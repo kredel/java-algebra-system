@@ -75,7 +75,7 @@ public class DistThreadPool /*extends ThreadPool*/ {
 
 
     private static final Logger logger = Logger.getLogger(DistThreadPool.class);
-    private static boolean debug = logger.isDebugEnabled();
+    private final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -365,7 +365,7 @@ class DistPoolThread extends Thread {
     final int myId;
 
     private static final Logger logger = Logger.getLogger(DistPoolThread.class);
-    private static boolean debug = true || logger.isDebugEnabled();
+    private final boolean debug = logger.isInfoEnabled();
 
     boolean working = false;
 

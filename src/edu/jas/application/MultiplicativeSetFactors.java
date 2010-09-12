@@ -30,7 +30,7 @@ public class MultiplicativeSetFactors<C extends GcdRingElem<C>> extends Multipli
     private static final Logger logger = Logger.getLogger(MultiplicativeSetFactors.class);
 
 
-    private final boolean debug = true || logger.isDebugEnabled();
+    private final boolean debug = logger.isDebugEnabled();
 
 
     /**

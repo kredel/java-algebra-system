@@ -40,7 +40,7 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
     public static final Logger logger = Logger.getLogger(GroebnerBaseDistributedHybrid.class);
 
 
-    public static final boolean debug = true || logger.isDebugEnabled();
+    public final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -442,7 +442,7 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
     public static final Logger logger = Logger.getLogger(HybridReducerServer.class);
 
 
-    public static final boolean debug = true || logger.isDebugEnabled();
+    public final boolean debug = logger.isDebugEnabled();
 
 
     private final Terminator finner;
@@ -656,7 +656,7 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
     public static final Logger logger = Logger.getLogger(HybridReducerReceiver.class);
 
 
-    public static final boolean debug = true || logger.isDebugEnabled();
+    public final boolean debug = logger.isDebugEnabled();
 
 
     private final DistHashTable<Integer, GenPolynomial<C>> theList;
@@ -848,7 +848,7 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
     private static final Logger logger = Logger.getLogger(HybridReducerClient.class);
 
 
-    public static final boolean debug = true || logger.isDebugEnabled();
+    public final boolean debug = logger.isDebugEnabled();
 
 
     private final TaggedSocketChannel pairChannel;

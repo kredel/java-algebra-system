@@ -36,7 +36,7 @@ public class HenselUtil {
     private static final Logger logger = Logger.getLogger(HenselUtil.class);
 
 
-    private static boolean debug = true || logger.isDebugEnabled();
+    private static final boolean debug = logger.isInfoEnabled();
 
 
     /**

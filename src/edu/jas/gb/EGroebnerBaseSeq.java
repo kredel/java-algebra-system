@@ -25,7 +25,7 @@ public class EGroebnerBaseSeq<C extends RingElem<C>>
 
 
     private static final Logger logger = Logger.getLogger(EGroebnerBaseSeq.class);
-    private final boolean debug = true; //logger.isDebugEnabled();
+    private final boolean debug = logger.isDebugEnabled();
 
 
 

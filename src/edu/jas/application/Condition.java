@@ -32,7 +32,7 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
     private static final Logger logger = Logger.getLogger(Condition.class);
 
 
-    private final boolean debug = true || logger.isDebugEnabled();
+    private final boolean debug = logger.isDebugEnabled();
 
 
     /**
