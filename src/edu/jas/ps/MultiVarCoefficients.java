@@ -96,6 +96,18 @@ public abstract class MultiVarCoefficients<C extends RingElem<C>> {
      * Public constructor with pre-filled caches.
      * @param pf polynomial ring factory.
      * @param cache pre-filled coefficient cache.
+     * @param hc pre-filled homogeneous check bit-set.
+     */
+    public MultiVarCoefficients(GenPolynomialRing<C> pf, HashMap<Long, GenPolynomial<C>> cache,
+                                BitSet hc) {
+        this(pf, cache, new HashSet<ExpVector>(), hc);
+    }
+
+
+    /**
+     * Public constructor with pre-filled caches.
+     * @param pf polynomial ring factory.
+     * @param cache pre-filled coefficient cache.
      * @param zeros pre-filled zero coefficient cache.
      * @param hc pre-filled homogeneous check bit-set.
      */

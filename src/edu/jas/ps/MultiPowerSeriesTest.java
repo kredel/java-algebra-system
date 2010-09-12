@@ -6,6 +6,7 @@ package edu.jas.ps;
 
 
 import java.util.Map;
+import java.util.List;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -67,6 +68,9 @@ public class MultiPowerSeriesTest extends TestCase {
 
 
     MultiVarPowerSeries<BigRational> e;
+
+
+    MultiVarPowerSeries<BigRational> f;
 
 
     int rl = 2;
@@ -183,7 +187,7 @@ public class MultiPowerSeriesTest extends TestCase {
 
 
     /**
-     * Test constructor and toString.
+     * Test constructor and generators.
      * 
      */
     public void testConstruction() {
@@ -199,6 +203,24 @@ public class MultiPowerSeriesTest extends TestCase {
         //System.out.println("d = " + d);
         assertTrue("isZERO( d )", d.isZERO());
         assertTrue("isONE( d )", !d.isONE());
+
+        List<MultiVarPowerSeries<BigRational>> gens = fac.generators();
+        assertTrue("#gens == rl+1 ", rl+1 == gens.size());
+        for ( MultiVarPowerSeries<BigRational> p : gens ) {
+            //System.out.println("p = " + p);
+            assertTrue("red(p) == 0 ", p.reductum().isZERO());
+        }
+
+        a = fac.copy(c);
+        b = c.clone();
+        assertEquals("copy(c) == c.clone() ", a, b);
+
+        a = fac.fromInteger(1);
+        assertEquals("1 == fromInteger(1) ", a, c);
+
+        b = fac.fromInteger(java.math.BigInteger.ONE);
+        assertEquals("1 == fromInteger(1) ", b, c);
+
     }
 
 
@@ -309,11 +331,17 @@ public class MultiPowerSeriesTest extends TestCase {
 
         d = c.subtract(b);
         assertEquals("a+b-b = a", a, d);
+        d = c.sum(b.negate());
+        assertEquals("a+b-b = a", a, d);
 
         c = fac.random(kl);
         d = a.sum(b.sum(c));
         e = a.sum(b).sum(c);
         assertEquals("a+(b+c) = (a+b)+c", d, e);
+
+        Map.Entry<ExpVector, BigRational> ma = a.orderMonomial();
+        c = a.reductum().sum(ma);
+        assertEquals("a = red(a)+om(a)", a, c);
     }
 
 
@@ -451,10 +479,10 @@ public class MultiPowerSeriesTest extends TestCase {
 
 
     /**
-     * Test reduction.
+     * Test reductum.
      * 
      */
-    public void testReduction() {
+    public void testReductum() {
         a = fac.random(kl);
         //System.out.println("a = " + a);
 
@@ -496,5 +524,63 @@ public class MultiPowerSeriesTest extends TestCase {
 //             //System.out.println("c = " + c);
 //      }
 //         assertTrue("red^n(a) == 0 ", c.isZERO());
+
+        br = new BigRational(2,3);
+        c = a.prepend(br,0);
+        d = c.reductum(0);
+        assertEquals("red(a + br_0,0) = a ", d, a);
+
+        c = a.shift(3,0);
+        d = c.shift(-3,0);
+        assertEquals("shift(shift(a,3,),-3,0) = a ", d, a);
+    }
+
+
+    /**
+     * Test polynomial constructions.
+     * 
+     */
+    public void testPolynomial() {
+        GenPolynomialRing<BigRational> pr = fac.polyRing();
+        //System.out.println("pr = " + pr);
+
+        GenPolynomial<BigRational> p = pr.random(kl,3,3,q+q);
+        //System.out.println("p = " + p);
+
+        a = fac.fromPolynomial(p);
+        //System.out.println("a = " + a);
+
+        GenPolynomial<BigRational> s = a.asPolynomial();
+        //System.out.println("s = " + s);
+        assertEquals("asPolynomial(fromPolynomial(p)) = p ", p, s);
+//         if ( a.isUnit() ) {
+//             b = a.inverse();
+//             System.out.println("b = " + b);
+//      }
+    }
+
+    /**
+     * Test gcd.
+     * 
+     */
+    public void testGcd() {
+        a = fac.random(kl);
+        //System.out.println("a = " + a);
+
+        b = fac.random(kl);
+        //System.out.println("b = " + b);
+
+        c = a.gcd(b);
+        //System.out.println("c = " + c);
+
+        d = a.divide(c);
+        //System.out.println("d = " + d);
+
+        e = b.divide(c);
+        //System.out.println("e = " + e);
+
+        f = d.gcd(e);
+        //System.out.println("f = " + f);
+        assertTrue("gcd(a/gcd(a,b),b/gcd(a,b)) == 1 ", f.isONE());
     }
 }

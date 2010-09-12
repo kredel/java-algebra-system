@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.BitSet;
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.ExpVector;
@@ -564,8 +565,17 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
         if (mt > truncate()) {
             setTruncate(mt);
         }
+        BitSet check = new BitSet();
+        for ( int i = 0; i < truncate(); i++ ) {
+            check.set(i);
+            if ( cache.get((long)i) == null ) {
+                GenPolynomial<C> p = pfac.getZERO().clone();
+                cache.put((long)i, p);
+                //System.out.println("p zero for deg i = " + i);
+            }
+        }
 
-        return new MultiVarPowerSeries<C>(this, new MultiVarCoefficients<C>(pfac, cache) {
+        return new MultiVarPowerSeries<C>(this, new MultiVarCoefficients<C>(pfac, cache, check) {
 
 
             @Override

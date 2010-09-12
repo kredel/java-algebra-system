@@ -266,17 +266,17 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
         if (A == null) {
             return A;
         }
-	MultiVarPowerSeries<C> R = normalform(P,A);
+        MultiVarPowerSeries<C> R = normalform(P,A);
         if ( R.isZERO() ) {
             return R;
-	}
+        }
         MultiVarCoefficients<C> Rc = new MultiVarCoefficients<C>(A.ring) {
             @Override
             public C generate(ExpVector i) { // will not be used
                 return pfac.coFac.getZERO();
             }
         };
-	GenPolynomialRing<C> pfac = A.lazyCoeffs.pfac;
+        GenPolynomialRing<C> pfac = A.lazyCoeffs.pfac;
         while ( !R.isZERO() ) {
               Map.Entry<ExpVector, C> m = R.orderMonomial();
               R = R.reductum();
@@ -285,13 +285,13 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
               GenPolynomial<C> p = Rc.coeffCache.get(t);
               if ( p == null ) {
                   p = pfac.getZERO();
-	      }
+              }
               p = p.sum(m.getValue(),e);
               Rc.coeffCache.put(t,p); 
               // zeros need never update
 
               R = normalform(P,R);
-	}
+        }
         R = R.sum(Rc);
         return R;
     }
@@ -310,10 +310,10 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
         List<MultiVarPowerSeries<C>> S = new ArrayList<MultiVarPowerSeries<C>>(P);
         for ( MultiVarPowerSeries<C> a : P ) {
             S.remove(a);
-	    MultiVarPowerSeries<C> b = totalNormalform(S,a);
+            MultiVarPowerSeries<C> b = totalNormalform(S,a);
             S.add(a);
             R.add(b);
-	}
+        }
         return R;
     }
 
