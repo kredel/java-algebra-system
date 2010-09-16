@@ -115,8 +115,11 @@ The library contains at the moment of the following
 </dd>
 <dt>edu.jas.ps:</dt>
 <dd>
-  contains univariate power series arithmetic
-  in class <code>UnivPowerSeries</code>.
+  contains univariate and multivariate power series arithmetic
+  in classes <code>UnivPowerSeries</code> and <code>MultiVarPowerSeries</code>.
+  There is an initial implementation of Mora's tangent cone reduction algorithm 
+  in class <code>ReductionSeq</code> and a standard bases computation in 
+  <code>StandardBaseSeq</code> with method <code>STD()</code>.
 </dd>
 <dt>edu.jas.integrate:</dt>
 <dd>
@@ -176,6 +179,16 @@ or
 
 <h3>Published papers and talks about JAS</h3>
 
+
+<p>The design of JAS and ScAS is presented together with examples in the talk 
+   <a href="kredel/oocas-casc2010-slides.pdf" target="casc"
+      >Raphael Jolly, Heinz Kredel,
+       <i>Generic, Type-safe and Object Oriented Computer Algebra Software</i></a>,
+    at the Workshop on Computer Algebra in Scientific Computing
+    <a href="http://www14.in.tum.de/CASC2010/">CACS 2010</a>,
+    Tsakhkadzor, Armenia, 2010.
+</p>
+
 <p>Performance meassurements for the distributed hybrid Gr&ouml;bner
    bases implementation are contained in the paper
    <a href="http://arxiv.org/abs/1008.0011" target="arxiv" 
@@ -208,8 +221,8 @@ or
 
 <p>Some unique factorization domain algorithms in JAS are contained 
    in the seminar presentation
-<a href="http://krum.rz.uni-mannheim.de/kredel/ca-sem-2009.pdf" target="fmi"
-   >Tools for the integration of rational functions in Java</a>,
+   <a href="http://krum.rz.uni-mannheim.de/kredel/ca-sem-2009.pdf" target="fmi"
+      >Tools for the integration of rational functions in Java</a>,
    during the Computer-Algebra Seminar, University of Mannheim, FMI 2009
 </p> 
 
@@ -225,7 +238,7 @@ or
 
 <p>The parallel and distributed Gr&ouml;bner bases implementations are explained in 
    the talk 
-<a href="http://doi.ieeecomputersociety.org/10.1109/CISIS.2009.109" target="ecds"  
+   <a href="http://doi.ieeecomputersociety.org/10.1109/CISIS.2009.109" target="ecds"  
        ><i>Distributed parallel Groebner bases computation</i></a>, 
     at the
     <a href="http://www.cisis-conference.eu/" target="ecds">CISIS 2009</a>  
@@ -245,31 +258,31 @@ or
 
 <p>A description of the JAS greatest common divisor package is contained
    in the talk 
-<a href="http://krum.rz.uni-mannheim.de/kredel/jas-adg2008-slides.pdf" target="adg" 
-   ><i>Multivariate Greatest Common Divisors in the Java Computer Algebra System</i></a>,
-at the International Workshop on 
-<a href="http://adg2008.redlog.eu/" target="adg"
-    >Automated Deduction in Geometry (ADG 2008)</a>, Shanghai.
+   <a href="http://krum.rz.uni-mannheim.de/kredel/jas-adg2008-slides.pdf" target="adg" 
+      ><i>Multivariate Greatest Common Divisors in the Java Computer Algebra System</i></a>,
+   at the International Workshop on 
+   <a href="http://adg2008.redlog.eu/" target="adg"
+      >Automated Deduction in Geometry (ADG 2008)</a>, Shanghai.
 </p>
 
 <p>Some background information on the python scripting interface 
    for JAS can be found in the article 
-<a href="http://de.arxiv.org/abs/0811.1061" target="arxivascm"  
-   >Raphael Jolly, Heinz Kredel, 
+   <a href="http://de.arxiv.org/abs/0811.1061" target="arxivascm"  
+      >Raphael Jolly, Heinz Kredel, 
    <i>How to turn a scripting language into a domain specific language for computer algebra</i></a>, 
-    avaliable as 
-    <a href="http://de.arxiv.org/abs/0811.1061" target="arxivascm"  
-       >arXiv:0811.1061v1</a>, 2008. 
-    Previous title was <i>Computer algebra in Java: libraries and scripting</i>. 
+   avaliable as 
+   <a href="http://de.arxiv.org/abs/0811.1061" target="arxivascm"  
+      >arXiv:0811.1061v1</a>, 2008. 
+   Previous title was <i>Computer algebra in Java: libraries and scripting</i>. 
 </p>
 
 <p>A comparison of JAS to other Computer Algebra Systems is contained 
    in the talk 
-<a href="http://krum.rz.uni-mannheim.de/kredel/jas-ascm2007-slides.pdf" target="ascm" 
-   ><i>Evaluation of a Java Computer Algebra System</i></a>,
-at the 
-<a href="http://www.comp.nus.edu.sg/~ascm2007/" target="ascm"
-   >Asian Symposium on Computer Mathematics (ASCM 2007)</a>, Singapore. 
+   <a href="http://krum.rz.uni-mannheim.de/kredel/jas-ascm2007-slides.pdf" target="ascm" 
+      ><i>Evaluation of a Java Computer Algebra System</i></a>,
+   at the 
+   <a href="http://www.comp.nus.edu.sg/~ascm2007/" target="ascm"
+      >Asian Symposium on Computer Mathematics (ASCM 2007)</a>, Singapore. 
 <br />
 It has been published as paper in
 <a href="http://dx.doi.org/10.1007/978-3-540-87827-8_10" target="ascm" 
@@ -404,7 +417,7 @@ the class edu.jas.gb.RunGB. E.g. <br />
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Thu Aug  5 23:22:06 CEST 2010
+Last modified: Thu Sep 16 23:31:05 CEST 2010
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
