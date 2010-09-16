@@ -5,9 +5,7 @@
 
 import sys;
 
-from jas import QQ
-from jas import DD
-from jas import Ring
+from jas import QQ, DD, Ring
 from jas import MultiSeriesRing
 from jas import startLog
 
@@ -92,8 +90,6 @@ r8 = psr.gcd(y,s);
 print "r8:", r8;
 print;
 
-
-
 ## s1 = s.evaluate( QQ(0) );
 ## print "s1:", s1;
 ## print;
@@ -112,121 +108,13 @@ print;
 
 #sys.exit();
 
-#
-# floating point examples
-#
-
-dr = MultiSeriesRing(cofac=DD(),names=psr.ring.polyRing().getVars(),truncate=psr.ring.truncate());
-print "dr:", dr;
-print;
-
-de = dr.exp(1);
-print "de:", de;
-print;
-
-## d0 = de.evaluate( DD(0) );
-## print "d0:", d0;
-## print;
-
-## d1 = de.evaluate( DD(0.5) );
-## print "d1:", d1;
-## print;
-
-## d01 = de.evaluate( DD(0.000000000000000001) );
-## print "d01:", d01;
-## print;
-
-sys.exit();
-
-def f(a):
-    return a*a;
-
-ps = psr.create(f);
-print "ps:", ps;
-print;
-
-
-def g(a):
-    return a+a;
-
-ps1 = psr.create(g);
-print "ps1:", ps1;
-print;
-
-ps2 = ps * ps1;
-print "ps2:", ps2;
-print;
-
-
-def h(a):
-    return psr.ring.coFac.fromInteger( 2*a );
-
-ps3 = psr.create(jfunc=h);
-print "ps3:", ps3;
-print;
-
-ps4 = ps3 * ps1;
-print "ps4:", ps4;
-print;
-
-
-# does not work, since get() is not known
-def k(a):
-    if a > 0:
-        return get(a-1).multiply( psr.ring.coFac.fromInteger( 2*a ) );
-    else:
-        return psr.ring.coFac.fromInteger( 2*a );
-
-#no#ps5 = psr.create(jfunc=k);
-#no#print "ps5:", ps5;
-#no#print;
-
-sys.exit();
-
-class coeff( Coefficients ):
-    def __init__(self,cofac):
-        self.coFac = cofac;
-    def generate(self,i):
-        if i == 0:
-            return self.coFac.getZERO();
-        else:
-            if i == 1:
-                return self.coFac.getONE();
-            else:
-                c = self.get( i-2 ).negate();
-                return c.divide( self.coFac.fromInteger(i) ).divide( self.coFac.fromInteger(i-1) );
-
-ps6 = psr.create( clazz=coeff(psr.ring.coFac) );
-print "ps6:", ps6;
-print;
-
-ps7 = ps6 - s;
-print "ps7:", ps7;
-print;
-
-
-class cosmap( UnivPowerSeriesMap ):
-    def __init__(self,cofac):
-        self.coFac = cofac;
-    def map(self,ps):
-        return ps.negate().integrate( self.coFac.getZERO() ).integrate( self.coFac.getONE() );
-
-ps8 = psr.fixPoint( cosmap( psr.ring.coFac ) );
-print "ps8:", ps8;
-print;
-
-ps9 = ps8 - c;
-print "ps9:", ps9;
-print;
-
-
 # conversion from polynomials
 
-pr = Ring("Q(y) L");
+pr = Ring("Q(x,y,z) L");
 print "pr:", pr;
 print;
 
-[one,yp] = pr.gens();
+[one,xp,yp,zp] = pr.gens();
 
 p1 = one;
 p2 = one - yp;
@@ -254,8 +142,8 @@ ps2 = psr.fromPoly(p2);
 # rational function as power series:
 ps3 = ps1 / ps2;
 
-ps4 = ps3.integrate( QQ(1) );
-ps5 = ps3.differentiate();
+ps4 = ps3.integrate( QQ(1), 1 );
+ps5 = ps3.differentiate(1);
 
 print "p1:", p1;
 print "p2:", p2;
@@ -266,5 +154,101 @@ print "ps4:", ps4;
 print "ps5:", ps5;
 print;
 
+#sys.exit();
+
+#
+# floating point examples
+#
+
+dr = MultiSeriesRing(cofac=DD(),names=psr.ring.polyRing().getVars(),truncate=psr.ring.truncate());
+print "dr:", dr;
+print;
+
+de = dr.exp(1);
+print "de:", de;
+print;
+
+def f(a):
+    return a.totalDeg();
+
+ps = psr.create(f);
+print "ps:", ps;
+print;
+
+
+def g(a):
+    return a.maxDeg();
+
+ps1 = psr.create(g);
+print "ps1:", ps1;
+print;
+
+ps2 = ps * ps1;
+print "ps2:", ps2;
+print;
+
+
+def h(a):
+    return psr.ring.coFac.fromInteger( 2*a.maxDeg() );
+
+ps3 = psr.create(jfunc=h);
+print "ps3:", ps3;
+print;
+
+ps4 = ps3 * ps1;
+print "ps4:", ps4;
+print;
+
+
+# does not work, since get() is not known
+def k(a):
+    if a > 0:
+        return get(a-1).multiply( psr.ring.coFac.fromInteger( 2*a ) );
+    else:
+        return psr.ring.coFac.fromInteger( 2*a );
+
+#no#ps5 = psr.create(jfunc=k);
+#no#print "ps5:", ps5;
+#no#print;
 
 #sys.exit();
+
+class coeff( MultiVarCoefficients ):
+    def __init__(self,r):
+        MultiVarCoefficients.__init__(self,r);
+        self.coFac = r.coFac;
+    def generate(self,i):
+        #print "i: ", i;
+        if i.signum() < 0:
+            return self.coFac.getZERO();
+        else:
+            if i.isZERO():
+                return self.coFac.getONE();
+            else:
+                c = self.coFac.getONE(); #self.get( i-1 ).negate();
+                return c.divide( self.coFac.fromInteger(i.totalDeg()) ).divide( self.coFac.fromInteger(i.totalDeg()-1) );
+
+ps6 = psr.create( clazz=coeff(psr.ring) );
+print "ps6:", ps6;
+print;
+
+ps7 = ps6 - s;
+print "ps7:", ps7;
+print;
+
+#sys.exit();
+
+class cosmap( MultiVarPowerSeriesMap ):
+    def __init__(self,cofac):
+        self.coFac = cofac;
+    def map(self,ps):
+        return ps.negate().integrate( self.coFac.getZERO(), 1 ).integrate( self.coFac.getONE(), 1 );
+
+ps8 = psr.fixPoint( cosmap( psr.ring.coFac ) );
+print "ps8:", ps8;
+print;
+
+ps9 = ps8 - c;
+print "ps9:", ps9;
+print;
+

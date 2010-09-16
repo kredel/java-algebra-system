@@ -1454,17 +1454,20 @@ class MultiSeriesRing:
         clazz must implement the Coefficients abstract class.
         '''
         class coeff( MultiVarCoefficients ):
-            def __init__(self,cofac):
-                self.coFac = cofac;
+            def __init__(self,r):
+                MultiVarCoefficients.__init__(self,r);
+                self.coFac = r.coFac;
             def generate(self,i):
                 if jfunc == None:
                     return self.coFac.fromInteger( ifunc(i) );
                 else:
                     return jfunc(i);
+        #print "ifunc"
         if clazz == None:
             ps = MultiVarPowerSeries( self.ring, coeff(self.ring) );
         else:
             ps = MultiVarPowerSeries( self.ring, clazz );
+        #print "ps ", ps.toScript();
         return RingElem( ps );
 
     def fixPoint(self,psmap):
@@ -2393,8 +2396,10 @@ class RingElem:
             e = 0;            
         return RingElem( e );
 
-    def integrate(self,a=0):
+    def integrate(self,a=0,r=None):
         '''Integrate a power series with constant a or as rational function.
+
+        a is the integration constant, r is for partial integration in variable r.
         '''
         #print "self  type(%s) = %s" % (self,type(self));
         #print "a     type(%s) = %s" % (a,type(a));
@@ -2406,7 +2411,10 @@ class RingElem:
             # assume self will be compatible with them. todo: check this
             x = makeJasArith(a);
         try:
-            e = self.elem.integrate(x);
+            if r != None:
+                e = self.elem.integrate(x,r);
+            else:
+                e = self.elem.integrate(x);
             return RingElem( e );
         except:
             pass;
@@ -2419,13 +2427,18 @@ class RingElem:
         ei = integrator.integrate(self.elem); 
         return ei;
 
-    def differentiate(self):
+    def differentiate(self,r=None):
         '''Differentiate a power series.
+
+        r is for partial differentiation in variable r.
         '''
         try:
-            e = self.elem.differentiate();
+            if r != None:
+                e = self.elem.differentiate(r);
+            else:
+                e = self.elem.differentiate();
         except:
-            e = 0;
+            e = self.elem.factory().getZERO();
         return RingElem( e );
 
     def coefficients(self):
