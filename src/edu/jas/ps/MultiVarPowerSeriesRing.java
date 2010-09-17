@@ -233,6 +233,15 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
 
 
     /**
+     * Get a variable names.
+     * @return names.
+     */
+    public String[] getVars() {
+        return vars;
+    }
+
+
+    /**
      * Get a scripting compatible string representation.
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.ElemFactory#toScript()

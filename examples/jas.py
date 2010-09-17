@@ -1987,15 +1987,16 @@ def MPS(cofac,names,f=None,truncate=None):
         r = ps.getZERO();
     else:
         class coeff( MultiVarCoefficients ):
-            def __init__(self,cofac):
-                self.coFac = cofac;
+            def __init__(self,r):
+                MultiVarCoefficients.__init__(self,r);
+                self.coFac = r.coFac;
             def generate(self,i):
                 a = f(i);
                 if isinstance(a,RingElem):
                     a = a.elem;
-                #print "a = " + str(a);
                 return a;
-        r = MultiVarPowerSeries(ps,coeff(cofac));
+        r = MultiVarPowerSeries(ps,coeff(ps));
+        #print "r = " + str(r);
     return RingElem(r);
 
 

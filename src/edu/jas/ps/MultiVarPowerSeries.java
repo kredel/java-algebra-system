@@ -238,6 +238,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         if (sb.length() == 0) {
             sb.append("0");
         }
+        sb.append(" + BigO( (" + ring.varsToString() + ")**" + truncate + " )");
         // sb.append("," + truncate + "");
         return sb.toString();
     }

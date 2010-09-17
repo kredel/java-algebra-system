@@ -6,7 +6,7 @@
 import sys;
 
 from jas import QQ, DD, Ring
-from jas import MultiSeriesRing
+from jas import MultiSeriesRing, MPS
 from jas import startLog
 
 from edu.jas.ps import MultiVarCoefficients
@@ -200,16 +200,17 @@ print "ps4:", ps4;
 print;
 
 
-# does not work, since get() is not known
 def k(a):
-    if a > 0:
-        return get(a-1).multiply( psr.ring.coFac.fromInteger( 2*a ) );
+    if a.signum() > 0:
+        r = psr.ring.coFac.fromInteger( 2*a.totalDeg() );
     else:
-        return psr.ring.coFac.fromInteger( 2*a );
+        r = psr.ring.coFac.getONE();
+    #print "r: ", r;
+    return r;
 
-#no#ps5 = psr.create(jfunc=k);
-#no#print "ps5:", ps5;
-#no#print;
+ps5 = MPS(psr.ring.coFac,psr.ring.getVars(),f=k);
+print "ps5:", ps5;
+print;
 
 #sys.exit();
 
