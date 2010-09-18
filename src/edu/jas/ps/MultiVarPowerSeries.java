@@ -32,6 +32,8 @@ import edu.jas.util.ExpVectorIterable;
  * <code>orderExpVector()</code> methods, like <code>signum()</code>,
  * <code>abs()</code>, <code>divide()</code>, <code>remainder()</code> and
  * <code>gcd()</code>.
+ * <b>Note: </b> Currently the term order is fixed to the order defined by 
+ * the iterator over exponent vectors <code>ExpVectorIterator</code>.
  * @param <C> ring element type
  * @author Heinz Kredel
  */

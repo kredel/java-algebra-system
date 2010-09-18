@@ -15,7 +15,9 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Dtandard Base sequential algorithm. Implements Standard bases and GB test.
+ * Standard Base sequential algorithm. Implements Standard bases and GB test.
+ * <b>Note: </b> Currently the term order is fixed to the order defined by 
+ * the iterator over exponent vectors <code>ExpVectorIterator</code>.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
