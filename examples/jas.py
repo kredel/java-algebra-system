@@ -21,7 +21,8 @@ from edu.jas.poly        import GenPolynomial, GenPolynomialRing,\
 from edu.jas.ps          import UnivPowerSeries, UnivPowerSeriesRing,\
                                 UnivPowerSeriesMap, Coefficients, \
                                 MultiVarPowerSeries, MultiVarPowerSeriesRing,\
-                                MultiVarPowerSeriesMap, MultiVarCoefficients
+                                MultiVarPowerSeriesMap, MultiVarCoefficients,\
+                                StandardBaseSeq
 from edu.jas.gb          import DGroebnerBaseSeq, EGroebnerBaseSeq,\
                                 GroebnerBaseDistributed, GBDist, GroebnerBaseParallel,\
                                 GroebnerBaseSeq, GroebnerBaseSeqPairSeq,\
@@ -291,6 +292,12 @@ class Ring:
         integrator = ElementaryIntegration(cf.coFac);
         ei = integrator.integrate(a); 
         return ei;
+
+    def powerseriesRing(self):
+        '''Get a power series ring from this ring.
+        '''
+        pr = MultiVarPowerSeriesRing(self.ring);
+        return MultiSeriesRing(ring=pr);
 
 
 class Ideal:
@@ -1493,6 +1500,63 @@ class MultiSeriesRing:
         if isinstance(a,RingElem):
             a = a.elem;
         return RingElem( self.ring.fromPolynomial(a) );
+
+    def fromPoly(self,a):
+        '''Convert a GenPolynomial to a power series.
+        '''
+        if isinstance(a,RingElem):
+            a = a.elem;
+        return RingElem( self.ring.fromPolynomial(a) );
+
+
+class PSIdeal:
+    '''Represents a JAS power series ideal.
+
+    Method for Standard bases.
+    '''
+
+    def __init__(self,ring,polylist,ideal=None,list=None):
+        '''PSIdeal constructor.
+        '''
+        if isinstance(ring,Ring) or isinstance(ring,PolyRing):
+            ring = MultiVarPowerSeriesRing(ring.ring);
+        if isinstance(ring,MultiSeriesRing):
+            ring = ring.ring;
+        self.ring = ring;
+        #print "ring = ", ring.toScript();
+        if ideal != None:
+           polylist = ideal.pset.list;
+        if list == None:
+            self.polylist = pylist2arraylist( [ a.elem for a in polylist ] );
+            #print "polylist = ", self.polylist;
+            self.list = self.ring.fromPolynomial(self.polylist);
+        else:
+            self.polylist = None;
+            self.list = pylist2arraylist( [ a.elem for a in list ] );
+
+    def __str__(self):
+        '''Create a string representation.
+        '''
+        return str([ a.toScript() for a in self.list ]);
+
+    def STD(self,trunc=None):
+        '''Compute a standard base.
+        '''
+        pr = self.ring;
+        if trunc != None:
+            pr.setTruncate(trunc);
+        #print "pr = ", pr.toScript();
+        F = self.list;
+        #print "F = ", F;
+        tm = StandardBaseSeq();
+        t = System.currentTimeMillis();
+        S = tm.STD(F);
+        t = System.currentTimeMillis() - t;
+        print "sequential standard base executed in %s ms" % t;
+        #Sp = [ RingElem(a.asPolynomial()) for a in S ];
+        Sp = [ RingElem(a) for a in S ];
+        #return Sp;
+        return PSIdeal(self.ring,None,list=Sp);
 
 
 def pylist2arraylist(list,fac=None,rec=1):

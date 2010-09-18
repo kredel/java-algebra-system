@@ -20,6 +20,8 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.Monomial;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.util.ListUtil;
+import edu.jas.structure.UnaryFunctor;
 
 
 /**
@@ -593,6 +595,21 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
                 return coFac.getZERO();
             }
         });
+    }
+
+
+    /**
+     * Get a list of MultiVarPowerSeries&lt;C&gt; from a list of GenPolynomial&lt;C&gt;.
+     * @param A list of GenPolynomial&lt;C&gt;.
+     * @return a list of MultiVarPowerSeries&lt;C&gt;.
+     */
+    public List<MultiVarPowerSeries<C>> fromPolynomial(List<GenPolynomial<C>> A) {
+        return ListUtil.<GenPolynomial<C>, MultiVarPowerSeries<C>> map(A, 
+               new UnaryFunctor<GenPolynomial<C>, MultiVarPowerSeries<C>>() {
+                   public MultiVarPowerSeries<C> eval(GenPolynomial<C> c) {
+                          return fromPolynomial(c);
+                   }
+               });
     }
 
 

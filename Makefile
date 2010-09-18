@@ -89,10 +89,11 @@ JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d . -Xlint:unchecked
 #-Xlint:unchecked
 #-Djava.util.logging.config.file=logging.properties 
 #JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -verbose:gc 
-JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -server -Xms500M -Xmx800M -XX:+AggressiveHeap -XX:+UseParallelGC -XX:ParallelGCThreads=2 -verbose:gc 
+#JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -server -Xms1100M -Xmx1900M -XX:+AggressiveHeap -XX:+UseParallelGC -XX:ParallelGCThreads=2 -verbose:gc 
 #-Xrunhprof:cpu=samples,heap=sites,force=n
 #-Xbatch
-#old#JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -Xms300M -Xmx600M -XX:+AggressiveHeap -XX:+UseParallelGC -verbose:gc 
+#dist#
+JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -server -Xms500M -Xmx800M -XX:+AggressiveHeap -XX:+UseParallelGC -XX:ParallelGCThreads=2 -verbose:gc 
 #JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -verbose:gc -Xrunhprof:cpu=times,format=a
 #JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -verbose:gc -verbose:class -verbose:jni
 DOC=$(JDK)/javadoc -classpath $(DOCCLASSES)
@@ -298,8 +299,9 @@ SVNDATE=svnlook date $(SVNREPO)/jas
 # Jun 2008 SVNSRT=1882
 # Sep 2008 SVNSRT=2118
 # jan 2009 SVNSRT=2288
-# jun 2009 
-SVNSRT=2668
+# jun 2009 SVNSRT=2668
+# jan 2010
+SVNSRT=2978
 
 export:
 	rm -rf ~/jas-versions/$(VERSION)

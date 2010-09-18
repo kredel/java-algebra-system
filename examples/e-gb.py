@@ -9,7 +9,7 @@ from jas import Ring, PolyRing, Ideal
 from jas import ZZ
 from jas import startLog
 
-# mark, e-gb and d-gb example to compare with hermit normal form
+# e-gb and d-gb example to compare with hermit normal form
 
 r = PolyRing( ZZ(), "x4,x3,x2,x1", PolyRing.lex );
 print "Ring: " + str(r);
