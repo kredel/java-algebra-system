@@ -259,7 +259,7 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
         if ( s != 0 ) {
             return s;
         }
-        if (arfactors == null && arfactors == null) {
+        if (arfactors == null && facs.arfactors == null) {
             return 0;
         }
         if (arfactors == null) {

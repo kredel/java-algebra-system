@@ -111,7 +111,7 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseA
      * @return true, if F is a partial Groebner base, else false.
      */
     public boolean isGBrec(int modv, List<GenPolynomial<GenPolynomial<C>>> F) {
-        if (F == null || F.size() == 0) {
+        if (F == null || F.isEmpty()) {
             return true;
         }
         if (true) {
