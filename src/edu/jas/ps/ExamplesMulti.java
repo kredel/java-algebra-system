@@ -20,7 +20,7 @@ import edu.jas.poly.GenPolynomialRing;
  * @author Heinz Kredel
  */
 
-public class MultiExamples {
+public class ExamplesMulti {
 
 
     public static void main(String[] args) {

@@ -175,33 +175,6 @@
          fork="yes" />
 </target>
 
-<target name="TestOld" depends="vorher" >
-  <java  classname="edu.jas.SemaphoreTest" 
-         classpath="${cp}" 
-         fork="yes" />
-  <java  classname="edu.jas.arith.BigRationalTest" 
-         classpath="${cp}" 
-         fork="yes" />
-  <java  classname="edu.jas.arith.BigIntegerTest" 
-         classpath="${cp}" 
-         fork="yes" />
-  <java  classname="edu.jas.poly.ExpVectorTest" 
-         classpath="${cp}" 
-         fork="yes" />
-  <java  classname="edu.jas.poly.PolynomialTest" 
-         classpath="${cp}" 
-         fork="yes" />
-  <java  classname="edu.jas.poly.RatPolynomialTest" 
-         classpath="${cp}" 
-         fork="yes" />
-  <java  classname="edu.jas.poly.IntPolynomialTest" 
-         classpath="${cp}" 
-         fork="yes" />
-  <java  classname="edu.jas.poly.RatGBaseTest" 
-         classpath="${cp}" 
-         fork="yes" />
-</target>
-
 <target name="run" depends="compile" >
   <java  classname="${run}" 
          classpath="${cp}" 
@@ -237,53 +210,19 @@
   </junit>
 </target>
 
-<target name="testarith" 
-        depends="vorher" >
-  <junit printsummary="yes" 
-         fork="yes" 
-         showoutput="yes"
-         haltonfailure="no" >
-     <classpath path="${cp}" />
-     <formatter type="plain" /> <!-- plain, xml, brief -->
-     <batchtest todir="${test}" >
-        <fileset dir="${build}">
-          <include name="edu/jas/arith/*Test.class"/>
-        </fileset>
-     </batchtest>
-  </junit>
+
+<target name="exam" depends="compile" >
+  <java  classname="edu.jas.poly.Examples" classpath="${cp}" fork="yes" />
+  <java  classname="edu.jas.vector.Examples" classpath="${cp}" fork="yes" />
+  <java  classname="edu.jas.gb.Examples" classpath="${cp}" fork="yes" />
+  <java  classname="edu.jas.ps.Examples" classpath="${cp}" fork="yes" />
+  <java  classname="edu.jas.ps.ExamplesMulti" classpath="${cp}" fork="yes" />
+  <java  classname="edu.jas.ufd.Examples" classpath="${cp}" fork="yes" />
+  <java  classname="edu.jas.ufd.ExamplesPartialFraction" classpath="${cp}" fork="yes" />
+  <java  classname="edu.jas.integrate.Examples" classpath="${cp}" fork="yes" />
+  <java  classname="edu.jas.application.Examples" classpath="${cp}" fork="yes" />
 </target>
 
-<target name="testpoly" 
-        depends="vorher" >
-  <junit printsummary="yes" 
-         fork="yes" 
-         showoutput="yes"
-         haltonfailure="no" >
-     <classpath path="${cp}" />
-     <formatter type="plain" /> <!-- plain, xml, brief -->
-     <batchtest todir="${test}" >
-        <fileset dir="${build}">
-          <include name="edu/jas/poly/*Test.class"/>
-        </fileset>
-     </batchtest>
-  </junit>
-</target>
-
-<target name="testufd" 
-        depends="vorher" >
-  <junit printsummary="yes" 
-         fork="yes" 
-         showoutput="yes"
-         haltonfailure="no" >
-     <classpath path="${cp}" />
-     <formatter type="plain" /> <!-- plain, xml, brief -->
-     <batchtest todir="${test}" >
-        <fileset dir="${build}">
-          <include name="edu/jas/ufd/*Test.class"/>
-        </fileset>
-     </batchtest>
-  </junit>
-</target>
 
 <target name="lint" depends="vorher" >
   <lint4j sourcepath="${src}" 
