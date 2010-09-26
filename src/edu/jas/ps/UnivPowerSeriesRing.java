@@ -11,10 +11,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.Monomial;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.Monomial;
 
 
 /**
@@ -109,6 +110,15 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
      */
     public UnivPowerSeriesRing(RingFactory<C> coFac, String name) {
         this(coFac, DEFAULT_TRUNCATE, name);
+    }
+
+
+    /**
+     * Constructor.
+     * @param pfac polynomial ring factory.
+     */
+    public UnivPowerSeriesRing(GenPolynomialRing<C> pfac) {
+        this(pfac.coFac, DEFAULT_TRUNCATE, pfac.getVars()[0]);
     }
 
 
@@ -411,6 +421,15 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
 
 
     /**
+     * Get the corresponding GenPolynomialRing&lt;C&gt;.
+     * @return GenPolynomialRing&lt;C&gt;.
+     */
+    public GenPolynomialRing<C> polyRing() {
+        return new GenPolynomialRing<C>(coFac, 1, new String[] { var });
+    }
+
+
+    /**
      * Get a UnivPowerSeries&lt;C&gt; from a GenPolynomial&lt;C&gt;.
      * @param a GenPolynomial&lt;C&gt;.
      * @return a UnivPowerSeries&lt;C&gt;.
@@ -537,6 +556,42 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
      */
     public UnivPowerSeries<C> parse(Reader r) {
         throw new UnsupportedOperationException("parse for power series not implemented");
+    }
+
+
+    /**
+     * Taylor power series.
+     * @param f function.
+     * @param a expansion point.
+     * @return Taylor series of f.
+     */
+    public UnivPowerSeries<C> seriesOfTaylor(final TaylorFunction<C> f, final C a) {
+        return new UnivPowerSeries<C>(this, new Coefficients<C>() {
+
+            TaylorFunction<C> der = f;
+            long k = 0;
+            long n = 1;
+
+            @Override
+            public C generate(int i) {
+                C c;
+                if (i > 0) {
+                    c = get(i - 1); // ensure deriv is updated
+                }
+                if ( i == 0 ) {
+                   c = der.evaluate(a);
+                   der = der.deriviative();
+                   return c;
+                }
+                k++;
+                n *= k;
+                c = der.evaluate(a);
+                //System.out.println("n = " + n + ", i = " +i);
+                c = c.divide( coFac.fromInteger(n) );
+                der = der.deriviative();
+                return c;
+            }
+        });
     }
 
 }

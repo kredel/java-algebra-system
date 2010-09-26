@@ -5,11 +5,16 @@
 package edu.jas.ps;
 
 
+import java.util.List;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import edu.jas.arith.BigRational;
+import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.PolyUtil;
 
 
 /**
@@ -231,4 +236,38 @@ public class UnivPowerSeriesTest extends TestCase {
         //assertEquals("g = gcd(a,b)", c, g );
     }
 
+
+    /**
+     * Test Taylor series.
+     * 
+     */
+    public void testTaylor() {
+        BigRational br = new BigRational(0);
+        GenPolynomialRing<BigRational> pr = fac.polyRing();
+        //System.out.println("pr  = " + pr);
+
+        GenPolynomial<BigRational> p = pr.random(kl,3,3,q+q);
+        //System.out.println("p   = " + p);
+
+        TaylorFunction<BigRational> F = new PolynomialTaylorFunction<BigRational>(p);
+
+        UnivPowerSeriesRing<BigRational> psr = new UnivPowerSeriesRing<BigRational>(pr);
+        //System.out.println("psr = " + psr.toScript());
+
+        UnivPowerSeries<BigRational> ps = fac.seriesOfTaylor(F,br);
+        //System.out.println("ps  = " + ps);
+        UnivPowerSeries<BigRational> pps = fac.fromPolynomial(p);
+        //System.out.println("pps = " + pps);
+        assertEquals("taylor(p) == p", ps, pps);
+
+        for ( GenPolynomial<BigRational> g : pr.generators() ) {
+            F = new PolynomialTaylorFunction<BigRational>(g);
+            ps = fac.seriesOfTaylor(F,br);
+            //System.out.println("g   = " + g);
+            //System.out.println("ps  = " + ps);
+            pps = fac.fromPolynomial(g);
+            //System.out.println("pps = " + pps);
+            assertEquals("taylor(p) == p", ps, pps);
+	}
+    }
 }
