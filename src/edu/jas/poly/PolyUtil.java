@@ -1150,6 +1150,42 @@ public class PolyUtil {
 
 
     /**
+     * GenPolynomial polynomial partial derivative variable r.
+     * @param <C> coefficient type.
+     * @param P GenPolynomial.
+     * @param r variable for partial deriviate.
+     * @return deriviative(P,r).
+     */
+    public static <C extends RingElem<C>> GenPolynomial<C> baseDeriviative(GenPolynomial<C> P, int r) {
+        if (P == null || P.isZERO()) {
+            return P;
+        }
+        GenPolynomialRing<C> pfac = P.ring;
+        if (r < 0 || pfac.nvar <= r) {
+            throw new IllegalArgumentException(P.getClass().getName() + " deriviative variable out of bound " + r);
+        }
+        int rp = pfac.nvar - 1 - r;
+        RingFactory<C> rf = pfac.coFac;
+        GenPolynomial<C> d = pfac.getZERO().clone();
+        Map<ExpVector, C> dm = d.val; //getMap();
+        for (Map.Entry<ExpVector, C> m : P.getMap().entrySet()) {
+            ExpVector f = m.getKey();
+            long fl = f.getVal(rp);
+            if (fl > 0) {
+                C cf = rf.fromInteger(fl);
+                C a = m.getValue();
+                C x = a.multiply(cf);
+                if (x != null && !x.isZERO()) {
+                    ExpVector e = f.subst(rp, fl - 1L);
+                    dm.put(e, x);
+                }
+            }
+        }
+        return d;
+    }
+
+
+    /**
      * GenPolynomial polynomial integral main variable.
      * @param <C> coefficient type.
      * @param P GenPolynomial.

@@ -575,13 +575,13 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
             @Override
             public C generate(int i) {
                 C c;
-                if (i > 0) {
-                    c = get(i - 1); // ensure deriv is updated
-                }
                 if ( i == 0 ) {
                    c = der.evaluate(a);
                    der = der.deriviative();
                    return c;
+                }
+                if (i > 0) {
+                    c = get(i - 1); // ensure deriv is updated
                 }
                 k++;
                 n *= k;

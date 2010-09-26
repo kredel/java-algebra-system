@@ -746,4 +746,43 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
         throw new UnsupportedOperationException("parse for power series not implemented");
     }
 
+
+    /**
+     * Taylor power series.
+     * @param f function.
+     * @param a expansion point.
+     * @return Taylor series of f.
+     */
+    public MultiVarPowerSeries<C> seriesOfTaylor(final TaylorFunction<C> f, final List<C> a) {
+        return new MultiVarPowerSeries<C>(this, new MultiVarCoefficients<C>(this) {
+
+            TaylorFunction<C> der = f;
+            long k = 0;
+            long n = 1;
+
+            @Override
+            public C generate(ExpVector  i) {
+                C c;
+                int s = i.signum();
+                if (s == 0) {
+                   c = der.evaluate(a);
+                   //der = der.deriviative();
+                   return c;
+                }
+                if (s > 0) {
+                    int[] deps = i.dependencyOnVariables();
+                    ExpVector e = i.subst(deps[0], i.getVal(deps[0]) - 1L);
+                    c = get(e); // ensure deriv is updated
+                }
+                k++;
+                n *= k;
+                TaylorFunction<C> pder = der.deriviative(i);
+                c = pder.evaluate(a);
+                //System.out.println("n = " + n + ", i = " +i);
+                c = c.divide( coFac.fromInteger(pder.getFacul()) );
+                return c;
+            }
+        });
+    }
+
 }

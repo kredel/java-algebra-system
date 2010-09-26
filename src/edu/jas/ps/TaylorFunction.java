@@ -8,6 +8,7 @@ package edu.jas.ps;
 import java.util.List;
 
 
+import edu.jas.poly.ExpVector;
 import edu.jas.structure.RingElem;
 
 
@@ -18,6 +19,13 @@ import edu.jas.structure.RingElem;
  */
 
 public interface TaylorFunction<C extends RingElem<C>> {
+
+
+    /**
+     * Get the faculty coefficient.
+     * @return faculty coefficient.
+     */
+    public long getFacul();
 
 
     /**
@@ -33,6 +41,14 @@ public interface TaylorFunction<C extends RingElem<C>> {
      * @return partial deriviative of this with respect to variable r.
      */
     public TaylorFunction<C> deriviative(int r);
+
+
+    /**
+     * Multi-partial deriviative.
+     * @param i exponent vector.
+     * @return partial deriviative of this with respect to all variables.
+     */
+    public TaylorFunction<C> deriviative(ExpVector i);
 
 
     /**

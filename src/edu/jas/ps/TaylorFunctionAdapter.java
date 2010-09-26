@@ -9,6 +9,7 @@ import java.util.List;
 
 
 import edu.jas.structure.RingElem;
+import edu.jas.poly.ExpVector;
 
 
 /**
@@ -21,11 +22,21 @@ public abstract class TaylorFunctionAdapter<C extends RingElem<C>> implements Ta
 
 
     /**
+     * Get the faculty coefficient.
+     * @return faculty coefficient.
+     */
+    @Override
+    public long getFacul() {
+        return 1L;
+    }
+
+
+    /**
      * Deriviative.
      * @return deriviative of this.
      */
     public TaylorFunction<C> deriviative() {
-	throw new UnsupportedOperationException("not implemented");
+        throw new UnsupportedOperationException("not implemented");
     }
 
 
@@ -36,7 +47,17 @@ public abstract class TaylorFunctionAdapter<C extends RingElem<C>> implements Ta
      * @return partial deriviative of this with respect to variable r.
      */
     public TaylorFunction<C> deriviative(int r) {
-	throw new UnsupportedOperationException("not implemented");
+        throw new UnsupportedOperationException("not implemented");
+    }
+
+
+    /**
+     * Multi-partial deriviative.
+     * @param i exponent vector.
+     * @return partial deriviative of this with respect to all variables.
+     */
+    public TaylorFunction<C> deriviative(ExpVector i) {
+        throw new UnsupportedOperationException("not implemented");
     }
 
 
@@ -46,7 +67,7 @@ public abstract class TaylorFunctionAdapter<C extends RingElem<C>> implements Ta
      * @return this(a).
      */
     public C evaluate(C a){
-	throw new UnsupportedOperationException("not implemented");
+        throw new UnsupportedOperationException("not implemented");
     }
 
 
@@ -57,7 +78,7 @@ public abstract class TaylorFunctionAdapter<C extends RingElem<C>> implements Ta
      * @return this_r(a).
      */
     public TaylorFunction<C> evaluate(C a, int r) {
-	throw new UnsupportedOperationException("not implemented");
+        throw new UnsupportedOperationException("not implemented");
     }
 
 
@@ -67,7 +88,7 @@ public abstract class TaylorFunctionAdapter<C extends RingElem<C>> implements Ta
      * @return this(a).
      */
     public C evaluate(List<C> a) {
-	throw new UnsupportedOperationException("not implemented");
+        throw new UnsupportedOperationException("not implemented");
     }
 
 }

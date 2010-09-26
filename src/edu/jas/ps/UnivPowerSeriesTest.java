@@ -268,6 +268,6 @@ public class UnivPowerSeriesTest extends TestCase {
             pps = fac.fromPolynomial(g);
             //System.out.println("pps = " + pps);
             assertEquals("taylor(p) == p", ps, pps);
-	}
+        }
     }
 }
