@@ -592,38 +592,58 @@ public class MultiPowerSeriesTest extends TestCase {
      * 
      */
     public void testTaylor() {
+        BigRational ar = new BigRational(5);
         BigRational br = new BigRational(0);
+        BigRational cr = new BigRational(-5);
+        List<BigRational> Ar = new ArrayList<BigRational>(rl);
         List<BigRational> Br = new ArrayList<BigRational>(rl);
+        List<BigRational> Cr = new ArrayList<BigRational>(rl);
         for ( int i = 0; i < rl; i++ ) {
+            Ar.add(ar);        
             Br.add(br);        
+            Cr.add(cr);        
         }
         GenPolynomialRing<BigRational> pr = fac.polyRing();
-        System.out.println("pr  = " + pr.toScript());
+        //System.out.println("pr  = " + pr.toScript());
 
         GenPolynomial<BigRational> p = pr.random(kl,3,3,q+q);
-        System.out.println("p   = " + p);
+        //System.out.println("p   = " + p);
         int tdeg = (int) p.degree();
         fac.setTruncate( tdeg+1 );
    
         TaylorFunction<BigRational> F = new PolynomialTaylorFunction<BigRational>(p);
 
         MultiVarPowerSeriesRing<BigRational> psr = new MultiVarPowerSeriesRing<BigRational>(pr);
-        System.out.println("psr = " + psr.toScript());
+        //System.out.println("psr = " + psr.toScript());
 
         MultiVarPowerSeries<BigRational> pps = fac.fromPolynomial(p);
-        System.out.println("pps = " + pps);
+        //System.out.println("pps = " + pps);
         MultiVarPowerSeries<BigRational> ps = fac.seriesOfTaylor(F,Br);
-        System.out.println("ps  = " + ps);
+        //System.out.println("ps  = " + ps);
         assertEquals("taylor(p) == p", ps, pps);
+
+        MultiVarPowerSeries<BigRational> psa = fac.seriesOfTaylor(F,Ar);
+        //System.out.println("psa  = " + psa);
+        F = new PolynomialTaylorFunction<BigRational>(psa.asPolynomial());
+        MultiVarPowerSeries<BigRational> psc = fac.seriesOfTaylor(F,Cr);
+        //System.out.println("psc  = " + psc);
+        assertEquals("taylor(taylor(p,5),-5) == p", ps, psc);
 
         for ( GenPolynomial<BigRational> g : pr.generators() ) {
             F = new PolynomialTaylorFunction<BigRational>(g);
             ps = fac.seriesOfTaylor(F,Br);
-            System.out.println("g   = " + g);
-            System.out.println("ps  = " + ps);
+            //System.out.println("g   = " + g);
+            //System.out.println("ps  = " + ps);
             pps = fac.fromPolynomial(g);
-            System.out.println("pps = " + pps);
+            //System.out.println("pps = " + pps);
             assertEquals("taylor(p) == p", ps, pps);
+
+            psa = fac.seriesOfTaylor(F,Ar);
+            //System.out.println("psa  = " + psa);
+            F = new PolynomialTaylorFunction<BigRational>(psa.asPolynomial());
+            psc = fac.seriesOfTaylor(F,Cr);
+            //System.out.println("psc  = " + psc);
+            assertEquals("taylor(taylor(p,5),-5) == p", ps, psc);
         }
     }
 }

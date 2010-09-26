@@ -29,7 +29,7 @@ public class PolynomialTaylorFunction<C extends RingElem<C>> implements TaylorFu
 
 
     public PolynomialTaylorFunction(GenPolynomial<C> p) {
-        this(p,0L);
+        this(p,1L);
     }
 
 
@@ -50,8 +50,8 @@ public class PolynomialTaylorFunction<C extends RingElem<C>> implements TaylorFu
 
 
     /**
-     * Get the faculty coefficient.
-     * @return faculty coefficient.
+     * Get the facultorial coefficient.
+     * @return facultorial coefficient.
      */
     @Override
     public long getFacul() {
@@ -69,15 +69,14 @@ public class PolynomialTaylorFunction<C extends RingElem<C>> implements TaylorFu
     }
 
 
-    /**
+    /*
      * Partial deriviative.
      * @param r index of the variable.
      * @return partial deriviative of this with respect to variable r.
-     */
     public TaylorFunction<C> deriviative(int r) {
         return new PolynomialTaylorFunction<C>(PolyUtil. <C> baseDeriviative(pol,r)); 
-        //throw new UnsupportedOperationException("not implemented");
     }
+     */
 
 
     /**
@@ -105,9 +104,8 @@ public class PolynomialTaylorFunction<C extends RingElem<C>> implements TaylorFu
                 }
             }
         }
-        System.out.println("i = " + i + ", f = " + f + ", der = " + p);
+        //System.out.println("i = " + i + ", f = " + f + ", der = " + p);
         return new PolynomialTaylorFunction<C>(p,f); 
-        //throw new UnsupportedOperationException("not implemented");
     }
 
 
@@ -119,17 +117,6 @@ public class PolynomialTaylorFunction<C extends RingElem<C>> implements TaylorFu
     @Override
     public C evaluate(C a) {
         return PolyUtil. <C> evaluateMain(pol.ring.coFac,pol,a);
-    }
-
-
-    /**
-     * Evaluate at a given variable.
-     * @param a element.
-     * @param r index of the variable.
-     * @return this_r(a).
-     */
-    public TaylorFunction<C> evaluate(C a, int r) {
-        throw new UnsupportedOperationException("not implemented");
     }
 
 
