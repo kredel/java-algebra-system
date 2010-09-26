@@ -757,29 +757,33 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
         return new MultiVarPowerSeries<C>(this, new MultiVarCoefficients<C>(this) {
 
             TaylorFunction<C> der = f;
-            long k = 0;
-            long n = 1;
+            // Map<ExpVextor,TaylorFunction<C>> pderCache = ...
+            final List<C> v = a;
 
             @Override
             public C generate(ExpVector  i) {
                 C c;
                 int s = i.signum();
                 if (s == 0) {
-                   c = der.evaluate(a);
+                   c = der.evaluate(v);
                    //der = der.deriviative();
                    return c;
                 }
-                if (s > 0) {
-                    int[] deps = i.dependencyOnVariables();
-                    ExpVector e = i.subst(deps[0], i.getVal(deps[0]) - 1L);
-                    c = get(e); // ensure deriv is updated
-                }
-                k++;
-                n *= k;
+//                 if (s > 0) {
+//                     int[] deps = i.dependencyOnVariables();
+//                     ExpVector e = i.subst(deps[0], i.getVal(deps[0]) - 1L);
+//                     c = get(e); // ensure deriv is updated
+//                 }
                 TaylorFunction<C> pder = der.deriviative(i);
-                c = pder.evaluate(a);
-                //System.out.println("n = " + n + ", i = " +i);
-                c = c.divide( coFac.fromInteger(pder.getFacul()) );
+//                 if ( pder.isZERO() ) {
+//                     return coFac.getZERO();
+// 		}
+                c = pder.evaluate(v);
+                if ( c.isZERO() ) {
+                    return c;
+		}
+                long f = pder.getFacul();
+                c = c.divide( coFac.fromInteger(f) );
                 return c;
             }
         });

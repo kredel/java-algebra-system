@@ -602,7 +602,9 @@ public class MultiPowerSeriesTest extends TestCase {
 
         GenPolynomial<BigRational> p = pr.random(kl,3,3,q+q);
         System.out.println("p   = " + p);
-
+        int tdeg = (int) p.degree();
+        fac.setTruncate( tdeg+1 );
+   
         TaylorFunction<BigRational> F = new PolynomialTaylorFunction<BigRational>(p);
 
         MultiVarPowerSeriesRing<BigRational> psr = new MultiVarPowerSeriesRing<BigRational>(pr);

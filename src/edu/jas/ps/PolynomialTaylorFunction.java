@@ -87,25 +87,25 @@ public class PolynomialTaylorFunction<C extends RingElem<C>> implements TaylorFu
      */
     public TaylorFunction<C> deriviative(ExpVector i) {
         GenPolynomial<C> p = pol;
-        if ( i.signum() == 0 || pol.isZERO() ) {
-            return new PolynomialTaylorFunction<C>(p); 
-        }
         long f = 1L;
+        if ( i.signum() == 0 || pol.isZERO() ) {
+            return new PolynomialTaylorFunction<C>(p,f); 
+        }
         for ( int j = 0; j < i.length(); j++ ) {
             long e = i.getVal(j);
             if ( e == 0 ) {
                 continue;
             }
-            int ll = i.length()-1-j;
+            int jl = i.length()-1-j;
             for ( long k = 0; k < e; k++ ) {
-                p = PolyUtil. <C> baseDeriviative(p,ll);
+                p = PolyUtil. <C> baseDeriviative(p,jl);
                 f *= (k+1);
                 if ( p.isZERO() ) {
                     return new PolynomialTaylorFunction<C>(p,f); 
                 }
             }
         }
-        System.out.println("i = " + i + ", der = " + p);
+        System.out.println("i = " + i + ", f = " + f + ", der = " + p);
         return new PolynomialTaylorFunction<C>(p,f); 
         //throw new UnsupportedOperationException("not implemented");
     }
