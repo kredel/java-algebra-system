@@ -16,8 +16,8 @@ import edu.jas.structure.RingElem;
 
 /**
  * Standard Base sequential algorithm. Implements Standard bases and GB test.
- * <b>Note: </b> Currently the term order is fixed to the order defined by 
- * the iterator over exponent vectors <code>ExpVectorIterator</code>.
+ * <b>Note: </b> Currently the term order is fixed to the order defined by the
+ * iterator over exponent vectors <code>ExpVectorIterator</code>.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
@@ -211,8 +211,8 @@ public class StandardBaseSeq<C extends RingElem<C>>
 
     /**
      * Minimal ordered Standard basis.
-     * @param Gp a Groebner base.
-     * @return a minimal Groebner base of Gp, not auto reduced.
+     * @param Gp a Standard base.
+     * @return a minimal Standard base of Gp, not auto reduced.
      */
     public List<MultiVarPowerSeries<C>> minimalSTD(List<MultiVarPowerSeries<C>> Gp) {
         if (Gp == null || Gp.size() <= 1) {

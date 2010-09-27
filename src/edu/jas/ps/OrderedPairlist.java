@@ -167,7 +167,7 @@ public class OrderedPairlist<C extends RingElem<C>> {
 
     /**
      * Remove the next required pair from the pairlist and reduction matrix.
-     * Appy the criterions 3 and 4 to see if the S-power-series is required.
+     * Apply the criterions 3 and 4 to see if the S-power-series is required.
      * @return the next pair if one exists, otherwise null.
      */
     public synchronized Pair<C> removeNext() {
@@ -227,7 +227,7 @@ public class OrderedPairlist<C extends RingElem<C>> {
 
 
     /**
-     * Get the list of power seriess.
+     * Get the list of power series.
      * @return the power series list.
      */
     public List<MultiVarPowerSeries<C>> getList() {
@@ -276,7 +276,7 @@ public class OrderedPairlist<C extends RingElem<C>> {
 
 
     /**
-     * GB criterium 3.
+     * GB criterion 3.
      * @return true if the S-power-series(i,j) is required.
      */
     public boolean criterion3(int i, int j, ExpVector eij) {

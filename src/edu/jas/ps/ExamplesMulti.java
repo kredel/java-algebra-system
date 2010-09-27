@@ -248,7 +248,7 @@ public class ExamplesMulti {
     public static void example7() {
         BigRational br = new BigRational(1);
         String[] vars = new String[] { "x", "y" };
-        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(br,vars);
+        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(br, vars);
         System.out.println("pfac = " + pfac.toScript());
 
         GenPolynomial<BigRational> a = pfac.parse("x^10 + x^9 y^2");
@@ -271,8 +271,8 @@ public class ExamplesMulti {
 
         StandardBaseSeq<BigRational> tm = new StandardBaseSeq<BigRational>();
         List<MultiVarPowerSeries<BigRational>> S = tm.STD(L);
-        for ( MultiVarPowerSeries<BigRational> ps : S ) {
-             System.out.println("ps = " + ps);
+        for (MultiVarPowerSeries<BigRational> ps : S) {
+            System.out.println("ps = " + ps);
         }
         System.out.println("\nS = " + S);
 
@@ -280,7 +280,7 @@ public class ExamplesMulti {
         System.out.println("\nisSTD = " + s);
 
         ReductionSeq<BigRational> red = new ReductionSeq<BigRational>();
-        s = red.contains(S,L);
+        s = red.contains(S, L);
         System.out.println("\nS contains L = " + s);
     }
 
@@ -328,7 +328,7 @@ public class ExamplesMulti {
     }
 
 
-   public static void example9() {
+    public static void example9() {
         BigRational br = new BigRational(1);
         String[] vars = new String[] { "x", "y", "z" };
         GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(br, vars);
@@ -373,7 +373,7 @@ public class ExamplesMulti {
     }
 
 
-   public static void example10() {
+    public static void example10() {
         BigRational br = new BigRational(1);
         String[] vars = new String[] { "x", "y", "z" };
         GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(br, vars);
@@ -430,7 +430,7 @@ public class ExamplesMulti {
     }
 
 
-   public static void example11() {
+    public static void example11() {
         BigRational br = new BigRational(1);
         String[] vars = new String[] { "x", "y", "z" };
         GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(br, vars);

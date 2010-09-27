@@ -8,10 +8,10 @@ package edu.jas.ps;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-import java.util.BitSet;
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.ExpVector;
@@ -20,8 +20,8 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.Monomial;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
-import edu.jas.util.ListUtil;
 import edu.jas.structure.UnaryFunctor;
+import edu.jas.util.ListUtil;
 
 
 /**
@@ -91,6 +91,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
     /**
      * No argument constructor.
      */
+    @SuppressWarnings("unused")
     private MultiVarPowerSeriesRing() {
         throw new IllegalArgumentException("do not use no-argument constructor");
     }
@@ -172,9 +173,8 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
             public C generate(ExpVector i) {
                 if (i.isZERO()) {
                     return coFac.getONE();
-                } else {
-                    return coFac.getZERO();
                 }
+                return coFac.getZERO();
             }
         });
         ZERO = new MultiVarPowerSeries<C>(this, new MultiVarCoefficients<C>(this) {
@@ -332,15 +332,14 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
                 public C generate(ExpVector i) {
                     if (i.isZERO()) {
                         return cg;
-                    } else {
-                        return coFac.getZERO();
                     }
+                    return coFac.getZERO();
                 }
             });
             gens.add(g);
         }
         for (int i = 0; i < nvar; i++) {
-            gens.add(ONE.shift(1, nvar-1-i));
+            gens.add(ONE.shift(1, nvar - 1 - i));
         }
         return gens;
     }
@@ -507,9 +506,8 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
             public C generate(ExpVector i) {
                 if (i.isZERO()) {
                     return coFac.fromInteger(a);
-                } else {
-                    return coFac.getZERO();
                 }
+                return coFac.getZERO();
             }
         });
     }
@@ -529,9 +527,8 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
             public C generate(ExpVector i) {
                 if (i.isZERO()) {
                     return coFac.fromInteger(a);
-                } else {
-                    return coFac.getZERO();
                 }
+                return coFac.getZERO();
             }
         });
     }
@@ -577,11 +574,11 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
             setTruncate(mt);
         }
         BitSet check = new BitSet();
-        for ( int i = 0; i < truncate(); i++ ) {
+        for (int i = 0; i < truncate(); i++) {
             check.set(i);
-            if ( cache.get((long)i) == null ) {
+            if (cache.get((long) i) == null) {
                 GenPolynomial<C> p = pfac.getZERO().clone();
-                cache.put((long)i, p);
+                cache.put((long) i, p);
                 //System.out.println("p zero for deg i = " + i);
             }
         }
@@ -599,17 +596,20 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
 
 
     /**
-     * Get a list of MultiVarPowerSeries&lt;C&gt; from a list of GenPolynomial&lt;C&gt;.
+     * Get a list of MultiVarPowerSeries&lt;C&gt; from a list of
+     * GenPolynomial&lt;C&gt;.
      * @param A list of GenPolynomial&lt;C&gt;.
      * @return a list of MultiVarPowerSeries&lt;C&gt;.
      */
     public List<MultiVarPowerSeries<C>> fromPolynomial(List<GenPolynomial<C>> A) {
-        return ListUtil.<GenPolynomial<C>, MultiVarPowerSeries<C>> map(A, 
-               new UnaryFunctor<GenPolynomial<C>, MultiVarPowerSeries<C>>() {
-                   public MultiVarPowerSeries<C> eval(GenPolynomial<C> c) {
-                          return fromPolynomial(c);
-                   }
-               });
+        return ListUtil.<GenPolynomial<C>, MultiVarPowerSeries<C>> map(A,
+                new UnaryFunctor<GenPolynomial<C>, MultiVarPowerSeries<C>>() {
+
+
+                    public MultiVarPowerSeries<C> eval(GenPolynomial<C> c) {
+                        return fromPolynomial(c);
+                    }
+                });
     }
 
 
@@ -641,9 +641,8 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
                 int j = (int) i.getVal(r);
                 if (j > 0) {
                     return ps.coefficient(j);
-                } else {
-                    return coFac.getZERO();
                 }
+                return coFac.getZERO();
             }
         });
     }
@@ -660,7 +659,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
 
     /**
      * Generate a random power series with d = 0.7.
-     * @param k bitsize of random coefficients.
+     * @param k bit-size of random coefficients.
      * @return a random power series.
      */
     public MultiVarPowerSeries<C> random(int k) {
@@ -670,7 +669,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
 
     /**
      * Generate a random power series with d = 0.7.
-     * @param k bitsize of random coefficients.
+     * @param k bit-size of random coefficients.
      * @param rnd is a source for random bits.
      * @return a random power series.
      */
@@ -681,7 +680,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
 
     /**
      * Generate a random power series.
-     * @param k bitsize of random coefficients.
+     * @param k bit-size of random coefficients.
      * @param d density of non-zero coefficients.
      * @return a random power series.
      */
@@ -692,7 +691,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
 
     /**
      * Generate a random power series.
-     * @param k bitsize of random coefficients.
+     * @param k bit-size of random coefficients.
      * @param d density of non-zero coefficients.
      * @param rnd is a source for random bits.
      * @return a random power series.
@@ -756,34 +755,38 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
     public MultiVarPowerSeries<C> seriesOfTaylor(final TaylorFunction<C> f, final List<C> a) {
         return new MultiVarPowerSeries<C>(this, new MultiVarCoefficients<C>(this) {
 
+
             TaylorFunction<C> der = f;
+
+
             // Map<ExpVextor,TaylorFunction<C>> pderCache = ...
             final List<C> v = a;
 
+
             @Override
-            public C generate(ExpVector  i) {
+            public C generate(ExpVector i) {
                 C c;
                 int s = i.signum();
                 if (s == 0) {
-                   c = der.evaluate(v);
-                   //der = der.deriviative();
-                   return c;
-                }
-//                 if (s > 0) {
-//                     int[] deps = i.dependencyOnVariables();
-//                     ExpVector e = i.subst(deps[0], i.getVal(deps[0]) - 1L);
-//                     c = get(e); // ensure deriv is updated
-//                 }
-                TaylorFunction<C> pder = der.deriviative(i);
-//                 if ( pder.isZERO() ) {
-//                     return coFac.getZERO();
-// 		}
-                c = pder.evaluate(v);
-                if ( c.isZERO() ) {
+                    c = der.evaluate(v);
+                    //der = der.deriviative();
                     return c;
-		}
+                }
+                // if (s > 0) {
+                //     int[] deps = i.dependencyOnVariables();
+                //     ExpVector e = i.subst(deps[0], i.getVal(deps[0]) - 1L);
+                //     c = get(e); // ensure deriv is updated
+                // }
+                TaylorFunction<C> pder = der.deriviative(i);
+                // if ( pder.isZERO() ) {
+                //     return coFac.getZERO();
+                // }
+                c = pder.evaluate(v);
+                if (c.isZERO()) {
+                    return c;
+                }
                 long f = pder.getFacul();
-                c = c.divide( coFac.fromInteger(f) );
+                c = c.divide(coFac.fromInteger(f));
                 return c;
             }
         });

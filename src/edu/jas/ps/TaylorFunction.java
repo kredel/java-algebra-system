@@ -7,7 +7,6 @@ package edu.jas.ps;
 
 import java.util.List;
 
-
 import edu.jas.poly.ExpVector;
 import edu.jas.structure.RingElem;
 
@@ -22,8 +21,8 @@ public interface TaylorFunction<C extends RingElem<C>> {
 
 
     /**
-     * Get the facultorial coefficient.
-     * @return facultorial coefficient.
+     * Get the factorial coefficient.
+     * @return factorial coefficient.
      */
     public long getFacul();
 

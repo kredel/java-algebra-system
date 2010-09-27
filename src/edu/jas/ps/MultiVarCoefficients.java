@@ -98,8 +98,7 @@ public abstract class MultiVarCoefficients<C extends RingElem<C>> {
      * @param cache pre-filled coefficient cache.
      * @param hc pre-filled homogeneous check bit-set.
      */
-    public MultiVarCoefficients(GenPolynomialRing<C> pf, HashMap<Long, GenPolynomial<C>> cache,
-                                BitSet hc) {
+    public MultiVarCoefficients(GenPolynomialRing<C> pf, HashMap<Long, GenPolynomial<C>> cache, BitSet hc) {
         this(pf, cache, new HashSet<ExpVector>(), hc);
     }
 
@@ -112,7 +111,7 @@ public abstract class MultiVarCoefficients<C extends RingElem<C>> {
      * @param hc pre-filled homogeneous check bit-set.
      */
     public MultiVarCoefficients(GenPolynomialRing<C> pf, HashMap<Long, GenPolynomial<C>> cache,
-                                HashSet<ExpVector> zeros, BitSet hc) {
+            HashSet<ExpVector> zeros, BitSet hc) {
         pfac = pf;
         coeffCache = cache;
         zeroCache = zeros;

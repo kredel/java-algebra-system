@@ -7,10 +7,9 @@ package edu.jas.ps;
 
 import java.util.List;
 
-import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.PolyUtil;
-import edu.jas.poly.ExpVector;
 import edu.jas.structure.RingElem;
 
 
@@ -25,11 +24,12 @@ public class PolynomialTaylorFunction<C extends RingElem<C>> implements TaylorFu
 
     final GenPolynomial<C> pol;
 
+
     final long facul;
 
 
     public PolynomialTaylorFunction(GenPolynomial<C> p) {
-        this(p,1L);
+        this(p, 1L);
     }
 
 
@@ -50,8 +50,8 @@ public class PolynomialTaylorFunction<C extends RingElem<C>> implements TaylorFu
 
 
     /**
-     * Get the facultorial coefficient.
-     * @return facultorial coefficient.
+     * Get the factorial coefficient.
+     * @return factorial coefficient.
      */
     @Override
     public long getFacul() {
@@ -65,7 +65,7 @@ public class PolynomialTaylorFunction<C extends RingElem<C>> implements TaylorFu
      */
     @Override
     public TaylorFunction<C> deriviative() {
-        return new PolynomialTaylorFunction<C>(PolyUtil. <C> baseDeriviative(pol)); 
+        return new PolynomialTaylorFunction<C>(PolyUtil.<C> baseDeriviative(pol));
     }
 
 
@@ -87,25 +87,25 @@ public class PolynomialTaylorFunction<C extends RingElem<C>> implements TaylorFu
     public TaylorFunction<C> deriviative(ExpVector i) {
         GenPolynomial<C> p = pol;
         long f = 1L;
-        if ( i.signum() == 0 || pol.isZERO() ) {
-            return new PolynomialTaylorFunction<C>(p,f); 
+        if (i.signum() == 0 || pol.isZERO()) {
+            return new PolynomialTaylorFunction<C>(p, f);
         }
-        for ( int j = 0; j < i.length(); j++ ) {
+        for (int j = 0; j < i.length(); j++) {
             long e = i.getVal(j);
-            if ( e == 0 ) {
+            if (e == 0) {
                 continue;
             }
-            int jl = i.length()-1-j;
-            for ( long k = 0; k < e; k++ ) {
-                p = PolyUtil. <C> baseDeriviative(p,jl);
-                f *= (k+1);
-                if ( p.isZERO() ) {
-                    return new PolynomialTaylorFunction<C>(p,f); 
+            int jl = i.length() - 1 - j;
+            for (long k = 0; k < e; k++) {
+                p = PolyUtil.<C> baseDeriviative(p, jl);
+                f *= (k + 1);
+                if (p.isZERO()) {
+                    return new PolynomialTaylorFunction<C>(p, f);
                 }
             }
         }
         //System.out.println("i = " + i + ", f = " + f + ", der = " + p);
-        return new PolynomialTaylorFunction<C>(p,f); 
+        return new PolynomialTaylorFunction<C>(p, f);
     }
 
 
@@ -116,7 +116,7 @@ public class PolynomialTaylorFunction<C extends RingElem<C>> implements TaylorFu
      */
     @Override
     public C evaluate(C a) {
-        return PolyUtil. <C> evaluateMain(pol.ring.coFac,pol,a);
+        return PolyUtil.<C> evaluateMain(pol.ring.coFac, pol, a);
     }
 
 
@@ -126,7 +126,7 @@ public class PolynomialTaylorFunction<C extends RingElem<C>> implements TaylorFu
      * @return this(a).
      */
     public C evaluate(List<C> a) {
-        return PolyUtil. <C> evaluateAll(pol.ring.coFac,pol.ring,pol,a);
+        return PolyUtil.<C> evaluateAll(pol.ring.coFac, pol.ring, pol, a);
     }
 
 }

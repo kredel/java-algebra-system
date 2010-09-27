@@ -7,9 +7,8 @@ package edu.jas.ps;
 
 import java.util.List;
 
-
-import edu.jas.structure.RingElem;
 import edu.jas.poly.ExpVector;
+import edu.jas.structure.RingElem;
 
 
 /**
@@ -22,10 +21,9 @@ public abstract class TaylorFunctionAdapter<C extends RingElem<C>> implements Ta
 
 
     /**
-     * Get the facultorial coefficient.
-     * @return facultorial coefficient.
+     * Get the factorial coefficient.
+     * @return factorial coefficient.
      */
-    @Override
     public long getFacul() {
         return 1L;
     }
@@ -55,7 +53,7 @@ public abstract class TaylorFunctionAdapter<C extends RingElem<C>> implements Ta
      * @param a element.
      * @return this(a).
      */
-    public C evaluate(C a){
+    public C evaluate(C a) {
         throw new UnsupportedOperationException("not implemented");
     }
 
