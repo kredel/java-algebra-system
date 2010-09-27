@@ -5,7 +5,7 @@
 package edu.jas.root;
 
 
-//import edu.jas.structure.RingElem;
+// import edu.jas.structure.RingElem;
 import edu.jas.arith.Rational;
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.AlgebraicNumber;
@@ -21,7 +21,7 @@ import edu.jas.structure.NotInvertibleException;
  * @author Heinz Kredel
  */
 
-public class ComplexAlgebraicNumber<C extends GcdRingElem<C>& Rational>
+public class ComplexAlgebraicNumber<C extends GcdRingElem<C> & Rational>
 /*extends AlgebraicNumber<C>*/
 implements GcdRingElem<ComplexAlgebraicNumber<C>> {
 
@@ -130,9 +130,8 @@ implements GcdRingElem<ComplexAlgebraicNumber<C>> {
     public String toString() {
         if (PrettyPrint.isTrue()) {
             return "{ " + number.toString() + " }";
-        } else {
-            return "Complex" + number.toString();
         }
+        return "Complex" + number.toString();
     }
 
 
@@ -236,9 +235,8 @@ implements GcdRingElem<ComplexAlgebraicNumber<C>> {
     public ComplexAlgebraicNumber<C> abs() {
         if (this.signum() < 0) {
             return new ComplexAlgebraicNumber<C>(ring, number.negate());
-        } else {
-            return this;
         }
+        return this;
     }
 
 

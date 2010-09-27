@@ -11,11 +11,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import edu.jas.structure.RingElem;
-import edu.jas.structure.RingFactory;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.Monomial;
+import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
 
 
 /**
@@ -79,6 +79,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
     /**
      * No argument constructor.
      */
+    @SuppressWarnings("unused")
     private UnivPowerSeriesRing() {
         throw new IllegalArgumentException("do not use no-argument constructor");
     }
@@ -139,9 +140,8 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
             public C generate(int i) {
                 if (i == 0) {
                     return coFac.getONE();
-                } else {
-                    return coFac.getZERO();
                 }
+                return coFac.getZERO();
             }
         });
         this.ZERO = new UnivPowerSeries<C>(this, new Coefficients<C>() {
@@ -271,9 +271,8 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
                 public C generate(int i) {
                     if (i == 0) {
                         return cg;
-                    } else {
-                        return coFac.getZERO();
                     }
+                    return coFac.getZERO();
                 }
             });
             gens.add(g);
@@ -324,7 +323,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
 
 
     /**
-     * Get the power series of the cosinus function.
+     * Get the power series of the cosine function.
      * @return cos(x) as UnivPowerSeries<C>.
      */
     public UnivPowerSeries<C> getCOS() {
@@ -365,7 +364,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
 
 
     /**
-     * Is commuative.
+     * Is commutative.
      * @return true, if this ring is commutative, else false.
      */
     public boolean isCommutative() {
@@ -482,7 +481,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
 
     /**
      * Generate a random power series with d = 0.7.
-     * @param k bitsize of random coefficients.
+     * @param k bit-size of random coefficients.
      * @param rnd is a source for random bits.
      * @return a random power series.
      */
@@ -493,7 +492,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
 
     /**
      * Generate a random power series.
-     * @param k bitsize of random coefficients.
+     * @param k bit-size of random coefficients.
      * @param d density of non-zero coefficients.
      * @return a random power series.
      */
@@ -504,7 +503,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
 
     /**
      * Generate a random power series.
-     * @param k bitsize of random coefficients.
+     * @param k bit-size of random coefficients.
      * @param d density of non-zero coefficients.
      * @param rnd is a source for random bits.
      * @return a random power series.
@@ -568,17 +567,23 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
     public UnivPowerSeries<C> seriesOfTaylor(final TaylorFunction<C> f, final C a) {
         return new UnivPowerSeries<C>(this, new Coefficients<C>() {
 
+
             TaylorFunction<C> der = f;
+
+
             long k = 0;
+
+
             long n = 1;
+
 
             @Override
             public C generate(int i) {
                 C c;
-                if ( i == 0 ) {
-                   c = der.evaluate(a);
-                   der = der.deriviative();
-                   return c;
+                if (i == 0) {
+                    c = der.evaluate(a);
+                    der = der.deriviative();
+                    return c;
                 }
                 if (i > 0) {
                     c = get(i - 1); // ensure deriv is updated
@@ -587,7 +592,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
                 n *= k;
                 c = der.evaluate(a);
                 //System.out.println("n = " + n + ", i = " +i);
-                c = c.divide( coFac.fromInteger(n) );
+                c = c.divide(coFac.fromInteger(n));
                 der = der.deriviative();
                 return c;
             }

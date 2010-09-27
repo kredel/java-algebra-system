@@ -433,9 +433,8 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
     public Complex<C> remainder(Complex<C> S) {
         if (ring.isField()) {
             return ring.getZERO();
-        } else {
-            return quotientRemainder(S)[1];
         }
+        return quotientRemainder(S)[1];
     }
 
 
@@ -447,9 +446,8 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
     public Complex<C> divide(Complex<C> B) {
         if (ring.isField()) {
             return this.multiply(B.inverse());
-        } else {
-            return quotientRemainder(B)[0];
         }
+        return quotientRemainder(B)[0];
     }
 
 
@@ -460,7 +458,7 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
      */
     @SuppressWarnings("unchecked")
     public Complex<C>[] quotientRemainder(Complex<C> S) {
-        Complex<C>[] ret = (Complex<C>[]) new Complex[2];
+        Complex<C>[] ret = new Complex[2];
         C n = S.norm().re;
         Complex<C> Sp = this.multiply(S.conjugate()); // == this*inv(S)*n
         C qr = Sp.re.divide(n);
@@ -534,6 +532,7 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
         return quotientRemainder(S);
     }
 
+
     /**
      * Complex number greatest common divisor.
      * @param S Complex<C>.
@@ -582,7 +581,7 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
      */
     @SuppressWarnings("unchecked")
     public Complex<C>[] egcd(Complex<C> S) {
-        Complex<C>[] ret = (Complex<C>[]) new Complex[3];
+        Complex<C>[] ret = new Complex[3];
         ret[0] = null;
         ret[1] = null;
         ret[2] = null;

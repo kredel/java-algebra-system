@@ -121,8 +121,8 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         GenPolynomial<MOD> am = null;
         GenPolynomialRing<MOD> mfac = null;
         final int TT = 5; // 7
-        List<GenPolynomial<MOD>>[] modfac = (List<GenPolynomial<MOD>>[]) new List[TT];
-        List<GenPolynomial<BigInteger>>[] intfac = (List<GenPolynomial<BigInteger>>[]) new List[TT];
+        List<GenPolynomial<MOD>>[] modfac = new List[TT];
+        List<GenPolynomial<BigInteger>>[] intfac = new List[TT];
         BigInteger[] plist = new BigInteger[TT];
         List<GenPolynomial<MOD>> mlist = null;
         List<GenPolynomial<BigInteger>> ilist = null;
@@ -529,7 +529,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         GenPolynomial<BigInteger> u = PP;
         long deg = (u.degree(0) + 1L) / 2L;
         GenPolynomial<MOD> um = Pm;
-        BigInteger ldcf = u.leadingBaseCoefficient();
+        //BigInteger ldcf = u.leadingBaseCoefficient();
         //System.out.println("ldcf = " + ldcf); 
         HenselApprox<MOD> ilist = null;
         for (int j = 1; j <= dl; j++) {

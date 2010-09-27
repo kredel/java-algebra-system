@@ -28,6 +28,7 @@ public class ComplexRing<C extends RingElem<C>> implements RingFactory<Complex<C
     private final static Random random = new Random();
 
 
+    @SuppressWarnings("unused")
     private static final Logger logger = Logger.getLogger(ComplexRing.class);
 
 
@@ -213,9 +214,8 @@ public class ComplexRing<C extends RingElem<C>> implements RingFactory<Complex<C
         }
         if (!ring.equals(a.ring)) {
             return false;
-        } else {
-            return true;
         }
+        return true;
     }
 
 
