@@ -181,7 +181,7 @@ public class MultiVarPowerSeriesTest extends TestCase {
         //System.out.println("zeroCache  = " + vars.zeroCache);
         //System.out.println("homCheck   = " + vars.homCheck);
         //System.out.println("homCheck   = " + vars.homCheck.length());
-        assertTrue("zeroCache is not empty", !vars.zeroCache.isEmpty());
+        //no-more: assertTrue("zeroCache is not empty", !vars.zeroCache.isEmpty());
         assertTrue("#coeffCache = " + m, vars.coeffCache.size() == (m + 1));
         assertTrue("#homCheck = " + m, vars.homCheck.length() == (m + 1));
     }
@@ -311,7 +311,7 @@ public class MultiVarPowerSeriesTest extends TestCase {
             //System.out.println("p = " + p + ", i = " + i);
             assertTrue("p==0 || deg(p)==1 ", p.isZERO() || p.degree() == 1L);
         }
-        assertTrue("zeroCache is not empty", !c.lazyCoeffs.zeroCache.isEmpty());
+        //no-more:assertTrue("zeroCache is not empty", !c.lazyCoeffs.zeroCache.isEmpty());
         assertTrue("#coeffCache = " + m, c.lazyCoeffs.coeffCache.size() == (m + 1));
         assertTrue("#homCheck = " + m, c.lazyCoeffs.homCheck.length() == (m + 1));
     }
@@ -644,5 +644,39 @@ public class MultiVarPowerSeriesTest extends TestCase {
             //System.out.println("psc  = " + psc);
             assertEquals("taylor(taylor(p,5),-5) == p", ps, psc);
         }
+    }
+
+
+    /**
+     * Test evaluation.
+     * 
+     */
+    public void testEvaluation() {
+        a = fac.random(kl, q);
+        b = fac.random(kl, q);
+        BigRational fv = new BigRational(0);
+        List<BigRational> v = new ArrayList<BigRational>(rl);
+        for ( int i = 0; i < rl; i++ ) {
+            v.add( fv.random(kl) );
+        }
+
+        BigRational av = a.evaluate(v);
+        BigRational bv = b.evaluate(v);
+
+        c = a.sum(b);
+        BigRational cv = c.evaluate(v);
+        BigRational dv = av.sum(bv);
+
+        assertEquals("a(v)+b(v) = (a+b)(v) ", cv, dv);
+
+        c = fac.getZERO();
+        cv = c.evaluate(v);
+        dv = fv.getZERO();
+        assertEquals("0(v) = 0 ", cv, dv);
+
+        c = fac.getONE();
+        cv = c.evaluate(v);
+        dv = fv.getONE();
+        assertEquals("1(v) = 1 ", cv, dv);
     }
 }

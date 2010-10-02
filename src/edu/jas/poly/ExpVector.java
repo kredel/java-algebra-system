@@ -5,12 +5,15 @@
 package edu.jas.poly;
 
 import java.util.Random;
-import java.util.Vector;
+import java.util.List;
 //import java.io.Serializable;
 import java.util.Collection;
 
+import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
 import edu.jas.structure.AbelianGroupElem;
 import edu.jas.structure.AbelianGroupFactory;
+import edu.jas.structure.Power;
 
 
 /**
@@ -421,6 +424,29 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
             }
         }
         return -1; // not found
+    }
+
+
+    /** Evaluate.
+     * @param cf ring factory for elements of a.
+     * @param a list of values.
+     * @return a_1^{e_1} * ... * a_n^{e_n}.
+     */
+    public <C extends RingElem<C>> C evaluate(RingFactory<C> cf, List<C> a) {
+        C c = cf.getONE();
+        for ( int i = 0; i < length(); i++ ) { 
+             long ei = getVal(i);
+             if (ei == 0L) {
+                 continue;
+             }
+             C ai = a.get(length()-1-i);
+             if (ai.isZERO()) {
+                 return ai;
+             }
+             C pi = Power.<C>positivePower(ai,ei);
+             c = c.multiply(pi);
+        }
+        return c;
     }
 
 

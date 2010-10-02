@@ -110,13 +110,13 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
      * @return spol(A,B) the S-power-series of A and B.
      */
     public MultiVarPowerSeries<C> SPolynomial(MultiVarPowerSeries<C> A, MultiVarPowerSeries<C> B) {
-        if (B == null /*|| B.isZERO()*/) {
+        if (B == null || B.isZERO()) {
             if (A == null) {
                 return B;
             }
             return A.ring.getZERO();
         }
-        if (A == null /*|| A.isZERO()*/) {
+        if (A == null || A.isZERO()) {
             return B.ring.getZERO();
         }
         if (debug) {
@@ -155,7 +155,7 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
         if (Pp == null || Pp.isEmpty()) {
             return Ap;
         }
-        if (Ap == null) {
+        if (Ap == null || Ap.isZERO()) {
             return Ap;
         }
         if (!Ap.ring.coFac.isField()) {
