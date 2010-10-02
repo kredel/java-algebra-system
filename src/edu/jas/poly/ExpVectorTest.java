@@ -607,7 +607,20 @@ public class ExpVectorTest extends TestCase {
         c = ExpVector.create(rl);
         cv = c.evaluate(fv,v);
         dv = fv.getONE();
-        assertEquals("0(v) = 0 ", cv, dv);
+        assertEquals("0(v) = 1 ", cv, dv);
+
+        v.clear();
+        for ( int i = 0; i < a.length(); i++ ) {
+            v.add( fv.getZERO() );
+        }
+        cv = c.evaluate(fv,v);
+        dv = fv.getONE();
+        assertEquals("0(0) = 1 ", cv, dv);
+
+        av = a.evaluate(fv,v);
+        dv = fv.getZERO();
+        assertEquals("a(0) = 0 ", av, dv);
+
     }
 
 }

@@ -25,17 +25,19 @@ public class ExamplesMulti {
 
     public static void main(String[] args) {
         BasicConfigurator.configure();
-        //example1();
-        //example2();
-        //example3();
-        //example4();
-        //example5();
-        //example6();
-        //example7();
-        //example8();
-        //example9();
+        if ( args.length > 0 ) {
+            example1();
+            example2();
+            example3();
+            example4();
+            example5();
+            example6();
+            example7();
+            example8();
+            example9();
+            example11();
+        }
         example10();
-        //example11();
     }
 
 

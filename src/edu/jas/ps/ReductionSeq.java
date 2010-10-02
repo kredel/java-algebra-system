@@ -150,7 +150,6 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
      * @param Pp power series list.
      * @return top-nf(Ap) with respect to Pp.
      */
-    //@SuppressWarnings("unchecked") 
     public MultiVarPowerSeries<C> normalform(List<MultiVarPowerSeries<C>> Pp, MultiVarPowerSeries<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
             return Ap;
@@ -161,67 +160,60 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
         if (!Ap.ring.coFac.isField()) {
             throw new IllegalArgumentException("coefficients not from a field");
         }
-        int l;
-        MultiVarPowerSeries<C>[] P;
+        List<MultiVarPowerSeries<C>> P = new ArrayList<MultiVarPowerSeries<C>>(Pp.size());
         synchronized (Pp) {
-            l = Pp.size();
-            P = new MultiVarPowerSeries[l];
-            for (int i = 0; i < Pp.size(); i++) {
-                P[i] = Pp.get(i);
-            }
+            P.addAll(Pp);
         }
-        ArrayList<ExpVector> htl = new ArrayList<ExpVector>(l);
-        ArrayList<C> lbc = new ArrayList<C>(l);
-        ArrayList<MultiVarPowerSeries<C>> p = new ArrayList<MultiVarPowerSeries<C>>(l);
-        ArrayList<Long> ecart = new ArrayList<Long>(l);
+        ArrayList<ExpVector> htl = new ArrayList<ExpVector>(P.size());
+        ArrayList<C> lbc = new ArrayList<C>(P.size());
+        ArrayList<MultiVarPowerSeries<C>> p = new ArrayList<MultiVarPowerSeries<C>>(P.size());
+        ArrayList<Long> ecart = new ArrayList<Long>(P.size());
         Map.Entry<ExpVector, C> m;
-        int i;
         int j = 0;
-        for (i = 0; i < l; i++) {
-            m = P[i].orderMonomial();
+        for (int i = 0; i < P.size(); i++) {
+            m = P.get(i).orderMonomial();
             //System.out.println("m_i = " + m);
             if (m != null) {
-                p.add(P[i]);
+                p.add(P.get(i));
                 //System.out.println("e = " + m.getKey().toString(Ap.ring.vars));
                 htl.add(m.getKey());
                 lbc.add(m.getValue());
-                ecart.add(P[i].ecart());
+                ecart.add(P.get(i).ecart());
                 j++;
             }
         }
-        l = j;
-        MultiVarPowerSeries<C> R = Ap.ring.getZERO();
-        //System.out.println("R = " + R);
         MultiVarPowerSeries<C> S = Ap;
         m = S.orderMonomial();
         while (true) {
             //System.out.println("m = " + m);
             //System.out.println("S = " + S);
             if (m == null) {
-                R = R.sum(S);
-                return R;
+                S.setTruncate(Ap.ring.truncate()); // ??
+                return S;
             }
             if (S.isZERO()) {
-                return R;
+                S.setTruncate(Ap.ring.truncate()); // ??
+                return S;
             }
             ExpVector e = m.getKey();
             if (debug) {
                 logger.debug("e = " + e.toString(Ap.ring.vars));
             }
-            if (e.totalDeg() > S.truncate()) {
+            if (e.totalDeg() > S.ring.truncate()+1) {
                 throw new RuntimeException("not convergent, deg = " + e.totalDeg() + " > " + S.truncate());
             }
             // search ps with ht(ps) | ht(S)
             List<Integer> li = new ArrayList<Integer>();
-            for (i = 0; i < l; i++) {
+            int i;
+            for (i = 0; i < htl.size(); i++) {
                 if (e.multipleOf(htl.get(i))) {
                     //System.out.println("m = " + m);
                     li.add(i);
                 }
             }
-            if (li.size() == 0) {
-                R = R.sum(S);
-                return R;
+            if (li.isEmpty()) {
+                S.setTruncate(Ap.ring.truncate()); // ??
+                return S;
             }
             //System.out.println("li = " + li);
             // select ps with smallest ecart
@@ -242,7 +234,6 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 htl.add(m.getKey());
                 lbc.add(m.getValue());
                 ecart.add(si);
-                l++;
             }
             e = e.subtract(htl.get(i));
             C a = m.getValue().divide(lbc.get(i));

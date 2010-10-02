@@ -196,7 +196,6 @@ public abstract class MultiVarCoefficients<C extends RingElem<C>> {
             return p;
         }
         // check correct contents or generate coefficients
-        //int s = zeroCache.size();
         ExpVectorIterable eiter = new ExpVectorIterable(pfac.nvar, tdeg);
         for (ExpVector e : eiter) {
             if (zeroCache.contains(e)) {
@@ -216,7 +215,6 @@ public abstract class MultiVarCoefficients<C extends RingElem<C>> {
         homCheck.set((int) tdeg);
         //System.out.println("homCheck = " + homCheck);
         //System.out.println("coeffCache = " + coeffCache.keySet());
-        //System.out.println("#zeroCache = " + s + ", #now = " + zeroCache.size() + ", #p = " + p.length());
         return p;
     }
 

@@ -178,11 +178,14 @@ public class StandardBaseSeq<C extends RingElem<C>>
                 logger.info("ht(S) = " + S.orderExpVector().toString(S.ring.vars));
             }
 
+            //long t = System.currentTimeMillis();
             H = red.normalform(G, S);
             if (H.isZERO()) {
                 pair.setZero();
                 continue;
             }
+            //t = System.currentTimeMillis() - t;
+            //System.out.println("time = " + t);
             if (logger.isInfoEnabled()) {
                 logger.info("ht(H) = " + H.orderExpVector().toString(S.ring.vars));
             }

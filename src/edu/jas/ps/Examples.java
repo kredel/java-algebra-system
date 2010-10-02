@@ -36,7 +36,9 @@ public class Examples {
         example3();
         example5();
         example7();
-        //example12();
+        if ( args.length > 0 ) {
+            example12();
+	}
         example13();
     }
 
