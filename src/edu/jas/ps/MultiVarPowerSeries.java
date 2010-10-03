@@ -464,16 +464,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         int nt = truncate; // + (int)k.totalDeg();
         //int td = (int)k.totalDeg();
         //System.out.println("nt = " + nt + ", truncate = " + truncate + ", tdeg = " + k.totalDeg());
-//         BitSet hc = new BitSet(nt);
-//         for ( int i = 0; i < td; i++ ) {
-//             hc.set(i); 
-//         }
-//         for ( int i = td; i < truncate; i++ ) {
-//             if ( lazyCoeffs.homCheck.get(i-td) ) {
-//                 hc.set(i); 
-//             }
-//         }
-//         System.out.println("hc = " + hc);
+
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
 
 
@@ -527,8 +518,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         cc.put(d, p);
         HashSet<ExpVector> z = new HashSet<ExpVector>(mc.zeroCache);
         //System.out.println("z = " + z);
-        C x = p.coefficient(k);
-        if (x.isZERO()) {
+        if (p.coefficient(k).isZERO() && !mc.homCheck.get((int)d)) {
             z.add(k);
         }
 
@@ -567,8 +557,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         cc.put(d, p);
         HashSet<ExpVector> z = new HashSet<ExpVector>(mc.zeroCache);
         //System.out.println("z = " + z);
-        C x = p.coefficient(k);
-        if (x.isZERO()) {
+        if (p.coefficient(k).isZERO()&& !mc.homCheck.get((int)d)) {
             z.add(k);
         }
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(mc.pfac, cc, z, mc.homCheck) {
@@ -596,6 +585,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         HashSet<ExpVector> z = new HashSet<ExpVector>(mc.zeroCache);
         z.addAll(mvc.zeroCache);
         long d = Math.max(d1, d2);
+        BitSet hc = new BitSet((int)d);
         for (long i = 0; i < d; i++) {
             GenPolynomial<C> p1 = cc.get(i);
             GenPolynomial<C> p2 = mvc.coeffCache.get(i);
@@ -608,15 +598,19 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
             GenPolynomial<C> p = p1.sum(p2);
             //System.out.println("p = " + p);
             cc.put(i, p);
-            Set<ExpVector> ev = new HashSet<ExpVector>(p1.getMap().keySet());
-            ev.addAll(p2.getMap().keySet());
-            ev.removeAll(p.getMap().keySet());
-            z.addAll(ev);
+            if ( mc.homCheck.get((int)i) && mvc.homCheck.get((int)i) )  {
+                hc.set((int)i);
+            } else {
+                Set<ExpVector> ev = new HashSet<ExpVector>(p1.getMap().keySet());
+                ev.addAll(p2.getMap().keySet());
+                ev.removeAll(p.getMap().keySet());
+                z.addAll(ev);
+            }
         }
         //System.out.println("z = " + z);
 
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(mc.pfac,
-                new HashMap<Long, GenPolynomial<C>>(cc), z) {
+                   new HashMap<Long, GenPolynomial<C>>(cc), z, hc) {
 
 
             @Override
@@ -884,15 +878,32 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
             if (!coefficient(i).isZERO()) {
                 order = (int)i.totalDeg(); //ord;
                 evorder = i;
+                //System.out.println("order = " + order + ", evorder = " + evorder);
                 return order;
             }
             x = i;
         }
         order = truncate + 1;
+        if (true) { // evorder == null
+            return order;
+        }
         if (x != null) {
             evorder = x.subst(0, x.getVal(0) + 1L);
         } else {
             evorder = ring.EVZERO;
+        }
+        System.out.println("order > " + truncate + ", evorder = " + evorder + ", coeff(evorder) = " + coefficient(evorder));
+        if (coefficient(evorder).isZERO()) {
+            return order;
+        }        
+        for (ExpVector i : new ExpVectorIterable(ring.nvar, order)) {
+            if (!coefficient(i).isZERO()) {
+                order = (int)i.totalDeg(); //ord;
+                int yp = setTruncate(order+1);
+                evorder = i;
+                System.out.println("order// = " + order + ", evorder = " + evorder);
+                return order;
+            }
         }
         return order;
     }
@@ -915,6 +926,9 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      */
     public Map.Entry<ExpVector, C> orderMonomial() {
         ExpVector e = orderExpVector();
+        if ( e == null ) {
+            return null;
+        }
         return new AbstractMap.SimpleImmutableEntry<ExpVector, C>(e, coefficient(e));
     }
 

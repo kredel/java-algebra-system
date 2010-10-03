@@ -183,25 +183,31 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
             }
         }
         MultiVarPowerSeries<C> S = Ap;
+        //S.setTruncate(Ap.ring.truncate()); // ??
         m = S.orderMonomial();
         while (true) {
             //System.out.println("m = " + m);
             //System.out.println("S = " + S);
             if (m == null) {
-                S.setTruncate(Ap.ring.truncate()); // ??
+                //S.setTruncate(Ap.ring.truncate()); // ??
+                return S;
+            }
+            if ( m.getValue().isZERO() ) {
+                System.out.println("coeff(m) = " + m.getValue());
+                //S.setTruncate(Ap.ring.truncate()); // ??
                 return S;
             }
             if (S.isZERO()) {
-                S.setTruncate(Ap.ring.truncate()); // ??
+                //S.setTruncate(Ap.ring.truncate()); // ??
                 return S;
             }
             ExpVector e = m.getKey();
             if (debug) {
                 logger.debug("e = " + e.toString(Ap.ring.vars));
             }
-            if (e.totalDeg() > S.ring.truncate()+1) {
-                throw new RuntimeException("not convergent, deg = " + e.totalDeg() + " > " + S.truncate());
-            }
+            //if (e.totalDeg() > S.ring.truncate()+1) {
+            //    throw new RuntimeException("not convergent, deg = " + e.totalDeg() + " > " + S.truncate());
+            //}
             // search ps with ht(ps) | ht(S)
             List<Integer> li = new ArrayList<Integer>();
             int i;
@@ -212,20 +218,23 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 }
             }
             if (li.isEmpty()) {
-                S.setTruncate(Ap.ring.truncate()); // ??
+                //S.setTruncate(Ap.ring.truncate()); // ??
                 return S;
             }
             //System.out.println("li = " + li);
             // select ps with smallest ecart
             long mi = Long.MAX_VALUE;
+            String es = "";
             for (int k = 0; k < li.size(); k++) {
                 int ki = li.get(k);
                 long x = ecart.get(ki); //p.get( ki ).ecart();
-                if (x < mi) { // first or last?
+                es = es + x + " ";
+                if (x < mi) { // first < or last <= ?
                     mi = x;
                     i = ki;
                 }
             }
+            //System.out.println("li = " + li + ", ecarts = " + es);
             //System.out.println("i = " + i + ", p_i = " + p.get(i));
             long si = S.ecart();
             if (mi > si) {
@@ -239,6 +248,7 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
             C a = m.getValue().divide(lbc.get(i));
             MultiVarPowerSeries<C> Q = p.get(i).multiply(a, e);
             S = S.subtract(Q);
+            //S.setTruncate(Ap.ring.truncate()); // ??
             m = S.orderMonomial();
         }
     }

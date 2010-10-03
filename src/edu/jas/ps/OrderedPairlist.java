@@ -82,7 +82,8 @@ public class OrderedPairlist<C extends RingElem<C>> {
         moduleVars = m;
         ring = r;
         P = new ArrayList<MultiVarPowerSeries<C>>();
-        pairlist = new TreeMap<ExpVector, LinkedList<Pair<C>>>(ring.polyRing().tord.getAscendComparator());
+        //pairlist = new TreeMap<ExpVector, LinkedList<Pair<C>>>(ring.polyRing().tord.getAscendComparator());
+        pairlist = new TreeMap<ExpVector, LinkedList<Pair<C>>>(ring.polyRing().tord.getDescendComparator());
         //pairlist = new TreeMap( to.getSugarComparator() );
         red = new ArrayList<BitSet>();
         putCount = 0;

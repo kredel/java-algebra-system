@@ -12,6 +12,7 @@ import java.util.ListIterator;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
+import edu.jas.poly.ExpVector;
 
 
 /**
@@ -120,7 +121,7 @@ public class StandardBaseSeq<C extends RingElem<C>>
      * @return STD(F) a Standard base of F.
      */
     public List<MultiVarPowerSeries<C>> STD(int modv, List<MultiVarPowerSeries<C>> F) {
-        MultiVarPowerSeries<C> p;
+        MultiVarPowerSeries<C> p = null;
         List<MultiVarPowerSeries<C>> G = new ArrayList<MultiVarPowerSeries<C>>();
         OrderedPairlist<C> pairlist = null;
         int l = F.size();
@@ -170,12 +171,14 @@ public class StandardBaseSeq<C extends RingElem<C>>
             }
 
             S = red.SPolynomial(pi, pj);
+            //S.setTruncate(p.ring.truncate()); // ??
             if (S.isZERO()) {
                 pair.setZero();
                 continue;
             }
             if (logger.isInfoEnabled()) {
-                logger.info("ht(S) = " + S.orderExpVector().toString(S.ring.vars));
+                ExpVector es = S.orderExpVector();
+                logger.info("ht(S) = " + es.toString(S.ring.vars) + ", " + es); // + ", S = " + S);
             }
 
             //long t = System.currentTimeMillis();
@@ -187,11 +190,12 @@ public class StandardBaseSeq<C extends RingElem<C>>
             //t = System.currentTimeMillis() - t;
             //System.out.println("time = " + t);
             if (logger.isInfoEnabled()) {
-                logger.info("ht(H) = " + H.orderExpVector().toString(S.ring.vars));
+                ExpVector eh = H.orderExpVector();
+                logger.info("ht(H) = " + eh.toString(S.ring.vars) + ", " + eh); // + ", coeff(HT(H)) = " + H.coefficient(eh));
             }
 
             //H = H.monic();
-            if (H.isONE()) {
+            if (H.isUnit()) {
                 G.clear();
                 G.add(H);
                 return G; // since no threads are activated
@@ -199,11 +203,11 @@ public class StandardBaseSeq<C extends RingElem<C>>
             if (logger.isInfoEnabled()) {
                 logger.info("H = " + H);
             }
-            if (!H.isZERO()) {
+            //if (!H.isZERO()) {
                 l++;
                 G.add(H);
                 pairlist.put(H);
-            }
+            //}
         }
         logger.debug("#sequential list = " + G.size());
         G = minimalSTD(G);
