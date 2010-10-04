@@ -130,7 +130,7 @@ public class StandardBaseSeq<C extends RingElem<C>>
             p = it.next();
             if (p.truncate() > 0) {
                 //p = p.monic();
-                if (p.isONE()) {
+                if (p.isUnit()) {
                     G.clear();
                     G.add(p);
                     return G; // since no threads are activated
