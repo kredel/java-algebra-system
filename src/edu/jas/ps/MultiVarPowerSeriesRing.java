@@ -574,7 +574,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
             setTruncate(mt);
         }
         BitSet check = new BitSet();
-        for (int i = 0; i < truncate(); i++) {
+        for (int i = 0; i <= truncate(); i++) {
             check.set(i);
             if (cache.get((long) i) == null) {
                 GenPolynomial<C> p = pfac.getZERO().clone();
@@ -769,18 +769,12 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
                 int s = i.signum();
                 if (s == 0) {
                     c = der.evaluate(v);
-                    //der = der.deriviative();
                     return c;
                 }
-                // if (s > 0) {
-                //     int[] deps = i.dependencyOnVariables();
-                //     ExpVector e = i.subst(deps[0], i.getVal(deps[0]) - 1L);
-                //     c = get(e); // ensure deriv is updated
-                // }
                 TaylorFunction<C> pder = der.deriviative(i);
-                // if ( pder.isZERO() ) {
-                //     return coFac.getZERO();
-                // }
+                if ( pder.isZERO() ) {
+                     return coFac.getZERO();
+                }
                 c = pder.evaluate(v);
                 if (c.isZERO()) {
                     return c;

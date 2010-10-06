@@ -28,6 +28,13 @@ public interface TaylorFunction<C extends RingElem<C>> {
 
 
     /**
+     * Test if this is zero.
+     * @return true if this is 0, else false.
+     */
+    public boolean isZERO();
+
+
+    /**
      * Deriviative.
      * @return deriviative of this.
      */

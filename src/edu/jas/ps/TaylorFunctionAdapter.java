@@ -30,6 +30,16 @@ public abstract class TaylorFunctionAdapter<C extends RingElem<C>> implements Ta
 
 
     /**
+     * Test if this is zero.
+     * @return true if this is 0, else false.
+     */
+    public boolean isZERO() {
+        throw new UnsupportedOperationException("not implemented");
+    }
+
+
+
+    /**
      * Deriviative.
      * @return deriviative of this.
      */

@@ -116,10 +116,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         }
         this.ring = ring;
         this.lazyCoeffs = lazyCoeffs;
-        this.truncate = trunc;
-        if (trunc > ring.truncate) {
-            //System.out.println("trunc = " + trunc + ", ring.trunc = " + ring.truncate);// + ", this = " + toString());
-        }
+        this.truncate = Math.min(trunc,ring.truncate);
     }
 
 
@@ -369,7 +366,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         if (r < 0 || ring.nvar < r) {
             throw new IllegalArgumentException("variable index out of bound");
         }
-        //int nt = truncate; // + k;
+        int nt = Math.min(truncate+k,ring.truncate);
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
 
 
@@ -382,7 +379,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                 ExpVector e = i.subst(r, i.getVal(r) - k);
                 return coefficient(e);
             }
-        });
+        },nt);
     }
 
 
@@ -430,7 +427,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         if (k.signum() == 0) {
             return this;
         }
-        int nt = truncate; // + (int)k.totalDeg();
+        int nt = Math.min(truncate+(int)k.totalDeg(),ring.truncate);
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
 
 
@@ -462,9 +459,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         if (c.signum() == 0) {
             return ring.getZERO();
         }
-        int nt = truncate; // + (int)k.totalDeg();
-        //int td = (int)k.totalDeg();
-        //System.out.println("nt = " + nt + ", truncate = " + truncate + ", tdeg = " + k.totalDeg());
+        int nt = Math.min(ring.truncate,truncate+(int)k.totalDeg());
 
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
 
@@ -710,9 +705,8 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      */
     public MultiVarPowerSeries<C> zip(final BinaryFunctor<? super C, ? super C, C> f,
             final MultiVarPowerSeries<C> ps) {
-        int m = truncate();
-        //int n = ps.truncate();
-        //int pos = (m > n) ? m : n;
+        int m = Math.min(ring.truncate,Math.max(truncate,ps.truncate()));
+
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
 
 
@@ -991,7 +985,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
     public int compareTo(MultiVarPowerSeries<C> ps) {
         final int m = truncate();
         final int n = ps.truncate();
-        final int pos = Math.min(m, n);
+        final int pos = Math.min(ring.truncate,Math.min(m, n));
         int s = 0;
         //System.out.println("coeffCache_c1 = " + lazyCoeffs.coeffCache);
         //System.out.println("coeffCache_c2 = " + ps.lazyCoeffs.coeffCache);
@@ -1006,7 +1000,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         if (pos == Math.max(m, n)) {
             return s;
         }
-        for (int j = pos + 1; j < pos + 2; j++) { // Math.max(m,n)
+        for (int j = pos + 1; j <= Math.min(ring.truncate,Math.max(m, n)); j++) { 
             for (ExpVector i : new ExpVectorIterable(ring.nvar, j)) {
                 s = coefficient(i).compareTo(ps.coefficient(i));
                 //System.out.println("i = " + i + ", coeff = " + coefficient(i) + ", ps.coeff = " + ps.coefficient(i));
@@ -1104,7 +1098,8 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      */
     public MultiVarPowerSeries<C> multiply(final MultiVarPowerSeries<C> ps) {
         //final MultiVarPowerSeries<C> ps1 = this; // method name was ambiguous in generate
-        int nt = truncate(); // + ps.truncate();
+        int nt = Math.min(ring.truncate,Math.max(truncate(),ps.truncate()));
+
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
 
 
@@ -1251,7 +1246,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         if (r < 0 || ring.nvar < r) {
             throw new IllegalArgumentException("variable index out of bound");
         }
-        int nt = truncate; // + 1;
+        int nt = Math.min(ring.truncate,truncate+1);
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
 
 

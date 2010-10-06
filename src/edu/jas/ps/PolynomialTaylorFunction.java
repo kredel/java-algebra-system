@@ -60,6 +60,15 @@ public class PolynomialTaylorFunction<C extends RingElem<C>> implements TaylorFu
 
 
     /**
+     * Test if this is zero.
+     * @return true if this is 0, else false.
+     */
+    public boolean isZERO() {
+        return pol.isZERO();
+    }
+
+
+    /**
      * Deriviative.
      * @return deriviative of this.
      */
