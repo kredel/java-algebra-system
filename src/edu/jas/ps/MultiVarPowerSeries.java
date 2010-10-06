@@ -470,7 +470,15 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                 if (d.signum() < 0) {
                     return ring.coFac.getZERO();
                 }
-                return coefficient(d).multiply(c);
+                long tdegi = i.totalDeg();
+                long tdegd = d.totalDeg();
+                GenPolynomial<C> p = homogeneousPart(tdegd).multiply(c,k);
+                coeffCache.put(tdegi, p); // overwrite
+                homCheck.set((int) tdegi);
+                C b = p.coefficient(i);
+                //System.out.println("b = " + b + ", i = " + i + ", tdegi = " + tdegi+ ", tdegd = " + tdegd);
+                return b;
+                //return coefficient(d).multiply(c);
             }
         }, nt);
     }
@@ -719,11 +727,11 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
 
 
     /**
-     * Sum of two power series.
+     * Sum of two power series, using zip().
      * @param ps other power series.
      * @return this + ps.
      */
-    public MultiVarPowerSeries<C> sum(MultiVarPowerSeries<C> ps) {
+    public MultiVarPowerSeries<C> sumZip(MultiVarPowerSeries<C> ps) {
         return zip(new BinaryFunctor<C, C, C>() {
 
 
@@ -736,11 +744,11 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
 
 
     /**
-     * Subtraction of two power series.
+     * Subtraction of two power series, using zip().
      * @param ps other power series.
      * @return this - ps.
      */
-    public MultiVarPowerSeries<C> subtract(MultiVarPowerSeries<C> ps) {
+    public MultiVarPowerSeries<C> subtractZip(MultiVarPowerSeries<C> ps) {
         return zip(new BinaryFunctor<C, C, C>() {
 
 
@@ -945,8 +953,6 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      * @return ecart.
      */
     public long ecart() {
-        //@SuppressWarnings("unused")
-        //boolean b = this.isZERO();
         ExpVector e = orderExpVector();
         if (e == null) {
             return 0L;
@@ -996,9 +1002,6 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                 //System.out.println("i = " + i + ", coeff = " + coefficient(i) + ", ps.coeff = " + ps.coefficient(i));
                 return s;
             }
-        }
-        if (pos == Math.max(m, n)) {
-            return s;
         }
         for (int j = pos + 1; j <= Math.min(ring.truncate,Math.max(m, n)); j++) { 
             for (ExpVector i : new ExpVectorIterable(ring.nvar, j)) {
@@ -1093,12 +1096,67 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
 
 
     /**
+     * Sum a another power series.
+     * @param ps other power series.
+     * @return this + ps.
+     */
+    public MultiVarPowerSeries<C> sum(final MultiVarPowerSeries<C> ps) {
+        //final MultiVarPowerSeries<C> ps1 = this; // method name was ambiguous in generate
+        int nt = Math.min(ring.truncate,Math.max(truncate(),ps.truncate()));
+
+        return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
+
+
+            @Override
+            public C generate(ExpVector e) {
+                long tdeg = e.totalDeg();
+                // generate respective homogeneous polynomial
+                GenPolynomial<C> p = homogeneousPart(tdeg).sum(ps.homogeneousPart(tdeg));
+                coeffCache.put(tdeg, p); // overwrite
+                homCheck.set((int) tdeg);
+                C c = p.coefficient(e);
+                //System.out.println("c = " + c + ", e = " + e + ", tdeg = " + tdeg);
+                return c;
+            }
+        }, nt);
+    }
+
+
+    /**
+     * Subtract a another power series.
+     * @param ps other power series.
+     * @return this - ps.
+     */
+    public MultiVarPowerSeries<C> subtract(final MultiVarPowerSeries<C> ps) {
+        //final MultiVarPowerSeries<C> ps1 = this; // method name was ambiguous in generate
+        int nt = Math.min(ring.truncate,Math.max(truncate(),ps.truncate()));
+
+        return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
+
+
+            @Override
+            public C generate(ExpVector e) {
+                long tdeg = e.totalDeg();
+                // generate respective homogeneous polynomial
+                GenPolynomial<C> p = homogeneousPart(tdeg).subtract(ps.homogeneousPart(tdeg));
+                coeffCache.put(tdeg, p); // overwrite
+                homCheck.set((int) tdeg);
+                C c = p.coefficient(e);
+                //System.out.println("c = " + c + ", e = " + e + ", tdeg = " + tdeg);
+                return c;
+            }
+        }, nt);
+    }
+
+
+    /**
      * Multiply by another power series.
+     * @param ps other power series.
      * @return this * ps.
      */
     public MultiVarPowerSeries<C> multiply(final MultiVarPowerSeries<C> ps) {
         //final MultiVarPowerSeries<C> ps1 = this; // method name was ambiguous in generate
-        int nt = Math.min(ring.truncate,Math.max(truncate(),ps.truncate()));
+        int nt = Math.min(ring.truncate,truncate()+ps.truncate());
 
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
 
@@ -1162,6 +1220,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
 
     /**
      * Divide by another power series.
+     * @param ps nonzero power series with invertible coefficient.
      * @return this / ps.
      */
     public MultiVarPowerSeries<C> divide(MultiVarPowerSeries<C> ps) {

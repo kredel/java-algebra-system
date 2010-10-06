@@ -128,7 +128,7 @@ public class StandardBaseSeq<C extends RingElem<C>>
         ListIterator<MultiVarPowerSeries<C>> it = F.listIterator();
         while (it.hasNext()) {
             p = it.next();
-            if (p.truncate() > 0) {
+            if (!p.isZERO()) {
                 //p = p.monic();
                 if (p.isUnit()) {
                     G.clear();
