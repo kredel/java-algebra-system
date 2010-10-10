@@ -618,9 +618,13 @@ public class ExpVectorTest extends TestCase {
         assertEquals("0(0) = 1 ", cv, dv);
 
         av = a.evaluate(fv,v);
-        dv = fv.getZERO();
-        assertEquals("a(0) = 0 ", av, dv);
-
+        if ( a.isZERO() ) {
+            dv = fv.getONE();
+            assertEquals("0(0) = 1 ", av, dv);
+        } else {
+            dv = fv.getZERO();
+            assertEquals("a(0) = 0 ", av, dv);
+        } 
     }
 
 }

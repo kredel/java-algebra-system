@@ -470,15 +470,18 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                 if (d.signum() < 0) {
                     return ring.coFac.getZERO();
                 }
-                long tdegi = i.totalDeg();
                 long tdegd = d.totalDeg();
-                GenPolynomial<C> p = homogeneousPart(tdegd).multiply(c,k);
-                coeffCache.put(tdegi, p); // overwrite
-                homCheck.set((int) tdegi);
-                C b = p.coefficient(i);
-                //System.out.println("b = " + b + ", i = " + i + ", tdegi = " + tdegi+ ", tdegd = " + tdegd);
-                return b;
-                //return coefficient(d).multiply(c);
+                if ( lazyCoeffs.homCheck.get((int)tdegd) ) {
+                    GenPolynomial<C> p = homogeneousPart(tdegd).multiply(c,k);
+                    long tdegi = i.totalDeg();
+                    coeffCache.put(tdegi, p); // overwrite
+                    homCheck.set((int) tdegi);
+                    C b = p.coefficient(i);
+                    //System.out.println("b = " + b + ", i = " + i + ", tdegi = " + tdegi+ ", tdegd = " + tdegd);
+                    //System.out.println("p = " + p + ", i = " + i);
+                    return b;
+                }
+                return coefficient(d).multiply(c);
             }
         }, nt);
     }
@@ -590,7 +593,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         z.addAll(mvc.zeroCache);
         long d = Math.max(d1, d2);
         BitSet hc = new BitSet((int)d);
-        for (long i = 0; i < d; i++) {
+        for (long i = 0; i <= d; i++) {
             GenPolynomial<C> p1 = cc.get(i);
             GenPolynomial<C> p2 = mvc.coeffCache.get(i);
             if (p1 == null) {
@@ -611,7 +614,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                 z.addAll(ev);
             }
         }
-        //System.out.println("z = " + z);
+        //System.out.println("cc = " + cc);
 
         return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(mc.pfac,
                    new HashMap<Long, GenPolynomial<C>>(cc), z, hc) {
@@ -1110,13 +1113,16 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
             @Override
             public C generate(ExpVector e) {
                 long tdeg = e.totalDeg();
-                // generate respective homogeneous polynomial
-                GenPolynomial<C> p = homogeneousPart(tdeg).sum(ps.homogeneousPart(tdeg));
-                coeffCache.put(tdeg, p); // overwrite
-                homCheck.set((int) tdeg);
-                C c = p.coefficient(e);
-                //System.out.println("c = " + c + ", e = " + e + ", tdeg = " + tdeg);
-                return c;
+                if ( lazyCoeffs.homCheck.get((int)tdeg) ) {
+                    // generate respective homogeneous polynomial
+                    GenPolynomial<C> p = homogeneousPart(tdeg).sum(ps.homogeneousPart(tdeg));
+                    coeffCache.put(tdeg, p); // overwrite
+                    homCheck.set((int) tdeg);
+                    C c = p.coefficient(e);
+                    //System.out.println("c = " + c + ", e = " + e + ", tdeg = " + tdeg);
+                    return c;
+                }
+                return coefficient(e).sum(ps.coefficient(e));
             }
         }, nt);
     }
@@ -1137,13 +1143,16 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
             @Override
             public C generate(ExpVector e) {
                 long tdeg = e.totalDeg();
-                // generate respective homogeneous polynomial
-                GenPolynomial<C> p = homogeneousPart(tdeg).subtract(ps.homogeneousPart(tdeg));
-                coeffCache.put(tdeg, p); // overwrite
-                homCheck.set((int) tdeg);
-                C c = p.coefficient(e);
-                //System.out.println("c = " + c + ", e = " + e + ", tdeg = " + tdeg);
-                return c;
+                if ( lazyCoeffs.homCheck.get((int)tdeg) ) {
+                    // generate respective homogeneous polynomial
+                    GenPolynomial<C> p = homogeneousPart(tdeg).subtract(ps.homogeneousPart(tdeg));
+                    coeffCache.put(tdeg, p); // overwrite
+                    homCheck.set((int) tdeg);
+                    C c = p.coefficient(e);
+                    //System.out.println("p = " + p + ", e = " + e + ", tdeg = " + tdeg);
+                    return c;
+                }
+                return coefficient(e).subtract(ps.coefficient(e));
             }
         }, nt);
     }

@@ -26,18 +26,18 @@ public class ExamplesMulti {
     public static void main(String[] args) {
         BasicConfigurator.configure();
         if ( args.length > 0 ) {
-            example1();
-            example2();
-            example3();
-            example4();
-            example5();
-            example6();
-            example7();
-            example8();
-            example9();
+            //example1();
+            //example2();
+            //example3();
+            //example4();
+            //example5();
+            //example6();
+            //example7();
+            //example8();
+            //example9();
             example11();
         }
-        example10();
+        //example10();
     }
 
 
@@ -216,7 +216,7 @@ public class ExamplesMulti {
         System.out.println("c = " + c);
 
         MultiVarPowerSeriesRing<BigRational> fac = new MultiVarPowerSeriesRing<BigRational>(pfac);
-        fac.setTruncate(11);
+        //fac.setTruncate(11);
         System.out.println("fac = " + fac.toScript());
 
         MultiVarPowerSeries<BigRational> ap = fac.fromPolynomial(a);
@@ -446,7 +446,7 @@ public class ExamplesMulti {
         System.out.println("c = " + c);
 
         MultiVarPowerSeriesRing<BigRational> fac = new MultiVarPowerSeriesRing<BigRational>(pfac);
-        fac.setTruncate(9);
+        //fac.setTruncate(9);
         System.out.println("fac = " + fac.toScript());
 
         MultiVarPowerSeries<BigRational> ap = fac.fromPolynomial(a);
@@ -476,11 +476,35 @@ public class ExamplesMulti {
         System.out.println("S contains L = " + s);
 
         List<MultiVarPowerSeries<BigRational>> R = red.totalNormalform(S);
-        System.out.println("R = " + R);
+        for (MultiVarPowerSeries<BigRational> ps : R) {
+            System.out.println("ps = " + ps);
+        }
+        System.out.println("\nR = " + R);
+        s = tm.isSTD(R);
+        System.out.println("\nisSTD = " + s);
+
         s = red.contains(R, L);
         System.out.println("R contains L = " + s);
         s = red.contains(R, S);
         System.out.println("R contains S = " + s);
+        s = red.contains(S,R);
+        System.out.println("S contains R = " + s);
+        s = red.contains(S,L);
+        System.out.println("S contains L = " + s);
+
+        List<MultiVarPowerSeries<BigRational>> Rs = tm.STD(R);
+        for (MultiVarPowerSeries<BigRational> ps : Rs) {
+            System.out.println("ps = " + ps);
+        }
+        System.out.println("\nRs = " + Rs);
+        s = tm.isSTD(Rs);
+        System.out.println("\nisSTD = " + s);
+
+        s = red.contains(Rs, R);
+        System.out.println("Rs contains R = " + s);
+
+        s = red.contains(Rs, S);
+        System.out.println("Rs contains S = " + s);
     }
 
 }
