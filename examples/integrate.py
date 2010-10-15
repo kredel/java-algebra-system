@@ -22,6 +22,10 @@ print "one   = " + str(one);
 print "x     = " + str(x);
 print;
 
+#f = 1 / ( 1 + x**2 );
+
+#f = x**2 / ( x**2 + 1 );
+
 #f = 1 / ( x**2 - 2 );
 #f = 1 / ( x**3 - 2 );
 
@@ -41,6 +45,9 @@ t = System.currentTimeMillis();
 e1 = r.integrate(f);
 t = System.currentTimeMillis() - t;
 print "e1 = ", e1;
+## print "e1.toScript() = ";
+## for a in e1.logarithm:
+##     print a.toScript();
 print "integration time =", t, "milliseconds";
 print 
 

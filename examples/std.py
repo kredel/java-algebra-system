@@ -38,10 +38,12 @@ print;
 
 startLog();
 
-S = Fp.STD(9); # truncate at total degree 9!
+#9+5 # truncate at total degree 9
+S = Fp.STD(); 
 #print "std: " + str(S);
 print;
 for p in S.list:
+    #print "p = ", str(p.asPolynomial());
     print "p = ", str(p);
 print;
 
