@@ -24,7 +24,7 @@ import edu.jas.poly.ExpVector;
  */
 
 public class StandardBaseSeq<C extends RingElem<C>>
-/*extends StandardBaseAbstract<C>*/{
+    /*todo: extends StandardBaseAbstract<C>*/{
 
 
     private static final Logger logger = Logger.getLogger(StandardBaseSeq.class);
@@ -200,7 +200,7 @@ public class StandardBaseSeq<C extends RingElem<C>>
                 G.add(H);
                 return G; // since no threads are activated
             }
-            if (logger.isInfoEnabled()) {
+            if (logger.isDebugEnabled()) {
                 logger.info("H = " + H);
             }
             //if (!H.isZERO()) {

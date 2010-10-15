@@ -458,7 +458,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
 
 
     /**
-     * Is commuative.
+     * Query if this ring is commuative.
      * @return true, if this ring is commutative, else false.
      */
     public boolean isCommutative() {

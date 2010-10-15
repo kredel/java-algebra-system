@@ -33,7 +33,7 @@ import edu.jas.util.ExpVectorIterable;
  * <code>orderExpVector()</code> methods, like <code>signum()</code>,
  * <code>abs()</code>, <code>divide()</code>, <code>remainder()</code> and
  * <code>gcd()</code>. <b>Note: </b> Currently the term order is fixed to the
- * order defined by the iterator over exponent vectors
+ * order defined by the iterator over exponent vectors in class
  * <code>ExpVectorIterator</code>.
  * @param <C> ring element type
  * @author Heinz Kredel
@@ -277,9 +277,6 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      * @return polynomial part of given degree.
      */
     public GenPolynomial<C> homogeneousPart(long tdeg) {
-        //if (lazyCoeffs == null) {
-        //    throw new IllegalArgumentException("null cache not allowed");
-        //}
         return lazyCoeffs.getHomPart(tdeg);
     }
 
