@@ -19,13 +19,13 @@ import edu.jas.structure.RingElem;
 
 /**
  * Multivariate power series reduction sequential use algorithm. Implements Mora
- * normal-form.
+ * normal-form algorithm.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
 public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
-/*extends ReductionAbstract<C>*/{
+    /*todo: extends ReductionAbstract<C>*/{
 
 
     private static final Logger logger = Logger.getLogger(ReductionSeq.class);
@@ -182,6 +182,7 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 j++;
             }
         }
+        int ll = j;
         MultiVarPowerSeries<C> S = Ap;
         //S.setTruncate(Ap.ring.truncate()); // ??
         m = S.orderMonomial();
@@ -225,6 +226,10 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
             }
             //System.out.println("li = " + li + ", ecarts = " + es);
             //System.out.println("i = " + i + ", p_i = " + p.get(i));
+            //if ( i <= ll ) {
+            //} else {
+            //    System.out.println("i = " + i + ", ll = " + ll);
+            //}
             long si = S.ecart();
             if (mi > si) {
                 //System.out.println("ecart_i = " + mi + ", ecart_S = " + si + ", S+ = " + S);
@@ -316,9 +321,9 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
             }
             MultiVarPowerSeries<C> r = a.reductum();
 
-            //MultiVarPowerSeries<C> b = totalNormalform(S, r);
             MultiVarPowerSeries<C> b = normalform(S, r);
-            //S.add(a);
+            // need also unit of reduction: u r --> b
+            // b = b.multiply(u);
             b = b.sum(m);
             if ( !b.isZERO() ) {
                 R.add(b);

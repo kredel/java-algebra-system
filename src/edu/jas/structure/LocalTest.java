@@ -235,9 +235,11 @@ public class LocalTest extends TestCase {
  public void testIntMultiplication() {
 
      a = fac.random(kl);
-     assertTrue("not isZERO( a )", !a.isZERO() );
-
      b = fac.random(kl);
+     if ( a.isZERO() || b.isZERO() ) {
+         return;
+     }
+     assertTrue("not isZERO( a )", !a.isZERO() );
      assertTrue("not isZERO( b )", !b.isZERO() );
 
      c = b.multiply(a);
@@ -282,9 +284,12 @@ public class LocalTest extends TestCase {
  public void testPolyMultiplication() {
 
      ap = mfac.random(kl);
-     assertTrue("not isZERO( a )", !ap.isZERO() );
-
      bp = mfac.random(kl);
+     if ( ap.isZERO() || bp.isZERO() ) {
+         return;
+     }
+
+     assertTrue("not isZERO( a )", !ap.isZERO() );
      assertTrue("not isZERO( b )", !bp.isZERO() );
 
      cp = bp.multiply(ap);
