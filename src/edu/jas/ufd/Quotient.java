@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.application;
+package edu.jas.ufd;
 
 
 import org.apache.log4j.Logger;

@@ -42,6 +42,8 @@ import edu.jas.ufd.FactorFactory;
 import edu.jas.ufd.GCDFactory;
 import edu.jas.ufd.GreatestCommonDivisor;
 import edu.jas.ufd.PolyUfdUtil;
+import edu.jas.ufd.Quotient;
+import edu.jas.ufd.QuotientRing;
 import edu.jas.ufd.SquarefreeAbstract;
 import edu.jas.ufd.SquarefreeFactory;
 

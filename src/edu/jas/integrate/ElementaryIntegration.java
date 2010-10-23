@@ -11,8 +11,6 @@ import java.util.SortedMap;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.application.Quotient;
-import edu.jas.application.QuotientRing;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
@@ -27,6 +25,8 @@ import edu.jas.ufd.GCDFactory;
 import edu.jas.ufd.GreatestCommonDivisorAbstract;
 import edu.jas.ufd.GreatestCommonDivisorSubres;
 import edu.jas.ufd.PolyUfdUtil;
+import edu.jas.ufd.Quotient;
+import edu.jas.ufd.QuotientRing;
 import edu.jas.ufd.SquarefreeAbstract;
 import edu.jas.ufd.SquarefreeFactory;
 

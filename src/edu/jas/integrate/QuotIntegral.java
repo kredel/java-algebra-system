@@ -9,10 +9,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.jas.application.Quotient;
-import edu.jas.application.QuotientRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.GcdRingElem;
+import edu.jas.ufd.Quotient;
+import edu.jas.ufd.QuotientRing;
 
 
 /**

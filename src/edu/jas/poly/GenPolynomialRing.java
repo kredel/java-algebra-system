@@ -19,12 +19,12 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.application.QuotientRing;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.kern.PreemptStatus;
 import edu.jas.kern.PrettyPrint;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.ufd.QuotientRing;
 import edu.jas.util.CartesianProduct;
 import edu.jas.util.CartesianProductInfinite;
 import edu.jas.util.LongIterable;

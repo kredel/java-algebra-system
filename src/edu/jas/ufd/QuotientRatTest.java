@@ -3,7 +3,7 @@
  * $Id$
  */
 
-package edu.jas.application;
+package edu.jas.ufd;
 
 
 import junit.framework.Test;

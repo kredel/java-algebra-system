@@ -17,8 +17,8 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.PolyUtil;
-import edu.jas.application.Quotient;
-import edu.jas.application.QuotientRing;
+import edu.jas.ufd.Quotient;
+import edu.jas.ufd.QuotientRing;
 
 import edu.jas.kern.ComputerThreads;
 

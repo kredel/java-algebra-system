@@ -26,6 +26,7 @@ import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
 import edu.jas.structure.Complex;
 import edu.jas.structure.ComplexRing;
+import edu.jas.ufd.Quotient;
 import edu.jas.util.KsubSet;
 
 

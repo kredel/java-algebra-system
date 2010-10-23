@@ -35,11 +35,11 @@ from edu.jas.gbmod       import ModGroebnerBaseAbstract, ModSolvableGroebnerBase
 from edu.jas.vector      import OrderedModuleList, ModuleList, GenVector, GenVectorModul,\
                                 GenMatrix, GenMatrixRing
 from edu.jas.application import ComprehensiveGroebnerBaseSeq, PolyUtilApp,\
-                                Residue, ResidueRing, Ideal, Quotient, QuotientRing,\
+                                Residue, ResidueRing, Ideal,\
                                 Local, LocalRing, IdealWithRealAlgebraicRoots
 from edu.jas.kern        import ComputerThreads, StringUtil
 from edu.jas.ufd         import GreatestCommonDivisor, PolyUfdUtil, GCDFactory,\
-                                FactorFactory, SquarefreeFactory
+                                FactorFactory, SquarefreeFactory, Quotient, QuotientRing
 from edu.jas.root        import RealRootsSturm, Interval, RealAlgebraicNumber, RealAlgebraicRing,\
                                 ComplexRootsSturm, Rectangle
 from edu.jas.integrate   import ElementaryIntegration

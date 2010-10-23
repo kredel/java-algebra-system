@@ -14,7 +14,6 @@ import java.util.TreeMap;
 import org.apache.log4j.Logger;
 
 import edu.jas.application.Ideal;
-import edu.jas.application.Quotient;
 import edu.jas.gb.Reduction;
 import edu.jas.gb.ReductionSeq;
 import edu.jas.poly.AlgebraicNumber;

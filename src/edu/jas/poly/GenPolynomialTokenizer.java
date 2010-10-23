@@ -17,8 +17,6 @@ import java.util.Scanner;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.application.Quotient;
-import edu.jas.application.QuotientRing;
 import edu.jas.arith.BigComplex;
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigInteger;
@@ -29,6 +27,8 @@ import edu.jas.arith.ModIntegerRing;
 import edu.jas.structure.Power;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.ufd.Quotient;
+import edu.jas.ufd.QuotientRing;
 import edu.jas.vector.ModuleList;
 import edu.jas.vector.OrderedModuleList;
 

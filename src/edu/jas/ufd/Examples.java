@@ -9,8 +9,6 @@ import java.util.SortedMap;
 
 import org.apache.log4j.BasicConfigurator;
 
-import edu.jas.application.Quotient;
-import edu.jas.application.QuotientRing;
 import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.AlgebraicNumber;
