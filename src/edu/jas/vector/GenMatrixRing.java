@@ -16,11 +16,11 @@ import java.math.BigInteger;
 
 import org.apache.log4j.Logger;
 
+import edu.jas.kern.StringUtil;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.AlgebraFactory;
 
-import edu.jas.util.StringUtil;
 
 
 /**

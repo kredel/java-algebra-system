@@ -15,10 +15,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import edu.jas.kern.StringUtil;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.Power;
 import edu.jas.structure.RingFactory;
-import edu.jas.util.StringUtil;
 
 
 /**

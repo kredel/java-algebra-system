@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 
+import edu.jas.kern.StringUtil;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
@@ -23,7 +24,6 @@ import edu.jas.poly.PolyUtil;
 import edu.jas.ufd.GreatestCommonDivisor;
 import edu.jas.ufd.GCDFactory;
 
-import edu.jas.util.StringUtil;
 
 
 /**

@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.util;
+package edu.jas.kern;
 
 
 import java.io.Reader;

@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 //import edu.jas.structure.GcdRingElem;
+import edu.jas.kern.StringUtil;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.ModularRingFactory;
 //import edu.jas.kern.PrettyPrint;
 
-import edu.jas.util.StringUtil;
 
 
 /**

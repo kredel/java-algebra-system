@@ -37,13 +37,13 @@ from edu.jas.vector      import OrderedModuleList, ModuleList, GenVector, GenVec
 from edu.jas.application import ComprehensiveGroebnerBaseSeq, PolyUtilApp,\
                                 Residue, ResidueRing, Ideal, Quotient, QuotientRing,\
                                 Local, LocalRing, IdealWithRealAlgebraicRoots
-from edu.jas.kern        import ComputerThreads
+from edu.jas.kern        import ComputerThreads, StringUtil
 from edu.jas.ufd         import GreatestCommonDivisor, PolyUfdUtil, GCDFactory,\
                                 FactorFactory, SquarefreeFactory
 from edu.jas.root        import RealRootsSturm, Interval, RealAlgebraicNumber, RealAlgebraicRing,\
                                 ComplexRootsSturm, Rectangle
 from edu.jas.integrate   import ElementaryIntegration
-from edu.jas.util        import ExecutableServer, StringUtil
+from edu.jas.util        import ExecutableServer
 from edu.jas             import structure, arith, poly, ps, gb, gbmod, vector,\
                                 application, util, ufd
 from edu                 import jas

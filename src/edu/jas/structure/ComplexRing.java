@@ -13,7 +13,7 @@ import java.util.Random;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.util.StringUtil;
+import edu.jas.kern.StringUtil;
 
 
 /**

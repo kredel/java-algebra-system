@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import edu.jas.kern.StringUtil;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 
-import edu.jas.util.StringUtil;
 
 
 /**
