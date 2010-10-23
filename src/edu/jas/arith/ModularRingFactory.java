@@ -2,11 +2,11 @@
  * $Id$
  */
 
-package edu.jas.structure;
+package edu.jas.arith;
 
 
-import edu.jas.arith.Modular;
-import edu.jas.arith.BigInteger;
+import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
 
 
 /**

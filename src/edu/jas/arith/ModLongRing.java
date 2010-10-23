@@ -12,7 +12,6 @@ import java.util.Random;
 import java.util.Iterator;
 
 import edu.jas.kern.StringUtil;
-import edu.jas.structure.ModularRingFactory;
 
 
 /**

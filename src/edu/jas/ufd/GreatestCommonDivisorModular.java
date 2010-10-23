@@ -8,11 +8,11 @@ package edu.jas.ufd;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.ModularRingFactory;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.Modular;
 import edu.jas.arith.ModLongRing;
 import edu.jas.arith.ModIntegerRing;
+import edu.jas.arith.ModularRingFactory;
 import edu.jas.arith.PrimeList;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;

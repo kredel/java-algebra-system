@@ -9,9 +9,9 @@ import java.io.Serializable;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.Modular;
+import edu.jas.arith.ModularRingFactory;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.ModularRingFactory;
 
 
 /**
