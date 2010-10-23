@@ -212,15 +212,15 @@
 
 
 <target name="exam" depends="compile" >
-  <java  classname="edu.jas.poly.Examples" classpath="${cp}" fork="yes" />
-  <java  classname="edu.jas.vector.Examples" classpath="${cp}" fork="yes" />
-  <java  classname="edu.jas.gb.Examples" classpath="${cp}" fork="yes" />
-  <java  classname="edu.jas.ps.Examples" classpath="${cp}" fork="yes" />
-  <java  classname="edu.jas.ps.ExamplesMulti" classpath="${cp}" fork="yes" />
-  <java  classname="edu.jas.ufd.Examples" classpath="${cp}" fork="yes" />
-  <java  classname="edu.jas.ufd.ExamplesPartialFraction" classpath="${cp}" fork="yes" />
-  <java  classname="edu.jas.integrate.Examples" classpath="${cp}" fork="yes" />
-  <java  classname="edu.jas.application.Examples" classpath="${cp}" fork="yes" />
+  <java classname="edu.jas.poly.Examples" classpath="${cp}" fork="yes" args="1" />
+  <java classname="edu.jas.vector.Examples" classpath="${cp}" fork="yes" args="1" />
+  <java classname="edu.jas.gb.Examples" classpath="${cp}" fork="yes" args="1" />
+  <java classname="edu.jas.ps.Examples" classpath="${cp}" fork="yes" args="1" />
+  <java classname="edu.jas.ps.ExamplesMulti" classpath="${cp}" fork="yes" args="1" />
+  <java classname="edu.jas.ufd.Examples" classpath="${cp}" fork="yes" args="1" />
+  <java classname="edu.jas.ufd.ExamplesPartialFraction" classpath="${cp}" fork="yes" args="1" />
+  <java classname="edu.jas.integrate.Examples" classpath="${cp}" fork="yes" args="1" />
+  <java classname="edu.jas.application.Examples" classpath="${cp}" fork="yes" args="1" />
 </target>
 
 
@@ -237,6 +237,8 @@
   <jdepend outputfile="test/jdepend-report-${DSTAMP}.out" >
       <exclude name="java.*" />
       <exclude name="javax.*" />
+      <exclude name="org.apache.*" />
+      <exclude name="junit.*" />
       <classespath>
         <pathelement location="${bin}"/>
       </classespath>

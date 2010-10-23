@@ -13,6 +13,7 @@ import java.io.StreamTokenizer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
 
 import org.apache.log4j.Logger;
 
@@ -1454,6 +1455,44 @@ public class GenPolynomialTokenizer {
                 logger.debug("comma: ");
             tt = tok.nextToken();
         }
+    }
+
+
+    /**
+     * Parse variable list from String.
+     * @param s String. Syntax: (n1,...,nk) or (n1 ... nk), brackest are also
+     *            optional.
+     * @return array of variable names found in s.
+     */
+    public static String[] variableList(String s) {
+        String[] vl = null;
+        if (s == null) {
+            return vl;
+        }
+        String st = s.trim();
+        if (st.length() == 0) {
+            return new String[0];
+        }
+        if (st.charAt(0) == '(') {
+            st = st.substring(1);
+        }
+        if (st.charAt(st.length() - 1) == ')') {
+            st = st.substring(0, st.length() - 1);
+        }
+        st = st.replaceAll(",", " ");
+        List<String> sl = new ArrayList<String>();
+        Scanner sc = new Scanner(st);
+        while (sc.hasNext()) {
+            String sn = sc.next();
+            sl.add(sn);
+        }
+        vl = new String[sl.size()];
+        int i = 0;
+        for (String si : sl) {
+            vl[i] = si;
+            i++;
+        }
+        return vl;
     }
 
 }

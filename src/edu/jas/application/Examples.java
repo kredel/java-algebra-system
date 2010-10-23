@@ -5,17 +5,17 @@
 package edu.jas.application;
 
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.BasicConfigurator;
 
+import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
-import edu.jas.arith.BigDecimal;
 import edu.jas.gb.GBFactory;
 import edu.jas.gb.GroebnerBase;
 import edu.jas.gb.RGroebnerBasePseudoSeq;
@@ -23,8 +23,8 @@ import edu.jas.gb.RReductionSeq;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.PolynomialList;
 import edu.jas.poly.GenPolynomialTokenizer;
+import edu.jas.poly.PolynomialList;
 import edu.jas.structure.Product;
 import edu.jas.structure.ProductRing;
 
@@ -42,7 +42,7 @@ public class Examples {
      */
     public static void main(String[] args) {
         BasicConfigurator.configure();
-        if ( args.length > 0 ) {
+        if (args.length > 0) {
             example1();
             example2();
             example3();
@@ -86,7 +86,7 @@ public class Examples {
     static GenPolynomial<BigInteger> cyclicPoly(GenPolynomialRing<BigInteger> ring, int n, int i) {
 
         List<? extends GenPolynomial<BigInteger>> X = /*(List<GenPolynomial<BigInteger>>)*/ring
-                .univariateList();
+                        .univariateList();
 
         GenPolynomial<BigInteger> p = ring.getZERO();
         for (int j = 1; j <= n; j++) {
@@ -159,7 +159,7 @@ public class Examples {
         //System.out.println("Lp = " + Lp);
 
         GroebnerBase<Product<Residue<BigRational>>> bb = new RGroebnerBasePseudoSeq<Product<Residue<BigRational>>>(
-                pr);
+                        pr);
 
         System.out.println("isGB(L) = " + bb.isGB(L));
 
@@ -346,7 +346,7 @@ public class Examples {
 
         if (bLr.size() > 0) {
             GroebnerBase<Product<Residue<BigRational>>> rbb = new RGroebnerBasePseudoSeq<Product<Residue<BigRational>>>(
-                    bLr.get(0).ring.coFac);
+                            bLr.get(0).ring.coFac);
             System.out.println("isRegularGB(Lr) = " + rbb.isGB(bLr));
         }
     }
@@ -358,36 +358,34 @@ public class Examples {
     @SuppressWarnings("unchecked")
     public static void example6() {
         BigRational coeff = new BigRational();
-        GroebnerBase<BigRational> gb = GBFactory.<BigRational>getImplementation(coeff);
+        GroebnerBase<BigRational> gb = GBFactory.getImplementation(coeff);
 
-        String exam = "(x,y,z) L "
-            + "( "  
-            + "( x^2 - 2 ), ( y^2 - 3 ), ( z^2 + x * y )"
-            + ") ";
-        Reader source = new StringReader( exam );
-        GenPolynomialTokenizer parser = new GenPolynomialTokenizer( source );
+        String exam = "(x,y,z) L " + "( " + "( x^2 - 2 ), ( y^2 - 3 ), ( z^2 + x * y )" + ") ";
+        Reader source = new StringReader(exam);
+        GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
         PolynomialList<BigRational> F = null;
 
         try {
             F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
-        } catch(ClassCastException e) {
+        } catch (ClassCastException e) {
             e.printStackTrace();
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         System.out.println("F = " + F);
 
         List<GenPolynomial<BigRational>> G = gb.GB(F.list);
 
-        PolynomialList<BigRational> Gp = new PolynomialList<BigRational>(F.ring,G);
+        PolynomialList<BigRational> Gp = new PolynomialList<BigRational>(F.ring, G);
         System.out.println("G = " + Gp);
 
         // compute real roots of the ideal
         Ideal<BigRational> I = new Ideal<BigRational>(Gp);
-        List<IdealWithRealAlgebraicRoots<BigRational,BigRational>> Ir = PolyUtilApp.<BigRational,BigRational> realAlgebraicRoots(I);
-        for ( IdealWithRealAlgebraicRoots<BigRational,BigRational> R : Ir ) {
+        List<IdealWithRealAlgebraicRoots<BigRational, BigRational>> Ir = PolyUtilApp
+                        .<BigRational, BigRational> realAlgebraicRoots(I);
+        for (IdealWithRealAlgebraicRoots<BigRational, BigRational> R : Ir) {
             R.doDecimalApproximation();
-            for ( List<BigDecimal> Dr : R.decimalApproximation() ) {
+            for (List<BigDecimal> Dr : R.decimalApproximation()) {
                 System.out.println(Dr.toString());
             }
             System.out.println();

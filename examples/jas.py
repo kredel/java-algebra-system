@@ -2540,7 +2540,7 @@ class PolyRing(Ring):
             raise ValueError, "No variable names given."
         names = vars;
         if isinstance(vars,PyString):
-            names = StringUtil.variableList(vars);
+            names = GenPolynomialTokenizer.variableList(vars);
         nv = len(names);
         to = PolyRing.lex;
         if isinstance(order,TermOrder):
@@ -2599,7 +2599,7 @@ class SolvPolyRing(SolvableRing):
             raise ValueError, "No variable names given."
         names = vars;
         if isinstance(vars,PyString):
-            names = StringUtil.variableList(vars);
+            names = GenPolynomialTokenizer.variableList(vars);
         nv = len(names);
         to = PolyRing.lex;
         if isinstance(order,TermOrder):
