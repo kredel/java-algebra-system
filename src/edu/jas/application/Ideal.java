@@ -1857,7 +1857,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         }
         if ( ofac.characteristic().signum() == 0 ) {
             return normalPositionForChar0(i,j,og);
-	}
+        }
         return normalPositionForCharP(i,j,og);
     }
 
