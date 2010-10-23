@@ -7,11 +7,15 @@ package edu.jas.application;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.IOException;
 
 import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
+import edu.jas.arith.BigDecimal;
 import edu.jas.gb.GBFactory;
 import edu.jas.gb.GroebnerBase;
 import edu.jas.gb.RGroebnerBasePseudoSeq;
@@ -19,6 +23,8 @@ import edu.jas.gb.RReductionSeq;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.PolynomialList;
+import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.structure.Product;
 import edu.jas.structure.ProductRing;
 
@@ -36,11 +42,15 @@ public class Examples {
      */
     public static void main(String[] args) {
         BasicConfigurator.configure();
-        //example1();
-        //example2();
-        //example3();
-        //example4();
+        if ( args.length > 0 ) {
+            example1();
+            example2();
+            example3();
+            example4();
+        }
         example5();
+        example6();
+        ComputerThreads.terminate();
     }
 
 
@@ -158,9 +168,6 @@ public class Examples {
         G = bb.GB(L);
         System.out.println("G = " + G);
         System.out.println("isGB(G) = " + bb.isGB(G));
-
-        ComputerThreads.terminate();
-
     }
 
 
@@ -222,8 +229,6 @@ public class Examples {
         G = bb.GB(L);
         System.out.println("G = " + G);
         System.out.println("isGB(G) = " + bb.isGB(G));
-
-        ComputerThreads.terminate();
     }
 
 
@@ -282,8 +287,6 @@ public class Examples {
         L = bb.GB(L);
         System.out.println("CGB( L )   = " + L);
         System.out.println("isCGB( L ) = " + bb.isGB(L));
-
-        ComputerThreads.terminate();
     }
 
 
@@ -346,8 +349,49 @@ public class Examples {
                     bLr.get(0).ring.coFac);
             System.out.println("isRegularGB(Lr) = " + rbb.isGB(bLr));
         }
+    }
 
-        ComputerThreads.terminate();
+
+    /**
+     * Example GBase and real root.
+     */
+    @SuppressWarnings("unchecked")
+    public static void example6() {
+        BigRational coeff = new BigRational();
+        GroebnerBase<BigRational> gb = GBFactory.<BigRational>getImplementation(coeff);
+
+        String exam = "(x,y,z) L "
+            + "( "  
+            + "( x^2 - 2 ), ( y^2 - 3 ), ( z^2 + x * y )"
+            + ") ";
+        Reader source = new StringReader( exam );
+        GenPolynomialTokenizer parser = new GenPolynomialTokenizer( source );
+        PolynomialList<BigRational> F = null;
+
+        try {
+            F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
+        } catch(ClassCastException e) {
+            e.printStackTrace();
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("F = " + F);
+
+        List<GenPolynomial<BigRational>> G = gb.GB(F.list);
+
+        PolynomialList<BigRational> Gp = new PolynomialList<BigRational>(F.ring,G);
+        System.out.println("G = " + Gp);
+
+        // compute real roots of the ideal
+        Ideal<BigRational> I = new Ideal<BigRational>(Gp);
+        List<IdealWithRealAlgebraicRoots<BigRational,BigRational>> Ir = PolyUtilApp.<BigRational,BigRational> realAlgebraicRoots(I);
+        for ( IdealWithRealAlgebraicRoots<BigRational,BigRational> R : Ir ) {
+            R.doDecimalApproximation();
+            for ( List<BigDecimal> Dr : R.decimalApproximation() ) {
+                System.out.println(Dr.toString());
+            }
+            System.out.println();
+        }
     }
 
 }
