@@ -1298,6 +1298,24 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
+     * Test if this ideal is maximal.
+     * @return true, if this is maximal and not one, else false.
+     */
+    public boolean isMaximal() {
+        if ( commonZeroTest() != 0 ) {
+            return false;
+        }
+        for (Long d : univariateDegrees()) {
+            if (d > 1L) {
+                // todo: test if irreducible
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
      * Univariate head term degrees.
      * @return a list of the degrees of univariate head terms.
      */

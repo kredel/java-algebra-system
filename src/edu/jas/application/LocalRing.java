@@ -65,6 +65,10 @@ public class LocalRing<C extends GcdRingElem<C> >
         if ( ideal.isONE() ) {
            throw new IllegalArgumentException("ideal may not be 1");
         }
+        if ( !ideal.isMaximal() ) {
+            //throw new IllegalArgumentException("ideal must be maximal");
+            logger.warn("ideal not maximal");
+        }
         ring = ideal.list.ring;
         //engine = GCDFactory.<C>getImplementation( ring.coFac );
         engine = GCDFactory.<C>getProxy( ring.coFac );

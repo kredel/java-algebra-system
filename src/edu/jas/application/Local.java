@@ -242,11 +242,14 @@ public class Local<C extends GcdRingElem<C> >
     @Override
      public String toString() {
         if ( PrettyPrint.isTrue() ) {
-           return num.toString( ring.ring.getVars() ) 
-                  + "///" + den.toString( ring.ring.getVars() );
+            String s = "{ " + num.toString( ring.ring.getVars() );
+            if ( den.isONE() ) {
+                return s + " }";
+            }
+            return s + "| " + den.toString( ring.ring.getVars() ) + " }";
         } else {
            return "Local[ " + num.toString() 
-                    + " / " + den.toString() + " ]";
+                    + " | " + den.toString() + " ]";
         }
     }
 

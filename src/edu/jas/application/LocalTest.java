@@ -75,12 +75,16 @@ public class LocalTest extends TestCase {
 
    protected void setUp() {
        a = b = c = d = e = null;
-       mfac = new GenPolynomialRing<BigRational>( new BigRational(1), rl );
+       BigRational cfac = new BigRational(1);
+       String[] vars = new String[] { "x", "y", "z" };
+       mfac = new GenPolynomialRing<BigRational>( cfac, rl, vars );
        id = null;
        while ( id == null || id.isONE() ) {
            F = new ArrayList<GenPolynomial<BigRational>>( il );
-           for ( int i = 0; i < il; i++ ) {
-               GenPolynomial<BigRational> mo = mfac.random(kl,ll,el,q);
+           for ( int i = 0; i < rl; i++ ) {
+               //GenPolynomial<BigRational> mo = mfac.random(kl,ll,el,q);
+               GenPolynomial<BigRational> mo = mfac.univariate(i);
+               mo = mo.sum( mfac.fromInteger( cfac.random(7).denominator() ) );
                while ( mo.isConstant() ) {
                     mo = mfac.random(kl,ll,el,q);
                }
@@ -89,7 +93,9 @@ public class LocalTest extends TestCase {
            id = new Ideal<BigRational>(mfac,F);
            id = id.GB();
        }
+       //System.out.println("id = " + id);
        fac = new LocalRing<BigRational>( id );
+       //System.out.println("fac = " + fac);
        F = null;
    }
 
@@ -128,6 +134,7 @@ public class LocalTest extends TestCase {
  * 
  */
  public void testRandom() {
+     //System.out.println("fac = " + fac);
      for (int i = 0; i < 4; i++) {
          //a = fac.random(ll+i);
          a = fac.random(kl*(i+1), ll+i, el, q );
@@ -147,6 +154,7 @@ public class LocalTest extends TestCase {
  * Not jet working because of monic GBs.
  */
  public void testAddition() {
+     //System.out.println("fac = " + fac);
 
      a = fac.random(kl,ll,el,q);
      b = fac.random(kl,ll,el,q);
@@ -155,6 +163,8 @@ public class LocalTest extends TestCase {
 
      c = a.sum(b);
      d = c.subtract(b);
+     //System.out.println("c = " + c);
+     //System.out.println("d = " + d);
      assertEquals("a+b-b = a",a,d);
 
      c = a.sum(b);
@@ -166,7 +176,6 @@ public class LocalTest extends TestCase {
      d = c.sum( a.sum(b) );
      e = c.sum( a ).sum(b);
      assertEquals("c+(a+b) = (c+a)+b",d,e);
-
 
      c = a.sum( fac.getZERO() );
      d = a.subtract( fac.getZERO() );
@@ -184,24 +193,26 @@ public class LocalTest extends TestCase {
  */
 
  public void testMultiplication() {
+     //System.out.println("fac = " + fac);
 
      a = fac.random(kl,ll,el,q);
-
      b = fac.random(kl,ll,el,q);
 
      if ( a.isZERO() || b.isZERO() ) {
          return;
      }
+     //System.out.println("a = " + a);
+     //System.out.println("b = " + b);
      assertTrue("not isZERO( a )", !a.isZERO() );
      assertTrue("not isZERO( b )", !b.isZERO() );
 
      c = b.multiply(a);
      d = a.multiply(b);
+     //System.out.println("c = " + c);
+     //System.out.println("d = " + d);
      assertTrue("not isZERO( c )", !c.isZERO() );
      assertTrue("not isZERO( d )", !d.isZERO() );
 
-     //System.out.println("a = " + a);
-     //System.out.println("b = " + b);
      e = d.subtract(c);
      assertTrue("isZERO( a*b-b*a ) " + e, e.isZERO() );
 
@@ -211,6 +222,9 @@ public class LocalTest extends TestCase {
      c = fac.random(kl,ll,el,q);
      d = a.multiply( b.multiply(c) );
      e = (a.multiply(b)).multiply(c);
+     //System.out.println("c = " + c);
+     //System.out.println("d = " + d);
+     //System.out.println("e = " + e);
 
      assertEquals("a(bc) = (ab)c",d,e);
      assertTrue("a(bc) = (ab)c", d.equals(e) );
@@ -226,6 +240,9 @@ public class LocalTest extends TestCase {
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
         assertTrue("a*1/a = 1",d.isONE()); 
+        d = c.inverse();
+        //System.out.println("d = " + d);
+        assertTrue("1/(1/a) = a",d.equals(a)); 
      }
  }
 
