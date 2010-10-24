@@ -14,13 +14,13 @@ import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
 
-import edu.jas.structure.Product;
-import edu.jas.structure.ProductRing;
 import edu.jas.structure.RingFactory;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.BigComplex;
+import edu.jas.arith.Product;
+import edu.jas.arith.ProductRing;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;

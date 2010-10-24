@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.structure;
+package edu.jas.arith;
 
 import java.io.Reader;
 import java.io.StringReader;
@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
+import edu.jas.structure.ElemFactory;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 

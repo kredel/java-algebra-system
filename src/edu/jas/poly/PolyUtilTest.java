@@ -17,8 +17,8 @@ import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
-import edu.jas.structure.Product;
-import edu.jas.structure.ProductRing;
+import edu.jas.arith.Product;
+import edu.jas.arith.ProductRing;
 
 
 /**

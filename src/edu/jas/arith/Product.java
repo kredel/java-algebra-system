@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.structure;
+package edu.jas.arith;
 
 import java.util.Map;
 import java.util.Iterator;
@@ -11,6 +11,8 @@ import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
+import edu.jas.structure.Element;
+import edu.jas.structure.RegularRingElem;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.NotInvertibleException;

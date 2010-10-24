@@ -13,12 +13,12 @@ import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.ModLong;
 import edu.jas.arith.ModLongRing;
+import edu.jas.arith.Product;
+import edu.jas.arith.ProductRing;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.Product;
-import edu.jas.structure.ProductRing;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 

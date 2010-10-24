@@ -18,6 +18,8 @@ import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
+import edu.jas.arith.Product;
+import edu.jas.arith.ProductRing;
 import edu.jas.gb.GBFactory;
 import edu.jas.gb.GroebnerBase;
 import edu.jas.gb.RGroebnerBasePseudoSeq;
@@ -28,8 +30,6 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
-import edu.jas.structure.Product;
-import edu.jas.structure.ProductRing;
 
 
 /**

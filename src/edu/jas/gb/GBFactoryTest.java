@@ -18,14 +18,14 @@ import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
+import edu.jas.arith.Product;
+import edu.jas.arith.ProductRing;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
 import edu.jas.structure.RingFactory;
-import edu.jas.structure.Product;
-import edu.jas.structure.ProductRing;
 
 
 /**

@@ -3,7 +3,7 @@
  * $Id$
  */
 
-package edu.jas.structure;
+package edu.jas.arith;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +15,7 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 //import org.apache.log4j.Logger;
 
-import edu.jas.arith.BigRational;
-import edu.jas.arith.BigInteger;
-import edu.jas.arith.ModInteger;
-import edu.jas.arith.ModIntegerRing;
+import edu.jas.structure.RingFactory;
 
 
 /**

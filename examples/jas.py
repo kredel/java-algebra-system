@@ -9,15 +9,16 @@ from java.util           import ArrayList
 
 from org.apache.log4j    import BasicConfigurator;
 
-from edu.jas.structure   import RingElem, RingFactory, Power, Product, ProductRing,\
-                                Complex, ComplexRing
+from edu.jas.structure   import RingElem, RingFactory, Power
 from edu.jas.arith       import BigInteger, BigRational, BigComplex, BigDecimal,\
-                                ModInteger, ModIntegerRing, BigQuaternion, BigOctonion
+                                ModInteger, ModIntegerRing, BigQuaternion, BigOctonion,\
+                                Product, ProductRing
 from edu.jas.poly        import GenPolynomial, GenPolynomialRing,\
                                 GenSolvablePolynomial, GenSolvablePolynomialRing,\
                                 GenPolynomialTokenizer, OrderedPolynomialList, PolyUtil,\
                                 TermOrderOptimization, TermOrder, PolynomialList,\
-                                AlgebraicNumber, AlgebraicNumberRing
+                                AlgebraicNumber, AlgebraicNumberRing,\
+                                Complex, ComplexRing
 from edu.jas.ps          import UnivPowerSeries, UnivPowerSeriesRing,\
                                 UnivPowerSeriesMap, Coefficients, \
                                 MultiVarPowerSeries, MultiVarPowerSeriesRing,\
