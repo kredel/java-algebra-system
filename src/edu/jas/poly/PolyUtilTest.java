@@ -19,6 +19,8 @@ import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.structure.Complex;
 import edu.jas.structure.ComplexRing;
+import edu.jas.structure.Product;
+import edu.jas.structure.ProductRing;
 
 
 /**
@@ -1323,6 +1325,84 @@ public class PolyUtilTest extends TestCase {
 
             assertEquals("re(c)+i*im(c) = c", cp, ap);
         }
+    }
+
+
+    /**
+     * Test product represenation conversion, rational numbers.
+     * 
+     */
+    public void testProductConversionRN() {
+        GenPolynomialRing<BigRational> ufac;
+        ufac = new GenPolynomialRing<BigRational>(new BigRational(1), 1);
+
+        ProductRing<GenPolynomial<BigRational>> pfac;
+        pfac = new ProductRing<GenPolynomial<BigRational>>(ufac, rl);
+
+        GenPolynomialRing<BigRational> dfac = new GenPolynomialRing<BigRational>(new BigRational(1), rl, to);
+
+        GenPolynomial<BigRational> c;
+        Product<GenPolynomial<BigRational>> cp;
+
+        c = dfac.getONE();
+        //System.out.println("c = " + c);
+ 
+        cp = PolyUtil.<BigRational> toProduct(pfac, c);
+        //System.out.println("cp = " + cp);
+        assertTrue("isONE( cp )", cp.isONE());
+
+        c = dfac.random(kl, ll, el, q);
+        //System.out.println("c = " + c);
+
+        cp = PolyUtil.<BigRational> toProduct(pfac, c);
+        //System.out.println("cp = " + cp);
+        assertTrue("!isONE( cp )", !cp.isONE());
+    }
+
+
+    /**
+     * Test polynomal over product represenation conversion, algebraic numbers.
+     * 
+     */
+    public void testPolyProductConversionAN() {
+        GenPolynomialRing<BigRational> ufac;
+        ufac = new GenPolynomialRing<BigRational>(new BigRational(1), 1);
+
+        GenPolynomial<BigRational> m;
+        m = ufac.univariate(0, 2);
+        m = m.subtract(ufac.univariate(0, 1));
+        //System.out.println("m = " + m);
+
+        AlgebraicNumberRing<BigRational> afac;
+        afac = new AlgebraicNumberRing<BigRational>(m);
+        //System.out.println("afac = " + afac);
+
+        ProductRing<AlgebraicNumber<BigRational>> pfac;
+        pfac = new ProductRing<AlgebraicNumber<BigRational>>(afac, rl);
+
+        GenPolynomialRing<Product<AlgebraicNumber<BigRational>>> dpfac;
+        dpfac = new GenPolynomialRing<Product<AlgebraicNumber<BigRational>>>(pfac, 2);
+
+        GenPolynomialRing<AlgebraicNumber<BigRational>> dfac;
+        dfac = new GenPolynomialRing<AlgebraicNumber<BigRational>>(afac, 2, to);
+
+
+        GenPolynomial<AlgebraicNumber<BigRational>> c;
+        GenPolynomial<Product<AlgebraicNumber<BigRational>>> cp;
+
+        c = dfac.getONE();
+        //System.out.println("c = " + c);
+
+        cp = PolyUtil.<AlgebraicNumber<BigRational>> toProductGen(dpfac, c);
+        //System.out.println("cp = " + cp);
+        assertTrue("isZERO( cp )", cp.isONE());
+
+        c = dfac.random(kl, ll, el, q);
+        //System.out.println("c = " + c);
+
+        cp = PolyUtil.<AlgebraicNumber<BigRational>> toProductGen(dpfac, c);
+        //System.out.println("cp = " + cp);
+        assertTrue("!isONE( cp )", !cp.isONE());
     }
 
 }
