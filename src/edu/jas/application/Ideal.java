@@ -1270,30 +1270,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         if (this.isONE()) {
             return -1;
         }
-        if (this.list.ring.nvar <= 0) {
-            return -1;
-        }
-        //int uht = 0;
-        Set<Integer> v = new HashSet<Integer>(); // for non reduced GBs
-        // List<GenPolynomial<C>> Z = this.list.list;
-        for (GenPolynomial<C> p : getList()) {
-            ExpVector e = p.leadingExpVector();
-            if (e == null) {
-                continue;
-            }
-            int[] u = e.dependencyOnVariables();
-            if (u == null) {
-                continue;
-            }
-            if (u.length == 1) {
-                //uht++;
-                v.add(u[0]);
-            }
-        }
-        if (this.list.ring.nvar == v.size()) {
-            return 0;
-        }
-        return 1;
+        return bb.commonZeroTest(getList());
     }
 
 
