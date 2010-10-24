@@ -27,8 +27,6 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
 
-//import edu.jas.application.Ideal;
-
 
 /**
  * Reduction tests with JUnit.

@@ -7,10 +7,13 @@ package edu.jas.gb;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Set;
+import java.util.HashSet;
 
 import org.apache.log4j.Logger;
 
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.RingElem;
 import edu.jas.poly.ExpVector;
 import edu.jas.vector.BasicLinAlg;
@@ -104,6 +107,42 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
             }
         }
         return true;
+    }
+
+
+    /**
+     * Common zero test.
+     * @param F polynomial list.
+     * @return -1, 0 or 1 if dimension(ideal(F)) &eq; -1, 0 or &ge; 1.
+     */
+    public int commonZeroTest(List<GenPolynomial<C>> F) {
+        if (F == null || F.isEmpty()) {
+            return 1;
+        }
+	GenPolynomialRing<C> pfac = F.get(0).ring;
+        if (pfac.nvar <= 0) {
+            return -1;
+        }
+        //int uht = 0;
+        Set<Integer> v = new HashSet<Integer>(); // for non reduced GBs
+        for (GenPolynomial<C> p : F) {
+            ExpVector e = p.leadingExpVector();
+            if (e == null) {
+                continue;
+            }
+            int[] u = e.dependencyOnVariables();
+            if (u == null) {
+                continue;
+            }
+            if (u.length == 1) {
+                //uht++;
+                v.add(u[0]);
+            }
+        }
+        if (pfac.nvar == v.size()) {
+            return 0;
+        }
+        return 1;
     }
 
 

@@ -17,11 +17,11 @@ import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
 
-import edu.jas.application.PolyUtilApp;
 import edu.jas.arith.BigInteger;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
+import edu.jas.poly.PolyUtil;
 import edu.jas.poly.PolynomialList;
 import edu.jas.structure.Product;
 import edu.jas.structure.ProductRing;
@@ -244,7 +244,7 @@ public class RGroebnerBasePseudoSeqTest extends TestCase {
         // System.out.println("fac = " + fac);
 
         List<GenPolynomial<Product<BigInteger>>> Fp = null;
-        Fp = PolyUtilApp.<BigInteger> toProductGen(fac, F.list);
+        Fp = PolyUtil.<BigInteger> toProductGen(fac, F.list);
 
 
         List<GenPolynomial<Product<BigInteger>>> Fpp;
