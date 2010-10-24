@@ -13,9 +13,10 @@ import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.application.Ideal;
 import edu.jas.gb.Reduction;
 import edu.jas.gb.ReductionSeq;
+import edu.jas.gb.GroebnerBaseAbstract;
+import edu.jas.gb.GBFactory;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.ExpVector;
@@ -219,8 +220,9 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>> ext
         // solve system of equations and construct result
         Reduction<C> red = new ReductionSeq<C>();
         gl = red.irreducibleSet(gl);
-        Ideal<C> L = new Ideal<C>(ppfac, gl, true);
-        int z = L.commonZeroTest();
+        GroebnerBaseAbstract<C> bb = GBFactory.<C>getImplementation();
+        //Ideal<C> L = new Ideal<C>(ppfac, gl, true);
+        int z = bb.commonZeroTest(gl);
         if (z < 0) { // no solution
             return null;
         }
