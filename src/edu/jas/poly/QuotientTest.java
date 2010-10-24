@@ -3,7 +3,7 @@
  * $Id$
  */
 
-package edu.jas.structure;
+package edu.jas.poly;
 
 
 import junit.framework.Test;
@@ -18,8 +18,6 @@ import edu.jas.arith.BigInteger;
 
 //import edu.jas.structure.RingElem;
 
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
 
 
 /**
