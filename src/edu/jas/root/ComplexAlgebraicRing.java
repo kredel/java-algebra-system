@@ -12,8 +12,8 @@ import java.util.Random;
 
 import edu.jas.arith.Rational;
 import edu.jas.poly.AlgebraicNumberRing;
+import edu.jas.poly.Complex;
 import edu.jas.poly.GenPolynomial;
-import edu.jas.structure.Complex;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.Power;
 import edu.jas.structure.RingFactory;

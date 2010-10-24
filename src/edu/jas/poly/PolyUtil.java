@@ -23,8 +23,6 @@ import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.Modular;
 import edu.jas.arith.ModularRingFactory;
 import edu.jas.arith.Rational;
-import edu.jas.structure.Complex;
-import edu.jas.structure.ComplexRing;
 import edu.jas.structure.Element;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.Product;

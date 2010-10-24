@@ -2,15 +2,18 @@
  * $Id$
  */
 
-package edu.jas.structure;
+package edu.jas.poly;
 
 
 import org.apache.log4j.Logger;
 
-// import edu.jas.arith.BigComplex;
-// import edu.jas.arith.BigDecimal;
-// import edu.jas.arith.BigInteger;
-// import edu.jas.arith.BigRational;
+import edu.jas.arith.BigComplex;
+import edu.jas.arith.BigDecimal;
+import edu.jas.arith.BigInteger;
+import edu.jas.arith.BigRational;
+import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.RingElem;
+import edu.jas.structure.StarRingElem;
 
 
 /**
@@ -410,7 +413,7 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
      */
     public Complex<C> multiply(Complex<C> B) {
         return new Complex<C>(ring, re.multiply(B.re).subtract(im.multiply(B.im)), re.multiply(B.im).sum(
-                im.multiply(B.re)));
+                        im.multiply(B.re)));
     }
 
 
@@ -501,18 +504,18 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
             System.out.println("this = " + this);
             System.out.println("S    = " + S);
             System.out.println("Sp   = " + Sp);
-//             BigInteger tr = (BigInteger) (Object) this.re;
-//             BigInteger ti = (BigInteger) (Object) this.im;
-//             BigInteger sr = (BigInteger) (Object) S.re;
-//             BigInteger si = (BigInteger) (Object) S.im;
-//             BigComplex tc = new BigComplex(new BigRational(tr), new BigRational(ti));
-//             BigComplex sc = new BigComplex(new BigRational(sr), new BigRational(si));
-//             BigComplex qc = tc.divide(sc);
-//             System.out.println("qc   = " + qc);
-//             BigDecimal qrd = new BigDecimal(qc.getRe());
-//             BigDecimal qid = new BigDecimal(qc.getIm());
-//             System.out.println("qrd  = " + qrd);
-//             System.out.println("qid  = " + qid);
+            BigInteger tr = (BigInteger) (Object) this.re;
+            BigInteger ti = (BigInteger) (Object) this.im;
+            BigInteger sr = (BigInteger) (Object) S.re;
+            BigInteger si = (BigInteger) (Object) S.im;
+            BigComplex tc = new BigComplex(new BigRational(tr), new BigRational(ti));
+            BigComplex sc = new BigComplex(new BigRational(sr), new BigRational(si));
+            BigComplex qc = tc.divide(sc);
+            System.out.println("qc   = " + qc);
+            BigDecimal qrd = new BigDecimal(qc.getRe());
+            BigDecimal qid = new BigDecimal(qc.getIm());
+            System.out.println("qrd  = " + qrd);
+            System.out.println("qid  = " + qid);
             throw new ArithmeticException("QR norm not decreasing " + Rp + ", " + Rp.norm());
         }
         ret[0] = Sp;

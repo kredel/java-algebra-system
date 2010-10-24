@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.structure;
+package edu.jas.poly;
 
 
 import java.io.Reader;
@@ -14,6 +14,10 @@ import java.util.Random;
 import org.apache.log4j.Logger;
 
 import edu.jas.kern.StringUtil;
+import edu.jas.structure.ElemFactory;
+import edu.jas.structure.Element;
+import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
 
 
 /**

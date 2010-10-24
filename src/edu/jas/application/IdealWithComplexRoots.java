@@ -9,8 +9,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import edu.jas.arith.BigDecimal;
+import edu.jas.poly.Complex;
 import edu.jas.poly.GenPolynomial;
-import edu.jas.structure.Complex;
 import edu.jas.structure.GcdRingElem;
 
 

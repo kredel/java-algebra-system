@@ -19,13 +19,13 @@ import edu.jas.arith.BigRational;
 import edu.jas.gb.GroebnerBase;
 import edu.jas.gb.GBFactory;
 import edu.jas.kern.ComputerThreads;
+import edu.jas.poly.Complex;
+import edu.jas.poly.ComplexRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
-import edu.jas.structure.Complex;
-import edu.jas.structure.ComplexRing;
 import edu.jas.ufd.Quotient;
 import edu.jas.util.KsubSet;
 

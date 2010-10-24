@@ -3,7 +3,7 @@
  * $Id$
  */
 
-package edu.jas.structure;
+package edu.jas.poly;
 
 //import java.util.ArrayList;
 //import java.util.List;
@@ -20,8 +20,6 @@ import edu.jas.arith.BigInteger;
 
 //import edu.jas.structure.RingElem;
 
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
 
 
 /**

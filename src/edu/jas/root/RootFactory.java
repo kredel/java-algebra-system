@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Set;
 
 import edu.jas.arith.Rational;
+import edu.jas.poly.Complex;
 import edu.jas.poly.GenPolynomial;
-import edu.jas.structure.Complex;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.ufd.FactorAbstract;
 import edu.jas.ufd.FactorFactory;

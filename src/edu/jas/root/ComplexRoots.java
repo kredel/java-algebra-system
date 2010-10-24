@@ -9,8 +9,8 @@ import java.util.List;
 
 import edu.jas.arith.Rational;
 import edu.jas.arith.BigRational;
+import edu.jas.poly.Complex;
 import edu.jas.poly.GenPolynomial;
-import edu.jas.structure.Complex;
 import edu.jas.structure.RingElem;
 
 

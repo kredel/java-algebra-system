@@ -7,7 +7,7 @@ package edu.jas.util;
 
 //import org.apache.log4j.Logger;
 
-import edu.jas.structure.Complex;
+import edu.jas.poly.Complex;
 
 
 /**
