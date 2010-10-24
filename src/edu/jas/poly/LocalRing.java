@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.structure;
+package edu.jas.poly;
 
 import java.util.Random;
 import java.io.Reader;
@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
+import edu.jas.structure.ElemFactory;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 
