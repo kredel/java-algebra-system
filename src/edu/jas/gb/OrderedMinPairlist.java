@@ -17,7 +17,6 @@ import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenSolvablePolynomialRing;
-
 import edu.jas.structure.RingElem;
 
 /**
@@ -26,7 +25,7 @@ import edu.jas.structure.RingElem;
  * @author Heinz Kredel
  */
 
-public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
+public class OrderedMinPairlist<C extends RingElem<C> > implements PairList<C> {
 
     protected final ArrayList<GenPolynomial<C>> P;
     protected final TreeMap<ExpVector,LinkedList<Pair<C>>> pairlist;
@@ -39,14 +38,14 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
     protected int remCount;
     protected final int moduleVars;
 
-    private static final Logger logger = Logger.getLogger(OrderedPairlist.class);
+    private static final Logger logger = Logger.getLogger(OrderedMinPairlist.class);
 
 
     /**
      * Constructor for OrderedPairlist.
      * @param r polynomial factory.
      */
-    public OrderedPairlist() {
+    public OrderedMinPairlist() {
          moduleVars = 0;
          ring = null;
          P = null;
@@ -62,8 +61,8 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
      * Constructor for OrderedPairlist.
      * @param r polynomial factory.
      */
-    public OrderedPairlist(GenPolynomialRing<C> r) {
-        this(0,r);
+    public OrderedMinPairlist(GenPolynomialRing<C> r) {
+         this(0,r);
     }
 
 
@@ -72,7 +71,7 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
      * @param m number of module variables.
      * @param r polynomial factory.
      */
-    public OrderedPairlist(int m, GenPolynomialRing<C> r) {
+    public OrderedMinPairlist(int m, GenPolynomialRing<C> r) {
          moduleVars = m;
          ring = r;
          P = new ArrayList<GenPolynomial<C>>();
@@ -94,7 +93,7 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
      * @param r polynomial ring.
      */
     public PairList<C> create(GenPolynomialRing<C> r) {
-        return new OrderedPairlist<C>(r);
+        return new OrderedMinPairlist<C>(r);
     }
 
 
@@ -104,7 +103,7 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
      * @param r polynomial ring.
      */
     public PairList<C> create(int m, GenPolynomialRing<C> r) {
-        return new OrderedPairlist<C>(m,r);
+        return new OrderedMinPairlist<C>(m,r);
     }
 
 
@@ -113,7 +112,7 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
      */
     @Override
     public String toString() {
-        StringBuffer s = new StringBuffer("OrderedPairlist(");
+        StringBuffer s = new StringBuffer("OrderedMinPairlist(");
         //s.append("polys="+P.size());
         s.append("#put="+putCount);
         s.append(", #rem="+remCount);
@@ -135,51 +134,48 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
            if ( oneInGB ) { 
                return P.size()-1;
            }
-           Pair<C> pair;
-           ExpVector e; 
-           ExpVector f; 
-           ExpVector g; 
-           GenPolynomial<C> pj; 
-           BitSet redi;
-           LinkedList<Pair<C>> x;
-           LinkedList<Pair<C>> xl;
-           e = p.leadingExpVector();
+           ExpVector e = p.leadingExpVector();
            int l = P.size();
+           BitSet redi = new BitSet();
+           redi.set( 0, l ); // [0..l-1] = true
+           red.add( redi );
+           P.add(  p );
            for ( int j = 0; j < l; j++ ) {
-               pj = P.get(j);
-               f = pj.leadingExpVector(); 
+               GenPolynomial<C> pj = P.get(j);
+               ExpVector f = pj.leadingExpVector(); 
                if ( moduleVars > 0 ) {
                   if ( !reduction.moduleCriterion( moduleVars, e, f) ) {
+                     red.get(j).clear(l); 
                      continue; // skip pair
                   }
                }
-               g =  e.lcm( f );
-               pair = new Pair<C>( pj, p, j, l);
-               // redi = (BitSet)red.get(j);
-               ///if ( j < l ) redi.set( l );
-               // System.out.println("bitset."+j+" = " + redi );  
-
+               ExpVector g =  e.lcm( f );
+               //System.out.println("g  = " + g);  
+               Pair<C> pair = new Pair<C>( pj, p, j, l);
+               boolean c = true;
+               if ( useCriterion4 ) {
+                   c = reduction.criterion4( pair.pi, pair.pj, g ); 
+               }
+               //System.out.println("c4  = " + c);  
+               if ( c ) {
+                   c = criterion3( j, l, g );
+                   //System.out.println("c3  = " + c); 
+               }
+               if ( !c ) { // skip pair
+                   red.get(j).clear(l); 
+                   //System.out.println("c_skip = " + g); 
+                   continue; 
+               }
                //multiple pairs under same keys -> list of pairs
-               x = pairlist.get( g );
-               if ( x == null ) {
+               LinkedList<Pair<C>> xl = pairlist.get( g );
+               if ( xl == null ) {
                   xl = new LinkedList<Pair<C>>();
-               } else {
-                  xl = x; 
                }
                //xl.addLast( pair ); // first or last ?
                xl.addFirst( pair ); // first or last ? better for d- e-GBs
                pairlist.put( g, xl );
            }
            // System.out.println("pairlist.keys@put = " + pairlist.keySet() );  
-           P.add(  p );
-           redi = new BitSet();
-           redi.set( 0, l ); // jdk 1.4
-           // if ( l > 0 ) { // jdk 1.3
-           //    for ( int i=0; i<l; i++ ) redi.set(i);
-           // }
-           red.add( redi );
-           System.out.println("pairlist.set = " + red); //.get( pair.j )); //pair);
-           System.out.println("pairlist.key = " + pairlist.keySet() );  
            return P.size()-1;
     }
 
@@ -205,7 +201,7 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
            ExpVector g =  me.getKey();
            LinkedList<Pair<C>> xl = me.getValue();
            if ( logger.isInfoEnabled() )
-              logger.info("g  = " + g);
+              logger.info("g_s  = " + g);
            pair = null;
            while ( !c && xl.size() > 0 ) {
                  pair = xl.removeFirst();
@@ -213,20 +209,28 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
                  i = pair.i; 
                  j = pair.j; 
                  // System.out.println("pair(" + j + "," +i+") ");
+                 if ( !red.get(j).get(i) ) {
+                     System.out.println("c_y = " + g); // + ", " + red.get(j).get(i)); 
+                     continue;
+                 }
+                 c = true;
                  if ( useCriterion4 ) {
                     c = reduction.criterion4( pair.pi, pair.pj, g ); 
-                 } else {
-                    c = true;
                  }
-                 //System.out.println("c4_o  = " + c);  
+                 //System.out.println("c4_x = " + c);  
                  if ( c ) {
                     c = criterion3( i, j, g );
-                    //System.out.println("c3_o  = " + c); 
+                    //System.out.println("c3_x = " + c); 
+                 }
+                 if ( !c ) {
+                    System.out.println("c_x = " + g); 
                  }
                  red.get( j ).clear(i); // set(i,false) jdk1.4
            }
-           if ( xl.size() == 0 ) ip.remove(); 
+           if ( xl.size() == 0 ) {
+              ip.remove(); 
               // = pairlist.remove( g );
+           }
        }
        if ( ! c ) {
           pair = null;
@@ -288,7 +292,6 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
         return putOne();
     }
 
-
     /**
      * Put to ONE-Polynomial to the pairlist.
      * @param one polynomial. (no more required)
@@ -324,7 +327,7 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
         for ( int k = 0; k < P.size(); k++ ) {
             A = P.get( k );
             ek = A.leadingExpVector();
-            m = eij.multipleOf(ek);
+            m = eij.multipleOf(ek) && eij.compareTo(ek) != 0;
             if ( m ) {
                 if ( k < i ) {
                    // System.out.println("k < i "+k+" "+i); 

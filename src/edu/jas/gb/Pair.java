@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 import edu.jas.structure.RingElem;
 
+import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 
 
@@ -47,6 +48,22 @@ public class Pair<C extends RingElem<C> > extends AbstractPair<C>
     public Pair(GenPolynomial<C> a, GenPolynomial<C> b, 
                 int i, int j) {
         super(a,b,i,j);
+        this.n = 0;
+        toZero = false; // ok
+    }
+
+
+    /**
+     * Pair constructor.
+     * @param lcm of lt(a) lt(b).
+     * @param a polynomial i.
+     * @param b polynomial j.
+     * @param i first index.
+     * @param j second index.
+     */
+    public Pair(ExpVector lcm, GenPolynomial<C> a, GenPolynomial<C> b, 
+                int i, int j) {
+        super(lcm,a,b,i,j);
         this.n = 0;
         toZero = false; // ok
     }

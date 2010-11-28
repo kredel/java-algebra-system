@@ -98,6 +98,7 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
         if ( l <= 1 ) {
            return G; // since no threads are activated
         }
+        logger.info("start " + pairlist); 
 
         Pair<C> pair;
         GenPolynomial<C> pi;
@@ -127,12 +128,16 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
               }
 
               H = red.normalform( G, S );
+              if ( true || debug ) {
+                  logger.info("ht(H) = " + H.monic()); //.leadingExpVector() );
+              }
               if ( H.isZERO() ) {
                  pair.setZero();
                  continue;
               }
+              H = H.monic();
               if ( debug ) {
-                  logger.debug("ht(H) = " + H.leadingExpVector() );
+                  logger.info("ht(H) = " + H); //.leadingExpVector() );
               }
 
               H = H.monic();
