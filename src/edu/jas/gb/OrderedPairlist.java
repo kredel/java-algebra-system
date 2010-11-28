@@ -155,6 +155,7 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
                }
                g =  e.lcm( f );
                pair = new Pair<C>( pj, p, j, l);
+               System.out.println("pair.new      = " + pair);
                // redi = (BitSet)red.get(j);
                ///if ( j < l ) redi.set( l );
                // System.out.println("bitset."+j+" = " + redi );  

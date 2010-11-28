@@ -63,8 +63,7 @@ public abstract class AbstractPair<C extends RingElem<C> >
      */
     @Override
     public String toString() {
-        return "pair(" + i + "{" + pi.length() + "}," 
-                       + j + "{" + pj.length() + "},"
+        return "pair(" + i + "," + j + "{" + pi.length() + "," + pj.length() + "},"
                        + e + ")";
     }
 

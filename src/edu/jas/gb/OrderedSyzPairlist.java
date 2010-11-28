@@ -137,9 +137,9 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
                return P.size()-1;
            }
            ExpVector e = p.leadingExpVector();
-           int l = P.size();
+           int ps = P.size();
            BitSet redi = new BitSet();
-           //redi.set( 0, l ); // [0..l-1] = true
+           //redi.set( 0, ps ); // [0..ps-1] = true
            red.add( redi );
            P.add(  p );
            // remove from existing pairs:
@@ -160,6 +160,9 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
                        if ( g.compareTo(ejl) == 0 ) {
                            continue;
                        }
+                       if ( true ) {
+			   continue;
+		       }
                        // g == ge && g != eil && g != ejl  
                        System.out.println("to skip " + pair);
                        red.get( pair.j ).clear( pair.i ); 
@@ -182,10 +185,11 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
                    System.out.println("removed empty for = " + ei);
 	       }
            }
+           es = null;
            // generate new pairs:
            SortedMap<ExpVector,LinkedList<Pair<C>>> npl 
                  = new TreeMap<ExpVector,LinkedList<Pair<C>>>( ring.tord.getAscendComparator() );
-           for ( int j = 0; j < l; j++ ) {
+           for ( int j = 0; j < ps; j++ ) {
                GenPolynomial<C> pj = P.get(j);
                ExpVector f = pj.leadingExpVector(); 
                if ( moduleVars > 0 ) {
@@ -196,7 +200,8 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
                }
                ExpVector g =  e.lcm( f );
                //System.out.println("g  = " + g);  
-               Pair<C> pair = new Pair<C>( pj, p, j, l);
+               Pair<C> pair = new Pair<C>( pj, p, j, ps);
+               System.out.println("pair.new      = " + pair);
                //multiple pairs under same keys -> list of pairs
                LinkedList<Pair<C>> xl = npl.get( g );
                if ( xl == null ) {
@@ -224,10 +229,10 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
            for ( ExpVector ei : es ) {
                LinkedList<Pair<C>> ignored = npl.get(ei);
                for ( Pair<C> pair : ignored ) {
-                   red.get( pair.j ).clear( pair.i ); 
+                   //red.get( pair.j ).clear( pair.i ); 
                }
            }
-           if ( useCriterion4 ) {
+           if ( false && useCriterion4 ) {
                es = new ArrayList<ExpVector>(npl.size());
                for ( ExpVector ei : npl.keySet() ) {
                    LinkedList<Pair<C>> exl = npl.get( ei );
@@ -254,6 +259,10 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
                for ( ExpVector ei : es ) {
                    LinkedList<Pair<C>> ignored = npl.get(ei);
                    for ( Pair<C> pair : ignored ) {
+                       if ( reduction.criterion4( pair.pi, pair.pj, pair.e ) ) {
+                           continue;
+		       }
+                       System.out.println("npl.skip c4  = " + pair.i + ", " + pair.j);
                        red.get( pair.j ).clear( pair.i ); 
                    }
                }
@@ -269,8 +278,11 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
                if ( ex != null ) {
                    //System.out.println("pairlist.add_ex = " + ex ); 
                    //exl.addAll(ex); 
+                   for ( Pair<C> ep : ex ) {
+		       exl.addFirst(ep);
+		   }
                }
-               //System.out.println("pairlist.add = " + ei ); 
+               System.out.println("pairlist.add = " + ei + ", exl = " + exl); 
                pairlist.put(ei,exl);
            }
            System.out.println("pairlist.set = " + red); //.get( pair.j )); //pair);
@@ -307,8 +319,8 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
                  // xl is also modified in pairlist 
                  i = pair.i; 
                  j = pair.j; 
-                 // System.out.println("pair(" + j + "," +i+") ");
-                 if ( !red.get(j).get(i) ) {
+                 System.out.println("pair.remove = " + pair );
+                 if ( false && !red.get(j).get(i) ) {
                      System.out.println("c_red.get(j).get(i) = " + g); // + ", " + red.get(j).get(i)); 
                      pair = null;
                      continue;
@@ -327,7 +339,7 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
 //                     System.out.println("c_criterions = " + g); 
 //                  }
                  red.get(j).clear(i);
-                 //break; 
+                 break; 
            }
            if ( xl.size() == 0 ) {
               ip.remove(); 

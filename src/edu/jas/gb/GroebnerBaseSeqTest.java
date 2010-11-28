@@ -160,6 +160,13 @@ public class GroebnerBaseSeqTest extends TestCase {
             + "( 99 W - 11 B S + 3 B**2 ), "
             + "( B**2 + 33/50 B + 2673/10000 ) "
             + ") ";
+        String exam2 = "(x,y,z) L "
+            + "( "
+            + "( z y**2 + 2 x + 1/2 )"
+            + "( z x**2 - y**2 - 1/2 x )"
+            + "( -z + y**2 x + 4 x**2 + 1/4 )"
+            + " )";
+
         Reader source = new StringReader( exam );
         GenPolynomialTokenizer parser
             = new GenPolynomialTokenizer( source );
@@ -306,6 +313,13 @@ public class GroebnerBaseSeqTest extends TestCase {
             + "( 99 W - 11 B S + 3 B**2 ), "
             + "( B**2 + 33/50 B + 2673/10000 ) "
             + ") ";
+        String exam2 = "(x,y,z) L "
+            + "( "
+            + "( z y**2 + 2 x + 1/2 )"
+            + "( z x**2 - y**2 - 1/2 x )"
+            + "( -z + y**2 x + 4 x**2 + 1/4 )"
+            + " )";
+
         Reader source = new StringReader( exam );
         GenPolynomialTokenizer parser
             = new GenPolynomialTokenizer( source );
