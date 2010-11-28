@@ -15,9 +15,13 @@ from jas import terminate
 # integral function coefficients
 
 r = PolyRing( PolyRing(QQ(),"f, e, d, c, b, a",PolyRing.lex), "y,x", PolyRing.lex );
+#r = PolyRing( PolyRing(QQ(),"f, e, d, c, b, a",PolyRing.grad), "y,x", PolyRing.lex );
+#r = PolyRing( PolyRing(QQ(),"f, e, d, c, b, a",PolyRing.lex), "y,x", PolyRing.grad );
+#r = PolyRing( PolyRing(QQ(),"e, d, c, b, f, a",PolyRing.lex), "y,x", PolyRing.grad );
 print "Ring: " + str(r);
 print;
 
+#[one,e,d,c,b,f,a,y,x] = r.gens();
 [one,f,e,d,c,b,a,y,x] = r.gens();
 print "gens: ", [ str(f) for f in r.gens() ];
 print;
@@ -37,14 +41,16 @@ If = r.paramideal( "", list = F );
 print "ParamIdeal: " + str(If);
 print;
 
-## G = If.GB();
-## print "GB: " + str(G);
-## print;
+G = If.GB();
+print "GB: " + str(G);
+print;
 ## sys.exit();
 
+startLog();
+
 GS = If.CGBsystem();
-GS = If.CGBsystem();
-GS = If.CGBsystem();
+#GS = If.CGBsystem();
+#GS = If.CGBsystem();
 print "CGBsystem: " + str(GS);
 print;
 
