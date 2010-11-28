@@ -30,7 +30,7 @@ import edu.jas.structure.RingElem;
  * @author Heinz Kredel
  */
 
-public class CriticalPairList<C extends RingElem<C> > {
+public class CriticalPairList<C extends RingElem<C>> implements PairList<C> {
 
     private final GenPolynomialRing<C> ring;
 
@@ -157,6 +157,21 @@ public class CriticalPairList<C extends RingElem<C> > {
         red.clear();
         recordCount = 0;
         return 0;
+    }
+
+
+    /**
+     * Get and remove the next required pair from the pairlist.
+     * Appy the criterions 3 and 4 to see if the S-polynomial is required.
+     * The pair is not removed from the pair list.
+     * @return the next pair if one exists, otherwise null.
+     */
+    public Pair<C> removeNext() { 
+        CriticalPair<C> cp = getNext();
+        if ( cp == null ) {
+            return null;
+        }
+        return new Pair<C>(cp.pi,cp.pj,cp.i,cp.j);
     }
 
 

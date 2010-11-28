@@ -26,7 +26,7 @@ import edu.jas.structure.RingElem;
  * @author Heinz Kredel
  */
 
-public class OrderedPairlist<C extends RingElem<C> > {
+public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
 
     protected final ArrayList<GenPolynomial<C>> P;
     protected final TreeMap<ExpVector,LinkedList<Pair<C>>> pairlist;
@@ -241,17 +241,26 @@ public class OrderedPairlist<C extends RingElem<C> > {
      * @return the index of the last polynomial.
      */
     public synchronized int putOne(GenPolynomial<C> one) { 
-        putCount++;
         if ( one == null ) {
            return P.size()-1;
         }
         if ( ! one.isONE() ) {
            return P.size()-1;
         }
+        return putOne();
+    }
+
+    /**
+     * Put to ONE-Polynomial to the pairlist.
+     * @param one polynomial. (no more required)
+     * @return the index of the last polynomial.
+     */
+    public synchronized int putOne() { 
+        putCount++;
         oneInGB = true;
         pairlist.clear();
         P.clear();
-        P.add(one);
+        P.add(ring.getONE());
         red.clear();
         return P.size()-1;
     }

@@ -18,14 +18,10 @@ import edu.jas.poly.GenPolynomial;
  * @param <C> coefficient type
  * @author Heinz Kredel.
  */
-public class CriticalPair<C extends RingElem<C> > 
+public class CriticalPair<C extends RingElem<C> > extends AbstractPair<C>
              implements Serializable {
 
     public final ExpVector e;
-    public final GenPolynomial<C> pi;
-    public final GenPolynomial<C> pj;
-    public final int i;
-    public final int j;
     protected volatile boolean inReduction;
     protected volatile GenPolynomial<C> reductum;
     //public final ExpVector sugar;
@@ -42,11 +38,8 @@ public class CriticalPair<C extends RingElem<C> >
     public CriticalPair(ExpVector e,
                         GenPolynomial<C> pi, GenPolynomial<C> pj, 
                         int i, int j) {
+        super(pi,pj,i,j);
         this.e = e;
-        this.pi = pi; 
-        this.pj = pj; 
-        this.i = i; 
-        this.j = j;
         inReduction = false; 
         reductum = null;
     }
@@ -56,23 +49,16 @@ public class CriticalPair<C extends RingElem<C> >
      * toString.
      */
     @Override
-     public String toString() {
-        StringBuffer s = new StringBuffer("pair( ");
-        s.append(e + "," + i);
-        if ( pi != null ) {
-           s.append("{" + pi.length() + "}");
-        }
-        s.append("," + j);
-        if ( pj != null ) {
-           s.append("{" + pj.length() + "}");
-        }
+    public String toString() {
+        StringBuffer s = new StringBuffer(super.toString() + "[ ");
+        s.append(e.toString());
         if ( inReduction ) {
            s.append("," + inReduction);
         } 
         if ( reductum != null ) {
            s.append("," + reductum.leadingExpVector());
         } 
-        s.append(" )");
+        s.append(" ]");
         return s.toString();
     }
 
@@ -146,3 +132,4 @@ public class CriticalPair<C extends RingElem<C> >
     }
 
 }
+
