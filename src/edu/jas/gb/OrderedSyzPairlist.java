@@ -160,7 +160,7 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
                        if ( g.compareTo(ejl) == 0 ) {
                            continue;
                        }
-                       if ( true ) {
+                       if ( false ) {
 			   continue;
 		       }
                        // g == ge && g != eil && g != ejl  
@@ -201,7 +201,7 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
                ExpVector g =  e.lcm( f );
                //System.out.println("g  = " + g);  
                Pair<C> pair = new Pair<C>( pj, p, j, ps);
-               System.out.println("pair.new      = " + pair);
+               //System.out.println("pair.new      = " + pair);
                //multiple pairs under same keys -> list of pairs
                LinkedList<Pair<C>> xl = npl.get( g );
                if ( xl == null ) {
@@ -227,21 +227,21 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
            }
            System.out.println("npl.skip div = " + es);
            for ( ExpVector ei : es ) {
-               LinkedList<Pair<C>> ignored = npl.get(ei);
+               LinkedList<Pair<C>> ignored = npl.remove(ei);
                for ( Pair<C> pair : ignored ) {
-                   //red.get( pair.j ).clear( pair.i ); 
+                   red.get( pair.j ).clear( pair.i ); 
                }
            }
-           if ( false && useCriterion4 ) {
+           if ( useCriterion4 ) {
                es = new ArrayList<ExpVector>(npl.size());
                for ( ExpVector ei : npl.keySet() ) {
                    LinkedList<Pair<C>> exl = npl.get( ei );
-                   System.out.println("exl = " + exl ); 
+                   //System.out.println("exl = " + exl ); 
                    boolean c = true;
                    for ( Pair<C> pair : exl ) {
                        c = c && reduction.criterion4( pair.pi, pair.pj, pair.e ); 
                    }
-                   System.out.println("c4 = " + c ); 
+                   //System.out.println("c4 = " + c ); 
                    if ( c ) {
                        if ( exl.size() > 1 ) {
                            Pair<C> pair = exl.getFirst(); // or getLast()
@@ -257,12 +257,12 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
                }
                System.out.println("npl.skip c4  = " + es);
                for ( ExpVector ei : es ) {
-                   LinkedList<Pair<C>> ignored = npl.get(ei);
+                   LinkedList<Pair<C>> ignored = npl.remove(ei);
                    for ( Pair<C> pair : ignored ) {
-                       if ( reduction.criterion4( pair.pi, pair.pj, pair.e ) ) {
+                       if ( false && reduction.criterion4( pair.pi, pair.pj, pair.e ) ) {
                            continue;
 		       }
-                       System.out.println("npl.skip c4  = " + pair.i + ", " + pair.j);
+                       //System.out.println("npl.skip c4  = " + pair.i + ", " + pair.j);
                        red.get( pair.j ).clear( pair.i ); 
                    }
                }
@@ -277,10 +277,10 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
                LinkedList<Pair<C>> ex = pairlist.get( ei );
                if ( ex != null ) {
                    //System.out.println("pairlist.add_ex = " + ex ); 
-                   //exl.addAll(ex); 
-                   for ( Pair<C> ep : ex ) {
-		       exl.addFirst(ep);
-		   }
+                   exl.addAll(ex); 
+                   //for ( Pair<C> ep : ex ) {
+		   //    exl.addFirst(ep);
+		   //}
                }
                System.out.println("pairlist.add = " + ei + ", exl = " + exl); 
                pairlist.put(ei,exl);
@@ -319,8 +319,8 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
                  // xl is also modified in pairlist 
                  i = pair.i; 
                  j = pair.j; 
-                 System.out.println("pair.remove = " + pair );
-                 if ( false && !red.get(j).get(i) ) {
+                 //System.out.println("pair.remove = " + pair );
+                 if ( !red.get(j).get(i) ) {
                      System.out.println("c_red.get(j).get(i) = " + g); // + ", " + red.get(j).get(i)); 
                      pair = null;
                      continue;
