@@ -181,7 +181,7 @@ public class GCDPrimitiveTest extends TestCase {
             //System.out.println("c  = " + c);
             //System.out.println("ci = " + ci);
 
-            if (a.isZERO() || c.isZERO()) {
+            if (a.isZERO() || c.isZERO() || ci.isZERO()) {
                 // skip for this turn
                 continue;
             }
