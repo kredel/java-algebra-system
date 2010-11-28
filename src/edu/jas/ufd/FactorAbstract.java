@@ -18,6 +18,7 @@ import edu.jas.kern.TimeStatus;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
+import edu.jas.poly.ExpVector;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.util.KsubSet;
@@ -149,6 +150,10 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         if (P.isZERO()) {
             return factors;
         }
+        if (P.degreeVector().totalDeg() <= 1L) {
+            factors.add(P);
+            return factors;
+        }
         long d = P.degree() + 1L;
         GenPolynomial<C> kr = PolyUfdUtil.<C> substituteKronecker(P, d);
         GenPolynomialRing<C> ufac = kr.ring;
@@ -194,6 +199,8 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         int ti = 0;
         GenPolynomial<C> u = P;
         long deg = (u.degree() + 1L) / 2L; // max deg
+        ExpVector evl = u.leadingExpVector();
+        ExpVector evt = u.trailingExpVector();
         //System.out.println("deg = " + deg);
         for (int j = 1; j <= dl; j++) {
             KsubSet<GenPolynomial<C>> ps = new KsubSet<GenPolynomial<C>>(ulist, j);
@@ -204,20 +211,27 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
                     utrial = utrial.multiply(flist.get(k));
                 }
                 GenPolynomial<C> trial = PolyUfdUtil.<C> backSubstituteKronecker(pfac, utrial, d);
+                ti++;
+                if (ti % 2000 == 0) {
+                    System.out.print("ti(" + ti + ") ");
+                    TimeStatus.checkTime(ti + " % 2000 == 0");
+                }
+                if ( !evl.multipleOf(trial.leadingExpVector()) ) {
+                    continue;
+                }
+                if ( !evt.multipleOf(trial.trailingExpVector()) ) {
+                    continue;
+                }
                 if (trial.degree() > deg || trial.isConstant()) {
                     continue;
                 }
                 trial = trial.monic();
-                ti++;
-                if (ti % 1000 == 0) {
-                    System.out.print("ti(" + ti + ") ");
-                    TimeStatus.checkTime(ti + " % 1000 == 0");
-                    if (ti % 10000 == 0) {
-                        System.out.println("\ndl   = " + dl + ", deg(u) = " + deg);
-                        System.out.println("ulist = " + ulist);
-                        System.out.println("kr    = " + kr);
-                        System.out.println("u     = " + u);
-                    }
+                if (ti % 15000 == 0) {
+                    System.out.println("\ndl   = " + dl + ", deg(u) = " + deg);
+                    System.out.println("ulist = " + ulist);
+                    System.out.println("kr    = " + kr);
+                    System.out.println("u     = " + u);
+                    System.out.println("trial = " + trial);
                 }
                 GenPolynomial<C> rem = PolyUtil.<C> basePseudoRemainder(u, trial);
                 //System.out.println(" rem = " + rem);
@@ -226,6 +240,8 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
                     //System.out.println("trial = " + trial);
                     factors.add(trial);
                     u = PolyUtil.<C> basePseudoDivide(u, trial); //u = u.divide( trial );
+                    evl = u.leadingExpVector();
+                    evt = u.trailingExpVector();
                     if (u.isConstant()) {
                         j = dl + 1;
                         break;
