@@ -40,6 +40,12 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
 
 
     /**
+     * Strategy for pair selection.
+     */
+    public final PairList<C> strategy;
+
+
+    /**
      * linear algebra engine.
      */
     public final BasicLinAlg<C> blas;
@@ -58,7 +64,18 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
      * @param red Reduction engine
      */
     public GroebnerBaseAbstract(Reduction<C> red) {
+        this(red, new OrderedPairlist<C>() );
+    }
+
+
+    /**
+     * Constructor.
+     * @param red Reduction engine
+     * @param pl pair selection strategy
+     */
+    public GroebnerBaseAbstract(Reduction<C> red, PairList<C> pl) {
         this.red = red;
+        this.strategy = pl;
         blas = new BasicLinAlg<C>();
     }
 

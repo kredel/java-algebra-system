@@ -50,6 +50,16 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
 
 
     /**
+     * Constructor.
+     * @param red Reduction engine
+     * @param pl pair selection strategy
+     */
+    public GroebnerBaseSeq(Reduction<C> red, PairList<C> pl) {
+        super(red,pl);
+    }
+
+
+    /**
      * Groebner base using pairlist class.
      * @param modv module variable number.
      * @param F polynomial list.
@@ -60,7 +70,7 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
                  List<GenPolynomial<C>> F ) {  
         GenPolynomial<C> p;
         List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
-        OrderedPairlist<C> pairlist = null; 
+        PairList<C> pairlist = null; 
         int l = F.size();
         ListIterator<GenPolynomial<C>> it = F.listIterator();
         while ( it.hasNext() ) { 
@@ -73,7 +83,8 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
                }
                G.add( p );
                if ( pairlist == null ) {
-                  pairlist = new OrderedPairlist<C>( modv, p.ring );
+                   //pairlist = new OrderedPairlist<C>( modv, p.ring );
+                  pairlist = strategy.create( modv, p.ring );
                   if ( ! p.ring.coFac.isField() ) {
                      throw new IllegalArgumentException("coefficients not from a field");
                   }
@@ -158,7 +169,7 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
         List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
         List<List<GenPolynomial<C>>> F2G = new ArrayList<List<GenPolynomial<C>>>();
         List<List<GenPolynomial<C>>> G2F = new ArrayList<List<GenPolynomial<C>>>();
-        OrderedPairlist<C> pairlist = null; 
+        PairList<C> pairlist = null; 
         boolean oneInGB = false;
         int len = F.size();
 
@@ -202,7 +213,8 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
                G.add( p );
                G2F.add( row );
                if ( pairlist == null ) {
-                  pairlist = new OrderedPairlist<C>( modv, p.ring );
+                  pairlist = strategy.create( modv, p.ring );
+                  //pairlist = new OrderedPairlist<C>( modv, p.ring );
                   //pairlist = new CriticalPairList<C>( modv, p.ring );
                   if ( ! p.ring.coFac.isField() ) {
                      throw new RuntimeException("coefficients not from a field");

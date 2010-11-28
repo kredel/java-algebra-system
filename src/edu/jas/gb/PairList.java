@@ -8,7 +8,9 @@ import java.util.List;
 
 import edu.jas.structure.RingElem;
 import edu.jas.poly.ExpVector;
+import edu.jas.poly.TermOrder;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
 
 
 /**
@@ -18,6 +20,20 @@ import edu.jas.poly.GenPolynomial;
 
 public interface PairList<C extends RingElem<C> > {
 
+
+    /**
+     * Create a new PairList.
+     * @param r polynomial ring.
+     */
+    public PairList<C> create(GenPolynomialRing<C> r);
+
+
+    /**
+     * Create a new PairList.
+     * @param m number of module variables.
+     * @param r polynomial ring.
+     */
+    public PairList<C> create(int m, GenPolynomialRing<C> r);
 
 
     /**

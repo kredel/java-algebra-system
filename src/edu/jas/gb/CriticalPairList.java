@@ -87,6 +87,25 @@ public class CriticalPairList<C extends RingElem<C>> implements PairList<C> {
 
 
     /**
+     * Create a new PairList.
+     * @param r polynomial ring.
+     */
+    public PairList<C> create(GenPolynomialRing<C> r) {
+        return new CriticalPairList<C>(r);
+    }
+
+
+    /**
+     * Create a new PairList.
+     * @param m number of module variables.
+     * @param r polynomial ring.
+     */
+    public PairList<C> create(int m, GenPolynomialRing<C> r) {
+        return new CriticalPairList<C>(m,r);
+    }
+
+
+    /**
      * toString.
      */
     @Override
