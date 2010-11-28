@@ -48,14 +48,14 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
      * @param r polynomial factory.
      */
     public OrderedSyzPairlist() {
-         moduleVars = 0;
-         ring = null;
-         P = null;
-         pairlist = null; 
-         red = null;
-         reduction = null;
-         putCount = 0;
-         remCount = 0;
+        moduleVars = 0;
+        ring = null;
+        P = null;
+        pairlist = null; 
+        red = null;
+        reduction = null;
+        putCount = 0;
+        remCount = 0;
     }
 
 
@@ -64,7 +64,7 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
      * @param r polynomial factory.
      */
     public OrderedSyzPairlist(GenPolynomialRing<C> r) {
-         this(0,r);
+        this(0,r);
     }
 
 
@@ -74,19 +74,19 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
      * @param r polynomial factory.
      */
     public OrderedSyzPairlist(int m, GenPolynomialRing<C> r) {
-         moduleVars = m;
-         ring = r;
-         P = new ArrayList<GenPolynomial<C>>();
-         pairlist = new TreeMap<ExpVector,LinkedList<Pair<C>>>( 
-                               ring.tord.getAscendComparator() );
-         //pairlist = new TreeMap( to.getSugarComparator() );
-         red = new ArrayList<BitSet>();
-         putCount = 0;
-         remCount = 0;
-         if ( ring instanceof GenSolvablePolynomialRing ) {
+        moduleVars = m;
+        ring = r;
+        P = new ArrayList<GenPolynomial<C>>();
+        pairlist = new TreeMap<ExpVector,LinkedList<Pair<C>>>( 
+                                                              ring.tord.getAscendComparator() );
+        //pairlist = new TreeMap( to.getSugarComparator() );
+        red = new ArrayList<BitSet>();
+        putCount = 0;
+        remCount = 0;
+        if ( ring instanceof GenSolvablePolynomialRing ) {
             useCriterion4 = false;
-         }
-         reduction = new ReductionSeq<C>();
+        }
+        reduction = new ReductionSeq<C>();
     }
 
 
@@ -119,7 +119,7 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
         s.append("#put="+putCount);
         s.append(", #rem="+remCount);
         if ( pairlist.size() != 0 ) {
-           s.append(", size="+pairlist.size());
+            s.append(", size="+pairlist.size());
         }
         s.append(")");
         return s.toString();
@@ -132,162 +132,167 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
      * @return the index of the added polynomial.
      */
     public synchronized int put(GenPolynomial<C> p) { 
-           putCount++;
-           if ( oneInGB ) { 
-               return P.size()-1;
-           }
-           ExpVector e = p.leadingExpVector();
-           int ps = P.size();
-           BitSet redi = new BitSet();
-           //redi.set( 0, ps ); // [0..ps-1] = true
-           red.add( redi );
-           P.add(  p );
-           // remove from existing pairs:
-           List<ExpVector> es = new ArrayList<ExpVector>();
-           for (Map.Entry<ExpVector,LinkedList<Pair<C>>> me : pairlist.entrySet()) {
-               ExpVector g = me.getKey();
-               ExpVector ge = g.lcm(e);
-               LinkedList<Pair<C>> ll = me.getValue();
-               if (g.compareTo(ge) == 0) {
-                   // if ( moduleVars > 0 ) { ... }
-                   LinkedList<Pair<C>> lle = new LinkedList<Pair<C>>();
-                   for (Pair<C> pair : ll) {
-                       ExpVector eil = pair.pi.leadingExpVector().lcm(e);
-                       if ( g.compareTo(eil) == 0 ) {
-                           continue;
-                       }
-                       ExpVector ejl = pair.pj.leadingExpVector().lcm(e);
-                       if ( g.compareTo(ejl) == 0 ) {
-                           continue;
-                       }
-                       if ( false ) {
-			   continue;
-		       }
-                       // g == ge && g != eil && g != ejl  
-                       System.out.println("to skip " + pair);
-                       red.get( pair.j ).clear( pair.i ); 
-                       lle.add(pair);
-                   }
-                   if ( lle.size() > 0 ) {
-                       for ( Pair<C> pair : lle ) {
-                           ll.remove(pair); 
-                       }
-                       if ( ! es.contains(g) ) {
-                           es.add(g);
-		       }
-                   }
-               }
-           }
-           for ( ExpVector ei : es ) {
-               LinkedList<Pair<C>> ll = pairlist.get(ei);
-               if ( ll.size() == 0 ) {
-                   ll = pairlist.remove(ei);
-                   System.out.println("removed empty for = " + ei);
-	       }
-           }
-           es = null;
-           // generate new pairs:
-           SortedMap<ExpVector,LinkedList<Pair<C>>> npl 
-                 = new TreeMap<ExpVector,LinkedList<Pair<C>>>( ring.tord.getAscendComparator() );
-           for ( int j = 0; j < ps; j++ ) {
-               GenPolynomial<C> pj = P.get(j);
-               ExpVector f = pj.leadingExpVector(); 
-               if ( moduleVars > 0 ) {
-                  if ( !reduction.moduleCriterion( moduleVars, e, f) ) {
-                      //red.get( j ).clear(l); 
-                      continue; // skip pair
-                  }
-               }
-               ExpVector g =  e.lcm( f );
-               //System.out.println("g  = " + g);  
-               Pair<C> pair = new Pair<C>( pj, p, j, ps);
-               //System.out.println("pair.new      = " + pair);
-               //multiple pairs under same keys -> list of pairs
-               LinkedList<Pair<C>> xl = npl.get( g );
-               if ( xl == null ) {
-                  xl = new LinkedList<Pair<C>>();
-               }
-               //xl.addLast( pair ); // first or last ?
-               xl.addFirst( pair ); // first or last ? better for d- e-GBs
-               npl.put( g, xl );
-           }
-           System.out.println("npl.new      = " + npl.keySet());
-           es = new ArrayList<ExpVector>(npl.size());
-           for ( ExpVector eil : npl.keySet() ) {
-                for ( ExpVector ejl : npl.keySet() ) {
-                    if ( eil.compareTo(ejl) == 0 ) {
+        putCount++;
+        if ( oneInGB ) { 
+            return P.size()-1;
+        }
+        ExpVector e = p.leadingExpVector();
+        int ps = P.size();
+        BitSet redi = new BitSet();
+        //redi.set( 0, ps ); // [0..ps-1] = true
+        red.add( redi ); // all zeros
+        P.add(  p );
+        // remove from existing pairs:
+        List<ExpVector> es = new ArrayList<ExpVector>();
+        for (Map.Entry<ExpVector,LinkedList<Pair<C>>> me : pairlist.entrySet()) {
+            ExpVector g = me.getKey();
+            if ( moduleVars > 0 ) {
+                if ( !reduction.moduleCriterion( moduleVars, e, g) ) {
+                    continue; // skip pair
+                }
+            }
+            ExpVector ge = g.lcm(e);
+            LinkedList<Pair<C>> ll = me.getValue();
+            if (g.compareTo(ge) == 0) {
+                LinkedList<Pair<C>> lle = new LinkedList<Pair<C>>();
+                for (Pair<C> pair : ll) {
+                    ExpVector eil = pair.pi.leadingExpVector().lcm(e);
+                    if ( g.compareTo(eil) == 0 ) {
                         continue;
                     }
-                    if ( eil.multipleOf(ejl) ) {
-                        if ( !es.contains(eil) ) {
-                            es.add(eil);
-                        }
+                    ExpVector ejl = pair.pj.leadingExpVector().lcm(e);
+                    if ( g.compareTo(ejl) == 0 ) {
+                        continue;
+                    }
+                    // g == ge && g != eil && g != ejl  
+                    //System.out.println("to skip " + pair);
+                    red.get( pair.j ).clear( pair.i ); 
+                    lle.add(pair);
+                }
+                if ( lle.size() > 0 ) {
+                    for ( Pair<C> pair : lle ) {
+                        ll.remove(pair); 
+                    }
+                    if ( ! es.contains(g) ) {
+                        es.add(g);
                     }
                 }
-           }
-           System.out.println("npl.skip div = " + es);
-           for ( ExpVector ei : es ) {
-               LinkedList<Pair<C>> ignored = npl.remove(ei);
-               for ( Pair<C> pair : ignored ) {
-                   red.get( pair.j ).clear( pair.i ); 
-               }
-           }
-           if ( useCriterion4 ) {
-               es = new ArrayList<ExpVector>(npl.size());
-               for ( ExpVector ei : npl.keySet() ) {
-                   LinkedList<Pair<C>> exl = npl.get( ei );
-                   //System.out.println("exl = " + exl ); 
-                   boolean c = true;
-                   for ( Pair<C> pair : exl ) {
-                       c = c && reduction.criterion4( pair.pi, pair.pj, pair.e ); 
-                   }
-                   //System.out.println("c4 = " + c ); 
-                   if ( c ) {
-                       if ( exl.size() > 1 ) {
-                           Pair<C> pair = exl.getFirst(); // or getLast()
-                           exl.clear();
-                           exl.add(pair);
-                           //npl.put(ei,exl);
-                       }
-                   } else {
-                       if ( !es.contains(ei) ) {
-                           es.add(ei);
-                       }
-                   }
-               }
-               System.out.println("npl.skip c4  = " + es);
-               for ( ExpVector ei : es ) {
-                   LinkedList<Pair<C>> ignored = npl.remove(ei);
-                   for ( Pair<C> pair : ignored ) {
-                       if ( false && reduction.criterion4( pair.pi, pair.pj, pair.e ) ) {
-                           continue;
-		       }
-                       //System.out.println("npl.skip c4  = " + pair.i + ", " + pair.j);
-                       red.get( pair.j ).clear( pair.i ); 
-                   }
-               }
-           }
-           // add to existing pairlist:
-           System.out.println("npl.put new  = " + npl.keySet() );  
-           for ( ExpVector ei : npl.keySet() ) {
-               LinkedList<Pair<C>> exl = npl.get( ei );
-               for ( Pair<C> pair : exl ) {
-                   red.get( pair.j ).set( pair.i ); 
-               }
-               LinkedList<Pair<C>> ex = pairlist.get( ei );
-               if ( ex != null ) {
-                   //System.out.println("pairlist.add_ex = " + ex ); 
-                   exl.addAll(ex); 
-                   //for ( Pair<C> ep : ex ) {
-		   //    exl.addFirst(ep);
-		   //}
-               }
-               System.out.println("pairlist.add = " + ei + ", exl = " + exl); 
-               pairlist.put(ei,exl);
-           }
-           System.out.println("pairlist.set = " + red); //.get( pair.j )); //pair);
-           System.out.println("pairlist.key = " + pairlist.keySet() );  
-           return P.size()-1;
+            }
+        }
+        for ( ExpVector ei : es ) {
+            LinkedList<Pair<C>> ll = pairlist.get(ei);
+            if ( ll.size() == 0 ) {
+                ll = pairlist.remove(ei);
+                //System.out.println("removed empty for = " + ei);
+            }
+        }
+        // generate new pairs:
+        SortedMap<ExpVector,LinkedList<Pair<C>>> npl 
+            = new TreeMap<ExpVector,LinkedList<Pair<C>>>( ring.tord.getAscendComparator() );
+        for ( int j = 0; j < ps; j++ ) {
+            GenPolynomial<C> pj = P.get(j);
+            ExpVector f = pj.leadingExpVector(); 
+            if ( moduleVars > 0 ) {
+                if ( !reduction.moduleCriterion( moduleVars, e, f) ) {
+                    //red.get( j ).clear(l); 
+                    continue; // skip pair
+                }
+            }
+            ExpVector g =  e.lcm( f );
+            //System.out.println("g  = " + g);  
+            Pair<C> pair = new Pair<C>( pj, p, j, ps);
+            //System.out.println("pair.new      = " + pair);
+            //multiple pairs under same keys -> list of pairs
+            LinkedList<Pair<C>> xl = npl.get( g );
+            if ( xl == null ) {
+                xl = new LinkedList<Pair<C>>();
+            }
+            //xl.addLast( pair ); // first or last ?
+            xl.addFirst( pair ); // first or last ? better for d- e-GBs
+            npl.put( g, xl );
+        }
+        //System.out.println("npl.new      = " + npl.keySet());
+        // skip by divisibility:
+        es = new ArrayList<ExpVector>(npl.size());
+        for ( ExpVector eil : npl.keySet() ) {
+            for ( ExpVector ejl : npl.keySet() ) {
+                if ( eil.compareTo(ejl) == 0 ) {
+                    continue;
+                }
+                if ( eil.multipleOf(ejl) ) {
+                    if ( !es.contains(eil) ) {
+                        es.add(eil);
+                    }
+                }
+            }
+        }
+        //System.out.println("npl.skip div = " + es);
+        for ( ExpVector ei : es ) {
+            LinkedList<Pair<C>> ignored = npl.remove(ei);
+            //                for ( Pair<C> pair : ignored ) {
+            //                    if ( red.get( pair.j ).get( pair.i ) ) {
+            //                        System.out.println("reset for pair = " + pair); 
+            //                        red.get( pair.j ).clear( pair.i ); 
+            //                }
+            //                }
+        }
+        // skip by criterion 4:
+        if ( useCriterion4 ) {
+            es = new ArrayList<ExpVector>(npl.size());
+            for ( ExpVector ei : npl.keySet() ) {
+                LinkedList<Pair<C>> exl = npl.get( ei );
+                //System.out.println("exl = " + exl ); 
+                boolean c = true;
+                for ( Pair<C> pair : exl ) {
+                    c = c && reduction.criterion4( pair.pi, pair.pj, pair.e ); 
+                }
+                //System.out.println("c4 = " + c ); 
+                if ( c ) {
+                    if ( exl.size() > 1 ) {
+                        Pair<C> pair = exl.getFirst(); // or getLast()
+                        exl.clear();
+                        exl.add(pair);
+                        //npl.put(ei,exl);
+                    }
+                } else {
+                    if ( !es.contains(ei) ) {
+                        es.add(ei);
+                    }
+                }
+            }
+            //System.out.println("npl.skip c4  = " + es);
+            for ( ExpVector ei : es ) {
+                LinkedList<Pair<C>> ignored = npl.remove(ei);
+                //                    for ( Pair<C> pair : ignored ) {
+                //                        if ( false && reduction.criterion4( pair.pi, pair.pj, pair.e ) ) {
+                //                            continue;
+                //                     }
+                //                        //System.out.println("npl.skip c4  = " + pair.i + ", " + pair.j);
+                //                        red.get( pair.j ).clear( pair.i ); 
+                //                    }
+            }
+        }
+        // add to existing pairlist:
+        //System.out.println("npl.put new  = " + npl.keySet() );  
+        for ( ExpVector ei : npl.keySet() ) {
+            LinkedList<Pair<C>> exl = npl.get( ei );
+            for ( Pair<C> pair : exl ) {
+                red.get( pair.j ).set( pair.i ); 
+            }
+            LinkedList<Pair<C>> ex = pairlist.get( ei );
+            if ( ex != null ) {
+                //System.out.println("pairlist.add_ex = " + ex ); 
+                exl.addAll(ex); 
+                //for ( Pair<C> ep : ex ) {
+                //    exl.addFirst(ep);
+                //}
+            }
+            //System.out.println("pairlist.add = " + ei + ", exl = " + exl); 
+            pairlist.put(ei,exl);
+        }
+        //System.out.println("pairlist.set = " + red); //.get( pair.j )); //pair);
+        //System.out.println("pairlist.key = " + pairlist.keySet() );  
+        return P.size()-1;
     }
 
 
@@ -297,64 +302,46 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
      * @return the next pair if one exists, otherwise null.
      */
     public synchronized Pair<C> removeNext() { 
-       if ( oneInGB ) {
-          return null;
-       }
-       Iterator< Map.Entry<ExpVector,LinkedList<Pair<C>>> > ip 
-             = pairlist.entrySet().iterator();
-
-       Pair<C> pair = null;
-       boolean c = false;
-       int i, j;
-
-       while ( /*!c &&*/ ip.hasNext() )  {
-           Map.Entry<ExpVector,LinkedList<Pair<C>>> me = ip.next();
-           ExpVector g =  me.getKey();
-           LinkedList<Pair<C>> xl = me.getValue();
-           if ( logger.isInfoEnabled() )
-              logger.info("g_s  = " + g);
-           pair = null;
-           while ( /*!c &&*/ xl.size() > 0 ) {
-                 pair = xl.removeFirst();
-                 // xl is also modified in pairlist 
-                 i = pair.i; 
-                 j = pair.j; 
-                 //System.out.println("pair.remove = " + pair );
-                 if ( !red.get(j).get(i) ) {
-                     System.out.println("c_red.get(j).get(i) = " + g); // + ", " + red.get(j).get(i)); 
-                     pair = null;
-                     continue;
-                     //break;
-                 }
-//                  c = true;
-//                  if ( useCriterion4 ) {
-//                     c = reduction.criterion4( pair.pi, pair.pj, g ); 
-//                  }
-//                  //System.out.println("c4_x = " + c);  
-//                  if ( c ) {
-//                     c = criterion3( i, j, g );
-//                     //System.out.println("c3_x = " + c); 
-//                  }
-//                  if ( !c ) {
-//                     System.out.println("c_criterions = " + g); 
-//                  }
-                 red.get(j).clear(i);
-                 break; 
-           }
-           if ( xl.size() == 0 ) {
-              ip.remove(); 
-              // = pairlist.remove( g );
-           }
-           if ( pair != null ) {
-               break;
-           }
-       }
-       if ( false && ! c ) {
-          pair = null;
-       } else {
-          remCount++; // count only real pairs
-       }
-       return pair; 
+        if ( oneInGB ) {
+            return null;
+        }
+        Iterator< Map.Entry<ExpVector,LinkedList<Pair<C>>> > ip 
+            = pairlist.entrySet().iterator();
+        Pair<C> pair = null;
+        boolean c = false;
+        int i, j;
+        while ( /*!c &&*/ ip.hasNext() )  {
+            Map.Entry<ExpVector,LinkedList<Pair<C>>> me = ip.next();
+            ExpVector g =  me.getKey();
+            LinkedList<Pair<C>> xl = me.getValue();
+            if ( logger.isInfoEnabled() )
+                logger.info("g  = " + g);
+            pair = null;
+            while ( /*!c &&*/ xl.size() > 0 ) {
+                pair = xl.removeFirst();
+                // xl is also modified in pairlist 
+                i = pair.i; 
+                j = pair.j; 
+                //System.out.println("pair.remove = " + pair );
+                if ( !red.get(j).get(i) ) {
+                    System.out.println("c_red.get(j).get(i) = " + g); // + ", " + red.get(j).get(i)); 
+                    pair = null;
+                    continue;
+                    //break;
+                }
+                red.get(j).clear(i);
+                break; 
+            }
+            if ( xl.size() == 0 ) {
+                ip.remove(); 
+                // = pairlist.remove( g );
+            }
+            if ( pair != null ) {
+                break;
+            }
+        }
+        remCount++; // count only real pairs
+        return pair; 
     }
 
 
@@ -363,7 +350,7 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
      * @return true if a next pair could exist, otherwise false.
      */
     public boolean hasNext() { 
-          return pairlist.size() > 0;
+        return pairlist.size() > 0;
     }
 
 
@@ -372,7 +359,7 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
      * @return the polynomial list.
      */
     public ArrayList<GenPolynomial<C>> getList() { 
-          return P;
+        return P;
     }
 
 
@@ -381,7 +368,7 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
      * @return the number of calls to put.
      */
     public int putCount() { 
-          return putCount;
+        return putCount;
     }
 
 
@@ -390,7 +377,7 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
      * @return the number of non null pairs delivered.
      */
     public int remCount() { 
-          return remCount;
+        return remCount;
     }
 
 
@@ -401,13 +388,14 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
      */
     public synchronized int putOne(GenPolynomial<C> one) { 
         if ( one == null ) {
-           return P.size()-1;
+            return P.size()-1;
         }
         if ( ! one.isONE() ) {
-           return P.size()-1;
+            return P.size()-1;
         }
         return putOne();
     }
+
 
     /**
      * Put to ONE-Polynomial to the pairlist.
@@ -430,42 +418,7 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
      * @return true if the S-polynomial(i,j) is required.
      */
     public boolean criterion3(int i, int j, ExpVector eij) {  
-        // assert i < j;
-        boolean s;
-        s = red.get( j ).get(i); 
-        if ( ! s ) { 
-           logger.warn("c3.s false for " + j + " " + i); 
-           return s;
-        }
-        s = true;
-        boolean m;
-        GenPolynomial<C> A;
-        ExpVector ek;
-        for ( int k = 0; k < P.size(); k++ ) {
-            A = P.get( k );
-            ek = A.leadingExpVector();
-            m = eij.multipleOf(ek) && eij.compareTo(ek) != 0;
-            if ( m ) {
-                if ( k < i ) {
-                   // System.out.println("k < i "+k+" "+i); 
-                   s =    red.get( i ).get(k) 
-                       || red.get( j ).get(k); 
-                }
-                if ( i < k && k < j ) {
-                   // System.out.println("i < k < j "+i+" "+k+" "+j); 
-                   s =    red.get( k ).get(i) 
-                       || red.get( j ).get(k); 
-                }
-                if ( j < k ) {
-                    //System.out.println("j < k "+j+" "+k); 
-                   s =    red.get( k ).get(i) 
-                       || red.get( k ).get(j); 
-                }
-                //System.out.println("s."+k+" = " + s); 
-                if ( ! s ) return s;
-            }
-        }
-        return true;
+	throw new UnsupportedOperationException("not used in " + this.getClass().getName());
     }
-}
 
+}
