@@ -22,6 +22,7 @@ import edu.jas.structure.RingElem;
 import edu.jas.structure.Selector;
 import edu.jas.structure.UnaryFunctor;
 import edu.jas.util.ExpVectorIterable;
+import edu.jas.util.MapEntry;
 
 
 /**
@@ -735,7 +736,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         return zip(new BinaryFunctor<C, C, C>() {
 
 
-            @Override
+            //JAVA6only: @Override
             public C eval(C c1, C c2) {
                 return c1.sum(c2);
             }
@@ -752,7 +753,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         return zip(new BinaryFunctor<C, C, C>() {
 
 
-            @Override
+            //JAVA6only: @Override
             public C eval(C c1, C c2) {
                 return c1.subtract(c2);
             }
@@ -775,7 +776,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         return map(new UnaryFunctor<C, C>() {
 
 
-            @Override
+            //JAVA6only: @Override
             public C eval(C c) {
                 return c.multiply(a);
             }
@@ -803,7 +804,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         return map(new UnaryFunctor<C, C>() {
 
 
-            @Override
+            //JAVA6only: @Override
             public C eval(C c) {
                 return b.multiply(c);
             }
@@ -819,7 +820,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         return map(new UnaryFunctor<C, C>() {
 
 
-            @Override
+            //JAVA6only: @Override
             public C eval(C c) {
                 return c.negate();
             }
@@ -914,7 +915,9 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         if ( e == null ) {
             return null;
         }
-        return new AbstractMap.SimpleImmutableEntry<ExpVector, C>(e, coefficient(e));
+        //JAVA6only:
+        //return new AbstractMap.SimpleImmutableEntry<ExpVector, C>(e, coefficient(e));
+        return new MapEntry<ExpVector, C>(e, coefficient(e));
     }
 
 
