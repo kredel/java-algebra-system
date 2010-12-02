@@ -201,7 +201,7 @@ public class OrderedMinPairlist<C extends RingElem<C> > implements PairList<C> {
            ExpVector g =  me.getKey();
            LinkedList<Pair<C>> xl = me.getValue();
            if ( logger.isInfoEnabled() )
-              logger.info("g_s  = " + g);
+              logger.info("g  = " + g);
            pair = null;
            while ( !c && xl.size() > 0 ) {
                  pair = xl.removeFirst();
@@ -223,7 +223,7 @@ public class OrderedMinPairlist<C extends RingElem<C> > implements PairList<C> {
                     //System.out.println("c3_x = " + c); 
                  }
                  if ( !c ) {
-                    System.out.println("c_x = " + g); 
+		     //System.out.println("c_x = " + g); 
                  }
                  red.get( j ).clear(i); // set(i,false) jdk1.4
            }

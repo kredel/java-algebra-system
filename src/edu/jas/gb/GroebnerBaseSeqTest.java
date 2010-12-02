@@ -43,6 +43,7 @@ public class GroebnerBaseSeqTest extends TestCase {
         junit.textui.TestRunner.run( suite() );
     }
 
+
     /**
      * Constructs a <CODE>GroebnerBaseSeqTest</CODE> object.
      * @param name String.
@@ -51,6 +52,7 @@ public class GroebnerBaseSeqTest extends TestCase {
         super(name);
     }
 
+
     /**
      * suite.
      */ 
@@ -58,6 +60,7 @@ public class GroebnerBaseSeqTest extends TestCase {
         TestSuite suite= new TestSuite(GroebnerBaseSeqTest.class);
         return suite;
     }
+
 
     GenPolynomialRing<BigRational> fac;
 
@@ -79,12 +82,14 @@ public class GroebnerBaseSeqTest extends TestCase {
     int el = 3; // 4
     float q = 0.2f; //0.4f
 
+
     protected void setUp() {
         BigRational coeff = new BigRational(9);
         fac = new GenPolynomialRing<BigRational>(coeff,rl);
         a = b = c = d = e = null;
         bb = new GroebnerBaseSeq<BigRational>();
     }
+
 
     protected void tearDown() {
         a = b = c = d = e = null;
@@ -95,10 +100,8 @@ public class GroebnerBaseSeqTest extends TestCase {
 
     /**
      * Test sequential GBase.
-     * 
      */
-    public void xtestSequentialGBase() {
-
+    public void testSequentialGBase() {
         L = new ArrayList<GenPolynomial<BigRational>>();
 
         a = fac.random(kl, ll, el, q );
@@ -146,10 +149,9 @@ public class GroebnerBaseSeqTest extends TestCase {
 
     /**
      * Test Trinks7 GBase.
-     * 
      */
     @SuppressWarnings("unchecked") 
-    public void ytestTrinks7GBase() {
+    public void testTrinks7GBase() {
         String exam = "(B,S,T,Z,P,W) L "
             + "( "  
             + "( 45 P + 35 S - 165 B - 36 ), " 
@@ -184,7 +186,7 @@ public class GroebnerBaseSeqTest extends TestCase {
         assertEquals("#GB(Trinks7) == 6", 6, G.size() );
         PolynomialList<BigRational> trinks 
             = new PolynomialList<BigRational>(F.ring,G);
-        System.out.println("G = " + trinks);
+        //System.out.println("G = " + trinks);
     }
 
 
@@ -298,7 +300,7 @@ public class GroebnerBaseSeqTest extends TestCase {
      * 
      */
     @SuppressWarnings("unchecked") 
-    public void ytestTrinks7GBaseSyz() {
+    public void testTrinks7GBaseSyz() {
         GroebnerBase<BigRational> bbs;
         bbs = new GroebnerBaseSeq<BigRational>(new ReductionSeq<BigRational>(),
                  new OrderedSyzPairlist<BigRational>());
@@ -337,18 +339,11 @@ public class GroebnerBaseSeqTest extends TestCase {
         assertEquals("#GB(Trinks7) == 6", 6, G.size() );
         PolynomialList<BigRational> trinks 
             = new PolynomialList<BigRational>(F.ring,G);
-        System.out.println("G = " + trinks);
+        //System.out.println("G = " + trinks);
         assertTrue("isGB( GB(Trinks7) )", bb.isGB(G) );
 
         Reduction<BigRational> rd = new ReductionSeq<BigRational>();
-        System.out.println("G.contains(F) = " + rd.normalform(G,F.list) );
-
-//         G = bb.GB(G);
-//         System.out.println("bb(G) = " + G);
-
-//         G.addAll(F.list);
-//         G = bb.GB(G);
-//         System.out.println("bb(G+F) = " + G);
+        //System.out.println("G.contains(F) = " + rd.normalform(G,F.list) );
     }
 
 
@@ -357,7 +352,7 @@ public class GroebnerBaseSeqTest extends TestCase {
      * 
      */
     @SuppressWarnings("unchecked") 
-    public void xtestTrinks7GBaseMin() {
+    public void testTrinks7GBaseMin() {
         bb = new GroebnerBaseSeq<BigRational>(new ReductionSeq<BigRational>(),
                  new OrderedMinPairlist<BigRational>());
 
@@ -388,18 +383,7 @@ public class GroebnerBaseSeqTest extends TestCase {
         assertEquals("#GB(Trinks7) == 6", 6, G.size() );
         PolynomialList<BigRational> trinks 
             = new PolynomialList<BigRational>(F.ring,G);
-        System.out.println("G = " + trinks);
-    }
-
-
-    /**
-     * Test both.
-     * 
-     */
-    public void testBoth() {
-        ytestTrinks7GBase();
-        ytestTrinks7GBaseSyz();
-        bb = new GroebnerBaseSeq<BigRational>();
+        //System.out.println("G = " + trinks);
     }
 
 
@@ -407,8 +391,7 @@ public class GroebnerBaseSeqTest extends TestCase {
      * Test sequential GBase, both.
      * 
      */
-    public void xtestSequentialGBaseBoth() {
-
+    public void testSequentialGBaseBoth() {
         GroebnerBase<BigRational> bbs = new GroebnerBaseSeq<BigRational>(new ReductionSeq<BigRational>(),
                                                                          new OrderedSyzPairlist<BigRational>());
 

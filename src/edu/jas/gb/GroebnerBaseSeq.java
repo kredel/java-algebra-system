@@ -128,7 +128,7 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
               }
 
               H = red.normalform( G, S );
-              if ( true || debug ) {
+              if ( debug ) {
                   //logger.info("pair = " + pair); 
                   //logger.info("ht(S) = " + S.monic()); //.leadingExpVector() );
                   logger.info("ht(H) = " + H.monic()); //.leadingExpVector() );
