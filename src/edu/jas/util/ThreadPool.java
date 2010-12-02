@@ -132,7 +132,7 @@ public class ThreadPool {
     @Override
     public String toString() {
         return "ThreadPool( size=" + getNumber() + ", idle=" + idleworkers + ", " + getStrategy() + ", jobs="
-                + jobstack.size() + ")";
+            + jobstack.size() + ")";
     }
 
 
@@ -260,6 +260,9 @@ public class ThreadPool {
             return true;
         }
         for (int i = 0; i < workers.length; i++) {
+            if (workers[i] == null ) {
+                continue;
+            }
             if (workers[i].isWorking) {
                 return true;
             }
@@ -282,6 +285,9 @@ public class ThreadPool {
         // ( ( j > 0 && ( j+workers.length > n ) ) || ( j > n )
         int x = 0;
         for (int i = 0; i < workers.length; i++) {
+            if (workers[i] == null ) {
+                continue;
+            }
             if (workers[i].isWorking) {
                 x++;
             }
