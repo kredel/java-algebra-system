@@ -187,11 +187,16 @@ public class ThreadPool {
         shutdown = true;
         int s = jobstack.size();
         if (hasJobs()) {
-            logger.info("jobs canceled: " + jobstack);
-            jobstack.clear();
+            synchronized (this) {
+                logger.info("jobs canceled: " + jobstack);
+                jobstack.clear();
+	    }
         }
         int re = 0;
         for (int i = 0; i < workers.length; i++) {
+            if (workers[i] == null ) {
+                continue;
+            }
             try {
                 while (workers[i].isAlive()) {
                     synchronized (this) {
