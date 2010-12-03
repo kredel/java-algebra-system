@@ -23,6 +23,8 @@ import edu.jas.structure.RingElem;
 
 /**
  * Pair list management.
+ * The Buchberger algorithm following 
+ * the syzygy criterions by Gebauer &amp; M&ouml;ller in Reduce.
  * Implemented using GenPolynomial, TreeMap and BitSet.
  * @author Heinz Kredel
  */

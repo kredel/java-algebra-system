@@ -21,6 +21,8 @@ import edu.jas.structure.RingElem;
 
 /**
  * Pair list management.
+ * The original Buchberger algorithm with criterions 
+ * using early pair exclusion.
  * Implemented using GenPolynomial, TreeMap and BitSet.
  * @author Heinz Kredel
  */
