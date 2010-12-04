@@ -119,7 +119,7 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
         //s.append("polys="+P.size());
         s.append("#put="+putCount);
         s.append(", #rem="+remCount);
-        if ( pairlist.size() != 0 ) {
+        if ( pairlist != null && pairlist.size() != 0 ) {
             s.append(", size="+pairlist.size());
         }
         s.append(")");

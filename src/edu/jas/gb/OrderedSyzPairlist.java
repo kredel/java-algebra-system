@@ -85,7 +85,7 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
         red = new ArrayList<BitSet>();
         putCount = 0;
         remCount = 0;
-        if ( ring instanceof GenSolvablePolynomialRing ) {
+        if ( !ring.isCommutative() ) { // instanceof GenSolvablePolynomialRing ) {
             useCriterion4 = false;
         }
         reduction = new ReductionSeq<C>();
@@ -120,7 +120,7 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
         //s.append("polys="+P.size());
         s.append("#put="+putCount);
         s.append(", #rem="+remCount);
-        if ( pairlist.size() != 0 ) {
+        if ( pairlist != null && pairlist.size() != 0 ) {
             s.append(", size="+pairlist.size());
         }
         s.append(")");

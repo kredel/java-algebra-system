@@ -419,7 +419,7 @@ public class CriticalPairList<C extends RingElem<C>> implements PairList<C> {
         boolean s;
         s = red.get( j ).get( i ); 
         if ( ! s ) { 
-           logger.warn("c3.s false for " + j + " " + i); 
+           logger.warn("c3.s false for " + i + "," + j + ", lcm=" + eij); 
            return s;
         }
         // now s == true;

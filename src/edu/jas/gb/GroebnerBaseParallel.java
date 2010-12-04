@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import edu.jas.structure.RingElem;
 
 import edu.jas.gb.OrderedPairlist;
+import edu.jas.gb.PairList;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 
@@ -86,12 +87,33 @@ public class GroebnerBaseParallel<C extends RingElem<C>>
 
     /**
      * Constructor.
+     * @param pool ThreadPool to use.
+     * @param red Reduction engine
+     */
+    public GroebnerBaseParallel(int threads,  ThreadPool pool, Reduction<C> red) {
+        this(threads, pool, red, new OrderedPairlist<C>());
+    }
+
+
+    /**
+     * Constructor.
+     * @param red Reduction engine
+     * @param pl pair selection strategy
+     */
+    public GroebnerBaseParallel(int threads, Reduction<C> red, PairList<C> pl) {
+        this(threads, new ThreadPool(threads),red,pl);
+    }
+
+
+    /**
+     * Constructor.
      * @param threads number of threads to use.
      * @param pool ThreadPool to use.
      * @param red parallelism aware reduction engine
+     * @param pl pair selection strategy
      */
-    public GroebnerBaseParallel(int threads, ThreadPool pool, Reduction<C> red) {
-        super( red );
+    public GroebnerBaseParallel(int threads, ThreadPool pool, Reduction<C> red, PairList<C> pl) {
+        super( red, pl );
         if ( ! (red instanceof ReductionPar) ) {
            logger.warn("parallel GB should use parallel aware reduction");
         }
@@ -137,7 +159,7 @@ public class GroebnerBaseParallel<C extends RingElem<C>>
             List<GenPolynomial<C>> F ) {  
         GenPolynomial<C> p;
         List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
-        OrderedPairlist<C> pairlist = null; 
+        PairList<C> pairlist = null; 
         int l = F.size();
         ListIterator<GenPolynomial<C>> it = F.listIterator();
         while ( it.hasNext() ) { 
@@ -150,7 +172,8 @@ public class GroebnerBaseParallel<C extends RingElem<C>>
                 }
                 G.add( p );
                 if ( pairlist == null ) {
-                    pairlist = new OrderedPairlist<C>( modv, p.ring );
+                    //pairlist = new OrderedPairlist<C>( modv, p.ring );
+                    pairlist = strategy.create( modv, p.ring );
                     if ( ! p.ring.coFac.isField() ) {
                         throw new IllegalArgumentException("coefficients not from a field");
                     }
@@ -164,6 +187,7 @@ public class GroebnerBaseParallel<C extends RingElem<C>>
         if ( l <= 1 ) {
             return G; // since no threads activated jet
         }
+        logger.info("start " + pairlist); 
 
         Terminator fin = new Terminator(threads);
         Reducer<C> R;
@@ -269,14 +293,14 @@ public class GroebnerBaseParallel<C extends RingElem<C>>
  */
 class Reducer<C extends RingElem<C>> implements Runnable {
     private List<GenPolynomial<C>> G;
-    private OrderedPairlist<C> pairlist;
+    private PairList<C> pairlist;
     private Terminator fin;
     private ReductionPar<C> red;
     private static final Logger logger = Logger.getLogger(Reducer.class);
 
     Reducer(Terminator fin, 
             List<GenPolynomial<C>> G, 
-            OrderedPairlist<C> L) {
+            PairList<C> L) {
         this.fin = fin;
         this.G = G;
         pairlist = L;
@@ -365,7 +389,8 @@ class Reducer<C extends RingElem<C>> implements Runnable {
             H = H.monic();
             // System.out.println("H   = " + H);
             if ( H.isONE() ) { 
-                pairlist.putOne( H ); // not really required
+                // putOne not required
+                pairlist.put( H ); 
                 synchronized (G) {
                     G.clear(); G.add( H );
                 }

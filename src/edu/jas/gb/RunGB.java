@@ -307,10 +307,11 @@ public class RunGB {
         List L = S.list;
         List G;
         long t;
-        GroebnerBaseParallel bb = null;
-        GroebnerBaseSeqPairParallel bbs = null;
+        GroebnerBaseAbstract bb = null;
+        GroebnerBaseAbstract bbs = null;
         if (pairseq) {
-            bbs = new GroebnerBaseSeqPairParallel(threads);
+            //bbs = new GroebnerBaseSeqPairParallel(threads);
+            bbs = new GroebnerBaseParallel(threads,new ReductionPar(),new OrderedSyzPairlist());
         } else {
             bb = new GroebnerBaseParallel(threads);
         }
@@ -347,9 +348,10 @@ public class RunGB {
         List L = S.list;
         List G;
         long t;
-        GroebnerBase bb = null;
+        GroebnerBaseAbstract bb = null;
         if (pairseq) {
-            bb = new GroebnerBaseSeqPairSeq();
+            //bb = new GroebnerBaseSeqPairSeq();
+            bb = new GroebnerBaseSeq(new ReductionSeq(),new OrderedSyzPairlist());
         } else {
             bb = new GroebnerBaseSeq();
         }

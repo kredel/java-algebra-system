@@ -28,13 +28,13 @@ import edu.jas.poly.PolynomialList;
 
 
 /**
- * Groebner base parallel, sequential pair list, tests with JUnit.
+ * Groebner base parallel, syzygy pair list, tests with JUnit.
  * @author Heinz Kredel.
  */
 
-public class GroebnerBaseSeqPairParTest extends TestCase {
+public class GroebnerBaseParSyzPairTest extends TestCase {
 
-    //private static final Logger logger = Logger.getLogger(GroebnerBaseSeqPairParTest.class);
+    //private static final Logger logger = Logger.getLogger(GroebnerBaseParSyzPairTest.class);
 
     /**
      * main
@@ -45,10 +45,10 @@ public class GroebnerBaseSeqPairParTest extends TestCase {
     }
 
     /**
-     * Constructs a <CODE>GroebnerBaseSeqPairParTest</CODE> object.
+     * Constructs a <CODE>GroebnerBaseParSyzPairTest</CODE> object.
      * @param name String.
      */
-    public GroebnerBaseSeqPairParTest(String name) {
+    public GroebnerBaseParSyzPairTest(String name) {
         super(name);
     }
 
@@ -56,7 +56,7 @@ public class GroebnerBaseSeqPairParTest extends TestCase {
      * suite.
      */ 
     public static Test suite() {
-        TestSuite suite= new TestSuite(GroebnerBaseSeqPairParTest.class);
+        TestSuite suite= new TestSuite(GroebnerBaseParSyzPairTest.class);
         return suite;
     }
 
@@ -90,7 +90,8 @@ public class GroebnerBaseSeqPairParTest extends TestCase {
         a = b = c = d = e = null;
         bbseq = new GroebnerBaseSeq<BigRational>();
         bbpar = new GroebnerBaseParallel<BigRational>(threads);
-        bbspar = new GroebnerBaseSeqPairParallel<BigRational>(threads);
+        bbspar = new GroebnerBaseParallel<BigRational>(threads, new ReductionPar<BigRational>(),
+                                                       new OrderedSyzPairlist<BigRational>());
     }
 
     protected void tearDown() {
@@ -105,10 +106,10 @@ public class GroebnerBaseSeqPairParTest extends TestCase {
 
 
     /**
-     * Test parallel GBase.
+     * Test syzygy pair parallel GBase.
      * 
      */
-    public void testSeqPairParallelGBase() {
+    public void testSyzPairParallelGBase() {
 
         L = new ArrayList<GenPolynomial<BigRational>>();
 
@@ -156,10 +157,10 @@ public class GroebnerBaseSeqPairParTest extends TestCase {
 
 
     /**
-     * Test compare sequential with parallel GBase.
+     * Test compare sequential with syzygy pair parallel GBase.
      * 
      */
-    public void testSequentialSeqPairParallelGBase() {
+    public void testSequentialSyzPairParallelGBase() {
 
         List<GenPolynomial<BigRational>> Gs, Gp;
 
@@ -217,10 +218,10 @@ public class GroebnerBaseSeqPairParTest extends TestCase {
 
 
     /**
-     * Test compare parallel with sequential pair parallel GBase.
+     * Test compare parallel with syzygy pair parallel GBase.
      * 
      */
-    public void testParallelSeqPairParallelGBase() {
+    public void testParallelSyzPairParallelGBase() {
 
         List<GenPolynomial<BigRational>> Gs, Gp;
 
