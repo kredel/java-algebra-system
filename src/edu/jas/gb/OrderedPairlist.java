@@ -45,8 +45,7 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
 
 
     /**
-     * Constructor for OrderedPairlist.
-     * @param r polynomial factory.
+     * Constructor.
      */
     public OrderedPairlist() {
         moduleVars = 0;
@@ -61,7 +60,7 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
 
 
     /**
-     * Constructor for OrderedPairlist.
+     * Constructor.
      * @param r polynomial factory.
      */
     public OrderedPairlist(GenPolynomialRing<C> r) {
@@ -70,7 +69,7 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
 
 
     /**
-     * Constructor for OrderedPairlist.
+     * Constructor.
      * @param m number of module variables.
      * @param r polynomial factory.
      */
@@ -272,7 +271,7 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
 
 
     /**
-     * Put to ONE-Polynomial to the pairlist.
+     * Put the ONE-Polynomial to the pairlist.
      * @param one polynomial. (no more required)
      * @return the index of the last polynomial.
      */
@@ -288,8 +287,7 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
 
 
     /**
-     * Put to ONE-Polynomial to the pairlist.
-     * @param one polynomial. (no more required)
+     * Put the ONE-Polynomial to the pairlist.
      * @return the index of the last polynomial.
      */
     public synchronized int putOne() { 
