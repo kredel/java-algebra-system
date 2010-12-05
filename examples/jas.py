@@ -575,6 +575,15 @@ class Ideal:
         self.radical = I.radicalDecomposition();
         return self.radical;
 
+    def complexRoots(self):
+        '''Compute complex roots of 0-dim ideal.
+        '''
+        I = jas.application.Ideal(self.pset);
+        self.croots = jas.application.PolyUtilApp.complexAlgebraicRoots(I);
+        #for R in self.croots:
+        #    R.doDecimalApproximation();
+        return self.croots;
+
     def primeDecomp(self):
         '''Compute prime decomposition of this ideal.
         '''
