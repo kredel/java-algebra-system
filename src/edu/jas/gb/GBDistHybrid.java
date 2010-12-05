@@ -66,6 +66,19 @@ public class GBDistHybrid<C extends RingElem<C>> {
      * @param port for GB server.
      */
     public GBDistHybrid(int threads, int threadsPerNode, String mfile, int port) {
+        this(threads, threadsPerNode, new OrderedPairlist<C>(), mfile, port);
+    }
+
+
+    /**
+     * Constructor.
+     * @param threads number of threads respectivly processes.
+     * @param threadsPerNode number of threads per node to use.
+     * @param pl pair selection strategy
+     * @param mfile name of the machine file.
+     * @param port for GB server.
+     */
+    public GBDistHybrid(int threads, int threadsPerNode, PairList<C> pl, String mfile, int port) {
         this.threads = threads;
         this.threadsPerNode = threadsPerNode;
         if (mfile == null || mfile.length() == 0) {
@@ -74,7 +87,7 @@ public class GBDistHybrid<C extends RingElem<C>> {
             this.mfile = mfile;
         }
         this.port = port;
-        bbd = new GroebnerBaseDistributedHybrid<C>(threads, threadsPerNode, port);
+        bbd = new GroebnerBaseDistributedHybrid<C>(threads, threadsPerNode, pl, port);
         dtp = new DistThreadPool(threads, mfile);
     }
 
@@ -155,7 +168,7 @@ class GBClientHybrid<C extends RingElem<C>> implements RemoteExecutable {
      */
     public void run() {
         GroebnerBaseDistributedHybrid<C> bbd;
-        bbd = new GroebnerBaseDistributedHybrid<C>(1, threadsPerNode, null, port);
+        bbd = new GroebnerBaseDistributedHybrid<C>(1, threadsPerNode, null, null, port);
         try {
             bbd.clientPart(host);
         } catch (IOException e) {

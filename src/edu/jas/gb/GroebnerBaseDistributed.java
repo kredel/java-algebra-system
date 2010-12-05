@@ -106,7 +106,28 @@ public class GroebnerBaseDistributed<C extends RingElem<C>> extends GroebnerBase
      * @param port server port to use.
      */
     public GroebnerBaseDistributed(int threads, ThreadPool pool, int port) {
-        super( new ReductionPar<C>() );
+        this(threads,pool,new OrderedPairlist<C>(),port);
+    }
+
+    /**
+     * Constructor.
+     * @param threads number of threads to use.
+     * @param pl pair selection strategy
+     * @param port server port to use.
+     */
+    public GroebnerBaseDistributed(int threads, PairList<C> pl, int port) {
+        this(threads, new ThreadPool(threads), pl , port);
+    }
+
+    /**
+     * Constructor.
+     * @param threads number of threads to use.
+     * @param pool ThreadPool to use.
+     * @param pl pair selection strategy
+     * @param port server port to use.
+     */
+    public GroebnerBaseDistributed(int threads, ThreadPool pool, PairList<C> pl, int port) {
+        super( new ReductionPar<C>(), pl );
         if (threads < 1) {
             threads = 1;
         }
@@ -144,7 +165,7 @@ public class GroebnerBaseDistributed<C extends RingElem<C>> extends GroebnerBase
 
         GenPolynomial<C> p;
         List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
-        OrderedPairlist<C> pairlist = null;
+        PairList<C> pairlist = null;
         boolean oneInGB = false;
         int l = F.size();
         int unused;
@@ -163,14 +184,15 @@ public class GroebnerBaseDistributed<C extends RingElem<C>> extends GroebnerBase
                     G.add(p);
                 }
                 if (pairlist == null) {
-                    pairlist = new OrderedPairlist<C>(modv, p.ring);
+                    //pairlist = new OrderedPairlist<C>(modv, p.ring);
+                    pairlist = strategy.create( modv, p.ring );
                     if ( ! p.ring.coFac.isField() ) {
                         throw new IllegalArgumentException("coefficients not from a field");
                     }
                 }
                 // theList not updated here
                 if (p.isONE()) {
-                    unused = pairlist.putOne(p);
+                    unused = pairlist.putOne();
                 } else {
                     unused = pairlist.put(p);
                 }
@@ -189,7 +211,7 @@ public class GroebnerBaseDistributed<C extends RingElem<C>> extends GroebnerBase
 
         DistHashTable<Integer, GenPolynomial<C>> theList = new DistHashTable<Integer, GenPolynomial<C>>(
                 "localhost", DL_PORT);
-        ArrayList<GenPolynomial<C>> al = pairlist.getList();
+        List<GenPolynomial<C>> al = pairlist.getList();
         for (int i = 0; i < al.size(); i++) {
             // no wait required
             GenPolynomial<C> nn = theList.put(new Integer(i), al.get(i));
@@ -365,14 +387,14 @@ class ReducerServer<C extends RingElem<C>> implements Runnable {
 
 
     //private List<GenPolynomial<C>> G;
-    private final OrderedPairlist<C> pairlist;
+    private final PairList<C> pairlist;
 
 
     private static final Logger logger = Logger.getLogger(ReducerServer.class);
 
 
     ReducerServer(Terminator fin, ChannelFactory cf, DistHashTable<Integer, GenPolynomial<C>> dl,
-            List<GenPolynomial<C>> G, OrderedPairlist<C> L) {
+            List<GenPolynomial<C>> G, PairList<C> L) {
         pool = fin;
         this.cf = cf;
         theList = dl;
@@ -513,7 +535,7 @@ class ReducerServer<C extends RingElem<C>> implements Runnable {
                     } else {
                         if (H.isONE()) {
                             // pool.allIdle();
-                            polIndex = pairlist.putOne(H);
+                            polIndex = pairlist.putOne();
                             GenPolynomial<C> nn = theList.put(new Integer(polIndex), H);
                             if (nn != null) {
                                 logger.info("double polynomials nn = " + nn + ", H = " + H);

@@ -92,7 +92,7 @@ public class GroebnerBaseDistTest extends TestCase {
     GroebnerBaseDistributed<BigRational> bbdist;
 
 
-    GroebnerBaseDistributedHybrid<BigRational> bbdisthyb;
+    GroebnerBaseDistributed<BigRational> bbdists;
 
 
     GenPolynomial<BigRational> a;
@@ -134,8 +134,8 @@ public class GroebnerBaseDistTest extends TestCase {
         fac = new GenPolynomialRing<BigRational>(coeff, rl);
         a = b = c = d = e = null;
         bbseq = new GroebnerBaseSeq<BigRational>();
-        bbdist = new GroebnerBaseDistributed<BigRational>(threads, port);
-        bbdisthyb = new GroebnerBaseDistributedHybrid<BigRational>(threads, port);
+        bbdists = new GroebnerBaseDistributed<BigRational>(threads, port);
+        bbdist = new GroebnerBaseDistributed<BigRational>(threads, new OrderedSyzPairlist<BigRational>(), port);
     }
 
 
@@ -146,9 +146,9 @@ public class GroebnerBaseDistTest extends TestCase {
         bbseq = null;
         bbdist.terminate();
         bbdist = null;
-        bbdisthyb.terminate();
-        bbdisthyb = null;
-     ComputerThreads.terminate();
+        bbdists.terminate();
+        bbdists = null;
+        ComputerThreads.terminate();
     }
 
 
@@ -361,7 +361,7 @@ class JunitClient<C extends RingElem<C>> implements Runnable {
 
     public void run() {
         GroebnerBaseDistributed<C> bbd;
-        bbd = new GroebnerBaseDistributed<C>(1, null, port);
+        bbd = new GroebnerBaseDistributed<C>(1, null, null, port);
         try {
             bbd.clientPart(host);
         } catch (IOException ignored) {

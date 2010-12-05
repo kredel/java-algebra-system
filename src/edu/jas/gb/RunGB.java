@@ -176,9 +176,10 @@ public class RunGB {
         t = System.currentTimeMillis();
         System.out.println("\nGroebner base distributed (" + threads + ", " + mfile + ", " + port +  ") ...");
         GBDist gbd = null;
-        GBDistSP gbds = null;
+        GBDist gbds = null;
         if (pairseq) {
-            gbds = new GBDistSP(threads, mfile, port);
+            //gbds = new GBDistSP(threads,mfile, port);
+            gbds = new GBDist(threads, new OrderedSyzPairlist(), mfile, port);
         } else {
             gbd = new GBDist(threads, mfile, port);
         }
@@ -217,9 +218,10 @@ public class RunGB {
         t = System.currentTimeMillis();
         System.out.println("\nGroebner base distributed[once] (" + threads + ", " + mfile + ", " + port +  ") ...");
         GBDist gbd = null;
-        GBDistSP gbds = null;
+        GBDist gbds = null;
         if (pairseq) {
-            gbds = new GBDistSP(threads, mfile, port);
+            //gbds = new GBDistSP(threads, mfile, port);
+            gbds = new GBDist(threads, new OrderedSyzPairlist(), mfile, port);
         } else {
             gbd = new GBDist(threads, mfile, port);
         }
@@ -259,17 +261,18 @@ public class RunGB {
         t = System.currentTimeMillis();
         System.out.println("\nGroebner base distributed hybrid[once] (" + threads + "/" + threadsPerNode + ", " + mfile + ", " + port +  ") ...");
         GBDistHybrid gbd = null;
-        //GBDistSP gbds = null; 
+        GBDistHybrid gbds = null; 
         if (pairseq) {
-            System.out.println("... not implemented.");
-            return;
+            //System.out.println("... not implemented.");
+            //return;
             // gbds = new GBDistSP(threads, mfile, port);
+            gbds = new GBDistHybrid(threads, threadsPerNode, new OrderedSyzPairlist(), mfile, port);
         } else {
             gbd = new GBDistHybrid(threads, threadsPerNode, mfile, port);
         }
         t1 = System.currentTimeMillis();
         if (pairseq) {
-            //G = gbds.execute( L );
+            G = gbds.execute( L );
         } else {
             G = gbd.execute(L);
         }

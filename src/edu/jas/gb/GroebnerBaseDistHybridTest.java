@@ -89,7 +89,7 @@ public class GroebnerBaseDistHybridTest extends TestCase {
     GroebnerBase<BigRational> bbseq;
 
 
-    GroebnerBaseDistributed<BigRational> bbdist;
+    GroebnerBaseDistributedHybrid<BigRational> bbdisthybs;
 
 
     GroebnerBaseDistributedHybrid<BigRational> bbdisthyb;
@@ -137,7 +137,7 @@ public class GroebnerBaseDistHybridTest extends TestCase {
         fac = new GenPolynomialRing<BigRational>(coeff, rl);
         a = b = c = d = e = null;
         bbseq = new GroebnerBaseSeq<BigRational>();
-        bbdist = null; //new GroebnerBaseDistributed<BigRational>(threads, port);
+        bbdisthybs = null; //new GroebnerBaseDistributed<BigRational>(threads, port);
         bbdisthyb = null; //new GroebnerBaseDistributedHybrid<BigRational>(threads, threadsPerNode, port);
     }
 
@@ -147,8 +147,8 @@ public class GroebnerBaseDistHybridTest extends TestCase {
         a = b = c = d = e = null;
         fac = null;
         bbseq = null;
-        //bbdist.terminate();
-        bbdist = null;
+        bbdisthybs.terminate();
+        bbdisthybs = null;
         bbdisthyb.terminate();
         bbdisthyb = null;
         ComputerThreads.terminate();
@@ -192,7 +192,8 @@ public class GroebnerBaseDistHybridTest extends TestCase {
      */
     public void testDistributedHybridGBase() {
 
-        bbdisthyb = new GroebnerBaseDistributedHybrid<BigRational>(threads, threadsPerNode, port);
+        bbdisthybs = new GroebnerBaseDistributedHybrid<BigRational>(threads, threadsPerNode, port);
+        bbdisthyb = new GroebnerBaseDistributedHybrid<BigRational>(threads, threadsPerNode, new OrderedSyzPairlist<BigRational>(), port);
 
         Thread[] clients;
 
@@ -258,7 +259,8 @@ public class GroebnerBaseDistHybridTest extends TestCase {
      */
     @SuppressWarnings("unchecked")
     public void testTrinks7GBase() {
-        bbdisthyb = new GroebnerBaseDistributedHybrid<BigRational>(threads, threadsPerNode, port);
+        bbdisthybs = new GroebnerBaseDistributedHybrid<BigRational>(threads, threadsPerNode, port);
+        bbdisthyb = new GroebnerBaseDistributedHybrid<BigRational>(threads, threadsPerNode, new OrderedSyzPairlist<BigRational>(), port);
         Thread[] clients;
         String exam = "(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
                 + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
@@ -295,7 +297,8 @@ public class GroebnerBaseDistHybridTest extends TestCase {
         //bbdisthyb.terminate();
         threads = 1;
         threadsPerNode = 4;
-        bbdisthyb = new GroebnerBaseDistributedHybrid<BigRational>(threads, threadsPerNode, port);
+        bbdisthybs = new GroebnerBaseDistributedHybrid<BigRational>(threads, threadsPerNode, port);
+        bbdisthyb = new GroebnerBaseDistributedHybrid<BigRational>(threads, threadsPerNode, new OrderedSyzPairlist<BigRational>(), port);
 
         Thread[] clients;
         String exam = "(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
@@ -332,7 +335,8 @@ public class GroebnerBaseDistHybridTest extends TestCase {
         //bbdisthyb.terminate();
         threads = 4;
         threadsPerNode = 1;
-        bbdisthyb = new GroebnerBaseDistributedHybrid<BigRational>(threads, threadsPerNode, port);
+        bbdisthybs = new GroebnerBaseDistributedHybrid<BigRational>(threads, threadsPerNode, port);
+        bbdisthyb = new GroebnerBaseDistributedHybrid<BigRational>(threads, threadsPerNode, new OrderedSyzPairlist<BigRational>(), port);
 
         Thread[] clients;
         String exam = "(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
@@ -369,7 +373,8 @@ public class GroebnerBaseDistHybridTest extends TestCase {
         //bbdisthyb.terminate();
         threads = 2;
         threadsPerNode = 4;
-        bbdisthyb = new GroebnerBaseDistributedHybrid<BigRational>(threads, threadsPerNode, port);
+        bbdisthybs = new GroebnerBaseDistributedHybrid<BigRational>(threads, threadsPerNode, port);
+        bbdisthyb = new GroebnerBaseDistributedHybrid<BigRational>(threads, threadsPerNode, new OrderedSyzPairlist<BigRational>(), port);
 
         Thread[] clients;
         String exam = "(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
@@ -424,7 +429,7 @@ class JunitClientHybrid<C extends RingElem<C>> implements Runnable {
 
     public void run() {
         GroebnerBaseDistributedHybrid<C> bbd;
-        bbd = new GroebnerBaseDistributedHybrid<C>(1, threadsPerNode, null, port);
+        bbd = new GroebnerBaseDistributedHybrid<C>(1, threadsPerNode, null, null, port);
         try {
             bbd.clientPart(host);
         } catch (IOException ignored) {

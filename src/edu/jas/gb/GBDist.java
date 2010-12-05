@@ -59,6 +59,17 @@ public class GBDist<C extends RingElem<C>> {
      * @param port for GB server.
      */
     public GBDist(int threads, String mfile, int port) {
+	this(threads, new OrderedPairlist<C>(), mfile, port);
+    }
+
+    /**
+     * Constructor.
+     * @param threads number of threads respectivly processes.
+     * @param pl pair selection strategy
+     * @param mfile name of the machine file.
+     * @param port for GB server.
+     */
+    public GBDist(int threads, PairList<C> pl, String mfile, int port) {
         this.threads = threads;
         if (mfile == null || mfile.length() == 0) {
             this.mfile = "../util/machines";
@@ -66,7 +77,7 @@ public class GBDist<C extends RingElem<C>> {
             this.mfile = mfile;
         }
         this.port = port;
-        bbd = new GroebnerBaseDistributed<C>(threads, port);
+        bbd = new GroebnerBaseDistributed<C>(threads, pl, port);
         dtp = new DistThreadPool(threads, mfile);
     }
 
@@ -153,7 +164,7 @@ class GBClient<C extends RingElem<C>> implements RemoteExecutable {
      */
     public void run() {
         GroebnerBaseDistributed<C> bbd;
-        bbd = new GroebnerBaseDistributed<C>(1, null, port);
+        bbd = new GroebnerBaseDistributed<C>(1, null, null, port);
         try {
             bbd.clientPart(host);
         } catch (IOException ignored) {
