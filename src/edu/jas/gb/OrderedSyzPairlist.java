@@ -350,7 +350,7 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
      * Test if there is possibly a pair in the list.
      * @return true if a next pair could exist, otherwise false.
      */
-    public boolean hasNext() { 
+    public synchronized boolean hasNext() { 
         return pairlist.size() > 0;
     }
 

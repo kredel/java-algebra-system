@@ -305,6 +305,7 @@ class Reducer<C extends RingElem<C>> implements Runnable {
         this.G = G;
         pairlist = L;
         red = new ReductionPar<C>();
+        fin.initIdle(1); 
     } 
 
 
@@ -329,7 +330,7 @@ class Reducer<C extends RingElem<C>> implements Runnable {
         while ( pairlist.hasNext() || fin.hasJobs() ) {
             while ( ! pairlist.hasNext() ) {
                 // wait
-                fin.beIdle(); set = true;
+                //fin.beIdle(); set = true;
                 try {
                     sleeps++;
                     if ( sleeps % 10 == 0 ) {
@@ -348,15 +349,18 @@ class Reducer<C extends RingElem<C>> implements Runnable {
             if ( ! pairlist.hasNext() && ! fin.hasJobs() ) {
                 break;
             }
-            if ( set ) {
-                fin.notIdle(); set = false;
-            }
+            //if ( set ) {
+                //fin.notIdle(); set = false;
+            //}
 
+            fin.notIdle(); // before pairlist get
             pair = pairlist.removeNext();
             if ( Thread.currentThread().isInterrupted() ) {
+                fin.initIdle(1); 
                 throw new RuntimeException("interrupt after removeNext");
             }
             if ( pair == null ) {
+                fin.initIdle(1); 
                 continue; 
             }
 
@@ -370,6 +374,7 @@ class Reducer<C extends RingElem<C>> implements Runnable {
             S = red.SPolynomial( pi, pj );
             if ( S.isZERO() ) {
                 pair.setZero();
+                fin.initIdle(1); 
                 continue;
             }
             if ( logger.isDebugEnabled() ) {
@@ -380,6 +385,7 @@ class Reducer<C extends RingElem<C>> implements Runnable {
             reduction++;
             if ( H.isZERO() ) {
                 pair.setZero();
+                fin.initIdle(1); 
                 continue;
             }
             if ( logger.isDebugEnabled() ) {
@@ -404,7 +410,9 @@ class Reducer<C extends RingElem<C>> implements Runnable {
                 G.add( H );
             }
             pairlist.put( H );
+            fin.initIdle(1); 
         }
+        fin.allIdle();
         logger.info( "terminated, done " + reduction + " reductions");
     }
 }
