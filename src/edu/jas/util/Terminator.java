@@ -23,13 +23,16 @@ public class Terminator {
     private static final Logger logger = Logger.getLogger(Terminator.class);
 
 
-    private int workers = 0;
+    private final int workers;
 
 
     private int idler = 0;
 
 
-    private final Semaphore fin = new Semaphore(0);
+    private final Semaphore fin;
+
+
+    private /*volatile*/ boolean done;
 
 
     /**
@@ -38,6 +41,8 @@ public class Terminator {
      */
     public Terminator(int workers) {
         this.workers = workers;
+        fin = new Semaphore(0);
+        done = false;
         logger.info("constructor, workers = " + workers);
     }
 
@@ -47,7 +52,7 @@ public class Terminator {
      */
     @Override
     public String toString() {
-        return "Terminator(workers=" + workers + ",idler=" + idler + ")";
+        return "Terminator(" + done + ",workers=" + workers + ",idler=" + idler + ")";
     }
 
 
@@ -57,8 +62,9 @@ public class Terminator {
      */
     public synchronized void beIdle() {
         idler++;
-        logger.debug("beIdle, idler = " + idler);
+        logger.info("beIdle, idler = " + idler);
         if (idler >= workers) {
+            done = true;
             fin.release(); //fin.V();
         }
     }
@@ -73,7 +79,11 @@ public class Terminator {
         idler += i;
         logger.info("initIdle, idler = " + idler);
         if ( idler > workers ) {
-            throw new RuntimeException("idler > workers");
+            if (done) {
+                idler = workers;
+            } else {
+                throw new RuntimeException("idler > workers");
+            }
         }
     }
 
@@ -85,8 +95,9 @@ public class Terminator {
      */
     public synchronized void beIdle(int i) {
         idler += i;
-        logger.debug("beIdle, idler = " + idler);
+        logger.info("beIdle, idler = " + idler);
         if (idler >= workers) {
+            done = true;
             fin.release(); //fin.V();
         }
     }
@@ -98,6 +109,8 @@ public class Terminator {
      */
     public synchronized void allIdle() {
         idler = workers;
+        logger.info("allIdle");
+        done = true;
         fin.release(); //fin.V();
     }
 
@@ -138,8 +151,8 @@ public class Terminator {
     public synchronized void release() {
         logger.info("release = " + this);
         if ( idler >= workers ) {
-            fin.release(); //fin.V();
-            //idler++; ??
+            done = true;
+            fin.release(); 
         }
         //logger.info("release, idler = " + idler);
     }
@@ -150,7 +163,7 @@ public class Terminator {
      */
     public void waitDone() {
         try {
-            fin.acquire(); //fin.P();
+            fin.acquire(); 
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
