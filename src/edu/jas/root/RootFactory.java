@@ -11,7 +11,10 @@ import java.util.Set;
 
 import edu.jas.arith.Rational;
 import edu.jas.poly.Complex;
+import edu.jas.poly.ComplexRing;
+import edu.jas.poly.PolyUtil;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.ufd.FactorAbstract;
 import edu.jas.ufd.FactorFactory;
@@ -96,8 +99,8 @@ public class RootFactory {
      * @param f univariate polynomial.
      * @return a list of different complex algebraic numbers.
      */
-    public static <C extends GcdRingElem<C> & Rational> List<ComplexAlgebraicNumber<C>> complexAlgebraicNumbers(
-            GenPolynomial<Complex<C>> f) {
+    public static <C extends GcdRingElem<C> & Rational> 
+           List<ComplexAlgebraicNumber<C>> complexAlgebraicNumbersComplex(GenPolynomial<Complex<C>> f) {
         ComplexRoots<C> cr = new ComplexRootsSturm<C>(f.ring.coFac);
         SquarefreeAbstract<Complex<C>> engine = SquarefreeFactory
                 .<Complex<C>> getImplementation(f.ring.coFac);
@@ -112,6 +115,20 @@ public class RootFactory {
             }
         }
         return list;
+    }
+
+
+    /**
+     * Complex algebraic numbers.
+     * @param f univariate (rational) polynomial.
+     * @return a list of different complex algebraic numbers.
+     */
+    public static <C extends GcdRingElem<C> & Rational> 
+           List<ComplexAlgebraicNumber<C>> complexAlgebraicNumbers(GenPolynomial<C> f) {
+        ComplexRing<C> cr = new ComplexRing<C>( f.ring.coFac );
+        GenPolynomialRing<Complex<C>> fac = new GenPolynomialRing<Complex<C>>(cr,f.ring);
+        GenPolynomial<Complex<C>> fc = PolyUtil.<C>complexFromAny(fac,f); 
+        return complexAlgebraicNumbersComplex(fc);
     }
 
 }

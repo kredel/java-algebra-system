@@ -411,7 +411,7 @@ public class PolyUtil {
 
 
     /**
-     * Complex from rational real part.
+     * Complex from rational coefficients.
      * @param fac result polynomial factory.
      * @param A polynomial with BigRational coefficients to be converted.
      * @return polynomial with BigComplex coefficients.
@@ -419,6 +419,19 @@ public class PolyUtil {
     public static GenPolynomial<BigComplex> complexFromRational(GenPolynomialRing<BigComplex> fac,
             GenPolynomial<BigRational> A) {
         return PolyUtil.<BigRational, BigComplex> map(fac, A, new RatToCompl());
+    }
+
+
+    /**
+     * Complex from ring element coefficients.
+     * @param fac result polynomial factory.
+     * @param A polynomial with RingElem coefficients to be converted.
+     * @return polynomial with Complex coefficients.
+     */
+    public static <C extends GcdRingElem<C>> 
+           GenPolynomial<Complex<C>> complexFromAny(GenPolynomialRing<Complex<C>> fac, GenPolynomial<C> A) {
+        ComplexRing<C> cr = (ComplexRing<C>) fac.coFac;
+        return PolyUtil.<C, Complex<C>> map(fac, A, new AnyToComplex<C>(cr));
     }
 
 
@@ -2367,6 +2380,40 @@ class RatToCompl implements UnaryFunctor<BigRational, BigComplex> {
             return new BigComplex();
         } else {
             return new BigComplex(c);
+        }
+    }
+}
+
+
+/**
+ * Any ring element to generic complex functor.
+ */
+class AnyToComplex<C extends GcdRingElem<C>> implements UnaryFunctor<C, Complex<C>> {
+
+
+    final protected ComplexRing<C> cfac;
+
+
+    public AnyToComplex(ComplexRing<C> fac) {
+        if (fac == null) {
+            throw new IllegalArgumentException("fac must not be null");
+        }
+        cfac = fac;
+    }
+
+
+    public AnyToComplex(RingFactory<C> fac) {
+        this( new ComplexRing<C>(fac) );
+    }
+
+
+    public Complex<C> eval(C a) {
+        if (a == null || a.isZERO()) { // should not happen
+            return cfac.getZERO();
+        } else if (a.isONE()) {
+            return cfac.getONE();
+        } else {
+            return new Complex<C>(cfac, a);
         }
     }
 }

@@ -234,7 +234,32 @@ public class RootUtilTest extends TestCase {
         GenPolynomial<Complex<BigRational>> ca = PolyUtil.<BigRational> toComplex(cfac, a);
         //System.out.println("ca = " + ca);
 
-        List<ComplexAlgebraicNumber<BigRational>> lcn = RootFactory.<BigRational> complexAlgebraicNumbers(ca);
+        List<ComplexAlgebraicNumber<BigRational>> lcn = RootFactory.<BigRational> complexAlgebraicNumbersComplex(ca);
+        //System.out.println("lcn = " + lcn);
+        assertTrue("#roots == deg(a) ", lcn.size() == a.degree(0));
+
+        if (true)
+            return;
+
+        for (ComplexAlgebraicNumber<BigRational> car : lcn) {
+            //System.out.println("car = " + car.toScript() + " in " + car.toScriptFactory());
+            //System.out.println("car = " + car.ring.root);
+            System.out.println("car = " + car.ring.root.centerApprox() + ", "
+                    + (Roots.sqrt(new BigDecimal(car.ring.root.rationalLength()))) + ", " + car.ring.root);
+        }
+    }
+
+
+    /**
+     * Test complex rational factory.
+     * 
+     */
+    public void testComplexRationalFactory() {
+        a = dfac.random(kl, ll, el, q);
+        //a = a.multiply( dfac.univariate(0) );
+        //System.out.println("a = " + a);
+
+        List<ComplexAlgebraicNumber<BigRational>> lcn = RootFactory.<BigRational> complexAlgebraicNumbers(a);
         //System.out.println("lcn = " + lcn);
         assertTrue("#roots == deg(a) ", lcn.size() == a.degree(0));
 
