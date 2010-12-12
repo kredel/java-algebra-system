@@ -127,6 +127,7 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
 
     /**
      * Put one Polynomial to the pairlist and reduction matrix.
+     * Removes all unnecessary pairs identified by the syzygy criterion and criterion 4.
      * @param p polynomial.
      * @return the index of the added polynomial.
      */
@@ -270,7 +271,7 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
                 //    exl.addFirst(ep);
                 //}
             }
-            pairlist.put(ei,exl);
+            pairlist.put(ei,exl); // replace ex
         }
         return P.size()-1;
     }
@@ -290,20 +291,19 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
         Pair<C> pair = null;
         boolean c = false;
         int i, j;
-        while ( /*!c &&*/ ip.hasNext() )  {
+        while ( ip.hasNext() )  {
             Map.Entry<ExpVector,LinkedList<Pair<C>>> me = ip.next();
             ExpVector g =  me.getKey();
             LinkedList<Pair<C>> xl = me.getValue();
             if ( logger.isInfoEnabled() )
                 logger.info("g  = " + g);
             pair = null;
-            while ( /*!c &&*/ xl.size() > 0 ) {
-                pair = xl.removeFirst();
-                // xl is also modified in pairlist 
+            while ( xl.size() > 0 ) {
+                pair = xl.removeFirst(); // xl is also modified in pairlist 
                 i = pair.i; 
                 j = pair.j; 
                 //System.out.println("pair.remove = " + pair );
-                if ( !red.get(j).get(i) ) {
+                if ( !red.get(j).get(i) ) { // should not happen
                     System.out.println("c_red.get(j).get(i) = " + g); // + ", " + red.get(j).get(i)); 
                     pair = null;
                     continue;
@@ -313,8 +313,7 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
                 break; 
             }
             if ( xl.size() == 0 ) {
-                ip.remove(); 
-                // = pairlist.remove( g );
+                ip.remove(); // = pairlist.remove( g );
             }
             if ( pair != null ) {
                 break;
