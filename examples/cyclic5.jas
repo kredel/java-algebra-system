@@ -1,5 +1,5 @@
 #Cyclic equations for N = 5:
-(a,b,c,d,e) G 
+(a,b,c,d,e) L 
 (
 a + b + c + d + e,
 a*b + b*c + c*d + d*e + e*a,

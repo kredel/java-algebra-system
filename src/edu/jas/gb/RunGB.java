@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.apache.log4j.BasicConfigurator;
 
+import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
 import edu.jas.util.ExecutableServer;
@@ -29,6 +30,12 @@ public class RunGB {
 
 
     /**
+     * Check result GB if it is a GB.
+     */
+    static boolean doCheck = true; //false;
+
+
+    /**
      * main method to be called from commandline <br />
      * Usage: RunGB [seq|par(+)|dist(1)(+)|disthyb|cli] &lt;file&gt;
      * #procs/#threadsPerNode [machinefile]
@@ -40,7 +47,7 @@ public class RunGB {
 
         String usage = "Usage: RunGB "
             + "[ seq | seq+ | par | par+ | dist | dist1 | dist+ | dist1+ | disthyb1 | cli [port] ] "
-            + "<file> " + "#procs/#threadsPerNode " + "[machinefile]";
+            + "<file> " + "#procs/#threadsPerNode " + "[machinefile] <check>";
         if (args.length < 1) {
             System.out.println(usage);
             return;
@@ -91,6 +98,12 @@ public class RunGB {
             }
             filename = args[1];
         }
+
+        for ( int i = 0; i < args.length; i++ ) {
+            if ( args[i].equals("check") ) {
+                doCheck = true;
+	    }
+	}
 
         int threads = 0;
         int threadsPerNode = 1;
@@ -163,7 +176,8 @@ public class RunGB {
         } else if (kind.startsWith("dist")) {
             runMaster(S, threads, mfile, port, pairseq);
         }
-        System.exit(0);
+        ComputerThreads.terminate();
+        //System.exit(0);
     }
 
 
@@ -205,6 +219,7 @@ public class RunGB {
             System.out.print("d ");
         }
         System.out.println("= " + threads + ", time = " + t + " milliseconds, " + (t - t1) + " start-up");
+        checkGB(S);
         System.out.println("");
     }
 
@@ -247,6 +262,7 @@ public class RunGB {
             System.out.print("d ");
         }
         System.out.println("= " + threads + ", time = " + t + " milliseconds, " + (t - t1) + " start-up");
+        checkGB(S);
         System.out.println("");
     }
 
@@ -283,16 +299,17 @@ public class RunGB {
             //gbd.terminate(true);
             gbd.terminate(false); // plus eventually killed by script
         }
+        t = System.currentTimeMillis() - t;
         S = new PolynomialList(S.ring, G);
         System.out.println("G =\n" + S);
         System.out.println("G.size() = " + G.size());
-        t = System.currentTimeMillis() - t;
         if (pairseq) {
             System.out.print("d+ ");
         } else {
             System.out.print("d ");
         }
         System.out.println("= " + threads + ", ppn = " + threadsPerNode + ", time = " + t + " milliseconds, " + (t - t1) + " start-up");
+        checkGB(S);
         System.out.println("");
     }
 
@@ -326,10 +343,10 @@ public class RunGB {
         } else {
             G = bb.GB(L);
         }
+        t = System.currentTimeMillis() - t;
         S = new PolynomialList(S.ring, G);
         System.out.println("G =\n" + S);
         System.out.println("G.size() = " + G.size());
-        t = System.currentTimeMillis() - t;
 
         if (pairseq) {
             System.out.print("p+ ");
@@ -337,12 +354,13 @@ public class RunGB {
             System.out.print("p ");
         }
         System.out.println("= " + threads + ", time = " + t + " milliseconds");
-        System.out.println("");
         if (pairseq) {
             bbs.terminate();
         } else {
             bb.terminate();
         }
+        checkGB(S);
+        System.out.println("");
     }
 
 
@@ -361,17 +379,30 @@ public class RunGB {
         t = System.currentTimeMillis();
         System.out.println("\nGroebner base sequential ...");
         G = bb.GB(L);
+        t = System.currentTimeMillis() - t;
         S = new PolynomialList(S.ring, G);
         System.out.println("G =\n" + S);
         System.out.println("G.size() = " + G.size());
-        t = System.currentTimeMillis() - t;
         if (pairseq) {
             System.out.print("seq+, ");
         } else {
             System.out.print("seq, ");
         }
         System.out.println("time = " + t + " milliseconds");
+        checkGB(S);
         System.out.println("");
+    }
+
+
+    static void checkGB(PolynomialList S) {
+        if ( !doCheck ) {
+	    return;
+	}
+	GroebnerBaseAbstract bb = GBFactory.getImplementation(S.ring.coFac);
+        long t = System.currentTimeMillis();
+	boolean chk = bb.isGB(S.list);
+        t = System.currentTimeMillis() - t;
+	System.out.println("check isGB = " + chk + " in " + t + " milliseconds");
     }
 
 }
