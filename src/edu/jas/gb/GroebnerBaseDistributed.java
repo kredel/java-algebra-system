@@ -348,8 +348,10 @@ public class GroebnerBaseDistributed<C extends RingElem<C>> extends GroebnerBase
         while (G.size() > 0) {
             a = G.remove(0);
             // System.out.println("doing " + a.length());
-            mirs[i] = new MiReducerServer<C>((List<GenPolynomial<C>>) G.clone(), (List<GenPolynomial<C>>) F
-                    .clone(), a);
+            List<GenPolynomial<C>> R = new ArrayList<GenPolynomial<C>>(G.size()+F.size());
+            R.addAll(G);
+            R.addAll(F);
+            mirs[i] = new MiReducerServer<C>(R, a);
             pool.addJob(mirs[i]);
             i++;
             F.add(a);
@@ -884,12 +886,6 @@ class MiReducerServer<C extends RingElem<C>> implements Runnable {
     private final List<GenPolynomial<C>> G;
 
 
-    private final List<GenPolynomial<C>> F;
-
-
-    private final GenPolynomial<C> S;
-
-
     private GenPolynomial<C> H;
 
 
@@ -902,11 +898,9 @@ class MiReducerServer<C extends RingElem<C>> implements Runnable {
     private static final Logger logger = Logger.getLogger(MiReducerServer.class);
 
 
-    MiReducerServer(List<GenPolynomial<C>> G, List<GenPolynomial<C>> F, GenPolynomial<C> p) {
+    MiReducerServer(List<GenPolynomial<C>> G, GenPolynomial<C> p) {
         this.G = G;
-        this.F = F;
-        S = p;
-        H = S;
+        H = p;
         red = new ReductionPar<C>();
     }
 
@@ -926,10 +920,9 @@ class MiReducerServer<C extends RingElem<C>> implements Runnable {
 
     public void run() {
         if (logger.isDebugEnabled()) {
-            logger.debug("ht(S) = " + S.leadingExpVector());
+            logger.debug("ht(H) = " + H.leadingExpVector());
         }
         H = red.normalform(G, H); //mod
-        H = red.normalform(F, H); //mod
         done.release(); //done.V();
         if (logger.isDebugEnabled()) {
             logger.debug("ht(H) = " + H.leadingExpVector());
@@ -949,12 +942,6 @@ class MiReducerClient<C extends RingElem<C>> implements Runnable {
     private final List<GenPolynomial<C>> G;
 
 
-    private final List<GenPolynomial<C>> F;
-
-
-    private final GenPolynomial<C> S;
-
-
     private GenPolynomial<C> H;
 
 
@@ -967,11 +954,9 @@ class MiReducerClient<C extends RingElem<C>> implements Runnable {
     private static final Logger logger = Logger.getLogger(MiReducerClient.class);
 
 
-    MiReducerClient(List<GenPolynomial<C>> G, List<GenPolynomial<C>> F, GenPolynomial<C> p) {
+    MiReducerClient(List<GenPolynomial<C>> G, GenPolynomial<C> p) {
         this.G = G;
-        this.F = F;
-        S = p;
-        H = S;
+        H = p;
         red = new ReductionPar<C>();
     }
 
@@ -992,10 +977,9 @@ class MiReducerClient<C extends RingElem<C>> implements Runnable {
 
     public void run() {
         if (logger.isDebugEnabled()) {
-            logger.debug("ht(S) = " + S.leadingExpVector());
+            logger.debug("ht(S) = " + H.leadingExpVector());
         }
         H = red.normalform(G, H); //mod
-        H = red.normalform(F, H); //mod
         done.release(); //done.V();
         if (logger.isDebugEnabled()) {
             logger.debug("ht(H) = " + H.leadingExpVector());

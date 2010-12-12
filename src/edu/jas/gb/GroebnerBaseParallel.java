@@ -268,10 +268,11 @@ public class GroebnerBaseParallel<C extends RingElem<C>>
         F = new ArrayList<GenPolynomial<C>>( G.size() );
         while ( G.size() > 0 ) {
             a = G.remove(0);
+            List<GenPolynomial<C>> R = new ArrayList<GenPolynomial<C>>(G.size()+F.size());
+            R.addAll(G);
+            R.addAll(F);
             // System.out.println("doing " + a.length());
-            mirs[i] = new MiReducer<C>( (List<GenPolynomial<C>>)G.clone(), 
-                                        (List<GenPolynomial<C>>)F.clone(), 
-                                        a );
+            mirs[i] = new MiReducer<C>(R,a);
             pool.addJob( mirs[i] );
             i++;
             F.add( a );
@@ -423,20 +424,14 @@ class Reducer<C extends RingElem<C>> implements Runnable {
  */
 class MiReducer<C extends RingElem<C>> implements Runnable {
     private List<GenPolynomial<C>> G;
-    private List<GenPolynomial<C>> F;
-    private GenPolynomial<C> S;
     private GenPolynomial<C> H;
     private ReductionPar<C> red;
     private Semaphore done = new Semaphore(0);
     private static final Logger logger = Logger.getLogger(MiReducer.class);
 
-    MiReducer(List<GenPolynomial<C>> G, 
-              List<GenPolynomial<C>> F, 
-              GenPolynomial<C> p) {
+    MiReducer(List<GenPolynomial<C>> G, GenPolynomial<C> p) {
         this.G = G;
-        this.F = F;
-        S = p;
-        H = S;
+        H = p;
         red = new ReductionPar<C>();
     } 
 
@@ -464,11 +459,10 @@ class MiReducer<C extends RingElem<C>> implements Runnable {
 
     public void run() {
         if ( logger.isDebugEnabled() ) {
-            logger.debug("ht(S) = " + S.leadingExpVector() );
+            logger.debug("ht(H) = " + H.leadingExpVector() );
         }
         try { 
             H = red.normalform( G, H ); //mod
-            H = red.normalform( F, H ); //mod
             done.release(); //done.V();
         } catch (RuntimeException e) { 
             Thread.currentThread().interrupt();
