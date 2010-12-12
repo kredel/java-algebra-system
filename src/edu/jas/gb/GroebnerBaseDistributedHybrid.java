@@ -438,8 +438,10 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
         while (G.size() > 0) {
             a = G.remove(0);
             // System.out.println("doing " + a.length());
-            mirs[i] = new MiReducerServer<C>((List<GenPolynomial<C>>) G.clone(), (List<GenPolynomial<C>>) F
-                    .clone(), a);
+            List<GenPolynomial<C>> R = new ArrayList<GenPolynomial<C>>(G.size()+F.size());
+            R.addAll(G);
+            R.addAll(F);
+            mirs[i] = new MiReducerServer<C>(R, a);
             pool.addJob(mirs[i]);
             i++;
             F.add(a);
