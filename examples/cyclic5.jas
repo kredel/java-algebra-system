@@ -1,0 +1,9 @@
+#Cyclic equations for N = 5:
+(a,b,c,d,e) G 
+(
+a + b + c + d + e,
+a*b + b*c + c*d + d*e + e*a,
+a*b*c + b*c*d + c*d*e + d*e*a + e*a*b,
+a*b*c*d + b*c*d*e + c*d*e*a + d*e*a*b + e*a*b*c,
+a*b*c*d*e - 1
+)
