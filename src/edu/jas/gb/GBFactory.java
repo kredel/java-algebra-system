@@ -169,8 +169,8 @@ public class GBFactory {
      * @param fac GenPolynomialRing&lt;C&gt;.
      * @return GB algorithm implementation.
      */
-    public static <C extends GcdRingElem<C>> GroebnerBaseAbstract<GenPolynomial<C>> getImplementation(
-                                                                                                      GenPolynomialRing<C> fac) {
+    public static <C extends GcdRingElem<C>> 
+      GroebnerBaseAbstract<GenPolynomial<C>> getImplementation(GenPolynomialRing<C> fac) {
         GroebnerBaseAbstract<GenPolynomial<C>> bba;
         bba = new GroebnerBasePseudoRecSeq<C>(fac);
         return bba;
@@ -182,8 +182,8 @@ public class GBFactory {
      * @param fac RegularRing.
      * @return GB algorithm implementation.
      */
-    public static <C extends RingElem<C>> GroebnerBaseAbstract<Product<C>> getImplementation(
-                                                                                             ProductRing<C> fac) {
+    public static <C extends RingElem<C>> 
+       GroebnerBaseAbstract<Product<C>> getImplementation(ProductRing<C> fac) {
         GroebnerBaseAbstract<Product<C>> bba;
         if (fac.onlyFields()) {
             bba = new RGroebnerBaseSeq<Product<C>>();
@@ -201,7 +201,7 @@ public class GBFactory {
      */
     //@SuppressWarnings("unchecked")
     public static <C extends GcdRingElem<C>> // interface RingElem not sufficient 
-                             GroebnerBaseAbstract<C> getImplementation(RingFactory<C> fac) {
+      GroebnerBaseAbstract<C> getImplementation(RingFactory<C> fac) {
         logger.debug("fac = " + fac.getClass().getName());
         if (fac.isField()) {
             return new GroebnerBaseSeq<C>();
@@ -210,8 +210,8 @@ public class GBFactory {
         GroebnerBaseAbstract bba = null;
         Object ofac = fac;
         if (ofac instanceof GenPolynomialRing) {
-            GroebnerBaseAbstract<GenPolynomial<C>> bbr = new GroebnerBasePseudoRecSeq<C>(
-                                                                                         (GenPolynomialRing<C>) ofac);
+            GenPolynomialRing<C> rofac = (GenPolynomialRing<C>) ofac;
+            GroebnerBaseAbstract<GenPolynomial<C>> bbr = new GroebnerBasePseudoRecSeq<C>(rofac);
             bba = (GroebnerBaseAbstract) bbr;
         } else if (ofac instanceof ProductRing) {
             ProductRing pfac = (ProductRing) ofac;
@@ -236,7 +236,7 @@ public class GBFactory {
      */
     //@SuppressWarnings("unchecked")
     public static <C extends GcdRingElem<C>> // interface RingElem not sufficient 
-                             GroebnerBaseAbstract<C> getProxy(RingFactory<C> fac) {
+      GroebnerBaseAbstract<C> getProxy(RingFactory<C> fac) {
         logger.debug("fac = " + fac.getClass().getName());
         if (fac.isField()) {
             if (ComputerThreads.NO_THREADS) {
@@ -252,8 +252,8 @@ public class GBFactory {
         GroebnerBaseAbstract bba = null;
         Object ofac = fac;
         if (ofac instanceof GenPolynomialRing) {
-            GroebnerBaseAbstract<GenPolynomial<C>> bbr = new GroebnerBasePseudoRecSeq<C>(
-                                                                                         (GenPolynomialRing<C>) ofac);
+            GenPolynomialRing<C> rofac = (GenPolynomialRing<C>) ofac;
+            GroebnerBaseAbstract<GenPolynomial<C>> bbr = new GroebnerBasePseudoRecSeq<C>(rofac);
             bba = (GroebnerBaseAbstract) bbr;
         } else if (ofac instanceof ProductRing) {
             ProductRing pfac = (ProductRing) ofac;

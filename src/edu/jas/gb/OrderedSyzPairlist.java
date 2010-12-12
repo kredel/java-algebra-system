@@ -23,8 +23,8 @@ import edu.jas.structure.RingElem;
 
 /**
  * Pair list management.
- * The Buchberger algorithm following 
- * the syzygy criterions by Gebauer &amp; M&ouml;ller in Reduce.
+ * For the Buchberger algorithm following 
+ * the syzygy criterions by Gebauer &amp; M&ouml;ller.
  * Implemented using GenPolynomial, TreeMap and BitSet.
  * @author Heinz Kredel
  */
@@ -78,13 +78,11 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
         moduleVars = m;
         ring = r;
         P = new ArrayList<GenPolynomial<C>>();
-        pairlist = new TreeMap<ExpVector,LinkedList<Pair<C>>>( 
-                                                              ring.tord.getAscendComparator() );
-        //pairlist = new TreeMap( to.getSugarComparator() );
+        pairlist = new TreeMap<ExpVector,LinkedList<Pair<C>>>(ring.tord.getAscendComparator());
         red = new ArrayList<BitSet>();
         putCount = 0;
         remCount = 0;
-        if ( !ring.isCommutative() ) { // instanceof GenSolvablePolynomialRing ) {
+        if ( !ring.isCommutative() ) { 
             useCriterion4 = false;
         }
         reduction = new ReductionSeq<C>();
@@ -139,9 +137,9 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
         }
         ExpVector e = p.leadingExpVector();
         int ps = P.size();
-        BitSet redi = new BitSet();
-        //redi.set( 0, ps ); // [0..ps-1] = true
-        red.add( redi ); // all zeros
+        BitSet redi = new BitSet(); // all zeros
+        //redi.set( 0, ps ); // [0..ps-1] = true, i.e. all ones
+        red.add( redi ); 
         P.add(  p );
         // remove from existing pairs:
         List<ExpVector> es = new ArrayList<ExpVector>();
@@ -166,7 +164,6 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
                         continue;
                     }
                     // g == ge && g != eil && g != ejl  
-                    //System.out.println("to skip " + pair);
                     red.get( pair.j ).clear( pair.i ); 
                     lle.add(pair);
                 }
@@ -230,12 +227,6 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
         //System.out.println("npl.skip div = " + es);
         for ( ExpVector ei : es ) {
             LinkedList<Pair<C>> ignored = npl.remove(ei);
-            //                for ( Pair<C> pair : ignored ) {
-            //                    if ( red.get( pair.j ).get( pair.i ) ) {
-            //                        System.out.println("reset for pair = " + pair); 
-            //                        red.get( pair.j ).clear( pair.i ); 
-            //                }
-            //                }
         }
         // skip by criterion 4:
         if ( useCriterion4 ) {
@@ -247,7 +238,6 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
                 for ( Pair<C> pair : exl ) {
                     c = c && reduction.criterion4( pair.pi, pair.pj, pair.e ); 
                 }
-                //System.out.println("c4 = " + c ); 
                 if ( c ) {
                     if ( exl.size() > 1 ) {
                         Pair<C> pair = exl.getFirst(); // or getLast()
@@ -264,13 +254,6 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
             //System.out.println("npl.skip c4  = " + es);
             for ( ExpVector ei : es ) {
                 LinkedList<Pair<C>> ignored = npl.remove(ei);
-                //                    for ( Pair<C> pair : ignored ) {
-                //                        if ( false && reduction.criterion4( pair.pi, pair.pj, pair.e ) ) {
-                //                            continue;
-                //                     }
-                //                        //System.out.println("npl.skip c4  = " + pair.i + ", " + pair.j);
-                //                        red.get( pair.j ).clear( pair.i ); 
-                //                    }
             }
         }
         // add to existing pairlist:
@@ -282,17 +265,13 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
             }
             LinkedList<Pair<C>> ex = pairlist.get( ei );
             if ( ex != null ) {
-                //System.out.println("pairlist.add_ex = " + ex ); 
-                exl.addAll(ex); 
+                exl.addAll(ex); // add last
                 //for ( Pair<C> ep : ex ) {
                 //    exl.addFirst(ep);
                 //}
             }
-            //System.out.println("pairlist.add = " + ei + ", exl = " + exl); 
             pairlist.put(ei,exl);
         }
-        //System.out.println("pairlist.set = " + red); //.get( pair.j )); //pair);
-        //System.out.println("pairlist.key = " + pairlist.keySet() );  
         return P.size()-1;
     }
 
