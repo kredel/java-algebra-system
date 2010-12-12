@@ -241,7 +241,7 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
                 }
                 if ( c ) {
                     if ( exl.size() > 1 ) {
-                        Pair<C> pair = exl.getFirst(); // or getLast()
+                        Pair<C> pair = exl.getFirst(); // or exl.getLast();
                         exl.clear();
                         exl.add(pair);
                         //npl.put(ei,exl);
@@ -266,12 +266,13 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
             }
             LinkedList<Pair<C>> ex = pairlist.get( ei );
             if ( ex != null ) {
-                exl.addAll(ex); // add last
-                //for ( Pair<C> ep : ex ) {
-                //    exl.addFirst(ep);
-                //}
+                exl.addAll(ex); // add new pairs first 
+                ex = exl;
+                //ex.addAll(exl); // add old pairs first
+            } else {
+                ex = exl;
             }
-            pairlist.put(ei,exl); // replace ex
+            pairlist.put(ei,ex); // replace ex
         }
         return P.size()-1;
     }
@@ -396,7 +397,7 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
      * @return true if the S-polynomial(i,j) is required.
      */
     public boolean criterion3(int i, int j, ExpVector eij) {  
-	throw new UnsupportedOperationException("not used in " + this.getClass().getName());
+        throw new UnsupportedOperationException("not used in " + this.getClass().getName());
     }
 
 }

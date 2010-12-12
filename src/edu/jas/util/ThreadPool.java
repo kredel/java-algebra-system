@@ -366,6 +366,8 @@ class PoolThread extends Thread {
                 Thread.currentThread().interrupt();
                 running = false;
                 isWorking = false;
+            } catch (RuntimeException e) {
+                logger.warn("catched " + e);
             }
         }
         isWorking = false;
