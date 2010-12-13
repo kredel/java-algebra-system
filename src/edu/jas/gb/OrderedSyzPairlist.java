@@ -180,7 +180,7 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
         }
         for ( ExpVector ei : es ) {
             LinkedList<Pair<C>> ll = pairlist.get(ei);
-            if ( ll.size() == 0 ) {
+            if ( ll != null && ll.size() == 0 ) {
                 ll = pairlist.remove(ei);
                 //System.out.println("removed empty for = " + ei);
             }
