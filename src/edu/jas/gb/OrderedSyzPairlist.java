@@ -141,7 +141,7 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
         BitSet redi = new BitSet(); // all zeros
         //redi.set( 0, ps ); // [0..ps-1] = true, i.e. all ones
         red.add( redi ); 
-        P.add(  p );
+        P.add( p );
         // remove from existing pairs:
         List<ExpVector> es = new ArrayList<ExpVector>();
         for (Map.Entry<ExpVector,LinkedList<Pair<C>>> me : pairlist.entrySet()) {
@@ -182,7 +182,6 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
             LinkedList<Pair<C>> ll = pairlist.get(ei);
             if ( ll != null && ll.size() == 0 ) {
                 ll = pairlist.remove(ei);
-                //System.out.println("removed empty for = " + ei);
             }
         }
         // generate new pairs:
@@ -193,16 +192,15 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
             ExpVector f = pj.leadingExpVector(); 
             if ( moduleVars > 0 ) {
                 if ( !reduction.moduleCriterion( moduleVars, e, f) ) {
-                    //red.get( j ).clear(l); 
+                    //red.get(j).clear(l); 
                     continue; // skip pair
                 }
             }
-            ExpVector g =  e.lcm( f );
-            //System.out.println("g  = " + g);  
+            ExpVector g =  e.lcm(f);
             Pair<C> pair = new Pair<C>( pj, p, j, ps);
             //System.out.println("pair.new      = " + pair);
             //multiple pairs under same keys -> list of pairs
-            LinkedList<Pair<C>> xl = npl.get( g );
+            LinkedList<Pair<C>> xl = npl.get(g);
             if ( xl == null ) {
                 xl = new LinkedList<Pair<C>>();
             }
@@ -305,10 +303,9 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
                 j = pair.j; 
                 //System.out.println("pair.remove = " + pair );
                 if ( !red.get(j).get(i) ) { // should not happen
-                    System.out.println("c_red.get(j).get(i) = " + g); // + ", " + red.get(j).get(i)); 
+                    System.out.println("c_red.get("+j+").get("+i+") = " + g); 
                     pair = null;
-                    continue;
-                    //break;
+		    continue;
                 }
                 red.get(j).clear(i);
                 break; 
