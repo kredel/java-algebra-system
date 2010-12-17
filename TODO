@@ -6,6 +6,10 @@ issues to consider:
 
 - implement Berlekamp-Zassenhaus for modular factorization
 
+- implement 0-dim ideal complex root selection
+
+- implement IDEALDIV2 with extGB
+
 - make hashCode to reuse computed value --> not immutable
 
 - use further util.concurrent algorithms where possible, e.g. in DHT
@@ -16,13 +20,7 @@ issues to consider:
 
 - refactor from BasicLinAlg to GenMatrix and GenVector 
 
-- implement parallel proxys for GB computation
-
-- rework parallel GB algorithms
-
 - implement univariate power series composition and power
-
-- implement multivariate power series 
 
 - make final variables public (?)
 
@@ -36,8 +34,6 @@ issues to consider:
 
 - check solvable polynomials with integral domain coefficients
 
-- refactor the Quotient class to edu.jas.ufd package
-
 - implement real roots with other methods, e.g. after Uspensky or Rolle
 
 - implement complex roots with other methods, e.g. after Collins and Krandick
@@ -47,6 +43,12 @@ issues to consider:
 
 
 partially resolved and completed issues:
+
+- refactor package structure to reduce circular dependences
+
+- implement parallel proxys for GB computation
+
+- rework parallel GB algorithms
 
 - check the 693 exceptions (including 473 runtime exceptions) that are thrown, 
   reduce number of runtime exceptions
@@ -65,15 +67,15 @@ partially resolved and completed issues:
 
 - implement univaiate and multivariate polynomial factorization
 
-- implement power series
+- implement multivariate power series, done
+
+- implement univariate power series, done
 
 - let arith implementations extend Power as abstract class
   add divide, subtract, abs, remainder to Power, 
   name e.g RingElemAbstract
   clean structure of compareTo, signum and equals
   - is not possible
-
-- rename divideAndRemainder to quotientRemainder
 
 - define power(n) in RingElem (not done) and implement in edu.jas.structure.Power 
   and classes, done
@@ -97,11 +99,15 @@ partially resolved and completed issues:
 
 - develop modifiable polynomial constructor or put method and iterators
 
-- using git to publish the repository, done
-
 
 
 resolved and completed issues:
+
+- using git to publish the repository, done
+
+- rename divideAndRemainder to quotientRemainder
+
+- refactor the Quotient class to edu.jas.ufd package, done
 
 - implement d- and e-reductions and d-/e-Groebner bases, done
 
@@ -131,7 +137,7 @@ resolved and completed issues:
 
 - add missing comments in edu.jas.Algebra*, done
 
-- let inverse() throw a runtime exception, done; throw a checked exception (?)
+- let inverse() throw a runtime exception, done; throw a checked exception (?, no)
 
 - split ModInteger to ModIntegerRing factory, done
 
