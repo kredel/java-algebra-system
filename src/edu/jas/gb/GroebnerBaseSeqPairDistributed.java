@@ -246,12 +246,12 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
         fin.waitDone();
         int ps = theList.size();
         //logger.debug("#distributed list = "+ps);
-        // make sure all polynomials arrived
+        // make sure all polynomials arrived: not needed in master
         // G = (ArrayList)theList.values();
         G = pairlist.getList();
         //logger.debug("#pairlist list = "+G.size());
         if (ps != G.size()) {
-            logger.error("#distributed list = " + theList.size() + " #pairlist list = " + G.size());
+            logger.info("#distributed list = " + theList.size() + " #pairlist list = " + G.size());
         }
         long time = System.currentTimeMillis();
         List<GenPolynomial<C>> Gp;
