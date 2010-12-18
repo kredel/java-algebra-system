@@ -234,7 +234,8 @@
 </target>
 
 <target name="jdepend" depends="vorher" >
-  <jdepend outputfile="test/jdepend-report-${DSTAMP}.out" >
+  <jdepend format="text" 
+      outputfile="test/jdepend-report-${DSTAMP}.out" >
       <exclude name="java.*" />
       <exclude name="javax.*" />
       <exclude name="org.apache.*" />
