@@ -134,7 +134,6 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
         GenPolynomial<C> Bs = zero.sum( a /*correct .negate()*/, f1 );
         S.set( i, As );
         S.set( j, Bs );
-
         return Cp;
     }
 
@@ -154,7 +153,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
         }
         ExpVector ei = A.leadingExpVector();
         ExpVector ej = B.leadingExpVector();
-     return moduleCriterion(modv,ei,ej);
+        return moduleCriterion(modv,ei,ej);
     }
 
 
@@ -191,9 +190,8 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
            if ( ! A.ring.equals( B.ring ) ) { 
               logger.error("rings not equal " + A.ring + ", " + B.ring); 
            }
-           if (   A instanceof GenSolvablePolynomial
-               || B instanceof GenSolvablePolynomial ) {
-              logger.error("GBCriterion4 not applicabable to SolvablePolynomials"); 
+           if ( !A.ring.isCommutative() ) { //B instanceof GenSolvablePolynomial ) {
+              logger.error("GBCriterion4 not applicabable to non-commutative polynomials"); 
               return true;
            }
         }
@@ -216,9 +214,8 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
     public boolean criterion4(GenPolynomial<C> A, 
                               GenPolynomial<C> B) {  
         if ( logger.isInfoEnabled() ) {
-           if (   A instanceof GenSolvablePolynomial
-               || B instanceof GenSolvablePolynomial ) {
-               logger.error("GBCriterion4 not applicabable to SolvablePolynomials"); 
+	    if ( !A.ring.isCommutative() || !B.ring.isCommutative() ) { // A instanceof GenSolvablePolynomial
+               logger.error("GBCriterion4 not applicabable to non-commutative polynomials"); 
                return true;
            }
         }
@@ -226,7 +223,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
         ExpVector ej = B.leadingExpVector();
         ExpVector g = ei.sum(ej);
         ExpVector e = ei.lcm(ej);
-        //        boolean t =  g == e ;
+        // boolean t =  g == e ;
         ExpVector h = g.subtract(e);
         int s = h.signum();
         return ! ( s == 0 );
