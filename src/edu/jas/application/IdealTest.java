@@ -1294,6 +1294,7 @@ public class IdealTest extends TestCase {
 
         BigRational coeff = new BigRational(17, 1);
         to = new TermOrder(TermOrder.INVLEX);
+        //vars = new String[] { "x", "y" , "z" };
         vars = new String[] { "x", "y" };
         fac = new GenPolynomialRing<BigRational>(coeff, vars.length, to, vars);
 
@@ -1306,9 +1307,9 @@ public class IdealTest extends TestCase {
 
         a = fac.parse("( x^2 + 9 )");
         b = fac.parse("( y^2 - x )");
-        c = fac.parse("( z^2 - x^2 )");
+        //c = fac.parse("( z^2 - x^2 )");
 
-        if (a.isZERO() || b.isZERO() || c.isZERO()) {
+        if (a.isZERO() || b.isZERO() ) {
             return;
         }
 
