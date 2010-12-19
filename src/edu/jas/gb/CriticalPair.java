@@ -21,7 +21,6 @@ import edu.jas.poly.GenPolynomial;
 public class CriticalPair<C extends RingElem<C> > extends AbstractPair<C>
              implements Serializable {
 
-    public final ExpVector e;
     protected volatile boolean inReduction;
     protected volatile GenPolynomial<C> reductum;
     //public final ExpVector sugar;
@@ -38,8 +37,7 @@ public class CriticalPair<C extends RingElem<C> > extends AbstractPair<C>
     public CriticalPair(ExpVector e,
                         GenPolynomial<C> pi, GenPolynomial<C> pj, 
                         int i, int j) {
-        super(pi,pj,i,j);
-        this.e = e;
+        super(e,pi,pj,i,j);
         inReduction = false; 
         reductum = null;
     }
@@ -51,7 +49,6 @@ public class CriticalPair<C extends RingElem<C> > extends AbstractPair<C>
     @Override
     public String toString() {
         StringBuffer s = new StringBuffer(super.toString() + "[ ");
-        s.append(e.toString());
         if ( inReduction ) {
            s.append("," + inReduction);
         } 

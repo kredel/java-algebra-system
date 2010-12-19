@@ -28,7 +28,7 @@ public abstract class AbstractPair<C extends RingElem<C> >
 
 
     /**
-     * AbstarctPair constructor.
+     * AbstractPair constructor.
      * @param a polynomial i.
      * @param b polynomial j.
      * @param i first index.
@@ -41,7 +41,7 @@ public abstract class AbstractPair<C extends RingElem<C> >
 
 
     /**
-     * AbstarctPair constructor.
+     * AbstractPair constructor.
      * @param lcm least common multiple of lt(a) and lt(b).
      * @param a polynomial i.
      * @param b polynomial j.

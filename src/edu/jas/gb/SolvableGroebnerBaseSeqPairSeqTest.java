@@ -88,6 +88,7 @@ public class SolvableGroebnerBaseSeqPairSeqTest extends TestCase {
        ring = new GenSolvablePolynomialRing<BigRational>(cfac,rl,tord);
        table = ring.table;
        a = b = c = d = e = null;
+       //sbb = new SolvableGroebnerBaseSeqPairSeq<BigRational>(); // not existing
        sbb = new SolvableGroebnerBaseSeq<BigRational>();
 
        a = ring.random(kl, ll, el, q );

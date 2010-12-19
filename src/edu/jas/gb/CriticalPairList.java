@@ -79,7 +79,7 @@ public class CriticalPairList<C extends RingElem<C>> implements PairList<C> {
         recordCount = 0;
         putCount = 0;
         remCount = 0;
-        if ( ring instanceof GenSolvablePolynomialRing ) {
+        if ( !ring.isCommutative() ) {
            useCriterion4 = false;
         }
         reduction = new ReductionSeq<C>();
