@@ -16,8 +16,6 @@ import edu.jas.poly.GenSolvablePolynomialRing;
 
 import edu.jas.structure.RingElem;
 
-import edu.jas.vector.SolvableBasicLinAlg;
-
 
 /**
  * Solvable Groebner bases sequential algorithms.
@@ -36,29 +34,21 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
 
 
     /**
-     * Linear algebra engine.
-     */
-    protected SolvableBasicLinAlg<C> sblas;
-
-
-    /**
      * Constructor.
      */
     public SolvableGroebnerBaseSeq() {
         super();
-        sblas = new SolvableBasicLinAlg<C>();
     }
 
 
     /**
      * Constructor.
-     * @param red Reduction engine
      * @param sred Solvable reduction engine
+     * @param pl pair selection strategy
      */
-    public SolvableGroebnerBaseSeq(Reduction<C> red,
-                                   SolvableReduction<C> sred) {
-        super(red,sred);
-        sblas = new SolvableBasicLinAlg<C>();
+    public SolvableGroebnerBaseSeq(SolvableReduction<C> sred, 
+                                   PairList<C> pl) {
+        super(sred,pl);
     }
 
 
@@ -73,7 +63,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
                       List<GenSolvablePolynomial<C>> F) {  
         List<GenSolvablePolynomial<C>> G 
            = new ArrayList<GenSolvablePolynomial<C>>();
-        OrderedPairlist<C> pairlist = null; 
+        PairList<C> pairlist = null; 
         int l = F.size();
         //  ListIterator it = F.listIterator();
         for ( GenSolvablePolynomial<C> p: F ) { 
@@ -86,7 +76,8 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
                }
                G.add( p );
                if ( pairlist == null ) {
-                   pairlist = new OrderedPairlist<C>( modv, p.ring );
+                   //pairlist = new OrderedPairlist<C>( modv, p.ring );
+                   pairlist = strategy.create( modv, p.ring );
                }
                // putOne not required
                pairlist.put( p );
@@ -146,10 +137,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
         }
         logger.debug("#sequential list = "+G.size());
         G = leftMinimalGB(G);
-        logger.info("pairlist #put = " + pairlist.putCount() 
-                  + " #rem = " + pairlist.remCount()
-                    // + " #total = " + pairlist.pairCount()
-                   );
+        logger.info("" + pairlist); 
         return G;
     }
 
@@ -361,10 +349,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
         G = exgb.G;
         G2F = exgb.G2F;
         logger.debug("#sequential list = " + G.size());
-        logger.info("pairlist #put = " + pairlist.putCount() 
-                  + " #rem = " + pairlist.remCount()
-                    // + " #total = " + pairlist.pairCount()
-                   );
+        logger.info("" + pairlist); 
         // setup matrices F and F2G
         for ( GenSolvablePolynomial<C> f : F ) {
             row = new ArrayList<GenSolvablePolynomial<C>>( G.size() );
@@ -415,7 +400,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
         //System.out.println("F generated = " + F);
         List<GenSolvablePolynomial<C>> G 
             = new ArrayList<GenSolvablePolynomial<C>>();
-        OrderedPairlist<C> pairlist = null; 
+        PairList<C> pairlist = null; 
         int l = F.size();
         ListIterator<GenSolvablePolynomial<C>> it = F.listIterator();
         while ( it.hasNext() ) { 
@@ -428,7 +413,8 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
                }
                G.add( p );
                if ( pairlist == null ) {
-                  pairlist = new OrderedPairlist<C>( modv, p.ring );
+                   // pairlist = new OrderedPairlist<C>( modv, p.ring );
+                   pairlist = strategy.create( modv, p.ring );
                }
                // putOne not required
                pairlist.put( p );
@@ -505,10 +491,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
         }
         logger.debug("#sequential list = "+G.size());
         G = leftMinimalGB(G);
-        logger.info("pairlist #put = " + pairlist.putCount() 
-                  + " #rem = " + pairlist.remCount()
-                    // + " #total = " + pairlist.pairCount()
-                   );
+        logger.info("" + pairlist); 
         return G;
     }
 

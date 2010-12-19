@@ -17,6 +17,8 @@ import edu.jas.poly.PolynomialList;
 
 import edu.jas.structure.RingElem;
 
+import edu.jas.vector.SolvableBasicLinAlg;
+
 
 /**
  * Solvable Groebner Bases abstract class.
@@ -42,26 +44,48 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
     /**
      * Reduction engine.
      */
-    protected Reduction<C> red;
+    protected final Reduction<C> red;
+
+
+    /**
+     * Strategy for pair selection.
+     */
+    public final PairList<C> strategy;
+
+
+    /**
+     * Linear algebra engine.
+     */
+    protected SolvableBasicLinAlg<C> sblas;
 
 
     /**
      * Constructor.
      */
     public SolvableGroebnerBaseAbstract() {
-        this( new ReductionSeq<C>(), new SolvableReductionSeq<C>() );
+        this( new SolvableReductionSeq<C>() );
     }
 
 
     /**
      * Constructor.
-     * @param red Reduction engine
      * @param sred Solvable reduction engine
      */
-    public SolvableGroebnerBaseAbstract(Reduction<C> red,
-                                        SolvableReduction<C> sred) {
-        this.red = red;
+    public SolvableGroebnerBaseAbstract(SolvableReduction<C> sred) {
+        this(sred,new OrderedPairlist<C>());
+    }
+
+
+    /**
+     * Constructor.
+     * @param sred Solvable reduction engine
+     * @param pl pair selection strategy
+     */
+    public SolvableGroebnerBaseAbstract(SolvableReduction<C> sred, PairList<C> pl) {
+        this.red = new ReductionSeq<C>();
         this.sred = sred;
+        this.strategy = pl;
+        sblas = new SolvableBasicLinAlg<C>();
     }
 
 

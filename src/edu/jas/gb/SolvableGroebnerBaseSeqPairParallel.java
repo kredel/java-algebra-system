@@ -97,7 +97,7 @@ public class SolvableGroebnerBaseSeqPairParallel<C extends RingElem<C>>
      */
     public SolvableGroebnerBaseSeqPairParallel(int threads, ThreadPool pool, 
                                                SolvableReduction<C> sred) {
-        super( new ReductionSeq<C>(), sred);
+        super(sred);
         if ( ! (sred instanceof SolvableReductionPar) ) {
             logger.warn("parallel GB should use parallel aware reduction");
         }
@@ -170,10 +170,7 @@ public class SolvableGroebnerBaseSeqPairParallel<C extends RingElem<C>>
         logger.debug("#parallel list = "+G.size());
         G = leftMinimalGB(G);
         // not in this context // pool.terminate();
-        logger.info("pairlist #put = " + pairlist.putCount() 
-                    + " #rem = " + pairlist.remCount()
-                    //+ " #total = " + pairlist.pairCount()
-                    );
+        logger.info("" + pairlist); 
         return G;
     }
 
@@ -344,10 +341,7 @@ public class SolvableGroebnerBaseSeqPairParallel<C extends RingElem<C>>
         logger.debug("#parallel list = "+G.size());
         G = leftMinimalGB(G);
         // not in this context // pool.terminate();
-        logger.info("pairlist #put = " + pairlist.putCount() 
-                    + " #rem = " + pairlist.remCount()
-                    //+ " #total = " + pairlist.pairCount()
-                    );
+        logger.info("" + pairlist); 
         return G;
     }
 

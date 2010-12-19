@@ -78,10 +78,31 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
     /**
      * Constructor.
      * @param threads number of threads to use.
-     * @param red parallelism aware reduction engine
+     * @param sred parallelism aware reduction engine
      */
-    public SolvableGroebnerBaseParallel(int threads, SolvableReduction<C> red) {
-        this(threads, new ThreadPool(threads), red );
+    public SolvableGroebnerBaseParallel(int threads, SolvableReduction<C> sred) {
+        this(threads, new ThreadPool(threads), sred );
+    }
+
+
+    /**
+     * Constructor.
+     * @param threads number of threads to use.
+     * @param pl pair selection strategy
+     */
+    public SolvableGroebnerBaseParallel(int threads, PairList<C> pl) {
+        this(threads, new ThreadPool(threads), new SolvableReductionPar<C>(), pl );
+    }
+
+
+    /**
+     * Constructor.
+     * @param threads number of threads to use.
+     * @param sred parallelism aware reduction engine
+     * @param pl pair selection strategy
+     */
+    public SolvableGroebnerBaseParallel(int threads, SolvableReduction<C> sred, PairList<C> pl) {
+        this(threads, new ThreadPool(threads), sred, pl );
     }
 
 
@@ -90,10 +111,24 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
      * @param threads number of threads to use.
      * @param pool ThreadPool to use.
      * @param sred parallelism aware reduction engine
+     * @param pl pair selection strategy
      */
     public SolvableGroebnerBaseParallel(int threads, ThreadPool pool, 
                                         SolvableReduction<C> sred) {
-        super( new ReductionSeq<C>(), sred);
+        this(threads, pool, sred, new OrderedPairlist<C>() );
+    }
+
+
+    /**
+     * Constructor.
+     * @param threads number of threads to use.
+     * @param pool ThreadPool to use.
+     * @param sred parallelism aware reduction engine
+     * @param pl pair selection strategy
+     */
+    public SolvableGroebnerBaseParallel(int threads, ThreadPool pool, 
+                                        SolvableReduction<C> sred, PairList<C> pl) {
+        super(sred, pl);
         if ( ! (sred instanceof SolvableReductionPar) ) {
             logger.warn("parallel GB should use parallel aware reduction");
         }
@@ -128,7 +163,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
                 List<GenSolvablePolynomial<C>> F ) {  
         GenSolvablePolynomial<C> p;
         List<GenSolvablePolynomial<C>> G = new ArrayList<GenSolvablePolynomial<C>>();
-        OrderedPairlist<C> pairlist = null; 
+        PairList<C> pairlist = null; 
         int l = F.size();
         ListIterator<GenSolvablePolynomial<C>> it = F.listIterator();
         while ( it.hasNext() ) { 
@@ -141,7 +176,8 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
                 }
                 G.add( p );
                 if ( pairlist == null ) {
-                    pairlist = new OrderedPairlist<C>( modv, p.ring );
+                    //pairlist = new OrderedPairlist<C>( modv, p.ring );
+                    pairlist = strategy.create( modv, p.ring );
                     if ( ! p.ring.coFac.isField() ) {
                         throw new IllegalArgumentException("coefficients not from a field");
                     }
@@ -166,10 +202,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
         logger.debug("#parallel list = "+G.size());
         G = leftMinimalGB(G);
         // not in this context // pool.terminate();
-        logger.info("pairlist #put = " + pairlist.putCount() 
-                    + " #rem = " + pairlist.remCount()
-                    //+ " #total = " + pairlist.pairCount()
-                    );
+        logger.info("" + pairlist); 
         return G;
     }
 
@@ -302,7 +335,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
         //System.out.println("F generated = " + F);
         List<GenSolvablePolynomial<C>> G 
             = new ArrayList<GenSolvablePolynomial<C>>();
-        OrderedPairlist<C> pairlist = null; 
+        PairList<C> pairlist = null; 
         int l = F.size();
         ListIterator<GenSolvablePolynomial<C>> it = F.listIterator();
         while ( it.hasNext() ) { 
@@ -315,7 +348,8 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
                 }
                 G.add( p );
                 if ( pairlist == null ) {
-                    pairlist = new OrderedPairlist<C>( modv, p.ring );
+                    //pairlist = new OrderedPairlist<C>( modv, p.ring );
+                    pairlist = strategy.create( modv, p.ring );
                     if ( ! p.ring.coFac.isField() ) {
                         throw new IllegalArgumentException("coefficients not from a field");
                     }
@@ -340,10 +374,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
         logger.debug("#parallel list = "+G.size());
         G = leftMinimalGB(G);
         // not in this context // pool.terminate();
-        logger.info("pairlist #put = " + pairlist.putCount() 
-                    + " #rem = " + pairlist.remCount()
-                    //+ " #total = " + pairlist.pairCount()
-                    );
+        logger.info("" + pairlist); 
         return G;
     }
 
@@ -356,7 +387,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
  */
 class LeftSolvableReducer<C extends RingElem<C>> implements Runnable {
     private List<GenSolvablePolynomial<C>> G;
-    private OrderedPairlist<C> pairlist;
+    private PairList<C> pairlist;
     private Terminator pool;
     private SolvableReductionPar<C> sred;
     private static final Logger logger = Logger.getLogger(LeftSolvableReducer.class);
@@ -364,7 +395,7 @@ class LeftSolvableReducer<C extends RingElem<C>> implements Runnable {
 
     LeftSolvableReducer(Terminator fin, 
                         List<GenSolvablePolynomial<C>> G, 
-                        OrderedPairlist<C> L) {
+                        PairList<C> L) {
         pool = fin;
         this.G = G;
         pairlist = L;
@@ -431,7 +462,7 @@ class LeftSolvableReducer<C extends RingElem<C>> implements Runnable {
             H = (GenSolvablePolynomial<C>)H.monic();
             // System.out.println("H   = " + H);
             if ( H.isONE() ) { 
-                pairlist.putOne(H); // not really required
+                pairlist.putOne(); // not really required
                 synchronized (G) {
                     G.clear(); G.add( H );
                 }
@@ -458,7 +489,7 @@ class LeftSolvableReducer<C extends RingElem<C>> implements Runnable {
 class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
     private List<GenSolvablePolynomial<C>> X;
     private List<GenSolvablePolynomial<C>> G;
-    private OrderedPairlist<C> pairlist;
+    private PairList<C> pairlist;
     private Terminator pool;
     private SolvableReductionPar<C> sred;
     private static final Logger logger = Logger.getLogger(TwosidedSolvableReducer.class);
@@ -467,7 +498,7 @@ class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
     TwosidedSolvableReducer(Terminator fin, 
                             List<GenSolvablePolynomial<C>> X,
                             List<GenSolvablePolynomial<C>> G, 
-                            OrderedPairlist<C> L) {
+                            PairList<C> L) {
         pool = fin;
         this.X = X;
         this.G = G;
@@ -536,7 +567,7 @@ class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
             H = (GenSolvablePolynomial<C>)H.monic();
             // System.out.println("H   = " + H);
             if ( H.isONE() ) { 
-                pairlist.putOne(H); // not really required
+                pairlist.putOne(); // not really required
                 synchronized (G) {
                     G.clear(); G.add( H );
                 }
