@@ -327,7 +327,9 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
                             || red.get( k ).get(j); 
                     }
                     //System.out.println("s."+k+" = " + s); 
-                    if ( ! s ) return s;
+                    if ( ! s ) {
+                        return s;
+                    }
                 }
             }
         }

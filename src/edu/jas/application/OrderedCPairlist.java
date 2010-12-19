@@ -261,39 +261,29 @@ public class OrderedCPairlist<C extends GcdRingElem<C>> implements Serializable,
         if (oneInGB) {
             return P.size() - 1;
         }
-        CPair<C> pair;
-        ExpVector e;
-        ExpVector f;
-        ExpVector g;
-        ColorPolynomial<C> pj;
-        BitSet redi;
-        LinkedList<CPair<C>> x;
-        LinkedList<CPair<C>> xl;
-        e = p.leadingExpVector();
+        ExpVector e = p.leadingExpVector();
         // System.out.println("p = " + p);
         int l = P.size();
         for (int j = 0; j < l; j++) {
-            pj = P.get(j);
+            ColorPolynomial<C> pj = P.get(j);
             // System.out.println("pj = " + pj);
-            f = pj.leadingExpVector();
+            ExpVector f = pj.leadingExpVector();
             if (moduleVars > 0) {
                 if (e.invLexCompareTo(f, 0, moduleVars) != 0) {
                     continue; // skip pair
                 }
             }
             // System.out.println("e = " + e + ", f = " + f);
-            g = e.lcm(f); // EVLCM( e, f );
-            pair = new CPair<C>(pj, p, j, l);
+            ExpVector g = e.lcm(f); // EVLCM( e, f );
+            CPair<C> pair = new CPair<C>(pj, p, j, l);
             // redi = (BitSet)red.get(j);
             // /if ( j < l ) redi.set( l );
             // System.out.println("bitset."+j+" = " + redi );
 
             // multiple pairs under same keys -> list of pairs
-            x = pairlist.get(g);
-            if (x == null) {
+            LinkedList<CPair<C>> xl = pairlist.get(g);
+            if (xl == null) {
                 xl = new LinkedList<CPair<C>>();
-            } else {
-                xl = x;
             }
             // xl.addLast( pair ); // first or last ?
             xl.addFirst(pair); // first or last ? better for d- e-GBs
@@ -301,11 +291,8 @@ public class OrderedCPairlist<C extends GcdRingElem<C>> implements Serializable,
         }
         // System.out.println("pairlist.keys@put = " + pairlist.keySet() );
         P.add(p);
-        redi = new BitSet();
+        BitSet redi = new BitSet();
         redi.set(0, l); // jdk 1.4
-        // if ( l > 0 ) { // jdk 1.3
-        // for ( int i=0; i<l; i++ ) redi.set(i);
-        // }
         red.add(redi);
         return P.size() - 1;
     }
@@ -370,7 +357,7 @@ public class OrderedCPairlist<C extends GcdRingElem<C>> implements Serializable,
      * Test if there is possibly a pair in the list.
      * @return true if a next pair could exist, otherwise false.
      */
-    public boolean hasNext() {
+    public synchronized boolean hasNext() {
         return pairlist.size() > 0;
     }
 
@@ -430,36 +417,33 @@ public class OrderedCPairlist<C extends GcdRingElem<C>> implements Serializable,
      */
     public boolean criterion3(int i, int j, ExpVector eij) {
         // assert i < j;
-        boolean s;
-        s = red.get(j).get(i);
+        boolean s = red.get(j).get(i);
         if (!s) {
             logger.warn("c3.s false for " + j + " " + i);
             return s;
         }
-        s = true;
-        boolean m;
-        ColorPolynomial<C> A;
-        ExpVector ek;
+        // now s = true;
         for (int k = 0; k < P.size(); k++) {
-            A = P.get(k);
-            ek = A.leadingExpVector();
-            m = eij.multipleOf(ek); // EVMT(eij,ek);
-            if (m) {
-                if (k < i) {
-                    // System.out.println("k < i "+k+" "+i);
-                    s = red.get(i).get(k) || red.get(j).get(k);
+            if ( i != k && j != k ) {
+                ColorPolynomial<C> A = P.get(k);
+                ExpVector ek = A.leadingExpVector();
+                boolean m = eij.multipleOf(ek); // EVMT(eij,ek);
+                if (m) {
+                    if (k < i) {
+                        // System.out.println("k < i "+k+" "+i);
+                        s = red.get(i).get(k) || red.get(j).get(k);
+                    } else if (i < k && k < j) {
+                        // System.out.println("i < k < j "+i+" "+k+" "+j);
+                        s = red.get(k).get(i) || red.get(j).get(k);
+                    } else if (j < k) {
+                        // System.out.println("j < k "+j+" "+k);
+                        s = red.get(k).get(i) || red.get(k).get(j);
+                    }
+                    // System.out.println("s."+k+" = " + s);
+                    if (!s) {
+                        return s;
+                    }
                 }
-                if (i < k && k < j) {
-                    // System.out.println("i < k < j "+i+" "+k+" "+j);
-                    s = red.get(k).get(i) || red.get(j).get(k);
-                }
-                if (j < k) {
-                    // System.out.println("j < k "+j+" "+k);
-                    s = red.get(k).get(i) || red.get(k).get(j);
-                }
-                // System.out.println("s."+k+" = " + s);
-                if (!s)
-                    return s;
             }
         }
         return true;

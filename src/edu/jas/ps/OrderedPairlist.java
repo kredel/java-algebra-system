@@ -84,7 +84,6 @@ public class OrderedPairlist<C extends RingElem<C>> {
         P = new ArrayList<MultiVarPowerSeries<C>>();
         pairlist = new TreeMap<ExpVector, LinkedList<Pair<C>>>(ring.polyRing().tord.getAscendComparator());
         //pairlist = new TreeMap<ExpVector, LinkedList<Pair<C>>>(ring.polyRing().tord.getDescendComparator());
-        //pairlist = new TreeMap( to.getSugarComparator() );
         red = new ArrayList<BitSet>();
         putCount = 0;
         remCount = 0;
@@ -119,36 +118,26 @@ public class OrderedPairlist<C extends RingElem<C>> {
         if (oneInGB) {
             return P.size() - 1;
         }
-        Pair<C> pair;
-        ExpVector e;
-        ExpVector f;
-        ExpVector g;
-        MultiVarPowerSeries<C> pj;
-        BitSet redi;
-        LinkedList<Pair<C>> x;
-        LinkedList<Pair<C>> xl;
-        e = p.orderExpVector();
+        ExpVector e = p.orderExpVector();
         int l = P.size();
         for (int j = 0; j < l; j++) {
-            pj = P.get(j);
-            f = pj.orderExpVector();
+            MultiVarPowerSeries<C> pj = P.get(j);
+            ExpVector f = pj.orderExpVector();
             if (moduleVars > 0) {
                 if (!reduction.moduleCriterion(moduleVars, e, f)) {
                     continue; // skip pair
                 }
             }
-            g = e.lcm(f);
-            pair = new Pair<C>(pj, p, j, l);
+            ExpVector g = e.lcm(f);
+            Pair<C> pair = new Pair<C>(pj, p, j, l);
             // redi = (BitSet)red.get(j);
             ///if ( j < l ) redi.set( l );
             // System.out.println("bitset."+j+" = " + redi );  
 
             //multiple pairs under same keys -> list of pairs
-            x = pairlist.get(g);
-            if (x == null) {
+            LinkedList<Pair<C>> xl = pairlist.get(g);
+            if (xl == null) {
                 xl = new LinkedList<Pair<C>>();
-            } else {
-                xl = x;
             }
             //xl.addLast( pair ); // first or last ?
             xl.addFirst(pair); // first or last ? better for d- e-GBs
@@ -156,11 +145,8 @@ public class OrderedPairlist<C extends RingElem<C>> {
         }
         // System.out.println("pairlist.keys@put = " + pairlist.keySet() );  
         P.add(p);
-        redi = new BitSet();
+        BitSet redi = new BitSet();
         redi.set(0, l); // jdk 1.4
-        // if ( l > 0 ) { // jdk 1.3
-        //    for ( int i=0; i<l; i++ ) redi.set(i);
-        // }
         red.add(redi);
         return P.size() - 1;
     }
@@ -222,7 +208,7 @@ public class OrderedPairlist<C extends RingElem<C>> {
      * Test if there is possibly a pair in the list.
      * @return true if a next pair could exist, otherwise false.
      */
-    public boolean hasNext() {
+    public synchronized boolean hasNext() {
         return pairlist.size() > 0;
     }
 
@@ -267,10 +253,19 @@ public class OrderedPairlist<C extends RingElem<C>> {
         if (!one.isONE()) {
             return P.size() - 1;
         }
+        return putOne();
+    }
+
+
+    /**
+     * Put the ONE-power-series to the pairlist.
+     * @return the index of the last power-series.
+     */
+    public synchronized int putOne() { 
         oneInGB = true;
         pairlist.clear();
         P.clear();
-        P.add(one);
+        P.add(ring.getONE());
         red.clear();
         return P.size() - 1;
     }
@@ -282,38 +277,34 @@ public class OrderedPairlist<C extends RingElem<C>> {
      */
     public boolean criterion3(int i, int j, ExpVector eij) {
         // assert i < j;
-        boolean s;
-        s = red.get(j).get(i);
+        boolean s = red.get(j).get(i);
         if (!s) {
             logger.warn("c3.s false for " + j + " " + i);
             return s;
         }
-        s = true;
-        boolean m;
-        MultiVarPowerSeries<C> A;
-        ExpVector ek;
+        // now s = true;
         for (int k = 0; k < P.size(); k++) {
-            A = P.get(k);
-            ek = A.orderExpVector();
-            m = eij.multipleOf(ek);
+            MultiVarPowerSeries<C> A = P.get(k);
+            ExpVector ek = A.orderExpVector();
+            boolean m = eij.multipleOf(ek);
             if (m) {
                 if (k < i) {
                     // System.out.println("k < i "+k+" "+i); 
                     s = red.get(i).get(k) || red.get(j).get(k);
-                }
-                if (i < k && k < j) {
+                } else if (i < k && k < j) {
                     // System.out.println("i < k < j "+i+" "+k+" "+j); 
                     s = red.get(k).get(i) || red.get(j).get(k);
-                }
-                if (j < k) {
+                } else if (j < k) {
                     //System.out.println("j < k "+j+" "+k); 
                     s = red.get(k).get(i) || red.get(k).get(j);
                 }
                 //System.out.println("s."+k+" = " + s); 
-                if (!s)
+                if (!s) {
                     return s;
+                }
             }
         }
         return true;
     }
+
 }
