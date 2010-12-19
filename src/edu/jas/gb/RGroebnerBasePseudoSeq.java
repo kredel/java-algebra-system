@@ -194,9 +194,7 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>> extends RGroeb
         logger.debug("#sequential list = " + G.size());
         G = minimalGB(G);
         // G = red.irreducibleSet(G); // not correct since not boolean closed
-        logger.info("pairlist #put = " + pairlist.putCount() + " #rem = " + pairlist.remCount()
-        // + " #total = " + pairlist.pairCount()
-                );
+        logger.info("" + pairlist); 
         return G;
     }
 

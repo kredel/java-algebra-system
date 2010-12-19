@@ -212,10 +212,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>> extends
         logger.debug("#sequential list = " + G.size());
         G = minimalGB(G);
         //G = red.irreducibleSet(G);
-        logger.info("pairlist #put = " + pairlist.putCount() + " #rem = "
-                + pairlist.remCount()
-        // + " #total = " + pairlist.pairCount()
-                );
+        logger.info("" + pairlist); 
         return G;
     }
 
