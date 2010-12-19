@@ -10,8 +10,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.SortedMap;
 
 import org.apache.log4j.Logger;
 
@@ -29,18 +29,7 @@ import edu.jas.structure.RingElem;
  * @author Heinz Kredel
  */
 
-public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
-
-    protected final ArrayList<GenPolynomial<C>> P;
-    protected final SortedMap<ExpVector,LinkedList<Pair<C>>> pairlist;
-    protected final ArrayList<BitSet> red;
-    protected final GenPolynomialRing<C> ring;
-    protected final Reduction<C> reduction;
-    protected boolean oneInGB = false;
-    protected boolean useCriterion4 = true;
-    protected int putCount;
-    protected int remCount;
-    protected final int moduleVars;
+public class OrderedSyzPairlist<C extends RingElem<C> > extends OrderedPairlist<C> {
 
     private static final Logger logger = Logger.getLogger(OrderedSyzPairlist.class);
 
@@ -49,14 +38,7 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
      * Constructor.
      */
     public OrderedSyzPairlist() {
-        moduleVars = 0;
-        ring = null;
-        P = null;
-        pairlist = null; 
-        red = null;
-        reduction = null;
-        putCount = 0;
-        remCount = 0;
+        super();
     }
 
 
@@ -75,17 +57,7 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
      * @param r polynomial factory.
      */
     public OrderedSyzPairlist(int m, GenPolynomialRing<C> r) {
-        moduleVars = m;
-        ring = r;
-        P = new ArrayList<GenPolynomial<C>>();
-        pairlist = new TreeMap<ExpVector,LinkedList<Pair<C>>>(ring.tord.getAscendComparator());
-        red = new ArrayList<BitSet>();
-        putCount = 0;
-        remCount = 0;
-        if ( !ring.isCommutative() ) { 
-            useCriterion4 = false;
-        }
-        reduction = new ReductionSeq<C>();
+        super(m,r);
     }
 
 
@@ -105,23 +77,6 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
      */
     public PairList<C> create(int m, GenPolynomialRing<C> r) {
         return new OrderedSyzPairlist<C>(m,r);
-    }
-
-
-    /**
-     * toString.
-     */
-    @Override
-    public String toString() {
-        StringBuffer s = new StringBuffer("OrderedSyzPairlist(");
-        //s.append("polys="+P.size());
-        s.append("#put="+putCount);
-        s.append(", #rem="+remCount);
-        if ( pairlist != null && pairlist.size() != 0 ) {
-            s.append(", size="+pairlist.size());
-        }
-        s.append(")");
-        return s.toString();
     }
 
 
@@ -305,7 +260,7 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
                 if ( !red.get(j).get(i) ) { // should not happen
                     System.out.println("c_red.get("+j+").get("+i+") = " + g); 
                     pair = null;
-		    continue;
+                    continue;
                 }
                 red.get(j).clear(i);
                 break; 
@@ -319,73 +274,6 @@ public class OrderedSyzPairlist<C extends RingElem<C> > implements PairList<C> {
         }
         remCount++; // count only real pairs
         return pair; 
-    }
-
-
-    /**
-     * Test if there is possibly a pair in the list.
-     * @return true if a next pair could exist, otherwise false.
-     */
-    public synchronized boolean hasNext() { 
-        return pairlist.size() > 0;
-    }
-
-
-    /**
-     * Get the list of polynomials.
-     * @return the polynomial list.
-     */
-    public ArrayList<GenPolynomial<C>> getList() { 
-        return P;
-    }
-
-
-    /**
-     * Get the number of polynomials put to the pairlist.
-     * @return the number of calls to put.
-     */
-    public int putCount() { 
-        return putCount;
-    }
-
-
-    /**
-     * Get the number of required pairs removed from the pairlist.
-     * @return the number of non null pairs delivered.
-     */
-    public int remCount() { 
-        return remCount;
-    }
-
-
-    /**
-     * Put the ONE-Polynomial to the pairlist.
-     * @param one polynomial. (no more required)
-     * @return the index of the last polynomial.
-     */
-    public synchronized int putOne(GenPolynomial<C> one) { 
-        if ( one == null ) {
-            return P.size()-1;
-        }
-        if ( ! one.isONE() ) {
-            return P.size()-1;
-        }
-        return putOne();
-    }
-
-
-    /**
-     * Put the ONE-Polynomial to the pairlist.
-     * @return the index of the last polynomial.
-     */
-    public synchronized int putOne() { 
-        putCount++;
-        oneInGB = true;
-        pairlist.clear();
-        P.clear();
-        P.add(ring.getONE());
-        red.clear();
-        return P.size()-1;
     }
 
 

@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.SortedMap;
 
 import org.apache.log4j.Logger;
 
@@ -30,9 +32,9 @@ import edu.jas.structure.RingElem;
 
 public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
 
-    protected final ArrayList<GenPolynomial<C>> P;
-    protected final TreeMap<ExpVector,LinkedList<Pair<C>>> pairlist;
-    protected final ArrayList<BitSet> red;
+    protected final List<GenPolynomial<C>> P;
+    protected final SortedMap<ExpVector,LinkedList<Pair<C>>> pairlist;
+    protected final List<BitSet> red;
     protected final GenPolynomialRing<C> ring;
     protected final Reduction<C> reduction;
     protected boolean oneInGB = false;
@@ -136,33 +138,23 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
         if ( oneInGB ) { 
             return P.size()-1;
         }
-        Pair<C> pair;
-        ExpVector e; 
-        ExpVector f; 
-        ExpVector g; 
-        GenPolynomial<C> pj; 
-        BitSet redi;
-        LinkedList<Pair<C>> x;
-        LinkedList<Pair<C>> xl;
-        e = p.leadingExpVector();
+        ExpVector e = p.leadingExpVector();
         int l = P.size();
         for ( int j = 0; j < l; j++ ) {
-            pj = P.get(j);
-            f = pj.leadingExpVector(); 
+            GenPolynomial<C> pj = P.get(j);
+            ExpVector f = pj.leadingExpVector(); 
             if ( moduleVars > 0 ) {
                 if ( !reduction.moduleCriterion( moduleVars, e, f) ) {
                     continue; // skip pair
                 }
             }
-            g =  e.lcm( f );
-            pair = new Pair<C>( pj, p, j, l);
+            ExpVector g =  e.lcm( f );
+            Pair<C> pair = new Pair<C>( pj, p, j, l);
             //System.out.println("pair.new      = " + pair);
             //multiple pairs under same keys -> list of pairs
-            x = pairlist.get( g );
-            if ( x == null ) {
+            LinkedList<Pair<C>> xl = pairlist.get( g );
+            if ( xl == null ) {
                 xl = new LinkedList<Pair<C>>();
-            } else {
-                xl = x; 
             }
             //xl.addLast( pair ); // first or last ?
             xl.addFirst( pair ); // first or last ? better for d- e-GBs
@@ -170,7 +162,7 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
         }
         // System.out.println("pairlist.keys@put = " + pairlist.keySet() );  
         P.add(  p );
-        redi = new BitSet();
+        BitSet redi = new BitSet();
         redi.set( 0, l ); 
         red.add( redi );
         //System.out.println("pairlist.set = " + red); //.get( pair.j )); //pair);
@@ -239,7 +231,7 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
      * Test if there is possibly a pair in the list.
      * @return true if a next pair could exist, otherwise false.
      */
-    public boolean hasNext() { 
+    public synchronized boolean hasNext() { 
         return pairlist.size() > 0;
     }
 
@@ -248,7 +240,7 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
      * Get the list of polynomials.
      * @return the polynomial list.
      */
-    public ArrayList<GenPolynomial<C>> getList() { 
+    public List<GenPolynomial<C>> getList() { 
         return P;
     }
 
@@ -308,38 +300,35 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
      */
     public boolean criterion3(int i, int j, ExpVector eij) {  
         // assert i < j;
-        boolean s;
-        s = red.get( j ).get(i); 
+        boolean s = red.get( j ).get(i); 
         if ( ! s ) { 
             logger.warn("c3.s false for " + j + " " + i); 
             return s;
         }
-        s = true;
-        boolean m;
-        GenPolynomial<C> A;
-        ExpVector ek;
+        // now s = true;
         for ( int k = 0; k < P.size(); k++ ) {
-            A = P.get( k );
-            ek = A.leadingExpVector();
-            m = eij.multipleOf(ek);
-            if ( m ) {
-                if ( k < i ) {
-                    // System.out.println("k < i "+k+" "+i); 
-                    s =    red.get( i ).get(k) 
-                        || red.get( j ).get(k); 
+            // System.out.println("i , k , j "+i+" "+k+" "+j); 
+            if ( i != k && j != k ) {
+                GenPolynomial<C> A = P.get( k );
+                ExpVector ek = A.leadingExpVector();
+                boolean m = eij.multipleOf(ek);
+                if ( m ) {
+                    if ( k < i ) {
+                        // System.out.println("k < i "+k+" "+i); 
+                        s =    red.get( i ).get(k) 
+                            || red.get( j ).get(k); 
+                    } else if ( i < k && k < j ) {
+                        // System.out.println("i < k < j "+i+" "+k+" "+j); 
+                        s =    red.get( k ).get(i) 
+                            || red.get( j ).get(k); 
+                    } else if ( j < k ) {
+                        //System.out.println("j < k "+j+" "+k); 
+                        s =    red.get( k ).get(i) 
+                            || red.get( k ).get(j); 
+                    }
+                    //System.out.println("s."+k+" = " + s); 
+                    if ( ! s ) return s;
                 }
-                if ( i < k && k < j ) {
-                    // System.out.println("i < k < j "+i+" "+k+" "+j); 
-                    s =    red.get( k ).get(i) 
-                        || red.get( j ).get(k); 
-                }
-                if ( j < k ) {
-                    //System.out.println("j < k "+j+" "+k); 
-                    s =    red.get( k ).get(i) 
-                        || red.get( k ).get(j); 
-                }
-                //System.out.println("s."+k+" = " + s); 
-                if ( ! s ) return s;
             }
         }
         return true;

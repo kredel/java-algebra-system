@@ -30,25 +30,22 @@ import edu.jas.structure.RingElem;
  * @author Heinz Kredel
  */
 
-public class CriticalPairList<C extends RingElem<C>> implements PairList<C> {
+public class CriticalPairList<C extends RingElem<C>> extends OrderedPairlist<C> {
 
-    private final GenPolynomialRing<C> ring;
+    private final SortedSet< CriticalPair<C> > pairlist; // hide super
 
-    private final ArrayList<GenPolynomial<C>> P;
-
-    private final SortedSet< CriticalPair<C> > pairlist;
-    private final ArrayList<BitSet> red;
-
-    private final Reduction<C> reduction;
-
-    private boolean oneInGB = false;
-    private boolean useCriterion4 = true;
     private int recordCount;
-    private int putCount;
-    private int remCount;
-    private final int moduleVars;
 
     private static final Logger logger = Logger.getLogger(CriticalPairList.class);
+
+
+    /**
+     * Constructor for CriticalPairList.
+     */
+    public CriticalPairList() {
+        super();
+        pairlist = null;
+    }
 
 
     /**
@@ -66,23 +63,11 @@ public class CriticalPairList<C extends RingElem<C>> implements PairList<C> {
      * @param r polynomial factory.
      */
     public CriticalPairList(int m, GenPolynomialRing<C> r) {
-        ring = r;
-        if ( m < 0 || ring.nvar < m ) {
-           throw new IllegalArgumentException("moduleVars > nvars");
-        }
-        moduleVars = m;
-        P = new ArrayList<GenPolynomial<C>>();
+        super(m,r);
         Comparator< CriticalPair<C> > cpc; 
         cpc = new CriticalPairComparator<C>( ring.tord ); 
         pairlist = new TreeSet< CriticalPair<C> >( cpc );
-        red = new ArrayList<BitSet>();
         recordCount = 0;
-        putCount = 0;
-        remCount = 0;
-        if ( !ring.isCommutative() ) {
-           useCriterion4 = false;
-        }
-        reduction = new ReductionSeq<C>();
     }
 
 
@@ -106,23 +91,6 @@ public class CriticalPairList<C extends RingElem<C>> implements PairList<C> {
 
 
     /**
-     * toString.
-     */
-    @Override
-    public String toString() {
-        StringBuffer s = new StringBuffer("CriticalPairlist(");
-        //s.append("polys="+P.size());
-        s.append("#put="+putCount);
-        s.append(", #rem="+remCount);
-        if ( pairlist.size() != 0 ) {
-           s.append(", size="+pairlist.size());
-        }
-        s.append(")");
-        return s.toString();
-    }
-
-
-    /**
      * Put a polynomial to the pairlist and reduction matrix.
      * @param p polynomial.
      * @return the index of the added polynomial.
@@ -132,28 +100,23 @@ public class CriticalPairList<C extends RingElem<C>> implements PairList<C> {
         if ( oneInGB ) { 
            return P.size()-1;
         }
-        CriticalPair<C> pair;
         ExpVector e = p.leadingExpVector(); 
-        ExpVector f; 
-        ExpVector g; 
-        GenPolynomial<C> pj; 
-        BitSet redi;
         int len = P.size();
         for ( int j = 0; j < len; j++ ) {
-            pj = P.get(j);
-            f = pj.leadingExpVector(); 
+            GenPolynomial<C> pj = P.get(j);
+            ExpVector f = pj.leadingExpVector(); 
             if ( moduleVars > 0 ) { // test moduleCriterion
             if ( !reduction.moduleCriterion( moduleVars, e, f) ) {
                   continue; // skip pair
                }
             }
-            g =  e.lcm( f );
-            pair = new CriticalPair<C>( g, pj, p, j, len );
+            ExpVector g =  e.lcm( f );
+            CriticalPair<C> pair = new CriticalPair<C>( g, pj, p, j, len );
             //System.out.println("put pair = " + pair );
             pairlist.add( pair );
         }
         P.add( p );
-        redi = new BitSet();
+        BitSet redi = new BitSet();
         redi.set( 0, len ); // >= jdk 1.4
         red.add( redi );
         if ( recordCount < len ) {
@@ -164,18 +127,11 @@ public class CriticalPairList<C extends RingElem<C>> implements PairList<C> {
 
 
     /**
-     * Put the ONE-Polynomial to the pairlist.
-     * @return the index of the last polynomial.
+     * Test if there is possibly a pair in the list.
+     * @return true if a next pair could exist, otherwise false.
      */
-    public synchronized int putOne() { 
-        putCount++;
-        oneInGB = true;
-        pairlist.clear();
-        P.clear();
-        P.add( ring.getONE() );
-        red.clear();
-        recordCount = 0;
-        return 0;
+    public synchronized boolean hasNext() { 
+          return pairlist.size() > 0;
     }
 
 
@@ -375,77 +331,13 @@ public class CriticalPairList<C extends RingElem<C>> implements PairList<C> {
 
 
     /**
-     * Test if there is possibly a pair in the list.
-     * @return true if a next pair could exist, otherwise false.
+     * Put the ONE-Polynomial to the pairlist.
+     * @return the index of the last polynomial.
      */
-    public boolean hasNext() { 
-          return pairlist.size() > 0;
+    public synchronized int putOne() { 
+        super.putOne();
+        pairlist.clear();
+        return 0;
     }
 
-
-    /**
-     * Get the list of polynomials.
-     * @return the polynomial list.
-     */
-    public ArrayList<GenPolynomial<C>> getList() { 
-          return P;
-    }
-
-
-    /**
-     * Get the number of polynomials put to the pairlist.
-     * @return the number of calls to put.
-     */
-    public int putCount() { 
-          return putCount;
-    }
-
-
-    /**
-     * Get the number of required pairs removed from the pairlist.
-     * @return the number of non null pairs delivered.
-     */
-    public int remCount() { 
-          return remCount;
-    }
-
-
-    /**
-     * GB criterium 3.
-     * @return true if the S-polynomial(i,j) is required.
-     */
-    public boolean criterion3(int i, int j, ExpVector eij) {  
-        assert i < j;
-        boolean s;
-        s = red.get( j ).get( i ); 
-        if ( ! s ) { 
-           logger.warn("c3.s false for " + i + "," + j + ", lcm=" + eij); 
-           return s;
-        }
-        // now s == true;
-        for ( int k = 0; k < P.size(); k++ ) {
-            // System.out.println("i , k , j "+i+" "+k+" "+j); 
-            if ( i != k && j != k ) {
-               GenPolynomial<C> A = P.get( k );
-               ExpVector ek = A.leadingExpVector();
-               boolean m = eij.multipleOf(ek);
-               if ( m ) {
-                  if ( k < i ) {
-                     s =    red.get( i ).get(k) 
-                         || red.get( j ).get(k); 
-                  } else if ( i < k && k < j ) {
-                     s =    red.get( k ).get(i) 
-                         || red.get( j ).get(k); 
-                  } else if ( j < k ) {
-                     s =    red.get( k ).get(i) 
-                         || red.get( k ).get(j); 
-                  }
-                  //System.out.println("s."+k+" = " + s); 
-                  if ( ! s ) return s;
-               }
-            }
-        }
-        return true;
-    }
 }
-

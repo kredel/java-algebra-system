@@ -25,11 +25,6 @@ import edu.jas.util.Terminator;
 import edu.jas.util.ThreadPool;
 
 
-// import edu.unima.ky.parallel.ChannelFactory;
-// import edu.unima.ky.parallel.Semaphore;
-// import edu.unima.ky.parallel.SocketChannel;
-
-
 /**
  * Groebner Base distributed algorithm. Implements a distributed memory parallel
  * version of Groebner bases. Using pairlist class, distributed tasks do
@@ -227,7 +222,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
 
         DistHashTable<Integer, GenPolynomial<C>> theList = new DistHashTable<Integer, GenPolynomial<C>>(
                 "localhost", DL_PORT);
-        ArrayList<GenPolynomial<C>> al = pairlist.getList();
+        List<GenPolynomial<C>> al = pairlist.getList();
         for (int i = 0; i < al.size(); i++) {
             // no wait required
             GenPolynomial<C> nn = theList.put(new Integer(i), al.get(i));
