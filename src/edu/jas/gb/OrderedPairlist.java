@@ -114,7 +114,7 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
      */
     @Override
     public String toString() {
-        StringBuffer s = new StringBuffer("OrderedPairlist(");
+        StringBuffer s = new StringBuffer(this.getClass().getSimpleName() + "(");
         //s.append("polys="+P.size());
         s.append("#put="+putCount);
         s.append(", #rem="+remCount);
@@ -199,8 +199,9 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
             Map.Entry<ExpVector,LinkedList<Pair<C>>> me = ip.next();
             ExpVector g =  me.getKey();
             LinkedList<Pair<C>> xl = me.getValue();
-            if ( logger.isInfoEnabled() )
+            if ( logger.isInfoEnabled() ) {
                 logger.info("g  = " + g);
+            }
             pair = null;
             while ( !c && xl.size() > 0 ) {
                 pair = xl.removeFirst();
