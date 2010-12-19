@@ -220,9 +220,8 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
                G.add( p );
                G2F.add( row );
                if ( pairlist == null ) {
-                  pairlist = strategy.create( modv, p.ring );
                   //pairlist = new OrderedPairlist<C>( modv, p.ring );
-                  //pairlist = new CriticalPairList<C>( modv, p.ring );
+                  pairlist = strategy.create( modv, p.ring );
                   if ( ! p.ring.coFac.isField() ) {
                      throw new RuntimeException("coefficients not from a field");
                   }

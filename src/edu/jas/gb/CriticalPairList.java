@@ -24,17 +24,17 @@ import edu.jas.structure.RingElem;
  * Critical pair list management.
  * Makes some effort to produce the same sequence of critical pairs 
  * as in the sequential case, when used in parallel.
- * However already reduced pairs are not rereduced if new
+ * However already reduced pairs are not re-reduced if new
  * polynomials appear.
- * Implemented using GenPolynomial, TreeSet and BitSet.
+ * Implemented using GenPolynomial, SortedSet / TreeSet and BitSet.
  * @author Heinz Kredel
  */
 
 public class CriticalPairList<C extends RingElem<C>> extends OrderedPairlist<C> {
 
-    private final SortedSet< CriticalPair<C> > pairlist; // hide super
+    protected final SortedSet< CriticalPair<C> > pairlist; // hide super
 
-    private int recordCount;
+    protected int recordCount;
 
     private static final Logger logger = Logger.getLogger(CriticalPairList.class);
 
@@ -64,7 +64,7 @@ public class CriticalPairList<C extends RingElem<C>> extends OrderedPairlist<C> 
      */
     public CriticalPairList(int m, GenPolynomialRing<C> r) {
         super(m,r);
-        Comparator< CriticalPair<C> > cpc; 
+        Comparator< AbstractPair<C> > cpc; 
         cpc = new CriticalPairComparator<C>( ring.tord ); 
         pairlist = new TreeSet< CriticalPair<C> >( cpc );
         recordCount = 0;

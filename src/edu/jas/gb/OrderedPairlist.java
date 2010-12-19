@@ -79,8 +79,7 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
         moduleVars = m;
         ring = r;
         P = new ArrayList<GenPolynomial<C>>();
-        pairlist = new TreeMap<ExpVector,LinkedList<Pair<C>>>( 
-                                                              ring.tord.getAscendComparator() );
+        pairlist = new TreeMap<ExpVector,LinkedList<Pair<C>>>( ring.tord.getAscendComparator() );
         //pairlist = new TreeMap( to.getSugarComparator() );
         red = new ArrayList<BitSet>();
         putCount = 0;

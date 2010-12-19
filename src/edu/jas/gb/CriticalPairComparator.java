@@ -11,7 +11,6 @@ import edu.jas.structure.RingElem;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.TermOrder;
-//import edu.jas.poly.GenPolynomial;
 
 
 /**
@@ -21,7 +20,7 @@ import edu.jas.poly.TermOrder;
  * @author Heinz Kredel.
  */
 public class CriticalPairComparator<C extends RingElem<C> > 
-             implements Serializable, Comparator<CriticalPair<C>> {
+             implements Serializable, Comparator<AbstractPair<C>> {
 
 
     public final TermOrder tord;
@@ -45,7 +44,7 @@ public class CriticalPairComparator<C extends RingElem<C> >
      * @param p2 second critical pair.
      * @return 0 if ( p1 == p2 ), -1 if ( p1 < p2 ) and +1 if ( p1 > p2 ).
      */
-    public int compare(CriticalPair<C> p1, CriticalPair<C> p2) {
+    public int compare(AbstractPair<C> p1, AbstractPair<C> p2) {
         int s = ec.compare( p1.e, p2.e );
         if ( s == 0 ) {
             /* not ok  
