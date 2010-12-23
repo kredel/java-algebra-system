@@ -155,7 +155,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
         List<GenSolvablePolynomial<C>> G = new ArrayList<GenSolvablePolynomial<C>>();
         List<List<GenSolvablePolynomial<C>>> F2G = new ArrayList<List<GenSolvablePolynomial<C>>>();
         List<List<GenSolvablePolynomial<C>>> G2F = new ArrayList<List<GenSolvablePolynomial<C>>>();
-        CriticalPairList<C> pairlist = null; 
+        PairList<C> pairlist = null; 
         boolean oneInGB = false;
         int len = F.size();
 
@@ -199,7 +199,8 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
                G.add( p );
                G2F.add( row );
                if ( pairlist == null ) {
-                  pairlist = new CriticalPairList<C>( modv, p.ring );
+                   //pairlist = new CriticalPairList<C>( modv, p.ring );
+                   pairlist = strategy.create( modv, p.ring );
                }
                // putOne not required
                pairlist.put( p );
@@ -226,7 +227,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
            return exgb;
         }
 
-        CriticalPair<C> pair;
+        Pair<C> pair;
         int i, j;
         GenSolvablePolynomial<C> pi;
         GenSolvablePolynomial<C> pj;
@@ -235,10 +236,10 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
         GenSolvablePolynomial<C> y;
         //GenPolynomial<C> z;
         while ( pairlist.hasNext() && ! oneInGB ) {
-              pair = pairlist.getNext();
+              pair = pairlist.removeNext();
               if ( pair == null ) { 
-                 pairlist.update(); // ?
-                 continue; 
+		  //pairlist.update(); // ?
+                  continue; 
               }
               i = pair.i; 
               j = pair.j; 
@@ -259,9 +260,10 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
                              + sred.isLeftReductionNF( rows, G, ring.getZERO(), S ) );
               }
               if ( S.isZERO() ) {
-                 pairlist.update( pair, S );
-                 // do not add to G2F
-                 continue;
+                  pair.setZero();
+		  //pairlist.update( pair, S );
+                  // do not add to G2F
+                  continue;
               }
               if ( debug ) {
                  logger.debug("ht(S) = " + S.leadingExpVector() );
@@ -278,9 +280,10 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
                               + sred.isLeftReductionNF( rowh, G, S, H ) );
               }
               if ( H.isZERO() ) {
-                 pairlist.update( pair, H );
-                 // do not add to G2F
-                 continue;
+                  pair.setZero();
+		  //pairlist.update( pair, H );
+                  // do not add to G2F
+                  continue;
               }
               if ( debug ) {
                  logger.debug("ht(H) = " + H.leadingExpVector() );
@@ -331,7 +334,8 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
                  logger.debug("H = " + H );
               }
               G.add( H );
-              pairlist.update( pair, H );
+              //pairlist.update( pair, H );
+              pairlist.put(H);
               G2F.add( row );
         }
         if ( debug ) {
