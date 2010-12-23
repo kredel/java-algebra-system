@@ -194,7 +194,7 @@ public class GroebnerBaseSeqTest extends TestCase {
      * Test sequential extended GBase.
      * 
      */
-    public void xtestSeqPairSequentialExtendedGBase() {
+    public void testSequentialExtendedGBase() {
 
         L = new ArrayList<GenPolynomial<BigRational>>();
 
@@ -260,7 +260,7 @@ public class GroebnerBaseSeqTest extends TestCase {
      * 
      */
     @SuppressWarnings("unchecked") 
-    public void xtestTrinks7ExtendedGBase() {
+    public void testTrinks7ExtendedGBase() {
         String exam = "(B,S,T,Z,P,W) L "
             + "( "  
             + "( 45 P + 35 S - 165 B - 36 ), " 
@@ -455,6 +455,7 @@ public class GroebnerBaseSeqTest extends TestCase {
         G = bbs.GB( L );
         assertTrue("isGB( { a, b, c, d, e } )", bbs.isGB(G) );
     }
+
 }
 
 
