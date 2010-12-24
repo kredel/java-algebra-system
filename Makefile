@@ -293,10 +293,10 @@ tests:
 	ant exam 2>&1 | tee e.out
 	find examples -name "*.py"|grep -v jas.py |grep -v plot|grep -v versuch|sort|xargs -L 1 echo "time jython" | awk '{ printf "echo %s\n", $$0; printf "%s\n", $$0 }' > ./all_jython.sh
 	time bash all_jython.sh 2>&1 | tee tj.out
-	make edu.jas.gb.RunGB cl="seq  examples/trinks6.jas"   | tee tr.out
-	make edu.jas.gb.RunGB cl="seq+ examples/trinks6.jas"   | tee -a tr.out
-	make edu.jas.gb.RunGB cl="par  examples/trinks6.jas 4" | tee -a tr.out
-	make edu.jas.gb.RunGB cl="par+ examples/trinks6.jas 4" | tee -a tr.out
+	make edu.jas.application.RunGB cl="seq  examples/trinks6.jas"   | tee tr.out
+	make edu.jas.application.RunGB cl="seq+ examples/trinks6.jas"   | tee -a tr.out
+	make edu.jas.application.RunGB cl="par  examples/trinks6.jas 4" | tee -a tr.out
+	make edu.jas.application.RunGB cl="par+ examples/trinks6.jas 4" | tee -a tr.out
 	-grep FAIL t.out
 	-grep Exception e.out | grep -v GCDProxy
 	-grep File tj.out
