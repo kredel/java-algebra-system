@@ -16,10 +16,6 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigRational;
-import edu.jas.gbufd.CReductionSeq;
-import edu.jas.gbufd.ColorPolynomial;
-import edu.jas.gbufd.ColoredSystem;
-import edu.jas.gbufd.Condition;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;

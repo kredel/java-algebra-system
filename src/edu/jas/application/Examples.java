@@ -22,8 +22,6 @@ import edu.jas.arith.Product;
 import edu.jas.arith.ProductRing;
 import edu.jas.gb.GBFactory;
 import edu.jas.gb.GroebnerBase;
-import edu.jas.gbufd.ComprehensiveGroebnerBaseSeq;
-import edu.jas.gbufd.GroebnerSystem;
 import edu.jas.gbufd.RGroebnerBasePseudoSeq;
 import edu.jas.gbufd.RReductionSeq;
 import edu.jas.kern.ComputerThreads;

@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.gbufd;
+package edu.jas.application;
 
 
 import java.util.List;

@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.gbufd;
+package edu.jas.application;
 
 
 import java.io.Serializable;
@@ -12,7 +12,8 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.application.Ideal;
+import edu.jas.gbufd.MultiplicativeSet;
+import edu.jas.gbufd.MultiplicativeSetSquarefree;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;

@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.gbufd;
+package edu.jas.application;
 
 
 import java.util.ArrayList;
@@ -10,10 +10,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.application.Ideal;
-import edu.jas.application.PolyUtilApp;
-import edu.jas.application.Residue;
-import edu.jas.application.ResidueRing;
 import edu.jas.gb.GBFactory;
 import edu.jas.gb.GroebnerBase;
 import edu.jas.poly.ExpVector;

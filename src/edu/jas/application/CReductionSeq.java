@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.gbufd;
+package edu.jas.application;
 
 
 import java.util.ArrayList;
@@ -13,7 +13,6 @@ import java.util.Collections;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.gbufd.Condition.Color;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
