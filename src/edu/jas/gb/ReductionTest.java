@@ -21,6 +21,10 @@ import edu.jas.arith.BigRational;
 import edu.jas.arith.BigComplex;
 import edu.jas.arith.Product;
 import edu.jas.arith.ProductRing;
+import edu.jas.gbufd.PseudoReductionEntry;
+import edu.jas.gbufd.PseudoReductionSeq;
+import edu.jas.gbufd.RPseudoReductionSeq;
+import edu.jas.gbufd.RReductionSeq;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;

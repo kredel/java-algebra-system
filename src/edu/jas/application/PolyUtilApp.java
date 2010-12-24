@@ -23,6 +23,8 @@ import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.Product;
 import edu.jas.arith.ProductRing;
 import edu.jas.arith.Rational;
+import edu.jas.gbufd.ColoredSystem;
+import edu.jas.gbufd.GroebnerSystem;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.Complex;
