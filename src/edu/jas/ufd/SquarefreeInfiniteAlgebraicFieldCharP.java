@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 import edu.jas.gb.Reduction;
 import edu.jas.gb.ReductionSeq;
 import edu.jas.gb.GroebnerBaseAbstract;
-import edu.jas.gbufd.GBFactory;
+import edu.jas.gb.GroebnerBaseSeq;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.ExpVector;
@@ -220,7 +220,7 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>> ext
         // solve system of equations and construct result
         Reduction<C> red = new ReductionSeq<C>();
         gl = red.irreducibleSet(gl);
-        GroebnerBaseAbstract<C> bb = GBFactory.<C>getImplementation();
+        GroebnerBaseAbstract<C> bb = new GroebnerBaseSeq<C>(); //GBFactory.<C>getImplementation();
         //Ideal<C> L = new Ideal<C>(ppfac, gl, true);
         int z = bb.commonZeroTest(gl);
         if (z < 0) { // no solution
