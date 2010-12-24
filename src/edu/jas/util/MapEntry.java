@@ -53,7 +53,7 @@ public class MapEntry<K,V> implements Map.Entry<K,V> {
     /**
      * Set the value.
      * Is not implemented.
-     * @see java.util.Map.Entry#setValue(V)
+     * @see java.util.Map.Entry#setValue()
      */
     public V setValue(V value) {
         throw new UnsupportedOperationException("not implemented");

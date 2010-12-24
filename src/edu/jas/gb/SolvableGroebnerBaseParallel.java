@@ -111,7 +111,6 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>>
      * @param threads number of threads to use.
      * @param pool ThreadPool to use.
      * @param sred parallelism aware reduction engine
-     * @param pl pair selection strategy
      */
     public SolvableGroebnerBaseParallel(int threads, ThreadPool pool, 
                                         SolvableReduction<C> sred) {
