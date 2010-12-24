@@ -30,14 +30,14 @@ from edu.jas.gb          import DGroebnerBaseSeq, EGroebnerBaseSeq,\
                                 ReductionSeq, GroebnerBaseSeqPairParallel,\
                                 SolvableGroebnerBaseParallel, SolvableGroebnerBaseSeq
 from edu.jas.gbufd       import GroebnerBasePseudoRecSeq, GroebnerBasePseudoSeq,\
-                                RGroebnerBasePseudoSeq, RGroebnerBaseSeq, RReductionSeq,\
-                                ComprehensiveGroebnerBaseSeq
+                                RGroebnerBasePseudoSeq, RGroebnerBaseSeq, RReductionSeq
 from edu.jas.gbmod       import ModGroebnerBaseAbstract, ModSolvableGroebnerBaseAbstract,\
                                 SolvableSyzygyAbstract, SyzygyAbstract
 from edu.jas.vector      import OrderedModuleList, ModuleList, GenVector, GenVectorModul,\
                                 GenMatrix, GenMatrixRing
 from edu.jas.application import PolyUtilApp, Residue, ResidueRing, Ideal,\
-                                Local, LocalRing, IdealWithRealAlgebraicRoots
+                                Local, LocalRing, IdealWithRealAlgebraicRoots,\
+                                ComprehensiveGroebnerBaseSeq
 from edu.jas.kern        import ComputerThreads, StringUtil
 from edu.jas.ufd         import GreatestCommonDivisor, PolyUfdUtil, GCDFactory,\
                                 FactorFactory, SquarefreeFactory, Quotient, QuotientRing
