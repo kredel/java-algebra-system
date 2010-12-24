@@ -214,7 +214,7 @@
 <target name="exam" depends="compile" >
   <java classname="edu.jas.poly.Examples" classpath="${cp}" fork="yes" args="1" />
   <java classname="edu.jas.vector.Examples" classpath="${cp}" fork="yes" args="1" />
-  <java classname="edu.jas.gb.Examples" classpath="${cp}" fork="yes" args="1" />
+  <java classname="edu.jas.gbufd.Examples" classpath="${cp}" fork="yes" args="1" />
   <java classname="edu.jas.ps.Examples" classpath="${cp}" fork="yes" args="1" />
   <java classname="edu.jas.ps.ExamplesMulti" classpath="${cp}" fork="yes" args="1" />
   <java classname="edu.jas.ufd.Examples" classpath="${cp}" fork="yes" args="1" />

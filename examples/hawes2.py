@@ -18,7 +18,7 @@
 
 import sys;
 
-from jas import Ring
+from jas import Ring, PolyRing, QQ, ZZ, RF
 from jas import Ideal
 from jas import startLog
 from jas import terminate
@@ -28,7 +28,8 @@ from jas import terminate
 # Hawes & Gibson example 2
 # rational function coefficients
 
-r = Ring( "RatFunc(a, c, b) (y2, y1, z1, z2, x) G" );
+#r = Ring( "RatFunc(a, c, b) (y2, y1, z1, z2, x) G" );
+r = PolyRing( RF(PolyRing(ZZ(),"a, c, b",PolyRing.lex)), "y2, y1, z1, z2, x", PolyRing.grad );
 print "Ring: " + str(r);
 print;
 

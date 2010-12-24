@@ -5,7 +5,7 @@
 
 import sys;
 
-from jas import Ring
+from jas import Ring, PolyRing, RF, ZZ, ZM
 from jas import Ideal
 from jas import startLog
 from jas import terminate
@@ -16,7 +16,9 @@ from jas import terminate
 # integral function coefficients
 
 #r = Ring( "IntFunc(a1,a2,a3,b1,b2,b3,c1,c2,c3,d1,d2,d3,e1,e2,e3) (t1,t2,t3) G" );
-r = Ring( "RatFunc(a1,a2,a3,b1,b2,b3,c1,c2,c3,d1,d2,d3,e1,e2,e3) (t1,t2,t3) G" );
+#r = Ring( "RatFunc(a1,a2,a3,b1,b2,b3,c1,c2,c3,d1,d2,d3,e1,e2,e3) (t1,t2,t3) G" );
+r = PolyRing( RF(PolyRing(ZZ(),"a1,a2,a3,b1,b2,b3,c1,c2,c3,d1,d2,d3,e1,e2,e3",PolyRing.lex)), "t1,t2,t3", PolyRing.grad );
+#r = PolyRing( RF(PolyRing(ZM(163),"a1,a2,a3,b1,b2,b3,c1,c2,c3,d1,d2,d3,e1,e2,e3",PolyRing.lex)), "t1,t2,t3", PolyRing.grad );
 print "Ring: " + str(r);
 print;
 
@@ -40,7 +42,7 @@ print;
 
 sys.exit();
 
-#startLog();
+startLog();
 
 rg = f.GB();
 #rg = f.GB();
