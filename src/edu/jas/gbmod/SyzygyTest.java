@@ -18,8 +18,8 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigRational;
-import edu.jas.gb.GBFactory;
 import edu.jas.gb.GroebnerBase;
+import edu.jas.gbufd.GBFactory;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;

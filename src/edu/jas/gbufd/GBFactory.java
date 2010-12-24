@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.gb;
+package edu.jas.gbufd;
 
 
 import org.apache.log4j.Logger;
@@ -15,10 +15,13 @@ import edu.jas.arith.ModLong;
 import edu.jas.arith.ModLongRing;
 import edu.jas.arith.Product;
 import edu.jas.arith.ProductRing;
-import edu.jas.gbufd.GroebnerBasePseudoRecSeq;
-import edu.jas.gbufd.GroebnerBasePseudoSeq;
-import edu.jas.gbufd.RGroebnerBasePseudoSeq;
-import edu.jas.gbufd.RGroebnerBaseSeq;
+import edu.jas.gb.DGroebnerBaseSeq;
+import edu.jas.gb.EGroebnerBaseSeq;
+import edu.jas.gb.GBProxy;
+import edu.jas.gb.GroebnerBase;
+import edu.jas.gb.GroebnerBaseAbstract;
+import edu.jas.gb.GroebnerBaseParallel;
+import edu.jas.gb.GroebnerBaseSeq;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;

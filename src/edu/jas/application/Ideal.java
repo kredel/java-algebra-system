@@ -19,9 +19,9 @@ import java.util.TreeMap;
 import org.apache.log4j.Logger;
 
 import edu.jas.gb.ExtendedGB;
-import edu.jas.gb.GBFactory;
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.Reduction;
+import edu.jas.gbufd.GBFactory;
 import edu.jas.gbufd.GroebnerBasePartial;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;

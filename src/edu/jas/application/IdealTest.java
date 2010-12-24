@@ -17,7 +17,7 @@ import org.apache.log4j.BasicConfigurator;
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
 import edu.jas.gb.GroebnerBase;
-import edu.jas.gb.GBFactory;
+import edu.jas.gbufd.GBFactory;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.Complex;
 import edu.jas.poly.ComplexRing;

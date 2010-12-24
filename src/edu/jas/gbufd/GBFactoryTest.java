@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.gb;
+package edu.jas.gbufd;
 
 
 //import java.util.Map;
@@ -20,10 +20,10 @@ import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.Product;
 import edu.jas.arith.ProductRing;
-import edu.jas.gbufd.GroebnerBasePseudoRecSeq;
-import edu.jas.gbufd.GroebnerBasePseudoSeq;
-import edu.jas.gbufd.RGroebnerBasePseudoSeq;
-import edu.jas.gbufd.RGroebnerBaseSeq;
+import edu.jas.gb.GBProxy;
+import edu.jas.gb.GroebnerBase;
+import edu.jas.gb.GroebnerBaseAbstract;
+import edu.jas.gb.GroebnerBaseSeq;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;

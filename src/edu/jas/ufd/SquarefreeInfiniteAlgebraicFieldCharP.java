@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 import edu.jas.gb.Reduction;
 import edu.jas.gb.ReductionSeq;
 import edu.jas.gb.GroebnerBaseAbstract;
-import edu.jas.gb.GBFactory;
+import edu.jas.gbufd.GBFactory;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.ExpVector;

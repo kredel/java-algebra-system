@@ -14,10 +14,10 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import edu.jas.gb.ExtendedGB;
-import edu.jas.gb.GBFactory;
 import edu.jas.gb.GroebnerBase;
 import edu.jas.gb.Reduction;
 import edu.jas.gb.ReductionSeq;
+import edu.jas.gbufd.GBFactory;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;

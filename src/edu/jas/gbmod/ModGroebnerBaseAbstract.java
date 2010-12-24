@@ -7,8 +7,8 @@ package edu.jas.gbmod;
 
 import java.util.List;
 
-import edu.jas.gb.GBFactory;
 import edu.jas.gb.GroebnerBase;
+import edu.jas.gbufd.GBFactory;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.PolynomialList;
 import edu.jas.structure.GcdRingElem;
