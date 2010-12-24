@@ -221,7 +221,6 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>> ext
         Reduction<C> red = new ReductionSeq<C>();
         gl = red.irreducibleSet(gl);
         GroebnerBaseAbstract<C> bb = new GroebnerBaseSeq<C>(); //GBFactory.<C>getImplementation();
-        //Ideal<C> L = new Ideal<C>(ppfac, gl, true);
         int z = bb.commonZeroTest(gl);
         if (z < 0) { // no solution
             return null;

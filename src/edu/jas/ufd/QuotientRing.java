@@ -268,7 +268,13 @@ public class QuotientRing<C extends GcdRingElem<C>> implements RingFactory<Quoti
      */
     @Override
     public String toString() {
-        return "Quotient[ " + ring.toString() + " ]";
+        String s = null;
+        if ( ring.coFac.characteristic().signum() == 0 ) {
+            s = "RatFunc";
+	} else {
+            s = "ModFunc";
+	}
+        return s + "( " + ring.toString() + " )";
     }
 
 
