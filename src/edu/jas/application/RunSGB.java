@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.gb;
+package edu.jas.application;
 
 
 import java.io.FileNotFoundException;
@@ -13,6 +13,13 @@ import java.util.List;
 
 import org.apache.log4j.BasicConfigurator;
 
+import edu.jas.gb.SolvableGroebnerBase;
+import edu.jas.gb.SolvableGroebnerBaseParallel;
+import edu.jas.gb.SolvableGroebnerBaseSeq;
+import edu.jas.gb.SolvableGroebnerBaseSeqPairParallel;
+import edu.jas.gb.SolvableReduction;
+import edu.jas.gb.SolvableReductionPar;
+import edu.jas.gb.SolvableReductionSeq;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.PolynomialList;
