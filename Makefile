@@ -145,6 +145,9 @@ edu/jas/vector/%.class: src/edu/jas/vector/%.java
 edu/jas/gbmod/%.class: src/edu/jas/gbmod/%.java
 	$(JAVAC) $<
 
+edu/jas/gbufd/%.class: src/edu/jas/gbufd/%.java
+	$(JAVAC) $<
+
 edu/jas/structure/%.class: src/edu/jas/structure/%.java
 	$(JAVAC) $<
 
@@ -166,7 +169,6 @@ edu/jas/integrate/%.class: src/edu/jas/integrate/%.java
 edu/mas/kern/%.class: src/edu/mas/kern/%.java
 	$(JAVAC) $<
 
-
 edu.jas.%: edu/jas/%.class
 	$(JAVA) $@ $(cl)
 
@@ -183,6 +185,9 @@ edu.jas.gb.%: edu/jas/gb/%.class
 	$(JAVA) $@ $(cl)
 
 edu.jas.ufd.%: edu/jas/ufd/%.class
+	$(JAVA) $@ $(cl)
+
+edu.jas.gbufd.%: edu/jas/gbufd/%.class
 	$(JAVA) $@ $(cl)
 
 edu.jas.vector.%: edu/jas/vector/%.class
@@ -297,6 +302,9 @@ tests:
 	-grep File tj.out
 	-grep Exception tr.out || grep Usage tr.out
 
+metrics:
+	ant jdepend
+	../java/javancss-32.53/bin/javancss -all -recursive -out test/javanccs-`date +%Y-%m-%d`.out src
 
 #svn copy file:///$(SVNREPO)/jas/trunk file:///$(SVNREPO)/jas/tags/$(VERSION)
 
