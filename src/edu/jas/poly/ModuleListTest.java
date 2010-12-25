@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.vector;
+package edu.jas.poly;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -15,10 +15,6 @@ import junit.framework.TestSuite;
 
 import edu.jas.arith.BigRational;
 
-import edu.jas.poly.PolynomialList;
-import edu.jas.poly.TermOrder;
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
 
 
 

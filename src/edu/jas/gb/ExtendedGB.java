@@ -9,9 +9,9 @@ import java.util.List;
 import edu.jas.structure.RingElem;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.ModuleList;
 import edu.jas.poly.PolynomialList;
 
-import edu.jas.vector.ModuleList;
 
 
 /**

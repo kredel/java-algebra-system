@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.vector;
+package edu.jas.poly;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -13,12 +13,9 @@ import org.apache.log4j.Logger;
 
 //import edu.jas.structure.RingFactory;
 import edu.jas.structure.RingElem;
+import edu.jas.vector.GenVector;
+import edu.jas.vector.GenVectorModul;
 
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.PolynomialList;
-import edu.jas.poly.GenSolvablePolynomial;
-import edu.jas.poly.GenSolvablePolynomialRing;
 
 
 /**

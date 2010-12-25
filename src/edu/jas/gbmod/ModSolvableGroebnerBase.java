@@ -7,9 +7,9 @@ package edu.jas.gbmod;
 import java.util.List;
 
 import edu.jas.poly.GenSolvablePolynomial;
+import edu.jas.poly.ModuleList;
 import edu.jas.structure.RingElem;
 
-import edu.jas.vector.ModuleList;
 
 
 /**

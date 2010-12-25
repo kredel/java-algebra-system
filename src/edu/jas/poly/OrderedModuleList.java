@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.vector;
+package edu.jas.poly;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -12,9 +12,6 @@ import java.util.Comparator;
 //import edu.jas.structure.RingFactory;
 import edu.jas.structure.RingElem;
 
-import edu.jas.poly.ExpVector;
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
 
 
 

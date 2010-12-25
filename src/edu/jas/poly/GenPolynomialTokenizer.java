@@ -27,8 +27,6 @@ import edu.jas.arith.ModIntegerRing;
 import edu.jas.structure.Power;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
-import edu.jas.vector.ModuleList;
-import edu.jas.vector.OrderedModuleList;
 
 
 /**

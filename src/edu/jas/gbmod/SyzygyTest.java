@@ -23,9 +23,9 @@ import edu.jas.gbufd.GBFactory;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
+import edu.jas.poly.ModuleList;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
-import edu.jas.vector.ModuleList;
 
 
 /**

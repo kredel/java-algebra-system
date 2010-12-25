@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
+import edu.jas.poly.ModuleList;
 import edu.jas.structure.RingElem;
 
 

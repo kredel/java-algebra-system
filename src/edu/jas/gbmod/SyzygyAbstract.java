@@ -21,13 +21,13 @@ import edu.jas.gbufd.GBFactory;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.ModuleList;
 import edu.jas.poly.PolynomialList;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingElem;
 import edu.jas.vector.BasicLinAlg;
 import edu.jas.vector.GenVector;
 import edu.jas.vector.GenVectorModul;
-import edu.jas.vector.ModuleList;
 
 
 /**

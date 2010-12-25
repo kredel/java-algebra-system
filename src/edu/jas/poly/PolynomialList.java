@@ -24,7 +24,6 @@ import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenSolvablePolynomialRing;
 
-import edu.jas.vector.ModuleList;
 
 
 /**
@@ -223,7 +222,7 @@ public class PolynomialList<C extends RingElem<C> >
     /**
      * Get ModuleList from PolynomialList.
      * Extract module from polynomial ring. 
-     * @see edu.jas.vector.ModuleList
+     * @see edu.jas.poly.ModuleList
      * @param i number of variables to be contract form the polynomials.
      * @return module list corresponding to this.
      */

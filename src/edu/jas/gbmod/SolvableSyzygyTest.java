@@ -21,6 +21,7 @@ import edu.jas.arith.BigRational;
 import edu.jas.gb.SolvableGroebnerBase;
 import edu.jas.gb.SolvableGroebnerBaseSeq;
 
+import edu.jas.poly.ModuleList;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.GenPolynomialTokenizer;
@@ -30,7 +31,6 @@ import edu.jas.poly.WeylRelations;
 import edu.jas.poly.RelationTable;
 
 
-import edu.jas.vector.ModuleList;
 
 
 /**
