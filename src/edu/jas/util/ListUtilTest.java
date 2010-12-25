@@ -13,9 +13,6 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import edu.jas.arith.BigInteger;
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.TermOrder;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.UnaryFunctor;
 
@@ -24,7 +21,6 @@ import edu.jas.structure.UnaryFunctor;
  * ListUtil tests with JUnit.
  * @author Heinz Kredel.
  */
-
 public class ListUtilTest extends TestCase {
 
 
@@ -53,20 +49,6 @@ public class ListUtilTest extends TestCase {
     }
 
 
-    //private final static int bitlen = 100;
-
-    TermOrder to = new TermOrder(TermOrder.INVLEX);
-
-
-    GenPolynomialRing<BigInteger> dfac;
-
-
-    GenPolynomialRing<BigInteger> cfac;
-
-
-    GenPolynomialRing<GenPolynomial<BigInteger>> rfac;
-
-
     BigInteger ai;
 
 
@@ -82,70 +64,15 @@ public class ListUtilTest extends TestCase {
     BigInteger ei;
 
 
-    GenPolynomial<BigInteger> a;
-
-
-    GenPolynomial<BigInteger> b;
-
-
-    GenPolynomial<BigInteger> c;
-
-
-    GenPolynomial<BigInteger> d;
-
-
-    GenPolynomial<BigInteger> e;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> ar;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> br;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> cr;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> dr;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> er;
-
-
-    int rl = 5;
-
-
-    int kl = 5;
-
-
-    int ll = 5;
-
-
-    int el = 3;
-
-
-    float q = 0.3f;
-
-
     @Override
     protected void setUp() {
-        a = b = c = d = e = null;
         ai = bi = ci = di = ei = null;
-        ar = br = cr = dr = er = null;
-        dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), rl, to);
-        cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), rl - 1, to);
-        rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac, 1, to);
     }
 
 
     @Override
     protected void tearDown() {
-        a = b = c = d = e = null;
         ai = bi = ci = di = ei = null;
-        ar = br = cr = dr = er = null;
-        dfac = null;
-        cfac = null;
-        rfac = null;
     }
 
 
@@ -163,16 +90,6 @@ public class ListUtilTest extends TestCase {
         List<BigInteger> nl;
         nl = ListUtil.<BigInteger, BigInteger> map(list, new Multiply<BigInteger>(bi));
         assertEquals("list == nl ", list, nl);
-
-        List<GenPolynomial<BigInteger>> plist = new ArrayList<GenPolynomial<BigInteger>>();
-        for (int i = 0; i < 10; i++) {
-            plist.add(dfac.random(7));
-        }
-        b = dfac.getONE();
-        List<GenPolynomial<BigInteger>> pnl;
-        pnl = ListUtil.<GenPolynomial<BigInteger>, GenPolynomial<BigInteger>> map(plist,
-                new Multiply<GenPolynomial<BigInteger>>(b));
-        assertEquals("plist == pnl ", plist, pnl);
     }
 
 

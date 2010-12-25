@@ -218,9 +218,8 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
                 logger.info("new center = " + center);
             }
             try {
-                Complex<C>[] cp = (Complex<C>[]) ArrayUtil.copyOfComplex(rect.corners, 4);
+                Complex<C>[] cp = (Complex<C>[]) ArrayUtil.<Complex<C>> copyOf(rect.corners, 4);
                     // (Complex<C>[]) new Complex[4];  cp[0] = rect.corners[0];
-                    // ArrayUtil.<Complex<C>> copyOf(rect.corners, 4);
                 // cp[0] fix
                 cp[1] = new Complex<C>(cr, cp[1].getRe(), center.getIm());
                 cp[2] = center;
@@ -231,8 +230,7 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
                 //System.out.println("#nwr = " + nwr.size()); 
                 roots.addAll(nwr);
 
-                cp = (Complex<C>[]) ArrayUtil.copyOfComplex(rect.corners, 4);
-                //(Complex<C>[]) ArrayUtil.<Complex<C>> copyOf(rect.corners, 4);
+                cp = (Complex<C>[]) ArrayUtil.<Complex<C>> copyOf(rect.corners, 4);
                 cp[0] = new Complex<C>(cr, cp[0].getRe(), center.getIm());
                 // cp[1] fix
                 cp[2] = new Complex<C>(cr, center.getRe(), cp[2].getIm());
@@ -243,8 +241,7 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
                 //System.out.println("#swr = " + swr.size()); 
                 roots.addAll(swr);
 
-                cp = (Complex<C>[]) ArrayUtil.copyOfComplex(rect.corners, 4);
-                // (Complex<C>[]) ArrayUtil.<Complex<C>> copyOf(rect.corners, 4);
+                cp = (Complex<C>[]) ArrayUtil.<Complex<C>> copyOf(rect.corners, 4);
                 cp[0] = center;
                 cp[1] = new Complex<C>(cr, center.getRe(), cp[1].getIm());
                 // cp[2] fix
@@ -255,8 +252,7 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
                 //System.out.println("#ser = " + ser.size()); 
                 roots.addAll(ser);
 
-                cp = (Complex<C>[]) ArrayUtil.copyOfComplex(rect.corners, 4);
-                // (Complex<C>[]) ArrayUtil.<Complex<C>> copyOf(rect.corners, 4);
+                cp = (Complex<C>[]) ArrayUtil.<Complex<C>> copyOf(rect.corners, 4);
                 cp[0] = new Complex<C>(cr, center.getRe(), cp[0].getIm());
                 cp[1] = center;
                 cp[2] = new Complex<C>(cr, cp[2].getRe(), center.getIm());

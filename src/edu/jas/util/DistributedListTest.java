@@ -13,16 +13,6 @@ import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
 
-/*
-import edu.jas.arith.BigComplex;
-import edu.jas.arith.BigInteger;
-import edu.jas.arith.BigQuaternion;
-import edu.jas.arith.BigRational;
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
-import edu.jas.structure.RingElem;
-*/
-
 
 /**
  * DistributedList tests with JUnit.
@@ -191,111 +181,6 @@ public class DistributedListTest extends TestCase {
             assertEquals("l1(i)==(i)", x, p );
         }
     }
-
-/**
- * Tests DistributedLists with BigInteger, BigRational etc.
- public void testDistributedList4() {
-     l1 = new DistributedList(host);
-     assertTrue("l1==empty",l1.isEmpty());
-     l2 = new DistributedList(host);
-     assertTrue("l2==empty",l2.isEmpty());
-
-     RingElem<BigInteger> a = (new BigInteger()).random(kl);
-     l1.add( a );
-     assertTrue("#l1==i", l1.size() == 1 );
-
-     RingElem<BigRational> b = (new BigRational()).random(kl);
-     l1.add( b );
-     assertTrue("#l1==i", l1.size() == 2 );
-
-     RingElem<BigComplex> c = (new BigComplex()).random(kl);
-     l1.add( c );
-     assertTrue("#l1==i", l1.size() == 3 );
-
-     RingElem<BigQuaternion> d = (new BigQuaternion()).random(kl);
-     l1.add( d );
-     assertTrue("#l1==i", l1.size() == 4 );
-
-     while ( l2.size() < l1.size() ) {
-         try {
-        System.out.print("4");
-             Thread.sleep(100);
-         } catch (InterruptedException e) {
-         }
-     }
-     Iterator ita = null;
-     ita = l1.iterator();
-     Iterator itb = null;
-     itb = l2.iterator();
-     // sequence of elements is not correct at moment
-     while ( ita.hasNext() && itb.hasNext() ) {
-      Object o = ita.next();
-      Object p = itb.next();
-      //System.out.println("o = " + o + " x = "+ x);
-           assertEquals("a==b", o, p );
-     }
-     assertTrue("#l1==#l210", l1.size() == l2.size() );
- }
- */
-
-
-/**
- * Tests DistributedLists with Polynomials.
- public void testDistributedList5() {
-     l1 = new DistributedList(host);
-     assertTrue("l1==empty",l1.isEmpty());
-     l2 = new DistributedList(host);
-     assertTrue("l2==empty",l2.isEmpty());
-
-     GenPolynomialRing<BigInteger> afac = new GenPolynomialRing<BigInteger>(
-                                                new BigInteger(), rl);
-     GenPolynomial<BigInteger> a = afac.random(ll); //, el, q);
-     l1.add( a );
-     assertTrue("#l1==i", l1.size() == 1 );
-
-
-     GenPolynomialRing<BigRational> bfac = new GenPolynomialRing<BigRational>(
-                                                new BigRational(), rl);
-     GenPolynomial<BigRational> b = bfac.random(ll); //, el, q);
-     l1.add( b );
-     assertTrue("#l1==i", l1.size() == 2 );
-
-
-     GenPolynomialRing<BigComplex> cfac = new GenPolynomialRing<BigComplex>(
-                                                new BigComplex(), rl);
-     GenPolynomial<BigComplex> c = cfac.random(ll); //, el, q);
-     l1.add( c );
-     assertTrue("#l1==i", l1.size() == 3 );
-
-
-     GenPolynomialRing<BigQuaternion> dfac = new GenPolynomialRing<BigQuaternion>(
-                                                new BigQuaternion(), rl);
-     GenPolynomial<BigQuaternion> d = dfac.random(ll); //, el, q);
-     l1.add( d );
-     assertTrue("#l1==i", l1.size() == 4 );
-
-
-     while ( l2.size() < l1.size() ) {
-         try {
-        System.out.print("5");
-             Thread.sleep(100);
-         } catch (InterruptedException e) {
-         }
-     }
-     Iterator ita = null;
-     ita = l1.iterator();
-     Iterator itb = null;
-     itb = l2.iterator();
-     // sequence of elements is not correct at moment
-     while ( ita.hasNext() && itb.hasNext() ) {
-      Object o = ita.next();
-      Object p = itb.next();
-      //System.out.println("o = " + o + " x = "+ x);
-           assertEquals("a==b", o, p );
-     }
-     assertTrue("#l1==#l210", l1.size() == l2.size() );
- }
- */
 
 
 /**
