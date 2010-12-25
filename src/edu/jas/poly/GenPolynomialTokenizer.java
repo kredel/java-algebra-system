@@ -27,18 +27,20 @@ import edu.jas.arith.ModIntegerRing;
 import edu.jas.structure.Power;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
-//import edu.jas.ufd.Quotient;
-//import edu.jas.ufd.QuotientRing;
 import edu.jas.vector.ModuleList;
 import edu.jas.vector.OrderedModuleList;
 
 
 /**
- * GenPolynomial Tokenizer. Used to read rational polynomials and lists from
- * input streams.
+ * GenPolynomial Tokenizer. Used to read rational polynomials and
+ * lists of polynomials from input streams. Arbitrary polynomial rings
+ * and coefficient rings can be read with RingFactoryTokenizer.
+ * <b>Note:</b> Can no more read QuotientRing since end of 2010,
+ * revision 3441.  Quotient coefficients and others can still be read
+ * if the respective factory is provided via the constructor.
+ * @see edu.jas.application.RingFactoryTokenizer
  * @author Heinz Kredel
  */
-
 public class GenPolynomialTokenizer {
 
 
@@ -70,10 +72,8 @@ public class GenPolynomialTokenizer {
     private RingFactory fac;
 
 
-    //private RingFactory<AlgebraicNumber<BigRational>> anfac;
-    //private RingFactory<AlgebraicNumber<ModInteger>>  gffac;
     private static enum coeffType {
-        BigRat, BigInt, ModInt, BigC, BigQ, BigD, ANrat, ANmod, RatFunc, ModFunc, IntFunc
+        BigRat, BigInt, ModInt, BigC, BigQ, BigD, ANrat, ANmod, IntFunc
     };
 
 
@@ -84,7 +84,7 @@ public class GenPolynomialTokenizer {
 
 
     private static enum polyType {
-        PolBigRat, PolBigInt, PolModInt, PolBigC, PolBigD, PolBigQ, PolANrat, PolANmod, PolRatFunc, PolModFunc, PolIntFunc
+        PolBigRat, PolBigInt, PolModInt, PolBigC, PolBigD, PolBigQ, PolANrat, PolANmod, PolIntFunc
     };
 
 
@@ -143,19 +143,10 @@ public class GenPolynomialTokenizer {
         //BasicConfigurator.configure();
         vars = null;
         tord = new TermOrder();
-        //in = r;
-        // table = rt;
         nvars = 1;
-        //if ( vars != null ) {
-        //    nvars = vars.length;
-        //}
-        //fac = null;
         fac = new BigRational(1);
 
-        //pfac = null;
         pfac = new GenPolynomialRing<BigRational>(fac, nvars, tord, vars);
-
-        //spfac = null;
         spfac = new GenSolvablePolynomialRing<BigRational>(fac, nvars, tord, vars);
 
         reader = r;
@@ -179,7 +170,7 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * initialize coefficient and polynomial factories.
+     * Initialize coefficient and polynomial factories.
      * @param rf ring factory.
      * @param ct coefficient type.
      */
@@ -213,14 +204,6 @@ public class GenPolynomialTokenizer {
             pfac = new GenPolynomialRing<BigDecimal>(fac, nvars, tord, vars);
             parsedPoly = polyType.PolBigD;
             break;
-//         case RatFunc:
-//             pfac = new GenPolynomialRing<Quotient<BigInteger>>(fac, nvars, tord, vars);
-//             parsedPoly = polyType.PolRatFunc;
-//             break;
-//         case ModFunc:
-//             pfac = new GenPolynomialRing<Quotient<ModInteger>>(fac, nvars, tord, vars);
-//             parsedPoly = polyType.PolModFunc;
-//             break;
         case IntFunc:
             pfac = new GenPolynomialRing<GenPolynomial<BigRational>>(fac, nvars, tord, vars);
             parsedPoly = polyType.PolIntFunc;
@@ -233,7 +216,7 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * initialize coefficient and solvable polynomial factories.
+     * Initialize polynomial and solvable polynomial factories.
      * @param rf ring factory.
      * @param ct coefficient type.
      */
@@ -267,17 +250,9 @@ public class GenPolynomialTokenizer {
             spfac = new GenSolvablePolynomialRing<BigDecimal>(fac, nvars, tord, vars);
             parsedPoly = polyType.PolBigD;
             break;
-//         case RatFunc:
-//             spfac = new GenSolvablePolynomialRing<Quotient<BigInteger>>(fac, nvars, tord, vars);
-//             parsedPoly = polyType.PolRatFunc;
-//             break;
-//         case ModFunc:
-//             spfac = new GenSolvablePolynomialRing<Quotient<ModInteger>>(fac, nvars, tord, vars);
-//             parsedPoly = polyType.PolModFunc;
-//             break;
         case IntFunc:
             spfac = new GenSolvablePolynomialRing<GenPolynomial<BigRational>>(fac, nvars, tord, vars);
-            parsedPoly = polyType.PolModFunc;
+            parsedPoly = polyType.PolIntFunc;
             break;
         default:
             spfac = new GenSolvablePolynomialRing<BigRational>(fac, nvars, tord, vars);
@@ -287,7 +262,7 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * parsing method for GenPolynomial. syntax ? (simple)
+     * Parsing method for GenPolynomial. syntax ? (simple)
      * @return the next polynomial.
      * @throws IOException
      */
@@ -337,32 +312,7 @@ public class GenPolynomialTokenizer {
             if (tt == StreamTokenizer.TT_EOF)
                 break;
             switch (tt) {
-            //             case '_': 
-            //                 logger.warn("use of underscore _ ... _ is deprecated, use braces { ... } instead ");
-            //                 StringBuffer cf = new StringBuffer();
-            //                 tt = tok.nextToken();
-            //                 //System.out.println("tt = " + tt );
-            //                 while ( tt != '_' ) {
-            //                     if ( tok.sval != null ) {
-            //                         if ( cf.length() > 0 && cf.charAt(cf.length()-1) != '.' ) {
-            //                             cf.append( " " );
-            //                         }
-            //                         cf.append( tok.sval ); // " " +  
-            //                     } else {
-            //                         cf.append( (char)tt );
-            //                     }
-            //                     tt = tok.nextToken();
-            //                 }
-            //                 //System.out.println("coeff_ = " + cf.toString() );
-            //                 r = (RingElem)fac.parse( cf.toString() );
-            //                 //System.out.println("r = " + r );
-            //                 if (debug) logger.debug("coeff " + r);
-            //                 b = b.multiply(r,leer); 
-            //                 tt = tok.nextToken();
-            //                 if (debug) logger.debug("tt,digit = " + tok);
-            //                 //no break;
-            //                 break;
-
+            // case '_': removed 
             case '{':
                 StringBuffer rf = new StringBuffer();
                 int level = 0;
@@ -461,9 +411,7 @@ public class GenPolynomialTokenizer {
                     //  System.out.println("ix: " + ix);
                     ie = nextExponent();
                     //  System.out.println("ie: " + ie);
-                    // r = BigRational.RNONE;
                     e = ExpVector.create(vars.length, ix, ie);
-                    //c = new GenPolynomial<BigRational>(r,e);
                     b = b.multiply(e);
                     tt = tok.nextToken();
                     if (debug)
@@ -529,7 +477,7 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * parsing method for exponent (of variable). syntax: ^long | **long.
+     * Parsing method for exponent (of variable). syntax: ^long | **long.
      * @return the next exponent or 1.
      * @throws IOException
      */
@@ -572,7 +520,7 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * parsing method for comments. syntax: (* comment *) | /_* comment *_/
+     * Parsing method for comments. syntax: (* comment *) | /_* comment *_/
      * without _ Does not work with this pushBack(), unused.
      */
     public String nextComment() throws IOException {
@@ -615,7 +563,7 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * parsing method for variable list. syntax: (a, b c, de) gives [ "a", "b",
+     * Parsing method for variable list. syntax: (a, b c, de) gives [ "a", "b",
      * "c", "de" ]
      * @return the next variable list.
      * @throws IOException
@@ -650,10 +598,9 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * parsing method for coefficient ring. syntax: Rat | Q | Int | Z | Mod
-     * modul | Complex | C | D | Quat | AN[ (var) ( poly ) | AN[ modul (var) (
-     * poly ) ] | RatFunc (var_list) | ModFunc modul (var_list) | IntFunc
-     * (var_list)
+     * Parsing method for coefficient ring. syntax: Rat | Q | Int | Z
+     * | Mod modul | Complex | C | D | Quat | AN[ (var) ( poly ) | AN[
+     * modul (var) ( poly ) ] | IntFunc (var_list)
      * @return the next coefficient factory.
      * @throws IOException
      */
@@ -667,36 +614,28 @@ public class GenPolynomialTokenizer {
             if (tok.sval.equalsIgnoreCase("Q")) {
                 coeff = new BigRational(0);
                 ct = coeffType.BigRat;
-            }
-            if (tok.sval.equalsIgnoreCase("Rat")) {
+            } else if (tok.sval.equalsIgnoreCase("Rat")) {
                 coeff = new BigRational(0);
                 ct = coeffType.BigRat;
-            }
-            if (tok.sval.equalsIgnoreCase("D")) {
+            } else if (tok.sval.equalsIgnoreCase("D")) {
                 coeff = new BigDecimal(0);
                 ct = coeffType.BigD;
-            }
-            if (tok.sval.equalsIgnoreCase("Z")) {
+            } else if (tok.sval.equalsIgnoreCase("Z")) {
                 coeff = new BigInteger(0);
                 ct = coeffType.BigInt;
-            }
-            if (tok.sval.equalsIgnoreCase("Int")) {
+            } else if (tok.sval.equalsIgnoreCase("Int")) {
                 coeff = new BigInteger(0);
                 ct = coeffType.BigInt;
-            }
-            if (tok.sval.equalsIgnoreCase("C")) {
+            } else if (tok.sval.equalsIgnoreCase("C")) {
                 coeff = new BigComplex(0);
                 ct = coeffType.BigC;
-            }
-            if (tok.sval.equalsIgnoreCase("Complex")) {
+            } else if (tok.sval.equalsIgnoreCase("Complex")) {
                 coeff = new BigComplex(0);
                 ct = coeffType.BigC;
-            }
-            if (tok.sval.equalsIgnoreCase("Quat")) {
+            } else if (tok.sval.equalsIgnoreCase("Quat")) {
                 coeff = new BigQuaternion(0);
                 ct = coeffType.BigQ;
-            }
-            if (tok.sval.equalsIgnoreCase("Mod")) {
+            } else if (tok.sval.equalsIgnoreCase("Mod")) {
                 tt = tok.nextToken();
                 boolean openb = false;
                 if (tt == '[') { // optional
@@ -716,34 +655,9 @@ public class GenPolynomialTokenizer {
                 if (tt == ']' && openb) { // optional
                     tt = tok.nextToken();
                 }
-//             } else if (tok.sval.equalsIgnoreCase("RatFunc")) {
-//                 String[] rfv = nextVariableList();
-//                 //System.out.println("rfv = " + rfv.length + " " + rfv[0]);
-//                 int vr = rfv.length;
-//                 BigInteger bi = new BigInteger();
-//                 TermOrder to = new TermOrder(TermOrder.INVLEX);
-//                 GenPolynomialRing<BigInteger> pcf = new GenPolynomialRing<BigInteger>(bi, vr, to, rfv);
-//                 coeff = new QuotientRing(pcf);
-//                 ct = coeffType.RatFunc;
-//             } else if (tok.sval.equalsIgnoreCase("ModFunc")) {
-//                 tt = tok.nextToken();
-//                 RingFactory mi = new ModIntegerRing("19");
-//                 if (tok.sval != null && tok.sval.length() > 0) {
-//                     if (digit(tok.sval.charAt(0))) {
-//                         mi = new ModIntegerRing(tok.sval);
-//                     } else {
-//                         tok.pushBack();
-//                     }
-//                 } else {
-//                     tok.pushBack();
-//                 }
-//                 String[] rfv = nextVariableList();
-//                 //System.out.println("rfv = " + rfv.length + " " + rfv[0]);
-//                 int vr = rfv.length;
-//                 TermOrder to = new TermOrder(TermOrder.INVLEX);
-//                 GenPolynomialRing<ModInteger> pcf = new GenPolynomialRing<ModInteger>(mi, vr, to, rfv);
-//                 coeff = new QuotientRing(pcf);
-//                 ct = coeffType.ModFunc;
+            } else if (tok.sval.equalsIgnoreCase("RatFunc") || tok.sval.equalsIgnoreCase("ModFunc")) {
+                logger.error("RatFunc and ModFunc can no more be read, see edu.jas.application.RingFactoryTokenizer.");
+                throw new IOException("RatFunc and ModFunc can no more be read, see edu.jas.application.RingFactoryTokenizer.");
             } else if (tok.sval.equalsIgnoreCase("IntFunc")) {
                 String[] rfv = nextVariableList();
                 //System.out.println("rfv = " + rfv.length + " " + rfv[0]);
@@ -842,7 +756,7 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * parsing method for weight list. syntax: (w1, w2, w3, ..., wn)
+     * Parsing method for weight list. syntax: (w1, w2, w3, ..., wn)
      * @return the next weight list.
      * @throws IOException
      */
@@ -882,7 +796,7 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * parsing method for weight array. syntax: ( (w11, ...,w1n), ..., (wm1,
+     * Parsing method for weight array. syntax: ( (w11, ...,w1n), ..., (wm1,
      * ..., wmn) )
      * @return the next weight array.
      * @throws IOException
@@ -931,7 +845,7 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * parsing method for split index. syntax: |i|
+     * Parsing method for split index. syntax: |i|
      * @return the next split index.
      * @throws IOException
      */
@@ -996,7 +910,7 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * parsing method for term order name. syntax: termOrderName = L, IL, LEX,
+     * Parsing method for term order name. syntax: termOrderName = L, IL, LEX,
      * G, IG, GRLEX, W(weights) |split index|
      * @return the next term order.
      * @throws IOException
@@ -1012,36 +926,24 @@ public class GenPolynomialTokenizer {
             if (tok.sval != null) {
                 if (tok.sval.equalsIgnoreCase("L")) {
                     evord = TermOrder.INVLEX;
-                }
-                if (tok.sval.equalsIgnoreCase("IL")) {
+                } else if (tok.sval.equalsIgnoreCase("IL")) {
                     evord = TermOrder.INVLEX;
-                }
-                if (tok.sval.equalsIgnoreCase("INVLEX")) {
+                } else if (tok.sval.equalsIgnoreCase("INVLEX")) {
                     evord = TermOrder.INVLEX;
-                }
-                if (tok.sval.equalsIgnoreCase("LEX")) {
+                } else if (tok.sval.equalsIgnoreCase("LEX")) {
                     evord = TermOrder.LEX;
-                }
-                if (tok.sval.equalsIgnoreCase("G")) {
+                } else if (tok.sval.equalsIgnoreCase("G")) {
                     evord = TermOrder.IGRLEX;
-                }
-                if (tok.sval.equalsIgnoreCase("IG")) {
+                } else if (tok.sval.equalsIgnoreCase("IG")) {
                     evord = TermOrder.IGRLEX;
-                }
-                if (tok.sval.equalsIgnoreCase("IGRLEX")) {
+                } else if (tok.sval.equalsIgnoreCase("IGRLEX")) {
                     evord = TermOrder.IGRLEX;
-                }
-                if (tok.sval.equalsIgnoreCase("GRLEX")) {
+                } else if (tok.sval.equalsIgnoreCase("GRLEX")) {
                     evord = TermOrder.GRLEX;
-                }
-                if (tok.sval.equalsIgnoreCase("W")) {
+                } else if (tok.sval.equalsIgnoreCase("W")) {
                     long[][] w = nextWeightArray();
                     //int s = nextSplitIndex(); // no more
-                    //if ( s <= 0 ) {
                     return new TermOrder(w);
-                    //} else {
-                    //return new TermOrder( w, s );
-                    //}
                 }
             }
         }
@@ -1055,7 +957,7 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * parsing method for polynomial list. syntax: ( p1, p2, p3, ..., pn )
+     * Parsing method for polynomial list. syntax: ( p1, p2, p3, ..., pn )
      * @return the next polynomial list.
      * @throws IOException
      */
@@ -1094,7 +996,7 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * parsing method for submodule list. syntax: ( ( p11, p12, p13, ..., p1n ),
+     * Parsing method for submodule list. syntax: ( ( p11, p12, p13, ..., p1n ),
      * ..., ( pm1, pm2, pm3, ..., pmn ) )
      * @return the next list of polynomial lists.
      * @throws IOException
@@ -1129,7 +1031,7 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * parsing method for solvable polynomial relation table. syntax: ( p_1,
+     * Parsing method for solvable polynomial relation table. syntax: ( p_1,
      * p_2, p_3, ..., p_{n+3} ) semantics: p_{n+1} * p_{n+2} = p_{n+3} The next
      * relation table is stored into the solvable polynomial factory.
      * @throws IOException
@@ -1175,7 +1077,7 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * parsing method for polynomial set. syntax: coeffRing varList
+     * Parsing method for polynomial set. syntax: coeffRing varList
      * termOrderName polyList.
      * @return the next polynomial set.
      * @throws IOException
@@ -1213,7 +1115,7 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * parsing method for module set. syntax: coeffRing varList termOrderName
+     * Parsing method for module set. syntax: coeffRing varList termOrderName
      * moduleList.
      * @return the next module set.
      * @throws IOException
@@ -1252,7 +1154,7 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * parsing method for solvable polynomial list. syntax: ( p1, p2, p3, ...,
+     * Parsing method for solvable polynomial list. syntax: ( p1, p2, p3, ...,
      * pn )
      * @return the next solvable polynomial list.
      * @throws IOException
@@ -1277,7 +1179,7 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * parsing method for solvable polynomial. syntax: p.
+     * Parsing method for solvable polynomial. syntax: p.
      * @return the next polynomial.
      * @throws IOException
      */
@@ -1294,7 +1196,7 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * parsing method for solvable polynomial set. syntax: varList termOrderName
+     * Parsing method for solvable polynomial set. syntax: varList termOrderName
      * relationTable polyList.
      * @return the next solvable polynomial set.
      * @throws IOException
@@ -1325,7 +1227,6 @@ public class GenPolynomialTokenizer {
 
         initFactory(coeff, parsedCoeff); // must be because of symmetric read
         initSolvableFactory(coeff, parsedCoeff); // global: nvars, tord, vars
-
         //System.out.println("pfac = " + pfac);
         //System.out.println("spfac = " + spfac);
 
@@ -1343,7 +1244,7 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * parsing method for solvable submodule list. syntax: ( ( p11, p12, p13,
+     * Parsing method for solvable submodule list. syntax: ( ( p11, p12, p13,
      * ..., p1n ), ..., ( pm1, pm2, pm3, ..., pmn ) )
      * @return the next list of solvable polynomial lists.
      * @throws IOException
@@ -1378,7 +1279,7 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * parsing method for solvable module set. syntax: varList termOrderName
+     * Parsing method for solvable module set. syntax: varList termOrderName
      * relationTable moduleList.
      * @return the next solvable module set.
      * @throws IOException
@@ -1439,16 +1340,6 @@ public class GenPolynomialTokenizer {
     private boolean letter(char x) {
         return ('a' <= x && x <= 'z') || ('A' <= x && x <= 'Z');
     }
-
-
-    //     private int indexVar(String x) {
-    //         for ( int i = 0; i < vars.length; i++ ) { 
-    //             if ( x.equals( vars[i] ) ) { 
-    //                 return vars.length-i-1;
-    //             }
-    //         }
-    //         return -1; // not found
-    //     }
 
 
     // unused

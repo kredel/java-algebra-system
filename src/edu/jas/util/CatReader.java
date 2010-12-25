@@ -14,6 +14,7 @@ import java.io.IOException;
 
 /**
  * Reader to concat two readers.
+ * Read from first reader until it is empty, then read from second reader.
  * @author Heinz Kredel
  */
 

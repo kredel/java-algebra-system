@@ -45,7 +45,8 @@ import edu.jas.poly.GenPolynomialTokenizer;
 
 
 /**
- * RingFactory Tokenizer. Used to ring factories from input streams.
+ * RingFactory Tokenizer. Used to read ring factories from input streams.
+ * It can read also QuotientRing factory.
  * @author Heinz Kredel
  */
 
@@ -80,8 +81,6 @@ public class RingFactoryTokenizer {
     private RingFactory fac;
 
 
-    //private RingFactory<AlgebraicNumber<BigRational>> anfac;
-    //private RingFactory<AlgebraicNumber<ModInteger>>  gffac;
     private static enum coeffType {
         BigRat, BigInt, ModInt, BigC, BigQ, BigD, ANrat, ANmod, RatFunc, ModFunc, IntFunc
     };
@@ -105,7 +104,7 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * noargs constructor reads from System.in.
+     * No-args constructor reads from System.in.
      */
     public RingFactoryTokenizer() {
         this(new BufferedReader(new InputStreamReader(System.in)));
@@ -113,7 +112,7 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * constructor with Ring and Reader.
+     * Constructor with Ring and Reader.
      * @param rf ring factory.
      * @param r reader stream.
      */
@@ -145,7 +144,7 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * constructor with Reader.
+     * Constructor with Reader.
      * @param r reader stream.
      */
     @SuppressWarnings("unchecked")
@@ -153,13 +152,7 @@ public class RingFactoryTokenizer {
         //BasicConfigurator.configure();
         vars = null;
         tord = new TermOrder();
-        //in = r;
-        // table = rt;
         nvars = 1;
-        //if ( vars != null ) {
-        //    nvars = vars.length;
-        //}
-        //fac = null;
         fac = new BigRational(1);
 
         //pfac = null;
@@ -189,7 +182,7 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * initialize coefficient and polynomial factories.
+     * Initialize coefficient and polynomial factories.
      * @param rf ring factory.
      * @param ct coefficient type.
      */
@@ -243,7 +236,7 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * initialize coefficient and solvable polynomial factories.
+     * Initialize coefficient and solvable polynomial factories.
      * @param rf ring factory.
      * @param ct coefficient type.
      */
@@ -287,7 +280,7 @@ public class RingFactoryTokenizer {
             break;
         case IntFunc:
             spfac = new GenSolvablePolynomialRing<GenPolynomial<BigRational>>(fac, nvars, tord, vars);
-            parsedPoly = polyType.PolModFunc;
+            parsedPoly = polyType.PolIntFunc;
             break;
         default:
             spfac = new GenSolvablePolynomialRing<BigRational>(fac, nvars, tord, vars);
@@ -297,7 +290,7 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * parsing method for comments. syntax: (* comment *) | /_* comment *_/
+     * Parsing method for comments. syntax: (* comment *) | /_* comment *_/
      * without _ Does not work with this pushBack(), unused.
      */
     public String nextComment() throws IOException {
@@ -340,7 +333,7 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * parsing method for variable list. syntax: (a, b c, de) gives [ "a", "b",
+     * Parsing method for variable list. syntax: (a, b c, de) gives [ "a", "b",
      * "c", "de" ]
      * @return the next variable list.
      * @throws IOException
@@ -375,7 +368,7 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * parsing method for coefficient ring. syntax: Rat | Q | Int | Z | Mod
+     * Parsing method for coefficient ring. syntax: Rat | Q | Int | Z | Mod
      * modul | Complex | C | D | Quat | AN[ (var) ( poly ) | AN[ modul (var) (
      * poly ) ] | RatFunc (var_list) | ModFunc modul (var_list) | IntFunc
      * (var_list)
@@ -392,36 +385,28 @@ public class RingFactoryTokenizer {
             if (tok.sval.equalsIgnoreCase("Q")) {
                 coeff = new BigRational(0);
                 ct = coeffType.BigRat;
-            }
-            if (tok.sval.equalsIgnoreCase("Rat")) {
+            } else if (tok.sval.equalsIgnoreCase("Rat")) {
                 coeff = new BigRational(0);
                 ct = coeffType.BigRat;
-            }
-            if (tok.sval.equalsIgnoreCase("D")) {
+            } else if (tok.sval.equalsIgnoreCase("D")) {
                 coeff = new BigDecimal(0);
                 ct = coeffType.BigD;
-            }
-            if (tok.sval.equalsIgnoreCase("Z")) {
+            } else if (tok.sval.equalsIgnoreCase("Z")) {
                 coeff = new BigInteger(0);
                 ct = coeffType.BigInt;
-            }
-            if (tok.sval.equalsIgnoreCase("Int")) {
+            } else if (tok.sval.equalsIgnoreCase("Int")) {
                 coeff = new BigInteger(0);
                 ct = coeffType.BigInt;
-            }
-            if (tok.sval.equalsIgnoreCase("C")) {
+            } else if (tok.sval.equalsIgnoreCase("C")) {
                 coeff = new BigComplex(0);
                 ct = coeffType.BigC;
-            }
-            if (tok.sval.equalsIgnoreCase("Complex")) {
+            } else if (tok.sval.equalsIgnoreCase("Complex")) {
                 coeff = new BigComplex(0);
                 ct = coeffType.BigC;
-            }
-            if (tok.sval.equalsIgnoreCase("Quat")) {
+            } else if (tok.sval.equalsIgnoreCase("Quat")) {
                 coeff = new BigQuaternion(0);
                 ct = coeffType.BigQ;
-            }
-            if (tok.sval.equalsIgnoreCase("Mod")) {
+            } else if (tok.sval.equalsIgnoreCase("Mod")) {
                 tt = tok.nextToken();
                 boolean openb = false;
                 if (tt == '[') { // optional
@@ -559,7 +544,7 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * parsing method for weight list. syntax: (w1, w2, w3, ..., wn)
+     * Parsing method for weight list. syntax: (w1, w2, w3, ..., wn)
      * @return the next weight list.
      * @throws IOException
      */
@@ -599,7 +584,7 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * parsing method for weight array. syntax: ( (w11, ...,w1n), ..., (wm1,
+     * Parsing method for weight array. syntax: ( (w11, ...,w1n), ..., (wm1,
      * ..., wmn) )
      * @return the next weight array.
      * @throws IOException
@@ -648,7 +633,7 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * parsing method for split index. syntax: |i|
+     * Parsing method for split index. syntax: |i|
      * @return the next split index.
      * @throws IOException
      */
@@ -712,7 +697,7 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * parsing method for term order name. syntax: termOrderName = L, IL, LEX,
+     * Parsing method for term order name. syntax: termOrderName = L, IL, LEX,
      * G, IG, GRLEX, W(weights) |split index|
      * @return the next term order.
      * @throws IOException
@@ -758,7 +743,7 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * parsing method for solvable polynomial relation table. syntax: ( p_1,
+     * Parsing method for solvable polynomial relation table. syntax: ( p_1,
      * p_2, p_3, ..., p_{n+3} ) semantics: p_{n+1} * p_{n+2} = p_{n+3} The next
      * relation table is stored into the solvable polynomial factory.
      * @throws IOException
@@ -807,7 +792,7 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * parsing method for polynomial set. syntax: coeffRing varList
+     * Parsing method for polynomial set. syntax: coeffRing varList
      * termOrderName polyList.
      * @return the next polynomial set.
      * @throws IOException
@@ -841,12 +826,11 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * parsing method for solvable polynomial set. syntax: varList termOrderName
+     * Parsing method for solvable polynomial set. syntax: varList termOrderName
      * relationTable polyList.
      * @return the next solvable polynomial set.
      * @throws IOException
      */
-
     @SuppressWarnings("unchecked")
     public GenSolvablePolynomialRing nextSolvablePolynomialRing() throws IOException {
         //String comments = "";
@@ -872,7 +856,6 @@ public class RingFactoryTokenizer {
 
         initFactory(coeff, parsedCoeff); // must be because of symmetric read
         initSolvableFactory(coeff, parsedCoeff); // global: nvars, tord, vars
-
         //System.out.println("pfac = " + pfac);
         //System.out.println("spfac = " + spfac);
 
