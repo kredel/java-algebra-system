@@ -18,6 +18,7 @@ from edu.jas.poly        import GenPolynomial, GenPolynomialRing,\
                                 GenPolynomialTokenizer, OrderedPolynomialList, PolyUtil,\
                                 TermOrderOptimization, TermOrder, PolynomialList,\
                                 AlgebraicNumber, AlgebraicNumberRing,\
+                                OrderedModuleList, ModuleList,\
                                 Complex, ComplexRing
 from edu.jas.ps          import UnivPowerSeries, UnivPowerSeriesRing,\
                                 UnivPowerSeriesMap, Coefficients, \
@@ -33,7 +34,7 @@ from edu.jas.gbufd       import GroebnerBasePseudoRecSeq, GroebnerBasePseudoSeq,
                                 RGroebnerBasePseudoSeq, RGroebnerBaseSeq, RReductionSeq
 from edu.jas.gbmod       import ModGroebnerBaseAbstract, ModSolvableGroebnerBaseAbstract,\
                                 SolvableSyzygyAbstract, SyzygyAbstract
-from edu.jas.vector      import OrderedModuleList, ModuleList, GenVector, GenVectorModul,\
+from edu.jas.vector      import GenVector, GenVectorModul,\
                                 GenMatrix, GenMatrixRing
 from edu.jas.application import PolyUtilApp, Residue, ResidueRing, Ideal,\
                                 Local, LocalRing, IdealWithRealAlgebraicRoots,\
