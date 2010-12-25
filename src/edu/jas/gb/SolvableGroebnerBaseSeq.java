@@ -10,11 +10,12 @@ import java.util.ListIterator;
 
 import org.apache.log4j.Logger;
 
+import edu.jas.structure.RingElem;
 import edu.jas.poly.ExpVector;
+import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
-
-import edu.jas.structure.RingElem;
+import edu.jas.poly.PolynomialList;
 
 
 /**
@@ -320,7 +321,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
               C c = H.leadingBaseCoefficient();
               c = c.inverse();
               H = H.multiply( c );
-              row = sblas.leftScalarProduct( mone.multiply(c), row );
+              row = PolynomialList.<C>castToSolvableList(blas.scalarProduct( mone.multiply(c), PolynomialList.<C>castToList(row) ));
               row.set( G.size(), mone );
               if ( H.isONE() ) {
                  // pairlist.record( pair, H );
@@ -546,11 +547,12 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
                 if ( k < nrow.size() ) { // always true
                    a = nrow.get( k );
                    //System.out.println("k, a = " + k + ", " + a);
-                   if ( a != null && !a.isZERO() ) {
-                      xrow = sblas.leftScalarProduct( a, row);
-                      xrow = sblas.vectorAdd(xrow,nrow);
-                      //System.out.println("xrow = " + xrow);
-                      N.set( j, xrow );
+                   if ( a != null && !a.isZERO() ) { 
+                       List<GenPolynomial<C>> yrow = blas.scalarProduct(a,PolynomialList.<C>castToList(row));
+		       yrow = blas.vectorAdd(yrow,PolynomialList.<C>castToList(nrow));
+		       xrow = PolynomialList.<C>castToSolvableList(yrow);
+                       //System.out.println("xrow = " + xrow);
+                       N.set( j, xrow );
                    }
                 }
             }

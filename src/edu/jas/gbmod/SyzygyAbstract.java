@@ -54,7 +54,7 @@ public class SyzygyAbstract<C extends GcdRingElem<C>> implements Syzygy<C> {
     /**
      * Linear algebra engine.
      */
-    protected BasicLinAlg<C> blas;
+    protected BasicLinAlg<GenPolynomial<C>> blas;
 
 
     /**
@@ -62,7 +62,7 @@ public class SyzygyAbstract<C extends GcdRingElem<C>> implements Syzygy<C> {
      */
     public SyzygyAbstract() {
         red = new ReductionSeq<C>();
-        blas = new BasicLinAlg<C>();
+        blas = new BasicLinAlg<GenPolynomial<C>>();
         //gb = new GroebnerBaseSeqPairSeq<C>();
         //gb = new GroebnerBaseSeq<C>();
         //gb = GBFactory. getImplementation(); 
@@ -249,7 +249,7 @@ public class SyzygyAbstract<C extends GcdRingElem<C>> implements Syzygy<C> {
             return true;
         }
         for (List<GenPolynomial<C>> row : Z.list) {
-            List<GenPolynomial<C>> zr = blas.scalarProduct(row, F);
+            List<GenPolynomial<C>> zr = blas.scalarProduct(row, F.list);
             if (!blas.isZero(zr)) {
                 logger.info("is not ZeroRelation (" + zr.size() + ") = " + zr);
                 return false;

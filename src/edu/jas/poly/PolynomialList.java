@@ -284,6 +284,19 @@ public class PolynomialList<C extends RingElem<C> >
      * @return solvable polynomial list from this.
      */
     public List< GenSolvablePolynomial<C> > castToSolvableList() {
+        return castToSolvableList(list);
+    }
+
+
+    /**
+     * Get list as List of GenSolvablePolynomials.
+     * Required because no List casts allowed. Equivalent to 
+     * cast (List&lt;GenSolvablePolynomial&lt;C&gt;&gt;) list.
+     * @param list list of extensions of polynomials.
+     * @return solvable polynomial list from this.
+     */
+    public static <C extends RingElem<C> > 
+           List< GenSolvablePolynomial<C> > castToSolvableList(List<GenPolynomial<C>> list) {
         List< GenSolvablePolynomial<C> > slist = null;
         if ( list == null ) {
             return slist;
@@ -295,6 +308,29 @@ public class PolynomialList<C extends RingElem<C> >
                throw new IllegalArgumentException("no solvable polynomial "+p);
             }
             s = (GenSolvablePolynomial<C>) p;
+            slist.add( s );
+        }
+        return slist;
+    }
+
+
+    /**
+     * Get list of list as List of List of GenSolvablePolynomials.
+     * Required because no List casts allowed. Equivalent to 
+     * cast (List&lt;GenSolvablePolynomial&lt;C&gt;&gt;) list.
+     * @param list list of extensions of polynomials.
+     * @return solvable polynomial list from this.
+     */
+    public static <C extends RingElem<C> > 
+           List<List< GenSolvablePolynomial<C> >> castToSolvablematrix(List<List<GenPolynomial<C>>> list) {
+        List<List< GenSolvablePolynomial<C> >> slist = null;
+        if ( list == null ) {
+            return slist;
+        }
+        slist = new ArrayList< List<GenSolvablePolynomial<C>> >( list.size() ); 
+        List<GenSolvablePolynomial<C>> s;
+        for ( List<GenPolynomial<C>> p: list ) {
+            s = PolynomialList.<C>castToSolvableList(p);
             slist.add( s );
         }
         return slist;
@@ -319,6 +355,29 @@ public class PolynomialList<C extends RingElem<C> >
         list = new ArrayList< GenPolynomial<C> >( slist.size() ); 
         for ( GenPolynomial<C> p: slist ) {
             list.add( p );
+        }
+        return list;
+    }
+
+
+    /**
+     * Get list of list of extensions of polynomials as List of List of GenPolynomials.
+     * Required because no List casts allowed. Equivalent to 
+     * cast (List&lt;GenPolynomial&lt;C&gt;&gt;) list.
+     * Mainly used for lists of GenSolvablePolynomials.
+     * @param slist list of extensions of polynomials.
+     * @return polynomial list from slist.
+     */
+    public static <C extends RingElem<C> > 
+           List<List< GenPolynomial<C> >> 
+           castToMatrix( List<List<? extends GenPolynomial<C>>> slist) {
+        List<List< GenPolynomial<C> >> list = null;
+        if ( slist == null ) {
+            return list;
+        }
+        list = new ArrayList< List<GenPolynomial<C>> >( slist.size() ); 
+        for ( List<? extends GenPolynomial<C>> p: slist ) {
+            list.add( PolynomialList.<C>castToList(p) );
         }
         return list;
     }
@@ -362,6 +421,5 @@ public class PolynomialList<C extends RingElem<C> >
       }
       return false;
   }
-
 
 }

@@ -10,8 +10,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.ModuleList;
 import edu.jas.structure.RingElem;
 
 
@@ -36,21 +34,18 @@ public class BasicLinAlg<C extends RingElem<C>> {
 
 
     /**
-     * Scalar product of vectors of polynomials.
-     * @param r a polynomial list.
-     * @param F a polynomial list.
+     * Scalar product of vectors of ring elements.
+     * @param G a ring element list.
+     * @param F a ring element list.
      * @return the scalar product of r and F.
      */
-
-    public GenPolynomial<C> 
-           scalarProduct(List<GenPolynomial<C>> r, 
-                         List<GenPolynomial<C>> F) {  
-        GenPolynomial<C> sp = null;
-        Iterator<GenPolynomial<C>> it = r.iterator();
-        Iterator<GenPolynomial<C>> jt = F.iterator();
+    public C scalarProduct(List<C> G, List<C> F) {  
+        C sp = null;
+        Iterator<C> it = G.iterator();
+        Iterator<C> jt = F.iterator();
         while ( it.hasNext() && jt.hasNext() ) {
-            GenPolynomial<C> pi = it.next();
-            GenPolynomial<C> pj = jt.next();
+            C pi = it.next();
+            C pj = jt.next();
             if ( pi == null || pj == null ) {
                continue;
             }
@@ -68,62 +63,86 @@ public class BasicLinAlg<C extends RingElem<C>> {
 
 
     /**
-     * product of vector and matrix of polynomials.
-     * @param r a polynomial list.
-     * @param F a polynomial matrix.
+     * Scalar product of vectors and a matrix of ring elements.
+     * @param G a ring element list.
+     * @param F a list of ring element lists.
      * @return the scalar product of r and F.
      */
-
-    public List<GenPolynomial<C>> 
-           scalarProduct(List<GenPolynomial<C>> r, ModuleList<C> F) {  
-        List<GenPolynomial<C>> ZZ = null;
-        Iterator<GenPolynomial<C>> it = r.iterator();
-        Iterator<List<GenPolynomial<C>>> jt = F.list.iterator();
+    public List<C> scalarProduct(List<C> G, List<List<C>> F) {  
+        List<C> sp = null; //new ArrayList<C>(G.size());
+        Iterator<C> it = G.iterator();
+        Iterator<List<C>> jt = F.iterator();
         while ( it.hasNext() && jt.hasNext() ) {
-            GenPolynomial<C> pi = it.next();
-            List<GenPolynomial<C>> vj = jt.next();
-            List<GenPolynomial<C>> Z = scalarProduct( pi, vj );
-            //System.out.println("pi" + pi);
-            //System.out.println("vj" + vj);
-            // System.out.println("scalarProduct" + Z);
-            if ( ZZ == null ) {
-                ZZ = Z;
-            } else {
-                ZZ = vectorAdd(ZZ,Z);
+            C pi = it.next();
+            List<C> pj = jt.next();
+            if ( pi == null || pj == null ) {
+               continue;
             }
+            List<C> s = scalarProduct(pi,pj);
+            if ( sp == null ) {
+		sp = s;
+	    } else {
+                sp = vectorAdd(sp,s);
+	    }
         }
         if ( it.hasNext() || jt.hasNext() ) {
             logger.error("scalarProduct wrong sizes");
         }
-        if ( logger.isDebugEnabled() ) {
-            logger.debug("scalarProduct" + ZZ);
-        }
-        return ZZ;
+        return sp;
     }
 
 
     /**
-     * Addition of vectors of polynomials.
-     * @param a a polynomial list.
-     * @param b a polynomial list.
+     * Scalar product of vectors and a matrix of ring elements.
+     * @param G a ring element list.
+     * @param F a list of ring element lists.
+     * @return the scalar product of r and F.
+     */
+    public List<C> rightScalarProduct(List<C> G, List<List<C>> F) {  
+        List<C> sp = null; //new ArrayList<C>(G.size());
+        Iterator<C> it = G.iterator();
+        Iterator<List<C>> jt = F.iterator();
+        while ( it.hasNext() && jt.hasNext() ) {
+            C pi = it.next();
+            List<C> pj = jt.next();
+            if ( pi == null || pj == null ) {
+               continue;
+            }
+            List<C> s = scalarProduct(pj,pi);
+            if ( sp == null ) {
+		sp = s;
+	    } else {
+                sp = vectorAdd(sp,s);
+	    }
+        }
+        if ( it.hasNext() || jt.hasNext() ) {
+            logger.error("scalarProduct wrong sizes");
+        }
+        return sp;
+    }
+
+
+    /**
+     * Addition of vectors of ring elements.
+     * @param a a ring element list.
+     * @param b a ring element list.
      * @return a+b, the vector sum of a and b.
      */
 
-    public List<GenPolynomial<C>> 
-           vectorAdd(List<GenPolynomial<C>> a, List<GenPolynomial<C>> b) {  
+    public List<C> vectorAdd(List<C> a, List<C> b) {  
         if ( a == null ) {
             return b;
         }
         if ( b == null ) {
             return a;
         }
-        List<GenPolynomial<C>> V = new ArrayList<GenPolynomial<C>>( a.size() );
-        Iterator<GenPolynomial<C>> it = a.iterator();
-        Iterator<GenPolynomial<C>> jt = b.iterator();
+        List<C> V = new ArrayList<C>( a.size() );
+        Iterator<C> it = a.iterator();
+        Iterator<C> jt = b.iterator();
         while ( it.hasNext() && jt.hasNext() ) {
-            GenPolynomial<C> pi = it.next();
-            GenPolynomial<C> pj = jt.next();
-            GenPolynomial<C> p = pi.sum( pj );
+            C pi = it.next();
+            C pj = jt.next();
+            C p = pi.sum( pj );
             V.add( p );
         }
         //System.out.println("vectorAdd" + V);
@@ -135,16 +154,15 @@ public class BasicLinAlg<C extends RingElem<C>> {
 
 
     /**
-     * test vector of zero polynomials.
-     * @param a a polynomial list.
+     * Test vector of zero ring elements.
+     * @param a a ring element list.
      * @return true, if all polynomial in a are zero, else false.
      */
-    public boolean 
-           isZero(List<GenPolynomial<C>> a) {  
+    public boolean isZero(List<C> a) {  
         if ( a == null ) {
             return true;
         }
-        for ( GenPolynomial<C> pi : a ) {
+        for ( C pi : a ) {
             if ( pi == null ) {
                 continue;
             }
@@ -157,16 +175,15 @@ public class BasicLinAlg<C extends RingElem<C>> {
 
 
     /**
-     * Scalar product of polynomial with vector of polynomials.
-     * @param p a polynomial.
-     * @param F a polynomial list.
+     * Scalar product of ring element with vector of ring elements.
+     * @param p a ring element.
+     * @param F a ring element list.
      * @return the scalar product of p and F.
      */
 
-    public List<GenPolynomial<C>> 
-           scalarProduct(GenPolynomial<C> p, List<GenPolynomial<C>> F) {  
-        List<GenPolynomial<C>> V = new ArrayList<GenPolynomial<C>>( F.size() );
-        for ( GenPolynomial<C> pi : F ) {
+    public List<C> scalarProduct(C p, List<C> F) {  
+        List<C> V = new ArrayList<C>( F.size() );
+        for ( C pi : F ) {
             if ( p != null ) {
                pi = p.multiply( pi );
             } else {
@@ -179,16 +196,15 @@ public class BasicLinAlg<C extends RingElem<C>> {
 
 
     /**
-     * Scalar product of vector of polynomials with polynomial.
-     * @param F a polynomial list.
-     * @param p a polynomial.
+     * Scalar product of vector of ring element with ring element.
+     * @param F a ring element list.
+     * @param p a ring element.
      * @return the scalar product of F and p.
      */
 
-    public List<GenPolynomial<C>> 
-        scalarProduct(List<GenPolynomial<C>> F, GenPolynomial<C> p) {  
-        List<GenPolynomial<C>> V = new ArrayList<GenPolynomial<C>>( F.size() );
-        for ( GenPolynomial<C> pi : F ) {
+    public List<C> scalarProduct(List<C> F, C p) {  
+        List<C> V = new ArrayList<C>( F.size() );
+        for ( C pi : F ) {
             if ( pi != null ) {
                pi = pi.multiply( p );
             }

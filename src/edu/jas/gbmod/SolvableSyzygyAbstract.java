@@ -29,8 +29,7 @@ import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.ModuleList;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.ExpVector;
-
-import edu.jas.vector.SolvableBasicLinAlg;
+import edu.jas.vector.BasicLinAlg;
 
 
 /**
@@ -62,7 +61,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
     /**
      * Linear algebra engine.
      */
-    protected SolvableBasicLinAlg<C> sblas;
+    protected BasicLinAlg<GenPolynomial<C>> blas;
 
 
     /**
@@ -71,7 +70,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
     public SolvableSyzygyAbstract() {
         red = new ReductionSeq<C>();
         sred = new SolvableReductionSeq<C>();
-        sblas = new SolvableBasicLinAlg<C>();
+        blas = new BasicLinAlg<GenPolynomial<C>>();
     }
 
 
@@ -217,7 +216,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
            isLeftZeroRelation(List<List<GenSolvablePolynomial<C>>> Z, 
                               List<GenSolvablePolynomial<C>> F) {  
         for ( List<GenSolvablePolynomial<C>> row : Z ) {
-            GenSolvablePolynomial<C> p = sblas.leftScalarProduct(row,F);
+            GenPolynomial<C> p = blas.scalarProduct(PolynomialList.<C>castToList(row),PolynomialList.<C>castToList(F));
             if ( p == null ) { 
                continue;
             }
@@ -241,7 +240,8 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
                                List<GenSolvablePolynomial<C>> F) {  
         boolean isit = true;
         for ( List<GenSolvablePolynomial<C>> row : Z ) {
-            GenSolvablePolynomial<C> p = sblas.leftScalarProduct(F,row); // param order
+            List<GenPolynomial<C>> yrow = PolynomialList.<C>castToList(row);
+            GenPolynomial<C> p = blas.scalarProduct(PolynomialList.<C>castToList(F),yrow); // param order
             if ( p == null ) { 
                continue;
             }
@@ -267,16 +267,16 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
         if ( Z == null || Z.list == null ) {
             return true;
         }
-        for ( List<GenSolvablePolynomial<C>> row : Z.castToSolvableList() ) {
-            List<GenSolvablePolynomial<C>> zr = sblas.leftScalarProduct(row,F);
-            if ( ! sblas.isZero(zr) ) {
+        for ( List<GenPolynomial<C>> row : Z.list ) {
+            List<GenPolynomial<C>> zr = blas.scalarProduct(row,F.list);
+            if ( ! blas.isZero(zr) ) {
                 logger.info("is not ZeroRelation (" + zr.size() + ") = " + zr);
                 return false;
             }
         }
         return true;
     }
-
+ 
 
     /**
      * Test if right sysygy of modules
@@ -290,9 +290,10 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
         if ( Z == null || Z.list == null ) {
             return true;
         }
-        for ( List<GenSolvablePolynomial<C>> row : Z.castToSolvableList() ) {
-            List<GenSolvablePolynomial<C>> zr = sblas.rightScalarProduct(row,F);
-            if ( ! sblas.isZero(zr) ) {
+        for ( List<GenPolynomial<C>> row : Z.list ) {
+            List<GenPolynomial<C>> zr = blas.rightScalarProduct(row,F.list);
+            //List<GenPolynomial<C>> zr = blas.scalarProduct(row,F.list);
+            if ( ! blas.isZero(zr) ) {
                 logger.info("is not ZeroRelation (" + zr.size() + ") = " + zr);
                 return false;
             }
@@ -470,9 +471,9 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
                if ( si == null || ai == null ) {
                   continue;
                }
-               List<GenSolvablePolynomial<C>> pi = sblas.leftScalarProduct(si,ai);
+               List<GenPolynomial<C>> pi = blas.scalarProduct(si,PolynomialList.<C>castToList(ai));
                //System.out.println("pi = " + pi);
-               rf = sblas.vectorAdd( rf, pi );
+               rf = PolynomialList.<C>castToSolvableList(blas.vectorAdd( PolynomialList.<C>castToList(rf), pi));
             }
             if ( it.hasNext() || jt.hasNext() ) {
                logger.error("leftZeroRelationsArbitrary wrong sizes");
@@ -503,10 +504,10 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
                if ( si == null || ai == null ) {
                   continue;
                }
-               //wrong: List<GenSolvablePolynomial<C>> pi = sblas.leftScalarProduct(ai,si);
-               List<GenSolvablePolynomial<C>> pi = sblas.leftScalarProduct(si,ai);
+               //wrong: List<GenSolvablePolynomial<C>> pi = blas.scalarProduct(ai,si);
+               List<GenPolynomial<C>> pi = blas.scalarProduct(si,PolynomialList.<C>castToList(ai));
                //System.out.println("pi = " + pi);
-               rf = sblas.vectorAdd( rf, pi );
+               rf = PolynomialList.<C>castToSolvableList(blas.vectorAdd( PolynomialList.<C>castToList(rf), pi));
             }
             if ( it.hasNext() || jt.hasNext() ) {
                logger.error("zeroRelationsArbitrary wrong sizes");
@@ -520,7 +521,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
         //List<GenSolvablePolynomial<C>> F2 = new ArrayList<GenSolvablePolynomial<C>>( F.size() );
         /* not true in general
         for ( List<GenSolvablePolynomial<C>> rr: M ) {
-            GenSolvablePolynomial<C> rrg = sblas.leftScalarProduct( F, rr );
+            GenSolvablePolynomial<C> rrg = PolynomialList.<C>castToSolvableList(blas.scalarProduct( PolynomialList.<C>castToList(F), PolynomialList.<C>castToList(rr) ));
             F2.add( rrg );
         }
         PolynomialList<C> pF = new PolynomialList<C>( ring, F );
@@ -552,7 +553,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
                 j++;
             }
             M2.add( r2i );
-            if ( ! sblas.isZero( r2i ) ) {
+            if ( ! blas.isZero( PolynomialList.<C>castToList(r2i) ) ) {
                 sf.add( r2i );
             }
             i++;

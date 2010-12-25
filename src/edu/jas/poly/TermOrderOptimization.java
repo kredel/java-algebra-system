@@ -114,15 +114,14 @@ public class TermOrderOptimization {
        if ( L == null ) {
           throw new IllegalArgumentException("list must be non null");
        }
-       BasicLinAlg<BigInteger> bla 
-           = new BasicLinAlg<BigInteger>();
+       BasicLinAlg<GenPolynomial<BigInteger>> blas = new BasicLinAlg<GenPolynomial<BigInteger>>();
        List<GenPolynomial<BigInteger>> dem = null;
        for ( GenPolynomial<C> p : L ) {
            List<GenPolynomial<BigInteger>> dm = degreeMatrix( p );
            if ( dem == null ) {
               dem = dm;
            } else {
-              dem = bla.vectorAdd( dem, dm );
+              dem = blas.vectorAdd( dem, dm );
            }
        }
        return dem;
@@ -140,15 +139,14 @@ public class TermOrderOptimization {
         if ( L == null ) {
            throw new IllegalArgumentException("list must not be null");
         }
-        BasicLinAlg<BigInteger> bla 
-            = new BasicLinAlg<BigInteger>();
+        BasicLinAlg<GenPolynomial<BigInteger>> blas = new BasicLinAlg<GenPolynomial<BigInteger>>();
         List<GenPolynomial<BigInteger>> dem = null;
         for ( GenPolynomial<GenPolynomial<C>> p : L ) {
             List<GenPolynomial<BigInteger>> dm = degreeMatrixOfCoefficients( p );
             if ( dem == null ) {
                dem = dm;
             } else {
-               dem = bla.vectorAdd( dem, dm );
+               dem = blas.vectorAdd( dem, dm );
             }
         }
         return dem;

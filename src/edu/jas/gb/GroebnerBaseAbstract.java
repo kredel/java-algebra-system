@@ -48,7 +48,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
     /**
      * linear algebra engine.
      */
-    public final BasicLinAlg<C> blas;
+    public final BasicLinAlg<GenPolynomial<C>> blas;
 
 
     /**
@@ -76,7 +76,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
     public GroebnerBaseAbstract(Reduction<C> red, PairList<C> pl) {
         this.red = red;
         this.strategy = pl;
-        blas = new BasicLinAlg<C>();
+        blas = new BasicLinAlg<GenPolynomial<C>>();
     }
 
 

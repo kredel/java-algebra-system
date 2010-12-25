@@ -11,13 +11,14 @@ import java.util.ListIterator;
 import org.apache.log4j.Logger;
 
 import edu.jas.poly.ExpVector;
+import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolynomialList;
 
 import edu.jas.structure.RingElem;
 
-import edu.jas.vector.SolvableBasicLinAlg;
+import edu.jas.vector.BasicLinAlg;
 
 
 /**
@@ -56,7 +57,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
     /**
      * Linear algebra engine.
      */
-    protected SolvableBasicLinAlg<C> sblas;
+    protected BasicLinAlg<GenPolynomial<C>> blas;
 
 
     /**
@@ -85,7 +86,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
         this.red = new ReductionSeq<C>();
         this.sred = sred;
         this.strategy = pl;
-        sblas = new SolvableBasicLinAlg<C>();
+        blas = new BasicLinAlg<GenPolynomial<C>>();
     }
 
 
