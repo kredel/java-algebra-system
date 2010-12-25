@@ -14,6 +14,7 @@ import java.util.List;
 import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.kern.ComputerThreads;
+import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
 import edu.jas.util.ExecutableServer;
@@ -162,10 +163,19 @@ public class RunGB {
             return;
         }
 
-        GenPolynomialTokenizer tok = new GenPolynomialTokenizer(problem);
+        RingFactoryTokenizer rftok = new RingFactoryTokenizer(problem);
+        GenPolynomialRing pfac = null;
+        try {
+            pfac = rftok.nextPolynomialRing();
+            rftok = null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        GenPolynomialTokenizer tok = new GenPolynomialTokenizer(pfac,problem);
         PolynomialList S = null;
         try {
-            S = tok.nextPolynomialSet();
+            S = new PolynomialList(pfac,tok.nextPolynomialList());
         } catch (IOException e) {
             e.printStackTrace();
             return;

@@ -22,6 +22,7 @@ import edu.jas.gb.SolvableReductionPar;
 import edu.jas.gb.SolvableReductionSeq;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.GenSolvablePolynomial;
+import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolynomialList;
 
 
@@ -113,10 +114,19 @@ public class RunSGB {
             return;
         }
 
-        GenPolynomialTokenizer tok = new GenPolynomialTokenizer(problem);
+        RingFactoryTokenizer rftok = new RingFactoryTokenizer(problem);
+        GenSolvablePolynomialRing spfac = null;
+        try {
+            spfac = rftok.nextSolvablePolynomialRing();
+            rftok = null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        GenPolynomialTokenizer tok = new GenPolynomialTokenizer(spfac,problem);
         PolynomialList S = null;
         try {
-            S = tok.nextSolvablePolynomialSet();
+            S = new PolynomialList(spfac,tok.nextSolvablePolynomialList());
         } catch (IOException e) {
             e.printStackTrace();
             return;

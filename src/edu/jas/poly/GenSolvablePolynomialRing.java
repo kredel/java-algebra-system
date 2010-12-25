@@ -1,4 +1,3 @@
-
 /*
  * $Id$
  */
@@ -13,19 +12,13 @@ import java.io.StringReader;
 
 import java.util.List;
 import java.util.ArrayList;
-//import java.util.Arrays;
 import java.util.Random;
 
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
-
 import edu.jas.kern.PrettyPrint;
-
-//import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.TermOrder;
-import edu.jas.poly.ExpVector;
 
 
 /**
@@ -41,8 +34,8 @@ import edu.jas.poly.ExpVector;
  */
 
 public class GenSolvablePolynomialRing<C extends RingElem<C> > 
-             extends GenPolynomialRing<C> {
-         //  implements RingFactory< GenSolvablePolynomial<C> > {
+    extends GenPolynomialRing<C> {
+    //  implements RingFactory< GenSolvablePolynomial<C> > {
 
 
     /** The solvable multiplication relations. 
@@ -139,9 +132,9 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
                                      String[] v, RelationTable<C> rt) {
         super(cf,n,t,v);
         if ( rt == null ) {
-           table = new RelationTable<C>(this);
+            table = new RelationTable<C>(this);
         } else {
-           table = rt;
+            table = rt;
         }
         ZERO = new GenSolvablePolynomial<C>( this );
         C coeff = coFac.getONE();
@@ -170,10 +163,10 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
     public String toString() {
         String res = super.toString();
         if ( PrettyPrint.isTrue() ) {
-           res += "\n"
+            res += "\n"
                 + table.toString(vars);
         } else {
-           res += ", #rel = " + table.size();
+            res += ", #rel = " + table.size();
         }
         return res;
     }
@@ -213,21 +206,21 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
      */
     @Override
     @SuppressWarnings("unchecked") 
-    public boolean equals( Object other ) { 
+        public boolean equals( Object other ) { 
         if ( ! (other instanceof GenSolvablePolynomialRing) ) {
-           return false;
+            return false;
         }
         // do a super.equals( )
         if ( ! super.equals( other ) ) {
-           return false;
+            return false;
         }
         GenSolvablePolynomialRing<C> oring = null;
         try {
-           oring = (GenSolvablePolynomialRing<C>)other;
+            oring = (GenSolvablePolynomialRing<C>)other;
         } catch (ClassCastException ignored) {
         }
         if ( oring == null ) {
-           return false;
+            return false;
         }
         // @todo check same base relations
         //if ( ! table.equals(oring.table) ) {
@@ -242,10 +235,10 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
      */
     @Override
     public int hashCode() { 
-       int h;
-       h = super.hashCode();
-       h = 37 * h + table.hashCode();
-       return h;
+        int h;
+        h = super.hashCode();
+        h = 37 * h + table.hashCode();
+        return h;
     }
 
 
@@ -274,7 +267,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
     @Override
     public boolean isCommutative() {
         if ( table.size() == 0 ) {
-           return super.isCommutative();
+            return super.isCommutative();
         }
         // todo: check structure of relations
         return false;
@@ -302,12 +295,12 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
                     p = Xk.multiply(Xj).multiply(Xi);
                     q = Xk.multiply(Xj.multiply(Xi));
                     if ( !p.equals(q) ) {
-                       if ( true || debug ) {
-                          logger.info("Xi = " + Xi + ", Xj = " + Xj + ", Xk = " + Xk);
-                          logger.info("p = ( Xk * Xj ) * Xi = " + p);
-                          logger.info("q = Xk * ( Xj * Xi ) = " + q);
-                       }
-                       return false;
+                        if ( true || debug ) {
+                            logger.info("Xi = " + Xi + ", Xj = " + Xj + ", Xk = " + Xk);
+                            logger.info("p = ( Xk * Xj ) * Xi = " + p);
+                            logger.info("q = Xk * ( Xj * Xi ) = " + q);
+                        }
+                        return false;
                     }
                 }
             }
@@ -323,7 +316,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
     @Override
     public GenSolvablePolynomial<C> fromInteger(long a) {
         return new GenSolvablePolynomial<C>( this, coFac.fromInteger(a), 
-                                                   evzero );
+                                             evzero );
     }
 
 
@@ -335,7 +328,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
     @Override
     public GenSolvablePolynomial<C> fromInteger(BigInteger a) {
         return new GenSolvablePolynomial<C>( this, coFac.fromInteger(a), 
-                                                   evzero );
+                                             evzero );
     }
 
 
@@ -403,8 +396,8 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
     public GenSolvablePolynomial<C> random(int k, int l, int d, float q,
                                            Random rnd) {
         GenSolvablePolynomial<C> r = getZERO(); //.clone();
-                 // copy( ZERO ); 
-                 // new GenPolynomial<C>( this, getZERO().val );
+        // copy( ZERO ); 
+        // new GenPolynomial<C>( this, getZERO().val );
         ExpVector e;
         C a;
         // add random coeffs and exponents
@@ -412,7 +405,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
             e = ExpVector.EVRAND(nvar, d, q, rnd);
             a = coFac.random(k,rnd);
             r = (GenSolvablePolynomial<C>)r.sum(a,e); 
-                // somewhat inefficient but clean
+            // somewhat inefficient but clean
         }
         return r;
     }
@@ -447,7 +440,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
      */
     @Override
     @SuppressWarnings("unchecked") 
-    public GenSolvablePolynomial<C> parse(Reader r) {
+        public GenSolvablePolynomial<C> parse(Reader r) {
         GenPolynomialTokenizer pt = new GenPolynomialTokenizer(this,r);
         GenSolvablePolynomial<C> p = null;
         try {
@@ -542,23 +535,23 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
      * @param modv number of module variables.
      * @param e the exponent of the variables.
      * @return List(X_1^e,...,X_n^e) a list of univariate polynomials.
-    @Override
-    public List<GenSolvablePolynomial<C>> univariateList(int modv, long e) {
-        List<GenPolynomial<C>> pol = super.univariateList(modv,e);
-        UnaryFunctor<GenPolynomial<C>,GenSolvablePolynomial<C>> fc 
-            = new UnaryFunctor<GenPolynomial<C>,GenSolvablePolynomial<C>>() {
-            public GenSolvablePolynomial<C> eval(GenPolynomial<C> p) {
-                if ( ! (p instanceof GenSolvablePolynomial) ) {
-                   throw new RuntimeException("no solvable polynomial "+p);
-                }
-                return (GenSolvablePolynomial<C>) p;
-            }
-        };
-        List<GenSolvablePolynomial<C>> pols 
-            = ListUtil.<GenPolynomial<C>,GenSolvablePolynomial<C>>map(this,pol,fc);
-        return pols;
-    }
-     */
+     @Override
+     public List<GenSolvablePolynomial<C>> univariateList(int modv, long e) {
+     List<GenPolynomial<C>> pol = super.univariateList(modv,e);
+     UnaryFunctor<GenPolynomial<C>,GenSolvablePolynomial<C>> fc 
+     = new UnaryFunctor<GenPolynomial<C>,GenSolvablePolynomial<C>>() {
+     public GenSolvablePolynomial<C> eval(GenPolynomial<C> p) {
+     if ( ! (p instanceof GenSolvablePolynomial) ) {
+     throw new RuntimeException("no solvable polynomial "+p);
+     }
+     return (GenSolvablePolynomial<C>) p;
+     }
+     };
+     List<GenSolvablePolynomial<C>> pols 
+     = ListUtil.<GenPolynomial<C>,GenSolvablePolynomial<C>>map(this,pol,fc);
+     return pols;
+     }
+    */
 
 
     /* include here ?
@@ -566,23 +559,23 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
      * Required because no List casts allowed. Equivalent to 
      * cast (List&lt;GenSolvablePolynomial&lt;C&gt;&gt;) list.
      * @return solvable polynomial list from this.
-    public List<GenSolvablePolynomial<C>> castToSolvableList(List<GenPolynomial<C>> list) {
-        List< GenSolvablePolynomial<C> > slist = null;
-        if ( list == null ) {
-            return slist;
-        }
-        slist = new ArrayList< GenSolvablePolynomial<C> >( list.size() ); 
-        GenSolvablePolynomial<C> s;
-        for ( GenPolynomial<C> p: list ) {
-            if ( ! (p instanceof GenSolvablePolynomial) ) {
-               throw new RuntimeException("no solvable polynomial "+p);
-            }
-            s = (GenSolvablePolynomial<C>) p;
-            slist.add( s );
-        }
-        return slist;
-    }
-     */
+     public List<GenSolvablePolynomial<C>> castToSolvableList(List<GenPolynomial<C>> list) {
+     List< GenSolvablePolynomial<C> > slist = null;
+     if ( list == null ) {
+     return slist;
+     }
+     slist = new ArrayList< GenSolvablePolynomial<C> >( list.size() ); 
+     GenSolvablePolynomial<C> s;
+     for ( GenPolynomial<C> p: list ) {
+     if ( ! (p instanceof GenSolvablePolynomial) ) {
+     throw new RuntimeException("no solvable polynomial "+p);
+     }
+     s = (GenSolvablePolynomial<C>) p;
+     slist.add( s );
+     }
+     return slist;
+     }
+    */
 
 
     /**

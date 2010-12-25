@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.poly;
+package edu.jas.application;
 
 
 import java.io.BufferedReader;
@@ -27,22 +27,32 @@ import edu.jas.arith.ModIntegerRing;
 import edu.jas.structure.Power;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
-//import edu.jas.ufd.Quotient;
-//import edu.jas.ufd.QuotientRing;
+import edu.jas.ufd.Quotient;
+import edu.jas.ufd.QuotientRing;
 import edu.jas.vector.ModuleList;
 import edu.jas.vector.OrderedModuleList;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.GenSolvablePolynomial;
+import edu.jas.poly.GenSolvablePolynomialRing;
+import edu.jas.poly.TermOrder;
+import edu.jas.poly.ExpVector;
+import edu.jas.poly.PolynomialList;
+import edu.jas.poly.RelationTable;
+import edu.jas.poly.AlgebraicNumberRing;
+import edu.jas.poly.AlgebraicNumber;
+import edu.jas.poly.GenPolynomialTokenizer;
 
 
 /**
- * GenPolynomial Tokenizer. Used to read rational polynomials and lists from
- * input streams.
+ * RingFactory Tokenizer. Used to ring factories from input streams.
  * @author Heinz Kredel
  */
 
-public class GenPolynomialTokenizer {
+public class RingFactoryTokenizer {
 
 
-    private static final Logger logger = Logger.getLogger(GenPolynomialTokenizer.class);
+    private static final Logger logger = Logger.getLogger(RingFactoryTokenizer.class);
 
 
     private final boolean debug = logger.isDebugEnabled();
@@ -97,7 +107,7 @@ public class GenPolynomialTokenizer {
     /**
      * noargs constructor reads from System.in.
      */
-    public GenPolynomialTokenizer() {
+    public RingFactoryTokenizer() {
         this(new BufferedReader(new InputStreamReader(System.in)));
     }
 
@@ -107,7 +117,7 @@ public class GenPolynomialTokenizer {
      * @param rf ring factory.
      * @param r reader stream.
      */
-    public GenPolynomialTokenizer(GenPolynomialRing rf, Reader r) {
+    public RingFactoryTokenizer(GenPolynomialRing rf, Reader r) {
         this(r);
         if (rf == null) {
             return;
@@ -120,7 +130,7 @@ public class GenPolynomialTokenizer {
             spfac = null;
         }
         fac = rf.coFac;
-        vars = rf.vars;
+        vars = rf.getVars();
         if (vars != null) {
             nvars = vars.length;
         }
@@ -139,7 +149,7 @@ public class GenPolynomialTokenizer {
      * @param r reader stream.
      */
     @SuppressWarnings("unchecked")
-    public GenPolynomialTokenizer(Reader r) {
+    public RingFactoryTokenizer(Reader r) {
         //BasicConfigurator.configure();
         vars = null;
         tord = new TermOrder();
@@ -213,14 +223,14 @@ public class GenPolynomialTokenizer {
             pfac = new GenPolynomialRing<BigDecimal>(fac, nvars, tord, vars);
             parsedPoly = polyType.PolBigD;
             break;
-//         case RatFunc:
-//             pfac = new GenPolynomialRing<Quotient<BigInteger>>(fac, nvars, tord, vars);
-//             parsedPoly = polyType.PolRatFunc;
-//             break;
-//         case ModFunc:
-//             pfac = new GenPolynomialRing<Quotient<ModInteger>>(fac, nvars, tord, vars);
-//             parsedPoly = polyType.PolModFunc;
-//             break;
+        case RatFunc:
+            pfac = new GenPolynomialRing<Quotient<BigInteger>>(fac, nvars, tord, vars);
+            parsedPoly = polyType.PolRatFunc;
+            break;
+        case ModFunc:
+            pfac = new GenPolynomialRing<Quotient<ModInteger>>(fac, nvars, tord, vars);
+            parsedPoly = polyType.PolModFunc;
+            break;
         case IntFunc:
             pfac = new GenPolynomialRing<GenPolynomial<BigRational>>(fac, nvars, tord, vars);
             parsedPoly = polyType.PolIntFunc;
@@ -267,14 +277,14 @@ public class GenPolynomialTokenizer {
             spfac = new GenSolvablePolynomialRing<BigDecimal>(fac, nvars, tord, vars);
             parsedPoly = polyType.PolBigD;
             break;
-//         case RatFunc:
-//             spfac = new GenSolvablePolynomialRing<Quotient<BigInteger>>(fac, nvars, tord, vars);
-//             parsedPoly = polyType.PolRatFunc;
-//             break;
-//         case ModFunc:
-//             spfac = new GenSolvablePolynomialRing<Quotient<ModInteger>>(fac, nvars, tord, vars);
-//             parsedPoly = polyType.PolModFunc;
-//             break;
+        case RatFunc:
+            spfac = new GenSolvablePolynomialRing<Quotient<BigInteger>>(fac, nvars, tord, vars);
+            parsedPoly = polyType.PolRatFunc;
+            break;
+        case ModFunc:
+            spfac = new GenSolvablePolynomialRing<Quotient<ModInteger>>(fac, nvars, tord, vars);
+            parsedPoly = polyType.PolModFunc;
+            break;
         case IntFunc:
             spfac = new GenSolvablePolynomialRing<GenPolynomial<BigRational>>(fac, nvars, tord, vars);
             parsedPoly = polyType.PolModFunc;
@@ -283,291 +293,6 @@ public class GenPolynomialTokenizer {
             spfac = new GenSolvablePolynomialRing<BigRational>(fac, nvars, tord, vars);
             parsedPoly = polyType.PolBigRat;
         }
-    }
-
-
-    /**
-     * parsing method for GenPolynomial. syntax ? (simple)
-     * @return the next polynomial.
-     * @throws IOException
-     */
-    @SuppressWarnings("unchecked")
-    public GenPolynomial nextPolynomial() throws IOException {
-        if (debug) {
-            logger.debug("torder = " + tord);
-        }
-        GenPolynomial a = pfac.getZERO();
-        GenPolynomial a1 = pfac.getONE();
-        ExpVector leer = pfac.evzero;
-
-        if (debug) {
-            logger.debug("a = " + a);
-            logger.debug("a1 = " + a1);
-        }
-        GenPolynomial b = a1;
-        GenPolynomial c;
-        int tt; //, oldtt;
-        //String rat = "";
-        char first;
-        RingElem r;
-        ExpVector e;
-        int ix;
-        long ie;
-        boolean done = false;
-        while (!done) {
-            // next input. determine next action
-            tt = tok.nextToken();
-            //System.out.println("while tt = " + tok);
-            logger.debug("while tt = " + tok);
-            if (tt == StreamTokenizer.TT_EOF)
-                break;
-            switch (tt) {
-            case ')':
-            case ',':
-                return a; // do not change or remove
-            case '-':
-                b = b.negate();
-            case '+':
-            case '*':
-                tt = tok.nextToken();
-                break;
-            default: // skip
-            }
-            // read coefficient, monic monomial and polynomial
-            if (tt == StreamTokenizer.TT_EOF)
-                break;
-            switch (tt) {
-            //             case '_': 
-            //                 logger.warn("use of underscore _ ... _ is deprecated, use braces { ... } instead ");
-            //                 StringBuffer cf = new StringBuffer();
-            //                 tt = tok.nextToken();
-            //                 //System.out.println("tt = " + tt );
-            //                 while ( tt != '_' ) {
-            //                     if ( tok.sval != null ) {
-            //                         if ( cf.length() > 0 && cf.charAt(cf.length()-1) != '.' ) {
-            //                             cf.append( " " );
-            //                         }
-            //                         cf.append( tok.sval ); // " " +  
-            //                     } else {
-            //                         cf.append( (char)tt );
-            //                     }
-            //                     tt = tok.nextToken();
-            //                 }
-            //                 //System.out.println("coeff_ = " + cf.toString() );
-            //                 r = (RingElem)fac.parse( cf.toString() );
-            //                 //System.out.println("r = " + r );
-            //                 if (debug) logger.debug("coeff " + r);
-            //                 b = b.multiply(r,leer); 
-            //                 tt = tok.nextToken();
-            //                 if (debug) logger.debug("tt,digit = " + tok);
-            //                 //no break;
-            //                 break;
-
-            case '{':
-                StringBuffer rf = new StringBuffer();
-                int level = 0;
-                do {
-                    tt = tok.nextToken();
-                    //System.out.println("token { = " + ((char)tt) + ", " + tt + ", level = " + level);
-                    if (tt == '{') {
-                        level++;
-                    }
-                    if (tt == '}') {
-                        level--;
-                        if (level < 0) {
-                            continue; // skip last closing brace 
-                        }
-                    }
-                    if (tok.sval != null) {
-                        if (rf.length() > 0 && rf.charAt(rf.length() - 1) != '.') {
-                            rf.append(" ");
-                        }
-                        rf.append(tok.sval); // " " + 
-                    } else {
-                        rf.append((char) tt);
-                    }
-                } while (level >= 0); // || tt != '}' 
-                //System.out.println("coeff{} = " + rf.toString() );
-                r = (RingElem) fac.parse(rf.toString());
-                if (debug)
-                    logger.debug("coeff " + r);
-                ie = nextExponent();
-                if (debug)
-                    logger.debug("ie " + ie);
-                r = Power.<RingElem> positivePower(r, ie);
-                if (debug)
-                    logger.debug("coeff^ie " + r);
-                b = b.multiply(r, leer);
-                tt = tok.nextToken();
-                if (debug)
-                    logger.debug("tt,digit = " + tok);
-                //no break;
-                break;
-
-            case StreamTokenizer.TT_WORD:
-                //System.out.println("TT_WORD: " + tok.sval);
-                if (tok.sval == null || tok.sval.length() == 0)
-                    break;
-                // read coefficient
-                first = tok.sval.charAt(0);
-                if (digit(first)) {
-                    //System.out.println("coeff 0 = " + tok.sval );
-                    StringBuffer df = new StringBuffer();
-                    df.append(tok.sval);
-                    tt = tok.nextToken();
-                    if (tt == '.') {
-                        tt = tok.nextToken();
-                        if (debug)
-                            logger.debug("tt,dot = " + tok);
-                        if (tok.sval != null) {
-                            df.append(".");
-                            df.append(tok.sval);
-                        } else {
-                            tok.pushBack();
-                            tok.pushBack();
-                        }
-                    } else {
-                        tok.pushBack();
-                    }
-                    r = (RingElem) fac.parse(df.toString());
-                    if (debug)
-                        logger.debug("coeff " + r);
-                    //System.out.println("r = " + r.toScriptFactory());
-                    ie = nextExponent();
-                    if (debug)
-                        logger.debug("ie " + ie);
-                    // r = r^ie;
-                    r = Power.<RingElem> positivePower(r, ie);
-                    if (debug)
-                        logger.debug("coeff^ie " + r);
-                    b = b.multiply(r, leer);
-                    tt = tok.nextToken();
-                    if (debug)
-                        logger.debug("tt,digit = " + tok);
-                }
-                if (tt == StreamTokenizer.TT_EOF)
-                    break;
-                if (tok.sval == null)
-                    break;
-                // read monomial 
-                first = tok.sval.charAt(0);
-                if (letter(first)) {
-                    ix = leer.indexVar(tok.sval, vars); //indexVar( tok.sval );
-                    if (ix < 0) {
-                        logger.error("Unknown varibable " + tok.sval);
-                        done = true;
-                        break;
-                    }
-                    //  System.out.println("ix: " + ix);
-                    ie = nextExponent();
-                    //  System.out.println("ie: " + ie);
-                    // r = BigRational.RNONE;
-                    e = ExpVector.create(vars.length, ix, ie);
-                    //c = new GenPolynomial<BigRational>(r,e);
-                    b = b.multiply(e);
-                    tt = tok.nextToken();
-                    if (debug)
-                        logger.debug("tt,letter = " + tok);
-                }
-                break;
-
-            case '(':
-                c = nextPolynomial();
-                if (debug)
-                    logger.debug("factor " + c);
-                ie = nextExponent();
-                if (debug)
-                    logger.debug("ie " + ie);
-                c = Power.<GenPolynomial> positivePower(c, ie);
-                if (debug)
-                    logger.debug("factor^ie " + c);
-                b = b.multiply(c);
-                tt = tok.nextToken();
-                if (debug)
-                    logger.debug("tt,digit = " + tok);
-                //no break;
-                break;
-
-            default: //skip 
-            }
-            if (done)
-                break; // unknown variable
-            if (tt == StreamTokenizer.TT_EOF)
-                break;
-            // complete polynomial
-            tok.pushBack();
-            switch (tt) {
-            case '-':
-            case '+':
-            case ')':
-            case ',':
-                logger.debug("b, = " + b);
-                a = a.sum(b);
-                b = a1;
-                break;
-            case '*':
-                logger.debug("b, = " + b);
-                //a = a.sum(b); 
-                //b = a1;
-                break;
-            case '\n':
-                tt = tok.nextToken();
-                if (debug)
-                    logger.debug("tt,nl = " + tt);
-            default: // skip or finish ?
-                if (debug)
-                    logger.debug("default: " + tok);
-            }
-        }
-        if (debug)
-            logger.debug("b = " + b);
-        a = a.sum(b);
-        logger.debug("a = " + a);
-        // b = a1;
-        return a;
-    }
-
-
-    /**
-     * parsing method for exponent (of variable). syntax: ^long | **long.
-     * @return the next exponent or 1.
-     * @throws IOException
-     */
-    public long nextExponent() throws IOException {
-        long e = 1;
-        char first;
-        int tt;
-        tt = tok.nextToken();
-        if (tt == '^') {
-            if (debug)
-                logger.debug("exponent ^");
-            tt = tok.nextToken();
-            if (tok.sval != null) {
-                first = tok.sval.charAt(0);
-                if (digit(first)) {
-                    e = Long.parseLong(tok.sval);
-                    return e;
-                }
-            }
-        }
-        if (tt == '*') {
-            tt = tok.nextToken();
-            if (tt == '*') {
-                if (debug)
-                    logger.debug("exponent **");
-                tt = tok.nextToken();
-                if (tok.sval != null) {
-                    first = tok.sval.charAt(0);
-                    if (digit(first)) {
-                        e = Long.parseLong(tok.sval);
-                        return e;
-                    }
-                }
-            }
-            tok.pushBack();
-        }
-        tok.pushBack();
-        return e;
     }
 
 
@@ -716,34 +441,34 @@ public class GenPolynomialTokenizer {
                 if (tt == ']' && openb) { // optional
                     tt = tok.nextToken();
                 }
-//             } else if (tok.sval.equalsIgnoreCase("RatFunc")) {
-//                 String[] rfv = nextVariableList();
-//                 //System.out.println("rfv = " + rfv.length + " " + rfv[0]);
-//                 int vr = rfv.length;
-//                 BigInteger bi = new BigInteger();
-//                 TermOrder to = new TermOrder(TermOrder.INVLEX);
-//                 GenPolynomialRing<BigInteger> pcf = new GenPolynomialRing<BigInteger>(bi, vr, to, rfv);
-//                 coeff = new QuotientRing(pcf);
-//                 ct = coeffType.RatFunc;
-//             } else if (tok.sval.equalsIgnoreCase("ModFunc")) {
-//                 tt = tok.nextToken();
-//                 RingFactory mi = new ModIntegerRing("19");
-//                 if (tok.sval != null && tok.sval.length() > 0) {
-//                     if (digit(tok.sval.charAt(0))) {
-//                         mi = new ModIntegerRing(tok.sval);
-//                     } else {
-//                         tok.pushBack();
-//                     }
-//                 } else {
-//                     tok.pushBack();
-//                 }
-//                 String[] rfv = nextVariableList();
-//                 //System.out.println("rfv = " + rfv.length + " " + rfv[0]);
-//                 int vr = rfv.length;
-//                 TermOrder to = new TermOrder(TermOrder.INVLEX);
-//                 GenPolynomialRing<ModInteger> pcf = new GenPolynomialRing<ModInteger>(mi, vr, to, rfv);
-//                 coeff = new QuotientRing(pcf);
-//                 ct = coeffType.ModFunc;
+            } else if (tok.sval.equalsIgnoreCase("RatFunc")) {
+                String[] rfv = nextVariableList();
+                //System.out.println("rfv = " + rfv.length + " " + rfv[0]);
+                int vr = rfv.length;
+                BigInteger bi = new BigInteger();
+                TermOrder to = new TermOrder(TermOrder.INVLEX);
+                GenPolynomialRing<BigInteger> pcf = new GenPolynomialRing<BigInteger>(bi, vr, to, rfv);
+                coeff = new QuotientRing(pcf);
+                ct = coeffType.RatFunc;
+            } else if (tok.sval.equalsIgnoreCase("ModFunc")) {
+                tt = tok.nextToken();
+                RingFactory mi = new ModIntegerRing("19");
+                if (tok.sval != null && tok.sval.length() > 0) {
+                    if (digit(tok.sval.charAt(0))) {
+                        mi = new ModIntegerRing(tok.sval);
+                    } else {
+                        tok.pushBack();
+                    }
+                } else {
+                    tok.pushBack();
+                }
+                String[] rfv = nextVariableList();
+                //System.out.println("rfv = " + rfv.length + " " + rfv[0]);
+                int vr = rfv.length;
+                TermOrder to = new TermOrder(TermOrder.INVLEX);
+                GenPolynomialRing<ModInteger> pcf = new GenPolynomialRing<ModInteger>(mi, vr, to, rfv);
+                coeff = new QuotientRing(pcf);
+                ct = coeffType.ModFunc;
             } else if (tok.sval.equalsIgnoreCase("IntFunc")) {
                 String[] rfv = nextVariableList();
                 //System.out.println("rfv = " + rfv.length + " " + rfv[0]);
@@ -789,17 +514,9 @@ public class GenPolynomialTokenizer {
                     if (debug) {
                         logger.debug("pfac = " + pfac);
                     }
-                    tt = tok.nextToken();
-                    GenPolynomial mod;
-                    if (tt == '(') {
-                        mod = nextPolynomial();
-                        tt = tok.nextToken();
-                        if (tok.ttype != ')')
-                            tok.pushBack();
-                    } else {
-                        tok.pushBack();
-                        mod = nextPolynomial();
-                    }
+                    GenPolynomialTokenizer ptok = new GenPolynomialTokenizer(pfac,reader);
+                    GenPolynomial mod = ptok.nextPolynomial();
+                    ptok = null;
                     if (debug) {
                         logger.debug("mod = " + mod);
                     }
@@ -936,6 +653,7 @@ public class GenPolynomialTokenizer {
      * @throws IOException
      */
     public int nextSplitIndex() throws IOException {
+        boolean pushback = true;
         int e = -1; // =unknown
         int e0 = -1; // =unknown
         char first;
@@ -946,12 +664,12 @@ public class GenPolynomialTokenizer {
             tt = tok.nextToken();
             if (tt == StreamTokenizer.TT_EOF) {
                 return e;
-            }
-            if (tok.sval != null) {
+            } else if (tok.sval != null) {
                 first = tok.sval.charAt(0);
                 if (digit(first)) {
                     e = Integer.parseInt(tok.sval);
                     //System.out.println("w: " + i);
+               	    pushback = false;
                 }
                 tt = tok.nextToken();
                 if (tt != '|') {
@@ -969,6 +687,7 @@ public class GenPolynomialTokenizer {
                 if (digit(first)) {
                     e0 = Integer.parseInt(tok.sval);
                     //System.out.println("w: " + i);
+               	    pushback = false;
                 }
                 tt = tok.nextToken();
                 if (tt == ',') {
@@ -981,6 +700,7 @@ public class GenPolynomialTokenizer {
                         if (digit(first)) {
                             e = Integer.parseInt(tok.sval);
                             //System.out.println("w: " + i);
+                 	    pushback = false;
                         }
                     }
                     if (tt != ']') {
@@ -991,6 +711,11 @@ public class GenPolynomialTokenizer {
         } else {
             tok.pushBack();
         }
+        if ( pushback ) {
+            System.out.println("pushback1s = " + tok);
+            tok.pushBack();
+            System.out.println("pushback2s = " + tok);
+	}
         return e;
     }
 
@@ -1002,40 +727,42 @@ public class GenPolynomialTokenizer {
      * @throws IOException
      */
     public TermOrder nextTermOrder() throws IOException {
+        boolean pushback = true;
         int evord = TermOrder.DEFAULT_EVORD;
         int tt;
         tt = tok.nextToken();
         if (tt == StreamTokenizer.TT_EOF) { /* nop */
-        }
-        if (tt == StreamTokenizer.TT_WORD) {
+	    pushback = false;
+        } else if (tt == StreamTokenizer.TT_WORD) {
             // System.out.println("TT_WORD: " + tok.sval);
             if (tok.sval != null) {
                 if (tok.sval.equalsIgnoreCase("L")) {
                     evord = TermOrder.INVLEX;
-                }
-                if (tok.sval.equalsIgnoreCase("IL")) {
+               	    pushback = false;
+                } else if (tok.sval.equalsIgnoreCase("IL")) {
                     evord = TermOrder.INVLEX;
-                }
-                if (tok.sval.equalsIgnoreCase("INVLEX")) {
+               	    pushback = false;
+                } else if (tok.sval.equalsIgnoreCase("INVLEX")) {
                     evord = TermOrder.INVLEX;
-                }
-                if (tok.sval.equalsIgnoreCase("LEX")) {
+               	    pushback = false;
+                } else if (tok.sval.equalsIgnoreCase("LEX")) {
                     evord = TermOrder.LEX;
-                }
-                if (tok.sval.equalsIgnoreCase("G")) {
+               	    pushback = false;
+                } else if (tok.sval.equalsIgnoreCase("G")) {
                     evord = TermOrder.IGRLEX;
-                }
-                if (tok.sval.equalsIgnoreCase("IG")) {
+               	    pushback = false;
+                } else if (tok.sval.equalsIgnoreCase("IG")) {
                     evord = TermOrder.IGRLEX;
-                }
-                if (tok.sval.equalsIgnoreCase("IGRLEX")) {
+               	    pushback = false;
+                } else if (tok.sval.equalsIgnoreCase("IGRLEX")) {
                     evord = TermOrder.IGRLEX;
-                }
-                if (tok.sval.equalsIgnoreCase("GRLEX")) {
+               	    pushback = false;
+                } else if (tok.sval.equalsIgnoreCase("GRLEX")) {
                     evord = TermOrder.GRLEX;
-                }
-                if (tok.sval.equalsIgnoreCase("W")) {
+               	    pushback = false;
+                } else if (tok.sval.equalsIgnoreCase("W")) {
                     long[][] w = nextWeightArray();
+               	    pushback = false;
                     //int s = nextSplitIndex(); // no more
                     //if ( s <= 0 ) {
                     return new TermOrder(w);
@@ -1045,86 +772,17 @@ public class GenPolynomialTokenizer {
                 }
             }
         }
+        if ( pushback ) {
+            System.out.println("pushback1 = " + tok);
+            tok.pushBack();
+            System.out.println("pushback2 = " + tok);
+	}
         int s = nextSplitIndex();
         if (s <= 0) {
             return new TermOrder(evord);
         } else {
             return new TermOrder(evord, evord, vars.length, s);
         }
-    }
-
-
-    /**
-     * parsing method for polynomial list. syntax: ( p1, p2, p3, ..., pn )
-     * @return the next polynomial list.
-     * @throws IOException
-     */
-    public List<GenPolynomial> nextPolynomialList() throws IOException {
-        GenPolynomial a;
-        List<GenPolynomial> L = new ArrayList<GenPolynomial>();
-        int tt;
-        tt = tok.nextToken();
-        if (tt == StreamTokenizer.TT_EOF)
-            return L;
-        if (tt != '(')
-            return L;
-        logger.debug("polynomial list");
-        while (true) {
-            tt = tok.nextToken();
-            if (tok.ttype == ',')
-                continue;
-            if (tt == '(') {
-                a = nextPolynomial();
-                tt = tok.nextToken();
-                if (tok.ttype != ')')
-                    tok.pushBack();
-            } else {
-                tok.pushBack();
-                a = nextPolynomial();
-            }
-            logger.info("next pol = " + a);
-            L.add(a);
-            if (tok.ttype == StreamTokenizer.TT_EOF)
-                break;
-            if (tok.ttype == ')')
-                break;
-        }
-        return L;
-    }
-
-
-    /**
-     * parsing method for submodule list. syntax: ( ( p11, p12, p13, ..., p1n ),
-     * ..., ( pm1, pm2, pm3, ..., pmn ) )
-     * @return the next list of polynomial lists.
-     * @throws IOException
-     */
-    public List<List<GenPolynomial>> nextSubModuleList() throws IOException {
-        List<List<GenPolynomial>> L = new ArrayList<List<GenPolynomial>>();
-        int tt;
-        tt = tok.nextToken();
-        if (tt == StreamTokenizer.TT_EOF)
-            return L;
-        if (tt != '(')
-            return L;
-        logger.debug("module list");
-        List<GenPolynomial> v = null;
-        while (true) {
-            tt = tok.nextToken();
-            if (tok.ttype == ',')
-                continue;
-            if (tok.ttype == ')')
-                break;
-            if (tok.ttype == StreamTokenizer.TT_EOF)
-                break;
-            if (tt == '(') {
-                tok.pushBack();
-                v = nextPolynomialList();
-                logger.info("next vect = " + v);
-                L.add(v);
-            }
-        }
-        return L;
     }
 
 
@@ -1147,7 +805,9 @@ public class GenPolynomialTokenizer {
         tt = tok.nextToken();
         if (tok.sval != null) {
             if (tok.sval.equalsIgnoreCase("RelationTable")) {
-                rels = nextPolynomialList();
+                GenPolynomialTokenizer ptok = new GenPolynomialTokenizer(pfac,reader);
+                rels = ptok.nextPolynomialList();
+                ptok = null;
             }
         }
         if (rels == null) {
@@ -1162,7 +822,8 @@ public class GenPolynomialTokenizer {
                 ExpVector f = p.leadingExpVector();
                 if (it.hasNext()) {
                     p = it.next();
-                    sp = new GenSolvablePolynomial(spfac, p.val);
+                    sp = new GenSolvablePolynomial(spfac);
+                    sp.doPutToMap(p.getMap());
                     table.update(e, f, sp);
                 }
             }
@@ -1181,7 +842,7 @@ public class GenPolynomialTokenizer {
      * @throws IOException
      */
     @SuppressWarnings("unchecked")
-    public PolynomialList nextPolynomialSet() throws IOException {
+    public GenPolynomialRing nextPolynomialRing() throws IOException {
         //String comments = "";
         //comments += nextComment();
         //if (debug) logger.debug("comment = " + comments);
@@ -1200,96 +861,17 @@ public class GenPolynomialTokenizer {
         }
 
         tord = nextTermOrder();
-        logger.info("tord = " + tord);
+        logger.info("tord = " + tord + ", tok = " + tok);
         // check more TOs
-
+        if (tok.ttype == '(' ) {
+            System.out.println("pushback3 = " + tok);
+            tok.pushBack();
+	}
         initFactory(coeff, parsedCoeff); // global: nvars, tord, vars
-        List<GenPolynomial> s = null;
-        s = nextPolynomialList();
-        logger.info("s = " + s);
-        // comments += nextComment();
-        return new PolynomialList(pfac, s);
-    }
+        System.out.println("pfac = " + pfac + ", tok = " + tok);
 
-
-    /**
-     * parsing method for module set. syntax: coeffRing varList termOrderName
-     * moduleList.
-     * @return the next module set.
-     * @throws IOException
-     */
-    @SuppressWarnings("unchecked")
-    public ModuleList nextSubModuleSet() throws IOException {
-        //String comments = "";
-        //comments += nextComment();
-        //if (debug) logger.debug("comment = " + comments);
-
-        RingFactory coeff = nextCoefficientRing();
-        logger.info("coeff = " + coeff);
-
-        vars = nextVariableList();
-        String dd = "vars =";
-        for (int i = 0; i < vars.length; i++) {
-            dd += " " + vars[i];
-        }
-        logger.info(dd);
-        if (vars != null) {
-            nvars = vars.length;
-        }
-
-        tord = nextTermOrder();
-        logger.info("tord = " + tord);
-        // check more TOs
-
-        initFactory(coeff, parsedCoeff); // global: nvars, tord, vars
-        List<List<GenPolynomial>> m = null;
-        m = nextSubModuleList();
-        logger.info("m = " + m);
-        // comments += nextComment();
-
-        return new ModuleList(pfac, m);
-    }
-
-
-    /**
-     * parsing method for solvable polynomial list. syntax: ( p1, p2, p3, ...,
-     * pn )
-     * @return the next solvable polynomial list.
-     * @throws IOException
-     */
-    @SuppressWarnings("unchecked")
-    public List<GenSolvablePolynomial> nextSolvablePolynomialList() throws IOException {
-        List<GenPolynomial> s = nextPolynomialList();
-        logger.info("s = " + s);
-        // comments += nextComment();
-
-        GenPolynomial p;
-        GenSolvablePolynomial ps;
-        List<GenSolvablePolynomial> sp = new ArrayList<GenSolvablePolynomial>(s.size());
-        for (Iterator<GenPolynomial> it = s.iterator(); it.hasNext();) {
-            p = it.next();
-            ps = new GenSolvablePolynomial(spfac, p.val);
-            //System.out.println("ps = " + ps);
-            sp.add(ps);
-        }
-        return sp;
-    }
-
-
-    /**
-     * parsing method for solvable polynomial. syntax: p.
-     * @return the next polynomial.
-     * @throws IOException
-     */
-    @SuppressWarnings("unchecked")
-    public GenSolvablePolynomial nextSolvablePolynomial() throws IOException {
-        GenPolynomial p = nextPolynomial();
-        logger.info("p = " + p);
-        // comments += nextComment();
-
-        GenSolvablePolynomial ps = new GenSolvablePolynomial(spfac, p.val);
-        //System.out.println("ps = " + ps);
-        return ps;
+        // now pfac is initialized
+        return pfac;
     }
 
 
@@ -1301,7 +883,7 @@ public class GenPolynomialTokenizer {
      */
 
     @SuppressWarnings("unchecked")
-    public PolynomialList nextSolvablePolynomialSet() throws IOException {
+    public GenSolvablePolynomialRing nextSolvablePolynomialRing() throws IOException {
         //String comments = "";
         //comments += nextComment();
         //if (debug) logger.debug("comment = " + comments);
@@ -1326,108 +908,15 @@ public class GenPolynomialTokenizer {
         initFactory(coeff, parsedCoeff); // must be because of symmetric read
         initSolvableFactory(coeff, parsedCoeff); // global: nvars, tord, vars
 
-        //System.out.println("pfac = " + pfac);
-        //System.out.println("spfac = " + spfac);
+        System.out.println("pfac = " + pfac);
+        System.out.println("spfac = " + spfac);
 
         nextRelationTable();
         if (logger.isInfoEnabled()) {
-            logger.info("table = " + table);
+            logger.info("table = " + table + ", tok = " + tok);
         }
-
-        List<GenSolvablePolynomial> s = null;
-        s = nextSolvablePolynomialList();
-        logger.info("s = " + s);
-        // comments += nextComment();
-        return new PolynomialList(spfac, s); // Ordered ?
-    }
-
-
-    /**
-     * parsing method for solvable submodule list. syntax: ( ( p11, p12, p13,
-     * ..., p1n ), ..., ( pm1, pm2, pm3, ..., pmn ) )
-     * @return the next list of solvable polynomial lists.
-     * @throws IOException
-     */
-    public List<List<GenSolvablePolynomial>> nextSolvableSubModuleList() throws IOException {
-        List<List<GenSolvablePolynomial>> L = new ArrayList<List<GenSolvablePolynomial>>();
-        int tt;
-        tt = tok.nextToken();
-        if (tt == StreamTokenizer.TT_EOF)
-            return L;
-        if (tt != '(')
-            return L;
-        logger.debug("module list");
-        List<GenSolvablePolynomial> v = null;
-        while (true) {
-            tt = tok.nextToken();
-            if (tok.ttype == ',')
-                continue;
-            if (tok.ttype == ')')
-                break;
-            if (tok.ttype == StreamTokenizer.TT_EOF)
-                break;
-            if (tt == '(') {
-                tok.pushBack();
-                v = nextSolvablePolynomialList();
-                logger.info("next vect = " + v);
-                L.add(v);
-            }
-        }
-        return L;
-    }
-
-
-    /**
-     * parsing method for solvable module set. syntax: varList termOrderName
-     * relationTable moduleList.
-     * @return the next solvable module set.
-     * @throws IOException
-     */
-    @SuppressWarnings("unchecked")
-    public ModuleList nextSolvableSubModuleSet() throws IOException {
-        //String comments = "";
-        //comments += nextComment();
-        //if (debug) logger.debug("comment = " + comments);
-
-        RingFactory coeff = nextCoefficientRing();
-        logger.info("coeff = " + coeff);
-
-        vars = nextVariableList();
-        String dd = "vars =";
-        for (int i = 0; i < vars.length; i++) {
-            dd += " " + vars[i];
-        }
-        logger.info(dd);
-        if (vars != null) {
-            nvars = vars.length;
-        }
-
-        tord = nextTermOrder();
-        logger.info("tord = " + tord);
-        // check more TOs
-
-        initFactory(coeff, parsedCoeff); // must be because of symmetric read
-        initSolvableFactory(coeff, parsedCoeff); // global: nvars, tord, vars
-
-        //System.out.println("spfac = " + spfac);
-
-        nextRelationTable();
-        if (logger.isInfoEnabled()) {
-            logger.info("table = " + table);
-        }
-
-        List<List<GenSolvablePolynomial>> s = null;
-        s = nextSolvableSubModuleList();
-        logger.info("s = " + s);
-        // comments += nextComment();
-
-        return new OrderedModuleList(spfac, s); // Ordered
-    }
-
-
-    // must also allow +/- // does not work with tokenizer
-    private boolean number(char x) {
-        return digit(x) || x == '-' || x == '+';
+        // now spfac is initialized
+        return spfac; 
     }
 
 
@@ -1439,16 +928,6 @@ public class GenPolynomialTokenizer {
     private boolean letter(char x) {
         return ('a' <= x && x <= 'z') || ('A' <= x && x <= 'Z');
     }
-
-
-    //     private int indexVar(String x) {
-    //         for ( int i = 0; i < vars.length; i++ ) { 
-    //             if ( x.equals( vars[i] ) ) { 
-    //                 return vars.length-i-1;
-    //             }
-    //         }
-    //         return -1; // not found
-    //     }
 
 
     // unused

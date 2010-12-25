@@ -34,7 +34,7 @@ import edu.jas.structure.UnaryFunctor;
  */
 
 public class GenPolynomial<C extends RingElem<C>> implements RingElem<GenPolynomial<C>>, /* not yet Polynomial<C> */
-Iterable<Monomial<C>> {
+                                                             Iterable<Monomial<C>> {
 
 
     /**
@@ -181,6 +181,30 @@ Iterable<Monomial<C>> {
 
 
     /**
+     * Put an a sorted map of exponents to coefficients into the internal map of this
+     * GenPolynomial. <b>Note:</b> Do not use this method unless you are
+     * constructing a new polynomial. this is modified and breaks the
+     * immutability promise of this class.
+     * @param vals sorted map of exponents and coefficients.
+     */
+    public void doPutToMap(SortedMap<ExpVector,C> vals) {
+        for ( Map.Entry<ExpVector,C> me : vals.entrySet() ) {
+            ExpVector e = me.getKey();
+            if (false && debug) {
+                C a = val.get(e);
+                if (a != null) {
+                    logger.info("map entry exists " + e + " to " + a + " new " + me.getValue());
+                }
+            }
+            C c = me.getValue();
+            if (!c.isZERO()) {
+                val.put(e, c);
+            }
+        }
+    }
+
+
+    /**
      * String representation of GenPolynomial.
      * @see java.lang.Object#toString()
      */
@@ -309,8 +333,8 @@ Iterable<Monomial<C>> {
         }
         boolean parenthesis = false;
         if (ring.coFac instanceof GenPolynomialRing || ring.coFac instanceof AlgebraicNumberRing
-        // || ring.coFac instanceof RealAlgebraicRing
-        ) {
+            // || ring.coFac instanceof RealAlgebraicRing
+            ) {
             // inactive: parenthesis = true;
         }
         boolean first = true;
@@ -1077,12 +1101,12 @@ Iterable<Monomial<C>> {
                 if (!x.isZERO()) {
                     System.out.println("divide x = " + x);
                     throw new ArithmeticException(this.getClass().getName() + " no exact division: " + c1
-                            + "/" + s);
+                                                  + "/" + s);
                 }
             }
             if (c.isZERO()) {
                 throw new ArithmeticException(this.getClass().getName() + " no exact division: " + c1 + "/"
-                        + s + ", in " + this);
+                                              + s + ", in " + this);
             }
             pv.put(e, c); // or m1.setValue( c )
         }
@@ -1220,7 +1244,7 @@ Iterable<Monomial<C>> {
         }
         if (ring.nvar != 1) {
             throw new IllegalArgumentException(this.getClass().getName() + " not univariate polynomials"
-                    + ring);
+                                               + ring);
         }
         GenPolynomial<C> x;
         GenPolynomial<C> q = this;
@@ -1260,7 +1284,7 @@ Iterable<Monomial<C>> {
         }
         if (ring.nvar != 1) {
             throw new IllegalArgumentException(this.getClass().getName() + " not univariate polynomials"
-                    + ring);
+                                               + ring);
         }
         GenPolynomial<C>[] qr;
         GenPolynomial<C> q = this;
@@ -1321,7 +1345,7 @@ Iterable<Monomial<C>> {
         }
         if (ring.nvar != 1) {
             throw new IllegalArgumentException(this.getClass().getName() + " not univariate polynomials"
-                    + ring);
+                                               + ring);
         }
         GenPolynomial<C>[] qr;
         GenPolynomial<C> q = this;
