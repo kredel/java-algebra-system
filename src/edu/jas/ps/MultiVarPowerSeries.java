@@ -21,7 +21,6 @@ import edu.jas.structure.BinaryFunctor;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.Selector;
 import edu.jas.structure.UnaryFunctor;
-import edu.jas.util.ExpVectorIterable;
 import edu.jas.util.MapEntry;
 
 

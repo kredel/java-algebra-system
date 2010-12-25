@@ -17,7 +17,6 @@ import edu.jas.arith.BigRational;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.util.ExpVectorIterable;
 
 
 /**

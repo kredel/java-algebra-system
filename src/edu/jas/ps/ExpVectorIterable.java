@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.util;
+package edu.jas.ps;
 
 
 import java.util.Iterator;
@@ -12,6 +12,8 @@ import java.util.ArrayList;
 
 
 import edu.jas.poly.ExpVector;
+import edu.jas.util.CartesianProductLong;
+import edu.jas.util.LongIterable;
 
 
 /**
