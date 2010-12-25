@@ -653,7 +653,6 @@ public class RingFactoryTokenizer {
      * @throws IOException
      */
     public int nextSplitIndex() throws IOException {
-        boolean pushback = true;
         int e = -1; // =unknown
         int e0 = -1; // =unknown
         char first;
@@ -669,7 +668,6 @@ public class RingFactoryTokenizer {
                 if (digit(first)) {
                     e = Integer.parseInt(tok.sval);
                     //System.out.println("w: " + i);
-               	    pushback = false;
                 }
                 tt = tok.nextToken();
                 if (tt != '|') {
@@ -687,7 +685,6 @@ public class RingFactoryTokenizer {
                 if (digit(first)) {
                     e0 = Integer.parseInt(tok.sval);
                     //System.out.println("w: " + i);
-               	    pushback = false;
                 }
                 tt = tok.nextToken();
                 if (tt == ',') {
@@ -700,7 +697,6 @@ public class RingFactoryTokenizer {
                         if (digit(first)) {
                             e = Integer.parseInt(tok.sval);
                             //System.out.println("w: " + i);
-                 	    pushback = false;
                         }
                     }
                     if (tt != ']') {
@@ -711,11 +707,6 @@ public class RingFactoryTokenizer {
         } else {
             tok.pushBack();
         }
-        if ( pushback ) {
-            System.out.println("pushback1s = " + tok);
-            tok.pushBack();
-            System.out.println("pushback2s = " + tok);
-	}
         return e;
     }
 
@@ -727,56 +718,36 @@ public class RingFactoryTokenizer {
      * @throws IOException
      */
     public TermOrder nextTermOrder() throws IOException {
-        boolean pushback = true;
         int evord = TermOrder.DEFAULT_EVORD;
         int tt;
         tt = tok.nextToken();
         if (tt == StreamTokenizer.TT_EOF) { /* nop */
-	    pushback = false;
         } else if (tt == StreamTokenizer.TT_WORD) {
             // System.out.println("TT_WORD: " + tok.sval);
             if (tok.sval != null) {
                 if (tok.sval.equalsIgnoreCase("L")) {
                     evord = TermOrder.INVLEX;
-               	    pushback = false;
                 } else if (tok.sval.equalsIgnoreCase("IL")) {
                     evord = TermOrder.INVLEX;
-               	    pushback = false;
                 } else if (tok.sval.equalsIgnoreCase("INVLEX")) {
                     evord = TermOrder.INVLEX;
-               	    pushback = false;
                 } else if (tok.sval.equalsIgnoreCase("LEX")) {
                     evord = TermOrder.LEX;
-               	    pushback = false;
                 } else if (tok.sval.equalsIgnoreCase("G")) {
                     evord = TermOrder.IGRLEX;
-               	    pushback = false;
                 } else if (tok.sval.equalsIgnoreCase("IG")) {
                     evord = TermOrder.IGRLEX;
-               	    pushback = false;
                 } else if (tok.sval.equalsIgnoreCase("IGRLEX")) {
                     evord = TermOrder.IGRLEX;
-               	    pushback = false;
                 } else if (tok.sval.equalsIgnoreCase("GRLEX")) {
                     evord = TermOrder.GRLEX;
-               	    pushback = false;
                 } else if (tok.sval.equalsIgnoreCase("W")) {
                     long[][] w = nextWeightArray();
-               	    pushback = false;
                     //int s = nextSplitIndex(); // no more
-                    //if ( s <= 0 ) {
                     return new TermOrder(w);
-                    //} else {
-                    //return new TermOrder( w, s );
-                    //}
                 }
             }
         }
-        if ( pushback ) {
-            System.out.println("pushback1 = " + tok);
-            tok.pushBack();
-            System.out.println("pushback2 = " + tok);
-	}
         int s = nextSplitIndex();
         if (s <= 0) {
             return new TermOrder(evord);
@@ -861,15 +832,9 @@ public class RingFactoryTokenizer {
         }
 
         tord = nextTermOrder();
-        logger.info("tord = " + tord + ", tok = " + tok);
+        logger.info("tord = " + tord);
         // check more TOs
-        if (tok.ttype == '(' ) {
-            System.out.println("pushback3 = " + tok);
-            tok.pushBack();
-	}
         initFactory(coeff, parsedCoeff); // global: nvars, tord, vars
-        System.out.println("pfac = " + pfac + ", tok = " + tok);
-
         // now pfac is initialized
         return pfac;
     }
@@ -908,8 +873,8 @@ public class RingFactoryTokenizer {
         initFactory(coeff, parsedCoeff); // must be because of symmetric read
         initSolvableFactory(coeff, parsedCoeff); // global: nvars, tord, vars
 
-        System.out.println("pfac = " + pfac);
-        System.out.println("spfac = " + spfac);
+        //System.out.println("pfac = " + pfac);
+        //System.out.println("spfac = " + spfac);
 
         nextRelationTable();
         if (logger.isInfoEnabled()) {

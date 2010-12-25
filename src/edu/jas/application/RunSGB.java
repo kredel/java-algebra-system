@@ -7,6 +7,7 @@ package edu.jas.application;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.StringReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.List;
@@ -24,6 +25,7 @@ import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolynomialList;
+import edu.jas.util.CatReader;
 
 
 /**
@@ -123,7 +125,8 @@ public class RunSGB {
             e.printStackTrace();
             return;
         }
-        GenPolynomialTokenizer tok = new GenPolynomialTokenizer(spfac,problem);
+        Reader polyreader = new CatReader(new StringReader("("),problem); // ( has gone
+        GenPolynomialTokenizer tok = new GenPolynomialTokenizer(spfac,polyreader);
         PolynomialList S = null;
         try {
             S = new PolynomialList(spfac,tok.nextSolvablePolynomialList());

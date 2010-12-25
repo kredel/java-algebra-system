@@ -7,6 +7,7 @@ package edu.jas.application;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.StringReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.List;
@@ -27,6 +28,7 @@ import edu.jas.gb.OrderedSyzPairlist;
 import edu.jas.gb.ReductionPar;
 import edu.jas.gb.ReductionSeq;
 import edu.jas.gbufd.GBFactory;
+import edu.jas.util.CatReader;
 
 
 /**
@@ -172,7 +174,8 @@ public class RunGB {
             e.printStackTrace();
             return;
         }
-        GenPolynomialTokenizer tok = new GenPolynomialTokenizer(pfac,problem);
+        Reader polyreader = new CatReader(new StringReader("("),problem); // ( has gone
+        GenPolynomialTokenizer tok = new GenPolynomialTokenizer(pfac,polyreader);
         PolynomialList S = null;
         try {
             S = new PolynomialList(pfac,tok.nextPolynomialList());
