@@ -26,7 +26,7 @@ print "Ideal: " + str(f);
 print;
 
 from edu.jas.gbmod  import SyzygyAbstract;
-from edu.jas.vector import ModuleList;
+from edu.jas.poly   import ModuleList;
 from edu.jas.gbmod  import ModGroebnerBaseAbstract;
 
 R = SyzygyAbstract().resolution( f.pset );

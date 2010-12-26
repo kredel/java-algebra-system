@@ -54,7 +54,7 @@ print;
 
 from edu.jas.gbmod  import SyzygyAbstract;
 from edu.jas.gbmod  import ModGroebnerBaseAbstract;
-from edu.jas.vector import ModuleList;
+from edu.jas.poly   import ModuleList;
 
 s = SyzygyAbstract().zeroRelations( rg.list );
 sl = ModuleList(rg.pset.ring,s);
