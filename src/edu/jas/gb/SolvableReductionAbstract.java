@@ -215,7 +215,7 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>>
 
     /**
      * Is reduction of normal form.
-     * @param row recording matrix, is modified.
+     * @param row recording matrix.
      * @param Pp a solvable polynomial list for reduction.
      * @param Ap a solvable polynomial.
      * @param Np nf(Pp,Ap), a left normal form of Ap wrt. Pp.
@@ -230,7 +230,7 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>>
         if ( row == null && Pp == null ) {
             if ( Ap == null ) {
                return Np == null;
-         }
+            }
             return Ap.equals(Np);
         }
         if ( row == null && Pp != null ) {
@@ -317,6 +317,5 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>>
         GenSolvablePolynomial<C> Cp = (GenSolvablePolynomial<C>) App.subtract(Bpp);
         return Cp;
     }
-
 
 }

@@ -16,6 +16,7 @@ import edu.jas.structure.RingElem;
 /**
  * Basic linear algebra methods.
  * Implements Basic linear algebra computations and tests.
+ * <b>Note:</b> will use wrong method dispatch in JRE when used with GenSolvablePolynomial.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
@@ -37,7 +38,7 @@ public class BasicLinAlg<C extends RingElem<C>> {
      * Scalar product of vectors of ring elements.
      * @param G a ring element list.
      * @param F a ring element list.
-     * @return the scalar product of r and F.
+     * @return the scalar product of G and F.
      */
     public C scalarProduct(List<C> G, List<C> F) {  
         C sp = null;
@@ -66,7 +67,7 @@ public class BasicLinAlg<C extends RingElem<C>> {
      * Scalar product of vectors and a matrix of ring elements.
      * @param G a ring element list.
      * @param F a list of ring element lists.
-     * @return the scalar product of r and F.
+     * @return the scalar product of G and F.
      */
     public List<C> scalarProduct(List<C> G, List<List<C>> F) {  
         List<C> sp = null; //new ArrayList<C>(G.size());
@@ -96,7 +97,7 @@ public class BasicLinAlg<C extends RingElem<C>> {
      * Scalar product of vectors and a matrix of ring elements.
      * @param G a ring element list.
      * @param F a list of ring element lists.
-     * @return the scalar product of r and F.
+     * @return the right scalar product of G and F.
      */
     public List<C> rightScalarProduct(List<C> G, List<List<C>> F) {  
         List<C> sp = null; //new ArrayList<C>(G.size());
@@ -180,7 +181,6 @@ public class BasicLinAlg<C extends RingElem<C>> {
      * @param F a ring element list.
      * @return the scalar product of p and F.
      */
-
     public List<C> scalarProduct(C p, List<C> F) {  
         List<C> V = new ArrayList<C>( F.size() );
         for ( C pi : F ) {
@@ -201,7 +201,6 @@ public class BasicLinAlg<C extends RingElem<C>> {
      * @param p a ring element.
      * @return the scalar product of F and p.
      */
-
     public List<C> scalarProduct(List<C> F, C p) {  
         List<C> V = new ArrayList<C>( F.size() );
         for ( C pi : F ) {

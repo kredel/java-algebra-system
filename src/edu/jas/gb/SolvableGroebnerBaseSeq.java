@@ -276,8 +276,8 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
               }
               H = sred.leftNormalform( rowh, G, S );
               if ( debug ) {
-                 System.out.println("H = " + H);
-                 logger.debug("is reduction H = " 
+		  //System.out.println("H = " + H);
+                  logger.debug("is reduction H = " 
                               + sred.isLeftReductionNF( rowh, G, S, H ) );
               }
               if ( H.isZERO() ) {
@@ -321,7 +321,8 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
               C c = H.leadingBaseCoefficient();
               c = c.inverse();
               H = H.multiply( c );
-              row = PolynomialList.<C>castToSolvableList(blas.scalarProduct( mone.multiply(c), PolynomialList.<C>castToList(row) ));
+              // 1*c*row, leads to wrong method dispatch:
+              row = PolynomialList.<C>castToSolvableList(blas.scalarProduct(mone.multiply(c),PolynomialList.<C>castToList(row)));
               row.set( G.size(), mone );
               if ( H.isONE() ) {
                  // pairlist.record( pair, H );
@@ -547,11 +548,10 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
                 if ( k < nrow.size() ) { // always true
                    a = nrow.get( k );
                    //System.out.println("k, a = " + k + ", " + a);
-                   if ( a != null && !a.isZERO() ) { 
+                   if ( a != null && !a.isZERO() ) { // a*row + nrow, leads to wrong method dispatch
                        List<GenPolynomial<C>> yrow = blas.scalarProduct(a,PolynomialList.<C>castToList(row));
 		       yrow = blas.vectorAdd(yrow,PolynomialList.<C>castToList(nrow));
 		       xrow = PolynomialList.<C>castToSolvableList(yrow);
-                       //System.out.println("xrow = " + xrow);
                        N.set( j, xrow );
                    }
                 }

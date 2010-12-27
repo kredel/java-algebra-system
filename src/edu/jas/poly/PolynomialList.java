@@ -322,7 +322,7 @@ public class PolynomialList<C extends RingElem<C> >
      * @return solvable polynomial list from this.
      */
     public static <C extends RingElem<C> > 
-           List<List< GenSolvablePolynomial<C> >> castToSolvablematrix(List<List<GenPolynomial<C>>> list) {
+           List<List< GenSolvablePolynomial<C> >> castToSolvableMatrix(List<List<GenPolynomial<C>>> list) {
         List<List< GenSolvablePolynomial<C> >> slist = null;
         if ( list == null ) {
             return slist;
@@ -348,6 +348,7 @@ public class PolynomialList<C extends RingElem<C> >
     public static <C extends RingElem<C> > 
            List< GenPolynomial<C> > 
            castToList( List<? extends GenPolynomial<C>> slist) {
+        logger.warn("will lead to wrong method dispatch");
         List< GenPolynomial<C> > list = null;
         if ( slist == null ) {
             return list;
@@ -371,6 +372,7 @@ public class PolynomialList<C extends RingElem<C> >
     public static <C extends RingElem<C> > 
            List<List< GenPolynomial<C> >> 
            castToMatrix( List<List<? extends GenPolynomial<C>>> slist) {
+        logger.warn("will lead to wrong method dispatch");
         List<List< GenPolynomial<C> >> list = null;
         if ( slist == null ) {
             return list;

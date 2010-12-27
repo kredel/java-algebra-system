@@ -57,7 +57,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
     /**
      * Linear algebra engine.
      */
-    protected BasicLinAlg<GenPolynomial<C>> blas;
+    protected final BasicLinAlg<GenPolynomial<C>> blas;
 
 
     /**
@@ -445,8 +445,11 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
         for ( List<GenSolvablePolynomial<C>> row : Mg ) {
             boolean t = sred.isLeftReductionNF( row, F, G.get( k ), null );  
             if ( ! t ) {
-               logger.error("F isLeftReductionMatrix s, k = " + F.size() + ", " + k);
-               return false;
+                System.out.println("row = " + row);
+                System.out.println("F   = " + F);
+                System.out.println("Gk  = " + G.get(k));
+                logger.info("F isLeftReductionMatrix s, k = " + F.size() + ", " + k);
+                return false;
             }
             k++;
         }

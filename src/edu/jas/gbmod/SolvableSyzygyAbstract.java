@@ -215,8 +215,10 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
     public boolean 
            isLeftZeroRelation(List<List<GenSolvablePolynomial<C>>> Z, 
                               List<GenSolvablePolynomial<C>> F) {  
+        List<GenPolynomial<C>> Fp = PolynomialList.<C>castToList(F);
         for ( List<GenSolvablePolynomial<C>> row : Z ) {
-            GenPolynomial<C> p = blas.scalarProduct(PolynomialList.<C>castToList(row),PolynomialList.<C>castToList(F));
+            // p has wrong type:
+            GenPolynomial<C> p = blas.scalarProduct(PolynomialList.<C>castToList(row),Fp);
             if ( p == null ) { 
                continue;
             }
@@ -238,20 +240,20 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
     public boolean 
            isRightZeroRelation(List<List<GenSolvablePolynomial<C>>> Z, 
                                List<GenSolvablePolynomial<C>> F) {  
-        boolean isit = true;
+        List<GenPolynomial<C>> Fp = PolynomialList.<C>castToList(F);
         for ( List<GenSolvablePolynomial<C>> row : Z ) {
             List<GenPolynomial<C>> yrow = PolynomialList.<C>castToList(row);
-            GenPolynomial<C> p = blas.scalarProduct(PolynomialList.<C>castToList(F),yrow); // param order
+            // p has wrong type:
+            GenPolynomial<C> p = blas.scalarProduct(Fp,yrow); // param order
             if ( p == null ) { 
                continue;
             }
             if ( ! p.isZERO() ) {
                 logger.info("is not ZeroRelation = " + p);
-                isit = false;
                 return false;
             }
         }
-        return isit; //true;
+        return true;
     }
 
 
@@ -471,6 +473,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
                if ( si == null || ai == null ) {
                   continue;
                }
+               // pi has wrong type:
                List<GenPolynomial<C>> pi = blas.scalarProduct(si,PolynomialList.<C>castToList(ai));
                //System.out.println("pi = " + pi);
                rf = PolynomialList.<C>castToSolvableList(blas.vectorAdd( PolynomialList.<C>castToList(rf), pi));
@@ -504,7 +507,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
                if ( si == null || ai == null ) {
                   continue;
                }
-               //wrong: List<GenSolvablePolynomial<C>> pi = blas.scalarProduct(ai,si);
+               //pi has wrong type, should be: List<GenSolvablePolynomial<C>>
                List<GenPolynomial<C>> pi = blas.scalarProduct(si,PolynomialList.<C>castToList(ai));
                //System.out.println("pi = " + pi);
                rf = PolynomialList.<C>castToSolvableList(blas.vectorAdd( PolynomialList.<C>castToList(rf), pi));
@@ -520,8 +523,9 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>>
         // debug only:
         //List<GenSolvablePolynomial<C>> F2 = new ArrayList<GenSolvablePolynomial<C>>( F.size() );
         /* not true in general
+        List<GenPolynomial<C>> Fp = PolynomialList.<C>castToList(F);
         for ( List<GenSolvablePolynomial<C>> rr: M ) {
-            GenSolvablePolynomial<C> rrg = PolynomialList.<C>castToSolvableList(blas.scalarProduct( PolynomialList.<C>castToList(F), PolynomialList.<C>castToList(rr) ));
+            GenSolvablePolynomial<C> rrg = PolynomialList.<C>castToSolvableList(blas.scalarProduct(Fp,PolynomialList.<C>castToList(rr)));
             F2.add( rrg );
         }
         PolynomialList<C> pF = new PolynomialList<C>( ring, F );
@@ -787,4 +791,3 @@ class SolvResPolPart<C extends RingElem<C>> implements Serializable {
     }
 
 }
-

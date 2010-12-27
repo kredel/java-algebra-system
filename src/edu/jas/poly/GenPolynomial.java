@@ -29,10 +29,10 @@ import edu.jas.structure.UnaryFunctor;
  * changed in the future). C can also be a non integral domain, e.g. a
  * ModInteger, i.e. it may contain zero divisors, since multiply() does now
  * check for zeros.
+ * <b>Note:</b> multiply() now checks for wrong method dispatch for GenSolvablePolynomial.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
-
 public class GenPolynomial<C extends RingElem<C>> implements RingElem<GenPolynomial<C>>, /* not yet Polynomial<C> */
                                                              Iterable<Monomial<C>> {
 
@@ -931,6 +931,13 @@ public class GenPolynomial<C extends RingElem<C>> implements RingElem<GenPolynom
             return this;
         }
         assert (ring.nvar == S.ring.nvar);
+        if ( this instanceof GenSolvablePolynomial || S instanceof GenSolvablePolynomial ) {
+            //throw new RuntimeException("wrong method dispatch in JRE ");
+            logger.warn("wrong method dispatch in JRE (S) - trying to fix");
+            GenSolvablePolynomial<C> T = (GenSolvablePolynomial<C>) this;
+            GenSolvablePolynomial<C> Sp = (GenSolvablePolynomial<C>) S;
+            return T.multiply(Sp);
+        }
         GenPolynomial<C> p = ring.getZERO().clone();
         SortedMap<ExpVector, C> pv = p.val;
         for (Map.Entry<ExpVector, C> m1 : val.entrySet()) {
@@ -1025,6 +1032,12 @@ public class GenPolynomial<C extends RingElem<C>> implements RingElem<GenPolynom
         if (this.isZERO()) {
             return this;
         }
+        if ( this instanceof GenSolvablePolynomial ) {
+            //throw new RuntimeException("wrong method dispatch in JRE ");
+            logger.warn("wrong method dispatch in JRE (s,e) - trying to fix");
+            GenSolvablePolynomial<C> T = (GenSolvablePolynomial<C>) this;
+            return T.multiply(s,e);
+        }
         GenPolynomial<C> p = ring.getZERO().clone();
         SortedMap<ExpVector, C> pv = p.val;
         for (Map.Entry<ExpVector, C> m1 : val.entrySet()) {
@@ -1049,6 +1062,12 @@ public class GenPolynomial<C extends RingElem<C>> implements RingElem<GenPolynom
         // assert e != null. This is never allowed.
         if (this.isZERO()) {
             return this;
+        }
+        if ( this instanceof GenSolvablePolynomial ) {
+            //throw new RuntimeException("wrong method dispatch in JRE ");
+            logger.warn("wrong method dispatch in JRE (e) - trying to fix");
+            GenSolvablePolynomial<C> T = (GenSolvablePolynomial<C>) this;
+            return T.multiply(e);
         }
         GenPolynomial<C> p = ring.getZERO().clone();
         SortedMap<ExpVector, C> pv = p.val;
