@@ -326,6 +326,9 @@ class ReducerSeqPair<C extends RingElem<C>> implements Runnable {
                 if ( ! fin.hasJobs() ) {
                     break;
                 }
+                if ( Thread.currentThread().isInterrupted() ) {
+                    throw new RuntimeException("interrupt after sleep");
+                }
             }
             if ( ! pairlist.hasNext() && ! fin.hasJobs() ) {
                 break;
