@@ -231,6 +231,23 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
 
 
     /**
+     * Count number of factors in a (squarefree) factorization.
+     * @param F = [p_1 -&gt; e_1, ..., p_k -&gt; e_k].
+     * @return sum_{i=1,...,k} e_i.
+     */
+    public long factorCount(SortedMap<GenPolynomial<C>,Long> F) {
+        if (F == null || F.isEmpty() ) {
+            return 0L;
+        }
+        long f = 0L;
+        for (Long e : F.values()) {
+            f += e;
+        }
+        return f;
+    }
+
+
+    /**
      * GenPolynomial is (squarefree) factorization.
      * @param P GenPolynomial.
      * @param F = [p_1 -&gt; e_1, ..., p_k -&gt; e_k].

@@ -592,7 +592,7 @@ public class MultiplicativeSetTest extends TestCase {
         if (!b.isConstant()) {
             assertFalse("not isEmpty ", ms3.isEmpty());
 
-            if (!a.monic().equals(c) && !b.monic().equals(c) && !c.isConstant()) {
+            if (!a.monic().equals(c) && !b.monic().equals(c) && !c.isConstant() && !ms3.mset.contains(c)) {
                 assertFalse("not contained " + ms3 + ", " + c, ms3.contains(c));
             }
         }
