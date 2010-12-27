@@ -9,6 +9,7 @@ import java.util.SortedMap;
 
 import org.apache.log4j.BasicConfigurator;
 
+import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.AlgebraicNumber;
@@ -17,6 +18,8 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
+import edu.jas.vector.GenMatrix;
+import edu.jas.vector.GenMatrixRing;
 
 
 /**
@@ -35,9 +38,50 @@ public class Examples {
         //// no go: example6();
         //BasicConfigurator.configure();
         //example9();
+        example1();
         BasicConfigurator.configure();
         example10();
         ComputerThreads.terminate();
+    }
+
+
+    /**
+     * example1 with GenMatrix. 
+     */
+    public static void example1() {
+        System.out.println("\n\n example 1");
+
+        BigInteger cfac;
+        GenPolynomialRing<BigInteger> fac;
+        QuotientRing<BigInteger> efac;
+        GenPolynomialRing<Quotient<BigInteger>> qfac;
+        GenMatrixRing<GenPolynomial<Quotient<BigInteger>>> mfac;
+
+        cfac = new BigInteger();
+        System.out.println("cfac = " + cfac);
+
+        fac = new GenPolynomialRing<BigInteger>(cfac,2);
+        System.out.println(" fac = " + fac);
+
+        efac = new QuotientRing<BigInteger>( fac );
+        System.out.println("efac = " + efac);
+
+        String[] v = new String[] {"x", "y", "z" };
+        qfac = new GenPolynomialRing<Quotient<BigInteger>>( efac, 3, v );
+        System.out.println("qfac = " + qfac);
+
+        mfac = new GenMatrixRing<GenPolynomial<Quotient<BigInteger>>>( qfac, 3, 3 );
+        System.out.println("mfac = " + mfac);
+
+        GenPolynomial<Quotient<BigInteger>> p;
+        p = qfac.random(3,4,2,0.3f);
+        System.out.println("\np = " + p);
+
+
+        GenMatrix<GenPolynomial<Quotient<BigInteger>>> m;
+        m = mfac.random(3,0.4f);
+        System.out.println("\nm = " + m);
+
     }
 
 
@@ -113,28 +157,28 @@ public class Examples {
 
         String[] var_x = new String[] { "x" };
         GenPolynomialRing<AlgebraicNumber<BigRational>> apfac = new GenPolynomialRing<AlgebraicNumber<BigRational>>(
-                a2fac, 1, to, var_x);
+                                                                                                                    a2fac, 1, to, var_x);
         System.out.println("apfac  = " + apfac.toScript());
 
         QuotientRing<AlgebraicNumber<BigRational>> qfac = new QuotientRing<AlgebraicNumber<BigRational>>(
-                apfac);
+                                                                                                         apfac);
         System.out.println("qfac   = " + qfac.toScript());
 
         String[] var_wx = new String[] { "wx" };
         GenPolynomialRing<Quotient<AlgebraicNumber<BigRational>>> pqfac = new GenPolynomialRing<Quotient<AlgebraicNumber<BigRational>>>(
-                qfac, 1, to, var_wx);
+                                                                                                                                        qfac, 1, to, var_wx);
         System.out.println("pqfac  = " + pqfac.toScript());
 
         GenPolynomial<Quotient<AlgebraicNumber<BigRational>>> wx = pqfac.parse(" wx^2 - { x } ");
         System.out.println("wx     = " + wx);
 
         AlgebraicNumberRing<Quotient<AlgebraicNumber<BigRational>>> axfac = new AlgebraicNumberRing<Quotient<AlgebraicNumber<BigRational>>>(
-                wx, true);
+                                                                                                                                            wx, true);
         System.out.println("axfac  = " + axfac.toScript());
 
         String[] var_y = new String[] { "y" };
         GenPolynomialRing<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>> apqfac = new GenPolynomialRing<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>>(
-                axfac, 1, to, var_y);
+                                                                                                                                                                           axfac, 1, to, var_y);
         System.out.println("apqfac = " + apqfac.toScript());
 
         //  ( y^2 - x ) * ( y^2 - 2 ), need {} for recursive coefficients
@@ -143,11 +187,11 @@ public class Examples {
         System.out.println("f      = " + f);
 
         FactorAbstract<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>> engine = FactorFactory
-                .getImplementation(axfac);
+            .getImplementation(axfac);
         System.out.println("engine = " + engine);
 
         SortedMap<GenPolynomial<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>>, Long> F = engine
-                .factors(f);
+            .factors(f);
         System.out.println("factors(f) = " + F);
     }
 
