@@ -2,8 +2,11 @@
  * $Id$
  */
 
-package edu.jas.vector;
+package edu.jas.poly;
 
+
+import java.util.List;
+import java.util.ArrayList;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -11,15 +14,18 @@ import junit.framework.TestSuite;
 
 //import edu.jas.structure.RingElem;
 //import edu.jas.structure.ModulElem;
+
 import edu.jas.arith.BigRational;
+import edu.jas.vector.GenMatrix;
+import edu.jas.vector.GenMatrixRing;
 
 
 /**
- * GenVector tests with JUnit
+ * GenMatrix tests with JUnit
  * @author Heinz Kredel.
  */
 
-public class GenVectorTest extends TestCase {
+public class GenMatrixTest extends TestCase {
 
 
     /**
@@ -31,10 +37,10 @@ public class GenVectorTest extends TestCase {
 
 
     /**
-     * Constructs a <CODE>RatGenVectorTest</CODE> object.
+     * Constructs a <CODE>GenMatrixTest</CODE> object.
      * @param name String.
      */
-    public GenVectorTest(String name) {
+    public GenMatrixTest(String name) {
         super(name);
     }
 
@@ -42,7 +48,7 @@ public class GenVectorTest extends TestCase {
     /**
      */
     public static Test suite() {
-        TestSuite suite = new TestSuite(GenVectorTest.class);
+        TestSuite suite = new TestSuite(GenMatrixTest.class);
         return suite;
     }
 
@@ -59,6 +65,12 @@ public class GenVectorTest extends TestCase {
     float q = 0.5f;
 
 
+    int rows = 3;
+
+
+    int cols = 3;
+
+
     @Override
     protected void setUp() {
     }
@@ -71,31 +83,36 @@ public class GenVectorTest extends TestCase {
 
     /**
      * Test constructor and toString.
+     * 
      */
-    public void testConstruction() {
+    public void testPolynomialConstruction() {
         BigRational cfac = new BigRational(1);
-        GenVectorModul<BigRational> mfac = new GenVectorModul<BigRational>(cfac, ll);
+        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, rl);
 
-        assertTrue("#columns = " + ll, mfac.cols == ll);
-        assertTrue("cfac == coFac ", cfac == mfac.coFac);
+        GenMatrixRing<GenPolynomial<BigRational>> mfac = new GenMatrixRing<GenPolynomial<BigRational>>(pfac,
+                rows, cols);
 
-        GenVector<BigRational> a;
+        assertTrue("#rows = " + rows, mfac.rows == rows);
+        assertTrue("#columns = " + cols, mfac.cols == cols);
+        assertTrue("pfac == coFac ", pfac == mfac.coFac);
+
+        GenMatrix<GenPolynomial<BigRational>> a;
         a = mfac.getZERO();
         //System.out.println("a = " + a);
         assertTrue("isZERO( a )", a.isZERO());
 
-        GenVector<BigRational> b = new GenVector<BigRational>(mfac);
+        GenMatrix<GenPolynomial<BigRational>> b = new GenMatrix<GenPolynomial<BigRational>>(mfac);
         //System.out.println("b = " + b);
         assertTrue("isZERO( b )", b.isZERO());
 
         assertTrue("a == b ", a.equals(b));
 
-        GenVector<BigRational> c = b.clone();
+        GenMatrix<GenPolynomial<BigRational>> c = b.clone();
         //System.out.println("c = " + c);
         assertTrue("isZERO( c )", c.isZERO());
         assertTrue("a == c ", a.equals(c));
 
-        GenVector<BigRational> d = mfac.copy(b);
+        GenMatrix<GenPolynomial<BigRational>> d = mfac.copy(b);
         //System.out.println("d = " + d);
         assertTrue("isZERO( d )", d.isZERO());
         assertTrue("a == d ", a.equals(d));
@@ -103,15 +120,18 @@ public class GenVectorTest extends TestCase {
 
 
     /**
-     * Test random vector.
+     * Test random matrix
      * 
      */
-    public void testRandom() {
+    public void testPolynomialRandom() {
         BigRational cfac = new BigRational(1);
-        GenVectorModul<BigRational> mfac = new GenVectorModul<BigRational>(cfac, ll);
-        GenVector<BigRational> a;
+        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, rl);
 
-        for (int i = 0; i < 7; i++) {
+        GenMatrixRing<GenPolynomial<BigRational>> mfac = new GenMatrixRing<GenPolynomial<BigRational>>(pfac,
+                rows, cols);
+
+        GenMatrix<GenPolynomial<BigRational>> a;
+        for (int i = 0; i < 5; i++) {
             a = mfac.random(kl, q);
             //System.out.println("a = " + a);
             if (a.isZERO()) {
@@ -126,10 +146,14 @@ public class GenVectorTest extends TestCase {
      * Test addition.
      * 
      */
-    public void testAddition() {
+    public void testPolynomialAddition() {
         BigRational cfac = new BigRational(1);
-        GenVectorModul<BigRational> mfac = new GenVectorModul<BigRational>(cfac, ll);
-        GenVector<BigRational> a, b, c, d, e;
+        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, rl);
+
+        GenMatrixRing<GenPolynomial<BigRational>> mfac = new GenMatrixRing<GenPolynomial<BigRational>>(pfac,
+                rows, cols);
+
+        GenMatrix<GenPolynomial<BigRational>> a, b, c, d, e;
 
         a = mfac.random(kl, q);
         b = mfac.random(kl, q);
@@ -167,34 +191,37 @@ public class GenVectorTest extends TestCase {
      * Test scalar multiplication.
      * 
      */
-    public void testMultiplication() {
+    public void testPolynomialMultiplication() {
         BigRational cfac = new BigRational(1);
-        GenVectorModul<BigRational> mfac = new GenVectorModul<BigRational>(cfac, ll);
-        BigRational r, s, t;
-        GenVector<BigRational> a, b, c, d, e;
+        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, rl);
 
-        r = cfac.random(kl);
-        if (r.isZERO()) {
-            r = cfac.getONE();
-        }
+        GenMatrixRing<GenPolynomial<BigRational>> mfac = new GenMatrixRing<GenPolynomial<BigRational>>(pfac,
+                rows, cols);
+
+        GenPolynomial<BigRational> r, s, t;
+        GenMatrix<GenPolynomial<BigRational>> a, b, c, d, e;
+
+        r = pfac.random(kl);
         //System.out.println("r = " + r);
-        s = r.inverse();
+        s = r.negate();
         //System.out.println("s = " + s);
 
         a = mfac.random(kl, q);
         //System.out.println("a = " + a);
 
         c = a.scalarMultiply(r);
-        d = c.scalarMultiply(s);
+        d = a.scalarMultiply(s);
+        e = c.sum(d);
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
-        assertEquals("a*b*(1/b) = a " + r, a, d);
+        //System.out.println("e = " + e);
+        assertEquals("a*b + a*(-b) = 0", e, mfac.getZERO());
 
 
         b = mfac.random(kl, q);
         //System.out.println("b = " + b);
 
-        t = cfac.getONE();
+        t = pfac.getONE();
         //System.out.println("t = " + t);
         c = a.linearCombination(b, t);
         d = b.linearCombination(a, t);
@@ -220,9 +247,9 @@ public class GenVectorTest extends TestCase {
         d = c.linearCombination(t, b, s);
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
-        assertEquals("a*1+b*1+b*(-1) = a", a, d);
+        assertEquals("a+1*b+(-1)*b = a", a, d);
 
-        t = cfac.getZERO();
+        t = pfac.getZERO();
         //System.out.println("t = " + t);
         c = a.linearCombination(b, t);
         //System.out.println("c = " + c);
@@ -231,36 +258,6 @@ public class GenVectorTest extends TestCase {
         d = a.linearCombination(t, b, t);
         //System.out.println("d = " + d);
         assertEquals("0*a+0*b = 0", mfac.getZERO(), d);
-
-        r = a.scalarProduct(b);
-        s = b.scalarProduct(a);
-        //System.out.println("r = " + r);
-        //System.out.println("s = " + s);
-        assertEquals("a.b = b.a", r, s);
-    }
-
-
-    /**
-     * Test parse vector.
-     * 
-     */
-    public void testParse() {
-        BigRational cfac = new BigRational(1);
-        GenVectorModul<BigRational> mfac = new GenVectorModul<BigRational>(cfac, ll);
-
-        GenVector<BigRational> a, b, c;
-
-        a = mfac.random(kl, q);
-        //System.out.println("a = " + a);
-        if (!a.isZERO()) {
-            //return;
-            assertTrue(" not isZERO( a )", !a.isZERO());
-        }
-        String s = a.toString();
-        //System.out.println("s = " + s);
-        c = mfac.parse(s);
-        //System.out.println("c = " + c);
-        assertEquals("parse(toStirng(a) == a ", a, c);
     }
 
 }
