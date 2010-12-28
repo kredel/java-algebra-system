@@ -21,6 +21,21 @@
 
 <dl>
 
+<dt>2010, December, 28</dt> 
+<dd> 
+ Cleanup of package structure so that all cyclic dependencies have
+ been removed, see <a href="images/PackageOverview.png">diagram</a>.
+ Split factory parsing parts from <code>GenPolynomialTokenizer</code>
+ to <code>RingFactoryTokenizer</code>. Some artificial code was
+ required to use solvable polynomials as ring elements since solvable
+ polynomials cannot implement
+ <code>RingElem&lt;GenSolvablePolynomial&lt;C&gt;&gt;</code>.  This
+ resulted in some cases in wrong method dispatch for the
+ <code>multiply()</code> method due to compiler optimizations. A work
+ around to detect and repair this is now implemented in class
+ <code>GenPolynomial</code>.
+</dd>
+
 <dt>2010, December, 18 </dt>
 <dd>
  New critial pair selection for Gr&ouml;bner base computation with
@@ -1986,7 +2001,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Sat Dec 18 12:30:42 CET 2010
+Last modified: Tue Dec 28 11:55:25 CET 2010
 <!-- hhmts end -->
 </p>
 <!--p align="right" >

@@ -89,11 +89,11 @@ JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d . -Xlint:unchecked
 #-Xlint:unchecked
 #-Djava.util.logging.config.file=logging.properties 
 #JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -verbose:gc 
-#JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -server -Xms1100M -Xmx1900M -XX:+AggressiveHeap -XX:+UseParallelGC -XX:ParallelGCThreads=2 -verbose:gc 
+JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -server -Xms1100M -Xmx1900M -XX:+AggressiveHeap -XX:+UseParallelGC -XX:ParallelGCThreads=2 -verbose:gc 
 #-Xrunhprof:cpu=samples,heap=sites,force=n
 #-Xbatch
 #dist#
-JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -server -Xms500M -Xmx800M -XX:+AggressiveHeap -XX:+UseParallelGC -XX:ParallelGCThreads=2 -verbose:gc 
+#JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -server -Xms500M -Xmx800M -XX:+AggressiveHeap -XX:+UseParallelGC -XX:ParallelGCThreads=2 -verbose:gc 
 #JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -verbose:gc -Xrunhprof:cpu=times,format=a
 #JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -verbose:gc -verbose:class -verbose:jni
 DOC=$(JDK)/javadoc -classpath $(DOCCLASSES)
@@ -252,7 +252,7 @@ jas-all.jar: $(ALLJAR)
 
 jas.tgz: $(FILES) *.html TODO
 	tar -cvzf jas.tgz $(FILES) *.html TODO
-	mv jas.tgz /tmp/jas-`date +%Y%j`.tgz
+	cp jas.tgz /tmp/jas-`date +%Y%j`.tgz
 
 #	cp jas.jar ...../jas-`date +%Y%j`.jar
 #jas-run.jar: GBManifest.MF $(TOJAR)

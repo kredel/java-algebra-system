@@ -1,0 +1,1253 @@
+
+--------------------------------------------------
+- Package: edu.jas.application
+--------------------------------------------------
+
+Stats:
+    Total Classes: 39
+    Concrete Classes: 39
+    Abstract Classes: 0
+
+    Ca: 0
+    Ce: 9
+
+    A: 0
+    I: 1
+    D: 0
+
+Abstract Classes:
+
+Concrete Classes:
+    edu.jas.application.CGBSeqTest
+    edu.jas.application.CPair
+    edu.jas.application.CReductionSeq
+    edu.jas.application.CReductionSeq$1
+    edu.jas.application.CoeffConvertAlg
+    edu.jas.application.CoeffRecConvertAlg
+    edu.jas.application.ColorPolynomial
+    edu.jas.application.ColoredSystem
+    edu.jas.application.ComprehensiveGroebnerBaseSeq
+    edu.jas.application.Condition
+    edu.jas.application.Condition$1
+    edu.jas.application.Condition$Color
+    edu.jas.application.Dimension
+    edu.jas.application.Examples
+    edu.jas.application.GroebnerSystem
+    edu.jas.application.Ideal
+    edu.jas.application.IdealTest
+    edu.jas.application.IdealWithComplexRoots
+    edu.jas.application.IdealWithRealAlgebraicRoots
+    edu.jas.application.IdealWithRealRoots
+    edu.jas.application.IdealWithUniv
+    edu.jas.application.Local
+    edu.jas.application.LocalRing
+    edu.jas.application.LocalTest
+    edu.jas.application.OrderedCPairlist
+    edu.jas.application.PolyUtilApp
+    edu.jas.application.PolyUtilAppTest
+    edu.jas.application.PrimaryComponent
+    edu.jas.application.PrimitiveElement
+    edu.jas.application.ReductionTest
+    edu.jas.application.Residue
+    edu.jas.application.ResidueRing
+    edu.jas.application.ResidueTest
+    edu.jas.application.RingFactoryTokenizer
+    edu.jas.application.RingFactoryTokenizer$1
+    edu.jas.application.RingFactoryTokenizer$coeffType
+    edu.jas.application.RingFactoryTokenizer$polyType
+    edu.jas.application.RunGB
+    edu.jas.application.RunSGB
+
+Depends Upon:
+    edu.jas.arith
+    edu.jas.gb
+    edu.jas.gbufd
+    edu.jas.kern
+    edu.jas.poly
+    edu.jas.root
+    edu.jas.structure
+    edu.jas.ufd
+    edu.jas.util
+
+Used By:
+    Not used by any packages.
+
+--------------------------------------------------
+- Package: edu.jas.arith
+--------------------------------------------------
+
+Stats:
+    Total Classes: 36
+    Concrete Classes: 33
+    Abstract Classes: 3
+
+    Ca: 12
+    Ce: 2
+
+    A: 0,08
+    I: 0,14
+    D: 0,77
+
+Abstract Classes:
+    edu.jas.arith.Modular
+    edu.jas.arith.ModularRingFactory
+    edu.jas.arith.Rational
+
+Concrete Classes:
+    edu.jas.arith.ArithTest
+    edu.jas.arith.BigComplex
+    edu.jas.arith.BigComplexTest
+    edu.jas.arith.BigDecimal
+    edu.jas.arith.BigDecimalTest
+    edu.jas.arith.BigInteger
+    edu.jas.arith.BigIntegerIterator
+    edu.jas.arith.BigIntegerTest
+    edu.jas.arith.BigOctonion
+    edu.jas.arith.BigOctonionTest
+    edu.jas.arith.BigQuaternion
+    edu.jas.arith.BigQuaternionTest
+    edu.jas.arith.BigRational
+    edu.jas.arith.BigRationalIterator
+    edu.jas.arith.BigRationalTest
+    edu.jas.arith.BigRationalUniqueIterator
+    edu.jas.arith.Combinatoric
+    edu.jas.arith.ModInteger
+    edu.jas.arith.ModIntegerIterator
+    edu.jas.arith.ModIntegerRing
+    edu.jas.arith.ModIntegerTest
+    edu.jas.arith.ModLong
+    edu.jas.arith.ModLongIterator
+    edu.jas.arith.ModLongRing
+    edu.jas.arith.ModLongTest
+    edu.jas.arith.PrimeList
+    edu.jas.arith.PrimeList$1
+    edu.jas.arith.PrimeList$2
+    edu.jas.arith.PrimeList$Range
+    edu.jas.arith.Product
+    edu.jas.arith.ProductRing
+    edu.jas.arith.ProductTest
+    edu.jas.arith.Roots
+
+Depends Upon:
+    edu.jas.kern
+    edu.jas.structure
+
+Used By:
+    edu.jas.application
+    edu.jas.gb
+    edu.jas.gbmod
+    edu.jas.gbufd
+    edu.jas.integrate
+    edu.jas.poly
+    edu.jas.ps
+    edu.jas.root
+    edu.jas.ufd
+    edu.jas.util
+    edu.jas.vector
+    edu.mas.kern
+
+--------------------------------------------------
+- Package: edu.jas.gb
+--------------------------------------------------
+
+Stats:
+    Total Classes: 104
+    Concrete Classes: 92
+    Abstract Classes: 12
+
+    Ca: 4
+    Ce: 6
+
+    A: 0,12
+    I: 0,6
+    D: 0,28
+
+Abstract Classes:
+    edu.jas.gb.AbstractPair
+    edu.jas.gb.DReduction
+    edu.jas.gb.EReduction
+    edu.jas.gb.GroebnerBase
+    edu.jas.gb.GroebnerBaseAbstract
+    edu.jas.gb.PairList
+    edu.jas.gb.Reduction
+    edu.jas.gb.ReductionAbstract
+    edu.jas.gb.SolvableGroebnerBase
+    edu.jas.gb.SolvableGroebnerBaseAbstract
+    edu.jas.gb.SolvableReduction
+    edu.jas.gb.SolvableReductionAbstract
+
+Concrete Classes:
+    edu.jas.gb.CriticalPair
+    edu.jas.gb.CriticalPairComparator
+    edu.jas.gb.CriticalPairList
+    edu.jas.gb.DGroebnerBaseSeq
+    edu.jas.gb.DGroebnerBaseSeqTest
+    edu.jas.gb.DReductionSeq
+    edu.jas.gb.EGroebnerBaseSeq
+    edu.jas.gb.EGroebnerBaseSeqTest
+    edu.jas.gb.EReductionSeq
+    edu.jas.gb.ExtendedGB
+    edu.jas.gb.GBClient
+    edu.jas.gb.GBClientHybrid
+    edu.jas.gb.GBClientSP
+    edu.jas.gb.GBDist
+    edu.jas.gb.GBDistHybrid
+    edu.jas.gb.GBDistSP
+    edu.jas.gb.GBProxy
+    edu.jas.gb.GBProxy$1
+    edu.jas.gb.GBProxy$2
+    edu.jas.gb.GBProxyTest
+    edu.jas.gb.GBSPTransportMess
+    edu.jas.gb.GBSPTransportMessEnd
+    edu.jas.gb.GBSPTransportMessPair
+    edu.jas.gb.GBSPTransportMessPairIndex
+    edu.jas.gb.GBSPTransportMessPoly
+    edu.jas.gb.GBSPTransportMessReq
+    edu.jas.gb.GBTransportMess
+    edu.jas.gb.GBTransportMessEnd
+    edu.jas.gb.GBTransportMessPair
+    edu.jas.gb.GBTransportMessPairIndex
+    edu.jas.gb.GBTransportMessPoly
+    edu.jas.gb.GBTransportMessReq
+    edu.jas.gb.GroebnerBaseDistHybridTest
+    edu.jas.gb.GroebnerBaseDistTest
+    edu.jas.gb.GroebnerBaseDistributed
+    edu.jas.gb.GroebnerBaseDistributedHybrid
+    edu.jas.gb.GroebnerBaseParSyzPairTest
+    edu.jas.gb.GroebnerBaseParTest
+    edu.jas.gb.GroebnerBaseParallel
+    edu.jas.gb.GroebnerBaseSeq
+    edu.jas.gb.GroebnerBaseSeqPairDistTest
+    edu.jas.gb.GroebnerBaseSeqPairDistributed
+    edu.jas.gb.GroebnerBaseSeqPairParTest
+    edu.jas.gb.GroebnerBaseSeqPairParallel
+    edu.jas.gb.GroebnerBaseSeqPairSeq
+    edu.jas.gb.GroebnerBaseSeqPairSeqTest
+    edu.jas.gb.GroebnerBaseSeqTest
+    edu.jas.gb.HybridReducerClient
+    edu.jas.gb.HybridReducerReceiver
+    edu.jas.gb.HybridReducerServer
+    edu.jas.gb.JunitClient
+    edu.jas.gb.JunitClientHybrid
+    edu.jas.gb.JunitSeqPairClient
+    edu.jas.gb.Katsura
+    edu.jas.gb.LeftSolvableReducer
+    edu.jas.gb.LeftSolvableReducerSeqPair
+    edu.jas.gb.MiReducer
+    edu.jas.gb.MiReducerClient
+    edu.jas.gb.MiReducerClientSeqPair
+    edu.jas.gb.MiReducerSeqPair
+    edu.jas.gb.MiReducerServer
+    edu.jas.gb.MiReducerServerSeqPair
+    edu.jas.gb.MiniPair
+    edu.jas.gb.OrderedDPairlist
+    edu.jas.gb.OrderedMinPairlist
+    edu.jas.gb.OrderedPairlist
+    edu.jas.gb.OrderedSyzPairlist
+    edu.jas.gb.Pair
+    edu.jas.gb.PairListTest
+    edu.jas.gb.Reducer
+    edu.jas.gb.ReducerClient
+    edu.jas.gb.ReducerClientSeqPair
+    edu.jas.gb.ReducerSeqPair
+    edu.jas.gb.ReducerServer
+    edu.jas.gb.ReducerServerSeqPair
+    edu.jas.gb.ReductionPar
+    edu.jas.gb.ReductionSeq
+    edu.jas.gb.ReductionTest
+    edu.jas.gb.SolvableExtendedGB
+    edu.jas.gb.SolvableGroebnerBaseParTest
+    edu.jas.gb.SolvableGroebnerBaseParallel
+    edu.jas.gb.SolvableGroebnerBaseSeq
+    edu.jas.gb.SolvableGroebnerBaseSeqPairParTest
+    edu.jas.gb.SolvableGroebnerBaseSeqPairParallel
+    edu.jas.gb.SolvableGroebnerBaseSeqTest
+    edu.jas.gb.SolvableMiReducer
+    edu.jas.gb.SolvableMiReducerSeqPair
+    edu.jas.gb.SolvableReductionPar
+    edu.jas.gb.SolvableReductionSeq
+    edu.jas.gb.SolvableReductionTest
+    edu.jas.gb.TwosidedSolvableReducer
+    edu.jas.gb.TwosidedSolvableReducerSeqPair
+
+Depends Upon:
+    edu.jas.arith
+    edu.jas.kern
+    edu.jas.poly
+    edu.jas.structure
+    edu.jas.util
+    edu.jas.vector
+
+Used By:
+    edu.jas.application
+    edu.jas.gbmod
+    edu.jas.gbufd
+    edu.jas.ufd
+
+--------------------------------------------------
+- Package: edu.jas.gbmod
+--------------------------------------------------
+
+Stats:
+    Total Classes: 16
+    Concrete Classes: 12
+    Abstract Classes: 4
+
+    Ca: 0
+    Ce: 6
+
+    A: 0,25
+    I: 1
+    D: 0,25
+
+Abstract Classes:
+    edu.jas.gbmod.ModGroebnerBase
+    edu.jas.gbmod.ModSolvableGroebnerBase
+    edu.jas.gbmod.SolvableSyzygy
+    edu.jas.gbmod.Syzygy
+
+Concrete Classes:
+    edu.jas.gbmod.ModGroebnerBaseAbstract
+    edu.jas.gbmod.ModGroebnerBaseTest
+    edu.jas.gbmod.ModSolvableGroebnerBaseAbstract
+    edu.jas.gbmod.ModSolvableGroebnerBaseTest
+    edu.jas.gbmod.ResPart
+    edu.jas.gbmod.ResPolPart
+    edu.jas.gbmod.SolvResPart
+    edu.jas.gbmod.SolvResPolPart
+    edu.jas.gbmod.SolvableSyzygyAbstract
+    edu.jas.gbmod.SolvableSyzygyTest
+    edu.jas.gbmod.SyzygyAbstract
+    edu.jas.gbmod.SyzygyTest
+
+Depends Upon:
+    edu.jas.arith
+    edu.jas.gb
+    edu.jas.gbufd
+    edu.jas.poly
+    edu.jas.structure
+    edu.jas.vector
+
+Used By:
+    Not used by any packages.
+
+--------------------------------------------------
+- Package: edu.jas.gbufd
+--------------------------------------------------
+
+Stats:
+    Total Classes: 28
+    Concrete Classes: 25
+    Abstract Classes: 3
+
+    Ca: 2
+    Ce: 7
+
+    A: 0,11
+    I: 0,78
+    D: 0,12
+
+Abstract Classes:
+    edu.jas.gbufd.PseudoReduction
+    edu.jas.gbufd.RPseudoReduction
+    edu.jas.gbufd.RReduction
+
+Concrete Classes:
+    edu.jas.gbufd.Examples
+    edu.jas.gbufd.GBFactory
+    edu.jas.gbufd.GBFactory$1
+    edu.jas.gbufd.GBFactory$Algo
+    edu.jas.gbufd.GBFactoryTest
+    edu.jas.gbufd.GroebnerBasePartTest
+    edu.jas.gbufd.GroebnerBasePartial
+    edu.jas.gbufd.GroebnerBasePseudoRecSeq
+    edu.jas.gbufd.GroebnerBasePseudoSeq
+    edu.jas.gbufd.GroebnerBasePseudoSeqTest
+    edu.jas.gbufd.MultiplicativeSet
+    edu.jas.gbufd.MultiplicativeSetCoPrime
+    edu.jas.gbufd.MultiplicativeSetFactors
+    edu.jas.gbufd.MultiplicativeSetSquarefree
+    edu.jas.gbufd.MultiplicativeSetTest
+    edu.jas.gbufd.OrderedRPairlist
+    edu.jas.gbufd.PseudoReductionEntry
+    edu.jas.gbufd.PseudoReductionSeq
+    edu.jas.gbufd.RGroebnerBasePseudoSeq
+    edu.jas.gbufd.RGroebnerBasePseudoSeqTest
+    edu.jas.gbufd.RGroebnerBaseSeq
+    edu.jas.gbufd.RGroebnerBaseSeqTest
+    edu.jas.gbufd.RPseudoReductionSeq
+    edu.jas.gbufd.RReductionSeq
+    edu.jas.gbufd.ReductionTest
+
+Depends Upon:
+    edu.jas.arith
+    edu.jas.gb
+    edu.jas.kern
+    edu.jas.poly
+    edu.jas.structure
+    edu.jas.ufd
+    edu.jas.util
+
+Used By:
+    edu.jas.application
+    edu.jas.gbmod
+
+--------------------------------------------------
+- Package: edu.jas.integrate
+--------------------------------------------------
+
+Stats:
+    Total Classes: 6
+    Concrete Classes: 6
+    Abstract Classes: 0
+
+    Ca: 0
+    Ce: 5
+
+    A: 0
+    I: 1
+    D: 0
+
+Abstract Classes:
+
+Concrete Classes:
+    edu.jas.integrate.ElementaryIntegration
+    edu.jas.integrate.ElementaryIntegrationTest
+    edu.jas.integrate.Examples
+    edu.jas.integrate.Integral
+    edu.jas.integrate.LogIntegral
+    edu.jas.integrate.QuotIntegral
+
+Depends Upon:
+    edu.jas.arith
+    edu.jas.kern
+    edu.jas.poly
+    edu.jas.structure
+    edu.jas.ufd
+
+Used By:
+    Not used by any packages.
+
+--------------------------------------------------
+- Package: edu.jas.kern
+--------------------------------------------------
+
+Stats:
+    Total Classes: 9
+    Concrete Classes: 9
+    Abstract Classes: 0
+
+    Ca: 10
+    Ce: 0
+
+    A: 0
+    I: 0
+    D: 1
+
+Abstract Classes:
+
+Concrete Classes:
+    edu.jas.kern.ComputerThreads
+    edu.jas.kern.PreemptStatus
+    edu.jas.kern.PreemptingException
+    edu.jas.kern.PrettyPrint
+    edu.jas.kern.StringUtil
+    edu.jas.kern.TSCallMock
+    edu.jas.kern.TimeExceededException
+    edu.jas.kern.TimeStatus
+    edu.jas.kern.TimeStatusTest
+
+Depends Upon:
+    Not dependent on any packages.
+
+Used By:
+    edu.jas.application
+    edu.jas.arith
+    edu.jas.gb
+    edu.jas.gbufd
+    edu.jas.integrate
+    edu.jas.poly
+    edu.jas.ps
+    edu.jas.root
+    edu.jas.ufd
+    edu.jas.vector
+
+--------------------------------------------------
+- Package: edu.jas.poly
+--------------------------------------------------
+
+Stats:
+    Total Classes: 178
+    Concrete Classes: 174
+    Abstract Classes: 4
+
+    Ca: 8
+    Ce: 5
+
+    A: 0,02
+    I: 0,38
+    D: 0,59
+
+Abstract Classes:
+    edu.jas.poly.ExpVector
+    edu.jas.poly.Polynomial
+    edu.jas.poly.PolynomialRing
+    edu.jas.poly.TermOrder$EVorder
+
+Concrete Classes:
+    edu.jas.poly.ANumGenPolynomialTest
+    edu.jas.poly.AlgToPoly
+    edu.jas.poly.AlgebToCompl
+    edu.jas.poly.AlgebraicNumber
+    edu.jas.poly.AlgebraicNumberIterator
+    edu.jas.poly.AlgebraicNumberModTest
+    edu.jas.poly.AlgebraicNumberRing
+    edu.jas.poly.AlgebraicNumberTest
+    edu.jas.poly.AnyToComplex
+    edu.jas.poly.CoeffToAlg
+    edu.jas.poly.CoeffToRecAlg
+    edu.jas.poly.CompRatToDec
+    edu.jas.poly.ComplToAlgeb
+    edu.jas.poly.Complex
+    edu.jas.poly.ComplexGenPolynomialTest
+    edu.jas.poly.ComplexRing
+    edu.jas.poly.ComplexTest
+    edu.jas.poly.DistToRec
+    edu.jas.poly.EvalMain
+    edu.jas.poly.Examples
+    edu.jas.poly.ExpVector$1
+    edu.jas.poly.ExpVector$StorUnit
+    edu.jas.poly.ExpVectorByte
+    edu.jas.poly.ExpVectorInteger
+    edu.jas.poly.ExpVectorLong
+    edu.jas.poly.ExpVectorPair
+    edu.jas.poly.ExpVectorShort
+    edu.jas.poly.ExpVectorTest
+    edu.jas.poly.FromInteger
+    edu.jas.poly.FromIntegerPoly
+    edu.jas.poly.GFGenPolynomialTest
+    edu.jas.poly.GaloisFieldTest
+    edu.jas.poly.GenMatrixTest
+    edu.jas.poly.GenPolynomial
+    edu.jas.poly.GenPolynomialIterator
+    edu.jas.poly.GenPolynomialMonomialIterator
+    edu.jas.poly.GenPolynomialRing
+    edu.jas.poly.GenPolynomialTest
+    edu.jas.poly.GenPolynomialTokenizer
+    edu.jas.poly.GenPolynomialTokenizer$1
+    edu.jas.poly.GenPolynomialTokenizer$coeffType
+    edu.jas.poly.GenPolynomialTokenizer$polyType
+    edu.jas.poly.GenPolynomialTokenizerTest
+    edu.jas.poly.GenSolvablePolynomial
+    edu.jas.poly.GenSolvablePolynomialRing
+    edu.jas.poly.GenSolvablePolynomialTest
+    edu.jas.poly.GenVectorTest
+    edu.jas.poly.ImagPart
+    edu.jas.poly.ImagPartComplex
+    edu.jas.poly.IntGenPolynomialTest
+    edu.jas.poly.Local
+    edu.jas.poly.LocalRing
+    edu.jas.poly.LocalTest
+    edu.jas.poly.ModGenPolynomialTest
+    edu.jas.poly.ModGenSolvablePolynomialTest
+    edu.jas.poly.ModSymToInt
+    edu.jas.poly.ModToInt
+    edu.jas.poly.ModuleList
+    edu.jas.poly.ModuleListTest
+    edu.jas.poly.Monomial
+    edu.jas.poly.Multiply
+    edu.jas.poly.OptimizedPolynomialList
+    edu.jas.poly.OrderedModuleList
+    edu.jas.poly.OrderedModuleList$1
+    edu.jas.poly.OrderedPolynomialList
+    edu.jas.poly.OrderedPolynomialList$1
+    edu.jas.poly.PolyIterator
+    edu.jas.poly.PolyToAlg
+    edu.jas.poly.PolyUtil
+    edu.jas.poly.PolyUtil$1
+    edu.jas.poly.PolyUtil$2
+    edu.jas.poly.PolyUtil$3
+    edu.jas.poly.PolyUtilTest
+    edu.jas.poly.PolynomialComparator
+    edu.jas.poly.PolynomialList
+    edu.jas.poly.PolynomialListTest
+    edu.jas.poly.QuatGenPolynomialTest
+    edu.jas.poly.Quotient
+    edu.jas.poly.QuotientRing
+    edu.jas.poly.QuotientTest
+    edu.jas.poly.RatGenPolynomialTest
+    edu.jas.poly.RatGenSolvablePolynomialTest
+    edu.jas.poly.RatNumer
+    edu.jas.poly.RatPolyGenPolynomialTest
+    edu.jas.poly.RatToCompl
+    edu.jas.poly.RatToDec
+    edu.jas.poly.RatToInt
+    edu.jas.poly.RatToIntFactor
+    edu.jas.poly.RatToIntPoly
+    edu.jas.poly.RealPart
+    edu.jas.poly.RealPartComplex
+    edu.jas.poly.RecToDist
+    edu.jas.poly.RelationTable
+    edu.jas.poly.RelationTableTest
+    edu.jas.poly.Residue
+    edu.jas.poly.ResidueRing
+    edu.jas.poly.ResidueTest
+    edu.jas.poly.SolvableModuleListTest
+    edu.jas.poly.TableRelation
+    edu.jas.poly.TermOrder
+    edu.jas.poly.TermOrder$1
+    edu.jas.poly.TermOrder$10
+    edu.jas.poly.TermOrder$11
+    edu.jas.poly.TermOrder$12
+    edu.jas.poly.TermOrder$13
+    edu.jas.poly.TermOrder$14
+    edu.jas.poly.TermOrder$15
+    edu.jas.poly.TermOrder$16
+    edu.jas.poly.TermOrder$17
+    edu.jas.poly.TermOrder$18
+    edu.jas.poly.TermOrder$19
+    edu.jas.poly.TermOrder$2
+    edu.jas.poly.TermOrder$20
+    edu.jas.poly.TermOrder$21
+    edu.jas.poly.TermOrder$22
+    edu.jas.poly.TermOrder$23
+    edu.jas.poly.TermOrder$24
+    edu.jas.poly.TermOrder$25
+    edu.jas.poly.TermOrder$26
+    edu.jas.poly.TermOrder$27
+    edu.jas.poly.TermOrder$28
+    edu.jas.poly.TermOrder$29
+    edu.jas.poly.TermOrder$3
+    edu.jas.poly.TermOrder$30
+    edu.jas.poly.TermOrder$31
+    edu.jas.poly.TermOrder$32
+    edu.jas.poly.TermOrder$33
+    edu.jas.poly.TermOrder$34
+    edu.jas.poly.TermOrder$35
+    edu.jas.poly.TermOrder$36
+    edu.jas.poly.TermOrder$37
+    edu.jas.poly.TermOrder$38
+    edu.jas.poly.TermOrder$39
+    edu.jas.poly.TermOrder$4
+    edu.jas.poly.TermOrder$40
+    edu.jas.poly.TermOrder$41
+    edu.jas.poly.TermOrder$42
+    edu.jas.poly.TermOrder$43
+    edu.jas.poly.TermOrder$44
+    edu.jas.poly.TermOrder$45
+    edu.jas.poly.TermOrder$46
+    edu.jas.poly.TermOrder$47
+    edu.jas.poly.TermOrder$48
+    edu.jas.poly.TermOrder$49
+    edu.jas.poly.TermOrder$5
+    edu.jas.poly.TermOrder$50
+    edu.jas.poly.TermOrder$51
+    edu.jas.poly.TermOrder$52
+    edu.jas.poly.TermOrder$53
+    edu.jas.poly.TermOrder$54
+    edu.jas.poly.TermOrder$55
+    edu.jas.poly.TermOrder$56
+    edu.jas.poly.TermOrder$57
+    edu.jas.poly.TermOrder$58
+    edu.jas.poly.TermOrder$59
+    edu.jas.poly.TermOrder$6
+    edu.jas.poly.TermOrder$60
+    edu.jas.poly.TermOrder$61
+    edu.jas.poly.TermOrder$62
+    edu.jas.poly.TermOrder$63
+    edu.jas.poly.TermOrder$64
+    edu.jas.poly.TermOrder$65
+    edu.jas.poly.TermOrder$66
+    edu.jas.poly.TermOrder$67
+    edu.jas.poly.TermOrder$68
+    edu.jas.poly.TermOrder$69
+    edu.jas.poly.TermOrder$7
+    edu.jas.poly.TermOrder$70
+    edu.jas.poly.TermOrder$8
+    edu.jas.poly.TermOrder$9
+    edu.jas.poly.TermOrderOptimization
+    edu.jas.poly.TermOrderTest
+    edu.jas.poly.ToComplex
+    edu.jas.poly.WeylRelations
+
+Depends Upon:
+    edu.jas.arith
+    edu.jas.kern
+    edu.jas.structure
+    edu.jas.util
+    edu.jas.vector
+
+Used By:
+    edu.jas.application
+    edu.jas.gb
+    edu.jas.gbmod
+    edu.jas.gbufd
+    edu.jas.integrate
+    edu.jas.ps
+    edu.jas.root
+    edu.jas.ufd
+
+--------------------------------------------------
+- Package: edu.jas.ps
+--------------------------------------------------
+
+Stats:
+    Total Classes: 111
+    Concrete Classes: 105
+    Abstract Classes: 6
+
+    Ca: 0
+    Ce: 5
+
+    A: 0,05
+    I: 1
+    D: 0,05
+
+Abstract Classes:
+    edu.jas.ps.Coefficients
+    edu.jas.ps.MultiVarCoefficients
+    edu.jas.ps.MultiVarPowerSeriesMap
+    edu.jas.ps.TaylorFunction
+    edu.jas.ps.TaylorFunctionAdapter
+    edu.jas.ps.UnivPowerSeriesMap
+
+Concrete Classes:
+    edu.jas.ps.Examples
+    edu.jas.ps.Examples$1
+    edu.jas.ps.Examples$10
+    edu.jas.ps.Examples$11
+    edu.jas.ps.Examples$12
+    edu.jas.ps.Examples$13
+    edu.jas.ps.Examples$14
+    edu.jas.ps.Examples$15
+    edu.jas.ps.Examples$16
+    edu.jas.ps.Examples$2
+    edu.jas.ps.Examples$2$1
+    edu.jas.ps.Examples$3
+    edu.jas.ps.Examples$4
+    edu.jas.ps.Examples$5
+    edu.jas.ps.Examples$6
+    edu.jas.ps.Examples$7
+    edu.jas.ps.Examples$8
+    edu.jas.ps.Examples$9
+    edu.jas.ps.Examples$Odds
+    edu.jas.ps.Examples$Sum
+    edu.jas.ps.ExamplesMulti
+    edu.jas.ps.ExpVectorIterable
+    edu.jas.ps.ExpVectorIterator
+    edu.jas.ps.IteratorsTest
+    edu.jas.ps.MultiVarPowerSeries
+    edu.jas.ps.MultiVarPowerSeries$1
+    edu.jas.ps.MultiVarPowerSeries$10
+    edu.jas.ps.MultiVarPowerSeries$11
+    edu.jas.ps.MultiVarPowerSeries$12
+    edu.jas.ps.MultiVarPowerSeries$13
+    edu.jas.ps.MultiVarPowerSeries$14
+    edu.jas.ps.MultiVarPowerSeries$15
+    edu.jas.ps.MultiVarPowerSeries$16
+    edu.jas.ps.MultiVarPowerSeries$17
+    edu.jas.ps.MultiVarPowerSeries$18
+    edu.jas.ps.MultiVarPowerSeries$19
+    edu.jas.ps.MultiVarPowerSeries$2
+    edu.jas.ps.MultiVarPowerSeries$20
+    edu.jas.ps.MultiVarPowerSeries$21
+    edu.jas.ps.MultiVarPowerSeries$22
+    edu.jas.ps.MultiVarPowerSeries$23
+    edu.jas.ps.MultiVarPowerSeries$24
+    edu.jas.ps.MultiVarPowerSeries$3
+    edu.jas.ps.MultiVarPowerSeries$4
+    edu.jas.ps.MultiVarPowerSeries$5
+    edu.jas.ps.MultiVarPowerSeries$6
+    edu.jas.ps.MultiVarPowerSeries$7
+    edu.jas.ps.MultiVarPowerSeries$8
+    edu.jas.ps.MultiVarPowerSeries$9
+    edu.jas.ps.MultiVarPowerSeriesRing
+    edu.jas.ps.MultiVarPowerSeriesRing$1
+    edu.jas.ps.MultiVarPowerSeriesRing$10
+    edu.jas.ps.MultiVarPowerSeriesRing$11
+    edu.jas.ps.MultiVarPowerSeriesRing$12
+    edu.jas.ps.MultiVarPowerSeriesRing$13
+    edu.jas.ps.MultiVarPowerSeriesRing$14
+    edu.jas.ps.MultiVarPowerSeriesRing$2
+    edu.jas.ps.MultiVarPowerSeriesRing$3
+    edu.jas.ps.MultiVarPowerSeriesRing$4
+    edu.jas.ps.MultiVarPowerSeriesRing$5
+    edu.jas.ps.MultiVarPowerSeriesRing$6
+    edu.jas.ps.MultiVarPowerSeriesRing$7
+    edu.jas.ps.MultiVarPowerSeriesRing$8
+    edu.jas.ps.MultiVarPowerSeriesRing$9
+    edu.jas.ps.MultiVarPowerSeriesTest
+    edu.jas.ps.MultiVarPowerSeriesTest$1
+    edu.jas.ps.MultiVarPowerSeriesTest$2
+    edu.jas.ps.MultiVarPowerSeriesTest$3
+    edu.jas.ps.MultiVarPowerSeriesTest$4
+    edu.jas.ps.MultiVarPowerSeriesTest$5
+    edu.jas.ps.MultiVarPowerSeriesTest$6
+    edu.jas.ps.Multiply
+    edu.jas.ps.Negate
+    edu.jas.ps.OrderedPairlist
+    edu.jas.ps.Pair
+    edu.jas.ps.PolynomialTaylorFunction
+    edu.jas.ps.ReductionSeq
+    edu.jas.ps.ReductionSeq$1
+    edu.jas.ps.StandardBaseSeq
+    edu.jas.ps.Subtract
+    edu.jas.ps.Sum
+    edu.jas.ps.UnivPowerSeries
+    edu.jas.ps.UnivPowerSeries$1
+    edu.jas.ps.UnivPowerSeries$10
+    edu.jas.ps.UnivPowerSeries$11
+    edu.jas.ps.UnivPowerSeries$2
+    edu.jas.ps.UnivPowerSeries$3
+    edu.jas.ps.UnivPowerSeries$4
+    edu.jas.ps.UnivPowerSeries$5
+    edu.jas.ps.UnivPowerSeries$6
+    edu.jas.ps.UnivPowerSeries$7
+    edu.jas.ps.UnivPowerSeries$8
+    edu.jas.ps.UnivPowerSeries$9
+    edu.jas.ps.UnivPowerSeriesRing
+    edu.jas.ps.UnivPowerSeriesRing$1
+    edu.jas.ps.UnivPowerSeriesRing$10
+    edu.jas.ps.UnivPowerSeriesRing$2
+    edu.jas.ps.UnivPowerSeriesRing$3
+    edu.jas.ps.UnivPowerSeriesRing$4
+    edu.jas.ps.UnivPowerSeriesRing$5
+    edu.jas.ps.UnivPowerSeriesRing$6
+    edu.jas.ps.UnivPowerSeriesRing$7
+    edu.jas.ps.UnivPowerSeriesRing$8
+    edu.jas.ps.UnivPowerSeriesRing$9
+    edu.jas.ps.UnivPowerSeriesTest
+
+Depends Upon:
+    edu.jas.arith
+    edu.jas.kern
+    edu.jas.poly
+    edu.jas.structure
+    edu.jas.util
+
+Used By:
+    Not used by any packages.
+
+--------------------------------------------------
+- Package: edu.jas.root
+--------------------------------------------------
+
+Stats:
+    Total Classes: 23
+    Concrete Classes: 19
+    Abstract Classes: 4
+
+    Ca: 1
+    Ce: 5
+
+    A: 0,17
+    I: 0,83
+    D: 0,01
+
+Abstract Classes:
+    edu.jas.root.ComplexRoots
+    edu.jas.root.ComplexRootsAbstract
+    edu.jas.root.RealRootAbstract
+    edu.jas.root.RealRoots
+
+Concrete Classes:
+    edu.jas.root.Boundary
+    edu.jas.root.ComplexAlgebraicNumber
+    edu.jas.root.ComplexAlgebraicRing
+    edu.jas.root.ComplexAlgebraicTest
+    edu.jas.root.ComplexRootTest
+    edu.jas.root.ComplexRootsSturm
+    edu.jas.root.Interval
+    edu.jas.root.InvalidBoundaryException
+    edu.jas.root.NoConvergenceException
+    edu.jas.root.RealAlgebraicNumber
+    edu.jas.root.RealAlgebraicRing
+    edu.jas.root.RealAlgebraicTest
+    edu.jas.root.RealRootAbstract$1
+    edu.jas.root.RealRootTest
+    edu.jas.root.RealRootsSturm
+    edu.jas.root.Rectangle
+    edu.jas.root.RootFactory
+    edu.jas.root.RootUtil
+    edu.jas.root.RootUtilTest
+
+Depends Upon:
+    edu.jas.arith
+    edu.jas.kern
+    edu.jas.poly
+    edu.jas.structure
+    edu.jas.ufd
+
+Used By:
+    edu.jas.application
+
+--------------------------------------------------
+- Package: edu.jas.structure
+--------------------------------------------------
+
+Stats:
+    Total Classes: 21
+    Concrete Classes: 2
+    Abstract Classes: 19
+
+    Ca: 12
+    Ce: 0
+
+    A: 0,9
+    I: 0
+    D: 0,1
+
+Abstract Classes:
+    edu.jas.structure.AbelianGroupElem
+    edu.jas.structure.AbelianGroupFactory
+    edu.jas.structure.AlgebraElem
+    edu.jas.structure.AlgebraFactory
+    edu.jas.structure.BinaryFunctor
+    edu.jas.structure.ElemFactory
+    edu.jas.structure.Element
+    edu.jas.structure.FieldElem
+    edu.jas.structure.GcdRingElem
+    edu.jas.structure.ModulElem
+    edu.jas.structure.ModulFactory
+    edu.jas.structure.MonoidElem
+    edu.jas.structure.MonoidFactory
+    edu.jas.structure.RegularRingElem
+    edu.jas.structure.RingElem
+    edu.jas.structure.RingFactory
+    edu.jas.structure.Selector
+    edu.jas.structure.StarRingElem
+    edu.jas.structure.UnaryFunctor
+
+Concrete Classes:
+    edu.jas.structure.NotInvertibleException
+    edu.jas.structure.Power
+
+Depends Upon:
+    Not dependent on any packages.
+
+Used By:
+    edu.jas.application
+    edu.jas.arith
+    edu.jas.gb
+    edu.jas.gbmod
+    edu.jas.gbufd
+    edu.jas.integrate
+    edu.jas.poly
+    edu.jas.ps
+    edu.jas.root
+    edu.jas.ufd
+    edu.jas.util
+    edu.jas.vector
+
+--------------------------------------------------
+- Package: edu.jas.ufd
+--------------------------------------------------
+
+Stats:
+    Total Classes: 84
+    Concrete Classes: 76
+    Abstract Classes: 8
+
+    Ca: 4
+    Ce: 7
+
+    A: 0,1
+    I: 0,64
+    D: 0,27
+
+Abstract Classes:
+    edu.jas.ufd.FactorAbsolute
+    edu.jas.ufd.FactorAbstract
+    edu.jas.ufd.Factorization
+    edu.jas.ufd.GreatestCommonDivisor
+    edu.jas.ufd.GreatestCommonDivisorAbstract
+    edu.jas.ufd.Squarefree
+    edu.jas.ufd.SquarefreeAbstract
+    edu.jas.ufd.SquarefreeFieldCharP
+
+Concrete Classes:
+    edu.jas.ufd.BackSubstKronecker
+    edu.jas.ufd.Examples
+    edu.jas.ufd.ExamplesPartialFraction
+    edu.jas.ufd.FactorAlgebraic
+    edu.jas.ufd.FactorAlgebraicTest
+    edu.jas.ufd.FactorComplex
+    edu.jas.ufd.FactorComplexTest
+    edu.jas.ufd.FactorFactory
+    edu.jas.ufd.FactorGenericTest
+    edu.jas.ufd.FactorInteger
+    edu.jas.ufd.FactorIntegerTest
+    edu.jas.ufd.FactorModular
+    edu.jas.ufd.FactorModularTest
+    edu.jas.ufd.FactorMoreTest
+    edu.jas.ufd.FactorQuotient
+    edu.jas.ufd.FactorQuotientTest
+    edu.jas.ufd.FactorRational
+    edu.jas.ufd.FactorRationalTest
+    edu.jas.ufd.FactorTest
+    edu.jas.ufd.Factors
+    edu.jas.ufd.FactorsList
+    edu.jas.ufd.FactorsMap
+    edu.jas.ufd.GCDFactory
+    edu.jas.ufd.GCDFactoryTest
+    edu.jas.ufd.GCDHenselTest
+    edu.jas.ufd.GCDModEvalTest
+    edu.jas.ufd.GCDModLongEvalTest
+    edu.jas.ufd.GCDModLongTest
+    edu.jas.ufd.GCDModularTest
+    edu.jas.ufd.GCDPartFracRatTest
+    edu.jas.ufd.GCDPrimitiveTest
+    edu.jas.ufd.GCDProxy
+    edu.jas.ufd.GCDProxy$1
+    edu.jas.ufd.GCDProxy$2
+    edu.jas.ufd.GCDProxy$3
+    edu.jas.ufd.GCDProxy$4
+    edu.jas.ufd.GCDProxy$5
+    edu.jas.ufd.GCDProxy$6
+    edu.jas.ufd.GCDProxyTest
+    edu.jas.ufd.GCDSimpleTest
+    edu.jas.ufd.GCDSubresRatTest
+    edu.jas.ufd.GCDSubresTest
+    edu.jas.ufd.GCDTimingTest
+    edu.jas.ufd.GreatestCommonDivisorHensel
+    edu.jas.ufd.GreatestCommonDivisorModEval
+    edu.jas.ufd.GreatestCommonDivisorModular
+    edu.jas.ufd.GreatestCommonDivisorPrimitive
+    edu.jas.ufd.GreatestCommonDivisorSimple
+    edu.jas.ufd.GreatestCommonDivisorSubres
+    edu.jas.ufd.HenselApprox
+    edu.jas.ufd.HenselUtil
+    edu.jas.ufd.HenselUtilTest
+    edu.jas.ufd.NoLiftingException
+    edu.jas.ufd.PartialFraction
+    edu.jas.ufd.PolyUfdUtil
+    edu.jas.ufd.PolyUfdUtilTest
+    edu.jas.ufd.QuotIntPolynomialTest
+    edu.jas.ufd.Quotient
+    edu.jas.ufd.QuotientIntTest
+    edu.jas.ufd.QuotientRatTest
+    edu.jas.ufd.QuotientRing
+    edu.jas.ufd.SquarefreeAlgModTest
+    edu.jas.ufd.SquarefreeAlgQuotModTest
+    edu.jas.ufd.SquarefreeFactory
+    edu.jas.ufd.SquarefreeFieldChar0
+    edu.jas.ufd.SquarefreeFiniteFieldCharP
+    edu.jas.ufd.SquarefreeInfiniteAlgebraicFieldCharP
+    edu.jas.ufd.SquarefreeInfiniteFieldCharP
+    edu.jas.ufd.SquarefreeIntTest
+    edu.jas.ufd.SquarefreeModLongTest
+    edu.jas.ufd.SquarefreeModTest
+    edu.jas.ufd.SquarefreeQuotModTest
+    edu.jas.ufd.SquarefreeRatTest
+    edu.jas.ufd.SquarefreeRingChar0
+    edu.jas.ufd.SquarefreeTest
+    edu.jas.ufd.SubstKronecker
+
+Depends Upon:
+    edu.jas.arith
+    edu.jas.gb
+    edu.jas.kern
+    edu.jas.poly
+    edu.jas.structure
+    edu.jas.util
+    edu.jas.vector
+
+Used By:
+    edu.jas.application
+    edu.jas.gbufd
+    edu.jas.integrate
+    edu.jas.root
+
+--------------------------------------------------
+- Package: edu.jas.util
+--------------------------------------------------
+
+Stats:
+    Total Classes: 67
+    Concrete Classes: 65
+    Abstract Classes: 2
+
+    Ca: 6
+    Ce: 2
+
+    A: 0,03
+    I: 0,25
+    D: 0,72
+
+Abstract Classes:
+    edu.jas.util.DHTTransport
+    edu.jas.util.RemoteExecutable
+
+Concrete Classes:
+    edu.jas.util.ArrayUtil
+    edu.jas.util.Broadcaster
+    edu.jas.util.CartesianOneProductInfiniteIterator
+    edu.jas.util.CartesianProduct
+    edu.jas.util.CartesianProductInfinite
+    edu.jas.util.CartesianProductIterator
+    edu.jas.util.CartesianProductLong
+    edu.jas.util.CartesianProductLongIterator
+    edu.jas.util.CartesianTwoProductInfiniteIterator
+    edu.jas.util.CartesianTwoProductInfiniteIteratorList
+    edu.jas.util.CatReader
+    edu.jas.util.ChannelFactory
+    edu.jas.util.Counter
+    edu.jas.util.DHTBroadcaster
+    edu.jas.util.DHTListener
+    edu.jas.util.DHTTransport$1
+    edu.jas.util.DHTTransport$Stor
+    edu.jas.util.DHTTransportMarshal
+    edu.jas.util.DHTTransportPlain
+    edu.jas.util.DistFastWorker
+    edu.jas.util.DistHashTable
+    edu.jas.util.DistHashTableServer
+    edu.jas.util.DistHashTableTest
+    edu.jas.util.DistPoolThread
+    edu.jas.util.DistSlowWorker
+    edu.jas.util.DistThreadPool
+    edu.jas.util.DistThreadPoolTest
+    edu.jas.util.DistributedList
+    edu.jas.util.DistributedListServer
+    edu.jas.util.DistributedListTest
+    edu.jas.util.Executable
+    edu.jas.util.ExecutableChannels
+    edu.jas.util.ExecutableChannelsTest
+    edu.jas.util.ExecutableServer
+    edu.jas.util.ExecutableServerTest
+    edu.jas.util.Executor
+    edu.jas.util.FastWorker
+    edu.jas.util.IteratorsTest
+    edu.jas.util.KsubSet
+    edu.jas.util.KsubSetIterator
+    edu.jas.util.ListUtil
+    edu.jas.util.ListUtilTest
+    edu.jas.util.Listener
+    edu.jas.util.LongIterable
+    edu.jas.util.LongIterator
+    edu.jas.util.MapEntry
+    edu.jas.util.Multiply
+    edu.jas.util.OneSubSetIterator
+    edu.jas.util.PoolThread
+    edu.jas.util.PowerSet
+    edu.jas.util.PowerSetIterator
+    edu.jas.util.PowerSetIterator$Mode
+    edu.jas.util.PowerSetTest
+    edu.jas.util.ShutdownRequest
+    edu.jas.util.SlowWorker
+    edu.jas.util.SocketChannel
+    edu.jas.util.SocketChannelTest
+    edu.jas.util.StrategyEnumeration
+    edu.jas.util.TaggedMessage
+    edu.jas.util.TaggedSocketChannel
+    edu.jas.util.TaggedSocketChannelTest
+    edu.jas.util.Terminator
+    edu.jas.util.ThreadPool
+    edu.jas.util.ThreadPoolTest
+    edu.jas.util.ZeroSubSetIterator
+
+Depends Upon:
+    edu.jas.arith
+    edu.jas.structure
+
+Used By:
+    edu.jas.application
+    edu.jas.gb
+    edu.jas.gbufd
+    edu.jas.poly
+    edu.jas.ps
+    edu.jas.ufd
+
+--------------------------------------------------
+- Package: edu.jas.vector
+--------------------------------------------------
+
+Stats:
+    Total Classes: 8
+    Concrete Classes: 8
+    Abstract Classes: 0
+
+    Ca: 4
+    Ce: 3
+
+    A: 0
+    I: 0,43
+    D: 0,57
+
+Abstract Classes:
+
+Concrete Classes:
+    edu.jas.vector.BasicLinAlg
+    edu.jas.vector.Examples
+    edu.jas.vector.GenMatrix
+    edu.jas.vector.GenMatrixRing
+    edu.jas.vector.GenMatrixTest
+    edu.jas.vector.GenVector
+    edu.jas.vector.GenVectorModul
+    edu.jas.vector.GenVectorTest
+
+Depends Upon:
+    edu.jas.arith
+    edu.jas.kern
+    edu.jas.structure
+
+Used By:
+    edu.jas.gb
+    edu.jas.gbmod
+    edu.jas.poly
+    edu.jas.ufd
+
+--------------------------------------------------
+- Package: edu.mas.kern
+--------------------------------------------------
+
+Stats:
+    Total Classes: 2
+    Concrete Classes: 2
+    Abstract Classes: 0
+
+    Ca: 0
+    Ce: 1
+
+    A: 0
+    I: 1
+    D: 0
+
+Abstract Classes:
+
+Concrete Classes:
+    edu.mas.kern.LIST
+    edu.mas.kern.LISTTest
+
+Depends Upon:
+    edu.jas.arith
+
+Used By:
+    Not used by any packages.
+
+
+--------------------------------------------------
+- Package Dependency Cycles:
+--------------------------------------------------
+
+
+--------------------------------------------------
+- Summary:
+--------------------------------------------------
+
+Name, Class Count, Abstract Class Count, Ca, Ce, A, I, D, V:
+
+edu.jas.application,39,0,0,9,0,1,0,1
+edu.jas.arith,36,3,12,2,0,08,0,14,0,77,1
+edu.jas.gb,104,12,4,6,0,12,0,6,0,28,1
+edu.jas.gbmod,16,4,0,6,0,25,1,0,25,1
+edu.jas.gbufd,28,3,2,7,0,11,0,78,0,12,1
+edu.jas.integrate,6,0,0,5,0,1,0,1
+edu.jas.kern,9,0,10,0,0,0,1,1
+edu.jas.poly,178,4,8,5,0,02,0,38,0,59,1
+edu.jas.ps,111,6,0,5,0,05,1,0,05,1
+edu.jas.root,23,4,1,5,0,17,0,83,0,01,1
+edu.jas.structure,21,19,12,0,0,9,0,0,1,1
+edu.jas.ufd,84,8,4,7,0,1,0,64,0,27,1
+edu.jas.util,67,2,6,2,0,03,0,25,0,72,1
+edu.jas.vector,8,0,4,3,0,0,43,0,57,1
+edu.mas.kern,2,0,0,1,0,1,0,1
