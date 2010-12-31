@@ -1512,13 +1512,6 @@ class MultiSeriesRing:
             a = a.elem;
         return RingElem( self.ring.fromPolynomial(a) );
 
-    def fromPoly(self,a):
-        '''Convert a GenPolynomial to a power series.
-        '''
-        if isinstance(a,RingElem):
-            a = a.elem;
-        return RingElem( self.ring.fromPolynomial(a) );
-
 
 class PSIdeal:
     '''Represents a JAS power series ideal.
