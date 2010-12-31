@@ -1,7 +1,7 @@
 '''jruby interface to JAS.
 '''
 
-# $Id: $
+# $Id$
 
 require "java"
 require "rational"
