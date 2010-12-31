@@ -130,9 +130,9 @@ def CC(re=BigRational.new(),im=BigRational.new())
     if im == 0
         im = BigRational.new();
     end
-    if false #isinstance(re,PyTuple) or isinstance(re,PyList)
-        if isinstance(re[0],PyTuple) or isinstance(re[0],PyList)
-            if len(re) > 1
+    if re.is_a? Array 
+        if re[0].is_a? Array 
+            if re.size > 1
                 im = QQ( re[1] );
             end
             re = QQ( re[0] );
@@ -141,7 +141,7 @@ def CC(re=BigRational.new(),im=BigRational.new())
 #        re = makeJasArith( re );
         end
     end
-    if false #isinstance(im,PyTuple) or isinstance(im,PyList)
+    if im.is_a? Array 
         im = QQ( im );
 #        im = makeJasArith( im );
     end
@@ -173,9 +173,9 @@ def CR(re=BigRational.new(),im=BigRational.new(),ring=nil)
     if im == 0
         im = BigRational.new();
     end
-    if false #isinstance(re,PyTuple) or isinstance(re,PyList)
-        if isinstance(re[0],PyTuple) or isinstance(re[0],PyList)
-            if len(re) > 1
+    if re.is_a? Array 
+        if re[0].is_a? Array 
+            if re.size > 1
                 im = QQ( re[1] );
             end
             re = QQ( re[0] );
@@ -184,7 +184,7 @@ def CR(re=BigRational.new(),im=BigRational.new(),ring=nil)
 #        re = makeJasArith( re );
         end
     end
-    if false #isinstance(im,PyTuple) or isinstance(im,PyList)
+    if im.is_a? Array 
         im = QQ( im );
 #        im = makeJasArith( im );
     end
@@ -245,9 +245,9 @@ def Quat(re=BigRational.new(),im=BigRational.new(),jm=BigRational.new(),km=BigRa
     if km == 0
         km = BigRational.new();
     end
-    if false #isinstance(re,PyTuple) or isinstance(re,PyList)
-        if isinstance(re[0],PyTuple) or isinstance(re[0],PyList)
-            if len(re) > 1
+    if re.is_a? Array 
+        if re[0].is_a? Array 
+            if re.size > 1
                 im = QQ( re[1] );
             end
             re = QQ( re[0] );
@@ -256,13 +256,13 @@ def Quat(re=BigRational.new(),im=BigRational.new(),jm=BigRational.new(),km=BigRa
 #        re = makeJasArith( re );
         end
     end
-    if false #isinstance(im,PyTuple) or isinstance(im,PyList)
+    if im.is_a? Array 
         im = QQ( im );
     end
-    if false #isinstance(jm,PyTuple) or isinstance(jm,PyList)
+    if jm.is_a? Array 
         jm = QQ( jm );
     end
-    if false #isinstance(km,PyTuple) or isinstance(km,PyList)
+    if km.is_a? Array 
        kim = QQ( km );
 #        im = makeJasArith( im );
     end
@@ -292,9 +292,9 @@ def Oct(ro=BigQuaternion.new(),io=BigQuaternion.new())
     if io == 0
         io = BigQuaternion.new();
     end
-    if false #isinstance(ro,PyTuple) or isinstance(ro,PyList)
-        if isinstance(ro[0],PyTuple) or isinstance(ro[0],PyList)
-            if len(ro) > 1
+    if ro.is_a? Array 
+        if ro[0].is_a? Array 
+            if ro.size > 1
                 io = QQ( ro[1] );
             end
             ro = QQ( ro[0] );
@@ -303,7 +303,7 @@ def Oct(ro=BigQuaternion.new(),io=BigQuaternion.new())
 #        re = makeJasArith( re );
         end
     end
-    if false #isinstance(io,PyTuple) or isinstance(io,PyList)
+    if io.is_a? Array 
         io = QQ( io );
 #        im = makeJasArith( im );
     end
@@ -461,14 +461,14 @@ class RingElem
         print "self  type(#{self}) = #{self.class}\n";
         print "other type(#{other}) = #{other.class}\n";
         if @elem.getClass().getSimpleName() == "GenVector"
-            if isinstance(other,PyTuple) or isinstance(other,PyList)
+            if other.is_a? Array 
                 o = pylist2arraylist(other,@elem.factory().coFac,rec=1);
                 o = GenVector(@elem.factory(),o);
                 return RingElem.new( o );
                 end
         end
         if @elem.getClass().getSimpleName() == "GenMatrix"
-            if isinstance(other,PyTuple) or isinstance(other,PyList)
+            if other.is_a? Array 
                 o = pylist2arraylist(other,@elem.factory().coFac,rec=2);
                 o = GenMatrix(@elem.factory(),o);
                 return RingElem.new( o );
@@ -649,7 +649,7 @@ class RingElem
         '''Test if two ring elements are equal.
         '''
         o = other;
-        if isinstance(other,RingElem)
+        if other.is_a? RingElem
             o = other.elem;
         end
         return @elem.equals(o)
@@ -693,7 +693,7 @@ class RingElem
         if a.is_a? RingElem
             x = a.elem;
         end
-        if isinstance(a,PyTuple) or isinstance(a,PyList)
+        if a.is_a? Array 
             # assume BigRational or BigComplex
             # assume self will be compatible with them. todo: check this
             x = makeJasArith(a);
@@ -714,10 +714,10 @@ class RingElem
         #print "self  type(#{@elem}) = #{@elem.class}";
         #print "a     type(#{a}) = #{a.class}";
         x = nil;
-        if isinstance(a,RingElem)
+        if a.is_a? RingElem
             x = a.elem;
         end
-        if isinstance(a,PyTuple) or isinstance(a,PyList)
+        if a.is_a? Array 
             # assume BigRational or BigComplex
             # assume self will be compatible with them. todo: check this
             x = makeJasArith(a);
@@ -890,13 +890,13 @@ class Ring
     def gcd(a,b)
         '''Compute the greatest common divisor of a and b.
         '''
-        if isinstance(a,RingElem)
+        if a.is_a? RingElem
             a = a.elem;
         else
             a = element( str(a) );
             a = a.elem;
         end
-        if isinstance(b,RingElem)
+        if b.is_a? RingElem
             b = b.elem;
         else
             b = element( str(b) );
@@ -908,7 +908,7 @@ class Ring
     def squarefreeFactors(a)
         '''Compute squarefree factors of polynomial.
         '''
-        if isinstance(a,RingElem)
+        if a.is_a? RingElem
             a = a.elem;
         else
             a = element( str(a) );
@@ -932,7 +932,7 @@ class Ring
         '''Compute irreducible factorization for modular, integer,
         rational number and algebriac number coefficients.
         '''
-        if isinstance(a,RingElem)
+        if a.is_a? RingElem
             a = a.elem;
         else
             a = element( str(a) );
@@ -961,7 +961,7 @@ class Ring
         '''Compute absolute irreducible factorization for (modular,)
         rational number coefficients.
         '''
-        if isinstance(a,RingElem)
+        if a.is_a? RingElem
             a = a.elem;
         else
             a = element( str(a) );
@@ -983,22 +983,22 @@ class Ring
     def realRoots(a,eps=nil)
         '''Compute real roots of univariate polynomial.
         '''
-        if isinstance(a,RingElem)
+        if a.is_a? RingElem
             a = a.elem;
         else
             a = element( str(a) );
             a = a.elem;
         end
-        if isinstance(eps,RingElem)
+        if eps.is_a? RingElem
             eps = eps.elem;
         end
         begin
             if eps == nil
-                rr = RealRootsSturm().realRoots( a );
+                rr = RealRootsSturm.new().realRoots( a );
             else
-##                 rr = RealRootsSturm().realRoots( a, eps );
+##                 rr = RealRootsSturm.new().realRoots( a, eps );
 ##                 rr = [ r.toDecimal() for r in rr ];
-                rr = RealRootsSturm().approximateRoots(a,eps);
+                rr = RealRootsSturm.new().approximateRoots(a,eps);
                 rr = rr.map{ |e| RingElem.new(e) };
             end
             return rr;
@@ -1011,23 +1011,23 @@ class Ring
     def complexRoots(a,eps=nil)
         '''Compute complex roots of univariate polynomial.
         '''
-        if isinstance(a,RingElem)
+        if a.is_a? RingElem
             a = a.elem;
         else
             a = element( str(a) );
             a = a.elem;
         end
-        if isinstance(eps,RingElem)
+        if eps.is_a? RingElem
             eps = eps.elem;
         end
         begin
             if eps == nil
-                rr = ComplexRootsSturm(a.ring.coFac).complexRoots( a );
+                rr = ComplexRootsSturm.new(a.ring.coFac).complexRoots( a );
                 #R = [ r.centerApprox() for r in R ];
             else
-##                 R = ComplexRootsSturm(a.ring.coFac).complexRoots( a, eps );
+##                 R = ComplexRootsSturm.new(a.ring.coFac).complexRoots( a, eps );
 ##                 R = [ r.centerApprox() for r in R ];
-                rr = ComplexRootsSturm(a.ring.coFac).approximateRoots( a, eps );
+                rr = ComplexRootsSturm.new(a.ring.coFac).approximateRoots( a, eps );
                 rr = rr.map{ |e| RingElem.new(e) };
             end
             return rr;
@@ -1040,7 +1040,7 @@ class Ring
     def integrate(a)
         '''Integrate (univariate) rational function.
         '''
-        if isinstance(a,RingElem)
+        if a.is_a? RingElem
             a = a.elem;
         else
             a = element( str(a) );
@@ -1052,7 +1052,7 @@ class Ring
         rescue
             pass;
         end
-        integrator = ElementaryIntegration(cf.coFac);
+        integrator = ElementaryIntegration.new(cf.coFac);
         ei = integrator.integrate(a); 
         return ei;
     end
@@ -1060,8 +1060,8 @@ class Ring
     def powerseriesRing()
         '''Get a power series ring from this ring.
         '''
-        pr = MultiVarPowerSeriesRing(@ring);
-        return MultiSeriesRing(ring=pr);
+        pr = MultiVarPowerSeriesRing.new(@ring);
+        return MultiSeriesRing.new(ring=pr);
     end
 end
 
@@ -1616,9 +1616,9 @@ class Ideal
         ff = s.list;
         t = System.currentTimeMillis();
         if cofac.isField()
-            b = GroebnerBaseSeq().isGB(ff);
+            b = GroebnerBaseSeq.new().isGB(ff);
         else
-            b = EGroebnerBaseSeq().isGB(ff)
+            b = EGroebnerBaseSeq.new().isGB(ff)
         end
         t = System.currentTimeMillis() - t;
         print "is e-GB test executed in #{t} ms\n"; 
@@ -1634,9 +1634,9 @@ class Ideal
         ff = s.list;
         t = System.currentTimeMillis();
         if cofac.isField()
-            gg = GroebnerBaseSeq().GB(ff);
+            gg = GroebnerBaseSeq.new().GB(ff);
         else
-            gg = DGroebnerBaseSeq().GB(ff)
+            gg = DGroebnerBaseSeq.new().GB(ff)
         end
         t = System.currentTimeMillis() - t;
         print "sequential d-GB executed in #{t} ms\n"; 
@@ -1652,9 +1652,9 @@ class Ideal
         ff = s.list;
         t = System.currentTimeMillis();
         if cofac.isField()
-            b = GroebnerBaseSeq().isGB(ff);
+            b = GroebnerBaseSeq.new().isGB(ff);
         else
-            b = DGroebnerBaseSeq().isGB(ff)
+            b = DGroebnerBaseSeq.new().isGB(ff)
         end
         t = System.currentTimeMillis() - t;
         print "is d-GB test executed in #{t} ms\n"; 
@@ -1667,7 +1667,7 @@ class Ideal
         '''
         s = @pset;
         ff = s.list;
-        bbpar = GroebnerBaseSeqPairParallel(th);
+        bbpar = GroebnerBaseSeqPairParallel.new(th);
         t = System.currentTimeMillis();
         gg = bbpar.GB(ff);
         t = System.currentTimeMillis() - t;
@@ -1770,7 +1770,7 @@ class Ideal
         '''
         p = @pset;
         o = TermOrderOptimization.optimizeTermOrder(p);
-        r = Ring("",o.ring);
+        r = Ring.new("",o.ring);
         return Ideal.new(r,"",o.list);
     end
 
@@ -1846,9 +1846,9 @@ class Ideal
         p = @pset;
         l = p.list;
         r = p.ring;
-        ri = GenPolynomialRing( BigInteger(), r.nvar, r.tord, r.vars );
+        ri = GenPolynomialRing.new( BigInteger(), r.nvar, r.tord, r.vars );
         pi = PolyUtil.integerFromRationalCoefficients(ri,l);
-        r = Ring("",ri);
+        r = Ring.new("",ri);
         return Ideal.new(r,"",pi);
     end
 
@@ -1858,9 +1858,9 @@ class Ideal
         p = @pset;
         l = p.list;
         r = p.ring;
-        rm = GenPolynomialRing( mf, r.nvar, r.tord, r.vars );
+        rm = GenPolynomialRing.new( mf, r.nvar, r.tord, r.vars );
         pm = PolyUtil.fromIntegerCoefficients(rm,l);
-        r = Ring("",rm);
+        r = Ring.new("",rm);
         return Ideal.new(r,"",pm);
     end
 
@@ -2029,7 +2029,7 @@ class ParamIdeal
         s = @pset;
         ff = s.list;
         t = System.currentTimeMillis();
-        ss = ComprehensiveGroebnerBaseSeq(@ring.ring.coFac).GBsys(ff);
+        ss = ComprehensiveGroebnerBaseSeq.new(@ring.ring.coFac).GBsys(ff);
         t = System.currentTimeMillis() - t;
         print "sequential comprehensive system executed in #{r} ms\n"; 
         return ParamIdeal.new(@ring,nil,ff,ss);
@@ -3051,19 +3051,19 @@ def PS(cofac,name,f=nil,truncate=nil)
     '''Create JAS UnivPowerSeries as ring element.
     '''
     cf = cofac;
-    if isinstance(cofac,RingElem)
+    if cofac.is_a? RingElem
         cf = cofac.elem.factory();
     end
-    if isinstance(cofac,Ring)
+    if cofac.is_a? Ring
         cf = cofac.ring;
     end
-    if isinstance(truncate,RingElem)
+    if truncate.is_a? RingElem
         truncate = truncate.elem;
     end
     if truncate == nil
-        ps = UnivPowerSeriesRing(cf,name);
+        ps = UnivPowerSeriesRing.new(cf,name);
     else
-        ps = UnivPowerSeriesRing(cf,truncate,name);
+        ps = UnivPowerSeriesRing.new(cf,truncate,name);
     end
     if f == nil
         r = ps.getZERO();

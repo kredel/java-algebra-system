@@ -7,7 +7,6 @@ load "examples/jas.rb"
 
 #startLog();
 
-#import sys;
 #from jas import Ring
 #from jas import Ideal
 #from jas import startLog
@@ -65,5 +64,5 @@ rg = f.distGB(2);
 
 terminate();
 
-sys.exit(); # required because of distClient
+exit(0); # required because of distClient
 
