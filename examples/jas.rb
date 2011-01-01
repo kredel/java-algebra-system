@@ -257,24 +257,17 @@ def Quat(re=BigRational.new(),im=BigRational.new(),jm=BigRational.new(),km=BigRa
     if km == 0
         km = BigRational.new();
     end
-    if re.is_a? Array 
-        if re[0].is_a? Array 
-            if re.size > 1
-                im = QQ( re[1] );
-            end
-            re = QQ( re[0] );
-        else
-            re = QQ(re);
+    if re.is_a? Numeric 
+        re = QQ(re);
 #        re = makeJasArith( re );
-        end
     end
-    if im.is_a? Array 
+    if im.is_a? Numeric 
         im = QQ( im );
     end
-    if jm.is_a? Array 
+    if jm.is_a? Numeric
         jm = QQ( jm );
     end
-    if km.is_a? Array 
+    if km.is_a? Numeric
        kim = QQ( km );
 #        im = makeJasArith( im );
     end
@@ -337,8 +330,7 @@ class RingElem
     '''
 
     include Comparable
-    attr_reader :elem
-    attr_reader :ring
+    attr_reader :elem, :ring
 
     def initialize(elem)
         '''Constructor for ring element.
@@ -421,7 +413,7 @@ class RingElem
     def signum()
         '''Get the sign of this element.
         '''
-        return @elem.signum().intValue();
+        return @elem.signum();
     end
 
     def abs()
@@ -478,15 +470,15 @@ class RingElem
         #print "other type(#{other}) = #{other.class}\n";
         if @elem.getClass().getSimpleName() == "GenVector"
             if other.is_a? Array 
-                o = pylist2arraylist(other,@elem.factory().coFac,rec=1);
-                o = GenVector(@elem.factory(),o);
+                o = rbarray2arraylist(other,@elem.factory().coFac,rec=1);
+                o = GenVector.new(@elem.factory(),o);
                 return RingElem.new( o );
                 end
         end
         if @elem.getClass().getSimpleName() == "GenMatrix"
             if other.is_a? Array 
-                o = pylist2arraylist(other,@elem.factory().coFac,rec=2);
-                o = GenMatrix(@elem.factory(),o);
+                o = rbarray2arraylist(other,@elem.factory().coFac,rec=2);
+                o = GenMatrix.new(@elem.factory(),o);
                 return RingElem.new( o );
                 end
         end
@@ -751,13 +743,13 @@ class RingElem
             end
             return RingElem.new( e );
         rescue:
-            pass;
+            #pass;
         end
         cf = @elem.ring;
         begin
             cf = cf.ring;
         rescue
-            pass;
+            #pass;
         end
         integrator = ElementaryIntegration(cf.coFac);
         ei = integrator.integrate(@elem); 
@@ -816,9 +808,7 @@ class Ring
 
     Methods to create ideals and ideals with parametric coefficients.
     '''
-    attr_reader :ring
-    attr_reader :pset
-    attr_reader :engine
+    attr_reader :ring, :pset, :engine
 
     def initialize(ringstr="",ring=nil)
         '''Ring constructor.
@@ -838,13 +828,13 @@ class Ring
 #        rescue Rescueion => e
 #            print "error " + str(e)
         rescue
-            pass
+            #pass
         end
         begin
             @factor = FactorFactory.getImplementation(@ring.coFac);
             #print "factor: ", @factor;
         rescue
-            pass
+            #pass
 #        rescue Rescueion => e
 #            print "error " + str(e)
         end
@@ -903,7 +893,7 @@ class Ring
         '''
         i = Ideal.new( "( " + polystr + " )");
         list = i.pset.list;
-        if len(list) > 0
+        if list.size > 0
             return RingElem.new( list[0] );
         end
     end
@@ -1071,7 +1061,7 @@ class Ring
         begin
             cf = cf.ring;
         rescue
-            pass;
+            #pass;
         end
         integrator = ElementaryIntegration.new(cf.coFac);
         ei = integrator.integrate(a); 
@@ -1108,8 +1098,8 @@ class PolyRing < Ring
         if coeff.is_a? RingElem
             cf = coeff.elem.factory();
         end
-        if coeff.is_a? RingElem
-            cf = coeff::ring;
+        if coeff.is_a? Ring
+            cf = coeff.ring;
         end
         if vars == nil
             raise ValueError, "No variable names given."
@@ -1130,9 +1120,9 @@ class PolyRing < Ring
         begin
             @sqf = SquarefreeFactory.getImplementation(@ring.coFac);
         rescue
-            pass
+            #pass
 #        rescue Exception => e:
-#            print "error " + str(e)
+#            print "error " + str(e) + "\n"
         end
         begin
             @factor = FactorFactory.getImplementation(@ring.coFac);
@@ -1153,8 +1143,7 @@ class PolyRing < Ring
     @grad = TermOrder.new(TermOrder::IGRLEX)
 
     class << self  # means add to class
-       attr_reader :lex
-       attr_reader :grad
+       attr_reader :lex, :grad
     end
 
 end
@@ -1238,7 +1227,7 @@ def RF(pr,d=0,n=1)
         if n != 1
             print "#{} ignored\n";
         end
-        if len(d) > 1
+        if d.size > 1
             n = d[1];
         end
         d = d[0];
@@ -1272,7 +1261,7 @@ end
 include_class "edu.jas.application.PolyUtilApp";
 include_class "edu.jas.application.Residue";
 include_class "edu.jas.application.ResidueRing";
-#include_class "edu.jas.application.Ideal";
+include_class "edu.jas.application.Ideal";
 include_class "edu.jas.application.Local";
 include_class "edu.jas.application.LocalRing";
 include_class "edu.jas.application.IdealWithRealAlgebraicRoots";
@@ -1286,7 +1275,7 @@ def RC(ideal,r=0)
         raise ValueError, "No ideal given."
     end
     if ideal.is_a? Ideal
-        ideal = jas.application.Ideal.new(ideal.pset);
+        ideal = edu.jas.application.Ideal.new(ideal.pset);
         #ideal.doGB();
     end
     #print "ideal.getList().get(0).ring.ideal = #{ideal.getList().get(0).ring.ideal}\n";
@@ -1327,7 +1316,7 @@ def LC(ideal,d=0,n=1)
         if n != 1
             print "#{n} ignored\n";
         end
-        if len(d) > 1
+        if d.size > 1
             n = d[1];
         end
         d = d[0];
@@ -1390,7 +1379,7 @@ def RR(flist,n=1,r=0)
             r = r.val;
         end
     rescue
-        pass;
+        #pass;
     end
     #print "r = " + r.to_s;
     if r == 0
@@ -1430,7 +1419,7 @@ def rbarray2arraylist(list,fac=nil,rec=1)
                    t = false;
                end
            rescue
-               pass;
+               #pass;
            end
            if t and fac != nil
                #print "e.p(#{e}) = #{e.class}\n";
@@ -1566,7 +1555,7 @@ class Ideal
             begin
                 v = cofac.vars;
             rescue
-                pass
+                #pass
             end
             if v == nil
                 gg = GroebnerBasePseudoSeq.new(cofac).GB(ff);
@@ -1593,7 +1582,7 @@ class Ideal
             begin
                 v = cofac.vars;
             rescue
-                pass
+                #pass
             end
             if v == nil
                 b = GroebnerBasePseudoSeq.new(cofac).isGB(ff);
@@ -2191,7 +2180,7 @@ class SolvableRing < Ring
         '''
         ii = SolvableIdeal.new(self, "( " + polystr + " )");
         list = ii.pset.list;
-        if len(list) > 0
+        if list.size > 0
             return RingElem.new( list[0] );
         end
     end
@@ -2231,7 +2220,7 @@ class SolvPolyRing < SolvableRing
         if vars.is_a? String
             names = GenPolynomialTokenizer.variableList(vars);
         end
-        nv = len(names);
+        nv = names.size;
         to = PolyRing.lex;
         if order.is_a? TermOrder
             to = order;
@@ -2245,12 +2234,12 @@ class SolvPolyRing < SolvableRing
                 if x.is_a? RingElem
                     x = x.elem;
                 end
-                ll.append(x);
+                ll << x;
             end
             #print "rel = " + str(L);
-            for i in range(0,len(L),3)
+	    (0..ll.size-1).step(3) { |i|
                 table.update( ll[i], ll[i+1], ll[i+2] );
-            end
+	    }
         end
         @ring = ring;
     end
@@ -2278,7 +2267,7 @@ class SolvableIdeal
            tok = GenPolynomialTokenizer.new(ring.ring,sr);
            @list = tok.nextSolvablePolynomialList();
         else
-           @list = pylist2arraylist(list,rec=1);
+           @list = rbarray2arraylist(list,rec=1);
         end
         @pset = OrderedPolynomialList.new(ring.ring,@list);
     end
@@ -2409,11 +2398,12 @@ class SolvableIdeal
 end
 
 
-class ComutativeModule
+class CommutativeModule
     '''Represents a JAS module over a polynomial ring.
 
     Method to create sub-modules.
     '''
+    attr_reader :ring, :mset, :cols
 
     def initialize(modstr="",ring=nil,cols=0)
         '''Module constructor.
@@ -2443,7 +2433,7 @@ class ComutativeModule
     def submodul(modstr="",list=nil)
         '''Create a sub-module.
         '''
-        return SubModule.new(modstr,list);
+        return SubModule.new(self,modstr,list);
     end
 
     def element(modstr)
@@ -2475,6 +2465,7 @@ class SubModule
 
     Methods to compute Groebner bases.
     '''
+    attr_reader :modu, :mset, :pset, :cols, :rows, :list
 
     def initialize(modu,modstr="",list=nil)
         '''Constructor for a sub-module.
@@ -2547,11 +2538,12 @@ class SubModule
 end
 
 
-class SolvableModule < ComutativeModule
+class SolvableModule < CommutativeModule
     '''Represents a JAS module over a solvable polynomial ring.
 
     Method to create solvable sub-modules.
     '''
+    attr_reader :ring, :mset, :cols
 
     def initialize(modstr="",ring=nil,cols=0)
         '''Solvable module constructor.
@@ -2579,7 +2571,7 @@ class SolvableModule < ComutativeModule
     def submodul(modstr="",list=nil)
         '''Create a solvable sub-module.
         '''
-        return SolvableSubModule.new(modstr,list);
+        return SolvableSubModule.new(self,modstr,list);
     end
 
     def element(modstr)
@@ -2600,6 +2592,7 @@ class SolvableSubModule
 
     Methods to compute left, right and two-sided Groebner bases.
     '''
+    attr_reader :modu, :mset, :cols, :rows, :list
 
     def initialize(modu,modstr="",list=nil)
         '''Constructor for sub-module over a solvable polynomial ring.
@@ -2706,6 +2699,8 @@ class SeriesRing
 
     Methods for univariate power series arithmetic.
     '''
+
+    attr_reader :ring
 
     def initialize(ringstr="",truncate=nil,ring=nil,cofac=nil,name="z")
         '''Ring constructor.
@@ -2857,6 +2852,8 @@ class MultiSeriesRing
 
     Methods for multivariate power series arithmetic.
     '''
+
+    attr_reader :ring
 
     def initialize(ringstr="",truncate=nil,ring=nil,cofac=nil,names=nil)
         '''Ring constructor.
@@ -3063,8 +3060,19 @@ class PSIdeal
 end
 
 
+class Coeff < Coefficients
+  def initialize(cof)
+      print "cof type(#{cof}) = #{cof.class}\n";
+      @coFac = cof;
+  end
+  def generate(i)
+      print "f_3  type(#{f}) = #{f.class}\n";
+      return @cofac.getZERO()
+  end
+end
 
-def PS(cofac,name,f=nil,truncate=nil)
+
+def PS(cofac,name,truncate=nil,&f) #=nil,truncate=nil)
     '''Create JAS UnivPowerSeries as ring element.
     '''
     cf = cofac;
@@ -3082,24 +3090,29 @@ def PS(cofac,name,f=nil,truncate=nil)
     else
         ps = UnivPowerSeriesRing.new(cf,truncate,name);
     end
+    print "ps type(#{ps}) = #{ps.class}\n";
+    print "f  type(#{f}) = #{f.class}\n";
     if f == nil
         r = ps.getZERO();
     else
-        '''
-        class Coeff < Coefficients
-            def initialize(cofac):
-                @coFac = cofac;
-            def generate(i)
-                a = f(i);
+'''
+Bug in JRuby 1.5.6:
+
+            def Coeff.generate(i)
+                print "f_2  type(#{f}) = #{f.class}\n";
+                if f == nil
+                   a = @cofac.getZERO()
+                else
+                   a = f.call(i);
+                end
                 if a.is_a? RingElem
                     a = a.elem;
                 end
                 #print "a = " + str(a);
                 return a;
             end
-        end
-        '''
-        r = UnivPowerSeries.new(ps,Coeff.new(cofac));
+'''
+        r = UnivPowerSeries.new(ps,Coeff.new(cf));
     end
     return RingElem.new(r);
 
@@ -3141,7 +3154,7 @@ def MPS(cofac,names,f=nil,truncate=nil)
             end
         end
         '''
-        r = MultiVarPowerSeries.new(ps,Coeff(ps));
+        r = MultiVarPowerSeries.new(ps,Coeff(cf));
         #print "r = " + str(r);
     end
     return RingElem.new(r);

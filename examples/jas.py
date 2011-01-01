@@ -2033,7 +2033,7 @@ def PS(cofac,name,f=None,truncate=None):
                     a = a.elem;
                 #print "a = " + str(a);
                 return a;
-        r = UnivPowerSeries(ps,coeff(cofac));
+        r = UnivPowerSeries(ps,coeff(cf));
     return RingElem(r);
 
 
@@ -2063,7 +2063,7 @@ def MPS(cofac,names,f=None,truncate=None):
                 if isinstance(a,RingElem):
                     a = a.elem;
                 return a;
-        r = MultiVarPowerSeries(ps,coeff(ps));
+        r = MultiVarPowerSeries(ps,coeff(cf));
         #print "r = " + str(r);
     return RingElem(r);
 
