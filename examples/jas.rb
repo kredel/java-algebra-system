@@ -23,6 +23,12 @@ end
 
 #startLog();
 
+def str(s)
+    '''Mimic Python str() function.
+    '''
+    return s.to_s;
+end
+
 include_class "edu.jas.kern.ComputerThreads";
 
 def terminate()
@@ -144,6 +150,12 @@ def CC(re=BigRational.new(),im=BigRational.new())
     if im.is_a? Array 
         im = QQ( im );
 #        im = makeJasArith( im );
+    end
+    if re.is_a? Numeric
+        re = QQ(re);
+    end
+    if im.is_a? Numeric
+        im = QQ(im);
     end
     if re.is_a? RingElem
         re = re.elem;
@@ -326,6 +338,7 @@ class RingElem
 
     include Comparable
     attr_reader :elem
+    attr_reader :ring
 
     def initialize(elem)
         '''Constructor for ring element.
@@ -430,16 +443,17 @@ class RingElem
     end
 
     def coerce(other)
-        '''Coerce other to @
+        '''Coerce other to self
         '''
-        return coercePair(self,other);
+        s,o = coercePair(self,other);
+        return [o,s]; # keep order for non-commutative
     end
 
     def coercePair(a,b)
         '''Coerce type a to type b or type b to type a.
         '''
-        print "a type(#{a}) = #{a.class}\n";
-        print "b type(#{b}) = #{b.class}\n";
+        #print "a type(#{a}) = #{a.class}\n";
+        #print "b type(#{b}) = #{b.class}\n";
         begin
             if not a.isPolynomial() and b.isPolynomial()
                s = b.coerceElem(a);
@@ -452,14 +466,16 @@ class RingElem
             s = a;
             o = a.coerceElem(b);
         end
+        #print "s type(#{s}) = #{s.class}\n";
+        #print "o type(#{o}) = #{o.class}\n";
         return [s,o];
     end
 
     def coerceElem(other)
-        '''Coerce other to @
+        '''Coerce other to self
         '''
-        print "self  type(#{self}) = #{self.class}\n";
-        print "other type(#{other}) = #{other.class}\n";
+        #print "self  type(#{self}) = #{self.class}\n";
+        #print "other type(#{other}) = #{other.class}\n";
         if @elem.getClass().getSimpleName() == "GenVector"
             if other.is_a? Array 
                 o = pylist2arraylist(other,@elem.factory().coFac,rec=1);
@@ -485,8 +501,10 @@ class RingElem
         if other.is_a? Array
            # assume BigRational or BigComplex
            # assume self will be compatible with them. todo: check this
+           print "other type(#{other})_3 = #{other.class}\n";
            o = makeJasArith(other);
-  	   ##o = BigRational.new(other[0],other[1]);
+           print "other type(#{o})_4 = #{o.class}\n";
+           ##o = BigRational.new(other[0],other[1]);
            if isPolynomial()
                 o = @ring.parse( o.toString() ); # not toScript();
                 #o = o.elem;
@@ -504,6 +522,7 @@ class RingElem
                 #print "o = #{o}";
                 o = o.elem;
            end
+           print "other type(#{o})_5 = #{o.class}\n";
            return RingElem.new(o);
         end
         # test if @elem is a factory itself
@@ -514,10 +533,11 @@ class RingElem
                 o = @elem.fromInteger( other.numerator );
                 o = o.divide( @elem.fromInteger( other.denominator ) );
             elsif other.is_a? Float # ?? what to do ??
-                o = @elem.fromInteger( other.to_i );
+                o = @elem.parse( other.to_s );
+                ##o = @elem.fromInteger( other.to_i );
             else
-		print "unknown other type(#{other})_1 = #{other.class}\n";
-                o = other;
+                print "unknown other type(#{other})_1 = #{other.class}\n";
+                o = @elem.parse( other.to_s );
             end
             return RingElem.new(o);
         end
@@ -528,16 +548,14 @@ class RingElem
             o = @elem.factory().fromInteger( other.numerator );
             o = o.divide( @elem.factory().fromInteger( other.denominator ) );
         elsif other.is_a? Float # ?? what to do ??
-                o = BigDecimal(other.to_s);
+                o = @elem.factory().parse( other.to_s );
                 if @elem.getClass().getSimpleName() == "Product"
                     o = RR(@ring, @elem.idempotent().multiply(o) ); # valueOf
                     o = o.elem;
-                else
-                    o = @elem.factory().getZERO().sum( o );
                 end
         else
                 print "unknown other type(#{other})_2 = #{other.class}\n";
-                o = other;
+                o = @elem.factory().parse( other.to_s );
         end
         return RingElem.new(o);
     end
@@ -567,7 +585,8 @@ class RingElem
     def <=>(other)
         '''Compare two ring elements.
         '''
-        s,o = coercePair(other);
+        #s,o = coercePair(other);
+        s,o = self, other
         return s.elem.compareTo( o.elem ); 
     end
 
@@ -580,15 +599,17 @@ class RingElem
     def *(other)
         '''Multiply two ring elements.
         '''
+        #print "* self  type(#{self}) = #{self.class}\n";
+        #print "* other type(#{other}) = #{other.class}\n";
         s,o = coercePair(self,other);
-        #print "self  type(#{s}) = #{s.class}";
-        #print "other type(#{o}) = #{s.class}";
         return RingElem.new( s.elem.multiply( o.elem ) ); 
     end
 
     def +(other)
         '''Add two ring elements.
         '''
+        #print "+ self  type(#{self}) = #{self.class}\n";
+        #print "+ other type(#{other}) = #{other.class}\n";
         s,o = coercePair(self,other);
         return RingElem.new( s.elem.sum( o.elem ) ); 
     end
@@ -1073,7 +1094,7 @@ class PolyRing < Ring
     Then returns a Ring.
     '''
 
-    def initialize(coeff,vars,order=TermOrder.new(TermOrder.IGRLEX))
+    def initialize(coeff,vars,order=TermOrder.new(TermOrder::IGRLEX))
         '''Ring constructor.
 
         coeff = factory for coefficients,
@@ -1088,7 +1109,7 @@ class PolyRing < Ring
             cf = coeff.elem.factory();
         end
         if coeff.is_a? RingElem
-            cf = coeff.ring;
+            cf = coeff::ring;
         end
         if vars == nil
             raise ValueError, "No variable names given."
@@ -1097,8 +1118,8 @@ class PolyRing < Ring
         if vars.is_a? String
            names = GenPolynomialTokenizer.variableList(vars);
         end
-        nv = len(names);
-        to = PolyRing.lex;
+        nv = names.size;
+        to = @grad;
         if order.is_a? TermOrder
             to = order;
         end
@@ -1118,7 +1139,7 @@ class PolyRing < Ring
 #        rescue Exception => e
 #            print "error " + str(e)
         rescue
-            pass
+            #pass 
         end
     end
 
@@ -1128,9 +1149,14 @@ class PolyRing < Ring
         return @ring.toScript();
     end
 
-    lex = TermOrder.new(TermOrder::INVLEX)
+    @lex = TermOrder.new(TermOrder::INVLEX)
+    @grad = TermOrder.new(TermOrder::IGRLEX)
 
-    grad = TermOrder.new(TermOrder::IGRLEX)
+    class << self  # means add to class
+       attr_reader :lex
+       attr_reader :grad
+    end
+
 end
 
 
@@ -1421,10 +1447,10 @@ end
 
 def makeJasArith(item)
     '''Construct a jas.arith object.
-    If item is a python tuple or list then a BigRational, BigComplex is constructed. 
-    If item is a python float then a BigDecimal is constructed. 
+    If item is an ruby array then a BigComplex is constructed. 
+    If item is a ruby float then a BigDecimal is constructed. 
     '''
-    #print "item type(#{item}) = #{item.class}\n";
+    print "item type(#{item}) = #{item.class}\n";
     if item.is_a? Integer
         return BigInteger.new( item );
     end
@@ -1438,32 +1464,23 @@ def makeJasArith(item)
         if item.size > 2
             print "len(item) > 2, remaining items ignored\n";
         end
-        #print "item[0] type(#{item[0]}) = #{item[0].class}\n";
-        isc = item[0].is_a? Array
+        print "item[0] type(#{item[0]}) = #{item[0].class}\n";
         if item.size > 1
-            isc = isc or item[1].is_a? Array;
-        end
-        if isc
-            if item.size > 1
-                re = makeJasArith( item[0] );
-                if not re.isField():
-                    re = BigRational.new( re.val );
-                end
-                im = makeJasArith( item[1] );
-                if not im.isField():
-                    im = BigRational.new( im.val );
-                end
-                jasArith = BigComplex.new( re, im );
-            else
-                re = makeJasArith( item[0] );
-                jasArith = BigComplex.new( re );
+            re = makeJasArith( item[0] );
+            if not re.isField():
+                re = BigRational.new( re.val );
             end
+            im = makeJasArith( item[1] );
+            if not im.isField():
+                im = BigRational.new( im.val );
+            end
+            jasArith = BigComplex.new( re, im );
         else
-            if item.size > 1
-                jasArith = BigRational.new( item[0] ).divide( BigRational.new( item[1] ) );
-            else
-                jasArith = BigRational.new( item[0] );
+            re = makeJasArith( item[0] );
+            if not re.isField():
+                re = BigRational.new( re.val );
             end
+            jasArith = BigComplex.new( re );
         end
         return jasArith;
     end
@@ -2471,7 +2488,7 @@ class SubModule
             if list.is_a? Array
                 if list.size != 0:
                     if list[0].is_a? RingElem
-		        list = list.map { |re| re.elem  };
+                        list = list.map { |re| re.elem  };
                     end
                 end
                 @list = rbarray2arraylist(list,@modu.ring,rec=2);

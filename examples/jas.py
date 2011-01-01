@@ -2256,7 +2256,7 @@ class RingElem:
                     o = self.elem.fromInteger( int(other) );
                 else:
                     print "unknown other type(%s) = %s" % (other,type(other));
-                    o = other;
+                    o = self.elem.parse( str(other) );
             return RingElem(o);
         #print "--3";
         #print "other type(%s) = %s" % (other,type(other));
@@ -2275,14 +2275,13 @@ class RingElem:
                     o = self.elem.factory().getZERO().sum( o );
             else:
                 print "unknown other type(%s) = %s" % (other,type(other));
-                o = other;
+                o = self.elem.factory().parse( str(other) );
         #print "--4";
         return RingElem(o);
 
     def isFactory(self):
         '''Test if this is itself a ring factory.
         '''
-        # todo: use factory() method
         f = self.elem.factory();
         if self.elem == f:
             return True;
