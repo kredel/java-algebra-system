@@ -852,7 +852,7 @@ class Ring
     def ideal(ringstr="",list=nil)
         '''Create an ideal.
         '''
-        return JAS::Ideal.new(self,ringstr,list=list);
+        return JAS::SimIdeal.new(self,ringstr,list=list);
     end
 
     def paramideal(ringstr="",list=nil,gbsys=nil)
@@ -894,7 +894,7 @@ class Ring
     def element(polystr)
         '''Create an element from a string.
         '''
-        i = Ideal.new( "( " + polystr + " )");
+        i = SimIdeal.new( "( " + polystr + " )");
         list = i.pset.list;
         if list.size > 0
             return RingElem.new( list[0] );
@@ -1264,7 +1264,7 @@ end
 include_class "edu.jas.application.PolyUtilApp";
 include_class "edu.jas.application.Residue";
 include_class "edu.jas.application.ResidueRing";
-#include_class "edu.jas.application.Ideal";
+include_class "edu.jas.application.Ideal";
 include_class "edu.jas.application.Local";
 include_class "edu.jas.application.LocalRing";
 include_class "edu.jas.application.IdealWithRealAlgebraicRoots";
@@ -1277,9 +1277,10 @@ def RC(ideal,r=0)
     if ideal == nil
         raise ValueError, "No ideal given."
     end
-    if ideal.is_a? Ideal
-        print "ideal.pset = " + str(ideal.pset) + "\n";
-        ideal = Java::EduJasApplication::Ideal.new(ideal.ring,ideal.list);
+    if ideal.is_a? SimIdeal
+        #print "ideal.pset = " + str(ideal.pset) + "\n";
+        #ideal = Java::EduJasApplication::Ideal.new(ideal.ring,ideal.list);
+        ideal = Ideal.new(ideal.pset);
         #ideal.doGB();
     end
     #print "ideal.getList().get(0).ring.ideal = #{ideal.getList().get(0).ring.ideal}\n";
@@ -1306,8 +1307,8 @@ def LC(ideal,d=0,n=1)
     if ideal == nil
         raise ValueError, "No ideal given."
     end
-    if ideal.is_a? Ideal
-        ideal = jas.application.Ideal.new(ideal.pset);
+    if ideal.is_a? SimIdeal
+        ideal = Ideal.new(ideal.pset);
         #ideal.doGB();
     end
     #print "ideal.getList().get(0).ring.ideal = #{ideal.getList().get(0).ring.ideal}\n";
@@ -1509,9 +1510,9 @@ include_class "edu.jas.ufd.Quotient";
 include_class "edu.jas.ufd.QuotientRing";
 include_class "edu.jas.integrate.ElementaryIntegration";
 
-include_class "edu.jas.application.Ideal";
+#include_class "edu.jas.application.Ideal";
 
-class Ideal
+class SimIdeal
     '''Represents a JAS polynomial ideal: PolynomialList and Ideal.
 
     Methods for Groebner bases, ideal sum, intersection and others.
@@ -1520,7 +1521,7 @@ class Ideal
     attr_reader :pset, :ring, :list, :roots, :prime, :primary
 
     def initialize(ring,polystr="",list=nil)
-        '''Ideal constructor.
+        '''SimIdeal constructor.
         '''
         @ring = ring;
         if list == nil
@@ -1530,11 +1531,11 @@ class Ideal
         else
            @list = rbarray2arraylist(list,rec=1);
         end
-        @pset = OrderedPolynomialList.new(ring::ring,@list);
+        @pset = OrderedPolynomialList.new(@ring.ring,@list);
         @roots = nil;
         @prime = nil;
         @primary = nil;
-        super(@ring::ring,@list) # non-sense, JRuby extends edu.jas.application.Ideal without beeing told
+        #super(@ring::ring,@list) # non-sense, JRuby extends edu.jas.application.Ideal without beeing told
     end
 
     def to_s()
@@ -1573,7 +1574,7 @@ class Ideal
         end
         t = System.currentTimeMillis() - t;
         print "sequential GB executed in #{t} ms\n"; 
-        return Ideal.new(@ring,"",gg);
+        return SimIdeal.new(@ring,"",gg);
     end
 
     def isGB()
@@ -1618,7 +1619,7 @@ class Ideal
         end
         t = System.currentTimeMillis() - t;
         print "sequential e-GB executed in #{t} ms\n"; 
-        return Ideal.new(@ring,"",gg);
+        return SimIdeal.new(@ring,"",gg);
     end
 
 
@@ -1654,7 +1655,7 @@ class Ideal
         end
         t = System.currentTimeMillis() - t;
         print "sequential d-GB executed in #{t} ms\n"; 
-        return Ideal.new(@ring,"",gg);
+        return SimIdeal.new(@ring,"",gg);
     end
 
 
@@ -1687,7 +1688,7 @@ class Ideal
         t = System.currentTimeMillis() - t;
         bbpar.terminate();
         print "parallel-old #{th} executed in #{t} ms\n"; 
-        return Ideal.new(@ring,"",gg);
+        return SimIdeal.new(@ring,"",gg);
     end
 
     def parGB(th)
@@ -1701,7 +1702,7 @@ class Ideal
         t = System.currentTimeMillis() - t;
         bbpar.terminate();
         print "parallel #{th} executed in #{t} ms\n"; 
-        return Ideal.new(@ring,"",gg);
+        return SimIdeal.new(@ring,"",gg);
     end
 
     def distGB(th=2,machine="examples/machines.localhost",port=7114)
@@ -1719,7 +1720,7 @@ class Ideal
         gbd.terminate(false);
         t = System.currentTimeMillis() - t;
         print "distributed #{th} executed in #{t1} ms (#{t-t1} ms start-up)\n"; 
-        return Ideal.new(@ring,"",gg);
+        return SimIdeal.new(@ring,"",gg);
     end
 
     def distClient(port=8114)
@@ -1741,42 +1742,42 @@ class Ideal
         nn = ReductionSeq.new().normalform(gg,ff);
         t = System.currentTimeMillis() - t;
         print "sequential NF executed in #{t} ms\n"; 
-        return Ideal.new(@ring,"",nn);
+        return SimIdeal.new(@ring,"",nn);
     end
 
     def intersectRing(ring)
         '''Compute the intersection of this and the given polynomial ring.
         '''
-        s = jas.application.Ideal.new(@pset);
+        s = Ideal.new(@pset);
         nn = s.intersect(ring.ring);
-        return Ideal.new(ring,"",nn.getList());
+        return SimIdeal.new(ring,"",nn.getList());
     end
 
     def intersect(id2)
         '''Compute the intersection of this and the given ideal.
         '''
-        s1 = jas.application.Ideal.new(@pset);
-        s2 = jas.application.Ideal.new(id2.pset);
+        s1 = Ideal.new(@pset);
+        s2 = Ideal.new(id2.pset);
         nn = s1.intersect(s2);
-        return Ideal.new(@ring,"",nn.getList());
+        return SimIdeal.new(@ring,"",nn.getList());
     end
 
     def eliminateRing(ring)
         '''Compute the elimination ideal of this and the given polynomial ring.
         '''
-        s = jas.application.Ideal.new(@pset);
+        s = Ideal.new(@pset);
         nn = s.eliminate(ring.ring);
         r = Ring.new( ring=nn.getRing() );
-        return Ideal.new(r,"",nn.getList());
+        return SimIdeal.new(r,"",nn.getList());
     end
 
     def sum(other)
         '''Compute the sum of this and the ideal.
         '''
-        s = jas.application.Ideal.new(@pset);
-        t = jas.application.Ideal.new(other.pset);
+        s = Ideal.new(@pset);
+        t = Ideal.new(other.pset);
         nn = s.sum( t );
-        return Ideal.new(@ring,"",nn.getList());
+        return SimIdeal.new(@ring,"",nn.getList());
     end
 
     def optimize()
@@ -1785,14 +1786,14 @@ class Ideal
         p = @pset;
         o = TermOrderOptimization.optimizeTermOrder(p);
         r = Ring.new("",o.ring);
-        return Ideal.new(r,"",o.list);
+        return SimIdeal.new(r,"",o.list);
     end
 
     def realRoots()
         '''Compute real roots of 0-dim ideal.
         '''
-        ii = jas.application.Ideal.new(@pset);
-        @roots = jas.application.PolyUtilApp.realAlgebraicRoots(ii);
+        ii = Ideal.new(@pset);
+        @roots = PolyUtilApp.realAlgebraicRoots(ii);
         for r in @roots
             r.doDecimalApproximation();
         end
@@ -1803,8 +1804,8 @@ class Ideal
         '''Print decimal approximation of real roots of 0-dim ideal.
         '''
         if @roots == nil
-            ii = jas.application.Ideal.new(@pset);
-            @roots = jas.application.PolyUtilApp.realAlgebraicRoots(ii);
+            ii = Ideal.new(@pset);
+            @roots = PolyUtilApp.realAlgebraicRoots(ii);
             for r in @roots
                 r.doDecimalApproximation();
             end
@@ -1821,7 +1822,7 @@ class Ideal
     def radicalDecomp()
         '''Compute radical decomposition of this ideal.
         '''
-        ii = jas.application.Ideal.new(@pset);
+        ii = Ideal.new(@pset);
         @radical = ii.radicalDecomposition();
         return @radical;
     end
@@ -1829,8 +1830,8 @@ class Ideal
     def complexRoots()
         '''Compute complex roots of 0-dim ideal.
         '''
-        ii = jas.application.Ideal.new(@pset);
-        @croots = jas.application.PolyUtilApp.complexAlgebraicRoots(ii);
+        ii = Ideal.new(@pset);
+        @croots = PolyUtilApp.complexAlgebraicRoots(ii);
         #for R in @croots:
         #    R.doDecimalApproximation();
         return @croots;
@@ -1839,7 +1840,7 @@ class Ideal
     def primeDecomp()
         '''Compute prime decomposition of this ideal.
         '''
-        ii = jas.application.Ideal.new(@pset);
+        ii = Ideal.new(@pset);
         @prime = ii.primeDecomposition();
         return @prime;
     end
@@ -1847,7 +1848,7 @@ class Ideal
     def primaryDecomp()
         '''Compute primary decomposition of this ideal.
         '''
-        ii = jas.application.Ideal.new(@pset);
+        ii = Ideal.new(@pset);
 ##         if @prime == nil:
 ##             @prime = I.primeDecomposition();
         @primary = ii.primaryDecomposition();
@@ -1863,7 +1864,7 @@ class Ideal
         ri = GenPolynomialRing.new( BigInteger(), r.nvar, r.tord, r.vars );
         pi = PolyUtil.integerFromRationalCoefficients(ri,l);
         r = Ring.new("",ri);
-        return Ideal.new(r,"",pi);
+        return SimIdeal.new(r,"",pi);
     end
 
     def toModular(mf)
@@ -1875,7 +1876,7 @@ class Ideal
         rm = GenPolynomialRing.new( mf, r.nvar, r.tord, r.vars );
         pm = PolyUtil.fromIntegerCoefficients(rm,l);
         r = Ring.new("",rm);
-        return Ideal.new(r,"",pm);
+        return SimIdeal.new(r,"",pm);
     end
 
 ##     def syzygy()
@@ -2010,7 +2011,7 @@ class ParamIdeal
     def GB()
         '''Compute a Groebner base.
         '''
-        ii = Ideal.new(@ring,"",@pset.list);
+        ii = SimIdeal.new(@ring,"",@pset.list);
         g = ii.GB();
         return ParamIdeal.new(g.ring,"",g.pset.list);
     end
@@ -2018,7 +2019,7 @@ class ParamIdeal
     def isGB()
         '''Test if this is a Groebner base.
         '''
-        ii = Ideal.new(@ring,"",@pset.list);
+        ii = SimIdeal.new(@ring,"",@pset.list);
         return ii.isGB();
     end
 
@@ -2361,7 +2362,7 @@ class SolvableIdeal
     def intersect(ring)
         '''Compute the intersection of this and the polynomial ring.
         '''
-        s = jas.application.SolvableIdeal.new(@pset);
+        s = SolvableIdeal.new(@pset);
         nn = s.intersect(ring.ring);
         return SolvableIdeal.new(@ring,"",nn.getList());
     end
@@ -2369,8 +2370,8 @@ class SolvableIdeal
     def sum(other)
         '''Compute the sum of this and the other ideal.
         '''
-        s = jas.application.SolvableIdeal.new(@pset);
-        t = jas.application.SolvableIdeal.new(other.pset);
+        s = SolvableIdeal.new(@pset);
+        t = SolvableIdeal.new(other.pset);
         nn = s.sum( t );
         return SolvableIdeal.new(@ring,"",nn.getList());
     end
@@ -3100,6 +3101,7 @@ def PS(cofac,name,truncate=nil,&f) #=nil,truncate=nil)
     end
     print "ps type(#{ps}) = #{ps.class}\n";
     print "f  type(#{f}) = #{f.class}\n";
+    f = nil; # TODO
     if f == nil
         r = ps.getZERO();
     else

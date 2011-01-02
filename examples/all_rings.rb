@@ -399,9 +399,9 @@ g2 = pb**3 - 2;
 puts "g2 = " + str(g2);
 g3 = pc**2 - pa*pb;
 puts "g3 = " + str(g3);
-F = Ideal.new(r,"",list=[g1,g2,g3]);
+F = r.ideal("",list=[g1,g2,g3]);
 puts "F = " + str(F);
-rc = RC(F);
+rc = RC(F,0);
 puts "rc.factory() = " + str(rc.factory());
 one,a,b,c = rc.gens();
 puts "one   = " + str(one);
@@ -423,16 +423,12 @@ r6 = 1/r2;
 puts "r6 = " + str(r6);
 r7 = r6 * r2;
 puts "r7 = " + str(r7);
-#F1 = Ideal(PolyRing.new(QQ(),"a, b, c",PolyRing.lex),list=[( pa**2 - 2 ), ( pb**3 - 2 ), ( pc**2 - pa * pb )]);
+#F1 = SimIdeal.new(PolyRing.new(QQ(),"a, b, c",PolyRing.lex),list=[( pa**2 - 2 ), ( pb**3 - 2 ), ( pc**2 - pa * pb )]);
 #puts "F1 = " + str(F1);
-rc1 = RC(Ideal(PolyRing.new(QQ(),"a, b, c",PolyRing.lex),"",list=[( a**2 - 2 ), ( b**3 - 2 ), ( c**2 - a * b )]));
+rc1 = RC(SimIdeal.new(PolyRing.new(QQ(),"a, b, c",PolyRing.lex),"",list=[( a**2 - 2 ), ( b**3 - 2 ), ( c**2 - a * b )]));
 puts "rc1.factory() = " + str(rc1.factory());
 puts;
 
-terminate()
-__END__
-
-to_skip = <<TOSKIP
 
 puts "------- LC(PolyRing(QQ(),\"a,b,c\",PolyRing.lex)) ---------";
 r = PolyRing.new(QQ(),"a,b,c",PolyRing.lex);
@@ -448,18 +444,18 @@ g2 = pb**3 - 2;
 puts "g2 = " + str(g2);
 g3 = pc**2 - pa*pb;
 puts "g3 = " + str(g3);
-F = Ideal(r,"",list=(g1,g2,g3));
-puts "F = " + str(F);
-lc = LC(F);
+ff = r.ideal("",list=[g1,g2,g3]);
+puts "ff = " + str(ff);
+lc = LC(ff,0,1);
 puts "lc.factory() = " + str(lc.factory());
 one,a,b,c = lc.gens();
 puts "one   = " + str(one);
 puts "a     = " + str(a);
 puts "b     = " + str(b);
 puts "c     = " + str(c);
-#F1 = Ideal(PolyRing.new(QQ(),"a, b, c",PolyRing.lex),"",list=(( pa**2 - 2 ), ( pb**3 - 2 ), ( pc**2 - pa * pb )));
+#F1 = SimIdeal.new(PolyRing.new(QQ(),"a, b, c",PolyRing.lex),"",list=[( pa**2 - 2 ), ( pb**3 - 2 ), ( pc**2 - pa * pb )]);
 #puts "F1 = " + str(F1);
-lc1 = LC(Ideal(PolyRing.new(QQ(),"a, b, c",PolyRing.lex),"",list=(( a**2 - 2 ), ( b**3 - 2 ), ( c**2 - a * b ))));
+lc1 = LC(SimIdeal.new(PolyRing.new(QQ(),"a, b, c",PolyRing.lex),"",list=[( a**2 - 2 ), ( b**3 - 2 ), ( c**2 - a * b )]));
 puts "lc1.factory() = " + str(lc1.factory());
 l1 = a*b + c;
 puts "l1 = " + str(l1);
@@ -479,11 +475,11 @@ puts;
 
 
 puts "------- RR( [QQ(),ZM(19),DD()] ) ---------";
-r = RR( (QQ(),ZM(19),DD()) );
+r = RR( [ QQ(),ZM(19),DD() ] );
 puts "r = " + str(r);
 puts "r.factory() = " + str(r.factory());
-rc1 = RR( ( QQ(), ZM(19), DD() ) );
-puts [ str(x) for x in r.gens() ];
+rc1 = RR( [ QQ(), ZM(19), DD() ] );
+puts r.gens.each { |x| str(x) };
 puts "rc1.factory() = " + str(rc1.factory());
 pg0,pg1,pg2 = r.gens();
 puts "pg0     = " + str(pg0);
@@ -499,7 +495,7 @@ r4 = 1/r3;
 puts "r4 = " + str(r4);
 r5 = r4 - r1;
 puts "r5 = " + str(r5);
-r6 = ( (-511,512)*pg0 + 17*pg1 - 0.998046875*pg2 );
+r6 = -511/512 * pg0 + 17 * pg1; #TODO - 0.998046875 * pg2;
 puts "r6 = " + str(r6);
 puts;
 
@@ -539,7 +535,6 @@ p2 = x**3 - r/2;
 puts "p2 = " + str(p2);
 puts;
 
-TOSKIP
 
 puts "------- Vec(QQ(),7) ---------";
 r = Vec(QQ(),7);
@@ -777,3 +772,7 @@ terminate();
 
 terminate();
 __END__
+
+to_skip = <<TOSKIP
+
+TOSKIP
