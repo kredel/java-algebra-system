@@ -3070,13 +3070,23 @@ end
 
 
 class Coeff < Coefficients
-  def initialize(cof)
-      print "cof type(#{cof}) = #{cof.class}\n";
+  def initialize(cof,&f)
+      super()
+      #print "cof type(#{cof}) = #{cof.class}\n";
       @coFac = cof;
+      #print "f type(#{f}) = #{f.class}\n";
+      @func = f
   end
   def generate(i)
-      print "f_3  type(#{f}) = #{f.class}\n";
-      return @cofac.getZERO()
+      #print "f_3  type(#{@func}) = #{@func.class}\n";
+      #print "f_3  type(#{i}) = #{i.class}\n";
+      #return @coFac.getZERO()
+      c = @func.call(i)
+      #print "f_3  type(#{c}) = #{c.class}\n";
+      if c.is_a? RingElem
+          c = c.elem
+      end
+      return c
   end
 end
 
@@ -3099,30 +3109,14 @@ def PS(cofac,name,truncate=nil,&f) #=nil,truncate=nil)
     else
         ps = UnivPowerSeriesRing.new(cf,truncate,name);
     end
-    print "ps type(#{ps}) = #{ps.class}\n";
-    print "f  type(#{f}) = #{f.class}\n";
-    f = nil; # TODO
+    #print "ps type(#{ps}) = #{ps.class}\n";
+    #print "f  type(#{f}) = #{f.class}\n";
+    #f = nil; # TODO
     if f == nil
         r = ps.getZERO();
     else
-'''
-Bug in JRuby 1.5.6:
-
-            def Coeff.generate(i)
-                print "f_2  type(#{f}) = #{f.class}\n";
-                if f == nil
-                   a = @cofac.getZERO()
-                else
-                   a = f.call(i);
-                end
-                if a.is_a? RingElem
-                    a = a.elem;
-                end
-                #print "a = " + str(a);
-                return a;
-            end
-'''
-        r = UnivPowerSeries.new(ps,Coeff.new(cf));
+        #Bug in JRuby 1.5.6? move outside method
+        r = UnivPowerSeries.new(ps,Coeff.new(cf,&f));
     end
     return RingElem.new(r);
 

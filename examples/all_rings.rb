@@ -531,7 +531,7 @@ puts "one   = " + str(one);
 puts "x     = " + str(x);
 p1 = x**2 - r;
 puts "p1 = " + str(p1);
-p2 = x**3 - r/2;
+p2 = x**3 + r/2;
 puts "p2 = " + str(p2);
 puts;
 
