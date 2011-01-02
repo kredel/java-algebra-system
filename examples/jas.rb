@@ -1,7 +1,9 @@
+# $Id$
+
+module JAS
 '''jruby interface to JAS.
 '''
-
-# $Id$
+  module_function
 
 require "java"
 require "rational"
@@ -14,6 +16,7 @@ include_class "java.util.ArrayList"
 require "../lib/log4j.jar"
 include_class "org.apache.log4j.BasicConfigurator";
 include_class "org.apache.log4j.Logger";
+
 
 def startLog()
     '''Configure the log4j system and start logging.
@@ -849,7 +852,7 @@ class Ring
     def ideal(ringstr="",list=nil)
         '''Create an ideal.
         '''
-        return Ideal.new(self,ringstr,list=list);
+        return JAS::Ideal.new(self,ringstr,list=list);
     end
 
     def paramideal(ringstr="",list=nil,gbsys=nil)
@@ -1261,7 +1264,7 @@ end
 include_class "edu.jas.application.PolyUtilApp";
 include_class "edu.jas.application.Residue";
 include_class "edu.jas.application.ResidueRing";
-include_class "edu.jas.application.Ideal";
+#include_class "edu.jas.application.Ideal";
 include_class "edu.jas.application.Local";
 include_class "edu.jas.application.LocalRing";
 include_class "edu.jas.application.IdealWithRealAlgebraicRoots";
@@ -1275,7 +1278,8 @@ def RC(ideal,r=0)
         raise ValueError, "No ideal given."
     end
     if ideal.is_a? Ideal
-        ideal = edu.jas.application.Ideal.new(ideal.pset);
+        print "ideal.pset = " + str(ideal.pset) + "\n";
+        ideal = Java::EduJasApplication::Ideal.new(ideal.ring,ideal.list);
         #ideal.doGB();
     end
     #print "ideal.getList().get(0).ring.ideal = #{ideal.getList().get(0).ring.ideal}\n";
@@ -1505,12 +1509,15 @@ include_class "edu.jas.ufd.Quotient";
 include_class "edu.jas.ufd.QuotientRing";
 include_class "edu.jas.integrate.ElementaryIntegration";
 
+include_class "edu.jas.application.Ideal";
 
 class Ideal
     '''Represents a JAS polynomial ideal: PolynomialList and Ideal.
 
     Methods for Groebner bases, ideal sum, intersection and others.
     '''
+
+    attr_reader :pset, :ring, :list, :roots, :prime, :primary
 
     def initialize(ring,polystr="",list=nil)
         '''Ideal constructor.
@@ -1527,6 +1534,7 @@ class Ideal
         @roots = nil;
         @prime = nil;
         @primary = nil;
+        super(@ring::ring,@list) # non-sense, JRuby extends edu.jas.application.Ideal without beeing told
     end
 
     def to_s()
@@ -3221,3 +3229,6 @@ def Mat(cofac,n,m,v=nil)
 
 end
 
+end
+
+include JAS

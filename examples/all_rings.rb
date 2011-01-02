@@ -3,7 +3,8 @@
 # $Id: $
 #
 
-load "examples/jas.rb"
+#load "examples/jas.rb"
+require "examples/jas"
 
 #from jas import Ring, PolyRing, SolvPolyRing
 #from jas import Ideal
@@ -383,7 +384,6 @@ x = RF(PolyRing.new(ZZ(),"a, b, c",PolyRing.lex));
 puts "x  = " + str(x.factory());
 puts;
 
-to_skip = <<TOSKIP
 
 puts "------- RC(PolyRing(QQ(),\"a,b,c\",PolyRing.lex)) ---------";
 r = PolyRing.new(QQ(),"a,b,c",PolyRing.lex);
@@ -429,6 +429,10 @@ rc1 = RC(Ideal(PolyRing.new(QQ(),"a, b, c",PolyRing.lex),"",list=[( a**2 - 2 ), 
 puts "rc1.factory() = " + str(rc1.factory());
 puts;
 
+terminate()
+__END__
+
+to_skip = <<TOSKIP
 
 puts "------- LC(PolyRing(QQ(),\"a,b,c\",PolyRing.lex)) ---------";
 r = PolyRing.new(QQ(),"a,b,c",PolyRing.lex);

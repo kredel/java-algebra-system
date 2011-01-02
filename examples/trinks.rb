@@ -3,7 +3,8 @@
 # $Id$
 #
 
-load "examples/jas.rb"
+#load "examples/jas.rb"
+require "examples/jas"
 
 #startLog();
 
@@ -64,5 +65,5 @@ rg = f.distGB(2);
 
 terminate();
 
-exit(0); # required because of distClient
+exit!(0); # required because of distClient, ! for jirb 
 
