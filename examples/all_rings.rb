@@ -536,6 +536,44 @@ puts "p2 = " + str(p2);
 puts;
 
 
+puts "------- MPS(QQ(),\"x,y\") ---------";
+r = MPS(QQ(),"x,y");
+puts "r = " + str(r);
+puts "r.factory() = " + str(r.factory());
+one,x,y = r.gens();
+puts "one   = " + str(one);
+puts "x     = " + str(x);
+puts "y     = " + str(y);
+p1 = x**2 - 2*y;
+puts "p1 = " + str(p1);
+p2 = x**3 * y - y**2;
+puts "p2 = " + str(p2);
+p3 = x**2 * y**2 - p1 * p2;
+puts "p3 = " + str(p3);
+p4 = - 4 + 3 * x**2 + 2 * x**3 - x**5;
+puts "p4 = " + str(p4);
+def g1(i)
+    return r.ring.coFac.fromInteger( 2*i );
+end
+def g2(i)
+    #puts "2*QQ(i) = " + str(QQ(2)*QQ(i))
+    return 2*QQ(i);
+end
+g3 = Proc.new { |i| QQ(i.getVal(0))*QQ(i.getVal(1)) }
+r = MPS(QQ(),"x,y",&g3);
+puts "r = " + str(r);
+puts "r.factory() = " + str(r.factory());
+one,x,y = r.gens();
+puts "one   = " + str(one);
+puts "x     = " + str(x);
+puts "y     = " + str(y);
+p1 = x**2 - r;
+puts "p1 = " + str(p1);
+p2 = y**3 + r/2;
+puts "p2 = " + str(p2);
+puts;
+
+
 puts "------- Vec(QQ(),7) ---------";
 r = Vec(QQ(),7);
 puts "r = " + str(r);

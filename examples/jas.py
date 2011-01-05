@@ -2024,7 +2024,7 @@ def PS(cofac,name,f=None,truncate=None):
     if f == None:
         r = ps.getZERO();
     else:
-        class coeff( Coefficients ):
+        class Coeff( Coefficients ):
             def __init__(self,cofac):
                 self.coFac = cofac;
             def generate(self,i):
@@ -2033,7 +2033,7 @@ def PS(cofac,name,f=None,truncate=None):
                     a = a.elem;
                 #print "a = " + str(a);
                 return a;
-        r = UnivPowerSeries(ps,coeff(cf));
+        r = UnivPowerSeries(ps,Coeff(cf));
     return RingElem(r);
 
 
@@ -2045,16 +2045,20 @@ def MPS(cofac,names,f=None,truncate=None):
         cf = cofac.elem.factory();
     if isinstance(cofac,Ring):
         cf = cofac.ring;
+    vars = names;
+    if isinstance(vars,PyString):
+       vars = GenPolynomialTokenizer.variableList(vars);
+    nv = len(vars);
     if isinstance(truncate,RingElem):
         truncate = truncate.elem;
     if truncate == None:
-        ps = MultiVarPowerSeriesRing(cf,names);
+        ps = MultiVarPowerSeriesRing(cf,nv,vars);
     else:
-        ps = MultiVarPowerSeriesRing(cf,names,truncate);
+        ps = MultiVarPowerSeriesRing(cf,nv,vars,truncate);
     if f == None:
         r = ps.getZERO();
     else:
-        class coeff( MultiVarCoefficients ):
+        class MCoeff( MultiVarCoefficients ):
             def __init__(self,r):
                 MultiVarCoefficients.__init__(self,r);
                 self.coFac = r.coFac;
@@ -2063,7 +2067,7 @@ def MPS(cofac,names,f=None,truncate=None):
                 if isinstance(a,RingElem):
                     a = a.elem;
                 return a;
-        r = MultiVarPowerSeries(ps,coeff(cf));
+        r = MultiVarPowerSeries(ps,MCoeff(ps));
         #print "r = " + str(r);
     return RingElem(r);
 

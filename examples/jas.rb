@@ -3062,7 +3062,7 @@ class PSIdeal
         print "sequential standard base executed in #{t} ms\n";
         #Sp = [ RingElem.new(a.asPolynomial()) for a in S ];
         sp = ss.map { |a| RingElem.new(a) };
-        #return Sp;
+        #return sp;
         return PSIdeal.new(@ring,nil,list=sp);
     end
 
@@ -3071,7 +3071,7 @@ end
 
 class Coeff < Coefficients
   def initialize(cof,&f)
-      super()
+      super() # this is important in jruby 1.5.6!
       #print "cof type(#{cof}) = #{cof.class}\n";
       @coFac = cof;
       #print "f type(#{f}) = #{f.class}\n";
@@ -3111,7 +3111,6 @@ def PS(cofac,name,truncate=nil,&f) #=nil,truncate=nil)
     end
     #print "ps type(#{ps}) = #{ps.class}\n";
     #print "f  type(#{f}) = #{f.class}\n";
-    #f = nil; # TODO
     if f == nil
         r = ps.getZERO();
     else
@@ -3123,7 +3122,24 @@ def PS(cofac,name,truncate=nil,&f) #=nil,truncate=nil)
 end
 
 
-def MPS(cofac,names,f=nil,truncate=nil)
+class MCoeff < MultiVarCoefficients
+  def initialize(r,&f)
+      super(r) # this is important in jruby 1.5.6!
+      @coFac = r.coFac;
+      @func = f
+  end
+  def generate(i)
+      a = @func.call(i);
+      if a.is_a? RingElem
+         a = a.elem;
+      end
+      #print "f_5  type(#{a}) = #{a.class}\n";
+      return a;
+  end
+end
+
+
+def MPS(cofac,names,truncate=nil,&f)
     '''Create JAS MultiVarPowerSeries as ring element.
     '''
     cf = cofac;
@@ -3132,33 +3148,23 @@ def MPS(cofac,names,f=nil,truncate=nil)
     elsif cofac.is_a? Ring
         cf = cofac.ring;
     end
+    vars = names;
+    if vars.is_a? String
+       vars = GenPolynomialTokenizer.variableList(vars);
+    end
+    nv = vars.size;
     if truncate.is_a? RingElem
         truncate = truncate.elem;
     end
     if truncate == nil
-        ps = MultiVarPowerSeriesRing.new(cf,names);
+        ps = MultiVarPowerSeriesRing.new(cf,nv,vars);
     else
-        ps = MultiVarPowerSeriesRing.new(cf,names,truncate);
+        ps = MultiVarPowerSeriesRing.new(cf,nv,vars,truncate);
     end
     if f == nil
         r = ps.getZERO();
     else
-        '''
-        class Coeff < MultiVarCoefficients
-            def initialize(r)
-                MultiVarCoefficients.initialize(r);
-                @coFac = r.coFac;
-            end
-            def generate(i)
-                a = f(i);
-                if a.is_a? RingElem
-                    a = a.elem;
-                end
-                return a;
-            end
-        end
-        '''
-        r = MultiVarPowerSeries.new(ps,Coeff(cf));
+        r = MultiVarPowerSeries.new(ps,MCoeff.new(ps,&f));
         #print "r = " + str(r);
     end
     return RingElem.new(r);
