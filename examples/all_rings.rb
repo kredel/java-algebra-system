@@ -6,14 +6,6 @@
 #load "examples/jas.rb"
 require "examples/jas"
 
-#from jas import Ring, PolyRing, SolvPolyRing
-#from jas import Ideal
-#from jas import Module, SubModule, SolvableModule, SolvableSubModule
-#from jas import startLog
-#from jas import terminate
-#from jas import ZZ, QQ, ZM, DD, CC, Quat, Oct, AN, RealN, RF, RC, LC, RR, PS, Vec, Mat
-#from edu.jas.arith import BigDecimal
-
 
 puts "------- ZZ = BigInteger ------------";
 z1 = ZZ(12345678901234567890);
@@ -479,7 +471,7 @@ r = RR( [ QQ(),ZM(19),DD() ] );
 puts "r = " + str(r);
 puts "r.factory() = " + str(r.factory());
 rc1 = RR( [ QQ(), ZM(19), DD() ] );
-puts r.gens.each { |x| str(x) };
+print "gens = " , r.gens().map { |x| str(x) + ", " }, "\n";
 puts "rc1.factory() = " + str(rc1.factory());
 pg0,pg1,pg2 = r.gens();
 puts "pg0     = " + str(pg0);
@@ -553,11 +545,11 @@ puts "p3 = " + str(p3);
 p4 = - 4 + 3 * x**2 + 2 * x**3 - x**5;
 puts "p4 = " + str(p4);
 def g1(i)
-    return r.ring.coFac.fromInteger( 2*i );
+    return r.ring.coFac.fromInteger( i.getVal(0)*i.getVal(1) );
 end
 def g2(i)
-    #puts "2*QQ(i) = " + str(QQ(2)*QQ(i))
-    return 2*QQ(i);
+    #puts "QQ(i.0)*QQ(i.1) = " + str(QQ(i.getVal(0))*QQ(i.getVal(1)))
+    return QQ(i.getVal(0))*QQ(i.getVal(1));
 end
 g3 = Proc.new { |i| QQ(i.getVal(0))*QQ(i.getVal(1)) }
 r = MPS(QQ(),"x,y",&g3);
@@ -619,7 +611,7 @@ m3 = m2**3 - 125*e21 - 125*e23;
 puts "m3 = " + str(m3);
 #m4 = 1/m2;
 #puts "m4 = " + str(m4);
-m5 = [ [ 1, 0, 0 ], [ -125, 125, -125 ], [ 1, 0, 0 ] ]; 
+m5 = Mat(QQ(),3,3,v=[ [ 1, 0, 0 ], [ -125, 125, -125 ], [ 1, 0, 0 ] ]); 
 puts "m5 = " + str(m5);
 m6 = m3 * m5;
 puts "m6 = " + str(m6);
@@ -632,7 +624,7 @@ puts "r = " + str(r);
 puts "r.factory() = " + str(r.factory());
 #puts [ str(g) for g in r.gens() ];
 for g in r.gens()
-    puts "g = " + str(g);
+    print "g = ", str(g), "\n";
 end
 puts;
 
@@ -641,7 +633,7 @@ puts "------- PolyRing(Mat(QQ(),3,3),\"x,y,z\",PolyRing.lex) ---------";
 r = PolyRing.new(Mat(QQ(),3,3),"x,y,z",PolyRing.lex);
 puts "r = " + str(r);
 for g in r.gens()
-    puts "g = " + str(g);
+    print "g = ", str(g), "\n";
 end
 puts;
 
@@ -702,7 +694,7 @@ puts "l   = " + str(l);
 m = CommutativeModule.new("",ring=p,cols=4);
 puts "m = " + str(m);
 for g in m.gens()
-    puts "g =", str(g);
+    print "g = ", str(g), "\n";
 end
 
 
@@ -745,7 +737,6 @@ puts;
 #puts;
 
 
-
 puts "------- SolvableSubModule(SolvPolyRing(CC(),\"X,Y,x,y\")) ---------";
 r = PolyRing.new(CC(),"X,Y,x,y",PolyRing.lex);
 puts "r = " + str(r);
@@ -758,7 +749,8 @@ puts "px   = " + str(px);
 puts "py   = " + str(py);
 #rel = ( py, px, px * py - 1 , pz, py, py * pz - 1 );
 rel = [ py, px, pi * px * py, pX, pY, pi * pY * pX ];
-puts "rel  = " + str( rel.each { |x| str(x) });
+print "rel  = ", rel.map { |z| z.to_s + ", " }, "\n";
+#print "rel  = ", rel.to_s, "\n";
 
 sr = SolvPolyRing.new(CC(),"X,Y,x,y",PolyRing.lex,rel);
 puts "sr = " + str(sr);

@@ -39,7 +39,7 @@ from edu.jas.vector      import GenVector, GenVectorModul,\
 from edu.jas.application import PolyUtilApp, Residue, ResidueRing, Ideal,\
                                 Local, LocalRing, IdealWithRealAlgebraicRoots,\
                                 ComprehensiveGroebnerBaseSeq
-from edu.jas.kern        import ComputerThreads, StringUtil
+from edu.jas.kern        import ComputerThreads, StringUtil, Scripting
 from edu.jas.ufd         import GreatestCommonDivisor, PolyUfdUtil, GCDFactory,\
                                 FactorFactory, SquarefreeFactory, Quotient, QuotientRing
 from edu.jas.root        import RealRootsSturm, Interval, RealAlgebraicNumber, RealAlgebraicRing,\
@@ -54,6 +54,8 @@ from edu                 import jas
 from org.python.core     import PyInstance, PyJavaInstance, PyList, PyTuple,\
                                 PyInteger, PyLong, PyFloat, PyString
 
+# set output to Python scripting
+Scripting.setLang(Scripting.Lang.Python);
 
 def startLog():
     '''Configure the log4j system and start logging.
@@ -656,10 +658,10 @@ class ParamIdeal:
         '''Create a string representation.
         '''
         if self.gbsys == None:
-            return str(self.pset.toScript());
+            return self.pset.toScript();
         else:
-            return str(self.gbsys.toString());
-#            return str(self.pset) + "\n" + str(self.gbsys);
+            return self.gbsys.toScript(); #toString();
+#            return self.pset.toScript() + "\n" + self.gbsys.toScript();
 
     def optimizeCoeff(self):
         '''Optimize the term order on the variables of the coefficients.

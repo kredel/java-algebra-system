@@ -6,16 +6,14 @@ package edu.jas.poly;
 
 import java.util.List;
 import java.util.ArrayList;
-
 import java.io.Serializable;
 
 import org.apache.log4j.Logger;
 
-//import edu.jas.structure.RingFactory;
+import edu.jas.kern.Scripting;
 import edu.jas.structure.RingElem;
 import edu.jas.vector.GenVector;
 import edu.jas.vector.GenVectorModul;
-
 
 
 /**
@@ -212,34 +210,35 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
      * @return script compatible representation for this ModuleList.
      */
     public String toScript() {
-        // Python case
-        StringBuffer erg = new StringBuffer();
+        StringBuffer s = new StringBuffer();
         if ( ring instanceof GenSolvablePolynomialRing ) {
-            erg.append("SolvableSubModule(");
-        } else {
-            erg.append("SubModule(");
+            s.append("Solvable");
+	}
+        switch (Scripting.getLang() ) {
+        case Ruby:
+            s.append("SubModule.new(");
+            break;
+        case Python:
+        default:
+            s.append("SubModule(");
         }
-        String[] vars = null;
         if ( ring != null ) {
-           erg.append( ring.toScript() );
-           vars = ring.getVars();
-        } else {
-            // should not happen
+           s.append( ring.toScript() );
         }
         if ( list == null ) {
-            erg.append(")");
-            return erg.toString();
+            s.append(")");
+            return s.toString();
         }
-        erg.append(",list=[");
+        s.append(",list=[");
         boolean first = true;
         for ( List< GenPolynomial<C> > row: list ) {
             if ( first ) {
                first = false;
             } else {
-               erg.append( "," );
+               s.append( "," );
             }
             boolean ifirst = true;
-            erg.append(" ( ");
+            s.append(" ( ");
             String os;
             for ( GenPolynomial<C> oa: row ) {
                 if ( oa == null ) {
@@ -250,14 +249,14 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
                 if ( ifirst ) {
                    ifirst = false;
                 } else {
-                   erg.append( ", " );
+                   s.append( ", " );
                 }
-                erg.append( os );
+                s.append( os );
             }
-            erg.append(" )");
+            s.append(" )");
         }
-        erg.append(" ])");
-        return erg.toString();
+        s.append(" ])");
+        return s.toString();
     }
 
 

@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.kern.PreemptStatus;
 import edu.jas.kern.PrettyPrint;
+import edu.jas.kern.Scripting;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.util.CartesianProduct;
@@ -256,7 +257,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
             res += "( " + varsToString() + " ) " + tord.toString() + " ";
         } else {
             res = this.getClass().getSimpleName() + "[ " + coFac.toString() + " ";
-	    //  + coFac.getClass().getSimpleName();
+            //  + coFac.getClass().getSimpleName();
             if (coFac instanceof AlgebraicNumberRing) {
                 AlgebraicNumberRing an = (AlgebraicNumberRing) coFac;
                 res = "AN[ (" + an.ring.varsToString() + ") (" + an.modul + ") ]";
@@ -292,13 +293,21 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
      */
     //JAVA6only: @Override
     public String toScript() {
-        // Python case
-        String cf = "";
-        if (coFac instanceof RingElem) {
-            cf = ((RingElem<C>) coFac).toScriptFactory();
-        } else {
-            cf = coFac.toScript().trim();
+        StringBuffer s = new StringBuffer();
+        switch (Scripting.getLang() ) {
+        case Ruby:
+            s.append("PolyRing.new(");
+            break;
+        case Python:
+        default:
+            s.append("PolyRing(");
         }
+        if (coFac instanceof RingElem) {
+            s.append( ((RingElem<C>) coFac).toScriptFactory() );
+        } else {
+            s.append( coFac.toScript().trim() );
+        }
+        s.append(",\"" + varsToString() + "\",");
         String to = tord.toString();
         if (tord.getEvord() == TermOrder.INVLEX) {
             to = "PolyRing.lex";
@@ -306,7 +315,9 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
         if (tord.getEvord() == TermOrder.IGRLEX) {
             to = "PolyRing.grad";
         }
-        return "PolyRing(" + cf + ",\"" + varsToString() + "\"," + to + ")";
+        s.append(to);
+        s.append(")");
+        return s.toString();
     }
 
 

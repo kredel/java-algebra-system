@@ -16,6 +16,7 @@ import java.util.Random;
 import java.util.Set;
 
 import edu.jas.kern.StringUtil;
+import edu.jas.kern.Scripting;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.Power;
 import edu.jas.structure.RingFactory;
@@ -306,17 +307,26 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
     //JAVA6only: @Override
     public String toScript() {
         // Python case: (num,den) or num 
-        // was (num,) 
+        // Ruby case: num/den or num 
         StringBuffer s = new StringBuffer();
         if (den.equals(BigInteger.ONE)) {
             s.append(num.toString());
             return s.toString();
         }
-        s.append("(");
-        s.append(num.toString());
-        s.append(",");
-        s.append(den.toString());
-        s.append(")");
+        switch (Scripting.getLang() ) {
+	case Python:
+	    s.append("(");
+	    s.append(num.toString());
+	    s.append(",");
+	    s.append(den.toString());
+	    s.append(")");
+	    break;
+	case Ruby:
+        default:
+	    s.append(num.toString());
+	    s.append("/");
+	    s.append(den.toString());
+	}
         return s.toString();
     }
 

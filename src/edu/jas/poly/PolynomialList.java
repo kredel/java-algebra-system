@@ -6,24 +6,19 @@ package edu.jas.poly;
 
 
 import java.lang.Comparable;
-
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
-
 import java.io.Serializable;
 
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
-//import edu.jas.structure.RingFactory;
-
+import edu.jas.kern.Scripting;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
-
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenSolvablePolynomialRing;
-
 
 
 /**
@@ -192,17 +187,23 @@ public class PolynomialList<C extends RingElem<C> >
      * @return script compatible representation for this polynomial list.
      */
     public String toScript() {
-        // Python case
-        StringBuffer erg = new StringBuffer();
-        erg.append("Ideal(");
+        StringBuffer s = new StringBuffer();
+        switch (Scripting.getLang() ) {
+        case Ruby:
+            s.append("Ideal.new(");
+            break;
+        case Python:
+        default:
+            s.append("Ideal(");
+        }
         if ( ring != null ) {
-           erg.append( ring.toScript() );
+           s.append( ring.toScript() );
         }
         if ( list == null ) {
-            erg.append(")");
-            return erg.toString();
+            s.append(")");
+            return s.toString();
         }
-        erg.append(",list=[");
+        s.append(",list=[");
         boolean first = true;
         String sa = null;
         for ( GenPolynomial<C> oa: list ) {
@@ -210,12 +211,12 @@ public class PolynomialList<C extends RingElem<C> >
             if ( first ) {
                first = false;
             } else {
-               erg.append( ", " );
+               s.append( ", " );
             }
-            erg.append( "( " + sa + " )" );
+            s.append( "( " + sa + " )" );
         }
-        erg.append("])");
-        return erg.toString();
+        s.append("])");
+        return s.toString();
     }
 
 

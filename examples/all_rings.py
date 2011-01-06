@@ -517,9 +517,11 @@ p4 = - 4 + 3 * x**2 + 2 * x**3 - x**5;
 print "p4 = " + str(p4);
 def g1(i):
     return r.ring.coFac.fromInteger( 2*i );
+
 def g2(i):
     #print "2*QQ(i) = " + str(QQ(2)*QQ(i))
     return 2*QQ(i);
+
 r = PS(QQ(),"x",g2);
 print "r = " + str(r);
 print "r.factory() = " + str(r.factory());
@@ -550,10 +552,10 @@ print "p3 = " + str(p3);
 p4 = - 4 + 3 * x**2 + 2 * x**3 - x**5;
 print "p4 = " + str(p4);
 def g1(i):
-    return r.ring.coFac.fromInteger( 2*i );
+    return r.ring.coFac.fromInteger( i.getVal(0)*i.getVal(1) );
 
 def g2(i):
-    #print "2*QQ(i) = " + str(QQ(2)*QQ(i))
+    #print "QQ(i.0)*QQ(i.1) = " + str(QQ(i.0)*QQ(i.1))
     return QQ(i.getVal(0)) * QQ(i.getVal(1));
 
 r = MPS(QQ(),"x,y",g2);

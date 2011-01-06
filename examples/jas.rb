@@ -49,6 +49,10 @@ def noThreads()
     puts
 end
 
+# set output to Ruby scripting
+include_class "edu.jas.kern.Scripting";
+Scripting.setLang(Scripting::Lang::Ruby);
+
 include_class "edu.jas.util.ExecutableServer";
 include_class "edu.jas.structure.Power";
 include_class "edu.jas.arith.BigInteger";
@@ -356,8 +360,8 @@ class RingElem
     def to_s()
         '''Create a string representation.
         '''
-        #return @elem.toScript(); 
-        return @elem.toString(); 
+        return @elem.toScript(); 
+        #return @elem.toString(); 
     end
 
     def to_f()
@@ -1917,10 +1921,10 @@ class ParamIdeal
         '''Create a string representation.
         '''
         if @gbsys == nil
-            return @pset.toScript().to_s;
+            return @pset.toScript(); #.to_s;
         else
-            return @gbsys.toString().to_s;
-#            return @pset.to_s + "\n" + @gbsys.to_s;
+            return @gbsys.toScript(); #.to_s;
+#            return @pset.toScript() + "\n" + @gbsys.toScript();
         end
     end
 
@@ -2163,7 +2167,7 @@ class SolvableRing < Ring
     def to_s()
         '''Create a string representation.
         '''
-        return @ring.toScript().to_s;
+        return @ring.toScript(); #.to_s;
     end
 
     def ideal(ringstr="",list=nil)
@@ -2460,8 +2464,6 @@ class CommutativeModule
         '''
         gm = GenVectorModul.new(@ring,@cols);
         ll = gm.generators();
-        #for g in ll:
-        #    print "g = ", str(g);
         nn = ll.map { |e| RingElem.new(e) }; # want use val here, but can not
         return nn;
     end
@@ -3221,6 +3223,9 @@ def Mat(cofac,n,m,v=nil)
         v = v.elem;
     end
     #print "cf type(#{cf}) = #{cf.class}";
+    if v.is_a? Array
+        v = rbarray2arraylist(v,cf,rec=2);
+    end
     mr = GenMatrixRing.new(cf,n,m);
     if v == nil
         r = GenMatrix.new(mr);

@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.kern.PrettyPrint;
+import edu.jas.kern.Scripting;
 
 
 /**
@@ -178,26 +179,36 @@ public class GenSolvablePolynomialRing<C extends RingElem<C> >
      */
     @Override
     public String toScript() {
-        // Python case
-        String cf = null;
-        if ( coFac instanceof RingElem ) {
-            cf = ((RingElem<C>)coFac).toScriptFactory();
-        } else {
-            cf =  coFac.toScript().trim();
+        StringBuffer s = new StringBuffer();
+        switch (Scripting.getLang() ) {
+        case Ruby:
+            s.append("SolvPolyRing.new(");
+            break;
+        case Python:
+        default:
+            s.append("SolvPolyRing(");
         }
+        if (coFac instanceof RingElem) {
+            s.append( ((RingElem<C>) coFac).toScriptFactory() );
+        } else {
+            s.append( coFac.toScript().trim() );
+        }
+        s.append(",\"" + varsToString() + "\",");
         String to = tord.toString();
-        if ( tord.getEvord() == TermOrder.INVLEX ) {
+        if (tord.getEvord() == TermOrder.INVLEX) {
             to = "PolyRing.lex";
         }
-        if ( tord.getEvord() == TermOrder.IGRLEX ) {
+        if (tord.getEvord() == TermOrder.IGRLEX) {
             to = "PolyRing.grad";
         }
+        s.append(to);
         if ( table.size() > 0 ) {
             String rel = table.toScript();
-            return "SolvPolyRing(" + cf + ",\"" + varsToString() + "\"," + to + ",rel=" + rel + ")";
-        } else {
-            return "SolvPolyRing(" + cf + ",\"" + varsToString() + "\"," + to + ")";
+            s.append(",rel=");
+            s.append(rel);
         }
+        s.append(")");
+        return s.toString();
     }
 
 
