@@ -1,6 +1,6 @@
 #
 # jruby examples for jas.
-# $Id: $
+# $Id$
 #
 
 #load "examples/jas.rb"
