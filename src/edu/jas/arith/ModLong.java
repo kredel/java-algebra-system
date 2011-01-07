@@ -345,7 +345,9 @@ public final class ModLong implements GcdRingElem<ModLong>, Modular {
         try {
             return new ModLong(ring, modInverse(val, ring.modul));
         } catch (ArithmeticException e) {
-            throw new NotInvertibleException(e.getCause());
+            long g = gcd( val, ring.modul );
+            long f = ring.modul / g;
+            throw new ModularNotInvertibleException(e,new BigInteger(ring.modul),new BigInteger(g),new BigInteger(f));
         }
     }
 

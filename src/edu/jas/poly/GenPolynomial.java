@@ -1422,7 +1422,7 @@ public class GenPolynomial<C extends RingElem<C>> implements RingElem<GenPolynom
         GenPolynomial<C>[] hegcd = this.hegcd(m);
         GenPolynomial<C> a = hegcd[0];
         if (!a.isUnit()) { // gcd != 1
-            throw new NotInvertibleException("element not invertible, gcd != 1");
+            throw new AlgebraicNotInvertibleException("element not invertible, gcd != 1",m,a,m.divide(a));
         }
         GenPolynomial<C> b = hegcd[1];
         if (b.isZERO()) { // when m divides this, e.g. m.isUnit()

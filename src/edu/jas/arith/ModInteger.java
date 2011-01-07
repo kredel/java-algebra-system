@@ -341,9 +341,9 @@ public final class ModInteger implements GcdRingElem<ModInteger>, Modular {
                 if ( val.remainder( S.val ).equals( java.math.BigInteger.ZERO ) ) {
                    return new ModInteger( ring, val.divide( S.val ) );
                 }
-                throw new NotInvertibleException(e.getCause());
+                throw new NotInvertibleException(e);
             } catch (ArithmeticException a) {
-                throw new NotInvertibleException(a.getCause());
+                throw new NotInvertibleException(a);
             }
         }
     }
@@ -369,7 +369,9 @@ public final class ModInteger implements GcdRingElem<ModInteger>, Modular {
         try {
             return new ModInteger( ring, val.modInverse( ring.modul ));
         } catch (ArithmeticException e) {
-            throw new NotInvertibleException(e.getCause());
+            java.math.BigInteger g = val.gcd( ring.modul );
+            java.math.BigInteger f = ring.modul.divide(g);
+            throw new ModularNotInvertibleException(e,new BigInteger(ring.modul),new BigInteger(g),new BigInteger(f));
         }
     }
 
