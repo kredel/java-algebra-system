@@ -558,7 +558,8 @@ public final class ModLong implements GcdRingElem<ModLong>, Modular {
         long[] hegcd = hegcd(T, m);
         long a = hegcd[0];
         if (!(a == 1L || a == -1L)) { // gcd != 1
-            throw new NotInvertibleException("element not invertible, gcd != 1");
+            throw new ModularNotInvertibleException("element not invertible, gcd != 1",
+                                                    new BigInteger(m),new BigInteger(a),new BigInteger(m/a));
         }
         long b = hegcd[1];
         if (b == 0L) { // when m divides this, e.g. m.isUnit()

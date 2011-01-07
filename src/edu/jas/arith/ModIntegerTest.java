@@ -235,10 +235,29 @@ public class ModIntegerTest extends TestCase {
 
         try {
             a = zm.getZERO().inverse();
+            fail("0 invertible");
         } catch(NotInvertibleException expected) {
-            return;
+            // ok
         }
-        fail("0 invertible");
+
+        zm = new ModIntegerRing(5*3);
+        a = new ModInteger(zm, 5);
+        assertFalse("5 !unit mod 15", a.isUnit());
+
+        try {
+            b = a.inverse();
+            fail("5 invertible");
+        } catch (ModularNotInvertibleException expected) {
+            //ok
+            //expected.printStackTrace();
+            assertTrue("f  = 15 ", expected.f.equals(new BigInteger(15)));
+            assertTrue("f1 =  5 ", expected.f1.equals(new BigInteger(5)));
+            assertTrue("f2 =  3 ", expected.f2.equals(new BigInteger(3)));
+            assertTrue("f  =  f1*f2 ", expected.f.equals(expected.f1.multiply(expected.f2)));
+        } catch (NotInvertibleException e) {
+            //e.printStackTrace();
+            fail("wrong exception " + e);
+        }
     }
 
 

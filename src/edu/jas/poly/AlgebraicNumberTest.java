@@ -192,7 +192,6 @@ public class AlgebraicNumberTest extends TestCase {
 
         //System.out.println("d = " + d);
         //System.out.println("e = " + e);
-
         //System.out.println("d-e = " + d.subtract(c) );
 
         assertEquals("a(bc) = (ab)c",d,e);
@@ -201,7 +200,6 @@ public class AlgebraicNumberTest extends TestCase {
         c = a.multiply( fac.getONE() );
         d = fac.getONE().multiply( a );
         assertEquals("a*1 = 1*a",c,d);
-
 
         c = a.inverse();
         d = c.multiply(a);
@@ -212,10 +210,34 @@ public class AlgebraicNumberTest extends TestCase {
 
         try {
             a = fac.getZERO().inverse();
+            fail("0 invertible");
         } catch(NotInvertibleException expected) {
-            return;
+            // ok
         }
-        fail("0 invertible");
+
+        GenPolynomial<BigRational> dp = fac.modul;
+        GenPolynomial<BigRational> cp = fac.modul.multiply(a.val.monic());
+        //System.out.println("dp = " + dp);
+        //System.out.println("cp = " + cp);
+        fac = new AlgebraicNumberRing<BigRational>( cp );
+        a = new AlgebraicNumber<BigRational>(fac,a.val.monic());
+        assertFalse("a !unit mod m*a", a.isUnit());
+
+        try {
+            b = a.inverse();
+            fail("5 invertible");
+        } catch (AlgebraicNotInvertibleException expected) {
+            //ok
+            //expected.printStackTrace();
+            //System.out.println("expected = " + expected);
+            assertTrue("f  = " + cp, expected.f.equals(cp));
+            assertTrue("f1 = " + a.val, expected.f1.equals(a.val));
+            assertTrue("f2 = " + dp, expected.f2.equals(dp));
+            assertTrue("f  =  f1*f2 ", expected.f.equals(expected.f1.multiply(expected.f2)));
+        } catch (NotInvertibleException e) {
+            //e.printStackTrace();
+            fail("wrong exception " + e);
+        }
     }
 
 
