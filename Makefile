@@ -292,14 +292,17 @@ tests:
 	ant test 2>&1 | tee t.out
 	ant exam 2>&1 | tee e.out
 	find examples -name "*.py"|grep -v jas.py |grep -v plot|grep -v versuch|sort|xargs -L 1 echo "time jython" | awk '{ printf "echo %s\n", $$0; printf "%s\n", $$0 }' > ./all_jython.sh
-	time bash all_jython.sh 2>&1 | tee tj.out
+	time bash all_jython.sh 2>&1 | tee tjy.out
+	find examples -name "*.rb"|grep -v jas.rb |grep -v versuch|sort|xargs -L 1 echo "time jruby" | awk '{ printf "echo %s\n", $$0; printf "%s\n", $$0 }' > ./all_jruby.sh
+	time bash all_jruby.sh 2>&1 | tee tjr.out
 	make edu.jas.application.RunGB cl="seq  examples/trinks6.jas"   | tee tr.out
 	make edu.jas.application.RunGB cl="seq+ examples/trinks6.jas"   | tee -a tr.out
 	make edu.jas.application.RunGB cl="par  examples/trinks6.jas 4" | tee -a tr.out
 	make edu.jas.application.RunGB cl="par+ examples/trinks6.jas 4" | tee -a tr.out
 	-grep FAIL t.out
 	-grep Exception e.out | grep -v GCDProxy
-	-grep File tj.out
+	-grep File tjy.out
+	-grep -i error tjr.out
 	-grep Exception tr.out || grep Usage tr.out
 
 metrics:
@@ -327,11 +330,12 @@ export:
 	cd ~/jas-versions/; jar -cf $(VERSION).`$(SVNREV)`-src.jar $(VERSION)/
 	cd ~/jas-versions/$(VERSION)/; ant compile > ant_compile.out
 	cd ~/jas-versions/$(VERSION)/; jar -cf ../$(VERSION).`$(SVNREV)`-bin.jar edu/ COPYING*
-	cd ~/jas-versions/$(VERSION)/; ant test > ant_test.out
-	cd ~/jas-versions/$(VERSION)/; sh ./jython_tests.sh >jython_tests.out 2>&1
 	cd ~/jas-versions/$(VERSION)/; ant doc > ant_doc.out
 	cd ~/jas-versions/$(VERSION)/; epydoc -o doc/jython -n JAS -u ../../index.html examples/jas.py > epydoc.out
 	cd ~/jas-versions/$(VERSION)/; jar -cf ../$(VERSION).`$(SVNREV)`-doc.jar doc/ *.html
+	cd ~/jas-versions/$(VERSION)/; ant test > ant_test.out
+	cd ~/jas-versions/$(VERSION)/; sh ./jython_tests.sh >jython_tests.out 2>&1
+	cd ~/jas-versions/$(VERSION)/; sh ./jruby_tests.sh >jruby_tests.out 2>&1
 	cp ~/jas-versions/$(VERSION).`$(SVNREV)`-bin.jar $(LIBPATH)/jas.jar
 	cp ~/jas-versions/$(VERSION).`$(SVNREV)`-bin.jar ~/jas-versions/$(VERSION)/jas.jar
 	mv ~/jas-versions/$(VERSION).`$(SVNREV)`-*.jar ~/jas-versions/$(VERSION)/
