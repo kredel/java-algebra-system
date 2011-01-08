@@ -225,15 +225,15 @@ public class AlgebraicNumberTest extends TestCase {
 
         try {
             b = a.inverse();
-            fail("5 invertible");
+            fail("invertible " + a);
         } catch (AlgebraicNotInvertibleException expected) {
             //ok
             //expected.printStackTrace();
             //System.out.println("expected = " + expected);
-            assertTrue("f  = " + cp, expected.f.equals(cp));
+            assertTrue("f  = " + cp,    expected.f.equals(cp));
             assertTrue("f1 = " + a.val, expected.f1.equals(a.val));
-            assertTrue("f2 = " + dp, expected.f2.equals(dp));
-            assertTrue("f  =  f1*f2 ", expected.f.equals(expected.f1.multiply(expected.f2)));
+            assertTrue("f2 = " + dp,    expected.f2.equals(dp));
+            assertTrue("f  =  f1*f2 ",  expected.f.equals(expected.f1.multiply(expected.f2)));
         } catch (NotInvertibleException e) {
             //e.printStackTrace();
             fail("wrong exception " + e);
