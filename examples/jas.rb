@@ -13,7 +13,7 @@ include_class "java.lang.System"
 include_class "java.io.StringReader"
 include_class "java.util.ArrayList"
 
-require "../lib/log4j.jar"
+#require "../lib/log4j.jar"
 include_class "org.apache.log4j.BasicConfigurator";
 include_class "org.apache.log4j.Logger";
 
@@ -1091,6 +1091,9 @@ class PolyRing < Ring
     Then returns a Ring.
     '''
 
+    @lex = TermOrder.new(TermOrder::INVLEX)
+    @grad = TermOrder.new(TermOrder::IGRLEX)
+
     def initialize(coeff,vars,order=TermOrder.new(TermOrder::IGRLEX))
         '''Ring constructor.
 
@@ -1098,6 +1101,9 @@ class PolyRing < Ring
         vars = string with variable names,
         order = term order.
         '''
+        @lex = TermOrder.new(TermOrder::INVLEX)
+        @grad = TermOrder.new(TermOrder::IGRLEX)
+
         if coeff == nil
             raise ValueError, "No coefficient given."
         end
@@ -1145,9 +1151,6 @@ class PolyRing < Ring
         '''
         return @ring.toScript();
     end
-
-    @lex = TermOrder.new(TermOrder::INVLEX)
-    @grad = TermOrder.new(TermOrder::IGRLEX)
 
     class << self  # means add to class
        attr_reader :lex, :grad
