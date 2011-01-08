@@ -1,8 +1,11 @@
 # $Id$
 
+=begin rdoc
+jruby interface to JAS.
+=end
+
 module JAS
-'''jruby interface to JAS.
-'''
+
   module_function
 
 require "java"
@@ -18,31 +21,35 @@ include_class "org.apache.log4j.BasicConfigurator";
 include_class "org.apache.log4j.Logger";
 
 
+=begin rdoc
+Configure the log4j system and start logging.
+=end
 def startLog()
-    '''Configure the log4j system and start logging.
-    '''
     BasicConfigurator.configure();
 end
 
 #startLog();
 
+=begin rdoc
+Mimic Python str() function.
+=end
 def str(s)
-    '''Mimic Python str() function.
-    '''
     return s.to_s;
 end
 
 include_class "edu.jas.kern.ComputerThreads";
 
+=begin rdoc
+Terminate the running thread pools.
+=end
 def terminate()
-    '''Terminate the running thread pools.
-    '''
     ComputerThreads.terminate();
 end
 
+=begin rdoc
+Turn off automatic parallel threads usage.
+=end
 def noThreads()
-    '''Turn off automatic parallel threads usage.
-    '''
     print "nt = ", ComputerThreads.NO_THREADS;
     ComputerThreads.setNoThreads(); #NO_THREADS = #0; #1; #true;
     print "\nnt = ", ComputerThreads.NO_THREADS;
@@ -67,9 +74,10 @@ include_class "edu.jas.arith.Product";
 include_class "edu.jas.arith.ProductRing";
 
 
+=begin rdoc
+Create JAS BigInteger as ring element.
+=end
 def ZZ(z=0)
-    '''Create JAS BigInteger as ring element.
-    '''
     if z.is_a? RingElem
         z = z.elem;
     end
@@ -78,9 +86,10 @@ def ZZ(z=0)
 end
 
 
+=begin rdoc
+Create JAS ModInteger as ring element.
+=end
 def ZM(m,z=0,field=false)
-    '''Create JAS ModInteger as ring element.
-    '''
     if m.is_a? RingElem
         m = m.elem;
     end
@@ -101,9 +110,10 @@ def ZM(m,z=0,field=false)
 end
 
 
+=begin rdoc
+Create JAS BigRational as ring element.
+=end
 def QQ(d=0,n=1)
-    '''Create JAS BigRational as ring element.
-    '''
     if d.is_a? Rational 
         if n != 1:
             print "#{n} ignored\n";
@@ -134,9 +144,10 @@ def QQ(d=0,n=1)
 end
 
 
+=begin rdoc
+Create JAS BigComplex as ring element.
+=end
 def CC(re=BigRational.new(),im=BigRational.new())
-    '''Create JAS BigComplex as ring element.
-    '''
     if re == 0
         re = BigRational.new();
     end
@@ -183,9 +194,10 @@ def CC(re=BigRational.new(),im=BigRational.new())
 end
 
 
+=begin rdoc
+Create JAS generic Complex as ring element.
+=end
 def CR(re=BigRational.new(),im=BigRational.new(),ring=nil)
-    '''Create JAS generic Complex as ring element.
-    '''
     if re == 0
         re = BigRational.new();
     end
@@ -230,9 +242,10 @@ def CR(re=BigRational.new(),im=BigRational.new(),ring=nil)
 end
 
 
+=begin rdoc
+Create JAS BigDecimal as ring element.
+=end
 def DD(d=0)
-    '''Create JAS BigDecimal as ring element.
-    '''
     if d.is_a? RingElem
         d = d.elem;
     end
@@ -249,9 +262,10 @@ def DD(d=0)
 end
 
 
+=begin rdoc
+Create JAS BigQuaternion as ring element.
+=end
 def Quat(re=BigRational.new(),im=BigRational.new(),jm=BigRational.new(),km=BigRational.new())
-    '''Create JAS BigQuaternion as ring element.
-    '''
     if re == 0
         re = BigRational.new();
     end
@@ -295,9 +309,10 @@ def Quat(re=BigRational.new(),im=BigRational.new(),jm=BigRational.new(),km=BigRa
 end
 
 
+=begin rdoc
+Create JAS BigOctonion as ring element.
+=end
 def Oct(ro=BigQuaternion.new(),io=BigQuaternion.new())
-    '''Create JAS BigOctonion as ring element.
-    '''
     if ro == 0
         ro = BigQuaternion.new();
     end
@@ -330,18 +345,19 @@ def Oct(ro=BigQuaternion.new(),io=BigQuaternion.new())
 end
 
 
+=begin rdoc
+Proxy for JAS ring elements.
+
+Methods to be used as + - * ** / %.
+=end
 class RingElem
-    '''Proxy for JAS ring elements.
-
-    Methods to be used as + - * ** / %.
-    '''
-
     include Comparable
     attr_reader :elem, :ring
 
+=begin rdoc
+Constructor for ring element.
+=end
     def initialize(elem)
-        '''Constructor for ring element.
-        '''
         if elem.is_a? RingElem
             @elem = elem.elem;
         else
@@ -357,16 +373,18 @@ class RingElem
         self.freeze
     end
 
+=begin rdoc
+Create a string representation.
+=end
     def to_s()
-        '''Create a string representation.
-        '''
         return @elem.toScript(); 
         #return @elem.toString(); 
     end
 
+=begin rdoc
+Convert to float.
+=end
     def to_f()
-        '''Convert to float.
-        '''
         e = @elem;
         if e.getClass().getSimpleName() == "BigInteger"
             e = BigRational(e);
@@ -381,76 +399,88 @@ class RingElem
         return e;
     end
 
+=begin rdoc
+Zero element of this ring.
+=end
     def zero()
-        '''Zero element of this ring.
-        '''
         return RingElem.new( @elem.factory().getZERO() );
     end
 
+=begin rdoc
+Test if this is the zero element of the ring.
+=end
     def isZERO()
-        '''Test if this is the zero element of the ring.
-        '''
         return @elem.isZERO();
     end
 
+=begin rdoc
+Test if this is the zero element of the ring.
+=end
     def zero?()
-        '''Test if this is the zero element of the ring.
-        '''
         return @elem.isZERO();
     end
 
+=begin rdoc
+One element of this ring.
+=end
     def one()
-        '''One element of this ring.
-        '''
         return RingElem.new( @elem.factory().getONE() );
     end
 
+=begin rdoc
+Test if this is the one element of the ring.
+=end
     def isONE()
-        '''Test if this is the one element of the ring.
-        '''
         return @elem.isONE();
     end
 
+=begin rdoc
+Test if this is the one element of the ring.
+=end
     def one?()
-        '''Test if this is the one element of the ring.
-        '''
         return @elem.isONE();
     end
 
+=begin rdoc
+Get the sign of this element.
+=end
     def signum()
-        '''Get the sign of this element.
-        '''
         return @elem.signum();
     end
 
+=begin rdoc
+Absolute value.
+=end
     def abs()
-        '''Absolute value.
-        '''
         return RingElem.new( @elem.abs() ); 
     end
 
+=begin rdoc
+Negative value.
+=end
     def -@()
-        '''Negative value.
-        '''
         return RingElem.new( @elem.negate() ); 
     end
 
+=begin rdoc
+Positive value.
+=end
     def +@()
-        '''Positive value.
-        '''
         return self; 
     end
 
+=begin rdoc
+Coerce other to self
+=end
     def coerce(other)
-        '''Coerce other to self
-        '''
         s,o = coercePair(self,other);
         return [o,s]; # keep order for non-commutative
     end
 
+=begin rdoc
+Coerce type a to type b or type b to type a.
+=end
     def coercePair(a,b)
-        '''Coerce type a to type b or type b to type a.
-        '''
         #print "a type(#{a}) = #{a.class}\n";
         #print "b type(#{b}) = #{b.class}\n";
         begin
@@ -470,9 +500,10 @@ class RingElem
         return [s,o];
     end
 
+=begin rdoc
+Coerce other to self
+=end
     def coerceElem(other)
-        '''Coerce other to self
-        '''
         #print "self  type(#{self}) = #{self.class}\n";
         #print "other type(#{other}) = #{other.class}\n";
         if @elem.getClass().getSimpleName() == "GenVector"
@@ -559,9 +590,10 @@ class RingElem
         return RingElem.new(o);
     end
 
+=begin rdoc
+Test if this is itself a ring factory.
+=end
     def isFactory()
-        '''Test if this is itself a ring factory.
-        '''
         f = @elem.factory();
         if @elem == f
             return true;
@@ -570,9 +602,10 @@ class RingElem
         end
     end
 
+=begin rdoc
+Test if this is a polynomial.
+=end
     def isPolynomial()
-        '''Test if this is a polynomial.
-        '''
         begin
             nv = @elem.ring.nvar;
         rescue
@@ -581,68 +614,77 @@ class RingElem
         return true;
     end
 
+=begin rdoc
+Compare two ring elements.
+=end
     def <=>(other)
-        '''Compare two ring elements.
-        '''
         #s,o = coercePair(other);
         s,o = self, other
         return s.elem.compareTo( o.elem ); 
     end
 
+=begin rdoc
+Hash value.
+=end
     def object_id()
-        '''Hash value.
-        '''
         return @elem.hashCode(); 
     end
 
+=begin rdoc
+Multiply two ring elements.
+=end
     def *(other)
-        '''Multiply two ring elements.
-        '''
         #print "* self  type(#{self}) = #{self.class}\n";
         #print "* other type(#{other}) = #{other.class}\n";
         s,o = coercePair(self,other);
         return RingElem.new( s.elem.multiply( o.elem ) ); 
     end
 
+=begin rdoc
+Add two ring elements.
+=end
     def +(other)
-        '''Add two ring elements.
-        '''
         #print "+ self  type(#{self}) = #{self.class}\n";
         #print "+ other type(#{other}) = #{other.class}\n";
         s,o = coercePair(self,other);
         return RingElem.new( s.elem.sum( o.elem ) ); 
     end
 
+=begin rdoc
+Subtract two ring elements.
+=end
     def -(other)
-        '''Subtract two ring elements.
-        '''
         s,o = coercePair(self,other);
         return RingElem.new( s.elem.subtract( o.elem ) ); 
     end
 
+=begin rdoc
+Divide two ring elements.
+=end
     def /(other)
-        '''Divide two ring elements.
-        '''
         s,o = coercePair(self,other);
         return RingElem.new( s.elem.divide( o.elem ) ); 
     end
 
+=begin rdoc
+Modular remainder of two ring elements.
+=end
     def %(other)
-        '''Modular remainder of two ring elements.
-        '''
         s,o = coercePair(self,other);
         return RingElem.new( s.elem.remainder( o.elem ) ); 
     end
 
+=begin rdoc
+Can not be used as power.
+=end
     def ^(other)
-        '''Can not be used as power.
-        '''
         return nil;
     end
 
+=begin rdoc
+Power of this to other.
+=end
     def **(other)
-        '''Power of this to other.
-        '''
         #print "pow other type(#{other}) = #{other.class}";
         if other.is_a? Integer
             n = other;
@@ -665,9 +707,10 @@ class RingElem
         return RingElem.new( p ); 
     end
 
+=begin rdoc
+Test if two ring elements are equal.
+=end
     def equal?(other)
-        '''Test if two ring elements are equal.
-        '''
         o = other;
         if other.is_a? RingElem
             o = other.elem;
@@ -675,9 +718,10 @@ class RingElem
         return @elem.equals(o)
     end
 
+=begin rdoc
+Get the factory of this element.
+=end
     def factory()
-        '''Get the factory of this element.
-        '''
         fac = @elem.factory();
         begin
             nv = fac.nvar;
@@ -688,9 +732,10 @@ class RingElem
         return RingElem.new(fac);
     end
 
+=begin rdoc
+Get the generators for the factory of this element.
+=end
     def gens()
-        '''Get the generators for the factory of this element.
-        '''
         ll = @elem.factory().generators();
         #print "L = #{ll}";
         nn = ll.map {|e| RingElem.new(e) };
@@ -698,15 +743,17 @@ class RingElem
         return nn;
     end
 
+=begin rdoc
+Monic polynomial.
+=end
     def monic()
-        '''Monic polynomial.
-        '''
         return RingElem.new( @elem.monic() ); 
     end
 
+=begin rdoc
+Evaluate at a for power series.
+=end
     def evaluate(a)
-        '''Evaluate at a for power series.
-        '''
         #print "self  type(#{@elem}) = #{@elen.class}";
         #print "a     type(#{a}) = #{a.class}";
         x = nil;
@@ -726,11 +773,12 @@ class RingElem
         return RingElem.new( e );
     end
 
-    def integrate(a=0,r=nil)
-        '''Integrate a power series with constant a or as rational function.
+=begin rdoc
+Integrate a power series with constant a or as rational function.
 
-        a is the integration constant, r is for partial integration in variable r.
-        '''
+a is the integration constant, r is for partial integration in variable r.
+=end
+    def integrate(a=0,r=nil)
         #print "self  type(#{@elem}) = #{@elem.class}";
         #print "a     type(#{a}) = #{a.class}";
         x = nil;
@@ -763,11 +811,12 @@ class RingElem
         return ei;
     end
 
-    def differentiate(r=nil)
-        '''Differentiate a power series.
+=begin rdoc
+Differentiate a power series.
 
-        r is for partial differentiation in variable r.
-        '''
+r is for partial differentiation in variable r.
+=end
+    def differentiate(r=nil)
         begin
             if r != nil
                 e = @elem.differentiate(r);
@@ -780,9 +829,10 @@ class RingElem
         return RingElem.new( e );
     end
 
+=begin rdoc
+Get the coefficients of a polynomial.
+=end
     def coefficients()
-        '''Get the coefficients of a polynomial.
-        '''
         a = @elem;
         #L = [ c.toScriptFactory() for c in a.coefficientIterator() ];
         ll = a.coefficientIterator().map { |c| RingElem.new(c) }; 
@@ -810,16 +860,18 @@ include_class "edu.jas.poly.Complex";
 include_class "edu.jas.poly.ComplexRing";
 
 
-class Ring
-    '''Represents a JAS polynomial ring: GenPolynomialRing.
+=begin rdoc
+Represents a JAS polynomial ring: GenPolynomialRing.
 
-    Methods to create ideals and ideals with parametric coefficients.
-    '''
+Methods to create ideals and ideals with parametric coefficients.
+=end
+class Ring
     attr_reader :ring, :pset, :engine
 
     def initialize(ringstr="",ring=nil)
-        '''Ring constructor.
-        '''
+=begin rdoc
+Ring constructor.
+=end
         if ring == nil
            sr = StringReader.new( ringstr );
            tok = GenPolynomialTokenizer.new(sr);
@@ -847,47 +899,54 @@ class Ring
         end
     end
 
+=begin rdoc
+Create a string representation.
+=end
     def to_s()
-        '''Create a string representation.
-        '''
         return @ring.toScript();
     end
 
+=begin rdoc
+Create an ideal.
+=end
     def ideal(ringstr="",list=nil)
-        '''Create an ideal.
-        '''
         return JAS::SimIdeal.new(self,ringstr,list=list);
     end
 
+=begin rdoc
+Create an ideal in a polynomial ring with parameter coefficients.
+=end
     def paramideal(ringstr="",list=nil,gbsys=nil)
-        '''Create an ideal in a polynomial ring with parameter coefficients.
-        '''
         return ParamIdeal.new(self,ringstr,list,gbsys);
     end
 
+=begin rdoc
+Get list of generators of the polynomial ring.
+=end
     def gens()
-        '''Get list of generators of the polynomial ring.
-        '''
         ll = @ring.generators();
         n = ll.map{ |e| RingElem.new(e) };
         return n;
     end
 
+=begin rdoc
+Get the one of the polynomial ring.
+=end
     def one()
-        '''Get the one of the polynomial ring.
-        '''
         return RingElem.new( @ring.getONE() );
     end
 
+=begin rdoc
+Get the zero of the polynomial ring.
+=end
     def zero()
-        '''Get the zero of the polynomial ring.
-        '''
         return RingElem.new( @ring.getZERO() );
     end
 
+=begin rdoc
+Get a random polynomial.
+=end
     def random(k=5,l=7,d=3,q=0.3)
-        '''Get a random polynomial.
-        '''
         r = @ring.random(k,l,d,q);
         if @ring.coFac.isField()
             r = r.monic();
@@ -895,9 +954,10 @@ class Ring
         return RingElem.new( r );
     end
 
+=begin rdoc
+Create an element from a string.
+=end
     def element(polystr)
-        '''Create an element from a string.
-        '''
         i = SimIdeal.new( "( " + polystr + " )");
         list = i.pset.list;
         if list.size > 0
@@ -905,9 +965,10 @@ class Ring
         end
     end
 
+=begin rdoc
+Compute the greatest common divisor of a and b.
+=end
     def gcd(a,b)
-        '''Compute the greatest common divisor of a and b.
-        '''
         if a.is_a? RingElem
             a = a.elem;
         else
@@ -923,9 +984,10 @@ class Ring
         return RingElem.new( @engine.gcd(a,b) );
     end
 
+=begin rdoc
+Compute squarefree factors of polynomial.
+=end
     def squarefreeFactors(a)
-        '''Compute squarefree factors of polynomial.
-        '''
         if a.is_a? RingElem
             a = a.elem;
         else
@@ -946,10 +1008,11 @@ class Ring
         return ll;
     end
 
+=begin rdoc
+Compute irreducible factorization for modular, integer,
+rational number and algebriac number coefficients.
+=end
     def factors(a)
-        '''Compute irreducible factorization for modular, integer,
-        rational number and algebriac number coefficients.
-        '''
         if a.is_a? RingElem
             a = a.elem;
         else
@@ -975,10 +1038,11 @@ class Ring
         end
     end
 
+=begin rdoc
+Compute absolute irreducible factorization for (modular,)
+rational number coefficients.
+=end
     def factorsAbsolute(a)
-        '''Compute absolute irreducible factorization for (modular,)
-        rational number coefficients.
-        '''
         if a.is_a? RingElem
             a = a.elem;
         else
@@ -998,9 +1062,10 @@ class Ring
         end
     end
 
+=begin rdoc
+Compute real roots of univariate polynomial.
+=end
     def realRoots(a,eps=nil)
-        '''Compute real roots of univariate polynomial.
-        '''
         if a.is_a? RingElem
             a = a.elem;
         else
@@ -1026,9 +1091,10 @@ class Ring
         end
     end
 
+=begin rdoc
+Compute complex roots of univariate polynomial.
+=end
     def complexRoots(a,eps=nil)
-        '''Compute complex roots of univariate polynomial.
-        '''
         if a.is_a? RingElem
             a = a.elem;
         else
@@ -1055,9 +1121,10 @@ class Ring
         end
     end
 
+=begin rdoc
+Integrate (univariate) rational function.
+=end
     def integrate(a)
-        '''Integrate (univariate) rational function.
-        '''
         if a.is_a? RingElem
             a = a.elem;
         else
@@ -1075,32 +1142,35 @@ class Ring
         return ei;
     end
 
+=begin rdoc
+Get a power series ring from this ring.
+=end
     def powerseriesRing()
-        '''Get a power series ring from this ring.
-        '''
         pr = MultiVarPowerSeriesRing.new(@ring);
         return MultiSeriesRing.new(ring=pr);
     end
 end
 
 
-class PolyRing < Ring
-    '''Represents a JAS polynomial ring: GenPolynomialRing.
+=begin rdoc
+Represents a JAS polynomial ring: GenPolynomialRing.
 
-    Provides more convenient constructor. 
-    Then returns a Ring.
-    '''
+Provides more convenient constructor. 
+Then returns a Ring.
+=end
+class PolyRing < Ring
 
     @lex = TermOrder.new(TermOrder::INVLEX)
     @grad = TermOrder.new(TermOrder::IGRLEX)
 
-    def initialize(coeff,vars,order=TermOrder.new(TermOrder::IGRLEX))
-        '''Ring constructor.
+=begin rdoc
+Ring constructor.
 
-        coeff = factory for coefficients,
-        vars = string with variable names,
-        order = term order.
-        '''
+coeff = factory for coefficients,
+vars = string with variable names,
+order = term order.
+=end
+    def initialize(coeff,vars,order=TermOrder.new(TermOrder::IGRLEX))
         @lex = TermOrder.new(TermOrder::INVLEX)
         @grad = TermOrder.new(TermOrder::IGRLEX)
 
@@ -1146,9 +1216,10 @@ class PolyRing < Ring
         end
     end
 
+=begin rdoc
+Create a string representation.
+=end
     def to_s()
-        '''Create a string representation.
-        '''
         return @ring.toScript();
     end
 
@@ -1159,9 +1230,10 @@ class PolyRing < Ring
 end
 
 
+=begin rdoc
+Create JAS AlgebraicNumber as ring element.
+=end
 def AN(m,z=0,field=false,pr=nil)
-    '''Create JAS AlgebraicNumber as ring element.
-    '''
     if m.is_a? RingElem
         m = m.elem;
     end
@@ -1201,9 +1273,10 @@ include_class "edu.jas.root.ComplexRootsSturm";
 include_class "edu.jas.root.Rectangle";
 
 
+=begin rdoc
+Create JAS RealAlgebraicNumber as ring element.
+=end
 def RealN(m,i,r=0)
-    '''Create JAS RealAlgebraicNumber as ring element.
-    '''
     if m.is_a? RingElem
         m = m.elem;
     end
@@ -1230,9 +1303,10 @@ def RealN(m,i,r=0)
 end
 
 
+=begin rdoc
+Create JAS rational function Quotient as ring element.
+=end
 def RF(pr,d=0,n=1)
-    '''Create JAS rational function Quotient as ring element.
-    '''
     if d.is_a? Array
         if n != 1
             print "#{} ignored\n";
@@ -1278,9 +1352,10 @@ include_class "edu.jas.application.IdealWithRealAlgebraicRoots";
 include_class "edu.jas.application.ComprehensiveGroebnerBaseSeq";
 
 
+=begin rdoc
+Create JAS polynomial Residue as ring element.
+=end
 def RC(ideal,r=0)
-    '''Create JAS polynomial Residue as ring element.
-    '''
     if ideal == nil
         raise ValueError, "No ideal given."
     end
@@ -1308,9 +1383,10 @@ def RC(ideal,r=0)
 end
 
 
+=begin rdoc
+Create JAS polynomial Local as ring element.
+=end
 def LC(ideal,d=0,n=1)
-    '''Create JAS polynomial Local as ring element.
-    '''
     if ideal == nil
         raise ValueError, "No ideal given."
     end
@@ -1352,9 +1428,10 @@ def LC(ideal,d=0,n=1)
 end
 
 
+=begin rdoc
+Create JAS regular ring Product as ring element.
+=end
 def RR(flist,n=1,r=0)
-    '''Create JAS regular ring Product as ring element.
-    '''
     if not n.is_a? Integer
         r = n;
         n = 1;
@@ -1403,11 +1480,12 @@ def RR(flist,n=1,r=0)
 end
 
 
-def rbarray2arraylist(list,fac=nil,rec=1)
-    '''Convert a Ruby array to a Java ArrayList.
+=begin rdoc
+Convert a Ruby array to a Java ArrayList.
 
-    If list is a Ruby array, it is converted, else list is left unchanged.
-    '''
+If list is a Ruby array, it is converted, else list is left unchanged.
+=end
+def rbarray2arraylist(list,fac=nil,rec=1)
     #print "list type(#{list}) = #{list.class}\n";
     if list.is_a? Array
        ll = ArrayList.new();
@@ -1446,12 +1524,14 @@ def rbarray2arraylist(list,fac=nil,rec=1)
 end
 
 
+=begin rdoc
+Construct a jas.arith object.
+
+If item is an ruby array then a BigComplex is constructed. 
+If item is a ruby float then a BigDecimal is constructed. 
+=end
 def makeJasArith(item)
-    '''Construct a jas.arith object.
-    If item is an ruby array then a BigComplex is constructed. 
-    If item is a ruby float then a BigDecimal is constructed. 
-    '''
-    print "item type(#{item}) = #{item.class}\n";
+    #print "item type(#{item}) = #{item.class}\n";
     if item.is_a? Integer
         return BigInteger.new( item );
     end
@@ -1519,17 +1599,19 @@ include_class "edu.jas.integrate.ElementaryIntegration";
 
 #include_class "edu.jas.application.Ideal";
 
-class SimIdeal
-    '''Represents a JAS polynomial ideal: PolynomialList and Ideal.
+=begin rdoc
+Represents a JAS polynomial ideal: PolynomialList and Ideal.
 
-    Methods for Groebner bases, ideal sum, intersection and others.
-    '''
+Methods for Groebner bases, ideal sum, intersection and others.
+=end
+class SimIdeal
 
     attr_reader :pset, :ring, :list, :roots, :prime, :primary
 
+=begin rdoc
+SimIdeal constructor.
+=end
     def initialize(ring,polystr="",list=nil)
-        '''SimIdeal constructor.
-        '''
         @ring = ring;
         if list == nil
            sr = StringReader.new( polystr );
@@ -1545,21 +1627,24 @@ class SimIdeal
         #super(@ring::ring,@list) # non-sense, JRuby extends edu.jas.application.Ideal without beeing told
     end
 
+=begin rdoc
+Create a string representation.
+=end
     def to_s()
-        '''Create a string representation.
-        '''
         return @pset.toScript();
     end
 
+=begin rdoc
+Create an ideal in a polynomial ring with parameter coefficients.
+=end
     def paramideal()
-        '''Create an ideal in a polynomial ring with parameter coefficients.
-        '''
         return ParamIdeal.new(@ring,"",@list);
     end
 
+=begin rdoc
+Compute a Groebner base.
+=end
     def GB()
-        '''Compute a Groebner base.
-        '''
         s = @pset;
         cofac = s.ring.coFac;
         ff = s.list;
@@ -1584,9 +1669,10 @@ class SimIdeal
         return SimIdeal.new(@ring,"",gg);
     end
 
+=begin rdoc
+Test if this is a Groebner base.
+=end
     def isGB()
-        '''Test if this is a Groebner base.
-        '''
         s = @pset;
         cofac = s.ring.coFac;
         ff = s.list;
@@ -1612,9 +1698,10 @@ class SimIdeal
     end
 
 
+=begin rdoc
+Compute an e-Groebner base.
+=end
     def eGB()
-        '''Compute an e-Groebner base.
-        '''
         s = @pset;
         cofac = s.ring.coFac;
         ff = s.list;
@@ -1630,9 +1717,10 @@ class SimIdeal
     end
 
 
+=begin rdoc
+Test if this is an e-Groebner base.
+=end
     def iseGB()
-        '''Test if this is an e-Groebner base.
-        '''
         s = @pset;
         cofac = s.ring.coFac;
         ff = s.list;
@@ -1648,9 +1736,10 @@ class SimIdeal
     end
 
 
+=begin rdoc
+Compute an d-Groebner base.
+=end
     def dGB()
-        '''Compute an d-Groebner base.
-        '''
         s = @pset;
         cofac = s.ring.coFac;
         ff = s.list;
@@ -1666,9 +1755,10 @@ class SimIdeal
     end
 
 
+=begin rdoc
+Test if this is a d-Groebner base.
+=end
     def isdGB()
-        '''Test if this is a d-Groebner base.
-        '''
         s = @pset;
         cofac = s.ring.coFac;
         ff = s.list;
@@ -1684,9 +1774,10 @@ class SimIdeal
     end
 
 
+=begin rdoc
+Compute in parallel a Groebner base.
+=end
     def parUnusedGB(th)
-        '''Compute in parallel a Groebner base.
-        '''
         s = @pset;
         ff = s.list;
         bbpar = GroebnerBaseSeqPairParallel.new(th);
@@ -1698,9 +1789,10 @@ class SimIdeal
         return SimIdeal.new(@ring,"",gg);
     end
 
+=begin rdoc
+Compute in parallel a Groebner base.
+=end
     def parGB(th)
-        '''Compute in parallel a Groebner base.
-        '''
         s = @pset;
         ff = s.list;
         bbpar = GroebnerBaseParallel.new(th);
@@ -1712,9 +1804,10 @@ class SimIdeal
         return SimIdeal.new(@ring,"",gg);
     end
 
+=begin rdoc
+Compute on a distributed system a Groebner base.
+=end
     def distGB(th=2,machine="examples/machines.localhost",port=7114)
-        '''Compute on a distributed system a Groebner base.
-        '''
         s = @pset;
         ff = s.list;
         t = System.currentTimeMillis();
@@ -1730,18 +1823,20 @@ class SimIdeal
         return SimIdeal.new(@ring,"",gg);
     end
 
+=begin rdoc
+Client for a distributed computation.
+=end
     def distClient(port=8114)
-        '''Client for a distributed computation.
-        '''
         s = @pset;
         es = ExecutableServer.new( port );
         es.init();
         return nil;
     end
 
+=begin rdoc
+Compute a normal form of this ideal with respect to reducer.
+=end
     def NF(reducer)
-        '''Compute a normal form of this ideal with respect to reducer.
-        '''
         s = @pset;
         ff = s.list;
         gg = reducer.list;
@@ -1752,53 +1847,59 @@ class SimIdeal
         return SimIdeal.new(@ring,"",nn);
     end
 
+=begin rdoc
+Compute the intersection of this and the given polynomial ring.
+=end
     def intersectRing(ring)
-        '''Compute the intersection of this and the given polynomial ring.
-        '''
         s = Ideal.new(@pset);
         nn = s.intersect(ring.ring);
         return SimIdeal.new(ring,"",nn.getList());
     end
 
+=begin rdoc
+Compute the intersection of this and the given ideal.
+=end
     def intersect(id2)
-        '''Compute the intersection of this and the given ideal.
-        '''
         s1 = Ideal.new(@pset);
         s2 = Ideal.new(id2.pset);
         nn = s1.intersect(s2);
         return SimIdeal.new(@ring,"",nn.getList());
     end
 
+=begin rdoc
+Compute the elimination ideal of this and the given polynomial ring.
+=end
     def eliminateRing(ring)
-        '''Compute the elimination ideal of this and the given polynomial ring.
-        '''
         s = Ideal.new(@pset);
         nn = s.eliminate(ring.ring);
         r = Ring.new( ring=nn.getRing() );
         return SimIdeal.new(r,"",nn.getList());
     end
 
+=begin rdoc
+Compute the sum of this and the ideal.
+=end
     def sum(other)
-        '''Compute the sum of this and the ideal.
-        '''
         s = Ideal.new(@pset);
         t = Ideal.new(other.pset);
         nn = s.sum( t );
         return SimIdeal.new(@ring,"",nn.getList());
     end
 
+=begin rdoc
+Optimize the term order on the variables.
+=end
     def optimize()
-        '''Optimize the term order on the variables.
-        '''
         p = @pset;
         o = TermOrderOptimization.optimizeTermOrder(p);
         r = Ring.new("",o.ring);
         return SimIdeal.new(r,"",o.list);
     end
 
+=begin rdoc
+Compute real roots of 0-dim ideal.
+=end
     def realRoots()
-        '''Compute real roots of 0-dim ideal.
-        '''
         ii = Ideal.new(@pset);
         @roots = PolyUtilApp.realAlgebraicRoots(ii);
         for r in @roots
@@ -1807,9 +1908,10 @@ class SimIdeal
         return @roots;
     end
 
+=begin rdoc
+Print decimal approximation of real roots of 0-dim ideal.
+=end
     def realRootsPrint()
-        '''Print decimal approximation of real roots of 0-dim ideal.
-        '''
         if @roots == nil
             ii = Ideal.new(@pset);
             @roots = PolyUtilApp.realAlgebraicRoots(ii);
@@ -1826,17 +1928,19 @@ class SimIdeal
         end
     end
 
+=begin rdoc
+Compute radical decomposition of this ideal.
+=end
     def radicalDecomp()
-        '''Compute radical decomposition of this ideal.
-        '''
         ii = Ideal.new(@pset);
         @radical = ii.radicalDecomposition();
         return @radical;
     end
 
+=begin rdoc
+Compute complex roots of 0-dim ideal.
+=end
     def complexRoots()
-        '''Compute complex roots of 0-dim ideal.
-        '''
         ii = Ideal.new(@pset);
         @croots = PolyUtilApp.complexAlgebraicRoots(ii);
         #for R in @croots:
@@ -1844,17 +1948,19 @@ class SimIdeal
         return @croots;
     end
 
+=begin rdoc
+Compute prime decomposition of this ideal.
+=end
     def primeDecomp()
-        '''Compute prime decomposition of this ideal.
-        '''
         ii = Ideal.new(@pset);
         @prime = ii.primeDecomposition();
         return @prime;
     end
 
+=begin rdoc
+Compute primary decomposition of this ideal.
+=end
     def primaryDecomp()
-        '''Compute primary decomposition of this ideal.
-        '''
         ii = Ideal.new(@pset);
 ##         if @prime == nil:
 ##             @prime = I.primeDecomposition();
@@ -1862,9 +1968,10 @@ class SimIdeal
         return @primary;
     end
 
+=begin rdoc
+Convert rational coefficients to integer coefficients.
+=end
     def toInteger()
-        '''Convert rational coefficients to integer coefficients.
-        '''
         p = @pset;
         l = p.list;
         r = p.ring;
@@ -1874,9 +1981,10 @@ class SimIdeal
         return SimIdeal.new(r,"",pi);
     end
 
+=begin rdoc
+Convert integer coefficients to modular coefficients.
+=end
     def toModular(mf)
-        '''Convert integer coefficients to modular coefficients.
-        '''
         p = @pset;
         l = p.list;
         r = p.ring;
@@ -1886,9 +1994,10 @@ class SimIdeal
         return SimIdeal.new(r,"",pm);
     end
 
+## =begin rdoc
+## Syzygy of generating polynomials.
+## =end
 ##     def syzygy()
-##         '''Syzygy of generating polynomials.
-##         '''
 ##         p = @pset;
 ##         l = p.list;
 ##         s = SyzygyAbstract().zeroRelations( l );
@@ -1899,15 +2008,17 @@ class SimIdeal
 end
 
 
+=begin rdoc
+Represents a JAS polynomial ideal with polynomial coefficients.
+
+Methods to compute comprehensive Groebner bases.
+=end
 class ParamIdeal
-    '''Represents a JAS polynomial ideal with polynomial coefficients.
 
-    Methods to compute comprehensive Groebner bases.
-    '''
-
+=begin rdoc
+Parametric ideal constructor.
+=end
     def initialize(ring,polystr="",list=nil,gbsys=nil)
-        '''Parametric ideal constructor.
-        '''
         @ring = ring;
         if list == nil and polystr != nil
            sr = StringReader.new( polystr );
@@ -1920,9 +2031,10 @@ class ParamIdeal
         @pset = OrderedPolynomialList.new(ring.ring,@list);
     end
 
+=begin rdoc
+Create a string representation.
+=end
     def to_s()
-        '''Create a string representation.
-        '''
         if @gbsys == nil
             return @pset.toScript(); #.to_s;
         else
@@ -1931,18 +2043,20 @@ class ParamIdeal
         end
     end
 
+=begin rdoc
+Optimize the term order on the variables of the coefficients.
+=end
     def optimizeCoeff()
-        '''Optimize the term order on the variables of the coefficients.
-        '''
         p = @pset;
         o = TermOrderOptimization.optimizeTermOrderOnCoefficients(p);
         r = Ring.new("",o.ring);
         return ParamIdeal.new(r,"",o.list);
     end
 
+=begin rdoc
+Optimize the term order on the variables of the quotient coefficients.
+=end
     def optimizeCoeffQuot()
-        '''Optimize the term order on the variables of the quotient coefficients.
-        '''
         p = @pset;
         l = p.list;
         r = p.ring;
@@ -1965,9 +2079,10 @@ class ParamIdeal
         return ParamIdeal.new(r,"",o);
     end
 
+=begin rdoc
+Convert rational function coefficients to integral function coefficients.
+=end
     def toIntegralCoeff()
-        '''Convert rational function coefficients to integral function coefficients.
-        '''
         p = @pset;
         l = p.list;
         r = p.ring;
@@ -1981,9 +2096,10 @@ class ParamIdeal
         return ParamIdeal.new(r,"",lp);
     end
 
+=begin rdoc
+Convert integral function coefficients to modular function coefficients.
+=end
     def toModularCoeff(mf)
-        '''Convert integral function coefficients to modular function coefficients.
-        '''
         p = @pset;
         l = p.list;
         r = p.ring;
@@ -1998,9 +2114,10 @@ class ParamIdeal
         return ParamIdeal.new(r,"",pm);
     end
 
+=begin rdoc
+Convert integral function coefficients to rational function coefficients.
+=end
     def toQuotientCoeff()
-        '''Convert integral function coefficients to rational function coefficients.
-        '''
         p = @pset;
         l = p.list;
         r = p.ring;
@@ -2015,24 +2132,27 @@ class ParamIdeal
         return ParamIdeal.new(r,"",pm);
     end
 
+=begin rdoc
+Compute a Groebner base.
+=end
     def GB()
-        '''Compute a Groebner base.
-        '''
         ii = SimIdeal.new(@ring,"",@pset.list);
         g = ii.GB();
         return ParamIdeal.new(g.ring,"",g.pset.list);
     end
 
+=begin rdoc
+Test if this is a Groebner base.
+=end
     def isGB()
-        '''Test if this is a Groebner base.
-        '''
         ii = SimIdeal.new(@ring,"",@pset.list);
         return ii.isGB();
     end
 
+=begin rdoc
+Compute a comprehensive Groebner base.
+=end
     def CGB()
-        '''Compute a comprehensive Groebner base.
-        '''
         s = @pset;
         ff = s.list;
         t = System.currentTimeMillis();
@@ -2045,9 +2165,10 @@ class ParamIdeal
         return ParamIdeal.new(@ring,"",gg,@gbsys);
     end
 
+=begin rdoc
+Compute a comprehensive Groebner system.
+=end
     def CGBsystem()
-        '''Compute a comprehensive Groebner system.
-        '''
         s = @pset;
         ff = s.list;
         t = System.currentTimeMillis();
@@ -2057,9 +2178,10 @@ class ParamIdeal
         return ParamIdeal.new(@ring,nil,ff,ss);
     end
 
+=begin rdoc
+Test if this is a comprehensive Groebner base.
+=end
     def isCGB()
-        '''Test if this is a comprehensive Groebner base.
-        '''
         s = @pset;
         ff = s.list;
         t = System.currentTimeMillis();
@@ -2069,9 +2191,10 @@ class ParamIdeal
         return b;
     end
 
+=begin rdoc
+Test if this is a comprehensive Groebner system.
+=end
     def isCGBsystem()
-        '''Test if this is a comprehensive Groebner system.
-        '''
         s = @pset;
         ss = @gbsys;
         t = System.currentTimeMillis();
@@ -2081,9 +2204,10 @@ class ParamIdeal
         return b;
     end
 
+=begin rdoc
+Convert Groebner system to a representation with regular ring coefficents.
+=end
     def regularRepresentation()
-        '''Convert Groebner system to a representation with regular ring coefficents.
-        '''
         if @gbsys == nil
             return nil;
         end
@@ -2092,9 +2216,10 @@ class ParamIdeal
         return ParamIdeal.new(ring,nil,gg);
     end
 
+=begin rdoc
+Convert Groebner system to a boolean closed representation with regular ring coefficents.
+=end
     def regularRepresentationBC()
-        '''Convert Groebner system to a boolean closed representation with regular ring coefficents.
-        '''
         if @gbsys == nil
             return nil;
         end
@@ -2105,9 +2230,10 @@ class ParamIdeal
         return ParamIdeal.new(ring,nil,gg);
     end
 
+=begin rdoc
+Compute a Groebner base over a regular ring.
+=end
     def regularGB()
-        '''Compute a Groebner base over a regular ring.
-        '''
         s = @pset;
         ff = s.list;
         t = System.currentTimeMillis();
@@ -2117,9 +2243,10 @@ class ParamIdeal
         return ParamIdeal.new(@ring,nil,gg);
     end
 
+=begin rdoc
+Test if this is Groebner base over a regular ring.
+=end
     def isRegularGB()
-        '''Test if this is Groebner base over a regular ring.
-        '''
         s = @pset;
         ff = s.list;
         t = System.currentTimeMillis();
@@ -2129,9 +2256,10 @@ class ParamIdeal
         return b;
     end
 
+=begin rdoc
+Get each component (slice) of regular ring coefficients separate.
+=end
     def stringSlice()
-        '''Get each component (slice) of regular ring coefficients separate.
-        '''
         s = @pset;
         b = PolyUtilApp.productToString(s);
         return b;
@@ -2145,15 +2273,17 @@ include_class "edu.jas.gbmod.SolvableSyzygyAbstract";
 include_class "edu.jas.gbmod.SyzygyAbstract";
 
 
+=begin rdoc
+Represents a JAS solvable polynomial ring: GenSolvablePolynomialRing.
+
+Has a method to create solvable ideals.
+=end
 class SolvableRing < Ring
-    '''Represents a JAS solvable polynomial ring: GenSolvablePolynomialRing.
 
-    Has a method to create solvable ideals.
-    '''
-
+=begin rdoc
+Solvable polynomial ring constructor.
+=end
     def initialize(ringstr="",ring=nil)
-        '''Solvable polynomial ring constructor.
-        '''
         if ring == nil
            sr = StringReader.new( ringstr );
            tok = GenPolynomialTokenizer.new(sr);
@@ -2167,33 +2297,38 @@ class SolvableRing < Ring
         end
     end
 
+=begin rdoc
+Create a string representation.
+=end
     def to_s()
-        '''Create a string representation.
-        '''
         return @ring.toScript(); #.to_s;
     end
 
+=begin rdoc
+Create a solvable ideal.
+=end
     def ideal(ringstr="",list=nil)
-        '''Create a solvable ideal.
-        '''
         return SolvableIdeal.new(self,ringstr,list);
     end
 
+=begin rdoc
+Get the one of the solvable polynomial ring.
+=end
     def one()
-        '''Get the one of the solvable polynomial ring.
-        '''
         return RingElem.new( @ring.getONE() );
     end
 
+=begin rdoc
+Get the zero of the solvable polynomial ring.
+=end
     def zero()
-        '''Get the zero of the solvable polynomial ring.
-        '''
         return RingElem.new( @ring.getZERO() );
     end
 
+=begin rdoc
+Create an element from a string.
+=end
     def element(polystr)
-        '''Create an element from a string.
-        '''
         ii = SolvableIdeal.new(self, "( " + polystr + " )");
         list = ii.pset.list;
         if list.size > 0
@@ -2204,21 +2339,23 @@ class SolvableRing < Ring
 end
 
 
+=begin rdoc
+Represents a JAS solvable polynomial ring: GenSolvablePolynomialRing.
+
+Provides more convenient constructor. 
+Then returns a Ring.
+=end
 class SolvPolyRing < SolvableRing
-    '''Represents a JAS solvable polynomial ring: GenSolvablePolynomialRing.
 
-    Provides more convenient constructor. 
-    Then returns a Ring.
-    '''
+=begin rdoc
+Ring constructor.
 
+coeff = factory for coefficients,
+vars = string with variable names,
+order = term order,
+rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
+=end
     def initialize(coeff,vars,order,rel=nil)
-        '''Ring constructor.
-
-        coeff = factory for coefficients,
-        vars = string with variable names,
-        order = term order,
-        rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
-        '''
         if coeff == nil
             raise ValueError, "No coefficient given."
         end
@@ -2260,23 +2397,26 @@ class SolvPolyRing < SolvableRing
         @ring = ring;
     end
 
+=begin rdoc
+Create a string representation.
+=end
     def to_s()
-        '''Create a string representation.
-        '''
         return @ring.toScript();
     end
 end
 
 
+=begin rdoc
+Represents a JAS solvable polynomial ideal.
+
+Methods for left, right two-sided Groebner basees and others.
+=end
 class SolvableIdeal
-    '''Represents a JAS solvable polynomial ideal.
 
-    Methods for left, right two-sided Groebner basees and others.
-    '''
-
+=begin rdoc
+Constructor for an ideal in a solvable polynomial ring.
+=end
     def initialize(ring,ringstr="",list=nil)
-        '''Constructor for an ideal in a solvable polynomial ring.
-        '''
         @ring = ring;
         if list == nil
            sr = StringReader.new( ringstr );
@@ -2288,15 +2428,17 @@ class SolvableIdeal
         @pset = OrderedPolynomialList.new(ring.ring,@list);
     end
 
+=begin rdoc
+Create a string representation.
+=end
     def to_s()
-        '''Create a string representation.
-        '''
         return @pset.toScript().to_s;
     end
 
+=begin rdoc
+Compute a left Groebner base.
+=end
     def leftGB()
-        '''Compute a left Groebner base.
-        '''
         s = @pset;
         ff = s.list;
         t = System.currentTimeMillis();
@@ -2306,9 +2448,10 @@ class SolvableIdeal
         return SolvableIdeal.new(@ring,"",gg);
     end
 
+=begin rdoc
+Test if this is a left Groebner base.
+=end
     def isLeftGB()
-        '''Test if this is a left Groebner base.
-        '''
         s = @pset;
         ff = s.list;
         t = System.currentTimeMillis();
@@ -2318,9 +2461,10 @@ class SolvableIdeal
         return b;
     end
 
+=begin rdoc
+Compute a two-sided Groebner base.
+=end
     def twosidedGB()
-        '''Compute a two-sided Groebner base.
-        '''
         s = @pset;
         ff = s.list;
         t = System.currentTimeMillis();
@@ -2330,9 +2474,10 @@ class SolvableIdeal
         return SolvableIdeal.new(@ring,"",gg);
     end
 
+=begin rdoc
+Test if this is a two-sided Groebner base.
+=end
     def isTwosidedGB()
-        '''Test if this is a two-sided Groebner base.
-        '''
         s = @pset;
         ff = s.list;
         t = System.currentTimeMillis();
@@ -2342,9 +2487,10 @@ class SolvableIdeal
         return b;
     end
 
+=begin rdoc
+Compute a right Groebner base.
+=end
     def rightGB()
-        '''Compute a right Groebner base.
-        '''
         s = @pset;
         ff = s.list;
         t = System.currentTimeMillis();
@@ -2354,9 +2500,10 @@ class SolvableIdeal
         return SolvableIdeal.new(@ring,"",gg);
     end
 
+=begin rdoc
+Test if this is a right Groebner base.
+=end
     def isRightGB()
-        '''Test if this is a right Groebner base.
-        '''
         s = @pset;
         ff = s.list;
         t = System.currentTimeMillis();
@@ -2366,26 +2513,29 @@ class SolvableIdeal
         return b;
     end
 
+=begin rdoc
+Compute the intersection of this and the polynomial ring.
+=end
     def intersect(ring)
-        '''Compute the intersection of this and the polynomial ring.
-        '''
         s = SolvableIdeal.new(@pset);
         nn = s.intersect(ring.ring);
         return SolvableIdeal.new(@ring,"",nn.getList());
     end
 
+=begin rdoc
+Compute the sum of this and the other ideal.
+=end
     def sum(other)
-        '''Compute the sum of this and the other ideal.
-        '''
         s = SolvableIdeal.new(@pset);
         t = SolvableIdeal.new(other.pset);
         nn = s.sum( t );
         return SolvableIdeal.new(@ring,"",nn.getList());
     end
 
+=begin rdoc
+Compute a left Groebner base in parallel.
+=end
     def parLeftGB(th)
-        '''Compute a left Groebner base in parallel.
-        '''
         s = @pset;
         ff = s.list;
         bbpar = SolvableGroebnerBaseParallel.new(th);
@@ -2397,9 +2547,10 @@ class SolvableIdeal
         return SolvableIdeal.new(@ring,"",gg);
     end
 
+=begin rdoc
+Compute a two-sided Groebner base in parallel.
+=end
     def parTwosidedGB(th)
-        '''Compute a two-sided Groebner base in parallel.
-        '''
         s = @pset;
         ff = s.list;
         bbpar = SolvableGroebnerBaseParallel.new(th);
@@ -2414,16 +2565,18 @@ class SolvableIdeal
 end
 
 
-class CommutativeModule
-    '''Represents a JAS module over a polynomial ring.
+=begin rdoc
+Represents a JAS module over a polynomial ring.
 
-    Method to create sub-modules.
-    '''
+Method to create sub-modules.
+=end
+class CommutativeModule
     attr_reader :ring, :mset, :cols
 
+=begin rdoc
+Module constructor.
+=end
     def initialize(modstr="",ring=nil,cols=0)
-        '''Module constructor.
-        '''
         if ring == nil
            sr = StringReader.new( modstr );
            tok = GenPolynomialTokenizer.new(sr);
@@ -2440,21 +2593,24 @@ class CommutativeModule
         @ring = @mset.ring;
     end
 
+=begin rdoc
+Create a string representation.
+=end
     def to_s()
-        '''Create a string representation.
-        '''
         return @mset.toScript();
     end
 
+=begin rdoc
+Create a sub-module.
+=end
     def submodul(modstr="",list=nil)
-        '''Create a sub-module.
-        '''
         return SubModule.new(self,modstr,list);
     end
 
+=begin rdoc
+Create an element from a string.
+=end
     def element(modstr)
-        '''Create an element from a string.
-        '''
         ii = SubModule.new( "( " + modstr + " )");
         list = ii.mset.list;
         if list.size > 0
@@ -2462,9 +2618,10 @@ class CommutativeModule
         end
     end
 
+=begin rdoc
+Get the generators of this module.
+=end
     def gens()
-        '''Get the generators of this module.
-        '''
         gm = GenVectorModul.new(@ring,@cols);
         ll = gm.generators();
         nn = ll.map { |e| RingElem.new(e) }; # want use val here, but can not
@@ -2474,16 +2631,18 @@ class CommutativeModule
 end
 
 
-class SubModule
-    '''Represents a JAS sub-module over a polynomial ring.
+=begin rdoc
+Represents a JAS sub-module over a polynomial ring.
 
-    Methods to compute Groebner bases.
-    '''
+Methods to compute Groebner bases.
+=end
+class SubModule
     attr_reader :modu, :mset, :pset, :cols, :rows, :list
 
+=begin rdoc
+Constructor for a sub-module.
+=end
     def initialize(modu,modstr="",list=nil)
-        '''Constructor for a sub-module.
-        '''
         @modu = modu;
         if list == nil
            sr = StringReader.new( modstr );
@@ -2510,15 +2669,17 @@ class SubModule
         @pset = @mset.getPolynomialList();
     end
 
+=begin rdoc
+Create a string representation.
+=end
     def to_s()
-        '''Create a string representation.
-        '''
         return @mset.toScript(); # + "\n\n" + str(@pset);
     end
 
+=begin rdoc
+Compute a Groebner base.
+=end
     def GB()
-        '''Compute a Groebner base.
-        '''
         t = System.currentTimeMillis();
         gg = ModGroebnerBaseAbstract.new().GB(@mset);
         t = System.currentTimeMillis() - t;
@@ -2526,9 +2687,10 @@ class SubModule
         return SubModule(@modu,"",gg.list);
     end
 
+=begin rdoc
+Test if this is a Groebner base.
+=end
     def isGB()
-        '''Test if this is a Groebner base.
-        '''
         t = System.currentTimeMillis();
         b = ModGroebnerBaseAbstract.new().isGB(@mset);
         t = System.currentTimeMillis() - t;
@@ -2536,9 +2698,10 @@ class SubModule
         return b;
     end
 
+## =begin rdoc
+## Test if this is a syzygy of the polynomials in g.
+## =end
 ##     def isSyzygy(g):
-##         '''Test if this is a syzygy of the polynomials in g.
-##         '''
 ##         l = @list;
 ##         print "l = #{l}"; 
 ##         print "g = #{g}"; 
@@ -2552,16 +2715,18 @@ class SubModule
 end
 
 
-class SolvableModule < CommutativeModule
-    '''Represents a JAS module over a solvable polynomial ring.
+=begin rdoc
+Represents a JAS module over a solvable polynomial ring.
 
-    Method to create solvable sub-modules.
-    '''
+Method to create solvable sub-modules.
+=end
+class SolvableModule < CommutativeModule
     attr_reader :ring, :mset, :cols
 
+=begin rdoc
+Solvable module constructor.
+=end
     def initialize(modstr="",ring=nil,cols=0)
-        '''Solvable module constructor.
-        '''
         if ring == nil
            sr = StringReader.new( modstr );
            tok = GenPolynomialTokenizer.new(sr);
@@ -2576,21 +2741,24 @@ class SolvableModule < CommutativeModule
         end
     end
 
+=begin rdoc
+Create a string representation.
+=end
     def to_s()
-        '''Create a string representation.
-        '''
         return @mset.toScript();
     end
 
+=begin rdoc
+Create a solvable sub-module.
+=end
     def submodul(modstr="",list=nil)
-        '''Create a solvable sub-module.
-        '''
         return SolvableSubModule.new(self,modstr,list);
     end
 
+=begin rdoc
+Create an element from a string.
+=end
     def element(modstr)
-        '''Create an element from a string.
-        '''
         ii = SolvableSubModule.new( "( " + modstr + " )");
         list = ii.mset.list;
         if list.size > 0
@@ -2601,16 +2769,18 @@ class SolvableModule < CommutativeModule
 end
 
 
-class SolvableSubModule
-    '''Represents a JAS sub-module over a solvable polynomial ring.
+=begin rdoc
+Represents a JAS sub-module over a solvable polynomial ring.
 
-    Methods to compute left, right and two-sided Groebner bases.
-    '''
+Methods to compute left, right and two-sided Groebner bases.
+=end
+class SolvableSubModule
     attr_reader :modu, :mset, :cols, :rows, :list
 
+=begin rdoc
+Constructor for sub-module over a solvable polynomial ring.
+=end
     def initialize(modu,modstr="",list=nil)
-        '''Constructor for sub-module over a solvable polynomial ring.
-        '''
         @modu = modu;
         if list == nil
            sr = StringReader.new( modstr );
@@ -2628,15 +2798,17 @@ class SolvableSubModule
         @rows = @mset.rows;
     end
 
+=begin rdoc
+Create a string representation.
+=end
     def to_s()
-        '''Create a string representation.
-        '''
         return @mset.toScript(); # + "\n\n" + str(@pset);
     end
 
+=begin rdoc
+Compute a left Groebner base.
+=end
     def leftGB()
-        '''Compute a left Groebner base.
-        '''
         t = System.currentTimeMillis();
         gg = ModSolvableGroebnerBaseAbstract.new().leftGB(@mset);
         t = System.currentTimeMillis() - t;
@@ -2644,9 +2816,10 @@ class SolvableSubModule
         return SolvableSubModule.new(@modu,"",gg.list);
     end
 
+=begin rdoc
+Test if this is a left Groebner base.
+=end
     def isLeftGB()
-        '''Test if this is a left Groebner base.
-        '''
         t = System.currentTimeMillis();
         b = ModSolvableGroebnerBaseAbstract.new().isLeftGB(@mset);
         t = System.currentTimeMillis() - t;
@@ -2654,9 +2827,10 @@ class SolvableSubModule
         return b;
     end
 
+=begin rdoc
+Compute a two-sided Groebner base.
+=end
     def twosidedGB()
-        '''Compute a two-sided Groebner base.
-        '''
         t = System.currentTimeMillis();
         gg = ModSolvableGroebnerBaseAbstract.new().twosidedGB(@mset);
         t = System.currentTimeMillis() - t;
@@ -2664,9 +2838,10 @@ class SolvableSubModule
         return SolvableSubModule.new(@modu,"",gg.list);
     end
 
+=begin rdoc
+Test if this is a two-sided Groebner base.
+=end
     def isTwosidedGB()
-        '''Test if this is a two-sided Groebner base.
-        '''
         t = System.currentTimeMillis();
         b = ModSolvableGroebnerBaseAbstract.new().isTwosidedGB(@mset);
         t = System.currentTimeMillis() - t;
@@ -2674,9 +2849,10 @@ class SolvableSubModule
         return b;
     end
 
+=begin rdoc
+Compute a right Groebner base.
+=end
     def rightGB()
-        '''Compute a right Groebner base.
-        '''
         t = System.currentTimeMillis();
         gg = ModSolvableGroebnerBaseAbstract.new().rightGB(@mset);
         t = System.currentTimeMillis() - t;
@@ -2684,9 +2860,10 @@ class SolvableSubModule
         return SolvableSubModule.new(@modu,"",gg.list);
     end
 
+=begin rdoc
+Test if this is a right Groebner base.
+=end
     def isRightGB()
-        '''Test if this is a right Groebner base.
-        '''
         t = System.currentTimeMillis();
         b = ModSolvableGroebnerBaseAbstract.new().isRightGB(@mset);
         t = System.currentTimeMillis() - t;
@@ -2708,17 +2885,19 @@ include_class "edu.jas.ps.MultiVarCoefficients";
 include_class "edu.jas.ps.StandardBaseSeq";
 
 
-class SeriesRing
-    '''Represents a JAS power series ring: UnivPowerSeriesRing.
+=begin rdoc
+Represents a JAS power series ring: UnivPowerSeriesRing.
 
-    Methods for univariate power series arithmetic.
-    '''
+Methods for univariate power series arithmetic.
+=end
+class SeriesRing
 
     attr_reader :ring
 
+=begin rdoc
+Ring constructor.
+=end
     def initialize(ringstr="",truncate=nil,ring=nil,cofac=nil,name="z")
-        '''Ring constructor.
-        '''
         if ring == nil
             if ringstr.size > 0
                 sr = StringReader.new( ringstr );
@@ -2742,70 +2921,73 @@ class SeriesRing
         end
     end
 
+=begin rdoc
+Create a string representation.
+=end
     def to_s()
-        '''Create a string representation.
-        '''
         return @ring.toScript();
     end
 
+=begin rdoc
+Get the generators of the power series ring.
+=end
     def gens()
-        '''Get the generators of the power series ring.
-        '''
         ll = @ring.generators();
         nn = ll.map { |e| RingElem.new(e) };
         return nn;
     end
 
+=begin rdoc
+Get the one of the power series ring.
+=end
     def one()
-        '''Get the one of the power series ring.
-        '''
         return RingElem.new( @ring.getONE() );
     end
 
+=begin rdoc
+Get the zero of the power series ring.
+=end
     def zero()
-        '''Get the zero of the power series ring.
-        '''
         return RingElem.new( @ring.getZERO() );
     end
 
+=begin rdoc
+Get a random power series.
+=end
     def random(n)
-        '''Get a random power series.
-        '''
         return RingElem.new( @ring.random(n) );
     end
 
+=begin rdoc
+Get the exponential power series.
+=end
     def exp()
-        '''Get the exponential power series.
-        '''
         return RingElem.new( @ring.getEXP() );
     end
 
+=begin rdoc
+Get the sinus power series.
+=end
     def sin()
-        '''Get the sinus power series.
-        '''
         return RingElem.new( @ring.getSIN() );
     end
 
+=begin rdoc
+Get the cosinus power series.
+=end
     def cos()
-        '''Get the cosinus power series.
-        '''
         return RingElem.new( @ring.getCOS() );
     end
 
+=begin rdoc
+Get the tangens power series.
+=end
     def tan()
-        '''Get the tangens power series.
-        '''
         return RingElem.new( @ring.getTAN() );
     end
 
-    def create(ifunc=nil,jfunc=nil,clazz=nil)
-        '''Create a power series with given generating function.
-
-        ifunc(int i) must return a value which is used in RingFactory.fromInteger().
-        jfunc(int i) must return a value of type ring.coFac.
-        clazz must implement the Coefficients abstract class.
-        '''
-        '''
+=begin
+=end
         class Coeff < Coefficients
             def initialize(cofac)
                 @coFac = cofac;
@@ -2818,8 +3000,15 @@ class SeriesRing
                 end
             end
         end
-        '''
 
+=begin rdoc
+Create a power series with given generating function.
+
+ifunc(int i) must return a value which is used in RingFactory.fromInteger().
+jfunc(int i) must return a value of type ring.coFac.
+clazz must implement the Coefficients abstract class.
+=end
+    def create(ifunc=nil,jfunc=nil,clazz=nil)
         if clazz == nil
             ps = UnivPowerSeries.new( @ring, Coeff(@ring.coFac) );
         else
@@ -2828,18 +3017,20 @@ class SeriesRing
         return RingElem.new( ps );
     end
 
-    def fixPoint(psmap)
-        '''Create a power series as fixed point of the given mapping.
+=begin rdoc
+Create a power series as fixed point of the given mapping.
 
-        psmap must implement the UnivPowerSeriesMap interface.
-        '''
+psmap must implement the UnivPowerSeriesMap interface.
+=end
+    def fixPoint(psmap)
         ps = @ring.fixPoint( psmap );
         return RingElem.new( ps );
     end
 
+=begin rdoc
+Compute the greatest common divisor of a and b.
+=end
     def gcd(a,b)
-        '''Compute the greatest common divisor of a and b.
-        '''
         if a.is_a? RingElem
             a = a.elem;
         end
@@ -2849,9 +3040,10 @@ class SeriesRing
         return RingElem.new( a.gcd(b) );
     end
 
+=begin rdoc
+Convert a GenPolynomial to a power series.
+=end
     def fromPoly(a)
-        '''Convert a GenPolynomial to a power series.
-        '''
         if a.is_a? RingElem
             a = a.elem;
         end
@@ -2861,17 +3053,19 @@ class SeriesRing
 end
 
 
-class MultiSeriesRing
-    '''Represents a JAS power series ring: MultiVarPowerSeriesRing.
+=begin rdoc
+Represents a JAS power series ring: MultiVarPowerSeriesRing.
 
-    Methods for multivariate power series arithmetic.
-    '''
+Methods for multivariate power series arithmetic.
+=end
+class MultiSeriesRing
 
     attr_reader :ring
 
+=begin rdoc
+Ring constructor.
+=end
     def initialize(ringstr="",truncate=nil,ring=nil,cofac=nil,names=nil)
-        '''Ring constructor.
-        '''
         if ring == nil
             if ringstr.size > 0
                 sr = StringReader.new( ringstr );
@@ -2894,70 +3088,74 @@ class MultiSeriesRing
         end
     end
 
+=begin rdoc
+Create a string representation.
+=end
     def to_s()
-        '''Create a string representation.
-        '''
         return @ring.toScript();
     end
 
+=begin rdoc
+Get the generators of the power series ring.
+=end
     def gens()
-        '''Get the generators of the power series ring.
-        '''
         ll = @ring.generators();
         nn = ll.map { |e| RingElem.new(e) };
         return nn;
     end
 
+=begin rdoc
+Get the one of the power series ring.
+=end
     def one()
-        '''Get the one of the power series ring.
-        '''
         return RingElem.new( @ring.getONE() );
     end
 
+=begin rdoc
+Get the zero of the power series ring.
+=end
     def zero()
-        '''Get the zero of the power series ring.
-        '''
         return RingElem.new( @ring.getZERO() );
     end
 
+=begin rdoc
+Get a random power series.
+=end
     def random(n)
-        '''Get a random power series.
-        '''
         return RingElem.new( @ring.random(n) );
     end
 
+=begin rdoc
+Get the exponential power series, var r.
+=end
     def exp(r)
-        '''Get the exponential power series, var r.
-        '''
         return RingElem.new( @ring.getEXP(r) );
     end
 
+=begin rdoc
+Get the sinus power series, var r.
+=end
     def sin(r)
-        '''Get the sinus power series, var r.
-        '''
         return RingElem.new( @ring.getSIN(r) );
     end
 
+=begin rdoc
+Get the cosinus power series, var r.
+=end
     def cos(r)
-        '''Get the cosinus power series, var r.
-        '''
         return RingElem.new( @ring.getCOS(r) );
     end
 
+=begin rdoc
+Get the tangens power series, var r.
+=end
     def tan(r)
-        '''Get the tangens power series, var r.
-        '''
         return RingElem.new( @ring.getTAN(r) );
     end
 
-    def create(ifunc=nil,jfunc=nil,clazz=nil)
-        '''Create a power series with given generating function.
 
-        ifunc(int i) must return a value which is used in RingFactory.fromInteger().
-        jfunc(int i) must return a value of type ring.coFac.
-        clazz must implement the Coefficients abstract class.
-        '''
-        '''
+=begin
+=end
         class Coeff < MultiVarCoefficients
             def initialize(r)
                 MultiVarCoefficients.new(r);
@@ -2971,7 +3169,15 @@ class MultiSeriesRing
                 end
             end
         end
-        '''
+
+=begin rdoc
+Create a power series with given generating function.
+
+ifunc(int i) must return a value which is used in RingFactory.fromInteger().
+jfunc(int i) must return a value of type ring.coFac.
+clazz must implement the Coefficients abstract class.
+=end
+    def create(ifunc=nil,jfunc=nil,clazz=nil)
         #print "ifunc"
         if clazz == nil
             ps = MultiVarPowerSeries.new( @ring, Coeff(@ring) );
@@ -2982,18 +3188,20 @@ class MultiSeriesRing
         return RingElem.new( ps );
     end
 
-    def fixPoint(psmap)
-        '''Create a power series as fixed point of the given mapping.
+=begin rdoc
+Create a power series as fixed point of the given mapping.
 
-        psmap must implement the UnivPowerSeriesMap interface.
-        '''
+psmap must implement the UnivPowerSeriesMap interface.
+=end
+    def fixPoint(psmap)
         ps = @ring.fixPoint( psmap );
         return RingElem.new( ps );
     end
 
+=begin rdoc
+Compute the greatest common divisor of a and b.
+=end
     def gcd(a,b)
-        '''Compute the greatest common divisor of a and b.
-        '''
         if a.is_a? RingElem
             a = a.elem;
         end
@@ -3003,9 +3211,10 @@ class MultiSeriesRing
         return RingElem.new( a.gcd(b) );
     end
 
+=begin rdoc
+Convert a GenPolynomial to a power series.
+=end
     def fromPoly(a)
-        '''Convert a GenPolynomial to a power series.
-        '''
         if a.is_a? RingElem
             a = a.elem;
         end
@@ -3015,15 +3224,17 @@ class MultiSeriesRing
 end
 
 
+=begin rdoc
+Represents a JAS power series ideal.
+
+Method for Standard bases.
+=end
 class PSIdeal
-    '''Represents a JAS power series ideal.
 
-    Method for Standard bases.
-    '''
-
+=begin rdoc
+PSIdeal constructor.
+=end
     def initialize(ring,polylist,ideal=nil,list=nil)
-        '''PSIdeal constructor.
-        '''
         if ring.is_a? Ring or ring.is_a? PolyRing
             ring = MultiVarPowerSeriesRing.new(ring.ring);
         elsif ring.is_a? MultiSeriesRing
@@ -3044,15 +3255,17 @@ class PSIdeal
         end
     end
 
+=begin rdoc
+Create a string representation.
+=end
     def to_s()
-        '''Create a string representation.
-        '''
         return @list.map { |a| a.toScript() };
     end
 
+=begin rdoc
+Compute a standard base.
+=end
     def STD(trunc=nil)
-        '''Compute a standard base.
-        '''
         pr = @ring;
         if trunc != nil
             pr.setTruncate(trunc);
@@ -3096,9 +3309,10 @@ class Coeff < Coefficients
 end
 
 
+=begin rdoc
+Create JAS UnivPowerSeries as ring element.
+=end
 def PS(cofac,name,truncate=nil,&f) #=nil,truncate=nil)
-    '''Create JAS UnivPowerSeries as ring element.
-    '''
     cf = cofac;
     if cofac.is_a? RingElem
         cf = cofac.elem.factory();
@@ -3144,9 +3358,10 @@ class MCoeff < MultiVarCoefficients
 end
 
 
+=begin rdoc
+Create JAS MultiVarPowerSeries as ring element.
+=end
 def MPS(cofac,names,truncate=nil,&f)
-    '''Create JAS MultiVarPowerSeries as ring element.
-    '''
     cf = cofac;
     if cofac.is_a? RingElem
         cf = cofac.elem.factory();
@@ -3182,9 +3397,10 @@ include_class "edu.jas.vector.GenMatrix";
 include_class "edu.jas.vector.GenMatrixRing";
 
 
+=begin rdoc
+Create JAS GenVector ring element.
+=end
 def Vec(cofac,n,v=nil)
-    '''Create JAS GenVector ring element.
-    '''
     cf = cofac;
     if cofac.is_a? RingElem
         cf = cofac.elem.factory();
@@ -3204,12 +3420,12 @@ def Vec(cofac,n,v=nil)
         r = GenVector.new(vr,v);
     end
     return RingElem.new(r);
-
 end
 
+=begin rdoc
+Create JAS GenMatrix ring element.
+=end
 def Mat(cofac,n,m,v=nil)
-    '''Create JAS GenMatrix ring element.
-    '''
     cf = cofac;
     if cofac.is_a? RingElem
         cf = cofac.elem.factory();
@@ -3236,7 +3452,6 @@ def Mat(cofac,n,m,v=nil)
         r = GenMatrix.new(mr,v);
     end
     return RingElem.new(r);
-
 end
 
 end
