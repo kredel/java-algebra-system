@@ -383,5 +383,7 @@ loc: young
 	find src -name "*.java" | grep    Test | xargs cat | grep "void test" | wc -l 
 	cat examples/jas.py | wc
 	find examples -name "*.py" | grep -v jas.py | xargs cat | wc
+	cat examples/jas.rb | wc
+	find examples -name "*.rb" | grep -v jas.rb | xargs cat | wc
 
 # -eof-
