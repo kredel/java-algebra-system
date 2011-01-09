@@ -335,7 +335,7 @@ export:
 	cd ~/jas-versions/$(VERSION)/; jar -cf ../$(VERSION).`$(SVNREV)`-bin.jar edu/ COPYING*
 	cd ~/jas-versions/$(VERSION)/; ant doc > ant_doc.out
 	cd ~/jas-versions/$(VERSION)/; epydoc -o doc/jython -n "Python to JAS" -u ../../index.html examples/jas.py > epydoc.out
-	cd ~/jas-versions/$(VERSION)/; jrdoc -o doc/jruby -U -S -N -t "Ruby to JAS" examples/jas.rb
+	cd ~/jas-versions/$(VERSION)/; jrdoc -o doc/jruby -U -S -N -t "Ruby to JAS" examples/jas.rb > rdoc.out
 	cd ~/jas-versions/$(VERSION)/; jar -cf ../$(VERSION).`$(SVNREV)`-doc.jar doc/ *.html
 	cd ~/jas-versions/$(VERSION)/; ant test > ant_test.out
 	cd ~/jas-versions/$(VERSION)/; sh ./jython_tests.sh >jython_tests.out 2>&1
