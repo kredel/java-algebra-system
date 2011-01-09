@@ -48,7 +48,7 @@ The library contains at the moment of the following
 <dt>edu.jas.vector:</dt>
 <dd>
   contains classes for vectors and lists of polynomials and solvable
-  polynomials like <code>GenVector</code> or <code>ModuleList</code>.
+  polynomials like <code>GenVector</code> or <code>GenMatrix</code>.
 </dd>
 <dt>edu.jas.gb:</dt>
 <dd>
@@ -59,11 +59,7 @@ The library contains at the moment of the following
   <code>GroebnerBaseSeq</code>, <code>GroebnerBaseParallel</code> and
   <code>GroebnerBaseDistributed</code>.  New are Groebner bases in
   polynomial rings over principal ideal domains and Euclidean domains,
-  so called D- and E-Groebner bases,
-  e.g. <code>EGroebnerBaseSeq</code>.  Latest additions are Groebner
-  bases for polynomial rings over regular rings (direct products of
-  fields or integral domains) in <code>RGroebnerBaseSeq</code> and
-  <code>RGroebnerBasePseudoSeq</code>.
+  so called D- and E-Groebner bases, e.g. <code>EGroebnerBaseSeq</code>.  
 </dd>
 <dt>edu.jas.gbmod:</dt>
 <dd>
@@ -93,6 +89,22 @@ The library contains at the moment of the following
   <code>FactorInteger</code>, over rational numbers in class
   <code>FactorRational</code> and over algebraic numbers in class
   <code>FactorAlgebraic&lt;C&gt;</code>.
+</dd>
+<dt>edu.jas.gbufd:</dt>
+<dd>
+  contains classes for Gr&ouml;bner base computation using classes
+  from the <em>edu.jas.ufd</em> package for polynomial
+  coefficients. The main classes deal with pseudo reduction
+  <code>PseudoReduction</code>, <code>PseudoReductionSeq</code> and
+  greatest common divisors computation on coefficients
+  <code>GroebnerBasePseudoSeq</code>. Multiplicative sets of
+  polynomials with several simplifications, e.g. maintaining co-prime
+  factors or co-prime and squarefree factors, are contained in classes
+  <code>MultiplicativeSet</code>, <code>MultiplicativeSetCoPrime</code> 
+  or <code>MultiplicativeSetSquarefree</code>.  Also contained are
+  Groebner bases for polynomial rings over regular rings (direct
+  products of fields or integral domains) in
+  <code>RGroebnerBaseSeq</code> and <code>RGroebnerBasePseudoSeq</code>.
 </dd>
 <dt>edu.jas.root:</dt>
 <dd>
@@ -419,7 +431,7 @@ the class edu.jas.application.RunGB. E.g. <br />
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Mon Jan  3 22:32:48 CET 2011
+Last modified: Sun Jan  9 12:51:01 CET 2011
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
