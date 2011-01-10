@@ -13,6 +13,7 @@ import java.util.Random;
 
 import org.apache.log4j.Logger;
 
+import edu.jas.kern.Scripting;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.util.CartesianProduct;
@@ -313,9 +314,21 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C>> implements RingFactor
      */
     //JAVA6only: @Override
     public String toScript() {
-        // Python case
-        return "AN(" + modul.toScript() + (isField() ? ",True" : ",False") + "," + ring.toScript() + ")";
-        //return "AN(" + modul.toScript() + "," + isField + "," + ring.toScript() + ")";
+        StringBuffer s = new StringBuffer();
+        s.append("AN(");
+        s.append(modul.toScript());
+        switch (Scripting.getLang() ) {
+        case Ruby:
+            s.append((isField() ? ",true" : ",false"));
+            break;
+        case Python:
+        default:
+            s.append((isField() ? ",True" : ",False"));
+        }
+        s.append(",");
+        s.append(ring.toScript());
+        s.append(")");
+        return s.toString();
     }
 
 

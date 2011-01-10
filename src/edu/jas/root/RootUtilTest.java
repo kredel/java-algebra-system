@@ -261,7 +261,7 @@ public class RootUtilTest extends TestCase {
 
         List<ComplexAlgebraicNumber<BigRational>> lcn = RootFactory.<BigRational> complexAlgebraicNumbers(a);
         //System.out.println("lcn = " + lcn);
-        assertTrue("#roots == deg(a) ", lcn.size() == a.degree(0));
+        assertTrue("#roots == deg(a) " + lcn.size() + ", " + a.degree(0), lcn.size() == a.degree(0));
 
         if (true)
             return;

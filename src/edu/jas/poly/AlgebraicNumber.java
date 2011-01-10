@@ -327,9 +327,10 @@ public class AlgebraicNumber<C extends GcdRingElem<C>> implements GcdRingElem<Al
         try {
             return new AlgebraicNumber<C>(ring, val.modInverse(ring.modul));
         } catch (AlgebraicNotInvertibleException e) {
+            //System.out.println(e);
             throw e;
         } catch (NotInvertibleException e) {
-            throw new AlgebraicNotInvertibleException("val = " + val + ", modul = " + ring.modul + ", gcd = "
+            throw new AlgebraicNotInvertibleException(e + ", val = " + val + ", modul = " + ring.modul + ", gcd = "
                                                       + val.gcd(ring.modul),e);
         }
     }
