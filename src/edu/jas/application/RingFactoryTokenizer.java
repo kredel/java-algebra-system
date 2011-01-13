@@ -24,6 +24,8 @@ import edu.jas.arith.BigQuaternion;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
+import edu.jas.arith.ModLong;
+import edu.jas.arith.ModLongRing;
 import edu.jas.structure.Power;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
@@ -415,7 +417,14 @@ public class RingFactoryTokenizer {
                 }
                 if (tok.sval != null && tok.sval.length() > 0) {
                     if (digit(tok.sval.charAt(0))) {
-                        coeff = new ModIntegerRing(tok.sval);
+                        BigInteger mo = new BigInteger(tok.sval);
+                        BigInteger lm = new BigInteger(Long.MAX_VALUE);
+                        if ( mo.compareTo(lm) < 0 ) {
+                            coeff = new ModLongRing(mo.getVal());
+			} else {
+                            coeff = new ModIntegerRing(mo.getVal());
+			}
+                        System.out.println("coeff = " + coeff + " :: " + coeff.getClass());
                         ct = coeffType.ModInt;
                     } else {
                         tok.pushBack();
