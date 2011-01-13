@@ -1,6 +1,6 @@
 #
 # jruby examples for jas.
-# $Id: $
+# $Id$
 #
 
 require "examples/jas"
@@ -15,9 +15,10 @@ puts "r     = " + str(r);
 e,a = r.gens();
 puts "e     = " + str(e);
 puts "a     = " + str(a);
+
 ap = a**5 - a + 1;
 puts "ap    = " + str(ap);
-x =r.factors(ap); 
+x = r.factors(ap); 
 puts "x     = " + str( x.map{ |p,e| str(p)+"**"+str(e)+"," });
 qs2 = AN(ap,x.size==1); # and e==1
 puts "qs2   = " + str(qs2.factory());
@@ -40,7 +41,7 @@ puts "b     = " + str(b);
 
 bp = b**2 - a;
 puts "bp    = " + str(bp);
-x =ar.factors(bp); 
+x = ar.factors(bp); 
 puts "x     = " + str( x.map{ |p,e| str(p)+"**"+str(e)+"," });
 qs3 = AN(bp,x.size==1); # and e==1
 puts "qs3   = " + str(qs3.factory());
@@ -67,7 +68,7 @@ puts "c     = " + str(c);
 
 cp = c**2 - b*c - a;
 puts "cp    = " + str(cp);
-x =br.factors(cp); 
+x = br.factors(cp); 
 puts "x     = " + str( x.map{ |p,e| str(p)+"**"+str(e)+"," });
 qs4 = AN(cp,x.size==1); # and e==1
 puts "qs4   = " + str(qs4.factory());
@@ -98,7 +99,7 @@ dp = d**2 + c*d - b + a; # irreducible
 #dp = (d**2 + b) * ( c**2 - a ); # = b * c * ( d**2 + b )
 #dp = (d + b * c) * ( d + c - a**2 );
 puts "dp    = " + str(dp);
-x =cr.factors(dp); 
+x = cr.factors(dp); 
 puts "x     = " + str( x.map{ |p,e| str(p)+"**"+str(e)+", " });
 qs5 = AN(dp,x.size==1); # and e==1
 puts "qs5   = " + str(qs5.factory());
@@ -110,9 +111,9 @@ puts "gamma = " + str(gamma);
 puts "delta = " + str(delta);
 
 #e = -alpha*gamma + beta*delta; # ok
-#e = alpha**3 - gamma; # 1/e should fail but does not because it is a unit
+#e = alpha**3 - gamma; # 1/e does fail not because it is a unit
 e = delta**2 + beta; # 1/e fails
-e = delta + beta*gamma; # 1/e should fail
+e = delta + beta*gamma; # 1/e fails
 puts "e     = " + str(e);
 f = 1 / e;
 puts "f     = " + str(f);
