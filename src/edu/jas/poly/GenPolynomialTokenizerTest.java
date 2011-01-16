@@ -23,6 +23,8 @@ import edu.jas.arith.BigRational;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
+import edu.jas.arith.ModLong;
+import edu.jas.arith.ModLongRing;
 import edu.jas.arith.BigComplex;
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigQuaternion;
@@ -226,11 +228,11 @@ public class GenPolynomialTokenizerTest extends TestCase {
         assertTrue("f != null", f.list != null);
         assertTrue("length( f ) = 4", f.list.size() == 4);
 
-        ModIntegerRing fac = new ModIntegerRing(19);
+        ModLongRing fac = new ModLongRing(19);
         TermOrder tord = new TermOrder(TermOrder.INVLEX);
         String[] vars = new String[]{ "x", "y", "z" };
         int nvar = vars.length;
-        pfac = new GenPolynomialRing<ModInteger>(fac,nvar,tord,vars);
+        pfac = new GenPolynomialRing<ModLong>(fac,nvar,tord,vars);
         assertEquals("pfac == f.ring", pfac, f.ring );
 
         GenPolynomial<ModInteger> a = f.list.get(0);
@@ -501,11 +503,11 @@ public class GenPolynomialTokenizerTest extends TestCase {
         assertTrue("f != null", f.list != null);
         assertTrue("length( f ) = 4", f.list.size() == 4);
 
-        ModIntegerRing fac = new ModIntegerRing(19);
+        ModLongRing fac = new ModLongRing(19);
         TermOrder tord = new TermOrder(TermOrder.INVLEX);
         String[] vars = new String[]{ "x", "y", "z" };
         int nvar = vars.length;
-        spfac = new GenSolvablePolynomialRing<ModInteger>(fac,nvar,tord,vars);
+        spfac = new GenSolvablePolynomialRing<ModLong>(fac,nvar,tord,vars);
         assertEquals("spfac == f.ring", spfac, f.ring );
         //System.out.println("spfac = " + spfac);
         //System.out.println("spfac.table = " + spfac.table);
