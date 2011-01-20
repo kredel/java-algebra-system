@@ -6,6 +6,7 @@ package edu.jas.ufd;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -1122,8 +1123,8 @@ public class HenselUtil {
         }
         GenPolynomial<MOD> S = gst[1];
         GenPolynomial<MOD> T = gst[2];
-        //System.out.println("\nS = " + S + ": " + S.ring.coFac);
-        //System.out.println("T = " + T + ": " + S.ring.coFac);
+        //System.out.println("eeS = " + S + ": " + S.ring.coFac);
+        //System.out.println("eeT = " + T + ": " + T.ring.coFac);
 
         // setup integer polynomial ring
         GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(), fac);
@@ -1269,9 +1270,9 @@ public class HenselUtil {
     /**
      * Modular diophantine equation solution and lifting algorithm. Let p =
      * A_i.ring.coFac.modul() and assume ggt(A,B) == 1 mod p.
-     * @param A modular GenPolynomial
-     * @param B modular GenPolynomial
-     * @param C modular GenPolynomial
+     * @param A modular GenPolynomial, mod p
+     * @param B modular GenPolynomial, mod p
+     * @param C modular GenPolynomial, mod p^k
      * @param k desired approximation exponent p^k.
      * @return [s, t] with s A' + t B' = C mod p^k, with A' = B, B' = A.
      */
@@ -1292,7 +1293,7 @@ public class HenselUtil {
             //System.out.println("monomial = " + m);
             long e = m.e.getVal(0);
             List<GenPolynomial<MOD>> S = liftDiophant(A, B, e, k);
-            //System.out.println("Se = " + S);
+            System.out.println("Se = " + S);
             MOD a = m.c;
             fac = S.get(0).ring;
             a = fac.coFac.fromInteger(a.getSymmetricInteger().getVal());
@@ -1304,6 +1305,7 @@ public class HenselUtil {
                 //System.out.println("d = " + d);
                 sol.set(i++, d);
             }
+            System.out.println("sol = " + sol);
         }
         if (debug) {
             GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(), fac);
@@ -1341,6 +1343,13 @@ public class HenselUtil {
         GenPolynomial<MOD>[] lee = liftExtendedEuclidean(B, A, k);
         GenPolynomial<MOD> s1 = lee[0];
         GenPolynomial<MOD> s2 = lee[1];
+        if ( e == 0L ) {
+            System.out.println("s1 = " + s1);
+            System.out.println("s2 = " + s2);
+            sol.add(s1);
+            sol.add(s2);
+            return sol;
+        }
         fac = s1.ring;
         A = PolyUtil.<MOD> fromIntegerCoefficients(fac, PolyUtil.integerFromModularCoefficients(ifac, A));
         B = PolyUtil.<MOD> fromIntegerCoefficients(fac, PolyUtil.integerFromModularCoefficients(ifac, B));
@@ -1357,6 +1366,7 @@ public class HenselUtil {
         GenPolynomial<MOD> q = s1.multiply(xe);
         GenPolynomial<MOD>[] QR = q.quotientRemainder(A);
         q = QR[0];
+        //System.out.println("ee coeff qr = " + Arrays.toString(QR));
         GenPolynomial<MOD> r1 = QR[1];
         GenPolynomial<MOD> r2 = s2.multiply(xe).sum(q.multiply(B));
         //System.out.println("r1 = " + r1 + ", r2 = " + r2);
@@ -1371,6 +1381,29 @@ public class HenselUtil {
             }
         }
         return sol;
+    }
+
+
+    /**
+     * Modular Diophant relation lifting test.
+     * @param A modular GenPolynomial
+     * @param B modular GenPolynomial
+     * @param C modular GenPolynomial
+     * @param S1 modular GenPolynomial
+     * @param S2 modular GenPolynomial
+     * @return true if A*S1 + B*S2 = C, else false.
+     */
+    public static <MOD extends GcdRingElem<MOD> & Modular> boolean isDiophantLift(
+            GenPolynomial<MOD> A, GenPolynomial<MOD> B, GenPolynomial<MOD> S1, GenPolynomial<MOD> S2, GenPolynomial<MOD> C) {
+        GenPolynomialRing<MOD> fac = C.ring;
+        GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(),fac);
+        GenPolynomial<MOD> a = PolyUtil.<MOD> fromIntegerCoefficients(fac,PolyUtil.integerFromModularCoefficients(ifac,A));
+        GenPolynomial<MOD> b = PolyUtil.<MOD> fromIntegerCoefficients(fac,PolyUtil.integerFromModularCoefficients(ifac,B));
+        GenPolynomial<MOD> s1 = PolyUtil.<MOD> fromIntegerCoefficients(fac,PolyUtil.integerFromModularCoefficients(ifac,S1));
+        GenPolynomial<MOD> s2 = PolyUtil.<MOD> fromIntegerCoefficients(fac,PolyUtil.integerFromModularCoefficients(ifac,S2));
+        GenPolynomial<MOD> t = a.multiply(s1);
+        t = t.sum( b.multiply(s2) );
+        return t.equals(C);
     }
 
 

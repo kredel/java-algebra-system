@@ -794,7 +794,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
                 }
                 C r = cf.fromInteger(rp); //cf.random(rp);
                 //System.out.println("r   = " + r);
-                ep = PolyUtil.<C> evaluateMain(nfac, upr, r);
+                ep = PolyUtil.<C> evaluateMainRecursive(nfac, upr, r);
                 //System.out.println("ep  = " + ep);
                 rp++;
             } while (!isSquarefree(ep) /*todo: || ep.degree() <= 1*/); // max deg
