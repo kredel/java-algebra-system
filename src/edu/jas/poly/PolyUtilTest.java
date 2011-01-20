@@ -408,7 +408,7 @@ public class PolyUtilTest extends TestCase {
         ar = rfac.getZERO();
         //System.out.println("ar  = " + ar);
 
-        a = PolyUtil.<BigInteger> evaluateMain(cfac, ar, ai);
+        a = PolyUtil.<BigInteger> evaluateMainRecursive(cfac, ar, ai);
         //System.out.println("a   = " + a);
 
         assertTrue("isZERO( a )", a.isZERO());
@@ -416,7 +416,7 @@ public class PolyUtilTest extends TestCase {
         ar = rfac.getONE();
         //System.out.println("ar  = " + ar);
 
-        a = PolyUtil.<BigInteger> evaluateMain(cfac, ar, ai);
+        a = PolyUtil.<BigInteger> evaluateMainRecursive(cfac, ar, ai);
         //System.out.println("a   = " + a);
 
         assertTrue("isONE( a )", a.isONE());
@@ -432,9 +432,9 @@ public class PolyUtilTest extends TestCase {
         cr = br.sum(ar);
         //System.out.println("cr  = " + cr);
 
-        a = PolyUtil.<BigInteger> evaluateMain(cfac, ar, ai);
-        b = PolyUtil.<BigInteger> evaluateMain(cfac, br, ai);
-        c = PolyUtil.<BigInteger> evaluateMain(cfac, cr, ai);
+        a = PolyUtil.<BigInteger> evaluateMainRecursive(cfac, ar, ai);
+        b = PolyUtil.<BigInteger> evaluateMainRecursive(cfac, br, ai);
+        c = PolyUtil.<BigInteger> evaluateMainRecursive(cfac, cr, ai);
         //System.out.println("a   = " + a);
         //System.out.println("b   = " + b);
         //System.out.println("c   = " + c);
@@ -448,9 +448,9 @@ public class PolyUtilTest extends TestCase {
         cr = br.multiply(ar);
         //System.out.println("cr  = " + cr);
 
-        a = PolyUtil.<BigInteger> evaluateMain(cfac, ar, ai);
-        b = PolyUtil.<BigInteger> evaluateMain(cfac, br, ai);
-        c = PolyUtil.<BigInteger> evaluateMain(cfac, cr, ai);
+        a = PolyUtil.<BigInteger> evaluateMainRecursive(cfac, ar, ai);
+        b = PolyUtil.<BigInteger> evaluateMainRecursive(cfac, br, ai);
+        c = PolyUtil.<BigInteger> evaluateMainRecursive(cfac, cr, ai);
         //System.out.println("a   = " + a);
         //System.out.println("b   = " + b);
         //System.out.println("c   = " + c);
