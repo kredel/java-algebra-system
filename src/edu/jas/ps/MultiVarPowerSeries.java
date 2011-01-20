@@ -17,6 +17,7 @@ import java.util.TreeMap;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.AlgebraicNumber;
 import edu.jas.structure.BinaryFunctor;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.Selector;
@@ -174,7 +175,13 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                     sb.append(" - ");
                 }
                 if (!c.isONE() || i.isZERO()) {
+                    if (c instanceof GenPolynomial || c instanceof AlgebraicNumber) {
+                         sb.append("{ ");
+                    }
                     sb.append(c.toString());
+                    if (c instanceof GenPolynomial || c instanceof AlgebraicNumber) {
+                        sb.append(" }");
+                    }
                     if (!i.isZERO()) {
                         sb.append(" * ");
                     }
