@@ -1578,6 +1578,8 @@ include_class "edu.jas.gb.GroebnerBaseParallel";
 include_class "edu.jas.gb.GroebnerBaseSeq";
 include_class "edu.jas.gb.GroebnerBaseSeqPairSeq";
 include_class "edu.jas.gb.ReductionSeq";
+include_class "edu.jas.gb.OrderedPairlist";
+include_class "edu.jas.gb.OrderedSyzPairlist";
 include_class "edu.jas.gb.GroebnerBaseSeqPairParallel";
 include_class "edu.jas.gb.SolvableGroebnerBaseParallel";
 include_class "edu.jas.gb.SolvableGroebnerBaseSeq";
@@ -1650,7 +1652,9 @@ Compute a Groebner base.
         ff = s.list;
         t = System.currentTimeMillis();
         if cofac.isField()
-            gg = GroebnerBaseSeq.new().GB(ff);
+            #gg = GroebnerBaseSeq.new().GB(ff);
+            #gg = GroebnerBaseSeq.new(ReductionSeq.new(),OrderedPairlist.new()).GB(ff);
+            gg = GroebnerBaseSeq.new(ReductionSeq.new(),OrderedSyzPairlist.new()).GB(ff);
         else
             v = nil;
             begin
