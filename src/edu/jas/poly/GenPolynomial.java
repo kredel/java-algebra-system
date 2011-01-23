@@ -8,6 +8,7 @@ package edu.jas.poly;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Arrays;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -216,7 +217,7 @@ public class GenPolynomial<C extends RingElem<C>> implements RingElem<GenPolynom
         StringBuffer s = new StringBuffer();
         s.append(this.getClass().getSimpleName() + ":");
         s.append(ring.coFac.getClass().getSimpleName());
-        if (!ring.coFac.characteristic().equals(java.math.BigInteger.ZERO)) {
+        if (ring.coFac.characteristic().signum() != 0) {
             s.append("(" + ring.coFac.characteristic() + ")");
         }
         s.append("[ ");
@@ -469,7 +470,7 @@ public class GenPolynomial<C extends RingElem<C>> implements RingElem<GenPolynom
         if (a == null) {
             return false;
         }
-        return this.subtract(a).isZERO();
+        return this.compareTo(a) == 0;
     }
 
 
@@ -1304,6 +1305,17 @@ public class GenPolynomial<C extends RingElem<C>> implements RingElem<GenPolynom
         if (ring.nvar != 1) {
             throw new IllegalArgumentException(this.getClass().getName() + " not univariate polynomials"
                                                + ring);
+        }
+        if (this.isConstant() && S.isConstant()) {
+            C t = this.leadingBaseCoefficient();
+            C s = S.leadingBaseCoefficient();
+            C[] gg = t.egcd(s);
+            //System.out.println("coeff gcd = " + Arrays.toString(gg));
+            GenPolynomial<C> z = this.ring.getZERO();
+            ret[0] = z.sum(gg[0]);
+            ret[1] = z.sum(gg[1]);
+            ret[2] = z.sum(gg[2]);
+            return ret;
         }
         GenPolynomial<C>[] qr;
         GenPolynomial<C> q = this;
