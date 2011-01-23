@@ -476,6 +476,48 @@ public final class ModInteger implements GcdRingElem<ModInteger>, Modular {
 
 
     /**
+     * ModInteger half extended greatest common divisor.
+     * @param S ModInteger.
+     * @return [ gcd(this,S), a ] with a*this + b*S = gcd(this,S) for some b.
+     */
+    public ModInteger[] hegcd(ModInteger S) {
+        ModInteger[] ret = new ModInteger[2];
+        ret[0] = null;
+        ret[1] = null;
+        if ( S == null || S.isZERO() ) {
+           ret[0] = this;
+           ret[1] = this.ring.getONE();
+           return ret;
+        }
+        if ( isZERO() ) {
+           ret[0] = S;
+           return ret;
+        }
+        //System.out.println("this = " + this + ", S = " + S);
+        java.math.BigInteger[] qr;
+        java.math.BigInteger q = this.val; 
+        java.math.BigInteger r = S.val;
+        java.math.BigInteger c1 = BigInteger.ONE.val;
+        java.math.BigInteger d1 = BigInteger.ZERO.val;
+        java.math.BigInteger x1;
+        while ( !r.equals(java.math.BigInteger.ZERO) ) {
+            qr = q.divideAndRemainder(r);
+            q = qr[0];
+            x1 = c1.subtract( q.multiply(d1) );
+            c1 = d1; 
+            d1 = x1; 
+            q = r;
+            r = qr[1];
+        }
+        //System.out.println("q = " + q + "\n c1 = " + c1 + "\n c2 = " + c2);
+        ret[0] = new ModInteger(ring,q); 
+        ret[1] = new ModInteger(ring,c1);
+        //assert ( ((c1.multiply(this)).remainder(S).equals(q) )); 
+        return ret;
+    }
+
+
+    /**
      * ModInteger extended greatest common divisor.
      * @param S ModInteger.
      * @return [ gcd(this,S), a, b ] with a*this + b*S = gcd(this,S).
@@ -496,9 +538,16 @@ public final class ModInteger implements GcdRingElem<ModInteger>, Modular {
         if ( this.isUnit() || S.isUnit() ) {
            ret[0] = ring.getONE();
            if ( this.isUnit() && S.isUnit() ) {
-              ModInteger half = ring.fromInteger(2).inverse();
-              ret[1] = this.inverse().multiply(half);
-              ret[2] = S.inverse().multiply(half);
+              //ModInteger half = ring.fromInteger(2).inverse();
+              //ret[1] = this.inverse().multiply(half);
+              //ret[2] = S.inverse().multiply(half);
+              //System.out.println("gcd = " + (ret[1].multiply(this).sum(ret[2].multiply(S))));
+              // (1-1*this)/S
+              ret[1] = ring.getONE();
+              ModInteger x = ret[0].subtract(ret[1].multiply(this)); 
+              ret[2] = x.divide(S);
+              //System.out.println("gcd, a, b = " + (ret[1]) + ", " + ret[2]);
+              //System.out.println("gcd = " + (ret[1].multiply(this).sum(ret[2].multiply(S))));
               return ret;
            }
            if ( this.isUnit() ) {

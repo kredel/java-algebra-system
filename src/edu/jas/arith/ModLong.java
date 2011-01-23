@@ -431,9 +431,13 @@ public final class ModLong implements GcdRingElem<ModLong>, Modular {
         if (isUnit() || S.isUnit()) {
             ret[0] = ring.getONE();
             if (isUnit() && S.isUnit()) {
-                ModLong half = (new ModLong(ring, 2L)).inverse();
-                ret[1] = this.inverse().multiply(half);
-                ret[2] = S.inverse().multiply(half);
+                //ModLong half = (new ModLong(ring, 2L)).inverse();
+                //ret[1] = this.inverse().multiply(half);
+                //ret[2] = S.inverse().multiply(half);
+                // (1-1*this)/S
+                ret[1] = ring.getONE();
+                ModInteger x = ret[0].subtract(ret[1].multiply(this)); 
+                ret[2] = x.divide(S);
                 return ret;
             }
             if (isUnit()) {
