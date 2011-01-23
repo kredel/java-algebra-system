@@ -436,7 +436,7 @@ public final class ModLong implements GcdRingElem<ModLong>, Modular {
                 //ret[2] = S.inverse().multiply(half);
                 // (1-1*this)/S
                 ret[1] = ring.getONE();
-                ModInteger x = ret[0].subtract(ret[1].multiply(this)); 
+                ModLong x =  ret[0].subtract(ret[1].multiply(this)); 
                 ret[2] = x.divide(S);
                 return ret;
             }
