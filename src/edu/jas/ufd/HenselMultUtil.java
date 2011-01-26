@@ -50,13 +50,13 @@ public class HenselMultUtil {
      * @param A modular GenPolynomial, mod p
      * @param B modular GenPolynomial, mod p
      * @param C modular GenPolynomial, mod p^k
-     * @param v substitution value, mod p^k
+     * @param V list of substitution values, mod p^k
      * @param d desired approximation exponent (x-v)^d.
      * @param k desired approximation exponent p^k.
      * @return [s, t] with s A' + t B' = C mod p^k, with A' = B, B' = A.
      */
     public static <MOD extends GcdRingElem<MOD> & Modular> List<GenPolynomial<MOD>> 
-           liftDiophant(GenPolynomial<MOD> A, GenPolynomial<MOD> B, GenPolynomial<MOD> C, MOD v, long d, long k)
+           liftDiophant(GenPolynomial<MOD> A, GenPolynomial<MOD> B, GenPolynomial<MOD> C, List<MOD> V, long d, long k)
                         throws NoLiftingException {
         GenPolynomialRing<MOD> fac = A.ring;
         GenPolynomialRing<MOD> pkfac = C.ring;
@@ -65,9 +65,11 @@ public class HenselMultUtil {
         if (fac.nvar == 1) { // v, d??
             return HenselUtil.<MOD> liftDiophant(A,B,C,k);
         }
-        if (fac.nvar > 2) { 
-            throw new UnsupportedOperationException("polynomial ring in more than 2 variables");
-        }
+        List<MOD> Vp = new ArrayList<MOD>(V); 
+        MOD v = Vp.remove(Vp.size()-1);
+        //if (fac.nvar > 2) { 
+        //    throw new UnsupportedOperationException("polynomial ring in more than 2 variables");
+        //}
         //System.out.println("C = " + C);
         GenPolynomial<MOD> zero = pkfac.getZERO();
         // (x_2 - v)
@@ -89,10 +91,12 @@ public class HenselMultUtil {
         System.out.println("Cp = " + Cp);
 
         // recursion:
-        List<GenPolynomial<MOD>> su = HenselUtil.<MOD> liftDiophant(Ap,Bp,Cp,k); 
+        List<GenPolynomial<MOD>> su = HenselMultUtil.<MOD> liftDiophant(Ap,Bp,Cp,Vp,d,k); 
         System.out.println("su@p^" + k + " = " + su);
         System.out.println("coFac = " + su.get(0).ring.coFac.toScript());
-        System.out.println("isDiophantLift: " +  HenselUtil.<MOD> isDiophantLift(Bp,Ap,su.get(0),su.get(1),Cp) );
+        if (fac.nvar == 2) { 
+           System.out.println("isDiophantLift: " +  HenselUtil.<MOD> isDiophantLift(Bp,Ap,su.get(0),su.get(1),Cp) );
+        }
 
         String[] mn = new String[] { fac.getVars()[fac.nvar-1] };
         GenPolynomialRing<MOD> qfac = su.get(0).ring;
@@ -162,7 +166,7 @@ public class HenselMultUtil {
             return sup; //??
         }
         for ( int mm = 1; mm <= d; mm++ ) {
-            System.out.println("\nmm = " + mm + " --------------------------------------");
+            System.out.println("\nmm = " + mm + " -------------------------------------- " + fac.nvar);
             GenPolynomialRing<GenPolynomial<MOD>> qrfac = new GenPolynomialRing<GenPolynomial<MOD>>(qfac,1,mn);
             System.out.println("qrfac = " + qrfac);
             GenPolynomial<GenPolynomial<MOD>> Epr = PolyUtil.<MOD> recursive(qrfac,Ep);
@@ -190,9 +194,6 @@ public class HenselMultUtil {
                 //System.out.println("monomial = " + m);
                 long e = m.e.getVal(0);
                 System.out.println("e    = " + e);
-                if ( e > d ) {
-                    continue;
-                }
                 if ( e != mm ) {
                     continue;
                 }
@@ -203,7 +204,7 @@ public class HenselMultUtil {
                 //cm = PolyUtil.<MOD> fromIntegerCoefficients(cfac,PolyUtil.integerFromModularCoefficients(cifac, cm));
                 //System.out.println("cm   = " + cm);
                 //List<GenPolynomial<MOD>> S = HenselMultUtil.<MOD> liftDiophant(Ap, Bp, cm, null, d, k);
-                List<GenPolynomial<MOD>> S = HenselUtil.<MOD> liftDiophant(Ap, Bp, cm, k);
+                List<GenPolynomial<MOD>> S = HenselMultUtil.<MOD> liftDiophant(Ap, Bp, cm, Vp, d, k);
                 System.out.println("S    = " + S);
                 System.out.println("coFac = " + S.get(0).ring.coFac.toScript());
                 if ( !qfac.coFac.equals(S.get(0).ring) ) {
@@ -215,7 +216,9 @@ public class HenselMultUtil {
                     S = Sup;
                     System.out.println("S    = " + S);
                 }
-                System.out.println("isDiophantLift: " +  HenselUtil.<MOD> isDiophantLift(Ap,Bp,S.get(1),S.get(0),cm) );
+                if (fac.nvar == 2) { 
+                    System.out.println("isDiophantLift: " +  HenselUtil.<MOD> isDiophantLift(Ap,Bp,S.get(1),S.get(0),cm) );
+                }
                 mon = Power.<GenPolynomial<MOD>> power(q2fac,xv,e);
                 System.out.println("mon  = " + mon);
                 List<GenPolynomial<MOD>> Sp = new ArrayList<GenPolynomial<MOD>>(S.size());
