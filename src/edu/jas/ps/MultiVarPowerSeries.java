@@ -230,7 +230,13 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                     sb.append(" - ");
                 }
                 if (!c.isONE() || i.isZERO()) {
+                    if (c instanceof GenPolynomial || c instanceof AlgebraicNumber) {
+                         sb.append("( ");
+                    }
                     sb.append(c.toScript());
+                    if (c instanceof GenPolynomial || c instanceof AlgebraicNumber) {
+                         sb.append(" )");
+                    }
                     if (!i.isZERO()) {
                         sb.append(" * ");
                     }

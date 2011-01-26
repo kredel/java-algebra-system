@@ -9,6 +9,9 @@ import edu.jas.structure.BinaryFunctor;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.Selector;
 import edu.jas.structure.UnaryFunctor;
+import edu.jas.poly.ExpVector;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.AlgebraicNumber;
 
 
 /**
@@ -137,7 +140,13 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
                     sb.append(" - ");
                 }
                 if (!c.isONE() || i == 0) {
+                    if (c instanceof GenPolynomial || c instanceof AlgebraicNumber) {
+                        sb.append("{ ");
+		    }
                     sb.append(c.toString());
+                    if (c instanceof GenPolynomial || c instanceof AlgebraicNumber) {
+                        sb.append(" }");
+		    }
                     if (i > 0) {
                         sb.append(" * ");
                     }
@@ -187,7 +196,13 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
                     sb.append(" - ");
                 }
                 if (!c.isONE() || i == 0) {
+                    if (c instanceof GenPolynomial || c instanceof AlgebraicNumber) {
+                        sb.append("{ ");
+		    }
                     sb.append(c.toScript());
+                    if (c instanceof GenPolynomial || c instanceof AlgebraicNumber) {
+                        sb.append(" }");
+		    }
                     if (i > 0) {
                         sb.append(" * ");
                     }
@@ -234,6 +249,22 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
         }
         //System.out.println("cache = " + coeffCache);
         return lazyCoeffs.get(index);
+    }
+
+
+    /**
+     * Get a GenPolynomial&lt;C&gt; from this.
+     * @return a GenPolynomial&lt;C&gt; from this up to truncate 
+     *         parts.
+     */
+    public GenPolynomial<C> asPolynomial() {
+        GenPolynomial<C> p = ring.polyRing().getZERO();
+        for (int i = 0; i <= truncate; i++) {
+            C c = coefficient(i);
+            ExpVector e = ExpVector.create(1,0,i);
+            p = p.sum(c,e);
+        }
+        return p;
     }
 
 

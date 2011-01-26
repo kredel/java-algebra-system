@@ -28,6 +28,8 @@ import edu.jas.ps.MultiVarPowerSeriesRing;
 import edu.jas.ps.MultiVarPowerSeries;
 import edu.jas.ps.TaylorFunction;
 import edu.jas.ps.PolynomialTaylorFunction;
+import edu.jas.ps.UnivPowerSeriesRing;
+import edu.jas.ps.UnivPowerSeries;
 
 
 /**
@@ -165,13 +167,13 @@ public class HenselMultUtil {
         if ( Ep.isZERO() ) {
             return sup; //??
         }
-        for ( int mm = 1; mm <= d; mm++ ) {
-            System.out.println("\nmm = " + mm + " -------------------------------------- " + fac.nvar);
+        for ( int e = 1; e <= d; e++ ) {
+            System.out.println("\ne = " + e + " -------------------------------------- " + fac.nvar);
             GenPolynomialRing<GenPolynomial<MOD>> qrfac = new GenPolynomialRing<GenPolynomial<MOD>>(qfac,1,mn);
             System.out.println("qrfac = " + qrfac);
             GenPolynomial<GenPolynomial<MOD>> Epr = PolyUtil.<MOD> recursive(qrfac,Ep);
             System.out.println("Epr   = " + Epr);
-            MultiVarPowerSeriesRing<GenPolynomial<MOD>> psfac = new MultiVarPowerSeriesRing<GenPolynomial<MOD>>(qrfac);
+            UnivPowerSeriesRing<GenPolynomial<MOD>> psfac = new UnivPowerSeriesRing<GenPolynomial<MOD>>(qrfac);
             System.out.println("psfac = " + psfac);
             TaylorFunction<GenPolynomial<MOD>> F = new PolynomialTaylorFunction<GenPolynomial<MOD>>(Epr);
             System.out.println("F     = " + F);
@@ -180,79 +182,66 @@ public class HenselMultUtil {
             Vs.add(vq);
             //Vs.add(qfac.getZERO());
             System.out.println("Vs    = " + Vs);
-            MultiVarPowerSeries<GenPolynomial<MOD>> Epst = psfac.seriesOfTaylor(F,Vs);
-            //MultiVarPowerSeries<GenPolynomial<MOD>> Epst = psfac.fromPolynomial(Epr);
+            UnivPowerSeries<GenPolynomial<MOD>> Epst = psfac.seriesOfTaylor(F,vq);
             System.out.println("Epst  = " + Epst);
-            GenPolynomial<GenPolynomial<MOD>> Ept = Epst.asPolynomial();
-            System.out.println("Ept   = " + Ept);
+            GenPolynomial<MOD> cm = Epst.coefficient(e);
 
             xv = q2fac.univariate(0,1);
             xv = xv.subtract( q2fac.fromInteger(v.getSymmetricInteger().getVal()) );
             System.out.println("xv = " + xv);
 
-            for (Monomial<GenPolynomial<MOD>> m : Ept) {
-                //System.out.println("monomial = " + m);
-                long e = m.e.getVal(0);
-                System.out.println("e    = " + e);
-                if ( e != mm ) {
-                    continue;
+            System.out.println("Ap   = " + Ap + ", Ap.ring   = " + Ap.ring.toScript());
+            System.out.println("Bp   = " + Bp + ", Bp.ring   = " + Bp.ring.toScript());
+            System.out.println("cm   = " + cm + ", cm.ring   = " + cm.ring.toScript());
+            //cm = PolyUtil.<MOD> fromIntegerCoefficients(cfac,PolyUtil.integerFromModularCoefficients(cifac, cm));
+            List<GenPolynomial<MOD>> S = HenselMultUtil.<MOD> liftDiophant(Ap, Bp, cm, Vp, d, k);
+            System.out.println("S    = " + S);
+            System.out.println("coFac = " + S.get(0).ring.coFac.toScript());
+            if ( !qfac.coFac.equals(S.get(0).ring) ) {
+                List<GenPolynomial<MOD>> Sup = new ArrayList<GenPolynomial<MOD>>(S.size());
+                for ( GenPolynomial<MOD> s : S ) {
+                    s = PolyUtil.<MOD> fromIntegerCoefficients(qfac,PolyUtil.integerFromModularCoefficients(cifac,s));
+                    Sup.add(s);
                 }
-                GenPolynomial<MOD> cm = m.c;
-                System.out.println("Ap   = " + Ap + ", Ap.ring   = " + Ap.ring.toScript());
-                System.out.println("Bp   = " + Bp + ", Bp.ring   = " + Bp.ring.toScript());
-                System.out.println("cm   = " + cm + ", cm.ring   = " + cm.ring.toScript());
-                //cm = PolyUtil.<MOD> fromIntegerCoefficients(cfac,PolyUtil.integerFromModularCoefficients(cifac, cm));
-                //System.out.println("cm   = " + cm);
-                //List<GenPolynomial<MOD>> S = HenselMultUtil.<MOD> liftDiophant(Ap, Bp, cm, null, d, k);
-                List<GenPolynomial<MOD>> S = HenselMultUtil.<MOD> liftDiophant(Ap, Bp, cm, Vp, d, k);
+                S = Sup;
                 System.out.println("S    = " + S);
-                System.out.println("coFac = " + S.get(0).ring.coFac.toScript());
-                if ( !qfac.coFac.equals(S.get(0).ring) ) {
-                    List<GenPolynomial<MOD>> Sup = new ArrayList<GenPolynomial<MOD>>(S.size());
-                    for ( GenPolynomial<MOD> s : S ) {
-                        s = PolyUtil.<MOD> fromIntegerCoefficients(qfac,PolyUtil.integerFromModularCoefficients(cifac,s));
-                        Sup.add(s);
-                    }
-                    S = Sup;
-                    System.out.println("S    = " + S);
-                }
-                if (fac.nvar == 2) { 
-                    System.out.println("isDiophantLift: " +  HenselUtil.<MOD> isDiophantLift(Ap,Bp,S.get(1),S.get(0),cm) );
-                }
-                mon = Power.<GenPolynomial<MOD>> power(q2fac,xv,e);
-                System.out.println("mon  = " + mon);
-                List<GenPolynomial<MOD>> Sp = new ArrayList<GenPolynomial<MOD>>(S.size());
-                int i = 0;
-                supi = new ArrayList<GenPolynomial<BigInteger>>(su.size());
-                for (GenPolynomial<MOD> dd : S) {
-                    //System.out.println("dd = " + dd);
-                    GenPolynomial<MOD> de = dd.extend(q2fac,0,0L);
-                    GenPolynomial<MOD> dm = de.multiply( mon );
-                    Sp.add(dm);
-                    de = sup.get(i).sum(dm);
-                    //System.out.println("dd = " + dd);
-                    sup.set(i++, de);
-                    GenPolynomial<BigInteger> spi = PolyUtil.integerFromModularCoefficients(ifac, dm);
-                    supi.add(spi);
-                }
-                System.out.println("Sp   = " + Sp);
-                System.out.println("sup  = " + sup);
-                System.out.println("supi = " + supi);
-                // compute error
-                //E = E; // - sum_i s_i b_i
-                E = E.subtract( Bi.multiply(supi.get(0)) ); 
-                E = E.subtract( Ai.multiply(supi.get(1)) );
-                System.out.println("E     = " + E);
-                System.out.println("s1 b1 = " + Bi.multiply(supi.get(0)));
-                System.out.println("s2 b2 = " + Ai.multiply(supi.get(1)));
-                if ( E.isZERO() ) {
-                    return sup; //??
-                }
-                Ep = PolyUtil.<MOD> fromIntegerCoefficients(q2fac,E);
-                System.out.println("Ep    = " + Ep);
-                if ( Ep.isZERO() ) {
-                    return sup; //??
-                }
+            }
+            if (fac.nvar == 2) { 
+                System.out.println("isDiophantLift: " +  HenselUtil.<MOD> isDiophantLift(Ap,Bp,S.get(1),S.get(0),cm) );
+            }
+            mon = Power.<GenPolynomial<MOD>> power(q2fac,xv,e);
+            System.out.println("mon  = " + mon);
+            List<GenPolynomial<MOD>> Sp = new ArrayList<GenPolynomial<MOD>>(S.size());
+            int i = 0;
+            supi = new ArrayList<GenPolynomial<BigInteger>>(su.size());
+            for (GenPolynomial<MOD> dd : S) {
+                //System.out.println("dd = " + dd);
+                GenPolynomial<MOD> de = dd.extend(q2fac,0,0L);
+                GenPolynomial<MOD> dm = de.multiply( mon );
+                Sp.add(dm);
+                de = sup.get(i).sum(dm);
+                //System.out.println("dd = " + dd);
+                sup.set(i++, de);
+                GenPolynomial<BigInteger> spi = PolyUtil.integerFromModularCoefficients(ifac, dm);
+                supi.add(spi);
+            }
+            System.out.println("Sp   = " + Sp);
+            System.out.println("sup  = " + sup);
+            System.out.println("supi = " + supi);
+            // compute error
+            //E = E; // - sum_i s_i b_i
+            E = E.subtract( Bi.multiply(supi.get(0)) ); 
+            E = E.subtract( Ai.multiply(supi.get(1)) );
+            System.out.println("E     = " + E);
+            System.out.println("s1 b1 = " + Bi.multiply(supi.get(0)));
+            System.out.println("s2 b2 = " + Ai.multiply(supi.get(1)));
+            if ( E.isZERO() ) {
+                return sup; //??
+            }
+            Ep = PolyUtil.<MOD> fromIntegerCoefficients(q2fac,E);
+            System.out.println("Ep    = " + Ep);
+            if ( Ep.isZERO() ) {
+                return sup; //??
             }
         }
         return sup;
