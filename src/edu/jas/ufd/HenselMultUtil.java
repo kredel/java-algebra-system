@@ -64,21 +64,17 @@ public class HenselMultUtil {
         GenPolynomialRing<MOD> pkfac = C.ring;
         System.out.println("fac = " + fac);
         System.out.println("pkfac = " + pkfac);
-        if (fac.nvar == 1) { // v, d??
+        if (fac.nvar == 1) { // V, d ignored
             return HenselUtil.<MOD> liftDiophant(A,B,C,k);
         }
         List<MOD> Vp = new ArrayList<MOD>(V); 
         MOD v = Vp.remove(Vp.size()-1);
-        //if (fac.nvar > 2) { 
-        //    throw new UnsupportedOperationException("polynomial ring in more than 2 variables");
-        //}
-        //System.out.println("C = " + C);
         GenPolynomial<MOD> zero = pkfac.getZERO();
-        // (x_2 - v)
+        // (x_n - v)
         GenPolynomial<MOD> mon = pkfac.getONE();
         GenPolynomial<MOD> xv = pkfac.univariate(0,1);
         xv = xv.subtract( pkfac.fromInteger(v.getSymmetricInteger().getVal()) );
-        //System.out.println("xv = " + xv);
+        System.out.println("xv = " + xv);
         // A(v), B(v), C(v)
         ModularRingFactory<MOD> cf = (ModularRingFactory<MOD>)fac.coFac;
         MOD vp = cf.fromInteger(v.getSymmetricInteger().getVal());
@@ -149,8 +145,8 @@ public class HenselMultUtil {
         E = E.subtract( Bi.multiply(supi.get(0)) ); 
         E = E.subtract( Ai.multiply(supi.get(1)) );
         System.out.println("E     = " + E);
-        System.out.println("s1 b1 = " + Bi.multiply(supi.get(0)));
-        System.out.println("s2 b2 = " + Ai.multiply(supi.get(1)));
+        //System.out.println("s1 b1 = " + Bi.multiply(supi.get(0)));
+        //System.out.println("s2 b2 = " + Ai.multiply(supi.get(1)));
         if ( E.isZERO() ) {
             return sup; //??
         }
@@ -190,6 +186,7 @@ public class HenselMultUtil {
             xv = xv.subtract( q2fac.fromInteger(v.getSymmetricInteger().getVal()) );
             System.out.println("xv = " + xv);
 
+            // recursion:
             System.out.println("Ap   = " + Ap + ", Ap.ring   = " + Ap.ring.toScript());
             System.out.println("Bp   = " + Bp + ", Bp.ring   = " + Bp.ring.toScript());
             System.out.println("cm   = " + cm + ", cm.ring   = " + cm.ring.toScript());
@@ -233,8 +230,8 @@ public class HenselMultUtil {
             E = E.subtract( Bi.multiply(supi.get(0)) ); 
             E = E.subtract( Ai.multiply(supi.get(1)) );
             System.out.println("E     = " + E);
-            System.out.println("s1 b1 = " + Bi.multiply(supi.get(0)));
-            System.out.println("s2 b2 = " + Ai.multiply(supi.get(1)));
+            //System.out.println("s1 b1 = " + Bi.multiply(supi.get(0)));
+            //System.out.println("s2 b2 = " + Ai.multiply(supi.get(1)));
             if ( E.isZERO() ) {
                 return sup; //??
             }

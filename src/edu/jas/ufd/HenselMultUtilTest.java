@@ -188,10 +188,11 @@ public class HenselMultUtilTest extends TestCase {
         GreatestCommonDivisor<BigInteger> ufd = GCDFactory.getImplementation(mi);
 
         //ModLong v = pl.fromInteger(3L);
-        ModInteger v = pkm.fromInteger(0L);
+        ModInteger v = pkm.fromInteger(5L);
         List<ModInteger> V = new ArrayList<ModInteger>(1);
         V.add(v);
-        V.add(v);
+        V.add(pkm.fromInteger(3L));
+        System.out.println("V = " + V);
 
         GenPolynomial<ModInteger> ap;
         GenPolynomial<ModInteger> bp;
@@ -220,7 +221,9 @@ public class HenselMultUtilTest extends TestCase {
             //a = dfac.parse(" (x - 1)*(y^2 + 1) ");
             //b = dfac.parse(" (x - 2)*(y^2 - 1) ");
             a = dfac.parse(" z + (y - 1)*(1 + y) ");
-            b = dfac.parse(" z + (y - 2)*(3 + y) ");
+            b = dfac.parse(" z + (y - 2)*(2 + y) ");
+            //a = dfac.parse(" (y - 1)*(1 + y) ");
+            //b = dfac.parse(" (y - 2)*(2 + y) ");
             ///a = dfac.parse(" (y - 3) "); //2 // tp = 47045880 = -1
             ///b = dfac.parse(" (y - 1) "); // sp = 1
             //a = dfac.parse(" (y - 4) "); // tp = 15681960
@@ -236,10 +239,11 @@ public class HenselMultUtilTest extends TestCase {
             if ( ! c.isUnit() ) {
                 continue;
             }
-            //c = c.sum(c);
+            //c = dfac.parse(" x y z ");
+            //System.out.println("c     = " + c);
 
-            ap = PolyUtil.<ModInteger> fromIntegerCoefficients(pfac,a);
-            bp = PolyUtil.<ModInteger> fromIntegerCoefficients(pfac,b);
+            ap = PolyUtil.<ModInteger> fromIntegerCoefficients(pkfac,a);
+            bp = PolyUtil.<ModInteger> fromIntegerCoefficients(pkfac,b);
             cp = PolyUtil.<ModInteger> fromIntegerCoefficients(pkfac,c);
             //if (ap.degree(0) < 1 || bp.degree(0) < 1) {
             //    continue;
@@ -286,14 +290,14 @@ public class HenselMultUtilTest extends TestCase {
                 //assertEquals("a s + b t = c ", dp,rp);
 
                 GenPolynomialRing<ModInteger> cfac = qfac.contract(1);
-                ModInteger vp = qfac.coFac.fromInteger(V.get(0).getSymmetricInteger().getVal());
+                ModInteger vp = qfac.coFac.fromInteger(V.get(1).getSymmetricInteger().getVal());
                 GenPolynomial<ModInteger> ya = qfac.univariate(0);
                 ya = ya.subtract(vp);
                 ya = Power.<GenPolynomial<ModInteger>>power(qfac,ya,d);
                 System.out.println("ya     = " + ya);
                 List<GenPolynomial<ModInteger>> Y = new ArrayList<GenPolynomial<ModInteger>>();
                 Y.add(ya); 
-                vp = qfac.coFac.fromInteger(V.get(1).getSymmetricInteger().getVal());
+                vp = qfac.coFac.fromInteger(V.get(0).getSymmetricInteger().getVal());
                 GenPolynomial<ModInteger> za = qfac.univariate(1);
                 za = za.subtract(vp);
                 za = Power.<GenPolynomial<ModInteger>>power(qfac,za,d);
