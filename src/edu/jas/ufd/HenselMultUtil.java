@@ -231,13 +231,13 @@ public class HenselMultUtil {
         // co-products
         GenPolynomial<MOD> As = pkfac.getONE();
         for ( GenPolynomial<MOD> a : A ) {
-	    As = As.multiply(a);
-	}
+            As = As.multiply(a);
+        }
         List<GenPolynomial<MOD>> Bp = new ArrayList<GenPolynomial<MOD>>(A.size());
         for ( GenPolynomial<MOD> a : A ) {
-	    GenPolynomial<MOD> b = PolyUtil.<MOD> basePseudoDivide(As, a);
+            GenPolynomial<MOD> b = PolyUtil.<MOD> basePseudoDivide(As, a);
             Bp.add(b);
-	}
+        }
 
         // evaluate at v_n:
         List<MOD> Vp = new ArrayList<MOD>(V); 
@@ -257,9 +257,9 @@ public class HenselMultUtil {
         for ( GenPolynomial<MOD> a : A ) {
              GenPolynomial<MOD> ap = PolyUtil.<MOD> evaluateMain(ckfac,a,vp);
              Ap.add(ap);
-	}
+        }
         GenPolynomial<MOD> Cp = PolyUtil.<MOD> evaluateMain(ckfac,C,vp);
-        System.out.println("Ap = " + Ap);
+        //System.out.println("Ap = " + Ap);
         //System.out.println("Cp = " + Cp);
 
         // recursion:
@@ -293,36 +293,37 @@ public class HenselMultUtil {
         for (GenPolynomial<MOD> a : A) {
              GenPolynomial<BigInteger> ai = PolyUtil.integerFromModularCoefficients(ifac, a);
              Ai.add(ai);
-	}
+        }
         List<GenPolynomial<BigInteger>> Bi = new ArrayList<GenPolynomial<BigInteger>>(A.size());
         for (GenPolynomial<MOD> b : Bp) {
              GenPolynomial<BigInteger> bi = PolyUtil.integerFromModularCoefficients(ifac, b);
              Bi.add(bi);
-	}
+        }
         GenPolynomial<BigInteger> Ci = PolyUtil.integerFromModularCoefficients(ifac, C);
-        System.out.println("Ai = " + Ai);
+        //System.out.println("Ai = " + Ai);
         //System.out.println("Ci = " + Ci);
 
         List<GenPolynomial<MOD>> Aq = new ArrayList<GenPolynomial<MOD>>(A.size());
         for (GenPolynomial<BigInteger> ai : Ai) {
              GenPolynomial<MOD> aq = PolyUtil.<MOD> fromIntegerCoefficients(pkfac,ai);
              Aq.add(aq);
-	}
-        System.out.println("Aq = " + Aq);
+        }
+        //System.out.println("Aq = " + Aq);
 
         // compute error:
         GenPolynomial<BigInteger> E = Ci; // - sum_i s_i b_i
         int i = 0;
         for ( GenPolynomial<BigInteger> bi : Bi ) {
-	    E = E.subtract( bi.multiply(supi.get(i++)) ); 
-	}
-        System.out.println("E     = " + E);
+            E = E.subtract( bi.multiply(supi.get(i++)) ); 
+        }
+        //System.out.println("E     = " + E);
         if ( E.isZERO() ) {
             logger.info("leaving on zero error");
             return sup; 
         }
         GenPolynomial<MOD> Ep = PolyUtil.<MOD> fromIntegerCoefficients(pkfac,E);
-        System.out.println("Ep(0," + pkfac.nvar + ") = " + Ep);
+        //System.out.println("Ep(0," + pkfac.nvar + ") = " + Ep);
+        logger.info("Ep(0," + pkfac.nvar + ") = " + Ep);
         if ( Ep.isZERO() ) {
             logger.info("leaving on zero error");
             return sup; 
@@ -376,15 +377,16 @@ public class HenselMultUtil {
             //E = E; // - sum_i s_i b_i
             i = 0;
             for ( GenPolynomial<BigInteger> bi : Bi ) {
-	         E = E.subtract( bi.multiply(supi.get(i++)) ); 
-	    }
-            System.out.println("E     = " + E);
+                 E = E.subtract( bi.multiply(supi.get(i++)) ); 
+            }
+            //System.out.println("E     = " + E);
             if ( E.isZERO() ) {
                 logger.info("leaving on zero error");
                 return sup; 
             }
             Ep = PolyUtil.<MOD> fromIntegerCoefficients(pkfac,E);
-            System.out.println("Ep(" + e + "," + pkfac.nvar + ") = " + Ep); 
+            //System.out.println("Ep(" + e + "," + pkfac.nvar + ") = " + Ep); 
+            logger.info("Ep(" + e + "," + pkfac.nvar + ") = " + Ep); 
             if ( Ep.isZERO() ) {
                 logger.info("leaving on zero error");
                 return sup; 
