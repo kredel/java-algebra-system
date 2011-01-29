@@ -231,14 +231,18 @@ public class HenselUtil {
             throw new IllegalArgumentException("polynomial ring not univariate");
         }
         // one Hensel step on part polynomials
-        GenPolynomial<MOD>[] gst = A.egcd(B);
-        if (!gst[0].isONE()) {
-            throw new NoLiftingException("A and B not coprime, gcd = " + gst[0] + ", A = " + A + ", B = " + B);
+        try {
+            GenPolynomial<MOD>[] gst = A.egcd(B);
+            if (!gst[0].isONE()) {
+                throw new NoLiftingException("A and B not coprime, gcd = " + gst[0] + ", A = " + A + ", B = " + B);
+            }
+            GenPolynomial<MOD> s = gst[1];
+            GenPolynomial<MOD> t = gst[2];
+            HenselApprox<MOD> ab = HenselUtil.<MOD> liftHensel(C, M, A, B, s, t);
+            return ab;
+        } catch (ArithmeticException e) {
+            throw new NoLiftingException("coefficient error " + e);
         }
-        GenPolynomial<MOD> s = gst[1];
-        GenPolynomial<MOD> t = gst[2];
-        HenselApprox<MOD> ab = HenselUtil.<MOD> liftHensel(C, M, A, B, s, t);
-        return ab;
     }
 
 
@@ -496,14 +500,18 @@ public class HenselUtil {
             throw new IllegalArgumentException("polynomial ring not univariate");
         }
         // one Hensel step on part polynomials
-        GenPolynomial<MOD>[] gst = A.egcd(B);
-        if (!gst[0].isONE()) {
-            throw new NoLiftingException("A and B not coprime, gcd = " + gst[0] + ", A = " + A + ", B = " + B);
+        try {
+            GenPolynomial<MOD>[] gst = A.egcd(B);
+            if (!gst[0].isONE()) {
+                throw new NoLiftingException("A and B not coprime, gcd = " + gst[0] + ", A = " + A + ", B = " + B);
+            }
+            GenPolynomial<MOD> s = gst[1];
+            GenPolynomial<MOD> t = gst[2];
+            HenselApprox<MOD> ab = HenselUtil.<MOD> liftHenselQuadratic(C, M, A, B, s, t);
+            return ab;
+        } catch (ArithmeticException e) {
+            throw new NoLiftingException("coefficient error " + e);
         }
-        GenPolynomial<MOD> s = gst[1];
-        GenPolynomial<MOD> t = gst[2];
-        HenselApprox<MOD> ab = HenselUtil.<MOD> liftHenselQuadratic(C, M, A, B, s, t);
-        return ab;
     }
 
 
@@ -533,14 +541,18 @@ public class HenselUtil {
             throw new IllegalArgumentException("polynomial ring not univariate");
         }
         // one Hensel step on part polynomials
-        GenPolynomial<MOD>[] gst = A.egcd(B);
-        if (!gst[0].isONE()) {
-            throw new NoLiftingException("A and B not coprime, gcd = " + gst[0] + ", A = " + A + ", B = " + B);
+        try {
+            GenPolynomial<MOD>[] gst = A.egcd(B);
+            if (!gst[0].isONE()) {
+                throw new NoLiftingException("A and B not coprime, gcd = " + gst[0] + ", A = " + A + ", B = " + B);
+            }
+            GenPolynomial<MOD> s = gst[1];
+            GenPolynomial<MOD> t = gst[2];
+            HenselApprox<MOD> ab = HenselUtil.<MOD> liftHenselQuadraticFac(C, M, A, B, s, t);
+            return ab;
+        } catch (ArithmeticException e) {
+            throw new NoLiftingException("coefficient error " + e);
         }
-        GenPolynomial<MOD> s = gst[1];
-        GenPolynomial<MOD> t = gst[2];
-        HenselApprox<MOD> ab = HenselUtil.<MOD> liftHenselQuadraticFac(C, M, A, B, s, t);
-        return ab;
     }
 
 
@@ -1004,9 +1016,14 @@ public class HenselUtil {
             throw new IllegalArgumentException("polynomial ring not univariate");
         }
         // start with extended Euclidean relation mod p
-        GenPolynomial<MOD>[] gst = A.egcd(B);
-        if (!gst[0].isONE()) {
-            throw new NoLiftingException("A and B not coprime, gcd = " + gst[0] + ", A = " + A + ", B = " + B);
+        GenPolynomial<MOD>[] gst = null;
+        try {
+            gst = A.egcd(B);
+            if (!gst[0].isONE()) {
+                throw new NoLiftingException("A and B not coprime, gcd = " + gst[0] + ", A = " + A + ", B = " + B);
+            }
+        } catch (ArithmeticException e) {
+            throw new NoLiftingException("coefficient error " + e);
         }
         GenPolynomial<MOD> S = gst[1];
         GenPolynomial<MOD> T = gst[2];
@@ -1235,7 +1252,7 @@ public class HenselUtil {
             throws NoLiftingException {
         if ( false && A.size() <= 2 ) {
             return HenselUtil.<MOD> liftDiophant(A.get(0),A.get(1),C,k);
-	}
+        }
         List<GenPolynomial<MOD>> sol = new ArrayList<GenPolynomial<MOD>>();
         GenPolynomialRing<MOD> fac = C.ring;
         if (fac.nvar != 1) { // todo assert
@@ -1243,7 +1260,7 @@ public class HenselUtil {
         }
         //System.out.println("C = " + C);
         GenPolynomial<MOD> zero = fac.getZERO();
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < A.size(); i++) {
             sol.add(zero);
         }
         GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(),fac);
@@ -1266,7 +1283,7 @@ public class HenselUtil {
             }
             //System.out.println("sol = " + sol + ", for " + m);
         }
-	/*
+        /*
         if (true || debug) {
             //GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(), fac);
             A = PolyUtil.<MOD> fromIntegerCoefficients(fac, PolyUtil.integerFromModularCoefficients(ifac, A));
@@ -1279,7 +1296,7 @@ public class HenselUtil {
                 System.out.println("Error: A*r1 + B*r2 = " + y + " : " + fac.coFac);
             }
         }
-	*/
+        */
         return sol;
     }
 
@@ -1358,7 +1375,7 @@ public class HenselUtil {
             List<GenPolynomial<MOD>> A, long e, long k) throws NoLiftingException {
         if ( false && A.size() <= 2 ) {
             return HenselUtil.<MOD> liftDiophant(A.get(0),A.get(1),e,k);
-	}
+        }
         List<GenPolynomial<MOD>> sol = new ArrayList<GenPolynomial<MOD>>();
         GenPolynomialRing<MOD> fac = A.get(0).ring;
         if (fac.nvar != 1) { // todo assert
@@ -1376,7 +1393,7 @@ public class HenselUtil {
         for ( GenPolynomial<MOD> a : lee ) {
              a = PolyUtil.<MOD> fromIntegerCoefficients(fac, PolyUtil.integerFromModularCoefficients(ifac, a));
              S.add(a);
-	}
+        }
         GenPolynomial<MOD> xe = fac.univariate(0, e);
         List<GenPolynomial<MOD>> Sr = new ArrayList<GenPolynomial<MOD>>(lee.size());
         int i = 0;
@@ -1385,7 +1402,7 @@ public class HenselUtil {
              GenPolynomial<MOD> r = q.remainder(A.get(i++));
              //System.out.println("r = " + r);
              sol.add(r);
-	}
+        }
         //System.out.println("sol@"+ e + " = " + sol); 
         /*
         if (true || debug) {
@@ -1396,7 +1413,7 @@ public class HenselUtil {
                 System.out.println("Error: A*r1 + B*r2 = " + y);
             }
         }
-	*/
+        */
         return sol;
     }
 
@@ -1456,7 +1473,7 @@ public class HenselUtil {
      *         prod_{i!=j} A_j, else false.
      */
     public static <MOD extends GcdRingElem<MOD> & Modular> boolean isDiophantLift(
-		  List<GenPolynomial<MOD>> A, List<GenPolynomial<MOD>> S, GenPolynomial<MOD> C) {
+                  List<GenPolynomial<MOD>> A, List<GenPolynomial<MOD>> S, GenPolynomial<MOD> C) {
         GenPolynomialRing<MOD> fac = A.get(0).ring;
         GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(),fac);
         List<GenPolynomial<MOD>> B = new ArrayList<GenPolynomial<MOD>>(A.size());
