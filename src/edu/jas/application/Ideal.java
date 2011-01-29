@@ -1088,6 +1088,27 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
+     * Power. Generators for the power of this ideal. Note: if this ideal is
+     * a Groebner base, a Groebner base is returned.
+     * @param d integer
+     * @return ideal(this^d)
+     */
+    public Ideal<C> power(int d) {
+        if ( d <= 0 ) {
+            return getONE();
+        }
+        if (this.isZERO() || this.isONE()) {
+            return this;
+        }
+        Ideal<C> c = this;
+        for (int i = 1; i < d; i++ ) {
+            c = c.product(this);
+        }
+        return c;
+    }
+
+
+    /**
      * Normalform for element.
      * @param h polynomial
      * @return normalform of h with respect to this
