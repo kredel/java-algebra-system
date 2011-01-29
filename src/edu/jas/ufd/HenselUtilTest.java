@@ -1020,7 +1020,7 @@ public class HenselUtilTest extends TestCase {
             //System.out.println("pi  = " + pi);
             //System.out.println("k   = " + k);
 
-            fp = mfac.univariate(0,2); //mfac.getONE();
+            fp = mfac.random(4); //mfac.univariate(0,2); //mfac.getONE();
 
             //System.out.println("a   = " + a);
             //System.out.println("b   = " + b);
@@ -1050,7 +1050,7 @@ public class HenselUtilTest extends TestCase {
                 List<GenPolynomial<ModInteger>> L = HenselUtil.<ModInteger> liftDiophant(ap, bp, fp, k);
                 //System.out.println("lift(a,b) = " + L[0] + ", " + L[1] + "\n");
 
-                lift = HenselUtil.<ModInteger> liftDiophant(A2, fp, k); // liftDiophant(A2, fp, k);
+                lift = HenselUtil.<ModInteger> liftDiophant(A2, fp, k); 
                 tq = System.currentTimeMillis() - tq;
 
                 //System.out.println("");

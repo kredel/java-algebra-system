@@ -1368,7 +1368,7 @@ public class HenselUtil {
         List<GenPolynomial<MOD>> lee = liftExtendedEuclidean(A, k);
         if ( e == 0L ) {
             //System.out.println("sol@0 = " + sol); 
-            return sol;
+            return lee;
         }
         fac = lee.get(0).ring;
         GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(), fac);
@@ -1444,44 +1444,6 @@ public class HenselUtil {
         GenPolynomialRing<MOD> fac = A.get(0).ring;
         GenPolynomial<MOD> C = fac.getONE();
         return isDiophantLift(A,S,C);
-	/*
-        GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(),fac);
-        List<GenPolynomial<MOD>> B = new ArrayList<GenPolynomial<MOD>>(A.size());
-        int i = 0;
-        for (GenPolynomial<MOD> ai : A) {
-            GenPolynomial<MOD> b = fac.getONE();
-            int j = 0;
-            for (GenPolynomial<MOD> aj : A) {
-                if (i != j ) { // !ai.equals(aj)
-                    b = b.multiply(aj);
-                }
-                j++;
-            }
-            //System.out.println("b = " + b);
-            b = PolyUtil.<MOD> fromIntegerCoefficients(fac,PolyUtil.integerFromModularCoefficients(ifac,b));
-            B.add(b);
-            i++;
-        }
-        //System.out.println("B = " + B);
-        // check mod p^e 
-        GenPolynomial<MOD> t = fac.getZERO();
-        i = 0;
-        for (GenPolynomial<MOD> a : B) {
-            GenPolynomial<MOD> b = S.get(i++);
-            b = PolyUtil.<MOD> fromIntegerCoefficients(fac,PolyUtil.integerFromModularCoefficients(ifac,b));
-            GenPolynomial<MOD> s = a.multiply(b);
-            t = t.sum(s);
-        }
-        if (!t.isONE()) {
-            System.out.println("no ee lift!");
-            System.out.println("A = " + A);
-            System.out.println("B = " + B);
-            System.out.println("S = " + S);
-            System.out.println("t = " + t);
-            return false;
-        }
-        return true;
-        */
     }
 
 
@@ -1526,6 +1488,7 @@ public class HenselUtil {
         if (!t.equals(C)) {
             System.out.println("no diophant lift!");
             System.out.println("A = " + A);
+            System.out.println("B = " + B);
             System.out.println("S = " + S);
             System.out.println("C = " + C);
             System.out.println("t = " + t);
