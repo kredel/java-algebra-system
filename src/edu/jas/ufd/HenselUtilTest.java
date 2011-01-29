@@ -1050,7 +1050,7 @@ public class HenselUtilTest extends TestCase {
                 List<GenPolynomial<ModInteger>> L = HenselUtil.<ModInteger> liftDiophant(ap, bp, fp, k);
                 //System.out.println("lift(a,b) = " + L[0] + ", " + L[1] + "\n");
 
-                lift = HenselUtil.<ModInteger> liftDiophant(A2, 2L, k); // liftDiophant(A2, fp, k);
+                lift = HenselUtil.<ModInteger> liftDiophant(A2, fp, k); // liftDiophant(A2, fp, k);
                 tq = System.currentTimeMillis() - tq;
 
                 //System.out.println("");

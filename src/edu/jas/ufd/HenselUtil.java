@@ -1167,8 +1167,8 @@ public class HenselUtil {
     /**
      * Modular diophantine equation solution and lifting algorithm. Let p =
      * A_i.ring.coFac.modul() and assume ggt(A,B) == 1 mod p.
-     * @param A modular GenPolynomial, mod p
-     * @param B modular GenPolynomial, mod p
+     * @param A modular GenPolynomial, mod p^k
+     * @param B modular GenPolynomial, mod p^k
      * @param C modular GenPolynomial, mod p^k
      * @param k desired approximation exponent p^k.
      * @return [s, t] with s A' + t B' = C mod p^k, with A' = B, B' = A.
@@ -1218,6 +1218,68 @@ public class HenselUtil {
                 System.out.println("Error: A*r1 + B*r2 = " + y + " : " + fac.coFac);
             }
         }
+        return sol;
+    }
+
+
+    /**
+     * Modular diophantine equation solution and lifting algorithm. Let p =
+     * A_i.ring.coFac.modul() and assume ggt(a,b) == 1 mod p, for a, b in A.
+     * @param A list of modular GenPolynomials, mod p^k
+     * @param C modular GenPolynomial, mod p^k
+     * @param k desired approximation exponent p^k.
+     * @return [s_1,..., s_n] with sum_i s_i A_i' = C mod p^k, with Ai' = prod_{j!=i} A_j.
+     */
+    public static <MOD extends GcdRingElem<MOD> & Modular> List<GenPolynomial<MOD>> liftDiophant(
+            List<GenPolynomial<MOD>> A, GenPolynomial<MOD> C, long k)
+            throws NoLiftingException {
+        if ( false && A.size() <= 2 ) {
+            return HenselUtil.<MOD> liftDiophant(A.get(0),A.get(1),C,k);
+	}
+        List<GenPolynomial<MOD>> sol = new ArrayList<GenPolynomial<MOD>>();
+        GenPolynomialRing<MOD> fac = C.ring;
+        if (fac.nvar != 1) { // todo assert
+            throw new IllegalArgumentException("polynomial ring not univariate");
+        }
+        //System.out.println("C = " + C);
+        GenPolynomial<MOD> zero = fac.getZERO();
+        for (int i = 0; i < 2; i++) {
+            sol.add(zero);
+        }
+        GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(),fac);
+        for (Monomial<MOD> m : C) {
+            //System.out.println("monomial = " + m);
+            long e = m.e.getVal(0);
+            List<GenPolynomial<MOD>> S = liftDiophant(A, e, k);
+            //System.out.println("Se = " + S);
+            MOD a = m.c;
+            //System.out.println("C.fac = " + fac.toScript());
+            a = fac.coFac.fromInteger(a.getSymmetricInteger().getVal());
+            int i = 0;
+            for (GenPolynomial<MOD> d : S) {
+                //System.out.println("d = " + d);
+                d = PolyUtil.<MOD> fromIntegerCoefficients(fac, PolyUtil.integerFromModularCoefficients(ifac, d));
+                d = d.multiply(a);
+                d = sol.get(i).sum(d);
+                //System.out.println("d = " + d);
+                sol.set(i++, d);
+            }
+            //System.out.println("sol = " + sol + ", for " + m);
+        }
+	/*
+        if (true || debug) {
+            //GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(), fac);
+            A = PolyUtil.<MOD> fromIntegerCoefficients(fac, PolyUtil.integerFromModularCoefficients(ifac, A));
+            B = PolyUtil.<MOD> fromIntegerCoefficients(fac, PolyUtil.integerFromModularCoefficients(ifac, B));
+            C = PolyUtil.<MOD> fromIntegerCoefficients(fac, PolyUtil.integerFromModularCoefficients(ifac, C));
+            GenPolynomial<MOD> y = B.multiply(sol.get(0)).sum(A.multiply(sol.get(1)));
+            if (!y.equals(C)) {
+                System.out.println("A = " + A + ", B = " + B);
+                System.out.println("s1 = " + sol.get(0) + ", s2 = " + sol.get(1));
+                System.out.println("Error: A*r1 + B*r2 = " + y + " : " + fac.coFac);
+            }
+        }
+	*/
         return sol;
     }
 
@@ -1286,7 +1348,7 @@ public class HenselUtil {
 
     /**
      * Modular diophantine equation solution and lifting algorithm. Let p =
-     * A_i.ring.coFac.modul() and assume ggt(A,B) == 1 mod p.
+     * A_i.ring.coFac.modul() and assume ggt(a,b) == 1 mod p, for a, b in A.
      * @param A list of modular GenPolynomials
      * @param e exponent for x^e
      * @param k desired approximation exponent p^k.
@@ -1294,7 +1356,7 @@ public class HenselUtil {
      */
     public static <MOD extends GcdRingElem<MOD> & Modular> List<GenPolynomial<MOD>> liftDiophant(
             List<GenPolynomial<MOD>> A, long e, long k) throws NoLiftingException {
-        if ( A.size() <= 2 ) {
+        if ( false && A.size() <= 2 ) {
             return HenselUtil.<MOD> liftDiophant(A.get(0),A.get(1),e,k);
 	}
         List<GenPolynomial<MOD>> sol = new ArrayList<GenPolynomial<MOD>>();
