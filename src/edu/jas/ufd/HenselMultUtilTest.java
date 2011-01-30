@@ -520,11 +520,11 @@ public class HenselMultUtilTest extends TestCase {
         List<GenPolynomial<BigInteger>> A = new ArrayList<GenPolynomial<BigInteger>>();
 
         for (int i = 1; i < 2; i++) {
-            //a = dfac.random(kl + 7 * i, ll, el + 3, q).abs();
-            //b = dfac.random(kl + 7 * i, ll, el + 2, q).abs();
+            //a = dfac.random(kl + 7 * i, ll, el + 1, q).abs();
+            //b = dfac.random(kl + 7 * i, ll, el + 0, q).abs();
             //c = dfac.random(kl + 7 * i, ll, el + 2, q).abs();
-            a = dfac.parse(" ( z + y^2 + x^3 - x + 1 + w ) ");
-            b = dfac.parse(" ( z + y + x^2 + 3 + w ) ");
+            a = dfac.parse(" ( z^2 + y^2 + 4 x^3 - x + 1 + w ) ");
+            b = dfac.parse(" ( z + y + x^2 + 10 + w ) ");
             //c = dfac.parse(" z + x + (y - 2)*(2 + y) ");
 
             A.add(a);

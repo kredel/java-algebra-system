@@ -405,7 +405,6 @@ public class HenselMultUtil {
      * @param Cp GenPolynomial mod p^k
      * @param F list of modular GenPolynomials, mod (I_v, p^k )
      * @param V list of substitution values, mod p^k
-     * @param d desired approximation exponent (x_i-v_i)^d.
      * @param k desired approximation exponent p^k.
      * @return [g'_1,..., g'_n] with prod_i g'_i = Cp mod p^k.
      */
@@ -444,6 +443,7 @@ public class HenselMultUtil {
         if (!pkfac.coFac.equals(pk1fac.coFac)) {
             throw new IllegalArgumentException("F.ring != pkfac: " + pk1fac + " != " + pkfac);
         }
+        // TODO: adjust leading coefficients
         pkfac = Pfac.get(0);
         Cp = Ap.get(0);
         System.out.println("pkfac  = " + pkfac.toScript());
