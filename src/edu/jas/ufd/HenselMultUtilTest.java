@@ -483,8 +483,8 @@ public class HenselMultUtilTest extends TestCase {
         ModIntegerRing pm = new ModIntegerRing(p, false);
         //ModLongRing pl = new ModLongRing(p, false);
         //GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 2, tord, new String[]{ "x", "y" });
-        GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 3, tord, new String[]{ "x", "y", "z" });
-        //GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 4, tord, new String[]{ "w", "x", "y", "z" });
+        //GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 3, tord, new String[]{ "x", "y", "z" });
+        GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 4, tord, new String[]{ "w", "x", "y", "z" });
         GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(),pfac);
 
         BigInteger mi = m;
@@ -523,8 +523,8 @@ public class HenselMultUtilTest extends TestCase {
             //a = dfac.random(kl + 7 * i, ll, el + 3, q).abs();
             //b = dfac.random(kl + 7 * i, ll, el + 2, q).abs();
             //c = dfac.random(kl + 7 * i, ll, el + 2, q).abs();
-            a = dfac.parse(" ( z + y^2 + x^3 - x + 1 ) ");
-            b = dfac.parse(" ( z + y + x^2 + 3 ) ");
+            a = dfac.parse(" ( z + y^2 + x^3 - x + 1 + w ) ");
+            b = dfac.parse(" ( z + y + x^2 + 3 + w ) ");
             //c = dfac.parse(" z + x + (y - 2)*(2 + y) ");
 
             A.add(a);
@@ -549,7 +549,7 @@ public class HenselMultUtilTest extends TestCase {
             System.out.println("A mod p^k  = " + Ap);
             //System.out.println("v = " + v + ", vp = " + vp);
             GenPolynomialRing<ModInteger> ckfac = pkfac.contract(1);
-            v = V.get(1);
+            v = V.get(2);
             List<GenPolynomial<ModInteger>> Ae = new ArrayList<GenPolynomial<ModInteger>>(A.size());
             for ( GenPolynomial<ModInteger> a : Ap ) {
                  GenPolynomial<ModInteger> ae = PolyUtil.<ModInteger> evaluateMain(ckfac,a,v);
@@ -557,7 +557,7 @@ public class HenselMultUtilTest extends TestCase {
             }
             System.out.println("A(v) mod p^k = " + Ae);
             ckfac = ckfac.contract(1);
-            v = V.get(0);
+            v = V.get(1);
             List<GenPolynomial<ModInteger>> Ae1 = new ArrayList<GenPolynomial<ModInteger>>(A.size());
             for ( GenPolynomial<ModInteger> a : Ae ) {
                  GenPolynomial<ModInteger> ae = PolyUtil.<ModInteger> evaluateMain(ckfac,a,v);
@@ -565,6 +565,15 @@ public class HenselMultUtilTest extends TestCase {
             }
             Ae = Ae1;
             System.out.println("A(v,v) mod p^k = " + Ae);
+            ckfac = ckfac.contract(1);
+            v = V.get(0);
+            Ae1 = new ArrayList<GenPolynomial<ModInteger>>(A.size());
+            for ( GenPolynomial<ModInteger> a : Ae ) {
+                 GenPolynomial<ModInteger> ae = PolyUtil.<ModInteger> evaluateMain(ckfac,a,v);
+                 Ae1.add(ae);
+            }
+            Ae = Ae1;
+            System.out.println("A(v,v,v) mod p^k = " + Ae);
             
             GenPolynomial<ModInteger> B = pkfac.getONE();
             for ( GenPolynomial<ModInteger> bp : Ap ) {

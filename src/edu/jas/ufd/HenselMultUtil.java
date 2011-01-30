@@ -432,7 +432,7 @@ public class HenselMultUtil {
             Pfac.add(0,pf);
             MOD vp = pkfac.coFac.fromInteger(V.get(j-2).getSymmetricInteger().getVal());
             System.out.println("vp     = " + vp);
-            Vb.add(vp);
+            Vb.add(1,vp);
             ap = PolyUtil.<MOD> evaluateMain(pf,ap,vp);
             Ap.add(0,ap);
         }
