@@ -133,13 +133,13 @@ public class HenselMultUtil {
         E = E.subtract( Ai.multiply(supi.get(1)) );
         //System.out.println("E     = " + E);
         if ( E.isZERO() ) {
-            logger.info("leaving on zero error");
+            logger.info("liftDiophant leaving on zero error");
             return sup; 
         }
         GenPolynomial<MOD> Ep = PolyUtil.<MOD> fromIntegerCoefficients(pkfac,E);
         System.out.println("Ep(0," + pkfac.nvar + ") = " + Ep);
         if ( Ep.isZERO() ) {
-            logger.info("leaving on zero error");
+            logger.info("liftDiophant leaving on zero error mod p^k");
             return sup; 
         }
         for ( int e = 1; e <= d; e++ ) {
@@ -193,13 +193,13 @@ public class HenselMultUtil {
             E = E.subtract( Ai.multiply(supi.get(1)) );
             //System.out.println("E     = " + E);
             if ( E.isZERO() ) {
-                logger.info("leaving on zero error");
+                logger.info("liftDiophant leaving on zero error");
                 return sup; 
             }
             Ep = PolyUtil.<MOD> fromIntegerCoefficients(pkfac,E);
             System.out.println("Ep(" + e + "," + pkfac.nvar + ") = " + Ep); 
             if ( Ep.isZERO() ) {
-                logger.info("leaving on zero error");
+                logger.info("liftDiophant leaving on zero error mod p^k");
                 return sup; 
             }
         }
@@ -317,14 +317,14 @@ public class HenselMultUtil {
         }
         //System.out.println("E     = " + E);
         if ( E.isZERO() ) {
-            logger.info("leaving on zero error");
+            logger.info("liftDiophant leaving on zero error");
             return sup; 
         }
         GenPolynomial<MOD> Ep = PolyUtil.<MOD> fromIntegerCoefficients(pkfac,E);
         //System.out.println("Ep(0," + pkfac.nvar + ") = " + Ep);
         logger.info("Ep(0," + pkfac.nvar + ") = " + Ep);
         if ( Ep.isZERO() ) {
-            logger.info("leaving on zero error");
+            logger.info("liftDiophant leaving on zero error mod p^k");
             return sup; 
         }
         for ( int e = 1; e <= d; e++ ) {
@@ -382,14 +382,14 @@ public class HenselMultUtil {
             }
             //System.out.println("E     = " + E);
             if ( E.isZERO() ) {
-                logger.info("leaving on zero error");
+                logger.info("liftDiophant leaving on zero error");
                 return sup; 
             }
             Ep = PolyUtil.<MOD> fromIntegerCoefficients(pkfac,E);
             //System.out.println("Ep(" + e + "," + pkfac.nvar + ") = " + Ep); 
             logger.info("Ep(" + e + "," + pkfac.nvar + ") = " + Ep); 
             if ( Ep.isZERO() ) {
-                logger.info("leaving on zero error");
+                logger.info("liftDiophant leaving on zero error mod p^k");
                 return sup; 
             }
         }
@@ -421,7 +421,7 @@ public class HenselMultUtil {
         List<GenPolynomialRing<MOD>> Pfac = new ArrayList<GenPolynomialRing<MOD>>();
         List<GenPolynomial<MOD>> Ap = new ArrayList<GenPolynomial<MOD>>();
         List<MOD> Vb = new ArrayList<MOD>();
-        MOD v = V.get(V.size()-1);
+        MOD v = V.get(0);
         Pfac.add(pkfac);
         Ap.add(Cp);
         Vb.add(v);
@@ -430,13 +430,15 @@ public class HenselMultUtil {
         for ( int j = pkfac.nvar; j > 2; j-- ) {
             pf = pf.contract(1);
             Pfac.add(0,pf);
-            MOD vp = pkfac.coFac.fromInteger(V.get(pkfac.nvar-j).getSymmetricInteger().getVal());
-            Vb.add(0,vp);
+            MOD vp = pkfac.coFac.fromInteger(V.get(j-2).getSymmetricInteger().getVal());
+            System.out.println("vp     = " + vp);
+            Vb.add(vp);
             ap = PolyUtil.<MOD> evaluateMain(pf,ap,vp);
             Ap.add(0,ap);
         }
         System.out.println("Pfac   = " + Pfac);
         System.out.println("Ap     = " + Ap);
+        System.out.println("V      = " + V);
         System.out.println("Vb     = " + Vb);
         GenPolynomialRing<MOD> pk1fac = F.get(0).ring;
         if (!pkfac.coFac.equals(pk1fac.coFac)) {
@@ -473,12 +475,14 @@ public class HenselMultUtil {
 	System.out.println("U1 = " + U1);
 
         GenPolynomial<BigInteger> E = C.ring.getZERO(); 
+        List<MOD> Vh = new ArrayList<MOD>();
 
         while ( Pfac.size() > 0 ) {
             pkfac = Pfac.remove(0);
             Cp = Ap.remove(0);
-            v = Vb.get(0);
-            System.out.println("\npkfac = " + pkfac.toScript() + " ================================== " + Vb);
+            v = Vb.remove(0);
+            //Vh.add(0,v);
+            System.out.println("\npkfac = " + pkfac.toScript() + " ================================== " + Vh);
 
             // (x_n - v)
             GenPolynomial<MOD> mon = pkfac.getONE();
@@ -509,14 +513,14 @@ public class HenselMultUtil {
             E = Ci.subtract(E);
             System.out.println("E     = " + E);
             if ( false && E.isZERO() ) {
-                logger.info("leaving on zero error");
+                logger.info("liftHensel leaving on zero error");
                 return U; 
             }
             GenPolynomial<MOD> Ep = PolyUtil.<MOD> fromIntegerCoefficients(pkfac,E);
             //System.out.println("Ep(0," + pkfac.nvar + ") = " + Ep);
             logger.info("Ep(0," + pkfac.nvar + ") = " + Ep);
             if ( false && Ep.isZERO() ) {
-                logger.info("leaving on zero error");
+                logger.info("liftHensel leaving on zero error");
                 return U; 
             }
 
@@ -536,7 +540,7 @@ public class HenselMultUtil {
                 List<GenPolynomial<MOD>> Vs = new ArrayList<GenPolynomial<MOD>>(1);
                 GenPolynomial<MOD> vq = ckfac.fromInteger(v.getSymmetricInteger().getVal());
                 Vs.add(vq);
-                System.out.println("Vs    = " + Vs);
+                System.out.println("Vs    = " + Vs + ", Vh = " + Vh);
                 UnivPowerSeries<GenPolynomial<MOD>> Epst = psfac.seriesOfTaylor(T,vq);
                 System.out.println("Epst  = " + Epst);
                 GenPolynomial<MOD> cm = Epst.coefficient(e);
@@ -544,7 +548,7 @@ public class HenselMultUtil {
                 if ( cm.isZERO() ) {
                     continue;
                 }
-                List<GenPolynomial<MOD>> Ud = HenselMultUtil.<MOD> liftDiophant(U1,cm,Vb,d,k);
+                List<GenPolynomial<MOD>> Ud = HenselMultUtil.<MOD> liftDiophant(U1,cm,Vh,d,k);
                 System.out.println("Ud = " + Ud);
 
                 mon = mon.multiply(xv); // Power.<GenPolynomial<MOD>> power(pkfac,xv,e);
@@ -575,20 +579,20 @@ public class HenselMultUtil {
                 E = Ci.subtract(E);
                 System.out.println("E     = " + E);
                 if ( false &&  E.isZERO() ) {
-                    logger.info("leaving on zero error");
+                    logger.info("liftHensel leaving on zero error");
                     return U; 
                 }
                 Ep = PolyUtil.<MOD> fromIntegerCoefficients(pkfac,E);
                 //System.out.println("Ep(0," + pkfac.nvar + ") = " + Ep);
                 logger.info("Ep(0," + pkfac.nvar + ") = " + Ep);
                 if ( false && Ep.isZERO() ) {
-                    logger.info("leaving on zero error");
+                    logger.info("liftHensel leaving on zero error");
                     return U; 
                 }
             }
+            Vh.add(v);
             U1 = U;
             if ( Pfac.size() > 0 ) {
-                v = Vb.remove(0);
 		List<GenPolynomial<MOD>> U2 = new ArrayList<GenPolynomial<MOD>>(U.size());
 		pkfac = Pfac.get(0);
 		for (GenPolynomial<MOD> b : U) {
@@ -600,7 +604,7 @@ public class HenselMultUtil {
 	    }
         }
         if ( E.isZERO() ) {
-             logger.info("leaving with zero error");
+             logger.info("liftHensel leaving with zero error");
         }
         return U;
     }
