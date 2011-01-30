@@ -159,7 +159,7 @@ public class HenselMultUtilTest extends TestCase {
     /**
      * Test multivariate diophant lifting.
      */
-    public void testDiophantLifting() {
+    public void xtestDiophantLifting() {
         java.math.BigInteger p;
         //p = getPrime1();
         p = new java.math.BigInteger("19");
@@ -229,6 +229,8 @@ public class HenselMultUtilTest extends TestCase {
             //b = dfac.parse(" (y - 1) "); // sp = 31363921
             //a = dfac.parse(" (x - 3) "); // tp = 15681960,  1238049
             //b = dfac.parse(" (x - 1) "); // sp = 31363921, -1238049
+            //a = dfac.parse(" ( y^2 + x^3 - 2 x ) ");
+            //b = dfac.parse(" ( y - x^2 + 3 ) ");
 
             c = ufd.gcd(a,b);
             System.out.println("\na     = " + a);
@@ -315,7 +317,7 @@ public class HenselMultUtilTest extends TestCase {
     /**
      * Test multivariate diophant lifting list.
      */
-    public void testDiophantLiftingList() {
+    public void xtestDiophantLiftingList() {
         java.math.BigInteger p;
         //p = getPrime1();
         p = new java.math.BigInteger("19");
@@ -384,6 +386,8 @@ public class HenselMultUtilTest extends TestCase {
             }
             System.out.println("A mod p^k  = " + Ap);
             cp = pkfac.parse(" x y z + x y + x ");
+            //cp = pkfac.parse(" x y + x ");
+            //cp = Ap.get(0).multiply(Ap.get(1));
             System.out.println("cp         = " + cp);
             
             GenPolynomial<ModInteger> B = pkfac.getONE();
@@ -456,6 +460,140 @@ public class HenselMultUtilTest extends TestCase {
                 System.out.println("cpr     = " + cpr);
                 System.out.println("rpr     = " + rpr);
                 assertEquals("sum_i( br sr ) = cr ", cpr,rpr);
+            } catch (ArithmeticException e) {
+                // ok, can happen
+            } catch (NoLiftingException e) {
+                // can now happen: fail("" + e);
+                System.out.println("e = " + e);
+            }
+        }
+    }
+
+
+    /**
+     * Test multivariate Hensel lifting list.
+     */
+    public void testHenselLiftingList() {
+        java.math.BigInteger p;
+        //p = getPrime1();
+        p = new java.math.BigInteger("19");
+        //p = new java.math.BigInteger("5");
+        BigInteger m = new BigInteger(p);
+
+        ModIntegerRing pm = new ModIntegerRing(p, false);
+        //ModLongRing pl = new ModLongRing(p, false);
+        GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 2, tord, new String[]{ "x", "y" });
+        //GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 3, tord, new String[]{ "x", "y", "z" });
+        //GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 4, tord, new String[]{ "w", "x", "y", "z" });
+        GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(),pfac);
+
+        BigInteger mi = m;
+        long k = 5L;
+        long d = 3L;
+        java.math.BigInteger pk = p.pow((int)k);
+        m = new BigInteger(pk);
+
+        ModIntegerRing pkm = new ModIntegerRing(pk, false);
+        //ModLongRing pkl = new ModLongRing(pk, false);
+        GenPolynomialRing<ModInteger> pkfac = new GenPolynomialRing<ModInteger>(pkm, pfac);
+        dfac = new GenPolynomialRing<BigInteger>(mi, pfac);
+
+        //GreatestCommonDivisor<BigInteger> ufd = GCDFactory.getProxy(mi);
+        GreatestCommonDivisor<BigInteger> ufd = GCDFactory.getImplementation(mi);
+
+        //ModLong v = pl.fromInteger(3L);
+        ModInteger v = pkm.fromInteger(0L);
+        List<ModInteger> V = new ArrayList<ModInteger>(1);
+        V.add(v);
+        if ( pkfac.nvar > 2 ) {
+            V.add(pkm.fromInteger(3L));
+        }
+        if ( pkfac.nvar > 3 ) {
+            V.add(pkm.fromInteger(7L));
+        }
+        System.out.println("V = " + V);
+
+        GenPolynomial<ModInteger> ap;
+        GenPolynomial<ModInteger> cp;
+        GenPolynomial<ModInteger> rp;
+
+        List<GenPolynomial<BigInteger>> A = new ArrayList<GenPolynomial<BigInteger>>();
+
+        for (int i = 1; i < 2; i++) {
+            //a = dfac.random(kl + 7 * i, ll, el + 3, q).abs();
+            //b = dfac.random(kl + 7 * i, ll, el + 2, q).abs();
+            //c = dfac.random(kl + 7 * i, ll, el + 2, q).abs();
+            a = dfac.parse(" ( y^2 + x^3 - x + 1 ) ");
+            b = dfac.parse(" ( y + x^2 + 3 ) ");
+            //c = dfac.parse(" z + x + (y - 2)*(2 + y) ");
+
+            A.add(a);
+            A.add(b);
+            //A.add(c);
+            System.out.println("\nA          = " + A);
+            A = ufd.coPrime(A);
+            System.out.println("coprime(A) = " + A);
+            if ( A.size() == 0 ) {
+                continue;
+            }
+            c = A.get(0).multiply(A.get(1));
+            //c = dfac.parse(" y^2 + x^2 ");
+            cp = PolyUtil.<ModInteger> fromIntegerCoefficients(pkfac,c);
+            System.out.println("c          = " + c);
+
+            List<GenPolynomial<ModInteger>> Ap = new ArrayList<GenPolynomial<ModInteger>>(A.size());
+            for ( GenPolynomial<BigInteger> ai : A ) {
+                 ap = PolyUtil.<ModInteger> fromIntegerCoefficients(pkfac,ai);
+                 Ap.add(ap);
+            }
+            System.out.println("A mod p^k  = " + Ap);
+            //System.out.println("v = " + v + ", vp = " + vp);
+            GenPolynomialRing<ModInteger> ckfac = pkfac.contract(1);
+            List<GenPolynomial<ModInteger>> Ae = new ArrayList<GenPolynomial<ModInteger>>(A.size());
+            for ( GenPolynomial<ModInteger> a : Ap ) {
+                 GenPolynomial<ModInteger> ae = PolyUtil.<ModInteger> evaluateMain(ckfac,a,v);
+                 Ae.add(ae);
+            }
+            System.out.println("A(v) mod p^k = " + Ae);
+
+            
+            GenPolynomial<ModInteger> B = pkfac.getONE();
+            for ( GenPolynomial<ModInteger> bp : Ap ) {
+                B = B.multiply(bp);
+            }
+            System.out.println("B          = " + B);
+            List<GenPolynomial<ModInteger>> Bp = new ArrayList<GenPolynomial<ModInteger>>(A.size());
+            for ( GenPolynomial<ModInteger> bp : Ap ) {
+                 GenPolynomial<ModInteger> b = PolyUtil.<ModInteger> basePseudoDivide(B, bp);
+                 if ( b.isZERO() ) {
+                     System.out.println("b == 0");
+                     return;
+                 }
+                 Bp.add(b);
+            }
+            System.out.println("B mod p^k  = " + Bp);
+
+            try {
+                List<GenPolynomial<ModInteger>> lift;
+                lift = HenselMultUtil.<ModInteger> liftHensel(c, cp, Ae, V, k); // 5 is max
+                System.out.println("\nliftMultiHensel:");
+                System.out.println("lift   = " + lift);
+
+                GenPolynomialRing<ModInteger> qfac = pkfac; //lift.get(0).ring;
+                assertEquals("pkfac == qfac: " + qfac, pkfac, qfac);
+
+                GenPolynomial<ModInteger> C = qfac.getONE();
+                for ( GenPolynomial<ModInteger> fi : lift ) {
+                    C = C.multiply(fi);
+                }
+                GenPolynomial<BigInteger> Ci = PolyUtil.integerFromModularCoefficients(dfac, C);
+
+                System.out.println("cp = " + cp);
+                System.out.println("C  = " + C);
+                System.out.println("Ci = " + Ci);
+                System.out.println("Cp == C: " + cp.equals(C));
+                System.out.println("c  == Ci: " + c.equals(Ci));
+                //assertEquals("prod_i( fi ) = c ", cp,C);
             } catch (ArithmeticException e) {
                 // ok, can happen
             } catch (NoLiftingException e) {

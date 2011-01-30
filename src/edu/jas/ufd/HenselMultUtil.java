@@ -344,7 +344,9 @@ public class HenselMultUtil {
             //System.out.println("Epst  = " + Epst);
             GenPolynomial<MOD> cm = Epst.coefficient(e);
             //System.out.println("cm   = " + cm + ", cm.ring   = " + cm.ring.toScript());
-
+            if ( cm.isZERO() ) {
+                continue;
+            }
             // recursion:
             List<GenPolynomial<MOD>> S = HenselMultUtil.<MOD> liftDiophant(Ap, cm, Vp, d, k);
             //System.out.println("S    = " + S);
@@ -394,6 +396,173 @@ public class HenselMultUtil {
         }
         //System.out.println("*** done: " + pkfac.nvar);
         return sup;
+    }
+
+
+    /**
+     * Modular Hensel lifting algorithm. Let p =
+     * A_i.ring.coFac.modul() and assume ggt(a,b) == 1 mod p, for a, b in A.
+     * @param C GenPolynomial with integer coefficients
+     * @param Cp GenPolynomial mod p^k
+     * @param F list of modular GenPolynomials, mod (I_v, p^k )
+     * @param V list of substitution values, mod p^k
+     * @param d desired approximation exponent (x_i-v_i)^d.
+     * @param k desired approximation exponent p^k.
+     * @return [g'_1,..., g'_n] with prod_i g'_i = Cp mod p^k.
+     */
+    public static <MOD extends GcdRingElem<MOD> & Modular> List<GenPolynomial<MOD>> 
+        liftHensel(GenPolynomial<BigInteger> C, GenPolynomial<MOD> Cp, List<GenPolynomial<MOD>> F, List<MOD> V, long k)
+                      throws NoLiftingException {
+        GenPolynomialRing<MOD> pkfac = Cp.ring;
+        if (pkfac.nvar == 1) { // V, d ignored
+            return HenselUtil.<MOD> liftHenselMonic(C,F,k);
+        }
+        GenPolynomialRing<MOD> pk1fac = F.get(0).ring;
+        if (!pkfac.coFac.equals(pk1fac.coFac)) {
+            throw new IllegalArgumentException("F.ring != pkfac: " + pk1fac + " != " + pkfac);
+        }
+        System.out.println("pkfac  = " + pkfac.toScript());
+        System.out.println("pk1fac = " + pk1fac.toScript());
+
+        // evaluate Cp at v_n:
+        List<MOD> Vp = new ArrayList<MOD>(V); 
+        MOD v = Vp.remove(Vp.size()-1);
+        GenPolynomial<MOD> zero = pkfac.getZERO();
+        // (x_n - v)
+        GenPolynomial<MOD> mon = pkfac.getONE();
+        GenPolynomial<MOD> xv = pkfac.univariate(0,1);
+        xv = xv.subtract( pkfac.fromInteger(v.getSymmetricInteger().getVal()) );
+        System.out.println("xv = " + xv);
+        // A(v), B(v), C(v)
+        ModularRingFactory<MOD> cf = (ModularRingFactory<MOD>)pkfac.coFac;
+        MOD vp = cf.fromInteger(v.getSymmetricInteger().getVal());
+        System.out.println("v = " + v + ", vp = " + vp);
+        GenPolynomialRing<MOD> ckfac = pkfac.contract(1);
+        GenPolynomial<MOD> Cs = PolyUtil.<MOD> evaluateMain(ckfac,Cp,vp);
+        //System.out.println("Ap = " + Ap);
+        System.out.println("Cp = " + Cp);
+        System.out.println("Cs = " + Cs);
+        long deg = Cp.degree(pkfac.nvar-1);
+        System.out.println("deg = " + deg);
+        long d = C.degree();
+        System.out.println("d = " + d);
+
+        GenPolynomialRing<BigInteger> i1fac = new GenPolynomialRing<BigInteger>(new BigInteger(),pk1fac);
+        System.out.println("i1fac = " + i1fac.toScript());
+        List<GenPolynomial<BigInteger>> B1i = new ArrayList<GenPolynomial<BigInteger>>(F.size());
+        for (GenPolynomial<MOD> b : F) {
+             GenPolynomial<BigInteger> bi = PolyUtil.integerFromModularCoefficients(i1fac, b);
+             B1i.add(bi);
+        }
+        GenPolynomial<BigInteger> Ci = PolyUtil.integerFromModularCoefficients(i1fac, Cs);
+        System.out.println("B1i = " + B1i);
+        System.out.println("Ci = " + Ci);
+
+        GenPolynomialRing<BigInteger> ifac = C.ring; // todo compute to right number of variables
+        System.out.println("ifac = " + ifac.toScript());
+        List<GenPolynomial<BigInteger>> Bi = new ArrayList<GenPolynomial<BigInteger>>(F.size());
+        for (GenPolynomial<BigInteger> b : B1i) {
+            GenPolynomial<BigInteger> bi = b.extend(ifac,0,0L);
+             Bi.add(bi);
+        }
+        System.out.println("Bi = " + Bi);
+
+        List<GenPolynomial<MOD>> U = new ArrayList<GenPolynomial<MOD>>(F.size());
+        for (GenPolynomial<MOD> b : F) {
+            GenPolynomial<MOD> bi = b.extend(pkfac,0,0L);
+            U.add(bi);
+        }
+        System.out.println("U  = " + U);
+        List<GenPolynomial<MOD>> U1 = F;
+        System.out.println("U1 = " + U1);
+
+        // compute error:
+        GenPolynomial<BigInteger> E = ifac.getONE(); 
+        for ( GenPolynomial<BigInteger> bi : Bi ) {
+            E = E.multiply( bi ); 
+        }
+        E = C.subtract(E);
+        System.out.println("E     = " + E);
+        if ( E.isZERO() ) {
+            logger.info("leaving on zero error");
+            return U; 
+        }
+        GenPolynomial<MOD> Ep = PolyUtil.<MOD> fromIntegerCoefficients(pkfac,E);
+        //System.out.println("Ep(0," + pkfac.nvar + ") = " + Ep);
+        logger.info("Ep(0," + pkfac.nvar + ") = " + Ep);
+        if ( Ep.isZERO() ) {
+            logger.info("leaving on zero error");
+            return U; 
+        }
+
+        String[] mn = new String[] { pkfac.getVars()[pkfac.nvar-1] };
+        GenPolynomialRing<GenPolynomial<MOD>> pkrfac = new GenPolynomialRing<GenPolynomial<MOD>>(ckfac,1,mn);
+        System.out.println("pkrfac = " + pkrfac);
+
+        for ( int e = 1; e <= deg; e++ ) {
+            System.out.println("\ne = " + e + " -------------------------------------- " + pkfac.nvar);
+            GenPolynomial<GenPolynomial<MOD>> Epr = PolyUtil.<MOD> recursive(pkrfac,Ep);
+            //System.out.println("Epr   = " + Epr);
+            UnivPowerSeriesRing<GenPolynomial<MOD>> psfac = new UnivPowerSeriesRing<GenPolynomial<MOD>>(pkrfac);
+            //System.out.println("psfac = " + psfac);
+            TaylorFunction<GenPolynomial<MOD>> T = new PolynomialTaylorFunction<GenPolynomial<MOD>>(Epr);
+            //System.out.println("T     = " + T);
+            List<GenPolynomial<MOD>> Vs = new ArrayList<GenPolynomial<MOD>>(1);
+            GenPolynomial<MOD> vq = ckfac.fromInteger(v.getSymmetricInteger().getVal());
+            Vs.add(vq);
+            System.out.println("Vs    = " + Vs);
+            UnivPowerSeries<GenPolynomial<MOD>> Epst = psfac.seriesOfTaylor(T,vq);
+            System.out.println("Epst  = " + Epst);
+            GenPolynomial<MOD> cm = Epst.coefficient(e);
+            System.out.println("cm   = " + cm);
+            if ( cm.isZERO() ) {
+                continue;
+            }
+            List<GenPolynomial<MOD>> Ud = HenselMultUtil.<MOD> liftDiophant(U1,cm,Vp,d,k);
+            System.out.println("Ud = " + Ud);
+
+            mon = mon.multiply(xv); // Power.<GenPolynomial<MOD>> power(pkfac,xv,e);
+            System.out.println("mon  = " + mon);
+            List<GenPolynomial<MOD>> Sd = new ArrayList<GenPolynomial<MOD>>(Ud.size());
+            int i = 0;
+            List<GenPolynomial<BigInteger>> Si = new ArrayList<GenPolynomial<BigInteger>>(Ud.size());
+            for (GenPolynomial<MOD> dd : Ud) {
+                //System.out.println("dd = " + dd);
+                GenPolynomial<MOD> de = dd.extend(pkfac,0,0L);
+                GenPolynomial<MOD> dm = de.multiply( mon );
+                Sd.add(dm);
+                de = U.get(i).sum(dm);
+                //System.out.println("de = " + de);
+                U.set(i++, de);
+                GenPolynomial<BigInteger> si = PolyUtil.integerFromModularCoefficients(ifac, de);
+                Si.add(si);
+            }
+            System.out.println("Sd   = " + Sd);
+            System.out.println("U    = " + U);
+            System.out.println("Si   = " + Si);
+
+            // compute new error:
+            E = ifac.getONE(); 
+            for ( GenPolynomial<BigInteger> bi : Si ) {
+                E = E.multiply( bi ); 
+            }
+            E = C.subtract(E);
+            System.out.println("E     = " + E);
+            if ( E.isZERO() ) {
+                logger.info("leaving on zero error");
+                return U; 
+            }
+            Ep = PolyUtil.<MOD> fromIntegerCoefficients(pkfac,E);
+            //System.out.println("Ep(0," + pkfac.nvar + ") = " + Ep);
+            logger.info("Ep(0," + pkfac.nvar + ") = " + Ep);
+            if ( Ep.isZERO() ) {
+                logger.info("leaving on zero error");
+                return U; 
+            }
+
+        }
+
+        return U;
     }
 
 }
