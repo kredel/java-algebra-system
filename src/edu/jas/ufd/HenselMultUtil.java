@@ -137,7 +137,8 @@ public class HenselMultUtil {
             return sup; 
         }
         GenPolynomial<MOD> Ep = PolyUtil.<MOD> fromIntegerCoefficients(pkfac,E);
-        System.out.println("Ep(0," + pkfac.nvar + ") = " + Ep);
+        //System.out.println("Ep(0," + pkfac.nvar + ") = " + Ep);
+        logger.info("Ep(0," + pkfac.nvar + ") = " + Ep);
         if ( Ep.isZERO() ) {
             logger.info("liftDiophant leaving on zero error mod p^k");
             return sup; 
@@ -197,7 +198,8 @@ public class HenselMultUtil {
                 return sup; 
             }
             Ep = PolyUtil.<MOD> fromIntegerCoefficients(pkfac,E);
-            System.out.println("Ep(" + e + "," + pkfac.nvar + ") = " + Ep); 
+            //System.out.println("Ep(" + e + "," + pkfac.nvar + ") = " + Ep); 
+            logger.info("Ep(" + e + "," + pkfac.nvar + ") = " + Ep); 
             if ( Ep.isZERO() ) {
                 logger.info("liftDiophant leaving on zero error mod p^k");
                 return sup; 
@@ -596,6 +598,72 @@ public class HenselMultUtil {
         if ( E.isZERO() ) {
              logger.info("liftHensel leaving with zero error");
         }
+        return U;
+    }
+
+
+    /**
+     * Modular Hensel full lifting algorithm. Let p =
+     * A_i.ring.coFac.modul() and assume ggt(a,b) == 1 mod p, for a, b in A.
+     * @param C GenPolynomial with integer coefficients
+     * @param F list of modular GenPolynomials, mod (I_v, p )
+     * @param V list of substitution values, mod p^k
+     * @param k desired approximation exponent p^k.
+     * @return [g_1,..., g_n] with prod_i g_i = C mod p^k.
+     */
+    public static <MOD extends GcdRingElem<MOD> & Modular> List<GenPolynomial<MOD>> 
+        liftHenselFull(GenPolynomial<BigInteger> C, List<GenPolynomial<MOD>> F, List<MOD> V, long k)
+                      throws NoLiftingException {
+        if ( F == null || F.size() == 0 ) {
+            return new ArrayList<GenPolynomial<MOD>>();
+	}
+        GenPolynomialRing<MOD> pkfac = F.get(0).ring;
+        long d = C.degree();
+        System.out.println("d = " + d);
+        // setup q = p^k
+	RingFactory<MOD> cfac = pkfac.coFac;
+        ModularRingFactory<MOD> pcfac = (ModularRingFactory<MOD>)cfac; 
+        System.out.println("pcfac = " + pcfac);
+        BigInteger p = pcfac.getIntegerModul();
+        BigInteger q = Power.positivePower(p,k);
+        ModularRingFactory<MOD> mcfac;
+        if (ModLongRing.MAX_LONG.compareTo(q.getVal()) > 0) {
+            mcfac = (ModularRingFactory) new ModLongRing(q.getVal());
+        } else {
+            mcfac = (ModularRingFactory) new ModIntegerRing(q.getVal());
+        }
+        System.out.println("mcfac = " + mcfac);
+        GenPolynomialRing<MOD> qcfac = new GenPolynomialRing<MOD>(mcfac,C.ring);
+        // convert C form Z[...] to Z_q[...]
+        GenPolynomial<MOD> Cq = PolyUtil.<MOD> fromIntegerCoefficients(qcfac,C);
+
+        // evaluate C to Z_q[x]
+        GenPolynomialRing<MOD> pf = qcfac;
+        GenPolynomial<MOD> ap = Cq;
+        for ( int j = C.ring.nvar; j > 1; j-- ) {
+            pf = pf.contract(1);
+            MOD vp = mcfac.fromInteger(V.get(j-2).getSymmetricInteger().getVal());
+            //System.out.println("vp     = " + vp);
+            ap = PolyUtil.<MOD> evaluateMain(pf,ap,vp);
+            //System.out.println("ap     = " + ap);
+        }
+        GenPolynomial<MOD> Cq1 = ap;
+        System.out.println("Cq1 = " + Cq1);
+
+        GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(),pf);
+        GenPolynomial<BigInteger> Ci = PolyUtil.integerFromModularCoefficients(ifac, Cq1);
+        System.out.println("Ci = " + Ci);
+        //System.out.println("F.fac = " + F.get(0).ring);
+
+        // lift F to Z_{p^k}[x]
+        List<GenPolynomial<MOD>> U1 = HenselUtil.<MOD> liftHenselMonic(Ci,F,k);
+        System.out.println("U1 = " + U1);
+        //System.out.println("U1.fac = " + U1.get(0).ring);
+
+        // lift U to Z_{p^k}[x,...]
+        List<GenPolynomial<MOD>> U = HenselMultUtil.<MOD> liftHensel(C,Cq,U1,V,k);
+        System.out.println("U  = " + U);
+        System.out.println("U.fac = " + U.get(0).ring);
         return U;
     }
 

@@ -177,9 +177,8 @@ public class GCDHenselTest extends TestCase {
 
     /**
      * Test univariate Hensel algorithm gcd with subres PRS recursive algorithm.
-     * 
      */
-    public void testHenselSubresGcd() {
+    public void xtestHenselSubresGcd() {
 
         GenPolynomial<BigInteger> a;
         GenPolynomial<BigInteger> b;
@@ -239,10 +238,9 @@ public class GCDHenselTest extends TestCase {
 
     /**
      * Test univariate linear Hensel algorithm gcd with subres PRS recursive
- * algorithm.
-     * 
+     * algorithm.
      */
-    public void testHenselLinearSubresGcd() {
+    public void xtestHenselLinearSubresGcd() {
 
         ufd1 = new GreatestCommonDivisorHensel<ModInteger>(false);
 
@@ -308,6 +306,48 @@ public class GCDHenselTest extends TestCase {
             e = PolyUtil.<BigInteger> basePseudoRemainder(b, d);
             //System.out.println("e  = " + e);
             assertTrue("gcd(a,b) | b: " + e, e.isZERO());
+        }
+    }
+
+
+    /**
+     * Test Hensel gcd 2 variables.
+     * 
+     */
+    public void testHenselGCD2() {
+        dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 2, to , new String[] {"y", "x" });
+
+        for (int i = 0; i < 1; i++) {
+            //a = dfac.random(kl, ll, el + i, q);
+            //b = dfac.random(kl, ll, el, q);
+            //c = dfac.random(kl, ll, el, q);
+            a = dfac.parse(" y^2 + 2 x y - 3 y + x^2 - 3 x - 4 ");
+            b = dfac.parse(" y^2 + 2 x y + 5 y + x^2 + 5 x + 4 ");
+            c = dfac.parse(" x + y + 1 ");
+            System.out.println("a = " + a);
+            System.out.println("b = " + b);
+            System.out.println("c = " + c);
+
+            if (a.isZERO() || b.isZERO() ) { //|| c.isZERO()) {
+                // skip for this turn
+                continue;
+            }
+            //assertTrue("length( c" + i + " ) <> 0", c.length() > 0);
+            //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
+            //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
+
+            //a = a.multiply(c);
+            //b = b.multiply(c);
+            //System.out.println("a = " + a);
+            //System.out.println("b = " + b);
+
+            d = ufd.gcd(a, b);
+            System.out.println("d = " + d);
+
+            e = PolyUtil.<BigInteger> basePseudoRemainder(d, c);
+            System.out.println("e = " + e);
+
+            assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
         }
     }
 

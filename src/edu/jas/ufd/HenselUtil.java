@@ -1522,7 +1522,7 @@ public class HenselUtil {
      * @param C monic integer polynomial
      * @param F = [f_0,...,f_{n-1}] list of monic modular polynomials.
      * @param k approximation exponent.
-     * @return [g_0,...,g_{n-1}] with C = prod_{0,...,n-1} g_i mod p^e.
+     * @return [g_0,...,g_{n-1}] with C = prod_{0,...,n-1} g_i mod p^k.
      */
     public static <MOD extends GcdRingElem<MOD> & Modular> List<GenPolynomial<MOD>> liftHenselMonic(
             GenPolynomial<BigInteger> C, List<GenPolynomial<MOD>> F, long k) throws NoLiftingException {
@@ -1591,6 +1591,7 @@ public class HenselUtil {
         List<GenPolynomial<MOD>> Sp = PolyUtil.fromIntegerCoefficients(mfac, Si);
         //System.out.println("Sp = " + Sp);
         for (int i = 1; i < k; i++) {
+            //System.out.println("i = " + i);
             GenPolynomial<BigInteger> e = fac.getONE();
             for (GenPolynomial<BigInteger> fi : Fi) {
                 e = e.multiply(fi);
@@ -1639,7 +1640,8 @@ public class HenselUtil {
                 logger.info("e != 0 for k = " + k);
             }
         }
-        // setup ring mod p^i
+        // setup ring mod p^k
+        modul = Power.positivePower(p,k);
         if (ModLongRing.MAX_LONG.compareTo(modul.getVal()) > 0) {
             mcfac = (ModularRingFactory) new ModLongRing(modul.getVal());
         } else {

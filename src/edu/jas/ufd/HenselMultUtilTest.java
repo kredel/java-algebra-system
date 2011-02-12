@@ -159,7 +159,7 @@ public class HenselMultUtilTest extends TestCase {
     /**
      * Test multivariate diophant lifting.
      */
-    public void xtestDiophantLifting() {
+    public void testDiophantLifting() {
         java.math.BigInteger p;
         //p = getPrime1();
         p = new java.math.BigInteger("19");
@@ -317,7 +317,7 @@ public class HenselMultUtilTest extends TestCase {
     /**
      * Test multivariate diophant lifting list.
      */
-    public void xtestDiophantLiftingList() {
+    public void testDiophantLiftingList() {
         java.math.BigInteger p;
         //p = getPrime1();
         p = new java.math.BigInteger("19");
