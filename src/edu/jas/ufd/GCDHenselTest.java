@@ -13,6 +13,7 @@ import junit.framework.TestSuite;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
+import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
@@ -138,7 +139,7 @@ public class GCDHenselTest extends TestCase {
     int rl = 3;
 
 
-    int kl = 34;
+    int kl = 4;
 
 
     int ll = 5;
@@ -311,35 +312,45 @@ public class GCDHenselTest extends TestCase {
 
 
     /**
-     * Test Hensel gcd 2 variables.
+     * Test Hensel gcd 3 variables.
      * 
      */
-    public void testHenselGCD2() {
-        dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 2, to , new String[] {"y", "x" });
+    public void testHenselGCD3() {
+        BigInteger ifa = new BigInteger(1);
+        //dfac = new GenPolynomialRing<BigInteger>(ifa, 2, to , new String[] {"x", "y" });
+        dfac = new GenPolynomialRing<BigInteger>(ifa, 3, to , new String[] { "x" , "y", "z" });
 
         for (int i = 0; i < 1; i++) {
-            //a = dfac.random(kl, ll, el + i, q);
-            //b = dfac.random(kl, ll, el, q);
-            //c = dfac.random(kl, ll, el, q);
-            a = dfac.parse(" y^2 + 2 x y - 3 y + x^2 - 3 x - 4 ");
-            b = dfac.parse(" y^2 + 2 x y + 5 y + x^2 + 5 x + 4 ");
-            c = dfac.parse(" x + y + 1 ");
+            a = dfac.random(kl, ll, el + i, q);
+            b = dfac.random(kl, ll, el, q);
+            c = dfac.random(kl, ll, el, q);
+	    // make monic
+            ExpVector ev = a.leadingExpVector();
+            a.doPutToMap(ev,ifa.getONE());
+            ev = b.leadingExpVector();
+            b.doPutToMap(ev,ifa.getONE());
+            ev = c.leadingExpVector();
+            c.doPutToMap(ev,ifa.getONE());
+            //a = dfac.parse(" y^2 + 2 x y - 3 y + x^2 - 3 x - 4 ");
+            //b = dfac.parse(" y^2 + 2 x y + 5 y + x^2 + 5 x + 4 ");
+            //a = dfac.parse(" x + 2 y + z^2 + 5 ");
+            //b = dfac.parse(" x - y - 3 + y z ");
+            //c = dfac.parse(" x y + z^2 + y ");
             System.out.println("a = " + a);
             System.out.println("b = " + b);
             System.out.println("c = " + c);
 
-            if (a.isZERO() || b.isZERO() ) { //|| c.isZERO()) {
+            if (a.isZERO() || b.isZERO() || c.isZERO()) {
                 // skip for this turn
                 continue;
             }
-            //assertTrue("length( c" + i + " ) <> 0", c.length() > 0);
-            //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
-            //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
+            assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
+            assertTrue(" not isONE( c"+i+" )", !c.isONE() );
 
-            //a = a.multiply(c);
-            //b = b.multiply(c);
-            //System.out.println("a = " + a);
-            //System.out.println("b = " + b);
+            a = a.multiply(c);
+            b = b.multiply(c);
+            System.out.println("a = " + a);
+            System.out.println("b = " + b);
 
             d = ufd.gcd(a, b);
             System.out.println("d = " + d);
