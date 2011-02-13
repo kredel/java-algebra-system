@@ -489,6 +489,16 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
                     continue;
 		} 
                 // d0 == d1 is ok
+                long dx = r.degree(0);
+                System.out.println("d0, dx = " + d0 + ", " + dx);
+                if ( d0 == dx ) { // gcd == r ??
+                    if (PolyUtil.<BigInteger> recursivePseudoRemainder(q,r).isZERO() ) {
+                        System.out.println("exit with r | q ");
+                        r = r.abs().multiply(c); //.abs();
+                        return r;
+		    }
+                    continue;
+		}
 	    }
 
             // norm
