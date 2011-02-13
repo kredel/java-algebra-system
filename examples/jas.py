@@ -25,7 +25,7 @@ from edu.jas.ps          import UnivPowerSeries, UnivPowerSeriesRing,\
                                 MultiVarPowerSeries, MultiVarPowerSeriesRing,\
                                 MultiVarPowerSeriesMap, MultiVarCoefficients,\
                                 StandardBaseSeq
-from edu.jas.gb          import DGroebnerBaseSeq, EGroebnerBaseSeq,\
+from edu.jas.gb          import EReductionSeq, DGroebnerBaseSeq, EGroebnerBaseSeq,\
                                 GroebnerBaseDistributed, GBDist, GroebnerBaseParallel,\
                                 GroebnerBaseSeq, GroebnerBaseSeqPairSeq,\
                                 ReductionSeq, GroebnerBaseSeqPairParallel,\
@@ -496,6 +496,32 @@ class Ideal:
         es = ExecutableServer( port );
         es.init();
         return None;
+
+    def eReduction(self,p):
+        '''Compute a e-normal form of p with respect to this ideal.
+        '''
+        s = self.pset;
+        G = s.list;
+        if isinstance(p,RingElem):
+            p = p.elem;
+        t = System.currentTimeMillis();
+        n = EReductionSeq().normalform(G,p);
+        t = System.currentTimeMillis() - t;
+        print "sequential eReduction executed in %s ms" % t; 
+        return RingElem(n);
+
+    def reduction(self,p):
+        '''Compute a normal form of p with respect to this ideal.
+        '''
+        s = self.pset;
+        G = s.list;
+        if isinstance(p,RingElem):
+            p = p.elem;
+        t = System.currentTimeMillis();
+        n = ReductionSeq().normalform(G,p);
+        t = System.currentTimeMillis() - t;
+        print "sequential reduction executed in %s ms" % t; 
+        return RingElem(n);
 
     def NF(self,reducer):
         '''Compute a normal form of this ideal with respect to reducer.
