@@ -609,11 +609,16 @@ public class HenselMultUtil {
      * @param F list of modular GenPolynomials, mod (I_v, p )
      * @param V list of substitution values, mod p^k
      * @param k desired approximation exponent p^k.
+     * @param g multiple of leading coefficient of C.
      * @return [g_1,..., g_n] with prod_i g_i = C mod p^k.
      */
     public static <MOD extends GcdRingElem<MOD> & Modular> List<GenPolynomial<MOD>> 
-        liftHenselFull(GenPolynomial<BigInteger> C, List<GenPolynomial<MOD>> F, List<MOD> V, long k)
-                      throws NoLiftingException {
+           liftHenselFull(
+               GenPolynomial<BigInteger> C, 
+               List<GenPolynomial<MOD>> F,  
+               List<MOD> V, 
+               long k, 
+               GenPolynomial<BigInteger> g) throws NoLiftingException {
         if ( F == null || F.size() == 0 ) {
             return new ArrayList<GenPolynomial<MOD>>();
 	}
@@ -649,7 +654,9 @@ public class HenselMultUtil {
         }
         GenPolynomial<MOD> Cq1 = ap;
         System.out.println("Cq1 = " + Cq1);
-
+        if ( Cq1.isZERO() ) {
+            throw new NoLiftingException("C mod I, p == 0: " + C);
+        }
         GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(),pf);
         GenPolynomial<BigInteger> Ci = PolyUtil.integerFromModularCoefficients(ifac, Cq1);
         System.out.println("Ci = " + Ci);

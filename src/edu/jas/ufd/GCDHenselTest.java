@@ -347,8 +347,7 @@ public class GCDHenselTest extends TestCase {
                 // skip for this turn
                 continue;
             }
-            assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
-            //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
+            //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
 
             a = a.multiply(c);
             b = b.multiply(c);
