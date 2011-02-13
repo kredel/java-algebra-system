@@ -274,8 +274,8 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
      */
     @Override
     public GenPolynomial<GenPolynomial<BigInteger>> recursiveUnivariateGcd(
-                                                                           GenPolynomial<GenPolynomial<BigInteger>> P,
-                                                                           GenPolynomial<GenPolynomial<BigInteger>> S) {
+              GenPolynomial<GenPolynomial<BigInteger>> P,
+              GenPolynomial<GenPolynomial<BigInteger>> S) {
         if (S == null || S.isZERO()) {
             return P;
         }
@@ -308,6 +308,8 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
         System.out.println("rgcd c = " + c);
         r = PolyUtil.<BigInteger> recursiveDivide(r, a);
         q = PolyUtil.<BigInteger> recursiveDivide(q, b);
+        a = PolyUtil.<BigInteger> basePseudoDivide(a, c);
+        b = PolyUtil.<BigInteger> basePseudoDivide(b, c);
         if (r.isONE()) {
             return r.multiply(c);
         }
@@ -322,7 +324,6 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
         RingFactory<GenPolynomial<BigInteger>> rrfac = rfac.coFac;
         GenPolynomialRing<BigInteger> cfac = (GenPolynomialRing<BigInteger>) rrfac;
         GenPolynomialRing<BigInteger> dfac = cfac.extend(rfac.nvar);
-
         System.out.println("pfac = " + P.ring.toScript());
         System.out.println("rfac = " + rfac.toScript());
         System.out.println("dfac = " + dfac.toScript());
@@ -331,192 +332,238 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
         GenPolynomial<BigInteger> rd = PolyUtil.<BigInteger> distribute(dfac, rs);
         System.out.println("qd = " + qd);
         System.out.println("rd = " + rd);
+        System.out.println("a  = " + a);
+        System.out.println("b  = " + b);
 
         // compute normalization factor
         BigInteger ac = rd.leadingBaseCoefficient();
         BigInteger bc = qd.leadingBaseCoefficient();
         BigInteger cc = gcd(ac, bc); // indirection
-        // compute degree vectors
-        ExpVector rdegv = rd.degreeVector();
-        ExpVector qdegv = qd.degreeVector();
+
         //initialize prime list
         PrimeList primes = new PrimeList(PrimeList.Range.medium); // PrimeList.Range.medium);
         Iterator<java.math.BigInteger> primeIter = primes.iterator();
         int pn = 50; //primes.size();
 
-        // compute norms
-        BigInteger an = rd.maxNorm();
-        BigInteger bn = qd.maxNorm();
-        BigInteger n = (an.compareTo(bn) < 0 ? bn : an);
-        n = n.multiply(cc).multiply(n.fromInteger(2));
-        System.out.println("n = " + n);
+        // double check variables
+        // need qe,re,qd,rd,a,b
+        GenPolynomial<MOD> qe0;
+        GenPolynomial<MOD> re0;
+        GenPolynomial<MOD> ce0 = null;
 
-        java.math.BigInteger p = new java.math.BigInteger("19"); //primes.next();
-        //p = primeIter.next(); // 2
-        //p = primeIter.next(); // 3
-
-        ModularRingFactory<MOD> cofac = null;
-        int pi = 0;
-        while ( pi < pn && primeIter.hasNext() ) {
-            p = primeIter.next();
-            //p = new java.math.BigInteger("19");
-            System.out.println("prime = " + p);
-            // initialize coefficient factory and map normalization factor and polynomials
-            ModularRingFactory<MOD> cf = null;
-            if (ModLongRing.MAX_LONG.compareTo(p) > 0) {
-                cf = (ModularRingFactory) new ModLongRing(p, true);
-            } else {
-                cf = (ModularRingFactory) new ModIntegerRing(p, true);
-            }
-            MOD nf = cf.fromInteger(cc.getVal());
-            if (nf.isZERO()) {
-                continue;
-            }
-            //System.out.println("nf 1 = " + nf);
-            nf = cf.fromInteger(q.leadingBaseCoefficient().leadingBaseCoefficient().getVal());
-            if (nf.isZERO()) {
-                continue;
-            }
-            //System.out.println("nf 2 = " + nf);
-            nf = cf.fromInteger(r.leadingBaseCoefficient().leadingBaseCoefficient().getVal());
-            if (nf.isZERO()) {
-                continue;
-            }
-            //System.out.println("nf 3 = " + nf);
-            cofac = cf;
-            break;
-        }
-        if ( cofac == null ) {
-            GenPolynomial<GenPolynomial<BigInteger>> T = iufd.recursiveUnivariateGcd(P, S);
-            return T.abs().multiply(c); //.abs();
-        }
-        System.out.println("cofac = " + cofac);
-
-        List<MOD> V = new ArrayList<MOD>(1);
-        GenPolynomialRing<MOD> mfac = new GenPolynomialRing<MOD>(cofac, dfac);
-        System.out.println("mfac = " + mfac.toScript());
-        GenPolynomial<MOD> qm = PolyUtil.<MOD> fromIntegerCoefficients(mfac, qd);
-        GenPolynomial<MOD> rm = PolyUtil.<MOD> fromIntegerCoefficients(mfac, rd);
-        System.out.println("qm = " + qm);
-        System.out.println("rm = " + rm);
-
-        // search evaluation point and evaluate
-        GenPolynomialRing<MOD> ckfac = mfac;
-        GenPolynomial<MOD> qe = qm;
-        GenPolynomial<MOD> re = rm;
-        GenPolynomial<MOD> qep;
-        GenPolynomial<MOD> rep;
-        for ( int j = dfac.nvar; j > 1; j-- ) {
-            // evaluation to univariate case
-            long degq = qe.degree(ckfac.nvar-2);
-            long degr = re.degree(ckfac.nvar-2);
-            ckfac = ckfac.contract(1);
-            long vi = 1L; // 0 not good
-            // search small evaluation point
-            while( true ) { 
-                //MOD vp = cofac.fromInteger(V.get(j-2).getSymmetricInteger().getVal());
-                MOD vp = cofac.fromInteger(vi++);
-                System.out.println("vp = " + vp);
-                if ( vp.isZERO() && vi != 1L ) { // all elements of Z_p exhausted
-                    GenPolynomial<GenPolynomial<BigInteger>> T = iufd.recursiveUnivariateGcd(P, S);
-                    return T.abs().multiply(c); //.abs();
+        for ( int i = 0; i < 10; i++ ) { // meta loop
+            System.out.println("======================================================= run " + i);
+            java.math.BigInteger p = null; //new java.math.BigInteger("19"); //primes.next();
+            if ( i == 5 ) { // no success with medium primes
+                primes = new PrimeList(PrimeList.Range.small);
+                primeIter = primes.iterator();
+                p = primeIter.next(); // 2
+                p = primeIter.next(); // 3
+	    }
+            ModularRingFactory<MOD> cofac = null;
+            int pi = 0;
+            while ( pi < pn && primeIter.hasNext() ) {
+                p = primeIter.next();
+                //p = new java.math.BigInteger("19");
+                System.out.println("prime = " + p);
+                // initialize coefficient factory and map normalization factor and polynomials
+                ModularRingFactory<MOD> cf = null;
+                if (ModLongRing.MAX_LONG.compareTo(p) > 0) {
+                    cf = (ModularRingFactory) new ModLongRing(p, true);
+                } else {
+                    cf = (ModularRingFactory) new ModIntegerRing(p, true);
                 }
-                System.out.println("degv(qe) = " + qe.degreeVector());
-                System.out.println("degv(re) = " + re.degreeVector());
-                qep = PolyUtil.<MOD> evaluateMain(ckfac,qe,vp);
-                rep = PolyUtil.<MOD> evaluateMain(ckfac,re,vp);
-                System.out.println("qep = " + qep);
-                System.out.println("rep = " + rep);
-
-                // check lucky evaluation point 
-                MOD ql = qep.leadingBaseCoefficient();
-                MOD rl = rep.leadingBaseCoefficient();
-                if (ql.isZERO()) {
-                    //throw new RuntimeException("ql.isZERO()"); //
+                MOD nf = cf.fromInteger(cc.getVal());
+                if (nf.isZERO()) {
                     continue;
                 }
-                if (rl.isZERO()) {
-                    //throw new RuntimeException("rl.isZERO()"); //
+                nf = cf.fromInteger(q.leadingBaseCoefficient().leadingBaseCoefficient().getVal());
+                if (nf.isZERO()) {
                     continue;
                 }
-                System.out.println("ql = " + ql);
-                System.out.println("rl = " + rl);
-                if (degq != qep.degree(ckfac.nvar-1)) {
-                    System.out.println("degv(qe) = " + qe.degreeVector());
-                    System.out.println("deg(qe) = " + degq + ", deg(qe) = " + qep.degree(0));
-                    //throw new RuntimeException("wrong degree"); //
+                nf = cf.fromInteger(r.leadingBaseCoefficient().leadingBaseCoefficient().getVal());
+                if (nf.isZERO()) {
                     continue;
                 }
-                if (degr != rep.degree(ckfac.nvar-1)) {
-                    System.out.println("degv(re) = " + re.degreeVector());
-                    System.out.println("deg(re) = " + degr + ", deg(re) = " + rep.degree(0));
-                    //throw new RuntimeException("wrong degree"); //
-                    continue;
-                }
-                V.add(vp);
-                qe = qep;
-                re = rep;
+                cofac = cf;
                 break;
             }
-        }
-        System.out.println("V = " + V);
+            if ( cofac == null ) { // no lucky prime found
+                System.out.println("giving up on Hensel gcd reverting to Subres gcd");
+                GenPolynomial<GenPolynomial<BigInteger>> T = iufd.recursiveUnivariateGcd(P, S);
+                return T.abs().multiply(c); //.abs();
+            }
+            System.out.println("cofac = " + cofac);
 
-        // recursion base:
-        GreatestCommonDivisorAbstract<MOD> mufd = GCDFactory.getImplementation(cofac);
-        GenPolynomial<MOD> ce = mufd.baseGcd(qe,re);
-        System.out.println("ce = " + ce);
-        if ( ce.isConstant() ) {
-            return P.ring.getONE().multiply(c);
-        }
+            List<MOD> V = new ArrayList<MOD>(1);
+            GenPolynomialRing<MOD> mfac = new GenPolynomialRing<MOD>(cofac, dfac);
+            System.out.println("mfac = " + mfac.toScript());
+            GenPolynomial<MOD> qm = PolyUtil.<MOD> fromIntegerCoefficients(mfac, qd);
+            GenPolynomial<MOD> rm = PolyUtil.<MOD> fromIntegerCoefficients(mfac, rd);
+            System.out.println("qm = " + qm);
+            System.out.println("rm = " + rm);
 
-        // prepare lifting
-        GenPolynomial<BigInteger> ui;
-        GenPolynomial<MOD> he;
-        if ( mufd.baseGcd(qe,ce).isONE() ) {
-            ui = qd; he = PolyUtil.<MOD> basePseudoDivide(qe,ce);
-        } else if ( mufd.baseGcd(re,ce).isONE() ) {
-            ui = rd; he = PolyUtil.<MOD> basePseudoDivide(re,ce);
-        } else {
-            System.out.println("giving up on Hensel gcd reverting to Subres gcd");
-            System.out.println("gcd(qe,ce) = " + mufd.baseGcd(qe,ce));
-            System.out.println("gcd(re,ce) = " + mufd.baseGcd(re,ce));
-            //logger.info("giving up on Hensel gcd reverting to Subres gcd");
-            //GenPolynomial<GenPolynomial<BigInteger>> T = iufd.recursiveUnivariateGcd(P, S);
-            //return T.abs().multiply(c); //.abs();
-            ui = qd; he = PolyUtil.<MOD> basePseudoDivide(qe,ce);
-        }
-        System.out.println("ui = " + ui);
+            // search evaluation point and evaluate
+            GenPolynomialRing<MOD> ckfac = mfac;
+            GenPolynomial<MOD> qe = qm;
+            GenPolynomial<MOD> re = rm;
+            GenPolynomial<MOD> qep;
+            GenPolynomial<MOD> rep;
+            for ( int j = dfac.nvar; j > 1; j-- ) {
+                // evaluation to univariate case
+                long degq = qe.degree(ckfac.nvar-2);
+                long degr = re.degree(ckfac.nvar-2);
+                ckfac = ckfac.contract(1);
+                long vi = 1L; // 0 not good
+                // search small evaluation point
+                while( true ) { 
+                    MOD vp = cofac.fromInteger(vi++);
+                    System.out.println("vp = " + vp);
+                    if ( vp.isZERO() && vi != 1L ) { // all elements of Z_p exhausted
+			qe = null;
+                        re = null;
+                        break;
+                        //GenPolynomial<GenPolynomial<BigInteger>> T = iufd.recursiveUnivariateGcd(P, S);
+                        //return T.abs().multiply(c); //.abs();
+                    }
+                    qep = PolyUtil.<MOD> evaluateMain(ckfac,qe,vp);
+                    rep = PolyUtil.<MOD> evaluateMain(ckfac,re,vp);
+                    System.out.println("qep = " + qep);
+                    System.out.println("rep = " + rep);
 
-        long k = 1L;
-        java.math.BigInteger m = p;
-        while ( m.compareTo(n.getVal()) < 0 ) {
-	    m = m.multiply(p);
-            k++;
-	}
-        System.out.println("k = " + k);
-        System.out.println("m = " + m);
+                    // check lucky evaluation point 
+                    MOD ql = qep.leadingBaseCoefficient();
+                    MOD rl = rep.leadingBaseCoefficient();
+                    if (ql.isZERO()||rl.isZERO()) { // nearly non sense
+                        continue;
+                    }
+                    if (degq != qep.degree(ckfac.nvar-1)) {
+                        System.out.println("degv(qe) = " + qe.degreeVector());
+                        System.out.println("deg(qe) = " + degq + ", deg(qe) = " + qep.degree(0));
+                        continue;
+                    }
+                    if (degr != rep.degree(ckfac.nvar-1)) {
+                        System.out.println("degv(re) = " + re.degreeVector());
+                        System.out.println("deg(re) = " + degr + ", deg(re) = " + rep.degree(0));
+                        continue;
+                    }
+                    V.add(vp);
+                    qe = qep;
+                    re = rep;
+                    break;
+                }
+                if ( qe == null && re == null ) {
+                    break;
+		}
+            }
+            if ( qe == null && re == null ) {
+                continue;
+            }
+            System.out.println("V = " + V);
+
+            // recursion base:
+            GreatestCommonDivisorAbstract<MOD> mufd = GCDFactory.getImplementation(cofac);
+            GenPolynomial<MOD> ce = mufd.baseGcd(qe,re);
+            System.out.println("ce = " + ce);
+            if ( ce.isConstant() ) {
+                return P.ring.getONE().multiply(c);
+            }
+
+            // need qe,re,qd,rd,a,b
+            if ( i == 0 ) {
+                qe0 = qe;
+                re0 = re;
+                ce0 = ce;
+                continue;
+	    } else {
+                long d0 = ce0.degree(0);
+                long d1 = ce.degree(0);
+                System.out.println("d0, d1 = " + d0 + ", " + d1);
+                if ( d1 < d0 ) {
+                    qe0 = qe;
+                    re0 = re;
+                    ce0 = ce;
+                    continue;
+		} else if ( d1 > d0 ) {
+                    continue;
+		} 
+                // d0 == d1 is ok
+	    }
+
+            // norm
+            BigInteger mn = null; 
+            //mn = mn.multiply(cc).multiply(mn.fromInteger(2));
+
+            // prepare lifting
+            GenPolynomial<BigInteger> ui;
+            GenPolynomial<MOD> he;
+            GenPolynomial<BigInteger> g;
+            if ( mufd.baseGcd(qe,ce).isONE() ) {
+                ui = qd; 
+                he = PolyUtil.<MOD> basePseudoDivide(qe,ce);
+                BigInteger bn = qd.maxNorm();
+                mn = bn.multiply(cc).multiply(new BigInteger(2L));
+                g = b;
+            } else if ( mufd.baseGcd(re,ce).isONE() ) {
+                ui = rd; 
+                he = PolyUtil.<MOD> basePseudoDivide(re,ce);
+                BigInteger an = rd.maxNorm();
+                mn = an.multiply(cc).multiply(new BigInteger(2L));
+                g = a;
+            } else {
+                //System.out.println("giving up on Hensel gcd reverting to Subres gcd");
+                System.out.println("gcd(qe,ce) = " + mufd.baseGcd(qe,ce));
+                System.out.println("gcd(re,ce) = " + mufd.baseGcd(re,ce));
+                ///continue;
+                //logger.info("giving up on Hensel gcd reverting to Subres gcd");
+                ui = qd; 
+                he = PolyUtil.<MOD> basePseudoDivide(qe,ce);
+                BigInteger bn = qd.maxNorm();
+                mn = bn.multiply(cc).multiply(new BigInteger(2L));
+                g = a;
+            }
+            System.out.println("ui = " + ui);
+
+            long k = Power.logarithm(new BigInteger(p),mn);
+            System.out.println("mn = " + mn);
+            System.out.println("k = " + k);
         
-        List<GenPolynomial<MOD>> F = new ArrayList<GenPolynomial<MOD>>();
-        F.add(ce);
-        F.add(he);
-        List<GenPolynomial<MOD>> lift;
-        try {
-            lift = HenselMultUtil.<MOD> liftHenselFull(ui,F,V,k);
-            System.out.println("lift = " + lift);
-        } catch ( NoLiftingException nle ) { 
-            GenPolynomial<GenPolynomial<BigInteger>> T = iufd.recursiveUnivariateGcd(P, S);
-            return T.abs().multiply(c); //.abs();
-        }
+            List<GenPolynomial<MOD>> F = new ArrayList<GenPolynomial<MOD>>();
+            F.add(ce);
+            F.add(he);
+            List<GenPolynomial<MOD>> lift;
+            try {
+                lift = HenselMultUtil.<MOD> liftHenselFull(ui,F,V,k);
+                System.out.println("lift = " + lift);
+            } catch ( NoLiftingException nle ) {
+                continue;  
+                //System.out.println("giving up on Hensel gcd reverting to Subres gcd");
+                //GenPolynomial<GenPolynomial<BigInteger>> T = iufd.recursiveUnivariateGcd(P, S);
+                //return T.abs().multiply(c); //.abs();
+            } catch ( ArithmeticException ae ) {
+                continue;  
+            }
 
-        // convert Ci from Z_{p^k}[x,y1,...,yr] to Z[x,y1,...,yr] to Z[x][y1,...,yr] to Z[y1,...,yr][x]
-        GenPolynomial<BigInteger> ci = PolyUtil.integerFromModularCoefficients( dfac, lift.get(0) );
-        GenPolynomial<GenPolynomial<BigInteger>> Cr = PolyUtil.<BigInteger> recursive(rfac,ci);
-        GenPolynomial<GenPolynomial<BigInteger>> Cs = PolyUtil.<BigInteger> switchVariables(Cr);
-        if ( ! Cs.ring.equals(P.ring) ) {
-            System.out.println("Cs.ring = " + Cs.ring + ", P.ring = " + P.ring);
-        }
-        q = recursivePrimitivePart(Cs);
-        return q.abs().multiply(c); //.abs();
+            // convert Ci from Z_{p^k}[x,y1,...,yr] to Z[x,y1,...,yr] to Z[x][y1,...,yr] to Z[y1,...,yr][x]
+            GenPolynomial<BigInteger> ci = PolyUtil.integerFromModularCoefficients( dfac, lift.get(0) );
+            GenPolynomial<GenPolynomial<BigInteger>> Cr = PolyUtil.<BigInteger> recursive(rfac,ci);
+            GenPolynomial<GenPolynomial<BigInteger>> Cs = PolyUtil.<BigInteger> switchVariables(Cr);
+            if ( ! Cs.ring.equals(P.ring) ) {
+                System.out.println("Cs.ring = " + Cs.ring + ", P.ring = " + P.ring);
+            }
+            q = recursivePrimitivePart(Cs);
+            if ( PolyUtil.<BigInteger> recursivePseudoRemainder(P,q).isZERO() 
+                 && PolyUtil.<BigInteger> recursivePseudoRemainder(S,q).isZERO() ) {
+                q = q.abs().multiply(c); //.abs();
+                return q;
+	    }
+        } // end for
+        // Hensel gcd failed
+        System.out.println("giving up on Hensel gcd reverting to Subres gcd");
+        GenPolynomial<GenPolynomial<BigInteger>> T = iufd.recursiveUnivariateGcd(P, S);
+        return T.abs().multiply(c); //.abs();
     }
+
+
 
 }

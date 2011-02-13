@@ -324,13 +324,16 @@ public class GCDHenselTest extends TestCase {
             a = dfac.random(kl, ll, el + i, q);
             b = dfac.random(kl, ll, el, q);
             c = dfac.random(kl, ll, el, q);
-	    // make monic
+            // make monic and c with univariate head term
             ExpVector ev = a.leadingExpVector();
             a.doPutToMap(ev,ifa.getONE());
             ev = b.leadingExpVector();
             b.doPutToMap(ev,ifa.getONE());
             ev = c.leadingExpVector();
             c.doPutToMap(ev,ifa.getONE());
+            if ( ev.dependencyOnVariables().length > 1 ) {
+                c = dfac.getONE();
+            }
             //a = dfac.parse(" y^2 + 2 x y - 3 y + x^2 - 3 x - 4 ");
             //b = dfac.parse(" y^2 + 2 x y + 5 y + x^2 + 5 x + 4 ");
             //a = dfac.parse(" x + 2 y + z^2 + 5 ");
@@ -345,7 +348,7 @@ public class GCDHenselTest extends TestCase {
                 continue;
             }
             assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
-            assertTrue(" not isONE( c"+i+" )", !c.isONE() );
+            //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
 
             a = a.multiply(c);
             b = b.multiply(c);
@@ -353,10 +356,11 @@ public class GCDHenselTest extends TestCase {
             System.out.println("b = " + b);
 
             d = ufd.gcd(a, b);
-            System.out.println("d = " + d);
 
             e = PolyUtil.<BigInteger> basePseudoRemainder(d, c);
             System.out.println("e = " + e);
+            System.out.println("d = " + d);
+            System.out.println("c = " + c);
 
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
         }
