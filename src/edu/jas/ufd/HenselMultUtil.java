@@ -685,12 +685,12 @@ public class HenselMultUtil {
         System.out.println("gi0 = " + gi0 + ", V = " + V + ", g = " + g);
 
         // lift F to Z_{p^k}[x]
-        List<GenPolynomial<MOD>> U1 = HenselUtil.<MOD> liftHenselMonic(Ci,F,k);
+        List<GenPolynomial<MOD>> U1 = HenselUtil.<MOD> liftHenselMonic(Ci,F,k); // gi0
         System.out.println("U1 = " + U1);
         //System.out.println("U1.fac = " + U1.get(0).ring);
 
         // lift U to Z_{p^k}[x,...]
-        List<GenPolynomial<MOD>> U = HenselMultUtil.<MOD> liftHensel(C,Cq,U1,V,k);
+        List<GenPolynomial<MOD>> U = HenselMultUtil.<MOD> liftHensel(C,Cq,U1,V,k); // g
         System.out.println("U  = " + U);
         System.out.println("U.fac = " + U.get(0).ring);
         return U;
