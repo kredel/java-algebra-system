@@ -326,13 +326,19 @@ public class GCDHenselTest extends TestCase {
             c = dfac.random(kl, ll, el, q);
             // make monic and c with univariate head term
             ExpVector ev = a.leadingExpVector();
-            a.doPutToMap(ev,ifa.getONE());
+            if ( ev != null ) {
+                a.doPutToMap(ev,ifa.getONE());
+            }
             ev = b.leadingExpVector();
-            b.doPutToMap(ev,ifa.getONE());
+            if ( ev != null ) {
+                b.doPutToMap(ev,ifa.getONE());
+            }
             ev = c.leadingExpVector();
-            c.doPutToMap(ev,ifa.getONE());
+            if ( ev != null ) {
+                c.doPutToMap(ev,ifa.getONE());
+            }
             if ( ev.dependencyOnVariables().length > 1 ) {
-                c = dfac.getONE();
+                c = dfac.univariate(1); //getONE();
             }
             //a = dfac.parse(" y^2 + 2 x y - 3 y + x^2 - 3 x - 4 ");
             //b = dfac.parse(" y^2 + 2 x y + 5 y + x^2 + 5 x + 4 ");
@@ -357,7 +363,7 @@ public class GCDHenselTest extends TestCase {
             d = ufd.gcd(a, b);
 
             e = PolyUtil.<BigInteger> basePseudoRemainder(d, c);
-            System.out.println("e = " + e);
+            //System.out.println("e = " + e);
             System.out.println("d = " + d);
             System.out.println("c = " + c);
 
