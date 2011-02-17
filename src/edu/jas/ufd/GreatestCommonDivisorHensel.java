@@ -32,7 +32,7 @@ import edu.jas.structure.RingFactory;
  */
 
 public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular> extends
-                                                                                     GreatestCommonDivisorAbstract<BigInteger> {
+                                             GreatestCommonDivisorAbstract<BigInteger> {
 
 
     private static final Logger logger = Logger.getLogger(GreatestCommonDivisorHensel.class);
@@ -353,8 +353,8 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
         GenPolynomial<MOD> ce0 = null;
 
         for ( int i = 0; i < 11; i++ ) { // meta loop
-            System.out.println("======================================================= run " 
-                               + dfac.nvar + ", " + i);
+            //System.out.println("======================================================= run " 
+            //                   + dfac.nvar + ", " + i);
             java.math.BigInteger p = null; //new java.math.BigInteger("19"); //primes.next();
             // 5 small, 5 medium and 1 large size primes
             if ( i == 0 ) { // medium size
@@ -378,7 +378,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
             while ( pi < pn && primeIter.hasNext() ) {
                 p = primeIter.next();
                 //p = new java.math.BigInteger("19");
-                System.out.println("prime = " + p);
+                logger.info("prime = " + p);
                 // initialize coefficient factory and map normalization factor and polynomials
                 ModularRingFactory<MOD> cf = null;
                 if (ModLongRing.MAX_LONG.compareTo(p) > 0) {
@@ -476,17 +476,18 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
             if ( qe == null && re == null ) {
                 continue;
             }
-            System.out.println("V  = " + V);
+            logger.info("evaluation points  = " + V);
             //System.out.println("qe = " + qe);
             //System.out.println("re = " + re);
 
             // recursion base:
             GreatestCommonDivisorAbstract<MOD> mufd = GCDFactory.getImplementation(cofac);
             GenPolynomial<MOD> ce = mufd.baseGcd(qe,re);
-            System.out.println("ce = " + ce);
             if ( ce.isConstant() ) {
                 return P.ring.getONE().multiply(c);
             }
+            //System.out.println("ce = " + ce);
+            logger.info("base gcd = " + ce);
             //System.out.println("c = " + c);
 
             // double check 
@@ -559,7 +560,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
             List<GenPolynomial<MOD>> lift;
             try {
                 lift = HenselMultUtil.<MOD> liftHenselFull(ui,F,V,k,g);
-                System.out.println("lift = " + lift);
+                logger.info("lift = " + lift);
             } catch ( NoLiftingException nle ) {
                 //System.out.println("exception : " + nle);
                 continue;  
@@ -581,16 +582,16 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
                  && PolyUtil.<BigInteger> recursivePseudoRemainder(S,q).isZERO() ) {
                 return q;
             } else {
-                System.out.println("bad q = " + q);
+                //System.out.println("bad q = " + q);
                 //System.out.println("bad P/q = " + PolyUtil.<BigInteger> recursivePseudoRemainder(P,q));
                 //System.out.println("bad S/q = " + PolyUtil.<BigInteger> recursivePseudoRemainder(S,q));
             }
         } // end for meta loop
         // Hensel gcd failed
-        logger.info("giving up on Hensel gcd reverting to Subres gcd");
         GenPolynomial<GenPolynomial<BigInteger>> T = iufd.recursiveUnivariateGcd(P, S);
         T = T.abs().multiply(c); //.abs();
-        System.out.println("giving up on Hensel gcd reverted to Subres gcd: " + T);
+        logger.info("giving up on Hensel gcd reverting to Subres gcd " + T);
+        //System.out.println("giving up on Hensel gcd reverted to Subres gcd: " + T);
         return T;
     }
 

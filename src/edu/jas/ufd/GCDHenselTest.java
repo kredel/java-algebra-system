@@ -7,6 +7,8 @@ package edu.jas.ufd;
 
 //import java.util.Map;
 
+import org.apache.log4j.BasicConfigurator;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -32,7 +34,7 @@ public class GCDHenselTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        //BasicConfigurator.configure();
+        BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 
@@ -179,7 +181,7 @@ public class GCDHenselTest extends TestCase {
     /**
      * Test univariate Hensel algorithm gcd with subres PRS recursive algorithm.
      */
-    public void xtestHenselSubresGcd() {
+    public void testHenselSubresGcd() {
 
         GenPolynomial<BigInteger> a;
         GenPolynomial<BigInteger> b;
@@ -241,7 +243,7 @@ public class GCDHenselTest extends TestCase {
      * Test univariate linear Hensel algorithm gcd with subres PRS recursive
      * algorithm.
      */
-    public void xtestHenselLinearSubresGcd() {
+    public void testHenselLinearSubresGcd() {
 
         ufd1 = new GreatestCommonDivisorHensel<ModInteger>(false);
 
@@ -361,12 +363,10 @@ public class GCDHenselTest extends TestCase {
             System.out.println("b = " + b);
 
             d = ufd.gcd(a, b);
-
             e = PolyUtil.<BigInteger> basePseudoRemainder(d, c);
             //System.out.println("e = " + e);
             System.out.println("d = " + d);
             System.out.println("c = " + c);
-
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
         }
     }

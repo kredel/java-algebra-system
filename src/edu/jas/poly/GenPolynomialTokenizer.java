@@ -651,7 +651,7 @@ public class GenPolynomialTokenizer {
 			} else {
                             coeff = new ModIntegerRing(mo.getVal());
 			}
-                        System.out.println("coeff = " + coeff + " :: " + coeff.getClass());
+                        //System.out.println("coeff = " + coeff + " :: " + coeff.getClass());
                         ct = coeffType.ModInt;
                     } else {
                         tok.pushBack();

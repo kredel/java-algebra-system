@@ -418,7 +418,7 @@ public class HenselMultUtil {
         //    return HenselUtil.<MOD> liftHenselMonic(C,F,k);
         //}
         long d = C.degree();
-        System.out.println("d = " + d);
+        //System.out.println("d = " + d);
         // prepare stack of polynomial rings and polynomials
         List<GenPolynomialRing<MOD>> Pfac = new ArrayList<GenPolynomialRing<MOD>>();
         List<GenPolynomial<MOD>> Ap = new ArrayList<GenPolynomial<MOD>>();
@@ -621,12 +621,12 @@ public class HenselMultUtil {
                GenPolynomial<BigInteger> g) throws NoLiftingException {
         if ( F == null || F.size() == 0 ) {
             return new ArrayList<GenPolynomial<MOD>>();
-	}
+        }
         GenPolynomialRing<MOD> pkfac = F.get(0).ring;
         long d = C.degree();
         System.out.println("d = " + d);
         // setup q = p^k
-	RingFactory<MOD> cfac = pkfac.coFac;
+        RingFactory<MOD> cfac = pkfac.coFac;
         ModularRingFactory<MOD> pcfac = (ModularRingFactory<MOD>)cfac; 
         //System.out.println("pcfac = " + pcfac);
         BigInteger p = pcfac.getIntegerModul();
