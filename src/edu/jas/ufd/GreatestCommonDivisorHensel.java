@@ -456,12 +456,12 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
                     }
                     if (degq != qep.degree(ckfac.nvar-1)) {
                         //System.out.println("degv(qe) = " + qe.degreeVector());
-                        System.out.println("deg(qe) = " + degq + ", deg(qe) = " + qep.degree(ckfac.nvar-1));
+                        //System.out.println("deg(qe) = " + degq + ", deg(qe) = " + qep.degree(ckfac.nvar-1));
                         continue;
                     }
                     if (degr != rep.degree(ckfac.nvar-1)) {
                         //System.out.println("degv(re) = " + re.degreeVector());
-                        System.out.println("deg(re) = " + degr + ", deg(re) = " + rep.degree(ckfac.nvar-1));
+                        //System.out.println("deg(re) = " + degr + ", deg(re) = " + rep.degree(ckfac.nvar-1));
                         continue;
                     }
                     V.add(vp);
@@ -548,7 +548,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
                 break;
                 //System.out.println("giving up on Hensel gcd reverting to Subres gcd");
             }
-            System.out.println("ui = " + ui);
+            //System.out.println("ui = " + ui);
 
             long k = Power.logarithm(new BigInteger(p),mn);
             //System.out.println("mn = " + mn);

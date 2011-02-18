@@ -34,7 +34,7 @@ public class GCDHenselTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
+        //BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 
@@ -347,9 +347,9 @@ public class GCDHenselTest extends TestCase {
             //a = dfac.parse(" x + 2 y + z^2 + 5 ");
             //b = dfac.parse(" x - y - 3 + y z ");
             //c = dfac.parse(" x y + z^2 + y ");
-            System.out.println("a = " + a);
-            System.out.println("b = " + b);
-            System.out.println("c = " + c);
+            //System.out.println("a = " + a);
+            //System.out.println("b = " + b);
+            //System.out.println("c = " + c);
 
             if (a.isZERO() || b.isZERO() || c.isZERO()) {
                 // skip for this turn
@@ -359,14 +359,14 @@ public class GCDHenselTest extends TestCase {
 
             a = a.multiply(c);
             b = b.multiply(c);
-            System.out.println("a = " + a);
-            System.out.println("b = " + b);
+            //System.out.println("a = " + a);
+            //System.out.println("b = " + b);
 
             d = ufd.gcd(a, b);
             e = PolyUtil.<BigInteger> basePseudoRemainder(d, c);
             //System.out.println("e = " + e);
-            System.out.println("d = " + d);
-            System.out.println("c = " + c);
+            //System.out.println("d = " + d);
+            //System.out.println("c = " + c);
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
         }
     }

@@ -624,7 +624,7 @@ public class HenselMultUtil {
         }
         GenPolynomialRing<MOD> pkfac = F.get(0).ring;
         long d = C.degree();
-        System.out.println("d = " + d);
+        //System.out.println("d = " + d);
         // setup q = p^k
         RingFactory<MOD> cfac = pkfac.coFac;
         ModularRingFactory<MOD> pcfac = (ModularRingFactory<MOD>)cfac; 
@@ -663,7 +663,7 @@ public class HenselMultUtil {
         }
         GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(),pf);
         GenPolynomial<BigInteger> Ci = PolyUtil.integerFromModularCoefficients(ifac, Cq1);
-        System.out.println("Ci = " + Ci);
+        //System.out.println("Ci = " + Ci);
         //System.out.println("F.fac = " + F.get(0).ring);
 
         // evaluate g to Z_q
@@ -682,11 +682,11 @@ public class HenselMultUtil {
         MOD gq0 = PolyUtil.<MOD> evaluateMain(mcfac,gq1,vp);
         //System.out.println("gq0 = " + gq0);
         BigInteger gi0 = gq0.getSymmetricInteger();
-        System.out.println("gi0 = " + gi0 + ", g = " + g);
+        //System.out.println("gi0 = " + gi0 + ", g = " + g);
 
         // lift F to Z_{p^k}[x]
         List<GenPolynomial<MOD>> U1 = HenselUtil.<MOD> liftHenselMonic(Ci,F,k); // gi0
-        System.out.println("U1 = " + U1);
+        //System.out.println("U1 = " + U1);
         //System.out.println("U1.fac = " + U1.get(0).ring);
 
         // lift U to Z_{p^k}[x,...]
