@@ -34,7 +34,7 @@ public class GCDHenselTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        //BasicConfigurator.configure();
+        BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 
@@ -226,7 +226,7 @@ public class GCDHenselTest extends TestCase {
             //System.out.println("d  = " + d);
             //System.out.println("e  = " + e);
 
-            assertTrue("c | gcd(ac,bc): " + e, e.isZERO());
+            assertTrue("c | gcd(ac,bc): " + d + ", c = " + c, e.isZERO());
 
             e = PolyUtil.<BigInteger> basePseudoRemainder(a, d);
             //System.out.println("e  = " + e);
@@ -300,7 +300,7 @@ public class GCDHenselTest extends TestCase {
             //System.out.println("d  = " + d);
             //System.out.println("e  = " + e);
 
-            assertTrue("c | gcd(ac,bc): " + e, e.isZERO());
+            assertTrue("c | gcd(ac,bc): " + d + ", c = " + c, e.isZERO());
 
             e = PolyUtil.<BigInteger> basePseudoRemainder(a, d);
             //System.out.println("e  = " + e);
