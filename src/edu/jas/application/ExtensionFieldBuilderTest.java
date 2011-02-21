@@ -15,6 +15,7 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 //import org.apache.log4j.Logger;
 
+import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
@@ -78,23 +79,27 @@ public class ExtensionFieldBuilderTest extends TestCase {
      RingFactory<BigRational> fac = builder.build();
      System.out.println("fac     = " + fac.toScript());
 
-     builder = builder.transcendentExtension("x,y,z");
-     System.out.println("builder = " + builder.toString());
-
-     fac = builder.build();
-     System.out.println("fac     = " + fac.toScript());
-
      builder = builder.algebraicExtension("w", "w^2 - 2");
      System.out.println("builder = " + builder.toString());
 
      fac = builder.build();
      System.out.println("fac     = " + fac.toScript());
 
-     builder = builder.algebraicExtension("wx", "wx^2 - { { x } }");
+     builder = builder.transcendentExtension("x");
      System.out.println("builder = " + builder.toString());
 
      fac = builder.build();
      System.out.println("fac     = " + fac.toScript());
+
+     builder = builder.algebraicExtension("wx", "wx^2 - { x }");
+     System.out.println("builder = " + builder.toString());
+
+     fac = builder.build();
+     System.out.println("fac     = " + fac.toScript());
+
+     RingElem<BigRational> elem = fac.random(2);
+     System.out.println("elem     = " + elem.toScript());
+     System.out.println("elem     = " + elem);
 
 //      assertTrue("isONE( c )", c.isONE() );
  }
