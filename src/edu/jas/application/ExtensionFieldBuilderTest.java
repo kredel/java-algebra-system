@@ -76,7 +76,7 @@ public class ExtensionFieldBuilderTest extends TestCase {
      builder = new ExtensionFieldBuilder<BigRational>(new BigRational(1));
      System.out.println("builder = " + builder.toString());
 
-     RingFactory<BigRational> fac = builder.build();
+     RingFactory fac = builder.build();
      System.out.println("fac     = " + fac.toScript());
 
      builder = builder.algebraicExtension("w", "w^2 - 2");
@@ -97,11 +97,16 @@ public class ExtensionFieldBuilderTest extends TestCase {
      fac = builder.build();
      System.out.println("fac     = " + fac.toScript());
 
-     RingElem<BigRational> elem = fac.random(2);
-     System.out.println("elem     = " + elem.toScript());
+     RingElem elem = (RingElem)fac.random(2);
+     //System.out.println("elem     = " + elem.toScript());
      System.out.println("elem     = " + elem);
 
-//      assertTrue("isONE( c )", c.isONE() );
+     RingElem inv = (RingElem)elem.inverse();
+     //System.out.println("inv      = " + inv.toScript());
+     System.out.println("inv      = " + inv);
+
+     RingElem a = (RingElem)elem.multiply(inv);
+     assertTrue("e / e == 1 " + a, a.isONE() );
  }
 
 }

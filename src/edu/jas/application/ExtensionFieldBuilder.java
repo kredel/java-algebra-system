@@ -51,7 +51,7 @@ public class ExtensionFieldBuilder<C extends GcdRingElem<C>> implements Serializ
     /**
      * Build the field tower.
      */
-    public RingFactory<C> build() {
+    public RingFactory build() {
         return factory;
     }
 
