@@ -18,9 +18,14 @@ import org.apache.log4j.BasicConfigurator;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.arith.BigRational;
+import edu.jas.arith.ModLongRing;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.AlgebraicNumberRing;
+import edu.jas.poly.AlgebraicNumber;
+import edu.jas.ufd.Quotient;
+import edu.jas.ufd.QuotientRing;
 
 
 /**
@@ -70,38 +75,82 @@ public class ExtensionFieldBuilderTest extends TestCase {
 
 
     /**
-     * Test construction Q(sqrt(2))(x)(sqrt(x)).
+     * Test construction Q(sqrt(2))(x)(sqrt(x)) by hand.
      */
-    public void testConstructionF1() {
+    public void testConstructionF0() {
+        BigRational bf = new BigRational(1);
+        GenPolynomialRing<BigRational> pf = new GenPolynomialRing<BigRational>(bf,new String[]{ "w2" });
+	GenPolynomial<BigRational> a = pf.parse("w2^2 - 2");
+        AlgebraicNumberRing<BigRational> af = new AlgebraicNumberRing<BigRational>(a);
+        GenPolynomialRing<AlgebraicNumber<BigRational>> tf = new GenPolynomialRing<AlgebraicNumber<BigRational>>(af,new String[]{ "x" });
+        QuotientRing<AlgebraicNumber<BigRational>> qf = new QuotientRing<AlgebraicNumber<BigRational>>(tf);
+        GenPolynomialRing<Quotient<AlgebraicNumber<BigRational>>> qaf = new GenPolynomialRing<Quotient<AlgebraicNumber<BigRational>>>(qf,new String[]{ "wx" });
+	GenPolynomial<Quotient<AlgebraicNumber<BigRational>>> b = qaf.parse("wx^2 - { x }");
+        AlgebraicNumberRing<Quotient<AlgebraicNumber<BigRational>>> fac = new AlgebraicNumberRing<Quotient<AlgebraicNumber<BigRational>>>(b);
+        System.out.println("fac = " + fac.toScript());
+
+        List<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>> gens = fac.generators();
+        int s = gens.size();
+        System.out.println("gens    = " + gens);
+        assertTrue("#gens == 4 " + s, s == 4 );
+
+        AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>> elem = fac.random(2);
+        if ( elem.isZERO() || elem.isONE() ) {
+            elem = gens.get(s-1).sum(gens.get(s-2));
+            //elem = (RingElem)gens.get(s-1).multiply(gens.get(s-2));
+            elem = elem.multiply(elem);
+	}
+        //System.out.println("elem     = " + elem.toScript());
+        System.out.println("elem    = " + elem);
+
+        AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>> inv = elem.inverse();
+        //System.out.println("inv      = " + inv.toScript());
+        System.out.println("inv     = " + inv);
+
+        AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>> e = elem.multiply(inv);
+        assertTrue("e / e == 1 " + e, e.isONE() );
+    }
+
+
+    /**
+     * Test construction Q(sqrt(2))(x)(sqrt(x)) by extension field builder.
+     */
+    public void xtestConstructionF1() {
         builder = ExtensionFieldBuilder.baseField(new BigRational(1));
-        System.out.println("builder = " + builder.toString());
+        //System.out.println("builder = " + builder.toString());
 
         RingFactory fac = builder.build();
-        System.out.println("fac     = " + fac.toScript());
+        //System.out.println("fac     = " + fac.toScript());
 
         builder = builder.algebraicExtension("w2", "w2^2 - 2");
-        System.out.println("builder = " + builder.toString());
+        //System.out.println("builder = " + builder.toString());
 
         fac = builder.build();
-        System.out.println("fac     = " + fac.toScript());
+        //System.out.println("fac     = " + fac.toScript());
 
         builder = builder.transcendentExtension("x");
-        System.out.println("builder = " + builder.toString());
+        //System.out.println("builder = " + builder.toString());
 
         fac = builder.build();
-        System.out.println("fac     = " + fac.toScript());
+        //System.out.println("fac     = " + fac.toScript());
 
         builder = builder.algebraicExtension("wx", "wx^2 - { x }"); // how to know number of { }
-        System.out.println("builder = " + builder.toString());
+        //System.out.println("builder = " + builder.toString());
 
         fac = builder.build();
         System.out.println("fac     = " + fac.toScript());
 
-        int s = fac.generators().size();
-        System.out.println("gens    = " + fac.generators());
+        List<RingElem> gens = fac.generators();
+        int s = gens.size();
+        System.out.println("gens    = " + gens);
         assertTrue("#gens == 4 " + s, s == 4 );
 
         RingElem elem = (RingElem)fac.random(2);
+        if ( elem.isZERO() || elem.isONE() ) {
+            elem = (RingElem)gens.get(s-1).sum(gens.get(s-2));
+            //elem = (RingElem)gens.get(s-1).multiply(gens.get(s-2));
+            elem = (RingElem) elem.multiply(elem);
+	}
         //System.out.println("elem     = " + elem.toScript());
         System.out.println("elem    = " + elem);
 
@@ -115,28 +164,28 @@ public class ExtensionFieldBuilderTest extends TestCase {
 
 
     /**
-     * Test construction Q(x)(sqrt(2))(sqrt(x)).
+     * Test construction Q(x)(sqrt(2))(sqrt(x)) by extension field builder.
      */
-    public void testConstructionF2() {
+    public void xtestConstructionF2() {
         builder = ExtensionFieldBuilder.baseField(new BigRational(1));
-        System.out.println("builder = " + builder.toString());
+        //System.out.println("builder = " + builder.toString());
 
         RingFactory fac = builder.build();
-        System.out.println("fac     = " + fac.toScript());
+        //System.out.println("fac     = " + fac.toScript());
 
         builder = builder.transcendentExtension("x");
-        System.out.println("builder = " + builder.toString());
+        //System.out.println("builder = " + builder.toString());
 
         fac = builder.build();
-        System.out.println("fac     = " + fac.toScript());
+        //System.out.println("fac     = " + fac.toScript());
         builder = builder.algebraicExtension("w2", "w2^2 - 2");
-        System.out.println("builder = " + builder.toString());
+        //System.out.println("builder = " + builder.toString());
 
         fac = builder.build();
-        System.out.println("fac     = " + fac.toScript());
+        //System.out.println("fac     = " + fac.toScript());
 
         builder = builder.algebraicExtension("wx", "wx^2 - { { x } }"); // how to know number of { }
-        System.out.println("builder = " + builder.toString());
+        //System.out.println("builder = " + builder.toString());
 
         fac = builder.build();
         System.out.println("fac     = " + fac.toScript());
@@ -148,7 +197,44 @@ public class ExtensionFieldBuilderTest extends TestCase {
 
         RingElem elem = (RingElem)fac.random(1);
         if ( elem.isZERO() || elem.isONE() ) {
-            elem = gens.get(s-1);
+            elem = (RingElem)gens.get(s-1).sum(gens.get(s-2));
+            //elem = (RingElem)gens.get(s-1).multiply(gens.get(s-2));
+            elem = (RingElem) elem.multiply(elem);
+	}
+        //System.out.println("elem     = " + elem.toScript());
+        System.out.println("elem    = " + elem);
+
+        RingElem inv = (RingElem)elem.inverse();
+        //System.out.println("inv      = " + inv.toScript());
+        System.out.println("inv     = " + inv);
+
+        RingElem a = (RingElem)elem.multiply(inv);
+        assertTrue("e / e == 1 " + a, a.isONE() );
+    }
+
+
+    /**
+     * Test construction Z_p(sqrt(2))(x)(sqrt(x)) by extension field builder.
+     */
+    public void xtestConstructionF3() {
+        RingFactory fac = ExtensionFieldBuilder
+                                  .baseField(new ModLongRing(7))
+                                  .algebraicExtension("w2", "w2^2 - 3")
+                                  .transcendentExtension("x")
+                                  .algebraicExtension("wx", "wx^7 - { x }")
+                                  .build();
+        System.out.println("fac = " + fac.toScript());
+
+        List<RingElem> gens = fac.generators();
+        int s = gens.size();
+        System.out.println("gens    = " + gens);
+        assertTrue("#gens == 4 " + s, s == 4 );
+
+        RingElem elem = (RingElem)fac.random(2);
+        if ( elem.isZERO() || elem.isONE() ) {
+            elem = (RingElem)gens.get(s-1).sum(gens.get(s-2));
+            //elem = (RingElem)gens.get(s-1).multiply(gens.get(s-2));
+            elem = (RingElem) elem.multiply(elem);
 	}
         //System.out.println("elem     = " + elem.toScript());
         System.out.println("elem    = " + elem);
