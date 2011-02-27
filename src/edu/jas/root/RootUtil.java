@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.arith.Rational;
+import edu.jas.poly.Complex;
 
 
 /**
@@ -58,7 +59,7 @@ public class RootUtil {
 
 
     /**
-     * Parse interval for real root from String.
+     * Parse interval for a real root from String.
      * @param s String, syntax: [left, right] or [mid].
      * @return Interval from s.
      */
@@ -94,4 +95,44 @@ public class RootUtil {
         //System.out.println("left = " + left + ", right = " + right);
         return new Interval<C>(left,right);
     }
+
+
+    /**
+     * Parse rectangle for a complex root from String.
+     * @param s String, syntax: [south-west, north-east] or [mid].
+     * @return Interval from s.
+     */
+    public static <C extends RingElem<C> & Rational> 
+      Rectangle<C> parseRectangle(RingFactory<Complex<C>> fac, String s) {
+        int r = s.length();
+        int el = s.indexOf("[");
+        if ( el >= 0 ) {
+            int ri = s.indexOf("]");
+            if ( ri > 0 ) {
+		r = ri;
+	    }
+	} else {
+            el = -1;
+	}
+        //System.out.println("s  = " + s);
+        String iv = s.substring(el+1,r).trim();
+        //System.out.println("iv = " + iv);
+        int k = iv.indexOf(",");
+        if ( k < 0 ) {
+	    k = s.indexOf(" ");
+	}
+        if ( k < 0 ) {
+            Complex mid = fac.parse(iv);
+            return new Rectangle<C>(mid);
+	}
+        //System.out.println("k  = " + k + ", len = " + iv.length());
+        String ls = iv.substring(0,k).trim();
+        String rs = iv.substring(k+1,iv.length()).trim();
+        //System.out.println("ls = " + ls + ", rs = " + rs);
+        Complex sw = fac.parse(ls);;
+        Complex ne = fac.parse(rs);;
+        //System.out.println("left = " + left + ", right = " + right);
+        return new Rectangle<C>(sw,ne);
+    }
+
 }

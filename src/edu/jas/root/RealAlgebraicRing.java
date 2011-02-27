@@ -182,8 +182,8 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
         List<AlgebraicNumber<C>> agens = algebraic.generators();
         List<RealAlgebraicNumber<C>> gens = new ArrayList<RealAlgebraicNumber<C>>(agens.size());
         for (AlgebraicNumber<C> a : agens) {
-	    gens.add(getZERO().sum(a.getVal()));
-	}
+            gens.add(getZERO().sum(a.getVal()));
+        }
         return gens;
     }
 

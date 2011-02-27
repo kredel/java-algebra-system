@@ -99,7 +99,7 @@ implements RingFactory<ComplexAlgebraicNumber<C>> {
     }
 
 
-    /**
+    /*
      * Get the module part.
      * @return modul. public GenPolynomial<C> getModul() { return
      *         algebraic.modul; }
@@ -173,8 +173,8 @@ implements RingFactory<ComplexAlgebraicNumber<C>> {
         List<AlgebraicNumber<Complex<C>>> agens = algebraic.generators();
         List<ComplexAlgebraicNumber<C>> gens = new ArrayList<ComplexAlgebraicNumber<C>>(agens.size());
         for (AlgebraicNumber<Complex<C>> a : agens) {
-	    gens.add(getZERO().sum(a.getVal()));
-	}
+            gens.add(getZERO().sum(a.getVal()));
+        }
         return gens;
     }
 

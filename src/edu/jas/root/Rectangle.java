@@ -51,6 +51,27 @@ public class Rectangle<C extends RingElem<C> & Rational > {
 
     /**
      * Constructor.
+     * @param mid corner.
+     */
+    @SuppressWarnings("unchecked")
+    public Rectangle(Complex<C> mid) {
+        this(mid, mid);
+    }
+
+
+    /**
+     * Constructor.
+     * @param sw corner.
+     * @param ne corner.
+     */
+    @SuppressWarnings("unchecked")
+    public Rectangle(Complex<C> sw, Complex<C> ne) {
+        this( new Complex<C>(sw.ring,sw.getRe(),ne.getIm()), sw, new Complex<C>(sw.ring,ne.getRe(),sw.getIm()), ne );
+    }
+
+
+    /**
+     * Constructor.
      * @param nw corner.
      * @param sw corner.
      * @param se corner.
