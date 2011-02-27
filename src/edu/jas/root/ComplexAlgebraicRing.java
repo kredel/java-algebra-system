@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Random;
 
 import edu.jas.arith.Rational;
+import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.Complex;
 import edu.jas.poly.GenPolynomial;
@@ -20,7 +21,7 @@ import edu.jas.structure.RingFactory;
 
 
 /**
- * Complex algebraic number factory class based on GenPolynomial with RingElem
+ * Complex algebraic number factory class based on AlgebraicNumberRing with RingElem
  * interface. Objects of this class are immutable with the exception of the
  * isolating intervals.
  * @author Heinz Kredel
@@ -169,9 +170,11 @@ implements RingFactory<ComplexAlgebraicNumber<C>> {
      * @see edu.jas.structure.ElemFactory#generators()
      */
     public List<ComplexAlgebraicNumber<C>> generators() {
-        List<ComplexAlgebraicNumber<C>> gens = new ArrayList<ComplexAlgebraicNumber<C>>(2);
-        gens.add(getONE());
-        gens.add(getGenerator());
+        List<AlgebraicNumber<Complex<C>>> agens = algebraic.generators();
+        List<ComplexAlgebraicNumber<C>> gens = new ArrayList<ComplexAlgebraicNumber<C>>(agens.size());
+        for (AlgebraicNumber<Complex<C>> a : agens) {
+	    gens.add(getZERO().sum(a.getVal()));
+	}
         return gens;
     }
 

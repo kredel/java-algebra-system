@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Random;
 
 import edu.jas.arith.Rational;
+import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.GcdRingElem;
@@ -19,7 +20,7 @@ import edu.jas.structure.RingFactory;
 
 
 /**
- * Real algebraic number factory class based on GenPolynomial with RingElem
+ * Real algebraic number factory class based on AlgebraicNumberRing with RingElem
  * interface. Objects of this class are immutable with the exception of the
  * isolating intervals.
  * @author Heinz Kredel
@@ -178,9 +179,11 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
      * @see edu.jas.structure.ElemFactory#generators()
      */
     public List<RealAlgebraicNumber<C>> generators() {
-        List<RealAlgebraicNumber<C>> gens = new ArrayList<RealAlgebraicNumber<C>>(2);
-        gens.add(getONE());
-        gens.add(getGenerator());
+        List<AlgebraicNumber<C>> agens = algebraic.generators();
+        List<RealAlgebraicNumber<C>> gens = new ArrayList<RealAlgebraicNumber<C>>(agens.size());
+        for (AlgebraicNumber<C> a : agens) {
+	    gens.add(getZERO().sum(a.getVal()));
+	}
         return gens;
     }
 
