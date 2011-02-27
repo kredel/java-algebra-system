@@ -7,19 +7,26 @@ package edu.jas.application;
 
 import java.io.Serializable;
 
+import edu.jas.arith.Rational;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
+import edu.jas.poly.Complex;
+import edu.jas.poly.ComplexRing;
 import edu.jas.ufd.QuotientRing;
 import edu.jas.ufd.Quotient;
 import edu.jas.root.RealAlgebraicNumber;
 import edu.jas.root.RealAlgebraicRing;
 import edu.jas.root.Interval;
+import edu.jas.root.Rectangle;
 import edu.jas.root.RootUtil;
+import edu.jas.root.ComplexAlgebraicNumber;
+import edu.jas.root.ComplexAlgebraicRing;
 
 
 /**
@@ -118,12 +125,41 @@ public class ExtensionFieldBuilder implements Serializable {
      */
     public ExtensionFieldBuilder realAlgebraicExtension(String var, String expr, String root) {
         String[] variables = new String[] { var };
+        RingElem one = (RingElem)factory.getONE();
+        if ( ! (one instanceof Rational) ) {
+            throw new IllegalArgumentException("base field not instance of Rational");
+        }
         GenPolynomialRing pfac = new GenPolynomialRing(factory,variables);
         GenPolynomial gen = pfac.parse(expr);
         RingFactory cf = pfac.coFac;
         Interval iv = RootUtil.parseInterval(cf,root);
         //System.out.println("iv = " + iv);
         RealAlgebraicRing rfac = new RealAlgebraicRing(gen,iv);
+        RingFactory base = (RingFactory) rfac;
+        return new ExtensionFieldBuilder(base);
+    }
+
+
+    /**
+     * Complex algebraic field extension.
+     * @param var name for the algebraic generator.
+     * @param expr generating expresion, a univariate polynomial in var.
+     * @param root isolating rectangle for a complex root.
+     */
+    public ExtensionFieldBuilder complexAlgebraicExtension(String var, String expr, String root) {
+        String[] variables = new String[] { var };
+        RingElem one = (RingElem)factory.getONE();
+        if ( ! (one instanceof Complex) ) {
+            throw new IllegalArgumentException("base field not instance of Complex");
+        }
+        GenPolynomialRing pfac = new GenPolynomialRing(factory,variables);
+        System.out.println("pfac = " + pfac);
+        GenPolynomial gen = pfac.parse(expr);
+        System.out.println("gen  = " + gen);
+        RingFactory cf = pfac.coFac;
+        Rectangle rt = RootUtil.parseRectangle(cf,root);
+        //System.out.println("rt = " + rt);
+        ComplexAlgebraicRing rfac = new ComplexAlgebraicRing(gen,rt);
         RingFactory base = (RingFactory) rfac;
         return new ExtensionFieldBuilder(base);
     }
