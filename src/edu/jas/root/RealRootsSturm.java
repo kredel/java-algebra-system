@@ -242,7 +242,7 @@ public class RealRootsSturm<C extends RingElem<C> & Rational> extends RealRootAb
      * @param iv root isolating interval for f, with f(left) * f(right) &lt; 0.
      * @param f univariate polynomial, non-zero.
      * @param g univariate polynomial, gcd(f,g) == 1.
-     * @return v with v a new interval contained in iv such that g(v) != 0.
+     * @return v with v a new interval contained in iv such that g(w) != 0 for w in v.
      */
     @Override
     public Interval<C> invariantSignInterval(Interval<C> iv, GenPolynomial<C> f, GenPolynomial<C> g) {

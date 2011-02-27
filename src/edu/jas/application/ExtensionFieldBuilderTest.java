@@ -274,11 +274,13 @@ public class ExtensionFieldBuilderTest extends TestCase {
             elem = (RingElem) elem.multiply(elem);
         }
         //System.out.println("elem     = " + elem.toScript());
-        System.out.println("elem    = " + elem + " =~= " + new BigDecimal(((Rational)elem).getRational()));
+        System.out.println("elem    = " + elem);
+        System.out.println("        ~ " + new BigDecimal(((Rational)elem).getRational()));
 
         RingElem inv = (RingElem)elem.inverse();
         //System.out.println("inv      = " + inv.toScript());
-        System.out.println("inv     = " + inv + " =~= " + new BigDecimal(((Rational)inv).getRational()));
+        System.out.println("inv     = " + inv);
+        System.out.println("        ~ " + new BigDecimal(((Rational)inv).getRational()));
 
         RingElem a = (RingElem)elem.multiply(inv);
         //System.out.println("a       = " + a + " =~= " + new BigDecimal(((Rational)a).getRational()));
