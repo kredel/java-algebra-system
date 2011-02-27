@@ -699,4 +699,37 @@ public class ComplexRootTest extends TestCase {
         }
     }
 
+
+    /**
+     * Test complex root invariant rectangle.
+     * 
+     */
+    public void testComplexRootInvariant() {
+        ComplexRootsAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
+
+        a = dfac.random(kl, ll, el - 1, q);
+        b = dfac.random(kl, ll, 2, q);
+        //a = dfac.parse("( (x-1)^3 )");
+        //a = dfac.parse("( x^4-2 )");
+        if ( a.degree() == 0 ) {
+            return;
+	}
+        System.out.println("a = " + a);
+        System.out.println("b = " + b);
+
+        List<Rectangle<BigRational>> roots = cr.complexRoots(a);
+        System.out.println("roots = " + roots);
+        //assertTrue("#roots == deg(a) ", refine.size() == a.degree(0));
+
+        Rectangle<BigRational> rect = roots.get(0);
+        System.out.println("rect = " + rect);
+        
+        try {
+            Rectangle<BigRational> ref = cr.invariantRectangle(rect,a,b);
+            System.out.println("ref = " + ref);
+	} catch (InvalidBoundaryException e) {
+	    e.printStackTrace();
+	}
+    }
+
 }

@@ -298,6 +298,19 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
 
 
     /**
+     * Invariant rectangle for algebraic number.
+     * @param rect root isolating rectangle for f which contains exactly one root.
+     * @param f univariate polynomial, non-zero.
+     * @param g univariate polynomial, gcd(f,g) == 1.
+     * @return v with v a new rectangle contained in iv such that g(w) != 0 for w in v.
+     */
+    public abstract Rectangle<C> invariantRectangle(Rectangle<C> rect, 
+                                           GenPolynomial<Complex<C>> f, 
+                                           GenPolynomial<Complex<C>> g) 
+	throws InvalidBoundaryException;
+
+
+    /**
      * Get decimal approximation.
      * @param a complex number.
      * @return decimal(a).

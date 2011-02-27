@@ -12,6 +12,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import edu.jas.arith.Rational;
+import edu.jas.arith.BigRational;
 import edu.jas.poly.Complex;
 import edu.jas.poly.ComplexRing;
 import edu.jas.poly.GenPolynomial;
@@ -271,6 +272,46 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
             }
         }
         return roots;
+    }
+
+
+    /**
+     * Invariant rectangle for algebraic number.
+     * @param rect root isolating rectangle for f which contains exactly one root.
+     * @param f univariate polynomial, non-zero.
+     * @param g univariate polynomial, gcd(f,g) == 1.
+     * @return v with v a new rectangle contained in iv such that g(w) != 0 for w in v.
+     */
+    @Override
+    public Rectangle<C> invariantRectangle(Rectangle<C> rect, 
+                                           GenPolynomial<Complex<C>> f, 
+                                           GenPolynomial<Complex<C>> g) 
+                        throws InvalidBoundaryException {
+        Rectangle<C> v = rect;
+        if (g == null || g.isZERO()) {
+            return v;
+        }
+        if (g.isConstant()) {
+            return v;
+        }
+        if (f == null || f.isZERO() || f.isConstant()) { // ?
+            return v;
+        }
+        BigRational len = v.rationalLength();
+        BigRational half = new BigRational(1,2);
+        while (true) {
+            long n = windingNumber(v, g);
+            System.out.println("n = " + n);
+            if (n < 0) { // can this happen?
+                throw new RuntimeException("negative winding number " + n);
+            }
+            if (n == 0) {
+                return v;
+            }
+            len = len.multiply(half);
+            v = complexRootRefinement(v,f,len);
+        }
+        //return v;
     }
 
 }
