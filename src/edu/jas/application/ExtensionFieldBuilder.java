@@ -16,6 +16,10 @@ import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.ufd.QuotientRing;
 import edu.jas.ufd.Quotient;
+import edu.jas.root.RealAlgebraicNumber;
+import edu.jas.root.RealAlgebraicRing;
+import edu.jas.root.Interval;
+import edu.jas.root.RootUtil;
 
 
 /**
@@ -80,6 +84,18 @@ public class ExtensionFieldBuilder implements Serializable {
 
 
     /**
+     * Polynomial ring extension.
+     * @param vars names for the polynomial ring generators.
+     */
+    public ExtensionFieldBuilder polynomialExtension(String vars) {
+        String[] variables = GenPolynomialTokenizer.variableList(vars);
+        GenPolynomialRing pfac = new GenPolynomialRing(factory,variables);
+        RingFactory base = (RingFactory) pfac;
+        return new ExtensionFieldBuilder(base);
+    }
+
+
+    /**
      * Algebraic field extension.
      * @param var name for the algebraic generator.
      * @param expr generating expresion, a univariate polynomial in var.
@@ -90,6 +106,25 @@ public class ExtensionFieldBuilder implements Serializable {
         GenPolynomial gen = pfac.parse(expr);
         AlgebraicNumberRing afac = new AlgebraicNumberRing(gen);
         RingFactory base = (RingFactory) afac;
+        return new ExtensionFieldBuilder(base);
+    }
+
+
+    /**
+     * Real algebraic field extension.
+     * @param var name for the algebraic generator.
+     * @param expr generating expresion, a univariate polynomial in var.
+     * @param root isolating interval for a real root.
+     */
+    public ExtensionFieldBuilder realAlgebraicExtension(String var, String expr, String root) {
+        String[] variables = new String[] { var };
+        GenPolynomialRing pfac = new GenPolynomialRing(factory,variables);
+        GenPolynomial gen = pfac.parse(expr);
+        RingFactory cf = pfac.coFac;
+        Interval iv = RootUtil.parseInterval(cf,root);
+        //System.out.println("iv = " + iv);
+        RealAlgebraicRing rfac = new RealAlgebraicRing(gen,iv);
+        RingFactory base = (RingFactory) rfac;
         return new ExtensionFieldBuilder(base);
     }
 
