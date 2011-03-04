@@ -298,7 +298,7 @@ public class mytests {
     </p>
 </li>
 <li><p>Be sure you have downloaded the above libraries 
-    log4j.jar, junit.jar, tnj.jar and jas.jar.
+    log4j.jar, junit.jar and jas*-bin.jar.
     </p>
 </li>
 <li><p>The main file to interface to the JAS library is  
@@ -314,8 +314,7 @@ public class mytests {
     </p>
 </li>
 <li><p>Start using JAS, e.g.
-    <code>jython examples/trinks.py</code>
-    <br />
+    <pre>jython examples/trinks.py</pre>
     The 
     <a href="examples/trinks.py" target="py">examples/trinks.py</a>
     contains an Groebner base example named after its proposer Mr. Trinks.
@@ -330,6 +329,37 @@ public class mytests {
 </li>
 </ul>
 
+
+<h2>Using the <a name="jruby">JRuby</a> interpreter</h2>
+
+<ul>
+<li><p>Be sure you have downloaded the above libraries 
+    log4j.jar, junit.jar and jas*-bin.jar.
+    </p>
+</li>
+<li><p>The main file to interface to the JAS library is  
+    <a href="examples/jas.rb" target="rb">jas.rb</a>.
+    It must be imported by other Ruby files.
+    HTML documents of the interface can be found 
+    <a href="doc/jruby/index.html" target="jruby">here</a>.
+    </p>
+</li>
+<li><p>Start using JAS, e.g.
+    <pre>jruby -J-cp "../lib/log4j.jar:../lib/junit.jar:." examples/trinks.rb</pre>
+    The 
+    <a href="examples/trinks.rb" target="rb">examples/trinks.rb</a>
+    contains an Groebner base example named after its proposer Mr. Trinks.
+    The file runs a sequential, a parallel and a distributed version
+    of the Groebner base algorithms.
+    </p>
+</li>
+<li><p>For further discussion of the JAS scripting interface 
+    see 
+    <a href="guide.html" target="main">User guide</a>.
+    </p>
+</li>
+</ul>
+
     <hr />
 <address><a name="contact" 
             href="mailto:kredel@at@rz.uni-mannheim.de">Heinz Kredel</a>
@@ -337,7 +367,7 @@ public class mytests {
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Thu Aug  5 23:43:42 CEST 2010
+Last modified: Fri Mar  4 16:05:35 CET 2011
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
