@@ -13,8 +13,8 @@ require "examples/jas"
 #r = Ring.new( "Z(t,x,y,z) L" );
 #r = Ring.new( "Mod 11(t,x,y,z) L" );
 r = Ring.new( "Rat(t,x,y) L" );
-print "Ring: " + str(r);
-print;
+puts "Ring: " + str(r);
+puts;
 
 
 ps = """
@@ -38,14 +38,14 @@ ps = """
 
 
 f = r.ideal( ps );
-print "Ideal: " + str(f);
-print;
+puts "Ideal: " + str(f);
+puts;
 
 startLog();
 
 rg = f.GB();
-print "seq Output:", rg;
-print;
+puts "seq Output:", rg;
+puts;
 
 terminate();
 
