@@ -1680,9 +1680,9 @@ def ZM(m,z=0,field=False):
         m = m.elem;
     if isinstance(z,RingElem):
         z = z.elem;
-    if z != 0 and ( z == True or z == False ):
-        field = z;
-        z = 0;
+#    if z != 0 and ( z == False ): # never true
+#        field = z;
+#        z = 0;
     if field:
         mf = ModIntegerRing(m,field);
     else:
@@ -1867,9 +1867,9 @@ def AN(m,z=0,field=False,pr=None):
         m = m.elem;
     if isinstance(z,RingElem):
         z = z.elem;
-    if z != 0 and ( z == True or z == False ):
-        field = z;
-        z = 0;
+#    if z != 0 and ( z == True or z == False ): # not working
+#        field = z;
+#        z = 0;
     #print "m.getClass() = " + str(m.getClass().getName());
     #print "field = " + str(field);
     if m.getClass().getSimpleName() == "AlgebraicNumber":
