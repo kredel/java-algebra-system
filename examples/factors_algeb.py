@@ -27,7 +27,7 @@ print "e     = " + str(e);
 print "a     = " + str(a);
 imag = a**2 + 1;
 print "imag  = " + str(imag);
-Qi = AN(imag,True);
+Qi = AN(imag,field=True);
 print "Qi    = " + str(Qi.factory());
 [one,i] = Qi.gens();
 print "one   = " + str(one);

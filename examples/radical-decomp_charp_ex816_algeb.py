@@ -46,7 +46,7 @@ print "wpt  = " + str(wpt);
 print;
 
 root = wpt**prime - ta2;
-af = AN(root,True);
+af = AN(root,field=True);
 print "coefficient algebraic quotient ring: " + str(af.ring.toScript());
 #print af.gens();
 ##xx = AN(( wpt**5 + 4 * t ),True,PolyRing(RF(PolyRing(ZM(5),"t",PolyRing.lex)),"wpt",PolyRing.lex))
