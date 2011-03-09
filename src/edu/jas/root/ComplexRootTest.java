@@ -74,6 +74,9 @@ public class ComplexRootTest extends TestCase {
     BigRational eps;
 
 
+    Complex<BigRational> ceps;
+
+
     GenPolynomial<Complex<BigRational>> a;
 
 
@@ -111,6 +114,7 @@ public class ComplexRootTest extends TestCase {
         String[] vars = new String[] { "x" };
         dfac = new GenPolynomialRing<Complex<BigRational>>(cfac, rl, to, vars);
         eps = Power.positivePower(new BigRational(1L, 10L), BigDecimal.DEFAULT_PRECISION);
+        ceps = new Complex<BigRational>(cfac,eps);
     }
 
 
@@ -718,15 +722,59 @@ public class ComplexRootTest extends TestCase {
         System.out.println("b = " + b);
 
         List<Rectangle<BigRational>> roots = cr.complexRoots(a);
-        System.out.println("roots = " + roots);
-        //assertTrue("#roots == deg(a) ", refine.size() == a.degree(0));
+        //System.out.println("roots = " + roots);
+        assertTrue("#roots == deg(a) ", roots.size() == a.degree(0));
 
         Rectangle<BigRational> rect = roots.get(0);
-        System.out.println("rect = " + rect);
+        //System.out.println("rect = " + rect);
         
         try {
             Rectangle<BigRational> ref = cr.invariantRectangle(rect,a,b);
             System.out.println("ref = " + ref);
+	} catch (InvalidBoundaryException e) {
+	    e.printStackTrace();
+	}
+    }
+
+
+    /**
+     * Test complex root invariant magnitude rectangle.
+     * 
+     */
+    public void testComplexRootInvariantMagnitude() {
+        ComplexRootsAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
+
+        a = dfac.random(kl, ll, el - 1, q);
+        b = dfac.random(kl, ll, 3, q);
+        a = dfac.parse("( x^2 + 1 )");
+        b = dfac.parse("( x - 0i1 )");
+        if ( a.degree() == 0 ) {
+            return;
+	}
+        Squarefree<Complex<BigRational>> engine = SquarefreeFactory
+                .<Complex<BigRational>> getImplementation(cfac);
+        a = engine.squarefreePart(a);
+        b = engine.squarefreePart(b);
+        System.out.println("a = " + a);
+        System.out.println("b = " + b);
+
+        List<Rectangle<BigRational>> roots = cr.complexRoots(a);
+        //System.out.println("roots = " + roots);
+        assertTrue("#roots == deg(a) ", roots.size() == a.degree(0));
+
+        Rectangle<BigRational> rect = roots.get(0);
+        //System.out.println("rect = " + rect);
+        
+        try {
+            Rectangle<BigRational> ref = cr.invariantMagnitudeRectangle(rect,a,b,eps);
+            //System.out.println("ref = " + ref);
+            Complex<BigRational> mag = cr.complexRectangleMagnitude(ref,a,b);
+            System.out.println("mag  = " + mag);
+            Complex<BigRational> cmag = cr.complexMagnitude(ref,a,b,eps);
+            System.out.println("cmag = " + cmag);
+            assertEquals("mag == cmag: " + cmag, mag, cmag);
+            BigRational rmag = cmag.getRe();
+            System.out.println("rmag = " + new BigDecimal(cmag.getRe()) + " i " + new BigDecimal(cmag.getIm()));
 	} catch (InvalidBoundaryException e) {
 	    e.printStackTrace();
 	}

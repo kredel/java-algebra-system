@@ -301,7 +301,7 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
         BigRational half = new BigRational(1,2);
         while (true) {
             long n = windingNumber(v, g);
-            System.out.println("n = " + n);
+            //System.out.println("n = " + n);
             if (n < 0) { // can this happen?
                 throw new RuntimeException("negative winding number " + n);
             }
@@ -309,7 +309,12 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
                 return v;
             }
             len = len.multiply(half);
+            Rectangle<C> v1 = v;
             v = complexRootRefinement(v,f,len);
+            if ( v.equals(v1) ) {
+                throw new RuntimeException("no convergence " + v);
+                //break; // no convergence
+	    }
         }
         //return v;
     }

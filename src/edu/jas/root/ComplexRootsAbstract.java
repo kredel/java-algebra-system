@@ -22,6 +22,7 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.UnaryFunctor;
 import edu.jas.ufd.Squarefree;
 import edu.jas.ufd.SquarefreeFactory;
 import edu.jas.util.ArrayUtil;
@@ -80,6 +81,58 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
         M = M.sum(cfac.getONE());
         //System.out.println("M = " + M);
         return M;
+    }
+
+
+    /**
+     * Magnitude bound.
+     * @param rect rectangle.
+     * @param f univariate polynomial.
+     * @return B such that |f(c)| &lt; B for c in rect.
+     */
+    public C magnitudeBound(Rectangle<C> rect, GenPolynomial<Complex<C>> f) {
+        if (f == null) {
+            return null;
+        }
+        if (f.isZERO()) {
+            return f.ring.coFac.getONE().getRe();
+        }
+        //System.out.println("f = " + f);
+        if (f.isConstant()) {
+            return f.leadingBaseCoefficient().norm().getRe();
+        }
+        GenPolynomial<Complex<C>> fa = f.map(new UnaryFunctor<Complex<C>, Complex<C>>() {
+
+
+            public Complex<C> eval(Complex<C> a) {
+                return a.norm();
+            }
+        });
+        //System.out.println("fa = " + fa);
+        Complex<C> Mc = rect.getNW().norm();
+        C M = Mc.getRe();
+        Complex<C> M1c = rect.getSW().norm();
+        C M1 = M1c.getRe();
+        if (M.compareTo(M1) < 0) {
+            M = M1;
+            Mc = M1c;
+        }
+        M1c = rect.getSE().norm();
+        M1 = M1c.getRe();
+        if (M.compareTo(M1) < 0) {
+            M = M1;
+            Mc = M1c;
+        }
+        M1c = rect.getNE().norm();
+        M1 = M1c.getRe();
+        if (M.compareTo(M1) < 0) {
+            M = M1;
+            Mc = M1c;
+        }
+        //System.out.println("M = " + M);
+        Complex<C> B = PolyUtil.<Complex<C>> evaluateMain(f.ring.coFac, fa, Mc);
+        //System.out.println("B = " + B);
+        return B.getRe();
     }
 
 
@@ -235,7 +288,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                         delta = null;
                         continue;
                     }
-                    if (false) {
+                    if (true) {
                         w = complexRootCount(root, a);
                         System.out.println("#root = " + w);
                         System.out.println("root = " + root);
@@ -573,6 +626,94 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
         Complex[] copy = new Complex[newLength];
         System.arraycopy(original, 0, copy, 0, Math.min(original.length, newLength));
         return copy;
+    }
+
+
+    /**
+     * Invariant rectangle for algebraic number magnitude.
+     * @param rect root isolating rectangle for f which contains exactly one root.
+     * @param f univariate polynomial, non-zero.
+     * @param g univariate polynomial, gcd(f,g) == 1.
+     * @param eps length limit for rectangle length.
+     * @return v with v a new rectangle contained in rect such that |g(a) - g(b)|
+     *         &lt; eps for a, b in v in rect.
+     */
+    public Rectangle<C> invariantMagnitudeRectangle(Rectangle<C> rect, GenPolynomial<Complex<C>> f, GenPolynomial<Complex<C>> g,
+            C eps) throws InvalidBoundaryException {
+        Rectangle<C> v = rect;
+        if (g == null || g.isZERO()) {
+            return v;
+        }
+        if (g.isConstant()) {
+            return v;
+        }
+        if (f == null || f.isZERO() || f.isConstant()) { // ?
+            return v;
+        }
+        GenPolynomial<Complex<C>> gp = PolyUtil.<Complex<C>> baseDeriviative(g);
+        //System.out.println("g  = " + g);
+        //System.out.println("gp = " + gp);
+        C B = magnitudeBound(rect, gp);
+        //System.out.println("B = " + B);
+
+        BigRational len = v.rationalLength();
+        BigRational half = new BigRational(1,2);
+
+        C vlen = v.length();
+        vlen = vlen.multiply(vlen);
+        //eps = eps.multiply(eps);
+        //System.out.println("v = " + v);
+        //System.out.println("vlen = " + vlen);
+        while (B.multiply(vlen).compareTo(eps) >= 0) { // TODO: test squared
+            len = len.multiply(half);
+	    v = complexRootRefinement(v,f,len);
+            //System.out.println("v = " + v);
+            vlen = v.length();
+            vlen = vlen.multiply(vlen);
+            //System.out.println("vlen = " + vlen);
+        }
+        //System.out.println("vlen = " + vlen);
+        return v;
+    }
+
+
+    /**
+     * Complex algebraic number magnitude.
+     * @param rect root isolating rectangle for f which contains exactly one root,
+     *            with rect such that |g(a) - g(b)| &lt; eps for a, b in rect.
+     * @param f univariate polynomial, non-zero.
+     * @param g univariate polynomial, gcd(f,g) == 1.
+     * @return g(rect) .
+     */
+    public Complex<C> complexRectangleMagnitude(Rectangle<C> rect, GenPolynomial<Complex<C>> f, GenPolynomial<Complex<C>> g) {
+        if (g.isZERO() || g.isConstant()) {
+            return g.leadingBaseCoefficient();
+        }
+        RingFactory<Complex<C>> cfac = g.ring.coFac;
+        Complex<C> c = rect.getCenter();
+        Complex<C> ev = PolyUtil.<Complex<C>> evaluateMain(cfac, g, c);
+        //System.out.println("ev = " + ev);
+        return ev;
+    }
+
+
+    /**
+     * Complex algebraic number magnitude.
+     * @param rect root isolating rectangle for f which contains exactly one root,
+     *            with rect such that |g(a) - g(b)| &lt; eps for a, b in rect.
+     * @param f univariate polynomial, non-zero.
+     * @param g univariate polynomial, gcd(f,g) == 1.
+     * @param eps length limit for rectangle length.
+     * @return g(rect) .
+     */
+    public Complex<C> complexMagnitude(Rectangle<C> rect, GenPolynomial<Complex<C>> f, GenPolynomial<Complex<C>> g, C eps) 
+                      throws InvalidBoundaryException {
+        if (g.isZERO() || g.isConstant()) {
+            return g.leadingBaseCoefficient();
+        }
+        Rectangle<C> v = invariantMagnitudeRectangle(rect,f,g,eps);
+        //System.out.println("ref = " + ref);
+        return complexRectangleMagnitude(v,f,g);
     }
 
 }

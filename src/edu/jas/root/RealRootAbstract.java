@@ -367,10 +367,9 @@ public abstract class RealRootAbstract<C extends RingElem<C>& Rational> implemen
      *            with iv such that |g(a) - g(b)| &lt; eps for a, b in iv.
      * @param f univariate polynomial, non-zero.
      * @param g univariate polynomial, gcd(f,g) == 1.
-     * @param eps length limit for interval length.
      * @return g(iv) .
      */
-    public C realIntervalMagnitude(Interval<C> iv, GenPolynomial<C> f, GenPolynomial<C> g, C eps) {
+    public C realIntervalMagnitude(Interval<C> iv, GenPolynomial<C> f, GenPolynomial<C> g) {
         if (g.isZERO() || g.isConstant()) {
             return g.leadingBaseCoefficient();
         }
@@ -396,7 +395,7 @@ public abstract class RealRootAbstract<C extends RingElem<C>& Rational> implemen
             return g.leadingBaseCoefficient();
         }
         Interval<C> v = invariantMagnitudeInterval(iv, f, g, eps);
-        return realIntervalMagnitude(v, f, g, eps);
+        return realIntervalMagnitude(v, f, g);
     }
 
 
