@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Random;
 
 import edu.jas.arith.Rational;
+import edu.jas.arith.BigDecimal;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
@@ -71,8 +72,8 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
         }
         C e = m.ring.coFac.fromInteger(10L);
         e = e.inverse();
-        // e = Power.positivePower(e,BigDecimal.DEFAULT_PRECISION);
-        e = Power.positivePower(e, 9); //BigDecimal.DEFAULT_PRECISION);
+        C x = Power.positivePower(e,BigDecimal.DEFAULT_PRECISION);
+        e = Power.positivePower(e, 9); // better not too much for speed
         eps = e;
     }
 

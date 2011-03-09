@@ -153,9 +153,9 @@ public class ExtensionFieldBuilder implements Serializable {
             throw new IllegalArgumentException("base field not instance of Complex");
         }
         GenPolynomialRing pfac = new GenPolynomialRing(factory,variables);
-        System.out.println("pfac = " + pfac);
+        //System.out.println("pfac = " + pfac);
         GenPolynomial gen = pfac.parse(expr);
-        System.out.println("gen  = " + gen);
+        //System.out.println("gen  = " + gen);
         RingFactory cf = pfac.coFac;
         Rectangle rt = RootUtil.parseRectangle(cf,root);
         //System.out.println("rt = " + rt);
