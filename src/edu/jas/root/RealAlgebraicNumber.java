@@ -313,7 +313,7 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
                 ring.eps);
         ring.setRoot(v);
         //System.out.println("new v = " + v);
-        C ev = ring.engine.realIntervalMagnitude(v, ring.algebraic.modul, number.val, ring.eps);
+        C ev = ring.engine.realIntervalMagnitude(v, ring.algebraic.modul, number.val); //, ring.eps);
         if ((Object) ev instanceof Rational) { // always true by type parameter
             BigRational er = ev.getRational();
             return er;
