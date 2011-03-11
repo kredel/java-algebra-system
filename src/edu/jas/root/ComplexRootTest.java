@@ -13,6 +13,9 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import org.apache.log4j.BasicConfigurator;
+//import org.apache.log4j.Logger;
+
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
@@ -718,6 +721,10 @@ public class ComplexRootTest extends TestCase {
         if ( a.degree() == 0 ) {
             return;
 	}
+        Squarefree<Complex<BigRational>> engine = SquarefreeFactory
+                .<Complex<BigRational>> getImplementation(cfac);
+        a = engine.squarefreePart(a);
+        b = engine.squarefreePart(b);
         System.out.println("a = " + a);
         System.out.println("b = " + b);
 

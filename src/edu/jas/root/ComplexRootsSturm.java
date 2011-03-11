@@ -230,6 +230,10 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
                 List<Rectangle<C>> nwr = complexRoots(nw, a);
                 //System.out.println("#nwr = " + nwr.size()); 
                 roots.addAll(nwr);
+                if ( roots.size() == a.degree(0) ) {
+                    work = false;
+                    break;
+		}
 
                 cp = (Complex<C>[]) copyOfComplex(rect.corners, 4);
                 cp[0] = new Complex<C>(cr, cp[0].getRe(), center.getIm());
@@ -241,6 +245,10 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
                 List<Rectangle<C>> swr = complexRoots(sw, a);
                 //System.out.println("#swr = " + swr.size()); 
                 roots.addAll(swr);
+                if ( roots.size() == a.degree(0) ) {
+                    work = false;
+                    break;
+		}
 
                 cp = (Complex<C>[]) copyOfComplex(rect.corners, 4);
                 cp[0] = center;
@@ -252,6 +260,10 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
                 List<Rectangle<C>> ser = complexRoots(se, a);
                 //System.out.println("#ser = " + ser.size()); 
                 roots.addAll(ser);
+                if ( roots.size() == a.degree(0) ) {
+                    work = false;
+                    break;
+		}
 
                 cp = (Complex<C>[]) copyOfComplex(rect.corners, 4);
                 cp[0] = new Complex<C>(cr, center.getRe(), cp[0].getIm());
@@ -280,7 +292,7 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
      * @param rect root isolating rectangle for f which contains exactly one root.
      * @param f univariate polynomial, non-zero.
      * @param g univariate polynomial, gcd(f,g) == 1.
-     * @return v with v a new rectangle contained in iv such that g(w) != 0 for w in v.
+     * @return v a new rectangle contained in rect such that g(w) != 0 for w in v.
      */
     @Override
     public Rectangle<C> invariantRectangle(Rectangle<C> rect, 
@@ -312,7 +324,11 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
             Rectangle<C> v1 = v;
             v = complexRootRefinement(v,f,len);
             if ( v.equals(v1) ) {
-                throw new RuntimeException("no convergence " + v);
+                //System.out.println("len = " + len);
+                if ( !f.gcd(g).isONE() ) {
+                    System.out.println("f.gcd(g) = " + f.gcd(g));
+                    throw new RuntimeException("no convergence " + v);
+                }
                 //break; // no convergence
 	    }
         }
