@@ -515,7 +515,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
                 if ( d0 == dx ) { // gcd == r ??
                     if (PolyUtil.<BigInteger> recursivePseudoRemainder(q,r).isZERO() ) {
                         r = r.abs().multiply(c); //.abs();
-                        System.out.println("exit with r | q : " + r);
+                        logger.info("exit with r | q : " + r);
                         return r;
                     }
                     continue;
@@ -552,7 +552,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
 
             long k = Power.logarithm(new BigInteger(p),mn);
             //System.out.println("mn = " + mn);
-            System.out.println("k = " + k);
+            //System.out.println("k = " + k);
         
             List<GenPolynomial<MOD>> F = new ArrayList<GenPolynomial<MOD>>();
             F.add(ce);

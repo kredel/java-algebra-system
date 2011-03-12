@@ -341,7 +341,6 @@ public class ComplexRootTest extends TestCase {
 
     /**
      * Test complex roots.
-     * 
      */
     @SuppressWarnings("unchecked")
     public void testComplexRootsRand() {
@@ -387,7 +386,6 @@ public class ComplexRootTest extends TestCase {
 
     /**
      * Test complex roots.
-     * 
      */
     public void testComplexRoots() {
         ComplexRootsAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
@@ -404,7 +402,6 @@ public class ComplexRootTest extends TestCase {
 
     /**
      * Test complex root refinement.
-     * 
      */
     public void testComplexRootRefinement() {
         ComplexRootsAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
@@ -438,7 +435,6 @@ public class ComplexRootTest extends TestCase {
 
     /**
      * Test complex root refinement full.
-     * 
      */
     public void testComplexRootRefinementFull() {
         ComplexRootsAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
@@ -459,7 +455,6 @@ public class ComplexRootTest extends TestCase {
 
     /**
      * Test winding number with wrong precondition.
-     * 
      */
     @SuppressWarnings("unchecked")
     public void testWindingNumberWrong() {
@@ -502,7 +497,6 @@ public class ComplexRootTest extends TestCase {
 
     /**
      * Test complex root approximation.
-     * 
      */
     public void testComplexRootApproximation() {
         ComplexRootsAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
@@ -552,7 +546,6 @@ public class ComplexRootTest extends TestCase {
 
     /**
      * Test complex root approximation full algorithm.
-     * 
      */
     public void testComplexRootApproximationFull() {
         ComplexRootsAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
@@ -644,7 +637,6 @@ public class ComplexRootTest extends TestCase {
     /**
      * Test complex root approximation full algorithm with Wilkinson
      * polynomials, inverse roots. p = (x-1/i1)*(x-1/i2)*(x-1/i3*...*(x-1/in)
-     * 
      */
     public void testComplexRootApproximationWilkinsonInverseFull() {
         final int N = 5;
@@ -709,7 +701,6 @@ public class ComplexRootTest extends TestCase {
 
     /**
      * Test complex root invariant rectangle.
-     * 
      */
     public void testComplexRootInvariant() {
         ComplexRootsAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
@@ -720,13 +711,13 @@ public class ComplexRootTest extends TestCase {
         //a = dfac.parse("( x^4-2 )");
         if ( a.degree() == 0 ) {
             return;
-	}
+        }
         Squarefree<Complex<BigRational>> engine = SquarefreeFactory
                 .<Complex<BigRational>> getImplementation(cfac);
         a = engine.squarefreePart(a);
         b = engine.squarefreePart(b);
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
 
         List<Rectangle<BigRational>> roots = cr.complexRoots(a);
         //System.out.println("roots = " + roots);
@@ -737,33 +728,32 @@ public class ComplexRootTest extends TestCase {
         
         try {
             Rectangle<BigRational> ref = cr.invariantRectangle(rect,a,b);
-            System.out.println("ref = " + ref);
-	} catch (InvalidBoundaryException e) {
-	    e.printStackTrace();
-	}
+            //System.out.println("ref = " + ref);
+        } catch (InvalidBoundaryException e) {
+            e.printStackTrace();
+        }
     }
 
 
     /**
      * Test complex root invariant magnitude rectangle.
-     * 
      */
     public void testComplexRootInvariantMagnitude() {
         ComplexRootsAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
 
         a = dfac.random(kl, ll, el - 1, q);
         b = dfac.random(kl, ll, 3, q);
-        a = dfac.parse("( x^2 + 1 )");
-        b = dfac.parse("( x - 0i1 )");
+        //a = dfac.parse("( x^2 + 1 )");
+        //b = dfac.parse("( x - 0i1 )");
         if ( a.degree() == 0 ) {
             return;
-	}
+        }
         Squarefree<Complex<BigRational>> engine = SquarefreeFactory
                 .<Complex<BigRational>> getImplementation(cfac);
         a = engine.squarefreePart(a);
         b = engine.squarefreePart(b);
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
 
         List<Rectangle<BigRational>> roots = cr.complexRoots(a);
         //System.out.println("roots = " + roots);
@@ -776,15 +766,15 @@ public class ComplexRootTest extends TestCase {
             Rectangle<BigRational> ref = cr.invariantMagnitudeRectangle(rect,a,b,eps);
             //System.out.println("ref = " + ref);
             Complex<BigRational> mag = cr.complexRectangleMagnitude(ref,a,b);
-            System.out.println("mag  = " + mag);
+            //System.out.println("mag  = " + mag);
             Complex<BigRational> cmag = cr.complexMagnitude(ref,a,b,eps);
-            System.out.println("cmag = " + cmag);
+            //System.out.println("cmag = " + cmag);
             assertEquals("mag == cmag: " + cmag, mag, cmag);
             BigRational rmag = cmag.getRe();
-            System.out.println("rmag = " + new BigDecimal(cmag.getRe()) + " i " + new BigDecimal(cmag.getIm()));
-	} catch (InvalidBoundaryException e) {
-	    e.printStackTrace();
-	}
+            //System.out.println("rmag = " + new BigDecimal(cmag.getRe()) + " i " + new BigDecimal(cmag.getIm()));
+        } catch (InvalidBoundaryException e) {
+            e.printStackTrace();
+        }
     }
 
 }
