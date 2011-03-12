@@ -686,7 +686,7 @@ class ParamIdeal:
         if self.gbsys == None:
             return self.pset.toScript();
         else:
-            return self.gbsys.toScript(); #toString();
+            return self.gbsys.toString(); # toScript() not available
 #            return self.pset.toScript() + "\n" + self.gbsys.toScript();
 
     def optimizeCoeff(self):

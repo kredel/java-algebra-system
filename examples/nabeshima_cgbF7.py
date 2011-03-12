@@ -14,7 +14,7 @@ from jas import terminate
 # Nabashima, ISSAC 2007, example F7
 # integral function coefficients
 
-r = Ring( "IntFunc(a, b) (y,x) G" );
+r = Ring( "IntFunc(a, b) (z,y,x) G" );
 print "Ring: " + str(r);
 print;
 
