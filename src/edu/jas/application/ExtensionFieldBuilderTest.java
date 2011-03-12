@@ -89,7 +89,7 @@ public class ExtensionFieldBuilderTest extends TestCase {
         GenPolynomialRing<AlgebraicNumber<BigRational>> tf = new GenPolynomialRing<AlgebraicNumber<BigRational>>(af,new String[]{ "x" });
         QuotientRing<AlgebraicNumber<BigRational>> qf = new QuotientRing<AlgebraicNumber<BigRational>>(tf);
         GenPolynomialRing<Quotient<AlgebraicNumber<BigRational>>> qaf = new GenPolynomialRing<Quotient<AlgebraicNumber<BigRational>>>(qf,new String[]{ "wx" });
-        GenPolynomial<Quotient<AlgebraicNumber<BigRational>>> b = qaf.parse("wx^2 - { x }");
+        GenPolynomial<Quotient<AlgebraicNumber<BigRational>>> b = qaf.parse("wx^2 - x");
         AlgebraicNumberRing<Quotient<AlgebraicNumber<BigRational>>> fac = new AlgebraicNumberRing<Quotient<AlgebraicNumber<BigRational>>>(b);
         //System.out.println("fac = " + fac.toScript());
 
@@ -138,7 +138,7 @@ public class ExtensionFieldBuilderTest extends TestCase {
         fac = builder.build();
         //System.out.println("fac     = " + fac.toScript());
 
-        builder = builder.algebraicExtension("wx", "wx^2 - { x }"); // how to know number of { }
+        builder = builder.algebraicExtension("wx", "wx^2 - x"); // number of { } resolved
         //System.out.println("builder = " + builder.toString());
 
         fac = builder.build();
@@ -188,7 +188,7 @@ public class ExtensionFieldBuilderTest extends TestCase {
         fac = builder.build();
         //System.out.println("fac     = " + fac.toScript());
 
-        builder = builder.algebraicExtension("wx", "wx^2 - { { x } }"); // how to know number of { }
+        builder = builder.algebraicExtension("wx", "wx^2 - x"); // number of { } resolved
         //System.out.println("builder = " + builder.toString());
 
         fac = builder.build();
@@ -225,7 +225,7 @@ public class ExtensionFieldBuilderTest extends TestCase {
             .baseField(new ModLongRing(7))
             .algebraicExtension("w2", "w2^2 - 3")
             .transcendentExtension("x")
-            .algebraicExtension("wx", "wx^7 - { x }")
+            .algebraicExtension("wx", "wx^7 - x")
             .build();
         //System.out.println("fac = " + fac.toScript());
 
@@ -259,7 +259,7 @@ public class ExtensionFieldBuilderTest extends TestCase {
         RingFactory fac = ExtensionFieldBuilder
             .baseField(new BigRational(1))
             .realAlgebraicExtension("q", "q^3 - 3","[1,2]")
-            .realAlgebraicExtension("w", "w^2 - { q }","[1,2]")
+            .realAlgebraicExtension("w", "w^2 - q","[1,2]")
             .realAlgebraicExtension("s", "s^5 - 2","[1,2]")
             .build();
         //System.out.println("fac = " + fac.toScript());
@@ -303,7 +303,7 @@ public class ExtensionFieldBuilderTest extends TestCase {
         RingFactory fac = ExtensionFieldBuilder
             .baseField(cf)
             .complexAlgebraicExtension("w2", "w2^2 + 2","[-1i0,1i2]")
-            //.complexAlgebraicExtension("q3", "q3^3 + { w2 }","[-1i0,1i2]")
+            //.complexAlgebraicExtension("q3", "q3^3 + { w2 }","[-1i0,1i2]") // not possible, TODO
             .build();
         //System.out.println("fac = " + fac.toScript());
 
@@ -339,9 +339,8 @@ public class ExtensionFieldBuilderTest extends TestCase {
         RingFactory fac = ExtensionFieldBuilder
             .baseField(new BigRational(1))
             .realAlgebraicExtension("q", "q^3 - 3","[1,2]")
-            .realAlgebraicExtension("w", "w^2 - { q }","[1,2]")
+            .realAlgebraicExtension("w", "w^2 - q","[1,2]")
             .realAlgebraicExtension("s", "s^5 - 2","[1,2]")
-            //                    .polynomialExtension("y")
             .build();
         //System.out.println("fac = " + fac.toScript());
 
@@ -351,9 +350,9 @@ public class ExtensionFieldBuilderTest extends TestCase {
         assertTrue("#gens == 4 " + s, s == 4 );
 
         GenPolynomialRing pfac = new GenPolynomialRing(fac,new String[] { "y" });
-        GenPolynomial elem = pfac.parse("y^2 - { { w } s }");
+        GenPolynomial elem = pfac.parse("y^2 - w s");
         //elem = (RingElem)elem.negate();
-        //System.out.println("elem     = " + elem.toScript());
+        //System.out.println("elem    = " + elem.toScript());
         //System.out.println("elem    = " + elem);
 
         List<RealAlgebraicNumber> roots = RootFactory.realAlgebraicNumbers(elem);
@@ -363,7 +362,7 @@ public class ExtensionFieldBuilderTest extends TestCase {
             //BigDecimal id = new BigDecimal(root.getRational());
             //System.out.println("root    = " + root);
             //System.out.println("        ~ " + id);
-	    RealAlgebraicNumber inv = root.inverse();
+            RealAlgebraicNumber inv = root.inverse();
             //System.out.println("inv     = " + inv);
             //BigDecimal ivd = new BigDecimal(inv.getRational());
             //System.out.println("        ~ " + ivd);
