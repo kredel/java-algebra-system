@@ -36,10 +36,8 @@ import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
-
+import edu.jas.poly.InvalidExpressionException;
 import edu.jas.poly.PolynomialList;
-
-
 
 
 /**
@@ -97,7 +95,6 @@ public class GenPolynomialTokenizerTest extends TestCase {
 
     /**
      * Test rational polynomial.
-     * 
      */
     @SuppressWarnings("unchecked")
     public void testBigRational() {
@@ -150,7 +147,6 @@ public class GenPolynomialTokenizerTest extends TestCase {
 
     /**
      * Test integer polynomial.
-     * 
      */
     @SuppressWarnings("unchecked")
     public void testBigInteger() {
@@ -203,7 +199,6 @@ public class GenPolynomialTokenizerTest extends TestCase {
 
     /**
      * Test modular integer polynomial.
-     * 
      */
     @SuppressWarnings("unchecked")
     public void testModInteger() {
@@ -255,7 +250,6 @@ public class GenPolynomialTokenizerTest extends TestCase {
 
     /**
      * Test complex polynomial.
-     * 
      */
     @SuppressWarnings("unchecked")
     public void testBigComplex() {
@@ -308,7 +302,6 @@ public class GenPolynomialTokenizerTest extends TestCase {
 
     /**
      * Test decimal polynomial.
-     * 
      */
     @SuppressWarnings("unchecked")
     public void testBigDecimal() {
@@ -360,7 +353,6 @@ public class GenPolynomialTokenizerTest extends TestCase {
 
     /**
      * Test quaternion polynomial.
-     * 
      */
     @SuppressWarnings("unchecked")
     public void testBigQuaternion() {
@@ -413,7 +405,6 @@ public class GenPolynomialTokenizerTest extends TestCase {
 
     /**
      * Test rational solvable polynomial.
-     * 
      */
     @SuppressWarnings("unchecked")
     public void testSolvableBigRational() {
@@ -473,7 +464,6 @@ public class GenPolynomialTokenizerTest extends TestCase {
 
     /**
      * Test mod integer solvable polynomial.
-     * 
      */
     @SuppressWarnings("unchecked")
     public void testSolvableModInteger() {
@@ -533,7 +523,6 @@ public class GenPolynomialTokenizerTest extends TestCase {
 
     /**
      * Test integer polynomial module.
-     * 
      */
     @SuppressWarnings("unchecked")
     public void testBigIntegerModule() {
@@ -613,7 +602,6 @@ public class GenPolynomialTokenizerTest extends TestCase {
 
     /**
      * Test rational solvable polynomial module.
-     * 
      */
     @SuppressWarnings("unchecked")
     public void testBigRationalSolvableModule() {
@@ -698,7 +686,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
 
     /**
      * Test algebraic number polynomial.
-     * <b>Note: </b> Sysntax no more supported.
+     * <b>Note: </b> Syntax no more supported.
      */
     @SuppressWarnings("unchecked")
     public void removedTestAlgebraicNumber() {
@@ -760,7 +748,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
 
     /**
      * Test Galois field coefficient polynomial.
-     * <b>Note: </b> Sysntax no more supported.
+     * <b>Note: </b> Syntax no more supported.
      */
     @SuppressWarnings("unchecked")
     public void removedTestGaloisField() {
@@ -822,7 +810,6 @@ public class GenPolynomialTokenizerTest extends TestCase {
 
     /**
      * Test algebraic number polynomial with braces.
-     * 
      */
     @SuppressWarnings("unchecked")
     public void testAlgebraicNumberBrace() {
@@ -884,7 +871,6 @@ public class GenPolynomialTokenizerTest extends TestCase {
 
     /**
      * Test Galois field coefficient polynomial with braces.
-     * 
      */
     @SuppressWarnings("unchecked")
     public void testGaloisFieldBrace() {
@@ -945,8 +931,68 @@ public class GenPolynomialTokenizerTest extends TestCase {
 
 
     /**
+     * Test Galois field coefficient polynomial without braces.
+     */
+    @SuppressWarnings("unchecked")
+    public void testGaloisFieldWoBrace() {
+        String exam = "AN[ 19 (i) ( i^2 + 1 ) ] (x,y,z) L "  
+            + "( "
+            + "( 20 ), "
+            + "( i ), "
+            + "( 0 ), "
+            + "( i^2 + 20 ), "
+            + "( 1 x + x^3 + 3^3 i^3 y z - (x)^3 ) "
+            + " )";
+        source = new StringReader( exam );
+        parser = new GenPolynomialTokenizer( source );
+        PolynomialList<AlgebraicNumber<ModInteger>> f = null;
+        AlgebraicNumberRing<ModInteger> fac = null;
+        try {
+            f = (PolynomialList<AlgebraicNumber<ModInteger>>)parser.nextPolynomialSet();
+            fac = (AlgebraicNumberRing<ModInteger>)f.ring.coFac;
+        } catch(IOException e) {
+            fail(""+e);
+        } catch (ClassCastException e) {
+            fail(""+e);
+        }
+        //System.out.println("f = " + f);
+        assertTrue("f != null", f.list != null);
+        assertTrue("length( f ) = 5", f.list.size() == 5);
+
+        TermOrder tord = new TermOrder(TermOrder.INVLEX);
+        String[] vars = new String[]{ "x", "y", "z" };
+        int nvar = vars.length;
+        pfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac,nvar,tord,vars);
+        assertEquals("pfac == f.ring", pfac, f.ring );
+
+        GenPolynomial<AlgebraicNumber<ModInteger>> a = f.list.get(0);
+        //System.out.println("a = " + a);
+        assertTrue("isONE( f.get(0) )", a.isONE() );
+
+        GenPolynomial<AlgebraicNumber<ModInteger>> b = f.list.get(1);
+        //System.out.println("b = " + b);
+        assertTrue("isUnit( f.get(1) )", b.isUnit() );
+
+        b = b.monic();
+        //System.out.println("b = " + b);
+        assertTrue("isUnit( f.get(1) )", b.isONE() );
+
+        GenPolynomial<AlgebraicNumber<ModInteger>> c = f.list.get(2);
+        //System.out.println("c = " + c);
+        assertTrue("isZERO( f.get(1) )", c.isZERO() );
+
+        GenPolynomial<AlgebraicNumber<ModInteger>> d = f.list.get(3);
+        //System.out.println("d = " + d);
+        assertTrue("isZERO( f.get(2) )", d.isZERO() );
+
+        GenPolynomial<AlgebraicNumber<ModInteger>> e = f.list.get(4);
+        //System.out.println("e = " + e);
+        assertEquals("f.get(3).length() == 2", 2, e.length() );
+    }
+
+
+    /**
      * Test rational polynomial with generic coefficients.
-     * 
      */
     @SuppressWarnings("unchecked")
     public void testBigRationalGeneric() {
@@ -999,6 +1045,85 @@ public class GenPolynomialTokenizerTest extends TestCase {
         GenPolynomial<BigRational> e = f.list.get(4);
         //System.out.println("e = " + e);
         assertTrue("isONE( f.get(4) )", e.isONE() );
+    }
+
+
+    /**
+     * Test rational polynomial with errors.
+     */
+    @SuppressWarnings("unchecked")
+    public void testBigRationalErorr() {
+        // brace mismatch
+        String exam = "Rat(x,y,z) L "  
+            + "( "
+            + "( { 3 ), "
+            + " )";
+        source = new StringReader( exam );
+        parser = new GenPolynomialTokenizer( source );
+        PolynomialList<BigRational> f = null;
+        try {
+            f = (PolynomialList<BigRational>)parser.nextPolynomialSet();
+        } catch(IOException e) {
+            fail(""+e);
+        } catch (ClassCastException e) {
+            fail(""+e);
+        } catch (InvalidExpressionException e) {
+            // pass
+        }
+
+        // brace mismatch
+        exam = "Rat(x,y,z) L "  
+            + "( "
+            + "( 3 } ), "
+            + " )";
+        source = new StringReader( exam );
+        parser = new GenPolynomialTokenizer( source );
+        f = null;
+        try {
+            f = (PolynomialList<BigRational>)parser.nextPolynomialSet();
+        } catch(IOException e) {
+            fail(""+e);
+        } catch (ClassCastException e) {
+            fail(""+e);
+        } catch (InvalidExpressionException e) {
+            // pass
+        }
+
+        // invalid nesting
+        exam = "Rat(x,y,z) L "  
+            + "( "
+            + "( { x } ), "
+            + " )";
+        source = new StringReader( exam );
+        parser = new GenPolynomialTokenizer( source );
+        f = null;
+        try {
+            f = (PolynomialList<BigRational>)parser.nextPolynomialSet();
+        } catch(IOException e) {
+            fail(""+e);
+        } catch (ClassCastException e) {
+            fail(""+e);
+        } catch (InvalidExpressionException e) {
+            // pass
+        }
+
+        // unknown varaible
+        exam = "Rat(x,y,z) L "  
+            + "( "
+            + "( w ), "
+            + " )";
+        source = new StringReader( exam );
+        parser = new GenPolynomialTokenizer( source );
+        f = null;
+        try {
+            f = (PolynomialList<BigRational>)parser.nextPolynomialSet();
+        } catch(IOException e) {
+            fail(""+e);
+        } catch (ClassCastException e) {
+            fail(""+e);
+        } catch (InvalidExpressionException e) {
+            // pass
+        }
     }
 
 }

@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
@@ -29,6 +30,7 @@ import edu.jas.arith.ModLongRing;
 import edu.jas.structure.Power;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.poly.InvalidExpressionException;
 
 
 /**
@@ -313,12 +315,17 @@ public class GenPolynomialTokenizer {
                 break;
             switch (tt) {
             // case '_': removed 
-            case '{':
+            case '}': 
+                throw new InvalidExpressionException("mismatch of braces after " + a + ", error at " + b);
+            case '{': // recursion
                 StringBuffer rf = new StringBuffer();
                 int level = 0;
                 do {
                     tt = tok.nextToken();
                     //System.out.println("token { = " + ((char)tt) + ", " + tt + ", level = " + level);
+                    if (tt == StreamTokenizer.TT_EOF) {
+                        throw new InvalidExpressionException("mismatch of braces after " + a + ", error at " + b);
+                    }
                     if (tt == '{') {
                         level++;
                     }
@@ -336,9 +343,13 @@ public class GenPolynomialTokenizer {
                     } else {
                         rf.append((char) tt);
                     }
-                } while (level >= 0); // || tt != '}' 
+                } while (level >= 0); 
                 //System.out.println("coeff{} = " + rf.toString() );
-                r = (RingElem) fac.parse(rf.toString());
+                try {
+                     r = (RingElem) fac.parse(rf.toString());
+                } catch (NumberFormatException re) {
+                    throw new InvalidExpressionException("not a number " + rf, re);
+                }
                 if (debug)
                     logger.debug("coeff " + r);
                 ie = nextExponent();
@@ -379,7 +390,11 @@ public class GenPolynomialTokenizer {
                     } else {
                         tok.pushBack();
                     }
-                    r = (RingElem) fac.parse(df.toString());
+                    try {
+                         r = (RingElem) fac.parse(df.toString());
+                    } catch (NumberFormatException re) {
+                        throw new InvalidExpressionException("not a number " + df, re);
+                    }
                     if (debug)
                         logger.debug("coeff " + r);
                     //System.out.println("r = " + r.toScriptFactory());
@@ -399,20 +414,35 @@ public class GenPolynomialTokenizer {
                     break;
                 if (tok.sval == null)
                     break;
-                // read monomial 
+                // read monomial or recursion 
                 first = tok.sval.charAt(0);
                 if (letter(first)) {
                     ix = leer.indexVar(tok.sval, vars); //indexVar( tok.sval );
-                    if (ix < 0) {
-                        logger.error("Unknown varibable " + tok.sval);
-                        done = true;
-                        break;
+                    if (ix < 0) { // not found
+                        try {
+                            r = (RingElem) fac.parse(tok.sval);
+                        } catch (NumberFormatException re) {
+                            throw new InvalidExpressionException("recursively unknown variable " + tok.sval);
+                        }
+                        if (debug)
+                            logger.info("coeff " + r);
+                        if ( r.isONE() || r.isZERO() ) {
+                            //logger.error("Unknown varibable " + tok.sval);
+                            //done = true;
+                            //break;
+                            throw new InvalidExpressionException("recursively unknown variable " + tok.sval);
+                        }
+                        ie = nextExponent();
+                        //  System.out.println("ie: " + ie);
+                        r = Power.<RingElem> positivePower(r, ie);
+                        b = b.multiply(r);
+                    } else { // found
+                        //  System.out.println("ix: " + ix);
+                        ie = nextExponent();
+                        //  System.out.println("ie: " + ie);
+                        e = ExpVector.create(vars.length, ix, ie);
+                        b = b.multiply(e);
                     }
-                    //  System.out.println("ix: " + ix);
-                    ie = nextExponent();
-                    //  System.out.println("ie: " + ie);
-                    e = ExpVector.create(vars.length, ix, ie);
-                    b = b.multiply(e);
                     tt = tok.nextToken();
                     if (debug)
                         logger.debug("tt,letter = " + tok);
@@ -648,9 +678,9 @@ public class GenPolynomialTokenizer {
                         BigInteger lm = new BigInteger(Long.MAX_VALUE);
                         if ( mo.compareTo(lm) < 0 ) {
                             coeff = new ModLongRing(mo.getVal());
-			} else {
+                        } else {
                             coeff = new ModIntegerRing(mo.getVal());
-			}
+                        }
                         //System.out.println("coeff = " + coeff + " :: " + coeff.getClass());
                         ct = coeffType.ModInt;
                     } else {
@@ -663,8 +693,8 @@ public class GenPolynomialTokenizer {
                     tt = tok.nextToken();
                 }
             } else if (tok.sval.equalsIgnoreCase("RatFunc") || tok.sval.equalsIgnoreCase("ModFunc")) {
-                logger.error("RatFunc and ModFunc can no more be read, see edu.jas.application.RingFactoryTokenizer.");
-                throw new IOException("RatFunc and ModFunc can no more be read, see edu.jas.application.RingFactoryTokenizer.");
+                //logger.error("RatFunc and ModFunc can no more be read, see edu.jas.application.RingFactoryTokenizer.");
+                throw new InvalidExpressionException("RatFunc and ModFunc can no more be read, see edu.jas.application.RingFactoryTokenizer.");
             } else if (tok.sval.equalsIgnoreCase("IntFunc")) {
                 String[] rfv = nextVariableList();
                 //System.out.println("rfv = " + rfv.length + " " + rfv[0]);
@@ -694,7 +724,7 @@ public class GenPolynomialTokenizer {
                     //System.out.println("anv = " + anv.length + " " + anv[0]);
                     int vs = anv.length;
                     if (vs != 1) {
-                        logger.error("AlgebraicNumber only for univariate polynomials");
+                        throw new InvalidExpressionException("AlgebraicNumber only for univariate polynomials " + Arrays.toString(anv));
                     }
                     String[] ovars = vars;
                     vars = anv;
