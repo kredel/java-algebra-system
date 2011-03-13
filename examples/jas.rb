@@ -3458,6 +3458,81 @@ def Mat(cofac,n,m,v=nil)
     return RingElem.new(r);
 end
 
+
+include_class "edu.jas.application.ExtensionFieldBuilder";
+
+=begin rdoc
+Extension field builder.
+Construction of extension field towers according to then builder pattern.
+=end
+class EF
+    attr_reader :builder
+
+=begin rdoc
+Constructor to set base field.
+=end
+    def initialize(base)
+        if base.is_a? RingElem
+            factory = base.elem;
+        else
+            factory = base;
+        end
+        begin
+            factory = factory.factory();
+        rescue
+            #pass
+        end
+        if factory.is_a? ExtensionFieldBuilder
+            @builder = factory;
+        else
+            @builder = ExtensionFieldBuilder.new(factory);
+        end
+    end
+
+=begin rdoc
+Create a string representation.
+=end
+    def to_s()
+        return @builder.toScript(); 
+        #return @builder.toString(); 
+    end
+
+=begin rdoc 
+Create an extension field.  If algebraic is given as
+string expression, then an algebraic extension field is constructed,
+else a transcendental extension field is constructed.  
+=end 
+    def extend(vars,algebraic=nil) 
+        if algebraic == nil
+            ef = @builder.transcendentExtension(vars);
+        else
+            ef = @builder.algebraicExtension(vars,algebraic);
+        end
+        return EF.new(ef.build());
+    end
+
+=begin rdoc
+Create an polynomial ring extension.
+=end
+    def polynomial(vars)
+        ef = @builder.polynomialExtension(vars);
+        return EF.new(ef.build());
+    end
+
+=begin rdoc
+Get extension field tower.
+=end
+    def build()
+        rf = @builder.build();
+        if rf.is_a? GenPolynomialRing
+            return PolyRing.new(rf.coFac,rf.getVars());
+        else
+            return RingElem.new(rf.getZERO());
+        end
+    end
+
+end
+
 end
 
 include JAS

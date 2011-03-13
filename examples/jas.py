@@ -38,7 +38,7 @@ from edu.jas.vector      import GenVector, GenVectorModul,\
                                 GenMatrix, GenMatrixRing
 from edu.jas.application import PolyUtilApp, Residue, ResidueRing, Ideal,\
                                 Local, LocalRing, IdealWithRealAlgebraicRoots,\
-                                ComprehensiveGroebnerBaseSeq
+                                ComprehensiveGroebnerBaseSeq, ExtensionFieldBuilder
 from edu.jas.kern        import ComputerThreads, StringUtil, Scripting
 from edu.jas.ufd         import GreatestCommonDivisor, PolyUfdUtil, GCDFactory,\
                                 FactorFactory, SquarefreeFactory, Quotient, QuotientRing
@@ -2657,3 +2657,63 @@ class SolvPolyRing(SolvableRing):
         '''Create a string representation.
         '''
         return self.ring.toScript();
+
+
+class EF:
+    '''Extension field builder.
+
+    Construction of extension field towers according to then builder pattern.
+    '''
+
+    def __init__(self,base):
+        '''Constructor to set base field.
+        '''
+        if isinstance(base,RingElem):
+            factory = base.elem;
+        else:
+            factory = base;
+        try:
+            factory = self.factory.factory();
+        except:
+            pass
+        #print "factory: " + factory.toScript() + " :: " + factory.toString();
+        if isinstance(factory,ExtensionFieldBuilder):
+            self.builder = factory;
+        else:
+            self.builder = ExtensionFieldBuilder(factory);
+
+    def __str__(self):
+        '''Create a string representation.
+        '''
+        return str(self.builder.toScript()); 
+
+    def extend(self,vars,algebraic=None):
+        '''Create an extension field.
+
+        If algebraic is given as string expression, then an algebraic
+        extension field is constructed, else a transcendental
+        extension field is constructed.
+        '''
+        if algebraic == None:
+            ef = self.builder.transcendentExtension(vars);
+        else:
+            ef = self.builder.algebraicExtension(vars,algebraic);
+        return EF(ef.build());
+
+    def polynomial(self,vars):
+        '''Create an polynomial ring extension.
+        '''
+        ef = self.builder.polynomialExtension(vars);
+        return EF(ef.build());
+
+    def build(self):
+        '''Get extension field tower.
+
+        '''
+        rf = self.builder.build();
+        if isinstance(rf,GenPolynomialRing):
+            return PolyRing(rf.coFac,rf.getVars());
+        else:
+            return RingElem(rf.getZERO());
+
+
