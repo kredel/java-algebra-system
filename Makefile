@@ -388,8 +388,6 @@ loc: young
 	find ~/jas-versions/jlinalg_adapter -name "*.java" | xargs cat | wc
 	find ~/jas-versions/commons-math_adapter -name "*.java" | wc -l
 	find ~/jas-versions/commons-math_adapter -name "*.java" | xargs cat | wc
-	find ~/jas-versions/$(VERSION)/jython -name "*.java" | wc -l
-	find ~/jas-versions/$(VERSION)/jython -name "*.java" | xargs cat | wc 
 	cat examples/jas.py | wc
 	find examples -name "*.py" | grep -v jas.py | xargs cat | wc
 	cat examples/jas.rb | wc
