@@ -60,7 +60,6 @@ public class Examples {
 
     /**
      * example1. cyclic n-th roots polynomial systems.
-     * 
      */
     public static void example1() {
         int n = 4;
@@ -111,7 +110,6 @@ public class Examples {
     /**
      * example2. abtract types:
      * List<GenPolynomial<Product<Residue<BigRational>>>>.
-     * 
      */
     public static void example2() {
         List<GenPolynomial<Product<Residue<BigRational>>>> L = null;
@@ -177,7 +175,6 @@ public class Examples {
 
     /**
      * example3. abtract types: GB of List<GenPolynomial<Residue<BigRational>>>.
-     * 
      */
     public static void example3() {
         List<GenPolynomial<Residue<BigRational>>> L = null;
@@ -239,7 +236,6 @@ public class Examples {
     /**
      * example4. abtract types: comprehensive GB of
      * List<GenPolynomial<GenPolynomial<BigRational>>>.
-     * 
      */
     public static void example4() {
         int kl = 2;
@@ -399,7 +395,6 @@ public class Examples {
 
     /**
      * example7. Coefficients in Boolean residue class ring.
-     * 
      */
     public static void example7() {
         String[] vars = { "v3", "v2", "v1" };
@@ -455,7 +450,6 @@ public class Examples {
     /**
      * example8. Coefficients in Boolean residue class ring with cuppling of
      * variables.
-     * 
      */
     public static void example8() {
         String[] vars = { "v3", "v2", "v1" };
@@ -520,7 +514,57 @@ public class Examples {
         List<GenPolynomial<Residue<ModInteger>>> G = gb.GB(polynomials);
 
         System.out.println(G);
+    }
 
+
+    /**
+     * example9. Groebner base and dimension.
+     */
+    public static void example9() {
+        String[] vars = { "d1", "d2", "d3", 
+                          "p1a", "p1b", "p1c", "p2a", "p2b", "p2c", "p3a", "p3b", "p3c", "p4a", "p4b", "p4c", 
+                          "A", "B", "C", "D" };
+
+        BigRational br = new BigRational();
+        GenPolynomialRing<BigRational> pring = new GenPolynomialRing<BigRational>(br, vars);
+        //GenPolynomialRing<BigRational> pring = new GenPolynomialRing<BigRational>(br, vars.length, new TermOrder(TermOrder.INVLEX), vars);
+
+        GenPolynomial<BigRational> e1 = pring.parse("A*p1a+B*p1b+C*p1c+D"); // (1)
+        GenPolynomial<BigRational> e2 = pring.parse("A*p2a+B*p2b+C*p2c+D"); // (2)
+        GenPolynomial<BigRational> e3 = pring.parse("A*p3a+B*p3b+C*p3c+D"); // (3)
+        GenPolynomial<BigRational> e4 = pring.parse("A*p4a+B*p4b+C*p4c+D"); // (4)
+        GenPolynomial<BigRational> e5 = pring.parse("p2a-p3a");             // (5)
+        GenPolynomial<BigRational> e6 = pring.parse("p2b-p3b");             // (6)
+        GenPolynomial<BigRational> e7 = pring.parse("p2c-p3c");             // (7)
+        GenPolynomial<BigRational> e8 = pring.parse("(p2a-p1a)^2+(p2b-p1b)^2+(p2c-p1c)^2-d1^2"); // (8)
+        GenPolynomial<BigRational> e9 = pring.parse("(p4a-p3a)^2+(p4b-p3b)^2+(p4c-p3c)^2-d2^2"); // (9)
+
+        List<GenPolynomial<BigRational>> cp = new ArrayList<GenPolynomial<BigRational>>(9);
+        cp.add(e1);
+        cp.add(e2);
+        cp.add(e3);
+        cp.add(e4);
+        cp.add(e5);
+        cp.add(e6);
+        cp.add(e7);
+        cp.add(e8);
+        cp.add(e9);
+
+        GenPolynomial<BigRational> e10 = pring.parse("(p4a-p1a)^2+(p4b-p1b)^2+(p4c-p1c)^2-d3^2"); // (10)
+        cp.add(e10);
+
+        List<GenPolynomial<BigRational>> gb;
+        GroebnerBase<BigRational> sgb = GBFactory.getImplementation(br);
+        gb = sgb.GB(cp);
+        //System.out.println("gb = " + gb);
+
+        PolynomialList<BigRational> pl = new PolynomialList<BigRational>(pring,gb);
+        Ideal<BigRational> id = new Ideal<BigRational>(pl,true);
+        System.out.println("cp = " + cp);
+        System.out.println("id = " + id);
+
+        Dimension dim = id.dimension();
+        System.out.println("dim = " + dim);
     }
 
 }
