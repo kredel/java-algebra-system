@@ -4,6 +4,7 @@
 
 package edu.jas.vector;
 
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -14,16 +15,19 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Basic linear algebra methods.
- * Implements Basic linear algebra computations and tests.
- * <b>Note:</b> will use wrong method dispatch in JRE when used with GenSolvablePolynomial.
+ * Basic linear algebra methods. Implements Basic linear algebra computations
+ * and tests. <b>Note:</b> will use wrong method dispatch in JRE when used with
+ * GenSolvablePolynomial.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
 public class BasicLinAlg<C extends RingElem<C>> {
 
+
     private static final Logger logger = Logger.getLogger(BasicLinAlg.class);
+
+
     //private final boolean debug = logger.isDebugEnabled();
 
 
@@ -40,23 +44,23 @@ public class BasicLinAlg<C extends RingElem<C>> {
      * @param F a ring element list.
      * @return the scalar product of G and F.
      */
-    public C scalarProduct(List<C> G, List<C> F) {  
+    public C scalarProduct(List<C> G, List<C> F) {
         C sp = null;
         Iterator<C> it = G.iterator();
         Iterator<C> jt = F.iterator();
-        while ( it.hasNext() && jt.hasNext() ) {
+        while (it.hasNext() && jt.hasNext()) {
             C pi = it.next();
             C pj = jt.next();
-            if ( pi == null || pj == null ) {
-               continue;
+            if (pi == null || pj == null) {
+                continue;
             }
-            if ( sp == null ) {
+            if (sp == null) {
                 sp = pi.multiply(pj);
             } else {
-                sp = sp.sum( pi.multiply(pj) );
+                sp = sp.sum(pi.multiply(pj));
             }
         }
-        if ( it.hasNext() || jt.hasNext() ) {
+        if (it.hasNext() || jt.hasNext()) {
             logger.error("scalarProduct wrong sizes");
         }
         return sp;
@@ -69,24 +73,24 @@ public class BasicLinAlg<C extends RingElem<C>> {
      * @param F a list of ring element lists.
      * @return the scalar product of G and F.
      */
-    public List<C> scalarProduct(List<C> G, List<List<C>> F) {  
+    public List<C> scalarProduct(List<C> G, List<List<C>> F) {
         List<C> sp = null; //new ArrayList<C>(G.size());
         Iterator<C> it = G.iterator();
         Iterator<List<C>> jt = F.iterator();
-        while ( it.hasNext() && jt.hasNext() ) {
+        while (it.hasNext() && jt.hasNext()) {
             C pi = it.next();
             List<C> pj = jt.next();
-            if ( pi == null || pj == null ) {
-               continue;
+            if (pi == null || pj == null) {
+                continue;
             }
-            List<C> s = scalarProduct(pi,pj);
-            if ( sp == null ) {
-		sp = s;
-	    } else {
-                sp = vectorAdd(sp,s);
-	    }
+            List<C> s = scalarProduct(pi, pj);
+            if (sp == null) {
+                sp = s;
+            } else {
+                sp = vectorAdd(sp, s);
+            }
         }
-        if ( it.hasNext() || jt.hasNext() ) {
+        if (it.hasNext() || jt.hasNext()) {
             logger.error("scalarProduct wrong sizes");
         }
         return sp;
@@ -99,24 +103,24 @@ public class BasicLinAlg<C extends RingElem<C>> {
      * @param F a list of ring element lists.
      * @return the right scalar product of G and F.
      */
-    public List<C> rightScalarProduct(List<C> G, List<List<C>> F) {  
+    public List<C> rightScalarProduct(List<C> G, List<List<C>> F) {
         List<C> sp = null; //new ArrayList<C>(G.size());
         Iterator<C> it = G.iterator();
         Iterator<List<C>> jt = F.iterator();
-        while ( it.hasNext() && jt.hasNext() ) {
+        while (it.hasNext() && jt.hasNext()) {
             C pi = it.next();
             List<C> pj = jt.next();
-            if ( pi == null || pj == null ) {
-               continue;
+            if (pi == null || pj == null) {
+                continue;
             }
-            List<C> s = scalarProduct(pj,pi);
-            if ( sp == null ) {
-		sp = s;
-	    } else {
-                sp = vectorAdd(sp,s);
-	    }
+            List<C> s = scalarProduct(pj, pi);
+            if (sp == null) {
+                sp = s;
+            } else {
+                sp = vectorAdd(sp, s);
+            }
         }
-        if ( it.hasNext() || jt.hasNext() ) {
+        if (it.hasNext() || jt.hasNext()) {
             logger.error("scalarProduct wrong sizes");
         }
         return sp;
@@ -130,24 +134,24 @@ public class BasicLinAlg<C extends RingElem<C>> {
      * @return a+b, the vector sum of a and b.
      */
 
-    public List<C> vectorAdd(List<C> a, List<C> b) {  
-        if ( a == null ) {
+    public List<C> vectorAdd(List<C> a, List<C> b) {
+        if (a == null) {
             return b;
         }
-        if ( b == null ) {
+        if (b == null) {
             return a;
         }
-        List<C> V = new ArrayList<C>( a.size() );
+        List<C> V = new ArrayList<C>(a.size());
         Iterator<C> it = a.iterator();
         Iterator<C> jt = b.iterator();
-        while ( it.hasNext() && jt.hasNext() ) {
+        while (it.hasNext() && jt.hasNext()) {
             C pi = it.next();
             C pj = jt.next();
-            C p = pi.sum( pj );
-            V.add( p );
+            C p = pi.sum(pj);
+            V.add(p);
         }
         //System.out.println("vectorAdd" + V);
-        if ( it.hasNext() || jt.hasNext() ) {
+        if (it.hasNext() || jt.hasNext()) {
             logger.error("vectorAdd wrong sizes");
         }
         return V;
@@ -159,15 +163,15 @@ public class BasicLinAlg<C extends RingElem<C>> {
      * @param a a ring element list.
      * @return true, if all polynomial in a are zero, else false.
      */
-    public boolean isZero(List<C> a) {  
-        if ( a == null ) {
+    public boolean isZero(List<C> a) {
+        if (a == null) {
             return true;
         }
-        for ( C pi : a ) {
-            if ( pi == null ) {
+        for (C pi : a) {
+            if (pi == null) {
                 continue;
             }
-            if ( ! pi.isZERO() ) {
+            if (!pi.isZERO()) {
                 return false;
             }
         }
@@ -181,15 +185,15 @@ public class BasicLinAlg<C extends RingElem<C>> {
      * @param F a ring element list.
      * @return the scalar product of p and F.
      */
-    public List<C> scalarProduct(C p, List<C> F) {  
-        List<C> V = new ArrayList<C>( F.size() );
-        for ( C pi : F ) {
-            if ( p != null ) {
-               pi = p.multiply( pi );
+    public List<C> scalarProduct(C p, List<C> F) {
+        List<C> V = new ArrayList<C>(F.size());
+        for (C pi : F) {
+            if (p != null) {
+                pi = p.multiply(pi);
             } else {
-               pi = null;
+                pi = null;
             }
-            V.add( pi );
+            V.add(pi);
         }
         return V;
     }
@@ -201,13 +205,13 @@ public class BasicLinAlg<C extends RingElem<C>> {
      * @param p a ring element.
      * @return the scalar product of F and p.
      */
-    public List<C> scalarProduct(List<C> F, C p) {  
-        List<C> V = new ArrayList<C>( F.size() );
-        for ( C pi : F ) {
-            if ( pi != null ) {
-               pi = pi.multiply( p );
+    public List<C> scalarProduct(List<C> F, C p) {
+        List<C> V = new ArrayList<C>(F.size());
+        for (C pi : F) {
+            if (pi != null) {
+                pi = pi.multiply(p);
             }
-            V.add( pi );
+            V.add(pi);
         }
         return V;
     }
