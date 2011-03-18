@@ -259,9 +259,8 @@ public class GenVector<C extends RingElem<C>> implements ModulElem<GenVector<C>,
     public GenVector<C> abs() {
         if (signum() < 0) {
             return negate();
-        } else {
-            return this;
         }
+        return this;
     }
 
 

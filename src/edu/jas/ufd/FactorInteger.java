@@ -364,7 +364,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
      *         p**e. <b>Note:</b> does not work in all cases.
      */
     List<GenPolynomial<BigInteger>> searchFactorsMonic(GenPolynomial<BigInteger> C, BigInteger M,
-            List<GenPolynomial<MOD>> F, BitSet D) {
+                    List<GenPolynomial<MOD>> F, BitSet D) {
         //System.out.println("*** monic factor combination ***");
         if (C == null || C.isZERO() || F == null || F.size() == 0) {
             throw new IllegalArgumentException("C must be nonzero and F must be nonempty");
@@ -461,9 +461,8 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                         //System.out.println("dl = " + dl); 
                         j = 0; // since j++
                         break;
-                    } else {
-                        logger.error("error removing flist from lift = " + lift);
                     }
+                    logger.error("error removing flist from lift = " + lift);
                 }
             }
         }
@@ -493,7 +492,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
      *         p**e.
      */
     List<GenPolynomial<BigInteger>> searchFactorsNonMonic(GenPolynomial<BigInteger> C, BigInteger M,
-            List<GenPolynomial<MOD>> F, BitSet D) {
+                    List<GenPolynomial<MOD>> F, BitSet D) {
         //System.out.println("*** non monic factor combination ***");
         if (C == null || C.isZERO() || F == null || F.size() == 0) {
             throw new IllegalArgumentException("C must be nonzero and F must be nonempty");
@@ -596,9 +595,8 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                         dl = (mlist.size() + 1) / 2;
                         j = 0; // since j++
                         break;
-                    } else {
-                        logger.error("error removing flist from ilist = " + mlist);
                     }
+                    logger.error("error removing flist from ilist = " + mlist);
                 }
             }
         }

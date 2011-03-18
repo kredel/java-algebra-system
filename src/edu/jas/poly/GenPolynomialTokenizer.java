@@ -25,21 +25,19 @@ import edu.jas.arith.BigQuaternion;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
-import edu.jas.arith.ModLong;
 import edu.jas.arith.ModLongRing;
 import edu.jas.structure.Power;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
-import edu.jas.poly.InvalidExpressionException;
 
 
 /**
- * GenPolynomial Tokenizer. Used to read rational polynomials and
- * lists of polynomials from input streams. Arbitrary polynomial rings
- * and coefficient rings can be read with RingFactoryTokenizer.
- * <b>Note:</b> Can no more read QuotientRing since end of 2010,
- * revision 3441.  Quotient coefficients and others can still be read
- * if the respective factory is provided via the constructor.
+ * GenPolynomial Tokenizer. Used to read rational polynomials and lists of
+ * polynomials from input streams. Arbitrary polynomial rings and coefficient
+ * rings can be read with RingFactoryTokenizer. <b>Note:</b> Can no more read
+ * QuotientRing since end of 2010, revision 3441. Quotient coefficients and
+ * others can still be read if the respective factory is provided via the
+ * constructor.
  * @see edu.jas.application.RingFactoryTokenizer
  * @author Heinz Kredel
  */
@@ -315,7 +313,7 @@ public class GenPolynomialTokenizer {
                 break;
             switch (tt) {
             // case '_': removed 
-            case '}': 
+            case '}':
                 throw new InvalidExpressionException("mismatch of braces after " + a + ", error at " + b);
             case '{': // recursion
                 StringBuffer rf = new StringBuffer();
@@ -324,7 +322,8 @@ public class GenPolynomialTokenizer {
                     tt = tok.nextToken();
                     //System.out.println("token { = " + ((char)tt) + ", " + tt + ", level = " + level);
                     if (tt == StreamTokenizer.TT_EOF) {
-                        throw new InvalidExpressionException("mismatch of braces after " + a + ", error at " + b);
+                        throw new InvalidExpressionException("mismatch of braces after " + a + ", error at "
+                                        + b);
                     }
                     if (tt == '{') {
                         level++;
@@ -343,10 +342,10 @@ public class GenPolynomialTokenizer {
                     } else {
                         rf.append((char) tt);
                     }
-                } while (level >= 0); 
+                } while (level >= 0);
                 //System.out.println("coeff{} = " + rf.toString() );
                 try {
-                     r = (RingElem) fac.parse(rf.toString());
+                    r = (RingElem) fac.parse(rf.toString());
                 } catch (NumberFormatException re) {
                     throw new InvalidExpressionException("not a number " + rf, re);
                 }
@@ -391,7 +390,7 @@ public class GenPolynomialTokenizer {
                         tok.pushBack();
                     }
                     try {
-                         r = (RingElem) fac.parse(df.toString());
+                        r = (RingElem) fac.parse(df.toString());
                     } catch (NumberFormatException re) {
                         throw new InvalidExpressionException("not a number " + df, re);
                     }
@@ -426,7 +425,7 @@ public class GenPolynomialTokenizer {
                         }
                         if (debug)
                             logger.info("coeff " + r);
-                        if ( r.isONE() || r.isZERO() ) {
+                        if (r.isONE() || r.isZERO()) {
                             //logger.error("Unknown varibable " + tok.sval);
                             //done = true;
                             //break;
@@ -628,9 +627,9 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * Parsing method for coefficient ring. syntax: Rat | Q | Int | Z
-     * | Mod modul | Complex | C | D | Quat | AN[ (var) ( poly ) | AN[
-     * modul (var) ( poly ) ] | IntFunc (var_list)
+     * Parsing method for coefficient ring. syntax: Rat | Q | Int | Z | Mod
+     * modul | Complex | C | D | Quat | AN[ (var) ( poly ) | AN[ modul (var) (
+     * poly ) ] | IntFunc (var_list)
      * @return the next coefficient factory.
      * @throws IOException
      */
@@ -676,7 +675,7 @@ public class GenPolynomialTokenizer {
                     if (digit(tok.sval.charAt(0))) {
                         BigInteger mo = new BigInteger(tok.sval);
                         BigInteger lm = new BigInteger(Long.MAX_VALUE);
-                        if ( mo.compareTo(lm) < 0 ) {
+                        if (mo.compareTo(lm) < 0) {
                             coeff = new ModLongRing(mo.getVal());
                         } else {
                             coeff = new ModIntegerRing(mo.getVal());
@@ -694,7 +693,8 @@ public class GenPolynomialTokenizer {
                 }
             } else if (tok.sval.equalsIgnoreCase("RatFunc") || tok.sval.equalsIgnoreCase("ModFunc")) {
                 //logger.error("RatFunc and ModFunc can no more be read, see edu.jas.application.RingFactoryTokenizer.");
-                throw new InvalidExpressionException("RatFunc and ModFunc can no more be read, see edu.jas.application.RingFactoryTokenizer.");
+                throw new InvalidExpressionException(
+                                "RatFunc and ModFunc can no more be read, see edu.jas.application.RingFactoryTokenizer.");
             } else if (tok.sval.equalsIgnoreCase("IntFunc")) {
                 String[] rfv = nextVariableList();
                 //System.out.println("rfv = " + rfv.length + " " + rfv[0]);
@@ -724,7 +724,9 @@ public class GenPolynomialTokenizer {
                     //System.out.println("anv = " + anv.length + " " + anv[0]);
                     int vs = anv.length;
                     if (vs != 1) {
-                        throw new InvalidExpressionException("AlgebraicNumber only for univariate polynomials " + Arrays.toString(anv));
+                        throw new InvalidExpressionException(
+                                        "AlgebraicNumber only for univariate polynomials "
+                                                        + Arrays.toString(anv));
                     }
                     String[] ovars = vars;
                     vars = anv;
@@ -987,9 +989,8 @@ public class GenPolynomialTokenizer {
         int s = nextSplitIndex();
         if (s <= 0) {
             return new TermOrder(evord);
-        } else {
-            return new TermOrder(evord, evord, vars.length, s);
         }
+        return new TermOrder(evord, evord, vars.length, s);
     }
 
 

@@ -5,22 +5,19 @@
 package edu.jas.vector;
 
 
-//import java.io.IOException;
-import java.io.Reader; //import java.io.StringReader;
-
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Random;
-
+// import java.io.IOException;
+import java.io.Reader;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import org.apache.log4j.Logger;
 
 import edu.jas.kern.StringUtil;
+import edu.jas.structure.ModulFactory;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
-import edu.jas.structure.ModulFactory;
-
 
 
 /**
@@ -276,9 +273,8 @@ public class GenVectorModul<C extends RingElem<C>> implements ModulFactory<GenVe
     public GenVector<C> copy(GenVector<C> c) {
         if (c == null) {
             return c;
-        } else {
-            return c.clone();
         }
+        return c.clone();
     }
 
 

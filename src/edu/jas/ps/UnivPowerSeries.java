@@ -5,13 +5,13 @@
 package edu.jas.ps;
 
 
+import edu.jas.poly.AlgebraicNumber;
+import edu.jas.poly.ExpVector;
+import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.BinaryFunctor;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.Selector;
 import edu.jas.structure.UnaryFunctor;
-import edu.jas.poly.ExpVector;
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.AlgebraicNumber;
 
 
 /**
@@ -57,6 +57,7 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
     /**
      * Private constructor.
      */
+    @SuppressWarnings("unused")
     private UnivPowerSeries() {
         throw new IllegalArgumentException("do not use no-argument constructor");
     }
@@ -80,7 +81,7 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
     public UnivPowerSeries(UnivPowerSeriesRing<C> ring, Coefficients<C> lazyCoeffs) {
         if (lazyCoeffs == null || ring == null) {
             throw new IllegalArgumentException("null not allowed: ring = " + ring + ", lazyCoeffs = "
-                    + lazyCoeffs);
+                            + lazyCoeffs);
         }
         this.ring = ring;
         this.lazyCoeffs = lazyCoeffs;
@@ -142,11 +143,11 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
                 if (!c.isONE() || i == 0) {
                     if (c instanceof GenPolynomial || c instanceof AlgebraicNumber) {
                         sb.append("{ ");
-		    }
+                    }
                     sb.append(c.toString());
                     if (c instanceof GenPolynomial || c instanceof AlgebraicNumber) {
                         sb.append(" }");
-		    }
+                    }
                     if (i > 0) {
                         sb.append(" * ");
                     }
@@ -198,11 +199,11 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
                 if (!c.isONE() || i == 0) {
                     if (c instanceof GenPolynomial || c instanceof AlgebraicNumber) {
                         sb.append("{ ");
-		    }
+                    }
                     sb.append(c.toScript());
                     if (c instanceof GenPolynomial || c instanceof AlgebraicNumber) {
                         sb.append(" }");
-		    }
+                    }
                     if (i > 0) {
                         sb.append(" * ");
                     }
@@ -254,15 +255,14 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
 
     /**
      * Get a GenPolynomial&lt;C&gt; from this.
-     * @return a GenPolynomial&lt;C&gt; from this up to truncate 
-     *         parts.
+     * @return a GenPolynomial&lt;C&gt; from this up to truncate parts.
      */
     public GenPolynomial<C> asPolynomial() {
         GenPolynomial<C> p = ring.polyRing().getZERO();
         for (int i = 0; i <= truncate; i++) {
             C c = coefficient(i);
-            ExpVector e = ExpVector.create(1,0,i);
-            p = p.sum(c,e);
+            ExpVector e = ExpVector.create(1, 0, i);
+            p = p.sum(c, e);
         }
         return p;
     }
@@ -327,9 +327,8 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
             public C generate(int i) {
                 if (i - k < 0) {
                     return ring.coFac.getZERO();
-                } else {
-                    return coefficient(i - k);
                 }
+                return coefficient(i - k);
             }
         });
     }
@@ -409,7 +408,7 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
      * @return new power series.
      */
     public <C2 extends RingElem<C2>> UnivPowerSeries<C> zip(final BinaryFunctor<? super C, ? super C2, C> f,
-            final UnivPowerSeries<C2> ps) {
+                    final UnivPowerSeries<C2> ps) {
         return new UnivPowerSeries<C>(ring, new Coefficients<C>() {
 
 
@@ -697,7 +696,7 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
         }
         if (!ps.coefficient(n).isUnit()) {
             throw new ArithmeticException("division by non unit coefficient " + ps.coefficient(n) + ", n = "
-                    + n);
+                            + n);
         }
         // now m >= n
         UnivPowerSeries<C> st, sps, q, sq;

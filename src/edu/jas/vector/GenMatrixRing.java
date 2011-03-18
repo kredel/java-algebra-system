@@ -5,22 +5,19 @@
 package edu.jas.vector;
 
 
-//import java.io.IOException;
-import java.io.Reader; //import java.io.StringReader;
-
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Random;
-
+// import java.io.IOException;
+import java.io.Reader;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import org.apache.log4j.Logger;
 
 import edu.jas.kern.StringUtil;
+import edu.jas.structure.AlgebraFactory;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
-import edu.jas.structure.AlgebraFactory;
-
 
 
 /**
@@ -496,15 +493,14 @@ public class GenMatrixRing<C extends RingElem<C>> implements AlgebraFactory<GenM
     public GenMatrix<C> copy(GenMatrix<C> c) {
         if (c == null) {
             return c;
-        } else {
-            return c.clone();
         }
-        //return new GenMatrix<C>( this, c.val );//clone val
+        return c.clone();
     }
 
 
     /**
-     * parse a matrix from a String. Syntax: [ [ c, ..., c ], ..., [ c, ..., c ] ]
+     * parse a matrix from a String. Syntax: [ [ c, ..., c ], ..., [ c, ..., c ]
+     * ]
      */
     public GenMatrix<C> parse(String s) {
         int i = s.indexOf("[");

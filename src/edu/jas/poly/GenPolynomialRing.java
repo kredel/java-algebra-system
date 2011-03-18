@@ -39,7 +39,7 @@ import edu.jas.util.LongIterable;
  */
 
 public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<GenPolynomial<C>>, Cloneable,
-        Iterable<GenPolynomial<C>> {
+                Iterable<GenPolynomial<C>> {
 
 
     /**
@@ -246,7 +246,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
             }
             if (res == null) {
                 if (coFac != null) {
-                    res = coFac.toString(); 
+                    res = coFac.toString();
                     if (res.matches("[0-9].*")) {
                         res = scf;
                     }
@@ -294,7 +294,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
     //JAVA6only: @Override
     public String toScript() {
         StringBuffer s = new StringBuffer();
-        switch (Scripting.getLang() ) {
+        switch (Scripting.getLang()) {
         case Ruby:
             s.append("PolyRing.new(");
             break;
@@ -303,9 +303,9 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
             s.append("PolyRing(");
         }
         if (coFac instanceof RingElem) {
-            s.append( ((RingElem<C>) coFac).toScriptFactory() );
+            s.append(((RingElem<C>) coFac).toScriptFactory());
         } else {
-            s.append( coFac.toScript().trim() );
+            s.append(coFac.toScript().trim());
         }
         s.append(",\"" + varsToString() + "\",");
         String to = tord.toString();
@@ -533,9 +533,8 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
     public GenPolynomial<C> random(int n, Random rnd) {
         if (nvar == 1) {
             return random(3, n, n, 0.7f, rnd);
-        } else {
-            return random(5, n, 3, 0.3f, rnd);
         }
+        return random(5, n, 3, 0.3f, rnd);
     }
 
 
@@ -967,12 +966,11 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
     public Iterator<GenPolynomial<C>> iterator() {
         if (coFac.isFinite()) {
             return new GenPolynomialIterator<C>(this);
-        } else {
-            logger.warn("ring of coefficients " + coFac
-                    + " is infinite, constructing iterator only over monomials");
-            return new GenPolynomialMonomialIterator<C>(this);
-            //throw new IllegalArgumentException("only for finite iterable coefficients implemented");
         }
+        logger.warn("ring of coefficients " + coFac
+                        + " is infinite, constructing iterator only over monomials");
+        return new GenPolynomialMonomialIterator<C>(this);
+        //throw new IllegalArgumentException("only for finite iterable coefficients implemented");
     }
 
 }

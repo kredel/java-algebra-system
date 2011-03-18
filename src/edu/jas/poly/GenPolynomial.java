@@ -8,7 +8,6 @@ package edu.jas.poly;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Arrays;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -29,13 +28,13 @@ import edu.jas.structure.UnaryFunctor;
  * exponents are fixed to ExpVector with long entries (this will eventually be
  * changed in the future). C can also be a non integral domain, e.g. a
  * ModInteger, i.e. it may contain zero divisors, since multiply() does now
- * check for zeros.
- * <b>Note:</b> multiply() now checks for wrong method dispatch for GenSolvablePolynomial.
+ * check for zeros. <b>Note:</b> multiply() now checks for wrong method dispatch
+ * for GenSolvablePolynomial.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
 public class GenPolynomial<C extends RingElem<C>> implements RingElem<GenPolynomial<C>>, /* not yet Polynomial<C> */
-                                                             Iterable<Monomial<C>> {
+Iterable<Monomial<C>> {
 
 
     /**
@@ -182,14 +181,14 @@ public class GenPolynomial<C extends RingElem<C>> implements RingElem<GenPolynom
 
 
     /**
-     * Put an a sorted map of exponents to coefficients into the internal map of this
-     * GenPolynomial. <b>Note:</b> Do not use this method unless you are
+     * Put an a sorted map of exponents to coefficients into the internal map of
+     * this GenPolynomial. <b>Note:</b> Do not use this method unless you are
      * constructing a new polynomial. this is modified and breaks the
      * immutability promise of this class.
      * @param vals sorted map of exponents and coefficients.
      */
-    public void doPutToMap(SortedMap<ExpVector,C> vals) {
-        for ( Map.Entry<ExpVector,C> me : vals.entrySet() ) {
+    public void doPutToMap(SortedMap<ExpVector, C> vals) {
+        for (Map.Entry<ExpVector, C> me : vals.entrySet()) {
             ExpVector e = me.getKey();
             if (false && debug) {
                 C a = val.get(e);
@@ -334,8 +333,8 @@ public class GenPolynomial<C extends RingElem<C>> implements RingElem<GenPolynom
         }
         boolean parenthesis = false;
         if (ring.coFac instanceof GenPolynomialRing || ring.coFac instanceof AlgebraicNumberRing
-            // || ring.coFac instanceof RealAlgebraicRing
-            ) {
+        // || ring.coFac instanceof RealAlgebraicRing
+        ) {
             // inactive: parenthesis = true;
         }
         boolean first = true;
@@ -910,9 +909,8 @@ public class GenPolynomial<C extends RingElem<C>> implements RingElem<GenPolynom
     public GenPolynomial<C> abs() {
         if (leadingBaseCoefficient().signum() < 0) {
             return this.negate();
-        } else {
-            return this;
         }
+        return this;
     }
 
 
@@ -932,7 +930,7 @@ public class GenPolynomial<C extends RingElem<C>> implements RingElem<GenPolynom
             return this;
         }
         assert (ring.nvar == S.ring.nvar);
-        if ( this instanceof GenSolvablePolynomial || S instanceof GenSolvablePolynomial ) {
+        if (this instanceof GenSolvablePolynomial || S instanceof GenSolvablePolynomial) {
             //throw new RuntimeException("wrong method dispatch in JRE ");
             logger.warn("wrong method dispatch in JRE (S) - trying to fix");
             GenSolvablePolynomial<C> T = (GenSolvablePolynomial<C>) this;
@@ -1033,11 +1031,11 @@ public class GenPolynomial<C extends RingElem<C>> implements RingElem<GenPolynom
         if (this.isZERO()) {
             return this;
         }
-        if ( this instanceof GenSolvablePolynomial ) {
+        if (this instanceof GenSolvablePolynomial) {
             //throw new RuntimeException("wrong method dispatch in JRE ");
             logger.warn("wrong method dispatch in JRE (s,e) - trying to fix");
             GenSolvablePolynomial<C> T = (GenSolvablePolynomial<C>) this;
-            return T.multiply(s,e);
+            return T.multiply(s, e);
         }
         GenPolynomial<C> p = ring.getZERO().clone();
         SortedMap<ExpVector, C> pv = p.val;
@@ -1064,7 +1062,7 @@ public class GenPolynomial<C extends RingElem<C>> implements RingElem<GenPolynom
         if (this.isZERO()) {
             return this;
         }
-        if ( this instanceof GenSolvablePolynomial ) {
+        if (this instanceof GenSolvablePolynomial) {
             //throw new RuntimeException("wrong method dispatch in JRE ");
             logger.warn("wrong method dispatch in JRE (e) - trying to fix");
             GenSolvablePolynomial<C> T = (GenSolvablePolynomial<C>) this;
@@ -1121,12 +1119,12 @@ public class GenPolynomial<C extends RingElem<C>> implements RingElem<GenPolynom
                 if (!x.isZERO()) {
                     System.out.println("divide x = " + x);
                     throw new ArithmeticException(this.getClass().getName() + " no exact division: " + c1
-                                                  + "/" + s);
+                                    + "/" + s);
                 }
             }
             if (c.isZERO()) {
                 throw new ArithmeticException(this.getClass().getName() + " no exact division: " + c1 + "/"
-                                              + s + ", in " + this);
+                                + s + ", in " + this);
             }
             pv.put(e, c); // or m1.setValue( c )
         }
@@ -1264,7 +1262,7 @@ public class GenPolynomial<C extends RingElem<C>> implements RingElem<GenPolynom
         }
         if (ring.nvar != 1) {
             throw new IllegalArgumentException(this.getClass().getName() + " not univariate polynomials"
-                                               + ring);
+                            + ring);
         }
         GenPolynomial<C> x;
         GenPolynomial<C> q = this;
@@ -1304,7 +1302,7 @@ public class GenPolynomial<C extends RingElem<C>> implements RingElem<GenPolynom
         }
         if (ring.nvar != 1) {
             throw new IllegalArgumentException(this.getClass().getName() + " not univariate polynomials"
-                                               + ring);
+                            + ring);
         }
         if (this.isConstant() && S.isConstant()) {
             C t = this.leadingBaseCoefficient();
@@ -1376,7 +1374,7 @@ public class GenPolynomial<C extends RingElem<C>> implements RingElem<GenPolynom
         }
         if (ring.nvar != 1) {
             throw new IllegalArgumentException(this.getClass().getName() + " not univariate polynomials"
-                                               + ring);
+                            + ring);
         }
         GenPolynomial<C>[] qr;
         GenPolynomial<C> q = this;
@@ -1434,7 +1432,7 @@ public class GenPolynomial<C extends RingElem<C>> implements RingElem<GenPolynom
         GenPolynomial<C>[] hegcd = this.hegcd(m);
         GenPolynomial<C> a = hegcd[0];
         if (!a.isUnit()) { // gcd != 1
-            throw new AlgebraicNotInvertibleException("element not invertible, gcd != 1",m,a,m.divide(a));
+            throw new AlgebraicNotInvertibleException("element not invertible, gcd != 1", m, a, m.divide(a));
         }
         GenPolynomial<C> b = hegcd[1];
         if (b.isZERO()) { // when m divides this, e.g. m.isUnit()

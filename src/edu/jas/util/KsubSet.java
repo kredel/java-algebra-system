@@ -150,9 +150,8 @@ class KsubSetIterator<E> implements Iterator<List<E>> {
                 recIter = new KsubSetIterator<E>(rest, k - 1);
             }
             return this.next(); // retry
-        } else {
-            throw new NoSuchElementException("invalid call of next()");
         }
+        throw new NoSuchElementException("invalid call of next()");
     }
 
 

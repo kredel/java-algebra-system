@@ -8,29 +8,23 @@ package edu.jas.application;
 import java.io.Serializable;
 
 import edu.jas.arith.Rational;
-import edu.jas.structure.RingFactory;
-import edu.jas.structure.RingElem;
-import edu.jas.structure.GcdRingElem;
-import edu.jas.poly.GenPolynomialTokenizer;
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.Complex;
-import edu.jas.poly.ComplexRing;
-import edu.jas.ufd.QuotientRing;
-import edu.jas.ufd.Quotient;
-import edu.jas.root.RealAlgebraicNumber;
-import edu.jas.root.RealAlgebraicRing;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.GenPolynomialTokenizer;
+import edu.jas.root.ComplexAlgebraicRing;
 import edu.jas.root.Interval;
+import edu.jas.root.RealAlgebraicRing;
 import edu.jas.root.Rectangle;
 import edu.jas.root.RootUtil;
-import edu.jas.root.ComplexAlgebraicNumber;
-import edu.jas.root.ComplexAlgebraicRing;
+import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
+import edu.jas.ufd.QuotientRing;
 
 
 /**
- * Biulder for extension field towers.
+ * Builder for extension field towers.
  * @author Heinz Kredel
  */
 public class ExtensionFieldBuilder implements Serializable {
@@ -60,8 +54,8 @@ public class ExtensionFieldBuilder implements Serializable {
 
 
     /**
-     * Build the field tower.
-     * TODO: build at the end and optimize field tower for faster computation.
+     * Build the field tower. TODO: build at the end and optimize field tower
+     * for faster computation.
      */
     public RingFactory build() {
         return factory;
@@ -83,7 +77,7 @@ public class ExtensionFieldBuilder implements Serializable {
      */
     public ExtensionFieldBuilder transcendentExtension(String vars) {
         String[] variables = GenPolynomialTokenizer.variableList(vars);
-        GenPolynomialRing pfac = new GenPolynomialRing(factory,variables);
+        GenPolynomialRing pfac = new GenPolynomialRing(factory, variables);
         QuotientRing qfac = new QuotientRing(pfac);
         RingFactory base = (RingFactory) qfac;
         return new ExtensionFieldBuilder(base);
@@ -96,7 +90,7 @@ public class ExtensionFieldBuilder implements Serializable {
      */
     public ExtensionFieldBuilder polynomialExtension(String vars) {
         String[] variables = GenPolynomialTokenizer.variableList(vars);
-        GenPolynomialRing pfac = new GenPolynomialRing(factory,variables);
+        GenPolynomialRing pfac = new GenPolynomialRing(factory, variables);
         RingFactory base = (RingFactory) pfac;
         return new ExtensionFieldBuilder(base);
     }
@@ -109,7 +103,7 @@ public class ExtensionFieldBuilder implements Serializable {
      */
     public ExtensionFieldBuilder algebraicExtension(String var, String expr) {
         String[] variables = new String[] { var };
-        GenPolynomialRing pfac = new GenPolynomialRing(factory,variables);
+        GenPolynomialRing pfac = new GenPolynomialRing(factory, variables);
         GenPolynomial gen = pfac.parse(expr);
         AlgebraicNumberRing afac = new AlgebraicNumberRing(gen);
         RingFactory base = (RingFactory) afac;
@@ -125,16 +119,16 @@ public class ExtensionFieldBuilder implements Serializable {
      */
     public ExtensionFieldBuilder realAlgebraicExtension(String var, String expr, String root) {
         String[] variables = new String[] { var };
-        RingElem one = (RingElem)factory.getONE();
-        if ( ! (one instanceof Rational) ) {
+        RingElem one = (RingElem) factory.getONE();
+        if (!(one instanceof Rational)) {
             throw new IllegalArgumentException("base field not instance of Rational");
         }
-        GenPolynomialRing pfac = new GenPolynomialRing(factory,variables);
+        GenPolynomialRing pfac = new GenPolynomialRing(factory, variables);
         GenPolynomial gen = pfac.parse(expr);
         RingFactory cf = pfac.coFac;
-        Interval iv = RootUtil.parseInterval(cf,root);
+        Interval iv = RootUtil.parseInterval(cf, root);
         //System.out.println("iv = " + iv);
-        RealAlgebraicRing rfac = new RealAlgebraicRing(gen,iv);
+        RealAlgebraicRing rfac = new RealAlgebraicRing(gen, iv);
         RingFactory base = (RingFactory) rfac;
         return new ExtensionFieldBuilder(base);
     }
@@ -148,18 +142,18 @@ public class ExtensionFieldBuilder implements Serializable {
      */
     public ExtensionFieldBuilder complexAlgebraicExtension(String var, String expr, String root) {
         String[] variables = new String[] { var };
-        RingElem one = (RingElem)factory.getONE();
-        if ( ! (one instanceof Complex) ) {
+        RingElem one = (RingElem) factory.getONE();
+        if (!(one instanceof Complex)) {
             throw new IllegalArgumentException("base field not instance of Complex");
         }
-        GenPolynomialRing pfac = new GenPolynomialRing(factory,variables);
+        GenPolynomialRing pfac = new GenPolynomialRing(factory, variables);
         //System.out.println("pfac = " + pfac);
         GenPolynomial gen = pfac.parse(expr);
         //System.out.println("gen  = " + gen);
         RingFactory cf = pfac.coFac;
-        Rectangle rt = RootUtil.parseRectangle(cf,root);
+        Rectangle rt = RootUtil.parseRectangle(cf, root);
         //System.out.println("rt = " + rt);
-        ComplexAlgebraicRing rfac = new ComplexAlgebraicRing(gen,rt);
+        ComplexAlgebraicRing rfac = new ComplexAlgebraicRing(gen, rt);
         RingFactory base = (RingFactory) rfac;
         return new ExtensionFieldBuilder(base);
     }

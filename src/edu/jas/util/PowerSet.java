@@ -129,11 +129,10 @@ class PowerSetIterator<E> implements Iterator<List<E>> {
         if (mode == Mode.copy) {
             if (recIter.hasNext()) {
                 return recIter.next();
-            } else {
-                mode = Mode.extend;
-                recIter = new PowerSetIterator<E>(rest);
-                return this.next();
             }
+            mode = Mode.extend;
+            recIter = new PowerSetIterator<E>(rest);
+            return this.next();
         }
         return null;
     }
