@@ -143,6 +143,12 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
         //int uht = 0;
         Set<Integer> v = new HashSet<Integer>(); // for non reduced GBs
         for (GenPolynomial<C> p : F) {
+            if ( p.isZERO() ) {
+                continue;
+            }
+            if ( p.isConstant() ) { // for non-monic lists
+                return -1;
+            }
             ExpVector e = p.leadingExpVector();
             if (e == null) {
                 continue;
