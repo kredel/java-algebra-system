@@ -201,6 +201,41 @@ public class ComplexAlgebraicTest extends TestCase {
 
 
     /**
+     * Test real and imaginary.
+     * 
+     */
+    public void testReIm() {
+        System.out.println("fac = " + fac.toScript());
+        a = fac.random(ll);
+
+        b = a.getRe();
+        c = a.getIm();
+        System.out.println("a = " + a);
+        System.out.println("b = " + b);
+        System.out.println("c = " + c);
+
+        e = fac.getIMAG();
+        System.out.println("e = " + e);
+
+        d = b.sum(c.multiply(e));
+        System.out.println("d = " + d);
+        assertEquals("re(a)+i*im(a) = a", a, d);
+
+        b = a.conjugate();
+        c = b.conjugate();
+        System.out.println("b = " + b);
+        System.out.println("c = " + c);
+        assertEquals("con(con(a)) = a", a, c);
+
+        c = b.multiply(a);
+        d = a.norm();
+        System.out.println("c = " + c);
+        System.out.println("d = " + d);
+        assertEquals("a*con(a) = norm(a)", c, d);
+    }
+
+
+    /**
      * Test object multiplication.
      * 
      */

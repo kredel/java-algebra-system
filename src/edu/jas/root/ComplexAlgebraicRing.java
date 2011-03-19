@@ -14,6 +14,7 @@ import edu.jas.arith.Rational;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.Complex;
+import edu.jas.poly.ComplexRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.Power;
@@ -152,6 +153,17 @@ implements RingFactory<ComplexAlgebraicNumber<C>> {
      */
     public ComplexAlgebraicNumber<C> getONE() {
         return new ComplexAlgebraicNumber<C>(this, algebraic.getONE());
+    }
+
+
+    /**
+     * Get the i element.
+     * @return i as ComplexAlgebraicNumber.
+     */
+    public ComplexAlgebraicNumber<C> getIMAG() {
+        ComplexRing<C> cr = (ComplexRing<C>) algebraic.ring.coFac;
+        Complex<C> I = cr.getIMAG(); 
+        return new ComplexAlgebraicNumber<C>(this, algebraic.getZERO().sum(I));
     }
 
 

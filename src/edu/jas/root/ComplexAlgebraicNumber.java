@@ -10,8 +10,12 @@ import edu.jas.arith.Rational;
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.Complex;
+import edu.jas.poly.ComplexRing;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.PolyUtil;
 import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.RingFactory;
 import edu.jas.structure.NotInvertibleException;
 
 
@@ -228,6 +232,47 @@ implements GcdRingElem<ComplexAlgebraicNumber<C>> {
 
 
     /**
+     * Get the real part.
+     * @return real part.
+     */
+    public ComplexAlgebraicNumber<C> getRe() {
+        GenPolynomial<Complex<C>> p = number.val;
+        ComplexRing<C> cr = (ComplexRing<C>) p.ring.coFac;
+        RingFactory<C> rf = cr.ring;
+        GenPolynomialRing<C> fac = new GenPolynomialRing<C>(rf,p.ring);
+        GenPolynomial<C> rp = PolyUtil.<C>realPartFromComplex(fac,p);
+        GenPolynomial<Complex<C>> cp = PolyUtil.<C>complexFromAny(p.ring,rp);
+        ComplexAlgebraicNumber<C> re = new ComplexAlgebraicNumber<C>(ring,cp);
+        return re;
+    }
+
+
+    /**
+     * Get the imaginary part.
+     * @return imaginary part.
+     */
+    public ComplexAlgebraicNumber<C> getIm() {
+        GenPolynomial<Complex<C>> p = number.val;
+        ComplexRing<C> cr = (ComplexRing<C>) p.ring.coFac;
+        RingFactory<C> rf = cr.ring;
+        GenPolynomialRing<C> fac = new GenPolynomialRing<C>(rf,p.ring);
+        GenPolynomial<C> ip = PolyUtil.<C>imaginaryPartFromComplex(fac,p);
+        GenPolynomial<Complex<C>> cp = PolyUtil.<C>complexFromAny(p.ring,ip);
+        ComplexAlgebraicNumber<C> im = new ComplexAlgebraicNumber<C>(ring,cp);
+        return im;
+    }
+
+
+    /**
+     * ComplexAlgebraicNumber conjugate.
+     * @return the complex conjugate of this.
+     */
+    public ComplexAlgebraicNumber<C> conjugate() {
+        return getRe().sum( getIm().negate().multiply(ring.getIMAG()) );
+    }
+
+
+    /**
      * ComplexAlgebraicNumber absolute value.
      * @return the absolute value of this.
      * @see edu.jas.structure.RingElem#abs()
@@ -237,6 +282,21 @@ implements GcdRingElem<ComplexAlgebraicNumber<C>> {
             return new ComplexAlgebraicNumber<C>(ring, number.negate());
         }
         return this;
+    }
+
+
+    /**
+     * ComplexAlgebraicNumber norm.
+     * @see edu.jas.structure.StarRingElem#norm()
+     * @return ||this||.
+     */
+    public ComplexAlgebraicNumber<C> norm() {
+        // this.conjugate().multiply(this);
+        ComplexAlgebraicNumber<C> re = getRe();
+        ComplexAlgebraicNumber<C> im = getIm();
+        ComplexAlgebraicNumber<C> v = re.multiply(re);
+        v = v.sum(im.multiply(im));
+        return v;
     }
 
 
