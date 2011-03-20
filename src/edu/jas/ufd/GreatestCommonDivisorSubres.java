@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.Power;
@@ -415,6 +416,37 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
         z = h.multiply(t).multiply(z);
         x = P.ring.getONE().multiply(z);
         return x;
+    }
+
+
+    /**
+     * GenPolynomial base coefficient discriminant.
+     * @param P GenPolynomial.
+     * @return discriminant(P).
+     */
+    public GenPolynomial<C> baseDiscriminant(GenPolynomial<C> P) {
+        if (P == null) {
+            throw new IllegalArgumentException(this.getClass().getName() + " P != null");
+        }
+        if (P.isZERO()) {
+            return P;
+        }
+        GenPolynomialRing<C> pfac = P.ring;
+        if (pfac.nvar > 1) {
+            throw new IllegalArgumentException(this.getClass().getName() + " P not univariate");
+        }
+        C a = P.leadingBaseCoefficient();
+        a = a.inverse();
+	GenPolynomial<C> Pp = PolyUtil.<C> baseDeriviative(P);
+        GenPolynomial<C> res = baseResultant(P,Pp);
+	GenPolynomial<C> disc = res.multiply(a);
+        long n = P.degree(0);
+        n = n * (n-1);
+        n = n / 2;
+        if ( n % 2L != 0L ) {
+            disc = disc.negate();
+	}
+        return disc;
     }
 
 

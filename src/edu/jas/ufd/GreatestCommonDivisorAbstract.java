@@ -100,39 +100,6 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
 
 
     /**
-     * GenPolynomial base coefficient discriminant.
-     * @param P GenPolynomial.
-     * @return discriminant(P).
-     */
-    public GenPolynomial<C> baseDiscriminant(GenPolynomial<C> P) {
-        if (P == null) {
-            throw new IllegalArgumentException(this.getClass().getName() + " P != null");
-        }
-        if (P.isZERO()) {
-            return P;
-        }
-        GenPolynomialRing<C> pfac = P.ring;
-        if (pfac.nvar > 1) {
-            throw new IllegalArgumentException(this.getClass().getName() + " P not univariate");
-        }
-        C a = P.leadingBaseCoefficient();
-        a = a.inverse();
-	GenPolynomial<C> Pp = PolyUtil.<C> baseDeriviative(P);
-        // hack for now:
-        GreatestCommonDivisorSubres<C> ufd_sr = new GreatestCommonDivisorSubres<C>();
-        GenPolynomial<C> res = ufd_sr.baseResultant(P,Pp);
-	GenPolynomial<C> disc = res.multiply(a);
-        long n = P.degree(0);
-        n = n * (n-1);
-        n = n / 2;
-        if ( n % 2L != 0L ) {
-            disc = disc.negate();
-	}
-        return disc;
-    }
-
-
-    /**
      * Univariate GenPolynomial greatest common divisor. Uses sparse
      * pseudoRemainder for remainder.
      * @param P univariate GenPolynomial.

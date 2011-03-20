@@ -55,7 +55,7 @@ public class GCDSubresRatTest extends TestCase {
 
     //private final static int bitlen = 100;
 
-    GreatestCommonDivisorAbstract<BigRational> ufd;
+    GreatestCommonDivisorSubres<BigRational> ufd;
 
 
     TermOrder to = new TermOrder(TermOrder.INVLEX);
