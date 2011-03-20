@@ -7,6 +7,7 @@ package edu.jas.root;
 
 //import edu.jas.structure.RingElem;
 import edu.jas.arith.BigRational;
+import edu.jas.arith.BigDecimal;
 import edu.jas.arith.Rational;
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.AlgebraicNumber;
@@ -320,6 +321,15 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
         } else {
             throw new RuntimeException("Rational expected, but was " + ev.getClass());
         }
+    }
+
+
+    /**
+     * RealAlgebraicNumber magnitude.
+     * @return |this| as big decimal.
+     */
+    public BigDecimal decimalMagnitude() {
+        return new BigDecimal(magnitude());
     }
 
 

@@ -7,6 +7,8 @@ package edu.jas.root;
 
 // import edu.jas.structure.RingElem;
 import edu.jas.arith.Rational;
+import edu.jas.arith.BigRational;
+import edu.jas.arith.BigDecimal;
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.Complex;
@@ -264,6 +266,65 @@ implements GcdRingElem<ComplexAlgebraicNumber<C>> {
 
 
     /**
+     * Get the real part as real algebraic number.
+     * @return real part.
+     */
+    public RealAlgebraicNumber<C> realRe() {
+        GenPolynomial<Complex<C>> p = number.val;
+        ComplexRing<C> cr = (ComplexRing<C>) p.ring.coFac;
+        RingFactory<C> rf = cr.ring;
+        GenPolynomialRing<C> fac = new GenPolynomialRing<C>(rf,p.ring);
+        GenPolynomial<C> rp = PolyUtil.<C>realPartFromComplex(fac,p);
+
+        GenPolynomial<Complex<C>> m = ring.algebraic.modul;
+        GenPolynomial<C> rm = PolyUtil.<C>realPartFromComplex(fac,m);
+
+        Rectangle<C> root = ring.root;
+        C left = root.getSW().getRe();
+        C right = root.getNE().getRe();
+        Interval<C> v = new Interval<C>(left,right);
+        RealAlgebraicRing<C> rr = new RealAlgebraicRing<C>(rm,v);
+        System.out.println("root = " + root);
+        System.out.println("intv = " + v);
+
+        RealAlgebraicNumber<C> re = new RealAlgebraicNumber<C>(rr,rp);
+        return re;
+    }
+
+
+    /**
+     * Get the imaginary part as real algebraic number.
+     * @return imaginary part.
+     */
+    public RealAlgebraicNumber<C> realIm() {
+        GenPolynomial<Complex<C>> p = number.val;
+        ComplexRing<C> cr = (ComplexRing<C>) p.ring.coFac;
+        RingFactory<C> rf = cr.ring;
+        GenPolynomialRing<C> fac = new GenPolynomialRing<C>(rf,p.ring);
+        GenPolynomial<C> rp = PolyUtil.<C>imaginaryPartFromComplex(fac,p);
+
+        GenPolynomial<Complex<C>> m = ring.algebraic.modul;
+        GenPolynomial<C> rm = PolyUtil.<C>imaginaryPartFromComplex(fac,m);
+        System.out.println("m = " + m);
+        System.out.println("rm = " + rm);
+
+        Rectangle<C> root = ring.root;
+        C left = root.getSW().getIm();
+        C right = root.getNE().getIm();
+        Interval<C> v = new Interval<C>(left,right);
+        RealAlgebraicRing<C> rr = new RealAlgebraicRing<C>(rm,v);
+        System.out.println("root = " + root);
+        System.out.println("intv = " + v);
+
+        System.out.println("rr = " + rr);
+        System.out.println("rp = " + rp);
+
+        RealAlgebraicNumber<C> re = new RealAlgebraicNumber<C>(rr,rp);
+        return re;
+    }
+
+
+    /**
      * ComplexAlgebraicNumber conjugate.
      * @return the complex conjugate of this.
      */
@@ -453,6 +514,45 @@ implements GcdRingElem<ComplexAlgebraicNumber<C>> {
         ret[1] = new ComplexAlgebraicNumber<C>(ring, aret[1]);
         ret[2] = new ComplexAlgebraicNumber<C>(ring, aret[2]);
         return ret;
+    }
+
+
+    /**
+     * ComplexAlgebraicNumber magnitude.
+     * @return |this| as complex rational number.
+     */
+    public Complex<BigRational> magnitude() {
+        try {
+            Rectangle<C> v = ring.engine.invariantMagnitudeRectangle(ring.root, 
+                                                                     ring.algebraic.modul, 
+                                                                     number.val,
+                                                                     ring.eps);
+            ring.setRoot(v);
+            //System.out.println("new v = " + v);
+            Complex<C> ev = ring.engine.complexRectangleMagnitude(v, ring.algebraic.modul, number.val); //, ring.eps);
+            if ((Object) ev.getRe() instanceof Rational) { // true by type parameter
+                BigRational er = ev.getRe().getRational();
+                BigRational ei = ev.getIm().getRational();
+                ComplexRing<BigRational> cr = new ComplexRing<BigRational>(er.factory());
+                return new Complex<BigRational>(cr,er,ei);
+            } else {
+                throw new RuntimeException("Rational expected, but was " + ev.getClass());
+            }
+        } catch (InvalidBoundaryException e) { // should not happen
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    /**
+     * ComplexAlgebraicNumber magnitude.
+     * @return |this| as complex big decimal.
+     */
+    public Complex<BigDecimal> decimalMagnitude() {
+        Complex<BigRational> cr = magnitude();
+        ComplexRing<BigDecimal> dr = new ComplexRing<BigDecimal>(BigDecimal.ZERO);
+        return new Complex<BigDecimal>(dr,new BigDecimal(cr.getRe()),new BigDecimal(cr.getIm()));
     }
 
 }

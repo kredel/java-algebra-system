@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Random;
 
 import edu.jas.arith.Rational;
+import edu.jas.arith.BigDecimal;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.Complex;
@@ -47,9 +48,15 @@ implements RingFactory<ComplexAlgebraicNumber<C>> {
 
 
     /**
+     * Epsilon of the isolating rectangle for a complex root.
+     */
+    public final C eps;
+
+
+    /**
      * Precision of the isolating rectangle for a complex root.
      */
-    public final Complex<C> eps;
+    public final int PRECISION = 9; //BigDecimal.DEFAULT_PRECISION;
 
 
     /**
@@ -71,10 +78,9 @@ implements RingFactory<ComplexAlgebraicNumber<C>> {
         if (m.ring.characteristic().signum() > 0) {
             throw new IllegalArgumentException("characteristic not zero");
         }
-        Complex<C> e = m.ring.coFac.fromInteger(10L);
+        C e = m.ring.coFac.fromInteger(10L).getRe();
         e = e.inverse();
-        // e = Power.positivePower(e,BigDecimal.DEFAULT_PRECISION);
-        e = Power.positivePower(e, 9); //BigDecimal.DEFAULT_PRECISION);
+        e = Power.positivePower(e, PRECISION);
         eps = e;
     }
 
@@ -93,9 +99,9 @@ implements RingFactory<ComplexAlgebraicNumber<C>> {
         if (m.ring.characteristic().signum() > 0) {
             throw new IllegalArgumentException("characteristic not zero");
         }
-        Complex<C> e = m.ring.coFac.fromInteger(10L);
+        C e = m.ring.coFac.fromInteger(10L).getRe();
         e = e.inverse();
-        e = Power.positivePower(e, 9); //BigDecimal.DEFAULT_PRECISION);
+        e = Power.positivePower(e, PRECISION);
         eps = e;
     }
 
