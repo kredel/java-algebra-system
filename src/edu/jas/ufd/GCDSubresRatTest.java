@@ -165,10 +165,8 @@ public class GCDSubresRatTest extends TestCase {
 
     /**
      * Test gcd.
-     * 
      */
     public void testGcd() {
-
         for (int i = 0; i < 1; i++) {
             a = dfac.random(kl * (i + 2), ll + 2 * i, el + 0 * i, q);
             b = dfac.random(kl * (i + 2), ll + 2 * i, el + 0 * i, q);
@@ -211,10 +209,8 @@ public class GCDSubresRatTest extends TestCase {
 
     /**
      * Test base quotioent and remainder.
-     * 
      */
     public void testBaseQR() {
-
         dfac = new GenPolynomialRing<BigRational>(mi, 1, to);
 
         for (int i = 0; i < 3; i++) {
@@ -265,10 +261,8 @@ public class GCDSubresRatTest extends TestCase {
 
     /**
      * Test base content and primitive part.
-     * 
      */
     public void testBaseContentPP() {
-
         for (int i = 0; i < 9; i++) {
             c = dfac.random(kl * (i + 2), ll + 2 * i, el + i, q);
             c = c.multiply(mi.random(kl * (i + 2)));
@@ -293,12 +287,28 @@ public class GCDSubresRatTest extends TestCase {
     }
 
 
+    public void testDiscriminant() {
+        dfac = new GenPolynomialRing<BigRational>(mi, 1, to);
+        for (int i = 0; i < 5; i++) {
+            c = dfac.random(kl * (i + 1), ll + 2 * i, el + i, q*2);
+            //System.out.println("c  = " + c);
+            if (c.isZERO()) {
+                // skip for this turn
+                continue;
+            }
+            c = c.multiply(c);
+            d = ufd.baseDiscriminant(c);
+            //System.out.println("d  = " + d);
+
+            assertTrue("disc(c^2) == 0", d.isZERO());
+        }
+    }
+
+
     /**
      * Test base gcd.
-     * 
      */
     public void testBaseGcd() {
-
         dfac = new GenPolynomialRing<BigRational>(mi, 1, to);
 
         for (int i = 0; i < 3; i++) {
@@ -335,7 +345,6 @@ public class GCDSubresRatTest extends TestCase {
 
     /**
      * Test recursive quotioent and remainder.
-     * 
      */
     public void testRecursiveQR() {
         dfac = new GenPolynomialRing<BigRational>(mi, 2, to);
@@ -391,7 +400,6 @@ public class GCDSubresRatTest extends TestCase {
 
     /**
      * Test recursive content and primitive part.
-     * 
      */
     public void testRecursiveContentPP() {
         dfac = new GenPolynomialRing<BigRational>(mi, 2, to);
@@ -419,7 +427,6 @@ public class GCDSubresRatTest extends TestCase {
 
     /**
      * Test recursive gcd.
-     * 
      */
     public void testRecursiveGCD() {
         dfac = new GenPolynomialRing<BigRational>(mi, 2, to);
@@ -460,7 +467,6 @@ public class GCDSubresRatTest extends TestCase {
 
     /**
      * Test arbitrary recursive gcd.
-     * 
      */
     public void testArbitraryRecursiveGCD() {
         dfac = new GenPolynomialRing<BigRational>(mi, 2, to);
@@ -501,7 +507,6 @@ public class GCDSubresRatTest extends TestCase {
 
     /**
      * Test content and primitive part.
-     * 
      */
     public void testContentPP() {
         dfac = new GenPolynomialRing<BigRational>(mi, 3, to);
@@ -530,7 +535,6 @@ public class GCDSubresRatTest extends TestCase {
 
     /**
      * Test gcd 3 variables.
-     * 
      */
     public void testGCD3() {
         dfac = new GenPolynomialRing<BigRational>(mi, 3, to);
@@ -569,7 +573,6 @@ public class GCDSubresRatTest extends TestCase {
 
     /**
      * Test gcd.
-     * 
      */
     public void testGCD() {
         // dfac = new GenPolynomialRing<BigRational>(mi,3,to);
@@ -615,7 +618,6 @@ public class GCDSubresRatTest extends TestCase {
 
     /**
      * Test lcm.
-     * 
      */
     public void testLCM() {
         dfac = new GenPolynomialRing<BigRational>(mi, 3, to);
@@ -657,10 +659,8 @@ public class GCDSubresRatTest extends TestCase {
 
     /**
      * Test co-prime factors.
-     * 
      */
     public void testCoPrime() {
-
         dfac = new GenPolynomialRing<BigRational>(mi, 3, to);
 
         a = dfac.random(kl, 3, 2, q);
