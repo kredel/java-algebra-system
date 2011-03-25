@@ -43,7 +43,7 @@ from edu.jas.kern        import ComputerThreads, StringUtil, Scripting
 from edu.jas.ufd         import GreatestCommonDivisor, PolyUfdUtil, GCDFactory,\
                                 FactorFactory, SquarefreeFactory, Quotient, QuotientRing
 from edu.jas.root        import RealRootsSturm, Interval, RealAlgebraicNumber, RealAlgebraicRing,\
-                                ComplexRootsSturm, Rectangle
+                                ComplexRootsSturm, Rectangle, RootFactory
 from edu.jas.integrate   import ElementaryIntegration
 from edu.jas.util        import ExecutableServer
 from edu.jas             import structure, arith, poly, ps, gb, gbmod, vector,\
@@ -247,10 +247,8 @@ class Ring:
             if eps == None:
                 R = RealRootsSturm().realRoots( a );
             else:
-##                 R = RealRootsSturm().realRoots( a, eps );
-##                 R = [ r.toDecimal() for r in R ];
-                R = RealRootsSturm().approximateRoots(a,eps);
-                R = [ RingElem(r) for r in R ];
+                R = RootFactory.realAlgebraicNumbers( a, eps );
+                R = [ RingElem(BigDecimal(r.getRational())) for r in R ];
             return R;
         except Exception, e:
             print "error " + str(e)
@@ -271,10 +269,13 @@ class Ring:
                 R = ComplexRootsSturm(a.ring.coFac).complexRoots( a );
                 #R = [ r.centerApprox() for r in R ];
             else:
+                R = RootFactory.complexAlgebraicNumbers(a,eps);
+                R = [ RingElem(r) for r in R ];
+#                R = [ RingElem(BigDecimal(r.getRational())) for r in R ];
 ##                 R = ComplexRootsSturm(a.ring.coFac).complexRoots( a, eps );
 ##                 R = [ r.centerApprox() for r in R ];
-                R = ComplexRootsSturm(a.ring.coFac).approximateRoots( a, eps );
-                R = [ RingElem(r) for r in R ];
+#                R = ComplexRootsSturm(a.ring.coFac).approximateRoots( a, eps );
+#                R = [ RingElem(r) for r in R ];
             return R;
         except Exception, e:
             print "error " + str(e)
@@ -2662,7 +2663,7 @@ class SolvPolyRing(SolvableRing):
 class EF:
     '''Extension field builder.
 
-    Construction of extension field towers according to then builder pattern.
+    Construction of extension field towers according to the builder pattern.
     '''
 
     def __init__(self,base):
@@ -2698,6 +2699,14 @@ class EF:
             ef = self.builder.transcendentExtension(vars);
         else:
             ef = self.builder.algebraicExtension(vars,algebraic);
+        return EF(ef.build());
+
+    def realExtend(self,vars,algebraic,interval):
+        '''Create a real extension field.
+
+        Construct a real algebraic extension field with an isolating interval for a real root.
+        '''
+        ef = self.builder.realAlgebraicExtension(vars,algebraic,interval);
         return EF(ef.build());
 
     def polynomial(self,vars):
