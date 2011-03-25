@@ -6,6 +6,9 @@ package edu.jas.application;
 
 
 import java.io.Serializable;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.List;
 
 import edu.jas.arith.Rational;
 import edu.jas.poly.AlgebraicNumberRing;
@@ -21,6 +24,8 @@ import edu.jas.root.RootUtil;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.ufd.QuotientRing;
+import edu.jas.application.Ideal;
+import edu.jas.application.ResidueRing;
 
 
 /**
@@ -98,14 +103,39 @@ public class ExtensionFieldBuilder implements Serializable {
 
     /**
      * Algebraic field extension.
-     * @param var name for the algebraic generator.
-     * @param expr generating expresion, a univariate polynomial in var.
+     * @param var name(s) for the algebraic generator(s).
+     * @param expr generating expresion, a univariate or multivariate polynomial in vars.
      */
     public ExtensionFieldBuilder algebraicExtension(String var, String expr) {
-        String[] variables = new String[] { var };
+        String[] variables = GenPolynomialTokenizer.variableList(var);
+        if ( variables.length < 1 ) {
+            throw new IllegalArgumentException("no variables in '" + var + "'");
+        }
         GenPolynomialRing pfac = new GenPolynomialRing(factory, variables);
-        GenPolynomial gen = pfac.parse(expr);
-        AlgebraicNumberRing afac = new AlgebraicNumberRing(gen);
+        if ( variables.length == 1 ) { // simple extension
+           GenPolynomial gen = pfac.parse(expr);
+           AlgebraicNumberRing afac = new AlgebraicNumberRing(gen);
+           RingFactory base = (RingFactory) afac;
+           return new ExtensionFieldBuilder(base);
+        }
+        GenPolynomialTokenizer pt = new GenPolynomialTokenizer(pfac,new StringReader(expr));
+        List<GenPolynomial> gen = null;
+        try {
+            gen = pt.nextPolynomialList();
+        } catch (IOException e) { // should not happen
+            throw new IllegalArgumentException(e);
+        }
+        Ideal agen = new Ideal(pfac,gen);
+        if ( agen.isONE() ) {
+            throw new IllegalArgumentException("ideal is 1: " + expr);
+        }
+        if ( agen.isZERO() ) { // transcendent extension
+            QuotientRing qfac = new QuotientRing(pfac);
+            RingFactory base = (RingFactory) qfac;
+            return new ExtensionFieldBuilder(base);
+        }
+        // check if agen is prime?
+        ResidueRing afac = new ResidueRing(agen);
         RingFactory base = (RingFactory) afac;
         return new ExtensionFieldBuilder(base);
     }

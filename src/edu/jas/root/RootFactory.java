@@ -237,7 +237,7 @@ public class RootFactory {
      * @return a list of different complex algebraic numbers.
      */
     public static <C extends GcdRingElem<C> & Rational> 
-			     List<ComplexAlgebraicNumber<C>> complexAlgebraicNumbers(GenPolynomial<C> f, BigRational eps) {
+                             List<ComplexAlgebraicNumber<C>> complexAlgebraicNumbers(GenPolynomial<C> f, BigRational eps) {
         ComplexRing<C> cr = new ComplexRing<C>( f.ring.coFac );
         GenPolynomialRing<Complex<C>> fac = new GenPolynomialRing<Complex<C>>(cr,f.ring);
         GenPolynomial<Complex<C>> fc = PolyUtil.<C>complexFromAny(fac,f); 
