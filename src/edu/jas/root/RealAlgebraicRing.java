@@ -12,6 +12,7 @@ import java.util.Random;
 
 import edu.jas.arith.Rational;
 import edu.jas.arith.BigDecimal;
+import edu.jas.arith.BigRational;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
@@ -48,7 +49,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
     /**
      * Precision of the isolating interval for a real root.
      */
-    public final C eps;
+    protected C eps;
 
 
     /**
@@ -124,6 +125,33 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
     public synchronized void setRoot(Interval<C> v) {
         // assert v is contained in root
         this.root = v;
+    }
+
+
+    /**
+     * Get the epsilon. 
+     * @return eps.
+     */
+    public synchronized C getEps() {
+        return this.eps;
+    }
+
+
+    /**
+     * Set a new epsilon. 
+     * @param e epsilon.
+     */
+    public synchronized void setEps(C e) {
+        this.eps = e;
+    }
+
+
+    /**
+     * Set a new epsilon. 
+     * @param e epsilon.
+     */
+    public synchronized void setEps(BigRational e) {
+        this.eps = algebraic.ring.coFac.parse(e.toString());
     }
 
 

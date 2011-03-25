@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Random;
 
 import edu.jas.arith.Rational;
+import edu.jas.arith.BigRational;
 import edu.jas.arith.BigDecimal;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
@@ -50,7 +51,7 @@ implements RingFactory<ComplexAlgebraicNumber<C>> {
     /**
      * Epsilon of the isolating rectangle for a complex root.
      */
-    public final C eps;
+    protected C eps;
 
 
     /**
@@ -121,6 +122,24 @@ implements RingFactory<ComplexAlgebraicNumber<C>> {
     public synchronized void setRoot(Rectangle<C> v) {
         // assert v is contained in root
         this.root = v;
+    }
+
+
+    /**
+     * Set a new epsilon. 
+     * @param e epsilon.
+     */
+    public synchronized void setEps(C e) {
+        this.eps = e;
+    }
+
+
+    /**
+     * Set a new epsilon. 
+     * @param e epsilon.
+     */
+    public synchronized void setEps(BigRational e) {
+        this.eps = algebraic.ring.coFac.parse(e.toString()).getRe();
     }
 
 
