@@ -530,7 +530,8 @@ implements GcdRingElem<ComplexAlgebraicNumber<C>> {
             ring.setRoot(v);
             //System.out.println("new v = " + v);
             Complex<C> ev = ring.engine.complexRectangleMagnitude(v, ring.algebraic.modul, number.val); //, ring.eps);
-            if ((Object) ev.getRe() instanceof Rational) { // true by type parameter
+            C re = ev.getRe();
+            if ( (Object) re instanceof Rational) { // true by type parameter
                 BigRational er = ev.getRe().getRational();
                 BigRational ei = ev.getIm().getRational();
                 ComplexRing<BigRational> cr = new ComplexRing<BigRational>(er.factory());

@@ -99,7 +99,8 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
         }
         //System.out.println("f = " + f);
         if (f.isConstant()) {
-            return f.leadingBaseCoefficient().norm().getRe();
+            Complex<C> c = f.leadingBaseCoefficient();
+            return c.norm().getRe();
         }
         GenPolynomial<Complex<C>> fa = f.map(new UnaryFunctor<Complex<C>, Complex<C>>() {
 
@@ -111,6 +112,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
         //System.out.println("fa = " + fa);
         Complex<C> Mc = rect.getNW().norm();
         C M = Mc.getRe();
+        //System.out.println("M = " + M);
         Complex<C> M1c = rect.getSW().norm();
         C M1 = M1c.getRe();
         if (M.compareTo(M1) < 0) {
@@ -654,7 +656,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
         //System.out.println("g  = " + g);
         //System.out.println("gp = " + gp);
         C B = magnitudeBound(rect, gp);
-        //System.out.println("B = " + B);
+        //System.out.println("B = " + B + " : " + B.getClass());
 
         BigRational len = v.rationalLength();
         BigRational half = new BigRational(1,2);
@@ -690,9 +692,9 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
             return g.leadingBaseCoefficient();
         }
         RingFactory<Complex<C>> cfac = g.ring.coFac;
+        //System.out.println("cfac = " + cfac + " : " + cfac.getClass());
         Complex<C> c = rect.getCenter();
         Complex<C> ev = PolyUtil.<Complex<C>> evaluateMain(cfac, g, c);
-        //System.out.println("ev = " + ev);
         return ev;
     }
 

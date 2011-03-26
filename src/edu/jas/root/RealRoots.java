@@ -8,6 +8,7 @@ package edu.jas.root;
 import java.util.List;
 
 import edu.jas.arith.Rational;
+import edu.jas.arith.BigRational;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.RingElem;
 
@@ -43,6 +44,15 @@ public interface RealRoots<C extends RingElem<C> & Rational> {
      * @return a list of isolating intervals v such that |v| &lt; eps.
      */
     public List<Interval<C>> realRoots(GenPolynomial<C> f, C eps);
+
+
+    /**
+     * Isolating intervals for the real roots.
+     * @param f univariate polynomial.
+     * @param eps requested intervals length.
+     * @return a list of isolating intervals v such that |v| &lt; eps.
+     */
+    public List<Interval<C>> realRoots(GenPolynomial<C> f, BigRational eps);
 
 
     /**

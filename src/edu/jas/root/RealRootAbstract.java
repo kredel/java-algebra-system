@@ -174,6 +174,18 @@ public abstract class RealRootAbstract<C extends RingElem<C>& Rational> implemen
 
 
     /**
+     * Isolating intervals for the real roots.
+     * @param f univariate polynomial.
+     * @param eps requested intervals length.
+     * @return a list of isolating intervals v such that |v| &lt; eps.
+     */
+    public List<Interval<C>> realRoots(GenPolynomial<C> f, BigRational eps) {
+        C e = f.ring.coFac.parse(eps.toString());
+        return realRoots(f,e);
+    }
+
+
+    /**
      * Sign changes on interval bounds.
      * @param iv root isolating interval with f(left) * f(right) != 0.
      * @param f univariate polynomial.

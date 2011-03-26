@@ -204,7 +204,7 @@ public class ComplexAlgebraicTest extends TestCase {
      * Test real and imaginary.
      * 
      */
-    public void testReIm() {
+    public void xtestReIm() {
         System.out.println("fac = " + fac.toScript());
         a = fac.random(ll);
 

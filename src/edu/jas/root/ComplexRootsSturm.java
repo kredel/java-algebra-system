@@ -195,6 +195,8 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
         long n = windingNumber(rect, a);
         if (n < 0) { // can this happen?
             throw new RuntimeException("negative winding number " + n);
+            //System.out.println("negative winding number " + n);
+            //return roots;
         }
         if (n == 0) {
             return roots;
