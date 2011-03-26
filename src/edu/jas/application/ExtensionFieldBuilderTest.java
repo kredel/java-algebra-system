@@ -372,8 +372,8 @@ public class ExtensionFieldBuilderTest extends TestCase {
 
 
     /**
-     * Test construction by extension
-     * field builder and multiple algebraic extension.
+     * Test construction by extension field builder and multiple algebraic
+     * extension.
      */
     public void testConstructionM1() {
         RingFactory fac = ExtensionFieldBuilder.baseField(new BigRational(1)).algebraicExtension("q,w,s",
@@ -385,7 +385,8 @@ public class ExtensionFieldBuilderTest extends TestCase {
         //System.out.println("gens    = " + gens);
         assertTrue("#gens == 4 " + s, s == 4);
 
-        GenPolynomialRing pfac = (GenPolynomialRing) ExtensionFieldBuilder.baseField(fac).polynomialExtension("y").build();
+        GenPolynomialRing pfac = (GenPolynomialRing) ExtensionFieldBuilder.baseField(fac)
+                        .polynomialExtension("y").build();
         GenPolynomial elem = pfac.parse("y^2 - w s");
         //System.out.println("elem    = " + elem.toScript());
         //System.out.println("elem    = " + elem);
@@ -400,18 +401,18 @@ public class ExtensionFieldBuilderTest extends TestCase {
 
         elem = elem.multiply(elem.negate());
         //System.out.println("elem    = " + elem);
-        elem = Power.positivePower(elem,3);
+        elem = Power.positivePower(elem, 3);
         //System.out.println("elem    = " + elem);
     }
 
 
     /**
-     * Test construction by extension
-     * field builder and multiple transcendent extension.
+     * Test construction by extension field builder and multiple transcendent
+     * extension.
      */
     public void testConstructionM2() {
-        RingFactory fac = ExtensionFieldBuilder.baseField(new BigRational(1)).algebraicExtension("q,w,s",
-                        "").build();
+        RingFactory fac = ExtensionFieldBuilder.baseField(new BigRational(1)).algebraicExtension("q,w,s", "")
+                        .build();
         //System.out.println("fac = " + fac.toScript());
 
         List<RingElem> gens = fac.generators();
@@ -419,7 +420,8 @@ public class ExtensionFieldBuilderTest extends TestCase {
         //System.out.println("gens    = " + gens);
         assertTrue("#gens == 4 " + s, s == 4);
 
-        GenPolynomialRing pfac = (GenPolynomialRing) ExtensionFieldBuilder.baseField(fac).polynomialExtension("y").build();
+        GenPolynomialRing pfac = (GenPolynomialRing) ExtensionFieldBuilder.baseField(fac)
+                        .polynomialExtension("y").build();
         GenPolynomial elem = pfac.parse("y^2 - w s");
         //System.out.println("elem    = " + elem.toScript());
         //System.out.println("elem    = " + elem);
@@ -434,7 +436,7 @@ public class ExtensionFieldBuilderTest extends TestCase {
 
         elem = elem.multiply(elem.negate());
         //System.out.println("elem    = " + elem);
-        elem = Power.positivePower(elem,3);
+        elem = Power.positivePower(elem, 3);
         //System.out.println("elem    = " + elem);
     }
 
