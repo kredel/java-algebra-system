@@ -23,6 +23,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.root.RealAlgebraicNumber;
 import edu.jas.root.RootFactory;
+import edu.jas.structure.Power;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.ufd.Quotient;
@@ -367,6 +368,74 @@ public class ExtensionFieldBuilderTest extends TestCase {
             //System.out.println("        ~ " + id.multiply(ivd));
             assertTrue("y / y == 1 " + a, a.isONE());
         }
+    }
+
+
+    /**
+     * Test construction by extension
+     * field builder and multiple algebraic extension.
+     */
+    public void testConstructionM1() {
+        RingFactory fac = ExtensionFieldBuilder.baseField(new BigRational(1)).algebraicExtension("q,w,s",
+                        "( q^3 - 3, w^2 - q, s^5 - 2)").build();
+        //System.out.println("fac = " + fac.toScript());
+
+        List<RingElem> gens = fac.generators();
+        int s = gens.size();
+        //System.out.println("gens    = " + gens);
+        assertTrue("#gens == 4 " + s, s == 4);
+
+        GenPolynomialRing pfac = (GenPolynomialRing) ExtensionFieldBuilder.baseField(fac).polynomialExtension("y").build();
+        GenPolynomial elem = pfac.parse("y^2 - w s");
+        //System.out.println("elem    = " + elem.toScript());
+        //System.out.println("elem    = " + elem);
+
+        RingElem r = (RingElem) elem.trailingBaseCoefficient();
+        RingElem t = (RingElem) r.inverse();
+        RingElem u = (RingElem) r.multiply(t);
+        //System.out.println("r       = " + r);
+        //System.out.println("t       = " + t);
+        //System.out.println("r*t     = " + u);
+        assertTrue("r*t == 1: ", u.isONE());
+
+        elem = elem.multiply(elem.negate());
+        //System.out.println("elem    = " + elem);
+        elem = Power.positivePower(elem,3);
+        //System.out.println("elem    = " + elem);
+    }
+
+
+    /**
+     * Test construction by extension
+     * field builder and multiple transcendent extension.
+     */
+    public void testConstructionM2() {
+        RingFactory fac = ExtensionFieldBuilder.baseField(new BigRational(1)).algebraicExtension("q,w,s",
+                        "").build();
+        //System.out.println("fac = " + fac.toScript());
+
+        List<RingElem> gens = fac.generators();
+        int s = gens.size();
+        //System.out.println("gens    = " + gens);
+        assertTrue("#gens == 4 " + s, s == 4);
+
+        GenPolynomialRing pfac = (GenPolynomialRing) ExtensionFieldBuilder.baseField(fac).polynomialExtension("y").build();
+        GenPolynomial elem = pfac.parse("y^2 - w s");
+        //System.out.println("elem    = " + elem.toScript());
+        //System.out.println("elem    = " + elem);
+
+        RingElem r = (RingElem) elem.trailingBaseCoefficient();
+        RingElem t = (RingElem) r.inverse();
+        RingElem u = (RingElem) r.multiply(t);
+        //System.out.println("r       = " + r);
+        //System.out.println("t       = " + t);
+        //System.out.println("r*t     = " + u);
+        assertTrue("r*t == 1: ", u.isONE());
+
+        elem = elem.multiply(elem.negate());
+        //System.out.println("elem    = " + elem);
+        elem = Power.positivePower(elem,3);
+        //System.out.println("elem    = " + elem);
     }
 
 }
