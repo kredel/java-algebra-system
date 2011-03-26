@@ -245,10 +245,12 @@ class Ring:
             eps = eps.elem;
         try:
             if eps == None:
-                R = RealRootsSturm().realRoots( a );
+                #R = RealRootsSturm().realRoots( a );
+                R = RootFactory.realAlgebraicNumbers( a );
             else:
                 R = RootFactory.realAlgebraicNumbers( a, eps );
-                R = [ RingElem(BigDecimal(r.getRational())) for r in R ];
+            R = [ RingElem(r) for r in R ];
+            #R = [ RingElem(BigDecimal(r.getRational())) for r in R ];
             return R;
         except Exception, e:
             print "error " + str(e)
@@ -264,18 +266,31 @@ class Ring:
             a = a.elem;
         if isinstance(eps,RingElem):
             eps = eps.elem;
+        cmplx = False;
+        try:
+            x = a.ring.coFac.getONE().getRe();
+            cmplx = True;
+        except Exception, e:
+            pass;
         try:
             if eps == None:
-                R = ComplexRootsSturm(a.ring.coFac).complexRoots( a );
-                #R = [ r.centerApprox() for r in R ];
-            else:
-                R = RootFactory.complexAlgebraicNumbers(a,eps);
+                if cmplx:
+                    R = RootFactory.complexAlgebraicNumbersComplex(a);
+                else:
+                    R = RootFactory.complexAlgebraicNumbers(a);
+#                R = ComplexRootsSturm(a.ring.coFac).complexRoots( a );
+#                R = [ r.centerApprox() for r in R ];
+#                R = [ r.ring.getRoot() for r in R ];
                 R = [ RingElem(r) for r in R ];
-#                R = [ RingElem(BigDecimal(r.getRational())) for r in R ];
-##                 R = ComplexRootsSturm(a.ring.coFac).complexRoots( a, eps );
-##                 R = [ r.centerApprox() for r in R ];
+            else:
+                if cmplx:
+                    R = RootFactory.complexAlgebraicNumbersComplex(a,eps);
+                else:
+                    R = RootFactory.complexAlgebraicNumbers(a,eps);
+                R = [ RingElem(r) for r in R ];
+#                R = [ r.decimalMagnitude() for r in R ];
+#                R = ComplexRootsSturm(a.ring.coFac).complexRoots( a, eps );
 #                R = ComplexRootsSturm(a.ring.coFac).approximateRoots( a, eps );
-#                R = [ RingElem(r) for r in R ];
             return R;
         except Exception, e:
             print "error " + str(e)

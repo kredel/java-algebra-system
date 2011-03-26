@@ -46,7 +46,8 @@ startLog();
 t = System.currentTimeMillis();
 R = r.realRoots(f);
 t = System.currentTimeMillis() - t;
-print "R = ", R;
+#print "R = ", R;
+print "R = ", [ a.elem.ring.getRoot() for a in R ];
 print "real roots time =", t, "milliseconds";
 
 eps = QQ(1,10) ** (DD().elem.DEFAULT_PRECISION-3);
@@ -55,8 +56,9 @@ print "eps = ", eps;
 t = System.currentTimeMillis();
 R = r.realRoots(f,eps);
 t = System.currentTimeMillis() - t;
-print "R = ", [ str(r) for r in R ];
+#print "R = ", [ str(r) for r in R ];
+print "R = ", [ a.elem.decimalMagnitude() for a in R ];
 print "real roots time =", t, "milliseconds";
 
 #startLog();
-#terminate();
+terminate();

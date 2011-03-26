@@ -43,25 +43,27 @@ f = f2;
 print "f = ", f;
 print;
 
-#startLog();
+startLog();
 
 t = System.currentTimeMillis();
 R = r.complexRoots(f);
 t = System.currentTimeMillis() - t;
-print "R = ", R;
+#print "R = ", [ a.elem.ring for a in R ];
+print "R = ", [ a.elem.ring.getRoot() for a in R ];
 print "complex roots time =", t, "milliseconds";
 
 #terminate();
 #sys.exit();
 
-eps = QQ(1,10) ** (DD().elem.DEFAULT_PRECISION-3); # now not too big
-#eps = QQ(1,10) ** 45;
+#eps = QQ(1,10) ** (DD().elem.DEFAULT_PRECISION-3); # not too big
+eps = QQ(1,10) ** 10;
 print "eps = ", eps;
 
 t = System.currentTimeMillis();
 R = r.complexRoots(f,eps);
 t = System.currentTimeMillis() - t;
-print "R = ", [ str(r) for r in R ];
+#print "R = ", [ str(a) for a in R ];
+print "R = ", [ a.elem.decimalMagnitude() for a in R ];
 print "complex root refinement time =", t, "milliseconds";
 
 #startLog();
