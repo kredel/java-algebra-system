@@ -249,7 +249,7 @@ public class SyzygyAbstract<C extends GcdRingElem<C>> implements Syzygy<C> {
             return true;
         }
         for (List<GenPolynomial<C>> row : Z.list) {
-            List<GenPolynomial<C>> zr = blas.scalarProduct(row, F.list);
+            List<GenPolynomial<C>> zr = blas.leftScalarProduct(row, F.list);
             if (!blas.isZero(zr)) {
                 logger.info("is not ZeroRelation (" + zr.size() + ") = " + zr);
                 return false;

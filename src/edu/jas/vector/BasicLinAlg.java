@@ -73,7 +73,7 @@ public class BasicLinAlg<C extends RingElem<C>> {
      * @param F a list of ring element lists.
      * @return the scalar product of G and F.
      */
-    public List<C> scalarProduct(List<C> G, List<List<C>> F) {
+    public List<C> leftScalarProduct(List<C> G, List<List<C>> F) {
         List<C> sp = null; //new ArrayList<C>(G.size());
         Iterator<C> it = G.iterator();
         Iterator<List<C>> jt = F.iterator();
