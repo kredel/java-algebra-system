@@ -126,6 +126,15 @@ implements RingFactory<ComplexAlgebraicNumber<C>> {
 
 
     /**
+     * Get rectangle for the complex root.
+     * @return v rectangle.
+     */
+    public synchronized Rectangle<C> getRoot() {
+        return this.root;
+    }
+
+
+    /**
      * Set a new epsilon. 
      * @param e epsilon.
      */
