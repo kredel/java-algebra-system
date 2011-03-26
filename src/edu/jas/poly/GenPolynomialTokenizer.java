@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.Scanner;
 
 import org.apache.log4j.Logger;
@@ -1365,17 +1367,17 @@ public class GenPolynomialTokenizer {
 
 
     // must also allow +/- // does not work with tokenizer
-    private boolean number(char x) {
+    private static boolean number(char x) {
         return digit(x) || x == '-' || x == '+';
     }
 
 
-    private boolean digit(char x) {
+    private static boolean digit(char x) {
         return '0' <= x && x <= '9';
     }
 
 
-    private boolean letter(char x) {
+    private static boolean letter(char x) {
         return ('a' <= x && x <= 'z') || ('A' <= x && x <= 'Z');
     }
 
@@ -1393,7 +1395,7 @@ public class GenPolynomialTokenizer {
 
     /**
      * Parse variable list from String.
-     * @param s String. Syntax: (n1,...,nk) or (n1 ... nk), brackest are also
+     * @param s String. Syntax: (n1,...,nk) or (n1 ... nk), parenthesis are also
      *            optional.
      * @return array of variable names found in s.
      */
@@ -1417,6 +1419,70 @@ public class GenPolynomialTokenizer {
         Scanner sc = new Scanner(st);
         while (sc.hasNext()) {
             String sn = sc.next();
+            sl.add(sn);
+        }
+        vl = new String[sl.size()];
+        int i = 0;
+        for (String si : sl) {
+            vl[i] = si;
+            i++;
+        }
+        return vl;
+    }
+
+
+    /**
+     * Extract variable list from expression.
+     * @param s String. Syntax: any polynomial expression.
+     * @return array of variable names found in s.
+     */
+    public static String[] expressionVariables(String s) {
+        String[] vl = null;
+        if (s == null) {
+            return vl;
+        }
+        String st = s.trim();
+        if (st.length() == 0) {
+            return new String[0];
+        }
+        st = st.replaceAll(",", " ");
+        st = st.replaceAll("\\+", " ");
+        st = st.replaceAll("-", " ");
+        st = st.replaceAll("\\*", " ");
+        st = st.replaceAll("/", " ");
+        st = st.replaceAll("\\(", " ");
+        st = st.replaceAll("\\)", " ");
+        st = st.replaceAll("\\{", " ");
+        st = st.replaceAll("\\}", " ");
+        st = st.replaceAll("\\[", " ");
+        st = st.replaceAll("\\]", " ");
+        st = st.replaceAll("\\^", " ");
+        //System.out.println("st = " + st);
+
+        Set<String> sl = new TreeSet<String>();
+        Scanner sc = new Scanner(st);
+        while (sc.hasNext()) {
+            String sn = sc.next();
+            if ( sn == null || sn.length() == 0 ) {
+                continue;
+            }
+            //System.out.println("sn = " + sn);
+            int i = 0;
+            while ( digit(sn.charAt(i)) && i < sn.length()-1 ) {
+                i++;
+            }
+            //System.out.println("sn = " + sn + ", i = " + i);
+            if ( i > 0 ) {
+                sn = sn.substring(i,sn.length());
+            }
+            //System.out.println("sn = " + sn);
+            if ( sn.length() == 0 ) {
+                continue;
+            }
+            if ( ! letter(sn.charAt(0)) ) {
+                continue;
+            }
+            //System.out.println("sn = " + sn);
             sl.add(sn);
         }
         vl = new String[sl.size()];

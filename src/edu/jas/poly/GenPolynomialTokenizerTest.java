@@ -15,6 +15,7 @@ import java.io.Reader;
 import java.io.StringReader;
 
 import java.util.List;
+import java.util.Arrays;
 
 //import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
@@ -125,7 +126,6 @@ public class GenPolynomialTokenizerTest extends TestCase {
         int nvar = vars.length;
         pfac = new GenPolynomialRing<BigRational>(fac,nvar,tord,vars);
         assertEquals("pfac == f.ring", pfac, f.ring );
-
 
         GenPolynomial<BigRational> a = f.list.get(0);
         //System.out.println("a = " + a);
@@ -1124,6 +1124,36 @@ public class GenPolynomialTokenizerTest extends TestCase {
         } catch (InvalidExpressionException e) {
             // pass
         }
+    }
+
+
+    /**
+     * Test variables.
+     */
+    public void testVariables() {
+        String vars = "a,b,c,d,e";
+        String[] variables = GenPolynomialTokenizer.variableList(vars);
+        assertTrue("len == 5: ", variables.length == 5);
+
+        String expr = "a,b,c,d,e";
+        variables = GenPolynomialTokenizer.expressionVariables(expr);
+        //System.out.println("variables = " + Arrays.toString(variables) + ", len = " + variables.length);
+        assertTrue("len == 5: ", variables.length == 5);
+
+        expr = "b,c,d,e*a,b,c,d";
+        variables = GenPolynomialTokenizer.expressionVariables(expr);
+        //System.out.println("variables = " + Arrays.toString(variables) + ", len = " + variables.length);
+        assertTrue("len == 5: ", variables.length == 5);
+
+        expr = "b + c^3 - d + e*a - b/c +d";
+        variables = GenPolynomialTokenizer.expressionVariables(expr);
+        //System.out.println("variables = " + Arrays.toString(variables) + ", len = " + variables.length);
+        assertTrue("len == 5: ", variables.length == 5);
+
+        expr = "(b + c)^3 - { d + e*a } / [ b/c + d ] + (b + 3f + f*3 + f3)";
+        variables = GenPolynomialTokenizer.expressionVariables(expr);
+        //System.out.println("variables = " + Arrays.toString(variables) + ", len = " + variables.length);
+        assertTrue("len == 7: ", variables.length == 7);
     }
 
 }
