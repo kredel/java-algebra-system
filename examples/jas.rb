@@ -1077,13 +1077,15 @@ Compute real roots of univariate polynomial.
         end
         begin
             if eps == nil
-                rr = RealRootsSturm.new().realRoots( a );
+                #rr = RealRootsSturm.new().realRoots( a );
+                rr = RootFactory.realAlgebraicNumbers( a )
             else
-##                 rr = RealRootsSturm.new().realRoots( a, eps );
-##                 rr = [ r.toDecimal() for r in rr ];
-                rr = RealRootsSturm.new().approximateRoots(a,eps);
-                rr = rr.map{ |e| RingElem.new(e) };
+                rr = RootFactory.realAlgebraicNumbers( a, eps );
+                ## rr = RealRootsSturm.new().realRoots( a, eps );
+                ## rr = [ r.toDecimal() for r in rr ];
+                #rr = RealRootsSturm.new().approximateRoots(a,eps);
             end
+            rr = rr.map{ |e| RingElem.new(e) };
             return rr;
         rescue Exception => e
             print "error " + str(e)
@@ -1104,16 +1106,33 @@ Compute complex roots of univariate polynomial.
         if eps.is_a? RingElem
             eps = eps.elem;
         end
+        cmplx = false;
+        begin
+            x = a.ring.coFac.getONE().getRe();
+            cmplx = true;
+        rescue Exception => e
+            #pass;
+        end
         begin
             if eps == nil
-                rr = ComplexRootsSturm.new(a.ring.coFac).complexRoots( a );
+                #rr = ComplexRootsSturm.new(a.ring.coFac).complexRoots( a );
+                if cmplx
+                   rr = RootFactory.complexAlgebraicNumbersComplex( a );
+                else 
+                   rr = RootFactory.complexAlgebraicNumbers( a );
+                end
                 #R = [ r.centerApprox() for r in R ];
             else
-##                 R = ComplexRootsSturm.new(a.ring.coFac).complexRoots( a, eps );
-##                 R = [ r.centerApprox() for r in R ];
-                rr = ComplexRootsSturm.new(a.ring.coFac).approximateRoots( a, eps );
-                rr = rr.map{ |e| RingElem.new(e) };
+                ## rr = ComplexRootsSturm.new(a.ring.coFac).complexRoots( a, eps );
+                ## rr = [ r.centerApprox() for r in rr ];
+                ##rr = ComplexRootsSturm.new(a.ring.coFac).approximateRoots( a, eps );
+                if cmplx
+                   rr = RootFactory.complexAlgebraicNumbersComplex( a, eps );
+                else
+                   rr = RootFactory.complexAlgebraicNumbers( a, eps );
+                end
             end
+            rr = rr.map{ |e| RingElem.new(e) };
             return rr;
         rescue Exception => e
             print "error " + str(e)
@@ -1271,6 +1290,7 @@ include_class "edu.jas.root.RealAlgebraicNumber";
 include_class "edu.jas.root.RealAlgebraicRing";
 include_class "edu.jas.root.ComplexRootsSturm";
 include_class "edu.jas.root.Rectangle";
+include_class "edu.jas.root.RootFactory";
 
 
 =begin rdoc
@@ -3512,6 +3532,15 @@ else a transcendental extension field is constructed.
     end
 
 =begin rdoc
+Create a real extension field.
+Construct a real algebraic extension field with an isolating interval for a real root.
+=end
+    def realExtend(vars,algebraic,interval)
+        ef = @builder.realAlgebraicExtension(vars,algebraic,interval);
+        return EF.new(ef.build());
+    end
+
+=begin rdoc
 Create an polynomial ring extension.
 =end
     def polynomial(vars)
@@ -3532,6 +3561,7 @@ Get extension field tower.
     end
 
 end
+
 
 end
 
