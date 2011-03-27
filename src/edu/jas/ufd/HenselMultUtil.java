@@ -128,14 +128,14 @@ public class HenselMultUtil {
         E = E.subtract(Ai.multiply(supi.get(1)));
         //System.out.println("E     = " + E);
         if (E.isZERO()) {
-            logger.info("liftDiophant leaving on zero error");
+            logger.info("liftDiophant leaving on zero E");
             return sup;
         }
         GenPolynomial<MOD> Ep = PolyUtil.<MOD> fromIntegerCoefficients(pkfac, E);
         //System.out.println("Ep(0," + pkfac.nvar + ") = " + Ep);
         logger.info("Ep(0," + pkfac.nvar + ") = " + Ep);
         if (Ep.isZERO()) {
-            logger.info("liftDiophant leaving on zero error mod p^k");
+            logger.info("liftDiophant leaving on zero Ep mod p^k");
             return sup;
         }
         for (int e = 1; e <= d; e++) {
@@ -190,14 +190,14 @@ public class HenselMultUtil {
             E = E.subtract(Ai.multiply(supi.get(1)));
             //System.out.println("E     = " + E);
             if (E.isZERO()) {
-                logger.info("liftDiophant leaving on zero error");
+                logger.info("liftDiophant leaving on zero E");
                 return sup;
             }
             Ep = PolyUtil.<MOD> fromIntegerCoefficients(pkfac, E);
             //System.out.println("Ep(" + e + "," + pkfac.nvar + ") = " + Ep); 
             logger.info("Ep(" + e + "," + pkfac.nvar + ") = " + Ep);
             if (Ep.isZERO()) {
-                logger.info("liftDiophant leaving on zero error mod p^k");
+                logger.info("liftDiophant leaving on zero Ep mod p^k");
                 return sup;
             }
         }
@@ -316,14 +316,14 @@ public class HenselMultUtil {
         }
         //System.out.println("E     = " + E);
         if (E.isZERO()) {
-            logger.info("liftDiophant leaving on zero error");
+            logger.info("liftDiophant leaving on zero E");
             return sup;
         }
         GenPolynomial<MOD> Ep = PolyUtil.<MOD> fromIntegerCoefficients(pkfac, E);
         //System.out.println("Ep(0," + pkfac.nvar + ") = " + Ep);
         logger.info("Ep(0," + pkfac.nvar + ") = " + Ep);
         if (Ep.isZERO()) {
-            logger.info("liftDiophant leaving on zero error mod p^k");
+            logger.info("liftDiophant leaving on zero Ep mod p^k");
             return sup;
         }
         for (int e = 1; e <= d; e++) {
@@ -382,14 +382,14 @@ public class HenselMultUtil {
             }
             //System.out.println("E     = " + E);
             if (E.isZERO()) {
-                logger.info("liftDiophant leaving on zero error");
+                logger.info("liftDiophant leaving on zero E");
                 return sup;
             }
             Ep = PolyUtil.<MOD> fromIntegerCoefficients(pkfac, E);
             //System.out.println("Ep(" + e + "," + pkfac.nvar + ") = " + Ep); 
             logger.info("Ep(" + e + "," + pkfac.nvar + ") = " + Ep);
             if (Ep.isZERO()) {
-                logger.info("liftDiophant leaving on zero error mod p^k");
+                logger.info("liftDiophant leaving on zero Ep mod p^k");
                 return sup;
             }
         }
@@ -596,7 +596,7 @@ public class HenselMultUtil {
             }
         }
         if (E.isZERO()) {
-            logger.info("liftHensel leaving with zero error");
+            logger.info("liftHensel leaving with zero E");
         }
         return U;
     }

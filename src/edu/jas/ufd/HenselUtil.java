@@ -126,8 +126,7 @@ public class HenselUtil {
             // compute E=(C-AB)/q over the integers
             E = C.subtract(Ai.multiply(Bi));
             if (E.isZERO()) {
-                //System.out.println("leaving on zero error");
-                logger.info("leaving on zero error");
+                logger.info("leaving on zero E");
                 break;
             }
             try {
@@ -347,8 +346,7 @@ public class HenselUtil {
             // compute E=(C-AB)/q over the integers
             E = C.subtract(Ai.multiply(Bi));
             if (E.isZERO()) {
-                //System.out.println("leaving on zero error");
-                logger.info("leaving on zero error");
+                logger.info("leaving on zero E");
                 break;
             }
             E = E.divide(Qi);
@@ -357,7 +355,7 @@ public class HenselUtil {
             //logger.info("Ep = " + Ep + ", qfac = " + qfac);
             if (Ep.isZERO()) {
                 //System.out.println("leaving on zero error");
-                //??logger.info("leaving on zero error Ep");
+                //??logger.info("leaving on zero Ep");
                 //??break;
             }
 
@@ -707,8 +705,7 @@ public class HenselUtil {
             //System.out.println("Em =  " + Em);
             if (Em.isZERO()) {
                 if (C.subtract(Ai.multiply(Bi)).isZERO()) {
-                    //System.out.println("leaving on zero error");
-                    logger.info("leaving on zero error");
+                    logger.info("leaving on zero E");
                     break;
                 }
             }
@@ -725,8 +722,7 @@ public class HenselUtil {
             //logger.info("Emp = " + Emp);
             if (Emp.isZERO()) {
                 if (C.subtract(Ai.multiply(Bi)).isZERO()) {
-                    //System.out.println("leaving on zero error Emp");
-                    logger.info("leaving on zero error Emp");
+                    logger.info("leaving on zero Emp");
                     break;
                 }
             }
@@ -1052,7 +1048,7 @@ public class HenselUtil {
             GenPolynomial<BigInteger> e = one.subtract(Si.multiply(Ai)).subtract(Ti.multiply(Bi));
             //System.out.println("\ne = " + e);
             if (e.isZERO()) {
-                logger.info("leaving on zero error in liftExtendedEuclidean");
+                logger.info("leaving on zero e in liftExtendedEuclidean");
                 break;
             }
             e = e.divide(modul);
@@ -1599,7 +1595,7 @@ public class HenselUtil {
             e = C.subtract(e);
             //System.out.println("\ne = " + e);
             if (e.isZERO()) {
-                logger.info("leaving on zero error");
+                logger.info("leaving on zero e");
                 break;
             }
             try {
