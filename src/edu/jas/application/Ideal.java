@@ -1994,8 +1994,8 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         GenPolynomial<C> zp;
         AlgebraicNumberRing<C> afac = null;
         Iterator<AlgebraicNumber<C>> aiter = null;
-        String obr = "";
-        String cbr = "";
+        //String obr = "";
+        //String cbr = "";
         int t = 0;
         do {
             t--;
@@ -2005,7 +2005,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                 tn = nfac.fromInteger(t);
                 if (tn.isZERO()) {
                     RingFactory<C> fac = nfac.coFac;
-                    int braces = 2;
+                    //int braces = 2;
                     while (!(fac instanceof AlgebraicNumberRing)) {
                         if (fac instanceof GenPolynomialRing) {
                             GenPolynomialRing<C> pfac = (GenPolynomialRing) (Object) fac;
@@ -2014,15 +2014,14 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                             QuotientRing<C> pfac = (QuotientRing) (Object) fac;
                             fac = pfac.ring.coFac;
                         } else {
-                            throw new ArithmeticException(
-                                                          "field elements exhausted, need algebraic extension of base ring");
+                            throw new ArithmeticException("field elements exhausted, need algebraic extension of base ring");
                         }
-                        braces++;
+                        //braces++;
                     }
-                    for (int ii = 0; ii < braces; ii++) {
-                        obr += "{ ";
-                        cbr += " }";
-                    }
+                    //for (int ii = 0; ii < braces; ii++) {
+                    //    obr += "{ ";
+                    //    cbr += " }";
+                    //}
                     afac = (AlgebraicNumberRing) (Object) fac;
                     logger.info("afac = " + afac.toScript());
                     aiter = afac.iterator();
@@ -2031,7 +2030,8 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                         an = aiter.next();
                     }
                     //System.out.println("an,iter = " + an);
-                    tn = nfac.parse(obr + an.toString() + cbr);
+                    //tn = nfac.parse(obr + an.toString() + cbr);
+                    tn = nfac.parse(an.toString());
                     //System.out.println("tn = " + tn);
                     if (false) {
                         throw new RuntimeException("probe");
@@ -2039,15 +2039,16 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                 }
             } else {
                 if (!aiter.hasNext()) {
-                    throw new ArithmeticException("field elements exhausted, normal position not reachable");
+                    throw new ArithmeticException("field elements exhausted, normal position not reachable: !aiter.hasNext(): " + t);
                 }
                 AlgebraicNumber<C> an = aiter.next();
                 //System.out.println("an,iter = " + an);
-                tn = nfac.parse(obr + an.toString() + cbr);
+                //tn = nfac.parse(obr + an.toString() + cbr);
+                tn = nfac.parse(an.toString());
                 //System.out.println("tn = " + tn);
             }
             if (tn.isZERO()) {
-                throw new ArithmeticException("field elements exhausted, normal position not reachable");
+                throw new ArithmeticException("field elements exhausted, normal position not reachable: tn == 0: " + t);
             }
             zp = z.subtract(xj.subtract(xi.multiply(tn)));
             zp = zp.monic();
@@ -2057,7 +2058,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                 logger.info("normal position, t = " + t);
                 logger.info("normal position, GB = " + Ip);
                 if (t < -550) {
-                    throw new RuntimeException("normal position not reachable");
+                    throw new ArithmeticException("normal position not reached in " + t + " steps");
                 }
             }
         } while (!Ip.isNormalPositionFor(i + 1, j + 1));

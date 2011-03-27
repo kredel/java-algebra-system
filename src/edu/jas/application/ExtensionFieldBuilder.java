@@ -108,7 +108,10 @@ public class ExtensionFieldBuilder implements Serializable {
     public ExtensionFieldBuilder algebraicExtension(String var, String expr) {
         String[] variables = GenPolynomialTokenizer.variableList(var);
         if (variables.length < 1) {
-            throw new IllegalArgumentException("no variables in '" + var + "'");
+            variables = GenPolynomialTokenizer.expressionVariables(expr);
+            if (variables.length < 1) {
+                throw new IllegalArgumentException("no variables in '" + var + "' and '" + expr + "'" );
+	    }
         }
         GenPolynomialRing pfac = new GenPolynomialRing(factory, variables);
         if (variables.length == 1) { // simple extension
