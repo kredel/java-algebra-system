@@ -3541,6 +3541,15 @@ Construct a real algebraic extension field with an isolating interval for a real
     end
 
 =begin rdoc
+Create a complex extension field.
+Construct a complex algebraic extension field with an isolating rectangle for a complex root.
+=end
+    def complexExtend(vars,algebraic,rectangle)
+        ef = @builder.complexAlgebraicExtension(vars,algebraic,rectangle);
+        return EF.new(ef.build());
+    end
+
+=begin rdoc
 Create an polynomial ring extension.
 =end
     def polynomial(vars)

@@ -2724,6 +2724,14 @@ class EF:
         ef = self.builder.realAlgebraicExtension(vars,algebraic,interval);
         return EF(ef.build());
 
+    def complexExtend(self,vars,algebraic,rectangle):
+        '''Create a complex extension field.
+
+        Construct a complex algebraic extension field with an isolating rectangle for a complex root.
+        '''
+        ef = self.builder.complexAlgebraicExtension(vars,algebraic,rectangle);
+        return EF(ef.build());
+
     def polynomial(self,vars):
         '''Create an polynomial ring extension.
         '''
