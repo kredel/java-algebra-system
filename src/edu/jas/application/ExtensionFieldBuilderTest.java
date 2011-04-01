@@ -227,8 +227,9 @@ public class ExtensionFieldBuilderTest extends TestCase {
      * Test construction Z_p(sqrt(2))(x)(sqrt(x)) by extension field builder.
      */
     public void testConstructionF3() {
-        RingFactory fac = ExtensionFieldBuilder.baseField(new ModLongRing(7)).algebraicExtension("w2",
-                        "w2^2 - 3").transcendentExtension("x").algebraicExtension("wx", "wx^7 - x").build();
+        RingFactory fac = ExtensionFieldBuilder.baseField(new ModLongRing(7))
+                        .algebraicExtension("w2", "w2^2 - 3").transcendentExtension("x")
+                        .algebraicExtension("wx", "wx^7 - x").build();
         //System.out.println("fac = " + fac.toScript());
 
         List<RingElem> gens = fac.generators();
@@ -259,8 +260,9 @@ public class ExtensionFieldBuilderTest extends TestCase {
      * builder.
      */
     public void testConstructionR1() {
-        RingFactory fac = ExtensionFieldBuilder.baseField(new BigRational(1)).realAlgebraicExtension("q",
-                        "q^3 - 3", "[1,2]").realAlgebraicExtension("w", "w^2 - q", "[1,2]")
+        RingFactory fac = ExtensionFieldBuilder.baseField(new BigRational(1))
+                        .realAlgebraicExtension("q", "q^3 - 3", "[1,2]")
+                        .realAlgebraicExtension("w", "w^2 - q", "[1,2]")
                         .realAlgebraicExtension("s", "s^5 - 2", "[1,2]").build();
         //System.out.println("fac = " + fac.toScript());
 
@@ -300,9 +302,9 @@ public class ExtensionFieldBuilderTest extends TestCase {
     public void testConstructionC1() {
         ComplexRing<BigRational> cf = new ComplexRing<BigRational>(new BigRational(1));
         //System.out.println("cf = " + cf.toScript());
-        RingFactory fac = ExtensionFieldBuilder.baseField(cf).complexAlgebraicExtension("w2", "w2^2 + 2",
-                        "[-1i0,1i2]")
-        //.complexAlgebraicExtension("q3", "q3^3 + { w2 }","[-1i0,1i2]") // not possible, TODO
+        RingFactory fac = ExtensionFieldBuilder.baseField(cf)
+                        .complexAlgebraicExtension("w2", "w2^2 + 2", "[-1i0,1i2]")
+                        //.complexAlgebraicExtension("q3", "q3^3 + { w2 }","[-1i0,1i2]") // not possible, TODO
                         .build();
         //System.out.println("fac = " + fac.toScript());
 
@@ -335,8 +337,9 @@ public class ExtensionFieldBuilderTest extends TestCase {
      * field builder and real root calculation.
      */
     public void testConstructionR2factory() {
-        RingFactory fac = ExtensionFieldBuilder.baseField(new BigRational(1)).realAlgebraicExtension("q",
-                        "q^3 - 3", "[1,2]").realAlgebraicExtension("w", "w^2 - q", "[1,2]")
+        RingFactory fac = ExtensionFieldBuilder.baseField(new BigRational(1))
+                        .realAlgebraicExtension("q", "q^3 - 3", "[1,2]")
+                        .realAlgebraicExtension("w", "w^2 - q", "[1,2]")
                         .realAlgebraicExtension("s", "s^5 - 2", "[1,2]").build();
         //System.out.println("fac = " + fac.toScript());
 
@@ -351,7 +354,8 @@ public class ExtensionFieldBuilderTest extends TestCase {
         //System.out.println("elem    = " + elem.toScript());
         //System.out.println("elem    = " + elem);
 
-        List<RealAlgebraicNumber> roots = RootFactory.realAlgebraicNumbers(elem);
+        List<RealAlgebraicNumber<BigRational>> roots = RootFactory
+                        .realAlgebraicNumbers((GenPolynomial<BigRational>) elem);
         //System.out.println("roots   = " + roots);
         assertTrue("#roots == 2 " + roots, roots.size() == 2);
         for (RealAlgebraicNumber root : roots) {
@@ -376,8 +380,8 @@ public class ExtensionFieldBuilderTest extends TestCase {
      * extension.
      */
     public void testConstructionM1() {
-        RingFactory fac = ExtensionFieldBuilder.baseField(new BigRational(1)).algebraicExtension("q,w,s",
-                        "( q^3 - 3, w^2 - q, s^5 - 2)").build();
+        RingFactory fac = ExtensionFieldBuilder.baseField(new BigRational(1))
+                        .algebraicExtension("q,w,s", "( q^3 - 3, w^2 - q, s^5 - 2)").build();
         //System.out.println("fac = " + fac.toScript());
 
         List<RingElem> gens = fac.generators();
