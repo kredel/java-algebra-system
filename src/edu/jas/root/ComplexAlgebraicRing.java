@@ -135,6 +135,15 @@ implements RingFactory<ComplexAlgebraicNumber<C>> {
 
 
     /**
+     * Get epsilon. 
+     * @return epsilon.
+     */
+    public synchronized C getEps() {
+        return this.eps;
+    }
+
+
+    /**
      * Set a new epsilon. 
      * @param e epsilon.
      */

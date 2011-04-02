@@ -180,7 +180,7 @@ implements GcdRingElem<ComplexAlgebraicNumber<C>> {
         if (s != 0) {
             return s;
         }
-        s = this.subtract(b).signum();
+        s = number.compareTo(b.number); // TODO
         //System.out.println("s_real = " + s);
         return s;
     }
@@ -373,7 +373,7 @@ implements GcdRingElem<ComplexAlgebraicNumber<C>> {
 
     /**
      * ComplexAlgebraicNumber summation.
-     * @param c coefficient.
+     * @param c complex polynomial.
      * @return this+c.
      */
     public ComplexAlgebraicNumber<C> sum(GenPolynomial<Complex<C>> c) {
@@ -383,7 +383,17 @@ implements GcdRingElem<ComplexAlgebraicNumber<C>> {
 
     /**
      * ComplexAlgebraicNumber summation.
-     * @param c polynomial.
+     * @param c algebraic number.
+     * @return this+c.
+     */
+    public ComplexAlgebraicNumber<C> sum(AlgebraicNumber<Complex<C>> c) {
+        return new ComplexAlgebraicNumber<C>(ring, number.sum(c));
+    }
+
+
+    /**
+     * ComplexAlgebraicNumber summation.
+     * @param c coefficient.
      * @return this+c.
      */
     public ComplexAlgebraicNumber<C> sum(Complex<C> c) {
@@ -398,16 +408,6 @@ implements GcdRingElem<ComplexAlgebraicNumber<C>> {
      */
     public ComplexAlgebraicNumber<C> negate() {
         return new ComplexAlgebraicNumber<C>(ring, number.negate());
-    }
-
-
-    /**
-     * ComplexAlgebraicNumber signum.
-     * @see edu.jas.structure.RingElem#signum()
-     * @return signum(this).
-     */
-    public int signum() {
-        return number.signum();
     }
 
 
@@ -514,6 +514,24 @@ implements GcdRingElem<ComplexAlgebraicNumber<C>> {
         ret[1] = new ComplexAlgebraicNumber<C>(ring, aret[1]);
         ret[2] = new ComplexAlgebraicNumber<C>(ring, aret[2]);
         return ret;
+    }
+
+
+    /**
+     * ComplexAlgebraicNumber signum.
+     * @see edu.jas.structure.RingElem#signum()
+     * @return signum(this).
+     */
+    public int signum() {
+        try {
+            Rectangle<C> v = ring.engine.invariantRectangle(ring.root, ring.algebraic.modul, number.val);
+            ring.setRoot(v);
+            Complex<C> c = v.getCenter();
+            return c.signum();
+        } catch (InvalidBoundaryException e) { // should not happen
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
 
