@@ -226,7 +226,7 @@ implements GcdRingElem<ComplexAlgebraicNumber<C>> {
     /**
      * Hash code for this ComplexAlgebraicNumber.
      * @see java.lang.Object#hashCode()
-     */
+     */ 
     @Override
     public int hashCode() {
         return 37 * number.val.hashCode() + ring.hashCode();
@@ -237,14 +237,9 @@ implements GcdRingElem<ComplexAlgebraicNumber<C>> {
      * Get the real part.
      * @return real part.
      */
-    public ComplexAlgebraicNumber<C> getRe() {
-        GenPolynomial<Complex<C>> p = number.val;
-        ComplexRing<C> cr = (ComplexRing<C>) p.ring.coFac;
-        RingFactory<C> rf = cr.ring;
-        GenPolynomialRing<C> fac = new GenPolynomialRing<C>(rf,p.ring);
-        GenPolynomial<C> rp = PolyUtil.<C>realPartFromComplex(fac,p);
-        GenPolynomial<Complex<C>> cp = PolyUtil.<C>complexFromAny(p.ring,rp);
-        ComplexAlgebraicNumber<C> re = new ComplexAlgebraicNumber<C>(ring,cp);
+    public RealAlgebraicNumberPart<C> getRe() {
+        RealAlgebraicPartRing<C> rr = new RealAlgebraicPartRing<C>(ring,RealAlgebraicPartRing.Axis.REAL);
+        RealAlgebraicNumberPart<C> re = new RealAlgebraicNumberPart<C>(rr,this);
         return re;
     }
 
@@ -253,84 +248,20 @@ implements GcdRingElem<ComplexAlgebraicNumber<C>> {
      * Get the imaginary part.
      * @return imaginary part.
      */
-    public ComplexAlgebraicNumber<C> getIm() {
-        GenPolynomial<Complex<C>> p = number.val;
-        ComplexRing<C> cr = (ComplexRing<C>) p.ring.coFac;
-        RingFactory<C> rf = cr.ring;
-        GenPolynomialRing<C> fac = new GenPolynomialRing<C>(rf,p.ring);
-        GenPolynomial<C> ip = PolyUtil.<C>imaginaryPartFromComplex(fac,p);
-        GenPolynomial<Complex<C>> cp = PolyUtil.<C>complexFromAny(p.ring,ip);
-        ComplexAlgebraicNumber<C> im = new ComplexAlgebraicNumber<C>(ring,cp);
+    public RealAlgebraicNumberPart<C> getIm() {
+        RealAlgebraicPartRing<C> ir = new RealAlgebraicPartRing<C>(ring,RealAlgebraicPartRing.Axis.IMAG);
+        RealAlgebraicNumberPart<C> im = new RealAlgebraicNumberPart<C>(ir,this);
         return im;
     }
 
 
-    /**
-     * Get the real part as real algebraic number.
-     * @return real part.
-     */
-    public RealAlgebraicNumber<C> realRe() {
-        GenPolynomial<Complex<C>> p = number.val;
-        ComplexRing<C> cr = (ComplexRing<C>) p.ring.coFac;
-        RingFactory<C> rf = cr.ring;
-        GenPolynomialRing<C> fac = new GenPolynomialRing<C>(rf,p.ring);
-        GenPolynomial<C> rp = PolyUtil.<C>realPartFromComplex(fac,p);
-
-        GenPolynomial<Complex<C>> m = ring.algebraic.modul;
-        GenPolynomial<C> rm = PolyUtil.<C>realPartFromComplex(fac,m);
-
-        Rectangle<C> root = ring.root;
-        C left = root.getSW().getRe();
-        C right = root.getNE().getRe();
-        Interval<C> v = new Interval<C>(left,right);
-        RealAlgebraicRing<C> rr = new RealAlgebraicRing<C>(rm,v);
-        System.out.println("root = " + root);
-        System.out.println("intv = " + v);
-
-        RealAlgebraicNumber<C> re = new RealAlgebraicNumber<C>(rr,rp);
-        return re;
-    }
-
-
-    /**
-     * Get the imaginary part as real algebraic number.
-     * @return imaginary part.
-     */
-    public RealAlgebraicNumber<C> realIm() {
-        GenPolynomial<Complex<C>> p = number.val;
-        ComplexRing<C> cr = (ComplexRing<C>) p.ring.coFac;
-        RingFactory<C> rf = cr.ring;
-        GenPolynomialRing<C> fac = new GenPolynomialRing<C>(rf,p.ring);
-        GenPolynomial<C> rp = PolyUtil.<C>imaginaryPartFromComplex(fac,p);
-
-        GenPolynomial<Complex<C>> m = ring.algebraic.modul;
-        GenPolynomial<C> rm = PolyUtil.<C>imaginaryPartFromComplex(fac,m);
-        System.out.println("m = " + m);
-        System.out.println("rm = " + rm);
-
-        Rectangle<C> root = ring.root;
-        C left = root.getSW().getIm();
-        C right = root.getNE().getIm();
-        Interval<C> v = new Interval<C>(left,right);
-        RealAlgebraicRing<C> rr = new RealAlgebraicRing<C>(rm,v);
-        System.out.println("root = " + root);
-        System.out.println("intv = " + v);
-
-        System.out.println("rr = " + rr);
-        System.out.println("rp = " + rp);
-
-        RealAlgebraicNumber<C> re = new RealAlgebraicNumber<C>(rr,rp);
-        return re;
-    }
-
-
-    /**
+    /*
      * ComplexAlgebraicNumber conjugate.
      * @return the complex conjugate of this.
-     */
     public ComplexAlgebraicNumber<C> conjugate() {
         return getRe().sum( getIm().negate().multiply(ring.getIMAG()) );
     }
+     */
 
 
     /**
@@ -351,11 +282,11 @@ implements GcdRingElem<ComplexAlgebraicNumber<C>> {
      * @see edu.jas.structure.StarRingElem#norm()
      * @return ||this||.
      */
-    public ComplexAlgebraicNumber<C> norm() {
+    public RealAlgebraicNumberPart<C> norm() {
         // this.conjugate().multiply(this);
-        ComplexAlgebraicNumber<C> re = getRe();
-        ComplexAlgebraicNumber<C> im = getIm();
-        ComplexAlgebraicNumber<C> v = re.multiply(re);
+        RealAlgebraicNumberPart<C> re = getRe();
+        RealAlgebraicNumberPart<C> im = getIm();
+        RealAlgebraicNumberPart<C> v = re.multiply(re);
         v = v.sum(im.multiply(im));
         return v;
     }

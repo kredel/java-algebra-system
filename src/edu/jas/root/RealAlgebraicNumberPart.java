@@ -25,7 +25,6 @@ import edu.jas.structure.NotInvertibleException;
  */
 
 public class RealAlgebraicNumberPart<C extends GcdRingElem<C> & Rational>
-       /*extends AlgebraicNumber<C>*/
     implements GcdRingElem<RealAlgebraicNumberPart<C>>, Rational {
 
 
@@ -48,8 +47,7 @@ public class RealAlgebraicNumberPart<C extends GcdRingElem<C> & Rational>
      * @param a value GenPolynomial<C>.
      */
     public RealAlgebraicNumberPart(RealAlgebraicPartRing<C> r, GenPolynomial<Complex<C>> a) {
-        number = new ComplexAlgebraicNumber<C>(r.algebraic, a);
-        ring = r;
+        this(r, new ComplexAlgebraicNumber<C>(r.algebraic, a));
     }
 
 
@@ -111,7 +109,7 @@ public class RealAlgebraicNumberPart<C extends GcdRingElem<C> & Rational>
      * @see edu.jas.structure.RingElem#isZERO()
      */
     public boolean isZERO() {
-        return number.isZERO();
+        return magnitude().isZERO(); // ??
     }
 
 
@@ -121,7 +119,7 @@ public class RealAlgebraicNumberPart<C extends GcdRingElem<C> & Rational>
      * @see edu.jas.structure.RingElem#isONE()
      */
     public boolean isONE() {
-        return number.isONE();
+        return magnitude().isONE(); // ??
     }
 
 
@@ -131,7 +129,7 @@ public class RealAlgebraicNumberPart<C extends GcdRingElem<C> & Rational>
      * @see edu.jas.structure.RingElem#isUnit()
      */
     public boolean isUnit() {
-        return number.isUnit();
+        return magnitude().isUnit(); // ??
     }
 
 
@@ -142,9 +140,17 @@ public class RealAlgebraicNumberPart<C extends GcdRingElem<C> & Rational>
     @Override
     public String toString() {
         if (PrettyPrint.isTrue()) {
-            return "{ " + number.toString() + " }";
+            switch( ring.axis ) {
+            case REAL: return "re{ " + number.toString() + " }";
+            case IMAG: return "im{ " + number.toString() + " }";
+            default:   throw new IllegalArgumentException("cannot happen");
+            }
         } else {
-            return "Real" + number.toString();
+            switch( ring.axis ) {
+            case REAL: return "Real( " + number.toString() + " )";
+            case IMAG: return "Imag( " + number.toString() + " )";
+            default:   throw new IllegalArgumentException("cannot happen");
+            }
         }
     }
 
@@ -157,7 +163,11 @@ public class RealAlgebraicNumberPart<C extends GcdRingElem<C> & Rational>
     //JAVA6only: @Override
     public String toScript() {
         // Python case
-        return number.toScript();
+        switch( ring.axis ) {
+        case REAL: return "re(" + number.toScript() + ")";
+        case IMAG: return "im(" + number.toScript() + ")";
+        default:   throw new IllegalArgumentException("cannot happen");
+        }
     }
 
 
@@ -176,7 +186,7 @@ public class RealAlgebraicNumberPart<C extends GcdRingElem<C> & Rational>
     /**
      * RealAlgebraicNumberPart comparison.
      * @param b RealAlgebraicNumberPart.
-     * @return real sign(this-b).
+     * @return sign(this-b).
      */
     //JAVA6only: @Override
     public int compareTo(RealAlgebraicNumberPart<C> b) {
@@ -188,20 +198,8 @@ public class RealAlgebraicNumberPart<C extends GcdRingElem<C> & Rational>
         if (s != 0) {
             return s;
         }
-        s = number.compareTo(b.number); // TODO
+        s = magnitude().compareTo(b.magnitude()); // TODO
         //System.out.println("s_real = " + s);
-        return s;
-    }
-
-
-    /**
-     * RealAlgebraicNumberPart comparison.
-     * @param b AlgebraicNumber.
-     * @return polynomial sign(this-b).
-     */
-    public int compareTo(AlgebraicNumber<Complex<C>> b) {
-        int s = number.number.compareTo(b);
-        System.out.println("s_algeb = " + s);
         return s;
     }
 
@@ -227,7 +225,7 @@ public class RealAlgebraicNumberPart<C extends GcdRingElem<C> & Rational>
         if (!ring.equals(a.ring)) {
             return false;
         }
-        return number.equals(a.number);
+        return compareTo(a) == 0;
     }
 
 
@@ -315,7 +313,11 @@ public class RealAlgebraicNumberPart<C extends GcdRingElem<C> & Rational>
         int s = number.signum(); // changes root
         Rectangle<C> v = ring.algebraic.root;
         Complex<C> c = v.getCenter();
-        return c.getRe().signum();
+        switch( ring.axis ) {
+        case REAL: return c.getRe().signum();
+        case IMAG: return c.getIm().signum();
+        default:   throw new IllegalArgumentException("cannot happen");
+        }
     }
 
 
@@ -325,7 +327,11 @@ public class RealAlgebraicNumberPart<C extends GcdRingElem<C> & Rational>
      */
     public BigRational magnitude() {
         Complex<BigRational> m = number.magnitude();
-        return m.getRe();
+        switch( ring.axis ) {
+        case REAL: return m.getRe();
+        case IMAG: return m.getIm();
+        default:   throw new IllegalArgumentException("cannot happen");
+        }
     }
 
 

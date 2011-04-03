@@ -204,12 +204,12 @@ public class ComplexAlgebraicTest extends TestCase {
      * Test real and imaginary.
      * 
      */
-    public void xtestReIm() {
+    public void testReIm() {
         System.out.println("fac = " + fac.toScript());
         a = fac.random(ll);
-
-        b = a.getRe();
-        c = a.getIm();
+ 
+        RealAlgebraicNumberPart<BigRational> b = a.getRe();
+        RealAlgebraicNumberPart<BigRational> c = a.getIm();
         System.out.println("a = " + a);
         System.out.println("a = " + a.magnitude());
         System.out.println("a = " + a.decimalMagnitude());
@@ -219,48 +219,50 @@ public class ComplexAlgebraicTest extends TestCase {
         System.out.println("c = " + c);
         System.out.println("c = " + c.magnitude());
         System.out.println("c = " + c.decimalMagnitude());
-        //System.out.println("c = " + a.realIm());
-
-        RealAlgebraicNumber<BigRational> br = a.realRe();
-        System.out.println("br = " + br);
-        System.out.println("br = " + br.magnitude());
-        System.out.println("br = " + br.decimalMagnitude());
-
-        RealAlgebraicNumber<BigRational> cr = a.realIm();
-        System.out.println("cr = " + cr);
-        System.out.println("cr = " + cr.magnitude());
-        System.out.println("cr = " + cr.decimalMagnitude());
 
         e = fac.getIMAG();
         System.out.println("e = " + e);
         System.out.println("e = " + e.magnitude());
         System.out.println("e = " + e.decimalMagnitude());
 
-        d = b.sum(c.multiply(e));
+        RealAlgebraicNumberPart<BigRational> d = e.getRe();
         System.out.println("d = " + d);
         System.out.println("d = " + d.magnitude());
         System.out.println("d = " + d.decimalMagnitude());
-        assertEquals("re(a)+i*im(a) = a", a, d);
 
-        b = a.conjugate();
-        c = b.conjugate();
-        System.out.println("b = " + b);
-        System.out.println("b = " + b.magnitude());
-        System.out.println("b = " + b.decimalMagnitude());
-        System.out.println("c = " + c);
-        System.out.println("c = " + c.magnitude());
-        System.out.println("c = " + c.decimalMagnitude());
-        assertEquals("con(con(a)) = a", a, c);
+        RealAlgebraicNumberPart<BigRational> f = e.getIm();
+        System.out.println("f = " + f);
+        System.out.println("f = " + f.magnitude());
+        System.out.println("f = " + f.decimalMagnitude());
 
-        c = b.multiply(a);
-        d = a.norm();
-        System.out.println("c = " + c);
-        System.out.println("c = " + c.magnitude());
-        System.out.println("c = " + c.decimalMagnitude());
+        d = d.sum(f);
         System.out.println("d = " + d);
-        System.out.println("d = " + d.magnitude());
-        System.out.println("d = " + d.decimalMagnitude());
-        assertEquals("a*con(a) = norm(a)", c, d);
+
+//         d = b.sum(c.multiply(e));
+//         System.out.println("d = " + d);
+//         System.out.println("d = " + d.magnitude());
+//         System.out.println("d = " + d.decimalMagnitude());
+//         assertEquals("re(a)+i*im(a) = a", a, d);
+
+//         b = a.conjugate();
+//         c = b.conjugate();
+//         System.out.println("b = " + b);
+//         System.out.println("b = " + b.magnitude());
+//         System.out.println("b = " + b.decimalMagnitude());
+//         System.out.println("c = " + c);
+//         System.out.println("c = " + c.magnitude());
+//         System.out.println("c = " + c.decimalMagnitude());
+//         assertEquals("con(con(a)) = a", a, c);
+
+//         c = b.multiply(a);
+//         d = a.norm();
+//         System.out.println("c = " + c);
+//         System.out.println("c = " + c.magnitude());
+//         System.out.println("c = " + c.decimalMagnitude());
+//         System.out.println("d = " + d);
+//         System.out.println("d = " + d.magnitude());
+//         System.out.println("d = " + d.decimalMagnitude());
+//         assertEquals("a*con(a) = norm(a)", c, d);
     }
 
 

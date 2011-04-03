@@ -32,8 +32,19 @@ import edu.jas.structure.RingFactory;
  */
 
 public class RealAlgebraicPartRing<C extends GcdRingElem<C> & Rational>
-       /*extends AlgebraicNumberRing<C>*/
     implements RingFactory<RealAlgebraicNumberPart<C>> {
+
+
+    /**
+     * Representing coordinate axis.
+     */
+    public static enum Axis { REAL, IMAG };
+
+
+    /**
+     * Coordinate axis of this part.
+     */
+    public final Axis axis;
 
 
     /**
@@ -44,22 +55,25 @@ public class RealAlgebraicPartRing<C extends GcdRingElem<C> & Rational>
 
     /**
      * The constructor creates a RealAlgebraicNumberPart factory object from a
-     * GenPolynomial objects module.
+     * ComplexAlgebraicRing object module.
+     * @param alg module ComplexAlgebraicRing.
+     * @param ax coordinate axis.
+     */
+    public RealAlgebraicPartRing(ComplexAlgebraicRing<C> alg, Axis ax) {
+        algebraic = alg;
+        axis = ax;
+    }
+
+
+    /**
+     * The constructor creates a RealAlgebraicNumberPart factory object from a
+     * GenPolynomial object module.
      * @param m module GenPolynomial<C>.
      * @param root isolating rectangle for a real root.
+     * @param ax coordinate axis.
      */
-    public RealAlgebraicPartRing(GenPolynomial<Complex<C>> m, Rectangle<C> root) {
-        algebraic = new ComplexAlgebraicRing<C>(m,root);
-        //this.root = root;
-        //engine = new RealRootsSturm<C>();
-        if (m.ring.characteristic().signum() > 0) {
-            throw new RuntimeException("characteristic not zero");
-        }
-        //C e = m.ring.coFac.fromInteger(10L).getRe();
-        //e = e.inverse();
-        //C x = Power.positivePower(e,BigDecimal.DEFAULT_PRECISION);
-        //e = Power.positivePower(e, 9); // better not too much for speed
-        //eps = e;
+    public RealAlgebraicPartRing(GenPolynomial<Complex<C>> m, Rectangle<C> root, Axis ax) {
+        this(new ComplexAlgebraicRing<C>(m,root),ax);
     }
 
 
@@ -69,26 +83,11 @@ public class RealAlgebraicPartRing<C extends GcdRingElem<C> & Rational>
      * @param m module GenPolynomial<C>.
      * @param root isolating rectangle for a real root.
      * @param isField indicator if m is prime.
+     * @param ax coordinate axis.
      */
-    public RealAlgebraicPartRing(GenPolynomial<Complex<C>> m, Rectangle<C> root, boolean isField) {
-        algebraic = new ComplexAlgebraicRing<C>(m, root, isField);
-        //this.root = root;
-        //engine = new RealRootsSturm<C>();
-        if (m.ring.characteristic().signum() > 0) {
-            throw new RuntimeException("characteristic not zero");
-        }
-        //C e = m.ring.coFac.fromInteger(10L).getRe();
-        //e = e.inverse();
-        //e = Power.positivePower(e, 9); //BigDecimal.DEFAULT_PRECISION);
-        //eps = e;
+    public RealAlgebraicPartRing(GenPolynomial<Complex<C>> m, Rectangle<C> root, boolean isField, Axis ax) {
+        this(new ComplexAlgebraicRing<C>(m, root, isField),ax);
     }
-
-
-    /**
-     * Get the module part.
-     * @return modul. public GenPolynomial<C> getModul() { return
-     *         algebraic.modul; }
-     */
 
 
     /**
@@ -301,6 +300,9 @@ public class RealAlgebraicPartRing<C extends GcdRingElem<C> & Rational>
         if (a == null) {
             return false;
         }
+        if ( axis != a.axis ) {
+            return false;
+	}
         return algebraic.equals(a.algebraic);
     }
 
