@@ -198,6 +198,9 @@ public class RealAlgebraicNumberPart<C extends GcdRingElem<C> & Rational>
         if (s != 0) {
             return s;
         }
+        if ( ring.axis != b.ring.axis ) {
+            throw new IllegalArgumentException("axis not equal");
+        }
         s = magnitude().compareTo(b.magnitude()); // TODO
         //System.out.println("s_real = " + s);
         return s;
@@ -259,6 +262,9 @@ public class RealAlgebraicNumberPart<C extends GcdRingElem<C> & Rational>
      * @return this+S.
      */
     public RealAlgebraicNumberPart<C> sum(RealAlgebraicNumberPart<C> S) {
+        if ( ring.axis != S.ring.axis ) {
+            throw new IllegalArgumentException("axis not equal");
+        }
         return new RealAlgebraicNumberPart<C>(ring, number.sum(S.number));
     }
 
@@ -350,6 +356,9 @@ public class RealAlgebraicNumberPart<C extends GcdRingElem<C> & Rational>
      * @return this-S.
      */
     public RealAlgebraicNumberPart<C> subtract(RealAlgebraicNumberPart<C> S) {
+        if ( ring.axis != S.ring.axis ) {
+            throw new IllegalArgumentException("axis not equal");
+        }
         return new RealAlgebraicNumberPart<C>(ring, number.subtract(S.number));
     }
 
@@ -360,6 +369,9 @@ public class RealAlgebraicNumberPart<C extends GcdRingElem<C> & Rational>
      * @return this/S.
      */
     public RealAlgebraicNumberPart<C> divide(RealAlgebraicNumberPart<C> S) {
+        if ( ring.axis != S.ring.axis ) {
+            throw new IllegalArgumentException("axis not equal");
+        }
         return multiply(S.inverse());
     }
 
@@ -381,6 +393,9 @@ public class RealAlgebraicNumberPart<C extends GcdRingElem<C> & Rational>
      * @return this - (this/S)*S.
      */
     public RealAlgebraicNumberPart<C> remainder(RealAlgebraicNumberPart<C> S) {
+        if ( ring.axis != S.ring.axis ) {
+            throw new IllegalArgumentException("axis not equal");
+        }
         return new RealAlgebraicNumberPart<C>(ring, number.remainder(S.number));
     }
 
@@ -391,6 +406,9 @@ public class RealAlgebraicNumberPart<C extends GcdRingElem<C> & Rational>
      * @return this*S.
      */
     public RealAlgebraicNumberPart<C> multiply(RealAlgebraicNumberPart<C> S) {
+        if ( ring.axis != S.ring.axis ) {
+            throw new IllegalArgumentException("axis not equal");
+        }
         return new RealAlgebraicNumberPart<C>(ring, number.multiply(S.number));
     }
 
@@ -430,6 +448,9 @@ public class RealAlgebraicNumberPart<C extends GcdRingElem<C> & Rational>
      * @return gcd(this,S).
      */
     public RealAlgebraicNumberPart<C> gcd(RealAlgebraicNumberPart<C> S) {
+        if ( ring.axis != S.ring.axis ) {
+            throw new IllegalArgumentException("axis not equal");
+        }
         return new RealAlgebraicNumberPart<C>(ring, number.gcd(S.number));
     }
 
@@ -441,6 +462,9 @@ public class RealAlgebraicNumberPart<C extends GcdRingElem<C> & Rational>
      */
     @SuppressWarnings("unchecked")
     public RealAlgebraicNumberPart<C>[] egcd(RealAlgebraicNumberPart<C> S) {
+        if ( ring.axis != S.ring.axis ) {
+            throw new IllegalArgumentException("axis not equal");
+        }
         ComplexAlgebraicNumber<C>[] aret = number.egcd(S.number);
         RealAlgebraicNumberPart<C>[] ret = new RealAlgebraicNumberPart[3];
         ret[0] = new RealAlgebraicNumberPart<C>(ring, aret[0]);

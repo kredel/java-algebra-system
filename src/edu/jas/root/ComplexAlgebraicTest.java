@@ -232,37 +232,42 @@ public class ComplexAlgebraicTest extends TestCase {
 
         RealAlgebraicNumberPart<BigRational> f = e.getIm();
         System.out.println("f = " + f);
-        System.out.println("f = " + f.magnitude());
+        System.out.println("f = " + f.magnitude()); 
         System.out.println("f = " + f.decimalMagnitude());
 
-        d = d.sum(f);
-        System.out.println("d = " + d);
+        ComplexRing<RealAlgebraicNumberPart<BigRational>> crr;
+        crr = new ComplexRing<RealAlgebraicNumberPart<BigRational>>(d.factory()); //,f.factory());
 
-//         d = b.sum(c.multiply(e));
-//         System.out.println("d = " + d);
-//         System.out.println("d = " + d.magnitude());
-//         System.out.println("d = " + d.decimalMagnitude());
-//         assertEquals("re(a)+i*im(a) = a", a, d);
+        Complex<RealAlgebraicNumberPart<BigRational>> ac, bc, cc, dc, ec;
+        dc = new Complex<RealAlgebraicNumberPart<BigRational>>(crr,d,f);
+        System.out.println("dc = " + dc);
+        // assertEquals("re(a)+i*im(a) = a", a, dc);
 
-//         b = a.conjugate();
-//         c = b.conjugate();
-//         System.out.println("b = " + b);
-//         System.out.println("b = " + b.magnitude());
-//         System.out.println("b = " + b.decimalMagnitude());
+        ac = dc.conjugate();
+        bc = ac.conjugate();
+        System.out.println("ac = " + ac);
+        System.out.println("bc = " + bc);
+        assertEquals("con(con(a)) = a", bc, dc);
+
+        // not okay:
+//         cc = dc.multiply(ac);
+//         ec = dc.norm();
+//         System.out.println("cc = " + cc);
+//         System.out.println("ec = " + ec);
+
+//         c = cc.getRe();
+//         f = ec.getRe();
 //         System.out.println("c = " + c);
-//         System.out.println("c = " + c.magnitude());
-//         System.out.println("c = " + c.decimalMagnitude());
-//         assertEquals("con(con(a)) = a", a, c);
+//         System.out.println("f = " + f);
+//         assertEquals("a*con(a) = norm(a)", c, f);
 
-//         c = b.multiply(a);
-//         d = a.norm();
+//         c = cc.getIm();
+//         f = ec.getIm();
 //         System.out.println("c = " + c);
-//         System.out.println("c = " + c.magnitude());
-//         System.out.println("c = " + c.decimalMagnitude());
-//         System.out.println("d = " + d);
-//         System.out.println("d = " + d.magnitude());
-//         System.out.println("d = " + d.decimalMagnitude());
-//         assertEquals("a*con(a) = norm(a)", c, d);
+//         System.out.println("f = " + f);
+        //assertEquals("a*con(a) = norm(a)", c, f);
+
+        //assertEquals("a*con(a) = norm(a)", cc, ec);
     }
 
 
