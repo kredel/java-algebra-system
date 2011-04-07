@@ -205,48 +205,48 @@ public class ComplexAlgebraicTest extends TestCase {
      * 
      */
     public void testReIm() {
-        System.out.println("fac = " + fac.toScript());
+        //System.out.println("fac = " + fac.toScript());
         a = fac.random(ll);
  
         RealAlgebraicNumberPart<BigRational> b = a.getRe();
         RealAlgebraicNumberPart<BigRational> c = a.getIm();
-        System.out.println("a = " + a);
-        System.out.println("a = " + a.magnitude());
-        System.out.println("a = " + a.decimalMagnitude());
-        System.out.println("b = " + b);
-        System.out.println("b = " + b.magnitude());
-        System.out.println("b = " + b.decimalMagnitude());
-        System.out.println("c = " + c);
-        System.out.println("c = " + c.magnitude());
-        System.out.println("c = " + c.decimalMagnitude());
+        //System.out.println("a = " + a);
+        //System.out.println("a = " + a.magnitude());
+        //System.out.println("a = " + a.decimalMagnitude());
+        //System.out.println("b = " + b);
+        //System.out.println("b = " + b.magnitude());
+        //System.out.println("b = " + b.decimalMagnitude());
+        //System.out.println("c = " + c);
+        //System.out.println("c = " + c.magnitude());
+        //System.out.println("c = " + c.decimalMagnitude());
 
         e = fac.getIMAG();
-        System.out.println("e = " + e);
-        System.out.println("e = " + e.magnitude());
-        System.out.println("e = " + e.decimalMagnitude());
+        //System.out.println("e = " + e);
+        //System.out.println("e = " + e.magnitude());
+        //System.out.println("e = " + e.decimalMagnitude());
 
         RealAlgebraicNumberPart<BigRational> d = e.getRe();
-        System.out.println("d = " + d);
-        System.out.println("d = " + d.magnitude());
-        System.out.println("d = " + d.decimalMagnitude());
+        //System.out.println("d = " + d);
+        //System.out.println("d = " + d.magnitude());
+        //System.out.println("d = " + d.decimalMagnitude());
 
         RealAlgebraicNumberPart<BigRational> f = e.getIm();
-        System.out.println("f = " + f);
-        System.out.println("f = " + f.magnitude()); 
-        System.out.println("f = " + f.decimalMagnitude());
+        //System.out.println("f = " + f);
+        //System.out.println("f = " + f.magnitude()); 
+        //System.out.println("f = " + f.decimalMagnitude());
 
         ComplexRing<RealAlgebraicNumberPart<BigRational>> crr;
         crr = new ComplexRing<RealAlgebraicNumberPart<BigRational>>(d.factory()); //,f.factory());
 
         Complex<RealAlgebraicNumberPart<BigRational>> ac, bc, cc, dc, ec;
         dc = new Complex<RealAlgebraicNumberPart<BigRational>>(crr,d,f);
-        System.out.println("dc = " + dc);
+        //System.out.println("dc = " + dc);
         // assertEquals("re(a)+i*im(a) = a", a, dc);
 
         ac = dc.conjugate();
         bc = ac.conjugate();
-        System.out.println("ac = " + ac);
-        System.out.println("bc = " + bc);
+        //System.out.println("ac = " + ac);
+        //System.out.println("bc = " + bc);
         assertEquals("con(con(a)) = a", bc, dc);
 
         // not okay:
