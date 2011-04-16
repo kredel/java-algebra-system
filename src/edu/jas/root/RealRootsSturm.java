@@ -15,6 +15,8 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.ufd.Squarefree;
+import edu.jas.ufd.SquarefreeFactory;
 
 
 /**
@@ -256,16 +258,36 @@ public class RealRootsSturm<C extends RingElem<C> & Rational> extends RealRootAb
         if (f == null || f.isZERO() || f.isConstant()) { // ?
             return v;
         }
+        List<GenPolynomial<C>> Sg = sturmSequence(g.monic());
+        return invariantSignInterval(iv, f, Sg);
+   }
+
+
+    /**
+     * Invariant interval for algebraic number sign.
+     * @param iv root isolating interval for f, with f(left) * f(right) &lt; 0.
+     * @param f univariate polynomial, non-zero.
+     * @param Sg Sturm sequence for g, a univariate polynomial with gcd(f,g) == 1.
+     * @return v with v a new interval contained in iv such that g(w) != 0 for w in v.
+     */
+    public Interval<C> invariantSignInterval(Interval<C> iv, GenPolynomial<C> f, List<GenPolynomial<C>> Sg) {
+        Interval<C> v = iv;
+        GenPolynomial<C> g = Sg.get(0);
+        if (g == null || g.isZERO()) {
+            return v;
+        }
+        if (g.isConstant()) {
+            return v;
+        }
+        if (f == null || f.isZERO() || f.isConstant()) { // ?
+            return v;
+        }
         RingFactory<C> cfac = f.ring.coFac;
         C two = cfac.fromInteger(2);
 
-        List<GenPolynomial<C>> Sg = sturmSequence(g);
-        // System.out.println("g = " + g);
-        g = Sg.get(0);
-        //System.out.println("g = " + g);
-
         while (true) {
             long n = realRootCount(v, Sg);
+            logger.debug("n = " + n);
             if (n == 0) {
                 return v;
             }
