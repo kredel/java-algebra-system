@@ -1162,7 +1162,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
      */
     public GenPolynomial<C> inverse(GenPolynomial<C> h) {
         if (h == null || h.isZERO()) {
-            throw new IllegalArgumentException("zero not invertible");
+            throw new NotInvertibleException("zero not invertible");
         }
         if (this.isZERO()) {
             throw new NotInvertibleException("zero ideal");
