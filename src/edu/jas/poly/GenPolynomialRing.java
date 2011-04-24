@@ -166,6 +166,17 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
     /**
      * The constructor creates a polynomial factory object.
      * @param cf factory for coefficients of type C.
+     * @param t a term order.
+     * @param v names for the variables.
+     */
+    public GenPolynomialRing(RingFactory<C> cf, TermOrder t, String[] v) {
+        this(cf, v.length, t, v);
+    }
+
+
+    /**
+     * The constructor creates a polynomial factory object.
+     * @param cf factory for coefficients of type C.
      * @param n number of variables.
      * @param t a term order.
      * @param v names for the variables.
