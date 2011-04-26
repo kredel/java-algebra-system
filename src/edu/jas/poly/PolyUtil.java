@@ -1597,12 +1597,15 @@ public class PolyUtil {
             return null;
         }
         GenPolynomialRing<C> fac = f.ring;
-        if (fac.nvar > 1 || t.ring.nvar > 1) {
-            throw new IllegalArgumentException("only for univariate polynomials");
+        if (fac.nvar > 1) {
+            throw new IllegalArgumentException("only for univariate polynomial f");
         }
         if (f.isZERO() || f.isConstant()) {
             return f;
         }
+        if (t.ring.nvar > 1) {
+            fac = t.ring;
+	}
         // assert decending exponents, i.e. compatible term order
         Map<ExpVector, C> val = f.getMap();
         GenPolynomial<C> s = null;
