@@ -365,8 +365,8 @@ public class Rectangle<C extends RingElem<C> & Rational > {
      * @return rational(|ne-sw|**2);
      */
     public BigRational rationalLength() {
-        BigRational r = new BigRational(length().toString());
-        return r;
+        //BigRational r = new BigRational(length().toString());
+        return length().getRational();
     }
 
 }
