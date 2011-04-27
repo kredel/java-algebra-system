@@ -1167,6 +1167,10 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         if (this.isZERO()) {
             throw new NotInvertibleException("zero ideal");
         }
+        if ( h.isUnit() ) { 
+            return h.inverse();
+        }
+        doGB(); 
         List<GenPolynomial<C>> F = new ArrayList<GenPolynomial<C>>(1 + list.list.size());
         F.add(h);
         F.addAll(list.list);
@@ -1211,7 +1215,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             //logger.info("inv f = " + f);
             f = g.multiply(h);
             k = red.normalform(list.list, f);
-            logger.info("inv k = " + k);
+            logger.debug("inv k = " + k);
             if (!k.isUnit()) {
                 throw new NotInvertibleException(" k = " + k);
             }
