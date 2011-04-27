@@ -131,88 +131,45 @@ public class ComplexRootTest extends TestCase {
 
 
     /**
-     * Test complex roots, sqrt(-1).
-     * 
+     * Test complex roots, imaginary.
      */
-    @SuppressWarnings("unchecked")
     public void testComplexRootsImag() {
-        Complex<BigRational> I = cfac.getIMAG(); 
-
+        //Complex<BigRational> I = cfac.getIMAG(); 
         a = dfac.parse("z^3 - i2");
         a = dfac.random(ll+1).monic();
         a = dfac.parse("z^7 - 2 z");
-        a = dfac.parse("z^6 - 2");
+        a = dfac.parse("z^6 - i2");
         //System.out.println("a = " + a);
 
         List<Complex<RealAlgebraicNumber<BigRational>>> roots;
         roots = RootFactory.<BigRational> complexAlgebraicNumbersComplex(a); 
-        System.out.println("a = " + a);
-        System.out.println("roots = " + roots);
+        //System.out.println("a = " + a);
+        //System.out.println("roots = " + roots);
         assertTrue("#roots == deg(a) ", roots.size() == a.degree(0));
         for ( Complex<RealAlgebraicNumber<BigRational>> root : roots ) {
-            System.out.println("root = " + root.getRe().decimalMagnitude() + " + " + root.getIm().decimalMagnitude() + " i");
+            //System.out.println("root = " + root.getRe().decimalMagnitude() + " + " + root.getIm().decimalMagnitude() + " i");
         }
     }
 
 
     /*
-     * Test complex roots.
-    @SuppressWarnings("unchecked")
+     * Test complex roots, random polynomial.
+     */
     public void testComplexRootsRand() {
-        ComplexRootsAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
-        Complex<BigRational> I = cfac.getIMAG();
-
-        a = dfac.random(kl, ll, el, q);
-        Squarefree<Complex<BigRational>> engine = SquarefreeFactory
-                .<Complex<BigRational>> getImplementation(cfac);
-        a = engine.squarefreePart(a);
-
-        //a = dfac.univariate(0,2L).subtract(cfac.getONE());  // x^2 - 1
-        //a = dfac.univariate(0,2L).sum(cfac.fromInteger(1));  // x^2 + 1
-        //a = dfac.univariate(0,2L).subtract(I);  // x^2 - I
-        //a = dfac.univariate(0,1L);  // x
-        //System.out.println("a = " + a);
-
-        Complex<BigRational> Mb = cr.rootBound(a);
-        BigRational M = Mb.getRe();
-        //System.out.println("M = " + M);
-
-        Complex<BigRational>[] corner = new Complex[4];
-
-        corner[0] = new Complex<BigRational>(cfac, M.negate(), M); // nw
-        corner[1] = new Complex<BigRational>(cfac, M.negate(), M.negate()); // sw
-        corner[2] = new Complex<BigRational>(cfac, M, M.negate()); // se
-        corner[3] = new Complex<BigRational>(cfac, M, M); // ne
-
-        Rectangle<BigRational> rect = new Rectangle<BigRational>(corner);
-
-
-        List<Rectangle<BigRational>> roots = null;
-        try {
-            roots = cr.complexRoots(rect, a);
-        } catch (InvalidBoundaryException e) {
-            fail("" + e);
+        //Complex<BigRational> I = cfac.getIMAG(); 
+        a = dfac.random(ll+1).monic();
+        if ( a.isZERO() || a.isONE() ) {
+             a = dfac.parse("z^6 - i2");
         }
         //System.out.println("a = " + a);
-        //System.out.println("roots = " + roots);
-        assertTrue("#roots == deg(a) ", roots.size() == a.degree(0));
-    }
-     */
-
-
-    /*
-     * Test complex roots.
-    public void testComplexRoots() {
-        ComplexRootsAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
-
-        a = dfac.random(kl, ll, el + 1, q);
-        //System.out.println("a = " + a);
-
-        List<Rectangle<BigRational>> roots = cr.complexRoots(a);
+        List<Complex<RealAlgebraicNumber<BigRational>>> roots;
+        roots = RootFactory.<BigRational> complexAlgebraicNumbersComplex(a); 
         //System.out.println("a = " + a);
         //System.out.println("roots = " + roots);
         assertTrue("#roots == deg(a) ", roots.size() == a.degree(0));
+        for ( Complex<RealAlgebraicNumber<BigRational>> root : roots ) {
+            //System.out.println("root = " + root.getRe().decimalMagnitude() + " + " + root.getIm().decimalMagnitude() + " i");
+        }
     }
-     */
 
 }

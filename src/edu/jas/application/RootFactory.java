@@ -57,7 +57,7 @@ public class RootFactory {
         GenPolynomialRing<Complex<C>> tfac = new GenPolynomialRing<Complex<C>>(cfac,2,to); //,vars); //tord?
         //System.out.println("tfac = " + tfac);
         GenPolynomial<Complex<C>> t = tfac.univariate(1,1L).sum(tfac.univariate(0,1L).multiply(cfac.getIMAG()));
-        //System.out.println("t = " + t);
+        //System.out.println("t = " + t); // t = x + i y
 
         GenPolynomialRing<C> rfac = new GenPolynomialRing<C>(cfac.ring,tfac); //tord?
         //System.out.println("rfac = " + rfac);
@@ -73,8 +73,8 @@ public class RootFactory {
             //System.out.println("su = " + su);
             GenPolynomial<C> re = PolyUtil.<C> realPartFromComplex(rfac,su);
             GenPolynomial<C> im = PolyUtil.<C> imaginaryPartFromComplex(rfac,su);
-            System.out.println("re = " + re);
-            System.out.println("im = " + im);
+            //System.out.println("re = " + re);
+            //System.out.println("im = " + im);
 
             List<GenPolynomial<C>> li = new ArrayList<GenPolynomial<C>>(2);
             li.add(re);
@@ -88,7 +88,7 @@ public class RootFactory {
             IdealWithRealAlgebraicRoots<C,C> idr;
             for (IdealWithUniv<C> idu : idul) {
                 idr = PolyUtilApp.<C,C> realAlgebraicRoots(idu.ideal).get(0);
-                System.out.println("idr = " + idr);
+                //System.out.println("idr = " + idr);
                 for (List<edu.jas.root.RealAlgebraicNumber<C>> crr : idr.ran) {
                     //System.out.println("crr = " + crr);
                     RealRootTuple<C> root = new RealRootTuple<C>(crr);

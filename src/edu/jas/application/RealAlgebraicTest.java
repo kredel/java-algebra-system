@@ -23,6 +23,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
 import edu.jas.structure.NotInvertibleException;
+import edu.jas.structure.Power;
 import edu.jas.root.Interval;
 import edu.jas.root.Rectangle;
 //import edu.jas.root.RealAlgebraicNumber;
@@ -41,7 +42,7 @@ public class RealAlgebraicTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        //BasicConfigurator.configure();
+        BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 
@@ -355,20 +356,25 @@ public class RealAlgebraicTest extends TestCase {
     public void testSignum() {
         a = fac.random(ll);
         //a = fac.getONE();
-        System.out.println("a = " + a);
+        //System.out.println("a = " + a);
 
         int s = a.signum();
-        System.out.println("sign(a) = " + s);
+        //System.out.println("sign(a) = " + s);
         assertTrue("isZERO( c )", (a.isZERO() && s == 0) || (!a.isZERO() && s != 0));
 
         BigDecimal r = a.decimalMagnitude();
-        System.out.println("magnitude(a)              = " + r);
+        //System.out.println("magnitude(a)              = " + r);
 
         b = a.multiply(a);
         BigDecimal rb = b.decimalMagnitude();
-        System.out.println("magnitude(a*a)            = " + rb);
+        //System.out.println("magnitude(a*a)            = " + rb);
         BigDecimal rr = r.multiply(r);
-        System.out.println("magnitude(a)*magnitude(a) = " + rr);
+        //System.out.println("magnitude(a)*magnitude(a) = " + rr);
+        BigDecimal eps = Power.positivePower(new BigDecimal(0.1), 9); //BigDecimal.DEFAULT_PRECISION);
+        //System.out.println("eps                       = " + eps);
+        BigDecimal err = rr.subtract(rb).divide(rr).abs();
+        //System.out.println("err                       = " + err);
+        assertTrue("magnitude(a)*magnitude(a) == magnitude(a*a): " + err + " <= " + eps, err.compareTo(eps) <= 0 );
     }
 
 
