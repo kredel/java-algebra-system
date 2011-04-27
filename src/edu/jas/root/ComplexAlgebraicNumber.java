@@ -234,37 +234,6 @@ implements GcdRingElem<ComplexAlgebraicNumber<C>> {
 
 
     /**
-     * Get the real part.
-     * @return real part.
-     */
-    public RealAlgebraicNumberPart<C> getRe() {
-        RealAlgebraicPartRing<C> rr = new RealAlgebraicPartRing<C>(ring,RealAlgebraicPartRing.Axis.REAL);
-        RealAlgebraicNumberPart<C> re = new RealAlgebraicNumberPart<C>(rr,this);
-        return re;
-    }
-
-
-    /**
-     * Get the imaginary part.
-     * @return imaginary part.
-     */
-    public RealAlgebraicNumberPart<C> getIm() {
-        RealAlgebraicPartRing<C> ir = new RealAlgebraicPartRing<C>(ring,RealAlgebraicPartRing.Axis.IMAG);
-        RealAlgebraicNumberPart<C> im = new RealAlgebraicNumberPart<C>(ir,this);
-        return im;
-    }
-
-
-    /*
-     * ComplexAlgebraicNumber conjugate.
-     * @return the complex conjugate of this.
-    public ComplexAlgebraicNumber<C> conjugate() {
-        return getRe().sum( getIm().negate().multiply(ring.getIMAG()) );
-    }
-     */
-
-
-    /**
      * ComplexAlgebraicNumber absolute value.
      * @return the absolute value of this.
      * @see edu.jas.structure.RingElem#abs()
@@ -274,21 +243,6 @@ implements GcdRingElem<ComplexAlgebraicNumber<C>> {
             return new ComplexAlgebraicNumber<C>(ring, number.negate());
         }
         return this;
-    }
-
-
-    /**
-     * ComplexAlgebraicNumber norm.
-     * @see edu.jas.structure.StarRingElem#norm()
-     * @return ||this||.
-     */
-    public RealAlgebraicNumberPart<C> norm() {
-        // this.conjugate().multiply(this);
-        RealAlgebraicNumberPart<C> re = getRe();
-        RealAlgebraicNumberPart<C> im = getIm();
-        RealAlgebraicNumberPart<C> v = re.multiply(re);
-        v = v.sum(im.multiply(im));
-        return v;
     }
 
 
