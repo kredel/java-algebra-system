@@ -36,7 +36,7 @@ import edu.jas.root.PolyUtilRoot;
  */
 
 public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
-implements GcdRingElem<RealAlgebraicNumber<C>> {
+    implements GcdRingElem<RealAlgebraicNumber<C>>, Rational {
 
 
     /**
@@ -108,6 +108,16 @@ implements GcdRingElem<RealAlgebraicNumber<C>> {
     @Override
     public RealAlgebraicNumber<C> clone() {
         return new RealAlgebraicNumber<C>(ring, number);
+    }
+
+
+    /**
+     * Return a BigRational approximation of this Element.
+     * @return a BigRational approximation of this.
+     * @see edu.jas.arith.Rational#getRational()
+     */
+    public BigRational getRational() {
+        return magnitude();
     }
 
 
@@ -393,7 +403,7 @@ implements GcdRingElem<RealAlgebraicNumber<C>> {
     public int signum() {
         if ( reNum == null ) { // no synchronization required
             GenPolynomial<C> p = number.val;
-            reNum = ring.rere.parse(p.toString());
+            reNum = ring.rere.parse(p.toString()); // todo: convert
             //System.out.println("reNum = " + reNum);
 	}
         return reNum.signum();
@@ -402,12 +412,12 @@ implements GcdRingElem<RealAlgebraicNumber<C>> {
 
     /**
      * RealAlgebraicNumber magnitude.
-     * @return |this| as complex rational number.
+     * @return |this| as rational number.
      */
     public BigRational magnitude() {
         if ( reNum == null ) { // no synchronization required
             GenPolynomial<C> p = number.val;
-            reNum = ring.rere.parse(p.toString());
+            reNum = ring.rere.parse(p.toString()); // todo: convert
             //System.out.println("reNum = " + reNum);
 	}
         return reNum.magnitude();
@@ -416,7 +426,7 @@ implements GcdRingElem<RealAlgebraicNumber<C>> {
 
     /**
      * RealAlgebraicNumber magnitude.
-     * @return |this| as complex big decimal.
+     * @return |this| as big decimal.
      */
     public BigDecimal decimalMagnitude() {
         BigRational cr = magnitude();
