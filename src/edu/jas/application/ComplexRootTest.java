@@ -197,8 +197,8 @@ public class ComplexRootTest extends TestCase {
         GenPolynomial<Complex<RealAlgebraicNumber<BigRational>>> cpol;
         cpol = cring.random(3);
         cpol = cring.univariate(0,3L).subtract(cring.fromInteger(2L));
-        //cpol = cring.univariate(0,3L).subtract(cring.parse( root.getRe().toString() ));
-        cpol = cring.univariate(0,1L).subtract(cring.parse( "x3^2 + x4" ));
+        cpol = cring.univariate(0,1L).subtract(cring.parse( root.getRe().toString() ));
+        //cpol = cring.univariate(0,1L).subtract(cring.parse( "x3^2 + x4" ));
         System.out.println("cpol = " + cpol);
 
         ComplexRoots<RealAlgebraicNumber<BigRational>> crs 
