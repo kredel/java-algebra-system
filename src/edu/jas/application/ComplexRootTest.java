@@ -28,6 +28,9 @@ import edu.jas.poly.TermOrder;
 import edu.jas.structure.Power;
 import edu.jas.ufd.Squarefree;
 import edu.jas.ufd.SquarefreeFactory;
+import edu.jas.root.ComplexRootsSturm;
+import edu.jas.root.ComplexRoots;
+import edu.jas.root.Rectangle;
 
 
 /**
@@ -169,6 +172,59 @@ public class ComplexRootTest extends TestCase {
         assertTrue("#roots == deg(a) ", roots.size() == a.degree(0));
         for ( Complex<RealAlgebraicNumber<BigRational>> root : roots ) {
             //System.out.println("root = " + root.getRe().decimalMagnitude() + " + " + root.getIm().decimalMagnitude() + " i");
+        }
+    }
+
+
+    /**
+     * Test polynomial with complex roots.
+     */
+    public void testPolynomialComplexRoots() {
+        a = dfac.parse("z^3 - 2");
+        //System.out.println("a = " + a);
+        List<Complex<RealAlgebraicNumber<BigRational>>> roots;
+        roots = RootFactory.<BigRational> complexAlgebraicNumbersComplex(a); 
+        //System.out.println("a = " + a);
+        //System.out.println("roots = " + roots);
+        assertTrue("#roots == deg(a) ", roots.size() == a.degree(0));
+        Complex<RealAlgebraicNumber<BigRational>> root = roots.get(1);
+        System.out.println("a = " + a);
+        System.out.println("root = " + root.getRe().decimalMagnitude() + " + " + root.getIm().decimalMagnitude() + " i");
+
+        GenPolynomialRing<Complex<RealAlgebraicNumber<BigRational>>> cring 
+	    = new GenPolynomialRing<Complex<RealAlgebraicNumber<BigRational>>>(root.ring,1);
+
+        GenPolynomial<Complex<RealAlgebraicNumber<BigRational>>> cpol;
+        cpol = cring.random(3);
+        cpol = cring.univariate(0,3L).subtract(cring.fromInteger(2L));
+        //cpol = cring.univariate(0,3L).subtract(cring.parse( root.getRe().toString() ));
+        cpol = cring.univariate(0,1L).subtract(cring.parse( "x3^2 + x4" ));
+        System.out.println("cpol = " + cpol);
+
+        ComplexRoots<RealAlgebraicNumber<BigRational>> crs 
+            = new ComplexRootsSturm<RealAlgebraicNumber<BigRational>>(root.ring);
+
+        // existing version using winding numbers
+        List<Rectangle<RealAlgebraicNumber<BigRational>>> r2roots = crs.complexRoots(cpol);
+        System.out.println("r2roots = " + r2roots);
+        assertTrue("#r2roots == deg(cpol) ", r2roots.size() == cpol.degree(0));
+        for ( Rectangle<RealAlgebraicNumber<BigRational>> r2 : r2roots ) {
+            System.out.println("r2 = " + r2.getDecimalCenter());
+        }
+
+        // new version with recursion: not yet because of missing real factorization
+        //List<Complex<RealAlgebraicNumber<RealAlgebraicNumber<BigRational>>>> croots;
+        //croots = RootFactory.<RealAlgebraicNumber<BigRational>> complexAlgebraicNumbersComplex(cpol); 
+        //System.out.println("croots = " + croots);
+        //assertTrue("#croots == deg(cpol) ", croots.size() == cpol.degree(0));
+
+        // old version with recursion: but only one step
+        List<edu.jas.root.ComplexAlgebraicNumber<RealAlgebraicNumber<BigRational>>> coroots;
+        coroots = edu.jas.root.RootFactory.<RealAlgebraicNumber<BigRational>> complexAlgebraicNumbersComplex(cpol); 
+        System.out.println("coroots = " + coroots);
+        assertTrue("#coroots == deg(cpol) ", coroots.size() == cpol.degree(0));
+        for ( edu.jas.root.ComplexAlgebraicNumber<RealAlgebraicNumber<BigRational>> cr2 : coroots ) {
+            System.out.println("r2 = " + cr2.decimalMagnitude());
         }
     }
 
