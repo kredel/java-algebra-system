@@ -27,9 +27,10 @@ import edu.jas.root.RealRootTuple;
 
 
 /**
- * Complex algebraic number factory class based on bi-variate Ideal.
- * Objects of this class are immutable with the exception of the
- * isolating intervals.
+ * Complex algebraic number factory class based on bi-variate real
+ * algebraic numbers.  Objects of this class are immutable with the
+ * exception of the isolating intervals.
+ * Bivariate ideal implementation is in version 3614 2011-04-28 09:20:34Z.
  * @author Heinz Kredel
  */
 
@@ -40,13 +41,13 @@ implements RingFactory<RealAlgebraicNumber<C>> {
     /**
      * Representing univariate polynomials IdealWithUniv.
      */
-    public final IdealWithUniv<C> univs;
+    /*package*/ final IdealWithUniv<C> univs;
 
 
     /**
      * Representing ResidueRing.
      */
-    public final ResidueRing<C> algebraic;
+    /*package*/ final ResidueRing<C> algebraic;
 
 
     /**
@@ -173,7 +174,8 @@ implements RingFactory<RealAlgebraicNumber<C>> {
      * @param e epsilon.
      */
     public synchronized void setEps(BigRational e) {
-        this.eps = algebraic.ring.coFac.parse(e.toString());
+        edu.jas.root.RealAlgebraicRing<C> r = (edu.jas.root.RealAlgebraicRing<C>) realRing.algebraic.ring.coFac;
+        this.eps = r.algebraic.ring.coFac.parse(e.toString());
     }
 
 
@@ -183,7 +185,7 @@ implements RingFactory<RealAlgebraicNumber<C>> {
      * @see edu.jas.structure.ElemFactory#isFinite()
      */
     public boolean isFinite() {
-        return algebraic.isFinite();
+        return realRing.isFinite();
     }
 
 
@@ -202,7 +204,7 @@ implements RingFactory<RealAlgebraicNumber<C>> {
      * @return 0 as RealAlgebraicNumber.
      */
     public RealAlgebraicNumber<C> getZERO() {
-        return new RealAlgebraicNumber<C>(this, algebraic.getZERO());
+        return new RealAlgebraicNumber<C>(this, realRing.getZERO());
     }
 
 
@@ -211,7 +213,7 @@ implements RingFactory<RealAlgebraicNumber<C>> {
      * @return 1 as RealAlgebraicNumber.
      */
     public RealAlgebraicNumber<C> getONE() {
-        return new RealAlgebraicNumber<C>(this, algebraic.getONE());
+        return new RealAlgebraicNumber<C>(this, realRing.getONE());
     }
 
 
@@ -221,9 +223,9 @@ implements RingFactory<RealAlgebraicNumber<C>> {
      * @see edu.jas.structure.ElemFactory#generators()
      */
     public List<RealAlgebraicNumber<C>> generators() {
-        List<Residue<C>> agens = algebraic.generators();
+        List<edu.jas.root.RealAlgebraicNumber<edu.jas.root.RealAlgebraicNumber<C>>> agens = realRing.generators();
         List<RealAlgebraicNumber<C>> gens = new ArrayList<RealAlgebraicNumber<C>>(agens.size());
-        for (Residue<C> a : agens) {
+        for (edu.jas.root.RealAlgebraicNumber<edu.jas.root.RealAlgebraicNumber<C>> a : agens) {
             gens.add(getZERO().sum(a));
         }
         return gens;
@@ -235,7 +237,7 @@ implements RingFactory<RealAlgebraicNumber<C>> {
      * @return true if this ring is commutative, else false.
      */
     public boolean isCommutative() {
-        return algebraic.isCommutative();
+        return realRing.isCommutative();
     }
 
 
@@ -244,7 +246,7 @@ implements RingFactory<RealAlgebraicNumber<C>> {
      * @return true if this ring is associative, else false.
      */
     public boolean isAssociative() {
-        return algebraic.isAssociative();
+        return realRing.isAssociative();
     }
 
 
@@ -253,7 +255,7 @@ implements RingFactory<RealAlgebraicNumber<C>> {
      * @return true if algebraic is prime, else false.
      */
     public boolean isField() {
-        return algebraic.isField();
+        return realRing.isField();
     }
 
 
@@ -262,7 +264,7 @@ implements RingFactory<RealAlgebraicNumber<C>> {
      * @return characteristic of this ring.
      */
     public java.math.BigInteger characteristic() {
-        return algebraic.characteristic();
+        return realRing.characteristic();
     }
 
 
@@ -272,7 +274,7 @@ implements RingFactory<RealAlgebraicNumber<C>> {
      * @return a RealAlgebraicNumber.
      */
     public RealAlgebraicNumber<C> fromInteger(java.math.BigInteger a) {
-        return new RealAlgebraicNumber<C>(this, algebraic.fromInteger(a));
+        return new RealAlgebraicNumber<C>(this, realRing.fromInteger(a));
     }
 
 
@@ -282,7 +284,7 @@ implements RingFactory<RealAlgebraicNumber<C>> {
      * @return a RealAlgebraicNumber.
      */
     public RealAlgebraicNumber<C> fromInteger(long a) {
-        return new RealAlgebraicNumber<C>(this, algebraic.fromInteger(a));
+        return new RealAlgebraicNumber<C>(this, realRing.fromInteger(a));
     }
 
 
@@ -292,8 +294,8 @@ implements RingFactory<RealAlgebraicNumber<C>> {
      */
     @Override
     public String toString() {
-        return "RealAlgebraicRing[ " + algebraic.ideal.toString() + " in " + root + " | isField="
-                + algebraic.isField() + " :: " + algebraic.ring.toString() + " ]";
+        return "RealAlgebraicRing[ " + realRing.toString() + " in " + root + " | isField="
+                + realRing.isField() + " :: " + algebraic.ideal.toString() + " ]";
     }
 
 
@@ -305,9 +307,9 @@ implements RingFactory<RealAlgebraicNumber<C>> {
     //JAVA6only: @Override
     public String toScript() {
         // Python case
-        return "ComplexN( " + algebraic.ideal.toScript() + ", " + root.toScript()
-        //+ ", " + algebraic.isField() 
-                //+ ", " + algebraic.ring.toScript() 
+        return "RealRecN( " + realRing.toScript() + ", " + root.toScript()
+        //+ ", " + realRing.isField() 
+                //+ ", " + realRing.ring.toScript() 
                 + " )";
     }
 
@@ -331,7 +333,7 @@ implements RingFactory<RealAlgebraicNumber<C>> {
         if (a == null) {
             return false;
         }
-        return algebraic.equals(a.algebraic) && root.equals(a.root);
+        return realRing.equals(a.realRing) && root.equals(a.root);
     }
 
 
@@ -341,7 +343,7 @@ implements RingFactory<RealAlgebraicNumber<C>> {
      */
     @Override
     public int hashCode() {
-        return 37 * root.hashCode() + algebraic.hashCode();
+        return 37 * root.hashCode() + realRing.hashCode();
     }
 
 
@@ -351,7 +353,7 @@ implements RingFactory<RealAlgebraicNumber<C>> {
      * @return a random integer mod modul.
      */
     public RealAlgebraicNumber<C> random(int n) {
-        return new RealAlgebraicNumber<C>(this, algebraic.random(n));
+        return new RealAlgebraicNumber<C>(this, realRing.random(n));
     }
 
 
@@ -362,7 +364,7 @@ implements RingFactory<RealAlgebraicNumber<C>> {
      * @return a random integer mod modul.
      */
     public RealAlgebraicNumber<C> random(int n, Random rnd) {
-        return new RealAlgebraicNumber<C>(this, algebraic.random(n, rnd));
+        return new RealAlgebraicNumber<C>(this, realRing.random(n, rnd));
     }
 
 
@@ -372,7 +374,7 @@ implements RingFactory<RealAlgebraicNumber<C>> {
      * @return RealAlgebraicNumber from s.
      */
     public RealAlgebraicNumber<C> parse(String s) {
-        return new RealAlgebraicNumber<C>(this, algebraic.parse(s));
+        return new RealAlgebraicNumber<C>(this, realRing.parse(s));
     }
 
 
@@ -382,7 +384,7 @@ implements RingFactory<RealAlgebraicNumber<C>> {
      * @return next RealAlgebraicNumber from r.
      */
     public RealAlgebraicNumber<C> parse(Reader r) {
-        return new RealAlgebraicNumber<C>(this, algebraic.parse(r));
+        return new RealAlgebraicNumber<C>(this, realRing.parse(r));
     }
 
 }

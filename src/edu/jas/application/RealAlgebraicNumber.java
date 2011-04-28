@@ -30,8 +30,9 @@ import edu.jas.root.PolyUtilRoot;
 
 
 /**
- * Complex algebraic number class based on bi-variate Ideal member. Objects of this
- * class are immutable.
+ * Complex algebraic number class based on bi-variate real algebraic
+ * numbers. Objects of this class are immutable.
+ * Bivariate ideal implementation is in version 3614 2011-04-28 09:20:34Z.
  * @author Heinz Kredel
  */
 
@@ -39,16 +40,16 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
     implements GcdRingElem<RealAlgebraicNumber<C>>, Rational {
 
 
-    /**
-     * Representing Residue.
+    /*
+     * Representing Residue, unused.
      */
-    public final Residue<C> number;
+    private Residue<C> numberRes;
 
 
     /**
      * Representing recursive RealAlgebraicNumber.
      */
-    private edu.jas.root.RealAlgebraicNumber<edu.jas.root.RealAlgebraicNumber<C>> reNum = null;
+    public final edu.jas.root.RealAlgebraicNumber<edu.jas.root.RealAlgebraicNumber<C>> number;
 
 
     /**
@@ -62,7 +63,7 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
      * @param r ring RealAlgebraicRing<C>.
      */
     public RealAlgebraicNumber(RealAlgebraicRing<C> r) {
-        this(r, r.algebraic.getZERO());
+        this(r, r.realRing.getZERO());
     }
 
     /**
@@ -72,21 +73,21 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
      * @param a value GenPolynomial<C>.
      */
     public RealAlgebraicNumber(RealAlgebraicRing<C> r, GenPolynomial<C> a) {
-        this(r,new Residue<C>(r.algebraic, a));
+        this(r,r.realRing.parse(a.toString()));
     }
 
 
     /**
      * The constructor creates a RealAlgebraicNumber object from
-     * a Residue value.
+     * a recursive real algebraic value.
      * @param r ring RealAlgebraicRing<C>.
-     * @param a value Residue<C>.
+     * @param a recursive real algebraic number.
      */
-    public RealAlgebraicNumber(RealAlgebraicRing<C> r, Residue<C> a) {
+    public RealAlgebraicNumber(RealAlgebraicRing<C> r, edu.jas.root.RealAlgebraicNumber<edu.jas.root.RealAlgebraicNumber<C>> a) {
         number = a;
         ring = r;
-        reNum = ring.realRing.parse(number.val.toString()); // todo: convert
-        //System.out.println("reNum = " + reNum);
+        //number = ring.realRing.parse(number.val.toString()); // todo: convert
+        //System.out.println("number = " + number);
     }
 
 
@@ -214,7 +215,7 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
      * @param b AlgebraicNumber.
      * @return polynomial sign(this-b).
      */
-    public int compareTo(Residue<C> b) {
+    public int compareTo(edu.jas.root.RealAlgebraicNumber<edu.jas.root.RealAlgebraicNumber<C>> b) {
         int s = number.compareTo(b);
         //System.out.println("s_algeb = " + s);
         return s;
@@ -281,10 +282,10 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
 
     /**
      * RealAlgebraicNumber summation.
-     * @param c residue.
+     * @param c recursive real algebraic number.
      * @return this+c.
      */
-    public RealAlgebraicNumber<C> sum(Residue<C> c) {
+    public RealAlgebraicNumber<C> sum(edu.jas.root.RealAlgebraicNumber<edu.jas.root.RealAlgebraicNumber<C>> c) {
         return new RealAlgebraicNumber<C>(ring, number.sum(c));
     }
 
@@ -352,10 +353,10 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
 
     /**
      * RealAlgebraicNumber multiplication.
-     * @param c residue.
+     * @param c recursive real algebraic number.
      * @return this*c.
      */
-    public RealAlgebraicNumber<C> multiply(Residue<C> c) {
+    public RealAlgebraicNumber<C> multiply(edu.jas.root.RealAlgebraicNumber<edu.jas.root.RealAlgebraicNumber<C>> c) {
         return new RealAlgebraicNumber<C>(ring, number.multiply(c));
     }
 
@@ -386,7 +387,7 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
      */
     @SuppressWarnings("unchecked")
     public RealAlgebraicNumber<C>[] egcd(RealAlgebraicNumber<C> S) {
-        Residue<C>[] aret = number.egcd(S.number);
+        edu.jas.root.RealAlgebraicNumber<edu.jas.root.RealAlgebraicNumber<C>>[] aret = number.egcd(S.number);
         RealAlgebraicNumber<C>[] ret = new RealAlgebraicNumber[3];
         ret[0] = new RealAlgebraicNumber<C>(ring, aret[0]);
         ret[1] = new RealAlgebraicNumber<C>(ring, aret[1]);
@@ -401,12 +402,12 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
      * @return signum(this).
      */
     public int signum() {
-        if ( reNum == null ) { // no synchronization required
-            GenPolynomial<C> p = number.val;
-            reNum = ring.realRing.parse(p.toString()); // todo: convert
-            //System.out.println("reNum = " + reNum);
-	}
-        return reNum.signum();
+//         if ( number == null ) { // no synchronization required
+//             GenPolynomial<C> p = number.val;
+//             number = ring.realRing.parse(p.toString()); // todo: convert
+//             //System.out.println("number = " + number);
+// 	}
+        return number.signum();
     }
 
 
@@ -415,12 +416,12 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
      * @return |this| as rational number.
      */
     public BigRational magnitude() {
-        if ( reNum == null ) { // no synchronization required
-            GenPolynomial<C> p = number.val;
-            reNum = ring.realRing.parse(p.toString()); // todo: convert
-            //System.out.println("reNum = " + reNum);
-	}
-        return reNum.magnitude();
+//         if ( number == null ) { // no synchronization required
+//             GenPolynomial<C> p = number.val;
+//             number = ring.realRing.parse(p.toString()); // todo: convert
+//             //System.out.println("number = " + number);
+// 	}
+        return number.magnitude();
     }
 
 
