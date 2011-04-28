@@ -4,10 +4,9 @@
 
 package edu.jas.application;
 
+
 import java.util.Arrays;
 
-
-// import edu.jas.structure.RingElem;
 import edu.jas.arith.Rational;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.BigDecimal;
@@ -25,14 +24,12 @@ import edu.jas.structure.NotInvertibleException;
 import edu.jas.root.InvalidBoundaryException;
 import edu.jas.root.RealRootTuple;
 import edu.jas.root.PolyUtilRoot;
-//import edu.jas.root.RealAlgebraicNumber;
-//import edu.jas.root.RealAlgebraicRing;
 
 
 /**
  * Complex algebraic number class based on bi-variate real algebraic
  * numbers. Objects of this class are immutable.
- * Bivariate ideal implementation is in version 3614 2011-04-28 09:20:34Z.
+ * Bi-variate ideal implementation is in version 3614 2011-04-28 09:20:34Z.
  * @author Heinz Kredel
  */
 
@@ -426,7 +423,7 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
 
 
     /**
-     * RealAlgebraicNumber magnitude.
+     * RealAlgebraicNumber decimal magnitude.
      * @return |this| as big decimal.
      */
     public BigDecimal decimalMagnitude() {

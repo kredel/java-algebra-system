@@ -27,10 +27,10 @@ import edu.jas.root.RealRootTuple;
 
 
 /**
- * Complex algebraic number factory class based on bi-variate real
+ * Real algebraic number factory class based on bi-variate real
  * algebraic numbers.  Objects of this class are immutable with the
  * exception of the isolating intervals.
- * Bivariate ideal implementation is in version 3614 2011-04-28 09:20:34Z.
+ * Bi-variate ideal implementation is in version 3614 2011-04-28 09:20:34Z.
  * @author Heinz Kredel
  */
 
@@ -39,7 +39,7 @@ implements RingFactory<RealAlgebraicNumber<C>> {
 
 
     /**
-     * Representing univariate polynomials IdealWithUniv.
+     * Representing ideal with univariate polynomials IdealWithUniv.
      */
     /*package*/ final IdealWithUniv<C> univs;
 
@@ -104,14 +104,14 @@ implements RingFactory<RealAlgebraicNumber<C>> {
                ExtensionFieldBuilder.baseField(rfac1)
                    .realAlgebraicExtension(rfac2.algebraic.ring.getVars()[0],p0.toString(),rfac2.getRoot().toString())
                    .build(); 
-        System.out.println("realRing = " + realRing);
+        //System.out.println("realRing = " + realRing);
     }
 
 
     /**
      * The constructor creates a RealAlgebraicNumber factory object from a
-     * GenPolynomial objects module.
-     * @param m module GenPolynomial&lt;C&gt;.
+     * IdealWithUniv and a root tuple.
+     * @param m module IdealWithUniv&lt;C&gt;.
      * @param root isolating rectangle for a complex root.
      */
     public RealAlgebraicRing(IdealWithUniv<C> m, RealRootTuple<C> root) {
@@ -121,10 +121,10 @@ implements RingFactory<RealAlgebraicNumber<C>> {
 
     /**
      * The constructor creates a RealAlgebraicNumber factory object from a
-     * GenPolynomial objects module.
-     * @param m module GenPolynomial&lt;C&gt;.
+     * IdealWithUniv and a root tuple.
+     * @param m module IdealWithUniv&lt;C&gt;.
      * @param root isolating rectangle for a complex root.
-     * @param isField indicator if m is prime.
+     * @param isField indicator if m is maximal.
      */
     public RealAlgebraicRing(IdealWithUniv<C> m, RealRootTuple<C> root, boolean isField) {
         this(m,new ResidueRing<C>(m.ideal,isField),root);
@@ -343,7 +343,7 @@ implements RingFactory<RealAlgebraicNumber<C>> {
      */
     @Override
     public int hashCode() {
-        return 37 * root.hashCode() + realRing.hashCode();
+        return 37 * realRing.hashCode() + root.hashCode();
     }
 
 

@@ -192,15 +192,18 @@ public class ComplexRootTest extends TestCase {
         Complex<RealAlgebraicNumber<BigRational>> root = roots.get(1);
         System.out.println("a = " + a);
         System.out.println("root = " + root.getRe().decimalMagnitude() + " + " + root.getIm().decimalMagnitude() + " i");
+        System.out.println("root = " + root.getRe() + " + " + root.getIm() + " i");
 
         GenPolynomialRing<Complex<RealAlgebraicNumber<BigRational>>> cring 
-	    = new GenPolynomialRing<Complex<RealAlgebraicNumber<BigRational>>>(root.ring,1);
+            = new GenPolynomialRing<Complex<RealAlgebraicNumber<BigRational>>>(root.ring,1);
 
         GenPolynomial<Complex<RealAlgebraicNumber<BigRational>>> cpol;
         cpol = cring.random(3);
         //cpol = cring.univariate(0,3L).subtract(cring.fromInteger(2L));
-        cpol = cring.univariate(0,3L).subtract(cring.parse( root.getRe().toString() + "^2 + " + root.getIm().toString() ));
-        //cpol = cring.univariate(0,1L).subtract(cring.parse( "x3^2 + x4" ));
+        String val = root.getRe().toString() + " + " + root.getIm().toString();
+        val = val.replace("{","");
+        val = val.replace("}","");
+        //cpol = cring.univariate(0,3L).subtract(cring.parse( val ));
         System.out.println("cpol = " + cpol);
 
         ComplexRoots<RealAlgebraicNumber<BigRational>> crs 
@@ -221,15 +224,16 @@ public class ComplexRootTest extends TestCase {
         //System.out.println("croots = " + croots);
         //assertTrue("#croots == deg(cpol) ", croots.size() == cpol.degree(0));
 
-        // old version with recursion: but only one step
+        // old version with winding number and recursion: but only one step
         List<edu.jas.root.ComplexAlgebraicNumber<RealAlgebraicNumber<BigRational>>> coroots;
         coroots = edu.jas.root.RootFactory.<RealAlgebraicNumber<BigRational>> complexAlgebraicNumbersComplex(cpol); 
         System.out.println("cpol = " + cpol);
         System.out.println("coroots = " + coroots);
         assertTrue("#coroots == deg(cpol) ", coroots.size() == cpol.degree(0));
         for ( edu.jas.root.ComplexAlgebraicNumber<RealAlgebraicNumber<BigRational>> cr2 : coroots ) {
-            System.out.println("r2 = " + cr2.ring); //magnitude());
-            //System.out.println("r2 = " + cr2.decimalMagnitude());
+            System.out.println("r2.ring = " + cr2.ring); //magnitude());
+            //System.out.println("r2.mag  = " + cr2.magnitude());
+            //System.out.println("r2.dec  = " + cr2.decimalMagnitude());
         }
     }
 
