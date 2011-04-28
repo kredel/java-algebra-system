@@ -165,9 +165,12 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
      */
     @SuppressWarnings("unchecked")
     public List<Rectangle<C>> complexRoots(GenPolynomial<Complex<C>> a) {
+        List<Rectangle<C>> roots = new ArrayList<Rectangle<C>>();
+        if ( a.isConstant() || a.isZERO() ) {
+            return roots;
+        }
         ComplexRing<C> cr = (ComplexRing<C>) a.ring.coFac;
         SortedMap<GenPolynomial<Complex<C>>, Long> sa = engine.squarefreeFactors(a);
-        List<Rectangle<C>> roots = new ArrayList<Rectangle<C>>();
         for (GenPolynomial<Complex<C>> p : sa.keySet()) {
             Complex<C> Mb = rootBound(p);
             C M = Mb.getRe();
@@ -189,6 +192,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                     roots.addAll(rs);
                 }
             } catch (InvalidBoundaryException e) {
+                //logger.error("invalid boundary for p = " + p);
                 throw new RuntimeException("this should never happen " + e);
             }
         }
@@ -362,7 +366,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
     public abstract Rectangle<C> invariantRectangle(Rectangle<C> rect, 
                                            GenPolynomial<Complex<C>> f, 
                                            GenPolynomial<Complex<C>> g) 
-	throws InvalidBoundaryException;
+        throws InvalidBoundaryException;
 
 
     /**
@@ -668,7 +672,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
         //System.out.println("vlen = " + vlen);
         while (B.multiply(vlen).compareTo(eps) >= 0) { // TODO: test squared
             len = len.multiply(half);
-	    v = complexRootRefinement(v,f,len);
+            v = complexRootRefinement(v,f,len);
             //System.out.println("v = " + v);
             vlen = v.length();
             vlen = vlen.multiply(vlen);

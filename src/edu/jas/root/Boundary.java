@@ -67,10 +67,13 @@ public class Boundary<C extends RingElem<C> & Rational> {
     /**
      * Constructor.
      * @param r rectangle of of corners.
-     * @param p polynomial.
+     * @param p non constant polynomial.
      */
     @SuppressWarnings("unchecked")
     public Boundary(Rectangle<C> r, GenPolynomial<Complex<C>> p) throws InvalidBoundaryException {
+        if ( p.isConstant() || p.isZERO() ) {
+            throw new InvalidBoundaryException("p is constant or 0 " + p);
+        }
         rect = r;
         A = p;
         ufd = GCDFactory.<Complex<C>> getImplementation(A.ring.coFac);
@@ -88,7 +91,7 @@ public class Boundary<C extends RingElem<C> & Rational> {
                 //System.out.println("A = " + A);
                 //System.out.println("PC["+i+"] = " + pc);
                 //System.out.println("gcd = " + gcd);
-                throw new InvalidBoundaryException("A has a zero on rectangle " + rect);
+                throw new InvalidBoundaryException("A has a zero on rectangle " + rect + ", A = " + A);
             }
             polys[i] = pc;
         }
@@ -107,7 +110,6 @@ public class Boundary<C extends RingElem<C> & Rational> {
      * @param p polynomial.
      * @param b boundary polynomials.
      */
-    //@SuppressWarnings("unchecked")
     protected Boundary(Rectangle<C> r, GenPolynomial<Complex<C>> p, GenPolynomial<Complex<C>>[] b) {
         rect = r;
         A = p;

@@ -189,8 +189,10 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
     public List<Rectangle<C>> complexRoots(Rectangle<C> rect, GenPolynomial<Complex<C>> a)
             throws InvalidBoundaryException {
         ComplexRing<C> cr = (ComplexRing<C>) a.ring.coFac;
-
         List<Rectangle<C>> roots = new ArrayList<Rectangle<C>>();
+        if ( a.isConstant() || a.isZERO() ) {
+            return roots;
+        }
         //System.out.println("rect = " + rect); 
         long n = windingNumber(rect, a);
         if (n < 0) { // can this happen?
@@ -235,7 +237,7 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
                 if ( roots.size() == a.degree(0) ) {
                     work = false;
                     break;
-		}
+                }
 
                 cp = (Complex<C>[]) copyOfComplex(rect.corners, 4);
                 cp[0] = new Complex<C>(cr, cp[0].getRe(), center.getIm());
@@ -250,7 +252,7 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
                 if ( roots.size() == a.degree(0) ) {
                     work = false;
                     break;
-		}
+                }
 
                 cp = (Complex<C>[]) copyOfComplex(rect.corners, 4);
                 cp[0] = center;
@@ -265,7 +267,7 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
                 if ( roots.size() == a.degree(0) ) {
                     work = false;
                     break;
-		}
+                }
 
                 cp = (Complex<C>[]) copyOfComplex(rect.corners, 4);
                 cp[0] = new Complex<C>(cr, center.getRe(), cp[0].getIm());
@@ -332,7 +334,7 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
                     throw new RuntimeException("no convergence " + v);
                 }
                 //break; // no convergence
-	    }
+            }
         }
         //return v;
     }

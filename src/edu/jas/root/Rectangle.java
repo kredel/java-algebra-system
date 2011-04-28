@@ -89,7 +89,8 @@ public class Rectangle<C extends RingElem<C> & Rational > {
      */
     @Override
     public String toString() {
-        return "[" + corners[0] + ", " + corners[1] + ", " + corners[2] + ", " + corners[3] + "]";
+        //return "[" + corners[0] + ", " + corners[1] + ", " + corners[2] + ", " + corners[3] + "]";
+        return "[" + corners[1] + ", " + corners[3] + "]";
         //return centerApprox() + " = [" + corners[0] + ", " + corners[1] + ", " + corners[2] + ", " + corners[3] + "]";
     }
 
@@ -100,7 +101,8 @@ public class Rectangle<C extends RingElem<C> & Rational > {
      */
     public String toScript() {
         // Python case
-        return "(" + corners[0] + ", " + corners[1] + ", " + corners[2] + ", " + corners[3] + ")";
+        //return "(" + corners[0] + ", " + corners[1] + ", " + corners[2] + ", " + corners[3] + ")";
+        return "(" + corners[1] + ", " + corners[3] + ")";
     }
 
 
@@ -199,7 +201,7 @@ public class Rectangle<C extends RingElem<C> & Rational > {
      */
     public boolean contains(Complex<C> c) {
         Complex<C> ll = getSW();
-        Complex<C> ur = getSW();
+        Complex<C> ur = getNE(); // ?? Fix ?? getSW();
         return c.getRe().compareTo(ll.getRe()) < 0 ||
                c.getIm().compareTo(ll.getIm()) < 0 || 
                c.getRe().compareTo(ur.getRe()) > 0 || 
