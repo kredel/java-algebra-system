@@ -58,36 +58,35 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
 
 
     /**
-     * The constructor creates a ComplexResidue object from
-     * RealAlgebraicRing modul and a GenPolynomial value.
+     * The constructor creates a zero RealAlgebraicNumber. 
+     * @param r ring RealAlgebraicRing<C>.
+     */
+    public RealAlgebraicNumber(RealAlgebraicRing<C> r) {
+        this(r, r.algebraic.getZERO());
+    }
+
+    /**
+     * The constructor creates a RealAlgebraicNumber object from
+     * a GenPolynomial value.
      * @param r ring RealAlgebraicRing<C>.
      * @param a value GenPolynomial<C>.
      */
     public RealAlgebraicNumber(RealAlgebraicRing<C> r, GenPolynomial<C> a) {
-        number = new Residue<C>(r.algebraic, a);
-        ring = r;
+        this(r,new Residue<C>(r.algebraic, a));
     }
 
 
     /**
      * The constructor creates a RealAlgebraicNumber object from
-     * RealAlgebraicRing modul and a Residue value.
+     * a Residue value.
      * @param r ring RealAlgebraicRing<C>.
      * @param a value Residue<C>.
      */
     public RealAlgebraicNumber(RealAlgebraicRing<C> r, Residue<C> a) {
         number = a;
         ring = r;
-    }
-
-
-    /**
-     * The constructor creates a RealAlgebraicNumber object from a
-     * GenPolynomial object module.
-     * @param r ring RealAlgebraicRing<C>.
-     */
-    public RealAlgebraicNumber(RealAlgebraicRing<C> r) {
-        this(r, r.algebraic.getZERO());
+        reNum = ring.realRing.parse(number.val.toString()); // todo: convert
+        //System.out.println("reNum = " + reNum);
     }
 
 
@@ -116,6 +115,7 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
      * @return a BigRational approximation of this.
      * @see edu.jas.arith.Rational#getRational()
      */
+    //JAVA6only: @Override
     public BigRational getRational() {
         return magnitude();
     }
@@ -403,7 +403,7 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
     public int signum() {
         if ( reNum == null ) { // no synchronization required
             GenPolynomial<C> p = number.val;
-            reNum = ring.rere.parse(p.toString()); // todo: convert
+            reNum = ring.realRing.parse(p.toString()); // todo: convert
             //System.out.println("reNum = " + reNum);
 	}
         return reNum.signum();
@@ -417,7 +417,7 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
     public BigRational magnitude() {
         if ( reNum == null ) { // no synchronization required
             GenPolynomial<C> p = number.val;
-            reNum = ring.rere.parse(p.toString()); // todo: convert
+            reNum = ring.realRing.parse(p.toString()); // todo: convert
             //System.out.println("reNum = " + reNum);
 	}
         return reNum.magnitude();

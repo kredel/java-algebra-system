@@ -57,9 +57,9 @@ implements RingFactory<RealAlgebraicNumber<C>> {
 
 
     /**
-     * Recursive real root.
+     * Recursive real root ring.
      */
-    public final edu.jas.root.RealAlgebraicRing<edu.jas.root.RealAlgebraicNumber<C>> rere;
+    public final edu.jas.root.RealAlgebraicRing<edu.jas.root.RealAlgebraicNumber<C>> realRing;
 
 
     /**
@@ -99,11 +99,11 @@ implements RingFactory<RealAlgebraicNumber<C>> {
             throw new RuntimeException("no polynomial found in " + (0) + " of  " + univs.ideal);
         }
         //System.out.println("p0 = " + p0);
-        rere = (edu.jas.root.RealAlgebraicRing<edu.jas.root.RealAlgebraicNumber<C>>) 
+        realRing = (edu.jas.root.RealAlgebraicRing<edu.jas.root.RealAlgebraicNumber<C>>) 
                ExtensionFieldBuilder.baseField(rfac1)
                    .realAlgebraicExtension(rfac2.algebraic.ring.getVars()[0],p0.toString(),rfac2.getRoot().toString())
                    .build(); 
-        //System.out.println("rere = " + rere);
+        System.out.println("realRing = " + realRing);
     }
 
 
@@ -128,13 +128,6 @@ implements RingFactory<RealAlgebraicNumber<C>> {
     public RealAlgebraicRing(IdealWithUniv<C> m, RealRootTuple<C> root, boolean isField) {
         this(m,new ResidueRing<C>(m.ideal,isField),root);
     }
-
-
-    /*
-     * Get the module part.
-     * @return modul. public GenPolynomial<C> getModul() { return
-     *         algebraic.ideal; }
-     */
 
 
     /**
@@ -219,17 +212,6 @@ implements RingFactory<RealAlgebraicNumber<C>> {
      */
     public RealAlgebraicNumber<C> getONE() {
         return new RealAlgebraicNumber<C>(this, algebraic.getONE());
-    }
-
-
-    /**
-     * Get the i element.
-     * @return i as RealAlgebraicNumber.
-     */
-    public RealAlgebraicNumber<C> getIMAG() {
-        //ComplexRing<C> cr = (ComplexRing<C>) algebraic.ring.coFac;
-        //Complex<C> I = cr.getIMAG(); 
-        return new RealAlgebraicNumber<C>(this, algebraic.getZERO());
     }
 
 
