@@ -100,9 +100,16 @@ implements RingFactory<RealAlgebraicNumber<C>> {
             throw new RuntimeException("no polynomial found in " + (0) + " of  " + univs.ideal);
         }
         //System.out.println("p0 = " + p0);
+        //System.out.println("realRing, var = " + rfac2.algebraic.ring.getVars()[0]);
+        //System.out.println("realRing, pol = " + p0.toString());
+        //System.out.println("realRing, iv  = " + rfac2.getRoot().toString());
+        String ival = rfac2.getRoot().toString();
+        ival = ival.replace("{","");
+        ival = ival.replace("}","");
+        //System.out.println("realRing, val = " + ival);
         realRing = (edu.jas.root.RealAlgebraicRing<edu.jas.root.RealAlgebraicNumber<C>>) 
                ExtensionFieldBuilder.baseField(rfac1)
-                   .realAlgebraicExtension(rfac2.algebraic.ring.getVars()[0],p0.toString(),rfac2.getRoot().toString())
+                   .realAlgebraicExtension(rfac2.algebraic.ring.getVars()[0],p0.toString(),ival)
                    .build(); 
         //System.out.println("realRing = " + realRing);
     }

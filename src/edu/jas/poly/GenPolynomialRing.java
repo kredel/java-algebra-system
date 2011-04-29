@@ -604,7 +604,8 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
      * @return GenPolynomial from s.
      */
     public GenPolynomial<C> parse(String s) {
-        return parse(new StringReader(s));
+        String val = s.replace("{","").replace("}","");
+        return parse(new StringReader(val));
     }
 
 
