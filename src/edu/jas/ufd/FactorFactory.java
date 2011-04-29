@@ -8,6 +8,7 @@ package edu.jas.ufd;
 import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigInteger;
+import edu.jas.arith.Rational;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
@@ -20,6 +21,10 @@ import edu.jas.poly.ComplexRing;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.root.RealAlgebraicNumber;
+import edu.jas.root.RealAlgebraicRing;
+//import edu.jas.application.RealAlgebraicNumber;
+//import edu.jas.application.RealAlgebraicRing;
 
 
 /**
@@ -125,6 +130,32 @@ public class FactorFactory {
 
     /**
      * Determine suitable implementation of factorization algorithms, case
+     * RealAlgebraicNumber&lt;C&gt;.
+     * @param fac RealAlgebraicRing&lt;C&gt;.
+     * @param <C> coefficient type, e.g. BigRational.
+     * @return factorization algorithm implementation.
+     */
+    public static <C extends GcdRingElem<C> & Rational> FactorAbstract<RealAlgebraicNumber<C>> getImplementation(
+            RealAlgebraicRing<C> fac) {
+        return new FactorRealAlgebraic<C>(fac);
+    }
+
+
+    /**
+     * Determine suitable implementation of factorization algorithms, case
+     * RealAlgebraicNumber&lt;C&gt;.
+     * @param fac RealAlgebraicRing&lt;C&gt;.
+     * @param <C> coefficient type, e.g. BigRational.
+     * @return factorization algorithm implementation.
+     */
+    public static <C extends GcdRingElem<C> & Rational> FactorAbstract<edu.jas.application.RealAlgebraicNumber<C>> getImplementation(
+            edu.jas.application.RealAlgebraicRing<C> fac) {
+        return new FactorRealReal<C>(fac);
+    }
+
+
+    /**
+     * Determine suitable implementation of factorization algorithms, case
      * Complex&lt;C&gt;.
      * @param fac ComplexRing&lt;C&gt;.
      * @param <C> coefficient type, e.g. BigRational, ModInteger.
@@ -173,6 +204,8 @@ public class FactorFactory {
         int t = 0;
         FactorAbstract/*raw type<C>*/ufd = null;
         AlgebraicNumberRing afac = null;
+        RealAlgebraicRing rfac = null;
+        edu.jas.application.RealAlgebraicRing rrfac = null;
         QuotientRing qfac = null;
         GenPolynomialRing pfac = null;
         while (true) { // switch
@@ -204,6 +237,20 @@ public class FactorFactory {
                 t = 4;
                 break;
             }
+            if (ofac instanceof RealAlgebraicRing) {
+                System.out.println("rfac_o = " + ofac);
+                rfac = (RealAlgebraicRing) ofac;
+                ofac = rfac.algebraic;
+                t = 5;
+                break;
+            }
+            if (ofac instanceof edu.jas.application.RealAlgebraicRing) {
+                System.out.println("rrfac_o = " + ofac);
+                rrfac = (edu.jas.application.RealAlgebraicRing) ofac;
+                ofac = rrfac.realRing;
+                t = 6;
+                break;
+            }
             if (ofac instanceof QuotientRing) {
                 //System.out.println("qfac_o = " + ofac);
                 qfac = (QuotientRing) ofac;
@@ -218,7 +265,7 @@ public class FactorFactory {
             }
             break;
         }
-        //System.out.println("ft = " + t);
+        System.out.println("ft = " + t);
         if (t == 0) {
             throw new IllegalArgumentException("no factorization implementation for "
                     + fac.getClass().getName());
@@ -241,13 +288,19 @@ public class FactorFactory {
         if (t == 4) {
             ufd = new FactorAlgebraic/*raw <C>*/(afac);
         }
+        if (t == 5) {
+            ufd = new FactorRealAlgebraic/*raw <C>*/(rfac);
+        }
+        if (t == 6) {
+            ufd = new FactorRealReal/*raw <C>*/(rrfac);
+        }
         if (t == 7) {
             ufd = new FactorQuotient/*raw <C>*/(qfac);
         }
         if (t == 8) {
             ufd = getImplementation(pfac.coFac);
         }
-        logger.debug("ufd = " + ufd);
+        logger.info("ufd = " + ufd);
         return (FactorAbstract<C>) ufd;
     }
 
