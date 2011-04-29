@@ -96,8 +96,10 @@ public class RootFactory {
                     RealAlgebraicRing<C> car = new RealAlgebraicRing<C>(idu,root);
                     //System.out.println("car = " + car);
                     List<RealAlgebraicNumber<C>> gens = car.generators();
+                    //System.out.println("gens = " + gens);
+                    int sg = gens.size();
                     ComplexRing<RealAlgebraicNumber<C>> cring = new ComplexRing<RealAlgebraicNumber<C>>(car);
-                    Complex<RealAlgebraicNumber<C>> crn = new Complex<RealAlgebraicNumber<C>>(cring,gens.get(1),gens.get(2));
+                    Complex<RealAlgebraicNumber<C>> crn = new Complex<RealAlgebraicNumber<C>>(cring,gens.get(sg-2),gens.get(sg-1));
                     //System.out.println("crn = " + crn);
                     list.add(crn);
                 }

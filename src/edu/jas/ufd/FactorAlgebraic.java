@@ -118,7 +118,7 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
                 continue;
             }
             sqf = factorCoeff.isSquarefree(res);
-            //System.out.println("sqf("+ks+") = " + res.degree());
+            System.out.println("sqf("+ks+") = " + res.degree());
             //System.out.println("resfact = " + factorCoeff.baseFactors(res) + "\n");
         }
         // if Res is now squarefree, else must take radical factorization
