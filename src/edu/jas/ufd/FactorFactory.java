@@ -238,14 +238,14 @@ public class FactorFactory {
                 break;
             }
             if (ofac instanceof RealAlgebraicRing) {
-                System.out.println("rfac_o = " + ofac);
+                //System.out.println("rfac_o = " + ofac);
                 rfac = (RealAlgebraicRing) ofac;
                 ofac = rfac.algebraic;
                 t = 5;
                 break;
             }
             if (ofac instanceof edu.jas.application.RealAlgebraicRing) {
-                System.out.println("rrfac_o = " + ofac);
+                //System.out.println("rrfac_o = " + ofac);
                 rrfac = (edu.jas.application.RealAlgebraicRing) ofac;
                 ofac = rrfac.realRing;
                 t = 6;
@@ -265,7 +265,7 @@ public class FactorFactory {
             }
             break;
         }
-        System.out.println("ft = " + t);
+        //System.out.println("ft = " + t);
         if (t == 0) {
             throw new IllegalArgumentException("no factorization implementation for "
                     + fac.getClass().getName());
