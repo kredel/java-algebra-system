@@ -1037,6 +1037,34 @@ public class PolyUtilApp<C extends RingElem<C>> {
                 new CoeffRecConvertAlg<C>(cfac, A, B));
     }
 
+
+    /**
+     * Convert to RealAlgebraicNumber coefficients. Represent as polynomial with
+     * RealAlgebraicNumber<C> coefficients from package <pre>edu.jas.root</pre>.
+     * @param afac result polynomial factory.
+     * @param A polynomial with RealAlgebraicNumber&lt;C&gt; coefficients to be converted.
+     * @return polynomial with RealAlgebraicNumber&lt;C&gt; coefficients.
+     */
+    public static <C extends GcdRingElem<C> & Rational> GenPolynomial<edu.jas.root.RealAlgebraicNumber<C>> realAlgFromRealCoefficients(
+                    GenPolynomialRing<edu.jas.root.RealAlgebraicNumber<C>> afac, GenPolynomial<edu.jas.application.RealAlgebraicNumber<C>> A) {
+        edu.jas.root.RealAlgebraicRing<C> cfac = (edu.jas.root.RealAlgebraicRing<C>) afac.coFac;
+        return PolyUtil.<edu.jas.application.RealAlgebraicNumber<C>, edu.jas.root.RealAlgebraicNumber<C>> map(afac, A, new ReAlgFromRealCoeff<C>(cfac));
+    }
+
+
+    /**
+     * Convert to RealAlgebraicNumber coefficients. Represent as polynomial with
+     * RealAlgebraicNumber<C> coefficients from package <pre>edu.jas.application</pre>.
+     * @param rfac result polynomial factory.
+     * @param A polynomial with RealAlgebraicNumber&lt;C&gt; coefficients to be converted.
+     * @return polynomial with RealAlgebraicNumber&lt;C&gt; coefficients.
+     */
+    public static <C extends GcdRingElem<C> & Rational> GenPolynomial<edu.jas.application.RealAlgebraicNumber<C>> realFromRealAlgCoefficients(
+                    GenPolynomialRing<edu.jas.application.RealAlgebraicNumber<C>> rfac, GenPolynomial<edu.jas.root.RealAlgebraicNumber<C>> A) {
+        edu.jas.application.RealAlgebraicRing<C> cfac = (edu.jas.application.RealAlgebraicRing<C>) rfac.coFac;
+        return PolyUtil.<edu.jas.root.RealAlgebraicNumber<C>, edu.jas.application.RealAlgebraicNumber<C>> map(rfac, A, new RealFromReAlgCoeff<C>(cfac));
+    }
+
 }
 
 
@@ -1103,6 +1131,62 @@ class CoeffRecConvertAlg<C extends GcdRingElem<C>> implements
             return afac.getZERO();
         } else {
             return PolyUtilApp.<C> convertToPrimitiveElem(afac, A, B, c);
+        }
+    }
+}
+
+
+/**
+ * Coefficient to real algebriac from real algebraic functor.
+ */
+class ReAlgFromRealCoeff<C extends GcdRingElem<C> & Rational> implements UnaryFunctor<edu.jas.application.RealAlgebraicNumber<C>, edu.jas.root.RealAlgebraicNumber<C>> {
+
+
+    final protected edu.jas.root.RealAlgebraicRing<C> afac;
+
+
+    public ReAlgFromRealCoeff(edu.jas.root.RealAlgebraicRing<C> fac) {
+        if (fac == null) {
+            throw new IllegalArgumentException("fac must not be null");
+        }
+        afac = fac;
+    }
+
+
+    public edu.jas.root.RealAlgebraicNumber<C> eval(edu.jas.application.RealAlgebraicNumber<C> c) {
+        if (c == null) {
+            return afac.getZERO();
+        } else {
+            return (edu.jas.root.RealAlgebraicNumber<C>) (Object) c.number; // force ignore recursion
+        }
+    }
+}
+
+
+/**
+ * Coefficient to real algebriac from algebraic functor.
+ */
+class RealFromReAlgCoeff<C extends GcdRingElem<C> & Rational> implements UnaryFunctor<edu.jas.root.RealAlgebraicNumber<C>, edu.jas.application.RealAlgebraicNumber<C>> {
+
+
+    final protected edu.jas.application.RealAlgebraicRing<C> rfac;
+
+
+    public RealFromReAlgCoeff(edu.jas.application.RealAlgebraicRing<C> fac) {
+        if (fac == null) {
+            throw new IllegalArgumentException("fac must not be null");
+        }
+        rfac = fac;
+    }
+
+
+    public edu.jas.application.RealAlgebraicNumber<C> eval(edu.jas.root.RealAlgebraicNumber<C> c) {
+        if (c == null) {
+            return rfac.getZERO();
+        } else {
+            edu.jas.root.RealAlgebraicNumber<edu.jas.root.RealAlgebraicNumber<C>> rrc 
+               = (edu.jas.root.RealAlgebraicNumber<edu.jas.root.RealAlgebraicNumber<C>>) (Object) c; // force resurrect recursion
+            return new edu.jas.application.RealAlgebraicNumber<C>(rfac, rrc); 
         }
     }
 }
