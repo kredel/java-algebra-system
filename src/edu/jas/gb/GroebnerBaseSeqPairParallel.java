@@ -7,6 +7,7 @@ package edu.jas.gb;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Collections;
 import java.util.concurrent.Semaphore;
 
 import org.apache.log4j.Logger;
@@ -244,6 +245,7 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>>
         if ( G.size() <= 1 ) {
             return G;
         }
+        Collections.reverse(G); // important for lex GB
 
         MiReducerSeqPair<C>[] mirs = (MiReducerSeqPair<C>[]) new MiReducerSeqPair[ G.size() ];
         int i = 0;

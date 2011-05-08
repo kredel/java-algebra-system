@@ -8,6 +8,7 @@ package edu.jas.gbufd;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Collections;
 
 import org.apache.log4j.Logger;
 
@@ -232,6 +233,7 @@ public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
         if (G.size() <= 1) {
             return G;
         }
+        Collections.reverse(G); // important for lex GB
         // reduce remaining polynomials
         int len = G.size();
         int i = 0;

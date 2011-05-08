@@ -7,6 +7,7 @@ package edu.jas.application;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 import org.apache.log4j.Logger;
 
@@ -639,6 +640,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         if (G.size() <= 1) {
             return new ColoredSystem<C>(cs.condition, G, cs.pairlist);
         }
+        Collections.reverse(G); // important for lex GB
         // reduce remaining polynomials
         int len = G.size();
         int i = 0;

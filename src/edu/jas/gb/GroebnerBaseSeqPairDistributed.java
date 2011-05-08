@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Collections;
 import java.util.concurrent.Semaphore;
 
 import org.apache.log4j.Logger;
@@ -353,6 +354,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
         if (G.size() <= 1) {
             return G;
         }
+        Collections.reverse(G); // important for lex GB
 
         MiReducerServerSeqPair<C>[] mirs = (MiReducerServerSeqPair<C>[]) new MiReducerServerSeqPair[G.size()];
         int i = 0;

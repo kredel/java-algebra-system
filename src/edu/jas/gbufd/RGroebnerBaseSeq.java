@@ -7,6 +7,7 @@ package edu.jas.gbufd;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 import org.apache.log4j.Logger;
 
@@ -277,6 +278,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>> extends
         if (G.size() <= 1) {
             // wg monic return G;
         }
+        Collections.reverse(G); // important for lex GB
         // reduce remaining polynomials
         int len = G.size();
         int el = 0;
