@@ -5,36 +5,24 @@
 package edu.jas.application;
 
 
-import java.util.Arrays;
-
-import edu.jas.arith.Rational;
-import edu.jas.arith.BigRational;
 import edu.jas.arith.BigDecimal;
+import edu.jas.arith.BigRational;
+import edu.jas.arith.Rational;
 import edu.jas.kern.PrettyPrint;
-import edu.jas.poly.AlgebraicNumber;
-import edu.jas.poly.Complex;
-import edu.jas.poly.ComplexRing;
 import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.PolyUtil;
-import edu.jas.poly.ExpVector;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingFactory;
 import edu.jas.structure.NotInvertibleException;
-import edu.jas.root.InvalidBoundaryException;
-import edu.jas.root.RealRootTuple;
-import edu.jas.root.PolyUtilRoot;
 
 
 /**
- * Complex algebraic number class based on bi-variate real algebraic
- * numbers. Objects of this class are immutable.
- * Bi-variate ideal implementation is in version 3614 2011-04-28 09:20:34Z.
+ * Complex algebraic number class based on bi-variate real algebraic numbers.
+ * Objects of this class are immutable. Bi-variate ideal implementation is in
+ * version 3614 2011-04-28 09:20:34Z.
  * @author Heinz Kredel
  */
 
-public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
-    implements GcdRingElem<RealAlgebraicNumber<C>>, Rational {
+public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational> implements
+                GcdRingElem<RealAlgebraicNumber<C>>, Rational {
 
 
     /*
@@ -56,31 +44,33 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
 
 
     /**
-     * The constructor creates a zero RealAlgebraicNumber. 
+     * The constructor creates a zero RealAlgebraicNumber.
      * @param r ring RealAlgebraicRing<C>.
      */
     public RealAlgebraicNumber(RealAlgebraicRing<C> r) {
         this(r, r.realRing.getZERO());
     }
 
+
     /**
-     * The constructor creates a RealAlgebraicNumber object from
-     * a GenPolynomial value.
+     * The constructor creates a RealAlgebraicNumber object from a GenPolynomial
+     * value.
      * @param r ring RealAlgebraicRing<C>.
      * @param a value GenPolynomial<C>.
      */
     public RealAlgebraicNumber(RealAlgebraicRing<C> r, GenPolynomial<C> a) {
-        this(r,r.realRing.parse(a.toString()));
+        this(r, r.realRing.parse(a.toString()));
     }
 
 
     /**
-     * The constructor creates a RealAlgebraicNumber object from
-     * a recursive real algebraic value.
+     * The constructor creates a RealAlgebraicNumber object from a recursive
+     * real algebraic value.
      * @param r ring RealAlgebraicRing<C>.
      * @param a recursive real algebraic number.
      */
-    public RealAlgebraicNumber(RealAlgebraicRing<C> r, edu.jas.root.RealAlgebraicNumber<edu.jas.root.RealAlgebraicNumber<C>> a) {
+    public RealAlgebraicNumber(RealAlgebraicRing<C> r,
+                    edu.jas.root.RealAlgebraicNumber<edu.jas.root.RealAlgebraicNumber<C>> a) {
         number = a;
         ring = r;
         //number = ring.realRing.parse(number.val.toString()); // todo: convert
@@ -194,8 +184,8 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
     //JAVA6only: @Override
     public int compareTo(RealAlgebraicNumber<C> b) {
         int s = 0;
-        if (number.ring != b.number.ring) { 
-            s = ( number.ring.equals(b.number.ring) ? 0 : 1 );
+        if (number.ring != b.number.ring) {
+            s = (number.ring.equals(b.number.ring) ? 0 : 1);
             System.out.println("s_mod = " + s);
         }
         if (s != 0) {
@@ -247,7 +237,7 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
     /**
      * Hash code for this RealAlgebraicNumber.
      * @see java.lang.Object#hashCode()
-     */ 
+     */
     @Override
     public int hashCode() {
         return 37 * number.hashCode() + ring.hashCode();
@@ -353,7 +343,8 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
      * @param c recursive real algebraic number.
      * @return this*c.
      */
-    public RealAlgebraicNumber<C> multiply(edu.jas.root.RealAlgebraicNumber<edu.jas.root.RealAlgebraicNumber<C>> c) {
+    public RealAlgebraicNumber<C> multiply(
+                    edu.jas.root.RealAlgebraicNumber<edu.jas.root.RealAlgebraicNumber<C>> c) {
         return new RealAlgebraicNumber<C>(ring, number.multiply(c));
     }
 
@@ -399,11 +390,11 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
      * @return signum(this).
      */
     public int signum() {
-//         if ( number == null ) { // no synchronization required
-//             GenPolynomial<C> p = number.val;
-//             number = ring.realRing.parse(p.toString()); // todo: convert
-//             //System.out.println("number = " + number);
-// 	}
+        //         if ( number == null ) { // no synchronization required
+        //             GenPolynomial<C> p = number.val;
+        //             number = ring.realRing.parse(p.toString()); // todo: convert
+        //             //System.out.println("number = " + number);
+        // 	}
         return number.signum();
     }
 
@@ -413,11 +404,11 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
      * @return |this| as rational number.
      */
     public BigRational magnitude() {
-//         if ( number == null ) { // no synchronization required
-//             GenPolynomial<C> p = number.val;
-//             number = ring.realRing.parse(p.toString()); // todo: convert
-//             //System.out.println("number = " + number);
-// 	}
+        //         if ( number == null ) { // no synchronization required
+        //             GenPolynomial<C> p = number.val;
+        //             number = ring.realRing.parse(p.toString()); // todo: convert
+        //             //System.out.println("number = " + number);
+        // 	}
         return number.magnitude();
     }
 

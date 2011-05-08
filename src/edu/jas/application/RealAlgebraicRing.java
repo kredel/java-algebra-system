@@ -10,51 +10,44 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import edu.jas.arith.Rational;
 import edu.jas.arith.BigRational;
-import edu.jas.arith.BigDecimal;
-import edu.jas.poly.AlgebraicNumber;
-import edu.jas.poly.AlgebraicNumberRing;
-import edu.jas.poly.Complex;
-import edu.jas.poly.ComplexRing;
+import edu.jas.arith.Rational;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.root.RealRootTuple;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.Power;
 import edu.jas.structure.RingFactory;
-import edu.jas.root.InvalidBoundaryException;
-//import edu.jas.root.RealAlgebraicNumber;
-import edu.jas.root.RealRootTuple;
 
 
 /**
- * Real algebraic number factory class based on bi-variate real
- * algebraic numbers.  Objects of this class are immutable with the
- * exception of the isolating intervals.
- * Bi-variate ideal implementation is in version 3614 2011-04-28 09:20:34Z.
+ * Real algebraic number factory class based on bi-variate real algebraic
+ * numbers. Objects of this class are immutable with the exception of the
+ * isolating intervals. Bi-variate ideal implementation is in version 3614
+ * 2011-04-28 09:20:34Z.
  * @author Heinz Kredel
  */
 
-public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
-implements RingFactory<RealAlgebraicNumber<C>> {
+public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational> implements
+                RingFactory<RealAlgebraicNumber<C>> {
 
 
     /**
      * Representing ideal with univariate polynomials IdealWithUniv.
      */
-    /*package*/ final IdealWithUniv<C> univs;
+    /*package*/final IdealWithUniv<C> univs;
 
 
     /**
      * Representing ResidueRing.
      */
-    /*package*/ final ResidueRing<C> algebraic;
+    /*package*/final ResidueRing<C> algebraic;
 
 
     /**
-     * Isolating intervals for the real algebraic roots of the real and imaginary part.
-     * <b>Note: </b> intervals may shrink eventually.
+     * Isolating intervals for the real algebraic roots of the real and
+     * imaginary part. <b>Note: </b> intervals may shrink eventually.
      */
-    /*package*/ RealRootTuple<C> root;
+    /*package*/RealRootTuple<C> root;
 
 
     /**
@@ -93,8 +86,8 @@ implements RingFactory<RealAlgebraicNumber<C>> {
         e = e.inverse();
         e = Power.positivePower(e, PRECISION);
         eps = e;
-        edu.jas.root.RealAlgebraicRing<C> rfac1 = root.tuple.get(0).factory(); 
-        edu.jas.root.RealAlgebraicRing<C> rfac2 = root.tuple.get(1).factory(); 
+        edu.jas.root.RealAlgebraicRing<C> rfac1 = root.tuple.get(0).factory();
+        edu.jas.root.RealAlgebraicRing<C> rfac2 = root.tuple.get(1).factory();
         GenPolynomial<C> p0 = PolyUtilApp.<C> selectWithVariable(univs.ideal.list.list, 0);
         if (p0 == null) {
             throw new RuntimeException("no polynomial found in " + (0) + " of  " + univs.ideal);
@@ -104,13 +97,13 @@ implements RingFactory<RealAlgebraicNumber<C>> {
         //System.out.println("realRing, pol = " + p0.toString());
         //System.out.println("realRing, iv  = " + rfac2.getRoot().toString());
         String ival = rfac2.getRoot().toString();
-        ival = ival.replace("{","");
-        ival = ival.replace("}","");
+        ival = ival.replace("{", "");
+        ival = ival.replace("}", "");
         //System.out.println("realRing, val = " + ival);
-        realRing = (edu.jas.root.RealAlgebraicRing<edu.jas.root.RealAlgebraicNumber<C>>) 
-               ExtensionFieldBuilder.baseField(rfac1)
-                   .realAlgebraicExtension(rfac2.algebraic.ring.getVars()[0],p0.toString(),ival)
-                   .build(); 
+        realRing = (edu.jas.root.RealAlgebraicRing<edu.jas.root.RealAlgebraicNumber<C>>) ExtensionFieldBuilder
+                        .baseField(rfac1)
+                        .realAlgebraicExtension(rfac2.algebraic.ring.getVars()[0], p0.toString(), ival)
+                        .build();
         //System.out.println("realRing = " + realRing);
     }
 
@@ -122,7 +115,7 @@ implements RingFactory<RealAlgebraicNumber<C>> {
      * @param root isolating rectangle for a complex root.
      */
     public RealAlgebraicRing(IdealWithUniv<C> m, RealRootTuple<C> root) {
-        this(m,new ResidueRing<C>(m.ideal),root);
+        this(m, new ResidueRing<C>(m.ideal), root);
     }
 
 
@@ -134,7 +127,7 @@ implements RingFactory<RealAlgebraicNumber<C>> {
      * @param isField indicator if m is maximal.
      */
     public RealAlgebraicRing(IdealWithUniv<C> m, RealRootTuple<C> root, boolean isField) {
-        this(m,new ResidueRing<C>(m.ideal,isField),root);
+        this(m, new ResidueRing<C>(m.ideal, isField), root);
     }
 
 
@@ -159,7 +152,7 @@ implements RingFactory<RealAlgebraicNumber<C>> {
 
 
     /**
-     * Get epsilon. 
+     * Get epsilon.
      * @return epsilon.
      */
     public synchronized C getEps() {
@@ -168,7 +161,7 @@ implements RingFactory<RealAlgebraicNumber<C>> {
 
 
     /**
-     * Set a new epsilon. 
+     * Set a new epsilon.
      * @param e epsilon.
      */
     public synchronized void setEps(C e) {
@@ -177,7 +170,7 @@ implements RingFactory<RealAlgebraicNumber<C>> {
 
 
     /**
-     * Set a new epsilon. 
+     * Set a new epsilon.
      * @param e epsilon.
      */
     public synchronized void setEps(BigRational e) {
@@ -230,7 +223,8 @@ implements RingFactory<RealAlgebraicNumber<C>> {
      * @see edu.jas.structure.ElemFactory#generators()
      */
     public List<RealAlgebraicNumber<C>> generators() {
-        List<edu.jas.root.RealAlgebraicNumber<edu.jas.root.RealAlgebraicNumber<C>>> agens = realRing.generators();
+        List<edu.jas.root.RealAlgebraicNumber<edu.jas.root.RealAlgebraicNumber<C>>> agens = realRing
+                        .generators();
         List<RealAlgebraicNumber<C>> gens = new ArrayList<RealAlgebraicNumber<C>>(agens.size());
         for (edu.jas.root.RealAlgebraicNumber<edu.jas.root.RealAlgebraicNumber<C>> a : agens) {
             gens.add(getZERO().sum(a));
@@ -302,7 +296,7 @@ implements RingFactory<RealAlgebraicNumber<C>> {
     @Override
     public String toString() {
         return "RealAlgebraicRing[ " + realRing.toString() + " in " + root + " | isField="
-                + realRing.isField() + " :: " + algebraic.ideal.toString() + " ]";
+                        + realRing.isField() + " :: " + algebraic.ideal.toString() + " ]";
     }
 
 
@@ -316,8 +310,8 @@ implements RingFactory<RealAlgebraicNumber<C>> {
         // Python case
         return "RealRecN( " + realRing.toScript() + ", " + root.toScript()
         //+ ", " + realRing.isField() 
-                //+ ", " + realRing.ring.toScript() 
-                + " )";
+        //+ ", " + realRing.ring.toScript() 
+                        + " )";
     }
 
 

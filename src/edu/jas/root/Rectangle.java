@@ -20,7 +20,7 @@ import edu.jas.structure.RingFactory;
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
-public class Rectangle<C extends RingElem<C> & Rational > {
+public class Rectangle<C extends RingElem<C> & Rational> {
 
 
     /**
@@ -66,7 +66,8 @@ public class Rectangle<C extends RingElem<C> & Rational > {
      */
     @SuppressWarnings("unchecked")
     public Rectangle(Complex<C> sw, Complex<C> ne) {
-        this( new Complex<C>(sw.ring,sw.getRe(),ne.getIm()), sw, new Complex<C>(sw.ring,ne.getRe(),sw.getIm()), ne );
+        this(new Complex<C>(sw.ring, sw.getRe(), ne.getIm()), sw, new Complex<C>(sw.ring, ne.getRe(),
+                        sw.getIm()), ne);
     }
 
 
@@ -79,7 +80,7 @@ public class Rectangle<C extends RingElem<C> & Rational > {
      */
     @SuppressWarnings("unchecked")
     public Rectangle(Complex<C> nw, Complex<C> sw, Complex<C> se, Complex<C> ne) {
-        this( (Complex<C>[]) new Complex[] { nw, sw, se, ne } );
+        this((Complex<C>[]) new Complex[] { nw, sw, se, ne });
     }
 
 
@@ -149,9 +150,9 @@ public class Rectangle<C extends RingElem<C> & Rational > {
      */
     public Rectangle<C> exchangeNW(Complex<C> c) {
         Complex<C> d = getSE();
-        Complex<C> sw = new Complex<C>(c.factory(),c.getRe(),d.getIm());
-        Complex<C> ne = new Complex<C>(c.factory(),d.getRe(),c.getIm());
-        return new Rectangle<C>(c,sw,d,ne);
+        Complex<C> sw = new Complex<C>(c.factory(), c.getRe(), d.getIm());
+        Complex<C> ne = new Complex<C>(c.factory(), d.getRe(), c.getIm());
+        return new Rectangle<C>(c, sw, d, ne);
     }
 
 
@@ -162,9 +163,9 @@ public class Rectangle<C extends RingElem<C> & Rational > {
      */
     public Rectangle<C> exchangeSW(Complex<C> c) {
         Complex<C> d = getNE();
-        Complex<C> nw = new Complex<C>(c.factory(),c.getRe(),d.getIm());
-        Complex<C> se = new Complex<C>(c.factory(),d.getRe(),c.getIm());
-        return new Rectangle<C>(nw,c,se,d);
+        Complex<C> nw = new Complex<C>(c.factory(), c.getRe(), d.getIm());
+        Complex<C> se = new Complex<C>(c.factory(), d.getRe(), c.getIm());
+        return new Rectangle<C>(nw, c, se, d);
     }
 
 
@@ -175,9 +176,9 @@ public class Rectangle<C extends RingElem<C> & Rational > {
      */
     public Rectangle<C> exchangeSE(Complex<C> c) {
         Complex<C> d = getNW();
-        Complex<C> sw = new Complex<C>(c.factory(),d.getRe(),c.getIm());
-        Complex<C> ne = new Complex<C>(c.factory(),c.getRe(),d.getIm());
-        return new Rectangle<C>(d,sw,c,ne);
+        Complex<C> sw = new Complex<C>(c.factory(), d.getRe(), c.getIm());
+        Complex<C> ne = new Complex<C>(c.factory(), c.getRe(), d.getIm());
+        return new Rectangle<C>(d, sw, c, ne);
     }
 
 
@@ -188,9 +189,9 @@ public class Rectangle<C extends RingElem<C> & Rational > {
      */
     public Rectangle<C> exchangeNE(Complex<C> c) {
         Complex<C> d = getSW();
-        Complex<C> nw = new Complex<C>(c.factory(),d.getRe(),c.getIm());
-        Complex<C> se = new Complex<C>(c.factory(),c.getRe(),d.getIm());
-        return new Rectangle<C>(nw,d,se,c);
+        Complex<C> nw = new Complex<C>(c.factory(), d.getRe(), c.getIm());
+        Complex<C> se = new Complex<C>(c.factory(), c.getRe(), d.getIm());
+        return new Rectangle<C>(nw, d, se, c);
     }
 
 
@@ -202,10 +203,8 @@ public class Rectangle<C extends RingElem<C> & Rational > {
     public boolean contains(Complex<C> c) {
         Complex<C> ll = getSW();
         Complex<C> ur = getNE(); // ?? Fix ?? getSW();
-        return c.getRe().compareTo(ll.getRe()) < 0 ||
-               c.getIm().compareTo(ll.getIm()) < 0 || 
-               c.getRe().compareTo(ur.getRe()) > 0 || 
-               c.getIm().compareTo(ur.getIm()) > 0;
+        return c.getRe().compareTo(ll.getRe()) < 0 || c.getIm().compareTo(ll.getIm()) < 0
+                        || c.getRe().compareTo(ur.getRe()) > 0 || c.getIm().compareTo(ur.getIm()) > 0;
     }
 
 
@@ -222,21 +221,21 @@ public class Rectangle<C extends RingElem<C> & Rational > {
         C di = nw.getIm().subtract(sw.getIm()); // >= 0
         C rr = r.getRe().abs();
         C ri = r.getIm().abs();
-        C one = ((RingFactory<C>)dr.factory()).getONE();
-        if ( !rr.isZERO() ) {
-            if ( rr.compareTo(one) > 0 ) {
+        C one = ((RingFactory<C>) dr.factory()).getONE();
+        if (!rr.isZERO()) {
+            if (rr.compareTo(one) > 0) {
                 rr = rr.inverse();
             }
         }
-        if ( !ri.isZERO() ) {
-            if ( ri.compareTo(one) > 0 ) {
+        if (!ri.isZERO()) {
+            if (ri.compareTo(one) > 0) {
                 ri = ri.inverse();
             }
         }
         // 0 <= rr, ri <= 1
         rr = rr.multiply(dr);
         ri = ri.multiply(di);
-        Complex<C> rp = new Complex<C>(sw.factory(),rr,ri);
+        Complex<C> rp = new Complex<C>(sw.factory(), rr, ri);
         //System.out.println("rp = " + rp);
         rp = sw.sum(rp);
         return rp;
@@ -304,7 +303,7 @@ public class Rectangle<C extends RingElem<C> & Rational > {
         m = m.divide(two);
         r = corners[1].getRe().sum(r);
         m = corners[1].getIm().sum(m);
-        return new Complex<C>(corners[0].factory(),r,m);
+        return new Complex<C>(corners[0].factory(), r, m);
     }
 
 
@@ -314,10 +313,10 @@ public class Rectangle<C extends RingElem<C> & Rational > {
      */
     public Complex<BigRational> getRationalCenter() {
         Complex<C> cm = getCenter();
-        BigRational rs = cm.getRe().getRational(); 
-        BigRational ms = cm.getIm().getRational(); 
+        BigRational rs = cm.getRe().getRational();
+        BigRational ms = cm.getIm().getRational();
         ComplexRing<BigRational> cf = new ComplexRing<BigRational>(rs.factory());
-        Complex<BigRational> c = new Complex<BigRational>(cf,rs,ms);
+        Complex<BigRational> c = new Complex<BigRational>(cf, rs, ms);
         return c;
     }
 
@@ -331,7 +330,7 @@ public class Rectangle<C extends RingElem<C> & Rational > {
         BigDecimal rd = new BigDecimal(rc.getRe());
         BigDecimal md = new BigDecimal(rc.getIm());
         ComplexRing<BigDecimal> cf = new ComplexRing<BigDecimal>(rd.factory());
-        Complex<BigDecimal> c = new Complex<BigDecimal>(cf,rd,md);
+        Complex<BigDecimal> c = new Complex<BigDecimal>(cf, rd, md);
         return c;
     }
 

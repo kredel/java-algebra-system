@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import edu.jas.arith.Rational;
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
+import edu.jas.arith.Rational;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
@@ -22,15 +22,15 @@ import edu.jas.structure.RingFactory;
 
 
 /**
- * Real algebraic number factory class based on AlgebraicNumberRing with RingElem
- * interface. Objects of this class are immutable with the exception of the
- * isolating intervals.
+ * Real algebraic number factory class based on AlgebraicNumberRing with
+ * RingElem interface. Objects of this class are immutable with the exception of
+ * the isolating intervals.
  * @author Heinz Kredel
  */
 
 public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
-       /*extends AlgebraicNumberRing<C>*/
-    implements RingFactory<RealAlgebraicNumber<C>> {
+/*extends AlgebraicNumberRing<C>*/
+implements RingFactory<RealAlgebraicNumber<C>> {
 
 
     /**
@@ -73,7 +73,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
         }
         C e = m.ring.coFac.fromInteger(10L);
         e = e.inverse();
-        C x = Power.positivePower(e,BigDecimal.DEFAULT_PRECISION);
+        C x = Power.positivePower(e, BigDecimal.DEFAULT_PRECISION);
         e = Power.positivePower(e, 9); // better not too much for speed
         eps = e;
     }
@@ -108,12 +108,12 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
 
 
     /**
-     * Get the interval for the real root. <b>Note: </b> interval may
-     * shrink later.
+     * Get the interval for the real root. <b>Note: </b> interval may shrink
+     * later.
      * @return real root isolating interval
      */
     public synchronized Interval<C> getRoot() {
-       return root;
+        return root;
     }
 
 
@@ -129,7 +129,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
 
 
     /**
-     * Get the epsilon. 
+     * Get the epsilon.
      * @return eps.
      */
     public synchronized C getEps() {
@@ -138,7 +138,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
 
 
     /**
-     * Set a new epsilon. 
+     * Set a new epsilon.
      * @param e epsilon.
      */
     public synchronized void setEps(C e) {
@@ -147,7 +147,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
 
 
     /**
-     * Set a new epsilon. 
+     * Set a new epsilon.
      * @param e epsilon.
      */
     public synchronized void setEps(BigRational e) {
@@ -280,7 +280,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
     @Override
     public String toString() {
         return "RealAlgebraicRing[ " + algebraic.modul.toString() + " in " + root + " | isField="
-                + algebraic.isField() + " :: " + algebraic.ring.toString() + " ]";
+                        + algebraic.isField() + " :: " + algebraic.ring.toString() + " ]";
     }
 
 
@@ -294,8 +294,8 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
         // Python case
         return "RealN( " + algebraic.modul.toScript() + ", " + root.toScript()
         //+ ", " + algebraic.isField() 
-                //+ ", " + algebraic.ring.toScript() 
-                + " )";
+        //+ ", " + algebraic.ring.toScript() 
+                        + " )";
     }
 
 

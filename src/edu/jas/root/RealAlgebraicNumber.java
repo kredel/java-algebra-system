@@ -5,9 +5,9 @@
 package edu.jas.root;
 
 
-//import edu.jas.structure.RingElem;
-import edu.jas.arith.BigRational;
+// import edu.jas.structure.RingElem;
 import edu.jas.arith.BigDecimal;
+import edu.jas.arith.BigRational;
 import edu.jas.arith.Rational;
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.AlgebraicNumber;
@@ -23,8 +23,8 @@ import edu.jas.structure.NotInvertibleException;
  */
 
 public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
-       /*extends AlgebraicNumber<C>*/
-    implements GcdRingElem<RealAlgebraicNumber<C>>, Rational {
+/*extends AlgebraicNumber<C>*/
+implements GcdRingElem<RealAlgebraicNumber<C>>, Rational {
 
 
     /**
@@ -311,7 +311,7 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
      */
     public BigRational magnitude() {
         Interval<C> v = ring.engine.invariantMagnitudeInterval(ring.root, ring.algebraic.modul, number.val,
-                ring.eps);
+                        ring.eps);
         ring.setRoot(v);
         //System.out.println("new v = " + v);
         C ev = ring.engine.realIntervalMagnitude(v, ring.algebraic.modul, number.val); //, ring.eps);

@@ -5,8 +5,8 @@
 package edu.jas.application;
 
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -14,20 +14,17 @@ import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
 
-import edu.jas.kern.ComputerThreads;
-import edu.jas.arith.BigRational;
 import edu.jas.arith.BigDecimal;
+import edu.jas.arith.BigRational;
+import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.Complex;
 import edu.jas.poly.ComplexRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
+import edu.jas.root.RealRootTuple;
 import edu.jas.structure.NotInvertibleException;
 import edu.jas.structure.Power;
-import edu.jas.root.Interval;
-import edu.jas.root.Rectangle;
-//import edu.jas.root.RealAlgebraicNumber;
-import edu.jas.root.RealRootTuple;
 
 
 /**
@@ -117,15 +114,15 @@ public class RealAlgebraicTest extends TestCase {
         List<GenPolynomial<BigRational>> li = new ArrayList<GenPolynomial<BigRational>>(2);
         li.add(fr);
         li.add(fi);
-        Ideal<BigRational> id = new Ideal<BigRational>(mfac,li);
+        Ideal<BigRational> id = new Ideal<BigRational>(mfac, li);
         //System.out.println("id = " + id);
 
         List<IdealWithUniv<BigRational>> idul = id.zeroDimRootDecomposition();
         IdealWithUniv<BigRational> idu = idul.get(0);
-        if ( idul.size() > 1 ) {
+        if (idul.size() > 1) {
             //System.out.println("idul = " + idul);
             //idu = idul.get(1);
-	}
+        }
         //System.out.println("idu = " + idu);
         GenPolynomial<BigRational> x = idu.ideal.list.list.remove(1);
         //System.out.println("x = " + x);
@@ -134,15 +131,16 @@ public class RealAlgebraicTest extends TestCase {
         idu.ideal.list.list.add(x);
         //System.out.println("idu = " + idu);
 
-        IdealWithRealAlgebraicRoots<BigRational,BigRational> idr = PolyUtilApp.<BigRational,BigRational> realAlgebraicRoots(idu.ideal).get(0);
+        IdealWithRealAlgebraicRoots<BigRational, BigRational> idr = PolyUtilApp
+                        .<BigRational, BigRational> realAlgebraicRoots(idu.ideal).get(0);
         //System.out.println("idr = " + idr);
         //idr.doDecimalApproximation();
         //for ( List<BigDecimal> d : idr.decimalApproximation() ) {
         //    System.out.println("d = " + d);
-	//}
+        //}
         List<List<edu.jas.root.RealAlgebraicNumber<BigRational>>> ran = idr.ran;
         RealRootTuple<BigRational> root = new RealRootTuple<BigRational>(ran.get(0));
-	if ( ran.size() > 1 ) {
+        if (ran.size() > 1) {
             //System.out.println("ran = " + ran);
             root = new RealRootTuple<BigRational>(ran.get(1));
         }
@@ -215,10 +213,10 @@ public class RealAlgebraicTest extends TestCase {
         //System.out.println("b = " + b);
 
         ComplexRing<RealAlgebraicNumber<BigRational>> crr;
-        crr = new ComplexRing<RealAlgebraicNumber<BigRational>>(fac); 
+        crr = new ComplexRing<RealAlgebraicNumber<BigRational>>(fac);
 
         Complex<RealAlgebraicNumber<BigRational>> ac, bc, cc, dc, ec;
-        cc = new Complex<RealAlgebraicNumber<BigRational>>(crr,a,b);
+        cc = new Complex<RealAlgebraicNumber<BigRational>>(crr, a, b);
         //System.out.println("cc = " + cc);
         assertEquals("a == re(c)", a, cc.getRe());
         assertEquals("b == im(c)", b, cc.getIm());
@@ -374,7 +372,8 @@ public class RealAlgebraicTest extends TestCase {
         //System.out.println("eps                       = " + eps);
         BigDecimal err = rr.subtract(rb).divide(rr).abs();
         //System.out.println("err                       = " + err);
-        assertTrue("magnitude(a)*magnitude(a) == magnitude(a*a): " + err + " <= " + eps, err.compareTo(eps) <= 0 );
+        assertTrue("magnitude(a)*magnitude(a) == magnitude(a*a): " + err + " <= " + eps,
+                        err.compareTo(eps) <= 0);
     }
 
 
