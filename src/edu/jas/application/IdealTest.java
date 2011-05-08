@@ -7,6 +7,7 @@ package edu.jas.application;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -1420,15 +1421,15 @@ public class IdealTest extends TestCase {
         //System.out.println("np = " + np);
         if (np == null) {
             np = Ip.ideal.normalPositionIndexUnivars();
-            //System.out.println("np = " + np);
+            //System.out.println("np = " + Arrays.toString(np));
         }
         if (np == null) {
             return;
         }
         i = np[0];
         j = np[1];
-        assertTrue("i == 0", i == 0);
-        assertTrue("j == 3", j == 3);
+        assertTrue("i == 0: " + i, i == 0);
+        assertTrue("j == 2: " + j, j == 2); // fixed, was 3
     }
 
 

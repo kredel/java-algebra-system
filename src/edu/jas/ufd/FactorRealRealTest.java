@@ -112,8 +112,8 @@ public class FactorRealRealTest extends TestCase {
 
         List<Complex<RealAlgebraicNumber<BigRational>>> roots
             = RootFactory.<BigRational> complexAlgebraicNumbersComplex(ap); 
-        System.out.println("ap = " + ap);
-        System.out.println("roots = " + roots);
+        //System.out.println("ap = " + ap);
+        //System.out.println("roots = " + roots);
         assertTrue("#roots == deg(ap) ", roots.size() == ap.degree(0));
 
         for ( Complex<RealAlgebraicNumber<BigRational>> root : roots ) {
@@ -140,15 +140,15 @@ public class FactorRealRealTest extends TestCase {
             a = c.multiply(b);
             //a = c;
             //a = a.monic();
-            System.out.println("\na = " + a);
-            System.out.println("b = " + b);
-            System.out.println("c = " + c);
-            System.out.println("b = " + b.monic());
-            System.out.println("c = " + c.monic());
+            //System.out.println("\na = " + a);
+            //System.out.println("b = " + b);
+            //System.out.println("c = " + c);
+            //System.out.println("b = " + b.monic());
+            //System.out.println("c = " + c.monic());
 
             SortedMap<GenPolynomial<RealAlgebraicNumber<BigRational>>, Long> sm = fac.baseFactors(a);
-            System.out.println("\na   =  " + a);
-            System.out.println("sm = " + sm);
+            //System.out.println("\na   =  " + a);
+            //System.out.println("sm = " + sm);
             if (sm.size() >= facs) {
                 assertTrue("#facs < " + facs, sm.size() >= facs);
             } else {

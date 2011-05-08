@@ -2199,7 +2199,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             ExpVector e = p.degreeVector();
             int[] dov = e.dependencyOnVariables();
             long t = e.totalDeg(); // lt(p) would be enough
-            //System.out.println("dov_univ = " + Arrays.toString(dov));
+            //System.out.println("dov_univ = " + Arrays.toString(dov) + ", e = " + e);
             if (dov.length == 0) {
                 throw new IllegalArgumentException("ideal dimension is not zero");
             }
@@ -2227,7 +2227,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                 if (t >= 2) {
                     e = p.degreeVector();
                     int[] dov = e.dependencyOnVariables();
-                    //System.out.println("dov_univ2 = " + Arrays.toString(dov));
+                    //System.out.println("dov_univ2 = " + Arrays.toString(dov) + " e = " + e);
                     if (dov.length == 0) {
                         throw new IllegalArgumentException("ideal dimension is not zero");
                     }

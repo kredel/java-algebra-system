@@ -874,9 +874,10 @@ public class PolyUtilApp<C extends RingElem<C>> {
 
         // extract result polynomials
         List<GenPolynomial<C>> Np = iu.ideal.getList();
+        //System.out.println("Np = " + Np);
         as = Np.get(1); // take care
-        bs = Np.get(0); // take care
-        GenPolynomial<C> cs = Np.get(2);
+        bs = Np.get(2); // take care
+        GenPolynomial<C> cs = Np.get(0);
         //System.out.println("as = " + as);
         //System.out.println("bs = " + bs);
         //System.out.println("cs = " + cs);
@@ -992,9 +993,9 @@ public class PolyUtilApp<C extends RingElem<C>> {
 
         // extract result polynomials
         List<GenPolynomial<C>> Np = iu.ideal.getList();
-        as = Np.get(1);
-        bs = Np.get(0);
-        GenPolynomial<C> cs = Np.get(2);
+        as = Np.get(1); // take care
+        bs = Np.get(2); // take care
+        GenPolynomial<C> cs = Np.get(0);
         //System.out.println("as = " + as);
         //System.out.println("bs = " + bs);
         //System.out.println("cs = " + cs);
