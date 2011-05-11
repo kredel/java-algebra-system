@@ -650,8 +650,8 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * @param I zero dimensional ideal with univariate irreducible polynomials.
      * @return list of real algebraic roots for ideal(G)
      */
-    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D> & Rational> IdealWithRealAlgebraicRoots<C, D> realAlgebraicRoots(
-            IdealWithUniv<D> I) {
+    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D> & Rational> 
+           IdealWithRealAlgebraicRoots<C, D> realAlgebraicRoots(IdealWithUniv<D> I) {
         List<List<RealAlgebraicNumber<D>>> ran = new ArrayList<List<RealAlgebraicNumber<D>>>();
         if (I == null || I.ideal == null || I.ideal.isZERO() || I.upolys == null || I.upolys.size() == 0) {
             return new IdealWithRealAlgebraicRoots<C, D>(I, ran);
@@ -659,7 +659,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
         GenPolynomialRing<D> fac = I.ideal.list.ring;
         // case i == 0:
         GenPolynomial<D> p0 = I.upolys.get(0);
-        GenPolynomial<D> p0p = selectWithVariable(I.ideal.list.list, fac.nvar - 1);
+        GenPolynomial<D> p0p = PolyUtilApp.<D> selectWithVariable(I.ideal.list.list, fac.nvar - 1);
         if (p0p == null) {
             throw new RuntimeException("no polynomial found in " + (fac.nvar - 1) + " of  " + I.ideal);
         }
@@ -757,10 +757,9 @@ public class PolyUtilApp<C extends RingElem<C>> {
      *            polynomials.
      * @return list of real algebraic roots for all ideal(I_i)
      */
-    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D> & Rational> List<IdealWithRealAlgebraicRoots<C, D>> realAlgebraicRoots(
-            List<IdealWithUniv<D>> I) {
-        List<IdealWithRealAlgebraicRoots<C, D>> lir = new ArrayList<IdealWithRealAlgebraicRoots<C, D>>(I
-                .size());
+    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D> & Rational> 
+           List<IdealWithRealAlgebraicRoots<C, D>> realAlgebraicRoots(List<IdealWithUniv<D>> I) {
+        List<IdealWithRealAlgebraicRoots<C, D>> lir = new ArrayList<IdealWithRealAlgebraicRoots<C, D>>(I.size());
         for (IdealWithUniv<D> iu : I) {
             IdealWithRealAlgebraicRoots<C, D> iur = PolyUtilApp.<C, D> realAlgebraicRoots(iu);
             //System.out.println("iur = " + iur);
@@ -833,8 +832,8 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * @param I zero dimensional ideal.
      * @return list of coordinates of real roots for ideal(G)
      */
-    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D> & Rational> List<IdealWithRealAlgebraicRoots<C, D>> realAlgebraicRoots(
-            Ideal<D> I) {
+    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D> & Rational> 
+           List<IdealWithRealAlgebraicRoots<C, D>> realAlgebraicRoots(Ideal<D> I) {
         List<IdealWithUniv<D>> Ir = I.zeroDimRootDecomposition();
         //System.out.println("Ir = " + Ir);
         List<IdealWithRealAlgebraicRoots<C, D>> roots = PolyUtilApp.<C, D> realAlgebraicRoots(Ir);
@@ -875,9 +874,12 @@ public class PolyUtilApp<C extends RingElem<C>> {
         // extract result polynomials
         List<GenPolynomial<C>> Np = iu.ideal.getList();
         //System.out.println("Np = " + Np);
-        as = Np.get(1); // take care
-        bs = Np.get(2); // take care
-        GenPolynomial<C> cs = Np.get(0);
+        //as = Np.get(1); // take care
+        //bs = Np.get(2); // take care
+        //GenPolynomial<C> cs = Np.get(0); // take care
+        as = PolyUtilApp.<C> selectWithVariable(Np, 1);
+        bs = PolyUtilApp.<C> selectWithVariable(Np, 0);
+        GenPolynomial<C> cs = PolyUtilApp.<C> selectWithVariable(Np, 2);
         //System.out.println("as = " + as);
         //System.out.println("bs = " + bs);
         //System.out.println("cs = " + cs);
@@ -993,9 +995,12 @@ public class PolyUtilApp<C extends RingElem<C>> {
 
         // extract result polynomials
         List<GenPolynomial<C>> Np = iu.ideal.getList();
-        as = Np.get(1); // take care
-        bs = Np.get(2); // take care
-        GenPolynomial<C> cs = Np.get(0);
+        //as = Np.get(1); // take care
+        //bs = Np.get(2); // take care
+        //GenPolynomial<C> cs = Np.get(0); // take care
+        as = PolyUtilApp.<C> selectWithVariable(Np, 1);
+        bs = PolyUtilApp.<C> selectWithVariable(Np, 0);
+        GenPolynomial<C> cs = PolyUtilApp.<C> selectWithVariable(Np, 2);
         //System.out.println("as = " + as);
         //System.out.println("bs = " + bs);
         //System.out.println("cs = " + cs);
