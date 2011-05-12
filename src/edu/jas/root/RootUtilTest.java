@@ -102,10 +102,10 @@ public class RootUtilTest extends TestCase {
     int rl = 1;
 
 
-    int kl = 5;
+    int kl = 3;
 
 
-    int ll = 7;
+    int ll = 5;
 
 
     int el = 7;
@@ -137,7 +137,6 @@ public class RootUtilTest extends TestCase {
 
     /**
      * Test sign variations.
-     * 
      */
     public void testSignVar() {
         int[] li = new int[] { 1, 0, 0, -1, 2, 3, 0, 1, 0, 0, 0, -1 };
@@ -192,7 +191,6 @@ public class RootUtilTest extends TestCase {
 
     /**
      * Test real algebraic factory.
-     * 
      */
     public void testRealAlgebraicFactory() {
         a = dfac.random(kl, ll * 2, el * 2, q);
@@ -202,57 +200,49 @@ public class RootUtilTest extends TestCase {
         List<RealAlgebraicNumber<BigRational>> lrn = RootFactory.<BigRational> realAlgebraicNumbers(a);
         //System.out.println("lrn = " + lrn);
         assertTrue("#roots >= 0 ", lrn.size() >= 0);
-
-        if (true)
-            return;
-
         for (RealAlgebraicNumber<BigRational> ra : lrn) {
             //System.out.println("ra = " + ra.toScript() + " in " + ra.toScriptFactory());
+            assertTrue("f(r) == 0: " + ra, RootFactory.<BigRational> isRoot(a,ra));
         }
 
         lrn = RootFactory.<BigRational> realAlgebraicNumbersField(a);
         //System.out.println("lrn = " + lrn);
-
+        assertTrue("#roots >= 0 ", lrn.size() >= 0);
         for (RealAlgebraicNumber<BigRational> ra : lrn) {
             //System.out.println("ra = " + ra.toScript() + " in " + ra.toScriptFactory());
+            assertTrue("f(r) == 0: " + ra, RootFactory.<BigRational> isRoot(a,ra));
         }
     }
 
 
     /**
      * Test complex algebraic factory.
-     * 
      */
     public void testComplexAlgebraicFactory() {
         a = dfac.random(kl, ll, el, q);
         //a = a.multiply( dfac.univariate(0) );
         //System.out.println("a = " + a);
-
         ComplexRing<BigRational> cf = new ComplexRing<BigRational>(new BigRational());
         GenPolynomialRing<Complex<BigRational>> cfac = new GenPolynomialRing<Complex<BigRational>>(cf, dfac);
 
         GenPolynomial<Complex<BigRational>> ca = PolyUtil.<BigRational> toComplex(cfac, a);
         //System.out.println("ca = " + ca);
-
         List<ComplexAlgebraicNumber<BigRational>> lcn = RootFactory.<BigRational> complexAlgebraicNumbersComplex(ca);
         //System.out.println("lcn = " + lcn);
-        assertTrue("#roots == deg(a) ", lcn.size() == a.degree(0));
-
-        if (true)
-            return;
+        assertTrue("#roots == deg(a): " + lcn.size() + " != " + a.degree(0), lcn.size() == a.degree(0));
 
         for (ComplexAlgebraicNumber<BigRational> car : lcn) {
             //System.out.println("car = " + car.toScript() + " in " + car.toScriptFactory());
             //System.out.println("car = " + car.ring.root);
-            System.out.println("car = " + car.ring.root.centerApprox() + ", "
-                    + (Roots.sqrt(new BigDecimal(car.ring.root.rationalLength()))) + ", " + car.ring.root);
+            //System.out.println("car = " + car.ring.root.centerApprox() + ", "
+            //        + (Roots.sqrt(new BigDecimal(car.ring.root.rationalLength()))) + ", " + car.ring.root);
+            assertTrue("f(r) == 0: " + car, RootFactory.<BigRational> isRoot(a,car));
         }
     }
 
 
     /**
      * Test complex rational factory.
-     * 
      */
     public void testComplexRationalFactory() {
         a = dfac.random(kl, ll, el, q);
@@ -263,14 +253,12 @@ public class RootUtilTest extends TestCase {
         //System.out.println("lcn = " + lcn);
         assertTrue("#roots == deg(a) " + lcn.size() + ", " + a.degree(0), lcn.size() == a.degree(0));
 
-        if (true)
-            return;
-
         for (ComplexAlgebraicNumber<BigRational> car : lcn) {
             //System.out.println("car = " + car.toScript() + " in " + car.toScriptFactory());
             //System.out.println("car = " + car.ring.root);
-            System.out.println("car = " + car.ring.root.centerApprox() + ", "
-                    + (Roots.sqrt(new BigDecimal(car.ring.root.rationalLength()))) + ", " + car.ring.root);
+            //System.out.println("car = " + car.ring.root.centerApprox() + ", "
+            //        + (Roots.sqrt(new BigDecimal(car.ring.root.rationalLength()))) + ", " + car.ring.root);
+            assertTrue("f(r) == 0: " + car, RootFactory.<BigRational> isRoot(a,car));
         }
     }
 }

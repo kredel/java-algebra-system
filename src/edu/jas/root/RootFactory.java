@@ -31,6 +31,25 @@ public class RootFactory {
 
 
     /**
+     * Is real algebraic number a root of a polynomial.
+     * @param f univariate polynomial.
+     * @param r real algebraic number.
+     * @return true, if f(r) == 0, else false;
+     */
+    public static <C extends GcdRingElem<C> & Rational> 
+           boolean isRoot(GenPolynomial<C> f, RealAlgebraicNumber<C> r) {
+        boolean t = false;
+        RealAlgebraicRing<C> rr = r.factory(); 
+        GenPolynomialRing<RealAlgebraicNumber<C>> rfac 
+           = new GenPolynomialRing<RealAlgebraicNumber<C>>(rr,f.factory());
+        GenPolynomial<RealAlgebraicNumber<C>> p;
+        p = PolyUtilRoot.<C> convertToRealCoefficients(rfac,f);
+        RealAlgebraicNumber<C> a = PolyUtil.<RealAlgebraicNumber<C>> evaluateMain(rr,p,r);
+        return a.isZERO();
+    }
+
+
+    /**
      * Real algebraic numbers.
      * @param f univariate polynomial.
      * @return a list of different real algebraic numbers.
@@ -163,6 +182,25 @@ public class RootFactory {
             list.add(rn);
         }
         return list;
+    }
+
+
+    /**
+     * Is complex algebraic number a root of a polynomial.
+     * @param f univariate polynomial.
+     * @param r complex algebraic number.
+     * @return true, if f(r) == 0, else false;
+     */
+    public static <C extends GcdRingElem<C> & Rational> 
+           boolean isRoot(GenPolynomial<C> f, ComplexAlgebraicNumber<C> r) {
+        boolean t = false;
+        ComplexAlgebraicRing<C> cr = r.factory(); 
+        GenPolynomialRing<ComplexAlgebraicNumber<C>> cfac 
+           = new GenPolynomialRing<ComplexAlgebraicNumber<C>>(cr,f.factory());
+        GenPolynomial<ComplexAlgebraicNumber<C>> p;
+        p = PolyUtilRoot.<C> convertToComplexCoefficients(cfac,f);
+        ComplexAlgebraicNumber<C> a = PolyUtil.<ComplexAlgebraicNumber<C>> evaluateMain(cr,p,r);
+        return a.isZERO();
     }
 
 
