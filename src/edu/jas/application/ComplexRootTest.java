@@ -180,14 +180,18 @@ public class ComplexRootTest extends TestCase {
      * Test polynomial with complex roots.
      */
     public void testPolynomialComplexRoots() {
-        a = dfac.parse("z^3 - 3");
+        a = dfac.parse("z^3 - 2");
         //System.out.println("a = " + a);
         List<Complex<RealAlgebraicNumber<BigRational>>> roots = RootFactory
                         .<BigRational> complexAlgebraicNumbersComplex(a);
         //System.out.println("a = " + a);
         //System.out.println("roots = " + roots);
         assertTrue("#roots == deg(a) ", roots.size() == a.degree(0));
-        Complex<RealAlgebraicNumber<BigRational>> root = roots.get(2); // 1)
+        for (Complex<RealAlgebraicNumber<BigRational>> car : roots) {
+            //System.out.println("car = " + car);
+            assertTrue("f(r) == 0: " + car, RootFactory.<BigRational> isRoot(a,car));
+        }
+        Complex<RealAlgebraicNumber<BigRational>> root = roots.get(2); // 0,1,2)
         //System.out.println("a = " + a);
         //System.out.println("root = " + root.getRe().decimalMagnitude() + " + "
         //                + root.getIm().decimalMagnitude() + " i");
@@ -205,40 +209,31 @@ public class ComplexRootTest extends TestCase {
         GenPolynomial<Complex<RealAlgebraicNumber<BigRational>>> cpol;
         //cpol = cring.random(2, 3, 3, q);
         //cpol = cring.univariate(0,3L).subtract(cring.fromInteger(2L));
-        //String vpol = vre + " + " + IM + " " + vim;
-        String vpol = IM + " " + vim;
-        //String vpol = " 3 ";// + vre; // + " " + IM;
+        String vpol = vre + " + " + IM + " " + vim;
+        //String vpol = IM + " " + vim;
+        //String vpol = " 2 ";// + vre; // + " " + IM;
+        //String vpol = vre; // + " " + IM;
         //System.out.println("vpol = " + vpol);
-        cpol = cring.univariate(0, 2L).subtract(cring.parse(vpol));
+        cpol = cring.univariate(0, 3L).subtract(cring.parse(vpol));
         cpol = cpol.monic();
         //System.out.println("cpol = " + cpol);
 
         // new version with recursion: now possible with real factorization
         List<Complex<RealAlgebraicNumber<RealAlgebraicNumber<BigRational>>>> croots = RootFactory
                         .<RealAlgebraicNumber<BigRational>> complexAlgebraicNumbersComplex(cpol);
-        //System.out.println("\na = " + a);
-        //System.out.println("root = " + root.getRe().decimalMagnitude() + " + "
-        //               + root.getIm().decimalMagnitude() + " i");
-        //System.out.println("cpol = " + cpol);
+        System.out.println("\na = " + a);
+        System.out.println("root = " + root.getRe().decimalMagnitude() + " + "
+                       + root.getIm().decimalMagnitude() + " i");
+        System.out.println("cpol = " + cpol);
         //System.out.println("croots = " + croots);
         for (Complex<RealAlgebraicNumber<RealAlgebraicNumber<BigRational>>> croot : croots) {
             //System.out.println("croot = " + croot);
-            Complex<RealAlgebraicNumber<RealAlgebraicNumber<BigRational>>> croot2 = croot.multiply(croot);
-            //System.out.println("croot^2 = " + croot2);
-            //System.out.println("croot = " + croot.ring);
-            //System.out.println("croot = " + croot.getRe() + " + " + croot.getIm() + " i");
+            System.out.println("croot = " + croot.getRe() + " + " + croot.getIm() + " i");
             System.out.println("croot = " + croot.getRe().decimalMagnitude() + " + "
                             + croot.getIm().decimalMagnitude() + " i");
-            //System.out.println("croot^2 = " + croot2.getRe().decimalMagnitude() + " + "
-            //                + croot2.getIm().decimalMagnitude() + " i");
+            assertTrue("f(r) == 0: " + croot, RootFactory.<RealAlgebraicNumber<BigRational>> isRoot(cpol,croot));
         }
-
-        for (Complex<RealAlgebraicNumber<BigRational>> roo : roots) {
-            //System.out.println("root = " + roo.getRe().decimalMagnitude() + " + "
-            //                + roo.getIm().decimalMagnitude() + " i");
-        }
-
-        assertTrue("#croots == deg(cpol) ", croots.size() == cpol.degree(0));
+        assertTrue("#croots == deg(cpol) " + croots.size() + " != " + cpol.degree(0), croots.size() == cpol.degree(0));
 
         if (true)
             return;

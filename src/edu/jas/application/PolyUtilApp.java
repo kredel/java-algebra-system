@@ -689,6 +689,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
             //System.out.println("i   = " + i);
             //System.out.println("pi  = " + pi);
             if (logger.isInfoEnabled()) {
+                logger.info("pi  = " + pi);
                 logger.info("pip = " + pip);
             }
             int[] depi = pip.degreeVector().dependencyOnVariables();
@@ -734,7 +735,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
                         RealAlgebraicNumber<D> rer = new RealAlgebraicNumber<D>(rar, pip2erc);
                         int sl = rel.signum();
                         int sr = rer.signum();
-                        //System.out.println("sl = " + sl + ", sr = " + sr + ", sl*sr = " + (sl*sr));
+                        System.out.println("sl = " + sl + ", sr = " + sr + ", sl*sr = " + (sl*sr));
                         if (sl * sr <= 0) {
                             List<RealAlgebraicNumber<D>> ry = new ArrayList<RealAlgebraicNumber<D>>();
                             ry.addAll(rx);
@@ -1071,6 +1072,23 @@ public class PolyUtilApp<C extends RingElem<C>> {
         return PolyUtil.<edu.jas.root.RealAlgebraicNumber<C>, edu.jas.application.RealAlgebraicNumber<C>> map(rfac, A, new RealFromReAlgCoeff<C>(cfac));
     }
 
+
+    /**
+     * Convert to Complex&lt;RealAlgebraicNumber&gt; coefficients. Represent as polynomial with
+     * Complex&lt;RealAlgebraicNumber&gt; coefficients, C is e.g. BigRational.
+     * @param pfac result polynomial factory.
+     * @param A polynomial with Complex coefficients to be converted.
+     * @return polynomial with Complex&lt;RealAlgebraicNumber&gt; coefficients.
+     */
+    public static <C extends GcdRingElem<C> & Rational> GenPolynomial<Complex<edu.jas.application.RealAlgebraicNumber<C>>> 
+           convertToComplexRealCoefficients(GenPolynomialRing<Complex<edu.jas.application.RealAlgebraicNumber<C>>> pfac, 
+                                            GenPolynomial<Complex<C>> A) {
+        ComplexRing<edu.jas.application.RealAlgebraicNumber<C>> afac 
+             = (ComplexRing<edu.jas.application.RealAlgebraicNumber<C>>) pfac.coFac;
+        return PolyUtil.<Complex<C>, Complex<edu.jas.application.RealAlgebraicNumber<C>>> map(pfac, A, new CoeffToComplexReal<C>(afac));
+    }
+
+
 }
 
 
@@ -1193,6 +1211,52 @@ class RealFromReAlgCoeff<C extends GcdRingElem<C> & Rational> implements UnaryFu
             edu.jas.root.RealAlgebraicNumber<edu.jas.root.RealAlgebraicNumber<C>> rrc 
                = (edu.jas.root.RealAlgebraicNumber<edu.jas.root.RealAlgebraicNumber<C>>) (Object) c; // force resurrect recursion
             return new edu.jas.application.RealAlgebraicNumber<C>(rfac, rrc); 
+        }
+    }
+}
+
+
+/**
+ * Coefficient to complex real algebriac functor.
+ */
+class CoeffToComplexReal<C extends GcdRingElem<C> & Rational> implements UnaryFunctor<Complex<C>, Complex<edu.jas.application.RealAlgebraicNumber<C>>> {
+
+
+    final protected ComplexRing<edu.jas.application.RealAlgebraicNumber<C>> cfac;
+
+
+    final edu.jas.application.RealAlgebraicRing<C> afac;
+
+
+    final GenPolynomialRing<C> pfac;
+
+
+    public CoeffToComplexReal(ComplexRing<edu.jas.application.RealAlgebraicNumber<C>> fac) {
+        if (fac == null) {
+            throw new IllegalArgumentException("fac must not be null");
+        }
+        cfac = fac;
+        afac = (edu.jas.application.RealAlgebraicRing<C>)cfac.ring;
+        pfac = afac.univs.ideal.getRing();
+        //List<GenPolynomial<C>> gens = pfac.getGenerators();
+        //realOne = gens.get(1);
+        //imagOne = gens.get(2);
+    }
+
+
+    public Complex<edu.jas.application.RealAlgebraicNumber<C>> eval(Complex<C> c) {
+        if (c == null) {
+            return cfac.getZERO();
+        } else {
+            GenPolynomial<C> pr = new GenPolynomial<C>(pfac,c.getRe());
+            GenPolynomial<C> pi = new GenPolynomial<C>(pfac,c.getIm());
+            //System.out.println("pr = " + pr);
+            //System.out.println("pi = " + pi);
+            edu.jas.application.RealAlgebraicNumber<C> re = new edu.jas.application.RealAlgebraicNumber<C>(afac,pr);
+            edu.jas.application.RealAlgebraicNumber<C> im = new edu.jas.application.RealAlgebraicNumber<C>(afac,pi);
+            //System.out.println("re = " + re);
+            //System.out.println("im = " + im);
+            return new Complex<edu.jas.application.RealAlgebraicNumber<C>>(cfac, re,im);
         }
     }
 }

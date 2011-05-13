@@ -32,12 +32,32 @@ public class RootFactory {
 
 
     /**
+     * Is complex algebraic number a root of a polynomial.
+     * @param f univariate polynomial.
+     * @param r complex algebraic number.
+     * @return true, if f(r) == 0, else false;
+     */
+    public static <C extends GcdRingElem<C> & Rational> 
+           boolean isRoot(GenPolynomial<Complex<C>> f, Complex<RealAlgebraicNumber<C>> r) {
+        ComplexRing<RealAlgebraicNumber<C>> cr = r.factory(); 
+        GenPolynomialRing<Complex<RealAlgebraicNumber<C>>> cfac 
+           = new GenPolynomialRing<Complex<RealAlgebraicNumber<C>>>(cr,f.factory());
+        GenPolynomial<Complex<RealAlgebraicNumber<C>>> p;
+        p = PolyUtilApp.<C> convertToComplexRealCoefficients(cfac,f);
+        //System.out.println("p = " + p);
+        Complex<RealAlgebraicNumber<C>> a = PolyUtil.<Complex<RealAlgebraicNumber<C>>> evaluateMain(cr,p,r);
+        //System.out.println("p(r) = " + a);
+        return a.isZERO();
+    }
+
+
+    /**
      * Complex algebraic numbers.
      * @param f univariate polynomial.
      * @return a list of different complex algebraic numbers.
      */
-    public static <C extends GcdRingElem<C> & Rational> List<Complex<RealAlgebraicNumber<C>>> complexAlgebraicNumbersComplex(
-                    GenPolynomial<Complex<C>> f) {
+    public static <C extends GcdRingElem<C> & Rational> 
+           List<Complex<RealAlgebraicNumber<C>>> complexAlgebraicNumbersComplex(GenPolynomial<Complex<C>> f) {
         GenPolynomialRing<Complex<C>> pfac = f.factory();
         if (pfac.nvar != 1) {
             throw new IllegalArgumentException("only for univariate polynomials");
@@ -70,8 +90,9 @@ public class RootFactory {
             //System.out.println("su = " + su);
             GenPolynomial<C> re = PolyUtil.<C> realPartFromComplex(rfac, su);
             GenPolynomial<C> im = PolyUtil.<C> imaginaryPartFromComplex(rfac, su);
-            //System.out.println("re = " + re);
-            //System.out.println("im = " + im);
+            System.out.println("\nrfac = " + rfac.toScript());
+            System.out.println("re   = " + re.toScript());
+            System.out.println("im   = " + im.toScript());
 
             List<GenPolynomial<C>> li = new ArrayList<GenPolynomial<C>>(2);
             li.add(re);
@@ -84,8 +105,10 @@ public class RootFactory {
 
             IdealWithRealAlgebraicRoots<C, C> idr;
             for (IdealWithUniv<C> idu : idul) {
-                idr = PolyUtilApp.<C, C> realAlgebraicRoots(idu.ideal).get(0);
-                //System.out.println("---idr = " + idr);
+                System.out.println("---idu = " + idu);
+                //idr = PolyUtilApp.<C, C> realAlgebraicRoots(idu.ideal).get(0);
+                idr = PolyUtilApp.<C, C> realAlgebraicRoots(idu);
+                System.out.println("---idr = " + idr);
                 for (List<edu.jas.root.RealAlgebraicNumber<C>> crr : idr.ran) {
                     //System.out.println("crr = " + crr);
                     RealRootTuple<C> root = new RealRootTuple<C>(crr);
