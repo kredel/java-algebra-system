@@ -715,7 +715,8 @@ public class PolyUtilApp<C extends RingElem<C>> {
                 GenPolynomial<D> pip2 = removeUnusedUpperVariables(pip);
                 //System.out.println("pip2 = " + pip2.ring);
                 GenPolynomialRing<D> ufac = pip2.ring.contract(1);
-                GenPolynomialRing<GenPolynomial<D>> rfac = new GenPolynomialRing<GenPolynomial<D>>(ufac, 1);
+                TermOrder to = new TermOrder(TermOrder.INVLEX);
+                GenPolynomialRing<GenPolynomial<D>> rfac = new GenPolynomialRing<GenPolynomial<D>>(ufac, 1, to);
                 GenPolynomial<GenPolynomial<D>> pip2r = PolyUtil.<D> recursive(rfac, pip2);
                 int ix = fac.nvar - 1 - depi[depi.length - 1];
                 //System.out.println("ix = " + ix);

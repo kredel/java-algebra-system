@@ -1554,7 +1554,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         }
         if ( debug ) {
             logger.info("univariate construction, P = " + P);
-            logger.info("G = " + G);
+            logger.info("univariate construction, G = " + G);
             //throw new RuntimeException("check");
         }
         GenPolynomial<C> X;
@@ -1612,7 +1612,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             pol = pol.sum(pi);
         }
         if (logger.isInfoEnabled()) {
-            logger.info("univ pol = " + pol);
+            logger.info("univariate construction, pol = " + pol);
         }
         return pol;
     }
@@ -2294,6 +2294,14 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
     public List<IdealWithUniv<C>> zeroDimPrimeDecomposition() {
         List<IdealWithUniv<C>> pdec = zeroDimPrimeDecompositionFE();
         List<IdealWithUniv<C>> dec = new ArrayList<IdealWithUniv<C>>();
+        if ( pdec.size() == 1 ) { // already prime
+            IdealWithUniv<C> Ip = pdec.get(0); 
+            int s = Ip.upolys.size() - getRing().nvar; // skip field ext univariate polys
+            List<GenPolynomial<C>> upol = Ip.upolys.subList(s, Ip.upolys.size());
+            Ip = new IdealWithUniv<C>(this,upol);
+            dec.add(Ip);
+            return dec;
+        }
         for (IdealWithUniv<C> Ip : pdec) {
             if (Ip.ideal.getRing().nvar == getRing().nvar) { // no field extension
                 dec.add(Ip);
