@@ -14,7 +14,12 @@ import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.PolyUtil;
+import edu.jas.poly.TermOrder;
 import edu.jas.structure.GcdRingElem;
+import edu.jas.application.Ideal;
+import edu.jas.application.IdealWithUniv;
+import edu.jas.application.PolyUtilApp;
 
 
 /**
@@ -84,6 +89,9 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
             throw new IllegalArgumentException("only for univariate polynomials");
         }
         AlgebraicNumberRing<C> afac = (AlgebraicNumberRing<C>) pfac.coFac;
+        if (false) { // testing
+           return new edu.jas.application.FactorAlgebraicPrim<C>(afac).baseFactorsSquarefree(P);
+        }
 
         AlgebraicNumber<C> ldcf = P.leadingBaseCoefficient();
         if (!ldcf.isONE()) {
@@ -92,16 +100,29 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
         }
         //System.out.println("\nP = " + P);
 
-        //GreatestCommonDivisor<AlgebraicNumber<C>> aengine //= GCDFactory.<AlgebraicNumber<C>> getProxy(afac);
-        //  = new GreatestCommonDivisorSimple<AlgebraicNumber<C>>( /*cfac.coFac*/ );
+        if (false && debug) {
+           Squarefree<AlgebraicNumber<C>> sqengine = SquarefreeFactory.<AlgebraicNumber<C>> getImplementation(afac);
+           if ( !sqengine.isSquarefree(P) ) {
+               throw new RuntimeException("P not squarefree: " + sqengine.squarefreeFactors(P));
+           }
+           GenPolynomial<C> modu = afac.modul;
+           if ( !factorCoeff.isIrreducible(modu) ) {
+               throw new RuntimeException("modul not irreducible: " + factorCoeff.factors(modu));
+           }
+           System.out.println("P squarefree and modul irreducible");
+           //GreatestCommonDivisor<AlgebraicNumber<C>> aengine //= GCDFactory.<AlgebraicNumber<C>> getProxy(afac);
+           //  = new GreatestCommonDivisorSimple<AlgebraicNumber<C>>( /*cfac.coFac*/ );
+        }
 
         // search squarefree norm
         long k = 0L;
         long ks = k;
         GenPolynomial<C> res = null;
         boolean sqf = false;
-        // int[] klist = new int[]{ 0, 1, 2, 3, -1, -2, -3 , -4};
-        int[] klist = new int[] { 0, -1, -2, 1, 2, -3, 3 };
+        //int[] klist = new int[]{ 0, 1, 2, 3, -1, -2, -3 , 5, -5, 7, -7, 101, -101, 1001, -1001 };
+        //int[] klist = new int[]{ 0, 1, 2, 3, -1, -2, -3 , 5, -5, 7, -7, 23, -23, 167, -167 };
+        //int[] klist = new int[] { 0, -1, -2, 1, 2, -3, 3 };
+        int[] klist = new int[] { 0, -1, -2, 1, 2 };
         int ki = 0;
         while (!sqf) {
             // k = 0,1,2,-1,-2
@@ -178,7 +199,7 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
                 //                 //throw new RuntimeException("gcd(Ni,Pp) == 1");
             }
         }
-        if (!Pp.isZERO() && !Pp.isONE()) { // hack to pretend irreducible
+        if (!Pp.isZERO() && !Pp.isONE()) { // irreducible rest
             factors.add(Pp);
         }
         //System.out.println("afactors = " + factors);
