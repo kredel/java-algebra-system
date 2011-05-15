@@ -46,8 +46,11 @@ public class RootFactory {
         p = PolyUtilApp.<C> convertToComplexRealCoefficients(cfac,f);
         //System.out.println("p = " + p);
         Complex<RealAlgebraicNumber<C>> a = PolyUtil.<Complex<RealAlgebraicNumber<C>>> evaluateMain(cr,p,r);
-        //System.out.println("p(r) = " + a);
-        return a.isZERO();
+        boolean t = a.isZERO();
+        if ( !t ) {
+            System.out.println("p(r) = " + a);
+        }
+        return t;
     }
 
 
@@ -77,7 +80,7 @@ public class RootFactory {
         //System.out.println("t = " + t); // t = x + i y
 
         GenPolynomialRing<C> rfac = new GenPolynomialRing<C>(cfac.ring, tfac); //tord?
-        //System.out.println("rfac = " + rfac);
+        System.out.println("rfac = " + rfac);
 
         List<Complex<RealAlgebraicNumber<C>>> list = new ArrayList<Complex<RealAlgebraicNumber<C>>>();
         for (GenPolynomial<Complex<C>> sp : S) {
@@ -105,7 +108,7 @@ public class RootFactory {
 
             IdealWithRealAlgebraicRoots<C, C> idr;
             for (IdealWithUniv<C> idu : idul) {
-                System.out.println("---idu = " + idu);
+                //System.out.println("---idu = " + idu);
                 //idr = PolyUtilApp.<C, C> realAlgebraicRoots(idu.ideal).get(0);
                 idr = PolyUtilApp.<C, C> realAlgebraicRoots(idu);
                 System.out.println("---idr = " + idr);

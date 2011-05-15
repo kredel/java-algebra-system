@@ -104,7 +104,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational> implements
                         .baseField(rfac1)
                         .realAlgebraicExtension(rfac2.algebraic.ring.getVars()[0], p0.toString(), ival)
                         .build();
-        //System.out.println("realRing = " + realRing);
+        System.out.println("realRing = " + realRing);
     }
 
 
