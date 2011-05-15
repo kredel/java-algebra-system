@@ -521,10 +521,10 @@ public class PolyUtil {
 
     /**
      * ModInteger chinese remainder algorithm on coefficients.
-     * @param fac GenPolynomial<ModInteger> result factory with
+     * @param fac GenPolynomial&lt;ModInteger&gt; result factory with
      *            A.coFac.modul*B.coFac.modul = C.coFac.modul.
-     * @param A GenPolynomial<ModInteger>.
-     * @param B other GenPolynomial<ModInteger>.
+     * @param A GenPolynomial&lt;ModInteger&gt;.
+     * @param B other GenPolynomial&lt;ModInteger&gt;.
      * @param mi inverse of A.coFac.modul in ring B.coFac.
      * @return S = cra(A,B), with S mod A.coFac.modul == A and S mod
      *         B.coFac.modul == B.

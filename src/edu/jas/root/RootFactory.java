@@ -38,7 +38,6 @@ public class RootFactory {
      */
     public static <C extends GcdRingElem<C> & Rational> 
            boolean isRoot(GenPolynomial<C> f, RealAlgebraicNumber<C> r) {
-        boolean t = false;
         RealAlgebraicRing<C> rr = r.factory(); 
         GenPolynomialRing<RealAlgebraicNumber<C>> rfac 
            = new GenPolynomialRing<RealAlgebraicNumber<C>>(rr,f.factory());
@@ -193,7 +192,6 @@ public class RootFactory {
      */
     public static <C extends GcdRingElem<C> & Rational> 
            boolean isRoot(GenPolynomial<C> f, ComplexAlgebraicNumber<C> r) {
-        boolean t = false;
         ComplexAlgebraicRing<C> cr = r.factory(); 
         GenPolynomialRing<ComplexAlgebraicNumber<C>> cfac 
            = new GenPolynomialRing<ComplexAlgebraicNumber<C>>(cr,f.factory());
