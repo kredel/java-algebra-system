@@ -1674,10 +1674,10 @@ public class PolyUtil {
      * ModInteger interpolate on first variable.
      * @param <C> coefficient type.
      * @param fac GenPolynomial<C> result factory.
-     * @param A GenPolynomial<C>.
-     * @param M GenPolynomial<C> interpolation modul of A.
+     * @param A GenPolynomial.
+     * @param M GenPolynomial interpolation modul of A.
      * @param mi inverse of M(am) in ring fac.coFac.
-     * @param B evaluation of other GenPolynomial<C>.
+     * @param B evaluation of other GenPolynomial.
      * @param am evaluation point (interpolation modul) of B, i.e. P(am) = B.
      * @return S, with S mod M == A and S(am) == B.
      */
@@ -1724,10 +1724,10 @@ public class PolyUtil {
      * Univariate polynomial interpolation.
      * @param <C> coefficient type.
      * @param fac GenPolynomial<C> result factory.
-     * @param A GenPolynomial<C>.
-     * @param M GenPolynomial<C> interpolation modul of A.
+     * @param A GenPolynomial.
+     * @param M GenPolynomial interpolation modul of A.
      * @param mi inverse of M(am) in ring fac.coFac.
-     * @param a evaluation of other GenPolynomial<C>.
+     * @param a evaluation of other GenPolynomial.
      * @param am evaluation point (interpolation modul) of a, i.e. P(am) = a.
      * @return S, with S mod M == A and S(am) == a.
      */

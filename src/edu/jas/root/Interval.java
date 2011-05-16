@@ -68,7 +68,7 @@ public class Interval<C extends RingElem<C> & Rational > {
      */
     public String toScript() {
         // Python case
-        return "( " + left + ", " + right + " ) ";
+        return "[ " + left.toScript() + ", " + right.toScript() + " ]";
     }
 
 
