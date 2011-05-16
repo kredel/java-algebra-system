@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import edu.jas.kern.Scripting;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.Rational;
 import edu.jas.poly.GenPolynomial;
@@ -92,19 +93,21 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational> implements
         if (p0 == null) {
             throw new RuntimeException("no polynomial found in " + (0) + " of  " + univs.ideal);
         }
-        //System.out.println("p0 = " + p0);
+        Scripting.Lang old = Scripting.setLang(Scripting.Lang.Ruby);
+        //System.out.println("realRing, p0  = " + p0);
         //System.out.println("realRing, var = " + rfac2.algebraic.ring.getVars()[0]);
-        //System.out.println("realRing, pol = " + p0.toString());
+        System.out.println("realRing, pol = " + p0.toScript());
         //System.out.println("realRing, iv  = " + rfac2.getRoot().toString());
-        String ival = rfac2.getRoot().toString();
-        ival = ival.replace("{", "");
-        ival = ival.replace("}", "");
-        //System.out.println("realRing, val = " + ival);
+        String ival = rfac2.getRoot().toScript();
+        //ival = ival.replace("{", "");
+        //ival = ival.replace("}", "");
+        System.out.println("realRing, val = " + ival);
         realRing = (edu.jas.root.RealAlgebraicRing<edu.jas.root.RealAlgebraicNumber<C>>) ExtensionFieldBuilder
                         .baseField(rfac1)
-                        .realAlgebraicExtension(rfac2.algebraic.ring.getVars()[0], p0.toString(), ival)
+                        .realAlgebraicExtension(rfac2.algebraic.ring.getVars()[0], p0.toScript(), ival)
                         .build();
-        System.out.println("realRing = " + realRing);
+        System.out.println("realRing = " + realRing.toScript());
+        old = Scripting.setLang(old);
     }
 
 
