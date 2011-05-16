@@ -105,11 +105,13 @@ public class RootFactory {
 
             List<IdealWithUniv<C>> idul = id.zeroDimRootDecomposition();
             //System.out.println("---idul = " + idul);
+            //for (IdealWithUniv<C> idu : idul) {
+            //    System.out.println("---idu = " + idu);
+	    //}
 
             IdealWithRealAlgebraicRoots<C, C> idr;
             for (IdealWithUniv<C> idu : idul) {
                 //System.out.println("---idu = " + idu);
-                //idr = PolyUtilApp.<C, C> realAlgebraicRoots(idu.ideal).get(0);
                 idr = PolyUtilApp.<C, C> realAlgebraicRoots(idu);
                 System.out.println("---idr = " + idr);
                 for (List<edu.jas.root.RealAlgebraicNumber<C>> crr : idr.ran) {
@@ -118,13 +120,17 @@ public class RootFactory {
                     //System.out.println("root = " + root);
                     RealAlgebraicRing<C> car = new RealAlgebraicRing<C>(idu, root);
                     //System.out.println("car = " + car);
+                    ComplexRing<RealAlgebraicNumber<C>> cring = new ComplexRing<RealAlgebraicNumber<C>>(car);
+
                     List<RealAlgebraicNumber<C>> gens = car.generators();
                     //System.out.println("gens = " + gens);
                     int sg = gens.size();
-                    ComplexRing<RealAlgebraicNumber<C>> cring = new ComplexRing<RealAlgebraicNumber<C>>(car);
-                    Complex<RealAlgebraicNumber<C>> crn = new Complex<RealAlgebraicNumber<C>>(cring,
-                                    gens.get(sg - 2), gens.get(sg - 1));
-                    //System.out.println("crn = " + crn);
+                    RealAlgebraicNumber<C> rre = gens.get(sg-2);
+                    RealAlgebraicNumber<C> rim = gens.get(sg-1);
+                    //System.out.println("rre = " + rre.toScript());
+                    //System.out.println("rim = " + rim.toScript());
+                    Complex<RealAlgebraicNumber<C>> crn = new Complex<RealAlgebraicNumber<C>>(cring,rre,rim);
+                    System.out.println("crn = " + crn.toScript());
                     list.add(crn);
                 }
             }
