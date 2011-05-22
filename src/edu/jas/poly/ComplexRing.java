@@ -10,6 +10,8 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 
@@ -57,10 +59,16 @@ public class ComplexRing<C extends RingElem<C>> implements RingFactory<Complex<C
      * @see edu.jas.structure.ElemFactory#generators()
      */
     public List<Complex<C>> generators() {
-        List<Complex<C>> g = new ArrayList<Complex<C>>(2);
+        List<C> gens = ring.generators();
+        Set<Complex<C>> g = new TreeSet<Complex<C>>(); // TODO
         g.add(getONE());
+        gens.remove(1);
         g.add(getIMAG());
-        return g;
+        for ( C x : gens ) {
+	    Complex<C> cx = new Complex<C>(this,x);
+            g.add(cx);
+        }
+        return new ArrayList<Complex<C>>(g);
     }
 
 
