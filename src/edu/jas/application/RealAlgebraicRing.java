@@ -13,8 +13,15 @@ import java.util.Random;
 import edu.jas.kern.Scripting;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.Rational;
+import edu.jas.poly.AlgebraicNumber;
+import edu.jas.poly.AlgebraicNumberRing;
+import edu.jas.poly.PolyUtil;
+import edu.jas.poly.TermOrder;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
 import edu.jas.root.RealRootTuple;
+import edu.jas.root.PolyUtilRoot;
+import edu.jas.root.Interval;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.Power;
 import edu.jas.structure.RingFactory;
@@ -93,21 +100,40 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational> implements
         if (p0 == null) {
             throw new RuntimeException("no polynomial found in " + (0) + " of  " + univs.ideal);
         }
-        Scripting.Lang old = Scripting.setLang(Scripting.Lang.Ruby);
-        //System.out.println("realRing, p0  = " + p0);
-        //System.out.println("realRing, var = " + rfac2.algebraic.ring.getVars()[0]);
+        //System.out.println("realRing, pol.factory() = " + p0.factory().toScript());
         System.out.println("realRing, pol = " + p0.toScript());
-        //System.out.println("realRing, iv  = " + rfac2.getRoot().toString());
-        String ival = rfac2.getRoot().toScript();
-        //ival = ival.replace("{", "");
-        //ival = ival.replace("}", "");
-        System.out.println("realRing, val = " + ival);
-        realRing = (edu.jas.root.RealAlgebraicRing<edu.jas.root.RealAlgebraicNumber<C>>) ExtensionFieldBuilder
-                        .baseField(rfac1)
-                        .realAlgebraicExtension(rfac2.algebraic.ring.getVars()[0], p0.toScript(), ival)
-                        .build();
-        System.out.println("realRing = " + realRing.toScript());
-        old = Scripting.setLang(old);
+        GenPolynomialRing<C> pfac = p0.ring;
+        GenPolynomialRing<C> pcfac = pfac.contract(1);
+        String[] vars = new String[] { pfac.getVars()[1] };
+        TermOrder to = new TermOrder(TermOrder.INVLEX);
+        GenPolynomialRing<GenPolynomial<C>> prfac2 = new GenPolynomialRing<GenPolynomial<C>>(pcfac,to,vars);
+        GenPolynomialRing<GenPolynomial<C>> prfac = pfac.recursive(1);
+        //System.out.println("pcfac = " + pcfac);
+        //System.out.println("prfac = " + prfac);
+        //System.out.println("prfac2 = " + prfac2);
+        if ( !prfac.equals(prfac2) ) {
+            System.out.println("prfac = " + prfac);
+            System.out.println("prfac2 = " + prfac2);
+            System.out.println("not equal: prfac prfac2");
+        }
+        GenPolynomial<GenPolynomial<C>> p0r = PolyUtil.<C> recursive(prfac,p0);
+        //System.out.println("realRing, p0r = " + p0r.toScript());
+        GenPolynomialRing<edu.jas.root.RealAlgebraicNumber<C>> parfac 
+           = new GenPolynomialRing<edu.jas.root.RealAlgebraicNumber<C>>(rfac1,to,vars);
+        //System.out.println("parfac = " + parfac);
+        GenPolynomial<edu.jas.root.RealAlgebraicNumber<C>> p0ar 
+           = PolyUtilRoot.<C> convertRecursiveToAlgebraicCoefficients(parfac,p0r);
+        //System.out.println("realRing, p0ar = " + p0ar.toScript());
+        Interval<C> r2 = rfac2.getRoot();
+        edu.jas.root.RealAlgebraicNumber<C> rleft = rfac1.getZERO().sum(r2.left);
+        edu.jas.root.RealAlgebraicNumber<C> rright = rfac1.getZERO().sum(r2.right);
+        Interval<edu.jas.root.RealAlgebraicNumber<C>> r2r = new Interval<edu.jas.root.RealAlgebraicNumber<C>>(rleft,rright);
+        edu.jas.root.RealAlgebraicRing<edu.jas.root.RealAlgebraicNumber<C>> rr 
+	    = new edu.jas.root.RealAlgebraicRing<edu.jas.root.RealAlgebraicNumber<C>>(p0ar,r2r); 
+        //System.out.println("realRing, val  = " + r2);
+        //System.out.println("realRing, valr = " + r2r);
+        System.out.println("realRing, rr = " + rr.toScript());
+        realRing = rr;
     }
 
 
