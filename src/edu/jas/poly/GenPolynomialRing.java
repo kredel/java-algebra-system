@@ -845,6 +845,30 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
 
 
     /**
+     * Recursive representation as polynomial with i main variables.
+     * @param i number of main variables.
+     * @return recursive polynomial ring factory.
+     */
+    public GenPolynomialRing<GenPolynomial<C>> recursive(int i) {
+        if ( i <= 0 || i >= nvar ) {
+            throw new IllegalArgumentException("wrong: 0 < " + i + " < " + nvar);
+        }
+        GenPolynomialRing<C> cfac = contract(i);
+        String[] v = null;
+        if (vars != null) {
+            v = new String[i];
+            int k = 0;
+            for (int j = nvar-i; j < nvar; j++) {
+                v[k++] = vars[j];
+            }
+        }
+        TermOrder to = tord.contract(0,i); // ??
+        GenPolynomialRing<GenPolynomial<C>> pfac = new GenPolynomialRing<GenPolynomial<C>>(cfac, i, to, v);
+        return pfac;
+    }
+
+
+    /**
      * Reverse variables. Used e.g. in opposite rings.
      * @return polynomial ring factory with reversed variables.
      */

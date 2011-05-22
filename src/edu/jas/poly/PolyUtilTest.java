@@ -200,6 +200,20 @@ public class PolyUtilTest extends TestCase {
 
 
     /**
+     * Test recursive <--> distributive ring conversion.
+     * 
+     */
+    public void testConversionRing() {
+        GenPolynomialRing<GenPolynomial<BigInteger>> rf = dfac.recursive(1);
+        GenPolynomialRing<BigInteger> cf = (GenPolynomialRing<BigInteger>)rf.coFac;
+        assertEquals("rfac#var == rf#var ", rfac.nvar, rf.nvar);
+        assertEquals("rfac.coFac#var == rf.coFac#var ", cfac.nvar, cf.nvar);
+        assertEquals("rfac.coFac.coFac == rf.coFac.coFac ", cfac.coFac, cf.coFac);
+        // variable names not same in this test
+    }
+
+
+    /**
      * Test random recursive <--> distributive conversion.
      * 
      */
