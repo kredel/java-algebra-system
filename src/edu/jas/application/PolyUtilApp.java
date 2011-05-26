@@ -40,6 +40,7 @@ import edu.jas.root.RealAlgebraicRing;
 import edu.jas.root.RealRootAbstract;
 import edu.jas.root.RealRootsSturm;
 import edu.jas.root.RootFactory;
+import edu.jas.root.Interval;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
@@ -722,22 +723,19 @@ public class PolyUtilApp<C extends RingElem<C>> {
                 //System.out.println("ix = " + ix);
                 for (RealAlgebraicNumber<D> rr : rra) {
                     //System.out.println("rr.ring = " + rr.ring);
-                    GenPolynomial<D> pip2el = PolyUtil.<D> evaluateMainRecursive(ufac, pip2r, rr.ring.getRoot().left);
-                    GenPolynomial<D> pip2er = PolyUtil.<D> evaluateMainRecursive(ufac, pip2r, rr.ring.getRoot().right);
-                    GenPolynomialRing<D> upfac = I.upolys.get(ix).ring;
-                    GenPolynomial<D> pip2elc = convert(upfac, pip2el);
-                    GenPolynomial<D> pip2erc = convert(upfac, pip2er);
-                    //System.out.println("pip2elc = " + pip2elc);
-                    //System.out.println("pip2erc = " + pip2erc);
+                    Interval<D> rroot = rr.ring.getRoot();
+                    GenPolynomial<D> pip2el = PolyUtil.<D> evaluateMainRecursive(ufac, pip2r, rroot.left);
+                    GenPolynomial<D> pip2er = PolyUtil.<D> evaluateMainRecursive(ufac, pip2r, rroot.right);
                     for (List<RealAlgebraicNumber<D>> rx : ran) {
                         //System.out.println("rx = " + rx);
                         RealAlgebraicRing<D> rar = rx.get(ix).ring;
-                        RealAlgebraicNumber<D> rel = new RealAlgebraicNumber<D>(rar, pip2elc);
-                        RealAlgebraicNumber<D> rer = new RealAlgebraicNumber<D>(rar, pip2erc);
+                        //System.out.println("rar = " + rar.toScript());
+                        RealAlgebraicNumber<D> rel = new RealAlgebraicNumber<D>(rar, pip2el);
+                        RealAlgebraicNumber<D> rer = new RealAlgebraicNumber<D>(rar, pip2er);
                         int sl = rel.signum();
                         int sr = rer.signum();
-                        System.out.println("sl = " + sl + ", sr = " + sr + ", sl*sr = " + (sl*sr));
-                        if (sl * sr <= 0) {
+                        //System.out.println("sl = " + sl + ", sr = " + sr + ", sl*sr = " + (sl*sr));
+                        if (sl * sr <= 0) { 
                             List<RealAlgebraicNumber<D>> ry = new ArrayList<RealAlgebraicNumber<D>>();
                             ry.addAll(rx);
                             ry.add(rr);
@@ -815,16 +813,17 @@ public class PolyUtilApp<C extends RingElem<C>> {
     }
 
 
-    /**
+    /*
      * Convert to a polynomial in given ring.
      * @param fac result polynomial ring.
      * @param p polynomial.
      * @return polynomial in ring fac <b>Note: </b> if p can not be represented
      *         in fac then the results are unpredictable.
      */
-    public static <C extends RingElem<C>> GenPolynomial<C> convert(GenPolynomialRing<C> fac,
+    static <C extends RingElem<C>> GenPolynomial<C> convertNot(GenPolynomialRing<C> fac,
             GenPolynomial<C> p) {
         GenPolynomial<C> q = fac.parse(p.toString());
+        System.out.println("convert(" + p + ") = " + q);
         return q;
     }
 
