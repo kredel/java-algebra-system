@@ -726,12 +726,17 @@ public class PolyUtilApp<C extends RingElem<C>> {
                     Interval<D> rroot = rr.ring.getRoot();
                     GenPolynomial<D> pip2el = PolyUtil.<D> evaluateMainRecursive(ufac, pip2r, rroot.left);
                     GenPolynomial<D> pip2er = PolyUtil.<D> evaluateMainRecursive(ufac, pip2r, rroot.right);
+                    GenPolynomialRing<D> upfac = I.upolys.get(ix).ring;
+                    GenPolynomial<D> pip2elc = convert(upfac, pip2el);
+                    GenPolynomial<D> pip2erc = convert(upfac, pip2er);
+                    //System.out.println("pip2elc = " + pip2elc);
+                    //System.out.println("pip2erc = " + pip2erc);
                     for (List<RealAlgebraicNumber<D>> rx : ran) {
                         //System.out.println("rx = " + rx);
                         RealAlgebraicRing<D> rar = rx.get(ix).ring;
                         //System.out.println("rar = " + rar.toScript());
-                        RealAlgebraicNumber<D> rel = new RealAlgebraicNumber<D>(rar, pip2el);
-                        RealAlgebraicNumber<D> rer = new RealAlgebraicNumber<D>(rar, pip2er);
+                        RealAlgebraicNumber<D> rel = new RealAlgebraicNumber<D>(rar, pip2elc);
+                        RealAlgebraicNumber<D> rer = new RealAlgebraicNumber<D>(rar, pip2erc);
                         int sl = rel.signum();
                         int sr = rer.signum();
                         //System.out.println("sl = " + sl + ", sr = " + sr + ", sl*sr = " + (sl*sr));
@@ -820,10 +825,15 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * @return polynomial in ring fac <b>Note: </b> if p can not be represented
      *         in fac then the results are unpredictable.
      */
-    static <C extends RingElem<C>> GenPolynomial<C> convertNot(GenPolynomialRing<C> fac,
+    static <C extends RingElem<C>> GenPolynomial<C> convert(GenPolynomialRing<C> fac,
             GenPolynomial<C> p) {
+        if (fac.equals(p.factory())) {
+            return p;
+        }
         GenPolynomial<C> q = fac.parse(p.toString());
-        System.out.println("convert(" + p + ") = " + q);
+        if (!q.toString().equals(p.toString())) {
+           throw new RuntimeException("convert(" + p + ") = " + q);
+        }
         return q;
     }
 
