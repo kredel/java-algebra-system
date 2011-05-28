@@ -172,7 +172,7 @@ public class FactorAlgebraicPrimTest extends TestCase {
             t = fac.isFactorization(a, sm);
             //System.out.println("t        = " + t);
             assertTrue("prod(factor(a)) = a", t);
-            System.out.println("time: sp = " + sp + ", sr = " + sr + " milliseconds");
+            //System.out.println("time: sp = " + sp + ", sr = " + sr + " milliseconds");
         }
     }
 

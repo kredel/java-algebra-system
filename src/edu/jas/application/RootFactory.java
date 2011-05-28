@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import edu.jas.arith.Rational;
 import edu.jas.poly.Complex;
 import edu.jas.poly.ComplexRing;
@@ -31,6 +33,12 @@ import edu.jas.ufd.SquarefreeFactory;
 public class RootFactory {
 
 
+    private static final Logger logger = Logger.getLogger(RootFactory.class);
+
+
+    //private static boolean debug = logger.isDebugEnabled();
+
+
     /**
      * Is complex algebraic number a root of a polynomial.
      * @param f univariate polynomial.
@@ -48,7 +56,7 @@ public class RootFactory {
         Complex<RealAlgebraicNumber<C>> a = PolyUtil.<Complex<RealAlgebraicNumber<C>>> evaluateMain(cr,p,r);
         boolean t = a.isZERO();
         if ( !t ) {
-            System.out.println("p(r) = " + a);
+            logger.info("p(r) = " + a);
         }
         return t;
     }
@@ -93,9 +101,9 @@ public class RootFactory {
             //System.out.println("su = " + su);
             GenPolynomial<C> re = PolyUtil.<C> realPartFromComplex(rfac, su);
             GenPolynomial<C> im = PolyUtil.<C> imaginaryPartFromComplex(rfac, su);
-            System.out.println("\nrfac = " + rfac.toScript());
-            System.out.println("re   = " + re.toScript());
-            System.out.println("im   = " + im.toScript());
+            logger.debug("rfac = " + rfac.toScript());
+            logger.info("re   = " + re.toScript());
+            logger.info("im   = " + im.toScript());
 
             List<GenPolynomial<C>> li = new ArrayList<GenPolynomial<C>>(2);
             li.add(re);

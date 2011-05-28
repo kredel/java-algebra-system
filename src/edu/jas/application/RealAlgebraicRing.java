@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.log4j.Logger;
+
 import edu.jas.kern.Scripting;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.Rational;
@@ -76,6 +78,9 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational> implements
     public final int PRECISION = 9; //BigDecimal.DEFAULT_PRECISION;
 
 
+    private static final Logger logger = Logger.getLogger(RealAlgebraicRing.class);
+
+
     /**
      * The constructor creates a RealAlgebraicNumber factory object from a
      * IdealWithUniv, ResidueRing and a root tuple.
@@ -115,7 +120,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational> implements
         Interval<edu.jas.root.RealAlgebraicNumber<C>> r2r = new Interval<edu.jas.root.RealAlgebraicNumber<C>>(rleft,rright);
         edu.jas.root.RealAlgebraicRing<edu.jas.root.RealAlgebraicNumber<C>> rr 
             = new edu.jas.root.RealAlgebraicRing<edu.jas.root.RealAlgebraicNumber<C>>(p0ar,r2r); 
-        //System.out.println("realRing, rr = " + rr.toString());
+        logger.info("realRing = " + rr);
         realRing = rr;
     }
 
