@@ -143,6 +143,20 @@ public class PolyUtilRoot {
         return PolyUtil.<C, ComplexAlgebraicNumber<C>> map(pfac, A, new CoeffToComplex<C>(afac));
     }
 
+
+    /**
+     * Convert to ComplexAlgebraicNumber coefficients. Represent as polynomial with
+     * ComplexAlgebraicNumber<C> coefficients, C is e.g. BigRational.
+     * @param pfac result polynomial factory.
+     * @param A polynomial with C coefficients to be converted.
+     * @return polynomial with ComplexAlgebraicNumber&lt;C&gt; coefficients.
+     */
+    public static <C extends GcdRingElem<C> & Rational> GenPolynomial<ComplexAlgebraicNumber<C>> 
+           convertToComplexCoefficientsFromComplex(GenPolynomialRing<ComplexAlgebraicNumber<C>> pfac, GenPolynomial<Complex<C>> A) {
+        ComplexAlgebraicRing<C> afac = (ComplexAlgebraicRing<C>) pfac.coFac;
+        return PolyUtil.<Complex<C>, ComplexAlgebraicNumber<C>> map(pfac, A, new CoeffToComplexFromComplex<C>(afac));
+    }
+
 }
 
 
@@ -374,6 +388,43 @@ class CoeffToComplex<C extends GcdRingElem<C> & Rational> implements UnaryFuncto
             return cfac.getZERO();
         } else {
             return new ComplexAlgebraicNumber<C>(cfac, zero.sum(new Complex<C>(cr,c)));
+        }
+    }
+}
+
+
+
+/**
+ * Coefficient to complex algebriac from complex functor.
+ */
+class CoeffToComplexFromComplex<C extends GcdRingElem<C> & Rational> implements UnaryFunctor<Complex<C>, ComplexAlgebraicNumber<C>> {
+
+
+    final protected ComplexAlgebraicRing<C> cfac;
+
+
+    final protected AlgebraicNumber<Complex<C>> zero;
+
+
+    //final protected ComplexRing<C> cr;
+
+
+    public CoeffToComplexFromComplex(ComplexAlgebraicRing<C> fac) {
+        if (fac == null) {
+            throw new IllegalArgumentException("fac must not be null");
+        }
+        cfac = fac;
+        AlgebraicNumberRing<Complex<C>> afac = cfac.algebraic;
+        zero = afac.getZERO();
+        //cr = (ComplexRing<C>) afac.ring.coFac;
+    }
+
+
+    public ComplexAlgebraicNumber<C> eval(Complex<C> c) {
+        if (c == null) {
+            return cfac.getZERO();
+        } else {
+            return new ComplexAlgebraicNumber<C>(cfac, zero.sum(c));
         }
     }
 }

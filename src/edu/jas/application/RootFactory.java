@@ -80,7 +80,7 @@ public class RootFactory {
         //System.out.println("t = " + t); // t = x + i y
 
         GenPolynomialRing<C> rfac = new GenPolynomialRing<C>(cfac.ring, tfac); //tord?
-        System.out.println("rfac = " + rfac);
+        //System.out.println("rfac = " + rfac);
 
         List<Complex<RealAlgebraicNumber<C>>> list = new ArrayList<Complex<RealAlgebraicNumber<C>>>();
         for (GenPolynomial<Complex<C>> sp : S) {
@@ -104,16 +104,12 @@ public class RootFactory {
             //System.out.println("id = " + id);
 
             List<IdealWithUniv<C>> idul = id.zeroDimRootDecomposition();
-            //System.out.println("---idul = " + idul);
-            //for (IdealWithUniv<C> idu : idul) {
-            //    System.out.println("---idu = " + idu);
-            //}
 
             IdealWithRealAlgebraicRoots<C, C> idr;
             for (IdealWithUniv<C> idu : idul) {
                 //System.out.println("---idu = " + idu);
                 idr = PolyUtilApp.<C, C> realAlgebraicRoots(idu);
-                System.out.println("---idr = " + idr);
+                //System.out.println("---idr = " + idr);
                 for (List<edu.jas.root.RealAlgebraicNumber<C>> crr : idr.ran) {
                     //System.out.println("crr = " + crr);
                     RealRootTuple<C> root = new RealRootTuple<C>(crr);

@@ -437,7 +437,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 }
                 //System.out.println("+flist = " + flist + ", mtrial = " + mtrial);
                 if (mtrial.degree(0) > deg) { // this test is sometimes wrong
-                    logger.info("degree > deg " + deg + ", degree = " + mtrial.degree(0));
+                    logger.info("degree " +  mtrial.degree(0) + " > deg " + deg);
                     //continue;
                 }
                 //System.out.println("+flist    = " + flist);

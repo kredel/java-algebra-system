@@ -203,6 +203,24 @@ public class RootFactory {
 
 
     /**
+     * Is complex algebraic number a root of a complex polynomial.
+     * @param f univariate complex polynomial.
+     * @param r complex algebraic number.
+     * @return true, if f(r) == 0, else false;
+     */
+    public static <C extends GcdRingElem<C> & Rational> 
+           boolean isRootComplex(GenPolynomial<Complex<C>> f, ComplexAlgebraicNumber<C> r) {
+        ComplexAlgebraicRing<C> cr = r.factory(); 
+        GenPolynomialRing<ComplexAlgebraicNumber<C>> cfac 
+           = new GenPolynomialRing<ComplexAlgebraicNumber<C>>(cr,f.factory());
+        GenPolynomial<ComplexAlgebraicNumber<C>> p;
+        p = PolyUtilRoot.<C> convertToComplexCoefficientsFromComplex(cfac,f);
+        ComplexAlgebraicNumber<C> a = PolyUtil.<ComplexAlgebraicNumber<C>> evaluateMain(cr,p,r);
+        return a.isZERO();
+    }
+
+
+    /**
      * Complex algebraic numbers.
      * @param f univariate polynomial.
      * @return a list of different complex algebraic numbers.
