@@ -65,7 +65,7 @@ public class ComplexRing<C extends RingElem<C>> implements RingFactory<Complex<C
         gens.remove(0);
         g.add(getIMAG());
         for ( C x : gens ) {
-	    Complex<C> cx = new Complex<C>(this,x);
+            Complex<C> cx = new Complex<C>(this,x);
             g.add(cx);
         }
         return new ArrayList<Complex<C>>(g);

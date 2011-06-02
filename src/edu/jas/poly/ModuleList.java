@@ -213,7 +213,7 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
         StringBuffer s = new StringBuffer();
         if ( ring instanceof GenSolvablePolynomialRing ) {
             s.append("Solvable");
-	}
+        }
         switch (Scripting.getLang() ) {
         case Ruby:
             s.append("SubModule.new(");

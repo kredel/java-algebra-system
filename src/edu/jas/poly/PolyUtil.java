@@ -1605,7 +1605,7 @@ public class PolyUtil {
         }
         if (t.ring.nvar > 1) {
             fac = t.ring;
-	}
+        }
         // assert decending exponents, i.e. compatible term order
         Map<ExpVector, C> val = f.getMap();
         GenPolynomial<C> s = null;
