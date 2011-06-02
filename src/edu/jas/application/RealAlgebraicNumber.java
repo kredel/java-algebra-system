@@ -394,7 +394,7 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational> implements
         //             GenPolynomial<C> p = number.val;
         //             number = ring.realRing.parse(p.toString()); // todo: convert
         //             //System.out.println("number = " + number);
-        // 	}
+        //      }
         return number.signum();
     }
 
@@ -408,7 +408,7 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational> implements
         //             GenPolynomial<C> p = number.val;
         //             number = ring.realRing.parse(p.toString()); // todo: convert
         //             //System.out.println("number = " + number);
-        // 	}
+        //      }
         return number.magnitude();
     }
 

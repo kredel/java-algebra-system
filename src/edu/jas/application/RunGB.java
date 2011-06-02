@@ -114,8 +114,8 @@ public class RunGB {
         for ( int i = 0; i < args.length; i++ ) {
             if ( args[i].equals("check") ) {
                 doCheck = true;
-	    }
-	}
+            }
+        }
 
         int threads = 0;
         int threadsPerNode = 1;
@@ -418,13 +418,13 @@ public class RunGB {
 
     static void checkGB(PolynomialList S) {
         if ( !doCheck ) {
-	    return;
-	}
-	GroebnerBaseAbstract bb = GBFactory.getImplementation(S.ring.coFac);
+            return;
+        }
+        GroebnerBaseAbstract bb = GBFactory.getImplementation(S.ring.coFac);
         long t = System.currentTimeMillis();
-	boolean chk = bb.isGB(S.list);
+        boolean chk = bb.isGB(S.list);
         t = System.currentTimeMillis() - t;
-	System.out.println("check isGB = " + chk + " in " + t + " milliseconds");
+        System.out.println("check isGB = " + chk + " in " + t + " milliseconds");
     }
 
 }
