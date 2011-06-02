@@ -427,12 +427,12 @@ public class GenPolynomialTokenizer {
                         }
                         if (debug)
                             logger.info("coeff " + r);
-                        if (r.isONE() || r.isZERO()) {
+                        //if (r.isONE() || r.isZERO()) {
                             //logger.error("Unknown varibable " + tok.sval);
                             //done = true;
                             //break;
-                            throw new InvalidExpressionException("recursively unknown variable " + tok.sval);
-                        }
+                            //throw new InvalidExpressionException("recursively unknown variable " + tok.sval);
+			//}
                         ie = nextExponent();
                         //  System.out.println("ie: " + ie);
                         r = Power.<RingElem> positivePower(r, ie);
