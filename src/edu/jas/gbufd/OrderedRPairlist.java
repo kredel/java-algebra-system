@@ -98,7 +98,7 @@ public class OrderedRPairlist<C extends RegularRingElem<C> >
             if ( xl.size() == 0 ) {
                 ip.remove(); 
                 // = pairlist.remove( g );
-	    }
+            }
         }
         remCount++; // count pairs
         return pair; 

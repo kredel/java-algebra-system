@@ -400,16 +400,16 @@ public class GroebnerBaseSeqTest extends TestCase {
 
         do {
             a = fac.random(kl, ll, el, q );
-	} while ( a.isZERO() || a.isONE() );
+        } while ( a.isZERO() || a.isONE() );
         do {
             b = fac.random(kl, ll, el, q );
-	} while ( b.isZERO() || b.isONE() );
+        } while ( b.isZERO() || b.isONE() );
         do {
             c = fac.random(kl, ll, el, q );
-	} while ( c.isZERO() || c.isONE() );
+        } while ( c.isZERO() || c.isONE() );
         do {
             d = fac.random(kl, ll, el, q );
-	} while ( d.isZERO() || d.isONE() );
+        } while ( d.isZERO() || d.isONE() );
         e = d; //fac.random(kl, ll, el, q );
 
         //if ( a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO() ) {

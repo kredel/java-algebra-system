@@ -214,7 +214,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>>
     public boolean criterion4(GenPolynomial<C> A, 
                               GenPolynomial<C> B) {  
         if ( logger.isInfoEnabled() ) {
-	    if ( !A.ring.isCommutative() || !B.ring.isCommutative() ) { // A instanceof GenSolvablePolynomial
+            if ( !A.ring.isCommutative() || !B.ring.isCommutative() ) { // A instanceof GenSolvablePolynomial
                logger.error("GBCriterion4 not applicabable to non-commutative polynomials"); 
                return true;
            }

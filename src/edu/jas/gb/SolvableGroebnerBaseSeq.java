@@ -239,7 +239,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
         while ( pairlist.hasNext() && ! oneInGB ) {
               pair = pairlist.removeNext();
               if ( pair == null ) { 
-		  //pairlist.update(); // ?
+                  //pairlist.update(); // ?
                   continue; 
               }
               i = pair.i; 
@@ -262,7 +262,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
               }
               if ( S.isZERO() ) {
                   pair.setZero();
-		  //pairlist.update( pair, S );
+                  //pairlist.update( pair, S );
                   // do not add to G2F
                   continue;
               }
@@ -276,13 +276,13 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
               }
               H = sred.leftNormalform( rowh, G, S );
               if ( debug ) {
-		  //System.out.println("H = " + H);
+                  //System.out.println("H = " + H);
                   logger.debug("is reduction H = " 
                               + sred.isLeftReductionNF( rowh, G, S, H ) );
               }
               if ( H.isZERO() ) {
                   pair.setZero();
-		  //pairlist.update( pair, H );
+                  //pairlist.update( pair, H );
                   // do not add to G2F
                   continue;
               }
@@ -550,8 +550,8 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>>
                    //System.out.println("k, a = " + k + ", " + a);
                    if ( a != null && !a.isZERO() ) { // a*row + nrow, leads to wrong method dispatch
                        List<GenPolynomial<C>> yrow = blas.scalarProduct(a,PolynomialList.<C>castToList(row));
-		       yrow = blas.vectorAdd(yrow,PolynomialList.<C>castToList(nrow));
-		       xrow = PolynomialList.<C>castToSolvableList(yrow);
+                       yrow = blas.vectorAdd(yrow,PolynomialList.<C>castToList(nrow));
+                       xrow = PolynomialList.<C>castToSolvableList(yrow);
                        N.set( j, xrow );
                    }
                 }

@@ -271,9 +271,9 @@ public class QuotientRing<C extends GcdRingElem<C>> implements RingFactory<Quoti
         String s = null;
         if ( ring.coFac.characteristic().signum() == 0 ) {
             s = "RatFunc";
-	} else {
+        } else {
             s = "ModFunc";
-	}
+        }
         return s + "( " + ring.toString() + " )";
     }
 

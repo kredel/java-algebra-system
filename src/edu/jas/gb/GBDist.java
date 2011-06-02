@@ -59,7 +59,7 @@ public class GBDist<C extends RingElem<C>> {
      * @param port for GB server.
      */
     public GBDist(int threads, String mfile, int port) {
-	this(threads, new OrderedPairlist<C>(), mfile, port);
+        this(threads, new OrderedPairlist<C>(), mfile, port);
     }
 
     /**

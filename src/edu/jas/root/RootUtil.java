@@ -70,22 +70,22 @@ public class RootUtil {
         if ( el >= 0 ) {
             int ri = s.indexOf("]");
             if ( ri > 0 ) {
-		r = ri;
-	    }
-	} else {
+                r = ri;
+            }
+        } else {
             el = -1;
-	}
+        }
         //System.out.println("s  = " + s);
         String iv = s.substring(el+1,r).trim();
         //System.out.println("iv = " + iv);
         int k = iv.indexOf(",");
         if ( k < 0 ) {
-	    k = s.indexOf(" ");
-	}
+            k = s.indexOf(" ");
+        }
         if ( k < 0 ) {
             C mid = fac.parse(iv);
             return new Interval<C>(mid);
-	}
+        }
         //System.out.println("k  = " + k + ", len = " + iv.length());
         String ls = iv.substring(0,k).trim();
         String rs = iv.substring(k+1,iv.length()).trim();
@@ -109,22 +109,22 @@ public class RootUtil {
         if ( el >= 0 ) {
             int ri = s.indexOf("]");
             if ( ri > 0 ) {
-		r = ri;
-	    }
-	} else {
+                r = ri;
+            }
+        } else {
             el = -1;
-	}
+        }
         //System.out.println("s  = " + s);
         String iv = s.substring(el+1,r).trim();
         //System.out.println("iv = " + iv);
         int k = iv.indexOf(",");
         if ( k < 0 ) {
-	    k = s.indexOf(" ");
-	}
+            k = s.indexOf(" ");
+        }
         if ( k < 0 ) {
             Complex mid = fac.parse(iv);
             return new Rectangle<C>(mid);
-	}
+        }
         //System.out.println("k  = " + k + ", len = " + iv.length());
         String ls = iv.substring(0,k).trim();
         String rs = iv.substring(k+1,iv.length()).trim();

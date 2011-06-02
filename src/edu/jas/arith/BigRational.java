@@ -314,19 +314,19 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
             return s.toString();
         }
         switch (Scripting.getLang() ) {
-	case Python:
-	    s.append("(");
-	    s.append(num.toString());
-	    s.append(",");
-	    s.append(den.toString());
-	    s.append(")");
-	    break;
-	case Ruby:
+        case Python:
+            s.append("(");
+            s.append(num.toString());
+            s.append(",");
+            s.append(den.toString());
+            s.append(")");
+            break;
+        case Ruby:
         default:
-	    s.append(num.toString());
-	    s.append("/");
-	    s.append(den.toString());
-	}
+            s.append(num.toString());
+            s.append("/");
+            s.append(den.toString());
+        }
         return s.toString();
     }
 
