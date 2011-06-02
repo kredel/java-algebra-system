@@ -52,7 +52,7 @@ public class IdealWithComplexAlgebraicRoots<C extends RingElem<C> & Rational, D 
      * Constructor.
      * @param id the ideal
      * @param up the list of univariate polynomials
-     * @param rr the list of complex algebraic roots
+     * @param cr the list of complex algebraic roots
      */
     public IdealWithComplexAlgebraicRoots(Ideal<D> id, List<GenPolynomial<D>> up,
             List<List<Complex<RealAlgebraicNumber<D>>>> cr) {
@@ -64,7 +64,7 @@ public class IdealWithComplexAlgebraicRoots<C extends RingElem<C> & Rational, D 
     /**
      * Constructor.
      * @param iu the ideal with univariate polynomials
-     * @param rr the list of real algebraic roots
+     * @param cr the list of real algebraic roots
      */
     public IdealWithComplexAlgebraicRoots(IdealWithUniv<D> iu, List<List<Complex<RealAlgebraicNumber<D>>>> cr) {
         super(iu.ideal, iu.upolys);
