@@ -123,5 +123,19 @@ else:
     print "factor time =", t, "milliseconds,", "isFactors(f,g): ",  cmp(f,g);
 print;
 
+sys.exit();
+
+t = System.currentTimeMillis();
+G = Yr.factors(f);
+t = System.currentTimeMillis() - t;
+#print "G = ", G;
+print "2 factor time =", t, "milliseconds";
+
+t = System.currentTimeMillis();
+G = Yr.factors(f);
+t = System.currentTimeMillis() - t;
+#print "G = ", G;
+print "3 factor time =", t, "milliseconds";
+
 #startLog();
 terminate();
