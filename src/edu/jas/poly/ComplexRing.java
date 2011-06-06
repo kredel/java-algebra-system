@@ -180,8 +180,16 @@ public class ComplexRing<C extends RingElem<C>> implements RingFactory<Complex<C
      */
     @Override
     public String toString() {
-        String s = "Complex[" + ring + "]";
-        return s;
+        StringBuffer sb = new StringBuffer();
+        sb.append("Complex[");
+        if (ring instanceof RingElem) {
+            RingElem ri = (RingElem) ring;
+            sb.append(ri.toScriptFactory());
+	} else {
+            sb.append(ring.toString());
+        }
+        sb.append("]");
+        return sb.toString();
     }
 
 
