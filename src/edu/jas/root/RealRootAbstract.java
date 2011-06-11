@@ -46,7 +46,11 @@ public abstract class RealRootAbstract<C extends RingElem<C>& Rational> implemen
         }
         RingFactory<C> cfac = f.ring.coFac;
         C M = cfac.getONE();
-        if (f.isZERO() || f.isConstant()) {
+        if (f.isZERO()) {
+            return M;
+        }
+        if (f.isConstant()) {
+            M = f.leadingBaseCoefficient().abs().sum(cfac.getONE());
             return M;
         }
         C a = f.leadingBaseCoefficient().abs();

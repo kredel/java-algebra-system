@@ -112,6 +112,26 @@ public class Interval<C extends RingElem<C> & Rational > {
 
 
     /**
+     * Test if an element is contained in this interval.
+     * @param c element to test.
+     * @return true, if left <= b <= right;
+     */
+    public boolean contains(C c) {
+        return left.compareTo(c) <= 0 && c.compareTo(right) <= 0;
+    }
+
+
+    /**
+     * Test if an interval is contained in this interval.
+     * @param vc interval to test.
+     * @return true, if left <= vc.left and vc.right <= right;
+     */
+    public boolean contains(Interval<C> vc) {
+        return contains(vc.left) && contains(vc.right);
+    }
+
+
+    /**
      * Length.
      * @return |left-right|;
      */

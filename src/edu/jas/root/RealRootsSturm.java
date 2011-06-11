@@ -73,16 +73,21 @@ public class RealRootsSturm<C extends RingElem<C> & Rational> extends RealRootAb
     /**
      * Isolating intervals for the real roots.
      * @param f univariate polynomial.
-     * @return a list of isolating intervalls for the real roots of f.
+     * @return a list of isolating intervals for the real roots of f.
      */
     @Override
     public List<Interval<C>> realRoots(GenPolynomial<C> f) {
         List<Interval<C>> R = new ArrayList<Interval<C>>();
-        if (f == null) {
+        if (f == null || f.isConstant()) {
             return R;
         }
         if (f.isZERO()) {
             C z = f.ring.coFac.getZERO();
+            R.add(new Interval<C>(z));
+            return R;
+        }
+        if ( f.degree(0) == 1L ) {
+            C z = f.monic().trailingBaseCoefficient().negate();
             R.add(new Interval<C>(z));
             return R;
         }
@@ -103,11 +108,32 @@ public class RealRootsSturm<C extends RingElem<C> & Rational> extends RealRootAb
      * Isolating intervals for the real roots.
      * @param iv interval with f(left) * f(right) != 0.
      * @param S sturm sequence for f and I.
-     * @return a list of isolating intervalls for the real roots of f in I.
+     * @return a list of isolating intervals for the real roots of f in I.
      */
     public List<Interval<C>> realRoots(Interval<C> iv, List<GenPolynomial<C>> S) {
         List<Interval<C>> R = new ArrayList<Interval<C>>();
         GenPolynomial<C> f = S.get(0); // squarefree part
+        if ( f.isZERO() ) {
+            C z = f.leadingBaseCoefficient();
+            if ( !iv.contains(z) ) {
+                throw new IllegalArgumentException("root not in interval: f = " + f + ", iv = " + iv + ", z = " + z);
+            }
+            Interval<C> iv1 = new Interval<C>(z);
+            R.add(iv1);
+            return R;
+        }
+        if ( f.isConstant() ) {
+            throw new IllegalArgumentException("f has no root: f = " + f + ", iv = " + iv);
+        }
+        if ( f.degree(0) == 1L ) {
+            C z = f.monic().trailingBaseCoefficient().negate();
+            if ( !iv.contains(z) ) {
+                throw new IllegalArgumentException("root not in interval: f = " + f + ", iv = " + iv + ", z = " + z);
+            }
+            Interval<C> iv1 = new Interval<C>(z);
+            R.add(iv1);
+            return R;
+        }
         //System.out.println("iv = " + iv);
         // check sign variations at interval bounds
         long v = realRootCount(iv, S);
@@ -259,7 +285,8 @@ public class RealRootsSturm<C extends RingElem<C> & Rational> extends RealRootAb
             return v;
         }
         List<GenPolynomial<C>> Sg = sturmSequence(g.monic());
-        return invariantSignInterval(iv, f, Sg);
+        Interval<C> ivp = invariantSignInterval(iv, f, Sg);
+        return ivp;
    }
 
 
