@@ -376,8 +376,31 @@ public class GenPolynomialTokenizer {
                     //System.out.println("coeff 0 = " + tok.sval );
                     StringBuffer df = new StringBuffer();
                     df.append(tok.sval);
+                    if (tok.sval.charAt(tok.sval.length()-1) == 'i') { // complex number
+                        tt = tok.nextToken();
+                        if (debug)
+                            logger.debug("tt,im = " + tok);
+                        if (tok.sval != null || tt == '-') {
+                            if (tok.sval != null) {
+                                df.append(tok.sval);
+                            } else {
+                                df.append("-");
+                            }
+                            if (tt == '-') {
+                                tt = tok.nextToken(); // todo: decimal number
+                                if (tok.sval != null && digit(tok.sval.charAt(0))) {
+                                    df.append(tok.sval);
+
+                                } else {
+                                    tok.pushBack();
+                                }
+			    }
+                        } else {
+                            tok.pushBack();
+                        }
+                    } 
                     tt = tok.nextToken();
-                    if (tt == '.') {
+                    if (tt == '.') { // decimal number
                         tt = tok.nextToken();
                         if (debug)
                             logger.debug("tt,dot = " + tok);
