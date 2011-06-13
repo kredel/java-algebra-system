@@ -134,10 +134,10 @@ public class ComplexRootTest extends TestCase {
      */
     public void testComplexRootsImag() {
         //Complex<BigRational> I = cfac.getIMAG(); 
-        //a = dfac.parse("z^3 - i2");
+        //a = dfac.parse("z^3 - i2"); 
         //a = dfac.random(ll+1).monic();
         //a = dfac.parse("z^7 - 2 z");
-        a = dfac.parse("z^6 - i2");
+        a = dfac.parse("z^6 - i3");
         //System.out.println("a = " + a);
 
         List<Complex<RealAlgebraicNumber<BigRational>>> roots;
@@ -159,7 +159,7 @@ public class ComplexRootTest extends TestCase {
         //Complex<BigRational> I = cfac.getIMAG(); 
         a = dfac.random(ll + 1).monic();
         if (a.isZERO() || a.isONE()) {
-            a = dfac.parse("z^6 - i2");
+            a = dfac.parse("z^6 - i3");
         }
         Squarefree<Complex<BigRational>> sqf = SquarefreeFactory
                         .<Complex<BigRational>> getImplementation(cfac);

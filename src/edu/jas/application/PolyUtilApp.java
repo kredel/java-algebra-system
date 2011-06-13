@@ -814,12 +814,12 @@ public class PolyUtilApp<C extends RingElem<C>> {
 
         GenPolynomialRing<Complex<D>> faccu = new GenPolynomialRing<Complex<D>>(ccfac,p0p.ring);
         GenPolynomial<Complex<D>> p0pc = PolyUtil.<D>complexFromAny(faccu,p0p);
-        System.out.println("p0c  = " + p0c);
-        System.out.println("p0pc = " + p0pc);
+        //System.out.println("p0c  = " + p0c);
+        //System.out.println("p0pc = " + p0pc);
 
         List<Complex<edu.jas.application.RealAlgebraicNumber<D>>> cra 
             = edu.jas.application.RootFactory.<D> complexAlgebraicNumbersSquarefree(p0c);
-        System.out.println("cra_0 = " + cra);
+        logger.info("#roots(p0c) = " + cra.size());
         for (Complex<edu.jas.application.RealAlgebraicNumber<D>> cr : cra) {
             List<Complex<edu.jas.application.RealAlgebraicNumber<D>>> cl 
                 = new ArrayList<Complex<edu.jas.application.RealAlgebraicNumber<D>>>();
@@ -848,15 +848,21 @@ public class PolyUtilApp<C extends RingElem<C>> {
             GenPolynomial<Complex<D>> pic = PolyUtil.<D>complexFromAny(facc,pi);
             faccu = new GenPolynomialRing<Complex<D>>(ccfac,pip.ring);
             GenPolynomial<Complex<D>> pipc = PolyUtil.<D>complexFromAny(faccu,pip);
-            System.out.println("pic  = " + pic);
-            System.out.println("pipc = " + pipc);
+            //System.out.println("pic  = " + pic);
+            //System.out.println("pipc = " + pipc);
             int[] depi = pip.degreeVector().dependencyOnVariables();
             //System.out.println("depi = " + Arrays.toString(depi));
             if (depi.length < 1 || depi.length > 2) {
-                throw new RuntimeException("wrong number of variables " + Arrays.toString(depi));
+                throw new RuntimeException("wrong number of variables " + Arrays.toString(depi) + " for " + pip);
             }
             cra = edu.jas.application.RootFactory.<D> complexAlgebraicNumbersSquarefree(pic);
-            System.out.println("cra_i = " + cra);
+            logger.info("#roots(pic) = " + cra.size());
+            if (false && debug) {
+               boolean t = edu.jas.application.RootFactory.<D> isRoot(pic,cra);
+               if (!t) {
+                   throw new RuntimeException("no roots of " + pic);
+               }
+            }
             if (depi.length == 1) {
                 // all combinations are roots of the ideal I
                 for (Complex<edu.jas.application.RealAlgebraicNumber<D>> cr : cra) {
@@ -873,21 +879,20 @@ public class PolyUtilApp<C extends RingElem<C>> {
             } else { // depi.length == 2
                 // select roots of the ideal I
                 GenPolynomial<D> pip2 = removeUnusedUpperVariables(pip);
-                System.out.println("pip2 = " + pip2.ring);
+                //System.out.println("pip2 = " + pip2.ring);
                 GenPolynomialRing<D> ufac = pip2.ring.contract(1);
-                System.out.println("ufac = " + ufac);
+                //System.out.println("ufac = " + ufac);
                 GenPolynomialRing<Complex<D>> ucfac = new GenPolynomialRing<Complex<D>>(ccfac,ufac);
-                System.out.println("ucfac = " + ucfac);
+                //System.out.println("ucfac = " + ucfac);
                 GenPolynomial<Complex<D>> pip2c = PolyUtil.<D> complexFromAny(ucfac,pip2);
 
-                //TermOrder to = new TermOrder(TermOrder.INVLEX);
-                GenPolynomialRing<GenPolynomial<D>> rfac = pip2.ring.recursive(1); //new GenPolynomialRing<GenPolynomial<D>>(ufac, 1, to);
+                GenPolynomialRing<GenPolynomial<D>> rfac = pip2.ring.recursive(1); 
                 GenPolynomial<GenPolynomial<D>> pip2r = PolyUtil.<D> recursive(rfac, pip2);
-                System.out.println("rfac = " + rfac);
+                //System.out.println("rfac = " + rfac);
 
                 GenPolynomialRing<GenPolynomial<Complex<D>>> rcfac = new GenPolynomialRing<GenPolynomial<Complex<D>>>(ucfac,rfac);
                 GenPolynomial<GenPolynomial<Complex<D>>> pip2cr = PolyUtil.<Complex<D>> recursive(rcfac, pip2c);
-                System.out.println("rcfac = " + rcfac);
+                //System.out.println("rcfac = " + rcfac);
 
                 int ix = fac.nvar - 1 - depi[depi.length - 1];
                 //System.out.println("ix = " + ix);
@@ -896,94 +901,93 @@ public class PolyUtilApp<C extends RingElem<C>> {
                     edu.jas.application.RealAlgebraicRing<D> cring = (edu.jas.application.RealAlgebraicRing<D>)cr.ring.ring;
                     RealRootTuple<D> rroot = cring.getRoot();
                     List<RealAlgebraicNumber<D>> rlist = rroot.tuple;
-                    System.out.println("rlist = " + rlist);
+                    //System.out.println("rlist = " + rlist);
                     Interval<D> vr = rlist.get(0).ring.getRoot();
                     Interval<D> vi = rlist.get(1).ring.getRoot();
-                    System.out.println("vr = " + vr);
-                    System.out.println("vi = " + vi);
+                    logger.info("vr = " + vr + ", vi = " + vi);
                     Complex<D> sw = new Complex<D>(ccfac,vr.left,vi.left);
                     Complex<D> ne = new Complex<D>(ccfac,vr.right,vi.right);
-                    System.out.println("sw   = " + sw   + ", ne   = " + ne);
+                    //System.out.println("sw   = " + sw   + ", ne   = " + ne);
+
                     GenPolynomial<Complex<D>> pip2cesw = PolyUtil.<Complex<D>> evaluateMainRecursive(ucfac, pip2cr, sw);
                     GenPolynomial<Complex<D>> pip2cene = PolyUtil.<Complex<D>> evaluateMainRecursive(ucfac, pip2cr, ne);
 
                     GenPolynomialRing<D> upfac = I.upolys.get(ix).ring;
                     GenPolynomialRing<Complex<D>> upcfac = new GenPolynomialRing<Complex<D>>(ccfac,upfac);
-                    System.out.println("upfac = " + upfac);
-                    System.out.println("upcfac = " + upcfac);
+                    //System.out.println("upfac = " + upfac);
+                    //System.out.println("upcfac = " + upcfac);
                     GenPolynomial<Complex<D>> pip2eswc = convertComplexComplex(upcfac, pip2cesw);
                     GenPolynomial<Complex<D>> pip2enec = convertComplexComplex(upcfac, pip2cene);
-                    System.out.println("pip2eswc = " + pip2eswc);
-                    System.out.println("pip2enec = " + pip2enec);
-
+                    //System.out.println("pip2eswc = " + pip2eswc);
+                    //System.out.println("pip2enec = " + pip2enec);
                     for (List<Complex<edu.jas.application.RealAlgebraicNumber<D>>> cx : can) {
                         //System.out.println("cx = " + cx);
                         ComplexRing<edu.jas.application.RealAlgebraicNumber<D>> car = cx.get(ix).ring;
                         edu.jas.application.RealAlgebraicRing<D> rar 
                             = (edu.jas.application.RealAlgebraicRing<D>) car.ring;
                         //System.out.println("car = " + car);
-                        System.out.println("rar = " + rar);
+                        //System.out.println("rar = " + rar);
 
                         TermOrder to = new TermOrder(TermOrder.INVLEX);
                         String vvr = rar.algebraic.ring.getVars()[0];
                         String vvi = rar.algebraic.ring.getVars()[1];
                         String[] vars = new String[] { vvr, vvi };
                         GenPolynomialRing<Complex<D>> tfac = new GenPolynomialRing<Complex<D>>(ccfac,to,vars); 
-                        System.out.println("tfac = " + tfac);
+                        //System.out.println("tfac = " + tfac);
                         GenPolynomial<Complex<D>> t = tfac.univariate(1, 1L).sum(tfac.univariate(0, 1L).multiply(ccfac.getIMAG()));
-                        System.out.println("t = " + t); // t = x + i y
+                        //System.out.println("t = " + t); // t = x + i y
                         GenPolynomialRing<D> rtfac = new GenPolynomialRing<D>(cfac, tfac); 
-                        System.out.println("rtfac = " + rtfac);
+                        //System.out.println("rtfac = " + rtfac);
 
                         GenPolynomial<Complex<D>> su;
                         GenPolynomial<D> re, im;
 
                         su = PolyUtil.<Complex<D>> substituteUnivariate(pip2eswc,t); 
                         //su = su.monic(); not here
-                        System.out.println("su = " + su);
+                        //System.out.println("su = " + su);
                         re = PolyUtil.<D> realPartFromComplex(rtfac, su);
                         im = PolyUtil.<D> imaginaryPartFromComplex(rtfac, su);
-                        System.out.println("re = " + re);
-                        System.out.println("im = " + im);
+                        //System.out.println("re = " + re);
+                        //System.out.println("im = " + im);
                         edu.jas.application.RealAlgebraicNumber<D> resw 
                            = new edu.jas.application.RealAlgebraicNumber<D>(rar, re);
-                        System.out.println("resw = " + resw);
+                        //System.out.println("resw = " + resw);
                         int sswr = resw.signum();
                         edu.jas.application.RealAlgebraicNumber<D> imsw 
                             = new edu.jas.application.RealAlgebraicNumber<D>(rar, im);
-                        System.out.println("imsw = " + imsw);
+                        //System.out.println("imsw = " + imsw);
                         int sswi = imsw.signum();
-                        System.out.println("sswr = " + sswr + ", sswi = " + sswi);
+                        //System.out.println("sswr = " + sswr + ", sswi = " + sswi);
 
                         su = PolyUtil.<Complex<D>> substituteUnivariate(pip2enec,t);
                         //su = su.monic(); not here
-                        System.out.println("su = " + su);
+                        //System.out.println("su = " + su);
                         re = PolyUtil.<D> realPartFromComplex(rtfac, su);
                         im = PolyUtil.<D> imaginaryPartFromComplex(rtfac, su);
-                        System.out.println("re = " + re);
-                        System.out.println("im = " + im);
+                        //System.out.println("re = " + re);
+                        //System.out.println("im = " + im);
                         edu.jas.application.RealAlgebraicNumber<D> rene 
                            = new edu.jas.application.RealAlgebraicNumber<D>(rar, re);
-                        System.out.println("rene = " + rene);
+                        //System.out.println("rene = " + rene);
                         int sner = rene.signum();
                         edu.jas.application.RealAlgebraicNumber<D> imne 
                             = new edu.jas.application.RealAlgebraicNumber<D>(rar, im);
-                        System.out.println("imne = " + imne);
+                        //System.out.println("imne = " + imne);
                         int snei = imne.signum();
-                        System.out.println("sner = " + sner + ", snei = " + snei);
+                        //System.out.println("sner = " + sner + ", snei = " + snei);
 
-                        System.out.println("");
-                        System.out.println("sswr = " + sswr + ", sswi = " + sswi);
-                        System.out.println("sner = " + sner + ", snei = " + snei);
+                        //System.out.println("");
+                        //System.out.println("sswr = " + sswr + ", sswi = " + sswi);
+                        //System.out.println("sner = " + sner + ", snei = " + snei);
                         if (sswr*sner <= 0 && sswi*snei <= 0) { 
-                            System.out.println("hit, cx = " + cx + ", cr = " + cr);
+                            //System.out.println("hit, cx = " + cx + ", cr = " + cr); //.getRe().decimalMagnitude() + " i " + cr.getIm().decimalMagnitude());
                             List<Complex<edu.jas.application.RealAlgebraicNumber<D>>> cy 
                                 = new ArrayList<Complex<edu.jas.application.RealAlgebraicNumber<D>>>();
                             cy.addAll(cx);
                             cy.add(cr);
                             cn.add(cy);
                         } else {
-                            System.out.println("no hit, cx = " + cx + ", cr = " + cr);
+                            //System.out.println("no hit, cx = " + cx + ", cr = " + cr); //.getRe().decimalMagnitude() + " i " + cr.getIm().decimalMagnitude());
                         }
                     }
                 }
