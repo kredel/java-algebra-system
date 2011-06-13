@@ -216,6 +216,23 @@ public abstract class RealRootAbstract<C extends RingElem<C>& Rational> implemen
 
 
     /**
+     * Half interval.
+     * @param iv root isolating interval with f(left) * f(right) &lt; 0.
+     * @param f univariate polynomial, non-zero.
+     * @return a new interval v such that |v| &lt; |iv|/2.
+     */
+    public Interval<C> halfInterval(Interval<C> iv, GenPolynomial<C> f) {
+        if (f == null || f.isZERO()) {
+            return iv;
+        }
+        C len = iv.length();
+        C two = len.factory().fromInteger(2);
+        C eps = len.divide(two);
+        return refineInterval(iv,f,eps);
+    }
+
+
+    /**
      * Refine interval.
      * @param iv root isolating interval with f(left) * f(right) &lt; 0.
      * @param f univariate polynomial, non-zero.

@@ -156,6 +156,16 @@ implements RingFactory<RealAlgebraicNumber<C>> {
 
 
     /**
+     * RealAlgebraicRing half interval.
+     */
+    public void halfInterval() {
+        Interval<C> v = engine.halfInterval(root, algebraic.modul);
+        //System.out.println("old v = " + ring.root + ", new v = " + v);
+        setRoot(v);
+    }
+
+
+    /**
      * Is this structure finite or infinite.
      * @return true if this structure is finite, else false.
      * @see edu.jas.structure.ElemFactory#isFinite()
