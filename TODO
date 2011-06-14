@@ -6,8 +6,6 @@ issues to consider:
 
 - implement Berlekamp-Zassenhaus for modular factorization
 
-- implement 0-dim ideal complex root selection
-
 - implement IDEALDIV2 with extGB
 
 - make hashCode to reuse computed value --> not immutable
@@ -21,6 +19,8 @@ issues to consider:
 - refactor from BasicLinAlg to GenMatrix and GenVector 
 
 - implement univariate power series composition and power
+
+- refactor unit tests to a different source code tree to avoid circular dependencys
 
 - make final variables public (?)
 
@@ -43,6 +43,8 @@ issues to consider:
 
 
 partially resolved and completed issues:
+
+- implement 0-dim ideal complex root selection
 
 - refactor package structure to reduce circular dependences
 
