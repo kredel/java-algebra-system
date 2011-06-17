@@ -33,6 +33,7 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
+import edu.jas.poly.Monomial;
 import edu.jas.root.ComplexRootsAbstract;
 import edu.jas.root.ComplexRootsSturm;
 import edu.jas.root.RealAlgebraicNumber;
@@ -649,7 +650,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
 
     /**
      * Construct real roots for zero dimensional ideal(G).
-     * @param I zero dimensional ideal with univariate irreducible polynomials.
+     * @param I zero dimensional ideal with univariate irreducible polynomials and bi-variate polynomials.
      * @return real algebraic roots for ideal(G)
      */
     public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D> & Rational> 
@@ -760,7 +761,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
     /**
      * Construct real roots for zero dimensional ideal(G).
      * @param I list of zero dimensional ideal with univariate irreducible
-     *            polynomials.
+     *            polynomials and bi-variate polynomials.
      * @return list of real algebraic roots for all ideal(I_i)
      */
     public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D> & Rational> 
@@ -777,7 +778,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
 
     /**
      * Construct complex roots for zero dimensional ideal(G).
-     * @param I zero dimensional ideal with univariate irreducible polynomials.
+     * @param I zero dimensional ideal with univariate irreducible polynomials and bi-variate polynomials.
      * @return complex algebraic roots for ideal(G)
      */
     public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D> & Rational> 
@@ -1001,7 +1002,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
 
     /**
      * Construct complex roots for zero dimensional ideal(G).
-     * @param I list of zero dimensional ideal with univariate irreducible polynomials.
+     * @param I list of zero dimensional ideal with univariate irreducible polynomials and bi-variate polynomials.
      * @return list of complex algebraic roots for ideal(G)
      */
     public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D> & Rational> 
@@ -1056,6 +1057,41 @@ public class PolyUtilApp<C extends RingElem<C>> {
         if (n == 0) {
             return pr;
         } // else case not implemented
+        return pr;
+    }
+
+
+    /**
+     * Remove all lower variables, which do not occur in polynomial.
+     * @param p polynomial.
+     * @return polynomial with removed variables
+     */
+    public static <C extends RingElem<C>> GenPolynomial<C> removeUnusedLowerVariables(GenPolynomial<C> p) {
+        int[] dep = p.degreeVector().dependencyOnVariables();
+        GenPolynomialRing<C> fac = p.ring;
+        if (fac.nvar == dep.length) { // all variables appear
+            return p;
+        }
+        int l = dep[0];
+        int r = dep[dep.length - 1];
+        int n = r;
+        GenPolynomialRing<GenPolynomial<C>> rfac = fac.recursive(n);
+        GenPolynomial<GenPolynomial<C>> mpr = PolyUtil.<C>recursive(rfac,p);
+        if (mpr.length() != p.length()) {
+            throw new RuntimeException("this should not happen " + mpr);
+        }
+        RingFactory<C> cf = fac.coFac;
+        GenPolynomialRing<C> facl = new GenPolynomialRing<C>(cf,rfac);
+        GenPolynomial<C> pr = facl.getZERO().clone();
+        for (Monomial<GenPolynomial<C>> m : mpr) {
+            ExpVector e = m.e;
+            GenPolynomial<C> a = m.c;
+            if ( !a.isConstant() ) {
+                throw new RuntimeException("this can not happen " + a);
+            }
+            C c = a.leadingBaseCoefficient();
+            pr.doPutToMap(e, c);
+        }
         return pr;
     }
 
