@@ -3215,7 +3215,7 @@ clazz must implement the Coefficients abstract class.
 =begin rdoc
 Create a power series as fixed point of the given mapping.
 
-psmap must implement the UnivPowerSeriesMap interface.
+psmap must implement the MultiVarPowerSeriesMap interface.
 =end
     def fixPoint(psmap)
         ps = @ring.fixPoint( psmap );
