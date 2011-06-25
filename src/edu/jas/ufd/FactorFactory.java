@@ -7,6 +7,7 @@ package edu.jas.ufd;
 
 import org.apache.log4j.Logger;
 
+import edu.jas.application.FactorRealReal;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.Rational;
 import edu.jas.arith.BigRational;
@@ -23,8 +24,6 @@ import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.root.RealAlgebraicNumber;
 import edu.jas.root.RealAlgebraicRing;
-//import edu.jas.application.RealAlgebraicNumber;
-//import edu.jas.application.RealAlgebraicRing;
 
 
 /**

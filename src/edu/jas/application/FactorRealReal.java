@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.ufd;
+package edu.jas.application;
 
 
 import java.util.ArrayList;
@@ -16,9 +16,8 @@ import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.application.RealAlgebraicNumber;
-import edu.jas.application.RealAlgebraicRing;
-import edu.jas.application.PolyUtilApp;
+import edu.jas.ufd.FactorAbstract;
+import edu.jas.ufd.FactorFactory;
 
 
 /**

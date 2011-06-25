@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.ufd;
+package edu.jas.application;
 
 
 import java.util.SortedMap;
@@ -23,9 +23,6 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.Complex;
 import edu.jas.poly.ComplexRing;
-import edu.jas.application.RealAlgebraicNumber;
-import edu.jas.application.RealAlgebraicRing;
-import edu.jas.application.RootFactory;
 import edu.jas.root.Interval;
 import edu.jas.root.RootUtil;
 

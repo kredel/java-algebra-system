@@ -12,7 +12,6 @@ import java.util.Random;
 
 import org.apache.log4j.Logger;
 
-//import edu.jas.application.Ideal;
 import edu.jas.kern.StringUtil;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;

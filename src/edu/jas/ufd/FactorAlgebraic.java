@@ -17,9 +17,6 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.application.Ideal;
-import edu.jas.application.IdealWithUniv;
-import edu.jas.application.PolyUtilApp;
 
 
 /**
@@ -31,9 +28,6 @@ import edu.jas.application.PolyUtilApp;
  */
 
 public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<AlgebraicNumber<C>> {
-
-
-    //FactorAbstract<AlgebraicNumber<C>>
 
 
     private static final Logger logger = Logger.getLogger(FactorAlgebraic.class);
@@ -89,17 +83,12 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
             throw new IllegalArgumentException("only for univariate polynomials");
         }
         AlgebraicNumberRing<C> afac = (AlgebraicNumberRing<C>) pfac.coFac;
-        if (false) { // testing
-           return new edu.jas.application.FactorAlgebraicPrim<C>(afac).baseFactorsSquarefree(P);
-        }
-
         AlgebraicNumber<C> ldcf = P.leadingBaseCoefficient();
         if (!ldcf.isONE()) {
             P = P.monic();
             factors.add(pfac.getONE().multiply(ldcf));
         }
         //System.out.println("\nP = " + P);
-
         if (false && debug) {
            Squarefree<AlgebraicNumber<C>> sqengine = SquarefreeFactory.<AlgebraicNumber<C>> getImplementation(afac);
            if ( !sqengine.isSquarefree(P) ) {
