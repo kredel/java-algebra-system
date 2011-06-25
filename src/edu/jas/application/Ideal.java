@@ -38,7 +38,7 @@ import edu.jas.structure.NotInvertibleException;
 import edu.jas.structure.Power;
 import edu.jas.structure.RingFactory;
 import edu.jas.ufd.FactorAbstract;
-import edu.jas.ufd.FactorFactory;
+//import edu.jas.ufd.FactorFactory;
 import edu.jas.ufd.GCDFactory;
 import edu.jas.ufd.GreatestCommonDivisor;
 import edu.jas.ufd.PolyUfdUtil;

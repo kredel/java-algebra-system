@@ -19,7 +19,7 @@ import edu.jas.poly.TermOrder;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.ufd.FactorAbstract;
 import edu.jas.ufd.FactorAbsolute;
-import edu.jas.ufd.FactorFactory;
+//import edu.jas.ufd.FactorFactory;
 import edu.jas.ufd.Squarefree;
 import edu.jas.ufd.SquarefreeFactory;
 import edu.jas.ufd.PolyUfdUtil;

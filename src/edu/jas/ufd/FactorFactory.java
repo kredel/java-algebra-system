@@ -7,7 +7,6 @@ package edu.jas.ufd;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.application.FactorRealReal;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.Rational;
 import edu.jas.arith.BigRational;
@@ -142,19 +141,6 @@ public class FactorFactory {
 
     /**
      * Determine suitable implementation of factorization algorithms, case
-     * RealAlgebraicNumber&lt;C&gt;.
-     * @param fac RealAlgebraicRing&lt;C&gt;.
-     * @param <C> coefficient type, e.g. BigRational.
-     * @return factorization algorithm implementation.
-     */
-    public static <C extends GcdRingElem<C> & Rational> FactorAbstract<edu.jas.application.RealAlgebraicNumber<C>> getImplementation(
-            edu.jas.application.RealAlgebraicRing<C> fac) {
-        return new FactorRealReal<C>(fac);
-    }
-
-
-    /**
-     * Determine suitable implementation of factorization algorithms, case
      * Complex&lt;C&gt;.
      * @param fac ComplexRing&lt;C&gt;.
      * @param <C> coefficient type, e.g. BigRational, ModInteger.
@@ -200,104 +186,43 @@ public class FactorFactory {
     public static <C extends GcdRingElem<C>> FactorAbstract<C> getImplementation(RingFactory<C> fac) {
         //logger.info("fac = " + fac.getClass().getName());
         //System.out.println("fac_o = " + fac.getClass().getName());
-        int t = 0;
         FactorAbstract/*raw type<C>*/ufd = null;
         AlgebraicNumberRing afac = null;
         RealAlgebraicRing rfac = null;
-        edu.jas.application.RealAlgebraicRing rrfac = null;
         QuotientRing qfac = null;
         GenPolynomialRing pfac = null;
-        while (true) { // switch
-            Object ofac = fac;
-            if (ofac instanceof BigInteger) {
-                t = 1;
-                break;
-            }
-            if (ofac instanceof BigRational) {
-                t = 2;
-                break;
-            }
-            if (ofac instanceof ModIntegerRing) {
-                t = 3;
-                break;
-            }
-            if (ofac instanceof ModLongRing) {
-                t = 9;
-                break;
-            }
-            if (ofac instanceof ComplexRing) {
-                t = 11;
-                break;
-            }
-            if (ofac instanceof AlgebraicNumberRing) {
-                //System.out.println("afac_o = " + ofac);
-                afac = (AlgebraicNumberRing) ofac;
-                ofac = afac.ring.coFac;
-                t = 4;
-                break;
-            }
-            if (ofac instanceof RealAlgebraicRing) {
-                //System.out.println("rfac_o = " + ofac);
-                rfac = (RealAlgebraicRing) ofac;
-                ofac = rfac.algebraic;
-                t = 5;
-                break;
-            }
-            if (ofac instanceof edu.jas.application.RealAlgebraicRing) {
-                //System.out.println("rrfac_o = " + ofac);
-                rrfac = (edu.jas.application.RealAlgebraicRing) ofac;
-                ofac = rrfac.realRing;
-                t = 6;
-                break;
-            }
-            if (ofac instanceof QuotientRing) {
-                //System.out.println("qfac_o = " + ofac);
-                qfac = (QuotientRing) ofac;
-                t = 7;
-                break;
-            }
-            if (ofac instanceof GenPolynomialRing) {
-                //System.out.println("qfac_o = " + ofac);
-                pfac = (GenPolynomialRing) ofac;
-                t = 8;
-                break;
-            }
-            break;
-        }
-        //System.out.println("ft = " + t);
-        if (t == 0) {
+        Object ofac = fac;
+        if (ofac instanceof BigInteger) {
+            ufd = new FactorInteger();
+        } else if (ofac instanceof BigRational) {
+            ufd = new FactorRational();
+        } else if (ofac instanceof ModIntegerRing) {
+            ufd = new FactorModular(fac);
+        } else if (ofac instanceof ModLongRing) {
+            ufd = new FactorModular(fac);
+        } else if (ofac instanceof ComplexRing) {
+            ufd = new FactorComplex(fac);
+        } else if (ofac instanceof AlgebraicNumberRing) {
+            //System.out.println("afac_o = " + ofac);
+            afac = (AlgebraicNumberRing) ofac;
+            ofac = afac.ring.coFac;
+            ufd = new FactorAlgebraic/*raw <C>*/(afac);
+        } else if (ofac instanceof RealAlgebraicRing) {
+            //System.out.println("rfac_o = " + ofac);
+            rfac = (RealAlgebraicRing) ofac;
+            ofac = rfac.algebraic;
+            ufd = new FactorRealAlgebraic/*raw <C>*/(rfac);
+        } else if (ofac instanceof QuotientRing) {
+            //System.out.println("qfac_o = " + ofac);
+            qfac = (QuotientRing) ofac;
+            ufd = new FactorQuotient/*raw <C>*/(qfac);
+        } else if (ofac instanceof GenPolynomialRing) {
+            //System.out.println("qfac_o = " + ofac);
+            pfac = (GenPolynomialRing) ofac;
+            ufd = getImplementation(pfac.coFac);
+        } else {
             throw new IllegalArgumentException("no factorization implementation for "
                     + fac.getClass().getName());
-        }
-        if (t == 1) {
-            ufd = new FactorInteger();
-        }
-        if (t == 2) {
-            ufd = new FactorRational();
-        }
-        if (t == 3) {
-            ufd = new FactorModular(fac);
-        }
-        if (t == 9) {
-            ufd = new FactorModular(fac);
-        }
-        if (t == 11) {
-            ufd = new FactorComplex(fac);
-        }
-        if (t == 4) {
-            ufd = new FactorAlgebraic/*raw <C>*/(afac);
-        }
-        if (t == 5) {
-            ufd = new FactorRealAlgebraic/*raw <C>*/(rfac);
-        }
-        if (t == 6) {
-            ufd = new FactorRealReal/*raw <C>*/(rrfac);
-        }
-        if (t == 7) {
-            ufd = new FactorQuotient/*raw <C>*/(qfac);
-        }
-        if (t == 8) {
-            ufd = getImplementation(pfac.coFac);
         }
         logger.info("ufd = " + ufd);
         return (FactorAbstract<C>) ufd;
