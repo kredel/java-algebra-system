@@ -4,8 +4,8 @@
 --------------------------------------------------
 
 Stats:
-    Total Classes: 39
-    Concrete Classes: 39
+    Total Classes: 59
+    Concrete Classes: 59
     Abstract Classes: 0
 
     Ca: 0
@@ -24,17 +24,31 @@ Concrete Classes:
     edu.jas.application.CReductionSeq$1
     edu.jas.application.CoeffConvertAlg
     edu.jas.application.CoeffRecConvertAlg
+    edu.jas.application.CoeffToComplexReal
     edu.jas.application.ColorPolynomial
     edu.jas.application.ColoredSystem
+    edu.jas.application.ComplexRootTest
     edu.jas.application.ComprehensiveGroebnerBaseSeq
     edu.jas.application.Condition
     edu.jas.application.Condition$1
     edu.jas.application.Condition$Color
     edu.jas.application.Dimension
     edu.jas.application.Examples
+    edu.jas.application.ExtensionFieldBuilder
+    edu.jas.application.ExtensionFieldBuilderTest
+    edu.jas.application.FactorAlgebraicPrim
+    edu.jas.application.FactorAlgebraicPrimTest
+    edu.jas.application.FactorFactory
+    edu.jas.application.FactorRealAlgebraic
+    edu.jas.application.FactorRealAlgebraicTest
+    edu.jas.application.FactorRealReal
+    edu.jas.application.FactorRealRealTest
+    edu.jas.application.FactorTest
     edu.jas.application.GroebnerSystem
+    edu.jas.application.HenselMultUtilTest
     edu.jas.application.Ideal
     edu.jas.application.IdealTest
+    edu.jas.application.IdealWithComplexAlgebraicRoots
     edu.jas.application.IdealWithComplexRoots
     edu.jas.application.IdealWithRealAlgebraicRoots
     edu.jas.application.IdealWithRealRoots
@@ -47,6 +61,11 @@ Concrete Classes:
     edu.jas.application.PolyUtilAppTest
     edu.jas.application.PrimaryComponent
     edu.jas.application.PrimitiveElement
+    edu.jas.application.ReAlgFromRealCoeff
+    edu.jas.application.RealAlgebraicNumber
+    edu.jas.application.RealAlgebraicRing
+    edu.jas.application.RealAlgebraicTest
+    edu.jas.application.RealFromReAlgCoeff
     edu.jas.application.ReductionTest
     edu.jas.application.Residue
     edu.jas.application.ResidueRing
@@ -55,6 +74,7 @@ Concrete Classes:
     edu.jas.application.RingFactoryTokenizer$1
     edu.jas.application.RingFactoryTokenizer$coeffType
     edu.jas.application.RingFactoryTokenizer$polyType
+    edu.jas.application.RootFactory
     edu.jas.application.RunGB
     edu.jas.application.RunSGB
 
@@ -77,8 +97,8 @@ Used By:
 --------------------------------------------------
 
 Stats:
-    Total Classes: 36
-    Concrete Classes: 33
+    Total Classes: 38
+    Concrete Classes: 35
     Abstract Classes: 3
 
     Ca: 12
@@ -86,7 +106,7 @@ Stats:
 
     A: 0,08
     I: 0,14
-    D: 0,77
+    D: 0,78
 
 Abstract Classes:
     edu.jas.arith.Modular
@@ -107,6 +127,7 @@ Concrete Classes:
     edu.jas.arith.BigQuaternion
     edu.jas.arith.BigQuaternionTest
     edu.jas.arith.BigRational
+    edu.jas.arith.BigRational$1
     edu.jas.arith.BigRationalIterator
     edu.jas.arith.BigRationalTest
     edu.jas.arith.BigRationalUniqueIterator
@@ -119,6 +140,7 @@ Concrete Classes:
     edu.jas.arith.ModLongIterator
     edu.jas.arith.ModLongRing
     edu.jas.arith.ModLongTest
+    edu.jas.arith.ModularNotInvertibleException
     edu.jas.arith.PrimeList
     edu.jas.arith.PrimeList$1
     edu.jas.arith.PrimeList$2
@@ -433,8 +455,8 @@ Used By:
 --------------------------------------------------
 
 Stats:
-    Total Classes: 9
-    Concrete Classes: 9
+    Total Classes: 11
+    Concrete Classes: 11
     Abstract Classes: 0
 
     Ca: 10
@@ -451,6 +473,8 @@ Concrete Classes:
     edu.jas.kern.PreemptStatus
     edu.jas.kern.PreemptingException
     edu.jas.kern.PrettyPrint
+    edu.jas.kern.Scripting
+    edu.jas.kern.Scripting$Lang
     edu.jas.kern.StringUtil
     edu.jas.kern.TSCallMock
     edu.jas.kern.TimeExceededException
@@ -477,8 +501,8 @@ Used By:
 --------------------------------------------------
 
 Stats:
-    Total Classes: 178
-    Concrete Classes: 174
+    Total Classes: 185
+    Concrete Classes: 181
     Abstract Classes: 4
 
     Ca: 8
@@ -498,10 +522,12 @@ Concrete Classes:
     edu.jas.poly.ANumGenPolynomialTest
     edu.jas.poly.AlgToPoly
     edu.jas.poly.AlgebToCompl
+    edu.jas.poly.AlgebraicNotInvertibleException
     edu.jas.poly.AlgebraicNumber
     edu.jas.poly.AlgebraicNumberIterator
     edu.jas.poly.AlgebraicNumberModTest
     edu.jas.poly.AlgebraicNumberRing
+    edu.jas.poly.AlgebraicNumberRing$1
     edu.jas.poly.AlgebraicNumberTest
     edu.jas.poly.AnyToComplex
     edu.jas.poly.CoeffToAlg
@@ -532,6 +558,7 @@ Concrete Classes:
     edu.jas.poly.GenPolynomialIterator
     edu.jas.poly.GenPolynomialMonomialIterator
     edu.jas.poly.GenPolynomialRing
+    edu.jas.poly.GenPolynomialRing$1
     edu.jas.poly.GenPolynomialTest
     edu.jas.poly.GenPolynomialTokenizer
     edu.jas.poly.GenPolynomialTokenizer$1
@@ -540,11 +567,13 @@ Concrete Classes:
     edu.jas.poly.GenPolynomialTokenizerTest
     edu.jas.poly.GenSolvablePolynomial
     edu.jas.poly.GenSolvablePolynomialRing
+    edu.jas.poly.GenSolvablePolynomialRing$1
     edu.jas.poly.GenSolvablePolynomialTest
     edu.jas.poly.GenVectorTest
     edu.jas.poly.ImagPart
     edu.jas.poly.ImagPartComplex
     edu.jas.poly.IntGenPolynomialTest
+    edu.jas.poly.InvalidExpressionException
     edu.jas.poly.Local
     edu.jas.poly.LocalRing
     edu.jas.poly.LocalTest
@@ -553,6 +582,7 @@ Concrete Classes:
     edu.jas.poly.ModSymToInt
     edu.jas.poly.ModToInt
     edu.jas.poly.ModuleList
+    edu.jas.poly.ModuleList$1
     edu.jas.poly.ModuleListTest
     edu.jas.poly.Monomial
     edu.jas.poly.Multiply
@@ -570,6 +600,7 @@ Concrete Classes:
     edu.jas.poly.PolyUtilTest
     edu.jas.poly.PolynomialComparator
     edu.jas.poly.PolynomialList
+    edu.jas.poly.PolynomialList$1
     edu.jas.poly.PolynomialListTest
     edu.jas.poly.QuatGenPolynomialTest
     edu.jas.poly.Quotient
@@ -696,12 +727,12 @@ Stats:
     Concrete Classes: 105
     Abstract Classes: 6
 
-    Ca: 0
+    Ca: 1
     Ce: 5
 
     A: 0,05
-    I: 1
-    D: 0,05
+    I: 0,83
+    D: 0,11
 
 Abstract Classes:
     edu.jas.ps.Coefficients
@@ -826,23 +857,23 @@ Depends Upon:
     edu.jas.util
 
 Used By:
-    Not used by any packages.
+    edu.jas.ufd
 
 --------------------------------------------------
 - Package: edu.jas.root
 --------------------------------------------------
 
 Stats:
-    Total Classes: 23
-    Concrete Classes: 19
+    Total Classes: 34
+    Concrete Classes: 30
     Abstract Classes: 4
 
     Ca: 1
     Ce: 5
 
-    A: 0,17
+    A: 0,12
     I: 0,83
-    D: 0,01
+    D: 0,05
 
 Abstract Classes:
     edu.jas.root.ComplexRoots
@@ -851,20 +882,31 @@ Abstract Classes:
     edu.jas.root.RealRoots
 
 Concrete Classes:
+    edu.jas.root.AlgFromRealCoeff
     edu.jas.root.Boundary
+    edu.jas.root.CoeffToComplex
+    edu.jas.root.CoeffToComplexFromComplex
+    edu.jas.root.CoeffToReAlg
+    edu.jas.root.CoeffToReal
+    edu.jas.root.CoeffToRecReAlg
     edu.jas.root.ComplexAlgebraicNumber
     edu.jas.root.ComplexAlgebraicRing
     edu.jas.root.ComplexAlgebraicTest
     edu.jas.root.ComplexRootTest
+    edu.jas.root.ComplexRootsAbstract$1
     edu.jas.root.ComplexRootsSturm
     edu.jas.root.Interval
     edu.jas.root.InvalidBoundaryException
     edu.jas.root.NoConvergenceException
+    edu.jas.root.PolyToReAlg
+    edu.jas.root.PolyUtilRoot
     edu.jas.root.RealAlgebraicNumber
     edu.jas.root.RealAlgebraicRing
     edu.jas.root.RealAlgebraicTest
+    edu.jas.root.RealFromAlgCoeff
     edu.jas.root.RealRootAbstract$1
     edu.jas.root.RealRootTest
+    edu.jas.root.RealRootTuple
     edu.jas.root.RealRootsSturm
     edu.jas.root.Rectangle
     edu.jas.root.RootFactory
@@ -944,16 +986,16 @@ Used By:
 --------------------------------------------------
 
 Stats:
-    Total Classes: 84
-    Concrete Classes: 76
+    Total Classes: 86
+    Concrete Classes: 78
     Abstract Classes: 8
 
     Ca: 4
-    Ce: 7
+    Ce: 8
 
-    A: 0,1
-    I: 0,64
-    D: 0,27
+    A: 0,09
+    I: 0,67
+    D: 0,24
 
 Abstract Classes:
     edu.jas.ufd.FactorAbsolute
@@ -1016,6 +1058,8 @@ Concrete Classes:
     edu.jas.ufd.GreatestCommonDivisorSimple
     edu.jas.ufd.GreatestCommonDivisorSubres
     edu.jas.ufd.HenselApprox
+    edu.jas.ufd.HenselMultUtil
+    edu.jas.ufd.HenselMultUtilTest
     edu.jas.ufd.HenselUtil
     edu.jas.ufd.HenselUtilTest
     edu.jas.ufd.NoLiftingException
@@ -1048,6 +1092,7 @@ Depends Upon:
     edu.jas.gb
     edu.jas.kern
     edu.jas.poly
+    edu.jas.ps
     edu.jas.structure
     edu.jas.util
     edu.jas.vector
@@ -1236,18 +1281,18 @@ Used By:
 
 Name, Class Count, Abstract Class Count, Ca, Ce, A, I, D, V:
 
-edu.jas.application,39,0,0,9,0,1,0,1
-edu.jas.arith,36,3,12,2,0,08,0,14,0,77,1
+edu.jas.application,59,0,0,9,0,1,0,1
+edu.jas.arith,38,3,12,2,0,08,0,14,0,78,1
 edu.jas.gb,104,12,4,6,0,12,0,6,0,28,1
 edu.jas.gbmod,16,4,0,6,0,25,1,0,25,1
 edu.jas.gbufd,28,3,2,7,0,11,0,78,0,12,1
 edu.jas.integrate,6,0,0,5,0,1,0,1
-edu.jas.kern,9,0,10,0,0,0,1,1
-edu.jas.poly,178,4,8,5,0,02,0,38,0,59,1
-edu.jas.ps,111,6,0,5,0,05,1,0,05,1
-edu.jas.root,23,4,1,5,0,17,0,83,0,01,1
+edu.jas.kern,11,0,10,0,0,0,1,1
+edu.jas.poly,185,4,8,5,0,02,0,38,0,59,1
+edu.jas.ps,111,6,1,5,0,05,0,83,0,11,1
+edu.jas.root,34,4,1,5,0,12,0,83,0,05,1
 edu.jas.structure,21,19,12,0,0,9,0,0,1,1
-edu.jas.ufd,84,8,4,7,0,1,0,64,0,27,1
+edu.jas.ufd,86,8,4,8,0,09,0,67,0,24,1
 edu.jas.util,67,2,6,2,0,03,0,25,0,72,1
 edu.jas.vector,8,0,4,3,0,0,43,0,57,1
 edu.mas.kern,2,0,0,1,0,1,0,1
