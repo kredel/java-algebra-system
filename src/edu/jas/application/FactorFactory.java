@@ -46,7 +46,7 @@ import edu.jas.structure.RingFactory;
  * @see edu.jas.ufd.FactorFactory#getImplementation(edu.jas.structure.RingFactory P)
  */
 
-public class FactorFactory {
+public class FactorFactory extends edu.jas.ufd.FactorFactory {
 
 
     private static final Logger logger = Logger.getLogger(FactorFactory.class);
