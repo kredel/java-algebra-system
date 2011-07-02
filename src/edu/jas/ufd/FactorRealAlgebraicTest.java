@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.application;
+package edu.jas.ufd;
 
 
 import java.util.SortedMap;

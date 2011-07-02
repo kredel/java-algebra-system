@@ -95,7 +95,6 @@ public class FactorTest extends TestCase {
 
     /**
      * Test dummy for Junit.
-     * 
      */
     public void testDummy() {
     }
@@ -103,7 +102,6 @@ public class FactorTest extends TestCase {
 
     /**
      * Test factory.
-     * 
      */
     public void testFactory() {
         ModIntegerRing mi = new ModIntegerRing(19, true);
@@ -150,7 +148,6 @@ public class FactorTest extends TestCase {
 
     /**
      * Test factory generic.
-     * 
      */
     @SuppressWarnings("unchecked")
     public void testFactoryGeneric() {
@@ -207,7 +204,6 @@ public class FactorTest extends TestCase {
 
     /**
      * Test factory specific.
-     * 
      */
     public void testFactorySpecific() {
         ModIntegerRing mi = new ModIntegerRing(19, true);

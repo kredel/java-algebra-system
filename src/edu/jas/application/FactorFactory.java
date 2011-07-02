@@ -7,12 +7,10 @@ package edu.jas.application;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.ufd.FactorAbstract;
 import edu.jas.arith.Rational;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
-import edu.jas.root.RealAlgebraicNumber;
-import edu.jas.root.RealAlgebraicRing;
+import edu.jas.ufd.FactorAbstract;
 
 
 /**
@@ -44,7 +42,8 @@ import edu.jas.root.RealAlgebraicRing;
  * </pre>
  * 
  * @see edu.jas.ufd.Factorization#factors(edu.jas.poly.GenPolynomial P)
- * @see edu.jas.ufd.FactorFactory#getImplementation(edu.jas.structure.RingFactory P)
+ * @see edu.jas.ufd.FactorFactory#getImplementation(edu.jas.structure.RingFactory
+ *      P)
  */
 
 public class FactorFactory extends edu.jas.ufd.FactorFactory {
@@ -67,21 +66,8 @@ public class FactorFactory extends edu.jas.ufd.FactorFactory {
      * @param <C> coefficient type, e.g. BigRational.
      * @return factorization algorithm implementation.
      */
-    public static <C extends GcdRingElem<C> & Rational> FactorAbstract<RealAlgebraicNumber<C>> getImplementation(
-            RealAlgebraicRing<C> fac) {
-        return new FactorRealAlgebraic<C>(fac);
-    }
-
-
-    /**
-     * Determine suitable implementation of factorization algorithms, case
-     * RealAlgebraicNumber&lt;C&gt;.
-     * @param fac RealAlgebraicRing&lt;C&gt;.
-     * @param <C> coefficient type, e.g. BigRational.
-     * @return factorization algorithm implementation.
-     */
     public static <C extends GcdRingElem<C> & Rational> FactorAbstract<edu.jas.application.RealAlgebraicNumber<C>> getImplementation(
-            edu.jas.application.RealAlgebraicRing<C> fac) {
+                    edu.jas.application.RealAlgebraicRing<C> fac) {
         return new FactorRealReal<C>(fac);
     }
 
@@ -97,8 +83,7 @@ public class FactorFactory extends edu.jas.ufd.FactorFactory {
     public static <C extends GcdRingElem<C>> FactorAbstract<C> getImplementation(RingFactory<C> fac) {
         //logger.info("fac = " + fac.getClass().getName());
         //System.out.println("fac_o = " + fac.getClass().getName());
-        FactorAbstract/*raw type<C>*/ ufd = null;
-        RealAlgebraicRing rfac = null;
+        FactorAbstract/*raw type<C>*/ufd = null;
         edu.jas.application.RealAlgebraicRing rrfac = null;
         Object ofac = fac;
         if (ofac instanceof edu.jas.application.RealAlgebraicRing) {
@@ -106,19 +91,9 @@ public class FactorFactory extends edu.jas.ufd.FactorFactory {
             rrfac = (edu.jas.application.RealAlgebraicRing) ofac;
             ofac = rrfac.realRing;
             ufd = new FactorRealReal/*raw <C>*/(rrfac);
-        } else if (ofac instanceof RealAlgebraicRing) {
-            //System.out.println("rfac_o = " + ofac);
-            rfac = (RealAlgebraicRing) ofac;
-            ofac = rfac.algebraic;
-            ufd = new FactorRealAlgebraic/*raw <C>*/(rfac);
         } else {
             ufd = edu.jas.ufd.FactorFactory.getImplementation(fac);
             return (FactorAbstract<C>) ufd;
-        }
-        //System.out.println("ft = " + t);
-        if (ufd == null)  {
-            throw new IllegalArgumentException("no factorization implementation for "
-                    + fac.getClass().getName());
         }
         logger.info("ufd = " + ufd);
         return (FactorAbstract<C>) ufd;
