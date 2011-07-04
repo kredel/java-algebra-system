@@ -14,7 +14,7 @@ import edu.jas.poly.PolyUtil;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.ufd.GCDFactory;
-import edu.jas.ufd.GreatestCommonDivisorAbstract;
+import edu.jas.ufd.GreatestCommonDivisor;
 
 
 /**
@@ -53,12 +53,6 @@ public class Boundary<C extends RingElem<C> & Rational> {
 
 
     /**
-     * Engine for greatest common divisors.
-     */
-    public final GreatestCommonDivisorAbstract<Complex<C>> ufd;
-
-
-    /**
      * Factory for real polynomials.
      */
     GenPolynomialRing<C> rfac;
@@ -76,7 +70,7 @@ public class Boundary<C extends RingElem<C> & Rational> {
         }
         rect = r;
         A = p;
-        ufd = GCDFactory.<Complex<C>> getImplementation(A.ring.coFac);
+        GreatestCommonDivisor<Complex<C>> ufd = GCDFactory.<Complex<C>> getImplementation(A.ring.coFac);
         polys = (GenPolynomial<Complex<C>>[]) new GenPolynomial[5];
 
         Complex<C>[] corner = rect.corners;
@@ -114,7 +108,7 @@ public class Boundary<C extends RingElem<C> & Rational> {
         rect = r;
         A = p;
         polys = b;
-        ufd = GCDFactory.<Complex<C>> getImplementation(A.ring.coFac);
+        //ufd = GCDFactory.<Complex<C>> getImplementation(A.ring.coFac);
     }
 
 

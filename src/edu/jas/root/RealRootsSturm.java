@@ -15,8 +15,6 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
-import edu.jas.ufd.Squarefree;
-import edu.jas.ufd.SquarefreeFactory;
 
 
 /**
