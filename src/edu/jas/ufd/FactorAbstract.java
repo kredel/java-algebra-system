@@ -141,7 +141,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
 
 
     /**
-     * GenPolynomial factorization of a squarefree polynomial.
+     * GenPolynomial factorization of a squarefree polynomial, using Kronecker substitution.
      * @param P squarefree and primitive! (respectively monic) GenPolynomial.
      * @return [p_1,...,p_k] with P = prod_{i=1,...,r} p_i.
      */
@@ -280,6 +280,12 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
     }
 
 
+    /**
+     * Remove one occurence of elements.
+     * @param a list of objects.
+     * @param b list of objects.
+     * @return remove every element of b from a, but only one occurence.
+     */
     private static <T> List<T> removeOnce(List<T> a, List<T> b) {
         List<T> res = new ArrayList<T>();
         res.addAll(a);
@@ -559,6 +565,21 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
 
 
     /**
+     * Degree of a factorization.
+     * @param [p_1 -&gt; e_1, ..., p_k -&gt; e_k] factors map.
+     * @return sum_{i=1,...,k} degree(p_i)*e_i.
+     */
+    public long factorsDegree(SortedMap<GenPolynomial<C>,Long> F) {
+        long d = 0;
+        for ( GenPolynomial<C> p : F.keySet() ) {
+	    long e = F.get(p);
+            d += p.degree() * e;
+        }
+        return d;
+    }
+
+
+    /**
      * GenPolynomial is factorization.
      * @param P GenPolynomial.
      * @param F = [p_1 -&gt; e_1, ..., p_k -&gt; e_k].
@@ -618,7 +639,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         List<GenPolynomial<GenPolynomial<C>>> rfacts = PolyUtil.<C> recursive(pfac, ifacts);
         //System.out.println("rfacts = " + rfacts);
         if (logger.isDebugEnabled()) {
-            logger.info("rfacts = " + rfacts);
+            logger.info("recfacts = " + rfacts);
         }
         factors.addAll(rfacts);
         return factors;

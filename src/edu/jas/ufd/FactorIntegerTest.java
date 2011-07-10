@@ -7,6 +7,8 @@ package edu.jas.ufd;
 
 import java.util.SortedMap;
 
+import org.apache.log4j.BasicConfigurator;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -32,7 +34,7 @@ public class FactorIntegerTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        //BasicConfigurator.configure();
+        BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 
@@ -82,7 +84,6 @@ public class FactorIntegerTest extends TestCase {
 
     /**
      * Test dummy for Junit.
-     * 
      */
     public void testDummy() {
     }
@@ -90,9 +91,8 @@ public class FactorIntegerTest extends TestCase {
 
     /**
      * Test integer monic factorization.
-     * 
      */
-    public void testIntegerMonicFactorization() {
+    public void xtestIntegerMonicFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(4);
@@ -161,9 +161,8 @@ public class FactorIntegerTest extends TestCase {
 
     /**
      * Test integer factorization.
-     * 
      */
-    public void testIntegerFactorization() {
+    public void xtestIntegerFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(4);
@@ -221,15 +220,14 @@ public class FactorIntegerTest extends TestCase {
 
     /**
      * Test integer factorization irreducible polynomial.
-     * 
      */
-    public void testIntegerFactorizationIrred() {
+    public void xtestIntegerFactorizationIrred() {
         //BasicConfigurator.configure();
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(4);
         BigInteger one = cfac.getONE();
-        GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, 1, to,
-                new String[] { "x" });
+        String[] vars = new String[] { "x" };
+        GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, 1, to, vars);
         FactorAbstract<BigInteger> fac = new FactorInteger<ModInteger>();
 
         for (int i = 1; i < 2; i++) {
@@ -256,18 +254,20 @@ public class FactorIntegerTest extends TestCase {
 
     /**
      * Test multivariate integer factorization.
-     * 
      */
     public void testMultivariate2IntegerFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
-        GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, 2, to);
+        String[] vars = new String[] { "x", "y" };
+        GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, 2, to, vars);
         FactorAbstract<BigInteger> fac = new FactorInteger<ModInteger>();
 
         for (int i = 1; i < 2; i++) {
             GenPolynomial<BigInteger> b = pfac.random(kl, 3, el, q / 2.0f);
             GenPolynomial<BigInteger> c = pfac.random(kl, 2, el, q);
+            b = pfac.parse("( y - x )"); 
+            c = pfac.parse("( x + y )"); 
             GenPolynomial<BigInteger> a;
             //             if ( !a.leadingBaseCoefficient().isUnit()) {
             //                 //continue;
@@ -275,10 +275,12 @@ public class FactorIntegerTest extends TestCase {
             //                 //a.doPutToMap(e,cfac.getONE());
             //             }
             a = b.multiply(c);
-            //System.out.println("\na = " + a);
+            System.out.println("a = " + a);
+            System.out.println("b = " + b);
+            System.out.println("c = " + c);
 
             SortedMap<GenPolynomial<BigInteger>, Long> sm = fac.factors(a);
-            //System.out.println("sm = " + sm);
+            System.out.println("sm = " + sm);
 
             boolean t = fac.isFactorization(a, sm);
             //System.out.println("t        = " + t);

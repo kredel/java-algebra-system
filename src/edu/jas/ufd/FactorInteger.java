@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.SortedMap;
 
 import org.apache.log4j.Logger;
 
@@ -23,6 +24,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.Power;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.util.KsubSet;
@@ -609,6 +611,220 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             logger.info("irred u = " + u);
             //System.out.println("irred u = " + u);
             factors.add(PP);
+        }
+        return factors;
+    }
+
+
+    /**
+     * GenPolynomial factorization of a multivariate squarefree polynomial, using Hensel lifting.
+     * @param P squarefree and primitive! (respectively monic) multivariate GenPolynomial over the integers.
+     * @return [p_1,...,p_k] with P = prod_{i=1,...,r} p_i.
+     */
+    public List<GenPolynomial<BigInteger>> factorsSquarefree(GenPolynomial<BigInteger> P) {
+        if (P == null) {
+            throw new IllegalArgumentException(this.getClass().getName() + " P != null");
+        }
+        GenPolynomialRing<BigInteger> pfac = P.ring;
+        if (pfac.nvar == 1) {
+            return baseFactorsSquarefree(P);
+        }
+        List<GenPolynomial<BigInteger>> factors = new ArrayList<GenPolynomial<BigInteger>>();
+        if (P.isZERO()) {
+            return factors;
+        }
+        if (P.degreeVector().totalDeg() <= 1L) {
+            factors.add(P);
+            return factors;
+        }
+        GenPolynomialRing<GenPolynomial<BigInteger>> rfac = pfac.recursive(1);
+        System.out.println("pfac = " + pfac.toScript());
+        System.out.println("rfac = " + rfac.toScript());
+        GenPolynomial<GenPolynomial<BigInteger>> Pr = PolyUtil.<BigInteger> recursive(rfac,P);
+
+        GenPolynomial<BigInteger> ps = Pr.leadingBaseCoefficient(); 
+        GenPolynomial<BigInteger> pd = P; 
+        System.out.println("ps = " + ps);
+        System.out.println("pd = " + pd);
+        // ldcf(pd)
+        BigInteger ac = pd.leadingBaseCoefficient();
+
+        //initialize prime list
+        PrimeList primes = new PrimeList(PrimeList.Range.medium); // PrimeList.Range.medium);
+        Iterator<java.math.BigInteger> primeIter = primes.iterator();
+        int pn = 50; //primes.size();
+        FactorAbstract<MOD> mufd = null;
+
+        for ( int i = 0; i < 11; i++ ) { // meta loop
+            System.out.println("======================================================= run " 
+                               + pfac.nvar + ", " + i);
+            java.math.BigInteger p = null; //new java.math.BigInteger("19"); //primes.next();
+            // 5 small, 5 medium and 1 large size primes
+            if ( i == 0 ) { // medium size
+                primes = new PrimeList(PrimeList.Range.medium);
+                primeIter = primes.iterator();
+            }
+            if ( i == 5 ) { // smal size
+                primes = new PrimeList(PrimeList.Range.small);
+                primeIter = primes.iterator();
+                p = primeIter.next(); // 2
+                p = primeIter.next(); // 3
+                p = primeIter.next(); // 5
+                p = primeIter.next(); // 7
+            }
+            if ( i == 10 ) { // large size
+                primes = new PrimeList(PrimeList.Range.large);
+                primeIter = primes.iterator();
+            }
+            ModularRingFactory<MOD> cofac = null;
+            int pi = 0;
+            while ( pi < pn && primeIter.hasNext() ) {
+                p = primeIter.next();
+                //p = new java.math.BigInteger("19");
+                logger.info("prime = " + p);
+                // initialize coefficient factory and map normalization factor and polynomials
+                ModularRingFactory<MOD> cf = null;
+                if (ModLongRing.MAX_LONG.compareTo(p) > 0) {
+                    cf = (ModularRingFactory) new ModLongRing(p, true);
+                } else {
+                    cf = (ModularRingFactory) new ModIntegerRing(p, true);
+                }
+                MOD nf = cf.fromInteger(ac.getVal());
+                if (nf.isZERO()) {
+                    continue;
+                }
+                nf = cf.fromInteger(pd.leadingBaseCoefficient().getVal());
+                if (nf.isZERO()) {
+                    continue;
+                }
+                cofac = cf;
+                break;
+            }
+            if ( cofac == null ) { // no lucky prime found
+                throw new RuntimeException("giving up on Hensel preparation");
+            }
+            //System.out.println("cofac = " + cofac);
+
+            List<MOD> V = new ArrayList<MOD>(1);
+            GenPolynomialRing<MOD> mfac = new GenPolynomialRing<MOD>(cofac, pfac);
+            //System.out.println("mfac = " + mfac.toScript());
+            GenPolynomial<MOD> pm = PolyUtil.<MOD> fromIntegerCoefficients(mfac, pd);
+            System.out.println("pm = " + pm);
+
+            // search evaluation point and evaluate
+            GenPolynomialRing<MOD> ckfac = mfac;
+            GenPolynomial<MOD> pe = pm;
+            GenPolynomial<MOD> pep;
+            for ( int j = pfac.nvar; j > 1; j-- ) {
+                // evaluation to univariate case
+                long degp = pe.degree(ckfac.nvar-2);
+                ckfac = ckfac.contract(1);
+                long vi = 1L; //(long)(pfac.nvar-j); // 1L; 0 not so good for small p
+                if ( p.longValue() > 1000L ) {
+                    //vi = (long)j+1L;
+                    vi = 0L;
+                }
+                // search small evaluation point
+                while( true ) { 
+                    MOD vp = cofac.fromInteger(vi++);
+                    //System.out.println("vp = " + vp);
+                    if ( vp.isZERO() && vi != 1L ) { // all elements of Z_p exhausted
+                        pe = null;
+                        break;
+                    }
+                    pep = PolyUtil.<MOD> evaluateMain(ckfac,pe,vp);
+                    //System.out.println("pep = " + pep);
+
+                    // check lucky evaluation point 
+                    MOD pl = pep.leadingBaseCoefficient();
+                    if (pl.isZERO()) { // nearly non sense
+                        continue;
+                    }
+                    if (degp != pep.degree(ckfac.nvar-1)) {
+                        //System.out.println("degv(pe) = " + pe.degreeVector());
+                        //System.out.println("deg(pe) = " + degp + ", deg(pe) = " + pep.degree(ckfac.nvar-1));
+                        continue;
+                    }
+                    V.add(vp);
+                    pe = pep;
+                    break;
+                }
+                if ( pe == null ) {
+                    break;
+                }
+            }
+            if ( pe == null ) {
+                continue;
+            }
+            logger.info("evaluation points  = " + V);
+            System.out.println("pe = " + pe);
+
+            // recursion base:
+            if ( mufd == null ) {
+                mufd = FactorFactory.getImplementation(cofac);
+            }
+            SortedMap<GenPolynomial<MOD>,Long> Ce = mufd.baseFactors(pe);
+            if ( Ce.size() <= 1 ) {
+                factors.add(P);
+                return factors;
+            }
+            //System.out.println("Ce = " + Ce);
+            logger.info("base factors = " + Ce);
+
+            // double check and check squarefree ??
+            if ( mufd.factorsDegree(Ce) != P.degree() ) {
+                continue;
+            }
+            boolean sqf = true;
+            for ( Long ll : Ce.values() ) {
+		if ( ll > 1L ) {
+                    sqf = false;
+                    break;
+                }
+            }
+            if ( ! sqf ) {
+                continue;
+            }
+            // now the factorization is known to be squarefree
+            List<GenPolynomial<MOD>> F = new ArrayList<GenPolynomial<MOD>>( Ce.keySet() );
+            logger.info("base factors squarefree = " + F);
+
+            // norm
+            BigInteger an = pd.maxNorm();
+            BigInteger mn = an.multiply(ac).multiply(new BigInteger(2L));
+
+            long k = Power.logarithm(new BigInteger(p),mn);
+            System.out.println("mn = " + mn);
+            System.out.println("k = " + k);
+        
+            List<GenPolynomial<MOD>> lift;
+            try {
+                lift = HenselMultUtil.<MOD> liftHenselFull(pd,F,V,k,ps);
+                logger.info("lift = " + lift);
+            } catch ( NoLiftingException nle ) {
+                //System.out.println("exception : " + nle);
+                continue;  
+            } catch ( ArithmeticException ae ) {
+                //System.out.println("exception : " + ae);
+                continue;  
+            }
+
+            // convert factors Ci from Z_{p^k}[y0,...,yr] to Z[y0,...,yr]
+            for ( GenPolynomial<MOD> Cm : lift ) {
+                 GenPolynomial<BigInteger> ci = PolyUtil.integerFromModularCoefficients( pfac, Cm );
+                 factors.add(ci);
+	    }
+            logger.info("test factors = " + factors);
+            if ( isFactorization(P,factors) ) {
+                return factors; // done
+            }
+            factors.clear();
+            //break; // or repeat??
+        } // end for meta loop
+
+        if (factors.size() == 0) {
+            logger.info("irred P = " + P);
+            factors.add(P);
         }
         return factors;
     }
