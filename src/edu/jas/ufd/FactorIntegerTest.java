@@ -93,7 +93,6 @@ public class FactorIntegerTest extends TestCase {
      * Test integer monic factorization.
      */
     public void xtestIntegerMonicFactorization() {
-
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(4);
         BigInteger one = cfac.getONE();
@@ -163,7 +162,6 @@ public class FactorIntegerTest extends TestCase {
      * Test integer factorization.
      */
     public void xtestIntegerFactorization() {
-
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(4);
         BigInteger one = cfac.getONE();
@@ -253,10 +251,9 @@ public class FactorIntegerTest extends TestCase {
 
 
     /**
-     * Test multivariate integer factorization.
+     * Test bi-variate integer factorization.
      */
-    public void testMultivariate2IntegerFactorization() {
-
+    public void testBivariateIntegerFactorization() {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
         String[] vars = new String[] { "x", "y" };
@@ -266,8 +263,44 @@ public class FactorIntegerTest extends TestCase {
         for (int i = 1; i < 2; i++) {
             GenPolynomial<BigInteger> b = pfac.random(kl, 3, el, q / 2.0f);
             GenPolynomial<BigInteger> c = pfac.random(kl, 2, el, q);
-            b = pfac.parse("( y - x )"); 
+            b = pfac.parse("( y x - 1 )"); 
             c = pfac.parse("( x + y )"); 
+            GenPolynomial<BigInteger> a;
+            //             if ( !a.leadingBaseCoefficient().isUnit()) {
+            //                 //continue;
+            //                 //ExpVector e = a.leadingExpVector();
+            //                 //a.doPutToMap(e,cfac.getONE());
+            //             }
+            a = b.multiply(c);
+            System.out.println("a = " + a);
+            System.out.println("b = " + b);
+            System.out.println("c = " + c);
+
+            SortedMap<GenPolynomial<BigInteger>, Long> sm = fac.factors(a);
+            System.out.println("sm = " + sm);
+
+            boolean t = fac.isFactorization(a, sm);
+            //System.out.println("t        = " + t);
+            assertTrue("prod(factor(a)) = a", t);
+        }
+    }
+
+
+    /**
+     * Test multivariate integer factorization.
+     */
+    public void xtestMultivariateIntegerFactorization() {
+        TermOrder to = new TermOrder(TermOrder.INVLEX);
+        BigInteger cfac = new BigInteger(1);
+        String[] vars = new String[] { "x", "y", "z" };
+        GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, to, vars);
+        FactorAbstract<BigInteger> fac = new FactorInteger<ModInteger>();
+
+        for (int i = 1; i < 2; i++) {
+            GenPolynomial<BigInteger> b = pfac.random(kl, 3, el, q / 2.0f);
+            GenPolynomial<BigInteger> c = pfac.random(kl, 2, el, q);
+            b = pfac.parse("( z - y )"); 
+            c = pfac.parse("( z + x )"); 
             GenPolynomial<BigInteger> a;
             //             if ( !a.leadingBaseCoefficient().isUnit()) {
             //                 //continue;

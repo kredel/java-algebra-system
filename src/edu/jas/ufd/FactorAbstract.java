@@ -325,6 +325,10 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         if (pfac.nvar > 1) {
             throw new IllegalArgumentException(this.getClass().getName() + " only for univariate polynomials");
         }
+        if (P.isConstant()) {
+            factors.put(P, 1L);
+            return factors;
+        }
         C c;
         if (pfac.coFac.isField()) { //pfac.characteristic().signum() > 0
             c = P.leadingBaseCoefficient();
@@ -440,6 +444,10 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         }
         SortedMap<GenPolynomial<C>, Long> factors = new TreeMap<GenPolynomial<C>, Long>(pfac.getComparator());
         if (P.isZERO()) {
+            return factors;
+        }
+        if (P.isConstant()) {
+            factors.put(P, 1L);
             return factors;
         }
         C c;

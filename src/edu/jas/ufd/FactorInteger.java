@@ -641,6 +641,8 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         System.out.println("pfac = " + pfac.toScript());
         System.out.println("rfac = " + rfac.toScript());
         GenPolynomial<GenPolynomial<BigInteger>> Pr = PolyUtil.<BigInteger> recursive(rfac,P);
+        GenPolynomialRing<BigInteger> cfac = (GenPolynomialRing<BigInteger>) rfac.coFac;
+        System.out.println("cfac = " + cfac.toScript());
 
         GenPolynomial<BigInteger> ps = Pr.leadingBaseCoefficient(); 
         GenPolynomial<BigInteger> pd = P; 
@@ -648,6 +650,8 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         System.out.println("pd = " + pd);
         // ldcf(pd)
         BigInteger ac = pd.leadingBaseCoefficient();
+        SortedMap<GenPolynomial<BigInteger>,Long> ldfacs = factors(ps);
+        System.out.println("ldfacs = " + ldfacs);
 
         //initialize prime list
         PrimeList primes = new PrimeList(PrimeList.Range.medium); // PrimeList.Range.medium);
@@ -664,7 +668,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 primes = new PrimeList(PrimeList.Range.medium);
                 primeIter = primes.iterator();
             }
-            if ( i == 5 ) { // smal size
+            if ( i == 5 ) { // small size
                 primes = new PrimeList(PrimeList.Range.small);
                 primeIter = primes.iterator();
                 p = primeIter.next(); // 2
@@ -697,6 +701,10 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 if (nf.isZERO()) {
                     continue;
                 }
+                nf = cf.fromInteger(ps.leadingBaseCoefficient().getVal());
+                if (nf.isZERO()) {
+                    continue;
+                }
                 cofac = cf;
                 break;
             }
@@ -707,7 +715,9 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
 
             List<MOD> V = new ArrayList<MOD>(1);
             GenPolynomialRing<MOD> mfac = new GenPolynomialRing<MOD>(cofac, pfac);
-            //System.out.println("mfac = " + mfac.toScript());
+            GenPolynomialRing<MOD> mcfac = new GenPolynomialRing<MOD>(cofac, cfac);
+            System.out.println("mfac  = " + mfac.toScript());
+            System.out.println("mcfac = " + mcfac.toScript());
             GenPolynomial<MOD> pm = PolyUtil.<MOD> fromIntegerCoefficients(mfac, pd);
             System.out.println("pm = " + pm);
 
@@ -742,7 +752,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     }
                     if (degp != pep.degree(ckfac.nvar-1)) {
                         //System.out.println("degv(pe) = " + pe.degreeVector());
-                        //System.out.println("deg(pe) = " + degp + ", deg(pe) = " + pep.degree(ckfac.nvar-1));
+                        //System.out.println("deg(pe) = " + degp + ", deg(pep) = " + pep.degree(ckfac.nvar-1));
                         continue;
                     }
                     V.add(vp);
@@ -769,12 +779,11 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 return factors;
             }
             //System.out.println("Ce = " + Ce);
-            logger.info("base factors = " + Ce);
 
             // double check and check squarefree ??
-            if ( mufd.factorsDegree(Ce) != P.degree() ) {
-                continue;
-            }
+            //if ( mufd.factorsDegree(Ce) != P.degree() ) {
+            //    continue;
+            //}
             boolean sqf = true;
             for ( Long ll : Ce.values() ) {
 		if ( ll > 1L ) {
@@ -783,6 +792,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 }
             }
             if ( ! sqf ) {
+                logger.info("base factors = " + Ce);
                 continue;
             }
             // now the factorization is known to be squarefree
@@ -814,8 +824,8 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                  GenPolynomial<BigInteger> ci = PolyUtil.integerFromModularCoefficients( pfac, Cm );
                  factors.add(ci);
 	    }
-            logger.info("test factors = " + factors);
             if ( isFactorization(P,factors) ) {
+                logger.info("test factors = " + factors);
                 return factors; // done
             }
             factors.clear();
