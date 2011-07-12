@@ -11,6 +11,7 @@ package edu.jas.util;
 /**
  * Array utilities.
  * For example copyOf from Java 6.
+ * <b>Note:</b> unused at the moment since it is not working in Java 5.
  * @author Heinz Kredel
  */
 public class ArrayUtil {
