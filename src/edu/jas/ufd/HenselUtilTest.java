@@ -12,6 +12,8 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import org.apache.log4j.BasicConfigurator;
+
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
@@ -36,7 +38,7 @@ public class HenselUtilTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        //BasicConfigurator.configure();
+        BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
         ComputerThreads.terminate();
     }
@@ -165,9 +167,8 @@ public class HenselUtilTest extends TestCase {
 
     /**
      * Test Hensel lifting.
-     * 
      */
-    public void testHenselLifting() {
+    public void xtestHenselLifting() {
         java.math.BigInteger p;
         p = getPrime1();
         //p = new java.math.BigInteger("19");
@@ -278,9 +279,8 @@ public class HenselUtilTest extends TestCase {
 
     /**
      * Test Hensel lifting with gcd.
-     * 
      */
-    public void testHenselLiftingGcd() {
+    public void xtestHenselLiftingGcd() {
         java.math.BigInteger p;
         //p = getPrime1();
         p = new java.math.BigInteger("19");
@@ -380,9 +380,8 @@ public class HenselUtilTest extends TestCase {
 
     /**
      * Test Hensel quadratic lifting.
-     * 
      */
-    public void testHenselQuadraticLifting() {
+    public void xtestHenselQuadraticLifting() {
         java.math.BigInteger p;
         //p = getPrime1();
         p = new java.math.BigInteger("19");
@@ -522,9 +521,8 @@ public class HenselUtilTest extends TestCase {
 
     /**
      * Test Hensel quadratic lifting with gcd.
-     * 
      */
-    public void testHenselQuadraticLiftingGcd() {
+    public void xtestHenselQuadraticLiftingGcd() {
         java.math.BigInteger p;
         //p = getPrime1();
         p = new java.math.BigInteger("19");
@@ -624,9 +622,8 @@ public class HenselUtilTest extends TestCase {
 
     /**
      * Test lifting of extended Euclidean relation.
-     * 
      */
-    public void testLiftingEgcd() {
+    public void xtestLiftingEgcd() {
         java.math.BigInteger p;
         //p = getPrime1();
         //p = new java.math.BigInteger("19");
@@ -741,9 +738,8 @@ public class HenselUtilTest extends TestCase {
 
     /**
      * Test lifting of list of extended Euclidean relation.
-     * 
      */
-    public void testLiftingEgcdList() {
+    public void xtestLiftingEgcdList() {
         java.math.BigInteger p;
         //p = getPrime1();
         p = new java.math.BigInteger("19");
@@ -911,9 +907,8 @@ public class HenselUtilTest extends TestCase {
 
     /**
      * Test lifting of list of Diophant relation.
-     * 
      */
-    public void testLiftingDiophantList() {
+    public void xtestLiftingDiophantList() {
         java.math.BigInteger p;
         //p = getPrime1();
         p = new java.math.BigInteger("19");
@@ -1083,10 +1078,9 @@ public class HenselUtilTest extends TestCase {
 
 
     /**
-     * Test Hensel lifting new list version.
-     * 
+     * Test Hensel monic lifting new list version.
      */
-    public void testHenselLiftingList() {
+    public void xtestHenselLiftingMonicList() {
         java.math.BigInteger p;
         //p = getPrime1();
         p = new java.math.BigInteger("268435399");
@@ -1272,6 +1266,184 @@ public class HenselUtilTest extends TestCase {
 
             } catch (NoLiftingException e) {
                 // ok fail(""+e);
+            }
+            //System.out.println("time = " + tq);
+        }
+    }
+
+
+    /**
+     * Test Hensel lifting new list version.
+     */
+    public void testHenselLiftingList() {
+        java.math.BigInteger p;
+        //p = getPrime1();
+        p = new java.math.BigInteger("268435399");
+        //p = new java.math.BigInteger("19");
+        //p = new java.math.BigInteger("5");
+        BigInteger m = new BigInteger(p);
+
+        ModIntegerRing pm = new ModIntegerRing(p, true);
+        GenPolynomialRing<ModInteger> mfac 
+           = new GenPolynomialRing<ModInteger>(pm, 1, to, new String[] { "x" });
+
+        dfac = new GenPolynomialRing<BigInteger>(m, mfac);
+        GreatestCommonDivisorAbstract<BigInteger> ufd = GCDFactory.getProxy(m);
+        BigInteger one = m.getONE();
+
+        GenPolynomial<ModInteger> ap;
+        GenPolynomial<ModInteger> bp;
+        GenPolynomial<ModInteger> cp;
+        GenPolynomial<ModInteger> dp;
+        GenPolynomial<ModInteger> ep;
+        List<GenPolynomial<ModInteger>> lift;
+        GenPolynomial<ModInteger> s;
+        GenPolynomial<ModInteger> t;
+
+        for (int i = 1; i < 2; i++) { // 70 better for quadratic
+            a = dfac.random(kl + 30 * i, ll + 5, el + 3, q).abs();
+            //a = dfac.parse("( 35333333 x^3 + 20 x^2 - 313131)");
+            a = ufd.basePrimitivePart(a);
+            b = dfac.random(kl + 30 * i, ll + 5, el + 5, q).abs();
+            //b = dfac.parse("( 51111 x^4 + 23 x^3 - 32)");
+            b = ufd.basePrimitivePart(b);
+            e = ufd.baseGcd(a, b);
+            //System.out.println("e   = " + e);
+            if (!e.isONE()) {
+                a = PolyUtil.<BigInteger> basePseudoDivide(a, e);
+                b = PolyUtil.<BigInteger> basePseudoDivide(b, e);
+            }
+            if (a.degree(0) < 1) {
+                a = dfac.parse("( 3 x^3 + 20 x^2 - 313131)");
+            }
+            if (b.degree(0) < 1) {
+                b = dfac.parse("( 5 x^4 + 23 x^3 - 32)");
+            }
+            ap = PolyUtil.fromIntegerCoefficients(mfac, a);
+            if (!a.degreeVector().equals(ap.degreeVector())) {
+                continue;
+            }
+            bp = PolyUtil.fromIntegerCoefficients(mfac, b);
+            if (!b.degreeVector().equals(bp.degreeVector())) {
+                continue;
+            }
+            ep = ap.gcd(bp);
+            //System.out.println("ep  = " + ep);
+            if (!ep.isONE()) {
+                continue;
+            }
+            d = dfac.random(kl + 30 * i, ll + 5, el + 4, q).abs();
+            //d = dfac.parse("( 711111 x^2 + 22 x - 33)");
+            //d = dfac.parse("( 7 x^2 + 22 x - 33)");
+            d = ufd.basePrimitivePart(d);
+            e = ufd.baseGcd(a, d);
+            //System.out.println("e   = " + e);
+            if (!e.isONE()) {
+                a = PolyUtil.<BigInteger> basePseudoDivide(a, e);
+                d = PolyUtil.<BigInteger> basePseudoDivide(d, e);
+            }
+            e = ufd.baseGcd(b, d);
+            //System.out.println("e   = " + e);
+            if (!e.isONE()) {
+                b = PolyUtil.<BigInteger> basePseudoDivide(b, e);
+                d = PolyUtil.<BigInteger> basePseudoDivide(d, e);
+            }
+            if (d.degree(0) < 1) {
+                d = dfac.parse("( 7 x^2 + 22 x - 33)");
+                //continue;
+            }
+            dp = PolyUtil.fromIntegerCoefficients(mfac, d);
+            if (!d.degreeVector().equals(dp.degreeVector())) {
+                continue;
+            }
+            ep = ap.gcd(dp);
+            //System.out.println("ep  = " + ep);
+            if (!ep.isONE()) {
+                continue;
+            }
+            ep = bp.gcd(dp);
+            //System.out.println("ep  = " + ep);
+            if (!ep.isONE()) {
+                continue;
+            }
+
+            c = a.multiply(b).multiply(d);
+            cp = PolyUtil.fromIntegerCoefficients(mfac, c);
+            if (!c.degreeVector().equals(cp.degreeVector())) {
+                continue;
+            }
+
+            BigInteger mi;
+            BigInteger an = a.maxNorm();
+            BigInteger bn = b.maxNorm();
+            if (an.compareTo(bn) > 0) {
+                mi = an;
+            } else {
+                mi = bn;
+            }
+            BigInteger cn = c.maxNorm();
+            if (cn.compareTo(mi) > 0) {
+                mi = cn;
+            }
+            BigInteger dn = d.maxNorm();
+            if (dn.compareTo(mi) > 0) {
+                mi = dn;
+            }
+            long k = 1;
+            BigInteger pi = m;
+            while (pi.compareTo(mi) < 0) {
+                k++;
+                pi = pi.multiply(m);
+            }
+            k++;
+            pi = pi.multiply(m);
+
+            System.out.println("mi  = " + mi);
+            System.out.println("p   = " + p);
+            System.out.println("pi  = " + pi);
+            System.out.println("k   = " + k);
+
+            System.out.println("a   = " + a);
+            System.out.println("b   = " + b);
+            System.out.println("d   = " + d);
+            System.out.println("c   = " + c);
+            System.out.println("ap  = " + ap);
+            System.out.println("bp  = " + bp);
+            System.out.println("dp  = " + dp);
+            System.out.println("cp  = " + cp);
+
+            List<GenPolynomial<ModInteger>> A = new ArrayList<GenPolynomial<ModInteger>>();
+            List<GenPolynomial<BigInteger>> Ai = new ArrayList<GenPolynomial<BigInteger>>();
+            Ai.add(a);
+            Ai.add(b);
+            Ai.add(d);
+            A.add(ap);
+            A.add(bp);
+            A.add(dp);
+            System.out.println("Ai = " + Ai);
+            System.out.println("A  = " + A);
+
+            long tq = System.currentTimeMillis();
+            try {
+                lift = HenselUtil.<ModInteger> liftHensel(c, A, k, c.leadingBaseCoefficient());
+                tq = System.currentTimeMillis() - tq;
+
+                //System.out.println("\nk  = " + k);
+                //System.out.println("c  = " + c);
+                //System.out.println("A  = " + A);
+                //System.out.println("Ai = [" + a + ", " + b + ", " + d + "]");
+                //System.out.println("lift = " + lift);
+
+                List<GenPolynomial<BigInteger>> L = PolyUtil.integerFromModularCoefficients(dfac, lift);
+                System.out.println("L  = " + L);
+                System.out.println("Ai = " + Ai);
+
+                boolean ih = HenselUtil.isHenselLift(c, m, pi, L);
+                //System.out.println("ih = " + ih);
+                assertTrue("prod(lift(L)) = c: " + c, ih);
+            } catch (NoLiftingException e) {
+                // ok 
+                fail(""+e);
             }
             //System.out.println("time = " + tq);
         }

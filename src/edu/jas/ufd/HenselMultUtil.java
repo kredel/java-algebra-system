@@ -678,10 +678,15 @@ public class HenselMultUtil {
         MOD gq0 = PolyUtil.<MOD> evaluateMain(mcfac, gq1, vp);
         //System.out.println("gq0 = " + gq0);
         BigInteger gi0 = gq0.getSymmetricInteger();
-        //System.out.println("gi0 = " + gi0 + ", g = " + g);
+        System.out.println("gi0 = " + gi0 + ", g = " + g);
 
         // lift F to Z_{p^k}[x]
-        List<GenPolynomial<MOD>> U1 = HenselUtil.<MOD> liftHenselMonic(Ci, F, k); // gi0
+        List<GenPolynomial<MOD>> U1 = null;
+        if ( gi0.isONE() ) {
+            U1 = HenselUtil.<MOD> liftHenselMonic(Ci, F, k); // gi0
+        } else {
+            U1 = HenselUtil.<MOD> liftHensel(Ci, F, k, gi0); 
+        }
         //System.out.println("U1 = " + U1);
         //System.out.println("U1.fac = " + U1.get(0).ring);
 
