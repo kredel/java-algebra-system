@@ -296,7 +296,7 @@ public class HenselMultUtilTest extends TestCase {
         //GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 3, tord, new String[]{ "x", "y", "z" });
         //GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 4, tord, new String[]{ "w", "x", "y", "z" });
         GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(),pfac);
-        GenPolynomialRing<GenPolynomial<BigInteger>> irfac = ifac.recursive(1);
+        GenPolynomialRing<GenPolynomial<BigInteger>> irfac = ifac.recursive(ifac.nvar-1);
 
         BigInteger mi = m;
         long k = 5L;
@@ -337,9 +337,9 @@ public class HenselMultUtilTest extends TestCase {
             //c = dfac.random(kl + 7 * i, ll, el + 2, q).abs();
             //a = dfac.parse(" ( z^2 + y^2 + 4 x^3 - x + 1 + w ) ");
             //b = dfac.parse(" ( z y x + x^2 + 10 + w ) ");
-            a = dfac.parse(" ( x y - 1 ) ");
-            a = dfac.parse(" ( x - y ) ");
-            b = dfac.parse(" ( x + y ) ");
+            a = dfac.parse(" ( x^3 y - 1 ) ");
+            //a = dfac.parse(" ( x - y ) ");
+            b = dfac.parse(" ( x^2 + y ) ");
             //c = dfac.parse(" z + x + (y - 2)*(2 + y) ");
 
             A.add(a);
@@ -356,8 +356,13 @@ public class HenselMultUtilTest extends TestCase {
             cp = PolyUtil.<ModInteger> fromIntegerCoefficients(pkfac,c);
             System.out.println("c          = " + c);
             GenPolynomial<GenPolynomial<BigInteger>> cr = PolyUtil.<BigInteger>recursive(irfac,c);
-            GenPolynomial<BigInteger> cl = cr.leadingBaseCoefficient();
+            GenPolynomial<GenPolynomial<BigInteger>> crr = PolyUtil.<BigInteger>switchVariables(cr);
+            GenPolynomial<BigInteger> cl = crr.leadingBaseCoefficient();
             System.out.println("cl         = " + cl);
+            List<GenPolynomial<BigInteger>> CL = new ArrayList<GenPolynomial<BigInteger>>(2);
+            CL.add( cl.ring.getONE() );
+            CL.add( cl );
+            System.out.println("CL         = " + CL);
 
             List<GenPolynomial<ModInteger>> Ap = new ArrayList<GenPolynomial<ModInteger>>(A.size());
             for ( GenPolynomial<BigInteger> ai : A ) {
@@ -395,7 +400,7 @@ public class HenselMultUtilTest extends TestCase {
           
             try {
                 List<GenPolynomial<ModInteger>> lift;
-                lift = HenselMultUtil.<ModInteger> liftHensel(c, cp, Ae, V, k, cl); // 5 is max
+                lift = HenselMultUtil.<ModInteger> liftHensel(c, cp, Ae, V, k, CL); // 5 is max
                 //System.out.println("\nliftMultiHensel:");
                 System.out.println("lift   = " + lift);
                 System.out.println("A      = " + A);
