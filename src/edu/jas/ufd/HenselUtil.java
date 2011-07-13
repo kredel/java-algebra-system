@@ -1698,12 +1698,12 @@ public class HenselUtil {
         //     return lift;
         // }
         
-        // normalize c and F_i factors, assert p is prime
-        BigInteger cc = C.leadingBaseCoefficient();
-        MOD cm = PF.fromInteger(cc.getVal());
+        // normalize C and F_i factors
+        BigInteger cc = g;     //C.leadingBaseCoefficient(); // == g ??
         for ( int i = 1; i < F.size(); i++ ) { // #F-1
              C = C.multiply(cc); // sic
         }
+        MOD cm = PF.fromInteger(cc.getVal());
         List<GenPolynomial<MOD>> Fp = new ArrayList<GenPolynomial<MOD>>(F.size());
         for ( GenPolynomial<MOD> fm : F ) {
 	    GenPolynomial<MOD> am = fm.monic();

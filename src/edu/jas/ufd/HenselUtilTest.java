@@ -168,7 +168,7 @@ public class HenselUtilTest extends TestCase {
     /**
      * Test Hensel lifting.
      */
-    public void xtestHenselLifting() {
+    public void testHenselLifting() {
         java.math.BigInteger p;
         p = getPrime1();
         //p = new java.math.BigInteger("19");
@@ -280,7 +280,7 @@ public class HenselUtilTest extends TestCase {
     /**
      * Test Hensel lifting with gcd.
      */
-    public void xtestHenselLiftingGcd() {
+    public void testHenselLiftingGcd() {
         java.math.BigInteger p;
         //p = getPrime1();
         p = new java.math.BigInteger("19");
@@ -381,7 +381,7 @@ public class HenselUtilTest extends TestCase {
     /**
      * Test Hensel quadratic lifting.
      */
-    public void xtestHenselQuadraticLifting() {
+    public void testHenselQuadraticLifting() {
         java.math.BigInteger p;
         //p = getPrime1();
         p = new java.math.BigInteger("19");
@@ -522,7 +522,7 @@ public class HenselUtilTest extends TestCase {
     /**
      * Test Hensel quadratic lifting with gcd.
      */
-    public void xtestHenselQuadraticLiftingGcd() {
+    public void testHenselQuadraticLiftingGcd() {
         java.math.BigInteger p;
         //p = getPrime1();
         p = new java.math.BigInteger("19");
@@ -623,7 +623,7 @@ public class HenselUtilTest extends TestCase {
     /**
      * Test lifting of extended Euclidean relation.
      */
-    public void xtestLiftingEgcd() {
+    public void testLiftingEgcd() {
         java.math.BigInteger p;
         //p = getPrime1();
         //p = new java.math.BigInteger("19");
@@ -739,7 +739,7 @@ public class HenselUtilTest extends TestCase {
     /**
      * Test lifting of list of extended Euclidean relation.
      */
-    public void xtestLiftingEgcdList() {
+    public void testLiftingEgcdList() {
         java.math.BigInteger p;
         //p = getPrime1();
         p = new java.math.BigInteger("19");
@@ -908,7 +908,7 @@ public class HenselUtilTest extends TestCase {
     /**
      * Test lifting of list of Diophant relation.
      */
-    public void xtestLiftingDiophantList() {
+    public void testLiftingDiophantList() {
         java.math.BigInteger p;
         //p = getPrime1();
         p = new java.math.BigInteger("19");
@@ -1080,16 +1080,14 @@ public class HenselUtilTest extends TestCase {
     /**
      * Test Hensel monic lifting new list version.
      */
-    public void xtestHenselLiftingMonicList() {
+    public void testHenselLiftingMonicList() {
         java.math.BigInteger p;
         //p = getPrime1();
         p = new java.math.BigInteger("268435399");
         //p = new java.math.BigInteger("19");
         //p = new java.math.BigInteger("5");
         BigInteger m = new BigInteger(p);
-        //.multiply(p).multiply(p).multiply(p);
 
-        // BigInteger mi = m;
         ModIntegerRing pm = new ModIntegerRing(p, true);
         GenPolynomialRing<ModInteger> mfac = new GenPolynomialRing<ModInteger>(pm, 1, to,
                 new String[] { "x" });
@@ -1175,13 +1173,22 @@ public class HenselUtilTest extends TestCase {
             if (!d.degreeVector().equals(dp.degreeVector())) {
                 continue;
             }
+            ep = ap.gcd(dp);
+            //System.out.println("ep  = " + ep);
+            if (!ep.isONE()) {
+                continue;
+            }
+            ep = bp.gcd(dp);
+            //System.out.println("ep  = " + ep);
+            if (!ep.isONE()) {
+                continue;
+            }
 
             c = a.multiply(b).multiply(d);
             cp = PolyUtil.fromIntegerCoefficients(mfac, c);
             if (!c.degreeVector().equals(cp.degreeVector())) {
                 continue;
             }
-
             //c = dfac.parse("( (x^6 + 48) * (x^14 + 44) )");
 
             BigInteger mi;
@@ -1206,6 +1213,8 @@ public class HenselUtilTest extends TestCase {
                 k++;
                 pi = pi.multiply(m);
             }
+            k++;
+            pi = pi.multiply(m);
             //System.out.println("mi  = " + mi);
             //System.out.println("pi  = " + pi);
             //System.out.println("k   = " + k);
@@ -1258,12 +1267,6 @@ public class HenselUtilTest extends TestCase {
                 //System.out.println("ih = " + ih);
 
                 assertTrue("prod(lift(L)) = c: " + c, ih);
-
-                //System.out.println("lift1*lift2 = " + lift.get(0).multiply(lift.get(1)));
-                //System.out.println("lift3*lift4 = " + lift.get(2).multiply(lift.get(3)));
-                //System.out.println("L1*L2 = " + L.get(0).multiply(L.get(1)));
-                //System.out.println("L3*L4 = " + L.get(2).multiply(L.get(3)));
-
             } catch (NoLiftingException e) {
                 // ok fail(""+e);
             }
@@ -1398,19 +1401,19 @@ public class HenselUtilTest extends TestCase {
             k++;
             pi = pi.multiply(m);
 
-            System.out.println("mi  = " + mi);
-            System.out.println("p   = " + p);
-            System.out.println("pi  = " + pi);
-            System.out.println("k   = " + k);
+            //System.out.println("mi  = " + mi);
+            //System.out.println("p   = " + p);
+            //System.out.println("pi  = " + pi);
+            //System.out.println("k   = " + k);
 
-            System.out.println("a   = " + a);
-            System.out.println("b   = " + b);
-            System.out.println("d   = " + d);
-            System.out.println("c   = " + c);
-            System.out.println("ap  = " + ap);
-            System.out.println("bp  = " + bp);
-            System.out.println("dp  = " + dp);
-            System.out.println("cp  = " + cp);
+            //System.out.println("a   = " + a);
+            //System.out.println("b   = " + b);
+            //System.out.println("d   = " + d);
+            //System.out.println("c   = " + c);
+            //System.out.println("ap  = " + ap);
+            //System.out.println("bp  = " + bp);
+            //System.out.println("dp  = " + dp);
+            //System.out.println("cp  = " + cp);
 
             List<GenPolynomial<ModInteger>> A = new ArrayList<GenPolynomial<ModInteger>>();
             List<GenPolynomial<BigInteger>> Ai = new ArrayList<GenPolynomial<BigInteger>>();
@@ -1420,8 +1423,8 @@ public class HenselUtilTest extends TestCase {
             A.add(ap);
             A.add(bp);
             A.add(dp);
-            System.out.println("Ai = " + Ai);
-            System.out.println("A  = " + A);
+            //System.out.println("Ai = " + Ai);
+            //System.out.println("A  = " + A);
 
             long tq = System.currentTimeMillis();
             try {
@@ -1435,8 +1438,8 @@ public class HenselUtilTest extends TestCase {
                 //System.out.println("lift = " + lift);
 
                 List<GenPolynomial<BigInteger>> L = PolyUtil.integerFromModularCoefficients(dfac, lift);
-                System.out.println("L  = " + L);
-                System.out.println("Ai = " + Ai);
+                //System.out.println("L  = " + L);
+                //System.out.println("Ai = " + Ai);
 
                 boolean ih = HenselUtil.isHenselLift(c, m, pi, L);
                 //System.out.println("ih = " + ih);
