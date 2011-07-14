@@ -1005,7 +1005,7 @@ public class HenselUtil {
     public static <MOD extends GcdRingElem<MOD> & Modular> GenPolynomial<MOD>[] liftExtendedEuclidean(
             GenPolynomial<MOD> A, GenPolynomial<MOD> B, long k) throws NoLiftingException {
         if (A == null || A.isZERO() || B == null || B.isZERO()) {
-            throw new IllegalArgumentException("A and B must be nonzero");
+            throw new IllegalArgumentException("A and B must be nonzero, A = " + A + ", B = " + B);
         }
         GenPolynomialRing<MOD> fac = A.ring;
         if (fac.nvar != 1) { // todo assert
@@ -1189,6 +1189,9 @@ public class HenselUtil {
     public static <MOD extends GcdRingElem<MOD> & Modular> List<GenPolynomial<MOD>> liftDiophant(
             GenPolynomial<MOD> A, GenPolynomial<MOD> B, GenPolynomial<MOD> C, long k)
             throws NoLiftingException {
+        if (A == null || A.isZERO() || B == null || B.isZERO()) {
+            throw new IllegalArgumentException("A and B must be nonzero, A = " + A + ", B = " + B  + ", C = " + C);
+        }
         List<GenPolynomial<MOD>> sol = new ArrayList<GenPolynomial<MOD>>();
         GenPolynomialRing<MOD> fac = C.ring;
         if (fac.nvar != 1) { // todo assert
@@ -1308,6 +1311,9 @@ public class HenselUtil {
      */
     public static <MOD extends GcdRingElem<MOD> & Modular> List<GenPolynomial<MOD>> liftDiophant(
             GenPolynomial<MOD> A, GenPolynomial<MOD> B, long e, long k) throws NoLiftingException {
+        if (A == null || A.isZERO() || B == null || B.isZERO()) {
+            throw new IllegalArgumentException("A and B must be nonzero, A = " + A + ", B = " + B);
+        }
         List<GenPolynomial<MOD>> sol = new ArrayList<GenPolynomial<MOD>>();
         GenPolynomialRing<MOD> fac = A.ring;
         if (fac.nvar != 1) { // todo assert
