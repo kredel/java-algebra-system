@@ -574,7 +574,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
 
     /**
      * Degree of a factorization.
-     * @param [p_1 -&gt; e_1, ..., p_k -&gt; e_k] factors map.
+     * @param F a  factors map [p_1 -&gt; e_1, ..., p_k -&gt; e_k].
      * @return sum_{i=1,...,k} degree(p_i)*e_i.
      */
     public long factorsDegree(SortedMap<GenPolynomial<C>,Long> F) {
