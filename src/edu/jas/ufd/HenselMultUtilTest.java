@@ -161,7 +161,7 @@ public class HenselMultUtilTest extends TestCase {
     /**
      * Test multivariate Hensel lifting monic case list.
      */
-    public void xtestHenselLiftingMonicList() {
+    public void testHenselLiftingMonicList() {
         java.math.BigInteger p;
         //p = getPrime1();
         p = new java.math.BigInteger("19");
@@ -284,7 +284,7 @@ public class HenselMultUtilTest extends TestCase {
     /**
      * Test multivariate Hensel lifting list, 2 variables.
      */
-    public void xtestHenselLifting2List() {
+    public void testHenselLifting2List() {
         java.math.BigInteger p;
         //p = getPrime1();
         p = new java.math.BigInteger("19");
@@ -406,7 +406,7 @@ public class HenselMultUtilTest extends TestCase {
     /**
      * Test multivariate Hensel lifting list, 3 variables.
      */
-    public void xtestHenselLifting3List() {
+    public void testHenselLifting3List() {
         java.math.BigInteger p;
         //p = getPrime1();
         p = new java.math.BigInteger("19");
