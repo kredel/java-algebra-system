@@ -621,7 +621,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
      * @param P squarefree and primitive! (respectively monic) multivariate GenPolynomial over the integers.
      * @return [p_1,...,p_k] with P = prod_{i=1,...,r} p_i.
      */
-    public List<GenPolynomial<BigInteger>> factorsSquarefree(GenPolynomial<BigInteger> P) {
+    public List<GenPolynomial<BigInteger>> factorsSquarefreeHensel(GenPolynomial<BigInteger> P) {
         if (P == null) {
             throw new IllegalArgumentException(this.getClass().getName() + " P != null");
         }
@@ -807,9 +807,13 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             System.out.println("mn = " + mn);
             System.out.println("k = " + k);
         
+            List<GenPolynomial<BigInteger>> lf = new ArrayList<GenPolynomial<BigInteger>>();
+            for ( GenPolynomial<MOD> pp : F) {
+		lf.add( pd.ring.getONE() ); // ps
+            }
             List<GenPolynomial<MOD>> lift;
             try {
-                lift = HenselMultUtil.<MOD> liftHenselFull(pd,F,V,k,ps);
+                lift = HenselMultUtil.<MOD> liftHenselFull(pd,F,V,k,lf);
                 logger.info("lift = " + lift);
             } catch ( NoLiftingException nle ) {
                 //System.out.println("exception : " + nle);

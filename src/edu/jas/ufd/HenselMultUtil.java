@@ -766,21 +766,14 @@ public class HenselMultUtil {
                     //System.out.println("lr = " + lr);
                     GenPolynomial<GenPolynomial<MOD>> ls = PolyUtil.<MOD>switchVariables(lr);
                     //System.out.println("ls = " + ls + ", ls.ring = " + ls.ring);
-                    if ( ! ls.isConstant() ) {
+                    if ( !ls.isConstant() ) {
                         throw new RuntimeException("ls not constant " + ls); 
                     }
-                    ExpVector be = bs.leadingExpVector();
                     bs.doPutToMap(bs.leadingExpVector(),ls.leadingBaseCoefficient());
                     //System.out.println("bs = " + bs + ", bs.ring = " + bs.ring);
-
                     br = PolyUtil.<MOD>switchVariables(bs);
                     //System.out.println("br = " + br);
                     bi = PolyUtil.<MOD>distribute(pkfac,br);
-
-                    //ExpVector le = bi.leadingExpVector();
-                    //GenPolynomial<MOD> mm = li.multiply(le);
-                    //System.out.println("mm = " + mm);
-                    //bi = mm.sum( bi.reductum() ); // similar to doPutToMap
                     System.out.println("bi = " + bi);
                 }
                 U.add(bi);
@@ -805,7 +798,6 @@ public class HenselMultUtil {
                 GenPolynomial<BigInteger> ui = PolyUtil.integerFromModularCoefficients(ifac, u);
                 Bi.add(ui);
             }
-            //List<GenPolynomial<BigInteger>> Bi = Bip;
             System.out.println("Bi = " + Bi);
             GenPolynomial<BigInteger> Ci = PolyUtil.integerFromModularCoefficients(ifac, Cp);
             System.out.println("Ci = " + Ci);
@@ -874,7 +866,7 @@ public class HenselMultUtil {
                     E = E.multiply(bi);
                 }
                 E = Ci.subtract(E);
-                //System.out.println("E     = " + E);
+                System.out.println("E = " + E);
                 Ep = PolyUtil.<MOD> fromIntegerCoefficients(pkfac, E);
                 //System.out.println("Ep(0," + pkfac.nvar + ") = " + Ep);
                 logger.info("Ep(" + e + "," + deg + "," + pkfac.nvar + ") = " + Ep);
@@ -884,19 +876,20 @@ public class HenselMultUtil {
         if (E.isZERO()) {
             logger.info("liftHensel leaving with zero E, Ep");
         }
-
-        // remove normalization required ??
-        GreatestCommonDivisorAbstract<BigInteger> ufd = GCDFactory.getImplementation(new BigInteger());
-        List<GenPolynomial<BigInteger>> Fii = new ArrayList<GenPolynomial<BigInteger>>(U.size());
-        for ( GenPolynomial<BigInteger> bi : Si ) {
-            GenPolynomial<BigInteger> ci = ufd.primitivePart(bi); // ??
-            //System.out.println("bi = " + bi + ", ci = " + ci);
-            Fii.add(ci);
+        if ( debug ) {
+            // remove normalization required ??
+            GreatestCommonDivisorAbstract<BigInteger> ufd = GCDFactory.getImplementation(new BigInteger());
+            List<GenPolynomial<BigInteger>> Fii = new ArrayList<GenPolynomial<BigInteger>>(U.size());
+            for ( GenPolynomial<BigInteger> bi : Si ) {
+                GenPolynomial<BigInteger> ci = ufd.content(bi); //ufd.primitivePart(bi); // ??
+                if ( !ci.isONE() ) {
+                    System.out.println("bi = " + bi + ", cont(bi) = " + ci);
+                }
+                //Fii.add(ci);
+            }
+            //Si = Fii;
+            System.out.println("Si  = " + Si);
         }
-        //Si = Fii;
-        System.out.println("Si  = " + Si);
-        System.out.println("Fii = " + Fii);
-
         return U;
     }
 
