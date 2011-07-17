@@ -1044,22 +1044,40 @@ public class HenselMultUtil {
                 uf = uf.negate();
                 s++;                
             }
-            MOD x = f.leadingBaseCoefficient().divide(uf.leadingBaseCoefficient()); 
-            //System.out.println("x   = " + x);
-            if ( !x.isONE() ) {
-                MOD xq = mcfac.fromInteger(x.getSymmetricInteger().getVal());
-                //System.out.println("xq  = " + xq);
-                u = u.multiply(xq);
-                cC = cC.divide(xq);
+            j++;
+            if ( uf.isConstant() ) {
+                System.out.println("u   = " + u);
+                u = u.monic();
+                System.out.println("u  = " + u);
+                u = u.multiply(cC);
+                cC = cC.divide(cC);
+                System.out.println("u   = " + u);
+            } else {
+                MOD x = f.leadingBaseCoefficient().divide(uf.leadingBaseCoefficient()); 
+                System.out.println("x   = " + x + ", xi = " + x.getSymmetricInteger());
+                if ( !x.isONE() ) {
+                    MOD xq = mcfac.fromInteger(x.getSymmetricInteger().getVal());
+                    System.out.println("xq  = " + xq);
+                    u = u.multiply(xq);
+                    cC = cC.divide(xq);
+                    System.out.println("cC  = " + cC);
+                }
             }
             U1s.add(u);
-            j++;
         }
         System.out.println("U1s = " + U1s);
         if ( s % 2 != 0 || !cC.isONE()) {
-           throw new NoLiftingException("Ci = " + Ci + ", U1i = " + U1i + ", cC = " + cC);
+           throw new NoLiftingException("s = " + s + ", Ci = " + Ci + ", U1i = " + U1i + ", cC = " + cC);
         }
         U1 = U1s;
+        U1i = PolyUtil.<MOD> integerFromModularCoefficients(Ci.ring, U1);
+        //System.out.println("U1i = " + U1i);
+        U1f = PolyUtil.<MOD> fromIntegerCoefficients(F.get(0).ring, U1i);
+        System.out.println("F   = " + F);
+        System.out.println("U1f = " + U1f);
+        if ( !F.equals(U1f) ) { // evtl loop until reached
+           throw new NoLiftingException("F = " + F + ", U1f = " + U1f);
+        }
 
         // lift U to Z_{p^k}[x,...]
         System.out.println("C = " + C + ", U1 = " + U1 + ", V = " + V + ", k = " + k + ", q = " + U1.get(0).ring + ", G = " + G);
