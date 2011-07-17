@@ -659,7 +659,8 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         int pn = 50; //primes.size();
         FactorAbstract<MOD> mufd = null;
 
-        for ( int i = 0; i < 11; i++ ) { // meta loop
+        //for ( int i = 0; i < 11; i++ ) { // meta loop
+        for ( int i = 0; i < 1; i++ ) { // meta loop
             System.out.println("======================================================= run " 
                                + pfac.nvar + ", " + i);
             java.math.BigInteger p = null; //new java.math.BigInteger("19"); //primes.next();
@@ -682,9 +683,9 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             }
             ModularRingFactory<MOD> cofac = null;
             int pi = 0;
-            while ( pi < pn && primeIter.hasNext() ) {
+            while ( pi < pn && primeIter.hasNext() && pi == 0) {
                 p = primeIter.next();
-                //p = new java.math.BigInteger("19");
+                p = new java.math.BigInteger("19");
                 logger.info("prime = " + p);
                 // initialize coefficient factory and map normalization factor and polynomials
                 ModularRingFactory<MOD> cf = null;
@@ -807,10 +808,23 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             System.out.println("mn = " + mn);
             System.out.println("k = " + k);
         
+            GenPolynomialRing<GenPolynomial<BigInteger>> rnfac = pfac.recursive(pfac.nvar-1);
+            GenPolynomial<GenPolynomial<BigInteger>> pr = PolyUtil.<BigInteger>recursive(rnfac,pd);
+            GenPolynomial<GenPolynomial<BigInteger>> prr = PolyUtil.<BigInteger>switchVariables(pr);
+            GenPolynomial<BigInteger> lprr = prr.leadingBaseCoefficient();
+            System.out.println("prr      = " + prr);
+            System.out.println("lprr      = " + lprr);
+
+            SortedMap<GenPolynomial<BigInteger>,Long> lfactors = factors(lprr);
+            System.out.println("lfactors = " + lfactors);
+
             List<GenPolynomial<BigInteger>> lf = new ArrayList<GenPolynomial<BigInteger>>();
             for ( GenPolynomial<MOD> pp : F) {
-		lf.add( pd.ring.getONE() ); // ps
+		lf.add( lprr.ring.getONE() ); // ps
             }
+            lf.set(1, lfactors.firstKey() ); // ps
+            System.out.println("lf = " + lf);
+
             List<GenPolynomial<MOD>> lift;
             try {
                 lift = HenselMultUtil.<MOD> liftHenselFull(pd,F,V,k,lf);
@@ -828,6 +842,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                  GenPolynomial<BigInteger> ci = PolyUtil.integerFromModularCoefficients( pfac, Cm );
                  factors.add(ci);
 	    }
+            // TODO check factor combinations
             if ( isFactorization(P,factors) ) {
                 logger.info("test factors = " + factors);
                 return factors; // done

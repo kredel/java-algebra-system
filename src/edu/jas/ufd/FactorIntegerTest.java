@@ -6,6 +6,7 @@ package edu.jas.ufd;
 
 
 import java.util.SortedMap;
+import java.util.List;
 
 import org.apache.log4j.BasicConfigurator;
 
@@ -258,25 +259,30 @@ public class FactorIntegerTest extends TestCase {
         BigInteger cfac = new BigInteger(1);
         String[] vars = new String[] { "x", "y" };
         GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, 2, to, vars);
-        FactorAbstract<BigInteger> fac = new FactorInteger<ModInteger>();
+        //FactorAbstract<BigInteger> fac = new FactorInteger<ModInteger>();
+        FactorInteger<ModInteger> fac = new FactorInteger<ModInteger>();
 
         for (int i = 1; i < 2; i++) {
             GenPolynomial<BigInteger> b = pfac.random(kl, 3, el, q / 2.0f);
             GenPolynomial<BigInteger> c = pfac.random(kl, 2, el, q);
-            b = pfac.parse("( y x - 1 )"); 
-            c = pfac.parse("( x + y )"); 
+            GenPolynomial<BigInteger> d = pfac.random(kl, 2, el, q);
+            b = pfac.parse(" ( x y - 1 ) "); 
+            c = pfac.parse(" ( x + y ) "); 
+            d = pfac.parse(" ( y^2 - x )"); 
             GenPolynomial<BigInteger> a;
             //             if ( !a.leadingBaseCoefficient().isUnit()) {
             //                 //continue;
             //                 //ExpVector e = a.leadingExpVector();
             //                 //a.doPutToMap(e,cfac.getONE());
             //             }
-            a = b.multiply(c);
+            a = b.multiply(c); //.multiply(d);
             System.out.println("a = " + a);
             System.out.println("b = " + b);
             System.out.println("c = " + c);
+            //System.out.println("d = " + d);
 
-            SortedMap<GenPolynomial<BigInteger>, Long> sm = fac.factors(a);
+            //SortedMap<GenPolynomial<BigInteger>, Long> sm = fac.factorsSquarefreeHensel(a);
+            List<GenPolynomial<BigInteger>> sm = fac.factorsSquarefreeHensel(a);
             System.out.println("sm = " + sm);
 
             boolean t = fac.isFactorization(a, sm);
