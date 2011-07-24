@@ -26,6 +26,10 @@ print "Ring: " + str(r);
 print;
 
 [one,I,x] = r.gens();
+print "one = ", one;
+print "I   = ", I;
+print "x   = ", x;
+print;
 
 
 f1 = x**3 - 2;

@@ -13,6 +13,10 @@ puts "Ring: " + str(r);
 puts;
 
 one,I,x = r.gens();
+puts "one = " + one.to_s;
+puts "I   = " + I.to_s;
+puts "x   = " + x.to_s;
+puts;
 
 
 f1 = x**3 - 2;
