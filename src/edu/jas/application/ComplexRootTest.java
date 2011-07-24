@@ -196,7 +196,7 @@ public class ComplexRootTest extends TestCase {
         Complex<RealAlgebraicNumber<BigRational>> root = roots.get(2); // 0,1,2)
         //System.out.println("a = " + a);
         //System.out.println("root = " + root.getRe().decimalMagnitude() + " + "
-        //                + root.getIm().decimalMagnitude() + " i");
+        //                  + root.getIm().decimalMagnitude() + " i");
         //System.out.println("root = " + root.getRe() + " + " + root.getIm() + " i");
         String vre = root.getRe().toString().replace("{", "").replace("}", "").trim();
         String vim = root.getIm().toString().replace("{", "").replace("}", "").trim();
@@ -221,7 +221,7 @@ public class ComplexRootTest extends TestCase {
         //cpol = cring.univariate(0,3L).subtract(cring.univariate(0,1L).multiply(root).sum(root.multiply(root)));
         cpol = cring.univariate(0,2L).subtract(root.multiply(root)); // okay
         //cpol = cring.univariate(0,3L).subtract(root.multiply(root)); // okay
-        //cpol = cring.univariate(0,3L).subtract(root.multiply(root).multiply(root));
+        //cpol = cring.univariate(0,3L).subtract(root.multiply(root).multiply(root)); // not much sense r^3 = 2
         String vpol = vre + " + " + IM + " " + vim;
         //String vpol = " 3 + " + IM + " * 3 ";
         //String vpol = " 3i3 ";
@@ -239,6 +239,7 @@ public class ComplexRootTest extends TestCase {
         if ( cpol.degree(0) < d ) {
             //System.out.println("cpol = " + cpol);
         }
+        //System.out.println("cpol = " + cpol);
 
         // new version with recursion: with real factorization
         long t1 = System.currentTimeMillis();
@@ -248,12 +249,18 @@ public class ComplexRootTest extends TestCase {
         //System.out.println("\na = " + a.toScript());
         //System.out.println("root = " + root.getRe().decimalMagnitude() + " + "
         //                             + root.getIm().decimalMagnitude() + " i");
+        //System.out.println("a = " + a);
+        //System.out.println("root = " + root.getRe().decimalMagnitude() + " + "
+        //                  + root.getIm().decimalMagnitude() + " i");
         //System.out.println("root = " + root.getRe() + " + (" + root.getIm() + ") i");
-        //System.out.println("cpol = " + cpol);
+        //System.out.println("root.ring = " + root.ring);
+        //System.out.println("cpol      = " + cpol);
+        //System.out.println("cpol.ring = " + cpol.ring);
         //System.out.println("croots = " + croots);
         for (Complex<RealAlgebraicNumber<RealAlgebraicNumber<BigRational>>> croot : croots) {
             //System.out.println("croot = " + croot);
             //System.out.println("croot = " + croot.getRe() + " + ( " + croot.getIm() + ") i");
+            //System.out.println("croot.ring = " + croot.ring); //magnitude());
             //System.out.println("croot = " + croot.getRe().decimalMagnitude() + " + "
             //                              + croot.getIm().decimalMagnitude() + " i");
             assertTrue("f(r) == 0: " + croot, RootFactory.<RealAlgebraicNumber<BigRational>> isRoot(cpol,croot));

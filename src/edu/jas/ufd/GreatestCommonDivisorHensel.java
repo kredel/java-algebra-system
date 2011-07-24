@@ -558,7 +558,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
             F.add(ce);
             F.add(he);
             List<GenPolynomial<BigInteger>> G = new ArrayList<GenPolynomial<BigInteger>>(2);
-            G.add(g.ring.getONE());
+            G.add(g.ring.getONE()); // TODO
             G.add(g.ring.getONE());
             List<GenPolynomial<MOD>> lift;
             try {
