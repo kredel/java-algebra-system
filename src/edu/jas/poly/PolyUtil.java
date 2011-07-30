@@ -1372,6 +1372,20 @@ public class PolyUtil {
      * Evaluate at main variable.
      * @param <C> coefficient type.
      * @param cfac coefficent ring factory.
+     * @param L list of univariate polynomials to be evaluated.
+     * @param a value to evaluate at.
+     * @return list( A( x_1, ..., x_{n-1}, a ) ) for A in L.
+     */
+    public static <C extends RingElem<C>> List<GenPolynomial<C>> 
+        evaluateMain(GenPolynomialRing<C> cfac, List<GenPolynomial<C>> L, C a) {
+        return ListUtil.<GenPolynomial<C>, GenPolynomial<C>> map(L, new EvalMainPol<C>(cfac, a));
+    }
+
+
+    /**
+     * Evaluate at main variable.
+     * @param <C> coefficient type.
+     * @param cfac coefficent ring factory.
      * @param A univariate polynomial to be evaluated.
      * @param a value to evaluate at.
      * @return A( a ).
@@ -2669,7 +2683,35 @@ class EvalMain<C extends RingElem<C>> implements UnaryFunctor<GenPolynomial<C>, 
 
     public C eval(GenPolynomial<C> c) {
         if (c == null) {
-            return null;
+            return cfac.getZERO();
+        } else {
+            return PolyUtil.<C> evaluateMain(cfac, c, a);
+        }
+    }
+}
+
+
+/**
+ * Evaluate main variable functor.
+ */
+class EvalMainPol<C extends RingElem<C>> implements UnaryFunctor<GenPolynomial<C>, GenPolynomial<C>> {
+
+
+    final GenPolynomialRing<C> cfac;
+
+
+    final C a;
+
+
+    public EvalMainPol(GenPolynomialRing<C> cfac, C a) {
+        this.cfac = cfac;
+        this.a = a;
+    }
+
+
+    public GenPolynomial<C> eval(GenPolynomial<C> c) {
+        if (c == null) {
+            return cfac.getZERO();
         } else {
             return PolyUtil.<C> evaluateMain(cfac, c, a);
         }
