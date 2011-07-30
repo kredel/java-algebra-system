@@ -1017,7 +1017,7 @@ public class HenselMultUtil {
         } else {
             U1 = HenselUtil.<MOD> liftHensel(Ci, F, k, gi0); // GI0 TODO ??
         }
-        System.out.println("U1 = " + U1);
+        logger.info("univariate lift: Ci = " + Ci + ", F = " + F + ", U1 = " + U1);
         //System.out.println("U1.fac = " + U1.get(0).ring);
 
         // adjust leading coefficients of U1 with F
@@ -1087,6 +1087,7 @@ public class HenselMultUtil {
         } else {
             U = HenselMultUtil.<MOD> liftHensel(C, Cq, U1, V, k, G);
         }
+        logger.info("multivariate lift: C = " + C + ", U1 = " + U1 + ", U = " + U);
         //System.out.println("U  = " + U);
         //System.out.println("U.fac = " + U.get(0).ring);
         return U;
