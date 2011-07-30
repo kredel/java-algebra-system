@@ -266,8 +266,8 @@ public class FactorIntegerTest extends TestCase {
             GenPolynomial<BigInteger> b = pfac.random(kl, 3, el, q / 2.0f);
             GenPolynomial<BigInteger> c = pfac.random(kl, 2, el, q);
             GenPolynomial<BigInteger> d = pfac.random(kl, 2, el, q);
-            b = pfac.parse(" ( x y - 1 ) "); 
-            c = pfac.parse(" ( x + y ) "); 
+            b = pfac.parse(" ( 7 x y - 1 ) "); 
+            c = pfac.parse(" ( x y + 1 ) "); 
             d = pfac.parse(" ( y^2 - x )"); 
             GenPolynomial<BigInteger> a;
             //             if ( !a.leadingBaseCoefficient().isUnit()) {
