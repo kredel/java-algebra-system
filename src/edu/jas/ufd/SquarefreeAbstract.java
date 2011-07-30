@@ -80,7 +80,7 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
     /**
      * GenPolynomial greatest squarefree divisor.
      * @param P GenPolynomial.
-     * @return squarefree(pp(P)).
+     * @return squarefree(P) a primitive respectively monic polynomial.
      */
     public abstract GenPolynomial<C> squarefreePart(GenPolynomial<C> P);
 
@@ -92,7 +92,13 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
      */
     public boolean isSquarefree(GenPolynomial<C> P) {
         GenPolynomial<C> S = squarefreePart(P);
-        boolean f = P.equals(S);
+        GenPolynomial<C> Ps = P;
+        if ( P.ring.coFac.isField() ) {
+            Ps = Ps.monic();
+        } else {
+            Ps = engine.basePrimitivePart(Ps);
+        }
+        boolean f = Ps.equals(S);
         if (!f) {
             System.out.println("\nisSquarefree: " + f);
             System.out.println("S  = " + S);
