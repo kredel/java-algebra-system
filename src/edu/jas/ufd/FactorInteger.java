@@ -731,7 +731,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 System.out.println("cei = " + cei + ", pec = " + pec);
                 if ( lfacs.get(0).isConstant() ) {
                     ped = cei.remove(0);
-                    lfacs.remove(0);
+                    //lfacs.remove(0);
                 } else {
                     ped = cei.get(0).getONE();
                 }
@@ -783,6 +783,9 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             lf.add( lprr.ring.getONE() ); 
         }
         if ( !isMonic ) {
+            if ( lfacs.get(0).isConstant() ) {
+                GenPolynomial<BigInteger> xx = lfacs.remove(0);
+            }
             int i = 0;
             for ( GenPolynomial<BigInteger> pp : ufactors) {
                 BigInteger ppl = pp.leadingBaseCoefficient();
@@ -803,7 +806,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         }
         logger.info("ldcf factors = " + lf);
         if ( !lprr.equals(lpx) ) { // something is wrong
-            System.out.println("lpx = " + lpx +  ", lprr == lpx: " + lprr.equals(lpx));
+            System.out.println("lprr = " + lprr + ", lpx = " + lpx +  ", lprr == lpx: " + lprr.equals(lpx));
             throw new RuntimeException("something is wrong");
         }
 
