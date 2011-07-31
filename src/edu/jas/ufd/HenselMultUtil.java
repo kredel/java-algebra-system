@@ -808,7 +808,7 @@ public class HenselMultUtil {
                 E = E.multiply(bi);
             }
             E = Ci.subtract(E);
-            System.out.println("E = " + E);
+            System.out.println("E  = " + E);
             GenPolynomial<MOD> Ep = PolyUtil.<MOD> fromIntegerCoefficients(pkfac, E);
             logger.info("Ep(0," + deg + "," + pkfac.nvar + ") = " + Ep);
 
@@ -931,6 +931,7 @@ public class HenselMultUtil {
         // convert C from Z[...] to Z_q[...]
         GenPolynomialRing<MOD> qcfac = new GenPolynomialRing<MOD>(mcfac, C.ring);
         GenPolynomial<MOD> Cq = PolyUtil.<MOD> fromIntegerCoefficients(qcfac, C);
+        System.out.println("C  = " + C);
         System.out.println("Cq = " + Cq);
 
         // convert g_i from Z[...] to Z_q[...]
@@ -964,6 +965,7 @@ public class HenselMultUtil {
         GenPolynomial<BigInteger> Ci = PolyUtil.integerFromModularCoefficients(ifac, Cq1);
         System.out.println("Ci  = " + Ci);
         GreatestCommonDivisorAbstract<BigInteger> ufd = GCDFactory.getImplementation(new BigInteger());
+        Ci = Ci.abs();
         BigInteger cCi = ufd.baseContent(Ci);
         Ci = Ci.divide(cCi);
         System.out.println("cCi = " + cCi);
@@ -1040,6 +1042,7 @@ public class HenselMultUtil {
             GenPolynomial<BigInteger> ui = U1i.get(j);
             GenPolynomial<BigInteger> gi = G.get(j);
             if ( ui.signum() != gi.signum() ) {
+                System.out.println("ui = " + ui + ", gi = " + gi);
                 u = u.negate();
                 uf = uf.negate();
                 s++;                
@@ -1073,9 +1076,9 @@ public class HenselMultUtil {
         U1i = PolyUtil.<MOD> integerFromModularCoefficients(Ci.ring, U1);
         //System.out.println("U1i = " + U1i);
         U1f = PolyUtil.<MOD> fromIntegerCoefficients(F.get(0).ring, U1i);
-        System.out.println("F   = " + F);
-        System.out.println("U1f = " + U1f);
         if ( !F.equals(U1f) ) { // evtl loop until reached
+           System.out.println("F   = " + F);
+           System.out.println("U1f = " + U1f);
            throw new NoLiftingException("F = " + F + ", U1f = " + U1f);
         }
 
