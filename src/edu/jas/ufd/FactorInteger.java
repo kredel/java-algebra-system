@@ -638,16 +638,6 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             factors.add(P);
             return factors;
         }
-        //GenPolynomialRing<GenPolynomial<BigInteger>> rfac = pfac.recursive(1);
-        //System.out.println("rfac = " + rfac.toScript());
-        //GenPolynomial<GenPolynomial<BigInteger>> Pr = PolyUtil.<BigInteger> recursive(rfac,P);
-        //GenPolynomialRing<BigInteger> cfac = (GenPolynomialRing<BigInteger>) rfac.coFac;
-        //System.out.println("cfac = " + cfac.toScript());
-        //GenPolynomial<BigInteger> ps = Pr.leadingBaseCoefficient(); 
-        //System.out.println("ps = " + ps);
-        //SortedMap<GenPolynomial<BigInteger>,Long> ldfacs = factors(ps);
-        //System.out.println("ldfacs = " + ldfacs);
-
         GenPolynomial<BigInteger> pd = P; 
         System.out.println("pd   = " + pd);
         // ldcf(pd)
@@ -663,7 +653,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         boolean isMonic = false;
         if ( lprr.isConstant() ) {
             isMonic = true;
-	}
+        }
         SortedMap<GenPolynomial<BigInteger>,Long> lfactors = factors(lprr);
         System.out.println("lfactors = " + lfactors);
         List<GenPolynomial<BigInteger>> lfacs = new ArrayList<GenPolynomial<BigInteger>>(lfactors.keySet());
@@ -680,45 +670,63 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         BigInteger pec = null;
         BigInteger ped = null;
 
-        List<BigInteger> V = new ArrayList<BigInteger>();
-        for ( int j = pfac.nvar; j > 1; j-- ) {
-            // evaluation up to univariate case
-            long degp = pe.degree(cpfac.nvar-2);
-            cpfac = cpfac.contract(1);
-            ccpfac = ccpfac.contract(1);
-            long vi = 3L*5L;//0L; //(long)(pfac.nvar-j); // 1L; 0 not so good for small p
-            BigInteger Vi;
+        List<BigInteger> V = null;
+        boolean notLucky = true;
+        while ( notLucky ) { // for Wang's test
+            notLucky = false;
+            V = new ArrayList<BigInteger>();
+            cpfac = pfac;
+            pe = pd;
+            ccpfac = lprr.ring;
+            ce = lfacs;
+            cep = null;
+            cei = null;
+            pec = null;
+            ped = null;
+            for ( int j = pfac.nvar; j > 1; j-- ) {
+                // evaluation up to univariate case
+                long degp = pe.degree(cpfac.nvar-2);
+                cpfac = cpfac.contract(1);
+                ccpfac = ccpfac.contract(1);
+                long vi = 3L*5L;//0L; //(long)(pfac.nvar-j); // 1L; 0 not so good for small p
+                BigInteger Vi;
 
-            // search evaluation point
-            while( true ) { 
-                System.out.println("vi = " + vi);
-                Vi = new BigInteger(vi);
-                pep = PolyUtil.<BigInteger> evaluateMain(cpfac,pe,Vi);
-                System.out.println("pep = " + pep);
+                // search evaluation point
+                while( true ) { 
+                    System.out.println("vi = " + vi);
+                    Vi = new BigInteger(vi);
+                    pep = PolyUtil.<BigInteger> evaluateMain(cpfac,pe,Vi);
+                    System.out.println("pep = " + pep);
 
-                // check lucky evaluation point 
-                if (degp == pep.degree(cpfac.nvar-1)) {
-                    System.out.println("deg(pe) = " + degp + ", deg(pep) = " + pep.degree(cpfac.nvar-1));
-                    // check squarefree
-                    if ( sengine.isSquarefree(pep) ) {
-                        System.out.println("squarefeee = " + pep);
-                        break;
+                    // check lucky evaluation point 
+                    if (degp == pep.degree(cpfac.nvar-1)) {
+                        System.out.println("deg(pe) = " + degp + ", deg(pep) = " + pep.degree(cpfac.nvar-1));
+                        // check squarefree
+                        if ( sengine.isSquarefree(pep) ) {
+                            System.out.println("squarefeee = " + pep);
+                            break;
+                        }
+                    }
+                    if ( vi > 0L ) {
+                        vi = -vi;
+                    } else {
+                        vi = 1L - vi;
                     }
                 }
-                if ( vi > 0L ) {
-                    vi = -vi;
-                } else {
-                    vi = 1L - vi;
+                if ( !isMonic ) {
+                    if ( ccpfac.nvar >= 1 ) {
+                        cep = PolyUtil.<BigInteger> evaluateMain(ccpfac,ce,Vi);
+                    } else {
+                        cei = PolyUtil.<BigInteger> evaluateMain(ccpfac.coFac,ce,Vi);
+                    }
                 }
+                V.add(Vi);
+                pe = pep;
+                ce = cep;
             }
             if ( !isMonic ) {
-                if ( ccpfac.nvar >= 1 ) {
-                    cep = PolyUtil.<BigInteger> evaluateMain(ccpfac,ce,Vi);
-                } else {
-                    cei = PolyUtil.<BigInteger> evaluateMain(ccpfac.coFac,ce,Vi);
-                }
-                pec = engine.baseContent(pep);
-                System.out.println("ce = " + ce + ", cei = " + cei + ", pec = " + pec);
+                pec = engine.baseContent(pe);
+                System.out.println("cei = " + cei + ", pec = " + pec);
                 if ( lfacs.get(0).isConstant() ) {
                     ped = cei.remove(0);
                     lfacs.remove(0);
@@ -726,7 +734,6 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     ped = cei.get(0).getONE();
                 }
                 System.out.println("lfacs = " + lfacs + ", cei = " + cei + ", ped = " + ped);
-
                 // test Wang's condition
                 List<BigInteger> dei = new ArrayList<BigInteger>();
                 dei.add( pec.multiply(ped) );
@@ -742,17 +749,14 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     }
                     if ( cii.isONE() ) {
                         System.out.println("condition not met");
+                        notLucky = true;
                     }
                     dei.add(cii);
                     i++;
                 }
                 System.out.println("dei = " + dei);
-
             }
-            V.add(Vi);
-            pe = pep;
-            ce = cep;
-        }
+        } // end notLucky loop
         logger.info("evaluation points  = " + V);
         System.out.println("pe = " + pe);
         
@@ -771,7 +775,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
 
         // determine leading coefficients for factors
         List<GenPolynomial<BigInteger>> lf = new ArrayList<GenPolynomial<BigInteger>>();
-        GenPolynomial<BigInteger> ppx = null;
+        GenPolynomial<BigInteger> lpx = lprr.ring.getONE();
         for ( GenPolynomial<BigInteger> pp : ufactors) {
             lf.add( lprr.ring.getONE() ); 
         }
@@ -782,26 +786,23 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 GenPolynomial<BigInteger> lfp = lf.get(i);
                 int ii = 0;
                 for ( BigInteger ci : cei ) {
-		    while ( ppl.remainder(ci).isZERO() ) {
-			ppl = ppl.divide(ci);
+                    while ( ppl.remainder(ci).isZERO() ) {
+                        ppl = ppl.divide(ci);
                         lfp = lfp.multiply( lfacs.get(ii) );
                     }
                     ii++;
                 }
-                lf.set(i,lfp.multiply(ppl));
+                lfp = lfp.multiply(ppl);
+                lf.set(i,lfp);
+                lpx = lpx.multiply(lfp);
                 i++;
             }
         }
-        System.out.println("lf       = " + lf);
-        //for ( GenPolynomial<BigInteger> pp : lfactors.keySet()) {
-        //    if ( pp.isConstant() ) {
-        //        continue;
-	//    }
-        //    ppx = pp;
-        //}
-        //lf.set(0, ppx); //lfactors.firstKey() ); 
-        //lf.set(1, ppx.multiply(lfactors.firstKey()) ); 
-        //System.out.println("lf = " + lf);
+        logger.info("ldcf factors = " + lf);
+        if ( !lprr.equals(lpx) ) { // something is wrong
+            System.out.println("lpx = " + lpx +  ", lprr == lpx: " + lprr.equals(lpx));
+            throw new RuntimeException("something is wrong");
+        }
 
         GenPolynomialRing<BigInteger> ufac = pe.ring;
         System.out.println("ufac = " + ufac.toScript());
@@ -931,14 +932,14 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 GenPolynomial<MOD> cofactor = um.divide(mtrial);
                 GenPolynomial<BigInteger> trial = PolyUtil.integerFromModularCoefficients(pfac, mtrial);
                 GenPolynomial<BigInteger> cotrial = PolyUtil.integerFromModularCoefficients(pfac, cofactor);
-                System.out.println("trial    = " + trial   + ", mtrial = " + mtrial);
-                System.out.println("cotrial  = " + cotrial + ", cofactor = " + cofactor);
+                System.out.println("trial    = " + trial); //   + ", mtrial = " + mtrial);
+                //System.out.println("cotrial  = " + cotrial + ", cofactor = " + cofactor);
                 if (trial.multiply(cotrial).equals(ui) ) {
                     factors.add(trial);
                     ui = cotrial; //PolyUtil.<BigInteger> basePseudoDivide(ui, trial); //u.divide( trial );
-                    System.out.println("ui        = " + ui);
                     um = cofactor;
-                    System.out.println("um        = " + um);
+                    //System.out.println("ui        = " + ui);
+                    //System.out.println("um        = " + um);
                     if (mlift.removeAll(flist)) {
                         logger.info("new mlift= " + mlift);
                         //System.out.println("dl = " + dl); 
