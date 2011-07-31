@@ -671,6 +671,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         BigInteger ped = null;
 
         List<BigInteger> V = null;
+        long evStart = 0L; //3L * 5L;
         boolean notLucky = true;
         while ( notLucky ) { // for Wang's test
             notLucky = false;
@@ -683,12 +684,13 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             cei = null;
             pec = null;
             ped = null;
+            long vi = 0L; 
             for ( int j = pfac.nvar; j > 1; j-- ) {
                 // evaluation up to univariate case
                 long degp = pe.degree(cpfac.nvar-2);
                 cpfac = cpfac.contract(1);
                 ccpfac = ccpfac.contract(1);
-                long vi = 3L*5L;//0L; //(long)(pfac.nvar-j); // 1L; 0 not so good for small p
+                vi = evStart;//0L; //(long)(pfac.nvar-j); // 1L; 0 not so good for small p
                 BigInteger Vi;
 
                 // search evaluation point
@@ -750,6 +752,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     if ( cii.isONE() ) {
                         System.out.println("condition not met");
                         notLucky = true;
+                        evStart = vi + 1L;
                     }
                     dei.add(cii);
                     i++;
