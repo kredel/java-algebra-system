@@ -682,7 +682,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
 
         List<BigInteger> V = new ArrayList<BigInteger>();
         for ( int j = pfac.nvar; j > 1; j-- ) {
-            // evaluation to univariate case
+            // evaluation up to univariate case
             long degp = pe.degree(cpfac.nvar-2);
             cpfac = cpfac.contract(1);
             ccpfac = ccpfac.contract(1);
@@ -722,8 +722,11 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 if ( lfacs.get(0).isConstant() ) {
                     ped = cei.remove(0);
                     lfacs.remove(0);
+                } else {
+                    ped = cei.get(0).getONE();
                 }
                 System.out.println("lfacs = " + lfacs + ", cei = " + cei + ", ped = " + ped);
+
                 // test Wang's condition
                 List<BigInteger> dei = new ArrayList<BigInteger>();
                 dei.add( pec.multiply(ped) );
@@ -744,6 +747,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     i++;
                 }
                 System.out.println("dei = " + dei);
+
             }
             V.add(Vi);
             pe = pep;
@@ -889,11 +893,11 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             mlift = HenselMultUtil.<MOD> liftHenselFull(pd,mufactors,Vm,k,lf);
             logger.info("mlift = " + mlift);
         } catch ( NoLiftingException nle ) {
-            //System.out.println("exception : " + nle);
+            System.out.println("exception : " + nle);
             //continue;
             mlift = new ArrayList<GenPolynomial<MOD>>();
         } catch ( ArithmeticException aex ) {
-            //System.out.println("exception : " + aex);
+            System.out.println("exception : " + aex);
             //continue;  
             mlift = new ArrayList<GenPolynomial<MOD>>();
         }
@@ -927,12 +931,14 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 GenPolynomial<MOD> cofactor = um.divide(mtrial);
                 GenPolynomial<BigInteger> trial = PolyUtil.integerFromModularCoefficients(pfac, mtrial);
                 GenPolynomial<BigInteger> cotrial = PolyUtil.integerFromModularCoefficients(pfac, cofactor);
-                System.out.println("trial    = " + trial);
-                System.out.println("cotrial  = " + cotrial);
+                System.out.println("trial    = " + trial   + ", mtrial = " + mtrial);
+                System.out.println("cotrial  = " + cotrial + ", cofactor = " + cofactor);
                 if (trial.multiply(cotrial).equals(ui) ) {
                     factors.add(trial);
-                    ui = PolyUtil.<BigInteger> basePseudoDivide(ui, trial); //u.divide( trial );
-                    //System.out.println("ui        = " + ui);
+                    ui = cotrial; //PolyUtil.<BigInteger> basePseudoDivide(ui, trial); //u.divide( trial );
+                    System.out.println("ui        = " + ui);
+                    um = cofactor;
+                    System.out.println("um        = " + um);
                     if (mlift.removeAll(flist)) {
                         logger.info("new mlift= " + mlift);
                         //System.out.println("dl = " + dl); 
