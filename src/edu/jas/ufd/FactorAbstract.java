@@ -136,7 +136,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         }
         boolean t = Ps.equals(S);
         if ( !t ) {
-            System.out.println("not squarefree: Ps = " + Ps + ", S = " + S);
+            //System.out.println("not squarefree: Ps = " + Ps + ", S = " + S);
             //if ( !P.equals(Ps) ) {
                 //System.out.println("not squarefree: P = " + P);
             //}
