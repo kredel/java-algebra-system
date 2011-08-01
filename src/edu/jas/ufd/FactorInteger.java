@@ -754,13 +754,13 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                         }
                         if ( cii.isONE() ) {
                             System.out.println("condition (1) not met, ci = " + ci + ", dei = " + dei);
-                            System.out.println("cei = " + cei + ", pec = " + pec+ ", ped = " + ped);
+                            //System.out.println("cei = " + cei + ", pec = " + pec+ ", ped = " + ped);
                             notLucky = true;
                             evStart = vi + 1L;
                         }
                     } else {
                         System.out.println("condition (0) not met, ci = " + ci + ", dei = " + dei);
-                        System.out.println("cei = " + cei + ", pec = " + pec+ ", ped = " + ped);
+                        //System.out.println("cei = " + cei + ", pec = " + pec+ ", ped = " + ped);
                         notLucky = true;
                         evStart = vi + 1L;
                     }
@@ -778,13 +778,13 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         System.out.println("pp(pe) = " + pe);
 
         List<GenPolynomial<BigInteger>> ufactors = baseFactorsSquarefree(pe);
-        System.out.println("ufactors = " + ufactors + ", of " + pe);
-        System.out.println("lfacs    = " + lfacs);
-        System.out.println("cei      = " + cei);
         if (ufactors.size() <= 1) {
             factors.add(P);
             return factors;
         }
+        System.out.println("ufactors = " + ufactors + ", of " + pe);
+        System.out.println("lfacs    = " + lfacs);
+        System.out.println("cei      = " + cei);
 
         // determine leading coefficients for factors
         List<GenPolynomial<BigInteger>> lf = new ArrayList<GenPolynomial<BigInteger>>();
@@ -795,14 +795,18 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         if ( !isMonic ) {
             if ( lfacs.get(0).isConstant() ) {
                 GenPolynomial<BigInteger> xx = lfacs.remove(0);
+                BigInteger xxi = xx.leadingBaseCoefficient();
+                //System.out.println("xx = " + xx);             
             }
-            int i = 0;
-            for ( GenPolynomial<BigInteger> pp : ufactors) {
+            for ( int i = ufactors.size()-1; i >= 0; i-- ) {
+                GenPolynomial<BigInteger> pp = ufactors.get(i);
                 BigInteger ppl = pp.leadingBaseCoefficient();
+                ppl = ppl.multiply(pec); // content
                 GenPolynomial<BigInteger> lfp = lf.get(i);
                 int ii = 0;
                 for ( BigInteger ci : cei ) {
                     while ( ppl.remainder(ci).isZERO() ) {
+                        //System.out.println("ppl = " + ppl + ", ci = " + ci);
                         ppl = ppl.divide(ci);
                         lfp = lfp.multiply( lfacs.get(ii) );
                     }
@@ -810,14 +814,57 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 }
                 lfp = lfp.multiply(ppl);
                 lf.set(i,lfp);
-                lpx = lpx.multiply(lfp);
-                i++;
             }
-        }
-        logger.info("ldcf factors = " + lf);
-        if ( !lprr.equals(lpx) ) { // something is wrong
-            System.out.println("lprr = " + lprr + ", lpx = " + lpx +  ", lprr == lpx: " + lprr.equals(lpx));
-            throw new RuntimeException("something is wrong");
+            if ( !pec.isONE() ) { // content
+                for ( GenPolynomial<BigInteger> uf : lf ) {
+                    lpx = lpx.multiply(uf);
+                }
+                System.out.println("lpx = " + lpx);
+                GenPolynomial<BigInteger> ug = engine.gcd(lprr,lpx);
+                System.out.println("ug = " + ug);
+                GenPolynomial<BigInteger> ug1 = PolyUtil.<BigInteger> basePseudoDivide(lprr, ug); 
+                System.out.println("ug1 = " + ug1);
+                if ( !ug1.isConstant() ) {
+                    throw new RuntimeException("ug1 not constant: " + ug1);
+                }
+                BigInteger ugi = ug1.leadingBaseCoefficient();
+                System.out.println("ugi = " + ugi);
+                if ( ugi.isONE() ) {
+                   ug1 = PolyUtil.<BigInteger> basePseudoDivide(lpx, ug); 
+                   System.out.println("ug1 = " + ug1);
+                   if ( !ug1.isConstant() ) {
+                       throw new RuntimeException("ug1 not constant: " + ug1);
+                   }
+                }
+                ugi = ug1.leadingBaseCoefficient();
+                System.out.println("ugi = " + ugi);
+                int ii = 0;
+                for ( ; ii < lf.size() ; ) {
+                    GenPolynomial<BigInteger> uf = lf.get(ii);
+                    BigInteger ui = uf.leadingBaseCoefficient();
+                    for ( BigInteger ci : cei ) {
+                         BigInteger peci = ci.gcd( ui ); 
+                         System.out.println("peci = " + peci + ", ci = " + ci  + ", ui = " + ui);
+                         if ( !peci.isONE() ) {
+                             //pec = pec.divide(peci);
+                             GenPolynomial<BigInteger> ufi = uf.divide(peci);
+                             System.out.println("ufi = " + ufi);
+                             lf.set(ii,ufi);
+                         }
+                    }
+                    ii++;
+                }
+            }
+            logger.info("ldcf factors = " + lf);
+            lpx = lprr.ring.getONE();
+            for ( GenPolynomial<BigInteger> uf : lf ) {
+                lpx = lpx.multiply(uf);
+            }
+            if ( !lprr.equals(lpx) ) { // something is wrong
+                System.out.println("lprr = " + lprr + ", lpx = " + lpx +  ", lprr == lpx: " + lprr.equals(lpx));
+                //System.out.println("ufactors = " + ufactors + ", of " + pe +  ", is factorizatio: " + isFactorization(pe,ufactors));
+                throw new RuntimeException("something is wrong");
+            }
         }
 
         GenPolynomialRing<BigInteger> ufac = pe.ring;

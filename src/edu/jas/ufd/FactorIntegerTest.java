@@ -304,8 +304,8 @@ public class FactorIntegerTest extends TestCase {
             GenPolynomial<BigInteger> c = pfac.random(kl, 2, el, q);
             GenPolynomial<BigInteger> d = pfac.random(kl, 2, el, q);
             b = pfac.parse(" ( 5 x y^2 - 1 ) "); 
-            c = pfac.parse(" ( 2 x z^2 + 1 ) "); 
-            d = pfac.parse(" ( y^3 + 3 x )"); 
+            c = pfac.parse(" ( 2 x y z^2 + 1 ) "); 
+            d = pfac.parse(" ( y^3 z + 7 x )"); 
             GenPolynomial<BigInteger> a;
             a = b.multiply(c).multiply(d);
             System.out.println("a = " + a);
@@ -316,10 +316,15 @@ public class FactorIntegerTest extends TestCase {
             //SortedMap<GenPolynomial<BigInteger>, Long> sm = fac.factorsSquarefreeHensel(a);
             List<GenPolynomial<BigInteger>> sm = fac.factorsSquarefreeHensel(a);
             System.out.println("sm = " + sm);
-
             boolean t = fac.isFactorization(a, sm);
             //System.out.println("t        = " + t);
             assertTrue("prod(factor(a)) = a", t);
+
+            //sm = fac.factorsSquarefree(a);
+            //System.out.println("sm = " + sm);
+            //t = fac.isFactorization(a, sm);
+            //System.out.println("t        = " + t);
+            //assertTrue("prod(factor(a)) = a", t);
         }
     }
 
