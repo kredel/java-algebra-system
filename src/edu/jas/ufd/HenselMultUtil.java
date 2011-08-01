@@ -1059,7 +1059,8 @@ public class HenselMultUtil {
             U1s.add(u);
         }
         System.out.println("U1s = " + U1s);
-        if ( s % 2 != 0 || !cC.isONE()) {
+        //if ( s % 2 != 0 || !cC.isONE()) {
+        if ( !cC.isONE()) {
            throw new NoLiftingException("s = " + s + ", Ci = " + Ci + ", U1i = " + U1i + ", cC = " + cC);
         }
         U1 = U1s;

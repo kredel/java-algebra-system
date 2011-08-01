@@ -170,8 +170,6 @@ public class HenselMultUtilTest extends TestCase {
 
         ModIntegerRing pm = new ModIntegerRing(p, false);
         //ModLongRing pl = new ModLongRing(p, false);
-        //GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 2, tord, new String[]{ "x", "y" });
-        //GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 3, tord, new String[]{ "x", "y", "z" });
         GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 4, tord, new String[]{ "w", "x", "y", "z" });
         GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(),pfac);
 
@@ -408,9 +406,7 @@ public class HenselMultUtilTest extends TestCase {
         BigInteger m = new BigInteger(p);
 
         ModIntegerRing pm = new ModIntegerRing(p, false);
-        //GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 2, tord, new String[]{ "x", "y" });
         GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 3, tord, new String[]{ "x", "y", "z" });
-        //GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 4, tord, new String[]{ "x", "y", "z", "w" });
         GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(),pfac);
         GenPolynomialRing<GenPolynomial<BigInteger>> irfac = ifac.recursive(ifac.nvar-1);
 
@@ -548,7 +544,7 @@ public class HenselMultUtilTest extends TestCase {
     /**
      * Test multivariate Hensel lifting list, 4 variables.
      */
-    public void testHenselLifting4List() {
+    public void xtestHenselLifting4List() {
         java.math.BigInteger p;
         //p = getPrime1();
         p = new java.math.BigInteger("19");
@@ -556,8 +552,6 @@ public class HenselMultUtilTest extends TestCase {
         BigInteger m = new BigInteger(p);
 
         ModIntegerRing pm = new ModIntegerRing(p, false);
-        //GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 2, tord, new String[]{ "x", "y" });
-        //GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 3, tord, new String[]{ "x", "y", "z" });
         GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 4, tord, new String[]{ "x", "y", "z", "w" });
         GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(),pfac);
         GenPolynomialRing<GenPolynomial<BigInteger>> irfac = ifac.recursive(ifac.nvar-1);
@@ -688,7 +682,7 @@ public class HenselMultUtilTest extends TestCase {
     /**
      * Test univariate and multivariate Hensel lifting list, 2 variables.
      */
-    public void testHenselLifting2FullList() {
+    public void xtestHenselLifting2FullList() {
         java.math.BigInteger p;
         //p = getPrime1();
         p = new java.math.BigInteger("19");
@@ -921,6 +915,9 @@ public class HenselMultUtilTest extends TestCase {
                  Ap.add(ap);
             }
             System.out.println("A(v,v) mod p = " + Ap);
+ 
+            //Collections.reverse(V);
+            //System.out.println("V.reverse = " + V);
 
             try {
                 List<GenPolynomial<ModLong>> lift;
@@ -945,7 +942,7 @@ public class HenselMultUtilTest extends TestCase {
     /**
      * Test univariate and multivariate Hensel lifting list, 3 variables.
      */
-    public void testHenselLifting4FullList() {
+    public void xtestHenselLifting4FullList() {
         java.math.BigInteger p;
         //p = getPrime1();
         p = new java.math.BigInteger("19");
