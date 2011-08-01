@@ -921,10 +921,12 @@ public class HenselUtil {
         GenPolynomial<ModInteger> cp = PolyUtil.<ModInteger> fromIntegerCoefficients(mfac, C);
         if (!cp.equals(cl)) {
             System.out.println("Hensel precondition wrong!");
-            System.out.println("cl    = " + cl);
-            System.out.println("cp    = " + cp);
-            System.out.println("cp-cl = " + cp.subtract(cl));
-            System.out.println("M = " + M + ", p = " + p);
+            System.out.println("cl      = " + cl);
+            System.out.println("cp      = " + cp);
+            System.out.println("mon(cl) = " + cl.monic());
+            System.out.println("mon(cp) = " + cp.monic());
+            System.out.println("cp-cl   = " + cp.subtract(cl));
+            System.out.println("M       = " + M + ", p = " + p);
             return false;
         }
 
