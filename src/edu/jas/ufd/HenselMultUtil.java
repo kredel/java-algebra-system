@@ -959,7 +959,7 @@ public class HenselMultUtil {
         GenPolynomial<MOD> ap = Cq;
         for (int j = C.ring.nvar; j > 1; j--) {
             pf = pf.contract(1);
-            MOD vp = mcfac.fromInteger(V.get(j - 2).getSymmetricInteger().getVal());
+            MOD vp = mcfac.fromInteger(V.get(C.ring.nvar-j).getSymmetricInteger().getVal());
             //System.out.println("vp     = " + vp);
             ap = PolyUtil.<MOD> evaluateMain(pf, ap, vp);
             //System.out.println("ap     = " + ap);
@@ -987,7 +987,7 @@ public class HenselMultUtil {
             GenPolynomial<MOD> gp = gq;
             for (int j = gcfac.nvar; j > 1; j--) {
                 gf = gf.contract(1);
-                MOD vp = mcfac.fromInteger(V.get(j - 2).getSymmetricInteger().getVal());
+                MOD vp = mcfac.fromInteger(V.get(gcfac.nvar-j).getSymmetricInteger().getVal());
                 //System.out.println("vp     = " + vp);
                 gp = PolyUtil.<MOD> evaluateMain(gf, gp, vp);
                 //System.out.println("gp     = " + gp);

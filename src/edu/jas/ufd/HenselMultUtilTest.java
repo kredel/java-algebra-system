@@ -682,7 +682,7 @@ public class HenselMultUtilTest extends TestCase {
     /**
      * Test univariate and multivariate Hensel lifting list, 2 variables.
      */
-    public void xtestHenselLifting2FullList() {
+    public void testHenselLifting2FullList() {
         java.math.BigInteger p;
         //p = getPrime1();
         p = new java.math.BigInteger("19");
@@ -862,6 +862,7 @@ public class HenselMultUtilTest extends TestCase {
             c = A.get(0).multiply(A.get(1)).multiply(A.get(2));
             cp = PolyUtil.<ModLong> fromIntegerCoefficients(pkfac,c);
             System.out.println("c          = " + c);
+            System.out.println("cp         = " + cp);
             GenPolynomial<GenPolynomial<BigInteger>> cr = PolyUtil.<BigInteger>recursive(irfac,c);
             GenPolynomial<GenPolynomial<BigInteger>> crr = PolyUtil.<BigInteger>switchVariables(cr);
             System.out.println("crr        = " + crr);
@@ -890,7 +891,7 @@ public class HenselMultUtilTest extends TestCase {
             List<GenPolynomial<ModLong>> Ae = new ArrayList<GenPolynomial<ModLong>>(A.size());
 
             Ae = Apk;
-            v = V.get(1);
+            v = V.get(0);
             List<GenPolynomial<ModLong>> Ae1 = new ArrayList<GenPolynomial<ModLong>>(A.size());
             for ( GenPolynomial<ModLong> a : Ae ) {
                  GenPolynomial<ModLong> ae = PolyUtil.<ModLong> evaluateMain(ckfac,a,v);
@@ -898,9 +899,11 @@ public class HenselMultUtilTest extends TestCase {
             }
             Ae = Ae1;
             System.out.println("A(v) mod p^k = " + Ae);
+            GenPolynomial<ModLong> cpp = PolyUtil.<ModLong> evaluateMain(ckfac,cp,v);
+            System.out.println("cpp        = " + cpp);
             ckfac = ckfac.contract(1);
 
-            v = V.get(0);
+            v = V.get(1);
             Ae1 = new ArrayList<GenPolynomial<ModLong>>(A.size());
             for ( GenPolynomial<ModLong> a : Ae ) { // Ap
                  GenPolynomial<ModLong> ae = PolyUtil.<ModLong> evaluateMain(ckfac,a,v);
@@ -908,6 +911,8 @@ public class HenselMultUtilTest extends TestCase {
             }
             Ae = Ae1;
             System.out.println("A(v,v) mod p^k = " + Ae);
+            GenPolynomial<ModLong> cppp = PolyUtil.<ModLong> evaluateMain(ckfac,cpp,v);
+            System.out.println("cppp       = " + cppp);
           
             List<GenPolynomial<ModLong>> Ap = new ArrayList<GenPolynomial<ModLong>>(A.size());
             for ( GenPolynomial<BigInteger> ai : PolyUtil.<ModLong>integerFromModularCoefficients(icfac,Ae) ) {
@@ -915,9 +920,14 @@ public class HenselMultUtilTest extends TestCase {
                  Ap.add(ap);
             }
             System.out.println("A(v,v) mod p = " + Ap);
- 
-            //Collections.reverse(V);
-            //System.out.println("V.reverse = " + V);
+            GenPolynomial<ModLong> cpppp = PolyUtil.<ModLong> fromIntegerCoefficients(pcfac, PolyUtil.<ModLong>integerFromModularCoefficients(icfac,cppp));
+            System.out.println("cpppp      = " + cpppp);
+
+            GenPolynomial<ModLong> aa = pcfac.getONE();
+            for ( GenPolynomial<ModLong> x : Ap ) {
+		aa = aa.multiply(x);
+            }
+            System.out.println("prod(A(v,v)) mod p = " + aa + ", aa == cppp: " + cpppp.equals(aa));
 
             try {
                 List<GenPolynomial<ModLong>> lift;
@@ -942,7 +952,7 @@ public class HenselMultUtilTest extends TestCase {
     /**
      * Test univariate and multivariate Hensel lifting list, 3 variables.
      */
-    public void xtestHenselLifting4FullList() {
+    public void testHenselLifting4FullList() {
         java.math.BigInteger p;
         //p = getPrime1();
         p = new java.math.BigInteger("19");
@@ -1029,7 +1039,7 @@ public class HenselMultUtilTest extends TestCase {
             System.out.println("v = " + v + ", V = " + V);
 
             GenPolynomialRing<ModLong> ckfac = pkfac.contract(1);
-            v = V.get(2);
+            v = V.get(0);
             List<GenPolynomial<ModLong>> Ae = new ArrayList<GenPolynomial<ModLong>>(A.size());
             for ( GenPolynomial<ModLong> a : Apk ) {
                  GenPolynomial<ModLong> ae = PolyUtil.<ModLong> evaluateMain(ckfac,a,v);
@@ -1048,7 +1058,7 @@ public class HenselMultUtilTest extends TestCase {
             System.out.println("A(v,v) mod p^k = " + Ae);
             ckfac = ckfac.contract(1);
 
-            v = V.get(0);
+            v = V.get(2);
             Ae1 = new ArrayList<GenPolynomial<ModLong>>(A.size());
             for ( GenPolynomial<ModLong> a : Ae ) { // Ap
                  GenPolynomial<ModLong> ae = PolyUtil.<ModLong> evaluateMain(ckfac,a,v);
