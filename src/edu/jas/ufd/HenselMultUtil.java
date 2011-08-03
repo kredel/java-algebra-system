@@ -665,11 +665,11 @@ public class HenselMultUtil {
         //System.out.println("Cp = " + Cp);
         //System.out.println("G = " + G);
 
-        GenPolynomial<BigInteger> cd = G.get(1);
+        //GenPolynomial<BigInteger> cd = G.get(0); // 1
         //System.out.println("cd = " + cd + ", ring = " + C.ring);
-        if ( cd.equals(C.ring.univariate(0)) ) {
-            System.out.println("cd == G[1]");
-        }
+        //if ( cd.equals(C.ring.univariate(0)) ) {
+        //    System.out.println("cd == G[1]");
+        //}
         // G mod p^k, in all variables
         GenPolynomialRing<MOD> pkfac1 = new GenPolynomialRing<MOD>(pkfac.coFac, G.get(0).ring);
         List<GenPolynomial<MOD>> Lp = new ArrayList<GenPolynomial<MOD>>(G.size());

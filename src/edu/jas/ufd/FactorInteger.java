@@ -101,7 +101,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         if (pfac.nvar > 1) {
             throw new IllegalArgumentException(this.getClass().getName() + " only for univariate polynomials");
         }
-        if (P.degree(0) <= 1L) {
+        if (P.degree(0) < 1L) {
             factors.add(P);
             return factors;
         }
@@ -626,9 +626,9 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         try {
             logger.info("try factorsSquarefreeHensel: " + P);
             facs = factorsSquarefreeHensel(P);
-        } catch (RuntimeException e) {
-            logger.info("exception " + e);
-        //} catch (NoLiftingException e) {
+        } catch (Exception e) {
+            //System.out.println("exception " + e);
+            logger.warn("exception " + e);
         }
         if ( facs == null ) {
             facs = super.factorsSquarefree(P);
@@ -804,8 +804,8 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         //pe = engine.basePrimitivePart(pe);
         //System.out.println("pp(pe) = " + pe);
 
-        List<GenPolynomial<BigInteger>> ufactors = baseFactorsSquarefree(pe);
-        if (ufactors.size() <= 1) {
+        List<GenPolynomial<BigInteger>> ufactors = baseFactorsRadical(pe); //Squarefree(pe); wrong since not primitive
+        if (ufactors.size() <= 0) {
             factors.add(P);
             return factors;
         }

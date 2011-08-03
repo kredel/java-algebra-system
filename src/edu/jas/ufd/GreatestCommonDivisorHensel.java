@@ -408,7 +408,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
             }
             //System.out.println("cofac = " + cofac);
 
-            List<MOD> V = new ArrayList<MOD>(1);
+            List<MOD> V = new ArrayList<MOD>(P.ring.nvar);
             GenPolynomialRing<MOD> mfac = new GenPolynomialRing<MOD>(cofac, dfac);
             //System.out.println("mfac = " + mfac.toScript());
             GenPolynomial<MOD> qm = PolyUtil.<MOD> fromIntegerCoefficients(mfac, qd);
