@@ -95,6 +95,32 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
 
 
     /**
+     * GenPolynomial test if is squarefree.
+     * @param P GenPolynomial.
+     * @return true if P is squarefree, else false.
+     */
+    public boolean isBaseSquarefree(GenPolynomial<C> P) {
+        if (P == null || P.isZERO()) {
+            return true;
+        }
+        GenPolynomialRing<C> pfac = P.ring;
+        if (pfac.nvar > 1) {
+            throw new IllegalArgumentException(this.getClass().getName() + " only for univariate polynomials");
+        }
+        GenPolynomial<C> pp = P.monic();
+        if (pp.isConstant()) {
+            return true;
+        }
+        GenPolynomial<C> d = PolyUtil.<C> baseDeriviative(pp);
+        d = d.monic();
+        //System.out.println("d = " + d);
+        GenPolynomial<C> g = engine.baseGcd(pp, d);
+        g = g.monic();
+        return g.isONE();
+    }
+
+
+    /**
      * GenPolynomial polynomial squarefree factorization.
      * @param A GenPolynomial.
      * @return [p_1 -> e_1, ..., p_k -> e_k] with P = prod_{i=1,...,k} p_i^{e_i}
@@ -212,13 +238,57 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
         }
         GenPolynomial<GenPolynomial<C>> d = PolyUtil.<C> recursiveDeriviative(pp);
         //System.out.println("d = " + d);
-
         GenPolynomial<GenPolynomial<C>> g = engine.recursiveUnivariateGcd(pp, d);
         //System.out.println("g,rec = " + g);
         g = PolyUtil.<C> monic(g);
         GenPolynomial<GenPolynomial<C>> q = PolyUtil.<C> recursivePseudoDivide(pp, g);
         q = PolyUtil.<C> monic(q);
         return q.multiply(Pc);
+    }
+
+
+    /**
+     * GenPolynomial test if is squarefree.
+     * @param P GenPolynomial.
+     * @return true if P is squarefree, else false.
+     */
+    public boolean isRecursiveUnivariateSquarefree(GenPolynomial<GenPolynomial<C>> P) {
+        if (P == null || P.isZERO()) {
+            return true;
+        }
+        GenPolynomialRing<GenPolynomial<C>> pfac = P.ring;
+        if (pfac.nvar > 1) {
+            throw new IllegalArgumentException(this.getClass().getName() + " only for multivariate polynomials");
+        }
+        GenPolynomialRing<C> cfac = (GenPolynomialRing<C>) pfac.coFac;
+        // squarefree content
+        GenPolynomial<GenPolynomial<C>> pp = P;
+        GenPolynomial<C> Pc = engine.recursiveContent(P);
+        if ( logger.isInfoEnabled() ) {
+            logger.info("recursiveContent = " + Pc);
+        }
+        if ( ! isSquarefree(Pc) ) {
+            return false;
+        }
+        Pc = Pc.monic();
+        if (!Pc.isONE()) {
+            pp = PolyUtil.<C> coefficientPseudoDivide(pp, Pc);
+            //System.out.println("pp,sqp = " + pp);
+        }
+        if (pp.leadingExpVector().getVal(0) <= 1) {
+            //System.out.println("pp = " + pp);
+            //System.out.println("Pc = " + Pc);
+            return true;
+        }
+        GenPolynomial<GenPolynomial<C>> d = PolyUtil.<C> recursiveDeriviative(pp);
+        //System.out.println("d = " + d);
+        GenPolynomial<GenPolynomial<C>> g = engine.recursiveUnivariateGcd(pp, d);
+        if ( logger.isInfoEnabled() ) {
+            logger.info("gcd = " + g);
+        }
+        //System.out.println("g,rec = " + g);
+        g = PolyUtil.<C> monic(g);
+        return g.isONE();
     }
 
 
@@ -256,7 +326,7 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
         // factors of content
         GenPolynomial<C> Pc = engine.recursiveContent(P);
         if ( logger.isInfoEnabled() ) {
-            logger.info("Pc = " + Pc);
+            logger.info("recursiveContent = " + Pc);
         }
         Pc = Pc.monic();
         if (!Pc.isONE()) {
@@ -264,7 +334,7 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
         }
         SortedMap<GenPolynomial<C>, Long> rsf = squarefreeFactors(Pc);
         if ( logger.isInfoEnabled() ) {
-            logger.info("rsf = " + rsf);
+            logger.info("squarefreeFactors = " + rsf);
         }
         // add factors of content
         for (GenPolynomial<C> c : rsf.keySet()) {
@@ -348,10 +418,40 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
         GenPolynomial<C> Pc = engine.recursiveContent(Pr);
         Pr = PolyUtil.<C> coefficientPseudoDivide(Pr, Pc);
         GenPolynomial<C> Ps = squarefreePart(Pc);
+        if ( logger.isInfoEnabled() ) {
+            logger.info("content = " + Pc + ", squarefreePart = " + Ps);
+        }
         GenPolynomial<GenPolynomial<C>> PP = recursiveUnivariateSquarefreePart(Pr);
         GenPolynomial<GenPolynomial<C>> PS = PP.multiply(Ps);
         GenPolynomial<C> D = PolyUtil.<C> distribute(pfac, PS);
+        if ( logger.isInfoEnabled() ) {
+            logger.info("univRec = " + Pr + ", squarefreePart = " + PP);
+        }
         return D;
+    }
+
+
+    /**
+     * GenPolynomial test if is squarefree.
+     * @param P GenPolynomial.
+     * @return true if P is squarefree, else false.
+     */
+    @Override
+    public boolean isSquarefree(GenPolynomial<C> P) {
+        if (P == null) {
+            throw new IllegalArgumentException(this.getClass().getName() + " P != null");
+        }
+        if (P.isZERO()) {
+            return true;
+        }
+        GenPolynomialRing<C> pfac = P.ring;
+        if (pfac.nvar <= 1) {
+            return isBaseSquarefree(P);
+        }
+        GenPolynomialRing<C> cfac = pfac.contract(1);
+        GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(cfac, 1);
+        GenPolynomial<GenPolynomial<C>> Pr = PolyUtil.<C> recursive(rfac, P);
+        return isRecursiveUnivariateSquarefree(Pr);
     }
 
 
@@ -385,6 +485,9 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
             GenPolynomial<GenPolynomial<C>> Dr = m.getKey();
             GenPolynomial<C> D = PolyUtil.<C> distribute(pfac, Dr);
             sfactors.put(D, i);
+        }
+        if ( logger.isInfoEnabled() ) {
+            logger.info("squarefreeFactors(" + P + "= = " + sfactors);
         }
         return sfactors;
     }

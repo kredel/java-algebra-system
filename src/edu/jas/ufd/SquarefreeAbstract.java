@@ -549,7 +549,7 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
         if (P == null) {
             return null;
         }
-        // just for the moment:
+        // just for the moment: TODO
         C s = null;
         SortedMap<C, Long> factors = squarefreeFactors(P);
         //logger.info("sqfPart,factors = " + factors);
