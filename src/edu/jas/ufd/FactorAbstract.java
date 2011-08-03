@@ -127,21 +127,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
      * @return true if P is squarefree, else false.
      */
     public boolean isSquarefree(GenPolynomial<C> P) {
-        GenPolynomial<C> S = squarefreePart(P);
-        GenPolynomial<C> Ps = P;
-        if ( P.ring.coFac.isField() ) {
-            Ps = Ps.monic();
-        } else {
-            Ps = basePrimitivePart(Ps);
-        }
-        boolean t = Ps.equals(S);
-        if ( !t ) {
-            //System.out.println("not squarefree: Ps = " + Ps + ", S = " + S);
-            //if ( !P.equals(Ps) ) {
-                //System.out.println("not squarefree: P = " + P);
-            //}
-        }
-        return t;
+        return sengine.isSquarefree(P);
     }
 
 
