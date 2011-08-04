@@ -662,8 +662,8 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             return factors;
         }
         GenPolynomial<BigInteger> pd = P; 
-        System.out.println("pfac = " + pfac.toScript());
-        System.out.println("pd   = " + pd);
+        //System.out.println("pfac = " + pfac.toScript());
+        //System.out.println("pd   = " + pd);
         // ldcf(pd)
         BigInteger ac = pd.leadingBaseCoefficient();
 
@@ -679,7 +679,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             isMonic = true;
         }
         SortedMap<GenPolynomial<BigInteger>,Long> lfactors = factors(lprr);
-        System.out.println("lfactors = " + lfactors);
+        //System.out.println("lfactors = " + lfactors);
         List<GenPolynomial<BigInteger>> lfacs = new ArrayList<GenPolynomial<BigInteger>>(lfactors.keySet());
         logger.info("leading coefficient factors = " + lfacs);
 
@@ -723,14 +723,14 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
 
                 // search evaluation point
                 while( true ) { 
-                    System.out.println("vi(" + j + ") = " + vi);
+                    logger.info("vi(" + j + ") = " + vi);
                     Vi = new BigInteger(vi);
                     pep = PolyUtil.<BigInteger> evaluateMain(cpfac,pe,Vi);
                     //System.out.println("pep = " + pep);
 
                     // check lucky evaluation point 
                     if (degp == pep.degree(cpfac.nvar-1)) {
-                        System.out.println("pep = " + pep);
+                        logger.info("pep = " + pep);
                         //System.out.println("deg(pe) = " + degp + ", deg(pep) = " + pep.degree(cpfac.nvar-1));
                         // check squarefree
                         if ( sengine.isSquarefree(pep) ) {
@@ -814,7 +814,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         }
         logger.info("univariate factors = " + ufactors + ", of " + pe);
         //System.out.println("lfacs    = " + lfacs);
-        System.out.println("cei      = " + cei);
+        //System.out.println("cei      = " + cei);
 
         // determine leading coefficients for factors
         List<GenPolynomial<BigInteger>> lf = new ArrayList<GenPolynomial<BigInteger>>();
@@ -984,7 +984,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         BigInteger an = pd.maxNorm();
         BigInteger mn = an.multiply(ac.abs()).multiply(new BigInteger(2L));
         long k = Power.logarithm(cofac.getIntegerModul(),mn) + 1L;
-        System.out.println("mn = " + mn + ", k = " +k);
+        //System.out.println("mn = " + mn + ", k = " +k);
 
         BigInteger q = Power.positivePower(cofac.getIntegerModul(), k);
         ModularRingFactory<MOD> muqfac;
