@@ -460,14 +460,14 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     factors.add(trial);
                     u = PolyUtil.<BigInteger> basePseudoDivide(u, trial); //u.divide( trial );
                     //System.out.println("u        = " + u);
-                    if (lift.removeAll(flist)) {
-                        logger.info("new lift= " + lift);
-                        dl = (lift.size() + 1) / 2;
-                        //System.out.println("dl = " + dl); 
-                        j = 0; // since j++
-                        break;
-                    }
-                    logger.error("error removing flist from lift = " + lift);
+                    //if (lift.removeAll(flist)) {
+                    lift = removeOnce(lift,flist);
+                    logger.info("new lift= " + lift);
+                    dl = (lift.size() + 1) / 2;
+                    //System.out.println("dl = " + dl); 
+                    j = 0; // since j++
+                    break;
+                    //} logger.error("error removing flist from lift = " + lift);
                 }
             }
         }
@@ -595,13 +595,13 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     um = cofactor;
                     //System.out.println("u        = " + u);
                     //System.out.println("um       = " + um);
-                    if (mlist.removeAll(flist)) {
-                        logger.info("new mlist= " + mlist);
-                        dl = (mlist.size() + 1) / 2;
-                        j = 0; // since j++
-                        break;
-                    }
-                    logger.error("error removing flist from ilist = " + mlist);
+                    //if (mlist.removeAll(flist)) {
+                    mlist = removeOnce(mlist,flist);
+                    logger.info("new mlist= " + mlist);
+                    dl = (mlist.size() + 1) / 2;
+                    j = 0; // since j++
+                    break;
+                    //} logger.error("error removing flist from ilist = " + mlist);
                 }
             }
         }
@@ -782,7 +782,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                                 cii = cii.divide(r); 
                             } while ( !r.isONE() );
                         }
-                        if ( cii.isONE() ) {
+                        if ( cii.abs().isONE() ) {
                             //System.out.println("condition (1) not met, ci = " + ci + ", dei = " + dei);
                             //System.out.println("cei = " + cei + ", pec = " + pec+ ", ped = " + ped);
                             notLucky = true;
@@ -835,8 +835,11 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 GenPolynomial<BigInteger> lfp = lf.get(i);
                 int ii = 0;
                 for ( BigInteger ci : cei ) {
+                    if ( ci.abs().isONE() ) {
+                        System.out.println("ppl = " + ppl + ", ci = " + ci + ", lfp = " + lfp + ", lfacs.get(ii) = " + lfacs.get(ii));
+                        throw new RuntimeException("something is wrong, ci is a unit");
+                    }
                     while ( ppl.remainder(ci).isZERO() ) {
-                        //System.out.println("ppl = " + ppl + ", ci = " + ci);
                         ppl = ppl.divide(ci);
                         lfp = lfp.multiply( lfacs.get(ii) );
                     }
@@ -1074,20 +1077,20 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     um = cofactor;
                     //System.out.println("ui        = " + ui);
                     //System.out.println("um        = " + um);
-                    if (mlift.removeAll(flist)) {
-                        logger.info("new mlift= " + mlift);
-                        //System.out.println("dl = " + dl); 
-                        if ( mlift.size() > 1 ) {
-                            dl = (mlift.size() + 1) / 2;
-                            j = 0; // since j++
-                            break;
-                        } else {
-                            logger.info("last ui = " + ui);
-                            factors.add(ui);
-                            return factors;
-                        }
+                    //if (mlift.removeAll(flist)) {
+                    mlift = removeOnce(mlift,flist);
+                    logger.info("new mlift= " + mlift);
+                    //System.out.println("dl = " + dl); 
+                    if ( mlift.size() > 1 ) {
+                        dl = (mlift.size() + 1) / 2;
+                        j = 0; // since j++
+                        break;
+                    } else {
+                        logger.info("last ui = " + ui);
+                        factors.add(ui);
+                        return factors;
                     }
-                    logger.error("error removing flist from mlift = " + mlift);
+                    //} logger.error("error removing flist from mlift = " + mlift);
                 }
             }
         }

@@ -35,7 +35,7 @@ public class FactorIntegerTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
+        //BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 
@@ -622,6 +622,30 @@ public class FactorIntegerTest extends TestCase {
         //System.out.println("b = " + b);
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
+
+        SortedMap<GenPolynomial<BigInteger>,Long> sm = fac.factors(a);
+        //System.out.println("sm = " + sm);
+        boolean t = fac.isFactorization(a, sm);
+        //System.out.println("t        = " + t);
+        assertTrue("prod(factor(a)) = a", t);
+    }
+
+
+    /**
+     * Test integer factorization.
+     */
+    public void testIntegerFactorizationHk() {
+        TermOrder to = new TermOrder(TermOrder.INVLEX);
+        BigInteger cfac = new BigInteger(1);
+        String[] vars = new String[] { "t", "x" };
+        GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, vars.length, to, vars);
+        FactorInteger<ModInteger> fac = new FactorInteger<ModInteger>();
+        GenPolynomial<BigInteger> a;
+
+        // 2 t * x^2 + 5 x^2 - 4 t * x - 4 x - 6 t - 9
+
+        a = pfac.parse(" ( 2 t * x^2 + 5 x^2 - 4 t * x - 4 x - 6 t - 9 ) ");
+        //System.out.println("a = " + a);
 
         SortedMap<GenPolynomial<BigInteger>,Long> sm = fac.factors(a);
         //System.out.println("sm = " + sm);

@@ -156,6 +156,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         GenPolynomial<C> kr = PolyUfdUtil.<C> substituteKronecker(P, d);
         GenPolynomialRing<C> ufac = kr.ring;
         ufac.setVars(ufac.newVars("zz")); // side effects 
+        logger.info("deg(subs(P,d=" + d + ")) = " + kr.degree(0) + ", original degrees: " + P.degreeVector());
         if (debug) {
             logger.info("subs(P,d=" + d + ") = " + kr);
             //System.out.println("subs(P,d=" + d + ") = " + kr);
@@ -277,7 +278,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
      * @param b list of objects.
      * @return remove every element of b from a, but only one occurence.
      */
-    private static <T> List<T> removeOnce(List<T> a, List<T> b) {
+    static <T> List<T> removeOnce(List<T> a, List<T> b) {
         List<T> res = new ArrayList<T>();
         res.addAll(a);
         for (T e : b) {
@@ -477,8 +478,8 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         for (GenPolynomial<C> g : facs.keySet()) {
             Long d = facs.get(g);
             List<GenPolynomial<C>> sfacs = factorsSquarefree(g);
-            if (debug) {
-                logger.info("factors of squarefree = " + sfacs);
+            if (logger.isInfoEnabled()) {
+                logger.info("factors of squarefree ^" + d + " = " + sfacs);
                 //System.out.println("sfacs   = " + sfacs);
             }
             for (GenPolynomial<C> h : sfacs) {
@@ -694,7 +695,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         }
         //System.out.println("rfacts = " + rfacts);
         if (logger.isInfoEnabled()) {
-            logger.info("factors = " + factors);
+            logger.info("recursive factors = " + factors);
         }
         return factors;
     }
