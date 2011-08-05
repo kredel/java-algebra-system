@@ -803,7 +803,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         logger.info("evaluation points  = " + V + ", dei = " + dei);
         logger.info("univariate polynomial = " + pe);
         
-        pe = pe.abs();
+        //pe = pe.abs();
         //pe = engine.basePrimitivePart(pe);
         //System.out.println("pp(pe) = " + pe);
 
@@ -1091,7 +1091,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 }
             }
         }
-        System.out.println("end combine, factors = " + factors);
+        //System.out.println("end combine, factors = " + factors);
         if (!ui.isONE() && !ui.equals(pd)) {
             logger.info("rest ui = " + ui);
             //System.out.println("rest ui = " + ui);
