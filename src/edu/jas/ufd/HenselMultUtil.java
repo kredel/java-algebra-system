@@ -740,7 +740,8 @@ public class HenselMultUtil {
             Cp = Ap.remove(0);
             Lpp = Gp.remove(0);
             v = Vb.remove(Vb.size()-1); // last in stack
-            System.out.println("\npkfac = " + pkfac.toScript() + " ================================== " + v);
+            //System.out.println("\npkfac = " + pkfac.toScript() + " ================================== " + v);
+            logger.info("stack loop: pkfac = " + pkfac.toScript() + " v = " + v);
 
             List<GenPolynomial<MOD>> U1 = U;
             logger.info("to lift U1 = " + U1); // + ", U1.ring = " + U1.get(0).ring);
@@ -814,7 +815,8 @@ public class HenselMultUtil {
             //System.out.println("pkrfac = " + pkrfac.toScript());
 
             for (int e = 1; e <= deg && !Ep.isZERO(); e++) {
-                System.out.println("\ne = " + e + " -------------------------------------- " + deg);
+                //System.out.println("\ne = " + e + " -------------------------------------- " + deg);
+                logger.info("approximation loop: e = " + e + " of deg = " + deg);
                 GenPolynomial<GenPolynomial<MOD>> Epr = PolyUtil.<MOD> recursive(pkrfac, Ep);
                 //System.out.println("Epr   = " + Epr);
                 UnivPowerSeriesRing<GenPolynomial<MOD>> psfac 

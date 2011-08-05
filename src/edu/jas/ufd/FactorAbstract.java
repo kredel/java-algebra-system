@@ -467,11 +467,11 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         }
         if (logger.isInfoEnabled()) {
             if (facs.size() > 1) {
-                logger.info("squarefree mfacs   = " + facs);
+                logger.info("squarefree mfacs      = " + facs);
             } else if (facs.size() == 1 && facs.get(facs.firstKey()) > 1L) {
-                logger.info("squarefree mfacs   = " + facs);
+                logger.info("squarefree #mfacs 1-n = " + facs);
             } else {
-                logger.warn("squarefree mfacs empty = " + facs);
+                logger.info("squarefree #mfacs 1-1 = " + facs);
             }
         }
         for (GenPolynomial<C> g : facs.keySet()) {

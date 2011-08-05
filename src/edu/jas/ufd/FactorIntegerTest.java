@@ -517,12 +517,10 @@ public class FactorIntegerTest extends TestCase {
 
         //b = pfac.parse(" (z^2 - x^3 y + 3) "); 
         //b = pfac.parse(" (z^2 + x^3 y + 3) "); 
-        b = pfac.parse(" ( z^2 - x^3 y + 0 ) "); 
+        b = pfac.parse(" ( z^2 - x^3 y + 3 ) "); 
         c = pfac.parse(" (z^2 + x y^3) "); 
         d = pfac.parse(" (z^2 + x^3 y^4) "); 
         e = pfac.parse(" (y^4 z^2 + x^2 z + 5) "); 
-        //b = pfac.parse(" (z^2 + x^3 y^4) "); 
-        //d = pfac.parse(" (y^4 z^2 + x^2 z + 5) "); 
 
         a = b.multiply(c).multiply(d).multiply(e);
         System.out.println("a = " + a);
@@ -531,7 +529,7 @@ public class FactorIntegerTest extends TestCase {
         System.out.println("d = " + d);
         System.out.println("e = " + e);
 
-        List<GenPolynomial<BigInteger>> sm = fac.factorsSquarefreeHensel(a);
+        List<GenPolynomial<BigInteger>> sm = fac.factorsRadical(a); //SquarefreeHensel(a);
         System.out.println("sm = " + sm);
         boolean t = fac.isFactorization(a, sm);
         //System.out.println("t        = " + t);
