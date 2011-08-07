@@ -95,7 +95,7 @@ public class FactorMoreTest extends TestCase {
      * Test integral function factorization.
      * 
      */
-    public void testIntegralFunctionFactorization() {
+    public void xtestIntegralFunctionFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
@@ -201,13 +201,13 @@ public class FactorMoreTest extends TestCase {
                 facs++;
             }
             a = c.multiply(b);
-            //System.out.println("\na = " + a);
-            //System.out.println("b = " + b);
-            //System.out.println("c = " + c);
+            System.out.println("\na = " + a);
+            System.out.println("b = " + b);
+            System.out.println("c = " + c);
 
             SortedMap<GenPolynomial<GenPolynomial<BigInteger>>, Long> sm = fac.recursiveFactors(a);
             //System.out.println("\na   = " + a);
-            //System.out.println("sm = " + sm);
+            System.out.println("sm = " + sm);
 
             if (sm.size() >= facs) {
                 assertTrue("#facs < " + facs, sm.size() >= facs);
@@ -216,7 +216,7 @@ public class FactorMoreTest extends TestCase {
                 for (Long e : sm.values()) {
                     sf += e;
                 }
-                assertTrue("#facs < " + facs, sf >= facs);
+                assertTrue("#facs < " + facs + ", sm = " + sm, sf >= facs);
             }
 
             boolean tt = fac.isRecursiveFactorization(a, sm);
@@ -231,7 +231,7 @@ public class FactorMoreTest extends TestCase {
      * Test rational function factorization.
      * 
      */
-    public void testRationalFunctionFactorization() {
+    public void xtestRationalFunctionFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
@@ -300,7 +300,7 @@ public class FactorMoreTest extends TestCase {
      * Test modular rational function factorization.
      * 
      */
-    public void testModularRationalFunctionFactorization() {
+    public void xtestModularRationalFunctionFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         ModIntegerRing cfac = new ModIntegerRing(19, true);
