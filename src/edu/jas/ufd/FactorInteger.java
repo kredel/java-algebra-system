@@ -624,11 +624,11 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
      * @param P squarefree and primitive! (respectively monic) multivariate GenPolynomial over the integers.
      * @return [p_1,...,p_k] with P = prod_{i=1,...,r} p_i.
      */
-    public List<GenPolynomial<BigInteger>> factorsSquarefreeTest(GenPolynomial<BigInteger> P) {
+    public List<GenPolynomial<BigInteger>> factorsSquarefree(GenPolynomial<BigInteger> P) {
         ExpVector degv = P.degreeVector();
         int[] donv = degv.dependencyOnVariables();
         List<GenPolynomial<BigInteger>> facs = null;
-        if ( degv.length() == donv.length ) { // all variables appear, hack for Hensel
+        if ( true || degv.length() == donv.length ) { // all variables appear, hack for Hensel
             try {
                 logger.info("try factorsSquarefreeHensel: " + P);
                 facs = factorsSquarefreeHensel(P);
@@ -638,7 +638,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             }
         }
         if ( facs == null ) {
-            logger.info("factorsSquarefreeHensel failed, reverting to Kronecker: " + P);
+            logger.info("factorsSquarefreeHensel failed or not applicable, reverting to Kronecker: " + P);
             facs = super.factorsSquarefree(P);
         }
         return facs;
@@ -751,8 +751,8 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                         logger.info("pep = " + pep);
                         //System.out.println("deg(pe) = " + degp + ", deg(pep) = " + pep.degree(cpfac.nvar-1));
                         // check squarefree
-                        //if ( sengine.isSquarefree(pep) ) {
-                        if ( isNearlySquarefree(pep) ) {
+                        if ( sengine.isSquarefree(pep) ) {
+                            //if ( isNearlySquarefree(pep) ) {
                             //System.out.println("squarefeee(pep)"); // + pep);
                             break;
                         }
@@ -1194,7 +1194,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
     boolean isNearlySquarefree(GenPolynomial<BigInteger> P) {
         // in main variable
         GenPolynomialRing<BigInteger> pfac = P.ring;
-        if ( pfac.nvar <= 4 ) {
+        if ( true || pfac.nvar <= 4 ) {
             return sengine.isSquarefree(P);
         }
         GenPolynomialRing<GenPolynomial<BigInteger>> rfac = pfac.recursive(1);
@@ -1223,6 +1223,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
     }
 
 }
+
 
 
 class TrialParts {

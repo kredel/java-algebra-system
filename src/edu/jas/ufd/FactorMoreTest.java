@@ -35,7 +35,7 @@ public class FactorMoreTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
+        //BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 
@@ -93,9 +93,8 @@ public class FactorMoreTest extends TestCase {
 
     /**
      * Test integral function factorization.
-     * 
      */
-    public void xtestIntegralFunctionFactorization() {
+    public void testIntegralFunctionFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
@@ -161,7 +160,6 @@ public class FactorMoreTest extends TestCase {
 
     /**
      * Test integer integral function factorization.
-     * 
      */
     public void testIntegerIntegralFunctionFactorization() {
 
@@ -201,13 +199,13 @@ public class FactorMoreTest extends TestCase {
                 facs++;
             }
             a = c.multiply(b);
-            System.out.println("\na = " + a);
-            System.out.println("b = " + b);
-            System.out.println("c = " + c);
+            //System.out.println("\na = " + a);
+            //System.out.println("b = " + b);
+            //System.out.println("c = " + c);
 
             SortedMap<GenPolynomial<GenPolynomial<BigInteger>>, Long> sm = fac.recursiveFactors(a);
             //System.out.println("\na   = " + a);
-            System.out.println("sm = " + sm);
+            //System.out.println("sm = " + sm);
 
             if (sm.size() >= facs) {
                 assertTrue("#facs < " + facs, sm.size() >= facs);
@@ -229,7 +227,6 @@ public class FactorMoreTest extends TestCase {
 
     /**
      * Test rational function factorization.
-     * 
      */
     public void xtestRationalFunctionFactorization() {
 
@@ -298,7 +295,6 @@ public class FactorMoreTest extends TestCase {
 
     /**
      * Test modular rational function factorization.
-     * 
      */
     public void xtestModularRationalFunctionFactorization() {
 

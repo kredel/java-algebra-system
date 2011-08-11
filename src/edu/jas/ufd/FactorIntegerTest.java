@@ -35,7 +35,7 @@ public class FactorIntegerTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
+        //BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 
@@ -416,7 +416,7 @@ public class FactorIntegerTest extends TestCase {
     /**
      * Test integer factorization, example 1 from Wang.
      */
-    public void xtestIntegerFactorizationEx1() {
+    public void testIntegerFactorizationEx1() {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
         String[] vars = new String[] { "x", "y", "z"};
@@ -476,7 +476,7 @@ public class FactorIntegerTest extends TestCase {
     /**
      * Test integer factorization, example 3 from Wang.
      */
-    public void testIntegerFactorizationEx3() {
+    public void xtestIntegerFactorizationEx3() {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
         String[] vars = new String[] { "x", "y", "z"};
@@ -554,7 +554,7 @@ public class FactorIntegerTest extends TestCase {
         c = pfac.parse(" ( (y^2 + x ) z^2 + 3 u^2 x^3 y^4 z + 19 y^2 )"); 
         d = pfac.parse(" (u^2 y^4 z^2 + x^2 z + 5) "); 
 
-        a = b.multiply(c); //.multiply(d);
+        a = b.multiply(c); // .multiply(d); // all factors need 256 sec
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
         //System.out.println("c = " + c);
@@ -591,7 +591,7 @@ public class FactorIntegerTest extends TestCase {
         c = pfac.parse(" (- x^5 z^2 + y z + x^2 y^1) "); 
         d = pfac.parse(" (w z^3 + y^2 z^2 - w x^2 y^2 z^1 + x^5 - x^4 y^2  - w x^3 y) "); 
 
-        a = b.multiply(c); //.multiply(d);
+        a = b.multiply(c); //.multiply(d); // all factors with small degrees need 684 sec
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
         //System.out.println("c = " + c);
@@ -612,15 +612,15 @@ public class FactorIntegerTest extends TestCase {
     public void xtestIntegerFactorizationEx7() {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
-        String[] vars = new String[] { "x", "y", "z", "w" };
+        String[] vars = new String[] { "x", "y", "z" };
         GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, vars.length, to, vars);
         FactorInteger<ModInteger> fac = new FactorInteger<ModInteger>();
         GenPolynomial<BigInteger> a, b, c, d;
 
         // (z + y + x- 3)^3 (z + y + x-2)^2,
 
-        b = pfac.parse(" ( (z + y + x - 3)^3 ) "); 
-        c = pfac.parse(" ( (z + y + x - 2)^2 ) "); 
+        b = pfac.parse(" ( (z + y^2 + x - 3 )^3 ) "); 
+        c = pfac.parse(" ( (z + y + x^2 - 2 )^2 ) "); 
 
         a = b.multiply(c);
         //System.out.println("a = " + a);
