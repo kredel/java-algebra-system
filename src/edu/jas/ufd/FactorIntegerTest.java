@@ -35,7 +35,7 @@ public class FactorIntegerTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        //BasicConfigurator.configure();
+        BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 
@@ -639,7 +639,7 @@ public class FactorIntegerTest extends TestCase {
     /**
      * Test integer factorization.
      */
-    public void xtestIntegerFactorizationHk() {
+    public void testIntegerFactorizationHk() {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
         String[] vars = new String[] { "t", "x" };
@@ -651,10 +651,15 @@ public class FactorIntegerTest extends TestCase {
         // 2 t * x^2 - 5 x^2 + 8 t * x - 5 x + 6 t
         // 7 t * x^3 + 7 x^3 + 7 t * x^2 + 7 x^2 + 8 x + 8 
         // = ( x + { 1  } ) ( { 7 t + 7  } x^2 + { 8  } )
+        // 4 t * x^3 + 6 x^3 + 4 t * x^2 + 9 x^2 + 2 x - 1
+        // 2 t * x^2 - 7 x^2 + 2 t * x - 11 x - 4 // conter example to Wangs condition: [2 , x, x + 1 ]
 
         //a = pfac.parse(" ( 2 t * x^2 + 5 x^2 - 4 t * x - 4 x - 6 t - 9 ) ");
         //a = pfac.parse(" ( 2 t * x^2 - 5 x^2 + 8 t * x - 5 x + 6 t ) ");
-        a = pfac.parse(" ( 7 t * x^3 + 7 x^3 + 7 t * x^2 + 7 x^2 + 8 x + 8 ) ");
+        //a = pfac.parse(" ( 7 t * x^3 + 7 x^3 + 7 t * x^2 + 7 x^2 + 8 x + 8 ) ");
+        a = pfac.parse(" ( 4 t * x^3 + 6 x^3 + 4 t * x^2 + 9 x^2 + 2 x - 1 ) ");
+        //a = pfac.parse(" ( 2 t * x^2 - 7 x^2 + 2 t * x - 11 x - 4 ) "); // conter example to Wangs condition: [2 , x, x + 1 ]
+ 
         System.out.println("a = " + a);
 
         SortedMap<GenPolynomial<BigInteger>,Long> sm = fac.factors(a);

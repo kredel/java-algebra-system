@@ -628,7 +628,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         ExpVector degv = P.degreeVector();
         int[] donv = degv.dependencyOnVariables();
         List<GenPolynomial<BigInteger>> facs = null;
-        if ( true || degv.length() == donv.length ) { // all variables appear, hack for Hensel
+        if ( degv.length() == donv.length ) { // all variables appear, hack for Hensel
             try {
                 logger.info("try factorsSquarefreeHensel: " + P);
                 facs = factorsSquarefreeHensel(P);
@@ -712,11 +712,16 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         List<Long> Evs = new ArrayList<Long>(pfac.nvar+1); // Evs(0), Evs(1) unused
         for ( int j = 0; j <= pfac.nvar; j++ ) {
             Evs.add(evStart);
-        }        
+        }
+        double ran = 1.1;
         boolean notLucky = true;
         while ( notLucky ) { // for Wang's test
-            if ( evStart < -300L || evStart > 300L ) {
+            if ( evStart < -400L || evStart > 400L ) {
+                System.out.println("P = " + P + ",lprr = " + lprr + ", lfacs = " + lfacs);
                 throw new RuntimeException("no luky evaluation point found after " + evStart + " iterations");
+            }
+            if ( Math.abs(evStart) % 100L == 0L ) {
+                ran = ran * (Math.PI-2.0);
             }
             System.out.println("-------------------------------------------- Evs = " + Evs);
             notLucky = false;
@@ -740,7 +745,10 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 BigInteger Vi;
 
                 // search evaluation point
-                while( true ) { 
+                boolean doIt = true;
+                Vi = null;
+                pep = null;
+                while( doIt ) { 
                     logger.info("vi(" + j + ") = " + vi);
                     Vi = new BigInteger(vi);
                     pep = PolyUtil.<BigInteger> evaluateMain(cpfac,pe,Vi);
@@ -754,7 +762,8 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                         if ( sengine.isSquarefree(pep) ) {
                             //if ( isNearlySquarefree(pep) ) {
                             //System.out.println("squarefeee(pep)"); // + pep);
-                            break;
+                            doIt = false;
+                            //break;
                         }
                     }
                     if ( vi > 0L ) {
@@ -770,12 +779,14 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                         cei = PolyUtil.<BigInteger> evaluateMain(ccpfac.coFac,ce,Vi);
                     }
                 }
+                int jj = (int)Math.round( ran + j * Math.random() ); // random increment
+                System.out.println("jj = " + jj + ", vi " + vi);
                 if ( vi > 0L ) {
-                    Evs.set(j,vi+j); //1L); // record last tested value plus 1
-		    evStart = vi+j; //1L;
+                    Evs.set(j,vi+jj); //1L); // record last tested value plus increment
+		    evStart = vi+jj;  //1L;
                 } else {
-		    Evs.set(j,vi-j); //1L); // record last tested value minus 1
-                    evStart = vi-j; //1L;
+		    Evs.set(j,vi-jj); //1L); // record last tested value minus increment
+                    evStart = vi-jj;  //1L;
                 }
                 //evStart = vi+1L;
                 V.add(Vi);
@@ -985,7 +996,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         V = tpmin.evalPoints;
         pe = tpmin.univPoly;
         ufactors = tpmin.univFactors;
-        cei = tpmin.ldcfEval;
+        cei = tpmin.ldcfEval; // unused
         lf = tpmin.ldcfFactors;
         System.out.println("tpmin = " + tpmin);
 
