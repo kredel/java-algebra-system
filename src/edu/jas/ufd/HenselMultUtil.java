@@ -831,7 +831,7 @@ public class HenselMultUtil {
                 logger.info("Epst(" + e + "," + deg + "," + pkfac.nvar + ") = " + Epst);
                 GenPolynomial<MOD> cm = Epst.coefficient(e);
                 if (cm.isZERO()) {
-                    System.out.println("cm   = " + cm);
+                    //System.out.println("cm   = " + cm);
                     continue;
                 }
                 List<GenPolynomial<MOD>> Ud = HenselMultUtil.<MOD> liftDiophant(U1, cm, Vh, d, k);

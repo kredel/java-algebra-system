@@ -720,10 +720,10 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 System.out.println("P = " + P + ",lprr = " + lprr + ", lfacs = " + lfacs);
                 throw new RuntimeException("no luky evaluation point found after " + evStart + " iterations");
             }
-            if ( Math.abs(evStart) % 100L == 0L ) {
+            if ( Math.abs(evStart) % 100L <= 3L ) {
                 ran = ran * (Math.PI-2.0);
             }
-            System.out.println("-------------------------------------------- Evs = " + Evs);
+            //System.out.println("-------------------------------------------- Evs = " + Evs);
             notLucky = false;
             V = new ArrayList<BigInteger>();
             cpfac = pfac;
@@ -780,7 +780,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     }
                 }
                 int jj = (int)Math.round( ran + j * Math.random() ); // random increment
-                System.out.println("jj = " + jj + ", vi " + vi);
+                //System.out.println("jj = " + jj + ", vi " + vi);
                 if ( vi > 0L ) {
                     Evs.set(j,vi+jj); //1L); // record last tested value plus increment
 		    evStart = vi+jj;  //1L;
@@ -965,7 +965,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 if ( !lprr.abs().equals(lpx.abs()) ) { // something is wrong
                     //System.out.println("ufactors = " + ufactors + ", of " + pe +  ", is factorizatio: " + isFactorization(pe,ufactors));
                     if ( !lprr.degreeVector().equals(lpx.degreeVector()) ) {
-                        System.out.println("lprr = " + lprr + ", lpx = " + lpx);
+                        logger.info("lprr != lpx: lprr = " + lprr + ", lpx = " + lpx);
                         //throw new RuntimeException("something is wrong: " + "lprr = " + lprr + ", lpx = " + lpx);
                         notLucky = true; 
                     }
@@ -974,7 +974,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
 
             if ( ! notLucky ) {
                 TrialParts tp = new TrialParts(V,pe,ufactors,cei,lf);
-                System.out.println("trialParts = " + tp);
+                //System.out.println("trialParts = " + tp);
                 tParts.add(tp);
                 if (tParts.size() < trials) {
                     notLucky = true;
@@ -986,7 +986,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         int min = Integer.MAX_VALUE;
         TrialParts tpmin = null;
         for ( TrialParts tp : tParts ) {
-            System.out.println("tp.univFactors.size() = " + tp.univFactors.size());
+            logger.info("tp.univFactors.size() = " + tp.univFactors.size());
             if ( tp.univFactors.size() < min ) {
                 min = tp.univFactors.size();
                 tpmin = tp;
@@ -998,7 +998,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         ufactors = tpmin.univFactors;
         cei = tpmin.ldcfEval; // unused
         lf = tpmin.ldcfFactors;
-        System.out.println("tpmin = " + tpmin);
+        logger.info("minimal trial = " + tpmin);
 
         GenPolynomialRing<BigInteger> ufac = pe.ring;
         //System.out.println("ufac = " + ufac.toScript());
