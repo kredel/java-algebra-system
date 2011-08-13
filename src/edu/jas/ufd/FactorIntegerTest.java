@@ -35,7 +35,7 @@ public class FactorIntegerTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        //BasicConfigurator.configure();
+        BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 
@@ -93,7 +93,7 @@ public class FactorIntegerTest extends TestCase {
     /**
      * Test integer monic factorization.
      */
-    public void xtestIntegerMonicFactorization() {
+    public void testIntegerMonicFactorization() {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(4);
         BigInteger one = cfac.getONE();
@@ -162,7 +162,7 @@ public class FactorIntegerTest extends TestCase {
     /**
      * Test integer factorization.
      */
-    public void xtestIntegerFactorization() {
+    public void testIntegerFactorization() {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(4);
         BigInteger one = cfac.getONE();
@@ -220,7 +220,7 @@ public class FactorIntegerTest extends TestCase {
     /**
      * Test integer factorization irreducible polynomial.
      */
-    public void xtestIntegerFactorizationIrred() {
+    public void testIntegerFactorizationIrred() {
         //BasicConfigurator.configure();
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(4);
@@ -254,7 +254,7 @@ public class FactorIntegerTest extends TestCase {
     /**
      * Test bi-variate integer factorization.
      */
-    public void xtestBivariateIntegerFactorization() {
+    public void testBivariateIntegerFactorization() {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
         String[] vars = new String[] { "x", "y" };
@@ -296,7 +296,7 @@ public class FactorIntegerTest extends TestCase {
     /**
      * Test tri-variate integer factorization.
      */
-    public void xtestTrivariateIntegerFactorization() {
+    public void testTrivariateIntegerFactorization() {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
         String[] vars = new String[] { "x", "y", "z"};
@@ -338,7 +338,7 @@ public class FactorIntegerTest extends TestCase {
     /**
      * Test quad-variate integer factorization.
      */
-    public void xtestQuadvariateIntegerFactorization() {
+    public void testQuadvariateIntegerFactorization() {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
         String[] vars = new String[] { "x", "y", "z", "w" };
@@ -380,7 +380,7 @@ public class FactorIntegerTest extends TestCase {
     /**
      * Test multivariate integer factorization.
      */
-    public void xtestMultivariateIntegerFactorization() {
+    public void testMultivariateIntegerFactorization() {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
         String[] vars = new String[] { "x", "y", "z" };
@@ -447,7 +447,7 @@ public class FactorIntegerTest extends TestCase {
     /**
      * Test integer factorization, example 2 from Wang.
      */
-    public void xtestIntegerFactorizationEx2() {
+    public void testIntegerFactorizationEx2() {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
         String[] vars = new String[] { "x", "y", "z" };
@@ -476,7 +476,7 @@ public class FactorIntegerTest extends TestCase {
     /**
      * Test integer factorization, example 3 from Wang.
      */
-    public void xtestIntegerFactorizationEx3() {
+    public void testIntegerFactorizationEx3() {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
         String[] vars = new String[] { "x", "y", "z"};
@@ -506,7 +506,7 @@ public class FactorIntegerTest extends TestCase {
     /** 
      * Test integer factorization, example 4 from Wang.
      */
-    public void xtestIntegerFactorizationEx4() {
+    public void testIntegerFactorizationEx4() {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
         String[] vars = new String[] { "x", "y", "z"};
@@ -541,7 +541,7 @@ public class FactorIntegerTest extends TestCase {
     /** 
      * Test integer factorization, example 5 from Wang.
      */
-    public void xtestIntegerFactorizationEx5() {
+    public void testIntegerFactorizationEx5() {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
         String[] vars = new String[] { "x", "y", "z", "u"};
@@ -572,7 +572,7 @@ public class FactorIntegerTest extends TestCase {
     /** 
      * Test integer factorization, example 6 from Wang.
      */
-    public void xtestIntegerFactorizationEx6() {
+    public void testIntegerFactorizationEx6() {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
         String[] vars = new String[] { "x", "y", "z", "w"};
@@ -609,7 +609,7 @@ public class FactorIntegerTest extends TestCase {
     /**
      * Test integer factorization, example 7 from Wang.
      */
-    public void xtestIntegerFactorizationEx7() {
+    public void testIntegerFactorizationEx7() {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
         String[] vars = new String[] { "x", "y", "z" };
