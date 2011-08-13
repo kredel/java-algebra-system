@@ -2,8 +2,6 @@ List of things to be resolved or accomplished:
 
 issues to consider:
 
-- implement multivariate Hensel lifting for multivariate polynomial factorization
-
 - implement Berlekamp-Zassenhaus for modular factorization
 
 - implement IDEALDIV2 with extGB
@@ -43,6 +41,8 @@ issues to consider:
 
 
 partially resolved and completed issues:
+
+- implement multivariate Hensel lifting for multivariate polynomial factorization
 
 - implement 0-dim ideal complex root selection
 
