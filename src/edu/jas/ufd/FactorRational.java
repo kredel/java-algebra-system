@@ -97,7 +97,67 @@ public class FactorRational extends FactorAbsolute<BigRational> {
             GenPolynomial<BigRational> r = rfacts.get(0);
             rfacts.remove(r);
             r = r.multiply(ldcf);
-            rfacts.add(0, r);
+            rfacts.set(0, r);
+        }
+        if (logger.isInfoEnabled()) {
+            logger.info("rfacts = " + rfacts);
+        }
+        factors.addAll(rfacts);
+        return factors;
+    }
+
+
+    /**
+     * GenPolynomial factorization of a squarefree polynomial.
+     * @param P squarefree GenPolynomial.
+     * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
+     */
+    @Override
+    public List<GenPolynomial<BigRational>> factorsSquarefree(GenPolynomial<BigRational> P) {
+        if (P == null) {
+            throw new IllegalArgumentException(this.getClass().getName() + " P == null");
+        }
+        List<GenPolynomial<BigRational>> factors = new ArrayList<GenPolynomial<BigRational>>();
+        if (P.isZERO()) {
+            return factors;
+        }
+        if (P.isONE()) {
+            factors.add(P);
+            return factors;
+        }
+        GenPolynomialRing<BigRational> pfac = P.ring;
+        if (pfac.nvar == 1) {
+            return baseFactorsSquarefree(P);
+        }
+        GenPolynomial<BigRational> Pr = P;
+        BigRational ldcf = P.leadingBaseCoefficient();
+        if (!ldcf.isONE()) {
+            //System.out.println("ldcf = " + ldcf);
+            Pr = Pr.monic();
+        }
+        BigInteger bi = BigInteger.ONE;
+        GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(bi, pfac);
+        GenPolynomial<BigInteger> Pi = PolyUtil.integerFromRationalCoefficients(ifac, Pr);
+        if (debug) {
+            logger.info("Pi = " + Pi);
+        }
+        List<GenPolynomial<BigInteger>> ifacts = iengine.factorsSquarefree(Pi);
+        if (logger.isInfoEnabled()) {
+            logger.info("ifacts = " + ifacts);
+        }
+        if (ifacts.size() <= 1) {
+            factors.add(P);
+            return factors;
+        }
+        List<GenPolynomial<BigRational>> rfacts = PolyUtil.fromIntegerCoefficients(pfac, ifacts);
+        //System.out.println("rfacts = " + rfacts);
+        rfacts = PolyUtil.monic(rfacts);
+        //System.out.println("rfacts = " + rfacts);
+        if ( !ldcf.isONE() ) {
+            GenPolynomial<BigRational> r = rfacts.get(0);
+            rfacts.remove(r);
+            r = r.multiply(ldcf);
+            rfacts.set(0, r);
         }
         if (logger.isInfoEnabled()) {
             logger.info("rfacts = " + rfacts);

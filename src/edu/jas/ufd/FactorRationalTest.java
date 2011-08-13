@@ -4,8 +4,9 @@
 
 package edu.jas.ufd;
 
-
 import java.util.SortedMap;
+
+import org.apache.log4j.BasicConfigurator;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -30,7 +31,7 @@ public class FactorRationalTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        //BasicConfigurator.configure();
+        BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 
@@ -80,18 +81,15 @@ public class FactorRationalTest extends TestCase {
 
     /**
      * Test dummy for Junit.
-     * 
      */
     public void testDummy() {
     }
 
 
     /**
-     * Test rational factorization.
-     * 
+     * Test rational univariate factorization.
      */
     public void testRationalFactorization() {
-
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
         GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, 1, to);
@@ -126,7 +124,6 @@ public class FactorRationalTest extends TestCase {
             SortedMap<GenPolynomial<BigRational>, Long> sm = fac.baseFactors(a);
             //System.out.println("\na   = " + a);
             //System.out.println("sm = " + sm);
-
             if (sm.size() >= facs) {
                 assertTrue("#facs < " + facs, sm.size() >= facs);
             } else {
@@ -136,7 +133,60 @@ public class FactorRationalTest extends TestCase {
                 }
                 assertTrue("#facs < " + facs + ", b = " + b + ", c = " + c + ", sm = " + sm, sf >= facs);
             }
+            boolean t = fac.isFactorization(a, sm);
+            //System.out.println("t        = " + t);
+            assertTrue("prod(factor(a)) = a", t);
+        }
+    }
 
+
+    /**
+     * Test rational multivariate factorization.
+     */
+    public void testRationalMultiFactorization() {
+        TermOrder to = new TermOrder(TermOrder.INVLEX);
+        BigRational cfac = new BigRational(1);
+        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, 2, to);
+        FactorRational fac = new FactorRational();
+
+        for (int i = 1; i < 3; i++) {
+            int facs = 0;
+            GenPolynomial<BigRational> a;
+            GenPolynomial<BigRational> c = pfac.random(kl - 2, ll * i, el + i, q);
+            // a = a.monic();
+            GenPolynomial<BigRational> b = pfac.random(kl - 2, ll, el, q);
+            //b = b.monic();
+            //         if ( false && ! a.leadingBaseCoefficient().isONE() ) {
+            //continue;
+            //ExpVector e = a.leadingExpVector();
+            //a.doPutToMap(e,cfac.getONE());
+            //}
+            if (b.isZERO() || c.isZERO()) {
+                continue;
+            }
+            if (c.degree() > 0) {
+                facs++;
+            }
+            if (b.degree() > 0) {
+                facs++;
+            }
+            a = c.multiply(b);
+            //System.out.println("\na = " + a);
+            //System.out.println("b = " + b);
+            //System.out.println("c = " + c);
+
+            SortedMap<GenPolynomial<BigRational>, Long> sm = fac.factors(a);
+            //System.out.println("\na   = " + a);
+            //System.out.println("sm = " + sm);
+            if (sm.size() >= facs) {
+                assertTrue("#facs < " + facs, sm.size() >= facs);
+            } else {
+                long sf = 0;
+                for (Long e : sm.values()) {
+                    sf += e;
+                }
+                assertTrue("#facs < " + facs + ", b = " + b + ", c = " + c + ", sm = " + sm, sf >= facs);
+            }
             boolean t = fac.isFactorization(a, sm);
             //System.out.println("t        = " + t);
             assertTrue("prod(factor(a)) = a", t);
@@ -146,10 +196,8 @@ public class FactorRationalTest extends TestCase {
 
     /**
      * Test rational absolute factorization.
-     * 
      */
     public void testBaseRationalAbsoluteFactorization() {
-
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
         String[] alpha = new String[] { "alpha" };
@@ -175,10 +223,8 @@ public class FactorRationalTest extends TestCase {
 
     /**
      * Test rational absolute factorization.
-     * 
      */
     public void testRationalAbsoluteFactorization() {
-
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
         String[] vars = new String[] { "x", "y" };
