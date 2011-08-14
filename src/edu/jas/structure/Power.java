@@ -4,6 +4,9 @@
 
 package edu.jas.structure;
 
+
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
@@ -133,6 +136,7 @@ public class Power<C extends RingElem<C> > {
      * power of a to the n-th.
      * @param a element.
      * @param n integer exponent.
+     * @param fac ring factory.
      * @return a^n, with 0^0 = 0 and a^{-n} = {1/a}^n.
      */
     @SuppressWarnings("unchecked")
@@ -149,6 +153,7 @@ public class Power<C extends RingElem<C> > {
      * power of a to the n-th.
      * @param a element.
      * @param n integer exponent.
+     * @param fac monoid factory.
      * @return a^n, with a^{-n} = {1/a}^n.
      */
     public static <C extends MonoidElem<C>> C power( MonoidFactory<C> fac, C a, long n ) {
@@ -192,6 +197,7 @@ public class Power<C extends RingElem<C> > {
      * @param a element.
      * @param n integer exponent.
      * @param m modulus.
+     * @param fac monoid factory.
      * @return a^n mod m, with a^{-n} = {1/a}^n.
      */
     public static <C extends MonoidElem<C>> C modPower( MonoidFactory<C> fac, C a, long n, C m) {
@@ -235,6 +241,7 @@ public class Power<C extends RingElem<C> > {
      * @param a element.
      * @param n integer exponent.
      * @param m modulus.
+     * @param fac monoid factory.
      * @return a^n mod m, with a^{-n} = {1/a}^n.
      */
     public static <C extends MonoidElem<C>> C modPower( MonoidFactory<C> fac, C a, 
@@ -322,6 +329,70 @@ public class Power<C extends RingElem<C> > {
             k++;
         }
         return k;
+    }
+
+
+    /**
+     * Multiply elements in list.
+     * @param A list of elements (a_0,...,a_k).
+     * @param fac ring factory.
+     * @return prod(i=0,...k) a_i.
+     */
+    public static <C extends RingElem<C>> C multiply( RingFactory<C> fac, List<C> A) {
+	return multiply( (MonoidFactory<C>) fac, A);
+    }
+
+
+    /**
+     * Multiply elements in list.
+     * @param A list of elements (a_0,...,a_k).
+     * @param fac monoid factory.
+     * @return prod(i=0,...k) a_i.
+     */
+    public static <C extends MonoidElem<C>> C multiply( MonoidFactory<C> fac, List<C> A) {
+        if ( fac == null ) {
+            throw new IllegalArgumentException("fac may not be null for empty list");
+        }
+        C res = fac.getONE();
+        if ( A == null || A.size() == 0 ) {
+           return res;
+        }
+        for ( C a : A ) {
+	    res = res.multiply(a);
+        }
+        return res;
+    }
+
+
+    /**
+     * Sum elements in list.
+     * @param A list of elements (a_0,...,a_k).
+     * @param fac ring factory.
+     * @return sum(i=0,...k) a_i.
+     */
+    public static <C extends RingElem<C>> C sum( RingFactory<C> fac, List<C> A) {
+	return sum( (AbelianGroupFactory<C>) fac, A);
+    }
+
+
+    /**
+     * Sum elements in list.
+     * @param A list of elements (a_0,...,a_k).
+     * @param fac monoid factory.
+     * @return sum(i=0,...k) a_i.
+     */
+    public static <C extends AbelianGroupElem<C>> C sum( AbelianGroupFactory<C> fac, List<C> A) {
+        if ( fac == null ) {
+            throw new IllegalArgumentException("fac may not be null for empty list");
+        }
+        C res = fac.getZERO();
+        if ( A == null || A.size() == 0 ) {
+           return res;
+        }
+        for ( C a : A ) {
+	    res = res.sum(a);
+        }
+        return res;
     }
 
 }

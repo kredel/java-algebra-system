@@ -435,11 +435,12 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     logger.info("skipped by degree set " + D + ", deg = " + degreeSum(flist));
                     continue;
                 }
-                GenPolynomial<MOD> mtrial = mpfac.getONE();
-                for (int kk = 0; kk < flist.size(); kk++) {
-                    GenPolynomial<MOD> fk = flist.get(kk);
-                    mtrial = mtrial.multiply(fk);
-                }
+                GenPolynomial<MOD> mtrial = Power.<GenPolynomial<MOD>> multiply(mpfac,flist);
+                //GenPolynomial<MOD> mtrial = mpfac.getONE();
+                //for (int kk = 0; kk < flist.size(); kk++) {
+                //    GenPolynomial<MOD> fk = flist.get(kk);
+                //    mtrial = mtrial.multiply(fk);
+                //}
                 //System.out.println("+flist = " + flist + ", mtrial = " + mtrial);
                 if (mtrial.degree(0) > deg) { // this test is sometimes wrong
                     logger.info("degree " +  mtrial.degree(0) + " > deg " + deg);
@@ -759,7 +760,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                         logger.info("pep = " + pep);
                         //System.out.println("deg(pe) = " + degp + ", deg(pep) = " + pep.degree(cpfac.nvar-1));
                         // check squarefree
-                        if ( sengine.isSquarefree(pep) ) {
+                        if ( sengine.isSquarefree(pep) ) { // cpfac.nvar > 1 ??
                             //if ( isNearlySquarefree(pep) ) {
                             //System.out.println("squarefeee(pep)"); // + pep);
                             doIt = false;
@@ -958,10 +959,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     continue;
                 }
                 logger.info("distributed factors of leading coefficient = " + lf);
-                lpx = lprr.ring.getONE();
-                for ( GenPolynomial<BigInteger> uf : lf ) {
-                    lpx = lpx.multiply(uf);
-                }
+                lpx = Power.<GenPolynomial<BigInteger>> multiply(lprr.ring,lf);
                 if ( !lprr.abs().equals(lpx.abs()) ) { // something is wrong
                     //System.out.println("ufactors = " + ufactors + ", of " + pe +  ", is factorizatio: " + isFactorization(pe,ufactors));
                     if ( !lprr.degreeVector().equals(lpx.degreeVector()) ) {
@@ -1141,11 +1139,12 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             KsubSet<GenPolynomial<MOD>> subs = new KsubSet<GenPolynomial<MOD>>(mlift, j);
             for (List<GenPolynomial<MOD>> flist : subs) {
                 //System.out.println("degreeSum = " + degreeSum(flist));
-                GenPolynomial<MOD> mtrial = mfac.getONE(); // .multiply(nf); // == 1, since primitive
-                for (int kk = 0; kk < flist.size(); kk++) {
-                    GenPolynomial<MOD> fk = flist.get(kk);
-                    mtrial = mtrial.multiply(fk);
-                }
+                GenPolynomial<MOD> mtrial = Power.<GenPolynomial<MOD>> multiply(mfac,flist);
+                //GenPolynomial<MOD> mtrial = mfac.getONE(); // .multiply(nf); // == 1, since primitive
+                //for (int kk = 0; kk < flist.size(); kk++) {
+                //    GenPolynomial<MOD> fk = flist.get(kk);
+                //    mtrial = mtrial.multiply(fk);
+                //}
                 if (mtrial.degree() > deg) { // this test is sometimes wrong
                     logger.info("degree > deg " + deg + ", degree = " + mtrial.degree());
                     //continue;
@@ -1202,7 +1201,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
     }
 
 
-    boolean isNearlySquarefree(GenPolynomial<BigInteger> P) {
+    boolean isNearlySquarefree(GenPolynomial<BigInteger> P) { // unused
         // in main variable
         GenPolynomialRing<BigInteger> pfac = P.ring;
         if ( true || pfac.nvar <= 4 ) {
