@@ -905,7 +905,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                             throw new RuntimeException("something is wrong, ci is a unit");
                             //notLucky = true;
                         }
-                        while ( ppl.remainder(ci).isZERO() ) {
+                        while ( ppl.remainder(ci).isZERO() && lfacs.size() > ii ) {
                             ppl = ppl.divide(ci);
                             lfp = lfp.multiply( lfacs.get(ii) );
                         }
