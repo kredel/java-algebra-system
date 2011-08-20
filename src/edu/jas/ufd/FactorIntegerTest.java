@@ -35,7 +35,7 @@ public class FactorIntegerTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
+        //BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 
@@ -296,7 +296,7 @@ public class FactorIntegerTest extends TestCase {
     /**
      * Test tri-variate integer factorization.
      */
-    public void testTrivariateIntegerFactorization() {
+    public void ytestTrivariateIntegerFactorization() {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
         String[] vars = new String[] { "x", "y", "z"};
@@ -338,7 +338,7 @@ public class FactorIntegerTest extends TestCase {
     /**
      * Test quad-variate integer factorization.
      */
-    public void testQuadvariateIntegerFactorization() {
+    public void ytestQuadvariateIntegerFactorization() {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
         String[] vars = new String[] { "x", "y", "z", "w" };
@@ -642,7 +642,7 @@ public class FactorIntegerTest extends TestCase {
     public void xtestIntegerFactorizationHk() {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
-        String[] vars = new String[] { "x", "t" };
+        String[] vars = new String[] { "t", "x" };
         GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, vars.length, to, vars);
         FactorInteger<ModInteger> fac = new FactorInteger<ModInteger>();
         GenPolynomial<BigInteger> a;
@@ -660,8 +660,8 @@ public class FactorIntegerTest extends TestCase {
         //a = pfac.parse(" ( 2 t * x^2 - 5 x^2 + 8 t * x - 5 x + 6 t ) ");
         //a = pfac.parse(" ( 7 t * x^3 + 7 x^3 + 7 t * x^2 + 7 x^2 + 8 x + 8 ) ");
         //a = pfac.parse(" ( 4 t * x^3 + 6 x^3 + 4 t * x^2 + 9 x^2 + 2 x - 1 ) ");
-        a = pfac.parse(" ( 2 t * x^2 - 7 x^2 + 2 t * x - 11 x - 4 ) "); // conter example to Wangs condition: [2 , x, x + 1 ]
-        a = pfac.parse(" ( 3 x^4 - ( 7 t + 2  ) x^2 + ( 4 t^2 + 2 t ) ) "); // fails for t < x
+        a = pfac.parse(" ( 2 t * x^2 - 7 x^2 + 2 t * x - 11 x - 4 ) "); // example to parts of Wangs condition: [2 , x, x + 1 ]
+        a = pfac.parse(" ( 3 x^4 - ( 7 t + 2  ) x^2 + ( 4 t^2 + 2 t ) ) "); // not applicable or fails for t < x
  
         //System.out.println("a = " + a);
 

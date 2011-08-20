@@ -228,7 +228,7 @@ public class FactorMoreTest extends TestCase {
     /**
      * Test rational function factorization.
      */
-    public void xtestRationalFunctionFactorization() {
+    public void testRationalFunctionFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
@@ -296,7 +296,7 @@ public class FactorMoreTest extends TestCase {
     /**
      * Test modular rational function factorization.
      */
-    public void xtestModularRationalFunctionFactorization() {
+    public void testModularRationalFunctionFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         ModIntegerRing cfac = new ModIntegerRing(19, true);
