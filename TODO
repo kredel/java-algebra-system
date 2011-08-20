@@ -6,6 +6,8 @@ issues to consider:
 
 - implement IDEALDIV2 with extGB
 
+- implement Musers multivariate factorization, evtl. with sparse Hensel lifting
+
 - make hashCode to reuse computed value --> not immutable
 
 - use further util.concurrent algorithms where possible, e.g. in DHT
