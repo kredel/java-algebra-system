@@ -13,11 +13,11 @@
 The Java Algebra System (JAS) is an object oriented, type safe and
 multi-threaded approach to computer algebra.
 JAS provides a well designed software library using generic types 
-for algebraic computations implemented in the Java programming language.
+for algebraic computations implemented in the Java programming language using the JVM runtime infrastructure.
 The library can be used as any other Java software package or it can be
-used interactively or interpreted through an jython (Java Python) front end.
+used interactively or interpreted through an jython (Java Python) or jruby (Java Ruby) front ends.
 The focus of JAS is at the moment on commutative and solvable polynomials, 
-Groebner bases and applications. 
+Groebner bases, factorization, power series, real roots and applications. 
 By the use of Java as implementation language JAS is 64-bit and multi-core cpu ready.
 </p>
 
@@ -394,6 +394,22 @@ and <a href="guide.html" target="main">Users guide</a> pages.
 <a href="examples/syzy2.py" target="py">syzy2.py</a>
 </p>
 
+<h2><a name="usage">Usage</a> with the JRuby interpreter</h2>
+
+<p>
+See <a href="download.html#jruby" target="main">Download</a>. 
+<!--and <a href="guide.html" target="main">Users guide</a> pages.-->
+</p>
+
+<h4>jruby examples</h4>
+
+<p>Commutative:
+<a href="examples/trinks.rb" target="rb">trinks.rb</a>,
+<a href="examples/all_rings.rb" target="rb">all_rings.rb</a>,
+<a href="examples/gbs.rb" target="rb">gbs.rb</a>
+</p>
+
+
 
 <h2><a name="rungb">RunGB</a> Examples</h2>
 
@@ -442,7 +458,7 @@ the class edu.jas.application.RunGB. E.g. <br />
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Sat May 14 12:43:07 CEST 2011
+Last modified: Sun Aug 21 15:06:29 CEST 2011
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
