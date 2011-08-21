@@ -344,7 +344,7 @@ public final class TermOrder implements Serializable {
         evbeg2 = split;
         evend2 = r;
         if (evbeg2 > evend2) {
-            throw new IllegalArgumentException("invalid term order split");
+            throw new IllegalArgumentException("invalid term order split, r = " + r + ", split = " + split);
         }
         switch (evord) { // horder = new EVhorder();
         case TermOrder.LEX: {
@@ -1622,7 +1622,17 @@ public final class TermOrder implements Serializable {
             return new TermOrder(evord);
         }
         if (evend1 > k) { // < IntMax since evord2 != 0
-            return new TermOrder(evord, evord2, len, evend1 - k);
+            int el = evend1 - k;
+            while ( el > len ) {
+                el -= len;
+            }
+            if ( el == 0L ) {
+                return new TermOrder(evord);
+            }
+            if ( el == len ) {
+                return new TermOrder(evord);
+            }
+            return new TermOrder(evord, evord2, len, el);
         }
         return new TermOrder(evord2);
     }
