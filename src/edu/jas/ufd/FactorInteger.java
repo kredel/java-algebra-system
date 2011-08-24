@@ -6,6 +6,7 @@ package edu.jas.ufd;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Iterator;
 import java.util.List;
@@ -28,6 +29,7 @@ import edu.jas.structure.Power;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.util.KsubSet;
+import edu.jas.application.PolyUtilApp;
 
 
 /**
@@ -637,6 +639,26 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 logger.warn("exception " + e);
                 //e.printStackTrace();
             }
+        } else {
+            GenPolynomial<BigInteger> pu = PolyUtilApp. <BigInteger> removeUnusedUpperVariables(P);
+            GenPolynomial<BigInteger> pl = PolyUtilApp. <BigInteger> removeUnusedLowerVariables(pu);
+            try {
+                logger.info("try factorsSquarefreeHensel: " + pl); 
+                facs = factorsSquarefreeHensel(pu);
+            } catch (Exception e) {
+                logger.warn("exception " + e);
+                //e.printStackTrace();
+            }
+            List<GenPolynomial<BigInteger>> fs = new ArrayList<GenPolynomial<BigInteger>>(facs.size());
+            GenPolynomialRing<BigInteger> pf = P.ring;
+            GenPolynomialRing<BigInteger> pfu = pu.ring;
+            for ( GenPolynomial<BigInteger> p : facs ) {
+                GenPolynomial<BigInteger> pel = p.extendLower(pfu,0,0L);
+                GenPolynomial<BigInteger> pe = pel.extend(pf,0,0L);
+                fs.add(pe);
+            }
+            //System.out.println("fs = " + fs);
+            facs = fs;
         }
         if ( facs == null ) {
             logger.info("factorsSquarefreeHensel not applicable or failed, reverting to Kronecker for: " + P);

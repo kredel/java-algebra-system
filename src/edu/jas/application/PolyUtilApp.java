@@ -1044,6 +1044,9 @@ public class PolyUtilApp<C extends RingElem<C>> {
         if (fac.nvar == dep.length) { // all variables appear
             return p;
         }
+        if (fac.nvar <= 1) { // univariate
+            return p;
+        }
         int l = dep[0];
         int r = dep[dep.length - 1];
         int n = l;
@@ -1072,9 +1075,13 @@ public class PolyUtilApp<C extends RingElem<C>> {
         if (fac.nvar == dep.length) { // all variables appear
             return p;
         }
+        if (fac.nvar <= 1) { // univariate
+            return p;
+        }
         int l = dep[0];
         int r = dep[dep.length - 1];
-        int n = r;
+        int n = r+1;
+        //System.out.println("l = " + l + ", r = " + r);
         GenPolynomialRing<GenPolynomial<C>> rfac = fac.recursive(n);
         GenPolynomial<GenPolynomial<C>> mpr = PolyUtil.<C>recursive(rfac,p);
         if (mpr.length() != p.length()) {

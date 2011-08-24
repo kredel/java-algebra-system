@@ -1451,6 +1451,9 @@ Iterable<Monomial<C>> {
      * @return extended polynomial.
      */
     public GenPolynomial<C> extend(GenPolynomialRing<C> pfac, int j, long k) {
+        if (ring.equals(pfac)) { // nothing to do
+	    return this;
+        }
         GenPolynomial<C> Cp = pfac.getZERO().clone();
         if (this.isZERO()) {
             return Cp;
@@ -1477,6 +1480,9 @@ Iterable<Monomial<C>> {
      * @return extended polynomial.
      */
     public GenPolynomial<C> extendLower(GenPolynomialRing<C> pfac, int j, long k) {
+        if (ring.equals(pfac)) { // nothing to do
+	    return this;
+        }
         GenPolynomial<C> Cp = pfac.getZERO().clone();
         if (this.isZERO()) {
             return Cp;
