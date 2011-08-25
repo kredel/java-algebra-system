@@ -645,20 +645,20 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             try {
                 logger.info("try factorsSquarefreeHensel: " + pl); 
                 facs = factorsSquarefreeHensel(pu);
+                List<GenPolynomial<BigInteger>> fs = new ArrayList<GenPolynomial<BigInteger>>(facs.size());
+                GenPolynomialRing<BigInteger> pf = P.ring;
+                GenPolynomialRing<BigInteger> pfu = pu.ring;
+                for ( GenPolynomial<BigInteger> p : facs ) {
+                    GenPolynomial<BigInteger> pel = p.extendLower(pfu,0,0L);
+                    GenPolynomial<BigInteger> pe = pel.extend(pf,0,0L);
+                    fs.add(pe);
+                }
+                //System.out.println("fs = " + fs);
+                facs = fs;
             } catch (Exception e) {
                 logger.warn("exception " + e);
                 //e.printStackTrace();
             }
-            List<GenPolynomial<BigInteger>> fs = new ArrayList<GenPolynomial<BigInteger>>(facs.size());
-            GenPolynomialRing<BigInteger> pf = P.ring;
-            GenPolynomialRing<BigInteger> pfu = pu.ring;
-            for ( GenPolynomial<BigInteger> p : facs ) {
-                GenPolynomial<BigInteger> pel = p.extendLower(pfu,0,0L);
-                GenPolynomial<BigInteger> pe = pel.extend(pf,0,0L);
-                fs.add(pe);
-            }
-            //System.out.println("fs = " + fs);
-            facs = fs;
         }
         if ( facs == null ) {
             logger.info("factorsSquarefreeHensel not applicable or failed, reverting to Kronecker for: " + P);
@@ -694,13 +694,40 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         // ldcf(pd)
         BigInteger ac = pd.leadingBaseCoefficient();
 
-        // factor leading coefficient as polynomial in the lowest variable
+        // factor leading coefficient as polynomial in the lowest! variable
         GenPolynomialRing<GenPolynomial<BigInteger>> rnfac = pfac.recursive(pfac.nvar-1);
         GenPolynomial<GenPolynomial<BigInteger>> pr = PolyUtil.<BigInteger>recursive(rnfac,pd);
         GenPolynomial<GenPolynomial<BigInteger>> prr = PolyUtil.<BigInteger>switchVariables(pr);
         GenPolynomial<BigInteger> lprr = prr.leadingBaseCoefficient();
         //System.out.println("prr  = " + prr);
         logger.info("leading coeffcient = " + lprr);
+
+        // check for common factors of ldfc and polynomial, sic!
+        GenPolynomial<BigInteger> flp = lprr.extendLower(pfac,0,0L);
+        //System.out.println("flp  = " + flp);
+        GenPolynomial<BigInteger> glp = engine.gcd(flp,pd);
+        //System.out.println("glp  = " + glp);
+        if ( !glp.isONE() ) {
+            logger.info("common factor found = " + glp);
+            pd = PolyUtil.<BigInteger> basePseudoDivide(pd, glp);
+            //System.out.println("pd  = " + pd);
+            if ( pd.isONE() ) {
+                //throw new RuntimeException("case not implemented");
+                List<GenPolynomial<BigInteger>> ffs = factorsSquarefree(lprr); // ??
+                List<GenPolynomial<BigInteger>> ffp = new ArrayList<GenPolynomial<BigInteger>>(ffs.size());
+                for ( GenPolynomial<BigInteger> fs : ffs ) {
+                     GenPolynomial<BigInteger> fsp = fs.extendLower(pfac,0,0L);
+                     //System.out.println("fsp  = " + fsp);
+                     ffp.add(fsp);
+                }
+                return ffp;
+            }
+            List<GenPolynomial<BigInteger>> pfactors = factorsSquarefree(pd);
+            List<GenPolynomial<BigInteger>> gfs = factorsSquarefree(glp);
+            gfs.addAll(pfactors);
+            //System.out.println("gfs  = " + gfs);
+            return gfs;
+        }
         boolean isMonic = false; // multivariate monic
         if ( lprr.isConstant() ) { // isONE ?
             isMonic = true;
