@@ -2090,7 +2090,7 @@ public class PolyUtil {
         }
         int n = r + 1;
         GenPolynomialRing<GenPolynomial<C>> rfac = fac.recursive(n);
-        GenPolynomial<GenPolynomial<C>> mpr = <C> recursive(rfac, p);
+        GenPolynomial<GenPolynomial<C>> mpr = recursive(rfac, p);
         if (mpr.length() != p.length()) {
             System.out.println("lower ex, l = " + l + ", r = " + r + ", p = " + p + ", fac = "
                             + fac.toScript());
