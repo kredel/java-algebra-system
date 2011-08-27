@@ -487,7 +487,7 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
             sfactors.put(D, i);
         }
         if ( logger.isInfoEnabled() ) {
-            logger.info("squarefreeFactors(" + P + "= = " + sfactors);
+            logger.info("squarefreeFactors(" + P + ") = " + sfactors);
         }
         return sfactors;
     }

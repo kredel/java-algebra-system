@@ -1039,20 +1039,27 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * @return polynomial with removed variables
      */
     public static <C extends RingElem<C>> GenPolynomial<C> removeUnusedUpperVariables(GenPolynomial<C> p) {
-        int[] dep = p.degreeVector().dependencyOnVariables();
         GenPolynomialRing<C> fac = p.ring;
-        if (fac.nvar == dep.length) { // all variables appear
-            return p;
-        }
         if (fac.nvar <= 1) { // univariate
             return p;
         }
-        int l = dep[0];
-        int r = dep[dep.length - 1];
+        int[] dep = p.degreeVector().dependencyOnVariables();
+        if (fac.nvar == dep.length) { // all variables appear
+            return p;
+        }
+        if (dep.length == 0) { // no variables
+            return p;
+        }
+        int l = dep[0];              // higher variable
+        int r = dep[dep.length - 1]; // lower variable
+        if ( l == 0 /*|| l == fac.nvar-1*/ ) { // upper variable appears
+            return p;
+        }
         int n = l;
         GenPolynomialRing<C> facr = fac.contract(n);
         Map<ExpVector, GenPolynomial<C>> mpr = p.contract(facr);
         if (mpr.size() != 1) {
+            System.out.println("upper ex, l = " + l + ", r = " + r + ", p = " + p + ", fac = " + fac.toScript());
             throw new RuntimeException("this should not happen " + mpr);
         }
         GenPolynomial<C> pr = mpr.values().iterator().next();
@@ -1070,21 +1077,27 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * @return polynomial with removed variables
      */
     public static <C extends RingElem<C>> GenPolynomial<C> removeUnusedLowerVariables(GenPolynomial<C> p) {
-        int[] dep = p.degreeVector().dependencyOnVariables();
         GenPolynomialRing<C> fac = p.ring;
-        if (fac.nvar == dep.length) { // all variables appear
-            return p;
-        }
         if (fac.nvar <= 1) { // univariate
             return p;
         }
-        int l = dep[0];
-        int r = dep[dep.length - 1];
+        int[] dep = p.degreeVector().dependencyOnVariables();
+        if (fac.nvar == dep.length) { // all variables appear
+            return p;
+        }
+        if (dep.length == 0) { // no variables
+            return p;
+        }
+        int l = dep[0];              // higher variable
+        int r = dep[dep.length - 1]; // lower variable
+        if ( r == fac.nvar-1 ) { // lower variable appears
+            return p;
+        }
         int n = r+1;
-        //System.out.println("l = " + l + ", r = " + r);
         GenPolynomialRing<GenPolynomial<C>> rfac = fac.recursive(n);
         GenPolynomial<GenPolynomial<C>> mpr = PolyUtil.<C>recursive(rfac,p);
         if (mpr.length() != p.length()) {
+            System.out.println("lower ex, l = " + l + ", r = " + r + ", p = " + p + ", fac = " + fac.toScript());
             throw new RuntimeException("this should not happen " + mpr);
         }
         RingFactory<C> cf = fac.coFac;
