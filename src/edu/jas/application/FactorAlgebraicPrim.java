@@ -147,8 +147,8 @@ public class FactorAlgebraicPrim<C extends GcdRingElem<C>> extends FactorAbsolut
         }
         GenPolynomial<AlgebraicNumber<C>> f = pfac.getONE();
         for (IdealWithUniv<C> Iu : Iul ) {
-            GenPolynomial<C> ag = PolyUtilApp.<C> selectWithVariable(Iu.ideal.getList(),1); 
-            GenPolynomial<C> pg = PolyUtilApp.<C> selectWithVariable(Iu.ideal.getList(),0); 
+            GenPolynomial<C> ag = PolyUtil.<C> selectWithVariable(Iu.ideal.getList(),1); 
+            GenPolynomial<C> pg = PolyUtil.<C> selectWithVariable(Iu.ideal.getList(),0); 
             //System.out.println("ag = " + ag.toScript());
             //System.out.println("pg = " + pg.toScript());
             if ( ag.equals(Ad) ) {

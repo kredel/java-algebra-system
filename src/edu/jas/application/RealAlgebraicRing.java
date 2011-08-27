@@ -101,7 +101,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational> implements
         eps = e;
         edu.jas.root.RealAlgebraicRing<C> rfac1 = root.tuple.get(0).factory();
         edu.jas.root.RealAlgebraicRing<C> rfac2 = root.tuple.get(1).factory();
-        GenPolynomial<C> p0 = PolyUtilApp.<C> selectWithVariable(univs.ideal.list.list, 0);
+        GenPolynomial<C> p0 = PolyUtil.<C> selectWithVariable(univs.ideal.list.list, 0);
         if (p0 == null) {
             throw new RuntimeException("no polynomial found in " + (0) + " of  " + univs.ideal);
         }
