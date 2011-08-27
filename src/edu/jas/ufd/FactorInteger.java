@@ -698,36 +698,26 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         GenPolynomialRing<GenPolynomial<BigInteger>> rnfac = pfac.recursive(pfac.nvar-1);
         GenPolynomial<GenPolynomial<BigInteger>> pr = PolyUtil.<BigInteger>recursive(rnfac,pd);
         GenPolynomial<GenPolynomial<BigInteger>> prr = PolyUtil.<BigInteger>switchVariables(pr);
+
+        GenPolynomial<BigInteger> prrc = engine.recursiveContent(prr); // can have content wrt this variable
+        List<GenPolynomial<BigInteger>> cfactors = null;
+        if ( !prrc.isONE() ) {
+            prr = PolyUtil.<BigInteger> recursiveDivide(prr, prrc);
+            GenPolynomial<BigInteger> prrcu = prrc.extendLower(pfac,0,0L); // since switched vars
+            pd = PolyUtil.<BigInteger> basePseudoDivide(pd, prrcu);
+            logger.info("recursive content = " + prrc + ", new P = " + pd);
+            cfactors = factorsSquarefree(prrc);
+            List<GenPolynomial<BigInteger>> cff = new ArrayList<GenPolynomial<BigInteger>>(cfactors.size());
+            for ( GenPolynomial<BigInteger> fs : cfactors ) {
+                GenPolynomial<BigInteger> fsp = fs.extendLower(pfac,0,0L); // since switched vars
+                cff.add(fsp);
+            } 
+            cfactors = cff;
+            logger.info("cfactors = " + cfactors);
+        }
         GenPolynomial<BigInteger> lprr = prr.leadingBaseCoefficient();
         //System.out.println("prr  = " + prr);
         logger.info("leading coeffcient = " + lprr);
-
-        // check for common factors of ldfc and polynomial, sic!
-        GenPolynomial<BigInteger> flp = lprr.extendLower(pfac,0,0L);
-        //System.out.println("flp  = " + flp);
-        GenPolynomial<BigInteger> glp = engine.gcd(flp,pd);
-        //System.out.println("glp  = " + glp);
-        if ( !glp.isONE() ) {
-            logger.info("common factor found = " + glp);
-            pd = PolyUtil.<BigInteger> basePseudoDivide(pd, glp);
-            //System.out.println("pd  = " + pd);
-            if ( pd.isONE() ) {
-                //throw new RuntimeException("case not implemented");
-                List<GenPolynomial<BigInteger>> ffs = factorsSquarefree(lprr); // ??
-                List<GenPolynomial<BigInteger>> ffp = new ArrayList<GenPolynomial<BigInteger>>(ffs.size());
-                for ( GenPolynomial<BigInteger> fs : ffs ) {
-                     GenPolynomial<BigInteger> fsp = fs.extendLower(pfac,0,0L);
-                     //System.out.println("fsp  = " + fsp);
-                     ffp.add(fsp);
-                }
-                return ffp;
-            }
-            List<GenPolynomial<BigInteger>> pfactors = factorsSquarefree(pd);
-            List<GenPolynomial<BigInteger>> gfs = factorsSquarefree(glp);
-            gfs.addAll(pfactors);
-            //System.out.println("gfs  = " + gfs);
-            return gfs;
-        }
         boolean isMonic = false; // multivariate monic
         if ( lprr.isConstant() ) { // isONE ?
             isMonic = true;
@@ -916,7 +906,12 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 ufactors.add(0,cpfac.getONE().multiply(pecw));
             }
             if (ufactors.size() <= 1) {
-                factors.add(P);
+                logger.info("irreducible univariate polynomial");
+                factors.add(pd); // P
+                if ( cfactors != null ) {
+                    cfactors.addAll(factors);
+                    factors = cfactors;
+                }
                 return factors;
             }
             logger.info("univariate factors = " + ufactors); // + ", of " + pe);
@@ -1230,7 +1225,12 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             throw aex;
         }
         if ( mlift.size() <= 1 ) { // irreducible mod I, p^k, can this happen?
-            factors.add(P);
+            logger.info("modular lift size == 1: " + mlift);
+            factors.add(pd); // P
+            if ( cfactors != null ) {
+                cfactors.addAll(factors);
+                factors = cfactors;
+            }
             return factors;
         }
 
@@ -1273,6 +1273,10 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     } else {
                         logger.info("last factor = " + ui);
                         factors.add(ui);
+                        if ( cfactors != null ) {
+                            cfactors.addAll(factors);
+                            factors = cfactors;
+                        }
                         return factors;
                     }
                 }
@@ -1285,7 +1289,11 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         }
         if (factors.size() == 0) {
             logger.info("irreducible P = " + P);
-            factors.add(P);
+            factors.add(pd); // P
+        }
+        if ( cfactors != null ) {
+            cfactors.addAll(factors);
+            factors = cfactors;
         }
         return factors;
     }
