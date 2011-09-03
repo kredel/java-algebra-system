@@ -1795,6 +1795,38 @@ public class PolyUtil {
 
 
     /**
+     * Maximal degree of leading terms of a polynomial list.
+     * @return maximum degree of the leading terms of a polynomial list.
+     */
+    public static <C extends RingElem<C>> long totalDegreeLeadingTerm(List<GenPolynomial<C>> P){
+        long degree = 0;
+        for(GenPolynomial<C> g : P){
+            long total = g.leadingExpVector().totalDeg();
+            if ( degree < total ) {
+                degree = total;
+            }
+        }
+        return degree;
+    }
+
+
+    /**
+     * Maximal degree of polynomial list.
+     * @return maximum degree of the polynomial list.
+     */
+    public static <C extends RingElem<C>> long totalDegree(List<GenPolynomial<C>> P){
+        long degree = 0;
+        for(GenPolynomial<C> g : P){
+            long total = g.degree();
+            if ( degree < total ) {
+                degree = total;
+            }
+        }
+        return degree;
+    }
+
+
+    /**
      * Maximal degree in the coefficient polynomials.
      * @param <C> coefficient type.
      * @return maximal degree in the coefficients.

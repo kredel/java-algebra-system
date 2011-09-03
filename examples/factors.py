@@ -59,7 +59,7 @@ t = System.currentTimeMillis();
 #G = r.squarefreeFactors(f);
 G = r.factors(f);
 t = System.currentTimeMillis() - t;
-print "G = ", G;
+print "G = ", [ str(h)+"**"+str(i) for (h,i) in G.iteritems() ];
 #print "factor time =", t, "milliseconds";
 
 g = one;
