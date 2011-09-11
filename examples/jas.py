@@ -51,7 +51,7 @@ from edu.jas             import structure, arith, poly, ps, gb, gbmod, vector,\
 from edu                 import jas
 #PrettyPrint.setInternal();
 
-from org.python.core     import PyInstance, PyJavaInstance, PyList, PyTuple,\
+from org.python.core     import PyInstance, PyList, PyTuple,\
                                 PyInteger, PyLong, PyFloat, PyString
 
 # set output to Python scripting
@@ -2035,7 +2035,6 @@ def RR(flist,n=1,r=0):
     #print "r type(%s) = %s" % (r,type(r));
     if isinstance(r,RingElem):
         r = r.elem;
-    #if isinstance(r,PyJavaInstance):
     try:
         #print "r.class() = %s" % r.getClass().getSimpleName();
         if r.getClass().getSimpleName() == "Product":

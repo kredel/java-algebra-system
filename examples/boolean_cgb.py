@@ -5,7 +5,7 @@ from jas import startLog, terminate
 
 
 # Boolean coefficient boolean GB
-# see S. Inoue and A. Nagai "On the Implementation of Boolean Gröbner Bases" in ASCM 2009
+# see S. Inoue and A. Nagai "On the Implementation of Boolean Groebner Bases" in ASCM 2009
 # Z_2 regular ring coefficent example
 
 
