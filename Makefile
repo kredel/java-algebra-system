@@ -42,7 +42,7 @@ RSYNC=rsync -e ssh -avuz $(DRY) $(DELETE) --exclude=*~ --include=svn_change.log 
 ####--exclude=*.ps --exclude=*.pdf --exclude=spin*
 ####--exclude=*/.jxta/
 PART=jas.j16
-VERSION=jas-2.3
+VERSION=jas-2.4
 BRANCH=2.3
 SVNVERSION=`grep committed-rev .svn/entries |head -1|awk -F = '{ print $2 }'|sed 's/"//g'`
 
@@ -85,15 +85,16 @@ DOCOPTS=-package
 MYCLASSPATH = $(LOG4JPATH):.:$(JUNITPATH):$(JOMPPATH):$(PYPATH)
 #:$(TNJPATH)
 
+#JAVA_MEM=-Xms1100M -Xmx1900M
+JAVA_MEM=-Xms350M -Xmx800M
+
 JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d . -Xlint:unchecked
 #-Xlint:unchecked
 #-Djava.util.logging.config.file=logging.properties 
 #JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -verbose:gc 
-#JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -server -Xms1100M -Xmx1900M -XX:+AggressiveHeap -XX:+UseParallelGC -XX:ParallelGCThreads=2 -verbose:gc 
+JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -server $(JAVA_MEM) -XX:+AggressiveHeap -XX:+UseParallelGC -XX:ParallelGCThreads=2 -verbose:gc 
 #-Xrunhprof:cpu=samples,heap=sites,force=n
 #-Xbatch
-#dist#
-JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -Xms500M -Xmx800M -XX:+AggressiveHeap -XX:+UseParallelGC -XX:ParallelGCThreads=2 -verbose:gc 
 #JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -verbose:gc -Xrunhprof:cpu=times,format=a
 #JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -verbose:gc -verbose:class -verbose:jni
 DOC=$(JDK)/javadoc -classpath $(DOCCLASSES)
@@ -291,12 +292,15 @@ clean:
 	#rm -f application/application arith/arith kern/kern gbmod/gbmod poly/poly ps/ps gb/gb structure/structure ufd/ufd util/util vector/vector
 
 
+#SOPTS="-J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc -J-Xms1100M -J-Xmx1900M"
+SOPTS="-J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc -J-Xms350M -J-Xmx800M"
+
 tests:
 	ant test 2>&1 | tee t.out
 	ant exam 2>&1 | tee e.out
-	find examples -name "*.py"|grep -v jas.py |grep -v plot|grep -v versuch|sort|xargs -L 1 echo "time jython" | awk '{ printf "echo %s\n", $$0; printf "%s\n", $$0 }' > ./all_jython.sh
+	find examples -name "*.py"|grep -v jas.py |grep -v plot|grep -v versuch|sort|xargs -L 1 echo "time jython $(SOPTS)" | awk '{ printf "echo %s\n", $$0; printf "%s\n", $$0 }' > ./all_jython.sh
 	time bash all_jython.sh 2>&1 | tee tjy.out
-	find examples -name "*.rb"|grep -v jas.rb |grep -v versuch|sort|xargs -L 1 echo "time jruby -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc -J-Xms1100M -J-Xmx1900M" | awk '{ printf "echo %s\n", $$0; printf "%s\n", $$0 }' > ./all_jruby.sh
+	find examples -name "*.rb"|grep -v jas.rb |grep -v versuch|sort|xargs -L 1 echo "time jruby $(SOPTS)" | awk '{ printf "echo %s\n", $$0; printf "%s\n", $$0 }' > ./all_jruby.sh
 	time bash all_jruby.sh 2>&1 | tee tjr.out
 	make edu.jas.application.RunGB cl="seq  examples/trinks6.jas"   | tee tr.out
 	make edu.jas.application.RunGB cl="seq+ examples/trinks6.jas"   | tee -a tr.out
