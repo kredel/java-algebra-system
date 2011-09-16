@@ -2416,7 +2416,7 @@ class RingElem:
         '''
         return None;
 
-    def __pow__(self,other):
+    def __pow__(self,other,n=None):
         '''Power of this to other.
         '''
         #print "self  type(%s) = %s" % (self,type(self));
@@ -2432,6 +2432,8 @@ class RingElem:
                 #if isinstance(n,BigInteger):  # does not work
                 if n.getClass().getSimpleName() == "BigInteger": 
                     n = n.intValue();
+        if n == None:
+            n = other;
         if self.isFactory():
             p = Power(self.elem).power( self.elem, n );
         else:
