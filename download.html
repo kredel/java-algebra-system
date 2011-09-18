@@ -299,12 +299,13 @@ public class mytests {
 <h2>Using the <a name="jython">Jython</a> interpreter</h2>
 
 <ul>
-<li><p>Set up your <code>.jythonrc</code> file, e.g. see the sample code in
+<!--li><p>Set up your <code>.jythonrc</code> file, e.g. see the sample code in
     <a href="sample.jythonrc" target="py">sample.jythonrc</a>.
     </p>
-</li>
+</li-->
 <li><p>Be sure you have downloaded the above libraries 
-    log4j.jar, junit.jar and jas*-bin.jar.
+    log4j.jar, junit.jar and jas*-bin.jar. 
+    JAS-2.4 is using and has been tested with Jython 2.5.2. 
     </p>
 </li>
 <li><p>The main file to interface to the JAS library is  
@@ -314,13 +315,13 @@ public class mytests {
     <a href="doc/jython/index.html" target="jython">here</a>.
     </p>
 </li>
-<li><p>If jython cannot find the JAS classes, try to put the jas.jar also 
+<!--li><p>If jython cannot find the JAS classes, try to put the jas.jar also 
     into the CLASSPATH or unpack the jar into the directory you are 
     starting jython (also to get the correct version of .py files).
     </p>
-</li>
+</li-->
 <li><p>Start using JAS, e.g.
-    <pre>jython examples/trinks.py</pre>
+    <pre>jython -J-cp "../lib/log4j.jar:../lib/junit.jar:." examples/trinks.py</pre>
     The 
     <a href="examples/trinks.py" target="py">examples/trinks.py</a>
     contains an Groebner base example named after its proposer Mr. Trinks.
@@ -341,6 +342,7 @@ public class mytests {
 <ul>
 <li><p>Be sure you have downloaded the above libraries 
     log4j.jar, junit.jar and jas*-bin.jar.
+    JAS-2.4 is using and has been tested with JRuby 1.6.4 (Ruby 1.8.7 &amp; 1.9.2 compatible) 
     </p>
 </li>
 <li><p>The main file to interface to the JAS library is  
@@ -373,7 +375,7 @@ public class mytests {
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Sun Mar 13 18:12:41 CET 2011
+Last modified: Sun Sep 18 21:14:45 CEST 2011
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
