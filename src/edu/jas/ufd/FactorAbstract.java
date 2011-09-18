@@ -705,4 +705,30 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         return factors;
     }
 
+
+    /**
+     * Normalize factorization.
+     * p'_i &gt; 0 for i &gt; 1 and p'_1 != 1 if k &gt; 1.
+     * @param F = [p_1,...,p_k].
+     * @return F' = [p'_1,...,p'_k].
+     */
+    public List<GenPolynomial<C>> normalizeFactorization(List<GenPolynomial<C>> F) {
+        if ( F == null || F.size() <= 1 ) {
+            return F;
+        }
+	List<GenPolynomial<C>> Fp = new ArrayList<GenPolynomial<C>>(F.size());
+        GenPolynomial<C> f0 = F.get(0);
+        for ( int i = 1; i < F.size(); i++ ) {
+             GenPolynomial<C> fi = F.get(i);
+             if ( fi.signum() < 0 ) {
+                 fi = fi.negate();
+                 f0 = f0.negate();
+             }
+             Fp.add(fi);
+        }
+        if ( !f0.isONE() ) {
+            Fp.add(0,f0);
+        }
+        return Fp;
+    }
 }

@@ -639,7 +639,7 @@ public class FactorIntegerTest extends TestCase {
     /**
      * Test integer factorization.
      */
-    public void xtestIntegerFactorizationHk() {
+    public void testIntegerFactorizationHk() {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
         String[] vars = new String[] { "t", "x" };
@@ -655,13 +655,12 @@ public class FactorIntegerTest extends TestCase {
         // 2 t * x^2 - 7 x^2 + 2 t * x - 11 x - 4 // conter example to Wangs condition: [2 , x, x + 1 ]
         // 3 x^4 - ( 7 t + 2  ) x^2 + ( 4 t^2 + 2 t )
 
-
         //a = pfac.parse(" ( 2 t * x^2 + 5 x^2 - 4 t * x - 4 x - 6 t - 9 ) ");
         //a = pfac.parse(" ( 2 t * x^2 - 5 x^2 + 8 t * x - 5 x + 6 t ) ");
         //a = pfac.parse(" ( 7 t * x^3 + 7 x^3 + 7 t * x^2 + 7 x^2 + 8 x + 8 ) ");
         //a = pfac.parse(" ( 4 t * x^3 + 6 x^3 + 4 t * x^2 + 9 x^2 + 2 x - 1 ) ");
         a = pfac.parse(" ( 2 t * x^2 - 7 x^2 + 2 t * x - 11 x - 4 ) "); // example to parts of Wangs condition: [2 , x, x + 1 ]
-        a = pfac.parse(" ( 3 x^4 - ( 7 t + 2  ) x^2 + ( 4 t^2 + 2 t ) ) "); // not applicable or fails for t < x
+        a = pfac.parse(" ( 3 x^4 - ( 7 t + 2  ) x^2 + ( 4 t^2 + 2 t ) ) "); // was not applicable or failed for t < x
  
         //System.out.println("a = " + a);
 

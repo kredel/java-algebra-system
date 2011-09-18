@@ -305,7 +305,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 t = System.currentTimeMillis() - t;
                 //System.out.println("non monic time = " + t);
             }
-            return factors;
+            return normalizeFactorization(factors);
         }
 
         // search longest factor list
@@ -319,7 +319,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 ilist = intfac[k];
             }
         }
-        factors = ilist;
+        factors = normalizeFactorization(ilist);
         return factors;
     }
 
@@ -487,7 +487,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             //System.out.println("irred u = " + u);
             factors.add(PP);
         }
-        return factors;
+        return normalizeFactorization(factors);
     }
 
 
@@ -621,7 +621,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             //System.out.println("irred u = " + u);
             factors.add(PP);
         }
-        return factors;
+        return normalizeFactorization(factors);
     }
 
 
@@ -1287,7 +1287,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                         cfactors.addAll(factors);
                         factors = cfactors;
                     }
-                    return factors;
+                    return normalizeFactorization(factors);
                 }
             }
         }
@@ -1304,7 +1304,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             cfactors.addAll(factors);
             factors = cfactors;
         }
-        return factors;
+        return normalizeFactorization(factors);
     }
 
 
