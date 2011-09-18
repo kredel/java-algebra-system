@@ -9,9 +9,10 @@
 JASPATH=..
 LIBPATH=$(HOME)/java/lib
 
-CLASSPATH=$(LIBPATH)/jython.jar
+JYTHONPATH=$(LIBPATH)/jython.jar
+JRUBYPATH=$(LIBPATH)/jruby.jar:$(HOME)/java/jruby-1.5.6/lib/ruby/1.8
 
-JARSPATH=$(LIBPATH)/log4j.jar:$(LIBPATH)/jas.jar
+CLASSPATH=$(LIBPATH)/log4j.jar:$(LIBPATH)/jas.jar
 
 .SUFFIXES : .class .java .jar 
 .PHONY    : clean
@@ -25,14 +26,15 @@ all: clean jas-jython.jar
 
 $(CLASSES): $(FILES)
 	mkdir classes
-	javac -g -source 1.6 -target 1.6 -classpath $(CLASSPATH) -sourcepath src -d classes src/edu/jas/kern/*.java
+	javac -g -source 1.6 -target 1.6 -classpath $(JYTHONPATH) -sourcepath src -d classes src/edu/jas/kern/*.java
 
 jas-jython.jar: $(CLASSES) $(JASPATH)/examples/jas.py services/javax.script.ScriptEngineFactory
 	mkdir classes/META-INF
 	mkdir classes/META-INF/services
 	cp -a manifest.mf classes/META-INF/MANIFEST.MF
-	cp -a services/javax.script.ScriptEngineFactory classes/META-INF/services/
+	#cp -a services/javax.script.ScriptEngineFactory classes/META-INF/services/
 	cp -a $(JASPATH)/examples/jas.py $(JASPATH)/examples/jas.pyc $(JASPATH)/examples/*.class classes
+	cp -a $(JASPATH)/examples/jas.rb classes
 	cp -a $(JASPATH)/log4j.properties classes
 	jar cfM jas-jython.jar -C classes .
 	cp -f jas-jython.jar $(LIBPATH)
@@ -42,4 +44,4 @@ clean:
 	rm -rf classes
 
 tests:
-	java -cp $(CLASSPATH):$(JARSPATH):jas-jython.jar edu.jas.kern.ScriptingExample
+	java -cp $(JYTHONPATH):$(JRUBYPATH):$(CLASSPATH):jas-jython.jar edu.jas.kern.ScriptingExample
