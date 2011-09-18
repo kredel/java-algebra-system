@@ -11,6 +11,8 @@ LIBPATH=$(HOME)/java/lib
 
 CLASSPATH=$(LIBPATH)/jython.jar
 
+JARSPATH=$(LIBPATH)/log4j.jar:$(LIBPATH)/jas.jar
+
 .SUFFIXES : .class .java .jar 
 .PHONY    : clean
 
@@ -19,7 +21,7 @@ FILES=$(wildcard src/edu/jas/kern/*.java)
 CLASSES=$(subst src,classes,$(subst java,class,$(FILES)))
 #echo $(CLASSES)
 
-all: jas-jython.jar
+all: clean jas-jython.jar
 
 $(CLASSES): $(FILES)
 	mkdir classes
@@ -30,11 +32,14 @@ jas-jython.jar: $(CLASSES) $(JASPATH)/examples/jas.py services/javax.script.Scri
 	mkdir classes/META-INF/services
 	cp -a manifest.mf classes/META-INF/MANIFEST.MF
 	cp -a services/javax.script.ScriptEngineFactory classes/META-INF/services/
+	cp -a $(JASPATH)/examples/jas.py $(JASPATH)/examples/jas.pyc $(JASPATH)/examples/*.class classes
+	cp -a $(JASPATH)/log4j.properties classes
 	jar cfM jas-jython.jar -C classes .
-	jar uf jas-jython.jar -C $(JASPATH)/examples jas.py
 	cp -f jas-jython.jar $(LIBPATH)
 	cp -f jas-jython.jar ..
-	rm -rf classes
 
 clean:
 	rm -rf classes
+
+tests:
+	java -cp $(CLASSPATH):$(JARSPATH):jas-jython.jar edu.jas.kern.ScriptingExample

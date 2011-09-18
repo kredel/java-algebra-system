@@ -79,7 +79,7 @@ public class PyScriptEngineFactory implements ScriptEngineFactory  {
     @Override
     public List<String> getMimeTypes() {
 	List<String> ls = new ArrayList<String>();
-	ls.add("x-application/python");
+	//ls.add("x-application/python");
         //System.out.println("getMimeTypes: " + ls);
 	return Collections.unmodifiableList(ls);
     }
@@ -87,7 +87,7 @@ public class PyScriptEngineFactory implements ScriptEngineFactory  {
     @Override
     public List<String> getExtensions() {
 	List<String> ls = new ArrayList<String>();
-	ls.add("py");
+	//ls.add("py");
         //System.out.println("getExtensions: " + ls);
 	return Collections.unmodifiableList(ls);
     }
