@@ -23,6 +23,8 @@ import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
+import edu.jas.poly.OptimizedPolynomialList;
+import edu.jas.poly.TermOrderOptimization;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.Power;
 import edu.jas.structure.RingElem;
@@ -635,6 +637,21 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
     @Override
     public List<GenPolynomial<BigInteger>> factorsSquarefree(GenPolynomial<BigInteger> P) {
         ExpVector degv = P.degreeVector();
+        if ( degv.length() <= 1 ) {
+            return baseFactorsSquarefree(P);
+        }
+        GenPolynomialRing<BigInteger> pfac = P.ring;
+        List<GenPolynomial<BigInteger>> topt = new ArrayList<GenPolynomial<BigInteger>>(1);
+        topt.add(P);
+        OptimizedPolynomialList<BigInteger> opt = TermOrderOptimization. <BigInteger> optimizeTermOrder(pfac,topt);
+        logger.info("optimized polynomial: " + opt.list);
+        List<Integer> iperm = new ArrayList<Integer>(opt.perm); // ensure size
+        for ( int i = 0; i < opt.perm.size(); i++ ) {
+	    iperm.set(opt.perm.get(i),i); // inverse
+        }
+        logger.info("optimize perm: " + opt.perm + ", de-optimize perm: " + iperm);
+        P = opt.list.get(0);
+
         int[] donv = degv.dependencyOnVariables();
         List<GenPolynomial<BigInteger>> facs = null;
         if (degv.length() == donv.length) { // all variables appear, hack for Hensel, TODO check
@@ -666,7 +683,11 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 //e.printStackTrace();
             }
         }
-        if (facs == null) {
+        if (facs != null) {
+            List<GenPolynomial<BigInteger>> iopt = TermOrderOptimization. <BigInteger> permutation(iperm,pfac,facs);
+            logger.info("de-optimized polynomials: " + iopt);
+            facs = normalizeFactorization(iopt);
+        } else {
             logger.info("factorsSquarefreeHensel not applicable or failed, reverting to Kronecker for: " + P);
             facs = super.factorsSquarefree(P);
         }

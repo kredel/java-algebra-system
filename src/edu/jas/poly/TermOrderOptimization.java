@@ -454,16 +454,11 @@ public class TermOrderOptimization {
      */
     public static <C extends RingElem<C>> 
        OptimizedPolynomialList<C>
-       optimizeTermOrder( GenPolynomialRing<C> R, List<GenPolynomial<C>> L ) {
+      optimizeTermOrder( GenPolynomialRing<C> R, List<GenPolynomial<C>> L ) {
        List<Integer> perm = optimalPermutation( degreeMatrix(L) );
-       GenPolynomialRing<C> pring;
-       pring = TermOrderOptimization.<C>permutation( perm, R );
-
-       List<GenPolynomial<C>> ppolys;
-       ppolys = TermOrderOptimization.<C>permutation( perm, pring, L );
-
-       OptimizedPolynomialList<C> op 
-           = new OptimizedPolynomialList<C>(perm,pring,ppolys);
+       GenPolynomialRing<C> pring = TermOrderOptimization.<C>permutation( perm, R );
+       List<GenPolynomial<C>> ppolys = TermOrderOptimization.<C>permutation( perm, pring, L );
+       OptimizedPolynomialList<C> op = new OptimizedPolynomialList<C>(perm,pring,ppolys);
        return op;
     }
 
@@ -478,16 +473,7 @@ public class TermOrderOptimization {
        if ( P == null ) {
           return null;
        }
-       List<Integer> perm = optimalPermutation( degreeMatrix( P.list ) );
-       GenPolynomialRing<C> pring;
-       pring = TermOrderOptimization.<C>permutation( perm, P.ring );
-
-       List<GenPolynomial<C>> ppolys;
-       ppolys = TermOrderOptimization.<C>permutation( perm, pring, P.list );
-
-       OptimizedPolynomialList<C> op 
-           = new OptimizedPolynomialList<C>(perm,pring,ppolys);
-       return op;
+       return optimizeTermOrder( P.ring, P.list );
     }
 
 
