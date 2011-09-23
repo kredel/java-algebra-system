@@ -1166,7 +1166,7 @@ Get a power series ring from this ring.
 =end
     def powerseriesRing()
         pr = MultiVarPowerSeriesRing.new(@ring);
-        return MultiSeriesRing.new(ring=pr);
+        return MultiSeriesRing.new(pr);
     end
 end
 
@@ -1896,7 +1896,7 @@ Compute the elimination ideal of this and the given polynomial ring.
     def eliminateRing(ring)
         s = Ideal.new(@pset);
         nn = s.eliminate(ring.ring);
-        r = Ring.new( ring=nn.getRing() );
+        r = Ring.new( nn.getRing() );
         return SimIdeal.new(r,"",nn.getList());
     end
 
@@ -3305,7 +3305,7 @@ Compute a standard base.
         #Sp = [ RingElem.new(a.asPolynomial()) for a in S ];
         sp = ss.map { |a| RingElem.new(a) };
         #return sp;
-        return PSIdeal.new(@ring,nil,list=sp);
+        return PSIdeal.new(@ring,nil,sp);
     end
 
 end
