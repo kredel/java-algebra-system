@@ -197,13 +197,68 @@ public class TermOrderOptimization {
 
 
     /**
+     * Inverse of a permutation.
+     * @param P permutation.
+     * @return S with S*P = id.
+     */
+    public static List<Integer> inversePermutation( List<Integer> P ) {
+        if ( P == null || P.size() <= 1 ) {
+           return P;
+        }
+        List<Integer> ip = new ArrayList<Integer>(P); // ensure size and content
+        for ( int i = 0; i < P.size(); i++ ) {
+	    ip.set(P.get(i),i); // inverse
+        }
+        return ip;
+    }
+
+
+    /**
+     * Test for identity permutation.
+     * @param P permutation.
+     * @return true , if P = id, else false.
+     */
+    public static boolean isIdentityPermutation( List<Integer> P ) {
+        if ( P == null || P.size() <= 1 ) {
+           return true;
+        }
+        for ( int i = 0; i < P.size(); i++ ) {
+	    if ( P.get(i).intValue() != i ) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * Multiplication permutations.
+     * @param P permutation.
+     * @param S permutation.
+     * @return P*S.
+     */
+    public static List<Integer> multiplyPermutation( List<Integer> P, List<Integer> S ) {
+        if ( P == null || S == null ) {
+           return null;
+        }
+        if ( P.size() != S.size() ) {
+	    throw new IllegalArgumentException("#P != #S: P =" + P + ", S = " + S);
+        }
+        List<Integer> ip = new ArrayList<Integer>(P); // ensure size and content
+        for ( int i = 0; i < P.size(); i++ ) {
+	    ip.set(i,S.get(P.get(i))); 
+        }
+        return ip;
+    }
+
+
+    /**
      * Permutation of a list.
      * @param L list.
      * @param P permutation.
      * @return P(L).
      */
-    public static <T> 
-        List<T> listPermutation( List<Integer> P, List<T> L ) {
+    public static <T> List<T> listPermutation( List<Integer> P, List<T> L ) {
         if ( L == null || L.size() <= 1 ) {
            return L;
         }
@@ -223,8 +278,7 @@ public class TermOrderOptimization {
      * @return P(a).
      */
     @SuppressWarnings("unchecked") 
-    public static <T>
-        T[] arrayPermutation( List<Integer> P, T[] a ) {
+    public static <T> T[] arrayPermutation( List<Integer> P, T[] a ) {
         if ( a == null || a.length <= 1 ) {
            return a;
         }
@@ -245,8 +299,7 @@ public class TermOrderOptimization {
      * @param P permutation.
      * @return P(a).
      */
-    public static
-        String[] stringArrayPermutation( List<Integer> P, String[] a ) {
+    public static String[] stringArrayPermutation( List<Integer> P, String[] a ) {
         if ( a == null || a.length <= 1 ) {
            return a;
         }
@@ -267,8 +320,7 @@ public class TermOrderOptimization {
      * @param P permutation.
      * @return P(a).
      */
-    public static 
-        long[] longArrayPermutation( List<Integer> P, long[] a ) {
+    public static long[] longArrayPermutation( List<Integer> P, long[] a ) {
         if ( a == null || a.length <= 1 ) {
            return a;
         }

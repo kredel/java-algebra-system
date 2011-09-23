@@ -636,22 +636,19 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
      */
     @Override
     public List<GenPolynomial<BigInteger>> factorsSquarefree(GenPolynomial<BigInteger> P) {
-        ExpVector degv = P.degreeVector();
-        if ( degv.length() <= 1 ) {
+        GenPolynomialRing<BigInteger> pfac = P.ring;
+        if ( pfac.nvar <= 1 ) {
             return baseFactorsSquarefree(P);
         }
-        GenPolynomialRing<BigInteger> pfac = P.ring;
         List<GenPolynomial<BigInteger>> topt = new ArrayList<GenPolynomial<BigInteger>>(1);
         topt.add(P);
-        OptimizedPolynomialList<BigInteger> opt = TermOrderOptimization. <BigInteger> optimizeTermOrder(pfac,topt);
+        OptimizedPolynomialList<BigInteger> opt = TermOrderOptimization.<BigInteger> optimizeTermOrder(pfac,topt);
         logger.info("optimized polynomial: " + opt.list);
-        List<Integer> iperm = new ArrayList<Integer>(opt.perm); // ensure size
-        for ( int i = 0; i < opt.perm.size(); i++ ) {
-	    iperm.set(opt.perm.get(i),i); // inverse
-        }
+        List<Integer> iperm = TermOrderOptimization.inversePermutation(opt.perm);
         logger.info("optimize perm: " + opt.perm + ", de-optimize perm: " + iperm);
         P = opt.list.get(0);
 
+        ExpVector degv = P.degreeVector();
         int[] donv = degv.dependencyOnVariables();
         List<GenPolynomial<BigInteger>> facs = null;
         if (degv.length() == donv.length) { // all variables appear, hack for Hensel, TODO check
@@ -664,7 +661,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             }
         } else { // not all variables appear, remove unused variables, hack for Hensel, TODO check
             GenPolynomial<BigInteger> pu = PolyUtil.<BigInteger> removeUnusedUpperVariables(P);
-            GenPolynomial<BigInteger> pl = PolyUtil.<BigInteger> removeUnusedLowerVariables(pu);
+            GenPolynomial<BigInteger> pl = PolyUtil.<BigInteger> removeUnusedLowerVariables(pu); // not useful
             try {
                 logger.info("try factorsSquarefreeHensel: " + pl);
                 facs = factorsSquarefreeHensel(pu);
