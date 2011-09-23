@@ -910,7 +910,7 @@ Create a string representation.
 Create an ideal.
 =end
     def ideal(ringstr="",list=nil)
-        return JAS::SimIdeal.new(self,ringstr,list=list);
+        return JAS::SimIdeal.new(self,ringstr,list);
     end
 
 =begin rdoc
