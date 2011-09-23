@@ -643,10 +643,10 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         List<GenPolynomial<BigInteger>> topt = new ArrayList<GenPolynomial<BigInteger>>(1);
         topt.add(P);
         OptimizedPolynomialList<BigInteger> opt = TermOrderOptimization.<BigInteger> optimizeTermOrder(pfac,topt);
-        logger.info("optimized polynomial: " + opt.list);
+        P = opt.list.get(0);
+        logger.info("optimized polynomial: " + P);
         List<Integer> iperm = TermOrderOptimization.inversePermutation(opt.perm);
         logger.info("optimize perm: " + opt.perm + ", de-optimize perm: " + iperm);
-        P = opt.list.get(0);
 
         ExpVector degv = P.degreeVector();
         int[] donv = degv.dependencyOnVariables();
