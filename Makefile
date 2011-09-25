@@ -326,8 +326,9 @@ SVNDATE=svnlook date $(SVNREPO)/jas
 # jan 2009 SVNSRT=2288
 # jun 2009 SVNSRT=2668
 # jan 2010 SVNSRT=2978
-# jun 2010 
-SVNSRT=3188
+# jun 2010 SVNSRT=3188
+# jan 2011
+SVNSRT=3458
 
 export:
 	rm -rf ~/jas-versions/$(VERSION)
@@ -337,7 +338,8 @@ export:
 	svn log -v -r HEAD:$(SVNSRT) file:///$(SVNREPO)/jas/trunk src examples > ~/jas-versions/$(VERSION)/svn_change.log
 	cd ~/jas-versions/; jar -cf $(VERSION).`$(SVNREV)`-src.jar $(VERSION)/
 	cd ~/jas-versions/$(VERSION)/; ant compile > ant_compile.out
-	cd ~/jas-versions/$(VERSION)/; jar -cfm ../$(VERSION).`$(SVNREV)`-bin.jar GBManifest.MF edu/ COPYING*
+	cd ~/jas-versions/$(VERSION)/; jar -cfm ../$(VERSION).`$(SVNREV)`-bin.jar GBManifest.MF edu/ COPYING* log4j.properties
+	cd ~/jas-versions/$(VERSION)/; jar -uf ../$(VERSION).`$(SVNREV)`-bin.jar -C ~/jas-versions/$(VERSION)/examples jas.rb -C ~/jas-versions/$(VERSION)/examples jas.py
 	cd ~/jas-versions/$(VERSION)/; ant doc > ant_doc.out
 	cd ~/jas-versions/$(VERSION)/; epydoc -o doc/jython -n "Python to JAS" -u ../../index.html examples/jas.py > epydoc.out
 	cd ~/jas-versions/$(VERSION)/; jrdoc -o doc/jruby -U -S -N -t "Ruby to JAS" examples/jas.rb > rdoc.out 2>&1
