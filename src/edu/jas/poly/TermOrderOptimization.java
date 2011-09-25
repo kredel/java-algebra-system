@@ -473,8 +473,8 @@ public class TermOrderOptimization {
         TermOrder tord = R.tord;
         if ( tord.getEvord2() != 0 ) {
             //throw new IllegalArgumentException("split term orders not permutable");
-            logger.warn("split term orders not permutable, resetting to base term order");
-            tord = new TermOrder( tord.getEvord() );
+            tord = new TermOrder( tord.getEvord2() );
+            logger.warn("split term order '" + R.tord + "' not permutable, resetting to most base term order " + tord);
         }
         long[][] weight = tord.getWeight();
         if ( weight != null ) {
