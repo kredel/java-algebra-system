@@ -653,7 +653,7 @@ public class GenPolynomialTokenizer {
 
     /**
      * Parsing method for coefficient ring. syntax: Rat | Q | Int | Z | Mod
-     * modul | Complex | C | D | Quat | AN[ (var) ( poly ) | AN[ modul (var) (
+     * modul | Complex | C | D | Quat | AN[ (var) ( poly ) ] | AN[ modul (var) (
      * poly ) ] | IntFunc (var_list)
      * @return the next coefficient factory.
      * @throws IOException
