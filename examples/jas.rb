@@ -806,7 +806,7 @@ a is the integration constant, r is for partial integration in variable r.
         rescue
             #pass;
         end
-        integrator = ElementaryIntegration(cf.coFac);
+        integrator = ElementaryIntegration.new(cf.coFac);
         ei = integrator.integrate(@elem); 
         return ei;
     end
@@ -2060,10 +2060,10 @@ Create a string representation.
 =end
     def to_s()
         if @gbsys == nil
-            return @pset.toScript(); #.to_s;
+            return @pset.toScript();
         else
-            return @gbsys.toScript(); #.to_s;
 #            return @pset.toScript() + "\n" + @gbsys.toScript();
+            return @pset.toScript() + "\n" + @gbsys.to_s;
         end
     end
 
@@ -2198,7 +2198,7 @@ Compute a comprehensive Groebner system.
         t = System.currentTimeMillis();
         ss = ComprehensiveGroebnerBaseSeq.new(@ring.ring.coFac).GBsys(ff);
         t = System.currentTimeMillis() - t;
-        print "sequential comprehensive system executed in #{r} ms\n"; 
+        print "sequential comprehensive system executed in #{t} ms\n"; 
         return ParamIdeal.new(@ring,nil,ff,ss);
     end
 
@@ -2708,7 +2708,7 @@ Compute a Groebner base.
         gg = ModGroebnerBaseAbstract.new().GB(@mset);
         t = System.currentTimeMillis() - t;
         print "executed module GB in #{t} ms\n"; 
-        return SubModule(@modu,"",gg.list);
+        return SubModule.new(@modu,"",gg.list);
     end
 
 =begin rdoc
