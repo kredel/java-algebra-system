@@ -1896,7 +1896,7 @@ Compute the elimination ideal of this and the given polynomial ring.
     def eliminateRing(ring)
         s = Ideal.new(@pset);
         nn = s.eliminate(ring.ring);
-        r = Ring.new( nn.getRing() );
+        r = Ring.new( "", nn.getRing() );
         return SimIdeal.new(r,"",nn.getList());
     end
 
