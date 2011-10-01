@@ -6,6 +6,7 @@
 <project name="jas" default="usage" basedir="." >
 
   <property name="src"       value="src" />
+  <property name="testsrc"   value="trc" />
   <property name="bin"       value="edu" />
   <property name="build"     value="." />
   <property name="doc"       value="doc/api" />
@@ -48,53 +49,6 @@
   <mkdir dir="doc"  />
 </target>
 
-<!-- requires ant 1.7 -->
-<target name="symlinks" depends="symlinks.check" if="checklinks" >
-  <symlink resource="${src}/edu/jas/application" link="application" />
-  <symlink resource="${src}/edu/jas/arith"       link="arith" />
-  <symlink resource="${src}/edu/jas/kern"        link="kern" />
-  <symlink resource="${src}/edu/jas/gbmod"       link="gbmod" />
-  <symlink resource="${src}/edu/jas/poly"        link="poly" />
-  <symlink resource="${src}/edu/jas/ps"          link="ps" />
-  <symlink resource="${src}/edu/jas/gb"          link="gb" />
-  <symlink resource="${src}/edu/jas/structure"   link="structure" />
-  <symlink resource="${src}/edu/jas/ufd"         link="ufd" />
-  <symlink resource="${src}/edu/jas/util"        link="util" />
-  <symlink resource="${src}/edu/jas/vector"      link="vector" />
-</target>
-
-<target name="symlinks.check" >
- <condition property="checklinks" >
-  <not>
-   <and>
-   <available file="application" />
-   <available file="arith" />
-   <available file="kern" />
-   <available file="gbmod" />
-   <available file="poly" />
-   <available file="ps" />
-   <available file="gb" />
-   <available file="structure" />
-   <available file="ufd" />
-   <available file="util" />
-   <available file="vector" />
-   </and>
-  </not>
- </condition>
-  <delete quiet="true" failonerror="false" file="./application/application" />
-  <delete quiet="true" failonerror="false" file="./arith/arith" />
-  <delete quiet="true" failonerror="false" file="./kern/kern" />
-  <delete quiet="true" failonerror="false" file="./gbmod/gbmod" />
-  <delete quiet="true" failonerror="false" file="./poly/poly" />
-  <delete quiet="true" failonerror="false" file="./gb/gb" />
-  <delete quiet="true" failonerror="false" file="./structure/structure" />
-  <delete quiet="true" failonerror="false" file="./ufd/ufd" />
-  <delete quiet="true" failonerror="false" file="./util/util" />
-  <delete quiet="true" failonerror="false" file="./vector/vector" />
-</target>
-<!-- requires ant 1.7 -->
-
-
 <target name="usage" >
   <echo message="ant &lt;name&gt; -Drun=class"  />
   <echo message="basedir = ${basedir}"  />
@@ -103,21 +57,26 @@
 </target>
 
 <target name="recompile" depends="distclean" >
-  <javac srcdir="${src}" destdir="${build}"
+  <javac destdir="${build}"
          debug="on" debuglevel="lines,source"
          classpath="${cp}" 
          includeantruntime="false"
-  />
+  >
+     <src path="${src}" />
+     <src path="${testsrc}" />
+  </javac>
 </target>
 
 <target name="compile" depends="vorher" >
-  <javac srcdir="${src}" destdir="${build}" 
+  <javac destdir="${build}" 
          debug="on" debuglevel="lines,source"
          classpath="${cp}"
          listfiles="true"
          includeantruntime="false"
   >
-  <compilerarg value="-Xlint:unchecked" />
+     <compilerarg value="-Xlint:unchecked" />
+     <src path="${src}" />
+     <src path="${testsrc}" />
   </javac>
 <!--     listfiles="true"
          includes="**/*.java" 
@@ -125,13 +84,16 @@
 </target>
 
 <target name="recomp5" depends="distclean" >
-  <javac srcdir="${src}" destdir="${build}"
+  <javac destdir="${build}"
          debug="on" debuglevel="lines,source"
          classpath="${cp}" 
          source="1.5" 
          target="1.5" 
          includeantruntime="false"
-  />
+  >
+     <src path="${src}" />
+     <src path="${testsrc}" />
+  </javac>
 </target>
 
 <target name="doc" >
@@ -153,6 +115,7 @@
      <!--tag name="unused"    description="Not used"         scope="all" /-->
      <tag name="usage"     description="Usage"            scope="all" />
      <fileset dir="${src}" includes="**/*.java"  />
+     <fileset dir="${testsrc}" includes="**/*.java"  />
   </javadoc>
 </target>
 
@@ -223,7 +186,6 @@
   <java classname="edu.jas.application.Examples" classpath="${cp}" fork="yes" args="1" />
 </target>
 
-
 <target name="lint" depends="vorher" >
   <lint4j sourcepath="${src}" 
           classpath="${cp}:${jar}"
@@ -252,6 +214,7 @@
      <fileset dir="." includes="**/*.html"  />
      <fileset dir="." includes="*.py"  />
      <fileset dir="." includes="examples/*.py"  />
+     <fileset dir="." includes="examples/*.rb"  />
      <fileset dir="." includes="**/*.jas"  />
      <fileset dir="." includes="build.xml Makefile log4j.properties"  />
   </jar>
@@ -275,18 +238,26 @@
 <target name="clean" >
   <delete verbose="true" >
     <fileset dir="${src}" defaultexcludes="no" includes="**/*~"  />
+    <fileset dir="${testsrc}" defaultexcludes="no" includes="**/*~"  />
   </delete>
 </target>
 
 <target name="distclean" depends="clean" >
   <delete verbose="true" >
     <fileset dir="${src}" includes="**/*.class"  />
+    <fileset dir="${testsrc}" includes="**/*.class"  />
     <fileset dir="${build}" includes="**/*.class"  />
   </delete>
 </target>
 
 <target name="untabify" depends="vorher" >
   <fixcrlf srcdir="${src}"
+       tab="remove"
+       tablength="8"
+       javafiles="yes"
+       includes="**/*.java" 
+  />
+  <fixcrlf srcdir="${testsrc}"
        tab="remove"
        tablength="8"
        javafiles="yes"
