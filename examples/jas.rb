@@ -3010,7 +3010,8 @@ Get the tangens power series.
         return RingElem.new( @ring.getTAN() );
     end
 
-=begin
+=begin rdoc
+Inner class
 =end
         class Coeff < Coefficients
             def initialize(cofac)
@@ -3034,7 +3035,7 @@ clazz must implement the Coefficients abstract class.
 =end
     def create(ifunc=nil,jfunc=nil,clazz=nil)
         if clazz == nil
-            ps = UnivPowerSeries.new( @ring, Coeff(@ring.coFac) );
+            ps = UnivPowerSeries.new( @ring, Coeff.new(@ring.coFac) );
         else
             ps = UnivPowerSeries.new( @ring, clazz );
         end
