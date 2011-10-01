@@ -44,6 +44,8 @@ issues to consider:
 
 partially resolved and completed issues:
 
+- provide all Jython examples also for JRuby
+
 - implement multivariate Hensel lifting for multivariate polynomial factorization
 
 - implement 0-dim ideal complex root selection
