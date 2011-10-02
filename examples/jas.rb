@@ -3011,17 +3011,29 @@ Get the tangens power series.
     end
 
 =begin rdoc
-Inner class
+(Inner) class which extends edu.jas.ps.Coefficients
+
+ifunc(int i) must return a value which is used in ((RingFactory)cofac).fromInteger().
+jfunc(int i) must return a value of type ring.coFac.
 =end
-        class Coeff < Coefficients
-            def initialize(cofac)
+        class Ucoeff < Coefficients
+            def initialize(ifunc,jfunc,cofac=nil)
+                #puts "ifunc = " + ifunc.to_s + ",";
+                #puts "jfunc = " + jfunc.to_s + ",";
+                #puts "cofac = " + cofac.to_s + ",";
+                super();
+                if jfunc == nil && cofac == nil 
+                  raise "invalid arguments"
+                end
                 @coFac = cofac;
+                @ifunc = ifunc;
+                @jfunc = jfunc;
             end
             def generate(i)
-                if jfunc == nil
-                    return @coFac.fromInteger( ifunc(i) );
+                if @jfunc == nil
+                    return @coFac.fromInteger( @ifunc.call(i) );
                 else
-                    return jfunc(i);
+                    return @jfunc.call(i);
                 end
             end
         end
@@ -3033,9 +3045,14 @@ ifunc(int i) must return a value which is used in RingFactory.fromInteger().
 jfunc(int i) must return a value of type ring.coFac.
 clazz must implement the Coefficients abstract class.
 =end
-    def create(ifunc=nil,jfunc=nil,clazz=nil)
+    def create(ifunc,jfunc=nil,clazz=nil)
         if clazz == nil
-            ps = UnivPowerSeries.new( @ring, Coeff.new(@ring.coFac) );
+            #puts "ifunc = " + ifunc.to_s + ".";
+            #puts "jfunc = " + jfunc.to_s + ".";
+            #puts "clazz = " + clazz.to_s + ".";
+            cf = Ucoeff.new(ifunc,jfunc,@ring.coFac);
+            #puts "cf    = " + cf.to_s + ".";
+            ps = UnivPowerSeries.new( @ring, cf );
         else
             ps = UnivPowerSeries.new( @ring, clazz );
         end
@@ -3180,17 +3197,24 @@ Get the tangens power series, var r.
 
 
 =begin
+(Inner) class which extends edu.jas.ps.MultiVarCoefficients
+
+ring must be a polynomial or multivariate power series ring.
+ifunc(int i) must return a value which is used in ((RingFactory)cofac).fromInteger().
+jfunc(int i) must return a value of type ring.coFac.
 =end
-        class Coeff < MultiVarCoefficients
-            def initialize(r)
-                MultiVarCoefficients.new(r);
-                @coFac = r.coFac;
+        class Mcoeff < MultiVarCoefficients
+            def initialize(ring,ifunc=nil,jfunc=nil)
+                super(ring);
+                @coFac = ring.coFac;
+                @ifunc = ifunc;
+                @jfunc = jfunc;
             end
             def generate(i)
-                if jfunc == nil
-                    return @coFac.fromInteger( ifunc(i) );
+                if @jfunc == nil
+                    return @coFac.fromInteger( @ifunc.call(i) );
                 else
-                    return jfunc(i);
+                    return @jfunc.call(i);
                 end
             end
         end
@@ -3205,7 +3229,8 @@ clazz must implement the Coefficients abstract class.
     def create(ifunc=nil,jfunc=nil,clazz=nil)
         #print "ifunc"
         if clazz == nil
-            ps = MultiVarPowerSeries.new( @ring, Coeff(@ring) );
+            cf = Mcoeff.new(@ring,ifunc,jfunc);
+            ps = MultiVarPowerSeries.new( @ring, cf );
         else
             ps = MultiVarPowerSeries.new( @ring, clazz );
         end

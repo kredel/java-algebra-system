@@ -126,37 +126,35 @@ puts;
 #def f(a)
 #    return a*a;
 #end
+# use lambdas:
 
-#ps = psr.create(@f);
-#puts "ps: ", ps;
-#puts;
+f = lambda { |a| a*a };
 
+ps = psr.create(f);
+puts "ps: " + str(ps);
+puts;
 
-#def g(a)
-#    return a+a;
-#end
+g = lambda { |a| a+a };
 
-#ps1 = psr.create(g);
-#puts "ps1: ", ps1;
-#puts;
+ps1 = psr.create(g);
+puts "ps1: " +str(ps1);
+puts;
 
-#ps2 = ps * ps1;
-#puts "ps2: ", ps2;
-#puts;
+ps2 = ps * ps1;
+puts "ps2: " + str(ps2);
+puts;
 
+#exit();
 
-#def h(a)
-#    return psr.ring.coFac.fromInteger( 2*a );
-#end
+h = lambda { |a| psr.ring.coFac.fromInteger( 3*a ) };
 
-#ps3 = psr.create(jfunc=h);
-#puts "ps3: ", ps3;
-#puts;
+ps3 = psr.create(nil,h);
+puts "ps3: " + str(ps3);
+puts;
 
-#ps4 = ps3 * ps1;
-#puts "ps4: ", ps4;
-#puts;
-
+ps4 = ps3 * ps1;
+puts "ps4: " + str(ps4);
+puts;
 
 # does not work, since get() is not known
 #def k(a)
@@ -166,53 +164,59 @@ puts;
 #        return psr.ring.coFac.fromInteger( 2*a );
 #    end
 #end
-
 #no#ps5 = psr.create(jfunc=k);
 #no#puts "ps5: ", ps5;
 #no#puts;
 
 
-#class Mcoeff < Coefficients
-#    def initialize(cofac)
-#        @coFac = cofac;
-#    end
-#    def generate(i)
-#        if i == 0
-#            return @coFac.getZERO();
-#        else
-#            if i == 1
-#                return @coFac.getONE();
-#            else
-#                c = @get( i-2 ).negate();
-#                return c.divide( @coFac.fromInteger(i) ).divide( @coFac.fromInteger(i-1) );
-#            end
-#        end
-#    end
-#end
+class Mcoeff < Coefficients
+    def initialize(cofac)
+        super();
+        @coFac = cofac;
+    end
+    def generate(i)
+        if i == 0
+            return @coFac.getZERO();
+        else
+            if i == 1
+                return @coFac.getONE();
+            else
+                c = get( i-2 ).negate();
+                return c.divide( @coFac.fromInteger(i) ).divide( @coFac.fromInteger(i-1) );
+            end
+        end
+    end
+end
 
-#ps6 = psr.create( clazz=Mcoeff.new(psr.ring.coFac) );
-#puts "ps6: ", ps6;
-#puts;
+ps6 = psr.create(nil,nil, Mcoeff.new(psr.ring.coFac) );
+puts "ps6: " + str(ps6);
+puts;
 
-#ps7 = ps6 - s;
-#puts "ps7: ", ps7;
-#puts;
+ps7 = ps6 - s;
+puts "ps7: " + str(ps7);
+puts;
 
+#exit();
 
-#class cosmap( UnivPowerSeriesMap ):
-#   def __init__(self,cofac):
-#        self.coFac = cofac;
-#    def map(self,ps):
-#        return ps.negate().integrate( self.coFac.getZERO() ).integrate( self.coFac.getONE() );
+class Cosmap 
+    include UnivPowerSeriesMap # for interfaces use Module notations
+    def initialize(cofac)
+        @coFac = cofac;
+    end
+    def map(ps)
+        return ps.negate().integrate( @coFac.getZERO() ).integrate( @coFac.getONE() );
+    end
+end
 
-#ps8 = psr.fixPoint( cosmap( psr.ring.coFac ) );
-#puts "ps8: ", ps8;
-#puts;
+ps8 = psr.fixPoint( Cosmap.new( psr.ring.coFac ) );
+puts "ps8: " + str(ps8);
+puts;
 
-#ps9 = ps8 - c;
-#puts "ps9: ", ps9;
-#puts;
+ps9 = ps8 - c;
+puts "ps9: " + str(ps9);
+puts;
 
+#exit();
 
 # conversion from polynomials
 
@@ -261,4 +265,4 @@ puts "ps5: " + str(ps5);
 puts;
 
 
-#sys.exit();
+#exit();
