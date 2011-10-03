@@ -35,9 +35,9 @@ puts;
 
 #sys.exit();
 
-bg = gs.isCGBsystem();
-puts "isCGBsystem: " + str(bg);
-puts;
+#bg = gs.isCGBsystem();
+#puts "isCGBsystem: " + str(bg);
+#puts;
 
 #sys.exit();
 
@@ -49,9 +49,9 @@ puts;
 
 #startLog();
 
-bg = gs.isCGB();
-puts "isCGB: " + str(bg);
-puts;
+#bg = gs.isCGB();
+#puts "isCGB: " + str(bg);
+#puts;
 
 terminate();
 #sys.exit();

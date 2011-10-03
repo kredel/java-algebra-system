@@ -115,7 +115,7 @@ Create JAS BigRational as ring element.
 =end
 def QQ(d=0,n=1)
     if d.is_a? Rational 
-        if n != 1:
+        if n != 1
             print "#{n} ignored\n";
         end
         if d.denominator != 1
@@ -691,10 +691,10 @@ Power of this to other.
         else
             if other.is_a? RingElem
                 n = other.elem;
-                if n.getClass().getSimpleName() == "BigRational": 
+                if n.getClass().getSimpleName() == "BigRational"
                     n = n.numerator().intValue() / n.denominator().intValue();
                 end
-                if n.getClass().getSimpleName() == "BigInteger": 
+                if n.getClass().getSimpleName() == "BigInteger" 
                     n = n.intValue();
                 end
             end
@@ -797,7 +797,7 @@ a is the integration constant, r is for partial integration in variable r.
                 e = @elem.integrate(x);
             end
             return RingElem.new( e );
-        rescue:
+        rescue
             #pass;
         end
         cf = @elem.ring;
@@ -1027,7 +1027,7 @@ rational number and algebriac number coefficients.
                 e = @factor.factors( a );
             end
             ll = {};
-            for a in e.keySet():
+            for a in e.keySet()
                 i = e.get(a);
                 ll[ RingElem.new( a ) ] = i;
             end
@@ -1568,17 +1568,17 @@ def makeJasArith(item)
         print "item[0] type(#{item[0]}) = #{item[0].class}\n";
         if item.size > 1
             re = makeJasArith( item[0] );
-            if not re.isField():
+            if not re.isField()
                 re = BigRational.new( re.val );
             end
             im = makeJasArith( item[1] );
-            if not im.isField():
+            if not im.isField()
                 im = BigRational.new( im.val );
             end
             jasArith = BigComplex.new( re, im );
         else
             re = makeJasArith( item[0] );
-            if not re.isField():
+            if not re.isField()
                 re = BigRational.new( re.val );
             end
             jasArith = BigComplex.new( re );
@@ -2316,7 +2316,7 @@ Solvable polynomial ring constructor.
         else
            @ring = ring;
         end
-        if not @ring.isAssociative():
+        if not @ring.isAssociative()
            print "warning: ring is not associative";
         end
     end
@@ -2674,7 +2674,7 @@ Constructor for a sub-module.
            @list = tok.nextSubModuleList();
         else
             if list.is_a? Array
-                if list.size != 0:
+                if list.size != 0
                     if list[0].is_a? RingElem
                         list = list.map { |re| re.elem  };
                     end
