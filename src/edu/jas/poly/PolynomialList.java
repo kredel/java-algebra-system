@@ -190,7 +190,7 @@ public class PolynomialList<C extends RingElem<C> >
         StringBuffer s = new StringBuffer();
         switch (Scripting.getLang() ) {
         case Ruby:
-            s.append("Ideal.new(");
+            s.append("SimIdeal.new(");
             break;
         case Python:
         default:
@@ -203,7 +203,7 @@ public class PolynomialList<C extends RingElem<C> >
             s.append(")");
             return s.toString();
         }
-        s.append(",list=[");
+        s.append(",\"\",[");
         boolean first = true;
         String sa = null;
         for ( GenPolynomial<C> oa: list ) {
