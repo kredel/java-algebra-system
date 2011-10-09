@@ -1166,7 +1166,7 @@ Get a power series ring from this ring.
 =end
     def powerseriesRing()
         pr = MultiVarPowerSeriesRing.new(@ring);
-        return MultiSeriesRing.new(pr);
+        return MultiSeriesRing.new("",nil,pr);
     end
 end
 
@@ -3280,6 +3280,7 @@ Represents a JAS power series ideal.
 Method for Standard bases.
 =end
 class PSIdeal
+    attr_reader :ring, :list
 
 =begin rdoc
 PSIdeal constructor.
@@ -3301,7 +3302,7 @@ PSIdeal constructor.
             @list = @ring.fromPolynomial(@polylist);
         else
             @polylist = nil;
-            @list = rbarray2arraylist( polylist.map { |a| a.elem } );
+            @list = rbarray2arraylist( list.map { |a| a.elem } );
         end
     end
 
@@ -3309,7 +3310,7 @@ PSIdeal constructor.
 Create a string representation.
 =end
     def to_s()
-        return @list.map { |a| a.toScript() };
+        return @list.map { |a| a.toScript() }.join(", ");
     end
 
 =begin rdoc
@@ -3331,7 +3332,7 @@ Compute a standard base.
         #Sp = [ RingElem.new(a.asPolynomial()) for a in S ];
         sp = ss.map { |a| RingElem.new(a) };
         #return sp;
-        return PSIdeal.new(@ring,nil,sp);
+        return PSIdeal.new(@ring,nil,nil,sp);
     end
 
 end
