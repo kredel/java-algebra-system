@@ -27,24 +27,17 @@ f = r.ideal( ps );
 print "Ideal: " + str(f);
 print;
 
-from edu.jas.gb import EGroebnerBaseSeq;
-from edu.jas.gb import DGroebnerBaseSeq;
-
-egbs = EGroebnerBaseSeq();
-dgbs = DGroebnerBaseSeq();
-
 #startLog();
 
-eg = egbs.GB( f.list );
-rg = r.ideal(list=eg);
-print "seq e-GB:", rg;
-print "is e-GB:", egbs.isGB(eg);
+eg = f.eGB();
+print "seq e-GB:", eg;
+print "is e-GB:", eg.isGB();
 print;
 
-dg = dgbs.GB( f.list );
-rg = r.ideal(list=dg);
-print "seq d-GB:", rg;
-print "is d-GB:", dgbs.isGB(dg);
+dg = f.dGB();
+print "seq d-GB:", dg;
+print "is d-GB:", dg.isGB();
 print;
 
-print "d-GB == e-GB:", eg.equals(dg);
+print "d-GB == e-GB:", eg.list.equals(dg.list);
+print "d-GB == e-GB:", eg == dg;

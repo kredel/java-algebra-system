@@ -624,6 +624,13 @@ Compare two ring elements.
     end
 
 =begin rdoc
+Test if two ring element are equal.
+=end
+    def ===(other)
+        return (self <=> other) == 0; 
+    end
+
+=begin rdoc
 Hash value.
 =end
     def object_id()
@@ -1654,6 +1661,21 @@ Create a string representation.
 =end
     def to_s()
         return @pset.toScript();
+    end
+
+=begin rdoc
+Compare two ideals.
+=end
+    def <=>(other)
+        s,o = self, other
+        return s.pset.compareTo( o.pset ); 
+    end
+
+=begin rdoc
+Compare two ideals.
+=end
+    def ===(other)
+        return (self <=> other) == 0; 
     end
 
 =begin rdoc

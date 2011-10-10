@@ -346,6 +346,14 @@ class Ideal:
         '''
         return str(self.pset.toScript());
 
+    def __eq__(self,other):
+        '''Test if two ideals are equal.
+        '''
+        o = other;
+        if isinstance(other,Ideal):
+            o = other.pset;
+        return self.pset.equals(o)
+
     def paramideal(self):
         '''Create an ideal in a polynomial ring with parameter coefficients.
         '''

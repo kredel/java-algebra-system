@@ -1,13 +1,9 @@
 #
-# jython examples for jas.
+# jruby examples for jas.
 # $Id$
 #
 
-#import sys;
-
-from jas import Ring
-from jas import Ideal
-from jas import startLog
+require "examples/jas"
 
 # mark, d-gb diplom example, due to kandri-rody 1984
 #
@@ -25,9 +21,10 @@ from jas import startLog
 # Frist polynomial produces a different e-GB. 
 # Second polynomial reproduces the e-GB with the second polynomial. 
 
-r = Ring( "Z(x,y) L" );
-print "Ring: " + str(r);
-print;
+#r = Ring.new( "Z(x,y) L" );
+r = PolyRing.new( ZZ(), "(x,y)", PolyRing.lex );
+puts "Ring: " + str(r);
+puts;
 
 ps = """
 ( 
@@ -38,23 +35,23 @@ ps = """
 """;
 
 f = r.ideal( ps );
-print "Ideal: " + str(f);
-print;
+puts "Ideal: " + str(f);
+puts;
 
 #startLog();
 
-eg = f.eGB();
-print "seq e-GB:", eg;
-print "is e-GB:", eg.isGB();
-print;
+eg = f.eGB( );
+puts "seq e-GB: " + str(eg);
+puts "is e-GB: " + str(eg.isGB());
+puts;
 
 
 #startLog();
 
 dg = f.dGB();
-print "seq d-GB:", dg;
-print "is d-GB:", dg.isGB();
-print;
+puts "seq d-GB: " + str(dg);
+puts "is d-GB: " + str(dg.isGB());
+puts;
 
-print "d-GB == e-GB:", eg.list.equals(dg.list);
-print "d-GB == e-GB:", eg == dg;
+puts "d-GB == e-GB: "+ str(eg===dg);
+puts
