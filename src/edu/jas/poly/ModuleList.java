@@ -229,7 +229,14 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
             s.append(")");
             return s.toString();
         }
-        s.append(",list=[");
+        switch (Scripting.getLang() ) {
+        case Ruby:
+            s.append(",\"\",[");
+            break;
+        case Python:
+        default:
+            s.append(",list=[");
+        }
         boolean first = true;
         for ( List< GenPolynomial<C> > row: list ) {
             if ( first ) {

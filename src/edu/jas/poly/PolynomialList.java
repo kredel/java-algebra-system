@@ -203,7 +203,14 @@ public class PolynomialList<C extends RingElem<C> >
             s.append(")");
             return s.toString();
         }
-        s.append(",\"\",[");
+        switch (Scripting.getLang() ) {
+        case Ruby:
+            s.append(",\"\",[");
+            break;
+        case Python:
+        default:
+            s.append(",list=[");
+        }
         boolean first = true;
         String sa = null;
         for ( GenPolynomial<C> oa: list ) {
