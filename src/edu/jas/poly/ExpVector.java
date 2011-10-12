@@ -746,6 +746,14 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
 
 
     /**
+     * ExpVector degree.
+     * @return total degree of all exponents.
+     */
+    public long degree() {
+        return totalDeg();
+    }
+
+    /**
      * ExpVector total degree.
      * @return sum of all exponents.
      */

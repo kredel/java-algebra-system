@@ -109,6 +109,16 @@ Iterable<Monomial<C>> {
 
 
     /**
+     * Constructor for GenPolynomial x<sup>e</sup>.
+     * @param r polynomial ring factory.
+     * @param e exponent.
+     */
+    public GenPolynomial(GenPolynomialRing<C> r, ExpVector e) {
+        this(r, r.coFac.getONE(), e);
+    }
+
+
+    /**
      * Constructor for GenPolynomial.
      * @param r polynomial ring factory.
      * @param v the SortedMap of some other polynomial.
