@@ -2191,6 +2191,17 @@ def coercePair(a,b):
         s = a;
         o = a.coerce(b);
     return (s,o);
+
+
+def isJavaInstance(a):
+    '''Test if a is a Java instance.
+    '''
+    #print "a type(%s) = %s" % (a,type(a));
+    try:
+        c = a.getClass();
+    except:
+        return False;
+    return True;
     
 
 class RingElem:
@@ -2287,18 +2298,14 @@ class RingElem:
                 o = other;
             if o == None:
                 return RingElem( GenPolynomial(self.ring) )
-            if o.getClass().getSimpleName() == "ExpVectorLong": # want startsWith or substring(0,8) == "ExpVector":
-                o = GenPolynomial(self.ring,o);
-                return RingElem( o );
-            if o.getClass().getSimpleName() == "BigRational":
-                o = GenPolynomial(self.ring,o);
-                return RingElem( o );
-            if o.getClass().getSimpleName() == "ModInteger":
-                o = GenPolynomial(self.ring,o);
-                return RingElem( o );
-            if o.getClass().getSimpleName() == "ModLong":
-                o = GenPolynomial(self.ring,o);
-                return RingElem( o );
+            if isJavaInstance(o):
+                #print "self.elem, o = %s, %s " % (type(self.ring.coFac),type(o));
+                if o.getClass().getSimpleName() == "ExpVectorLong": # want startsWith or substring(0,8) == "ExpVector":
+                    o = GenPolynomial(self.ring,o);
+                    return RingElem( o );
+                if self.ring.coFac.getClass().getSimpleName() == o.getClass().getSimpleName():
+                    o = GenPolynomial(self.ring,o);
+                    return RingElem( o );
         if isinstance(other,RingElem):
             if self.isPolynomial() and not other.isPolynomial():
                 #print "self.ring = %s" % (self.ring);
