@@ -13,7 +13,7 @@ from edu.jas.structure   import RingElem, RingFactory, Power
 from edu.jas.arith       import BigInteger, BigRational, BigComplex, BigDecimal,\
                                 ModInteger, ModIntegerRing, BigQuaternion, BigOctonion,\
                                 Product, ProductRing
-from edu.jas.poly        import GenPolynomial, GenPolynomialRing,\
+from edu.jas.poly        import GenPolynomial, GenPolynomialRing, Monomial,\
                                 GenSolvablePolynomial, GenSolvablePolynomialRing,\
                                 GenPolynomialTokenizer, OrderedPolynomialList, PolyUtil,\
                                 TermOrderOptimization, TermOrder, PolynomialList,\
@@ -558,6 +558,15 @@ class Ideal:
         t = System.currentTimeMillis() - t;
         print "sequential NF executed in %s ms" % t; 
         return Ideal(self.ring,"",N);
+
+    def interreduced_basis(self):
+        '''Compute a interreduced ideal basis of this.
+
+        Compatibility method for Sage/Singular.
+        '''
+        F = self.pset.list;
+        N = ReductionSeq().irreducibleSet(F);
+        return [ RingElem(n) for n in N ];
 
     def intersectRing(self,ring):
         '''Compute the intersection of this and the given polynomial ring.
@@ -1684,7 +1693,7 @@ def makeJasArith(item):
             else:
                 jasArith = BigRational( item[0] );
         return jasArith;
-    print "unknown item type(%s) = %s" % (item,type(item));
+    print "makeJasArith: unknown item type(%s) = %s" % (item,type(item));
     return item;
 
 
@@ -2210,7 +2219,7 @@ class RingElem:
     def zero(self):
         '''Zero element of this ring.
         '''
-        return RingElem( self.elem.factory().getZERO() );
+        return RingElem( self.ring.getZERO() );
 
     def isZERO(self):
         '''Test if this is the zero element of the ring.
@@ -2220,7 +2229,7 @@ class RingElem:
     def one(self):
         '''One element of this ring.
         '''
-        return RingElem( self.elem.factory().getONE() );
+        return RingElem( self.ring.getONE() );
 
     def isONE(self):
         '''Test if this is the one element of the ring.
@@ -2266,6 +2275,30 @@ class RingElem:
                 o = pylist2arraylist(other,self.elem.factory().coFac,rec=2);
                 o = GenMatrix(self.elem.factory(),o);
                 return RingElem( o );
+        if self.elem.getClass().getSimpleName() == "GenPolynomial":
+            #print "self, other = %s, %s " % (type(self),type(other));
+            #print "o type(%s) = %s, str = %s" % (o,type(o),str(o));
+            if isinstance(other,PyInteger) or isinstance(other,PyLong):
+               o = self.ring.fromInteger(other);
+               return RingElem( o );
+            if isinstance(other,RingElem):
+                o = other.elem;
+            else:
+                o = other;
+            if o == None:
+                return RingElem( GenPolynomial(self.ring) )
+            if o.getClass().getSimpleName() == "ExpVectorLong": # want startsWith or substring(0,8) == "ExpVector":
+                o = GenPolynomial(self.ring,o);
+                return RingElem( o );
+            if o.getClass().getSimpleName() == "BigRational":
+                o = GenPolynomial(self.ring,o);
+                return RingElem( o );
+            if o.getClass().getSimpleName() == "ModInteger":
+                o = GenPolynomial(self.ring,o);
+                return RingElem( o );
+            if o.getClass().getSimpleName() == "ModLong":
+                o = GenPolynomial(self.ring,o);
+                return RingElem( o );
         if isinstance(other,RingElem):
             if self.isPolynomial() and not other.isPolynomial():
                 #print "self.ring = %s" % (self.ring);
@@ -2310,7 +2343,7 @@ class RingElem:
                 if isinstance(other,PyFloat): # ?? what to do ??
                     o = self.elem.fromInteger( int(other) );
                 else:
-                    print "unknown other type(%s) = %s" % (other,type(other));
+                    print "coerce_1: unknown other type(%s) = %s" % (other,type(other));
                     o = self.elem.parse( str(other) );
             return RingElem(o);
         #print "--3";
@@ -2329,7 +2362,8 @@ class RingElem:
                 else:
                     o = self.elem.factory().getZERO().sum( o );
             else:
-                print "unknown other type(%s) = %s" % (other,type(other));
+                print "coerce_2: unknown other type(%s) = %s" % (other,type(other));
+                print "coerce_2:          self type(%s) = %s" % (self,type(self));
                 o = self.elem.factory().parse( str(other) );
         #print "--4";
         return RingElem(o);
@@ -2445,24 +2479,24 @@ class RingElem:
         if self.isFactory():
             p = Power(self.elem).power( self.elem, n );
         else:
-            p = Power(self.elem.ring).power( self.elem, n );
+            p = Power(self.ring).power( self.elem, n );
         return RingElem( p ); 
 
     def __eq__(self,other):
         '''Test if two ring elements are equal.
         '''
-        o = other;
-        if isinstance(other,RingElem):
-            o = other.elem;
-        return self.elem.equals(o)
+        if other == None:
+            return False;
+        [s,o] = coercePair(self,other);
+        return s.elem.equals(o.elem)
 
     def __ne__(self,other):
         '''Test if two ring elements are not equal.
         '''
-        o = other;
-        if isinstance(other,RingElem):
-            o = other.elem;
-        return not self.elem.equals(o)
+        if other == None:
+            return False;
+        [s,o] = coercePair(self,other);
+        return not self.elem.equals(o.elem)
 
     def __float__(self):
         '''Convert to Python float.
@@ -2573,6 +2607,142 @@ class RingElem:
         #L = [ c.toScriptFactory() for c in a.coefficientIterator() ];
         L = [ RingElem(c) for c in a.coefficientIterator() ];
         return L
+
+#----------------
+# Compatibility methods for Sage/Singular:
+# Note: the meaning of lt and lm is swapped compared to JAS.
+#----------------
+
+    def parent(self):
+        '''Parent in Sage is factory in JAS.
+
+        Compatibility method for Sage/Singular.
+        '''
+        return self.factory();
+
+    def __call__(self,num):
+        '''Apply this to num.
+        '''
+        if num == 0:
+            return self.zero();
+        if num == 1:
+            return self.one();
+        return RingElem( self.ring.fromInteger(num) );
+
+    def lm(self):
+        '''Leading monomial of a polynomial.
+
+        Compatibility method for Sage/Singular.
+        Note: the meaning of lt and lm is swapped compared to JAS.
+        '''
+        ev = self.elem.leadingExpVector();
+        return ev;
+
+    def lc(self):
+        '''Leading coefficient of a polynomial.
+
+        Compatibility method for Sage/Singular.
+        '''
+        c = self.elem.leadingBaseCoefficient();
+        return RingElem(c);
+
+    def lt(self):
+        '''Leading term of a polynomial.
+
+        Compatibility method for Sage/Singular.
+        Note: the meaning of lt and lm is swapped compared to JAS.
+        '''
+        ev = self.elem.leadingMonomial();
+        return Monomial(ev);
+
+    def degree(self):
+        '''Degree of a polynomial.
+        '''
+        try:
+            ev = self.elem.degree();
+        except:
+            return None;
+        return ev;
+
+    def monomials(self):
+        '''All monomials of a polynomial.
+
+        Compatibility method for Sage/Singular.
+        '''
+        ev = self.elem.getMap().keySet();
+        return ev;
+
+    def divides(self,other):
+        '''Test if self divides other.
+
+        Compatibility method for Sage/Singular.
+        '''
+        [s,o] = coercePair(self,other);
+        return o.elem.remainder( s.elem ).isZERO(); 
+
+    def ideal(self,list):
+        '''Create an ideal.
+
+        Compatibility method for Sage/Singular.
+        '''
+        p = Ring(ring=self.ring);
+        return p.ideal(list=list);
+
+    def monomial_quotient(self,a,b,coeff=False):
+        '''Quotient of ExpVectors.
+
+        Compatibility method for Sage/Singular.
+        '''
+        if isinstance(a,RingElem):
+            a = a.elem;
+        if isinstance(b,RingElem):
+            b = b.elem;
+        if coeff == False:
+            if a.getClass().getSimpleName() == "GenPolynomial":
+                return RingElem( a.divide(b) );
+            else:
+                return RingElem( GenPolynomial(self.ring, a.subtract(b)) );
+        else:
+            # assume JAS Monomial
+            c = a.coefficient().divide(b.coefficient());
+            e = a.exponent().subtract(b.exponent())
+            return RingElem( GenPolynomial(self.ring, c, e) );
+
+    def monomial_divides(self,a,b):
+        '''Test divide of ExpVectors.
+
+        Compatibility method for Sage/Singular.
+        '''
+        #print "JAS a = " + str(a) + ", b = " + str(b);
+        if isinstance(a,RingElem):
+            a = a.elem;
+        if a.getClass().getSimpleName() == "GenPolynomial":
+            a = a.leadingExpVector();
+        if a.getClass().getSimpleName() != "ExpVectorLong":
+            raise ValueError, "No ExpVector given " + str(a) + ", " + str(b)
+        if b == None:
+            return False;
+        if isinstance(b,RingElem):
+            b = b.elem;
+        if b.getClass().getSimpleName() == "GenPolynomial":
+            b = b.leadingExpVector();
+        if b.getClass().getSimpleName() != "ExpVectorLong":
+            raise ValueError, "No ExpVector given " + str(a) + ", " + str(b)
+        return a.divides(b);
+
+    def reduce(self,F):
+        '''Compute a normal form of self with respect to F.
+
+        Compatibility method for Sage/Singular.
+        '''
+        s = self.elem;
+        Fe = [ e.elem for e in F ];
+        n = ReductionSeq().normalform(Fe,s);
+        return RingElem(n);
+
+#----------------
+# End of compatibility methods
+#----------------
 
 
 class PolyRing(Ring):
