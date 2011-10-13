@@ -402,7 +402,7 @@ class Ideal:
             else:
                 b = GroebnerBasePseudoRecSeq(cofac).isGB(F);
         t = System.currentTimeMillis() - t;
-        print "isGB executed in %s ms" % t; 
+        #print "isGB executed in %s ms" % t; 
         return b;
 
 
@@ -413,10 +413,7 @@ class Ideal:
         cofac = s.ring.coFac;
         F = s.list;
         t = System.currentTimeMillis();
-        if cofac.isField():
-            G = GroebnerBaseSeq().GB(F);
-        else:
-            G = EGroebnerBaseSeq().GB(F)
+        G = EGroebnerBaseSeq().GB(F)
         t = System.currentTimeMillis() - t;
         print "sequential e-GB executed in %s ms" % t; 
         return Ideal(self.ring,"",G);
@@ -429,10 +426,7 @@ class Ideal:
         cofac = s.ring.coFac;
         F = s.list;
         t = System.currentTimeMillis();
-        if cofac.isField():
-            b = GroebnerBaseSeq().isGB(F);
-        else:
-            b = EGroebnerBaseSeq().isGB(F)
+        b = EGroebnerBaseSeq().isGB(F)
         t = System.currentTimeMillis() - t;
         print "is e-GB test executed in %s ms" % t; 
         return b;
@@ -445,10 +439,7 @@ class Ideal:
         cofac = s.ring.coFac;
         F = s.list;
         t = System.currentTimeMillis();
-        if cofac.isField():
-            G = GroebnerBaseSeq().GB(F);
-        else:
-            G = DGroebnerBaseSeq().GB(F)
+        G = DGroebnerBaseSeq().GB(F)
         t = System.currentTimeMillis() - t;
         print "sequential d-GB executed in %s ms" % t; 
         return Ideal(self.ring,"",G);
@@ -461,10 +452,7 @@ class Ideal:
         cofac = s.ring.coFac;
         F = s.list;
         t = System.currentTimeMillis();
-        if cofac.isField():
-            b = GroebnerBaseSeq().isGB(F);
-        else:
-            b = DGroebnerBaseSeq().isGB(F)
+        b = DGroebnerBaseSeq().isGB(F)
         t = System.currentTimeMillis() - t;
         print "is d-GB test executed in %s ms" % t; 
         return b;
@@ -566,6 +554,7 @@ class Ideal:
         '''
         F = self.pset.list;
         N = ReductionSeq().irreducibleSet(F);
+        #N = GroebnerBaseSeq().minimalGB(F);
         return [ RingElem(n) for n in N ];
 
     def intersectRing(self,ring):

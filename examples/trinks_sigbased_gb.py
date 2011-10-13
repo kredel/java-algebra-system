@@ -14,8 +14,6 @@ from basic_sigbased_gb import coeff_free_sigbased_gb
 from basic_sigbased_gb import arris_algorithm, min_size_mons
 from basic_sigbased_gb import f5, f5z
 
-#print "Signature based GBs"
-
 from staggered_linear_basis import staglinbasis
 
 
@@ -111,3 +109,34 @@ if True:
         print "arri Output:" + str([ str(ggg) for ggg in gg]);
     print;
 
+## Output: for Z_32003 and Trinks 7
+## sequential GB executed in 44 ms
+## stag executed in 99 milliseconds
+## sbgb executed in 1180 milliseconds
+## f5   executed in 128 milliseconds
+## ggv  executed in 110 milliseconds
+## arri executed in 116 milliseconds
+
+## Output: for Z_32003 and Trinks 6
+## sequential GB executed in 302 ms
+## stag executed in 213 milliseconds
+## sbgb executed in 28849 milliseconds
+## f5   executed in 1248 milliseconds
+## ggv  executed in 237 milliseconds
+## arri executed in 410 milliseconds
+
+## Output: for Q and Trinks 7
+## sequential GB executed in 104 ms
+## stag executed in 223 milliseconds
+## sbgb executed in 1155 milliseconds
+## f5   executed in 226 milliseconds
+## ggv  executed in 98 milliseconds
+## arri executed in 111 milliseconds
+
+## Output: for Q and Trinks 6
+## sequential GB executed in 779 ms
+## stag executed in 196 milliseconds
+## sbgb executed in 740980 milliseconds
+## f5   executed in 1435 milliseconds
+## ggv  executed in 717 milliseconds
+## arri executed in 562 milliseconds
