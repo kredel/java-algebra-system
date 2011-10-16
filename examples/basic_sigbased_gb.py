@@ -17,7 +17,7 @@ class sigbased_gb:
     # incremental basis computation
     # F is a container of generators of an ideal
     F.sort(key=lambda x: -x.lm().degree()) # JAS
-    print "JAS F = " + str([ str(g) for g in F]); 
+    #print "JAS F = " + str([ str(g) for g in F]); 
     G = list()
     for f in F:
       G = self.incremental_basis(G,f)
@@ -124,7 +124,7 @@ class sigbased_gb:
     # to record a signature, we use only the leading monomial of a minimal representation
     # so that elements of F have "signature" 0 and g has "signature" 1
     G = [(R(0),F[i]) for i in xrange(len(F))] + [(R(1),g)]
-    print "JAS G = " + str([ str(gg[0])+","+str(gg[1]) for gg in G]); 
+    #print "JAS G = " + str([ str(gg[0])+","+str(gg[1]) for gg in G]); 
     # the structure of a pair can vary, except for its first entry,
     # which should be the signature
     P = set([self.new_pair(self.spoly_multipliers(g,f)[0],g,f,G) for f in F])
