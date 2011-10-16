@@ -60,6 +60,6 @@ public interface MonoidElem<C extends MonoidElem<C>>
      * Some implementing classes will throw NotInvertibleException if the element is not invertible.
      * @return x with this * x = 1, if it exists.
      */
-    public C inverse() /*throws NotInvertibleException*/;
+    public C inverse(); /*throws NotInvertibleException*/
 
 }
