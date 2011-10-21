@@ -25,7 +25,7 @@ import edu.jas.ufd.GreatestCommonDivisorAbstract;
 
 /**
  * Groebner Base with pseudo reduction sequential algorithm for integral
- * function coeffcients. Implements Groebner bases and GB test.
+ * function coeffcients. Implements polynomial fraction free coefficients Groebner bases.
  * @param <C> base coefficient type
  * @author Heinz Kredel
  */

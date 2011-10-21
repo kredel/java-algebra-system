@@ -23,8 +23,8 @@ import edu.jas.ufd.GreatestCommonDivisorAbstract;
 
 
 /**
- * Groebner Base with pseudo reduction sequential algorithm. Implements Groebner
- * bases and GB test.
+ * Groebner Base with pseudo reduction sequential algorithm. 
+ * Implements coefficient fraction free Groebner bases.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
