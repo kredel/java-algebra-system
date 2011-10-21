@@ -2,7 +2,7 @@
 JAS: Java Algebra System
 ------------------------
 
-Version 2.3, January 2011
+Version 2.4, September-October 2011
 
 by Heinz Kredel, University of Mannheim, kredel at rz.uni-mannheim.de
 
@@ -77,6 +77,21 @@ If you have a working ant, the last two steps can be replaced by
 > ant doc
 
 provided you have setup build.xml and the required libraries.
+
+
+Directory structure
+-------------------
+
+.          main dirrectory, with html documentation
++doc       javadocs, jython docs, jruby docs
++edu       Java class files
++examples  examples for jython, jruby and jas
++images    images for html docs
++jython    JSR 233 scripting interface
++meditor   JSR 233 scripting interface for meditor
++src       source code
++test      junit test output and log4j output
++trc       junit test sources
 
 
 $Id$
