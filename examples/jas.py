@@ -74,6 +74,50 @@ def noThreads():
     ComputerThreads.setNoThreads(); #NO_THREADS = #0; #1; #True;
     print "nt = ", ComputerThreads.NO_THREADS;
 
+def inject_variable(name, value):
+    """
+    inject a variable into the main global namespace
+
+    INPUT:
+     - ``name``  - a string
+     - ``value`` - anything 
+
+    Found in Sage.
+    AUTHORS:
+    - William Stein 
+    """
+    assert type(name) is str
+    import sys
+    depth = 0
+    while True:
+        G = sys._getframe(depth).f_globals
+        # orig: if G["__name__"] == "__main__" and G["__package__"] is None:
+        if G["__name__"] == "__main__":
+            try:
+                if G["__package__"] is None:
+                    break
+            except:
+                break
+        depth += 1
+    if name in G:
+        print "redefining global variable `%s`" % name;
+    G[name] = value
+
+
+def inject_generators(gens):
+    """
+    inject generators as variables into the main global namespace
+
+    INPUT:
+     - ``gens``  - generators
+    """
+    for v in gens:
+        #print "vars = " + str(v);
+        if str(v) == "1":
+            inject_variable("one",v)
+        else:
+            inject_variable(str(v),v)
+
 
 class Ring:
     '''Represents a JAS polynomial ring: GenPolynomialRing.
@@ -128,6 +172,12 @@ class Ring:
         L = self.ring.generators();
         N = [ RingElem(e) for e in L ];
         return N;
+
+    def inject_variables(self):
+        """
+        inject generators as variables into the main global namespace
+        """
+        inject_generators(self.gens());
 
     def one(self):
         '''Get the one of the polynomial ring.
@@ -1128,6 +1178,12 @@ class Module:
         N = [ RingElem(e) for e in L ]; # want use val here, but can not
         return N;
 
+    def inject_variables(self):
+        """
+        inject generators as variables into the main global namespace
+        """
+        inject_generators(self.gens());
+
 
 class SubModule:
     '''Represents a JAS sub-module over a polynomial ring.
@@ -1360,6 +1416,12 @@ class SeriesRing:
         N = [ RingElem(e) for e in L ];
         return N;
 
+    def inject_variables(self):
+        """
+        inject generators as variables into the main global namespace
+        """
+        inject_generators(self.gens());
+
     def one(self):
         '''Get the one of the power series ring.
         '''
@@ -1478,6 +1540,12 @@ class MultiSeriesRing:
         L = self.ring.generators();
         N = [ RingElem(e) for e in L ];
         return N;
+
+    def inject_variables(self):
+        """
+        inject generators as variables into the main global namespace
+        """
+        inject_generators(self.gens());
 
     def one(self):
         '''Get the one of the power series ring.
@@ -2527,6 +2595,12 @@ class RingElem:
         N = [ RingElem(e) for e in L ];
         #print "N = %s" % N;
         return N;
+
+    def inject_variables(self):
+        """
+        inject generators as variables into the main global namespace
+        """
+        inject_generators(self.gens());
 
     def monic(self):
         '''Monic polynomial.

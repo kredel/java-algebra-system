@@ -19,39 +19,33 @@ from jas import startLog
 
 Q = PolyRing(QQ(),"i",PolyRing.lex);
 print "Q     = " + str(Q);
-[e,a] = Q.gens();
-print "e     = " + str(e);
-print "a     = " + str(a);
-imag = a**2 + 1;
+Q.inject_variables();
+print "i     = " + str(i);
+imag = i**2 + 1;
 print "imag  = " + str(imag);
 Qi = AN(imag,field=True);
 print "Qi    = " + str(Qi.factory());
-[one,i] = Qi.gens();
-print "one   = " + str(one);
+Qi.inject_variables();
 print "i     = " + str(i);
 print;
 
 Wr = PolyRing(Qi,"w2",PolyRing.lex)
 print "Wr    = " + str(Wr);
-[e,a,b] = Wr.gens();
-print "e     = " + str(e);
-print "a     = " + str(a);
-print "b     = " + str(b);
-w2 = b**2 - 2;
+Wr.inject_variables();
+print "i     = " + str(i);
 print "w2    = " + str(w2);
-Qw2 = AN(w2,field=True);
+w2p = w2**2 - 2;
+print "w2p   = " + str(w2p);
+Qw2 = AN(w2p,field=True);
 print "Qw2   = " + str(Qw2.factory());
-[one,i,w2] = Qw2.gens();
-print "one   = " + str(one);
+Qw2.inject_variables();
 print "i     = " + str(i);
 print "w2    = " + str(w2);
 print;
 
 Qiw2 = PolyRing(Qw2,"x",PolyRing.lex)
 print "Qiw2  = " + str(Qiw2);
-
-[one,i,w2,x] = Qiw2.gens();
-print "one   = " + str(one);
+Qiw2.inject_variables();
 print "i     = " + str(i);
 print "w2    = " + str(w2);
 print "x     = " + str(x);
