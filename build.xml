@@ -197,11 +197,13 @@
 
 <target name="jdepend" depends="vorher" >
   <jdepend format="text" 
-      outputfile="test/jdepend-report-${DSTAMP}.out" >
+           outputfile="test/jdepend-report-${DSTAMP}.out" 
+       >
       <exclude name="java.*" />
       <exclude name="javax.*" />
       <exclude name="org.apache.*" />
       <exclude name="junit.*" />
+      <exclude name="*Test" /> <!-- not working -->
       <classespath>
         <pathelement location="${bin}"/>
       </classespath>

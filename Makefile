@@ -43,7 +43,7 @@ RSYNC=rsync -e ssh -avuz $(DRY) $(DELETE) --exclude=*~ --include=svn_change.log 
 ####--exclude=*/.jxta/
 PART=jas.j16
 VERSION=jas-2.4
-BRANCH=2.3
+#BRANCH=2.3
 SVNVERSION=`grep committed-rev .svn/entries |head -1|awk -F = '{ print $2 }'|sed 's/"//g'`
 
 all:
@@ -85,8 +85,12 @@ DOCOPTS=-package
 MYCLASSPATH = $(LOG4JPATH):.:$(JUNITPATH):$(JOMPPATH):$(PYPATH)
 #:$(TNJPATH)
 
-JAVA_MEM=-Xms1100M -Xmx1900M
-#JAVA_MEM=-Xms350M -Xmx800M
+#JAVA_MEM=-Xms1100M -Xmx1900M
+JAVA_MEM=-Xms350M -Xmx800M
+
+#SOPTS="-J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc -J-Xms1100M -J-Xmx1900M"
+SOPTS="-J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc -J-Xms350M -J-Xmx800M"
+
 
 JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d . -Xlint:unchecked
 #-Xlint:unchecked
@@ -125,49 +129,49 @@ all:
 edu/jas/%.class: src/edu/jas/%.java
 	$(JAVAC) $<
 
-edu/jas/arith/%.class: src/edu/jas/arith/%.java
+edu/jas/arith/%.class: src/edu/jas/arith/%.java  trc/edu/jas/arith/%.java
 	$(JAVAC) $<
 
-edu/jas/poly/%.class: src/edu/jas/poly/%.java
+edu/jas/poly/%.class: src/edu/jas/poly/%.java  trc/edu/jas/poly/%.java
 	$(JAVAC) $<
 
-edu/jas/ps/%.class: src/edu/jas/ps/%.java
+edu/jas/ps/%.class: src/edu/jas/ps/%.java  trc/edu/jas/ps/%.java
 	$(JAVAC) $<
 
-edu/jas/gb/%.class: src/edu/jas/gb/%.java
+edu/jas/gb/%.class: src/edu/jas/gb/%.java trc/edu/jas/gb/%.java
 	$(JAVAC) $<
 
-edu/jas/ufd/%.class: src/edu/jas/ufd/%.java
+edu/jas/ufd/%.class: src/edu/jas/ufd/%.java trc/edu/jas/ufd/%.java
 	$(JAVAC) $<
 
-edu/jas/vector/%.class: src/edu/jas/vector/%.java
+edu/jas/vector/%.class: src/edu/jas/vector/%.java  trc/edu/jas/vector/%.java
 	$(JAVAC) $<
 
-edu/jas/gbmod/%.class: src/edu/jas/gbmod/%.java
+edu/jas/gbmod/%.class: src/edu/jas/gbmod/%.java trc/edu/jas/gbmod/%.java
 	$(JAVAC) $<
 
-edu/jas/gbufd/%.class: src/edu/jas/gbufd/%.java
+edu/jas/gbufd/%.class: src/edu/jas/gbufd/%.java trc/edu/jas/gbufd/%.java
 	$(JAVAC) $<
 
-edu/jas/structure/%.class: src/edu/jas/structure/%.java
+edu/jas/structure/%.class: src/edu/jas/structure/%.java trc/edu/jas/structure/%.java
 	$(JAVAC) $<
 
-edu/jas/util/%.class: src/edu/jas/util/%.java
+edu/jas/util/%.class: src/edu/jas/util/%.java trc/edu/jas/util/%.java
 	$(JAVAC) $<
 
-edu/jas/application/%.class: src/edu/jas/application/%.java
+edu/jas/application/%.class: src/edu/jas/application/%.java trc/edu/jas/application/%.java
 	$(JAVAC) $<
 
-edu/jas/root/%.class: src/edu/jas/root/%.java
+edu/jas/root/%.class: src/edu/jas/root/%.java  trc/edu/jas/root/%.java
 	$(JAVAC) $<
 
-edu/jas/kern/%.class: src/edu/jas/kern/%.java
+edu/jas/kern/%.class: src/edu/jas/kern/%.java  trc/edu/jas/kern/%.java
 	$(JAVAC) $<
 
-edu/jas/integrate/%.class: src/edu/jas/integrate/%.java
+edu/jas/integrate/%.class: src/edu/jas/integrate/%.java trc/edu/jas/integrate/%.java
 	$(JAVAC) $<
 
-edu/mas/kern/%.class: src/edu/mas/kern/%.java
+edu/mas/kern/%.class: src/edu/mas/kern/%.java trc/edu/mas/kern/%.java
 	$(JAVAC) $<
 
 edu.jas.%: edu/jas/%.class
@@ -292,9 +296,6 @@ clean:
 	#rm -f application/application arith/arith kern/kern gbmod/gbmod poly/poly ps/ps gb/gb structure/structure ufd/ufd util/util vector/vector
 
 
-SOPTS="-J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc -J-Xms1100M -J-Xmx1900M"
-#SOPTS="-J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc -J-Xms350M -J-Xmx800M"
-
 tests:
 	ant test 2>&1 | tee t.out
 	ant exam 2>&1 | tee e.out
@@ -310,7 +311,7 @@ tests:
 	-grep Exception e.out | grep -v GCDProxy
 	-grep File tjy.out
 	-grep -i error tjr.out
-	-grep Exception tr.out || grep Usage tr.out
+	-grep Exception tr.out | grep Usage tr.out
 
 metrics:
 	ant jdepend
@@ -336,20 +337,21 @@ export:
 	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) `$(SVNREV)` download.html
 #	svn log -v -r HEAD:BASE src > ~/jas-versions/$(VERSION)/svn_change.log
 	svn log -v -r HEAD:$(SVNSRT) file:///$(SVNREPO)/jas/trunk src examples > ~/jas-versions/$(VERSION)/svn_change.log
-	cd ~/jas-versions/; jar -cf $(VERSION).`$(SVNREV)`-src.jar $(VERSION)/
+	cd ~/jas-versions/; jar -cfM $(VERSION).`$(SVNREV)`-src.zip $(VERSION)/
 	cd ~/jas-versions/$(VERSION)/; ant compile > ant_compile.out
 	cd ~/jas-versions/$(VERSION)/; jar -cfm ../$(VERSION).`$(SVNREV)`-bin.jar GBManifest.MF edu/ COPYING* log4j.properties
 	cd ~/jas-versions/$(VERSION)/; jar -uf ../$(VERSION).`$(SVNREV)`-bin.jar -C ~/jas-versions/$(VERSION)/examples jas.rb -C ~/jas-versions/$(VERSION)/examples jas.py
 	cd ~/jas-versions/$(VERSION)/; ant doc > ant_doc.out
 	cd ~/jas-versions/$(VERSION)/; epydoc -o doc/jython -n "Python to JAS" -u ../../index.html examples/jas.py > epydoc.out
 	cd ~/jas-versions/$(VERSION)/; jrdoc -o doc/jruby -U -S -N -t "Ruby to JAS" examples/jas.rb > rdoc.out 2>&1
-	cd ~/jas-versions/$(VERSION)/; jar -cf ../$(VERSION).`$(SVNREV)`-doc.jar doc/ *.html
+	cd ~/jas-versions/$(VERSION)/; jar -cfM ../$(VERSION).`$(SVNREV)`-doc.zip doc/ *.html
 	cd ~/jas-versions/$(VERSION)/; ant test > ant_test.out
 	cd ~/jas-versions/$(VERSION)/; sh ./jython_tests.sh >jython_tests.out 2>&1
 	cd ~/jas-versions/$(VERSION)/; sh ./jruby_tests.sh >jruby_tests.out 2>&1
 	cp ~/jas-versions/$(VERSION).`$(SVNREV)`-bin.jar $(LIBPATH)/jas.jar
 	cp ~/jas-versions/$(VERSION).`$(SVNREV)`-bin.jar ~/jas-versions/$(VERSION)/jas.jar
 	mv ~/jas-versions/$(VERSION).`$(SVNREV)`-*.jar ~/jas-versions/$(VERSION)/
+	mv ~/jas-versions/$(VERSION).`$(SVNREV)`-*.zip ~/jas-versions/$(VERSION)/
 	cd ~/jas-versions/$(VERSION)/meditor; jas_dosed $(VERSION) `$(SVNREV)` manifest.mf
 	cd ~/jas-versions/$(VERSION)/meditor; make > ~/jas-versions/$(VERSION)/make_meditor.out
 	cd ~/jas-versions/log4j_adapter; make > ~/jas-versions/$(VERSION)/make_mylog.out
@@ -381,13 +383,13 @@ subst:
 
 # lines of code and number of classes
 loc: young
-	find src -name "*.java" | wc -l
+	(find src -name "*.java"; find trc -name "*.java")| wc -l
 	find src -name "*.java" | grep -v Test | wc -l
-	find src -name "*.java" | grep    Test | wc -l 
-	find src -name "*.java" | xargs cat | wc
+	find trc -name "*.java" | grep    Test | wc -l 
+	(find src -name "*.java"; find trc -name "*.java") | xargs cat | wc
 	find src -name "*.java" | grep -v Test | xargs cat | wc
-	find src -name "*.java" | grep    Test | xargs cat | wc
-	find src -name "*.java" | grep    Test | xargs cat | grep "void test" | wc -l 
+	find trc -name "*.java" | grep    Test | xargs cat | wc
+	find trc -name "*.java" | grep    Test | xargs cat | grep "void test" | wc -l 
 	find ~/jas-versions/log4j_adapter -name "*.java" | wc -l 
 	find ~/jas-versions/log4j_adapter -name "*.java" | xargs cat | wc
 	find ~/jas-versions/jlinalg_adapter -name "*.java" | wc -l
