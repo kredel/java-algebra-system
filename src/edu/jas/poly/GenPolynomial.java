@@ -462,6 +462,26 @@ Iterable<Monomial<C>> {
 
 
     /**
+     * Is GenPolynomial&lt;C&gt; homogeneous.
+     * @return true, if this is homogeneous, else false.
+     */
+    public boolean isHomogeneous() {
+        if (val.size() <= 1) {
+	    return true;
+        }
+        long deg = -1;
+        for ( ExpVector e : val.keySet() ) {
+	    if (deg < 0) {
+		deg = e.totalDeg(); 
+            } else if (deg != e.totalDeg()) {
+                return false; 
+            }
+        }
+        return true;
+    }
+
+
+    /**
      * Comparison with any other object.
      * @see java.lang.Object#equals(java.lang.Object)
      */
@@ -681,6 +701,25 @@ Iterable<Monomial<C>> {
         long deg = 0;
         for (ExpVector e : val.keySet()) {
             long d = e.maxDeg();
+            if (d > deg) {
+                deg = d;
+            }
+        }
+        return deg;
+    }
+
+
+    /**
+     * Total degree.
+     * @return total degree in any variables.
+     */
+    public long totalDegree() {
+        if (val.size() == 0) {
+            return 0; // 0 or -1 ?;
+        }
+        long deg = 0;
+        for (ExpVector e : val.keySet()) {
+            long d = e.totalDeg();
             if (d > deg) {
                 deg = d;
             }
@@ -1597,6 +1636,58 @@ Iterable<Monomial<C>> {
         return Cp;
     }
 
+
+    /**
+     * Make homogeneous. 
+     * @param pfac extended polynomial ring factory (by 1 variable).
+     * @return homogeneous polynomial.
+     */
+    public GenPolynomial<C> homogeneous(GenPolynomialRing<C> pfac) {
+        if (ring.equals(pfac)) { // not implemented
+	    throw new UnsupportedOperationException("case with same ring not implemented");
+        }
+        GenPolynomial<C> Cp = pfac.getZERO().clone();
+        if (this.isZERO()) {
+            return Cp;
+        }
+        long deg = totalDegree();
+        int i = pfac.nvar - ring.nvar;
+        Map<ExpVector, C> C = Cp.val; //getMap();
+        Map<ExpVector, C> A = val;
+        for (Map.Entry<ExpVector, C> y : A.entrySet()) {
+            ExpVector e = y.getKey();
+            C a = y.getValue();
+            long d = deg - e.totalDeg();
+            ExpVector f = e.extend(1, 0, d);
+            C.put(f, a);
+        }
+        return Cp;
+    }
+
+
+    /**
+     * Dehomogenize. 
+     * @param pfac contracted polynomial ring factory (by 1 variable).
+     * @return in homogeneous polynomial.
+     */
+    public GenPolynomial<C> deHomogenize(GenPolynomialRing<C> pfac) {
+        if (ring.equals(pfac)) { // not implemented
+	    throw new UnsupportedOperationException("case with same ring not implemented");
+        }
+        GenPolynomial<C> Cp = pfac.getZERO().clone();
+        if (this.isZERO()) {
+            return Cp;
+        }
+        Map<ExpVector, C> C = Cp.val; //getMap();
+        Map<ExpVector, C> A = val;
+        for (Map.Entry<ExpVector, C> y : A.entrySet()) {
+            ExpVector e = y.getKey();
+            C a = y.getValue();
+            ExpVector f = e.contract(1,pfac.nvar);
+            C.put(f, a);
+        }
+        return Cp;
+    }
 
     /**
      * Reverse variables. Used e.g. in opposite rings.

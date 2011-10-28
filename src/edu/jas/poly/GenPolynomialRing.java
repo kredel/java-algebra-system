@@ -215,6 +215,18 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
 
 
     /**
+     * The constructor creates a polynomial factory object with the the same
+     * coefficient factory, number of variables and variable names as the given
+     * polynomial factory, only the term order differs.
+     * @param to term order.
+     * @param o other polynomial ring.
+     */
+    public GenPolynomialRing(GenPolynomialRing o, TermOrder to) {
+        this(o.coFac, o.nvar, to, o.getVars());
+    }
+
+
+    /**
      * Clone this factory.
      * @see java.lang.Object#clone()
      */

@@ -36,52 +36,49 @@ import edu.jas.structure.UnaryFunctor;
 
 public class GenPolynomialTest extends TestCase {
 
-/**
- * main
- */
-   public static void main (String[] args) {
-          BasicConfigurator.configure();
-          junit.textui.TestRunner.run( suite() );
-   }
+    /**
+     * main
+     */
+    public static void main (String[] args) {
+        BasicConfigurator.configure();
+        junit.textui.TestRunner.run( suite() );
+    }
 
-/**
- * Constructs a <CODE>GenPolynomialTest</CODE> object.
- * @param name String.
- */
-   public GenPolynomialTest(String name) {
-          super(name);
-   }
+    /**
+     * Constructs a <CODE>GenPolynomialTest</CODE> object.
+     * @param name String.
+     */
+    public GenPolynomialTest(String name) {
+        super(name);
+    }
 
-/**
- * suite.
- */ 
- public static Test suite() {
-     TestSuite suite= new TestSuite(GenPolynomialTest.class);
-     return suite;
-   }
+    /**
+     * suite.
+     */ 
+    public static Test suite() {
+        TestSuite suite= new TestSuite(GenPolynomialTest.class);
+        return suite;
+    }
 
-   //private final static int bitlen = 100;
-
-   int rl = 6; 
-   int kl = 10;
-   int ll = 7;
-   int el = 4;
-   float q = 0.5f;
-
-   protected void setUp() {
-       // a = b = c = d = e = null;
-   }
-
-   protected void tearDown() {
-       // a = b = c = d = e = null;
-   }
+    int rl = 6; 
+    int kl = 10;
+    int ll = 7;
+    int el = 4;
+    float q = 0.5f;
 
 
-/**
- * Test constructors and factory.
- * 
- */
- public void testConstructors() {
+    protected void setUp() {
+    }
+
+
+    protected void tearDown() {
+    }
+
+
+    /**
+     * Test constructors and factory.
+     */
+    public void testConstructors() {
         // rational numbers
         BigRational rf = new BigRational();
         // System.out.println("rf = " + rf);
@@ -93,7 +90,6 @@ public class GenPolynomialTest extends TestCase {
 
         RingElem<BigRational> re = new BigRational( 3 );
         // System.out.println("re = " + re);
-
 
         // polynomials over rational numbers
         GenPolynomialRing<BigRational> pf = new GenPolynomialRing<BigRational>(rf,2);
@@ -121,7 +117,6 @@ public class GenPolynomialTest extends TestCase {
         //System.out.println("p.isZERO() = " + p.isZERO());
         assertTrue("p.isZERO() = ", p.isZERO());
 
-
         // polynomials over (polynomials over rational numbers)
         GenPolynomialRing< GenPolynomial<BigRational> > ppf = new GenPolynomialRing< GenPolynomial<BigRational> >(pf,3);
         // System.out.println("ppf = " + ppf);
@@ -148,9 +143,9 @@ public class GenPolynomialTest extends TestCase {
         //System.out.println("pp.isZERO() = " + pp.isZERO());
         assertTrue("pp.isZERO() = ", pp.isZERO());
 
-
         // polynomials over (polynomials over (polynomials over rational numbers))
-        GenPolynomialRing< GenPolynomial< GenPolynomial<BigRational> > > pppf = new GenPolynomialRing< GenPolynomial< GenPolynomial<BigRational> > >(ppf,4);
+        GenPolynomialRing< GenPolynomial< GenPolynomial<BigRational> > > pppf 
+           = new GenPolynomialRing< GenPolynomial< GenPolynomial<BigRational> > >(ppf,4);
         // System.out.println("pppf = " + pppf);
 
         GenPolynomial< GenPolynomial< GenPolynomial<BigRational> > > ppp = pppf.getONE();
@@ -160,7 +155,8 @@ public class GenPolynomialTest extends TestCase {
         ppp = pppf.getZERO();
         // System.out.println("ppp = " + ppp);
 
-        RingElem< GenPolynomial< GenPolynomial< GenPolynomial<BigRational> > > > pppe = new GenPolynomial< GenPolynomial< GenPolynomial<BigRational> > >( pppf );
+        RingElem< GenPolynomial< GenPolynomial< GenPolynomial<BigRational> > > > pppe 
+            = new GenPolynomial< GenPolynomial< GenPolynomial<BigRational> > >( pppf );
         // System.out.println("pppe = " + pppe);
         // System.out.println("ppp.equals(pppe) = " + ppp.equals(pppe) );
         // System.out.println("ppp.equals(ppp) = " + ppp.equals(ppp) );
@@ -178,84 +174,80 @@ public class GenPolynomialTest extends TestCase {
         // some tests
         //GenPolynomial<BigRational> pfx = new GenPolynomial<BigRational>();
         //System.out.println("pfx = " + pfx);
-
     }
 
 
-/**
- * Test extension and contraction.
- * 
- */
- public void testExtendContract() {
-     // rational numbers
-     BigRational cf = new BigRational( 99 );
-     // System.out.println("cf = " + cf);
+    /**
+     * Test extension and contraction.
+     */
+    public void testExtendContract() {
+        // rational numbers
+        BigRational cf = new BigRational( 99 );
+        // System.out.println("cf = " + cf);
 
-     // polynomials over rational numbers
-     GenPolynomialRing<BigRational> pf = new GenPolynomialRing<BigRational>(cf,rl);
-     // System.out.println("pf = " + pf);
+        // polynomials over rational numbers
+        GenPolynomialRing<BigRational> pf = new GenPolynomialRing<BigRational>(cf,rl);
+        // System.out.println("pf = " + pf);
 
-     GenPolynomial<BigRational> a = pf.random(kl,ll,el,q);
-     //System.out.println("a = " + a);
+        GenPolynomial<BigRational> a = pf.random(kl,ll,el,q);
+        //System.out.println("a = " + a);
 
-     int k = rl;
-     GenPolynomialRing<BigRational> pfe = pf.extend(k);
-     GenPolynomialRing<BigRational> pfec = pfe.contract(k);
-     assertEquals("pf == pfec",pf,pfec);
+        int k = rl;
+        GenPolynomialRing<BigRational> pfe = pf.extend(k);
+        GenPolynomialRing<BigRational> pfec = pfe.contract(k);
+        assertEquals("pf == pfec",pf,pfec);
 
-     GenPolynomial<BigRational> ae = a.extend(pfe,0,0);
+        GenPolynomial<BigRational> ae = a.extend(pfe,0,0);
 
-     Map<ExpVector,GenPolynomial<BigRational>> m = ae.contract(pfec);
-     List<GenPolynomial<BigRational>> ml = new ArrayList<GenPolynomial<BigRational>>( m.values() );
-     GenPolynomial<BigRational> aec = ml.get(0);
-     assertEquals("a == aec",a,aec);
-     //System.out.println("ae = " + ae);
-     //System.out.println("aec = " + aec);
- }
-
-
-/**
- * Test reversion.
- * 
- */
- public void testReverse() {
-     // rational numbers
-     BigRational cf = new BigRational( 99 );
-     // System.out.println("cf = " + cf);
-
-     // polynomials over rational numbers
-     GenPolynomialRing<BigRational> pf = new GenPolynomialRing<BigRational>(cf,rl);
-     //System.out.println("pf = " + pf);
-
-     GenPolynomial<BigRational> a = pf.random(kl,ll,el,q);
-     //System.out.println("a = " + a);
-
-     int k = rl;
-     GenPolynomialRing<BigRational> pfr = pf.reverse();
-     GenPolynomialRing<BigRational> pfrr = pfr.reverse();
-     assertEquals("pf == pfrr",pf,pfrr);
-     //System.out.println("pfr = " + pfr);
-
-     GenPolynomial<BigRational> ar = a.reverse(pfr);
-     GenPolynomial<BigRational> arr = ar.reverse(pfrr);
-     assertEquals("a == arr",a,arr);
-     //System.out.println("ar = " + ar);
-     //System.out.println("arr = " + arr);
- }
+        Map<ExpVector,GenPolynomial<BigRational>> m = ae.contract(pfec);
+        List<GenPolynomial<BigRational>> ml = new ArrayList<GenPolynomial<BigRational>>( m.values() );
+        GenPolynomial<BigRational> aec = ml.get(0);
+        assertEquals("a == aec",a,aec);
+        //System.out.println("ae = " + ae);
+        //System.out.println("aec = " + aec);
+    }
 
 
-/**
- * Test accessors.
- * 
- */
- public void testAccessors() {
+    /**
+     * Test reversion.
+     */
+    public void testReverse() {
+        // rational numbers
+        BigRational cf = new BigRational( 99 );
+        // System.out.println("cf = " + cf);
+
+        // polynomials over rational numbers
+        GenPolynomialRing<BigRational> pf = new GenPolynomialRing<BigRational>(cf,rl);
+        //System.out.println("pf = " + pf);
+
+        GenPolynomial<BigRational> a = pf.random(kl,ll,el,q);
+        //System.out.println("a = " + a);
+
+        int k = rl;
+        GenPolynomialRing<BigRational> pfr = pf.reverse();
+        GenPolynomialRing<BigRational> pfrr = pfr.reverse();
+        assertEquals("pf == pfrr",pf,pfrr);
+        //System.out.println("pfr = " + pfr);
+
+        GenPolynomial<BigRational> ar = a.reverse(pfr);
+        GenPolynomial<BigRational> arr = ar.reverse(pfrr);
+        assertEquals("a == arr",a,arr);
+        //System.out.println("ar = " + ar);
+        //System.out.println("arr = " + arr);
+    }
+
+
+    /**
+     * Test accessors.
+     */
+    public void testAccessors() {
         // rational numbers
         BigRational rf = new BigRational();
         // System.out.println("rf = " + rf);
 
         // polynomials over rational numbers
         GenPolynomialRing<BigRational> pf 
-           = new GenPolynomialRing<BigRational>(rf,rl);
+            = new GenPolynomialRing<BigRational>(rf,rl);
         // System.out.println("pf = " + pf);
 
         // test 1
@@ -272,7 +264,6 @@ public class GenPolynomialTest extends TestCase {
         GenPolynomial<BigRational> r = p.reductum(); 
         assertTrue("red(1) == 0 ",r.isZERO()); 
 
-
         // test 0
         p = pf.getZERO();
         // System.out.println("p = " + p);
@@ -285,7 +276,6 @@ public class GenPolynomialTest extends TestCase {
         r = p.reductum(); 
         assertTrue("red(0) == 0 ",r.isZERO()); 
 
-
         // test random
         p = pf.random(kl,2*ll,el,q);
         // System.out.println("p = " + p);
@@ -297,35 +287,103 @@ public class GenPolynomialTest extends TestCase {
         f = r.sum(f);
         assertEquals("p == lm(f)+red(f) ",p,f); 
 
-
         // test iteration over random
         GenPolynomial<BigRational> g;
         g = p;
         f = pf.getZERO();
         while ( !g.isZERO() ) {
-              e = g.leadingExpVector();
-              c = g.leadingBaseCoefficient();
-              //System.out.println("c e = " + c + " " + e);
-              r = g.reductum(); 
-              f = f.sum(c,e);
-              g = r;
+            e = g.leadingExpVector();
+            c = g.leadingBaseCoefficient();
+            //System.out.println("c e = " + c + " " + e);
+            r = g.reductum(); 
+            f = f.sum(c,e);
+            g = r;
         }
         assertEquals("p == lm(f)+lm(red(f))+... ",p,f); 
- }
+    }
 
 
-/**
- * Test iterators.
- * 
- */
- public void testIterators() {
+    /**
+     * Test homogeneous.
+     */
+    public void testHomogeneous() {
+        // rational numbers
+        BigRational rf = new BigRational();
+        // System.out.println("rf = " + rf);
+
+        // polynomials over rational numbers
+        GenPolynomialRing<BigRational> pf 
+            = new GenPolynomialRing<BigRational>(rf, 2); //rl);
+        // System.out.println("pf = " + pf);
+
+        // test 1
+        GenPolynomial<BigRational> p = pf.getONE();
+        // System.out.println("p = " + p);
+        assertTrue("1 is homogeneous " + p, p.isHomogeneous()); 
+
+        // test 0
+        p = pf.getZERO();
+        // System.out.println("p = " + p);
+        assertTrue("0 is homogeneous " + p, p.isHomogeneous()); 
+
+        // test random
+        p = pf.random(kl,2*ll,el,q);
+        //p = pf.random(kl,ll,el,q);
+        //System.out.println("p = " + p);
+        assertFalse("rnd is homogeneous " + p, p.isHomogeneous()); 
+
+        // make homogeneous
+        GenPolynomialRing<BigRational> pfh = pf.extend(1);
+        //System.out.println("pfh = " + pfh);
+        // remove block order
+        TermOrder to = new TermOrder(TermOrder.IGRLEX);
+        pfh = new GenPolynomialRing<BigRational>(pfh,to);
+        //System.out.println("pfh = " + pfh);
+
+        GenPolynomial<BigRational> ph = p.homogeneous(pfh);
+        //System.out.println("ph = " + ph);
+        assertTrue("ph is homogeneous " + ph, ph.isHomogeneous()); 
+        GenPolynomial<BigRational> ps = ph.deHomogenize(pf);
+        //System.out.println("ps = " + ps);
+        //assertEquals("phs = p ",ps,p); 
+        //System.out.println("p is homogeneous = " + p.isHomogeneous());
+        //System.out.println("ph is homogeneous = " + ph.isHomogeneous());
+
+        GenPolynomial<BigRational> s = pf.random(kl,ll,el,q);
+        //System.out.println("s = " + s);
+        assertFalse("rnd is homogeneous " + s,s.isHomogeneous()); 
+
+        GenPolynomial<BigRational> sh = s.homogeneous(pfh);
+        //System.out.println("sh = " + sh);
+        assertTrue("sh is homogeneous " + sh, sh.isHomogeneous()); 
+        GenPolynomial<BigRational> ss = sh.deHomogenize(pf);
+        //System.out.println("ss = " + ss);
+        assertEquals("ss = s ",ss,s); 
+
+        GenPolynomial<BigRational> th = ph.multiply(sh);
+        //System.out.println("th = " + th);
+        assertTrue("th is homogeneous " + th, th.isHomogeneous()); 
+
+        GenPolynomial<BigRational> t = p.multiply(s);
+        //System.out.println("t = " + t);
+
+        GenPolynomial<BigRational> ts = th.deHomogenize(pf);
+        //System.out.println("ts = " + ts);
+        assertEquals("ts = t ",ts,t); 
+    }
+
+
+    /**
+     * Test iterators.
+     */
+    public void testIterators() {
         // integers
         BigInteger rf = new BigInteger();
         // System.out.println("rf = " + rf);
 
         // polynomials over integral numbers
         GenPolynomialRing<BigInteger> pf 
-           = new GenPolynomialRing<BigInteger>(rf,rl);
+            = new GenPolynomialRing<BigInteger>(rf,rl);
         // System.out.println("pf = " + pf);
 
         // random polynomial
@@ -354,21 +412,20 @@ public class GenPolynomialTest extends TestCase {
             //System.out.println("i = " + i);
             assertFalse("i == 0 ", i.isZERO()); 
         }
- }
+    }
 
 
-/**
- * Test coefficient map function.
- * 
- */
- public void testMap() {
+    /**
+     * Test coefficient map function.
+     */
+    public void testMap() {
         // integers
         BigInteger rf = new BigInteger();
         // System.out.println("rf = " + rf);
 
         // polynomials over integral numbers
         GenPolynomialRing<BigInteger> pf 
-           = new GenPolynomialRing<BigInteger>(rf,rl);
+            = new GenPolynomialRing<BigInteger>(rf,rl);
         // System.out.println("pf = " + pf);
 
         // random polynomial
@@ -387,7 +444,7 @@ public class GenPolynomialTest extends TestCase {
         // test times -1
         q = p.map( new Multiply<BigInteger>( rf.getONE().negate() ) );
         assertEquals("p == q ",p.negate(),q); 
- }
+    }
 
 }
 
@@ -395,11 +452,11 @@ public class GenPolynomialTest extends TestCase {
  * Internal scalar multiplication functor.
  */
 class Multiply<C extends RingElem<C>> implements UnaryFunctor<C,C> {
-        C x;
-        public Multiply(C x) {
-            this.x = x;
-        }
-        public C eval(C c) {
-            return c.multiply(x);
-        }
+    C x;
+    public Multiply(C x) {
+        this.x = x;
+    }
+    public C eval(C c) {
+        return c.multiply(x);
+    }
 }
