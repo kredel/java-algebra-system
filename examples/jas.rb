@@ -50,9 +50,9 @@ end
 Turn off automatic parallel threads usage.
 =end
 def noThreads()
-    print "nt = ", ComputerThreads.NO_THREADS;
+    puts "nt = ", ComputerThreads.NO_THREADS;
     ComputerThreads.setNoThreads(); #NO_THREADS = #0; #1; #true;
-    print "\nnt = ", ComputerThreads.NO_THREADS;
+    puts "\nnt = ", ComputerThreads.NO_THREADS;
     puts
 end
 
@@ -116,7 +116,7 @@ Create JAS BigRational as ring element.
 def QQ(d=0,n=1)
     if d.is_a? Rational 
         if n != 1
-            print "#{n} ignored\n";
+            puts "#{n} ignored\n";
         end
         if d.denominator != 1
             n = d.denominator;
@@ -252,7 +252,7 @@ def DD(d=0)
     if d.is_a? Float
         d = d.to_s;
     end
-    #print "d type(#{d}) = #{d.class}";
+    #puts "d type(#{d}) = #{d.class}";
     if d == 0
        r = BigDecimal.new();
     else
@@ -481,8 +481,8 @@ Coerce other to self
 Coerce type a to type b or type b to type a.
 =end
     def coercePair(a,b)
-        #print "a type(#{a}) = #{a.class}\n";
-        #print "b type(#{b}) = #{b.class}\n";
+        #puts "a type(#{a}) = #{a.class}\n";
+        #puts "b type(#{b}) = #{b.class}\n";
         begin
             if not a.isPolynomial() and b.isPolynomial()
                s = b.coerceElem(a);
@@ -495,8 +495,8 @@ Coerce type a to type b or type b to type a.
             s = a;
             o = a.coerceElem(b);
         end
-        #print "s type(#{s}) = #{s.class}\n";
-        #print "o type(#{o}) = #{o.class}\n";
+        #puts "s type(#{s}) = #{s.class}\n";
+        #puts "o type(#{o}) = #{o.class}\n";
         return [s,o];
     end
 
@@ -504,8 +504,8 @@ Coerce type a to type b or type b to type a.
 Coerce other to self
 =end
     def coerceElem(other)
-        #print "self  type(#{self}) = #{self.class}\n";
-        #print "other type(#{other}) = #{other.class}\n";
+        #puts "self  type(#{self}) = #{self.class}\n";
+        #puts "other type(#{other}) = #{other.class}\n";
         if @elem.getClass().getSimpleName() == "GenVector"
             if other.is_a? Array 
                 o = rbarray2arraylist(other,@elem.factory().coFac,rec=1);
@@ -527,13 +527,13 @@ Coerce other to self
             end
             return other;
         end
-        #print "--1";
+        #puts "--1";
         if other.is_a? Array
            # assume BigRational or BigComplex
            # assume self will be compatible with them. todo: check this
-           print "other type(#{other})_3 = #{other.class}\n";
+           puts "other type(#{other})_3 = #{other.class}\n";
            o = makeJasArith(other);
-           print "other type(#{o})_4 = #{o.class}\n";
+           puts "other type(#{o})_4 = #{o.class}\n";
            ##o = BigRational.new(other[0],other[1]);
            if isPolynomial()
                 o = @ring.parse( o.toString() ); # not toScript();
@@ -549,10 +549,10 @@ Coerce other to self
                 o = o.elem;
            elsif @elem.getClass().getSimpleName() == "Product"
                 o = RR(@ring, @elem.multiply(o) ); # valueOf
-                #print "o = #{o}";
+                #puts "o = #{o}";
                 o = o.elem;
            end
-           print "other type(#{o})_5 = #{o.class}\n";
+           puts "other type(#{o})_5 = #{o.class}\n";
            return RingElem.new(o);
         end
         # test if @elem is a factory itself
@@ -566,7 +566,7 @@ Coerce other to self
                 o = @elem.parse( other.to_s );
                 ##o = @elem.fromInteger( other.to_i );
             else
-                print "unknown other type(#{other})_1 = #{other.class}\n";
+                puts "unknown other type(#{other})_1 = #{other.class}\n";
                 o = @elem.parse( other.to_s );
             end
             return RingElem.new(o);
@@ -584,7 +584,7 @@ Coerce other to self
                     o = o.elem;
                 end
         else
-                print "unknown other type(#{other})_2 = #{other.class}\n";
+                puts "unknown other type(#{other})_2 = #{other.class}\n";
                 o = @elem.factory().parse( other.to_s );
         end
         return RingElem.new(o);
@@ -641,8 +641,8 @@ Hash value.
 Multiply two ring elements.
 =end
     def *(other)
-        #print "* self  type(#{self}) = #{self.class}\n";
-        #print "* other type(#{other}) = #{other.class}\n";
+        #puts "* self  type(#{self}) = #{self.class}\n";
+        #puts "* other type(#{other}) = #{other.class}\n";
         s,o = coercePair(self,other);
         return RingElem.new( s.elem.multiply( o.elem ) ); 
     end
@@ -651,8 +651,8 @@ Multiply two ring elements.
 Add two ring elements.
 =end
     def +(other)
-        #print "+ self  type(#{self}) = #{self.class}\n";
-        #print "+ other type(#{other}) = #{other.class}\n";
+        #puts "+ self  type(#{self}) = #{self.class}\n";
+        #puts "+ other type(#{other}) = #{other.class}\n";
         s,o = coercePair(self,other);
         return RingElem.new( s.elem.sum( o.elem ) ); 
     end
@@ -692,7 +692,7 @@ Can not be used as power.
 Power of this to other.
 =end
     def **(other)
-        #print "pow other type(#{other}) = #{other.class}";
+        #puts "pow other type(#{other}) = #{other.class}";
         if other.is_a? Integer
             n = other;
         else
@@ -744,9 +744,9 @@ Get the generators for the factory of this element.
 =end
     def gens()
         ll = @elem.factory().generators();
-        #print "L = #{ll}";
+        #puts "L = #{ll}";
         nn = ll.map {|e| RingElem.new(e) };
-        #print "N = #{nn}";
+        #puts "N = #{nn}";
         return nn;
     end
 
@@ -761,8 +761,8 @@ Monic polynomial.
 Evaluate at a for power series.
 =end
     def evaluate(a)
-        #print "self  type(#{@elem}) = #{@elen.class}";
-        #print "a     type(#{a}) = #{a.class}";
+        #puts "self  type(#{@elem}) = #{@elen.class}";
+        #puts "a     type(#{a}) = #{a.class}";
         x = nil;
         if a.is_a? RingElem
             x = a.elem;
@@ -786,8 +786,8 @@ Integrate a power series with constant a or as rational function.
 a is the integration constant, r is for partial integration in variable r.
 =end
     def integrate(a=0,r=nil)
-        #print "self  type(#{@elem}) = #{@elem.class}";
-        #print "a     type(#{a}) = #{a.class}";
+        #puts "self  type(#{@elem}) = #{@elem.class}";
+        #puts "a     type(#{a}) = #{a.class}";
         x = nil;
         if a.is_a? RingElem
             x = a.elem;
@@ -890,19 +890,19 @@ Ring constructor.
         @engine = GCDFactory.getProxy(@ring.coFac);
         begin
             @sqf = SquarefreeFactory.getImplementation(@ring.coFac);
-#            print "sqf: ", @sqf;
+#            puts "sqf: ", @sqf;
 #        rescue Rescueion => e
-#            print "error " + str(e)
+#            puts "error " + str(e)
         rescue
             #pass
         end
         begin
             @factor = FactorFactory.getImplementation(@ring.coFac);
-            #print "factor: ", @factor;
+            #puts "factor: ", @factor;
         rescue
             #pass
 #        rescue Rescueion => e
-#            print "error " + str(e)
+#            puts "error " + str(e)
         end
     end
 
@@ -965,7 +965,7 @@ Get a random polynomial.
 Create an element from a string.
 =end
     def element(polystr)
-        i = SimIdeal.new( "( " + polystr + " )");
+        i = SimIdeal.new( self, "( " + polystr + " )" );
         list = i.pset.list;
         if list.size > 0
             return RingElem.new( list[0] );
@@ -1040,7 +1040,7 @@ rational number and algebriac number coefficients.
             end
             return ll;
         rescue Exception => e
-            print "error " + str(e)
+            puts "error " + str(e)
             return nil
         end
     end
@@ -1064,7 +1064,7 @@ rational number coefficients.
 ##                 ll[ RingElem.new( a ) ] = i;
             return ll;
         rescue Exception => e
-            print "error in factorsAbsolute " + str(e)
+            puts "error in factorsAbsolute " + str(e)
             return nil
         end
     end
@@ -1095,7 +1095,7 @@ Compute real roots of univariate polynomial.
             rr = rr.map{ |e| RingElem.new(e) };
             return rr;
         rescue Exception => e
-            print "error " + str(e)
+            puts "error " + str(e)
             return nil
         end
     end
@@ -1142,7 +1142,7 @@ Compute complex roots of univariate polynomial.
             rr = rr.map{ |e| RingElem.new(e) };
             return rr;
         rescue Exception => e
-            print "error " + str(e)
+            puts "error " + str(e)
             return nil
         end
     end
@@ -1231,12 +1231,12 @@ order = term order.
         rescue
             #pass
 #        rescue Exception => e:
-#            print "error " + str(e) + "\n"
+#            puts "error " + str(e) + "\n"
         end
         begin
             @factor = FactorFactory.getImplementation(@ring.coFac);
 #        rescue Exception => e
-#            print "error " + str(e)
+#            puts "error " + str(e)
         rescue
             #pass 
         end
@@ -1270,8 +1270,8 @@ def AN(m,z=0,field=false,pr=nil)
         field = z;
         z = 0;
     end
-    #print "m.getClass() = " + str(m.getClass().getName());
-    #print "field = " + str(field);
+    #puts "m.getClass() = " + str(m.getClass().getName());
+    #puts "field = " + str(field);
     if m.getClass().getSimpleName() == "AlgebraicNumber"
         mf = AlgebraicNumberRing.new(m.factory().modul,m.factory().isField());
     else
@@ -1281,7 +1281,7 @@ def AN(m,z=0,field=false,pr=nil)
             mf = AlgebraicNumberRing.new(m);
         end
     end
-    #print "mf = " + mf.toString();
+    #puts "mf = " + mf.toString();
     if z == 0
         r = AlgebraicNumber.new(mf);
     else
@@ -1315,7 +1315,7 @@ def RealN(m,i,r=0)
         ir = BigRational.new(i[1]);
         i = Interval.new(il,ir);
     end
-    #print "m.getClass() = " + m.getClass().getName().to_s;
+    #puts "m.getClass() = " + m.getClass().getName().to_s;
     if m.getClass().getSimpleName() == "RealAlgebraicNumber"
         mf = RealAlgebraicRing.new(m.factory().algebraic.modul,i);
     else
@@ -1336,7 +1336,7 @@ Create JAS rational function Quotient as ring element.
 def RF(pr,d=0,n=1)
     if d.is_a? Array
         if n != 1
-            print "#{} ignored\n";
+            puts "#{} ignored\n";
         end
         if d.size > 1
             n = d[1];
@@ -1387,12 +1387,12 @@ def RC(ideal,r=0)
         raise ValueError, "No ideal given."
     end
     if ideal.is_a? SimIdeal
-        #print "ideal.pset = " + str(ideal.pset) + "\n";
+        #puts "ideal.pset = " + str(ideal.pset) + "\n";
         #ideal = Java::EduJasApplication::Ideal.new(ideal.ring,ideal.list);
         ideal = Ideal.new(ideal.pset);
         #ideal.doGB();
     end
-    #print "ideal.getList().get(0).ring.ideal = #{ideal.getList().get(0).ring.ideal}\n";
+    #puts "ideal.getList().get(0).ring.ideal = #{ideal.getList().get(0).ring.ideal}\n";
     if ideal.getList().get(0).ring.getClass().getSimpleName() == "ResidueRing"
         rc = ResidueRing.new( ideal.getList().get(0).ring.ideal );
     else
@@ -1421,7 +1421,7 @@ def LC(ideal,d=0,n=1)
         ideal = Ideal.new(ideal.pset);
         #ideal.doGB();
     end
-    #print "ideal.getList().get(0).ring.ideal = #{ideal.getList().get(0).ring.ideal}\n";
+    #puts "ideal.getList().get(0).ring.ideal = #{ideal.getList().get(0).ring.ideal}\n";
     if ideal.getList().get(0).ring.getClass().getSimpleName() == "LocalRing"
         lc = LocalRing.new( ideal.getList().get(0).ring.ideal );
     else
@@ -1429,7 +1429,7 @@ def LC(ideal,d=0,n=1)
     end
     if d.is_a? Array
         if n != 1
-            print "#{n} ignored\n";
+            puts "#{n} ignored\n";
         end
         if d.size > 1
             n = d[1];
@@ -1477,27 +1477,27 @@ def RR(flist,n=1,r=0)
         flist = flist.factory();
         ncop = n;
     end
-    #print "flist = " + str(flist);
-    #print "ncop  = " + str(ncop);
+    #puts "flist = " + str(flist);
+    #puts "ncop  = " + str(ncop);
     if ncop == 0
         pr = ProductRing.new(flist);
     else
         pr = ProductRing.new(flist,ncop);
     end
-    #print "r type(#{r}) = #{r.class}\n";
+    #puts "r type(#{r}) = #{r.class}\n";
     if r.is_a? RingElem
         r = r.elem;
     end
     begin
-        #print "r.class() = #{r.class}\n";
+        #puts "r.class() = #{r.class}\n";
         if r.getClass().getSimpleName() == "Product"
-            #print "r.val = #{r.val}\n";
+            #puts "r.val = #{r.val}\n";
             r = r.val;
         end
     rescue
         #pass;
     end
-    #print "r = " + r.to_s;
+    #puts "r = " + r.to_s;
     if r == 0
         r = Product.new(pr);
     else
@@ -1513,7 +1513,7 @@ Convert a Ruby array to a Java ArrayList.
 If list is a Ruby array, it is converted, else list is left unchanged.
 =end
 def rbarray2arraylist(list,fac=nil,rec=1)
-    #print "list type(#{list}) = #{list.class}\n";
+    #puts "list type(#{list}) = #{list.class}\n";
     if list.is_a? Array
        ll = ArrayList.new();
        for e in list
@@ -1539,14 +1539,14 @@ def rbarray2arraylist(list,fac=nil,rec=1)
                #pass;
            end
            if t and fac != nil
-               #print "e.p(#{e}) = #{e.class}\n";
+               #puts "e.p(#{e}) = #{e.class}\n";
                e = fac.parse( str(e) ); #or makeJasArith(e) ?
            end
            ll.add(e);
        end
        list = ll;
     end
-    #print "list type(#{list}) = #{list.class}\n";
+    #puts "list type(#{list}) = #{list.class}\n";
     return list
 end
 
@@ -1558,7 +1558,7 @@ If item is an ruby array then a BigComplex is constructed.
 If item is a ruby float then a BigDecimal is constructed. 
 =end
 def makeJasArith(item)
-    #print "item type(#{item}) = #{item.class}\n";
+    #puts "item type(#{item}) = #{item.class}\n";
     if item.is_a? Integer
         return BigInteger.new( item );
     end
@@ -1570,9 +1570,9 @@ def makeJasArith(item)
     end
     if item.is_a? Array
         if item.size > 2
-            print "len(item) > 2, remaining items ignored\n";
+            puts "len(item) > 2, remaining items ignored\n";
         end
-        print "item[0] type(#{item[0]}) = #{item[0].class}\n";
+        puts "item[0] type(#{item[0]}) = #{item[0].class}\n";
         if item.size > 1
             re = makeJasArith( item[0] );
             if not re.isField()
@@ -1592,7 +1592,7 @@ def makeJasArith(item)
         end
         return jasArith;
     end
-    print "unknown item type(#{item}) = #{item.class}\n";
+    puts "unknown item type(#{item}) = #{item.class}\n";
     return item;
 end
 
@@ -1711,7 +1711,7 @@ Compute a Groebner base.
             end
         end
         t = System.currentTimeMillis() - t;
-        print "sequential GB executed in #{t} ms\n"; 
+        puts "sequential GB executed in #{t} ms\n"; 
         return SimIdeal.new(@ring,"",gg);
     end
 
@@ -1739,7 +1739,7 @@ Test if this is a Groebner base.
             end
         end
         t = System.currentTimeMillis() - t;
-        print "isGB executed in #{t} ms\n"; 
+        puts "isGB executed in #{t} ms\n"; 
         return b;
     end
 
@@ -1758,7 +1758,7 @@ Compute an e-Groebner base.
             gg = EGroebnerBaseSeq.new().GB(ff)
         end
         t = System.currentTimeMillis() - t;
-        print "sequential e-GB executed in #{t} ms\n"; 
+        puts "sequential e-GB executed in #{t} ms\n"; 
         return SimIdeal.new(@ring,"",gg);
     end
 
@@ -1777,7 +1777,7 @@ Test if this is an e-Groebner base.
             b = EGroebnerBaseSeq.new().isGB(ff)
         end
         t = System.currentTimeMillis() - t;
-        print "is e-GB test executed in #{t} ms\n"; 
+        puts "is e-GB test executed in #{t} ms\n"; 
         return b;
     end
 
@@ -1796,7 +1796,7 @@ Compute an d-Groebner base.
             gg = DGroebnerBaseSeq.new().GB(ff)
         end
         t = System.currentTimeMillis() - t;
-        print "sequential d-GB executed in #{t} ms\n"; 
+        puts "sequential d-GB executed in #{t} ms\n"; 
         return SimIdeal.new(@ring,"",gg);
     end
 
@@ -1815,7 +1815,7 @@ Test if this is a d-Groebner base.
             b = DGroebnerBaseSeq.new().isGB(ff)
         end
         t = System.currentTimeMillis() - t;
-        print "is d-GB test executed in #{t} ms\n"; 
+        puts "is d-GB test executed in #{t} ms\n"; 
         return b;
     end
 
@@ -1831,7 +1831,7 @@ Compute in parallel a Groebner base.
         gg = bbpar.GB(ff);
         t = System.currentTimeMillis() - t;
         bbpar.terminate();
-        print "parallel-old #{th} executed in #{t} ms\n"; 
+        puts "parallel-old #{th} executed in #{t} ms\n"; 
         return SimIdeal.new(@ring,"",gg);
     end
 
@@ -1846,7 +1846,7 @@ Compute in parallel a Groebner base.
         gg = bbpar.GB(ff);
         t = System.currentTimeMillis() - t;
         bbpar.terminate();
-        print "parallel #{th} executed in #{t} ms\n"; 
+        puts "parallel #{th} executed in #{t} ms\n"; 
         return SimIdeal.new(@ring,"",gg);
     end
 
@@ -1865,7 +1865,7 @@ Compute on a distributed system a Groebner base.
         t1 = System.currentTimeMillis() - t1;
         gbd.terminate(false);
         t = System.currentTimeMillis() - t;
-        print "distributed #{th} executed in #{t1} ms (#{t-t1} ms start-up)\n"; 
+        puts "distributed #{th} executed in #{t1} ms (#{t-t1} ms start-up)\n"; 
         return SimIdeal.new(@ring,"",gg);
     end
 
@@ -1889,7 +1889,7 @@ Compute a normal form of this ideal with respect to reducer.
         t = System.currentTimeMillis();
         nn = ReductionSeq.new().normalform(gg,ff);
         t = System.currentTimeMillis() - t;
-        print "sequential NF executed in #{t} ms\n"; 
+        puts "sequential NF executed in #{t} ms\n"; 
         return SimIdeal.new(@ring,"",nn);
     end
 
@@ -1968,9 +1968,9 @@ Print decimal approximation of real roots of 0-dim ideal.
         dd = [];
         for ir in @roots
             for dr in ir.decimalApproximation()
-                print dr.to_s;
+                puts dr.to_s;
             end
-            print;
+            puts;
         end
     end
 
@@ -2021,7 +2021,7 @@ Convert rational coefficients to integer coefficients.
         p = @pset;
         l = p.list;
         r = p.ring;
-        ri = GenPolynomialRing.new( BigInteger(), r.nvar, r.tord, r.vars );
+        ri = GenPolynomialRing.new( BigInteger.new(), r.nvar, r.tord, r.vars );
         pi = PolyUtil.integerFromRationalCoefficients(ri,l);
         r = Ring.new("",ri);
         return SimIdeal.new(r,"",pi);
@@ -2109,17 +2109,17 @@ Optimize the term order on the variables of the quotient coefficients.
         q = r.coFac;
         c = q.ring;
         rc = GenPolynomialRing.new( c, r.nvar, r.tord, r.vars );
-        #print "rc = ", rc;        
+        #puts "rc = ", rc;        
         lp = PolyUfdUtil.integralFromQuotientCoefficients(rc,l);
-        #print "lp = ", lp;
+        #puts "lp = ", lp;
         pp = PolynomialList.new(rc,lp);
-        #print "pp = ", pp;        
+        #puts "pp = ", pp;        
         oq = TermOrderOptimization.optimizeTermOrderOnCoefficients(pp);
         oor = oq.ring;
         qo = oor.coFac;
         cq = QuotientRing.new( qo );
         rq = GenPolynomialRing.new( cq, r.nvar, r.tord, r.vars );
-        #print "rq = ", rq;        
+        #puts "rq = ", rq;        
         o = PolyUfdUtil.quotientFromIntegralCoefficients(rq,oq.list);
         r = Ring.new("",rq);
         return ParamIdeal.new(r,"",o);
@@ -2135,9 +2135,9 @@ Convert rational function coefficients to integral function coefficients.
         q = r.coFac;
         c = q.ring;
         rc = GenPolynomialRing.new( c, r.nvar, r.tord, r.vars );
-        #print "rc = ", rc;        
+        #puts "rc = ", rc;        
         lp = PolyUfdUtil.integralFromQuotientCoefficients(rc,l);
-        #print "lp = ", lp;
+        #puts "lp = ", lp;
         r = Ring.new("",rc);
         return ParamIdeal.new(r,"",lp);
     end
@@ -2150,11 +2150,11 @@ Convert integral function coefficients to modular function coefficients.
         l = p.list;
         r = p.ring;
         c = r.coFac;
-        #print "c = ", c;
+        #puts "c = ", c;
         cm = GenPolynomialRing.new( mf, c.nvar, c.tord, c.vars );
-        #print "cm = ", cm;
+        #puts "cm = ", cm;
         rm = GenPolynomialRing.new( cm, r.nvar, r.tord, r.vars );
-        #print "rm = ", rm;
+        #puts "rm = ", rm;
         pm = PolyUfdUtil.fromIntegerCoefficients(rm,l);
         r = Ring.new("",rm);
         return ParamIdeal.new(r,"",pm);
@@ -2168,11 +2168,11 @@ Convert integral function coefficients to rational function coefficients.
         l = p.list;
         r = p.ring;
         c = r.coFac;
-        #print "c = ", c;
+        #puts "c = ", c;
         q = QuotientRing.new(c);
-        #print "q = ", q;
+        #puts "q = ", q;
         qm = GenPolynomialRing.new( q, r.nvar, r.tord, r.vars );
-        #print "qm = ", qm;
+        #puts "qm = ", qm;
         pm = PolyUfdUtil.quotientFromIntegralCoefficients(qm,l);
         r = Ring.new("",qm);
         return ParamIdeal.new(r,"",pm);
@@ -2207,7 +2207,7 @@ Compute a comprehensive Groebner base.
         end
         gg = @gbsys.getCGB();
         t = System.currentTimeMillis() - t;
-        print "sequential comprehensive executed in #{t} ms\n"; 
+        puts "sequential comprehensive executed in #{t} ms\n"; 
         return ParamIdeal.new(@ring,"",gg,@gbsys);
     end
 
@@ -2220,7 +2220,7 @@ Compute a comprehensive Groebner system.
         t = System.currentTimeMillis();
         ss = ComprehensiveGroebnerBaseSeq.new(@ring.ring.coFac).GBsys(ff);
         t = System.currentTimeMillis() - t;
-        print "sequential comprehensive system executed in #{t} ms\n"; 
+        puts "sequential comprehensive system executed in #{t} ms\n"; 
         return ParamIdeal.new(@ring,nil,ff,ss);
     end
 
@@ -2233,7 +2233,7 @@ Test if this is a comprehensive Groebner base.
         t = System.currentTimeMillis();
         b = ComprehensiveGroebnerBaseSeq.new(@ring.ring.coFac).isGB(ff);
         t = System.currentTimeMillis() - t;
-        print "isCGB executed in #{t} ms\n"; 
+        puts "isCGB executed in #{t} ms\n"; 
         return b;
     end
 
@@ -2246,7 +2246,7 @@ Test if this is a comprehensive Groebner system.
         t = System.currentTimeMillis();
         b = ComprehensiveGroebnerBaseSeq.new(@ring.ring.coFac).isGBsys(ss);
         t = System.currentTimeMillis() - t;
-        print "isCGBsystem executed in #{t} ms\n"; 
+        puts "isCGBsystem executed in #{t} ms\n"; 
         return b;
     end
 
@@ -2285,7 +2285,7 @@ Compute a Groebner base over a regular ring.
         t = System.currentTimeMillis();
         gg = RGroebnerBasePseudoSeq.new(@ring.ring.coFac).GB(ff);
         t = System.currentTimeMillis() - t;
-        print "sequential regular GB executed in #{t} ms\n"; 
+        puts "sequential regular GB executed in #{t} ms\n"; 
         return ParamIdeal.new(@ring,nil,gg);
     end
 
@@ -2298,7 +2298,7 @@ Test if this is Groebner base over a regular ring.
         t = System.currentTimeMillis();
         b = RGroebnerBasePseudoSeq.new(@ring.ring.coFac).isGB(ff);
         t = System.currentTimeMillis() - t;
-        print "isRegularGB executed in #{t} ms\n"; 
+        puts "isRegularGB executed in #{t} ms\n"; 
         return b;
     end
 
@@ -2339,7 +2339,7 @@ Solvable polynomial ring constructor.
            @ring = ring;
         end
         if not @ring.isAssociative()
-           print "warning: ring is not associative";
+           puts "warning: ring is not associative";
         end
     end
 
@@ -2426,7 +2426,7 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
         end
         ring = GenSolvablePolynomialRing.new(cf,nv,to,names);
         if rel != nil
-            #print "rel = " + str(rel);
+            #puts "rel = " + str(rel);
             table = ring.table;
             ll = [];
             for x in rel
@@ -2435,7 +2435,7 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
                 end
                 ll << x;
             end
-            #print "rel = " + str(L);
+            #puts "rel = " + str(L);
 	    (0..ll.size-1).step(3) { |i|
                 table.update( ll[i], ll[i+1], ll[i+2] );
 	    }
@@ -2490,7 +2490,7 @@ Compute a left Groebner base.
         t = System.currentTimeMillis();
         gg = SolvableGroebnerBaseSeq.new().leftGB(ff);
         t = System.currentTimeMillis() - t;
-        print "executed leftGB in #{t} ms\n"; 
+        puts "executed leftGB in #{t} ms\n"; 
         return SolvableIdeal.new(@ring,"",gg);
     end
 
@@ -2503,7 +2503,7 @@ Test if this is a left Groebner base.
         t = System.currentTimeMillis();
         b = SolvableGroebnerBaseSeq.new().isLeftGB(ff);
         t = System.currentTimeMillis() - t;
-        print "isLeftGB executed in #{t} ms\n"; 
+        puts "isLeftGB executed in #{t} ms\n"; 
         return b;
     end
 
@@ -2516,7 +2516,7 @@ Compute a two-sided Groebner base.
         t = System.currentTimeMillis();
         gg = SolvableGroebnerBaseSeq.new().twosidedGB(ff);
         t = System.currentTimeMillis() - t;
-        print "executed twosidedGB in #{t} ms\n"; 
+        puts "executed twosidedGB in #{t} ms\n"; 
         return SolvableIdeal.new(@ring,"",gg);
     end
 
@@ -2529,7 +2529,7 @@ Test if this is a two-sided Groebner base.
         t = System.currentTimeMillis();
         b = SolvableGroebnerBaseSeq.new().isTwosidedGB(ff);
         t = System.currentTimeMillis() - t;
-        print "isTwosidedGB executed in #{t} ms\n"; 
+        puts "isTwosidedGB executed in #{t} ms\n"; 
         return b;
     end
 
@@ -2542,7 +2542,7 @@ Compute a right Groebner base.
         t = System.currentTimeMillis();
         gg = SolvableGroebnerBaseSeq.new().rightGB(ff);
         t = System.currentTimeMillis() - t;
-        print "executed rightGB in #{t} ms\n"; 
+        puts "executed rightGB in #{t} ms\n"; 
         return SolvableIdeal.new(@ring,"",gg);
     end
 
@@ -2555,7 +2555,7 @@ Test if this is a right Groebner base.
         t = System.currentTimeMillis();
         b = SolvableGroebnerBaseSeq.new().isRightGB(ff);
         t = System.currentTimeMillis() - t;
-        print "isRightGB executed in #{t} ms\n"; 
+        puts "isRightGB executed in #{t} ms\n"; 
         return b;
     end
 
@@ -2589,7 +2589,7 @@ Compute a left Groebner base in parallel.
         gg = bbpar.leftGB(ff);
         t = System.currentTimeMillis() - t;
         bbpar.terminate();
-        print "parallel #{th} leftGB executed in #{t} ms\n"; 
+        puts "parallel #{th} leftGB executed in #{t} ms\n"; 
         return SolvableIdeal.new(@ring,"",gg);
     end
 
@@ -2604,7 +2604,7 @@ Compute a two-sided Groebner base in parallel.
         gg = bbpar.twosidedGB(ff);
         t = System.currentTimeMillis() - t;
         bbpar.terminate();
-        print "parallel #{th} twosidedGB executed in #{t} ms\n"; 
+        puts "parallel #{th} twosidedGB executed in #{t} ms\n"; 
         return SolvableIdeal.new(@ring,"",gg);
     end
 
@@ -2706,9 +2706,9 @@ Constructor for a sub-module.
                 @list = list;
             end
         end
-        #print "list = ", str(list);
+        #puts "list = ", str(list);
         #e = @list[0];
-        #print "e = ", e;
+        #puts "e = ", e;
         @mset = OrderedModuleList.new(modu.ring,@list);
         @cols = @mset.cols;
         @rows = @mset.rows;
@@ -2729,7 +2729,7 @@ Compute a Groebner base.
         t = System.currentTimeMillis();
         gg = ModGroebnerBaseAbstract.new().GB(@mset);
         t = System.currentTimeMillis() - t;
-        print "executed module GB in #{t} ms\n"; 
+        puts "executed module GB in #{t} ms\n"; 
         return SubModule.new(@modu,"",gg.list);
     end
 
@@ -2740,7 +2740,7 @@ Test if this is a Groebner base.
         t = System.currentTimeMillis();
         b = ModGroebnerBaseAbstract.new().isGB(@mset);
         t = System.currentTimeMillis() - t;
-        print "module isGB executed in #{t} ms\n"; 
+        puts "module isGB executed in #{t} ms\n"; 
         return b;
     end
 
@@ -2749,12 +2749,12 @@ Test if this is a Groebner base.
 ## =end
 ##     def isSyzygy(g):
 ##         l = @list;
-##         print "l = #{l}"; 
-##         print "g = #{g}"; 
+##         puts "l = #{l}"; 
+##         puts "g = #{g}"; 
 ##         t = System.currentTimeMillis();
 ##         z = SyzygyAbstract().isZeroRelation( l, g.list );
 ##         t = System.currentTimeMillis() - t;
-##         print "executed isSyzygy in #{t} ms\n"; 
+##         puts "executed isSyzygy in #{t} ms\n"; 
 ##         return z;
 ##     end
 
@@ -2858,7 +2858,7 @@ Compute a left Groebner base.
         t = System.currentTimeMillis();
         gg = ModSolvableGroebnerBaseAbstract.new().leftGB(@mset);
         t = System.currentTimeMillis() - t;
-        print "executed left module GB in #{t} ms\n"; 
+        puts "executed left module GB in #{t} ms\n"; 
         return SolvableSubModule.new(@modu,"",gg.list);
     end
 
@@ -2869,7 +2869,7 @@ Test if this is a left Groebner base.
         t = System.currentTimeMillis();
         b = ModSolvableGroebnerBaseAbstract.new().isLeftGB(@mset);
         t = System.currentTimeMillis() - t;
-        print "module isLeftGB executed in #{t} ms\n"; 
+        puts "module isLeftGB executed in #{t} ms\n"; 
         return b;
     end
 
@@ -2880,7 +2880,7 @@ Compute a two-sided Groebner base.
         t = System.currentTimeMillis();
         gg = ModSolvableGroebnerBaseAbstract.new().twosidedGB(@mset);
         t = System.currentTimeMillis() - t;
-        print "executed in #{t} ms\n"; 
+        puts "executed in #{t} ms\n"; 
         return SolvableSubModule.new(@modu,"",gg.list);
     end
 
@@ -2891,7 +2891,7 @@ Test if this is a two-sided Groebner base.
         t = System.currentTimeMillis();
         b = ModSolvableGroebnerBaseAbstract.new().isTwosidedGB(@mset);
         t = System.currentTimeMillis() - t;
-        print "module isTwosidedGB executed in #{t} ms\n"; 
+        puts "module isTwosidedGB executed in #{t} ms\n"; 
         return b;
     end
 
@@ -2902,7 +2902,7 @@ Compute a right Groebner base.
         t = System.currentTimeMillis();
         gg = ModSolvableGroebnerBaseAbstract.new().rightGB(@mset);
         t = System.currentTimeMillis() - t;
-        print "executed module rightGB in #{t} ms\n"; 
+        puts "executed module rightGB in #{t} ms\n"; 
         return SolvableSubModule.new(@modu,"",gg.list);
     end
 
@@ -2913,7 +2913,7 @@ Test if this is a right Groebner base.
         t = System.currentTimeMillis();
         b = ModSolvableGroebnerBaseAbstract.new().isRightGB(@mset);
         t = System.currentTimeMillis() - t;
-        print "module isRightGB executed in #{t} ms\n"; 
+        puts "module isRightGB executed in #{t} ms\n"; 
         return b;
     end
 
@@ -3249,14 +3249,14 @@ jfunc(int i) must return a value of type ring.coFac.
 clazz must implement the Coefficients abstract class.
 =end
     def create(ifunc=nil,jfunc=nil,clazz=nil)
-        #print "ifunc"
+        #puts "ifunc"
         if clazz == nil
             cf = Mcoeff.new(@ring,ifunc,jfunc);
             ps = MultiVarPowerSeries.new( @ring, cf );
         else
             ps = MultiVarPowerSeries.new( @ring, clazz );
         end
-        #print "ps ", ps.toScript();
+        #puts "ps ", ps.toScript();
         return RingElem.new( ps );
     end
 
@@ -3314,13 +3314,13 @@ PSIdeal constructor.
             ring = ring.ring;
         end
         @ring = ring;
-        #print "ring = ", ring.toScript();
+        #puts "ring = ", ring.toScript();
         if ideal != nil
            polylist = ideal.pset.list;
         end
         if list == nil
             @polylist = rbarray2arraylist( polylist.map { |a| a.elem } );
-            #print "polylist = ", @polylist;
+            #puts "polylist = ", @polylist;
             @list = @ring.fromPolynomial(@polylist);
         else
             @polylist = nil;
@@ -3343,14 +3343,14 @@ Compute a standard base.
         if trunc != nil
             pr.setTruncate(trunc);
         end
-        #print "pr = ", pr.toScript();
+        #puts "pr = ", pr.toScript();
         ff = @list;
-        #print "ff = ", ff;
+        #puts "ff = ", ff;
         tm = StandardBaseSeq.new();
         t = System.currentTimeMillis();
         ss = tm.STD(ff);
         t = System.currentTimeMillis() - t;
-        print "sequential standard base executed in #{t} ms\n";
+        puts "sequential standard base executed in #{t} ms\n";
         #Sp = [ RingElem.new(a.asPolynomial()) for a in S ];
         sp = ss.map { |a| RingElem.new(a) };
         #return sp;
@@ -3363,17 +3363,17 @@ end
 class Coeff < Coefficients
   def initialize(cof,&f)
       super() # this is important in jruby 1.5.6!
-      #print "cof type(#{cof}) = #{cof.class}\n";
+      #puts "cof type(#{cof}) = #{cof.class}\n";
       @coFac = cof;
-      #print "f type(#{f}) = #{f.class}\n";
+      #puts "f type(#{f}) = #{f.class}\n";
       @func = f
   end
   def generate(i)
-      #print "f_3  type(#{@func}) = #{@func.class}\n";
-      #print "f_3  type(#{i}) = #{i.class}\n";
+      #puts "f_3  type(#{@func}) = #{@func.class}\n";
+      #puts "f_3  type(#{i}) = #{i.class}\n";
       #return @coFac.getZERO()
       c = @func.call(i)
-      #print "f_3  type(#{c}) = #{c.class}\n";
+      #puts "f_3  type(#{c}) = #{c.class}\n";
       if c.is_a? RingElem
           c = c.elem
       end
@@ -3401,8 +3401,8 @@ def PS(cofac,name,truncate=nil,&f) #=nil,truncate=nil)
     else
         ps = UnivPowerSeriesRing.new(cf,truncate,name);
     end
-    #print "ps type(#{ps}) = #{ps.class}\n";
-    #print "f  type(#{f}) = #{f.class}\n";
+    #puts "ps type(#{ps}) = #{ps.class}\n";
+    #puts "f  type(#{f}) = #{f.class}\n";
     if f == nil
         r = ps.getZERO();
     else
@@ -3425,7 +3425,7 @@ class MCoeff < MultiVarCoefficients
       if a.is_a? RingElem
          a = a.elem;
       end
-      #print "f_5  type(#{a}) = #{a.class}\n";
+      #puts "f_5  type(#{a}) = #{a.class}\n";
       return a;
   end
 end
@@ -3458,7 +3458,7 @@ def MPS(cofac,names,truncate=nil,&f)
         r = ps.getZERO();
     else
         r = MultiVarPowerSeries.new(ps,MCoeff.new(ps,&f));
-        #print "r = " + str(r);
+        #puts "r = " + str(r);
     end
     return RingElem.new(r);
 
@@ -3514,7 +3514,7 @@ def Mat(cofac,n,m,v=nil)
     if v.is_a? RingElem
         v = v.elem;
     end
-    #print "cf type(#{cf}) = #{cf.class}";
+    #puts "cf type(#{cf}) = #{cf.class}";
     if v.is_a? Array
         v = rbarray2arraylist(v,cf,rec=2);
     end
