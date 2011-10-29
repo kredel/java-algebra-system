@@ -152,7 +152,7 @@ public class PolynomialListTest extends TestCase {
         p = new PolynomialList<BigRational>(fac,l);
         //System.out.println("p = "+p);
 
-        PolynomialList<BigRational> h = p.homogeneous();
+        PolynomialList<BigRational> h = p.homogenize();
         //System.out.println("h = "+h);
         assertTrue("h is homogen", h.isHomogeneous() );
 

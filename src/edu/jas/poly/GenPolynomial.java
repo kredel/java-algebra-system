@@ -1642,7 +1642,7 @@ Iterable<Monomial<C>> {
      * @param pfac extended polynomial ring factory (by 1 variable).
      * @return homogeneous polynomial.
      */
-    public GenPolynomial<C> homogeneous(GenPolynomialRing<C> pfac) {
+    public GenPolynomial<C> homogenize(GenPolynomialRing<C> pfac) {
         if (ring.equals(pfac)) { // not implemented
 	    throw new UnsupportedOperationException("case with same ring not implemented");
         }

@@ -340,7 +340,7 @@ public class GenPolynomialTest extends TestCase {
         pfh = new GenPolynomialRing<BigRational>(pfh,to);
         //System.out.println("pfh = " + pfh);
 
-        GenPolynomial<BigRational> ph = p.homogeneous(pfh);
+        GenPolynomial<BigRational> ph = p.homogenize(pfh);
         //System.out.println("ph = " + ph);
         assertTrue("ph is homogeneous " + ph, ph.isHomogeneous()); 
         GenPolynomial<BigRational> ps = ph.deHomogenize(pf);
@@ -353,7 +353,7 @@ public class GenPolynomialTest extends TestCase {
         //System.out.println("s = " + s);
         assertFalse("rnd is homogeneous " + s,s.isHomogeneous()); 
 
-        GenPolynomial<BigRational> sh = s.homogeneous(pfh);
+        GenPolynomial<BigRational> sh = s.homogenize(pfh);
         //System.out.println("sh = " + sh);
         assertTrue("sh is homogeneous " + sh, sh.isHomogeneous()); 
         GenPolynomial<BigRational> ss = sh.deHomogenize(pf);

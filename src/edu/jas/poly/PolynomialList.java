@@ -437,11 +437,11 @@ public class PolynomialList<C extends RingElem<C> >
      * Make homogeneous. 
      * @return polynomial list of homogeneous polynomials.
      */
-    public PolynomialList<C> homogeneous() {
+    public PolynomialList<C> homogenize() {
         GenPolynomialRing<C> pfac = ring.extend(1);
         List<GenPolynomial<C>> hom = new ArrayList<GenPolynomial<C>>(list.size());
         for (GenPolynomial<C> p : list) {
-            GenPolynomial<C> h = p.homogeneous(pfac);
+            GenPolynomial<C> h = p.homogenize(pfac);
             hom.add(h);
         }
         return new PolynomialList<C>(pfac,hom);
