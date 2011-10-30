@@ -164,7 +164,7 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>> extends SquarefreeAbs
                 sfactors.put(z, k);
             }
         }
-        return sfactors;
+        return normalizeFactorization(sfactors);
     }
 
 
@@ -372,7 +372,7 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>> extends SquarefreeAbs
             GenPolynomial<C> D = PolyUtil.<C> distribute(pfac, Dr);
             sfactors.put(D, i);
         }
-        return sfactors;
+        return normalizeFactorization(sfactors);
     }
 
 

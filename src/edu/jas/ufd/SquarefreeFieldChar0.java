@@ -200,7 +200,7 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
         //             //System.out.println("gcda sqf f1e = " + f1);
         //             sfactors.put(f1,e1);
         //         }
-        return sfactors;
+        return normalizeFactorization(sfactors);
     }
 
 
@@ -468,11 +468,11 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
         }
         GenPolynomialRing<C> pfac = P.ring;
         if (pfac.nvar <= 1) {
-            return baseSquarefreeFactors(P);
+            return normalizeFactorization(baseSquarefreeFactors(P));
         }
         SortedMap<GenPolynomial<C>, Long> sfactors = new TreeMap<GenPolynomial<C>, Long>();
         if (P.isZERO()) {
-            return sfactors;
+            return normalizeFactorization(sfactors);
         }
         GenPolynomialRing<C> cfac = pfac.contract(1);
         GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(cfac, 1);
@@ -489,7 +489,7 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
         if ( logger.isInfoEnabled() ) {
             logger.info("squarefreeFactors(" + P + ") = " + sfactors);
         }
-        return sfactors;
+        return normalizeFactorization(sfactors);
     }
 
 

@@ -268,7 +268,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             //System.out.println("irred u = " + u);
             factors.add(P);
         }
-        return factors;
+        return normalizeFactorization(factors);
     }
 
 
