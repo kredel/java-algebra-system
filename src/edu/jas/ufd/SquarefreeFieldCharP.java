@@ -411,6 +411,9 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
             }
         }
         logger.info("exit char root: T0 = " + T0 + ", T = " + T);
+        if (sfactors.size() == 0) {
+            sfactors.put(pfac.getONE(), 1L);
+        }
         return sfactors;
     }
 
