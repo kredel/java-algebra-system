@@ -1235,6 +1235,7 @@ order = term order.
         tring = GenPolynomialRing.new(cf,nv,to,names);
         #want: super(Ring,self).initialize(ring=tring)
         @ring = tring;
+        variable_generators()
         @engine = GCDFactory.getProxy(@ring.coFac);
         begin
             @sqf = SquarefreeFactory.getImplementation(@ring.coFac);
@@ -1261,6 +1262,25 @@ Create a string representation.
 
     class << self  # means add to class
        attr_reader :lex, :grad
+    end
+
+=begin rdoc
+Define instance variables for generators.
+=end
+    def variable_generators() 
+       PolyRing.class_eval( "attr_accessor :generators;" )
+       @generators = {};
+       for i in self.gens()
+          #puts "#{i} = " + i.to_s + ", class = " + i.class.to_s;
+          if i.to_s == "1" 
+             @generators[ "one" ] = i;
+             self.instance_eval( "def one; @generators[ 'one' ]; end" )
+          else
+             @generators[ "#{i}" ] = i;
+             self.instance_eval( "def #{i}; @generators[ '#{i}' ]; end" )
+          end
+       end
+    puts "defined generators: " + @generators.keys().join(", ");  
     end
 
 end
