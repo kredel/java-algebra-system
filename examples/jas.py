@@ -197,10 +197,17 @@ class Ring:
             r = r.monic();
         return RingElem( r );
 
-    def element(self,polystr):
-        '''Create an element from a string.
+    def element(self,poly):
+        '''Create an element from a string or object.
         '''
-        I = Ideal(self, "( " + polystr + " )");
+        if not isinstance(poly,str):
+            try:
+                if self.ring == poly.ring:
+                    return RingElem(poly);
+            except Exception, e:
+                pass
+            poly = str(poly);
+        I = Ideal(self, "( " + poly + " )");
         list = I.pset.list;
         if len(list) > 0:
             return RingElem( list[0] );
@@ -211,12 +218,12 @@ class Ring:
         if isinstance(a,RingElem):
             a = a.elem;
         else:
-            a = self.element( str(a) );
+            a = self.element( a );
             a = a.elem;
         if isinstance(b,RingElem):
             b = b.elem;
         else:
-            b = self.element( str(b) );
+            b = self.element( b );
             b = b.elem;
         return RingElem( self.engine.gcd(a,b) );
 
@@ -226,7 +233,7 @@ class Ring:
         if isinstance(a,RingElem):
             a = a.elem;
         else:
-            a = self.element( str(a) );
+            a = self.element( a );
             a = a.elem;
         cf = self.ring.coFac;
         if cf.getClass().getSimpleName() == "GenPolynomialRing":
@@ -246,7 +253,7 @@ class Ring:
         if isinstance(a,RingElem):
             a = a.elem;
         else:
-            a = self.element( str(a) );
+            a = self.element( a );
             a = a.elem;
         try:
             cf = self.ring.coFac;
@@ -270,7 +277,7 @@ class Ring:
         if isinstance(a,RingElem):
             a = a.elem;
         else:
-            a = self.element( str(a) );
+            a = self.element( a );
             a = a.elem;
         try:
             L = self.factor.factorsAbsolute( a );
@@ -289,7 +296,7 @@ class Ring:
         if isinstance(a,RingElem):
             a = a.elem;
         else:
-            a = self.element( str(a) );
+            a = self.element( a );
             a = a.elem;
         if isinstance(eps,RingElem):
             eps = eps.elem;
@@ -312,7 +319,7 @@ class Ring:
         if isinstance(a,RingElem):
             a = a.elem;
         else:
-            a = self.element( str(a) );
+            a = self.element( a );
             a = a.elem;
         if isinstance(eps,RingElem):
             eps = eps.elem;
@@ -352,7 +359,7 @@ class Ring:
         if isinstance(a,RingElem):
             a = a.elem;
         else:
-            a = self.element( str(a) );
+            a = self.element( a );
             a = a.elem;
         cf = self.ring;
         try:
@@ -988,10 +995,17 @@ class SolvableRing(Ring):
         '''
         return RingElem( self.ring.getZERO() );
 
-    def element(self,polystr):
-        '''Create an element from a string.
+    def element(self,poly):
+        '''Create an element from a string or object.
         '''
-        I = SolvableIdeal(self, "( " + polystr + " )");
+        if not isinstance(poly,str):
+            try:
+                if self.ring == poly.ring:
+                    return RingElem(poly);
+            except Exception, e:
+                pass
+            poly = str(poly);
+        I = SolvableIdeal(self, "( " + poly + " )");
         list = I.pset.list;
         if len(list) > 0:
             return RingElem( list[0] );
@@ -1160,10 +1174,17 @@ class Module:
         '''
         return SubModule(self,modstr,list);
 
-    def element(self,modstr):
-        '''Create an element from a string.
+    def element(self,poly):
+        '''Create an element from a string or object.
         '''
-        I = SubModule(self, "( " + modstr + " )");
+        if not isinstance(poly,str):
+            try:
+                if self.ring == poly.ring:
+                    return RingElem(poly);
+            except Exception, e:
+                pass
+            poly = str(poly);
+        I = SubModule(self, "( " + poly + " )");
         list = I.mset.list;
         if len(list) > 0:
             return RingElem( list[0] );
@@ -1285,10 +1306,17 @@ class SolvableModule(Module):
         '''
         return SolvableSubModule(self,modstr,list);
 
-    def element(self,modstr):
-        '''Create an element from a string.
+    def element(self,poly):
+        '''Create an element from a string or object.
         '''
-        I = SolvableSubModule(self, "( " + modstr + " )");
+        if not isinstance(poly,str):
+            try:
+                if self.ring == poly.ring:
+                    return RingElem(poly);
+            except Exception, e:
+                pass
+            poly = str(poly);
+        I = SolvableSubModule(self, "( " + poly + " )");
         list = I.mset.list;
         if len(list) > 0:
             return RingElem( list[0] );

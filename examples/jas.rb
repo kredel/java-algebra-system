@@ -962,13 +962,23 @@ Get a random polynomial.
     end
 
 =begin rdoc
-Create an element from a string.
+Create an element from a string or an object.
 =end
-    def element(polystr)
-        i = SimIdeal.new( self, "( " + polystr + " )" );
+    def element(poly)
+        if not poly.is_a? String 
+           begin
+              if @ring == poly.ring 
+                 return RingElem.new(poly);
+              end
+           rescue Exception => e
+              # pass
+           end
+           poly = str(poly);
+        end
+        i = SimIdeal.new( self, "( " + poly + " )" );
         list = i.pset.list;
         if list.size > 0
-            return RingElem.new( list[0] );
+           return RingElem.new( list[0] );
         end
     end
 
@@ -979,13 +989,13 @@ Compute the greatest common divisor of a and b.
         if a.is_a? RingElem
             a = a.elem;
         else
-            a = element( str(a) );
+            a = element( a );
             a = a.elem;
         end
         if b.is_a? RingElem
             b = b.elem;
         else
-            b = element( str(b) );
+            b = element( b );
             b = b.elem;
         end
         return RingElem.new( @engine.gcd(a,b) );
@@ -998,7 +1008,7 @@ Compute squarefree factors of polynomial.
         if a.is_a? RingElem
             a = a.elem;
         else
-            a = element( str(a) );
+            a = element( a );
             a = a.elem;
         end
         cf = @ring.coFac;
@@ -1023,7 +1033,7 @@ rational number and algebriac number coefficients.
         if a.is_a? RingElem
             a = a.elem;
         else
-            a = element( str(a) );
+            a = element( a );
             a = a.elem;
         end
         begin
@@ -1053,7 +1063,7 @@ rational number coefficients.
         if a.is_a? RingElem
             a = a.elem;
         else
-            a = element( str(a) );
+            a = element( a );
             a = a.elem;
         end
         begin
@@ -1076,7 +1086,7 @@ Compute real roots of univariate polynomial.
         if a.is_a? RingElem
             a = a.elem;
         else
-            a = element( str(a) );
+            a = element( a );
             a = a.elem;
         end
         if eps.is_a? RingElem
@@ -1107,7 +1117,7 @@ Compute complex roots of univariate polynomial.
         if a.is_a? RingElem
             a = a.elem;
         else
-            a = element( str(a) );
+            a = element( a );
             a = a.elem;
         end
         if eps.is_a? RingElem
@@ -1154,7 +1164,7 @@ Integrate (univariate) rational function.
         if a.is_a? RingElem
             a = a.elem;
         else
-            a = element( str(a) );
+            a = element( a );
             a = a.elem;
         end
         cf = @ring;
@@ -2372,10 +2382,20 @@ Get the zero of the solvable polynomial ring.
     end
 
 =begin rdoc
-Create an element from a string.
+Create an element from a string or object.
 =end
-    def element(polystr)
-        ii = SolvableIdeal.new(self, "( " + polystr + " )");
+    def element(poly)
+        if not poly.is_a? String 
+           begin
+              if @ring == poly.ring 
+                 return RingElem.new(poly);
+              end
+           rescue Exception => e
+              # pass
+           end
+           poly = str(poly);
+        end
+        ii = SolvableIdeal.new(self, "( " + poly + " )");
         list = ii.pset.list;
         if list.size > 0
             return RingElem.new( list[0] );
@@ -2656,8 +2676,18 @@ Create a sub-module.
 =begin rdoc
 Create an element from a string.
 =end
-    def element(modstr)
-        ii = SubModule.new( "( " + modstr + " )");
+    def element(mods)
+        if not mods.is_a? String 
+           begin
+              if @ring == mods.ring 
+                 return RingElem.new(mods);
+              end
+           rescue Exception => e
+              # pass
+           end
+           mods = str(mods);
+        end
+        ii = SubModule.new( "( " + mods + " )");
         list = ii.mset.list;
         if list.size > 0
             return RingElem.new( list[0] );
@@ -2804,8 +2834,18 @@ Create a solvable sub-module.
 =begin rdoc
 Create an element from a string.
 =end
-    def element(modstr)
-        ii = SolvableSubModule.new( "( " + modstr + " )");
+    def element(mods)
+        if not mods.is_a? String 
+           begin
+              if @ring == mods.ring 
+                 return RingElem.new(mods);
+              end
+           rescue Exception => e
+              # pass
+           end
+           mods = str(mods);
+        end
+        ii = SolvableSubModule.new( "( " + mods + " )");
         list = ii.mset.list;
         if list.size > 0
             return RingElem.new( list[0] );

@@ -68,17 +68,15 @@ rg = f.isGB();
 puts "is GB output: " + str(rg);
 puts;
 
-
 ri = f.toInteger();
 puts "integer Output: " + str(ri);
 puts;
-
 
 rip = ri.list.get(0);
 puts "integer polynomial: " + str(rip);
 puts;
 
-#startLog();
+startLog();
 
 rfi = rz.squarefreeFactors(rip);
 #rfi = rz.factors(rip);
@@ -89,5 +87,5 @@ rfi.each{ |h,i| puts "h**i = " + str(h) + "**" + str(i) };
 #puts "g = ", g;
 puts;
 
-startLog();
+#startLog();
 terminate();

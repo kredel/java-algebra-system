@@ -85,17 +85,16 @@ rip = ri.list.get(0);
 print "integer polynomial:", rip;
 print;
 
+#startLog();
 
 rfi = rz.squarefreeFactors(rip);
 print "squarefree Output:", str(rfi);
 print;
 
 for h, i in rfi.iteritems():
-    print "h**i = (", h, ")**" + str(i);
+    print "h**i = ", h, "**" + str(i);
 #print "g = ", g;
 print;
 
-
+startLog();
 terminate();
-
-#sys.exit();
