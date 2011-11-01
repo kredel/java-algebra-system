@@ -1271,13 +1271,19 @@ Define instance variables for generators.
        PolyRing.class_eval( "attr_accessor :generators;" )
        @generators = {};
        for i in self.gens()
-          #puts "#{i} = " + i.to_s + ", class = " + i.class.to_s;
-          if i.to_s == "1" 
-             @generators[ "one" ] = i;
-             self.instance_eval( "def one; @generators[ 'one' ]; end" )
-          else
-             @generators[ "#{i}" ] = i;
-             self.instance_eval( "def #{i}; @generators[ '#{i}' ]; end" )
+          begin 
+             if not i.to_s.include?(",") and not i.to_s.include?("(")
+                if i.to_s == "1" 
+                   @generators[ "one" ] = i;
+                   self.instance_eval( "def one; @generators[ 'one' ]; end" )
+                else
+                   @generators[ "#{i}" ] = i;
+                   self.instance_eval( "def #{i}; @generators[ '#{i}' ]; end" )
+                end
+             end
+          rescue 
+             puts "#{i} = " + i.to_s + ", class = " + i.class.to_s;
+             #pass
           end
        end
     puts "defined generators: " + @generators.keys().join(", ");  
@@ -2498,6 +2504,8 @@ Represents a JAS solvable polynomial ideal.
 Methods for left, right two-sided Groebner basees and others.
 =end
 class SolvableIdeal
+
+    attr_reader :pset, :ring, :list
 
 =begin rdoc
 Constructor for an ideal in a solvable polynomial ring.
