@@ -50,7 +50,8 @@
 </target>
 
 <target name="usage" >
-  <echo message="ant &lt;name&gt; -Drun=class"  />
+  <echo message="ant &lt;target&gt;"  />
+  <echo message="ant run -Dclass=&lt;class&gt;"  />
   <echo message="basedir = ${basedir}"  />
   <echo message="libs = ${libs}"  />
   <!--echoproperties /-->
@@ -89,6 +90,19 @@
          classpath="${cp}" 
          source="1.5" 
          target="1.5" 
+         includeantruntime="false"
+  >
+     <src path="${src}" />
+     <src path="${testsrc}" />
+  </javac>
+</target>
+
+<target name="recomp6" depends="distclean" >
+  <javac destdir="${build}"
+         debug="on" debuglevel="lines,source"
+         classpath="${cp}" 
+         source="1.6" 
+         target="1.6" 
          includeantruntime="false"
   >
      <src path="${src}" />
