@@ -23,9 +23,10 @@ import edu.jas.structure.RingFactory;
 
 
 /**
- * Immutable arbitrary-precision rational numbers. BigRational class based on
- * BigInteger implementing the RingElem interface and with the familiar SAC
- * static method names. BigInteger is from java.math in the implementation.
+ * Immutable arbitrary-precision rational numbers. BigRational class
+ * based on BigInteger and implementing the RingElem
+ * interface. BigInteger is from java.math in the implementation.
+ * The SAC2 static methods are also provided.
  * @author Heinz Kredel
  */
 
@@ -45,12 +46,12 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
     protected final BigInteger den;
 
 
-    /* from history: */
+    /* from history: 
     private final static BigInteger IZERO = BigInteger.ZERO;
 
 
     private final static BigInteger IONE = BigInteger.ONE;
-
+    */
 
     /**
      * The Constant 0.
@@ -85,7 +86,7 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
      */
     public BigRational(BigInteger n) {
         num = n;
-        den = IONE; // be aware of static initialization order
+        den = BigInteger.ONE; // be aware of static initialization order
         //den = BigInteger.ONE;
     }
 
@@ -96,6 +97,20 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
      */
     public BigRational(edu.jas.arith.BigInteger n) {
         this(n.getVal());
+    }
+
+
+    /**
+     * Constructor for a BigRational from jas.arith.BigIntegers.
+     * @param n edu.jas.arith.BigInteger.
+     * @param d edu.jas.arith.BigInteger.
+     */
+    public BigRational(edu.jas.arith.BigInteger n, edu.jas.arith.BigInteger d) {
+        BigInteger nu = n.getVal();
+        BigInteger de = d.getVal();
+        BigRational r = RNRED(nu, de);
+        num = r.num;
+        den = r.den;
     }
 
 
@@ -119,7 +134,7 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
      */
     public BigRational(long n) {
         num = BigInteger.valueOf(n);
-        den = IONE;
+        den = BigInteger.ONE;
     }
 
 
@@ -127,8 +142,8 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
      * Constructor for a BigRational with no arguments.
      */
     public BigRational() {
-        num = IZERO;
-        den = IONE;
+        num = BigInteger.ZERO;
+        den = BigInteger.ONE;
     }
 
 
@@ -139,13 +154,13 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
      */
     public BigRational(String s) throws NumberFormatException {
         if (s == null) {
-            num = IZERO;
-            den = IONE;
+            num = BigInteger.ZERO;
+            den = BigInteger.ONE;
             return;
         }
         if (s.length() == 0) {
-            num = IZERO;
-            den = IONE;
+            num = BigInteger.ZERO;
+            den = BigInteger.ONE;
             return;
         }
         BigInteger n;
@@ -313,7 +328,7 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
             s.append(num.toString());
             return s.toString();
         }
-        switch (Scripting.getLang() ) {
+        switch (Scripting.getLang()) {
         case Python:
             s.append("(");
             s.append(num.toString());
@@ -393,7 +408,7 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
      * @return characteristic of this ring.
      */
     public java.math.BigInteger characteristic() {
-        return java.math.BigInteger.ZERO;
+        return BigInteger.ZERO;
     }
 
 
@@ -403,6 +418,16 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
      * @return BigRational from a.
      */
     public BigRational fromInteger(BigInteger a) {
+        return new BigRational(a);
+    }
+
+
+    /**
+     * Get a BigRational element from a arith.BigInteger.
+     * @param a arith.BigInteger.
+     * @return BigRational from a.
+     */
+    public BigRational fromInteger(edu.jas.arith.BigInteger a) {
         return new BigRational(a);
     }
 
@@ -500,9 +525,9 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
     public static BigRational RNRED(BigInteger n, BigInteger d) {
         BigInteger num;
         BigInteger den;
-        if (n.equals(IZERO)) {
+        if (n.equals(BigInteger.ZERO)) {
             num = n;
-            den = IONE;
+            den = BigInteger.ONE;
             return new BigRational(num, den);
         }
         BigInteger C = n.gcd(d);
@@ -767,12 +792,12 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
         R2 = den; //this.denominator();
         S1 = S.num;
         S2 = S.den;
-        if (R2.equals(IONE) && S2.equals(IONE)) {
+        if (R2.equals(BigInteger.ONE) && S2.equals(BigInteger.ONE)) {
             T1 = R1.multiply(S1);
-            T = new BigRational(T1, IONE);
+            T = new BigRational(T1, BigInteger.ONE);
             return T;
         }
-        if (R2.equals(IONE)) {
+        if (R2.equals(BigInteger.ONE)) {
             D1 = R1.gcd(S2);
             RB1 = R1.divide(D1);
             SB2 = S2.divide(D1);
@@ -780,7 +805,7 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
             T = new BigRational(T1, SB2);
             return T;
         }
-        if (S2.equals(IONE)) {
+        if (S2.equals(BigInteger.ONE)) {
             D2 = S1.gcd(R2);
             SB1 = S1.divide(D2);
             RB2 = R2.divide(D2);
@@ -880,7 +905,7 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
             A = A.negate();
         }
         B = new BigInteger(n, rnd); // always positive
-        B = B.add(IONE);
+        B = B.add(BigInteger.ONE);
         return RNRED(A, B);
     }
 
@@ -950,18 +975,18 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
         R2 = den; //this.denominator();
         S1 = S.num;
         S2 = S.den;
-        if (R2.equals(IONE) && S2.equals(IONE)) {
+        if (R2.equals(BigInteger.ONE) && S2.equals(BigInteger.ONE)) {
             T1 = R1.add(S1);
-            T = new BigRational(T1, IONE);
+            T = new BigRational(T1, BigInteger.ONE);
             return T;
         }
-        if (R2.equals(IONE)) {
+        if (R2.equals(BigInteger.ONE)) {
             T1 = R1.multiply(S2);
             T1 = T1.add(S1);
             T = new BigRational(T1, S2);
             return T;
         }
-        if (S2.equals(IONE)) {
+        if (S2.equals(BigInteger.ONE)) {
             T1 = R2.multiply(S1);
             T1 = T1.add(R1);
             T = new BigRational(T1, R2);
@@ -973,13 +998,13 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
         J1Y = R1.multiply(SB2);
         J2Y = RB2.multiply(S1);
         T1 = J1Y.add(J2Y);
-        if (T1.equals(IZERO)) {
+        if (T1.equals(BigInteger.ZERO)) {
             T = ZERO;
             return T;
         }
-        if (!D.equals(IONE)) {
+        if (!D.equals(BigInteger.ONE)) {
             E = T1.gcd(D);
-            if (!E.equals(IONE)) {
+            if (!E.equals(BigInteger.ONE)) {
                 T1 = T1.divide(E);
                 R2 = R2.divide(E);
             }
@@ -1105,7 +1130,7 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
 
 
     /**
-     * Get a BigInteger iterator.
+     * Get a BigRational iterator.
      * @return a iterator over all rationals.
      */
     public Iterator<BigRational> iterator() {
@@ -1117,7 +1142,7 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
 
 
     /**
-     * Get a BigInteger iterator with no duplicates.
+     * Get a BigRational iterator with no duplicates.
      * @return a iterator over all rationals without duplicates.
      */
     public Iterator<BigRational> uniqueIterator() {
@@ -1266,7 +1291,7 @@ class BigRationalIterator implements Iterator<BigRational> {
 
 
 /**
- * Big rational unique iterator. Uses Cantors diagonal enumeration, produces all
+ * Big rational unique iterator. Uses Cantors diagonal enumeration, produces 
  * distinct elements.
  * @author Heinz Kredel
  */

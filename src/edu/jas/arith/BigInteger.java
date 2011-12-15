@@ -18,8 +18,9 @@ import edu.jas.structure.RingFactory;
 
 /**
  * BigInteger class to make java.math.BigInteger available with RingElem 
- * interface and with the familiar SAC static method names.
+ * respectively the GcdRingElem interface.
  * Objects of this class are immutable.
+ * The SAC2 static methods are also provided.
  * @author Heinz Kredel
  * @see java.math.BigInteger
  */
