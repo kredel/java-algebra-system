@@ -221,7 +221,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
      * @param to term order.
      * @param o other polynomial ring.
      */
-    public GenPolynomialRing(GenPolynomialRing o, TermOrder to) {
+    public GenPolynomialRing(GenPolynomialRing<C> o, TermOrder to) {
         this(o.coFac, o.nvar, to, o.getVars());
     }
 

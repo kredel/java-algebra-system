@@ -1872,10 +1872,10 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                     //int braces = 2;
                     while (!(fac instanceof AlgebraicNumberRing)) {
                         if (fac instanceof GenPolynomialRing) {
-                            GenPolynomialRing<C> pfac = (GenPolynomialRing) (Object) fac;
+                            GenPolynomialRing<C> pfac = (GenPolynomialRing<C>) (Object) fac;
                             fac = pfac.coFac;
                         } else if (fac instanceof QuotientRing) {
-                            QuotientRing<C> pfac = (QuotientRing) (Object) fac;
+                            QuotientRing<C> pfac = (QuotientRing<C>) (Object) fac;
                             fac = pfac.ring.coFac;
                         } else {
                             throw new ArithmeticException("field elements exhausted, need algebraic extension of base ring");
@@ -1886,7 +1886,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                     //    obr += "{ ";
                     //    cbr += " }";
                     //}
-                    afac = (AlgebraicNumberRing) (Object) fac;
+                    afac = (AlgebraicNumberRing<C>) (Object) fac;
                     logger.info("afac = " + afac.toScript());
                     aiter = afac.iterator();
                     AlgebraicNumber<C> an = aiter.next();
