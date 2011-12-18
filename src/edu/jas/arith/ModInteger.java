@@ -10,9 +10,9 @@ import edu.jas.structure.NotInvertibleException;
 
 
 /**
- * ModInteger class with RingElem interface
- * and with the familiar SAC method names.
+ * ModInteger class with GcdRingElem interface.
  * Objects of this class are immutable.
+ * The SAC2 static methods are also provided.
  * @author Heinz Kredel
  * @see java.math.BigInteger
  */
