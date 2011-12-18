@@ -339,7 +339,7 @@ public class Power<C extends RingElem<C> > {
      * @return prod(i=0,...k) a_i.
      */
     public static <C extends RingElem<C>> C multiply( RingFactory<C> fac, List<C> A) {
-	return multiply( (MonoidFactory<C>) fac, A);
+        return multiply( (MonoidFactory<C>) fac, A);
     }
 
 
@@ -358,7 +358,7 @@ public class Power<C extends RingElem<C> > {
            return res;
         }
         for ( C a : A ) {
-	    res = res.multiply(a);
+            res = res.multiply(a);
         }
         return res;
     }
@@ -371,7 +371,7 @@ public class Power<C extends RingElem<C> > {
      * @return sum(i=0,...k) a_i.
      */
     public static <C extends RingElem<C>> C sum( RingFactory<C> fac, List<C> A) {
-	return sum( (AbelianGroupFactory<C>) fac, A);
+        return sum( (AbelianGroupFactory<C>) fac, A);
     }
 
 
@@ -390,7 +390,7 @@ public class Power<C extends RingElem<C> > {
            return res;
         }
         for ( C a : A ) {
-	    res = res.sum(a);
+            res = res.sum(a);
         }
         return res;
     }

@@ -1714,7 +1714,7 @@ public class HenselUtil {
         MOD cm = PF.fromInteger(cc.getVal());
         List<GenPolynomial<MOD>> Fp = new ArrayList<GenPolynomial<MOD>>(F.size());
         for ( GenPolynomial<MOD> fm : F ) {
-	    GenPolynomial<MOD> am = fm.monic();
+            GenPolynomial<MOD> am = fm.monic();
             am = am.multiply(cm);
             Fp.add(am);
         }
@@ -1817,16 +1817,16 @@ public class HenselUtil {
         //int j = 0;
         for ( GenPolynomial<BigInteger> bi : Fi ) {
             GenPolynomial<BigInteger> ci = null;
-	    //if ( j++ == 0 ) {
+            //if ( j++ == 0 ) {
             //    ci = bi.divide(ai);
             //} else {
             //    BigInteger i = cc.divide(ai);
             //    ci = bi.divide(i);
-	    //}
+            //}
             ci = ufd.basePrimitivePart(bi); // ??
             //System.out.println("bi = " + bi + ", ci = " + ci);
             Fii.add(ci);
-	}
+        }
         Fi = Fii;
 
         // setup ring mod p^k

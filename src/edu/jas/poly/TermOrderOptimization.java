@@ -207,7 +207,7 @@ public class TermOrderOptimization {
         }
         List<Integer> ip = new ArrayList<Integer>(P); // ensure size and content
         for ( int i = 0; i < P.size(); i++ ) {
-	    ip.set(P.get(i),i); // inverse
+            ip.set(P.get(i),i); // inverse
         }
         return ip;
     }
@@ -223,7 +223,7 @@ public class TermOrderOptimization {
            return true;
         }
         for ( int i = 0; i < P.size(); i++ ) {
-	    if ( P.get(i).intValue() != i ) {
+            if ( P.get(i).intValue() != i ) {
                 return false;
             }
         }
@@ -242,11 +242,11 @@ public class TermOrderOptimization {
            return null;
         }
         if ( P.size() != S.size() ) {
-	    throw new IllegalArgumentException("#P != #S: P =" + P + ", S = " + S);
+            throw new IllegalArgumentException("#P != #S: P =" + P + ", S = " + S);
         }
         List<Integer> ip = new ArrayList<Integer>(P); // ensure size and content
         for ( int i = 0; i < P.size(); i++ ) {
-	    ip.set(i,S.get(P.get(i))); 
+            ip.set(i,S.get(P.get(i))); 
         }
         return ip;
     }

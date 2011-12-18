@@ -183,7 +183,7 @@ public class ComplexRing<C extends RingElem<C>> implements RingFactory<Complex<C
         if (ring instanceof RingElem) {
             RingElem ri = (RingElem) ring;
             sb.append(ri.toScriptFactory());
-	} else {
+        } else {
             sb.append(ring.toString());
         }
         sb.append("]");

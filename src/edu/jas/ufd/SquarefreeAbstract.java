@@ -221,7 +221,7 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
         if ( F == null || F.size() <= 1 ) {
             return F;
         }
-	List<GenPolynomial<C>> Fp = new ArrayList<GenPolynomial<C>>(F.keySet());
+        List<GenPolynomial<C>> Fp = new ArrayList<GenPolynomial<C>>(F.keySet());
         GenPolynomial<C> f0 = Fp.get(0);
         if ( f0.ring.characteristic().signum() != 0 ) { // only ordered coefficients
             return F;

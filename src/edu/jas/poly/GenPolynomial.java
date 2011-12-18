@@ -467,12 +467,12 @@ Iterable<Monomial<C>> {
      */
     public boolean isHomogeneous() {
         if (val.size() <= 1) {
-	    return true;
+            return true;
         }
         long deg = -1;
         for ( ExpVector e : val.keySet() ) {
-	    if (deg < 0) {
-		deg = e.totalDeg(); 
+            if (deg < 0) {
+                deg = e.totalDeg(); 
             } else if (deg != e.totalDeg()) {
                 return false; 
             }
@@ -1501,7 +1501,7 @@ Iterable<Monomial<C>> {
      */
     public GenPolynomial<C> extend(GenPolynomialRing<C> pfac, int j, long k) {
         if (ring.equals(pfac)) { // nothing to do
-	    return this;
+            return this;
         }
         GenPolynomial<C> Cp = pfac.getZERO().clone();
         if (this.isZERO()) {
@@ -1530,7 +1530,7 @@ Iterable<Monomial<C>> {
      */
     public GenPolynomial<C> extendLower(GenPolynomialRing<C> pfac, int j, long k) {
         if (ring.equals(pfac)) { // nothing to do
-	    return this;
+            return this;
         }
         GenPolynomial<C> Cp = pfac.getZERO().clone();
         if (this.isZERO()) {
@@ -1644,7 +1644,7 @@ Iterable<Monomial<C>> {
      */
     public GenPolynomial<C> homogenize(GenPolynomialRing<C> pfac) {
         if (ring.equals(pfac)) { // not implemented
-	    throw new UnsupportedOperationException("case with same ring not implemented");
+            throw new UnsupportedOperationException("case with same ring not implemented");
         }
         GenPolynomial<C> Cp = pfac.getZERO().clone();
         if (this.isZERO()) {
@@ -1672,7 +1672,7 @@ Iterable<Monomial<C>> {
      */
     public GenPolynomial<C> deHomogenize(GenPolynomialRing<C> pfac) {
         if (ring.equals(pfac)) { // not implemented
-	    throw new UnsupportedOperationException("case with same ring not implemented");
+            throw new UnsupportedOperationException("case with same ring not implemented");
         }
         GenPolynomial<C> Cp = pfac.getZERO().clone();
         if (this.isZERO()) {
