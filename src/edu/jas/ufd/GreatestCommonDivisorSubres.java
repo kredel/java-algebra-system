@@ -296,8 +296,8 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
             q = P;
             r = S;
         }
-        r = r.abs();
-        q = q.abs();
+        //r = r.abs();
+        //q = q.abs();
         C a = baseContent(r);
         C b = baseContent(q);
         r = divide(r, a); // indirection
@@ -317,6 +317,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
                 s = -s;
             }
             x = basePseudoRemainder(q, r);
+            System.out.println("x  = " + x);
             q = r;
             if (x.degree(0) > 0) {
                 z = g.multiply(power(cofac, h, delta));
@@ -399,6 +400,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
                 s = -s;
             }
             x = recursivePseudoRemainder(q, r);
+            System.out.println("x  = " + x);
             q = r;
             if (x.degree(0) > 0) {
                 z = g.multiply(power(P.ring.coFac, h, delta));

@@ -56,8 +56,6 @@ public class GCDModularTest extends TestCase {
     }
 
 
-    //private final static int bitlen = 100;
-
     GreatestCommonDivisorAbstract<ModInteger> ufd;
 
 
@@ -157,7 +155,7 @@ public class GCDModularTest extends TestCase {
         ai = bi = ci = di = ei = null;
         ar = br = cr = dr = er = null;
         //mi = new ModIntegerRing(primes.get(0), true);
-        mi = new ModIntegerRing(5L, true);
+        mi = new ModIntegerRing(19L, true);
         ufd = new GreatestCommonDivisorPrimitive<ModInteger>();
         dfac = new GenPolynomialRing<ModInteger>(mi, rl, to);
         cfac = new GenPolynomialRing<ModInteger>(mi, rl - 1, to);
@@ -179,7 +177,6 @@ public class GCDModularTest extends TestCase {
 
     /**
      * Test modular algorithm gcd with modular evaluation recursive algorithm.
-     * 
      */
     public void testModularEvaluationGcd() {
 
@@ -239,7 +236,6 @@ public class GCDModularTest extends TestCase {
 
     /**
      * Test modular algorithm gcd with simple PRS recursive algorithm.
-     * 
      */
     public void testModularSimpleGcd() {
 
@@ -299,7 +295,6 @@ public class GCDModularTest extends TestCase {
 
     /**
      * Test recursive content and primitive part, modular coefficients.
-     * 
      */
     public void testRecursiveContentPPmodular() {
 
@@ -351,7 +346,6 @@ public class GCDModularTest extends TestCase {
 
     /**
      * Test base gcd modular coefficients.
-     * 
      */
     public void testGCDbaseModular() {
 
@@ -401,7 +395,6 @@ public class GCDModularTest extends TestCase {
 
     /**
      * Test recursive gcd modular coefficients.
-     * 
      */
     public void testRecursiveGCDModular() {
 
@@ -458,7 +451,6 @@ public class GCDModularTest extends TestCase {
 
     /**
      * Test arbitrary recursive gcd modular coefficients.
-     * 
      */
     public void testArbitraryRecursiveGCDModular() {
 
@@ -515,7 +507,6 @@ public class GCDModularTest extends TestCase {
 
     /**
      * Test gcd modular coefficients.
-     * 
      */
     public void testGcdModular() {
 
@@ -568,7 +559,6 @@ public class GCDModularTest extends TestCase {
 
     /**
      * Test co-prime factors.
-     * 
      */
     public void testCoPrime() {
 
@@ -612,6 +602,117 @@ public class GCDModularTest extends TestCase {
 
         assertTrue("is co-prime ", ufd.isCoPrime(P));
         assertTrue("is co-prime of ", ufd.isCoPrime(P, F));
+    }
+
+
+    /**
+     * Test base resultant modular coefficients.
+     */
+    public void xtestResultantBaseModular() {
+
+        dfac = new GenPolynomialRing<ModInteger>(mi, 1, to);
+
+        GreatestCommonDivisorSimple<ModInteger> ufds = new GreatestCommonDivisorSimple<ModInteger>();
+        GreatestCommonDivisorSubres<ModInteger> sres = new GreatestCommonDivisorSubres<ModInteger>();
+
+        for (int i = 0; i < 4; i++) {
+            a = dfac.random(kl, ll, el + 3 + i, q).monic();
+            b = dfac.random(kl, ll, el + 3 + i, q).monic();
+            c = dfac.random(kl, ll, el + 3 + i, q).monic();
+            System.out.println("a = " + a);
+            System.out.println("b = " + b);
+            //System.out.println("c = " + c);
+
+            if (a.isZERO() || b.isZERO() || c.isZERO()) {
+                // skip for this turn
+                continue;
+            }
+            if (c.isConstant()) {
+                // skip for this turn
+                c = dfac.univariate(0,1);
+            }
+            assertTrue("length( c" + i + " ) <> 0", c.length() > 0);
+
+            d = ufds.baseResultant(a, b);
+            System.out.println("d = " + d);
+            e = sres.baseResultant(a, b);
+            System.out.println("e = " + e);
+            assertEquals("d == e: " + d.subtract(e), d.signum(), e.signum());
+            //assertEquals("d == e: " + d.subtract(e), d, e);
+
+            ac = a.multiply(c);
+            bc = b.multiply(c);
+            System.out.println("ac = " + ac);
+            System.out.println("bc = " + bc);
+
+            d = ufds.baseResultant(ac, bc);
+            System.out.println("d = " + d);
+            assertTrue("d == 0: " + d, d.isZERO());
+
+            e = sres.baseResultant(ac, bc);
+            System.out.println("e = " + e);
+            assertTrue("e == 0: " + e, e.isZERO());
+
+            assertEquals("d == e: " + d.subtract(e), d, e);
+        }
+    }
+
+
+    /**
+     * Test recursive resultant modular coefficients.
+     */
+    public void testRecursiveResultantModular() {
+
+        dfac = new GenPolynomialRing<ModInteger>(mi, 2, to);
+        cfac = new GenPolynomialRing<ModInteger>(mi, 2 - 1, to);
+        rfac = new GenPolynomialRing<GenPolynomial<ModInteger>>(cfac, 1, to);
+
+        GreatestCommonDivisorSimple<ModInteger> ufds = new GreatestCommonDivisorSimple<ModInteger>();
+        GreatestCommonDivisorSubres<ModInteger> sres = new GreatestCommonDivisorSubres<ModInteger>();
+
+        for (int i = 0; i < 1; i++) {
+            ar = rfac.random(kl, 2, el + 2, q);
+            br = rfac.random(kl, 2, el + 2, q);
+            cr = rfac.random(kl, 2, el + 2, q);
+            ar = PolyUtil.<ModInteger> monic(ar);
+            br = PolyUtil.<ModInteger> monic(br);
+            cr = PolyUtil.<ModInteger> monic(cr);
+            System.out.println("ar = " + ar);
+            System.out.println("br = " + br);
+            //System.out.println("cr = " + cr);
+
+            if (ar.isZERO() || br.isZERO() || cr.isZERO()) {
+                // skip for this turn
+                continue;
+            }
+            if (cr.isConstant()) {
+                // skip for this turn
+                cr = rfac.univariate(0,1);
+            }
+            assertTrue("length( cr" + i + " ) <> 0", cr.length() > 0);
+
+            dr = ufds.recursiveResultant(ar, br);
+            System.out.println("dr = " + dr);
+            er = sres.recursiveResultant(ar, br);
+            System.out.println("er = " + er);
+            assertEquals("dr == er: " + dr.subtract(er), dr.signum(), er.signum());
+            //assertEquals("dr == er: " + dr.subtract(er), dr, er);
+
+            arc = ar.multiply(cr);
+            brc = br.multiply(cr);
+            System.out.println("arc = " + arc);
+            System.out.println("brc = " + brc);
+
+            dr = ufds.recursiveResultant(arc, brc);
+            System.out.println("dr = " + dr);
+            assertTrue("dr == 0: " + dr, dr.isZERO());
+
+            er = sres.recursiveResultant(arc, brc);
+            System.out.println("er = " + er);
+            assertTrue("er == 0: " + er, er.isZERO());
+
+            assertEquals("dr == er: " + dr.subtract(er), dr, er);
+        }
     }
 
 }

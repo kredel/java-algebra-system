@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.RingFactory;
 
 
 /**
@@ -167,6 +168,148 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
         q = recursivePrimitivePart(q);
         q = q.abs().multiply(c);
         return q;
+    }
+
+
+    /**
+     * Univariate GenPolynomial resultant. 
+     * @param P univariate GenPolynomial.
+     * @param S univariate GenPolynomial.
+     * @return res(P,S).
+     */
+    public GenPolynomial<C> baseResultant(GenPolynomial<C> P, GenPolynomial<C> S) {
+        if (S == null || S.isZERO()) {
+            return S;
+        }
+        if (P == null || P.isZERO()) {
+            return P;
+        }
+        if (P.ring.nvar > 1) {
+            throw new IllegalArgumentException("no univariate polynomial");
+        }
+        long e = P.degree(0);
+        long f = S.degree(0);
+        if ( e == 0 ) {
+            return P;
+        }
+        if ( f == 0 ) {
+            return S;
+        }
+        GenPolynomial<C> q;
+        GenPolynomial<C> r;
+        if (e < f) {
+            r = P;
+            q = S;
+        } else {
+            q = P;
+            r = S;
+        }
+        int s = 0;
+        if ((e % 2 != 0) && (f % 2 != 0)) { // odd(e) && odd(f)
+            s = 1;
+        }
+        RingFactory<C> cofac = P.ring.coFac; 
+        assert ( cofac.isField() ); 
+        C c = cofac.getONE();
+        GenPolynomial<C> x;
+        long g;
+        do {
+            x = q.remainder(r);
+            //x = PolyUtil.<C>basePseudoRemainder(q,r);
+            if ( x.isZERO() ) {
+                return x;
+            }
+            System.out.println("x = " + x);
+            e = q.degree(0);
+            f = r.degree(0);
+            if ((e % 2 != 0) && (f % 2 != 0)) { // odd(e) && odd(f)
+               s = 1 - s;
+            }
+            g = x.degree(0);
+            C c2 = r.leadingBaseCoefficient();
+            for (int i = 0; i < (e-g); i++ ) {
+                c = c.multiply(c2);
+            }
+            q = r; 
+            r = x;
+        } while (g != 0);
+        C c2 = r.leadingBaseCoefficient();
+        for (int i = 0; i < f; i++ ) {
+             c = c.multiply(c2);
+        }
+        if ( s == 1 ) {
+            c = c.negate();
+	}
+        x = P.ring.getONE().multiply(c);
+        return x;
+    }
+
+
+    /**
+     * Univariate GenPolynomial recursive resultant. 
+     * @param P univariate recursive GenPolynomial.
+     * @param S univariate recursive GenPolynomial.
+     * @return res(P,S).
+     */
+    public GenPolynomial<GenPolynomial<C>> recursiveResultant(GenPolynomial<GenPolynomial<C>> P,
+            GenPolynomial<GenPolynomial<C>> S) {
+        if (S == null || S.isZERO()) {
+            return S;
+        }
+        if (P == null || P.isZERO()) {
+            return P;
+        }
+        if (P.ring.nvar > 1) {
+            throw new IllegalArgumentException("no recursive univariate polynomial");
+        }
+        long e = P.degree(0);
+        long f = S.degree(0);
+        if ( e == 0 ) {
+            return P;
+        }
+        if ( f == 0 ) {
+            return S;
+        }
+        GenPolynomial<GenPolynomial<C>> q;
+        GenPolynomial<GenPolynomial<C>> r;
+        if (f > e) {
+            r = P;
+            q = S;
+            long g = f;
+            f = e;
+            e = g;
+        } else {
+            q = P;
+            r = S;
+        }
+        int s = 0;
+        if ((e % 2 != 0) && (f % 2 != 0)) { // odd(e) && odd(f)
+            s = 1;
+        }
+        RingFactory<GenPolynomial<C>> cofac = P.ring.coFac; 
+        GenPolynomial<C> c = cofac.getONE();
+        GenPolynomial<GenPolynomial<C>> x;
+        long g;
+        do {
+            x = PolyUtil.<C>recursivePseudoRemainder(q,r);
+            if ( x.isZERO() ) {
+                return x;
+            }
+            System.out.println("x = " + x);
+            e = q.degree(0);
+            f = r.degree(0);
+            if ((e % 2 != 0) && (f % 2 != 0)) { // odd(e) && odd(f)
+               s = 1 - s;
+            }
+            g = x.degree(0);
+            q = r; 
+            r = x;
+        } while (g != 0);
+        if ( s == 1 ) {
+            c = c.negate();
+	}
+        x = P.ring.getONE().multiply(c);
+        return x;
     }
 
 }
