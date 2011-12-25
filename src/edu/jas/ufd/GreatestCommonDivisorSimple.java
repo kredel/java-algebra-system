@@ -189,20 +189,23 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
         }
         long e = P.degree(0);
         long f = S.degree(0);
-        if ( e == 0 ) {
-            return P;
-        }
-        if ( f == 0 ) {
-            return S;
-        }
         GenPolynomial<C> q;
         GenPolynomial<C> r;
         if (e < f) {
             r = P;
             q = S;
+            long t = e;
+            e = f;
+            f = t;
         } else {
             q = P;
             r = S;
+        }
+        if ( e == 0 ) {
+            return q;
+        }
+        if ( f == 0 ) {
+            return r;
         }
         int s = 0;
         if ((e % 2 != 0) && (f % 2 != 0)) { // odd(e) && odd(f)
@@ -219,7 +222,7 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
             if ( x.isZERO() ) {
                 return x;
             }
-            System.out.println("x = " + x);
+            //System.out.println("x = " + x);
             e = q.degree(0);
             f = r.degree(0);
             if ((e % 2 != 0) && (f % 2 != 0)) { // odd(e) && odd(f)
@@ -264,12 +267,6 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
         }
         long e = P.degree(0);
         long f = S.degree(0);
-        if ( e == 0 ) {
-            return P;
-        }
-        if ( f == 0 ) {
-            return S;
-        }
         GenPolynomial<GenPolynomial<C>> q;
         GenPolynomial<GenPolynomial<C>> r;
         if (f > e) {
@@ -282,13 +279,26 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
             q = P;
             r = S;
         }
+        GenPolynomial<GenPolynomial<C>> x;
+        if (f == 0 && e == 0 && q.ring.nvar > 0) {
+            // if coeffs are multivariate (and non constant)
+            // otherwise it would be 1
+            GenPolynomial<C> t = resultant(q.leadingBaseCoefficient(), r.leadingBaseCoefficient());
+            x = P.ring.getONE().multiply(t);
+            return x;
+        }
+        if ( e == 0 ) {
+            return q;
+        }
+        if ( f == 0 ) {
+            return r;
+        }
         int s = 0;
         if ((e % 2 != 0) && (f % 2 != 0)) { // odd(e) && odd(f)
             s = 1;
         }
         RingFactory<GenPolynomial<C>> cofac = P.ring.coFac; 
         GenPolynomial<C> c = cofac.getONE();
-        GenPolynomial<GenPolynomial<C>> x;
         long g;
         do {
             x = PolyUtil.<C>recursivePseudoRemainder(q,r);

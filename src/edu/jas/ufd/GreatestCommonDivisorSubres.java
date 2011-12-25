@@ -317,7 +317,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
                 s = -s;
             }
             x = basePseudoRemainder(q, r);
-            System.out.println("x  = " + x);
+            //System.out.println("x  = " + x);
             q = r;
             if (x.degree(0) > 0) {
                 z = g.multiply(power(cofac, h, delta));

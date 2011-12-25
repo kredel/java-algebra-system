@@ -394,6 +394,29 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
 
 
     /**
+     * Univariate GenPolynomial resultant. 
+     * @param P univariate GenPolynomial.
+     * @param S univariate GenPolynomial.
+     * @return res(P,S).
+     */
+    public GenPolynomial<C> baseResultant(GenPolynomial<C> P, GenPolynomial<C> S) { // should be abstract
+        throw new UnsupportedOperationException("not implmented");
+    }
+
+
+    /**
+     * Univariate GenPolynomial recursive resultant. 
+     * @param P univariate recursive GenPolynomial.
+     * @param S univariate recursive GenPolynomial.
+     * @return res(P,S).
+     */
+    public GenPolynomial<GenPolynomial<C>> recursiveResultant(GenPolynomial<GenPolynomial<C>> P,
+            GenPolynomial<GenPolynomial<C>> S) { // should be abstract
+        throw new UnsupportedOperationException("not implmented");
+    }
+
+
+    /**
      * GenPolynomial resultant.
      * The input polynomials are considered as univariate polynomials in the main variable. 
      * @param P GenPolynomial.
@@ -421,7 +444,8 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         GenPolynomial<GenPolynomial<C>> Pr = PolyUtil.<C> recursive(rfac, P);
         GenPolynomial<GenPolynomial<C>> Sr = PolyUtil.<C> recursive(rfac, S);
 
-        GenPolynomial<GenPolynomial<C>> Dr = ufd_sr.recursiveResultant(Pr, Sr);
+        //GenPolynomial<GenPolynomial<C>> Dr = ufd_sr.recursiveResultant(Pr, Sr);
+        GenPolynomial<GenPolynomial<C>> Dr = recursiveResultant(Pr, Sr);
         GenPolynomial<C> D = PolyUtil.<C> distribute(pfac, Dr);
         return D;
     }

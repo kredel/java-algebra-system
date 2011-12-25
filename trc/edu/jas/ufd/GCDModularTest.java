@@ -181,7 +181,6 @@ public class GCDModularTest extends TestCase {
     public void testModularEvaluationGcd() {
 
         GreatestCommonDivisorAbstract<BigInteger> ufd_m = new GreatestCommonDivisorModular(/*false*/);
-
         GreatestCommonDivisorAbstract<BigInteger> ufd = new GreatestCommonDivisorPrimitive<BigInteger>();
 
         GenPolynomial<BigInteger> a;
@@ -240,7 +239,6 @@ public class GCDModularTest extends TestCase {
     public void testModularSimpleGcd() {
 
         GreatestCommonDivisorAbstract<BigInteger> ufd_m = new GreatestCommonDivisorModular(true);
-
         GreatestCommonDivisorAbstract<BigInteger> ufd = new GreatestCommonDivisorPrimitive<BigInteger>();
 
         GenPolynomial<BigInteger> a;
@@ -608,19 +606,19 @@ public class GCDModularTest extends TestCase {
     /**
      * Test base resultant modular coefficients.
      */
-    public void xtestResultantBaseModular() {
+    public void testResultantBaseModular() {
 
         dfac = new GenPolynomialRing<ModInteger>(mi, 1, to);
 
         GreatestCommonDivisorSimple<ModInteger> ufds = new GreatestCommonDivisorSimple<ModInteger>();
         GreatestCommonDivisorSubres<ModInteger> sres = new GreatestCommonDivisorSubres<ModInteger>();
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 3; i++) {
             a = dfac.random(kl, ll, el + 3 + i, q).monic();
             b = dfac.random(kl, ll, el + 3 + i, q).monic();
             c = dfac.random(kl, ll, el + 3 + i, q).monic();
-            System.out.println("a = " + a);
-            System.out.println("b = " + b);
+            //System.out.println("a = " + a);
+            //System.out.println("b = " + b);
             //System.out.println("c = " + c);
 
             if (a.isZERO() || b.isZERO() || c.isZERO()) {
@@ -634,26 +632,26 @@ public class GCDModularTest extends TestCase {
             assertTrue("length( c" + i + " ) <> 0", c.length() > 0);
 
             d = ufds.baseResultant(a, b);
-            System.out.println("d = " + d);
+            //System.out.println("d = " + d);
             e = sres.baseResultant(a, b);
-            System.out.println("e = " + e);
+            //System.out.println("e = " + e);
             assertEquals("d == e: " + d.subtract(e), d.signum(), e.signum());
             //assertEquals("d == e: " + d.subtract(e), d, e);
 
             ac = a.multiply(c);
             bc = b.multiply(c);
-            System.out.println("ac = " + ac);
-            System.out.println("bc = " + bc);
+            //System.out.println("ac = " + ac);
+            //System.out.println("bc = " + bc);
 
             d = ufds.baseResultant(ac, bc);
-            System.out.println("d = " + d);
+            //System.out.println("d = " + d);
             assertTrue("d == 0: " + d, d.isZERO());
 
             e = sres.baseResultant(ac, bc);
-            System.out.println("e = " + e);
+            //System.out.println("e = " + e);
             assertTrue("e == 0: " + e, e.isZERO());
 
-            assertEquals("d == e: " + d.subtract(e), d, e);
+            //assertEquals("d == e: " + d.subtract(e), d, e);
         }
     }
 
@@ -661,12 +659,12 @@ public class GCDModularTest extends TestCase {
     /**
      * Test recursive resultant modular coefficients.
      */
-    public void testRecursiveResultantModular() {
+    public void xtestRecursiveResultantModular() {
 
         dfac = new GenPolynomialRing<ModInteger>(mi, 2, to);
         cfac = new GenPolynomialRing<ModInteger>(mi, 2 - 1, to);
         rfac = new GenPolynomialRing<GenPolynomial<ModInteger>>(cfac, 1, to);
-
+ 
         GreatestCommonDivisorSimple<ModInteger> ufds = new GreatestCommonDivisorSimple<ModInteger>();
         GreatestCommonDivisorSubres<ModInteger> sres = new GreatestCommonDivisorSubres<ModInteger>();
 
@@ -686,7 +684,6 @@ public class GCDModularTest extends TestCase {
                 continue;
             }
             if (cr.isConstant()) {
-                // skip for this turn
                 cr = rfac.univariate(0,1);
             }
             assertTrue("length( cr" + i + " ) <> 0", cr.length() > 0);
@@ -711,7 +708,57 @@ public class GCDModularTest extends TestCase {
             System.out.println("er = " + er);
             assertTrue("er == 0: " + er, er.isZERO());
 
-            assertEquals("dr == er: " + dr.subtract(er), dr, er);
+            //assertEquals("dr == er: " + dr.subtract(er), dr, er);
+        }
+    }
+
+
+    /**
+     * Test resultant modular coefficients.
+     */
+    public void testResultantModular() {
+        dfac = new GenPolynomialRing<ModInteger>(mi, 4, to);
+        System.out.println("dfac = " + dfac);
+
+        GreatestCommonDivisorSimple<ModInteger> ufds = new GreatestCommonDivisorSimple<ModInteger>();
+        GreatestCommonDivisorSubres<ModInteger> sres = new GreatestCommonDivisorSubres<ModInteger>();
+
+        for (int i = 0; i < 1; i++) {
+            a = dfac.random(kl, ll, el + i, q).monic();
+            b = dfac.random(kl, ll, el + i, q).monic();
+            c = dfac.random(kl, ll, el + i, q).monic();
+            System.out.println("a = " + a);
+            System.out.println("b = " + b);
+            System.out.println("c = " + c);
+
+            if (a.isZERO() || b.isZERO() || c.isZERO()) {
+                // skip for this turn
+                continue;
+            }
+            if (c.isConstant()) {
+                c = dfac.univariate(1,1);
+            }
+            assertTrue("length( c" + i + " ) <> 0", c.length() > 0);
+
+            d = ufds.resultant(a, b);
+            System.out.println("d = " + d);
+            e = sres.resultant(a, b);
+            System.out.println("e = " + e);
+            assertEquals("d == e: " + d.subtract(e), d.signum(), e.signum());
+            //assertEquals("d == e: " + d.subtract(e), d, e);
+
+            ac = a.multiply(c);
+            bc = b.multiply(c);
+            System.out.println("ac = " + ac);
+            System.out.println("bc = " + bc);
+
+            d = ufds.resultant(ac, bc);
+            System.out.println("d = " + d);
+            assertTrue("d == 0: " + d, d.isZERO());
+
+            e = sres.resultant(ac, bc);
+            System.out.println("e = " + e);
+            assertTrue("e == 0: " + e, e.isZERO());
         }
     }
 
