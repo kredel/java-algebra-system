@@ -108,10 +108,10 @@ public class PolyGBUtilTest extends TestCase {
     int ll = 4;
 
 
-    int el = 2;
+    int el = 3;
 
 
-    float q = 0.19f;
+    float q = 0.29f;
 
 
     @Override

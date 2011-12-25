@@ -52,7 +52,7 @@ public class PolyGBUtil {
         List<GenPolynomial<C>> G = bb.GB(F);
         System.out.println("G = " + G);
         GenPolynomial<C> n = bb.red.normalform(G,r);
-        System.out.println("n = " + n);
+        //System.out.println("n = " + n);
         return n.isZERO();
     }
 

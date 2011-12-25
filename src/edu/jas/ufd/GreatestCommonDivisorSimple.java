@@ -299,22 +299,32 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
         }
         RingFactory<GenPolynomial<C>> cofac = P.ring.coFac; 
         GenPolynomial<C> c = cofac.getONE();
+        //GreatestCommonDivisorSubres<C> sres = new GreatestCommonDivisorSubres<C>();
         long g;
         do {
             x = PolyUtil.<C>recursivePseudoRemainder(q,r);
+            //x = sres.recursivePseudoRemainder(q,r);
             if ( x.isZERO() ) {
                 return x;
             }
-            System.out.println("x = " + x);
+            //System.out.println("x = " + x);
             e = q.degree(0);
             f = r.degree(0);
             if ((e % 2 != 0) && (f % 2 != 0)) { // odd(e) && odd(f)
                s = 1 - s;
             }
             g = x.degree(0);
+            GenPolynomial<C> c2 = r.leadingBaseCoefficient();
+            for (int i = 0; i < (e-g); i++ ) {
+                c = c.multiply(c2);
+            }
             q = r; 
             r = x;
         } while (g != 0);
+        GenPolynomial<C> c2 = r.leadingBaseCoefficient();
+        for (int i = 0; i < f; i++ ) {
+             c = c.multiply(c2);
+        }
         if ( s == 1 ) {
             c = c.negate();
 	}
