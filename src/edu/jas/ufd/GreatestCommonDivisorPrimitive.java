@@ -75,7 +75,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends
         }
         GenPolynomial<C> x;
         while (!r.isZERO()) {
-            x = PolyUtil.<C> basePseudoRemainder(q, r);
+            x = PolyUtil.<C> baseSparsePseudoRemainder(q, r);
             q = r;
             r = basePrimitivePart(x);
         }

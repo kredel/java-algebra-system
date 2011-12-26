@@ -251,8 +251,8 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
             }
             q = basePrimitivePart(q);
             q = q.multiply(c).abs();
-            if (PolyUtil.<BigInteger> basePseudoRemainder(P, q).isZERO()
-                && PolyUtil.<BigInteger> basePseudoRemainder(S, q).isZERO()) {
+            if (PolyUtil.<BigInteger> baseSparsePseudoRemainder(P, q).isZERO()
+                && PolyUtil.<BigInteger> baseSparsePseudoRemainder(S, q).isZERO()) {
                 break;
             } else { // else should not happen at this point
                 logger.info("final devision not successfull");

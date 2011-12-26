@@ -296,10 +296,10 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
                 GenPolynomial<BigInteger> x;
                 x = PolyUtil.<MOD>integerFromModularCoefficients(fac, cp);
                 x = basePrimitivePart(x);
-                if (!PolyUtil.<BigInteger> basePseudoRemainder(q, x).isZERO()) {
+                if (!PolyUtil.<BigInteger> baseSparsePseudoRemainder(q, x).isZERO()) {
                     continue;
                 }
-                if (!PolyUtil.<BigInteger> basePseudoRemainder(r, x).isZERO()) {
+                if (!PolyUtil.<BigInteger> baseSparsePseudoRemainder(r, x).isZERO()) {
                     continue;
                 }
                 logger.info("done on exact division, #primes = " + i);

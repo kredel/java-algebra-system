@@ -632,7 +632,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             }
             boolean divides = false;
             for (GenPolynomial<C> p : P) {
-                GenPolynomial<C> a = PolyUtil.<C> basePseudoRemainder(q, p);
+                GenPolynomial<C> a = PolyUtil.<C> baseSparsePseudoRemainder(q, p);
                 if (a.isZERO()) { // p divides q
                     divides = true;
                     break;

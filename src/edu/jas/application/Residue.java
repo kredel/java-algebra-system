@@ -310,7 +310,7 @@ public class Residue<C extends GcdRingElem<C> >
      */
     public Residue<C> remainder(Residue<C> S) {
         //GenPolynomial<C> x = val.remainder( S.val );
-        GenPolynomial<C> x = PolyUtil.<C>basePseudoRemainder( val, S.val );
+        GenPolynomial<C> x = PolyUtil.<C>baseSparsePseudoRemainder( val, S.val );
         return new Residue<C>( ring, x );
     }
 

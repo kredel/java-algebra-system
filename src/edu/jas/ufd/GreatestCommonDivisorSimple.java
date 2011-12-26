@@ -86,7 +86,7 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
         //System.out.println("q = " + q);
         //System.out.println("r = " + r);
         while (!r.isZERO()) {
-            x = PolyUtil.<C> basePseudoRemainder(q, r);
+            x = PolyUtil.<C> baseSparsePseudoRemainder(q, r);
             q = r;
             if (field) {
                 r = x.monic();

@@ -459,7 +459,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 //trial = engine.basePrimitivePart( trial.multiply(ldcf) );
                 trial = engine.basePrimitivePart(trial);
                 //System.out.println("pp(trial)= " + trial);
-                if (PolyUtil.<BigInteger> basePseudoRemainder(u, trial).isZERO()) {
+                if (PolyUtil.<BigInteger> baseSparsePseudoRemainder(u, trial).isZERO()) {
                     logger.info("successful trial = " + trial);
                     //System.out.println("trial    = " + trial);
                     //System.out.println("flist    = " + flist);
@@ -589,7 +589,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
 
                 itrial = engine.basePrimitivePart(itrial);
                 //System.out.println("pp(trial)= " + itrial);
-                if (PolyUtil.<BigInteger> basePseudoRemainder(u, itrial).isZERO()) {
+                if (PolyUtil.<BigInteger> baseSparsePseudoRemainder(u, itrial).isZERO()) {
                     logger.info("successful trial = " + itrial);
                     //System.out.println("trial    = " + itrial);
                     //System.out.println("cofactor = " + icofactor);
@@ -1286,7 +1286,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 if (debug) {
                     logger.info("trial    = " + trial); // + ", mtrial = " + mtrial);
                 }
-                if (PolyUtil.<BigInteger> basePseudoRemainder(ui, trial).isZERO()) {
+                if (PolyUtil.<BigInteger> baseSparsePseudoRemainder(ui, trial).isZERO()) {
                     logger.info("successful trial = " + trial);
                     factors.add(trial);
                     ui = PolyUtil.<BigInteger> basePseudoDivide(ui, trial);

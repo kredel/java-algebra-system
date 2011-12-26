@@ -232,7 +232,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
                     System.out.println("u     = " + u);
                     System.out.println("trial = " + trial);
                 }
-                GenPolynomial<C> rem = PolyUtil.<C> basePseudoRemainder(u, trial);
+                GenPolynomial<C> rem = PolyUtil.<C> baseSparsePseudoRemainder(u, trial);
                 //System.out.println(" rem = " + rem);
                 if (rem.isZERO()) {
                     logger.info("trial = " + trial);
