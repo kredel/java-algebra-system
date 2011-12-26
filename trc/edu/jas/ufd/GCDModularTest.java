@@ -13,6 +13,8 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import org.apache.log4j.BasicConfigurator;
+
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
@@ -35,6 +37,7 @@ public class GCDModularTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
+        BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 
@@ -659,24 +662,24 @@ public class GCDModularTest extends TestCase {
     /**
      * Test recursive resultant modular coefficients.
      */
-    public void xtestRecursiveResultantModular() {
+    public void testRecursiveResultantModular() {
 
-        dfac = new GenPolynomialRing<ModInteger>(mi, 2, to);
-        cfac = new GenPolynomialRing<ModInteger>(mi, 2 - 1, to);
+        cfac = new GenPolynomialRing<ModInteger>(mi, 2 - 0, to);
         rfac = new GenPolynomialRing<GenPolynomial<ModInteger>>(cfac, 1, to);
+        //System.out.println("rfac = " + rfac);
  
         GreatestCommonDivisorSimple<ModInteger> ufds = new GreatestCommonDivisorSimple<ModInteger>();
         GreatestCommonDivisorSubres<ModInteger> sres = new GreatestCommonDivisorSubres<ModInteger>();
 
         for (int i = 0; i < 1; i++) {
             ar = rfac.random(kl, 2, el + 2, q);
-            br = rfac.random(kl, 2, el + 2, q);
-            cr = rfac.random(kl, 2, el + 2, q);
+            br = rfac.random(kl, 2, el + 3, q);
+            cr = rfac.random(kl, 2, el + 1, q);
             ar = PolyUtil.<ModInteger> monic(ar);
             br = PolyUtil.<ModInteger> monic(br);
             cr = PolyUtil.<ModInteger> monic(cr);
-            System.out.println("ar = " + ar);
-            System.out.println("br = " + br);
+            //System.out.println("ar = " + ar);
+            //System.out.println("br = " + br);
             //System.out.println("cr = " + cr);
 
             if (ar.isZERO() || br.isZERO() || cr.isZERO()) {
@@ -689,26 +692,26 @@ public class GCDModularTest extends TestCase {
             assertTrue("length( cr" + i + " ) <> 0", cr.length() > 0);
 
             dr = ufds.recursiveResultant(ar, br);
-            System.out.println("dr = " + dr);
+            //System.out.println("dr = " + dr);
             er = sres.recursiveResultant(ar, br);
-            System.out.println("er = " + er);
+            //System.out.println("er = " + er);
             assertEquals("dr == er: " + dr.subtract(er), dr.signum(), er.signum());
             //assertEquals("dr == er: " + dr.subtract(er), dr, er);
 
             arc = ar.multiply(cr);
             brc = br.multiply(cr);
-            System.out.println("arc = " + arc);
-            System.out.println("brc = " + brc);
+            //System.out.println("arc = " + arc);
+            //System.out.println("brc = " + brc);
 
             dr = ufds.recursiveResultant(arc, brc);
-            System.out.println("dr = " + dr);
-            assertTrue("dr == 0: " + dr, dr.isZERO());
+            //System.out.println("dr = " + dr);
+            //assertTrue("dr == 0: " + dr, dr.isZERO());
 
             er = sres.recursiveResultant(arc, brc);
-            System.out.println("er = " + er);
-            assertTrue("er == 0: " + er, er.isZERO());
+            //System.out.println("er = " + er);
+            //assertTrue("er == 0: " + er, er.isZERO());
 
-            //assertEquals("dr == er: " + dr.subtract(er), dr, er);
+            assertEquals("dr == er: " + dr.subtract(er), dr.signum(), er.signum());
         }
     }
 
@@ -718,7 +721,7 @@ public class GCDModularTest extends TestCase {
      */
     public void testResultantModular() {
         dfac = new GenPolynomialRing<ModInteger>(mi, 4, to);
-        System.out.println("dfac = " + dfac);
+        //System.out.println("dfac = " + dfac);
 
         GreatestCommonDivisorSimple<ModInteger> ufds = new GreatestCommonDivisorSimple<ModInteger>();
         GreatestCommonDivisorSubres<ModInteger> sres = new GreatestCommonDivisorSubres<ModInteger>();
@@ -727,38 +730,40 @@ public class GCDModularTest extends TestCase {
             a = dfac.random(kl, ll, el + i, q).monic();
             b = dfac.random(kl, ll, el + i, q).monic();
             c = dfac.random(kl, ll, el + i, q).monic();
-            System.out.println("a = " + a);
-            System.out.println("b = " + b);
-            System.out.println("c = " + c);
+            //System.out.println("a = " + a);
+            //System.out.println("b = " + b);
+            //System.out.println("c = " + c);
 
             if (a.isZERO() || b.isZERO() || c.isZERO()) {
                 // skip for this turn
                 continue;
             }
             if (c.isConstant()) {
-                c = dfac.univariate(1,1);
+                c = dfac.univariate(0,1);
             }
             assertTrue("length( c" + i + " ) <> 0", c.length() > 0);
 
             d = ufds.resultant(a, b);
-            System.out.println("d = " + d);
+            //System.out.println("d = " + d);
             e = sres.resultant(a, b);
-            System.out.println("e = " + e);
+            //System.out.println("e = " + e);
             assertEquals("d == e: " + d.subtract(e), d.signum(), e.signum());
             //assertEquals("d == e: " + d.subtract(e), d, e);
 
             ac = a.multiply(c);
             bc = b.multiply(c);
-            System.out.println("ac = " + ac);
-            System.out.println("bc = " + bc);
+            //System.out.println("ac = " + ac);
+            //System.out.println("bc = " + bc);
 
             d = ufds.resultant(ac, bc);
-            System.out.println("d = " + d);
-            assertTrue("d == 0: " + d, d.isZERO());
+            //System.out.println("d = " + d);
+            //assertTrue("d == 0: " + d, d.isZERO());
 
             e = sres.resultant(ac, bc);
-            System.out.println("e = " + e);
-            assertTrue("e == 0: " + e, e.isZERO());
+            //System.out.println("e = " + e);
+            //assertTrue("e == 0: " + e, e.isZERO());
+
+            assertEquals("d == e: " + d.subtract(e), d.signum(), e.signum());
         }
     }
 
