@@ -276,8 +276,10 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
         }
         z = power(cofac, r.leadingBaseCoefficient(), q.degree(0));
         h = z.divide(power(cofac, h, q.degree(0) - 1));
-        z = cofac.fromInteger(s);
-        z = h.multiply(t).multiply(z);
+        z = h.multiply(t);
+        if ( s < 0 ) {
+            z = z.negate();
+	}
         x = P.ring.getONE().multiply(z);
         return x;
     }
@@ -359,8 +361,10 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
         }
         z = power(cofac, r.leadingBaseCoefficient(), q.degree(0));
         h = PolyUtil.<C> basePseudoDivide(z, power(cofac, h, q.degree(0) - 1));
-        z = cofac.fromInteger(s);
-        z = h.multiply(t).multiply(z);
+        z = h.multiply(t);
+        if ( s < 0 ) {
+            z = z.negate();
+	}
         x = P.ring.getONE().multiply(z);
         return x;
     }
