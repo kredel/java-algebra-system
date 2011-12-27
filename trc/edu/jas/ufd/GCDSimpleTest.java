@@ -51,8 +51,6 @@ public class GCDSimpleTest extends TestCase {
     }
 
 
-    //private final static int bitlen = 100;
-
     GreatestCommonDivisorAbstract<BigInteger> ufd;
 
 
@@ -154,7 +152,6 @@ public class GCDSimpleTest extends TestCase {
 
     /**
      * Test base gcd simple.
-     * 
      */
     public void testBaseGcdSimple() {
 
@@ -203,7 +200,6 @@ public class GCDSimpleTest extends TestCase {
 
     /**
      * Test recursive gcd simple.
-     * 
      */
     public void testRecursiveGCDSimple() {
 
@@ -257,7 +253,6 @@ public class GCDSimpleTest extends TestCase {
 
     /**
      * Test arbitrary recursive gcd simple.
-     * 
      */
     public void testArbitraryRecursiveGCDSimple() {
 
@@ -311,7 +306,6 @@ public class GCDSimpleTest extends TestCase {
 
     /**
      * Test gcd simple.
-     * 
      */
     public void testGCDSimple() {
 
@@ -359,5 +353,112 @@ public class GCDSimpleTest extends TestCase {
         }
     }
 
+
+    /**
+     * Test base resultant integral coefficients.
+     */
+    public void testBaseResultant() {
+
+        dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 1, to);
+
+        GreatestCommonDivisorSimple<BigInteger> ufds = new GreatestCommonDivisorSimple<BigInteger>();
+        GreatestCommonDivisorSubres<BigInteger> sres = new GreatestCommonDivisorSubres<BigInteger>();
+
+        for (int i = 0; i < 1; i++) {
+            a = dfac.random(kl, ll, el + 3 + i, q);
+            b = dfac.random(kl, ll, el + 3 + i, q);
+            c = dfac.random(kl, ll, el + 3 + i, q);
+            //System.out.println("a = " + a);
+            //System.out.println("b = " + b);
+            //System.out.println("c = " + c);
+
+            if (a.isZERO() || b.isZERO() || c.isZERO()) {
+                // skip for this turn
+                continue;
+            }
+            if (c.isConstant()) {
+                c = dfac.univariate(0,1);
+            }
+            assertTrue("length( c" + i + " ) <> 0", c.length() > 0);
+
+            d = ufds.baseResultant(a, b);
+            //System.out.println("d = " + d);
+            e = sres.baseResultant(a, b);
+            //System.out.println("e = " + e);
+            assertEquals("d == e: " + d.subtract(e), d.abs().signum(), e.abs().signum() );
+            //assertEquals("d == e: " + d.subtract(e), d, e);
+
+            GenPolynomial<BigInteger> ac = a.multiply(c);
+            GenPolynomial<BigInteger> bc = b.multiply(c);
+            //System.out.println("ac = " + ac);
+            //System.out.println("bc = " + bc);
+
+            d = ufds.baseResultant(ac, bc);
+            //System.out.println("d = " + d);
+            assertTrue("d == 0: " + d, d.isZERO());
+
+            e = sres.baseResultant(ac, bc);
+            //System.out.println("e = " + e);
+            assertTrue("e == 0: " + e, e.isZERO());
+        }
+    }
+
+
+    /**
+     * Test recursive resultant simple.
+     */
+    public void testRecursiveResultantimple() {
+
+        di = new BigInteger(1);
+        dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 2, to);
+        cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 2 - 1, to);
+        rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac, 1, to);
+
+        GreatestCommonDivisorSimple<BigInteger> ufds = new GreatestCommonDivisorSimple<BigInteger>();
+        GreatestCommonDivisorSubres<BigInteger> sres = new GreatestCommonDivisorSubres<BigInteger>();
+
+        //kl = 3; ll = 2;
+
+        for (int i = 0; i < 1; i++) {
+            ar = rfac.random(kl, ll, el + i, q);
+            br = rfac.random(kl, ll, el, q);
+            cr = rfac.random(kl, ll, el, q);
+            cr = ufd.recursivePrimitivePart(cr).abs();
+            System.out.println("ar = " + ar);
+            System.out.println("br = " + br);
+
+            if (ar.isZERO() || br.isZERO() || cr.isZERO()) {
+                // skip for this turn
+                continue;
+            }
+            if (cr.isConstant()) {
+                cr = rfac.univariate(0,1);
+            }
+            System.out.println("cr = " + cr);
+            assertTrue("length( cr" + i + " ) <> 0", cr.length() > 0);
+
+            dr = ufds.recursiveResultant(ar, br);
+            System.out.println("dr = " + dr);
+            er = sres.recursiveResultant(ar, br);
+            System.out.println("er = " + er);
+            assertEquals("dr == er: " + dr.subtract(er), dr.abs().signum(), er.abs().signum());
+            //assertEquals("dr == er: " + dr.subtract(er), dr, er);
+
+            GenPolynomial<GenPolynomial<BigInteger>> arc = ar.multiply(cr);
+            GenPolynomial<GenPolynomial<BigInteger>> brc = br.multiply(cr);
+            System.out.println("ar = " + ar);
+            System.out.println("br = " + br);
+
+            dr = ufds.recursiveResultant(arc, brc);
+            System.out.println("dr = " + dr);
+            //assertTrue("dr == 0: " + dr, dr.isZERO());
+
+            er = sres.recursiveResultant(arc, brc);
+            System.out.println("er = " + er);
+            //assertTrue("er == 0: " + er, er.isZERO());
+
+            assertEquals("dr == er: " + dr.subtract(er), dr.signum(), er.signum());
+        }
+    }
 
 }

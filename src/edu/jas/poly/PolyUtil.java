@@ -728,7 +728,7 @@ public class PolyUtil {
     public static <C extends RingElem<C>> GenPolynomial<C> basePseudoRemainder(GenPolynomial<C> P,
                     GenPolynomial<C> S) {
                         return baseSparsePseudoRemainder(P, S);
-                    }
+    }
 
 
     /**
@@ -778,7 +778,7 @@ public class PolyUtil {
 
 
     /**
-     * GenPolynomial pseudo remainder. For univariate polynomials.
+     * GenPolynomial dense pseudo remainder. For univariate polynomials.
      * @param P GenPolynomial.
      * @param S nonzero GenPolynomial.
      * @return remainder with ldcf(S)<sup>m</sup> P = quotient * S +
@@ -1022,8 +1022,22 @@ public class PolyUtil {
      * @param S nonzero recursive GenPolynomial.
      * @return remainder with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
      * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
+     * @deprecated Use {@link #recursiveSparsePseudoRemainder(GenPolynomial<GenPolynomial<C>>,GenPolynomial<GenPolynomial<C>>)} instead
      */
     public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<C>> recursivePseudoRemainder(
+                    GenPolynomial<GenPolynomial<C>> P, GenPolynomial<GenPolynomial<C>> S) {
+        return recursiveSparsePseudoRemainder(P,S);
+    }
+
+    /**
+     * GenPolynomial sparse pseudo remainder. For recursive polynomials.
+     * @param <C> coefficient type.
+     * @param P recursive GenPolynomial.
+     * @param S nonzero recursive GenPolynomial.
+     * @return remainder with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
+     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
+     */
+    public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<C>> recursiveSparsePseudoRemainder(
                     GenPolynomial<GenPolynomial<C>> P, GenPolynomial<GenPolynomial<C>> S) {
         if (S == null || S.isZERO()) {
             throw new ArithmeticException(P + " division by zero " + S);
@@ -1061,10 +1075,10 @@ public class PolyUtil {
 
 
     /**
-     * GenPolynomial pseudo remainder. For recursive polynomials.
+     * GenPolynomial dense pseudo remainder. For recursive polynomials.
      * @param P recursive GenPolynomial.
      * @param S nonzero recursive GenPolynomial.
-     * @return remainder with ldcf(S)<sup>m</sup> P = quotient * S + remainder.
+     * @return remainder with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
      * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
      */
     public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<C>> recursiveDensePseudoRemainder(
@@ -1110,7 +1124,7 @@ public class PolyUtil {
      * @param <C> coefficient type.
      * @param P recursive GenPolynomial.
      * @param S nonzero recursive GenPolynomial.
-     * @return quotient with ldcf(S)<sup>m</sup> P = quotient * S + remainder.
+     * @return quotient with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
      * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
      */
     public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<C>> recursivePseudoDivide(

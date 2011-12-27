@@ -629,7 +629,6 @@ public class GCDModularTest extends TestCase {
                 continue;
             }
             if (c.isConstant()) {
-                // skip for this turn
                 c = dfac.univariate(0,1);
             }
             assertTrue("length( c" + i + " ) <> 0", c.length() > 0);

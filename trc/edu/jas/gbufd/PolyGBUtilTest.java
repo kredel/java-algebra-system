@@ -11,6 +11,7 @@ import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
 
+import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.kern.ComputerThreads;
@@ -33,7 +34,7 @@ public class PolyGBUtilTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
+        //BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
         ComputerThreads.terminate();
     }
@@ -60,46 +61,7 @@ public class PolyGBUtilTest extends TestCase {
     TermOrder to = new TermOrder(TermOrder.IGRLEX);
 
 
-    GenPolynomialRing<ModInteger> dfac;
-
-
-    GenPolynomialRing<ModInteger> cfac;
-
-
-    GenPolynomialRing<GenPolynomial<ModInteger>> rfac;
-
-
-    ModInteger ai;
-
-
-    ModInteger bi;
-
-
-    ModInteger ci;
-
-
-    ModInteger di;
-
-
-    ModInteger ei;
-
-
-    GenPolynomial<ModInteger> a;
-
-
-    GenPolynomial<ModInteger> b;
-
-
-    GenPolynomial<ModInteger> c;
-
-
-    GenPolynomial<ModInteger> d;
-
-
-    GenPolynomial<ModInteger> e;
-
-
-    int rl = 2;
+    int rl = 3;
 
 
     int kl = 3;
@@ -116,32 +78,30 @@ public class PolyGBUtilTest extends TestCase {
 
     @Override
     protected void setUp() {
-        a = b = c = d = e = null;
-        ai = bi = ci = di = ei = null;
-        dfac = new GenPolynomialRing<ModInteger>(new ModIntegerRing(19), rl, to);
-        cfac = new GenPolynomialRing<ModInteger>(new ModIntegerRing(19), rl - 1, to);
-        rfac = new GenPolynomialRing<GenPolynomial<ModInteger>>(cfac, 1, to);
     }
 
 
     @Override
     protected void tearDown() {
-        a = b = c = d = e = null;
-        ai = bi = ci = di = ei = null;
-        dfac = null;
-        cfac = null;
-        rfac = null;
     }
 
 
     /**
-     * Test resultant.
-     * 
+     * Test resultant modular.
      */
-    public void testResultant() {
+    public void xtestResultantModular() {
+        GenPolynomialRing<ModInteger> dfac;
+        GenPolynomialRing<ModInteger> cfac;
+        GenPolynomialRing<GenPolynomial<ModInteger>> rfac; 
+
+        dfac = new GenPolynomialRing<ModInteger>(new ModIntegerRing(19), rl, to);
+        cfac = new GenPolynomialRing<ModInteger>(new ModIntegerRing(19), rl - 1, to);
+        rfac = new GenPolynomialRing<GenPolynomial<ModInteger>>(cfac, 1, to);
+
         System.out.println("dfac = " + dfac);
         GreatestCommonDivisorSimple<ModInteger> ufds = new GreatestCommonDivisorSimple<ModInteger>();
         GreatestCommonDivisorSubres<ModInteger> sres = new GreatestCommonDivisorSubres<ModInteger>();
+        GenPolynomial<ModInteger> a, b, c, d, e;
 
         for (int i = 0; i < 2; i++) {
             a = dfac.random(kl, ll * 1, el * 2, q);
@@ -158,6 +118,46 @@ public class PolyGBUtilTest extends TestCase {
             boolean t1 = PolyGBUtil.<ModInteger> isResultant(a,b,c);
             System.out.println("t1 = " + t1);
             boolean t2 = PolyGBUtil.<ModInteger> isResultant(a,b,d);
+            System.out.println("t2 = " + t2);
+
+            assertTrue("isResultant(a,b,d): " + d, t2 );
+            assertTrue("isResultant(a,b,c): " + c, t1 );
+        }
+    }
+
+
+    /**
+     * Test resultant integer.
+     */
+    public void testResultantInteger() {
+        GenPolynomialRing<BigInteger> dfac;
+        GenPolynomialRing<BigInteger> cfac;
+        GenPolynomialRing<GenPolynomial<BigInteger>> rfac; 
+
+        dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), rl, to);
+        cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), rl - 1, to);
+        rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac, 1, to);
+
+        System.out.println("dfac = " + dfac);
+        GreatestCommonDivisorSimple<BigInteger> ufds = new GreatestCommonDivisorSimple<BigInteger>();
+        GreatestCommonDivisorSubres<BigInteger> sres = new GreatestCommonDivisorSubres<BigInteger>();
+        GenPolynomial<BigInteger> a, b, c, d, e;
+
+        for (int i = 0; i < 1; i++) {
+            a = dfac.random(kl, ll * 1, el * 2, q);
+            b = dfac.random(kl, ll * 2, el * 1, q);
+            System.out.println("a = " + a);
+            System.out.println("b = " + b);
+
+            c = ufds.resultant(a,b);
+            System.out.println("c = " + c);
+
+            d = sres.resultant(a,b);
+            System.out.println("d = " + d);
+
+            boolean t1 = PolyGBUtil.<BigInteger> isResultant(a,b,c);
+            System.out.println("t1 = " + t1);
+            boolean t2 = PolyGBUtil.<BigInteger> isResultant(a,b,d);
             System.out.println("t2 = " + t2);
 
             assertTrue("isResultant(a,b,d): " + d, t2 );
