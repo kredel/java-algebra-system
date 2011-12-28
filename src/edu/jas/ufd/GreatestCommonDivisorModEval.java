@@ -29,22 +29,20 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
     private static final Logger logger = Logger.getLogger(GreatestCommonDivisorModEval.class);
 
 
-    private final boolean debug = logger.isDebugEnabled();
+    private final boolean debug = true || logger.isDebugEnabled();
 
 
     /**
      * Modular gcd algorithm to use.
      */
     protected final GreatestCommonDivisorAbstract<MOD> mufd 
-    // == new GreatestCommonDivisorModular();
-    = new GreatestCommonDivisorSimple<MOD>();
+                    = new GreatestCommonDivisorSimple<MOD>();
     // = new GreatestCommonDivisorPrimitive<MOD>();
     // = new GreatestCommonDivisorSubres<MOD>();
 
 
     /**
-     * Univariate GenPolynomial greatest comon divisor. Delegate to subresultant
-     * baseGcd, should not be needed.
+     * Univariate GenPolynomial greatest common divisor. 
      * @param P univariate GenPolynomial.
      * @param S univariate GenPolynomial.
      * @return gcd(P,S).
@@ -56,8 +54,7 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
 
 
     /**
-     * Univariate GenPolynomial recursive greatest comon divisor. Delegate to
-     * subresultant recursiveGcd, should not be needed.
+     * Recursive univariate GenPolynomial greatest common divisor. 
      * @param P univariate recursive GenPolynomial.
      * @param S univariate recursive GenPolynomial.
      * @return gcd(P,S).
@@ -70,8 +67,7 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
 
 
     /**
-     * GenPolynomial greatest comon divisor, modular evaluation algorithm.
-     * Method name must be different because of parameter type erasure.
+     * GenPolynomial greatest common divisor, modular evaluation algorithm.
      * @param P GenPolynomial.
      * @param S GenPolynomial.
      * @return gcd(P,S).
@@ -261,6 +257,134 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
         // remove normalization
         cp = recursivePrimitivePart(cp).abs();
         cp = cp.multiply(c);
+        q = PolyUtil.<MOD> distribute(fac, cp);
+        return q;
+    }
+
+
+    /**
+     * GenPolynomial resultant, modular evaluation algorithm.
+     * @param P GenPolynomial.
+     * @param S GenPolynomial.
+     * @return res(P,S).
+     */
+    @Override
+    public GenPolynomial<MOD> resultant(GenPolynomial<MOD> P, GenPolynomial<MOD> S) {
+        if (S == null || S.isZERO()) {
+            return S;
+        }
+        if (P == null || P.isZERO()) {
+            return P;
+        }
+        GenPolynomialRing<MOD> fac = P.ring;
+        // special case for univariate polynomials
+        if (fac.nvar <= 1) {
+            GenPolynomial<MOD> T = mufd.baseResultant(P, S);
+            return T;
+        }
+        long e = P.degree(0);
+        long f = S.degree(0);
+        GenPolynomial<MOD> q;
+        GenPolynomial<MOD> r;
+        if (f > e) {
+            r = P;
+            q = S;
+            long g = f;
+            f = e;
+            e = g;
+        } else {
+            q = P;
+            r = S;
+        }
+        // setup factories
+        ModularRingFactory<MOD> cofac = (ModularRingFactory<MOD>) P.ring.coFac;
+        if (!cofac.isField()) {
+            logger.warn("cofac is not a field: " + cofac);
+        }
+        GenPolynomialRing<MOD> mfac = new GenPolynomialRing<MOD>(cofac, fac.nvar - 1, fac.tord);
+        GenPolynomialRing<MOD> ufac = new GenPolynomialRing<MOD>(cofac, 1, fac.tord);
+        GenPolynomialRing<GenPolynomial<MOD>> rfac = new GenPolynomialRing<GenPolynomial<MOD>>(
+                ufac, fac.nvar - 1, fac.tord);
+        // convert polynomials
+        GenPolynomial<GenPolynomial<MOD>> qr;
+        GenPolynomial<GenPolynomial<MOD>> rr;
+        qr = PolyUtil.<MOD> recursive(rfac, q);
+        rr = PolyUtil.<MOD> recursive(rfac, r);
+
+        // compute degrees and degree vectors
+        ExpVector qdegv = qr.degreeVector();
+        ExpVector rdegv = rr.degreeVector();
+
+        long qd0 = PolyUtil.<MOD> coeffMaxDegree(qr);
+        long rd0 = PolyUtil.<MOD> coeffMaxDegree(rr);
+        long G = qd0 * rdegv.getVal(0) + rd0 * qdegv.getVal(0);
+
+        // initialize element and degree vector
+        MOD inc = cofac.getONE();
+        long i = 0;
+        long en = cofac.getIntegerModul().longValue() - 1; // just a stopper
+        MOD end = cofac.fromInteger(en);
+        MOD mi;
+        GenPolynomial<MOD> M = null;
+        GenPolynomial<MOD> mn;
+        GenPolynomial<MOD> qm;
+        GenPolynomial<MOD> rm;
+        GenPolynomial<MOD> cm;
+        GenPolynomial<GenPolynomial<MOD>> cp = null;
+        if (debug) {
+            //logger.info("qr    = " + qr);
+            //logger.info("rr    = " + rr);
+            //logger.info("qd0   = " + qd0);
+            //logger.info("rd0   = " + rd0);
+            logger.info("G     = " + G);
+            logger.info("rdegv = " + rdegv);
+            logger.info("qdegv = " + qdegv);
+        }
+        for (MOD d = cofac.getZERO(); d.compareTo(end) <= 0; d = d.sum(inc)) {
+            if (++i >= en) {
+                logger.error("elements of Z_p exhausted, en = " + en + ", p = " + cofac.getIntegerModul());
+                return mufd.gcd(P, S);
+                //throw new ArithmeticException("prime list exhausted");
+            }
+            // map polynomials
+            qm = PolyUtil.<MOD> evaluateFirstRec(ufac, mfac, qr, d);
+            if (!qm.degreeVector().equals(qdegv)) {
+                logger.info("un-lucky evaluation point " + d + ", qm = " + qm.degreeVector());
+                continue;
+            }
+            rm = PolyUtil.<MOD> evaluateFirstRec(ufac, mfac, rr, d);
+            if (!rm.degreeVector().equals(rdegv)) {
+                logger.info("un-lucky evaluation point " + d + ", rm = " + rm.degreeVector());
+                continue;
+            }
+            logger.info("lucky evaluation point " + d);
+            // compute modular gcd in recursion
+            //System.out.println("recursion +++++++++++++++++++++++++++++++++++");
+            cm = resultant(rm, qm);
+            //System.out.println("recursion -----------------------------------");
+            //System.out.println("cm = " + cm);
+
+            // prepare interpolation algorithm
+            if (M == null) {
+                // initialize interpolation
+                M = ufac.getONE();
+                cp = rfac.getZERO();
+            }
+            // interpolate
+            mi = PolyUtil.<MOD> evaluateMain(cofac, M, d);
+            mi = mi.inverse(); // mod p
+            cp = PolyUtil.interpolate(rfac, cp, M, mi, cm, d);
+            //logger.info("cp = " + cp);
+            mn = ufac.getONE().multiply(d);
+            mn = ufac.univariate(0).subtract(mn);
+            M = M.multiply(mn);
+            // test for completion
+            if (M.degree(0) > G) {
+                break;
+            }
+            //logger.info("M  = " + M);
+        }
+        // distribute
         q = PolyUtil.<MOD> distribute(fac, cp);
         return q;
     }

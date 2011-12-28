@@ -12,6 +12,8 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import org.apache.log4j.BasicConfigurator;
+
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.PrimeList;
@@ -34,6 +36,7 @@ public class GCDModEvalTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
+        BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 
@@ -54,8 +57,6 @@ public class GCDModEvalTest extends TestCase {
         return suite;
     }
 
-
-    //private final static int bitlen = 100;
 
     GreatestCommonDivisorAbstract<ModInteger> ufd;
 
@@ -174,7 +175,6 @@ public class GCDModEvalTest extends TestCase {
 
     /**
      * Test modular evaluation gcd.
-     * 
      */
     public void testModEvalGcd() {
 
@@ -223,7 +223,6 @@ public class GCDModEvalTest extends TestCase {
 
     /**
      * Test base quotioent and remainder.
-     * 
      */
     public void testBaseQR() {
 
@@ -277,7 +276,6 @@ public class GCDModEvalTest extends TestCase {
 
     /**
      * Test base content and primitive part.
-     * 
      */
     public void testBaseContentPP() {
 
@@ -307,7 +305,6 @@ public class GCDModEvalTest extends TestCase {
 
     /**
      * Test base gcd.
-     * 
      */
     public void testBaseGcd() {
 
@@ -347,7 +344,6 @@ public class GCDModEvalTest extends TestCase {
 
     /**
      * Test recursive quotioent and remainder.
-     * 
      */
     public void testRecursiveQR() {
         dfac = new GenPolynomialRing<ModInteger>(mi, 2, to);
@@ -379,7 +375,6 @@ public class GCDModEvalTest extends TestCase {
             //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
             //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
 
-
             br = ar.multiply(cr);
             //System.out.println("br = " + br);
             dr = PolyUtil.<ModInteger> recursivePseudoRemainder(br, cr);
@@ -403,7 +398,6 @@ public class GCDModEvalTest extends TestCase {
 
     /**
      * Test recursive content and primitive part.
-     * 
      */
     public void testRecursiveContentPP() {
         dfac = new GenPolynomialRing<ModInteger>(mi, 2, to);
@@ -431,7 +425,6 @@ public class GCDModEvalTest extends TestCase {
 
     /**
      * Test recursive gcd.
-     * 
      */
     public void testRecursiveGCD() {
         dfac = new GenPolynomialRing<ModInteger>(mi, 2, to);
@@ -472,7 +465,6 @@ public class GCDModEvalTest extends TestCase {
 
     /**
      * Test arbitrary recursive gcd.
-     * 
      */
     public void testArbitraryRecursiveGCD() {
         dfac = new GenPolynomialRing<ModInteger>(mi, 2, to);
@@ -513,7 +505,6 @@ public class GCDModEvalTest extends TestCase {
 
     /**
      * Test content and primitive part.
-     * 
      */
     public void testContentPP() {
         dfac = new GenPolynomialRing<ModInteger>(mi, 3, to);
@@ -545,7 +536,6 @@ public class GCDModEvalTest extends TestCase {
 
     /**
      * Test gcd 3 variables.
-     * 
      */
     public void testGCD3() {
         dfac = new GenPolynomialRing<ModInteger>(mi, 3, to);
@@ -584,7 +574,6 @@ public class GCDModEvalTest extends TestCase {
 
     /**
      * Test gcd.
-     * 
      */
     public void testGCD() {
         // dfac = new GenPolynomialRing<ModInteger>(mi,3,to);
@@ -630,7 +619,6 @@ public class GCDModEvalTest extends TestCase {
 
     /**
      * Test lcm.
-     * 
      */
     public void testLCM() {
         dfac = new GenPolynomialRing<ModInteger>(mi, 3, to);
@@ -672,7 +660,6 @@ public class GCDModEvalTest extends TestCase {
 
     /**
      * Test co-prime factors.
-     * 
      */
     public void testCoPrime() {
 
@@ -711,13 +698,11 @@ public class GCDModEvalTest extends TestCase {
         assertTrue("is co-prime ", ufd.isCoPrime(P));
         assertTrue("is co-prime of ", ufd.isCoPrime(P, F));
 
-
         //P = ufd.coPrimeSquarefree(F);
         //System.out.println("F = " + F);
         //System.out.println("P = " + P);
         //assertTrue("is co-prime ", ufd.isCoPrime(P) );
         //assertTrue("is co-prime of ", ufd.isCoPrime(P,F) );
-
 
         P = ufd.coPrimeRec(F);
         //System.out.println("F = " + F);
@@ -725,6 +710,59 @@ public class GCDModEvalTest extends TestCase {
 
         assertTrue("is co-prime ", ufd.isCoPrime(P));
         assertTrue("is co-prime of ", ufd.isCoPrime(P, F));
+    }
+
+
+    /**
+     * Test resultant.
+     */
+    public void testResultant() {
+        mi = new ModIntegerRing(163, true);
+        dfac = new GenPolynomialRing<ModInteger>(mi,3,to);
+        System.out.println("dfac = " + dfac);
+
+        GreatestCommonDivisorAbstract<ModInteger> ufdm = new GreatestCommonDivisorModEval<ModInteger>();
+        GreatestCommonDivisorSubres<ModInteger> ufds = new GreatestCommonDivisorSubres<ModInteger>();
+
+        for (int i = 0; i < 1; i++) {
+            a = dfac.random(kl, ll, el, q);
+            b = dfac.random(kl, ll, el, q);
+            c = dfac.random(kl, ll, el, q);
+            System.out.println("a = " + a);
+            System.out.println("b = " + b);
+
+            if (a.isZERO() || b.isZERO() || c.isZERO()) {
+                // skip for this turn
+                continue;
+            }
+            if (c.isConstant()) {
+                c = dfac.univariate(0,1);
+            }
+            assertTrue("length( c" + i + " ) <> 0", c.length() > 0);
+
+            d = ufdm.resultant(a, b);
+            System.out.println("d = " + d);
+            e = ufds.resultant(a, b);
+            System.out.println("e = " + e);
+            assertEquals("d == e: " + d.subtract(e), d.abs().signum(), e.abs().signum());
+            //assertEquals("d == e: " + d.subtract(e), d, e);
+
+            System.out.println("c = " + c);
+            GenPolynomial<ModInteger> ac = a.multiply(c);
+            GenPolynomial<ModInteger> bc = b.multiply(c);
+            System.out.println("ac = " + ac);
+            System.out.println("bc = " + bc);
+
+            d = ufdm.resultant(ac, bc);
+            System.out.println("d = " + d);
+            //assertTrue("d == 0: " + d, d.isZERO());
+
+            e = ufds.resultant(ac, bc);
+            System.out.println("e = " + e);
+            //assertTrue("e == 0: " + e, e.isZERO());
+
+            assertEquals("d == e: " + d.subtract(e), d.abs().signum(), e.abs().signum());
+        }
     }
 
 }

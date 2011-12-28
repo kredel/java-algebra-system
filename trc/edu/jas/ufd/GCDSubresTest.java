@@ -532,11 +532,11 @@ public class GCDSubresTest extends TestCase {
         GreatestCommonDivisorAbstract<BigInteger> ufdm = new GreatestCommonDivisorModular<ModInteger>(true);
         GreatestCommonDivisorSubres<BigInteger> ufds = new GreatestCommonDivisorSubres<BigInteger>();
 
-        dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 2, to);
+        dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 3, to);
 
         for (int i = 0; i < 1; i++) {
-            a = dfac.random(kl, ll, el, q);
-            b = dfac.random(kl, ll, el, q);
+            a = dfac.random(kl+(i+1), ll, el, q);
+            b = dfac.random(kl+(i+2), ll, el, q);
             c = dfac.random(kl, ll, 2, q);
             //c = dfac.getONE();
             //c = c.multiply( dfac.univariate(0) );

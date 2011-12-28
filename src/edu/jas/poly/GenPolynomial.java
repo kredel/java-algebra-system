@@ -597,7 +597,7 @@ Iterable<Monomial<C>> {
      */
     public ExpVector leadingExpVector() {
         if (val.size() == 0) {
-            return null; // ring.evzero or null ?;
+            return ring.evzero; //or null ?;
         }
         return val.firstKey();
     }
@@ -609,7 +609,7 @@ Iterable<Monomial<C>> {
      */
     public ExpVector trailingExpVector() {
         if (val.size() == 0) {
-            return null; // ring.evzero or null ?;
+            return ring.evzero; // or null ?;
         }
         return val.lastKey();
     }
