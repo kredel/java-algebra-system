@@ -407,7 +407,7 @@ public class GCDSimpleTest extends TestCase {
     /**
      * Test recursive resultant simple.
      */
-    public void testRecursiveResultantimple() {
+    public void testRecursiveResultantSimple() {
 
         di = new BigInteger(1);
         dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 2, to);

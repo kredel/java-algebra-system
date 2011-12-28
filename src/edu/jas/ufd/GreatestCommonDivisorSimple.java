@@ -240,14 +240,14 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
             C c2 = r.leadingBaseCoefficient();
             for (int i = 0; i < (e-g); i++ ) {
                 c = c.multiply(c2);
-	    }
+            }
             q = r; 
             r = x;
         } while (g != 0);
         C c2 = r.leadingBaseCoefficient();
         for (int i = 0; i < f; i++ ) {
-	    c = c.multiply(c2);
-	}
+            c = c.multiply(c2);
+        }
         if ( s == 1 ) {
             c = c.negate();
         }

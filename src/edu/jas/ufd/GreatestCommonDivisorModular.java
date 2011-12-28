@@ -8,6 +8,7 @@ package edu.jas.ufd;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.Power;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.Modular;
 import edu.jas.arith.ModLongRing;
@@ -33,7 +34,7 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
     private static final Logger logger = Logger.getLogger(GreatestCommonDivisorModular.class);
 
 
-    private final boolean debug = logger.isDebugEnabled(); //logger.isInfoEnabled();
+    private final boolean debug = true || logger.isDebugEnabled(); //logger.isInfoEnabled();
 
 
     /*
@@ -313,6 +314,161 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
         q = PolyUtil.<MOD>integerFromModularCoefficients(fac, cp);
         q = basePrimitivePart(q);
         return q.abs().multiply(c);
+    }
+
+
+    /**
+     * GenPolynomial resultant, modular algorithm.
+     * @param P GenPolynomial.
+     * @param S GenPolynomial.
+     * @return res(P,S).
+     */
+    @Override
+    public GenPolynomial<BigInteger> resultant(GenPolynomial<BigInteger> P, GenPolynomial<BigInteger> S) {
+        if (S == null || S.isZERO()) {
+            return S;
+        }
+        if (P == null || P.isZERO()) {
+            return P;
+        }
+        GenPolynomialRing<BigInteger> fac = P.ring;
+        // special case for univariate polynomials
+        if (fac.nvar <= 1) {
+            GenPolynomial<BigInteger> T = baseResultant(P, S);
+            return T;
+        }
+        long e = P.degree(0);
+        long f = S.degree(0);
+        GenPolynomial<BigInteger> q;
+        GenPolynomial<BigInteger> r;
+        if (f > e) {
+            r = P;
+            q = S;
+            long g = f;
+            f = e;
+            e = g;
+        } else {
+            q = P;
+            r = S;
+        }
+        // compute norms
+        BigInteger an = r.maxNorm();
+        BigInteger bn = q.maxNorm();
+        an = Power.<BigInteger> power(fac.coFac,an,f);
+        bn = Power.<BigInteger> power(fac.coFac,bn,e);
+        BigInteger cn = new BigInteger(e+f);
+        cn = Power.<BigInteger> factorial(fac.coFac,cn);
+        BigInteger n = cn.multiply(an).multiply(bn);
+
+        // compute degree vectors
+        ExpVector rdegv = r.leadingExpVector(); //degreeVector();
+        ExpVector qdegv = q.leadingExpVector(); //degreeVector();
+
+        //initialize prime list and degree vector
+        PrimeList primes = new PrimeList();
+        int pn = 20; //primes.size();
+        //ExpVector wdegv = rdegv.subst(0, rdegv.getVal(0) + 1);
+        // +1 seems to be a hack for the unlucky prime test
+        ModularRingFactory<MOD> cofac;
+        ModularRingFactory<MOD> cofacM = null;
+        GenPolynomial<MOD> qm;
+        GenPolynomial<MOD> rm;
+        GenPolynomialRing<MOD> mfac;
+        GenPolynomialRing<MOD> rfac = null;
+        int i = 0;
+        BigInteger M = null;
+        GenPolynomial<MOD> cp = null;
+        GenPolynomial<MOD> cm = null;
+        GenPolynomial<BigInteger> cpi = null;
+        if (debug) {
+            logger.info("an = " + an);
+            logger.info("bn = " + bn);
+            logger.info("cn = " + cn);
+            logger.info("n  = " + n);
+            logger.info("rdegv = " + rdegv);
+            logger.info("qdegv = " + qdegv);
+        }
+        for (java.math.BigInteger p : primes) {
+            //System.out.println("next run ++++++++++++++++++++++++++++++++++");
+            if ( p.longValue() == 2L ) { // skip 2
+                continue;
+            }
+            if (++i >= pn) {
+                logger.error("prime list exhausted, pn = " + pn);
+                return iufd.gcd(P, S);
+                //throw new ArithmeticException("prime list exhausted");
+            }
+            // initialize coefficient factory and map normalization factor
+            if ( ModLongRing.MAX_LONG.compareTo( p ) > 0 ) {
+                cofac = (ModularRingFactory) new ModLongRing(p, true);
+            } else {
+                cofac = (ModularRingFactory) new ModIntegerRing(p, true);
+            }
+            // initialize polynomial factory and map polynomials
+            mfac = new GenPolynomialRing<MOD>(cofac, fac.nvar, fac.tord, fac.getVars());
+            qm = PolyUtil.<MOD> fromIntegerCoefficients(mfac, q);
+            if (!qm.leadingExpVector().equals(qdegv)) { //degreeVector()
+                continue;
+            }
+            rm = PolyUtil.<MOD> fromIntegerCoefficients(mfac, r);
+            if (!rm.leadingExpVector().equals(rdegv)) { //degreeVector()
+                continue;
+            }
+            logger.info("lucky prime = " + cofac.getIntegerModul());
+
+            // compute modular resultant
+            cm = mufd.resultant(qm, rm);
+
+            // prepare chinese remainder algorithm
+            if (M == null) {
+                // initialize chinese remainder algorithm
+                M = new BigInteger(p);
+                cofacM = cofac;
+                rfac = mfac;
+                cp = cm;
+                //wdegv = wdegv.gcd(mdegv); //EVGCD(wdegv,mdegv);
+            } else {
+                // apply chinese remainder algorithm
+                BigInteger Mp = M;
+                MOD mi = cofac.fromInteger(Mp.getVal());
+                mi = mi.inverse(); // mod p
+                M = M.multiply(new BigInteger(p));
+                if ( ModLongRing.MAX_LONG.compareTo( M.getVal() ) > 0 ) {
+                    cofacM = (ModularRingFactory) new ModLongRing(M.getVal());
+                } else {
+                    cofacM = (ModularRingFactory) new ModIntegerRing(M.getVal());
+                }
+                rfac = new GenPolynomialRing<MOD>(cofacM, fac);
+                if ( ! cofac.getClass().equals(cofacM.getClass()) ) {
+                    logger.info("adjusting coefficents: cofacM = " + cofacM.getClass() + ", cofacP = " + cofac.getClass());
+                    cofac = (ModularRingFactory) new ModIntegerRing(p);
+                    mfac = new GenPolynomialRing<MOD>(cofac, fac);
+                    q = PolyUtil.<MOD>integerFromModularCoefficients(fac, cm);
+                    cm = PolyUtil.<MOD> fromIntegerCoefficients(mfac, q);
+                    mi = cofac.fromInteger(Mp.getVal());
+                    mi = mi.inverse(); // mod p
+                }
+                if ( ! cp.ring.coFac.getClass().equals(cofacM.getClass()) ) {
+                    logger.info("adjusting coefficents: cofacM = " + cofacM.getClass() + ", cofacM' = " + cp.ring.coFac.getClass());
+                    ModularRingFactory cop = (ModularRingFactory) cp.ring.coFac;
+                    cofac = (ModularRingFactory) new ModIntegerRing(cop.getIntegerModul().getVal());
+                    mfac = new GenPolynomialRing<MOD>(cofac, fac);
+                    q = PolyUtil.<MOD>integerFromModularCoefficients(fac, cp);
+                    cp = PolyUtil.<MOD> fromIntegerCoefficients(mfac, q);
+                }
+                cp = PolyUtil.<MOD> chineseRemainder(rfac, cp, mi, cm);
+            }
+            // test for completion
+            if (n.compareTo(M) <= 0) {
+                break;
+            }
+        }
+        if (debug) {
+            logger.info("done on M = " + M + ", #primes = " + i);
+        }
+        // convert to integer polynomial
+        q = PolyUtil.<MOD>integerFromModularCoefficients(fac, cp);
+        return q;
     }
 
 }

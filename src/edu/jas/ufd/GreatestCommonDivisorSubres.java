@@ -279,7 +279,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
         z = h.multiply(t);
         if ( s < 0 ) {
             z = z.negate();
-	}
+        }
         x = P.ring.getONE().multiply(z);
         return x;
     }
@@ -364,7 +364,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
         z = h.multiply(t);
         if ( s < 0 ) {
             z = z.negate();
-	}
+        }
         x = P.ring.getONE().multiply(z);
         return x;
     }

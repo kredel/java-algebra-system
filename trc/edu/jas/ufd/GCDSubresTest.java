@@ -11,7 +11,10 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import org.apache.log4j.BasicConfigurator;
+
 import edu.jas.arith.BigInteger;
+import edu.jas.arith.ModInteger;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -31,6 +34,7 @@ public class GCDSubresTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
+        BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 
@@ -51,8 +55,6 @@ public class GCDSubresTest extends TestCase {
         return suite;
     }
 
-
-    //private final static int bitlen = 100;
 
     GreatestCommonDivisorAbstract<BigInteger> ufd;
 
@@ -158,7 +160,6 @@ public class GCDSubresTest extends TestCase {
 
     /**
      * Test base gcd subresultant.
-     * 
      */
     public void testBaseGcdSubres() {
 
@@ -209,7 +210,6 @@ public class GCDSubresTest extends TestCase {
 
     /**
      * Test recursive gcd subresultant.
-     * 
      */
     public void testRecursiveGCDsubres() {
 
@@ -263,7 +263,6 @@ public class GCDSubresTest extends TestCase {
 
     /**
      * Test arbitrary recursive gcd subresultant.
-     * 
      */
     public void testArbitraryRecursiveGCDsubres() {
 
@@ -317,7 +316,6 @@ public class GCDSubresTest extends TestCase {
 
     /**
      * Test gcd subresultant.
-     * 
      */
     public void testGCDsubres() {
 
@@ -373,7 +371,6 @@ public class GCDSubresTest extends TestCase {
 
     /**
      * Test base subresultant.
-     * 
      */
     public void testBaseSubresultant() {
 
@@ -418,7 +415,6 @@ public class GCDSubresTest extends TestCase {
 
     /**
      * Test recursive subresultant.
-     * 
      */
     public void testRecursiveSubresultant() {
 
@@ -476,7 +472,6 @@ public class GCDSubresTest extends TestCase {
 
     /**
      * Test subresultant.
-     * 
      */
     public void testSubres() {
 
@@ -525,6 +520,61 @@ public class GCDSubresTest extends TestCase {
                         || !d.isConstant());
             }
 
+        }
+    }
+
+
+    /**
+     * Test and compare resultant.
+     */
+    public void testResultant() {
+
+        GreatestCommonDivisorAbstract<BigInteger> ufdm = new GreatestCommonDivisorModular<ModInteger>(true);
+        GreatestCommonDivisorSubres<BigInteger> ufds = new GreatestCommonDivisorSubres<BigInteger>();
+
+        dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 2, to);
+
+        for (int i = 0; i < 1; i++) {
+            a = dfac.random(kl, ll, el, q);
+            b = dfac.random(kl, ll, el, q);
+            c = dfac.random(kl, ll, 2, q);
+            //c = dfac.getONE();
+            //c = c.multiply( dfac.univariate(0) );
+            //c = ufd.primitivePart(c).abs();
+            System.out.println("a = " + a);
+            System.out.println("b = " + b);
+ 
+            if (a.isZERO() || b.isZERO() || c.isZERO()) {
+                // skip for this turn
+                continue;
+            }
+            if (c.isConstant()) {
+                c = dfac.univariate(0,1);
+            }
+            System.out.println("c = " + c);
+            assertTrue("length( c" + i + " ) <> 0", c.length() > 0);
+
+            d = ufdm.resultant(a, b);
+            System.out.println("d = " + d);
+            e = ufds.resultant(a, b);
+            System.out.println("e = " + e);
+            assertEquals("d == e: " + d.subtract(e), d.abs().signum(), e.abs().signum());
+            //assertEquals("d == e: " + d.subtract(e), d, e);
+
+            GenPolynomial<BigInteger> ac = a.multiply(c);
+            GenPolynomial<BigInteger> bc = b.multiply(c);
+            System.out.println("ac = " + ac);
+            System.out.println("bc = " + bc);
+
+            d = ufdm.resultant(ac, bc);
+            System.out.println("d = " + d);
+            //assertTrue("d == 0: " + d, d.isZERO());
+
+            e = ufds.resultant(ac, bc);
+            System.out.println("e = " + e);
+            //assertTrue("e == 0: " + e, e.isZERO());
+
+            assertEquals("d == e: " + d.subtract(e), d.abs().signum(), e.abs().signum());
         }
     }
 
