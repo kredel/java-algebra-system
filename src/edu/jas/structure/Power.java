@@ -395,26 +395,4 @@ public class Power<C extends RingElem<C> > {
         return res;
     }
 
-
-    /**
-     * n-th Factorial.
-     * @param n integer element.
-     * @param fac ring factory.
-     * @return n!, with 0! = 1 and.
-     */
-    @SuppressWarnings("unchecked")
-    public static <C extends RingElem<C>> C factorial( RingFactory<C> fac, C n ) {
-        C one = fac.getONE();
-        if ( n == null || n.isZERO() || n.isONE()) {
-            return one;
-        }
-        C f = one;
-        C z = one;
-        while ( z.compareTo(n) <= 0 ) {
-            f = f.multiply(z);
-            z = z.sum(one);
-        }
-        return f;
-    }
-
 }
