@@ -39,12 +39,29 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
      * @return remainder with ldcf(S)<sup>m</sup> P = quotient * S + remainder.
      * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
      * @deprecated Use {@link
-     *             #baseDensePseudoRemainder(GenPolynomial<C>,GenPolynomial<C>)}
+     *             edu.jas.poly.PolyUtil#baseDensePseudoRemainder(GenPolynomial<C>,GenPolynomial<C>)}
      *             instead
      */
     @Deprecated
     public GenPolynomial<C> basePseudoRemainder(GenPolynomial<C> P, GenPolynomial<C> S) {
         return PolyUtil.<C> baseDensePseudoRemainder(P, S);
+    }
+
+
+    /**
+     * GenPolynomial pseudo remainder. For recursive polynomials.
+     * @param P recursive GenPolynomial.
+     * @param S nonzero recursive GenPolynomial.
+     * @return remainder with ldcf(S)<sup>m</sup> P = quotient * S + remainder.
+     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
+     * @deprecated Use {@link
+     *             edu.jas.poly.PolyUtil#recursiveDensePseudoRemainder(GenPolynomial<GenPolynomial<C
+     *             >>,GenPolynomial<GenPolynomial<C>>)} instead
+     */
+    @Deprecated
+    public GenPolynomial<GenPolynomial<C>> recursivePseudoRemainder(GenPolynomial<GenPolynomial<C>> P,
+                    GenPolynomial<GenPolynomial<C>> S) {
+        return PolyUtil.<C> recursiveDensePseudoRemainder(P, S);
     }
 
 
@@ -117,23 +134,6 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
         }
         q = basePrimitivePart(q);
         return (q.multiply(c)).abs();
-    }
-
-
-    /**
-     * GenPolynomial pseudo remainder. For recursive polynomials.
-     * @param P recursive GenPolynomial.
-     * @param S nonzero recursive GenPolynomial.
-     * @return remainder with ldcf(S)<sup>m</sup> P = quotient * S + remainder.
-     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
-     * @deprecated Use {@link
-     *             #recursiveDensePseudoRemainder(GenPolynomial<GenPolynomial<C
-     *             >>,GenPolynomial<GenPolynomial<C>>)} instead
-     */
-    @Deprecated
-    public GenPolynomial<GenPolynomial<C>> recursivePseudoRemainder(GenPolynomial<GenPolynomial<C>> P,
-                    GenPolynomial<GenPolynomial<C>> S) {
-        return PolyUtil.<C> recursiveDensePseudoRemainder(P, S);
     }
 
 

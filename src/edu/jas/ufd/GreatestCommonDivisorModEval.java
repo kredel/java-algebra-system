@@ -179,11 +179,11 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
             }
             // map polynomials
             qm = PolyUtil.<MOD> evaluateFirstRec(ufac, mfac, qr, d);
-            if (!qm.degreeVector().equals(qdegv)) {
+            if (qm.isZERO() || !qm.degreeVector().equals(qdegv)) {
                 continue;
             }
             rm = PolyUtil.<MOD> evaluateFirstRec(ufac, mfac, rr, d);
-            if (!rm.degreeVector().equals(rdegv)) {
+            if (rm.isZERO() || !rm.degreeVector().equals(rdegv)) {
                 continue;
             }
             if (debug) {
@@ -375,12 +375,12 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
             }
             // map polynomials
             qm = PolyUtil.<MOD> evaluateFirstRec(ufac, mfac, qr, d);
-            if (!qm.degreeVector().equals(qdegv)) {
+            if (qm.isZERO() || !qm.degreeVector().equals(qdegv)) {
                 logger.info("un-lucky evaluation point " + d + ", qm = " + qm.degreeVector());
                 continue;
             }
             rm = PolyUtil.<MOD> evaluateFirstRec(ufac, mfac, rr, d);
-            if (!rm.degreeVector().equals(rdegv)) {
+            if (rm.isZERO() || !rm.degreeVector().equals(rdegv)) {
                 logger.info("un-lucky evaluation point " + d + ", rm = " + rm.degreeVector());
                 continue;
             }

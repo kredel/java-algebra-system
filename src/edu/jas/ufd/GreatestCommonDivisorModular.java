@@ -212,11 +212,11 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
             // initialize polynomial factory and map polynomials
             mfac = new GenPolynomialRing<MOD>(cofac, fac.nvar, fac.tord, fac.getVars());
             qm = PolyUtil.<MOD> fromIntegerCoefficients(mfac, q);
-            if (!qm.degreeVector().equals(qdegv)) {
+            if (qm.isZERO() || !qm.degreeVector().equals(qdegv)) {
                 continue;
             }
             rm = PolyUtil.<MOD> fromIntegerCoefficients(mfac, r);
-            if (!rm.degreeVector().equals(rdegv)) {
+            if (rm.isZERO() || !rm.degreeVector().equals(rdegv)) {
                 continue;
             }
             if (debug) {
@@ -454,13 +454,13 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
             // initialize polynomial factory and map polynomials
             mfac = new GenPolynomialRing<MOD>(cofac, fac);
             qm = PolyUtil.<MOD> fromIntegerCoefficients(mfac, q);
-            if (!qm.leadingExpVector().equals(qdegv)) { //degreeVector()
+            if (qm.isZERO() || !qm.leadingExpVector().equals(qdegv)) { //degreeVector()
                 //logger.info("qm = " + qm);
                 logger.info("unlucky prime = " + cofac.getIntegerModul() + ", degv = " + qm.leadingExpVector());
                 continue;
             }
             rm = PolyUtil.<MOD> fromIntegerCoefficients(mfac, r);
-            if (!rm.leadingExpVector().equals(rdegv)) { //degreeVector()
+            if (rm.isZERO() || !rm.leadingExpVector().equals(rdegv)) { //degreeVector()
                 //logger.info("rm = " + rm);
                 logger.info("unlucky prime = " + cofac.getIntegerModul() + ", degv = " + rm.leadingExpVector());
                 continue;
