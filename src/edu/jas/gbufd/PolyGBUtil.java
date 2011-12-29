@@ -46,7 +46,7 @@ public class PolyGBUtil {
         F.add(A);
         F.add(B);
         List<GenPolynomial<C>> G = bb.GB(F);
-        System.out.println("G = " + G);
+        //System.out.println("G = " + G);
         GenPolynomial<C> n = bb.red.normalform(G, r);
         //System.out.println("n = " + n);
         return n.isZERO();

@@ -36,9 +36,9 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
      * Modular gcd algorithm to use.
      */
     protected final GreatestCommonDivisorAbstract<MOD> mufd 
-                    = new GreatestCommonDivisorSimple<MOD>();
+    // = new GreatestCommonDivisorSimple<MOD>();
     // = new GreatestCommonDivisorPrimitive<MOD>();
-    // = new GreatestCommonDivisorSubres<MOD>();
+       = new GreatestCommonDivisorSubres<MOD>();
 
 
     /**
@@ -81,13 +81,20 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
             return S;
         }
         GenPolynomialRing<MOD> fac = P.ring;
-        // special case for univariate polynomials
+        // recusion base case for univariate polynomials
         if (fac.nvar <= 1) {
             GenPolynomial<MOD> T = baseGcd(P, S);
             return T;
         }
-        long e = P.degree(0);
-        long f = S.degree(0);
+        long e = P.degree(fac.nvar-1);
+        long f = S.degree(fac.nvar-1);
+        if ( e == 0 && f == 0 ) {
+            GenPolynomialRing<GenPolynomial<MOD>> rfac = fac.recursive(1);
+            GenPolynomial<MOD> Pc = PolyUtil.<MOD> recursive(rfac, P).leadingBaseCoefficient();
+            GenPolynomial<MOD> Sc = PolyUtil.<MOD> recursive(rfac, S).leadingBaseCoefficient();
+            GenPolynomial<MOD> r = gcd(Pc,Sc);
+            return r.extend(fac,0,0L);
+	}
         GenPolynomial<MOD> q;
         GenPolynomial<MOD> r;
         if (f > e) {
@@ -107,10 +114,13 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
         if (!cofac.isField()) {
             logger.warn("cofac is not a field: " + cofac);
         }
-        GenPolynomialRing<MOD> mfac = new GenPolynomialRing<MOD>(cofac, fac.nvar - 1, fac.tord);
-        GenPolynomialRing<MOD> ufac = new GenPolynomialRing<MOD>(cofac, 1, fac.tord);
-        GenPolynomialRing<GenPolynomial<MOD>> rfac = new GenPolynomialRing<GenPolynomial<MOD>>(
-                ufac, fac.nvar - 1, fac.tord);
+        GenPolynomialRing<GenPolynomial<MOD>> rfac = fac.recursive(fac.nvar - 1);
+        GenPolynomialRing<MOD> mfac = new GenPolynomialRing<MOD>(cofac, rfac);
+        GenPolynomialRing<MOD> ufac = (GenPolynomialRing<MOD>) rfac.coFac;
+        //GenPolynomialRing<MOD> mfac = new GenPolynomialRing<MOD>(cofac, fac.nvar - 1, fac.tord);
+        //GenPolynomialRing<MOD> ufac = new GenPolynomialRing<MOD>(cofac, 1, fac.tord);
+        //GenPolynomialRing<GenPolynomial<MOD>> rfac = new GenPolynomialRing<GenPolynomial<MOD>>(
+        //        ufac, fac.nvar - 1, fac.tord);
         // convert polynomials
         GenPolynomial<GenPolynomial<MOD>> qr;
         GenPolynomial<GenPolynomial<MOD>> rr;
@@ -190,9 +200,7 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
                 logger.debug("eval d = " + d);
             }
             // compute modular gcd in recursion
-            //System.out.println("recursion +++++++++++++++++++++++++++++++++++");
             cm = gcd(rm, qm);
-            //System.out.println("recursion -----------------------------------");
             //System.out.println("cm = " + cm);
             // test for constant g.c.d
             if (cm.isConstant()) {
@@ -304,13 +312,20 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
             return P;
         }
         GenPolynomialRing<MOD> fac = P.ring;
-        // special case for univariate polynomials
+        // recusion base case for univariate polynomials
         if (fac.nvar <= 1) {
             GenPolynomial<MOD> T = mufd.baseResultant(P, S);
             return T;
         }
-        long e = P.degree(0);
-        long f = S.degree(0);
+        long e = P.degree(fac.nvar-1);
+        long f = S.degree(fac.nvar-1);
+        if ( e == 0 && f == 0 ) {
+            GenPolynomialRing<GenPolynomial<MOD>> rfac = fac.recursive(1);
+            GenPolynomial<MOD> Pc = PolyUtil.<MOD> recursive(rfac, P).leadingBaseCoefficient();
+            GenPolynomial<MOD> Sc = PolyUtil.<MOD> recursive(rfac, S).leadingBaseCoefficient();
+            GenPolynomial<MOD> r = resultant(Pc,Sc);
+            return r.extend(fac,0,0L);
+	}
         GenPolynomial<MOD> q;
         GenPolynomial<MOD> r;
         if (f > e) {
@@ -328,15 +343,13 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
         if (!cofac.isField()) {
             logger.warn("cofac is not a field: " + cofac);
         }
-        GenPolynomialRing<MOD> mfac = new GenPolynomialRing<MOD>(cofac, fac.nvar - 1, fac.tord);
-        GenPolynomialRing<MOD> ufac = new GenPolynomialRing<MOD>(cofac, 1, fac.tord);
-        GenPolynomialRing<GenPolynomial<MOD>> rfac = new GenPolynomialRing<GenPolynomial<MOD>>(
-                ufac, fac.nvar - 1, fac.tord);
+        GenPolynomialRing<GenPolynomial<MOD>> rfac = fac.recursive(fac.nvar - 1);
+        GenPolynomialRing<MOD> mfac = new GenPolynomialRing<MOD>(cofac, rfac);
+        GenPolynomialRing<MOD> ufac = (GenPolynomialRing<MOD>) rfac.coFac;
+
         // convert polynomials
-        GenPolynomial<GenPolynomial<MOD>> qr;
-        GenPolynomial<GenPolynomial<MOD>> rr;
-        qr = PolyUtil.<MOD> recursive(rfac, q);
-        rr = PolyUtil.<MOD> recursive(rfac, r);
+        GenPolynomial<GenPolynomial<MOD>> qr = PolyUtil.<MOD> recursive(rfac, q);
+        GenPolynomial<GenPolynomial<MOD>> rr = PolyUtil.<MOD> recursive(rfac, r);
 
         // compute degrees and degree vectors
         ExpVector qdegv = qr.degreeVector();
@@ -344,9 +357,15 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
 
         long qd0 = PolyUtil.<MOD> coeffMaxDegree(qr);
         long rd0 = PolyUtil.<MOD> coeffMaxDegree(rr);
-        long G = qd0 * rdegv.getVal(0) + rd0 * qdegv.getVal(0);
+        qd0 = ( qd0 == 0 ? 1 : qd0 );
+        rd0 = ( rd0 == 0 ? 1 : rd0 );
+        long qd1 = qr.degree(); 
+        long rd1 = rr.degree();
+        qd1 = ( qd1 == 0 ? 1 : qd1 );
+        rd1 = ( rd1 == 0 ? 1 : rd1 );
+        long G = qd0 * rd1 + rd0 * qd1 + 1;
 
-        // initialize element and degree vector
+        // initialize element
         MOD inc = cofac.getONE();
         long i = 0;
         long en = cofac.getIntegerModul().longValue() - 1; // just a stopper
@@ -359,35 +378,37 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
         GenPolynomial<MOD> cm;
         GenPolynomial<GenPolynomial<MOD>> cp = null;
         if (debug) {
-            //logger.info("qr    = " + qr);
-            //logger.info("rr    = " + rr);
+            //logger.info("qr    = " + qr + ", q = " + q);
+            //logger.info("rr    = " + rr + ", r = " + r);
             //logger.info("qd0   = " + qd0);
             //logger.info("rd0   = " + rd0);
             logger.info("G     = " + G);
-            logger.info("rdegv = " + rdegv);
-            logger.info("qdegv = " + qdegv);
+            logger.info("rdegv = " + rdegv); // + ", rr.degree(0) = " + rr.degree(0));
+            logger.info("qdegv = " + qdegv); // + ", qr.degree(0) = " + qr.degree(0));
         }
         for (MOD d = cofac.getZERO(); d.compareTo(end) <= 0; d = d.sum(inc)) {
             if (++i >= en) {
                 logger.error("elements of Z_p exhausted, en = " + en + ", p = " + cofac.getIntegerModul());
-                return mufd.gcd(P, S);
+                return mufd.resultant(P, S);
                 //throw new ArithmeticException("prime list exhausted");
             }
             // map polynomials
             qm = PolyUtil.<MOD> evaluateFirstRec(ufac, mfac, qr, d);
+            //logger.info("qr(" + d + ") = " + qm + ", qr = " + qr);
             if (qm.isZERO() || !qm.degreeVector().equals(qdegv)) {
                 logger.info("un-lucky evaluation point " + d + ", qm = " + qm.degreeVector());
                 continue;
             }
             rm = PolyUtil.<MOD> evaluateFirstRec(ufac, mfac, rr, d);
+            //logger.info("rr(" + d + ") = " + rm + ", rr = " + rr);
             if (rm.isZERO() || !rm.degreeVector().equals(rdegv)) {
                 logger.info("un-lucky evaluation point " + d + ", rm = " + rm.degreeVector());
                 continue;
             }
-            logger.info("lucky evaluation point " + d);
             // compute modular gcd in recursion
             //System.out.println("recursion +++++++++++++++++++++++++++++++++++");
             cm = resultant(rm, qm);
+            //logger.info("res(" + rm + ", " + qm + ") mod (x - " + d  + "): " + cm.ring.toScript() + " = " + cm);
             //System.out.println("recursion -----------------------------------");
             //System.out.println("cm = " + cm);
 
@@ -407,6 +428,7 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
             M = M.multiply(mn);
             // test for completion
             if (M.degree(0) > G) {
+                logger.info("last lucky evaluation point " + d);
                 break;
             }
             //logger.info("M  = " + M);

@@ -469,6 +469,7 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
 
             // compute modular resultant
             cm = mufd.resultant(qm, rm);
+            logger.info("res_p = " + cm);
 
             // prepare chinese remainder algorithm
             if (M == null) {
