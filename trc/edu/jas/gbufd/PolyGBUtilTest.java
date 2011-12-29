@@ -24,6 +24,7 @@ import edu.jas.ufd.GreatestCommonDivisorSubres;
 import edu.jas.ufd.GreatestCommonDivisorAbstract;
 import edu.jas.ufd.GreatestCommonDivisorModular;
 import edu.jas.ufd.GreatestCommonDivisorModEval;
+import edu.jas.ufd.GCDProxy;
 
 
 /**
@@ -119,6 +120,9 @@ public class PolyGBUtilTest extends TestCase {
             //a = dfac.parse("5 x1^4 * x2^4 + 2 x1^2 + x0^2");
             //b = dfac.parse("5 x0^2 * x1^2 + 2 x2^2 + 5 x2 + 15");
 
+            //a = dfac.parse("x0^3 * x2^2 + 6 x0^4 + 6 x0 + 7");
+            //b = dfac.parse("7 x0^2 * x2^2 + 3 x2^2 + 4 x1^2 * x2 + 4 x2 + 4 x1^2 + x1 + 7");
+
             System.out.println("a = " + a);
             System.out.println("b = " + b);
 
@@ -127,9 +131,6 @@ public class PolyGBUtilTest extends TestCase {
             d = sres.resultant(a, b);
 
             e = ufdm.resultant(a, b);
-            System.out.println("c = " + c);
-            System.out.println("d = " + d);
-            System.out.println("e = " + e);
 
             boolean t1 = PolyGBUtil.<ModInteger> isResultant(a, b, c);
             System.out.println("t1 = " + t1);
@@ -137,6 +138,10 @@ public class PolyGBUtilTest extends TestCase {
             System.out.println("t2 = " + t2);
             boolean t3 = PolyGBUtil.<ModInteger> isResultant(a, b, e);
             System.out.println("t3 = " + t3);
+
+            System.out.println("c = " + c);
+            System.out.println("d = " + d);
+            System.out.println("e = " + e);
 
             assertTrue("isResultant(a,b,c): " + c, t1);
             assertTrue("isResultant(a,b,d): " + d, t2);
@@ -174,13 +179,10 @@ public class PolyGBUtilTest extends TestCase {
             System.out.println("b = " + b);
 
             c = ufds.resultant(a, b);
-            System.out.println("c = " + c);
 
             d = sres.resultant(a, b);
-            System.out.println("d = " + d);
 
             e = ufdm.resultant(a, b);
-            System.out.println("e = " + e);
 
             boolean t1 = PolyGBUtil.<BigInteger> isResultant(a, b, c);
             System.out.println("t1 = " + t1);
@@ -189,8 +191,114 @@ public class PolyGBUtilTest extends TestCase {
             boolean t3 = PolyGBUtil.<BigInteger> isResultant(a, b, e);
             System.out.println("t3 = " + t3);
 
+            System.out.println("c = " + c);
+            System.out.println("d = " + d);
+            System.out.println("e = " + e);
+
             assertTrue("isResultant(a,b,d): " + d, t2);
             assertTrue("isResultant(a,b,e): " + e, t3);
+            assertTrue("isResultant(a,b,c): " + c, t1);
+        }
+    }
+
+
+    /**
+     * Test resultant modular parallel proxy.
+     */
+    public void xtestResultantModularParallel() {
+        GenPolynomialRing<ModInteger> dfac;
+        //GenPolynomialRing<ModInteger> cfac;
+        //GenPolynomialRing<GenPolynomial<ModInteger>> rfac;
+        ModIntegerRing mi;
+
+        PrimeList primes = new PrimeList();
+        mi = new ModIntegerRing(primes.get(1)); // 17, 19, 23, 41, 163, 
+        dfac = new GenPolynomialRing<ModInteger>(mi, rl, to);
+        //cfac = new GenPolynomialRing<ModInteger>(mi, rl - 1, to);
+        //rfac = new GenPolynomialRing<GenPolynomial<ModInteger>>(cfac, 1, to);
+
+        System.out.println("dfac = " + dfac);
+        GreatestCommonDivisorAbstract<ModInteger> ufds = new GreatestCommonDivisorSimple<ModInteger>();
+        GreatestCommonDivisorAbstract<ModInteger> sres = new GreatestCommonDivisorSubres<ModInteger>();
+        GreatestCommonDivisorAbstract<ModInteger> ufdm = new GreatestCommonDivisorModEval<ModInteger>();
+
+        GreatestCommonDivisorAbstract<ModInteger> pufds = new GCDProxy<ModInteger>(sres,ufds); 
+        GreatestCommonDivisorAbstract<ModInteger> pufdm = new GCDProxy<ModInteger>(ufdm,sres); 
+
+        GenPolynomial<ModInteger> a, b, c, d, e;
+
+        for (int i = 0; i < 1; i++) {
+            a = dfac.random(kl, ll * 1, el * 2, q);
+            b = dfac.random(kl, ll * 2, el * 1, q);
+            //a = dfac.parse("6 x0^4 - 17");
+            //b = dfac.parse("6 x1^2 - 7 x0^2 - 5 x1 - 14");
+            //a = dfac.parse("5 x1^4 * x2^4 + 2 x1^2 + x0^2");
+            //b = dfac.parse("5 x0^2 * x1^2 + 2 x2^2 + 5 x2 + 15");
+
+            System.out.println("a = " + a);
+            System.out.println("b = " + b);
+
+            c = pufds.resultant(a, b);
+
+            d = pufdm.resultant(a, b);
+
+            boolean t1 = PolyGBUtil.<ModInteger> isResultant(a, b, c);
+            System.out.println("t1 = " + t1);
+            boolean t2 = PolyGBUtil.<ModInteger> isResultant(a, b, d);
+            System.out.println("t2 = " + t2);
+
+            System.out.println("c = " + c);
+            System.out.println("d = " + d);
+
+            assertTrue("isResultant(a,b,c): " + c, t1);
+            assertTrue("isResultant(a,b,d): " + d, t2);
+        }
+    }
+
+
+    /**
+     * Test resultant integer parallel proxy.
+     */
+    public void xtestResultantIntegerProxy() {
+        GenPolynomialRing<BigInteger> dfac;
+        GenPolynomialRing<BigInteger> cfac;
+        GenPolynomialRing<GenPolynomial<BigInteger>> rfac;
+
+        dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), rl, to);
+        cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), rl - 1, to);
+        rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac, 1, to);
+
+        System.out.println("dfac = " + dfac);
+        GreatestCommonDivisorAbstract<BigInteger> ufds = new GreatestCommonDivisorSimple<BigInteger>();
+        GreatestCommonDivisorAbstract<BigInteger> sres = new GreatestCommonDivisorSubres<BigInteger>();
+        GreatestCommonDivisorAbstract<BigInteger> ufdm = new GreatestCommonDivisorModular<ModInteger>(); //true);
+
+        GreatestCommonDivisorAbstract<BigInteger> pufds = new GCDProxy<BigInteger>(sres,ufds); 
+        GreatestCommonDivisorAbstract<BigInteger> pufdm = new GCDProxy<BigInteger>(ufdm,sres); 
+
+        GenPolynomial<BigInteger> a, b, c, d, e;
+
+        for (int i = 0; i < 1; i++) {
+            a = dfac.random(kl, ll * 1, el * 2, q);
+            b = dfac.random(kl, ll * 2, el * 1, q);
+            //a = dfac.parse("6 x0^4 - 17");
+            //b = dfac.parse("6 x1^2 - 7 x0^2 - 5 x1 - 14");
+            System.out.println("a = " + a);
+            System.out.println("b = " + b);
+
+            c = pufds.resultant(a, b);
+
+            d = pufdm.resultant(a, b);
+
+            boolean t1 = PolyGBUtil.<BigInteger> isResultant(a, b, c);
+            System.out.println("t1 = " + t1);
+            boolean t2 = PolyGBUtil.<BigInteger> isResultant(a, b, d);
+            System.out.println("t2 = " + t2);
+
+            System.out.println("c = " + c);
+            System.out.println("d = " + d);
+
+            assertTrue("isResultant(a,b,d): " + d, t2);
             assertTrue("isResultant(a,b,c): " + c, t1);
         }
     }
