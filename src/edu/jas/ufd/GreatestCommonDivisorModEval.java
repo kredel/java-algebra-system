@@ -263,6 +263,33 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
 
 
     /**
+     * Univariate GenPolynomial resultant. 
+     * @param P univariate GenPolynomial.
+     * @param S univariate GenPolynomial.
+     * @return res(P,S).
+     */
+    @Override
+    public GenPolynomial<MOD> baseResultant(GenPolynomial<MOD> P, GenPolynomial<MOD> S) { 
+        // required as recursion base
+        return mufd.baseResultant(P, S);
+    }
+
+
+    /**
+     * Univariate GenPolynomial recursive resultant. 
+     * @param P univariate recursive GenPolynomial.
+     * @param S univariate recursive GenPolynomial.
+     * @return res(P,S).
+     */
+    @Override
+    public GenPolynomial<GenPolynomial<MOD>> recursiveUnivariateResultant(GenPolynomial<GenPolynomial<MOD>> P,
+            GenPolynomial<GenPolynomial<MOD>> S) { 
+        // only in this class
+        return recursiveResultant(P,S);
+    }
+
+
+    /**
      * GenPolynomial resultant, modular evaluation algorithm.
      * @param P GenPolynomial.
      * @param S GenPolynomial.

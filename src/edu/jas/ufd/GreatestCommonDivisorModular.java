@@ -339,6 +339,32 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
 
 
     /**
+     * Univariate GenPolynomial resultant. 
+     * @param P univariate GenPolynomial.
+     * @param S univariate GenPolynomial.
+     * @return res(P,S).
+     */
+    @Override
+    public GenPolynomial<BigInteger> baseResultant(GenPolynomial<BigInteger> P, GenPolynomial<BigInteger> S) { 
+        // not a special case here
+        return resultant(P,S);
+    }
+
+
+    /**
+     * Univariate GenPolynomial recursive resultant. 
+     * @param P univariate recursive GenPolynomial.
+     * @param S univariate recursive GenPolynomial.
+     * @return res(P,S).
+     */
+    public GenPolynomial<GenPolynomial<BigInteger>> recursiveUnivariateResultant(GenPolynomial<GenPolynomial<BigInteger>> P,
+            GenPolynomial<GenPolynomial<BigInteger>> S) { 
+        // only in this class
+        return recursiveResultant(P,S);
+    }
+
+
+    /**
      * GenPolynomial resultant, modular algorithm.
      * @param P GenPolynomial.
      * @param S GenPolynomial.

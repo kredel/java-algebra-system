@@ -361,7 +361,7 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
         // = GCDFactory.<C>getImplementation( cfac.coFac );
         GreatestCommonDivisorAbstract<AlgebraicNumber<C>> aengine = null;
 
-        GenPolynomial<GenPolynomial<C>> Rc = engine.recursiveResultant(Pc, At);
+        GenPolynomial<GenPolynomial<C>> Rc = engine.recursiveUnivariateResultant(Pc, At);
         //System.out.println("Rc = " + Rc);
         GenPolynomial<C> res = Rc.leadingBaseCoefficient();
         //no: res = res.monic();

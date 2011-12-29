@@ -80,7 +80,7 @@ public interface GreatestCommonDivisor<C extends GcdRingElem<C>> extends Seriali
      * @param P GenPolynomial.
      * @param S GenPolynomial.
      * @return res(P,S).
-     * @see edu.jas.ufd.GreatestCommonDivisorSubres#recursiveResultant
+     * @throws UnsupportedOperationException if there is no implementation in the sub-class.
      */
     public GenPolynomial<C> resultant(GenPolynomial<C> P, GenPolynomial<C> S);
 
@@ -96,31 +96,10 @@ public interface GreatestCommonDivisor<C extends GcdRingElem<C>> extends Seriali
 
 
     /**
-     * GenPolynomial co-prime list.
-     * @param a GenPolynomial.
-     * @param P co-prime list of GenPolynomials.
-     * @return B with gcd(b,c) = 1 for all b != c in B and for non-constant a
-     *         there exists b in P with b|a. B does not contain zero or constant
-     *         polynomials.
-     */
-    public List<GenPolynomial<C>> coPrime(GenPolynomial<C> a, List<GenPolynomial<C>> P);
-
-
-    /**
      * GenPolynomial test for co-prime list.
      * @param A list of GenPolynomials.
      * @return true if gcd(b,c) = 1 for all b != c in B, else false.
      */
     public boolean isCoPrime(List<GenPolynomial<C>> A);
-
-
-    /**
-     * GenPolynomial test for co-prime list of given list.
-     * @param A list of GenPolynomials.
-     * @param P list of co-prime GenPolynomials.
-     * @return true if isCoPrime(P) and for all a in A exists p in P with p | a,
-     *         else false.
-     */
-    public boolean isCoPrime(List<GenPolynomial<C>> P, List<GenPolynomial<C>> A);
 
 }

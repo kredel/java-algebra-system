@@ -449,7 +449,7 @@ public class GCDSubresTest extends TestCase {
             //System.out.println("ar = " + ar);
             //System.out.println("br = " + br);
 
-            dr = ufd.recursiveResultant(ar, br);
+            dr = ufd.recursiveUnivariateResultant(ar, br);
             //System.out.println("cr = " + cr);
             //System.out.println("dr = " + dr);
             er = ufd.recursiveUnivariateGcd(ar, br);

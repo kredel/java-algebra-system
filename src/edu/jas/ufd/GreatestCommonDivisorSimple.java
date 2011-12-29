@@ -178,6 +178,7 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
      * @param S univariate GenPolynomial.
      * @return res(P,S).
      */
+    @Override
     public GenPolynomial<C> baseResultant(GenPolynomial<C> P, GenPolynomial<C> S) {
         if (S == null || S.isZERO()) {
             return S;
@@ -262,7 +263,8 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
      * @param S univariate recursive GenPolynomial.
      * @return res(P,S).
      */
-    public GenPolynomial<GenPolynomial<C>> recursiveResultant(GenPolynomial<GenPolynomial<C>> P,
+    @Override
+    public GenPolynomial<GenPolynomial<C>> recursiveUnivariateResultant(GenPolynomial<GenPolynomial<C>> P,
             GenPolynomial<GenPolynomial<C>> S) {
         if (S == null || S.isZERO()) {
             return S;

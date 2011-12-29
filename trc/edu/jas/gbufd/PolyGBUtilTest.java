@@ -9,8 +9,6 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.log4j.BasicConfigurator;
-
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
@@ -92,7 +90,7 @@ public class PolyGBUtilTest extends TestCase {
     public void xtestResultantModular() {
         GenPolynomialRing<ModInteger> dfac;
         GenPolynomialRing<ModInteger> cfac;
-        GenPolynomialRing<GenPolynomial<ModInteger>> rfac; 
+        GenPolynomialRing<GenPolynomial<ModInteger>> rfac;
 
         dfac = new GenPolynomialRing<ModInteger>(new ModIntegerRing(19), rl, to);
         cfac = new GenPolynomialRing<ModInteger>(new ModIntegerRing(19), rl - 1, to);
@@ -109,19 +107,19 @@ public class PolyGBUtilTest extends TestCase {
             System.out.println("a = " + a);
             System.out.println("b = " + b);
 
-            c = ufds.resultant(a,b);
+            c = ufds.resultant(a, b);
             System.out.println("c = " + c);
 
-            d = sres.resultant(a,b);
+            d = sres.resultant(a, b);
             System.out.println("d = " + d);
 
-            boolean t1 = PolyGBUtil.<ModInteger> isResultant(a,b,c);
+            boolean t1 = PolyGBUtil.<ModInteger> isResultant(a, b, c);
             System.out.println("t1 = " + t1);
-            boolean t2 = PolyGBUtil.<ModInteger> isResultant(a,b,d);
+            boolean t2 = PolyGBUtil.<ModInteger> isResultant(a, b, d);
             System.out.println("t2 = " + t2);
 
-            assertTrue("isResultant(a,b,d): " + d, t2 );
-            assertTrue("isResultant(a,b,c): " + c, t1 );
+            assertTrue("isResultant(a,b,d): " + d, t2);
+            assertTrue("isResultant(a,b,c): " + c, t1);
         }
     }
 
@@ -132,7 +130,7 @@ public class PolyGBUtilTest extends TestCase {
     public void testResultantInteger() {
         GenPolynomialRing<BigInteger> dfac;
         GenPolynomialRing<BigInteger> cfac;
-        GenPolynomialRing<GenPolynomial<BigInteger>> rfac; 
+        GenPolynomialRing<GenPolynomial<BigInteger>> rfac;
 
         dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), rl, to);
         cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), rl - 1, to);
@@ -149,19 +147,19 @@ public class PolyGBUtilTest extends TestCase {
             System.out.println("a = " + a);
             System.out.println("b = " + b);
 
-            c = ufds.resultant(a,b);
+            c = ufds.resultant(a, b);
             System.out.println("c = " + c);
 
-            d = sres.resultant(a,b);
+            d = sres.resultant(a, b);
             System.out.println("d = " + d);
 
-            boolean t1 = PolyGBUtil.<BigInteger> isResultant(a,b,c);
+            boolean t1 = PolyGBUtil.<BigInteger> isResultant(a, b, c);
             System.out.println("t1 = " + t1);
-            boolean t2 = PolyGBUtil.<BigInteger> isResultant(a,b,d);
+            boolean t2 = PolyGBUtil.<BigInteger> isResultant(a, b, d);
             System.out.println("t2 = " + t2);
 
-            assertTrue("isResultant(a,b,d): " + d, t2 );
-            assertTrue("isResultant(a,b,c): " + c, t1 );
+            assertTrue("isResultant(a,b,d): " + d, t2);
+            assertTrue("isResultant(a,b,c): " + c, t1);
         }
     }
 

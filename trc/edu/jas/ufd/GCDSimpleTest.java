@@ -437,9 +437,9 @@ public class GCDSimpleTest extends TestCase {
             System.out.println("cr = " + cr);
             assertTrue("length( cr" + i + " ) <> 0", cr.length() > 0);
 
-            dr = ufds.recursiveResultant(ar, br);
+            dr = ufds.recursiveUnivariateResultant(ar, br);
             System.out.println("dr = " + dr);
-            er = sres.recursiveResultant(ar, br);
+            er = sres.recursiveUnivariateResultant(ar, br);
             System.out.println("er = " + er);
             assertEquals("dr == er: " + dr.subtract(er), dr.abs().signum(), er.abs().signum());
             //assertEquals("dr == er: " + dr.subtract(er), dr, er);
@@ -449,11 +449,11 @@ public class GCDSimpleTest extends TestCase {
             System.out.println("ar = " + ar);
             System.out.println("br = " + br);
 
-            dr = ufds.recursiveResultant(arc, brc);
+            dr = ufds.recursiveUnivariateResultant(arc, brc);
             System.out.println("dr = " + dr);
             //assertTrue("dr == 0: " + dr, dr.isZERO());
 
-            er = sres.recursiveResultant(arc, brc);
+            er = sres.recursiveUnivariateResultant(arc, brc);
             System.out.println("er = " + er);
             //assertTrue("er == 0: " + er, er.isZERO());
 

@@ -338,7 +338,7 @@ public class PolyUfdUtil {
         GreatestCommonDivisorSubres<C> engine = new GreatestCommonDivisorSubres<C>( /*cfac.coFac*/);
         // = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getImplementation( cfac.coFac );
 
-        GenPolynomial<GenPolynomial<C>> Rc = engine.recursiveResultant(Pc, Ac);
+        GenPolynomial<GenPolynomial<C>> Rc = engine.recursiveUnivariateResultant(Pc, Ac);
         //System.out.println("Rc = " + Rc.toScript());
         GenPolynomial<C> res = Rc.leadingBaseCoefficient();
         res = res.monic();
