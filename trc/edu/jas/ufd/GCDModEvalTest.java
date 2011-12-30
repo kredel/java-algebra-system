@@ -689,10 +689,8 @@ public class GCDModEvalTest extends TestCase {
         F.add(b);
         F.add(c);
         F.add(e);
-
-
-        List<GenPolynomial<ModInteger>> P = ufd.coPrime(F);
         //System.out.println("F = " + F);
+        List<GenPolynomial<ModInteger>> P = ufd.coPrime(F);
         //System.out.println("P = " + P);
 
         assertTrue("is co-prime ", ufd.isCoPrime(P));
@@ -719,7 +717,7 @@ public class GCDModEvalTest extends TestCase {
     public void testResultant() {
         mi = new ModIntegerRing(163, true);
         dfac = new GenPolynomialRing<ModInteger>(mi,3,to);
-        System.out.println("dfac = " + dfac);
+        //System.out.println("dfac = " + dfac);
 
         GreatestCommonDivisorAbstract<ModInteger> ufdm = new GreatestCommonDivisorModEval<ModInteger>();
         GreatestCommonDivisorSubres<ModInteger> ufds = new GreatestCommonDivisorSubres<ModInteger>();
@@ -728,8 +726,8 @@ public class GCDModEvalTest extends TestCase {
             a = dfac.random(kl, ll, el, q);
             b = dfac.random(kl, ll, el, q);
             c = dfac.random(kl, ll, el, q);
-            System.out.println("a = " + a);
-            System.out.println("b = " + b);
+            //System.out.println("a = " + a);
+            //System.out.println("b = " + b);
 
             if (a.isZERO() || b.isZERO() || c.isZERO()) {
                 // skip for this turn
@@ -741,24 +739,24 @@ public class GCDModEvalTest extends TestCase {
             assertTrue("length( c" + i + " ) <> 0", c.length() > 0);
 
             d = ufdm.resultant(a, b);
-            System.out.println("d = " + d);
+            //System.out.println("d = " + d);
             e = ufds.resultant(a, b);
-            System.out.println("e = " + e);
+            //System.out.println("e = " + e);
             assertEquals("d == e: " + d.subtract(e), d.abs().signum(), e.abs().signum());
             //assertEquals("d == e: " + d.subtract(e), d, e);
 
-            System.out.println("c = " + c);
+            //System.out.println("c = " + c);
             GenPolynomial<ModInteger> ac = a.multiply(c);
             GenPolynomial<ModInteger> bc = b.multiply(c);
-            System.out.println("ac = " + ac);
-            System.out.println("bc = " + bc);
+            //System.out.println("ac = " + ac);
+            //System.out.println("bc = " + bc);
 
             d = ufdm.resultant(ac, bc);
-            System.out.println("d = " + d);
+            //System.out.println("d = " + d);
             //assertTrue("d == 0: " + d, d.isZERO());
 
             e = ufds.resultant(ac, bc);
-            System.out.println("e = " + e);
+            //System.out.println("e = " + e);
             //assertTrue("e == 0: " + e, e.isZERO());
 
             assertEquals("d == e: " + d.subtract(e), d.abs().signum(), e.abs().signum());

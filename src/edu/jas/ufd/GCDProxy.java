@@ -531,7 +531,7 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
                 try {
                     //System.out.println("starting e1 " + e1.getClass().getName());
                     GenPolynomial<C> g = e1.resultant(P, S);
-                    if (true || debug) {
+                    if (debug) {
                         logger.info("GCDProxy done e1 " + e1.getClass().getName());
                     }
                     return g;
@@ -555,7 +555,7 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
                 try {
                     //System.out.println("starting e2 " + e2.getClass().getName());
                     GenPolynomial<C> g = e2.resultant(P, S);
-                    if (true || debug) {
+                    if (debug) {
                         logger.info("GCDProxy done e2 " + e2.getClass().getName());
                     }
                     return g;

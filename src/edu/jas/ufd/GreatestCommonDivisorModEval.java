@@ -29,16 +29,16 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
     private static final Logger logger = Logger.getLogger(GreatestCommonDivisorModEval.class);
 
 
-    private final boolean debug = true || logger.isDebugEnabled();
+    private final boolean debug = logger.isDebugEnabled();
 
 
     /**
      * Modular gcd algorithm to use.
      */
     protected final GreatestCommonDivisorAbstract<MOD> mufd 
-    // = new GreatestCommonDivisorSimple<MOD>();
+       = new GreatestCommonDivisorSimple<MOD>();
     // = new GreatestCommonDivisorPrimitive<MOD>();
-       = new GreatestCommonDivisorSubres<MOD>();
+    // not okay: = new GreatestCommonDivisorSubres<MOD>();
 
 
     /**
@@ -49,6 +49,7 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
      */
     @Override
     public GenPolynomial<MOD> baseGcd(GenPolynomial<MOD> P, GenPolynomial<MOD> S) {
+        // required as recursion base
         return mufd.baseGcd(P, S);
     }
 
@@ -119,8 +120,7 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
         GenPolynomialRing<MOD> ufac = (GenPolynomialRing<MOD>) rfac.coFac;
         //GenPolynomialRing<MOD> mfac = new GenPolynomialRing<MOD>(cofac, fac.nvar - 1, fac.tord);
         //GenPolynomialRing<MOD> ufac = new GenPolynomialRing<MOD>(cofac, 1, fac.tord);
-        //GenPolynomialRing<GenPolynomial<MOD>> rfac = new GenPolynomialRing<GenPolynomial<MOD>>(
-        //        ufac, fac.nvar - 1, fac.tord);
+        //GenPolynomialRing<GenPolynomial<MOD>> rfac = new GenPolynomialRing<GenPolynomial<MOD>>(ufac, fac.nvar - 1, fac.tord);
         // convert polynomials
         GenPolynomial<GenPolynomial<MOD>> qr;
         GenPolynomial<GenPolynomial<MOD>> rr;
@@ -178,7 +178,7 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
         }
         for (MOD d = cofac.getZERO(); d.compareTo(end) <= 0; d = d.sum(inc)) {
             if (++i >= en) {
-                logger.error("elements of Z_p exhausted, en = " + en);
+                logger.warn("elements of Z_p exhausted, en = " + en);
                 return mufd.gcd(P, S);
                 //throw new ArithmeticException("prime list exhausted");
             }
@@ -225,11 +225,11 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
                 }
             } else { // TL = 3
                 boolean ok = false;
-                if (wdegv.multipleOf(mdegv)) { // TL = 2 // EVMT(wdegv,mdegv)
+                if (wdegv.multipleOf(mdegv)) { // TL = 2
                     M = null; // init chinese remainder
                     ok = true; // prime ok
                 }
-                if (mdegv.multipleOf(wdegv)) { // TL = 1 // EVMT(mdegv,wdegv)
+                if (mdegv.multipleOf(wdegv)) { // TL = 1
                     continue; // skip this prime
                 }
                 if (!ok) {
@@ -383,12 +383,12 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
             //logger.info("qd0   = " + qd0);
             //logger.info("rd0   = " + rd0);
             logger.info("G     = " + G);
-            logger.info("rdegv = " + rdegv); // + ", rr.degree(0) = " + rr.degree(0));
-            logger.info("qdegv = " + qdegv); // + ", qr.degree(0) = " + qr.degree(0));
+            //logger.info("rdegv = " + rdegv); // + ", rr.degree(0) = " + rr.degree(0));
+            //logger.info("qdegv = " + qdegv); // + ", qr.degree(0) = " + qr.degree(0));
         }
         for (MOD d = cofac.getZERO(); d.compareTo(end) <= 0; d = d.sum(inc)) {
             if (++i >= en) {
-                logger.error("elements of Z_p exhausted, en = " + en + ", p = " + cofac.getIntegerModul());
+                logger.warn("elements of Z_p exhausted, en = " + en + ", p = " + cofac.getIntegerModul());
                 return mufd.resultant(P, S);
                 //throw new ArithmeticException("prime list exhausted");
             }
@@ -396,20 +396,21 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
             qm = PolyUtil.<MOD> evaluateFirstRec(ufac, mfac, qr, d);
             //logger.info("qr(" + d + ") = " + qm + ", qr = " + qr);
             if (qm.isZERO() || !qm.degreeVector().equals(qdegv)) {
-                logger.info("un-lucky evaluation point " + d + ", qm = " + qm.degreeVector());
+                if (debug) {
+                   logger.info("un-lucky evaluation point " + d + ", qm = " + qm.degreeVector() + " < " + qdegv);
+                }
                 continue;
             }
             rm = PolyUtil.<MOD> evaluateFirstRec(ufac, mfac, rr, d);
             //logger.info("rr(" + d + ") = " + rm + ", rr = " + rr);
             if (rm.isZERO() || !rm.degreeVector().equals(rdegv)) {
-                logger.info("un-lucky evaluation point " + d + ", rm = " + rm.degreeVector());
+                if (debug) {
+                    logger.info("un-lucky evaluation point " + d + ", rm = " + rm.degreeVector() + " < " + rdegv);
+                }
                 continue;
             }
-            // compute modular gcd in recursion
-            //System.out.println("recursion +++++++++++++++++++++++++++++++++++");
+            // compute modular resultant in recursion
             cm = resultant(rm, qm);
-            //logger.info("res(" + rm + ", " + qm + ") mod (x - " + d  + "): " + cm.ring.toScript() + " = " + cm);
-            //System.out.println("recursion -----------------------------------");
             //System.out.println("cm = " + cm);
 
             // prepare interpolation algorithm
@@ -428,7 +429,9 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
             M = M.multiply(mn);
             // test for completion
             if (M.degree(0) > G) {
-                logger.info("last lucky evaluation point " + d);
+                if (debug) {
+                    logger.info("last lucky evaluation point " + d);
+                }
                 break;
             }
             //logger.info("M  = " + M);

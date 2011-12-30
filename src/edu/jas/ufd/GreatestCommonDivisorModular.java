@@ -35,7 +35,7 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
     private static final Logger logger = Logger.getLogger(GreatestCommonDivisorModular.class);
 
 
-    private final boolean debug = true || logger.isDebugEnabled(); //logger.isInfoEnabled();
+    private final boolean debug = logger.isDebugEnabled(); //logger.isInfoEnabled();
 
 
     /*
@@ -195,7 +195,7 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
                 continue;
             }
             if (++i >= pn) {
-                logger.error("prime list exhausted, pn = " + pn);
+                logger.warn("prime list exhausted, pn = " + pn);
                 return iufd.gcd(P, S);
                 //throw new ArithmeticException("prime list exhausted");
             }
@@ -379,7 +379,7 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
             return P;
         }
         GenPolynomialRing<BigInteger> fac = P.ring;
-        // no special case for univariate polynomials
+        // no special case for univariate polynomials in this class !
         //if (fac.nvar <= 1) {
         //    GenPolynomial<BigInteger> T = iufd.baseResultant(P, S);
         //    return T;
@@ -441,7 +441,7 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
                 continue;
             }
             if (++i >= pn) {
-                logger.error("prime list exhausted, pn = " + pn);
+                logger.warn("prime list exhausted, pn = " + pn);
                 return iufd.resultant(P, S);
                 //throw new ArithmeticException("prime list exhausted");
             }
@@ -456,20 +456,26 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
             qm = PolyUtil.<MOD> fromIntegerCoefficients(mfac, q);
             if (qm.isZERO() || !qm.leadingExpVector().equals(qdegv)) { //degreeVector()
                 //logger.info("qm = " + qm);
-                logger.info("unlucky prime = " + cofac.getIntegerModul() + ", degv = " + qm.leadingExpVector());
+                if (debug) {
+                   logger.info("unlucky prime = " + cofac.getIntegerModul() + ", degv = " + qm.leadingExpVector());
+                }
                 continue;
             }
             rm = PolyUtil.<MOD> fromIntegerCoefficients(mfac, r);
             if (rm.isZERO() || !rm.leadingExpVector().equals(rdegv)) { //degreeVector()
                 //logger.info("rm = " + rm);
-                logger.info("unlucky prime = " + cofac.getIntegerModul() + ", degv = " + rm.leadingExpVector());
+                if (debug) {
+                    logger.info("unlucky prime = " + cofac.getIntegerModul() + ", degv = " + rm.leadingExpVector());
+                }
                 continue;
             }
             logger.info("lucky prime = " + cofac.getIntegerModul());
 
             // compute modular resultant
             cm = mufd.resultant(qm, rm);
-            logger.info("res_p = " + cm);
+            if (debug) {
+                logger.info("res_p = " + cm);
+            }
 
             // prepare chinese remainder algorithm
             if (M == null) {
