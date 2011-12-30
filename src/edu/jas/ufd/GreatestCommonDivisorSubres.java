@@ -39,7 +39,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
      * @return remainder with ldcf(S)<sup>m</sup> P = quotient * S + remainder.
      * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
      * @deprecated Use {@link
-     *             edu.jas.poly.PolyUtil#baseDensePseudoRemainder(GenPolynomial<C>,GenPolynomial<C>)}
+     *             edu.jas.poly.PolyUtil#baseDensePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial)}
      *             instead
      */
     @Deprecated
@@ -55,8 +55,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
      * @return remainder with ldcf(S)<sup>m</sup> P = quotient * S + remainder.
      * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
      * @deprecated Use {@link
-     *             edu.jas.poly.PolyUtil#recursiveDensePseudoRemainder(GenPolynomial<GenPolynomial<C
-     *             >>,GenPolynomial<GenPolynomial<C>>)} instead
+     *             edu.jas.poly.PolyUtil#recursiveDensePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial)} instead
      */
     @Deprecated
     public GenPolynomial<GenPolynomial<C>> recursivePseudoRemainder(GenPolynomial<GenPolynomial<C>> P,

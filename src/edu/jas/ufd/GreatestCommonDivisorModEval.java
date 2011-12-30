@@ -95,7 +95,7 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
             GenPolynomial<MOD> Sc = PolyUtil.<MOD> recursive(rfac, S).leadingBaseCoefficient();
             GenPolynomial<MOD> r = gcd(Pc,Sc);
             return r.extend(fac,0,0L);
-	}
+        }
         GenPolynomial<MOD> q;
         GenPolynomial<MOD> r;
         if (f > e) {
@@ -325,7 +325,7 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
             GenPolynomial<MOD> Sc = PolyUtil.<MOD> recursive(rfac, S).leadingBaseCoefficient();
             GenPolynomial<MOD> r = resultant(Pc,Sc);
             return r.extend(fac,0,0L);
-	}
+        }
         GenPolynomial<MOD> q;
         GenPolynomial<MOD> r;
         if (f > e) {
