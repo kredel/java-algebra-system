@@ -120,59 +120,119 @@ GETC      = getc.pl
 .PHONY    : clean doc
 
 all:
-	$(JAVAC) src/edu/jas/*/*.java src/edu/mas/*/*.java
+	$(JAVAC) src/edu/jas/*/*.java src/edu/mas/*/*.java trc/edu/jas/*/*.java trc/edu/mas/*/*.java
 
 %.class: %.java
 	$(JAVAC) $<
 
-
 edu/jas/%.class: src/edu/jas/%.java
 	$(JAVAC) $<
 
-edu/jas/arith/%.class: src/edu/jas/arith/%.java  trc/edu/jas/arith/%.java
+
+edu/jas/arith/%Test.class: trc/edu/jas/arith/%Test.java
 	$(JAVAC) $<
 
-edu/jas/poly/%.class: src/edu/jas/poly/%.java  trc/edu/jas/poly/%.java
+edu/jas/arith/%.class: src/edu/jas/arith/%.java
 	$(JAVAC) $<
 
-edu/jas/ps/%.class: src/edu/jas/ps/%.java  trc/edu/jas/ps/%.java
+
+edu/jas/poly/%Test.class: trc/edu/jas/poly/%Test.java
 	$(JAVAC) $<
 
-edu/jas/gb/%.class: src/edu/jas/gb/%.java trc/edu/jas/gb/%.java
+edu/jas/poly/%.class: src/edu/jas/poly/%.java
 	$(JAVAC) $<
 
-edu/jas/ufd/%.class: src/edu/jas/ufd/%.java trc/edu/jas/ufd/%.java
+
+edu/jas/ps/%Test.class: trc/edu/jas/ps/%Test.java
 	$(JAVAC) $<
 
-edu/jas/vector/%.class: src/edu/jas/vector/%.java  trc/edu/jas/vector/%.java
+edu/jas/ps/%.class: src/edu/jas/ps/%.java
 	$(JAVAC) $<
 
-edu/jas/gbmod/%.class: src/edu/jas/gbmod/%.java trc/edu/jas/gbmod/%.java
+
+edu/jas/gb/%Test.class: trc/edu/jas/gb/%Test.java
 	$(JAVAC) $<
 
-edu/jas/gbufd/%.class: src/edu/jas/gbufd/%.java trc/edu/jas/gbufd/%.java
+edu/jas/gb/%.class: src/edu/jas/gb/%.java
 	$(JAVAC) $<
 
-edu/jas/structure/%.class: src/edu/jas/structure/%.java trc/edu/jas/structure/%.java
+
+edu/jas/ufd/%Test.class: trc/edu/jas/ufd/%Test.java 
 	$(JAVAC) $<
 
-edu/jas/util/%.class: src/edu/jas/util/%.java trc/edu/jas/util/%.java
+edu/jas/ufd/%.class: src/edu/jas/ufd/%.java 
 	$(JAVAC) $<
 
-edu/jas/application/%.class: src/edu/jas/application/%.java trc/edu/jas/application/%.java
+
+edu/jas/vector/%Test.class: trc/edu/jas/vector/%Test.java
 	$(JAVAC) $<
 
-edu/jas/root/%.class: src/edu/jas/root/%.java  trc/edu/jas/root/%.java
+edu/jas/vector/%.class: src/edu/jas/vector/%.java
 	$(JAVAC) $<
 
-edu/jas/kern/%.class: src/edu/jas/kern/%.java  trc/edu/jas/kern/%.java
+
+edu/jas/gbmod/%Test.class: trc/edu/jas/gbmod/%Test.java
 	$(JAVAC) $<
 
-edu/jas/integrate/%.class: src/edu/jas/integrate/%.java trc/edu/jas/integrate/%.java
+edu/jas/gbmod/%.class: src/edu/jas/gbmod/%.java
 	$(JAVAC) $<
 
-edu/mas/kern/%.class: src/edu/mas/kern/%.java trc/edu/mas/kern/%.java
+
+edu/jas/gbufd/%Test.class: trc/edu/jas/gbufd/%Test.java
 	$(JAVAC) $<
+
+edu/jas/gbufd/%.class: src/edu/jas/gbufd/%.java
+	$(JAVAC) $<
+
+
+edu/jas/structure/%Test.class: trc/edu/jas/structure/%Test.java
+	$(JAVAC) $<
+
+edu/jas/structure/%.class: src/edu/jas/structure/%.java
+	$(JAVAC) $<
+
+
+edu/jas/util/%Test.class: trc/edu/jas/util/%Test.java
+	$(JAVAC) $<
+
+edu/jas/util/%.class: src/edu/jas/util/%.java
+	$(JAVAC) $<
+
+
+edu/jas/application/%Test.class: trc/edu/jas/application/%Test.java
+	$(JAVAC) $<
+
+edu/jas/application/%.class: src/edu/jas/application/%.java
+	$(JAVAC) $<
+
+
+edu/jas/root/%Test.class: trc/edu/jas/root/%Test.java
+	$(JAVAC) $<
+
+edu/jas/root/%.class: src/edu/jas/root/%.java
+	$(JAVAC) $<
+
+
+edu/jas/kern/%Test.class: trc/edu/jas/kern/%Test.java
+	$(JAVAC) $<
+
+edu/jas/kern/%.class: src/edu/jas/kern/%.java
+	$(JAVAC) $<
+
+
+edu/jas/integrate/%Test.class: trc/edu/jas/integrate/%Test.java
+	$(JAVAC) $<
+
+edu/jas/integrate/%.class: src/edu/jas/integrate/%.java
+	$(JAVAC) $<
+
+
+edu/mas/kern/%Test.class: trc/edu/mas/kern/%Test.java
+	$(JAVAC) $<
+
+edu/mas/kern/%.class: src/edu/mas/kern/%.java
+	$(JAVAC) $<
+
 
 edu.jas.%: edu/jas/%.class
 	$(JAVA) $@ $(cl)
@@ -225,6 +285,8 @@ edu.mas.kern.%: edu/mas/kern/%.class
 
 FILES=$(wildcard src/edu/jas/structure/*.java src/edu/jas/arith/*.java src/edu/jas/poly/*.java src/edu/jas/ps/*.java src/edu/jas/gb/*.java src/edu/jas/application/*.java src/edu/jas/vector/*.java src/edu/jas/gbmod/*.java src/edu/jas/util/*.java src/edu/jas/ufd/*.java src/edu/jas/kern/*.java src/edu/jas/root/*.java src/edu/jas/integrate/*.java)
 
+TESTFILES=$(wildcard trc/edu/jas/structure/*.java trc/edu/jas/arith/*.java trc/edu/jas/poly/*.java trc/edu/jas/ps/*.java trc/edu/jas/gb/*.java trc/edu/jas/application/*.java trc/edu/jas/vector/*.java trc/edu/jas/gbmod/*.java trc/edu/jas/util/*.java trc/edu/jas/ufd/*.java trc/edu/jas/kern/*.java trc/edu/jas/root/*.java trc/edu/jas/integrate/*.java)
+
 LIBS=$(JUNITPATH) $(LOG4JPATH) $(JOMPPATH) $(TNJPATH)
 
 CLASSES=edu/jas/structure/ edu/jas/arith/ edu/jas/poly/ edu/jas/ps/ edu/jas/gb/ edu/jas/application/ edu/jas/vector/ edu/jas/gbmod/ edu/jas/util/ edu/jas/ufd/ edu/jas/kern/ edu/jas/root/ edu/jas/integrate/
@@ -235,8 +297,8 @@ EXAMPY=$(wildcard examples/*.py)
 DOCU=$(wildcard jas-log.html index.html problems.html design.html COPYING* sample.jythonrc overview.html)
 # */package.html 
 
-doc: $(FILES)
-	$(DOC) $(DOCOPTS) -d doc/api $(FILES) 
+doc: $(FILES) $(TESTFILES)
+	$(DOC) $(DOCOPTS) -d doc/api $(FILES) $(TESTFILES)
 
 epydoc: examples/jas.py
 	epydoc -o doc/jython -n "Python to JAS" -u ../../index.html examples/jas.py
@@ -244,22 +306,22 @@ epydoc: examples/jas.py
 rdoc: examples/jas.rb
 	jrdoc -o doc/jruby -U -S -N -t "Ruby to JAS" examples/jas.rb
 
-texdoc: $(FILES)
+texdoc: $(FILES) $(TESTFILES)
 	mkdir -p doc/tex
 	rm -f doc/tex/*
-	$(DOC) $(DOCOPTS) -doclet TexGen -docletpath ~/java/lib/texgen.jar -dest doc/tex $(FILES) 
+	$(DOC) $(DOCOPTS) -doclet TexGen -docletpath ~/java/lib/texgen.jar -dest doc/tex $(FILES) $(TESTFILES) 
 	ls doc/tex/* | grep -v Test | grep -v allclasses | xargs cat > doc/tex/allclasses.tex
 	sed -i -f doc/totex.sed doc/tex/allclasses.tex
 	cd doc; pdflatex jas_texgen.tex
 
-ALLJAR=$(FILES) $(DOCU) Makefile build.xml log4j.properties $(PYS)
+ALLJAR=$(FILES) $(TESTFILES) $(DOCU) Makefile build.xml log4j.properties $(PYS)
 
 jas-all.jar: $(ALLJAR)
 	$(JDK)/jar -cvf jas.jar $(ALLJAR) edu/ 
 	mv jas.jar /tmp/jas-`date +%Y%j`.jar
 
-jas.tgz: $(FILES) *.html TODO
-	tar -cvzf jas.tgz $(FILES) *.html TODO
+jas.tgz: $(FILES) $(TESTFILES) *.html TODO
+	tar -cvzf jas.tgz $(FILES) $(TESTFILES) *.html TODO
 	cp jas.tgz /tmp/jas-`date +%Y%j`.tgz
 
 #	cp jas.jar ...../jas-`date +%Y%j`.jar
@@ -267,9 +329,9 @@ jas.tgz: $(FILES) *.html TODO
 #	$(JDK)/jar -cvfm jas-run.jar GBManifest.MF $(TOJAR)
 
 
-TOJAR=$(FILES) $(CLASSES) Makefile build.xml log4j.properties $(EXAMPY) examples/machines.test $(wildcard COPYING*)
+TOJAR=$(FILES) $(TESTFILES) $(CLASSES) Makefile build.xml log4j.properties $(EXAMPY) examples/machines.test $(wildcard COPYING*)
 
-jas.jar: $(FILES) Makefile build.xml log4j.properties $(EXAMPY)
+jas.jar: $(FILES) $(TESTFILES) Makefile build.xml log4j.properties $(EXAMPY)
 	$(JDK)/jar -cf jas.jar $(TOJAR)
 #	$(JDK)/jar -cf jas.jar $(filter-out %/ufd/, $(filter-out src/edu/jas/ufd/%.java, $(TOJAR)))
 
@@ -342,9 +404,9 @@ export:
 	cd ~/jas-versions/$(VERSION)/; jar -cfm ../$(VERSION).`$(SVNREV)`-bin.jar GBManifest.MF edu/ COPYING* log4j.properties
 	cd ~/jas-versions/$(VERSION)/; jar -uf ../$(VERSION).`$(SVNREV)`-bin.jar -C ~/jas-versions/$(VERSION)/examples jas.rb -C ~/jas-versions/$(VERSION)/examples jas.py
 	cd ~/jas-versions/$(VERSION)/; ant doc > ant_doc.out
-	cd ~/jas-versions/$(VERSION)/; epydoc -o doc/jython -n "Python to JAS" -u ../../index.html examples/jas.py > epydoc.out
+	cd ~/jas-versions/$(VERSION)/; epydoc -v -o doc/jython -n "Python to JAS" -u ../../index.html examples/jas.py > epydoc.out
 	cd ~/jas-versions/$(VERSION)/; jrdoc -o doc/jruby -U -S -N -t "Ruby to JAS" examples/jas.rb > rdoc.out 2>&1
-	cd ~/jas-versions/$(VERSION)/; jar -cfM ../$(VERSION).`$(SVNREV)`-doc.zip doc/ *.html
+	cd ~/jas-versions/$(VERSION)/; jar -cfM ../$(VERSION).`$(SVNREV)`-doc.zip doc/ *.html *.css
 	cd ~/jas-versions/$(VERSION)/; ant test > ant_test.out
 	cd ~/jas-versions/$(VERSION)/; sh ./jython_tests.sh >jython_tests.out 2>&1
 	cd ~/jas-versions/$(VERSION)/; sh ./jruby_tests.sh >jruby_tests.out 2>&1
@@ -372,6 +434,7 @@ git-export:
 
 git-deploy:
 	$(RSYNC) -e 'ssh -p 2222' --delete-after ~/jas-versions/jas-git/jas.git/ krum:htdocs/jas.git
+	cd ~/jas-versions/jas-git/jas; git push -v $(DRY) google >> ~/jas-versions/$(VERSION)/git_push.out
 
 
 young:
