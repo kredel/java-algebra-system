@@ -11,6 +11,8 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import org.apache.log4j.BasicConfigurator;
+
 import edu.jas.arith.BigInteger;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -30,6 +32,7 @@ public class GCDSimpleTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
+        BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 
@@ -424,8 +427,8 @@ public class GCDSimpleTest extends TestCase {
             br = rfac.random(kl, ll, el, q);
             cr = rfac.random(kl, ll, el, q);
             cr = ufd.recursivePrimitivePart(cr).abs();
-            System.out.println("ar = " + ar);
-            System.out.println("br = " + br);
+            //System.out.println("ar = " + ar);
+            //System.out.println("br = " + br);
 
             if (ar.isZERO() || br.isZERO() || cr.isZERO()) {
                 // skip for this turn
@@ -434,27 +437,27 @@ public class GCDSimpleTest extends TestCase {
             if (cr.isConstant()) {
                 cr = rfac.univariate(0,1);
             }
-            System.out.println("cr = " + cr);
+            //System.out.println("cr = " + cr);
             assertTrue("length( cr" + i + " ) <> 0", cr.length() > 0);
 
             dr = ufds.recursiveUnivariateResultant(ar, br);
-            System.out.println("dr = " + dr);
+            //System.out.println("dr = " + dr);
             er = sres.recursiveUnivariateResultant(ar, br);
-            System.out.println("er = " + er);
+            //System.out.println("er = " + er);
             assertEquals("dr == er: " + dr.subtract(er), dr.abs().signum(), er.abs().signum());
             //assertEquals("dr == er: " + dr.subtract(er), dr, er);
 
             GenPolynomial<GenPolynomial<BigInteger>> arc = ar.multiply(cr);
             GenPolynomial<GenPolynomial<BigInteger>> brc = br.multiply(cr);
-            System.out.println("ar = " + ar);
-            System.out.println("br = " + br);
+            //System.out.println("ar = " + ar);
+            //System.out.println("br = " + br);
 
             dr = ufds.recursiveUnivariateResultant(arc, brc);
-            System.out.println("dr = " + dr);
+            //System.out.println("dr = " + dr);
             //assertTrue("dr == 0: " + dr, dr.isZERO());
 
             er = sres.recursiveUnivariateResultant(arc, brc);
-            System.out.println("er = " + er);
+            //System.out.println("er = " + er);
             //assertTrue("er == 0: " + er, er.isZERO());
 
             assertEquals("dr == er: " + dr.subtract(er), dr.signum(), er.signum());

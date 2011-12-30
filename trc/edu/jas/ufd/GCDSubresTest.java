@@ -541,8 +541,8 @@ public class GCDSubresTest extends TestCase {
             //c = dfac.getONE();
             //c = c.multiply( dfac.univariate(0) );
             //c = ufd.primitivePart(c).abs();
-            System.out.println("a = " + a);
-            System.out.println("b = " + b);
+            //System.out.println("a = " + a);
+            //System.out.println("b = " + b);
  
             if (a.isZERO() || b.isZERO() || c.isZERO()) {
                 // skip for this turn
@@ -551,27 +551,27 @@ public class GCDSubresTest extends TestCase {
             if (c.isConstant()) {
                 c = dfac.univariate(0,1);
             }
-            System.out.println("c = " + c);
+            //System.out.println("c = " + c);
             assertTrue("length( c" + i + " ) <> 0", c.length() > 0);
 
             d = ufdm.resultant(a, b);
-            System.out.println("d = " + d);
+            //System.out.println("d = " + d);
             e = ufds.resultant(a, b);
-            System.out.println("e = " + e);
+            //System.out.println("e = " + e);
             assertEquals("d == e: " + d.subtract(e), d.abs().signum(), e.abs().signum());
             //assertEquals("d == e: " + d.subtract(e), d, e);
 
             GenPolynomial<BigInteger> ac = a.multiply(c);
             GenPolynomial<BigInteger> bc = b.multiply(c);
-            System.out.println("ac = " + ac);
-            System.out.println("bc = " + bc);
+            //System.out.println("ac = " + ac);
+            //System.out.println("bc = " + bc);
 
             d = ufdm.resultant(ac, bc);
-            System.out.println("d = " + d);
+            //System.out.println("d = " + d);
             //assertTrue("d == 0: " + d, d.isZERO());
 
             e = ufds.resultant(ac, bc);
-            System.out.println("e = " + e);
+            //System.out.println("e = " + e);
             //assertTrue("e == 0: " + e, e.isZERO());
 
             assertEquals("d == e: " + d.subtract(e), d.abs().signum(), e.abs().signum());
