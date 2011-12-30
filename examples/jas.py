@@ -75,17 +75,16 @@ def noThreads():
     print "nt = ", ComputerThreads.NO_THREADS;
 
 def inject_variable(name, value):
-    """
-    inject a variable into the main global namespace
+    '''Inject a variable into the main global namespace
 
     INPUT:
-     - ``name``  - a string
-     - ``value`` - anything 
+     - "name"  - a string
+     - "value" - anything 
 
     Found in Sage.
     AUTHORS:
-    - William Stein 
-    """
+     - William Stein 
+    '''
     assert type(name) is str
     import sys
     depth = 0
@@ -105,12 +104,11 @@ def inject_variable(name, value):
 
 
 def inject_generators(gens):
-    """
-    inject generators as variables into the main global namespace
+    '''Inject generators as variables into the main global namespace
 
     INPUT:
-     - ``gens``  - generators
-    """
+     - "gens"  - generators
+    '''
     for v in gens:
         #print "vars = " + str(v);
         if str(v) == "1":
@@ -174,9 +172,8 @@ class Ring:
         return N;
 
     def inject_variables(self):
-        """
-        inject generators as variables into the main global namespace
-        """
+        '''Inject generators as variables into the main global namespace
+        '''
         inject_generators(self.gens());
 
     def one(self):
@@ -1200,9 +1197,8 @@ class Module:
         return N;
 
     def inject_variables(self):
-        """
-        inject generators as variables into the main global namespace
-        """
+        '''Inject generators as variables into the main global namespace
+        '''
         inject_generators(self.gens());
 
 
@@ -1445,9 +1441,8 @@ class SeriesRing:
         return N;
 
     def inject_variables(self):
-        """
-        inject generators as variables into the main global namespace
-        """
+        '''Inject generators as variables into the main global namespace
+        '''
         inject_generators(self.gens());
 
     def one(self):
@@ -1570,9 +1565,8 @@ class MultiSeriesRing:
         return N;
 
     def inject_variables(self):
-        """
-        inject generators as variables into the main global namespace
-        """
+        '''Inject generators as variables into the main global namespace
+        '''
         inject_generators(self.gens());
 
     def one(self):
@@ -2625,9 +2619,8 @@ class RingElem:
         return N;
 
     def inject_variables(self):
-        """
-        inject generators as variables into the main global namespace
-        """
+        '''Inject generators as variables into the main global namespace
+        '''
         inject_generators(self.gens());
 
     def monic(self):
