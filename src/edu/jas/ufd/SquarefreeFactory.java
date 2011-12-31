@@ -115,8 +115,7 @@ public class SquarefreeFactory {
      * @param <C> coefficient type, e.g. BigRational, ModInteger.
      * @return squarefree factorization algorithm implementation.
      */
-    public static <C extends GcdRingElem<C>> SquarefreeAbstract<AlgebraicNumber<C>> getImplementation(
-            AlgebraicNumberRing<C> fac) {
+    public static <C extends GcdRingElem<C>> SquarefreeAbstract<AlgebraicNumber<C>> getImplementation(AlgebraicNumberRing<C> fac) {
         PolyUfdUtil.<C> ensureFieldProperty(fac);
         if (fac.isField()) {
             if (fac.characteristic().signum() == 0) {
@@ -126,8 +125,6 @@ public class SquarefreeFactory {
                     return new SquarefreeFiniteFieldCharP<AlgebraicNumber<C>>(fac);
                 } else {
                     return new SquarefreeInfiniteAlgebraicFieldCharP<C>(fac);
-                    //throw new RuntimeException("algebraic extension of infinite not implemented" 
-                    //                          + fac.getClass().getName());
                 }
             }
         } else {
@@ -143,8 +140,7 @@ public class SquarefreeFactory {
      * @param <C> coefficient type, e.g. BigRational, ModInteger.
      * @return squarefree factorization algorithm implementation.
      */
-    public static <C extends GcdRingElem<C>> SquarefreeAbstract<Quotient<C>> getImplementation(
-            QuotientRing<C> fac) {
+    public static <C extends GcdRingElem<C>> SquarefreeAbstract<Quotient<C>> getImplementation(QuotientRing<C> fac) {
         if (fac.characteristic().signum() == 0) {
             return new SquarefreeFieldChar0<Quotient<C>>(fac);
         } else {
@@ -172,8 +168,8 @@ public class SquarefreeFactory {
      * @param <C> coefficient type, e.g. BigRational, ModInteger.
      * @return squarefree factorization algorithm implementation.
      */
-    protected static <C extends GcdRingElem<C>> SquarefreeAbstract<C> getImplementationPoly(
-            GenPolynomialRing<C> fac) {
+    @SuppressWarnings("unchecked")
+    protected static <C extends GcdRingElem<C>> SquarefreeAbstract<C> getImplementationPoly(GenPolynomialRing<C> fac) {
         if (fac.characteristic().signum() == 0) {
             if (fac.coFac.isField()) {
                 return new SquarefreeFieldChar0<C>(fac.coFac);
@@ -219,99 +215,44 @@ public class SquarefreeFactory {
         AlgebraicNumberRing afac = null;
         QuotientRing qfac = null;
         GenPolynomialRing pfac = null;
-        while (true) { // switch
-            Object ofac = fac;
-            if (ofac instanceof BigInteger) {
-                t = 1;
-                break;
-            }
-            if (ofac instanceof BigRational) {
-                t = 2;
-                break;
-            }
-            if (ofac instanceof ModIntegerRing) {
-                t = 3;
-                break;
-            }
-            if (ofac instanceof ModLongRing) {
-                t = 10;
-                break;
-            }
-            if (ofac instanceof AlgebraicNumberRing) {
-                //System.out.println("afac_o = " + ofac);
-                afac = (AlgebraicNumberRing) ofac;
-                ofac = afac.ring.coFac;
-                //System.out.println("o_afac = " + ofac);
-                t = 4;
-                break;
-            }
-            if (ofac instanceof QuotientRing) {
-                //System.out.println("qfac_o = " + ofac);
-                qfac = (QuotientRing) ofac;
-                t = 7;
-                break;
-            }
-            if (ofac instanceof GenPolynomialRing) {
-                //System.out.println("qfac_o = " + ofac);
-                pfac = (GenPolynomialRing) ofac;
-                t = 8;
-                break;
-            }
-            if (fac.isField()) {
-                //System.out.println("fac_field = " + fac);
-                t = 9;
-                break;
-            } else {
-                t = 11;
-                break;
-            }
-            //break;
-        }
-        //System.out.println("ft = " + t);
-        if (t == 1) { // BigInteger
-            ufd = new SquarefreeRingChar0/*raw*/(fac);
-        }
-        if (t == 2) { // BigRational
-            ufd = new SquarefreeFieldChar0/*raw*/(fac);
-        }
-        if (t == 3) { // ModInteger
-            ufd = new SquarefreeFiniteFieldCharP/*raw*/(fac);
-        }
-        if (t == 10) { // ModLong
-            ufd = new SquarefreeFiniteFieldCharP/*raw*/(fac);
-        }
-        if (t == 4) { // AlgebraicNumber
+        Object ofac = fac;
+        if (ofac instanceof BigInteger) {
+            ufd = new SquarefreeRingChar0<C>(fac);
+        } else if (ofac instanceof BigRational) {
+            ufd = new SquarefreeFieldChar0<C>(fac);
+        } else if (ofac instanceof ModIntegerRing) {
+            ufd = new SquarefreeFiniteFieldCharP<C>(fac);
+        } else if (ofac instanceof ModLongRing) {
+            ufd = new SquarefreeFiniteFieldCharP<C>(fac);
+        } else if (ofac instanceof AlgebraicNumberRing) {
+            afac = (AlgebraicNumberRing) ofac;
+            ofac = afac.ring.coFac;
+            //System.out.println("o_afac = " + ofac);
             ufd = getImplementation(afac);
-        }
-        if (t == 7) { // Quotient
+        } else if (ofac instanceof QuotientRing) {
+            qfac = (QuotientRing) ofac;
             ufd = getImplementation(qfac);
-        }
-        if (t == 8) { // GenPolynomial
+        } else if (ofac instanceof GenPolynomialRing) {
+            pfac = (GenPolynomialRing) ofac;
             ufd = getImplementationPoly(pfac);
-        }
-        if (t == 9) { // other fields 
+        } else if (fac.isField()) {
+            //System.out.println("fac_field = " + fac);
             if (fac.characteristic().signum() == 0) {
-                ufd = new SquarefreeFieldChar0/*raw*/(fac);
+                ufd = new SquarefreeFieldChar0<C>(fac);
             } else {
                 if (fac.isFinite()) {
-                    ufd = new SquarefreeFiniteFieldCharP/*raw*/(fac);
+                    ufd = new SquarefreeFiniteFieldCharP<C>(fac);
                 } else {
                     ufd = new SquarefreeInfiniteFieldCharP/*raw*/(fac);
                 }
             }
-        }
-        if (t == 11) { // other rings 
-            if (fac.characteristic().signum() == 0) {
-                ufd = new SquarefreeRingChar0/*raw*/(fac);
-            }
-            // else fail
-        }
-        if (ufd == null) {
+        } else if (fac.characteristic().signum() == 0) {
+            ufd = new SquarefreeRingChar0<C>(fac);
+        } else {
             throw new IllegalArgumentException("no squarefree factorization implementation for "
-                    + fac.getClass().getName());
+                                               + fac.getClass().getName());
         }
         logger.debug("ufd = " + ufd);
-        //System.out.println("ufd = " + ufd);
         return (SquarefreeAbstract<C>) ufd;
     }
 
