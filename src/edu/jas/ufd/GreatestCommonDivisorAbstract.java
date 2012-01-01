@@ -394,6 +394,24 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
 
 
     /**
+     * List of GenPolynomials greatest common divisor.
+     * @param A non empty list of GenPolynomials.
+     * @return gcd(A_i).
+     */
+    public GenPolynomial<C> gcd(List<GenPolynomial<C>> A) {
+        if (A == null || A.isEmpty()) {
+            throw new IllegalArgumentException("A may not be empty");
+        }
+        GenPolynomial<C> g = A.get(0);
+        for ( int i = 1; i < A.size(); i++ ) {
+            GenPolynomial<C> f = A.get(i);
+            g = gcd(g,f);
+        }
+        return g;
+    }
+
+
+    /**
      * Univariate GenPolynomial resultant. 
      * @param P univariate GenPolynomial.
      * @param S univariate GenPolynomial.
