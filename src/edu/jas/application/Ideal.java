@@ -2648,7 +2648,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             logger.info("dimension = " + dim);
         }
 
-        // shortest maximal independent set
+        // a short maximal independent set with small variables
         Set<Set<Integer>> M = dim.M;
         Set<Integer> min = null;
         for (Set<Integer> m : M) {
@@ -2660,6 +2660,18 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                 min = m;
             }
         }
+        int ms = min.size();
+        Integer[] ia = new Integer[0];
+        int mx = min.toArray(ia)[ms-1];
+        for (Set<Integer> m : M) {
+            if (m.size() == ms) {
+                int mxx = m.toArray(ia)[ms-1];
+                if ( mxx < mx ) {
+                    min = m;
+                    mx = mxx;
+                }
+            }
+        }
         //System.out.println("min = " + min);
         String[] mvars = new String[min.size()];
         int j = 0;
@@ -2667,7 +2679,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             mvars[j++] = dim.v[i];
         }
         if (logger.isInfoEnabled()) {
-            logger.info("extension for variables = " + Arrays.toString(mvars));
+            logger.info("extension for variables = " + Arrays.toString(mvars) + ", indexes = " + min);
         }
         // reduce to dimension zero
         IdealWithUniv<Quotient<C>> Ext = extension(mvars);
