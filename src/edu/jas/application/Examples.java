@@ -369,8 +369,10 @@ public class Examples {
             F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
         } catch (ClassCastException e) {
             e.printStackTrace();
+            return;
         } catch (IOException e) {
             e.printStackTrace();
+            return;
         }
         System.out.println("F = " + F);
 
@@ -401,7 +403,7 @@ public class Examples {
 
         ModIntegerRing z2 = new ModIntegerRing(2);
         GenPolynomialRing<ModInteger> z2p = new GenPolynomialRing<ModInteger>(z2, vars.length, new TermOrder(
-                TermOrder.INVLEX), vars);
+                        TermOrder.INVLEX), vars);
         List<GenPolynomial<ModInteger>> fieldPolynomials = new ArrayList<GenPolynomial<ModInteger>>();
 
         //add v1^2 + v1, v2^2 + v2, v3^2 + v3 to fieldPolynomials
@@ -415,7 +417,7 @@ public class Examples {
         ResidueRing<ModInteger> ring = new ResidueRing<ModInteger>(fieldPolys);
         String[] mvars = { "mv3", "mv2", "mv1" };
         GenPolynomialRing<Residue<ModInteger>> ringp = new GenPolynomialRing<Residue<ModInteger>>(ring,
-                mvars.length, mvars);
+                        mvars.length, mvars);
 
         List<GenPolynomial<Residue<ModInteger>>> polynomials = new ArrayList<GenPolynomial<Residue<ModInteger>>>();
 
@@ -456,7 +458,7 @@ public class Examples {
 
         ModIntegerRing z2 = new ModIntegerRing(2);
         GenPolynomialRing<ModInteger> z2p = new GenPolynomialRing<ModInteger>(z2, vars.length, new TermOrder(
-                TermOrder.INVLEX), vars);
+                        TermOrder.INVLEX), vars);
         List<GenPolynomial<ModInteger>> fieldPolynomials = new ArrayList<GenPolynomial<ModInteger>>();
 
         //add v1^2 + v1, v2^2 + v2, v3^2 + v3 to fieldPolynomials
@@ -470,7 +472,7 @@ public class Examples {
         ResidueRing<ModInteger> ring = new ResidueRing<ModInteger>(fieldPolys);
         String[] mvars = { "mv3", "mv2", "mv1" };
         GenPolynomialRing<Residue<ModInteger>> ringp = new GenPolynomialRing<Residue<ModInteger>>(ring,
-                mvars.length, mvars);
+                        mvars.length, mvars);
 
         List<GenPolynomial<Residue<ModInteger>>> polynomials = new ArrayList<GenPolynomial<Residue<ModInteger>>>();
 
@@ -521,9 +523,8 @@ public class Examples {
      * example9. Groebner base and dimension.
      */
     public static void example9() {
-        String[] vars = { "d1", "d2", "d3", 
-                          "p1a", "p1b", "p1c", "p2a", "p2b", "p2c", "p3a", "p3b", "p3c", "p4a", "p4b", "p4c", 
-                          "A", "B", "C", "D" };
+        String[] vars = { "d1", "d2", "d3", "p1a", "p1b", "p1c", "p2a", "p2b", "p2c", "p3a", "p3b", "p3c",
+                "p4a", "p4b", "p4c", "A", "B", "C", "D" };
 
         BigRational br = new BigRational();
         GenPolynomialRing<BigRational> pring = new GenPolynomialRing<BigRational>(br, vars);
@@ -533,9 +534,9 @@ public class Examples {
         GenPolynomial<BigRational> e2 = pring.parse("A*p2a+B*p2b+C*p2c+D"); // (2)
         GenPolynomial<BigRational> e3 = pring.parse("A*p3a+B*p3b+C*p3c+D"); // (3)
         GenPolynomial<BigRational> e4 = pring.parse("A*p4a+B*p4b+C*p4c+D"); // (4)
-        GenPolynomial<BigRational> e5 = pring.parse("p2a-p3a");             // (5)
-        GenPolynomial<BigRational> e6 = pring.parse("p2b-p3b");             // (6)
-        GenPolynomial<BigRational> e7 = pring.parse("p2c-p3c");             // (7)
+        GenPolynomial<BigRational> e5 = pring.parse("p2a-p3a"); // (5)
+        GenPolynomial<BigRational> e6 = pring.parse("p2b-p3b"); // (6)
+        GenPolynomial<BigRational> e7 = pring.parse("p2c-p3c"); // (7)
         GenPolynomial<BigRational> e8 = pring.parse("(p2a-p1a)^2+(p2b-p1b)^2+(p2c-p1c)^2-d1^2"); // (8)
         GenPolynomial<BigRational> e9 = pring.parse("(p4a-p3a)^2+(p4b-p3b)^2+(p4c-p3c)^2-d2^2"); // (9)
 
@@ -558,8 +559,8 @@ public class Examples {
         gb = sgb.GB(cp);
         //System.out.println("gb = " + gb);
 
-        PolynomialList<BigRational> pl = new PolynomialList<BigRational>(pring,gb);
-        Ideal<BigRational> id = new Ideal<BigRational>(pl,true);
+        PolynomialList<BigRational> pl = new PolynomialList<BigRational>(pring, gb);
+        Ideal<BigRational> id = new Ideal<BigRational>(pl, true);
         System.out.println("cp = " + cp);
         System.out.println("id = " + id);
 
