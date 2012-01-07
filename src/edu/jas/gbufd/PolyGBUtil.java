@@ -42,7 +42,7 @@ public class PolyGBUtil {
      * @param A generic polynomial.
      * @param B generic polynomial.
      * @param r generic polynomial.
-     * @return true if r == res(A,B), else false.
+     * @return true if res(A,B) isContained in ideal(A,B), else false.
      */
     public static <C extends GcdRingElem<C>> boolean isResultant(GenPolynomial<C> A, GenPolynomial<C> B,
                     GenPolynomial<C> r) {
@@ -89,6 +89,10 @@ public class PolyGBUtil {
                 continue;
             }
             f = f.monic();
+            if ( f.isONE() ) {
+                S.add(f);
+                return S;
+            }
             GenPolynomial<GenPolynomial<C>> fr = PolyUtil.<C> recursive(rfac,f);
             if ( fr.degree(0) == 0 ) {
                 zeroDeg.add( fr.leadingBaseCoefficient() );
@@ -144,7 +148,7 @@ public class PolyGBUtil {
                 long d1 = d;
                 do {
                     d1 = d;
-                    sr = characteristicSetRemainderCoeff(sr,Sp);
+                    sr = characteristicSetRemainderCoeff(Sp,sr);
                     //System.out.println("sr = " + sr);
                     if ( sr.isZERO() ) {
                         logger.warn("zero in rededuction");
@@ -169,7 +173,7 @@ public class PolyGBUtil {
 
 
     /**
-     * Characteristic set tst.
+     * Characteristic set test.
      * @param A list of generic polynomials.
      * @return true, if A = charSet(A), else false.
      */
@@ -241,16 +245,7 @@ public class PolyGBUtil {
             return R.monic();
             // not further reduced wrt. other variables
         }
-        List<GenPolynomial<C>> zeroDeg = new ArrayList<GenPolynomial<C>>();
-        for ( int i = 1; i < A.size(); i++ ) {
-            GenPolynomial<C> f = A.get(i);
-            GenPolynomial<GenPolynomial<C>> fr = PolyUtil.<C> recursive(rfac,f);
-            if ( fr.degree(0) == 0 ) {
-                zeroDeg.add( fr.leadingBaseCoefficient() );
-            } else {
-                throw new IllegalArgumentException("not a characteristic set: " + fr);
-            }
-        }
+        List<GenPolynomial<C>> zeroDeg = zeroDegrees(A);
         GenPolynomial<C> R = characteristicSetRemainder(zeroDeg,rr.leadingBaseCoefficient());
         R = R.extend(pfac,0,0L);
         return R.monic();
@@ -264,7 +259,7 @@ public class PolyGBUtil {
      * @return pseudo remainder P wrt. to the leading coefficient of P wrt. A.
      */
     public static <C extends RingElem<C>> 
-      GenPolynomial<C> characteristicSetRemainderCoeff(GenPolynomial<C> P, List<GenPolynomial<C>> A) {
+      GenPolynomial<C> characteristicSetRemainderCoeff(List<GenPolynomial<C>> A, GenPolynomial<C> P) {
         if ( A == null || A.isEmpty() ) {
             return P;
         }
@@ -283,38 +278,25 @@ public class PolyGBUtil {
             }
             if ( pfac.nvar <= 1 ) {
                 GenPolynomial<C> R = PolyUtil.<C> baseSparsePseudoRemainder(P,a);
-                //System.out.println("R    = " + R);
                 return R.monic();
             }
             GenPolynomialRing<GenPolynomial<C>> rfac = pfac.recursive(pfac.nvar-1);
-            //System.out.println("rfac = " + rfac);
             GenPolynomial<GenPolynomial<C>> pr = PolyUtil.<C> recursive(rfac,P); 
-            //System.out.println("pr   = " + pr);
             GenPolynomial<GenPolynomial<C>> ar = new GenPolynomial<GenPolynomial<C>>(rfac,a,pr.leadingExpVector());
-            //System.out.println("ar   = " + ar);
             pr = pr.subtract(ar);
-            //System.out.println("pr   = " + pr);
             GenPolynomial<C> R = PolyUtil.<C> distribute(pfac,pr);
-            //System.out.println("R    = " + R);
             return R.monic();
         }
         // select polynomials according to the main variable
         GenPolynomialRing<GenPolynomial<C>> rfac1 = pfac1.recursive(1);
-        //System.out.println("rfac1 = " + rfac1);
         int nv = pfac.nvar - pfac1.nvar;
-        //System.out.println("nv = " + nv);
         GenPolynomialRing<GenPolynomial<C>> rfac = pfac.recursive(1+nv);
         GenPolynomialRing<GenPolynomial<GenPolynomial<C>>> rfac2 = rfac.recursive(nv);
-        //System.out.println("pfac = " + pfac);
         if (debug) {
            logger.info("rfac =" + rfac);
         }
-        //System.out.println("rfac2 = " + rfac2);
         GenPolynomial<GenPolynomial<C>> pr = PolyUtil.<C> recursive(rfac,P);
         GenPolynomial<GenPolynomial<GenPolynomial<C>>> pr2 = PolyUtil.<GenPolynomial<C>> recursive(rfac2,pr);
-        //System.out.println("pr   = " + pr);
-        //System.out.println("pr2  = " + pr2);
-        //System.out.println("l(pr2) = " + pr2.leadingBaseCoefficient());
         GenPolynomial<GenPolynomial<C>> plr = pr2.leadingBaseCoefficient();
         GenPolynomial<C> pld = plr.leadingBaseCoefficient();
         //System.out.println("plr  = " + plr);
@@ -326,10 +308,7 @@ public class PolyGBUtil {
         }
         GenPolynomial<C> Q = A.get(0);
         GenPolynomial<GenPolynomial<C>> qr = PolyUtil.<C> recursive(rfac1,Q);
-        //System.out.println("Q    = " + Q);
-        //System.out.println("qr   = " + qr);
         GenPolynomial<C> qld = qr.leadingBaseCoefficient();
-        //System.out.println("qld  = " + qld);
 
         // pseudo remainder:
         GenPolynomial<GenPolynomial<C>> ql = new GenPolynomial<GenPolynomial<C>>(rfac1,qld);
@@ -342,17 +321,11 @@ public class PolyGBUtil {
         GenPolynomial<C> R = null;
         if ( e.divides(f) ) {
             ExpVector g = e.subtract(f);
-            //System.out.println("e divides f " + g);
             rr = pr2.multiply(ql);
-            //System.out.println("rr   = " + rr);
             GenPolynomial<GenPolynomial<C>> qrr = qr.multiply(pl);
-            //System.out.println("qrr  = " + qrr);
             qrr = qrr.multiply(g);
-            //System.out.println("qrr  = " + qrr);
             qrp = new GenPolynomial<GenPolynomial<GenPolynomial<C>>>(rfac2,qrr,pr2.leadingExpVector());
-            //System.out.println("qrp  = " + qrp);
             rr = rr.subtract(qrp);
-            //System.out.println("rr   = " + rr);
             if ( debug) {
                 logger.info("remainder = " + rr);
             }
@@ -360,7 +333,6 @@ public class PolyGBUtil {
                 return pfac.getZERO();
             }
             GenPolynomial<GenPolynomial<C>> Rp = PolyUtil.<GenPolynomial<C>> distribute(rfac,rr);
-            //System.out.println("Rp   = " + Rp);
             R = PolyUtil.<C> distribute(pfac,Rp);
             //System.out.println("R    = " + R);
         } else {
@@ -368,18 +340,62 @@ public class PolyGBUtil {
             R = P;
         }
         // reduction wrt. the other variables
-        List<GenPolynomial<C>> zeroDeg = new ArrayList<GenPolynomial<C>>();
-        for ( int i = 1; i < A.size(); i++ ) {
+        List<GenPolynomial<C>> zeroDeg = zeroDegrees(A);
+        R = characteristicSetRemainderCoeff(zeroDeg,R);
+        return R;
+    }
+
+
+    /**
+     * Characteristic set reduction.
+     * Pseudo remainder wrt. the main variabe with further pseudo reduction of the leading coefficient.
+     * @param P generic polynomial.
+     * @param A list of generic polynomials as characteristic set.
+     * @return characteristicSetReductionCoeff(characteristicSetRemainder(A,P),Ap).
+     */
+    public static <C extends RingElem<C>> 
+     GenPolynomial<C> characteristicSetReduction(List<GenPolynomial<C>> A, GenPolynomial<C> P) {
+        if ( A == null || A.isEmpty() ) {
+            return P.monic();
+        }
+        if ( P.isZERO() || P.isONE() ) {
+            return P.monic();
+        }
+        GenPolynomialRing<C> pfac = A.get(0).ring;
+        GenPolynomial<C> R = characteristicSetRemainder(A,P);
+        //System.out.println("R = " + R);
+        if ( R.isZERO() || R.isONE() ) {
+            return R;
+        }
+        List<GenPolynomial<C>> Ap = zeroDegrees(A);
+        //System.out.println("Ap = " + Ap);
+        R = characteristicSetRemainderCoeff(Ap,R);
+        //System.out.println("R = " + R);
+        return R;
+    } 
+
+
+    /**
+     * Characteristic set polynomials with degree zero in the main variable.
+     * @param A list of generic polynomials in n variables.
+     * @return Z = [a_i] with deg(a_i,x_n) = 0 and in n-1 variables.
+     */
+    public static <C extends RingElem<C>> 
+      List<GenPolynomial<C>> zeroDegrees(List<GenPolynomial<C>> A) {
+        if ( A == null || A.isEmpty() ) {
+            return A;
+        }
+        GenPolynomialRing<C> pfac = A.get(0).ring;
+        GenPolynomialRing<GenPolynomial<C>> rfac = pfac.recursive(1);
+        List<GenPolynomial<C>> zeroDeg = new ArrayList<GenPolynomial<C>>(A.size());
+        for ( int i = 0; i < A.size(); i++ ) {
             GenPolynomial<C> q = A.get(i);
-            GenPolynomial<GenPolynomial<C>> fr = PolyUtil.<C> recursive(rfac1,q);
+            GenPolynomial<GenPolynomial<C>> fr = PolyUtil.<C> recursive(rfac,q);
             if ( fr.degree(0) == 0 ) {
                 zeroDeg.add( fr.leadingBaseCoefficient() );
-            } else {
-                throw new IllegalArgumentException("not a characteristic set: " + fr);
             }
         }
-        R = characteristicSetRemainderCoeff(R,zeroDeg);
-        return R;
+        return zeroDeg;
     }
 
 }

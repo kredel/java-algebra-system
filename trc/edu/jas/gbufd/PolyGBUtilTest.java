@@ -31,6 +31,12 @@ import edu.jas.ufd.GreatestCommonDivisorModEval;
 import edu.jas.ufd.GCDProxy;
 import edu.jas.ufd.QuotientRing;
 import edu.jas.ufd.Quotient;
+import edu.jas.gb.Reduction;
+import edu.jas.gb.GroebnerBase;
+import edu.jas.gb.GroebnerBaseAbstract;
+import edu.jas.gbufd.GBFactory;
+import edu.jas.application.Ideal;
+import edu.jas.application.IdealWithUniv;
 
 
 /**
@@ -297,8 +303,8 @@ public class PolyGBUtilTest extends TestCase {
         for (int i = 0; i < 1; i++) {
             F = new ArrayList<GenPolynomial<BigRational>>();
             a = dfac.random(kl, ll, el, q * 1.5f);
-            b = dfac.random(kl, ll + 2, el, q * 1);
-            c = dfac.random(kl, ll, el, q * 1.5f);
+            b = dfac.random(kl, ll + 2, el, q);
+            c = dfac.random(kl, ll, el, q);
             F.add(a);
             F.add(b);
             F.add(c);
@@ -343,8 +349,10 @@ public class PolyGBUtilTest extends TestCase {
         dfac = new GenPolynomialRing<BigRational>(br, to, vars);
         //System.out.println("dfac = " + dfac);
 
-        GenPolynomial<BigRational> h1, h2, h3, h4, h5, h6, h7, h8, g, e;
-        List<GenPolynomial<BigRational>> F, G;
+        GenPolynomial<BigRational> h1, h2, h3, h4, h5, h6, h7, h8, g, e, f;
+        List<GenPolynomial<BigRational>> F, G, H, K;
+        Ideal<BigRational> I, J;
+        List<IdealWithUniv<BigRational>> R;
 
         F = new ArrayList<GenPolynomial<BigRational>>();
         h1 = dfac.parse(" 2 x1 - u1 ");
@@ -375,9 +383,40 @@ public class PolyGBUtilTest extends TestCase {
         g = dfac.parse("( ( x5 - x7 )**2 + ( x6 - x8 )**2 - ( x1 - x7 )**2 - x8^2 )");
         System.out.println("g = " + g);
 
-        e = PolyGBUtil.<BigRational> characteristicSetRemainder(G,g);
+        e = PolyGBUtil.<BigRational> characteristicSetReduction(G,g);
         System.out.println("e = " + e);
         assertTrue("g mod G: " + e, e.isZERO()||true); // not always true
+
+        GroebnerBaseAbstract<BigRational> bb = GBFactory.<BigRational> getImplementation(br);
+        H = bb.GB(F);
+        System.out.println("H = " + H);
+
+        Reduction red = bb.red;
+        f = red.normalform(H,g);
+        System.out.println("fg = " + f);
+        f = red.normalform(H,e);
+        System.out.println("fe = " + f);
+
+        K = red.normalform(H,G);
+        System.out.println("Kg = " + K);
+        K = red.normalform(H,F);
+        System.out.println("Kf = " + K);
+
+        //J = new Ideal<BigRational>(dfac,H,true);
+        //J = new Ideal<BigRational>(dfac,F);
+        //System.out.println("F = " + F);
+        //System.out.println("J = " + J);
+
+        //R = J.radicalDecomposition();
+        //System.out.println("R = " + R);
+        //for ( IdealWithUniv<BigRational> r : R ) {
+        //     System.out.println("radical: ");
+        //     System.out.println("" + r);
+	//}
+        //boolean t = J.isRadicalMember(g);
+        //System.out.println("radicalMember g = " + t);
+        //t = J.isRadicalMember(e);
+        //System.out.println("radicalMember e = " + t);
     }
 
 }
