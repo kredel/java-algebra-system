@@ -320,6 +320,10 @@ public class PolyGBUtilTest extends TestCase {
 
             e = PolyGBUtil.<BigRational> characteristicSetRemainder(G,a);
             //System.out.println("e = " + e);
+            assertTrue("a rem G: " + e, e.isZERO()||true); // not always true
+
+            e = PolyGBUtil.<BigRational> characteristicSetReduction(G,a);
+            //System.out.println("e = " + e);
             assertTrue("a mod G: " + e, e.isZERO()||true); // not always true
 
             //e = PolyGBUtil.<BigRational> characteristicSetRemainder(G,G.get(G.size()-1));
@@ -331,6 +335,9 @@ public class PolyGBUtilTest extends TestCase {
                 d = dfac.random(kl, ll, el, q).sum(d);
                 //System.out.println("d = " + d);
                 e = PolyGBUtil.<BigRational> characteristicSetRemainder(G,d);
+                //System.out.println("e = " + e);
+                assertFalse("a rem G: " + e, e.isZERO());
+                e = PolyGBUtil.<BigRational> characteristicSetReduction(G,d);
                 //System.out.println("e = " + e);
                 assertFalse("a mod G: " + e, e.isZERO()&&false);
             }

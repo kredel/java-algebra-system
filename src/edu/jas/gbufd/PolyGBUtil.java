@@ -223,7 +223,7 @@ public class PolyGBUtil {
         if ( A == null || A.isEmpty() ) {
             return P.monic();
         }
-        if ( P.isZERO() || P.isONE() ) {
+        if ( P.isZERO() || P.isConstant() ) {
             return P.monic();
         }
         GenPolynomialRing<C> pfac = A.get(0).ring;
@@ -281,7 +281,9 @@ public class PolyGBUtil {
                 return R.monic();
             }
             GenPolynomialRing<GenPolynomial<C>> rfac = pfac.recursive(pfac.nvar-1);
-            GenPolynomial<GenPolynomial<C>> pr = PolyUtil.<C> recursive(rfac,P); 
+            // loop ?
+            GenPolynomial<GenPolynomial<C>> pr = PolyUtil.<C> recursive(rfac,P.multiply(a.leadingBaseCoefficient()));
+            a = a.multiply(P.leadingBaseCoefficient()); 
             GenPolynomial<GenPolynomial<C>> ar = new GenPolynomial<GenPolynomial<C>>(rfac,a,pr.leadingExpVector());
             pr = pr.subtract(ar);
             GenPolynomial<C> R = PolyUtil.<C> distribute(pfac,pr);
@@ -319,7 +321,7 @@ public class PolyGBUtil {
         GenPolynomial<GenPolynomial<GenPolynomial<C>>> rr = null;
         GenPolynomial<GenPolynomial<GenPolynomial<C>>> qrp = null;
         GenPolynomial<C> R = null;
-        if ( e.divides(f) ) {
+        if ( e.divides(f) ) { // loop ?
             ExpVector g = e.subtract(f);
             rr = pr2.multiply(ql);
             GenPolynomial<GenPolynomial<C>> qrr = qr.multiply(pl);
@@ -336,7 +338,6 @@ public class PolyGBUtil {
             R = PolyUtil.<C> distribute(pfac,Rp);
             //System.out.println("R    = " + R);
         } else {
-            //System.out.println("e not divides f");
             R = P;
         }
         // reduction wrt. the other variables
