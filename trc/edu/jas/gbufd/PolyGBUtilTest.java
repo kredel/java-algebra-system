@@ -35,8 +35,8 @@ import edu.jas.gb.Reduction;
 import edu.jas.gb.GroebnerBase;
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gbufd.GBFactory;
-import edu.jas.application.Ideal;
-import edu.jas.application.IdealWithUniv;
+//import edu.jas.application.Ideal;
+//import edu.jas.application.IdealWithUniv;
 
 
 /**
@@ -302,7 +302,7 @@ public class PolyGBUtilTest extends TestCase {
 
         for (int i = 0; i < 1; i++) {
             F = new ArrayList<GenPolynomial<BigRational>>();
-            a = dfac.random(kl, ll, el, q * 1.5f);
+            a = dfac.random(kl, ll, el, q * 1.1f);
             b = dfac.random(kl, ll + 2, el, q);
             c = dfac.random(kl, ll, el, q);
             F.add(a);
@@ -349,10 +349,10 @@ public class PolyGBUtilTest extends TestCase {
         dfac = new GenPolynomialRing<BigRational>(br, to, vars);
         //System.out.println("dfac = " + dfac);
 
-        GenPolynomial<BigRational> h1, h2, h3, h4, h5, h6, h7, h8, g, e, f;
-        List<GenPolynomial<BigRational>> F, G, H, K;
-        Ideal<BigRational> I, J;
-        List<IdealWithUniv<BigRational>> R;
+        GenPolynomial<BigRational> h1, h2, h3, h4, h5, h6, h7, h8, g, e, f, k;
+        List<GenPolynomial<BigRational>> F, G, H, K, L;
+        //Ideal<BigRational> I, J;
+        //List<IdealWithUniv<BigRational>> R;
 
         F = new ArrayList<GenPolynomial<BigRational>>();
         h1 = dfac.parse(" 2 x1 - u1 ");
@@ -373,34 +373,41 @@ public class PolyGBUtilTest extends TestCase {
         F.add(h7);
         F.add(h8);
 
-        System.out.println("F = " + F);
+        //System.out.println("F = " + F);
         assertFalse("isCharacteristicSet: " + F, PolyGBUtil.<BigRational> isCharacteristicSet(F));
 
         G = PolyGBUtil.<BigRational> characteristicSet(F);
-        System.out.println("G = " + G);
+        //System.out.println("G = " + G);
         assertTrue("isCharacteristicSet: " + G, PolyGBUtil.<BigRational> isCharacteristicSet(G));
 
         g = dfac.parse("( ( x5 - x7 )**2 + ( x6 - x8 )**2 - ( x1 - x7 )**2 - x8^2 )");
-        System.out.println("g = " + g);
+        //g = dfac.parse("( - x1^2 x4 + x4 x5^2 + x1^2 x6 - x3^2 x6 - x4^2 x6 + x4 x6^2 + 2 x1 x4 x7 - 2 x4 x5 x7 - 2 x1 x6 x7 + 2 x3 x6 x7 )");
+        //g = dfac.parse("-2 x6 * x8 - 2 x5 * x7 + 2 x1 * x7 + x6^2 + x5^2 - x1^2");
+        //System.out.println("g = " + g);
 
         e = PolyGBUtil.<BigRational> characteristicSetReduction(G,g);
-        System.out.println("e = " + e);
+        //System.out.println("e = " + e);
         assertTrue("g mod G: " + e, e.isZERO()||true); // not always true
 
         GroebnerBaseAbstract<BigRational> bb = GBFactory.<BigRational> getImplementation(br);
         H = bb.GB(F);
-        System.out.println("H = " + H);
+        //System.out.println(" H = " + H);
 
         Reduction red = bb.red;
         f = red.normalform(H,g);
-        System.out.println("fg = " + f);
-        f = red.normalform(H,e);
-        System.out.println("fe = " + f);
+        //System.out.println("fg = " + f);
+
+        k = red.normalform(H,e);
+        //System.out.println("fk' = " + k);
+
+        //System.out.println("fk' == f: " + k.equals(f));
+        //System.out.println("fk' - f: " + k.subtract(f));
 
         K = red.normalform(H,G);
-        System.out.println("Kg = " + K);
-        K = red.normalform(H,F);
-        System.out.println("Kf = " + K);
+        //System.out.println("Kg = " + K);
+        L = red.normalform(H,F);
+        //System.out.println("Lf = " + L);
+        assertEquals("Kg == Kf: " + L, K, L);
 
         //J = new Ideal<BigRational>(dfac,H,true);
         //J = new Ideal<BigRational>(dfac,F);
@@ -414,9 +421,9 @@ public class PolyGBUtilTest extends TestCase {
         //     System.out.println("" + r);
 	//}
         //boolean t = J.isRadicalMember(g);
-        //System.out.println("radicalMember g = " + t);
+        //System.out.println("radicalMember g = " + t); // false
         //t = J.isRadicalMember(e);
-        //System.out.println("radicalMember e = " + t);
+        //System.out.println("radicalMember e = " + t); // false
     }
 
 }
