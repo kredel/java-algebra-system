@@ -417,10 +417,7 @@ Iterable<Monomial<C>> {
         if (c == null) {
             return false;
         }
-        if (!c.isONE()) {
-            return false;
-        }
-        return true;
+        return c.isONE();
     }
 
 
@@ -437,10 +434,7 @@ Iterable<Monomial<C>> {
         if (c == null) {
             return false;
         }
-        if (c.isUnit()) {
-            return true;
-        }
-        return false;
+        return c.isUnit();
     }
 
 
@@ -678,7 +672,12 @@ Iterable<Monomial<C>> {
         if (val.size() == 0) {
             return 0; // 0 or -1 ?;
         }
-        int j = ring.nvar - 1 - i;
+        int j;
+        if ( i >= 0 ) {
+            j = ring.nvar - 1 - i;
+        } else { // python like -1 means main variable
+            j = ring.nvar + i;
+        }
         long deg = 0;
         for (ExpVector e : val.keySet()) {
             long d = e.getVal(j);
