@@ -23,6 +23,7 @@ import edu.jas.root.RealAlgebraicNumber;
 import edu.jas.root.RealAlgebraicRing;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.ufdroot.FactorRealAlgebraic;
 
 
 /**

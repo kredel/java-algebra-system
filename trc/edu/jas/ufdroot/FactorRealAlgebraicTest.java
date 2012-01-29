@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.ufd;
+package edu.jas.ufdroot;
 
 
 import java.util.SortedMap;
@@ -24,6 +24,7 @@ import edu.jas.root.RealAlgebraicNumber;
 import edu.jas.root.RealAlgebraicRing;
 import edu.jas.root.Interval;
 import edu.jas.root.RootUtil;
+import edu.jas.ufdroot.FactorRealAlgebraic;
 
 
 /**
