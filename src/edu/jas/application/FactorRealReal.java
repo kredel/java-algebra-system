@@ -61,10 +61,21 @@ public class FactorRealReal<C extends GcdRingElem<C> & Rational>
      * @param fac algebraic number factory.
      */
     public FactorRealReal(RealAlgebraicRing<C> fac) {
-        super(fac);
         // ignore recursion, as it is handled in FactorRealAlgebraic:
-        edu.jas.root.RealAlgebraicRing<C> rere = (edu.jas.root.RealAlgebraicRing<C>) (Object) fac.realRing;
-        this.factorAlgebraic = FactorFactory.<edu.jas.root.RealAlgebraicNumber<C>> getImplementation(rere);
+        this(fac, 
+             FactorFactory.<edu.jas.root.RealAlgebraicNumber<C>> getImplementation((edu.jas.root.RealAlgebraicRing<C>) (Object) fac.realRing)
+	     );
+    }
+
+
+    /**
+     * Constructor.
+     * @param fac algebraic number factory.
+     * @param factorAlgebraic factorization engine for polynomials over base coefficients.
+    */
+    public FactorRealReal(RealAlgebraicRing<C> fac, FactorAbstract<edu.jas.root.RealAlgebraicNumber<C>> factorAlgebraic) {
+        super(fac);
+        this.factorAlgebraic = factorAlgebraic;
     }
 
 

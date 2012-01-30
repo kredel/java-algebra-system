@@ -50,8 +50,18 @@ public class FactorQuotient<C extends GcdRingElem<C>> extends FactorAbstract<Quo
      * @param fac coefficient quotient ring factory.
      */
     public FactorQuotient(QuotientRing<C> fac) {
+        this(fac, FactorFactory.<C> getImplementation(fac.ring.coFac) );
+    }
+
+
+    /**
+     * Constructor.
+     * @param fac coefficient quotient ring factory.
+     * @param nengine factorization engine for polynomials over base coefficients.
+     */
+    public FactorQuotient(QuotientRing<C> fac, FactorAbstract<C> nengine) {
         super(fac);
-        nengine = FactorFactory.<C> getImplementation(fac.ring.coFac);
+        this.nengine = nengine;
     }
 
 

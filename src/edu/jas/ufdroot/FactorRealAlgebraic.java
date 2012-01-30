@@ -17,7 +17,8 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.ufd.FactorAbstract;
-import edu.jas.ufd.FactorFactory;
+import edu.jas.application.FactorFactory;
+//import edu.jas.ufd.FactorFactory;
 import edu.jas.root.RealAlgebraicNumber;
 import edu.jas.root.RealAlgebraicRing;
 import edu.jas.root.PolyUtilRoot;
@@ -64,8 +65,18 @@ public class FactorRealAlgebraic<C extends GcdRingElem<C> & Rational>
      * @param fac algebraic number factory.
      */
     public FactorRealAlgebraic(RealAlgebraicRing<C> fac) {
+        this(fac, FactorFactory.<AlgebraicNumber<C>> getImplementation(fac.algebraic) );
+    }
+
+
+    /**
+     * Constructor.
+     * @param fac algebraic number factory.
+     * @param factorAlgebraic factorization engine for polynomials over base coefficients.
+     */
+    public FactorRealAlgebraic(RealAlgebraicRing<C> fac, FactorAbstract<AlgebraicNumber<C>> factorAlgebraic) {
         super(fac);
-        this.factorAlgebraic = FactorFactory.<AlgebraicNumber<C>> getImplementation(fac.algebraic);
+        this.factorAlgebraic = factorAlgebraic;
     }
 
 

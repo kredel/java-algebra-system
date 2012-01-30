@@ -170,7 +170,7 @@ public class FactorFactory {
     @SuppressWarnings("unchecked")
     public static <C extends GcdRingElem<C>> FactorAbstract<C> getImplementation(RingFactory<C> fac) {
         //logger.info("fac = " + fac.getClass().getName());
-        //System.out.println("fac_o = " + fac.getClass().getName());
+        System.out.println("fac_o_ufd = " + fac.getClass().getName());
         FactorAbstract/*raw type<C>*/ufd = null;
         AlgebraicNumberRing afac = null;
         QuotientRing qfac = null;

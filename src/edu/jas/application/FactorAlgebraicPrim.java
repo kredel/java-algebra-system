@@ -64,8 +64,18 @@ public class FactorAlgebraicPrim<C extends GcdRingElem<C>> extends FactorAbsolut
      * @param fac algebraic number factory.
      */
     public FactorAlgebraicPrim(AlgebraicNumberRing<C> fac) {
+        this(fac, FactorFactory.<C> getImplementation(fac.ring.coFac) );
+    }
+
+
+    /**
+     * Constructor.
+     * @param fac algebraic number factory.
+     * @param factorCoeff factorization engine for polynomials over base coefficients.
+     */
+    public FactorAlgebraicPrim(AlgebraicNumberRing<C> fac, FactorAbstract<C> factorCoeff) {
         super(fac);
-        this.factorCoeff = FactorFactory.<C> getImplementation(fac.ring.coFac);
+        this.factorCoeff = factorCoeff;
     }
 
 
