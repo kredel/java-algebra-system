@@ -191,6 +191,9 @@ public class ComplexRootTest extends TestCase {
         assertTrue("#roots == deg(a) ", roots.size() == a.degree(0));
         for (Complex<RealAlgebraicNumber<BigRational>> car : roots) {
             //System.out.println("car = " + car);
+            RealAlgebraicRing<BigRational> rfac = car.getRe().ring;
+            rfac.setField(true); // ?? to check
+            assertTrue("isField(rfac) ", rfac.isField());
             assertTrue("f(r) == 0: " + car, RootFactory.<BigRational> isRoot(a,car));
         }
         Complex<RealAlgebraicNumber<BigRational>> root = roots.get(2); // 0,1,2)

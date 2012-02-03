@@ -116,7 +116,7 @@ public class FactorRealRealTest extends TestCase {
 
         for ( Complex<RealAlgebraicNumber<BigRational>> root : roots ) {
             RealAlgebraicRing<BigRational> rfac = root.getRe().ring;
-            rfac.setField(true);
+            rfac.setField(true); // ?? to check
             assertTrue("isField(rfac) ", rfac.isField());
             FactorRealReal<BigRational> fac = new FactorRealReal<BigRational>(rfac);
             //FactorAbstract<RealAlgebraicNumber<BigRational>> fac = FactorFactory.<RealAlgebraicNumber<BigRational>> getImplementation(rfac);
