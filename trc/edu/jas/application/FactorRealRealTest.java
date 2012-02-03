@@ -25,6 +25,7 @@ import edu.jas.poly.Complex;
 import edu.jas.poly.ComplexRing;
 import edu.jas.root.Interval;
 import edu.jas.root.RootUtil;
+import edu.jas.ufd.FactorAbstract;
 
 
 /**
@@ -115,7 +116,10 @@ public class FactorRealRealTest extends TestCase {
 
         for ( Complex<RealAlgebraicNumber<BigRational>> root : roots ) {
             RealAlgebraicRing<BigRational> rfac = root.getRe().ring;
+            rfac.setField(true);
+            assertTrue("isField(rfac) ", rfac.isField());
             FactorRealReal<BigRational> fac = new FactorRealReal<BigRational>(rfac);
+            //FactorAbstract<RealAlgebraicNumber<BigRational>> fac = FactorFactory.<RealAlgebraicNumber<BigRational>> getImplementation(rfac);
             String[] var = new String[] { "t" };
             GenPolynomialRing<RealAlgebraicNumber<BigRational>> rpfac 
                 = new GenPolynomialRing<RealAlgebraicNumber<BigRational>>(rfac, to, var); // univariate

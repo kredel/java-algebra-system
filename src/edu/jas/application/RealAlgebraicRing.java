@@ -278,6 +278,15 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational> implements
 
 
     /**
+     * Assert that this ring is a field.
+     * @param isField true if this ring is a field, else false.
+     */
+    public void setField(boolean isField) {
+        realRing.setField(isField);
+    }
+
+
+    /**
      * Characteristic of this ring.
      * @return characteristic of this ring.
      */
