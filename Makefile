@@ -85,11 +85,11 @@ DOCOPTS=-package
 MYCLASSPATH = $(LOG4JPATH):.:$(JUNITPATH):$(JOMPPATH):$(PYPATH)
 #:$(TNJPATH)
 
-#JAVA_MEM=-Xms1100M -Xmx1900M
-JAVA_MEM=-Xms350M -Xmx800M
+JAVA_MEM=-Xms1100M -Xmx1900M
+#JAVA_MEM=-Xms350M -Xmx800M
 
-#SOPTS="-J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc -J-Xms1100M -J-Xmx1900M"
-SOPTS="-J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc -J-Xms350M -J-Xmx800M"
+SOPTS="-J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc -J-Xms1100M -J-Xmx1900M"
+#SOPTS="-J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc -J-Xms350M -J-Xmx800M"
 
 
 JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d . -Xlint:unchecked
