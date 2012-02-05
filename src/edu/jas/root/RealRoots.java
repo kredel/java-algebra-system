@@ -10,7 +10,7 @@ import java.util.List;
 import edu.jas.arith.Rational;
 import edu.jas.arith.BigRational;
 import edu.jas.poly.GenPolynomial;
-import edu.jas.structure.RingElem;
+import edu.jas.structure.GcdRingElem;
 
 
 /**
@@ -18,7 +18,7 @@ import edu.jas.structure.RingElem;
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
-public interface RealRoots<C extends RingElem<C> & Rational> {
+public interface RealRoots<C extends GcdRingElem<C> & Rational> {
 
 
     /**

@@ -188,7 +188,7 @@ public class RootFactory {
 
         List<IdealWithUniv<C>> idul = id.zeroDimRootDecomposition();
 
-        IdealWithRealAlgebraicRoots<C, C> idr;
+        IdealWithRealAlgebraicRoots<C> idr;
         for (IdealWithUniv<C> idu : idul) {
             //System.out.println("---idu = " + idu);
             idr = PolyUtilApp.<C> realAlgebraicRoots(idu);

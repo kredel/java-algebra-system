@@ -651,11 +651,11 @@ public class PolyUtilApp<C extends RingElem<C>> {
      *            and bi-variate polynomials.
      * @return real algebraic roots for ideal(G)
      */
-    public static <D extends GcdRingElem<D> & Rational> IdealWithRealAlgebraicRoots<D, D> realAlgebraicRoots(
+    public static <D extends GcdRingElem<D> & Rational> IdealWithRealAlgebraicRoots<D> realAlgebraicRoots(
                     IdealWithUniv<D> I) {
         List<List<RealAlgebraicNumber<D>>> ran = new ArrayList<List<RealAlgebraicNumber<D>>>();
         if (I == null || I.ideal == null || I.ideal.isZERO() || I.upolys == null || I.upolys.size() == 0) {
-            return new IdealWithRealAlgebraicRoots<D, D>(I, ran);
+            return new IdealWithRealAlgebraicRoots<D>(I, ran);
         }
         GenPolynomialRing<D> fac = I.ideal.list.ring;
         // case i == 0:
@@ -752,7 +752,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
             }
             ran = rn;
         }
-        IdealWithRealAlgebraicRoots<D, D> Ir = new IdealWithRealAlgebraicRoots<D, D>(I, ran);
+        IdealWithRealAlgebraicRoots<D> Ir = new IdealWithRealAlgebraicRoots<D>(I, ran);
         return Ir;
     }
 
@@ -763,12 +763,12 @@ public class PolyUtilApp<C extends RingElem<C>> {
      *            polynomials and bi-variate polynomials.
      * @return list of real algebraic roots for all ideal(I_i)
      */
-    public static <D extends GcdRingElem<D> & Rational> List<IdealWithRealAlgebraicRoots<D, D>> realAlgebraicRoots(
+    public static <D extends GcdRingElem<D> & Rational> List<IdealWithRealAlgebraicRoots<D>> realAlgebraicRoots(
                     List<IdealWithUniv<D>> I) {
-        List<IdealWithRealAlgebraicRoots<D, D>> lir = new ArrayList<IdealWithRealAlgebraicRoots<D, D>>(
+        List<IdealWithRealAlgebraicRoots<D>> lir = new ArrayList<IdealWithRealAlgebraicRoots<D>>(
                         I.size());
         for (IdealWithUniv<D> iu : I) {
-            IdealWithRealAlgebraicRoots<D, D> iur = PolyUtilApp.<D> realAlgebraicRoots(iu);
+            IdealWithRealAlgebraicRoots<D> iur = PolyUtilApp.<D> realAlgebraicRoots(iu);
             //System.out.println("iur = " + iur);
             lir.add(iur);
         }
@@ -1084,11 +1084,11 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * @param I zero dimensional ideal.
      * @return list of coordinates of real roots for ideal(G)
      */
-    public static <D extends GcdRingElem<D> & Rational> List<IdealWithRealAlgebraicRoots<D, D>> realAlgebraicRoots(
+    public static <D extends GcdRingElem<D> & Rational> List<IdealWithRealAlgebraicRoots<D>> realAlgebraicRoots(
                     Ideal<D> I) {
         List<IdealWithUniv<D>> Ir = I.zeroDimRootDecomposition();
         //System.out.println("Ir = " + Ir);
-        List<IdealWithRealAlgebraicRoots<D, D>> roots = PolyUtilApp.<D> realAlgebraicRoots(Ir);
+        List<IdealWithRealAlgebraicRoots<D>> roots = PolyUtilApp.<D> realAlgebraicRoots(Ir);
         return roots;
     }
 

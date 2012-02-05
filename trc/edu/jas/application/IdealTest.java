@@ -1610,16 +1610,16 @@ public class IdealTest extends TestCase {
         assertTrue("isGB( I )", I.isGB());
         //System.out.println("I = " + I);
 
-        List<IdealWithRealAlgebraicRoots<BigRational, BigRational>> iur;
+        List<IdealWithRealAlgebraicRoots<BigRational>> iur;
         iur = PolyUtilApp.<BigRational> realAlgebraicRoots(I);
 
         List<IdealWithUniv<BigRational>> iul = new ArrayList<IdealWithUniv<BigRational>>();
-        for (IdealWithRealAlgebraicRoots<BigRational, BigRational> iu : iur) {
+        for (IdealWithRealAlgebraicRoots<BigRational> iu : iur) {
             iul.add((IdealWithUniv<BigRational>) iu);
         }
         assertTrue("is contained in intersection ", I.isZeroDimDecomposition(iul));
 
-        for (IdealWithRealAlgebraicRoots<BigRational, BigRational> iu : iur) {
+        for (IdealWithRealAlgebraicRoots<BigRational> iu : iur) {
             //System.out.println("iu = " + iu);
             //System.out.println("");
             List<List<BigDecimal>> rd = iu.decimalApproximation();

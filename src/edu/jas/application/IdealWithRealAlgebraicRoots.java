@@ -22,7 +22,7 @@ import edu.jas.structure.RingElem;
  * roots.
  * @author Heinz Kredel
  */
-public class IdealWithRealAlgebraicRoots<C extends RingElem<C> & Rational, D extends GcdRingElem<D> & Rational>
+public class IdealWithRealAlgebraicRoots<D extends GcdRingElem<D> & Rational>
         extends IdealWithUniv<D> implements Serializable {
 
 
