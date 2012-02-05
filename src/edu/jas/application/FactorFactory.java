@@ -162,6 +162,7 @@ public class FactorFactory extends edu.jas.ufd.FactorFactory {
         edu.jas.application.RealAlgebraicRing rrfac = null;
         RealAlgebraicRing rfac = null;
         AlgebraicNumberRing afac = null;
+        ComplexRing cfac = null;
         QuotientRing qfac = null;
         GenPolynomialRing pfac = null;
         Object ofac = fac;
@@ -176,7 +177,9 @@ public class FactorFactory extends edu.jas.ufd.FactorFactory {
             ofac = rfac.algebraic;
             ufd = new FactorRealAlgebraic/*raw <C>*/(rfac,FactorFactory.<AlgebraicNumber<C>> getImplementation(rfac.algebraic));
         } else if (ofac instanceof ComplexRing) {
-            ufd = new FactorComplex(fac);
+            cfac = (ComplexRing<C>)ofac;
+            afac = cfac.algebraicRing();
+            ufd = new FactorComplex(cfac, FactorFactory.<C> getImplementation(afac));
         } else if (ofac instanceof AlgebraicNumberRing) {
             //System.out.println("afac_o = " + ofac);
             afac = (AlgebraicNumberRing) ofac;

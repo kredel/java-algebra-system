@@ -173,6 +173,7 @@ public class FactorFactory {
         //System.out.println("fac_o_ufd = " + fac.getClass().getName());
         FactorAbstract/*raw type<C>*/ufd = null;
         AlgebraicNumberRing afac = null;
+        ComplexRing cfac = null;
         QuotientRing qfac = null;
         GenPolynomialRing pfac = null;
         Object ofac = fac;
@@ -185,7 +186,8 @@ public class FactorFactory {
         } else if (ofac instanceof ModLongRing) {
             ufd = new FactorModular(fac);
         } else if (ofac instanceof ComplexRing) {
-            ufd = new FactorComplex(fac);
+            cfac = (ComplexRing<C>)ofac;
+            ufd = new FactorComplex(cfac);
         } else if (ofac instanceof AlgebraicNumberRing) {
             //System.out.println("afac_o = " + ofac);
             afac = (AlgebraicNumberRing) ofac;
