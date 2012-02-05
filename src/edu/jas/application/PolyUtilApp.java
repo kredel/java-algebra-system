@@ -782,15 +782,15 @@ public class PolyUtilApp<C extends RingElem<C>> {
      *            and bi-variate polynomials.
      * @return complex algebraic roots for ideal(G)
      */
-    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D> & Rational> IdealWithComplexAlgebraicRoots<C, D> complexAlgebraicRoots(
+    public static <D extends GcdRingElem<D> & Rational> IdealWithComplexAlgebraicRoots<D> complexAlgebraicRoots(
                     IdealWithUniv<D> I) {
         List<List<Complex<edu.jas.application.RealAlgebraicNumber<D>>>> can = new ArrayList<List<Complex<edu.jas.application.RealAlgebraicNumber<D>>>>();
         if (I == null || I.ideal == null || I.ideal.isZERO() || I.upolys == null || I.upolys.size() == 0) {
-            return new IdealWithComplexAlgebraicRoots<C, D>(I, can);
+            return new IdealWithComplexAlgebraicRoots<D>(I, can);
         }
         GenPolynomialRing<D> fac = I.ideal.list.ring;
         if (fac.nvar == 0) {
-            return new IdealWithComplexAlgebraicRoots<C, D>(I, can);
+            return new IdealWithComplexAlgebraicRoots<D>(I, can);
         }
         // case i == 0:
         GenPolynomial<D> p0 = I.upolys.get(0);
@@ -827,7 +827,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
             can.add(cl);
         }
         if (fac.nvar == 1) {
-            return new IdealWithComplexAlgebraicRoots<C, D>(I, can);
+            return new IdealWithComplexAlgebraicRoots<D>(I, can);
         }
         // case i > 0:
         for (int i = 1; i < I.upolys.size(); i++) {
@@ -997,7 +997,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
             }
             can = cn;
         }
-        IdealWithComplexAlgebraicRoots<C, D> Ic = new IdealWithComplexAlgebraicRoots<C, D>(I, can);
+        IdealWithComplexAlgebraicRoots<D> Ic = new IdealWithComplexAlgebraicRoots<D>(I, can);
         return Ic;
     }
 
@@ -1008,11 +1008,11 @@ public class PolyUtilApp<C extends RingElem<C>> {
      *            polynomials and bi-variate polynomials.
      * @return list of complex algebraic roots for ideal(G)
      */
-    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D> & Rational> List<IdealWithComplexAlgebraicRoots<C, D>> complexAlgebraicRoots(
+    public static <D extends GcdRingElem<D> & Rational> List<IdealWithComplexAlgebraicRoots<D>> complexAlgebraicRoots(
                     List<IdealWithUniv<D>> I) {
-        List<IdealWithComplexAlgebraicRoots<C, D>> lic = new ArrayList<IdealWithComplexAlgebraicRoots<C, D>>();
+        List<IdealWithComplexAlgebraicRoots<D>> lic = new ArrayList<IdealWithComplexAlgebraicRoots<D>>();
         for (IdealWithUniv<D> iu : I) {
-            IdealWithComplexAlgebraicRoots<C, D> iuc = PolyUtilApp.<C, D> complexAlgebraicRoots(iu);
+            IdealWithComplexAlgebraicRoots<D> iuc = PolyUtilApp.<D> complexAlgebraicRoots(iu);
             //System.out.println("iuc = " + iuc);
             lic.add(iuc);
         }

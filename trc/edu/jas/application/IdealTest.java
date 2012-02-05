@@ -1338,15 +1338,15 @@ public class IdealTest extends TestCase {
         BigDecimal e = new BigDecimal(eps.getRational());
         e = e.abs(); //.multiply(e);
 
-        List<IdealWithComplexAlgebraicRoots<BigRational,BigRational>> roots 
-            = PolyUtilApp.<BigRational, BigRational> complexAlgebraicRoots(zd); //, eps);
+        List<IdealWithComplexAlgebraicRoots<BigRational>> roots 
+            = PolyUtilApp.<BigRational> complexAlgebraicRoots(zd); //, eps);
         //System.out.println("roots = " + roots + "\n");
 
         ComplexRing<BigDecimal> dcc = new ComplexRing<BigDecimal>(e);
 
         int d = 0;
         int s = 0;
-        for (IdealWithComplexAlgebraicRoots<BigRational,BigRational> Ic : roots) {
+        for (IdealWithComplexAlgebraicRoots<BigRational> Ic : roots) {
             List<GenPolynomial<BigRational>> L = Ic.ideal.getList();
             List<GenPolynomial<Complex<BigDecimal>>> Ld 
                 = new ArrayList<GenPolynomial<Complex<BigDecimal>>>(L.size());
