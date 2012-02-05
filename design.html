@@ -535,7 +535,6 @@ implemented algebraic algorithms.
     <code>*Parallel</code> is a multi-threaded and 
     <code>*Distributed</code> is a message passing implementation.  
     The <code>*Pseudo</code> version is for non-field coefficients.
-
 </td>
 <td>GB, isGB, extended GB, minimal GB
 </td>
@@ -720,7 +719,9 @@ implemented algebraic algorithms.
 </td>
 <td>Algorithms to compute factorizations of polynomials as products of irreducible polynomials
    over different ground rings.
-    <code>FactorFactory</code> helps with the correct selection of an algorithm.
+   <code>FactorFactory</code> helps with the correct selection of an algorithm.
+   Reduction of the multivariate factorization to an univariate factorization is done
+   with Kronecker's algorithm in the general case and with Wang's algorithm over the integers.
 </td>
 <td>squarefreeFactors, factors, baseFactors,
     isIrreducible, isReducible,  isSquarefree, isFactorization,
@@ -763,6 +764,15 @@ implemented algebraic algorithms.
 <td>Algorithms to compute elementary integrals of univariate rational functions.
 </td>
 <td>integrate, integrateHermite, integrateLogPart, isIntegral
+</td>
+</tr>
+
+<tr>
+<td><code>PolyGBUtil</code>
+</td>
+<td>Algorithms to compute Wu-Ritt characteristic sets.
+</td>
+<td>characteristicSet, isCharacteristicSet, characteristicSetReduction, characteristicSetRemainder
 </td>
 </tr>
 
@@ -1265,7 +1275,7 @@ of the Java algebra system.
 <p>
 <!-- Created: Sat Mar 11 10:51:36 CET 2006 -->
 <!-- hhmts start -->
-Last modified: Wed Apr 13 23:32:58 CEST 2011
+Last modified: Sun Feb  5 21:22:04 CET 2012
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
