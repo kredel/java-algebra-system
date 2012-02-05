@@ -384,7 +384,7 @@ public class Examples {
         // compute real roots of the ideal
         Ideal<BigRational> I = new Ideal<BigRational>(Gp);
         List<IdealWithRealAlgebraicRoots<BigRational, BigRational>> Ir = PolyUtilApp
-                        .<BigRational, BigRational> realAlgebraicRoots(I);
+                        .<BigRational> realAlgebraicRoots(I);
         for (IdealWithRealAlgebraicRoots<BigRational, BigRational> R : Ir) {
             R.doDecimalApproximation();
             for (List<BigDecimal> Dr : R.decimalApproximation()) {

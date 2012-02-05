@@ -1092,7 +1092,7 @@ public class IdealTest extends TestCase {
         GenPolynomialRing<Complex<BigDecimal>> dcfac = new GenPolynomialRing<Complex<BigDecimal>>(dcc, dfac);
         //System.out.println("dcfac = " + dcfac);
 
-        List<List<Complex<BigDecimal>>> roots = PolyUtilApp.<BigRational, BigRational> complexRootTuples(I,
+        List<List<Complex<BigDecimal>>> roots = PolyUtilApp.<BigRational> complexRootTuples(I,
                 eps);
         //System.out.println("roots = " + roots + "\n");
         for (GenPolynomial<BigRational> p : I.getList()) {
@@ -1153,7 +1153,7 @@ public class IdealTest extends TestCase {
         BigDecimal e = new BigDecimal(eps.getRational());
         e = e.abs(); //.multiply(e);
 
-        List<List<BigDecimal>> roots = PolyUtilApp.<BigRational, BigRational> realRootTuples(I, eps);
+        List<List<BigDecimal>> roots = PolyUtilApp.<BigRational> realRootTuples(I, eps);
         //System.out.println("roots = " + roots + "\n");
         // polynomials with decimal coefficients
         BigDecimal dc = BigDecimal.ONE;
@@ -1267,7 +1267,7 @@ public class IdealTest extends TestCase {
         BigDecimal dc = BigDecimal.ONE;
 
         List<IdealWithRealRoots<BigRational>> roots 
-             = PolyUtilApp.<BigRational, BigRational> realRoots(zd,eps);
+             = PolyUtilApp.<BigRational> realRoots(zd,eps);
         //System.out.println("roots = " + roots + "\n");
 
         for (IdealWithRealRoots<BigRational> Ir : roots) {
@@ -1611,7 +1611,7 @@ public class IdealTest extends TestCase {
         //System.out.println("I = " + I);
 
         List<IdealWithRealAlgebraicRoots<BigRational, BigRational>> iur;
-        iur = PolyUtilApp.<BigRational, BigRational> realAlgebraicRoots(I);
+        iur = PolyUtilApp.<BigRational> realAlgebraicRoots(I);
 
         List<IdealWithUniv<BigRational>> iul = new ArrayList<IdealWithUniv<BigRational>>();
         for (IdealWithRealAlgebraicRoots<BigRational, BigRational> iu : iur) {

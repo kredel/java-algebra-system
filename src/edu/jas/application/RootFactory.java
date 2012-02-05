@@ -191,7 +191,7 @@ public class RootFactory {
         IdealWithRealAlgebraicRoots<C, C> idr;
         for (IdealWithUniv<C> idu : idul) {
             //System.out.println("---idu = " + idu);
-            idr = PolyUtilApp.<C, C> realAlgebraicRoots(idu);
+            idr = PolyUtilApp.<C> realAlgebraicRoots(idu);
             //System.out.println("---idr = " + idr);
             for (List<edu.jas.root.RealAlgebraicNumber<C>> crr : idr.ran) {
                 //System.out.println("crr = " + crr);

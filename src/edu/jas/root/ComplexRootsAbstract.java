@@ -21,6 +21,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.RingElem;
+import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.UnaryFunctor;
 import edu.jas.ufd.Squarefree;
@@ -33,7 +34,7 @@ import edu.jas.util.ArrayUtil;
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
-public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> implements ComplexRoots<C> {
+public abstract class ComplexRootsAbstract<C extends GcdRingElem<C> & Rational> implements ComplexRoots<C> {
 
 
     private static final Logger logger = Logger.getLogger(ComplexRootsAbstract.class);

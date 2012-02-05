@@ -132,7 +132,7 @@ public class RealAlgebraicTest extends TestCase {
         //System.out.println("idu = " + idu);
 
         IdealWithRealAlgebraicRoots<BigRational, BigRational> idr = PolyUtilApp
-                        .<BigRational, BigRational> realAlgebraicRoots(idu.ideal).get(0);
+                        .<BigRational> realAlgebraicRoots(idu.ideal).get(0);
         //System.out.println("idr = " + idr);
         //idr.doDecimalApproximation();
         //for ( List<BigDecimal> d : idr.decimalApproximation() ) {

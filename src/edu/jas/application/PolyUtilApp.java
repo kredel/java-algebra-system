@@ -402,8 +402,8 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * @param eps desired precision.
      * @return list of coordinates of complex roots for ideal(G)
      */
-    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> List<List<Complex<BigDecimal>>> complexRootTuples(
-                    Ideal<D> I, C eps) {
+    public static <D extends GcdRingElem<D> & Rational> List<List<Complex<BigDecimal>>> complexRootTuples(
+                    Ideal<D> I, D eps) {
         List<GenPolynomial<D>> univs = I.constructUnivariate();
         if (logger.isInfoEnabled()) {
             logger.info("univs = " + univs);
@@ -419,17 +419,17 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * @param eps desired precision.
      * @return list of coordinates of complex roots for ideal(G)
      */
-    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> List<List<Complex<BigDecimal>>> complexRoots(
-                    Ideal<D> I, List<GenPolynomial<D>> univs, C eps) {
+    public static <D extends GcdRingElem<D> & Rational> List<List<Complex<BigDecimal>>> complexRoots(
+                    Ideal<D> I, List<GenPolynomial<D>> univs, D eps) {
         List<List<Complex<BigDecimal>>> croots = new ArrayList<List<Complex<BigDecimal>>>();
-        RingFactory<C> cf = (RingFactory<C>) I.list.ring.coFac;
-        ComplexRing<C> cr = new ComplexRing<C>(cf);
-        ComplexRootsAbstract<C> cra = new ComplexRootsSturm<C>(cr);
-        List<GenPolynomial<Complex<C>>> cunivs = new ArrayList<GenPolynomial<Complex<C>>>();
+        RingFactory<D> cf = (RingFactory<D>) I.list.ring.coFac;
+        ComplexRing<D> cr = new ComplexRing<D>(cf);
+        ComplexRootsAbstract<D> cra = new ComplexRootsSturm<D>(cr);
+        List<GenPolynomial<Complex<D>>> cunivs = new ArrayList<GenPolynomial<Complex<D>>>();
         for (GenPolynomial<D> p : univs) {
-            GenPolynomialRing<Complex<C>> pfac = new GenPolynomialRing<Complex<C>>(cr, p.ring);
+            GenPolynomialRing<Complex<D>> pfac = new GenPolynomialRing<Complex<D>>(cr, p.ring);
             //System.out.println("pfac = " + pfac.toScript());
-            GenPolynomial<Complex<C>> cp = PolyUtil.<C> toComplex(pfac, (GenPolynomial<C>) p);
+            GenPolynomial<Complex<D>> cp = PolyUtil.<D> toComplex(pfac, (GenPolynomial<D>) p);
             cunivs.add(cp);
             //System.out.println("cp = " + cp);
         }
@@ -449,8 +449,8 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * @param eps desired precision.
      * @return list of coordinates of complex roots for ideal(cap_i(G_i))
      */
-    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> List<List<Complex<BigDecimal>>> complexRootTuples(
-                    List<IdealWithUniv<D>> Il, C eps) {
+    public static <D extends GcdRingElem<D> & Rational> List<List<Complex<BigDecimal>>> complexRootTuples(
+                    List<IdealWithUniv<D>> Il, D eps) {
         List<List<Complex<BigDecimal>>> croots = new ArrayList<List<Complex<BigDecimal>>>();
         for (IdealWithUniv<D> I : Il) {
             List<List<Complex<BigDecimal>>> cr = complexRoots(I.ideal, I.upolys, eps);
@@ -467,8 +467,8 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * @return list of ideals with coordinates of complex roots for
      *         ideal(cap_i(G_i))
      */
-    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> List<IdealWithComplexRoots<D>> complexRoots(
-                    List<IdealWithUniv<D>> Il, C eps) {
+    public static <D extends GcdRingElem<D> & Rational> List<IdealWithComplexRoots<D>> complexRoots(
+                    List<IdealWithUniv<D>> Il, D eps) {
         List<IdealWithComplexRoots<D>> Ic = new ArrayList<IdealWithComplexRoots<D>>(Il.size());
         for (IdealWithUniv<D> I : Il) {
             List<List<Complex<BigDecimal>>> cr = complexRoots(I.ideal, I.upolys, eps);
@@ -485,8 +485,8 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * @param eps desired precision.
      * @return list of ideals with coordinates of complex roots for ideal(G)
      */
-    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> List<IdealWithComplexRoots<D>> complexRoots(
-                    Ideal<D> G, C eps) {
+    public static <D extends GcdRingElem<D> & Rational> List<IdealWithComplexRoots<D>> complexRoots(
+                    Ideal<D> G, D eps) {
         List<IdealWithUniv<D>> Il = G.zeroDimDecomposition();
         return complexRoots(Il, eps);
     }
@@ -498,8 +498,8 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * @param eps desired precision.
      * @return list of coordinates of real roots for ideal(G)
      */
-    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> List<List<BigDecimal>> realRootTuples(
-                    Ideal<D> I, C eps) {
+    public static <D extends GcdRingElem<D> & Rational> List<List<BigDecimal>> realRootTuples(
+                    Ideal<D> I, D eps) {
         List<GenPolynomial<D>> univs = I.constructUnivariate();
         if (logger.isInfoEnabled()) {
             logger.info("univs = " + univs);
@@ -515,13 +515,13 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * @param eps desired precision.
      * @return list of coordinates of real roots for ideal(G)
      */
-    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> List<List<BigDecimal>> realRoots(
-                    Ideal<D> I, List<GenPolynomial<D>> univs, C eps) {
+    public static <D extends GcdRingElem<D> & Rational> List<List<BigDecimal>> realRoots(
+                    Ideal<D> I, List<GenPolynomial<D>> univs, D eps) {
         List<List<BigDecimal>> roots = new ArrayList<List<BigDecimal>>();
-        //RingFactory<C> cf = (RingFactory<C>) I.list.ring.coFac;
-        RealRootAbstract<C> rra = new RealRootsSturm<C>();
+        //RingFactory<D> cf = (RingFactory<D>) I.list.ring.coFac;
+        RealRootAbstract<D> rra = new RealRootsSturm<D>();
         for (int i = 0; i < I.list.ring.nvar; i++) {
-            List<BigDecimal> rri = rra.approximateRoots((GenPolynomial<C>) univs.get(i), eps);
+            List<BigDecimal> rri = rra.approximateRoots((GenPolynomial<D>) univs.get(i), eps);
             //System.out.println("rri = " + rri);
             roots.add(rri);
         }
@@ -538,8 +538,8 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * @param eps desired precision.
      * @return list of coordinates of real roots for ideal(cap_i(G_i))
      */
-    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> List<List<BigDecimal>> realRootTuples(
-                    List<IdealWithUniv<D>> Il, C eps) {
+    public static <D extends GcdRingElem<D> & Rational> List<List<BigDecimal>> realRootTuples(
+                    List<IdealWithUniv<D>> Il, D eps) {
         List<List<BigDecimal>> rroots = new ArrayList<List<BigDecimal>>();
         for (IdealWithUniv<D> I : Il) {
             List<List<BigDecimal>> rr = realRoots(I.ideal, I.upolys, eps);
@@ -556,8 +556,8 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * @return list of ideals with coordinates of real roots for
      *         ideal(cap_i(G_i))
      */
-    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> List<IdealWithRealRoots<D>> realRoots(
-                    List<IdealWithUniv<D>> Il, C eps) {
+    public static <D extends GcdRingElem<D> & Rational> List<IdealWithRealRoots<D>> realRoots(
+                    List<IdealWithUniv<D>> Il, D eps) {
         List<IdealWithRealRoots<D>> Ir = new ArrayList<IdealWithRealRoots<D>>(Il.size());
         for (IdealWithUniv<D> I : Il) {
             List<List<BigDecimal>> rr = realRoots(I.ideal, I.upolys, eps);
@@ -574,8 +574,8 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * @param eps desired precision.
      * @return list of ideals with coordinates of real roots for ideal(G)
      */
-    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D>> List<IdealWithRealRoots<D>> realRoots(
-                    Ideal<D> G, C eps) {
+    public static <D extends GcdRingElem<D> & Rational> List<IdealWithRealRoots<D>> realRoots(
+                    Ideal<D> G, D eps) {
         List<IdealWithUniv<D>> Il = G.zeroDimDecomposition();
         return realRoots(Il, eps);
     }
@@ -651,11 +651,11 @@ public class PolyUtilApp<C extends RingElem<C>> {
      *            and bi-variate polynomials.
      * @return real algebraic roots for ideal(G)
      */
-    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D> & Rational> IdealWithRealAlgebraicRoots<C, D> realAlgebraicRoots(
+    public static <D extends GcdRingElem<D> & Rational> IdealWithRealAlgebraicRoots<D, D> realAlgebraicRoots(
                     IdealWithUniv<D> I) {
         List<List<RealAlgebraicNumber<D>>> ran = new ArrayList<List<RealAlgebraicNumber<D>>>();
         if (I == null || I.ideal == null || I.ideal.isZERO() || I.upolys == null || I.upolys.size() == 0) {
-            return new IdealWithRealAlgebraicRoots<C, D>(I, ran);
+            return new IdealWithRealAlgebraicRoots<D, D>(I, ran);
         }
         GenPolynomialRing<D> fac = I.ideal.list.ring;
         // case i == 0:
@@ -752,7 +752,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
             }
             ran = rn;
         }
-        IdealWithRealAlgebraicRoots<C, D> Ir = new IdealWithRealAlgebraicRoots<C, D>(I, ran);
+        IdealWithRealAlgebraicRoots<D, D> Ir = new IdealWithRealAlgebraicRoots<D, D>(I, ran);
         return Ir;
     }
 
@@ -763,12 +763,12 @@ public class PolyUtilApp<C extends RingElem<C>> {
      *            polynomials and bi-variate polynomials.
      * @return list of real algebraic roots for all ideal(I_i)
      */
-    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D> & Rational> List<IdealWithRealAlgebraicRoots<C, D>> realAlgebraicRoots(
+    public static <D extends GcdRingElem<D> & Rational> List<IdealWithRealAlgebraicRoots<D, D>> realAlgebraicRoots(
                     List<IdealWithUniv<D>> I) {
-        List<IdealWithRealAlgebraicRoots<C, D>> lir = new ArrayList<IdealWithRealAlgebraicRoots<C, D>>(
+        List<IdealWithRealAlgebraicRoots<D, D>> lir = new ArrayList<IdealWithRealAlgebraicRoots<D, D>>(
                         I.size());
         for (IdealWithUniv<D> iu : I) {
-            IdealWithRealAlgebraicRoots<C, D> iur = PolyUtilApp.<C, D> realAlgebraicRoots(iu);
+            IdealWithRealAlgebraicRoots<D, D> iur = PolyUtilApp.<D> realAlgebraicRoots(iu);
             //System.out.println("iur = " + iur);
             lir.add(iur);
         }
@@ -1084,11 +1084,11 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * @param I zero dimensional ideal.
      * @return list of coordinates of real roots for ideal(G)
      */
-    public static <C extends RingElem<C> & Rational, D extends GcdRingElem<D> & Rational> List<IdealWithRealAlgebraicRoots<C, D>> realAlgebraicRoots(
+    public static <D extends GcdRingElem<D> & Rational> List<IdealWithRealAlgebraicRoots<D, D>> realAlgebraicRoots(
                     Ideal<D> I) {
         List<IdealWithUniv<D>> Ir = I.zeroDimRootDecomposition();
         //System.out.println("Ir = " + Ir);
-        List<IdealWithRealAlgebraicRoots<C, D>> roots = PolyUtilApp.<C, D> realAlgebraicRoots(Ir);
+        List<IdealWithRealAlgebraicRoots<D, D>> roots = PolyUtilApp.<D> realAlgebraicRoots(Ir);
         return roots;
     }
 
