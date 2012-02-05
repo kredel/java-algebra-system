@@ -361,7 +361,7 @@ public class RealRootTest extends TestCase {
         }
         //System.out.println("a = " + a);
 
-        RealRootAbstract<BigRational> rr = new RealRootsSturm<BigRational>();
+        RealRootsAbstract<BigRational> rr = new RealRootsSturm<BigRational>();
 
         List<Interval<BigRational>> R = rr.realRoots(a);
         //System.out.println("R = " + R);
@@ -416,7 +416,7 @@ public class RealRootTest extends TestCase {
         Collections.reverse(Rn);
         //System.out.println("Rn = " + Rn);
 
-        RealRootAbstract<BigRational> rr = new RealRootsSturm<BigRational>();
+        RealRootsAbstract<BigRational> rr = new RealRootsSturm<BigRational>();
 
         List<Interval<BigRational>> R = rr.realRoots(a);
         //System.out.println("R = " + R);
@@ -465,7 +465,7 @@ public class RealRootTest extends TestCase {
         }
         //System.out.println("a = " + a);
 
-        RealRootAbstract<BigRational> rr = new RealRootsSturm<BigRational>();
+        RealRootsAbstract<BigRational> rr = new RealRootsSturm<BigRational>();
 
         eps = eps.multiply(new BigRational(10000));
         //System.out.println("eps = " + eps);
@@ -516,7 +516,7 @@ public class RealRootTest extends TestCase {
         Collections.reverse(Rn);
         //System.out.println("Rn = " + Rn);
 
-        RealRootAbstract<BigRational> rr = new RealRootsSturm<BigRational>();
+        RealRootsAbstract<BigRational> rr = new RealRootsSturm<BigRational>();
 
         eps = eps.multiply(new BigRational(1000000));
         //System.out.println("eps = " + eps);

@@ -26,10 +26,10 @@ import edu.jas.structure.UnaryFunctor;
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
-public abstract class RealRootAbstract<C extends GcdRingElem<C>& Rational> implements RealRoots<C> {
+public abstract class RealRootsAbstract<C extends GcdRingElem<C>& Rational> implements RealRoots<C> {
 
 
-    private static final Logger logger = Logger.getLogger(RealRootAbstract.class);
+    private static final Logger logger = Logger.getLogger(RealRootsAbstract.class);
 
 
     private static boolean debug = logger.isDebugEnabled();

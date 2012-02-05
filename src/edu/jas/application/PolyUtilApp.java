@@ -35,7 +35,7 @@ import edu.jas.root.ComplexRootsSturm;
 import edu.jas.root.Interval;
 import edu.jas.root.RealAlgebraicNumber;
 import edu.jas.root.RealAlgebraicRing;
-import edu.jas.root.RealRootAbstract;
+import edu.jas.root.RealRootsAbstract;
 import edu.jas.root.RealRootTuple;
 import edu.jas.root.RealRootsSturm;
 import edu.jas.root.RootFactory;
@@ -519,7 +519,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
                     Ideal<D> I, List<GenPolynomial<D>> univs, D eps) {
         List<List<BigDecimal>> roots = new ArrayList<List<BigDecimal>>();
         //RingFactory<D> cf = (RingFactory<D>) I.list.ring.coFac;
-        RealRootAbstract<D> rra = new RealRootsSturm<D>();
+        RealRootsAbstract<D> rra = new RealRootsSturm<D>();
         for (int i = 0; i < I.list.ring.nvar; i++) {
             List<BigDecimal> rri = rra.approximateRoots((GenPolynomial<D>) univs.get(i), eps);
             //System.out.println("rri = " + rri);

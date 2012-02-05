@@ -22,7 +22,7 @@ import edu.jas.structure.RingFactory;
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
-public class RealRootsSturm<C extends GcdRingElem<C> & Rational> extends RealRootAbstract<C> {
+public class RealRootsSturm<C extends GcdRingElem<C> & Rational> extends RealRootsAbstract<C> {
 
 
     private static final Logger logger = Logger.getLogger(RealRootsSturm.class);
