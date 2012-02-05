@@ -20,7 +20,7 @@ import edu.jas.structure.GcdRingElem;
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
-public interface ComplexRoots<C extends GcdRingElem<C> & Rational> {
+public interface ComplexRoots<C extends RingElem<C> & Rational> {
 
 
     /**

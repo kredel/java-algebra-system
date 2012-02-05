@@ -34,7 +34,7 @@ import edu.jas.util.ArrayUtil;
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
-public abstract class ComplexRootsAbstract<C extends GcdRingElem<C> & Rational> implements ComplexRoots<C> {
+public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> implements ComplexRoots<C> {
 
 
     private static final Logger logger = Logger.getLogger(ComplexRootsAbstract.class);

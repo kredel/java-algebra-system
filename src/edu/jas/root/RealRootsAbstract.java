@@ -16,6 +16,7 @@ import edu.jas.arith.Rational;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
+import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.UnaryFunctor;
@@ -26,7 +27,7 @@ import edu.jas.structure.UnaryFunctor;
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
-public abstract class RealRootsAbstract<C extends GcdRingElem<C>& Rational> implements RealRoots<C> {
+public abstract class RealRootsAbstract<C extends RingElem<C>& Rational> implements RealRoots<C> {
 
 
     private static final Logger logger = Logger.getLogger(RealRootsAbstract.class);

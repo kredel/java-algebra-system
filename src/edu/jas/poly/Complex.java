@@ -19,7 +19,7 @@ import edu.jas.structure.StarRingElem;
 /**
  * Generic Complex class implementing the RingElem interface. Objects of this
  * class are immutable.
- * @param <C> base type.
+ * @param <C> base type of RingElem (for complex polynomials).
  * @author Heinz Kredel
  */
 public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>, GcdRingElem<Complex<C>> {
