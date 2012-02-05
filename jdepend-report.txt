@@ -4,12 +4,12 @@
 --------------------------------------------------
 
 Stats:
-    Total Classes: 59
-    Concrete Classes: 59
+    Total Classes: 57
+    Concrete Classes: 57
     Abstract Classes: 0
 
     Ca: 0
-    Ce: 9
+    Ce: 10
 
     A: 0
     I: 1
@@ -39,8 +39,6 @@ Concrete Classes:
     edu.jas.application.FactorAlgebraicPrim
     edu.jas.application.FactorAlgebraicPrimTest
     edu.jas.application.FactorFactory
-    edu.jas.application.FactorRealAlgebraic
-    edu.jas.application.FactorRealAlgebraicTest
     edu.jas.application.FactorRealReal
     edu.jas.application.FactorRealRealTest
     edu.jas.application.FactorTest
@@ -87,6 +85,7 @@ Depends Upon:
     edu.jas.root
     edu.jas.structure
     edu.jas.ufd
+    edu.jas.ufdroot
     edu.jas.util
 
 Used By:
@@ -101,12 +100,12 @@ Stats:
     Concrete Classes: 35
     Abstract Classes: 3
 
-    Ca: 12
+    Ca: 13
     Ce: 2
 
     A: 0,08
-    I: 0,14
-    D: 0,78
+    I: 0,13
+    D: 0,79
 
 Abstract Classes:
     edu.jas.arith.Modular
@@ -164,6 +163,7 @@ Used By:
     edu.jas.ps
     edu.jas.root
     edu.jas.ufd
+    edu.jas.ufdroot
     edu.jas.util
     edu.jas.vector
     edu.mas.kern
@@ -358,16 +358,16 @@ Used By:
 --------------------------------------------------
 
 Stats:
-    Total Classes: 28
-    Concrete Classes: 25
+    Total Classes: 33
+    Concrete Classes: 30
     Abstract Classes: 3
 
     Ca: 2
     Ce: 7
 
-    A: 0,11
+    A: 0,09
     I: 0,78
-    D: 0,12
+    D: 0,13
 
 Abstract Classes:
     edu.jas.gbufd.PseudoReduction
@@ -380,6 +380,9 @@ Concrete Classes:
     edu.jas.gbufd.GBFactory$1
     edu.jas.gbufd.GBFactory$Algo
     edu.jas.gbufd.GBFactoryTest
+    edu.jas.gbufd.GroebnerBaseExamplesFGLM
+    edu.jas.gbufd.GroebnerBaseFGLM
+    edu.jas.gbufd.GroebnerBaseFGLMTest
     edu.jas.gbufd.GroebnerBasePartTest
     edu.jas.gbufd.GroebnerBasePartial
     edu.jas.gbufd.GroebnerBasePseudoRecSeq
@@ -391,6 +394,8 @@ Concrete Classes:
     edu.jas.gbufd.MultiplicativeSetSquarefree
     edu.jas.gbufd.MultiplicativeSetTest
     edu.jas.gbufd.OrderedRPairlist
+    edu.jas.gbufd.PolyGBUtil
+    edu.jas.gbufd.PolyGBUtilTest
     edu.jas.gbufd.PseudoReductionEntry
     edu.jas.gbufd.PseudoReductionSeq
     edu.jas.gbufd.RGroebnerBasePseudoSeq
@@ -459,7 +464,7 @@ Stats:
     Concrete Classes: 11
     Abstract Classes: 0
 
-    Ca: 10
+    Ca: 11
     Ce: 0
 
     A: 0
@@ -494,6 +499,7 @@ Used By:
     edu.jas.ps
     edu.jas.root
     edu.jas.ufd
+    edu.jas.ufdroot
     edu.jas.vector
 
 --------------------------------------------------
@@ -501,16 +507,16 @@ Used By:
 --------------------------------------------------
 
 Stats:
-    Total Classes: 185
-    Concrete Classes: 181
+    Total Classes: 187
+    Concrete Classes: 183
     Abstract Classes: 4
 
-    Ca: 8
+    Ca: 9
     Ce: 5
 
     A: 0,02
-    I: 0,38
-    D: 0,59
+    I: 0,36
+    D: 0,62
 
 Abstract Classes:
     edu.jas.poly.ExpVector
@@ -540,6 +546,7 @@ Concrete Classes:
     edu.jas.poly.ComplexTest
     edu.jas.poly.DistToRec
     edu.jas.poly.EvalMain
+    edu.jas.poly.EvalMainPol
     edu.jas.poly.Examples
     edu.jas.poly.ExpVector$1
     edu.jas.poly.ExpVector$StorUnit
@@ -697,6 +704,7 @@ Concrete Classes:
     edu.jas.poly.TermOrder$8
     edu.jas.poly.TermOrder$9
     edu.jas.poly.TermOrderOptimization
+    edu.jas.poly.TermOrderOptimizationTest
     edu.jas.poly.TermOrderTest
     edu.jas.poly.ToComplex
     edu.jas.poly.WeylRelations
@@ -717,6 +725,7 @@ Used By:
     edu.jas.ps
     edu.jas.root
     edu.jas.ufd
+    edu.jas.ufdroot
 
 --------------------------------------------------
 - Package: edu.jas.ps
@@ -868,18 +877,18 @@ Stats:
     Concrete Classes: 30
     Abstract Classes: 4
 
-    Ca: 1
+    Ca: 2
     Ce: 5
 
     A: 0,12
-    I: 0,83
-    D: 0,05
+    I: 0,71
+    D: 0,17
 
 Abstract Classes:
     edu.jas.root.ComplexRoots
     edu.jas.root.ComplexRootsAbstract
-    edu.jas.root.RealRootAbstract
     edu.jas.root.RealRoots
+    edu.jas.root.RealRootsAbstract
 
 Concrete Classes:
     edu.jas.root.AlgFromRealCoeff
@@ -904,9 +913,9 @@ Concrete Classes:
     edu.jas.root.RealAlgebraicRing
     edu.jas.root.RealAlgebraicTest
     edu.jas.root.RealFromAlgCoeff
-    edu.jas.root.RealRootAbstract$1
     edu.jas.root.RealRootTest
     edu.jas.root.RealRootTuple
+    edu.jas.root.RealRootsAbstract$1
     edu.jas.root.RealRootsSturm
     edu.jas.root.Rectangle
     edu.jas.root.RootFactory
@@ -922,22 +931,23 @@ Depends Upon:
 
 Used By:
     edu.jas.application
+    edu.jas.ufdroot
 
 --------------------------------------------------
 - Package: edu.jas.structure
 --------------------------------------------------
 
 Stats:
-    Total Classes: 21
+    Total Classes: 22
     Concrete Classes: 2
-    Abstract Classes: 19
+    Abstract Classes: 20
 
     Ca: 12
     Ce: 0
 
-    A: 0,9
+    A: 0,91
     I: 0
-    D: 0,1
+    D: 0,09
 
 Abstract Classes:
     edu.jas.structure.AbelianGroupElem
@@ -948,6 +958,7 @@ Abstract Classes:
     edu.jas.structure.ElemFactory
     edu.jas.structure.Element
     edu.jas.structure.FieldElem
+    edu.jas.structure.FieldFactory
     edu.jas.structure.GcdRingElem
     edu.jas.structure.ModulElem
     edu.jas.structure.ModulFactory
@@ -986,16 +997,16 @@ Used By:
 --------------------------------------------------
 
 Stats:
-    Total Classes: 86
-    Concrete Classes: 78
+    Total Classes: 93
+    Concrete Classes: 85
     Abstract Classes: 8
 
-    Ca: 4
+    Ca: 5
     Ce: 8
 
     A: 0,09
-    I: 0,67
-    D: 0,24
+    I: 0,62
+    D: 0,3
 
 Abstract Classes:
     edu.jas.ufd.FactorAbsolute
@@ -1041,11 +1052,17 @@ Concrete Classes:
     edu.jas.ufd.GCDPrimitiveTest
     edu.jas.ufd.GCDProxy
     edu.jas.ufd.GCDProxy$1
+    edu.jas.ufd.GCDProxy$10
+    edu.jas.ufd.GCDProxy$11
+    edu.jas.ufd.GCDProxy$12
     edu.jas.ufd.GCDProxy$2
     edu.jas.ufd.GCDProxy$3
     edu.jas.ufd.GCDProxy$4
     edu.jas.ufd.GCDProxy$5
     edu.jas.ufd.GCDProxy$6
+    edu.jas.ufd.GCDProxy$7
+    edu.jas.ufd.GCDProxy$8
+    edu.jas.ufd.GCDProxy$9
     edu.jas.ufd.GCDProxyTest
     edu.jas.ufd.GCDSimpleTest
     edu.jas.ufd.GCDSubresRatTest
@@ -1086,6 +1103,7 @@ Concrete Classes:
     edu.jas.ufd.SquarefreeRingChar0
     edu.jas.ufd.SquarefreeTest
     edu.jas.ufd.SubstKronecker
+    edu.jas.ufd.TrialParts
 
 Depends Upon:
     edu.jas.arith
@@ -1102,6 +1120,39 @@ Used By:
     edu.jas.gbufd
     edu.jas.integrate
     edu.jas.root
+    edu.jas.ufdroot
+
+--------------------------------------------------
+- Package: edu.jas.ufdroot
+--------------------------------------------------
+
+Stats:
+    Total Classes: 2
+    Concrete Classes: 2
+    Abstract Classes: 0
+
+    Ca: 1
+    Ce: 5
+
+    A: 0
+    I: 0,83
+    D: 0,17
+
+Abstract Classes:
+
+Concrete Classes:
+    edu.jas.ufdroot.FactorRealAlgebraic
+    edu.jas.ufdroot.FactorRealAlgebraicTest
+
+Depends Upon:
+    edu.jas.arith
+    edu.jas.kern
+    edu.jas.poly
+    edu.jas.root
+    edu.jas.ufd
+
+Used By:
+    edu.jas.application
 
 --------------------------------------------------
 - Package: edu.jas.util
@@ -1281,18 +1332,19 @@ Used By:
 
 Name, Class Count, Abstract Class Count, Ca, Ce, A, I, D, V:
 
-edu.jas.application,59,0,0,9,0,1,0,1
-edu.jas.arith,38,3,12,2,0,08,0,14,0,78,1
+edu.jas.application,57,0,0,10,0,1,0,1
+edu.jas.arith,38,3,13,2,0,08,0,13,0,79,1
 edu.jas.gb,104,12,4,6,0,12,0,6,0,28,1
 edu.jas.gbmod,16,4,0,6,0,25,1,0,25,1
-edu.jas.gbufd,28,3,2,7,0,11,0,78,0,12,1
+edu.jas.gbufd,33,3,2,7,0,09,0,78,0,13,1
 edu.jas.integrate,6,0,0,5,0,1,0,1
-edu.jas.kern,11,0,10,0,0,0,1,1
-edu.jas.poly,185,4,8,5,0,02,0,38,0,59,1
+edu.jas.kern,11,0,11,0,0,0,1,1
+edu.jas.poly,187,4,9,5,0,02,0,36,0,62,1
 edu.jas.ps,111,6,1,5,0,05,0,83,0,11,1
-edu.jas.root,34,4,1,5,0,12,0,83,0,05,1
-edu.jas.structure,21,19,12,0,0,9,0,0,1,1
-edu.jas.ufd,86,8,4,8,0,09,0,67,0,24,1
+edu.jas.root,34,4,2,5,0,12,0,71,0,17,1
+edu.jas.structure,22,20,12,0,0,91,0,0,09,1
+edu.jas.ufd,93,8,5,8,0,09,0,62,0,3,1
+edu.jas.ufdroot,2,0,1,5,0,0,83,0,17,1
 edu.jas.util,67,2,6,2,0,03,0,25,0,72,1
 edu.jas.vector,8,0,4,3,0,0,43,0,57,1
 edu.mas.kern,2,0,0,1,0,1,0,1
