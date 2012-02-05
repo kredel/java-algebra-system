@@ -10,14 +10,11 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
-import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 
 import edu.jas.kern.StringUtil;
-import edu.jas.structure.ElemFactory;
-import edu.jas.structure.Element;
+import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 
@@ -60,14 +57,28 @@ public class ComplexRing<C extends RingElem<C>> implements RingFactory<Complex<C
      */
     public List<Complex<C>> generators() {
         List<C> gens = ring.generators();
-        List<Complex<C>> g = new ArrayList<Complex<C>>(gens.size()+1);
-        for ( C x : gens ) {
-            Complex<C> cx = new Complex<C>(this,x);
+        List<Complex<C>> g = new ArrayList<Complex<C>>(gens.size() + 1);
+        for (C x : gens) {
+            Complex<C> cx = new Complex<C>(this, x);
             g.add(cx);
         }
         g.add(getIMAG());
-        return g; 
+        return g;
     }
+
+
+    /**
+     * Corresponding algebraic number ring.
+     * @return algebraic number ring.
+     * not jet possible.
+    public AlgebraicNumberRing<C> algebraicRing() {
+        GenPolynomialRing<C> pfac = new GenPolynomialRing<C>(ring, 1, new TermOrder(TermOrder.INVLEX),
+                        new String[] { "I" });
+        GenPolynomial<C> I = pfac.univariate(0, 2L).sum(pfac.getONE());
+        AlgebraicNumberRing<C> afac = new AlgebraicNumberRing<C>(I, true); // must indicate field
+        return afac;
+    }
+     */
 
 
     /**

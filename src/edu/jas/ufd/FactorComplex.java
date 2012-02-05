@@ -85,6 +85,19 @@ public class FactorComplex<C extends GcdRingElem<C>> extends FactorAbsolute<Comp
 
 
     /**
+     * Constructor.
+     * @param fac complex number factory.
+     * @param afac algebraic number factory.
+     * @param factorAlgeb factorization engine for polynomials over algebraic coefficients.
+     */
+    public FactorComplex(ComplexRing<C> fac, AlgebraicNumberRing<C> afac, FactorAbstract<AlgebraicNumber<C>> factorAlgeb) {
+        super(fac);
+        this.afac = afac;
+        this.factorAlgeb = factorAlgeb;
+    }
+
+
+    /**
      * GenPolynomial base factorization of a squarefree polynomial.
      * @param P squarefree GenPolynomial&lt;AlgebraicNumber&lt;C&gt;&gt;.
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
