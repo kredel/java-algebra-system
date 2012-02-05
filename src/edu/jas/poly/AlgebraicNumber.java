@@ -6,6 +6,7 @@ package edu.jas.poly;
 
 
 import edu.jas.kern.PrettyPrint;
+import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.NotInvertibleException;
 
@@ -16,7 +17,7 @@ import edu.jas.structure.NotInvertibleException;
  * @author Heinz Kredel
  */
 
-public class AlgebraicNumber<C extends GcdRingElem<C>> implements GcdRingElem<AlgebraicNumber<C>> {
+public class AlgebraicNumber<C extends RingElem<C>> implements GcdRingElem<AlgebraicNumber<C>> {
 
 
     /**

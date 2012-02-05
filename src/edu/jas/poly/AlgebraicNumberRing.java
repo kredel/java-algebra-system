@@ -14,6 +14,7 @@ import java.util.Random;
 import org.apache.log4j.Logger;
 
 import edu.jas.kern.Scripting;
+import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.util.CartesianProduct;
@@ -26,7 +27,7 @@ import edu.jas.util.CartesianProductInfinite;
  * @author Heinz Kredel
  */
 
-public class AlgebraicNumberRing<C extends GcdRingElem<C>> implements RingFactory<AlgebraicNumber<C>>,
+public class AlgebraicNumberRing<C extends RingElem<C>> implements RingFactory<AlgebraicNumber<C>>,
         Iterable<AlgebraicNumber<C>> {
 
 
@@ -532,7 +533,7 @@ public class AlgebraicNumberRing<C extends GcdRingElem<C>> implements RingFactor
  * Algebraic number iterator.
  * @author Heinz Kredel
  */
-class AlgebraicNumberIterator<C extends GcdRingElem<C>> implements Iterator<AlgebraicNumber<C>> {
+class AlgebraicNumberIterator<C extends RingElem<C>> implements Iterator<AlgebraicNumber<C>> {
 
 
     /**

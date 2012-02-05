@@ -71,14 +71,14 @@ public class ComplexRing<C extends RingElem<C>> implements RingFactory<Complex<C
      * Corresponding algebraic number ring.
      * @return algebraic number ring.
      * not jet possible.
+     */
     public AlgebraicNumberRing<C> algebraicRing() {
-        GenPolynomialRing<C> pfac = new GenPolynomialRing<C>(ring, 1, new TermOrder(TermOrder.INVLEX),
-                        new String[] { "I" });
+        GenPolynomialRing<C> pfac 
+           = new GenPolynomialRing<C>(ring, 1, new TermOrder(TermOrder.INVLEX), new String[] { "I" });
         GenPolynomial<C> I = pfac.univariate(0, 2L).sum(pfac.getONE());
-        AlgebraicNumberRing<C> afac = new AlgebraicNumberRing<C>(I, true); // must indicate field
+        AlgebraicNumberRing<C> afac = new AlgebraicNumberRing<C>(I, ring.isField()); // must indicate field
         return afac;
     }
-     */
 
 
     /**
