@@ -87,6 +87,7 @@ public class ResidueTest extends TestCase {
        }
        id = new Ideal<BigRational>(mfac,F);
        //System.out.println("id = " + id);
+       assert !id.isONE() : "id = " + id;
        fac = new ResidueRing<BigRational>( id );
        //System.out.println("fac = " + fac);
        F = null;
@@ -108,9 +109,9 @@ public class ResidueTest extends TestCase {
      c = fac.getONE();
      //System.out.println("c = " + c);
      //System.out.println("c.val = " + c.val);
-     assertTrue("length( c ) = 1", c.val.length() == 1);
-     assertTrue("isZERO( c )", !c.isZERO() );
-     assertTrue("isONE( c )", c.isONE() );
+     assertTrue("length( c ) = 1 ", c.val.length() == 1 || id.isONE());
+     assertTrue("isZERO( c )", !c.isZERO() || id.isONE());
+     assertTrue("isONE( c )", c.isONE() || id.isONE());
 
      d = fac.getZERO();
      //System.out.println("d = " + d);
