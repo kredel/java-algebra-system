@@ -199,6 +199,7 @@ public class FactorMoreTest extends TestCase {
                 facs++;
             }
             a = c.multiply(b);
+            //a = pqfac.parse("( ( -26 t - 91  ) x^3 - ( 13 t + 26  ) x^2 + ( 6 t^2 + 21 t ) x + ( 3 t^2 + 6 t ) )");
             //System.out.println("\na = " + a);
             //System.out.println("b = " + b);
             //System.out.println("c = " + c);

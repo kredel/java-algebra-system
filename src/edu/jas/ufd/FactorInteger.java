@@ -1093,7 +1093,9 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     tp = new TrialParts(V, pes, un, cei, ln);
                 }
                 //System.out.println("trialParts = " + tp);
-                tParts.add(tp);
+                if (tp.univPoly != null) {
+                    tParts.add(tp);
+                }
                 if (tParts.size() < trials) {
                     notLucky = true;
                 }
