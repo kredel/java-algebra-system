@@ -680,14 +680,13 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 //e.printStackTrace();
             }
         }
-        if (facs != null) {
-            List<GenPolynomial<BigInteger>> iopt = TermOrderOptimization. <BigInteger> permutation(iperm,pfac,facs);
-            logger.info("de-optimized polynomials: " + iopt);
-            facs = normalizeFactorization(iopt);
-        } else {
+        if (facs == null) {
             logger.info("factorsSquarefreeHensel not applicable or failed, reverting to Kronecker for: " + P);
             facs = super.factorsSquarefree(P);
         }
+        List<GenPolynomial<BigInteger>> iopt = TermOrderOptimization. <BigInteger> permutation(iperm,pfac,facs);
+        logger.info("de-optimized polynomials: " + iopt);
+        facs = normalizeFactorization(iopt);
         return facs;
     }
 
@@ -787,9 +786,9 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         boolean isPrimitive = true;
         boolean notLucky = true;
         while (notLucky) { // for Wang's test
-            if (Math.abs(evStart) > 400L) {
+            if (Math.abs(evStart) > 371L) {
                 System.out.println("P = " + P + ", lprr = " + lprr + ", lfacs = " + lfacs);
-                throw new RuntimeException("no lucky evaluation point found after " + evStart + " iterations");
+                throw new RuntimeException("no lucky evaluation point found after " + Math.abs(evStart) + " iterations");
             }
             if (Math.abs(evStart) % 100L <= 3L) {
                 ran = ran * (Math.PI - 2.14);
@@ -1094,7 +1093,9 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 }
                 //System.out.println("trialParts = " + tp);
                 if (tp.univPoly != null) {
-                    tParts.add(tp);
+                    if (tp.ldcfEval.size() != 0) {
+                       tParts.add(tp);
+                    }
                 }
                 if (tParts.size() < trials) {
                     notLucky = true;
@@ -1127,6 +1128,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         ufactors = tpmin.univFactors;
         cei = tpmin.ldcfEval; // unused
         lf = tpmin.ldcfFactors;
+        logger.info("iterations    = " + Math.abs(evStart));
         logger.info("minimal trial = " + tpmin);
 
         GenPolynomialRing<BigInteger> ufac = pe.ring;
