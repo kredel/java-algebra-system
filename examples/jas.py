@@ -2483,6 +2483,11 @@ class RingElem:
         '''
         return self.elem.hashCode(); 
 
+    def __len__(self):
+        '''Length of the element.
+        '''
+        return self.elem.length(); 
+
     def __mul__(self,other):
         '''Multiply two ring elements.
         '''

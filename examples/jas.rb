@@ -624,10 +624,17 @@ Compare two ring elements.
     end
 
 =begin rdoc
-Test if two ring element are equal.
+Test if two ring elements are equal.
 =end
     def ===(other)
         return (self <=> other) == 0; 
+    end
+
+=begin rdoc
+Length of an element.
+=end
+    def len()
+        return self.elem.length(); 
     end
 
 =begin rdoc
