@@ -20,8 +20,6 @@ issues to consider:
 
 - implement univariate power series composition and power
 
-- refactor unit tests to a different source code tree to avoid circular dependencys
-
 - make final variables public (?)
 
 - define quotientRemainder in RingElem interface (?)
@@ -43,6 +41,8 @@ issues to consider:
 
 
 partially resolved and completed issues:
+
+- refactor unit tests to a different source code tree to avoid circular dependencys
 
 - provide all Jython examples also for JRuby
 
