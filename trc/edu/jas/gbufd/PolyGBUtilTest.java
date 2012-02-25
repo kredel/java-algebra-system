@@ -426,7 +426,7 @@ public class PolyGBUtilTest extends TestCase {
         //for ( IdealWithUniv<BigRational> r : R ) {
         //     System.out.println("radical: ");
         //     System.out.println("" + r);
-	//}
+        //}
         //boolean t = J.isRadicalMember(g);
         //System.out.println("radicalMember g = " + t); // false
         //t = J.isRadicalMember(e);

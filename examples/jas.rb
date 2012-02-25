@@ -2008,7 +2008,6 @@ Print decimal approximation of real roots of 0-dim ideal.
                 r.doDecimalApproximation();
             end
         end
-        dd = [];
         for ir in @roots
             for dr in ir.decimalApproximation()
                 puts dr.to_s;
@@ -2032,9 +2031,29 @@ Compute complex roots of 0-dim ideal.
     def complexRoots()
         ii = Ideal.new(@pset);
         @croots = PolyUtilApp.complexAlgebraicRoots(ii);
-        #for R in @croots:
-        #    R.doDecimalApproximation();
+        for r in @croots
+            r.doDecimalApproximation();
+        end
         return @croots;
+    end
+
+=begin rdoc
+Print decimal approximation of complex roots of 0-dim ideal.
+=end
+    def complexRootsPrint()
+        if @roots == nil
+            ii = Ideal.new(@pset);
+            @croots = PolyUtilApp.complexAlgebraicRoots(ii);
+            for r in @croots
+                r.doDecimalApproximation();
+            end
+        end
+        for ic in @croots
+            for dc in ic.decimalApproximation()
+                puts dc.to_s;
+            end
+            puts;
+        end
     end
 
 =begin rdoc
