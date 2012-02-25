@@ -667,7 +667,6 @@ class Ideal:
             self.roots = jas.application.PolyUtilApp.realAlgebraicRoots(I);
             for R in self.roots:
                 R.doDecimalApproximation();
-        D = [];
         for Ir in self.roots:
             for Dr in Ir.decimalApproximation():
                 print str(Dr);
@@ -685,9 +684,22 @@ class Ideal:
         '''
         I = jas.application.Ideal(self.pset);
         self.croots = jas.application.PolyUtilApp.complexAlgebraicRoots(I);
-        #for R in self.croots:
-        #    R.doDecimalApproximation();
+        for R in self.croots:
+            R.doDecimalApproximation();
         return self.croots;
+
+    def complexRootsPrint(self):
+        '''Print decimal approximation of complex roots of 0-dim ideal.
+        '''
+        if self.croots == None:
+            I = jas.application.Ideal(self.pset);
+            self.croots = jas.application.PolyUtilApp.realAlgebraicRoots(I);
+            for R in self.croots:
+                R.doDecimalApproximation();
+        for Ic in self.croots:
+            for Dc in Ic.decimalApproximation():
+                print str(Dc);
+            print;
 
     def primeDecomp(self):
         '''Compute prime decomposition of this ideal.

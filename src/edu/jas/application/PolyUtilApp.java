@@ -1020,6 +1020,20 @@ public class PolyUtilApp<C extends RingElem<C>> {
     }
 
 
+    /**
+     * Construct exact set of complex roots for zero dimensional ideal(G).
+     * @param I zero dimensional ideal.
+     * @return list of coordinates of complex roots for ideal(G)
+     */
+    public static <D extends GcdRingElem<D> & Rational> List<IdealWithComplexAlgebraicRoots<D>> complexAlgebraicRoots(
+                    Ideal<D> I) {
+        List<IdealWithUniv<D>> Ir = I.zeroDimRootDecomposition();
+        //System.out.println("Ir = " + Ir);
+        List<IdealWithComplexAlgebraicRoots<D>> roots = PolyUtilApp.<D> complexAlgebraicRoots(Ir);
+        return roots;
+    }
+
+
     /*
      * Convert to a polynomial in given ring.
      * @param fac result polynomial ring.

@@ -14,7 +14,7 @@ from jas import startLog
 
 from jas import QQ, DD
 
-# polynomial examples: complex roots over Q
+# polynomial examples: real roots over Q
 
 r = PolyRing(QQ(),"I,x,y,z",PolyRing.lex);
 print "Ring: " + str(r);
@@ -76,14 +76,13 @@ print "G = ", G;
 print;
 
 t = System.currentTimeMillis();
-R = G.complexRoots();
+R = G.realRoots();
 t = System.currentTimeMillis() - t;
 print "R = ", R;
 print;
-print "complex roots: ";
-G.complexRootsPrint()
-print;
-print "complex roots time =", t, "milliseconds";
+print "real roots: ";
+G.realRootsPrint()
+print "real roots time =", t, "milliseconds";
 print;
 
 print "G = ", G;

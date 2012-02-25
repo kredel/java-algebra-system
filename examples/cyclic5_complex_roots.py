@@ -13,7 +13,7 @@ from jas import startLog
 
 from jas import QQ, DD
 
-# polynomial examples: real roots over Q for zero dimensional ideal `cyclic5'
+# polynomial examples: complex roots over Q for zero dimensional ideal `cyclic5'
 
 #r = Ring( "Q(x) L" );
 r = PolyRing(QQ(),"a,b,c,d,e",PolyRing.lex);
@@ -50,14 +50,15 @@ startLog();
 #sys.exit();
 
 t = System.currentTimeMillis();
-R = F.realRoots();
+R = F.complexRoots();
+#R = F.realRoots();
 t = System.currentTimeMillis() - t;
 print;
 print "R = ", R;
 print;
-print "real roots: ";
-F.realRootsPrint()
-print "real roots time =", t, "milliseconds";
+print "complex roots: ";
+F.complexRootsPrint()
+print "complex roots time =", t, "milliseconds";
 print;
 
 print "F = ", F;
