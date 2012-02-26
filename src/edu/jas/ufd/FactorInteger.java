@@ -787,7 +787,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         boolean notLucky = true;
         while (notLucky) { // for Wang's test
             if (Math.abs(evStart) > 371L) {
-                System.out.println("P = " + P + ", lprr = " + lprr + ", lfacs = " + lfacs);
+                logger.warn("no lucky evaluation point for: P = " + P + ", lprr = " + lprr + ", lfacs = " + lfacs);
                 throw new RuntimeException("no lucky evaluation point found after " + Math.abs(evStart) + " iterations");
             }
             if (Math.abs(evStart) % 100L <= 3L) {
