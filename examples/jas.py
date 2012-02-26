@@ -1815,6 +1815,11 @@ def ZM(m,z=0,field=False):
     return RingElem(r);
 
 
+def GF(m,z=0,field=True):
+    '''Create JAS ModInteger as field element.
+    '''
+    return ZM(m,z,field);
+
 def QQ(d=0,n=1):
     '''Create JAS BigRational as ring element.
     '''
@@ -2772,6 +2777,20 @@ class RingElem:
             return None;
         return ev;
 
+    def base_ring(self):
+        '''Coefficient ring of a polynomial.
+        '''
+        try:
+            ev = self.elem.ring.coFac;
+        except:
+            return None;
+        return RingElem(ev);
+
+    def is_field(self):
+        '''Test if this RingElem is field.
+        '''
+        return self.elem.isField();
+
     def monomials(self):
         '''All monomials of a polynomial.
 
@@ -2837,6 +2856,32 @@ class RingElem:
         if b.getClass().getSimpleName() != "ExpVectorLong":
             raise ValueError, "No ExpVector given " + str(a) + ", " + str(b)
         return a.divides(b);
+
+    def monomial_pairwise_prime(self,e,f):
+        '''Test if ExpVectors are pairwise prime.
+
+        Compatibility method for Sage/Singular.
+        '''
+        if isinstance(e,RingElem):
+            e = e.elem;
+        if isinstance(f,RingElem):
+            f = f.elem;
+        # assume JAS ExpVector
+        c = e.gcd(f);
+        return c.isZERO();
+
+    def monomial_lcm(self,e,f):
+        '''Lcm of ExpVectors.
+
+        Compatibility method for Sage/Singular.
+        '''
+        if isinstance(e,RingElem):
+            e = e.elem;
+        if isinstance(f,RingElem):
+            f = f.elem;
+        # assume JAS ExpVector
+        c = e.lcm(f);
+        return c;
 
     def reduce(self,F):
         '''Compute a normal form of self with respect to F.
