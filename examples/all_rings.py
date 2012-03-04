@@ -10,7 +10,7 @@ from jas import Ideal
 from jas import Module, SubModule, SolvableModule, SolvableSubModule
 from jas import startLog
 from jas import terminate
-from jas import ZZ, QQ, ZM, DD, CC, Quat, Oct, AN, RealN, RF, RC, LC, RR, PS, MPS, Vec, Mat
+from jas import ZZ, QQ, ZM, GF, DD, CC, Quat, Oct, AN, RealN, RF, RC, LC, RR, PS, MPS, Vec, Mat
 from edu.jas.arith import BigDecimal
 
 
@@ -32,6 +32,14 @@ print;
 
 print "------- ZM = ModInteger ------------";
 m1 = ZM(19,12345678901234567890);
+print "m1 = " + str(m1);
+m2 = m1**2 + 12345678901234567890;
+print "m2 = " + str(m2);
+print;
+
+
+print "------- GF = ModInteger ------------";
+m1 = GF(19,12345678901234567890);
 print "m1 = " + str(m1);
 m2 = m1**2 + 12345678901234567890;
 print "m2 = " + str(m2);
@@ -282,7 +290,7 @@ print;
 
 
 print "------- GF_17(alpha**2 - 2) ---------";
-r = PolyRing(ZM(17),"alpha",PolyRing.lex);
+r = PolyRing(GF(17),"alpha",PolyRing.lex);
 print "r = " + str(r);
 [e,a] = r.gens();
 print "e     = " + str(e);

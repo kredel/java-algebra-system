@@ -111,6 +111,13 @@ end
 
 
 =begin rdoc
+Create JAS ModInteger as field element.
+=end
+def GF(m,z=0,field=true)
+    return ZM(m,z,field);
+end
+
+=begin rdoc
 Create JAS BigRational as ring element.
 =end
 def QQ(d=0,n=1)

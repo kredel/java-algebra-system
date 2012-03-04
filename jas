@@ -1,0 +1,59 @@
+#!/bin/bash
+# $Id: $
+#
+SCRIPT_LANG="python"
+SCRIPT_LANG="ruby"
+#
+JAVA_LIBS="../lib/log4j.jar:../lib/junit.jar:../lib/jas.jar"
+#
+JAVA_OPTS="-J-verbose:gc -J-Xms1100M -J-Xmx1900M"
+#
+# check for scripting language
+# Scanning for args is aborted by '--'.
+#set -- $JAS_OPTS "$@"
+#echo "jas_args: " $*
+while [ $# -gt 0 ]
+do
+    case "$1" in
+    # use python
+    -py*|-jy*) 
+         SCRIPT_LANG="python"
+         ;;
+    # use ruby
+    -rb*|-ruby|-jr*) 
+         SCRIPT_LANG="ruby"
+         ;;
+    -h|--help)
+         help_requested=true
+         ;;
+    --) break ;;
+    # Other opts go through  
+    -*) jas_args=("${jas_args[@]}" "$1") ;;
+    # Abort processing on first non-opt arg 
+    *) jas_args=("${jas_args[@]}" "$1")
+        break ;;
+    esac
+    shift
+done
+
+#echo "jas_args: " $jas_args
+# Put the jas_args back into the position arguments $1, $2 etc
+set -- "${jas_args[@]}"
+
+if [ -n "$help_requested" ] ; then
+  echo "JAS options:" >&2
+  echo "-py|-jy   : use Python scripting with jython" >&2
+  echo "-rb|-jr   : use Ruby scripting with jruby" >&2
+  echo "-h|--help : this infos" >&2
+  echo "--        : pass remaining arguments through to Jython|JRuby" >&2
+  exit
+fi
+
+#
+if [ "$SCRIPT_LANG" = "python" ]; then
+   #jython -v -J-verbose -J-client -J-cp "$JAVA_LIBS" $JAVA_OPTS $jas_args $* 
+   jython -J-client -J-cp "$JAVA_LIBS" $JAVA_OPTS $* 
+elif [ "$SCRIPT_LANG" = "ruby" ]; then
+   jruby -J-cp "$JAVA_LIBS" $JAVA_OPTS -S jirb -r "examples/jas" $*
+fi
+#

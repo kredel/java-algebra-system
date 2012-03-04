@@ -1796,7 +1796,6 @@ def ZZ(z=0):
     r = BigInteger(z);
     return RingElem(r);
 
-
 def ZM(m,z=0,field=False):
     '''Create JAS ModInteger as ring element.
     '''
@@ -1818,7 +1817,9 @@ def ZM(m,z=0,field=False):
 def GF(m,z=0,field=True):
     '''Create JAS ModInteger as field element.
     '''
+    #print "m = %s" % m
     return ZM(m,z,field);
+
 
 def QQ(d=0,n=1):
     '''Create JAS BigRational as ring element.
@@ -1876,6 +1877,7 @@ def CC(re=BigRational(),im=BigRational()):
         c = BigComplex(re,im);
     return RingElem(c);
 
+
 def CR(re=BigRational(),im=BigRational(),ring=None):
     '''Create JAS generic Complex as ring element.
     '''
@@ -1909,6 +1911,7 @@ def CR(re=BigRational(),im=BigRational(),ring=None):
     else:
         c = BigComplex(r,re,im);
     return RingElem(c);
+
 
 def DD(d=0):
     '''Create JAS BigDecimal as ring element.
