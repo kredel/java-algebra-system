@@ -148,6 +148,14 @@ class Ring:
             pass
 #        except Exception, e:
 #            print "error " + str(e)
+        #print "dict: " + str(self.__dict__)
+        for v in self.ring.generators():
+            #print "vars = " + str(v);
+            if str(v) == "1 ":
+                self.__dict__['one'] = v;
+            else:
+                self.__dict__[str(v)] = v;
+        #print "dict: " + str(self.__dict__)
 
     def __str__(self):
         '''Create a string representation.
@@ -2947,7 +2955,14 @@ class PolyRing(Ring):
 #            print "error " + str(e)
         except:
             pass
-
+        #print "dict: " + str(self.__dict__)
+        for v in self.ring.generators():
+            #print "vars = " + str(v);
+            if str(v) == "1 ":
+                self.__dict__['one'] = v;
+            else:
+                self.__dict__[str(v)] = v;
+        #print "dict: " + str(self.__dict__)
 
     def __str__(self):
         '''Create a string representation.

@@ -52,7 +52,7 @@ fi
 #
 if [ "$SCRIPT_LANG" = "python" ]; then
    #jython -v -J-verbose -J-client -J-cp "$JAVA_LIBS" $JAVA_OPTS $jas_args $* 
-   jython -J-client -J-cp "$JAVA_LIBS" $JAVA_OPTS $* 
+   jython -J-cp "$JAVA_LIBS" $JAVA_OPTS $* 
 elif [ "$SCRIPT_LANG" = "ruby" ]; then
    jruby -J-cp "$JAVA_LIBS" $JAVA_OPTS -S jirb -r "examples/jas" $*
 fi
