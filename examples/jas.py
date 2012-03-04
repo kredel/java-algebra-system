@@ -151,10 +151,17 @@ class Ring:
         #print "dict: " + str(self.__dict__)
         for v in self.ring.generators():
             #print "vars = " + str(v);
-            if str(v) == "1 ":
-                self.__dict__['one'] = v;
-            else:
-                self.__dict__[str(v)] = v;
+            vs = str(v);
+            vr = RingElem(v);
+            if vs == "1 ":
+                vs='one';
+            try:
+                if self.__dict__[vs] is None:
+                    self.__dict__[vs] = vr;
+                else:
+                    print vs + " not redefined to " + str(v);
+            except:
+                self.__dict__[vs] = vr;
         #print "dict: " + str(self.__dict__)
 
     def __str__(self):
@@ -2958,10 +2965,17 @@ class PolyRing(Ring):
         #print "dict: " + str(self.__dict__)
         for v in self.ring.generators():
             #print "vars = " + str(v);
-            if str(v) == "1 ":
-                self.__dict__['one'] = v;
-            else:
-                self.__dict__[str(v)] = v;
+            vs = str(v);
+            vr = RingElem(v);
+            if vs == "1 ":
+                vs='one';
+            try:
+                if self.__dict__[vs] is None:
+                    self.__dict__[vs] = vr;
+                else:
+                    print vs + " not redefined to " + str(v);
+            except:
+                self.__dict__[vs] = vr;
         #print "dict: " + str(self.__dict__)
 
     def __str__(self):
