@@ -80,6 +80,19 @@ do
     shift
 done
 
+if [ "$SCRIPT_LANG" = "ruby" ]; then
+   if [ -f "examples/jas.rb" ] ; then
+      echo -n "" 
+   else 
+      echo "===========================================" 
+      echo "Error: library examples/jas.rb not found" 
+      echo "Please install examples/jas.rb" 
+      echo "===========================================" 
+      exit 0
+   fi
+fi
+
+
 #echo "jas_args: " $jas_args
 # Put the jas_args back into the position arguments $1, $2 etc
 set -- "${jas_args[@]}"
@@ -99,7 +112,7 @@ if [ "$SCRIPT_LANG" = "python" ]; then
    [[ $DEBUG > 0 ]] && echo jython -J-cp "$JAVA_LIBS" $JAVA_OPTS $* 
    jython -J-cp "$JAVA_LIBS" $JAVA_OPTS $* 
 elif [ "$SCRIPT_LANG" = "ruby" ]; then
-   [[ $DEBUG > 0 ]] && echo jruby -J-cp "$JAVA_LIBS" $JAVA_OPTS -S jirb -r "examples/jas" $*
-   jruby -J-cp "$JAVA_LIBS" $JAVA_OPTS -S jirb -r "examples/jas" $*
+   [[ $DEBUG > 0 ]] && echo jruby -J-cp "$JAVA_LIBS" $JAVA_OPTS -S jirb -r "examples/jas.rb" $*
+   jruby -J-cp "$JAVA_LIBS" $JAVA_OPTS -S jirb -r "examples/jas.rb" $*
 fi
 #
