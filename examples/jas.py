@@ -74,6 +74,8 @@ def noThreads():
     ComputerThreads.setNoThreads(); #NO_THREADS = #0; #1; #True;
     print "nt = ", ComputerThreads.NO_THREADS;
 
+auto_inject = True
+
 def inject_variable(name, value):
     '''Inject a variable into the main global namespace
 
@@ -101,7 +103,8 @@ def inject_variable(name, value):
     if name in G:
         print "redefining global variable `%s`" % name;
     G[name] = value
-
+    #if auto_inject:
+    #    print "defining " + name
 
 def inject_generators(gens):
     '''Inject generators as variables into the main global namespace
@@ -149,6 +152,7 @@ class Ring:
 #        except Exception, e:
 #            print "error " + str(e)
         #print "dict: " + str(self.__dict__)
+        vns = ""
         for v in self.ring.generators():
             #print "vars = " + str(v);
             vs = str(v);
@@ -162,6 +166,11 @@ class Ring:
                     print vs + " not redefined to " + str(v);
             except:
                 self.__dict__[vs] = vr;
+            if auto_inject:
+                inject_variable(vs,vr)
+                vns = vns + vs + " "
+        if auto_inject:
+            print "defined variables: " + vns
         #print "dict: " + str(self.__dict__)
 
     def __str__(self):
@@ -2963,6 +2972,7 @@ class PolyRing(Ring):
         except:
             pass
         #print "dict: " + str(self.__dict__)
+        vns = ""
         for v in self.ring.generators():
             #print "vars = " + str(v);
             vs = str(v);
@@ -2976,6 +2986,11 @@ class PolyRing(Ring):
                     print vs + " not redefined to " + str(v);
             except:
                 self.__dict__[vs] = vr;
+            if auto_inject:
+                inject_variable(vs,vr)
+                vns = vns + vs + " "
+        if auto_inject:
+            print "defined variables: " + vns
         #print "dict: " + str(self.__dict__)
 
     def __str__(self):
