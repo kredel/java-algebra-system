@@ -31,7 +31,12 @@ else
    echo "===========================================" 
 fi
 #
-if [ -f "../lib/jas.jar" ] ; then
+if [ -d "examples" ] ; then
+   JAVA_LIBS="$JAVA_LIBS:examples"
+fi
+if [ -d "edu/jas" ] ; then
+   JAVA_LIBS="$JAVA_LIBS:."
+elif [ -f "../lib/jas.jar" ] ; then
    JAVA_LIBS="$JAVA_LIBS:../lib/jas.jar"
 elif [ -f "lib/jas.jar" ] ; then
    JAVA_LIBS="$JAVA_LIBS:lib/jas.jar"
@@ -45,9 +50,12 @@ else
    exit 0
 fi
 #
+#JAVA_LIBS="$JAVA_LIBS:."
+#
 #JAVA_OPTS="-J-verbose:gc -J-Xms1100M -J-Xmx1900M"
 JAVA_OPTS="-J-verbose:gc -J-Xms350M -J-Xmx800M"
 #JAVA_OPTS="-J-verbose:gc"
+SCRIPT_OPTS=""
 #
 # check for scripting language
 # Scanning for args is aborted by '--'.
@@ -67,8 +75,11 @@ do
     -h|--help)
          help_requested=true
          ;;
-    -d|--verbose)
+    -d)
          DEBUG=1
+         ;;
+    -v|--verbose)
+         SCRIPT_OPTS="-v"
          ;;
     --) break ;;
     # Other opts go through  
@@ -102,6 +113,7 @@ if [ -n "$help_requested" ] ; then
   echo "-py|-jy   : use Python scripting with jython" >&2
   echo "-rb|-jr   : use Ruby scripting with jruby" >&2
   echo "-d        : debug this script" >&2
+  echo "-v        : verbose option for scripting language" >&2
   echo "-h|--help : this infos" >&2
   echo "--        : pass remaining arguments through to Jython|JRuby" >&2
   exit 0
@@ -109,10 +121,10 @@ fi
 
 #
 if [ "$SCRIPT_LANG" = "python" ]; then
-   [[ $DEBUG > 0 ]] && echo jython -J-cp "$JAVA_LIBS" $JAVA_OPTS $* 
-   jython -J-cp "$JAVA_LIBS" $JAVA_OPTS $* 
+   [[ $DEBUG > 0 ]] && echo jython $SCRIPT_OPTS -J-cp "$JAVA_LIBS" $JAVA_OPTS $* 
+   jython $SCRIPT_OPTS -J-cp "$JAVA_LIBS" $JAVA_OPTS $* 
 elif [ "$SCRIPT_LANG" = "ruby" ]; then
-   [[ $DEBUG > 0 ]] && echo jruby -J-cp "$JAVA_LIBS" $JAVA_OPTS -S jirb -r "examples/jas.rb" $*
-   jruby -J-cp "$JAVA_LIBS" $JAVA_OPTS -S jirb -r "examples/jas.rb" $*
+   [[ $DEBUG > 0 ]] && echo jruby $SCRIPT_OPTS -J-cp "$JAVA_LIBS" $JAVA_OPTS -S jirb -r "examples/jas.rb" $*
+   jruby $SCRIPT_OPTS -J-cp "$JAVA_LIBS" $JAVA_OPTS -S jirb -r "examples/jas.rb" $*
 fi
 #
