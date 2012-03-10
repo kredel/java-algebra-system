@@ -18,7 +18,7 @@ class RingElemTest (unittest.TestCase):
 
     def testRingZZ(self):
         r = PolyRing( ZZ(), "(t,x)", PolyRing.lex );
-        self.assertEqual(str(r),'PolyRing(ZZ(),"t, x", PolyRing.lex)');
+        self.assertEqual(str(r),'PolyRing(ZZ(),"t, x",PolyRing.lex)');
         [one,x,t] = r.gens();
         self.assertTrue(one.isONE());
         self.assertTrue(len(x)==1);
@@ -32,7 +32,7 @@ class RingElemTest (unittest.TestCase):
 
     def testRingQQ(self):
         r = PolyRing( QQ(), "(t,x)", PolyRing.lex );
-        self.assertEqual(str(r),'PolyRing(QQ(),"t, x", PolyRing.lex)');
+        self.assertEqual(str(r),'PolyRing(QQ(),"t, x",PolyRing.lex)');
         [one,x,t] = r.gens();
         self.assertTrue(one.isONE());
         self.assertTrue(len(x)==1);
@@ -46,7 +46,7 @@ class RingElemTest (unittest.TestCase):
 
     def testRingZM(self):
         r = PolyRing( ZM(17), "(t,x)", PolyRing.lex );
-        self.assertEqual(str(r),'PolyRing(ZM(17),"t, x", PolyRing.lex)');
+        self.assertEqual(str(r),'PolyRing(ZM(17),"t, x",PolyRing.lex)');
         [one,x,t] = r.gens();
         self.assertTrue(one.isONE());
         self.assertTrue(len(x)==1);
