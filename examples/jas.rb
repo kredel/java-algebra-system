@@ -1282,25 +1282,55 @@ Create a string representation.
 Define instance variables for generators.
 =end
     def variable_generators() 
-       PolyRing.class_eval( "attr_accessor :generators;" )
+       PolyRing.instance_eval( "attr_accessor :generators;" )
        @generators = {};
        for i in self.gens()
           begin 
-             if not i.to_s.include?(",") and not i.to_s.include?("(")
-                if i.to_s == "1" 
-                   @generators[ "one" ] = i;
-                   self.instance_eval( "def one; @generators[ 'one' ]; end" )
-                else
-                   @generators[ "#{i}" ] = i;
-                   self.instance_eval( "def #{i}; @generators[ '#{i}' ]; end" )
+             ivs = i.to_s
+             if not ivs.include?(",") and not ivs.include?("(")
+                if ivs == "1" or ivs == "1 "
+                   ivs = "one"
                 end
+                @generators[ ivs ] = i;
+                self.instance_eval( "def #{ivs}; @generators[ '#{ivs}' ]; end" )
              end
           rescue 
-             puts "#{i} = " + i.to_s + ", class = " + i.class.to_s;
+             puts "error: #{i} = " + i.to_s + ", class = " + i.class.to_s;
              #pass
           end
        end
     puts "defined generators: " + @generators.keys().join(", ");  
+    end
+
+
+=begin rdoc
+Inject variables for generators in given environment.
+=end
+    def inject_variables(env) 
+       env.class.instance_eval( "attr_accessor :generators;" )
+       if env.generators == nil
+          env.generators = {};
+       end
+       #puts "existing generators: " + env.generators.keys().join(", ");  
+       for i in self.gens()
+          begin 
+             ivs = i.to_s
+             if not ivs.include?(",") and not ivs.include?("(")
+                if ivs == "1" or ivs == "1 "
+                   ivs = "one"
+                end
+                if env.generators[ ivs ] != nil
+                   puts "redefining #{ivs}";
+                end
+                env.generators[ ivs ] = i;
+                env.instance_eval( "def #{ivs}; @generators[ '#{ivs}' ]; end" )
+             end
+          rescue 
+             puts "error: #{i} = " + i.to_s + ", class = " + i.class.to_s;
+             #pass
+          end
+       end
+    puts "globaly defined generators: " + env.generators.keys().join(", ");  
     end
 
 end

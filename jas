@@ -124,7 +124,7 @@ if [ "$SCRIPT_LANG" = "python" ]; then
    [[ $DEBUG > 0 ]] && echo jython $SCRIPT_OPTS -J-cp "$JAVA_LIBS" $JAVA_OPTS $* 
    jython $SCRIPT_OPTS -J-cp "$JAVA_LIBS" $JAVA_OPTS $* 
 elif [ "$SCRIPT_LANG" = "ruby" ]; then
-   [[ $DEBUG > 0 ]] && echo jruby $SCRIPT_OPTS -J-cp "$JAVA_LIBS" $JAVA_OPTS -S jirb -r "examples/jas.rb" $*
-   jruby $SCRIPT_OPTS -J-cp "$JAVA_LIBS" $JAVA_OPTS -S jirb -r "examples/jas.rb" $*
+   [[ $DEBUG > 0 ]] && echo jruby $SCRIPT_OPTS -J-cp "$JAVA_LIBS" $JAVA_OPTS -S jirb --noinspect --readline -r "examples/jas.rb" $*
+   jruby $SCRIPT_OPTS -J-cp "$JAVA_LIBS" $JAVA_OPTS -S jirb --noinspect --readline -r "examples/jas.rb" $*
 fi
 #
