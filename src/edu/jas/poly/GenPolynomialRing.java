@@ -330,13 +330,13 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
         } else {
             s.append(coFac.toScript().trim());
         }
-        s.append(",\"" + varsToString() + "\",");
+        s.append(",\"" + varsToString() + "\"");
         String to = tord.toString();
         if (tord.getEvord() == TermOrder.INVLEX) {
-            to = "PolyRing.lex";
+            to = ",PolyRing.lex";
         }
         if (tord.getEvord() == TermOrder.IGRLEX) {
-            to = "PolyRing.grad";
+            to = ",PolyRing.grad";
         }
         s.append(to);
         s.append(")");

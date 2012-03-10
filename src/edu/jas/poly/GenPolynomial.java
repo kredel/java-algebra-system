@@ -273,12 +273,13 @@ Iterable<Monomial<C>> {
                     }
                     ExpVector e = m.getKey();
                     if (!c.isONE() || e.isZERO()) {
+                        String cs = c.toString();
                         if (c instanceof GenPolynomial || c instanceof AlgebraicNumber) {
-                            s.append("{ ");
-                        }
-                        s.append(c.toString());
-                        if (c instanceof GenPolynomial || c instanceof AlgebraicNumber) {
-                            s.append(" }");
+                            s.append("( ");
+                            s.append(cs);
+                            s.append(" )");
+                        } else {
+                            s.append(cs);
                         }
                         s.append(" ");
                     }
