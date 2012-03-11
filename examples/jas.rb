@@ -1209,13 +1209,17 @@ Then returns a Ring.
 =end
 class PolyRing < Ring
 
-    #attr_reader :lex, :grad
-    #attr_accessor :auto_inject
+    # class instance variables != class variables
+    @lex = TermOrder.new(TermOrder::INVLEX)
+    @grad = TermOrder.new(TermOrder::IGRLEX)
 
-    #@lex = TermOrder.new(TermOrder::INVLEX)
-    #@grad = TermOrder.new(TermOrder::IGRLEX)
+    @auto_inject = true
 
-    @@auto_inject = true
+    class << self  # means add to class
+       attr_reader :lex, :grad
+       attr_accessor :auto_inject
+    end
+
 
 =begin rdoc
 Ring constructor.
@@ -1224,10 +1228,7 @@ coeff = factory for coefficients,
 vars = string with variable names,
 order = term order.
 =end
-    def initialize(coeff,vars,order=TermOrder.new(TermOrder::IGRLEX))
-        @lex = TermOrder.new(TermOrder::INVLEX)
-        @grad = TermOrder.new(TermOrder::IGRLEX)
-
+    def initialize(coeff,vars,order=self.class.grad)
         if coeff == nil
             raise ValueError, "No coefficient given."
         end
@@ -1246,7 +1247,7 @@ order = term order.
            names = GenPolynomialTokenizer.variableList(vars);
         end
         nv = names.size;
-        to = @grad;
+        to = self.class.grad;
         if order.is_a? TermOrder
             to = order;
         end
@@ -1255,7 +1256,7 @@ order = term order.
         #  is: super("",tring) 
         @ring = tring;
         variable_generators()
-        if @@auto_inject 
+        if self.class.auto_inject 
            inject_variables();
         end
         @engine = GCDFactory.getProxy(@ring.coFac);
@@ -1280,11 +1281,6 @@ Create a string representation.
 =end
     def to_s()
         return @ring.toScript();
-    end
-
-    class << self  # means add to class
-       attr_reader :lex, :grad
-       attr_accessor :auto_inject
     end
 
 =begin rdoc
