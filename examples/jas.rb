@@ -1351,7 +1351,7 @@ Inject variables for generators in given environment.
 Inject variables for generators in top level environment.
 =end
     def inject_variables() 
-        require "irb/frame"
+        require "irb/frame" # must be placed here
         bin = IRB::Frame.bottom(0);
         env = eval "self", bin;
         #puts "env = " + str(env)

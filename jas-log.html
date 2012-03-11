@@ -22,6 +22,21 @@
 
 <dl>
 
+<dt>2012, March</dt> 
+<dd> 
+ The Jython and JRuby scripting classes <code>PolyRing</code> are now
+ injecting the polynomial ring variables into the top level
+ interpreter environment by default. New class
+ <code>GroebnerBaseFGLM</code> to compute a Gr&ouml;bner base
+ according to the "FGLM" algorithm. It computes a Gr&ouml;bner base
+ with respect to a graded term order and then contructs the
+ Gr&ouml;bner base with respect to the requested term order via linear
+ algebra in the residue class ring. Changes from '<code>{}</code>' to
+ '<code>()</code>' in <code>GenPolynomial</code> to string conversion.
+ New laucher shell script <code>jas</code>.  Small fixes, improvements
+ and a missing method implemented and in <code>PolyUtilApp</code>.
+</dd>
+
 <dt>2012, February</dt> 
 <dd> 
  Refactorings to simplify type parameters and loosen type
@@ -2114,7 +2129,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Sun Feb 12 12:27:33 CET 2012
+Last modified: Sun Mar 11 19:07:34 CET 2012
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
