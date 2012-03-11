@@ -20,7 +20,6 @@ include_class "java.util.ArrayList"
 include_class "org.apache.log4j.BasicConfigurator";
 include_class "org.apache.log4j.Logger";
 
-
 =begin rdoc
 Configure the log4j system and start logging.
 =end
@@ -1210,8 +1209,13 @@ Then returns a Ring.
 =end
 class PolyRing < Ring
 
-    @lex = TermOrder.new(TermOrder::INVLEX)
-    @grad = TermOrder.new(TermOrder::IGRLEX)
+    #attr_reader :lex, :grad
+    #attr_accessor :auto_inject
+
+    #@lex = TermOrder.new(TermOrder::INVLEX)
+    #@grad = TermOrder.new(TermOrder::IGRLEX)
+
+    @@auto_inject = true
 
 =begin rdoc
 Ring constructor.
@@ -1248,8 +1252,12 @@ order = term order.
         end
         tring = GenPolynomialRing.new(cf,nv,to,names);
         #want: super(Ring,self).initialize(ring=tring)
+        #  is: super("",tring) 
         @ring = tring;
         variable_generators()
+        if @@auto_inject 
+           inject_variables();
+        end
         @engine = GCDFactory.getProxy(@ring.coFac);
         begin
             @sqf = SquarefreeFactory.getImplementation(@ring.coFac);
@@ -1276,6 +1284,7 @@ Create a string representation.
 
     class << self  # means add to class
        attr_reader :lex, :grad
+       attr_accessor :auto_inject
     end
 
 =begin rdoc
@@ -1306,7 +1315,7 @@ Define instance variables for generators.
 =begin rdoc
 Inject variables for generators in given environment.
 =end
-    def inject_variables(env) 
+    def inject_gens(env) 
        env.class.instance_eval( "attr_accessor :generators;" )
        if env.generators == nil
           env.generators = {};
@@ -1324,6 +1333,14 @@ Inject variables for generators in given environment.
                 end
                 env.generators[ ivs ] = i;
                 env.instance_eval( "def #{ivs}; @generators[ '#{ivs}' ]; end" )
+                #puts "def #{ivs}; @generators[ '#{ivs}' ]; end"
+                first = ivs.slice(0,1);
+                if first.count('A-Z') > 0
+                   first = first.downcase
+                   ivl = first + ivs.slice(1,ivs.length);
+                   puts "warning: '" + str(ivs) + "' additionaly renamed to '" + str(ivl) + "' to avoid constant semantics"
+                   env.instance_eval( "def #{ivl}; @generators[ '#{ivs}' ]; end" )
+                end
              end
           rescue 
              puts "error: #{i} = " + i.to_s + ", class = " + i.class.to_s;
@@ -1331,6 +1348,18 @@ Inject variables for generators in given environment.
           end
        end
     puts "globaly defined generators: " + env.generators.keys().join(", ");  
+    end
+
+
+=begin rdoc
+Inject variables for generators in top level environment.
+=end
+    def inject_variables() 
+        require "irb/frame"
+        bin = IRB::Frame.bottom(0);
+        env = eval "self", bin;
+        #puts "env = " + str(env)
+        inject_gens(env)
     end
 
 end

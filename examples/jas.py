@@ -2939,6 +2939,7 @@ class PolyRing(Ring):
         vars = string with variable names,
         order = term order.
         '''
+        # super: Ring.__init__(self,...)
         if coeff == None:
             raise ValueError, "No coefficient given."
         cf = coeff;
