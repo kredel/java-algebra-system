@@ -2939,7 +2939,6 @@ class PolyRing(Ring):
         vars = string with variable names,
         order = term order.
         '''
-        # super: Ring.__init__(self,...)
         if coeff == None:
             raise ValueError, "No coefficient given."
         cf = coeff;
@@ -2958,20 +2957,7 @@ class PolyRing(Ring):
             to = order;
         tring = GenPolynomialRing(cf,nv,to,names);
         #want: super(Ring,self).__init__(ring=tring)
-        self.ring = tring;
-        self.engine = GCDFactory.getProxy(self.ring.coFac);
-        try:
-            self.sqf = SquarefreeFactory.getImplementation(self.ring.coFac);
-        except:
-            pass
-#        except Exception, e:
-#            print "error " + str(e)
-        try:
-            self.factor = FactorFactory.getImplementation(self.ring.coFac);
-#        except Exception, e:
-#            print "error " + str(e)
-        except:
-            pass
+        Ring.__init__(ring=tring)
         #print "dict: " + str(self.__dict__)
         vns = ""
         for v in self.ring.generators():
