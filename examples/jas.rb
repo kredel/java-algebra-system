@@ -886,7 +886,7 @@ Represents a JAS polynomial ring: GenPolynomialRing.
 Methods to create ideals and ideals with parametric coefficients.
 =end
 class Ring
-    attr_reader :ring, :pset, :engine
+    attr_reader :ring, :pset, :engine, :sqf, :factor
 
     def initialize(ringstr="",ring=nil)
 =begin rdoc
@@ -901,21 +901,23 @@ Ring constructor.
            @ring = ring;
         end
         @engine = GCDFactory.getProxy(@ring.coFac);
+        @sqf = nil;
+        @factor = nil;
         begin
             @sqf = SquarefreeFactory.getImplementation(@ring.coFac);
-#            puts "sqf: ", @sqf;
-#        rescue Rescueion => e
-#            puts "error " + str(e)
+            #puts "sqf: ", @sqf;
+        #rescue Rescueion => e
+            #puts "error " + str(e)
         rescue
-            #pass
+            pass
         end
         begin
             @factor = FactorFactory.getImplementation(@ring.coFac);
             #puts "factor: ", @factor;
+        #rescue Rescueion => e
+            #puts "error " + str(e)
         rescue
-            #pass
-#        rescue Rescueion => e
-#            puts "error " + str(e)
+            pass
         end
     end
 
@@ -1253,26 +1255,10 @@ order = term order.
         end
         tring = GenPolynomialRing.new(cf,nv,to,names);
         #want: super(Ring,self).initialize(ring=tring)
-        #  is: super("",tring) 
-        @ring = tring;
+        super("",tring) 
         variable_generators()
         if self.class.auto_inject 
            inject_variables();
-        end
-        @engine = GCDFactory.getProxy(@ring.coFac);
-        begin
-            @sqf = SquarefreeFactory.getImplementation(@ring.coFac);
-        rescue
-            #pass
-#        rescue Exception => e:
-#            puts "error " + str(e) + "\n"
-        end
-        begin
-            @factor = FactorFactory.getImplementation(@ring.coFac);
-#        rescue Exception => e
-#            puts "error " + str(e)
-        rescue
-            #pass 
         end
     end
 
