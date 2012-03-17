@@ -2957,7 +2957,7 @@ class PolyRing(Ring):
             to = order;
         tring = GenPolynomialRing(cf,nv,to,names);
         #want: super(Ring,self).__init__(ring=tring)
-        Ring.__init__(ring=tring)
+        Ring.__init__(self,ring=tring)
         #print "dict: " + str(self.__dict__)
         vns = ""
         for v in self.ring.generators():
