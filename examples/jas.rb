@@ -909,7 +909,7 @@ Ring constructor.
         #rescue Rescueion => e
             #puts "error " + str(e)
         rescue
-            pass
+            #pass
         end
         begin
             @factor = FactorFactory.getImplementation(@ring.coFac);
@@ -917,7 +917,7 @@ Ring constructor.
         #rescue Rescueion => e
             #puts "error " + str(e)
         rescue
-            pass
+            #pass
         end
     end
 
