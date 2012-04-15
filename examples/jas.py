@@ -101,7 +101,7 @@ def inject_variable(name, value):
                 break
         depth += 1
     if name in G:
-        print "redefining global variable `%s`" % name;
+        print "redefining global variable `%s`, from `%s` " % (name, G[name]);
     G[name] = value
     #if auto_inject:
     #    print "defining " + name
@@ -170,7 +170,7 @@ class Ring:
                 inject_variable(vs,vr)
                 vns = vns + vs + " "
         if auto_inject:
-            print "defined variables: " + vns
+            print "globally defined variables: " + vns
         #print "dict: " + str(self.__dict__)
 
     def __str__(self):
@@ -2958,27 +2958,27 @@ class PolyRing(Ring):
         tring = GenPolynomialRing(cf,nv,to,names);
         #want: super(Ring,self).__init__(ring=tring)
         Ring.__init__(self,ring=tring)
-        #print "dict: " + str(self.__dict__)
-        vns = ""
-        for v in self.ring.generators():
-            #print "vars = " + str(v);
-            vs = str(v);
-            vr = RingElem(v);
-            if vs == "1 ":
-                vs='one';
-            try:
-                if self.__dict__[vs] is None:
-                    self.__dict__[vs] = vr;
-                else:
-                    print vs + " not redefined to " + str(v);
-            except:
-                self.__dict__[vs] = vr;
-            if auto_inject:
-                inject_variable(vs,vr)
-                vns = vns + vs + " "
-        if auto_inject:
-            print "defined variables: " + vns
-        #print "dict: " + str(self.__dict__)
+##         #print "dict: " + str(self.__dict__)
+##         vns = ""
+##         for v in self.ring.generators():
+##             #print "vars = " + str(v);
+##             vs = str(v);
+##             vr = RingElem(v);
+##             if vs == "1 ":
+##                 vs='one';
+##             try:
+##                 if self.__dict__[vs] is None:
+##                     self.__dict__[vs] = vr;
+##                 else:
+##                     print vs + " not redefined to " + str(v) + " from " + str(self.__dict__[vs]);
+##             except:
+##                 self.__dict__[vs] = vr;
+##             if auto_inject:
+##                 inject_variable(vs,vr)
+##                 vns = vns + vs + " "
+##         if auto_inject:
+##             print "globaly defined variables: " + vns
+##         #print "dict: " + str(self.__dict__)
 
     def __str__(self):
         '''Create a string representation.
