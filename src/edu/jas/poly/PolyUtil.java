@@ -831,7 +831,6 @@ public class PolyUtil {
      *         remainder.
      *         m == deg(P)-deg(S)
      * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
-     * @note quotient is not always meaningful
      */
     public static <C extends RingElem<C>> GenPolynomial<C> baseDensePseudoQuotient(GenPolynomial<C> P, GenPolynomial<C> S) {
         if (S == null || S.isZERO()) {
@@ -863,8 +862,10 @@ public class PolyUtil {
                 r = r.multiply(c); // coeff ac
                 h = S.multiply(a, f); // coeff ac
                 r = r.subtract(h);
+                q = q.multiply(c); 
                 q = q.sum(a,f);
             } else {
+                q = q.multiply(c); 
                 r = r.multiply(c);
             }
         }
@@ -881,7 +882,6 @@ public class PolyUtil {
      * @return quotient with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
      *         m' &le; deg(P)-deg(S)
      * @see edu.jas.poly.GenPolynomial#divide(edu.jas.poly.GenPolynomial).
-     * @note quotient is not always meaningful
      */
     public static <C extends RingElem<C>> GenPolynomial<C> basePseudoDivide(GenPolynomial<C> P,
                     GenPolynomial<C> S) {
@@ -913,8 +913,8 @@ public class PolyUtil {
                     q = q.sum(y, f);
                     h = S.multiply(y, f); // coeff a
                 } else {
-                    q = q.sum(a, f);
                     q = q.multiply(c);
+                    q = q.sum(a, f);
                     r = r.multiply(c); // coeff ac
                     h = S.multiply(a, f); // coeff ac
                 }
@@ -936,7 +936,6 @@ public class PolyUtil {
      * @return [ quotient, remainder ] with ldcf(S)<sup>m'</sup> P = quotient *
      *         S + remainder. m' &le; deg(P)-deg(S)
      * @see edu.jas.poly.GenPolynomial#divide(edu.jas.poly.GenPolynomial).
-     * @note quotient is not always meaningful
      */
     @SuppressWarnings("unchecked")
     public static <C extends RingElem<C>> GenPolynomial<C>[] basePseudoQuotientRemainder(GenPolynomial<C> P,
@@ -974,8 +973,8 @@ public class PolyUtil {
                     q = q.sum(y, f);
                     h = S.multiply(y, f); // coeff a
                 } else {
-                    q = q.sum(a, f);
                     q = q.multiply(c);
+                    q = q.sum(a, f);
                     r = r.multiply(c); // coeff ac
                     h = S.multiply(a, f); // coeff ac
                 }
@@ -999,7 +998,7 @@ public class PolyUtil {
      * @param S nonzero base GenPolynomial.
      * @return remainder with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
      * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
-     * @note quotient is not always meaningful
+     * @note not always meaningful and working
      */
     public static <C extends RingElem<C>> boolean isBasePseudoQuotientRemainder(
            GenPolynomial<C> P, GenPolynomial<C> S,
@@ -1008,8 +1007,8 @@ public class PolyUtil {
         //System.out.println("rhs,1 = " + rhs);
 	GenPolynomial<C> lhs = P;
 	C ldcf = S.leadingBaseCoefficient();
-        long d = P.degree(0); // - S.degree(0);
-        d = ( d >= 0 ? d : 0 );
+        long d = P.degree(0) - S.degree(0) + 1;
+        d = ( d > 0 ? d : -d+2 );
         for ( long i = 0; i <= d; i++ ) {
             //System.out.println("lhs-rhs = " + lhs.subtract(rhs));
 	    if ( lhs.equals(rhs) ) {
@@ -1124,6 +1123,7 @@ public class PolyUtil {
         return recursiveSparsePseudoRemainder(P,S);
     }
 
+
     /**
      * GenPolynomial sparse pseudo remainder. For recursive polynomials.
      * @param <C> coefficient type.
@@ -1221,7 +1221,6 @@ public class PolyUtil {
      * @param S nonzero recursive GenPolynomial.
      * @return quotient with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
      * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
-     * @note quotient is not always meaningful
      */
     public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<C>> recursivePseudoDivide(
                     GenPolynomial<GenPolynomial<C>> P, GenPolynomial<GenPolynomial<C>> S) {
@@ -1255,8 +1254,8 @@ public class PolyUtil {
                     q = q.sum(y, f);
                     h = S.multiply(y, f); // coeff a
                 } else {
-                    q = q.sum(a, f);
                     q = q.multiply(c);
+                    q = q.sum(a, f);
                     r = r.multiply(c); // coeff ac
                     h = S.multiply(a, f); // coeff ac
                 }
@@ -1276,7 +1275,7 @@ public class PolyUtil {
      * @param S nonzero recursive GenPolynomial.
      * @return remainder with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
      * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
-     * @note quotient is not always meaningful
+     * @note not always meaningful and working
      */
     public static <C extends RingElem<C>> boolean isRecursivePseudoQuotientRemainder(
            GenPolynomial<GenPolynomial<C>> P, GenPolynomial<GenPolynomial<C>> S,
@@ -1284,8 +1283,8 @@ public class PolyUtil {
 	GenPolynomial<GenPolynomial<C>> rhs = q.multiply(S).sum(r);
 	GenPolynomial<GenPolynomial<C>> lhs = P;
 	GenPolynomial<C> ldcf = S.leadingBaseCoefficient();
-        long d = P.degree(0); // - S.degree(0);
-        d = ( d >= 0 ? d : 0 );
+        long d = P.degree(0) - S.degree(0) + 1;
+        d = ( d > 0 ? d : -d+2 );
         for ( long i = 0; i <= d; i++ ) {
             //System.out.println("lhs = " + lhs);
             //System.out.println("rhs = " + rhs);
@@ -1294,6 +1293,18 @@ public class PolyUtil {
                 return true;
             }
             lhs = lhs.multiply(ldcf);
+        }
+	GenPolynomial<GenPolynomial<C>> Pp = P;
+	rhs = q.multiply(S);
+        //System.out.println("rhs,2 = " + rhs);
+        for ( long i = 0; i <= d; i++ ) {
+            lhs = Pp.subtract(r);
+            //System.out.println("lhs-rhs = " + lhs.subtract(rhs));
+	    if ( lhs.equals(rhs) ) {
+                //System.out.println("lhs,2 = " + lhs);
+                return true;
+            }
+            Pp = Pp.multiply(ldcf);
         }
         return false;
     }

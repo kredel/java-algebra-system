@@ -441,7 +441,7 @@ public class PolyUtilTest extends TestCase {
         //System.out.println("q b = " + d.multiply(b));
 
         boolean t = PolyUtil.<BigInteger> isBasePseudoQuotientRemainder(a, b, d, c);
-        //System.out.println("assertTrue lc^n a = q b + r: " + t);
+        assertTrue("lc^n a = q b + r: " + c, t);
 
         GenPolynomial<BigRational> ap = PolyUtil.<BigRational> fromIntegerCoefficients(rdfac,a);
         GenPolynomial<BigRational> bp = PolyUtil.<BigRational> fromIntegerCoefficients(rdfac,b);
@@ -464,7 +464,7 @@ public class PolyUtilTest extends TestCase {
         assertEquals("ap = qp bp + rp: ", ap, rhs);
 
         assertEquals("cp = rp: ", rp.monic(), cp.monic() );
-        //assertEquals("dp = qp: ", qp.monic(), dp.monic() ); // not always true
+        assertEquals("dp = qp: ", qp.monic(), dp.monic() ); // ??
         //System.out.println("dp = qp: " + qp.monic().equals(dp.monic()) );
     }
 
