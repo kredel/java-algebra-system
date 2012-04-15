@@ -824,6 +824,55 @@ public class PolyUtil {
 
 
     /**
+     * GenPolynomial dense pseudo quotient. For univariate polynomials.
+     * @param P GenPolynomial.
+     * @param S nonzero GenPolynomial.
+     * @return quotient with ldcf(S)<sup>m</sup> P = quotient * S +
+     *         remainder.
+     *         m == deg(P)-deg(S)
+     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
+     * @note quotient is not always meaningful
+     */
+    public static <C extends RingElem<C>> GenPolynomial<C> baseDensePseudoQuotient(GenPolynomial<C> P, GenPolynomial<C> S) {
+        if (S == null || S.isZERO()) {
+            throw new ArithmeticException(P + " division by zero " + S);
+        }
+        if (P.isZERO()) {
+            return P;
+        }
+        //if (S.degree() <= 0) {
+        //    return l^n P; //P.ring.getZERO();
+        //}
+        long m = P.degree(0);
+        long n = S.degree(0);
+        C c = S.leadingBaseCoefficient();
+        ExpVector e = S.leadingExpVector();
+        GenPolynomial<C> q = P.ring.getZERO();
+        GenPolynomial<C> h;
+        GenPolynomial<C> r = P;
+        for (long i = m; i >= n; i--) {
+            if (r.isZERO()) {
+                return q;
+            }
+            long k = r.degree(0);
+            if (i == k) {
+                ExpVector f = r.leadingExpVector();
+                C a = r.leadingBaseCoefficient();
+                f = f.subtract(e); // EVDIF( f, e );
+                //System.out.println("red div = " + f);
+                r = r.multiply(c); // coeff ac
+                h = S.multiply(a, f); // coeff ac
+                r = r.subtract(h);
+                q = q.sum(a,f);
+            } else {
+                r = r.multiply(c);
+            }
+        }
+        return q;
+    }
+
+
+    /**
      * GenPolynomial sparse pseudo divide. For univariate polynomials or exact
      * division.
      * @param <C> coefficient type.
@@ -832,6 +881,7 @@ public class PolyUtil {
      * @return quotient with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
      *         m' &le; deg(P)-deg(S)
      * @see edu.jas.poly.GenPolynomial#divide(edu.jas.poly.GenPolynomial).
+     * @note quotient is not always meaningful
      */
     public static <C extends RingElem<C>> GenPolynomial<C> basePseudoDivide(GenPolynomial<C> P,
                     GenPolynomial<C> S) {
@@ -886,6 +936,7 @@ public class PolyUtil {
      * @return [ quotient, remainder ] with ldcf(S)<sup>m'</sup> P = quotient *
      *         S + remainder. m' &le; deg(P)-deg(S)
      * @see edu.jas.poly.GenPolynomial#divide(edu.jas.poly.GenPolynomial).
+     * @note quotient is not always meaningful
      */
     @SuppressWarnings("unchecked")
     public static <C extends RingElem<C>> GenPolynomial<C>[] basePseudoQuotientRemainder(GenPolynomial<C> P,
@@ -933,9 +984,53 @@ public class PolyUtil {
                 break;
             }
         }
+        GenPolynomial<C> rhs = q.multiply(S).sum(r);
+        GenPolynomial<C> lhs = P;
         ret[0] = q;
         ret[1] = r;
         return ret;
+    }
+
+
+    /**
+     * Is GenPolynomial pseudo quotient and remainder. For univariate polynomials.
+     * @param <C> coefficient type.
+     * @param P base GenPolynomial.
+     * @param S nonzero base GenPolynomial.
+     * @return remainder with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
+     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
+     * @note quotient is not always meaningful
+     */
+    public static <C extends RingElem<C>> boolean isBasePseudoQuotientRemainder(
+           GenPolynomial<C> P, GenPolynomial<C> S,
+           GenPolynomial<C> q, GenPolynomial<C> r) {
+	GenPolynomial<C> rhs = q.multiply(S).sum(r);
+        //System.out.println("rhs,1 = " + rhs);
+	GenPolynomial<C> lhs = P;
+	C ldcf = S.leadingBaseCoefficient();
+        long d = P.degree(0); // - S.degree(0);
+        d = ( d >= 0 ? d : 0 );
+        for ( long i = 0; i <= d; i++ ) {
+            //System.out.println("lhs-rhs = " + lhs.subtract(rhs));
+	    if ( lhs.equals(rhs) ) {
+                //System.out.println("lhs,1 = " + lhs);
+                return true;
+            }
+            lhs = lhs.multiply(ldcf);
+        }
+	GenPolynomial<C> Pp = P;
+	rhs = q.multiply(S);
+        //System.out.println("rhs,2 = " + rhs);
+        for ( long i = 0; i <= d; i++ ) {
+            lhs = Pp.subtract(r);
+            //System.out.println("lhs-rhs = " + lhs.subtract(rhs));
+	    if ( lhs.equals(rhs) ) {
+                //System.out.println("lhs,2 = " + lhs);
+                return true;
+            }
+            Pp = Pp.multiply(ldcf);
+        }
+        return false;
     }
 
 
@@ -1126,6 +1221,7 @@ public class PolyUtil {
      * @param S nonzero recursive GenPolynomial.
      * @return quotient with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
      * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
+     * @note quotient is not always meaningful
      */
     public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<C>> recursivePseudoDivide(
                     GenPolynomial<GenPolynomial<C>> P, GenPolynomial<GenPolynomial<C>> S) {
@@ -1154,7 +1250,7 @@ public class PolyUtil {
                 GenPolynomial<C> a = r.leadingBaseCoefficient();
                 f = f.subtract(e);
                 GenPolynomial<C> x = PolyUtil.<C> baseSparsePseudoRemainder(a, c);
-                if (x.isZERO()) {
+                if (x.isZERO() && !c.isConstant()) {
                     GenPolynomial<C> y = PolyUtil.<C> basePseudoDivide(a, c);
                     q = q.sum(y, f);
                     h = S.multiply(y, f); // coeff a
@@ -1170,6 +1266,36 @@ public class PolyUtil {
             }
         }
         return q;
+    }
+
+
+    /**
+     * Is GenPolynomial pseudo quotient and remainder. For recursive polynomials.
+     * @param <C> coefficient type.
+     * @param P recursive GenPolynomial.
+     * @param S nonzero recursive GenPolynomial.
+     * @return remainder with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
+     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
+     * @note quotient is not always meaningful
+     */
+    public static <C extends RingElem<C>> boolean isRecursivePseudoQuotientRemainder(
+           GenPolynomial<GenPolynomial<C>> P, GenPolynomial<GenPolynomial<C>> S,
+           GenPolynomial<GenPolynomial<C>> q, GenPolynomial<GenPolynomial<C>> r) {
+	GenPolynomial<GenPolynomial<C>> rhs = q.multiply(S).sum(r);
+	GenPolynomial<GenPolynomial<C>> lhs = P;
+	GenPolynomial<C> ldcf = S.leadingBaseCoefficient();
+        long d = P.degree(0); // - S.degree(0);
+        d = ( d >= 0 ? d : 0 );
+        for ( long i = 0; i <= d; i++ ) {
+            //System.out.println("lhs = " + lhs);
+            //System.out.println("rhs = " + rhs);
+            //System.out.println("lhs-rhs = " + lhs.subtract(rhs));
+	    if ( lhs.equals(rhs) ) {
+                return true;
+            }
+            lhs = lhs.multiply(ldcf);
+        }
+        return false;
     }
 
 

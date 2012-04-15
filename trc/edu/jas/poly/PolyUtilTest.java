@@ -20,6 +20,11 @@ import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.Product;
 import edu.jas.arith.ProductRing;
 
+import edu.jas.kern.ComputerThreads;
+import edu.jas.ufd.PolyUfdUtil;
+import edu.jas.ufd.Quotient;
+import edu.jas.ufd.QuotientRing;
+
 
 /**
  * PolyUtil tests with JUnit.
@@ -47,7 +52,7 @@ public class PolyUtilTest extends TestCase {
 
 
     /**
- */
+     */
     public static Test suite() {
         TestSuite suite = new TestSuite(PolyUtilTest.class);
         return suite;
@@ -176,7 +181,6 @@ public class PolyUtilTest extends TestCase {
 
     /**
      * Test recursive <--> distributive conversion.
-     * 
      */
     public void testConversion() {
         c = dfac.getONE();
@@ -201,7 +205,6 @@ public class PolyUtilTest extends TestCase {
 
     /**
      * Test recursive <--> distributive ring conversion.
-     * 
      */
     public void testConversionRing() {
         GenPolynomialRing<GenPolynomial<BigInteger>> rf = dfac.recursive(1);
@@ -215,7 +218,6 @@ public class PolyUtilTest extends TestCase {
 
     /**
      * Test random recursive <--> distributive conversion.
-     * 
      */
     public void testRandomConversion() {
         for (int i = 0; i < 7; i++) {
@@ -238,7 +240,6 @@ public class PolyUtilTest extends TestCase {
 
     /**
      * Test random rational <--> integer conversion.
-     * 
      */
     public void testRationalConversion() {
         GenPolynomialRing<BigRational> rfac = new GenPolynomialRing<BigRational>(new BigRational(1), rl, to);
@@ -270,7 +271,6 @@ public class PolyUtilTest extends TestCase {
 
     /**
      * Test random modular <--> integer conversion.
-     * 
      */
     public void testModularConversion() {
         ModIntegerRing pm = new ModIntegerRing(getPrime1());
@@ -300,7 +300,6 @@ public class PolyUtilTest extends TestCase {
 
     /**
      * Test chinese remainder.
-     * 
      */
     public void testChineseRemainder() {
         java.math.BigInteger p1 = getPrime1();
@@ -366,7 +365,6 @@ public class PolyUtilTest extends TestCase {
 
     /**
      * Test complex conversion.
-     * 
      */
     public void testComplexConversion() {
         BigRational rf = new BigRational(1);
@@ -412,8 +410,75 @@ public class PolyUtilTest extends TestCase {
 
 
     /**
+     * Test base pseudo division.
+     */
+    public void testBasePseudoDivision() {
+        String[] names = new String[] { "x" };
+        dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),to,names);
+        GenPolynomialRing<BigRational> rdfac = new GenPolynomialRing<BigRational>(new BigRational(1),dfac);
+        //System.out.println("\ndfac  = " + dfac);
+        //System.out.println("rdfac = " + rdfac);
+
+        a = dfac.random(kl, 2*ll, el+17, q);
+        //a = dfac.parse(" 3 x^5 + 44 ");
+        //b = a;
+        b = dfac.random(kl, 2*ll, el+3, q);
+        //a = a.multiply(b);
+        //a = a.sum(b);
+        //b = dfac.parse(" 2 x^2 + 40 ");
+        //System.out.println("a   = " + a);
+        //System.out.println("b   = " + b);
+
+        GenPolynomial<BigInteger>[] QR = PolyUtil.<BigInteger> basePseudoQuotientRemainder(a, b);
+        c = QR[1];
+        d = QR[0];
+        //d = PolyUtil.<BigInteger> baseDensePseudoQuotient(a, b);
+        //d = PolyUtil.<BigInteger> basePseudoDivide(a, b);
+        //System.out.println("q   = " + d);
+        //c = PolyUtil.<BigInteger> baseDensePseudoRemainder(a, b);
+        //c = PolyUtil.<BigInteger> baseSparsePseudoRemainder(a, b);
+        //System.out.println("r   = " + c);
+        //System.out.println("q b = " + d.multiply(b));
+
+        boolean t = PolyUtil.<BigInteger> isBasePseudoQuotientRemainder(a, b, d, c);
+        //System.out.println("assertTrue lc^n a = q b + r: " + t);
+
+        GenPolynomial<BigRational> ap = PolyUtil.<BigRational> fromIntegerCoefficients(rdfac,a);
+        GenPolynomial<BigRational> bp = PolyUtil.<BigRational> fromIntegerCoefficients(rdfac,b);
+        GenPolynomial<BigRational> cp = PolyUtil.<BigRational> fromIntegerCoefficients(rdfac,c);
+        GenPolynomial<BigRational> dp = PolyUtil.<BigRational> fromIntegerCoefficients(rdfac,d);
+        //System.out.println("ap  = " + ap);
+        //System.out.println("bp  = " + bp);
+        //System.out.println("cp  = " + cp);
+        ////System.out.println("dp  = " + dp);
+        //System.out.println("dp  = " + dp.monic());
+
+        GenPolynomial<BigRational> qp = ap.divide(bp);
+        GenPolynomial<BigRational> rp = ap.remainder(bp);
+        //System.out.println("qp  = " + qp);
+        //System.out.println("qp  = " + qp.monic());
+        //System.out.println("rp  = " + rp);
+        GenPolynomial<BigRational> rhs = qp.multiply(bp).sum(rp);
+        //System.out.println("qp bp + rp  = " + rhs);
+
+        assertEquals("ap = qp bp + rp: ", ap, rhs);
+
+        assertEquals("cp = rp: ", rp.monic(), cp.monic() );
+        //assertEquals("dp = qp: ", qp.monic(), dp.monic() ); // not always true
+        //System.out.println("dp = qp: " + qp.monic().equals(dp.monic()) );
+    }
+
+
+    /**
+     * Test recursive pseudo division.
+     * @see edu.jas.ufd.PolyUfdUtilTest#testRecursivePseudoDivision
+     */
+    public void testRecursivePseudoDivision() {
+    }
+
+
+    /**
      * Test evaluate main recursive.
-     * 
      */
     public void testEvalMainRecursive() {
         ai = (new BigInteger()).random(kl);
@@ -478,7 +543,6 @@ public class PolyUtilTest extends TestCase {
 
     /**
      * Test evaluate main.
-     * 
      */
     public void testEvalMain() {
         ei = (new BigInteger()).random(kl);
@@ -525,7 +589,6 @@ public class PolyUtilTest extends TestCase {
 
         assertEquals("eval(a+b) == eval(a) + eval(b)", ci, di);
 
-
         c = b.multiply(a);
         //System.out.println("c  = " + c);
 
@@ -545,7 +608,6 @@ public class PolyUtilTest extends TestCase {
 
     /**
      * Test evaluate first.
-     * 
      */
     public void testEvalFirst() {
         ei = (new BigInteger()).random(kl);
@@ -601,7 +663,6 @@ public class PolyUtilTest extends TestCase {
 
         assertEquals("eval(a+b) == eval(a) + eval(b)", ce, de);
 
-
         c = b.multiply(a);
         //System.out.println("c  = " + c);
 
@@ -621,7 +682,6 @@ public class PolyUtilTest extends TestCase {
 
     /**
      * Test evaluate all.
-     * 
      */
     public void testEvalAll() {
         BigInteger cfac = new BigInteger();
@@ -694,7 +754,6 @@ public class PolyUtilTest extends TestCase {
 
     /**
      * Test interpolate univariate 1 polynomial.
-     * 
      */
     public void testInterpolateUnivariateOne() {
         ModInteger ai, bi, ci, di, ei, fi, gi, hi;
@@ -776,7 +835,6 @@ public class PolyUtilTest extends TestCase {
 
     /**
      * Test interpolate univariate deg > 0 polynomial.
-     * 
      */
     public void testInterpolateUnivariate() {
         ModInteger ai, ci, ei, fi;
@@ -854,7 +912,6 @@ public class PolyUtilTest extends TestCase {
 
     /**
      * Test interpolate multivariate deg > 0 polynomial.
-     * 
      */
     public void testInterpolateMultivariate() {
         ModInteger ci, ei, fi;
@@ -952,7 +1009,6 @@ public class PolyUtilTest extends TestCase {
 
     /**
      * Test interpolate rational multivariate deg > 0 polynomial.
-     * 
      */
     public void testInterpolateRationalMultivariate() {
         BigRational ci, ei, fi;
@@ -1045,7 +1101,6 @@ public class PolyUtilTest extends TestCase {
 
     /**
      * Test coefficient map function.
-     * 
      */
     public void testMap() {
         // integers
@@ -1122,7 +1177,6 @@ public class PolyUtilTest extends TestCase {
 
     /**
      * Test substitution.
-     * 
      */
     public void testSubstitution() {
         dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 1, to);
@@ -1148,7 +1202,6 @@ public class PolyUtilTest extends TestCase {
 
     /**
      * Test algebraic substitution.
-     * 
      */
     public void testAlgebraicSubstitution() {
 
@@ -1159,18 +1212,18 @@ public class PolyUtilTest extends TestCase {
         GenPolynomial<BigRational> agen = pfac.univariate(0, 2);
         agen = agen.sum(pfac.getONE()); // x^2 + 1
         AlgebraicNumberRing<BigRational> afac = new AlgebraicNumberRing<BigRational>(agen, true);
-        GenPolynomialRing<AlgebraicNumber<BigRational>> apfac = new GenPolynomialRing<AlgebraicNumber<BigRational>>(
-                afac, 1, to, vars); // univariate
+        GenPolynomialRing<AlgebraicNumber<BigRational>> apfac 
+           = new GenPolynomialRing<AlgebraicNumber<BigRational>>(afac, 1, to, vars); // univariate
 
         //System.out.println("agen  = " + agen);
         //System.out.println("afac  = " + afac);
         //System.out.println("apfac = " + apfac);
 
         // subs = x - 7
-        GenPolynomial<AlgebraicNumber<BigRational>> s = apfac.univariate(0).subtract(
-                apfac.fromInteger(7).multiply(afac.getGenerator()));
-        GenPolynomial<AlgebraicNumber<BigRational>> s1 = apfac.univariate(0).sum(
-                apfac.fromInteger(7).multiply(afac.getGenerator()));
+        GenPolynomial<AlgebraicNumber<BigRational>> s 
+           = apfac.univariate(0).subtract(apfac.fromInteger(7).multiply(afac.getGenerator()));
+        GenPolynomial<AlgebraicNumber<BigRational>> s1 
+           = apfac.univariate(0).sum(apfac.fromInteger(7).multiply(afac.getGenerator()));
         //System.out.println("s = " + s);
         //System.out.println("s1 = " + s1);
 
@@ -1190,14 +1243,13 @@ public class PolyUtilTest extends TestCase {
 
     /**
      * Test switch variables.
-     * 
      */
     public void testSwitchVariables() {
 
         BigRational cfac = new BigRational(1);
         GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, rl, to);
-        GenPolynomialRing<GenPolynomial<BigRational>> rfac = new GenPolynomialRing<GenPolynomial<BigRational>>(
-                pfac, rl, to);
+        GenPolynomialRing<GenPolynomial<BigRational>> rfac 
+           = new GenPolynomialRing<GenPolynomial<BigRational>>(pfac, rl, to);
 
         //System.out.println("pfac  = " + pfac);
         //System.out.println("rfac  = " + rfac);
@@ -1219,7 +1271,6 @@ public class PolyUtilTest extends TestCase {
 
     /**
      * Test algebraic conversions.
-     * 
      */
     public void testAlgebraicConversions() {
 
@@ -1230,10 +1281,10 @@ public class PolyUtilTest extends TestCase {
         GenPolynomial<BigRational> agen = pfac.univariate(0, 2);
         agen = agen.sum(pfac.getONE()); // x^2 + 1
         AlgebraicNumberRing<BigRational> afac = new AlgebraicNumberRing<BigRational>(agen, true);
-        GenPolynomialRing<AlgebraicNumber<BigRational>> apfac = new GenPolynomialRing<AlgebraicNumber<BigRational>>(
-                afac, rl, to);
-        GenPolynomialRing<GenPolynomial<BigRational>> rfac = new GenPolynomialRing<GenPolynomial<BigRational>>(
-                pfac, rl, to);
+        GenPolynomialRing<AlgebraicNumber<BigRational>> apfac 
+           = new GenPolynomialRing<AlgebraicNumber<BigRational>>(afac, rl, to);
+        GenPolynomialRing<GenPolynomial<BigRational>> rfac 
+           = new GenPolynomialRing<GenPolynomial<BigRational>>(pfac, rl, to);
 
         //System.out.println("agen  = " + agen);
         //System.out.println("afac  = " + afac);
@@ -1258,7 +1309,6 @@ public class PolyUtilTest extends TestCase {
 
     /**
      * Test Taylor series.
-     * 
      */
     public void testTaylorSeries() {
         GenPolynomial<BigRational> a;
@@ -1295,7 +1345,6 @@ public class PolyUtilTest extends TestCase {
 
     /**
      * Test Complex real and imaginary part.
-     * 
      */
     public void testComplexParts() {
         BigRational rf = new BigRational(1);
@@ -1342,7 +1391,6 @@ public class PolyUtilTest extends TestCase {
 
     /**
      * Test product represenation conversion, rational numbers.
-     * 
      */
     public void testProductConversionRN() {
         GenPolynomialRing<BigRational> ufac;
@@ -1374,7 +1422,6 @@ public class PolyUtilTest extends TestCase {
 
     /**
      * Test polynomal over product represenation conversion, algebraic numbers.
-     * 
      */
     public void testPolyProductConversionAN() {
         GenPolynomialRing<BigRational> ufac;
