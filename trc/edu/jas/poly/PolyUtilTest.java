@@ -432,13 +432,116 @@ public class PolyUtilTest extends TestCase {
         GenPolynomial<BigInteger>[] QR = PolyUtil.<BigInteger> basePseudoQuotientRemainder(a, b);
         c = QR[1];
         d = QR[0];
-        //d = PolyUtil.<BigInteger> baseDensePseudoQuotient(a, b);
-        //d = PolyUtil.<BigInteger> basePseudoDivide(a, b);
         //System.out.println("q   = " + d);
-        //c = PolyUtil.<BigInteger> baseDensePseudoRemainder(a, b);
-        //c = PolyUtil.<BigInteger> baseSparsePseudoRemainder(a, b);
         //System.out.println("r   = " + c);
-        //System.out.println("q b = " + d.multiply(b));
+
+        boolean t = PolyUtil.<BigInteger> isBasePseudoQuotientRemainder(a, b, d, c);
+        assertTrue("lc^n a = q b + r: " + c, t);
+
+        GenPolynomial<BigRational> ap = PolyUtil.<BigRational> fromIntegerCoefficients(rdfac,a);
+        GenPolynomial<BigRational> bp = PolyUtil.<BigRational> fromIntegerCoefficients(rdfac,b);
+        GenPolynomial<BigRational> cp = PolyUtil.<BigRational> fromIntegerCoefficients(rdfac,c);
+        GenPolynomial<BigRational> dp = PolyUtil.<BigRational> fromIntegerCoefficients(rdfac,d);
+        //System.out.println("ap  = " + ap);
+        //System.out.println("bp  = " + bp);
+        //System.out.println("cp  = " + cp);
+        ////System.out.println("dp  = " + dp);
+        //System.out.println("dp  = " + dp.monic());
+
+        GenPolynomial<BigRational> qp = ap.divide(bp);
+        GenPolynomial<BigRational> rp = ap.remainder(bp);
+        //System.out.println("qp  = " + qp);
+        //System.out.println("qp  = " + qp.monic());
+        //System.out.println("rp  = " + rp);
+        GenPolynomial<BigRational> rhs = qp.multiply(bp).sum(rp);
+        //System.out.println("qp bp + rp  = " + rhs);
+
+        assertEquals("ap = qp bp + rp: ", ap, rhs);
+
+        assertEquals("cp = rp: ", rp.monic(), cp.monic() );
+        assertEquals("dp = qp: ", qp.monic(), dp.monic() ); // ??
+        //System.out.println("dp = qp: " + qp.monic().equals(dp.monic()) );
+    }
+
+
+    /**
+     * Test base sparse pseudo division.
+     */
+    public void testBasePseudoDivisionSparse() {
+        String[] names = new String[] { "x" };
+        dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),to,names);
+        GenPolynomialRing<BigRational> rdfac = new GenPolynomialRing<BigRational>(new BigRational(1),dfac);
+        //System.out.println("\ndfac  = " + dfac);
+        //System.out.println("rdfac = " + rdfac);
+
+        a = dfac.random(kl, 2*ll, el+17, q);
+        //a = dfac.parse(" 3 x^5 + 44 ");
+        //b = a;
+        b = dfac.random(kl, 2*ll, el+3, q);
+        //a = a.multiply(b);
+        //a = a.sum(b);
+        //b = dfac.parse(" 2 x^2 + 40 ");
+        //System.out.println("a   = " + a);
+        //System.out.println("b   = " + b);
+
+        d = PolyUtil.<BigInteger> basePseudoDivide(a, b);
+        //System.out.println("q   = " + d);
+        c = PolyUtil.<BigInteger> baseSparsePseudoRemainder(a, b);
+        //System.out.println("r   = " + c);
+
+        boolean t = PolyUtil.<BigInteger> isBasePseudoQuotientRemainder(a, b, d, c);
+        assertTrue("lc^n a = q b + r: " + c, t);
+
+        GenPolynomial<BigRational> ap = PolyUtil.<BigRational> fromIntegerCoefficients(rdfac,a);
+        GenPolynomial<BigRational> bp = PolyUtil.<BigRational> fromIntegerCoefficients(rdfac,b);
+        GenPolynomial<BigRational> cp = PolyUtil.<BigRational> fromIntegerCoefficients(rdfac,c);
+        GenPolynomial<BigRational> dp = PolyUtil.<BigRational> fromIntegerCoefficients(rdfac,d);
+        //System.out.println("ap  = " + ap);
+        //System.out.println("bp  = " + bp);
+        //System.out.println("cp  = " + cp);
+        ////System.out.println("dp  = " + dp);
+        //System.out.println("dp  = " + dp.monic());
+
+        GenPolynomial<BigRational> qp = ap.divide(bp);
+        GenPolynomial<BigRational> rp = ap.remainder(bp);
+        //System.out.println("qp  = " + qp);
+        //System.out.println("qp  = " + qp.monic());
+        //System.out.println("rp  = " + rp);
+        GenPolynomial<BigRational> rhs = qp.multiply(bp).sum(rp);
+        //System.out.println("qp bp + rp  = " + rhs);
+
+        assertEquals("ap = qp bp + rp: ", ap, rhs);
+
+        assertEquals("cp = rp: ", rp.monic(), cp.monic() );
+        assertEquals("dp = qp: ", qp.monic(), dp.monic() ); // ??
+        //System.out.println("dp = qp: " + qp.monic().equals(dp.monic()) );
+    }
+
+
+    /**
+     * Test base dense pseudo division.
+     */
+    public void testBasePseudoDivisionDense() {
+        String[] names = new String[] { "x" };
+        dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),to,names);
+        GenPolynomialRing<BigRational> rdfac = new GenPolynomialRing<BigRational>(new BigRational(1),dfac);
+        //System.out.println("\ndfac  = " + dfac);
+        //System.out.println("rdfac = " + rdfac);
+
+        a = dfac.random(kl, 2*ll, el+17, q);
+        //a = dfac.parse(" 3 x^5 + 44 ");
+        //b = a;
+        b = dfac.random(kl, 2*ll, el+3, q);
+        //a = a.multiply(b);
+        //a = a.sum(b);
+        //b = dfac.parse(" 2 x^2 + 40 ");
+        //System.out.println("a   = " + a);
+        //System.out.println("b   = " + b);
+
+        d = PolyUtil.<BigInteger> baseDensePseudoQuotient(a, b);
+        //System.out.println("q   = " + d);
+        c = PolyUtil.<BigInteger> baseDensePseudoRemainder(a, b);
+        //System.out.println("r   = " + c);
 
         boolean t = PolyUtil.<BigInteger> isBasePseudoQuotientRemainder(a, b, d, c);
         assertTrue("lc^n a = q b + r: " + c, t);

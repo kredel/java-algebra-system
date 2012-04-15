@@ -198,9 +198,9 @@ public class PolyUfdUtilTest extends TestCase {
 
 
     /**
-     * Test recursive pseudo division.
+     * Test recursive dense pseudo division.
      */
-    public void testRecursivePseudoDivision() {
+    public void testRecursivePseudoDivisionDense() {
         String[] cnames = new String[] { "x" };
         String[] mnames = new String[] { "t" };
         dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),to,cnames);
@@ -225,9 +225,67 @@ public class PolyUfdUtilTest extends TestCase {
         dr = PolyUtil.<BigInteger> recursivePseudoDivide(ar, br);
         //System.out.println("qr   = " + dr);
         cr = PolyUtil.<BigInteger> recursiveDensePseudoRemainder(ar, br);
-        //cr = PolyUtil.<BigInteger> baseSparsePseudoRemainder(ar, br);
         //System.out.println("rr   = " + cr);
-        //System.out.println("qr br = " + dr.multiply(br));
+
+        boolean t = PolyUtil.<BigInteger> isRecursivePseudoQuotientRemainder(ar, br, dr, cr);
+        //System.out.println("assertTrue lc^n a = q b + r: " + t);
+        //assertTrue("lc^n a = q b + r: " + cr, t); // ?? not always true
+
+        GenPolynomial<Quotient<BigInteger>> ap = PolyUfdUtil.<BigInteger> quotientFromIntegralCoefficients(rqfac,ar);
+        GenPolynomial<Quotient<BigInteger>> bp = PolyUfdUtil.<BigInteger> quotientFromIntegralCoefficients(rqfac,br);
+        GenPolynomial<Quotient<BigInteger>> cp = PolyUfdUtil.<BigInteger> quotientFromIntegralCoefficients(rqfac,cr);
+        GenPolynomial<Quotient<BigInteger>> dp = PolyUfdUtil.<BigInteger> quotientFromIntegralCoefficients(rqfac,dr);
+        //System.out.println("ap  = " + ap);
+        //System.out.println("bp  = " + bp);
+        //System.out.println("cp  = " + cp);
+        ////System.out.println("dp  = " + dp);
+        //System.out.println("dp  = " + dp.monic());
+
+        GenPolynomial<Quotient<BigInteger>> qp = ap.divide(bp);
+        GenPolynomial<Quotient<BigInteger>> rp = ap.remainder(bp);
+        ////System.out.println("qp  = " + qp);
+        //System.out.println("qp  = " + qp.monic());
+        //System.out.println("rp  = " + rp);
+        GenPolynomial<Quotient<BigInteger>> rhs = qp.multiply(bp).sum(rp);
+        //System.out.println("qp bp + rp  = " + rhs);
+
+        assertEquals("ap = qp bp + rp: ", ap, rhs);
+
+        assertEquals("cp = rp: ", rp.monic(), cp.monic() );
+        //System.out.println("dp = qp: " + qp.monic().equals(dp.monic()) );
+        assertEquals("dp = qp: ", qp.monic(), dp.monic() ); // ??
+    }
+
+
+    /**
+     * Test recursive sparse pseudo division.
+     */
+    public void testRecursivePseudoDivisionSparse() {
+        String[] cnames = new String[] { "x" };
+        String[] mnames = new String[] { "t" };
+        dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),to,cnames);
+        GenPolynomialRing<BigRational> rdfac = new GenPolynomialRing<BigRational>(new BigRational(1),dfac);
+        rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(dfac, to, mnames);
+        QuotientRing<BigInteger> qfac = new QuotientRing<BigInteger>(dfac);
+        GenPolynomialRing<Quotient<BigInteger>> rqfac = new GenPolynomialRing<Quotient<BigInteger>>(qfac,rfac);
+        //System.out.println("\ndfac  = " + dfac);
+        //System.out.println("rdfac = " + rdfac);
+        //System.out.println("rfac  = " + rfac);
+        //System.out.println("qfac  = " + qfac);
+        //System.out.println("rqfac = " + rqfac);
+
+        ar = rfac.random(kl, 2*ll, el+4, q);
+        //ar = rfac.parse(" ( -2 x^4 + 8 x^3 - 5 x^2 - x + 6  ) t^3 + ( 2 x - 8  ) t^2 - ( 13 x^4 - 13 x^3 + x^2 + 2 x - 13  ) ");
+        br = rfac.random(kl, 2*ll, el+2, q);
+        //ar = ar.multiply(br);
+        //br = rfac.parse(" ( 13 ) t^3 + ( 3 x^2 - 6  ) t - ( 13 x^4 - 8 x^3 + 10 x^2 + 22 x + 21  ) ");
+        //System.out.println("ar   = " + ar);
+        //System.out.println("br   = " + br);
+
+        dr = PolyUtil.<BigInteger> recursivePseudoDivide(ar, br);
+        //System.out.println("qr   = " + dr);
+        cr = PolyUtil.<BigInteger> recursiveSparsePseudoRemainder(ar, br);
+        //System.out.println("rr   = " + cr);
 
         boolean t = PolyUtil.<BigInteger> isRecursivePseudoQuotientRemainder(ar, br, dr, cr);
         //System.out.println("assertTrue lc^n a = q b + r: " + t);
