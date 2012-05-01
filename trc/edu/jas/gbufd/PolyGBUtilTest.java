@@ -35,6 +35,7 @@ import edu.jas.gb.Reduction;
 import edu.jas.gb.GroebnerBase;
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gbufd.GBFactory;
+
 //import edu.jas.application.Ideal;
 //import edu.jas.application.IdealWithUniv;
 
@@ -358,7 +359,6 @@ public class PolyGBUtilTest extends TestCase {
 
         GenPolynomial<BigRational> h1, h2, h3, h4, h5, h6, h7, h8, g, e, f, k;
         List<GenPolynomial<BigRational>> F, G, H, K, L;
-        //Ideal<BigRational> I, J;
         //List<IdealWithUniv<BigRational>> R;
 
         F = new ArrayList<GenPolynomial<BigRational>>();
@@ -401,7 +401,7 @@ public class PolyGBUtilTest extends TestCase {
         H = bb.GB(F);
         System.out.println(" H = " + H);
 
-        Reduction red = bb.red;
+        Reduction<BigRational> red = bb.red;
         f = red.normalform(H,g);
         System.out.println("fg = " + f);
 
@@ -417,6 +417,7 @@ public class PolyGBUtilTest extends TestCase {
         System.out.println("Lf = " + L);
         assertEquals("Kg == Kf: " + L, K, L);
 
+        //Ideal<BigRational> I, J;
         //J = new Ideal<BigRational>(dfac,H,true);
         //J = new Ideal<BigRational>(dfac,F);
         //System.out.println("F = " + F);
@@ -470,8 +471,8 @@ public class PolyGBUtilTest extends TestCase {
         g = dfac.parse(" x3^2 - 2 x3 x1 + x1^2  ");
         System.out.println("g = " + g);
 
-        //e = PolyGBUtil.<BigRational> characteristicSetReduction(G,g);
-        e = PolyGBUtil.<BigRational> characteristicSetRemainder(G,g);
+        e = PolyGBUtil.<BigRational> characteristicSetReduction(G,g);
+        //e = PolyGBUtil.<BigRational> characteristicSetRemainder(G,g);
         System.out.println("e = " + e);
         assertTrue("g mod G: " + e, e.isZERO()||true); // not always true
     }
@@ -508,7 +509,100 @@ public class PolyGBUtilTest extends TestCase {
         G = PolyGBUtil.<BigRational> characteristicSet(F);
         System.out.println("G = " + G);
         assertTrue("isCharacteristicSet: " + G, PolyGBUtil.<BigRational> isCharacteristicSet(G));
+    }
 
+
+    /**
+     * Test coefficient base pseudo remainder.
+     */
+    public void xtestCoefficientBasePseudoRemainder() {
+        GenPolynomialRing<BigRational> dfac;
+        BigRational br = new BigRational();
+        to = new TermOrder(TermOrder.INVLEX);
+        //String[] vars = new String[] { "x1",  "x2", "x3" };
+        String[] vars = new String[] { "x1",  "x2" };
+        dfac = new GenPolynomialRing<BigRational>(br, to, vars);
+        System.out.println("dfac = " + dfac);
+        GenPolynomialRing<GenPolynomial<BigRational>> rfac = dfac.recursive(1);
+        System.out.println("rfac = " + rfac);
+        GenPolynomialRing<BigRational> cfac = (GenPolynomialRing<BigRational>) rfac.coFac;
+        System.out.println("cfac = " + cfac);
+        GenPolynomial<GenPolynomial<BigRational>> ar, cr, dr, er;
+        GenPolynomial<BigRational> a, b, c, d, e;
+
+        ar = rfac.random(kl, ll, el, q * 1.1f);
+        b = cfac.random(kl, ll + 2, el*2, q);
+        System.out.println("ar = " + ar);
+        System.out.println("b  = " + b);
+
+        cr = PolyGBUtil.<BigRational> coefficientPseudoRemainderBase(ar,b);
+        System.out.println("cr = " + cr);
+        assertTrue("deg(c) < deg(a): ", cr.degree(0) <= ar.degree(0) || ar.degree(0) == 0); 
+        assertTrue("deg(lfcd(c)) < deg(b): ", cr.leadingBaseCoefficient().degree(0) < b.degree(0) || b.degree(0) == 0); 
+
+        dr = ar.multiply(b);
+        System.out.println("dr = " + dr);
+        cr = PolyGBUtil.<BigRational> coefficientPseudoRemainderBase(dr,b);
+        System.out.println("cr = " + cr);
+        assertTrue("c == 0: ", cr.isZERO()); 
+
+        long s = ar.degree(0);
+        er = rfac.univariate(0,s+1);
+        //System.out.println("er = " + er);
+        er = er.multiply(b.multiply(b));
+        er = er.sum(ar);
+        System.out.println("er = " + er);
+        cr = PolyGBUtil.<BigRational> coefficientPseudoRemainderBase(er,b);
+        System.out.println("cr = " + cr);
+        assertTrue("deg(c) < deg(a): ", cr.degree(0) < er.degree(0)); 
+    }
+
+
+    /**
+     * Test coefficient recursive pseudo remainder.
+     */
+    public void xtestCoefficientRecursivePseudoRemainder() {
+        GenPolynomialRing<BigRational> dfac;
+        BigRational br = new BigRational();
+        to = new TermOrder(TermOrder.INVLEX);
+        String[] vars = new String[] { "x1",  "x2", "x3" };
+        //String[] vars = new String[] { "x1",  "x2" };
+        dfac = new GenPolynomialRing<BigRational>(br, to, vars);
+        System.out.println("dfac = " + dfac);
+        GenPolynomialRing<GenPolynomial<BigRational>> r1fac = dfac.recursive(2);
+        System.out.println("r1fac = " + r1fac);
+        GenPolynomialRing<GenPolynomial<GenPolynomial<BigRational>>> rfac = r1fac.recursive(1);
+        System.out.println("rfac = " + rfac);
+        GenPolynomialRing<GenPolynomial<BigRational>> cfac = (GenPolynomialRing<GenPolynomial<BigRational>>) rfac.coFac;
+        System.out.println("cfac = " + cfac);
+        GenPolynomial<GenPolynomial<GenPolynomial<BigRational>>> ar, cr, dr, er;
+        GenPolynomial<GenPolynomial<BigRational>> a, b, c, d, e;
+
+        ar = rfac.random(kl, ll, el, q);
+        b = cfac.random(kl, ll + 2, el, q);
+        System.out.println("ar = " + ar);
+        System.out.println("b  = " + b);
+
+        cr = PolyGBUtil.<BigRational> coefficientPseudoRemainder(ar,b);
+        System.out.println("cr = " + cr);
+        assertTrue("deg(c) < deg(a): ", cr.degree(0) <= ar.degree(0) || ar.degree(0) == 0); 
+        assertTrue("deg(lfcd(c)) < deg(b): ", cr.leadingBaseCoefficient().degree(0) < b.degree(0) || b.degree(0) == 0); 
+
+        dr = ar.multiply(b);
+        System.out.println("dr = " + dr);
+        cr = PolyGBUtil.<BigRational> coefficientPseudoRemainder(dr,b);
+        System.out.println("cr = " + cr);
+        assertTrue("c == 0: ", cr.isZERO()); 
+
+        long s = ar.degree(0);
+        er = rfac.univariate(0,s+1);
+        //System.out.println("er = " + er);
+        er = er.multiply(b.multiply(cfac.fromInteger(100)));
+        er = er.sum(ar);
+        System.out.println("er = " + er);
+        cr = PolyGBUtil.<BigRational> coefficientPseudoRemainder(er,b);
+        System.out.println("cr = " + cr);
+        assertTrue("deg(c) < deg(a): ", cr.degree(0) < er.degree(0)); 
     }
 
 }
