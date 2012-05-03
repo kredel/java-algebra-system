@@ -136,7 +136,7 @@ public class PolyGBUtil {
              GenPolynomial<C> fp = f.extend(pfac,0,0L);
              S.add(fp);
         }
-        logger.info("charSet recursion, Sp = " + Sp);
+        //logger.info("charSet recursion, Sp = " + Sp);
         if ( pd.isEmpty() ) { 
             return S;
         }
@@ -144,12 +144,13 @@ public class PolyGBUtil {
         GenPolynomial<GenPolynomial<C>> rr = pd.get(0);
         GenPolynomial<C> sr = PolyUtil.<C> distribute(pfac,rr);
         sr = characteristicSetRemainderCoeff(Sp,sr);
+        logger.info("charSet rereduced sr = " + sr);
         if ( sr.isZERO() ) {
             return S;
         }
         long d = sr.degree(pfac.nvar-1);
         //System.out.println("deg(sr): " + d + ", degv(sr): " + sr.leadingExpVector());
-        if ( d == 0 ) { // constant, invalid characteristic set, restart
+        if ( d == 0 ) { // deg zero, invalid characteristic set, restart
             S.add(0,sr);
             logger.warn("invalid characteristic set, restarting with S = " + S);
             return characteristicSet(S);
@@ -277,7 +278,7 @@ public class PolyGBUtil {
             //System.out.println("recursion, pr  = " + pr);
             //System.out.println("recursion, rr  = " + rr);
             GenPolynomial<C> R = PolyUtil.<C> distribute(pfac,rr);
-            return R;
+            return R.monic();
         }
         // select polynomials according to the main variable
         GenPolynomialRing<GenPolynomial<C>> rfac1 = pfac1.recursive(1);
@@ -304,7 +305,7 @@ public class PolyGBUtil {
         GenPolynomial<GenPolynomial<C>> Rr = PolyUtil.<GenPolynomial<C>> distribute(rfac,rr);
         GenPolynomial<C> R = PolyUtil.<C> distribute(pfac,Rr);
         R = characteristicSetRemainderCoeff(zeroDeg,R);
-        return R;
+        return R.monic();
     }
 
 
