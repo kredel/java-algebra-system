@@ -110,6 +110,8 @@ public class PolyGBUtil {
         if (debug) {
            logger.info("positive degrees: " + pd);
         }
+        //System.out.println("positive degrees: " + pd);
+        //System.out.println("zero     degrees: " + zeroDeg);
         while ( pd.size() > 1 ) {
             GenPolynomial<GenPolynomial<C>> fr = pd.remove(0);
             GenPolynomial<GenPolynomial<C>> qr = pd.get(0); // = get(1)
@@ -129,48 +131,31 @@ public class PolyGBUtil {
             }
         }
         // recursion for degree zero polynomials
-        List<GenPolynomial<C>> Sp = null;
-        if ( !zeroDeg.isEmpty() ) {
-            Sp = characteristicSet(zeroDeg); // recursion
-            for ( GenPolynomial<C> f : Sp ) {
-                GenPolynomial<C> fp = f.extend(pfac,0,0L);
-                S.add(fp);
-            }
+        List<GenPolynomial<C>> Sp = characteristicSet(zeroDeg); // recursion
+        for ( GenPolynomial<C> f : Sp ) {
+             GenPolynomial<C> fp = f.extend(pfac,0,0L);
+             S.add(fp);
         }
         logger.info("charSet recursion, Sp = " + Sp);
-        //logger.info("recursion, S  = " + S);
-        // rereduction of leading coefficient wrt. characteristic set according to Wu
-        if ( pd.size() > 0 ) { // == 1
-            GenPolynomial<GenPolynomial<C>> rr = pd.get(0);
-            // distribute
-            GenPolynomial<C> sr = PolyUtil.<C> distribute(pfac,rr);
-            if ( false && Sp != null && !Sp.isEmpty() ) {
-                // reduce leading coefficient
-                long d = sr.degree(pfac.nvar-1);
-                long d1 = d;
-                do {
-                    d1 = d;
-                    System.out.println("sr_1 = " + sr);
-                    sr = characteristicSetRemainderCoeff(Sp,sr);
-                    System.out.println("sr_2 = " + sr);
-                    if ( sr.isZERO() ) {
-                        logger.warn("zero in rededuction");
-                        return S;
-                    }
-                    d = sr.degree(pfac.nvar-1);
-                    if ( d < d1 ) {
-                        logger.warn("degree reduction in rededuction");
-                    }
-                } while ( d < d1 && d > 0 ); 
-                if ( d == 0 ) { // constant, invalid characteristic set, restart
-                    S.add(0,sr);
-                    logger.warn("invalid characteristic set, restarting with S = " + S);
-                    return characteristicSet(S);
-                }
-            }
-            sr = sr.monic();
-            S.add(0,sr);
+        if ( pd.isEmpty() ) { 
+            return S;
         }
+        // rereduction of leading coefficient wrt. characteristic set according to Wu
+        GenPolynomial<GenPolynomial<C>> rr = pd.get(0);
+        GenPolynomial<C> sr = PolyUtil.<C> distribute(pfac,rr);
+        sr = characteristicSetRemainderCoeff(Sp,sr);
+        if ( sr.isZERO() ) {
+            return S;
+        }
+        long d = sr.degree(pfac.nvar-1);
+        //System.out.println("deg(sr): " + d + ", degv(sr): " + sr.leadingExpVector());
+        if ( d == 0 ) { // constant, invalid characteristic set, restart
+            S.add(0,sr);
+            logger.warn("invalid characteristic set, restarting with S = " + S);
+            return characteristicSet(S);
+        }
+        sr = sr.monic();
+        S.add(0,sr);
         return S;
     }
 
@@ -240,13 +225,13 @@ public class PolyGBUtil {
         GenPolynomial<C> Q = A.get(0); // wrong, must eventually search polynomial
         GenPolynomial<GenPolynomial<C>> qr = PolyUtil.<C> recursive(rfac,Q);
         if ( qr.degree(0) > 0 ) {
-            System.out.println("remainder qr.deg = " + qr.degree(0));
+            //System.out.println("remainder qr.deg = " + qr.degree(0));
         }
-        System.out.println("remainder, qr = " + qr);
+        //System.out.println("remainder, qr = " + qr);
         GenPolynomial<GenPolynomial<C>> pr = PolyUtil.<C> recursive(rfac,P);
-        System.out.println("remainder, pr = " + pr);
+        //System.out.println("remainder, pr = " + pr);
         GenPolynomial<GenPolynomial<C>> rr = PolyUtil.<C> recursiveSparsePseudoRemainder(pr,qr);
-        System.out.println("remainder, rr = " + rr);
+        //System.out.println("remainder, rr = " + rr);
         if (debug) {
            logger.info("remainder = " + rr);
         }
@@ -276,8 +261,8 @@ public class PolyGBUtil {
         if ( P.isZERO() || P.isONE() ) {
             return P;
         }
-        System.out.println("remainderCoeff, A = " + A);
-        System.out.println("remainderCoeff, P = " + P);
+        //System.out.println("remainderCoeff, A = " + A);
+        //System.out.println("remainderCoeff, P = " + P);
         GenPolynomialRing<C> pfac = P.ring;
         //System.out.println("pfac  = " + pfac);
         GenPolynomialRing<C> pfac1 = A.get(0).ring;
@@ -288,9 +273,9 @@ public class PolyGBUtil {
             GenPolynomial<GenPolynomial<C>> pr = PolyUtil.<C> recursive(rfac,P);
             // ldcf(P,x_m) = q a + r 
             GenPolynomial<GenPolynomial<C>> rr = PolyGBUtil.<C> coefficientPseudoRemainderBase(pr,a);
-            System.out.println("recursion, a   = " + a);
-            System.out.println("recursion, pr  = " + pr);
-            System.out.println("recursion, rr  = " + rr);
+            //System.out.println("recursion, a   = " + a);
+            //System.out.println("recursion, pr  = " + pr);
+            //System.out.println("recursion, rr  = " + rr);
             GenPolynomial<C> R = PolyUtil.<C> distribute(pfac,rr);
             return R;
         }
@@ -304,15 +289,15 @@ public class PolyGBUtil {
         }
         GenPolynomial<GenPolynomial<C>> pr = PolyUtil.<C> recursive(rfac,P);
         GenPolynomial<GenPolynomial<GenPolynomial<C>>> pr2 = PolyUtil.<GenPolynomial<C>> recursive(rfac2,pr);
-        System.out.println("recursion, pr2 = " + pr2);
+        //System.out.println("recursion, pr2 = " + pr2);
         GenPolynomial<C> Q = A.get(0);
         GenPolynomial<GenPolynomial<C>> qr = PolyUtil.<C> recursive(rfac1,Q);
 
         // pseudo remainder:  ldcf(P,x_m) = a q + r 
         GenPolynomial<GenPolynomial<GenPolynomial<C>>> rr = PolyGBUtil.<C> coefficientPseudoRemainder(pr2,qr);
-        System.out.println("recursion, qr  = " + qr);
-        System.out.println("recursion, pr  = " + pr2);
-        System.out.println("recursion, rr  = " + rr);
+        //System.out.println("recursion, qr  = " + qr);
+        //System.out.println("recursion, pr  = " + pr2);
+        //System.out.println("recursion, rr  = " + rr);
 
         // reduction wrt. the other variables
         List<GenPolynomial<C>> zeroDeg = zeroDegrees(A);
@@ -462,7 +447,7 @@ public class PolyGBUtil {
         }
         GenPolynomialRing<C> pfac = A.get(0).ring;
         GenPolynomial<C> R = characteristicSetRemainder(A,P);
-        System.out.println("remainder, R = " + R);
+        //System.out.println("remainder, R = " + R);
         if ( R.isZERO() || R.isONE() ) {
             return R;
         }

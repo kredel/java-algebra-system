@@ -469,6 +469,7 @@ public class PolyGBUtilTest extends TestCase {
         assertTrue("isCharacteristicSet: " + G, PolyGBUtil.<BigRational> isCharacteristicSet(G));
 
         g = dfac.parse(" x3^2 - 2 x3 x1 + x1^2  ");
+        //g = dfac.parse(" x3 - x1 ");
         System.out.println("g = " + g);
 
         e = PolyGBUtil.<BigRational> characteristicSetReduction(G,g);
