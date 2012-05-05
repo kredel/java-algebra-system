@@ -28,15 +28,10 @@ import edu.jas.ufd.GreatestCommonDivisorSimple;
 import edu.jas.ufd.GreatestCommonDivisorSubres;
 
 
-// import edu.jas.application.Ideal;
-// import edu.jas.application.IdealWithUniv;
-
-
 /**
  * PolyGBUtil tests with JUnit.
  * @author Heinz Kredel.
  */
-
 public class PolyGBUtilTest extends TestCase {
 
 
@@ -126,9 +121,7 @@ public class PolyGBUtilTest extends TestCase {
             //System.out.println("b = " + b);
 
             c = ufds.resultant(a, b);
-
             d = sres.resultant(a, b);
-
             e = ufdm.resultant(a, b);
 
             boolean t1 = PolyGBUtil.<ModInteger> isResultant(a, b, c);
@@ -171,9 +164,7 @@ public class PolyGBUtilTest extends TestCase {
             //System.out.println("b = " + b);
 
             c = ufds.resultant(a, b);
-
             d = sres.resultant(a, b);
-
             e = ufdm.resultant(a, b);
 
             boolean t1 = PolyGBUtil.<BigInteger> isResultant(a, b, c);
@@ -222,7 +213,6 @@ public class PolyGBUtilTest extends TestCase {
             //System.out.println("b = " + b);
 
             c = pufds.resultant(a, b);
-
             d = pufdm.resultant(a, b);
 
             boolean t1 = PolyGBUtil.<ModInteger> isResultant(a, b, c);
@@ -263,7 +253,6 @@ public class PolyGBUtilTest extends TestCase {
             //System.out.println("b = " + b);
 
             c = pufds.resultant(a, b);
-
             d = pufdm.resultant(a, b);
 
             boolean t1 = PolyGBUtil.<BigInteger> isResultant(a, b, c);

@@ -208,22 +208,22 @@ public class CharSetTest extends TestCase {
 
         GroebnerBaseAbstract<BigRational> bb = GBFactory.getImplementation(br);
         H = bb.GB(F);
-        System.out.println(" H = " + H);
+        //System.out.println(" H = " + H);
 
         Reduction<BigRational> red = bb.red;
         f = red.normalform(H, g);
-        System.out.println("fg = " + f);
+        //System.out.println("fg = " + f);
 
         k = red.normalform(H, e);
-        System.out.println("fk' = " + k);
+        //System.out.println("fk' = " + k);
 
         //System.out.println("fk' == f: " + k.equals(f));
         //System.out.println("fk' - f: " + k.subtract(f));
 
         K = red.normalform(H, G);
-        System.out.println("Kg = " + K);
+        //System.out.println("Kg = " + K);
         L = red.normalform(H, F);
-        System.out.println("Lf = " + L);
+        //System.out.println("Lf = " + L);
         assertEquals("Kg == Kf: " + L, K, L);
 
         //Ideal<BigRational> I, J;

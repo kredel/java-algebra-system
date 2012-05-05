@@ -127,7 +127,7 @@ public class CharacteristicSetWu<C extends GcdRingElem<C>> implements Characteri
         //System.out.println("deg(sr): " + d + ", degv(sr): " + sr.leadingExpVector());
         if (d == 0) { // deg zero, invalid characteristic set, restart
             S.add(0, sr);
-            logger.warn("invalid characteristic set, restarting with S = " + S);
+            logger.warn("reducible characteristic set, restarting with S = " + S);
             return characteristicSet(S);
         }
         sr = sr.monic();
