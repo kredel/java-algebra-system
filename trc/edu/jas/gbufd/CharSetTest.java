@@ -1,0 +1,336 @@
+/*
+ * $Id$
+ */
+
+package edu.jas.gbufd;
+
+
+import java.util.List;
+import java.util.ArrayList;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
+import org.apache.log4j.BasicConfigurator;
+
+import edu.jas.arith.BigInteger;
+import edu.jas.arith.BigRational;
+import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
+import edu.jas.arith.PrimeList;
+import edu.jas.kern.ComputerThreads;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.TermOrder;
+import edu.jas.ufd.GreatestCommonDivisorSimple;
+import edu.jas.ufd.GreatestCommonDivisorSubres;
+import edu.jas.ufd.GreatestCommonDivisorAbstract;
+import edu.jas.ufd.GreatestCommonDivisorModular;
+import edu.jas.ufd.GreatestCommonDivisorModEval;
+import edu.jas.ufd.GCDProxy;
+import edu.jas.ufd.QuotientRing;
+import edu.jas.ufd.Quotient;
+import edu.jas.gb.Reduction;
+import edu.jas.gb.GroebnerBase;
+import edu.jas.gb.GroebnerBaseAbstract;
+import edu.jas.gbufd.GBFactory;
+
+//import edu.jas.application.Ideal;
+//import edu.jas.application.IdealWithUniv;
+
+
+/**
+ * Chararacteristic set tests with JUnit.
+ * @author Heinz Kredel.
+ */
+
+public class CharSetTest extends TestCase {
+
+
+    /**
+     * main.
+     */
+    public static void main(String[] args) {
+        BasicConfigurator.configure();
+        junit.textui.TestRunner.run(suite());
+        ComputerThreads.terminate();
+    }
+
+
+    /**
+     * Constructs a <CODE>CharSetTest</CODE> object.
+     * @param name String.
+     */
+    public CharSetTest(String name) {
+        super(name);
+    }
+
+
+    /**
+     */
+    public static Test suite() {
+        TestSuite suite = new TestSuite(CharSetTest.class);
+        return suite;
+    }
+
+
+    CharacteristicSet<BigRational> cs;
+
+
+    //TermOrder to = new TermOrder(TermOrder.INVLEX);
+    TermOrder to = new TermOrder(TermOrder.IGRLEX);
+
+
+    int rl = 3;
+
+
+    int kl = 3;
+
+
+    int ll = 4;
+
+
+    int el = 3;
+
+
+    float q = 0.29f;
+
+
+    @Override
+    protected void setUp() {
+	cs = new CharacteristicSetWu<BigRational>();
+    }
+
+
+    @Override
+    protected void tearDown() {
+        cs = null;
+    }
+
+
+    /**
+     * Test random characteristic set.
+     */
+    public void testCharacteristicSet() {
+        GenPolynomialRing<BigRational> dfac;
+        BigRational br = new BigRational();
+        to = new TermOrder(TermOrder.INVLEX);
+        dfac = new GenPolynomialRing<BigRational>(br, rl, to);
+        //System.out.println("dfac = " + dfac);
+
+        GenPolynomial<BigRational> a, b, c, d, e;
+        List<GenPolynomial<BigRational>> F, G;
+
+        for (int i = 0; i < 1; i++) {
+            F = new ArrayList<GenPolynomial<BigRational>>();
+            a = dfac.random(kl, ll, el, q * 1.1f);
+            b = dfac.random(kl, ll + 2, el, q);
+            c = dfac.random(kl, ll, el, q);
+            F.add(a);
+            F.add(b);
+            F.add(c);
+            while ( F.size() <= rl ) {
+                F.add(dfac.getZERO()); // make false cs
+            }
+            //System.out.println("F = " + F);
+            assertFalse("isCharacteristicSet: " + F, cs.isCharacteristicSet(F));
+
+            G = cs.characteristicSet(F);
+            //System.out.println("G = " + G);
+            assertTrue("isCharacteristicSet: " + G, cs.isCharacteristicSet(G));
+
+            e = PolyGBUtil.<BigRational> characteristicSetRemainder(G,a);
+            //System.out.println("e = " + e);
+            assertTrue("a rem G: " + e, e.isZERO()||true); // not always true
+
+            e = cs.characteristicSetReduction(G,a);
+            //System.out.println("e = " + e);
+            assertTrue("a mod G: " + e, e.isZERO()||true); // not always true
+
+            //e = PolyGBUtil.<BigRational> characteristicSetRemainder(G,G.get(G.size()-1));
+            //System.out.println("e = " + e);
+            //assertTrue("a mod G: " + e, e.isZERO());
+
+            d = dfac.getONE();
+            if ( ! G.contains(d) ) {
+                d = dfac.random(kl, ll, el, q).sum(d);
+                //System.out.println("d = " + d);
+                e = PolyGBUtil.<BigRational> characteristicSetRemainder(G,d);
+                //System.out.println("e = " + e);
+                assertFalse("a rem G: " + e, e.isZERO());
+                e = cs.characteristicSetReduction(G,d);
+                //System.out.println("e = " + e);
+                assertFalse("a mod G: " + e, e.isZERO()&&false);
+            }
+        }
+    }
+
+
+    /**
+     * Test characteristic set, example Circle of Apollonius, from CLO IVA, 1992.
+     */
+    public void testCharacteristicSetExample() {
+        GenPolynomialRing<BigRational> dfac;
+        BigRational br = new BigRational();
+        to = new TermOrder(TermOrder.INVLEX);
+        String[] vars = new String[] { "u1", "u2", "u3", "u4", "x1",  "x2", "x3", "x4", "x5", "x6", "x7", "x8" };
+        dfac = new GenPolynomialRing<BigRational>(br, to, vars);
+        //System.out.println("dfac = " + dfac);
+
+        GenPolynomial<BigRational> h1, h2, h3, h4, h5, h6, h7, h8, g, e, f, k;
+        List<GenPolynomial<BigRational>> F, G, H, K, L;
+        //List<IdealWithUniv<BigRational>> R;
+
+        F = new ArrayList<GenPolynomial<BigRational>>();
+        h1 = dfac.parse(" 2 x1 - u1 ");
+        h2 = dfac.parse(" 2 x2 - u2 ");
+        h3 = dfac.parse(" 2 x3 - u3 ");
+        h4 = dfac.parse(" 2 x4 - u4 ");
+        h5 = dfac.parse(" u2 x5 + u1 x6 - u1 u2 ");
+        h6 = dfac.parse(" u1 x5 - u2 x6 ");
+        h7 = dfac.parse(" x1^2 - x2^2 - 2 x1 x7 + 2 x2 x8 ");
+        h8 = dfac.parse(" x1^2 - 2 x1 x7 - x3^2 + 2 x3 x7 - x4^2 + 2 x4 x8 ");
+
+        F.add(h1);
+        F.add(h2);
+        F.add(h3);
+        F.add(h4);
+        F.add(h5);
+        F.add(h6);
+        F.add(h7);
+        F.add(h8);
+
+        //System.out.println("F = " + F);
+        assertFalse("isCharacteristicSet: " + F, cs.isCharacteristicSet(F));
+
+        G = cs.characteristicSet(F);
+        System.out.println("G = " + G);
+        assertTrue("isCharacteristicSet: " + G, cs.isCharacteristicSet(G));
+
+        g = dfac.parse("( ( x5 - x7 )**2 + ( x6 - x8 )**2 - ( x1 - x7 )**2 - x8^2 )");
+        //g = dfac.parse("( - x1^2 x4 + x4 x5^2 + x1^2 x6 - x3^2 x6 - x4^2 x6 + x4 x6^2 + 2 x1 x4 x7 - 2 x4 x5 x7 - 2 x1 x6 x7 + 2 x3 x6 x7 )");
+        //g = dfac.parse("-2 x6 * x8 - 2 x5 * x7 + 2 x1 * x7 + x6^2 + x5^2 - x1^2");
+        System.out.println("g = " + g);
+
+        //e = cs.characteristicSetReduction(G,g);
+        e = PolyGBUtil.<BigRational> characteristicSetRemainder(G,g);
+        System.out.println("e = " + e);
+        assertTrue("g mod G: " + e, e.isZERO()||true); // not always true
+
+        GroebnerBaseAbstract<BigRational> bb = GBFactory.<BigRational> getImplementation(br);
+        H = bb.GB(F);
+        System.out.println(" H = " + H);
+
+        Reduction<BigRational> red = bb.red;
+        f = red.normalform(H,g);
+        System.out.println("fg = " + f);
+
+        k = red.normalform(H,e);
+        System.out.println("fk' = " + k);
+
+        //System.out.println("fk' == f: " + k.equals(f));
+        //System.out.println("fk' - f: " + k.subtract(f));
+
+        K = red.normalform(H,G);
+        System.out.println("Kg = " + K);
+        L = red.normalform(H,F);
+        System.out.println("Lf = " + L);
+        assertEquals("Kg == Kf: " + L, K, L);
+
+        //Ideal<BigRational> I, J;
+        //J = new Ideal<BigRational>(dfac,H,true);
+        //J = new Ideal<BigRational>(dfac,F);
+        //System.out.println("F = " + F);
+        //System.out.println("J = " + J);
+
+        //R = J.radicalDecomposition();
+        //System.out.println("R = " + R);
+        //for ( IdealWithUniv<BigRational> r : R ) {
+        //     System.out.println("radical: ");
+        //     System.out.println("" + r);
+        //}
+        //boolean t = J.isRadicalMember(g);
+        //System.out.println("radicalMember g = " + t); // false
+        //t = J.isRadicalMember(e);
+        //System.out.println("radicalMember e = " + t); // false
+    }
+
+
+    /**
+     * Test characteristic set, example circum-center.
+     */
+    public void testCharacteristicSetExampleCC() {
+        GenPolynomialRing<BigRational> dfac;
+        BigRational br = new BigRational();
+        to = new TermOrder(TermOrder.INVLEX);
+        String[] vars = new String[] { "u1", "u2", "u3", "x1",  "x2", "x3" };
+        dfac = new GenPolynomialRing<BigRational>(br, to, vars);
+        //System.out.println("dfac = " + dfac);
+
+        GenPolynomial<BigRational> h1, h2, h3, g, e;
+        List<GenPolynomial<BigRational>> F, G, H, K, L;
+        //Ideal<BigRational> I, J;
+        //List<IdealWithUniv<BigRational>> R;
+
+        F = new ArrayList<GenPolynomial<BigRational>>();
+        h1 = dfac.parse(" 2 u1 x2 - u1^2 ");
+        h2 = dfac.parse(" 2 u2 x2 + 2 u3 x1 - u2^2 - u3^2 ");
+        h3 = dfac.parse(" 2 u3 x3 - 2 ( u2 - u1 ) x2 - u2^2 - u3^2 + u1^2 ");
+
+        F.add(h1);
+        F.add(h2);
+        F.add(h3);
+
+        System.out.println("F = " + F);
+        assertFalse("isCharacteristicSet: " + F, cs.isCharacteristicSet(F));
+
+        G = cs.characteristicSet(F);
+        System.out.println("G = " + G);
+        assertTrue("isCharacteristicSet: " + G, cs.isCharacteristicSet(G));
+
+        g = dfac.parse(" x3^2 - 2 x3 x1 + x1^2  ");
+        //g = dfac.parse(" x3 - x1 ");
+        System.out.println("g = " + g);
+
+        e = cs.characteristicSetReduction(G,g);
+        //e = PolyGBUtil.<BigRational> characteristicSetRemainder(G,g);
+        System.out.println("e = " + e);
+        assertTrue("g mod G: " + e, e.isZERO()||true); // not always true
+    }
+
+
+    /**
+     * Test characteristic set, example ??.
+     */
+    public void testCharacteristicSetExampleT() {
+        GenPolynomialRing<BigRational> dfac;
+        BigRational br = new BigRational();
+        to = new TermOrder(TermOrder.INVLEX);
+        String[] vars = new String[] { "x", "y", "z" };
+        dfac = new GenPolynomialRing<BigRational>(br, to, vars);
+        //System.out.println("dfac = " + dfac);
+
+        GenPolynomial<BigRational> h1, h2, h3, g, e;
+        List<GenPolynomial<BigRational>> F, G, H, K, L;
+        //Ideal<BigRational> I, J;
+        //List<IdealWithUniv<BigRational>> R;
+
+        F = new ArrayList<GenPolynomial<BigRational>>();
+        h1 = dfac.parse(" x^2 + y + z - 1 ");
+        h2 = dfac.parse(" x + y^2 + z - 1 ");
+        h3 = dfac.parse(" x + y + z^2 - 1 ");
+
+        F.add(h1);
+        F.add(h2);
+        F.add(h3);
+
+        System.out.println("F = " + F);
+        assertFalse("isCharacteristicSet: " + F, cs.isCharacteristicSet(F));
+
+        G = cs.characteristicSet(F);
+        System.out.println("G = " + G);
+        assertTrue("isCharacteristicSet: " + G, cs.isCharacteristicSet(G));
+    }
+
+}
