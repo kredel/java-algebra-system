@@ -7,20 +7,16 @@ package edu.jas.gbufd;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Collections;
 
 import org.apache.log4j.Logger;
 
 import edu.jas.gb.GroebnerBaseAbstract;
+import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
-import edu.jas.poly.ExpVector;
-import edu.jas.poly.OrderedPolynomialList;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingElem;
-import edu.jas.ufd.GreatestCommonDivisorAbstract;
-import edu.jas.ufd.GCDFactory;
 
 
 /**
@@ -67,43 +63,43 @@ public class PolyGBUtil {
      * @param A list of generic polynomials as characteristic set.
      * @return pseudo remainder of P wrt. A for the appearing variables.
      */
-    public static <C extends RingElem<C>> 
-     GenPolynomial<C> characteristicSetRemainder(List<GenPolynomial<C>> A, GenPolynomial<C> P) {
-        if ( A == null || A.isEmpty() ) {
+    public static <C extends RingElem<C>> GenPolynomial<C> characteristicSetRemainder(
+                    List<GenPolynomial<C>> A, GenPolynomial<C> P) {
+        if (A == null || A.isEmpty()) {
             return P.monic();
         }
-        if ( P.isZERO() || P.isConstant() ) {
+        if (P.isZERO() || P.isConstant()) {
             return P.monic();
         }
         //System.out.println("remainder, P = " + P);
         GenPolynomialRing<C> pfac = A.get(0).ring;
-        if ( pfac.nvar <= 1 ) { // recursion base 
-            GenPolynomial<C> R = PolyUtil.<C> baseSparsePseudoRemainder(P,A.get(0));
+        if (pfac.nvar <= 1) { // recursion base 
+            GenPolynomial<C> R = PolyUtil.<C> baseSparsePseudoRemainder(P, A.get(0));
             return R.monic();
         }
         // select polynomials according to the main variable
         GenPolynomialRing<GenPolynomial<C>> rfac = pfac.recursive(1);
         GenPolynomial<C> Q = A.get(0); // wrong, must eventually search polynomial
-        GenPolynomial<GenPolynomial<C>> qr = PolyUtil.<C> recursive(rfac,Q);
-        if ( qr.degree(0) > 0 ) {
+        GenPolynomial<GenPolynomial<C>> qr = PolyUtil.<C> recursive(rfac, Q);
+        if (qr.degree(0) > 0) {
             //System.out.println("remainder qr.deg = " + qr.degree(0));
         }
         //System.out.println("remainder, qr = " + qr);
-        GenPolynomial<GenPolynomial<C>> pr = PolyUtil.<C> recursive(rfac,P);
+        GenPolynomial<GenPolynomial<C>> pr = PolyUtil.<C> recursive(rfac, P);
         //System.out.println("remainder, pr = " + pr);
-        GenPolynomial<GenPolynomial<C>> rr = PolyUtil.<C> recursiveSparsePseudoRemainder(pr,qr);
+        GenPolynomial<GenPolynomial<C>> rr = PolyUtil.<C> recursiveSparsePseudoRemainder(pr, qr);
         //System.out.println("remainder, rr = " + rr);
         if (debug) {
-           logger.info("remainder = " + rr);
+            logger.info("remainder = " + rr);
         }
-        if ( rr.degree(0) > 0 ) {
-            GenPolynomial<C> R = PolyUtil.<C> distribute(pfac,rr);
+        if (rr.degree(0) > 0) {
+            GenPolynomial<C> R = PolyUtil.<C> distribute(pfac, rr);
             return R.monic();
             // not further reduced wrt. other variables
         }
         List<GenPolynomial<C>> zeroDeg = zeroDegrees(A);
-        GenPolynomial<C> R = characteristicSetRemainder(zeroDeg,rr.leadingBaseCoefficient());
-        R = R.extend(pfac,0,0L);
+        GenPolynomial<C> R = characteristicSetRemainder(zeroDeg, rr.leadingBaseCoefficient());
+        R = R.extend(pfac, 0, 0L);
         return R.monic();
     }
 
@@ -111,15 +107,16 @@ public class PolyGBUtil {
     /**
      * Characteristic set coefficient remainder wrt. all variables.
      * @param P generic polynomial in n+1 variables.
-     * @param A list of generic polynomials as characteristic set of polynomials in n variables.
+     * @param A list of generic polynomials as characteristic set of polynomials
+     *            in n variables.
      * @return pseudo remainder P wrt. to the leading coefficient of P wrt. A.
      */
-    public static <C extends RingElem<C>> 
-      GenPolynomial<C> characteristicSetRemainderCoeff(List<GenPolynomial<C>> A, GenPolynomial<C> P) {
-        if ( A == null || A.isEmpty() ) {
+    public static <C extends RingElem<C>> GenPolynomial<C> characteristicSetRemainderCoeff(
+                    List<GenPolynomial<C>> A, GenPolynomial<C> P) {
+        if (A == null || A.isEmpty()) {
             return P;
         }
-        if ( P.isZERO() || P.isONE() ) {
+        if (P.isZERO() || P.isONE()) {
             return P;
         }
         //System.out.println("remainderCoeff, A = " + A);
@@ -128,43 +125,44 @@ public class PolyGBUtil {
         //System.out.println("pfac  = " + pfac);
         GenPolynomialRing<C> pfac1 = A.get(0).ring;
         //System.out.println("pfac1 = " + pfac1);
-        if ( pfac1.nvar <= 1 ) { // recursion base 
+        if (pfac1.nvar <= 1) { // recursion base 
             GenPolynomial<C> a = A.get(0);
-            GenPolynomialRing<GenPolynomial<C>> rfac = pfac.recursive(pfac.nvar-1);
-            GenPolynomial<GenPolynomial<C>> pr = PolyUtil.<C> recursive(rfac,P);
+            GenPolynomialRing<GenPolynomial<C>> rfac = pfac.recursive(pfac.nvar - 1);
+            GenPolynomial<GenPolynomial<C>> pr = PolyUtil.<C> recursive(rfac, P);
             // ldcf(P,x_m) = q a + r 
-            GenPolynomial<GenPolynomial<C>> rr = PolyGBUtil.<C> coefficientPseudoRemainderBase(pr,a);
+            GenPolynomial<GenPolynomial<C>> rr = PolyGBUtil.<C> coefficientPseudoRemainderBase(pr, a);
             //System.out.println("recursion, a   = " + a);
             //System.out.println("recursion, pr  = " + pr);
             //System.out.println("recursion, rr  = " + rr);
-            GenPolynomial<C> R = PolyUtil.<C> distribute(pfac,rr);
+            GenPolynomial<C> R = PolyUtil.<C> distribute(pfac, rr);
             return R.monic();
         }
         // select polynomials according to the main variable
         GenPolynomialRing<GenPolynomial<C>> rfac1 = pfac1.recursive(1);
         int nv = pfac.nvar - pfac1.nvar;
-        GenPolynomialRing<GenPolynomial<C>> rfac = pfac.recursive(1+nv);
+        GenPolynomialRing<GenPolynomial<C>> rfac = pfac.recursive(1 + nv);
         GenPolynomialRing<GenPolynomial<GenPolynomial<C>>> rfac2 = rfac.recursive(nv);
         if (debug) {
-           logger.info("rfac =" + rfac);
+            logger.info("rfac =" + rfac);
         }
-        GenPolynomial<GenPolynomial<C>> pr = PolyUtil.<C> recursive(rfac,P);
-        GenPolynomial<GenPolynomial<GenPolynomial<C>>> pr2 = PolyUtil.<GenPolynomial<C>> recursive(rfac2,pr);
+        GenPolynomial<GenPolynomial<C>> pr = PolyUtil.<C> recursive(rfac, P);
+        GenPolynomial<GenPolynomial<GenPolynomial<C>>> pr2 = PolyUtil.<GenPolynomial<C>> recursive(rfac2, pr);
         //System.out.println("recursion, pr2 = " + pr2);
         GenPolynomial<C> Q = A.get(0);
-        GenPolynomial<GenPolynomial<C>> qr = PolyUtil.<C> recursive(rfac1,Q);
+        GenPolynomial<GenPolynomial<C>> qr = PolyUtil.<C> recursive(rfac1, Q);
 
         // pseudo remainder:  ldcf(P,x_m) = a q + r 
-        GenPolynomial<GenPolynomial<GenPolynomial<C>>> rr = PolyGBUtil.<C> coefficientPseudoRemainder(pr2,qr);
+        GenPolynomial<GenPolynomial<GenPolynomial<C>>> rr = PolyGBUtil
+                        .<C> coefficientPseudoRemainder(pr2, qr);
         //System.out.println("recursion, qr  = " + qr);
         //System.out.println("recursion, pr  = " + pr2);
         //System.out.println("recursion, rr  = " + rr);
 
         // reduction wrt. the other variables
         List<GenPolynomial<C>> zeroDeg = zeroDegrees(A);
-        GenPolynomial<GenPolynomial<C>> Rr = PolyUtil.<GenPolynomial<C>> distribute(rfac,rr);
-        GenPolynomial<C> R = PolyUtil.<C> distribute(pfac,Rr);
-        R = characteristicSetRemainderCoeff(zeroDeg,R);
+        GenPolynomial<GenPolynomial<C>> Rr = PolyUtil.<GenPolynomial<C>> distribute(rfac, rr);
+        GenPolynomial<C> R = PolyUtil.<C> distribute(pfac, Rr);
+        R = characteristicSetRemainderCoeff(zeroDeg, R);
         return R.monic();
     }
 
@@ -173,19 +171,18 @@ public class PolyGBUtil {
      * Polynomial leading coefficient pseudo remainder.
      * @param P generic polynomial in n+1 variables.
      * @param A generic polynomial in n variables.
-     * @return pseudo remainder of the leading coefficient of P wrt. A,
-     *         with ldcf(A)<sup>m'</sup> P = quotient * A + remainder.
+     * @return pseudo remainder of the leading coefficient of P wrt. A, with
+     *         ldcf(A)<sup>m'</sup> P = quotient * A + remainder.
      */
-    public static <C extends RingElem<C>> 
-      GenPolynomial<GenPolynomial<GenPolynomial<C>>> 
-      coefficientPseudoRemainder(GenPolynomial<GenPolynomial<GenPolynomial<C>>> P, GenPolynomial<GenPolynomial<C>> A) {
-        if ( A == null | A.isZERO() ) {
-          throw new ArithmeticException(P + " division by zero " + A);
+    public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<GenPolynomial<C>>> coefficientPseudoRemainder(
+                    GenPolynomial<GenPolynomial<GenPolynomial<C>>> P, GenPolynomial<GenPolynomial<C>> A) {
+        if (A == null | A.isZERO()) {
+            throw new ArithmeticException(P + " division by zero " + A);
         }
-        if ( A.isONE() ) {
+        if (A.isONE()) {
             return P.ring.getZERO();
         }
-        if ( P.isZERO() || P.isONE() ) {
+        if (P.isZERO() || P.isONE()) {
             return P;
         }
         //System.out.println("remainderCoeff, P = " + P);
@@ -214,17 +211,17 @@ public class PolyGBUtil {
             if (i == k) {
                 GenPolynomial<C> pl = p.leadingBaseCoefficient();
                 ExpVector f = p.leadingExpVector();
-                f = f.subtract(e); 
+                f = f.subtract(e);
                 r = r.multiply(cc); // coeff cc
                 h = A.multiply(pl, f); // coeff ac
-                hr = new GenPolynomial<GenPolynomial<GenPolynomial<C>>>(pfac,h,g);
+                hr = new GenPolynomial<GenPolynomial<GenPolynomial<C>>>(pfac, h, g);
                 r = r.subtract(hr);
             } else {
                 r = r.multiply(cc);
             }
             //System.out.println("r = " + r);
         }
-        if ( r.degree(0) < P.degree(0) ) {
+        if (r.degree(0) < P.degree(0)) {
             System.out.println("recursion for degree");
             r = coefficientPseudoRemainder(r, A);
         }
@@ -236,19 +233,18 @@ public class PolyGBUtil {
      * Polynomial leading coefficient pseudo remainder, base case.
      * @param P generic polynomial in n+1 variables.
      * @param A generic polynomial in 1 variable.
-     * @return pseudo remainder of the leading coefficient of P wrt. A,
-     *         with ldcf(A)<sup>m'</sup> P = quotient * A + remainder.
+     * @return pseudo remainder of the leading coefficient of P wrt. A, with
+     *         ldcf(A)<sup>m'</sup> P = quotient * A + remainder.
      */
-    public static <C extends RingElem<C>> 
-      GenPolynomial<GenPolynomial<C>> 
-      coefficientPseudoRemainderBase(GenPolynomial<GenPolynomial<C>> P, GenPolynomial<C> A) {
-        if ( A == null | A.isZERO() ) {
-          throw new ArithmeticException(P + " division by zero " + A);
+    public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<C>> coefficientPseudoRemainderBase(
+                    GenPolynomial<GenPolynomial<C>> P, GenPolynomial<C> A) {
+        if (A == null | A.isZERO()) {
+            throw new ArithmeticException(P + " division by zero " + A);
         }
-        if ( A.isONE() ) {
+        if (A.isONE()) {
             return P.ring.getZERO();
         }
-        if ( P.isZERO() || P.isONE() ) {
+        if (P.isZERO() || P.isONE()) {
             return P;
         }
         GenPolynomialRing<GenPolynomial<C>> pfac = P.ring;
@@ -273,17 +269,17 @@ public class PolyGBUtil {
             if (i == k) {
                 C pl = p.leadingBaseCoefficient();
                 ExpVector f = p.leadingExpVector();
-                f = f.subtract(e); 
+                f = f.subtract(e);
                 r = r.multiply(cc); // coeff cc
                 h = A.multiply(pl, f); // coeff ac
-                hr = new GenPolynomial<GenPolynomial<C>>(pfac,h,g);
+                hr = new GenPolynomial<GenPolynomial<C>>(pfac, h, g);
                 r = r.subtract(hr);
             } else {
                 r = r.multiply(cc);
             }
             //System.out.println("r = " + r);
         }
-        if ( r.degree(0) < P.degree(0) ) {
+        if (r.degree(0) < P.degree(0)) {
             //System.out.println("recursion for degree");
             r = coefficientPseudoRemainderBase(r, A);
         }
@@ -296,19 +292,18 @@ public class PolyGBUtil {
      * @param A list of generic polynomials in n variables.
      * @return Z = [a_i] with deg(a_i,x_n) = 0 and in n-1 variables.
      */
-    public static <C extends RingElem<C>> 
-      List<GenPolynomial<C>> zeroDegrees(List<GenPolynomial<C>> A) {
-        if ( A == null || A.isEmpty() ) {
+    public static <C extends RingElem<C>> List<GenPolynomial<C>> zeroDegrees(List<GenPolynomial<C>> A) {
+        if (A == null || A.isEmpty()) {
             return A;
         }
         GenPolynomialRing<C> pfac = A.get(0).ring;
         GenPolynomialRing<GenPolynomial<C>> rfac = pfac.recursive(1);
         List<GenPolynomial<C>> zeroDeg = new ArrayList<GenPolynomial<C>>(A.size());
-        for ( int i = 0; i < A.size(); i++ ) {
+        for (int i = 0; i < A.size(); i++) {
             GenPolynomial<C> q = A.get(i);
-            GenPolynomial<GenPolynomial<C>> fr = PolyUtil.<C> recursive(rfac,q);
-            if ( fr.degree(0) == 0 ) {
-                zeroDeg.add( fr.leadingBaseCoefficient() );
+            GenPolynomial<GenPolynomial<C>> fr = PolyUtil.<C> recursive(rfac, q);
+            if (fr.degree(0) == 0) {
+                zeroDeg.add(fr.leadingBaseCoefficient());
             }
         }
         return zeroDeg;

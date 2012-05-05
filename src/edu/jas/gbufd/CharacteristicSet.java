@@ -4,17 +4,17 @@
 
 package edu.jas.gbufd;
 
-import java.util.List;
-import java.io.Serializable;
 
-import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingElem;
+import java.io.Serializable;
+import java.util.List;
+
 import edu.jas.poly.GenPolynomial;
+import edu.jas.structure.GcdRingElem;
 
 
 /**
- * Characteristic Set interface.
- * Defines methods for Characteristic Sets and tests.
+ * Characteristic Set interface. Defines methods for Characteristic Sets and
+ * tests.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
@@ -22,8 +22,8 @@ public interface CharacteristicSet<C extends GcdRingElem<C>> extends Serializabl
 
 
     /**
-     * Characteristic set.
-     * According to Wu's algorithm with rereduction of leading coefficients.
+     * Characteristic set. According to Wu's algorithm with rereduction of
+     * leading coefficients.
      * @param A list of generic polynomials.
      * @return charSetWu(A).
      */
@@ -39,11 +39,11 @@ public interface CharacteristicSet<C extends GcdRingElem<C>> extends Serializabl
 
 
     /**
-     * Characteristic set reduction.
-     * Pseudo remainder wrt. the main variabe with further pseudo reduction of the leading coefficient.
+     * Characteristic set reduction. Pseudo remainder wrt. the main variabe with
+     * further pseudo reduction of the leading coefficient.
      * @param P generic polynomial.
      * @param A list of generic polynomials as characteristic set.
-     * @return characteristicSetReductionCoeff(characteristicSetRemainder(A,P),Ap).
+     * @return characteristicSetReductionCoeff(A,characteristicSetRemainder(A,P))
      */
     public GenPolynomial<C> characteristicSetReduction(List<GenPolynomial<C>> A, GenPolynomial<C> P);
 

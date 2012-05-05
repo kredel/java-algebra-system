@@ -5,8 +5,8 @@
 package edu.jas.gbufd;
 
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -14,30 +14,17 @@ import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
 
-import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
-import edu.jas.arith.ModInteger;
-import edu.jas.arith.ModIntegerRing;
-import edu.jas.arith.PrimeList;
+import edu.jas.gb.GroebnerBaseAbstract;
+import edu.jas.gb.Reduction;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
-import edu.jas.ufd.GreatestCommonDivisorSimple;
-import edu.jas.ufd.GreatestCommonDivisorSubres;
-import edu.jas.ufd.GreatestCommonDivisorAbstract;
-import edu.jas.ufd.GreatestCommonDivisorModular;
-import edu.jas.ufd.GreatestCommonDivisorModEval;
-import edu.jas.ufd.GCDProxy;
-import edu.jas.ufd.QuotientRing;
-import edu.jas.ufd.Quotient;
-import edu.jas.gb.Reduction;
-import edu.jas.gb.GroebnerBase;
-import edu.jas.gb.GroebnerBaseAbstract;
-import edu.jas.gbufd.GBFactory;
 
-//import edu.jas.application.Ideal;
-//import edu.jas.application.IdealWithUniv;
+
+// import edu.jas.application.Ideal;
+// import edu.jas.application.IdealWithUniv;
 
 
 /**
@@ -99,7 +86,7 @@ public class CharSetTest extends TestCase {
 
     @Override
     protected void setUp() {
-	cs = new CharacteristicSetWu<BigRational>();
+        cs = new CharacteristicSetWu<BigRational>();
     }
 
 
@@ -130,7 +117,7 @@ public class CharSetTest extends TestCase {
             F.add(a);
             F.add(b);
             F.add(c);
-            while ( F.size() <= rl ) {
+            while (F.size() <= rl) {
                 F.add(dfac.getZERO()); // make false cs
             }
             //System.out.println("F = " + F);
@@ -140,41 +127,42 @@ public class CharSetTest extends TestCase {
             //System.out.println("G = " + G);
             assertTrue("isCharacteristicSet: " + G, cs.isCharacteristicSet(G));
 
-            e = PolyGBUtil.<BigRational> characteristicSetRemainder(G,a);
+            e = PolyGBUtil.<BigRational> characteristicSetRemainder(G, a);
             //System.out.println("e = " + e);
-            assertTrue("a rem G: " + e, e.isZERO()||true); // not always true
+            assertTrue("a rem G: " + e, e.isZERO() || true); // not always true
 
-            e = cs.characteristicSetReduction(G,a);
+            e = cs.characteristicSetReduction(G, a);
             //System.out.println("e = " + e);
-            assertTrue("a mod G: " + e, e.isZERO()||true); // not always true
+            assertTrue("a mod G: " + e, e.isZERO() || true); // not always true
 
             //e = PolyGBUtil.<BigRational> characteristicSetRemainder(G,G.get(G.size()-1));
             //System.out.println("e = " + e);
             //assertTrue("a mod G: " + e, e.isZERO());
 
             d = dfac.getONE();
-            if ( ! G.contains(d) ) {
+            if (!G.contains(d)) {
                 d = dfac.random(kl, ll, el, q).sum(d);
                 //System.out.println("d = " + d);
-                e = PolyGBUtil.<BigRational> characteristicSetRemainder(G,d);
+                e = PolyGBUtil.<BigRational> characteristicSetRemainder(G, d);
                 //System.out.println("e = " + e);
                 assertFalse("a rem G: " + e, e.isZERO());
-                e = cs.characteristicSetReduction(G,d);
+                e = cs.characteristicSetReduction(G, d);
                 //System.out.println("e = " + e);
-                assertFalse("a mod G: " + e, e.isZERO()&&false);
+                assertFalse("a mod G: " + e, e.isZERO() && false);
             }
         }
     }
 
 
     /**
-     * Test characteristic set, example Circle of Apollonius, from CLO IVA, 1992.
+     * Test characteristic set, example Circle of Apollonius, from CLO IVA,
+     * 1992.
      */
     public void testCharacteristicSetExample() {
         GenPolynomialRing<BigRational> dfac;
         BigRational br = new BigRational();
         to = new TermOrder(TermOrder.INVLEX);
-        String[] vars = new String[] { "u1", "u2", "u3", "u4", "x1",  "x2", "x3", "x4", "x5", "x6", "x7", "x8" };
+        String[] vars = new String[] { "u1", "u2", "u3", "u4", "x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8" };
         dfac = new GenPolynomialRing<BigRational>(br, to, vars);
         //System.out.println("dfac = " + dfac);
 
@@ -214,27 +202,27 @@ public class CharSetTest extends TestCase {
         System.out.println("g = " + g);
 
         //e = cs.characteristicSetReduction(G,g);
-        e = PolyGBUtil.<BigRational> characteristicSetRemainder(G,g);
+        e = PolyGBUtil.<BigRational> characteristicSetRemainder(G, g);
         System.out.println("e = " + e);
-        assertTrue("g mod G: " + e, e.isZERO()||true); // not always true
+        assertTrue("g mod G: " + e, e.isZERO() || true); // not always true
 
-        GroebnerBaseAbstract<BigRational> bb = GBFactory.<BigRational> getImplementation(br);
+        GroebnerBaseAbstract<BigRational> bb = GBFactory.getImplementation(br);
         H = bb.GB(F);
         System.out.println(" H = " + H);
 
         Reduction<BigRational> red = bb.red;
-        f = red.normalform(H,g);
+        f = red.normalform(H, g);
         System.out.println("fg = " + f);
 
-        k = red.normalform(H,e);
+        k = red.normalform(H, e);
         System.out.println("fk' = " + k);
 
         //System.out.println("fk' == f: " + k.equals(f));
         //System.out.println("fk' - f: " + k.subtract(f));
 
-        K = red.normalform(H,G);
+        K = red.normalform(H, G);
         System.out.println("Kg = " + K);
-        L = red.normalform(H,F);
+        L = red.normalform(H, F);
         System.out.println("Lf = " + L);
         assertEquals("Kg == Kf: " + L, K, L);
 
@@ -264,7 +252,7 @@ public class CharSetTest extends TestCase {
         GenPolynomialRing<BigRational> dfac;
         BigRational br = new BigRational();
         to = new TermOrder(TermOrder.INVLEX);
-        String[] vars = new String[] { "u1", "u2", "u3", "x1",  "x2", "x3" };
+        String[] vars = new String[] { "u1", "u2", "u3", "x1", "x2", "x3" };
         dfac = new GenPolynomialRing<BigRational>(br, to, vars);
         //System.out.println("dfac = " + dfac);
 
@@ -293,10 +281,10 @@ public class CharSetTest extends TestCase {
         //g = dfac.parse(" x3 - x1 ");
         System.out.println("g = " + g);
 
-        e = cs.characteristicSetReduction(G,g);
+        e = cs.characteristicSetReduction(G, g);
         //e = PolyGBUtil.<BigRational> characteristicSetRemainder(G,g);
         System.out.println("e = " + e);
-        assertTrue("g mod G: " + e, e.isZERO()||true); // not always true
+        assertTrue("g mod G: " + e, e.isZERO() || true); // not always true
     }
 
 

@@ -5,9 +5,6 @@
 package edu.jas.gbufd;
 
 
-import java.util.List;
-import java.util.ArrayList;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -23,21 +20,16 @@ import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
+import edu.jas.ufd.GCDProxy;
+import edu.jas.ufd.GreatestCommonDivisorAbstract;
+import edu.jas.ufd.GreatestCommonDivisorModEval;
+import edu.jas.ufd.GreatestCommonDivisorModular;
 import edu.jas.ufd.GreatestCommonDivisorSimple;
 import edu.jas.ufd.GreatestCommonDivisorSubres;
-import edu.jas.ufd.GreatestCommonDivisorAbstract;
-import edu.jas.ufd.GreatestCommonDivisorModular;
-import edu.jas.ufd.GreatestCommonDivisorModEval;
-import edu.jas.ufd.GCDProxy;
-import edu.jas.ufd.QuotientRing;
-import edu.jas.ufd.Quotient;
-import edu.jas.gb.Reduction;
-import edu.jas.gb.GroebnerBase;
-import edu.jas.gb.GroebnerBaseAbstract;
-import edu.jas.gbufd.GBFactory;
 
-//import edu.jas.application.Ideal;
-//import edu.jas.application.IdealWithUniv;
+
+// import edu.jas.application.Ideal;
+// import edu.jas.application.IdealWithUniv;
 
 
 /**
@@ -218,8 +210,8 @@ public class PolyGBUtilTest extends TestCase {
         GreatestCommonDivisorAbstract<ModInteger> sres = new GreatestCommonDivisorSubres<ModInteger>();
         GreatestCommonDivisorAbstract<ModInteger> ufdm = new GreatestCommonDivisorModEval<ModInteger>();
 
-        GreatestCommonDivisorAbstract<ModInteger> pufds = new GCDProxy<ModInteger>(sres,ufds); 
-        GreatestCommonDivisorAbstract<ModInteger> pufdm = new GCDProxy<ModInteger>(ufdm,sres); 
+        GreatestCommonDivisorAbstract<ModInteger> pufds = new GCDProxy<ModInteger>(sres, ufds);
+        GreatestCommonDivisorAbstract<ModInteger> pufdm = new GCDProxy<ModInteger>(ufdm, sres);
 
         GenPolynomial<ModInteger> a, b, c, d, e;
 
@@ -259,8 +251,8 @@ public class PolyGBUtilTest extends TestCase {
         GreatestCommonDivisorAbstract<BigInteger> sres = new GreatestCommonDivisorSubres<BigInteger>();
         GreatestCommonDivisorAbstract<BigInteger> ufdm = new GreatestCommonDivisorModular<ModInteger>(); //true);
 
-        GreatestCommonDivisorAbstract<BigInteger> pufds = new GCDProxy<BigInteger>(sres,ufds); 
-        GreatestCommonDivisorAbstract<BigInteger> pufdm = new GCDProxy<BigInteger>(ufdm,sres); 
+        GreatestCommonDivisorAbstract<BigInteger> pufds = new GCDProxy<BigInteger>(sres, ufds);
+        GreatestCommonDivisorAbstract<BigInteger> pufdm = new GCDProxy<BigInteger>(ufdm, sres);
 
         GenPolynomial<BigInteger> a, b, c, d, e;
 
@@ -296,7 +288,7 @@ public class PolyGBUtilTest extends TestCase {
         BigRational br = new BigRational();
         to = new TermOrder(TermOrder.INVLEX);
         //String[] vars = new String[] { "x1",  "x2", "x3" };
-        String[] vars = new String[] { "x1",  "x2" };
+        String[] vars = new String[] { "x1", "x2" };
         dfac = new GenPolynomialRing<BigRational>(br, to, vars);
         System.out.println("dfac = " + dfac);
         GenPolynomialRing<GenPolynomial<BigRational>> rfac = dfac.recursive(1);
@@ -307,30 +299,31 @@ public class PolyGBUtilTest extends TestCase {
         GenPolynomial<BigRational> a, b, c, d, e;
 
         ar = rfac.random(kl, ll, el, q * 1.1f);
-        b = cfac.random(kl, ll + 2, el*2, q);
+        b = cfac.random(kl, ll + 2, el * 2, q);
         //System.out.println("ar = " + ar);
         //System.out.println("b  = " + b);
 
-        cr = PolyGBUtil.<BigRational> coefficientPseudoRemainderBase(ar,b);
+        cr = PolyGBUtil.<BigRational> coefficientPseudoRemainderBase(ar, b);
         //System.out.println("cr = " + cr);
-        assertTrue("deg(c) < deg(a): ", cr.degree(0) <= ar.degree(0) || ar.degree(0) == 0); 
-        assertTrue("deg(lfcd(c)) < deg(b): ", cr.leadingBaseCoefficient().degree(0) < b.degree(0) || b.degree(0) == 0); 
+        assertTrue("deg(c) < deg(a): ", cr.degree(0) <= ar.degree(0) || ar.degree(0) == 0);
+        assertTrue("deg(lfcd(c)) < deg(b): ",
+                        cr.leadingBaseCoefficient().degree(0) < b.degree(0) || b.degree(0) == 0);
 
         dr = ar.multiply(b);
         //System.out.println("dr = " + dr);
-        cr = PolyGBUtil.<BigRational> coefficientPseudoRemainderBase(dr,b);
+        cr = PolyGBUtil.<BigRational> coefficientPseudoRemainderBase(dr, b);
         //System.out.println("cr = " + cr);
-        assertTrue("c == 0: ", cr.isZERO()); 
+        assertTrue("c == 0: ", cr.isZERO());
 
         long s = ar.degree(0);
-        er = rfac.univariate(0,s+1);
+        er = rfac.univariate(0, s + 1);
         //System.out.println("er = " + er);
         er = er.multiply(b.multiply(b));
         er = er.sum(ar);
         //System.out.println("er = " + er);
-        cr = PolyGBUtil.<BigRational> coefficientPseudoRemainderBase(er,b);
+        cr = PolyGBUtil.<BigRational> coefficientPseudoRemainderBase(er, b);
         //System.out.println("cr = " + cr);
-        assertTrue("deg(c) < deg(a): ", cr.degree(0) < er.degree(0)); 
+        assertTrue("deg(c) < deg(a): ", cr.degree(0) < er.degree(0));
     }
 
 
@@ -341,7 +334,7 @@ public class PolyGBUtilTest extends TestCase {
         GenPolynomialRing<BigRational> dfac;
         BigRational br = new BigRational();
         to = new TermOrder(TermOrder.INVLEX);
-        String[] vars = new String[] { "x1",  "x2", "x3" };
+        String[] vars = new String[] { "x1", "x2", "x3" };
         //String[] vars = new String[] { "x1",  "x2" };
         dfac = new GenPolynomialRing<BigRational>(br, to, vars);
         //System.out.println("dfac = " + dfac);
@@ -359,26 +352,27 @@ public class PolyGBUtilTest extends TestCase {
         //System.out.println("ar = " + ar);
         //System.out.println("b  = " + b);
 
-        cr = PolyGBUtil.<BigRational> coefficientPseudoRemainder(ar,b);
+        cr = PolyGBUtil.<BigRational> coefficientPseudoRemainder(ar, b);
         //System.out.println("cr = " + cr);
-        assertTrue("deg(c) < deg(a): ", cr.degree(0) <= ar.degree(0) || ar.degree(0) == 0); 
-        assertTrue("deg(lfcd(c)) < deg(b): ", cr.leadingBaseCoefficient().degree(0) < b.degree(0) || b.degree(0) == 0); 
+        assertTrue("deg(c) < deg(a): ", cr.degree(0) <= ar.degree(0) || ar.degree(0) == 0);
+        assertTrue("deg(lfcd(c)) < deg(b): ",
+                        cr.leadingBaseCoefficient().degree(0) < b.degree(0) || b.degree(0) == 0);
 
         dr = ar.multiply(b);
         //System.out.println("dr = " + dr);
-        cr = PolyGBUtil.<BigRational> coefficientPseudoRemainder(dr,b);
+        cr = PolyGBUtil.<BigRational> coefficientPseudoRemainder(dr, b);
         //System.out.println("cr = " + cr);
-        assertTrue("c == 0: ", cr.isZERO()); 
+        assertTrue("c == 0: ", cr.isZERO());
 
         long s = ar.degree(0);
-        er = rfac.univariate(0,s+1);
+        er = rfac.univariate(0, s + 1);
         ////System.out.println("er = " + er);
         er = er.multiply(b.multiply(cfac.fromInteger(100)));
         er = er.sum(ar);
         //System.out.println("er = " + er);
-        cr = PolyGBUtil.<BigRational> coefficientPseudoRemainder(er,b);
+        cr = PolyGBUtil.<BigRational> coefficientPseudoRemainder(er, b);
         //System.out.println("cr = " + cr);
-        assertTrue("deg(c) < deg(a): ", cr.degree(0) < er.degree(0)); 
+        assertTrue("deg(c) < deg(a): ", cr.degree(0) < er.degree(0));
     }
 
 }
