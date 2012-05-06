@@ -120,6 +120,7 @@ public class CharSetTest extends TestCase {
         while (F.size() <= rl) {
             F.add(dfac.getZERO()); // make false cs
         }
+        //F.add(dfac.fromInteger(17)); // test 1
         //System.out.println("F = " + F);
         assertFalse("isCharacteristicSet: " + F, css.isCharacteristicSet(F));
 
@@ -197,6 +198,7 @@ public class CharSetTest extends TestCase {
         while (F.size() <= rl) {
             F.add(dfac.getZERO()); // make false cs
         }
+        //F.add(dfac.fromInteger(19)); // test 1
         //System.out.println("F = " + F);
         assertFalse("isCharacteristicSet: " + F, cs.isCharacteristicSet(F));
 

@@ -81,16 +81,15 @@ public class PolyGBUtil {
         GenPolynomialRing<GenPolynomial<C>> rfac = pfac.recursive(1);
         GenPolynomial<C> Q = A.get(0); // wrong, must eventually search polynomial
         GenPolynomial<GenPolynomial<C>> qr = PolyUtil.<C> recursive(rfac, Q);
-        if (qr.degree(0) > 0) {
-            //System.out.println("remainder qr.deg = " + qr.degree(0));
-        }
         GenPolynomial<GenPolynomial<C>> pr = PolyUtil.<C> recursive(rfac, P);
-        GenPolynomial<GenPolynomial<C>> rr = PolyUtil.<C> recursiveSparsePseudoRemainder(pr, qr);
-        //System.out.println("remainder, pr = " + pr);
-        //System.out.println("remainder, qr = " + qr);
-        //System.out.println("remainder, rr = " + rr);
-        if (debug) {
-            logger.info("remainder = " + rr);
+        GenPolynomial<GenPolynomial<C>> rr;
+        if (qr.degree(0) > 0) {
+            rr = PolyUtil.<C> recursiveSparsePseudoRemainder(pr, qr);
+            //System.out.println("remainder, pr = " + pr);
+            //System.out.println("remainder, qr = " + qr);
+            //System.out.println("remainder, rr = " + rr);
+        } else {
+            rr = pr;
         }
         if (rr.degree(0) > 0) {
             GenPolynomial<C> R = PolyUtil.<C> distribute(pfac, rr);
@@ -142,17 +141,16 @@ public class PolyGBUtil {
         //System.out.println("recursion, pr2 = " + pr2);
         GenPolynomial<C> Q = A.get(0);
         GenPolynomial<GenPolynomial<C>> qr = PolyUtil.<C> recursive(rfac1, Q);
-        if (qr.degree(0) > 0) {
-            //System.out.println("remainder qr.deg = " + qr.degree(0));
-        }
-
-        // pseudo remainder:  ldcf(P,x_m) = a q + r 
         GenPolynomial<GenPolynomial<GenPolynomial<C>>> rr;
-        rr = PolyGBUtil.<C> coefficientPseudoRemainder(pr2, qr);
-        //System.out.println("recursion, qr  = " + qr);
-        //System.out.println("recursion, pr  = " + pr2);
-        //System.out.println("recursion, rr  = " + rr);
-
+        if (qr.degree(0) > 0) {
+            // pseudo remainder:  ldcf(P,x_m) = a q + r 
+            rr = PolyGBUtil.<C> coefficientPseudoRemainder(pr2, qr);
+            //System.out.println("recursion, qr  = " + qr);
+            //System.out.println("recursion, pr  = " + pr2);
+            //System.out.println("recursion, rr  = " + rr);
+        } else {
+            rr = pr2;
+        }
         // reduction wrt. the other variables
         List<GenPolynomial<C>> zeroDeg = zeroDegrees(A);
         GenPolynomial<GenPolynomial<C>> Rr = PolyUtil.<GenPolynomial<C>> distribute(rfac, rr);

@@ -279,11 +279,11 @@ public class PolyGBUtilTest extends TestCase {
         //String[] vars = new String[] { "x1",  "x2", "x3" };
         String[] vars = new String[] { "x1", "x2" };
         dfac = new GenPolynomialRing<BigRational>(br, to, vars);
-        System.out.println("dfac = " + dfac);
+        //System.out.println("dfac = " + dfac);
         GenPolynomialRing<GenPolynomial<BigRational>> rfac = dfac.recursive(1);
-        System.out.println("rfac = " + rfac);
+        //System.out.println("rfac = " + rfac);
         GenPolynomialRing<BigRational> cfac = (GenPolynomialRing<BigRational>) rfac.coFac;
-        System.out.println("cfac = " + cfac);
+        //System.out.println("cfac = " + cfac);
         GenPolynomial<GenPolynomial<BigRational>> ar, cr, dr, er;
         GenPolynomial<BigRational> a, b, c, d, e;
 
