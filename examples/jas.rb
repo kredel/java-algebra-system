@@ -2159,6 +2159,7 @@ Compute a Characteristic Set.
             gg = CharacteristicSetWu.new().characteristicSet(ff);
         else
             puts "CS not implemented for coefficients #{cofac.toScriptFactory()}\n"; 
+            gg = nil;
         end
         t = System.currentTimeMillis() - t;
         puts "sequential char set executed in #{t} ms\n"; 
@@ -2178,6 +2179,7 @@ Test for Characteristic Set.
             b = CharacteristicSetWu.new().isCharacteristicSet(ff);
         else
             puts "isCS not implemented for coefficients #{cofac.toScriptFactory()}\n"; 
+            b = false;
         end
         t = System.currentTimeMillis() - t;
         #puts "sequential is char set executed in #{t} ms\n"; 
