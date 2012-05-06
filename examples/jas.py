@@ -5,7 +5,7 @@
 
 from java.lang           import System
 from java.io             import StringReader
-from java.util           import ArrayList
+from java.util           import ArrayList, Collections
 
 from org.apache.log4j    import BasicConfigurator;
 
@@ -31,7 +31,8 @@ from edu.jas.gb          import EReductionSeq, DGroebnerBaseSeq, EGroebnerBaseSe
                                 ReductionSeq, GroebnerBaseSeqPairParallel,\
                                 SolvableGroebnerBaseParallel, SolvableGroebnerBaseSeq
 from edu.jas.gbufd       import GroebnerBasePseudoRecSeq, GroebnerBasePseudoSeq,\
-                                RGroebnerBasePseudoSeq, RGroebnerBaseSeq, RReductionSeq
+                                RGroebnerBasePseudoSeq, RGroebnerBaseSeq, RReductionSeq,\
+                                CharacteristicSetWu
 from edu.jas.gbmod       import ModGroebnerBaseAbstract, ModSolvableGroebnerBaseAbstract,\
                                 SolvableSyzygyAbstract, SyzygyAbstract
 from edu.jas.vector      import GenVector, GenVectorModul,\
@@ -483,7 +484,6 @@ class Ideal:
         #print "isGB executed in %s ms" % t; 
         return b;
 
-
     def eGB(self):
         '''Compute an e-Groebner base.
         '''
@@ -495,7 +495,6 @@ class Ideal:
         t = System.currentTimeMillis() - t;
         print "sequential e-GB executed in %s ms" % t; 
         return Ideal(self.ring,"",G);
-
 
     def iseGB(self):
         '''Test if this is an e-Groebner base.
@@ -509,7 +508,6 @@ class Ideal:
         print "is e-GB test executed in %s ms" % t; 
         return b;
 
-
     def dGB(self):
         '''Compute an d-Groebner base.
         '''
@@ -522,7 +520,6 @@ class Ideal:
         print "sequential d-GB executed in %s ms" % t; 
         return Ideal(self.ring,"",G);
 
-
     def isdGB(self):
         '''Test if this is a d-Groebner base.
         '''
@@ -534,7 +531,6 @@ class Ideal:
         t = System.currentTimeMillis() - t;
         print "is d-GB test executed in %s ms" % t; 
         return b;
-
 
     def parGB(self,th):
         '''Compute in parallel a Groebner base.
@@ -762,6 +758,51 @@ class Ideal:
         pm = PolyUtil.fromIntegerCoefficients(rm,l);
         r = Ring("",rm);
         return Ideal(r,"",pm);
+
+    def CS(self):
+        '''Compute a Characteristic Set.
+        '''
+        s = self.pset;
+        cofac = s.ring.coFac;
+        F = s.list;
+        t = System.currentTimeMillis();
+        if cofac.isField():
+            G = CharacteristicSetWu().characteristicSet(F);
+        else:
+            print "CS not implemented for coefficients %s" % cofac.toScript(); 
+        t = System.currentTimeMillis() - t;
+        print "sequential CS executed in %s ms" % t; 
+        return Ideal(self.ring,"",G);
+
+    def isCS(self):
+        '''Test for Characteristic Set.
+        '''
+        s = self.pset;
+        cofac = s.ring.coFac;
+        F = s.list.clone(); 
+        Collections.reverse(F); # todo
+        t = System.currentTimeMillis();
+        if cofac.isField():
+            b = CharacteristicSetWu().isCharacteristicSet(F);
+        else:
+            print "isCS not implemented for coefficients %s" % cofac.toScript(); 
+        t = System.currentTimeMillis() - t;
+        return b;
+
+    def csReduction(self,p):
+        '''Compute a normal form of p with respect to this characteristic set.
+        '''
+        s = self.pset;
+        F = s.list.clone(); 
+        Collections.reverse(F); # todo
+        if isinstance(p,RingElem):
+            p = p.elem;
+        t = System.currentTimeMillis();
+        n = CharacteristicSetWu().characteristicSetReduction(F,p);
+        t = System.currentTimeMillis() - t;
+        #print "sequential char set reduction executed in %s ms" % t; 
+        return RingElem(n);
+
 
 ##     def syzygy(self):
 ##         '''Syzygy of generating polynomials.

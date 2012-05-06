@@ -283,9 +283,9 @@ public class CharSetTest extends TestCase {
         //g = dfac.parse("-2 x6 * x8 - 2 x5 * x7 + 2 x1 * x7 + x6^2 + x5^2 - x1^2");
         System.out.println("g = " + g);
 
-        //e = cs.characteristicSetReduction(G,g);
-        e = PolyGBUtil.<BigRational> topPseudoRemainder(G, g);
-        System.out.println("e = " + e);
+        e = cs.characteristicSetReduction(G,g);
+        //e = PolyGBUtil.<BigRational> topPseudoRemainder(G, g);
+        //System.out.println("e = " + e);
         assertTrue("g mod G: " + e, e.isZERO() || true); // not always true
 
         GroebnerBaseAbstract<BigRational> bb = GBFactory.getImplementation(br);
