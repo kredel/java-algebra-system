@@ -97,9 +97,87 @@ public class CharSetTest extends TestCase {
 
 
     /**
-     * Test random characteristic set.
+     * Test random characteristic set simple.
      */
     public void testCharacteristicSet() {
+        CharacteristicSet<BigRational> css = new CharacteristicSetSimple<BigRational>();
+        GenPolynomialRing<BigRational> dfac;
+        BigRational br = new BigRational();
+        to = new TermOrder(TermOrder.INVLEX);
+        dfac = new GenPolynomialRing<BigRational>(br, rl, to);
+        //System.out.println("dfac = " + dfac);
+
+        GenPolynomial<BigRational> a, b, c, d, e;
+        List<GenPolynomial<BigRational>> F, G, W;
+
+        F = new ArrayList<GenPolynomial<BigRational>>();
+        a = dfac.random(kl, ll, el, q * 1.1f);
+        b = dfac.random(kl, ll + 2, el, q);
+        c = dfac.random(kl, ll, el, q);
+        F.add(a);
+        F.add(b);
+        F.add(c);
+        while (F.size() <= rl) {
+            F.add(dfac.getZERO()); // make false cs
+        }
+        //System.out.println("F = " + F);
+        assertFalse("isCharacteristicSet: " + F, css.isCharacteristicSet(F));
+
+        G = css.characteristicSet(F);
+        //System.out.println("G = " + G);
+        assertTrue("isCharacteristicSet: " + G, css.isCharacteristicSet(G));
+
+        e = PolyGBUtil.<BigRational> characteristicSetRemainder(G, a);
+        //System.out.println("e = " + e);
+        assertTrue("a rem G: " + e, e.isZERO()|| true); // not always true
+
+        e = PolyGBUtil.<BigRational> characteristicSetRemainder(G, G.get(0));
+        //System.out.println("e = " + e);
+        assertTrue("a rem G: " + e + ", G = " + G, e.isZERO()); 
+
+        e = css.characteristicSetReduction(G, a);
+        //System.out.println("e = " + e);
+        assertTrue("a mod G: " + e, e.isZERO()|| true); // not always true
+
+        d = dfac.getONE();
+        if (!G.contains(d)) {
+            d = dfac.random(kl, ll, el, q).sum(d);
+            //System.out.println("d = " + d);
+            e = PolyGBUtil.<BigRational> characteristicSetRemainder(G, d);
+            //System.out.println("e = " + e);
+            assertFalse("a rem G: " + e, e.isZERO());
+            e = css.characteristicSetReduction(G, d);
+            //System.out.println("e = " + e);
+            assertFalse("a mod G: " + e, e.isZERO());
+        }
+
+        // now with Wu
+        W = cs.characteristicSet(F);
+        //System.out.println("W = " + W);
+        assertTrue("isCharacteristicSet: " + W, cs.isCharacteristicSet(W));
+
+        e = PolyGBUtil.<BigRational> characteristicSetRemainder(W, a);
+        //System.out.println("e = " + e);
+        assertTrue("a rem W: " + e, e.isZERO()|| true); // not always true
+
+        e = PolyGBUtil.<BigRational> characteristicSetRemainder(W, W.get(0));
+        //System.out.println("e = " + e);
+        assertTrue("a rem G: " + e + ", W = " + W, e.isZERO()); 
+
+        e = cs.characteristicSetReduction(W, W.get(W.size()-1));
+        //System.out.println("e = " + e);
+        assertTrue("a mod W: " + e, e.isZERO()); 
+
+        e = cs.characteristicSetReduction(W, a);
+        //System.out.println("e = " + e);
+        assertTrue("a mod W: " + e, e.isZERO()|| true); // not always true
+    }
+
+
+    /**
+     * Test random characteristic set Wu.
+     */
+    public void testCharacteristicSetWu() {
         GenPolynomialRing<BigRational> dfac;
         BigRational br = new BigRational();
         to = new TermOrder(TermOrder.INVLEX);
@@ -109,47 +187,49 @@ public class CharSetTest extends TestCase {
         GenPolynomial<BigRational> a, b, c, d, e;
         List<GenPolynomial<BigRational>> F, G;
 
-        for (int i = 0; i < 1; i++) {
-            F = new ArrayList<GenPolynomial<BigRational>>();
-            a = dfac.random(kl, ll, el, q * 1.1f);
-            b = dfac.random(kl, ll + 2, el, q);
-            c = dfac.random(kl, ll, el, q);
-            F.add(a);
-            F.add(b);
-            F.add(c);
-            while (F.size() <= rl) {
-                F.add(dfac.getZERO()); // make false cs
-            }
-            //System.out.println("F = " + F);
-            assertFalse("isCharacteristicSet: " + F, cs.isCharacteristicSet(F));
+        F = new ArrayList<GenPolynomial<BigRational>>();
+        a = dfac.random(kl, ll, el, q * 1.1f);
+        b = dfac.random(kl, ll + 2, el, q);
+        c = dfac.random(kl, ll, el, q);
+        F.add(a);
+        F.add(b);
+        F.add(c);
+        while (F.size() <= rl) {
+            F.add(dfac.getZERO()); // make false cs
+        }
+        //System.out.println("F = " + F);
+        assertFalse("isCharacteristicSet: " + F, cs.isCharacteristicSet(F));
 
-            G = cs.characteristicSet(F);
-            //System.out.println("G = " + G);
-            assertTrue("isCharacteristicSet: " + G, cs.isCharacteristicSet(G));
+        G = cs.characteristicSet(F);
+        //System.out.println("G = " + G);
+        assertTrue("isCharacteristicSet: " + G, cs.isCharacteristicSet(G));
 
-            e = PolyGBUtil.<BigRational> characteristicSetRemainder(G, a);
+        e = PolyGBUtil.<BigRational> characteristicSetRemainder(G, a);
+        //System.out.println("e = " + e);
+        assertTrue("a rem G: " + e, e.isZERO()|| true); // not always true
+
+        e = cs.characteristicSetReduction(G,G.get(G.size()-1));
+        //System.out.println("e = " + e);
+        assertTrue("a mod G: " + e, e.isZERO());
+
+        e = cs.characteristicSetReduction(G,G.get(0));
+        //System.out.println("e = " + e);
+        assertTrue("a mod G: " + e, e.isZERO());
+
+        e = cs.characteristicSetReduction(G, a);
+        //System.out.println("e = " + e);
+        assertTrue("a mod G: " + e + ", G = " + G, e.isZERO()|| true); // not always true
+
+        d = dfac.getONE();
+        if (!G.contains(d)) {
+            d = dfac.random(kl, ll, el, q).sum(d);
+            //System.out.println("d = " + d);
+            e = PolyGBUtil.<BigRational> characteristicSetRemainder(G, d);
             //System.out.println("e = " + e);
-            assertTrue("a rem G: " + e, e.isZERO() || true); // not always true
-
-            e = cs.characteristicSetReduction(G, a);
+            assertFalse("a rem G: " + e, e.isZERO()); 
+            e = cs.characteristicSetReduction(G, d);
             //System.out.println("e = " + e);
-            assertTrue("a mod G: " + e, e.isZERO() || true); // not always true
-
-            //e = PolyGBUtil.<BigRational> characteristicSetRemainder(G,G.get(G.size()-1));
-            //System.out.println("e = " + e);
-            //assertTrue("a mod G: " + e, e.isZERO());
-
-            d = dfac.getONE();
-            if (!G.contains(d)) {
-                d = dfac.random(kl, ll, el, q).sum(d);
-                //System.out.println("d = " + d);
-                e = PolyGBUtil.<BigRational> characteristicSetRemainder(G, d);
-                //System.out.println("e = " + e);
-                assertFalse("a rem G: " + e, e.isZERO());
-                e = cs.characteristicSetReduction(G, d);
-                //System.out.println("e = " + e);
-                assertFalse("a mod G: " + e, e.isZERO() && false);
-            }
+            assertFalse("a mod G: " + e, e.isZERO());
         }
     }
 
