@@ -118,7 +118,7 @@ public class CharacteristicSetWu<C extends GcdRingElem<C>> implements Characteri
         // rereduction of leading coefficient wrt. characteristic set according to Wu
         GenPolynomial<GenPolynomial<C>> rr = pd.get(0);
         GenPolynomial<C> sr = PolyUtil.<C> distribute(pfac, rr);
-        sr = PolyGBUtil.<C> characteristicSetRemainderCoeff(Sp, sr);
+        sr = PolyGBUtil.<C> topCoefficientPseudoRemainder(Sp, sr);
         logger.info("charSet rereduced sr = " + sr);
         if (sr.isZERO()) {
             return S;
@@ -194,14 +194,14 @@ public class CharacteristicSetWu<C extends GcdRingElem<C>> implements Characteri
             return P;
         }
         GenPolynomialRing<C> pfac = A.get(0).ring;
-        GenPolynomial<C> R = PolyGBUtil.<C> characteristicSetRemainder(A, P);
+        GenPolynomial<C> R = PolyGBUtil.<C> topPseudoRemainder(A, P);
         //System.out.println("remainder, R = " + R);
         if (R.isZERO()) {
             return R;
         }
         List<GenPolynomial<C>> Ap = PolyGBUtil.<C> zeroDegrees(A);
         //System.out.println("Ap = " + Ap);
-        R = PolyGBUtil.<C> characteristicSetRemainderCoeff(Ap, R);
+        R = PolyGBUtil.<C> topCoefficientPseudoRemainder(Ap, R);
         //System.out.println("R = " + R);
         return R;
     }

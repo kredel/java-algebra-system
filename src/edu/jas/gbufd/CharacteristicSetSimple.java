@@ -178,7 +178,7 @@ public class CharacteristicSetSimple<C extends GcdRingElem<C>> implements Charac
             return P;
         }
         GenPolynomialRing<C> pfac = A.get(0).ring;
-        GenPolynomial<C> R = PolyGBUtil.<C> characteristicSetRemainder(A, P);
+        GenPolynomial<C> R = PolyGBUtil.<C> topPseudoRemainder(A, P);
         R = R.monic();
         //System.out.println("remainder, R = " + R);
         return R;

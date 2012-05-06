@@ -127,11 +127,11 @@ public class CharSetTest extends TestCase {
         //System.out.println("G = " + G);
         assertTrue("isCharacteristicSet: " + G, css.isCharacteristicSet(G));
 
-        e = PolyGBUtil.<BigRational> characteristicSetRemainder(G, a);
+        e = PolyGBUtil.<BigRational> topPseudoRemainder(G, a);
         //System.out.println("e = " + e);
         assertTrue("a rem G: " + e, e.isZERO()|| true); // not always true
 
-        e = PolyGBUtil.<BigRational> characteristicSetRemainder(G, G.get(0));
+        e = PolyGBUtil.<BigRational> topPseudoRemainder(G, G.get(0));
         //System.out.println("e = " + e);
         assertTrue("a rem G: " + e + ", G = " + G, e.isZERO()); 
 
@@ -143,7 +143,7 @@ public class CharSetTest extends TestCase {
         if (!G.contains(d)) {
             d = dfac.random(kl, ll, el, q).sum(d);
             //System.out.println("d = " + d);
-            e = PolyGBUtil.<BigRational> characteristicSetRemainder(G, d);
+            e = PolyGBUtil.<BigRational> topPseudoRemainder(G, d);
             //System.out.println("e = " + e);
             assertFalse("a rem G: " + e, e.isZERO());
             e = css.characteristicSetReduction(G, d);
@@ -156,11 +156,11 @@ public class CharSetTest extends TestCase {
         //System.out.println("W = " + W);
         assertTrue("isCharacteristicSet: " + W, cs.isCharacteristicSet(W));
 
-        e = PolyGBUtil.<BigRational> characteristicSetRemainder(W, a);
+        e = PolyGBUtil.<BigRational> topPseudoRemainder(W, a);
         //System.out.println("e = " + e);
         assertTrue("a rem W: " + e, e.isZERO()|| true); // not always true
 
-        e = PolyGBUtil.<BigRational> characteristicSetRemainder(W, W.get(0));
+        e = PolyGBUtil.<BigRational> topPseudoRemainder(W, W.get(0));
         //System.out.println("e = " + e);
         assertTrue("a rem G: " + e + ", W = " + W, e.isZERO()); 
 
@@ -204,7 +204,7 @@ public class CharSetTest extends TestCase {
         //System.out.println("G = " + G);
         assertTrue("isCharacteristicSet: " + G, cs.isCharacteristicSet(G));
 
-        e = PolyGBUtil.<BigRational> characteristicSetRemainder(G, a);
+        e = PolyGBUtil.<BigRational> topPseudoRemainder(G, a);
         //System.out.println("e = " + e);
         assertTrue("a rem G: " + e, e.isZERO()|| true); // not always true
 
@@ -224,7 +224,7 @@ public class CharSetTest extends TestCase {
         if (!G.contains(d)) {
             d = dfac.random(kl, ll, el, q).sum(d);
             //System.out.println("d = " + d);
-            e = PolyGBUtil.<BigRational> characteristicSetRemainder(G, d);
+            e = PolyGBUtil.<BigRational> topPseudoRemainder(G, d);
             //System.out.println("e = " + e);
             assertFalse("a rem G: " + e, e.isZERO()); 
             e = cs.characteristicSetReduction(G, d);
@@ -282,7 +282,7 @@ public class CharSetTest extends TestCase {
         System.out.println("g = " + g);
 
         //e = cs.characteristicSetReduction(G,g);
-        e = PolyGBUtil.<BigRational> characteristicSetRemainder(G, g);
+        e = PolyGBUtil.<BigRational> topPseudoRemainder(G, g);
         System.out.println("e = " + e);
         assertTrue("g mod G: " + e, e.isZERO() || true); // not always true
 
