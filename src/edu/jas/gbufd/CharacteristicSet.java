@@ -22,10 +22,9 @@ public interface CharacteristicSet<C extends GcdRingElem<C>> extends Serializabl
 
 
     /**
-     * Characteristic set. According to Wu's algorithm with rereduction of
-     * leading coefficients.
+     * Characteristic set. According to the implementing algorithm (simple, Wu, etc).
      * @param A list of generic polynomials.
-     * @return charSetWu(A).
+     * @return charSet(A) with at most one polynomial per main variable.
      */
     public List<GenPolynomial<C>> characteristicSet(List<GenPolynomial<C>> A);
 
@@ -33,17 +32,18 @@ public interface CharacteristicSet<C extends GcdRingElem<C>> extends Serializabl
     /**
      * Characteristic set test.
      * @param A list of generic polynomials.
-     * @return true, if A is a characteristic set, else false.
+     * @return true, if A is (at least a simple) characteristic set, else false.
      */
     public boolean isCharacteristicSet(List<GenPolynomial<C>> A);
 
 
     /**
-     * Characteristic set reduction. Pseudo remainder wrt. the main variabe with
-     * further pseudo reduction of the leading coefficient.
+     * Characteristic set reduction. Pseudo remainder wrt. the main variable.
+     * With further pseudo reduction of the leading coefficient depending on the implementing algorithm.
      * @param P generic polynomial.
      * @param A list of generic polynomials as characteristic set.
-     * @return characteristicSetReductionCoeff(A,characteristicSetRemainder(A,P))
+     * @return characteristicSetRemainder(A,P) or 
+     *         characteristicSetReductionCoeff(A,characteristicSetRemainder(A,P)) depending on the algorithm.
      */
     public GenPolynomial<C> characteristicSetReduction(List<GenPolynomial<C>> A, GenPolynomial<C> P);
 

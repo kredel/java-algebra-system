@@ -68,8 +68,8 @@ public class PolyGBUtil {
         if (A == null || A.isEmpty()) {
             return P.monic();
         }
-        if (P.isZERO() || P.isConstant()) {
-            return P.monic();
+        if (P.isZERO()) {
+            return P;
         }
         //System.out.println("remainder, P = " + P);
         GenPolynomialRing<C> pfac = A.get(0).ring;
@@ -114,9 +114,9 @@ public class PolyGBUtil {
     public static <C extends RingElem<C>> GenPolynomial<C> characteristicSetRemainderCoeff(
                     List<GenPolynomial<C>> A, GenPolynomial<C> P) {
         if (A == null || A.isEmpty()) {
-            return P;
+            return P.monic();
         }
-        if (P.isZERO() || P.isONE()) {
+        if (P.isZERO()) {
             return P;
         }
         //System.out.println("remainderCoeff, A = " + A);
