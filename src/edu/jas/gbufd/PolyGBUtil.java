@@ -58,7 +58,7 @@ public class PolyGBUtil {
 
 
     /**
-     * Top pseudo reduction wrt. the main variables.
+     * Top pseudo reduction wrt the main variables.
      * @param P generic polynomial.
      * @param A list of generic polynomials sorted according to appearing main variables.
      * @return top pseudo remainder of P wrt. A for the appearing variables.
@@ -104,10 +104,10 @@ public class PolyGBUtil {
 
 
     /**
-     * Top coefficient pseudo remainder of the leading coefficient of P wrt. A in the main variables.
+     * Top coefficient pseudo remainder of the leading coefficient of P wrt A in the main variables.
      * @param P generic polynomial in n+1 variables.
      * @param A list of generic polynomials in n variables sorted according to appearing main variables.
-     * @return pseudo remainder of the leading coefficient of P wrt. A.
+     * @return pseudo remainder of the leading coefficient of P wrt A.
      */
     public static <C extends RingElem<C>> 
       GenPolynomial<C> topCoefficientPseudoRemainder(List<GenPolynomial<C>> A, GenPolynomial<C> P) {
@@ -164,7 +164,7 @@ public class PolyGBUtil {
      * Polynomial leading coefficient pseudo remainder.
      * @param P generic polynomial in n+1 variables.
      * @param A generic polynomial in n variables.
-     * @return pseudo remainder of the leading coefficient of P wrt. A, with
+     * @return pseudo remainder of the leading coefficient of P wrt A, with
      *         ldcf(A)<sup>m'</sup> P = quotient * A + remainder.
      */
     public static <C extends RingElem<C>> 
