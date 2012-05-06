@@ -769,7 +769,8 @@ class Ideal:
         if cofac.isField():
             G = CharacteristicSetWu().characteristicSet(F);
         else:
-            print "CS not implemented for coefficients %s" % cofac.toScript(); 
+            print "CS not implemented for coefficients %s" % cofac.toScriptFactory();
+            G = None;
         t = System.currentTimeMillis() - t;
         print "sequential CS executed in %s ms" % t; 
         return Ideal(self.ring,"",G);
@@ -785,7 +786,8 @@ class Ideal:
         if cofac.isField():
             b = CharacteristicSetWu().isCharacteristicSet(F);
         else:
-            print "isCS not implemented for coefficients %s" % cofac.toScript(); 
+            print "isCS not implemented for coefficients %s" % cofac.toScriptFactory();
+            b = False;
         t = System.currentTimeMillis() - t;
         return b;
 

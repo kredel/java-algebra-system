@@ -15,6 +15,7 @@ require "mathn"
 include_class "java.lang.System"
 include_class "java.io.StringReader"
 include_class "java.util.ArrayList"
+include_class "java.util.Collections"
 
 #require "../lib/log4j.jar"
 include_class "org.apache.log4j.BasicConfigurator";
@@ -1707,6 +1708,7 @@ include_class "edu.jas.gbufd.GroebnerBasePseudoSeq";
 include_class "edu.jas.gbufd.RGroebnerBasePseudoSeq";
 include_class "edu.jas.gbufd.RGroebnerBaseSeq";
 include_class "edu.jas.gbufd.RReductionSeq";
+include_class "edu.jas.gbufd.CharacteristicSetWu";
 
 include_class "edu.jas.ufd.GreatestCommonDivisor";
 include_class "edu.jas.ufd.PolyUfdUtil";
@@ -1834,7 +1836,6 @@ Test if this is a Groebner base.
         return b;
     end
 
-
 =begin rdoc
 Compute an e-Groebner base.
 =end
@@ -1852,7 +1853,6 @@ Compute an e-Groebner base.
         puts "sequential e-GB executed in #{t} ms\n"; 
         return SimIdeal.new(@ring,"",gg);
     end
-
 
 =begin rdoc
 Test if this is an e-Groebner base.
@@ -1872,7 +1872,6 @@ Test if this is an e-Groebner base.
         return b;
     end
 
-
 =begin rdoc
 Compute an d-Groebner base.
 =end
@@ -1891,7 +1890,6 @@ Compute an d-Groebner base.
         return SimIdeal.new(@ring,"",gg);
     end
 
-
 =begin rdoc
 Test if this is a d-Groebner base.
 =end
@@ -1909,7 +1907,6 @@ Test if this is a d-Groebner base.
         puts "is d-GB test executed in #{t} ms\n"; 
         return b;
     end
-
 
 =begin rdoc
 Compute in parallel a Groebner base.
@@ -2148,6 +2145,60 @@ Convert integer coefficients to modular coefficients.
         pm = PolyUtil.fromIntegerCoefficients(rm,l);
         r = Ring.new("",rm);
         return SimIdeal.new(r,"",pm);
+    end
+
+=begin rdoc
+Compute a Characteristic Set.
+=end
+    def CS()
+        s = @pset;
+        cofac = s.ring.coFac;
+        ff = s.list;
+        t = System.currentTimeMillis();
+        if cofac.isField()
+            gg = CharacteristicSetWu.new().characteristicSet(ff);
+        else
+            puts "CS not implemented for coefficients #{cofac.toScriptFactory()}\n"; 
+        end
+        t = System.currentTimeMillis() - t;
+        puts "sequential char set executed in #{t} ms\n"; 
+        return SimIdeal.new(@ring,"",gg);
+    end
+
+=begin rdoc
+Test for Characteristic Set.
+=end
+    def isCS()
+        s = @pset;
+        cofac = s.ring.coFac;
+        ff = s.list.clone();
+        Collections.reverse(ff); # todo
+        t = System.currentTimeMillis();
+        if cofac.isField()
+            b = CharacteristicSetWu.new().isCharacteristicSet(ff);
+        else
+            puts "isCS not implemented for coefficients #{cofac.toScriptFactory()}\n"; 
+        end
+        t = System.currentTimeMillis() - t;
+        #puts "sequential is char set executed in #{t} ms\n"; 
+        return b;
+    end
+
+=begin rdoc
+Compute a normal form of polynomial p with respect this characteristic set.
+=end
+    def csReduction(p)
+        s = @pset;
+        ff = s.list.clone();
+        Collections.reverse(ff); # todo
+        if p.is_a? RingElem
+            p = p.elem;
+        end
+        t = System.currentTimeMillis();
+        nn = CharacteristicSetWu.new().characteristicSetReduction(ff,p);
+        t = System.currentTimeMillis() - t;
+        #puts "sequential char set reduction executed in #{t} ms\n"; 
+        return RingElem.new(nn);
     end
 
 ## =begin rdoc

@@ -6,7 +6,7 @@
 import sys;
 
 from jas import Ring, PolyRing, Ideal
-from jas import QQ
+from jas import QQ, ZZ
 from jas import startLog
 
 # characteristic set example Circle of Apollonius, from CLO IVA
