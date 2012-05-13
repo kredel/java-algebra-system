@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigRational;
 import edu.jas.arith.BigDecimal;
+import edu.jas.arith.BigInteger;
 import edu.jas.arith.Rational;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -62,15 +63,26 @@ public abstract class RealRootsAbstract<C extends RingElem<C>& Rational> impleme
             }
         }
         // works also without this case, only for optimization 
-        // to use rational number interval end points
-        // can fail if real root is in interval [r,r+1] 
+        // to use integral number interval end points
+        // could be obsolete: can fail if real root is in interval [r,r+1] 
         // for too low precision or too big r, since r is approximation
-        if ((Object) M instanceof RealAlgebraicNumber) {
+        if (false&&(Object) M instanceof RealAlgebraicNumber) {
             RealAlgebraicNumber Mr = (RealAlgebraicNumber) M;
             BigRational r = Mr.magnitude();
-            M = cfac.fromInteger(r.numerator()).divide(cfac.fromInteger(r.denominator()));
+            //logger.info("rational root bound: " + r);
+            BigInteger i = new BigInteger(r.numerator().divide(r.denominator()));
+            i = i.sum(BigInteger.ONE);
+            //logger.info("integer root bound: " + i);
+            //M = cfac.fromInteger(r.numerator()).divide(cfac.fromInteger(r.denominator()));
+            M = cfac.fromInteger(i.getVal());
         }
+        BigRational r = M.getRational();
+        logger.info("rational root bound: " + r);
+        BigInteger i = new BigInteger(r.numerator().divide(r.denominator()));
+        i = i.sum(BigInteger.ONE);
+        M = cfac.fromInteger(i.getVal());
         M = M.sum(f.ring.coFac.getONE());
+        logger.info("integer root bound: " + M);
         //System.out.println("M = " + M);
         return M;
     }
@@ -408,10 +420,16 @@ public abstract class RealRootsAbstract<C extends RingElem<C>& Rational> impleme
             return g.leadingBaseCoefficient();
         }
         RingFactory<C> cfac = g.ring.coFac;
-        C c = iv.left.sum(iv.right);
-        c = c.divide(cfac.fromInteger(2));
-        C ev = PolyUtil.<C> evaluateMain(cfac, g, c);
-        //System.out.println("ev = " + ev);
+        //C c = iv.left.sum(iv.right);
+        //c = c.divide(cfac.fromInteger(2));
+        //C ev = PolyUtil.<C> evaluateMain(cfac, g, c);
+        C evl = PolyUtil.<C> evaluateMain(cfac, g, iv.left);
+        C evr = PolyUtil.<C> evaluateMain(cfac, g, iv.right);
+        C ev = evl;
+        if ( evl.compareTo(evr) <= 0 ) {
+            ev = evr;
+        }
+        //System.out.println("ev = " + ev + ", evl = " + evl + ", evr = " + evr + ", iv = " + iv);
         return ev;
     }
 
