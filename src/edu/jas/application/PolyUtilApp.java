@@ -674,6 +674,13 @@ public class PolyUtilApp<C extends RingElem<C>> {
             throw new RuntimeException("wrong number of variables " + Arrays.toString(dep0));
         }
         List<RealAlgebraicNumber<D>> rra = RootFactory.<D> realAlgebraicNumbersIrred(p0);
+        if (logger.isInfoEnabled()) {
+            List<Interval<D>> il = new ArrayList<Interval<D>>();
+            for (RealAlgebraicNumber<D> rr : rra) {
+                il.add(rr.ring.getRoot());
+            }
+            logger.info("roots(p0) = " + il);
+        }
         for (RealAlgebraicNumber<D> rr : rra) {
             List<RealAlgebraicNumber<D>> rl = new ArrayList<RealAlgebraicNumber<D>>();
             rl.add(rr);
@@ -699,6 +706,13 @@ public class PolyUtilApp<C extends RingElem<C>> {
                 throw new RuntimeException("wrong number of variables " + Arrays.toString(depi));
             }
             rra = RootFactory.<D> realAlgebraicNumbersIrred(pi);
+            if (logger.isInfoEnabled()) {
+                List<Interval<D>> il = new ArrayList<Interval<D>>();
+                for (RealAlgebraicNumber<D> rr : rra) {
+                    il.add(rr.ring.getRoot());
+                }
+                logger.info("roots(pi) = " + il);
+            }
             if (depi.length == 1) {
                 // all combinations are roots of the ideal I
                 for (RealAlgebraicNumber<D> rr : rra) {
@@ -742,6 +756,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
                         int sr = rer.signum();
                         //System.out.println("sl = " + sl + ", sr = " + sr + ", sl*sr = " + (sl*sr));
                         if (sl * sr <= 0) {
+                            //System.out.println("sl * sr <= 0: rar = " + rar.toScript());
                             List<RealAlgebraicNumber<D>> ry = new ArrayList<RealAlgebraicNumber<D>>();
                             ry.addAll(rx);
                             ry.add(rr);
@@ -751,6 +766,15 @@ public class PolyUtilApp<C extends RingElem<C>> {
                 }
             }
             ran = rn;
+        }
+        if (logger.isInfoEnabled()) {
+            for ( List<RealAlgebraicNumber<D>> rz : ran ) {
+                List<Interval<D>> il = new ArrayList<Interval<D>>();
+                for (RealAlgebraicNumber<D> rr : rz) {
+                    il.add(rr.ring.getRoot());
+                }
+                logger.info("root-tuple = " + il);
+            }
         }
         IdealWithRealAlgebraicRoots<D> Ir = new IdealWithRealAlgebraicRoots<D>(I, ran);
         return Ir;

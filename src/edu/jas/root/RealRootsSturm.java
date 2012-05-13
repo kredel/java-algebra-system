@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import edu.jas.arith.Rational;
+import edu.jas.arith.BigRational;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.RingElem;
@@ -98,6 +99,10 @@ public class RealRootsSturm<C extends RingElem<C> & Rational> extends RealRootsA
         //System.out.println("S = " + S);
         //System.out.println("f_S = " + S.get(0));
         List<Interval<C>> Rp = realRoots(iv, S);
+        if (logger.isInfoEnabled()&& !( ((Object)f.ring.coFac) instanceof BigRational)) {
+            //logger.info("realRoots bound: " + iv);
+            logger.info("realRoots: " + Rp);
+        }
         R.addAll(Rp);
         return R;
     }
