@@ -75,11 +75,15 @@ public abstract class RealRootsAbstract<C extends RingElem<C>& Rational> impleme
             //logger.info("integer root bound: " + i);
             //M = cfac.fromInteger(r.numerator()).divide(cfac.fromInteger(r.denominator()));
             M = cfac.fromInteger(i.getVal());
+            M = M.sum(f.ring.coFac.getONE());
+            logger.info("root bound: " + M);
+            //System.out.println("M = " + M);
+            return M;
         }
         BigRational r = M.getRational();
         logger.info("rational root bound: " + r);
         BigInteger i = new BigInteger(r.numerator().divide(r.denominator()));
-        i = i.sum(BigInteger.ONE);
+        i = i.sum(BigInteger.ONE); // ceiling
         M = cfac.fromInteger(i.getVal());
         M = M.sum(f.ring.coFac.getONE());
         logger.info("integer root bound: " + M);
@@ -420,9 +424,12 @@ public abstract class RealRootsAbstract<C extends RingElem<C>& Rational> impleme
             return g.leadingBaseCoefficient();
         }
         RingFactory<C> cfac = g.ring.coFac;
-        //C c = iv.left.sum(iv.right);
-        //c = c.divide(cfac.fromInteger(2));
-        //C ev = PolyUtil.<C> evaluateMain(cfac, g, c);
+        if (false) {
+            C c = iv.left.sum(iv.right);
+            c = c.divide(cfac.fromInteger(2));
+            C ev = PolyUtil.<C> evaluateMain(cfac, g, c);
+            return ev;
+        }
         C evl = PolyUtil.<C> evaluateMain(cfac, g, iv.left);
         C evr = PolyUtil.<C> evaluateMain(cfac, g, iv.right);
         C ev = evl;

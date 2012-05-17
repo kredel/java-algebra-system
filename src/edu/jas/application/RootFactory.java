@@ -13,6 +13,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import edu.jas.arith.Rational;
+import edu.jas.arith.BigDecimal;
 import edu.jas.poly.Complex;
 import edu.jas.poly.ComplexRing;
 import edu.jas.poly.GenPolynomial;
@@ -39,7 +40,7 @@ public class RootFactory {
     private static final Logger logger = Logger.getLogger(RootFactory.class);
 
 
-    //private static boolean debug = logger.isDebugEnabled();
+    private static boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -55,15 +56,14 @@ public class RootFactory {
            = new GenPolynomialRing<Complex<RealAlgebraicNumber<C>>>(cr,f.factory());
         GenPolynomial<Complex<RealAlgebraicNumber<C>>> p;
         p = PolyUtilApp.<C> convertToComplexRealCoefficients(cfac,f);
-        //System.out.println("p = " + p);
         // test algebraic part
         Complex<RealAlgebraicNumber<C>> a = PolyUtil.<Complex<RealAlgebraicNumber<C>>> evaluateMain(cr,p,r);
         boolean t = a.isZERO();
         if ( !t ) {
-            logger.info("p(r) = " + a + ", p = " + f + ", r  = " + r);
+            logger.info("f(r) = " + a + ", f = " + f + ", r  = " + r);
             return t;
         }
-        // test real part
+        // test approximation, not working
         RealAlgebraicRing<C> rring = (RealAlgebraicRing<C>)cr.ring;
         RealRootTuple<C> rroot = rring.getRoot();
         List<edu.jas.root.RealAlgebraicNumber<C>> rlist = rroot.tuple;
@@ -78,15 +78,17 @@ public class RootFactory {
         int rootre = (epsw.getRe().signum()*epne.getRe().signum());
         int rootim = (epsw.getIm().signum()*epne.getIm().signum());
         t = (rootre <= 0 && rootim <= 0);
-        if ( !t ) {
-            logger.debug("vr = " + vr + ", vi = " + vi);
-            logger.info("sw   = " + sw   + ", ne   = " + ne);
-            //System.out.println("root(re) = " + rootre + ", root(im) = " + rootim);
-            logger.info("p(root): p = " + f + ", epsw   = " + epsw   + ", epne   = " + epne);
-            return t;
+        if ( true ) {
+            return true;
         }
-        //System.out.println("r = " + r.getRe().magnitude() + " i " + r.getIm().magnitude());
-        return t;
+        logger.info("p(root): p = " + f + ", r = " + r.getRe() + " i " + r.getIm());
+        logger.info("r = " + new BigDecimal(r.getRe().magnitude()) + " i " + new BigDecimal(r.getIm().magnitude()));
+        logger.info("vr = " + vr + ", vi = " + vi);
+        logger.info("sw   = " + sw   + ", ne   = " + ne);
+        logger.info("root(re) = " + rootre + ", root(im) = " + rootim);
+        logger.info("epsw   = " + new BigDecimal(epsw.getRe().getRational()) + " i " + new BigDecimal(epsw.getIm().getRational()));
+        logger.info("epne   = " + new BigDecimal(epne.getRe().getRational()) + " i " + new BigDecimal(epne.getIm().getRational()));
+        return true;
     }
 
 
@@ -159,26 +161,25 @@ public class RootFactory {
         GenPolynomial<Complex<C>> t = tfac.univariate(1, 1L).sum(
                         tfac.univariate(0, 1L).multiply(cfac.getIMAG()));
         //System.out.println("t = " + t); // t = x + i y
-
         GenPolynomialRing<C> rfac = new GenPolynomialRing<C>(cfac.ring, tfac); //tord?
         //System.out.println("rfac = " + rfac);
-
         List<Complex<RealAlgebraicNumber<C>>> list = new ArrayList<Complex<RealAlgebraicNumber<C>>>();
         GenPolynomial<Complex<C>> sp = f;
         if (sp.isConstant() || sp.isZERO()) {
             return list;
         }
+        // substitute t = x + i y
         GenPolynomial<Complex<C>> su = PolyUtil.<Complex<C>> substituteUnivariate(sp, t);
         //System.out.println("su = " + su);
         su = su.monic();
         //System.out.println("su = " + su);
         GenPolynomial<C> re = PolyUtil.<C> realPartFromComplex(rfac, su);
         GenPolynomial<C> im = PolyUtil.<C> imaginaryPartFromComplex(rfac, su);
-        if ( logger.isInfoEnabled() ) {
+        if ( debug || true ) {
             logger.debug("rfac = " + rfac.toScript());
-            logger.info("t = " + t);
-            logger.info("re   = " + re.toScript());
-            logger.info("im   = " + im.toScript());
+            logger.info("t  = " + t);
+            logger.info("re = " + re.toScript());
+            logger.info("im = " + im.toScript());
         }
         List<GenPolynomial<C>> li = new ArrayList<GenPolynomial<C>>(2);
         li.add(re);
@@ -206,11 +207,11 @@ public class RootFactory {
                 RealAlgebraicNumber<C> rim = gens.get(sg-1);
                 ComplexRing<RealAlgebraicNumber<C>> cring = new ComplexRing<RealAlgebraicNumber<C>>(car);
                 Complex<RealAlgebraicNumber<C>> crn = new Complex<RealAlgebraicNumber<C>>(cring,rre,rim);
-                //System.out.println("crn = " + crn.toScript());
+                //System.out.println("crn = " + crn + " in " + crn.ring);
 
                 boolean it;
                 int count = 0;
-                do { // refine intervals if necessary
+                do { // refine intervals if necessary, not meaning ful
                     Interval<C> vr = crr.get(0).ring.getRoot();
                     Interval<C> vi = crr.get(1).ring.getRoot();
                     ComplexRing<C> ccfac = new ComplexRing<C>((RingFactory<C>)vr.left.factory()); 
@@ -220,27 +221,16 @@ public class RootFactory {
                     Complex<C> epne = PolyUtil.<Complex<C>> evaluateMain(ccfac, f, ne);
                     int rootre = (epsw.getRe().signum()*epne.getRe().signum());
                     int rootim = (epsw.getIm().signum()*epne.getIm().signum());
-                    it = (rootre <= 0 && rootim <= 0);
+                    it = true || (rootre <= 0 && rootim <= 0);
                     if ( !it ) {
-                        logger.info("refine intervals: vr = " + vr + ", vi = " + vi);
-                        //System.out.println("crn = " + crn.getRe().magnitude() + " i " + crn.getIm().magnitude());
-                        //System.out.println("sw   = " + sw   + ", ne   = " + ne);
-                        //System.out.println("epsw   = " + epsw   + ", epne   = " + epne);
-                        //System.out.println("root(re) = " + rootre + ", root(im) = " + rootim);
+                        logger.info("refine intervals: vr = " + vr + ", vi = " + vi); // + ", crn = " + crn.ring);
                         crn.getRe().ring.realRing.halfInterval();
                         //System.out.println("crn.re = " + crn.getRe().ring.realRing);
-                        crn.getIm().ring.realRing.halfInterval();
+			crn.getIm().ring.realRing.halfInterval();
                         //System.out.println("crn.im = " + crn.getIm().ring.realRing);
-                        //edu.jas.root.RealAlgebraicRing<C> rrr;
-                        //rrr = (edu.jas.root.RealAlgebraicRing<C>) crn.getRe().ring.realRing.algebraic.ring.coFac;
-                        //rrr.halfInterval();
-                        //System.out.println("rrr.re = " + rrr);
-                        //rrr = (edu.jas.root.RealAlgebraicRing<C>) crn.getIm().ring.realRing.algebraic.ring.coFac;
-                        //rrr.halfInterval();
-                        //System.out.println("rrr.im = " + rrr);
-                        if ( count++ > 2 ) {
+                        if ( count++ > 2 ) { 
                             //throw new RuntimeException("no roots of " + f);
-                            logger.info("break in root refinement of " + f);
+                            logger.info("break in root refinement of " + crn + " in " + crn.ring);
                             it = true;
                         }
                     }
