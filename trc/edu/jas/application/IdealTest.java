@@ -1152,6 +1152,7 @@ public class IdealTest extends TestCase {
         eps = eps.multiply(eps).multiply(eps);
         BigDecimal e = new BigDecimal(eps.getRational());
         e = e.abs(); //.multiply(e);
+        eps = eps.multiply(new BigRational(1, 2));
 
         List<List<BigDecimal>> roots = PolyUtilApp.<BigRational> realRootTuples(I, eps);
         //System.out.println("roots = " + roots + "\n");
@@ -1167,7 +1168,7 @@ public class IdealTest extends TestCase {
                 BigDecimal ev = PolyUtil.<BigDecimal> evaluateAll(dc, dfac, dp, r);
                 if (ev.abs().compareTo(e) > 0) {
                     //System.out.println("ev = " + ev);
-                    fail("ev > eps : " + ev + " > " + e);
+                    fail("ev > e : " + ev + " > " + e + ", eps = " + new BigDecimal(eps));
                 }
             }
         }
@@ -1264,6 +1265,7 @@ public class IdealTest extends TestCase {
         eps = eps.multiply(eps).multiply(eps);
         BigDecimal e = new BigDecimal(eps.getRational());
         e = e.abs(); //.multiply(e);
+        eps = eps.multiply(new BigRational(1, 2));
         BigDecimal dc = BigDecimal.ONE;
 
         List<IdealWithRealRoots<BigRational>> roots 
