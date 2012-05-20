@@ -417,6 +417,7 @@ class Ideal:
            self.list = pylist2arraylist(list,rec=1);
         self.pset = OrderedPolynomialList(ring.ring,self.list);
         self.roots = None;
+        self.croots = None;
         self.prime = None;
         self.primary = None;
 
@@ -1970,13 +1971,15 @@ def CR(re=BigRational(),im=BigRational(),ring=None):
     if ring == None:
         ring = re.factory();
     r = ComplexRing(ring);
+    #print "d type(%s) = %s" % (r,type(r));
     if im.isZERO():
         if re.isZERO():
             c = Complex(r);
         else:
             c = Complex(r,re);
     else:
-        c = BigComplex(r,re,im);
+        c = Complex(r,re,im);
+    #print "d type(%s) = %s" % (c,type(c));
     return RingElem(c);
 
 
@@ -3001,27 +3004,6 @@ class PolyRing(Ring):
         tring = GenPolynomialRing(cf,nv,to,names);
         #want: super(Ring,self).__init__(ring=tring)
         Ring.__init__(self,ring=tring)
-##         #print "dict: " + str(self.__dict__)
-##         vns = ""
-##         for v in self.ring.generators():
-##             #print "vars = " + str(v);
-##             vs = str(v);
-##             vr = RingElem(v);
-##             if vs == "1 ":
-##                 vs='one';
-##             try:
-##                 if self.__dict__[vs] is None:
-##                     self.__dict__[vs] = vr;
-##                 else:
-##                     print vs + " not redefined to " + str(v) + " from " + str(self.__dict__[vs]);
-##             except:
-##                 self.__dict__[vs] = vr;
-##             if auto_inject:
-##                 inject_variable(vs,vr)
-##                 vns = vns + vs + " "
-##         if auto_inject:
-##             print "globaly defined variables: " + vns
-##         #print "dict: " + str(self.__dict__)
 
     def __str__(self):
         '''Create a string representation.
@@ -3094,14 +3076,16 @@ class EF:
         '''Constructor to set base field.
         '''
         if isinstance(base,RingElem):
-            factory = base.elem;
+            #factory = base.elem;
+            factory = base.ring;
         else:
             factory = base;
         try:
             factory = self.factory.factory();
         except:
             pass
-        #print "factory: " + factory.toScript() + " :: " + factory.toString();
+        print "extension field factory: " + factory.toScript(); # + " :: " + factory.toString();
+        #print "d type(%s) = %s" % (factory,type(factory));
         if isinstance(factory,ExtensionFieldBuilder):
             self.builder = factory;
         else:
@@ -3153,7 +3137,7 @@ class EF:
         '''
         rf = self.builder.build();
         if isinstance(rf,GenPolynomialRing):
-            return PolyRing(rf.coFac,rf.getVars());
+            return PolyRing(rf.coFac,rf.getVars(),rf.tord);
         else:
             return RingElem(rf.getZERO());
 
