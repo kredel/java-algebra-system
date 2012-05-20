@@ -78,7 +78,7 @@ public class IdealWithComplexAlgebraicRoots<D extends GcdRingElem<D> & Rational>
      */
     @Override
     public String toString() {
-        StringBuffer sb = new StringBuffer(super.toString() + "\nreal roots:\n");
+        StringBuffer sb = new StringBuffer(super.toString() + "\ncomplex roots:\n");
         sb.append("[");
         boolean f1 = true;
         for (List<Complex<RealAlgebraicNumber<D>>> lr : can) {
@@ -101,7 +101,7 @@ public class IdealWithComplexAlgebraicRoots<D extends GcdRingElem<D> & Rational>
         }
         sb.append("]");
         if (droots != null) {
-            sb.append("\ndecimal real root approximation:\n");
+            sb.append("\ndecimal complex root approximation:\n");
             for (List<Complex<BigDecimal>> d : droots) {
                 sb.append(d.toString());
                 sb.append("\n");

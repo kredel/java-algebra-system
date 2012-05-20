@@ -286,6 +286,9 @@ public class RootFactory {
         if ( f.ring.coFac instanceof Complex ) {
             throw new IllegalArgumentException("f already has Complex coefficients " + f.ring);
         }
+        if ( f.ring.coFac instanceof ComplexAlgebraicRing ) {
+            throw new UnsupportedOperationException("unsupported ComplexAlgebraicRing coefficients " + f.ring);
+        }
         ComplexRing<C> cr = new ComplexRing<C>( f.ring.coFac );
         GenPolynomialRing<Complex<C>> fac = new GenPolynomialRing<Complex<C>>(cr,f.ring);
         GenPolynomial<Complex<C>> fc = PolyUtil.<C>complexFromAny(fac,f); 
@@ -303,6 +306,9 @@ public class RootFactory {
                              List<ComplexAlgebraicNumber<C>> complexAlgebraicNumbers(GenPolynomial<C> f, BigRational eps) {
         if ( f.ring.coFac instanceof Complex ) {
             throw new IllegalArgumentException("f already has Complex coefficients " + f.ring);
+        }
+        if ( f.ring.coFac instanceof ComplexAlgebraicRing ) {
+            throw new UnsupportedOperationException("unsupported ComplexAlgebraicRing coefficients " + f.ring);
         }
         ComplexRing<C> cr = new ComplexRing<C>( f.ring.coFac );
         GenPolynomialRing<Complex<C>> fac = new GenPolynomialRing<Complex<C>>(cr,f.ring);

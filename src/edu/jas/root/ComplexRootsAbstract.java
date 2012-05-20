@@ -54,6 +54,9 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
      * @param cf coefficient factory.
      */
     public ComplexRootsAbstract(RingFactory<Complex<C>> cf) {
+        if ( ! (cf instanceof ComplexRing) ) {
+            throw new IllegalArgumentException("cf not supported coefficients " + cf);
+        }
         engine = SquarefreeFactory.<Complex<C>> getImplementation(cf);
     }
 
