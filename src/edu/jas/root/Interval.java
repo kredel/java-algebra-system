@@ -164,12 +164,24 @@ public class Interval<C extends RingElem<C> & Rational > {
 
     /**
      * Rational middle point.
-     * @return (left-right)/2;
+     * @return (left+right)/2;
      */
     public BigRational rationalMiddle() {
         BigRational m = left.getRational().sum(right.getRational());
         BigRational t = new BigRational(1L,2L);
         m = m.multiply(t);
+        return m;
+    }
+
+
+    /**
+     * Middle point.
+     * @return (left+right)/2;
+     */
+    public C middle() {
+        C m = left.sum(right);
+        C h = left.factory().parse("1/2");
+        m = m.multiply(h);
         return m;
     }
 
