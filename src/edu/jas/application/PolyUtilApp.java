@@ -1139,7 +1139,19 @@ public class PolyUtilApp<C extends RingElem<C>> {
                     //System.out.println("rlist = " + rlist);
                     Interval<D> vr = rlist.get(0).ring.getRoot();
                     Interval<D> vi = rlist.get(1).ring.getRoot();
-                    //logger.info("vr = " + vr + ", vi = " + vi);
+                    logger.info("vr = " + vr + ", vi = " + vi);
+                    if ( vr.length().isZERO() ) {
+                        D e = vr.left.factory().parse("1/2");
+                        D m = vr.left; //middle();
+                        vr = new Interval<D>(m.subtract(e),m.sum(e));
+                        logger.info("|vr| == 0: " + vr);
+                    }
+                    if ( vi.length().isZERO() ) {
+                        D e = vi.left.factory().parse("1/2");
+                        D m = vi.left; //middle();
+                        vi = new Interval<D>(m.subtract(e),m.sum(e));
+                        logger.info("|vi| == 0: " + vi);
+                    }
                     edu.jas.application.RealAlgebraicNumber<D> vrl, vil, vrr, vir;
                     vrl = new edu.jas.application.RealAlgebraicNumber<D>(cring,vr.left);
                     vil = new edu.jas.application.RealAlgebraicNumber<D>(cring,vi.left);
@@ -1151,6 +1163,9 @@ public class PolyUtilApp<C extends RingElem<C>> {
                     csw = new Complex<edu.jas.application.RealAlgebraicNumber<D>>(crr,vrl,vil);
                     cne = new Complex<edu.jas.application.RealAlgebraicNumber<D>>(crr,vrr,vir);
                     logger.info("csw  = " + toString(csw)   + ", cne  = " + toString(cne));
+                    Rectangle<edu.jas.application.RealAlgebraicNumber<D>> rec;
+                    rec = new Rectangle<edu.jas.application.RealAlgebraicNumber<D>>(csw,cne);
+                    //System.out.println("rec = " + rec);
                     for (List<Complex<edu.jas.application.RealAlgebraicNumber<D>>> cx : can) {
                         Complex<edu.jas.application.RealAlgebraicNumber<D>> cax = cx.get(ix);
                         //System.out.println("cax = " + toString(cax));
@@ -1161,14 +1176,18 @@ public class PolyUtilApp<C extends RingElem<C>> {
                         GenPolynomial<Complex<edu.jas.application.RealAlgebraicNumber<D>>> pcr; 
                         pcr = evaluateToComplexRealCoefficients(pcrfac,pip2cr,cax);
                         //System.out.println("pcr = " + pcr);
-                        Rectangle<edu.jas.application.RealAlgebraicNumber<D>> rec;
-                        rec = new Rectangle<edu.jas.application.RealAlgebraicNumber<D>>(csw,cne);
                         ComplexRoots<edu.jas.application.RealAlgebraicNumber<D>> rengine;
                         rengine = new ComplexRootsSturm<edu.jas.application.RealAlgebraicNumber<D>>(car);
                         long nr = 0;
                         try {
                             nr = rengine.complexRootCount(rec,pcr);
-                            logger.debug("rootCount = " + nr);
+                            logger.info("rootCount = " + nr);
+                            if (false) {
+                                List<Rectangle<edu.jas.application.RealAlgebraicNumber<D>>> roo = rengine.complexRoots(rec,pcr);
+                                System.out.println("roo_1 = " + roo);
+                                roo = rengine.complexRoots(pcr);
+                                System.out.println("roo_2 = " + roo);
+                            }
                         } catch(InvalidBoundaryException e) {
                             e.printStackTrace();
                         }
