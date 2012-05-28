@@ -927,6 +927,18 @@ public class PolyUtilApp<C extends RingElem<C>> {
                     Interval<D> vr = rlist.get(0).ring.getRoot();
                     Interval<D> vi = rlist.get(1).ring.getRoot();
                     //logger.info("vr = " + vr + ", vi = " + vi);
+                    if ( vr.length().isZERO() ) {
+                        D e = vr.left.factory().parse("1/2");
+                        D m = vr.left; //middle();
+                        vr = new Interval<D>(m.subtract(e),m.sum(e));
+                        logger.info("|vr| == 0: " + vr);
+                    }
+                    if ( vi.length().isZERO() ) {
+                        D e = vi.left.factory().parse("1/2");
+                        D m = vi.left; //middle();
+                        vi = new Interval<D>(m.subtract(e),m.sum(e));
+                        logger.info("|vi| == 0: " + vi);
+                    }
                     Complex<D> sw = new Complex<D>(ccfac, vr.left, vi.left);
                     Complex<D> ne = new Complex<D>(ccfac, vr.right, vi.right);
                     logger.info("sw   = " + toString1(sw)   + ", ne   = " + toString1(ne));
@@ -1191,13 +1203,15 @@ public class PolyUtilApp<C extends RingElem<C>> {
                         } catch(InvalidBoundaryException e) {
                             e.printStackTrace();
                         }
-                        if ( nr > 0 ) { // (sswr * sner <= 0 && sswi * snei <= 0)  
+                        if ( nr == 1 ) { // (sswr * sner <= 0 && sswi * snei <= 0)  
                             logger.info("   hit, cxi = " + toString(cx.get(ix)) + ", cr = " + toString(cr));
                             List<Complex<edu.jas.application.RealAlgebraicNumber<D>>> cy;
                             cy = new ArrayList<Complex<edu.jas.application.RealAlgebraicNumber<D>>>();
                             cy.addAll(cx);
                             cy.add(cr);
                             cn.add(cy);
+                        } else if ( nr > 1 ) { 
+                            logger.error("to many roots, cxi = " + toString(cx.get(ix)) + ", cr = " + toString(cr));
                         } else {
                             logger.info("no hit, cxi = " + toString(cx.get(ix)) + ", cr = " + toString(cr));
                         }
