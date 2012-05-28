@@ -920,7 +920,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
                 int ix = fac.nvar - 1 - depi[depi.length - 1];
                 //System.out.println("ix = " + ix);
                 for (Complex<edu.jas.application.RealAlgebraicNumber<D>> cr : cra) {
-                    //System.out.println("cr = " + toString(cr)); // <----------------------------------
+                    System.out.println("cr = " + toString(cr)); // <----------------------------------
                     edu.jas.application.RealAlgebraicRing<D> cring = (edu.jas.application.RealAlgebraicRing<D>) cr.ring.ring;
                     RealRootTuple<D> rroot = cring.getRoot();
                     List<RealAlgebraicNumber<D>> rlist = rroot.tuple;
@@ -1010,6 +1010,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * @param I zero dimensional ideal with univariate irreducible polynomials
      *            and bi-variate polynomials.
      * @return complex algebraic roots for ideal(G)
+     * <b>Note:</b> not jet completed oin all cases.
      */
     public static <D extends GcdRingElem<D> & Rational> IdealWithComplexAlgebraicRoots<D> complexAlgebraicRoots(
                     IdealWithUniv<D> I) {
@@ -1107,6 +1108,18 @@ public class PolyUtilApp<C extends RingElem<C>> {
             } else { // depi.length == 2
                 // select roots of the ideal I
                 GenPolynomial<D> pip2 = PolyUtil.<D> removeUnusedUpperVariables(pip);
+                pip2 = PolyUtil.<D> removeUnusedLowerVariables(pip2);
+                if ( pip2.ring.nvar != 2 ) { // remove unused middle variables
+                    GenPolynomialRing<D> pip2ring = pip2.ring;
+                    TermOrder to = pip2ring.tord;
+                    String v1 = pip2ring.getVars()[0];
+                    String v2 = pip2ring.getVars()[pip2.ring.nvar-1];
+                    String[] vars = new String[] { v1, v2 };
+                    GenPolynomialRing<D> pip2fac = new GenPolynomialRing<D>(pip2ring.coFac, to, vars);
+                    logger.info("removed variables: = " + pip2ring + " to " + pip2fac);
+                    pip2 = convert(pip2fac,pip2);
+                    //throw new RuntimeException("implementation missing for middle variables: " + pip2.ring);
+                }
                 GenPolynomialRing<GenPolynomial<D>> rfac = pip2.ring.recursive(1);
                 GenPolynomialRing<D> ufac = pip2.ring.contract(1);
                 GenPolynomialRing<Complex<D>> ucfac = new GenPolynomialRing<Complex<D>>(ccfac, ufac);
@@ -1585,7 +1598,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
                     GenPolynomialRing<Complex<edu.jas.application.RealAlgebraicNumber<C>>> pfac,
                     GenPolynomial<GenPolynomial<Complex<C>>> A, Complex<edu.jas.application.RealAlgebraicNumber<C>> r) {
         return PolyUtil.<GenPolynomial<Complex<C>>, Complex<edu.jas.application.RealAlgebraicNumber<C>>> 
-	    map(pfac, A, new EvaluateToComplexReal<C>(pfac,r));
+            map(pfac, A, new EvaluateToComplexReal<C>(pfac,r));
     }
 
 
