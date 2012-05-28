@@ -322,7 +322,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational> implements
     @Override
     public String toString() {
         return "RealAlgebraicRing[ " + realRing.toString() + " in " + root + " | isField="
-                        + realRing.isField() + " :: " + algebraic.ideal.toString() + " ]";
+                        + realRing.isField() + ", algebraic.ideal=" + algebraic.ideal.toString() + " ]";
     }
 
 

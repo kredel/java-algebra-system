@@ -50,6 +50,22 @@ public class RootFactory {
      * @return true, if f(r) == 0, else false;
      */
     public static <C extends GcdRingElem<C> & Rational> 
+           boolean isRootRealCoeff(GenPolynomial<C> f, Complex<RealAlgebraicNumber<C>> r) {
+        RingFactory<C> cfac = f.ring.coFac;
+        ComplexRing<C> ccfac = new ComplexRing<C>(cfac);
+        GenPolynomialRing<Complex<C>> facc = new GenPolynomialRing<Complex<C>>(ccfac, f.ring);
+        GenPolynomial<Complex<C>> fc = PolyUtil.<C> complexFromAny(facc, f);
+        return isRoot(fc,r);
+    }
+
+
+    /**
+     * Is complex algebraic number a root of a polynomial.
+     * @param f univariate polynomial.
+     * @param r complex algebraic number.
+     * @return true, if f(r) == 0, else false;
+     */
+    public static <C extends GcdRingElem<C> & Rational> 
            boolean isRoot(GenPolynomial<Complex<C>> f, Complex<RealAlgebraicNumber<C>> r) {
         ComplexRing<RealAlgebraicNumber<C>> cr = r.factory(); 
         GenPolynomialRing<Complex<RealAlgebraicNumber<C>>> cfac 

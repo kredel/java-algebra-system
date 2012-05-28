@@ -56,6 +56,17 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational> implements
      * The constructor creates a RealAlgebraicNumber object from a GenPolynomial
      * value.
      * @param r ring RealAlgebraicRing<C>.
+     * @param a value element <C>.
+     */
+    public RealAlgebraicNumber(RealAlgebraicRing<C> r, C a) {
+        this(r, r.realRing.parse(a.toString()));
+    }
+
+
+    /**
+     * The constructor creates a RealAlgebraicNumber object from a GenPolynomial
+     * value.
+     * @param r ring RealAlgebraicRing<C>.
      * @param a value GenPolynomial<C>.
      */
     public RealAlgebraicNumber(RealAlgebraicRing<C> r, GenPolynomial<C> a) {
