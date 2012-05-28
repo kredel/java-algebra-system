@@ -998,7 +998,7 @@ public class PolyUtil {
      * @param S nonzero base GenPolynomial.
      * @return remainder with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
      * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
-     * @note not always meaningful and working
+     * <b>Note:</b> not always meaningful and working
      */
     public static <C extends RingElem<C>> boolean isBasePseudoQuotientRemainder(
            GenPolynomial<C> P, GenPolynomial<C> S,
@@ -1275,7 +1275,7 @@ public class PolyUtil {
      * @param S nonzero recursive GenPolynomial.
      * @return remainder with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
      * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
-     * @note not always meaningful and working
+     * <b>Note:</b> not always meaningful and working
      */
     public static <C extends RingElem<C>> boolean isRecursivePseudoQuotientRemainder(
            GenPolynomial<GenPolynomial<C>> P, GenPolynomial<GenPolynomial<C>> S,

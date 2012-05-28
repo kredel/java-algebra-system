@@ -574,7 +574,7 @@ public class PolyUtilTest extends TestCase {
 
     /**
      * Test recursive pseudo division.
-     * @see edu.jas.ufd.PolyUfdUtilTest#testRecursivePseudoDivision
+     * @see edu.jas.ufd.PolyUfdUtilTest#testRecursivePseudoDivisionSparse
      */
     public void testRecursivePseudoDivision() {
     }

@@ -1622,7 +1622,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * polynomial with Complex&lt;RealAlgebraicNumber&gt; coefficients, C is
      * e.g. BigRational.
      * @param pfac result polynomial factory.
-     * @param A(X,Y) a recursive polynomial with GenPolynomial&lt;Complex&gt; coefficients to be converted.
+     * @param A = A(x,Y) a recursive polynomial with GenPolynomial&lt;Complex&gt; coefficients to be converted.
      * @param r Complex&lt;RealAlgebraicNumber&gt; to be evaluated at.
      * @return A(r,Y), a polynomial with Complex&lt;RealAlgebraicNumber&gt; coefficients.
      */
