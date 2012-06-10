@@ -74,6 +74,10 @@ public class Rectangle<C extends RingElem<C> & Rational> {
 
     /**
      * Constructor.
+     * <pre>
+     *  nw|0 ne|3
+     *  sw|1 se|2
+     * </pre>
      * @param nw corner.
      * @param sw corner.
      * @param se corner.
@@ -369,6 +373,26 @@ public class Rectangle<C extends RingElem<C> & Rational> {
     public BigRational rationalLength() {
         //BigRational r = new BigRational(length().toString());
         return length().getRational();
+    }
+
+
+    /**
+     * Length real side.
+     * @return |re(ne)-re(sw)|;
+     */
+    public C lengthReal() {
+        C m = corners[3].getRe().subtract(corners[1].getRe());
+        return m.abs();
+    }
+
+
+    /**
+     * Length imaginary side.
+     * @return |im(ne)-im(sw)|;
+     */
+    public C lengthImag() {
+        C m = corners[3].getIm().subtract(corners[1].getIm());
+        return m.abs();
     }
 
 }
