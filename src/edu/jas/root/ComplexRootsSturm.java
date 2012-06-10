@@ -16,6 +16,7 @@ import edu.jas.arith.BigRational;
 import edu.jas.poly.Complex;
 import edu.jas.poly.ComplexRing;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
@@ -151,6 +152,67 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
     @Override
     public long complexRootCount(Rectangle<C> rect, GenPolynomial<Complex<C>> a)
             throws InvalidBoundaryException {
+        C rl = rect.lengthReal();
+        C il = rect.lengthImag();
+        if ( rl.isZERO() && il.isZERO() ) {
+            Complex<C> e = PolyUtil.<Complex<C>> evaluateMain(a.ring.coFac, a, rect.getSW());
+            if ( e.isZERO() ) {
+                return 1;
+            }
+            return 0;
+        }
+        if ( rl.isZERO() || il.isZERO() ) {
+            RingFactory<C> cf = (RingFactory<C>) rl.factory();
+            GenPolynomialRing<C> rfac = new GenPolynomialRing<C>(cf,a.ring);
+            cf = (RingFactory<C>) il.factory();
+            GenPolynomialRing<C> ifac = new GenPolynomialRing<C>(cf,a.ring);
+            GenPolynomial<C> rp = PolyUtil.<C> realPartFromComplex(rfac, a);
+            GenPolynomial<C> ip = PolyUtil.<C> imaginaryPartFromComplex(ifac, a);
+            RealRoots<C> rr = new RealRootsSturm<C>();
+            if ( rl.isZERO() ) {
+                //logger.info("lengthReal == 0: " + rect);
+                //Complex<C> r = rect.getSW();
+                //r = new Complex<C>(r.ring,r.getRe()/*,0*/);
+                //Complex<C> e = PolyUtil.<Complex<C>> evaluateMain(a.ring.coFac, a, r);
+                //logger.info("a(re(rect)): " + e);
+                //if ( !e.getRe().isZERO() ) {
+                //    return 0;
+                //}
+                //C ev = PolyUtil.<C> evaluateMain(rp.ring.coFac, rp, rl);
+                //logger.info("re(a)(re(rect)): " + ev);
+                //Interval<C> iv = new Interval<C>(rect.getSW().getIm(),rect.getNE().getIm());
+                //logger.info("iv: " + iv);
+                //long ic = rr.realRootCount(iv,ip);
+                //logger.info("ic: " + ic);
+
+                Complex<C> sw = rect.getSW();
+                Complex<C> ne = rect.getNE();
+                C delta = sw.ring.ring.parse("1"); // everything seems to work 1/2000000");
+                Complex<C> cd = new Complex<C>(sw.ring,delta/*, 0*/);
+                sw = sw.subtract(cd);
+                ne = ne.sum(cd);
+                rect = rect.exchangeSW(sw);
+                rect = rect.exchangeNE(ne);
+                logger.info("new rectangle: " + rect);
+            }
+            if ( il.isZERO() ) {
+                //logger.info("lengthImag == 0: " + rect);
+                //Interval<C> rv = new Interval<C>(rect.getSW().getRe(),rect.getNE().getRe());
+                //logger.info("rv: " + rv);
+                //long rc = rr.realRootCount(rv,rp);
+                //logger.info("rc: " + rc);
+
+                Complex<C> sw = rect.getSW();
+                Complex<C> ne = rect.getNE();
+                C delta = sw.ring.ring.parse("1"); // /2000000");
+                Complex<C> cd = new Complex<C>(sw.ring,sw.ring.ring.getZERO(),delta);
+                sw = sw.subtract(cd);
+                ne = ne.sum(cd);
+                rect = rect.exchangeSW(sw);
+                rect = rect.exchangeNE(ne);
+                logger.info("new rectangle: " + rect);
+            }
+        }
         return windingNumber(rect, a);
     }
 
