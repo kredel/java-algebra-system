@@ -926,7 +926,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
                     List<RealAlgebraicNumber<D>> rlist = rroot.tuple;
                     Interval<D> vr = rlist.get(0).ring.getRoot();
                     Interval<D> vi = rlist.get(1).ring.getRoot();
-                    //logger.info("vr = " + vr + ", vi = " + vi);
+                    logger.info("vr = " + vr + ", vi = " + vi);
                     if ( vr.length().isZERO() ) {
                         D e = vr.left.factory().parse("1/2");
                         D m = vr.left; //middle();
@@ -997,7 +997,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
                         int snei = imne.signum();
                         //System.out.println("sswr = " + sswr + ", sswi = " + sswi);
                         //System.out.println("sner = " + sner + ", snei = " + snei);
-                        if ( (sswr * sner <= 0 && sswi * snei <= 0) ) { 
+                        if ( (sswr * sner <= 0 && sswi * snei <= 0) ) { // wrong !
                             logger.info("   hit, cxi = " + toString(cx.get(ix)) + ", cr = " + toString(cr));
                             List<Complex<edu.jas.application.RealAlgebraicNumber<D>>> cy;
                             cy = new ArrayList<Complex<edu.jas.application.RealAlgebraicNumber<D>>>();
@@ -1152,18 +1152,6 @@ public class PolyUtilApp<C extends RingElem<C>> {
                     Interval<D> vr = rlist.get(0).ring.getRoot();
                     Interval<D> vi = rlist.get(1).ring.getRoot();
                     logger.info("vr = " + vr + ", vi = " + vi);
-                    if ( vr.length().isZERO() ) {
-                        D e = vr.left.factory().parse("1/2");
-                        D m = vr.left; //middle();
-                        vr = new Interval<D>(m.subtract(e),m.sum(e));
-                        logger.info("|vr| == 0: " + vr);
-                    }
-                    if ( vi.length().isZERO() ) {
-                        D e = vi.left.factory().parse("1/2");
-                        D m = vi.left; //middle();
-                        vi = new Interval<D>(m.subtract(e),m.sum(e));
-                        logger.info("|vi| == 0: " + vi);
-                    }
                     edu.jas.application.RealAlgebraicNumber<D> vrl, vil, vrr, vir;
                     vrl = new edu.jas.application.RealAlgebraicNumber<D>(cring,vr.left);
                     vil = new edu.jas.application.RealAlgebraicNumber<D>(cring,vi.left);
@@ -1203,7 +1191,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
                         } catch(InvalidBoundaryException e) {
                             e.printStackTrace();
                         }
-                        if ( nr == 1 ) { // (sswr * sner <= 0 && sswi * snei <= 0)  
+                        if ( nr == 1 ) { // one root
                             logger.info("   hit, cxi = " + toString(cx.get(ix)) + ", cr = " + toString(cr));
                             List<Complex<edu.jas.application.RealAlgebraicNumber<D>>> cy;
                             cy = new ArrayList<Complex<edu.jas.application.RealAlgebraicNumber<D>>>();
@@ -1212,7 +1200,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
                             cn.add(cy);
                         } else if ( nr > 1 ) { 
                             logger.error("to many roots, cxi = " + toString(cx.get(ix)) + ", cr = " + toString(cr));
-                        } else {
+                        } else { // no root
                             logger.info("no hit, cxi = " + toString(cx.get(ix)) + ", cr = " + toString(cr));
                         }
                     }
