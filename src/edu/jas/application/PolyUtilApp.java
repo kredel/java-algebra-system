@@ -1129,7 +1129,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
                     //System.out.println("rlist = " + rlist);
                     Interval<D> vr = rlist.get(0).ring.getRoot();
                     Interval<D> vi = rlist.get(1).ring.getRoot();
-                    logger.info("vr = " + vr + ", vi = " + vi);
+                    //logger.info("vr = " + vr + ", vi = " + vi);
                     edu.jas.application.RealAlgebraicNumber<D> vrl, vil, vrr, vir;
                     vrl = new edu.jas.application.RealAlgebraicNumber<D>(cring,vr.left);
                     vil = new edu.jas.application.RealAlgebraicNumber<D>(cring,vi.left);
@@ -1140,7 +1140,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
                     Complex<edu.jas.application.RealAlgebraicNumber<D>> csw, cne;
                     csw = new Complex<edu.jas.application.RealAlgebraicNumber<D>>(crr,vrl,vil);
                     cne = new Complex<edu.jas.application.RealAlgebraicNumber<D>>(crr,vrr,vir);
-                    logger.info("csw  = " + toString(csw)   + ", cne  = " + toString(cne));
+                    //logger.info("csw  = " + toString(csw)   + ", cne  = " + toString(cne));
                     Rectangle<edu.jas.application.RealAlgebraicNumber<D>> rec;
                     rec = new Rectangle<edu.jas.application.RealAlgebraicNumber<D>>(csw,cne);
                     //System.out.println("rec = " + rec);
@@ -1159,13 +1159,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
                         long nr = 0;
                         try {
                             nr = rengine.complexRootCount(rec,pcr);
-                            logger.info("rootCount = " + nr);
-                            if (false) {
-                                List<Rectangle<edu.jas.application.RealAlgebraicNumber<D>>> roo = rengine.complexRoots(rec,pcr);
-                                System.out.println("roo_1 = " + roo);
-                                roo = rengine.complexRoots(pcr);
-                                System.out.println("roo_2 = " + roo);
-                            }
+                            //logger.info("rootCount = " + nr);
                         } catch(InvalidBoundaryException e) {
                             e.printStackTrace();
                         }

@@ -194,7 +194,7 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
                 ne = ne.sum(cd);
                 rect = rect.exchangeSW(sw);
                 rect = rect.exchangeNE(ne);
-                logger.info("new rectangle: " + rect);
+                logger.info("new rectangle: " + rect.toScript());
             }
             if ( il.isZERO() ) {
                 //logger.info("lengthImag == 0: " + rect);
@@ -211,7 +211,7 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
                 ne = ne.sum(cd);
                 rect = rect.exchangeSW(sw);
                 rect = rect.exchangeNE(ne);
-                logger.info("new rectangle: " + rect);
+                logger.info("new rectangle: " + rect.toScript());
             }
         }
         return windingNumber(rect, a);
