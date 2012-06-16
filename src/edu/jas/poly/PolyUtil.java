@@ -1003,27 +1003,27 @@ public class PolyUtil {
     public static <C extends RingElem<C>> boolean isBasePseudoQuotientRemainder(
            GenPolynomial<C> P, GenPolynomial<C> S,
            GenPolynomial<C> q, GenPolynomial<C> r) {
-	GenPolynomial<C> rhs = q.multiply(S).sum(r);
+        GenPolynomial<C> rhs = q.multiply(S).sum(r);
         //System.out.println("rhs,1 = " + rhs);
-	GenPolynomial<C> lhs = P;
-	C ldcf = S.leadingBaseCoefficient();
+        GenPolynomial<C> lhs = P;
+        C ldcf = S.leadingBaseCoefficient();
         long d = P.degree(0) - S.degree(0) + 1;
         d = ( d > 0 ? d : -d+2 );
         for ( long i = 0; i <= d; i++ ) {
             //System.out.println("lhs-rhs = " + lhs.subtract(rhs));
-	    if ( lhs.equals(rhs) ) {
+            if ( lhs.equals(rhs) ) {
                 //System.out.println("lhs,1 = " + lhs);
                 return true;
             }
             lhs = lhs.multiply(ldcf);
         }
-	GenPolynomial<C> Pp = P;
-	rhs = q.multiply(S);
+        GenPolynomial<C> Pp = P;
+        rhs = q.multiply(S);
         //System.out.println("rhs,2 = " + rhs);
         for ( long i = 0; i <= d; i++ ) {
             lhs = Pp.subtract(r);
             //System.out.println("lhs-rhs = " + lhs.subtract(rhs));
-	    if ( lhs.equals(rhs) ) {
+            if ( lhs.equals(rhs) ) {
                 //System.out.println("lhs,2 = " + lhs);
                 return true;
             }
@@ -1280,27 +1280,27 @@ public class PolyUtil {
     public static <C extends RingElem<C>> boolean isRecursivePseudoQuotientRemainder(
            GenPolynomial<GenPolynomial<C>> P, GenPolynomial<GenPolynomial<C>> S,
            GenPolynomial<GenPolynomial<C>> q, GenPolynomial<GenPolynomial<C>> r) {
-	GenPolynomial<GenPolynomial<C>> rhs = q.multiply(S).sum(r);
-	GenPolynomial<GenPolynomial<C>> lhs = P;
-	GenPolynomial<C> ldcf = S.leadingBaseCoefficient();
+        GenPolynomial<GenPolynomial<C>> rhs = q.multiply(S).sum(r);
+        GenPolynomial<GenPolynomial<C>> lhs = P;
+        GenPolynomial<C> ldcf = S.leadingBaseCoefficient();
         long d = P.degree(0) - S.degree(0) + 1;
         d = ( d > 0 ? d : -d+2 );
         for ( long i = 0; i <= d; i++ ) {
             //System.out.println("lhs = " + lhs);
             //System.out.println("rhs = " + rhs);
             //System.out.println("lhs-rhs = " + lhs.subtract(rhs));
-	    if ( lhs.equals(rhs) ) {
+            if ( lhs.equals(rhs) ) {
                 return true;
             }
             lhs = lhs.multiply(ldcf);
         }
-	GenPolynomial<GenPolynomial<C>> Pp = P;
-	rhs = q.multiply(S);
+        GenPolynomial<GenPolynomial<C>> Pp = P;
+        rhs = q.multiply(S);
         //System.out.println("rhs,2 = " + rhs);
         for ( long i = 0; i <= d; i++ ) {
             lhs = Pp.subtract(r);
             //System.out.println("lhs-rhs = " + lhs.subtract(rhs));
-	    if ( lhs.equals(rhs) ) {
+            if ( lhs.equals(rhs) ) {
                 //System.out.println("lhs,2 = " + lhs);
                 return true;
             }
@@ -2319,7 +2319,7 @@ public class PolyUtil {
 
 
     /**
-     * Remove all upper variables, which do not occur in polynomial.
+     * Remove all upper variables which do not occur in polynomial.
      * @param p polynomial.
      * @return polynomial with removed variables
      */
@@ -2333,7 +2333,9 @@ public class PolyUtil {
             return p;
         }
         if (dep.length == 0) { // no variables
-            return p;
+            GenPolynomialRing<C> fac0 = new GenPolynomialRing<C>(fac.coFac,0);
+            GenPolynomial<C> p0 = new GenPolynomial<C>(fac0,p.leadingBaseCoefficient());
+            return p0;
         }
         int l = dep[0]; // higher variable
         int r = dep[dep.length - 1]; // lower variable
@@ -2358,7 +2360,7 @@ public class PolyUtil {
 
 
     /**
-     * Remove all lower variables, which do not occur in polynomial.
+     * Remove all lower variables which do not occur in polynomial.
      * @param p polynomial.
      * @return polynomial with removed variables
      */
@@ -2372,7 +2374,9 @@ public class PolyUtil {
             return p;
         }
         if (dep.length == 0) { // no variables
-            return p;
+            GenPolynomialRing<C> fac0 = new GenPolynomialRing<C>(fac.coFac,0);
+            GenPolynomial<C> p0 = new GenPolynomial<C>(fac0,p.leadingBaseCoefficient());
+            return p0;
         }
         int l = dep[0]; // higher variable
         int r = dep[dep.length - 1]; // lower variable
@@ -2400,6 +2404,79 @@ public class PolyUtil {
             pr.doPutToMap(e, c);
         }
         return pr;
+    }
+
+
+    /**
+     * Remove upper block of middle variables which do not occur in polynomial.
+     * @param p polynomial.
+     * @return polynomial with removed variables
+     */
+    public static <C extends RingElem<C>> GenPolynomial<C> removeUnusedMiddleVariables(GenPolynomial<C> p) {
+        GenPolynomialRing<C> fac = p.ring;
+        if (fac.nvar <= 2) { // univariate or bi-variate
+            return p;
+        }
+        int[] dep = p.degreeVector().dependencyOnVariables();
+        if (fac.nvar == dep.length) { // all variables appear
+            return p;
+        }
+        if (dep.length == 0) { // no variables
+            GenPolynomialRing<C> fac0 = new GenPolynomialRing<C>(fac.coFac,0);
+            GenPolynomial<C> p0 = new GenPolynomial<C>(fac0,p.leadingBaseCoefficient());
+            return p0;
+        }
+        ExpVector e1 = p.leadingExpVector();
+        if (dep.length == 1) { // one variable
+            TermOrder to = new TermOrder(fac.tord.getEvord());
+            int i = dep[0];
+            String v1 = e1.indexVarName(i,fac.getVars());
+            String[] vars = new String[] { v1 };
+            GenPolynomialRing<C> fac1 = new GenPolynomialRing<C>(fac.coFac, to, vars);
+            GenPolynomial<C> p1 = fac1.getZERO().clone(); 
+            for (Monomial<C> m : p) {
+                 ExpVector e = m.e;
+                 ExpVector f = ExpVector.create(1,0,e.getVal(i));
+                 p1.doPutToMap(f, m.c);
+            }
+            return p1;
+        }
+        GenPolynomialRing<GenPolynomial<C>> rfac = fac.recursive(1);
+        GenPolynomial<GenPolynomial<C>> mpr = recursive(rfac, p);
+
+        int l = dep[0];            // higher variable
+        int r = fac.nvar - dep[1]; // next variable
+        //System.out.println("l  = " + l);
+        //System.out.println("r  = " + r);
+
+        TermOrder to = new TermOrder(fac.tord.getEvord());
+        String[] vs = fac.getVars();
+        String[] vars = new String[ r+1 ];
+        for ( int i = 0; i < r; i++ ) {
+	    vars[i] = vs[i];
+        }
+        vars[r] = e1.indexVarName(l,vs);
+        //System.out.println("fac  = " + fac);
+        GenPolynomialRing<C> dfac = new GenPolynomialRing<C>(fac.coFac, to, vars);
+        //System.out.println("dfac = " + dfac);
+        GenPolynomialRing<GenPolynomial<C>> fac2 = dfac.recursive(1);
+        GenPolynomialRing<C> cfac = (GenPolynomialRing<C>) fac2.coFac;
+        GenPolynomial<GenPolynomial<C>> p2r = fac2.getZERO().clone();
+        for (Monomial<GenPolynomial<C>> m : mpr) {
+            ExpVector e = m.e;
+            GenPolynomial<C> a = m.c;
+            Map<ExpVector,GenPolynomial<C>> cc = a.contract(cfac);
+            for ( ExpVector f : cc.keySet() ) {
+                if ( f.isZERO() ) {
+                    GenPolynomial<C> c = cc.get(f);
+                    p2r.doPutToMap(e, c);
+                } else {
+                    throw new RuntimeException("this should not happen " + cc);
+                }
+            }
+        }
+        GenPolynomial<C> p2 = distribute(dfac, p2r);
+        return p2;
     }
 
 

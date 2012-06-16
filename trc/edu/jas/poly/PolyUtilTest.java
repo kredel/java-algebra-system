@@ -1567,4 +1567,110 @@ public class PolyUtilTest extends TestCase {
         assertTrue("!isONE( cp )", !cp.isONE());
     }
 
+
+    /**
+     * Test remove unused upper varaibles.
+     */
+    public void testRemoveUnusedUpper() {
+        //System.out.println("dfac = " + dfac);
+        a = dfac.univariate(3, 2);
+        b = a.subtract(dfac.univariate(1, 1));
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+
+        c = PolyUtil.<BigInteger> removeUnusedUpperVariables(b);
+        //System.out.println("c = " + c + ", fac = " + c.ring);
+        assertTrue("#var == 4: " + c.ring.nvar, c.ring.nvar == 4);
+
+        a = dfac.univariate(3, 2);
+        //System.out.println("a = " + a);
+
+        c = PolyUtil.<BigInteger> removeUnusedUpperVariables(a);
+        //System.out.println("c = " + c + ", fac = " + c.ring);
+        assertTrue("#var == 2: " + c.ring.nvar, c.ring.nvar == 2);
+
+        a = dfac.univariate(1, 2);
+        //System.out.println("a = " + a);
+
+        c = PolyUtil.<BigInteger> removeUnusedUpperVariables(a);
+        //System.out.println("c = " + c + ", fac = " + c.ring);
+        assertTrue("#var == 4: " + c.ring.nvar, c.ring.nvar == 4);
+    }
+
+
+    /**
+     * Test remove unused lower varaibles.
+     */
+    public void testRemoveUnusedLower() {
+        //System.out.println("dfac = " + dfac);
+        a = dfac.univariate(3, 2);
+        b = a.subtract(dfac.univariate(1, 1));
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+
+        c = PolyUtil.<BigInteger> removeUnusedLowerVariables(b);
+        //System.out.println("c = " + c + ", fac = " + c.ring);
+        assertTrue("#var == 4: " + c.ring.nvar, c.ring.nvar == 4);
+
+        a = dfac.univariate(3, 2);
+        //System.out.println("a = " + a);
+
+        c = PolyUtil.<BigInteger> removeUnusedLowerVariables(a);
+        //System.out.println("c = " + c + ", fac = " + c.ring);
+        assertTrue("#var == 4: " + c.ring.nvar, c.ring.nvar == 4);
+
+        a = dfac.univariate(1, 2);
+        //System.out.println("a = " + a);
+
+        c = PolyUtil.<BigInteger> removeUnusedLowerVariables(a);
+        //System.out.println("c = " + c + ", fac = " + c.ring);
+        assertTrue("#var == 2: " + c.ring.nvar, c.ring.nvar == 2);
+    }
+
+
+    /**
+     * Test remove unused middle varaibles.
+     */
+    public void testRemoveUnusedMiddle() {
+        //System.out.println("dfac = " + dfac);
+        a = dfac.univariate(4, 2);
+        b = a.subtract(dfac.univariate(0, 1));
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+
+        c = PolyUtil.<BigInteger> removeUnusedLowerVariables(b);
+        //System.out.println("c = " + c + ", fac = " + c.ring);
+        assertTrue("#var == 5: " + c.ring.nvar, c.ring.nvar == 5);
+        c = PolyUtil.<BigInteger> removeUnusedUpperVariables(c);
+        //System.out.println("c = " + c + ", fac = " + c.ring);
+        assertTrue("#var == 5: " + c.ring.nvar, c.ring.nvar == 5);
+
+        c = PolyUtil.<BigInteger> removeUnusedMiddleVariables(c);
+        //System.out.println("c = " + c + ", fac = " + c.ring);
+        assertTrue("#var == 2: " + c.ring.nvar, c.ring.nvar == 2);
+
+        a = dfac.univariate(3, 2);
+        b = a.subtract(dfac.univariate(1, 1));
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+
+        try {
+             c = PolyUtil.<BigInteger> removeUnusedMiddleVariables(b);
+             fail("c = " + c + ", fac = " + c.ring);
+        } catch (RuntimeException e) {
+	    // success
+        }
+
+        c = PolyUtil.<BigInteger> removeUnusedLowerVariables(b);
+        //System.out.println("c = " + c + ", fac = " + c.ring);
+        assertTrue("#var == 4: " + c.ring.nvar, c.ring.nvar == 4);
+        c = PolyUtil.<BigInteger> removeUnusedUpperVariables(c);
+        //System.out.println("c = " + c + ", fac = " + c.ring);
+        assertTrue("#var == 3: " + c.ring.nvar, c.ring.nvar == 3);
+
+        c = PolyUtil.<BigInteger> removeUnusedMiddleVariables(c);
+        //System.out.println("c = " + c + ", fac = " + c.ring);
+        assertTrue("#var == 2: " + c.ring.nvar, c.ring.nvar == 2);
+    }
+
 }
