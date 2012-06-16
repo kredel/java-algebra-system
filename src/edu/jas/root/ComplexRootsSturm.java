@@ -154,6 +154,7 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
             throws InvalidBoundaryException {
         C rl = rect.lengthReal();
         C il = rect.lengthImag();
+        // only linear polynomials have zero length intervals
         if ( rl.isZERO() && il.isZERO() ) {
             Complex<C> e = PolyUtil.<Complex<C>> evaluateMain(a.ring.coFac, a, rect.getSW());
             if ( e.isZERO() ) {
@@ -187,7 +188,7 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
 
                 Complex<C> sw = rect.getSW();
                 Complex<C> ne = rect.getNE();
-                C delta = sw.ring.ring.parse("1"); // everything seems to work 1/2000000");
+                C delta = sw.ring.ring.parse("1"); // works since linear polynomial
                 Complex<C> cd = new Complex<C>(sw.ring,delta/*, 0*/);
                 sw = sw.subtract(cd);
                 ne = ne.sum(cd);
@@ -204,7 +205,7 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
 
                 Complex<C> sw = rect.getSW();
                 Complex<C> ne = rect.getNE();
-                C delta = sw.ring.ring.parse("1"); // /2000000");
+                C delta = sw.ring.ring.parse("1"); // works since linear polynomial
                 Complex<C> cd = new Complex<C>(sw.ring,sw.ring.ring.getZERO(),delta);
                 sw = sw.subtract(cd);
                 ne = ne.sum(cd);

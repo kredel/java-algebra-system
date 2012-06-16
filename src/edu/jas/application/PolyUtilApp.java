@@ -1060,12 +1060,6 @@ public class PolyUtilApp<C extends RingElem<C>> {
         List<Complex<edu.jas.application.RealAlgebraicNumber<D>>> cra;
         cra = edu.jas.application.RootFactory.<D> complexAlgebraicNumbersSquarefree(p0c);
         logger.info("#roots(p0c) = " + cra.size());
-        if (debug) {
-            boolean t = edu.jas.application.RootFactory.<D> isRoot(p0c, cra);
-            if (!t) {
-                throw new RuntimeException("no roots of " + p0c);
-            }
-        }
         for (Complex<edu.jas.application.RealAlgebraicNumber<D>> cr : cra) {
             List<Complex<edu.jas.application.RealAlgebraicNumber<D>>> cl; 
             cl = new ArrayList<Complex<edu.jas.application.RealAlgebraicNumber<D>>>();
@@ -1098,12 +1092,6 @@ public class PolyUtilApp<C extends RingElem<C>> {
             }
             cra = edu.jas.application.RootFactory.<D> complexAlgebraicNumbersSquarefree(pic);
             logger.info("#roots(pic) = " + cra.size());
-            if (debug) {
-                boolean t = edu.jas.application.RootFactory.<D> isRoot(pic, cra);
-                if (!t) {
-                    throw new RuntimeException("no roots of " + pic);
-                }
-            }
             if (depi.length == 1) {
                 // all combinations are roots of the ideal I
                 for (Complex<edu.jas.application.RealAlgebraicNumber<D>> cr : cra) {
@@ -1121,17 +1109,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
                 // select roots of the ideal I
                 GenPolynomial<D> pip2 = PolyUtil.<D> removeUnusedUpperVariables(pip);
                 pip2 = PolyUtil.<D> removeUnusedLowerVariables(pip2);
-                if ( pip2.ring.nvar != 2 ) { // remove unused middle variables
-                    GenPolynomialRing<D> pip2ring = pip2.ring;
-                    TermOrder to = pip2ring.tord;
-                    String v1 = pip2ring.getVars()[0];
-                    String v2 = pip2ring.getVars()[pip2.ring.nvar-1];
-                    String[] vars = new String[] { v1, v2 };
-                    GenPolynomialRing<D> pip2fac = new GenPolynomialRing<D>(pip2ring.coFac, to, vars);
-                    logger.info("removed variables: = " + pip2ring + " to " + pip2fac);
-                    pip2 = convert(pip2fac,pip2);
-                    //throw new RuntimeException("implementation missing for middle variables: " + pip2.ring);
-                }
+                pip2 = PolyUtil.<D> removeUnusedMiddleVariables(pip2);
                 GenPolynomialRing<GenPolynomial<D>> rfac = pip2.ring.recursive(1);
                 GenPolynomialRing<D> ufac = pip2.ring.contract(1);
                 GenPolynomialRing<Complex<D>> ucfac = new GenPolynomialRing<Complex<D>>(ccfac, ufac);
