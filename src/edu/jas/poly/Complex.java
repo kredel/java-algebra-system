@@ -191,15 +191,21 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
         if (im.isZERO()) {
             s.append(re.toScript());
         } else {
-            s.append("");
+            C mi = im;
+            //s.append("");
             if (!re.isZERO()) {
                 s.append(re.toScript());
-                s.append(" + ");
+                if (mi.signum() > 0) {
+                    s.append(" + ");
+	        } else {
+                    s.append(" - ");
+                    mi = mi.negate();
+                }
             }
-            if (im.isONE()) {
+            if (mi.isONE()) {
                 s.append("I");
             } else {
-                s.append(im.toScript()).append(" * I");
+                s.append(mi.toScript()).append(" * I");
             }
             s.append("");
         }

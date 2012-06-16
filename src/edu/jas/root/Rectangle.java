@@ -108,7 +108,7 @@ public class Rectangle<C extends RingElem<C> & Rational> {
     public String toScript() {
         // Python case
         //return "(" + corners[0] + ", " + corners[1] + ", " + corners[2] + ", " + corners[3] + ")";
-        return "(" + corners[1] + ", " + corners[3] + ")";
+        return "(" + corners[1].toScript() + ", " + corners[3].toScript() + ")";
     }
 
 
