@@ -3445,7 +3445,9 @@ jfunc(int i) must return a value of type ring.coFac.
 clazz must implement the Coefficients abstract class.
 =end
     def create(ifunc=nil,jfunc=nil,clazz=nil)
-        #puts "ifunc"
+        #puts "ifunc "
+        #puts "jfunc "
+        #puts "clazz " + str(clazz)
         if clazz == nil
             cf = Mcoeff.new(@ring,ifunc,jfunc);
             ps = MultiVarPowerSeries.new( @ring, cf );
