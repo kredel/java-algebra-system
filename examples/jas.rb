@@ -243,7 +243,7 @@ def CR(re=BigRational.new(),im=BigRational.new(),ring=nil)
             c = Complex.new(r,re);
         end
     else
-        c = BigComplex.new(r,re,im);
+        c = Complex.new(r,re,im);
     end
     return RingElem.new(c);
 end
@@ -1744,6 +1744,7 @@ SimIdeal constructor.
         end
         @pset = OrderedPolynomialList.new(@ring.ring,@list);
         @roots = nil;
+        @croots = nil;
         @prime = nil;
         @primary = nil;
         #super(@ring::ring,@list) # non-sense, JRuby extends edu.jas.application.Ideal without beeing told
@@ -3737,7 +3738,8 @@ Constructor to set base field.
 =end
     def initialize(base)
         if base.is_a? RingElem
-            factory = base.elem;
+            #factory = base.elem;
+            factory = base.ring;
         else
             factory = base;
         end
@@ -3746,6 +3748,7 @@ Constructor to set base field.
         rescue
             #pass
         end
+        puts "extension field factory: " + factory.toScript(); # + " :: " + factory.toString();
         if factory.is_a? ExtensionFieldBuilder
             @builder = factory;
         else
@@ -3807,7 +3810,7 @@ Get extension field tower.
     def build()
         rf = @builder.build();
         if rf.is_a? GenPolynomialRing
-            return PolyRing.new(rf.coFac,rf.getVars());
+            return PolyRing.new(rf.coFac,rf.getVars(),rf.tord);
         else
             return RingElem.new(rf.getZERO());
         end
