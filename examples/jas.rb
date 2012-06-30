@@ -2087,7 +2087,7 @@ Compute complex roots of 0-dim ideal.
 Print decimal approximation of complex roots of 0-dim ideal.
 =end
     def complexRootsPrint()
-        if @roots == nil
+        if @croots == nil
             ii = Ideal.new(@pset);
             @croots = PolyUtilApp.complexAlgebraicRoots(ii);
             for r in @croots
