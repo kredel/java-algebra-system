@@ -219,14 +219,14 @@ class Mycoeff < MultiVarCoefficients
         @jfunc = jfunc;
     end
     def generate(i) # type(i) == ExpVector
-        if i.isZERO()
+        if i.signum() <= 0
             return @coFac.getONE();
         else
             dep = i.dependencyOnVariables();
-            if dep.length == 0 
-               return @coFac.getZERO();
-            end
-            i1 = i.subst( dep[0], i.getVal(dep[0])-1 ); # i1 < i
+            #if dep.length == 0 
+            #   return @coFac.getZERO();
+            #end
+            i1 = i.subst( dep[0], i.getVal(dep[0])-1 ); # 0 <= i1 < i
             c = get( i1 ).negate();
             c = c.divide( @coFac.fromInteger(i.maxDeg()) ).sum( @coFac.fromInteger(i.totalDeg()-1) );
             #puts "c: " + str(c) + " i: " + str(i);

@@ -1691,6 +1691,7 @@ end
 
 include_class "edu.jas.gb.DGroebnerBaseSeq";
 include_class "edu.jas.gb.EGroebnerBaseSeq";
+include_class "edu.jas.gb.EReductionSeq";
 include_class "edu.jas.gb.GroebnerBaseDistributed";
 include_class "edu.jas.gb.GBDist";
 include_class "edu.jas.gb.GroebnerBaseParallel";
@@ -1969,6 +1970,38 @@ Client for a distributed computation.
     end
 
 =begin rdoc
+Compute a normal form of p with respect to this ideal.
+=end
+    def reduction(p)
+        s = @pset;
+        gg = s.list;
+        if p.is_a? RingElem
+            p = p.elem;
+        end
+        t = System.currentTimeMillis();
+        n = ReductionSeq.new().normalform(gg,p);
+        t = System.currentTimeMillis() - t;
+        puts "sequential reduction executed in " + str(t) + " ms"; 
+        return RingElem.new(n);
+    end
+
+=begin rdoc
+Compute a e-normal form of p with respect to this ideal.
+=end
+    def eReduction(p)
+        s = @pset;
+        gg = s.list;
+        if p.is_a? RingElem
+            p = p.elem;
+        end
+        t = System.currentTimeMillis();
+        n = EReductionSeq.new().normalform(gg,p);
+        t = System.currentTimeMillis() - t;
+        puts "sequential eReduction executed in " + str(t) + " ms"; 
+        return RingElem.new(n);
+    end
+
+=begin rdoc
 Compute a normal form of this ideal with respect to reducer.
 =end
     def NF(reducer)
@@ -1981,6 +2014,7 @@ Compute a normal form of this ideal with respect to reducer.
         puts "sequential NF executed in #{t} ms\n"; 
         return SimIdeal.new(@ring,"",nn);
     end
+
 
 =begin rdoc
 Compute the intersection of this and the given polynomial ring.
