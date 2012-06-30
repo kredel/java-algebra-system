@@ -3003,8 +3003,8 @@ Solvable module constructor.
         else
            @mset = ModuleList.new(ring.ring,nil);
            @cols = cols;
-        @ring = @mset.ring;
         end
+        @ring = @mset.ring;
     end
 
 =begin rdoc
