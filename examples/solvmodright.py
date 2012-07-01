@@ -16,7 +16,8 @@ RelationTable
 """;
 
 rsc = """
-C(Y,X,x,y) G |2|
+# not supported: C(Y,X,x,y) G |2|
+C(Y,X,x,y) G 
 RelationTable
 (
  ( y ), ( x ), ( 0i1 x y )

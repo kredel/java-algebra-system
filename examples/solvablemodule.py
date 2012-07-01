@@ -55,3 +55,4 @@ ftg = f.twosidedGB();
 print "seq twosided GB:", ftg;
 print;
 
+# split term order not supported for rightGB
