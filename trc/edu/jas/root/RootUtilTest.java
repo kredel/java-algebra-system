@@ -247,6 +247,7 @@ public class RootUtilTest extends TestCase {
     public void testComplexRationalFactory() {
         a = dfac.random(kl, ll, el, q);
         //a = a.multiply( dfac.univariate(0) );
+        //a = dfac.parse(" 1/8 x^6 - 5/3 x^5 + 3/20 x^4 - 2 x^3 ");
         //System.out.println("a = " + a);
 
         List<ComplexAlgebraicNumber<BigRational>> lcn = RootFactory.<BigRational> complexAlgebraicNumbers(a);
