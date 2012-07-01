@@ -18,6 +18,7 @@ import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.ModuleList;
 import edu.jas.poly.PolynomialList;
+import edu.jas.poly.TermOrder;
 
 
 
@@ -256,6 +257,10 @@ public class ModSolvableGroebnerBaseAbstract<C extends RingElem<C>>
         if ( debug ) {
            logger.info("M ====================== \n" + M);
         }
+        TermOrder to = M.ring.tord;
+        if ( to.getSplit() <= M.ring.nvar ) {
+            throw new IllegalArgumentException("extended TermOrders not supported for rightGBs: " + to);
+        }
         List<List<GenSolvablePolynomial<C>>> mlist = M.castToSolvableList();
         GenSolvablePolynomialRing<C> sring 
             = (GenSolvablePolynomialRing<C>)M.ring;
@@ -281,8 +286,8 @@ public class ModSolvableGroebnerBaseAbstract<C extends RingElem<C>>
         ModuleList<C> rMg = leftGB( rM );
         if ( debug ) {
            logger.info("rMg -------------------- \n" + rMg);
+           logger.info("isLeftGB(rMg) ---------- " + isLeftGB(rMg));
         }
-
         mlist = rMg.castToSolvableList();
         nlist = new ArrayList<List<GenSolvablePolynomial<C>>>( rMg.rows );
         for ( List<GenSolvablePolynomial<C>> row : mlist ) {
@@ -298,6 +303,7 @@ public class ModSolvableGroebnerBaseAbstract<C extends RingElem<C>>
         ModuleList<C> Mg = new ModuleList<C>( sring, nlist );
         if ( debug ) {
            logger.info("Mg -------------------- \n" + Mg);
+           logger.info("isRightGB(Mg) --------- " + isRightGB(Mg));
         }
         return Mg;
     }

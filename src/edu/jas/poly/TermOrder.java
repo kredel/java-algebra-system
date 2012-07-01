@@ -1543,8 +1543,9 @@ public final class TermOrder implements Serializable {
             return new TermOrder(w);
         }
         if (evord2 != 0) {
-            if (debug) {
-                logger.warn("TermOrder is already extended");
+            logger.warn("TermOrder is already extended");
+            if ( false && debug ) {
+                throw new IllegalArgumentException("TermOrder is already extended: " + this);
             }
             return new TermOrder(evord, evord2, r + k, evend1 + k);
         }

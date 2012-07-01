@@ -226,7 +226,8 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
                 //System.out.println("s right = " + s);
                 h = sred.rightNormalform( F, s );
                 if ( ! h.isZERO() ) {
-                   logger.info("isRightGB non zero h = " + h);
+                   logger.info("isRightGB non zero h = " + h + " :: " + h.ring);
+                   logger.info("p"+i+" = " + pi + ", p"+j+" = " + pj );
                    return false;
                 } else {
                     //logger.info("isRightGB zero h = " + h);
@@ -369,6 +370,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
             return F;
         }
         GenSolvablePolynomialRing<C> rring = ring.reverse(true); //true
+        //System.out.println("reversed ring = " + rring);
         //ring = rring.reverse(true); // true
         GenSolvablePolynomial<C> q;
         List<GenSolvablePolynomial<C>> rF;
@@ -383,6 +385,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
            PolynomialList<C> pl = new PolynomialList<C>(rring,rF);
            logger.info("reversed problem = " + pl);
         }
+        //System.out.println("reversed problem = " + rF);
         List<GenSolvablePolynomial<C>> rG = leftGB( modv, rF );
         if ( true || debug ) {
             //PolynomialList<C> pl = new PolynomialList<C>(rring,rG);
@@ -392,6 +395,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
             t = System.currentTimeMillis() - t;
             logger.info("is left GB = " + isit + ", in " + t + " milliseconds");
         }
+        //System.out.println("reversed left GB = " + rG);
         ring = rring.reverse(true); // true
         List<GenSolvablePolynomial<C>> G = new ArrayList<GenSolvablePolynomial<C>>(rG.size());
         for ( GenSolvablePolynomial<C> p : rG ) {
