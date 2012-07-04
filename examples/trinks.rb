@@ -6,12 +6,6 @@
 #load "examples/jas.rb"
 require "examples/jas"
 
-#startLog();
-
-#from jas import Ring
-#from jas import Ideal
-#from jas import startLog
-#from jas import terminate
 
 # trinks 6/7 example
 
@@ -20,7 +14,8 @@ require "examples/jas"
 #r = Ring.new( "Quat(B,S,T,Z,P,W) L" );
 #r = Ring.new( "Z(B,S,T,Z,P,W) L" );
 #r = Ring.new( "C(B,S,T,Z,P,W) L" );
-r = Ring.new( "Rat(B,S,T,Z,P,W) L" );
+#r = Ring.new( "Rat(B,S,T,Z,P,W) L" );
+r = PolyRing.new( QQ(),"B,S,T,Z,P,W", PolyRing.lex);
 puts "Ring: " + r.to_s;
 puts;
 

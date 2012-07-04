@@ -5,10 +5,8 @@
 
 import sys;
 
-from jas import Ring
-from jas import Ideal
-from jas import startLog
-from jas import terminate
+from jas import QQ, Ring, PolyRing, Ideal
+from jas import startLog, terminate
 
 
 # trinks 6/7 example
@@ -18,7 +16,8 @@ from jas import terminate
 #r = Ring( "Quat(B,S,T,Z,P,W) L" );
 #r = Ring( "Z(B,S,T,Z,P,W) L" );
 #r = Ring( "C(B,S,T,Z,P,W) L" );
-r = Ring( "Rat(B,S,T,Z,P,W) L" );
+#r = Ring( "Rat(B,S,T,Z,P,W) L" );
+r = PolyRing( QQ(),"B,S,T,Z,P,W", PolyRing.lex);
 print "Ring: " + str(r);
 print;
 
