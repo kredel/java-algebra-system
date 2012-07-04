@@ -3452,8 +3452,8 @@ Get the tangens power series, var r.
 (Inner) class which extends edu.jas.ps.MultiVarCoefficients
 
 ring must be a polynomial or multivariate power series ring.
-ifunc(int i) must return a value which is used in ((RingFactory)cofac).fromInteger().
-jfunc(int i) must return a value of type ring.coFac.
+ifunc(ExpVector i) must return a value which is used in ((RingFactory)cofac).fromInteger().
+jfunc(ExpVector i) must return a value of type ring.coFac.
 =end
         class Mcoeff < MultiVarCoefficients
             def initialize(ring,ifunc=nil,jfunc=nil)
@@ -3474,20 +3474,18 @@ jfunc(int i) must return a value of type ring.coFac.
 =begin rdoc
 Create a power series with given generating function.
 
-ifunc(int i) must return a value which is used in RingFactory.fromInteger().
-jfunc(int i) must return a value of type ring.coFac.
-clazz must implement the Coefficients abstract class.
+ifunc(ExpVector i) must return a value which is used in RingFactory.fromInteger().
+jfunc(ExpVector i) must return a value of type ring.coFac.
+clazz must implement the MultiVarCoefficients abstract class.
 =end
     def create(ifunc=nil,jfunc=nil,clazz=nil)
         #puts "ifunc "
         #puts "jfunc "
         #puts "clazz " + str(clazz)
         if clazz == nil
-            cf = Mcoeff.new(@ring,ifunc,jfunc);
-            ps = MultiVarPowerSeries.new( @ring, cf );
-        else
-            ps = MultiVarPowerSeries.new( @ring, clazz );
+            clazz = Mcoeff.new(@ring,ifunc,jfunc);
         end
+        ps = MultiVarPowerSeries.new( @ring, clazz );
         #puts "ps ", ps.toScript();
         return RingElem.new( ps );
     end
