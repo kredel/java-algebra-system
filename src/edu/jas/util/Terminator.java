@@ -140,7 +140,7 @@ public class Terminator {
      * hasJobs.
      * @return true, if there are possibly jobs, else false.
      */
-    public boolean hasJobs() {
+    public synchronized boolean hasJobs() {
         return (idler < workers);
     }
 

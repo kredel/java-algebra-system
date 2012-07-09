@@ -429,7 +429,7 @@ implements GcdRingElem<ComplexAlgebraicNumber<C>> {
             Rectangle<C> v = ring.engine.invariantMagnitudeRectangle(ring.root, 
                                                                      ring.algebraic.modul, 
                                                                      number.val,
-                                                                     ring.eps);
+                                                                     ring.getEps());
             ring.setRoot(v);
             //System.out.println("new v = " + v);
             Complex<C> ev = ring.engine.complexRectangleMagnitude(v, ring.algebraic.modul, number.val); //, ring.eps);
