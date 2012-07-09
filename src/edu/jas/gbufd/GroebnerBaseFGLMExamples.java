@@ -1005,7 +1005,7 @@ public class GroebnerBaseFGLMExamples extends TestCase {
     //Method bitHeight returns the bitlength of the greatest number occurring during the computation of a groebnerbase  
     public int bitHeight(List<GenPolynomial<BigRational>> list) {
         BigInteger denom = BigInteger.ONE;
-        BigInteger num = BigInteger.ONE;;
+        BigInteger num = BigInteger.ONE;
         for (GenPolynomial<BigRational> g : list) {
             for (Monomial<BigRational> m : g) {
                 BigRational bi = new BigRational();

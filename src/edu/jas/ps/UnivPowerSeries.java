@@ -612,7 +612,7 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
         for (int i = 0; i <= truncate; i++) {
             h += coefficient(i).hashCode();
             h = (h << 23);
-        };
+        }
         return h;
     }
 

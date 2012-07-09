@@ -354,7 +354,7 @@ public class Power<C extends RingElem<C> > {
             throw new IllegalArgumentException("fac may not be null for empty list");
         }
         C res = fac.getONE();
-        if ( A == null || A.size() == 0 ) {
+        if ( A == null || A.isEmpty() ) {
            return res;
         }
         for ( C a : A ) {
@@ -386,7 +386,7 @@ public class Power<C extends RingElem<C> > {
             throw new IllegalArgumentException("fac may not be null for empty list");
         }
         C res = fac.getZERO();
-        if ( A == null || A.size() == 0 ) {
+        if ( A == null || A.isEmpty() ) {
            return res;
         }
         for ( C a : A ) {

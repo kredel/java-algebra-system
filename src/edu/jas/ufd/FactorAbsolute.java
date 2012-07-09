@@ -281,7 +281,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
             //System.out.println("factors over K(alpha) = " + factors);
         }
         List<GenPolynomial<AlgebraicNumber<C>>> faca = new ArrayList<GenPolynomial<AlgebraicNumber<C>>>(
-                factors.size());;
+                factors.size());
         List<Factors<AlgebraicNumber<C>>> facar = new ArrayList<Factors<AlgebraicNumber<C>>>();
         for (GenPolynomial<AlgebraicNumber<C>> fi : factors) {
             if (fi.degree(0) <= 1) {

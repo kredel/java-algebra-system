@@ -1096,7 +1096,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
             }
             h += c.hashCode();
             h = (h << 23);
-        };
+        }
         return h;
     }
 
