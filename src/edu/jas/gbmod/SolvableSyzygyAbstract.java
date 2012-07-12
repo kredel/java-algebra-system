@@ -163,9 +163,9 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>> implements SolvableSy
         int modv = M.cols; // > 0  
         logger.info("modv = " + modv);
         List<List<GenSolvablePolynomial<C>>> G = leftZeroRelations(modv, F.castToSolvableList());
-        if (G == null) {
-            return N;
-        }
+        //if (G == null) {
+        //    return N;
+        //}
         List<List<GenSolvablePolynomial<C>>> Z = new ArrayList<List<GenSolvablePolynomial<C>>>();
         for (int i = 0; i < G.size(); i++) {
             List<GenSolvablePolynomial<C>> Gi = G.get(i);

@@ -254,7 +254,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
     @Override
     public String toString() {
         String res = null;
-        if (PrettyPrint.isTrue()) {
+        if (PrettyPrint.isTrue()&& coFac != null) {
             String scf = coFac.getClass().getSimpleName();
             if (coFac instanceof AlgebraicNumberRing) {
                 AlgebraicNumberRing an = (AlgebraicNumberRing) coFac;
@@ -279,12 +279,8 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
                 res = "Mod " + mn.getModul() + " ";
             }
             if (res == null) {
-                if (coFac != null) {
-                    res = coFac.toString();
-                    if (res.matches("[0-9].*")) {
-                        res = scf;
-                    }
-                } else {
+                res = coFac.toString();
+                if (res.matches("[0-9].*")) {
                     res = scf;
                 }
             }

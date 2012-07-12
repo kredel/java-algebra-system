@@ -176,9 +176,9 @@ public class SyzygyAbstract<C extends GcdRingElem<C>> implements Syzygy<C> {
         int modv = M.cols; // > 0  
         //System.out.println("modv = " + modv);
         List<List<GenPolynomial<C>>> G = zeroRelations(modv, F.list);
-        if (G == null) {
-            return N;
-        }
+        //if (G == null) {
+        //    return N;
+        //}
         List<List<GenPolynomial<C>>> Z = new ArrayList<List<GenPolynomial<C>>>();
         for (int i = 0; i < G.size(); i++) {
             //F = new PolynomialList(F.ring,(List)G.get(i));
@@ -535,9 +535,9 @@ public class SyzygyAbstract<C extends GcdRingElem<C>> implements Syzygy<C> {
         int modv = M.cols; // > 0  
         //System.out.println("modv = " + modv);
         List<List<GenPolynomial<C>>> G = zeroRelationsArbitrary(modv, F.list);
-        if (G == null) {
-            return N;
-        }
+        //if (G == null) {
+        //    return N;
+        //}
         List<List<GenPolynomial<C>>> Z = new ArrayList<List<GenPolynomial<C>>>();
         for (int i = 0; i < G.size(); i++) {
             //F = new PolynomialList(F.ring,(List)G.get(i));

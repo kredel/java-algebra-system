@@ -352,7 +352,7 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
         }
         for (MultiVarPowerSeries<C> p : P) {
             ExpVector ep = p.orderExpVector();
-            if (e == null) {
+            if (ep == null) { // found by findbugs
                 continue;
             }
             if (e.multipleOf(ep)) {
