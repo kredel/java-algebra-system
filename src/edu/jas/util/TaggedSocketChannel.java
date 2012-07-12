@@ -102,7 +102,7 @@ public class TaggedSocketChannel extends Thread {
      */
     public void send(Integer tag, Object v) throws IOException {
         if (tag == null) {
-            throw new IllegalArgumentException("tag " + tag + " not allowed");
+            throw new IllegalArgumentException("tag null not allowed");
         }
         if (v instanceof Exception) {
             throw new IllegalArgumentException("message " + v + " not allowed");

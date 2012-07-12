@@ -560,7 +560,7 @@ class ReducerServerSeqPair<C extends RingElem<C>> implements Runnable {
                 //logger.info("H = " + H);
                 if (H == null) {
                     if (pair != null) {
-                        polIndex = pairlist.record(pair, H);
+                        polIndex = pairlist.record(pair, null);
                         //pair.setZero();
                     }
                     pairlist.update();
