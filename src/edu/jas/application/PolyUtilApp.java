@@ -657,7 +657,13 @@ public class PolyUtilApp<C extends RingElem<C>> {
     public static <D extends GcdRingElem<D> & Rational> IdealWithRealAlgebraicRoots<D> realAlgebraicRoots(
                     IdealWithUniv<D> I) {
         List<List<RealAlgebraicNumber<D>>> ran = new ArrayList<List<RealAlgebraicNumber<D>>>();
-        if (I == null || I.ideal == null || I.ideal.isZERO() || I.upolys == null || I.upolys.size() == 0) {
+        if (I == null) {
+            throw new IllegalArgumentException("null ideal not permitted");
+        }
+        if (I.ideal == null || I.upolys == null) {
+            throw new IllegalArgumentException("null ideal components not permitted " + I);
+        }
+        if (I.ideal.isZERO() || I.upolys.size() == 0) {
             return new IdealWithRealAlgebraicRoots<D>(I, ran);
         }
         GenPolynomialRing<D> fac = I.ideal.list.ring;
@@ -814,7 +820,13 @@ public class PolyUtilApp<C extends RingElem<C>> {
                     IdealWithUniv<D> I) {
         List<List<Complex<edu.jas.application.RealAlgebraicNumber<D>>>> can; 
         can = new ArrayList<List<Complex<edu.jas.application.RealAlgebraicNumber<D>>>>();
-        if (I == null || I.ideal == null || I.ideal.isZERO() || I.upolys == null || I.upolys.size() == 0) {
+        if (I == null) {
+            throw new IllegalArgumentException("null ideal not permitted");
+        }
+        if (I.ideal == null || I.upolys == null) {
+            throw new IllegalArgumentException("null ideal components not permitted " + I);
+        }
+        if (I.ideal.isZERO() || I.upolys.size() == 0) {
             return new IdealWithComplexAlgebraicRoots<D>(I, can);
         }
         GenPolynomialRing<D> fac = I.ideal.list.ring;
@@ -1028,7 +1040,13 @@ public class PolyUtilApp<C extends RingElem<C>> {
                     IdealWithUniv<D> I) {
         List<List<Complex<edu.jas.application.RealAlgebraicNumber<D>>>> can; 
         can = new ArrayList<List<Complex<edu.jas.application.RealAlgebraicNumber<D>>>>();
-        if (I == null || I.ideal == null || I.ideal.isZERO() || I.upolys == null || I.upolys.size() == 0) {
+        if (I == null) {
+            throw new IllegalArgumentException("null ideal not permitted");
+        }
+        if (I.ideal == null || I.upolys == null) {
+            throw new IllegalArgumentException("null ideal components not permitted " + I);
+        }
+        if (I.ideal.isZERO() || I.upolys.size() == 0) {
             return new IdealWithComplexAlgebraicRoots<D>(I, can);
         }
         GenPolynomialRing<D> fac = I.ideal.list.ring;
