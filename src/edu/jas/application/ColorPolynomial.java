@@ -5,6 +5,7 @@
 package edu.jas.application;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -23,7 +24,7 @@ import edu.jas.structure.RingElem;
  * @author Heinz Kredel
  */
 
-public class ColorPolynomial<C extends RingElem<C>>
+public class ColorPolynomial<C extends RingElem<C>> implements Serializable
     /* implements RingElem< ColorPolynomial<C> > */ {
 
 

@@ -5,6 +5,8 @@
 package edu.jas.root;
 
 
+import java.io.Serializable;
+
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.Rational;
@@ -17,7 +19,7 @@ import edu.jas.structure.RingFactory;
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
-public class Interval<C extends RingElem<C> & Rational > {
+public class Interval<C extends RingElem<C> & Rational > implements Serializable { //findbugs
 
 
     /**
