@@ -235,7 +235,7 @@ public class BigIntegerTest extends TestCase {
             }
         }
         ten = new BigInteger(10);
-        assertTrue("j == 10 ", j.equals(ten) );
+        assertEquals("j == 10 ", j, ten );
     }
 
 
@@ -258,7 +258,7 @@ public class BigIntegerTest extends TestCase {
             }
         }
         ten = new BigInteger(20);
-        assertTrue("j == 10 ", j.equals(ten) );
+        assertEquals("j == 10 ", j, ten );
     }
 
 }

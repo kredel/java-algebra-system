@@ -96,6 +96,7 @@ public class Interval<C extends RingElem<C> & Rational > {
         try {
             a = (Interval<C>) b;
         } catch (ClassCastException e) {
+            return false;
         }
         return left.equals(a.left) && right.equals(a.right);
     }

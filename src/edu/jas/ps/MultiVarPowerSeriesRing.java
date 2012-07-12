@@ -157,8 +157,10 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
         this.nvar = nv;
         this.truncate = truncate;
         this.vars = names;
-        if (vars == null && PrettyPrint.isTrue()) {
-            vars = GenPolynomialRing.newVars("x", nvar);
+        if (vars == null) {
+            if (PrettyPrint.isTrue()) {
+                vars = GenPolynomialRing.newVars("x", nvar);
+            }
         } else {
             if (vars.length != nvar) {
                 throw new IllegalArgumentException("incompatible variable size " + vars.length + ", " + nvar);

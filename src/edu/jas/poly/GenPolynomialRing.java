@@ -202,8 +202,10 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
         C coeff = coFac.getONE();
         evzero = ExpVector.create(nvar);
         ONE = new GenPolynomial<C>(this, coeff, evzero);
-        if (vars == null && PrettyPrint.isTrue()) {
-            vars = newVars("x", nvar);
+        if (vars == null) {
+            if (PrettyPrint.isTrue()) {
+                vars = newVars("x", nvar);
+            }
         } else {
             if (vars.length != nvar) {
                 throw new IllegalArgumentException("incompatible variable size " + vars.length + ", " + nvar);
