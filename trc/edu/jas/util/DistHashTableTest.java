@@ -87,6 +87,7 @@ public class DistHashTableTest extends TestCase {
      */
     public void testDistHashTable1() {
         l1 = new DistHashTable<Integer,Integer>(host);
+        l1.init();
         assertTrue("l1==empty",l1.isEmpty());
     }
 
@@ -96,6 +97,7 @@ public class DistHashTableTest extends TestCase {
      */
     public void testDistHashTable2() {
         l1 = new DistHashTable<Integer,Integer>(host);
+        l1.init();
         assertTrue("l1==empty",l1.isEmpty());
 
         l1.putWait( new Integer(1), new Integer(1) );
@@ -127,8 +129,10 @@ public class DistHashTableTest extends TestCase {
      */
     public void testDistHashTable3() {
         l2 = new DistHashTable<Integer,Integer>(host);
+        l2.init();
         assertTrue("l2==empty",l2.isEmpty());
         l1 = new DistHashTable<Integer,Integer>(host);
+        l1.init();
         assertTrue("l1==empty",l1.isEmpty());
 
         int i = 0, loops = 10;
@@ -166,10 +170,13 @@ public class DistHashTableTest extends TestCase {
      */
     public void testDistHashTable4() {
         l1 = new DistHashTable<Integer,Integer>(host);
+        l1.init();
         assertTrue("l1==empty",l1.isEmpty());
         l2 = new DistHashTable<Integer,Integer>(host);
+        l2.init();
         assertTrue("l2==empty",l2.isEmpty());
         l3 = new DistHashTable<Integer,Integer>(host);
+        l3.init();
         assertTrue("l3==empty",l3.isEmpty());
 
         int i = 0, loops = 10;
@@ -215,6 +222,7 @@ public class DistHashTableTest extends TestCase {
      */
     public void testDistHashTable5() {
         l1 = new DistHashTable<Integer,Integer>(host);
+        l1.init();
         assertTrue("l1==empty",l1.isEmpty());
 
         int i = 0, loops = 10;
@@ -226,6 +234,7 @@ public class DistHashTableTest extends TestCase {
         assertTrue("#l1=="+loops, l1.size() == loops );
 
         l2 = new DistHashTable<Integer,Integer>(host);
+        l2.init();
         // assertTrue("l2==empty",l2.isEmpty());
         while ( l2.size() < loops ) {
             try {
@@ -255,6 +264,7 @@ public class DistHashTableTest extends TestCase {
      */
     public void testDistHashTable6() {
         l1 = new DistHashTable<Integer,Integer>(host);
+        l1.init();
         assertTrue("l1==empty",l1.isEmpty());
 
         int i = 0, loops = 10;
@@ -266,6 +276,7 @@ public class DistHashTableTest extends TestCase {
         assertTrue("#l1=="+loops, l1.size() == loops );
 
         l2 = new DistHashTable<Integer,Integer>(host);
+        l2.init();
 
         Iterator<Integer> it = null;
         it = l1.iterator();

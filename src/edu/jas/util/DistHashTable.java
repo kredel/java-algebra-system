@@ -30,6 +30,9 @@ public class DistHashTable<K, V> extends AbstractMap<K, V> /* implements Map<K,V
     private static final Logger logger = Logger.getLogger(DistHashTable.class);
 
 
+    private static boolean debug = logger.isDebugEnabled();
+
+
     protected final SortedMap<K, V> theList;
 
 
@@ -69,20 +72,19 @@ public class DistHashTable<K, V> extends AbstractMap<K, V> /* implements Map<K,V
      */
     public DistHashTable(ChannelFactory cf, String host, int port) {
         this.cf = cf;
-        cf.init();
+        cf.init(); // why? see constructor
         try {
             channel = cf.getChannel(host, port);
         } catch (IOException e) {
             e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        if (logger.isDebugEnabled()) {
+        if (debug) {
             logger.debug("dl channel = " + channel);
         }
         theList = new TreeMap<K, V>();
         listener = new DHTListener<K, V>(channel, theList);
-        synchronized (theList) {
-            listener.start();
-        }
+        // listener.start() is in initialize()
     }
 
 
@@ -95,9 +97,7 @@ public class DistHashTable<K, V> extends AbstractMap<K, V> /* implements Map<K,V
         channel = sc;
         theList = new TreeMap<K, V>();
         listener = new DHTListener<K, V>(channel, theList);
-        synchronized (theList) {
-            listener.start();
-        }
+        // listener.start() is in initialize()
     }
 
 
@@ -233,16 +233,9 @@ public class DistHashTable<K, V> extends AbstractMap<K, V> /* implements Map<K,V
      */
     public void putWait(K key, V value) {
         put(key, value); // = send
-        try {
-            synchronized (theList) {
-                while (!value.equals(theList.get(key))) {
-                    //System.out.print("#");
-                    theList.wait(100);
-                }
-            }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            e.printStackTrace();
+        // assume key does not change multiple times before test:
+        while (!value.equals(getWait(key))) {
+            //System.out.print("#");
         }
     }
 
@@ -259,7 +252,7 @@ public class DistHashTable<K, V> extends AbstractMap<K, V> /* implements Map<K,V
             throw new NullPointerException("null keys or values not allowed");
         }
         try {
-            DHTTransport<K,V> tc = DHTTransport.<K,V> create(key, value);
+            DHTTransport<K, V> tc = DHTTransport.<K, V> create(key, value);
             channel.send(tc);
             //System.out.println("send: "+tc+" @ "+listener);
         } catch (IOException e) {
@@ -327,6 +320,25 @@ public class DistHashTable<K, V> extends AbstractMap<K, V> /* implements Map<K,V
 
 
     /**
+     * Initialize and start the list thread.
+     */
+    public void init() {
+        if (listener == null) {
+            return;
+        }
+        if (listener.isDone()) {
+            return;
+        }
+        if (debug) {
+            logger.debug("initialize " + listener);
+        }
+        synchronized (theList) {
+            listener.start();
+        }
+    }
+
+
+    /**
      * Terminate the list thread.
      */
     public void terminate() {
@@ -340,7 +352,7 @@ public class DistHashTable<K, V> extends AbstractMap<K, V> /* implements Map<K,V
         if (listener == null) {
             return;
         }
-        if (logger.isDebugEnabled()) {
+        if (debug) {
             logger.debug("terminate " + listener);
         }
         listener.setDone();
@@ -369,6 +381,9 @@ class DHTListener<K, V> extends Thread {
     private static final Logger logger = Logger.getLogger(DHTListener.class);
 
 
+    private static boolean debug = logger.isDebugEnabled();
+
+
     private final SocketChannel channel;
 
 
@@ -381,6 +396,12 @@ class DHTListener<K, V> extends Thread {
     DHTListener(SocketChannel s, SortedMap<K, V> list) {
         channel = s;
         theList = list;
+        goon = true;
+    }
+
+
+    boolean isDone() {
+        return !goon;
     }
 
 
@@ -397,13 +418,13 @@ class DHTListener<K, V> extends Thread {
     public void run() {
         Object o;
         DHTTransport<K, V> tc;
-        goon = true;
+        //goon = true;
         while (goon) {
             tc = null;
             o = null;
             try {
                 o = channel.receive();
-                if (logger.isDebugEnabled()) {
+                if (debug) {
                     logger.debug("receive(" + o + ")");
                 }
                 if (this.isInterrupted()) {

@@ -212,6 +212,7 @@ public class GroebnerBaseDistributed<C extends RingElem<C>> extends GroebnerBase
 
         DistHashTable<Integer, GenPolynomial<C>> theList = new DistHashTable<Integer, GenPolynomial<C>>(
                 "localhost", DL_PORT);
+        theList.init();
         List<GenPolynomial<C>> al = pairlist.getList();
         for (int i = 0; i < al.size(); i++) {
             // no wait required
@@ -275,6 +276,7 @@ public class GroebnerBaseDistributed<C extends RingElem<C>> extends GroebnerBase
         final int DL_PORT = port + 100;
         DistHashTable<Integer, GenPolynomial<C>> theList = new DistHashTable<Integer, GenPolynomial<C>>(host,
                 DL_PORT);
+        theList.init();
 
         ReducerClient<C> R = new ReducerClient<C>(pairChannel, theList);
         R.run();
