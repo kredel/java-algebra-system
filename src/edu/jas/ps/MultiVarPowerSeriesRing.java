@@ -272,13 +272,13 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object B) {
-        if (!(B instanceof MultiVarPowerSeriesRing)) {
-            return false;
-        }
         MultiVarPowerSeriesRing<C> a = null;
         try {
             a = (MultiVarPowerSeriesRing<C>) B;
         } catch (ClassCastException ignored) {
+        }
+        if (a == null) {
+            return false;
         }
         if (Arrays.equals(vars, a.vars)) {
             return true;

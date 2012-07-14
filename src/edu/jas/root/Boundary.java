@@ -174,13 +174,13 @@ public class Boundary<C extends RingElem<C> & Rational> {
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object b) {
-        if (!(b instanceof Boundary)) {
-            return false;
-        }
         Boundary<C> a = null;
         try {
             a = (Boundary<C>) b;
         } catch (ClassCastException e) {
+        }
+        if (a == null) {
+            return false;
         }
         return rect.equals(a.rect) && A.equals(a.A);
     }

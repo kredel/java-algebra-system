@@ -585,9 +585,6 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object B) {
-        if (!(B instanceof UnivPowerSeries)) {
-            return false;
-        }
         UnivPowerSeries<C> a = null;
         try {
             a = (UnivPowerSeries<C>) B;

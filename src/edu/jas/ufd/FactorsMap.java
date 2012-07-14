@@ -145,6 +145,7 @@ public class FactorsMap<C extends GcdRingElem<C>> implements Serializable {
             if ( e == null ) { // should not happen
                 System.out.println("f = " + f);
                 System.out.println("afactors = " + afactors);
+                throw new RuntimeException("this should not happen");
             }
             if (e == 1) {
                 sb.append(f.toScript());

@@ -612,8 +612,8 @@ public class GroebnerBaseFGLMExamples extends TestCase {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Input " + G.toString());
-        System.out.println("Input " + L.toString());
+        System.out.println("Input " + G);
+        System.out.println("Input " + L);
 
         //Computation of the Groebnerbase with Buchberger w.r.t INVLEX
         long buchberger_Lex = System.currentTimeMillis();
@@ -651,9 +651,9 @@ public class GroebnerBaseFGLMExamples extends TestCase {
 
         System.out.println("Order of Variables: " + order);
         System.out.println("Groebnerbases: ");
-        System.out.println("Groebnerbase Buchberger (IGRLEX) " + o1.toString());
-        System.out.println("Groebnerbase FGML (INVLEX) computed from Buchberger (IGRLEX) " + o2.toString());
-        System.out.println("Groebnerbase Buchberger (INVLEX) " + o3.toString());
+        System.out.println("Groebnerbase Buchberger (IGRLEX) " + o1);
+        System.out.println("Groebnerbase FGML (INVLEX) computed from Buchberger (IGRLEX) " + o2);
+        System.out.println("Groebnerbase Buchberger (INVLEX) " + o3);
 
         String erg = "BigRational |" + order + " |" + grad_numberOfElements + "          |"
                         + lex_numberOfElements + "          |" + grad_height + "   |" + lex_height
@@ -684,7 +684,7 @@ public class GroebnerBaseFGLMExamples extends TestCase {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Input " + G.toString());
+        System.out.println("Input " + G);
 
         //Computation of the Groebnerbase with Buchberger w.r.t GRADLEX (Total degree + INVLEX)
         long buchberger_Grad = System.currentTimeMillis();
@@ -716,8 +716,8 @@ public class GroebnerBaseFGLMExamples extends TestCase {
 
         System.out.println("Order of Variables: " + order);
         System.out.println("Groebnerbases: ");
-        System.out.println("Groebnerbase Buchberger (IGRLEX) " + o1.toString());
-        System.out.println("Groebnerbase FGML (INVLEX) computed from Buchberger (IGRLEX) " + o2.toString());
+        System.out.println("Groebnerbase Buchberger (IGRLEX) " + o1);
+        System.out.println("Groebnerbase FGML (INVLEX) computed from Buchberger (IGRLEX) " + o2);
 
         String erg = "BigRational |" + order + " |" + grad_numberOfElements + "         |"
                         + lex_numberOfElements + "  |" + grad_height + "   |" + lex_height + "           |"
@@ -743,7 +743,7 @@ public class GroebnerBaseFGLMExamples extends TestCase {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Input " + G.toString());
+        System.out.println("Input " + G);
 
         //Computation of the Groebnerbase with Buchberger w.r.t GRADLEX (Total degree + INVLEX)
         long buchberger_Grad = System.currentTimeMillis();
@@ -765,8 +765,8 @@ public class GroebnerBaseFGLMExamples extends TestCase {
 
         System.out.println("Order of Variables: " + order);
         System.out.println("Groebnerbases: ");
-        System.out.println("Groebnerbase Buchberger (IGRLEX) " + o1.toString());
-        System.out.println("Reduced Terms" + o4.toString());
+        System.out.println("Groebnerbase Buchberger (IGRLEX) " + o1);
+        System.out.println("Reduced Terms" + o4);
 
         String erg = "BigRational |" + order + " |" + grad_numberOfElements + "    |" + grad_height + "    |"
                         + grad_maxPolyGrad + "    |" + buchberger_Grad + "    |"
@@ -792,7 +792,7 @@ public class GroebnerBaseFGLMExamples extends TestCase {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Input " + L.toString());
+        System.out.println("Input " + L);
 
         //Computation of the Groebnerbase with Buchberger w.r.t INVLEX
         long buchberger_Lex = System.currentTimeMillis();
@@ -809,7 +809,7 @@ public class GroebnerBaseFGLMExamples extends TestCase {
         int lexHeigth = bitHeight(GL);
 
         System.out.println("Order of Variables: " + order);
-        System.out.println("Groebnerbase Buchberger (INVLEX) " + o3.toString());
+        System.out.println("Groebnerbase Buchberger (INVLEX) " + o3);
 
         String erg = "BigRational" + order + "|" + lex_numberOfElements + "     |" + lexHeigth + "    |"
                         + lex_maxPolyGrad + "    |" + buchberger_Lex;
@@ -840,8 +840,8 @@ public class GroebnerBaseFGLMExamples extends TestCase {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("G= " + G.toString());
-        System.out.println("L= " + L.toString());
+        System.out.println("G= " + G);
+        System.out.println("L= " + L);
 
         //Computation of the Groebnerbase with Buchberger w.r.t INVLEX
         long buchberger_Lex = System.currentTimeMillis();
@@ -877,9 +877,9 @@ public class GroebnerBaseFGLMExamples extends TestCase {
 
         System.out.println("Order of Variables: " + order);
         System.out.println("Groebnerbases: ");
-        System.out.println("Groebnerbase Buchberger (IGRLEX) " + o1.toString());
-        System.out.println("Groebnerbase FGML (INVLEX) computed from Buchberger (IGRLEX) " + o2.toString());
-        System.out.println("Groebnerbase Buchberger (INVLEX) " + o3.toString());
+        System.out.println("Groebnerbase Buchberger (IGRLEX) " + o1);
+        System.out.println("Groebnerbase FGML (INVLEX) computed from Buchberger (IGRLEX) " + o2);
+        System.out.println("Groebnerbase Buchberger (INVLEX) " + o3);
 
         String erg = "Mod " + m + "    |" + order + " |" + grad_numberOfElements + "          |"
                         + lex_numberOfElements + "          |" + grad_maxPolyGrad + "    |" + lex_maxPolyGrad
@@ -907,7 +907,7 @@ public class GroebnerBaseFGLMExamples extends TestCase {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("G= " + G.toString());
+        System.out.println("G= " + G);
 
         //Computation of the Groebnerbase with Buchberger w.r.t GRADLEX (Total degree + INVLEX)
         long buchberger_Grad = System.currentTimeMillis();
@@ -924,7 +924,7 @@ public class GroebnerBaseFGLMExamples extends TestCase {
 
         System.out.println("Order of Variables: " + order);
         System.out.println("Groebnerbases: ");
-        System.out.println("Groebnerbase Buchberger (IGRLEX) " + o1.toString());
+        System.out.println("Groebnerbase Buchberger (IGRLEX) " + o1);
 
         String erg = "Mod " + m + "    |" + order + " |" + grad_numberOfElements + "           |"
                         + grad_maxPolyGrad + "    |" + buchberger_Grad;
@@ -950,7 +950,7 @@ public class GroebnerBaseFGLMExamples extends TestCase {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("G= " + G.toString());
+        System.out.println("G= " + G);
 
         //Computation of the Groebnerbase with Buchberger w.r.t GRADLEX (Total degree + INVLEX)
         long buchberger_Grad = System.currentTimeMillis();
@@ -978,8 +978,8 @@ public class GroebnerBaseFGLMExamples extends TestCase {
 
         System.out.println("Order of Variables: " + order);
         System.out.println("Groebnerbases: ");
-        System.out.println("Groebnerbase Buchberger (IGRLEX) " + o1.toString());
-        System.out.println("Groebnerbase FGML (INVLEX) computed from Buchberger (IGRLEX) " + o2.toString());
+        System.out.println("Groebnerbase Buchberger (IGRLEX) " + o1);
+        System.out.println("Groebnerbase FGML (INVLEX) computed from Buchberger (IGRLEX) " + o2);
 
         String erg = "Mod " + m + "    |" + order + " |" + grad_numberOfElements + "         |"
                         + lex_numberOfElements + "           |" + grad_maxPolyGrad + "    |"

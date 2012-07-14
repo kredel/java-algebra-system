@@ -137,7 +137,7 @@ public class MultiplicativeSet<C extends GcdRingElem<C>> implements Serializable
         if (c.isConstant()) {
             return true;
         }
-        if (mset.size() == 0) {
+        if (mset.isEmpty()) {
             return false;
         }
         GenPolynomial<C> d = c;
@@ -153,10 +153,10 @@ public class MultiplicativeSet<C extends GcdRingElem<C>> implements Serializable
                 r = qr[1];
                 // System.out.println("q = " + q + ", r = " + r + ", d = " + d +
                 // ", n = " + n);
-                if (r != null && !r.isZERO()) {
+                if (!r.isZERO()) {
                     continue;
                 }
-                if (q != null && q.isConstant()) {
+                if (q.isConstant()) {
                     return true;
                 }
                 d = q;

@@ -140,13 +140,13 @@ public class RealRootTuple<C extends GcdRingElem<C> & Rational> implements Seria
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object b) {
-        if (!(b instanceof RealRootTuple)) {
-            return false;
-        }
         RealRootTuple<C> a = null;
         try {
             a = (RealRootTuple<C>) b;
         } catch (ClassCastException e) {
+        }
+        if (a == null) {
+            return false;
         }
         return tuple.equals(a.tuple);
     }

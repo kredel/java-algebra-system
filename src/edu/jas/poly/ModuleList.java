@@ -119,11 +119,7 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
         if ( list == ml.list ) {
             return true;
         }
-        if ( list == null && ml.list != null ) {
-            //System.out.println("List, null");
-            return false;
-        }
-        if ( list != null && ml.list == null ) {
+        if ( list == null || ml.list == null ) {
             //System.out.println("List, null");
             return false;
         }
