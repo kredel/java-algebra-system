@@ -29,13 +29,13 @@ public class ExpVectorByte extends ExpVector
     /**
      * Largest byte.
      */
-    public static long maxByte = (long) Byte.MAX_VALUE / 2;
+    public static final long maxByte = (long) Byte.MAX_VALUE / 2;
 
 
     /**
      * Smallest byte.
      */
-    public static long minByte = (long) Byte.MIN_VALUE / 2;
+    public static final long minByte = (long) Byte.MIN_VALUE / 2;
 
 
     /**

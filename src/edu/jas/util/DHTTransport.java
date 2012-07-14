@@ -20,10 +20,10 @@ import java.rmi.MarshalledObject;
 public abstract class DHTTransport<K, V> implements Serializable {
 
 
-    public static long etime  = 0L; // encode marshalled
-    public static long dtime  = 0L; // decode marshalled
-    public static long ertime = 0L; // encode plain raw
-    public static long drtime = 0L; // decode plain raw
+    static long etime  = 0L; // encode marshalled
+    static long dtime  = 0L; // decode marshalled
+    static long ertime = 0L; // encode plain raw
+    static long drtime = 0L; // decode plain raw
 
 
     public static enum Stor { // storage and transport class

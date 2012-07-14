@@ -29,13 +29,13 @@ public class ExpVectorShort extends ExpVector
     /**
      * Largest short.
      */
-    public static long maxShort = (long) Short.MAX_VALUE / 2;
+    public static final long maxShort = (long) Short.MAX_VALUE / 2;
 
 
     /**
      * Smallest short.
      */
-    public static long minShort = (long) Short.MIN_VALUE / 2;
+    public static final long minShort = (long) Short.MIN_VALUE / 2;
 
 
     /**

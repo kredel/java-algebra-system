@@ -108,7 +108,10 @@ public class Boundary<C extends RingElem<C> & Rational> {
         rect = r;
         A = p;
         polys = b;
-        //ufd = GCDFactory.<Complex<C>> getImplementation(A.ring.coFac);
+        // setup factory for real and imaginary parts
+        ComplexRing<C> cr = (ComplexRing<C>) A.ring.coFac;
+        RingFactory<C> cf = cr.ring;
+        rfac = new GenPolynomialRing<C>(cf, A.ring);
     }
 
 

@@ -29,13 +29,13 @@ public class ExpVectorInteger extends ExpVector
     /**
      * Largest integer.
      */
-    public static long maxInt = (long) Integer.MAX_VALUE / 2;
+    public static final long maxInt = (long) Integer.MAX_VALUE / 2;
 
 
     /**
      * Smallest integer.
      */
-    public static long minInt = (long) Integer.MIN_VALUE / 2;
+    public static final long minInt = (long) Integer.MIN_VALUE / 2;
 
 
     /**
