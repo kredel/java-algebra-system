@@ -57,7 +57,7 @@ implements RingFactory<ComplexAlgebraicNumber<C>> {
     /**
      * Precision of the isolating rectangle for a complex root.
      */
-    public final int PRECISION = 9; //BigDecimal.DEFAULT_PRECISION;
+    public static final int PRECISION = 9; //BigDecimal.DEFAULT_PRECISION;
 
 
     /**

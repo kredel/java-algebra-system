@@ -47,6 +47,12 @@ implements RingFactory<RealAlgebraicNumber<C>> {
 
 
     /**
+     * Precision of the isolating rectangle for a complex root.
+     */
+    public static final int PRECISION = 9; //BigDecimal.DEFAULT_PRECISION;
+
+
+    /**
      * Precision of the isolating interval for a real root.
      */
     protected C eps;
@@ -73,8 +79,8 @@ implements RingFactory<RealAlgebraicNumber<C>> {
         }
         C e = m.ring.coFac.fromInteger(10L);
         e = e.inverse();
-        C x = Power.positivePower(e, BigDecimal.DEFAULT_PRECISION);
-        e = Power.positivePower(e, 9); // better not too much for speed
+        //C x = Power.positivePower(e, BigDecimal.DEFAULT_PRECISION);
+        e = Power.positivePower(e, PRECISION); // better not too much for speed
         eps = e;
     }
 
@@ -95,7 +101,7 @@ implements RingFactory<RealAlgebraicNumber<C>> {
         }
         C e = m.ring.coFac.fromInteger(10L);
         e = e.inverse();
-        e = Power.positivePower(e, 9); //BigDecimal.DEFAULT_PRECISION);
+        e = Power.positivePower(e, PRECISION); //BigDecimal.DEFAULT_PRECISION);
         eps = e;
     }
 

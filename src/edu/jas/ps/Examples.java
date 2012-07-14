@@ -79,7 +79,7 @@ public class Examples {
 
         public Odds(RingFactory<C> fac) {
             this.fac = fac;
-            two = fac.fromInteger(2);
+            two = this.fac.fromInteger(2);
             //System.out.println("two = " + two);
         }
 
