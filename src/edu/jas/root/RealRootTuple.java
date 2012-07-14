@@ -23,7 +23,7 @@ import edu.jas.structure.RingFactory;
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
-public class RealRootTuple<C extends GcdRingElem<C> & Rational> implements Serializable {
+public class RealRootTuple<C extends GcdRingElem<C> & Rational> implements Serializable, Cloneable {
 
 
     /**

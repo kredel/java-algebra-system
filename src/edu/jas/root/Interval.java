@@ -19,7 +19,7 @@ import edu.jas.structure.RingFactory;
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
-public class Interval<C extends RingElem<C> & Rational > implements Serializable { //findbugs
+public class Interval<C extends RingElem<C> & Rational > implements Serializable, Cloneable { //findbugs
 
 
     /**

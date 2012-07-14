@@ -31,7 +31,7 @@ import edu.jas.ufd.GreatestCommonDivisor;
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
-public class Boundary<C extends RingElem<C> & Rational> {
+public class Boundary<C extends RingElem<C> & Rational> implements Cloneable {
 
 
     /**

@@ -23,7 +23,7 @@ import edu.jas.structure.RingFactory;
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
-public class Rectangle<C extends RingElem<C> & Rational> implements Serializable {
+public class Rectangle<C extends RingElem<C> & Rational> implements Serializable, Cloneable {
 
 
     /**
