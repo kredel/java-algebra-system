@@ -5,6 +5,7 @@
 package edu.jas.ufd;
 
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.SortedMap;
 
@@ -42,7 +43,7 @@ import edu.jas.structure.GcdRingElem;
  * @see edu.jas.ufd.SquarefreeFactory#getImplementation
  */
 
-public interface Squarefree<C extends GcdRingElem<C>> {
+public interface Squarefree<C extends GcdRingElem<C>> extends Serializable {
 
 
     /**

@@ -5,6 +5,7 @@
 package edu.jas.root;
 
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -22,7 +23,7 @@ import edu.jas.structure.RingFactory;
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
-public class RealRootTuple<C extends GcdRingElem<C> & Rational> {
+public class RealRootTuple<C extends GcdRingElem<C> & Rational> implements Serializable {
 
 
     /**

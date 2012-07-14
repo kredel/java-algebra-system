@@ -5,6 +5,7 @@
 package edu.jas.root;
 
 
+import java.io.Serializable;
 import java.util.List;
 
 import edu.jas.arith.Rational;
@@ -19,7 +20,7 @@ import edu.jas.structure.GcdRingElem;
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
-public interface RealRoots<C extends RingElem<C> & Rational> {
+public interface RealRoots<C extends RingElem<C> & Rational> extends Serializable {
 
 
     /**
