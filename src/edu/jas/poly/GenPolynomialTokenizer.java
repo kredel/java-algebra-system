@@ -516,6 +516,7 @@ public class GenPolynomialTokenizer {
                 tt = tok.nextToken();
                 if (debug)
                     logger.debug("tt,nl = " + tt);
+                break;
             default: // skip or finish ?
                 if (debug)
                     logger.debug("default: " + tok);
@@ -984,8 +985,7 @@ public class GenPolynomialTokenizer {
         int tt;
         tt = tok.nextToken();
         if (tt == StreamTokenizer.TT_EOF) { /* nop */
-        }
-        if (tt == StreamTokenizer.TT_WORD) {
+        } else if (tt == StreamTokenizer.TT_WORD) {
             // System.out.println("TT_WORD: " + tok.sval);
             if (tok.sval != null) {
                 if (tok.sval.equalsIgnoreCase("L")) {
