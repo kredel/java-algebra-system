@@ -73,6 +73,19 @@ public class MultiplicativeSetFactors<C extends GcdRingElem<C>> extends Multipli
 
 
     /**
+     * Comparison with any other object.
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object B) {
+        if (!(B instanceof MultiplicativeSetFactors)) {
+            return false;
+        }
+        return super.equals(B);
+    }
+
+
+    /**
      * Add polynomial to mset.
      * @param cc polynomial to be added to mset.
      * @return new multiplicative set.

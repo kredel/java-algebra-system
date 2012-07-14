@@ -101,6 +101,19 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
 
 
     /**
+     * Comparison with any other object.
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object B) {
+        if (!(B instanceof GenSolvablePolynomial)) {
+            return false;
+        }
+        return super.equals(B);
+    }
+
+
+    /**
      * GenSolvablePolynomial multiplication. 
      * @param Bp GenSolvablePolynomial.
      * @return this*Bp, where * denotes solvable multiplication.

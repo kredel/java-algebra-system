@@ -72,6 +72,19 @@ public class MultiplicativeSetSquarefree<C extends GcdRingElem<C>> extends Multi
 
 
     /**
+     * Comparison with any other object.
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object B) {
+        if (!(B instanceof MultiplicativeSetSquarefree)) {
+            return false;
+        }
+        return super.equals(B);
+    }
+
+
+    /**
      * Add polynomial to mset.
      * @param cc polynomial to be added to mset.
      * @return new multiplicative set.
