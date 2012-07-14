@@ -49,7 +49,7 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>>
     /**
      * Pool of threads to use.
      */
-    protected final ThreadPool pool;
+    protected transient final ThreadPool pool;
 
 
     /**

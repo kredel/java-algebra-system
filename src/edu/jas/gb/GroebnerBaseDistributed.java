@@ -58,7 +58,7 @@ public class GroebnerBaseDistributed<C extends RingElem<C>> extends GroebnerBase
      * Pool of threads to use. <b>Note:</b> No ComputerThreads for one node
      * tests
      */
-    protected final ThreadPool pool;
+    protected transient final ThreadPool pool;
 
 
     /**

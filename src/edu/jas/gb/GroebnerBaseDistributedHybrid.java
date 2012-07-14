@@ -72,7 +72,7 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
      * Pool of threads to use.
      */
     //protected final ExecutorService pool; // not for single node tests
-    protected final ThreadPool pool;
+    protected transient final ThreadPool pool;
 
 
     /**

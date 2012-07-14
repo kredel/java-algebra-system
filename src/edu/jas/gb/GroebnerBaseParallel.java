@@ -46,7 +46,7 @@ public class GroebnerBaseParallel<C extends RingElem<C>>
     /**
      * Pool of threads to use.
      */
-    protected final ThreadPool pool;
+    protected transient final ThreadPool pool;
 
 
     /**

@@ -57,7 +57,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
     /**
      * Pool of threads to use.
      */
-    protected final ThreadPool pool;
+    protected transient final ThreadPool pool;
 
 
     /**
