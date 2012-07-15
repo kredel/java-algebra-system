@@ -83,6 +83,9 @@ public class PolyGBUtil {
         GenPolynomial<GenPolynomial<C>> qr = PolyUtil.<C> recursive(rfac, Q);
         GenPolynomial<GenPolynomial<C>> pr = PolyUtil.<C> recursive(rfac, P);
         GenPolynomial<GenPolynomial<C>> rr;
+        if (qr.isONE()) {
+            return P.ring.getZERO();
+        }
         if (qr.degree(0) > 0) {
             rr = PolyUtil.<C> recursiveSparsePseudoRemainder(pr, qr);
             //System.out.println("remainder, pr = " + pr);
@@ -142,6 +145,9 @@ public class PolyGBUtil {
         GenPolynomial<C> Q = A.get(0);
         GenPolynomial<GenPolynomial<C>> qr = PolyUtil.<C> recursive(rfac1, Q);
         GenPolynomial<GenPolynomial<GenPolynomial<C>>> rr;
+        if (qr.isONE()) {
+            return P.ring.getZERO();
+        }
         if (qr.degree(0) > 0) {
             // pseudo remainder:  ldcf(P,x_m) = a q + r 
             rr = PolyGBUtil.<C> coefficientPseudoRemainder(pr2, qr);

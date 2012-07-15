@@ -93,7 +93,7 @@ public class CharacteristicSetWu<C extends GcdRingElem<C>> implements Characteri
             logger.info("pseudo remainder by deg = " + qr.degree() + " in variable " + rfac.getVars()[0]);
             GenPolynomial<GenPolynomial<C>> rr = PolyUtil.<C> recursiveSparsePseudoRemainder(fr, qr);
             if (rr.isZERO()) {
-                logger.warn("variety is reducible");
+                logger.warn("variety is reducible " + fr + " reduces to zero mod " + pd);
                 // replace qr by gcd(qr,fr) ?
                 continue;
             }
