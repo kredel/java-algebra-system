@@ -113,8 +113,8 @@ end
 =begin rdoc
 Create JAS ModInteger as field element.
 =end
-def GF(m,z=0,field=true)
-    return ZM(m,z,field);
+def GF(m,z=0)
+    return ZM(m,z,true);
 end
 
 =begin rdoc

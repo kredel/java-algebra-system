@@ -1882,11 +1882,11 @@ def ZM(m,z=0,field=False):
     return RingElem(r);
 
 
-def GF(m,z=0,field=True):
+def GF(m,z=0):
     '''Create JAS ModInteger as field element.
     '''
     #print "m = %s" % m
-    return ZM(m,z,field);
+    return ZM(m,z,True);
 
 
 def QQ(d=0,n=1):
