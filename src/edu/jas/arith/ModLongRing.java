@@ -339,7 +339,10 @@ public final class ModLongRing implements ModularRingFactory<ModLong>, Iterable<
      */
     //JAVA6only: @Override
     public String toScript() {
-        // Python case
+        // Python and Ruby case
+        if ( isField() ) {
+            return "GFL(" + modul + ")";
+        }
         return "ZL(" + modul + ")";
     }
 

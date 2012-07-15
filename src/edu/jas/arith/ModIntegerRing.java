@@ -276,7 +276,10 @@ public final class ModIntegerRing implements ModularRingFactory<ModInteger>, Ite
      */
     //JAVA6only: @Override
     public String toScript() {
-        // Python case
+        // Python and Ruby case
+        if ( isField() ) {
+            return "GF(" + modul.toString() + ")";
+        }
         return "ZM(" + modul.toString() + ")";
     }
 
