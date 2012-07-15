@@ -139,6 +139,16 @@ public class Pair<C extends RingElem<C>> implements Serializable, Comparable<Pai
 
 
     /**
+     * Hash code for this Pair.
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return (i << 16) + j;
+    }
+
+
+    /**
      * Set useCriterion4.
      * @param c boolean value to set.
      */

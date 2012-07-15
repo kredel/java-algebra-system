@@ -303,6 +303,16 @@ public class ExpVectorLong extends ExpVector
     }
 
 
+    /** hashCode for this exponent vector.
+     * @see java.lang.Object#hashCode()
+     * Only for findbugs.
+     */
+    @Override
+    public int hashCode() { 
+        return super.hashCode();
+    }
+
+
     /**
      * ExpVector absolute value.
      * @return abs(this).
