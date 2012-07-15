@@ -1456,7 +1456,7 @@ Iterable<Monomial<C>> {
 
 
     /**
-     * GenPolynomial inverse. Required by RingElem. Throws not implemented
+     * GenPolynomial inverse. Required by RingElem. Throws not invertible
      * exception.
      */
     public GenPolynomial<C> inverse() {
@@ -1464,7 +1464,7 @@ Iterable<Monomial<C>> {
             C c = leadingBaseCoefficient().inverse();
             return ring.getONE().multiply(c);
         }
-        throw new NotInvertibleException("element not invertible " + this);
+        throw new NotInvertibleException("element not invertible " + this + " :: " + ring);
     }
 
 
