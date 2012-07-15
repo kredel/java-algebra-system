@@ -368,6 +368,7 @@ public class ExpVectorShort extends ExpVector
 
     /** hashCode for this exponent vector.
      * @see java.lang.Object#hashCode()
+     * Only for findbugs.
      */
     @Override
     public int hashCode() { 
