@@ -124,16 +124,18 @@ public class CharSetTest extends TestCase {
         assertTrue("isCharacteristicSet: " + G, css.isCharacteristicSet(G));
 
         e = PolyGBUtil.<BigRational> topPseudoRemainder(G, a);
-        //System.out.println("e = " + e);
-        assertTrue("a rem G: " + e, e.isZERO()|| true); // not always true
+        //System.out.println("a = " + a + ", deg_1 = " + a.degree(rl-1));
+        //System.out.println("e = " + e + ", deg_1 = " + e.degree(rl-1));
+        assertTrue("a rem G: " + e, e.isZERO() || e.degree(rl-1) < a.degree(rl-1)); // not always true
 
         e = PolyGBUtil.<BigRational> topPseudoRemainder(G, G.get(0));
         //System.out.println("e = " + e);
         assertTrue("a rem G: " + e + ", G = " + G, e.isZERO()); 
 
         e = css.characteristicSetReduction(G, a);
+        //System.out.println("a = " + a);
         //System.out.println("e = " + e);
-        assertTrue("a mod G: " + e, e.isZERO()|| true); // not always true
+        assertTrue("a mod G: " + e, e.isZERO()|| e.degree(rl-1) < a.degree(rl-1)); // not always true
 
         d = dfac.getONE();
         if (!G.contains(d)) {
@@ -145,16 +147,18 @@ public class CharSetTest extends TestCase {
             e = css.characteristicSetReduction(G, d);
             //System.out.println("e = " + e);
             assertFalse("a mod G: " + e, e.isZERO());
-        }
+	}
 
         // now with Wu
         W = cs.characteristicSet(F);
+        //System.out.println("F = " + F);
         //System.out.println("W = " + W);
         assertTrue("isCharacteristicSet: " + W, cs.isCharacteristicSet(W));
 
         e = PolyGBUtil.<BigRational> topPseudoRemainder(W, a);
-        //System.out.println("e = " + e);
-        assertTrue("a rem W: " + e, e.isZERO()|| true); // not always true
+        //System.out.println("a = " + a + ", deg = " + a.degree(rl-1));
+        //System.out.println("e = " + e + ", deg = " + e.degree(rl-1));
+        assertTrue("a rem W: " + e, e.isZERO() || e.degree(rl-1) < a.degree(rl-1)); // not always true
 
         e = PolyGBUtil.<BigRational> topPseudoRemainder(W, W.get(0));
         //System.out.println("e = " + e);
@@ -165,8 +169,9 @@ public class CharSetTest extends TestCase {
         assertTrue("a mod W: " + e, e.isZERO()); 
 
         e = cs.characteristicSetReduction(W, a);
+        //System.out.println("a = " + a);
         //System.out.println("e = " + e);
-        assertTrue("a mod W: " + e, e.isZERO()|| true); // not always true
+        assertTrue("a mod W: " + e, e.isZERO() || e.degree(rl-1) < a.degree(rl-1)); // not always true
     }
 
 
@@ -203,7 +208,7 @@ public class CharSetTest extends TestCase {
 
         e = PolyGBUtil.<BigRational> topPseudoRemainder(G, a);
         //System.out.println("e = " + e);
-        assertTrue("a rem G: " + e, e.isZERO()|| true); // not always true
+        assertTrue("a rem G: " + e, e.isZERO() || e.degree(rl-1) < a.degree(rl-1)); // not always true
 
         e = cs.characteristicSetReduction(G,G.get(G.size()-1));
         //System.out.println("e = " + e);
@@ -215,7 +220,7 @@ public class CharSetTest extends TestCase {
 
         e = cs.characteristicSetReduction(G, a);
         //System.out.println("e = " + e);
-        assertTrue("a mod G: " + e + ", G = " + G, e.isZERO()|| true); // not always true
+        assertTrue("a mod G: " + e + ", G = " + G, e.isZERO() || e.degree(rl-1) < a.degree(rl-1)); // not always true
 
         d = dfac.getONE();
         if (!G.contains(d)) {
@@ -274,7 +279,7 @@ public class CharSetTest extends TestCase {
 
         g = dfac.parse("( ( x5 - x7 )**2 + ( x6 - x8 )**2 - ( x1 - x7 )**2 - x8^2 )");
         //g = dfac.parse("-2 x6 * x8 - 2 x5 * x7 + 2 x1 * x7 + x6^2 + x5^2 - x1^2");
-        System.out.println("g = " + g);
+        //System.out.println("g = " + g);
 
         e = cs.characteristicSetReduction(G,g);
         //e = PolyGBUtil.<BigRational> topPseudoRemainder(G, g);
@@ -341,7 +346,7 @@ public class CharSetTest extends TestCase {
         e = cs.characteristicSetReduction(G, g);
         //e = PolyGBUtil.<BigRational> characteristicSetRemainder(G,g);
         System.out.println("e = " + e);
-        assertTrue("g mod G: " + e, e.isZERO() || true); // not always true
+        assertTrue("g mod G: " + e, e.isZERO() || e.degree(rl-1) < g.degree(rl-1)); // not always true
     }
 
 
