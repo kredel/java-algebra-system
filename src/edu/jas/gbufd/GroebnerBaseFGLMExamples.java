@@ -7,6 +7,7 @@ package edu.jas.gbufd;
 
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
@@ -609,8 +610,9 @@ public class GroebnerBaseFGLMExamples extends TestCase {
         try {
             G = (PolynomialList) parserG.nextPolynomialSet();
             L = (PolynomialList) parserL.nextPolynomialSet();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
+            return "fail";
         }
         System.out.println("Input " + G);
         System.out.println("Input " + L);
@@ -681,8 +683,9 @@ public class GroebnerBaseFGLMExamples extends TestCase {
 
         try {
             G = (PolynomialList) parserG.nextPolynomialSet();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
+            return "fail";
         }
         System.out.println("Input " + G);
 
@@ -740,8 +743,9 @@ public class GroebnerBaseFGLMExamples extends TestCase {
 
         try {
             G = (PolynomialList) parserG.nextPolynomialSet();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
+            return "fail";
         }
         System.out.println("Input " + G);
 
@@ -789,8 +793,9 @@ public class GroebnerBaseFGLMExamples extends TestCase {
 
         try {
             L = (PolynomialList) parserL.nextPolynomialSet();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
+            return "fail";
         }
         System.out.println("Input " + L);
 
@@ -837,8 +842,9 @@ public class GroebnerBaseFGLMExamples extends TestCase {
         try {
             G = (PolynomialList) parserG.nextPolynomialSet();
             L = (PolynomialList) parserL.nextPolynomialSet();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
+            return "fail";
         }
         System.out.println("G= " + G);
         System.out.println("L= " + L);
@@ -904,8 +910,9 @@ public class GroebnerBaseFGLMExamples extends TestCase {
 
         try {
             G = (PolynomialList) parserG.nextPolynomialSet();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
+            return "fail";
         }
         System.out.println("G= " + G);
 
@@ -947,8 +954,9 @@ public class GroebnerBaseFGLMExamples extends TestCase {
 
         try {
             G = (PolynomialList) parserG.nextPolynomialSet();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
+            return "fail";
         }
         System.out.println("G= " + G);
 
