@@ -138,7 +138,6 @@ public class RootFactory {
             throw new IllegalArgumentException("only for univariate polynomials");
         }
         ComplexRing<C> cfac = (ComplexRing<C>) pfac.coFac;
-        ComplexRoots<C> cr = new ComplexRootsSturm<C>(cfac);
         SquarefreeAbstract<Complex<C>> engine = SquarefreeFactory.<Complex<C>> getImplementation(cfac);
         Map<GenPolynomial<Complex<C>>,Long> F = engine.squarefreeFactors(f.monic());
         Set<GenPolynomial<Complex<C>>> S = F.keySet();
@@ -170,7 +169,6 @@ public class RootFactory {
             throw new IllegalArgumentException("only for univariate polynomials");
         }
         ComplexRing<C> cfac = (ComplexRing<C>) pfac.coFac;
-        ComplexRoots<C> cr = new ComplexRootsSturm<C>(cfac);
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         GenPolynomialRing<Complex<C>> tfac = new GenPolynomialRing<Complex<C>>(cfac, 2, to); //,vars); //tord?
         //System.out.println("tfac = " + tfac);

@@ -563,8 +563,7 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseA
         TermOrder to = pfac.tord;
         int ev = to.getEvord();
         TermOrder split = new TermOrder(ev, ev, pl, evars.length);
-
-        GenPolynomialRing<C> sfac = new GenPolynomialRing<C>(pfac.coFac, pfac.nvar, split, pfac.getVars());
+        //GenPolynomialRing<C> sfac = new GenPolynomialRing<C>(pfac.coFac, pfac.nvar, split, pfac.getVars());
 
         GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(cfac, pl, split,
                 uvars);

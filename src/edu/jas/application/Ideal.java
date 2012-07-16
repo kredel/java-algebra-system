@@ -2742,9 +2742,9 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         // check dimension
         int z = commonZeroTest();
         List<IdealWithUniv<C>> dec = new ArrayList<IdealWithUniv<C>>();
-        List<GenPolynomial<C>> ups = new ArrayList<GenPolynomial<C>>();
         // dimension -1
         if (z < 0) {
+            //List<GenPolynomial<C>> ups = new ArrayList<GenPolynomial<C>>();
             //IdealWithUniv<C> id = new IdealWithUniv<C>(this, ups);
             //dec.add(id); see GB book
             return dec;
@@ -2844,9 +2844,9 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         // check dimension
         int z = commonZeroTest();
         List<IdealWithUniv<C>> dec = new ArrayList<IdealWithUniv<C>>();
-        List<GenPolynomial<C>> ups = new ArrayList<GenPolynomial<C>>();
         // dimension -1
         if (z < 0) {
+            //List<GenPolynomial<C>> ups = new ArrayList<GenPolynomial<C>>();
             //IdealWithUniv<C> id = new IdealWithUniv<C>(this, ups);
             //dec.add(id); see GB book
             return dec;
@@ -3003,9 +3003,9 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         // check dimension
         int z = commonZeroTest();
         List<PrimaryComponent<C>> dec = new ArrayList<PrimaryComponent<C>>();
-        List<GenPolynomial<C>> ups = new ArrayList<GenPolynomial<C>>();
         // dimension -1
         if (z < 0) {
+            //List<GenPolynomial<C>> ups = new ArrayList<GenPolynomial<C>>();
             //IdealWithUniv<C> id = new IdealWithUniv<C>(this, ups);
             //PrimaryComponent<C> pc = new PrimaryComponent<C>(this, id);
             //dec.add(pc); see GB book

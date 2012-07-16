@@ -169,7 +169,7 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
             GenPolynomialRing<C> ifac = new GenPolynomialRing<C>(cf,a.ring);
             GenPolynomial<C> rp = PolyUtil.<C> realPartFromComplex(rfac, a);
             GenPolynomial<C> ip = PolyUtil.<C> imaginaryPartFromComplex(ifac, a);
-            RealRoots<C> rr = new RealRootsSturm<C>();
+            //RealRoots<C> rr = new RealRootsSturm<C>();
             if ( rl.isZERO() ) {
                 //logger.info("lengthReal == 0: " + rect);
                 //Complex<C> r = rect.getSW();

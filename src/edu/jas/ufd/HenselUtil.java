@@ -573,7 +573,7 @@ public class HenselUtil {
             GenPolynomial<BigInteger> C, BigInteger M, GenPolynomial<MOD> A, GenPolynomial<MOD> B,
             GenPolynomial<MOD> S, GenPolynomial<MOD> T) throws NoLiftingException {
         //System.out.println("*** version for factorization *** ");
-        GenPolynomial<BigInteger>[] AB = new GenPolynomial[2];
+        //GenPolynomial<BigInteger>[] AB = new GenPolynomial[2];
         if (C == null || C.isZERO()) {
             throw new IllegalArgumentException("C must be nonzero");
         }
@@ -1399,7 +1399,7 @@ public class HenselUtil {
              S.add(a);
         }
         GenPolynomial<MOD> xe = fac.univariate(0, e);
-        List<GenPolynomial<MOD>> Sr = new ArrayList<GenPolynomial<MOD>>(lee.size());
+        //List<GenPolynomial<MOD>> Sr = new ArrayList<GenPolynomial<MOD>>(lee.size());
         int i = 0;
         for ( GenPolynomial<MOD> s : S ) {
              GenPolynomial<MOD> q = s.multiply(xe);

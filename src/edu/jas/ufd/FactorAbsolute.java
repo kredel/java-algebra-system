@@ -767,7 +767,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
         if (!pfac.coFac.isField()) {
             throw new IllegalArgumentException("only for field coefficients");
         }
-        List<GenPolynomial<C>> factors = new ArrayList<GenPolynomial<C>>();
+        //List<GenPolynomial<C>> factors = new ArrayList<GenPolynomial<C>>();
         if (P.degree() <= 1) {
             return new Factors<C>(P);
         }
