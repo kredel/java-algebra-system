@@ -173,13 +173,13 @@ public class HenselMultUtilTest extends TestCase {
         //ModLongRing pl = new ModLongRing(p, false);
         //GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 2, tord, new String[]{ "x", "y" });
         GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 3, tord, new String[]{ "x", "y", "z" });
-        GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(),pfac);
+        //GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(),pfac);
 
         BigInteger mi = m;
         long k = 5L;
         long d = 3L;
         java.math.BigInteger pk = p.pow((int)k);
-        m = new BigInteger(pk);
+        //m = new BigInteger(pk);
 
         ModIntegerRing pkm = new ModIntegerRing(pk, false);
         //ModLongRing pkl = new ModLongRing(pk, false);
@@ -333,13 +333,13 @@ public class HenselMultUtilTest extends TestCase {
         //GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 2, tord, new String[]{ "x", "y" });
         GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 3, tord, new String[]{ "x", "y", "z" });
         //GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 4, tord, new String[]{ "w", "x", "y", "z" });
-        GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(),pfac);
+        //GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(),pfac);
 
         BigInteger mi = m;
         long k = 5L;
         long d = 3L;
         java.math.BigInteger pk = p.pow((int)k);
-        m = new BigInteger(pk);
+        //m = new BigInteger(pk);
 
         ModIntegerRing pkm = new ModIntegerRing(pk, false);
         //ModLongRing pkl = new ModLongRing(pk, false);

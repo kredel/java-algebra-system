@@ -204,7 +204,7 @@ public class PolyUfdUtilTest extends TestCase {
         String[] cnames = new String[] { "x" };
         String[] mnames = new String[] { "t" };
         dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),to,cnames);
-        GenPolynomialRing<BigRational> rdfac = new GenPolynomialRing<BigRational>(new BigRational(1),dfac);
+        //GenPolynomialRing<BigRational> rdfac = new GenPolynomialRing<BigRational>(new BigRational(1),dfac);
         rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(dfac, to, mnames);
         QuotientRing<BigInteger> qfac = new QuotientRing<BigInteger>(dfac);
         GenPolynomialRing<Quotient<BigInteger>> rqfac = new GenPolynomialRing<Quotient<BigInteger>>(qfac,rfac);
@@ -264,7 +264,7 @@ public class PolyUfdUtilTest extends TestCase {
         String[] cnames = new String[] { "x" };
         String[] mnames = new String[] { "t" };
         dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),to,cnames);
-        GenPolynomialRing<BigRational> rdfac = new GenPolynomialRing<BigRational>(new BigRational(1),dfac);
+        //GenPolynomialRing<BigRational> rdfac = new GenPolynomialRing<BigRational>(new BigRational(1),dfac);
         rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(dfac, to, mnames);
         QuotientRing<BigInteger> qfac = new QuotientRing<BigInteger>(dfac);
         GenPolynomialRing<Quotient<BigInteger>> rqfac = new GenPolynomialRing<Quotient<BigInteger>>(qfac,rfac);

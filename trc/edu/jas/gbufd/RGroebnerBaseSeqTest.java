@@ -255,7 +255,7 @@ public class RGroebnerBaseSeqTest extends TestCase {
         }
         Fp = Fpp;
 
-        trinks = new PolynomialList<Product<ModInteger>>(fac, Fp);
+        //trinks = new PolynomialList<Product<ModInteger>>(fac, Fp);
         //System.out.println("Fp     = " + trinks);
 
         GroebnerBase<Product<ModInteger>> bbr = new RGroebnerBaseSeq<Product<ModInteger>>();
@@ -266,7 +266,7 @@ public class RGroebnerBaseSeqTest extends TestCase {
 
         //assertEquals("#GB(Trinks7) == 6", 6, G.size() );
         //System.out.println("Fp = " + trinks);
-        trinks = new PolynomialList<Product<ModInteger>>(fac, G);
+        //trinks = new PolynomialList<Product<ModInteger>>(fac, G);
         //System.out.println("G  = " + trinks);
 
         assertTrue("isGB( GB(Trinks7) )", bbr.isGB(G));

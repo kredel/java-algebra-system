@@ -332,7 +332,7 @@ public class GroebnerBaseDistTest extends TestCase {
 
         assertTrue("isGB( GB(Trinks7) )", bbseq.isGB(G));
         assertEquals("#GB(Trinks7) == 6", 6, G.size());
-        PolynomialList<BigRational> trinks = new PolynomialList<BigRational>(F.ring, G);
+        //PolynomialList<BigRational> trinks = new PolynomialList<BigRational>(F.ring, G);
         //System.out.println("G = " + trinks);
 
     }

@@ -179,8 +179,7 @@ public class GroebnerBaseSeqPairSeqTest extends TestCase {
      G = bb.GB(F.list);
      assertTrue("isGB( GB(Trinks7) )", bb.isGB(G) );
      assertEquals("#GB(Trinks7) == 6", 6, G.size() );
-     PolynomialList<BigRational> trinks 
-           = new PolynomialList<BigRational>(F.ring,G);
+     //PolynomialList<BigRational> trinks = new PolynomialList<BigRational>(F.ring,G);
      //System.out.println("G = " + trinks);
 
  }
@@ -287,8 +286,7 @@ public class GroebnerBaseSeqPairSeqTest extends TestCase {
      assertTrue("isGB( GB(Trinks7) )", bb.isGB(exgb.G) );
      //assertEquals("#GB(Trinks7) == 6", 6, exgb.G.size() );
      assertTrue("isRmat( GB(Trinks7) )", bb.isReductionMatrix(exgb) );
-     PolynomialList<BigRational> trinks 
-           = new PolynomialList<BigRational>(F.ring,G);
+     //PolynomialList<BigRational> trinks = new PolynomialList<BigRational>(F.ring,G);
      //System.out.println("G = " + trinks);
 
  }

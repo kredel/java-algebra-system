@@ -248,12 +248,20 @@ public class FactorTest extends TestCase {
         assertTrue("ufd != Quotient<ModInteger> " + ufdqm, ufdqm instanceof FactorQuotient);
 
         prfac = new GenPolynomialRing<BigRational>(br, 2);
-        GenPolynomialRing<GenPolynomial<BigRational>> rrfac = new GenPolynomialRing<GenPolynomial<BigRational>>(
-                prfac, 1);
         Factorization<BigRational> ufdrr = FactorFactory.<BigRational> getImplementation(prfac);
         //System.out.println("ufdrr = " + ufdrr);
         assertTrue("ufd != GenPolynomial<GenPolynomialBigRational>> " + ufdrr,
                 ufdrr instanceof FactorRational);
+
+        //GenPolynomialRing<GenPolynomial<BigRational>> rrfac = new GenPolynomialRing<GenPolynomial<BigRational>>(
+        //        prfac, 1);
+        //RingFactory<GenPolynomial<BigRational>> rrfac1 = (RingFactory<GenPolynomial<BigRational>>) (RingFactory) rrfac;
+        //ufdrr = FactorFactory.<BigRational> getImplementation(rrfac1); //.coFac);
+        //ufdrr = FactorFactory.<GenPolynomial<BigRational>>getImplementation(rrfac1); //.coFac);
+        //ufdrr = FactorFactory.<BigRational>getImplementation(rrfac.coFac);
+        //System.out.println("ufdrr = " + ufdrr);
+        //assertTrue("ufd != GenPolynomial<GenPolynomialBigRational>> " + ufdrr,
+        //        ufdrr instanceof FactorRational);
     }
 
 }

@@ -209,7 +209,7 @@ public class GBProxyTest extends TestCase {
         G = bb.GB(F.list);
         assertEquals("#GB(Trinks7) == 6", 6, G.size());
         assertTrue("isGB( GB(Trinks7) ) " + G, bb.isGB(G));
-        PolynomialList<BigRational> trinks = new PolynomialList<BigRational>(F.ring, G);
+        //PolynomialList<BigRational> trinks = new PolynomialList<BigRational>(F.ring, G);
         //System.out.println("G = " + trinks);
     }
 

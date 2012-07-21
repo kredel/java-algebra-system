@@ -26,6 +26,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
 import edu.jas.structure.UnaryFunctor;
 
 
@@ -88,8 +89,13 @@ public class GenPolynomialTest extends TestCase {
         r = rf.random( 9 );
         // System.out.println("r = " + r);
 
-        RingElem<BigRational> re = new BigRational( 3 );
+        //RingElem<BigRational> re = new BigRational( 3 );
         // System.out.println("re = " + re);
+        //rf = (BigRational) re;
+
+        //RingFactory<BigRational> ref = new BigRational( 3 );
+        // System.out.println("re = " + re);
+        //rf = (BigRational) ref;
 
         // polynomials over rational numbers
         GenPolynomialRing<BigRational> pf = new GenPolynomialRing<BigRational>(rf,2);

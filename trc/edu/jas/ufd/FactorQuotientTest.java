@@ -105,7 +105,7 @@ public class FactorQuotientTest extends TestCase {
     public void testQuotientFactorization() {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
-        BigRational cfac = new BigRational(1);
+        //BigRational cfac = new BigRational(1);
 
         String[] var_x = new String[] { "x" };
         GenPolynomialRing<Quotient<BigRational>> pfac = new GenPolynomialRing<Quotient<BigRational>>(efac, 1,

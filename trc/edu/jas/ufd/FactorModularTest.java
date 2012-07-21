@@ -242,7 +242,7 @@ public class FactorModularTest extends TestCase {
      */
     public void testMultivariateModularFactorization() {
 
-        PrimeList pl = new PrimeList(PrimeList.Range.small);
+        //PrimeList pl = new PrimeList(PrimeList.Range.small);
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         ModIntegerRing cfac = new ModIntegerRing(13); // pl.get(3), 7, 11, 13
         GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(cfac, rl, to);

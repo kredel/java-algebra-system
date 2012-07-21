@@ -257,7 +257,7 @@ public class RGroebnerBasePseudoSeqTest extends TestCase {
         }
         Fp = Fpp;
 
-        trinks = new PolynomialList<Product<BigInteger>>(fac, Fp);
+        //trinks = new PolynomialList<Product<BigInteger>>(fac, Fp);
         // System.out.println("Fp = " + trinks);
         GroebnerBase<Product<BigInteger>> bbri = new RGroebnerBasePseudoSeq<Product<BigInteger>>(
                 pfac);
@@ -268,7 +268,7 @@ public class RGroebnerBasePseudoSeqTest extends TestCase {
 
         // assertEquals("#GB(Trinks7) == 6", 6, G.size() );
         // System.out.println("Fp = " + trinks);
-        trinks = new PolynomialList<Product<BigInteger>>(fac, G);
+        //trinks = new PolynomialList<Product<BigInteger>>(fac, G);
         // System.out.println("G = " + trinks);
 
         assertTrue("isGB( GB(Trinks7) )", bbri.isGB(G));

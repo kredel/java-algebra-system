@@ -182,8 +182,7 @@ public class GroebnerBasePseudoSeqTest extends TestCase {
      t = System.currentTimeMillis() - t;
      assertTrue("isGB( GB(Trinks7) )", bb.isGB(G) );
      assertEquals("#GB(Trinks7) == 6", 6, G.size() );
-     PolynomialList<BigInteger> trinks 
-           = new PolynomialList<BigInteger>(F.ring,G);
+     //PolynomialList<BigInteger> trinks = new PolynomialList<BigInteger>(F.ring,G);
      //System.out.println("G = " + trinks);
 
      GenPolynomialRing<BigInteger> ifac = F.ring;

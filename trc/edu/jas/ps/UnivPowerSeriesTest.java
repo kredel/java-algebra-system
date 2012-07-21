@@ -287,9 +287,6 @@ public class UnivPowerSeriesTest extends TestCase {
 
         TaylorFunction<BigRational> F = new PolynomialTaylorFunction<BigRational>(p);
 
-        UnivPowerSeriesRing<BigRational> psr = new UnivPowerSeriesRing<BigRational>(pr);
-        //System.out.println("psr = " + psr.toScript());
-
         UnivPowerSeries<BigRational> ps = fac.seriesOfTaylor(F,br);
         //System.out.println("ps  = " + ps);
         UnivPowerSeries<BigRational> pps = fac.fromPolynomial(p);

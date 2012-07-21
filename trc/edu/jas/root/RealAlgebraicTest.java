@@ -335,8 +335,8 @@ public class RealAlgebraicTest extends TestCase {
         b = fac.random(ll);
         c = fac.random(ll);
 
-        BigDecimal ad = new BigDecimal(a.magnitude());
-        BigDecimal bd = new BigDecimal(b.magnitude());
+        //BigDecimal ad = new BigDecimal(a.magnitude());
+        //BigDecimal bd = new BigDecimal(b.magnitude());
         BigDecimal cd = new BigDecimal(c.magnitude());
 
         d = a.multiply(b);
@@ -457,7 +457,7 @@ public class RealAlgebraicTest extends TestCase {
         BigRational eps = Power.positivePower(new BigRational(1L, 10L), BigDecimal.DEFAULT_PRECISION);
         //BigRational eps = Power.positivePower(new BigRational(1L,10L),10);
         //System.out.println("eps = " + eps);
-        BigDecimal eps1 = new BigDecimal(eps);
+        //BigDecimal eps1 = new BigDecimal(eps);
         //System.out.println("eps1 = " + eps1);
         RealAlgebraicNumber<BigRational> epsr = dfac.coFac.getONE().multiply(eps);
         //System.out.println("epsr = " + epsr);

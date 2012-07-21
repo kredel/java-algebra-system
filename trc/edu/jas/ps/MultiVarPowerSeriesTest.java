@@ -611,9 +611,6 @@ public class MultiVarPowerSeriesTest extends TestCase {
 
         TaylorFunction<BigRational> F = new PolynomialTaylorFunction<BigRational>(p);
 
-        MultiVarPowerSeriesRing<BigRational> psr = new MultiVarPowerSeriesRing<BigRational>(pr);
-        //System.out.println("psr = " + psr.toScript());
-
         MultiVarPowerSeries<BigRational> pps = fac.fromPolynomial(p);
         //System.out.println("pps = " + pps);
         MultiVarPowerSeries<BigRational> ps = fac.seriesOfTaylor(F, Br);

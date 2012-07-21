@@ -471,10 +471,10 @@ public class ComplexRootTest extends TestCase {
         Complex<BigRational> Mb = cfac.fromInteger(1); //.divide(cfac.fromInteger(2)); //cr.rootBound(a);
         BigRational M = Mb.getRe();
         //System.out.println("M = " + M);
-        BigRational eps = new BigRational(1, 1000);
+        //BigRational eps = new BigRational(1, 1000);
         //System.out.println("eps = " + eps);
         BigRational zero = new BigRational();
-        BigRational one = new BigRational(1);
+        //BigRational one = new BigRational(1);
 
         Complex<BigRational>[] corner = new Complex[4];
 

@@ -107,7 +107,7 @@ public class FactorRealAlgebraicTest extends TestCase {
         GenPolynomial<BigRational> agen = pfac.univariate(0, 2);
         //agen = agen.subtract(pfac.getONE()); // x^2 - 1
         agen = agen.subtract(pfac.fromInteger(2)); // x^2 - 2
-        AlgebraicNumberRing<BigRational> afac = new AlgebraicNumberRing<BigRational>(agen, true);
+        //AlgebraicNumberRing<BigRational> afac = new AlgebraicNumberRing<BigRational>(agen, true);
         Interval<BigRational> iv = RootUtil.<BigRational>parseInterval(cfac, "[0,2]");
         //System.out.println("iv = " + iv);
         RealAlgebraicRing<BigRational> rfac = new RealAlgebraicRing<BigRational>(agen,iv,true);

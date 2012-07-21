@@ -86,10 +86,6 @@ public class GenSolvablePolynomialTest extends TestCase {
         r = rf.random( 9 );
         // System.out.println("r = " + r);
 
-        RingElem<BigRational> re = new BigRational( 3 );
-        // System.out.println("re = " + re);
-
-
         // polynomials over rational numbers
         GenSolvablePolynomialRing<BigRational> pf = new GenSolvablePolynomialRing<BigRational>(rf,2);
         // System.out.println("pf = " + pf);

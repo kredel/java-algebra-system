@@ -222,7 +222,7 @@ public class RealRootTest extends TestCase {
         assertTrue("#roots = " + N + " ", R.size() == N);
 
         //System.out.println("eps = " + eps);
-        BigDecimal eps1 = new BigDecimal(eps);
+        //BigDecimal eps1 = new BigDecimal(eps);
         //System.out.println("eps1 = " + eps1);
 
         R = rr.refineIntervals(R, a, eps);
@@ -271,7 +271,7 @@ public class RealRootTest extends TestCase {
         assertTrue("#roots = " + (N - 1) + " ", R.size() == (N - 1));
 
         //System.out.println("eps = " + eps);
-        BigDecimal eps1 = new BigDecimal(eps);
+        //BigDecimal eps1 = new BigDecimal(eps);
         //System.out.println("eps1 = " + eps1);
 
         R = rr.refineIntervals(R, a, eps);
