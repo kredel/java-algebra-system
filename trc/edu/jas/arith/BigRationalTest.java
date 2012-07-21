@@ -220,7 +220,7 @@ public class BigRationalTest extends TestCase {
         int t = 0;
         BigRational bi = new BigRational();
         bi.setAllIterator();
-        BigRational j = null, elem = null;
+        BigRational j = bi, elem = null;
         for ( BigRational i : bi ) {
             t++;
             //System.out.println("i = " + i);
@@ -241,7 +241,7 @@ public class BigRationalTest extends TestCase {
         int t = 0;
         BigRational bi = new BigRational();
         bi.setNonNegativeIterator();
-        BigRational j = null, elem = null;
+        BigRational j = bi, elem = null;
         Iterator<BigRational> iter = bi.iterator();
         while ( iter.hasNext() ) {
             BigRational i = iter.next();
@@ -265,7 +265,7 @@ public class BigRationalTest extends TestCase {
         BigRational bi = new BigRational();
         bi.setNonNegativeIterator();
         //bi.setAllIterator();
-        BigRational j = null, elem = null;
+        BigRational j = bi, elem = null;
         Iterator<BigRational> iter = bi.uniqueIterator();
         while ( iter.hasNext() ) {
             BigRational i = iter.next();
