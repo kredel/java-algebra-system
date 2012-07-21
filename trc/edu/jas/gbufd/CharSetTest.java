@@ -374,7 +374,7 @@ public class CharSetTest extends TestCase {
         F.add(h3);
 
         //System.out.println("F = " + F);
-        assertFalse("isCharacteristicSet: " + F, cs.isCharacteristicSet(F) && false); // already CS
+        assertTrue("isCharacteristicSet: " + F, cs.isCharacteristicSet(F)); // already CS
 
         G = cs.characteristicSet(F);
         //System.out.println("G = " + G);
