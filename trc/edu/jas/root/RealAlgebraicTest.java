@@ -337,7 +337,7 @@ public class RealAlgebraicTest extends TestCase {
 
         //BigDecimal ad = new BigDecimal(a.magnitude());
         //BigDecimal bd = new BigDecimal(b.magnitude());
-        BigDecimal cd = new BigDecimal(c.magnitude());
+        //BigDecimal cd = new BigDecimal(c.magnitude());
 
         d = a.multiply(b);
         e = a.sum(b);

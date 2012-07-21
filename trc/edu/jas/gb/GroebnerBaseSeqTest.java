@@ -339,7 +339,7 @@ public class GroebnerBaseSeqTest extends TestCase {
         //System.out.println("G = " + trinks);
         assertTrue("isGB( GB(Trinks7) )", bb.isGB(G) );
 
-        Reduction<BigRational> rd = new ReductionSeq<BigRational>();
+        //Reduction<BigRational> rd = new ReductionSeq<BigRational>();
         //System.out.println("G.contains(F) = " + rd.normalform(G,F.list) );
     }
 
