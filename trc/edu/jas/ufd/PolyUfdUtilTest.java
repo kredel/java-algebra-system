@@ -229,7 +229,7 @@ public class PolyUfdUtilTest extends TestCase {
 
         boolean t = PolyUtil.<BigInteger> isRecursivePseudoQuotientRemainder(ar, br, dr, cr);
         //System.out.println("assertTrue lc^n a = q b + r: " + t);
-        //assertTrue("lc^n a = q b + r: " + cr, t); // ?? not always true
+        assertTrue("lc^n a = q b + r: " + cr, t); // ?? not always true
 
         GenPolynomial<Quotient<BigInteger>> ap = PolyUfdUtil.<BigInteger> quotientFromIntegralCoefficients(rqfac,ar);
         GenPolynomial<Quotient<BigInteger>> bp = PolyUfdUtil.<BigInteger> quotientFromIntegralCoefficients(rqfac,br);
@@ -289,7 +289,7 @@ public class PolyUfdUtilTest extends TestCase {
 
         boolean t = PolyUtil.<BigInteger> isRecursivePseudoQuotientRemainder(ar, br, dr, cr);
         //System.out.println("assertTrue lc^n a = q b + r: " + t);
-        //assertTrue("lc^n a = q b + r: " + cr, t); // ?? not always true
+        assertTrue("lc^n a = q b + r: " + cr, t); // ?? not always true
 
         GenPolynomial<Quotient<BigInteger>> ap = PolyUfdUtil.<BigInteger> quotientFromIntegralCoefficients(rqfac,ar);
         GenPolynomial<Quotient<BigInteger>> bp = PolyUfdUtil.<BigInteger> quotientFromIntegralCoefficients(rqfac,br);

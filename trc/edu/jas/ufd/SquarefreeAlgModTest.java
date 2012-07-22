@@ -502,8 +502,7 @@ public class SquarefreeAlgModTest extends TestCase {
      */
     public void testBaseSquarefreeCharRoot2() {
         //System.out.println("\nbase CharRoot 2:");
-
-        long p = fac.characteristic().longValue();
+        //long p = fac.characteristic().longValue();
 
         //dfac = new GenPolynomialRing<ModInteger>(fac,1,to,rvars);
         dfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac, 1, to, rvars);
@@ -546,8 +545,7 @@ public class SquarefreeAlgModTest extends TestCase {
      * 
      */
     public void testBaseSquarefreeFactorsCharRoot2() {
-
-        long p = fac.characteristic().longValue();
+        //long p = fac.characteristic().longValue();
 
         //dfac = new GenPolynomialRing<ModInteger>(fac,1,to,rvars);
         dfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac, 1, to, rvars);

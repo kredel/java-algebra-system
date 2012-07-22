@@ -201,7 +201,7 @@ public class FactorRationalTest extends TestCase {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
         String[] alpha = new String[] { "alpha" };
-        String[] vars = new String[] { "z" };
+        //String[] vars = new String[] { "z" };
         GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, 1, to, alpha);
         GenPolynomial<BigRational> agen = pfac.univariate(0, 4);
         agen = agen.sum(pfac.fromInteger(4)); // x^4 + 4

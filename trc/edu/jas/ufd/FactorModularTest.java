@@ -300,7 +300,7 @@ public class FactorModularTest extends TestCase {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         ModIntegerRing cfac = new ModIntegerRing(17);
         String[] alpha = new String[] { "alpha" };
-        String[] vars = new String[] { "z" };
+        //String[] vars = new String[] { "z" };
         GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(cfac, 1, to, alpha);
         GenPolynomial<ModInteger> agen = pfac.univariate(0, 4);
         agen = agen.sum(pfac.fromInteger(1)); // x^4 + 1

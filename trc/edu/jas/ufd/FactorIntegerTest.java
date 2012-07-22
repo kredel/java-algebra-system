@@ -165,7 +165,7 @@ public class FactorIntegerTest extends TestCase {
     public void testIntegerFactorization() {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(4);
-        BigInteger one = cfac.getONE();
+        //BigInteger one = cfac.getONE();
         GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, 1, to);
         FactorAbstract<BigInteger> fac = new FactorInteger<ModInteger>();
 
@@ -224,7 +224,7 @@ public class FactorIntegerTest extends TestCase {
         //BasicConfigurator.configure();
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(4);
-        BigInteger one = cfac.getONE();
+        //BigInteger one = cfac.getONE();
         String[] vars = new String[] { "x" };
         GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, 1, to, vars);
         FactorAbstract<BigInteger> fac = new FactorInteger<ModInteger>();
@@ -552,7 +552,7 @@ public class FactorIntegerTest extends TestCase {
         // (z^2 + x^3 y^4 + u^2) ( (y^2 + x) z^2 + 3 u^2 x^3 y^4 z + 19 y^2) (u^2 y^4 z^2 + x^2 z + 5),
         b = pfac.parse(" (z^2 + x^3 y^4 + u^2) "); 
         c = pfac.parse(" ( (y^2 + x ) z^2 + 3 u^2 x^3 y^4 z + 19 y^2 )"); 
-        d = pfac.parse(" (u^2 y^4 z^2 + x^2 z + 5) "); 
+        //d = pfac.parse(" (u^2 y^4 z^2 + x^2 z + 5) "); 
 
         a = b.multiply(c); // .multiply(d); // all factors need 256 sec
         //System.out.println("a = " + a);
@@ -589,7 +589,7 @@ public class FactorIntegerTest extends TestCase {
         // with smaller degrees:
         b = pfac.parse(" (w z^2 - x y^1 z^1 - w x^5 y^2 - w x^3 y) "); 
         c = pfac.parse(" (- x^5 z^2 + y z + x^2 y^1) "); 
-        d = pfac.parse(" (w z^3 + y^2 z^2 - w x^2 y^2 z^1 + x^5 - x^4 y^2  - w x^3 y) "); 
+        //d = pfac.parse(" (w z^3 + y^2 z^2 - w x^2 y^2 z^1 + x^5 - x^4 y^2  - w x^3 y) "); 
 
         a = b.multiply(c); //.multiply(d); // all factors with small degrees need 684 sec
         //System.out.println("a = " + a);

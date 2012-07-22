@@ -855,7 +855,7 @@ public class HenselUtilTest extends TestCase {
             //System.out.println("cp  = " + cp);
 
             List<GenPolynomial<ModInteger>> A = new ArrayList<GenPolynomial<ModInteger>>();
-            List<GenPolynomial<ModInteger>> As = new ArrayList<GenPolynomial<ModInteger>>();
+            List<GenPolynomial<ModInteger>> As; // = new ArrayList<GenPolynomial<ModInteger>>();
             A.add(ap);
             A.add(bp);
             A.add(dp);
@@ -1027,7 +1027,7 @@ public class HenselUtilTest extends TestCase {
             //System.out.println("cp  = " + cp);
 
             List<GenPolynomial<ModInteger>> A = new ArrayList<GenPolynomial<ModInteger>>();
-            List<GenPolynomial<ModInteger>> As = new ArrayList<GenPolynomial<ModInteger>>();
+            List<GenPolynomial<ModInteger>> As; // = new ArrayList<GenPolynomial<ModInteger>>();
             A.add(ap);
             A.add(bp);
             A.add(dp);
@@ -1229,7 +1229,7 @@ public class HenselUtilTest extends TestCase {
             //System.out.println("cp  = " + cp);
 
             List<GenPolynomial<ModInteger>> A = new ArrayList<GenPolynomial<ModInteger>>();
-            List<GenPolynomial<ModInteger>> As = new ArrayList<GenPolynomial<ModInteger>>();
+            List<GenPolynomial<ModInteger>> As; // = new ArrayList<GenPolynomial<ModInteger>>();
             A.add(ap);
             A.add(bp);
             A.add(dp);
@@ -1292,7 +1292,7 @@ public class HenselUtilTest extends TestCase {
 
         dfac = new GenPolynomialRing<BigInteger>(m, mfac);
         GreatestCommonDivisorAbstract<BigInteger> ufd = GCDFactory.getProxy(m);
-        BigInteger one = m.getONE();
+        //BigInteger one = m.getONE();
 
         GenPolynomial<ModInteger> ap;
         GenPolynomial<ModInteger> bp;

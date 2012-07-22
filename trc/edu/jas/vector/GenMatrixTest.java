@@ -310,10 +310,12 @@ public class GenMatrixTest extends TestCase {
         s = System.currentTimeMillis();
         c = a.multiplySimple(b);
         s = System.currentTimeMillis() - s;
+        assertTrue("nonsense " + s, s >= 0L);
         d = b.multiplySimple(a);
         t = System.currentTimeMillis();
         e = a.multiply(b);
         t = System.currentTimeMillis() - t;
+        assertTrue("nonsense " + s, s >= 0L);
         f = b.multiply(a);
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);

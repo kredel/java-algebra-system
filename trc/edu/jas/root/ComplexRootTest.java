@@ -239,7 +239,7 @@ public class ComplexRootTest extends TestCase {
     @SuppressWarnings("unchecked")
     public void testWindingNumber() {
         ComplexRootsSturm<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
-        Complex<BigRational> I = cfac.getIMAG();
+        //Complex<BigRational> I = cfac.getIMAG();
 
         a = dfac.univariate(0, 2L).sum(cfac.fromInteger(1)); // x^2 + 1
         //a = dfac.random(kl, ll, el, q);
@@ -307,7 +307,7 @@ public class ComplexRootTest extends TestCase {
     @SuppressWarnings("unchecked")
     public void testComplexRootsImag() {
         ComplexRootsAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
-        Complex<BigRational> I = cfac.getIMAG();
+        //Complex<BigRational> I = cfac.getIMAG();
 
         a = dfac.univariate(0, 2L).sum(cfac.fromInteger(1)); // x^2 + 1
         //a = dfac.univariate(0,2L).subtract(cfac.getONE());  // x^2 - 1
@@ -345,7 +345,7 @@ public class ComplexRootTest extends TestCase {
     @SuppressWarnings("unchecked")
     public void testComplexRootsRand() {
         ComplexRootsAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
-        Complex<BigRational> I = cfac.getIMAG();
+        //Complex<BigRational> I = cfac.getIMAG();
 
         a = dfac.random(kl, ll, el, q);
         Squarefree<Complex<BigRational>> engine = SquarefreeFactory
@@ -459,7 +459,7 @@ public class ComplexRootTest extends TestCase {
     @SuppressWarnings("unchecked")
     public void testWindingNumberWrong() {
         ComplexRootsSturm<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
-        Complex<BigRational> I = cfac.getIMAG();
+        //Complex<BigRational> I = cfac.getIMAG();
 
         a = dfac.univariate(0, 2L).sum(cfac.fromInteger(1)); // x^2 + 1
         //a = dfac.random(kl, ll, el, q);
@@ -768,15 +768,17 @@ public class ComplexRootTest extends TestCase {
         try {
             Rectangle<BigRational> ref = cr.invariantMagnitudeRectangle(rect,a,b,eps);
             //System.out.println("ref = " + ref);
+            assertTrue("rect subseteq ref ", rect.contains(ref));
             Complex<BigRational> mag = cr.complexRectangleMagnitude(ref,a,b);
             //System.out.println("mag  = " + mag);
             Complex<BigRational> cmag = cr.complexMagnitude(ref,a,b,eps);
             //System.out.println("cmag = " + cmag);
             assertEquals("mag == cmag: " + cmag, mag, cmag);
-            BigRational rmag = cmag.getRe();
+            //BigRational rmag = cmag.getRe();
             //System.out.println("rmag = " + new BigDecimal(cmag.getRe()) + " i " + new BigDecimal(cmag.getIm()));
         } catch (InvalidBoundaryException e) {
             e.printStackTrace();
+            fail("bad boundary");
         }
     }
 

@@ -377,6 +377,7 @@ public class GCDProxyTest extends TestCase {
         afac = new AlgebraicNumberRing<ModInteger>(mo);
 
         AlgebraicNumber<ModInteger> a = afac.getONE();
+        assertTrue("a == 1 " + a, a.isONE());
         GreatestCommonDivisor<AlgebraicNumber<ModInteger>> ufd;
 
         ufd = GCDFactory.<AlgebraicNumber<ModInteger>> getImplementation(afac);
