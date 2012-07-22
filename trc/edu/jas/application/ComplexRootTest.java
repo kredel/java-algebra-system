@@ -205,7 +205,7 @@ public class ComplexRootTest extends TestCase {
         //String vim = root.getIm().toString().replace("{", "").replace("}", "").trim();
         //System.out.println("vre = " + vre);
         //System.out.println("vim = " + vim);
-        String IM = root.ring.getIMAG().toString().replace("{", "").replace("}", "").replace(" ", "").trim();
+        //String IM = root.ring.getIMAG().toString().replace("{", "").replace("}", "").replace(" ", "").trim();
         //System.out.println("IM  = " + IM);
 
         GenPolynomialRing<Complex<RealAlgebraicNumber<BigRational>>> cring 
@@ -249,6 +249,7 @@ public class ComplexRootTest extends TestCase {
         List<Complex<RealAlgebraicNumber<RealAlgebraicNumber<BigRational>>>> croots 
             = RootFactory.<RealAlgebraicNumber<BigRational>> complexAlgebraicNumbersComplex(cpol);
         t1 = System.currentTimeMillis() - t1;
+        assertTrue("nonsense " + t1, t1 >= 0L);
         //System.out.println("\na = " + a.toScript());
         //System.out.println("root = " + root.getRe().decimalMagnitude() + " + "
         //                             + root.getIm().decimalMagnitude() + " i");
@@ -276,6 +277,7 @@ public class ComplexRootTest extends TestCase {
         List<edu.jas.root.ComplexAlgebraicNumber<RealAlgebraicNumber<BigRational>>> coroots
             = edu.jas.root.RootFactory.<RealAlgebraicNumber<BigRational>> complexAlgebraicNumbersComplex(cpol);
         t2 = System.currentTimeMillis() - t2;
+        assertTrue("nonsense " + t2, t2 >= 0L);
         //System.out.println("\ncpol = " + cpol);
         //System.out.println("root = " + root.getRe() + " + (" + root.getIm() + ") i");
         //System.out.println("root = " + root.getRe().decimalMagnitude() + " + "
@@ -293,12 +295,14 @@ public class ComplexRootTest extends TestCase {
             //System.out.println("croot = " + crs);
         }
         t3 = System.currentTimeMillis() - t3;
+        assertTrue("nonsense " + t3, t3 >= 0L);
         long t4 = System.currentTimeMillis();
         for (edu.jas.root.ComplexAlgebraicNumber<RealAlgebraicNumber<BigRational>> cr2 : coroots) {
             String crs = cr2.decimalMagnitude().toString();
             //System.out.println("r2.dec  = " + crs);
         }
         t4 = System.currentTimeMillis() - t4;
+        assertTrue("nonsense " + t4, t4 >= 0L);
         assertTrue("#coroots == deg(cpol) ", coroots.size() == cpol.degree(0));
         //System.out.println("time, real ideal = " + t1 + "+" + t3 + ", complex winding = " + t2 + "+" + t4 + " milliseconds");
     }
