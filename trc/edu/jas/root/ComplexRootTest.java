@@ -524,7 +524,7 @@ public class ComplexRootTest extends TestCase {
         eps = eps.multiply(new BigRational(1000000));
         //System.out.println("eps = " + eps);
         BigDecimal eps1 = new BigDecimal(eps);
-        BigDecimal eps2 = eps1.multiply(new BigDecimal("10"));
+        //BigDecimal eps2 = eps1.multiply(new BigDecimal("10"));
         //System.out.println("eps1 = " + eps1);
         //System.out.println("eps2 = " + eps2);
 
@@ -569,7 +569,7 @@ public class ComplexRootTest extends TestCase {
         eps = eps.multiply(new BigRational(1000000));
         //System.out.println("eps = " + eps);
         BigDecimal eps1 = new BigDecimal(eps);
-        BigDecimal eps2 = eps1.multiply(new BigDecimal("10"));
+        //BigDecimal eps2 = eps1.multiply(new BigDecimal("10"));
         //System.out.println("eps1 = " + eps1);
         //System.out.println("eps2 = " + eps2);
 
@@ -728,9 +728,12 @@ public class ComplexRootTest extends TestCase {
         
         try {
             Rectangle<BigRational> ref = cr.invariantRectangle(rect,a,b);
-            //System.out.println("ref = " + ref);
+            //System.out.println("rect = " + rect);
+            //System.out.println("ref  = " + ref);
+            assertTrue("rect subseteq ref ", rect.contains(ref));
         } catch (InvalidBoundaryException e) {
             e.printStackTrace();
+            fail("bad boundary");
         }
     }
 

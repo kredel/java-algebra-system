@@ -210,8 +210,20 @@ public class Rectangle<C extends RingElem<C> & Rational> implements Serializable
     public boolean contains(Complex<C> c) {
         Complex<C> ll = getSW();
         Complex<C> ur = getNE(); // ?? Fix ?? getSW();
-        return c.getRe().compareTo(ll.getRe()) < 0 || c.getIm().compareTo(ll.getIm()) < 0
-                        || c.getRe().compareTo(ur.getRe()) > 0 || c.getIm().compareTo(ur.getIm()) > 0;
+        C cre = c.getRe();
+        C cim = c.getIm();
+        return    cre.compareTo(ll.getRe()) >= 0 && cim.compareTo(ll.getIm()) >= 0
+               && cre.compareTo(ur.getRe()) <= 0 && cim.compareTo(ur.getIm()) <= 0;
+    }
+
+
+    /**
+     * Contains a rectangle.
+     * @param r rectangle.
+     * @return true if r is contained in this rectangle, else false.
+     */
+    public boolean contains(Rectangle<C> r) {
+        return contains(r.getSW()) && contains(r.getNE()); // && contains(r.getSE()) && contains(r.getNW())
     }
 
 
