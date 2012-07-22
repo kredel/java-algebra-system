@@ -339,7 +339,8 @@ public class GCDHenselTest extends TestCase {
             if ( ev != null ) {
                 c.doPutToMap(ev,ifa.getONE());
             }
-            if ( ev != null && ev.dependencyOnVariables().length > 1 ) {
+            assertFalse("ev == null ", ev == null);
+            if ( ev.dependencyOnVariables().length > 1 ) {
                 c = dfac.univariate(1); //getONE();
             }
             //a = dfac.parse(" y^2 + 2 x y - 3 y + x^2 - 3 x - 4 ");

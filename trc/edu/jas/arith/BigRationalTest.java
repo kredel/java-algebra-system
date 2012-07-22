@@ -220,7 +220,7 @@ public class BigRationalTest extends TestCase {
         int t = 0;
         BigRational bi = new BigRational();
         bi.setAllIterator();
-        BigRational j = bi, elem = null;
+        BigRational j = null, elem = null;
         for ( BigRational i : bi ) {
             t++;
             //System.out.println("i = " + i);
@@ -229,6 +229,7 @@ public class BigRationalTest extends TestCase {
                 break;
             }
         }
+        assertFalse("j == null ", j == null);
         elem = new BigRational(-2,3);
         assertTrue("j == 10 ", j.equals(elem) );
     }
@@ -241,7 +242,7 @@ public class BigRationalTest extends TestCase {
         int t = 0;
         BigRational bi = new BigRational();
         bi.setNonNegativeIterator();
-        BigRational j = bi, elem = null;
+        BigRational j = null, elem = null;
         Iterator<BigRational> iter = bi.iterator();
         while ( iter.hasNext() ) {
             BigRational i = iter.next();
@@ -252,6 +253,7 @@ public class BigRationalTest extends TestCase {
                 break;
             }
         }
+        assertFalse("j == null ", j == null);
         elem = new BigRational(4,3);
         assertTrue("j == 10 ", j.equals(elem) );
     }
@@ -265,7 +267,7 @@ public class BigRationalTest extends TestCase {
         BigRational bi = new BigRational();
         bi.setNonNegativeIterator();
         //bi.setAllIterator();
-        BigRational j = bi, elem = null;
+        BigRational j = null, elem = null;
         Iterator<BigRational> iter = bi.uniqueIterator();
         while ( iter.hasNext() ) {
             BigRational i = iter.next();
@@ -276,6 +278,7 @@ public class BigRationalTest extends TestCase {
                 break;
             }
         }
+        assertFalse("j == null ", j == null);
         elem = new BigRational(5,3);
         assertTrue("j == 10 ", j.equals(elem) );
     }
