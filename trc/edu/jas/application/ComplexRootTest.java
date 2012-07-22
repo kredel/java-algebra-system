@@ -201,8 +201,8 @@ public class ComplexRootTest extends TestCase {
         //System.out.println("root = " + root.getRe().decimalMagnitude() + " + "
         //                  + root.getIm().decimalMagnitude() + " i");
         //System.out.println("root = " + root.getRe() + " + " + root.getIm() + " i");
-        String vre = root.getRe().toString().replace("{", "").replace("}", "").trim();
-        String vim = root.getIm().toString().replace("{", "").replace("}", "").trim();
+        //String vre = root.getRe().toString().replace("{", "").replace("}", "").trim();
+        //String vim = root.getIm().toString().replace("{", "").replace("}", "").trim();
         //System.out.println("vre = " + vre);
         //System.out.println("vim = " + vim);
         String IM = root.ring.getIMAG().toString().replace("{", "").replace("}", "").replace(" ", "").trim();

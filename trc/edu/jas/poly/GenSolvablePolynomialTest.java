@@ -133,6 +133,7 @@ public class GenSolvablePolynomialTest extends TestCase {
 
         ppe = ppe.sum( pp ); // why not pp = pp.add(ppe) ?
         //System.out.println("ppe = " + ppe);
+        assertTrue("ppe.isZERO() = ", ppe.isZERO());
         pp = ppf.random( 2 );
         pp = (GenSolvablePolynomial< GenPolynomial<BigRational>>)pp.subtract( pp ); 
         //System.out.println("pp = " + pp);

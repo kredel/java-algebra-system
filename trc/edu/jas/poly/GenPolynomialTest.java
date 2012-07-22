@@ -145,6 +145,7 @@ public class GenPolynomialTest extends TestCase {
 
         ppe = ppe.sum( pp ); // why not pp = pp.add(ppe) ?
         //System.out.println("ppe = " + ppe);
+        assertTrue("ppe.isZERO() = ", ppe.isZERO());
         pp = ppf.random( 2 );
         pp = pp.subtract( pp ); 
         //System.out.println("pp = " + pp);
