@@ -225,7 +225,7 @@ public class ComplexRootTest extends TestCase {
         cpol = cring.univariate(0,2L).subtract(root.multiply(root)); // okay
         //cpol = cring.univariate(0,3L).subtract(root.multiply(root)); // okay
         //cpol = cring.univariate(0,3L).subtract(root.multiply(root).multiply(root)); // not much sense r^3 = 2
-        String vpol = vre + " + " + IM + " " + vim;
+        ///String vpol = vre + " + " + IM + " " + vim;
         //String vpol = " 3 + " + IM + " * 3 ";
         //String vpol = " 3i3 ";
         //String vpol = IM + " " + vim;

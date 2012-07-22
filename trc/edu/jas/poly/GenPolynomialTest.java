@@ -118,6 +118,7 @@ public class GenPolynomialTest extends TestCase {
 
         pe = pe.sum( p ); // why not p = p.add(pe) ?
         //System.out.println("pe = " + pe);
+        assertTrue("pe.isZERO() = ", pe.isZERO());
         p = pf.random( 9 );
         p = p.subtract( p ); 
         //System.out.println("p = " + p);

@@ -290,10 +290,8 @@ public class FactorTest extends TestCase {
 
         PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N, agen);
         //System.out.println("\npartial fraction = " + F);
-
-        //boolean t = engine.isAbsoluteFactorization(F);
-        //System.out.println("t        = " + t);
-        // assertTrue("prod(factor(a)) = a", t);
+        assertFalse("pf not empty " + F, F.toString().isEmpty());
+        // TODO test for PartialFraction
     }
 
 }
