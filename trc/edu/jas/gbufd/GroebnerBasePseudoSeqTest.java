@@ -184,6 +184,7 @@ public class GroebnerBasePseudoSeqTest extends TestCase {
      assertEquals("#GB(Trinks7) == 6", 6, G.size() );
      //PolynomialList<BigInteger> trinks = new PolynomialList<BigInteger>(F.ring,G);
      //System.out.println("G = " + trinks);
+     assertTrue("nonsense ", t >= 0L);
 
      GenPolynomialRing<BigInteger> ifac = F.ring;
      BigRational cf = new BigRational();
@@ -202,6 +203,7 @@ public class GroebnerBasePseudoSeqTest extends TestCase {
 
      assertEquals("ratGB == intGB", Gr, Gir );
      //System.out.println("time: ratGB = " + s + ", intGB = " + t);
+     assertTrue("nonsense ", s >= 0L);
  }
 
 }

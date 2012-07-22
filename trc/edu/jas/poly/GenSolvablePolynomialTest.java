@@ -32,58 +32,57 @@ import edu.jas.structure.RingElem;
 
 public class GenSolvablePolynomialTest extends TestCase {
 
-/**
- * main
- */
-   public static void main (String[] args) {
-          junit.textui.TestRunner.run( suite() );
-   }
+    /**
+     * main
+     */
+    public static void main (String[] args) {
+        junit.textui.TestRunner.run( suite() );
+    }
 
-/**
- * Constructs a <CODE>GenSolvablePolynomialTest</CODE> object.
- * @param name String.
- */
-   public GenSolvablePolynomialTest(String name) {
-          super(name);
-   }
+    /**
+     * Constructs a <CODE>GenSolvablePolynomialTest</CODE> object.
+     * @param name String.
+     */
+    public GenSolvablePolynomialTest(String name) {
+        super(name);
+    }
 
-/**
- * suite.
- */ 
- public static Test suite() {
-     TestSuite suite= new TestSuite(GenSolvablePolynomialTest.class);
-     return suite;
-   }
+    /**
+     * suite.
+     */ 
+    public static Test suite() {
+        TestSuite suite= new TestSuite(GenSolvablePolynomialTest.class);
+        return suite;
+    }
 
-   //private final static int bitlen = 100;
+    //private final static int bitlen = 100;
 
-   int rl = 6;  // even for Weyl 
-   int kl = 10;
-   int ll = 7;
-   int el = 4;
-   float q = 0.5f;
+    int rl = 6;  // even for Weyl 
+    int kl = 10;
+    int ll = 7;
+    int el = 4;
+    float q = 0.5f;
 
-   protected void setUp() {
-       // a = b = c = d = e = null;
-   }
+    protected void setUp() {
+        // a = b = c = d = e = null;
+    }
 
-   protected void tearDown() {
-       // a = b = c = d = e = null;
-   }
+    protected void tearDown() {
+        // a = b = c = d = e = null;
+    }
 
 
-/**
- * Test constructors and factory.
- * 
- */
- public void testConstructors() {
+    /**
+     * Test constructors and factory.
+     */
+    public void testConstructors() {
         // rational numbers
         BigRational rf = new BigRational();
         // System.out.println("rf = " + rf);
 
-        BigRational r = rf.fromInteger( 99 );
+        //BigRational r = rf.fromInteger( 99 );
         // System.out.println("r = " + r);
-        r = rf.random( 9 );
+        //r = rf.random( 9 );
         // System.out.println("r = " + r);
 
         // polynomials over rational numbers
@@ -172,168 +171,167 @@ public class GenSolvablePolynomialTest extends TestCase {
     }
 
 
-/**
- * Test extension and contraction.
- * 
- */
- public void testExtendContract() {
-     // rational numbers
-     BigRational cf = new BigRational( 99 );
-     // System.out.println("cf = " + cf);
+    /**
+     * Test extension and contraction.
+     */
+    public void testExtendContract() {
+        // rational numbers
+        BigRational cf = new BigRational( 99 );
+        // System.out.println("cf = " + cf);
 
-     // polynomials over rational numbers
-     GenSolvablePolynomialRing<BigRational> pf = new GenSolvablePolynomialRing<BigRational>(cf,rl);
-     // System.out.println("pf = " + pf);
+        // polynomials over rational numbers
+        GenSolvablePolynomialRing<BigRational> pf = new GenSolvablePolynomialRing<BigRational>(cf,rl);
+        // System.out.println("pf = " + pf);
 
-     GenSolvablePolynomial<BigRational> a = pf.random(kl,ll,el,q);
-     //System.out.println("a = " + a);
+        GenSolvablePolynomial<BigRational> a = pf.random(kl,ll,el,q);
+        //System.out.println("a = " + a);
 
-     int k = rl;
-     GenSolvablePolynomialRing<BigRational> pfe = pf.extend(k);
-     GenSolvablePolynomialRing<BigRational> pfec = pfe.contract(k);
-     assertEquals("pf == pfec",pf,pfec);
+        int k = rl;
+        GenSolvablePolynomialRing<BigRational> pfe = pf.extend(k);
+        GenSolvablePolynomialRing<BigRational> pfec = pfe.contract(k);
+        assertEquals("pf == pfec",pf,pfec);
 
-     GenSolvablePolynomial<BigRational> ae 
-         = (GenSolvablePolynomial<BigRational>)a.extend(pfe,0,0);
+        GenSolvablePolynomial<BigRational> ae 
+            = (GenSolvablePolynomial<BigRational>)a.extend(pfe,0,0);
 
-     Map<ExpVector,GenPolynomial<BigRational>> m = ae.contract(pfec);
-     List<GenPolynomial<BigRational>> ml = new ArrayList<GenPolynomial<BigRational>>( m.values() );
-     GenSolvablePolynomial<BigRational> aec = (GenSolvablePolynomial<BigRational>)ml.get(0);
-     assertEquals("a == aec",a,aec);
-     //System.out.println("ae = " + ae);
-     //System.out.println("aec = " + aec);
- }
-
-
-/**
- * Test extension and contraction for Weyl relations.
- * 
- */
- public void testExtendContractWeyl() {
-     // rational numbers
-     BigRational cf = new BigRational( 99 );
-     // System.out.println("cf = " + cf);
-
-     // polynomials over rational numbers
-     GenSolvablePolynomialRing<BigRational> pf = new GenSolvablePolynomialRing<BigRational>(cf,rl);
-     WeylRelations<BigRational> wl = new WeylRelations<BigRational>(pf);
-     wl.generate();
-     // System.out.println("pf = " + pf);
-
-     GenSolvablePolynomial<BigRational> a = pf.random(kl,ll,el,q);
-     //System.out.println("a = " + a);
-
-     int k = rl;
-     GenSolvablePolynomialRing<BigRational> pfe = pf.extend(k);
-     GenSolvablePolynomialRing<BigRational> pfec = pfe.contract(k);
-     assertEquals("pf == pfec",pf,pfec);
-
-     GenSolvablePolynomial<BigRational> ae 
-         = (GenSolvablePolynomial<BigRational>)a.extend(pfe,0,0);
-
-     Map<ExpVector,GenPolynomial<BigRational>> m = ae.contract(pfec);
-     List<GenPolynomial<BigRational>> ml = new ArrayList<GenPolynomial<BigRational>>( m.values() );
-     GenSolvablePolynomial<BigRational> aec = (GenSolvablePolynomial<BigRational>)ml.get(0);
-     assertEquals("a == aec",a,aec);
-     //System.out.println("ae = " + ae);
-     //System.out.println("aec = " + aec);
- }
+        Map<ExpVector,GenPolynomial<BigRational>> m = ae.contract(pfec);
+        List<GenPolynomial<BigRational>> ml = new ArrayList<GenPolynomial<BigRational>>( m.values() );
+        GenSolvablePolynomial<BigRational> aec = (GenSolvablePolynomial<BigRational>)ml.get(0);
+        assertEquals("a == aec",a,aec);
+        //System.out.println("ae = " + ae);
+        //System.out.println("aec = " + aec);
+    }
 
 
-/**
- * Test reversion.
- * 
- */
- public void testReverse() {
-     // rational numbers
-     BigRational cf = new BigRational( 99 );
-     // System.out.println("cf = " + cf);
+    /**
+     * Test extension and contraction for Weyl relations.
+     */
+    public void testExtendContractWeyl() {
+        // rational numbers
+        BigRational cf = new BigRational( 99 );
+        // System.out.println("cf = " + cf);
 
-     // polynomials over rational numbers
-     GenSolvablePolynomialRing<BigRational> pf = new GenSolvablePolynomialRing<BigRational>(cf,rl);
-     //System.out.println("pf = " + pf);
+        // polynomials over rational numbers
+        GenSolvablePolynomialRing<BigRational> pf = new GenSolvablePolynomialRing<BigRational>(cf,rl);
+        WeylRelations<BigRational> wl = new WeylRelations<BigRational>(pf);
+        wl.generate();
+        // System.out.println("pf = " + pf);
 
-     GenSolvablePolynomial<BigRational> a = pf.random(kl,ll,el,q);
-     //System.out.println("a = " + a);
+        GenSolvablePolynomial<BigRational> a = pf.random(kl,ll,el,q);
+        //System.out.println("a = " + a);
 
-     GenSolvablePolynomialRing<BigRational> pfr = pf.reverse();
-     GenSolvablePolynomialRing<BigRational> pfrr = pfr.reverse();
-     assertEquals("pf == pfrr",pf,pfrr);
-     //System.out.println("pfr = " + pfr);
+        int k = rl;
+        GenSolvablePolynomialRing<BigRational> pfe = pf.extend(k);
+        GenSolvablePolynomialRing<BigRational> pfec = pfe.contract(k);
+        assertEquals("pf == pfec",pf,pfec);
 
-     GenSolvablePolynomial<BigRational> ar 
-        = (GenSolvablePolynomial<BigRational>)a.reverse(pfr);
-     GenSolvablePolynomial<BigRational> arr 
-        = (GenSolvablePolynomial<BigRational>)ar.reverse(pfrr);
-     assertEquals("a == arr",a,arr);
-     //System.out.println("ar = " + ar);
-     //System.out.println("arr = " + arr);
- }
+        GenSolvablePolynomial<BigRational> ae 
+            = (GenSolvablePolynomial<BigRational>)a.extend(pfe,0,0);
 
-
-/**
- * Test reversion for Weyl relations.
- * 
- */
- public void testReverseWeyl() {
-     // rational numbers
-     BigRational cf = new BigRational( 99 );
-     // System.out.println("cf = " + cf);
-
-     // polynomials over rational numbers
-     GenSolvablePolynomialRing<BigRational> pf = new GenSolvablePolynomialRing<BigRational>(cf,rl);
-     WeylRelations<BigRational> wl = new WeylRelations<BigRational>(pf);
-     wl.generate();
-     //System.out.println("pf = " + pf);
-
-     GenSolvablePolynomial<BigRational> a = pf.random(kl,ll,el,q);
-     //System.out.println("a = " + a);
-
-     GenSolvablePolynomialRing<BigRational> pfr = pf.reverse();
-     GenSolvablePolynomialRing<BigRational> pfrr = pfr.reverse();
-     assertEquals("pf == pfrr",pf,pfrr);
-     //System.out.println("pfr = " + pfr);
-
-     GenSolvablePolynomial<BigRational> ar 
-        = (GenSolvablePolynomial<BigRational>)a.reverse(pfr);
-     GenSolvablePolynomial<BigRational> arr 
-        = (GenSolvablePolynomial<BigRational>)ar.reverse(pfrr);
-     assertEquals("a == arr",a,arr);
-     //System.out.println("ar = " + ar);
-     //System.out.println("arr = " + arr);
- }
+        Map<ExpVector,GenPolynomial<BigRational>> m = ae.contract(pfec);
+        List<GenPolynomial<BigRational>> ml = new ArrayList<GenPolynomial<BigRational>>( m.values() );
+        GenSolvablePolynomial<BigRational> aec = (GenSolvablePolynomial<BigRational>)ml.get(0);
+        assertEquals("a == aec",a,aec);
+        //System.out.println("ae = " + ae);
+        //System.out.println("aec = " + aec);
+    }
 
 
-/**
- * Test recursion.
- * 
- */
- public void testRecursion() {
-     // rational numbers
-     BigRational rf = new BigRational();
-     // System.out.println("rf = " + rf);
+    /**
+     * Test reversion.
+     */
+    public void testReverse() {
+        // rational numbers
+        BigRational cf = new BigRational( 99 );
+        // System.out.println("cf = " + cf);
 
-     String[] vars = new String[] { "a", "b", "c", "d" };
-     TermOrder to = new TermOrder(TermOrder.INVLEX);
-     // polynomials over rational numbers
-     GenSolvablePolynomialRing<BigRational> pf = new GenSolvablePolynomialRing<BigRational>(rf,4,to,vars);
-     WeylRelations<BigRational> wl = new WeylRelations<BigRational>(pf);
-     wl.generate();
-     //System.out.println("pf = " + pf);
+        // polynomials over rational numbers
+        GenSolvablePolynomialRing<BigRational> pf = new GenSolvablePolynomialRing<BigRational>(cf,rl);
+        //System.out.println("pf = " + pf);
 
-     GenSolvablePolynomial<BigRational> sp = pf.random(5);
-     //System.out.println("sp = " + sp);
+        GenSolvablePolynomial<BigRational> a = pf.random(kl,ll,el,q);
+        //System.out.println("a = " + a);
+
+        GenSolvablePolynomialRing<BigRational> pfr = pf.reverse();
+        GenSolvablePolynomialRing<BigRational> pfrr = pfr.reverse();
+        assertEquals("pf == pfrr",pf,pfrr);
+        //System.out.println("pfr = " + pfr);
+
+        GenSolvablePolynomial<BigRational> ar 
+            = (GenSolvablePolynomial<BigRational>)a.reverse(pfr);
+        GenSolvablePolynomial<BigRational> arr 
+            = (GenSolvablePolynomial<BigRational>)ar.reverse(pfrr);
+        assertEquals("a == arr",a,arr);
+        //System.out.println("ar = " + ar);
+        //System.out.println("arr = " + arr);
+    }
+
+
+    /**
+     * Test reversion for Weyl relations.
+     * 
+     */
+    public void testReverseWeyl() {
+        // rational numbers
+        BigRational cf = new BigRational( 99 );
+        // System.out.println("cf = " + cf);
+
+        // polynomials over rational numbers
+        GenSolvablePolynomialRing<BigRational> pf = new GenSolvablePolynomialRing<BigRational>(cf,rl);
+        WeylRelations<BigRational> wl = new WeylRelations<BigRational>(pf);
+        wl.generate();
+        //System.out.println("pf = " + pf);
+
+        GenSolvablePolynomial<BigRational> a = pf.random(kl,ll,el,q);
+        //System.out.println("a = " + a);
+
+        GenSolvablePolynomialRing<BigRational> pfr = pf.reverse();
+        GenSolvablePolynomialRing<BigRational> pfrr = pfr.reverse();
+        assertEquals("pf == pfrr",pf,pfrr);
+        //System.out.println("pfr = " + pfr);
+
+        GenSolvablePolynomial<BigRational> ar 
+            = (GenSolvablePolynomial<BigRational>)a.reverse(pfr);
+        GenSolvablePolynomial<BigRational> arr 
+            = (GenSolvablePolynomial<BigRational>)ar.reverse(pfrr);
+        assertEquals("a == arr",a,arr);
+        //System.out.println("ar = " + ar);
+        //System.out.println("arr = " + arr);
+    }
+
+
+    /**
+     * Test recursion.
+     */
+    public void testRecursion() {
+        // rational numbers
+        BigRational rf = new BigRational();
+        // System.out.println("rf = " + rf);
+
+        String[] vars = new String[] { "a", "b", "c", "d" };
+        TermOrder to = new TermOrder(TermOrder.INVLEX);
+        // polynomials over rational numbers
+        GenSolvablePolynomialRing<BigRational> pf = new GenSolvablePolynomialRing<BigRational>(rf,4,to,vars);
+        WeylRelations<BigRational> wl = new WeylRelations<BigRational>(pf);
+        wl.generate();
+        //System.out.println("pf = " + pf);
+
+        GenSolvablePolynomial<BigRational> sp = pf.random(5);
+        //System.out.println("sp = " + sp);
+        sp = (GenSolvablePolynomial<BigRational>) sp.subtract(sp);
+        assertTrue("sp == 0 ",sp.isZERO());
   
-     // polynomials over (solvable) polynomials over rational numbers
-     GenSolvablePolynomialRing<GenPolynomial<BigRational>> rpf 
-         = new GenSolvablePolynomialRing<GenPolynomial<BigRational>>(pf,2);
-     WeylRelations<GenPolynomial<BigRational>> rwl = new WeylRelations<GenPolynomial<BigRational>>(rpf);
-     rwl.generate();
-     //System.out.println("rpf = " + rpf);
+        // polynomials over (solvable) polynomials over rational numbers
+        GenSolvablePolynomialRing<GenPolynomial<BigRational>> rpf 
+            = new GenSolvablePolynomialRing<GenPolynomial<BigRational>>(pf,2);
+        WeylRelations<GenPolynomial<BigRational>> rwl = new WeylRelations<GenPolynomial<BigRational>>(rpf);
+        rwl.generate();
+        //System.out.println("rpf = " + rpf);
 
-     GenSolvablePolynomial<GenPolynomial<BigRational>> rsp = rpf.random(5);
-     //System.out.println("rsp = " + rsp);
-
- }
+        GenSolvablePolynomial<GenPolynomial<BigRational>> rsp = rpf.random(5);
+        //System.out.println("rsp = " + rsp);
+        rsp = (GenSolvablePolynomial<GenPolynomial<BigRational>>) rsp.subtract(rsp);
+        assertTrue("rsp == 0 ",rsp.isZERO());
+    }
 
 }

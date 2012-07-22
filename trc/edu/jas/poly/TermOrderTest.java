@@ -135,7 +135,7 @@ public class TermOrderTest extends TestCase {
 
      //int r = 5;
      //int sp = 3;
-     w = new long [][] { new long[] { 5l, 4l, 3l, 2l, 1l } };
+     //w = new long [][] { new long[] { 5l, 4l, 3l, 2l, 1l } };
 
      //s = new TermOrder(w,sp);
      //t = new TermOrder(w,sp);
@@ -424,7 +424,7 @@ public class TermOrderTest extends TestCase {
 
      int r = 8;
      int sp = 5;
-     long [][] w  = new long [][] { new long[] { 1l, 2l, 3l, 4l, 5l, 1l, 2l, 3l } };
+     //long [][] w  = new long [][] { new long[] { 1l, 2l, 3l, 4l, 5l, 1l, 2l, 3l } };
      long [][] w2 = new long [][] { new long[] { 1l, 2l, 3l, 4l, 5l, 0l, 0l, 0l },
                                     new long[] { 0l, 0l, 0l, 0l, 0l, 1l, 2l, 3l }  };
 
@@ -556,7 +556,7 @@ public class TermOrderTest extends TestCase {
 
      int r = 8;
      int sp = 5;
-     long [][] w  = new long [][] { new long[] { 1l, 2l, 3l, 4l, 5l, 1l, 2l, 3l } };
+     //long [][] w  = new long [][] { new long[] { 1l, 2l, 3l, 4l, 5l, 1l, 2l, 3l } };
      long [][] w2 = new long [][] { new long[] { 1l, 2l, 3l, 4l, 5l, 0l, 0l, 0l },
                                     new long[] { 0l, 0l, 0l, 0l, 0l, 1l, 2l, 3l }  };
 
@@ -675,12 +675,12 @@ public class TermOrderTest extends TestCase {
      try {
          t = new TermOrder(notimpl);
          x = t.getDescendComparator().compare(a,b);
+         fail("IllegalArgumentException " + x);
      } catch (IllegalArgumentException e) {
-         return;
+         //return;
      } catch (NullPointerException e) {
-         return;
+         //return;
      }
-     fail("IllegalArgumentException");
    }
 
 
@@ -703,12 +703,12 @@ public class TermOrderTest extends TestCase {
      try {
          t = new TermOrder(notimpl,notimpl,r,sp);
          x = t.getDescendComparator().compare(a,b);
+         fail("IllegalArgumentException " + x);
      } catch (IllegalArgumentException e) {
-         return;
+         //return;
      } catch (NullPointerException e) {
-         return;
+         //return;
      }
-     fail("IllegalArgumentException");
    }
 
 
@@ -730,12 +730,12 @@ public class TermOrderTest extends TestCase {
      try {
          t = new TermOrder((long[][])null);
          x = t.getDescendComparator().compare(a,b);
+         fail("IllegalArgumentException " + x);
      } catch (IllegalArgumentException e) {
-         return;
+         //return;
      } catch (NullPointerException e) {
-         return;
+         //return;
      }
-     fail("IllegalArgumentException");
    }
 
 }

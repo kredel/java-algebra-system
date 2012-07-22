@@ -407,6 +407,7 @@ public class ExtensionFieldBuilderTest extends TestCase {
         //System.out.println("elem    = " + elem);
         elem = Power.positivePower(elem, 3);
         //System.out.println("elem    = " + elem);
+        assertFalse("elem == 0 " + elem, elem.isZERO());
     }
 
 
@@ -442,6 +443,7 @@ public class ExtensionFieldBuilderTest extends TestCase {
         //System.out.println("elem    = " + elem);
         elem = Power.positivePower(elem, 3);
         //System.out.println("elem    = " + elem);
+        assertFalse("elem == 0 " + elem, elem.isZERO());
     }
 
 }

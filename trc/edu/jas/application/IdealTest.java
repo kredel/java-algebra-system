@@ -1005,6 +1005,7 @@ public class IdealTest extends TestCase {
         vars = fac.getVars();
         //System.out.println("vars = " + Arrays.toString(vars));
         //System.out.println("fac = " + fac);
+        assertTrue("vars.length == 3 ", vars.length == 3);
 
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
@@ -1058,6 +1059,7 @@ public class IdealTest extends TestCase {
         vars = fac.getVars();
         //System.out.println("vars = " + Arrays.toString(vars));
         //System.out.println("fac = " + fac);
+        assertTrue("vars.length == 3 ", vars.length == 3);
 
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
@@ -1126,6 +1128,7 @@ public class IdealTest extends TestCase {
         vars = fac.getVars();
         //System.out.println("vars = " + Arrays.toString(vars));
         //System.out.println("fac = " + fac);
+        assertTrue("vars.length == 3 ", vars.length == 3);
 
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
@@ -1190,6 +1193,7 @@ public class IdealTest extends TestCase {
         vars = fac.getVars();
         //System.out.println("vars = " + Arrays.toString(vars));
         //System.out.println("fac = " + fac);
+        assertTrue("vars.length == 3 ", vars.length == 3);
 
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
@@ -1235,6 +1239,7 @@ public class IdealTest extends TestCase {
         vars = fac.getVars();
         //System.out.println("vars = " + Arrays.toString(vars));
         //System.out.println("fac = " + fac);
+        assertTrue("vars.length == 3 ", vars.length == 3);
 
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
@@ -1305,6 +1310,7 @@ public class IdealTest extends TestCase {
         vars = fac.getVars();
         //System.out.println("vars = " + Arrays.toString(vars));
         //System.out.println("fac = " + fac);
+        assertTrue("vars.length == 3 ", vars.length == 3);
 
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
@@ -1394,6 +1400,7 @@ public class IdealTest extends TestCase {
         vars = fac.getVars();
         //System.out.println("vars = " + Arrays.toString(vars));
         //System.out.println("fac = " + fac);
+        assertTrue("vars.length == 3 ", vars.length == 3);
 
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
@@ -1463,6 +1470,7 @@ public class IdealTest extends TestCase {
         vars = fac.getVars();
         //System.out.println("vars = " + Arrays.toString(vars));
         //System.out.println("fac = " + fac);
+        assertTrue("vars.length == 3 ", vars.length == 3);
 
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
@@ -1548,6 +1556,7 @@ public class IdealTest extends TestCase {
         vars = fac.getVars();
         //System.out.println("vars = " + Arrays.toString(vars));
         //System.out.println("fac = " + fac);
+        assertTrue("vars.length == 3 ", vars.length == 3);
 
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
@@ -1591,6 +1600,7 @@ public class IdealTest extends TestCase {
         vars = fac.getVars();
         //System.out.println("vars = " + Arrays.toString(vars));
         //System.out.println("fac = " + fac);
+        assertTrue("vars.length == 3 ", vars.length == 3);
 
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
@@ -1645,6 +1655,7 @@ public class IdealTest extends TestCase {
         vars = fac.getVars();
         //System.out.println("vars = " + Arrays.toString(vars));
         //System.out.println("fac = " + fac);
+        assertTrue("vars.length == 3 ", vars.length == 3);
 
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
@@ -1701,6 +1712,7 @@ public class IdealTest extends TestCase {
         vars = fac.getVars();
         //System.out.println("vars = " + Arrays.toString(vars));
         //System.out.println("fac = " + fac);
+        assertTrue("vars.length == 3 ", vars.length == 3);
 
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
@@ -1837,6 +1849,7 @@ public class IdealTest extends TestCase {
         vars = fac.getVars();
         //System.out.println("vars = " + Arrays.toString(vars));
         //System.out.println("fac = " + fac);
+        assertTrue("vars.length == 3 ", vars.length == 3);
 
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
@@ -1907,6 +1920,7 @@ public class IdealTest extends TestCase {
         vars = fac.getVars();
         //System.out.println("vars = " + Arrays.toString(vars));
         //System.out.println("fac = " + fac);
+        assertTrue("vars.length == 3 ", vars.length == 3);
 
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();

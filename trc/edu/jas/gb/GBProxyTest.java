@@ -126,6 +126,7 @@ public class GBProxyTest extends TestCase {
     @Override
     protected void tearDown() {
         int s = bb.cancel();
+        assertTrue("s == 0 ", s == 0);
         ComputerThreads.terminate();
         a = b = c = d = e = null;
         fac = null;

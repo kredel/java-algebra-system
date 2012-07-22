@@ -199,8 +199,7 @@ public class ReductionTest extends TestCase {
         //System.out.println("e = " + e);
         ExpVector ce = a.leadingExpVector().lcm(b.leadingExpVector());
         ExpVector ee = e.leadingExpVector();
-        assertFalse("lcm(lt(a),lt(b)) != lt(e) ", ce.equals( e ) ); 
-
+        assertTrue("lcm(lt(a),lt(b)) > lt(e) " + ce + " > " + ee, fac.tord.getAscendComparator().compare(ce,ee) > 0 ); // findbugs
 
         L = new ArrayList<GenPolynomial<BigRational>>();
         L.add( a );

@@ -210,7 +210,7 @@ public class ComplexRootTest extends TestCase {
 
         GenPolynomialRing<Complex<RealAlgebraicNumber<BigRational>>> cring 
             = new GenPolynomialRing<Complex<RealAlgebraicNumber<BigRational>>>(root.ring, to, new String[] { "t" });
-        List<GenPolynomial<Complex<RealAlgebraicNumber<BigRational>>>> gens = cring.generators();
+        //List<GenPolynomial<Complex<RealAlgebraicNumber<BigRational>>>> gens = cring.generators();
         //System.out.println("gens  = " + gens);
 
         GenPolynomial<Complex<RealAlgebraicNumber<BigRational>>> cpol;

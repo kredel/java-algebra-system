@@ -511,6 +511,7 @@ public class MultiVarPowerSeriesTest extends TestCase {
         b = fac.random(kl);
         String s = b.toString(); // generate and cache some coefficients
         //System.out.println("b = " + b);
+        assertFalse("s.size > 0 " + s, s.isEmpty());
 
         c = a.sum(b);
         //System.out.println("c = " + c);

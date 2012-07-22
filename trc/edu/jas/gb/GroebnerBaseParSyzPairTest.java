@@ -320,6 +320,7 @@ public class GroebnerBaseParSyzPairTest extends TestCase {
         G = bbspar.GB( F.list );
         t = System.currentTimeMillis() - t;
         //System.out.println("bbspar ms = " + t);     
+        assertTrue("nonsense ", t >= 0L);
 
         assertTrue("isGB( GB(Trinks7) )", bbspar.isGB(G) );
         assertEquals("#GB(Trinks7) == 6", 6, G.size() );

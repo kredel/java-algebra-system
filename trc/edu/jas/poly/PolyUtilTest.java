@@ -872,10 +872,8 @@ public class PolyUtilTest extends TestCase {
         cfac = new GenPolynomialRing<ModInteger>(fac, 1, to);
         //System.out.println("cfac  = " + cfac);
 
-
         a = cfac.getONE();
         //System.out.println("a  = " + a);
-
 
         ei = fac.fromInteger(11);
         //System.out.println("ei  = " + ei);
@@ -891,7 +889,6 @@ public class PolyUtilTest extends TestCase {
         //System.out.println("bi   = " + bi);
         assertTrue("isONE( bi )", bi.isONE());
 
-
         // interpolation result
         r = cfac.getZERO();
         //System.out.println("r   = " + r);
@@ -900,7 +897,6 @@ public class PolyUtilTest extends TestCase {
         Q = cfac.getONE();
         //System.out.println("Q   = " + Q);
 
-
         ci = PolyUtil.<ModInteger> evaluateMain(fac, Q, ei);
         //System.out.println("ci   = " + ci);
         // Q(ei)^-1
@@ -908,7 +904,6 @@ public class PolyUtilTest extends TestCase {
         //System.out.println("fi   = " + fi);
         r = PolyUtil.<ModInteger> interpolate(cfac, r, Q, fi, ai, ei);
         //System.out.println("r   = " + r);
-
 
         // next evaluation polynomial
         Qp = cfac.univariate(0);
@@ -930,6 +925,8 @@ public class PolyUtilTest extends TestCase {
         //System.out.println("gi   = " + gi);
         hi = PolyUtil.<ModInteger> evaluateMain(fac, r, di);
         //System.out.println("hi   = " + hi);
+        assertTrue("gi == 1 ", gi.isONE());
+        assertTrue("hi == 1 ", hi.isONE());
 
         //            interpolate( a(ei), a(di) )            = a (mod 19)
         assertEquals("interpolate(a mod (x-ei),a mod (x-di)) = a (mod 19)", a, r);
@@ -1236,7 +1233,7 @@ public class PolyUtilTest extends TestCase {
         //System.out.println("pi = " + pi);
 
         // random polynomial
-        GenPolynomial<BigRational> pr = pfr.random(kl, 2 * ll, el, q);
+        GenPolynomial<BigRational> pr = pfr.random(kl, 2 * ll, el, q).monic();
         //System.out.println("pr = " + pr);
 
         // random polynomial
@@ -1251,6 +1248,15 @@ public class PolyUtilTest extends TestCase {
         //System.out.println("qr = " + qr);
         //System.out.println("qi = " + qi);
         assertEquals("pi == qi ", pi, qi);
+
+        // test rational to integer and back
+        qi = PolyUtil.integerFromRationalCoefficients(pfi, pr);
+        qr = PolyUtil.<BigInteger, BigRational> map(pfr, qi, new FromInteger<BigRational>(fr));
+        qr = qr.monic();
+        //System.out.println("pr = " + pr);
+        //System.out.println("qr = " + qr);
+        //System.out.println("qi = " + qi);
+        assertEquals("pr == qr ", pr, qr);
 
         // test symmetric modular integer to integer and back
         GenPolynomial<ModInteger> qm;
@@ -1379,7 +1385,7 @@ public class PolyUtilTest extends TestCase {
 
         BigRational cfac = new BigRational(1);
         String[] alpha = new String[] { "alpha" };
-        String[] vars = new String[] { "z" };
+        //String[] vars = new String[] { "z" };
         GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, 1, to, alpha);
         GenPolynomial<BigRational> agen = pfac.univariate(0, 2);
         agen = agen.sum(pfac.getONE()); // x^2 + 1

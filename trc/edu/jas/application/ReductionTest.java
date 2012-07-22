@@ -250,8 +250,8 @@ public class ReductionTest extends TestCase {
         //System.out.println("b = " + b + "\n");
         //System.out.println("L = " + L);
 
-        List<Condition<BigRational>> Ccond;
-        Ccond = cred.caseDistinction(L);
+        //List<Condition<BigRational>> Ccond;
+        //Ccond = cred.caseDistinction(L);
         //for ( Condition<BigRational> cnd : Ccond ) {
         //    System.out.println("" + cnd);
         //}

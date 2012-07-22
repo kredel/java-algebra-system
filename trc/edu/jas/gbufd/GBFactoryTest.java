@@ -271,6 +271,7 @@ public class GBFactoryTest extends TestCase {
         afac = new AlgebraicNumberRing<ModInteger>(mo);
 
         AlgebraicNumber<ModInteger> a = afac.getONE();
+        assertTrue("a == 1 " + a, a.isONE());
         GroebnerBase<AlgebraicNumber<ModInteger>> bba;
 
         bba = GBFactory.<AlgebraicNumber<ModInteger>> getImplementation(afac);

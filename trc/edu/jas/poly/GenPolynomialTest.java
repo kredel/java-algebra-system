@@ -84,10 +84,11 @@ public class GenPolynomialTest extends TestCase {
         BigRational rf = new BigRational();
         // System.out.println("rf = " + rf);
 
-        BigRational r = rf.fromInteger( 99 );
+        //BigRational r = rf.fromInteger( 99 );
         // System.out.println("r = " + r);
-        r = rf.random( 9 );
+        //r = rf.random( 9 ).sum(r);
         // System.out.println("r = " + r);
+        //assertFalse("r.isZERO() = ", r.isZERO());
 
         //RingElem<BigRational> re = new BigRational( 3 );
         // System.out.println("re = " + re);
@@ -351,7 +352,7 @@ public class GenPolynomialTest extends TestCase {
         assertTrue("ph is homogeneous " + ph, ph.isHomogeneous()); 
         GenPolynomial<BigRational> ps = ph.deHomogenize(pf);
         //System.out.println("ps = " + ps);
-        //assertEquals("phs = p ",ps,p); 
+        assertEquals("phs == p ",ps,p); // findbugs
         //System.out.println("p is homogeneous = " + p.isHomogeneous());
         //System.out.println("ph is homogeneous = " + ph.isHomogeneous());
 
