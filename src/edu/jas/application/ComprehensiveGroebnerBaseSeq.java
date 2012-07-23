@@ -432,7 +432,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                 }
                 logger.info("H = " + H);
                 if (!H.isZERO()) {
-                    CSh = new ArrayList<ColoredSystem<C>>();
+                    //CSh = new ArrayList<ColoredSystem<C>>();
                     ncs = determineAddPairs(cs, H);
                     if (ncs == null || ncs.size() == 0) {
                         continue;

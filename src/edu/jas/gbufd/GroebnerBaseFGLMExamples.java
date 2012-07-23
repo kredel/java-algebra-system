@@ -106,14 +106,14 @@ public class GroebnerBaseFGLMExamples extends TestCase {
                         + ") ";
         String[] order = new String[] { "v", "w", "x", "y", "z" };
 
-        String order1 = shuffle(order);
+        //String order1 = shuffle(order);
         String order2 = shuffle(order);
-        String order3 = shuffle(order);
-        String order4 = shuffle(order);
-        String order5 = shuffle(order);
-        String order6 = "(z,w,v,y,x)"; //langsam
-        String order7 = "(v,z,w,y,x)"; //langsam
-        String order8 = "(w,z,v,x,y)"; //langsam
+        //String order3 = shuffle(order);
+        //String order4 = shuffle(order);
+        //String order5 = shuffle(order);
+        //String order6 = "(z,w,v,y,x)"; //langsam
+        //String order7 = "(v,z,w,y,x)"; //langsam
+        //String order8 = "(w,z,v,x,y)"; //langsam
 
         /*
           String erg1 = testGeneral(order1, polynomials);
@@ -1016,8 +1016,7 @@ public class GroebnerBaseFGLMExamples extends TestCase {
         BigInteger num = BigInteger.ONE;
         for (GenPolynomial<BigRational> g : list) {
             for (Monomial<BigRational> m : g) {
-                BigRational bi = new BigRational();
-                bi = m.coefficient();
+                BigRational bi = m.coefficient();
                 BigInteger i = bi.denominator().abs();
                 BigInteger j = bi.numerator().abs();
                 if (i.compareTo(denom) > 0)

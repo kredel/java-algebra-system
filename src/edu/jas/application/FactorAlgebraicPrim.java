@@ -126,7 +126,7 @@ public class FactorAlgebraicPrim<C extends GcdRingElem<C>> extends FactorAbsolut
         GenPolynomialRing<C> cfac = afac.ring;
         GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(cfac, pfac);
         // transform minimal polynomial to bi-variate polynomial
-        GenPolynomial<GenPolynomial<C>> Ac = PolyUfdUtil.<C> introduceLowerVariable(rfac, agen);
+        //GenPolynomial<GenPolynomial<C>> Ac = PolyUfdUtil.<C> introduceLowerVariable(rfac, agen);
         //System.out.println("Ac = " + Ac.toScript());
         // transform to bi-variate polynomial, 
         // switching varaible sequence from Q[alpha][x] to Q[X][alpha]

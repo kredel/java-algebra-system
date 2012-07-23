@@ -193,7 +193,6 @@ public class CharacteristicSetWu<C extends GcdRingElem<C>> implements Characteri
         if (P.isZERO()) {
             return P;
         }
-        GenPolynomialRing<C> pfac = A.get(0).ring;
         GenPolynomial<C> R = PolyGBUtil.<C> topPseudoRemainder(A, P);
         //System.out.println("remainder, R = " + R);
         if (R.isZERO()) {

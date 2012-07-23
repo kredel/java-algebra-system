@@ -1535,7 +1535,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                 }
             }
             dec = part;
-            part = new ArrayList<IdealWithUniv<C>>();
+            //part = new ArrayList<IdealWithUniv<C>>();
         }
         return dec;
     }
@@ -1620,7 +1620,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                 }
             }
             dec = part;
-            part = new ArrayList<IdealWithUniv<C>>();
+            //part = new ArrayList<IdealWithUniv<C>>();
         }
         return dec;
     }

@@ -235,6 +235,9 @@ public class CriticalPairList<C extends RingElem<C>> extends OrderedPairlist<C> 
            recordCount++;
         }
         int c = update();
+        if (c < 0) { // use for findbugs 
+            System.out.println("c < 0");
+        }
         if ( ! p.isZERO() && ! p.isONE() ) {
            return recordCount;
         } 

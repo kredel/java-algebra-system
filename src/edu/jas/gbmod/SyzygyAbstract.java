@@ -120,8 +120,8 @@ public class SyzygyAbstract<C extends GcdRingElem<C>> implements Syzygy<C> {
         GenVectorModul<GenPolynomial<C>> mfac = v.modul;
         List<GenPolynomial<C>> F = v.val;
         GenVector<GenPolynomial<C>> S = mfac.getZERO();
-        GenPolynomial<C> pi, pj, s, h, zero;
-        zero = mfac.coFac.getZERO();
+        GenPolynomial<C> pi, pj, s, h;
+        //zero = mfac.coFac.getZERO();
         for (int i = 0; i < F.size(); i++) {
             pi = F.get(i);
             for (int j = i + 1; j < F.size(); j++) {

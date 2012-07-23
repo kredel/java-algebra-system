@@ -653,7 +653,9 @@ public class RingFactoryTokenizer {
         int tt;
         tt = tok.nextToken();
         if (tt == '|') {
-            logger.debug("split index");
+            if (debug) {
+                logger.debug("split index");
+            }
             tt = tok.nextToken();
             if (tt == StreamTokenizer.TT_EOF) {
                 return e;
@@ -669,7 +671,9 @@ public class RingFactoryTokenizer {
                 }
             }
         } else if (tt == '[') {
-            logger.debug("split index");
+            if (debug) {
+                logger.debug("split index");
+            }
             tt = tok.nextToken();
             if (tt == StreamTokenizer.TT_EOF) {
                 return e;
@@ -684,7 +688,7 @@ public class RingFactoryTokenizer {
                 if (tt == ',') {
                     tt = tok.nextToken();
                     if (tt == StreamTokenizer.TT_EOF) {
-                        return e;
+                        return e0; // ??
                     }
                     if (tok.sval != null) {
                         first = tok.sval.charAt(0);
@@ -768,6 +772,9 @@ public class RingFactoryTokenizer {
         GenSolvablePolynomial sp;
         int tt;
         tt = tok.nextToken();
+        if (debug) {
+            logger.debug("start relation table: " + tt);
+        }
         if (tok.sval != null) {
             if (tok.sval.equalsIgnoreCase("RelationTable")) {
                 GenPolynomialTokenizer ptok = new GenPolynomialTokenizer(pfac,reader);
@@ -891,9 +898,10 @@ public class RingFactoryTokenizer {
     public void nextComma() throws IOException {
         int tt;
         if (tok.ttype == ',') {
-            if (debug)
-                logger.debug("comma: ");
             tt = tok.nextToken();
+            if (debug) {
+                logger.debug("after comma: " + tt);
+            }
         }
     }
 

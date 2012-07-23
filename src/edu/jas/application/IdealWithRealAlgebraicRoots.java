@@ -147,6 +147,9 @@ public class IdealWithRealAlgebraicRoots<D extends GcdRingElem<D> & Rational>
      */
     public void doDecimalApproximation() {
         List<List<BigDecimal>> unused = decimalApproximation();
+        if ( unused == null ) { // use for findbugs
+            System.out.println("unused is null");
+        }
         return;
     }
 

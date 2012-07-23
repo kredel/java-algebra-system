@@ -1227,6 +1227,9 @@ class BigRationalIterator implements Iterator<BigRational> {
         @SuppressWarnings("unused")
         edu.jas.arith.BigInteger unused = denit.next(); // skip zero denominator
         unused = numit.next();
+        if ( unused == null ) { // use for findbugs
+            System.out.println("unused is null");
+        }
         denlist.add(denit.next());
         numlist.add(numit.next());
         denlistit = denlist.iterator();

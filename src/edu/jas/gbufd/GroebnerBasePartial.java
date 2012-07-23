@@ -440,7 +440,7 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseA
         GenPolynomialRing<C> fac = F.get(0).ring;
         String[] vars = fac.getVars();
         // compute permutation (in reverse sorting)
-        String[] xvars = remainingVars(vars, pvars);
+        //String[] xvars = remainingVars(vars, pvars);
         //System.out.println("xvars = " + Arrays.toString(xvars));
 
         List<Integer> perm = partialPermutation(vars, pvars);
