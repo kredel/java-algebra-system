@@ -325,6 +325,9 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
             P = P.multiply(cfac.getONE().multiply(li));
             //System.out.println("P,monic = " + P);
             ldbcf = P.leadingBaseCoefficient().leadingBaseCoefficient();
+            if (debug) {
+                logger.debug("new ldbcf: " + ldbcf);
+            }
         }
         // factors of content
         GenPolynomial<C> Pc = engine.recursiveContent(P);

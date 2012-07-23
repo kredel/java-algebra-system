@@ -119,6 +119,9 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends
             q = P;
             r = S;
         }
+        if (debug) {
+            logger.debug("degrees: e = " + e + ", f = " + f);
+        }
         r = r.abs();
         q = q.abs();
         GenPolynomial<C> a = recursiveContent(r);
