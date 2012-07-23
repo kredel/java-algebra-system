@@ -1229,7 +1229,7 @@ class GenPolynomialMonomialIterator<C extends RingElem<C>> implements Iterator<G
             tlist.add(li);
         }
         CartesianProductInfinite<Long> ei = new CartesianProductInfinite<Long>(tlist);
-        Iterator<List<Long>> eviter = ei.iterator();
+        //Iterator<List<Long>> eviter = ei.iterator();
 
         RingFactory<C> cf = ring.coFac;
         Iterable<C> coeffiter;

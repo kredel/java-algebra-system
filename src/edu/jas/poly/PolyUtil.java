@@ -983,8 +983,8 @@ public class PolyUtil {
                 break;
             }
         }
-        GenPolynomial<C> rhs = q.multiply(S).sum(r);
-        GenPolynomial<C> lhs = P;
+        //GenPolynomial<C> rhs = q.multiply(S).sum(r);
+        //GenPolynomial<C> lhs = P;
         ret[0] = q;
         ret[1] = r;
         return ret;

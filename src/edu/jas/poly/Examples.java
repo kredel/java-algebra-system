@@ -249,8 +249,8 @@ public static void example6() {
        System.out.println("z = " + z.toString( fac.vars ) );
 
        GenPolynomial<BigInteger> p = x.sum(y).sum(z).sum( fac.getONE());
-       BigInteger f = cfac.fromInteger(10000000001L);
-       //       p = p.multiply( f );
+       //BigInteger f = cfac.fromInteger(10000000001L);
+       // p = p.multiply( f );
        System.out.println("p = " + p);
        System.out.println("p = " + p.toString( fac.vars ) );
 
@@ -307,8 +307,8 @@ public static void example7() {
        System.out.println("z = " + z.toString( fac.vars ) );
 
        GenPolynomial<BigRational> p = x.sum(y).sum(z).sum( fac.getONE());
-       BigRational f = cfac.fromInteger(10000000001L);
-           //f = f.multiply( f );
+       //BigRational f = cfac.fromInteger(10000000001L);
+       // f = f.multiply( f );
        //p = p.multiply( f );
        // System.out.println("p = " + p);
        System.out.println("p = " + p.toString( fac.vars ) );
@@ -360,8 +360,8 @@ public static void example8() {
 
     one = ring.getONE();
     x   = ring.univariate(0);
-    x2  = ring.parse("2 x");
-    x2a = x.multiply( fac.fromInteger(2) );
+    //x2  = ring.parse("2 x");
+    //x2a = x.multiply( fac.fromInteger(2) );
     x2b = x.multiply( new BigInteger(2) );
     x2 = x2b;
 

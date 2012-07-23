@@ -953,7 +953,7 @@ public class GenPolynomialTokenizer {
                 if (tt == ',') {
                     tt = tok.nextToken();
                     if (tt == StreamTokenizer.TT_EOF) {
-                        return e;
+                        return e0;
                     }
                     if (tok.sval != null) {
                         first = tok.sval.charAt(0);
@@ -1110,6 +1110,9 @@ public class GenPolynomialTokenizer {
         GenSolvablePolynomial sp;
         int tt;
         tt = tok.nextToken();
+        if (debug) {
+            logger.debug("relation table: " + tt);
+        }
         if (tok.sval != null) {
             if (tok.sval.equalsIgnoreCase("RelationTable")) {
                 rels = nextPolynomialList();
@@ -1409,9 +1412,10 @@ public class GenPolynomialTokenizer {
     public void nextComma() throws IOException {
         int tt;
         if (tok.ttype == ',') {
-            if (debug)
-                logger.debug("comma: ");
             tt = tok.nextToken();
+            if (debug) {
+                logger.debug("after comma: " + tt);
+            }
         }
     }
 

@@ -1651,7 +1651,7 @@ Iterable<Monomial<C>> {
             return Cp;
         }
         long deg = totalDegree();
-        int i = pfac.nvar - ring.nvar;
+        //int i = pfac.nvar - ring.nvar;
         Map<ExpVector, C> C = Cp.val; //getMap();
         Map<ExpVector, C> A = val;
         for (Map.Entry<ExpVector, C> y : A.entrySet()) {
