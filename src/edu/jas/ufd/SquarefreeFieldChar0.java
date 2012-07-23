@@ -219,7 +219,6 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
         if (pfac.nvar > 1) {
             throw new IllegalArgumentException(this.getClass().getName() + " only for multivariate polynomials");
         }
-        GenPolynomialRing<C> cfac = (GenPolynomialRing<C>) pfac.coFac;
         // squarefree content
         GenPolynomial<GenPolynomial<C>> pp = P;
         GenPolynomial<C> Pc = engine.recursiveContent(P);
@@ -260,7 +259,6 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
         if (pfac.nvar > 1) {
             throw new IllegalArgumentException(this.getClass().getName() + " only for multivariate polynomials");
         }
-        GenPolynomialRing<C> cfac = (GenPolynomialRing<C>) pfac.coFac;
         // squarefree content
         GenPolynomial<GenPolynomial<C>> pp = P;
         GenPolynomial<C> Pc = engine.recursiveContent(P);

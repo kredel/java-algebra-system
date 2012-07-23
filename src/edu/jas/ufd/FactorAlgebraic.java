@@ -33,7 +33,7 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
     private static final Logger logger = Logger.getLogger(FactorAlgebraic.class);
 
 
-    private final boolean debug = true || logger.isInfoEnabled();
+    private final boolean debug = logger.isInfoEnabled();
 
 
     /**
@@ -99,7 +99,7 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
             factors.add(pfac.getONE().multiply(ldcf));
         }
         //System.out.println("\nP = " + P);
-        if (false && debug) {
+        if (debug) {
            Squarefree<AlgebraicNumber<C>> sqengine = SquarefreeFactory.<AlgebraicNumber<C>> getImplementation(afac);
            if ( !sqengine.isSquarefree(P) ) {
                throw new RuntimeException("P not squarefree: " + sqengine.squarefreeFactors(P));
@@ -171,7 +171,7 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
         for (GenPolynomial<C> nfi : nfacs) {
             //System.out.println("nfi = " + nfi);
             Ni = PolyUfdUtil.<C> substituteConvertToAlgebraicCoefficients(pfac, nfi, ks);
-            if (logger.isDebugEnabled()) {
+            if (debug) {
                 logger.info("Ni = " + Ni);
                 //System.out.println("Pp = " + Pp);
                 //System.out.println("Ni = " + Ni);

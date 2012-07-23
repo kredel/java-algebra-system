@@ -164,7 +164,6 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>> extends Squa
             k = 1L; //return null;
         }
         // now c divides all exponents of non constant elements
-        Quotient<C> rp = P.ring.getONE();
         for (Quotient<C> q : sf.keySet()) {
             Long e = sf.get(q);
             //System.out.println("q = " + q + ", e = " + e);

@@ -94,7 +94,7 @@ public class Examples {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
-        String[] alpha = new String[] { "alpha" };
+        //String[] alpha = new String[] { "alpha" };
         String[] vars = new String[] { "x" };
         GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, 1, to, vars);
 
@@ -117,7 +117,7 @@ public class Examples {
 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
-        String[] alpha = new String[] { "alpha" };
+        //String[] alpha = new String[] { "alpha" };
         String[] vars = new String[] { "x" };
         GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, 1, to, vars);
 

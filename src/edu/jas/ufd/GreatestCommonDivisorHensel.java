@@ -38,7 +38,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
     private static final Logger logger = Logger.getLogger(GreatestCommonDivisorHensel.class);
 
 
-    private final boolean debug = /*true ||*/logger.isDebugEnabled();
+    private final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -103,6 +103,9 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
         } else {
             q = P;
             r = S;
+        }
+        if (debug) {
+            logger.debug("degrees: e = " + e + ", f = " + f);
         }
         r = r.abs();
         q = q.abs();
@@ -298,6 +301,9 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
         } else {
             q = P;
             r = S;
+        }
+        if (debug) {
+            logger.debug("degrees: e = " + e + ", f = " + f);
         }
         r = r.abs();
         q = q.abs();

@@ -226,7 +226,7 @@ public class SquarefreeFactory {
             ufd = new SquarefreeFiniteFieldCharP<C>(fac);
         } else if (ofac instanceof AlgebraicNumberRing) {
             afac = (AlgebraicNumberRing) ofac;
-            ofac = afac.ring.coFac;
+            //ofac = afac.ring.coFac;
             //System.out.println("o_afac = " + ofac);
             ufd = getImplementation(afac);
         } else if (ofac instanceof QuotientRing) {

@@ -108,6 +108,9 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
             q = P;
             r = S;
         }
+        if (debug) {
+            logger.debug("degrees: e = " + e + ", f = " + f);
+        }
         r = r.abs();
         q = q.abs();
         // setup factories
@@ -337,6 +340,9 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
         } else {
             q = P;
             r = S;
+        }
+        if (debug) {
+            logger.debug("degrees: e = " + e + ", f = " + f);
         }
         // setup factories
         ModularRingFactory<MOD> cofac = (ModularRingFactory<MOD>) P.ring.coFac;

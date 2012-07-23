@@ -456,6 +456,7 @@ public class ExpVectorByte extends ExpVector
      */
     public ExpVectorByte subst(int i, byte d) {
         ExpVectorByte V = (ExpVectorByte) this.clone();
+        @SuppressWarnings("unused")
         long e = V.setVal(i, d);
         return V;
         //return EVSU(this, i, d);
@@ -471,6 +472,7 @@ public class ExpVectorByte extends ExpVector
     @Override
     public ExpVectorByte subst(int i, long d) {
         ExpVectorByte V = (ExpVectorByte) this.clone();
+        @SuppressWarnings("unused")
         long e = V.setVal(i, d);
         return V;
         //return EVSU(this, i, d);

@@ -63,6 +63,9 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
             q = P;
             r = S;
         }
+        if (debug) {
+            logger.debug("degrees: e = " + e + ", f = " + f);
+        }
         C c;
         if (field) {
             r = r.monic();
@@ -135,6 +138,9 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
         } else {
             q = P;
             r = S;
+        }
+        if (debug) {
+            logger.debug("degrees: e = " + e + ", f = " + f);
         }
         if (field) {
             r = PolyUtil.<C> monic(r);

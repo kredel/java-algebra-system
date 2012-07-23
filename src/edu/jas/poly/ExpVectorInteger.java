@@ -457,6 +457,7 @@ public class ExpVectorInteger extends ExpVector
     @Override
     public ExpVectorInteger subst(int i, long d) {
         ExpVectorInteger V = (ExpVectorInteger) this.clone();
+        @SuppressWarnings("unused")
         long e = V.setVal(i, d);
         return V;
         //return EVSU(this, i, d);
@@ -471,6 +472,7 @@ public class ExpVectorInteger extends ExpVector
      */
     public ExpVectorInteger subst(int i, int d) {
         ExpVectorInteger V = (ExpVectorInteger) this.clone();
+        @SuppressWarnings("unused")
         long e = V.setVal(i, d);
         return V;
         //return EVSU(this, i, d);

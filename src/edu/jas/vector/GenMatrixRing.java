@@ -534,7 +534,7 @@ public class GenMatrixRing<C extends RingElem<C>> implements AlgebraFactory<GenM
                     if (e.trim().length() > 0) {
                         throw new RuntimeException("Error e not empty " + e);
                     }
-                    s = s.substring(i + 1);
+                    //s = s.substring(i + 1);
                 }
                 break;
             }

@@ -1044,7 +1044,7 @@ public class HenselUtil {
         ModularRingFactory<MOD> mcfac = (ModularRingFactory<MOD>) fac.coFac;
         BigInteger p = mcfac.getIntegerModul();
         BigInteger modul = p;
-        GenPolynomialRing<MOD> mfac = new GenPolynomialRing<MOD>(mcfac, fac);
+        GenPolynomialRing<MOD> mfac; // = new GenPolynomialRing<MOD>(mcfac, fac);
         for (int i = 1; i < k; i++) {
             // e = 1 - s a - t b in Z[x]
             GenPolynomial<BigInteger> e = one.subtract(Si.multiply(Ai)).subtract(Ti.multiply(Bi));
@@ -1566,7 +1566,6 @@ public class HenselUtil {
 
         // setup integer polynomial ring
         GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(), fac);
-        GenPolynomial<BigInteger> one = ifac.getONE();
         List<GenPolynomial<BigInteger>> Fi = PolyUtil.integerFromModularCoefficients(ifac, F);
         //System.out.println("Fi = " + Fi);
 
@@ -1722,7 +1721,6 @@ public class HenselUtil {
 
         // setup integer polynomial ring
         GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(), fac);
-        GenPolynomial<BigInteger> one = ifac.getONE();
         List<GenPolynomial<BigInteger>> Fi = PolyUtil.integerFromModularCoefficients(ifac, F);
         //System.out.println("Fi = " + Fi);
 

@@ -133,6 +133,9 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
             q = P;
             r = S;
         }
+        if (debug) {
+            logger.debug("degrees: e = " + e + ", f = " + f);
+        }
         r = r.abs();
         q = q.abs();
         // compute contents and primitive parts

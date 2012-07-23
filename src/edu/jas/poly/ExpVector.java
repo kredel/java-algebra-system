@@ -644,6 +644,7 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
      */
     public ExpVector subst( int i, long d ) {
         ExpVector V = (ExpVector)this.clone();
+        @SuppressWarnings("unused")
         long e = V.setVal( i, d );
         return V;
         //return EVSU(this, i, d);

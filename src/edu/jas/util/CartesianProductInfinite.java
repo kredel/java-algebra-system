@@ -171,6 +171,7 @@ class CartesianTwoProductInfiniteIterator<E> implements Iterator<List<E>> {
         fincomps1 = new ArrayList<E>();
         fincomps1.add(e); 
         fincompit1 = fincomps1.iterator();
+        //@SuppressWarnings("unused")
         d = fincompit1.next(); // remove current
         //System.out.println("current   = " + current);
     }
@@ -300,6 +301,7 @@ class CartesianTwoProductInfiniteIteratorList<E> implements Iterator<List<E>> {
         fincomps1 = new ArrayList<List<E>>();
         fincomps1.add(e); 
         fincompit1 = fincomps1.iterator();
+        //@SuppressWarnings("unused")
         d = fincompit1.next(); // remove current
         //System.out.println("current   = " + current);
     }

@@ -163,12 +163,12 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
             return 0;
         }
         if ( rl.isZERO() || il.isZERO() ) {
-            RingFactory<C> cf = (RingFactory<C>) rl.factory();
-            GenPolynomialRing<C> rfac = new GenPolynomialRing<C>(cf,a.ring);
-            cf = (RingFactory<C>) il.factory();
-            GenPolynomialRing<C> ifac = new GenPolynomialRing<C>(cf,a.ring);
-            GenPolynomial<C> rp = PolyUtil.<C> realPartFromComplex(rfac, a);
-            GenPolynomial<C> ip = PolyUtil.<C> imaginaryPartFromComplex(ifac, a);
+            //RingFactory<C> cf = (RingFactory<C>) rl.factory();
+            //GenPolynomialRing<C> rfac = new GenPolynomialRing<C>(cf,a.ring);
+            //cf = (RingFactory<C>) il.factory();
+            //GenPolynomialRing<C> ifac = new GenPolynomialRing<C>(cf,a.ring);
+            //GenPolynomial<C> rp = PolyUtil.<C> realPartFromComplex(rfac, a);
+            //GenPolynomial<C> ip = PolyUtil.<C> imaginaryPartFromComplex(ifac, a);
             //RealRoots<C> rr = new RealRootsSturm<C>();
             if ( rl.isZERO() ) {
                 //logger.info("lengthReal == 0: " + rect);

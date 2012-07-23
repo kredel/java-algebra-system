@@ -394,6 +394,7 @@ public class ExpVectorLong extends ExpVector
     @Override
     public ExpVectorLong subst(int i, long d) {
         ExpVectorLong V = (ExpVectorLong) this.clone();
+        @SuppressWarnings("unused")
         long e = V.setVal(i, d);
         return V;
         //return EVSU(this, i, d);

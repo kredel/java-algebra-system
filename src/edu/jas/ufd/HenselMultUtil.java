@@ -68,7 +68,7 @@ public class HenselMultUtil {
         // evaluate at v_n:
         List<MOD> Vp = new ArrayList<MOD>(V);
         MOD v = Vp.remove(Vp.size() - 1);
-        GenPolynomial<MOD> zero = pkfac.getZERO();
+        //GenPolynomial<MOD> zero = pkfac.getZERO();
         // (x_n - v)
         GenPolynomial<MOD> mon = pkfac.getONE();
         GenPolynomial<MOD> xv = pkfac.univariate(0, 1);
@@ -509,7 +509,7 @@ public class HenselMultUtil {
         MOD vp = cf.fromInteger(v.getSymmetricInteger().getVal());
         //System.out.println("v = " + v + ", vp = " + vp);
         GenPolynomialRing<MOD> ckfac = pkfac.contract(1);
-        GenPolynomial<MOD> Cs = PolyUtil.<MOD> evaluateMain(ckfac, Cp, vp);
+        //GenPolynomial<MOD> Cs = PolyUtil.<MOD> evaluateMain(ckfac, Cp, vp);
         //System.out.println("Cp = " + Cp);
         //System.out.println("Cs = " + Cs);
 
@@ -690,7 +690,7 @@ public class HenselMultUtil {
         Ap.add(Cp);
         Gp.add(Lp);
         GenPolynomialRing<MOD> pf = pkfac;
-        GenPolynomialRing<MOD> pf1 = pkfac1;
+        //GenPolynomialRing<MOD> pf1 = pkfac1;
         GenPolynomial<MOD> ap = Cp;
         List<GenPolynomial<MOD>> Lpp = Lp;
         for (int j = pkfac.nvar; j > 2; j--) {
@@ -922,7 +922,7 @@ public class HenselMultUtil {
             return new ArrayList<GenPolynomial<MOD>>();
         }
         GenPolynomialRing<MOD> pkfac = F.get(0).ring;
-        long d = C.degree();
+        //long d = C.degree();
         // setup q = p^k
         RingFactory<MOD> cfac = pkfac.coFac;
         ModularRingFactory<MOD> pcfac = (ModularRingFactory<MOD>) cfac;

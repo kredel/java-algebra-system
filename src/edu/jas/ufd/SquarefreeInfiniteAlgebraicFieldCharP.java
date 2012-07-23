@@ -92,7 +92,6 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>> ext
         }
         GenPolynomial<C> an = P.val;
         AlgebraicNumberRing<C> pfac = P.ring;
-        GenPolynomial<C> one = pfac.ring.getONE();
         if (!an.isONE()) {
             //System.out.println("an = " + an);
             //System.out.println("rengine = " + rengine);

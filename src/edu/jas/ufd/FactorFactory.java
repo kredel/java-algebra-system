@@ -191,7 +191,7 @@ public class FactorFactory {
         } else if (ofac instanceof AlgebraicNumberRing) {
             //System.out.println("afac_o = " + ofac);
             afac = (AlgebraicNumberRing) ofac;
-            ofac = afac.ring.coFac;
+            //ofac = afac.ring.coFac;
             ufd = new FactorAlgebraic/*raw <C>*/(afac);
         } else if (ofac instanceof QuotientRing) {
             //System.out.println("qfac_o = " + ofac);

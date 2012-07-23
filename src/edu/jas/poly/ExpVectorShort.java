@@ -456,6 +456,7 @@ public class ExpVectorShort extends ExpVector
      */
     public ExpVectorShort subst(int i, short d) {
         ExpVectorShort V = (ExpVectorShort) this.clone();
+        @SuppressWarnings("unused")
         long e = V.setVal(i, d);
         return V;
         //return EVSU(this, i, d);
@@ -471,6 +472,7 @@ public class ExpVectorShort extends ExpVector
     @Override
     public ExpVectorShort subst(int i, long d) {
         ExpVectorShort V = (ExpVectorShort) this.clone();
+        @SuppressWarnings("unused")
         long e = V.setVal(i, d);
         return V;
         //return EVSU(this, i, d);

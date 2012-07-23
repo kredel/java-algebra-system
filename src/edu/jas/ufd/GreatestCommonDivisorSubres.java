@@ -29,7 +29,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
     private static final Logger logger = Logger.getLogger(GreatestCommonDivisorSubres.class);
 
 
-    //private boolean debug = logger.isDebugEnabled();
+    private boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -95,6 +95,9 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
         } else {
             q = P;
             r = S;
+        }
+        if (debug) {
+            logger.debug("degrees: e = " + e + ", f = " + f);
         }
         r = r.abs();
         q = q.abs();
@@ -168,6 +171,9 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
         } else {
             q = P;
             r = S;
+        }
+        if (debug) {
+            logger.debug("degrees: e = " + e + ", f = " + f);
         }
         r = r.abs();
         q = q.abs();
