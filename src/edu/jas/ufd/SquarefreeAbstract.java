@@ -304,8 +304,9 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
             return true;
         }
         GenPolynomial<C> t = P.ring.getONE();
-        for (GenPolynomial<C> f : F.keySet()) {
-            Long E = F.get(f);
+        for ( Map.Entry<GenPolynomial<C>,Long> me : F.entrySet()) {
+            GenPolynomial<C> f = me.getKey();
+            Long E = me.getValue(); // F.get(f);
             long e = E.longValue();
             GenPolynomial<C> g = Power.<GenPolynomial<C>> positivePower(f, e);
             t = t.multiply(g);
@@ -347,8 +348,9 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
             return true;
         }
         GenPolynomial<GenPolynomial<C>> t = P.ring.getONE();
-        for (GenPolynomial<GenPolynomial<C>> f : F.keySet()) {
-            Long E = F.get(f);
+        for ( Map.Entry<GenPolynomial<GenPolynomial<C>>,Long> me : F.entrySet()) {
+            GenPolynomial<GenPolynomial<C>> f = me.getKey();
+            Long E = me.getValue(); // F.get(f);
             long e = E.longValue();
             GenPolynomial<GenPolynomial<C>> g = Power.<GenPolynomial<GenPolynomial<C>>> positivePower(f, e);
             t = t.multiply(g);
@@ -456,8 +458,9 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
         }
         //List<GenPolynomial<C>> fi;
         if ( A.isZERO() ) {
-            for ( GenPolynomial<C> d : D.keySet() ) {
-                long e = D.get(d);
+            for ( Map.Entry<GenPolynomial<C>,Long> me : D.entrySet() ) {
+                GenPolynomial<C> d = me.getKey();
+                long e = me.getValue(); //D.get(d);
                 int e1 = (int)e + 1;
                 List<GenPolynomial<C>> fi = new ArrayList<GenPolynomial<C>>(e1);
                 for ( int i = 0; i < e1; i++ ) {
@@ -472,8 +475,9 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
         }
         // A != 0, D != empty
         List<GenPolynomial<C>> Dp = new ArrayList<GenPolynomial<C>>( D.size() );
-        for ( GenPolynomial<C> d : D.keySet() ) {
-            long e = D.get(d);
+        for ( Map.Entry<GenPolynomial<C>,Long> me : D.entrySet() ) {
+            GenPolynomial<C> d = me.getKey();
+            long e = me.getValue(); //D.get(d);
             GenPolynomial<C> f = Power.<GenPolynomial<C>> positivePower(d, e);
             Dp.add(f);
         }
@@ -484,8 +488,9 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
         fi.add(A0);
         pf.add(fi);
         int i = 0;
-        for ( GenPolynomial<C> d : D.keySet() ) { // assume fixed sequence order
-            long e = D.get(d);
+        for ( Map.Entry<GenPolynomial<C>,Long> me : D.entrySet() ) { // assume fixed sequence order
+            GenPolynomial<C> d = me.getKey();
+            long e = me.getValue(); // D.get(d);
             int ei = (int)e;
             GenPolynomial<C> gi = F.get(i); // assume fixed sequence order
             List<GenPolynomial<C>> Fi = engine.basePartialFraction(gi,d,ei);
@@ -515,8 +520,9 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
             return false;
         }
         List<GenPolynomial<C>> Dp = new ArrayList<GenPolynomial<C>>( D.size() );
-        for ( GenPolynomial<C> d : D.keySet() ) {
-            long e = D.get(d);
+        for ( Map.Entry<GenPolynomial<C>,Long> me : D.entrySet() ) {
+            GenPolynomial<C> d = me.getKey();
+            long e = me.getValue(); // D.get(d);
             GenPolynomial<C> f = Power.<GenPolynomial<C>> positivePower(d, e);
             Dp.add(f);
         }
@@ -545,8 +551,9 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
 //         }
 
         int i = 0;
-        for ( GenPolynomial<C> d : D.keySet() ) { // assume fixed sequence order
-            long e = D.get(d);
+        for ( Map.Entry<GenPolynomial<C>,Long> me : D.entrySet() ) { // assume fixed sequence order
+            GenPolynomial<C> d = me.getKey();
+            long e = me.getValue(); // D.get(d);
             int ei = (int)e;
             List<GenPolynomial<C>> Fi = F.get(i+1); // assume fixed sequence order
 

@@ -5,6 +5,7 @@
 package edu.jas.ufd;
 
 
+import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -86,9 +87,10 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>> extends Squa
         if (!num.isONE()) {
             SortedMap<GenPolynomial<C>, Long> nfac = rengine.squarefreeFactors(num);
             //System.out.println("nfac = " + nfac);
-            for (GenPolynomial<C> nfp : nfac.keySet()) {
+            for ( Map.Entry<GenPolynomial<C>,Long> me : nfac.entrySet()) {
+                GenPolynomial<C> nfp = me.getKey();
                 Quotient<C> nf = new Quotient<C>(pfac, nfp);
-                factors.put(nf, nfac.get(nfp));
+                factors.put(nf, me.getValue()); //nfac.get(nfp));
             }
         }
         if (den.isONE()) {
@@ -99,9 +101,10 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>> extends Squa
         }
         SortedMap<GenPolynomial<C>, Long> dfac = rengine.squarefreeFactors(den);
         //System.out.println("dfac = " + dfac);
-        for (GenPolynomial<C> dfp : dfac.keySet()) {
+        for ( Map.Entry<GenPolynomial<C>,Long> me : dfac.entrySet()) {
+            GenPolynomial<C> dfp = me.getKey();
             Quotient<C> df = new Quotient<C>(pfac, one, dfp);
-            factors.put(df, dfac.get(dfp));
+            factors.put(df, me.getValue()); //dfac.get(dfp));
         }
         if (factors.size() == 0) {
             factors.put(P, 1L);
@@ -142,12 +145,13 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>> extends Squa
         // better: test if sf.size() == 2 // no, since num and den factors 
         Long k = null;
         Long cl = c.longValue();
-        for (Quotient<C> p : sf.keySet()) {
+        for ( Map.Entry<Quotient<C>,Long> me : sf.entrySet()) {
+            Quotient<C> p = me.getKey();
             //System.out.println("p = " + p);
             if (p.isConstant()) { // todo: check for non-constants in coefficients
                 continue;
             }
-            Long e = sf.get(p);
+            Long e = me.getValue(); //sf.get(p);
             long E = e.longValue();
             long r = E % cl;
             if (r != 0) {
@@ -164,8 +168,9 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>> extends Squa
             k = 1L; //return null;
         }
         // now c divides all exponents of non constant elements
-        for (Quotient<C> q : sf.keySet()) {
-            Long e = sf.get(q);
+        for ( Map.Entry<Quotient<C>,Long> me : sf.entrySet()) {
+            Quotient<C> q = me.getKey();
+            Long e = me.getValue(); //sf.get(q);
             //System.out.println("q = " + q + ", e = " + e);
             if (e >= k) {
                 e = e / cl;
@@ -225,8 +230,9 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>> extends Squa
                 logger.info("sm,root = " + sm);
             }
             Quotient<C> r = rf.getONE();
-            for (Quotient<C> rp : sm.keySet()) {
-                long gl = sm.get(rp);
+            for (Map.Entry<Quotient<C>,Long> me : sm.entrySet()) {
+                Quotient<C> rp = me.getKey(); 
+                long gl = me.getValue(); // sm.get(rp);
                 if (gl > 1) {
                     rp = Power.<Quotient<C>> positivePower(rp, gl);
                 }
@@ -278,9 +284,10 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>> extends Squa
                 logger.info("sm,base,root = " + sm);
             }
             Quotient<C> r = rf.getONE();
-            for (Quotient<C> rp : sm.keySet()) {
+            for ( Map.Entry<Quotient<C>,Long> me : sm.entrySet()) {
+                Quotient<C> rp = me.getKey();
                 //System.out.println("rp = " + rp);
-                long gl = sm.get(rp);
+                long gl = me.getValue(); //sm.get(rp);
                 //System.out.println("gl = " + gl);
                 Quotient<C> re = rp;
                 if (gl > 1) {

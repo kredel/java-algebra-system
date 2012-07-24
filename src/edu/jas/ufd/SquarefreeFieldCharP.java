@@ -153,10 +153,11 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
             SortedMap<C, Long> rfactors = squarefreeFactors(coeff);
             //System.out.println("rfactors,const = " + rfactors);
             if ( rfactors != null && rfactors.size() > 0) {
-                for (C c : rfactors.keySet()) {
+                for ( Map.Entry<C,Long> me : rfactors.entrySet()) {
+                    C c = me.getKey();
                     if (!c.isONE()) {
                         GenPolynomial<C> cr = pfac.getONE().multiply( c );
-                        Long rk = rfactors.get(c);
+                        Long rk = me.getValue(); // rfactors.get(c);
                         sfactors.put(cr, rk);
                     }
                 }
@@ -174,10 +175,11 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
             SortedMap<C, Long> rfactors = squarefreeFactors(ldbcf);
             //System.out.println("rfactors,ldbcf = " + rfactors);
             if ( rfactors != null && rfactors.size() > 0) {
-                for (C c : rfactors.keySet()) {
+                for ( Map.Entry<C,Long> me : rfactors.entrySet()) {
+                    C c = me.getKey();
                     if (!c.isONE()) {
                         GenPolynomial<C> cr = pfac.getONE().multiply( c );
-                        Long rk = rfactors.get(c);
+                        Long rk = me.getValue(); //rfactors.get(c);
                         sfactors.put(cr, rk);
                     }
                 }
@@ -343,10 +345,11 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
             logger.info("rsf = " + rsf);
         }
         // add factors of content
-        for (GenPolynomial<C> c : rsf.keySet()) {
+        for ( Map.Entry<GenPolynomial<C>,Long> me : rsf.entrySet()) {
+            GenPolynomial<C> c = me.getKey();
             if (!c.isONE()) {
                 GenPolynomial<GenPolynomial<C>> cr = pfac.getONE().multiply(c);
-                Long rk = rsf.get(c);
+                Long rk = me.getValue(); //rsf.get(c);
                 sfactors.put(cr, rk);
             }
         }
@@ -516,10 +519,11 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
                   = (SquarefreeInfiniteAlgebraicFieldCharP)SquarefreeFactory.getImplementation(cfac);
                 SortedMap<AlgebraicNumber<C>, Long> rfactors = reng.squarefreeFactors(an);
                 logger.info("rfactors,infinite,algeb = " + rfactors);
-                for (AlgebraicNumber<C> c : rfactors.keySet()) {
+                for ( Map.Entry<AlgebraicNumber<C>,Long> me : rfactors.entrySet()) {
+                    AlgebraicNumber<C> c = me.getKey();
                     if (!c.isONE()) {
                         C cr = (C) (Object) c;
-                        Long rk = rfactors.get(c);
+                        Long rk = me.getValue(); // rfactors.get(c);
                         factors.put(cr, rk);
                     }
                 }
@@ -530,10 +534,11 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
               = (SquarefreeInfiniteFieldCharP)SquarefreeFactory.getImplementation(cfac);
             SortedMap<Quotient<C>, Long> rfactors = reng.squarefreeFactors(q);
             logger.info("rfactors,infinite = " + rfactors);
-            for (Quotient<C> c : rfactors.keySet()) {
+            for ( Map.Entry<Quotient<C>,Long> me : rfactors.entrySet()) {
+                Quotient<C> c = me.getKey();
                 if (!c.isONE()) {
                     C cr = (C) (Object) c;
-                    Long rk = rfactors.get(c);
+                    Long rk = me.getValue(); //rfactors.get(c);
                     factors.put(cr, rk);
                 }
             }
@@ -586,8 +591,9 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
         }
         GenPolynomial<C> t = P.ring.getONE();
         long p = P.ring.characteristic().longValue();
-        for (GenPolynomial<C> f : F.keySet()) {
-            Long E = F.get(f);
+        for ( Map.Entry<GenPolynomial<C>,Long> me : F.entrySet()) {
+            GenPolynomial<C> f = me.getKey();
+            Long E = me.getValue(); //F.get(f);
             long e = E.longValue();
             GenPolynomial<C> g = Power.<GenPolynomial<C>> positivePower(f, e);
             if (!f.isConstant()) {
@@ -630,8 +636,9 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
         }
         GenPolynomial<GenPolynomial<C>> t = P.ring.getONE();
         long p = P.ring.characteristic().longValue();
-        for (GenPolynomial<GenPolynomial<C>> f : F.keySet()) {
-            Long E = F.get(f);
+        for ( Map.Entry<GenPolynomial<GenPolynomial<C>>,Long> me : F.entrySet()) {
+            GenPolynomial<GenPolynomial<C>> f = me.getKey();
+            Long E = me.getValue(); //F.get(f);
             long e = E.longValue();
             GenPolynomial<GenPolynomial<C>> g = Power.<GenPolynomial<GenPolynomial<C>>> positivePower(f, e);
             if (!f.isConstant()) {

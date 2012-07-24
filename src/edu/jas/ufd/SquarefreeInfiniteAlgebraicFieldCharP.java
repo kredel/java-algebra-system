@@ -8,6 +8,7 @@ package edu.jas.ufd;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -97,9 +98,10 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>> ext
             //System.out.println("rengine = " + rengine);
             SortedMap<GenPolynomial<C>, Long> nfac = rengine.squarefreeFactors(an);
             //System.out.println("nfac = " + nfac);
-            for (GenPolynomial<C> nfp : nfac.keySet()) {
+            for ( Map.Entry<GenPolynomial<C>,Long> me : nfac.entrySet()) {
+                GenPolynomial<C> nfp = me.getKey();
                 AlgebraicNumber<C> nf = new AlgebraicNumber<C>(pfac, nfp);
-                factors.put(nf, nfac.get(nfp));
+                factors.put(nf, me.getValue()); //nfac.get(nfp));
             }
         }
         if (factors.size() == 0) {
@@ -253,8 +255,9 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>> ext
                 //System.out.println("br = " + br);
                 if (br != null && br.size() > 0) {
                     C cc = apfac.coFac.getONE();
-                    for (C bc : br.keySet()) {
-                        long ll = br.get(bc);
+                    for ( Map.Entry<C,Long> me : br.entrySet()) {
+                        C bc = me.getKey(); 
+                        long ll = me.getValue(); //br.get(bc);
                         if (ll % c.longValue() == 0L) {
                             long fl = ll / c.longValue();
                             cc = cc.multiply(Power.<C> positivePower(bc, fl));
@@ -326,8 +329,9 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>> ext
                 logger.info("sm_alg,root = " + sm);
             }
             AlgebraicNumber<C> r = rf.getONE();
-            for (AlgebraicNumber<C> rp : sm.keySet()) {
-                long gl = sm.get(rp);
+            for ( Map.Entry<AlgebraicNumber<C>,Long> me : sm.entrySet()) {
+                AlgebraicNumber<C> rp = me.getKey();
+                long gl = me.getValue(); //sm.get(rp);
                 if (gl > 1) {
                     rp = Power.<AlgebraicNumber<C>> positivePower(rp, gl);
                 }
@@ -379,9 +383,10 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>> ext
                 logger.info("sm_alg,base,root = " + sm);
             }
             AlgebraicNumber<C> r = rf.getONE();
-            for (AlgebraicNumber<C> rp : sm.keySet()) {
+            for ( Map.Entry<AlgebraicNumber<C>,Long> me : sm.entrySet()) {
+                AlgebraicNumber<C> rp = me.getKey();
                 //System.out.println("rp = " + rp);
-                long gl = sm.get(rp);
+                long gl = me.getValue(); //sm.get(rp);
                 //System.out.println("gl = " + gl);
                 AlgebraicNumber<C> re = rp;
                 if (gl > 1) {

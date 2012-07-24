@@ -335,10 +335,11 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
             logger.info("squarefreeFactors = " + rsf);
         }
         // add factors of content
-        for (GenPolynomial<C> c : rsf.keySet()) {
+        for ( Map.Entry<GenPolynomial<C>,Long> me : rsf.entrySet()) {
+            GenPolynomial<C> c = me.getKey();
             if (!c.isONE()) {
                 GenPolynomial<GenPolynomial<C>> cr = pfac.getONE().multiply(c);
-                Long rk = rsf.get(c);
+                Long rk = me.getValue(); // rsf.get(c);
                 sfactors.put(cr, rk);
             }
         }

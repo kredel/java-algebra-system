@@ -5,6 +5,7 @@
 package edu.jas.ufd;
 
 
+import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -138,12 +139,13 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>> extends Square
         }
         // better: test if sf.size() == 1 // not ok
         Long k = null;
-        for (GenPolynomial<C> p : sf.keySet()) {
+        for ( Map.Entry<GenPolynomial<C>,Long> me : sf.entrySet()) {
+            GenPolynomial<C> p = me.getKey();
             if (p.isConstant()) {
                 //System.out.println("p,const = " + p);
                 continue;
             }
-            Long e = sf.get(p);
+            Long e = me.getValue(); //sf.get(p);
             java.math.BigInteger E = new java.math.BigInteger(e.toString());
             java.math.BigInteger r = E.remainder(c);
             if (!r.equals(java.math.BigInteger.ZERO)) {
@@ -159,8 +161,9 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>> extends Square
         // now c divides all exponents
         Long cl = c.longValue();
         GenPolynomial<C> rp = P.ring.getONE();
-        for (GenPolynomial<C> q : sf.keySet()) {
-            Long e = sf.get(q);
+        for ( Map.Entry<GenPolynomial<C>,Long> me : sf.entrySet()) {
+            GenPolynomial<C> q = me.getKey();
+            Long e = me.getValue(); // sf.get(q);
             if (q.isConstant()) { // ensure p-th root
                 C qc = q.leadingBaseCoefficient();
                 //System.out.println("qc,const = " + qc + ", e = " + e);
@@ -268,8 +271,9 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>> extends Square
                logger.info("sm,rec = " + sm);
             }
             GenPolynomial<C> r = rf.getONE();
-            for (GenPolynomial<C> rp : sm.keySet()) {
-                long gl = sm.get(rp);
+            for ( Map.Entry<GenPolynomial<C>,Long> me : sm.entrySet()) {
+                GenPolynomial<C> rp = me.getKey();
+                long gl = me.getValue(); //sm.get(rp);
                 if (gl > 1) {
                     rp = Power.<GenPolynomial<C>> positivePower(rp, gl);
                 }
