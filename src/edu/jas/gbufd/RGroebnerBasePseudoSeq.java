@@ -473,9 +473,9 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>> extends RGroeb
             bd.put(cf, block);
         }
         System.out.println("\nminGB bd:");
-        for (C k : bd.keySet()) {
-            System.out.println("\nkey = " + k + ":");
-            System.out.println("val = " + bd.get(k));
+        for (Map.Entry<C, List<GenPolynomial<C>>> me : bd.entrySet()) {
+            System.out.println("\nkey = " + me.getKey() + ":");
+            System.out.println("val = " + me.getValue());
         }
         System.out.println();
         //

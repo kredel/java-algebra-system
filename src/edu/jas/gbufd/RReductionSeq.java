@@ -159,11 +159,12 @@ public class RReductionSeq<C extends RegularRingElem<C>> extends ReductionAbstra
         l = j;
         boolean mt = false;
         Map<ExpVector, C> Am = Ap.getMap();
-        for (ExpVector e : Am.keySet()) {
+        for (Map.Entry<ExpVector, C> me : Am.entrySet()) {
+            ExpVector e = me.getKey();
+            C a = me.getValue();
             for (i = 0; i < l; i++) {
                 mt = e.multipleOf(htl[i]);
                 if (mt) {
-                    C a = Am.get(e);
                     //C r = a.multiply( lbc[i] );
                     //C r = a.idempotent().multiply( lbc[i].idempotent() );
                     C r = a.idempotentAnd(lbc[i]);

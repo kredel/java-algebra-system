@@ -259,12 +259,12 @@ public class PolynomialList<C extends RingElem<C> >
 
         for ( GenPolynomial<C> p: list ) {
             if ( p != null ) {
-                Map<ExpVector,GenPolynomial<C>> r = null;
-                r = p.contract( pfac );
+                Map<ExpVector,GenPolynomial<C>> r = p.contract( pfac );
                 //System.out.println("r = " + r ); 
                 List<GenPolynomial<C>> row 
                     = (ArrayList<GenPolynomial<C>>)zr.clone();
-                for ( ExpVector e: r.keySet() ) {
+                for ( Map.Entry<ExpVector,GenPolynomial<C>> me : r.entrySet() ) {
+                    ExpVector e = me.getKey();
                     int[] dov = e.dependencyOnVariables();
                     int ix = 0;
                     if ( dov.length > 1 ) {
@@ -274,7 +274,7 @@ public class PolynomialList<C extends RingElem<C> >
                     }
                     //ix = i-1 - ix; // revert
                     //System.out.println("ix = " + ix ); 
-                    GenPolynomial<C> vi = r.get( e );
+                    GenPolynomial<C> vi = me.getValue(); //r.get( e );
                     row.set(ix,vi);
                 }
                 //System.out.println("row = " + row ); 

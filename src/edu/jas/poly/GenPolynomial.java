@@ -522,21 +522,23 @@ Iterable<Monomial<C>> {
         }
         SortedMap<ExpVector, C> av = this.val;
         SortedMap<ExpVector, C> bv = b.val;
-        Iterator<ExpVector> ai = av.keySet().iterator();
-        Iterator<ExpVector> bi = bv.keySet().iterator();
+        Iterator<Map.Entry<ExpVector,C>> ai = av.entrySet().iterator();
+        Iterator<Map.Entry<ExpVector,C>> bi = bv.entrySet().iterator();
         int s = 0;
         int c = 0;
         while (ai.hasNext() && bi.hasNext()) {
-            ExpVector ae = ai.next();
-            ExpVector be = bi.next();
+            Map.Entry<ExpVector,C> aie = ai.next();
+            Map.Entry<ExpVector,C> bie = bi.next();
+            ExpVector ae = aie.getKey();
+            ExpVector be = bie.getKey();
             s = ae.compareTo(be);
             //System.out.println("s = " + s + ", " + ae + ", " +be);
             if (s != 0) {
                 return s;
             }
             if (c == 0) {
-                C ac = av.get(ae);
-                C bc = bv.get(be);
+                C ac = aie.getValue(); //av.get(ae);
+                C bc = bie.getValue(); //bv.get(be);
                 c = ac.compareTo(bc);
             }
         }
@@ -794,9 +796,10 @@ Iterable<Monomial<C>> {
         GenPolynomial<C> n = this.clone(); //new GenPolynomial<C>(ring, val); 
         SortedMap<ExpVector, C> nv = n.val;
         SortedMap<ExpVector, C> sv = S.val;
-        for (ExpVector e : sv.keySet()) {
+        for (Map.Entry<ExpVector,C> me : sv.entrySet()) {
+            ExpVector e = me.getKey();
+            C y = me.getValue(); //sv.get(e); // assert y != null
             C x = nv.get(e);
-            C y = sv.get(e); // assert y != null
             if (x != null) {
                 x = x.sum(y);
                 if (!x.isZERO()) {
@@ -874,9 +877,10 @@ Iterable<Monomial<C>> {
         GenPolynomial<C> n = this.clone(); //new GenPolynomial<C>(ring, val); 
         SortedMap<ExpVector, C> nv = n.val;
         SortedMap<ExpVector, C> sv = S.val;
-        for (ExpVector e : sv.keySet()) {
+        for (Map.Entry<ExpVector,C> me : sv.entrySet()) {
+            ExpVector e = me.getKey();
+            C y = me.getValue(); //sv.get(e); // assert y != null
             C x = nv.get(e);
-            C y = sv.get(e); // assert y != null
             if (x != null) {
                 x = x.subtract(y);
                 if (!x.isZERO()) {

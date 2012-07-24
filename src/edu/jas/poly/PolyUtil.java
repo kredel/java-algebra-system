@@ -539,9 +539,10 @@ public class PolyUtil {
         SortedMap<ExpVector, C> bv = B.getMap();
         SortedMap<ExpVector, C> sv = S.val; //getMap();
         C c = null;
-        for (ExpVector e : bv.keySet()) {
+        for (Map.Entry<ExpVector,C> me : bv.entrySet()) {
+            ExpVector e = me.getKey();
+            C y = me.getValue(); //bv.get(e); // assert y != null
             C x = av.get(e);
-            C y = bv.get(e); // assert y != null
             if (x != null) {
                 av.remove(e);
                 c = cfac.chineseRemainder(x, mi, y);
@@ -557,8 +558,9 @@ public class PolyUtil {
             }
         }
         // assert bv is empty = done
-        for (ExpVector e : av.keySet()) { // rest of av
-            C x = av.get(e); // assert x != null
+        for (Map.Entry<ExpVector,C> me : av.entrySet()) { // rest of av
+            ExpVector e = me.getKey();
+            C x = me.getValue(); // av.get(e); // assert x != null
             //c = cfac.fromInteger( x.getVal() );
             c = cfac.chineseRemainder(x, mi, B.ring.coFac.getZERO());
             if (!c.isZERO()) { // 0 cannot happen
@@ -1586,15 +1588,16 @@ public class PolyUtil {
         GenPolynomial<C> B = null;
         long el1 = -1; // undefined
         long el2 = -1;
-        for (ExpVector e : val.keySet()) {
+        for (Map.Entry<ExpVector,GenPolynomial<C>> me : val.entrySet()) {
+            ExpVector e = me.getKey();
             el2 = e.getVal(0);
             if (B == null /*el1 < 0*/) { // first turn
-                B = val.get(e);
+                B = me.getValue(); //val.get(e);
             } else {
                 for (long i = el2; i < el1; i++) {
                     B = B.multiply(a);
                 }
-                B = B.sum(val.get(e));
+                B = B.sum(me.getValue()); //val.get(e));
             }
             el1 = el2;
         }
@@ -1664,15 +1667,16 @@ public class PolyUtil {
         C B = null;
         long el1 = -1; // undefined
         long el2 = -1;
-        for (ExpVector e : val.keySet()) {
+        for (Map.Entry<ExpVector,C> me : val.entrySet()) {
+            ExpVector e = me.getKey();
             el2 = e.getVal(0);
             if (B == null /*el1 < 0*/) { // first turn
-                B = val.get(e);
+                B = me.getValue(); // val.get(e);
             } else {
                 for (long i = el2; i < el1; i++) {
                     B = B.multiply(a);
                 }
-                B = B.sum(val.get(e));
+                B = B.sum(me.getValue()); //val.get(e));
             }
             el1 = el2;
         }
@@ -1884,15 +1888,16 @@ public class PolyUtil {
         GenPolynomial<C> s = null;
         long el1 = -1; // undefined
         long el2 = -1;
-        for (ExpVector e : val.keySet()) {
+        for (Map.Entry<ExpVector,C> me : val.entrySet()) {
+            ExpVector e = me.getKey();
             el2 = e.getVal(0);
             if (s == null /*el1 < 0*/) { // first turn
-                s = fac.getZERO().sum(val.get(e));
+                s = fac.getZERO().sum(me.getValue()); //val.get(e));
             } else {
                 for (long i = el2; i < el1; i++) {
                     s = s.multiply(t);
                 }
-                s = s.sum(val.get(e));
+                s = s.sum(me.getValue()); //val.get(e));
             }
             el1 = el2;
         }
@@ -1965,9 +1970,10 @@ public class PolyUtil {
         GenPolynomialRing<C> cfac = (GenPolynomialRing<C>) fac.coFac;
         RingFactory<C> bfac = cfac.coFac;
         GenPolynomial<C> c = null;
-        for (ExpVector e : bv.keySet()) {
+        for (Map.Entry<ExpVector,C> me : bv.entrySet()) {
+            ExpVector e = me.getKey();
+            C y = me.getValue(); //bv.get(e); // assert y != null
             GenPolynomial<C> x = av.get(e);
-            C y = bv.get(e); // assert y != null
             if (x != null) {
                 av.remove(e);
                 c = PolyUtil.<C> interpolate(cfac, x, M, mi, y, am);
@@ -1982,8 +1988,9 @@ public class PolyUtil {
             }
         }
         // assert bv is empty = done
-        for (ExpVector e : av.keySet()) { // rest of av
-            GenPolynomial<C> x = av.get(e); // assert x != null
+        for (Map.Entry<ExpVector,GenPolynomial<C>> me : av.entrySet()) { // rest of av
+            ExpVector e = me.getKey();
+            GenPolynomial<C> x = me.getValue(); //av.get(e); // assert x != null
             c = PolyUtil.<C> interpolate(cfac, x, M, mi, bfac.getZERO(), am);
             if (!c.isZERO()) { // 0 cannot happen
                 sv.put(e, c); // c != null
@@ -2466,9 +2473,10 @@ public class PolyUtil {
             ExpVector e = m.e;
             GenPolynomial<C> a = m.c;
             Map<ExpVector,GenPolynomial<C>> cc = a.contract(cfac);
-            for ( ExpVector f : cc.keySet() ) {
+            for ( Map.Entry<ExpVector,GenPolynomial<C>> me : cc.entrySet() ) {
+                ExpVector f = me.getKey();
                 if ( f.isZERO() ) {
-                    GenPolynomial<C> c = cc.get(f);
+                    GenPolynomial<C> c = me.getValue(); //cc.get(f);
                     p2r.doPutToMap(e, c);
                 } else {
                     throw new RuntimeException("this should not happen " + cc);

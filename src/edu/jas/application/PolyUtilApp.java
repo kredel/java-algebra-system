@@ -368,10 +368,10 @@ public class PolyUtilApp<C extends RingElem<C>> {
         Set<GenPolynomial<GenPolynomial<C>>> sl = new TreeSet<GenPolynomial<GenPolynomial<C>>>();
         PolynomialList<GenPolynomial<C>> pl = null;
         StringBuffer sb = new StringBuffer(); //"\nproductSlice ----------------- begin");
-        for (Ideal<C> id : L.keySet()) {
+        for (Map.Entry<Ideal<C>, PolynomialList<GenPolynomial<C>>> en : L.entrySet()) {
             sb.append("\n\ncondition == 0:\n");
-            sb.append(id.list.toScript());
-            pl = L.get(id);
+            sb.append(en.getKey().list.toScript());
+            pl = en.getValue(); //L.get(id);
             sl.addAll(pl.list);
             sb.append("\ncorresponding ideal:\n");
             sb.append(pl.toScript());

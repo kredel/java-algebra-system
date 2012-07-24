@@ -114,11 +114,12 @@ public class EReductionSeq<C extends RingElem<C>> extends DReductionSeq<C> imple
         l = j;
         boolean mt = false;
         Map<ExpVector, C> Am = Ap.getMap();
-        for (ExpVector e : Am.keySet()) {
+        for (Map.Entry<ExpVector,C> me : Am.entrySet()) {
+            ExpVector e = me.getKey();
+            C a = me.getValue(); //Am.get(e);
             for (i = 0; i < l; i++) {
                 mt = e.multipleOf(htl[i]);
                 if (mt) {
-                    C a = Am.get(e);
                     C r = a.remainder(lbc[i]);
                     mt = !r.equals(a);
                     if (mt) {

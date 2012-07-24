@@ -346,9 +346,10 @@ public class Product<C extends RingElem<C> >
         }
         SortedMap<Integer,C> elem = new TreeMap<Integer,C>( val ); // clone
         SortedMap<Integer,C> sel = S.val;
-        for ( Integer i : sel.keySet() ) {
+        for ( Map.Entry<Integer,C> is : sel.entrySet() ) {
+            Integer i = is.getKey();
             C x = elem.get( i );
-            C y = sel.get( i ); // assert y != null
+            C y = is.getValue(); //sel.get( i ); // assert y != null
             if ( x != null ) {
                 x = x.sum(y);
                 if ( ! x.isZERO() ) {
@@ -690,9 +691,10 @@ public class Product<C extends RingElem<C> >
         }
         SortedMap<Integer,C> elem = new TreeMap<Integer,C>( val ); // clone
         SortedMap<Integer,C> sel = S.val;
-        for ( Integer i : sel.keySet() ) {
+        for ( Map.Entry<Integer,C> is : sel.entrySet() ) {
+            Integer i = is.getKey();
             C x = elem.get( i );
-            C y = sel.get( i ); // assert y != null
+            C y = is.getValue(); //sel.get( i ); // assert y != null
             if ( x != null ) {
                 x = x.gcd(y);
                 if ( x != null && ! x.isZERO() ) {
@@ -731,9 +733,10 @@ public class Product<C extends RingElem<C> >
         SortedMap<Integer,C> elem1 = this.idempotent().val; // init with 1
         SortedMap<Integer,C> elem2 = new TreeMap<Integer,C>(); // zero
         SortedMap<Integer,C> sel = S.val;
-        for ( Integer i : sel.keySet() ) {
+        for ( Map.Entry<Integer,C> is : sel.entrySet() ) {
+            Integer i = is.getKey();
             C x = elem.get( i );
-            C y = sel.get( i ); // assert y != null
+            C y = is.getValue(); //sel.get( i ); // assert y != null
             if ( x != null ) {
                 C[] g = x.egcd(y);
                 if ( ! g[0].isZERO() ) {
