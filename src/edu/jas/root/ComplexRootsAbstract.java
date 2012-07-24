@@ -8,6 +8,7 @@ package edu.jas.root;
 import java.util.ArrayList;
 //import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedMap;
 
 import org.apache.log4j.Logger;
@@ -175,7 +176,8 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
         }
         ComplexRing<C> cr = (ComplexRing<C>) a.ring.coFac;
         SortedMap<GenPolynomial<Complex<C>>, Long> sa = engine.squarefreeFactors(a);
-        for (GenPolynomial<Complex<C>> p : sa.keySet()) {
+        for ( Map.Entry<GenPolynomial<Complex<C>>,Long> me : sa.entrySet()) {
+	    GenPolynomial<Complex<C>> p = me.getKey();
             Complex<C> Mb = rootBound(p);
             C M = Mb.getRe();
             C M1 = M.sum(M.factory().fromInteger(1)); // asymmetric to origin
@@ -191,7 +193,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
             Rectangle<C> rect = new Rectangle<C>(corner);
             try {
                 List<Rectangle<C>> rs = complexRoots(rect, p);
-                long e = sa.get(p);
+                long e = me.getValue(); // sa.get(p);
                 for (int i = 0; i < e; i++) { // add with multiplicity
                     roots.addAll(rs);
                 }
@@ -328,7 +330,8 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
         ComplexRing<C> cr = (ComplexRing<C>) a.ring.coFac;
         SortedMap<GenPolynomial<Complex<C>>, Long> sa = engine.squarefreeFactors(a);
         List<Rectangle<C>> roots = new ArrayList<Rectangle<C>>();
-        for (GenPolynomial<Complex<C>> p : sa.keySet()) {
+        for ( Map.Entry<GenPolynomial<Complex<C>>, Long> me : sa.entrySet()) {
+            GenPolynomial<Complex<C>> p = me.getKey();
             Complex<C> Mb = rootBound(p);
             C M = Mb.getRe();
             C M1 = M.sum(M.factory().fromInteger(1)); // asymmetric to origin
@@ -348,7 +351,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                     Rectangle<C> rr = complexRootRefinement(r,p,len);
                     rf.add(rr);
                 }
-                long e = sa.get(p);
+                long e = me.getValue(); // sa.get(p);
                 for (int i = 0; i < e; i++) { // add with multiplicity
                     roots.addAll(rf);
                 }
@@ -565,7 +568,8 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
         ComplexRing<C> cr = (ComplexRing<C>) a.ring.coFac;
         SortedMap<GenPolynomial<Complex<C>>, Long> sa = engine.squarefreeFactors(a);
         List<Complex<BigDecimal>> roots = new ArrayList<Complex<BigDecimal>>();
-        for (GenPolynomial<Complex<C>> p : sa.keySet()) {
+        for ( Map.Entry<GenPolynomial<Complex<C>>, Long> me : sa.entrySet()) {
+            GenPolynomial<Complex<C>> p = me.getKey();
             List<Complex<BigDecimal>> rf = null;
             if ( p.degree(0) <= 1 ) {
                 Complex<C> tc = p.trailingBaseCoefficient();
@@ -617,7 +621,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                     }
                 }
             }
-            long e = sa.get(p);
+            long e = me.getValue(); // sa.get(p);
             for (int i = 0; i < e; i++) { // add with multiplicity
                 roots.addAll(rf);
             }

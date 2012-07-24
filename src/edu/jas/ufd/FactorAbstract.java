@@ -7,6 +7,7 @@ package edu.jas.ufd;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
@@ -175,8 +176,9 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             System.out.println("slist = " + slist);
             throw new ArithmeticException("no factorization");
         }
-        for (GenPolynomial<C> g : slist.keySet()) {
-            long e = slist.get(g);
+        for ( Map.Entry<GenPolynomial<C>,Long> me : slist.entrySet()) {
+            GenPolynomial<C> g = me.getKey();
+            long e = me.getValue(); // slist.get(g);
             for (int i = 0; i < e; i++) { // is this really required? yes!
                 ulist.add(g);
             }
@@ -295,7 +297,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
      *         e_i.
      */
     public List<GenPolynomial<C>> baseFactorsRadical(GenPolynomial<C> P) {
-        return new ArrayList<GenPolynomial<C>>(baseFactors(P).keySet());
+        return new ArrayList<GenPolynomial<C>>( baseFactors(P).keySet() );
     }
 
 
@@ -352,8 +354,9 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             //boolean tt = isFactorization(P,facs);
             //System.out.println("sfacs tt   = " + tt);
         }
-        for (GenPolynomial<C> g : facs.keySet()) {
-            Long k = facs.get(g);
+        for ( Map.Entry<GenPolynomial<C>,Long> me : facs.entrySet()) {
+            GenPolynomial<C> g = me.getKey();
+            Long k = me.getValue(); //facs.get(g);
             //System.out.println("g       = " + g);
             if (pfac.coFac.isField() && !g.leadingBaseCoefficient().isONE()) {
                 g = g.monic(); // how can this happen?
@@ -400,7 +403,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
      *         e_i.
      */
     public List<GenPolynomial<C>> factorsRadical(GenPolynomial<C> P) {
-        return new ArrayList<GenPolynomial<C>>(factors(P).keySet());
+        return new ArrayList<GenPolynomial<C>>( factors(P).keySet() );
     }
 
 
@@ -476,11 +479,12 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
                 logger.info("squarefree #mfacs 1-1 = " + facs);
             }
         }
-        for (GenPolynomial<C> g : facs.keySet()) {
+        for ( Map.Entry<GenPolynomial<C>,Long> me : facs.entrySet()) {
+            GenPolynomial<C> g = me.getKey();
             if ( g.isONE() ) { // skip 1
                 continue;
             }
-            Long d = facs.get(g);
+            Long d = me.getValue(); // facs.get(g);
             List<GenPolynomial<C>> sfacs = factorsSquarefree(g);
             if (logger.isInfoEnabled()) {
                 logger.info("factors of squarefree ^" + d + " = " + sfacs);
@@ -576,8 +580,9 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
      */
     public long factorsDegree(SortedMap<GenPolynomial<C>,Long> F) {
         long d = 0;
-        for ( GenPolynomial<C> p : F.keySet() ) {
-            long e = F.get(p);
+        for ( Map.Entry<GenPolynomial<C>,Long> me : F.entrySet() ) {
+            GenPolynomial<C> p = me.getKey();
+            long e = me.getValue(); //F.get(p);
             d += p.degree() * e;
         }
         return d;
@@ -693,8 +698,9 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             r = r.multiply(ldcf);
             dfacts.put(r, E);
         }
-        for (GenPolynomial<C> f : dfacts.keySet()) {
-            Long E = dfacts.get(f);
+        for ( Map.Entry<GenPolynomial<C>,Long> me : dfacts.entrySet()) {
+            GenPolynomial<C> f = me.getKey();
+            Long E = me.getValue(); //dfacts.get(f);
             GenPolynomial<GenPolynomial<C>> rp = PolyUtil.<C> recursive(pfac, f);
             factors.put(rp, E);
         }

@@ -7,6 +7,7 @@ package edu.jas.ufd;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -148,8 +149,9 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
         }
         // factor over some K(alpha)
         SortedMap<Factors<C>, Long> afactors = new TreeMap<Factors<C>, Long>();
-        for (GenPolynomial<C> p : facs.keySet()) {
-            Long e = facs.get(p);
+        for ( Map.Entry<GenPolynomial<C>,Long> me : facs.entrySet()) {
+            GenPolynomial<C> p = me.getKey();
+            Long e = me.getValue(); //facs.get(p);
             if (p.degree(0) <= 1) {
                 factors.put(p, e);
             } else {
@@ -669,8 +671,9 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
         }
         SortedMap<Factors<C>, Long> afactors = new TreeMap<Factors<C>, Long>();
         // factor over K(alpha)
-        for (GenPolynomial<C> p : facs.keySet()) {
-            Long e = facs.get(p);
+        for ( Map.Entry<GenPolynomial<C>, Long> me : facs.entrySet()) {
+            GenPolynomial<C> p = me.getKey();
+            Long e = me.getValue(); //facs.get(p);
             if (p.degree() <= 1) {
                 factors.put(p, e);
             } else {
@@ -972,8 +975,9 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
         }
         GenPolynomial<C> P = facs.poly;
         GenPolynomial<C> t = P.ring.getONE();
-        for (GenPolynomial<C> f : facs.factors.keySet()) {
-            long e = facs.factors.get(f);
+        for ( Map.Entry<GenPolynomial<C>,Long> me : facs.factors.entrySet()) {
+            GenPolynomial<C> f = me.getKey();
+            long e = me.getValue(); //facs.factors.get(f);
             GenPolynomial<C> g = Power.<GenPolynomial<C>> positivePower(f, e);
             t = t.multiply(g);
         }
@@ -983,11 +987,12 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
         if (facs.afactors == null) {
             return false;
         }
-        for (Factors<C> fs : facs.afactors.keySet()) {
+        for ( Map.Entry<Factors<C>,Long> me : facs.afactors.entrySet()) {
+            Factors<C> fs = me.getKey();
             if (!isAbsoluteFactorization(fs)) {
                 return false;
             }
-            long e = facs.afactors.get(fs);
+            long e = me.getValue(); // facs.afactors.get(fs);
             GenPolynomial<C> g = Power.<GenPolynomial<C>> positivePower(fs.poly, e);
             t = t.multiply(g);
         }

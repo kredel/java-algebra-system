@@ -7,6 +7,7 @@ package edu.jas.ufd;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
@@ -209,8 +210,9 @@ public class FactorModular<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             logger.info("dfacs    = " + dfacs);
             //System.out.println("dfacs    = " + dfacs);
         }
-        for (Long e : dfacs.keySet()) {
-            GenPolynomial<MOD> f = dfacs.get(e);
+        for ( Map.Entry<Long,GenPolynomial<MOD>> me : dfacs.entrySet()) {
+            Long e = me.getKey();
+            GenPolynomial<MOD> f = me.getValue(); // dfacs.get(e);
             List<GenPolynomial<MOD>> efacs = baseEqualDegreeFactors(f, e);
             if (debug) {
                 logger.info("efacs " + e + "   = " + efacs);

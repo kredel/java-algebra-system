@@ -33,7 +33,7 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
     private static final Logger logger = Logger.getLogger(FactorAlgebraic.class);
 
 
-    private final boolean debug = logger.isInfoEnabled();
+    private final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -171,7 +171,7 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
         for (GenPolynomial<C> nfi : nfacs) {
             //System.out.println("nfi = " + nfi);
             Ni = PolyUfdUtil.<C> substituteConvertToAlgebraicCoefficients(pfac, nfi, ks);
-            if (debug) {
+            if (logger.isInfoEnabled()) {
                 logger.info("Ni = " + Ni);
                 //System.out.println("Pp = " + Pp);
                 //System.out.println("Ni = " + Ni);
