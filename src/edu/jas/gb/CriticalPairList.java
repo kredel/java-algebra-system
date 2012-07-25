@@ -163,7 +163,7 @@ public class CriticalPairList<C extends RingElem<C>> extends OrderedPairlist<C> 
         CriticalPair<C> pair = null;
         Iterator< CriticalPair<C> > ip = pairlist.iterator();
         boolean c = false;
-        while ( !c & ip.hasNext() )  {
+        while ( !c && ip.hasNext() )  { // findbugs
            pair = ip.next();
            if ( pair.getInReduction() ) {
                continue;

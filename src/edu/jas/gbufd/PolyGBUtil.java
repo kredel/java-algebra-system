@@ -176,7 +176,7 @@ public class PolyGBUtil {
     public static <C extends RingElem<C>> 
       GenPolynomial<GenPolynomial<GenPolynomial<C>>> coefficientPseudoRemainder(
                     GenPolynomial<GenPolynomial<GenPolynomial<C>>> P, GenPolynomial<GenPolynomial<C>> A) {
-        if (A == null | A.isZERO()) {
+        if (A == null || A.isZERO()) { // findbugs
             throw new ArithmeticException(P + " division by zero " + A);
         }
         if (A.isONE()) {
@@ -234,7 +234,7 @@ public class PolyGBUtil {
     public static <C extends RingElem<C>> 
       GenPolynomial<GenPolynomial<C>> coefficientPseudoRemainderBase(
                     GenPolynomial<GenPolynomial<C>> P, GenPolynomial<C> A) {
-        if (A == null | A.isZERO()) {
+        if (A == null || A.isZERO()) { // findbugs
             throw new ArithmeticException(P + " division by zero " + A);
         }
         if (A.isONE()) {
