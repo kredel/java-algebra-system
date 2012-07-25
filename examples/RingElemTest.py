@@ -6,7 +6,7 @@
 from java.lang import System
 from java.lang import Integer
 
-from jas import PolyRing, ZZ, QQ, ZM
+from jas import PolyRing, ZZ, QQ, ZM, GF
 from jas import terminate
 from jas import startLog
 
@@ -18,7 +18,7 @@ class RingElemTest (unittest.TestCase):
 
     def testRingZZ(self):
         r = PolyRing( ZZ(), "(t,x)", PolyRing.lex );
-        self.assertEqual(str(r),'PolyRing(ZZ(),"t, x",PolyRing.lex)');
+        self.assertEqual(str(r),'PolyRing(ZZ(),"t,x",PolyRing.lex)');
         [one,x,t] = r.gens();
         self.assertTrue(one.isONE());
         self.assertTrue(len(x)==1);
@@ -32,7 +32,7 @@ class RingElemTest (unittest.TestCase):
 
     def testRingQQ(self):
         r = PolyRing( QQ(), "(t,x)", PolyRing.lex );
-        self.assertEqual(str(r),'PolyRing(QQ(),"t, x",PolyRing.lex)');
+        self.assertEqual(str(r),'PolyRing(QQ(),"t,x",PolyRing.lex)');
         [one,x,t] = r.gens();
         self.assertTrue(one.isONE());
         self.assertTrue(len(x)==1);
@@ -45,8 +45,8 @@ class RingElemTest (unittest.TestCase):
         #end
 
     def testRingZM(self):
-        r = PolyRing( ZM(17), "(t,x)", PolyRing.lex );
-        self.assertEqual(str(r),'PolyRing(GF(17),"t, x",PolyRing.lex)');
+        r = PolyRing( GF(17), "(t,x)", PolyRing.lex );
+        self.assertEqual(str(r),'PolyRing(GF(17),"t,x",PolyRing.lex)');
         [one,x,t] = r.gens();
         self.assertTrue(one.isONE());
         self.assertTrue(len(x)==1);
