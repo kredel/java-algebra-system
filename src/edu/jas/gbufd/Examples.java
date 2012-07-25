@@ -136,8 +136,10 @@ public class Examples {
             F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
         } catch (ClassCastException e) {
             e.printStackTrace();
+            return;
         } catch (IOException e) {
             e.printStackTrace();
+            return;
         }
         System.out.println("F = " + F);
 
@@ -166,8 +168,10 @@ public class Examples {
             F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
         } catch (ClassCastException e) {
             e.printStackTrace();
+            return;
         } catch (IOException e) {
             e.printStackTrace();
+            return;
         }
         System.out.println("F = " + F);
 
@@ -199,8 +203,10 @@ public class Examples {
             F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
         } catch (ClassCastException e) {
             e.printStackTrace();
+            return;
         } catch (IOException e) {
             e.printStackTrace();
+            return;
         }
         System.out.println("F = " + F);
 

@@ -13,8 +13,6 @@ import java.util.Comparator;
 import edu.jas.structure.RingElem;
 
 
-
-
 /**
  * Ordered list of vectors of polynomials.
  * Mainly for storage and printing / toString and 
@@ -102,6 +100,9 @@ public class OrderedModuleList<C extends RingElem<C> >
                            }
                            if ( e1 != null && e2 == null ) {
                                return 1; 
+                           }
+                           if ( e1 == null || e2 == null ) { // for findbugs
+                               continue; // cannot happen
                            }
                            if ( e1.length() != e2.length() ) {
                               if ( e1.length() > e2.length() ) {

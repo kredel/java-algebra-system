@@ -219,7 +219,7 @@ public class OrderedSyzPairlist<C extends RingElem<C> > extends OrderedPairlist<
             for ( Pair<C> pair : exl ) {
                 red.get( pair.j ).set( pair.i ); 
             }
-            LinkedList<Pair<C>> ex = pairlist.get( ei );
+            LinkedList<Pair<C>> ex = pairlist.get( ei ); // wrong in findbugs
             if ( ex != null ) {
                 exl.addAll(ex); // add new pairs first 
                 ex = exl;
