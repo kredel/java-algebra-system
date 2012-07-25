@@ -22,6 +22,7 @@ import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.gb.GroebnerBase;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.Monomial;
 import edu.jas.poly.OrderedPolynomialList;
@@ -999,14 +1000,10 @@ public class GroebnerBaseFGLMExamples extends TestCase {
     //Method shuffle returns a random permutation of a string of variables
     public String shuffle(String[] tempOrder) {
         Collections.shuffle(Arrays.asList(tempOrder));
-        String ret = "(";
-        int j = tempOrder.length;
-        for (int i = 0; i < j - 1; i++) {
-            ret = ret + tempOrder[i] + ",";
-        }
-        ret = ret + tempOrder[j - 1];
-        ret = ret + ")";
-        return ret;
+        StringBuffer ret = new StringBuffer("(");
+        ret.append(ExpVector.varsToString(tempOrder));
+        ret.append(")");
+        return ret.toString();
     }
 
 
