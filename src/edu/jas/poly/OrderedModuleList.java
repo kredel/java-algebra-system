@@ -60,6 +60,15 @@ public class OrderedModuleList<C extends RingElem<C> >
     }
 
 
+    /**
+     * Hash code for OrderedModuleList.
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
 
     /**
      * Sort a list of vectors of polynomials with respect to the 

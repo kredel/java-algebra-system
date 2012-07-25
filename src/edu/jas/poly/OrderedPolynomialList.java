@@ -50,7 +50,7 @@ public class OrderedPolynomialList<C extends RingElem<C> >
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    @SuppressWarnings("unchecked") // not jet working
+    @SuppressWarnings("unchecked") 
     public boolean equals(Object p) {
         if ( ! super.equals(p) ) {
             return false;
@@ -70,21 +70,32 @@ public class OrderedPolynomialList<C extends RingElem<C> >
 
 
     /**
+     * Hash code for OrderedPolynomialList.
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+
+    /**
      * Sort a list of polynomials with respect to the ascending order 
      * of the leading Exponent vectors. 
      * The term order is taken from the ring.
      * @param r polynomial ring factory.
-     * @param l polynomial list.
-     * @return sorted polynomial list from l.
+     * @param L polynomial list.
+     * @return sorted polynomial list from L.
      */
+    @SuppressWarnings("unchecked") 
     public static <C extends RingElem<C> >
     List<GenPolynomial<C>> sort( GenPolynomialRing< C > r,
-                                 List<GenPolynomial<C>> l ) {
-        if ( l == null ) {
-            return l;
+                                 List<GenPolynomial<C>> L ) {
+        if ( L == null ) {
+            return L;
         }
-        if ( l.size() <= 1 ) { // nothing to sort
-            return l;
+        if ( L.size() <= 1 ) { // nothing to sort
+            return L;
         }
         final Comparator<ExpVector> evc = r.tord.getAscendComparator();
         Comparator<GenPolynomial<C>> cmp = new Comparator<GenPolynomial<C>>() {
@@ -110,14 +121,9 @@ public class OrderedPolynomialList<C extends RingElem<C> >
             };
         GenPolynomial<C>[] s = null;
         try {
-            s = (GenPolynomial<C>[]) new GenPolynomial[ l.size() ]; 
-            //System.out.println("s.length = " + s.length );
-            //s = l.toArray(s); does not work
-            //for ( int i = 0; i < l.size(); i++ ) {
-            //    s[i] = l.get(i);
-            //}
+            s = (GenPolynomial<C>[]) new GenPolynomial[ L.size() ]; 
             int i = 0;
-            for ( GenPolynomial<C> p : l ) {
+            for ( GenPolynomial<C> p : L ) {
                 s[i++] = p;
             }
             Arrays.<GenPolynomial<C>>sort( s, cmp );
@@ -126,7 +132,7 @@ public class OrderedPolynomialList<C extends RingElem<C> >
         } catch(ClassCastException ok) {
             System.out.println("Warning: polynomials not sorted");
         }
-        return l; // unsorted
+        return L; // unsorted
     }
 
 }

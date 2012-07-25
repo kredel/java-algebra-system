@@ -157,4 +157,27 @@ public class Integral<C extends GcdRingElem<C>> implements Serializable {
         return h;
     }
 
+
+    /**
+     * Comparison with any other object.
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public boolean equals(Object B) {
+        Integral<C> b = null;
+        try {
+            b = (Integral<C>) B;
+        } catch (ClassCastException ignored) {
+        }
+        if (b == null) {
+            return false;
+        }
+        return num.equals(b.num) && 
+               den.equals(b.den) && 
+               pol.equals(b.pol) && 
+               rational.equals(b.rational) && 
+               logarithm.equals(b.logarithm);
+    }
+
 }
