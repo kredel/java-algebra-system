@@ -185,8 +185,9 @@ public class OrderedSyzPairlist<C extends RingElem<C> > extends OrderedPairlist<
         // skip by criterion 4:
         if ( useCriterion4 ) {
             es = new ArrayList<ExpVector>(npl.size());
-            for ( ExpVector ei : npl.keySet() ) {
-                LinkedList<Pair<C>> exl = npl.get( ei );
+            for ( Map.Entry<ExpVector,LinkedList<Pair<C>>> me : npl.entrySet() ) {
+                ExpVector ei = me.getKey();
+                LinkedList<Pair<C>> exl = me.getValue(); //npl.get( ei );
                 //System.out.println("exl = " + exl ); 
                 boolean c = true;
                 for ( Pair<C> pair : exl ) {
@@ -212,8 +213,9 @@ public class OrderedSyzPairlist<C extends RingElem<C> > extends OrderedPairlist<
         }
         // add to existing pairlist:
         //System.out.println("npl.put new  = " + npl.keySet() );  
-        for ( ExpVector ei : npl.keySet() ) {
-            LinkedList<Pair<C>> exl = npl.get( ei );
+        for ( Map.Entry<ExpVector,LinkedList<Pair<C>>> me : npl.entrySet() ) {
+            ExpVector ei = me.getKey();
+            LinkedList<Pair<C>> exl = me.getValue(); //npl.get( ei );
             for ( Pair<C> pair : exl ) {
                 red.get( pair.j ).set( pair.i ); 
             }

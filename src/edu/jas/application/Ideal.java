@@ -723,9 +723,10 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                 logger.debug("intersect contract m = " + m);
             }
             if (m.size() == 1) { // contains one power of variables
-                for (ExpVector e : m.keySet()) {
+                for ( Map.Entry<ExpVector,GenPolynomial<C>> me : m.entrySet()) {
+                    ExpVector e = me.getKey();
                     if (e.isZERO()) {
-                        H.add(m.get(e));
+                        H.add(me.getValue()); //m.get(e));
                     }
                 }
             }
