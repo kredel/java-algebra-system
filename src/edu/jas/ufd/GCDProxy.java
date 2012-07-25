@@ -49,7 +49,7 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
     /**
      * Thread pool.
      */
-    protected ExecutorService pool;
+    protected transient ExecutorService pool;
 
 
     /**

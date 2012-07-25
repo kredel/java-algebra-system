@@ -45,7 +45,7 @@ public class GBProxy<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C> {
     /**
      * Thread pool.
      */
-    protected ExecutorService pool;
+    protected transient ExecutorService pool;
 
 
     /**
