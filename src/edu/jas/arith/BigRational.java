@@ -1214,7 +1214,7 @@ class BigRationalIterator implements Iterator<BigRational> {
         level = 0;
         den = new edu.jas.arith.BigInteger(); // ZERO
         num = edu.jas.arith.BigInteger.ONE.clone();
-        if (nn) {
+        if (nonNegative) {
             den.setNonNegativeIterator();
         } else {
             den.setAllIterator();
