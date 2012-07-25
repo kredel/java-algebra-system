@@ -1,0 +1,2093 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>FindBugs Report</title>
+<style type="text/css">
+		.tablerow0 {
+			background: #EEEEEE;
+		}
+
+		.tablerow1 {
+			background: white;
+		}
+
+		.detailrow0 {
+			background: #EEEEEE;
+		}
+
+		.detailrow1 {
+			background: white;
+		}
+
+		.tableheader {
+			background: #b9b9fe;
+			font-size: larger;
+		}
+
+		.tablerow0:hover, .tablerow1:hover {
+			background: #aaffaa;
+		}
+
+		.priority-1 {
+		    color: red;
+		    font-weight: bold;
+		}
+		.priority-2 {
+		    color: orange;
+		    font-weight: bold;
+		}
+		.priority-3 {
+		    color: green;
+		    font-weight: bold;
+		}
+		.priority-4 {
+		    color: blue;
+		    font-weight: bold;
+		}
+		</style>
+<script type="text/javascript">
+			function toggleRow(elid) {
+				if (document.getElementById) {
+					element = document.getElementById(elid);
+					if (element) {
+						if (element.style.display == 'none') {
+							element.style.display = 'block';
+							//window.status = 'Toggle on!';
+						} else {
+							element.style.display = 'none';
+							//window.status = 'Toggle off!';
+						}
+					}
+				}
+			}
+		</script>
+</head>
+<body>
+<h1>
+<a href="http://findbugs.sourceforge.net">FindBugs</a> Report</h1>
+<h2>Project Information</h2>
+<p>Project: 
+		</p>
+<p>FindBugs version: 2.0.1-rc3</p>
+<p>Code analyzed:</p>
+<ul>
+<li>/home/kredel/jas/edu/jas/</li>
+</ul>
+<p>
+<br/>
+<br/>
+</p>
+<h2>Metrics</h2>
+<p>77849 lines of code analyzed,
+	in 794 classes, 
+	in 15 packages.</p>
+<table width="500" cellpadding="5" cellspacing="2">
+<tr class="tableheader">
+<th align="left">Metric</th>
+<th align="right">Total</th>
+<th align="right">Density*</th>
+</tr>
+<tr class="tablerow0">
+<td>High Priority Warnings</td>
+<td align="right">12</td>
+<td align="right">0.15</td>
+</tr>
+<tr class="tablerow1">
+<td>Medium Priority Warnings</td>
+<td align="right">105</td>
+<td align="right">1.35</td>
+</tr>
+<tr class="$totalClass">
+<td>
+<b>Total Warnings</b>
+</td>
+<td align="right">
+<b>117</b>
+</td>
+<td align="right">
+<b>1.50</b>
+</td>
+</tr>
+</table>
+<p>
+<i>(* Defects per Thousand lines of non-commenting source statements)</i>
+</p>
+<p>
+<br/>
+<br/>
+</p>
+<h2>Contents</h2>
+<ul>
+<li>
+<a href="#Warnings_BAD_PRACTICE">Bad practice Warnings</a>
+</li>
+<li>
+<a href="#Warnings_CORRECTNESS">Correctness Warnings</a>
+</li>
+<li>
+<a href="#Warnings_I18N">Internationalization Warnings</a>
+</li>
+<li>
+<a href="#Warnings_MALICIOUS_CODE">Malicious code vulnerability Warnings</a>
+</li>
+<li>
+<a href="#Warnings_MT_CORRECTNESS">Multithreaded correctness Warnings</a>
+</li>
+<li>
+<a href="#Warnings_PERFORMANCE">Performance Warnings</a>
+</li>
+<li>
+<a href="#Warnings_STYLE">Dodgy code Warnings</a>
+</li>
+<li>
+<a href="#Details">Details</a>
+</li>
+</ul>
+<h1>Summary</h1>
+<table width="500" cellpadding="5" cellspacing="2">
+<tr class="tableheader">
+<th align="left">Warning Type</th>
+<th align="right">Number</th>
+</tr>
+<tr class="tablerow0">
+<td>
+<a href="#Warnings_BAD_PRACTICE">Bad practice Warnings</a>
+</td>
+<td align="right">40</td>
+</tr>
+<tr class="tablerow1">
+<td>
+<a href="#Warnings_CORRECTNESS">Correctness Warnings</a>
+</td>
+<td align="right">1</td>
+</tr>
+<tr class="tablerow0">
+<td>
+<a href="#Warnings_I18N">Internationalization Warnings</a>
+</td>
+<td align="right">5</td>
+</tr>
+<tr class="tablerow1">
+<td>
+<a href="#Warnings_MALICIOUS_CODE">Malicious code vulnerability Warnings</a>
+</td>
+<td align="right">10</td>
+</tr>
+<tr class="tablerow0">
+<td>
+<a href="#Warnings_MT_CORRECTNESS">Multithreaded correctness Warnings</a>
+</td>
+<td align="right">3</td>
+</tr>
+<tr class="tablerow1">
+<td>
+<a href="#Warnings_PERFORMANCE">Performance Warnings</a>
+</td>
+<td align="right">39</td>
+</tr>
+<tr class="tablerow0">
+<td>
+<a href="#Warnings_STYLE">Dodgy code Warnings</a>
+</td>
+<td align="right">19</td>
+</tr>
+<tr class="tablerow1">
+<td>
+<b>Total</b>
+</td>
+<td align="right">
+<b>117</b>
+</td>
+</tr>
+</table>
+<h1>Warnings</h1>
+<p>Click on a warning row to see full context information.</p>
+<h2>
+<a name="Warnings_BAD_PRACTICE">Bad practice Warnings</a>
+</h2>
+<table class="warningtable" width="100%" cellspacing="0">
+<tr class="tableheader">
+<th align="left">Code</th>
+<th align="left">Warning</th>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N65548');">
+<td>
+<span class="priority-2">CN</span>
+</td>
+<td>edu.jas.application.ColoredSystem.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N65548" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.application.ColoredSystem<br/>In method edu.jas.application.ColoredSystem.clone()<br/>At ColoredSystem.java:[line 80]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N65722');">
+<td>
+<span class="priority-2">CN</span>
+</td>
+<td>edu.jas.application.Ideal.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N65722" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.application.Ideal<br/>In method edu.jas.application.Ideal.clone()<br/>At Ideal.java:[line 256]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N65775');">
+<td>
+<span class="priority-2">CN</span>
+</td>
+<td>edu.jas.application.Local.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N65775" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.application.Local<br/>In method edu.jas.application.Local.clone()<br/>At Local.java:[line 190]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N65828');">
+<td>
+<span class="priority-2">CN</span>
+</td>
+<td>edu.jas.application.OrderedCPairlist.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N65828" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.application.OrderedCPairlist<br/>In method edu.jas.application.OrderedCPairlist.clone()<br/>At OrderedCPairlist.java:[line 129]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N65944');">
+<td>
+<span class="priority-2">CN</span>
+</td>
+<td>edu.jas.application.RealAlgebraicNumber.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N65944" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.application.RealAlgebraicNumber<br/>In method edu.jas.application.RealAlgebraicNumber.clone()<br/>At RealAlgebraicNumber.java:[line 108]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N65997');">
+<td>
+<span class="priority-2">CN</span>
+</td>
+<td>edu.jas.application.Residue.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N65997" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.application.Residue<br/>In method edu.jas.application.Residue.clone()<br/>At Residue.java:[line 99]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N66401');">
+<td>
+<span class="priority-2">CN</span>
+</td>
+<td>edu.jas.arith.Product.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N66401" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.arith.Product<br/>In method edu.jas.arith.Product.clone()<br/>At Product.java:[line 105]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N67815');">
+<td>
+<span class="priority-2">CN</span>
+</td>
+<td>edu.jas.poly.AlgebraicNumber.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N67815" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.poly.AlgebraicNumber<br/>In method edu.jas.poly.AlgebraicNumber.clone()<br/>At AlgebraicNumber.java:[line 95]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N67868');">
+<td>
+<span class="priority-2">CN</span>
+</td>
+<td>edu.jas.poly.Complex.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N67868" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.poly.Complex<br/>In method edu.jas.poly.Complex.clone()<br/>At Complex.java:[line 163]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N67990');">
+<td>
+<span class="priority-2">CN</span>
+</td>
+<td>edu.jas.poly.ExpVectorByte.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N67990" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.poly.ExpVectorByte<br/>In method edu.jas.poly.ExpVectorByte.clone()<br/>At ExpVectorByte.java:[lines 151-153]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N68270');">
+<td>
+<span class="priority-2">CN</span>
+</td>
+<td>edu.jas.poly.ExpVectorInteger.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N68270" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.poly.ExpVectorInteger<br/>In method edu.jas.poly.ExpVectorInteger.clone()<br/>At ExpVectorInteger.java:[lines 151-153]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N68550');">
+<td>
+<span class="priority-2">CN</span>
+</td>
+<td>edu.jas.poly.ExpVectorLong.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N68550" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.poly.ExpVectorLong<br/>In method edu.jas.poly.ExpVectorLong.clone()<br/>At ExpVectorLong.java:[lines 112-114]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N68838');">
+<td>
+<span class="priority-2">CN</span>
+</td>
+<td>edu.jas.poly.ExpVectorShort.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N68838" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.poly.ExpVectorShort<br/>In method edu.jas.poly.ExpVectorShort.clone()<br/>At ExpVectorShort.java:[lines 151-153]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N69118');">
+<td>
+<span class="priority-1">CN</span>
+</td>
+<td>edu.jas.poly.GenPolynomial.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N69118" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.poly.GenPolynomial<br/>In method edu.jas.poly.GenPolynomial.clone()<br/>has subclass edu.jas.poly.GenSolvablePolynomial<br/>At GenPolynomial.java:[line 149]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N69184');">
+<td>
+<span class="priority-1">CN</span>
+</td>
+<td>edu.jas.poly.GenPolynomialRing.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N69184" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.poly.GenPolynomialRing<br/>In method edu.jas.poly.GenPolynomialRing.clone()<br/>has subclass edu.jas.poly.GenSolvablePolynomialRing<br/>At GenPolynomialRing.java:[line 248]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N69731');">
+<td>
+<span class="priority-2">CN</span>
+</td>
+<td>edu.jas.poly.GenSolvablePolynomial.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N69731" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.poly.GenSolvablePolynomial<br/>In method edu.jas.poly.GenSolvablePolynomial.clone()<br/>At GenSolvablePolynomial.java:[line 99]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N69784');">
+<td>
+<span class="priority-2">CN</span>
+</td>
+<td>edu.jas.poly.Local.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N69784" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.poly.Local<br/>In method edu.jas.poly.Local.clone()<br/>At Local.java:[line 150]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N69922');">
+<td>
+<span class="priority-1">CN</span>
+</td>
+<td>edu.jas.poly.PolynomialList.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N69922" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.poly.PolynomialList<br/>In method edu.jas.poly.PolynomialList.clone()<br/>has subclass edu.jas.poly.OptimizedPolynomialList<br/>has subclass edu.jas.poly.OrderedPolynomialList<br/>At PolynomialList.java:[line 77]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N70001');">
+<td>
+<span class="priority-2">CN</span>
+</td>
+<td>edu.jas.poly.Quotient.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N70001" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.poly.Quotient<br/>In method edu.jas.poly.Quotient.clone()<br/>At Quotient.java:[line 141]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N70146');">
+<td>
+<span class="priority-2">CN</span>
+</td>
+<td>edu.jas.poly.Residue.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N70146" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.poly.Residue<br/>In method edu.jas.poly.Residue.clone()<br/>At Residue.java:[line 104]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N70554');">
+<td>
+<span class="priority-2">CN</span>
+</td>
+<td>edu.jas.ps.MultiVarPowerSeries.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N70554" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.ps.MultiVarPowerSeries<br/>In method edu.jas.ps.MultiVarPowerSeries.clone()<br/>At MultiVarPowerSeries.java:[line 140]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N70892');">
+<td>
+<span class="priority-2">CN</span>
+</td>
+<td>edu.jas.ps.UnivPowerSeries.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N70892" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.ps.UnivPowerSeries<br/>In method edu.jas.ps.UnivPowerSeries.clone()<br/>At UnivPowerSeries.java:[line 108]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N70945');">
+<td>
+<span class="priority-2">CN</span>
+</td>
+<td>edu.jas.root.Boundary.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N70945" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.root.Boundary<br/>In method edu.jas.root.Boundary.clone()<br/>At Boundary.java:[line 166]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N70998');">
+<td>
+<span class="priority-2">CN</span>
+</td>
+<td>edu.jas.root.ComplexAlgebraicNumber.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N70998" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.root.ComplexAlgebraicNumber<br/>In method edu.jas.root.ComplexAlgebraicNumber.clone()<br/>At ComplexAlgebraicNumber.java:[line 97]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N71051');">
+<td>
+<span class="priority-2">CN</span>
+</td>
+<td>edu.jas.root.Interval.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N71051" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.root.Interval<br/>In method edu.jas.root.Interval.clone()<br/>At Interval.java:[line 83]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N71104');">
+<td>
+<span class="priority-2">CN</span>
+</td>
+<td>edu.jas.root.RealAlgebraicNumber.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N71104" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.root.RealAlgebraicNumber<br/>In method edu.jas.root.RealAlgebraicNumber.clone()<br/>At RealAlgebraicNumber.java:[line 92]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N71157');">
+<td>
+<span class="priority-2">CN</span>
+</td>
+<td>edu.jas.root.RealRootTuple.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N71157" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.root.RealRootTuple<br/>In method edu.jas.root.RealRootTuple.clone()<br/>At RealRootTuple.java:[line 132]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N71210');">
+<td>
+<span class="priority-2">CN</span>
+</td>
+<td>edu.jas.root.Rectangle.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N71210" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.root.Rectangle<br/>In method edu.jas.root.Rectangle.clone()<br/>At Rectangle.java:[line 270]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N71415');">
+<td>
+<span class="priority-2">CN</span>
+</td>
+<td>edu.jas.ufd.Quotient.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N71415" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.ufd.Quotient<br/>In method edu.jas.ufd.Quotient.clone()<br/>At Quotient.java:[line 136]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N73615');">
+<td>
+<span class="priority-2">CN</span>
+</td>
+<td>edu.jas.vector.GenMatrix.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N73615" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.vector.GenMatrix<br/>In method edu.jas.vector.GenMatrix.clone()<br/>At GenMatrix.java:[lines 211-217]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N73668');">
+<td>
+<span class="priority-2">CN</span>
+</td>
+<td>edu.jas.vector.GenVector.clone() does not call super.clone()</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N73668" style="display: none;">
+<a href="#CN_IDIOM_NO_SUPER_CALL">Bug type CN_IDIOM_NO_SUPER_CALL (click for details)</a>
+<br/>In class edu.jas.vector.GenVector<br/>In method edu.jas.vector.GenVector.clone()<br/>At GenVector.java:[lines 136-137]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N65675');">
+<td>
+<span class="priority-1">Nm</span>
+</td>
+<td>The class name edu.jas.application.FactorFactory shadows the simple name of the superclass edu.jas.ufd.FactorFactory</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N65675" style="display: none;">
+<a href="#NM_SAME_SIMPLE_NAME_AS_SUPERCLASS">Bug type NM_SAME_SIMPLE_NAME_AS_SUPERCLASS (click for details)</a>
+<br/>In class edu.jas.application.FactorFactory<br/>In class edu.jas.ufd.FactorFactory<br/>At FactorFactory.java:[lines 65-202]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N69837');">
+<td>
+<span class="priority-2">RV</span>
+</td>
+<td>edu.jas.poly.PolynomialComparator.compare(GenPolynomial, GenPolynomial) negates the return value of edu.jas.poly.GenPolynomial.compareTo(GenPolynomial)</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N69837" style="display: none;">
+<a href="#RV_NEGATING_RESULT_OF_COMPARETO">Bug type RV_NEGATING_RESULT_OF_COMPARETO (click for details)</a>
+<br/>In class edu.jas.poly.PolynomialComparator<br/>In method edu.jas.poly.PolynomialComparator.compare(GenPolynomial, GenPolynomial)<br/>Called method edu.jas.poly.GenPolynomial.compareTo(GenPolynomial)<br/>Return value of edu.jas.poly.GenPolynomial.compareTo(GenPolynomial)<br/>At PolynomialComparator.java:[line 51]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N70340');">
+<td>
+<span class="priority-2">RV</span>
+</td>
+<td>edu.jas.poly.TermOrder$69.compare(ExpVector, ExpVector) negates the return value of java.util.Comparator.compare(Object, Object)</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N70340" style="display: none;">
+<a href="#RV_NEGATING_RESULT_OF_COMPARETO">Bug type RV_NEGATING_RESULT_OF_COMPARETO (click for details)</a>
+<br/>In class edu.jas.poly.TermOrder$69<br/>In method edu.jas.poly.TermOrder$69.compare(ExpVector, ExpVector)<br/>Called method java.util.Comparator.compare(Object, Object)<br/>Return value of java.util.Comparator.compare(Object, Object)<br/>At TermOrder.java:[line 1269]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N70417');">
+<td>
+<span class="priority-2">RV</span>
+</td>
+<td>edu.jas.poly.TermOrder$9.compare(ExpVector, ExpVector) negates the return value of java.util.Comparator.compare(Object, Object)</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N70417" style="display: none;">
+<a href="#RV_NEGATING_RESULT_OF_COMPARETO">Bug type RV_NEGATING_RESULT_OF_COMPARETO (click for details)</a>
+<br/>In class edu.jas.poly.TermOrder$9<br/>In method edu.jas.poly.TermOrder$9.compare(ExpVector, ExpVector)<br/>Called method java.util.Comparator.compare(Object, Object)<br/>Return value of java.util.Comparator.compare(Object, Object)<br/>At TermOrder.java:[line 249]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N66903');">
+<td>
+<span class="priority-2">SnVI</span>
+</td>
+<td>edu.jas.gb.GroebnerBaseDistributed is Serializable; consider declaring a serialVersionUID</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N66903" style="display: none;">
+<a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
+<br/>In class edu.jas.gb.GroebnerBaseDistributed<br/>At GroebnerBaseDistributed.java:[lines 42-369]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N67122');">
+<td>
+<span class="priority-2">SnVI</span>
+</td>
+<td>edu.jas.gb.GroebnerBaseDistributedHybrid is Serializable; consider declaring a serialVersionUID</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N67122" style="display: none;">
+<a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
+<br/>In class edu.jas.gb.GroebnerBaseDistributedHybrid<br/>At GroebnerBaseDistributedHybrid.java:[lines 41-459]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N67157');">
+<td>
+<span class="priority-2">SnVI</span>
+</td>
+<td>edu.jas.gb.GroebnerBaseParallel is Serializable; consider declaring a serialVersionUID</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N67157" style="display: none;">
+<a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
+<br/>In class edu.jas.gb.GroebnerBaseParallel<br/>At GroebnerBaseParallel.java:[lines 37-288]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N67273');">
+<td>
+<span class="priority-2">SnVI</span>
+</td>
+<td>edu.jas.gb.GroebnerBaseSeqPairDistributed is Serializable; consider declaring a serialVersionUID</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N67273" style="display: none;">
+<a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
+<br/>In class edu.jas.gb.GroebnerBaseSeqPairDistributed<br/>At GroebnerBaseSeqPairDistributed.java:[lines 42-381]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N67308');">
+<td>
+<span class="priority-2">SnVI</span>
+</td>
+<td>edu.jas.gb.GroebnerBaseSeqPairParallel is Serializable; consider declaring a serialVersionUID</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N67308" style="display: none;">
+<a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
+<br/>In class edu.jas.gb.GroebnerBaseSeqPairParallel<br/>At GroebnerBaseSeqPairParallel.java:[lines 40-270]</p>
+</td>
+</tr>
+</table>
+<h2>
+<a name="Warnings_CORRECTNESS">Correctness Warnings</a>
+</h2>
+<table class="warningtable" width="100%" cellspacing="0">
+<tr class="tableheader">
+<th align="left">Code</th>
+<th align="left">Warning</th>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N70494');">
+<td>
+<span class="priority-2">SA</span>
+</td>
+<td>Self comparison of $L0 with itself edu.jas.ps.Examples.example11()</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N70494" style="display: none;">
+<a href="#SA_LOCAL_SELF_COMPARISON">Bug type SA_LOCAL_SELF_COMPARISON (click for details)</a>
+<br/>In class edu.jas.ps.Examples<br/>In method edu.jas.ps.Examples.example11()<br/>Local variable stored in JVM register 0<br/>At Examples.java:[line 273]</p>
+</td>
+</tr>
+</table>
+<h2>
+<a name="Warnings_I18N">Internationalization Warnings</a>
+</h2>
+<table class="warningtable" width="100%" cellspacing="0">
+<tr class="tableheader">
+<th align="left">Code</th>
+<th align="left">Warning</th>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N66113');">
+<td>
+<span class="priority-1">Dm</span>
+</td>
+<td>Found reliance on default encoding in new edu.jas.application.RingFactoryTokenizer(): new java.io.InputStreamReader(InputStream)</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N66113" style="display: none;">
+<a href="#DM_DEFAULT_ENCODING">Bug type DM_DEFAULT_ENCODING (click for details)</a>
+<br/>In class edu.jas.application.RingFactoryTokenizer<br/>In method new edu.jas.application.RingFactoryTokenizer()<br/>Called method new java.io.InputStreamReader(InputStream)<br/>At RingFactoryTokenizer.java:[line 113]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N66263');">
+<td>
+<span class="priority-1">Dm</span>
+</td>
+<td>Found reliance on default encoding in edu.jas.application.RunGB.main(String[]): new java.io.FileReader(String)</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N66263" style="display: none;">
+<a href="#DM_DEFAULT_ENCODING">Bug type DM_DEFAULT_ENCODING (click for details)</a>
+<br/>In class edu.jas.application.RunGB<br/>In method edu.jas.application.RunGB.main(String[])<br/>Called method new java.io.FileReader(String)<br/>At RunGB.java:[line 161]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N66332');">
+<td>
+<span class="priority-1">Dm</span>
+</td>
+<td>Found reliance on default encoding in edu.jas.application.RunSGB.main(String[]): new java.io.FileReader(String)</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N66332" style="display: none;">
+<a href="#DM_DEFAULT_ENCODING">Bug type DM_DEFAULT_ENCODING (click for details)</a>
+<br/>In class edu.jas.application.RunSGB<br/>In method edu.jas.application.RunSGB.main(String[])<br/>Called method new java.io.FileReader(String)<br/>At RunSGB.java:[line 112]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N69528');">
+<td>
+<span class="priority-1">Dm</span>
+</td>
+<td>Found reliance on default encoding in new edu.jas.poly.GenPolynomialTokenizer(): new java.io.InputStreamReader(InputStream)</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N69528" style="display: none;">
+<a href="#DM_DEFAULT_ENCODING">Bug type DM_DEFAULT_ENCODING (click for details)</a>
+<br/>In class edu.jas.poly.GenPolynomialTokenizer<br/>In method new edu.jas.poly.GenPolynomialTokenizer()<br/>Called method new java.io.InputStreamReader(InputStream)<br/>At GenPolynomialTokenizer.java:[line 103]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N72587');">
+<td>
+<span class="priority-1">Dm</span>
+</td>
+<td>Found reliance on default encoding in new edu.jas.util.ExecutableChannels(String): new java.io.FileReader(String)</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N72587" style="display: none;">
+<a href="#DM_DEFAULT_ENCODING">Bug type DM_DEFAULT_ENCODING (click for details)</a>
+<br/>In class edu.jas.util.ExecutableChannels<br/>In method new edu.jas.util.ExecutableChannels(String)<br/>Called method new java.io.FileReader(String)<br/>At ExecutableChannels.java:[line 93]</p>
+</td>
+</tr>
+</table>
+<h2>
+<a name="Warnings_MALICIOUS_CODE">Malicious code vulnerability Warnings</a>
+</h2>
+<table class="warningtable" width="100%" cellspacing="0">
+<tr class="tableheader">
+<th align="left">Code</th>
+<th align="left">Warning</th>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N69250');">
+<td>
+<span class="priority-2">EI</span>
+</td>
+<td>edu.jas.poly.GenPolynomialRing.getVars() may expose internal representation by returning GenPolynomialRing.vars</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N69250" style="display: none;">
+<a href="#EI_EXPOSE_REP">Bug type EI_EXPOSE_REP (click for details)</a>
+<br/>In class edu.jas.poly.GenPolynomialRing<br/>In method edu.jas.poly.GenPolynomialRing.getVars()<br/>Field edu.jas.poly.GenPolynomialRing.vars<br/>At GenPolynomialRing.java:[line 410]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N70199');">
+<td>
+<span class="priority-2">EI</span>
+</td>
+<td>edu.jas.poly.TermOrder.getWeight() may expose internal representation by returning TermOrder.weight</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N70199" style="display: none;">
+<a href="#EI_EXPOSE_REP">Bug type EI_EXPOSE_REP (click for details)</a>
+<br/>In class edu.jas.poly.TermOrder<br/>In method edu.jas.poly.TermOrder.getWeight()<br/>Field edu.jas.poly.TermOrder.weight<br/>At TermOrder.java:[line 1317]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N70751');">
+<td>
+<span class="priority-2">EI</span>
+</td>
+<td>edu.jas.ps.MultiVarPowerSeriesRing.getVars() may expose internal representation by returning MultiVarPowerSeriesRing.vars</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N70751" style="display: none;">
+<a href="#EI_EXPOSE_REP">Bug type EI_EXPOSE_REP (click for details)</a>
+<br/>In class edu.jas.ps.MultiVarPowerSeriesRing<br/>In method edu.jas.ps.MultiVarPowerSeriesRing.getVars()<br/>Field edu.jas.ps.MultiVarPowerSeriesRing.vars<br/>At MultiVarPowerSeriesRing.java:[line 238]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N65601');">
+<td>
+<span class="priority-2">EI2</span>
+</td>
+<td>new edu.jas.application.Dimension(int, Set, Set, String[]) may expose internal representation by storing an externally mutable object into Dimension.v</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N65601" style="display: none;">
+<a href="#EI_EXPOSE_REP2">Bug type EI_EXPOSE_REP2 (click for details)</a>
+<br/>In class edu.jas.application.Dimension<br/>In method new edu.jas.application.Dimension(int, Set, Set, String[])<br/>Field edu.jas.application.Dimension.v<br/>Local variable stored in JVM register 4<br/>At Dimension.java:[line 55]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N68764');">
+<td>
+<span class="priority-2">EI2</span>
+</td>
+<td>new edu.jas.poly.ExpVectorLong(long[]) may expose internal representation by storing an externally mutable object into ExpVectorLong.val</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N68764" style="display: none;">
+<a href="#EI_EXPOSE_REP2">Bug type EI_EXPOSE_REP2 (click for details)</a>
+<br/>In class edu.jas.poly.ExpVectorLong<br/>In method new edu.jas.poly.ExpVectorLong(long[])<br/>Field edu.jas.poly.ExpVectorLong.val<br/>Local variable stored in JVM register 1<br/>At ExpVectorLong.java:[line 59]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N69317');">
+<td>
+<span class="priority-2">EI2</span>
+</td>
+<td>new edu.jas.poly.GenPolynomialRing(RingFactory, int, TermOrder, String[]) may expose internal representation by storing an externally mutable object into GenPolynomialRing.vars</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N69317" style="display: none;">
+<a href="#EI_EXPOSE_REP2">Bug type EI_EXPOSE_REP2 (click for details)</a>
+<br/>In class edu.jas.poly.GenPolynomialRing<br/>In method new edu.jas.poly.GenPolynomialRing(RingFactory, int, TermOrder, String[])<br/>Field edu.jas.poly.GenPolynomialRing.vars<br/>Local variable stored in JVM register 4<br/>At GenPolynomialRing.java:[line 200]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N69391');">
+<td>
+<span class="priority-2">EI2</span>
+</td>
+<td>edu.jas.poly.GenPolynomialRing.setVars(String[]) may expose internal representation by storing an externally mutable object into GenPolynomialRing.vars</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N69391" style="display: none;">
+<a href="#EI_EXPOSE_REP2">Bug type EI_EXPOSE_REP2 (click for details)</a>
+<br/>In class edu.jas.poly.GenPolynomialRing<br/>In method edu.jas.poly.GenPolynomialRing.setVars(String[])<br/>Field edu.jas.poly.GenPolynomialRing.vars<br/>Local variable stored in JVM register 1<br/>At GenPolynomialRing.java:[line 420]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N70266');">
+<td>
+<span class="priority-2">EI2</span>
+</td>
+<td>new edu.jas.poly.TermOrder(long[][]) may expose internal representation by storing an externally mutable object into TermOrder.weight</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N70266" style="display: none;">
+<a href="#EI_EXPOSE_REP2">Bug type EI_EXPOSE_REP2 (click for details)</a>
+<br/>In class edu.jas.poly.TermOrder<br/>In method new edu.jas.poly.TermOrder(long[][])<br/>Field edu.jas.poly.TermOrder.weight<br/>Local variable stored in JVM register 1<br/>At TermOrder.java:[line 282]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N70818');">
+<td>
+<span class="priority-2">EI2</span>
+</td>
+<td>new edu.jas.ps.MultiVarPowerSeriesRing(RingFactory, int, int, String[]) may expose internal representation by storing an externally mutable object into MultiVarPowerSeriesRing.vars</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N70818" style="display: none;">
+<a href="#EI_EXPOSE_REP2">Bug type EI_EXPOSE_REP2 (click for details)</a>
+<br/>In class edu.jas.ps.MultiVarPowerSeriesRing<br/>In method new edu.jas.ps.MultiVarPowerSeriesRing(RingFactory, int, int, String[])<br/>Field edu.jas.ps.MultiVarPowerSeriesRing.vars<br/>Local variable stored in JVM register 4<br/>At MultiVarPowerSeriesRing.java:[line 159]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N67764');">
+<td>
+<span class="priority-2">MS</span>
+</td>
+<td>edu.jas.kern.ComputerThreads.NO_THREADS isn't final and can't be protected from malicious code </td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N67764" style="display: none;">
+<a href="#MS_CANNOT_BE_FINAL">Bug type MS_CANNOT_BE_FINAL (click for details)</a>
+<br/>In class edu.jas.kern.ComputerThreads<br/>Field edu.jas.kern.ComputerThreads.NO_THREADS<br/>At ComputerThreads.java:[line 40]</p>
+</td>
+</tr>
+</table>
+<h2>
+<a name="Warnings_MT_CORRECTNESS">Multithreaded correctness Warnings</a>
+</h2>
+<table class="warningtable" width="100%" cellspacing="0">
+<tr class="tableheader">
+<th align="left">Code</th>
+<th align="left">Warning</th>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N71609');">
+<td>
+<span class="priority-1">Ru</span>
+</td>
+<td>edu.jas.util.DistHashTableServer.main(String[]) explicitly invokes run on a thread (did you mean to start it instead?)</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N71609" style="display: none;">
+<a href="#RU_INVOKE_RUN">Bug type RU_INVOKE_RUN (click for details)</a>
+<br/>In class edu.jas.util.DistHashTableServer<br/>In method edu.jas.util.DistHashTableServer.main(String[])<br/>At DistHashTableServer.java:[line 107]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N72144');">
+<td>
+<span class="priority-1">Ru</span>
+</td>
+<td>edu.jas.util.DistributedListServer.main(String[]) explicitly invokes run on a thread (did you mean to start it instead?)</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N72144" style="display: none;">
+<a href="#RU_INVOKE_RUN">Bug type RU_INVOKE_RUN (click for details)</a>
+<br/>In class edu.jas.util.DistributedListServer<br/>In method edu.jas.util.DistributedListServer.main(String[])<br/>At DistributedListServer.java:[line 87]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N72656');">
+<td>
+<span class="priority-1">Ru</span>
+</td>
+<td>edu.jas.util.ExecutableServer.main(String[]) explicitly invokes run on a thread (did you mean to start it instead?)</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N72656" style="display: none;">
+<a href="#RU_INVOKE_RUN">Bug type RU_INVOKE_RUN (click for details)</a>
+<br/>In class edu.jas.util.ExecutableServer<br/>In method edu.jas.util.ExecutableServer.main(String[])<br/>At ExecutableServer.java:[line 112]</p>
+</td>
+</tr>
+</table>
+<h2>
+<a name="Warnings_PERFORMANCE">Performance Warnings</a>
+</h2>
+<table class="warningtable" width="100%" cellspacing="0">
+<tr class="tableheader">
+<th align="left">Code</th>
+<th align="left">Warning</th>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N66182');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>edu.jas.application.RingFactoryTokenizer.nextWeightList() invokes inefficient new Long(long) constructor; use Long.valueOf(long) instead</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N66182" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.application.RingFactoryTokenizer<br/>In method edu.jas.application.RingFactoryTokenizer.nextWeightList()<br/>Called method new Long(long)<br/>Should call Long.valueOf(long) instead<br/>At RingFactoryTokenizer.java:[line 580]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N66454');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>new edu.jas.gb.GBSPTransportMessPairIndex(int, int) invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N66454" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.gb.GBSPTransportMessPairIndex<br/>In method new edu.jas.gb.GBSPTransportMessPairIndex(int, int)<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At GroebnerBaseSeqPairDistributed.java:[line 755]<br/>Another occurrence at GroebnerBaseSeqPairDistributed.java:[line 756]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N66546');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>new edu.jas.gb.GBSPTransportMessPairIndex(CriticalPair) invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N66546" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.gb.GBSPTransportMessPairIndex<br/>In method new edu.jas.gb.GBSPTransportMessPairIndex(CriticalPair)<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At GroebnerBaseSeqPairDistributed.java:[line 744]<br/>Another occurrence at GroebnerBaseSeqPairDistributed.java:[line 745]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N66638');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>new edu.jas.gb.GBTransportMessPairIndex(int, int) invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N66638" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.gb.GBTransportMessPairIndex<br/>In method new edu.jas.gb.GBTransportMessPairIndex(int, int)<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At GroebnerBaseDistributed.java:[line 717]<br/>Another occurrence at GroebnerBaseDistributed.java:[line 718]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N66730');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>new edu.jas.gb.GBTransportMessPairIndex(Pair) invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N66730" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.gb.GBTransportMessPairIndex<br/>In method new edu.jas.gb.GBTransportMessPairIndex(Pair)<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At GroebnerBaseDistributed.java:[line 706]<br/>Another occurrence at GroebnerBaseDistributed.java:[line 707]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N66822');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>edu.jas.gb.GroebnerBaseDistributed.GB(int, List) invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N66822" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.gb.GroebnerBaseDistributed<br/>In method edu.jas.gb.GroebnerBaseDistributed.GB(int, List)<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At GroebnerBaseDistributed.java:[line 219]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N66938');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>edu.jas.gb.GroebnerBaseDistributedHybrid.&lt;static initializer&gt;() invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N66938" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.gb.GroebnerBaseDistributedHybrid<br/>In method edu.jas.gb.GroebnerBaseDistributedHybrid.&lt;static initializer&gt;()<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At GroebnerBaseDistributedHybrid.java:[line 93]<br/>Another occurrence at GroebnerBaseDistributedHybrid.java:[line 99]<br/>Another occurrence at GroebnerBaseDistributedHybrid.java:[line 105]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N67041');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>edu.jas.gb.GroebnerBaseDistributedHybrid.GB(int, List) invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N67041" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.gb.GroebnerBaseDistributedHybrid<br/>In method edu.jas.gb.GroebnerBaseDistributedHybrid.GB(int, List)<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At GroebnerBaseDistributedHybrid.java:[line 280]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N67192');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>edu.jas.gb.GroebnerBaseSeqPairDistributed.GB(int, List) invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N67192" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.gb.GroebnerBaseSeqPairDistributed<br/>In method edu.jas.gb.GroebnerBaseSeqPairDistributed.GB(int, List)<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At GroebnerBaseSeqPairDistributed.java:[line 230]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N67343');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>edu.jas.gb.HybridReducerReceiver.run() invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N67343" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.gb.HybridReducerReceiver<br/>In method edu.jas.gb.HybridReducerReceiver.run()<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At GroebnerBaseDistributedHybrid.java:[line 818]<br/>Another occurrence at GroebnerBaseDistributedHybrid.java:[line 828]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N67435');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>new edu.jas.gb.MiniPair(int, int) invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N67435" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.gb.MiniPair<br/>In method new edu.jas.gb.MiniPair(int, int)<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At MiniPair.java:[line 21]<br/>Another occurrence at MiniPair.java:[line 22]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N67580');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>edu.jas.gb.ReducerServer.run() invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N67580" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.gb.ReducerServer<br/>In method edu.jas.gb.ReducerServer.run()<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At GroebnerBaseDistributed.java:[line 545]<br/>Another occurrence at GroebnerBaseDistributed.java:[line 554]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N67672');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>edu.jas.gb.ReducerServerSeqPair.run() invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N67672" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.gb.ReducerServerSeqPair<br/>In method edu.jas.gb.ReducerServerSeqPair.run()<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At GroebnerBaseSeqPairDistributed.java:[line 577]<br/>Another occurrence at GroebnerBaseSeqPairDistributed.java:[line 587]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N68178');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>new edu.jas.poly.ExpVectorByte(String) invokes inefficient new Byte(byte) constructor; use Byte.valueOf(byte) instead</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N68178" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.poly.ExpVectorByte<br/>In method new edu.jas.poly.ExpVectorByte(String)<br/>Called method new Byte(byte)<br/>Should call Byte.valueOf(byte) instead<br/>At ExpVectorByte.java:[line 122]<br/>Another occurrence at ExpVectorByte.java:[line 128]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N68458');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>new edu.jas.poly.ExpVectorInteger(String) invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N68458" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.poly.ExpVectorInteger<br/>In method new edu.jas.poly.ExpVectorInteger(String)<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At ExpVectorInteger.java:[line 122]<br/>Another occurrence at ExpVectorInteger.java:[line 128]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N68672');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>new edu.jas.poly.ExpVectorLong(String) invokes inefficient new Long(long) constructor; use Long.valueOf(long) instead</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N68672" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.poly.ExpVectorLong<br/>In method new edu.jas.poly.ExpVectorLong(String)<br/>Called method new Long(long)<br/>Should call Long.valueOf(long) instead<br/>At ExpVectorLong.java:[line 83]<br/>Another occurrence at ExpVectorLong.java:[line 89]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N69026');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>new edu.jas.poly.ExpVectorShort(String) invokes inefficient new Short(short) constructor; use Short.valueOf(short) instead</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N69026" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.poly.ExpVectorShort<br/>In method new edu.jas.poly.ExpVectorShort(String)<br/>Called method new Short(short)<br/>Should call Short.valueOf(short) instead<br/>At ExpVectorShort.java:[line 122]<br/>Another occurrence at ExpVectorShort.java:[line 128]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N69597');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>edu.jas.poly.GenPolynomialTokenizer.nextWeightList() invokes inefficient new Long(long) constructor; use Long.valueOf(long) instead</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N69597" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.poly.GenPolynomialTokenizer<br/>In method edu.jas.poly.GenPolynomialTokenizer.nextWeightList()<br/>Called method new Long(long)<br/>Should call Long.valueOf(long) instead<br/>At GenPolynomialTokenizer.java:[line 847]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N70054');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>edu.jas.poly.RelationTable.makeKey(ExpVector, ExpVector) invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N70054" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.poly.RelationTable<br/>In method edu.jas.poly.RelationTable.makeKey(ExpVector, ExpVector)<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At RelationTable.java:[line 442]<br/>Another occurrence at RelationTable.java:[line 445]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N71662');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>edu.jas.util.DistHashTableTest.testDistHashTable2() invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N71662" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.util.DistHashTableTest<br/>In method edu.jas.util.DistHashTableTest.testDistHashTable2()<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At DistHashTableTest.java:[line 103]<br/>Another occurrence at DistHashTableTest.java:[line 106]<br/>Another occurrence at DistHashTableTest.java:[line 108]<br/>Another occurrence at DistHashTableTest.java:[line 117]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N71776');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>edu.jas.util.DistHashTableTest.testDistHashTable3() invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N71776" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.util.DistHashTableTest<br/>In method edu.jas.util.DistHashTableTest.testDistHashTable3()<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At DistHashTableTest.java:[line 140]<br/>Another occurrence at DistHashTableTest.java:[line 160]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N71868');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>edu.jas.util.DistHashTableTest.testDistHashTable4() invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N71868" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.util.DistHashTableTest<br/>In method edu.jas.util.DistHashTableTest.testDistHashTable4()<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At DistHashTableTest.java:[line 184]<br/>Another occurrence at DistHashTableTest.java:[line 209]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N71960');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>edu.jas.util.DistHashTableTest.testDistHashTable5() invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N71960" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.util.DistHashTableTest<br/>In method edu.jas.util.DistHashTableTest.testDistHashTable5()<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At DistHashTableTest.java:[line 230]<br/>Another occurrence at DistHashTableTest.java:[line 252]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N72052');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>edu.jas.util.DistHashTableTest.testDistHashTable6() invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N72052" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.util.DistHashTableTest<br/>In method edu.jas.util.DistHashTableTest.testDistHashTable6()<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At DistHashTableTest.java:[line 272]<br/>Another occurrence at DistHashTableTest.java:[line 287]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N72197');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>edu.jas.util.DistributedListTest.testDistributedList1() invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N72197" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.util.DistributedListTest<br/>In method edu.jas.util.DistributedListTest.testDistributedList1()<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At DistributedListTest.java:[line 81]<br/>Another occurrence at DistributedListTest.java:[line 84]<br/>Another occurrence at DistributedListTest.java:[line 86]<br/>Another occurrence at DistributedListTest.java:[line 94]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N72311');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>edu.jas.util.DistributedListTest.testDistributedList2() invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N72311" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.util.DistributedListTest<br/>In method edu.jas.util.DistributedListTest.testDistributedList2()<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At DistributedListTest.java:[line 114]<br/>Another occurrence at DistributedListTest.java:[line 132]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N72403');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>edu.jas.util.DistributedListTest.testDistributedList3() invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N72403" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.util.DistributedListTest<br/>In method edu.jas.util.DistributedListTest.testDistributedList3()<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At DistributedListTest.java:[line 153]<br/>Another occurrence at DistributedListTest.java:[line 178]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N72495');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>edu.jas.util.DistributedListTest.testDistributedList6() invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N72495" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.util.DistributedListTest<br/>In method edu.jas.util.DistributedListTest.testDistributedList6()<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At DistributedListTest.java:[line 196]<br/>Another occurrence at DistributedListTest.java:[line 216]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N72772');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>edu.jas.util.LongIterator.next() invokes inefficient new Long(long) constructor; use Long.valueOf(long) instead</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N72772" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.util.LongIterator<br/>In method edu.jas.util.LongIterator.next()<br/>Called method new Long(long)<br/>Should call Long.valueOf(long) instead<br/>At LongIterable.java:[line 159]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N72853');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>edu.jas.util.SocketChannelTest.testSocketChannel1() invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N72853" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.util.SocketChannelTest<br/>In method edu.jas.util.SocketChannelTest.testSocketChannel1()<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At SocketChannelTest.java:[line 77]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N72934');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>edu.jas.util.SocketChannelTest.testSocketChannel2() invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N72934" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.util.SocketChannelTest<br/>In method edu.jas.util.SocketChannelTest.testSocketChannel2()<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At SocketChannelTest.java:[line 89]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N73015');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>edu.jas.util.SocketChannelTest.testSocketChannel3() invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N73015" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.util.SocketChannelTest<br/>In method edu.jas.util.SocketChannelTest.testSocketChannel3()<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At SocketChannelTest.java:[line 107]<br/>Another occurrence at SocketChannelTest.java:[line 111]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N73107');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>new edu.jas.util.TaggedSocketChannelTest(String) invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N73107" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.util.TaggedSocketChannelTest<br/>In method new edu.jas.util.TaggedSocketChannelTest(String)<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At TaggedSocketChannelTest.java:[line 45]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N73188');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>edu.jas.util.TaggedSocketChannelTest.testTaggedSocketChannel1() invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N73188" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.util.TaggedSocketChannelTest<br/>In method edu.jas.util.TaggedSocketChannelTest.testTaggedSocketChannel1()<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At TaggedSocketChannelTest.java:[line 87]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N73269');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>edu.jas.util.TaggedSocketChannelTest.testTaggedSocketChannel2() invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N73269" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.util.TaggedSocketChannelTest<br/>In method edu.jas.util.TaggedSocketChannelTest.testTaggedSocketChannel2()<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At TaggedSocketChannelTest.java:[line 109]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N73350');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>edu.jas.util.TaggedSocketChannelTest.testTaggedSocketChannel3() invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N73350" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.util.TaggedSocketChannelTest<br/>In method edu.jas.util.TaggedSocketChannelTest.testTaggedSocketChannel3()<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At TaggedSocketChannelTest.java:[line 124]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N73431');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>edu.jas.util.TaggedSocketChannelTest.testTaggedSocketChannel4() invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N73431" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.util.TaggedSocketChannelTest<br/>In method edu.jas.util.TaggedSocketChannelTest.testTaggedSocketChannel4()<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At TaggedSocketChannelTest.java:[line 145]<br/>Another occurrence at TaggedSocketChannelTest.java:[line 150]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N73523');">
+<td>
+<span class="priority-2">Bx</span>
+</td>
+<td>edu.jas.util.TaggedSocketChannelTest.testTaggedSocketChannel5() invokes inefficient new Integer(int) constructor; use Integer.valueOf(int) instead</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N73523" style="display: none;">
+<a href="#DM_NUMBER_CTOR">Bug type DM_NUMBER_CTOR (click for details)</a>
+<br/>In class edu.jas.util.TaggedSocketChannelTest<br/>In method edu.jas.util.TaggedSocketChannelTest.testTaggedSocketChannel5()<br/>Called method new Integer(int)<br/>Should call Integer.valueOf(int) instead<br/>At TaggedSocketChannelTest.java:[line 172]<br/>Another occurrence at TaggedSocketChannelTest.java:[line 179]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N67527');">
+<td>
+<span class="priority-2">WMI</span>
+</td>
+<td>edu.jas.gb.OrderedSyzPairlist.put(GenPolynomial) makes inefficient use of keySet iterator instead of entrySet iterator</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N67527" style="display: none;">
+<a href="#WMI_WRONG_MAP_ITERATOR">Bug type WMI_WRONG_MAP_ITERATOR (click for details)</a>
+<br/>In class edu.jas.gb.OrderedSyzPairlist<br/>In method edu.jas.gb.OrderedSyzPairlist.put(GenPolynomial)<br/>At OrderedSyzPairlist.java:[line 222]</p>
+</td>
+</tr>
+</table>
+<h2>
+<a name="Warnings_STYLE">Dodgy code Warnings</a>
+</h2>
+<table class="warningtable" width="100%" cellspacing="0">
+<tr class="tableheader">
+<th align="left">Code</th>
+<th align="left">Warning</th>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N65881');">
+<td>
+<span class="priority-2">DB</span>
+</td>
+<td>edu.jas.application.OrderedCPairlist.removeNext() uses the same code for two branches</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N65881" style="display: none;">
+<a href="#DB_DUPLICATE_BRANCHES">Bug type DB_DUPLICATE_BRANCHES (click for details)</a>
+<br/>In class edu.jas.application.OrderedCPairlist<br/>In method edu.jas.application.OrderedCPairlist.removeNext()<br/>At OrderedCPairlist.java:[line 332]<br/>At OrderedCPairlist.java:[line 334]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N66050');">
+<td>
+<span class="priority-2">DB</span>
+</td>
+<td>edu.jas.application.RingFactoryTokenizer.nextCoefficientRing() uses the same code for two branches</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N66050" style="display: none;">
+<a href="#DB_DUPLICATE_BRANCHES">Bug type DB_DUPLICATE_BRANCHES (click for details)</a>
+<br/>In class edu.jas.application.RingFactoryTokenizer<br/>In method edu.jas.application.RingFactoryTokenizer.nextCoefficientRing()<br/>At RingFactoryTokenizer.java:[line 505]<br/>At RingFactoryTokenizer.java:[line 507]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N69465');">
+<td>
+<span class="priority-2">DB</span>
+</td>
+<td>edu.jas.poly.GenPolynomialTokenizer.nextCoefficientRing() uses the same code for two branches</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N69465" style="display: none;">
+<a href="#DB_DUPLICATE_BRANCHES">Bug type DB_DUPLICATE_BRANCHES (click for details)</a>
+<br/>In class edu.jas.poly.GenPolynomialTokenizer<br/>In method edu.jas.poly.GenPolynomialTokenizer.nextCoefficientRing()<br/>At GenPolynomialTokenizer.java:[line 764]<br/>At GenPolynomialTokenizer.java:[line 766]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N72709');">
+<td>
+<span class="priority-2">DB</span>
+</td>
+<td>edu.jas.util.Executor.run() uses the same code for two branches</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N72709" style="display: none;">
+<a href="#DB_DUPLICATE_BRANCHES">Bug type DB_DUPLICATE_BRANCHES (click for details)</a>
+<br/>In class edu.jas.util.Executor<br/>In method edu.jas.util.Executor.run()<br/>At ExecutableServer.java:[lines 269-270]<br/>At ExecutableServer.java:[lines 272-273]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N67921');">
+<td>
+<span class="priority-2">DLS</span>
+</td>
+<td>Dead store to $L5 in edu.jas.poly.ExpVector.subst(int, long)</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N67921" style="display: none;">
+<a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
+<br/>In class edu.jas.poly.ExpVector<br/>In method edu.jas.poly.ExpVector.subst(int, long)<br/>Local variable stored in JVM register 5<br/>At ExpVector.java:[line 670]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N68043');">
+<td>
+<span class="priority-2">DLS</span>
+</td>
+<td>Dead store to $L4 in edu.jas.poly.ExpVectorByte.subst(int, byte)</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N68043" style="display: none;">
+<a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
+<br/>In class edu.jas.poly.ExpVectorByte<br/>In method edu.jas.poly.ExpVectorByte.subst(int, byte)<br/>Local variable stored in JVM register 4<br/>At ExpVectorByte.java:[line 460]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N68109');">
+<td>
+<span class="priority-2">DLS</span>
+</td>
+<td>Dead store to $L5 in edu.jas.poly.ExpVectorByte.subst(int, long)</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N68109" style="display: none;">
+<a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
+<br/>In class edu.jas.poly.ExpVectorByte<br/>In method edu.jas.poly.ExpVectorByte.subst(int, long)<br/>Local variable stored in JVM register 5<br/>At ExpVectorByte.java:[line 476]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N68323');">
+<td>
+<span class="priority-2">DLS</span>
+</td>
+<td>Dead store to $L4 in edu.jas.poly.ExpVectorInteger.subst(int, int)</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N68323" style="display: none;">
+<a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
+<br/>In class edu.jas.poly.ExpVectorInteger<br/>In method edu.jas.poly.ExpVectorInteger.subst(int, int)<br/>Local variable stored in JVM register 4<br/>At ExpVectorInteger.java:[line 476]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N68389');">
+<td>
+<span class="priority-2">DLS</span>
+</td>
+<td>Dead store to $L5 in edu.jas.poly.ExpVectorInteger.subst(int, long)</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N68389" style="display: none;">
+<a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
+<br/>In class edu.jas.poly.ExpVectorInteger<br/>In method edu.jas.poly.ExpVectorInteger.subst(int, long)<br/>Local variable stored in JVM register 5<br/>At ExpVectorInteger.java:[line 461]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N68603');">
+<td>
+<span class="priority-2">DLS</span>
+</td>
+<td>Dead store to $L5 in edu.jas.poly.ExpVectorLong.subst(int, long)</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N68603" style="display: none;">
+<a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
+<br/>In class edu.jas.poly.ExpVectorLong<br/>In method edu.jas.poly.ExpVectorLong.subst(int, long)<br/>Local variable stored in JVM register 5<br/>At ExpVectorLong.java:[line 398]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N68891');">
+<td>
+<span class="priority-2">DLS</span>
+</td>
+<td>Dead store to $L5 in edu.jas.poly.ExpVectorShort.subst(int, long)</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N68891" style="display: none;">
+<a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
+<br/>In class edu.jas.poly.ExpVectorShort<br/>In method edu.jas.poly.ExpVectorShort.subst(int, long)<br/>Local variable stored in JVM register 5<br/>At ExpVectorShort.java:[line 476]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N68960');">
+<td>
+<span class="priority-2">DLS</span>
+</td>
+<td>Dead store to $L4 in edu.jas.poly.ExpVectorShort.subst(int, short)</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N68960" style="display: none;">
+<a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
+<br/>In class edu.jas.poly.ExpVectorShort<br/>In method edu.jas.poly.ExpVectorShort.subst(int, short)<br/>Local variable stored in JVM register 4<br/>At ExpVectorShort.java:[line 460]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N70607');">
+<td>
+<span class="priority-2">DLS</span>
+</td>
+<td>Dead store to $L1 in edu.jas.ps.MultiVarPowerSeries.orderExpVector()</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N70607" style="display: none;">
+<a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
+<br/>In class edu.jas.ps.MultiVarPowerSeries<br/>In method edu.jas.ps.MultiVarPowerSeries.orderExpVector()<br/>Local variable stored in JVM register 1<br/>At MultiVarPowerSeries.java:[line 916]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N70679');">
+<td>
+<span class="priority-2">DLS</span>
+</td>
+<td>Dead store to $L1 in edu.jas.ps.MultiVarPowerSeries.signum()</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N70679" style="display: none;">
+<a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
+<br/>In class edu.jas.ps.MultiVarPowerSeries<br/>In method edu.jas.ps.MultiVarPowerSeries.signum()<br/>Local variable stored in JVM register 1<br/>At MultiVarPowerSeries.java:[line 993]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N71263');">
+<td>
+<span class="priority-2">DLS</span>
+</td>
+<td>Dead store to $L14 in edu.jas.ufd.FactorAbsolute.factorsAbsoluteIrreducible(GenPolynomial)</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N71263" style="display: none;">
+<a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
+<br/>In class edu.jas.ufd.FactorAbsolute<br/>In method edu.jas.ufd.FactorAbsolute.factorsAbsoluteIrreducible(GenPolynomial)<br/>Local variable stored in JVM register 14<br/>At FactorAbsolute.java:[line 849]<br/>Another occurrence at FactorAbsolute.java:[line 850]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N71349');">
+<td>
+<span class="priority-2">DLS</span>
+</td>
+<td>Dead store to $L19 in edu.jas.ufd.HenselMultUtil.liftHenselMonic(GenPolynomial, GenPolynomial, List, List, long)</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N71349" style="display: none;">
+<a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
+<br/>In class edu.jas.ufd.HenselMultUtil<br/>In method edu.jas.ufd.HenselMultUtil.liftHenselMonic(GenPolynomial, GenPolynomial, List, List, long)<br/>Local variable stored in JVM register 19<br/>At HenselMultUtil.java:[line 509]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N71468');">
+<td>
+<span class="priority-2">DLS</span>
+</td>
+<td>Dead store to $L4 in new edu.jas.util.CartesianTwoProductInfiniteIterator(Iterable, Iterable)</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N71468" style="display: none;">
+<a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
+<br/>In class edu.jas.util.CartesianTwoProductInfiniteIterator<br/>In method new edu.jas.util.CartesianTwoProductInfiniteIterator(Iterable, Iterable)<br/>Local variable stored in JVM register 4<br/>At CartesianProductInfinite.java:[line 175]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N71540');">
+<td>
+<span class="priority-2">DLS</span>
+</td>
+<td>Dead store to $L4 in new edu.jas.util.CartesianTwoProductInfiniteIteratorList(Iterable, Iterable)</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N71540" style="display: none;">
+<a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
+<br/>In class edu.jas.util.CartesianTwoProductInfiniteIteratorList<br/>In method new edu.jas.util.CartesianTwoProductInfiniteIteratorList(Iterable, Iterable)<br/>Local variable stored in JVM register 4<br/>At CartesianProductInfinite.java:[line 305]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N69678');">
+<td>
+<span class="priority-2">SF</span>
+</td>
+<td>Switch statement found in edu.jas.poly.GenPolynomialTokenizer.nextPolynomial() where one case falls through to the next case</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N69678" style="display: none;">
+<a href="#SF_SWITCH_FALLTHROUGH">Bug type SF_SWITCH_FALLTHROUGH (click for details)</a>
+<br/>In class edu.jas.poly.GenPolynomialTokenizer<br/>In method edu.jas.poly.GenPolynomialTokenizer.nextPolynomial()<br/>At GenPolynomialTokenizer.java:[lines 306-309]</p>
+</td>
+</tr>
+</table>
+<h1>
+<a name="Details">Details</a>
+</h1>
+<h2>
+<a name="DM_NUMBER_CTOR">DM_NUMBER_CTOR: Method invokes inefficient Number constructor; use static valueOf instead</a>
+</h2>
+      
+      <p>
+      Using <code>new Integer(int)</code> is guaranteed to always result in a new object whereas
+      <code>Integer.valueOf(int)</code> allows caching of values to be done by the compiler, class library, or JVM.
+      Using of cached values avoids object allocation and the code will be faster.
+      </p>
+      <p>
+      Values between -128 and 127 are guaranteed to have corresponding cached instances
+      and using <code>valueOf</code> is approximately 3.5 times faster than using constructor.
+      For values outside the constant range the performance of both styles is the same.
+      </p>
+      <p>
+      Unless the class must be compatible with JVMs predating Java 1.5,
+      use either autoboxing or the <code>valueOf()</code> method when creating instances of
+      <code>Long</code>, <code>Integer</code>, <code>Short</code>, <code>Character</code>, and <code>Byte</code>.
+      </p>
+      
+    
+<h2>
+<a name="CN_IDIOM_NO_SUPER_CALL">CN_IDIOM_NO_SUPER_CALL: clone method does not call super.clone()</a>
+</h2>
+
+<p> This non-final class defines a clone() method that does not call super.clone().
+If this class ("<i>A</i>") is extended by a subclass ("<i>B</i>"),
+and the subclass <i>B</i> calls super.clone(), then it is likely that
+<i>B</i>'s clone() method will return an object of type <i>A</i>,
+which violates the standard contract for clone().</p>
+
+<p> If all clone() methods call super.clone(), then they are guaranteed
+to use Object.clone(), which always returns an object of the correct type.</p>
+
+    
+<h2>
+<a name="DB_DUPLICATE_BRANCHES">DB_DUPLICATE_BRANCHES: Method uses the same code for two branches</a>
+</h2>
+      
+      <p>
+      This method uses the same code to implement two branches of a conditional branch.
+    Check to ensure that this isn't a coding mistake.
+      </p>
+      
+   
+<h2>
+<a name="DLS_DEAD_LOCAL_STORE">DLS_DEAD_LOCAL_STORE: Dead store to local variable</a>
+</h2>
+
+<p>
+This instruction assigns a value to a local variable,
+but the value is not read or used in any subsequent instruction.
+Often, this indicates an error, because the value computed is never
+used.
+</p>
+<p>
+Note that Sun's javac compiler often generates dead stores for
+final local variables.  Because FindBugs is a bytecode-based tool,
+there is no easy way to eliminate these false positives.
+</p>
+
+    
+<h2>
+<a name="DM_DEFAULT_ENCODING">DM_DEFAULT_ENCODING: Reliance on default encoding</a>
+</h2>
+
+<p> Found a call to a method which will perform a byte to String (or String to byte) conversion, and will assume that the default platform encoding is suitable. This will cause the application behaviour to vary between platforms. Use an alternative API and specify a charset name or Charset object explicitly.  </p>
+
+      
+<h2>
+<a name="EI_EXPOSE_REP">EI_EXPOSE_REP: May expose internal representation by returning reference to mutable object</a>
+</h2>
+
+  <p> Returning a reference to a mutable object value stored in one of the object's fields
+  exposes the internal representation of the object.&nbsp;
+   If instances
+   are accessed by untrusted code, and unchecked changes to
+   the mutable object would compromise security or other
+   important properties, you will need to do something different.
+  Returning a new copy of the object is better approach in many situations.</p>
+
+    
+<h2>
+<a name="EI_EXPOSE_REP2">EI_EXPOSE_REP2: May expose internal representation by incorporating reference to mutable object</a>
+</h2>
+
+  <p> This code stores a reference to an externally mutable object into the
+  internal representation of the object.&nbsp;
+   If instances
+   are accessed by untrusted code, and unchecked changes to
+   the mutable object would compromise security or other
+   important properties, you will need to do something different.
+  Storing a copy of the object is better approach in many situations.</p>
+
+    
+<h2>
+<a name="MS_CANNOT_BE_FINAL">MS_CANNOT_BE_FINAL: Field isn't final and can't be protected from malicious code</a>
+</h2>
+
+  <p>
+ A mutable static field could be changed by malicious code or
+        by accident from another package.
+   Unfortunately, the way the field is used doesn't allow
+   any easy fix to this problem.</p>
+
+    
+<h2>
+<a name="NM_SAME_SIMPLE_NAME_AS_SUPERCLASS">NM_SAME_SIMPLE_NAME_AS_SUPERCLASS: Class names shouldn't shadow simple name of superclass</a>
+</h2>
+
+  <p> This class has a simple name that is identical to that of its superclass, except
+that its superclass is in a different package (e.g., <code>alpha.Foo</code> extends <code>beta.Foo</code>).
+This can be exceptionally confusing, create lots of situations in which you have to look at import statements
+to resolve references and creates many
+opportunities to accidently define methods that do not override methods in their superclasses.
+</p>
+
+    
+<h2>
+<a name="RU_INVOKE_RUN">RU_INVOKE_RUN: Invokes run on a thread (did you mean to start it instead?)</a>
+</h2>
+
+  <p> This method explicitly invokes <code>run()</code> on an object.&nbsp;
+  In general, classes implement the <code>Runnable</code> interface because
+  they are going to have their <code>run()</code> method invoked in a new thread,
+  in which case <code>Thread.start()</code> is the right method to call.</p>
+
+    
+<h2>
+<a name="RV_NEGATING_RESULT_OF_COMPARETO">RV_NEGATING_RESULT_OF_COMPARETO: Negating the result of compareTo()/compare()</a>
+</h2>
+
+  <p> This code negatives the return value of a compareTo or compare method.
+This is a questionable or bad programming practice, since if the return
+value is Integer.MIN_VALUE, negating the return value won't
+negate the sign of the result. You can achieve the same intended result
+by reversing the order of the operands rather than by negating the results.
+</p>
+
+    
+<h2>
+<a name="SA_LOCAL_SELF_COMPARISON">SA_LOCAL_SELF_COMPARISON: Self comparison of value with itself</a>
+</h2>
+
+<p> This method compares a local variable with itself, and may indicate a typo or
+a logic error.  Make sure that you are comparing the right things.
+</p>
+
+    
+<h2>
+<a name="SF_SWITCH_FALLTHROUGH">SF_SWITCH_FALLTHROUGH: Switch statement found where one case falls through to the next case</a>
+</h2>
+
+  <p> This method contains a switch statement where one case branch will fall through to the next case.
+  Usually you need to end this case with a break or return.</p>
+
+    
+<h2>
+<a name="SE_NO_SERIALVERSIONID">SE_NO_SERIALVERSIONID: Class is Serializable, but doesn't define serialVersionUID</a>
+</h2>
+
+  <p> This class implements the <code>Serializable</code> interface, but does
+  not define a <code>serialVersionUID</code> field.&nbsp;
+  A change as simple as adding a reference to a .class object
+    will add synthetic fields to the class,
+   which will unfortunately change the implicit
+   serialVersionUID (e.g., adding a reference to <code>String.class</code>
+   will generate a static field <code>class$java$lang$String</code>).
+   Also, different source code to bytecode compilers may use different
+   naming conventions for synthetic variables generated for
+   references to class objects or inner classes.
+   To ensure interoperability of Serializable across versions,
+   consider adding an explicit serialVersionUID.</p>
+
+    
+<h2>
+<a name="WMI_WRONG_MAP_ITERATOR">WMI_WRONG_MAP_ITERATOR: Inefficient use of keySet iterator instead of entrySet iterator</a>
+</h2>
+
+<p> This method accesses the value of a Map entry, using a key that was retrieved from
+a keySet iterator. It is more efficient to use an iterator on the entrySet of the map, to avoid the
+Map.get(key) lookup.</p>
+
+        </body>
+</html>
