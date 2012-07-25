@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
@@ -823,11 +824,7 @@ public class RingFactoryTokenizer {
         logger.info("coeff = " + coeff);
 
         vars = nextVariableList();
-        String dd = "vars =";
-        for (int i = 0; i < vars.length; i++) {
-            dd += " " + vars[i];
-        }
-        logger.info(dd);
+        logger.info("vars = " + Arrays.toString(vars));
         if (vars != null) {
             nvars = vars.length;
         }
@@ -857,11 +854,7 @@ public class RingFactoryTokenizer {
         logger.info("coeff = " + coeff);
 
         vars = nextVariableList();
-        String dd = "vars =";
-        for (int i = 0; i < vars.length; i++) {
-            dd += " " + vars[i];
-        }
-        logger.info(dd);
+        logger.info("vars = " + Arrays.toString(vars));
         if (vars != null) {
             nvars = vars.length;
         }

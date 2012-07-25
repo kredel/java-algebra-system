@@ -427,17 +427,10 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
      * @return names seperated by commas.
      */
     public String varsToString() {
-        String s = "";
         if (vars == null) {
-            return s + "#" + nvar;
+            return "#" + nvar;
         }
-        for (int i = 0; i < vars.length; i++) {
-            if (i != 0) {
-                s += ", ";
-            }
-            s += vars[i];
-        }
-        return s;
+        return Arrays.toString(vars);
     }
 
 

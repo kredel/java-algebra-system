@@ -219,20 +219,13 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
 
     /**
      * Get a String representation of the variable names.
-     * @return names seperated by commas.
+     * @return names separated by commas.
      */
     public String varsToString() {
-        String s = "";
         if (vars == null) {
-            return s + "#" + nvar;
+            return "#" + nvar;
         }
-        for (int i = 0; i < vars.length; i++) {
-            if (i != 0) {
-                s += ", ";
-            }
-            s += vars[i];
-        }
-        return s;
+        return Arrays.toString(vars);
     }
 
 

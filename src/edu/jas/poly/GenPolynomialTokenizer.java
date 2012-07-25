@@ -1158,11 +1158,7 @@ public class GenPolynomialTokenizer {
         logger.info("coeff = " + coeff);
 
         vars = nextVariableList();
-        String dd = "vars =";
-        for (int i = 0; i < vars.length; i++) {
-            dd += " " + vars[i];
-        }
-        logger.info(dd);
+        logger.info("vars = " + Arrays.toString(vars));
         if (vars != null) {
             nvars = vars.length;
         }
@@ -1196,11 +1192,7 @@ public class GenPolynomialTokenizer {
         logger.info("coeff = " + coeff);
 
         vars = nextVariableList();
-        String dd = "vars =";
-        for (int i = 0; i < vars.length; i++) {
-            dd += " " + vars[i];
-        }
-        logger.info(dd);
+        logger.info("vars = " + Arrays.toString(vars));
         if (vars != null) {
             nvars = vars.length;
         }
@@ -1278,11 +1270,7 @@ public class GenPolynomialTokenizer {
         logger.info("coeff = " + coeff);
 
         vars = nextVariableList();
-        String dd = "vars =";
-        for (int i = 0; i < vars.length; i++) {
-            dd += " " + vars[i];
-        }
-        logger.info(dd);
+        logger.info("vars = " + Arrays.toString(vars));
         if (vars != null) {
             nvars = vars.length;
         }
@@ -1360,11 +1348,7 @@ public class GenPolynomialTokenizer {
         logger.info("coeff = " + coeff);
 
         vars = nextVariableList();
-        String dd = "vars =";
-        for (int i = 0; i < vars.length; i++) {
-            dd += " " + vars[i];
-        }
-        logger.info(dd);
+        logger.info("vars = " + Arrays.toString(vars));
         if (vars != null) {
             nvars = vars.length;
         }

@@ -292,7 +292,7 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
      * @see java.lang.Object#toString()
      */
     public String toString(String[] vars) {
-        String s = "";
+        StringBuffer s = new StringBuffer();
         boolean pit;
         int r = length();
         if ( r != vars.length ) {
@@ -300,15 +300,15 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
             return toString();
         }
         if ( r == 0 ) {
-            return s;
+            return s.toString();
         }
         long vi;
         for (int i = r-1; i > 0; i-- ) {
             vi = getVal( i );
             if ( vi != 0 ) { 
-                s += vars[ r-1-i ];
+                s.append(vars[ r-1-i ]);
                 if ( vi != 1 ) {
-                    s += "^" + vi;
+                    s.append("^" + vi);
                 }
                 pit = false;
                 for ( int j = i-1; j >= 0; j-- ) {
@@ -316,17 +316,19 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
                        pit = true;
                     }
                 }
-                if ( pit ) s += " * ";
+                if ( pit ) {
+		    s.append(" * ");
+                }
             }
         }
         vi = getVal( 0 );
         if ( vi != 0 ) { 
-            s += vars[ r-1 ];
+            s.append(vars[ r-1 ]);
             if ( vi != 1 ) {
-                s += "^" + vi + "";
+                s.append("^" + vi);
             }
         }
-        return s; 
+        return s.toString(); 
     }
 
 
