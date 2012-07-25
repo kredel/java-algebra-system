@@ -360,8 +360,8 @@ public class RealAlgebraicTest extends TestCase {
         BigRational eps = Power.positivePower(new BigRational(1L, 10L), 8);
         BigDecimal epsd = new BigDecimal(eps);
 
-        assertTrue("mag(a*b) = mag(a)*mag(b)", dd.subtract(dd1).abs().compareTo(epsd) <= 0);
-        assertTrue("mag(a+b) = mag(a)+mag(b)", ed.subtract(ed1).abs().compareTo(epsd) <= 0);
+        assertTrue("mag(a*b) = mag(a)*mag(b): " + dd + ", " + dd1, dd.subtract(dd1).abs().compareTo(epsd) <= 0);
+        assertTrue("mag(a+b) = mag(a)+mag(b): " + ed + ", " + ed1, ed.subtract(ed1).abs().compareTo(epsd) <= 0);
 
 
         d = a.divide(b);
