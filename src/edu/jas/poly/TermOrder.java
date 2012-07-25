@@ -95,25 +95,25 @@ public final class TermOrder implements Serializable {
     /**
      * Defined descending order comparator. Sorts the highest terms first.
      */
-    private final Comparator<ExpVector> horder;
+    private final EVComparator horder;
 
 
     /**
      * Defined ascending order comparator. Sorts the lowest terms first.
      */
-    private final Comparator<ExpVector> lorder;
+    private final EVComparator lorder;
 
 
     /**
      * Defined sugar order comparator. Sorts the graded lowest terms first.
      */
-    private final Comparator<ExpVector> sugar;
+    private final EVComparator sugar;
 
 
     /**
      * Comparator for ExpVectors.
      */
-    private static abstract class EVorder implements Comparator<ExpVector>, Serializable {
+    public static abstract class EVComparator implements Comparator<ExpVector>, Serializable {
 
 
         public abstract int compare(ExpVector e1, ExpVector e2);
@@ -145,7 +145,7 @@ public final class TermOrder implements Serializable {
         evend2 = evend1;
         switch (evord) { // horder = new EVhorder();
         case TermOrder.LEX: {
-            horder = new EVorder() {
+            horder = new EVComparator() {
 
 
                 @Override
@@ -156,7 +156,7 @@ public final class TermOrder implements Serializable {
             break;
         }
         case TermOrder.INVLEX: {
-            horder = new EVorder() {
+            horder = new EVComparator() {
 
 
                 @Override
@@ -167,7 +167,7 @@ public final class TermOrder implements Serializable {
             break;
         }
         case TermOrder.GRLEX: {
-            horder = new EVorder() {
+            horder = new EVComparator() {
 
 
                 @Override
@@ -178,7 +178,7 @@ public final class TermOrder implements Serializable {
             break;
         }
         case TermOrder.IGRLEX: {
-            horder = new EVorder() {
+            horder = new EVComparator() {
 
 
                 @Override
@@ -189,7 +189,7 @@ public final class TermOrder implements Serializable {
             break;
         }
         case TermOrder.REVLEX: {
-            horder = new EVorder() {
+            horder = new EVComparator() {
 
 
                 @Override
@@ -200,7 +200,7 @@ public final class TermOrder implements Serializable {
             break;
         }
         case TermOrder.REVILEX: {
-            horder = new EVorder() {
+            horder = new EVComparator() {
 
 
                 @Override
@@ -211,7 +211,7 @@ public final class TermOrder implements Serializable {
             break;
         }
         case TermOrder.REVTDEG: {
-            horder = new EVorder() {
+            horder = new EVComparator() {
 
 
                 @Override
@@ -222,7 +222,7 @@ public final class TermOrder implements Serializable {
             break;
         }
         case TermOrder.REVITDG: {
-            horder = new EVorder() {
+            horder = new EVComparator() {
 
 
                 @Override
@@ -241,7 +241,7 @@ public final class TermOrder implements Serializable {
         }
 
         // lorder = new EVlorder();
-        lorder = new EVorder() {
+        lorder = new EVComparator() {
 
 
             @Override
@@ -251,7 +251,7 @@ public final class TermOrder implements Serializable {
         };
 
         // sugar = new EVsugar();
-        sugar = new EVorder() {
+        sugar = new EVComparator() {
 
 
             @Override
@@ -287,7 +287,7 @@ public final class TermOrder implements Serializable {
         evbeg2 = evend1;
         evend2 = evend1;
 
-        horder = new EVorder() {
+        horder = new EVComparator() {
 
 
             @Override
@@ -297,7 +297,7 @@ public final class TermOrder implements Serializable {
         };
 
         // lorder = new EVlorder();
-        lorder = new EVorder() {
+        lorder = new EVComparator() {
 
 
             @Override
@@ -350,7 +350,7 @@ public final class TermOrder implements Serializable {
         case TermOrder.LEX: {
             switch (evord2) {
             case TermOrder.LEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -365,7 +365,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.INVLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -380,7 +380,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.GRLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -395,7 +395,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.IGRLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -418,7 +418,7 @@ public final class TermOrder implements Serializable {
         case TermOrder.INVLEX: {
             switch (evord2) {
             case TermOrder.LEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -433,7 +433,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.INVLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -448,7 +448,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.GRLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -463,7 +463,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.IGRLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -478,7 +478,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.REVLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -493,7 +493,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.REVILEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -508,7 +508,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.REVTDEG: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -523,7 +523,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.REVITDG: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -546,7 +546,7 @@ public final class TermOrder implements Serializable {
         case TermOrder.GRLEX: {
             switch (evord2) {
             case TermOrder.LEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -561,7 +561,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.INVLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -576,7 +576,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.GRLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -591,7 +591,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.IGRLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -614,7 +614,7 @@ public final class TermOrder implements Serializable {
         case TermOrder.IGRLEX: {
             switch (evord2) {
             case TermOrder.LEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -629,7 +629,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.INVLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -644,7 +644,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.GRLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -659,7 +659,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.IGRLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -674,7 +674,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.REVLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -689,7 +689,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.REVILEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -704,7 +704,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.REVTDEG: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -719,7 +719,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.REVITDG: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -743,7 +743,7 @@ public final class TermOrder implements Serializable {
         case TermOrder.REVLEX: {
             switch (evord2) {
             case TermOrder.LEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -758,7 +758,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.INVLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -773,7 +773,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.GRLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -788,7 +788,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.IGRLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -803,7 +803,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.REVLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -818,7 +818,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.REVILEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -833,7 +833,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.REVTDEG: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -848,7 +848,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.REVITDG: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -871,7 +871,7 @@ public final class TermOrder implements Serializable {
         case TermOrder.REVILEX: {
             switch (evord2) {
             case TermOrder.LEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -886,7 +886,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.INVLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -901,7 +901,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.GRLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -916,7 +916,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.IGRLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -931,7 +931,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.REVLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -946,7 +946,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.REVILEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -961,7 +961,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.REVTDEG: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -976,7 +976,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.REVITDG: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -999,7 +999,7 @@ public final class TermOrder implements Serializable {
         case TermOrder.REVTDEG: {
             switch (evord2) {
             case TermOrder.LEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -1014,7 +1014,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.INVLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -1029,7 +1029,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.GRLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -1044,7 +1044,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.IGRLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -1059,7 +1059,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.REVLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -1074,7 +1074,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.REVILEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -1089,7 +1089,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.REVTDEG: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -1104,7 +1104,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.REVITDG: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -1127,7 +1127,7 @@ public final class TermOrder implements Serializable {
         case TermOrder.REVITDG: {
             switch (evord2) {
             case TermOrder.LEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -1142,7 +1142,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.INVLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -1157,7 +1157,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.GRLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -1172,7 +1172,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.IGRLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -1187,7 +1187,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.REVLEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -1202,7 +1202,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.REVILEX: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -1217,7 +1217,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.REVTDEG: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -1232,7 +1232,7 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.REVITDG: {
-                horder = new EVorder() {
+                horder = new EVComparator() {
 
 
                     @Override
@@ -1261,7 +1261,7 @@ public final class TermOrder implements Serializable {
             throw new IllegalArgumentException("invalid term order: " + evord + " 2 " + evord2);
         }
 
-        lorder = new EVorder() {
+        lorder = new EVComparator() {
 
 
             @Override
@@ -1271,7 +1271,7 @@ public final class TermOrder implements Serializable {
         };
 
         // sugar = new EVsugar();
-        sugar = new EVorder() {
+        sugar = new EVComparator() {
 
 
             @Override
@@ -1322,7 +1322,7 @@ public final class TermOrder implements Serializable {
      * Get the descending order comparator. Sorts the highest terms first.
      * @return horder.
      */
-    public Comparator<ExpVector> getDescendComparator() {
+    public EVComparator getDescendComparator() {
         return horder;
     }
 
@@ -1331,7 +1331,7 @@ public final class TermOrder implements Serializable {
      * Get the ascending order comparator. Sorts the lowest terms first.
      * @return lorder.
      */
-    public Comparator<ExpVector> getAscendComparator() {
+    public EVComparator getAscendComparator() {
         return lorder;
     }
 
@@ -1340,7 +1340,7 @@ public final class TermOrder implements Serializable {
      * Get the sugar order comparator. Sorts the graded lowest terms first.
      * @return sugar.
      */
-    public Comparator<ExpVector> getSugarComparator() {
+    public EVComparator getSugarComparator() {
         return sugar;
     }
 
