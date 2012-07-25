@@ -350,7 +350,9 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
      * @return abs(A).
      */
     public static BigInteger IABS(BigInteger A) {
-        if ( A == null ) return null;
+        if ( A == null ) {
+            throw new IllegalArgumentException("null A not allowed");
+        }
         return A.abs();
     }
 
@@ -368,7 +370,9 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
      * @return -A.
      */
     public static BigInteger INEG(BigInteger A) {
-        if ( A == null ) return null;
+        if ( A == null ) {
+            throw new IllegalArgumentException("null A not allowed");
+        }
         return A.negate();
     }
 
@@ -424,7 +428,9 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
      * @return A/B.
      */
     public static BigInteger IQ(BigInteger A, BigInteger B) {
-        if ( A == null ) return null;
+        if ( A == null ) {
+            throw new IllegalArgumentException("null A not allowed");
+        }
         return A.divide(B);
     }
 
@@ -456,7 +462,9 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
      * @return A - (A/B)*B.
      */
     public static BigInteger IREM(BigInteger A, BigInteger B) {
-        if ( A == null ) return null;
+        if ( A == null ) {
+            throw new IllegalArgumentException("null A not allowed");
+        }
         return A.remainder(B);
     }
 
@@ -497,7 +505,9 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
      * @return BigInteger[] { q, r } with A = q B + r and 0 &le; r &lt; |B|
      */
     public static BigInteger[] IQR(BigInteger A, BigInteger B) {
-        if ( A == null ) return null;
+        if ( A == null ) {
+            throw new IllegalArgumentException("null A not allowed");
+        }
         return A.quotientRemainder(B);
     }
 
@@ -568,7 +578,9 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
      * @return gcd(A,B).
      */
     public static BigInteger IGCD(BigInteger A, BigInteger B) {
-        if ( A == null ) return null;
+        if ( A == null ) {
+            throw new IllegalArgumentException("null A not allowed");
+        }
         return A.gcd(B);
     }
 
@@ -620,7 +632,9 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
      * @return A*B.
      */
     public static BigInteger IPROD(BigInteger A, BigInteger B) {
-        if ( A == null ) return null;
+        if ( A == null ) {
+            throw new IllegalArgumentException("null A not allowed");
+        }
         return A.multiply(B);
     }
 
@@ -640,7 +654,9 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
      * @return A+B.
      */
     public static BigInteger ISUM(BigInteger A, BigInteger B) {
-        if ( A == null ) return null;
+        if ( A == null ) {
+            throw new IllegalArgumentException("null A not allowed");
+        }
         return A.sum(B);
     }
 
