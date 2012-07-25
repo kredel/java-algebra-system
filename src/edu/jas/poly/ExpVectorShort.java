@@ -648,7 +648,6 @@ public class ExpVectorShort extends ExpVector
      * @param V
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
-    //@Override
     @Override
     public int compareTo(ExpVector V) {
         return this.invLexCompareTo(V);

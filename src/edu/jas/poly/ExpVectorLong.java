@@ -570,8 +570,8 @@ public class ExpVectorLong extends ExpVector
      * @param V
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
-    //@Override
-    public int compareTo(ExpVectorLong V) {
+    @Override
+    public int compareTo(ExpVector V) {
         return this.invLexCompareTo(V);
     }
 
