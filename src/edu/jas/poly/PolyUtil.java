@@ -3085,9 +3085,9 @@ class CoeffToRecAlg<C extends GcdRingElem<C>> implements UnaryFunctor<C, Algebra
         }
         AlgebraicNumberRing<C> afac = fac;
         this.depth = depth;
-        lfac = new ArrayList<AlgebraicNumberRing<C>>(depth);
+        lfac = new ArrayList<AlgebraicNumberRing<C>>(this.depth);
         lfac.add(fac);
-        for (int i = 1; i < depth; i++) {
+        for (int i = 1; i < this.depth; i++) {
             RingFactory<C> rf = afac.ring.coFac;
             if (!(rf instanceof AlgebraicNumberRing)) {
                 throw new IllegalArgumentException("fac depth to low");

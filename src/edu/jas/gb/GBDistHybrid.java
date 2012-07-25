@@ -87,8 +87,8 @@ public class GBDistHybrid<C extends RingElem<C>> {
             this.mfile = mfile;
         }
         this.port = port;
-        bbd = new GroebnerBaseDistributedHybrid<C>(threads, threadsPerNode, pl, port);
-        dtp = new DistThreadPool(threads, mfile);
+        bbd = new GroebnerBaseDistributedHybrid<C>(threads, threadsPerNode, pl, this.port);
+        dtp = new DistThreadPool(threads, this.mfile); // findbugs
     }
 
 

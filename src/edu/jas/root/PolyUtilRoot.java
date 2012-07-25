@@ -238,9 +238,9 @@ class CoeffToRecReAlg<C extends GcdRingElem<C> & Rational> implements UnaryFunct
         }
         RealAlgebraicRing<C> afac = fac;
         this.depth = depth;
-        lfac = new ArrayList<RealAlgebraicRing<C>>(depth);
+        lfac = new ArrayList<RealAlgebraicRing<C>>(this.depth);
         lfac.add(fac);
-        for (int i = 1; i < depth; i++) {
+        for (int i = 1; i < this.depth; i++) {
             RingFactory<C> rf = afac.algebraic.ring.coFac;
             if (!(rf instanceof RealAlgebraicRing)) {
                 throw new IllegalArgumentException("fac depth to low");

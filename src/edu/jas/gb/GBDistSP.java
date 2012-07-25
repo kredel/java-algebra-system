@@ -66,8 +66,8 @@ public class GBDistSP<C extends RingElem<C>> {
             this.mfile = mfile;
         }
         this.port = port;
-        bbd = new GroebnerBaseSeqPairDistributed<C>(threads, port);
-        dtp = new DistThreadPool(threads, mfile);
+        bbd = new GroebnerBaseSeqPairDistributed<C>(threads, this.port);
+        dtp = new DistThreadPool(threads, this.mfile);
     }
 
 

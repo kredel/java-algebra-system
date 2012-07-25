@@ -77,8 +77,8 @@ public class GBDist<C extends RingElem<C>> {
             this.mfile = mfile;
         }
         this.port = port;
-        bbd = new GroebnerBaseDistributed<C>(threads, pl, port);
-        dtp = new DistThreadPool(threads, mfile);
+        bbd = new GroebnerBaseDistributed<C>(threads, pl, this.port);
+        dtp = new DistThreadPool(threads, this.mfile); // findbugs
     }
 
 
