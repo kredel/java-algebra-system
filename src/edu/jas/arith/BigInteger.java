@@ -30,7 +30,7 @@ public final class BigInteger implements GcdRingElem<BigInteger>,
 
     /** The data structure. 
      */
-    protected final java.math.BigInteger val;
+    public final java.math.BigInteger val;
 
 
     private final static Random random = new Random();

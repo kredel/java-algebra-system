@@ -37,21 +37,14 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
     /**
      * Numerator part of the data structure.
      */
-    protected final BigInteger num;
+    public final BigInteger num;
 
 
     /**
      * Denominator part of the data structure.
      */
-    protected final BigInteger den;
+    public final BigInteger den;
 
-
-    /* from history: 
-    private final static BigInteger IZERO = BigInteger.ZERO;
-
-
-    private final static BigInteger IONE = BigInteger.ONE;
-    */
 
     /**
      * The Constant 0.

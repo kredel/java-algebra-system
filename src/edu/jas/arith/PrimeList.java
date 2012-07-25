@@ -43,13 +43,13 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
     /**
      * The list of probable primes in requested range.
      */
-    protected List<java.math.BigInteger> val = null;
+    private List<java.math.BigInteger> val = null;
 
 
     /**
      * The last prime in the list.
      */
-    protected java.math.BigInteger last;
+    private java.math.BigInteger last;
 
 
     /**

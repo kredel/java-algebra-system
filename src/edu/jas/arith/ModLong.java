@@ -27,7 +27,7 @@ public final class ModLong implements GcdRingElem<ModLong>, Modular {
     /**
      * Value part of the element data structure.
      */
-    protected final long val;
+    public final long val;
 
 
     /**

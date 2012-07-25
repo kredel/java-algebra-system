@@ -33,11 +33,11 @@ public final class BigComplex implements StarRingElem<BigComplex>,
 
     /** Real part of the data structure. 
       */
-    protected final BigRational re;
+    public final BigRational re;
 
     /** Imaginary part of the data structure. 
       */
-    protected final BigRational im;
+    public final BigRational im;
 
     private final static Random random = new Random();
 

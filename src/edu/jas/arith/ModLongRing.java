@@ -37,13 +37,13 @@ public final class ModLongRing implements ModularRingFactory<ModLong>, Iterable<
     /**
      * Indicator if this ring is a field.
      */
-    protected int isField = -1; // initially unknown
+    private int isField = -1; // initially unknown
 
 
     /**
      * Certainty if module is probable prime.
      */
-    protected int certainty = 10;
+    private int certainty = 10;
 
 
     /**

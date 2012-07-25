@@ -27,7 +27,7 @@ public final class ModInteger implements GcdRingElem<ModInteger>, Modular {
 
     /** Value part of the element data structure. 
      */
-    protected final java.math.BigInteger val;
+    public final java.math.BigInteger val;
 
 
     /** The constructor creates a ModInteger object 
