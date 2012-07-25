@@ -18,8 +18,7 @@ import edu.jas.poly.GenPolynomial;
  * @param <C> coefficient type
  * @author Heinz Kredel.
  */
-public class CriticalPair<C extends RingElem<C> > extends AbstractPair<C>
-             implements Serializable {
+public class CriticalPair<C extends RingElem<C> > extends AbstractPair<C> {
 
     protected volatile boolean inReduction;
     protected volatile GenPolynomial<C> reductum;

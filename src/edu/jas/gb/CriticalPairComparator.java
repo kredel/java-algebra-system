@@ -24,7 +24,7 @@ public class CriticalPairComparator<C extends RingElem<C> >
 
 
     public final TermOrder tord;
-    protected final Comparator<ExpVector> ec;
+    protected final TermOrder.EVComparator ec;
 
 
     /**

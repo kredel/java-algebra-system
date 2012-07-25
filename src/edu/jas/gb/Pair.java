@@ -18,7 +18,7 @@ import edu.jas.poly.GenPolynomial;
  * @author Heinz Kredel.
  */
 public class Pair<C extends RingElem<C> > extends AbstractPair<C>
-             implements Serializable, Comparable<Pair> {
+             implements Comparable<Pair> {
 
     protected int n;
     protected boolean toZero = false;

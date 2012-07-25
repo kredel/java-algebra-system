@@ -87,8 +87,8 @@ class PowerSetIterator<E> implements Iterator<List<E>> {
             return;
         }
         mode = Mode.copy;
-        current = set.get(0);
-        rest = new LinkedList<E>(set);
+        current = this.set.get(0);
+        rest = new LinkedList<E>(this.set);
         rest.remove(0);
         recIter = new PowerSetIterator<E>(rest);
     }

@@ -36,10 +36,10 @@ public class KsubSet<E> implements Iterable<List<E>> {
         if (set == null) {
             throw new IllegalArgumentException("null set not allowed");
         }
-        this.set = set;
         if (k < 0 || k > set.size()) {
             throw new IllegalArgumentException("k out of range");
         }
+        this.set = set;
         this.k = k;
     }
 
@@ -98,15 +98,15 @@ class KsubSetIterator<E> implements Iterator<List<E>> {
         if (set == null || set.size() == 0) {
             throw new IllegalArgumentException("null or empty set not allowed");
         }
-        this.set = set;
         if (k < 2 || k > set.size()) {
             throw new IllegalArgumentException("k out of range");
         }
+        this.set = set;
         this.k = k;
-        iter = set.iterator();
+        iter = this.set.iterator();
         current = iter.next();
         //System.out.println("current = " + current);
-        rest = new LinkedList<E>(set);
+        rest = new LinkedList<E>(this.set);
         rest.remove(0);
         //System.out.println("rest = " + rest);
         if (k == 2) {
@@ -191,7 +191,7 @@ class OneSubSetIterator<E> implements Iterator<List<E>> {
             iter = null;
             return;
         }
-        iter = set.iterator();
+        iter = this.set.iterator();
     }
 
 

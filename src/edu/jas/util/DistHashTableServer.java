@@ -157,7 +157,7 @@ public class DistHashTableServer<K> extends Thread {
                             Iterator<Entry<K, DHTTransport>> it = theList.entrySet().iterator();
                             for (int i = 0; i < ls; i++) {
                                 e = it.next();
-                                n = e.getKey();
+                                // n = e.getKey(); // findbugs, already in tc
                                 tc = e.getValue();
                                 //DHTTransport tc = (DHTTransport) o;                             
                                 try {
