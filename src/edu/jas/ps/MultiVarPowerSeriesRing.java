@@ -225,7 +225,8 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
         if (vars == null) {
             return "#" + nvar;
         }
-        return Arrays.toString(vars);
+        return ExpVector.varsToString(vars);
+        //return Arrays.toString(vars);
     }
 
 

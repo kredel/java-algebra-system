@@ -332,6 +332,26 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
     }
 
 
+    /** Get the string representation of the variables.
+     * @param vars names of variables.
+     * @return string representation of the variables.
+     * @see java.util.Arrays#toString()
+     */
+    public static String varsToString(String[] vars) {
+        if ( vars == null ) {
+            return "null";
+        }
+        StringBuffer s = new StringBuffer();
+        for (int i = 0; i < vars.length; i++ ) {
+            s.append( vars[i] );
+            if ( i < vars.length-1 ) {
+               s.append(",");
+            }
+        }
+        return s.toString();
+    }
+
+
     /** Get a scripting compatible string representation.
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
