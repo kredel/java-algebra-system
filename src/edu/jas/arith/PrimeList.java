@@ -34,10 +34,10 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
     /**
      * Cache the val list for different size
      */
-    private static List<java.math.BigInteger> SMALL_LIST = null;
-    private static List<java.math.BigInteger> MEDIUM_LIST = null;
-    private static List<java.math.BigInteger> LARGE_LIST = null;
-    private static List<java.math.BigInteger> MERSENNE_LIST = null;
+    private volatile static List<java.math.BigInteger> SMALL_LIST = null;
+    private volatile static List<java.math.BigInteger> MEDIUM_LIST = null;
+    private volatile static List<java.math.BigInteger> LARGE_LIST = null;
+    private volatile static List<java.math.BigInteger> MERSENNE_LIST = null;
 
 
     /**

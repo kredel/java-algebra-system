@@ -54,10 +54,8 @@ public class GBProxy<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C> {
     public GBProxy(GroebnerBaseAbstract<C> e1, GroebnerBaseAbstract<C> e2) {
         this.e1 = e1;
         this.e2 = e2;
-        if (pool == null) {
-            pool = ComputerThreads.getPool();
-            //System.out.println("pool 2 = "+pool);
-        }
+        pool = ComputerThreads.getPool();
+        //System.out.println("pool 2 = "+pool);
     }
 
 

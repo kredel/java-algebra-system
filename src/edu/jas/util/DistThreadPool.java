@@ -271,7 +271,7 @@ public class DistThreadPool /*extends ThreadPool*/{
         logger.debug("adding job");
         if (idleworkers > 0) {
             logger.debug("notifying a jobless worker");
-            notify();
+            notifyAll(); // findbugs
         }
     }
 
