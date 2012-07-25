@@ -371,9 +371,9 @@ public class SyzygyAbstract<C extends GcdRingElem<C>> implements Syzygy<C> {
      * @return syz(F), a basis for the module of syzygies for F.
      */
     public List<List<GenPolynomial<C>>> zeroRelationsArbitrary(int modv, List<GenPolynomial<C>> F) {
-
         if (F == null) {
-            return zeroRelations(modv, F);
+            return new ArrayList<List<GenPolynomial<C>>>();
+            //return zeroRelations(modv, F);
         }
         if (F.size() <= 1) {
             return zeroRelations(modv, F);

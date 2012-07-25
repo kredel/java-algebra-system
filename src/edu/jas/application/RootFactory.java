@@ -189,11 +189,9 @@ public class RootFactory {
         //System.out.println("su = " + su);
         GenPolynomial<C> re = PolyUtil.<C> realPartFromComplex(rfac, su);
         GenPolynomial<C> im = PolyUtil.<C> imaginaryPartFromComplex(rfac, su);
-        if ( debug || true ) {
+        if ( debug ) {
             logger.debug("rfac = " + rfac.toScript());
-            logger.info("t  = " + t);
-            logger.info("re = " + re.toScript());
-            logger.info("im = " + im.toScript());
+            logger.debug("t  = " + t + ", re = " + re.toScript() + ", im = " + im.toScript());
         }
         List<GenPolynomial<C>> li = new ArrayList<GenPolynomial<C>>(2);
         li.add(re);

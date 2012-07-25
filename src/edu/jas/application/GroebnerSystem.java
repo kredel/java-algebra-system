@@ -200,8 +200,8 @@ public class GroebnerSystem<C extends GcdRingElem<C>> {
         }
         // assure conditions are collected
         List<Condition<C>> unused = getConditions();
-        if ( unused == null ) { // use for findbugs
-            logger.info("unused is null");
+        if ( unused.isEmpty() ) { // use for findbugs
+            logger.info("unused is empty");
         }
         // combine for CGB
         Set<GenPolynomial<GenPolynomial<C>>> Gs 
