@@ -5,6 +5,7 @@
 package edu.jas.ps;
 
 
+import java.io.Serializable;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,7 +23,7 @@ import edu.jas.structure.RingElem;
  * @author Heinz Kredel
  */
 
-public abstract class MultiVarCoefficients<C extends RingElem<C>> {
+public abstract class MultiVarCoefficients<C extends RingElem<C>> implements Serializable {
 
 
     /**

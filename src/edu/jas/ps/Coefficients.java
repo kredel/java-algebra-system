@@ -5,6 +5,7 @@
 package edu.jas.ps;
 
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 import edu.jas.structure.RingElem;
@@ -17,7 +18,7 @@ import edu.jas.structure.RingElem;
  * @author Heinz Kredel
  */
 
-public abstract class Coefficients<C extends RingElem<C>> {
+public abstract class Coefficients<C extends RingElem<C>> implements Serializable {
 
 
     /**
