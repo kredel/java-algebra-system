@@ -17,7 +17,7 @@ import edu.jas.structure.GcdRingElem;
  * Container for Ideals together with univariate polynomials and real roots.
  * @author Heinz Kredel
  */
-public class IdealWithRealRoots<C extends GcdRingElem<C>> extends IdealWithUniv<C> implements Serializable {
+public class IdealWithRealRoots<C extends GcdRingElem<C>> extends IdealWithUniv<C> {
 
 
     /**

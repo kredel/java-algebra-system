@@ -25,7 +25,7 @@ import edu.jas.structure.RingElem;
  * @author Heinz Kredel
  */
 public class IdealWithComplexAlgebraicRoots<D extends GcdRingElem<D> & Rational>
-        extends IdealWithUniv<D> implements Serializable {
+        extends IdealWithUniv<D> {
 
 
     /**
