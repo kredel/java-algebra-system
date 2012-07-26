@@ -28,7 +28,7 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational> implements
     /*
      * Representing Residue, unused.
      */
-    private Residue<C> numberRes;
+    //private Residue<C> numberRes;
 
 
     /**

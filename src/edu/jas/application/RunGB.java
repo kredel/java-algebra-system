@@ -7,18 +7,13 @@ package edu.jas.application;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.StringReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.StringReader;
 import java.util.List;
 
 import org.apache.log4j.BasicConfigurator;
 
-import edu.jas.kern.ComputerThreads;
-import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.GenPolynomialTokenizer;
-import edu.jas.poly.PolynomialList;
-import edu.jas.util.ExecutableServer;
 import edu.jas.gb.GBDist;
 import edu.jas.gb.GBDistHybrid;
 import edu.jas.gb.GroebnerBaseAbstract;
@@ -28,7 +23,12 @@ import edu.jas.gb.OrderedSyzPairlist;
 import edu.jas.gb.ReductionPar;
 import edu.jas.gb.ReductionSeq;
 import edu.jas.gbufd.GBFactory;
+import edu.jas.kern.ComputerThreads;
+import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.GenPolynomialTokenizer;
+import edu.jas.poly.PolynomialList;
 import edu.jas.util.CatReader;
+import edu.jas.util.ExecutableServer;
 
 
 /**
@@ -58,8 +58,8 @@ public class RunGB {
         BasicConfigurator.configure();
 
         String usage = "Usage: RunGB "
-            + "[ seq | seq+ | par | par+ | dist | dist1 | dist+ | dist1+ | disthyb1 | cli [port] ] "
-            + "<file> " + "#procs/#threadsPerNode " + "[machinefile] <check>";
+                        + "[ seq | seq+ | par | par+ | dist | dist1 | dist+ | dist1+ | disthyb1 | cli [port] ] "
+                        + "<file> " + "#procs/#threadsPerNode " + "[machinefile] <check>";
         if (args.length < 1) {
             System.out.println(usage);
             return;
@@ -68,7 +68,7 @@ public class RunGB {
         boolean pairseq = false;
         String kind = args[0];
         String[] allkinds = new String[] { "seq", "seq+", "par", "par+", "dist", "dist1", "dist+", "dist1+",
-                                           "disthyb1", "cli" };
+                "disthyb1", "cli" };
         boolean sup = false;
         for (int i = 0; i < allkinds.length; i++) {
             if (kind.equals(allkinds[i])) {
@@ -83,7 +83,7 @@ public class RunGB {
             return;
         }
 
-        boolean once = false;
+        //boolean once = false;
         final int GB_SERVER_PORT = 7114;
         //inal int EX_CLIENT_PORT = GB_SERVER_PORT + 1000; 
         int port = GB_SERVER_PORT;
@@ -111,8 +111,8 @@ public class RunGB {
             filename = args[1];
         }
 
-        for ( int i = 0; i < args.length; i++ ) {
-            if ( args[i].equals("check") ) {
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("check")) {
                 doCheck = true;
             }
         }
@@ -174,11 +174,11 @@ public class RunGB {
             e.printStackTrace();
             return;
         }
-        Reader polyreader = new CatReader(new StringReader("("),problem); // ( has gone
-        GenPolynomialTokenizer tok = new GenPolynomialTokenizer(pfac,polyreader);
+        Reader polyreader = new CatReader(new StringReader("("), problem); // ( has gone
+        GenPolynomialTokenizer tok = new GenPolynomialTokenizer(pfac, polyreader);
         PolynomialList S = null;
         try {
-            S = new PolynomialList(pfac,tok.nextPolynomialList());
+            S = new PolynomialList(pfac, tok.nextPolynomialList());
         } catch (IOException e) {
             e.printStackTrace();
             return;
@@ -210,7 +210,7 @@ public class RunGB {
         long t, t1;
 
         t = System.currentTimeMillis();
-        System.out.println("\nGroebner base distributed (" + threads + ", " + mfile + ", " + port +  ") ...");
+        System.out.println("\nGroebner base distributed (" + threads + ", " + mfile + ", " + port + ") ...");
         GBDist gbd = null;
         GBDist gbds = null;
         if (pairseq) {
@@ -253,7 +253,8 @@ public class RunGB {
         long t, t1;
 
         t = System.currentTimeMillis();
-        System.out.println("\nGroebner base distributed[once] (" + threads + ", " + mfile + ", " + port +  ") ...");
+        System.out.println("\nGroebner base distributed[once] (" + threads + ", " + mfile + ", " + port
+                        + ") ...");
         GBDist gbd = null;
         GBDist gbds = null;
         if (pairseq) {
@@ -291,15 +292,16 @@ public class RunGB {
 
     @SuppressWarnings("unchecked")
     static void runMasterOnceHyb(PolynomialList S, int threads, int threadsPerNode, String mfile, int port,
-                                 boolean pairseq) {
+                    boolean pairseq) {
         List L = S.list;
         List G = null;
         long t, t1;
 
         t = System.currentTimeMillis();
-        System.out.println("\nGroebner base distributed hybrid[once] (" + threads + "/" + threadsPerNode + ", " + mfile + ", " + port +  ") ...");
+        System.out.println("\nGroebner base distributed hybrid[once] (" + threads + "/" + threadsPerNode
+                        + ", " + mfile + ", " + port + ") ...");
         GBDistHybrid gbd = null;
-        GBDistHybrid gbds = null; 
+        GBDistHybrid gbds = null;
         if (pairseq) {
             //System.out.println("... not implemented.");
             //return;
@@ -310,7 +312,7 @@ public class RunGB {
         }
         t1 = System.currentTimeMillis();
         if (pairseq) {
-            G = gbds.execute( L );
+            G = gbds.execute(L);
         } else {
             G = gbd.execute(L);
         }
@@ -330,14 +332,15 @@ public class RunGB {
         } else {
             System.out.print("d ");
         }
-        System.out.println("= " + threads + ", ppn = " + threadsPerNode + ", time = " + t + " milliseconds, " + (t - t1) + " start-up");
+        System.out.println("= " + threads + ", ppn = " + threadsPerNode + ", time = " + t + " milliseconds, "
+                        + (t - t1) + " start-up");
         checkGB(S);
         System.out.println("");
     }
 
 
     static void runClient(int port) {
-        System.out.println("\nGroebner base distributed client (" + port +  ") ...");
+        System.out.println("\nGroebner base distributed client (" + port + ") ...");
 
         ExecutableServer es = new ExecutableServer(port);
         es.init();
@@ -353,7 +356,7 @@ public class RunGB {
         GroebnerBaseAbstract bbs = null;
         if (pairseq) {
             //bbs = new GroebnerBaseSeqPairParallel(threads);
-            bbs = new GroebnerBaseParallel(threads,new ReductionPar(),new OrderedSyzPairlist());
+            bbs = new GroebnerBaseParallel(threads, new ReductionPar(), new OrderedSyzPairlist());
         } else {
             bb = new GroebnerBaseParallel(threads);
         }
@@ -394,7 +397,7 @@ public class RunGB {
         GroebnerBaseAbstract bb = null;
         if (pairseq) {
             //bb = new GroebnerBaseSeqPairSeq();
-            bb = new GroebnerBaseSeq(new ReductionSeq(),new OrderedSyzPairlist());
+            bb = new GroebnerBaseSeq(new ReductionSeq(), new OrderedSyzPairlist());
         } else {
             bb = new GroebnerBaseSeq();
         }
@@ -417,7 +420,7 @@ public class RunGB {
 
 
     static void checkGB(PolynomialList S) {
-        if ( !doCheck ) {
+        if (!doCheck) {
             return;
         }
         GroebnerBaseAbstract bb = GBFactory.getImplementation(S.ring.coFac);

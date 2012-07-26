@@ -30,17 +30,17 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
-import edu.jas.root.Rectangle;
-import edu.jas.root.InvalidBoundaryException;
+import edu.jas.root.ComplexRoots;
 import edu.jas.root.ComplexRootsAbstract;
 import edu.jas.root.ComplexRootsSturm;
-import edu.jas.root.ComplexRoots;
 import edu.jas.root.Interval;
+import edu.jas.root.InvalidBoundaryException;
 import edu.jas.root.RealAlgebraicNumber;
 import edu.jas.root.RealAlgebraicRing;
-import edu.jas.root.RealRootsAbstract;
 import edu.jas.root.RealRootTuple;
+import edu.jas.root.RealRootsAbstract;
 import edu.jas.root.RealRootsSturm;
+import edu.jas.root.Rectangle;
 import edu.jas.root.RootFactory;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingElem;
@@ -432,7 +432,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
         for (GenPolynomial<D> p : univs) {
             GenPolynomialRing<Complex<D>> pfac = new GenPolynomialRing<Complex<D>>(cr, p.ring);
             //System.out.println("pfac = " + pfac.toScript());
-            GenPolynomial<Complex<D>> cp = PolyUtil.<D> toComplex(pfac, (GenPolynomial<D>) p);
+            GenPolynomial<Complex<D>> cp = PolyUtil.<D> toComplex(pfac, p);
             cunivs.add(cp);
             //System.out.println("cp = " + cp);
         }
@@ -501,8 +501,8 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * @param eps desired precision.
      * @return list of coordinates of real roots for ideal(G)
      */
-    public static <D extends GcdRingElem<D> & Rational> List<List<BigDecimal>> realRootTuples(
-                    Ideal<D> I, D eps) {
+    public static <D extends GcdRingElem<D> & Rational> List<List<BigDecimal>> realRootTuples(Ideal<D> I,
+                    D eps) {
         List<GenPolynomial<D>> univs = I.constructUnivariate();
         if (logger.isInfoEnabled()) {
             logger.info("univs = " + univs);
@@ -518,13 +518,13 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * @param eps desired precision.
      * @return list of coordinates of real roots for ideal(G)
      */
-    public static <D extends GcdRingElem<D> & Rational> List<List<BigDecimal>> realRoots(
-                    Ideal<D> I, List<GenPolynomial<D>> univs, D eps) {
+    public static <D extends GcdRingElem<D> & Rational> List<List<BigDecimal>> realRoots(Ideal<D> I,
+                    List<GenPolynomial<D>> univs, D eps) {
         List<List<BigDecimal>> roots = new ArrayList<List<BigDecimal>>();
         //RingFactory<D> cf = (RingFactory<D>) I.list.ring.coFac;
         RealRootsAbstract<D> rra = new RealRootsSturm<D>();
         for (int i = 0; i < I.list.ring.nvar; i++) {
-            List<BigDecimal> rri = rra.approximateRoots((GenPolynomial<D>) univs.get(i), eps);
+            List<BigDecimal> rri = rra.approximateRoots(univs.get(i), eps);
             //System.out.println("rri = " + rri);
             roots.add(rri);
         }
@@ -577,8 +577,8 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * @param eps desired precision.
      * @return list of ideals with coordinates of real roots for ideal(G)
      */
-    public static <D extends GcdRingElem<D> & Rational> List<IdealWithRealRoots<D>> realRoots(
-                    Ideal<D> G, D eps) {
+    public static <D extends GcdRingElem<D> & Rational> List<IdealWithRealRoots<D>> realRoots(Ideal<D> G,
+                    D eps) {
         List<IdealWithUniv<D>> Il = G.zeroDimDecomposition();
         return realRoots(Il, eps);
     }
@@ -736,7 +736,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
                 }
             } else { // depi.length == 2
                 // select roots of the ideal I
-                GenPolynomial<D> pip2 = PolyUtil.<D>removeUnusedUpperVariables(pip);
+                GenPolynomial<D> pip2 = PolyUtil.<D> removeUnusedUpperVariables(pip);
                 //System.out.println("pip2 = " + pip2.ring);
                 GenPolynomialRing<D> ufac = pip2.ring.contract(1);
                 TermOrder to = new TermOrder(TermOrder.INVLEX);
@@ -777,7 +777,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
             ran = rn;
         }
         if (logger.isInfoEnabled()) {
-            for ( List<RealAlgebraicNumber<D>> rz : ran ) {
+            for (List<RealAlgebraicNumber<D>> rz : ran) {
                 List<Interval<D>> il = new ArrayList<Interval<D>>();
                 for (RealAlgebraicNumber<D> rr : rz) {
                     il.add(rr.ring.getRoot());
@@ -798,8 +798,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
      */
     public static <D extends GcdRingElem<D> & Rational> List<IdealWithRealAlgebraicRoots<D>> realAlgebraicRoots(
                     List<IdealWithUniv<D>> I) {
-        List<IdealWithRealAlgebraicRoots<D>> lir = new ArrayList<IdealWithRealAlgebraicRoots<D>>(
-                        I.size());
+        List<IdealWithRealAlgebraicRoots<D>> lir = new ArrayList<IdealWithRealAlgebraicRoots<D>>(I.size());
         for (IdealWithUniv<D> iu : I) {
             IdealWithRealAlgebraicRoots<D> iur = PolyUtilApp.<D> realAlgebraicRoots(iu);
             //System.out.println("iur = " + iur);
@@ -813,12 +812,12 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * Construct complex roots for zero dimensional ideal(G).
      * @param I zero dimensional ideal with univariate irreducible polynomials
      *            and bi-variate polynomials.
-     * @return complex algebraic roots for ideal(G)
-     * <b>Note:</b> implementation contains errors, do not use.
+     * @return complex algebraic roots for ideal(G) <b>Note:</b> implementation
+     *         contains errors, do not use.
      */
     public static <D extends GcdRingElem<D> & Rational> IdealWithComplexAlgebraicRoots<D> complexAlgebraicRootsWrong( // Wrong
                     IdealWithUniv<D> I) {
-        List<List<Complex<edu.jas.application.RealAlgebraicNumber<D>>>> can; 
+        List<List<Complex<edu.jas.application.RealAlgebraicNumber<D>>>> can;
         can = new ArrayList<List<Complex<edu.jas.application.RealAlgebraicNumber<D>>>>();
         if (I == null) {
             throw new IllegalArgumentException("null ideal not permitted");
@@ -865,7 +864,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
             }
         }
         for (Complex<edu.jas.application.RealAlgebraicNumber<D>> cr : cra) {
-            List<Complex<edu.jas.application.RealAlgebraicNumber<D>>> cl; 
+            List<Complex<edu.jas.application.RealAlgebraicNumber<D>>> cl;
             cl = new ArrayList<Complex<edu.jas.application.RealAlgebraicNumber<D>>>();
             cl.add(cr);
             can.add(cl);
@@ -875,7 +874,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
         }
         // case i > 0:
         for (int i = 1; i < I.upolys.size(); i++) {
-            List<List<Complex<edu.jas.application.RealAlgebraicNumber<D>>>> cn; 
+            List<List<Complex<edu.jas.application.RealAlgebraicNumber<D>>>> cn;
             cn = new ArrayList<List<Complex<edu.jas.application.RealAlgebraicNumber<D>>>>();
             GenPolynomial<D> pi = I.upolys.get(i);
             GenPolynomial<D> pip = PolyUtil.selectWithVariable(I.ideal.list.list, fac.nvar - 1 - i);
@@ -908,7 +907,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
                     //System.out.println("cr.ring = " + cr.ring);
                     for (List<Complex<edu.jas.application.RealAlgebraicNumber<D>>> cx : can) {
                         //System.out.println("cx = " + cx);
-                        List<Complex<edu.jas.application.RealAlgebraicNumber<D>>> cy; 
+                        List<Complex<edu.jas.application.RealAlgebraicNumber<D>>> cy;
                         cy = new ArrayList<Complex<edu.jas.application.RealAlgebraicNumber<D>>>();
                         cy.addAll(cx);
                         cy.add(cr);
@@ -926,7 +925,8 @@ public class PolyUtilApp<C extends RingElem<C>> {
                 //System.out.println("pip2c = " + pip2c);
                 GenPolynomialRing<GenPolynomial<Complex<D>>> rcfac;
                 rcfac = new GenPolynomialRing<GenPolynomial<Complex<D>>>(ucfac, rfac);
-                GenPolynomial<GenPolynomial<Complex<D>>> pip2cr = PolyUtil.<Complex<D>> recursive(rcfac,pip2c);
+                GenPolynomial<GenPolynomial<Complex<D>>> pip2cr = PolyUtil.<Complex<D>> recursive(rcfac,
+                                pip2c);
                 //System.out.println("pip2cr = " + pip2cr);
 
                 int ix = fac.nvar - 1 - depi[depi.length - 1];
@@ -939,24 +939,24 @@ public class PolyUtilApp<C extends RingElem<C>> {
                     Interval<D> vr = rlist.get(0).ring.getRoot();
                     Interval<D> vi = rlist.get(1).ring.getRoot();
                     logger.info("vr = " + vr + ", vi = " + vi);
-                    if ( vr.length().isZERO() ) {
+                    if (vr.length().isZERO()) {
                         D e = vr.left.factory().parse("1/2");
                         D m = vr.left; //middle();
-                        vr = new Interval<D>(m.subtract(e),m.sum(e));
+                        vr = new Interval<D>(m.subtract(e), m.sum(e));
                         logger.info("|vr| == 0: " + vr);
                     }
-                    if ( vi.length().isZERO() ) {
+                    if (vi.length().isZERO()) {
                         D e = vi.left.factory().parse("1/2");
                         D m = vi.left; //middle();
-                        vi = new Interval<D>(m.subtract(e),m.sum(e));
+                        vi = new Interval<D>(m.subtract(e), m.sum(e));
                         logger.info("|vi| == 0: " + vi);
                     }
                     Complex<D> sw = new Complex<D>(ccfac, vr.left, vi.left);
                     Complex<D> ne = new Complex<D>(ccfac, vr.right, vi.right);
-                    logger.info("sw   = " + toString1(sw)   + ", ne   = " + toString1(ne));
+                    logger.info("sw   = " + toString1(sw) + ", ne   = " + toString1(ne));
                     GenPolynomial<Complex<D>> pip2cesw, pip2cene;
-                    pip2cesw = PolyUtil.<Complex<D>> evaluateMainRecursive(ucfac,pip2cr,sw);
-                    pip2cene = PolyUtil.<Complex<D>> evaluateMainRecursive(ucfac,pip2cr,ne);
+                    pip2cesw = PolyUtil.<Complex<D>> evaluateMainRecursive(ucfac, pip2cr, sw);
+                    pip2cene = PolyUtil.<Complex<D>> evaluateMainRecursive(ucfac, pip2cr, ne);
                     GenPolynomialRing<D> upfac = I.upolys.get(ix).ring;
                     GenPolynomialRing<Complex<D>> upcfac = new GenPolynomialRing<Complex<D>>(ccfac, upfac);
                     //System.out.println("upfac = " + upfac);
@@ -976,8 +976,10 @@ public class PolyUtilApp<C extends RingElem<C>> {
                         String vvr = rar.algebraic.ring.getVars()[0];
                         String vvi = rar.algebraic.ring.getVars()[1];
                         String[] vars = new String[] { vvr, vvi };
-                        GenPolynomialRing<Complex<D>> tfac = new GenPolynomialRing<Complex<D>>(ccfac, to, vars);
-                        GenPolynomial<Complex<D>> t = tfac.univariate(1, 1L).sum(tfac.univariate(0, 1L).multiply(ccfac.getIMAG()));
+                        GenPolynomialRing<Complex<D>> tfac = new GenPolynomialRing<Complex<D>>(ccfac, to,
+                                        vars);
+                        GenPolynomial<Complex<D>> t = tfac.univariate(1, 1L).sum(
+                                        tfac.univariate(0, 1L).multiply(ccfac.getIMAG()));
                         //System.out.println("t  = " + t); // t = x + i y
                         GenPolynomialRing<D> rtfac = new GenPolynomialRing<D>(cfac, tfac);
                         GenPolynomial<Complex<D>> su;
@@ -1009,7 +1011,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
                         int snei = imne.signum();
                         //System.out.println("sswr = " + sswr + ", sswi = " + sswi);
                         //System.out.println("sner = " + sner + ", snei = " + snei);
-                        if ( (sswr * sner <= 0 && sswi * snei <= 0) ) { // wrong !
+                        if ((sswr * sner <= 0 && sswi * snei <= 0)) { // wrong !
                             logger.info("   hit, cxi = " + toString(cx.get(ix)) + ", cr = " + toString(cr));
                             List<Complex<edu.jas.application.RealAlgebraicNumber<D>>> cy;
                             cy = new ArrayList<Complex<edu.jas.application.RealAlgebraicNumber<D>>>();
@@ -1033,12 +1035,12 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * Construct complex roots for zero dimensional ideal(G).
      * @param I zero dimensional ideal with univariate irreducible polynomials
      *            and bi-variate polynomials.
-     * @return complex algebraic roots for ideal(G)
-     * <b>Note:</b> not jet completed oin all cases.
+     * @return complex algebraic roots for ideal(G) <b>Note:</b> not jet
+     *         completed oin all cases.
      */
     public static <D extends GcdRingElem<D> & Rational> IdealWithComplexAlgebraicRoots<D> complexAlgebraicRoots(
                     IdealWithUniv<D> I) {
-        List<List<Complex<edu.jas.application.RealAlgebraicNumber<D>>>> can; 
+        List<List<Complex<edu.jas.application.RealAlgebraicNumber<D>>>> can;
         can = new ArrayList<List<Complex<edu.jas.application.RealAlgebraicNumber<D>>>>();
         if (I == null) {
             throw new IllegalArgumentException("null ideal not permitted");
@@ -1079,7 +1081,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
         cra = edu.jas.application.RootFactory.<D> complexAlgebraicNumbersSquarefree(p0c);
         logger.info("#roots(p0c) = " + cra.size());
         for (Complex<edu.jas.application.RealAlgebraicNumber<D>> cr : cra) {
-            List<Complex<edu.jas.application.RealAlgebraicNumber<D>>> cl; 
+            List<Complex<edu.jas.application.RealAlgebraicNumber<D>>> cl;
             cl = new ArrayList<Complex<edu.jas.application.RealAlgebraicNumber<D>>>();
             cl.add(cr);
             can.add(cl);
@@ -1089,7 +1091,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
         }
         // case i > 0:
         for (int i = 1; i < I.upolys.size(); i++) {
-            List<List<Complex<edu.jas.application.RealAlgebraicNumber<D>>>> cn; 
+            List<List<Complex<edu.jas.application.RealAlgebraicNumber<D>>>> cn;
             cn = new ArrayList<List<Complex<edu.jas.application.RealAlgebraicNumber<D>>>>();
             GenPolynomial<D> pi = I.upolys.get(i);
             GenPolynomial<D> pip = PolyUtil.selectWithVariable(I.ideal.list.list, fac.nvar - 1 - i);
@@ -1116,7 +1118,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
                     //System.out.println("cr.ring = " + cr.ring);
                     for (List<Complex<edu.jas.application.RealAlgebraicNumber<D>>> cx : can) {
                         //System.out.println("cx = " + cx);
-                        List<Complex<edu.jas.application.RealAlgebraicNumber<D>>> cy; 
+                        List<Complex<edu.jas.application.RealAlgebraicNumber<D>>> cy;
                         cy = new ArrayList<Complex<edu.jas.application.RealAlgebraicNumber<D>>>();
                         cy.addAll(cx);
                         cy.add(cr);
@@ -1135,7 +1137,8 @@ public class PolyUtilApp<C extends RingElem<C>> {
                 GenPolynomial<Complex<D>> pip2c = PolyUtil.<D> complexFromAny(c2fac, pip2);
                 GenPolynomialRing<GenPolynomial<Complex<D>>> rcfac;
                 rcfac = new GenPolynomialRing<GenPolynomial<Complex<D>>>(ucfac, rfac);
-                GenPolynomial<GenPolynomial<Complex<D>>> pip2cr = PolyUtil.<Complex<D>> recursive(rcfac,pip2c);
+                GenPolynomial<GenPolynomial<Complex<D>>> pip2cr = PolyUtil.<Complex<D>> recursive(rcfac,
+                                pip2c);
                 //System.out.println("pip2cr = " + pip2cr);
                 int ix = fac.nvar - 1 - depi[depi.length - 1];
                 //System.out.println("ix = " + ix);
@@ -1149,47 +1152,49 @@ public class PolyUtilApp<C extends RingElem<C>> {
                     Interval<D> vi = rlist.get(1).ring.getRoot();
                     //logger.info("vr = " + vr + ", vi = " + vi);
                     edu.jas.application.RealAlgebraicNumber<D> vrl, vil, vrr, vir;
-                    vrl = new edu.jas.application.RealAlgebraicNumber<D>(cring,vr.left);
-                    vil = new edu.jas.application.RealAlgebraicNumber<D>(cring,vi.left);
-                    vrr = new edu.jas.application.RealAlgebraicNumber<D>(cring,vr.right);
-                    vir = new edu.jas.application.RealAlgebraicNumber<D>(cring,vi.right);
+                    vrl = new edu.jas.application.RealAlgebraicNumber<D>(cring, vr.left);
+                    vil = new edu.jas.application.RealAlgebraicNumber<D>(cring, vi.left);
+                    vrr = new edu.jas.application.RealAlgebraicNumber<D>(cring, vr.right);
+                    vir = new edu.jas.application.RealAlgebraicNumber<D>(cring, vi.right);
                     ComplexRing<edu.jas.application.RealAlgebraicNumber<D>> crr;
                     crr = new ComplexRing<edu.jas.application.RealAlgebraicNumber<D>>(cring);
                     Complex<edu.jas.application.RealAlgebraicNumber<D>> csw, cne;
-                    csw = new Complex<edu.jas.application.RealAlgebraicNumber<D>>(crr,vrl,vil);
-                    cne = new Complex<edu.jas.application.RealAlgebraicNumber<D>>(crr,vrr,vir);
+                    csw = new Complex<edu.jas.application.RealAlgebraicNumber<D>>(crr, vrl, vil);
+                    cne = new Complex<edu.jas.application.RealAlgebraicNumber<D>>(crr, vrr, vir);
                     //logger.info("csw  = " + toString(csw)   + ", cne  = " + toString(cne));
                     Rectangle<edu.jas.application.RealAlgebraicNumber<D>> rec;
-                    rec = new Rectangle<edu.jas.application.RealAlgebraicNumber<D>>(csw,cne);
+                    rec = new Rectangle<edu.jas.application.RealAlgebraicNumber<D>>(csw, cne);
                     //System.out.println("rec = " + rec);
                     for (List<Complex<edu.jas.application.RealAlgebraicNumber<D>>> cx : can) {
                         Complex<edu.jas.application.RealAlgebraicNumber<D>> cax = cx.get(ix);
                         //System.out.println("cax = " + toString(cax));
                         ComplexRing<edu.jas.application.RealAlgebraicNumber<D>> car = cax.ring;
                         //System.out.println("car = " + car);
-                        GenPolynomialRing<Complex<edu.jas.application.RealAlgebraicNumber<D>>> pcrfac; 
-                        pcrfac = new GenPolynomialRing<Complex<edu.jas.application.RealAlgebraicNumber<D>>>(car,rcfac);
-                        GenPolynomial<Complex<edu.jas.application.RealAlgebraicNumber<D>>> pcr; 
-                        pcr = evaluateToComplexRealCoefficients(pcrfac,pip2cr,cax);
+                        GenPolynomialRing<Complex<edu.jas.application.RealAlgebraicNumber<D>>> pcrfac;
+                        pcrfac = new GenPolynomialRing<Complex<edu.jas.application.RealAlgebraicNumber<D>>>(
+                                        car, rcfac);
+                        GenPolynomial<Complex<edu.jas.application.RealAlgebraicNumber<D>>> pcr;
+                        pcr = evaluateToComplexRealCoefficients(pcrfac, pip2cr, cax);
                         //System.out.println("pcr = " + pcr);
                         ComplexRoots<edu.jas.application.RealAlgebraicNumber<D>> rengine;
                         rengine = new ComplexRootsSturm<edu.jas.application.RealAlgebraicNumber<D>>(car);
                         long nr = 0;
                         try {
-                            nr = rengine.complexRootCount(rec,pcr);
+                            nr = rengine.complexRootCount(rec, pcr);
                             //logger.info("rootCount = " + nr);
-                        } catch(InvalidBoundaryException e) {
+                        } catch (InvalidBoundaryException e) {
                             e.printStackTrace();
                         }
-                        if ( nr == 1 ) { // one root
+                        if (nr == 1) { // one root
                             logger.info("   hit, cxi = " + toString(cx.get(ix)) + ", cr = " + toString(cr));
                             List<Complex<edu.jas.application.RealAlgebraicNumber<D>>> cy;
                             cy = new ArrayList<Complex<edu.jas.application.RealAlgebraicNumber<D>>>();
                             cy.addAll(cx);
                             cy.add(cr);
                             cn.add(cy);
-                        } else if ( nr > 1 ) { 
-                            logger.error("to many roots, cxi = " + toString(cx.get(ix)) + ", cr = " + toString(cr));
+                        } else if (nr > 1) {
+                            logger.error("to many roots, cxi = " + toString(cx.get(ix)) + ", cr = "
+                                            + toString(cr));
                         } else { // no root
                             logger.info("no hit, cxi = " + toString(cx.get(ix)) + ", cr = " + toString(cr));
                         }
@@ -1208,11 +1213,12 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * @param c compelx number.
      * @return String representation of c
      */
-    public static <D extends GcdRingElem<D> & Rational> String toString(Complex<edu.jas.application.RealAlgebraicNumber<D>> c) {
+    public static <D extends GcdRingElem<D> & Rational> String toString(
+                    Complex<edu.jas.application.RealAlgebraicNumber<D>> c) {
         edu.jas.application.RealAlgebraicNumber<D> re = c.getRe();
         edu.jas.application.RealAlgebraicNumber<D> im = c.getIm();
         String s = re.decimalMagnitude().toString();
-        if ( !im.isZERO() ) {
+        if (!im.isZERO()) {
             s = s + "i" + im.decimalMagnitude();
         }
         return s;
@@ -1228,7 +1234,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
         D re = c.getRe();
         D im = c.getIm();
         String s = new BigDecimal(re.getRational()).toString();
-        if ( !im.isZERO() ) {
+        if (!im.isZERO()) {
             s = s + "i" + new BigDecimal(im.getRational());
         }
         return s;
@@ -1460,7 +1466,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
         GenPolynomial<AlgebraicNumber<C>> bp = b.modul;
         AlgebraicNumberRing<C> a = (AlgebraicNumberRing<C>) b.ring.coFac;
         GenPolynomial<C> ap = a.modul;
- 
+
         // setup bivariate polynomial ring
         String[] cv = new String[2];
         cv[0] = ap.ring.getVars()[0];
@@ -1584,8 +1590,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * @param A polynomial with Complex coefficients to be converted.
      * @return polynomial with Complex&lt;RealAlgebraicNumber&gt; coefficients.
      */
-    public static <C extends GcdRingElem<C> & Rational> 
-      GenPolynomial<Complex<edu.jas.application.RealAlgebraicNumber<C>>> convertToComplexRealCoefficients(
+    public static <C extends GcdRingElem<C> & Rational> GenPolynomial<Complex<edu.jas.application.RealAlgebraicNumber<C>>> convertToComplexRealCoefficients(
                     GenPolynomialRing<Complex<edu.jas.application.RealAlgebraicNumber<C>>> pfac,
                     GenPolynomial<Complex<C>> A) {
         ComplexRing<edu.jas.application.RealAlgebraicNumber<C>> afac;
@@ -1600,16 +1605,18 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * polynomial with Complex&lt;RealAlgebraicNumber&gt; coefficients, C is
      * e.g. BigRational.
      * @param pfac result polynomial factory.
-     * @param A = A(x,Y) a recursive polynomial with GenPolynomial&lt;Complex&gt; coefficients to be converted.
+     * @param A = A(x,Y) a recursive polynomial with
+     *            GenPolynomial&lt;Complex&gt; coefficients to be converted.
      * @param r Complex&lt;RealAlgebraicNumber&gt; to be evaluated at.
-     * @return A(r,Y), a polynomial with Complex&lt;RealAlgebraicNumber&gt; coefficients.
+     * @return A(r,Y), a polynomial with Complex&lt;RealAlgebraicNumber&gt;
+     *         coefficients.
      */
-    public static <C extends GcdRingElem<C> & Rational> 
-      GenPolynomial<Complex<edu.jas.application.RealAlgebraicNumber<C>>> evaluateToComplexRealCoefficients(
+    public static <C extends GcdRingElem<C> & Rational> GenPolynomial<Complex<edu.jas.application.RealAlgebraicNumber<C>>> evaluateToComplexRealCoefficients(
                     GenPolynomialRing<Complex<edu.jas.application.RealAlgebraicNumber<C>>> pfac,
-                    GenPolynomial<GenPolynomial<Complex<C>>> A, Complex<edu.jas.application.RealAlgebraicNumber<C>> r) {
-        return PolyUtil.<GenPolynomial<Complex<C>>, Complex<edu.jas.application.RealAlgebraicNumber<C>>> 
-            map(pfac, A, new EvaluateToComplexReal<C>(pfac,r));
+                    GenPolynomial<GenPolynomial<Complex<C>>> A,
+                    Complex<edu.jas.application.RealAlgebraicNumber<C>> r) {
+        return PolyUtil.<GenPolynomial<Complex<C>>, Complex<edu.jas.application.RealAlgebraicNumber<C>>> map(
+                        pfac, A, new EvaluateToComplexReal<C>(pfac, r));
     }
 
 
@@ -1772,9 +1779,9 @@ class CoeffToComplexReal<C extends GcdRingElem<C> & Rational> implements
         pi = new GenPolynomial<C>(pfac, c.getIm());
         //System.out.println("pr = " + pr);
         //System.out.println("pi = " + pi);
-        edu.jas.application.RealAlgebraicNumber<C> re, im; 
-        re = new edu.jas.application.RealAlgebraicNumber<C>(afac,pr);
-        im = new edu.jas.application.RealAlgebraicNumber<C>(afac,pi);
+        edu.jas.application.RealAlgebraicNumber<C> re, im;
+        re = new edu.jas.application.RealAlgebraicNumber<C>(afac, pr);
+        im = new edu.jas.application.RealAlgebraicNumber<C>(afac, pi);
         //System.out.println("re = " + re);
         //System.out.println("im = " + im);
         return new Complex<edu.jas.application.RealAlgebraicNumber<C>>(cfac, re, im);
@@ -1798,8 +1805,8 @@ class EvaluateToComplexReal<C extends GcdRingElem<C> & Rational> implements
     final protected Complex<edu.jas.application.RealAlgebraicNumber<C>> root;
 
 
-    public EvaluateToComplexReal(GenPolynomialRing<Complex<edu.jas.application.RealAlgebraicNumber<C>>> fac, 
-                                 Complex<edu.jas.application.RealAlgebraicNumber<C>> r) {
+    public EvaluateToComplexReal(GenPolynomialRing<Complex<edu.jas.application.RealAlgebraicNumber<C>>> fac,
+                    Complex<edu.jas.application.RealAlgebraicNumber<C>> r) {
         if (fac == null) {
             throw new IllegalArgumentException("fac must not be null");
         }
@@ -1820,9 +1827,9 @@ class EvaluateToComplexReal<C extends GcdRingElem<C> & Rational> implements
         }
         //System.out.println("c  = " + c);
         GenPolynomial<Complex<edu.jas.application.RealAlgebraicNumber<C>>> cp;
-        cp = PolyUtilApp.<C> convertToComplexRealCoefficients(pfac,c);
+        cp = PolyUtilApp.<C> convertToComplexRealCoefficients(pfac, c);
         Complex<edu.jas.application.RealAlgebraicNumber<C>> cr;
-        cr = PolyUtil.<Complex<edu.jas.application.RealAlgebraicNumber<C>>> evaluateMain(cfac,cp,root);
+        cr = PolyUtil.<Complex<edu.jas.application.RealAlgebraicNumber<C>>> evaluateMain(cfac, cp, root);
         return cr;
     }
 }

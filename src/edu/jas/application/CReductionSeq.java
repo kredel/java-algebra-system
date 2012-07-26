@@ -7,10 +7,10 @@ package edu.jas.application;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Collections;
 
 import org.apache.log4j.Logger;
 
@@ -30,14 +30,14 @@ import edu.jas.ufd.GreatestCommonDivisor;
  * @author Heinz Kredel
  */
 public class CReductionSeq<C extends GcdRingElem<C>> implements Serializable
-       /* extends ReductionAbstract<C> */
-       /* implements CReduction<C> */ {
+/* extends ReductionAbstract<C> */
+/* implements CReduction<C> */{
 
 
     private static final Logger logger = Logger.getLogger(CReductionSeq.class);
 
 
-    private final boolean debug = logger.isDebugEnabled();
+    //private final boolean debug = logger.isDebugEnabled();
 
 
     private final boolean info = logger.isInfoEnabled();
@@ -203,24 +203,24 @@ public class CReductionSeq<C extends GcdRingElem<C>> implements Serializable
             for (i = 0; i < l; i++) {
                 mt = e.multipleOf(htl[i]); // EVMT( e, htl[i] );
                 if (mt) {
-                   System.out.println("not normalform " + Ap + ", P[i] = " + P[i]);
-                   return false;
+                    System.out.println("not normalform " + Ap + ", P[i] = " + P[i]);
+                    return false;
                 }
             }
-            if ( top ) {
-               return true;
+            if (top) {
+                return true;
             }
         }
         for (ExpVector e : Ap.white.getMap().keySet()) {
             for (i = 0; i < l; i++) {
                 mt = e.multipleOf(htl[i]); // EVMT( e, htl[i] );
                 if (mt) {
-                   System.out.println("not normalform " + Ap + ", P[i] = " + P[i]);
-                   return false;
+                    System.out.println("not normalform " + Ap + ", P[i] = " + P[i]);
+                    return false;
                 }
             }
-            if ( top ) {
-               return true;
+            if (top) {
+                return true;
             }
         }
         return true;
@@ -258,8 +258,7 @@ public class CReductionSeq<C extends GcdRingElem<C>> implements Serializable
      * @return nf(Ap) with respect to Pp.
      */
     @SuppressWarnings("unchecked")
-    public ColorPolynomial<C> normalform(Condition<C> cond, List<ColorPolynomial<C>> Pp,
-            ColorPolynomial<C> Ap) {
+    public ColorPolynomial<C> normalform(Condition<C> cond, List<ColorPolynomial<C>> Pp, ColorPolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
             return Ap;
         }
@@ -393,8 +392,7 @@ public class CReductionSeq<C extends GcdRingElem<C>> implements Serializable
      * @return list of conditions as case distinction extending the conditions
      *         in cd.
      */
-    public List<Condition<C>> caseDistinction(List<Condition<C>> cd,
-            GenPolynomial<GenPolynomial<C>> A) {
+    public List<Condition<C>> caseDistinction(List<Condition<C>> cd, GenPolynomial<GenPolynomial<C>> A) {
         if (A == null || A.isZERO()) {
             return cd;
         }
@@ -475,8 +473,7 @@ public class CReductionSeq<C extends GcdRingElem<C>> implements Serializable
      * @param cond a condition.
      * @return list of case distinction conditions.
      */
-    public List<Condition<C>> caseDistinction(Condition<C> cond,
-            GenPolynomial<GenPolynomial<C>> A) {
+    public List<Condition<C>> caseDistinction(Condition<C> cond, GenPolynomial<GenPolynomial<C>> A) {
         List<Condition<C>> cd = new ArrayList<Condition<C>>();
         if (A == null || A.isZERO()) {
             return cd;
@@ -521,8 +518,7 @@ public class CReductionSeq<C extends GcdRingElem<C>> implements Serializable
      * @param cd case distiction, a condition list.
      * @return new determined list of colored systems.
      */
-    public List<ColoredSystem<C>> determine(List<Condition<C>> cd,
-            List<GenPolynomial<GenPolynomial<C>>> H) {
+    public List<ColoredSystem<C>> determine(List<Condition<C>> cd, List<GenPolynomial<GenPolynomial<C>>> H) {
         List<ColoredSystem<C>> CS = new ArrayList<ColoredSystem<C>>();
         if (H == null || H.size() == 0) {
             return CS;

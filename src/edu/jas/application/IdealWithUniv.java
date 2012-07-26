@@ -26,20 +26,19 @@ public class IdealWithUniv<C extends GcdRingElem<C>> implements Serializable {
 
 
     /**
-     * The list of univariate polynomials.
-     * Contains polynomials from serveral rings, depending on the stage of the decomposition. 
-     * 1) polynomials in a ring of one variable,
-     * 2) polynomials depending on only one variable but in a ring with multiple variables,
-     * 3) after contraction to a non-zero dimensional ring multivariate polynomials depending on 
-     * one significant variable and multiple variables from the quotient coefficients.
+     * The list of univariate polynomials. Contains polynomials from serveral
+     * rings, depending on the stage of the decomposition. 1) polynomials in a
+     * ring of one variable, 2) polynomials depending on only one variable but
+     * in a ring with multiple variables, 3) after contraction to a non-zero
+     * dimensional ring multivariate polynomials depending on one significant
+     * variable and multiple variables from the quotient coefficients.
      */
     public final List<GenPolynomial<C>> upolys;
 
 
     /**
-     * A list of other useful polynomials.
-     * 1) field extension polynomials,
-     * 2) generators for infinite quotients.
+     * A list of other useful polynomials. 1) field extension polynomials, 2)
+     * generators for infinite quotients.
      */
     public final List<GenPolynomial<C>> others;
 
@@ -82,14 +81,13 @@ public class IdealWithUniv<C extends GcdRingElem<C>> implements Serializable {
     @Override
     public String toString() {
         String s = ideal.toString();
-        if ( upolys != null ) {
-             s += "\nunivariate polynomials:\n" + upolys.toString();
+        if (upolys != null) {
+            s += "\nunivariate polynomials:\n" + upolys.toString();
         }
         if (others == null) {
             return s;
-        } else {
-            return s + "\nother polynomials:\n" + others.toString();
         }
+        return s + "\nother polynomials:\n" + others.toString();
     }
 
 
@@ -101,14 +99,13 @@ public class IdealWithUniv<C extends GcdRingElem<C>> implements Serializable {
     public String toScript() {
         // Python case
         String s = ideal.toScript();
-        if ( upolys != null ) {
-             s += ", upolys=" + upolys.toString();
+        if (upolys != null) {
+            s += ", upolys=" + upolys.toString();
         }
         if (others == null) {
             return s;
-        } else {
-            return s + ", others=" + others.toString();
         }
+        return s + ", others=" + others.toString();
     }
 
 }

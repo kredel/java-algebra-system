@@ -25,31 +25,24 @@ import edu.jas.arith.BigQuaternion;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
-import edu.jas.arith.ModLong;
 import edu.jas.arith.ModLongRing;
-import edu.jas.structure.Power;
-import edu.jas.structure.RingElem;
+import edu.jas.poly.AlgebraicNumberRing;
+import edu.jas.poly.ExpVector;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.GenPolynomialTokenizer;
+import edu.jas.poly.GenSolvablePolynomial;
+import edu.jas.poly.GenSolvablePolynomialRing;
+import edu.jas.poly.RelationTable;
+import edu.jas.poly.TermOrder;
 import edu.jas.structure.RingFactory;
 import edu.jas.ufd.Quotient;
 import edu.jas.ufd.QuotientRing;
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.GenSolvablePolynomial;
-import edu.jas.poly.GenSolvablePolynomialRing;
-import edu.jas.poly.ModuleList;
-import edu.jas.poly.OrderedModuleList;
-import edu.jas.poly.TermOrder;
-import edu.jas.poly.ExpVector;
-import edu.jas.poly.PolynomialList;
-import edu.jas.poly.RelationTable;
-import edu.jas.poly.AlgebraicNumberRing;
-import edu.jas.poly.AlgebraicNumber;
-import edu.jas.poly.GenPolynomialTokenizer;
 
 
 /**
- * RingFactory Tokenizer. Used to read ring factories from input streams.
- * It can read also QuotientRing factory.
+ * RingFactory Tokenizer. Used to read ring factories from input streams. It can
+ * read also QuotientRing factory.
  * @author Heinz Kredel
  */
 
@@ -420,11 +413,11 @@ public class RingFactoryTokenizer {
                     if (digit(tok.sval.charAt(0))) {
                         BigInteger mo = new BigInteger(tok.sval);
                         BigInteger lm = new BigInteger(Long.MAX_VALUE);
-                        if ( mo.compareTo(lm) < 0 ) {
+                        if (mo.compareTo(lm) < 0) {
                             coeff = new ModLongRing(mo.getVal());
-			} else {
+                        } else {
                             coeff = new ModIntegerRing(mo.getVal());
-			}
+                        }
                         System.out.println("coeff = " + coeff + " :: " + coeff.getClass());
                         ct = coeffType.ModInt;
                     } else {
@@ -509,7 +502,7 @@ public class RingFactoryTokenizer {
                     if (debug) {
                         logger.debug("pfac = " + pfac);
                     }
-                    GenPolynomialTokenizer ptok = new GenPolynomialTokenizer(pfac,reader);
+                    GenPolynomialTokenizer ptok = new GenPolynomialTokenizer(pfac, reader);
                     GenPolynomial mod = ptok.nextPolynomial();
                     ptok = null;
                     if (debug) {
@@ -750,9 +743,8 @@ public class RingFactoryTokenizer {
         int s = nextSplitIndex();
         if (s <= 0) {
             return new TermOrder(evord);
-        } else {
-            return new TermOrder(evord, evord, vars.length, s);
         }
+        return new TermOrder(evord, evord, vars.length, s);
     }
 
 
@@ -778,7 +770,7 @@ public class RingFactoryTokenizer {
         }
         if (tok.sval != null) {
             if (tok.sval.equalsIgnoreCase("RelationTable")) {
-                GenPolynomialTokenizer ptok = new GenPolynomialTokenizer(pfac,reader);
+                GenPolynomialTokenizer ptok = new GenPolynomialTokenizer(pfac, reader);
                 rels = ptok.nextPolynomialList();
                 ptok = null;
             }
@@ -873,7 +865,7 @@ public class RingFactoryTokenizer {
             logger.info("table = " + table + ", tok = " + tok);
         }
         // now spfac is initialized
-        return spfac; 
+        return spfac;
     }
 
 
@@ -882,9 +874,9 @@ public class RingFactoryTokenizer {
     }
 
 
-    private boolean letter(char x) {
-        return ('a' <= x && x <= 'z') || ('A' <= x && x <= 'Z');
-    }
+    //private boolean letter(char x) {
+    //    return ('a' <= x && x <= 'z') || ('A' <= x && x <= 'Z');
+    //}
 
 
     // unused

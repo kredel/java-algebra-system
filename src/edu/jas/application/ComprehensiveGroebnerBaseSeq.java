@@ -6,8 +6,8 @@ package edu.jas.application;
 
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -45,10 +45,10 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
     protected final SquarefreeAbstract<C> engine;
 
 
-    /**
+    /*
      * Flag if gcd engine should be used.
      */
-    private final boolean notFaithfull = false;
+    //private final boolean notFaithfull = false;
 
 
     /**
@@ -163,7 +163,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         }
         ColorPolynomial<C> p, q, h, hp;
         for (ColoredSystem<C> cs : CS) {
-            if (true || debug) {
+            if (debug) {
                 if (!cs.isDetermined()) {
                     System.out.println("not determined, cs = " + cs);
                     return false;
@@ -184,7 +184,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                     // System.out.println("spol(a,b) = " + h);
                     h = cred.normalform(cond, S, h);
                     // System.out.println("NF(spol(a,b)) = " + h);
-                    if (true || debug) {
+                    if (debug) {
                         if (!cred.isNormalform(S, h)) {
                             System.out.println("not normalform, h = " + h);
                             System.out.println("cs = " + cs);
@@ -370,7 +370,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         // main loop
         List<ColoredSystem<C>> CSb = new ArrayList<ColoredSystem<C>>();
         List<ColoredSystem<C>> ncs;
-        List<ColoredSystem<C>> CSh, CSbh;
+        List<ColoredSystem<C>> CSh; //, CSbh;
         ColoredSystem<C> cs;
         List<ColorPolynomial<C>> G;
         OrderedCPairlist<C> pairlist;
@@ -606,16 +606,16 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             a = G.remove(0);
             b = a;
             // System.out.println("check " + b);
-            if (false) {
-                if (a.red.leadingBaseCoefficient().isConstant()) { // dont drop
-                    // these
-                    F.add(a);
-                    continue;
-                }
-            }
+            //if (false) {
+            //    if (a.red.leadingBaseCoefficient().isConstant()) { // dont drop
+            //        // these
+            //        F.add(a);
+            //        continue;
+            //    }
+            //}
             if (cred.isTopReducible(G, a) || cred.isTopReducible(F, a)) {
                 // drop polynomial
-                if (false) {
+                if (debug) {
                     // System.out.println("trying to drop " + a);
                     List<ColorPolynomial<C>> ff;
                     ff = new ArrayList<ColorPolynomial<C>>(G);
@@ -626,9 +626,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                     } catch (RuntimeException ignored) {
                     }
                     if (!a.isZERO()) {
-                        if (false || debug) {
-                            System.out.println("error, nf(a) != 0 " + b + ", " + a);
-                        }
+                        logger.error("nf(a) != 0 " + b + ", " + a);
                         F.add(b);
                     }
                 }
@@ -662,8 +660,8 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             if (e.equals(f)) {
                 G.add(a); // adds as last
             } else { // should not happen
-                if (false) {
-                    System.out.println("error, nf(a) not determined " + b + ", " + a);
+                if (debug) {
+                    logger.error("nf(a) not determined " + b + ", " + a);
                 }
                 G.add(b); // adds as last
             }

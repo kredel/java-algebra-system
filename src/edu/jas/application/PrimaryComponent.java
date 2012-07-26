@@ -93,9 +93,8 @@ public class PrimaryComponent<C extends GcdRingElem<C>> implements Serializable 
         String s = "\nprimary:\n" + primary.toString() + "\nprime:\n" + prime.toString();
         if (exponent < 0) {
             return s;
-        } else {
-            return s + "\nexponent:\n" + exponent;
         }
+        return s + "\nexponent:\n" + exponent;
     }
 
 
@@ -109,9 +108,8 @@ public class PrimaryComponent<C extends GcdRingElem<C>> implements Serializable 
         String s = primary.toScript() + ",  " + prime.toString();
         if (exponent < 0) {
             return s;
-        } else {
-            return s + ", " + exponent;
         }
+        return s + ", " + exponent;
     }
 
 }
