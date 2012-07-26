@@ -6,13 +6,12 @@ package edu.jas.structure;
 
 
 /**
- * Monoid factory interface.
- * Defines get one and tests for associativity and commutativity.
+ * Monoid factory interface. Defines get one and tests for associativity and
+ * commutativity.
  * @author Heinz Kredel
  */
 
-public interface MonoidFactory<C extends MonoidElem<C>> 
-                 extends ElemFactory<C> {
+public interface MonoidFactory<C extends MonoidElem<C>> extends ElemFactory<C> {
 
 
     /**

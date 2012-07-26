@@ -6,22 +6,20 @@ package edu.jas.structure;
 
 
 /**
- * Ring element interface.
- * Combines additive and multiplicative methods.
- * Adds also gcd because of polynomials.
+ * Ring element interface. Combines additive and multiplicative methods. Adds
+ * also gcd because of polynomials.
  * @param <C> ring element type
  * @author Heinz Kredel
  */
 
-public interface RingElem<C extends RingElem<C>> 
-                 extends AbelianGroupElem<C>, MonoidElem<C> {
+public interface RingElem<C extends RingElem<C>> extends AbelianGroupElem<C>, MonoidElem<C> {
 
 
-//     /** Quotient and remainder.
-//      * @param b other element.
-//      * @return C[] { q, r } with this = q b + r and 0 &le; r &lt; |b|.
-//      */
-//     public C[] quotientRemainder(C b);
+    //     /** Quotient and remainder.
+    //      * @param b other element.
+    //      * @return C[] { q, r } with this = q b + r and 0 &le; r &lt; |b|.
+    //      */
+    //     public C[] quotientRemainder(C b);
 
 
     /**

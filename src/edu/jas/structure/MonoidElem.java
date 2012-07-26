@@ -6,14 +6,12 @@ package edu.jas.structure;
 
 
 /**
- * Monoid element interface.
- * Defines the multiplicative methods.
+ * Monoid element interface. Defines the multiplicative methods.
  * @param <C> element type
  * @author Heinz Kredel
  */
 
-public interface MonoidElem<C extends MonoidElem<C>> 
-                 extends Element<C> {
+public interface MonoidElem<C extends MonoidElem<C>> extends Element<C> {
 
 
     /**
@@ -24,8 +22,8 @@ public interface MonoidElem<C extends MonoidElem<C>>
 
 
     /**
-     * Test if this is a unit. 
-     * I.e. there exists x with this.multiply(x).isONE() == true.
+     * Test if this is a unit. I.e. there exists x with this.multiply(x).isONE()
+     * == true.
      * @return true if this is a unit, else false.
      */
     public boolean isUnit();
@@ -56,8 +54,8 @@ public interface MonoidElem<C extends MonoidElem<C>>
 
 
     /**
-     * Inverse of this.
-     * Some implementing classes will throw NotInvertibleException if the element is not invertible.
+     * Inverse of this. Some implementing classes will throw
+     * NotInvertibleException if the element is not invertible.
      * @return x with this * x = 1, if it exists.
      */
     public C inverse(); /*throws NotInvertibleException*/

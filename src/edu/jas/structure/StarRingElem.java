@@ -6,14 +6,13 @@ package edu.jas.structure;
 
 
 /**
- * Star ring element interface.
- * Defines norm and conjugation.
+ * Star ring element interface. Defines norm and conjugation.
  * @param <C> ring element type
  * @author Heinz Kredel
  */
 
-public interface StarRingElem<C extends StarRingElem<C>> 
-                 extends RingElem<C> {
+public interface StarRingElem<C extends StarRingElem<C>> extends RingElem<C> {
+
 
     /**
      * Conjugate of this.

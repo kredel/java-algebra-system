@@ -4,19 +4,18 @@
 
 package edu.jas.structure;
 
+
 import java.util.List;
 
 
 /**
- * Module factory interface.
- * Defines conversion from list and sparse random.
+ * Module factory interface. Defines conversion from list and sparse random.
  * @param <M> module type
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
-public interface ModulFactory<M extends ModulElem<M,C>,
-                              C extends RingElem<C>> 
-                 extends AbelianGroupFactory<M> {
+public interface ModulFactory<M extends ModulElem<M, C>, C extends RingElem<C>> extends
+                AbelianGroupFactory<M> {
 
 
     /**

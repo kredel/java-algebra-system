@@ -12,7 +12,7 @@ package edu.jas.structure;
  * @author Heinz Kredel
  */
 
-public interface UnaryFunctor< C extends Element<C>, D extends Element<D> > {
+public interface UnaryFunctor<C extends Element<C>, D extends Element<D>> {
 
 
     /**

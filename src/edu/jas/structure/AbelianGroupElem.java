@@ -6,14 +6,12 @@ package edu.jas.structure;
 
 
 /**
- * Abelian group element interface.
- * Defines the additive methods.
+ * Abelian group element interface. Defines the additive methods.
  * @param <C> element type
  * @author Heinz Kredel
  */
 
-public interface AbelianGroupElem<C extends AbelianGroupElem<C>> 
-         extends Element<C> {
+public interface AbelianGroupElem<C extends AbelianGroupElem<C>> extends Element<C> {
 
 
     /**
@@ -36,6 +34,8 @@ public interface AbelianGroupElem<C extends AbelianGroupElem<C>>
      * @return this + S.
      */
     public C sum(C S);
+
+
     //public <T extends C> T sum(T S);
 
 
