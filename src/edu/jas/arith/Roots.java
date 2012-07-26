@@ -53,9 +53,8 @@ public class Roots {
             //System.out.println("P = " + P);
             if (A.compareTo(P) >= 0) {
                 break;
-            } else {
-                R = R.subtract(BigInteger.ONE);
             }
+            R = R.subtract(BigInteger.ONE);
         }
         return R;
     }
@@ -87,9 +86,8 @@ public class Roots {
             //System.out.println("P = " + P);
             if (A.compareTo(P) >= 0) {
                 break;
-            } else {
-                R = R.subtract(BigInteger.ONE);
             }
+            R = R.subtract(BigInteger.ONE);
         }
         return R;
     }

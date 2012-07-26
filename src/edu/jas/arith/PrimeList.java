@@ -4,20 +4,21 @@
 
 package edu.jas.arith;
 
-//import java.util.Random;
-import java.util.List;
-import java.util.Iterator;
-import java.util.ArrayList;
 
-//import edu.jas.util.StringUtil;
+// import java.util.Random;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import edu.jas.structure.Power;
+
 
 /**
  * List of big primes. Provides an Iterator for generating prime numbers.
  * Similar to ALDES/SAC2 SACPOL.PRIME list.
  * 
  * @author Heinz Kredel See Knuth vol 2,page 390, for list of known primes. See
- *         ALDES/SAC2 SACPOL.PRIME
+ *         also ALDES/SAC2 SACPOL.PRIME
  */
 
 public final class PrimeList implements Iterable<java.math.BigInteger> {
@@ -28,15 +29,21 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
      */
     public static enum Range {
         small, medium, large, mersenne
-            };
+    };
 
 
     /**
      * Cache the val list for different size
      */
     private volatile static List<java.math.BigInteger> SMALL_LIST = null;
+
+
     private volatile static List<java.math.BigInteger> MEDIUM_LIST = null;
+
+
     private volatile static List<java.math.BigInteger> LARGE_LIST = null;
+
+
     private volatile static List<java.math.BigInteger> MERSENNE_LIST = null;
 
 
@@ -59,11 +66,11 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
         this(Range.medium);
     }
 
+
     /**
      * Constructor for PrimeList.
      * 
-     * @param r
-     *          size range for primes.
+     * @param r size range for primes.
      */
     public PrimeList(Range r) {
         // initialize with some known primes, see knuth (2,390)
@@ -326,15 +333,20 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
      */
     public Iterator<java.math.BigInteger> iterator() {
         return new Iterator<java.math.BigInteger>() {
+
+
             int index = -1;
+
 
             public boolean hasNext() {
                 return true;
             }
 
+
             public void remove() {
                 throw new UnsupportedOperationException("remove not implemented");
             }
+
 
             public java.math.BigInteger next() {
                 index++;

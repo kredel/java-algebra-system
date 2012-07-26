@@ -15,23 +15,22 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import edu.jas.kern.StringUtil;
 import edu.jas.kern.Scripting;
+import edu.jas.kern.StringUtil;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.Power;
 import edu.jas.structure.RingFactory;
 
 
 /**
- * Immutable arbitrary-precision rational numbers. BigRational class
- * based on BigInteger and implementing the RingElem
- * interface. BigInteger is from java.math in the implementation.
- * The SAC2 static methods are also provided.
+ * Immutable arbitrary-precision rational numbers. BigRational class based on
+ * BigInteger and implementing the RingElem interface. BigInteger is from
+ * java.math in the implementation. The SAC2 static methods are also provided.
  * @author Heinz Kredel
  */
 
 public final class BigRational implements GcdRingElem<BigRational>, RingFactory<BigRational>, Rational,
-        Iterable<BigRational> {
+                Iterable<BigRational> {
 
 
     /**
@@ -1220,7 +1219,7 @@ class BigRationalIterator implements Iterator<BigRational> {
         @SuppressWarnings("unused")
         edu.jas.arith.BigInteger unused = denit.next(); // skip zero denominator
         unused = numit.next();
-        if ( unused == null ) { // use for findbugs
+        if (unused == null) { // use for findbugs
             System.out.println("unused is null");
         }
         denlist.add(denit.next());
@@ -1287,7 +1286,7 @@ class BigRationalIterator implements Iterator<BigRational> {
 
 
 /**
- * Big rational unique iterator. Uses Cantors diagonal enumeration, produces 
+ * Big rational unique iterator. Uses Cantors diagonal enumeration, produces
  * distinct elements.
  * @author Heinz Kredel
  */

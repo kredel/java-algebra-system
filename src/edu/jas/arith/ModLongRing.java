@@ -7,9 +7,9 @@ package edu.jas.arith;
 
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.Iterator;
 
 import edu.jas.kern.StringUtil;
 
@@ -40,17 +40,17 @@ public final class ModLongRing implements ModularRingFactory<ModLong>, Iterable<
     private int isField = -1; // initially unknown
 
 
-    /**
+    /*
      * Certainty if module is probable prime.
      */
-    private int certainty = 10;
+    //private final int certainty = 10;
 
 
     /**
      * maximal representable integer.
      */
-    public final static java.math.BigInteger MAX_LONG 
-        = new java.math.BigInteger(String.valueOf(Integer.MAX_VALUE)); // not larger!
+    public final static java.math.BigInteger MAX_LONG = new java.math.BigInteger(
+                    String.valueOf(Integer.MAX_VALUE)); // not larger!
 
 
     /**
@@ -340,7 +340,7 @@ public final class ModLongRing implements ModularRingFactory<ModLong>, Iterable<
     //JAVA6only: @Override
     public String toScript() {
         // Python and Ruby case
-        if ( isField() ) {
+        if (isField()) {
             return "GFL(" + modul + ")";
         }
         return "ZL(" + modul + ")";
@@ -441,7 +441,8 @@ public final class ModLongRing implements ModularRingFactory<ModLong>, Iterable<
     }
 
 
-    /** Get a ModLong iterator.
+    /**
+     * Get a ModLong iterator.
      * @return a iterator over all modular integers in this ring.
      */
     public Iterator<ModLong> iterator() {
@@ -482,7 +483,7 @@ class ModLongIterator implements Iterator<ModLong> {
      * @return true if the iteration has more elements, else false.
      */
     public synchronized boolean hasNext() {
-        return curr < ring.modul; 
+        return curr < ring.modul;
     }
 
 
@@ -491,7 +492,7 @@ class ModLongIterator implements Iterator<ModLong> {
      * @return next integer.
      */
     public synchronized ModLong next() {
-        ModLong i = new ModLong(ring,curr);
+        ModLong i = new ModLong(ring, curr);
         curr++;
         return i;
     }

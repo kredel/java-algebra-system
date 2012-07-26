@@ -4,28 +4,26 @@
 
 package edu.jas.arith;
 
-import java.util.Random;
+
 import java.io.Reader;
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 
-//import edu.jas.structure.GcdRingElem;
 import edu.jas.kern.StringUtil;
-import edu.jas.structure.RingFactory;
-
 
 
 /**
- * ModIntegerRing factory with RingFactory interface.
- * Effectively immutable.
+ * ModIntegerRing factory with RingFactory interface. Effectively immutable.
  * @author Heinz Kredel
  */
 
 public final class ModIntegerRing implements ModularRingFactory<ModInteger>, Iterable<ModInteger> {
 
 
-    /** Module part of the factory data structure. 
+    /**
+     * Module part of the factory data structure.
      */
     public final java.math.BigInteger modul;
 
@@ -33,18 +31,21 @@ public final class ModIntegerRing implements ModularRingFactory<ModInteger>, Ite
     private final static Random random = new Random();
 
 
-    /** Indicator if this ring is a field.
+    /**
+     * Indicator if this ring is a field.
      */
     protected int isField = -1; // initially unknown
 
 
-    /** Certainty if module is probable prime.
+    /**
+     * Certainty if module is probable prime.
      */
     protected int certainty = 10;
 
 
-    /** The constructor creates a ModIntegerRing object 
-     * from a BigInteger object as module part. 
+    /**
+     * The constructor creates a ModIntegerRing object from a BigInteger object
+     * as module part.
      * @param m math.BigInteger.
      */
     public ModIntegerRing(java.math.BigInteger m) {
@@ -52,59 +53,62 @@ public final class ModIntegerRing implements ModularRingFactory<ModInteger>, Ite
     }
 
 
-    /** The constructor creates a ModIntegerRing object 
-     * from a BigInteger object as module part. 
+    /**
+     * The constructor creates a ModIntegerRing object from a BigInteger object
+     * as module part.
      * @param m math.BigInteger.
      * @param isField indicator if m is prime.
      */
     public ModIntegerRing(java.math.BigInteger m, boolean isField) {
         modul = m;
-        this.isField = ( isField ? 1 :  0 );
+        this.isField = (isField ? 1 : 0);
     }
 
 
-    /** The constructor creates a ModIntegerRing object 
-     * from a long as module part. 
+    /**
+     * The constructor creates a ModIntegerRing object from a long as module
+     * part.
      * @param m long.
      */
     public ModIntegerRing(long m) {
-        this( new java.math.BigInteger( String.valueOf(m) ) );
+        this(new java.math.BigInteger(String.valueOf(m)));
     }
 
 
-    /** The constructor creates a ModIntegerRing object 
-     * from a long as module part. 
+    /**
+     * The constructor creates a ModIntegerRing object from a long as module
+     * part.
      * @param m long.
      * @param isField indicator if m is prime.
      */
     public ModIntegerRing(long m, boolean isField) {
-        this( 
-             new java.math.BigInteger( String.valueOf(m) ),
-             isField
-             );
+        this(new java.math.BigInteger(String.valueOf(m)), isField);
     }
 
 
-    /** The constructor creates a ModIntegerRing object 
-     * from a String object as module part. 
+    /**
+     * The constructor creates a ModIntegerRing object from a String object as
+     * module part.
      * @param m String.
      */
     public ModIntegerRing(String m) {
-        this( new java.math.BigInteger( m.trim() ) );
+        this(new java.math.BigInteger(m.trim()));
     }
 
 
-    /** The constructor creates a ModIntegerRing object 
-     * from a String object as module part. 
+    /**
+     * The constructor creates a ModIntegerRing object from a String object as
+     * module part.
      * @param m String.
      * @param isField indicator if m is prime.
      */
     public ModIntegerRing(String m, boolean isField) {
-        this( new java.math.BigInteger( m.trim() ), isField );
+        this(new java.math.BigInteger(m.trim()), isField);
     }
 
 
-    /** Get the module part. 
+    /**
+     * Get the module part.
      * @return modul.
      */
     public java.math.BigInteger getModul() {
@@ -112,7 +116,8 @@ public final class ModIntegerRing implements ModularRingFactory<ModInteger>, Ite
     }
 
 
-    /** Get the module part as BigInteger.  
+    /**
+     * Get the module part as BigInteger.
      * @return modul.
      */
     public BigInteger getIntegerModul() {
@@ -120,25 +125,28 @@ public final class ModIntegerRing implements ModularRingFactory<ModInteger>, Ite
     }
 
 
-    /** Create ModInteger element c.
+    /**
+     * Create ModInteger element c.
      * @param c
      * @return a ModInteger of c.
      */
     public ModInteger create(java.math.BigInteger c) {
-        return new ModInteger( this, c );
+        return new ModInteger(this, c);
     }
 
 
-    /** Create ModInteger element c.
+    /**
+     * Create ModInteger element c.
      * @param c
      * @return a ModInteger of c.
      */
     public ModInteger create(long c) {
-        return new ModInteger( this, c );
+        return new ModInteger(this, c);
     }
 
 
-    /** Create ModInteger element c.
+    /**
+     * Create ModInteger element c.
      * @param c
      * @return a ModInteger of c.
      */
@@ -147,28 +155,31 @@ public final class ModIntegerRing implements ModularRingFactory<ModInteger>, Ite
     }
 
 
-    /** Copy ModInteger element c.
+    /**
+     * Copy ModInteger element c.
      * @param c
      * @return a copy of c.
      */
     public ModInteger copy(ModInteger c) {
-        return new ModInteger( this, c.val );
+        return new ModInteger(this, c.val);
     }
 
 
-    /** Get the zero element.
+    /**
+     * Get the zero element.
      * @return 0 as ModInteger.
      */
     public ModInteger getZERO() {
-        return new ModInteger( this, java.math.BigInteger.ZERO );
+        return new ModInteger(this, java.math.BigInteger.ZERO);
     }
 
 
-    /**  Get the one element.
+    /**
+     * Get the one element.
      * @return 1 as ModInteger.
      */
     public ModInteger getONE() {
-        return new ModInteger( this, java.math.BigInteger.ONE );
+        return new ModInteger(this, java.math.BigInteger.ONE);
     }
 
 
@@ -179,7 +190,7 @@ public final class ModIntegerRing implements ModularRingFactory<ModInteger>, Ite
      */
     public List<ModInteger> generators() {
         List<ModInteger> g = new ArrayList<ModInteger>(1);
-        g.add( getONE() );
+        g.add(getONE());
         return g;
     }
 
@@ -217,17 +228,17 @@ public final class ModIntegerRing implements ModularRingFactory<ModInteger>, Ite
      * @return true if module is prime, else false.
      */
     public boolean isField() {
-        if ( isField > 0 ) { 
-           return true;
+        if (isField > 0) {
+            return true;
         }
-        if ( isField == 0 ) { 
-           return false;
+        if (isField == 0) {
+            return false;
         }
         //System.out.println("isProbablePrime " + modul + " = " + modul.isProbablePrime(certainty));
         // if ( modul.isProbablePrime(certainty) ) {
-        if ( modul.isProbablePrime(modul.bitLength()) ) {
-           isField = 1;
-           return true;
+        if (modul.isProbablePrime(modul.bitLength())) {
+            isField = 1;
+            return true;
         }
         isField = 0;
         return false;
@@ -243,25 +254,28 @@ public final class ModIntegerRing implements ModularRingFactory<ModInteger>, Ite
     }
 
 
-    /** Get a ModInteger element from a BigInteger value.
+    /**
+     * Get a ModInteger element from a BigInteger value.
      * @param a BigInteger.
      * @return a ModInteger.
      */
     public ModInteger fromInteger(java.math.BigInteger a) {
-        return new ModInteger(this,a);
+        return new ModInteger(this, a);
     }
 
 
-    /** Get a ModInteger element from a long value.
+    /**
+     * Get a ModInteger element from a long value.
      * @param a long.
      * @return a ModInteger.
      */
     public ModInteger fromInteger(long a) {
-        return new ModInteger(this, a );
+        return new ModInteger(this, a);
     }
 
 
-    /**  Get the String representation.
+    /**
+     * Get the String representation.
      * @see java.lang.Object#toString()
      */
     @Override
@@ -270,34 +284,37 @@ public final class ModIntegerRing implements ModularRingFactory<ModInteger>, Ite
     }
 
 
-    /** Get a scripting compatible string representation.
+    /**
+     * Get a scripting compatible string representation.
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.ElemFactory#toScript()
      */
     //JAVA6only: @Override
     public String toScript() {
         // Python and Ruby case
-        if ( isField() ) {
+        if (isField()) {
             return "GF(" + modul.toString() + ")";
         }
         return "ZM(" + modul.toString() + ")";
     }
 
 
-    /** Comparison with any other object.
+    /**
+     * Comparison with any other object.
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
     public boolean equals(Object b) {
-        if ( ! ( b instanceof ModIntegerRing ) ) {
+        if (!(b instanceof ModIntegerRing)) {
             return false;
         }
-        ModIntegerRing m = (ModIntegerRing)b;
-        return ( 0 == modul.compareTo( m.modul ) );
+        ModIntegerRing m = (ModIntegerRing) b;
+        return (0 == modul.compareTo(m.modul));
     }
 
 
-    /** Hash code for this ModIntegerRing.
+    /**
+     * Hash code for this ModIntegerRing.
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -306,76 +323,78 @@ public final class ModIntegerRing implements ModularRingFactory<ModInteger>, Ite
     }
 
 
-    /** ModInteger random.
+    /**
+     * ModInteger random.
      * @param n such that 0 &le; v &le; (2<sup>n</sup>-1).
      * @return a random integer mod modul.
      */
     public ModInteger random(int n) {
-        return random( n, random );
+        return random(n, random);
     }
 
 
-    /** ModInteger random.
+    /**
+     * ModInteger random.
      * @param n such that 0 &le; v &le; (2<sup>n</sup>-1).
      * @param rnd is a source for random bits.
      * @return a random integer mod modul.
      */
     public ModInteger random(int n, Random rnd) {
-        java.math.BigInteger v = new java.math.BigInteger( n, rnd );
-        return new ModInteger( this, v );
+        java.math.BigInteger v = new java.math.BigInteger(n, rnd);
+        return new ModInteger(this, v);
     }
 
 
-    /** Parse ModInteger from String.
+    /**
+     * Parse ModInteger from String.
      * @param s String.
      * @return ModInteger from s.
      */
     public ModInteger parse(String s) {
-        return new ModInteger(this,s);
+        return new ModInteger(this, s);
     }
 
 
-    /** Parse ModInteger from Reader.
+    /**
+     * Parse ModInteger from Reader.
      * @param r Reader.
      * @return next ModInteger from r.
      */
     public ModInteger parse(Reader r) {
-        return parse( StringUtil.nextString(r) );
+        return parse(StringUtil.nextString(r));
     }
 
 
-    /** ModInteger chinese remainder algorithm.  
-     * This is a factory method.
-     * Assert c.modul >= a.modul and c.modul * a.modul = this.modul.
+    /**
+     * ModInteger chinese remainder algorithm. This is a factory method. Assert
+     * c.modul >= a.modul and c.modul * a.modul = this.modul.
      * @param c ModInteger.
      * @param ci inverse of c.modul in ring of a.
      * @param a other ModInteger.
-     * @return S, with S mod c.modul == c and S mod a.modul == a. 
+     * @return S, with S mod c.modul == c and S mod a.modul == a.
      */
-    public ModInteger 
-           chineseRemainder(ModInteger c, 
-                            ModInteger ci, 
-                            ModInteger a) {
-        if ( false ) { // debug
-           if ( c.ring.modul.compareTo( a.ring.modul ) < 1 ) {
-               System.out.println("ModInteger error " + c + ", " + a);
-           }
+    public ModInteger chineseRemainder(ModInteger c, ModInteger ci, ModInteger a) {
+        //if (false) { // debug
+        //    if (c.ring.modul.compareTo(a.ring.modul) < 1) {
+        //        System.out.println("ModInteger error " + c + ", " + a);
+        //    }
+        //}
+        ModInteger b = a.ring.fromInteger(c.val); // c mod a.modul
+        ModInteger d = a.subtract(b); // a-c mod a.modul
+        if (d.isZERO()) {
+            return fromInteger(c.val);
         }
-        ModInteger b = a.ring.fromInteger( c.val ); // c mod a.modul
-        ModInteger d = a.subtract( b ); // a-c mod a.modul
-        if ( d.isZERO() ) {
-           return fromInteger( c.val );
-        }
-        b = d.multiply( ci ); // b = (a-c)*ci mod a.modul
+        b = d.multiply(ci); // b = (a-c)*ci mod a.modul
         // (c.modul*b)+c mod this.modul = c mod c.modul = 
         // (c.modul*ci*(a-c)+c) mod a.modul = a mod a.modul
-        java.math.BigInteger s = c.ring.modul.multiply( b.val );
-        s = s.add( c.val );
-        return fromInteger( s );
+        java.math.BigInteger s = c.ring.modul.multiply(b.val);
+        s = s.add(c.val);
+        return fromInteger(s);
     }
 
 
-    /** Get a ModInteger iterator.
+    /**
+     * Get a ModInteger iterator.
      * @return a iterator over all modular integers in this ring.
      */
     public Iterator<ModInteger> iterator() {
@@ -416,7 +435,7 @@ class ModIntegerIterator implements Iterator<ModInteger> {
      * @return true if the iteration has more elements, else false.
      */
     public synchronized boolean hasNext() {
-        return curr.compareTo(ring.modul) < 0; 
+        return curr.compareTo(ring.modul) < 0;
     }
 
 
@@ -425,8 +444,8 @@ class ModIntegerIterator implements Iterator<ModInteger> {
      * @return next integer.
      */
     public synchronized ModInteger next() {
-        ModInteger i = new ModInteger(ring,curr);
-        curr = curr.add( java.math.BigInteger.ONE );
+        ModInteger i = new ModInteger(ring, curr);
+        curr = curr.add(java.math.BigInteger.ONE);
         return i;
     }
 
