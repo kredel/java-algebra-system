@@ -5,10 +5,9 @@
 package edu.jas.kern;
 
 
+import java.io.IOException;
 import java.io.Reader;
 import java.io.StringWriter;
-import java.io.IOException;
-
 
 
 /**

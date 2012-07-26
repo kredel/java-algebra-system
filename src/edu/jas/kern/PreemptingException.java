@@ -6,8 +6,8 @@ package edu.jas.kern;
 
 
 /**
- * Preempting Exception class.
- * Runtime Exception to be thrown when a thread is interrupted.
+ * Preempting Exception class. Runtime Exception to be thrown when a thread is
+ * interrupted.
  * @author Heinz Kredel
  */
 
@@ -25,12 +25,12 @@ public class PreemptingException extends RuntimeException {
 
 
     public PreemptingException(String c, Throwable t) {
-        super(c,t);
+        super(c, t);
     }
 
 
     public PreemptingException(Throwable t) {
-        super("PreemptingException",t);
+        super("PreemptingException", t);
     }
 
 }

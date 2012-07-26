@@ -6,15 +6,16 @@ package edu.jas.kern;
 
 
 /**
- * Scripting,
- * defines script language for output in toScript() method.
+ * Scripting, defines script language for output in toScript() method.
  * @author Heinz Kredel
  */
 
 public class Scripting {
 
 
-    public static enum Lang { Python, Ruby };
+    public static enum Lang {
+        Python, Ruby
+    };
 
 
     private static Lang script = Lang.Python;

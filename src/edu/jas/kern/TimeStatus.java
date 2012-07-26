@@ -4,12 +4,12 @@
 
 package edu.jas.kern;
 
+
 import java.util.concurrent.Callable;
 
 
 /**
- * Run-time status, 
- * defines global status and handling for run time limits.
+ * Run-time status, defines global status and handling for run time limits.
  * @author Heinz Kredel
  */
 
@@ -35,8 +35,7 @@ public class TimeStatus {
 
 
     /**
-     * Call back method.
-     * true means continue, false means throw exception.
+     * Call back method. true means continue, false means throw exception.
      */
     private static Callable<Boolean> callBack = null;
 
@@ -58,8 +57,7 @@ public class TimeStatus {
 
 
     /**
-     * setAllow,
-     * set run-time interruption to allowed status.
+     * setAllow, set run-time interruption to allowed status.
      */
     public static void setActive() {
         allowTime = true;
@@ -67,8 +65,7 @@ public class TimeStatus {
 
 
     /**
-     * setNotActive,
-     * set run-time interruption to not active status.
+     * setNotActive, set run-time interruption to not active status.
      */
     public static void setNotActive() {
         allowTime = false;
@@ -76,8 +73,7 @@ public class TimeStatus {
 
 
     /**
-     * setLimit,
-     * set run-time limit in milliseconds.
+     * setLimit, set run-time limit in milliseconds.
      */
     public static void setLimit(long t) {
         limitTime = t;
@@ -85,8 +81,7 @@ public class TimeStatus {
 
 
     /**
-     * Restart timer,
-     * set run-time to current time.
+     * Restart timer, set run-time to current time.
      */
     public static void restart() {
         startTime = System.currentTimeMillis();
@@ -94,8 +89,7 @@ public class TimeStatus {
 
 
     /**
-     * set call back,
-     * set the Callabe object.
+     * set call back, set the Callabe object.
      */
     public static void setCallBack(Callable<Boolean> cb) {
         callBack = cb;
@@ -103,32 +97,32 @@ public class TimeStatus {
 
 
     /**
-     * Check for exceeded time,
-     * test if time has exceeded and throw an exception if so.
+     * Check for exceeded time, test if time has exceeded and throw an exception
+     * if so.
      * @param msg the message to be send with the exception.
      */
     public static void checkTime(String msg) {
-        if ( ! allowTime ) {
+        if (!allowTime) {
             return;
         }
-        if ( limitTime == Long.MAX_VALUE ) {
+        if (limitTime == Long.MAX_VALUE) {
             return;
         }
         long tt = (System.currentTimeMillis() - startTime - limitTime);
         //System.out.println("tt  = " + tt);
-        if ( tt <= 0L ) {
+        if (tt <= 0L) {
             return;
         }
-        if ( callBack != null ) {
+        if (callBack != null) {
             try {
                 boolean t = callBack.call();
-                if ( t ) {
+                if (t) {
                     return;
                 }
-            } catch ( Exception e ) {
+            } catch (Exception e) {
             }
         }
-        if ( msg == null ) {
+        if (msg == null) {
             msg = "";
         }
         throw new TimeExceededException(msg + " over time = " + tt);

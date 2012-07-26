@@ -6,17 +6,19 @@ package edu.jas.kern;
 
 
 /**
- * PrettyPrint,
- * defines global pretty print status.
+ * PrettyPrint, defines global pretty print status.
  * @author Heinz Kredel
  */
 
 public class PrettyPrint {
 
+
     private static volatile boolean toDo = true;
+
 
     protected PrettyPrint() {
     }
+
 
     /**
      * isTrue.
@@ -28,8 +30,7 @@ public class PrettyPrint {
 
 
     /**
-     * setPretty.
-     * Set use pretty printing to true.
+     * setPretty. Set use pretty printing to true.
      */
     public static void setPretty() {
         toDo = true;
@@ -37,8 +38,7 @@ public class PrettyPrint {
 
 
     /**
-     * setInternal.
-     * Set use pretty printing to false.
+     * setInternal. Set use pretty printing to false.
      */
     public static void setInternal() {
         toDo = false;
