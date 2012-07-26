@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.Scanner;
 
 import org.apache.log4j.Logger;
 
@@ -152,7 +152,7 @@ public class GenPolynomialTokenizer {
         spfac = new GenSolvablePolynomialRing<BigRational>(fac, nvars, tord, vars);
 
         reader = r;
-        tok = new StreamTokenizer(r);
+        tok = new StreamTokenizer(reader);
         tok.resetSyntax();
         // tok.eolIsSignificant(true); no more
         tok.eolIsSignificant(false);
@@ -376,7 +376,7 @@ public class GenPolynomialTokenizer {
                     //System.out.println("coeff 0 = " + tok.sval );
                     StringBuffer df = new StringBuffer();
                     df.append(tok.sval);
-                    if (tok.sval.charAt(tok.sval.length()-1) == 'i') { // complex number
+                    if (tok.sval.charAt(tok.sval.length() - 1) == 'i') { // complex number
                         tt = tok.nextToken();
                         if (debug)
                             logger.debug("tt,im = " + tok);
@@ -394,11 +394,11 @@ public class GenPolynomialTokenizer {
                                 } else {
                                     tok.pushBack();
                                 }
-			    }
+                            }
                         } else {
                             tok.pushBack();
                         }
-                    } 
+                    }
                     tt = tok.nextToken();
                     if (tt == '.') { // decimal number
                         tt = tok.nextToken();
@@ -451,11 +451,11 @@ public class GenPolynomialTokenizer {
                         if (debug)
                             logger.info("coeff " + r);
                         //if (r.isONE() || r.isZERO()) {
-                            //logger.error("Unknown varibable " + tok.sval);
-                            //done = true;
-                            //break;
-                            //throw new InvalidExpressionException("recursively unknown variable " + tok.sval);
-			//}
+                        //logger.error("Unknown varibable " + tok.sval);
+                        //done = true;
+                        //break;
+                        //throw new InvalidExpressionException("recursively unknown variable " + tok.sval);
+                        //}
                         ie = nextExponent();
                         //  System.out.println("ie: " + ie);
                         r = Power.<RingElem> positivePower(r, ie);
@@ -1377,9 +1377,9 @@ public class GenPolynomialTokenizer {
 
 
     // must also allow +/- // does not work with tokenizer
-    private static boolean number(char x) {
-        return digit(x) || x == '-' || x == '+';
-    }
+    //private static boolean number(char x) {
+    //    return digit(x) || x == '-' || x == '+';
+    //}
 
 
     private static boolean digit(char x) {
@@ -1474,23 +1474,23 @@ public class GenPolynomialTokenizer {
         Scanner sc = new Scanner(st);
         while (sc.hasNext()) {
             String sn = sc.next();
-            if ( sn == null || sn.length() == 0 ) {
+            if (sn == null || sn.length() == 0) {
                 continue;
             }
             //System.out.println("sn = " + sn);
             int i = 0;
-            while ( digit(sn.charAt(i)) && i < sn.length()-1 ) {
+            while (digit(sn.charAt(i)) && i < sn.length() - 1) {
                 i++;
             }
             //System.out.println("sn = " + sn + ", i = " + i);
-            if ( i > 0 ) {
-                sn = sn.substring(i,sn.length());
+            if (i > 0) {
+                sn = sn.substring(i, sn.length());
             }
             //System.out.println("sn = " + sn);
-            if ( sn.length() == 0 ) {
+            if (sn.length() == 0) {
                 continue;
             }
-            if ( ! letter(sn.charAt(0)) ) {
+            if (!letter(sn.charAt(0))) {
                 continue;
             }
             //System.out.println("sn = " + sn);

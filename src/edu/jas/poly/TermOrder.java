@@ -1544,7 +1544,7 @@ public final class TermOrder implements Serializable {
         }
         if (evord2 != 0) {
             logger.warn("TermOrder is already extended");
-            if ( false && debug ) {
+            if (debug) {
                 throw new IllegalArgumentException("TermOrder is already extended: " + this);
             }
             return new TermOrder(evord, evord2, r + k, evend1 + k);
@@ -1624,13 +1624,13 @@ public final class TermOrder implements Serializable {
         }
         if (evend1 > k) { // < IntMax since evord2 != 0
             int el = evend1 - k;
-            while ( el > len ) {
+            while (el > len) {
                 el -= len;
             }
-            if ( el == 0L ) {
+            if (el == 0L) {
                 return new TermOrder(evord);
             }
-            if ( el == len ) {
+            if (el == len) {
                 return new TermOrder(evord);
             }
             return new TermOrder(evord, evord2, len, el);

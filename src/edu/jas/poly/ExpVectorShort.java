@@ -366,12 +366,12 @@ public class ExpVectorShort extends ExpVector
     }
 
 
-    /** hashCode for this exponent vector.
-     * @see java.lang.Object#hashCode()
-     * Only for findbugs.
+    /**
+     * hashCode for this exponent vector.
+     * @see java.lang.Object#hashCode() Only for findbugs.
      */
     @Override
-    public int hashCode() { 
+    public int hashCode() {
         return super.hashCode();
     }
 
@@ -455,7 +455,7 @@ public class ExpVectorShort extends ExpVector
      * @return substituted ExpVector.
      */
     public ExpVectorShort subst(int i, short d) {
-        ExpVectorShort V = (ExpVectorShort) this.clone();
+        ExpVectorShort V = this.clone();
         @SuppressWarnings("unused")
         long e = V.setVal(i, d);
         return V;
@@ -471,7 +471,7 @@ public class ExpVectorShort extends ExpVector
      */
     @Override
     public ExpVectorShort subst(int i, long d) {
-        ExpVectorShort V = (ExpVectorShort) this.clone();
+        ExpVectorShort V = this.clone();
         @SuppressWarnings("unused")
         long e = V.setVal(i, d);
         return V;

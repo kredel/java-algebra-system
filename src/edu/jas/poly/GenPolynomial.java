@@ -178,10 +178,10 @@ Iterable<Monomial<C>> {
      * @param e exponent.
      */
     public void doPutToMap(ExpVector e, C c) {
-        if (false && debug) {
+        if (debug) {
             C a = val.get(e);
             if (a != null) {
-                logger.info("map entry exists " + e + " to " + a + " new " + c);
+                logger.error("map entry exists " + e + " to " + a + " new " + c);
             }
         }
         if (!c.isZERO()) {
@@ -200,10 +200,10 @@ Iterable<Monomial<C>> {
     public void doPutToMap(SortedMap<ExpVector, C> vals) {
         for (Map.Entry<ExpVector, C> me : vals.entrySet()) {
             ExpVector e = me.getKey();
-            if (false && debug) {
+            if (debug) {
                 C a = val.get(e);
                 if (a != null) {
-                    logger.info("map entry exists " + e + " to " + a + " new " + me.getValue());
+                    logger.error("map entry exists " + e + " to " + a + " new " + me.getValue());
                 }
             }
             C c = me.getValue();
@@ -465,11 +465,11 @@ Iterable<Monomial<C>> {
             return true;
         }
         long deg = -1;
-        for ( ExpVector e : val.keySet() ) {
+        for (ExpVector e : val.keySet()) {
             if (deg < 0) {
-                deg = e.totalDeg(); 
+                deg = e.totalDeg();
             } else if (deg != e.totalDeg()) {
-                return false; 
+                return false;
             }
         }
         return true;
@@ -522,13 +522,13 @@ Iterable<Monomial<C>> {
         }
         SortedMap<ExpVector, C> av = this.val;
         SortedMap<ExpVector, C> bv = b.val;
-        Iterator<Map.Entry<ExpVector,C>> ai = av.entrySet().iterator();
-        Iterator<Map.Entry<ExpVector,C>> bi = bv.entrySet().iterator();
+        Iterator<Map.Entry<ExpVector, C>> ai = av.entrySet().iterator();
+        Iterator<Map.Entry<ExpVector, C>> bi = bv.entrySet().iterator();
         int s = 0;
         int c = 0;
         while (ai.hasNext() && bi.hasNext()) {
-            Map.Entry<ExpVector,C> aie = ai.next();
-            Map.Entry<ExpVector,C> bie = bi.next();
+            Map.Entry<ExpVector, C> aie = ai.next();
+            Map.Entry<ExpVector, C> bie = bi.next();
             ExpVector ae = aie.getKey();
             ExpVector be = bie.getKey();
             s = ae.compareTo(be);
@@ -676,7 +676,7 @@ Iterable<Monomial<C>> {
             return 0; // 0 or -1 ?;
         }
         int j;
-        if ( i >= 0 ) {
+        if (i >= 0) {
             j = ring.nvar - 1 - i;
         } else { // python like -1 means main variable
             j = ring.nvar + i;
@@ -796,7 +796,7 @@ Iterable<Monomial<C>> {
         GenPolynomial<C> n = this.clone(); //new GenPolynomial<C>(ring, val); 
         SortedMap<ExpVector, C> nv = n.val;
         SortedMap<ExpVector, C> sv = S.val;
-        for (Map.Entry<ExpVector,C> me : sv.entrySet()) {
+        for (Map.Entry<ExpVector, C> me : sv.entrySet()) {
             ExpVector e = me.getKey();
             C y = me.getValue(); //sv.get(e); // assert y != null
             C x = nv.get(e);
@@ -877,7 +877,7 @@ Iterable<Monomial<C>> {
         GenPolynomial<C> n = this.clone(); //new GenPolynomial<C>(ring, val); 
         SortedMap<ExpVector, C> nv = n.val;
         SortedMap<ExpVector, C> sv = S.val;
-        for (Map.Entry<ExpVector,C> me : sv.entrySet()) {
+        for (Map.Entry<ExpVector, C> me : sv.entrySet()) {
             ExpVector e = me.getKey();
             C y = me.getValue(); //sv.get(e); // assert y != null
             C x = nv.get(e);
@@ -1167,10 +1167,10 @@ Iterable<Monomial<C>> {
             ExpVector e = m.getKey();
             C c1 = m.getValue();
             C c = c1.divide(s);
-            if (false) {
+            if (debug) {
                 C x = c1.remainder(s);
                 if (!x.isZERO()) {
-                    System.out.println("divide x = " + x);
+                    logger.info("divide x = " + x);
                     throw new ArithmeticException(this.getClass().getName() + " no exact division: " + c1
                                     + "/" + s);
                 }
@@ -1435,7 +1435,6 @@ Iterable<Monomial<C>> {
         GenPolynomial<C> c1 = ring.getONE().clone();
         GenPolynomial<C> d1 = ring.getZERO().clone();
         GenPolynomial<C> x1;
-        GenPolynomial<C> x2;
         while (!r.isZERO()) {
             qr = q.quotientRemainder(r);
             q = qr[0];
@@ -1642,7 +1641,7 @@ Iterable<Monomial<C>> {
 
 
     /**
-     * Make homogeneous. 
+     * Make homogeneous.
      * @param pfac extended polynomial ring factory (by 1 variable).
      * @return homogeneous polynomial.
      */
@@ -1670,7 +1669,7 @@ Iterable<Monomial<C>> {
 
 
     /**
-     * Dehomogenize. 
+     * Dehomogenize.
      * @param pfac contracted polynomial ring factory (by 1 variable).
      * @return in homogeneous polynomial.
      */
@@ -1687,11 +1686,12 @@ Iterable<Monomial<C>> {
         for (Map.Entry<ExpVector, C> y : A.entrySet()) {
             ExpVector e = y.getKey();
             C a = y.getValue();
-            ExpVector f = e.contract(1,pfac.nvar);
+            ExpVector f = e.contract(1, pfac.nvar);
             C.put(f, a);
         }
         return Cp;
     }
+
 
     /**
      * Reverse variables. Used e.g. in opposite rings.

@@ -15,7 +15,6 @@ import org.apache.log4j.Logger;
 
 import edu.jas.kern.Scripting;
 import edu.jas.structure.RingElem;
-import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.util.CartesianProduct;
 import edu.jas.util.CartesianProductInfinite;
@@ -28,7 +27,7 @@ import edu.jas.util.CartesianProductInfinite;
  */
 
 public class AlgebraicNumberRing<C extends RingElem<C>> implements RingFactory<AlgebraicNumber<C>>,
-        Iterable<AlgebraicNumber<C>> {
+                Iterable<AlgebraicNumber<C>> {
 
 
     /**
@@ -304,7 +303,7 @@ public class AlgebraicNumberRing<C extends RingElem<C>> implements RingFactory<A
     @Override
     public String toString() {
         return "AlgebraicNumberRing[ " + modul.toString() + " | isField=" + isField + " :: "
-                + ring.toString() + " ]";
+                        + ring.toString() + " ]";
     }
 
 
@@ -318,7 +317,7 @@ public class AlgebraicNumberRing<C extends RingElem<C>> implements RingFactory<A
         StringBuffer s = new StringBuffer();
         s.append("AN(");
         s.append(modul.toScript());
-        switch (Scripting.getLang() ) {
+        switch (Scripting.getLang()) {
         case Ruby:
             s.append((isField() ? ",true" : ",false"));
             break;
@@ -420,7 +419,7 @@ public class AlgebraicNumberRing<C extends RingElem<C>> implements RingFactory<A
      * @return S, with S mod c.modul == c and S mod a.modul == a.
      */
     public AlgebraicNumber<C> chineseRemainder(AlgebraicNumber<C> c, AlgebraicNumber<C> ci,
-            AlgebraicNumber<C> a) {
+                    AlgebraicNumber<C> a) {
         if (true) { // debug
             if (c.ring.modul.compareTo(a.ring.modul) < 1) {
                 System.out.println("AlgebraicNumber error " + c + ", " + a);
@@ -556,7 +555,7 @@ class AlgebraicNumberIterator<C extends RingElem<C>> implements Iterator<Algebra
 
     /**
      * CartesianProduct iterator constructor.
-     * @param comps components of the cartesian product.
+     * @param aring AlgebraicNumberRing components of the Cartesian product.
      */
     public AlgebraicNumberIterator(AlgebraicNumberRing<C> aring) {
         RingFactory<C> cf = aring.ring.coFac;
@@ -582,6 +581,9 @@ class AlgebraicNumberIterator<C extends RingElem<C>> implements Iterator<Algebra
         } else {
             CartesianProductInfinite<C> tuples = new CartesianProductInfinite<C>(comps);
             iter = tuples.iterator();
+        }
+        if (logger.isInfoEnabled()) {
+            logger.info("iterator for degree " + d + ", finite = " + cf.isFinite());
         }
     }
 
