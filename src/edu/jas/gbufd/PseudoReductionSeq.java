@@ -155,7 +155,7 @@ public class PseudoReductionSeq<C extends RingElem<C>> extends ReductionAbstract
             }
         }
         ExpVector[] htl = new ExpVector[l];
-        C[] lbc = (C[]) new Object[l]; // want C[] 
+        C[] lbc = (C[]) new RingElem[l]; // want C[] 
         GenPolynomial<C>[] p = new GenPolynomial[l];
         int i;
         int j = 0;
