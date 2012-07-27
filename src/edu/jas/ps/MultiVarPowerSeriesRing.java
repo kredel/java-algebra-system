@@ -156,7 +156,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
         this.coFac = cofac;
         this.nvar = nv;
         this.truncate = truncate;
-        this.vars = names;
+        vars = names;
         if (vars == null) {
             if (PrettyPrint.isTrue()) {
                 vars = GenPolynomialRing.newVars("x", nvar);
@@ -274,6 +274,9 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
         if (a == null) {
             return false;
         }
+        if (!coFac.equals(a.coFac)) {
+            return false;
+        }
         if (Arrays.equals(vars, a.vars)) {
             return true;
         }
@@ -287,7 +290,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
      */
     @Override
     public int hashCode() {
-        int h = 0;
+        int h = coFac.hashCode();
         h = (Arrays.hashCode(vars) << 23);
         h += truncate;
         return h;
@@ -599,13 +602,13 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
      */
     public List<MultiVarPowerSeries<C>> fromPolynomial(List<GenPolynomial<C>> A) {
         return ListUtil.<GenPolynomial<C>, MultiVarPowerSeries<C>> map(A,
-                new UnaryFunctor<GenPolynomial<C>, MultiVarPowerSeries<C>>() {
+                        new UnaryFunctor<GenPolynomial<C>, MultiVarPowerSeries<C>>() {
 
 
-                    public MultiVarPowerSeries<C> eval(GenPolynomial<C> c) {
-                        return fromPolynomial(c);
-                    }
-                });
+                            public MultiVarPowerSeries<C> eval(GenPolynomial<C> c) {
+                                return fromPolynomial(c);
+                            }
+                        });
     }
 
 
@@ -768,8 +771,8 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
                     return c;
                 }
                 TaylorFunction<C> pder = der.deriviative(i);
-                if ( pder.isZERO() ) {
-                     return coFac.getZERO();
+                if (pder.isZERO()) {
+                    return coFac.getZERO();
                 }
                 c = pder.evaluate(v);
                 if (c.isZERO()) {

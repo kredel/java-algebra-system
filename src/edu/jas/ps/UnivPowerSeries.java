@@ -306,9 +306,8 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
             public C generate(int i) {
                 if (i == 0) {
                     return h;
-                } else {
-                    return coefficient(i - 1);
                 }
+                return coefficient(i - 1);
             }
         });
     }
@@ -348,9 +347,8 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
                 C c = coefficient(i);
                 if (sel.select(c)) {
                     return c;
-                } else {
-                    return ring.coFac.getZERO();
                 }
+                return ring.coFac.getZERO();
             }
         });
     }
@@ -466,9 +464,8 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
     public UnivPowerSeries<C> abs() {
         if (signum() < 0) {
             return negate();
-        } else {
-            return this;
         }
+        return this;
     }
 
 

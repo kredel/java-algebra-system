@@ -25,7 +25,7 @@ import edu.jas.structure.RingElem;
  */
 
 public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
-    /*todo: extends ReductionAbstract<C>*/{
+/*todo: extends ReductionAbstract<C>*/{
 
 
     private static final Logger logger = Logger.getLogger(ReductionSeq.class);
@@ -182,7 +182,7 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 j++;
             }
         }
-        int ll = j;
+        //int ll = j;
         MultiVarPowerSeries<C> S = Ap;
         //S.setTruncate(Ap.ring.truncate()); // ??
         m = S.orderMonomial();
@@ -275,7 +275,7 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
         GenPolynomialRing<C> pfac = A.lazyCoeffs.pfac;
         while (!R.isZERO()) {
             Map.Entry<ExpVector, C> m = R.orderMonomial();
-            if ( m == null ) {
+            if (m == null) {
                 break;
             }
             R = R.reductum();
@@ -315,7 +315,7 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
             //    System.out.println("a = " + a);
             //}
             Map.Entry<ExpVector, C> m = a.orderMonomial();
-            if ( m == null ) {
+            if (m == null) {
                 //S.add(a);
                 continue;
             }
@@ -325,7 +325,7 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
             // need also unit of reduction: u r --> b
             // b = b.multiply(u);
             b = b.sum(m);
-            if ( !b.isZERO() ) {
+            if (!b.isZERO()) {
                 R.add(b);
             }
         }

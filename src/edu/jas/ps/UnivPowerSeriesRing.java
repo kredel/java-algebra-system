@@ -217,10 +217,13 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
         if (a == null) {
             return false;
         }
-        if (var.equals(a.var)) {
-            return true;
+        if (!coFac.equals(a.coFac)) {
+            return false;
         }
-        return false;
+        if (!var.equals(a.var)) {
+            return false;
+        }
+        return true;
     }
 
 
@@ -230,8 +233,8 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
      */
     @Override
     public int hashCode() {
-        int h = 0;
-        h = (var.hashCode() << 27);
+        int h = coFac.hashCode();
+        h += (var.hashCode() << 27);
         h += truncate;
         return h;
     }
