@@ -1012,7 +1012,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
         } catch (InvalidExpressionException e) {
             // pass
         }
-        assertFalse("f != null", f == null);
+        assertTrue("f != null", f == null);
     }
 
 
