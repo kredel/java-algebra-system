@@ -13,7 +13,6 @@ import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.ModLong;
 import edu.jas.arith.ModLongRing;
-import edu.jas.arith.Rational;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.Complex;
@@ -186,7 +185,7 @@ public class FactorFactory {
         } else if (ofac instanceof ModLongRing) {
             ufd = new FactorModular(fac);
         } else if (ofac instanceof ComplexRing) {
-            cfac = (ComplexRing<C>)ofac;
+            cfac = (ComplexRing<C>) ofac;
             ufd = new FactorComplex(cfac);
         } else if (ofac instanceof AlgebraicNumberRing) {
             //System.out.println("afac_o = " + ofac);

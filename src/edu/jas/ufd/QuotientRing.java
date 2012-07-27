@@ -69,11 +69,12 @@ public class QuotientRing<C extends GcdRingElem<C>> implements RingFactory<Quoti
     public QuotientRing(GenPolynomialRing<C> r, boolean ufdGCD) {
         ring = r;
         this.ufdGCD = ufdGCD;
-//         if (!ufdGCD) {
-//             engine = null;
-//             return;
-//         }
+        //         if (!ufdGCD) {
+        //             engine = null;
+        //             return;
+        //         }
         engine = GCDFactory.<C> getProxy(ring.coFac);
+        logger.debug("quotient ring constructed");
     }
 
 
@@ -109,20 +110,20 @@ public class QuotientRing<C extends GcdRingElem<C>> implements RingFactory<Quoti
      * @param d second polynomial.
      * @return lcm(n,d)
      */
-//     protected GenPolynomial<C> syzLcm(GenPolynomial<C> n, GenPolynomial<C> d) {
-//         List<GenPolynomial<C>> list = new ArrayList<GenPolynomial<C>>(1);
-//         list.add(n);
-//         Ideal<C> N = new Ideal<C>(n.ring, list, true);
-//         list = new ArrayList<GenPolynomial<C>>(1);
-//         list.add(d);
-//         Ideal<C> D = new Ideal<C>(n.ring, list, true);
-//         Ideal<C> L = N.intersect(D);
-//         if (L.getList().size() != 1) {
-//             throw new RuntimeException("lcm not uniqe");
-//         }
-//         GenPolynomial<C> lcm = L.getList().get(0);
-//         return lcm;
-//     }
+    //     protected GenPolynomial<C> syzLcm(GenPolynomial<C> n, GenPolynomial<C> d) {
+    //         List<GenPolynomial<C>> list = new ArrayList<GenPolynomial<C>>(1);
+    //         list.add(n);
+    //         Ideal<C> N = new Ideal<C>(n.ring, list, true);
+    //         list = new ArrayList<GenPolynomial<C>>(1);
+    //         list.add(d);
+    //         Ideal<C> D = new Ideal<C>(n.ring, list, true);
+    //         Ideal<C> L = N.intersect(D);
+    //         if (L.getList().size() != 1) {
+    //             throw new RuntimeException("lcm not uniqe");
+    //         }
+    //         GenPolynomial<C> lcm = L.getList().get(0);
+    //         return lcm;
+    //     }
 
 
     /*
@@ -131,24 +132,24 @@ public class QuotientRing<C extends GcdRingElem<C>> implements RingFactory<Quoti
      * @param d second polynomial.
      * @return gcd(n,d)
      */
-//     protected GenPolynomial<C> syzGcd(GenPolynomial<C> n, GenPolynomial<C> d) {
-//         if (n.isZERO()) {
-//             return d;
-//         }
-//         if (d.isZERO()) {
-//             return n;
-//         }
-//         if (n.isONE()) {
-//             return n;
-//         }
-//         if (d.isONE()) {
-//             return d;
-//         }
-//         GenPolynomial<C> p = n.multiply(d);
-//         GenPolynomial<C> lcm = syzLcm(n, d);
-//         GenPolynomial<C> gcd = divide(p, lcm);
-//         return gcd;
-//     }
+    //     protected GenPolynomial<C> syzGcd(GenPolynomial<C> n, GenPolynomial<C> d) {
+    //         if (n.isZERO()) {
+    //             return d;
+    //         }
+    //         if (d.isZERO()) {
+    //             return n;
+    //         }
+    //         if (n.isONE()) {
+    //             return n;
+    //         }
+    //         if (d.isONE()) {
+    //             return d;
+    //         }
+    //         GenPolynomial<C> p = n.multiply(d);
+    //         GenPolynomial<C> lcm = syzLcm(n, d);
+    //         GenPolynomial<C> gcd = divide(p, lcm);
+    //         return gcd;
+    //     }
 
 
     /**
@@ -268,7 +269,7 @@ public class QuotientRing<C extends GcdRingElem<C>> implements RingFactory<Quoti
     @Override
     public String toString() {
         String s = null;
-        if ( ring.coFac.characteristic().signum() == 0 ) {
+        if (ring.coFac.characteristic().signum() == 0) {
             s = "RatFunc";
         } else {
             s = "ModFunc";

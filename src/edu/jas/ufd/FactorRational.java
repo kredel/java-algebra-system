@@ -18,8 +18,8 @@ import edu.jas.poly.PolyUtil;
 
 
 /**
- * Rational number coefficients factorization algorithms.
- * This class implements factorization methods for polynomials over rational numbers.
+ * Rational number coefficients factorization algorithms. This class implements
+ * factorization methods for polynomials over rational numbers.
  * @author Heinz Kredel
  */
 
@@ -29,7 +29,7 @@ public class FactorRational extends FactorAbsolute<BigRational> {
     private static final Logger logger = Logger.getLogger(FactorRational.class);
 
 
-    private final boolean debug = true || logger.isInfoEnabled();
+    private final boolean debug = logger.isInfoEnabled();
 
 
     /**
@@ -39,11 +39,11 @@ public class FactorRational extends FactorAbsolute<BigRational> {
 
 
     /**
-     * No argument constructor. 
+     * No argument constructor.
      */
     protected FactorRational() {
-        super( BigRational.ONE );
-        iengine = FactorFactory.getImplementation( BigInteger.ONE );
+        super(BigRational.ONE);
+        iengine = FactorFactory.getImplementation(BigInteger.ONE);
     }
 
 
@@ -93,7 +93,7 @@ public class FactorRational extends FactorAbsolute<BigRational> {
         //System.out.println("rfacts = " + rfacts);
         rfacts = PolyUtil.monic(rfacts);
         //System.out.println("rfacts = " + rfacts);
-        if ( !ldcf.isONE() ) {
+        if (!ldcf.isONE()) {
             GenPolynomial<BigRational> r = rfacts.get(0);
             rfacts.remove(r);
             r = r.multiply(ldcf);
@@ -153,7 +153,7 @@ public class FactorRational extends FactorAbsolute<BigRational> {
         //System.out.println("rfacts = " + rfacts);
         rfacts = PolyUtil.monic(rfacts);
         //System.out.println("rfacts = " + rfacts);
-        if ( !ldcf.isONE() ) {
+        if (!ldcf.isONE()) {
             GenPolynomial<BigRational> r = rfacts.get(0);
             rfacts.remove(r);
             r = r.multiply(ldcf);

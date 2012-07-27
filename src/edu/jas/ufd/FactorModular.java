@@ -39,7 +39,7 @@ public class FactorModular<MOD extends GcdRingElem<MOD> & Modular> extends Facto
     private static final Logger logger = Logger.getLogger(FactorModular.class);
 
 
-    private final boolean debug = true || logger.isDebugEnabled();
+    private final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -210,7 +210,7 @@ public class FactorModular<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             logger.info("dfacs    = " + dfacs);
             //System.out.println("dfacs    = " + dfacs);
         }
-        for ( Map.Entry<Long,GenPolynomial<MOD>> me : dfacs.entrySet()) {
+        for (Map.Entry<Long, GenPolynomial<MOD>> me : dfacs.entrySet()) {
             Long e = me.getKey();
             GenPolynomial<MOD> f = me.getValue(); // dfacs.get(e);
             List<GenPolynomial<MOD>> efacs = baseEqualDegreeFactors(f, e);

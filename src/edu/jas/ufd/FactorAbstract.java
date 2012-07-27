@@ -16,10 +16,10 @@ import java.util.TreeSet;
 import org.apache.log4j.Logger;
 
 import edu.jas.kern.TimeStatus;
+import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
-import edu.jas.poly.ExpVector;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.util.KsubSet;
@@ -133,7 +133,8 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
 
 
     /**
-     * GenPolynomial factorization of a squarefree polynomial, using Kronecker substitution.
+     * GenPolynomial factorization of a squarefree polynomial, using Kronecker
+     * substitution.
      * @param P squarefree and primitive! (respectively monic) GenPolynomial.
      * @return [p_1,...,p_k] with P = prod_{i=1,...,r} p_i.
      */
@@ -176,7 +177,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             System.out.println("slist = " + slist);
             throw new ArithmeticException("no factorization");
         }
-        for ( Map.Entry<GenPolynomial<C>,Long> me : slist.entrySet()) {
+        for (Map.Entry<GenPolynomial<C>, Long> me : slist.entrySet()) {
             GenPolynomial<C> g = me.getKey();
             long e = me.getValue(); // slist.get(g);
             for (int i = 0; i < e; i++) { // is this really required? yes!
@@ -217,10 +218,10 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
                     System.out.print("ti(" + ti + ") ");
                     TimeStatus.checkTime(ti + " % 2000 == 0");
                 }
-                if ( !evl.multipleOf(trial.leadingExpVector()) ) {
+                if (!evl.multipleOf(trial.leadingExpVector())) {
                     continue;
                 }
-                if ( !evt.multipleOf(trial.trailingExpVector()) ) {
+                if (!evt.multipleOf(trial.trailingExpVector())) {
                     continue;
                 }
                 if (trial.degree() > deg || trial.isConstant()) {
@@ -275,10 +276,11 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
 
 
     /**
-     * Remove one occurence of elements.
+     * Remove one occurrence of elements.
      * @param a list of objects.
      * @param b list of objects.
-     * @return remove every element of b from a, but only one occurence.
+     * @return remove every element of b from a, but only one occurrence.
+     *         <b>Note:</b> not available in java.util.
      */
     static <T> List<T> removeOnce(List<T> a, List<T> b) {
         List<T> res = new ArrayList<T>();
@@ -297,7 +299,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
      *         e_i.
      */
     public List<GenPolynomial<C>> baseFactorsRadical(GenPolynomial<C> P) {
-        return new ArrayList<GenPolynomial<C>>( baseFactors(P).keySet() );
+        return new ArrayList<GenPolynomial<C>>(baseFactors(P).keySet());
     }
 
 
@@ -348,13 +350,13 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             facs.put(P, 1L);
         }
         if (logger.isInfoEnabled()
-                && (facs.size() > 1 || (facs.size() == 1 && facs.get(facs.firstKey()) > 1))) {
+                        && (facs.size() > 1 || (facs.size() == 1 && facs.get(facs.firstKey()) > 1))) {
             logger.info("squarefree facs   = " + facs);
             //System.out.println("sfacs   = " + facs);
             //boolean tt = isFactorization(P,facs);
             //System.out.println("sfacs tt   = " + tt);
         }
-        for ( Map.Entry<GenPolynomial<C>,Long> me : facs.entrySet()) {
+        for (Map.Entry<GenPolynomial<C>, Long> me : facs.entrySet()) {
             GenPolynomial<C> g = me.getKey();
             Long k = me.getValue(); //facs.get(g);
             //System.out.println("g       = " + g);
@@ -403,7 +405,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
      *         e_i.
      */
     public List<GenPolynomial<C>> factorsRadical(GenPolynomial<C> P) {
-        return new ArrayList<GenPolynomial<C>>( factors(P).keySet() );
+        return new ArrayList<GenPolynomial<C>>(factors(P).keySet());
     }
 
 
@@ -479,9 +481,9 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
                 logger.info("squarefree #mfacs 1-1 = " + facs);
             }
         }
-        for ( Map.Entry<GenPolynomial<C>,Long> me : facs.entrySet()) {
+        for (Map.Entry<GenPolynomial<C>, Long> me : facs.entrySet()) {
             GenPolynomial<C> g = me.getKey();
-            if ( g.isONE() ) { // skip 1
+            if (g.isONE()) { // skip 1
                 continue;
             }
             Long d = me.getValue(); // facs.get(g);
@@ -575,12 +577,12 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
 
     /**
      * Degree of a factorization.
-     * @param F a  factors map [p_1 -&gt; e_1, ..., p_k -&gt; e_k].
+     * @param F a factors map [p_1 -&gt; e_1, ..., p_k -&gt; e_k].
      * @return sum_{i=1,...,k} degree(p_i)*e_i.
      */
-    public long factorsDegree(SortedMap<GenPolynomial<C>,Long> F) {
+    public long factorsDegree(SortedMap<GenPolynomial<C>, Long> F) {
         long d = 0;
-        for ( Map.Entry<GenPolynomial<C>,Long> me : F.entrySet() ) {
+        for (Map.Entry<GenPolynomial<C>, Long> me : F.entrySet()) {
             GenPolynomial<C> p = me.getKey();
             long e = me.getValue(); //F.get(p);
             d += p.degree() * e;
@@ -596,7 +598,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
      * @return true if P = prod_{i=1,...,k} p_i**e_i , else false.
      */
     public boolean isRecursiveFactorization(GenPolynomial<GenPolynomial<C>> P,
-            SortedMap<GenPolynomial<GenPolynomial<C>>, Long> F) {
+                    SortedMap<GenPolynomial<GenPolynomial<C>>, Long> F) {
         return sengine.isRecursiveFactorization(P, F);
         // test irreducible
     }
@@ -668,7 +670,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         }
         GenPolynomialRing<GenPolynomial<C>> pfac = P.ring;
         SortedMap<GenPolynomial<GenPolynomial<C>>, Long> factors = new TreeMap<GenPolynomial<GenPolynomial<C>>, Long>(
-                pfac.getComparator());
+                        pfac.getComparator());
         if (P.isZERO()) {
             return factors;
         }
@@ -698,7 +700,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             r = r.multiply(ldcf);
             dfacts.put(r, E);
         }
-        for ( Map.Entry<GenPolynomial<C>,Long> me : dfacts.entrySet()) {
+        for (Map.Entry<GenPolynomial<C>, Long> me : dfacts.entrySet()) {
             GenPolynomial<C> f = me.getKey();
             Long E = me.getValue(); //dfacts.get(f);
             GenPolynomial<GenPolynomial<C>> rp = PolyUtil.<C> recursive(pfac, f);
@@ -713,27 +715,27 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
 
 
     /**
-     * Normalize factorization.
-     * p'_i &gt; 0 for i &gt; 1 and p'_1 != 1 if k &gt; 1.
+     * Normalize factorization. p'_i &gt; 0 for i &gt; 1 and p'_1 != 1 if k &gt;
+     * 1.
      * @param F = [p_1,...,p_k].
      * @return F' = [p'_1,...,p'_k].
      */
     public List<GenPolynomial<C>> normalizeFactorization(List<GenPolynomial<C>> F) {
-        if ( F == null || F.size() <= 1 ) {
+        if (F == null || F.size() <= 1) {
             return F;
         }
         List<GenPolynomial<C>> Fp = new ArrayList<GenPolynomial<C>>(F.size());
         GenPolynomial<C> f0 = F.get(0);
-        for ( int i = 1; i < F.size(); i++ ) {
-             GenPolynomial<C> fi = F.get(i);
-             if ( fi.signum() < 0 ) {
-                 fi = fi.negate();
-                 f0 = f0.negate();
-             }
-             Fp.add(fi);
+        for (int i = 1; i < F.size(); i++) {
+            GenPolynomial<C> fi = F.get(i);
+            if (fi.signum() < 0) {
+                fi = fi.negate();
+                f0 = f0.negate();
+            }
+            Fp.add(fi);
         }
-        if ( !f0.isONE() ) {
-            Fp.add(0,f0);
+        if (!f0.isONE()) {
+            Fp.add(0, f0);
         }
         return Fp;
     }

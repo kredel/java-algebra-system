@@ -5,8 +5,8 @@
 package edu.jas.ufd;
 
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -52,8 +52,8 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
     /**
      * GenPolynomial polynomial squarefree factorization.
      * @param A GenPolynomial.
-     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k} p_i^{e_i}
-     *         and p_i squarefree.
+     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k}
+     *         p_i^{e_i} and p_i squarefree.
      */
     public abstract SortedMap<GenPolynomial<C>, Long> baseSquarefreeFactors(GenPolynomial<C> A);
 
@@ -64,17 +64,17 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
      * @return squarefree(pp(P)).
      */
     public abstract GenPolynomial<GenPolynomial<C>> recursiveUnivariateSquarefreePart(
-            GenPolynomial<GenPolynomial<C>> P);
+                    GenPolynomial<GenPolynomial<C>> P);
 
 
     /**
      * GenPolynomial recursive univariate polynomial squarefree factorization.
      * @param P recursive univariate GenPolynomial.
-     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k} p_i^{e_i}
-     *         and p_i squarefree.
+     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k}
+     *         p_i^{e_i} and p_i squarefree.
      */
     public abstract SortedMap<GenPolynomial<GenPolynomial<C>>, Long> recursiveUnivariateSquarefreeFactors(
-            GenPolynomial<GenPolynomial<C>> P);
+                    GenPolynomial<GenPolynomial<C>> P);
 
 
     /**
@@ -93,7 +93,7 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
     public boolean isSquarefree(GenPolynomial<C> P) {
         GenPolynomial<C> S = squarefreePart(P);
         GenPolynomial<C> Ps = P;
-        if ( P.ring.coFac.isField() ) {
+        if (P.ring.coFac.isField()) {
             Ps = Ps.monic();
         } else {
             Ps = engine.basePrimitivePart(Ps);
@@ -114,11 +114,11 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
      * @return true if each P in L is squarefree, else false.
      */
     public boolean isSquarefree(List<GenPolynomial<C>> L) {
-        if ( L == null || L.isEmpty() ) {
+        if (L == null || L.isEmpty()) {
             return true;
         }
-        for ( GenPolynomial<C> P : L ) {
-            if (! isSquarefree(P) ) {
+        for (GenPolynomial<C> P : L) {
+            if (!isSquarefree(P)) {
                 return false;
             }
         }
@@ -146,8 +146,8 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
     /**
      * GenPolynomial squarefree factorization.
      * @param P GenPolynomial.
-     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k} p_i^{e_i}
-     *         and p_i squarefree.
+     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k}
+     *         p_i^{e_i} and p_i squarefree.
      */
     public abstract SortedMap<GenPolynomial<C>, Long> squarefreeFactors(GenPolynomial<C> P);
 
@@ -187,8 +187,8 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
         }
         SortedMap<GenPolynomial<C>, Long> sm = squarefreeFactors(a);
         List<GenPolynomial<C>> B = P;
-        for ( GenPolynomial<C> f : sm.keySet() ) {
-            B = engine.coPrime(f,B);
+        for (GenPolynomial<C> f : sm.keySet()) {
+            B = engine.coPrime(f, B);
         }
         return B;
     }
@@ -197,14 +197,14 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
     /**
      * Test if list of GenPolynomials is squarefree and co-prime.
      * @param B list of GenPolynomials.
-     * @return true, if for all b != c in B gcd(b,c) = 1 and 
-     *          each b in B is squarefree, else false. 
+     * @return true, if for all b != c in B gcd(b,c) = 1 and each b in B is
+     *         squarefree, else false.
      */
     public boolean isCoPrimeSquarefree(List<GenPolynomial<C>> B) {
         if (B == null || B.isEmpty()) {
             return true;
         }
-        if ( !engine.isCoPrime(B) ) {
+        if (!engine.isCoPrime(B)) {
             return false;
         }
         return isSquarefree(B);
@@ -212,37 +212,37 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
 
 
     /**
-     * Normalize factorization.
-     * p'_i &gt; 0 for i &gt; 1 and p'_1 != 1 if k &gt; 1.
+     * Normalize factorization. p'_i &gt; 0 for i &gt; 1 and p'_1 != 1 if k &gt;
+     * 1.
      * @param F = [p_1-&gt;e_1;, ..., p_k-&gt;e_k].
      * @return F' = [p'_1-&gt;e_1, ..., p'_k-&gt;e_k].
      */
-    public SortedMap<GenPolynomial<C>,Long> normalizeFactorization(SortedMap<GenPolynomial<C>,Long> F) {
-        if ( F == null || F.size() <= 1 ) {
+    public SortedMap<GenPolynomial<C>, Long> normalizeFactorization(SortedMap<GenPolynomial<C>, Long> F) {
+        if (F == null || F.size() <= 1) {
             return F;
         }
         List<GenPolynomial<C>> Fp = new ArrayList<GenPolynomial<C>>(F.keySet());
         GenPolynomial<C> f0 = Fp.get(0);
-        if ( f0.ring.characteristic().signum() != 0 ) { // only ordered coefficients
+        if (f0.ring.characteristic().signum() != 0) { // only ordered coefficients
             return F;
         }
-        long e0 = F.get(f0); 
-        SortedMap<GenPolynomial<C>,Long> Sp = new TreeMap<GenPolynomial<C>,Long>();
-        for ( int i = 1; i < Fp.size(); i++ ) {
-             GenPolynomial<C> fi = Fp.get(i);
-             long ei = F.get(fi); 
-             if ( fi.signum() < 0 ) {
-                 //System.out.println("e0 = " + e0 + ", f0 = " + f0);
-                 //System.out.println("ei = " + ei + ", fi = " + fi);
-                 fi = fi.negate();
-                 if ( ei % 2 != 0 ) { // && e0 % 2 != 0
-                     f0 = f0.negate();
-                 }
-             }
-             Sp.put(fi,ei);
+        long e0 = F.get(f0);
+        SortedMap<GenPolynomial<C>, Long> Sp = new TreeMap<GenPolynomial<C>, Long>();
+        for (int i = 1; i < Fp.size(); i++) {
+            GenPolynomial<C> fi = Fp.get(i);
+            long ei = F.get(fi);
+            if (fi.signum() < 0) {
+                //System.out.println("e0 = " + e0 + ", f0 = " + f0);
+                //System.out.println("ei = " + ei + ", fi = " + fi);
+                fi = fi.negate();
+                if (ei % 2 != 0) { // && e0 % 2 != 0
+                    f0 = f0.negate();
+                }
+            }
+            Sp.put(fi, ei);
         }
-        if ( !f0.isONE() ) {
-            Sp.put(f0,e0);
+        if (!f0.isONE()) {
+            Sp.put(f0, e0);
         }
         return Sp;
     }
@@ -278,8 +278,8 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
      * @param F = [p_1 -&gt; e_1, ..., p_k -&gt; e_k].
      * @return sum_{i=1,...,k} e_i.
      */
-    public long factorCount(SortedMap<GenPolynomial<C>,Long> F) {
-        if (F == null || F.isEmpty() ) {
+    public long factorCount(SortedMap<GenPolynomial<C>, Long> F) {
+        if (F == null || F.isEmpty()) {
             return 0L;
         }
         long f = 0L;
@@ -304,7 +304,7 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
             return true;
         }
         GenPolynomial<C> t = P.ring.getONE();
-        for ( Map.Entry<GenPolynomial<C>,Long> me : F.entrySet()) {
+        for (Map.Entry<GenPolynomial<C>, Long> me : F.entrySet()) {
             GenPolynomial<C> f = me.getKey();
             Long E = me.getValue(); // F.get(f);
             long e = E.longValue();
@@ -340,7 +340,7 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
      * @return true if P = prod_{i=1,...,k} p_i**e_i, else false.
      */
     public boolean isRecursiveFactorization(GenPolynomial<GenPolynomial<C>> P,
-            SortedMap<GenPolynomial<GenPolynomial<C>>, Long> F) {
+                    SortedMap<GenPolynomial<GenPolynomial<C>>, Long> F) {
         if (P == null || F == null) {
             throw new IllegalArgumentException("P and F may not be null");
         }
@@ -348,7 +348,7 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
             return true;
         }
         GenPolynomial<GenPolynomial<C>> t = P.ring.getONE();
-        for ( Map.Entry<GenPolynomial<GenPolynomial<C>>,Long> me : F.entrySet()) {
+        for (Map.Entry<GenPolynomial<GenPolynomial<C>>, Long> me : F.entrySet()) {
             GenPolynomial<GenPolynomial<C>> f = me.getKey();
             Long E = me.getValue(); // F.get(f);
             long e = E.longValue();
@@ -359,12 +359,12 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
         if (!f) {
             //System.out.println("P = " + P);
             //System.out.println("t = " + t);
-            GenPolynomialRing<C> cf = (GenPolynomialRing<C>)P.ring.coFac;
+            GenPolynomialRing<C> cf = (GenPolynomialRing<C>) P.ring.coFac;
             GreatestCommonDivisorAbstract<C> engine = GCDFactory.getProxy(cf.coFac);
             GenPolynomial<GenPolynomial<C>> Pp = engine.recursivePrimitivePart(P);
-            Pp = PolyUtil.<C>monic(Pp);
+            Pp = PolyUtil.<C> monic(Pp);
             GenPolynomial<GenPolynomial<C>> tp = engine.recursivePrimitivePart(t);
-            tp = PolyUtil.<C>monic(tp);
+            tp = PolyUtil.<C> monic(tp);
             f = Pp.equals(tp) || Pp.equals(tp.negate());
             if (f) {
                 return f;
@@ -411,11 +411,11 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
     /**
      * GenPolynomial recursive polynomial squarefree factorization.
      * @param P recursive GenPolynomial.
-     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k} p_i^{e_i}
-     *         and p_i squarefree.
+     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k}
+     *         p_i^{e_i} and p_i squarefree.
      */
     public SortedMap<GenPolynomial<GenPolynomial<C>>, Long> recursiveSquarefreeFactors(
-            GenPolynomial<GenPolynomial<C>> P) {
+                    GenPolynomial<GenPolynomial<C>> P) {
         SortedMap<GenPolynomial<GenPolynomial<C>>, Long> factors;
         factors = new TreeMap<GenPolynomial<GenPolynomial<C>>, Long>();
         if (P == null || P.isZERO()) {
@@ -443,57 +443,60 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
 
 
     /**
-     * Univariate GenPolynomial partial fraction decomposition. 
+     * Univariate GenPolynomial partial fraction decomposition.
      * @param A univariate GenPolynomial.
-     * @param D sorted map [d_1 -&gt; e_1, ..., d_k -&gt; e_k] with d_i squarefree.
-     * @return [ [Ai0, Ai1,..., Aie_i], i=0,...,k ] with A/prod(D) = A0 + sum( sum ( Aij/di^j ) ) with deg(Aij) < deg(di).
+     * @param D sorted map [d_1 -&gt; e_1, ..., d_k -&gt; e_k] with d_i
+     *            squarefree.
+     * @return [ [Ai0, Ai1,..., Aie_i], i=0,...,k ] with A/prod(D) = A0 + sum(
+     *         sum ( Aij/di^j ) ) with deg(Aij) < deg(di).
      */
-    public List<List<GenPolynomial<C>>> basePartialFraction(GenPolynomial<C> A, SortedMap<GenPolynomial<C>,Long> D) {
-        if ( D == null || A == null ) {
+    public List<List<GenPolynomial<C>>> basePartialFraction(GenPolynomial<C> A,
+                    SortedMap<GenPolynomial<C>, Long> D) {
+        if (D == null || A == null) {
             throw new IllegalArgumentException("null A or D not allowed");
         }
-        List<List<GenPolynomial<C>>> pf = new ArrayList<List<GenPolynomial<C>>>( D.size()+1 );
-        if ( D.size() == 0 ) {
+        List<List<GenPolynomial<C>>> pf = new ArrayList<List<GenPolynomial<C>>>(D.size() + 1);
+        if (D.size() == 0) {
             return pf;
         }
         //List<GenPolynomial<C>> fi;
-        if ( A.isZERO() ) {
-            for ( Map.Entry<GenPolynomial<C>,Long> me : D.entrySet() ) {
-                GenPolynomial<C> d = me.getKey();
+        if (A.isZERO()) {
+            for (Map.Entry<GenPolynomial<C>, Long> me : D.entrySet()) {
+                //GenPolynomial<C> d = me.getKey();
                 long e = me.getValue(); //D.get(d);
-                int e1 = (int)e + 1;
+                int e1 = (int) e + 1;
                 List<GenPolynomial<C>> fi = new ArrayList<GenPolynomial<C>>(e1);
-                for ( int i = 0; i < e1; i++ ) {
+                for (int i = 0; i < e1; i++) {
                     fi.add(A);
                 }
                 pf.add(fi);
             }
             List<GenPolynomial<C>> fi = new ArrayList<GenPolynomial<C>>(1);
             fi.add(A);
-            pf.add(0,fi);
+            pf.add(0, fi);
             return pf;
         }
         // A != 0, D != empty
-        List<GenPolynomial<C>> Dp = new ArrayList<GenPolynomial<C>>( D.size() );
-        for ( Map.Entry<GenPolynomial<C>,Long> me : D.entrySet() ) {
+        List<GenPolynomial<C>> Dp = new ArrayList<GenPolynomial<C>>(D.size());
+        for (Map.Entry<GenPolynomial<C>, Long> me : D.entrySet()) {
             GenPolynomial<C> d = me.getKey();
             long e = me.getValue(); //D.get(d);
             GenPolynomial<C> f = Power.<GenPolynomial<C>> positivePower(d, e);
             Dp.add(f);
         }
-        List<GenPolynomial<C>> F = engine.basePartialFraction(A,Dp);
+        List<GenPolynomial<C>> F = engine.basePartialFraction(A, Dp);
         //System.out.println("fraction list = " + F.size());
         GenPolynomial<C> A0 = F.remove(0);
         List<GenPolynomial<C>> fi = new ArrayList<GenPolynomial<C>>(1);
         fi.add(A0);
         pf.add(fi);
         int i = 0;
-        for ( Map.Entry<GenPolynomial<C>,Long> me : D.entrySet() ) { // assume fixed sequence order
+        for (Map.Entry<GenPolynomial<C>, Long> me : D.entrySet()) { // assume fixed sequence order
             GenPolynomial<C> d = me.getKey();
             long e = me.getValue(); // D.get(d);
-            int ei = (int)e;
+            int ei = (int) e;
             GenPolynomial<C> gi = F.get(i); // assume fixed sequence order
-            List<GenPolynomial<C>> Fi = engine.basePartialFraction(gi,d,ei);
+            List<GenPolynomial<C>> Fi = engine.basePartialFraction(gi, d, ei);
             pf.add(Fi);
             i++;
         }
@@ -502,82 +505,83 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
 
 
     /**
-     * Test for Univariate GenPolynomial partial fraction decomposition. 
+     * Test for Univariate GenPolynomial partial fraction decomposition.
      * @param A univariate GenPolynomial.
-     * @param D sorted map [d_1 -&gt; e_1, ..., d_k -&gt; e_k] with d_i squarefree.
-     * @param F a list of lists [ [Ai0, Ai1,..., Aie_i], i=0,...,k ] 
-     * @return true, if A/prod(D) = A0 + sum( sum ( Aij/di^j ) ),
-               else false.
+     * @param D sorted map [d_1 -&gt; e_1, ..., d_k -&gt; e_k] with d_i
+     *            squarefree.
+     * @param F a list of lists [ [Ai0, Ai1,..., Aie_i], i=0,...,k ]
+     * @return true, if A/prod(D) = A0 + sum( sum ( Aij/di^j ) ), else false.
      */
-    public boolean isBasePartialFraction(GenPolynomial<C> A, SortedMap<GenPolynomial<C>,Long> D, List<List<GenPolynomial<C>>> F) {
-        if ( D == null || A == null || F == null ) {
+    public boolean isBasePartialFraction(GenPolynomial<C> A, SortedMap<GenPolynomial<C>, Long> D,
+                    List<List<GenPolynomial<C>>> F) {
+        if (D == null || A == null || F == null) {
             throw new IllegalArgumentException("null A, D or F not allowed");
         }
-        if ( D.isEmpty() && F.isEmpty() ) {
+        if (D.isEmpty() && F.isEmpty()) {
             return true;
         }
-        if ( D.isEmpty() || F.isEmpty() ) {
+        if (D.isEmpty() || F.isEmpty()) {
             return false;
         }
-        List<GenPolynomial<C>> Dp = new ArrayList<GenPolynomial<C>>( D.size() );
-        for ( Map.Entry<GenPolynomial<C>,Long> me : D.entrySet() ) {
+        List<GenPolynomial<C>> Dp = new ArrayList<GenPolynomial<C>>(D.size());
+        for (Map.Entry<GenPolynomial<C>, Long> me : D.entrySet()) {
             GenPolynomial<C> d = me.getKey();
             long e = me.getValue(); // D.get(d);
             GenPolynomial<C> f = Power.<GenPolynomial<C>> positivePower(d, e);
             Dp.add(f);
         }
         List<GenPolynomial<C>> fi = F.get(0);
-        if ( fi.size() != 1 ) {
+        if (fi.size() != 1) {
             System.out.println("size(fi) != 1 " + fi);
             return false;
         }
         boolean t;
         GenPolynomial<C> A0 = fi.get(0);
         //System.out.println("A0 = " + A0);
-        List<GenPolynomial<C>> Qp = new ArrayList<GenPolynomial<C>>(D.size()+1);
+        List<GenPolynomial<C>> Qp = new ArrayList<GenPolynomial<C>>(D.size() + 1);
         Qp.add(A0);
 
-//         List<GenPolynomial<C>> Fp = engine.basePartialFraction(A,Dp);
-//         System.out.println("fraction list = " + F.size());
-//         t = engine.isBasePartialFraction(A,Dp,Fp);
-//         if ( ! t ) {
-//             System.out.println("not recursion isPartFrac = " + Fp);
-//             return false;
-//         }
-//         GenPolynomial<C> A0p = Fp.remove(0);
-//         if ( ! A0.equals(A0p) ) {
-//             System.out.println("A0 != A0p " + A0p);
-//             return false;
-//         }
+        //         List<GenPolynomial<C>> Fp = engine.basePartialFraction(A,Dp);
+        //         System.out.println("fraction list = " + F.size());
+        //         t = engine.isBasePartialFraction(A,Dp,Fp);
+        //         if ( ! t ) {
+        //             System.out.println("not recursion isPartFrac = " + Fp);
+        //             return false;
+        //         }
+        //         GenPolynomial<C> A0p = Fp.remove(0);
+        //         if ( ! A0.equals(A0p) ) {
+        //             System.out.println("A0 != A0p " + A0p);
+        //             return false;
+        //         }
 
         int i = 0;
-        for ( Map.Entry<GenPolynomial<C>,Long> me : D.entrySet() ) { // assume fixed sequence order
+        for (Map.Entry<GenPolynomial<C>, Long> me : D.entrySet()) { // assume fixed sequence order
             GenPolynomial<C> d = me.getKey();
             long e = me.getValue(); // D.get(d);
-            int ei = (int)e;
-            List<GenPolynomial<C>> Fi = F.get(i+1); // assume fixed sequence order
+            int ei = (int) e;
+            List<GenPolynomial<C>> Fi = F.get(i + 1); // assume fixed sequence order
 
-//            GenPolynomial<C> pi = Fp.get(i);        // assume fixed sequence order
-//             t = engine.isBasePartialFraction(pi,d,ei,Fi);
-//             if ( ! t ) {
-//                 System.out.println("not isPartFrac exp = " + pi + ", d = " + d + ", e = " + ei);
-//                 System.out.println("not isPartFrac exp = " + Fi);
-//                 return false;
-//             }
+            //            GenPolynomial<C> pi = Fp.get(i);        // assume fixed sequence order
+            //             t = engine.isBasePartialFraction(pi,d,ei,Fi);
+            //             if ( ! t ) {
+            //                 System.out.println("not isPartFrac exp = " + pi + ", d = " + d + ", e = " + ei);
+            //                 System.out.println("not isPartFrac exp = " + Fi);
+            //                 return false;
+            //             }
 
-            GenPolynomial<C> qi = engine.basePartialFractionValue(d,ei,Fi);
+            GenPolynomial<C> qi = engine.basePartialFractionValue(d, ei, Fi);
             Qp.add(qi);
 
-//             t = qi.equals(pi);
-//             if ( ! t ) {
-//                 System.out.println("not isPartFrac exp = " + pi + ", d = " + d + ", e = " + ei + ", qi = " + qi);
-//             }
+            //             t = qi.equals(pi);
+            //             if ( ! t ) {
+            //                 System.out.println("not isPartFrac exp = " + pi + ", d = " + d + ", e = " + ei + ", qi = " + qi);
+            //             }
 
             i++;
         }
 
-        t = engine.isBasePartialFraction(A,Dp,Qp);
-        if ( ! t ) {
+        t = engine.isBasePartialFraction(A, Dp, Qp);
+        if (!t) {
             System.out.println("not final isPartFrac " + Qp);
         }
         return t;
@@ -599,7 +603,7 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
         //logger.info("sqfPart,factors = " + factors);
         System.out.println("sqfPart,factors = " + factors);
         for (C sp : factors.keySet()) {
-            if ( s == null ) {
+            if (s == null) {
                 s = sp;
             } else {
                 s = s.multiply(sp);
@@ -612,10 +616,10 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
     /**
      * Coefficients squarefree factorization.
      * @param P coefficient.
-     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k} p_i^{e_i}
-     *         and p_i squarefree.
+     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k}
+     *         p_i^{e_i} and p_i squarefree.
      */
-    public abstract SortedMap<C, Long> squarefreeFactors(C P); 
+    public abstract SortedMap<C, Long> squarefreeFactors(C P);
     /* not possible:
     {
         if (P == null) {
