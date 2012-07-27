@@ -37,7 +37,8 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
 
 
     /**
-     * Constructor for GenMatrix.
+     * Constructor for zero GenMatrix.
+     * @parm r matrix ring
      */
     public GenMatrix(GenMatrixRing<C> r) {
         this(r, r.getZERO().matrix);
@@ -46,6 +47,8 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
 
     /**
      * Constructor for GenMatrix.
+     * @parm r matrix ring
+     * @parm m matrix
      */
     public GenMatrix(GenMatrixRing<C> r, List<List<C>> m) {
         ring = r;
@@ -54,19 +57,22 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
             ArrayList<C> nr = new ArrayList<C>(row);
             matrix.add(nr);
         }
-        //System.out.println("using List<List> constructor");
+        logger.info(ring.rows + " x " + ring.cols + " matrix constructed");
     }
 
 
     /**
      * Constructor for GenMatrix.
+     * @parm r matrix ring
+     * @parm m matrix
      */
     public GenMatrix(GenMatrixRing<C> r, ArrayList<ArrayList<C>> m) {
         if (r == null || m == null) {
             throw new IllegalArgumentException("Empty r or m not allowed, r = " + r + ", m = " + m);
         }
         ring = r;
-        matrix = m;
+        matrix = new ArrayList<ArrayList<C>>(m);
+        logger.info(ring.rows + " x " + ring.cols + " matrix constructed");
     }
 
 
@@ -222,7 +228,14 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
      * Test if this is equal to a zero matrix.
      */
     public boolean isZERO() {
-        return (0 == this.compareTo(ring.getZERO()));
+        for (List<C> row : matrix) {
+            for (C elem : row) {
+                if (!elem.isZERO()) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
 
@@ -231,7 +244,22 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
      * @return true if this is 1, else false.
      */
     public boolean isONE() {
-        return (0 == this.compareTo(ring.getONE()));
+        int i = 0;
+        for (List<C> row : matrix) {
+            int j = 0;
+            for (C elem : row) {
+                if (i == j) {
+                    if (!elem.isONE()) {
+                        return false;
+                    }
+                } else if (!elem.isZERO()) {
+                    return false;
+                }
+                j++;
+            }
+            i++;
+        }
+        return true;
     }
 
 
@@ -473,7 +501,7 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
 
 
     /**
-     * Linear compination of this matrix with scalar multiple of other matrix.
+     * Linear combination of this matrix with scalar multiple of other matrix.
      * @return this+b*t
      */
     public GenMatrix<C> linearCombination(GenMatrix<C> b, C t) {
@@ -496,7 +524,7 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
 
 
     /**
-     * Left linear compination of this matrix with scalar multiple of other
+     * Left linear combination of this matrix with scalar multiple of other
      * matrix.
      * @return this+t*b
      */
@@ -644,7 +672,7 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
      * @return this / S.
      */
     public GenMatrix<C> divide(GenMatrix<C> S) {
-        throw new UnsupportedOperationException("divide not jet implemented");
+        throw new UnsupportedOperationException("divide not yet implemented");
     }
 
 
@@ -663,7 +691,7 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
      * @return x with this * x = 1, if it exists.
      */
     public GenMatrix<C> inverse() {
-        throw new UnsupportedOperationException("inverse not jet implemented");
+        throw new UnsupportedOperationException("inverse not yet implemented");
     }
 
 

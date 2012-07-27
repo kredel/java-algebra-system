@@ -34,7 +34,7 @@ public class GenVector<C extends RingElem<C>> implements ModulElem<GenVector<C>,
 
 
     /**
-     * Constructor for GenVector.
+     * Constructor for zero GenVector.
      */
     public GenVector(GenVectorModul<C> m) {
         this(m, m.getZERO().val);
@@ -50,6 +50,7 @@ public class GenVector<C extends RingElem<C>> implements ModulElem<GenVector<C>,
         }
         modul = m;
         val = v;
+        logger.info(modul.cols + " vector constructed");
     }
 
 
@@ -133,8 +134,8 @@ public class GenVector<C extends RingElem<C>> implements ModulElem<GenVector<C>,
     @SuppressWarnings("unchecked")
     public GenVector<C> clone() {
         //return modul.copy(this);
-        ArrayList<C> av = (ArrayList<C>) val;
-        return new GenVector<C>(modul, (List<C>) av.clone());
+        ArrayList<C> av = new ArrayList<C>(val);
+        return new GenVector<C>(modul, av);
     }
 
 
@@ -176,7 +177,7 @@ public class GenVector<C extends RingElem<C>> implements ModulElem<GenVector<C>,
 
 
     /**
-     * compareTo, lexicogaphical comparison.
+     * compareTo, lexicographical comparison.
      * @param b other
      * @return 1 if (this &lt; b), 0 if (this == b) or -1 if (this &gt; b).
      */
@@ -208,6 +209,7 @@ public class GenVector<C extends RingElem<C>> implements ModulElem<GenVector<C>,
 
     /**
      * Sum of vectors.
+     * @param b other vector.
      * @return this+b
      */
     public GenVector<C> sum(GenVector<C> b) {
@@ -224,6 +226,7 @@ public class GenVector<C extends RingElem<C>> implements ModulElem<GenVector<C>,
 
     /**
      * Difference of vectors.
+     * @param b other vector.
      * @return this-b
      */
     public GenVector<C> subtract(GenVector<C> b) {
@@ -266,6 +269,7 @@ public class GenVector<C extends RingElem<C>> implements ModulElem<GenVector<C>,
 
     /**
      * Product of this vector with scalar.
+     * @param s scalar.
      * @return this*s
      */
     public GenVector<C> scalarMultiply(C s) {
@@ -280,6 +284,7 @@ public class GenVector<C extends RingElem<C>> implements ModulElem<GenVector<C>,
 
     /**
      * Left product of this vector with scalar.
+     * @param s scalar.
      * @return s*this
      */
     public GenVector<C> leftScalarMultiply(C s) {
@@ -293,7 +298,10 @@ public class GenVector<C extends RingElem<C>> implements ModulElem<GenVector<C>,
 
 
     /**
-     * Linear compination of this vector with scalar multiple of other vector.
+     * Linear combination of this vector with scalar multiple of other vector.
+     * @param s scalar.
+     * @param b other vector.
+     * @param t scalar.
      * @return this*s+b*t
      */
     public GenVector<C> linearCombination(C s, GenVector<C> b, C t) {
@@ -311,7 +319,9 @@ public class GenVector<C extends RingElem<C>> implements ModulElem<GenVector<C>,
 
 
     /**
-     * Linear compination of this vector with scalar multiple of other vector.
+     * Linear combination of this vector with scalar multiple of other vector.
+     * @param b other vector.
+     * @param t scalar.
      * @return this+b*t
      */
     public GenVector<C> linearCombination(GenVector<C> b, C t) {
@@ -328,8 +338,10 @@ public class GenVector<C extends RingElem<C>> implements ModulElem<GenVector<C>,
 
 
     /**
-     * Left linear compination of this vector with scalar multiple of other
+     * Left linear combination of this vector with scalar multiple of other
      * vector.
+     * @param b other vector.
+     * @param t scalar.
      * @return this+t*b
      */
     public GenVector<C> linearCombination(C t, GenVector<C> b) {
@@ -346,8 +358,11 @@ public class GenVector<C extends RingElem<C>> implements ModulElem<GenVector<C>,
 
 
     /**
-     * left linear compination of this vector with scalar multiple of other
+     * left linear combination of this vector with scalar multiple of other
      * vector.
+     * @param s scalar.
+     * @param b other vector.
+     * @param t scalar.
      * @return s*this+t*b
      */
     public GenVector<C> leftLinearCombination(C s, C t, GenVector<C> b) {
@@ -366,6 +381,7 @@ public class GenVector<C extends RingElem<C>> implements ModulElem<GenVector<C>,
 
     /**
      * scalar / dot product of this vector with other vector.
+     * @param b other vector.
      * @return this . b
      */
     public C scalarProduct(GenVector<C> b) {
@@ -382,6 +398,7 @@ public class GenVector<C extends RingElem<C>> implements ModulElem<GenVector<C>,
 
     /**
      * scalar / dot product of this vector with list of other vectors.
+     * @param B list of vectors.
      * @return this * b
      */
     public GenVector<C> scalarProduct(List<GenVector<C>> B) {
@@ -398,6 +415,7 @@ public class GenVector<C extends RingElem<C>> implements ModulElem<GenVector<C>,
 
     /**
      * right scalar / dot product of this vector with list of other vectors.
+     * @param B list of vectors.
      * @return b * this
      */
     public GenVector<C> rightScalarProduct(List<GenVector<C>> B) {

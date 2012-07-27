@@ -115,6 +115,8 @@ public class GenMatrixRing<C extends RingElem<C>> implements AlgebraFactory<GenM
             }
         }
         ONE = new GenMatrix<C>(this, m);
+        logger.info(rows + " x " + cols + " with blocksize " + blocksize + " matrix ring over " + coFac
+                        + "constructed");
     }
 
 
@@ -488,8 +490,10 @@ public class GenMatrixRing<C extends RingElem<C>> implements AlgebraFactory<GenM
 
 
     /**
-     * copy matrix.
-     */
+     * Copy matrix.
+     * @parm c matrix to copy.
+     * @return copy of the matrix
+     * */
     public GenMatrix<C> copy(GenMatrix<C> c) {
         if (c == null) {
             return c;
@@ -499,8 +503,10 @@ public class GenMatrixRing<C extends RingElem<C>> implements AlgebraFactory<GenM
 
 
     /**
-     * parse a matrix from a String. Syntax: [ [ c, ..., c ], ..., [ c, ..., c ]
+     * Parse a matrix from a String. Syntax: [ [ c, ..., c ], ..., [ c, ..., c ]
      * ]
+     * @param s input String.
+     * @return parsed matrix
      */
     public GenMatrix<C> parse(String s) {
         int i = s.indexOf("[");
@@ -544,7 +550,9 @@ public class GenMatrixRing<C extends RingElem<C>> implements AlgebraFactory<GenM
 
 
     /**
-     * parse a matrix from a Reader.
+     * Parse a matrix from a Reader.
+     * @param r Reader.
+     * @return parsed matrix
      */
     public GenMatrix<C> parse(Reader r) {
         String s = StringUtil.nextPairedString(r, '[', ']');

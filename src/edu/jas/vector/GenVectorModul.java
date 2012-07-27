@@ -75,6 +75,7 @@ public class GenVectorModul<C extends RingElem<C>> implements ModulFactory<GenVe
                 BASIS.add(new GenVector<C>(this, v));
             }
         }
+        logger.info(cols + " module over " + coFac + "constructed");
     }
 
 
@@ -199,6 +200,7 @@ public class GenVectorModul<C extends RingElem<C>> implements ModulFactory<GenVe
     /**
      * From List of coefficients.
      * @param v list of coefficients.
+     * @return vector from v.
      */
     public GenVector<C> fromList(List<C> v) {
         if (v == null) {
@@ -220,6 +222,7 @@ public class GenVectorModul<C extends RingElem<C>> implements ModulFactory<GenVe
     /**
      * Random vector.
      * @param k size of random coefficients.
+     * @return random vector.
      */
     public GenVector<C> random(int k) {
         return random(k, density, random);
@@ -229,7 +232,8 @@ public class GenVectorModul<C extends RingElem<C>> implements ModulFactory<GenVe
     /**
      * Random vector.
      * @param k size of random coefficients.
-     * @param q density of nozero coefficients.
+     * @param q density of nonzero coefficients.
+     * @return random vector.
      */
     public GenVector<C> random(int k, float q) {
         return random(k, q, random);
@@ -250,7 +254,7 @@ public class GenVectorModul<C extends RingElem<C>> implements ModulFactory<GenVe
     /**
      * Random vector.
      * @param k size of random coefficients.
-     * @param q density of nozero coefficients.
+     * @param q density of nonzero coefficients.
      * @param random is a source for random bits.
      * @return a random element.
      */
@@ -269,6 +273,8 @@ public class GenVectorModul<C extends RingElem<C>> implements ModulFactory<GenVe
 
     /**
      * copy vector.
+     * @param v vector.
+     * @return copy of vector c.
      */
     public GenVector<C> copy(GenVector<C> c) {
         if (c == null) {
@@ -279,7 +285,9 @@ public class GenVectorModul<C extends RingElem<C>> implements ModulFactory<GenVe
 
 
     /**
-     * parse a vector from a String. Syntax: [ c, ..., c ]
+     * Parse a vector from a String. Syntax: [ c, ..., c ]
+     * @param s String with vector.
+     * @return parsed vector.
      */
     public GenVector<C> parse(String s) {
         int i = s.indexOf("[");
@@ -311,7 +319,9 @@ public class GenVectorModul<C extends RingElem<C>> implements ModulFactory<GenVe
 
 
     /**
-     * parse a vector from a Reader.
+     * Parse a vector from a Reader.
+     * @param r Reader containing a vector.
+     * @return parsed vector.
      */
     public GenVector<C> parse(Reader r) {
         String s = StringUtil.nextPairedString(r, '[', ']');
