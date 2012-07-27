@@ -491,7 +491,7 @@ public class GenMatrixRing<C extends RingElem<C>> implements AlgebraFactory<GenM
 
     /**
      * Copy matrix.
-     * @parm c matrix to copy.
+     * @param c matrix to copy.
      * @return copy of the matrix
      * */
     public GenMatrix<C> copy(GenMatrix<C> c) {

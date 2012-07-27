@@ -273,7 +273,7 @@ public class GenVectorModul<C extends RingElem<C>> implements ModulFactory<GenVe
 
     /**
      * copy vector.
-     * @param v vector.
+     * @param c vector.
      * @return copy of vector c.
      */
     public GenVector<C> copy(GenVector<C> c) {

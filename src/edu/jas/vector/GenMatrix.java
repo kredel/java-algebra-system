@@ -38,7 +38,7 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
 
     /**
      * Constructor for zero GenMatrix.
-     * @parm r matrix ring
+     * @param r matrix ring
      */
     public GenMatrix(GenMatrixRing<C> r) {
         this(r, r.getZERO().matrix);
@@ -47,8 +47,8 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
 
     /**
      * Constructor for GenMatrix.
-     * @parm r matrix ring
-     * @parm m matrix
+     * @param r matrix ring
+     * @param m matrix
      */
     public GenMatrix(GenMatrixRing<C> r, List<List<C>> m) {
         ring = r;
@@ -63,8 +63,8 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
 
     /**
      * Constructor for GenMatrix.
-     * @parm r matrix ring
-     * @parm m matrix
+     * @param r matrix ring
+     * @param m matrix
      */
     public GenMatrix(GenMatrixRing<C> r, ArrayList<ArrayList<C>> m) {
         if (r == null || m == null) {
