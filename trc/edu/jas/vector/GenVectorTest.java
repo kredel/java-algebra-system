@@ -9,8 +9,6 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-//import edu.jas.structure.RingElem;
-//import edu.jas.structure.ModulElem;
 import edu.jas.arith.BigRational;
 
 
@@ -171,7 +169,7 @@ public class GenVectorTest extends TestCase {
         BigRational cfac = new BigRational(1);
         GenVectorModul<BigRational> mfac = new GenVectorModul<BigRational>(cfac, ll);
         BigRational r, s, t;
-        GenVector<BigRational> a, b, c, d, e;
+        GenVector<BigRational> a, b, c, d;
 
         r = cfac.random(kl);
         if (r.isZERO()) {
@@ -248,7 +246,7 @@ public class GenVectorTest extends TestCase {
         BigRational cfac = new BigRational(1);
         GenVectorModul<BigRational> mfac = new GenVectorModul<BigRational>(cfac, ll);
 
-        GenVector<BigRational> a, b, c;
+        GenVector<BigRational> a, c;
 
         a = mfac.random(kl, q);
         //System.out.println("a = " + a);

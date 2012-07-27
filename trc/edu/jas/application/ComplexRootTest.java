@@ -293,6 +293,7 @@ public class ComplexRootTest extends TestCase {
         for (Complex<RealAlgebraicNumber<RealAlgebraicNumber<BigRational>>> croot : croots) {
             String crs = croot.getRe().decimalMagnitude() + " + " + croot.getIm().decimalMagnitude() + " i";
             //System.out.println("croot = " + crs);
+            assertFalse("crs not empty", crs.isEmpty());
         }
         t3 = System.currentTimeMillis() - t3;
         assertTrue("nonsense " + t3, t3 >= 0L);
@@ -300,6 +301,7 @@ public class ComplexRootTest extends TestCase {
         for (edu.jas.root.ComplexAlgebraicNumber<RealAlgebraicNumber<BigRational>> cr2 : coroots) {
             String crs = cr2.decimalMagnitude().toString();
             //System.out.println("r2.dec  = " + crs);
+            assertFalse("crs not empty", crs.isEmpty());
         }
         t4 = System.currentTimeMillis() - t4;
         assertTrue("nonsense " + t4, t4 >= 0L);

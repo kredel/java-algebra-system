@@ -13,9 +13,6 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.log4j.BasicConfigurator;
-//import org.apache.log4j.Logger;
-
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
@@ -117,7 +114,7 @@ public class ComplexRootTest extends TestCase {
         String[] vars = new String[] { "x" };
         dfac = new GenPolynomialRing<Complex<BigRational>>(cfac, rl, to, vars);
         eps = Power.positivePower(new BigRational(1L, 10L), BigDecimal.DEFAULT_PRECISION);
-        ceps = new Complex<BigRational>(cfac,eps);
+        ceps = new Complex<BigRational>(cfac, eps);
     }
 
 
@@ -349,7 +346,7 @@ public class ComplexRootTest extends TestCase {
 
         a = dfac.random(kl, ll, el, q);
         Squarefree<Complex<BigRational>> engine = SquarefreeFactory
-                .<Complex<BigRational>> getImplementation(cfac);
+                        .<Complex<BigRational>> getImplementation(cfac);
         a = engine.squarefreePart(a);
 
         //a = dfac.univariate(0,2L).subtract(cfac.getONE());  // x^2 - 1
@@ -409,7 +406,7 @@ public class ComplexRootTest extends TestCase {
         a = dfac.random(kl, ll, el - 1, q);
         //a = dfac.parse("( (x-1)^3 )");
         Squarefree<Complex<BigRational>> engine = SquarefreeFactory
-                .<Complex<BigRational>> getImplementation(cfac);
+                        .<Complex<BigRational>> getImplementation(cfac);
         //System.out.println("a = " + a);
         a = engine.squarefreePart(a);
         //System.out.println("a = " + a);
@@ -426,6 +423,7 @@ public class ComplexRootTest extends TestCase {
             try {
                 Rectangle<BigRational> refine = cr.complexRootRefinement(root, a, len);
                 //System.out.println("refine = " + refine);
+                assertFalse("refine != null", refine == null);
             } catch (InvalidBoundaryException e) {
                 fail("" + e);
             }
@@ -517,7 +515,7 @@ public class ComplexRootTest extends TestCase {
         //a = b.multiply(c).multiply(d);
         //System.out.println("a = " + a);
         Squarefree<Complex<BigRational>> engine = SquarefreeFactory
-                .<Complex<BigRational>> getImplementation(cfac);
+                        .<Complex<BigRational>> getImplementation(cfac);
         a = engine.squarefreePart(a);
         //System.out.println("a = " + a);
 
@@ -537,6 +535,7 @@ public class ComplexRootTest extends TestCase {
             try {
                 Complex<BigDecimal> cd = cr.approximateRoot(root, a, eps);
                 //System.out.println("cd = " + cd);
+                assertFalse("cd != null", cd == null);
             } catch (NoConvergenceException e) {
                 //fail("" + e);
             }
@@ -709,11 +708,11 @@ public class ComplexRootTest extends TestCase {
         b = dfac.random(kl, ll, 2, q);
         //a = dfac.parse("( (x-1)^3 )");
         //a = dfac.parse("( x^4-2 )");
-        if ( a.degree() == 0 ) {
+        if (a.degree() == 0) {
             return;
         }
         Squarefree<Complex<BigRational>> engine = SquarefreeFactory
-                .<Complex<BigRational>> getImplementation(cfac);
+                        .<Complex<BigRational>> getImplementation(cfac);
         a = engine.squarefreePart(a);
         b = engine.squarefreePart(b);
         //System.out.println("a = " + a);
@@ -725,9 +724,9 @@ public class ComplexRootTest extends TestCase {
 
         Rectangle<BigRational> rect = roots.get(0);
         //System.out.println("rect = " + rect);
-        
+
         try {
-            Rectangle<BigRational> ref = cr.invariantRectangle(rect,a,b);
+            Rectangle<BigRational> ref = cr.invariantRectangle(rect, a, b);
             //System.out.println("rect = " + rect);
             //System.out.println("ref  = " + ref);
             assertTrue("rect subseteq ref ", rect.contains(ref));
@@ -748,11 +747,11 @@ public class ComplexRootTest extends TestCase {
         b = dfac.random(kl, ll, 3, q);
         //a = dfac.parse("( x^2 + 1 )");
         //b = dfac.parse("( x - 0i1 )");
-        if ( a.degree() == 0 ) {
+        if (a.degree() == 0) {
             return;
         }
         Squarefree<Complex<BigRational>> engine = SquarefreeFactory
-                .<Complex<BigRational>> getImplementation(cfac);
+                        .<Complex<BigRational>> getImplementation(cfac);
         a = engine.squarefreePart(a);
         b = engine.squarefreePart(b);
         //System.out.println("a = " + a);
@@ -764,14 +763,14 @@ public class ComplexRootTest extends TestCase {
 
         Rectangle<BigRational> rect = roots.get(0);
         //System.out.println("rect = " + rect);
-        
+
         try {
-            Rectangle<BigRational> ref = cr.invariantMagnitudeRectangle(rect,a,b,eps);
+            Rectangle<BigRational> ref = cr.invariantMagnitudeRectangle(rect, a, b, eps);
             //System.out.println("ref = " + ref);
             assertTrue("rect subseteq ref ", rect.contains(ref));
-            Complex<BigRational> mag = cr.complexRectangleMagnitude(ref,a,b);
+            Complex<BigRational> mag = cr.complexRectangleMagnitude(ref, a, b);
             //System.out.println("mag  = " + mag);
-            Complex<BigRational> cmag = cr.complexMagnitude(ref,a,b,eps);
+            Complex<BigRational> cmag = cr.complexMagnitude(ref, a, b, eps);
             //System.out.println("cmag = " + cmag);
             assertEquals("mag == cmag: " + cmag, mag, cmag);
             //BigRational rmag = cmag.getRe();

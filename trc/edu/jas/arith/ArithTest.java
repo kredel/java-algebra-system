@@ -751,7 +751,7 @@ public class ArithTest extends TestCase {
      * 
      */
     public void testRationalPower() {
-        BigRational a, b, c, d, e;
+        BigRational a, b, c, d;
         a = BigRational.ZERO.random(500);
 
         // power operations
@@ -830,7 +830,7 @@ public class ArithTest extends TestCase {
      * Test Combinatoric.
      */
     public void testCombinatoric() {
-        BigInteger a, b, c, d, e, f;
+        BigInteger a, b, c;
 
         a = Combinatoric.binCoeff(5, 0);
         assertTrue("(5 0) == 1 ", a.isONE());
@@ -897,7 +897,7 @@ public class ArithTest extends TestCase {
      * Test root.
      */
     public void testRoot() {
-        BigInteger a, b, c, d, e, f;
+        BigInteger a, b, d, e, f;
         a = BigInteger.ONE;
 
         b = a.random(47).abs();
@@ -921,7 +921,7 @@ public class ArithTest extends TestCase {
      * Test root decimal.
      */
     public void testRootDecimal() {
-        BigDecimal a, b, c, d, e, f;
+        BigDecimal a, b, d, e;
         a = BigDecimal.ONE;
 
         b = a.random(7).abs();

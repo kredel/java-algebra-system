@@ -146,9 +146,9 @@ public class ReductionTest extends TestCase {
 
         RingFactory<BigRational> bi = new BigRational(0);
         GenPolynomialRing<BigRational> pr = new GenPolynomialRing<BigRational>(bi, 2,
-                new String[] { "a", "b" });
+                        new String[] { "a", "b" });
         GenPolynomialRing<GenPolynomial<BigRational>> fac = new GenPolynomialRing<GenPolynomial<BigRational>>(
-                pr, rl);
+                        pr, rl);
 
         CReductionSeq<BigRational> cred = new CReductionSeq<BigRational>(bi);
 
@@ -267,7 +267,7 @@ public class ReductionTest extends TestCase {
 
         // check if reduced polynomials are in normalform
         ColorPolynomial<BigRational> q, h;
-        List<ColoredSystem<BigRational>> NCS;
+        //List<ColoredSystem<BigRational>> NCS;
         for (ColoredSystem<BigRational> x : CSp) {
             int k = x.list.size();
             for (int j = 0; j < k; j++) {

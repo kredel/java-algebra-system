@@ -221,6 +221,7 @@ public class IteratorsTest extends TestCase {
         //System.out.println("set = " + set);
         //System.out.println("degset = " + degset);
         for (Set<ExpVector> es : degset.values()) {
+            assertFalse("es != null", es == null);
             //System.out.println("#es = " + es.size() + ", es = " + es);
             //System.out.println("#es = " + es.size() + ", deg = " + es.iterator().next().totalDeg());
         }

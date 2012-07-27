@@ -15,8 +15,6 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigRational;
-import edu.jas.gb.GroebnerBaseAbstract;
-import edu.jas.gb.Reduction;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -126,16 +124,16 @@ public class CharSetTest extends TestCase {
         e = PolyGBUtil.<BigRational> topPseudoRemainder(G, a);
         //System.out.println("a = " + a + ", deg_1 = " + a.degree(rl-1));
         //System.out.println("e = " + e + ", deg_1 = " + e.degree(rl-1));
-        assertTrue("a rem G: " + e, e.isZERO() || e.degree(rl-1) < a.degree(rl-1)); // not always true
+        assertTrue("a rem G: " + e, e.isZERO() || e.degree(rl - 1) < a.degree(rl - 1)); // not always true
 
         e = PolyGBUtil.<BigRational> topPseudoRemainder(G, G.get(0));
         //System.out.println("e = " + e);
-        assertTrue("a rem G: " + e + ", G = " + G, e.isZERO()); 
+        assertTrue("a rem G: " + e + ", G = " + G, e.isZERO());
 
         e = css.characteristicSetReduction(G, a);
         //System.out.println("a = " + a);
         //System.out.println("e = " + e);
-        assertTrue("a mod G: " + e, e.isZERO()|| e.degree(rl-1) < a.degree(rl-1)); // not always true
+        assertTrue("a mod G: " + e, e.isZERO() || e.degree(rl - 1) < a.degree(rl - 1)); // not always true
 
         d = dfac.getONE();
         if (!G.contains(d)) {
@@ -147,7 +145,7 @@ public class CharSetTest extends TestCase {
             e = css.characteristicSetReduction(G, d);
             //System.out.println("e = " + e);
             assertFalse("a mod G: " + e, e.isZERO());
-	}
+        }
 
         // now with Wu
         W = cs.characteristicSet(F);
@@ -158,20 +156,20 @@ public class CharSetTest extends TestCase {
         e = PolyGBUtil.<BigRational> topPseudoRemainder(W, a);
         //System.out.println("a = " + a + ", deg = " + a.degree(rl-1));
         //System.out.println("e = " + e + ", deg = " + e.degree(rl-1));
-        assertTrue("a rem W: " + e, e.isZERO() || e.degree(rl-1) < a.degree(rl-1)); // not always true
+        assertTrue("a rem W: " + e, e.isZERO() || e.degree(rl - 1) < a.degree(rl - 1)); // not always true
 
         e = PolyGBUtil.<BigRational> topPseudoRemainder(W, W.get(0));
         //System.out.println("e = " + e);
-        assertTrue("a rem G: " + e + ", W = " + W, e.isZERO()); 
+        assertTrue("a rem G: " + e + ", W = " + W, e.isZERO());
 
-        e = cs.characteristicSetReduction(W, W.get(W.size()-1));
+        e = cs.characteristicSetReduction(W, W.get(W.size() - 1));
         //System.out.println("e = " + e);
-        assertTrue("a mod W: " + e, e.isZERO()); 
+        assertTrue("a mod W: " + e, e.isZERO());
 
         e = cs.characteristicSetReduction(W, a);
         //System.out.println("a = " + a);
         //System.out.println("e = " + e);
-        assertTrue("a mod W: " + e, e.isZERO() || e.degree(rl-1) < a.degree(rl-1)); // not always true
+        assertTrue("a mod W: " + e, e.isZERO() || e.degree(rl - 1) < a.degree(rl - 1)); // not always true
     }
 
 
@@ -208,19 +206,19 @@ public class CharSetTest extends TestCase {
 
         e = PolyGBUtil.<BigRational> topPseudoRemainder(G, a);
         //System.out.println("e = " + e);
-        assertTrue("a rem G: " + e, e.isZERO() || e.degree(rl-1) < a.degree(rl-1)); // not always true
+        assertTrue("a rem G: " + e, e.isZERO() || e.degree(rl - 1) < a.degree(rl - 1)); // not always true
 
-        e = cs.characteristicSetReduction(G,G.get(G.size()-1));
+        e = cs.characteristicSetReduction(G, G.get(G.size() - 1));
         //System.out.println("e = " + e);
         assertTrue("a mod G: " + e, e.isZERO());
 
-        e = cs.characteristicSetReduction(G,G.get(0));
+        e = cs.characteristicSetReduction(G, G.get(0));
         //System.out.println("e = " + e);
         assertTrue("a mod G: " + e, e.isZERO());
 
         e = cs.characteristicSetReduction(G, a);
         //System.out.println("e = " + e);
-        assertTrue("a mod G: " + e + ", G = " + G, e.isZERO() || e.degree(rl-1) < a.degree(rl-1)); // not always true
+        assertTrue("a mod G: " + e + ", G = " + G, e.isZERO() || e.degree(rl - 1) < a.degree(rl - 1)); // not always true
 
         d = dfac.getONE();
         if (!G.contains(d)) {
@@ -228,7 +226,7 @@ public class CharSetTest extends TestCase {
             //System.out.println("d = " + d);
             e = PolyGBUtil.<BigRational> topPseudoRemainder(G, d);
             //System.out.println("e = " + e);
-            assertFalse("a rem G: " + e, e.isZERO()); 
+            assertFalse("a rem G: " + e, e.isZERO());
             e = cs.characteristicSetReduction(G, d);
             //System.out.println("e = " + e);
             assertFalse("a mod G: " + e, e.isZERO());
@@ -248,8 +246,8 @@ public class CharSetTest extends TestCase {
         dfac = new GenPolynomialRing<BigRational>(br, to, vars);
         //System.out.println("dfac = " + dfac);
 
-        GenPolynomial<BigRational> h1, h2, h3, h4, h5, h6, h7, h8, g, e, f, k;
-        List<GenPolynomial<BigRational>> F, G, H, K, L;
+        GenPolynomial<BigRational> h1, h2, h3, h4, h5, h6, h7, h8, g, e;
+        List<GenPolynomial<BigRational>> F, G;
 
         F = new ArrayList<GenPolynomial<BigRational>>();
         h1 = dfac.parse(" 2 x1 - u1 ");
@@ -281,7 +279,7 @@ public class CharSetTest extends TestCase {
         //g = dfac.parse("-2 x6 * x8 - 2 x5 * x7 + 2 x1 * x7 + x6^2 + x5^2 - x1^2");
         //System.out.println("g = " + g);
 
-        e = cs.characteristicSetReduction(G,g);
+        e = cs.characteristicSetReduction(G, g);
         //e = PolyGBUtil.<BigRational> topPseudoRemainder(G, g);
         //System.out.println("e = " + e);
         assertTrue("g mod G: " + e, e.isZERO()); // || true ?not always true
@@ -320,7 +318,7 @@ public class CharSetTest extends TestCase {
         //System.out.println("dfac = " + dfac);
 
         GenPolynomial<BigRational> h1, h2, h3, g, e;
-        List<GenPolynomial<BigRational>> F, G, H, K, L;
+        List<GenPolynomial<BigRational>> F, G;
 
         F = new ArrayList<GenPolynomial<BigRational>>();
         // wrong:
@@ -346,7 +344,7 @@ public class CharSetTest extends TestCase {
         e = cs.characteristicSetReduction(G, g);
         //e = PolyGBUtil.<BigRational> characteristicSetRemainder(G,g);
         System.out.println("e = " + e);
-        assertTrue("g mod G: " + e, e.isZERO() || e.degree(rl-1) < g.degree(rl-1)); // not always true
+        assertTrue("g mod G: " + e, e.isZERO() || e.degree(rl - 1) < g.degree(rl - 1)); // not always true
     }
 
 
@@ -362,7 +360,7 @@ public class CharSetTest extends TestCase {
         //System.out.println("dfac = " + dfac);
 
         GenPolynomial<BigRational> h1, h2, h3, g, e;
-        List<GenPolynomial<BigRational>> F, G, H, K, L;
+        List<GenPolynomial<BigRational>> F, G;
 
         F = new ArrayList<GenPolynomial<BigRational>>();
         h1 = dfac.parse(" 2 u3 y1 - u2^2 + u1^2 - u3^2 ");
@@ -402,8 +400,8 @@ public class CharSetTest extends TestCase {
         dfac = new GenPolynomialRing<BigRational>(br, to, vars);
         //System.out.println("dfac = " + dfac);
 
-        GenPolynomial<BigRational> h1, h2, h3, g, e;
-        List<GenPolynomial<BigRational>> F, G, H, K, L;
+        GenPolynomial<BigRational> h1, h2, h3;
+        List<GenPolynomial<BigRational>> F, G;
 
         F = new ArrayList<GenPolynomial<BigRational>>();
         h1 = dfac.parse(" x^2 + y + z - 1 ");

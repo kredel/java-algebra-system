@@ -215,7 +215,7 @@ public class RealAlgebraicTest extends TestCase {
         ComplexRing<RealAlgebraicNumber<BigRational>> crr;
         crr = new ComplexRing<RealAlgebraicNumber<BigRational>>(fac);
 
-        Complex<RealAlgebraicNumber<BigRational>> ac, bc, cc, dc, ec;
+        Complex<RealAlgebraicNumber<BigRational>> ac, cc, dc, ec;
         cc = new Complex<RealAlgebraicNumber<BigRational>>(crr, a, b);
         //System.out.println("cc = " + cc);
         assertEquals("a == re(c)", a, cc.getRe());

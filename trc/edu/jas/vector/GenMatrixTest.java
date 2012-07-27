@@ -5,15 +5,13 @@
 package edu.jas.vector;
 
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-//import edu.jas.structure.RingElem;
-//import edu.jas.structure.ModulElem;
 import edu.jas.arith.BigRational;
 
 
@@ -116,7 +114,7 @@ public class GenMatrixTest extends TestCase {
 
         List<ArrayList<BigRational>> m = a.matrix;
         List<List<BigRational>> ml = new ArrayList<List<BigRational>>(m.size());
-        for ( ArrayList<BigRational> r : m ) {
+        for (ArrayList<BigRational> r : m) {
             ml.add(r);
         }
         b = mfac.fromList(ml);
@@ -202,7 +200,7 @@ public class GenMatrixTest extends TestCase {
         BigRational cfac = new BigRational(1);
         GenMatrixRing<BigRational> mfac = new GenMatrixRing<BigRational>(cfac, rows, cols);
         BigRational r, s, t;
-        GenMatrix<BigRational> a, b, c, d, e;
+        GenMatrix<BigRational> a, b, c, d;
 
         r = cfac.random(kl);
         //System.out.println("r = " + r);
@@ -351,7 +349,7 @@ public class GenMatrixTest extends TestCase {
         BigRational cfac = new BigRational(1);
         GenMatrixRing<BigRational> mfac = new GenMatrixRing<BigRational>(cfac, rows, cols);
 
-        GenMatrix<BigRational> a, b, c;
+        GenMatrix<BigRational> a, c;
 
         a = mfac.random(kl, q);
         //System.out.println("a = " + a);

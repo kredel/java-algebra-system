@@ -395,7 +395,7 @@ public class ExtensionFieldBuilderTest extends TestCase {
         //System.out.println("elem    = " + elem.toScript());
         //System.out.println("elem    = " + elem);
 
-        RingElem r = (RingElem) elem.trailingBaseCoefficient();
+        RingElem r = elem.trailingBaseCoefficient();
         RingElem t = (RingElem) r.inverse();
         RingElem u = (RingElem) r.multiply(t);
         //System.out.println("r       = " + r);
@@ -431,7 +431,7 @@ public class ExtensionFieldBuilderTest extends TestCase {
         //System.out.println("elem    = " + elem.toScript());
         //System.out.println("elem    = " + elem);
 
-        RingElem r = (RingElem) elem.trailingBaseCoefficient();
+        RingElem r = elem.trailingBaseCoefficient();
         RingElem t = (RingElem) r.inverse();
         RingElem u = (RingElem) r.multiply(t);
         //System.out.println("r       = " + r);

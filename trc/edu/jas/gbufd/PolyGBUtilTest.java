@@ -204,7 +204,7 @@ public class PolyGBUtilTest extends TestCase {
         GreatestCommonDivisorAbstract<ModInteger> pufds = new GCDProxy<ModInteger>(sres, ufds);
         GreatestCommonDivisorAbstract<ModInteger> pufdm = new GCDProxy<ModInteger>(ufdm, sres);
 
-        GenPolynomial<ModInteger> a, b, c, d, e;
+        GenPolynomial<ModInteger> a, b, c, d;
 
         for (int i = 0; i < 1; i++) {
             a = dfac.random(kl, ll, el, q);
@@ -244,7 +244,7 @@ public class PolyGBUtilTest extends TestCase {
         GreatestCommonDivisorAbstract<BigInteger> pufds = new GCDProxy<BigInteger>(sres, ufds);
         GreatestCommonDivisorAbstract<BigInteger> pufdm = new GCDProxy<BigInteger>(ufdm, sres);
 
-        GenPolynomial<BigInteger> a, b, c, d, e;
+        GenPolynomial<BigInteger> a, b, c, d;
 
         for (int i = 0; i < 1; i++) {
             a = dfac.random(kl, ll, el, q);
@@ -285,7 +285,7 @@ public class PolyGBUtilTest extends TestCase {
         GenPolynomialRing<BigRational> cfac = (GenPolynomialRing<BigRational>) rfac.coFac;
         //System.out.println("cfac = " + cfac);
         GenPolynomial<GenPolynomial<BigRational>> ar, cr, dr, er;
-        GenPolynomial<BigRational> a, b, c, d, e;
+        GenPolynomial<BigRational> b;
 
         ar = rfac.random(kl, ll, el, q * 1.1f);
         b = cfac.random(kl, ll + 2, el * 2, q);
@@ -334,7 +334,7 @@ public class PolyGBUtilTest extends TestCase {
         GenPolynomialRing<GenPolynomial<BigRational>> cfac = (GenPolynomialRing<GenPolynomial<BigRational>>) rfac.coFac;
         //System.out.println("cfac = " + cfac);
         GenPolynomial<GenPolynomial<GenPolynomial<BigRational>>> ar, cr, dr, er;
-        GenPolynomial<GenPolynomial<BigRational>> a, b, c, d, e;
+        GenPolynomial<GenPolynomial<BigRational>> b;
 
         ar = rfac.random(kl, ll, el, q);
         b = cfac.random(kl, ll + 2, el, q);

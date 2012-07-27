@@ -114,6 +114,7 @@ public class IteratorsTest extends TestCase {
         for (List<BigInteger> tuple : new PowerSet<BigInteger>(tlist)) {
             t++;
             //System.out.println("tuple = " + tuple);
+            assertFalse("tuple != null", tuple == null);
         }
         assertTrue("#tuple == " + s + " == " + t + " ", t == s);
     }
