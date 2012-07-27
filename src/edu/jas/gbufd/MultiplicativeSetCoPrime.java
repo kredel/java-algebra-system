@@ -29,7 +29,7 @@ public class MultiplicativeSetCoPrime<C extends GcdRingElem<C>> extends Multipli
     private static final Logger logger = Logger.getLogger(MultiplicativeSetCoPrime.class);
 
 
-    private final boolean debug = logger.isDebugEnabled();
+    //private final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -55,7 +55,7 @@ public class MultiplicativeSetCoPrime<C extends GcdRingElem<C>> extends Multipli
      * @param eng gcd computation engine.
      */
     protected MultiplicativeSetCoPrime(GenPolynomialRing<C> ring, List<GenPolynomial<C>> ms,
-            GreatestCommonDivisorAbstract<C> eng) {
+                    GreatestCommonDivisorAbstract<C> eng) {
         super(ring, ms);
         engine = eng;
     }

@@ -6,9 +6,9 @@ package edu.jas.gbufd;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Collections;
 
 import org.apache.log4j.Logger;
 
@@ -25,13 +25,14 @@ import edu.jas.ufd.GreatestCommonDivisorAbstract;
 
 /**
  * Groebner Base with pseudo reduction sequential algorithm for integral
- * function coeffcients. Implements polynomial fraction free coefficients Groebner bases.
+ * function coefficients. Implements polynomial fraction free coefficients
+ * Groebner bases.
  * @param <C> base coefficient type
  * @author Heinz Kredel
  */
 
 public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
-        GroebnerBaseAbstract<GenPolynomial<C>> {
+                GroebnerBaseAbstract<GenPolynomial<C>> {
 
 
     private static final Logger logger = Logger.getLogger(GroebnerBasePseudoRecSeq.class);
@@ -141,7 +142,7 @@ public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
 
             pi = pair.pi;
             pj = pair.pj;
-            if (false && logger.isDebugEnabled()) {
+            if (debug) {
                 logger.debug("pi    = " + pi);
                 logger.debug("pj    = " + pj);
             }
@@ -151,7 +152,7 @@ public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
                 pair.setZero();
                 continue;
             }
-            if (logger.isDebugEnabled()) {
+            if (debug) {
                 logger.debug("ht(S) = " + S.leadingExpVector());
             }
 
@@ -160,7 +161,7 @@ public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
                 pair.setZero();
                 continue;
             }
-            if (logger.isDebugEnabled()) {
+            if (debug) {
                 logger.debug("ht(H) = " + H.leadingExpVector());
             }
             H = engine.recursivePrimitivePart(H); //H.monic();
@@ -170,7 +171,7 @@ public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
                 G.add(H);
                 return G; // since no threads are activated
             }
-            if (logger.isDebugEnabled()) {
+            if (debug) {
                 logger.debug("H = " + H);
             }
             if (H.length() > 0) {
@@ -181,7 +182,7 @@ public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
         }
         logger.debug("#sequential list = " + G.size());
         G = minimalGB(G);
-        logger.info("" + pairlist); 
+        logger.info("" + pairlist);
         return G;
     }
 

@@ -29,7 +29,7 @@ public class MultiplicativeSetSquarefree<C extends GcdRingElem<C>> extends Multi
     private static final Logger logger = Logger.getLogger(MultiplicativeSetSquarefree.class);
 
 
-    private final boolean debug = logger.isDebugEnabled();
+    //private final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -55,7 +55,7 @@ public class MultiplicativeSetSquarefree<C extends GcdRingElem<C>> extends Multi
      * @param eng squarefree factorization engine.
      */
     protected MultiplicativeSetSquarefree(GenPolynomialRing<C> ring, List<GenPolynomial<C>> ms,
-            SquarefreeAbstract<C> eng) {
+                    SquarefreeAbstract<C> eng) {
         super(ring, ms);
         engine = eng;
     }

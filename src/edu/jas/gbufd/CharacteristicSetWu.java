@@ -101,7 +101,7 @@ public class CharacteristicSetWu<C extends GcdRingElem<C>> implements Characteri
                 zeroDeg.add(rr.leadingBaseCoefficient().monic());
             } else {
                 pd.add(rr);
-                pd = opl.sort(rfac, pd);
+                pd = OrderedPolynomialList.sort(rfac, pd);
                 Collections.reverse(pd); // avoid
             }
         }
@@ -180,11 +180,12 @@ public class CharacteristicSetWu<C extends GcdRingElem<C>> implements Characteri
 
 
     /**
-     * Characteristic set reduction. Pseudo remainder wrt. the main variable with
-     * further pseudo reduction of the leading coefficient.
+     * Characteristic set reduction. Pseudo remainder wrt. the main variable
+     * with further pseudo reduction of the leading coefficient.
      * @param P generic polynomial.
      * @param A list of generic polynomials as characteristic set.
-     * @return characteristicSetReductionCoeff(A,characteristicSetRemainder(A,P))
+     * @return 
+     *         characteristicSetReductionCoeff(A,characteristicSetRemainder(A,P))
      */
     public GenPolynomial<C> characteristicSetReduction(List<GenPolynomial<C>> A, GenPolynomial<C> P) {
         if (A == null || A.isEmpty()) {

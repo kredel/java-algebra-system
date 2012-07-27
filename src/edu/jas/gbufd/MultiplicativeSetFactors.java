@@ -30,7 +30,7 @@ public class MultiplicativeSetFactors<C extends GcdRingElem<C>> extends Multipli
     private static final Logger logger = Logger.getLogger(MultiplicativeSetFactors.class);
 
 
-    private final boolean debug = logger.isDebugEnabled();
+    //private final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -56,7 +56,7 @@ public class MultiplicativeSetFactors<C extends GcdRingElem<C>> extends Multipli
      * @param eng factorization engine.
      */
     protected MultiplicativeSetFactors(GenPolynomialRing<C> ring, List<GenPolynomial<C>> ms,
-            FactorAbstract<C> eng) {
+                    FactorAbstract<C> eng) {
         super(ring, ms);
         engine = eng;
     }

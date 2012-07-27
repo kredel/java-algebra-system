@@ -21,9 +21,9 @@ import edu.jas.ufd.GreatestCommonDivisorAbstract;
 
 
 /**
- * Characteristic Set class acccording to the simple algorithm, where
- * the leading coefficients are <strong>not</strong> rereduced.
- * Implements methods for Characteristic Sets and tests.
+ * Characteristic Set class acccording to the simple algorithm, where the
+ * leading coefficients are <strong>not</strong> rereduced. Implements methods
+ * for Characteristic Sets and tests.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
@@ -37,8 +37,8 @@ public class CharacteristicSetSimple<C extends GcdRingElem<C>> implements Charac
 
 
     /**
-     * Characteristic set. According to the simple algorithm.
-     * The leading coefficients are <strong>not</strong> rereduced.
+     * Characteristic set. According to the simple algorithm. The leading
+     * coefficients are <strong>not</strong> rereduced.
      * @param A list of generic polynomials.
      * @return charSetWu(A).
      */
@@ -102,7 +102,7 @@ public class CharacteristicSetSimple<C extends GcdRingElem<C>> implements Charac
                 zeroDeg.add(rr.leadingBaseCoefficient().monic());
             } else {
                 pd.add(rr);
-                pd = opl.sort(rfac, pd);
+                pd = OrderedPolynomialList.sort(rfac, pd);
                 Collections.reverse(pd); // avoid
             }
         }

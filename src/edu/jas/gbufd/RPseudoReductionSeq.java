@@ -22,8 +22,8 @@ import edu.jas.structure.RegularRingElem;
  * @author Heinz Kredel
  */
 
-public class RPseudoReductionSeq<C extends RegularRingElem<C>> extends RReductionSeq<C>
-        implements RPseudoReduction<C> {
+public class RPseudoReductionSeq<C extends RegularRingElem<C>> extends RReductionSeq<C> implements
+                RPseudoReduction<C> {
 
 
     private static final Logger logger = Logger.getLogger(RPseudoReductionSeq.class);
@@ -86,13 +86,12 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>> extends RReductio
         }
         l = j;
         ExpVector e, f;
-        C a, b;
+        C a;
         C r = null;
         boolean mt = false;
         GenPolynomial<C> R = Ap.ring.getZERO();
         GenPolynomial<C> Q = null;
         GenPolynomial<C> S = Ap;
-        GenPolynomial<C> Rp, Sp;
         while (S.length() > 0) {
             m = S.leadingMonomial();
             e = m.getKey();
@@ -147,8 +146,7 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>> extends RReductio
      *         for Ap.
      */
     @SuppressWarnings("unchecked")
-    public PseudoReductionEntry<C> normalformFactor(List<GenPolynomial<C>> Pp,
-            GenPolynomial<C> Ap) {
+    public PseudoReductionEntry<C> normalformFactor(List<GenPolynomial<C>> Pp, GenPolynomial<C> Ap) {
         if (Ap == null) {
             return null;
         }
@@ -192,13 +190,12 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>> extends RReductio
         }
         l = j;
         ExpVector e, f;
-        C a, b;
+        C a;
         C r = null;
         boolean mt = false;
         GenPolynomial<C> R = Ap.ring.getZERO();
         GenPolynomial<C> Q = null;
         GenPolynomial<C> S = Ap;
-        GenPolynomial<C> Rp, Sp;
         while (S.length() > 0) {
             m = S.leadingMonomial();
             e = m.getKey();
@@ -248,10 +245,10 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>> extends RReductio
 
 
     /**
-     * Normalform with recording. <b>Note:</b> Only meaningfull if all
-     * divisions are exact. Compute first the multiplication factor
-     * <code>m</code> with <code>normalform(Pp,Ap,m)</code>, then call this
-     * method with <code>normalform(row,Pp,m*Ap)</code>.
+     * Normalform with recording. <b>Note:</b> Only meaningfull if all divisions
+     * are exact. Compute first the multiplication factor <code>m</code> with
+     * <code>normalform(Pp,Ap,m)</code>, then call this method with
+     * <code>normalform(row,Pp,m*Ap)</code>.
      * @param row recording matrix, is modified.
      * @param Pp a polynomial list for reduction.
      * @param Ap a polynomial.
@@ -259,8 +256,8 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>> extends RReductio
      */
     @Override
     @SuppressWarnings("unchecked")
-    public GenPolynomial<C> normalform(List<GenPolynomial<C>> row,
-            List<GenPolynomial<C>> Pp, GenPolynomial<C> Ap) {
+    public GenPolynomial<C> normalform(List<GenPolynomial<C>> row, List<GenPolynomial<C>> Pp,
+                    GenPolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
             return Ap;
         }
@@ -329,7 +326,9 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>> extends RReductio
                             R = R.multiply(c);
                         }
                         f = e.subtract(htl[i]);
-                        //logger.info("red div = " + f);
+                        if (debug) {
+                            logger.info("red div = " + f);
+                        }
                         Q = p[i].multiply(a, f);
                         S = S.subtract(Q); // not ok with reductum
 

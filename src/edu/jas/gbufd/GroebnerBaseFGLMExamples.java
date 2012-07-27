@@ -5,9 +5,9 @@
 package edu.jas.gbufd;
 
 
+import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,8 +21,8 @@ import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.gb.GroebnerBase;
-import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.ExpVector;
+import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.Monomial;
 import edu.jas.poly.OrderedPolynomialList;

@@ -6,8 +6,8 @@ package edu.jas.gbufd;
 
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -25,8 +25,7 @@ import edu.jas.structure.RegularRingElem;
  * @author Heinz Kredel
  */
 
-public class RGroebnerBaseSeq<C extends RegularRingElem<C>> extends
-        GroebnerBaseAbstract<C> {
+public class RGroebnerBaseSeq<C extends RegularRingElem<C>> extends GroebnerBaseAbstract<C> {
 
 
     private static final Logger logger = Logger.getLogger(RGroebnerBaseSeq.class);
@@ -72,12 +71,12 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>> extends
             return true;
         }
         if (!red.isBooleanClosed(F)) {
-            if (true || debug) {
-                System.out.println("not boolean closed");
+            if (debug) {
+                logger.debug("not boolean closed");
             }
             return false;
         }
-        GenPolynomial<C> pi, pj, s, h;
+        GenPolynomial<C> pi, pj, s;
         for (int i = 0; i < F.size(); i++) {
             pi = F.get(i);
             for (int j = i + 1; j < F.size(); j++) {
@@ -93,11 +92,10 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>> extends
                 s = red.normalform(F, s);
                 if (!s.isZERO()) {
                     if (debug) {
-                        System.out.println("p" + i + " = " + pi);
-                        System.out.println("p" + j + " = " + pj);
-                        System.out.println("s-pol = " + red.SPolynomial(pi, pj));
-                        System.out.println("s-pol(" + i + "," + j + ") != 0: " + s);
-                        //System.out.println("red = " + red.getClass().getName());
+                        logger.debug("p" + i + " = " + pi);
+                        logger.debug("p" + j + " = " + pj);
+                        logger.debug("s-pol = " + red.SPolynomial(pi, pj));
+                        logger.debug("s-pol(" + i + "," + j + ") != 0: " + s);
                     }
                     return false;
                 }
@@ -215,7 +213,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>> extends
         logger.debug("#sequential list = " + G.size());
         G = minimalGB(G);
         //G = red.irreducibleSet(G);
-        logger.info("" + pairlist); 
+        logger.info("" + pairlist);
         return G;
     }
 
@@ -251,7 +249,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>> extends
             b = a;
             if (red.isTopReducible(G, a) || red.isTopReducible(F, a)) {
                 // drop polynomial 
-                if (true || debug) {
+                if (logger.isInfoEnabled()) {
                     List<GenPolynomial<C>> ff;
                     ff = new ArrayList<GenPolynomial<C>>(G);
                     ff.addAll(F);
