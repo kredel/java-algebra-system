@@ -12,28 +12,33 @@ import org.apache.log4j.Logger;
 
 import edu.jas.arith.Rational;
 import edu.jas.poly.AlgebraicNumber;
-import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.structure.GcdRingElem;
-import edu.jas.ufd.FactorAbstract;
-//import edu.jas.application.FactorFactory;
-import edu.jas.ufd.FactorFactory;
+import edu.jas.root.PolyUtilRoot;
 import edu.jas.root.RealAlgebraicNumber;
 import edu.jas.root.RealAlgebraicRing;
-import edu.jas.root.PolyUtilRoot;
+import edu.jas.structure.GcdRingElem;
+import edu.jas.ufd.FactorAbstract;
+import edu.jas.ufd.FactorFactory;
 
 
 /**
- * Real algebraic number coefficients factorization algorithms. This
- * class implements factorization methods for polynomials over real
- * algebraic numbers from package <pre>edu.jas.root</pre>.
+ * Real algebraic number coefficients factorization algorithms. This class
+ * implements factorization methods for polynomials over real algebraic numbers
+ * from package
+ * 
+ * <pre>
+ * edu.jas.root
+ * </pre>
+ * 
+ * .
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
-public class FactorRealAlgebraic<C extends GcdRingElem<C> & Rational> 
-             extends FactorAbstract<RealAlgebraicNumber<C>> {
+public class FactorRealAlgebraic<C extends GcdRingElem<C> & Rational> extends
+                FactorAbstract<RealAlgebraicNumber<C>> {
+
 
     // TODO: is absolute possible? and what does it mean?
     //FactorAbsolute<AlgebraicNumber<C>>
@@ -43,7 +48,7 @@ public class FactorRealAlgebraic<C extends GcdRingElem<C> & Rational>
     private static final Logger logger = Logger.getLogger(FactorRealAlgebraic.class);
 
 
-    private final boolean debug = true || logger.isInfoEnabled();
+    //private final boolean debug = logger.isInfoEnabled();
 
 
     /**
@@ -65,14 +70,15 @@ public class FactorRealAlgebraic<C extends GcdRingElem<C> & Rational>
      * @param fac algebraic number factory.
      */
     public FactorRealAlgebraic(RealAlgebraicRing<C> fac) {
-        this(fac, FactorFactory.<AlgebraicNumber<C>> getImplementation(fac.algebraic) );
+        this(fac, FactorFactory.<AlgebraicNumber<C>> getImplementation(fac.algebraic));
     }
 
 
     /**
      * Constructor.
      * @param fac algebraic number factory.
-     * @param factorAlgebraic factorization engine for polynomials over base coefficients.
+     * @param factorAlgebraic factorization engine for polynomials over base
+     *            coefficients.
      */
     public FactorRealAlgebraic(RealAlgebraicRing<C> fac, FactorAbstract<AlgebraicNumber<C>> factorAlgebraic) {
         super(fac);
@@ -86,7 +92,8 @@ public class FactorRealAlgebraic<C extends GcdRingElem<C> & Rational>
      * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
      */
     @Override
-    public List<GenPolynomial<RealAlgebraicNumber<C>>> baseFactorsSquarefree(GenPolynomial<RealAlgebraicNumber<C>> P) {
+    public List<GenPolynomial<RealAlgebraicNumber<C>>> baseFactorsSquarefree(
+                    GenPolynomial<RealAlgebraicNumber<C>> P) {
         if (P == null) {
             throw new IllegalArgumentException(this.getClass().getName() + " P == null");
         }
@@ -110,15 +117,16 @@ public class FactorRealAlgebraic<C extends GcdRingElem<C> & Rational>
             factors.add(pfac.getONE().multiply(ldcf));
         }
         //System.out.println("\nP = " + P);
-        GenPolynomialRing<AlgebraicNumber<C>> afac = new GenPolynomialRing<AlgebraicNumber<C>>(rfac.algebraic,pfac); 
-        GenPolynomial<AlgebraicNumber<C>> A = PolyUtilRoot.<C> algebraicFromRealCoefficients(afac,P); 
+        GenPolynomialRing<AlgebraicNumber<C>> afac = new GenPolynomialRing<AlgebraicNumber<C>>(
+                        rfac.algebraic, pfac);
+        GenPolynomial<AlgebraicNumber<C>> A = PolyUtilRoot.<C> algebraicFromRealCoefficients(afac, P);
         // factor A:
         List<GenPolynomial<AlgebraicNumber<C>>> afactors = factorAlgebraic.baseFactorsSquarefree(A);
-        for ( GenPolynomial<AlgebraicNumber<C>> a : afactors ) {
-             GenPolynomial<RealAlgebraicNumber<C>> p = PolyUtilRoot.<C> realFromAlgebraicCoefficients(pfac,a); 
-             factors.add(p);
-	}
-        //System.out.println("rafactors = " + factors);
+        for (GenPolynomial<AlgebraicNumber<C>> a : afactors) {
+            GenPolynomial<RealAlgebraicNumber<C>> p = PolyUtilRoot.<C> realFromAlgebraicCoefficients(pfac, a);
+            factors.add(p);
+        }
+        logger.info("real algebraic factors = " + factors);
         return factors;
     }
 
