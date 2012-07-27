@@ -654,10 +654,10 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>> implements SolvableSy
                 rF.add(q);
             }
         }
-        if (true || debug) {
+        if (logger.isInfoEnabled()) {
             PolynomialList<C> pl = new PolynomialList<C>(rring, rF);
-            //logger.info("reversed problem = " + pl);
-            System.out.println("reversed problem = " + pl);
+            logger.info("reversed problem = " + pl);
+            //System.out.println("reversed problem = " + pl);
         }
         List<List<GenSolvablePolynomial<C>>> rZ = leftZeroRelationsArbitrary(modv, rF);
         if (debug) {
