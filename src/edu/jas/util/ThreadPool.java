@@ -120,7 +120,7 @@ public class ThreadPool {
             }
             logger.info("size = " + size + ", strategy = " + strategy);
         }
-        if (false) { // debug
+        if (debug) {
             Thread.dumpStack();
         }
     }

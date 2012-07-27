@@ -21,12 +21,12 @@ public class CartesianProduct<E> implements Iterable<List<E>> {
     /**
      * data structure.
      */
-    public final List<Iterable<E>> comps; 
+    public final List<Iterable<E>> comps;
 
 
     /**
      * CartesianProduct constructor.
-     * @param comps components of the cartesian product.
+     * @param comps components of the Cartesian product.
      */
     public CartesianProduct(List<Iterable<E>> comps) {
         if (comps == null) {
@@ -36,13 +36,13 @@ public class CartesianProduct<E> implements Iterable<List<E>> {
     }
 
 
-//     /**
-//      * CartesianProduct constructor.
-//      * @param comps components of the cartesian product.
-//      */
-//     public CartesianProduct(List<List<E>> comps) {
-//         this( listToIterable(comps)  );
-//     }
+    //     /**
+    //      * CartesianProduct constructor.
+    //      * @param comps components of the Cartesian product.
+    //      */
+    //     public CartesianProduct(List<List<E>> comps) {
+    //         this( listToIterable(comps)  );
+    //     }
 
 
     /**
@@ -56,13 +56,13 @@ public class CartesianProduct<E> implements Iterable<List<E>> {
 
     /**
      * Transform list to iterables.
-     * @param comp components of the cartesian product.
-     * @return iterables taken fom lists.
+     * @param comp components of the Cartesian product.
+     * @return iterables taken from lists.
      */
     static <E> List<Iterable<E>> listToIterable(List<List<E>> comp) {
-        List<Iterable<E>> iter = new ArrayList<Iterable<E>>( comp.size() );
-        for ( List<E> list : comp ) {
-            iter.add( list );
+        List<Iterable<E>> iter = new ArrayList<Iterable<E>>(comp.size());
+        for (List<E> list : comp) {
+            iter.add(list);
         }
         return iter;
     }
@@ -95,7 +95,7 @@ class CartesianProductIterator<E> implements Iterator<List<E>> {
 
     /**
      * CartesianProduct iterator constructor.
-     * @param comps components of the cartesian product.
+     * @param comps components of the Cartesian product.
      */
     public CartesianProductIterator(List<Iterable<E>> comps) {
         if (comps == null) {

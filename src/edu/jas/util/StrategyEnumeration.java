@@ -31,9 +31,8 @@ public final class StrategyEnumeration {
     public String toString() {
         if (this == FIFO) {
             return "FIFO strategy";
-        } else {
-            return "LIFO strategy";
         }
+        return "LIFO strategy";
     }
 
 }

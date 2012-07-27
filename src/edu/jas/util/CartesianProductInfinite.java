@@ -6,15 +6,15 @@ package edu.jas.util;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Collections;
 import java.util.NoSuchElementException;
 
 
 /**
- * Cartesian product of infinite components with iterator.
- * Works also for finite iterables.
+ * Cartesian product of infinite components with iterator. Works also for finite
+ * iterables.
  * @author Heinz Kredel
  */
 public class CartesianProductInfinite<E> implements Iterable<List<E>> {
@@ -23,12 +23,12 @@ public class CartesianProductInfinite<E> implements Iterable<List<E>> {
     /**
      * data structure.
      */
-    public final List<Iterable<E>> comps; 
+    public final List<Iterable<E>> comps;
 
 
     /**
      * CartesianProduct constructor.
-     * @param comps components of the cartesian product.
+     * @param comps components of the Cartesian product.
      */
     public CartesianProductInfinite(List<Iterable<E>> comps) {
         if (comps == null || comps.size() == 0) {
@@ -43,17 +43,17 @@ public class CartesianProductInfinite<E> implements Iterable<List<E>> {
      * @return an iterator.
      */
     public Iterator<List<E>> iterator() {
-        if ( comps.size() == 1 ) {
+        if (comps.size() == 1) {
             return new CartesianOneProductInfiniteIterator<E>(comps.get(0));
-        } 
-//         if ( comps.size() == 2 ) { // this part is not realy required
-//             return new CartesianTwoProductInfiniteIterator<E>(comps.get(0),comps.get(1));
-//         }
+        }
+        //         if ( comps.size() == 2 ) { // this part is not realy required
+        //             return new CartesianTwoProductInfiniteIterator<E>(comps.get(0),comps.get(1));
+        //         }
         int n = comps.size();
         int k = n / 2 + n % 2; // ceiling
-        Iterable<List<E>> c0 = new CartesianProductInfinite<E>( comps.subList(0,k) );
-        Iterable<List<E>> c1 = new CartesianProductInfinite<E>( comps.subList(k,n) );
-        return new CartesianTwoProductInfiniteIteratorList<E>(c0,c1);
+        Iterable<List<E>> c0 = new CartesianProductInfinite<E>(comps.subList(0, k));
+        Iterable<List<E>> c1 = new CartesianProductInfinite<E>(comps.subList(k, n));
+        return new CartesianTwoProductInfiniteIteratorList<E>(c0, c1);
     }
 
 }
@@ -99,7 +99,7 @@ class CartesianOneProductInfiniteIterator<E> implements Iterator<List<E>> {
      */
     public synchronized List<E> next() {
         List<E> res = new ArrayList<E>(1);
-        res.add( compit.next() );
+        res.add(compit.next());
         return res;
     }
 
@@ -125,14 +125,20 @@ class CartesianTwoProductInfiniteIterator<E> implements Iterator<List<E>> {
      * data structure.
      */
     final Iterator<E> compit0;
+
+
     final Iterator<E> compit1;
 
 
     final List<E> fincomps0;
+
+
     final List<E> fincomps1;
 
 
     Iterator<E> fincompit0;
+
+
     Iterator<E> fincompit1;
 
 
@@ -147,7 +153,7 @@ class CartesianTwoProductInfiniteIterator<E> implements Iterator<List<E>> {
 
     /**
      * CartesianProduct iterator constructor.
-     * @param comps components of the cartesian product.
+     * @param comps components of the Cartesian product.
      */
     public CartesianTwoProductInfiniteIterator(Iterable<E> comps0, Iterable<E> comps1) {
         if (comps0 == null || comps1 == null) {
@@ -161,7 +167,7 @@ class CartesianTwoProductInfiniteIterator<E> implements Iterator<List<E>> {
         E e = compit0.next();
         current.add(e);
         fincomps0 = new ArrayList<E>();
-        fincomps0.add(e); 
+        fincomps0.add(e);
         fincompit0 = fincomps0.iterator();
         E d = fincompit0.next(); // remove current
 
@@ -169,7 +175,7 @@ class CartesianTwoProductInfiniteIterator<E> implements Iterator<List<E>> {
         e = compit1.next();
         current.add(e);
         fincomps1 = new ArrayList<E>();
-        fincomps1.add(e); 
+        fincomps1.add(e);
         fincompit1 = fincomps1.iterator();
         //@SuppressWarnings("unused")
         d = fincompit1.next(); // remove current
@@ -195,7 +201,7 @@ class CartesianTwoProductInfiniteIterator<E> implements Iterator<List<E>> {
             throw new NoSuchElementException("invalid call of next()");
         }
         List<E> res = current; // new ArrayList<E>(current); // copy
-        if ( fincompit0.hasNext() && fincompit1.hasNext() ) {
+        if (fincompit0.hasNext() && fincompit1.hasNext()) {
             E e0 = fincompit0.next();
             E e1 = fincompit1.next();
             current = new ArrayList<E>();
@@ -204,19 +210,19 @@ class CartesianTwoProductInfiniteIterator<E> implements Iterator<List<E>> {
             return res;
         }
         level++;
-        if ( level % 2 == 1 ) {
+        if (level % 2 == 1) {
             Collections.reverse(fincomps0);
         } else {
             Collections.reverse(fincomps1);
         }
-        if ( compit0.hasNext() && compit1.hasNext() ) {
-            fincomps0.add( compit0.next() );
-            fincomps1.add( compit1.next() );
-        } else { 
+        if (compit0.hasNext() && compit1.hasNext()) {
+            fincomps0.add(compit0.next());
+            fincomps1.add(compit1.next());
+        } else {
             empty = true;
             return res;
         }
-        if ( level % 2 == 0 ) {
+        if (level % 2 == 0) {
             Collections.reverse(fincomps0);
         } else {
             Collections.reverse(fincomps1);
@@ -255,14 +261,20 @@ class CartesianTwoProductInfiniteIteratorList<E> implements Iterator<List<E>> {
      * data structure.
      */
     final Iterator<List<E>> compit0;
+
+
     final Iterator<List<E>> compit1;
 
 
     final List<List<E>> fincomps0;
+
+
     final List<List<E>> fincomps1;
 
 
     Iterator<List<E>> fincompit0;
+
+
     Iterator<List<E>> fincompit1;
 
 
@@ -277,7 +289,7 @@ class CartesianTwoProductInfiniteIteratorList<E> implements Iterator<List<E>> {
 
     /**
      * CartesianProduct iterator constructor.
-     * @param comps components of the cartesian product.
+     * @param comps components of the Cartesian product.
      */
     public CartesianTwoProductInfiniteIteratorList(Iterable<List<E>> comps0, Iterable<List<E>> comps1) {
         if (comps0 == null || comps1 == null) {
@@ -291,7 +303,7 @@ class CartesianTwoProductInfiniteIteratorList<E> implements Iterator<List<E>> {
         List<E> e = compit0.next();
         current.addAll(e);
         fincomps0 = new ArrayList<List<E>>();
-        fincomps0.add(e); 
+        fincomps0.add(e);
         fincompit0 = fincomps0.iterator();
         List<E> d = fincompit0.next(); // remove current
 
@@ -299,7 +311,7 @@ class CartesianTwoProductInfiniteIteratorList<E> implements Iterator<List<E>> {
         e = compit1.next();
         current.addAll(e);
         fincomps1 = new ArrayList<List<E>>();
-        fincomps1.add(e); 
+        fincomps1.add(e);
         fincompit1 = fincomps1.iterator();
         //@SuppressWarnings("unused")
         d = fincompit1.next(); // remove current
@@ -325,7 +337,7 @@ class CartesianTwoProductInfiniteIteratorList<E> implements Iterator<List<E>> {
             throw new NoSuchElementException("invalid call of next()");
         }
         List<E> res = current; // new ArrayList<E>(current);
-        if ( fincompit0.hasNext() && fincompit1.hasNext() ) {
+        if (fincompit0.hasNext() && fincompit1.hasNext()) {
             List<E> e0 = fincompit0.next();
             List<E> e1 = fincompit1.next();
             current = new ArrayList<E>();
@@ -334,19 +346,19 @@ class CartesianTwoProductInfiniteIteratorList<E> implements Iterator<List<E>> {
             return res;
         }
         level++;
-        if ( level % 2 == 1 ) {
+        if (level % 2 == 1) {
             Collections.reverse(fincomps0);
         } else {
             Collections.reverse(fincomps1);
         }
-        if ( compit0.hasNext() && compit1.hasNext() ) {
-            fincomps0.add( compit0.next() );
-            fincomps1.add( compit1.next() );
-        } else { 
+        if (compit0.hasNext() && compit1.hasNext()) {
+            fincomps0.add(compit0.next());
+            fincomps1.add(compit1.next());
+        } else {
             empty = true;
             return res;
         }
-        if ( level % 2 == 0 ) {
+        if (level % 2 == 0) {
             Collections.reverse(fincomps0);
         } else {
             Collections.reverse(fincomps1);
