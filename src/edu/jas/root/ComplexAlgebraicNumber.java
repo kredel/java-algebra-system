@@ -6,18 +6,15 @@ package edu.jas.root;
 
 
 // import edu.jas.structure.RingElem;
-import edu.jas.arith.Rational;
-import edu.jas.arith.BigRational;
 import edu.jas.arith.BigDecimal;
+import edu.jas.arith.BigRational;
+import edu.jas.arith.Rational;
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.Complex;
 import edu.jas.poly.ComplexRing;
 import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.PolyUtil;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingFactory;
 import edu.jas.structure.NotInvertibleException;
 
 
@@ -226,7 +223,7 @@ implements GcdRingElem<ComplexAlgebraicNumber<C>> {
     /**
      * Hash code for this ComplexAlgebraicNumber.
      * @see java.lang.Object#hashCode()
-     */ 
+     */
     @Override
     public int hashCode() {
         return 37 * number.val.hashCode() + ring.hashCode();
@@ -426,22 +423,20 @@ implements GcdRingElem<ComplexAlgebraicNumber<C>> {
      */
     public Complex<BigRational> magnitude() {
         try {
-            Rectangle<C> v = ring.engine.invariantMagnitudeRectangle(ring.root, 
-                                                                     ring.algebraic.modul, 
-                                                                     number.val,
-                                                                     ring.getEps());
+            Rectangle<C> v = ring.engine.invariantMagnitudeRectangle(ring.root, ring.algebraic.modul,
+                            number.val, ring.getEps());
             ring.setRoot(v);
             //System.out.println("new v = " + v);
             Complex<C> ev = ring.engine.complexRectangleMagnitude(v, ring.algebraic.modul, number.val); //, ring.eps);
-            C re = ev.getRe();
-            if ( (Object) re instanceof Rational) { // true by type parameter
-                BigRational er = ev.getRe().getRational();
-                BigRational ei = ev.getIm().getRational();
-                ComplexRing<BigRational> cr = new ComplexRing<BigRational>(er.factory());
-                return new Complex<BigRational>(cr,er,ei);
-            } else {
-                throw new RuntimeException("Rational expected, but was " + ev.getClass());
-            }
+            //C re = ev.getRe();
+            //if ( (Object) re instanceof Rational) { // true by type parameter
+            BigRational er = ev.getRe().getRational();
+            BigRational ei = ev.getIm().getRational();
+            ComplexRing<BigRational> cr = new ComplexRing<BigRational>(er.factory());
+            return new Complex<BigRational>(cr, er, ei);
+            //} else {
+            //    throw new RuntimeException("Rational expected, but was " + ev.getClass());
+            //}
         } catch (InvalidBoundaryException e) { // should not happen
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -456,7 +451,7 @@ implements GcdRingElem<ComplexAlgebraicNumber<C>> {
     public Complex<BigDecimal> decimalMagnitude() {
         Complex<BigRational> cr = magnitude();
         ComplexRing<BigDecimal> dr = new ComplexRing<BigDecimal>(BigDecimal.ZERO);
-        return new Complex<BigDecimal>(dr,new BigDecimal(cr.getRe()),new BigDecimal(cr.getIm()));
+        return new Complex<BigDecimal>(dr, new BigDecimal(cr.getRe()), new BigDecimal(cr.getIm()));
     }
 
 }

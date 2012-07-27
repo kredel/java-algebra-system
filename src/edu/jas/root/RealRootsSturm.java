@@ -10,12 +10,11 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.arith.Rational;
 import edu.jas.arith.BigRational;
+import edu.jas.arith.Rational;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.RingElem;
-import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 
 
@@ -86,7 +85,7 @@ public class RealRootsSturm<C extends RingElem<C> & Rational> extends RealRootsA
             R.add(new Interval<C>(z));
             return R;
         }
-        if ( f.degree(0) == 1L ) {
+        if (f.degree(0) == 1L) {
             C z = f.monic().trailingBaseCoefficient().negate();
             R.add(new Interval<C>(z));
             return R;
@@ -99,7 +98,7 @@ public class RealRootsSturm<C extends RingElem<C> & Rational> extends RealRootsA
         //System.out.println("S = " + S);
         //System.out.println("f_S = " + S.get(0));
         List<Interval<C>> Rp = realRoots(iv, S);
-        if (logger.isInfoEnabled()&& !( ((Object)f.ring.coFac) instanceof BigRational)) {
+        if (logger.isInfoEnabled() && !(((Object) f.ring.coFac) instanceof BigRational)) {
             //logger.info("realRoots bound: " + iv);
             logger.info("realRoots: " + Rp);
         }
@@ -117,22 +116,23 @@ public class RealRootsSturm<C extends RingElem<C> & Rational> extends RealRootsA
     public List<Interval<C>> realRoots(Interval<C> iv, List<GenPolynomial<C>> S) {
         List<Interval<C>> R = new ArrayList<Interval<C>>();
         GenPolynomial<C> f = S.get(0); // squarefree part
-        if ( f.isZERO() ) {
+        if (f.isZERO()) {
             C z = f.leadingBaseCoefficient();
-            if ( !iv.contains(z) ) {
-                throw new IllegalArgumentException("root not in interval: f = " + f + ", iv = " + iv + ", z = " + z);
+            if (!iv.contains(z)) {
+                throw new IllegalArgumentException("root not in interval: f = " + f + ", iv = " + iv
+                                + ", z = " + z);
             }
             Interval<C> iv1 = new Interval<C>(z);
             R.add(iv1);
             return R;
         }
-        if ( f.isConstant() ) {
+        if (f.isConstant()) {
             return R;
             //throw new IllegalArgumentException("f has no root: f = " + f + ", iv = " + iv);
         }
-        if ( f.degree(0) == 1L ) {
+        if (f.degree(0) == 1L) {
             C z = f.monic().trailingBaseCoefficient().negate();
-            if ( !iv.contains(z) ) {
+            if (!iv.contains(z)) {
                 return R;
                 //throw new IllegalArgumentException("root not in interval: f = " + f + ", iv = " + iv + ", z = " + z);
             }
@@ -199,8 +199,8 @@ public class RealRootsSturm<C extends RingElem<C> & Rational> extends RealRootsA
             Interval<C> iv22 = new Interval<C>(d2, iv2.right);
 
             boolean b11 = signChange(iv11, f);
-            boolean b12 = signChange(iv12, f);
-            boolean b21 = signChange(iv21, f);
+            boolean b12 = signChange(iv12, f); // TODO check unnecessary
+            boolean b21 = signChange(iv21, f); // TODO check unused or unnecessary
             boolean b22 = signChange(iv22, f);
             if (b11) {
                 iv1 = iv11;
@@ -268,9 +268,9 @@ public class RealRootsSturm<C extends RingElem<C> & Rational> extends RealRootsA
         }
         if (f.isZERO()) {
             C z = f.leadingBaseCoefficient();
-            if ( !iv.contains(z) ) {
+            if (!iv.contains(z)) {
                 return 0L;
-	    }
+            }
             return 1L;
         }
         List<GenPolynomial<C>> S = sturmSequence(f);
@@ -283,7 +283,8 @@ public class RealRootsSturm<C extends RingElem<C> & Rational> extends RealRootsA
      * @param iv root isolating interval for f, with f(left) * f(right) &lt; 0.
      * @param f univariate polynomial, non-zero.
      * @param g univariate polynomial, gcd(f,g) == 1.
-     * @return v with v a new interval contained in iv such that g(w) != 0 for w in v.
+     * @return v with v a new interval contained in iv such that g(w) != 0 for w
+     *         in v.
      */
     @Override
     public Interval<C> invariantSignInterval(Interval<C> iv, GenPolynomial<C> f, GenPolynomial<C> g) {
@@ -302,15 +303,17 @@ public class RealRootsSturm<C extends RingElem<C> & Rational> extends RealRootsA
         List<GenPolynomial<C>> Sg = sturmSequence(g.monic());
         Interval<C> ivp = invariantSignInterval(iv, f, Sg);
         return ivp;
-   }
+    }
 
 
     /**
      * Invariant interval for algebraic number sign.
      * @param iv root isolating interval for f, with f(left) * f(right) &lt; 0.
      * @param f univariate polynomial, non-zero.
-     * @param Sg Sturm sequence for g, a univariate polynomial with gcd(f,g) == 1.
-     * @return v with v a new interval contained in iv such that g(w) != 0 for w in v.
+     * @param Sg Sturm sequence for g, a univariate polynomial with gcd(f,g) ==
+     *            1.
+     * @return v with v a new interval contained in iv such that g(w) != 0 for w
+     *         in v.
      */
     public Interval<C> invariantSignInterval(Interval<C> iv, GenPolynomial<C> f, List<GenPolynomial<C>> Sg) {
         Interval<C> v = iv;

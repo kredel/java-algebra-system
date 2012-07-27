@@ -6,7 +6,6 @@ package edu.jas.root;
 
 
 import java.util.ArrayList;
-//import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
@@ -22,12 +21,10 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.RingElem;
-import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.UnaryFunctor;
 import edu.jas.ufd.Squarefree;
 import edu.jas.ufd.SquarefreeFactory;
-import edu.jas.util.ArrayUtil;
 
 
 /**
@@ -55,7 +52,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
      * @param cf coefficient factory.
      */
     public ComplexRootsAbstract(RingFactory<Complex<C>> cf) {
-        if ( ! (cf instanceof ComplexRing) ) {
+        if (!(cf instanceof ComplexRing)) {
             throw new IllegalArgumentException("cf not supported coefficients " + cf);
         }
         engine = SquarefreeFactory.<Complex<C>> getImplementation(cf);
@@ -63,7 +60,8 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
 
 
     /**
-     * Root bound. With f(-M + i M) * f(-M - i M) * f(M - i M) * f(M + i M) != 0.
+     * Root bound. With f(-M + i M) * f(-M - i M) * f(M - i M) * f(M + i M) !=
+     * 0.
      * @param f univariate polynomial.
      * @return M such that root(f) is contained in the rectangle spanned by M.
      */
@@ -150,7 +148,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
      * @return root count of a in rectangle.
      */
     public abstract long complexRootCount(Rectangle<C> rect, GenPolynomial<Complex<C>> a)
-            throws InvalidBoundaryException;
+                    throws InvalidBoundaryException;
 
 
     /**
@@ -160,7 +158,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
      * @return list of complex roots.
      */
     public abstract List<Rectangle<C>> complexRoots(Rectangle<C> rect, GenPolynomial<Complex<C>> a)
-            throws InvalidBoundaryException;
+                    throws InvalidBoundaryException;
 
 
     /**
@@ -171,13 +169,13 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
     @SuppressWarnings("unchecked")
     public List<Rectangle<C>> complexRoots(GenPolynomial<Complex<C>> a) {
         List<Rectangle<C>> roots = new ArrayList<Rectangle<C>>();
-        if ( a.isConstant() || a.isZERO() ) {
+        if (a.isConstant() || a.isZERO()) {
             return roots;
         }
         ComplexRing<C> cr = (ComplexRing<C>) a.ring.coFac;
         SortedMap<GenPolynomial<Complex<C>>, Long> sa = engine.squarefreeFactors(a);
-        for ( Map.Entry<GenPolynomial<Complex<C>>,Long> me : sa.entrySet()) {
-	    GenPolynomial<Complex<C>> p = me.getKey();
+        for (Map.Entry<GenPolynomial<Complex<C>>, Long> me : sa.entrySet()) {
+            GenPolynomial<Complex<C>> p = me.getKey();
             Complex<C> Mb = rootBound(p);
             C M = Mb.getRe();
             C M1 = M.sum(M.factory().fromInteger(1)); // asymmetric to origin
@@ -186,10 +184,10 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                 logger.info("rootBound = " + M);
             }
             Complex<C>[] corner = (Complex<C>[]) new Complex[4];
-            corner[0] = new Complex<C>(cr, M1.negate(), M);           // nw
+            corner[0] = new Complex<C>(cr, M1.negate(), M); // nw
             corner[1] = new Complex<C>(cr, M1.negate(), M1.negate()); // sw
-            corner[2] = new Complex<C>(cr, M, M1.negate());           // se
-            corner[3] = new Complex<C>(cr, M, M);                     // ne
+            corner[2] = new Complex<C>(cr, M, M1.negate()); // se
+            corner[3] = new Complex<C>(cr, M, M); // ne
             Rectangle<C> rect = new Rectangle<C>(corner);
             try {
                 List<Rectangle<C>> rs = complexRoots(rect, p);
@@ -214,7 +212,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
      * @return refined complex root.
      */
     public Rectangle<C> complexRootRefinement(Rectangle<C> rect, GenPolynomial<Complex<C>> a, BigRational len)
-            throws InvalidBoundaryException {
+                    throws InvalidBoundaryException {
         ComplexRing<C> cr = (ComplexRing<C>) a.ring.coFac;
         Rectangle<C> root = rect;
         long w;
@@ -330,7 +328,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
         ComplexRing<C> cr = (ComplexRing<C>) a.ring.coFac;
         SortedMap<GenPolynomial<Complex<C>>, Long> sa = engine.squarefreeFactors(a);
         List<Rectangle<C>> roots = new ArrayList<Rectangle<C>>();
-        for ( Map.Entry<GenPolynomial<Complex<C>>, Long> me : sa.entrySet()) {
+        for (Map.Entry<GenPolynomial<Complex<C>>, Long> me : sa.entrySet()) {
             GenPolynomial<Complex<C>> p = me.getKey();
             Complex<C> Mb = rootBound(p);
             C M = Mb.getRe();
@@ -339,16 +337,16 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                 logger.info("rootBound = " + M);
             }
             Complex<C>[] corner = (Complex<C>[]) new Complex[4];
-            corner[0] = new Complex<C>(cr, M1.negate(), M);           // nw
+            corner[0] = new Complex<C>(cr, M1.negate(), M); // nw
             corner[1] = new Complex<C>(cr, M1.negate(), M1.negate()); // sw
-            corner[2] = new Complex<C>(cr, M, M1.negate());           // se
-            corner[3] = new Complex<C>(cr, M, M);                     // ne
+            corner[2] = new Complex<C>(cr, M, M1.negate()); // se
+            corner[3] = new Complex<C>(cr, M, M); // ne
             Rectangle<C> rect = new Rectangle<C>(corner);
             try {
                 List<Rectangle<C>> rs = complexRoots(rect, p);
                 List<Rectangle<C>> rf = new ArrayList<Rectangle<C>>(rs.size());
-                for ( Rectangle<C> r : rs ) {
-                    Rectangle<C> rr = complexRootRefinement(r,p,len);
+                for (Rectangle<C> r : rs) {
+                    Rectangle<C> rr = complexRootRefinement(r, p, len);
                     rf.add(rr);
                 }
                 long e = me.getValue(); // sa.get(p);
@@ -365,15 +363,15 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
 
     /**
      * Invariant rectangle for algebraic number.
-     * @param rect root isolating rectangle for f which contains exactly one root.
+     * @param rect root isolating rectangle for f which contains exactly one
+     *            root.
      * @param f univariate polynomial, non-zero.
      * @param g univariate polynomial, gcd(f,g) == 1.
-     * @return v with v a new rectangle contained in iv such that g(w) != 0 for w in v.
+     * @return v with v a new rectangle contained in iv such that g(w) != 0 for
+     *         w in v.
      */
-    public abstract Rectangle<C> invariantRectangle(Rectangle<C> rect, 
-                                           GenPolynomial<Complex<C>> f, 
-                                           GenPolynomial<Complex<C>> g) 
-        throws InvalidBoundaryException;
+    public abstract Rectangle<C> invariantRectangle(Rectangle<C> rect, GenPolynomial<Complex<C>> f,
+                    GenPolynomial<Complex<C>> g) throws InvalidBoundaryException;
 
 
     /**
@@ -401,11 +399,12 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
      * @param rt root isolating rectangle.
      * @param f univariate polynomial, non-zero.
      * @param eps requested interval length.
-     * @return a decimal approximation d such that |d-v| &lt; eps, for f(v) = 0, v in rt.
+     * @return a decimal approximation d such that |d-v| &lt; eps, for f(v) = 0,
+     *         v in rt.
      */
-    public Complex<BigDecimal> approximateRoot(Rectangle<C> rt, GenPolynomial<Complex<C>> f, C eps) 
-                               throws NoConvergenceException {
-        if (rt == null ) {
+    public Complex<BigDecimal> approximateRoot(Rectangle<C> rt, GenPolynomial<Complex<C>> f, C eps)
+                    throws NoConvergenceException {
+        if (rt == null) {
             throw new IllegalArgumentException("null interval not allowed");
         }
         Complex<BigDecimal> d = rt.getDecimalCenter();
@@ -420,74 +419,72 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
         Complex<C> sw = rt.getSW();
         BigDecimal swr = new BigDecimal(sw.getRe().getRational());
         BigDecimal swi = new BigDecimal(sw.getIm().getRational());
-        Complex<BigDecimal> ll = new Complex<BigDecimal>(cr, swr, swi );
+        Complex<BigDecimal> ll = new Complex<BigDecimal>(cr, swr, swi);
         Complex<C> ne = rt.getNE();
         BigDecimal ner = new BigDecimal(ne.getRe().getRational());
         BigDecimal nei = new BigDecimal(ne.getIm().getRational());
-        Complex<BigDecimal> ur = new Complex<BigDecimal>(cr, ner, nei );
+        Complex<BigDecimal> ur = new Complex<BigDecimal>(cr, ner, nei);
 
         BigDecimal e = new BigDecimal(eps.getRational());
-        Complex<BigDecimal> q = new Complex<BigDecimal>(cr, new BigDecimal("0.25") );
+        Complex<BigDecimal> q = new Complex<BigDecimal>(cr, new BigDecimal("0.25"));
         e = e.multiply(d.norm().getRe()); // relative error
         //System.out.println("e  = " + e);
 
         // polynomials with decimal coefficients
-        GenPolynomialRing<Complex<BigDecimal>> dfac = new GenPolynomialRing<Complex<BigDecimal>>(cr,f.ring);
-        GenPolynomial<Complex<BigDecimal>> df = PolyUtil.<C> complexDecimalFromRational(dfac,f);
+        GenPolynomialRing<Complex<BigDecimal>> dfac = new GenPolynomialRing<Complex<BigDecimal>>(cr, f.ring);
+        GenPolynomial<Complex<BigDecimal>> df = PolyUtil.<C> complexDecimalFromRational(dfac, f);
         GenPolynomial<Complex<C>> fp = PolyUtil.<Complex<C>> baseDeriviative(f);
-        GenPolynomial<Complex<BigDecimal>> dfp = PolyUtil.<C> complexDecimalFromRational(dfac,fp);
+        GenPolynomial<Complex<BigDecimal>> dfp = PolyUtil.<C> complexDecimalFromRational(dfac, fp);
 
         // Newton Raphson iteration: x_{n+1} = x_n - f(x_n)/f'(x_n)
         int i = 0;
-        final int MITER = 50; 
+        final int MITER = 50;
         int dir = -1;
-        while ( i++ < MITER ) {
-            Complex<BigDecimal> fx  = PolyUtil.<Complex<BigDecimal>> evaluateMain(cr, df, d); // f(d)
-            BigDecimal fs = fx.norm().getRe();
+        while (i++ < MITER) {
+            Complex<BigDecimal> fx = PolyUtil.<Complex<BigDecimal>> evaluateMain(cr, df, d); // f(d)
+            //BigDecimal fs = fx.norm().getRe();
             //System.out.println("fs = " + fs);
-            if ( fx.isZERO() ) {
+            if (fx.isZERO()) {
                 return d;
             }
             Complex<BigDecimal> fpx = PolyUtil.<Complex<BigDecimal>> evaluateMain(cr, dfp, d); // f'(d)
-            if ( fpx.isZERO() ) {
+            if (fpx.isZERO()) {
                 throw new NoConvergenceException("zero deriviative should not happen");
             }
             Complex<BigDecimal> x = fx.divide(fpx);
-            Complex<BigDecimal> dx = d.subtract( x );
+            Complex<BigDecimal> dx = d.subtract(x);
             //System.out.println("dx = " + dx);
-            if ( d.subtract(dx).norm().getRe().compareTo(e) <= 0 ) {
+            if (d.subtract(dx).norm().getRe().compareTo(e) <= 0) {
                 return dx;
             }
-//             if ( false ) { // not useful:
-//                 Complex<BigDecimal> fxx  = PolyUtil.<Complex<BigDecimal>> evaluateMain(cr, df, dx); // f(dx)
-//                 //System.out.println("fxx = " + fxx);
-//                 BigDecimal fsx = fxx.norm().getRe();
-//                 System.out.println("fsx = " + fsx);
-//                 while ( fsx.compareTo( fs ) >= 0 ) {
-//                     System.out.println("trying to increase f(d) ");
-//                     if ( i++ > MITER ) { // dx > right: dx - right > 0
-//                         throw new NoConvergenceException("no convergence after " + i + " steps");
-//                     }
-//                     x = x.multiply(q); // x * 1/4
-//                     dx = d.subtract(x);
-//                     //System.out.println(" x = " + x);
-//                     System.out.println("dx = " + dx);
-//                     fxx  = PolyUtil.<Complex<BigDecimal>> evaluateMain(cr, df, dx); // f(dx)
-//                     //System.out.println("fxx = " + fxx);
-//                     fsx = fxx.norm().getRe();
-//                     System.out.println("fsx = " + fsx);
-//                 }
-//             }
+            //             if ( false ) { // not useful:
+            //                 Complex<BigDecimal> fxx  = PolyUtil.<Complex<BigDecimal>> evaluateMain(cr, df, dx); // f(dx)
+            //                 //System.out.println("fxx = " + fxx);
+            //                 BigDecimal fsx = fxx.norm().getRe();
+            //                 System.out.println("fsx = " + fsx);
+            //                 while ( fsx.compareTo( fs ) >= 0 ) {
+            //                     System.out.println("trying to increase f(d) ");
+            //                     if ( i++ > MITER ) { // dx > right: dx - right > 0
+            //                         throw new NoConvergenceException("no convergence after " + i + " steps");
+            //                     }
+            //                     x = x.multiply(q); // x * 1/4
+            //                     dx = d.subtract(x);
+            //                     //System.out.println(" x = " + x);
+            //                     System.out.println("dx = " + dx);
+            //                     fxx  = PolyUtil.<Complex<BigDecimal>> evaluateMain(cr, df, dx); // f(dx)
+            //                     //System.out.println("fxx = " + fxx);
+            //                     fsx = fxx.norm().getRe();
+            //                     System.out.println("fsx = " + fsx);
+            //                 }
+            //             }
             // check interval bounds
-            while ( dx.getRe().compareTo(ll.getRe()) < 0 ||
-                    dx.getIm().compareTo(ll.getIm()) < 0 || 
-                    dx.getRe().compareTo(ur.getRe()) > 0 || 
-                    dx.getIm().compareTo(ur.getIm()) > 0 ) { // dx < ll: dx - ll < 0
-                                                             // dx > ur: dx - ur > 0
-                if ( i++ > MITER ) { // dx > right: dx - right > 0
+            while (dx.getRe().compareTo(ll.getRe()) < 0 || dx.getIm().compareTo(ll.getIm()) < 0
+                            || dx.getRe().compareTo(ur.getRe()) > 0 || dx.getIm().compareTo(ur.getIm()) > 0) { // dx < ll: dx - ll < 0
+                                                                                                               // dx > ur: dx - ur > 0
+                if (i++ > MITER) { // dx > right: dx - right > 0
                     throw new NoConvergenceException("no convergence after " + i + " steps");
                 }
-                if ( i > MITER/2 && dir == 0 ) { 
+                if (i > MITER / 2 && dir == 0) {
                     Complex<C> cc = rt.getCenter();
                     Rectangle<C> nrt = rt.exchangeSE(cc);
                     Complex<BigDecimal> sd = nrt.getDecimalCenter();
@@ -497,7 +494,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                     i = 0;
                     dir = 1;
                 }
-                if ( i > MITER/2 && dir == 1 ) { 
+                if (i > MITER / 2 && dir == 1) {
                     Complex<C> cc = rt.getCenter();
                     Rectangle<C> nrt = rt.exchangeNW(cc);
                     Complex<BigDecimal> sd = nrt.getDecimalCenter();
@@ -507,7 +504,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                     i = 0;
                     dir = 2;
                 }
-                if ( i > MITER/2 && dir == 2 ) { 
+                if (i > MITER / 2 && dir == 2) {
                     Complex<C> cc = rt.getCenter();
                     Rectangle<C> nrt = rt.exchangeSW(cc);
                     Complex<BigDecimal> sd = nrt.getDecimalCenter();
@@ -517,7 +514,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                     i = 0;
                     dir = 3;
                 }
-                if ( i > MITER/2 && dir == 3 ) { 
+                if (i > MITER / 2 && dir == 3) {
                     Complex<C> cc = rt.getCenter();
                     Rectangle<C> nrt = rt.exchangeNE(cc);
                     Complex<BigDecimal> sd = nrt.getDecimalCenter();
@@ -525,22 +522,22 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                     x = cr.getZERO();
                     logger.info("trying new NE starting point " + d);
                     i = 0;
-                    dir = 4; 
+                    dir = 4;
                 }
-                if ( i > MITER/2 && ( dir == -1 || dir == 4 || dir == 5 ) ) { 
+                if (i > MITER / 2 && (dir == -1 || dir == 4 || dir == 5)) {
                     Complex<C> sr = rt.randomPoint();
                     BigDecimal srr = new BigDecimal(sr.getRe().getRational());
                     BigDecimal sri = new BigDecimal(sr.getIm().getRational());
-                    Complex<BigDecimal> sd = new Complex<BigDecimal>(cr, srr, sri );
+                    Complex<BigDecimal> sd = new Complex<BigDecimal>(cr, srr, sri);
                     d = sd;
                     x = cr.getZERO();
                     logger.info("trying new random starting point " + d);
-                    if ( dir == -1 ) {
-                        i = 0; 
+                    if (dir == -1) {
+                        i = 0;
                         dir = 0;
-                    } else if ( dir == 4 ) {
-                        i = 0; 
-                        dir = 5; 
+                    } else if (dir == 4) {
+                        i = 0;
+                        dir = 5;
                     } else {
                         //i = 0; 
                         dir = 6; // end
@@ -568,16 +565,16 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
         ComplexRing<C> cr = (ComplexRing<C>) a.ring.coFac;
         SortedMap<GenPolynomial<Complex<C>>, Long> sa = engine.squarefreeFactors(a);
         List<Complex<BigDecimal>> roots = new ArrayList<Complex<BigDecimal>>();
-        for ( Map.Entry<GenPolynomial<Complex<C>>, Long> me : sa.entrySet()) {
+        for (Map.Entry<GenPolynomial<Complex<C>>, Long> me : sa.entrySet()) {
             GenPolynomial<Complex<C>> p = me.getKey();
             List<Complex<BigDecimal>> rf = null;
-            if ( p.degree(0) <= 1 ) {
+            if (p.degree(0) <= 1) {
                 Complex<C> tc = p.trailingBaseCoefficient();
                 tc = tc.negate();
-                BigDecimal rr = new BigDecimal( tc.getRe().getRational() );
-                BigDecimal ri = new BigDecimal( tc.getIm().getRational() );
-                ComplexRing<BigDecimal> crf = new ComplexRing<BigDecimal>(rr); 
-                Complex<BigDecimal> r = new Complex<BigDecimal>(crf,rr,ri); 
+                BigDecimal rr = new BigDecimal(tc.getRe().getRational());
+                BigDecimal ri = new BigDecimal(tc.getIm().getRational());
+                ComplexRing<BigDecimal> crf = new ComplexRing<BigDecimal>(rr);
+                Complex<BigDecimal> r = new Complex<BigDecimal>(crf, rr, ri);
                 rf = new ArrayList<Complex<BigDecimal>>(1);
                 rf.add(r);
             } else {
@@ -588,10 +585,10 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                     logger.info("rootBound = " + M);
                 }
                 Complex<C>[] corner = (Complex<C>[]) new Complex[4];
-                corner[0] = new Complex<C>(cr, M1.negate(), M);           // nw
+                corner[0] = new Complex<C>(cr, M1.negate(), M); // nw
                 corner[1] = new Complex<C>(cr, M1.negate(), M1.negate()); // sw
-                corner[2] = new Complex<C>(cr, M, M1.negate());           // se
-                corner[3] = new Complex<C>(cr, M, M);                     // ne
+                corner[2] = new Complex<C>(cr, M, M1.negate()); // se
+                corner[3] = new Complex<C>(cr, M, M); // ne
                 Rectangle<C> rect = new Rectangle<C>(corner);
                 List<Rectangle<C>> rs = null;
                 try {
@@ -600,21 +597,21 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                     throw new RuntimeException("this should never happen " + e);
                 }
                 rf = new ArrayList<Complex<BigDecimal>>(rs.size());
-                for ( Rectangle<C> r : rs ) {
+                for (Rectangle<C> r : rs) {
                     Complex<BigDecimal> rr = null;
-                    while ( rr == null ) {
+                    while (rr == null) {
                         try {
-                            rr = approximateRoot(r,p,eps);
+                            rr = approximateRoot(r, p, eps);
                             rf.add(rr);
                         } catch (NoConvergenceException e) {
                             // fall back to exact algorithm
                             BigRational len = r.rationalLength();
-                            len = len.multiply( new BigRational(1,1000));
+                            len = len.multiply(new BigRational(1, 1000));
                             try {
-                                r = complexRootRefinement(r,p,len);
+                                r = complexRootRefinement(r, p, len);
                                 logger.info("fall back rootRefinement = " + r);
                                 //System.out.println("len = " + len);
-                            } catch( InvalidBoundaryException ee ) {
+                            } catch (InvalidBoundaryException ee) {
                                 throw new RuntimeException("this should never happen " + ee);
                             }
                         }
@@ -645,15 +642,16 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
 
     /**
      * Invariant rectangle for algebraic number magnitude.
-     * @param rect root isolating rectangle for f which contains exactly one root.
+     * @param rect root isolating rectangle for f which contains exactly one
+     *            root.
      * @param f univariate polynomial, non-zero.
      * @param g univariate polynomial, gcd(f,g) == 1.
      * @param eps length limit for rectangle length.
-     * @return v with v a new rectangle contained in rect such that |g(a) - g(b)|
-     *         &lt; eps for a, b in v in rect.
+     * @return v with v a new rectangle contained in rect such that |g(a) -
+     *         g(b)| &lt; eps for a, b in v in rect.
      */
-    public Rectangle<C> invariantMagnitudeRectangle(Rectangle<C> rect, GenPolynomial<Complex<C>> f, GenPolynomial<Complex<C>> g,
-            C eps) throws InvalidBoundaryException {
+    public Rectangle<C> invariantMagnitudeRectangle(Rectangle<C> rect, GenPolynomial<Complex<C>> f,
+                    GenPolynomial<Complex<C>> g, C eps) throws InvalidBoundaryException {
         Rectangle<C> v = rect;
         if (g == null || g.isZERO()) {
             return v;
@@ -671,7 +669,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
         //System.out.println("B = " + B + " : " + B.getClass());
 
         BigRational len = v.rationalLength();
-        BigRational half = new BigRational(1,2);
+        BigRational half = new BigRational(1, 2);
 
         C vlen = v.length();
         vlen = vlen.multiply(vlen);
@@ -680,7 +678,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
         //System.out.println("vlen = " + vlen);
         while (B.multiply(vlen).compareTo(eps) >= 0) { // TODO: test squared
             len = len.multiply(half);
-            v = complexRootRefinement(v,f,len);
+            v = complexRootRefinement(v, f, len);
             //System.out.println("v = " + v);
             vlen = v.length();
             vlen = vlen.multiply(vlen);
@@ -693,17 +691,19 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
 
     /**
      * Complex algebraic number magnitude.
-     * @param rect root isolating rectangle for f which contains exactly one root,
-     *            with rect such that |g(a) - g(b)| &lt; eps for a, b in rect.
+     * @param rect root isolating rectangle for f which contains exactly one
+     *            root, with rect such that |g(a) - g(b)| &lt; eps for a, b in
+     *            rect.
      * @param f univariate polynomial, non-zero.
      * @param g univariate polynomial, gcd(f,g) == 1.
      * @return g(rect) .
      */
-    public Complex<C> complexRectangleMagnitude(Rectangle<C> rect, GenPolynomial<Complex<C>> f, GenPolynomial<Complex<C>> g) {
+    public Complex<C> complexRectangleMagnitude(Rectangle<C> rect, GenPolynomial<Complex<C>> f,
+                    GenPolynomial<Complex<C>> g) {
         if (g.isZERO() || g.isConstant()) {
             return g.leadingBaseCoefficient();
         }
-        RingFactory<Complex<C>> cfac = g.ring.coFac;
+        RingFactory<Complex<C>> cfac = f.ring.coFac;
         //System.out.println("cfac = " + cfac + " : " + cfac.getClass());
         Complex<C> c = rect.getCenter();
         Complex<C> ev = PolyUtil.<Complex<C>> evaluateMain(cfac, g, c);
@@ -713,21 +713,22 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
 
     /**
      * Complex algebraic number magnitude.
-     * @param rect root isolating rectangle for f which contains exactly one root,
-     *            with rect such that |g(a) - g(b)| &lt; eps for a, b in rect.
+     * @param rect root isolating rectangle for f which contains exactly one
+     *            root, with rect such that |g(a) - g(b)| &lt; eps for a, b in
+     *            rect.
      * @param f univariate polynomial, non-zero.
      * @param g univariate polynomial, gcd(f,g) == 1.
      * @param eps length limit for rectangle length.
      * @return g(rect) .
      */
-    public Complex<C> complexMagnitude(Rectangle<C> rect, GenPolynomial<Complex<C>> f, GenPolynomial<Complex<C>> g, C eps) 
-                      throws InvalidBoundaryException {
+    public Complex<C> complexMagnitude(Rectangle<C> rect, GenPolynomial<Complex<C>> f,
+                    GenPolynomial<Complex<C>> g, C eps) throws InvalidBoundaryException {
         if (g.isZERO() || g.isConstant()) {
             return g.leadingBaseCoefficient();
         }
-        Rectangle<C> v = invariantMagnitudeRectangle(rect,f,g,eps);
+        Rectangle<C> v = invariantMagnitudeRectangle(rect, f, g, eps);
         //System.out.println("ref = " + ref);
-        return complexRectangleMagnitude(v,f,g);
+        return complexRectangleMagnitude(v, f, g);
     }
 
 }
