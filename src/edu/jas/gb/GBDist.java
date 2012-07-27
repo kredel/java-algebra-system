@@ -62,6 +62,7 @@ public class GBDist<C extends RingElem<C>> {
         this(threads, new OrderedPairlist<C>(), mfile, port);
     }
 
+
     /**
      * Constructor.
      * @param threads number of threads respectivly processes.
@@ -80,27 +81,6 @@ public class GBDist<C extends RingElem<C>> {
         bbd = new GroebnerBaseDistributed<C>(threads, pl, this.port);
         dtp = new DistThreadPool(threads, this.mfile); // findbugs
     }
-
-
-    /**
-     * Execute a distributed GB example. Distribute clients and start master.
-     * Obsolete version.
-     * @param F list of polynomials
-     * @return GB(F) a Groebner base for F. public List<GenPolynomial<C>>
-     *         executeOld(List<GenPolynomial<C>> F) { final int numc = threads;
-     *         List<GenPolynomial<C>> G = null; ExecutableChannels ec = null;
-     *         try { ec = new ExecutableChannels( mfile ); } catch
-     *         (FileNotFoundException e) { e.printStackTrace(); return G; } try
-     *         { ec.open(numc); } catch (IOException e) { e.printStackTrace();
-     *         return G; } GBClient<C> gbc = new GBClient<C>(
-     *         ec.getMasterHost(), ec.getMasterPort() ); try { for ( int i = 0;
-     *         i < numc; i++ ) { ec.send( i, gbc ); } } catch (IOException e) {
-     *         e.printStackTrace(); return G; } G = bbd.GB( F ); try { for ( int
-     *         i = 0; i < numc; i++ ) { Object o = ec.receive( i ); } } catch
-     *         (IOException e) { e.printStackTrace(); return G; } catch
-     *         (ClassNotFoundException e) { e.printStackTrace(); return G; }
-     *         ec.close(); bbd.terminate(); return G; }
-     */
 
 
     /**

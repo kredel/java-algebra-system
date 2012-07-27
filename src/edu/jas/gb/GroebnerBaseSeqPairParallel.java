@@ -4,38 +4,33 @@
 
 package edu.jas.gb;
 
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Collections;
 import java.util.concurrent.Semaphore;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.structure.RingElem;
-
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
-
+import edu.jas.structure.RingElem;
 import edu.jas.util.Terminator;
 import edu.jas.util.ThreadPool;
-//import edu.unima.ky.parallel.Semaphore;
 
 
 /**
- * Groebner Base parallel algorithm.
- * Makes some effort to produce the same sequence of critical pairs 
- * as in the sequential version.
- * However already reduced pairs are not rereduced if new
- * polynomials appear.
- * Implements a shared memory parallel version of Groebner bases.
- * Slaves maintain pairlist.
+ * Groebner Base parallel algorithm. Makes some effort to produce the same
+ * sequence of critical pairs as in the sequential version. However already
+ * reduced pairs are not rereduced if new polynomials appear. Implements a
+ * shared memory parallel version of Groebner bases. Slaves maintain pairlist.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
-public class GroebnerBaseSeqPairParallel<C extends RingElem<C>>
-             extends GroebnerBaseAbstract<C>  {
+public class GroebnerBaseSeqPairParallel<C extends RingElem<C>> extends GroebnerBaseAbstract<C> {
+
 
     private static final Logger logger = Logger.getLogger(GroebnerBaseSeqPairParallel.class);
 
@@ -65,7 +60,7 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>>
      * @param threads number of threads to use.
      */
     public GroebnerBaseSeqPairParallel(int threads) {
-        this(threads, new ThreadPool(threads) );
+        this(threads, new ThreadPool(threads));
     }
 
 
@@ -75,7 +70,7 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>>
      * @param pool ThreadPool to use.
      */
     public GroebnerBaseSeqPairParallel(int threads, ThreadPool pool) {
-        this(threads, pool, new ReductionPar<C>() );
+        this(threads, pool, new ReductionPar<C>());
     }
 
 
@@ -85,7 +80,7 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>>
      * @param red parallelism aware reduction engine
      */
     public GroebnerBaseSeqPairParallel(int threads, Reduction<C> red) {
-        this(threads, new ThreadPool(threads), red );
+        this(threads, new ThreadPool(threads), red);
     }
 
 
@@ -97,11 +92,11 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>>
      */
     public GroebnerBaseSeqPairParallel(int threads, ThreadPool pool, Reduction<C> red) {
         super(red);
-        if ( ! (red instanceof ReductionPar) ) {
-           logger.warn("parallel GB should use parallel aware reduction");
+        if (!(red instanceof ReductionPar)) {
+            logger.warn("parallel GB should use parallel aware reduction");
         }
-        if ( threads < 1 ) {
-           threads = 1;
+        if (threads < 1) {
+            threads = 1;
         }
         this.threads = threads;
         this.pool = pool;
@@ -111,9 +106,10 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>>
     /**
      * Cleanup and terminate ThreadPool.
      */
+    @Override
     public void terminate() {
-        if ( pool == null ) {
-           return;
+        if (pool == null) {
+            return;
         }
         pool.terminate();
     }
@@ -122,9 +118,10 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>>
     /**
      * Cancel ThreadPool.
      */
+    @Override
     public int cancel() {
-        if ( pool == null ) {
-           return 0;
+        if (pool == null) {
+            return 0;
         }
         int s = pool.cancel();
         return s;
@@ -132,59 +129,58 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>>
 
 
     /**
-     * Parallel Groebner base using sequential pair order class.
-     * Slaves maintain pairlist.
+     * Parallel Groebner base using sequential pair order class. Slaves maintain
+     * pairlist.
      * @param modv number of module variables.
      * @param F polynomial list.
      * @return GB(F) a Groebner base of F.
      */
-    public List<GenPolynomial<C>> 
-        GB( int modv,
-            List<GenPolynomial<C>> F ) {  
+    public List<GenPolynomial<C>> GB(int modv, List<GenPolynomial<C>> F) {
         GenPolynomial<C> p;
         List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
-        CriticalPairList<C> pairlist = null; 
+        CriticalPairList<C> pairlist = null;
         int l = F.size();
         ListIterator<GenPolynomial<C>> it = F.listIterator();
-        while ( it.hasNext() ) { 
+        while (it.hasNext()) {
             p = it.next();
-            if ( p.length() > 0 ) {
+            if (p.length() > 0) {
                 p = p.monic();
-                if ( p.isONE() ) {
-                    G.clear(); G.add( p );
+                if (p.isONE()) {
+                    G.clear();
+                    G.add(p);
                     return G; // since no threads activated jet
                 }
-                G.add( p );
-                if ( pairlist == null ) {
-                    pairlist = new CriticalPairList<C>( modv, p.ring );
-                    if ( ! p.ring.coFac.isField() ) {
+                G.add(p);
+                if (pairlist == null) {
+                    pairlist = new CriticalPairList<C>(modv, p.ring);
+                    if (!p.ring.coFac.isField()) {
                         throw new IllegalArgumentException("coefficients not from a field");
                     }
                 }
                 // putOne not required
-                pairlist.put( p );
+                pairlist.put(p);
             } else {
                 l--;
             }
         }
-        if ( l <= 1 ) {
+        if (l <= 1) {
             return G; // since no threads activated jet
         }
 
         Terminator fin = new Terminator(threads);
         ReducerSeqPair<C> R;
-        for ( int i = 0; i < threads; i++ ) {
-            R = new ReducerSeqPair<C>( fin, G, pairlist );
-            pool.addJob( R );
+        for (int i = 0; i < threads; i++) {
+            R = new ReducerSeqPair<C>(fin, G, pairlist);
+            pool.addJob(R);
         }
         fin.waitDone();
-        if ( Thread.currentThread().isInterrupted() ) {
+        if (Thread.currentThread().isInterrupted()) {
             throw new RuntimeException("interrupt before minimalGB");
         }
-        logger.debug("#parallel list = "+G.size());
+        logger.debug("#parallel list = " + G.size());
         G = minimalGB(G);
         // not in this context // pool.terminate();
-        logger.info("" + pairlist); 
+        logger.info("" + pairlist);
         return G;
     }
 
@@ -195,77 +191,76 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>>
      * @return minimalGB(F) a minimal Groebner base of Fp.
      */
     @Override
-    public List<GenPolynomial<C>> 
-        minimalGB(List<GenPolynomial<C>> Fp) {  
+    public List<GenPolynomial<C>> minimalGB(List<GenPolynomial<C>> Fp) {
         GenPolynomial<C> a;
         ArrayList<GenPolynomial<C>> G;
-        G = new ArrayList<GenPolynomial<C>>( Fp.size() );
+        G = new ArrayList<GenPolynomial<C>>(Fp.size());
         ListIterator<GenPolynomial<C>> it = Fp.listIterator();
-        while ( it.hasNext() ) { 
+        while (it.hasNext()) {
             a = it.next();
-            if ( a.length() != 0 ) { // always true
+            if (a.length() != 0) { // always true
                 // already monic  a = a.monic();
-                G.add( a );
+                G.add(a);
             }
         }
-        if ( G.size() <= 1 ) {
+        if (G.size() <= 1) {
             return G;
         }
 
-        ExpVector e;        
-        ExpVector f;        
+        ExpVector e;
+        ExpVector f;
         GenPolynomial<C> p;
         ArrayList<GenPolynomial<C>> F;
-        F = new ArrayList<GenPolynomial<C>>( G.size() );
+        F = new ArrayList<GenPolynomial<C>>(G.size());
         boolean mt;
-        while ( G.size() > 0 ) {
+        while (G.size() > 0) {
             a = G.remove(0);
             e = a.leadingExpVector();
 
             it = G.listIterator();
             mt = false;
-            while ( it.hasNext() && ! mt ) {
+            while (it.hasNext() && !mt) {
                 p = it.next();
                 f = p.leadingExpVector();
-                mt =  e.multipleOf( f );
+                mt = e.multipleOf(f);
             }
             it = F.listIterator();
-            while ( it.hasNext() && ! mt ) {
+            while (it.hasNext() && !mt) {
                 p = it.next();
                 f = p.leadingExpVector();
-                mt =  e.multipleOf( f );
+                mt = e.multipleOf(f);
             }
-            if ( ! mt ) {
-                F.add( a ); // no thread at this point
+            if (!mt) {
+                F.add(a); // no thread at this point
             } else {
                 // System.out.println("dropped " + a.length());
             }
         }
         G = F;
-        if ( G.size() <= 1 ) {
+        if (G.size() <= 1) {
             return G;
         }
         Collections.reverse(G); // important for lex GB
 
-        MiReducerSeqPair<C>[] mirs = (MiReducerSeqPair<C>[]) new MiReducerSeqPair[ G.size() ];
+        MiReducerSeqPair<C>[] mirs = (MiReducerSeqPair<C>[]) new MiReducerSeqPair[G.size()];
         int i = 0;
-        F = new ArrayList<GenPolynomial<C>>( G.size() );
-        while ( G.size() > 0 ) {
+        F = new ArrayList<GenPolynomial<C>>(G.size());
+        while (G.size() > 0) {
             a = G.remove(0);
             // System.out.println("doing " + a.length());
-            List<GenPolynomial<C>> R = new ArrayList<GenPolynomial<C>>(G.size()+F.size());
+            List<GenPolynomial<C>> R = new ArrayList<GenPolynomial<C>>(G.size() + F.size());
             R.addAll(G);
             R.addAll(F);
-            mirs[i] = new MiReducerSeqPair<C>(R,a );
-            pool.addJob( mirs[i] );
+            mirs[i] = new MiReducerSeqPair<C>(R, a);
+            pool.addJob(mirs[i]);
             i++;
-            F.add( a );
+            F.add(a);
         }
         G = F;
-        F = new ArrayList<GenPolynomial<C>>( G.size() );
-        for ( i = 0; i < mirs.length; i++ ) {
+        F = new ArrayList<GenPolynomial<C>>(G.size());
+        for (i = 0; i < mirs.length; i++) {
             a = mirs[i].getNF();
-            F.add( a );
+            F.add(a);
         }
         return F;
     }
@@ -277,20 +272,29 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>>
  * Reducing worker threads.
  */
 class ReducerSeqPair<C extends RingElem<C>> implements Runnable {
-    private List<GenPolynomial<C>> G;
-    private CriticalPairList<C> pairlist;
-    private Terminator fin;
-    private ReductionPar<C> red;
+
+
+    private final List<GenPolynomial<C>> G;
+
+
+    private final CriticalPairList<C> pairlist;
+
+
+    private final Terminator fin;
+
+
+    private final ReductionPar<C> red;
+
+
     private static final Logger logger = Logger.getLogger(ReducerSeqPair.class);
 
-    ReducerSeqPair(Terminator fin, 
-                   List<GenPolynomial<C>> G, 
-                   CriticalPairList<C> L) {
+
+    ReducerSeqPair(Terminator fin, List<GenPolynomial<C>> G, CriticalPairList<C> L) {
         this.fin = fin;
         this.G = G;
         pairlist = L;
         red = new ReductionPar<C>();
-    } 
+    }
 
 
     /**
@@ -309,14 +313,15 @@ class ReducerSeqPair<C extends RingElem<C>> implements Runnable {
         boolean set = false;
         int reduction = 0;
         int sleeps = 0;
-        while ( pairlist.hasNext() || fin.hasJobs() ) {
-            while ( ! pairlist.hasNext() ) {
+        while (pairlist.hasNext() || fin.hasJobs()) {
+            while (!pairlist.hasNext()) {
                 pairlist.update();
                 // wait
-                fin.beIdle(); set = true;
+                fin.beIdle();
+                set = true;
                 try {
                     sleeps++;
-                    if ( sleeps % 10 == 0 ) {
+                    if (sleeps % 10 == 0) {
                         logger.info(" reducer is sleeping");
                     } else {
                         logger.debug("r");
@@ -325,70 +330,72 @@ class ReducerSeqPair<C extends RingElem<C>> implements Runnable {
                 } catch (InterruptedException e) {
                     break;
                 }
-                if ( ! fin.hasJobs() ) {
+                if (!fin.hasJobs()) {
                     break;
                 }
-                if ( Thread.currentThread().isInterrupted() ) {
+                if (Thread.currentThread().isInterrupted()) {
                     throw new RuntimeException("interrupt after sleep");
                 }
             }
-            if ( ! pairlist.hasNext() && ! fin.hasJobs() ) {
+            if (!pairlist.hasNext() && !fin.hasJobs()) {
                 break;
             }
-            if ( set ) {
-                fin.notIdle(); set = false;
+            if (set) {
+                fin.notIdle();
+                set = false;
             }
             pair = pairlist.getNext();
-            if ( Thread.currentThread().isInterrupted() ) {
+            if (Thread.currentThread().isInterrupted()) {
                 throw new RuntimeException("interrupt after getNext");
             }
-            if ( pair == null ) {
+            if (pair == null) {
                 pairlist.update();
-                continue; 
-            }
-            if ( false && logger.isDebugEnabled() ) {
-                logger.debug("pi = " + pair.pi );
-                logger.debug("pj = " + pair.pj );
-            }
-            S = red.SPolynomial( pair.pi, pair.pj );
-            if ( S.isZERO() ) {
-                pairlist.record( pair, S );
                 continue;
             }
-            if ( logger.isDebugEnabled() ) {
-                logger.debug("ht(S) = " + S.leadingExpVector() );
+            if (logger.isDebugEnabled()) {
+                logger.debug("pi = " + pair.pi);
+                logger.debug("pj = " + pair.pj);
             }
-            H = red.normalform( G, S ); //mod
+            S = red.SPolynomial(pair.pi, pair.pj);
+            if (S.isZERO()) {
+                pairlist.record(pair, S);
+                continue;
+            }
+            if (logger.isDebugEnabled()) {
+                logger.debug("ht(S) = " + S.leadingExpVector());
+            }
+            H = red.normalform(G, S); //mod
             reduction++;
-            if ( H.isZERO() ) {
-                pairlist.record( pair, H );
+            if (H.isZERO()) {
+                pairlist.record(pair, H);
                 continue;
             }
-            if ( logger.isDebugEnabled() ) {
-                logger.debug("ht(H) = " + H.leadingExpVector() );
+            if (logger.isDebugEnabled()) {
+                logger.debug("ht(H) = " + H.leadingExpVector());
             }
             H = H.monic();
             // System.out.println("H   = " + H);
-            if ( H.isONE() ) { 
+            if (H.isONE()) {
                 // pairlist.update( pair, H );
                 pairlist.putOne(); // not really required
                 synchronized (G) {
-                    G.clear(); G.add( H );
+                    G.clear();
+                    G.add(H);
                 }
                 fin.allIdle();
                 return;
             }
-            if ( logger.isDebugEnabled() ) {
-                logger.debug("H = " + H );
+            if (logger.isDebugEnabled()) {
+                logger.debug("H = " + H);
             }
             synchronized (G) {
-                G.add( H );
+                G.add(H);
             }
-            pairlist.update( pair, H );
+            pairlist.update(pair, H);
             //pairlist.record( pair, H );
             //pairlist.update();
         }
-        logger.info( "terminated, done " + reduction + " reductions");
+        logger.info("terminated, done " + reduction + " reductions");
     }
 }
 
@@ -397,17 +404,28 @@ class ReducerSeqPair<C extends RingElem<C>> implements Runnable {
  * Reducing worker threads for minimal GB.
  */
 class MiReducerSeqPair<C extends RingElem<C>> implements Runnable {
-    private List<GenPolynomial<C>> G;
+
+
+    private final List<GenPolynomial<C>> G;
+
+
     private GenPolynomial<C> H;
-    private ReductionPar<C> red;
-    private Semaphore done = new Semaphore(0);
+
+
+    private final ReductionPar<C> red;
+
+
+    private final Semaphore done = new Semaphore(0);
+
+
     private static final Logger logger = Logger.getLogger(MiReducerSeqPair.class);
+
 
     MiReducerSeqPair(List<GenPolynomial<C>> G, GenPolynomial<C> p) {
         this.G = G;
         H = p;
         red = new ReductionPar<C>();
-    } 
+    }
 
 
     /**
@@ -424,29 +442,30 @@ class MiReducerSeqPair<C extends RingElem<C>> implements Runnable {
      * @return the computed normal form.
      */
     public GenPolynomial<C> getNF() {
-        try { done.acquire(); //done.P();
-        } catch (InterruptedException e) { 
+        try {
+            done.acquire(); //done.P();
+        } catch (InterruptedException e) {
             throw new RuntimeException("interrupt in getNF");
         }
         return H;
     }
 
+
     public void run() {
-        if ( logger.isDebugEnabled() ) {
-            logger.debug("ht(H) = " + H.leadingExpVector() );
+        if (logger.isDebugEnabled()) {
+            logger.debug("ht(H) = " + H.leadingExpVector());
         }
-        try { 
-            H = red.normalform( G, H ); //mod
+        try {
+            H = red.normalform(G, H); //mod
             done.release(); //done.V();
-        } catch (RuntimeException e) { 
+        } catch (RuntimeException e) {
             Thread.currentThread().interrupt();
             //throw new RuntimeException("interrupt in getNF");
         }
-        if ( logger.isDebugEnabled() ) {
-            logger.debug("ht(H) = " + H.leadingExpVector() );
+        if (logger.isDebugEnabled()) {
+            logger.debug("ht(H) = " + H.leadingExpVector());
         }
         // H = H.monic();
     }
 
 }
-

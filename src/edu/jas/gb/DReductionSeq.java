@@ -6,7 +6,6 @@ package edu.jas.gb;
 
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +14,6 @@ import org.apache.log4j.Logger;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
-
 import edu.jas.structure.RingElem;
 
 
@@ -31,7 +29,7 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
     private static final Logger logger = Logger.getLogger(DReductionSeq.class);
 
 
-    private final boolean debug = logger.isDebugEnabled();
+    //private final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -118,7 +116,7 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
         l = j;
         boolean mt = false;
         Map<ExpVector, C> Am = Ap.getMap();
-        for (Map.Entry<ExpVector,C> me : Am.entrySet()) {
+        for (Map.Entry<ExpVector, C> me : Am.entrySet()) {
             ExpVector e = me.getKey();
             C a = me.getValue(); //Am.get(e);
             for (i = 0; i < l; i++) {
@@ -313,8 +311,8 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
      * @return gpol(Ap, Bp), the g-Polynomial for Ap and Bp.
      */
     public GenPolynomial<C> GPolynomial(List<GenPolynomial<C>> S, int i, GenPolynomial<C> Ap, int j,
-            GenPolynomial<C> Bp) {
-        throw new UnsupportedOperationException("not jet implemented");
+                    GenPolynomial<C> Bp) {
+        throw new UnsupportedOperationException("not yet implemented");
     }
 
 
@@ -398,16 +396,15 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
      * @return nf(Pp,Ap), the normal form of Ap wrt. Pp.
      */
     @SuppressWarnings("unchecked")
-    // not jet working
     public GenPolynomial<C> normalform(List<GenPolynomial<C>> row, List<GenPolynomial<C>> Pp,
-            GenPolynomial<C> Ap) {
+                    GenPolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
             return Ap;
         }
         if (Ap == null || Ap.isZERO()) {
             return Ap;
         }
-        throw new UnsupportedOperationException("not jet implemented");
+        throw new UnsupportedOperationException("not yet implemented");
         /*
         int l = Pp.size();
         GenPolynomial<C>[] P = new GenPolynomial[l];
@@ -503,11 +500,8 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
         ExpVector e;
         ExpVector f;
         GenPolynomial<C> a;
-        Iterator<GenPolynomial<C>> it;
         logger.debug("irr = ");
         while (irr != l) {
-            //it = P.listIterator(); 
-            //a = P.get(0); //it.next();
             a = P.remove(0);
             e = a.leadingExpVector();
             a = normalform(P, a);

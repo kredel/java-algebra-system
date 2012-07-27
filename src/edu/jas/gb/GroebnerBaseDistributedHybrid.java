@@ -7,9 +7,9 @@ package edu.jas.gb;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Collections;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
@@ -27,10 +27,10 @@ import edu.jas.util.ThreadPool;
 
 
 /**
- * Groebner Base distributed hybrid algorithm. Implements a
- * distributed memory with multi-core CPUs parallel version of
- * Groebner bases. Using pairlist class, distributed multi-threaded
- * tasks do reduction, one communication channel per remote node.
+ * Groebner Base distributed hybrid algorithm. Implements a distributed memory
+ * with multi-core CPUs parallel version of Groebner bases. Using pairlist
+ * class, distributed multi-threaded tasks do reduction, one communication
+ * channel per remote node.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
@@ -185,8 +185,9 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
      * @param pl pair selection strategy
      * @param port server port to use.
      */
-    public GroebnerBaseDistributedHybrid(int threads, int threadsPerNode, ThreadPool pool, PairList<C> pl, int port) {
-        super( new ReductionPar<C>(), pl );
+    public GroebnerBaseDistributedHybrid(int threads, int threadsPerNode, ThreadPool pool, PairList<C> pl,
+                    int port) {
+        super(new ReductionPar<C>(), pl);
         if (threads < 1) {
             threads = 1;
         }
@@ -201,6 +202,7 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
     /**
      * Cleanup and terminate.
      */
+    @Override
     public void terminate() {
         if (pool == null) {
             return;
@@ -210,7 +212,7 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
 
 
     /**
-     * Distributed hybrid Groebner base. 
+     * Distributed hybrid Groebner base.
      * @param modv number of module variables.
      * @param F polynomial list.
      * @return GB(F) a Groebner base of F or null, if a IOException occurs.
@@ -246,8 +248,8 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
                 }
                 if (pairlist == null) {
                     //pairlist = new OrderedPairlist<C>(modv, p.ring);
-                    pairlist = strategy.create( modv, p.ring );
-                    if ( ! p.ring.coFac.isField() ) {
+                    pairlist = strategy.create(modv, p.ring);
+                    if (!p.ring.coFac.isField()) {
                         throw new IllegalArgumentException("coefficients not from a field");
                     }
                 }
@@ -271,8 +273,8 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
         // now in DL, uses resend for late clients
         //while ( dls.size() < threads ) { sleep(); }
 
-        DistHashTable<Integer, GenPolynomial<C>> theList 
-            = new DistHashTable<Integer, GenPolynomial<C>>("localhost", DL_PORT);
+        DistHashTable<Integer, GenPolynomial<C>> theList = new DistHashTable<Integer, GenPolynomial<C>>(
+                        "localhost", DL_PORT);
         theList.init();
         List<GenPolynomial<C>> al = pairlist.getList();
         for (int i = 0; i < al.size(); i++) {
@@ -283,7 +285,7 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
             }
         }
 
-        Terminator finner = new Terminator(threads*threadsPerNode);
+        Terminator finner = new Terminator(threads * threadsPerNode);
         HybridReducerServer<C> R;
         logger.info("using pool = " + pool);
         for (int i = 0; i < threads; i++) {
@@ -301,9 +303,9 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
         if (ps != G.size()) {
             logger.info("#distributed list = " + theList.size() + " #pairlist list = " + G.size());
         }
-        for (GenPolynomial<C> q: theList.getValueList()) {
-            if ( q != null && !q.isZERO() ) {
-               logger.debug("final q = " + q.leadingExpVector());
+        for (GenPolynomial<C> q : theList.getValueList()) {
+            if (q != null && !q.isZERO()) {
+                logger.debug("final q = " + q.leadingExpVector());
             }
         }
         logger.debug("distributed list end");
@@ -346,15 +348,15 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
         }
 
         final int DL_PORT = port + 100;
-        DistHashTable<Integer, GenPolynomial<C>> theList 
-             = new DistHashTable<Integer, GenPolynomial<C>>(host, DL_PORT);
+        DistHashTable<Integer, GenPolynomial<C>> theList = new DistHashTable<Integer, GenPolynomial<C>>(host,
+                        DL_PORT);
         theList.init();
 
         //HybridReducerClient<C> R = new HybridReducerClient<C>(threadsPerNode, pairChannel, theList);
         //R.run();
 
         ThreadPool pool = new ThreadPool(threadsPerNode);
-        logger.info("client using pool = " +pool);
+        logger.info("client using pool = " + pool);
         for (int i = 0; i < threadsPerNode; i++) {
             HybridReducerClient<C> Rr = new HybridReducerClient<C>(threadsPerNode, pairChannel, i, theList);
             pool.addJob(Rr);
@@ -442,7 +444,7 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
         while (G.size() > 0) {
             a = G.remove(0);
             // System.out.println("doing " + a.length());
-            List<GenPolynomial<C>> R = new ArrayList<GenPolynomial<C>>(G.size()+F.size());
+            List<GenPolynomial<C>> R = new ArrayList<GenPolynomial<C>>(G.size() + F.size());
             R.addAll(G);
             R.addAll(F);
             mirs[i] = new MiReducerServer<C>(R, a);
@@ -520,8 +522,8 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
      * @param dl distributed hash table
      * @param L ordered pair list
      */
-    HybridReducerServer(int tpn, Terminator fin, ChannelFactory cf, 
-                        DistHashTable<Integer, GenPolynomial<C>> dl, PairList<C> L) {
+    HybridReducerServer(int tpn, Terminator fin, ChannelFactory cf,
+                    DistHashTable<Integer, GenPolynomial<C>> dl, PairList<C> L) {
         threadsPerNode = tpn;
         finner = fin;
         this.cf = cf;
@@ -557,13 +559,14 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
         AtomicInteger active = new AtomicInteger(0);
 
         // start receiver
-        HybridReducerReceiver<C> receiver = new HybridReducerReceiver<C>(threadsPerNode, finner, active, pairChannel, theList, pairlist);
+        HybridReducerReceiver<C> receiver = new HybridReducerReceiver<C>(threadsPerNode, finner, active,
+                        pairChannel, theList, pairlist);
         receiver.start();
 
         Pair<C> pair;
-        boolean set = false;
+        //boolean set = false;
         boolean goon = true;
-        int polIndex = -1;
+        //int polIndex = -1;
         int red = 0;
         int sleeps = 0;
 
@@ -620,7 +623,7 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
             finner.notIdle(); // before pairlist get!!
             pair = pairlist.removeNext();
             // send pair to client, even if null
-            if ( debug ) {
+            if (debug) {
                 logger.info("active count = " + active.get());
                 logger.info("send pair = " + pair);
             }
@@ -649,7 +652,7 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
          */
         logger.debug("send end");
         try {
-            for ( int i = 0; i < threadsPerNode; i++ ) { // -1
+            for (int i = 0; i < threadsPerNode; i++) { // -1
                 //do not wait: Object rq = pairChannel.receive(pairTag);
                 pairChannel.send(pairTag, new GBTransportMessEnd());
             }
@@ -738,8 +741,8 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
      * @param dl distributed hash table
      * @param L ordered pair list
      */
-    HybridReducerReceiver(int tpn, Terminator fin, AtomicInteger a, TaggedSocketChannel pc, 
-                          DistHashTable<Integer, GenPolynomial<C>> dl, PairList<C> L) {
+    HybridReducerReceiver(int tpn, Terminator fin, AtomicInteger a, TaggedSocketChannel pc,
+                    DistHashTable<Integer, GenPolynomial<C>> dl, PairList<C> L) {
         active = a;
         threadsPerNode = tpn;
         finner = fin;
@@ -809,7 +812,7 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
                 //senderId = mpi.threadId;
                 if (H != null) {
                     if (debug) {
-                       logger.info("H = " + H.leadingExpVector());
+                        logger.info("H = " + H.leadingExpVector());
                     }
                     if (!H.isZERO()) {
                         if (H.isONE()) {
@@ -836,15 +839,15 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
             // only after recording in pairlist !
             finner.initIdle(1);
             // if ( senderId != null ) { // send acknowledgement after recording
-                try { 
-                    //pairChannel.send(senderId, new GBTransportMess());
-                    pairChannel.send(ackTag, new GBTransportMess());
-                    logger.debug("send acknowledgement");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    goon = false;
-                    break;
-                }
+            try {
+                //pairChannel.send(senderId, new GBTransportMess());
+                pairChannel.send(ackTag, new GBTransportMess());
+                logger.debug("send acknowledgement");
+            } catch (IOException e) {
+                e.printStackTrace();
+                goon = false;
+                break;
+            }
             //}
         } // end while
         goon = false;
@@ -925,7 +928,8 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
      * @param tid thread identification
      * @param dl distributed hash table
      */
-    HybridReducerClient(int tpn, TaggedSocketChannel tc, Integer tid, DistHashTable<Integer, GenPolynomial<C>> dl) {
+    HybridReducerClient(int tpn, TaggedSocketChannel tc, Integer tid,
+                    DistHashTable<Integer, GenPolynomial<C>> dl) {
         this.threadsPerNode = tpn;
         pairChannel = tc;
         //threadId = 100 + tid; // keep distinct from other tags
@@ -967,7 +971,7 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
                 pairChannel.send(pairTag, req);
             } catch (IOException e) {
                 goon = false;
-                if ( logger.isDebugEnabled() ) {
+                if (logger.isDebugEnabled()) {
                     e.printStackTrace();
                 }
                 logger.info("receive pair, exception ");
@@ -1017,8 +1021,8 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
                 if (pp instanceof GBTransportMessPairIndex) {
                     pix = ((GBTransportMessPairIndex) pp).i;
                     pjx = ((GBTransportMessPairIndex) pp).j;
-                    pi = (GenPolynomial<C>) theList.getWait(pix);
-                    pj = (GenPolynomial<C>) theList.getWait(pjx);
+                    pi = theList.getWait(pix);
+                    pj = theList.getWait(pjx);
                     //logger.info("pix = " + pix + ", pjx = " +pjx);
                 }
 
@@ -1077,13 +1081,13 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
                 goon = false;
                 e.printStackTrace();
             }
-            if ( ! (pp instanceof GBTransportMess) ) {
+            if (!(pp instanceof GBTransportMess)) {
                 logger.error("invalid acknowledgement " + pp);
             }
             logger.info("received acknowledgment " + pp);
         }
         logger.info("terminated, done " + reduction + " reductions");
-        if ( !doEnd ) {
+        if (!doEnd) {
             try {
                 pairChannel.send(resultTag, new GBTransportMessEnd());
             } catch (IOException e) {
