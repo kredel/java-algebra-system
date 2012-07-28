@@ -12,6 +12,10 @@ MEDITORPATH=$(HOME)/java/meditor3.0
 
 CLASSPATH=$(LIBPATH)/jython.jar:$(MEDITORPATH)/meditor.jar
 
+# incompatible with jython version
+#BOOTCLASSPATH4="/usr/java/j2sdk1.4.0/jre/lib/rt.jar"
+#	javac -g -source 1.4 -target 1.4 -classpath $(CLASSPATH) -bootclasspath $(BOOTCLASSPATH4) -sourcepath src -d classes src/edu/jas/editorengine/*.java
+
 .SUFFIXES : .class .java .jar 
 .PHONY    : clean
 
