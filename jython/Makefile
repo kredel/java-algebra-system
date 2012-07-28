@@ -14,6 +14,8 @@ JRUBYPATH=$(LIBPATH)/jruby.jar:$(HOME)/java/jruby-1.5.6/lib/ruby/1.8
 
 CLASSPATH=$(LIBPATH)/log4j.jar:$(LIBPATH)/jas.jar
 
+BOOTCLASSPATH6="/usr/lib64/jvm/java-1.6.0/jre/lib/rt.jar"
+
 .SUFFIXES : .class .java .jar 
 .PHONY    : clean
 
@@ -26,7 +28,7 @@ all: clean jas-jython.jar
 
 $(CLASSES): $(FILES)
 	mkdir classes
-	javac -g -source 1.6 -target 1.6 -classpath $(JYTHONPATH) -sourcepath src -d classes src/edu/jas/kern/*.java
+	javac -g -source 1.6 -target 1.6 -classpath $(JYTHONPATH) -bootclasspath $(BOOTCLASSPATH6) -sourcepath src -d classes src/edu/jas/kern/*.java
 
 jas-jython.jar: $(CLASSES) $(JASPATH)/examples/jas.py services/javax.script.ScriptEngineFactory
 	mkdir classes/META-INF
