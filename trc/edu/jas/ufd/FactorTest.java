@@ -290,7 +290,7 @@ public class FactorTest extends TestCase {
 
         PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N, agen);
         //System.out.println("\npartial fraction = " + F);
-        assertFalse("pf not empty " + F, F.toString().isEmpty());
+        assertFalse("pf not empty " + F, F.toString().length() == 0); // java-5
         // TODO test for PartialFraction
     }
 
