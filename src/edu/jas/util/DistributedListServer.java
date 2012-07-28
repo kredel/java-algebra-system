@@ -74,7 +74,7 @@ public class DistributedListServer extends Thread {
      * main.
      * Usage: DistributedListServer &lt;port&gt;
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         int port = DEFAULT_PORT;
         if ( args.length < 1 ) {
             System.out.println("Usage: DistributedListServer <port>");
@@ -84,7 +84,9 @@ public class DistributedListServer extends Thread {
             } catch (NumberFormatException e) {
             }
         }
-        (new DistributedListServer(port)).run();
+        DistributedListServer dls = new DistributedListServer(port);
+        dls.init();
+        dls.join();
         // until CRTL-C
     }
 
@@ -197,6 +199,9 @@ public class DistributedListServer extends Thread {
      * number of servers.
      */ 
     public int size() {
+        if ( servers == null ) {
+            return -1;
+        }
         return servers.size();
     }
 
@@ -204,7 +209,7 @@ public class DistributedListServer extends Thread {
 
 
 /**
- * Class for holding the list index used a key in TreeMap.
+ * Class for holding the list index used as key in TreeMap.
  * Implemented since Integer has no add() method.
  * Must implement Comparable so that TreeMap works with correct ordering.
  */ 

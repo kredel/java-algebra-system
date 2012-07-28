@@ -94,7 +94,7 @@ public class DistHashTableServer<K> extends Thread {
     /**
      * main. Usage: DistHashTableServer &lt;port&gt;
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         int port = DEFAULT_PORT;
         if (args.length < 1) {
             System.out.println("Usage: DistHashTableServer <port>");
@@ -104,7 +104,9 @@ public class DistHashTableServer<K> extends Thread {
             } catch (NumberFormatException e) {
             }
         }
-        (new DistHashTableServer/*raw: <K>*/(port)).run();
+        DistHashTableServer dhts = new DistHashTableServer/*raw: <K>*/(port);
+        dhts.init();
+        dhts.join();
         // until CRTL-C
     }
 
@@ -253,6 +255,9 @@ public class DistHashTableServer<K> extends Thread {
      * number of servers.
      */
     public int size() {
+        if ( servers == null ) {
+            return -1;
+        }
         synchronized (servers) {
             return servers.size();
         }

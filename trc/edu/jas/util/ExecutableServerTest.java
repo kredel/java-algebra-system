@@ -167,18 +167,26 @@ class Executable implements RemoteExecutable {
 
     private String param = null;
 
-/**
- * Executable.
- * @param param String.
- */
+    /**
+     * Executable.
+     * @param param String.
+     */
     public Executable(String param) {
         this.param = param;
     }
-/**
- * run.
- */
+
+    /**
+     * run.
+     */
     public void run() {
-        logger.debug(param + " has been run");
+        logger.debug(this + " has been run");
+    }
+
+    /**
+     * toString.
+     */
+    public String toString() {
+        return "Executable(" + param + ")";
     }
 
 }
