@@ -412,7 +412,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
      * @return vars.
      */
     public String[] getVars() {
-        return Arrays.copyOf(vars,vars.length);
+        return vars; // Java-5: Arrays.copyOf(vars,vars.length);
     }
 
 
@@ -425,7 +425,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
             throw new IllegalArgumentException("v not matching number of variables: " + Arrays.toString(v) + ", nvar " + nvar);
         }
         String[] t = vars;
-        vars = Arrays.copyOf(v,v.length);
+        vars = v; // Java-5: Arrays.copyOf(v,v.length);
         return t;
     }
 
