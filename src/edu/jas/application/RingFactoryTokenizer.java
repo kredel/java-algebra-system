@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StreamTokenizer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -103,7 +104,7 @@ public class RingFactoryTokenizer {
      * No-args constructor reads from System.in.
      */
     public RingFactoryTokenizer() {
-        this(new BufferedReader(new InputStreamReader(System.in)));
+        this(new BufferedReader(new InputStreamReader(System.in,Charset.forName("UTF8"))));
     }
 
 

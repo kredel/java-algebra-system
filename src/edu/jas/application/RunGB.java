@@ -7,9 +7,13 @@ package edu.jas.application;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.BufferedReader;
 import java.io.StringReader;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import org.apache.log4j.BasicConfigurator;
@@ -158,7 +162,8 @@ public class RunGB {
 
         Reader problem = null;
         try {
-            problem = new FileReader(filename);
+            problem = new InputStreamReader(new FileInputStream(filename),Charset.forName("UTF8"));
+            problem = new BufferedReader(problem);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.out.println(usage);

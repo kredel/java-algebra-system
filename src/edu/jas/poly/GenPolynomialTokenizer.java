@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StreamTokenizer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -100,7 +101,7 @@ public class GenPolynomialTokenizer {
      * noargs constructor reads from System.in.
      */
     public GenPolynomialTokenizer() {
-        this(new BufferedReader(new InputStreamReader(System.in)));
+        this(new BufferedReader(new InputStreamReader(System.in,Charset.forName("UTF8"))));
     }
 
 
