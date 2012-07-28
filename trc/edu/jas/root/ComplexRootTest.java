@@ -535,7 +535,7 @@ public class ComplexRootTest extends TestCase {
             try {
                 Complex<BigDecimal> cd = cr.approximateRoot(root, a, eps);
                 //System.out.println("cd = " + cd);
-                assertFalse("cd != null", cd == null);
+                assertFalse("cd != 0", cd.isZERO());
             } catch (NoConvergenceException e) {
                 //fail("" + e);
             }
