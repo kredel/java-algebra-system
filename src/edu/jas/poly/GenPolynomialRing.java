@@ -245,6 +245,11 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
      */
     @Override
     public GenPolynomialRing<C> clone() {
+        try { 
+            super.clone();
+        } catch(CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
         return new GenPolynomialRing<C>(coFac, this);
     }
 

@@ -74,6 +74,11 @@ public class PolynomialList<C extends RingElem<C> >
      */
     @Override
     public PolynomialList<C> clone() {
+       try { 
+           super.clone();
+        } catch(CloneNotSupportedException e) {
+	    throw new RuntimeException(e);
+        }
         return new PolynomialList<C>(ring,new ArrayList<GenPolynomial<C>>(list));
     }
 

@@ -146,6 +146,11 @@ Iterable<Monomial<C>> {
     @Override
     public GenPolynomial<C> clone() {
         //return ring.copy(this);
+        try { 
+           super.clone();
+        } catch(CloneNotSupportedException e) {
+	    throw new RuntimeException(e);
+        }
         return new GenPolynomial<C>(ring, this.val);
     }
 
