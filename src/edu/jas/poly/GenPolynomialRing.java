@@ -223,7 +223,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
      * @param o other polynomial ring.
      */
     public GenPolynomialRing(RingFactory<C> cf, GenPolynomialRing o) {
-        this(cf, o.nvar, o.tord, o.getVars());
+        this(cf, o.nvar, o.tord, o.vars);
     }
 
 
@@ -235,7 +235,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
      * @param o other polynomial ring.
      */
     public GenPolynomialRing(GenPolynomialRing<C> o, TermOrder to) {
-        this(o.coFac, o.nvar, to, o.getVars());
+        this(o.coFac, o.nvar, to, o.vars);
     }
 
 
@@ -407,7 +407,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
      * @return vars.
      */
     public String[] getVars() {
-        return vars;
+        return Arrays.copyOf(vars,vars.length);
     }
 
 
@@ -416,8 +416,11 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
      * @return old vars.
      */
     public String[] setVars(String[] v) {
+        if ( v.length != nvar ) {
+            throw new IllegalArgumentException("v not matching number of variables: " + Arrays.toString(v) + ", nvar " + nvar);
+        }
         String[] t = vars;
-        vars = v;
+        vars = Arrays.copyOf(v,v.length);
         return t;
     }
 

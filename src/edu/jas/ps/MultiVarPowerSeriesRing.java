@@ -231,11 +231,11 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
 
 
     /**
-     * Get a variable names.
+     * Get the variable names.
      * @return names.
      */
     public String[] getVars() {
-        return vars;
+        return Arrays.copyOf(vars,vars.length);
     }
 
 
