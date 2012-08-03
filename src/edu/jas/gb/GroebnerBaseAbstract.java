@@ -283,6 +283,51 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
 
 
     /**
+     * Test for minimal ordered Groebner basis.
+     * @param Gp an ideal base.
+     * @return true, if Gp is a reduced minimal Groebner base.
+     */
+    public boolean isMinimalGB(List<GenPolynomial<C>> Gp) {  
+        if ( Gp == null || Gp.size() == 0 ) {
+            return true;
+        }
+        // test for zero polynomials
+        for ( GenPolynomial<C> a : Gp ) { 
+            if ( a == null || a.isZERO() ) { 
+                return false;
+            }
+        }
+        // test for top reducible polynomials
+        List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>( Gp );
+        List<GenPolynomial<C>> F = new ArrayList<GenPolynomial<C>>( G.size() );
+        while ( G.size() > 0 ) {
+            GenPolynomial<C> a = G.remove(0);
+            if ( red.isTopReducible(G,a) || red.isTopReducible(F,a) ) {
+                return false;
+            } else {
+                F.add(a);
+            }
+        }
+        G = F;
+        if ( G.size() <= 1 ) {
+           return true;
+        }
+        // test reducibility of polynomials
+        int len = G.size();
+        int i = 0;
+        while ( i < len ) {
+            GenPolynomial<C> a = G.remove(0);
+            if ( ! red.isNormalform( G, a ) ) {
+                return false;
+            }
+            G.add( a ); // re-adds as last
+            i++;
+        }
+        return true;
+    }
+
+
+    /**
      * Test if reduction matrix.
      * @param exgb an ExtendedGB container.
      * @return true, if exgb contains a reduction matrix, else false.
