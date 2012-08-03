@@ -294,6 +294,9 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
         // test for zero polynomials
         for ( GenPolynomial<C> a : Gp ) { 
             if ( a == null || a.isZERO() ) { 
+                if (debug) {
+                    logger.debug("zero polynomial " + a);
+                }
                 return false;
             }
         }
@@ -303,6 +306,9 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
         while ( G.size() > 0 ) {
             GenPolynomial<C> a = G.remove(0);
             if ( red.isTopReducible(G,a) || red.isTopReducible(F,a) ) {
+                if (debug) {
+                    logger.debug("top reducible polynomial " + a);
+                }
                 return false;
             } else {
                 F.add(a);
@@ -318,6 +324,9 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
         while ( i < len ) {
             GenPolynomial<C> a = G.remove(0);
             if ( ! red.isNormalform( G, a ) ) {
+                if (debug) {
+                    logger.debug("reducible polynomial " + a);
+                }
                 return false;
             }
             G.add( a ); // re-adds as last
