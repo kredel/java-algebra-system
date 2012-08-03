@@ -166,6 +166,7 @@ public class GBFactory {
     public static GroebnerBaseAbstract<BigRational> getImplementation(BigRational fac) {
         GroebnerBaseAbstract<BigRational> bba;
         bba = new GroebnerBaseSeq<BigRational>();
+        //bba = new GroebnerBaseSeqRational<BigRational>();
         return bba;
     }
 
@@ -211,6 +212,9 @@ public class GBFactory {
       GroebnerBaseAbstract<C> getImplementation(RingFactory<C> fac) {
         logger.debug("fac = " + fac.getClass().getName());
         if (fac.isField()) {
+            //if (fac instanceof BigRational) {
+            //    return new GroebnerBaseSeqRational(); // via integral 
+            //}
             return new GroebnerBaseSeq<C>();
             //return new GroebnerBaseSeq<C>(new ReductionSeq<C>(),new OrderedSyzPairlist<C>());
         }
