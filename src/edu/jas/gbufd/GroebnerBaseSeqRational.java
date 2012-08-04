@@ -22,7 +22,7 @@ import edu.jas.poly.PolyUtil;
 /**
  * Groebner Base sequential algorithm for rational coefficients, fraction free
  * computation. Implements Groebner bases.
- * @param <BigRational> coefficient type
+ * @param <C> BigRational coefficient type
  * @author Heinz Kredel
  */
 
