@@ -42,8 +42,6 @@ issues to consider:
 
 partially resolved and completed issues:
 
-- refactor unit tests to a different source code tree to avoid circular dependencys
-
 - provide all Jython examples also for JRuby
 
 - implement multivariate Hensel lifting for multivariate polynomial factorization
@@ -56,26 +54,22 @@ partially resolved and completed issues:
 
 - rework parallel GB algorithms
 
+- implement FGLM GB algorithm
+
+- implement other term orders for multivariate power series
+
 - check the 693 exceptions (including 473 runtime exceptions) that are thrown, 
   reduce number of runtime exceptions
 
 - check for safe publication in constructors, check wrt. the (new) Java memory model
 
-- implement AlgebraicNumber primitive element computation, done
-
-- implement prime and primary ideal decomposition for non-zero-dimensional ideals, done
-
-- implement prime and primary ideal decomposition for zero-dimensional ideals, done
+- check and fix Findbugs warnings
 
 - implement squarefree decomposition over fields of characteristic p
 
 - implement absolute polynomial factorization
 
 - implement univaiate and multivariate polynomial factorization
-
-- implement multivariate power series, done
-
-- implement univariate power series, done
 
 - let arith implementations extend Power as abstract class
   add divide, subtract, abs, remainder to Power, 
@@ -101,13 +95,25 @@ partially resolved and completed issues:
 - add assertions to check for number of polynomial variables and term order,
   nvar in GenPolynomial and GenSolvablePolynomial done
 
-- rework junit tests to stop failing in case of zero polynomials
-
-- develop modifiable polynomial constructor or put method and iterators
-
 
 
 resolved and completed issues:
+
+- refactor unit tests to a different source code tree to avoid circular dependencys
+
+- implement AlgebraicNumber primitive element computation, done
+
+- implement prime and primary ideal decomposition for non-zero-dimensional ideals, done
+
+- implement prime and primary ideal decomposition for zero-dimensional ideals, done
+
+- implement multivariate power series, done
+
+- implement univariate power series, done
+
+- develop modifiable polynomial constructor or put method and iterators
+
+- rework junit tests to stop failing in case of zero polynomials
 
 - using git to publish the repository, done
 
