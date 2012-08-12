@@ -217,7 +217,7 @@ public class GroebnerBaseDistributed<C extends RingElem<C>> extends GroebnerBase
         List<GenPolynomial<C>> al = pairlist.getList();
         for (int i = 0; i < al.size(); i++) {
             // no wait required
-            GenPolynomial<C> nn = theList.put(new Integer(i), al.get(i));
+            GenPolynomial<C> nn = theList.put(Integer.valueOf(i), al.get(i));
             if (nn != null) {
                 logger.info("double polynomials " + i + ", nn = " + nn + ", al(i) = " + al.get(i));
             }
@@ -543,7 +543,7 @@ class ReducerServer<C extends RingElem<C>> implements Runnable {
                         if (H.isONE()) {
                             // pool.allIdle();
                             polIndex = pairlist.putOne();
-                            GenPolynomial<C> nn = theList.put(new Integer(polIndex), H);
+                            GenPolynomial<C> nn = theList.put(Integer.valueOf(polIndex), H);
                             if (nn != null) {
                                 logger.info("double polynomials nn = " + nn + ", H = " + H);
                             }
@@ -552,7 +552,7 @@ class ReducerServer<C extends RingElem<C>> implements Runnable {
                         }
                         polIndex = pairlist.put(H);
                         // use putWait ? but still not all distributed
-                        GenPolynomial<C> nn = theList.put(new Integer(polIndex), H);
+                        GenPolynomial<C> nn = theList.put(Integer.valueOf(polIndex), H);
                         if (nn != null) {
                             logger.info("double polynomials nn = " + nn + ", H = " + H);
                         }
@@ -703,8 +703,8 @@ class GBTransportMessPairIndex extends GBTransportMess {
         if (p == null) {
             throw new NullPointerException("pair may not be null");
         }
-        this.i = new Integer(p.i);
-        this.j = new Integer(p.j);
+        this.i = Integer.valueOf(p.i);
+        this.j = Integer.valueOf(p.j);
     }
 
 
@@ -714,8 +714,8 @@ class GBTransportMessPairIndex extends GBTransportMess {
      * @param j second index.
      */
     public GBTransportMessPairIndex(int i, int j) {
-        this.i = new Integer(i);
-        this.j = new Integer(j);
+        this.i = Integer.valueOf(i);
+        this.j = Integer.valueOf(j);
     }
 
 

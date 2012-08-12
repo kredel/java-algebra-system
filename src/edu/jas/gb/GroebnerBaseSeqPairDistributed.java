@@ -227,7 +227,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
         List<GenPolynomial<C>> al = pairlist.getList();
         for (int i = 0; i < al.size(); i++) {
             // no wait required
-            GenPolynomial<C> nn = theList.put(new Integer(i), al.get(i));
+            GenPolynomial<C> nn = theList.put(Integer.valueOf(i), al.get(i));
             if (nn != null) {
                 logger.info("double polynomials " + i + ", nn = " + nn + ", al(i) = " + al.get(i));
             }
@@ -574,7 +574,7 @@ class ReducerServerSeqPair<C extends RingElem<C>> implements Runnable {
                         if (H.isONE()) {
                             // pool.allIdle();
                             pairlist.putOne();
-                            theList.put(new Integer(0), H);
+                            theList.put(Integer.valueOf(0), H);
                             goon = false;
                             //break;
                         } else {
@@ -584,7 +584,7 @@ class ReducerServerSeqPair<C extends RingElem<C>> implements Runnable {
                             // pairlist.update();
                             // polIndex = pairlist.put( H );
                             // use putWait ? but still not all distributed
-                            theList.put(new Integer(polIndex), H);
+                            theList.put(Integer.valueOf(polIndex), H);
                         }
                     }
                 }
@@ -741,8 +741,8 @@ class GBSPTransportMessPairIndex extends GBSPTransportMess {
         if (p == null) {
             throw new NullPointerException("pair may not be null");
         }
-        this.i = new Integer(p.i);
-        this.j = new Integer(p.j);
+        this.i = Integer.valueOf(p.i);
+        this.j = Integer.valueOf(p.j);
     }
 
 
@@ -752,8 +752,8 @@ class GBSPTransportMessPairIndex extends GBSPTransportMess {
      * @param j second index.
      */
     public GBSPTransportMessPairIndex(int i, int j) {
-        this.i = new Integer(i);
-        this.j = new Integer(j);
+        this.i = Integer.valueOf(i);
+        this.j = Integer.valueOf(j);
     }
 
 

@@ -845,7 +845,7 @@ public class GenPolynomialTokenizer {
                     first = tok.sval.charAt(0);
                     if (digit(first)) {
                         e = Long.parseLong(tok.sval);
-                        l.add(new Long(e));
+                        l.add(Long.valueOf(e));
                         //System.out.println("w: " + e);
                     }
                 }

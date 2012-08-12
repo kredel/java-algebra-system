@@ -90,19 +90,19 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
     /**
      * Message tag for pairs.
      */
-    public static final Integer pairTag = new Integer(1);
+    public static final Integer pairTag = Integer.valueOf(1);
 
 
     /**
      * Message tag for results.
      */
-    public static final Integer resultTag = new Integer(2);
+    public static final Integer resultTag = Integer.valueOf(2);
 
 
     /**
      * Message tag for acknowledgments.
      */
-    public static final Integer ackTag = new Integer(3);
+    public static final Integer ackTag = Integer.valueOf(3);
 
 
     /**
@@ -279,7 +279,7 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
         List<GenPolynomial<C>> al = pairlist.getList();
         for (int i = 0; i < al.size(); i++) {
             // no wait required
-            GenPolynomial<C> nn = theList.put(new Integer(i), al.get(i));
+            GenPolynomial<C> nn = theList.put(Integer.valueOf(i), al.get(i));
             if (nn != null) {
                 logger.info("double polynomials " + i + ", nn = " + nn + ", al(i) = " + al.get(i));
             }
@@ -818,7 +818,7 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
                         if (H.isONE()) {
                             // finner.allIdle();
                             polIndex = pairlist.putOne();
-                            GenPolynomial<C> nn = theList.put(new Integer(polIndex), H);
+                            GenPolynomial<C> nn = theList.put(Integer.valueOf(polIndex), H);
                             if (nn != null) {
                                 logger.info("double polynomials nn = " + nn + ", H = " + H);
                             }
@@ -828,7 +828,7 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
                         } else {
                             polIndex = pairlist.put(H);
                             // use putWait ? but still not all distributed
-                            GenPolynomial<C> nn = theList.put(new Integer(polIndex), H);
+                            GenPolynomial<C> nn = theList.put(Integer.valueOf(polIndex), H);
                             if (nn != null) {
                                 logger.info("double polynomials nn = " + nn + ", H = " + H);
                             }
