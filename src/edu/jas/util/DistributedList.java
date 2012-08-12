@@ -69,8 +69,6 @@ public class DistributedList /* implements List not jet */ {
         }
         logger.debug("dl channel = " + channel);
         theList = new TreeMap<Counter,Object>();
-        listener = new Listener(channel,theList);
-        listener.start();
     }
 
 
@@ -82,33 +80,69 @@ public class DistributedList /* implements List not jet */ {
         cf = null;
         channel = sc;
         theList = new TreeMap<Counter,Object>();
+    }
+
+
+    /**
+     * List thread initialization and start.
+     */ 
+    public void init() {
         listener = new Listener(channel,theList);
         listener.start();
     }
 
 
-/**
- * Get the internal list, convert from Collection.
- */ 
+    /**
+     * Terminate the list thread.
+     */ 
+    public void terminate() {
+        if ( cf != null ) {
+            cf.terminate();
+            logger.warn("terminating " + cf);
+        }
+        if ( channel != null ) {
+            channel.close();
+        }
+        //theList.clear();
+        if ( listener == null ) { 
+            return;
+        }
+        logger.debug("terminate " + listener);
+        listener.setDone(); 
+        try { 
+            while ( listener.isAlive() ) {
+                listener.interrupt(); 
+                listener.join(100);
+            }
+        } catch (InterruptedException u) { 
+            Thread.currentThread().interrupt();
+        }
+        listener = null;
+    }
+
+
+    /**
+     * Get the internal list, convert from Collection.
+     */ 
     public List<Object> getList() {
         return new ArrayList<Object>( theList.values() );
     }
 
 
-/**
- * Size of the (local) list.
- */ 
+    /**
+     * Size of the (local) list.
+     */ 
     public int size() {
         return theList.size();
     }
 
 
-/**
- * Add object to the list and distribute to other lists.
- * Blocks until the object is send and received from the server
- * (actually it blocks until some object is received).
- * @param o
- */
+    /**
+     * Add object to the list and distribute to other lists.
+     * Blocks until the object is send and received from the server
+     * (actually it blocks until some object is received).
+     * @param o
+     */
     public synchronized void add(Object o) {
         int sz1 = theList.size() + 1;
         try {
@@ -128,54 +162,26 @@ public class DistributedList /* implements List not jet */ {
     }
 
 
-/**
- * Terminate the list thread.
- */ 
-    public void terminate() {
-        if ( cf != null ) {
-           cf.terminate();
-        }
-        if ( channel != null ) {
-           channel.close();
-        }
-        //theList.clear();
-        if ( listener == null ) { 
-           return;
-        }
-        logger.debug("terminate " + listener);
-        listener.setDone(); 
-        try { 
-             while ( listener.isAlive() ) {
-                     listener.interrupt(); 
-                     listener.join(100);
-             }
-        } catch (InterruptedException u) { 
-             Thread.currentThread().interrupt();
-        }
-        listener = null;
-    }
-
-
-/**
- * Clear the List.
- * caveat: must be called on all clients.
- */ 
+    /**
+     * Clear the List.
+     * caveat: must be called on all clients.
+     */ 
     public synchronized void clear() {
         theList.clear();
     }
 
 
-/**
- * Is the List empty?
- */ 
+    /**
+     * Is the List empty?
+     */ 
     public boolean isEmpty() {
         return theList.isEmpty();
     }
 
 
-/**
- * List iterator.
- */ 
+    /**
+     * List iterator.
+     */ 
     public Iterator iterator() {
         return theList.values().iterator();
     }
@@ -204,8 +210,9 @@ class Listener extends Thread {
         goon = false;
     }
 
+
     @Override
-     public void run() {
+    public void run() {
         Counter n;
         Object o;
         goon = true;
@@ -215,20 +222,20 @@ class Listener extends Thread {
             try {
                 n = (Counter) channel.receive();
                 if ( this.isInterrupted() ) {
-                   goon = false;
+                    goon = false;
                 } else {
-                   o = channel.receive();
-                   //System.out.println("receive("+n+","+o+" @ "+Thread.currentThread());
-                   if ( this.isInterrupted() ) {
-                      goon = false;
-                   }
-                   theList.put(n,o);
+                    o = channel.receive();
+                    //System.out.println("receive("+n+","+o+" @ "+Thread.currentThread());
+                    if ( this.isInterrupted() ) {
+                        goon = false;
+                    }
+                    theList.put(n,o);
                 }
             } catch (IOException e) {
-                   goon = false;
+                goon = false;
             } catch (ClassNotFoundException e) {
-                   e.printStackTrace();
-                   goon = false;
+                e.printStackTrace();
+                goon = false;
             }
         }
     }

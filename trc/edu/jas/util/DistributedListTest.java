@@ -77,6 +77,7 @@ public class DistributedListTest extends TestCase {
      */
     public void testDistributedList1() {
         l1 = new DistributedList(host);
+        l1.init();
         assertTrue("l1==empty",l1.isEmpty());
         l1.add( Integer.valueOf(1) );
         assertFalse("l1!=empty",l1.isEmpty());
@@ -105,8 +106,10 @@ public class DistributedListTest extends TestCase {
      */
     public void testDistributedList2() {
         l2 = new DistributedList(host);
+        l2.init();
         assertTrue("l2==empty",l2.isEmpty());
         l1 = new DistributedList(host);
+        l1.init();
         assertTrue("l1==empty",l1.isEmpty());
 
         int i = 0, loops = 10;
@@ -142,10 +145,13 @@ public class DistributedListTest extends TestCase {
      */
     public void testDistributedList3() {
         l1 = new DistributedList(host);
+        l1.init();
         assertTrue("l1==empty",l1.isEmpty());
         l2 = new DistributedList(host);
+        l2.init();
         assertTrue("l2==empty",l2.isEmpty());
         l3 = new DistributedList(host);
+        l3.init();
         assertTrue("l3==empty",l3.isEmpty());
 
         int i = 0, loops = 10;
@@ -189,6 +195,7 @@ public class DistributedListTest extends TestCase {
  */
     public void testDistributedList6() {
         l1 = new DistributedList(host);
+        l1.init();
         assertTrue("l1==empty",l1.isEmpty());
 
         int i = 0, loops = 10;
@@ -200,6 +207,7 @@ public class DistributedListTest extends TestCase {
         assertTrue("#l1==10", l1.size() == loops );
 
         l2 = new DistributedList(host);
+        l2.init();
         // assertTrue("l2==empty",l2.isEmpty());
         while ( l2.size() < loops ) {
             try {
