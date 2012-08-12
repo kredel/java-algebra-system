@@ -196,13 +196,5 @@ public class Pair<C extends RingElem<C> > extends AbstractPair<C>
         return this.useCriterion3;
     }
 
-
-    /*
-     * what is this for?
-    public MiniPair toMiniPair() {
-        return new MiniPair(i,j);
-    }
-     */
-
 }
 
