@@ -163,7 +163,7 @@ class LongIterator implements Iterator<Long> {
         if (empty) {
             throw new NoSuchElementException("invalid call of next()");
         }
-        Long res = new Long(current);
+        Long res = Long.valueOf(current);
         if (nonNegative) {
             current++;
         } else if (current > 0L) {
