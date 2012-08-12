@@ -440,10 +440,10 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         int[] df = f.dependencyOnVariables();
         List<Integer> key = new ArrayList<Integer>(de.length + df.length);
         for (int i = 0; i < de.length; i++) {
-            key.add(new Integer(de[i]));
+            key.add(Integer.valueOf(de[i]));
         }
         for (int i = 0; i < df.length; i++) {
-            key.add(new Integer(df[i]));
+            key.add(Integer.valueOf(df[i]));
         }
         return key;
     }

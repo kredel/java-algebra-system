@@ -5,7 +5,8 @@
 package edu.jas.poly;
 
 
-import java.util.Vector;
+import java.util.List;
+import java.util.ArrayList;
 
 
 /**
@@ -107,7 +108,7 @@ public class ExpVectorInteger extends ExpVector
     public ExpVectorInteger(String s) throws NumberFormatException {
         super();
         // first format = (1,2,3,4,5,6,7)
-        Vector<Integer> exps = new Vector<Integer>();
+        List<Integer> exps = new ArrayList<Integer>();
         s = s.trim();
         int b = s.indexOf('(');
         int e = s.indexOf(')', b + 1);
@@ -119,18 +120,18 @@ public class ExpVectorInteger extends ExpVector
             while ((k = s.indexOf(',', b)) >= 0) {
                 teil = s.substring(b, k);
                 a = Integer.parseInt(teil);
-                exps.add(new Integer(a));
+                exps.add(Integer.valueOf(a));
                 b = k + 1;
             }
             if (b <= e) {
                 teil = s.substring(b, e);
                 a = Integer.parseInt(teil);
-                exps.add(new Integer(a));
+                exps.add(Integer.valueOf(a));
             }
             int length = exps.size();
             val = new int[length];
             for (int j = 0; j < length; j++) {
-                val[j] = exps.elementAt(j).intValue();
+                val[j] = exps.get(j).intValue();
             }
         } else {
             // not implemented
