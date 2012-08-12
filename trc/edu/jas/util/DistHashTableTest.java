@@ -100,12 +100,12 @@ public class DistHashTableTest extends TestCase {
         l1.init();
         assertTrue("l1==empty",l1.isEmpty());
 
-        l1.putWait( new Integer(1), new Integer(1) );
+        l1.putWait( Integer.valueOf(1), Integer.valueOf(1) );
         assertFalse("l1!=empty",l1.isEmpty());
         assertTrue("#l1==1", l1.size() == 1 );
-        l1.putWait( new Integer(2), new Integer(2) );
+        l1.putWait( Integer.valueOf(2), Integer.valueOf(2) );
         assertTrue("#l1==2", l1.size() == 2 );
-        l1.putWait( new Integer(3), new Integer(3) );
+        l1.putWait( Integer.valueOf(3), Integer.valueOf(3) );
         assertTrue("#l1==3", l1.size() == 3 );
 
         Iterator it = null;
@@ -114,7 +114,7 @@ public class DistHashTableTest extends TestCase {
         while ( it.hasNext() ) {
             Object k = it.next();
             Object o = l1.get(k);
-            Integer x = new Integer( ++i );
+            Integer x = Integer.valueOf( ++i );
             assertEquals("l1(i)==v(i)", x, o );
             assertEquals("l1(i)==k(i)", x, k );
         }
@@ -137,7 +137,7 @@ public class DistHashTableTest extends TestCase {
 
         int i = 0, loops = 10;
         while ( i < loops ) {
-            Integer x = new Integer( ++i );
+            Integer x = Integer.valueOf( ++i );
             l1.putWait( x, x );
             assertTrue("#l1==i", l1.size() == i );
         }
@@ -157,7 +157,7 @@ public class DistHashTableTest extends TestCase {
         while ( it.hasNext() ) {
             Object k = it.next();
             Object o = l2.get(k);
-            Integer x = new Integer( ++i );
+            Integer x = Integer.valueOf( ++i );
             //System.out.println("o = " + o + " x = "+ x);
             assertEquals("l2(i)==k(i)", x, k );
             assertEquals("l2(i)==v(i)", x, o );
@@ -181,7 +181,7 @@ public class DistHashTableTest extends TestCase {
 
         int i = 0, loops = 10;
         while ( i < loops ) {
-            Integer x = new Integer( ++i );
+            Integer x = Integer.valueOf( ++i );
             l3.putWait( x, x );
             assertTrue("#l3==i", l3.size() == i );
         }
@@ -206,7 +206,7 @@ public class DistHashTableTest extends TestCase {
             Object k2 = it3.next();
             Object v1 = l2.get(k1);
             Object v2 = l1.get(k2);
-            Integer x = new Integer( ++i );
+            Integer x = Integer.valueOf( ++i );
             //System.out.println("o = " + o + " x = "+ x);
             assertEquals("l2(i)==k(i)", x, k1 );
             assertEquals("l1(i)==k(i)", x, k2 );
@@ -227,7 +227,7 @@ public class DistHashTableTest extends TestCase {
 
         int i = 0, loops = 10;
         while ( i < loops ) {
-            Integer x = new Integer( ++i );
+            Integer x = Integer.valueOf( ++i );
             l1.putWait( x, x );
             assertTrue("#l1==i", l1.size() == i );
         }
@@ -249,7 +249,7 @@ public class DistHashTableTest extends TestCase {
         while ( it.hasNext() ) {
             Object k = it.next();
             Object v = l2.get(k);
-            Integer x = new Integer( ++i );
+            Integer x = Integer.valueOf( ++i );
             //System.out.println("o = " + o + " x = "+ x);
             assertEquals("l2(i)==k(i)", x, k );
             assertEquals("l2(i)==v(i)", x, v );
@@ -269,7 +269,7 @@ public class DistHashTableTest extends TestCase {
 
         int i = 0, loops = 10;
         while ( i < loops ) {
-            Integer x = new Integer( ++i );
+            Integer x = Integer.valueOf( ++i );
             l1.putWait( x, x );
             assertTrue("#l1==i", l1.size() == i );
         }
@@ -284,7 +284,7 @@ public class DistHashTableTest extends TestCase {
         while ( it.hasNext() ) {
             Integer k = it.next();
             Integer v = l2.getWait(k);
-            Integer x = new Integer( ++i );
+            Integer x = Integer.valueOf( ++i );
             //System.out.println("o = " + o + " x = "+ x);
             assertEquals("l1(i)==k(i)", x, k );
             assertEquals("l2(i)==v(i)", x, v );

@@ -42,7 +42,7 @@ public class TaggedSocketChannelTest extends TestCase {
    private String host;
    private int port;
 
-   final Integer tag1 = new Integer(1);
+   final Integer tag1 = Integer.valueOf(1);
 
 
     protected void setUp() {
@@ -84,7 +84,7 @@ public class TaggedSocketChannelTest extends TestCase {
 
    public void testTaggedSocketChannel1() {
        Object o = new IllegalArgumentException("leer");
-       Integer err = new Integer(-1);
+       Integer err = Integer.valueOf(-1);
        try {
            tsc1.send(err,o);
            fail("no Exception thrown");
@@ -106,7 +106,7 @@ public class TaggedSocketChannelTest extends TestCase {
 
 
    public void testTaggedSocketChannel2() {
-       Object o = new Integer(0);
+       Object o = Integer.valueOf(0);
        try {
            tsc1.send(tag1,o);
            assertEquals(o,tsc2.receive(tag1));
@@ -121,7 +121,7 @@ public class TaggedSocketChannelTest extends TestCase {
 
 
    public void testTaggedSocketChannel3() {
-       Object o = new Integer(0);
+       Object o = Integer.valueOf(0);
        try {
            tsc1.send(tag1,o);
            tsc2.send(tag1,o);
@@ -142,12 +142,12 @@ public class TaggedSocketChannelTest extends TestCase {
        Object o;
        try {
            for (int i = 0; i < n; i++) {
-               o = new Integer(i);
+               o = Integer.valueOf(i);
                tsc1.send(tag1,o);
            }
            assertEquals("#tags == 0 ", 0, tsc1.tagSize());
            for (int i = 0; i < n; i++) {
-               o = new Integer(i);
+               o = Integer.valueOf(i);
                assertEquals(o,tsc2.receive(tag1));
            }
            assertTrue("#tags == 1 ", tsc2.tagSize() == 1);
@@ -169,14 +169,14 @@ public class TaggedSocketChannelTest extends TestCase {
        Integer o;
        try {
            for (int i = 0; i < n; i++) {
-               o = new Integer(i);
+               o = Integer.valueOf(i);
                tsc1.send(o,msg+i);
            }
            assertTrue("#tags == 0 ", tsc1.tagSize() == 0);
            assertTrue("#messages == 0 ", tsc1.messages() == 0);
            assertTrue("#messages >= 0 ", tsc2.messages() >= 0); // not all 10 arrive in time
            for (int i = 0; i < n; i++) {
-               o = new Integer(i);
+               o = Integer.valueOf(i);
                assertEquals(msg+i,tsc2.receive(o));
            }
            //System.out.println("tsc2 = " + tsc2);

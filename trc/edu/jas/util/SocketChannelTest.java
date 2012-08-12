@@ -74,7 +74,7 @@ public class SocketChannelTest extends TestCase {
    }
 
    public void testSocketChannel1() {
-       Object o = new Integer(0);
+       Object o = Integer.valueOf(0);
        try {
            sc1.send(o);
            assertEquals(o,sc2.receive());
@@ -86,7 +86,7 @@ public class SocketChannelTest extends TestCase {
    }
 
    public void testSocketChannel2() {
-       Object o = new Integer(0);
+       Object o = Integer.valueOf(0);
        try {
            sc1.send(o);
            sc2.send(o);
@@ -104,11 +104,11 @@ public class SocketChannelTest extends TestCase {
        Object o;
        try {
            for (int i = 0; i < n; i++) {
-               o = new Integer(i);
+               o = Integer.valueOf(i);
                sc1.send(o);
            }
            for (int i = 0; i < n; i++) {
-               o = new Integer(i);
+               o = Integer.valueOf(i);
                assertEquals(o,sc2.receive());
            }
        } catch(IOException e) {

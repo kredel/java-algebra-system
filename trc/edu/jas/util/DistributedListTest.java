@@ -78,12 +78,12 @@ public class DistributedListTest extends TestCase {
     public void testDistributedList1() {
         l1 = new DistributedList(host);
         assertTrue("l1==empty",l1.isEmpty());
-        l1.add( new Integer(1) );
+        l1.add( Integer.valueOf(1) );
         assertFalse("l1!=empty",l1.isEmpty());
         assertTrue("#l1==1", l1.size() == 1 );
-        l1.add( new Integer(2) );
+        l1.add( Integer.valueOf(2) );
         assertTrue("#l1==2", l1.size() == 2 );
-        l1.add( new Integer(3) );
+        l1.add( Integer.valueOf(3) );
         assertTrue("#l1==3", l1.size() == 3 );
 
         Iterator it = null;
@@ -91,7 +91,7 @@ public class DistributedListTest extends TestCase {
         int i = 0;
         while ( it.hasNext() ) {
             Object o = it.next();
-            Integer x = new Integer( ++i );
+            Integer x = Integer.valueOf( ++i );
             assertEquals("l1(i)==(i)", x, o );
         }
 
@@ -111,7 +111,7 @@ public class DistributedListTest extends TestCase {
 
         int i = 0, loops = 10;
         while ( i < loops ) {
-            Integer x = new Integer( ++i );
+            Integer x = Integer.valueOf( ++i );
             l1.add( x );
             assertTrue("#l1==i", l1.size() == i );
         }
@@ -129,7 +129,7 @@ public class DistributedListTest extends TestCase {
         i = 0;
         while ( it.hasNext() ) {
             Object o = it.next();
-            Integer x = new Integer( ++i );
+            Integer x = Integer.valueOf( ++i );
             //System.out.println("o = " + o + " x = "+ x);
             assertEquals("l2(i)==(i)", x, o );
         }
@@ -150,7 +150,7 @@ public class DistributedListTest extends TestCase {
 
         int i = 0, loops = 10;
         while ( i < loops ) {
-            Integer x = new Integer( ++i );
+            Integer x = Integer.valueOf( ++i );
             l3.add( x );
             assertTrue("#l3==i", l3.size() == i );
         }
@@ -175,7 +175,7 @@ public class DistributedListTest extends TestCase {
         while ( it.hasNext() && it3.hasNext() ) {
             Object o = it.next();
             Object p = it3.next();
-            Integer x = new Integer( ++i );
+            Integer x = Integer.valueOf( ++i );
             //System.out.println("o = " + o + " x = "+ x);
             assertEquals("l2(i)==(i)", x, o );
             assertEquals("l1(i)==(i)", x, p );
@@ -193,7 +193,7 @@ public class DistributedListTest extends TestCase {
 
         int i = 0, loops = 10;
         while ( i < loops ) {
-            Integer x = new Integer( ++i );
+            Integer x = Integer.valueOf( ++i );
             l1.add( x );
             assertTrue("#l1==i", l1.size() == i );
         }
@@ -213,7 +213,7 @@ public class DistributedListTest extends TestCase {
         i = 0;
         while ( it.hasNext() ) {
             Object o = it.next();
-            Integer x = new Integer( ++i );
+            Integer x = Integer.valueOf( ++i );
             //System.out.println("o = " + o + " x = "+ x);
             assertEquals("l2(i)==(i)", x, o );
         }
