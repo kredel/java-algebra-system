@@ -36,9 +36,9 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>> extends Squa
 
 
     /**
-     * GCD engine for infinite ring of characteristic p base coefficients.
+     * Squarefree engine for infinite ring of characteristic p base coefficients.
      */
-    protected final SquarefreeAbstract<C> rengine;
+    protected final SquarefreeAbstract<C> qengine;
 
 
     /**
@@ -52,9 +52,9 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>> extends Squa
         }
         QuotientRing<C> qfac = (QuotientRing<C>) fac;
         GenPolynomialRing<C> rfac = qfac.ring;
-        rengine = SquarefreeFactory.<C> getImplementation(rfac);
-        //rengine = new SquarefreeFiniteFieldCharP<C>(rfac.coFac);
-        //rengine = new SquarefreeInfiniteRingCharP<C>( rfac.coFac );
+        qengine = (SquarefreeAbstract) SquarefreeFactory.<C> getImplementation(rfac);
+        //qengine = new SquarefreeFiniteFieldCharP<C>(rfac.coFac);
+        //qengine = new SquarefreeInfiniteRingCharP<C>( rfac.coFac );
     }
 
 
@@ -85,7 +85,7 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>> extends Squa
         QuotientRing<C> pfac = P.ring;
         GenPolynomial<C> one = pfac.ring.getONE();
         if (!num.isONE()) {
-            SortedMap<GenPolynomial<C>, Long> nfac = rengine.squarefreeFactors(num);
+            SortedMap<GenPolynomial<C>, Long> nfac = qengine.squarefreeFactors(num);
             //System.out.println("nfac = " + nfac);
             for (Map.Entry<GenPolynomial<C>, Long> me : nfac.entrySet()) {
                 GenPolynomial<C> nfp = me.getKey();
@@ -99,7 +99,7 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>> extends Squa
             }
             return factors;
         }
-        SortedMap<GenPolynomial<C>, Long> dfac = rengine.squarefreeFactors(den);
+        SortedMap<GenPolynomial<C>, Long> dfac = qengine.squarefreeFactors(den);
         //System.out.println("dfac = " + dfac);
         for (Map.Entry<GenPolynomial<C>, Long> me : dfac.entrySet()) {
             GenPolynomial<C> dfp = me.getKey();

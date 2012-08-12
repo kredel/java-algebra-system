@@ -35,10 +35,10 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
     private final boolean debug = logger.isDebugEnabled();
 
 
-    /**
-     * GCD engine for characteristic p base coefficients.
+    /*
+     * Squarefree engine for characteristic p base coefficients.
      */
-    protected final SquarefreeAbstract<C> rengine;
+    //protected final SquarefreeAbstract<C> rengine;
 
 
     /**
@@ -82,16 +82,16 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
         Object oFac = coFac;
         if (oFac instanceof AlgebraicNumberRing) {
             aCoFac = (AlgebraicNumberRing<C>) oFac; // <C> is not correct
-            rengine = (SquarefreeAbstract) SquarefreeFactory.getImplementation(aCoFac.ring);
+            //rengine = (SquarefreeAbstract) SquarefreeFactory.getImplementation(aCoFac.ring);
             qCoFac = null;
         } else {
             aCoFac = null;
             if (oFac instanceof QuotientRing) {
                 qCoFac = (QuotientRing<C>) oFac; // <C> is not correct
-                rengine = (SquarefreeAbstract) SquarefreeFactory.getImplementation(qCoFac.ring);
+                //rengine = (SquarefreeAbstract) SquarefreeFactory.getImplementation(qCoFac.ring);
             } else {
                 qCoFac = null;
-                rengine = null; //(SquarefreeAbstract) SquarefreeFactory.getImplementation(oFac);
+                //rengine = null; //(SquarefreeAbstract) SquarefreeFactory.getImplementation(oFac);
             }
         }
     }

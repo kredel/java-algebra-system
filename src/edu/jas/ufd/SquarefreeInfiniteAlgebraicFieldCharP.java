@@ -47,9 +47,9 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>> ext
 
 
     /**
-     * GCD engine for infinite ring of characteristic p base coefficients.
+     * Squarefree engine for infinite ring of characteristic p base coefficients.
      */
-    protected final SquarefreeAbstract<C> rengine;
+    protected final SquarefreeAbstract<C> aengine;
 
 
     /**
@@ -65,8 +65,8 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>> ext
         GenPolynomialRing<C> rfac = afac.ring;
         //System.out.println("rfac = " + rfac);
         //System.out.println("rfac = " + rfac.coFac);
-        rengine = SquarefreeFactory.<C> getImplementation(rfac);
-        //System.out.println("rengine = " + rengine);
+        aengine = SquarefreeFactory.<C> getImplementation(rfac);
+        //System.out.println("aengine = " + aengine);
     }
 
 
@@ -95,8 +95,8 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>> ext
         AlgebraicNumberRing<C> pfac = P.ring;
         if (!an.isONE()) {
             //System.out.println("an = " + an);
-            //System.out.println("rengine = " + rengine);
-            SortedMap<GenPolynomial<C>, Long> nfac = rengine.squarefreeFactors(an);
+            //System.out.println("aengine = " + aengine);
+            SortedMap<GenPolynomial<C>, Long> nfac = aengine.squarefreeFactors(an);
             //System.out.println("nfac = " + nfac);
             for (Map.Entry<GenPolynomial<C>, Long> me : nfac.entrySet()) {
                 GenPolynomial<C> nfp = me.getKey();
@@ -250,8 +250,8 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>> ext
             C tc = pl.trailingBaseCoefficient();
             tc = tc.negate();
             if (e.maxDeg() == c.longValue()) { // p-th root of tc ...
-                //SortedMap<C, Long> br = rengine.rootCharacteristic(tc);
-                SortedMap<C, Long> br = rengine.squarefreeFactors(tc);
+                //SortedMap<C, Long> br = aengine.rootCharacteristic(tc);
+                SortedMap<C, Long> br = aengine.squarefreeFactors(tc);
                 //System.out.println("br = " + br);
                 if (br != null && br.size() > 0) {
                     C cc = apfac.coFac.getONE();
