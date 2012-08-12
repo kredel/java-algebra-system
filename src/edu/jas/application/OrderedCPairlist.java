@@ -370,7 +370,7 @@ public class OrderedCPairlist<C extends GcdRingElem<C>> implements Serializable,
      * Get the number of polynomials put to the pairlist.
      * @return the number of calls to put.
      */
-    public int putCount() {
+    public synchronized int putCount() {
         return putCount;
     }
 
@@ -379,7 +379,7 @@ public class OrderedCPairlist<C extends GcdRingElem<C>> implements Serializable,
      * Get the number of required pairs removed from the pairlist.
      * @return the number of non null pairs delivered.
      */
-    public int remCount() {
+    public synchronized int remCount() {
         return remCount;
     }
 
