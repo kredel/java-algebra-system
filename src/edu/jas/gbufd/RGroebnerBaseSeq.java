@@ -37,7 +37,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>> extends GroebnerBase
     /**
      * Reduction engine.
      */
-    protected RReduction<C> red; // shadow super.red 
+    protected RReduction<C> rred; // shadow super.red ??
 
 
     /**
@@ -50,12 +50,12 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>> extends GroebnerBase
 
     /**
      * Constructor.
-     * @param red R-Reduction engine
+     * @param rred R-Reduction engine
      */
-    public RGroebnerBaseSeq(RReduction<C> red) {
-        super(red);
-        this.red = red;
-        assert super.red == this.red;
+    public RGroebnerBaseSeq(RReduction<C> rred) {
+        super(rred);
+        this.rred = rred;
+        assert super.red == this.rred;
     }
 
 
@@ -70,7 +70,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>> extends GroebnerBase
         if (F == null) {
             return true;
         }
-        if (!red.isBooleanClosed(F)) {
+        if (!rred.isBooleanClosed(F)) {
             if (debug) {
                 logger.debug("not boolean closed");
             }
@@ -113,7 +113,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>> extends GroebnerBase
      */
     public List<GenPolynomial<C>> GB(int modv, List<GenPolynomial<C>> F) {
         /* boolean closure */
-        List<GenPolynomial<C>> bcF = red.reducedBooleanClosure(F);
+        List<GenPolynomial<C>> bcF = rred.reducedBooleanClosure(F);
         logger.info("#bcF-#F = " + (bcF.size() - F.size()));
         F = bcF;
         /* normalize input */
@@ -196,7 +196,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>> extends GroebnerBase
             if (!H.isZERO()) {
                 logger.info("Sred = " + H);
                 //len = G.size();
-                bcH = red.reducedBooleanClosure(G, H);
+                bcH = rred.reducedBooleanClosure(G, H);
                 logger.info("#bcH = " + bcH.size());
                 for (GenPolynomial<C> h : bcH) {
                     h = h.monic(); // monic() ok, since boolean closed
@@ -256,7 +256,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>> extends GroebnerBase
                     a = red.normalform(ff, a);
                     if (!a.isZERO()) { // happens
                         logger.info("minGB not zero " + a);
-                        bcH = red.reducedBooleanClosure(G, a);
+                        bcH = rred.reducedBooleanClosure(G, a);
                         if (bcH.size() > 1) { // never happend so far
                             System.out.println("minGB not bc: bcH size = " + bcH.size());
                             F.add(b); // do not replace, stay with b
@@ -285,7 +285,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>> extends GroebnerBase
             b = a;
             //System.out.println("doing " + a.length());
             a = red.normalform(G, a);
-            bcH = red.reducedBooleanClosure(G, a);
+            bcH = rred.reducedBooleanClosure(G, a);
             if (bcH.size() > 1) {
                 System.out.println("minGB not bc: bcH size = " + bcH.size());
                 G.add(b); // do not reduce

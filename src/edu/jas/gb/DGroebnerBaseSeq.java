@@ -34,7 +34,7 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
     /**
      * Reduction engine.
      */
-    protected DReduction<C> red; // shadow super.red ??
+    protected DReduction<C> dred; // shadow super.red ??
 
 
     /**
@@ -47,11 +47,12 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
 
     /**
      * Constructor.
-     * @param red D-Reduction engine
+     * @param dred D-Reduction engine
      */
-    public DGroebnerBaseSeq(DReduction<C> red) {
-        super(red);
-        this.red = red;
+    public DGroebnerBaseSeq(DReduction<C> dred) {
+        super(dred);
+        this.dred = dred;
+        assert this.dred == super.red;
     }
 
 
@@ -71,7 +72,7 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
                 if (!red.moduleCriterion(modv, pi, pj)) {
                     continue;
                 }
-                d = red.GPolynomial(pi, pj);
+                d = dred.GPolynomial(pi, pj);
                 if (!d.isZERO()) {
                     // better check for top reduction only
                     d = red.normalform(F, d);
@@ -155,7 +156,7 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
             }
 
             // D-polynomial case ----------------------
-            D = red.GPolynomial(pi, pj);
+            D = dred.GPolynomial(pi, pj);
             //System.out.println("D_d = " + D);
             if (!D.isZERO() && !red.isTopReducible(G, D)) {
                 H = red.normalform(G, D);

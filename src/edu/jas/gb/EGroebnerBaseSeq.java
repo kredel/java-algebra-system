@@ -26,7 +26,7 @@ public class EGroebnerBaseSeq<C extends RingElem<C>> extends DGroebnerBaseSeq<C>
     /**
      * Reduction engine.
      */
-    protected EReduction<C> red; // shadow super.red
+    protected EReduction<C> ered; // shadow super.red ??
 
 
     /**
@@ -39,11 +39,12 @@ public class EGroebnerBaseSeq<C extends RingElem<C>> extends DGroebnerBaseSeq<C>
 
     /**
      * Constructor.
-     * @param red E-Reduction engine
+     * @param ered E-Reduction engine
      */
-    public EGroebnerBaseSeq(EReductionSeq<C> red) {
-        super(red);
-        this.red = red;
+    public EGroebnerBaseSeq(EReductionSeq<C> ered) {
+        super(ered);
+        this.ered = ered;
+        assert this.ered == super.red;
     }
 
 
