@@ -107,34 +107,9 @@ public class MultiVarPowerSeriesTest extends TestCase {
         BigRational cf = new BigRational(0);
         GenPolynomialRing<BigRational> pring = new GenPolynomialRing<BigRational>(cf, rl);
 
-        MultiVarCoefficients<BigRational> zeros = new MultiVarCoefficients<BigRational>(pring) {
-
-
-            @Override
-            public BigRational generate(ExpVector i) {
-                return pfac.coFac.getZERO();
-            }
-        };
-        MultiVarCoefficients<BigRational> ones = new MultiVarCoefficients<BigRational>(pring) {
-
-
-            @Override
-            public BigRational generate(ExpVector i) {
-                return pfac.coFac.getONE();
-            }
-        };
-        MultiVarCoefficients<BigRational> vars = new MultiVarCoefficients<BigRational>(pring) {
-
-
-            @Override
-            public BigRational generate(ExpVector i) {
-                int[] v = i.dependencyOnVariables();
-                if (v.length == 1 && i.getVal(v[0]) == 1L) {
-                    return pfac.coFac.getONE();
-                }
-                return pfac.coFac.getZERO();
-            }
-        };
+        MultiVarCoefficients<BigRational> zeros = new Zeros(pring);
+        MultiVarCoefficients<BigRational> ones = new Ones(pring);
+        MultiVarCoefficients<BigRational> vars = new Vars(pring);
 
         int m = 5;
         ExpVectorIterable eiter = new ExpVectorIterable(rl, true, m);
@@ -243,34 +218,9 @@ public class MultiVarPowerSeriesTest extends TestCase {
      */
     public void testCoefficientsInPS() {
 
-        MultiVarCoefficients<BigRational> zeros = new MultiVarCoefficients<BigRational>(fac) {
-
-
-            @Override
-            public BigRational generate(ExpVector i) {
-                return pfac.coFac.getZERO();
-            }
-        };
-        MultiVarCoefficients<BigRational> ones = new MultiVarCoefficients<BigRational>(fac) {
-
-
-            @Override
-            public BigRational generate(ExpVector i) {
-                return pfac.coFac.getONE();
-            }
-        };
-        MultiVarCoefficients<BigRational> vars = new MultiVarCoefficients<BigRational>(fac) {
-
-
-            @Override
-            public BigRational generate(ExpVector i) {
-                int[] v = i.dependencyOnVariables();
-                if (v.length == 1 && i.getVal(v[0]) == 1L) {
-                    return pfac.coFac.getONE();
-                }
-                return pfac.coFac.getZERO();
-            }
-        };
+        MultiVarCoefficients<BigRational> zeros = new Zeros(fac);
+        MultiVarCoefficients<BigRational> ones = new Ones(fac);
+        MultiVarCoefficients<BigRational> vars = new Vars(fac);
 
         a = new MultiVarPowerSeries<BigRational>(fac, zeros);
         b = new MultiVarPowerSeries<BigRational>(fac, ones);
@@ -676,4 +626,59 @@ public class MultiVarPowerSeriesTest extends TestCase {
         dv = fv.getONE();
         assertEquals("1(v) = 1 ", cv, dv);
     }
+}
+
+
+class Zeros extends MultiVarCoefficients<BigRational> {
+
+    public Zeros(MultiVarPowerSeriesRing<BigRational> pf) {
+        super(pf);
+    }
+    public Zeros(GenPolynomialRing<BigRational> pf) {
+        super(pf);
+    }
+
+    @Override
+    public BigRational generate(ExpVector i) {
+        return pfac.coFac.getZERO();
+    }
+
+}
+
+
+class Ones extends MultiVarCoefficients<BigRational> {
+
+    public Ones(MultiVarPowerSeriesRing<BigRational> pf) {
+        super(pf);
+    }
+    public Ones(GenPolynomialRing<BigRational> pf) {
+        super(pf);
+    }
+
+    @Override
+    public BigRational generate(ExpVector i) {
+        return pfac.coFac.getONE();
+    }
+
+}
+
+
+class Vars extends MultiVarCoefficients<BigRational> {
+
+    public Vars(MultiVarPowerSeriesRing<BigRational> pf) {
+        super(pf);
+    }
+    public Vars(GenPolynomialRing<BigRational> pf) {
+        super(pf);
+    }
+
+    @Override
+    public BigRational generate(ExpVector i) {
+        int[] v = i.dependencyOnVariables();
+        if (v.length == 1 && i.getVal(v[0]) == 1L) {
+            return pfac.coFac.getONE();
+        }
+        return pfac.coFac.getZERO();
+    }
+
 }
