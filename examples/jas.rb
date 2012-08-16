@@ -2046,6 +2046,17 @@ Compute the elimination ideal of this and the given polynomial ring.
     end
 
 =begin rdoc
+Compute the saturation of this and the given ideal.
+=end
+    def sat(id2)
+        s1 = Ideal.new(@pset);
+        s2 = Ideal.new(id2.pset);
+        #nn = s1.infiniteQuotient(s2);
+        nn = s1.infiniteQuotientRab(s2);
+        return SimIdeal.new(@ring,"",nn.getList());
+    end
+
+=begin rdoc
 Compute the sum of this and the ideal.
 =end
     def sum(other)

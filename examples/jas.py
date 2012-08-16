@@ -640,7 +640,7 @@ class Ideal:
         return Ideal(ring,"",N.getList());
 
     def intersect(self,id2):
-        '''Compute the intersection of this and the given ideal.
+        '''Compute the intersection of this and the given ideal id2.
         '''
         s1 = jas.application.Ideal(self.pset);
         s2 = jas.application.Ideal(id2.pset);
@@ -654,6 +654,15 @@ class Ideal:
         N = s.eliminate(ring.ring);
         r = Ring( ring=N.getRing() );
         return Ideal(r,"",N.getList());
+
+    def sat(self,id2):
+        '''Compute the saturation of this with respect to given ideal id2.
+        '''
+        s1 = jas.application.Ideal(self.pset);
+        s2 = jas.application.Ideal(id2.pset);
+        #Q = s1.infiniteQuotient(s2);
+        Q = s1.infiniteQuotientRab(s2);
+        return Ideal(self.ring,"",Q.getList());
 
     def sum(self,other):
         '''Compute the sum of this and the ideal.
