@@ -25,7 +25,7 @@ import edu.jas.structure.RingFactory;
  */
 
 public final class BigInteger implements GcdRingElem<BigInteger>, RingFactory<BigInteger>,
-                Iterable<BigInteger> {
+                                         Iterable<BigInteger>, Rational {
 
 
     /**
@@ -727,6 +727,15 @@ public final class BigInteger implements GcdRingElem<BigInteger>, RingFactory<Bi
      */
     public BigInteger parse(Reader r) {
         return parse(StringUtil.nextString(r));
+    }
+
+
+    /**
+     * Return a BigRational approximation of this Element.
+     * @return a BigRational approximation of this.
+     */
+    public BigRational getRational() {
+        return new BigRational(val);
     }
 
 
