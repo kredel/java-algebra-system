@@ -595,7 +595,7 @@ public class RingFactoryTokenizer {
      */
     public long[][] nextWeightArray() throws IOException {
         List<long[]> l = new ArrayList<long[]>();
-        long[][] w = null;
+        long[][] w;
         long[] e;
         char first;
         int tt;

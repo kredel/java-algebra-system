@@ -378,7 +378,7 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
             //vars = new String[] { "z_" + Math.abs(r.hashCode() % 1000) };
             vars = pfac.newVars("z_");
             pfac = pfac.clone();
-            vars = pfac.setVars(vars);
+            String[] unused = pfac.setVars(vars);
             r = pfac.copy(r); // hack to exchange the variables
             //System.out.println("r(z_) = " + r);
             AlgebraicNumberRing<C> afac = new AlgebraicNumberRing<C>(r, true); // since irreducible

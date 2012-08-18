@@ -141,9 +141,11 @@ public class FactorFactory extends edu.jas.ufd.FactorFactory {
      * @param <C> coefficient type, e.g. BigRational.
      * @return factorization algorithm implementation.
      */
+    @SuppressWarnings("unchecked")
     public static <C extends GcdRingElem<C> & Rational> FactorAbstract<edu.jas.application.RealAlgebraicNumber<C>> 
       getImplementation(edu.jas.application.RealAlgebraicRing<C> fac) {
-        return new FactorRealReal<C>(fac, FactorFactory.<edu.jas.root.RealAlgebraicNumber<C>> getImplementation((edu.jas.root.RealAlgebraicRing<C>) (Object) fac.realRing));
+        edu.jas.root.RealAlgebraicRing<C> rar = (edu.jas.root.RealAlgebraicRing<C>) (Object) fac.realRing;
+        return new FactorRealReal<C>(fac, FactorFactory.<edu.jas.root.RealAlgebraicNumber<C>> getImplementation(rar));
     }
 
 
@@ -169,12 +171,12 @@ public class FactorFactory extends edu.jas.ufd.FactorFactory {
         if (ofac instanceof edu.jas.application.RealAlgebraicRing) {
             //System.out.println("rrfac_o = " + ofac);
             rrfac = (edu.jas.application.RealAlgebraicRing) ofac;
-            ofac = rrfac.realRing;
+            //ofac = rrfac.realRing;
             ufd = new FactorRealReal/*raw <C>*/(rrfac, FactorFactory.<edu.jas.root.RealAlgebraicNumber> getImplementation(rrfac.realRing) );
         } else if (ofac instanceof edu.jas.root.RealAlgebraicRing) {
             //System.out.println("rfac_o = " + ofac);
             rfac = (edu.jas.root.RealAlgebraicRing) ofac;
-            ofac = rfac.algebraic;
+            //ofac = rfac.algebraic;
             ufd = new FactorRealAlgebraic/*raw <C>*/(rfac,FactorFactory.<AlgebraicNumber<C>> getImplementation(rfac.algebraic));
         } else if (ofac instanceof ComplexRing) {
             cfac = (ComplexRing<C>)ofac;
@@ -183,7 +185,7 @@ public class FactorFactory extends edu.jas.ufd.FactorFactory {
         } else if (ofac instanceof AlgebraicNumberRing) {
             //System.out.println("afac_o = " + ofac);
             afac = (AlgebraicNumberRing) ofac;
-            ofac = afac.ring.coFac;
+            //ofac = afac.ring.coFac;
             ufd = new FactorAlgebraic/*raw <C>*/(afac,FactorFactory.<C> getImplementation(afac.ring.coFac));
         } else if (ofac instanceof QuotientRing) {
             //System.out.println("qfac_o = " + ofac);

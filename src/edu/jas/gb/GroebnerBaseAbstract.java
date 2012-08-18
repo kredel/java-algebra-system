@@ -657,7 +657,6 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
         String var = pfac.getVars()[pfac.nvar - 1 - i];
         GenPolynomialRing<C> ufac = new GenPolynomialRing<C>(cfac, 1, new TermOrder(TermOrder.INVLEX),
                                                              new String[] { var });
-        GenPolynomial<C> pol = ufac.getZERO();
 
         GenPolynomialRing<C> cpfac = new GenPolynomialRing<C>(cfac, ll, new TermOrder(TermOrder.INVLEX));
         GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(cpfac, pfac);
@@ -709,7 +708,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
             }
         } while (z != 0); // && ll <= 5 && !XP.isZERO()
         // construct result polynomial
-        pol = ufac.univariate(0, ll);
+        GenPolynomial<C> pol = ufac.univariate(0, ll);
         for (GenPolynomial<C> pc : ls) {
             ExpVector e = pc.leadingExpVector();
             if (e == null) {
