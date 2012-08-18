@@ -371,7 +371,7 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
             public C generate(int i) {
                 C c;
                 if (i > 0) {
-                    c = get(i - 1);
+                    c = get(i - 1); // ensure coeffs are all generated
                 }
                 do {
                     c = coefficient(pos++);

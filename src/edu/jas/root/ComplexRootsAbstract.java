@@ -131,7 +131,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
         M1c = rect.getNE().norm();
         M1 = M1c.getRe();
         if (M.compareTo(M1) < 0) {
-            M = M1;
+            //M = M1;
             Mc = M1c;
         }
         //System.out.println("M = " + M);

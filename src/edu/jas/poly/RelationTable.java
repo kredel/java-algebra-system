@@ -314,12 +314,12 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
             table.put(key, part);
             return;
         }
-        Object o;
+        Object skip;
         int index = -1;
         synchronized (part) { // with lookup()
             for (ListIterator it = part.listIterator(); it.hasNext();) {
                 ExpVectorPair look = (ExpVectorPair) it.next();
-                o = it.next(); // skip poly
+                skip = it.next(); // skip poly
                 if (look.isMultiple(evp)) {
                     index = it.nextIndex();
                     // last index of or first index of: break

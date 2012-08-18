@@ -251,12 +251,11 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
      */
     @Override
     public GenSolvablePolynomial<C> multiply(ExpVector e) {  
-        GenSolvablePolynomial<C> Cp = ring.getZERO().clone(); 
         if ( e == null || e.isZERO() ) { 
             return this;
         }
         C b = ring.getONECoefficient();
-        Cp = new GenSolvablePolynomial<C>(ring,b,e);
+        GenSolvablePolynomial<C> Cp = new GenSolvablePolynomial<C>(ring,b,e);
         return multiply(Cp);
     }
 
@@ -275,7 +274,6 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
         if ( b == null || b.isZERO() ) { 
             return Cp;
         }
-        //Cp = (GenSolvablePolynomial<C>)Cp.add(b,e);
         Cp = new GenSolvablePolynomial<C>(ring,b,e);
         return multiply(Cp);
     }
@@ -308,12 +306,11 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
      * where * denotes solvable multiplication.
      */
     public GenSolvablePolynomial<C> multiplyLeft(ExpVector e) {  
-        GenSolvablePolynomial<C> Cp = ring.getZERO().clone(); 
         if ( e == null || e.isZERO() ) { 
             return this;
         }
         C b = ring.getONECoefficient();
-        Cp = new GenSolvablePolynomial<C>(ring,b,e);
+        GenSolvablePolynomial<C> Cp = new GenSolvablePolynomial<C>(ring,b,e);
         return Cp.multiply(this);
     }
 
