@@ -1025,8 +1025,9 @@ public class GroebnerBaseFGLMExamples extends TestCase {
         int erg;
         if (denom.compareTo(num) > 0) {
             erg = denom.bitLength();
+        } else {
+            erg = num.bitLength();
         }
-        erg = num.bitLength();
         return erg;
     }
 
