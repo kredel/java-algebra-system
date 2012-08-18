@@ -59,6 +59,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
      * @param F solvable polynomial list.
      * @return leftGB(F) a left Groebner base of F.
      */
+    @SuppressWarnings("unchecked")
     public List<GenSolvablePolynomial<C>> leftGB(int modv, List<GenSolvablePolynomial<C>> F) {
         List<GenSolvablePolynomial<C>> G = new ArrayList<GenSolvablePolynomial<C>>();
         PairList<C> pairlist = null;
@@ -148,6 +149,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
      * @param F solvable polynomial list.
      * @return a container for an extended left Groebner base of F.
      */
+    @SuppressWarnings("unchecked")
     public SolvableExtendedGB<C> extLeftGB(int modv, List<GenSolvablePolynomial<C>> F) {
 
         List<GenSolvablePolynomial<C>> G = new ArrayList<GenSolvablePolynomial<C>>();
@@ -376,6 +378,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
      * @param Fp solvable polynomial list.
      * @return tsGB(Fp) a twosided Groebner base of Fp.
      */
+    @SuppressWarnings("unchecked")
     public List<GenSolvablePolynomial<C>> twosidedGB(int modv, List<GenSolvablePolynomial<C>> Fp) {
         if (Fp == null || Fp.size() == 0) { // 0 not 1
             return new ArrayList<GenSolvablePolynomial<C>>();

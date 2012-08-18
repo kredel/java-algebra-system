@@ -301,6 +301,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>> extends Solvabl
      * @param Fp solvable polynomial list.
      * @return tsGB(Fp) a twosided Groebner base of F.
      */
+    @SuppressWarnings("unchecked")
     public List<GenSolvablePolynomial<C>> twosidedGB(int modv, List<GenSolvablePolynomial<C>> Fp) {
         if (Fp == null || Fp.size() == 0) { // 0 not 1
             return new ArrayList<GenSolvablePolynomial<C>>();
@@ -405,6 +406,7 @@ class LeftSolvableReducer<C extends RingElem<C>> implements Runnable {
     }
 
 
+    @SuppressWarnings("unchecked")
     public void run() {
         Pair<C> pair;
         GenSolvablePolynomial<C> S;

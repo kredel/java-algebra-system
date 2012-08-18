@@ -425,6 +425,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
     /**
      * Do Groebner Base. compute the Groebner Base for this ideal.
      */
+    @SuppressWarnings("unchecked")
     public void doGB() {
         if (isGB && testGB) {
             return;
@@ -1825,6 +1826,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
      * @param og other generators for the ideal
      * @return this + (z - x_j - t x_i) in the ring C[z, x_1, ..., x_r]
      */
+    @SuppressWarnings("unchecked")
     IdealWithUniv<C> normalPositionForCharP(int i, int j, List<GenPolynomial<C>> og) {
         // extend variables by one
         GenPolynomialRing<C> ofac = list.ring;

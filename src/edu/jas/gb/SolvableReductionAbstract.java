@@ -216,7 +216,7 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>> implement
      * @param Np nf(Pp,Ap), a left normal form of Ap wrt. Pp.
      * @return true, if Np + sum( row[i]*Pp[i] ) == Ap, else false.
      */
-
+    @SuppressWarnings("unchecked")
     public boolean isLeftReductionNF(List<GenSolvablePolynomial<C>> row, List<GenSolvablePolynomial<C>> Pp,
                     GenSolvablePolynomial<C> Ap, GenSolvablePolynomial<C> Np) {
         if (row == null && Pp == null) {
@@ -268,6 +268,7 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>> implement
      * @param Bp solvable polynomial.
      * @return right-spol(Ap,Bp) the right S-polynomial of Ap and Bp.
      */
+    @SuppressWarnings("unchecked")
     public GenSolvablePolynomial<C> rightSPolynomial(GenSolvablePolynomial<C> Ap, GenSolvablePolynomial<C> Bp) {
         if (logger.isInfoEnabled()) {
             if (Bp == null || Bp.isZERO()) {

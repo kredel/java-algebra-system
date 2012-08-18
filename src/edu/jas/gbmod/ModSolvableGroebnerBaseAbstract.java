@@ -97,6 +97,7 @@ public class ModSolvableGroebnerBaseAbstract<C extends RingElem<C>>
      * @param M a module basis.
      * @return leftGB(M) a left Groebner base for M.
      */
+    @SuppressWarnings("unchecked")
     public ModuleList<C> 
            leftGB(ModuleList<C> M) {  
         ModuleList<C> N = M;
@@ -171,6 +172,7 @@ public class ModSolvableGroebnerBaseAbstract<C extends RingElem<C>>
      * @param M a module basis.
      * @return tsGB(M) a twosided Groebner base for M.
      */
+    @SuppressWarnings("unchecked")
     public ModuleList<C> 
            twosidedGB(ModuleList<C> M) {  
         ModuleList<C> N = M;
@@ -245,6 +247,7 @@ public class ModSolvableGroebnerBaseAbstract<C extends RingElem<C>>
      * @param M a module basis.
      * @return rightGB(M) a right Groebner base for M.
      */
+    @SuppressWarnings("unchecked")
     public ModuleList<C> 
            rightGB(ModuleList<C> M) {  
         ModuleList<C> N = M;

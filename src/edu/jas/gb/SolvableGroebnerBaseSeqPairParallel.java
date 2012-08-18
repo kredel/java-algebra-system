@@ -374,6 +374,7 @@ class LeftSolvableReducerSeqPair<C extends RingElem<C>> implements Runnable {
     }
 
 
+    @SuppressWarnings("unchecked")
     public void run() {
         CriticalPair<C> pair;
         GenSolvablePolynomial<C> S;
