@@ -31,7 +31,7 @@ import edu.jas.structure.RingFactory;
  * @author Heinz Kredel
  */
 
-public class OrderedCPairlist<C extends GcdRingElem<C>> implements Serializable, Cloneable {
+public class OrderedCPairlist<C extends GcdRingElem<C>> implements Serializable {
 
 
     private static final Logger logger = Logger.getLogger(OrderedCPairlist.class);
@@ -122,8 +122,7 @@ public class OrderedCPairlist<C extends GcdRingElem<C>> implements Serializable,
      * Clone this OrderedPairlist.
      * @return a 2 level clone of this.
      */
-    @Override
-    public OrderedCPairlist<C> clone() {
+    public OrderedCPairlist<C> copy() {
         return new OrderedCPairlist<C>(moduleVars, ring, new ArrayList<ColorPolynomial<C>>(P),
                         clonePairlist(), cloneBitSet(), reduction, putCount, remCount);
     }

@@ -255,7 +255,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
         // setup field extension K(alpha) where alpha = z_xx
         //String[] vars = new String[] { "z_" + Math.abs(P.hashCode() % 1000) };
         String[] vars = pfac.newVars( "z_" );
-        pfac = pfac.clone();
+        pfac = pfac.copy();
         vars = pfac.setVars(vars);
         GenPolynomial<C> aP = pfac.copy(P); // hack to exchange the variables
         AlgebraicNumberRing<C> afac = new AlgebraicNumberRing<C>(aP, true); // since irreducible
@@ -464,7 +464,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
 //             }
             //vars = new String[] { "z_" + Math.abs(r.hashCode() % 1000) };
             vars = pfac.newVars( "z_" );
-            pfac = pfac.clone();
+            pfac = pfac.copy();
             String[] ovars = pfac.setVars(vars);
             r = pfac.copy(r); // hack to exchange the variables
             //System.out.println("r(z_) = " + r);
@@ -845,7 +845,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
         // setup field extension K(alpha)
         //String[] vars = new String[] { "z_" + Math.abs(up.hashCode() % 1000) };
         String[] vars = pfac.newVars( "z_" );
-        pfac = pfac.clone();
+        pfac = pfac.copy();
         String[] ovars = pfac.setVars(vars); // side effects! 
         GenPolynomial<C> aup = pfac.copy(up); // hack to exchange the variables
 

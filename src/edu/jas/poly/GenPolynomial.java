@@ -144,7 +144,7 @@ Iterable<Monomial<C>> {
      * @see java.lang.Object#clone()
      */
     @Override
-    public GenPolynomial<C> clone() {
+    public GenPolynomial<C> copy() {
         //return ring.copy(this);
         try { 
            super.clone();
@@ -798,7 +798,7 @@ Iterable<Monomial<C>> {
             return S;
         }
         assert (ring.nvar == S.ring.nvar);
-        GenPolynomial<C> n = this.clone(); //new GenPolynomial<C>(ring, val); 
+        GenPolynomial<C> n = this.copy(); //new GenPolynomial<C>(ring, val); 
         SortedMap<ExpVector, C> nv = n.val;
         SortedMap<ExpVector, C> sv = S.val;
         for (Map.Entry<ExpVector, C> me : sv.entrySet()) {
@@ -834,7 +834,7 @@ Iterable<Monomial<C>> {
         if (a.isZERO()) {
             return this;
         }
-        GenPolynomial<C> n = this.clone(); //new GenPolynomial<C>(ring, val); 
+        GenPolynomial<C> n = this.copy(); //new GenPolynomial<C>(ring, val); 
         SortedMap<ExpVector, C> nv = n.val;
         //if ( nv.size() == 0 ) { nv.put(e,a); return n; }
         C x = nv.get(e);
@@ -879,7 +879,7 @@ Iterable<Monomial<C>> {
             return S.negate();
         }
         assert (ring.nvar == S.ring.nvar);
-        GenPolynomial<C> n = this.clone(); //new GenPolynomial<C>(ring, val); 
+        GenPolynomial<C> n = this.copy(); //new GenPolynomial<C>(ring, val); 
         SortedMap<ExpVector, C> nv = n.val;
         SortedMap<ExpVector, C> sv = S.val;
         for (Map.Entry<ExpVector, C> me : sv.entrySet()) {
@@ -915,7 +915,7 @@ Iterable<Monomial<C>> {
         if (a.isZERO()) {
             return this;
         }
-        GenPolynomial<C> n = this.clone(); //new GenPolynomial<C>(ring, val); 
+        GenPolynomial<C> n = this.copy(); //new GenPolynomial<C>(ring, val); 
         SortedMap<ExpVector, C> nv = n.val;
         C x = nv.get(e);
         if (x != null) {
@@ -948,7 +948,7 @@ Iterable<Monomial<C>> {
      * @return -this.
      */
     public GenPolynomial<C> negate() {
-        GenPolynomial<C> n = ring.getZERO().clone();
+        GenPolynomial<C> n = ring.getZERO().copy();
         //new GenPolynomial<C>(ring, ring.getZERO().val);
         SortedMap<ExpVector, C> v = n.val;
         for (Map.Entry<ExpVector, C> m : val.entrySet()) {
@@ -995,7 +995,7 @@ Iterable<Monomial<C>> {
             GenSolvablePolynomial<C> Sp = (GenSolvablePolynomial<C>) S;
             return T.multiply(Sp);
         }
-        GenPolynomial<C> p = ring.getZERO().clone();
+        GenPolynomial<C> p = ring.getZERO().copy();
         SortedMap<ExpVector, C> pv = p.val;
         for (Map.Entry<ExpVector, C> m1 : val.entrySet()) {
             C c1 = m1.getValue();
@@ -1039,7 +1039,7 @@ Iterable<Monomial<C>> {
         if (this.isZERO()) {
             return this;
         }
-        GenPolynomial<C> p = ring.getZERO().clone();
+        GenPolynomial<C> p = ring.getZERO().copy();
         SortedMap<ExpVector, C> pv = p.val;
         for (Map.Entry<ExpVector, C> m1 : val.entrySet()) {
             C c1 = m1.getValue();
@@ -1095,7 +1095,7 @@ Iterable<Monomial<C>> {
             GenSolvablePolynomial<C> T = (GenSolvablePolynomial<C>) this;
             return T.multiply(s, e);
         }
-        GenPolynomial<C> p = ring.getZERO().clone();
+        GenPolynomial<C> p = ring.getZERO().copy();
         SortedMap<ExpVector, C> pv = p.val;
         for (Map.Entry<ExpVector, C> m1 : val.entrySet()) {
             C c1 = m1.getValue();
@@ -1126,7 +1126,7 @@ Iterable<Monomial<C>> {
             GenSolvablePolynomial<C> T = (GenSolvablePolynomial<C>) this;
             return T.multiply(e);
         }
-        GenPolynomial<C> p = ring.getZERO().clone();
+        GenPolynomial<C> p = ring.getZERO().copy();
         SortedMap<ExpVector, C> pv = p.val;
         for (Map.Entry<ExpVector, C> m1 : val.entrySet()) {
             C c1 = m1.getValue();
@@ -1166,7 +1166,7 @@ Iterable<Monomial<C>> {
         }
         //C t = s.inverse();
         //return multiply(t);
-        GenPolynomial<C> p = ring.getZERO().clone();
+        GenPolynomial<C> p = ring.getZERO().copy();
         SortedMap<ExpVector, C> pv = p.val;
         for (Map.Entry<ExpVector, C> m : val.entrySet()) {
             ExpVector e = m.getKey();
@@ -1213,8 +1213,8 @@ Iterable<Monomial<C>> {
         assert (ring.nvar == S.ring.nvar);
         ExpVector e = S.leadingExpVector();
         GenPolynomial<C> h;
-        GenPolynomial<C> q = ring.getZERO().clone();
-        GenPolynomial<C> r = this.clone();
+        GenPolynomial<C> q = ring.getZERO().copy();
+        GenPolynomial<C> r = this.copy();
         while (!r.isZERO()) {
             ExpVector f = r.leadingExpVector();
             if (f.multipleOf(e)) {
@@ -1287,7 +1287,7 @@ Iterable<Monomial<C>> {
         assert (ring.nvar == S.ring.nvar);
         ExpVector e = S.leadingExpVector();
         GenPolynomial<C> h;
-        GenPolynomial<C> r = this.clone();
+        GenPolynomial<C> r = this.copy();
         while (!r.isZERO()) {
             ExpVector f = r.leadingExpVector();
             if (f.multipleOf(e)) {
@@ -1376,10 +1376,10 @@ Iterable<Monomial<C>> {
         GenPolynomial<C>[] qr;
         GenPolynomial<C> q = this;
         GenPolynomial<C> r = S;
-        GenPolynomial<C> c1 = ring.getONE().clone();
-        GenPolynomial<C> d1 = ring.getZERO().clone();
-        GenPolynomial<C> c2 = ring.getZERO().clone();
-        GenPolynomial<C> d2 = ring.getONE().clone();
+        GenPolynomial<C> c1 = ring.getONE().copy();
+        GenPolynomial<C> d1 = ring.getZERO().copy();
+        GenPolynomial<C> c2 = ring.getZERO().copy();
+        GenPolynomial<C> d2 = ring.getONE().copy();
         GenPolynomial<C> x1;
         GenPolynomial<C> x2;
         while (!r.isZERO()) {
@@ -1437,8 +1437,8 @@ Iterable<Monomial<C>> {
         GenPolynomial<C>[] qr;
         GenPolynomial<C> q = this;
         GenPolynomial<C> r = S;
-        GenPolynomial<C> c1 = ring.getONE().clone();
-        GenPolynomial<C> d1 = ring.getZERO().clone();
+        GenPolynomial<C> c1 = ring.getONE().copy();
+        GenPolynomial<C> d1 = ring.getZERO().copy();
         GenPolynomial<C> x1;
         while (!r.isZERO()) {
             qr = q.quotientRemainder(r);
@@ -1511,7 +1511,7 @@ Iterable<Monomial<C>> {
         if (ring.equals(pfac)) { // nothing to do
             return this;
         }
-        GenPolynomial<C> Cp = pfac.getZERO().clone();
+        GenPolynomial<C> Cp = pfac.getZERO().copy();
         if (this.isZERO()) {
             return Cp;
         }
@@ -1540,7 +1540,7 @@ Iterable<Monomial<C>> {
         if (ring.equals(pfac)) { // nothing to do
             return this;
         }
-        GenPolynomial<C> Cp = pfac.getZERO().clone();
+        GenPolynomial<C> Cp = pfac.getZERO().copy();
         if (this.isZERO()) {
             return Cp;
         }
@@ -1628,7 +1628,7 @@ Iterable<Monomial<C>> {
             return pfac.getONE();
         }
         int j = pfac.nvar - 1 - i;
-        GenPolynomial<C> Cp = pfac.getZERO().clone();
+        GenPolynomial<C> Cp = pfac.getZERO().copy();
         if (this.isZERO()) {
             return Cp;
         }
@@ -1654,7 +1654,7 @@ Iterable<Monomial<C>> {
         if (ring.equals(pfac)) { // not implemented
             throw new UnsupportedOperationException("case with same ring not implemented");
         }
-        GenPolynomial<C> Cp = pfac.getZERO().clone();
+        GenPolynomial<C> Cp = pfac.getZERO().copy();
         if (this.isZERO()) {
             return Cp;
         }
@@ -1682,7 +1682,7 @@ Iterable<Monomial<C>> {
         if (ring.equals(pfac)) { // not implemented
             throw new UnsupportedOperationException("case with same ring not implemented");
         }
-        GenPolynomial<C> Cp = pfac.getZERO().clone();
+        GenPolynomial<C> Cp = pfac.getZERO().copy();
         if (this.isZERO()) {
             return Cp;
         }
@@ -1703,7 +1703,7 @@ Iterable<Monomial<C>> {
      * @return polynomial with reversed variables.
      */
     public GenPolynomial<C> reverse(GenPolynomialRing<C> oring) {
-        GenPolynomial<C> Cp = oring.getZERO().clone();
+        GenPolynomial<C> Cp = oring.getZERO().copy();
         if (this.isZERO()) {
             return Cp;
         }
@@ -1762,7 +1762,7 @@ Iterable<Monomial<C>> {
      * @return new polynomial with coefficients f(this(e)).
      */
     public GenPolynomial<C> map(final UnaryFunctor<? super C, C> f) {
-        GenPolynomial<C> n = ring.getZERO().clone();
+        GenPolynomial<C> n = ring.getZERO().copy();
         SortedMap<ExpVector, C> nv = n.val;
         for (Monomial<C> m : this) {
             //logger.info("m = " + m);

@@ -90,7 +90,7 @@ implements GcdRingElem<ComplexAlgebraicNumber<C>> {
      * @see java.lang.Object#clone()
      */
     @Override
-    public ComplexAlgebraicNumber<C> clone() {
+    public ComplexAlgebraicNumber<C> copy() {
         return new ComplexAlgebraicNumber<C>(ring, number);
     }
 

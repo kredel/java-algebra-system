@@ -313,7 +313,7 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>> ext
                             + rf);
         }
         long mp = rf.characteristic().longValue();
-        GenPolynomial<AlgebraicNumber<C>> d = pfac.getZERO().clone();
+        GenPolynomial<AlgebraicNumber<C>> d = pfac.getZERO().copy();
         for (Monomial<AlgebraicNumber<C>> m : P) {
             ExpVector f = m.e;
             long fl = f.getVal(0);
@@ -366,7 +366,7 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>> ext
             throw new IllegalArgumentException(P.getClass().getName() + " only for char p > 0 " + rf);
         }
         long mp = rf.characteristic().longValue();
-        GenPolynomial<AlgebraicNumber<C>> d = pfac.getZERO().clone();
+        GenPolynomial<AlgebraicNumber<C>> d = pfac.getZERO().copy();
         for (Monomial<AlgebraicNumber<C>> m : P) {
             //System.out.println("m = " + m);
             ExpVector f = m.e;
@@ -429,7 +429,7 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>> ext
             throw new IllegalArgumentException(P.getClass().getName() + " only for char p > 0 " + rf);
         }
         long mp = rf.characteristic().longValue();
-        GenPolynomial<GenPolynomial<AlgebraicNumber<C>>> d = pfac.getZERO().clone();
+        GenPolynomial<GenPolynomial<AlgebraicNumber<C>>> d = pfac.getZERO().copy();
         for (Monomial<GenPolynomial<AlgebraicNumber<C>>> m : P) {
             ExpVector f = m.e;
             long fl = f.getVal(0);

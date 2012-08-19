@@ -148,7 +148,7 @@ public class ExpVectorShort extends ExpVector
      * @see java.lang.Object#clone()
      */
     @Override
-    public ExpVectorShort clone() {
+    public ExpVectorShort copy() {
         short[] w = new short[val.length];
         System.arraycopy(val, 0, w, 0, val.length);
         return new ExpVectorShort(w);
@@ -456,7 +456,7 @@ public class ExpVectorShort extends ExpVector
      * @return substituted ExpVector.
      */
     public ExpVectorShort subst(int i, short d) {
-        ExpVectorShort V = this.clone();
+        ExpVectorShort V = this.copy();
         @SuppressWarnings("unused")
         long e = V.setVal(i, d);
         return V;
@@ -472,7 +472,7 @@ public class ExpVectorShort extends ExpVector
      */
     @Override
     public ExpVectorShort subst(int i, long d) {
-        ExpVectorShort V = this.clone();
+        ExpVectorShort V = this.copy();
         @SuppressWarnings("unused")
         long e = V.setVal(i, d);
         return V;

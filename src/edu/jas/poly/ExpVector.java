@@ -195,7 +195,7 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
      * @see java.lang.Object#clone()
      */
     @Override
-    public abstract ExpVector clone();
+    public abstract ExpVector copy();
 
 
     /**
@@ -684,7 +684,7 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
      * @return substituted ExpVector.
      */
     public ExpVector subst(int i, long d) {
-        ExpVector V = this.clone();
+        ExpVector V = this.copy();
         @SuppressWarnings("unused")
         long e = V.setVal(i, d);
         return V;

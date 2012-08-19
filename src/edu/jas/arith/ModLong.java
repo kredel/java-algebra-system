@@ -154,7 +154,7 @@ public final class ModLong implements GcdRingElem<ModLong>, Modular {
      * @see java.lang.Object#clone()
      */
     @Override
-    public ModLong clone() {
+    public ModLong copy() {
         return new ModLong(ring, val);
     }
 

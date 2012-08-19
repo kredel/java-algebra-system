@@ -132,7 +132,7 @@ public class Quotient<C extends GcdRingElem<C>> implements GcdRingElem<Quotient<
      * @see java.lang.Object#clone()
      */
     @Override
-    public Quotient<C> clone() {
+    public Quotient<C> copy() {
         return new Quotient<C>(ring, num, den, true);
     }
 

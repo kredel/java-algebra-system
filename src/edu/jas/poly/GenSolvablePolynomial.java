@@ -94,7 +94,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
      * @see java.lang.Object#clone()
      */
     @Override
-    public GenSolvablePolynomial<C> clone() {
+    public GenSolvablePolynomial<C> copy() {
         //return ring.copy(this);
         return new GenSolvablePolynomial<C>(ring,this.val);
     }
@@ -130,8 +130,8 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
             logger.debug("ring = " + ring);
         }
         ExpVector Z = ring.evzero;
-        GenSolvablePolynomial<C> Cp = ring.getZERO().clone(); 
-        GenSolvablePolynomial<C> zero = ring.getZERO().clone();
+        GenSolvablePolynomial<C> Cp = ring.getZERO().copy(); 
+        GenSolvablePolynomial<C> zero = ring.getZERO().copy();
         C one = ring.getONECoefficient();
 
         GenSolvablePolynomial<C> C1 = null;
@@ -226,7 +226,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
      */
     @Override
     public GenSolvablePolynomial<C> multiply(C b) {  
-        GenSolvablePolynomial<C> Cp = ring.getZERO().clone(); 
+        GenSolvablePolynomial<C> Cp = ring.getZERO().copy(); 
         if ( b == null || b.isZERO() ) { 
             return Cp;
         }
@@ -270,7 +270,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
      */
     @Override
     public GenSolvablePolynomial<C> multiply(C b, ExpVector e) {  
-        GenSolvablePolynomial<C> Cp = ring.getZERO().clone(); 
+        GenSolvablePolynomial<C> Cp = ring.getZERO().copy(); 
         if ( b == null || b.isZERO() ) { 
             return Cp;
         }
@@ -288,7 +288,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
      * where * denotes solvable multiplication.
      */
     public GenSolvablePolynomial<C> multiplyLeft(C b, ExpVector e) {  
-        GenSolvablePolynomial<C> Cp = ring.getZERO().clone(); 
+        GenSolvablePolynomial<C> Cp = ring.getZERO().copy(); 
         if ( b == null || b.isZERO() ) { 
             return Cp;
         }
@@ -322,7 +322,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
      * @return b*this, where * is usual multiplication.
      */
     public GenSolvablePolynomial<C> multiplyLeft(C b) {  
-        GenSolvablePolynomial<C> Cp = ring.getZERO().clone(); 
+        GenSolvablePolynomial<C> Cp = ring.getZERO().copy(); 
         if ( b == null || b.isZERO() ) { 
             return Cp;
         }

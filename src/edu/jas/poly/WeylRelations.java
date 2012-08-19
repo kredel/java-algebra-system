@@ -52,8 +52,8 @@ public class WeylRelations<C extends RingElem<C>> {
         int r = ring.nvar;
         int m =  r / 2;
         //ExpVector z = ring.evzero;
-        GenSolvablePolynomial<C> one  = ring.getONE().clone();
-        GenSolvablePolynomial<C> zero = ring.getZERO().clone();
+        GenSolvablePolynomial<C> one  = ring.getONE().copy();
+        GenSolvablePolynomial<C> zero = ring.getZERO().copy();
         for ( int i = m; i < r; i++ ) {
             ExpVector f = ExpVector.create(r,i,1); 
             int j = i - m;

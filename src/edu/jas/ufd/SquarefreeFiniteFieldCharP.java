@@ -215,7 +215,7 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>> extends Square
             throw new IllegalArgumentException(P.getClass().getName() + " only for char p > 0 " + rf);
         }
         long mp = rf.characteristic().longValue();
-        GenPolynomial<C> d = pfac.getZERO().clone();
+        GenPolynomial<C> d = pfac.getZERO().copy();
         for (Monomial<C> m : P) {
             ExpVector f = m.e;
             long fl = f.getVal(0);
@@ -255,7 +255,7 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>> extends Square
             throw new IllegalArgumentException(P.getClass().getName() + " only for char p > 0 " + rf);
         }
         long mp = rf.characteristic().longValue();
-        GenPolynomial<GenPolynomial<C>> d = pfac.getZERO().clone();
+        GenPolynomial<GenPolynomial<C>> d = pfac.getZERO().copy();
         for (Monomial<GenPolynomial<C>> m : P) {
             ExpVector f = m.e;
             long fl = f.getVal(0);

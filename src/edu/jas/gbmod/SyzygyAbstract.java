@@ -132,7 +132,7 @@ public class SyzygyAbstract<C extends GcdRingElem<C>> implements Syzygy<C> {
                     continue;
                 }
                 // if ( ! red.criterion4( pi, pj ) ) { continue; }
-                List<GenPolynomial<C>> row = S.clone().val;
+                List<GenPolynomial<C>> row = S.copy().val;
 
                 s = red.SPolynomial(row, i, pi, j, pj);
                 if (s.isZERO()) {

@@ -91,7 +91,7 @@ public class AlgebraicNumber<C extends RingElem<C>> implements GcdRingElem<Algeb
      * @see java.lang.Object#clone()
      */
     @Override
-    public AlgebraicNumber<C> clone() {
+    public AlgebraicNumber<C> copy() {
         return new AlgebraicNumber<C>(ring, val);
     }
 

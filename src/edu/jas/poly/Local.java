@@ -150,7 +150,7 @@ public class Local<C extends RingElem<C>> implements RingElem<Local<C>> {
      * @see java.lang.Object#clone()
      */
     @Override
-    public Local<C> clone() {
+    public Local<C> copy() {
         return new Local<C>(ring, num, den, true);
     }
 

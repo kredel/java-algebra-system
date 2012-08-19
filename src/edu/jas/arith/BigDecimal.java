@@ -226,7 +226,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
      * @see java.lang.Object#clone()
      */
     @Override
-    public BigDecimal clone() {
+    public BigDecimal copy() {
         return new BigDecimal(val, context);
     }
 

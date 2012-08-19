@@ -135,7 +135,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      * @see java.lang.Object#clone()
      */
     @Override
-    public MultiVarPowerSeries<C> clone() {
+    public MultiVarPowerSeries<C> copy() {
         return new MultiVarPowerSeries<C>(ring, lazyCoeffs);
     }
 

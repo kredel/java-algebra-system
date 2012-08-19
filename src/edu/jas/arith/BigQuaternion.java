@@ -239,7 +239,7 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
      * @see java.lang.Object#clone()
      */
     @Override
-    public BigQuaternion clone() {
+    public BigQuaternion copy() {
         return new BigQuaternion(re, im, jm, km);
     }
 

@@ -564,7 +564,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
             mt = Math.max(mt, (int) t);
             GenPolynomial<C> p = cache.get(t);
             if (p == null) {
-                p = pfac.getZERO().clone();
+                p = pfac.getZERO().copy();
                 cache.put(t, p);
             }
             p.doPutToMap(e, m.coefficient());
@@ -577,7 +577,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
         for (int i = 0; i <= truncate(); i++) {
             check.set(i);
             if (cache.get((long) i) == null) {
-                GenPolynomial<C> p = pfac.getZERO().clone();
+                GenPolynomial<C> p = pfac.getZERO().copy();
                 cache.put((long) i, p);
                 //System.out.println("p zero for deg i = " + i);
             }

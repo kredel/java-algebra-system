@@ -51,7 +51,7 @@ import edu.jas.ufd.SquarefreeFactory;
  * quotient and zero and positive dimensional ideal decomposition.
  * @author Heinz Kredel
  */
-public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Serializable, Cloneable {
+public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Serializable {
 
 
     private static final Logger logger = Logger.getLogger(Ideal.class);
@@ -249,9 +249,8 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
      * Clone this.
      * @return a copy of this.
      */
-    @Override
-    public Ideal<C> clone() {
-        return new Ideal<C>(list.clone(), isGB, isTopt, bb, red);
+    public Ideal<C> copy() {
+        return new Ideal<C>(list.copy(), isGB, isTopt, bb, red);
     }
 
 

@@ -58,7 +58,7 @@ public class PolyUtil {
     public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<C>> recursive(
                     GenPolynomialRing<GenPolynomial<C>> rfac, GenPolynomial<C> A) {
 
-        GenPolynomial<GenPolynomial<C>> B = rfac.getZERO().clone();
+        GenPolynomial<GenPolynomial<C>> B = rfac.getZERO().copy();
         if (A.isZERO()) {
             return B;
         }
@@ -91,7 +91,7 @@ public class PolyUtil {
      */
     public static <C extends RingElem<C>> GenPolynomial<C> distribute(GenPolynomialRing<C> dfac,
                     GenPolynomial<GenPolynomial<C>> B) {
-        GenPolynomial<C> C = dfac.getZERO().clone();
+        GenPolynomial<C> C = dfac.getZERO().copy();
         if (B.isZERO()) {
             return C;
         }
@@ -533,8 +533,8 @@ public class PolyUtil {
     public static <C extends RingElem<C> & Modular> GenPolynomial<C> chineseRemainder(
                     GenPolynomialRing<C> fac, GenPolynomial<C> A, C mi, GenPolynomial<C> B) {
         ModularRingFactory<C> cfac = (ModularRingFactory<C>) fac.coFac; // get RingFactory
-        GenPolynomial<C> S = fac.getZERO().clone();
-        GenPolynomial<C> Ap = A.clone();
+        GenPolynomial<C> S = fac.getZERO().copy();
+        GenPolynomial<C> Ap = A.copy();
         SortedMap<ExpVector, C> av = Ap.val; //getMap();
         SortedMap<ExpVector, C> bv = B.getMap();
         SortedMap<ExpVector, C> sv = S.val; //getMap();
@@ -646,7 +646,7 @@ public class PolyUtil {
      */
     public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<C>> extendCoefficients(
                     GenPolynomialRing<GenPolynomial<C>> pfac, GenPolynomial<GenPolynomial<C>> A, int j, long k) {
-        GenPolynomial<GenPolynomial<C>> Cp = pfac.getZERO().clone();
+        GenPolynomial<GenPolynomial<C>> Cp = pfac.getZERO().copy();
         if (A.isZERO()) {
             return Cp;
         }
@@ -675,7 +675,7 @@ public class PolyUtil {
     public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<C>> toRecursive(
                     GenPolynomialRing<GenPolynomial<C>> rfac, GenPolynomial<C> A) {
 
-        GenPolynomial<GenPolynomial<C>> B = rfac.getZERO().clone();
+        GenPolynomial<GenPolynomial<C>> B = rfac.getZERO().copy();
         if (A.isZERO()) {
             return B;
         }
@@ -705,7 +705,7 @@ public class PolyUtil {
         if (s == null || s.isZERO()) {
             throw new ArithmeticException(P + " division by zero " + s);
         }
-        GenPolynomial<C> h = P.ring.getZERO().clone();
+        GenPolynomial<C> h = P.ring.getZERO().copy();
         Map<ExpVector, C> hm = h.val; //getMap();
         for (Map.Entry<ExpVector, C> m : P.getMap().entrySet()) {
             ExpVector f = m.getKey();
@@ -905,7 +905,7 @@ public class PolyUtil {
         ExpVector e = S.leadingExpVector();
         GenPolynomial<C> h;
         GenPolynomial<C> r = P;
-        GenPolynomial<C> q = S.ring.getZERO().clone();
+        GenPolynomial<C> q = S.ring.getZERO().copy();
 
         while (!r.isZERO()) {
             ExpVector f = r.leadingExpVector();
@@ -965,7 +965,7 @@ public class PolyUtil {
         ExpVector e = S.leadingExpVector();
         GenPolynomial<C> h;
         GenPolynomial<C> r = P;
-        GenPolynomial<C> q = S.ring.getZERO().clone();
+        GenPolynomial<C> q = S.ring.getZERO().copy();
 
         while (!r.isZERO()) {
             ExpVector f = r.leadingExpVector();
@@ -1057,7 +1057,7 @@ public class PolyUtil {
         if (s.isONE()) {
             return P;
         }
-        GenPolynomial<GenPolynomial<C>> p = P.ring.getZERO().clone();
+        GenPolynomial<GenPolynomial<C>> p = P.ring.getZERO().copy();
         SortedMap<ExpVector, GenPolynomial<C>> pv = p.val; //getMap();
         for (Map.Entry<ExpVector, GenPolynomial<C>> m1 : P.getMap().entrySet()) {
             GenPolynomial<C> c1 = m1.getValue();
@@ -1095,7 +1095,7 @@ public class PolyUtil {
         if (s.isONE()) {
             return P;
         }
-        GenPolynomial<GenPolynomial<C>> p = P.ring.getZERO().clone();
+        GenPolynomial<GenPolynomial<C>> p = P.ring.getZERO().copy();
         SortedMap<ExpVector, GenPolynomial<C>> pv = p.val; //getMap();
         for (Map.Entry<ExpVector, GenPolynomial<C>> m1 : P.getMap().entrySet()) {
             GenPolynomial<C> c1 = m1.getValue();
@@ -1250,7 +1250,7 @@ public class PolyUtil {
         ExpVector e = S.leadingExpVector();
         GenPolynomial<GenPolynomial<C>> h;
         GenPolynomial<GenPolynomial<C>> r = P;
-        GenPolynomial<GenPolynomial<C>> q = S.ring.getZERO().clone();
+        GenPolynomial<GenPolynomial<C>> q = S.ring.getZERO().copy();
         while (!r.isZERO()) {
             ExpVector f = r.leadingExpVector();
             if (f.multipleOf(e)) {
@@ -1335,7 +1335,7 @@ public class PolyUtil {
         if (P.isZERO()) {
             return P;
         }
-        GenPolynomial<GenPolynomial<C>> p = P.ring.getZERO().clone();
+        GenPolynomial<GenPolynomial<C>> p = P.ring.getZERO().copy();
         SortedMap<ExpVector, GenPolynomial<C>> pv = p.val;
         for (Map.Entry<ExpVector, GenPolynomial<C>> m : P.getMap().entrySet()) {
             ExpVector e = m.getKey();
@@ -1374,7 +1374,7 @@ public class PolyUtil {
         if (P.isZERO()) {
             return P;
         }
-        GenPolynomial<C> p = P.ring.getZERO().clone();
+        GenPolynomial<C> p = P.ring.getZERO().copy();
         SortedMap<ExpVector, C> pv = p.val;
         for (Map.Entry<ExpVector, C> m : P.getMap().entrySet()) {
             ExpVector e = m.getKey();
@@ -1414,7 +1414,7 @@ public class PolyUtil {
             throw new IllegalArgumentException(P.getClass().getName() + " only for univariate polynomials");
         }
         RingFactory<C> rf = pfac.coFac;
-        GenPolynomial<C> d = pfac.getZERO().clone();
+        GenPolynomial<C> d = pfac.getZERO().copy();
         Map<ExpVector, C> dm = d.val; //getMap();
         for (Map.Entry<ExpVector, C> m : P.getMap().entrySet()) {
             ExpVector f = m.getKey();
@@ -1451,7 +1451,7 @@ public class PolyUtil {
         }
         int rp = pfac.nvar - 1 - r;
         RingFactory<C> rf = pfac.coFac;
-        GenPolynomial<C> d = pfac.getZERO().clone();
+        GenPolynomial<C> d = pfac.getZERO().copy();
         Map<ExpVector, C> dm = d.val; //getMap();
         for (Map.Entry<ExpVector, C> m : P.getMap().entrySet()) {
             ExpVector f = m.getKey();
@@ -1486,7 +1486,7 @@ public class PolyUtil {
             throw new IllegalArgumentException(P.getClass().getName() + " only for univariate polynomials");
         }
         RingFactory<C> rf = pfac.coFac;
-        GenPolynomial<C> d = pfac.getZERO().clone();
+        GenPolynomial<C> d = pfac.getZERO().copy();
         Map<ExpVector, C> dm = d.val; //getMap();
         for (Map.Entry<ExpVector, C> m : P.getMap().entrySet()) {
             ExpVector f = m.getKey();
@@ -1522,7 +1522,7 @@ public class PolyUtil {
         }
         GenPolynomialRing<C> pr = (GenPolynomialRing<C>) pfac.coFac;
         RingFactory<C> rf = pr.coFac;
-        GenPolynomial<GenPolynomial<C>> d = pfac.getZERO().clone();
+        GenPolynomial<GenPolynomial<C>> d = pfac.getZERO().copy();
         Map<ExpVector, GenPolynomial<C>> dm = d.val; //getMap();
         for (Map.Entry<ExpVector, GenPolynomial<C>> m : P.getMap().entrySet()) {
             ExpVector f = m.getKey();
@@ -1736,7 +1736,7 @@ public class PolyUtil {
         }
         Map<ExpVector, GenPolynomial<C>> Ap = A.contract(cfac);
         GenPolynomialRing<C> rcf = (GenPolynomialRing<C>) rfac.coFac;
-        GenPolynomial<GenPolynomial<C>> Ev = nfac.getZERO().clone();
+        GenPolynomial<GenPolynomial<C>> Ev = nfac.getZERO().copy();
         Map<ExpVector, GenPolynomial<C>> Evm = Ev.val; //getMap();
         for (Map.Entry<ExpVector, GenPolynomial<C>> m : Ap.entrySet()) {
             ExpVector e = m.getKey();
@@ -1769,7 +1769,7 @@ public class PolyUtil {
         Map<ExpVector, GenPolynomial<C>> Ap = A.contract(cfac);
         //RingFactory<C> rcf = cfac.coFac; // == dfac.coFac
 
-        GenPolynomial<C> B = dfac.getZERO().clone();
+        GenPolynomial<C> B = dfac.getZERO().copy();
         Map<ExpVector, C> Bm = B.val; //getMap();
 
         for (Map.Entry<ExpVector, GenPolynomial<C>> m : Ap.entrySet()) {
@@ -1800,7 +1800,7 @@ public class PolyUtil {
             return dfac.getZERO();
         }
         Map<ExpVector, GenPolynomial<C>> Ap = A.getMap();
-        GenPolynomial<C> B = dfac.getZERO().clone();
+        GenPolynomial<C> B = dfac.getZERO().copy();
         Map<ExpVector, C> Bm = B.val; //getMap();
         for (Map.Entry<ExpVector, GenPolynomial<C>> m : Ap.entrySet()) {
             ExpVector e = m.getKey();
@@ -1969,8 +1969,8 @@ public class PolyUtil {
     public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<C>> interpolate(
                     GenPolynomialRing<GenPolynomial<C>> fac, GenPolynomial<GenPolynomial<C>> A,
                     GenPolynomial<C> M, C mi, GenPolynomial<C> B, C am) {
-        GenPolynomial<GenPolynomial<C>> S = fac.getZERO().clone();
-        GenPolynomial<GenPolynomial<C>> Ap = A.clone();
+        GenPolynomial<GenPolynomial<C>> S = fac.getZERO().copy();
+        GenPolynomial<GenPolynomial<C>> Ap = A.copy();
         SortedMap<ExpVector, GenPolynomial<C>> av = Ap.val; //getMap();
         SortedMap<ExpVector, C> bv = B.getMap();
         SortedMap<ExpVector, GenPolynomial<C>> sv = S.val; //getMap();
@@ -2052,7 +2052,7 @@ public class PolyUtil {
         GenPolynomialRing<C> cfac2 = new GenPolynomialRing<C>(cfac1.coFac, rfac1);
         GenPolynomial<C> zero = cfac2.getZERO();
         GenPolynomialRing<GenPolynomial<C>> rfac2 = new GenPolynomialRing<GenPolynomial<C>>(cfac2, cfac1);
-        GenPolynomial<GenPolynomial<C>> B = rfac2.getZERO().clone();
+        GenPolynomial<GenPolynomial<C>> B = rfac2.getZERO().copy();
         if (P.isZERO()) {
             return B;
         }
@@ -2128,7 +2128,7 @@ public class PolyUtil {
      */
     public static <C extends RingElem<C>, D extends RingElem<D>> GenPolynomial<D> map(
                     GenPolynomialRing<D> ring, GenPolynomial<C> p, UnaryFunctor<C, D> f) {
-        GenPolynomial<D> n = ring.getZERO().clone();
+        GenPolynomial<D> n = ring.getZERO().copy();
         SortedMap<ExpVector, D> nv = n.val;
         for (Monomial<C> m : p) {
             D c = f.eval(m.c);
@@ -2172,7 +2172,7 @@ public class PolyUtil {
     public static <C extends GcdRingElem<C>> GenPolynomial<Product<C>> toProductGen(
                     GenPolynomialRing<Product<C>> pfac, GenPolynomial<C> A) {
 
-        GenPolynomial<Product<C>> P = pfac.getZERO().clone();
+        GenPolynomial<Product<C>> P = pfac.getZERO().copy();
         if (A == null || A.isZERO()) {
             return P;
         }
@@ -2293,7 +2293,7 @@ public class PolyUtil {
     public static GenPolynomial<Product<ModInteger>> toProduct(GenPolynomialRing<Product<ModInteger>> pfac,
                     GenPolynomial<BigInteger> A) {
 
-        GenPolynomial<Product<ModInteger>> P = pfac.getZERO().clone();
+        GenPolynomial<Product<ModInteger>> P = pfac.getZERO().copy();
         if (A == null || A.isZERO()) {
             return P;
         }
@@ -2407,7 +2407,7 @@ public class PolyUtil {
         }
         RingFactory<C> cf = fac.coFac;
         GenPolynomialRing<C> facl = new GenPolynomialRing<C>(cf, rfac);
-        GenPolynomial<C> pr = facl.getZERO().clone();
+        GenPolynomial<C> pr = facl.getZERO().copy();
         for (Monomial<GenPolynomial<C>> m : mpr) {
             ExpVector e = m.e;
             GenPolynomial<C> a = m.c;
@@ -2447,7 +2447,7 @@ public class PolyUtil {
             String v1 = e1.indexVarName(i, fac.getVars());
             String[] vars = new String[] { v1 };
             GenPolynomialRing<C> fac1 = new GenPolynomialRing<C>(fac.coFac, to, vars);
-            GenPolynomial<C> p1 = fac1.getZERO().clone();
+            GenPolynomial<C> p1 = fac1.getZERO().copy();
             for (Monomial<C> m : p) {
                 ExpVector e = m.e;
                 ExpVector f = ExpVector.create(1, 0, e.getVal(i));
@@ -2475,7 +2475,7 @@ public class PolyUtil {
         //System.out.println("dfac = " + dfac);
         GenPolynomialRing<GenPolynomial<C>> fac2 = dfac.recursive(1);
         GenPolynomialRing<C> cfac = (GenPolynomialRing<C>) fac2.coFac;
-        GenPolynomial<GenPolynomial<C>> p2r = fac2.getZERO().clone();
+        GenPolynomial<GenPolynomial<C>> p2r = fac2.getZERO().copy();
         for (Monomial<GenPolynomial<C>> m : mpr) {
             ExpVector e = m.e;
             GenPolynomial<C> a = m.c;

@@ -159,7 +159,7 @@ public final class BigComplex implements StarRingElem<BigComplex>, GcdRingElem<B
      * @see java.lang.Object#clone()
      */
     @Override
-    public BigComplex clone() {
+    public BigComplex copy() {
         return new BigComplex(re, im);
     }
 

@@ -23,7 +23,7 @@ import edu.jas.structure.RingFactory;
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
-public class Rectangle<C extends RingElem<C> & Rational> implements Serializable, Cloneable {
+public class Rectangle<C extends RingElem<C> & Rational> implements Serializable {
 
 
     /**
@@ -262,11 +262,10 @@ public class Rectangle<C extends RingElem<C> & Rational> implements Serializable
 
 
     /**
-     * Clone this.
-     * @see java.lang.Object#clone()
+     * Copy this.
+     * @return a copy of this.
      */
-    @Override
-    public Rectangle<C> clone() {
+    public Rectangle<C> copy() {
         return new Rectangle<C>(corners);
     }
 

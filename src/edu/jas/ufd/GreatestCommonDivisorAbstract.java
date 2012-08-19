@@ -748,8 +748,8 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         }
         GenPolynomial<C> q = P;
         GenPolynomial<C> r = S;
-        GenPolynomial<C> c1 = P.ring.getONE().clone();
-        GenPolynomial<C> d1 = P.ring.getZERO().clone();
+        GenPolynomial<C> c1 = P.ring.getONE().copy();
+        GenPolynomial<C> d1 = P.ring.getZERO().copy();
         while (!r.isZERO()) {
             GenPolynomial<C>[] qr = PolyUtil.<C> basePseudoQuotientRemainder(q, r);
             //q.divideAndRemainder(r);

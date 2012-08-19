@@ -104,7 +104,7 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational> implements
      * @see java.lang.Object#clone()
      */
     @Override
-    public RealAlgebraicNumber<C> clone() {
+    public RealAlgebraicNumber<C> copy() {
         return new RealAlgebraicNumber<C>(ring, number);
     }
 

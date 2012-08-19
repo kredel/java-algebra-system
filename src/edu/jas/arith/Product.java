@@ -110,7 +110,7 @@ public class Product<C extends RingElem<C>> implements RegularRingElem<Product<C
      * @see java.lang.Object#clone()
      */
     @Override
-    public Product<C> clone() {
+    public Product<C> copy() {
         return new Product<C>(ring, val, isunit);
     }
 

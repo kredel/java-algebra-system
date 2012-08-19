@@ -104,7 +104,7 @@ public class Residue<C extends RingElem<C> >
      * @see java.lang.Object#clone()
      */
     @Override
-    public Residue<C> clone() {
+    public Residue<C> copy() {
         return new Residue<C>( ring, val );
     }
    

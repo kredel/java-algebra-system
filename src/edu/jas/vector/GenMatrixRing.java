@@ -498,7 +498,7 @@ public class GenMatrixRing<C extends RingElem<C>> implements AlgebraFactory<GenM
         if (c == null) {
             return c;
         }
-        return c.clone();
+        return c.copy();
     }
 
 

@@ -154,7 +154,7 @@ public abstract class MultiVarCoefficients<C extends RingElem<C>> implements Ser
         long tdeg = index.totalDeg();
         GenPolynomial<C> p = coeffCache.get(tdeg);
         if (p == null) {
-            p = pfac.getZERO().clone();
+            p = pfac.getZERO().copy();
             coeffCache.put(tdeg, p);
         }
         C c = p.coefficient(index);
@@ -188,7 +188,7 @@ public abstract class MultiVarCoefficients<C extends RingElem<C>> implements Ser
         }
         GenPolynomial<C> p = coeffCache.get(tdeg);
         if (p == null) {
-            p = pfac.getZERO().clone();
+            p = pfac.getZERO().copy();
             coeffCache.put(tdeg, p);
         } 
         // trust contents?

@@ -148,7 +148,7 @@ public class ExpVectorInteger extends ExpVector
      * @see java.lang.Object#clone()
      */
     @Override
-    public ExpVectorInteger clone() {
+    public ExpVectorInteger copy() {
         int[] w = new int[val.length];
         System.arraycopy(val, 0, w, 0, val.length);
         return new ExpVectorInteger(w);
@@ -457,7 +457,7 @@ public class ExpVectorInteger extends ExpVector
      */
     @Override
     public ExpVectorInteger subst(int i, long d) {
-        ExpVectorInteger V = this.clone();
+        ExpVectorInteger V = this.copy();
         @SuppressWarnings("unused")
         long e = V.setVal(i, d);
         return V;
@@ -472,7 +472,7 @@ public class ExpVectorInteger extends ExpVector
      * @return substituted ExpVector.
      */
     public ExpVectorInteger subst(int i, int d) {
-        ExpVectorInteger V = this.clone();
+        ExpVectorInteger V = this.copy();
         @SuppressWarnings("unused")
         long e = V.setVal(i, d);
         return V;

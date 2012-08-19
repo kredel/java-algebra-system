@@ -10,20 +10,21 @@ import java.io.Serializable;
 
 /**
  * Element interface. Basic functionality of elements, e.g. compareTo, equals,
- * clone.
+ * clone. 
+ * <b>Note:</b> extension of <code>Cloneable</code> removed in
+ * 2012-08-18, <code>clone()</code> is renamed to <code>copy()</code>.
  * @param <C> element type.
  * @author Heinz Kredel
  */
 
-public interface Element<C extends Element<C>> extends Cloneable, Comparable<C>, Serializable {
+public interface Element<C extends Element<C>> extends Comparable<C>, Serializable {
 
 
-    /*
+    /**
      * Clone this Element.
      * @return Creates and returns a copy of this Element.
      */
-    /*@Override*/
-    /*public C clone();*/
+    public C copy();
 
 
     /**

@@ -97,7 +97,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
     public static <C extends GcdRingElem<C>> GenPolynomial<Product<Residue<C>>> toProductRes(
                     GenPolynomialRing<Product<Residue<C>>> pfac, GenPolynomial<GenPolynomial<C>> A) {
 
-        GenPolynomial<Product<Residue<C>>> P = pfac.getZERO().clone();
+        GenPolynomial<Product<Residue<C>>> P = pfac.getZERO().copy();
         if (A == null || A.isZERO()) {
             return P;
         }
@@ -210,7 +210,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
      */
     public static <C extends GcdRingElem<C>> GenPolynomial<Residue<C>> toResidue(
                     GenPolynomialRing<Residue<C>> pfac, GenPolynomial<GenPolynomial<C>> A) {
-        GenPolynomial<Residue<C>> P = pfac.getZERO().clone();
+        GenPolynomial<Residue<C>> P = pfac.getZERO().copy();
         if (A == null || A.isZERO()) {
             return P;
         }
@@ -337,7 +337,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
     public static <C extends GcdRingElem<C>> GenPolynomial<GenPolynomial<C>> fromProduct(
                     GenPolynomialRing<GenPolynomial<C>> pfac, GenPolynomial<Product<Residue<C>>> P, int i) {
 
-        GenPolynomial<GenPolynomial<C>> b = pfac.getZERO().clone();
+        GenPolynomial<GenPolynomial<C>> b = pfac.getZERO().copy();
         if (P == null || P.isZERO()) {
             return b;
         }

@@ -88,7 +88,7 @@ implements GcdRingElem<RealAlgebraicNumber<C>>, Rational {
      * @see java.lang.Object#clone()
      */
     @Override
-    public RealAlgebraicNumber<C> clone() {
+    public RealAlgebraicNumber<C> copy() {
         return new RealAlgebraicNumber<C>(ring, number);
     }
 

@@ -104,7 +104,7 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
      * @see java.lang.Object#clone()
      */
     @Override
-    public UnivPowerSeries<C> clone() {
+    public UnivPowerSeries<C> copy() {
         return new UnivPowerSeries<C>(ring, lazyCoeffs);
     }
 

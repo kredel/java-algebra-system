@@ -144,7 +144,7 @@ public final class ModInteger implements GcdRingElem<ModInteger>, Modular {
      * @see java.lang.Object#clone()
      */
     @Override
-    public ModInteger clone() {
+    public ModInteger copy() {
         return new ModInteger(ring, val);
     }
 

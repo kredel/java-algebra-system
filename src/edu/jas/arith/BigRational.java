@@ -236,7 +236,7 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
      * @see java.lang.Object#clone()
      */
     @Override
-    public BigRational clone() {
+    public BigRational copy() {
         return new BigRational(num, den);
     }
 
@@ -1205,7 +1205,7 @@ class BigRationalIterator implements Iterator<BigRational> {
         curr = edu.jas.arith.BigRational.ZERO;
         level = 0;
         den = new edu.jas.arith.BigInteger(); // ZERO
-        num = edu.jas.arith.BigInteger.ONE.clone();
+        num = edu.jas.arith.BigInteger.ONE.copy();
         if (nonNegative) {
             den.setNonNegativeIterator();
         } else {

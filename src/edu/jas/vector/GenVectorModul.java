@@ -280,7 +280,7 @@ public class GenVectorModul<C extends RingElem<C>> implements ModulFactory<GenVe
         if (c == null) {
             return c;
         }
-        return c.clone();
+        return c.copy();
     }
 
 

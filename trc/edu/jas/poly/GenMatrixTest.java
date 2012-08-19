@@ -107,7 +107,7 @@ public class GenMatrixTest extends TestCase {
 
         assertTrue("a == b ", a.equals(b));
 
-        GenMatrix<GenPolynomial<BigRational>> c = b.clone();
+        GenMatrix<GenPolynomial<BigRational>> c = b.copy();
         //System.out.println("c = " + c);
         assertTrue("isZERO( c )", c.isZERO());
         assertTrue("a == c ", a.equals(c));

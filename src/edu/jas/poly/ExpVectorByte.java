@@ -148,7 +148,7 @@ public class ExpVectorByte extends ExpVector
      * @see java.lang.Object#clone()
      */
     @Override
-    public ExpVectorByte clone() {
+    public ExpVectorByte copy() {
         byte[] w = new byte[val.length];
         System.arraycopy(val, 0, w, 0, val.length);
         return new ExpVectorByte(w);
@@ -456,7 +456,7 @@ public class ExpVectorByte extends ExpVector
      * @return substituted ExpVector.
      */
     public ExpVectorByte subst(int i, byte d) {
-        ExpVectorByte V = this.clone();
+        ExpVectorByte V = this.copy();
         @SuppressWarnings("unused")
         long e = V.setVal(i, d);
         return V;
@@ -472,7 +472,7 @@ public class ExpVectorByte extends ExpVector
      */
     @Override
     public ExpVectorByte subst(int i, long d) {
-        ExpVectorByte V = this.clone();
+        ExpVectorByte V = this.copy();
         @SuppressWarnings("unused")
         long e = V.setVal(i, d);
         return V;

@@ -176,7 +176,7 @@ public final class BigOctonion implements StarRingElem<BigOctonion>, GcdRingElem
      * @see java.lang.Object#clone()
      */
     @Override
-    public BigOctonion clone() {
+    public BigOctonion copy() {
         return new BigOctonion(or, oi);
     }
 

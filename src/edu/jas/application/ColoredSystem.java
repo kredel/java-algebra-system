@@ -21,7 +21,7 @@ import edu.jas.structure.GcdRingElem;
  * Groebner base pair list.
  * @param <C> coefficient type
  */
-public class ColoredSystem<C extends GcdRingElem<C>> implements Cloneable {
+public class ColoredSystem<C extends GcdRingElem<C>> {
 
 
     private static final Logger logger = Logger.getLogger(ColoredSystem.class);
@@ -72,12 +72,11 @@ public class ColoredSystem<C extends GcdRingElem<C>> implements Cloneable {
 
 
     /**
-     * Clone this colored polynomial system.
+     * Copy this colored polynomial system.
      * @return a clone of this.
      */
-    @Override
-    public ColoredSystem<C> clone() {
-        return new ColoredSystem<C>(condition, list, pairlist.clone());
+    public ColoredSystem<C> copy() {
+        return new ColoredSystem<C>(condition, list, pairlist.copy());
     }
 
 

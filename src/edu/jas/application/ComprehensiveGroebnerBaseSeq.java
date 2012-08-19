@@ -516,7 +516,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             if (nz.isZERO()) {
                 logger.info("zero determined nz = " + nz);
                 Sp = new ArrayList<ColorPolynomial<C>>(S);
-                OrderedCPairlist<C> PL = pl.clone();
+                OrderedCPairlist<C> PL = pl.copy();
                 NS = new ColoredSystem<C>(cnd, Sp, PL);
                 try {
                     if (!NS.isDetermined()) {
@@ -537,7 +537,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             logger.info("new determined nz = " + nz);
             Sp = new ArrayList<ColorPolynomial<C>>(S);
             Sp.add(nz);
-            OrderedCPairlist<C> PL = pl.clone();
+            OrderedCPairlist<C> PL = pl.copy();
             PL.put(nz);
             NS = new ColoredSystem<C>(cnd, Sp, PL);
             try {

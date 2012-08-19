@@ -187,7 +187,7 @@ public class ModIntegerTest extends TestCase {
     public void testRandom() {
         zm = new ModIntegerRing(19);
         a = zm.random(500);
-        b = a.clone();
+        b = a.copy();
         c = ModInteger.MIDIF(b, a);
 
         assertEquals("a-b = 0", c, zm.getZERO());

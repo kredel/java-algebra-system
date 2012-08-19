@@ -139,7 +139,7 @@ public final class BigInteger implements GcdRingElem<BigInteger>, RingFactory<Bi
      * @see java.lang.Object#clone()
      */
     @Override
-    public BigInteger clone() {
+    public BigInteger copy() {
         return new BigInteger(val);
     }
 

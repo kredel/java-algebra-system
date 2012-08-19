@@ -363,7 +363,7 @@ public class TermOrderOptimization {
         if ( A == null ) {
            return A;
         }
-        GenPolynomial<C> B = R.getZERO().clone();
+        GenPolynomial<C> B = R.getZERO().copy();
         Map<ExpVector,C> Bv = B.val; //getMap();
         for ( Map.Entry<ExpVector,C> y: A.getMap().entrySet() ) {
             ExpVector e = y.getKey();
@@ -414,7 +414,7 @@ public class TermOrderOptimization {
         if ( A == null ) {
            return A;
         }
-        GenPolynomial<GenPolynomial<C>> B = R.getZERO().clone();
+        GenPolynomial<GenPolynomial<C>> B = R.getZERO().copy();
         GenPolynomialRing<C> cf = (GenPolynomialRing<C>) R.coFac;
         Map<ExpVector,GenPolynomial<C>> Bv = B.val; //getMap();
         for ( Map.Entry<ExpVector,GenPolynomial<C>> y: A.getMap().entrySet() ) {

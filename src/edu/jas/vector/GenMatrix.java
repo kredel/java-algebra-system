@@ -108,7 +108,7 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
      * @return new matrix m, with m(i,j) == el.
      */
     public GenMatrix<C> set(int i, int j, C el) {
-        GenMatrix<C> mat = this.clone();
+        GenMatrix<C> mat = this.copy();
         mat.setMutate(i, j, el);
         return mat;
     }
@@ -212,7 +212,7 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
      */
     @Override
     @SuppressWarnings("unchecked")
-    public GenMatrix<C> clone() {
+    public GenMatrix<C> copy() {
         //return ring.copy(this);
         ArrayList<ArrayList<C>> m = new ArrayList<ArrayList<C>>(ring.rows);
         ArrayList<C> v;
@@ -577,7 +577,7 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
      * @return transpose(this)
      */
     public GenMatrix<C> transpose(GenMatrixRing<C> tr) {
-        GenMatrix<C> t = tr.getZERO().clone();
+        GenMatrix<C> t = tr.getZERO().copy();
         ArrayList<ArrayList<C>> m = t.matrix;
         int i = 0;
         for (ArrayList<C> val : matrix) {
@@ -612,7 +612,7 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
         //System.out.println("T = " + T); 
 
         GenMatrixRing<C> pr = ring.product(S.ring);
-        GenMatrix<C> P = pr.getZERO().clone();
+        GenMatrix<C> P = pr.getZERO().copy();
         ArrayList<ArrayList<C>> p = P.matrix;
         //System.out.println("P = " + P); 
 
@@ -648,7 +648,7 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
         ArrayList<ArrayList<C>> B = S.matrix;
 
         GenMatrixRing<C> pr = ring.product(S.ring);
-        GenMatrix<C> P = pr.getZERO().clone();
+        GenMatrix<C> P = pr.getZERO().copy();
         ArrayList<ArrayList<C>> p = P.matrix;
 
         for (int i = 0; i < pr.rows; i++) {

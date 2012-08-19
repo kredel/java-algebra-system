@@ -100,7 +100,7 @@ public class Residue<C extends GcdRingElem<C>> implements GcdRingElem<Residue<C>
      * @see java.lang.Object#clone()
      */
     @Override
-    public Residue<C> clone() {
+    public Residue<C> copy() {
         return new Residue<C>(ring, val, isunit);
     }
 

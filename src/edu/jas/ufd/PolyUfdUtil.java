@@ -51,7 +51,7 @@ public class PolyUfdUtil {
      */
     public static <C extends GcdRingElem<C>> GenPolynomial<GenPolynomial<C>> integralFromQuotientCoefficients(
                     GenPolynomialRing<GenPolynomial<C>> fac, GenPolynomial<Quotient<C>> A) {
-        GenPolynomial<GenPolynomial<C>> B = fac.getZERO().clone();
+        GenPolynomial<GenPolynomial<C>> B = fac.getZERO().copy();
         if (A == null || A.isZERO()) {
             return B;
         }
@@ -120,7 +120,7 @@ public class PolyUfdUtil {
      */
     public static <C extends GcdRingElem<C>> GenPolynomial<Quotient<C>> quotientFromIntegralCoefficients(
                     GenPolynomialRing<Quotient<C>> fac, GenPolynomial<GenPolynomial<C>> A) {
-        GenPolynomial<Quotient<C>> B = fac.getZERO().clone();
+        GenPolynomial<Quotient<C>> B = fac.getZERO().copy();
         if (A == null || A.isZERO()) {
             return B;
         }
@@ -170,7 +170,7 @@ public class PolyUfdUtil {
      */
     public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<C>> fromIntegerCoefficients(
                     GenPolynomialRing<GenPolynomial<C>> fac, GenPolynomial<GenPolynomial<BigInteger>> A) {
-        GenPolynomial<GenPolynomial<C>> B = fac.getZERO().clone();
+        GenPolynomial<GenPolynomial<C>> B = fac.getZERO().copy();
         if (A == null || A.isZERO()) {
             return B;
         }
@@ -408,7 +408,7 @@ public class PolyUfdUtil {
         }
         RingFactory<C> cfac = A.ring.coFac;
         GenPolynomialRing<C> ufac = new GenPolynomialRing<C>(cfac, 1);
-        GenPolynomial<C> B = ufac.getZERO().clone();
+        GenPolynomial<C> B = ufac.getZERO().copy();
         if (A.isZERO()) {
             return B;
         }
@@ -460,7 +460,7 @@ public class PolyUfdUtil {
             throw new IllegalArgumentException("null factory not allowed ");
         }
         int n = fac.nvar;
-        GenPolynomial<C> B = fac.getZERO().clone();
+        GenPolynomial<C> B = fac.getZERO().copy();
         if (A.isZERO()) {
             return B;
         }

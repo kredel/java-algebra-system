@@ -132,7 +132,7 @@ public class GenVector<C extends RingElem<C>> implements ModulElem<GenVector<C>,
      */
     @Override
     @SuppressWarnings("unchecked")
-    public GenVector<C> clone() {
+    public GenVector<C> copy() {
         //return modul.copy(this);
         ArrayList<C> av = new ArrayList<C>(val);
         return new GenVector<C>(modul, av);

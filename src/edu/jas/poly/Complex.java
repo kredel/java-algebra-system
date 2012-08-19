@@ -159,7 +159,7 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
      * @see java.lang.Object#clone()
      */
     @Override
-    public Complex<C> clone() {
+    public Complex<C> copy() {
         return new Complex<C>(ring, re, im);
     }
 

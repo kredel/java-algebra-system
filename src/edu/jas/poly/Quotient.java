@@ -138,7 +138,7 @@ public class Quotient<C extends RingElem<C>> implements RingElem<Quotient<C>> {
      * @see java.lang.Object#clone()
      */
     @Override
-    public Quotient<C> clone() {
+    public Quotient<C> copy() {
         return new Quotient<C>(ring, num, den, true);
     }
 

@@ -863,7 +863,7 @@ public class IdealTest extends TestCase {
         assertTrue("isGB( I )", I.isGB());
         //System.out.println("I = " + I);
 
-        J = I.clone(); //new Ideal<BigRational>(fac,L);
+        J = I.copy(); //new Ideal<BigRational>(fac,L);
         J.doToptimize();
         assertTrue("not isZERO( J )", !J.isZERO());
         assertTrue("isGB( J )", J.isGB());
@@ -877,7 +877,7 @@ public class IdealTest extends TestCase {
         L.add(b);
 
         I = new Ideal<BigRational>(fac, L);
-        K = I.clone();
+        K = I.copy();
         I.doGB();
         assertTrue("not isZERO( I )", !I.isZERO());
         assertTrue("isGB( I )", I.isGB());
@@ -889,7 +889,7 @@ public class IdealTest extends TestCase {
         assertTrue("isGB( K )", K.isGB());
         //System.out.println("GB(opt(K)) = " + K);
 
-        J = I.clone();
+        J = I.copy();
         J.doToptimize();
         assertTrue("not isZERO( J )", !J.isZERO());
         assertTrue("isGB( J )", J.isGB());
@@ -903,7 +903,7 @@ public class IdealTest extends TestCase {
         L.add(c);
 
         I = new Ideal<BigRational>(fac, L);
-        K = I.clone();
+        K = I.copy();
         I.doGB();
         assertTrue("not isZERO( I )", !I.isZERO());
         assertTrue("isGB( I )", I.isGB());
@@ -915,7 +915,7 @@ public class IdealTest extends TestCase {
         assertTrue("isGB( K )", K.isGB());
         //System.out.println("GB(opt(K)) = " + K);
 
-        J = I.clone();
+        J = I.copy();
         J.doToptimize();
         assertTrue("not isZERO( J )", !J.isZERO());
         assertTrue("isGB( J )", J.isGB());

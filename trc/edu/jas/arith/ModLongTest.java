@@ -187,7 +187,7 @@ public class ModLongTest extends TestCase {
     public void testRandom() {
         zm = new ModLongRing(19);
         a = zm.random(500);
-        b = a.clone();
+        b = a.copy();
         c = b.subtract(a);
 
         assertEquals("a-b = 0", c, zm.getZERO());

@@ -215,7 +215,7 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>> extends Squa
                             + rf);
         }
         long mp = rf.characteristic().longValue();
-        GenPolynomial<Quotient<C>> d = pfac.getZERO().clone();
+        GenPolynomial<Quotient<C>> d = pfac.getZERO().copy();
         for (Monomial<Quotient<C>> m : P) {
             ExpVector f = m.e;
             long fl = f.getVal(0);
@@ -268,7 +268,7 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>> extends Squa
             throw new IllegalArgumentException(P.getClass().getName() + " only for char p > 0 " + rf);
         }
         long mp = rf.characteristic().longValue();
-        GenPolynomial<Quotient<C>> d = pfac.getZERO().clone();
+        GenPolynomial<Quotient<C>> d = pfac.getZERO().copy();
         for (Monomial<Quotient<C>> m : P) {
             //System.out.println("m = " + m);
             ExpVector f = m.e;
@@ -331,7 +331,7 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>> extends Squa
             throw new IllegalArgumentException(P.getClass().getName() + " only for char p > 0 " + rf);
         }
         long mp = rf.characteristic().longValue();
-        GenPolynomial<GenPolynomial<Quotient<C>>> d = pfac.getZERO().clone();
+        GenPolynomial<GenPolynomial<Quotient<C>>> d = pfac.getZERO().copy();
         for (Monomial<GenPolynomial<Quotient<C>>> m : P) {
             ExpVector f = m.e;
             long fl = f.getVal(0);

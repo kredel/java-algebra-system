@@ -5,6 +5,8 @@
 package edu.jas.root;
 
 
+import java.io.Serializable;
+
 import edu.jas.arith.Rational;
 import edu.jas.poly.Complex;
 import edu.jas.poly.ComplexRing;
@@ -31,7 +33,7 @@ import edu.jas.ufd.GreatestCommonDivisor;
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
-public class Boundary<C extends RingElem<C> & Rational> implements Cloneable {
+public class Boundary<C extends RingElem<C> & Rational> implements Serializable {
 
 
     /**
@@ -158,11 +160,10 @@ public class Boundary<C extends RingElem<C> & Rational> implements Cloneable {
 
 
     /**
-     * Clone this.
-     * @see java.lang.Object#clone()
+     * Copy this.
+     * @return a copy of this.
      */
-    @Override
-    public Boundary<C> clone() {
+    public Boundary<C> copy() {
         return new Boundary<C>(rect, A, polys);
     }
 

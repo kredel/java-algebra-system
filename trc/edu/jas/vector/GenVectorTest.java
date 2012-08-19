@@ -88,7 +88,7 @@ public class GenVectorTest extends TestCase {
 
         assertTrue("a == b ", a.equals(b));
 
-        GenVector<BigRational> c = b.clone();
+        GenVector<BigRational> c = b.copy();
         //System.out.println("c = " + c);
         assertTrue("isZERO( c )", c.isZERO());
         assertTrue("a == c ", a.equals(c));

@@ -29,7 +29,7 @@ import edu.jas.poly.GenSolvablePolynomialRing;
  */
 
 public class PolynomialList<C extends RingElem<C> > 
-    implements Comparable<PolynomialList<C>>, Serializable, Cloneable {
+    implements Comparable<PolynomialList<C>>, Serializable {
 
 
     /** The factory for the solvable polynomial ring. 
@@ -69,16 +69,10 @@ public class PolynomialList<C extends RingElem<C> >
 
 
     /**
-     * Clone this.
+     * Copy this.
      * @return a copy of this.
      */
-    @Override
-    public PolynomialList<C> clone() {
-       try { 
-           super.clone();
-        } catch(CloneNotSupportedException e) {
-	    throw new RuntimeException(e);
-        }
+    public PolynomialList<C> copy() {
         return new PolynomialList<C>(ring,new ArrayList<GenPolynomial<C>>(list));
     }
 

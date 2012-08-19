@@ -187,7 +187,7 @@ public class MultiVarPowerSeriesTest extends TestCase {
         }
 
         a = fac.copy(c);
-        b = c.clone();
+        b = c.copy();
         assertEquals("copy(c) == c.clone() ", a, b);
 
         a = fac.fromInteger(1);
