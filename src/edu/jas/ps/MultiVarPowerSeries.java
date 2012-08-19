@@ -891,7 +891,6 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
             //System.out.println("order = " + t);
             return order;
         }
-        //ExpVector x = null;
         for (ExpVector i : new ExpVectorIterable(ring.nvar, true, truncate)) {
             if (!coefficient(i).isZERO()) {
                 order = (int) i.totalDeg(); //ord;
@@ -899,9 +898,9 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                 //System.out.println("order = " + order + ", evorder = " + evorder);
                 return order;
             }
-            //x = i;
         }
         order = truncate + 1;
+        // evorder is null
         return order;
     }
 
@@ -910,8 +909,8 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      * Order ExpVector.
      * @return ExpVector of first non zero coefficient.
      */
+    @SuppressWarnings("unused")
     public ExpVector orderExpVector() {
-        @SuppressWarnings("unused")
         int x = order(); // ensure evorder is set
         return evorder;
     }
@@ -987,8 +986,8 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      * Signum.
      * @return sign of first non zero coefficient.
      */
+    @SuppressWarnings("unused")
     public int signum() {
-        @SuppressWarnings("unused")
         int i = order(); // ensure evorder is defined
         if (evorder != null) {
             return coefficient(evorder).signum();

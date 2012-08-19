@@ -322,17 +322,16 @@ public class OrderedCPairlist<C extends GcdRingElem<C>> implements Serializable,
                 i = pair.i;
                 j = pair.j;
                 // System.out.println("pair(" + j + "," +i+") ");
-                if (useCriterion4) {
+                //if (useCriterion4) {
                     // c = reduction.criterion4( pair.pi, pair.pj, g );
-                    c = true;
-                } else {
-                    c = true;
-                }
+                //    c = true;
+                //}
+                c = true; 
                 // System.out.println("c4 = " + c);
-                if (c) {
+                //if (c) {
                     // c = criterion3( i, j, g );
                     // System.out.println("c3 = " + c);
-                }
+                //}
                 red.get(j).clear(i); // set(i,false) jdk1.4
             }
             if (xl.size() == 0)
