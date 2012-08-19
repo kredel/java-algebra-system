@@ -353,11 +353,11 @@ public class HenselUtil {
             // E mod p
             Ep = PolyUtil.<MOD> fromIntegerCoefficients(qfac, E);
             //logger.info("Ep = " + Ep + ", qfac = " + qfac);
-            if (Ep.isZERO()) {
+            //if (Ep.isZERO()) {
                 //System.out.println("leaving on zero error");
                 //??logger.info("leaving on zero Ep");
                 //??break;
-            }
+            //}
 
             // construct approximation mod p
             Ap = Sp.multiply(Ep); // S,T ++ T,S

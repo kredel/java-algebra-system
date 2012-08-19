@@ -183,7 +183,7 @@ public class EReductionSeq<C extends RingElem<C>> extends DReductionSeq<C> imple
         GenPolynomial<C> T = Ap.ring.getZERO();
         GenPolynomial<C> Q = null;
         GenPolynomial<C> S = Ap;
-        try { // required to avoid a compiler error in the while loop
+        //try { // required to avoid a compiler error in the while loop
             while (S.length() > 0) {
                 boolean mt = false;
                 m = S.leadingMonomial();
@@ -219,14 +219,14 @@ public class EReductionSeq<C extends RingElem<C>> extends DReductionSeq<C> imple
                 //System.out.println(" R = " + R);
                 //System.out.println(" S = " + S);
             }
-        } catch (Exception ex) {
-            System.out.println("R = " + R);
-            System.out.println("S = " + S);
-            System.out.println("f = " + f + ", " + e + ", " + htl[i]);
-            System.out.println("a = " + a + ", " + b + ", " + r + ", " + lbc[i]);
-            //throw ex;
-            return T;
-        }
+        //} catch (Exception ex) {
+        //    System.out.println("R = " + R);
+        //    System.out.println("S = " + S);
+        //    System.out.println("f = " + f + ", " + e + ", " + htl[i]);
+        //    System.out.println("a = " + a + ", " + b + ", " + r + ", " + lbc[i]);
+        //    //throw ex;
+        //    return T;
+        //}
         return R.abs();
     }
 

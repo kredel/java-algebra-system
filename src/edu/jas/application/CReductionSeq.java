@@ -322,10 +322,10 @@ public class CReductionSeq<C extends GcdRingElem<C>> implements Serializable
                 S = new ColorPolynomial<C>(g, r, w);
                 continue;
             }
-            if (col == Condition.Color.WHITE) { // refine condition
+            //if (col == Condition.Color.WHITE) { // refine condition
                 // System.out.println("white = " + zero.sum(a,e));
                 // return S; // return for new case distinction
-            }
+            //}
             // System.out.println("NF, e = " + e);
             for (i = 0; i < l; i++) {
                 mt = e.multipleOf(htl[i]); // EVMT( e, htl[i] );

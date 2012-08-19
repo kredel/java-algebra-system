@@ -99,11 +99,11 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
             Ps = engine.basePrimitivePart(Ps);
         }
         boolean f = Ps.equals(S);
-        if (!f) {
+        //if (!f) {
             //System.out.println("\nisSquarefree: " + f);
             //System.out.println("S  = " + S);
             //System.out.println("P  = " + P);
-        }
+        //}
         return f;
     }
 

@@ -1034,6 +1034,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                         }
                     }
                     if (!lf.equals(ln) || !un.equals(ufactors)) {
+                        logger.debug("!lf.equals(ln) || !un.equals(ufactors)");
                         //System.out.println("pe  = " + pe);
                         //System.out.println("#ln  = " + ln + ", #lf = " + lf);
                         //System.out.println("#un  = " + un + ", #ufactors = " + ufactors);
