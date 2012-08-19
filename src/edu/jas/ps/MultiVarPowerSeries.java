@@ -986,11 +986,10 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      * Signum.
      * @return sign of first non zero coefficient.
      */
-    @SuppressWarnings("unused")
     public int signum() {
-        int i = order(); // ensure evorder is defined
-        if (evorder != null) {
-            return coefficient(evorder).signum();
+        ExpVector ev = orderExpVector();
+        if (ev != null) {
+            return coefficient(ev).signum();
         }
         return 0;
     }
