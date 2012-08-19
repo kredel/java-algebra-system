@@ -225,8 +225,8 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
         if (!Pc.isONE()) {
             pp = PolyUtil.<C> coefficientPseudoDivide(pp, Pc);
             //System.out.println("pp,sqp = " + pp);
-            GenPolynomial<C> Pr = squarefreePart(Pc);
-            Pr = Pr.monic();
+            //GenPolynomial<C> Pr = squarefreePart(Pc);
+            //Pr = Pr.monic();
             //System.out.println("Pr,sqp = " + Pr);
         }
         if (pp.leadingExpVector().getVal(0) < 1) {

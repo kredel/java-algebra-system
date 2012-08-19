@@ -169,7 +169,7 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>> extends Square
                 //System.out.println("qc,const = " + qc + ", e = " + e);
                 if (e > 1L) {
                     qc = Power.<C> positivePower(qc, e);
-                    e = 1L;
+                    //e = 1L;
                 }
                 C qr = coeffRootCharacteristic(qc);
                 //System.out.println("qr,const = " + qr);

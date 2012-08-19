@@ -190,8 +190,8 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>> extends SquarefreeAbs
         if (!Pc.isONE()) {
             pp = PolyUtil.<C> coefficientPseudoDivide(pp, Pc);
             //System.out.println("pp,sqp = " + pp);
-            GenPolynomial<C> Pr = squarefreePart(Pc);
-            Pr = engine.basePrimitivePart(Pr);
+            //GenPolynomial<C> Pr = squarefreePart(Pc);
+            //Pr = engine.basePrimitivePart(Pr);
             //System.out.println("Pr,bPP = " + Pr);
         }
         if (pp.leadingExpVector().getVal(0) < 1) {
