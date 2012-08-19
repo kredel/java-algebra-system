@@ -13,7 +13,8 @@ import java.io.Serializable;
  * clone. 
  * <b>Note:</b> extension of <code>Cloneable</code> removed in
  * 2012-08-18, <code>clone()</code> is renamed to <code>copy()</code>.
- * @param <C> element type.
+ * @param <C> element type. See the discussion in 
+ * <a href="http://www.artima.com/intv/bloch13.html">Bloch on Cloning</a>.
  * @author Heinz Kredel
  */
 
