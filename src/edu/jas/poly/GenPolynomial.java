@@ -140,17 +140,10 @@ Iterable<Monomial<C>> {
 
 
     /**
-     * Clone this GenPolynomial.
-     * @see java.lang.Object#clone()
+     * Copy this GenPolynomial.
+     * @return copy of this.
      */
-    @Override
     public GenPolynomial<C> copy() {
-        //return ring.copy(this);
-        try { 
-           super.clone();
-        } catch(CloneNotSupportedException e) {
-	    throw new RuntimeException(e);
-        }
         return new GenPolynomial<C>(ring, this.val);
     }
 
