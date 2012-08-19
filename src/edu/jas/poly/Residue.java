@@ -77,6 +77,10 @@ public class Residue<C extends RingElem<C> >
             isunit = u;
             return;
         }
+        if (val.isZERO()) {
+            isunit = 0;
+            return;
+        }
         if ( val.isUnit() ) {
            isunit = 1;
         //} else { // not possible

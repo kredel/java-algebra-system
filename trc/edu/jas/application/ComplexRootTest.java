@@ -232,7 +232,7 @@ public class ComplexRootTest extends TestCase {
         //cpol = cring.univariate(0, 3L).subtract(cring.parse(vpol));
         cpol = cpol.monic();
         //System.out.println("cpol = " + cpol);
-        long dd = cpol.degree(0);
+        //long dd = cpol.degree(0);
         Squarefree<Complex<RealAlgebraicNumber<BigRational>>> sen = SquarefreeFactory
                         .<Complex<RealAlgebraicNumber<BigRational>>> getImplementation(root.ring);
         cpol = sen.squarefreePart(cpol);
