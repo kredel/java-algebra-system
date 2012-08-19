@@ -893,11 +893,11 @@ public class PolyUtil {
         if (S == null || S.isZERO()) {
             throw new ArithmeticException(P.toString() + " division by zero " + S);
         }
-        if (S.ring.nvar != 1) {
+        //if (S.ring.nvar != 1) {
             // ok if exact division
             // throw new RuntimeException(this.getClass().getName()
             //                            + " univariate polynomials only");
-        }
+        //}
         if (P.isZERO() || S.isONE()) {
             return P;
         }
@@ -948,11 +948,11 @@ public class PolyUtil {
         if (S == null || S.isZERO()) {
             throw new ArithmeticException(P.toString() + " division by zero " + S);
         }
-        if (S.ring.nvar != 1) {
+        //if (S.ring.nvar != 1) {
             // ok if exact division
             // throw new RuntimeException(this.getClass().getName()
             //                            + " univariate polynomials only");
-        }
+        //}
         GenPolynomial<C>[] ret = new GenPolynomial[2];
         ret[0] = null;
         ret[1] = null;
@@ -1235,11 +1235,11 @@ public class PolyUtil {
         if (S == null || S.isZERO()) {
             throw new ArithmeticException(P + " division by zero " + S);
         }
-        if (S.ring.nvar != 1) {
+        //if (S.ring.nvar != 1) {
             // ok if exact division
             // throw new RuntimeException(this.getClass().getName()
             //                            + " univariate polynomials only");
-        }
+        //}
         if (P == null || P.isZERO()) {
             return P;
         }

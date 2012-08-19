@@ -202,9 +202,9 @@ public class GroebnerBaseDistributed<C extends RingElem<C>> extends GroebnerBase
                 l--;
             }
         }
-        if (l <= 1) {
+        //if (l <= 1) {
             //return G; must signal termination to others
-        }
+        //}
 
         logger.debug("looking for clients");
         //long t = System.currentTimeMillis();

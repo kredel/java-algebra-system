@@ -333,9 +333,9 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>> extends RGroeb
                 G.add(a);
             }
         }
-        if (G.size() <= 1) {
+        //if (G.size() <= 1) {
             // wg monic do not return G;
-        }
+        //}
         // remove top reducible polynomials
         GenPolynomial<C> a, b;
         List<GenPolynomial<C>> F;
@@ -377,9 +377,9 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>> extends RGroeb
             }
         }
         G = F;
-        if (G.size() <= 1) {
+        //if (G.size() <= 1) {
             // wg monic return G;
-        }
+        //}
         Collections.reverse(G); // important for lex GB
         // reduce remaining polynomials
         int len = G.size();

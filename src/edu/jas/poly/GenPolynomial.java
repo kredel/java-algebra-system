@@ -348,11 +348,11 @@ Iterable<Monomial<C>> {
             v = GenPolynomialRing.newVars("x", ring.nvar);
         }
         boolean parenthesis = false;
-        if (ring.coFac instanceof GenPolynomialRing || ring.coFac instanceof AlgebraicNumberRing
-        // || ring.coFac instanceof RealAlgebraicRing
-        ) {
+        //if (ring.coFac instanceof GenPolynomialRing || ring.coFac instanceof AlgebraicNumberRing
+        //    || ring.coFac instanceof RealAlgebraicRing
+        //) {
             // inactive: parenthesis = true;
-        }
+        //}
         boolean first = true;
         for (Map.Entry<ExpVector, C> m : val.entrySet()) {
             C c = m.getValue();

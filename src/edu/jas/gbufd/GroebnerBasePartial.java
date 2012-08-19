@@ -79,9 +79,9 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseA
         super();
         this.bb = bb;
         this.rbb = rbb;
-        if (rbb == null) {
+        //if (rbb == null) {
             //logger.warn("no recursive GB given");
-        }
+        //}
     }
 
 

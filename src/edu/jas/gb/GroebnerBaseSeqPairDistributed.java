@@ -212,9 +212,9 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
                 l--;
             }
         }
-        if (l <= 1) {
+        //if (l <= 1) {
             //return G; must signal termination to others
-        }
+        //}
 
         logger.debug("looking for clients");
         //long t = System.currentTimeMillis();

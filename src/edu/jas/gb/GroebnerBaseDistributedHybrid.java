@@ -263,9 +263,9 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
                 l--;
             }
         }
-        if (l <= 1) {
+        //if (l <= 1) {
             //return G; must signal termination to others
-        }
+        //}
         logger.info("pairlist " + pairlist);
 
         logger.debug("looking for clients");
