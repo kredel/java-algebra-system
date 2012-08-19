@@ -634,7 +634,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
             throw new IllegalArgumentException("G may not be null or empty");
         }
         List<Long> ud = univariateDegrees(G);
-        if (ud == null || ud.size() <= i) {
+        if (ud.size() <= i) {
             //logger.info("univ pol, ud = " + ud);
             throw new IllegalArgumentException("ideal(G) not zero dimensional " + ud);
         }
