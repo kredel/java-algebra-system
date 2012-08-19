@@ -136,7 +136,7 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>> extends Squa
             return root;
         }
         SortedMap<Quotient<C>, Long> sf = squarefreeFactors(P);
-        if (sf == null || sf.size() == 0) {
+        if (sf.size() == 0) {
             return null;
         }
         if (logger.isInfoEnabled()) {

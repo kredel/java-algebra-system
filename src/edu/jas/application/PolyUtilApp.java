@@ -108,7 +108,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
             ExpVector e = y.getKey();
             GenPolynomial<C> a = y.getValue();
             p = toProductRes(fac, a);
-            if (p != null && !p.isZERO()) {
+            if (!p.isZERO()) {
                 P.doPutToMap(e, p);
             }
         }
@@ -132,7 +132,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
             ResidueRing<C> fac = (ResidueRing<C>) rfac;
             Residue<C> u = new Residue<C>(fac, c);
             //fac.fromInteger( c.getVal() );
-            if (u != null && !u.isZERO()) {
+            if (!u.isZERO()) {
                 elem.put(i, u);
             }
         }
@@ -348,7 +348,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
             Residue<C> r = a.get(i);
             if (r != null && !r.isZERO()) {
                 GenPolynomial<C> p = r.val;
-                if (p != null && !p.isZERO()) {
+                if (!p.isZERO()) {
                     b.doPutToMap(e, p);
                 }
             }

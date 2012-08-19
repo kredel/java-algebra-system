@@ -248,16 +248,12 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
                         j = dl + 1;
                         break;
                     }
-                    //if (ulist.removeAll(flist)) {
+                    //if (ulist.removeAll(flist)) { // wrong
                     ulist = removeOnce(ulist, flist);
-                    if (ulist != null) {
-                        //System.out.println("new ulist = " + ulist);
-                        dl = (ulist.size() + 1) / 2;
-                        j = 0; // since j++
-                        break;
-                        //} else {
-                        //    logger.error("error removing flist from ulist = " + ulist);
-                    }
+                    //System.out.println("new ulist = " + ulist);
+                    dl = (ulist.size() + 1) / 2;
+                    j = 0; // since j++
+                    break;
                 }
             }
         }

@@ -130,7 +130,7 @@ public class PolyUfdUtil {
             ExpVector e = y.getKey();
             GenPolynomial<C> a = y.getValue();
             Quotient<C> p = new Quotient<C>(qfac, a); // can not be zero
-            if (p != null && !p.isZERO()) {
+            if (!p.isZERO()) {
                 //B = B.sum( p, e ); // inefficient
                 B.doPutToMap(e, p);
             }
@@ -180,7 +180,7 @@ public class PolyUfdUtil {
             ExpVector e = y.getKey();
             GenPolynomial<BigInteger> a = y.getValue();
             GenPolynomial<C> p = PolyUtil.<C> fromIntegerCoefficients(rfac, a);
-            if (p != null && !p.isZERO()) {
+            if (!p.isZERO()) {
                 //B = B.sum( p, e ); // inefficient
                 B.doPutToMap(e, p);
             }

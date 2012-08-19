@@ -2182,7 +2182,7 @@ public class PolyUtil {
             ExpVector e = y.getKey();
             C a = y.getValue();
             Product<C> p = toProductGen(rfac, a);
-            if (p != null && !p.isZERO()) {
+            if (!p.isZERO()) {
                 P.doPutToMap(e, p);
             }
         }
@@ -2276,7 +2276,7 @@ public class PolyUtil {
             RingFactory<ModInteger> rfac = pfac.getFactory(i);
             ModIntegerRing fac = (ModIntegerRing) rfac;
             ModInteger u = fac.fromInteger(c.getVal());
-            if (u != null && !u.isZERO()) {
+            if (!u.isZERO()) {
                 elem.put(i, u);
             }
         }
@@ -2303,7 +2303,7 @@ public class PolyUtil {
             ExpVector e = y.getKey();
             BigInteger a = y.getValue();
             Product<ModInteger> p = toProduct(fac, a);
-            if (p != null && !p.isZERO()) {
+            if (!p.isZERO()) {
                 P.doPutToMap(e, p);
             }
         }
