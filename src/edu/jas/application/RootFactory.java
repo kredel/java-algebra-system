@@ -158,8 +158,9 @@ public class RootFactory {
      * @return a list of different complex algebraic numbers, with f(c) == 0 for
      *         c in roots.
      */
-    public static <C extends GcdRingElem<C> & Rational> List<Complex<RealAlgebraicNumber<C>>> complexAlgebraicNumbersSquarefree(
-                    GenPolynomial<Complex<C>> f) {
+    public static <C extends GcdRingElem<C> & Rational> 
+      List<Complex<RealAlgebraicNumber<C>>> complexAlgebraicNumbersSquarefree(
+                   GenPolynomial<Complex<C>> f) {
         GenPolynomialRing<Complex<C>> pfac = f.factory();
         if (pfac.nvar != 1) {
             throw new IllegalArgumentException("only for univariate polynomials");
@@ -217,32 +218,32 @@ public class RootFactory {
                 Complex<RealAlgebraicNumber<C>> crn = new Complex<RealAlgebraicNumber<C>>(cring, rre, rim);
                 //System.out.println("crn = " + crn + " in " + crn.ring);
 
-                boolean it;
-                int count = 0;
-                do { // refine intervals if necessary, not meaningful
-                    Interval<C> vr = crr.get(0).ring.getRoot();
-                    Interval<C> vi = crr.get(1).ring.getRoot();
-                    ComplexRing<C> ccfac = new ComplexRing<C>((RingFactory<C>) vr.left.factory());
-                    Complex<C> sw = new Complex<C>(ccfac, vr.left, vi.left);
-                    Complex<C> ne = new Complex<C>(ccfac, vr.right, vi.right);
-                    Complex<C> epsw = PolyUtil.<Complex<C>> evaluateMain(ccfac, f, sw);
-                    Complex<C> epne = PolyUtil.<Complex<C>> evaluateMain(ccfac, f, ne);
-                    int rootre = (epsw.getRe().signum() * epne.getRe().signum());
-                    int rootim = (epsw.getIm().signum() * epne.getIm().signum());
-                    it = true || (rootre <= 0 && rootim <= 0); // TODO
-                    if (!it) {
-                        logger.info("refine intervals: vr = " + vr + ", vi = " + vi); // + ", crn = " + crn.ring);
-                        crn.getRe().ring.realRing.halfInterval();
-                        //System.out.println("crn.re = " + crn.getRe().ring.realRing);
-                        crn.getIm().ring.realRing.halfInterval();
-                        //System.out.println("crn.im = " + crn.getIm().ring.realRing);
-                        if (count++ > 2) {
-                            //throw new RuntimeException("no roots of " + f);
-                            logger.info("break in root refinement of " + crn + " in " + crn.ring);
-                            it = true;
-                        }
-                    }
-                } while (!it);
+                //boolean it;
+                //int count = 0;
+                //do { // refine intervals if necessary, not meaningful
+                //    Interval<C> vr = crr.get(0).ring.getRoot();
+                //    Interval<C> vi = crr.get(1).ring.getRoot();
+                //    ComplexRing<C> ccfac = new ComplexRing<C>((RingFactory<C>) vr.left.factory());
+                //    Complex<C> sw = new Complex<C>(ccfac, vr.left, vi.left);
+                //    Complex<C> ne = new Complex<C>(ccfac, vr.right, vi.right);
+                //    Complex<C> epsw = PolyUtil.<Complex<C>> evaluateMain(ccfac, f, sw);
+                //    Complex<C> epne = PolyUtil.<Complex<C>> evaluateMain(ccfac, f, ne);
+                //    int rootre = (epsw.getRe().signum() * epne.getRe().signum());
+                //    int rootim = (epsw.getIm().signum() * epne.getIm().signum());
+                //    it = true || (rootre <= 0 && rootim <= 0); // TODO
+                //    if (!it) {
+                //        logger.info("refine intervals: vr = " + vr + ", vi = " + vi); // + ", crn = " + crn.ring);
+                //        crn.getRe().ring.realRing.halfInterval();
+                //        //System.out.println("crn.re = " + crn.getRe().ring.realRing);
+                //        crn.getIm().ring.realRing.halfInterval();
+                //        //System.out.println("crn.im = " + crn.getIm().ring.realRing);
+                //        if (count++ > 2) {
+                //            //throw new RuntimeException("no roots of " + f);
+                //            logger.info("break in root refinement of " + crn + " in " + crn.ring);
+                //            it = true;
+                //        }
+                //    }
+                //} while (!it);
                 list.add(crn);
             }
         }

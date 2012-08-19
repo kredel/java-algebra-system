@@ -200,7 +200,7 @@ public class RealRootsSturm<C extends RingElem<C> & Rational> extends RealRootsA
 
             boolean b11 = signChange(iv11, f);
             boolean b12 = signChange(iv12, f); // TODO check unnecessary
-            boolean b21 = signChange(iv21, f); // TODO check unused or unnecessary
+            //boolean b21 = signChange(iv21, f); // TODO check unused or unnecessary
             boolean b22 = signChange(iv22, f);
             if (b11) {
                 iv1 = iv11;

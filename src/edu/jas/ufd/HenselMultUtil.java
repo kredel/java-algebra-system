@@ -505,7 +505,7 @@ public class HenselMultUtil {
         //ModularRingFactory<MOD> cf = (ModularRingFactory<MOD>) pkfac.coFac;
         //MOD vp = cf.fromInteger(v.getSymmetricInteger().getVal());
         //System.out.println("v = " + v + ", vp = " + vp);
-        GenPolynomialRing<MOD> ckfac = pkfac.contract(1);
+        GenPolynomialRing<MOD> ckfac; // = pkfac.contract(1);
         //GenPolynomial<MOD> Cs = PolyUtil.<MOD> evaluateMain(ckfac, Cp, vp);
         //System.out.println("Cp = " + Cp);
         //System.out.println("Cs = " + Cs);

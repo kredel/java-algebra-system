@@ -291,7 +291,8 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
     @Override
     public int hashCode() {
         int h = coFac.hashCode();
-        h = (Arrays.hashCode(vars) << 23);
+        h = h << 7;
+        h += (Arrays.hashCode(vars) << 17);
         h += truncate;
         return h;
     }

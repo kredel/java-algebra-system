@@ -485,7 +485,7 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
                 // initialize chinese remainder algorithm
                 M = new BigInteger(p);
                 cofacM = cofac;
-                rfac = mfac;
+                //rfac = mfac;
                 cp = cm;
             } else {
                 // apply chinese remainder algorithm

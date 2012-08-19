@@ -242,7 +242,7 @@ public class OrderedCPairlist<C extends GcdRingElem<C>> implements Serializable,
         int h;
         h = getList().hashCode();
         h = h << 7;
-        h = pairCount();
+        h += pairCount(); // findbugs
         return h;
     }
 
