@@ -236,9 +236,9 @@ public class ComplexRootTest extends TestCase {
         Squarefree<Complex<RealAlgebraicNumber<BigRational>>> sen = SquarefreeFactory
                         .<Complex<RealAlgebraicNumber<BigRational>>> getImplementation(root.ring);
         cpol = sen.squarefreePart(cpol);
-        if (cpol.degree(0) < dd) {
+        //if (cpol.degree(0) < dd) {
             //System.out.println("cpol = " + cpol);
-        }
+        //}
         //System.out.println("cpol = " + cpol);
 
         // new version with recursion: with real factorization

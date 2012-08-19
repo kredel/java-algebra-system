@@ -119,10 +119,10 @@ public class RealAlgebraicTest extends TestCase {
 
         List<IdealWithUniv<BigRational>> idul = id.zeroDimRootDecomposition();
         IdealWithUniv<BigRational> idu = idul.get(0);
-        if (idul.size() > 1) {
+        //if (idul.size() > 1) {
             //System.out.println("idul = " + idul);
             //idu = idul.get(1);
-        }
+        //}
         //System.out.println("idu = " + idu);
         GenPolynomial<BigRational> x = idu.ideal.list.list.remove(1);
         //System.out.println("x = " + x);
