@@ -145,34 +145,38 @@ public class FactorAlgebraicPrimTest extends TestCase {
             //System.out.println("b = " + b.monic());
             //System.out.println("c = " + c.monic());
 
-            long sp = System.currentTimeMillis();
-            SortedMap<GenPolynomial<AlgebraicNumber<BigRational>>, Long> sm = fac.baseFactors(a);
-            sp = System.currentTimeMillis() - sp;
+            SortedMap<GenPolynomial<AlgebraicNumber<BigRational>>, Long> smi, smr;
+
+            long si = System.currentTimeMillis();
+            smi = fac.baseFactors(a);
+            si = System.currentTimeMillis() - si;
             //System.out.println("\na   =  " + a);
             //System.out.println("sm = " + sm);
-            if (sm.size() >= facs) {
-                assertTrue("#facs < " + facs, sm.size() >= facs);
+            if (smi.size() >= facs) {
+                assertTrue("#facs < " + facs, smi.size() >= facs);
             } else {
-                System.out.println("sm.size() < facs = " + facs);
+                System.out.println("smi.size() < facs = " + facs);
             }
-            boolean t = fac.isFactorization(a, sm);
+            boolean t = fac.isFactorization(a, smi);
             //System.out.println("t        = " + t);
             assertTrue("prod(factor(a)) = a", t);
 
             long sr = System.currentTimeMillis();
-            sm = new edu.jas.ufd.FactorAlgebraic<BigRational>(afac).baseFactors(a);
+            smr = new edu.jas.ufd.FactorAlgebraic<BigRational>(afac).baseFactors(a);
             sr = System.currentTimeMillis() - sr;
             //System.out.println("\na   =  " + a);
-            //System.out.println("sm = " + sm);
-            if (sm.size() >= facs) {
-                assertTrue("#facs < " + facs, sm.size() >= facs);
+            //System.out.println("smr = " + smr);
+            if (smr.size() >= facs) {
+                assertTrue("#facs < " + facs, smr.size() >= facs);
             } else {
-                System.out.println("sm.size() < facs = " + facs);
+                System.out.println("smr.size() < facs = " + facs);
             }
-            t = fac.isFactorization(a, sm);
+            t = fac.isFactorization(a, smr);
             //System.out.println("t        = " + t);
             assertTrue("prod(factor(a)) = a", t);
-            //System.out.println("time: sp = " + sp + ", sr = " + sr + " milliseconds");
+            //System.out.println("time: si = " + si + ", sr = " + sr + " milliseconds");
+            assertTrue("positive times", sr >= 0L && si >= 0L);
+            assertEquals("smi == smr: ", smi, smr);
         }
     }
 

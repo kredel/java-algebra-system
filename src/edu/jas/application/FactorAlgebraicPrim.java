@@ -25,9 +25,10 @@ import edu.jas.ufd.SquarefreeFactory;
 
 
 /**
- * Algebraic number coefficients factorization algorithms. This class implements
- * factorization methods for polynomials over algebraic numbers over rational
- * numbers or over (prime) modular integers.
+ * Algebraic number coefficients factorization algorithms. This class
+ * implements factorization methods for polynomials over algebraic
+ * numbers over rational numbers or over (prime) modular integers. The
+ * algorithm uses zero dimensional ideal prime decomposition.
  * @author Heinz Kredel
  * @param <C> coefficient type
  */
@@ -126,22 +127,16 @@ public class FactorAlgebraicPrim<C extends GcdRingElem<C>> extends FactorAbsolut
         GenPolynomial<C> agen = afac.modul;
         GenPolynomialRing<C> cfac = afac.ring;
         GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(cfac, pfac);
-        // transform minimal polynomial to bi-variate polynomial
-        //GenPolynomial<GenPolynomial<C>> Ac = PolyUfdUtil.<C> introduceLowerVariable(rfac, agen);
-        //System.out.println("Ac = " + Ac.toScript());
-        // transform to bi-variate polynomial, 
-        // switching varaible sequence from Q[alpha][x] to Q[X][alpha]
-        GenPolynomial<GenPolynomial<C>> Pc = PolyUfdUtil.<C> substituteFromAlgebraicCoefficients(rfac, P, 0);
-        Pc = PolyUtil.<C> monic(Pc);
-        //System.out.println("Pc = " + Pc.toScript());
-        // distribute 
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         String[] vars = new String[2];
         vars[0] = cfac.getVars()[0];
         vars[1] = rfac.getVars()[0];
         GenPolynomialRing<C> dfac = new GenPolynomialRing<C>(cfac.coFac, to, vars);
+        // transform minimal polynomial to bi-variate polynomial
         GenPolynomial<C> Ad = agen.extend(dfac, 0, 0L);
-        Pc = PolyUtil.<C> fromAlgebraicCoefficients(rfac, P);
+        // transform to bi-variate polynomial 
+        GenPolynomial<GenPolynomial<C>> Pc = PolyUtil.<C> fromAlgebraicCoefficients(rfac, P); 
+        //System.out.println("Pc = " + Pc.toScript());
         GenPolynomial<C> Pd = PolyUtil.<C> distribute(dfac, Pc);
         //System.out.println("Ad = " + Ad.toScript());
         //System.out.println("Pd = " + Pd.toScript());
@@ -158,8 +153,9 @@ public class FactorAlgebraicPrim<C extends GcdRingElem<C>> extends FactorAbsolut
         }
         GenPolynomial<AlgebraicNumber<C>> f = pfac.getONE();
         for (IdealWithUniv<C> Iu : Iul) {
-            GenPolynomial<C> ag = PolyUtil.<C> selectWithVariable(Iu.ideal.getList(), 1);
-            GenPolynomial<C> pg = PolyUtil.<C> selectWithVariable(Iu.ideal.getList(), 0);
+            List<GenPolynomial<C>> pl = Iu.ideal.getList();
+            GenPolynomial<C> ag = PolyUtil.<C> selectWithVariable(pl, 1);
+            GenPolynomial<C> pg = PolyUtil.<C> selectWithVariable(pl, 0);
             //System.out.println("ag = " + ag.toScript());
             //System.out.println("pg = " + pg.toScript());
             if (ag.equals(Ad)) {
@@ -170,6 +166,8 @@ public class FactorAlgebraicPrim<C extends GcdRingElem<C>> extends FactorAbsolut
                 //System.out.println("pga = " + pga.toScript());
                 f = f.multiply(pga);
                 factors.add(pga);
+            } else {
+                logger.warn("algebraic number mismatch: ag = " + ag + ", expected Ad = " + Ad);
             }
         }
         f = f.subtract(P);
