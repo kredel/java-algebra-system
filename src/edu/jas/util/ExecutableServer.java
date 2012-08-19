@@ -274,7 +274,8 @@ class Executor extends Thread /*implements Runnable*/{
                             goon = false; // stop this thread
                             channel.send(ExecutableServer.DONE);
                         } else {
-                            goon = false; // stop this thread
+                            logger.warn("invalid/unknown String: " + d + " from " + channel);
+                            goon = false; // stop this thread ?
                             channel.send(ExecutableServer.DONE);
                         }
                     }
