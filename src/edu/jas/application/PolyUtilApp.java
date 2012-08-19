@@ -315,7 +315,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
         GenPolynomial<GenPolynomial<C>> b;
         for (GenPolynomial<Product<Residue<C>>> a : L) {
             b = fromProduct(pfac, a, i);
-            if (b != null && !b.isZERO()) {
+            if (!b.isZERO()) {
                 b = b.abs();
                 if (!list.contains(b)) {
                     list.add(b);

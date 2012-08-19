@@ -434,7 +434,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                 if (!H.isZERO()) {
                     //CSh = new ArrayList<ColoredSystem<C>>();
                     ncs = determineAddPairs(cs, H);
-                    if (ncs == null || ncs.size() == 0) {
+                    if (ncs.size() == 0) {
                         continue;
                     }
                     cs = ncs.remove(0); // remove other?
@@ -513,7 +513,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         for (Condition<C> cnd : cd) {
             //nz = cnd.determine(Ap);
             nz = cnd.reDetermine(A);
-            if (nz == null || nz.isZERO()) {
+            if (nz.isZERO()) {
                 logger.info("zero determined nz = " + nz);
                 Sp = new ArrayList<ColorPolynomial<C>>(S);
                 OrderedCPairlist<C> PL = pl.clone();

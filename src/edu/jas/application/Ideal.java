@@ -1592,7 +1592,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                 //System.out.println("id.ideal = " + id.ideal);
                 GenPolynomial<C> u = id.ideal.constructUnivariate(i);
                 SortedMap<GenPolynomial<C>, Long> facs = ufd.baseFactors(u);
-                if (facs == null || facs.size() == 0 || (facs.size() == 1 && facs.get(facs.firstKey()) == 1L)) {
+                if (facs.size() == 0 || (facs.size() == 1 && facs.get(facs.firstKey()) == 1L)) {
                     List<GenPolynomial<C>> iup = new ArrayList<GenPolynomial<C>>();
                     iup.addAll(id.upolys);
                     iup.add(u);
