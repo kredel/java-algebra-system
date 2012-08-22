@@ -616,6 +616,27 @@ public class PolyUtil {
 
 
     /**
+     * Recursive polynomial list monic.
+     * @param <C> coefficient type.
+     * @param L list of recursive polynomials with field coefficients.
+     * @return list of polynomials with leading base coefficient 1.
+     */
+    public static <C extends RingElem<C>> List<GenPolynomial<GenPolynomial<C>>> monicRec(List<GenPolynomial<GenPolynomial<C>>> L) {
+        return ListUtil.<GenPolynomial<GenPolynomial<C>>, GenPolynomial<GenPolynomial<C>>> map(L,
+                        new UnaryFunctor<GenPolynomial<GenPolynomial<C>>, GenPolynomial<GenPolynomial<C>>>() {
+
+
+                            public GenPolynomial<GenPolynomial<C>> eval(GenPolynomial<GenPolynomial<C>> c) {
+                                if (c == null) {
+                                    return null;
+                                }
+                                return PolyUtil.<C> monic(c);
+                            }
+                        });
+    }
+
+
+    /**
      * Polynomial list leading exponent vectors.
      * @param <C> coefficient type.
      * @param L list of polynomials.
