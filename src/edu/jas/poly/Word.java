@@ -121,6 +121,9 @@ public class Word implements MonoidElem<Word> {
      */
     @Override
     public String toString() {
+        if ( val.length() == 0 ) {
+	    return "";
+        }
         StringBuffer s = new StringBuffer("(");
         for (int i = 0; i < length(); i++) {
             if (i != 0) {

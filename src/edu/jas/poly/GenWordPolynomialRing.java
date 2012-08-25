@@ -138,8 +138,17 @@ public class GenWordPolynomialRing<C extends RingElem<C>> implements RingFactory
      */
     @Override
     public String toString() {
-        String res = "";
-        return res;
+        StringBuffer s = new StringBuffer();
+        s.append("WordRing(");
+        if (coFac instanceof RingElem) {
+            s.append(((RingElem<C>) coFac).toScriptFactory());
+        } else {
+            s.append(coFac.toString().trim());
+        }
+        s.append(",");
+        s.append(alphabet.toString());
+        s.append(")");
+        return s.toString();
     }
 
 
@@ -164,6 +173,7 @@ public class GenWordPolynomialRing<C extends RingElem<C>> implements RingFactory
         } else {
             s.append(coFac.toScript().trim());
         }
+        s.append(",");
         s.append(alphabet.toScript());
         s.append(")");
         return s.toString();
@@ -373,7 +383,7 @@ public class GenWordPolynomialRing<C extends RingElem<C>> implements RingFactory
      * @return a random polynomial.
      */
     public GenWordPolynomial<C> random(int n, Random rnd) {
-        return random(5, n, 3, 0.3f, rnd);
+        return random(5, n, 3, rnd);
     }
 
 
@@ -382,11 +392,10 @@ public class GenWordPolynomialRing<C extends RingElem<C>> implements RingFactory
      * @param k bitsize of random coefficients.
      * @param l number of terms.
      * @param d maximal degree in each variable.
-     * @param q density of nozero exponents.
      * @return a random polynomial.
      */
-    public GenWordPolynomial<C> random(int k, int l, int d, float q) {
-        return random(k, l, d, q, random);
+    public GenWordPolynomial<C> random(int k, int l, int d) {
+        return random(k, l, d, random);
     }
 
 
@@ -395,11 +404,10 @@ public class GenWordPolynomialRing<C extends RingElem<C>> implements RingFactory
      * @param k bitsize of random coefficients.
      * @param l number of terms.
      * @param d maximal degree in each variable.
-     * @param q density of nozero exponents.
      * @param rnd is a source for random bits.
      * @return a random polynomial.
      */
-    public GenWordPolynomial<C> random(int k, int l, int d, float q, Random rnd) {
+    public GenWordPolynomial<C> random(int k, int l, int d, Random rnd) {
         GenWordPolynomial<C> r = getZERO(); //.clone() or copy( ZERO ); 
         // add l random coeffs and exponents
         for (int i = 0; i < l; i++) {

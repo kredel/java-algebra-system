@@ -216,7 +216,49 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
      */
     @Override
     public String toString() {
-        return val.toString();
+        if (isZERO()) {
+            return "0";
+        }
+        if (isONE()) {
+            return "1";
+        }
+        StringBuffer s = new StringBuffer();
+        if (val.size() > 1) {
+            s.append("( ");
+        }
+        boolean parenthesis = false;
+        boolean first = true;
+        for (Map.Entry<Word, C> m : val.entrySet()) {
+            C c = m.getValue();
+            if (first) {
+                first = false;
+            } else {
+                if (c.signum() < 0) {
+                    s.append(" - ");
+                    c = c.negate();
+                } else {
+                    s.append(" + ");
+                }
+            }
+            Word e = m.getKey();
+            if (!c.isONE() || e.isONE()) {
+                if (parenthesis) {
+                    s.append("( ");
+                }
+                s.append(c.toString());
+                if (parenthesis) {
+                    s.append(" )");
+                }
+                if (!e.isONE()) {
+                    s.append(" * ");
+                }
+            }
+            s.append(e.toString());
+        }
+        if (val.size() > 1) {
+            s.append(" )");
+        }
+        return s.toString();
     }
 
 
