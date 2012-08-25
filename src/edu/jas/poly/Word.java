@@ -237,7 +237,7 @@ public class Word implements MonoidElem<Word> {
         Word[] ret = divideWord(V);
         // TODO: fail if both non zero?
         if ( ! ret[0].isONE() && ! ret[1].isONE() ) {
-            throw new IllegalArgumentException("not simple dividable: " + this + ", ret " + ret + ", use divideWord");
+            throw new IllegalArgumentException("not simple dividable: left = " + ret[0] + ", right = " + ret[1] + ", use divideWord");
         }
         return ret[0].multiply(ret[1]); 
     }

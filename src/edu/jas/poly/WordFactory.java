@@ -69,7 +69,7 @@ public class WordFactory implements MonoidFactory<Word> {
                         } else if ( t > 0L ) {
                             return -1;
                         }
-                        return -e1.compareTo(e2);
+                        return e1.compareTo(e2);
                     }
     };
 
@@ -88,7 +88,7 @@ public class WordFactory implements MonoidFactory<Word> {
                         } else if ( t > 0L ) {
                            return 1;
                         }
-                        return e1.compareTo(e2);
+                        return -e1.compareTo(e2);
                     }
     };
 

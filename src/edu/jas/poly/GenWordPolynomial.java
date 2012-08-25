@@ -932,7 +932,7 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
      * GenWordPolynomial multiplication. Product with ring element and exponent
      * vector.
      * @param s coefficient.
-     * @param e exponent.
+     * @param e left exponent.
      * @return this * s x<sup>e</sup>.
      */
     public GenWordPolynomial<C> multiply(C s, Word e) {
@@ -953,6 +953,42 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
             C c = c1.multiply(s); // check non zero if not domain
             if (!c.isZERO()) {
                 Word e2 = e1.multiply(e);
+                pv.put(e2, c);
+            }
+        }
+        return p;
+    }
+
+
+    /**
+     * GenWordPolynomial multiplication. Product with ring element and exponent
+     * vector.
+     * @param s coefficient.
+     * @param e left exponent.
+     * @param f right exponent.
+     * @return this * s x<sup>e</sup>.
+     */
+    public GenWordPolynomial<C> multiply(C s, Word e, Word f) {
+        if (s == null) {
+            return ring.getZERO();
+        }
+        if (s.isZERO()) {
+            return ring.getZERO();
+        }
+        if (this.isZERO()) {
+            return this;
+        }
+        if ( e.isONE() ) {
+            return multiply(s,f);
+        }
+        GenWordPolynomial<C> p = ring.getZERO().copy();
+        SortedMap<Word, C> pv = p.val;
+        for (Map.Entry<Word, C> m1 : val.entrySet()) {
+            C c1 = m1.getValue();
+            Word e1 = m1.getKey();
+            C c = c1.multiply(s); // check non zero if not domain
+            if (!c.isZERO()) {
+                Word e2 = e.multiply(e1.multiply(f));
                 pv.put(e2, c);
             }
         }
@@ -1054,6 +1090,7 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
         }
         C ci = c.inverse();
         assert (ring.alphabet == S.ring.alphabet);
+        WordFactory.WordComparator cmp = ring.alphabet.getDescendComparator();
         Word e = S.leadingWord();
         GenWordPolynomial<C> h;
         GenWordPolynomial<C> q = ring.getZERO().copy();
@@ -1062,11 +1099,16 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
             Word f = r.leadingWord();
             if (f.multipleOf(e)) {
                 C a = r.leadingBaseCoefficient();
-                f = f.divide(e); // TODO
+                Word[] g = f.divideWord(e); // TODO
+                logger.info("div: f = " + f + ", e = " + e + ", g = " + g[0] + ", " + g[1]);
                 a = a.multiply(ci);
-                q = q.sum(a, f);
-                h = S.multiply(a, f);
+                q = q.sum(a, g[0].multiply(g[1]));
+                h = S.multiply(a, g[0], g[1]);
                 r = r.subtract(h);
+                Word fr = r.leadingWord();
+                if ( cmp.compare(f,fr) > 0 ) { // non noetherian reduction
+                    throw new RuntimeException("possible infinite loop: f = " + f + ", fr = " + fr);
+                }
             } else {
                 break;
             }
@@ -1111,6 +1153,7 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
         }
         C ci = c.inverse();
         assert (ring.alphabet == S.ring.alphabet);
+        WordFactory.WordComparator cmp = ring.alphabet.getDescendComparator();
         Word e = S.leadingWord();
         GenWordPolynomial<C> h;
         GenWordPolynomial<C> r = this.copy();
@@ -1118,11 +1161,15 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
             Word f = r.leadingWord();
             if (f.multipleOf(e)) {
                 C a = r.leadingBaseCoefficient();
-                f = f.divide(e); // TODO
-                //logger.info("red div = " + e);
+                Word[] g = f.divideWord(e); // TODO
+                logger.info("rem: f = " + f + ", e = " + e + ", g = " + g[0] + ", " + g[1]);
                 a = a.multiply(ci);
-                h = S.multiply(a, f);
+                h = S.multiply(a, g[0], g[1]);
                 r = r.subtract(h);
+                Word fr = r.leadingWord();
+                if ( cmp.compare(f,fr) > 0 ) { // non noetherian reduction
+                    throw new RuntimeException("possible infinite loop: f = " + f + ", fr = " + fr);
+                }
             } else {
                 break;
             }

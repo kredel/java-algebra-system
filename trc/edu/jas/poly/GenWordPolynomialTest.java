@@ -476,15 +476,61 @@ public class GenWordPolynomialTest extends TestCase {
 
 
     /**
-     * Test multivariate division.
+     * Test multivariate 2 division.
      */
-    public void testMultiDivision() {
+    public void testMulti2Division() {
         // rational numbers
         BigRational rf = new BigRational();
         // System.out.println("rf = " + rf);
 
         // non-commuting vars: xy
         WordFactory wf = new WordFactory("xy");
+        //System.out.println("wf = " + wf);
+
+        // polynomials over rational numbers
+        GenWordPolynomialRing<BigRational> fac = new GenWordPolynomialRing<BigRational>(rf, wf);
+        //System.out.println("fac = " + fac);
+
+        GenWordPolynomial<BigRational> a = fac.random(7,ll,el).monic();
+        GenWordPolynomial<BigRational> b = fac.random(7,ll,el).monic();
+
+        GenWordPolynomial<BigRational> c = a.multiply(b);
+        GenWordPolynomial<BigRational> d = b.multiply(a);
+        GenWordPolynomial<BigRational> e, f;
+        assertFalse("a*b == b*a",c.equals(d)); 
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+        //System.out.println("c = " + c);
+        //System.out.println("d = " + d);
+
+        e = c.divide(a);
+        //System.out.println("e = " + e);
+        assertTrue("a*b/a == b",b.equals(e)); 
+        f = d.divide(b);
+        //System.out.println("f = " + f);
+        assertTrue("a*b/b == a",a.equals(f)); 
+
+        f = a.divide(b);
+        System.out.println("f = " + f);
+
+        WordFactory.WordComparator cmp = fac.alphabet.getDescendComparator();
+        f = a.remainder(b);
+        System.out.println("a = " + a);
+        System.out.println("f = " + f);
+        assertTrue("a rem2 b <= a", cmp.compare(a.leadingWord(),f.leadingWord()) <= 0); 
+    }
+
+
+    /**
+     * Test multivariate 3 division.
+     */
+    public void testMulti3Division() {
+        // rational numbers
+        BigRational rf = new BigRational();
+        // System.out.println("rf = " + rf);
+
+        // non-commuting vars: xy
+        WordFactory wf = new WordFactory("xyz");
         System.out.println("wf = " + wf);
 
         // polynomials over rational numbers
@@ -509,6 +555,15 @@ public class GenWordPolynomialTest extends TestCase {
         f = d.divide(b);
         System.out.println("f = " + f);
         assertTrue("a*b/b == a",a.equals(f)); 
+
+        f = a.divide(b);
+        System.out.println("f = " + f);
+
+        WordFactory.WordComparator cmp = fac.alphabet.getDescendComparator();
+        f = a.remainder(b);
+        System.out.println("a = " + a);
+        System.out.println("f = " + f);
+        assertTrue("a rem3 b <= a: " + a.leadingWord() + ", " + f.leadingWord(), cmp.compare(a.leadingWord(),f.leadingWord()) <= 0); 
     }
 
 }
