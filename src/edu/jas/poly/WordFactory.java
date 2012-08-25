@@ -71,6 +71,9 @@ public class WordFactory implements MonoidFactory<Word> {
      *      because of finite String value.
      */
     public boolean isFinite() {
+        if ( alphabet.length() == 0 ) {
+            return true;
+        }
         return false;
     }
 
@@ -108,6 +111,15 @@ public class WordFactory implements MonoidFactory<Word> {
     @Override
     public Word copy(Word w) {
         return new Word(this,w.getVal()); 
+    }
+
+
+    /**
+     * Get the alphabet length.
+     * @return alphabet.length.
+     */
+    public int length() {
+        return alphabet.length();
     }
 
 
