@@ -82,61 +82,65 @@ public class GenWordPolynomialTest extends TestCase {
     /**
      * Test constructors and factory.
      */
-    public void xtestConstructors() {
+    public void testConstructors() {
         // integers
         BigInteger rf = new BigInteger();
-        System.out.println("rf = " + rf);
+        //System.out.println("rf = " + rf);
 
         // non-commuting vars: abcdef
         WordFactory wf = new WordFactory("abcdef");
-        System.out.println("wf = " + wf);
+        //System.out.println("wf = " + wf);
 
         // polynomials over integers
         GenWordPolynomialRing<BigInteger> pf = new GenWordPolynomialRing<BigInteger>(rf, wf);
-        System.out.println("pf = " + pf);
+        //System.out.println("pf = " + pf);
 
         GenWordPolynomial<BigInteger> p = pf.getONE();
-        System.out.println("p = " + p);
-        p = pf.random(9);
-        System.out.println("p = " + p);
+        //System.out.println("p = " + p);
+        assertTrue("p == 1", p.isONE());
         p = pf.getZERO();
-        System.out.println("p = " + p);
+        assertTrue("p == 1", p.isZERO());
+        //System.out.println("p = " + p);
+        //p = pf.random(9);
+        //System.out.println("p = " + p);
 
         RingElem<GenWordPolynomial<BigInteger>> pe = new GenWordPolynomial<BigInteger>(pf);
-        System.out.println("pe = " + pe);
+        //System.out.println("pe = " + pe);
         //System.out.println("p.equals(pe) = " + p.equals(pe) );
         //System.out.println("p.equals(p) = " + p.equals(p) );
         assertTrue("p.equals(pe) = ", p.equals(pe));
         assertTrue("p.equals(p) = ", p.equals(p));
 
-        pe = pe.sum(p); // why not p = p.add(pe) ?
-        System.out.println("pe = " + pe);
+        pe = pe.sum(p); 
+        //System.out.println("pe = " + pe);
         assertTrue("pe.isZERO() = ", pe.isZERO());
         p = pf.random(9);
         p = p.subtract(p);
-        System.out.println("p = " + p);
+        //System.out.println("p = " + p);
         //System.out.println("p.isZERO() = " + p.isZERO());
         assertTrue("p.isZERO() = ", p.isZERO());
 
         // polynomials over (polynomials over integers)
         // non-commuting vars: xyz
         WordFactory wf2 = new WordFactory("xyz");
-        System.out.println("wf2 = " + wf2);
+        //System.out.println("wf2 = " + wf2);
 
-        GenWordPolynomialRing<GenWordPolynomial<BigInteger>> ppf = new GenWordPolynomialRing<GenWordPolynomial<BigInteger>>(
-                                                                                                                            pf, wf2);
-        System.out.println("ppf = " + ppf);
+        GenWordPolynomialRing<GenWordPolynomial<BigInteger>> ppf 
+           = new GenWordPolynomialRing<GenWordPolynomial<BigInteger>>(pf, wf2);
+        //System.out.println("ppf = " + ppf);
 
         GenWordPolynomial<GenWordPolynomial<BigInteger>> pp = ppf.getONE();
-        System.out.println("pp = " + pp);
-        pp = ppf.random(2);
-        System.out.println("pp = " + pp);
+        //System.out.println("pp = " + pp);
+        assertTrue("pp == 1", pp.isONE());
+        //pp = ppf.random(2);
+        //System.out.println("pp = " + pp);
         pp = ppf.getZERO();
-        System.out.println("pp = " + pp);
+        //System.out.println("pp = " + pp);
+        assertTrue("pp == 0", pp.isZERO());
 
-        RingElem<GenWordPolynomial<GenWordPolynomial<BigInteger>>> ppe = new GenWordPolynomial<GenWordPolynomial<BigInteger>>(
-                                                                                                                              ppf);
-        System.out.println("ppe = " + ppe);
+        RingElem<GenWordPolynomial<GenWordPolynomial<BigInteger>>> ppe 
+            = new GenWordPolynomial<GenWordPolynomial<BigInteger>>(ppf);
+        //System.out.println("ppe = " + ppe);
         //System.out.println("pp.equals(ppe) = " + pp.equals(ppe) );
         //System.out.println("pp.equals(pp) = " + pp.equals(pp) );
         assertTrue("pp.equals(ppe) = ", pp.equals(ppe));
@@ -152,62 +156,60 @@ public class GenWordPolynomialTest extends TestCase {
         assertTrue("pp.isZERO() = ", pp.isZERO());
 
         // polynomials over (polynomials over (polynomials over integers))
-        // non-commuting vars: xyz
+        // non-commuting vars: uvw
         WordFactory wf3 = new WordFactory("uvw");
-        System.out.println("wf3 = " + wf3);
-        GenWordPolynomialRing<GenWordPolynomial<GenWordPolynomial<BigInteger>>> pppf = new GenWordPolynomialRing<GenWordPolynomial<GenWordPolynomial<BigInteger>>>(
-                                                                                                                                                                   ppf, wf3);
-        System.out.println("pppf = " + pppf);
+        //System.out.println("wf3 = " + wf3);
+        GenWordPolynomialRing<GenWordPolynomial<GenWordPolynomial<BigInteger>>> pppf 
+           = new GenWordPolynomialRing<GenWordPolynomial<GenWordPolynomial<BigInteger>>>(ppf, wf3);
+        //System.out.println("pppf = " + pppf);
 
         GenWordPolynomial<GenWordPolynomial<GenWordPolynomial<BigInteger>>> ppp = pppf.getONE();
-        System.out.println("ppp = " + ppp);
-        ppp = pppf.random(2);
-        System.out.println("ppp = " + ppp);
+        //System.out.println("ppp = " + ppp);
+        assertTrue("ppp == 1", ppp.isONE());
+        //ppp = pppf.random(2);
+        //System.out.println("ppp = " + ppp);
         ppp = pppf.getZERO();
-        System.out.println("ppp = " + ppp);
+        //System.out.println("ppp = " + ppp);
+        assertTrue("ppp == 0", ppp.isZERO());
 
-        RingElem<GenWordPolynomial<GenWordPolynomial<GenWordPolynomial<BigInteger>>>> pppe = new GenWordPolynomial<GenWordPolynomial<GenWordPolynomial<BigInteger>>>(
-                                                                                                                                                                     pppf);
-        System.out.println("pppe = " + pppe);
+        RingElem<GenWordPolynomial<GenWordPolynomial<GenWordPolynomial<BigInteger>>>> pppe 
+            = new GenWordPolynomial<GenWordPolynomial<GenWordPolynomial<BigInteger>>>(pppf);
+        //System.out.println("pppe = " + pppe);
         // System.out.println("ppp.equals(pppe) = " + ppp.equals(pppe) );
         // System.out.println("ppp.equals(ppp) = " + ppp.equals(ppp) );
         assertTrue("ppp.equals(pppe) = ", ppp.equals(pppe));
         assertTrue("ppp.equals(ppp) = ", ppp.equals(ppp));
 
-        pppe = pppe.sum(ppp); // why not ppp = ppp.add(pppe) ?
-        System.out.println("pppe = " + pppe);
+        pppe = pppe.sum(ppp); 
+        //System.out.println("pppe = " + pppe);
         assertTrue("pppe.isZERO() = ", pppe.isZERO());
-        ppp = pppf.random(2);
+        //ppp = pppf.random(2);
         ppp = ppp.subtract(ppp);
-        System.out.println("ppp = " + ppp);
+        //System.out.println("ppp = " + ppp);
         //System.out.println("ppp.isZERO() = " + ppp.isZERO());
         assertTrue("ppp.isZERO() = ", ppp.isZERO());
-
-        // some tests
-        //GenWordPolynomial<BigInteger> pfx = new GenWordPolynomial<BigInteger>();
-        //System.out.println("pfx = " + pfx);
     }
 
 
     /**
      * Test accessors.
      */
-    public void xtestAccessors() {
+    public void testAccessors() {
         // integers
         BigInteger rf = new BigInteger();
         // System.out.println("rf = " + rf);
 
         // non-commuting vars: abcdef
         WordFactory wf = new WordFactory("abcdef");
-        System.out.println("wf = " + wf);
+        //System.out.println("wf = " + wf);
 
         // polynomials over integers
         GenWordPolynomialRing<BigInteger> pf = new GenWordPolynomialRing<BigInteger>(rf, wf);
-        System.out.println("pf = " + pf);
+        //System.out.println("pf = " + pf);
 
         // test 1
         GenWordPolynomial<BigInteger> p = pf.getONE();
-        System.out.println("p = " + p);
+        //System.out.println("p = " + p);
 
         Word e = p.leadingWord();
         BigInteger c = p.leadingBaseCoefficient();
@@ -267,11 +269,11 @@ public class GenWordPolynomialTest extends TestCase {
 
         // non-commuting vars: abcdef
         WordFactory wf = new WordFactory("abcdef");
-        System.out.println("wf = " + wf);
+        //System.out.println("wf = " + wf);
 
         // polynomials over integers
         GenWordPolynomialRing<BigInteger> fac = new GenWordPolynomialRing<BigInteger>(rf, wf);
-        System.out.println("fac = " + fac);
+        //System.out.println("fac = " + fac);
 
         GenWordPolynomial<BigInteger> a = fac.random(kl,ll,el);
         GenWordPolynomial<BigInteger> b = fac.random(kl,ll,el);
@@ -280,19 +282,19 @@ public class GenWordPolynomialTest extends TestCase {
         GenWordPolynomial<BigInteger> d = c.subtract(b);
         GenWordPolynomial<BigInteger> e;
         assertEquals("a+b-b = a",a,d);
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
-        System.out.println("c = " + c);
-        System.out.println("d = " + d);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+        //System.out.println("c = " + c);
+        //System.out.println("d = " + d);
 
         c = fac.random(kl,ll,el);
-        System.out.println("\nc = " + c);
+        //System.out.println("\nc = " + c);
         d = a.sum( b.sum(c) );
         e = (a.sum(b)).sum(c);
 
-        System.out.println("d = " + d);
-        System.out.println("e = " + e);
-        System.out.println("d-e = " + d.subtract(e) );
+        //System.out.println("d = " + d);
+        //System.out.println("e = " + e);
+        //System.out.println("d-e = " + d.subtract(e) );
         assertEquals("a+(b+c) = (a+b)+c",d,e);
 
         Word u = wf.random(rl);
@@ -302,48 +304,48 @@ public class GenWordPolynomialTest extends TestCase {
         c = a.sum(b);
         d = a.sum(x,u);
         assertEquals("a+p(x,u) = a+(x,u)",c,d);
-        System.out.println("\nc = " + c);
-        System.out.println("d = " + d);
+        //System.out.println("\nc = " + c);
+        //System.out.println("d = " + d);
 
         c = a.subtract(b);
         d = a.subtract(x,u);
         assertEquals("a-p(x,u) = a-(x,u)",c,d);
-        System.out.println("c = " + c);
-        System.out.println("d = " + d);
+        //System.out.println("c = " + c);
+        //System.out.println("d = " + d);
 
         //a = new GenWordPolynomial<BigInteger>(fac);
         b = new GenWordPolynomial<BigInteger>(fac,x, u);
         c = b.sum(a);
         d = a.sum(x,u);
         assertEquals("a+p(x,u) = a+(x,u)",c,d);
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
-        System.out.println("c = " + c);
-        System.out.println("d = " + d);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+        //System.out.println("c = " + c);
+        //System.out.println("d = " + d);
 
         c = a.subtract(b);
         d = a.subtract(x,u);
         assertEquals("a-p(x,u) = a-(x,u)",c,d);
-        System.out.println("c = " + c);
-        System.out.println("d = " + d);
+        //System.out.println("c = " + c);
+        //System.out.println("d = " + d);
     }
 
 
     /**
      * Test multiplication.
      */
-    public void xtestMultiplication() {
+    public void testMultiplication() {
         // integers
         BigInteger rf = new BigInteger();
         // System.out.println("rf = " + rf);
 
         // non-commuting vars: abcdef
         WordFactory wf = new WordFactory("abcdef");
-        System.out.println("wf = " + wf);
+        //System.out.println("wf = " + wf);
 
         // polynomials over integers
         GenWordPolynomialRing<BigInteger> fac = new GenWordPolynomialRing<BigInteger>(rf, wf);
-        System.out.println("fac = " + fac);
+        //System.out.println("fac = " + fac);
 
         GenWordPolynomial<BigInteger> a = fac.random(kl,ll,el);
         GenWordPolynomial<BigInteger> b = fac.random(kl,ll,el);
@@ -352,20 +354,20 @@ public class GenWordPolynomialTest extends TestCase {
         GenWordPolynomial<BigInteger> d = b.multiply(a);
         GenWordPolynomial<BigInteger> e;
         assertFalse("a*b != b*a",c.equals(d));
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
-        System.out.println("c = " + c);
-        System.out.println("d = " + d);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+        //System.out.println("c = " + c);
+        //System.out.println("d = " + d);
 
         c = fac.random(kl,ll,el);
-        System.out.println("c = " + c);
+        //System.out.println("c = " + c);
         d = a.multiply( b.multiply(c) );
         e = (a.multiply(b)).multiply(c);
 
-        System.out.println("d = " + d);
-        System.out.println("e = " + e);
-        System.out.println("d-e = " + d.subtract(c) );
-        assertEquals("a+(b+c) = (a+b)+c",d,e);
+        //System.out.println("d = " + d);
+        //System.out.println("e = " + e);
+        //System.out.println("d-e = " + d.subtract(c) );
+        assertEquals("a*(b*c) = (a*b)*c",d,e);
 
         Word u = wf.random(rl);
         BigInteger x = rf.random(kl);
@@ -374,36 +376,36 @@ public class GenWordPolynomialTest extends TestCase {
         c = a.multiply(b);
         d = a.multiply(x,u);
         assertEquals("a+p(x,u) = a+(x,u)",c,d);
-        System.out.println("c = " + c);
-        System.out.println("d = " + d);
+        //System.out.println("c = " + c);
+        //System.out.println("d = " + d);
 
         //a = new GenWordPolynomial<BigInteger>(fac);
         b = new GenWordPolynomial<BigInteger>(fac,x, u);
         c = a.multiply(b);
         d = a.multiply(x,u);
         assertEquals("a+p(x,u) = a+(x,u)",c,d);
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
-        System.out.println("c = " + c);
-        System.out.println("d = " + d);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+        //System.out.println("c = " + c);
+        //System.out.println("d = " + d);
     }
 
 
     /**
      * Test distributive law.
      */
-    public void xtestDistributive() {
+    public void testDistributive() {
         // integers
         BigInteger rf = new BigInteger();
         // System.out.println("rf = " + rf);
 
         // non-commuting vars: abcdef
         WordFactory wf = new WordFactory("abcdef");
-        System.out.println("wf = " + wf);
+        //System.out.println("wf = " + wf);
 
         // polynomials over integers
         GenWordPolynomialRing<BigInteger> fac = new GenWordPolynomialRing<BigInteger>(rf, wf);
-        System.out.println("fac = " + fac);
+        //System.out.println("fac = " + fac);
 
         GenWordPolynomial<BigInteger> a = fac.random(kl,ll,el);
         GenWordPolynomial<BigInteger> b = fac.random(kl,ll,el);
@@ -414,6 +416,99 @@ public class GenWordPolynomialTest extends TestCase {
         e = a.multiply( b ).sum( a.multiply(c) );
 
         assertEquals("a(b+c) = ab+ac",d,e);
+    }
+
+
+    /**
+     * Test univariate division.
+     */
+    public void testUnivDivision() {
+        // rational numbers
+        BigRational rf = new BigRational();
+        //System.out.println("rf = " + rf);
+
+        // non-commuting vars: x
+        WordFactory wf = new WordFactory("x");
+        //System.out.println("wf = " + wf);
+
+        // polynomials over rational numbers
+        GenWordPolynomialRing<BigRational> fac = new GenWordPolynomialRing<BigRational>(rf, wf);
+        //System.out.println("fac = " + fac);
+
+        GenWordPolynomial<BigRational> a = fac.random(7,ll,el).monic();
+        GenWordPolynomial<BigRational> b = fac.random(7,ll,el).monic();
+
+        GenWordPolynomial<BigRational> c = a.multiply(b);
+        GenWordPolynomial<BigRational> d = b.multiply(a);
+        GenWordPolynomial<BigRational> e, f;
+        assertTrue("a*b == b*a",c.equals(d)); // since univariate
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+        //System.out.println("c = " + c);
+        //System.out.println("d = " + d);
+
+        e = c.divide(a);
+        //System.out.println("e = " + e);
+        assertTrue("a*b/a == b",b.equals(e)); 
+        d = c.divide(b);
+        //System.out.println("d = " + d);
+        assertTrue("a*b/b == a",a.equals(d)); 
+
+        d = c.gcd(a);
+        //System.out.println("d = " + d);
+        assertTrue("gcd(a*b,a) == a",a.equals(d)); 
+
+        d = a.gcd(b);
+        //System.out.println("d = " + d);
+        if ( d.isConstant() ) {
+            assertTrue("gcd(b,a) == 1",d.isONE()); 
+        } else {
+            return;
+        }
+        d = a.modInverse(b);
+        //System.out.println("d = " + d);
+        e = d.multiply(a);
+        //System.out.println("e = " + e);
+        f = e.remainder(b);
+        //System.out.println("f = " + f);
+        assertTrue("d * a == 1 mod b ",f.isONE()); 
+    }
+
+
+    /**
+     * Test multivariate division.
+     */
+    public void testMultiDivision() {
+        // rational numbers
+        BigRational rf = new BigRational();
+        // System.out.println("rf = " + rf);
+
+        // non-commuting vars: xy
+        WordFactory wf = new WordFactory("xy");
+        System.out.println("wf = " + wf);
+
+        // polynomials over rational numbers
+        GenWordPolynomialRing<BigRational> fac = new GenWordPolynomialRing<BigRational>(rf, wf);
+        System.out.println("fac = " + fac);
+
+        GenWordPolynomial<BigRational> a = fac.random(7,ll,el).monic();
+        GenWordPolynomial<BigRational> b = fac.random(7,ll,el).monic();
+
+        GenWordPolynomial<BigRational> c = a.multiply(b);
+        GenWordPolynomial<BigRational> d = b.multiply(a);
+        GenWordPolynomial<BigRational> e, f;
+        assertFalse("a*b == b*a",c.equals(d)); 
+        System.out.println("a = " + a);
+        System.out.println("b = " + b);
+        System.out.println("c = " + c);
+        System.out.println("d = " + d);
+
+        e = c.divide(a);
+        System.out.println("e = " + e);
+        assertTrue("a*b/a == b",b.equals(e)); 
+        f = d.divide(b);
+        System.out.println("f = " + f);
+        assertTrue("a*b/b == a",a.equals(f)); 
     }
 
 }

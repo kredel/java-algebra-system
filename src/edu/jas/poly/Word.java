@@ -124,14 +124,14 @@ public class Word implements MonoidElem<Word> {
         if ( val.length() == 0 ) {
 	    return "";
         }
-        StringBuffer s = new StringBuffer("(");
+        StringBuffer s = new StringBuffer("\"");
         for (int i = 0; i < length(); i++) {
             if (i != 0) {
-                s.append("*");
+                s.append(" ");
             }
             s.append(getVal(i));
         }
-        s.append(")");
+        s.append("\"");
         return s.toString();
     }
 
@@ -143,7 +143,18 @@ public class Word implements MonoidElem<Word> {
      */
     //JAVA6only: @Override
     public String toScript() {
-        return toString();
+        if ( val.length() == 0 ) {
+	    return "";
+        }
+        StringBuffer s = new StringBuffer("(");
+        for (int i = 0; i < length(); i++) {
+            if (i != 0) {
+                s.append("*"); // TODO check for python vs ruby
+            }
+            s.append(getVal(i));
+        }
+        s.append(")");
+        return s.toString();
     }
 
 

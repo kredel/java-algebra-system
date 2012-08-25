@@ -78,7 +78,7 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
      * @param r polynomial ring factory.
      */
     public GenWordPolynomial(GenWordPolynomialRing<C> r) {
-        this(r, new TreeMap<Word, C>());
+        this(r, new TreeMap<Word, C>(r.alphabet.getDescendComparator()));
     }
 
 
@@ -250,7 +250,7 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
                     s.append(" )");
                 }
                 if (!e.isONE()) {
-                    s.append(" * ");
+                    s.append(" ");
                 }
             }
             s.append(e.toString());
@@ -269,7 +269,49 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
      */
     //JAVA6only: @Override
     public String toScript() {
-        return toString();
+        if (isZERO()) {
+            return "0";
+        }
+        if (isONE()) {
+            return "1";
+        }
+        StringBuffer s = new StringBuffer();
+        if (val.size() > 1) {
+            s.append("( ");
+        }
+        boolean parenthesis = false;
+        boolean first = true;
+        for (Map.Entry<Word, C> m : val.entrySet()) {
+            C c = m.getValue();
+            if (first) {
+                first = false;
+            } else {
+                if (c.signum() < 0) {
+                    s.append(" - ");
+                    c = c.negate();
+                } else {
+                    s.append(" + ");
+                }
+            }
+            Word e = m.getKey();
+            if (!c.isONE() || e.isONE()) {
+                if (parenthesis) {
+                    s.append("( ");
+                }
+                s.append(c.toScript());
+                if (parenthesis) {
+                    s.append(" )");
+                }
+                if (!e.isONE()) {
+                    s.append(" * ");
+                }
+            }
+            s.append(e.toScript());
+        }
+        if (val.size() > 1) {
+            s.append(" )");
+        }
+        return s.toString();
     }
 
 
@@ -484,7 +526,7 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
      */
     public Word leadingWord() {
         if (val.size() == 0) {
-            return ring.wone; // null? needs many changes 
+            return ring.wone; // null? needs changes? 
         }
         return val.firstKey();
     }
@@ -558,26 +600,6 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
 
 
     /**
-     * Degree in variable i.
-     * @return maximal degree in the variable i.
-     */
-    public long degree(int i) {
-        if (val.size() == 0) {
-            return 0; // 0 or -1 ?;
-        }
-        int j = i;
-        long deg = 0;
-        for (Word e : val.keySet()) {
-            long d = e.getVal(j);
-            if (d > deg) {
-                deg = d;
-            }
-        }
-        return deg;
-    }
-
-
-    /**
      * Maximal degree.
      * @return maximal degree in any variables.
      */
@@ -591,41 +613,6 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
             if (d > deg) {
                 deg = d;
             }
-        }
-        return deg;
-    }
-
-
-    /**
-     * Total degree.
-     * @return total degree in any variables.
-     */
-    public long totalDegree() {
-        if (val.size() == 0) {
-            return 0; // 0 or -1 ?;
-        }
-        long deg = 0;
-        for (Word e : val.keySet()) {
-            long d = e.degree();
-            if (d > deg) {
-                deg = d;
-            }
-        }
-        return deg;
-    }
-
-
-    /**
-     * Maximal degree vector.
-     * @return maximal degree vector of all variables.
-     */
-    public Word degreeVector() {
-        Word deg = ring.wone;
-        if (val.size() == 0) {
-            return deg;
-        }
-        for (Word e : val.keySet()) {
-            deg = deg.lcm(e);
         }
         return deg;
     }
@@ -666,7 +653,6 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
      * @param S GenWordPolynomial.
      * @return this+S.
      */
-    //public <T extends GenWordPolynomial<C>> T sum(T /*GenWordPolynomial<C>*/ S) {
     public GenWordPolynomial<C> sum(GenWordPolynomial<C> S) {
         if (S == null) {
             return this;
@@ -677,7 +663,7 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
         if (this.isZERO()) {
             return S;
         }
-        assert (ring == S.ring);
+        assert (ring.alphabet == S.ring.alphabet);
         GenWordPolynomial<C> n = this.copy(); //new GenWordPolynomial<C>(ring, val); 
         SortedMap<Word, C> nv = n.val;
         SortedMap<Word, C> sv = S.val;
@@ -716,7 +702,6 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
         }
         GenWordPolynomial<C> n = this.copy(); //new GenWordPolynomial<C>(ring, val); 
         SortedMap<Word, C> nv = n.val;
-        //if ( nv.size() == 0 ) { nv.put(e,a); return n; }
         C x = nv.get(e);
         if (x != null) {
             x = x.sum(a);
@@ -758,7 +743,7 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
         if (this.isZERO()) {
             return S.negate();
         }
-        assert (ring == S.ring);
+        assert (ring.alphabet == S.ring.alphabet);
         GenWordPolynomial<C> n = this.copy(); //new GenWordPolynomial<C>(ring, val); 
         SortedMap<Word, C> nv = n.val;
         SortedMap<Word, C> sv = S.val;
@@ -829,12 +814,10 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
      */
     public GenWordPolynomial<C> negate() {
         GenWordPolynomial<C> n = ring.getZERO().copy();
-        //new GenWordPolynomial<C>(ring, ring.getZERO().val);
         SortedMap<Word, C> v = n.val;
         for (Map.Entry<Word, C> m : val.entrySet()) {
             C x = m.getValue(); // != null, 0
             v.put(m.getKey(), x.negate());
-            // or m.setValue( x.negate() ) if this cloned 
         }
         return n;
     }
@@ -867,7 +850,7 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
         if (this.isZERO()) {
             return this;
         }
-        assert (ring == S.ring);
+        assert (ring.alphabet == S.ring.alphabet);
         GenWordPolynomial<C> p = ring.getZERO().copy();
         SortedMap<Word, C> pv = p.val;
         for (Map.Entry<Word, C> m1 : val.entrySet()) {
@@ -983,7 +966,6 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
      * @return this * x<sup>e</sup>.
      */
     public GenWordPolynomial<C> multiply(Word e) {
-        // assert e != null. This is never allowed.
         if (this.isZERO()) {
             return this;
         }
@@ -1071,7 +1053,7 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
             throw new ArithmeticException(this.getClass().getName() + " lbcf not invertible " + c);
         }
         C ci = c.inverse();
-        assert (ring == S.ring);
+        assert (ring.alphabet == S.ring.alphabet);
         Word e = S.leadingWord();
         GenWordPolynomial<C> h;
         GenWordPolynomial<C> q = ring.getZERO().copy();
@@ -1093,23 +1075,6 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
         ret[0] = q;
         ret[1] = r;
         return ret;
-    }
-
-
-    /**
-     * GenWordPolynomial division with remainder. Fails, if exact division by
-     * leading base coefficient is not possible. Meaningful only for univariate
-     * polynomials over fields, but works in any case.
-     * @param S nonzero GenWordPolynomial with invertible leading coefficient.
-     * @return [ quotient , remainder ] with this = quotient * S + remainder and
-     *         deg(remainder) &lt; deg(S) or remiander = 0.
-     * @see edu.jas.poly.PolyUtil#baseSparsePseudoRemainder(edu.jas.poly.GenWordPolynomial,edu.jas.poly.GenWordPolynomial)
-     *      .
-     * @deprecated use quotientRemainder()
-     */
-    @Deprecated
-    public GenWordPolynomial<C>[] divideAndRemainder(GenWordPolynomial<C> S) {
-        return quotientRemainder(S);
     }
 
 
@@ -1145,7 +1110,7 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
             throw new ArithmeticException(this.getClass().getName() + " lbc not invertible " + c);
         }
         C ci = c.inverse();
-        assert (ring == S.ring);
+        assert (ring.alphabet == S.ring.alphabet);
         Word e = S.leadingWord();
         GenWordPolynomial<C> h;
         GenWordPolynomial<C> r = this.copy();
@@ -1180,8 +1145,7 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
             return S;
         }
         if (ring.alphabet.length() != 1) {
-            throw new IllegalArgumentException(this.getClass().getName() + " not univariate polynomials"
-                            + ring);
+            throw new IllegalArgumentException("no univariate polynomial " + ring);
         }
         GenWordPolynomial<C> x;
         GenWordPolynomial<C> q = this;
@@ -1220,8 +1184,7 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
             return ret;
         }
         if (ring.alphabet.length() != 1) {
-            throw new IllegalArgumentException(this.getClass().getName() + " not univariate polynomials"
-                            + ring);
+            throw new IllegalArgumentException("no univariate polynomial " + ring);
         }
         if (this.isConstant() && S.isConstant()) {
             C t = this.leadingBaseCoefficient();
@@ -1292,8 +1255,7 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
             return ret;
         }
         if (ring.alphabet.length() != 1) {
-            throw new IllegalArgumentException(this.getClass().getName() + " not univariate polynomials"
-                            + ring);
+            throw new IllegalArgumentException("no univariate polynomial " + ring);
         }
         GenWordPolynomial<C>[] qr;
         GenWordPolynomial<C> q = this;
@@ -1351,7 +1313,6 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
         GenWordPolynomial<C> a = hegcd[0];
         if (!a.isUnit()) { // gcd != 1
             throw new NotInvertibleException("element not invertible, gcd != 1");
-            //throw new AlgebraicNotInvertibleException("element not invertible, gcd != 1", m, a, m.divide(a));
         }
         GenWordPolynomial<C> b = hegcd[1];
         if (b.isZERO()) { // when m divides this, e.g. m.isUnit()
@@ -1396,8 +1357,8 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
      * @return new polynomial with coefficients f(this(e)).
      */
     public GenWordPolynomial<C> map(final UnaryFunctor<? super C, C> f) {
-        GenWordPolynomial<C> n = ring.getZERO().copy();
         throw new UnsupportedOperationException("not implemented");
+//        GenWordPolynomial<C> n = ring.getZERO().copy();
 //         SortedMap<Word, C> nv = n.val;
 //         for (Monomial<C> m : this) {
 //             //logger.info("m = " + m);

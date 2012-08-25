@@ -5,12 +5,14 @@
 package edu.jas.poly;
 
 
+import java.io.Serializable;
 import java.io.Reader;
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
-import java.math.BigInteger;
+import java.util.Comparator;
 
 import edu.jas.kern.StringUtil;
 import edu.jas.structure.MonoidElem;
@@ -41,6 +43,54 @@ public class WordFactory implements MonoidFactory<Word> {
      * Random number generator.
      */
     private final static Random random = new Random();
+
+
+    /**
+     * Comparator for Words.
+     */
+    public static abstract class WordComparator implements Comparator<Word>, Serializable {
+
+
+        public abstract int compare(Word e1, Word e2);
+    }
+
+
+    /**
+     * Defined descending order comparator. Sorts the highest terms first.
+     */
+    private static final WordComparator horder = new WordComparator() {
+
+
+                    @Override
+                    public int compare(Word e1, Word e2) {
+                        long t = e1.degree() - e2.degree();
+                        if ( t < 0L ) {
+                            return 1;
+                        } else if ( t > 0L ) {
+                            return -1;
+                        }
+                        return -e1.compareTo(e2);
+                    }
+    };
+
+
+    /**
+     * Defined ascending order comparator. Sorts the lowest terms first.
+     */
+    private static final WordComparator lorder = new WordComparator() {
+
+
+                    @Override
+                    public int compare(Word e1, Word e2) {
+                        long t = e2.degree() - e1.degree();
+                        if ( t < 0L ) {
+                            return -1;
+                        } else if ( t > 0L ) {
+                           return 1;
+                        }
+                        return e1.compareTo(e2);
+                    }
+    };
 
 
     /**
@@ -300,6 +350,24 @@ public class WordFactory implements MonoidFactory<Word> {
      */
     public Word parse(Reader r) {
         return parse( StringUtil.nextString(r) );
+    }
+
+
+    /**
+     * Get the descending order comparator. Sorts the highest terms first.
+     * @return horder.
+     */
+    public WordComparator getDescendComparator() {
+        return horder;
+    }
+
+
+    /**
+     * Get the ascending order comparator. Sorts the lowest terms first.
+     * @return lorder.
+     */
+    public WordComparator getAscendComparator() {
+        return lorder;
     }
 
 }
