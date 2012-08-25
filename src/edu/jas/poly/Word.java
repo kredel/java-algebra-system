@@ -19,7 +19,13 @@ import edu.jas.structure.NotInvertibleException;
  * @author Heinz Kredel
  */
 
-public class Word implements MonoidElem<Word> /* Serializable */ {
+public class Word implements MonoidElem<Word> {
+
+
+    /**
+     * Defining alphabet in WordFactory.
+     */
+    public final WordFactory mono;
 
 
     /**
@@ -43,9 +49,8 @@ public class Word implements MonoidElem<Word> /* Serializable */ {
     /**
      * Constructor for Word.
      */
-    public Word() {
-        hash = 0;
-        val = "";
+    public Word(WordFactory m) {
+        this(m,"");
     }
 
 
@@ -53,12 +58,13 @@ public class Word implements MonoidElem<Word> /* Serializable */ {
      * Constructor for Word.
      * @param s String
      */
-    public Word(String s) {
+    public Word(WordFactory m, String s) {
+        mono = m;
         hash = 0;
         if (s == null) {
             throw new IllegalArgumentException("null string not allowed");
         }
-        val = s.trim();
+        val = s; // mono.clean(s) ??
     }
 
 
@@ -68,18 +74,7 @@ public class Word implements MonoidElem<Word> /* Serializable */ {
      * @see edu.jas.structure.Element#factory()
      */
     public MonoidFactory<Word> factory() {
-        throw new UnsupportedOperationException("no factory implemented for Word");
-    }
-
-
-    /**
-     * Is this structure finite or infinite.
-     * @return true if this structure is finite, else false.
-     * @see edu.jas.structure.ElemFactory#isFinite() <b>Note: </b> returns true
-     *      because of finite String value.
-     */
-    public boolean isFinite() {
-        return true;
+        return mono;
     }
 
 
@@ -88,7 +83,7 @@ public class Word implements MonoidElem<Word> /* Serializable */ {
      */
     @Override
     public Word copy() {
-        return this; // since immutable
+        return new Word(mono,val); 
     }
 
 
@@ -102,7 +97,7 @@ public class Word implements MonoidElem<Word> /* Serializable */ {
 
 
     /**
-     * Get the exponent at position i.
+     * Get the letter at position i.
      * @param i position.
      * @return val[i].
      */
@@ -157,7 +152,7 @@ public class Word implements MonoidElem<Word> /* Serializable */ {
     //JAVA6only: @Override
     public String toScriptFactory() {
         // Python case
-        return "Word()";
+        return mono.toString();
     }
 
 
@@ -171,6 +166,7 @@ public class Word implements MonoidElem<Word> /* Serializable */ {
             return false;
         }
         Word b = (Word) B;
+        // mono == b.mono ??
         int t = this.compareTo(b);
         //System.out.println("equals: this = " + this + " B = " + B + " t = " + t);
         return (0 == t);
@@ -214,7 +210,7 @@ public class Word implements MonoidElem<Word> /* Serializable */ {
      * @return this * V.
      */
     public Word multiply(Word V) {
-        return new Word(this.val+V.val);
+        return new Word(mono,this.val+V.val);
     }
 
 
@@ -247,8 +243,8 @@ public class Word implements MonoidElem<Word> /* Serializable */ {
         String pre = this.val.substring(0,i);
         String suf = this.val.substring(i+len);
         Word[] ret = new Word[2];
-        ret[0] = new Word(pre);
-        ret[1] = new Word(suf);
+        ret[0] = new Word(mono,pre);
+        ret[1] = new Word(mono,suf);
         return ret;
     }
 
@@ -275,31 +271,6 @@ public class Word implements MonoidElem<Word> /* Serializable */ {
      */
     public Word inverse() {
         throw new UnsupportedOperationException("no inverse implemented for Word");
-    }
-
-
-    /**
-     * Generate a random Word.
-     * @param r length of new ExpVector.
-     * @param k maximal degree in each exponent.
-     * @param q density of nozero exponents.
-     * @return random Word.
-     */
-    public static Word random(int r, long k, float q) {
-        throw new UnsupportedOperationException("no divide implemented for Word");
-    }
-
-
-    /**
-     * Generate a random ExpVector.
-     * @param r length of new ExpVector.
-     * @param k maximal degree in each exponent.
-     * @param q density of nozero exponents.
-     * @param rnd is a source for random bits.
-     * @return random Word.
-     */
-    public static Word random(int r, long k, float q, Random rnd) {
-        throw new UnsupportedOperationException("no divide implemented for Word");
     }
 
 
@@ -398,6 +369,5 @@ public class Word implements MonoidElem<Word> /* Serializable */ {
         }
         return this.compareTo(V);
     }
-
 
 }

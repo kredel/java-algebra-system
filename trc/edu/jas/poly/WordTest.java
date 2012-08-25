@@ -71,7 +71,8 @@ public class WordTest extends TestCase {
      * Test constructor and toString.
      */
     public void testConstructor() {
-        a = new Word();
+        WordFactory wf = new WordFactory("abcdefg");
+        a = new Word(wf);
         b = a; 
         System.out.println("a = " + a);
         assertEquals("() = ()",a,b);
@@ -79,8 +80,8 @@ public class WordTest extends TestCase {
         assertTrue("isONE( () )",a.isONE());
         assertTrue("isUnit( () )",a.isUnit());
 
-        b = new Word( "abc");
-        c = new Word( " abc ");
+        b = new Word(wf, "abc");
+        c = wf.parse(" a b c ");
         System.out.println("b = " + b);
         System.out.println("c = " + c);
         assertEquals("b = c: ",b,c);
@@ -99,34 +100,70 @@ public class WordTest extends TestCase {
 
 
     /**
-     * Test random integer.
-     * 
+     * Test word factory.
+     */
+    public void testFactory() {
+        WordFactory wf = new WordFactory("abcdefg");
+        System.out.println("wf = " + wf);
+        Word w = wf.getONE();
+        System.out.println("w = " + w);
+        assertTrue("w == (): ", w.isONE());
+
+        w = wf.parse("aaabbbcccaaa");
+        System.out.println("w = " + w);
+        assertFalse("w != (): ", w.isONE());
+
+        a = wf.parse(w.toString());
+        System.out.println("a = " + a);
+        assertEquals("w = a",a,w);
+
+        WordFactory wf2 = new WordFactory(w.toString());
+        System.out.println("wf2 = " + wf2);
+
+        a = wf2.parse(w.toString());
+        System.out.println("a = " + a);
+        assertEquals("w = a",a,w);
+
+        List<Word> gens = wf.generators();
+        System.out.println("gens = " + gens);
+        assertTrue("#gens == 8: ", gens.size() == 8);
+        for ( Word v : gens ) {
+	    a = wf.parse(v.toString());
+            assertEquals("a == v", a,v);
+        }
+    }
+
+
+    /**
+     * Test random word.
      */
     public void testRandom() {
-        float q = (float) 0.2;
+        WordFactory wf = new WordFactory("uvwxyz");
+        System.out.println("wf = " + wf);
 
-        //         a = ExpVector.EVRAND(5,10,q);
-        //         String s = a.toString();
-        //         if ( s.indexOf(":") >= 0 ) {
-        //             s = s.substring(0,s.indexOf(":"));
-        //         }
-        //         b = ExpVector.create( s );
+        a = wf.random(3);
+        b = wf.random(4);
+        c = wf.random(5);
+        System.out.println("a = " + a);
+        System.out.println("b = " + b);
+        System.out.println("c = " + c);
 
-        //         assertEquals("a == b", true, a.equals(b) );
-
-        //         c = ExpVector.EVDIF(b,a);
-
-        //         assertTrue("a-b = 0",c.isZERO());
+        assertFalse("a != (): ", a.isONE());
+        assertFalse("b != (): ", b.isONE());
+        assertFalse("c != (): ", c.isONE());
+        assertTrue("#a == 3", a.length() == 3);
+        assertTrue("#b == 4", b.length() == 4);
+        assertTrue("#c == 5", c.length() == 5);
     }
 
 
     /**
      * Test multiplication.
-     * 
      */
     public void testMultiplication() {
-        a = new Word("abc");
-        b = new Word("cddaa");
+        WordFactory wf = new WordFactory("abcdefgx");
+        a = new Word(wf,"abc");
+        b = new Word(wf,"cddaa");
         System.out.println("a = " + a);
         System.out.println("b = " + b);
 
@@ -150,7 +187,7 @@ public class WordTest extends TestCase {
         System.out.println("d = " + d);
         assertTrue("isONE( () )",d.isONE());
 
-        d = new Word("xx");
+        d = new Word(wf,"xx");
         c = a.multiply(d).multiply(b);
         System.out.println("d = " + d);
         System.out.println("c = " + c);
