@@ -14,25 +14,24 @@ import java.util.TreeMap;
 import org.apache.log4j.Logger;
 
 import edu.jas.kern.PreemptingException;
-import edu.jas.kern.PrettyPrint;
 import edu.jas.structure.NotInvertibleException;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.UnaryFunctor;
 
 
 /**
- * GenWordPolynomial generic polynomials implementing RingElem. Non-commutative string
- * polynomials over C. Objects of this class are intended to be immutable. The
- * implementation is based on TreeMap respectively SortedMap from exponents to
- * coefficients. Only the coefficients are modeled with generic types, the
- * exponents are fixed to Word. C can also be a non integral domain, e.g. a
- * ModInteger, i.e. it may contain zero divisors, since multiply() does 
- * check for zeros. 
+ * GenWordPolynomial generic polynomials implementing RingElem. Non-commutative
+ * string polynomials over C. Objects of this class are intended to be
+ * immutable. The implementation is based on TreeMap respectively SortedMap from
+ * exponents to coefficients. Only the coefficients are modeled with generic
+ * types, the exponents are fixed to Word. C can also be a non integral domain,
+ * e.g. a ModInteger, i.e. it may contain zero divisors, since multiply() does
+ * check for zeros.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
-public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWordPolynomial<C>> 
-								 /*, Iterable<WordMonomial<C>>*/ {
+public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWordPolynomial<C>>
+/*, Iterable<WordMonomial<C>>*/{
 
 
     /**
@@ -188,8 +187,8 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
 
     /**
      * Put an a sorted map of exponents to coefficients into the internal map of
-     * this GenWordPolynomial. <b>Note:</b> Do not use this method unless you are
-     * constructing a new polynomial. this is modified and breaks the
+     * this GenWordPolynomial. <b>Note:</b> Do not use this method unless you
+     * are constructing a new polynomial. this is modified and breaks the
      * immutability promise of this class.
      * @param vals sorted map of exponents and coefficients.
      */
@@ -687,8 +686,8 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
 
 
     /**
-     * GenWordPolynomial addition. This method is not very efficient, since this is
-     * copied.
+     * GenWordPolynomial addition. This method is not very efficient, since this
+     * is copied.
      * @param a coefficient.
      * @param e exponent.
      * @return this + a x<sup>e</sup>.
@@ -718,8 +717,8 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
 
 
     /**
-     * GenWordPolynomial addition. This method is not very efficient, since this is
-     * copied.
+     * GenWordPolynomial addition. This method is not very efficient, since this
+     * is copied.
      * @param a coefficient.
      * @return this + a x<sup>0</sup>.
      */
@@ -767,8 +766,8 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
 
 
     /**
-     * GenWordPolynomial subtraction. This method is not very efficient, since this
-     * is copied.
+     * GenWordPolynomial subtraction. This method is not very efficient, since
+     * this is copied.
      * @param a coefficient.
      * @param e exponent.
      * @return this - a x<sup>e</sup>.
@@ -798,8 +797,8 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
 
 
     /**
-     * GenWordPolynomial subtract. This method is not very efficient, since this is
-     * copied.
+     * GenWordPolynomial subtract. This method is not very efficient, since this
+     * is copied.
      * @param a coefficient.
      * @return this + a x<sup>0</sup>.
      */
@@ -910,8 +909,8 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
 
 
     /**
-     * GenWordPolynomial monic, i.e. leadingCoefficient == 1. If leadingCoefficient
-     * is not invertible returns this unmodified.
+     * GenWordPolynomial monic, i.e. leadingCoefficient == 1. If
+     * leadingCoefficient is not invertible returns this unmodified.
      * @return monic(this).
      */
     public GenWordPolynomial<C> monic() {
@@ -978,8 +977,8 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
         if (this.isZERO()) {
             return this;
         }
-        if ( e.isONE() ) {
-            return multiply(s,f);
+        if (e.isONE()) {
+            return multiply(s, f);
         }
         GenWordPolynomial<C> p = ring.getZERO().copy();
         SortedMap<Word, C> pv = p.val;
@@ -1031,8 +1030,8 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
 
 
     /**
-     * GenWordPolynomial division. Division by coefficient ring element. Fails, if
-     * exact division is not possible.
+     * GenWordPolynomial division. Division by coefficient ring element. Fails,
+     * if exact division is not possible.
      * @param s coefficient.
      * @return this/s.
      */
@@ -1099,14 +1098,14 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
             Word f = r.leadingWord();
             if (f.multipleOf(e)) {
                 C a = r.leadingBaseCoefficient();
-                Word[] g = f.divideWord(e); // TODO
-                logger.info("div: f = " + f + ", e = " + e + ", g = " + g[0] + ", " + g[1]);
+                Word[] g = f.divideWord(e); // divide not sufficient
+                //logger.info("div: f = " + f + ", e = " + e + ", g = " + g[0] + ", " + g[1]);
                 a = a.multiply(ci);
                 q = q.sum(a, g[0].multiply(g[1]));
                 h = S.multiply(a, g[0], g[1]);
                 r = r.subtract(h);
                 Word fr = r.leadingWord();
-                if ( cmp.compare(f,fr) > 0 ) { // non noetherian reduction
+                if (cmp.compare(f, fr) > 0) { // non noetherian reduction
                     throw new RuntimeException("possible infinite loop: f = " + f + ", fr = " + fr);
                 }
             } else {
@@ -1161,13 +1160,13 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
             Word f = r.leadingWord();
             if (f.multipleOf(e)) {
                 C a = r.leadingBaseCoefficient();
-                Word[] g = f.divideWord(e); // TODO
-                logger.info("rem: f = " + f + ", e = " + e + ", g = " + g[0] + ", " + g[1]);
+                Word[] g = f.divideWord(e); // divide not sufficient
+                //logger.info("rem: f = " + f + ", e = " + e + ", g = " + g[0] + ", " + g[1]);
                 a = a.multiply(ci);
                 h = S.multiply(a, g[0], g[1]);
                 r = r.subtract(h);
                 Word fr = r.leadingWord();
-                if ( cmp.compare(f,fr) > 0 ) { // non noetherian reduction
+                if (cmp.compare(f, fr) > 0) { // non noetherian reduction
                     throw new RuntimeException("possible infinite loop: f = " + f + ", fr = " + fr);
                 }
             } else {
@@ -1179,8 +1178,8 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
 
 
     /**
-     * GenWordPolynomial greatest common divisor. Only for univariate polynomials
-     * over fields.
+     * GenWordPolynomial greatest common divisor. Only for univariate
+     * polynomials over fields.
      * @param S GenWordPolynomial.
      * @return gcd(this,S).
      */
@@ -1282,8 +1281,8 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
 
 
     /**
-     * GenWordPolynomial half extended greatest comon divisor. Only for univariate
-     * polynomials over fields.
+     * GenWordPolynomial half extended greatest comon divisor. Only for
+     * univariate polynomials over fields.
      * @param S GenWordPolynomial.
      * @return [ gcd(this,S), a ] with a*this + b*S = gcd(this,S).
      */
@@ -1369,7 +1368,6 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
     }
 
 
-
     /**
      * Iterator over coefficients.
      * @return val.values().iterator().
@@ -1405,16 +1403,16 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
      */
     public GenWordPolynomial<C> map(final UnaryFunctor<? super C, C> f) {
         throw new UnsupportedOperationException("not implemented");
-//        GenWordPolynomial<C> n = ring.getZERO().copy();
-//         SortedMap<Word, C> nv = n.val;
-//         for (Monomial<C> m : this) {
-//             //logger.info("m = " + m);
-//             C c = f.eval(m.c);
-//             if (c != null && !c.isZERO()) {
-//                 nv.put(m.e, c);
-//             }
-//         }
-//        return n;
+        //        GenWordPolynomial<C> n = ring.getZERO().copy();
+        //         SortedMap<Word, C> nv = n.val;
+        //         for (Monomial<C> m : this) {
+        //             //logger.info("m = " + m);
+        //             C c = f.eval(m.c);
+        //             if (c != null && !c.isZERO()) {
+        //                 nv.put(m.e, c);
+        //             }
+        //         }
+        //        return n;
     }
 
 }

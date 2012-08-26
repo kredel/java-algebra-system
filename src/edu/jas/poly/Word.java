@@ -5,17 +5,13 @@
 package edu.jas.poly;
 
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
-
 import edu.jas.structure.MonoidElem;
 import edu.jas.structure.MonoidFactory;
 import edu.jas.structure.NotInvertibleException;
 
 
 /**
- * Word implements strings of letters for polynomials. 
+ * Word implements strings of letters for polynomials.
  * @author Heinz Kredel
  */
 
@@ -31,7 +27,7 @@ public class Word implements MonoidElem<Word> {
     /**
      * The data structure is a String of characters.
      */
-    /*package*/ final String val;
+    /*package*/final String val;
 
 
     /**
@@ -41,16 +37,10 @@ public class Word implements MonoidElem<Word> {
 
 
     /**
-     * Random number generator.
-     */
-    private final static Random random = new Random();
-
-
-    /**
      * Constructor for Word.
      */
     public Word(WordFactory m) {
-        this(m,"");
+        this(m, "");
     }
 
 
@@ -83,7 +73,7 @@ public class Word implements MonoidElem<Word> {
      */
     @Override
     public Word copy() {
-        return new Word(mono,val); 
+        return new Word(mono, val);
     }
 
 
@@ -91,7 +81,7 @@ public class Word implements MonoidElem<Word> {
      * Get the word String.
      * @return val.
      */
-    /*package*/ String getVal() {
+    /*package*/String getVal() {
         return val;
     }
 
@@ -121,8 +111,8 @@ public class Word implements MonoidElem<Word> {
      */
     @Override
     public String toString() {
-        if ( val.length() == 0 ) {
-	    return "";
+        if (val.length() == 0) {
+            return "";
         }
         StringBuffer s = new StringBuffer("\"");
         for (int i = 0; i < length(); i++) {
@@ -143,8 +133,8 @@ public class Word implements MonoidElem<Word> {
      */
     //JAVA6only: @Override
     public String toScript() {
-        if ( val.length() == 0 ) {
-	    return "";
+        if (val.length() == 0) {
+            return "";
         }
         StringBuffer s = new StringBuffer("(");
         for (int i = 0; i < length(); i++) {
@@ -188,7 +178,7 @@ public class Word implements MonoidElem<Word> {
 
 
     /**
-     * hashCode. 
+     * hashCode.
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -224,54 +214,54 @@ public class Word implements MonoidElem<Word> {
      * @return this * V.
      */
     public Word multiply(Word V) {
-        return new Word(mono,this.val+V.val);
+        return new Word(mono, this.val + V.val);
     }
 
 
     /**
-     * Word divide. 
+     * Word divide.
      * @param V
      * @return this / V.
      */
     public Word divide(Word V) {
         Word[] ret = divideWord(V);
         // TODO: fail if both non zero?
-        if ( ! ret[0].isONE() && ! ret[1].isONE() ) {
-            throw new IllegalArgumentException("not simple dividable: left = " + ret[0] + ", right = " + ret[1] + ", use divideWord");
+        if (!ret[0].isONE() && !ret[1].isONE()) {
+            throw new IllegalArgumentException("not simple dividable: left = " + ret[0] + ", right = "
+                            + ret[1] + ", use divideWord");
         }
-        return ret[0].multiply(ret[1]); 
+        return ret[0].multiply(ret[1]);
     }
 
 
     /**
-     * Word divide with prefix and suffix. 
+     * Word divide with prefix and suffix.
      * @param V
      * @return [prefix(this/V), suffix(this/V)].
      */
     public Word[] divideWord(Word V) {
         int i = this.val.indexOf(V.val);
-        if ( i < 0 ) {
+        if (i < 0) {
             throw new NotInvertibleException("not dividable: " + this + ", other " + V);
         }
         int len = V.val.length();
-        String pre = this.val.substring(0,i);
-        String suf = this.val.substring(i+len);
+        String pre = this.val.substring(0, i);
+        String suf = this.val.substring(i + len);
         Word[] ret = new Word[2];
-        ret[0] = new Word(mono,pre);
-        ret[1] = new Word(mono,suf);
+        ret[0] = new Word(mono, pre);
+        ret[1] = new Word(mono, suf);
         return ret;
     }
 
 
     /**
-     * Word remainder. 
+     * Word remainder.
      * @param V
-     * @return this (this/V).
-     * <b>Note:</b> not useful.
+     * @return this (this/V). <b>Note:</b> not useful.
      */
     public Word remainder(Word V) {
         int i = this.val.indexOf(V.val);
-        if ( i < 0 ) {
+        if (i < 0) {
             throw new NotInvertibleException("not dividable: " + this + ", other " + V);
         }
         return V;
@@ -280,8 +270,7 @@ public class Word implements MonoidElem<Word> {
 
     /**
      * Word inverse.
-     * @return 1 / this.
-     * <b>Note:</b> throws UnsupportedOperationException.
+     * @return 1 / this. <b>Note:</b> throws UnsupportedOperationException.
      */
     public Word inverse() {
         throw new UnsupportedOperationException("no inverse implemented for Word");
@@ -294,7 +283,7 @@ public class Word implements MonoidElem<Word> {
      */
     public int signum() {
         int i = val.length();
-        if (i > 0 ) {
+        if (i > 0) {
             i = 1;
         }
         assert i >= 0;
@@ -320,6 +309,7 @@ public class Word implements MonoidElem<Word> {
         throw new UnsupportedOperationException("no divide implemented for Word");
     }
 
+
     /**
      * Word greatest common divisor.
      * @param V
@@ -338,7 +328,7 @@ public class Word implements MonoidElem<Word> {
 
 
     /**
-     * Word multiple test. 
+     * Word multiple test.
      * @param V
      * @return true if this is a multiple of V, else false.
      */
@@ -348,7 +338,7 @@ public class Word implements MonoidElem<Word> {
 
 
     /**
-     * Word divides test. 
+     * Word divides test.
      * @param V
      * @return true if this divides V, else false.
      */
@@ -375,10 +365,10 @@ public class Word implements MonoidElem<Word> {
      */
     public int gradCompareTo(Word V) {
         long e = this.degree();
-	long f = V.degree();
-        if ( e < f ) {
+        long f = V.degree();
+        if (e < f) {
             return 1;
-        } else if ( e > f ) {
+        } else if (e > f) {
             return -1;
         }
         return this.compareTo(V);

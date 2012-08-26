@@ -5,40 +5,30 @@
 package edu.jas.poly;
 
 
-import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.arith.ModIntegerRing;
 import edu.jas.kern.PreemptStatus;
-import edu.jas.kern.PrettyPrint;
 import edu.jas.kern.Scripting;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
-import edu.jas.util.CartesianProduct;
-import edu.jas.util.CartesianProductInfinite;
-import edu.jas.util.LongIterable;
 
 
 /**
  * GenWordPolynomialRing generic polynomial factory implementing RingFactory;
- * Factory for non-commutative string polynomials over C. 
+ * Factory for non-commutative string polynomials over C.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
 public class GenWordPolynomialRing<C extends RingElem<C>> implements RingFactory<GenWordPolynomial<C>>
-								     /*, Iterable<GenPolynomial<C>>*/ {
+/*, Iterable<GenPolynomial<C>>*/{
 
 
     /**
@@ -314,7 +304,8 @@ public class GenWordPolynomialRing<C extends RingElem<C>> implements RingFactory
 
 
     /**
-     * Get a (constant) GenWordPolynomial&lt;C&gt; element from a coefficient value.
+     * Get a (constant) GenWordPolynomial&lt;C&gt; element from a coefficient
+     * value.
      * @param a coefficient.
      * @return a GenWordPolynomial&lt;C&gt;.
      */
@@ -355,7 +346,8 @@ public class GenWordPolynomialRing<C extends RingElem<C>> implements RingFactory
 
 
     /**
-     * Get a (constant) GenWordPolynomial&lt;C&gt; element from a BigInteger value.
+     * Get a (constant) GenWordPolynomial&lt;C&gt; element from a BigInteger
+     * value.
      * @param a BigInteger.
      * @return a GenWordPolynomial&lt;C&gt;.
      */
@@ -454,16 +446,16 @@ public class GenWordPolynomialRing<C extends RingElem<C>> implements RingFactory
      */
     @SuppressWarnings("unchecked")
     public GenWordPolynomial<C> parse(Reader r) {
-        throw new UnsupportedOperationException("not implemented");   
-//         GenWordPolynomialTokenizer pt = new GenWordPolynomialTokenizer(this, r);
-//         GenWordPolynomial<C> p = null;
-//         try {
-//             p = (GenWordPolynomial<C>) pt.nextPolynomial();
-//         } catch (IOException e) {
-//             logger.error(e.toString() + " parse " + this);
-//             p = ZERO;
-//         }
-//         return p;
+        throw new UnsupportedOperationException("not implemented");
+        //         GenWordPolynomialTokenizer pt = new GenWordPolynomialTokenizer(this, r);
+        //         GenWordPolynomial<C> p = null;
+        //         try {
+        //             p = (GenWordPolynomial<C>) pt.nextPolynomial();
+        //         } catch (IOException e) {
+        //             logger.error(e.toString() + " parse " + this);
+        //             p = ZERO;
+        //         }
+        //         return p;
     }
 
 

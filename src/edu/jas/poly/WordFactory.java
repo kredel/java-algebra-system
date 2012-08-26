@@ -5,22 +5,20 @@
 package edu.jas.poly;
 
 
-import java.io.Serializable;
 import java.io.Reader;
+import java.io.Serializable;
 import java.math.BigInteger;
-import java.util.Collection;
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Comparator;
+import java.util.List;
+import java.util.Random;
 
 import edu.jas.kern.StringUtil;
-import edu.jas.structure.MonoidElem;
 import edu.jas.structure.MonoidFactory;
 
 
 /**
- * WordFactory implements alphabet related methods. 
+ * WordFactory implements alphabet related methods.
  * @author Heinz Kredel
  */
 
@@ -30,7 +28,7 @@ public class WordFactory implements MonoidFactory<Word> {
     /**
      * The data structure is a String of characters which defines the alphabet.
      */
-    /*package*/ final String alphabet;
+    /*package*/final String alphabet;
 
 
     /**
@@ -61,16 +59,16 @@ public class WordFactory implements MonoidFactory<Word> {
     private static final WordComparator horder = new WordComparator() {
 
 
-                    @Override
-                    public int compare(Word e1, Word e2) {
-                        long t = e1.degree() - e2.degree();
-                        if ( t < 0L ) {
-                            return 1;
-                        } else if ( t > 0L ) {
-                            return -1;
-                        }
-                        return e1.compareTo(e2);
-                    }
+        @Override
+        public int compare(Word e1, Word e2) {
+            long t = e1.degree() - e2.degree();
+            if (t < 0L) {
+                return 1;
+            } else if (t > 0L) {
+                return -1;
+            }
+            return e1.compareTo(e2);
+        }
     };
 
 
@@ -80,16 +78,16 @@ public class WordFactory implements MonoidFactory<Word> {
     private static final WordComparator lorder = new WordComparator() {
 
 
-                    @Override
-                    public int compare(Word e1, Word e2) {
-                        long t = e2.degree() - e1.degree();
-                        if ( t < 0L ) {
-                            return -1;
-                        } else if ( t > 0L ) {
-                           return 1;
-                        }
-                        return -e1.compareTo(e2);
-                    }
+        @Override
+        public int compare(Word e1, Word e2) {
+            long t = e2.degree() - e1.degree();
+            if (t < 0L) {
+                return -1;
+            } else if (t > 0L) {
+                return 1;
+            }
+            return -e1.compareTo(e2);
+        }
     };
 
 
@@ -121,7 +119,7 @@ public class WordFactory implements MonoidFactory<Word> {
      *      because of finite String value.
      */
     public boolean isFinite() {
-        if ( alphabet.length() == 0 ) {
+        if (alphabet.length() == 0) {
             return true;
         }
         return false;
@@ -160,7 +158,7 @@ public class WordFactory implements MonoidFactory<Word> {
      */
     @Override
     public Word copy(Word w) {
-        return new Word(this,w.getVal()); 
+        return new Word(this, w.getVal());
     }
 
 
@@ -177,7 +175,7 @@ public class WordFactory implements MonoidFactory<Word> {
      * Get the alphabet String.
      * @return alphabet.
      */
-    /*package*/ String getVal() {
+    /*package*/String getVal() {
         return alphabet;
     }
 
@@ -236,7 +234,7 @@ public class WordFactory implements MonoidFactory<Word> {
 
 
     /**
-     * hashCode. 
+     * hashCode.
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -251,10 +249,10 @@ public class WordFactory implements MonoidFactory<Word> {
      */
     public List<Word> generators() {
         int len = alphabet.length();
-        List<Word> gens = new ArrayList<Word>(len+1);
+        List<Word> gens = new ArrayList<Word>(len + 1);
         gens.add(ONE);
-        for ( int i = 0; i < len; i++ ) {
-	    Word w = new Word(this, String.valueOf(alphabet.charAt(i)) );
+        for (int i = 0; i < len; i++) {
+            Word w = new Word(this, String.valueOf(alphabet.charAt(i)));
             gens.add(w);
         }
         return gens;
@@ -287,7 +285,7 @@ public class WordFactory implements MonoidFactory<Word> {
      * @return a random element.
      */
     public Word random(int n) {
-        return random(n,random);
+        return random(n, random);
     }
 
 
@@ -300,15 +298,15 @@ public class WordFactory implements MonoidFactory<Word> {
     public Word random(int n, Random random) {
         StringBuffer sb = new StringBuffer();
         int len = alphabet.length();
-        for ( int i = 0; i < n; i++ ) {
+        for (int i = 0; i < n; i++) {
             int r = random.nextInt();
-            if ( r < 0 ) {
+            if (r < 0) {
                 r = -r;
             }
             r = r % len;
-	    sb.append( alphabet.charAt(r) );
+            sb.append(alphabet.charAt(r));
         }
-        return new Word(this,sb.toString());
+        return new Word(this, sb.toString());
     }
 
 
@@ -319,10 +317,10 @@ public class WordFactory implements MonoidFactory<Word> {
      */
     public static String clean(String s) {
         String st = s.trim();
-        st = st.replaceAll("\\*","");
-        st = st.replaceAll("\\s","");
-        st = st.replaceAll("\\(","");
-        st = st.replaceAll("\\)","");
+        st = st.replaceAll("\\*", "");
+        st = st.replaceAll("\\s", "");
+        st = st.replaceAll("\\(", "");
+        st = st.replaceAll("\\)", "");
         return st;
     }
 
@@ -335,21 +333,20 @@ public class WordFactory implements MonoidFactory<Word> {
     public Word parse(String s) {
         String st = clean(s);
         String regex = "[" + alphabet + "]*";
-        if ( ! st.matches( regex ) ) {
+        if (!st.matches(regex)) {
             throw new IllegalArgumentException("word '" + st + "' contains letters not from: " + alphabet);
-	}
-        return new Word(this,st);
+        }
+        return new Word(this, st);
     }
 
 
     /**
-     * Parse from Reader.
-     * White space is delimiter for word.
+     * Parse from Reader. White space is delimiter for word.
      * @param r Reader.
      * @return the next Element found on r.
      */
     public Word parse(Reader r) {
-        return parse( StringUtil.nextString(r) );
+        return parse(StringUtil.nextString(r));
     }
 
 
