@@ -206,7 +206,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
                         //ring.table.update(e1,?,Cs)
                     }
                 }
-                C c = a.multiply(b);
+                C c = a.multiply(b); // test for zero
                 //logger.debug("c = " + c);
                 Cs = Cs.multiply( c ); // symmetric!
                 //if ( debug ) logger.debug("Cs = " + Cs);
@@ -216,6 +216,26 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
         return Cp;
     }
 
+
+    /**
+     * GenSolvablePolynomial left and right multiplication. Product with
+     * two polynomials.
+     * @param S GenSolvablePolynomial.
+     * @param T GenSolvablePolynomial.
+     * @return S*this*T.
+     */
+    public GenSolvablePolynomial<C> multiply(GenSolvablePolynomial<C> S, GenSolvablePolynomial<C> T) {
+        if ( S.isZERO() || T.isZERO() ) {
+            return ring.getZERO();
+        }
+        if ( S.isONE() ) {
+            return multiply(T);
+        }
+        if ( T.isONE() ) {
+            return S.multiply(this);
+        }
+        return S.multiply(this).multiply(T);
+    }
 
 
     /**
@@ -236,7 +256,38 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
             ExpVector e = y.getKey(); 
             C a = y.getValue(); 
             C c = a.multiply(b);
-            Cm.put( e, c );
+            if ( !c.isZERO() ) {
+                Cm.put( e, c );
+            }
+        }
+        return Cp;
+    }
+
+
+    /**
+     * GenSolvablePolynomial left and right multiplication. 
+     * Product with coefficient ring element.
+     * @param b coefficient.
+     * @param c coefficient.
+     * @return b*this*c, where * is coefficient multiplication.
+     */
+    public GenSolvablePolynomial<C> multiply(C b, C c) {  
+        GenSolvablePolynomial<C> Cp = ring.getZERO().copy(); 
+        if ( b == null || b.isZERO() ) { 
+            return Cp;
+        }
+        if ( c == null || c.isZERO() ) { 
+            return Cp;
+        }
+        Map<ExpVector,C> Cm = Cp.val; //getMap();
+        Map<ExpVector,C> Am = val; 
+        for ( Map.Entry<ExpVector,C> y: Am.entrySet() ) { 
+            ExpVector e = y.getKey(); 
+            C a = y.getValue(); 
+            C d = b.multiply(a).multiply(c);
+            if ( !d.isZERO() ) {
+                Cm.put( e, d );
+            }
         }
         return Cp;
     }
@@ -255,8 +306,27 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
             return this;
         }
         C b = ring.getONECoefficient();
-        GenSolvablePolynomial<C> Cp = new GenSolvablePolynomial<C>(ring,b,e);
-        return multiply(Cp);
+        return multiply(b, e);
+    }
+
+
+    /**
+     * GenSolvablePolynomial left and right multiplication. 
+     * Product with exponent vector.
+     * @param e exponent.
+     * @param f exponent.
+     * @return x<sup>e</sup> * this * x<sup>f</sup>, 
+     * where * denotes solvable multiplication.
+     */
+    public GenSolvablePolynomial<C> multiply(ExpVector e, ExpVector f) {  
+        if ( e == null || e.isZERO() ) { 
+            return this;
+        }
+        if ( f == null || f.isZERO() ) { 
+            return this;
+        }
+        C b = ring.getONECoefficient();
+        return multiply(b, e, b, f);
     }
 
 
@@ -270,12 +340,34 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
      */
     @Override
     public GenSolvablePolynomial<C> multiply(C b, ExpVector e) {  
-        GenSolvablePolynomial<C> Cp = ring.getZERO().copy(); 
         if ( b == null || b.isZERO() ) { 
-            return Cp;
+            return ring.getZERO();
         }
-        Cp = new GenSolvablePolynomial<C>(ring,b,e);
+        GenSolvablePolynomial<C> Cp = new GenSolvablePolynomial<C>(ring,b,e);
         return multiply(Cp);
+    }
+
+
+    /**
+     * GenSolvablePolynomial left and right multiplication. 
+     * Product with ring element and exponent vector.
+     * @param b coefficient.
+     * @param e exponent.
+     * @param c coefficient.
+     * @param f exponent.
+     * @return b x<sup>e</sup> * this * c x<sup>f</sup>, 
+     * where * denotes solvable multiplication.
+     */
+    public GenSolvablePolynomial<C> multiply(C b, ExpVector e, C c, ExpVector f) {   
+        if ( b == null || b.isZERO() ) { 
+            return ring.getZERO();
+        }
+        if ( c == null || c.isZERO() ) { 
+            return ring.getZERO();
+        }
+        GenSolvablePolynomial<C> Cp = new GenSolvablePolynomial<C>(ring,b,e);
+        GenSolvablePolynomial<C> Dp = new GenSolvablePolynomial<C>(ring,c,f);
+        return multiply(Cp,Dp);
     }
 
 
@@ -288,13 +380,11 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
      * where * denotes solvable multiplication.
      */
     public GenSolvablePolynomial<C> multiplyLeft(C b, ExpVector e) {  
-        GenSolvablePolynomial<C> Cp = ring.getZERO().copy(); 
         if ( b == null || b.isZERO() ) { 
-            return Cp;
+            return ring.getZERO();
         }
-        Cp = new GenSolvablePolynomial<C>(ring,b,e);
-        Cp = Cp.multiply(this);
-        return Cp;
+        GenSolvablePolynomial<C> Cp = new GenSolvablePolynomial<C>(ring,b,e);
+        return Cp.multiply(this);
     }
 
 
@@ -332,7 +422,9 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
             ExpVector e = y.getKey(); 
             C a = y.getValue(); 
             C c = b.multiply(a);
-            Cm.put( e, c );
+            if ( !c.isZERO() ) {
+                Cm.put( e, c );
+            }
         }
         return Cp;
     }
