@@ -275,6 +275,16 @@ public class GenWordPolynomialRing<C extends RingElem<C>> implements RingFactory
 
 
     /**
+     * Is this structure finite or infinite.
+     * @return true if this structure is finite, else false.
+     * @see edu.jas.structure.ElemFactory#isFinite()
+     */
+    public boolean isFinite() {
+        return alphabet.isFinite() && coFac.isFinite();
+    }
+
+
+    /**
      * Query if this ring is a field.
      * @return false.
      */
@@ -357,8 +367,7 @@ public class GenWordPolynomialRing<C extends RingElem<C>> implements RingFactory
 
 
     /**
-     * Random polynomial. Generates a random polynomial with k = 5, l = n, d =
-     * (nvar == 1) ? n : 3, q = (nvar == 1) ? 0.7 : 0.3.
+     * Random polynomial. Generates a random polynomial.
      * @param n number of terms.
      * @return a random polynomial.
      */
@@ -368,8 +377,7 @@ public class GenWordPolynomialRing<C extends RingElem<C>> implements RingFactory
 
 
     /**
-     * Random polynomial. Generates a random polynomial with k = 5, l = n, d =
-     * (nvar == 1) ? n : 3, q = (nvar == 1) ? 0.7 : 0.3.
+     * Random polynomial. Generates a random polynomial with k = 5, l = n, d = 3.
      * @param n number of terms.
      * @param rnd is a source for random bits.
      * @return a random polynomial.
@@ -383,7 +391,7 @@ public class GenWordPolynomialRing<C extends RingElem<C>> implements RingFactory
      * Generate a random polynomial.
      * @param k bitsize of random coefficients.
      * @param l number of terms.
-     * @param d maximal degree in each variable.
+     * @param d maximal length of a random word.
      * @return a random polynomial.
      */
     public GenWordPolynomial<C> random(int k, int l, int d) {
@@ -395,13 +403,13 @@ public class GenWordPolynomialRing<C extends RingElem<C>> implements RingFactory
      * Generate a random polynomial.
      * @param k bitsize of random coefficients.
      * @param l number of terms.
-     * @param d maximal degree in each variable.
+     * @param d maximal length of a random word.
      * @param rnd is a source for random bits.
      * @return a random polynomial.
      */
     public GenWordPolynomial<C> random(int k, int l, int d, Random rnd) {
         GenWordPolynomial<C> r = getZERO(); //.clone() or copy( ZERO ); 
-        // add l random coeffs and exponents
+        // add l random coeffs and words of maximal length d
         for (int i = 0; i < l; i++) {
             int di = Math.abs(rnd.nextInt()) % d;
             Word e = alphabet.random(di, rnd);
@@ -409,7 +417,6 @@ public class GenWordPolynomialRing<C extends RingElem<C>> implements RingFactory
             r = r.sum(a, e); // somewhat inefficient but clean
             //System.out.println("e = " + e + " a = " + a);
         }
-        // System.out.println("r = " + r);
         return r;
     }
 
@@ -420,7 +427,6 @@ public class GenWordPolynomialRing<C extends RingElem<C>> implements RingFactory
      * @return a copy of c.
      */
     public GenWordPolynomial<C> copy(GenWordPolynomial<C> c) {
-        //System.out.println("GP copy = " + this);
         return new GenWordPolynomial<C>(this, c.val);
     }
 
@@ -446,6 +452,7 @@ public class GenWordPolynomialRing<C extends RingElem<C>> implements RingFactory
      */
     @SuppressWarnings("unchecked")
     public GenWordPolynomial<C> parse(Reader r) {
+        logger.error("parse not implemented");
         throw new UnsupportedOperationException("not implemented");
         //         GenWordPolynomialTokenizer pt = new GenWordPolynomialTokenizer(this, r);
         //         GenWordPolynomial<C> p = null;
@@ -467,7 +474,7 @@ public class GenWordPolynomialRing<C extends RingElem<C>> implements RingFactory
     public GenWordPolynomial<C> univariate(int i) {
         GenWordPolynomial<C> p = getZERO();
         List<Word> wgen = alphabet.generators();
-        if (1 <= i && i < wgen.size()) {
+        if (0 <= i && i < wgen.size()) {
             C one = coFac.getONE();
             Word f = wgen.get(i);
             p = p.sum(one, f);
@@ -477,12 +484,27 @@ public class GenWordPolynomialRing<C extends RingElem<C>> implements RingFactory
 
 
     /**
-     * Get the generating elements excluding the generators for the coefficient
+     * Generate list of univariate polynomials in all variables.
+     * @return List(X_1,...,X_n) a list of univariate polynomials.
+     */
+    public List<GenWordPolynomial<C>> univariateList() {
+        int n = alphabet.length();
+        List<GenWordPolynomial<C>> pols = new ArrayList<GenWordPolynomial<C>>(n);
+        for (int i = 0; i < n; i++) {
+            GenWordPolynomial<C> p = univariate(i);
+            pols.add(p);
+        }
+        return pols;
+    }
+
+
+    /**
+     * Get the generating elements <b>excluding</b> the generators for the coefficient
      * ring.
      * @return a list of generating elements for this ring.
      */
     public List<GenWordPolynomial<C>> getGenerators() {
-        List<? extends GenWordPolynomial<C>> univs = univariateList();
+        List<GenWordPolynomial<C>> univs = univariateList();
         List<GenWordPolynomial<C>> gens = new ArrayList<GenWordPolynomial<C>>(univs.size() + 1);
         gens.add(getONE());
         gens.addAll(univs);
@@ -491,44 +513,19 @@ public class GenWordPolynomialRing<C extends RingElem<C>> implements RingFactory
 
 
     /**
-     * Get a list of the generating elements.
+     * Get a list of all generating elements.
      * @return list of generators for the algebraic structure.
      * @see edu.jas.structure.ElemFactory#generators()
      */
     public List<GenWordPolynomial<C>> generators() {
-        List<? extends C> cogens = coFac.generators();
-        List<? extends GenWordPolynomial<C>> univs = univariateList();
+        List<C> cogens = coFac.generators();
+        List<GenWordPolynomial<C>> univs = univariateList();
         List<GenWordPolynomial<C>> gens = new ArrayList<GenWordPolynomial<C>>(univs.size() + cogens.size());
         for (C c : cogens) {
             gens.add(getONE().multiply(c));
         }
         gens.addAll(univs);
         return gens;
-    }
-
-
-    /**
-     * Is this structure finite or infinite.
-     * @return true if this structure is finite, else false.
-     * @see edu.jas.structure.ElemFactory#isFinite()
-     */
-    public boolean isFinite() {
-        return alphabet.isFinite() && coFac.isFinite();
-    }
-
-
-    /**
-     * Generate list of univariate polynomials in all variables.
-     * @return List(X_1,...,X_n) a list of univariate polynomials.
-     */
-    public List<? extends GenWordPolynomial<C>> univariateList() {
-        List<GenWordPolynomial<C>> pols = new ArrayList<GenWordPolynomial<C>>();
-        int nm = alphabet.length();
-        for (int i = 0; i < nm; i++) {
-            GenWordPolynomial<C> p = univariate(i);
-            pols.add(p);
-        }
-        return pols;
     }
 
 }

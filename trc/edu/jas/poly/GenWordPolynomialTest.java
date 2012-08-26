@@ -5,6 +5,8 @@
 package edu.jas.poly;
 
 
+import java.util.List;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -13,6 +15,7 @@ import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
+import edu.jas.arith.BigComplex;
 import edu.jas.structure.RingElem;
 
 
@@ -88,15 +91,22 @@ public class GenWordPolynomialTest extends TestCase {
         // polynomials over integers
         GenWordPolynomialRing<BigInteger> pf = new GenWordPolynomialRing<BigInteger>(rf, wf);
         //System.out.println("pf = " + pf);
+        assertFalse("not commutative",pf.isCommutative());
+        assertTrue("associative",pf.isAssociative());
+        assertFalse("not field",pf.isField());
 
         GenWordPolynomial<BigInteger> p = pf.getONE();
         //System.out.println("p = " + p);
         assertTrue("p == 1", p.isONE());
         p = pf.getZERO();
-        assertTrue("p == 1", p.isZERO());
+        assertTrue("p == 0", p.isZERO());
         //System.out.println("p = " + p);
         //p = pf.random(9);
         //System.out.println("p = " + p);
+
+        List<GenWordPolynomial<BigInteger>> gens = pf.generators();
+        //System.out.println("gens = " + gens);
+        assertTrue("#gens == 7", gens.size() == 7);
 
         RingElem<GenWordPolynomial<BigInteger>> pe = new GenWordPolynomial<BigInteger>(pf);
         //System.out.println("pe = " + pe);
@@ -119,8 +129,8 @@ public class GenWordPolynomialTest extends TestCase {
         WordFactory wf2 = new WordFactory("xyz");
         //System.out.println("wf2 = " + wf2);
 
-        GenWordPolynomialRing<GenWordPolynomial<BigInteger>> ppf = new GenWordPolynomialRing<GenWordPolynomial<BigInteger>>(
-                        pf, wf2);
+        GenWordPolynomialRing<GenWordPolynomial<BigInteger>> 
+           ppf = new GenWordPolynomialRing<GenWordPolynomial<BigInteger>>(pf, wf2);
         //System.out.println("ppf = " + ppf);
 
         GenWordPolynomial<GenWordPolynomial<BigInteger>> pp = ppf.getONE();
@@ -132,8 +142,12 @@ public class GenWordPolynomialTest extends TestCase {
         //System.out.println("pp = " + pp);
         assertTrue("pp == 0", pp.isZERO());
 
-        RingElem<GenWordPolynomial<GenWordPolynomial<BigInteger>>> ppe = new GenWordPolynomial<GenWordPolynomial<BigInteger>>(
-                        ppf);
+        List<GenWordPolynomial<GenWordPolynomial<BigInteger>>> pgens = ppf.generators();
+        //System.out.println("pgens = " + pgens);
+        assertTrue("#pgens == 7+3", pgens.size() == 10);
+
+        RingElem<GenWordPolynomial<GenWordPolynomial<BigInteger>>> 
+            ppe = new GenWordPolynomial<GenWordPolynomial<BigInteger>>(ppf);
         //System.out.println("ppe = " + ppe);
         //System.out.println("pp.equals(ppe) = " + pp.equals(ppe) );
         //System.out.println("pp.equals(pp) = " + pp.equals(pp) );
@@ -153,8 +167,8 @@ public class GenWordPolynomialTest extends TestCase {
         // non-commuting vars: uvw
         WordFactory wf3 = new WordFactory("uvw");
         //System.out.println("wf3 = " + wf3);
-        GenWordPolynomialRing<GenWordPolynomial<GenWordPolynomial<BigInteger>>> pppf = new GenWordPolynomialRing<GenWordPolynomial<GenWordPolynomial<BigInteger>>>(
-                        ppf, wf3);
+        GenWordPolynomialRing<GenWordPolynomial<GenWordPolynomial<BigInteger>>> 
+           pppf = new GenWordPolynomialRing<GenWordPolynomial<GenWordPolynomial<BigInteger>>>(ppf, wf3);
         //System.out.println("pppf = " + pppf);
 
         GenWordPolynomial<GenWordPolynomial<GenWordPolynomial<BigInteger>>> ppp = pppf.getONE();
@@ -166,8 +180,12 @@ public class GenWordPolynomialTest extends TestCase {
         //System.out.println("ppp = " + ppp);
         assertTrue("ppp == 0", ppp.isZERO());
 
-        RingElem<GenWordPolynomial<GenWordPolynomial<GenWordPolynomial<BigInteger>>>> pppe = new GenWordPolynomial<GenWordPolynomial<GenWordPolynomial<BigInteger>>>(
-                        pppf);
+        List<GenWordPolynomial<GenWordPolynomial<GenWordPolynomial<BigInteger>>>> ppgens = pppf.generators();
+        //System.out.println("ppgens = " + ppgens);
+        assertTrue("#ppgens == 7+3+3", ppgens.size() == 13);
+
+        RingElem<GenWordPolynomial<GenWordPolynomial<GenWordPolynomial<BigInteger>>>> 
+            pppe = new GenWordPolynomial<GenWordPolynomial<GenWordPolynomial<BigInteger>>>(pppf);
         //System.out.println("pppe = " + pppe);
         // System.out.println("ppp.equals(pppe) = " + ppp.equals(pppe) );
         // System.out.println("ppp.equals(ppp) = " + ppp.equals(ppp) );
@@ -511,7 +529,6 @@ public class GenWordPolynomialTest extends TestCase {
             System.out.println("a divide b fail: " + a + ", " + b);
             return;
         }
-
         WordFactory.WordComparator cmp = fac.alphabet.getDescendComparator();
         f = a.remainder(b);
         //System.out.println("a = " + a);
@@ -562,13 +579,67 @@ public class GenWordPolynomialTest extends TestCase {
             System.out.println("a divide b fail: " + a + ", " + b);
             return;
         }
-
         WordFactory.WordComparator cmp = fac.alphabet.getDescendComparator();
         f = a.remainder(b);
         //System.out.println("a = " + a);
         //System.out.println("f = " + f);
         assertTrue("a rem3 b <= a: " + a.leadingWord() + ", " + f.leadingWord(),
                         cmp.compare(a.leadingWord(), f.leadingWord()) <= 0);
+    }
+
+
+    /**
+     * Test polynomial and solvable coefficients.
+     */
+    public void testCoefficients() {
+        // integers
+        BigComplex rf = new BigComplex();
+        //System.out.println("rf = " + rf);
+
+        // commuting vars: uvw
+        String[] cvar = new String[] { "u", "v", "w" };
+        GenPolynomialRing<BigComplex> cf = new GenPolynomialRing<BigComplex>(rf, cvar);
+        //System.out.println("cf = " + cf);
+
+        // solvable vars: x1 x2 y1 y2
+        String[] svar = new String[] { "x1", "x2", "y1", "y2" };
+        GenSolvablePolynomialRing<GenPolynomial<BigComplex>> sf;
+        sf = new GenSolvablePolynomialRing<GenPolynomial<BigComplex>>(cf, svar);
+	//System.out.println("sf = " + sf);
+        WeylRelations<GenPolynomial<BigComplex>> wr = new WeylRelations<GenPolynomial<BigComplex>>(sf);
+        wr.generate();
+        //System.out.println("sf = " + sf);
+
+        // non-commuting vars: abcdef
+        WordFactory wf = new WordFactory("abcdef");
+        //System.out.println("wf = " + wf);
+        // non-commuting polynomials over commuting and solvable coefficients
+        GenWordPolynomialRing<GenPolynomial<GenPolynomial<BigComplex>>> nf;
+        nf = new GenWordPolynomialRing<GenPolynomial<GenPolynomial<BigComplex>>>(sf, wf);
+        //System.out.println("nf = " + nf);
+        //want: GenWordPolynomialRing<GenSolvablePolynomial<GenPolynomial<BigComplex>>> nf;
+
+        assertFalse("not commutative",nf.isCommutative());
+        assertTrue("associative",nf.isAssociative());
+        assertFalse("not field",nf.isField());
+
+        GenWordPolynomial<GenPolynomial<GenPolynomial<BigComplex>>> p = nf.getONE();
+        //System.out.println("p = " + p);
+        assertTrue("p == 1", p.isONE());
+        p = nf.getZERO();
+        //System.out.println("p = " + p);
+        assertTrue("p == 0", p.isZERO());
+        p = nf.random(3);
+        //System.out.println("p = " + p);
+        p = p.multiply(p);
+        //System.out.println("p = " + p);
+        p = p.subtract(p);
+        //System.out.println("p = " + p);
+        assertTrue("p == 0", p.isZERO());
+
+        List<GenWordPolynomial<GenPolynomial<GenPolynomial<BigComplex>>>> gens = nf.generators();
+        //System.out.println("gens = " + gens);
+        assertTrue("#gens == 2+3+4+6", gens.size() == 15);
     }
 
 }

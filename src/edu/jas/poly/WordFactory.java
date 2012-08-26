@@ -249,8 +249,8 @@ public class WordFactory implements MonoidFactory<Word> {
      */
     public List<Word> generators() {
         int len = alphabet.length();
-        List<Word> gens = new ArrayList<Word>(len + 1);
-        gens.add(ONE);
+        List<Word> gens = new ArrayList<Word>(len);
+        //gens.add(ONE); not a word generator
         for (int i = 0; i < len; i++) {
             Word w = new Word(this, String.valueOf(alphabet.charAt(i)));
             gens.add(w);
