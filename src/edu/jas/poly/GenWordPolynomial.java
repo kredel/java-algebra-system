@@ -1095,8 +1095,7 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
      * @param S nonzero GenWordPolynomial with invertible leading coefficient.
      * @return [ quotient , remainder ] with this = quotient * S + remainder and
      *         deg(remainder) &lt; deg(S) or remiander = 0.
-     * @see edu.jas.poly.PolyUtil#baseSparsePseudoRemainder(edu.jas.poly.GenWordPolynomial,edu.jas.poly.GenWordPolynomial)
-     *      .
+     * @see edu.jas.poly.PolyUtil#baseSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial).
      */
     @SuppressWarnings("unchecked")
     public GenWordPolynomial<C>[] quotientRemainder(GenWordPolynomial<C> S) {
@@ -1145,8 +1144,7 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
      * over fields, but works in any case.
      * @param S nonzero GenWordPolynomial with invertible leading coefficient.
      * @return quotient with this = quotient * S + remainder.
-     * @see edu.jas.poly.PolyUtil#baseSparsePseudoRemainder(edu.jas.poly.GenWordPolynomial,edu.jas.poly.GenWordPolynomial)
-     *      .
+     * @see edu.jas.poly.PolyUtil#baseSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial).
      */
     public GenWordPolynomial<C> divide(GenWordPolynomial<C> S) {
         return quotientRemainder(S)[0];
@@ -1159,8 +1157,7 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
      * over fields, but works in any case.
      * @param S nonzero GenWordPolynomial with invertible leading coefficient.
      * @return remainder with this = quotient * S + remainder.
-     * @see edu.jas.poly.PolyUtil#baseSparsePseudoRemainder(edu.jas.poly.GenWordPolynomial,edu.jas.poly.GenWordPolynomial)
-     *      .
+     * @see edu.jas.poly.PolyUtil#baseSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial).
      */
     public GenWordPolynomial<C> remainder(GenWordPolynomial<C> S) {
         if (S == null || S.isZERO()) {

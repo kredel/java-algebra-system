@@ -41,7 +41,7 @@ public class Word implements MonoidElem<Word> {
 
     /**
      * Constructor for Word.
-     * @param w factory for words.
+     * @param m factory for words.
      */
     public Word(WordFactory m) {
         this(m, "");
@@ -50,7 +50,7 @@ public class Word implements MonoidElem<Word> {
 
     /**
      * Constructor for Word.
-     * @param w factory for words.
+     * @param m factory for words.
      * @param s String
      */
     public Word(WordFactory m, String s) {
