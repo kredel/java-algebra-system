@@ -5,9 +5,9 @@
 package edu.jas.poly;
 
 
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
-import java.util.ArrayList;
+import java.util.SortedMap;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -15,12 +15,10 @@ import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
 
-import edu.jas.arith.BigInteger;
-
 
 /**
- * Word and WordFactory tests with JUnit.
- * Tests construction and arithmetic operations.
+ * Word and WordFactory tests with JUnit. Tests construction and arithmetic
+ * operations.
  * @author Heinz Kredel.
  */
 
@@ -30,9 +28,9 @@ public class WordTest extends TestCase {
     /**
      * main.
      */
-    public static void main (String[] args) {
+    public static void main(String[] args) {
         BasicConfigurator.configure();
-        junit.textui.TestRunner.run( suite() );
+        junit.textui.TestRunner.run(suite());
     }
 
 
@@ -44,24 +42,36 @@ public class WordTest extends TestCase {
         super(name);
     }
 
+
     /**
-     */ 
+     */
     public static Test suite() {
-        TestSuite suite= new TestSuite(WordTest.class);
+        TestSuite suite = new TestSuite(WordTest.class);
         return suite;
     }
+
 
     //private final static int bitlen = 100;
 
     Word a;
+
+
     Word b;
+
+
     Word c;
+
+
     Word d;
 
+
+    @Override
     protected void setUp() {
         a = b = c = d = null;
     }
 
+
+    @Override
     protected void tearDown() {
         a = b = c = d = null;
     }
@@ -73,29 +83,29 @@ public class WordTest extends TestCase {
     public void testConstructor() {
         WordFactory wf = new WordFactory("abcdefg");
         a = new Word(wf);
-        b = a; 
+        b = a;
         //System.out.println("a = " + a);
-        assertEquals("() = ()",a,b);
-        assertEquals("length( () ) = 0",a.length(),0);
-        assertTrue("isONE( () )",a.isONE());
-        assertTrue("isUnit( () )",a.isUnit());
+        assertEquals("() = ()", a, b);
+        assertEquals("length( () ) = 0", a.length(), 0);
+        assertTrue("isONE( () )", a.isONE());
+        assertTrue("isUnit( () )", a.isUnit());
 
         b = new Word(wf, "abc");
         c = wf.parse(" a b c ");
         //System.out.println("b = " + b);
         //System.out.println("c = " + c);
-        assertEquals("b = c: ",b,c);
+        assertEquals("b = c: ", b, c);
 
-        assertFalse("isONE( () )",b.isONE());
-        assertFalse("isUnit( () )",b.isUnit());
-        assertFalse("isONE( () )",c.isONE());
-        assertFalse("isUnit( () )",c.isUnit());
+        assertFalse("isONE( () )", b.isONE());
+        assertFalse("isUnit( () )", b.isUnit());
+        assertFalse("isONE( () )", c.isONE());
+        assertFalse("isUnit( () )", c.isUnit());
 
         String s = b.toString();
         String t = c.toString();
         //System.out.println("s = " + s);
         //System.out.println("t = " + t);
-        assertEquals("s = t: ",s,t);
+        assertEquals("s = t: ", s, t);
     }
 
 
@@ -115,21 +125,21 @@ public class WordTest extends TestCase {
 
         a = wf.parse(w.toString());
         //System.out.println("a = " + a);
-        assertEquals("w = a",a,w);
+        assertEquals("w = a", a, w);
 
         WordFactory wf2 = new WordFactory(w.toString());
         //System.out.println("wf2 = " + wf2);
 
         a = wf2.parse(w.toString());
         //System.out.println("a = " + a);
-        assertEquals("w = a",a,w);
+        assertEquals("w = a", a, w);
 
         List<Word> gens = wf.generators();
         //System.out.println("gens = " + gens);
-        assertTrue("#gens == 8: ", gens.size() == 8);
-        for ( Word v : gens ) {
-	    a = wf.parse(v.toString());
-            assertEquals("a == v", a,v);
+        assertTrue("#gens == 7: ", gens.size() == 7);
+        for (Word v : gens) {
+            a = wf.parse(v.toString());
+            assertEquals("a == v", a, v);
         }
     }
 
@@ -138,12 +148,12 @@ public class WordTest extends TestCase {
      * Test random word.
      */
     public void testRandom() {
-        WordFactory wf = new WordFactory("uvwxyz");
+        WordFactory wf = new WordFactory("uvw");
         //System.out.println("wf = " + wf);
 
-        a = wf.random(3);
-        b = wf.random(4);
-        c = wf.random(5);
+        a = wf.random(5);
+        b = wf.random(6);
+        c = wf.random(7);
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
         //System.out.println("c = " + c);
@@ -151,9 +161,31 @@ public class WordTest extends TestCase {
         assertFalse("a != (): ", a.isONE());
         assertFalse("b != (): ", b.isONE());
         assertFalse("c != (): ", c.isONE());
-        assertTrue("#a == 3", a.length() == 3);
-        assertTrue("#b == 4", b.length() == 4);
-        assertTrue("#c == 5", c.length() == 5);
+        assertTrue("#a == 5", a.length() == 5);
+        assertTrue("#b == 6", b.length() == 6);
+        assertTrue("#c == 7", c.length() == 7);
+
+        SortedMap<String, Integer> ma = a.dependencyOnVariables();
+        SortedMap<String, Integer> mb = b.dependencyOnVariables();
+        SortedMap<String, Integer> mc = c.dependencyOnVariables();
+        //System.out.println("ma = " + ma);
+        //System.out.println("mb = " + mb);
+        //System.out.println("mc = " + mc);
+        assertTrue("#ma <= 3", ma.size() <= wf.length());
+        assertTrue("#mb <= 3", mb.size() <= wf.length());
+        assertTrue("#mc <= 3", mc.size() <= wf.length());
+        assertTrue("S ma <= #a", sum(ma.values()) == a.length());
+        assertTrue("S mb <= #b", sum(mb.values()) == b.length());
+        assertTrue("S mc <= #c", sum(mc.values()) == c.length());
+    }
+
+
+    int sum(Collection<Integer> li) {
+        int s = 0;
+        for (Integer i : li) {
+            s += i;
+        }
+        return s;
     }
 
 
@@ -162,8 +194,8 @@ public class WordTest extends TestCase {
      */
     public void testMultiplication() {
         WordFactory wf = new WordFactory("abcdefgx");
-        a = new Word(wf,"abc");
-        b = new Word(wf,"cddaa");
+        a = new Word(wf, "abc");
+        b = new Word(wf, "cddaa");
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
 
@@ -177,17 +209,17 @@ public class WordTest extends TestCase {
 
         d = c.divide(a);
         //System.out.println("d = " + d);
-        assertEquals("d = b",d,b);
+        assertEquals("d = b", d, b);
 
         d = c.divide(b);
         //System.out.println("d = " + d);
-        assertEquals("d = a",d,a);
+        assertEquals("d = a", d, a);
 
         d = c.divide(c);
         //System.out.println("d = " + d);
-        assertTrue("isONE( () )",d.isONE());
+        assertTrue("isONE( () )", d.isONE());
 
-        d = new Word(wf,"xx");
+        d = new Word(wf, "xx");
         c = a.multiply(d).multiply(b);
         //System.out.println("d = " + d);
         //System.out.println("c = " + c);
@@ -196,11 +228,11 @@ public class WordTest extends TestCase {
         Word[] ret = c.divideWord(d);
         //System.out.println("ret = " + ret[0] + ", " + ret[1]);
 
-        assertEquals("prefix(c/d) = a",a,ret[0]);
-        assertEquals("suffix(c/d) = b",b,ret[1]);
+        assertEquals("prefix(c/d) = a", a, ret[0]);
+        assertEquals("suffix(c/d) = b", b, ret[1]);
 
         Word e = ret[0].multiply(d).multiply(ret[1]);
-        assertEquals("prefix(c/d) d suffix(c/d) = e",e,c);
+        assertEquals("prefix(c/d) d suffix(c/d) = e", e, c);
     }
 
 }

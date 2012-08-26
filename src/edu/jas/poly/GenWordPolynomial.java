@@ -23,8 +23,8 @@ import edu.jas.structure.UnaryFunctor;
  * GenWordPolynomial generic polynomials implementing RingElem. Non-commutative
  * string polynomials over C. Objects of this class are intended to be
  * immutable. The implementation is based on TreeMap respectively SortedMap from
- * exponents to coefficients. Only the coefficients are modeled with generic
- * types, the exponents are fixed to Word. C can also be a non integral domain,
+ * words to coefficients. Only the coefficients are modeled with generic
+ * types, the "exponents" are fixed to Word. C can also be a non integral domain,
  * e.g. a ModInteger, i.e. it may contain zero divisors, since multiply() does
  * check for zeros.
  * @param <C> coefficient type
@@ -85,7 +85,7 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
      * Constructor for GenWordPolynomial c * x<sup>e</sup>.
      * @param r polynomial ring factory.
      * @param c coefficient.
-     * @param e exponent.
+     * @param e word.
      */
     public GenWordPolynomial(GenWordPolynomialRing<C> r, C c, Word e) {
         this(r);
@@ -108,7 +108,7 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
     /**
      * Constructor for GenWordPolynomial x<sup>e</sup>.
      * @param r polynomial ring factory.
-     * @param e exponent.
+     * @param e word.
      */
     public GenWordPolynomial(GenWordPolynomialRing<C> r, Word e) {
         this(r, r.coFac.getONE(), e);
@@ -170,7 +170,7 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
      * constructing a new polynomial. this is modified and breaks the
      * immutability promise of this class.
      * @param c coefficient.
-     * @param e exponent.
+     * @param e word.
      */
     public void doPutToMap(Word e, C c) {
         if (debug) {
@@ -186,11 +186,11 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
 
 
     /**
-     * Put an a sorted map of exponents to coefficients into the internal map of
+     * Put an a sorted map of words to coefficients into the internal map of
      * this GenWordPolynomial. <b>Note:</b> Do not use this method unless you
      * are constructing a new polynomial. this is modified and breaks the
      * immutability promise of this class.
-     * @param vals sorted map of exponents and coefficients.
+     * @param vals sorted map of wordss and coefficients.
      */
     public void doPutToMap(SortedMap<Word, C> vals) {
         for (Map.Entry<Word, C> me : vals.entrySet()) {
@@ -520,8 +520,8 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
 
 
     /**
-     * Leading exponent vector.
-     * @return first exponent.
+     * Leading word.
+     * @return first highest word.
      */
     public Word leadingWord() {
         if (val.size() == 0) {
@@ -532,8 +532,8 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
 
 
     /**
-     * Trailing exponent vector.
-     * @return last exponent.
+     * Trailing word.
+     * @return last lowest word.
      */
     public Word trailingWord() {
         if (val.size() == 0) {
@@ -570,8 +570,8 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
 
     /**
      * Coefficient.
-     * @param e exponent.
-     * @return coefficient for given exponent.
+     * @param e word.
+     * @return coefficient for given word.
      */
     public C coefficient(Word e) {
         C c = val.get(e);
@@ -689,8 +689,8 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
      * GenWordPolynomial addition. This method is not very efficient, since this
      * is copied.
      * @param a coefficient.
-     * @param e exponent.
-     * @return this + a x<sup>e</sup>.
+     * @param e word.
+     * @return this + a e.
      */
     public GenWordPolynomial<C> sum(C a, Word e) {
         if (a == null) {
@@ -769,8 +769,8 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
      * GenWordPolynomial subtraction. This method is not very efficient, since
      * this is copied.
      * @param a coefficient.
-     * @param e exponent.
-     * @return this - a x<sup>e</sup>.
+     * @param e word.
+     * @return this - a e.
      */
     public GenWordPolynomial<C> subtract(C a, Word e) {
         if (a == null) {
@@ -880,6 +880,27 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
 
 
     /**
+     * GenWordPolynomial left and right multiplication. Product with
+     * two polynomials.
+     * @param S GenWordPolynomial.
+     * @param T GenWordPolynomial.
+     * @return S*this*T.
+     */
+    public GenWordPolynomial<C> multiply(GenWordPolynomial<C> S, GenWordPolynomial<C> T) {
+        if ( S.isZERO() || T.isZERO() ) {
+            return ring.getZERO();
+        }
+        if ( S.isONE() ) {
+            return multiply(T);
+        }
+        if ( T.isONE() ) {
+            return S.multiply(this);
+        }
+        return S.multiply(this).multiply(T);
+    }
+
+
+    /**
      * GenWordPolynomial multiplication. Product with coefficient ring element.
      * @param s coefficient.
      * @return this*s.
@@ -928,11 +949,10 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
 
 
     /**
-     * GenWordPolynomial multiplication. Product with ring element and exponent
-     * vector.
+     * GenWordPolynomial multiplication. Product with ring element and word.
      * @param s coefficient.
-     * @param e left exponent.
-     * @return this * s x<sup>e</sup>.
+     * @param e left word.
+     * @return this * s e.
      */
     public GenWordPolynomial<C> multiply(C s, Word e) {
         if (s == null) {
@@ -960,12 +980,12 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
 
 
     /**
-     * GenWordPolynomial multiplication. Product with ring element and exponent
-     * vector.
+     * GenWordPolynomial left and right multiplication. Product with
+     * ring element and two words.
      * @param s coefficient.
-     * @param e left exponent.
-     * @param f right exponent.
-     * @return this * s x<sup>e</sup>.
+     * @param e left word.
+     * @param f right word.
+     * @return e * this * s * f.
      */
     public GenWordPolynomial<C> multiply(C s, Word e, Word f) {
         if (s == null) {
@@ -996,9 +1016,9 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
 
 
     /**
-     * GenWordPolynomial multiplication. Product with exponent vector.
-     * @param e exponent (!= null).
-     * @return this * x<sup>e</sup>.
+     * GenWordPolynomial multiplication. Product with word.
+     * @param e word (!= null).
+     * @return this * e.
      */
     public GenWordPolynomial<C> multiply(Word e) {
         if (this.isZERO()) {
@@ -1378,10 +1398,10 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
 
 
     /**
-     * Iterator over exponents.
+     * Iterator over words.
      * @return val.keySet().iterator().
      */
-    public Iterator<Word> exponentIterator() {
+    public Iterator<Word> wordIterator() {
         return val.keySet().iterator();
     }
 

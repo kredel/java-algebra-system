@@ -155,6 +155,8 @@ public class WordFactory implements MonoidFactory<Word> {
 
     /**
      * Copy word.
+     * @param w word to copy.
+     * @return copy of w.
      */
     @Override
     public Word copy(Word w) {
@@ -299,11 +301,7 @@ public class WordFactory implements MonoidFactory<Word> {
         StringBuffer sb = new StringBuffer();
         int len = alphabet.length();
         for (int i = 0; i < n; i++) {
-            int r = random.nextInt();
-            if (r < 0) {
-                r = -r;
-            }
-            r = r % len;
+            int r = Math.abs(random.nextInt()) % len;
             sb.append(alphabet.charAt(r));
         }
         return new Word(this, sb.toString());
@@ -321,6 +319,7 @@ public class WordFactory implements MonoidFactory<Word> {
         st = st.replaceAll("\\s", "");
         st = st.replaceAll("\\(", "");
         st = st.replaceAll("\\)", "");
+        st = st.replaceAll("\\\"", "");
         return st;
     }
 

@@ -423,7 +423,7 @@ public class GenWordPolynomialRing<C extends RingElem<C>> implements RingFactory
 
     /**
      * Copy polynomial c.
-     * @param c
+     * @param c polynomial to copy.
      * @return a copy of c.
      */
     public GenWordPolynomial<C> copy(GenWordPolynomial<C> c) {

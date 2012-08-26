@@ -5,6 +5,9 @@
 package edu.jas.poly;
 
 
+import java.util.SortedMap;
+import java.util.TreeMap;
+
 import edu.jas.structure.MonoidElem;
 import edu.jas.structure.MonoidFactory;
 import edu.jas.structure.NotInvertibleException;
@@ -38,6 +41,7 @@ public class Word implements MonoidElem<Word> {
 
     /**
      * Constructor for Word.
+     * @param w factory for words.
      */
     public Word(WordFactory m) {
         this(m, "");
@@ -46,6 +50,7 @@ public class Word implements MonoidElem<Word> {
 
     /**
      * Constructor for Word.
+     * @param w factory for words.
      * @param s String
      */
     public Word(WordFactory m, String s) {
@@ -70,6 +75,7 @@ public class Word implements MonoidElem<Word> {
 
     /**
      * Copy this.
+     * @return copy of this.
      */
     @Override
     public Word copy() {
@@ -237,7 +243,7 @@ public class Word implements MonoidElem<Word> {
     /**
      * Word divide with prefix and suffix.
      * @param V
-     * @return [prefix(this/V), suffix(this/V)].
+     * @return [prefix(this/V), suffix(this/V)] = [left,right] with left * V * right = this.
      */
     public Word[] divideWord(Word V) {
         int i = this.val.indexOf(V.val);
@@ -320,11 +326,23 @@ public class Word implements MonoidElem<Word> {
     }
 
 
-    /*
-     * ExpVector dependency on variables.
-     * @return array of indices where val has positive exponents.
-    public abstract int[] dependencyOnVariables();
+    /**
+     * Word dependency on letters.
+     * @return sorted map of letters and the number of its occurences.
      */
+    public SortedMap<String,Integer> dependencyOnVariables() {
+        SortedMap<String,Integer> map = new TreeMap<String,Integer>();
+        for ( int i = 0; i < val.length(); i++ ) {
+	    String s = String.valueOf( val.charAt(i) );
+            Integer n = map.get(s);
+            if ( n == null ) {
+                n = 0;
+            }
+            n = n + 1;
+            map.put(s,n); 
+        }
+        return map;
+    }
 
 
     /**
@@ -348,7 +366,7 @@ public class Word implements MonoidElem<Word> {
 
 
     /**
-     * Word compareTo.
+     * Word compareTo. Uses <pre>String.compareTo</pre>.
      * @param V
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
@@ -359,7 +377,7 @@ public class Word implements MonoidElem<Word> {
 
 
     /**
-     * Word graded compareTo.
+     * Word graded comparison. Compares first be degree, then lexicographical.
      * @param V
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
