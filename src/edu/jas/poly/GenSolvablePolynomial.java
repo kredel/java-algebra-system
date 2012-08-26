@@ -53,7 +53,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
 
 
     /**
-     * Constructor for zero GenSolvablePolynomial.
+     * Constructor for GenSolvablePolynomial.
      * @param r solvable polynomial ring factory.
      * @param c coefficient.
      * @param e exponent.
@@ -68,7 +68,17 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
 
 
     /**
-     * Constructor for zero GenSolvablePolynomial.
+     * Constructor for GenSolvablePolynomial.
+     * @param r solvable polynomial ring factory.
+     * @param c coefficient.
+     */
+    public GenSolvablePolynomial(GenSolvablePolynomialRing< C > r, C c) {
+        this(r,c,r.evzero);
+    }
+
+
+    /**
+     * Constructor for GenSolvablePolynomial.
      * @param r solvable polynomial ring factory.
      * @param v the SortedMap of some other (solvable) polynomial.
      */
@@ -206,9 +216,8 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
                         //ring.table.update(e1,?,Cs)
                     }
                 }
-                C c = a.multiply(b); // test for zero
-                //logger.debug("c = " + c);
-                Cs = Cs.multiply( c ); // symmetric!
+                //C c = a.multiply(b);
+                Cs = Cs.multiply(a,b); // now non-symmetric // Cs.multiply(c); is symmetric!
                 //if ( debug ) logger.debug("Cs = " + Cs);
                 Cp = (GenSolvablePolynomial<C>)Cp.sum( Cs );
             }
@@ -225,7 +234,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
      * @return S*this*T.
      */
     public GenSolvablePolynomial<C> multiply(GenSolvablePolynomial<C> S, GenSolvablePolynomial<C> T) {
-        if ( S.isZERO() || T.isZERO() ) {
+        if ( S.isZERO() || T.isZERO() || this.isZERO() ) {
             return ring.getZERO();
         }
         if ( S.isONE() ) {

@@ -8,17 +8,15 @@ import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
 
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigRational;
-
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
-
 import edu.jas.structure.RingElem;
 //import edu.jas.structure.RingFactory;
 
@@ -36,6 +34,7 @@ public class GenSolvablePolynomialTest extends TestCase {
      * main
      */
     public static void main (String[] args) {
+        BasicConfigurator.configure();
         junit.textui.TestRunner.run( suite() );
     }
 
@@ -167,10 +166,6 @@ public class GenSolvablePolynomialTest extends TestCase {
         // System.out.println("ppp = " + ppp);
         // System.out.println("ppp.isZERO() = " + ppp.isZERO());
         assertTrue("ppp.isZERO() = ", ppp.isZERO());
-
-        // some tests
-        //GenSolvablePolynomial<BigRational> pfx = new GenSolvablePolynomial<BigRational>();
-        //System.out.println("pfx = " + pfx);
     }
 
 
