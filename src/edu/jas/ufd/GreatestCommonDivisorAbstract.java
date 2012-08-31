@@ -313,7 +313,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
      */
     public GenPolynomial<C> divide(GenPolynomial<C> a, C b) {
         if (b == null || b.isZERO()) {
-            throw new IllegalArgumentException(this.getClass().getName() + " division by zero");
+            throw new IllegalArgumentException("division by zero");
 
         }
         if (a == null || a.isZERO()) {

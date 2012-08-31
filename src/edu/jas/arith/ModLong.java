@@ -360,7 +360,7 @@ public final class ModLong implements GcdRingElem<ModLong>, Modular {
      */
     public ModLong remainder(ModLong S) {
         if (S == null || S.isZERO()) {
-            throw new ArithmeticException(this.getClass().getName() + " division by zero");
+            throw new ArithmeticException("division by zero");
         }
         if (S.isONE()) {
             return ring.getZERO();

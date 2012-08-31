@@ -344,7 +344,7 @@ public class AlgebraicNumber<C extends RingElem<C>> implements GcdRingElem<Algeb
      */
     public AlgebraicNumber<C> remainder(AlgebraicNumber<C> S) {
         if (S == null || S.isZERO()) {
-            throw new ArithmeticException(this.getClass().getName() + " division by zero");
+            throw new ArithmeticException("division by zero");
         }
         if (S.isONE()) {
             return ring.getZERO();

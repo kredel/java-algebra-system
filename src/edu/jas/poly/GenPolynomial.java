@@ -1152,7 +1152,7 @@ Iterable<Monomial<C>> {
      */
     public GenPolynomial<C> divide(C s) {
         if (s == null || s.isZERO()) {
-            throw new ArithmeticException(this.getClass().getName() + " division by zero");
+            throw new ArithmeticException("division by zero");
         }
         if (this.isZERO()) {
             return this;
@@ -1169,13 +1169,11 @@ Iterable<Monomial<C>> {
                 C x = c1.remainder(s);
                 if (!x.isZERO()) {
                     logger.info("divide x = " + x);
-                    throw new ArithmeticException(this.getClass().getName() + " no exact division: " + c1
-                                    + "/" + s);
+                    throw new ArithmeticException("no exact division: " + c1 + "/" + s);
                 }
             }
             if (c.isZERO()) {
-                throw new ArithmeticException(this.getClass().getName() + " no exact division: " + c1 + "/"
-                                + s + ", in " + this);
+                throw new ArithmeticException("no exact division: " + c1 + "/" + s + ", in " + this);
             }
             pv.put(e, c); // or m1.setValue( c )
         }
@@ -1196,11 +1194,11 @@ Iterable<Monomial<C>> {
     @SuppressWarnings("unchecked")
     public GenPolynomial<C>[] quotientRemainder(GenPolynomial<C> S) {
         if (S == null || S.isZERO()) {
-            throw new ArithmeticException(this.getClass().getName() + " division by zero");
+            throw new ArithmeticException("division by zero");
         }
         C c = S.leadingBaseCoefficient();
         if (!c.isUnit()) {
-            throw new ArithmeticException(this.getClass().getName() + " lbcf not invertible " + c);
+            throw new ArithmeticException("lbcf not invertible " + c);
         }
         C ci = c.inverse();
         assert (ring.nvar == S.ring.nvar);
@@ -1270,11 +1268,11 @@ Iterable<Monomial<C>> {
      */
     public GenPolynomial<C> remainder(GenPolynomial<C> S) {
         if (S == null || S.isZERO()) {
-            throw new ArithmeticException(this.getClass().getName() + " division by zero");
+            throw new ArithmeticException("division by zero");
         }
         C c = S.leadingBaseCoefficient();
         if (!c.isUnit()) {
-            throw new ArithmeticException(this.getClass().getName() + " lbc not invertible " + c);
+            throw new ArithmeticException("lbc not invertible " + c);
         }
         C ci = c.inverse();
         assert (ring.nvar == S.ring.nvar);
@@ -1312,8 +1310,7 @@ Iterable<Monomial<C>> {
             return S;
         }
         if (ring.nvar != 1) {
-            throw new IllegalArgumentException(this.getClass().getName() + " not univariate polynomials"
-                            + ring);
+            throw new IllegalArgumentException("not univariate polynomials" + ring);
         }
         GenPolynomial<C> x;
         GenPolynomial<C> q = this;
