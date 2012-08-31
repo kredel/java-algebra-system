@@ -102,10 +102,8 @@ def inject_variable(name, value):
                 break
         depth += 1
     if name in G:
-        print "redefining global variable `%s`, from `%s` " % (name, G[name]);
+        print "redefining global variable `%s` from `%s` " % (name, G[name]);
     G[name] = value
-    #if auto_inject:
-    #    print "defining " + name
 
 def inject_generators(gens):
     '''Inject generators as variables into the main global namespace
@@ -158,8 +156,15 @@ class Ring:
             #print "vars = " + str(v);
             vs = str(v);
             vr = RingElem(v);
-            if vs == "1 ":
+            vs = vs.replace(" ","");
+            if vs == "1":
                 vs='one';
+            if vs.find("(") >= 0:
+                vs = vs.replace("(","");
+                vs = vs.replace(")","");
+            if vs.find("{") >= 0:
+                vs = vs.replace("{","");
+                vs = vs.replace("}","");
             try:
                 if self.__dict__[vs] is None:
                     self.__dict__[vs] = vr;
@@ -708,6 +713,13 @@ class Ideal:
         I = jas.application.Ideal(self.pset);
         self.radical = I.radicalDecomposition();
         return self.radical;
+
+    def decomposition(self):
+        '''Compute irreducible decomposition of this ideal.
+        '''
+        I = jas.application.Ideal(self.pset);
+        self.irrdec = I.decomposition();
+        return self.irrdec;
 
     def complexRoots(self):
         '''Compute complex roots of 0-dim ideal.

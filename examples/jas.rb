@@ -1330,7 +1330,7 @@ Inject variables for generators in given environment.
              #pass
           end
        end
-    puts "globaly defined generators: " + env.generators.keys().join(", ");  
+    puts "globally defined generators: " + env.generators.keys().join(", ");  
     end
 
 
@@ -2053,7 +2053,8 @@ Compute the saturation of this and the given ideal.
         s2 = Ideal.new(id2.pset);
         #nn = s1.infiniteQuotient(s2);
         nn = s1.infiniteQuotientRab(s2);
-        return SimIdeal.new(@ring,"",nn.getList());
+        mm = nn.getList(); #PolyUtil.monicRec(nn.getList());
+        return SimIdeal.new(@ring,"",mm);
     end
 
 =begin rdoc
@@ -2114,6 +2115,15 @@ Compute radical decomposition of this ideal.
         ii = Ideal.new(@pset);
         @radical = ii.radicalDecomposition();
         return @radical;
+    end
+
+=begin rdoc
+Compute irreducible decomposition of this ideal.
+=end
+    def decomposition()
+        ii = Ideal.new(@pset);
+        @irrdec = ii.decomposition();
+        return @irrdec;
     end
 
 =begin rdoc
