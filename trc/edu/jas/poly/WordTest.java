@@ -8,6 +8,7 @@ package edu.jas.poly;
 import java.util.Collection;
 import java.util.List;
 import java.util.SortedMap;
+import java.util.Arrays;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -235,4 +236,82 @@ public class WordTest extends TestCase {
         assertEquals("prefix(c/d) d suffix(c/d) = e", e, c);
     }
 
+
+    /**
+     * Test overlap.
+     */
+    public void testOverlap() {
+        WordFactory wf = new WordFactory("abcdefg");
+        a = new Word(wf, "abc");
+        b = new Word(wf, "ddabca");
+        System.out.println("a = " + a);
+        System.out.println("b = " + b);
+
+        OverlapList ol = a.overlap(b);
+        System.out.println("ol = " + ol);
+        assertTrue("isOverlap: ", ol.isOverlap(a,b));
+
+        ol = b.overlap(a);
+        System.out.println("ol = " + ol);
+        assertTrue("isOverlap: ", ol.isOverlap(b,a));
+
+        a = new Word(wf,   "abcfff");
+        b = new Word(wf, "ddabc");
+        System.out.println("a = " + a);
+        System.out.println("b = " + b);
+
+        ol = a.overlap(b);
+        System.out.println("ol = " + ol);
+        assertTrue("isOverlap: ", ol.isOverlap(a,b));
+
+        ol = b.overlap(a);
+        System.out.println("ol = " + ol);
+        assertTrue("isOverlap: ", ol.isOverlap(b,a));
+
+        a = new Word(wf, "fffabc");
+        b = new Word(wf,    "abcdd");
+        System.out.println("a = " + a);
+        System.out.println("b = " + b);
+
+        ol = a.overlap(b);
+        System.out.println("ol = " + ol);
+        assertTrue("isOverlap: ", ol.isOverlap(a,b));
+
+        ol = b.overlap(a);
+        System.out.println("ol = " + ol);
+        assertTrue("isOverlap: ", ol.isOverlap(b,a));
+
+        a = new Word(wf, "ab");
+        b = new Word(wf, "dabeabfabc");
+        System.out.println("a = " + a);
+        System.out.println("b = " + b);
+        ol = a.overlap(b);
+        System.out.println("ol = " + ol);
+        assertTrue("isOverlap: ", ol.isOverlap(a,b));
+        ol = b.overlap(a);
+        System.out.println("ol = " + ol);
+        assertTrue("isOverlap: ", ol.isOverlap(b,a));
+
+        a = new Word(wf, "abc");
+        b = new Word(wf, "abceabcfabc");
+        System.out.println("a = " + a);
+        System.out.println("b = " + b);
+        ol = a.overlap(b);
+        System.out.println("ol = " + ol);
+        assertTrue("isOverlap: ", ol.isOverlap(a,b));
+        ol = b.overlap(a);
+        System.out.println("ol = " + ol);
+        assertTrue("isOverlap: ", ol.isOverlap(b,a));
+
+        a = new Word(wf, "aa");
+        b = new Word(wf, "aaaaaaaaa");
+        System.out.println("a = " + a);
+        System.out.println("b = " + b);
+        ol = a.overlap(b);
+        System.out.println("ol = " + ol);
+        assertTrue("isOverlap: ", ol.isOverlap(a,b));
+        ol = b.overlap(a);
+        System.out.println("ol = " + ol);
+        assertTrue("isOverlap: ", ol.isOverlap(b,a));
+    }
 }

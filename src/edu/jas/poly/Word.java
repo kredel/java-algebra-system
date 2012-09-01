@@ -5,8 +5,11 @@
 package edu.jas.poly;
 
 
+import java.io.Serializable;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.List;
+import java.util.ArrayList;
 
 import edu.jas.structure.MonoidElem;
 import edu.jas.structure.MonoidFactory;
@@ -234,7 +237,7 @@ public class Word implements MonoidElem<Word> {
         // TODO: fail if both non zero?
         if (!ret[0].isONE() && !ret[1].isONE()) {
             throw new IllegalArgumentException("not simple dividable: left = " + ret[0] + ", right = "
-                            + ret[1] + ", use divideWord");
+                                               + ret[1] + ", use divideWord");
         }
         return ret[0].multiply(ret[1]);
     }
@@ -307,33 +310,13 @@ public class Word implements MonoidElem<Word> {
 
 
     /**
-     * Word least common multiple.
-     * @param V
-     * @return ?? component wise maximum of this and V.
-     */
-    public Word lcm(Word V) {
-        throw new UnsupportedOperationException("no divide implemented for Word");
-    }
-
-
-    /**
-     * Word greatest common divisor.
-     * @param V
-     * @return ?? component wise minimum of this and V.
-     */
-    public Word gcd(Word V) {
-        throw new UnsupportedOperationException("no divide implemented for Word");
-    }
-
-
-    /**
      * Word dependency on letters.
      * @return sorted map of letters and the number of its occurences.
      */
     public SortedMap<String,Integer> dependencyOnVariables() {
         SortedMap<String,Integer> map = new TreeMap<String,Integer>();
         for ( int i = 0; i < val.length(); i++ ) {
-	    String s = String.valueOf( val.charAt(i) );
+            String s = String.valueOf( val.charAt(i) );
             Integer n = map.get(s);
             if ( n == null ) {
                 n = 0;
@@ -390,6 +373,105 @@ public class Word implements MonoidElem<Word> {
             return -1;
         }
         return this.compareTo(V);
+    }
+
+
+    /**
+     * Is word overlap.
+     * @param ol = [l1,r1,l2,r2] an Overlap container of four words
+     * @param V word
+     * @return true if l1 * this * r1 = l2 * V * r2, else false.
+     */
+    public boolean isOverlap(Overlap ol, Word V) {
+        return ol.isOverlap(this,V);
+    }
+
+
+    /**
+     * Word overlap list.
+     * @param V
+     * @return list of overlaps [l1,r1,l2,r2] with l1 * this * r1 = l2 * V * r2.
+     *         If no such overlaps exist the empty overlap list is returned.
+     */
+    public OverlapList overlap(Word V) {
+        OverlapList ret = new OverlapList();
+        Word wone = mono.getONE();
+        String a = this.val;
+        String b = V.val;
+        int ai = a.length();
+        int bi = b.length();
+        int j = b.indexOf(a);
+        if (j >= 0) {
+            while ( j >= 0 ) {
+                String pre = b.substring(0, j);
+                String suf = b.substring(j + ai);
+                Word wpre = new Word(mono, pre);
+                Word wsuf = new Word(mono, suf);
+                ret.add(new Overlap(wpre,wsuf,wone,wone));
+                j = b.indexOf(a,j+ai); // +1 also inner overlaps ?
+            }
+            return ret;
+        }
+        j = a.indexOf(b);
+        if (j >= 0) {
+            while ( j >= 0 ) {
+                String pre = a.substring(0, j);
+                String suf = a.substring(j + bi);
+                Word wpre = new Word(mono, pre);
+                Word wsuf = new Word(mono, suf);
+                ret.add(new Overlap(wone,wone,wpre,wsuf));
+                j = a.indexOf(b,j+bi); // +1 also inner overlaps ?
+            }
+            return ret;
+        }
+        if ( ai >= bi ) {
+            for ( int i = 0; i < bi; i++ ) {
+                String as = a.substring(0,i+1);
+                String bs = b.substring(bi-i-1,bi);
+                //System.out.println("i = " + i + ", bs = " + bs + ", as = " + as);
+                if ( as.equals(bs) ) {
+                    Word w1 = new Word(mono, b.substring(0,bi-i-1));
+                    Word w2 = new Word(mono, a.substring(i+1));
+                    ret.add(new Overlap(w1, wone, wone, w2));
+                    break;
+                }
+            }
+            for ( int i = 0; i < bi; i++ ) {
+                String as = a.substring(ai-i-1,ai);
+                String bs = b.substring(0,i+1);
+                //System.out.println("i = " + i + ", bs = " + bs + ", as = " + as);
+                if ( as.equals(bs) ) {
+                    Word w1 = new Word(mono, b.substring(i+1));
+                    Word w2 = new Word(mono, a.substring(0,ai-i-1));
+                    ret.add(new Overlap(wone, w1, w2, wone));
+                    break;
+                }
+            }
+        } else { // ai < bi
+            for ( int i = 0; i < ai; i++ ) {
+                String as = a.substring(ai-i-1,ai);
+                String bs = b.substring(0,i+1);
+                //System.out.println("i = " + i + ", bs = " + bs + ", as = " + as);
+                if ( as.equals(bs) ) {
+                    Word w1 = new Word(mono, b.substring(i+1));
+                    Word w2 = new Word(mono, a.substring(0,ai-i-1));
+                    ret.add(new Overlap(wone, w1, w2, wone));
+                    break;
+                }
+            }
+            for ( int i = 0; i < ai; i++ ) {
+                String as = a.substring(0,i+1);
+                String bs = b.substring(bi-i-1,bi);
+                //System.out.println("i = " + i + ", bs = " + bs + ", as = " + as);
+                if ( as.equals(bs) ) {
+                    Word w1 = new Word(mono, b.substring(0,bi-i-1));
+                    Word w2 = new Word(mono, a.substring(i+1));
+                    ret.add(new Overlap(w1, wone, wone, w2));
+                    break;
+                }
+            }
+        }
+        return ret;
     }
 
 }
