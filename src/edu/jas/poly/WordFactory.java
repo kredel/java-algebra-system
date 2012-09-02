@@ -61,13 +61,7 @@ public class WordFactory implements MonoidFactory<Word> {
 
         @Override
         public int compare(Word e1, Word e2) {
-            long t = e1.degree() - e2.degree();
-            if (t < 0L) {
-                return 1;
-            } else if (t > 0L) {
-                return -1;
-            }
-            return e1.compareTo(e2);
+            return e1.gradCompareTo(e2);
         }
     };
 
@@ -80,13 +74,7 @@ public class WordFactory implements MonoidFactory<Word> {
 
         @Override
         public int compare(Word e1, Word e2) {
-            long t = e2.degree() - e1.degree();
-            if (t < 0L) {
-                return -1;
-            } else if (t > 0L) {
-                return 1;
-            }
-            return -e1.compareTo(e2);
+            return -e1.gradCompareTo(e2);
         }
     };
 
