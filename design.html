@@ -291,6 +291,16 @@ of the implemented algebraic algorithms.
 </tr>
 
 <tr>
+<td><code>GenWord- Polynomial</code></td>
+<td><code>GenWord- PolynomialRing</code></td>
+<td>ring of free non-commutative polynomials in <code>r</code> letters 
+    over any implemented coefficient ring
+    with respect to a graded term ordering
+</td>
+<td>arithmetic</td>
+</tr>
+
+<tr>
 <td><code>Quotient</code></td>
 <td><code>QuotientRing</code></td>
 <td>ring of rational functions, 
@@ -412,7 +422,7 @@ of the implemented algebraic algorithms.
 <p>
 "Arithmetic" means implementation of the methods 
 defined in the interface <code>RingElem</code>.
-As of 2009-05 there are 22 rings implemented. To be continued.
+As of 2012-09 there are 23 rings implemented. To be continued.
 </p>
 
 
@@ -564,9 +574,22 @@ implemented algebraic algorithms.
 <td>Algorithm to compute left, right and two-sided Groebner bases 
     of sets of solvable polynomials.
     Coefficients of polynomials must be from a field.
-    *Parallel is a multi-threaded implementation.  
+    Parallel is a multi-threaded implementation.  
 </td>
 <td>left, right, two-sided versions of GB, isGB, extended GB, minimal GB
+</td>
+</tr>
+
+<tr>
+<td><code>WordGroebnerBase</code>,
+    <code>WordGroebnerBase- Abstract</code>,
+    <code>WordGroebnerBaseSeq</code>
+</td>
+<td>Algorithm to compute two-sided Groebner bases 
+    of sets of free non-commutative polynomials.
+    Coefficients of polynomials must be from a field.
+</td>
+<td>two-sided versions of GB, isGB, minimal GB
 </td>
 </tr>
 
@@ -1279,7 +1302,7 @@ of the Java algebra system.
 <p>
 <!-- Created: Sat Mar 11 10:51:36 CET 2006 -->
 <!-- hhmts start -->
-Last modified: Wed Jul 25 17:06:05 CEST 2012
+Last modified: Sun Sep  2 22:33:49 CEST 2012
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
