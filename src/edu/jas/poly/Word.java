@@ -21,7 +21,7 @@ import edu.jas.structure.NotInvertibleException;
  * @author Heinz Kredel
  */
 
-public class Word implements MonoidElem<Word> {
+public final class Word implements MonoidElem<Word> {
 
 
     /**
@@ -279,10 +279,13 @@ public class Word implements MonoidElem<Word> {
 
     /**
      * Word inverse.
-     * @return 1 / this. <b>Note:</b> throws UnsupportedOperationException.
+     * @return 1 / this. 
      */
     public Word inverse() {
-        throw new UnsupportedOperationException("no inverse implemented for Word");
+        if ( val.length() == 0 ) {
+            return this;
+        }
+        throw new NotInvertibleException("not inversible " + this);
     }
 
 
@@ -489,6 +492,23 @@ public class Word implements MonoidElem<Word> {
             }
         }
         return ret;
+    }
+
+
+    /**
+     * Word pseudo least common multiple.
+     * @param V
+     * @return w = l1*this*r1, with l1*this*r1 == l2*V*r2, if l1, r1, l2, r2 exist,
+     *         else null is returned.
+     */
+    public Word lcm(Word V) {
+        OverlapList oll = overlap(V);
+        if ( oll.ols.isEmpty() ) {
+            return null; 
+        }
+        Overlap ol = oll.ols.get(0);
+        Word g =  ol.l1.multiply(this).multiply(ol.r1); 
+        return g;
     }
 
 }

@@ -13,6 +13,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.log4j.Logger;
+
 import edu.jas.kern.StringUtil;
 import edu.jas.structure.MonoidFactory;
 
@@ -22,7 +24,7 @@ import edu.jas.structure.MonoidFactory;
  * @author Heinz Kredel
  */
 
-public class WordFactory implements MonoidFactory<Word> {
+public final class WordFactory implements MonoidFactory<Word> {
 
 
     /**
@@ -41,6 +43,12 @@ public class WordFactory implements MonoidFactory<Word> {
      * Random number generator.
      */
     private final static Random random = new Random();
+
+
+    /**
+     * Log4j logger object.
+     */
+    private static final Logger logger = Logger.getLogger(WordFactory.class);
 
 
     /**
@@ -99,6 +107,15 @@ public class WordFactory implements MonoidFactory<Word> {
         }
         alphabet = clean(s);
         ONE = new Word(this);
+    }
+
+
+    /**
+     * Constructor for WordFactory.
+     * @param S String array for alphabet
+     */
+    public WordFactory(String[] S) {
+        this(concat(S));
     }
 
 
@@ -377,6 +394,25 @@ public class WordFactory implements MonoidFactory<Word> {
      */
     public WordComparator getAscendComparator() {
         return lorder;
+    }
+
+
+    /**
+     * Concat variable names.
+     * @param v an array of strings.
+     * @return the concatination of the strings in v.
+     */
+    public static String concat(String[] v) {
+        StringBuffer s = new StringBuffer();
+        for ( int i = 0; i < v.length; i++ ) {
+            String a = v[i];
+            if ( a.length() != 1 ) {
+                logger.error("v[i] not single letter "+ a);
+                a  = a.substring(0,1);
+            }
+	    s.append(a);
+        }
+        return s.toString();
     }
 
 }

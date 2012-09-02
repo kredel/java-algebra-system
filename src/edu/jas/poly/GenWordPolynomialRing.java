@@ -28,8 +28,8 @@ import edu.jas.structure.RingFactory;
  * @author Heinz Kredel
  */
 
-public class GenWordPolynomialRing<C extends RingElem<C>> implements RingFactory<GenWordPolynomial<C>>
-/*, Iterable<GenPolynomial<C>>*/{
+public final class GenWordPolynomialRing<C extends RingElem<C>> implements RingFactory<GenWordPolynomial<C>>
+       /*, Iterable<GenWordPolynomial<C>>*/{
 
 
     /**
@@ -117,7 +117,7 @@ public class GenWordPolynomialRing<C extends RingElem<C>> implements RingFactory
      * @param fac polynomial ring.
      */
     public GenWordPolynomialRing(GenPolynomialRing fac) {
-        this(fac.coFac, new WordFactory(concat(fac.vars)));
+        this(fac.coFac, new WordFactory(fac.vars));
     }
 
 
@@ -575,25 +575,6 @@ public class GenWordPolynomialRing<C extends RingElem<C>> implements RingFactory
         }
         gens.addAll(univs);
         return gens;
-    }
-
-
-    /**
-     * Concat variable names.
-     * @param v an array of strings.
-     * @return the concatination of the strings in v.
-     */
-    public static String concat(String[] v) {
-        StringBuffer s = new StringBuffer();
-        for ( int i = 0; i < v.length; i++ ) {
-            String a = v[i];
-            if ( a.length() != 1 ) {
-                logger.error("v[i] not single letter "+ a);
-                a  = a.substring(0,1);
-            }
-	    s.append(a);
-        }
-        return s.toString();
     }
 
 }

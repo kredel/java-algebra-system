@@ -30,8 +30,8 @@ import edu.jas.structure.UnaryFunctor;
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
-public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWordPolynomial<C>>
-/*, Iterable<WordMonomial<C>>*/{
+public final class GenWordPolynomial<C extends RingElem<C>> 
+             implements RingElem<GenWordPolynomial<C>>, Iterable<WordMonomial<C>> {
 
 
     /**
@@ -1489,9 +1489,8 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
      * Iterator over monomials.
      * @return a PolyIterator.
      */
-    public Iterator<Monomial<C>> iterator() {
-        throw new UnsupportedOperationException("not implemented");
-        //return new PolyIterator<C>(val);
+    public Iterator<WordMonomial<C>> iterator() {
+        return new WordPolyIterator<C>(val);
     }
 
 
@@ -1501,17 +1500,16 @@ public class GenWordPolynomial<C extends RingElem<C>> implements RingElem<GenWor
      * @return new polynomial with coefficients f(this(e)).
      */
     public GenWordPolynomial<C> map(final UnaryFunctor<? super C, C> f) {
-        throw new UnsupportedOperationException("not implemented");
-        //        GenWordPolynomial<C> n = ring.getZERO().copy();
-        //         SortedMap<Word, C> nv = n.val;
-        //         for (Monomial<C> m : this) {
-        //             //logger.info("m = " + m);
-        //             C c = f.eval(m.c);
-        //             if (c != null && !c.isZERO()) {
-        //                 nv.put(m.e, c);
-        //             }
-        //         }
-        //        return n;
+        GenWordPolynomial<C> n = ring.getZERO().copy();
+        SortedMap<Word, C> nv = n.val;
+        for (WordMonomial<C> m : this) {
+            //logger.info("m = " + m);
+            C c = f.eval(m.c);
+            if (c != null && !c.isZERO()) {
+                nv.put(m.e, c);
+            }
+        }
+        return n;
     }
 
 }
