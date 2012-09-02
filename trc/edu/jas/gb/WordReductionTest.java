@@ -22,6 +22,8 @@ import edu.jas.arith.Product;
 import edu.jas.arith.ProductRing;
 import edu.jas.poly.Word;
 import edu.jas.poly.WordFactory;
+import edu.jas.poly.OverlapList;
+import edu.jas.poly.Overlap;
 import edu.jas.poly.GenWordPolynomial;
 import edu.jas.poly.GenWordPolynomialRing;
 
@@ -267,36 +269,40 @@ public class WordReductionTest extends TestCase {
         do {
            b = fac.random(kl, ll, el);
         } while ( b.isZERO() );
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+        Word de = new Word(wfac,"a");
+        a = a.multiply(wfac.getONE(),de);
+        b = b.multiply(de,wfac.getONE());
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
 
-        L = new ArrayList<GenWordPolynomial<BigRational>>();
-        L.add(a);
+        Word ae = a.leadingWord();
+        Word be = b.leadingWord();
+        //System.out.println("ae = " + ae);
+        //System.out.println("be = " + be);
 
-        e = red.normalform( L, a );
-        System.out.println("e = " + e);
-        assertTrue("isZERO( e )", e.isZERO() );
-
-        L.add(b);
-        e = red.normalform( L, a );
-        System.out.println("e = " + e);
-        assertTrue("isZERO( e ) some times", e.isZERO() ); 
-
-        //e = a; // TODO: red.SPolynomial( a, b );
-        //System.out.println("e = " + e);
-        //Word ce = a.leadingWord().lcm(b.leadingWord());
-        //Word ee = e.leadingWord();
-        //assertTrue("lcm(lt(a),lt(b)) > lt(e) " + ce + " > " + ee, fac.tord.getAscendComparator().compare(ce,ee) > 0 ); 
-        // findbugs
-
-        Word u = new Word(wfac,"f");
-        Word v = new Word(wfac,"abc");
-        c = a.multiply(cfac.getONE(),u,v);
-        System.out.println("c = " + c);
-        e = red.normalform( L, c );
-        System.out.println("e = " + e);
-        assertTrue("isNF( e )", red.isNormalform(L,e) ); 
-        assertTrue("e == 0", e.isZERO() ); 
+        List<GenWordPolynomial<BigRational>> S = red.SPolynomials( a, b );
+        //System.out.println("S = " + S);
+        OverlapList oll = ae.overlap(be);
+        //System.out.println("oll = " + oll);
+        for ( GenWordPolynomial<BigRational> s : S ) {
+             //System.out.println("s = " + s);
+             Word ee = s.leadingWord();
+             //System.out.println("ee = " + ee);
+             boolean t = false;
+             Word ce = fac.alphabet.getONE();
+             for ( Overlap ol : oll.ols ) {
+		 ce = ol.l1.multiply(ae).multiply(ol.r1);
+                 //System.out.println("ce = " + ce);
+                 if (fac.alphabet.getAscendComparator().compare(ce,ee) > 0) {
+		     t = true;
+                     break;
+                 }
+             }
+             assertTrue("ce > ee: " + ce + " > " + ee, t); 
+             // findbugs
+        }
     }
 
 }
