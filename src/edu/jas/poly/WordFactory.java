@@ -61,7 +61,8 @@ public class WordFactory implements MonoidFactory<Word> {
 
         @Override
         public int compare(Word e1, Word e2) {
-            return e1.gradCompareTo(e2);
+            //return e1.gradCompareTo(e2);
+            return e1.gradInvlexCompareTo(e2);
         }
     };
 
@@ -74,7 +75,8 @@ public class WordFactory implements MonoidFactory<Word> {
 
         @Override
         public int compare(Word e1, Word e2) {
-            return -e1.gradCompareTo(e2);
+            //return -e1.gradCompareTo(e2);
+            return -e1.gradInvlexCompareTo(e2);
         }
     };
 
@@ -266,6 +268,29 @@ public class WordFactory implements MonoidFactory<Word> {
      */
     public Word fromInteger(BigInteger a) {
         throw new UnsupportedOperationException("not implemented for WordFactory");
+    }
+
+
+    /**
+     * Get the Element for an ExpVector.
+     * @param e ExpVector.
+     * @return element corresponding to e.
+     */
+    public Word valueOf(ExpVector e) {
+        Word w = ONE;
+        List<Word> gens = generators();
+        int n = alphabet.length();
+        int m = e.length();
+        for ( int i = 0; i < m; i++ ) {
+            int x = (int) e.getVal(m-i-1);
+            Word y = gens.get(i);
+            Word u = ONE;
+            for ( int j = 0; j < x; j++ ) {
+                u = u.multiply(y);
+            }
+            w = w.multiply(u);
+        }
+        return w;
     }
 
 

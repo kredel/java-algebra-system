@@ -10,6 +10,7 @@ import java.io.StringReader;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.apache.log4j.Logger;
@@ -102,14 +103,21 @@ public class GenWordPolynomialRing<C extends RingElem<C>> implements RingFactory
 
 
     /**
-     * The constructor creates a polynomial factory object with the the same
-     * term order, number of variables and variable names as the given
-     * polynomial factory, only the coefficient factories differ.
+     * The constructor creates a polynomial factory object. 
      * @param cf factory for coefficients of type C.
      * @param o other polynomial ring.
      */
     public GenWordPolynomialRing(RingFactory<C> cf, GenWordPolynomialRing o) {
         this(cf, o.alphabet);
+    }
+
+
+    /**
+     * The constructor creates a polynomial factory object.
+     * @param fac polynomial ring.
+     */
+    public GenWordPolynomialRing(GenPolynomialRing fac) {
+        this(fac.coFac, new WordFactory(concat(fac.vars)));
     }
 
 
@@ -346,6 +354,47 @@ public class GenWordPolynomialRing<C extends RingElem<C>> implements RingFactory
 
 
     /**
+     * Get a GenWordPolynomial&lt;C&gt; element from a GenPolynomial&lt;C&gt;.
+     * @param a GenPolynomial.
+     * @return a GenWordPolynomial&lt;C&gt;.
+     */
+    public GenWordPolynomial<C> valueOf(GenPolynomial<C> a) {
+        if ( a.isZERO() ) {
+            return getZERO();
+        }
+        if ( a.isONE() ) {
+            return getONE();
+        }
+        GenWordPolynomial<C> p = this.getZERO().copy();
+        for (Map.Entry<ExpVector, C> m : a.val.entrySet()) {
+            C c = m.getValue();
+            ExpVector e = m.getKey();
+            Word w = alphabet.valueOf(e);
+            p.doPutToMap(w,c);
+        }
+        return p;
+    }
+
+
+    /**
+     * Get a list of GenWordPolynomial&lt;C&gt; element from a list of GenPolynomial&lt;C&gt;.
+     * @param A GenPolynomial list.
+     * @return a GenWordPolynomial&lt;C&gt; list.
+     */
+    public List<GenWordPolynomial<C>> valueOf(List<GenPolynomial<C>> A) {
+        List<GenWordPolynomial<C>> B = new ArrayList<GenWordPolynomial<C>>(A.size());
+        if ( A.isEmpty() ) {
+            return B;
+        }
+        for (GenPolynomial<C> a : A) {
+            GenWordPolynomial<C> b = valueOf(a);
+            B.add(b);
+        }
+        return B;
+    }
+
+
+    /**
      * Get a (constant) GenWordPolynomial&lt;C&gt; element from a long value.
      * @param a long.
      * @return a GenWordPolynomial&lt;C&gt;.
@@ -526,6 +575,25 @@ public class GenWordPolynomialRing<C extends RingElem<C>> implements RingFactory
         }
         gens.addAll(univs);
         return gens;
+    }
+
+
+    /**
+     * Concat variable names.
+     * @param v an array of strings.
+     * @return the concatination of the strings in v.
+     */
+    public static String concat(String[] v) {
+        StringBuffer s = new StringBuffer();
+        for ( int i = 0; i < v.length; i++ ) {
+            String a = v[i];
+            if ( a.length() != 1 ) {
+                logger.error("v[i] not single letter "+ a);
+                a  = a.substring(0,1);
+            }
+	    s.append(a);
+        }
+        return s.toString();
     }
 
 }

@@ -39,7 +39,7 @@ public class WordGroebnerBaseSeqTest extends TestCase {
      * main
      */
     public static void main (String[] args) {
-        BasicConfigurator.configure();
+        //BasicConfigurator.configure();
         junit.textui.TestRunner.run( suite() );
     }
 
@@ -77,15 +77,14 @@ public class WordGroebnerBaseSeqTest extends TestCase {
     GenWordPolynomial<BigRational> d;
     GenWordPolynomial<BigRational> e;
 
-    int rl = 4; //4; //3; 
     int kl = 3; // 10
-    int ll = 5;
-    int el = 3; // 4
+    int ll = 7;
+    int el = 4; // 4
 
 
     protected void setUp() {
         BigRational coeff = new BigRational(0);
-        wfac = new WordFactory("abcd");
+        wfac = new WordFactory("a");
         fac = new GenWordPolynomialRing<BigRational>(coeff,wfac);
         a = b = c = d = e = null;
         bb = new WordGroebnerBaseSeq<BigRational>();
@@ -100,35 +99,44 @@ public class WordGroebnerBaseSeqTest extends TestCase {
 
 
     /**
-     * Test sequential Word GBase.
+     * Test sequential univariate Word GBase.
      */
     public void testSequentialGBase() {
         L = new ArrayList<GenWordPolynomial<BigRational>>();
-        a = fac.random(kl, ll, el );
-        b = fac.random(kl, ll, el );
-        c = fac.random(kl, ll, el );
-        d = fac.random(kl, ll, el );
-        e = d; //fac.random(kl, ll, el );
-
-        if ( a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO() ) {
-            return;
+        a = fac.random(kl, ll, el);
+        b = fac.random(kl, ll, el);
+        c = fac.random(kl, ll, el);
+        d = fac.random(kl, ll, el);
+        e = d; //fac.random(kl, ll, el);
+        while ( a.isZERO() ) {
+            a = fac.random(kl, ll, el);
+        }
+        while ( b.isZERO() ) {
+            b = fac.random(kl, ll, el);
+        }
+        while ( c.isZERO() ) {
+            c = fac.random(kl, ll, el);
+        }
+        while ( d.isZERO() ) {
+            d = fac.random(kl, ll, el);
         }
 
         L.add(a);
+        //System.out.println("L = " + L);
         L = bb.GB( L );
         assertTrue("isGB( { a } )", bb.isGB(L) );
 
-        L.add(b);
+        L.add(a.multiply(b));
         //System.out.println("L = " + L);
         L = bb.GB( L );
         assertTrue("isGB( { a, b } )", bb.isGB(L) );
 
-        L.add(c);
+        L.add(a.multiply(c));
         //System.out.println("L = " + L);
         L = bb.GB( L );
         assertTrue("isGB( { a, b, c } )", bb.isGB(L) );
 
-        L.add(d);
+        L.add(a.multiply(d));
         //System.out.println("L = " + L);
         L = bb.GB( L );
         assertTrue("isGB( { a, b, c, d } )", bb.isGB(L) );
@@ -137,14 +145,58 @@ public class WordGroebnerBaseSeqTest extends TestCase {
         //System.out.println("L = " + L);
         L = bb.GB( L );
         assertTrue("isGB( { a, b, c, d, e } )", bb.isGB(L) );
+
+        L.clear();
+        L.add(a);
+        L.add(a.multiply(b));
+        L.add(a.multiply(c));
+        L.add(a.multiply(d));
+        //System.out.println("L = " + L);
+        L = bb.GB( L );
+        assertTrue("isGB( { a, b, c, d } )", bb.isGB(L) );
     }
 
 
     /**
-     * Test Trinks7 GBase.
+     * Test example word GBase.
      */
     @SuppressWarnings("unchecked") 
-    public void xtestTrinks7GBase() {
+    public void testExample1GBase() {
+        String exam = "(x,y,z) L "
+            + "( "
+            + "( z y**2 + 2 x + 1/2 )"
+            + "( z x**2 - y**2 - 1/2 x )"
+            + "( -z + y**2 x + 4 x**2 + 1/4 )"
+            + " )";
+
+        Reader source = new StringReader( exam );
+        GenPolynomialTokenizer parser = new GenPolynomialTokenizer( source );
+        try {
+            F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
+        } catch(ClassCastException e) {
+            fail(""+e);
+        } catch(IOException e) {
+            fail(""+e);
+        }
+        //System.out.println("F = " + F);
+
+        fac = new GenWordPolynomialRing(F.ring);
+        //System.out.println("fac = " + fac);
+
+        L = fac.valueOf(F.list);
+        //System.out.println("L = " + L);
+
+        G = bb.GB(L);
+        //System.out.println("G = " + G);
+        assertTrue("isGB( G )", bb.isGB(G) );
+    }
+
+
+    /**
+     * Test Trinks7 as non-commutative example word GBase.
+     */
+    @SuppressWarnings("unchecked") 
+    public void testTrinks7GBase() {
         String exam = "(B,S,T,Z,P,W) L "
             + "( "  
             + "( 45 P + 35 S - 165 B - 36 ), " 
@@ -155,19 +207,12 @@ public class WordGroebnerBaseSeqTest extends TestCase {
             + "( 99 W - 11 B S + 3 B**2 ), "
             + "( B**2 + 33/50 B + 2673/10000 ) "
             + ") ";
-        String exam2 = "(x,y,z) L "
-            + "( "
-            + "( z y**2 + 2 x + 1/2 )"
-            + "( z x**2 - y**2 - 1/2 x )"
-            + "( -z + y**2 x + 4 x**2 + 1/4 )"
-            + " )";
 
         Reader source = new StringReader( exam );
         GenPolynomialTokenizer parser
             = new GenPolynomialTokenizer( source );
         try {
-            F = null; 
-            System.out.println("parser: " + (PolynomialList<BigRational>) parser.nextPolynomialSet());
+            F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
         } catch(ClassCastException e) {
             fail(""+e);
         } catch(IOException e) {
@@ -175,11 +220,16 @@ public class WordGroebnerBaseSeqTest extends TestCase {
         }
         //System.out.println("F = " + F);
 
-        //G = bb.GB(F.list);
-        //assertTrue("isGB( GB(Trinks7) )", bb.isGB(G) );
-        //assertEquals("#GB(Trinks7) == 6", 6, G.size() );
-        //PolynomialList<BigRational> trinks = new PolynomialList<BigRational>(F.ring,G);
-        //System.out.println("G = " + trinks);
+        fac = new GenWordPolynomialRing(F.ring);
+        //System.out.println("fac = " + fac);
+
+        L = fac.valueOf(F.list);
+        //System.out.println("L = " + L);
+
+        G = bb.GB(L);
+        //System.out.println("G = " + G);
+        assertTrue("isGB( G )", bb.isGB(G) );
+        assertTrue("#G == 6", G.size() == 6);
     }
 
 }

@@ -377,6 +377,23 @@ public class Word implements MonoidElem<Word> {
 
 
     /**
+     * Word graded comparison. Compares first be degree, then inverse lexicographical.
+     * @param V
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
+     */
+    public int gradInvlexCompareTo(Word V) {
+        long e = this.degree();
+        long f = V.degree();
+        if (e < f) {
+            return 1;
+        } else if (e > f) {
+            return -1;
+        }
+        return -this.compareTo(V);
+    }
+
+
+    /**
      * Is word overlap.
      * @param ol = [l1,r1,l2,r2] an Overlap container of four words
      * @param V word
