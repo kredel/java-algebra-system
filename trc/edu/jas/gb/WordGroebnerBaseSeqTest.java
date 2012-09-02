@@ -39,7 +39,7 @@ public class WordGroebnerBaseSeqTest extends TestCase {
      * main
      */
     public static void main (String[] args) {
-        //BasicConfigurator.configure();
+        BasicConfigurator.configure();
         junit.textui.TestRunner.run( suite() );
     }
 
@@ -158,7 +158,7 @@ public class WordGroebnerBaseSeqTest extends TestCase {
 
 
     /**
-     * Test example word GBase.
+     * Test example 1 word GBase.
      */
     @SuppressWarnings("unchecked") 
     public void testExample1GBase() {
@@ -205,7 +205,7 @@ public class WordGroebnerBaseSeqTest extends TestCase {
             + "( - 9 W + 15 T P + 20 S Z ), "
             + "( P W + 2 T Z - 11 B**3 ), "
             + "( 99 W - 11 B S + 3 B**2 ), "
-            + "( B**2 + 33/50 B + 2673/10000 ) "
+            + "( B**2 + 33/50 B + 2673/10000 ) " // is needed
             + ") ";
 
         Reader source = new StringReader( exam );
@@ -230,6 +230,41 @@ public class WordGroebnerBaseSeqTest extends TestCase {
         //System.out.println("G = " + G);
         assertTrue("isGB( G )", bb.isGB(G) );
         assertTrue("#G == 6", G.size() == 6);
+    }
+
+
+    /**
+     * Test example 2 word GBase.
+     */
+    @SuppressWarnings("unchecked") 
+    public void testExample2GBase() {
+        String exam = "(x,y,z) L "
+            + "( "
+            + "( x y - z )" // will not be correct when converted to non-com
+            + "( y z + 2 x + z )"
+            + "( y z + x )"
+            + " )";
+
+        Reader source = new StringReader( exam );
+        GenPolynomialTokenizer parser = new GenPolynomialTokenizer( source );
+        try {
+            F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
+        } catch(ClassCastException e) {
+            fail(""+e);
+        } catch(IOException e) {
+            fail(""+e);
+        }
+        //System.out.println("F = " + F);
+
+        fac = new GenWordPolynomialRing(F.ring);
+        //System.out.println("fac = " + fac);
+
+        L = fac.valueOf(F.list);
+        //System.out.println("L = " + L);
+
+        G = bb.GB(L);
+        //System.out.println("G = " + G);
+        assertTrue("isGB( G )", bb.isGB(G) );
     }
 
 }

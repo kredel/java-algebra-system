@@ -115,6 +115,7 @@ public class OrderedWordPairlist<C extends RingElem<C> > implements WordPairList
             Word g = f.lcm(e);
             //System.out.println("g = " + g);
             if ( g == null ) {
+                //System.out.println("criterion 4");
                 continue; // criterion 4
             }
             WordPair<C> pair = new WordPair<C>( pj, p, j, l);
@@ -170,7 +171,10 @@ public class OrderedWordPairlist<C extends RingElem<C> > implements WordPairList
                 i = pair.i; 
                 j = pair.j; 
                 // System.out.println("pair(" + j + "," +i+") ");
-                c = criterion3( i, j, g ); //TODO
+                c = criterion3( i, j, g ); // should be okay
+                //if ( !c ) {
+                //    System.out.println("criterion 3");
+                //}
                 //System.out.println("c3_o  = " + c); 
                 red.get( j ).clear(i); // set(i,false) jdk1.4
             }
