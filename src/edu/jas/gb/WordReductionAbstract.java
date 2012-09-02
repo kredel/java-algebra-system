@@ -83,8 +83,9 @@ public abstract class WordReductionAbstract<C extends RingElem<C>> implements Wo
      */
     public GenWordPolynomial<C> SPolynomial(C a, Word l1, GenWordPolynomial<C> A, Word r1,
                                             C b, Word l2, GenWordPolynomial<C> B, Word r2) {
-	GenWordPolynomial<C> s1 = A.multiply(a,l1,r1);
-	GenWordPolynomial<C> s2 = B.multiply(b,l2,r2);
+        C one = A.ring.coFac.getONE();
+	GenWordPolynomial<C> s1 = A.multiply(a,l1,one,r1);
+	GenWordPolynomial<C> s2 = B.multiply(b,l2,one,r2);
 	GenWordPolynomial<C> s = s1.subtract(s2);
         return s;
     }
@@ -101,8 +102,9 @@ public abstract class WordReductionAbstract<C extends RingElem<C>> implements Wo
      */
     public GenWordPolynomial<C> SPolynomial(Overlap ol, C a, GenWordPolynomial<C> A,
                                                         C b, GenWordPolynomial<C> B) {
-	GenWordPolynomial<C> s1 = A.multiply(a,ol.l1,ol.r1);
-	GenWordPolynomial<C> s2 = B.multiply(b,ol.l2,ol.r2);
+        C one = A.ring.coFac.getONE();
+	GenWordPolynomial<C> s1 = A.multiply(a,ol.l1,one,ol.r1);
+	GenWordPolynomial<C> s2 = B.multiply(b,ol.l2,one,ol.r2);
 	GenWordPolynomial<C> s = s1.subtract(s2);
         return s;
     }

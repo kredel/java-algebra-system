@@ -26,7 +26,8 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
 
 
     private static final Logger logger = Logger.getLogger(WordReductionSeq.class);
-    private static boolean debug = logger.isInfoEnabled();
+    private static boolean debug = logger.isDebugEnabled();
+
 
     /**
      * Constructor.
@@ -84,6 +85,7 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
         C a;
         boolean mt = false;
         GenWordPolynomial<C> R = Ap.ring.getZERO();
+        C cone = Ap.ring.coFac.getONE();
 
         //GenWordPolynomial<C> T = null;
         GenWordPolynomial<C> Q = null;
@@ -110,7 +112,7 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                     logger.info("red divideWord: e = " + e + ", f = " + f);
                 }
                 a = a.divide( (C)lbc[i] );
-                Q = p[i].multiply( a, e, f );
+                Q = p[i].multiply( a, e, cone, f );
                 S = S.subtract( Q );
             }
         }
@@ -194,11 +196,11 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 e = elr[0];
                 Word f = elr[1];
                 if ( debug ) {
-                    logger.info("red divideWord: e = " + e + ", f = " + f);
+                    logger.info("redRec divideWord: e = " + e + ", f = " + f);
                 }
                 C c = (C) lbc[i];
                 a = a.divide( c );
-                Q = p[i].multiply( a, e, f );
+                Q = p[i].multiply( a, e, cone, f );
                 S = S.subtract( Q );
                 // left row
                 fac = lrow.get(i);

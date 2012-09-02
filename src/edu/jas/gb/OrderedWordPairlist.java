@@ -16,6 +16,8 @@ import java.util.SortedMap;
 import org.apache.log4j.Logger;
 
 import edu.jas.poly.Word;
+import edu.jas.poly.Overlap;
+import edu.jas.poly.OverlapList;
 import edu.jas.poly.GenWordPolynomial;
 import edu.jas.poly.GenWordPolynomialRing;
 import edu.jas.structure.RingElem;
@@ -109,8 +111,14 @@ public class OrderedWordPairlist<C extends RingElem<C> > implements WordPairList
         int l = P.size();
         for ( int j = 0; j < l; j++ ) {
             GenWordPolynomial<C> pj = P.get(j);
-            Word f = pj.leadingWord(); 
-            Word g =  e.multiply( f ); // TODO
+            Word f = pj.leadingWord();
+            OverlapList oll = f.overlap(e);
+            if ( oll.ols.isEmpty() ) {
+                continue; // criterion 4
+            }
+            Overlap ol = oll.ols.get(0);
+            Word g =  ol.l1.multiply(f).multiply(ol.r1); 
+            //System.out.println("g = " + g + ", ol = " + ol);
             WordPair<C> pair = new WordPair<C>( pj, p, j, l);
             //System.out.println("pair.new      = " + pair);
             //multiple pairs under same keys -> list of pairs
@@ -122,7 +130,8 @@ public class OrderedWordPairlist<C extends RingElem<C> > implements WordPairList
             xl.addFirst( pair ); // first or last ? better for d- e-GBs
             pairlist.put( g, xl );
         }
-        // System.out.println("pairlist.keys@put = " + pairlist.keySet() );  
+        //System.out.println("pairlist.keys@put = " + pairlist.keySet() );  
+        //System.out.println("#pairlist = " + pairlist.size() );  
         P.add(  p );
         BitSet redi = new BitSet();
         redi.set( 0, l ); 
@@ -163,7 +172,7 @@ public class OrderedWordPairlist<C extends RingElem<C> > implements WordPairList
                 i = pair.i; 
                 j = pair.j; 
                 // System.out.println("pair(" + j + "," +i+") ");
-                c = criterion3( i, j, g );
+                c = true; //criterion3( i, j, g ); TODO
                 //System.out.println("c3_o  = " + c); 
                 red.get( j ).clear(i); // set(i,false) jdk1.4
             }
