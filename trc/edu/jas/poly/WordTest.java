@@ -244,74 +244,95 @@ public class WordTest extends TestCase {
         WordFactory wf = new WordFactory("abcdefg");
         a = new Word(wf, "abc");
         b = new Word(wf, "ddabca");
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
 
         OverlapList ol = a.overlap(b);
-        System.out.println("ol = " + ol);
+        //System.out.println("ol = " + ol);
         assertTrue("isOverlap: ", ol.isOverlap(a,b));
 
         ol = b.overlap(a);
-        System.out.println("ol = " + ol);
+        //System.out.println("ol = " + ol);
         assertTrue("isOverlap: ", ol.isOverlap(b,a));
 
         a = new Word(wf,   "abcfff");
         b = new Word(wf, "ddabc");
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
 
         ol = a.overlap(b);
-        System.out.println("ol = " + ol);
+        //System.out.println("ol = " + ol);
         assertTrue("isOverlap: ", ol.isOverlap(a,b));
 
         ol = b.overlap(a);
-        System.out.println("ol = " + ol);
+        //System.out.println("ol = " + ol);
         assertTrue("isOverlap: ", ol.isOverlap(b,a));
 
         a = new Word(wf, "fffabc");
         b = new Word(wf,    "abcdd");
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
 
         ol = a.overlap(b);
-        System.out.println("ol = " + ol);
+        //System.out.println("ol = " + ol);
         assertTrue("isOverlap: ", ol.isOverlap(a,b));
 
         ol = b.overlap(a);
-        System.out.println("ol = " + ol);
+        //System.out.println("ol = " + ol);
         assertTrue("isOverlap: ", ol.isOverlap(b,a));
 
         a = new Word(wf, "ab");
         b = new Word(wf, "dabeabfabc");
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
         ol = a.overlap(b);
-        System.out.println("ol = " + ol);
+        //System.out.println("ol = " + ol);
         assertTrue("isOverlap: ", ol.isOverlap(a,b));
         ol = b.overlap(a);
-        System.out.println("ol = " + ol);
+        //System.out.println("ol = " + ol);
         assertTrue("isOverlap: ", ol.isOverlap(b,a));
 
         a = new Word(wf, "abc");
         b = new Word(wf, "abceabcfabc");
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
         ol = a.overlap(b);
-        System.out.println("ol = " + ol);
+        //System.out.println("ol = " + ol);
         assertTrue("isOverlap: ", ol.isOverlap(a,b));
         ol = b.overlap(a);
-        System.out.println("ol = " + ol);
+        //System.out.println("ol = " + ol);
         assertTrue("isOverlap: ", ol.isOverlap(b,a));
 
         a = new Word(wf, "aa");
         b = new Word(wf, "aaaaaaaaa");
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
         ol = a.overlap(b);
-        System.out.println("ol = " + ol);
+        //System.out.println("ol = " + ol);
         assertTrue("isOverlap: ", ol.isOverlap(a,b));
         ol = b.overlap(a);
-        System.out.println("ol = " + ol);
+        //System.out.println("ol = " + ol);
         assertTrue("isOverlap: ", ol.isOverlap(b,a));
     }
+
+
+    /**
+     * Test valueOf.
+     */
+    public void testValueOf() {
+        String[] vars = new String[] { "a", "b", "c", "d" };
+        WordFactory wf = new WordFactory(vars);
+
+        ExpVector ef = ExpVector.random(4,5L,0.5f);
+        //System.out.println("ef = " + ef);
+
+        a = wf.valueOf(ef);
+        //System.out.println("a = " + a);
+        assertTrue("deg(ef) == deg(a): " + ef + ", " + a, ef.degree() == a.degree() );
+
+        String es = ef.toString(vars);
+        //System.out.println("es = " + es);
+        assertTrue("ef != ''" + ef, es.length() >= 0 );
+    }
+
 }

@@ -112,13 +112,11 @@ public class OrderedWordPairlist<C extends RingElem<C> > implements WordPairList
         for ( int j = 0; j < l; j++ ) {
             GenWordPolynomial<C> pj = P.get(j);
             Word f = pj.leadingWord();
-            OverlapList oll = f.overlap(e);
-            if ( oll.ols.isEmpty() ) {
+            Word g = f.lcm(e);
+            //System.out.println("g = " + g);
+            if ( g == null ) {
                 continue; // criterion 4
             }
-            Overlap ol = oll.ols.get(0);
-            Word g =  ol.l1.multiply(f).multiply(ol.r1); 
-            //System.out.println("g = " + g + ", ol = " + ol);
             WordPair<C> pair = new WordPair<C>( pj, p, j, l);
             //System.out.println("pair.new      = " + pair);
             //multiple pairs under same keys -> list of pairs
@@ -172,7 +170,7 @@ public class OrderedWordPairlist<C extends RingElem<C> > implements WordPairList
                 i = pair.i; 
                 j = pair.j; 
                 // System.out.println("pair(" + j + "," +i+") ");
-                c = true; //criterion3( i, j, g ); TODO
+                c = criterion3( i, j, g ); //TODO
                 //System.out.println("c3_o  = " + c); 
                 red.get( j ).clear(i); // set(i,false) jdk1.4
             }
