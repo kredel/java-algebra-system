@@ -219,7 +219,7 @@ public final class Word implements MonoidElem<Word> {
 
     /**
      * Word multiplication.
-     * @param V
+     * @param V other word.
      * @return this * V.
      */
     public Word multiply(Word V) {
@@ -229,7 +229,7 @@ public final class Word implements MonoidElem<Word> {
 
     /**
      * Word divide.
-     * @param V
+     * @param V other word.
      * @return this / V.
      */
     public Word divide(Word V) {
@@ -245,7 +245,7 @@ public final class Word implements MonoidElem<Word> {
 
     /**
      * Word divide with prefix and suffix.
-     * @param V
+     * @param V other word.
      * @return [prefix(this/V), suffix(this/V)] = [left,right] with left * V * right = this.
      */
     public Word[] divideWord(Word V) {
@@ -265,7 +265,7 @@ public final class Word implements MonoidElem<Word> {
 
     /**
      * Word remainder.
-     * @param V
+     * @param V other word.
      * @return this (this/V). <b>Note:</b> not useful.
      */
     public Word remainder(Word V) {
@@ -333,7 +333,7 @@ public final class Word implements MonoidElem<Word> {
 
     /**
      * Word multiple test.
-     * @param V
+     * @param V other word.
      * @return true if this is a multiple of V, else false.
      */
     public boolean multipleOf(Word V) {
@@ -343,7 +343,7 @@ public final class Word implements MonoidElem<Word> {
 
     /**
      * Word divides test.
-     * @param V
+     * @param V other word.
      * @return true if this divides V, else false.
      */
     public boolean divides(Word V) {
@@ -353,7 +353,7 @@ public final class Word implements MonoidElem<Word> {
 
     /**
      * Word compareTo. Uses <pre>String.compareTo</pre>.
-     * @param V
+     * @param V other word.
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
     //JAVA6only: @Override
@@ -364,7 +364,7 @@ public final class Word implements MonoidElem<Word> {
 
     /**
      * Word graded comparison. Compares first be degree, then lexicographical.
-     * @param V
+     * @param V other word.
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
     public int gradCompareTo(Word V) {
@@ -381,7 +381,7 @@ public final class Word implements MonoidElem<Word> {
 
     /**
      * Word graded comparison. Compares first be degree, then inverse lexicographical.
-     * @param V
+     * @param V other word.
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
     public int gradInvlexCompareTo(Word V) {
@@ -409,7 +409,7 @@ public final class Word implements MonoidElem<Word> {
 
     /**
      * Word overlap list.
-     * @param V
+     * @param V other word.
      * @return list of overlaps [l1,r1,l2,r2] with l1 * this * r1 = l2 * V * r2.
      *         If no such overlaps exist the empty overlap list is returned.
      */
@@ -497,7 +497,7 @@ public final class Word implements MonoidElem<Word> {
 
     /**
      * Word pseudo least common multiple.
-     * @param V
+     * @param V other word.
      * @return w = l1*this*r1, with l1*this*r1 == l2*V*r2, if l1, r1, l2, r2 exist,
      *         else null is returned.
      */
