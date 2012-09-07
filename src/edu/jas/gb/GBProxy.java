@@ -72,6 +72,7 @@ public class GBProxy<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C> {
     /**
      * Cleanup and terminate ThreadPool.
      */
+    @Override
     public void terminate() {
         e1.terminate();
         e2.terminate();
@@ -81,6 +82,7 @@ public class GBProxy<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C> {
     /**
      * Cancel ThreadPool.
      */
+    @Override
     public int cancel() {
         int s = e1.cancel();
         s += e2.cancel();
