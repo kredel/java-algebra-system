@@ -40,10 +40,12 @@ The library contains at the moment of the following
 </dd>
 <dt>edu.jas.poly:</dt>
 <dd>
-  contains classes for polynomial and solvable polynomial arithmetic
-  like <code>GenPolynomial</code>, <code>GenSolvablePolynomial</code>
-  and others such as <code>AlgebraicNumber</code> and a polynomial
-  parser <code>GenPolynomialTokenizer</code>.
+  contains classes for commutative polynomial, solvable polynomial and
+  free non-commutative polynomial arithmetic like
+  <code>GenPolynomial</code>, <code>GenSolvablePolynomial</code>,
+  <code>GenWordPolynomial</code> and others such as
+  <code>AlgebraicNumber</code> and a polynomial parser
+  <code>GenPolynomialTokenizer</code>.
 </dd>
 <dt>edu.jas.vector:</dt>
 <dd>
@@ -53,13 +55,16 @@ The library contains at the moment of the following
 <dt>edu.jas.gb:</dt>
 <dd>
   contains classes for polynomial and solvable polynomial reduction,
-  Gr&ouml;bner bases over fields and ideal arithmetic as well as thread
-  parallel and distributed versions of Buchbergers algorithm like
-  <code>ReductionSeq</code>, <code>GroebnerBaseAbstract</code>,
+  Gr&ouml;bner bases over fields and ideal arithmetic as well as
+  thread parallel and distributed versions of Buchbergers algorithm
+  like <code>ReductionSeq</code>, <code>GroebnerBaseAbstract</code>,
   <code>GroebnerBaseSeq</code>, <code>GroebnerBaseParallel</code> and
-  <code>GroebnerBaseDistributed</code>.  New are Gr&ouml;bner bases in
-  polynomial rings over principal ideal domains and Euclidean domains,
-  so called D- and E-Gr&ouml;bner bases, e.g. <code>EGroebnerBaseSeq</code>.  
+  <code>GroebnerBaseDistributed</code>.  There are also Gr&ouml;bner
+  bases in polynomial rings over principal ideal domains and Euclidean
+  domains, so called D- and E-Gr&ouml;bner bases,
+  e.g. <code>EGroebnerBaseSeq</code>. New are Gr&ouml;bner bases in
+  free non-commutative polynomial rings over (skew) fields,
+  see <code>WordGroebnerBaseSeq</code>.
 </dd>
 <dt>edu.jas.gbmod:</dt>
 <dd>
@@ -201,6 +206,15 @@ or
 
 <h3>Published papers and talks about JAS</h3>
 
+
+<li>Some ideas on categories and mixin composition in ScAS and JAS are presented in the poster 
+    <a href="kredel/com-casc2012-poster.pdf" target="casc"  
+       >Raphael Jolly, Heinz Kredel, 
+        <i>Categories as classes and mixin composition</i></a>, 
+    Poster at  
+    <a href="http://www14.in.tum.de/CASC2012/">CASC 2012</a>, 
+    September 3-6, 2012, Maribor, Slovenia 
+</li>
 
 <p>A comparison of API interfaces for computer algebra is presented in the paper
    <a href="http://doi.ieeecomputersociety.org/10.1109/WAINA.2012.158" target="aina" 
@@ -488,7 +502,7 @@ the class edu.jas.application.RunGB. E.g. <br />
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Sun Jul 15 18:50:20 CEST 2012
+Last modified: Sat Sep  8 18:27:51 CEST 2012
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
