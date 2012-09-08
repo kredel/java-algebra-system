@@ -144,4 +144,20 @@ public class GroebnerBaseSeqQuotient<C extends GcdRingElem<C>> extends GroebnerB
         return G;
     }
 
+
+    /**
+     * Cleanup and terminate ThreadPool.
+     */
+    public void terminate() {
+        bba.terminate();
+    }
+
+
+    /**
+     * Cancel ThreadPool.
+     */
+    public int cancel() {
+        return bba.cancel();
+    }
+
 }

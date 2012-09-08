@@ -139,4 +139,20 @@ public class GroebnerBaseSeqRational<C extends BigRational> extends GroebnerBase
         return G;
     }
 
+
+    /**
+     * Cleanup and terminate ThreadPool.
+     */
+    public void terminate() {
+        bba.terminate();
+    }
+
+
+    /**
+     * Cancel ThreadPool.
+     */
+    public int cancel() {
+        return bba.cancel();
+    }
+
 }

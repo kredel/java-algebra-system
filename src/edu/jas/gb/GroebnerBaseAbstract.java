@@ -737,6 +737,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
      */
     public void terminate() {
         logger.info("terminate not implemented");
+        //throw new RuntimeException("get a stack trace");
     }
 
 

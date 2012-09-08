@@ -394,4 +394,26 @@ public class GroebnerBaseFGLM<C extends GcdRingElem<C>> extends GroebnerBaseAbst
         return maximum;
     }
 
+
+    /**
+     * Cleanup and terminate ThreadPool.
+     */
+    public void terminate() {
+        if ( sgb == null ) {
+            return;
+        }
+        sgb.terminate();
+    }
+
+
+    /**
+     * Cancel ThreadPool.
+     */
+    public int cancel() {
+        if ( sgb == null ) {
+            return 0;
+        }
+        return sgb.cancel();
+    }
+
 }
