@@ -50,6 +50,8 @@ public class GBProxy<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C> {
 
     /**
      * Proxy constructor.
+     * @param e1 Groebner base engine.
+     * @param e2 Groebner base engine.
      */
     public GBProxy(GroebnerBaseAbstract<C> e1, GroebnerBaseAbstract<C> e2) {
         this.e1 = e1;
