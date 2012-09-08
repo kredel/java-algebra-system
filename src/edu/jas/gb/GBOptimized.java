@@ -119,7 +119,7 @@ public class GBOptimized<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<
         }
         List<GenPolynomial<C>> iopt = TermOrderOptimization.<C> permutation(iperm, pfac, G);
         logger.info("de-optimized polynomials: " + iopt);
-        if ( iopt.size() == 1 && iopt.get(0).isONE() ) {
+        if ( iopt.size() == 1 ) {
             return iopt;
         }
         logger.warn("recomputing GB");

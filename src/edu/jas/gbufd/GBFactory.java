@@ -143,7 +143,7 @@ public class GBFactory {
     /**
      * Determine suitable implementation of GB algorithms, case BigInteger.
      * @param fac BigInteger.
-     * @param a algorithm.
+     * @param a algorithm, a = igb, egb, dgb.
      * @return GB algorithm implementation.
      */
     public static GroebnerBaseAbstract<BigInteger> getImplementation(BigInteger fac, Algo a) {
@@ -178,7 +178,7 @@ public class GBFactory {
     /**
      * Determine suitable implementation of GB algorithms, case BigRational.
      * @param fac BigRational.
-     * @param a algorithm.
+     * @param a algorithm, a = qgb, ffgb.
      * @return GB algorithm implementation.
      */
     public static GroebnerBaseAbstract<BigRational> getImplementation(BigRational fac, Algo a) {
@@ -211,7 +211,7 @@ public class GBFactory {
     /**
      * Determine suitable implementation of GB algorithms, case Quotient coefficients.
      * @param fac QuotientRing.
-     * @param a algorithm.
+     * @param a algorithm, a = qgb, ffgb.
      * @return GB algorithm implementation.
      */
     public static <C extends GcdRingElem<C>>
@@ -267,16 +267,12 @@ public class GBFactory {
      * @param fac RingFactory&lt;C&gt;.
      * @return GB algorithm implementation.
      */
-    //@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     public static <C extends GcdRingElem<C>> // interface RingElem not sufficient 
       GroebnerBaseAbstract<C> getImplementation(RingFactory<C> fac) {
         logger.debug("fac = " + fac.getClass().getName());
         if (fac.isField()) {
-            //if (fac instanceof BigRational) {
-            //    return new GroebnerBaseSeqRational(); // via integral 
-            //}
             return new GroebnerBaseSeq<C>();
-            //return new GroebnerBaseSeq<C>(new ReductionSeq<C>(),new OrderedSyzPairlist<C>());
         }
         GroebnerBaseAbstract bba = null;
         Object ofac = fac;
@@ -305,7 +301,6 @@ public class GBFactory {
      * @param fac RingFactory&lt;C&gt;.
      * @return GB proxy algorithm implementation.
      */
-    //@SuppressWarnings("unchecked")
     public static <C extends GcdRingElem<C>> // interface RingElem not sufficient 
       GroebnerBaseAbstract<C> getProxy(RingFactory<C> fac) {
         logger.debug("fac = " + fac.getClass().getName());
@@ -320,24 +315,7 @@ public class GBFactory {
             //                                                       new ReductionPar<C>(),new OrderedSyzPairlist<C>());
             return new GBProxy<C>(e1, e2);
         }
-        GroebnerBaseAbstract bba = null;
-        Object ofac = fac;
-        if (ofac instanceof GenPolynomialRing) {
-            GenPolynomialRing<C> rofac = (GenPolynomialRing<C>) ofac;
-            GroebnerBaseAbstract<GenPolynomial<C>> bbr = new GroebnerBasePseudoRecSeq<C>(rofac);
-            bba = (GroebnerBaseAbstract) bbr;
-        } else if (ofac instanceof ProductRing) {
-            ProductRing pfac = (ProductRing) ofac;
-            if (pfac.onlyFields()) {
-                bba = new RGroebnerBaseSeq<Product<C>>();
-            } else {
-                bba = new RGroebnerBasePseudoSeq<Product<C>>(pfac);
-            }
-        } else {
-            bba = new GroebnerBasePseudoSeq<C>(fac);
-        }
-        logger.debug("bba = " + bba.getClass().getName());
-        return bba;
+        return getImplementation(fac);
     }
 
 }
