@@ -96,10 +96,22 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
 
     /**
      * Request term order optimization.
+     * Call optimize(true) for return of permuted polynomials.
+     */
+    public GBAlgorithmBuilder<C> optimize() {
+        return optimize(true);
+    }
+
+
+    /**
+     * Request term order optimization.
      * @param rP true for return of permuted polynomials, false for inverse
      *            permuted polynomials and new GB computation.
      */
     public GBAlgorithmBuilder<C> optimize(boolean rP) {
+        if (algo == null) {
+           algo = GBFactory.<C> getImplementation(ring.coFac);
+        }
         GroebnerBaseAbstract<C> bb = new GBOptimized<C>(algo, rP);
         return new GBAlgorithmBuilder<C>(ring, bb);
     }
@@ -194,8 +206,10 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
     @Override
     public String toString() {
         StringBuffer s = new StringBuffer(" ");
-        s.append(algo.toString());
-        s.append(" for ");
+        if ( algo != null ) {
+            s.append(algo.toString());
+            s.append(" for ");
+        }
         s.append(ring.toString());
         return s.toString();
     }
@@ -209,8 +223,10 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
     public String toScript() {
         // Python case
         StringBuffer s = new StringBuffer(" ");
-        s.append(algo.toString()); // nonsense
-        s.append(" ");
+        if ( algo != null ) {
+            s.append(algo.toString()); // nonsense
+            s.append(" ");
+        }
         s.append(ring.toScript());
         return s.toString();
     }
