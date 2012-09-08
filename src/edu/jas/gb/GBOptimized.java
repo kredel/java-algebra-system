@@ -5,16 +5,16 @@
 package edu.jas.gb;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.TermOrderOptimization;
 import edu.jas.poly.OptimizedPolynomialList;
+import edu.jas.poly.TermOrderOptimization;
 import edu.jas.structure.GcdRingElem;
+
 
 /**
  * Groebner bases via optimized variable and term order.
@@ -47,14 +47,15 @@ public class GBOptimized<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<
      * @param e1 Groebner base engine.
      */
     public GBOptimized(GroebnerBaseAbstract<C> e1) {
-        this(e1,false); // true ??
+        this(e1, false); // true ??
     }
 
 
     /**
      * GBOptimized constructor.
      * @param e1 Groebner base engine.
-     * @param rP true for return of permuted polynomials, false for inverse permuted polynomials.
+     * @param rP true for return of permuted polynomials, false for inverse
+     *            permuted polynomials and new GB computation.
      */
     public GBOptimized(GroebnerBaseAbstract<C> e1, boolean rP) {
         this.e1 = e1;
@@ -98,32 +99,36 @@ public class GBOptimized<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<
      * @return GB(F) a Groebner base of F.
      */
     //JAVA6only: @Override
-    public List<GenPolynomial<C>> GB( int modv, List<GenPolynomial<C>> F ) {
+    public List<GenPolynomial<C>> GB(int modv, List<GenPolynomial<C>> F) {
         if (F == null || F.isEmpty()) {
             return F;
         }
-        if ( modv != 0 ) {
+        if (modv != 0) {
             throw new UnsupportedOperationException("implemented only for modv = 0, not " + modv);
         }
         GenPolynomialRing<C> pfac = F.get(0).ring;
-        OptimizedPolynomialList<C> opt = TermOrderOptimization.<C> optimizeTermOrder(pfac,F);
+        OptimizedPolynomialList<C> opt = TermOrderOptimization.<C> optimizeTermOrder(pfac, F);
         List<GenPolynomial<C>> P = opt.list;
-        logger.info("optimized polynomials: " + P);
+        if (debug) {
+            logger.info("optimized polynomials: " + P);
+        }
         List<Integer> iperm = TermOrderOptimization.inversePermutation(opt.perm);
         logger.info("optimize perm: " + opt.perm + ", de-optimize perm: " + iperm);
 
         // compute GB with backing engine
-        List<GenPolynomial<C>> G = e1.GB(modv,P);
-        if ( retPermuted || G.isEmpty() ) {
+        List<GenPolynomial<C>> G = e1.GB(modv, P);
+        if (retPermuted || G.isEmpty()) {
             return G;
         }
         List<GenPolynomial<C>> iopt = TermOrderOptimization.<C> permutation(iperm, pfac, G);
-        logger.info("de-optimized polynomials: " + iopt);
-        if ( iopt.size() == 1 ) {
+        if (debug) {
+            logger.info("de-optimized polynomials: " + iopt);
+        }
+        if (iopt.size() == 1) {
             return iopt;
         }
         logger.warn("recomputing GB");
-        G = e1.GB(modv,iopt);
+        G = e1.GB(modv, iopt);
         return G;
     }
 
