@@ -26,7 +26,7 @@ import edu.jas.poly.PolyUtil;
  * @author Heinz Kredel
  */
 
-public class GroebnerBaseSeqRational<C extends BigRational> extends GroebnerBaseSeq<BigRational> {
+public class GroebnerBaseSeqRational<C extends BigRational> extends GroebnerBaseAbstract<BigRational> {
 
 
     private static final Logger logger = Logger.getLogger(GroebnerBaseSeqRational.class);

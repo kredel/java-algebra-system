@@ -22,9 +22,12 @@ import edu.jas.gb.GroebnerBase;
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.GroebnerBaseParallel;
 import edu.jas.gb.GroebnerBaseSeq;
+import edu.jas.gb.ReductionSeq;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+import edu.jas.ufd.Quotient;
+import edu.jas.ufd.QuotientRing;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
@@ -68,8 +71,12 @@ public class GBFactory {
     private static final Logger logger = Logger.getLogger(GBFactory.class);
 
 
-    public enum Algo {
-        igb, egb, dgb
+    /**
+     * Algorithm indicators: igb = integerGB, egb = e-GB, dgb = d-GB, 
+     * qgb = fraction coefficients GB, ffgb = fraction free GB.
+     */
+    public static enum Algo {
+        igb, egb, dgb, qgb, ffgb
     };
 
 
@@ -152,7 +159,7 @@ public class GBFactory {
             bba = new DGroebnerBaseSeq<BigInteger>();
             break;
         default:
-            throw new IllegalArgumentException("algorithm not available " + a);
+            throw new IllegalArgumentException("algorithm not available for BigInteger " + a);
         }
         return bba;
     }
@@ -164,9 +171,62 @@ public class GBFactory {
      * @return GB algorithm implementation.
      */
     public static GroebnerBaseAbstract<BigRational> getImplementation(BigRational fac) {
+        return getImplementation(fac, Algo.qgb);
+    }
+
+
+    /**
+     * Determine suitable implementation of GB algorithms, case BigRational.
+     * @param fac BigRational.
+     * @param a algorithm.
+     * @return GB algorithm implementation.
+     */
+    public static GroebnerBaseAbstract<BigRational> getImplementation(BigRational fac, Algo a) {
         GroebnerBaseAbstract<BigRational> bba;
-        bba = new GroebnerBaseSeq<BigRational>();
-        //bba = new GroebnerBaseSeqRational<BigRational>();
+        switch (a) {
+        case qgb:
+            bba = new GroebnerBaseSeq<BigRational>();
+            break;
+        case ffgb:
+            bba = new GroebnerBaseSeqRational<BigRational>();
+            break;
+        default:
+            throw new IllegalArgumentException("algorithm not available for BigRational " + a);
+        }
+        return bba;
+    }
+
+
+    /**
+     * Determine suitable implementation of GB algorithms, case Quotient coefficients.
+     * @param fac QuotientRing.
+     * @return GB algorithm implementation.
+     */
+    public static <C extends GcdRingElem<C>>
+      GroebnerBaseAbstract<Quotient<C>> getImplementation(QuotientRing<C> fac) {
+        return getImplementation(fac, Algo.qgb);
+    }
+
+
+    /**
+     * Determine suitable implementation of GB algorithms, case Quotient coefficients.
+     * @param fac QuotientRing.
+     * @param a algorithm.
+     * @return GB algorithm implementation.
+     */
+    public static <C extends GcdRingElem<C>>
+      GroebnerBaseAbstract<Quotient<C>> getImplementation(QuotientRing<C> fac, Algo a) {
+        GroebnerBaseAbstract<Quotient<C>> bba;
+        switch (a) {
+        case qgb:
+            bba = new GroebnerBaseSeq<Quotient<C>>(new ReductionSeq<Quotient<C>>());
+            break;
+        case ffgb:
+            bba = new GroebnerBaseSeqQuotient<C>(fac);
+            break;
+        default:
+            throw new IllegalArgumentException("algorithm not available for Quotient " + a);
+        }
         return bba;
     }
 
