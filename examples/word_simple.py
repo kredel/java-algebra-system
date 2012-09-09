@@ -130,10 +130,13 @@ print;
 c1 = f1 * f2;
 c2 = f2 * f1;
 s = c1 - c2;
+s1 = 22 * y*x*x*y + x*y*y*x + 22 * y*x*y + x*y*y + x*y*x + 22 * x*x*y;
 
 print "c1 = " + str(c1);
 print "c2 = " + str(c2);
 print "s  = " + str(s);
+print "s1 = " + str(s1);
+print "s == s1: " + str(s==s1);
 print;
 
 Fp = rp.ideal( list=[f1,f2] );

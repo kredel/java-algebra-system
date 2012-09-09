@@ -3170,6 +3170,7 @@ class WordRing(Ring):
     '''Represents a JAS free non-commutative polynomial ring: GenWordPolynomialRing.
 
     Has a method to create word ideals.
+    <b>Note:</b> watch your step: check that jython does not reorder multiplication.
     '''
 
     def __init__(self,ringstr="",ring=None):
@@ -3237,6 +3238,7 @@ class WordPolyRing(WordRing):
 
     Provides more convenient constructor. 
     Then returns a Ring.
+    <b>Note:</b> watch your step: check that jython does not reorder multiplication.
     '''
 
     def __init__(self,coeff,vars):
@@ -3271,6 +3273,7 @@ class WordIdeal:
     '''Represents a JAS word polynomial ideal.
 
     Methods for two-sided Groebner basees and others.
+    <b>Note:</b> watch your step: check that jython does not reorder multiplication.
     '''
 
     def __init__(self,ring,ringstr="",list=None):

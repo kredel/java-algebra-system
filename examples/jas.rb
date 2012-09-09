@@ -867,12 +867,15 @@ include_class "edu.jas.poly.GenPolynomial";
 include_class "edu.jas.poly.GenPolynomialRing";
 include_class "edu.jas.poly.GenSolvablePolynomial";
 include_class "edu.jas.poly.GenSolvablePolynomialRing";
+include_class "edu.jas.poly.GenWordPolynomial";
+include_class "edu.jas.poly.GenWordPolynomialRing";
 include_class "edu.jas.poly.GenPolynomialTokenizer";
 include_class "edu.jas.poly.TermOrder";
 include_class "edu.jas.poly.OrderedPolynomialList";
 include_class "edu.jas.poly.PolyUtil";
 include_class "edu.jas.poly.TermOrderOptimization";
 include_class "edu.jas.poly.PolynomialList";
+include_class "edu.jas.poly.WordFactory";
 include_class "edu.jas.poly.AlgebraicNumber";
 include_class "edu.jas.poly.AlgebraicNumberRing";
 include_class "edu.jas.poly.OrderedModuleList";
@@ -1703,6 +1706,7 @@ include_class "edu.jas.gb.OrderedSyzPairlist";
 include_class "edu.jas.gb.GroebnerBaseSeqPairParallel";
 include_class "edu.jas.gb.SolvableGroebnerBaseParallel";
 include_class "edu.jas.gb.SolvableGroebnerBaseSeq";
+include_class "edu.jas.gb.WordGroebnerBaseSeq";
 
 include_class "edu.jas.gbufd.GroebnerBasePseudoRecSeq";
 include_class "edu.jas.gbufd.GroebnerBasePseudoSeq";
@@ -3869,6 +3873,229 @@ Get extension field tower.
         else
             return RingElem.new(rf.getZERO());
         end
+    end
+
+end
+
+
+=begin rdoc
+Represents a JAS non-commutative polynomial ring: GenWordPolynomialRing.
+
+Has a method to create non-commutative ideals.
+<b>Note:</b> watch your step: check that jruby does not reorder multiplication.
+=end
+class WordRing < Ring
+
+=begin rdoc
+Word polynomial ring constructor.
+=end
+    def initialize(ringstr="",ring=nil)
+        if ring == nil
+           raise "parse of word polynomial rings not implemented"
+           sr = StringReader.new( ringstr );
+           tok = GenPolynomialTokenizer.new(sr);
+           @pset = tok.nextWordPolynomialSet();
+           @ring = @pset.ring;
+        else
+           @ring = ring;
+        end
+        if not @ring.isAssociative()
+           puts "warning: ring is not associative";
+        end
+    end
+
+=begin rdoc
+Create a string representation.
+=end
+    def to_s()
+        return @ring.toScript(); #.to_s;
+    end
+
+=begin rdoc
+Create a solvable ideal.
+=end
+    def ideal(ringstr="",list=nil)
+        return WordIdeal.new(self,ringstr,list);
+    end
+
+=begin rdoc
+Get the one of the solvable polynomial ring.
+=end
+    def one()
+        return RingElem.new( @ring.getONE() );
+    end
+
+=begin rdoc
+Get the zero of the solvable polynomial ring.
+=end
+    def zero()
+        return RingElem.new( @ring.getZERO() );
+    end
+
+=begin rdoc
+Get a random word polynomial.
+=end
+    def random(n=5)
+        r = @ring.random(n);
+        if @ring.coFac.isField()
+            r = r.monic();
+        end
+        return RingElem.new( r );
+    end
+
+=begin rdoc
+Get a random word polynomial.
+=end
+    def random(k=5,l=7,d=3)
+        r = @ring.random(k,l,d);
+        if @ring.coFac.isField()
+            r = r.monic();
+        end
+        return RingElem.new( r );
+    end
+
+=begin rdoc
+Create an element from a string or object.
+=end
+    def element(poly)
+        if not poly.is_a? String 
+           begin
+              if @ring == poly.ring 
+                 return RingElem.new(poly);
+              end
+           rescue Exception => e
+              # pass
+           end
+           poly = str(poly);
+        end
+        ii = WordIdeal.new(self, "( " + poly + " )");
+        list = ii.pset.list;
+        if list.size > 0
+            return RingElem.new( list[0] );
+        end
+    end
+
+end
+
+
+=begin rdoc
+Represents a JAS non-commutative polynomial ring: GenWordPolynomialRing.
+
+Provides more convenient constructor. 
+Then returns a Ring.
+<b>Note:</b> watch your step: check that jruby does not reorder multiplication.
+=end
+class WordPolyRing < WordRing
+
+=begin rdoc
+Ring constructor.
+
+coeff = factory for coefficients,
+vars = string with variable names.
+=end
+    def initialize(coeff,vars)
+        if coeff == nil
+            raise ValueError, "No coefficient given."
+        end
+        cf = coeff;
+        if coeff.is_a? RingElem
+            cf = coeff.elem.factory();
+        end
+        if coeff.is_a? Ring
+            cf = coeff.ring;
+        end
+        if vars == nil
+            raise ValueError, "No variable names given."
+        end
+        names = vars;
+        if vars.is_a? String
+            names = GenPolynomialTokenizer.variableList(vars);
+        end
+        wf = WordFactory.new(names);
+        ring = GenWordPolynomialRing.new(cf,wf);
+        @ring = ring;
+    end
+
+=begin rdoc
+Create a string representation.
+=end
+    def to_s()
+        return @ring.toScript();
+    end
+end
+
+
+=begin rdoc
+Represents a JAS non-commutative polynomial ideal.
+
+Methods for two-sided Groebner bases and others.
+<b>Note:</b> watch your step: check that jruby does not reorder multiplication.
+=end
+class WordIdeal
+
+    attr_reader :ring, :list
+
+=begin rdoc
+Constructor for an ideal in a non-commutative polynomial ring.
+=end
+    def initialize(ring,ringstr="",list=nil)
+        @ring = ring;
+        if list == nil
+           raise "parse of non-commutative polynomials not implemented"
+           sr = StringReader.new( ringstr );
+           tok = GenPolynomialTokenizer.new(ring.ring,sr);
+           @list = tok.nextWordPolynomialList();
+        else
+           @list = rbarray2arraylist(list,rec=1);
+        end
+        #@pset = OrderedPolynomialList.new(ring.ring,@list);
+    end
+
+=begin rdoc
+Create a string representation.
+=end
+    def to_s()
+        return @list.toString(); #@pset.toScript().to_s;
+    end
+
+=begin rdoc
+Compute a two-sided Groebner base.
+=end
+    def GB()
+        return twosidedGB();
+    end
+
+=begin rdoc
+Compute a two-sided Groebner base.
+=end
+    def twosidedGB()
+        #s = @pset;
+        ff = @list;
+        t = System.currentTimeMillis();
+        gg = WordGroebnerBaseSeq.new().GB(ff);
+        t = System.currentTimeMillis() - t;
+        puts "executed twosidedGB in #{t} ms\n"; 
+        return WordIdeal.new(@ring,"",gg);
+    end
+
+=begin rdoc
+Test if this is a two-sided Groebner base.
+=end
+    def isGB()
+        return isTwosidedGB();
+    end
+
+=begin rdoc
+Test if this is a two-sided Groebner base.
+=end
+    def isTwosidedGB()
+        #s = @pset;
+        ff = @list;
+        t = System.currentTimeMillis();
+        b = WordGroebnerBaseSeq.new().isGB(ff);
+        t = System.currentTimeMillis() - t;
+        puts "isTwosidedGB executed in #{t} ms\n"; 
+        return b;
     end
 
 end
