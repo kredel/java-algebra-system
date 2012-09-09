@@ -30,6 +30,9 @@ import edu.jas.vector.BasicLinAlg;
  * Implements common Groebner bases and GB test methods.
  * @param <C> coefficient type
  * @author Heinz Kredel
+ *
+ * @see edu.jas.application.GBAlgorithmBuilder
+ * @see edu.jas.gbufd.GBFactory
  */
 
 public abstract class GroebnerBaseAbstract<C extends RingElem<C>> 

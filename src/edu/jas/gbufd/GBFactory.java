@@ -62,7 +62,8 @@ import edu.jas.structure.RingFactory;
  * c = engine.GB(A);
  * </pre>
  * 
- * @see edu.jas.gb.GroebnerBase#GB(java.util.List P)
+ * @see edu.jas.gb.GroebnerBase
+ * @see edu.jas.application.GBAlgorithmBuilder
  */
 
 public class GBFactory {

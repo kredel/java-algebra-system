@@ -27,6 +27,9 @@ import edu.jas.ufd.GreatestCommonDivisorAbstract;
  * coefficient fraction free Groebner bases.
  * @param <C> coefficient type
  * @author Heinz Kredel
+ *
+ * @see edu.jas.application.GBAlgorithmBuilder
+ * @see edu.jas.gbufd.GBFactory
  */
 
 public class GroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C> {

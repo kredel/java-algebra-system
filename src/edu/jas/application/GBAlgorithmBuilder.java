@@ -27,7 +27,55 @@ import edu.jas.ufd.QuotientRing;
 /**
  * Builder for commutative Gr&ouml;bner bases algorithm implementations.
  * @author Heinz Kredel
+ * @usage To create objects that implement the <code>GroebnerBase</code>
+ *        interface one can use the <code>GBFactory</code> or this <code>GBAlgorithmBuilder</code>. 
+ *        This class will select and compose an
+ *        appropriate implementation based on the types of polynomial
+ *        coefficients C and the desired properties. To build an implementation start with
+ *        the static method <code>polynomialRing()</code> to define the polynomial ring. 
+ *        Then continue to construct the algorithm with the methods 
+ *        <ul>
+ *        <li><code>optimize()</code> or <code>optimize(boolean)</code> for term order (variable order) 
+ *            optimization,
+ *        </li>
+ *        <li><code>fractionFree()</code> for clearing denominators and computing with pseudo reduction,
+ *        </li>
+ *        <li><code>graded()</code> for using the FGLM algorithm to first compute with a graded term order and 
+ *            then constructing a lexicographical Gr&ouml;bner base,
+ *        </li>
+ *        <li><code>parallel()</code> additionaly compute a Gr&ouml;bner base over a field in parallel,
+ *        </li>
+ *        <li><code>euclideanDomain()</code> for computing a e-Gr&ouml;bner base,
+ *        </li>
+ *        <li><code>domainAlgorithm(Algo)</code> for computing a d- or e-Gr&ouml;bner base,
+ *        </li>
+ *        </ul>
+ *        Finaly call the method <code>build()</code> to obtain an implementaton of
+ *        class <code>GroebnerBaseAbstract</code>. For example 
+ * 
+ *        <pre>
+ * GenPolynomialRing&lt;C&gt; pf = new GenPolynomialRing&lt;C&gt;(cofac, vars);
+ * GroebnerBaseAbstract&lt;C&gt; engine;
+ * engine = GBAlgorithmBuilder.&lt;C&gt; polynomialRing(pf).fractionFree().parallel().optimize().build();
+ * c = engine.GB(A);
+ * </pre>
+ * 
+ *        For example, if the coefficient type is BigRational, the usage looks
+ *        like
+ * 
+ *        <pre>
+ * GenPolynomialRing&lt;BigRational&gt; pf = new GenPolynomialRing&lt;BigRational&gt;(cofac, vars);
+ * GroebnerBaseAbstract&lt;BigRational&gt; engine;
+ * engine = GBAlgorithmBuilder.&lt;BigRational&gt; polynomialRing(pf).fractionFree().parallel().optimize().build();
+ * c = engine.GB(A);
+ * </pre>
+ * 
+ * <b>Note:</b> Not all combinations are meanigful  
+ * 
+ * @see edu.jas.gb.GroebnerBase
+ * @see edu.jas.gbufd.GBFactory
  */
+
 public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializable {
 
 
@@ -88,6 +136,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
     /**
      * Define polynomial ring.
      * @param fac the commutative polynomial ring.
+     * @return GBAlgorithmBuilder object.
      */
     public static <C extends GcdRingElem<C>> GBAlgorithmBuilder<C> polynomialRing(GenPolynomialRing<C> fac) {
         return new GBAlgorithmBuilder<C>(fac);
@@ -97,6 +146,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
     /**
      * Request term order optimization.
      * Call optimize(true) for return of permuted polynomials.
+     * @return GBAlgorithmBuilder object.
      */
     public GBAlgorithmBuilder<C> optimize() {
         return optimize(true);
@@ -107,6 +157,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
      * Request term order optimization.
      * @param rP true for return of permuted polynomials, false for inverse
      *            permuted polynomials and new GB computation.
+     * @return GBAlgorithmBuilder object.
      */
     public GBAlgorithmBuilder<C> optimize(boolean rP) {
         if (algo == null) {
@@ -118,9 +169,10 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
 
 
     /**
-     * Request fraction free algorithm.
-     * @param rP true for return of permuted polynomials, false for inverse
-     *            permuted polynomials and new GB computation.
+     * Request fraction free algorithm.  For BigRational and Quotient
+     * coefficients denominators are cleared and pseudo reduction is
+     * used.
+     * @return GBAlgorithmBuilder object.
      */
     @SuppressWarnings("unchecked")
     public GBAlgorithmBuilder<C> fractionFree() {
@@ -142,8 +194,18 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
 
 
     /**
+     * Request e-GB algorithm.
+     * @return GBAlgorithmBuilder object.
+     */
+    public GBAlgorithmBuilder<C> euclideanDomain() {
+        return domainAlgorithm(GBFactory.Algo.egb);
+    }
+
+
+    /**
      * Request d- or e-GB algorithm.
      * @param a algorithm from GBFactory.Algo.
+     * @return GBAlgorithmBuilder object.
      */
     @SuppressWarnings("unchecked")
     public GBAlgorithmBuilder<C> domainAlgorithm(GBFactory.Algo a) {
@@ -160,6 +222,8 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
 
     /**
      * Request parallel algorithm.
+     * Additionaly run a parallel algorithm via GBProxy.
+     * @return GBAlgorithmBuilder object.
      */
     @SuppressWarnings("unchecked")
     public GBAlgorithmBuilder<C> parallel() {
@@ -182,6 +246,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
 
     /**
      * Request FGLM algorithm.
+     * @return GBAlgorithmBuilder object.
      */
     @SuppressWarnings("unchecked")
     public GBAlgorithmBuilder<C> graded() {

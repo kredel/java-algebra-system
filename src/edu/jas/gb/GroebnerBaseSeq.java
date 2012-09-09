@@ -23,6 +23,9 @@ import edu.jas.poly.GenPolynomialRing;
  * Implements Groebner bases and GB test.
  * @param <C> coefficient type
  * @author Heinz Kredel
+ *
+ * @see edu.jas.application.GBAlgorithmBuilder
+ * @see edu.jas.gbufd.GBFactory
  */
 
 public class GroebnerBaseSeq<C extends RingElem<C>> 
