@@ -13,33 +13,22 @@ import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
 
-import edu.jas.arith.BigRational;
 import edu.jas.arith.BigInteger;
-import edu.jas.arith.ModLongRing;
-import edu.jas.kern.ComputerThreads;
-import edu.jas.poly.AlgebraicNumber;
-import edu.jas.poly.AlgebraicNumberRing;
-import edu.jas.poly.ComplexRing;
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
-import edu.jas.root.RealAlgebraicNumber;
-import edu.jas.root.RootFactory;
-import edu.jas.structure.Power;
-import edu.jas.structure.RingElem;
-import edu.jas.structure.RingFactory;
-import edu.jas.ufd.Quotient;
-import edu.jas.ufd.QuotientRing;
-import edu.jas.gb.GroebnerBaseAbstract;
-import edu.jas.gb.GroebnerBaseSeq;
-import edu.jas.gb.GroebnerBaseParallel;
+import edu.jas.arith.BigRational;
 import edu.jas.gb.DGroebnerBaseSeq;
 import edu.jas.gb.EGroebnerBaseSeq;
-import edu.jas.gb.GBProxy;
 import edu.jas.gb.GBOptimized;
+import edu.jas.gb.GBProxy;
+import edu.jas.gb.GroebnerBaseAbstract;
+import edu.jas.gb.GroebnerBaseParallel;
+import edu.jas.gb.GroebnerBaseSeq;
 import edu.jas.gbufd.GBFactory;
 import edu.jas.gbufd.GroebnerBaseFGLM;
 import edu.jas.gbufd.GroebnerBasePseudoSeq;
 import edu.jas.gbufd.GroebnerBaseSeqRational;
+import edu.jas.kern.ComputerThreads;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
 
 
 /**
@@ -98,14 +87,14 @@ public class GBAlgorithmBuilderTest extends TestCase {
      */
     public void testConstructionRational() {
         BigRational bf = new BigRational(1);
-        String[] vars  = new String[] { "a", "b", "c" };
+        String[] vars = new String[] { "a", "b", "c" };
         GenPolynomialRing<BigRational> pf = new GenPolynomialRing<BigRational>(bf, vars);
 
-        GBAlgorithmBuilder<BigRational> ab = GBAlgorithmBuilder.<BigRational>polynomialRing(pf);
-        System.out.println("ab = " + ab);
+        GBAlgorithmBuilder<BigRational> ab = GBAlgorithmBuilder.<BigRational> polynomialRing(pf);
+        //System.out.println("ab = " + ab);
 
         GroebnerBaseAbstract<BigRational> bb = ab.build();
-        System.out.println("bb = " + bb);
+        //System.out.println("bb = " + bb);
 
         assertTrue("instance of " + bb, bb instanceof GroebnerBaseSeq);
     }
@@ -116,17 +105,17 @@ public class GBAlgorithmBuilderTest extends TestCase {
      */
     public void testConstructionRationalFGLM() {
         BigRational bf = new BigRational(1);
-        String[] vars  = new String[] { "a", "b", "c" };
+        String[] vars = new String[] { "a", "b", "c" };
         GenPolynomialRing<BigRational> pf = new GenPolynomialRing<BigRational>(bf, vars);
 
-        GBAlgorithmBuilder<BigRational> ab = GBAlgorithmBuilder.<BigRational>polynomialRing(pf);
-        System.out.println("ab = " + ab);
+        GBAlgorithmBuilder<BigRational> ab = GBAlgorithmBuilder.<BigRational> polynomialRing(pf);
+        //System.out.println("ab = " + ab);
 
         ab = ab.graded();
-        System.out.println("ab = " + ab);
+        //System.out.println("ab = " + ab);
 
         GroebnerBaseAbstract<BigRational> bb = ab.build();
-        System.out.println("bb = " + bb);
+        //System.out.println("bb = " + bb);
 
         assertTrue("instance of " + bb, bb instanceof GroebnerBaseFGLM);
     }
@@ -137,17 +126,17 @@ public class GBAlgorithmBuilderTest extends TestCase {
      */
     public void testConstructionRationalParallel() {
         BigRational bf = new BigRational(1);
-        String[] vars  = new String[] { "a", "b", "c" };
+        String[] vars = new String[] { "a", "b", "c" };
         GenPolynomialRing<BigRational> pf = new GenPolynomialRing<BigRational>(bf, vars);
 
-        GBAlgorithmBuilder<BigRational> ab = GBAlgorithmBuilder.<BigRational>polynomialRing(pf);
-        System.out.println("ab = " + ab);
+        GBAlgorithmBuilder<BigRational> ab = GBAlgorithmBuilder.<BigRational> polynomialRing(pf);
+        //System.out.println("ab = " + ab);
 
         ab = ab.parallel();
-        System.out.println("ab = " + ab);
+        //System.out.println("ab = " + ab);
 
         GroebnerBaseAbstract<BigRational> bb = ab.build();
-        System.out.println("bb = " + bb);
+        //System.out.println("bb = " + bb);
 
         assertTrue("instance of " + bb, bb instanceof GBProxy);
 
@@ -162,17 +151,17 @@ public class GBAlgorithmBuilderTest extends TestCase {
      */
     public void testConstructionRationalOptimized() {
         BigRational bf = new BigRational(1);
-        String[] vars  = new String[] { "a", "b", "c" };
+        String[] vars = new String[] { "a", "b", "c" };
         GenPolynomialRing<BigRational> pf = new GenPolynomialRing<BigRational>(bf, vars);
 
-        GBAlgorithmBuilder<BigRational> ab = GBAlgorithmBuilder.<BigRational>polynomialRing(pf);
-        System.out.println("ab = " + ab);
+        GBAlgorithmBuilder<BigRational> ab = GBAlgorithmBuilder.<BigRational> polynomialRing(pf);
+        //System.out.println("ab = " + ab);
 
         ab = ab.optimize();
-        System.out.println("ab = " + ab);
+        //System.out.println("ab = " + ab);
 
         GroebnerBaseAbstract<BigRational> bb = ab.build();
-        System.out.println("bb = " + bb);
+        //System.out.println("bb = " + bb);
 
         assertTrue("instance of " + bb, bb instanceof GBOptimized);
     }
@@ -183,17 +172,17 @@ public class GBAlgorithmBuilderTest extends TestCase {
      */
     public void testConstructionRationalFF() {
         BigRational bf = new BigRational(1);
-        String[] vars  = new String[] { "a", "b", "c" };
+        String[] vars = new String[] { "a", "b", "c" };
         GenPolynomialRing<BigRational> pf = new GenPolynomialRing<BigRational>(bf, vars);
 
-        GBAlgorithmBuilder<BigRational> ab = GBAlgorithmBuilder.<BigRational>polynomialRing(pf);
-        System.out.println("ab = " + ab);
+        GBAlgorithmBuilder<BigRational> ab = GBAlgorithmBuilder.<BigRational> polynomialRing(pf);
+        //System.out.println("ab = " + ab);
 
         ab = ab.fractionFree();
-        System.out.println("ab = " + ab);
+        //System.out.println("ab = " + ab);
 
         GroebnerBaseAbstract<BigRational> bb = ab.build();
-        System.out.println("bb = " + bb);
+        //System.out.println("bb = " + bb);
 
         assertTrue("instance of " + bb, bb instanceof GroebnerBaseSeqRational);
     }
@@ -204,14 +193,14 @@ public class GBAlgorithmBuilderTest extends TestCase {
      */
     public void testConstructionInteger() {
         BigInteger bf = new BigInteger(1);
-        String[] vars  = new String[] { "a", "b", "c" };
+        String[] vars = new String[] { "a", "b", "c" };
         GenPolynomialRing<BigInteger> pf = new GenPolynomialRing<BigInteger>(bf, vars);
 
-        GBAlgorithmBuilder<BigInteger> ab = GBAlgorithmBuilder.<BigInteger>polynomialRing(pf);
-        System.out.println("ab = " + ab);
+        GBAlgorithmBuilder<BigInteger> ab = GBAlgorithmBuilder.<BigInteger> polynomialRing(pf);
+        //System.out.println("ab = " + ab);
 
         GroebnerBaseAbstract<BigInteger> bb = ab.build();
-        System.out.println("bb = " + bb);
+        //System.out.println("bb = " + bb);
 
         assertTrue("instance of " + bb, bb instanceof GroebnerBasePseudoSeq);
     }
@@ -222,17 +211,17 @@ public class GBAlgorithmBuilderTest extends TestCase {
      */
     public void testConstructionIntegerDGB() {
         BigInteger bf = new BigInteger(1);
-        String[] vars  = new String[] { "a", "b", "c" };
+        String[] vars = new String[] { "a", "b", "c" };
         GenPolynomialRing<BigInteger> pf = new GenPolynomialRing<BigInteger>(bf, vars);
 
-        GBAlgorithmBuilder<BigInteger> ab = GBAlgorithmBuilder.<BigInteger>polynomialRing(pf);
-        System.out.println("ab = " + ab);
+        GBAlgorithmBuilder<BigInteger> ab = GBAlgorithmBuilder.<BigInteger> polynomialRing(pf);
+        //System.out.println("ab = " + ab);
 
         ab = ab.domainAlgorithm(GBFactory.Algo.dgb);
-        System.out.println("ab = " + ab);
+        //System.out.println("ab = " + ab);
 
         GroebnerBaseAbstract<BigInteger> bb = ab.build();
-        System.out.println("bb = " + bb);
+        //System.out.println("bb = " + bb);
 
         assertTrue("instance of " + bb, bb instanceof DGroebnerBaseSeq);
     }
@@ -243,17 +232,17 @@ public class GBAlgorithmBuilderTest extends TestCase {
      */
     public void testConstructionIntegerEGB() {
         BigInteger bf = new BigInteger(1);
-        String[] vars  = new String[] { "a", "b", "c" };
+        String[] vars = new String[] { "a", "b", "c" };
         GenPolynomialRing<BigInteger> pf = new GenPolynomialRing<BigInteger>(bf, vars);
 
-        GBAlgorithmBuilder<BigInteger> ab = GBAlgorithmBuilder.<BigInteger>polynomialRing(pf);
-        System.out.println("ab = " + ab);
+        GBAlgorithmBuilder<BigInteger> ab = GBAlgorithmBuilder.<BigInteger> polynomialRing(pf);
+        //System.out.println("ab = " + ab);
 
         ab = ab.domainAlgorithm(GBFactory.Algo.egb);
-        System.out.println("ab = " + ab);
+        //System.out.println("ab = " + ab);
 
         GroebnerBaseAbstract<BigInteger> bb = ab.build();
-        System.out.println("bb = " + bb);
+        //System.out.println("bb = " + bb);
 
         assertTrue("instance of " + bb, bb instanceof EGroebnerBaseSeq);
     }
@@ -264,31 +253,21 @@ public class GBAlgorithmBuilderTest extends TestCase {
      */
     public void testConstructionRationalMore() {
         BigRational bf = new BigRational(1);
-        String[] vars  = new String[] { "a", "b", "c" };
+        String[] vars = new String[] { "a", "b", "c" };
         GenPolynomialRing<BigRational> pf = new GenPolynomialRing<BigRational>(bf, vars);
 
-        GroebnerBaseAbstract<BigRational> bb = GBAlgorithmBuilder.<BigRational>polynomialRing(pf)
-                                               .fractionFree()
-                                               .optimize()
-                                               .build();
-        System.out.println("bb = " + bb);
+        GroebnerBaseAbstract<BigRational> bb = GBAlgorithmBuilder.<BigRational> polynomialRing(pf)
+                        .fractionFree().optimize().build();
+        //System.out.println("bb = " + bb);
         assertTrue("instance of " + bb, bb instanceof GBOptimized);
 
-        bb = GBAlgorithmBuilder.<BigRational>polynomialRing(pf)
-                                .fractionFree()
-                                .parallel()
-                                .optimize()
-                                .build();
-        System.out.println("bb = " + bb);
+        bb = GBAlgorithmBuilder.<BigRational> polynomialRing(pf).fractionFree().parallel().optimize().build();
+        //System.out.println("bb = " + bb);
         assertTrue("instance of " + bb, bb instanceof GBOptimized);
 
-        bb = GBAlgorithmBuilder.<BigRational>polynomialRing(pf)
-                                .fractionFree()
-                                .graded()
-                                .parallel()
-                                .optimize()
-                                .build();
-        System.out.println("bb = " + bb);
+        bb = GBAlgorithmBuilder.<BigRational> polynomialRing(pf).fractionFree().graded().parallel()
+                        .optimize().build();
+        //System.out.println("bb = " + bb);
         assertTrue("instance of " + bb, bb instanceof GBOptimized);
     }
 
@@ -301,12 +280,8 @@ public class GBAlgorithmBuilderTest extends TestCase {
         GenPolynomialRing<BigRational> pf = cp.get(0).ring;
 
         GroebnerBaseAbstract<BigRational> bb;
-        bb = GBAlgorithmBuilder.<BigRational>polynomialRing(pf)
-                               .fractionFree()
-	                       .parallel()
-                               .optimize()
-                               .build();
-        System.out.println("bb = " + bb);
+        bb = GBAlgorithmBuilder.<BigRational> polynomialRing(pf).fractionFree().parallel().optimize().build();
+        //System.out.println("bb = " + bb);
         assertTrue("instance of " + bb, bb instanceof GBOptimized);
 
         List<GenPolynomial<BigRational>> gb;
@@ -314,21 +289,22 @@ public class GBAlgorithmBuilderTest extends TestCase {
         t = System.currentTimeMillis();
         gb = bb.GB(cp);
         t = System.currentTimeMillis() - t;
-        System.out.println("time(gb) = " + t);
+        //System.out.println("time(gb) = " + t);
 
         t = System.currentTimeMillis();
         gb = bb.GB(cp);
         t = System.currentTimeMillis() - t;
-        System.out.println("time(gb) = " + t);
+        //System.out.println("time(gb) = " + t);
 
         t = System.currentTimeMillis();
         gb = bb.GB(cp);
         t = System.currentTimeMillis() - t;
-        System.out.println("time(gb) = " + t);
+        //System.out.println("time(gb) = " + t);
+        assertTrue("t >= 0: ", t >= 0L);
 
         assertTrue("isGB: ", bb.isGB(gb));
         bb.terminate();
-        System.out.println("gb = " + gb);
-        System.out.println("bb = " + bb);
+        //System.out.println("gb = " + gb);
+        //System.out.println("bb = " + bb);
     }
 }
