@@ -36,6 +36,7 @@ public class ModGroebnerBaseAbstract<C extends GcdRingElem<C>> implements ModGro
     /**
      * Constructor.
      */
+    @Deprecated
     public ModGroebnerBaseAbstract() {
         bb = GBFactory.getImplementation();
     }
