@@ -137,7 +137,7 @@ public final class GenWordPolynomialRing<C extends RingElem<C>> implements RingF
     @Override
     public String toString() {
         StringBuffer s = new StringBuffer();
-        s.append("WordRing(");
+        s.append("WordPolyRing(");
         if (coFac instanceof RingElem) {
             s.append(((RingElem<C>) coFac).toScriptFactory());
         } else {
@@ -160,11 +160,11 @@ public final class GenWordPolynomialRing<C extends RingElem<C>> implements RingF
         StringBuffer s = new StringBuffer();
         switch (Scripting.getLang()) {
         case Ruby:
-            s.append("WordRing.new(");
+            s.append("WordPolyRing.new(");
             break;
         case Python:
         default:
-            s.append("WordRing(");
+            s.append("WordPolyRing(");
         }
         if (coFac instanceof RingElem) {
             s.append(((RingElem<C>) coFac).toScriptFactory());

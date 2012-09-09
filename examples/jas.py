@@ -15,6 +15,8 @@ from edu.jas.arith       import BigInteger, BigRational, BigComplex, BigDecimal,
                                 Product, ProductRing
 from edu.jas.poly        import GenPolynomial, GenPolynomialRing, Monomial,\
                                 GenSolvablePolynomial, GenSolvablePolynomialRing,\
+                                GenWordPolynomial, GenWordPolynomialRing,\
+                                Word, WordFactory,\
                                 GenPolynomialTokenizer, OrderedPolynomialList, PolyUtil,\
                                 TermOrderOptimization, TermOrder, PolynomialList,\
                                 AlgebraicNumber, AlgebraicNumberRing,\
@@ -29,7 +31,8 @@ from edu.jas.gb          import EReductionSeq, DGroebnerBaseSeq, EGroebnerBaseSe
                                 GroebnerBaseDistributed, GBDist, GroebnerBaseParallel,\
                                 GroebnerBaseSeq, GroebnerBaseSeqPairSeq,\
                                 ReductionSeq, GroebnerBaseSeqPairParallel,\
-                                SolvableGroebnerBaseParallel, SolvableGroebnerBaseSeq
+                                SolvableGroebnerBaseParallel, SolvableGroebnerBaseSeq,\
+                                WordGroebnerBaseSeq
 from edu.jas.gbufd       import GroebnerBasePseudoRecSeq, GroebnerBasePseudoSeq,\
                                 RGroebnerBasePseudoSeq, RGroebnerBaseSeq, RReductionSeq,\
                                 CharacteristicSetWu
@@ -3163,3 +3166,159 @@ class EF:
             return RingElem(rf.getZERO());
 
 
+class WordRing(Ring):
+    '''Represents a JAS free non-commutative polynomial ring: GenWordPolynomialRing.
+
+    Has a method to create word ideals.
+    '''
+
+    def __init__(self,ringstr="",ring=None):
+        '''Word polynomial ring constructor.
+        '''
+        if ring == None:
+           raise ValueError, "parse of word polynomials not implemented" 
+           sr = StringReader( ringstr );
+           tok = GenPolynomialTokenizer(sr);
+           self.pset = tok.nextWordPolynomialSet();
+           self.ring = self.pset.ring;
+        else:
+           self.ring = ring;
+        if not self.ring.isAssociative():
+           print "warning: ring is not associative";
+
+    def __str__(self):
+        '''Create a string representation.
+        '''
+        return str(self.ring.toScript());
+
+    def ideal(self,ringstr="",list=None):
+        '''Create a word ideal.
+        '''
+        return WordIdeal(self,ringstr,list);
+
+    def one(self):
+        '''Get the one of the word polynomial ring.
+        '''
+        return RingElem( self.ring.getONE() );
+
+    def zero(self):
+        '''Get the zero of the word polynomial ring.
+        '''
+        return RingElem( self.ring.getZERO() );
+
+    def random(self,n):
+        '''Get a random word polynomial.
+        '''
+        return RingElem( self.ring.random(n) );
+
+    def random(self,k,l,d):
+        '''Get a random word polynomial.
+        '''
+        return RingElem( self.ring.random(k,l,d) );
+
+    def element(self,poly):
+        '''Create an element from a string or object.
+        '''
+        if not isinstance(poly,str):
+            try:
+                if self.ring == poly.ring:
+                    return RingElem(poly);
+            except Exception, e:
+                pass
+            poly = str(poly);
+        I = WordIdeal(self, "( " + poly + " )");
+        list = I.list;
+        if len(list) > 0:
+            return RingElem( list[0] );
+
+
+class WordPolyRing(WordRing):
+    '''Represents a JAS free non-commutative polynomial ring: GenWordPolynomialRing.
+
+    Provides more convenient constructor. 
+    Then returns a Ring.
+    '''
+
+    def __init__(self,coeff,vars):
+        '''Ring constructor.
+
+        coeff = factory for coefficients,
+        vars = string with variable names.
+        '''
+        if coeff == None:
+            raise ValueError, "No coefficient given."
+        cf = coeff;
+        if isinstance(coeff,RingElem):
+            cf = coeff.elem.factory();
+        if isinstance(coeff,Ring):
+            cf = coeff.ring;
+        if vars == None:
+            raise ValueError, "No variable names given."
+        names = vars;
+        if isinstance(vars,PyString):
+            names = GenPolynomialTokenizer.variableList(vars);
+        wf = WordFactory(names);
+        ring = GenWordPolynomialRing(cf,wf);
+        self.ring = ring;
+
+    def __str__(self):
+        '''Create a string representation.
+        '''
+        return self.ring.toScript();
+
+
+class WordIdeal:
+    '''Represents a JAS word polynomial ideal.
+
+    Methods for two-sided Groebner basees and others.
+    '''
+
+    def __init__(self,ring,ringstr="",list=None):
+        '''Constructor for an ideal in a word polynomial ring.
+        '''
+        self.ring = ring;
+        if list == None:
+           raise ValueError, "parse of word polynomials not implemented" 
+           sr = StringReader( ringstr );
+           tok = GenPolynomialTokenizer(ring.ring,sr);
+           self.list = tok.nextSolvablePolynomialList();
+        else:
+           self.list = pylist2arraylist(list,rec=1);
+        #self.pset = PolynomialList(ring.ring,self.list);
+
+    def __str__(self):
+        '''Create a string representation.
+        '''
+        return str(self.list.toString()); # todo: toScript()
+
+    def GB(self):
+        '''Compute a two-sided Groebner base.
+        '''
+        return self.twosidedGB();
+
+    def twosidedGB(self):
+        '''Compute a two-sided Groebner base.
+        '''
+        #s = self.pset;
+        F = self.list;
+        t = System.currentTimeMillis();
+        G = WordGroebnerBaseSeq().GB(F);
+        t = System.currentTimeMillis() - t;
+        print "executed twosidedGB in %s ms" % t; 
+        return WordIdeal(self.ring,"",G);
+
+    def isGB(self):
+        '''Test if this is a two-sided Groebner base.
+        '''
+        return self.isTwosidedGB();
+
+    def isTwosidedGB(self):
+        '''Test if this is a two-sided Groebner base.
+        '''
+        #s = self.pset;
+        F = self.list;
+        t = System.currentTimeMillis();
+        b = WordGroebnerBaseSeq().isGB(F);
+        t = System.currentTimeMillis() - t;
+        print "isTwosidedGB executed in %s ms" % t; 
+        return b;
