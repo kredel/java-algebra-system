@@ -205,14 +205,15 @@ public final class WordFactory implements MonoidFactory<Word> {
      */
     @Override
     public String toString() {
-        StringBuffer s = new StringBuffer("WordFactory(\"");
+        //StringBuffer s = new StringBuffer("WordFactory(\"");
+        StringBuffer s = new StringBuffer("\"");
         for (int i = 0; i < alphabet.length(); i++) {
             if (i != 0) {
-                s.append("*");
+                s.append(",");
             }
             s.append(getVal(i));
         }
-        s.append("\")");
+        s.append("\"");
         return s.toString();
     }
 
