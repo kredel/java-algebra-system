@@ -54,6 +54,7 @@ import edu.jas.ufd.QuotientRing;
  *        class <code>GroebnerBaseAbstract</code>. For example 
  * 
  *        <pre>
+ *
  * GenPolynomialRing&lt;C&gt; pf = new GenPolynomialRing&lt;C&gt;(cofac, vars);
  * GroebnerBaseAbstract&lt;C&gt; engine;
  * engine = GBAlgorithmBuilder.&lt;C&gt; polynomialRing(pf).fractionFree().parallel().optimize().build();
@@ -64,6 +65,7 @@ import edu.jas.ufd.QuotientRing;
  *        like
  * 
  *        <pre>
+ *
  * GenPolynomialRing&lt;BigRational&gt; pf = new GenPolynomialRing&lt;BigRational&gt;(cofac, vars);
  * GroebnerBaseAbstract&lt;BigRational&gt; engine;
  * engine = GBAlgorithmBuilder.&lt;BigRational&gt; polynomialRing(pf).fractionFree().parallel().optimize().build();
@@ -124,6 +126,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
 
     /**
      * Build the GB algorithm implementaton.
+     * @return GB algorithm implementaton as GroebnerBaseAbstract object.
      */
     public GroebnerBaseAbstract<C> build() {
         if (algo == null) {

@@ -47,6 +47,7 @@ import edu.jas.structure.RingFactory;
  *        abstract class <code>GroebnerBaseAbstract</code>.
  * 
  *        <pre>
+ *
  * GroebnerBase&lt;CT&gt; engine;
  * engine = GBFactory.&lt;CT&gt; getImplementation(cofac);
  * c = engine.GB(A);
@@ -56,6 +57,7 @@ import edu.jas.structure.RingFactory;
  *        like
  * 
  *        <pre>
+ *
  * BigInteger cofac = new BigInteger();
  * GroebnerBase&lt;BigInteger&gt; engine;
  * engine = GBFactory.getImplementation(cofac);
