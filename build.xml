@@ -200,6 +200,7 @@
   <java classname="edu.jas.ufd.ExamplesPartialFraction" classpath="${cp}" fork="yes" args="1" />
   <java classname="edu.jas.integrate.Examples" classpath="${cp}" fork="yes" args="1" />
   <java classname="edu.jas.application.Examples" classpath="${cp}" fork="yes" args="1" />
+  <java classname="edu.jas.application.ExamplesGeoTheorems" classpath="${cp}" fork="yes" args="1" />
 </target>
 
 <target name="lint" depends="vorher" >
