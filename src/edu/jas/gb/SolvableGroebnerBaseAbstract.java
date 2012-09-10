@@ -164,7 +164,10 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
             for ( int j = 0; j < X.size(); j++ ) {
                 x = X.get(j);
                 p = p.multiply( x );
-                F.add( p );
+                p = sred.leftNormalform(F, p);
+                if (!p.isZERO()) {
+                    F.add(p);
+                }
             }
         }
         //System.out.println("F to check = " + F);
