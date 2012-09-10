@@ -1259,7 +1259,8 @@ order = term order.
         end
         tring = GenPolynomialRing.new(cf,nv,to,names);
         #want: super(Ring,self).initialize(ring=tring)
-        super("",tring) 
+        @ring = tring;
+        super("",@ring) 
         variable_generators()
         if self.class.auto_inject 
            inject_variables();
@@ -2564,6 +2565,8 @@ Solvable polynomial ring constructor.
         if not @ring.isAssociative()
            puts "warning: ring is not associative";
         end
+        #puts "SolvableRing to super()";
+        #super("",@ring) 
     end
 
 =begin rdoc
@@ -2674,6 +2677,8 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
 	    }
         end
         @ring = ring;
+        #puts "SolvPolyRing to super()";
+        super("",@ring) 
     end
 
 =begin rdoc

@@ -1075,6 +1075,7 @@ class SolvableRing(Ring):
            self.ring = ring;
         if not self.ring.isAssociative():
            print "warning: ring is not associative";
+        Ring.__init__(self,ring=self.ring)
 
     def __str__(self):
         '''Create a string representation.
@@ -1134,6 +1135,15 @@ class SolvableIdeal:
         '''Create a string representation.
         '''
         return str(self.pset.toScript());
+
+    def __cmp__(self,other):
+        '''Compare two ideals.
+        '''
+        t = False;
+        if not isinstance(other,WordIdeal):
+            return t;
+        t = self.list.equals(other.list);
+        return t; 
 
     def leftGB(self):
         '''Compute a left Groebner base.
@@ -3046,13 +3056,14 @@ class SolvPolyRing(SolvableRing):
     Then returns a Ring.
     '''
 
-    def __init__(self,coeff,vars,order,rel=None):
+    def __init__(self,coeff,vars,order=PolyRing.lex,rel=None):
         '''Ring constructor.
 
         coeff = factory for coefficients,
         vars = string with variable names,
         order = term order,
-        rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
+        rel = triple list of relations. (e,f,p,...) with e * f = p as relation
+        and e, f and p are commutative polynomials.
         '''
         if coeff == None:
             raise ValueError, "No coefficient given."
@@ -3081,8 +3092,10 @@ class SolvPolyRing(SolvableRing):
                 L.append(x);
             #print "rel = " + str(L);
             for i in range(0,len(L),3):
+                #print "adding relation: " + str(L[i]) + " * " + str(L[i+1]) + " = " + str(L[i+2]);
                 table.update( L[i], L[i+1], L[i+2] );
         self.ring = ring;
+        SolvableRing.__init__(self,ring=self.ring)
 
     def __str__(self):
         '''Create a string representation.
@@ -3293,6 +3306,15 @@ class WordIdeal:
         '''Create a string representation.
         '''
         return str(self.list.toString()); # todo: toScript()
+
+    def __cmp__(self,other):
+        '''Compare two ideals.
+        '''
+        t = False;
+        if not isinstance(other,WordIdeal):
+            return t;
+        t = self.list.equals(other.list);
+        return t; 
 
     def GB(self):
         '''Compute a two-sided Groebner base.
