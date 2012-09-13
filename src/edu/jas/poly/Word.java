@@ -79,7 +79,7 @@ public final class Word implements MonoidElem<Word> {
                 //System.out.println("s = " + s);
                 String[] S = GenPolynomialTokenizer.variableList(s);
                 //System.out.println("S = " + Arrays.toString(S));
-                val = WordFactory.translate(mono.translation,S);
+                val = mono.translate(S);
                 //System.out.println("val = " + val);
             } else {
                 val = WordFactory.cleanSpace(s); //??
@@ -161,11 +161,7 @@ public final class Word implements MonoidElem<Word> {
                 if (i != 0) {
                     s.append(" ");
                 }
-                int k = mono.alphabet.indexOf(getVal(i));
-                if ( k < 0 ) {
-                    System.out.println("k = " + k + ", i = " + i + ", al = " + mono.alphabet + ", v(i) = " + getVal(i) + ", val = " + val);
-                }
-                s.append(mono.translation[k]);
+                s.append(mono.transVar(getVal(i)));
             }
         }
         s.append("\"");
@@ -196,8 +192,7 @@ public final class Word implements MonoidElem<Word> {
                 if (i != 0) {
                     s.append("*"); // checked for python vs ruby
                 }
-                int k = mono.alphabet.indexOf(getVal(i));
-                s.append(mono.translation[k]); 
+                s.append(mono.transVar(getVal(i)));
             }
         }
         s.append("");

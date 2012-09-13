@@ -520,30 +520,6 @@ public final class WordFactory implements MonoidFactory<Word> {
 
 
     /**
-     * Translate variable names.
-     * @param v an array of strings.
-     * @param t translation array of strings.
-     * @return the translated string of v with respect to t.
-     */
-    public static String translate(String[] t, String[] v) {
-        StringBuffer s = new StringBuffer();
-        for ( int i = 0; i < v.length; i++ ) {
-            String a = v[i];
-            int k = indexOf(t,a);
-            if ( k < 0 ) {
-                System.out.println("t = " + Arrays.toString(t));
-                System.out.println("v = " + Arrays.toString(v));
-                logger.error("v[i] not found in t: "+ a);
-                //continue;
-                throw new IllegalArgumentException("v[i] not found in t: "+ a);
-            }
-	    s.append(transRef.charAt(k));
-        }
-        return s.toString();
-    }
-
-
-    /**
      * IndexOf for String array.
      * @param v an array of strings.
      * @param s string.
@@ -571,6 +547,40 @@ public final class WordFactory implements MonoidFactory<Word> {
             }
         }
         return true;
+    }
+
+
+    /**
+     * Translate variable names.
+     * @param v an array of strings.
+     * @return the translated string of v with respect to t.
+     */
+    public String translate(String[] v) {
+        StringBuffer s = new StringBuffer();
+        for ( int i = 0; i < v.length; i++ ) {
+            String a = v[i];
+            int k = indexOf(translation,a);
+            if ( k < 0 ) {
+                System.out.println("t = " + Arrays.toString(translation));
+                System.out.println("v = " + Arrays.toString(v));
+                logger.error("v[i] not found in t: "+ a);
+                //continue;
+                throw new IllegalArgumentException("v[i] not found in t: "+ a);
+            }
+	    s.append(transRef.charAt(k));
+        }
+        return s.toString();
+    }
+
+
+    /**
+     * Translate variable name.
+     * @param c internal char.
+     * @return the extenal translated string.
+     */
+    public String transVar(char c) {
+        int k = alphabet.indexOf(c);
+        return translation[k]; 
     }
 
 }
