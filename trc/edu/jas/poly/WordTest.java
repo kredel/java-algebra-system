@@ -335,4 +335,60 @@ public class WordTest extends TestCase {
         assertTrue("ef != ''" + ef, es.length() >= 0 );
     }
 
+
+    /**
+     * Test constructor with multi-letter Strings.
+     */
+    public void testMultiLetters() {
+        String[] vars = new String[] {"a1", "b", " e23", "tt*", "x y" };
+        WordFactory wf = new WordFactory(vars);
+        //System.out.println("wf = " + wf);
+        String s = wf.toString();
+        assertEquals("w == vars: ", s, "\"a1,b,e23,tt,xy\"");
+
+        Word w = wf.parse("a1 a1 b*b*b tt xy e23 tt xy");
+        s = w.toString();
+        String t = "\"a1 a1 b b b tt xy e23 tt xy\"";
+        //System.out.println("s = " + s);
+        //System.out.println("t = " + t);
+        assertEquals("w == parse: ", s, t);
+
+        Word u = wf.parse("xy e23 tt xy a1 a1 b*b*b tt");
+        s = u.toString();
+        String t1 = "\"xy e23 tt xy a1 a1 b b b tt\"";
+        //System.out.println("s = " + s);
+        //System.out.println("t = " + t1);
+        assertEquals("w == parse: ", s, t1);
+
+        Word v = u.multiply(w);
+        s = v.toString();
+        String t2 = t1.substring(0,t1.length()-1) + " " + t.substring(1);
+        //System.out.println("s = " + s);
+        //System.out.println("t = " + t2);
+        assertEquals("w == parse: ", s, t2);
+
+        v = w.multiply(u);
+        s = v.toString();
+        t2 = t.substring(0,t.length()-1) + " " + t1.substring(1);
+        //System.out.println("s = " + s);
+        //System.out.println("t = " + t2);
+        assertEquals("w == parse: ", s, t2);
+
+        w = wf.random(5);
+        //System.out.println("w = " + w);
+        u = wf.random(5);
+        //System.out.println("u = " + u);
+        v = u.multiply(w);
+        //System.out.println("v = " + v);
+        assertTrue("#v = #w+#u: ", v.length() == w.length()+u.length());
+
+        List<Word> gens = wf.generators();
+        //System.out.println("gens = " + gens);
+        assertTrue("#gens == 5: ", gens.size() == 5);
+        for (Word x : gens) {
+            a = wf.parse(x.toString());
+            assertEquals("a == x", a, x);
+        }
+    }
+
 }

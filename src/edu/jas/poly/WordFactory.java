@@ -9,6 +9,7 @@ import java.io.Reader;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
@@ -37,6 +38,18 @@ public final class WordFactory implements MonoidFactory<Word> {
      * The empty word for this monoid.
      */
     public final Word ONE;
+
+
+    /**
+     * The translation reference string.
+     */
+    public static final String transRef = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+
+    /**
+     * The translation array of Strings.
+     */
+    public final String[] translation;
 
 
     /**
@@ -99,14 +112,15 @@ public final class WordFactory implements MonoidFactory<Word> {
 
     /**
      * Constructor for WordFactory.
-     * @param s String for alphabet
+     * @param s String of single letters for alphabet
      */
     public WordFactory(String s) {
         if (s == null) {
             throw new IllegalArgumentException("null string not allowed");
         }
-        alphabet = clean(s);
-        ONE = new Word(this);
+        alphabet = cleanSpace(s);
+        translation = null;
+        ONE = new Word(this,"",false);
     }
 
 
@@ -115,7 +129,16 @@ public final class WordFactory implements MonoidFactory<Word> {
      * @param S String array for alphabet
      */
     public WordFactory(String[] S) {
-        this(concat(S));
+        String[] V = cleanAll(S);
+        if ( isSingleLetters(V) ) {
+            alphabet = concat(V);
+            translation = null;
+        } else {
+            alphabet = transRef.substring(0,V.length);
+            translation = V;
+            logger.info("alphabet = " + alphabet + ", translation = " + Arrays.toString(translation));
+        }
+        ONE = new Word(this,"",false);
     }
 
 
@@ -167,7 +190,7 @@ public final class WordFactory implements MonoidFactory<Word> {
      */
     @Override
     public Word copy(Word w) {
-        return new Word(this, w.getVal());
+        return new Word(this, w.getVal(), false);
     }
 
 
@@ -190,6 +213,15 @@ public final class WordFactory implements MonoidFactory<Word> {
 
 
     /**
+     * Get the translation array of Strings.
+     * @return alphabet.
+     */
+    /*package*/String[] getTrans() {
+        return translation;
+    }
+
+
+    /**
      * Get the alphabet letter at position i.
      * @param i position.
      * @return val[i].
@@ -205,13 +237,21 @@ public final class WordFactory implements MonoidFactory<Word> {
      */
     @Override
     public String toString() {
-        //StringBuffer s = new StringBuffer("WordFactory(\"");
         StringBuffer s = new StringBuffer("\"");
-        for (int i = 0; i < alphabet.length(); i++) {
-            if (i != 0) {
-                s.append(",");
+        if ( translation == null ) {
+            for (int i = 0; i < alphabet.length(); i++) {
+                if (i != 0) {
+                    s.append(",");
+                }
+                s.append(getVal(i));
             }
-            s.append(getVal(i));
+        } else {
+            for (int i = 0; i < alphabet.length(); i++) {
+                if (i != 0) {
+                    s.append(",");
+                }
+                s.append(translation[i]);
+            }
         }
         s.append("\"");
         return s.toString();
@@ -261,8 +301,9 @@ public final class WordFactory implements MonoidFactory<Word> {
         int len = alphabet.length();
         List<Word> gens = new ArrayList<Word>(len);
         //gens.add(ONE); not a word generator
+        // todo
         for (int i = 0; i < len; i++) {
-            Word w = new Word(this, String.valueOf(alphabet.charAt(i)));
+            Word w = new Word(this, String.valueOf(alphabet.charAt(i)), false);
             gens.add(w);
         }
         return gens;
@@ -335,23 +376,7 @@ public final class WordFactory implements MonoidFactory<Word> {
             int r = Math.abs(random.nextInt()) % len;
             sb.append(alphabet.charAt(r));
         }
-        return new Word(this, sb.toString());
-    }
-
-
-    /**
-     * Parse from String.
-     * @param s String.
-     * @return a Element corresponding to s.
-     */
-    public static String clean(String s) {
-        String st = s.trim();
-        st = st.replaceAll("\\*", "");
-        st = st.replaceAll("\\s", "");
-        st = st.replaceAll("\\(", "");
-        st = st.replaceAll("\\)", "");
-        st = st.replaceAll("\\\"", "");
-        return st;
+        return new Word(this, sb.toString(), false);
     }
 
 
@@ -362,11 +387,18 @@ public final class WordFactory implements MonoidFactory<Word> {
      */
     public Word parse(String s) {
         String st = clean(s);
-        String regex = "[" + alphabet + "]*";
-        if (!st.matches(regex)) {
-            throw new IllegalArgumentException("word '" + st + "' contains letters not from: " + alphabet);
+        String regex;
+        if ( translation == null ) {
+            regex = "[" + alphabet + " ]*";
+        } else {
+            regex = "[" + concat(translation) + " ]*";
         }
-        return new Word(this, st);
+        if (!st.matches(regex)) {
+            throw new IllegalArgumentException("word '" + st + "' contains letters not from: " 
+                                               + alphabet + " or from " + concat(translation));
+        }
+        // todo
+        return new Word(this, st, true);
     }
 
 
@@ -399,21 +431,146 @@ public final class WordFactory implements MonoidFactory<Word> {
 
 
     /**
+     * Prepare parse from String.
+     * @param s String.
+     * @return a Element corresponding to s.
+     */
+    public static String cleanSpace(String s) {
+        String st = s.trim();
+        st = st.replaceAll("\\*", "");
+        st = st.replaceAll("\\s", "");
+        st = st.replaceAll("\\(", "");
+        st = st.replaceAll("\\)", "");
+        st = st.replaceAll("\\\"", "");
+        return st;
+    }
+
+
+    /**
+     * Prepare parse from String.
+     * @param s String.
+     * @return a Element corresponding to s.
+     */
+    public static String clean(String s) {
+        String st = s.trim();
+        st = st.replaceAll("\\*", " ");
+        //st = st.replaceAll("\\s", "");
+        st = st.replaceAll("\\(", "");
+        st = st.replaceAll("\\)", "");
+        st = st.replaceAll("\\\"", "");
+        return st;
+    }
+
+
+    /**
+     * Prepare parse from String array.
+     * @param v String array.
+     * @return an array of cleaned strings.
+     */
+    public static String[] cleanAll(String[] v) {
+        String[] t = new String[v.length];
+        for ( int i = 0; i < v.length; i++ ) {
+            t[i] = cleanSpace(v[i]);
+            if ( t[i].length() == 0 ) {
+                logger.error("empty v[i]: '"+ v[i] + "'");
+            }
+            //System.out.println("clean all: " + v[i] + " --> " + t[i]);
+        }
+        return t;
+    }
+
+
+    /**
      * Concat variable names.
      * @param v an array of strings.
      * @return the concatination of the strings in v.
      */
     public static String concat(String[] v) {
         StringBuffer s = new StringBuffer();
+        if ( v == null ) {
+            return s.toString();
+        }
         for ( int i = 0; i < v.length; i++ ) {
-            String a = v[i];
-            if ( a.length() != 1 ) {
-                logger.error("v[i] not single letter "+ a);
-                a  = a.substring(0,1);
-            }
-	    s.append(a);
+            //String a = v[i];
+            //if ( a.length() != 1 ) {
+            //    //logger.error("v[i] not single letter "+ a);
+            //    a  = a.substring(0,1);
+            //}
+	    s.append(v[i]);
         }
         return s.toString();
+    }
+
+
+    /**
+     * Trim all variable names.
+     * @param v an array of strings.
+     * @return an array of strings with all elements trimmed.
+     */
+    public static String[] trimAll(String[] v) {
+        String[] t = new String[v.length];
+        for ( int i = 0; i < v.length; i++ ) {
+            t[i] = v[i].trim();
+            if ( t[i].length() == 0 ) {
+                logger.error("empty v[i]: '"+ v[i] + "'");
+            }
+        }
+        return t;
+    }
+
+
+    /**
+     * Translate variable names.
+     * @param v an array of strings.
+     * @param t translation array of strings.
+     * @return the translated string of v with respect to t.
+     */
+    public static String translate(String[] t, String[] v) {
+        StringBuffer s = new StringBuffer();
+        for ( int i = 0; i < v.length; i++ ) {
+            String a = v[i];
+            int k = indexOf(t,a);
+            if ( k < 0 ) {
+                System.out.println("t = " + Arrays.toString(t));
+                System.out.println("v = " + Arrays.toString(v));
+                logger.error("v[i] not found in t: "+ a);
+                //continue;
+                throw new IllegalArgumentException("v[i] not found in t: "+ a);
+            }
+	    s.append(transRef.charAt(k));
+        }
+        return s.toString();
+    }
+
+
+    /**
+     * IndexOf for String array.
+     * @param v an array of strings.
+     * @param s string.
+     * @return index of s in v, or -1 if s is not contained in v.
+     */
+    public static int indexOf(String[] v, String s) {
+        for ( int i = 0; i < v.length; i++ ) {
+            if ( s.equals(v[i]) ) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
+    /**
+     * Test if all variables are single letters.
+     * @param v an array of strings.
+     * @return true, if all variables have length 1, else false.
+     */
+    public static boolean isSingleLetters(String[] v) {
+        for ( int i = 0; i < v.length; i++ ) {
+            if ( v[i].length() != 1 ) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

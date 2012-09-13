@@ -10,6 +10,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import edu.jas.structure.MonoidElem;
 import edu.jas.structure.MonoidFactory;
@@ -57,12 +58,35 @@ public final class Word implements MonoidElem<Word> {
      * @param s String
      */
     public Word(WordFactory m, String s) {
+        this(m,s,true);
+    }
+
+
+    /**
+     * Constructor for Word.
+     * @param m factory for words.
+     * @param s String
+     * @param t indicator if s needs translation
+     */
+    public Word(WordFactory m, String s, boolean translate) {
         mono = m;
         hash = 0;
         if (s == null) {
             throw new IllegalArgumentException("null string not allowed");
         }
-        val = s; // mono.clean(s) ??
+        if ( translate ) {
+            if ( mono.translation != null ) {
+                //System.out.println("s = " + s);
+                String[] S = GenPolynomialTokenizer.variableList(s);
+                //System.out.println("S = " + Arrays.toString(S));
+                val = WordFactory.translate(mono.translation,S);
+                //System.out.println("val = " + val);
+            } else {
+                val = WordFactory.cleanSpace(s); //??
+            }
+        } else {
+            val = s;
+        }
     }
 
 
@@ -82,7 +106,7 @@ public final class Word implements MonoidElem<Word> {
      */
     @Override
     public Word copy() {
-        return new Word(mono, val);
+        return new Word(mono, val, false);
     }
 
 
@@ -124,11 +148,25 @@ public final class Word implements MonoidElem<Word> {
             return "";
         }
         StringBuffer s = new StringBuffer("\"");
-        for (int i = 0; i < length(); i++) {
-            if (i != 0) {
-                s.append(" ");
+        String vv;
+        if ( mono.translation == null ) {
+            for (int i = 0; i < length(); i++) {
+                if (i != 0) {
+                    s.append(" ");
+                }
+                s.append(getVal(i));
             }
-            s.append(getVal(i));
+        } else { 
+            for (int i = 0; i < length(); i++) {
+                if (i != 0) {
+                    s.append(" ");
+                }
+                int k = mono.alphabet.indexOf(getVal(i));
+                if ( k < 0 ) {
+                    System.out.println("k = " + k + ", i = " + i + ", al = " + mono.alphabet + ", v(i) = " + getVal(i) + ", val = " + val);
+                }
+                s.append(mono.translation[k]);
+            }
         }
         s.append("\"");
         return s.toString();
@@ -146,11 +184,21 @@ public final class Word implements MonoidElem<Word> {
             return "";
         }
         StringBuffer s = new StringBuffer("");
-        for (int i = 0; i < length(); i++) {
-            if (i != 0) {
-                s.append("*"); // checked for python vs ruby
+        if ( mono.translation == null ) {
+            for (int i = 0; i < length(); i++) {
+                if (i != 0) {
+                    s.append("*"); // checked for python vs ruby
+                }
+                s.append(getVal(i));
             }
-            s.append(getVal(i));
+        } else { 
+            for (int i = 0; i < length(); i++) {
+                if (i != 0) {
+                    s.append("*"); // checked for python vs ruby
+                }
+                int k = mono.alphabet.indexOf(getVal(i));
+                s.append(mono.translation[k]); 
+            }
         }
         s.append("");
         return s.toString();
@@ -223,7 +271,7 @@ public final class Word implements MonoidElem<Word> {
      * @return this * V.
      */
     public Word multiply(Word V) {
-        return new Word(mono, this.val + V.val);
+        return new Word(mono, this.val + V.val, false);
     }
 
 
@@ -257,8 +305,8 @@ public final class Word implements MonoidElem<Word> {
         String pre = this.val.substring(0, i);
         String suf = this.val.substring(i + len);
         Word[] ret = new Word[2];
-        ret[0] = new Word(mono, pre);
-        ret[1] = new Word(mono, suf);
+        ret[0] = new Word(mono, pre, false);
+        ret[1] = new Word(mono, suf, false);
         return ret;
     }
 
@@ -425,8 +473,8 @@ public final class Word implements MonoidElem<Word> {
             while ( j >= 0 ) {
                 String pre = b.substring(0, j);
                 String suf = b.substring(j + ai);
-                Word wpre = new Word(mono, pre);
-                Word wsuf = new Word(mono, suf);
+                Word wpre = new Word(mono, pre, false);
+                Word wsuf = new Word(mono, suf, false);
                 ret.add(new Overlap(wpre,wsuf,wone,wone));
                 j = b.indexOf(a,j+ai); // +1 also inner overlaps ?
             }
@@ -437,8 +485,8 @@ public final class Word implements MonoidElem<Word> {
             while ( j >= 0 ) {
                 String pre = a.substring(0, j);
                 String suf = a.substring(j + bi);
-                Word wpre = new Word(mono, pre);
-                Word wsuf = new Word(mono, suf);
+                Word wpre = new Word(mono, pre, false);
+                Word wsuf = new Word(mono, suf, false);
                 ret.add(new Overlap(wone,wone,wpre,wsuf));
                 j = a.indexOf(b,j+bi); // +1 also inner overlaps ?
             }
@@ -450,8 +498,8 @@ public final class Word implements MonoidElem<Word> {
                 String bs = b.substring(bi-i-1,bi);
                 //System.out.println("i = " + i + ", bs = " + bs + ", as = " + as);
                 if ( as.equals(bs) ) {
-                    Word w1 = new Word(mono, b.substring(0,bi-i-1));
-                    Word w2 = new Word(mono, a.substring(i+1));
+                    Word w1 = new Word(mono, b.substring(0,bi-i-1), false);
+                    Word w2 = new Word(mono, a.substring(i+1), false);
                     ret.add(new Overlap(w1, wone, wone, w2));
                     break;
                 }
@@ -461,8 +509,8 @@ public final class Word implements MonoidElem<Word> {
                 String bs = b.substring(0,i+1);
                 //System.out.println("i = " + i + ", bs = " + bs + ", as = " + as);
                 if ( as.equals(bs) ) {
-                    Word w1 = new Word(mono, b.substring(i+1));
-                    Word w2 = new Word(mono, a.substring(0,ai-i-1));
+                    Word w1 = new Word(mono, b.substring(i+1), false);
+                    Word w2 = new Word(mono, a.substring(0,ai-i-1), false);
                     ret.add(new Overlap(wone, w1, w2, wone));
                     break;
                 }
@@ -473,8 +521,8 @@ public final class Word implements MonoidElem<Word> {
                 String bs = b.substring(0,i+1);
                 //System.out.println("i = " + i + ", bs = " + bs + ", as = " + as);
                 if ( as.equals(bs) ) {
-                    Word w1 = new Word(mono, b.substring(i+1));
-                    Word w2 = new Word(mono, a.substring(0,ai-i-1));
+                    Word w1 = new Word(mono, b.substring(i+1), false);
+                    Word w2 = new Word(mono, a.substring(0,ai-i-1), false);
                     ret.add(new Overlap(wone, w1, w2, wone));
                     break;
                 }
@@ -484,8 +532,8 @@ public final class Word implements MonoidElem<Word> {
                 String bs = b.substring(bi-i-1,bi);
                 //System.out.println("i = " + i + ", bs = " + bs + ", as = " + as);
                 if ( as.equals(bs) ) {
-                    Word w1 = new Word(mono, b.substring(0,bi-i-1));
-                    Word w2 = new Word(mono, a.substring(i+1));
+                    Word w1 = new Word(mono, b.substring(0,bi-i-1), false);
+                    Word w2 = new Word(mono, a.substring(i+1), false);
                     ret.add(new Overlap(w1, wone, wone, w2));
                     break;
                 }
