@@ -2671,8 +2671,9 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
                 end
                 ll << x;
             end
-            #puts "rel = " + str(L);
+            #puts "rel = " + str(ll);
 	    (0..ll.size-1).step(3) { |i|
+                #puts "type " + str(ll[i].class);
                 table.update( ll[i], ll[i+1], ll[i+2] );
 	    }
         end

@@ -112,6 +112,6 @@ puts "isRightGB: " + str(rgt.isRightGB());
 puts;
 puts "rgr == rg: " + str(rgr.list == rg.list);
 
-startLog();
-terminate();
+#startLog();
+#terminate();
 
