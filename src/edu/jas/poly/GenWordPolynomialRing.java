@@ -460,7 +460,7 @@ public final class GenWordPolynomialRing<C extends RingElem<C>> implements RingF
         GenWordPolynomial<C> r = getZERO(); //.clone() or copy( ZERO ); 
         // add l random coeffs and words of maximal length d
         for (int i = 0; i < l; i++) {
-            int di = Math.abs(rnd.nextInt()) % d;
+            int di = Math.abs(rnd.nextInt() % d);
             Word e = alphabet.random(di, rnd);
             C a = coFac.random(k, rnd);
             r = r.sum(a, e); // somewhat inefficient but clean

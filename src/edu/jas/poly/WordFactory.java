@@ -373,7 +373,7 @@ public final class WordFactory implements MonoidFactory<Word> {
         StringBuffer sb = new StringBuffer();
         int len = alphabet.length();
         for (int i = 0; i < n; i++) {
-            int r = Math.abs(random.nextInt()) % len;
+            int r = Math.abs(random.nextInt() % len);
             sb.append(alphabet.charAt(r));
         }
         return new Word(this, sb.toString(), false);
