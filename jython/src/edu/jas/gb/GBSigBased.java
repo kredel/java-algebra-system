@@ -24,6 +24,9 @@ import edu.jas.structure.GcdRingElem;
 /**
  * Groebner bases via signatur based GBs in script.
  * @author Heinz Kredel
+ * TODO: Computing via the ScriptEngine is way slower than the direct execution 
+ * in the jython interpreter. Check if a different engine is in the path or if it must 
+ * be configured in some special way.
  */
 
 public class GBSigBased<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C> {

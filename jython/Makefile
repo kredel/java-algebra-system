@@ -45,6 +45,7 @@ jas-jython.jar: $(CLASSES) $(JASPATH)/examples/jas.py services/javax.script.Scri
 
 clean:
 	rm -rf classes
+	find . -name "*~" -follow -print -exec rm {} \;
 
 tests:
 	java -client -cp $(JYTHONPATH):$(JRUBYPATH):$(CLASSPATH):jas-jython.jar edu.jas.kern.ScriptingExample
