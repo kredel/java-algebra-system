@@ -5,7 +5,7 @@
 
 from java.lang           import System
 from java.io             import StringReader
-from java.util           import ArrayList, Collections
+from java.util           import ArrayList, List, Collections
 
 from org.apache.log4j    import BasicConfigurator;
 
@@ -96,14 +96,29 @@ def inject_variable(name, value):
     depth = 0
     while True:
         G = sys._getframe(depth).f_globals
+        #print "G = `%s` " % G;
+        depth += 1
+        if depth > 100:
+            print "depth limit %s reached " % depth;
+            break
+        if G is None:
+            continue
         # orig: if G["__name__"] == "__main__" and G["__package__"] is None:
+        try:
+            if G["__name__"] is None:
+                break
+        except:
+            #print "G[__name__] undefined";
+            break
         if G["__name__"] == "__main__":
             try:
                 if G["__package__"] is None:
                     break
             except:
                 break
-        depth += 1
+    if G is None:
+        print "error at G no global environment found for `%s` = `%s` " % (name, value);
+        return
     if name in G:
         print "redefining global variable `%s` from `%s` " % (name, G[name]);
     G[name] = value
@@ -128,7 +143,7 @@ class Ring:
     Methods to create ideals and ideals with parametric coefficients.
     '''
 
-    def __init__(self,ringstr="",ring=None):
+    def __init__(self,ringstr="",ring=None,fast=False):
         '''Ring constructor.
         '''
         if ring == None:
@@ -138,6 +153,8 @@ class Ring:
            self.ring = self.pset.ring;
         else:
            self.ring = ring;
+        if fast:
+            return;
         self.engine = GCDFactory.getProxy(self.ring.coFac);
         try:
             self.sqf = SquarefreeFactory.getImplementation(self.ring.coFac);
@@ -1851,6 +1868,23 @@ def pylist2arraylist(list,fac=None,rec=1):
     return list
 
 
+def arraylist2pylist(list,rec=1):
+    '''Convert a Java ArrayList to a Python list.
+
+    If list is a Java ArrayList list, it is converted, else list is left unchanged.
+    '''
+    #print "list type(%s) = %s" % (list,type(list));
+    if isinstance(list,List):
+       L = [];
+       for e in list:
+           if not isinstance(e,RingElem):
+               e = RingElem(e);
+           L.append(e);
+       list = L;
+    #print "list type(%s) = %s" % (list,type(list));
+    return list
+
+
 def makeJasArith(item):
     '''Construct a jas.arith object.
     If item is a python tuple or list then a BigRational, BigComplex is constructed. 
@@ -2919,8 +2953,8 @@ class RingElem:
 
         Compatibility method for Sage/Singular.
         '''
-        p = Ring(ring=self.ring);
-        return p.ideal(list=list);
+        p = Ring("",ring=self.ring,fast=True);
+        return p.ideal("",list=list);
 
     def monomial_quotient(self,a,b,coeff=False):
         '''Quotient of ExpVectors.
