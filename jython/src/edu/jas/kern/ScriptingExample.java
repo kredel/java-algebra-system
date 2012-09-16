@@ -13,11 +13,12 @@ public class ScriptingExample {
 
     public static void main(String[] args) {
         runJython();
+        //runJythonRegister();
         runJruby();
     }
 
 
-    public static void runJython() {
+    public static void runJythonRegister() {
         ScriptEngine jas = new ScriptEngineManager().getEngineByExtension("py");
         System.out.println("JAS service discovered: " + jas);
 	if ( jas == null ) {
@@ -35,6 +36,33 @@ public class ScriptingExample {
 	    //String ex = "x = 1; print(4*2*x)";
 	    String ex = "from jas import PolyRing, ZZ; r = PolyRing(ZZ(),\"x,y,z\",PolyRing.lex); print str(r);"
                       + "[one,x,y,z] = r.gens(); p = ((x*y)+z)**33; print \"p = \" + str(p)";
+            System.out.println("input:  " + ex);
+            Object ans = jas.eval(ex);
+            millis = System.currentTimeMillis() - millis;
+            System.out.println("answer: " + ans);
+            System.out.println("evaluation took " + millis);
+
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static void runJython() {
+        ScriptEngine jas = new ScriptEngineManager().getEngineByExtension("py");
+        System.out.println("JAS service discovered: " + jas);
+	if ( jas == null ) {
+	    System.out.println("No JAS engine found");
+	    return;
+	}
+        System.out.println("Using JAS engine: " + jas);
+        try {
+            long millis = System.currentTimeMillis();
+	    //String ex = "x = 1; print(4*2*x)";
+	    String ex = "from jas import PolyRing, ZZ;\nr = PolyRing(ZZ(),\"x,y,z\",PolyRing.lex);\nprint str(r);\n"
+                      + "[one,x,y,z] = r.gens();\np = ((x*y)+z)**33;\nprint \"p = \" + str(p)";
             System.out.println("input:  " + ex);
             Object ans = jas.eval(ex);
             millis = System.currentTimeMillis() - millis;
