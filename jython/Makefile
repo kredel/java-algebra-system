@@ -12,7 +12,7 @@ LIBPATH=$(HOME)/java/lib
 JYTHONPATH=$(LIBPATH)/jython.jar
 JRUBYPATH=$(LIBPATH)/jruby.jar:$(HOME)/java/jruby-1.5.6/lib/ruby/1.8
 
-CLASSPATH=$(LIBPATH)/log4j.jar:$(LIBPATH)/jas.jar
+CLASSPATH=$(LIBPATH)/log4j.jar:$(LIBPATH)/junit.jar:$(LIBPATH)/jas.jar
 
 BOOTCLASSPATH6="/usr/lib64/jvm/java-1.6.0/jre/lib/rt.jar"
 
@@ -28,14 +28,15 @@ all: clean jas-jython.jar
 
 $(CLASSES): $(FILES)
 	mkdir classes
-	javac -g -source 1.6 -target 1.6 -classpath $(JYTHONPATH) -bootclasspath $(BOOTCLASSPATH6) -sourcepath src -d classes src/edu/jas/kern/*.java
+	javac -g -source 1.6 -target 1.6 -classpath $(JYTHONPATH):$(CLASSPATH) -bootclasspath $(BOOTCLASSPATH6) -sourcepath src -d classes src/edu/jas/*/*.java
 
 jas-jython.jar: $(CLASSES) $(JASPATH)/examples/jas.py services/javax.script.ScriptEngineFactory
 	mkdir classes/META-INF
 	mkdir classes/META-INF/services
 	cp -a manifest.mf classes/META-INF/MANIFEST.MF
 	#cp -a services/javax.script.ScriptEngineFactory classes/META-INF/services/
-	cp -a $(JASPATH)/examples/jas.py $(JASPATH)/examples/jas.pyc $(JASPATH)/examples/*.class classes
+	cp -a $(JASPATH)/examples/jas.py $(JASPATH)/examples/*.class classes
+	-cp -a $(JASPATH)/examples/jas.pyc classes
 	cp -a $(JASPATH)/examples/jas.rb classes
 	cp -a $(JASPATH)/log4j.properties classes
 	jar cfM jas-jython.jar -C classes .
@@ -46,4 +47,5 @@ clean:
 	rm -rf classes
 
 tests:
-	java -cp $(JYTHONPATH):$(JRUBYPATH):$(CLASSPATH):jas-jython.jar edu.jas.kern.ScriptingExample
+	java -client -cp $(JYTHONPATH):$(JRUBYPATH):$(CLASSPATH):jas-jython.jar edu.jas.kern.ScriptingExample
+	java -client -cp $(JYTHONPATH):$(JRUBYPATH):$(CLASSPATH):jas-jython.jar edu.jas.gb.GBSigBasedTest
