@@ -369,15 +369,20 @@ tests:
 	make edu.jas.application.RunGB cl="seq+ examples/trinks6.jas"   | tee -a tr.out
 	make edu.jas.application.RunGB cl="par  examples/trinks6.jas 4" | tee -a tr.out
 	make edu.jas.application.RunGB cl="par+ examples/trinks6.jas 4" | tee -a tr.out
+	cd jython; make tests | tee jsr.out
 	-grep FAIL t.out
-	-grep Exception e.out | grep -v GCDProxy
+	-grep Exception e.out | grep -v GCDProxy | grep -v GBProxy
 	-grep File tjy.out
 	-grep -i error tjr.out
-	-grep Exception tr.out | grep Usage tr.out
+	-egrep '(Exception|Usage)' tr.out
 
 metrics:
 	ant jdepend
 	../java/javancss-32.53/bin/javancss -all -recursive -out test/javanccs-`date +%Y-%m-%d`.out src
+
+findbugs:
+	cd ~/java/findbugs; bin/fb analyze -sortByClass -medium -html -nested:false /home/kredel/jas/edu/jas/ > jas.findbugs-report.medium.html
+
 
 #svn copy file:///$(SVNREPO)/jas/trunk file:///$(SVNREPO)/jas/tags/$(VERSION)
 
@@ -390,8 +395,9 @@ SVNDATE=svnlook date $(SVNREPO)/jas
 # jun 2009 SVNSRT=2668
 # jan 2010 SVNSRT=2978
 # jun 2010 SVNSRT=3188
-# jan 2011
-SVNSRT=3458
+# jan 2011 SVNSRT=3458
+# jul 2011
+SVNSRT=3688
 
 export:
 	rm -rf ~/jas-versions/$(VERSION)
