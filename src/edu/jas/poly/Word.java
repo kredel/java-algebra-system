@@ -66,7 +66,7 @@ public final class Word implements MonoidElem<Word> {
      * Constructor for Word.
      * @param m factory for words.
      * @param s String
-     * @param t indicator if s needs translation
+     * @param translate indicator if s needs translation
      */
     public Word(WordFactory m, String s, boolean translate) {
         mono = m;
