@@ -60,23 +60,28 @@ public class DistHashTableMPJTest extends TestCase {
         return suite;
     }
 
-    //private static final String host = "localhost";
 
     private DistHashTableMPJ<Integer,Integer> l1;
     private DistHashTableMPJ<Integer,Integer> l2;
     private DistHashTableMPJ<Integer,Integer> l3;
-    private static int me = -1;
+
 
     protected void setUp() {
-        me = engine.Rank();
+        engine.Barrier();
     }
 
     protected void tearDown() {
+        engine.Barrier();
         if ( l1 != null ) l1.terminate();
         if ( l2 != null ) l2.terminate();
         if ( l3 != null ) l3.terminate();
         l1 = l2 = l3 = null;
-        me = -1;
+        try {
+            //System.out.println("tearDown: sleep = 1");
+            Thread.currentThread().sleep(1);
+        } catch(InterruptedException e) {
+        }
+        engine.Barrier();
     }
 
 
@@ -94,6 +99,7 @@ public class DistHashTableMPJTest extends TestCase {
      * Tests if the created DistHashTable has #n objects as content.
      */
     public void xtestDistHashTable2() {
+        int me = engine.Rank();
         l1 = new DistHashTableMPJ<Integer,Integer>(engine);
         l1.init();
         assertTrue("l1==empty",l1.isEmpty());
@@ -136,32 +142,35 @@ public class DistHashTableMPJTest extends TestCase {
      * Tests if the two created DistHashTables have #n objects as content.
      */
     public void testDistHashTable3() {
-        l1 = new DistHashTableMPJ<Integer,Integer>(engine);
-        l1.init();
-        assertTrue("l1==empty",l1.isEmpty());
+        int me = engine.Rank();
+        l2 = new DistHashTableMPJ<Integer,Integer>(engine);
+        l2.init();
+        //System.out.println("test3: me = " + me + ", l2 = "+ l2);
+        assertTrue("l2==empty",l2.isEmpty());
  
         int i = 0, loops = 10;
         while ( i < loops ) {
             Integer x = Integer.valueOf( ++i );
+            //System.out.println("me = " + me + ", x = "+ x);
             if ( me == 0 ) {
-		l1.putWait( x, x );
+		l2.putWait( x, x );
             } else {
-                Integer s = l1.getWait( x );
+                Integer s = l2.getWait( x );
                 assertEquals("s = x: " + s + ", " + x, s, x);
             }
-            assertTrue("#l1==i: " + i + ", #l1 = " + l1.size(), l1.size() >= i );
+            assertTrue("#l1==i: " + i + ", #l1 = " + l2.size(), l2.size() >= i );
         }
-        assertTrue("#l1=="+loops, l1.size() == loops );
+        assertTrue("#l2=="+loops, l2.size() == loops );
 
-        Iterator it = l1.iterator();
+        Iterator it = l2.iterator();
         i = 0;
         while ( it.hasNext() ) {
             Object k = it.next();
-            Object o = l1.get(k);
+            Object o = l2.get(k);
             Integer x = Integer.valueOf( ++i );
-            //System.out.println("o = " + o + " x = "+ x);
-            assertEquals("l1(i)==k(i)", x, k );
-            assertEquals("l1(i)==v(i)", x, o );
+            //System.out.println("me = " + me + ", o = " + o + ", x = "+ x);
+            assertEquals("l2(i)==k(i)", x, k );
+            assertEquals("l2(i)==v(i)", x, o );
         }
     }
 

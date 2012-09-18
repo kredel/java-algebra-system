@@ -213,9 +213,13 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
     public void putWait(K key, V value) {
         put(key, value); // = send
         // assume key does not change multiple times before test:
-        while (!value.equals(getWait(key))) {
+        V val = null;
+        do {
+            //System.out.println("putWait: " + value + ", key = " + key);
+            val = getWait(key);
+            //System.out.println("putWait: " + value + ", val = " + val);
             //System.out.print("#");
-        }
+        } while (!value.equals(val));
     }
 
 
@@ -263,12 +267,13 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
         V value = null;
         try {
             synchronized (theList) {
-                //value = theList.get(key);
-                value = get(key);
+                value = theList.get(key);
+                //value = get(key);
                 while (value == null) {
-                    //System.out.print("^");
+                    //System.out.print("-");
                     theList.wait(100);
                     value = theList.get(key);
+                    //value = get(key);
                 }
             }
         } catch (InterruptedException e) {
@@ -309,6 +314,7 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
      * Initialize and start the list thread.
      */
     public void init() {
+        logger.debug("init " + listener + ", theList = " + theList);
         if (listener == null) {
             return;
         }
@@ -328,20 +334,17 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
      * Terminate the list thread.
      */
     public void terminate() {
-        //if (engine != null) {
-        //    engine.terminate(); //only last one
-        //}
-        //theList.clear();
         if (listener == null) {
             return;
         }
         if (debug) {
-            logger.info("terminate " + listener);
+            Runtime rt = Runtime.getRuntime();
+            logger.debug("terminate " + listener + ", runtime = " + rt.hashCode());
         }
         listener.setDone();
         try {
             while (listener.isAlive()) {
-                //System.out.print("+");
+                //System.out.print("+++++");
                 listener.interrupt();
                 listener.join(100);
             }
@@ -399,14 +402,17 @@ class DHTMPJListener<K, V> extends Thread {
     @SuppressWarnings("unchecked")
     @Override
     public void run() {
+        logger.debug("listener run() " + this);
         DHTTransport<K,V> tc;
         //goon = true;
         while (goon) {
             tc = null;
             try {
                 DHTTransport[] tcl = new DHTTransport[1];
+                System.out.println("engine.Recv");
                 Status stat = engine.Recv(tcl,0,tcl.length,MPI.OBJECT,MPI.ANY_SOURCE,DistHashTableMPJ.DHTTAG);
                 int cnt = stat.Get_count(MPI.OBJECT);
+                System.out.println("engine.Recv, cnt = " + cnt);
                 if (cnt == 0) {
                     goon = false;
                     break;
@@ -430,11 +436,11 @@ class DHTMPJListener<K, V> extends Thread {
 		}
             } catch (MPIException e) {
                 goon = false;
-                logger.info("receive " + e);
+                logger.info("receive(MPI) " + e);
                 //e.printStackTrace();
             } catch (ClassNotFoundException e) {
                 goon = false;
-                logger.info("receive " + e);
+                logger.info("receive(Class) " + e);
                 e.printStackTrace();
             } catch (Exception e) {
                 goon = false;
