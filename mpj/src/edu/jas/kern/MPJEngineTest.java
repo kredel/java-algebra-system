@@ -1,3 +1,6 @@
+/*
+ * $Id$
+ */
 
 package edu.jas.kern;
 
