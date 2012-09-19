@@ -19,7 +19,8 @@ FMPJ_CMD=java -cp $(FMPJ_RUNLIB) runtime.FMPJRun -cp $(CLASSPATH):jas-mpj.jar -n
 
 CLASSPATH=$(LIBPATH)/log4j.jar:$(LIBPATH)/junit.jar:$(FMPJ_LIB):$(LIBPATH)/jas.jar
 
-DOCOPTS=-package
+#DOCOPTS=-package
+DOCOPTS=-package -author -version -linksource
 DOCCLASSES=$(CLASSPATH)
 DOC=javadoc -classpath $(DOCCLASSES)
 
