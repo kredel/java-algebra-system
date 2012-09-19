@@ -166,7 +166,7 @@ public class GroebnerBaseDistributedMPJ<C extends RingElem<C>> extends GroebnerB
 
 
     /**
-     * Distributed Groebner base.
+     * Distributed Groebner base, part for MPJ master.
      * @param modv number of module variables.
      * @param F polynomial list.
      * @return GB(F) a Groebner base of F or null, if a IOException occurs.
@@ -411,9 +411,15 @@ class MPJReducerServer<C extends RingElem<C>> implements Runnable {
 
     /**
      * Constructor.
+     * @param r MPJ rank of partner.
+     * @param fin termination coordinator to use.
+     * @param e MPJ communicator to use.
+     * @param dl DHT to use.
+     * @param L pair selection strategy
      */
-    MPJReducerServer(int r, Terminator fin, Comm e, DistHashTableMPJ<Integer, GenPolynomial<C>> dl,
-                    PairList<C> L) {
+    MPJReducerServer(int r, Terminator fin, Comm e, 
+                     DistHashTableMPJ<Integer, GenPolynomial<C>> dl, 
+                     PairList<C> L) {
         rank = r;
         finaler = fin;
         engine = e;
@@ -612,6 +618,8 @@ class MPJReducerClient<C extends RingElem<C>> implements Runnable {
 
     /**
      * Constructor.
+     * @param pc MPJ communication channel.
+     * @param dl DHT to use.
      */
     MPJReducerClient(MPJChannel pc, DistHashTableMPJ<Integer, GenPolynomial<C>> dl) {
         pairChannel = pc;
@@ -761,6 +769,8 @@ class MiMPJReducerServer<C extends RingElem<C>> implements Runnable {
 
     /**
      * Constructor.
+     * @param G polynomial list.
+     * @param p polynomial.
      */
     MiMPJReducerServer(List<GenPolynomial<C>> G, GenPolynomial<C> p) {
         this.G = G;
