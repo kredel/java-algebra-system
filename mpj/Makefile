@@ -32,7 +32,7 @@ FILES=$(wildcard src/edu/jas/*/*.java)
 CLASSES=$(subst src,classes,$(subst java,class,$(FILES)))
 #echo $(CLASSES)
 
-all: clean jas-mpj.jar
+all: clean jas-mpj.jar doc
 
 $(CLASSES): $(FILES) Makefile
 	-mkdir classes
