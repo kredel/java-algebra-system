@@ -14,11 +14,11 @@ import mpi.Comm;
 /**
  * MPJ engine, provides global MPI service.
  * <b>Note:</b> could eventually be done directly with MPJ, but provides logging. 
- * @author Heinz Kredel
  * <b>Usage:</b> To obtain a reference to the MPJ service communicator use
  *        <code>MPJEngine.getComminicator()</code>. Once an engine has been
  *        created it must be shutdown to exit JAS with
  *        <code>MPJEngine.terminate()</code>. 
+ * @author Heinz Kredel
  */
 
 public class MPJEngine {
