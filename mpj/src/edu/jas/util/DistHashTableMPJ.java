@@ -148,7 +148,6 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
 
     /**
      * Get the internal list, convert from Collection.
-     * @fix but is ok
      */
     public List<V> getValueList() {
         synchronized (theList) {

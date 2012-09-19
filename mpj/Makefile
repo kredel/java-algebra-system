@@ -19,6 +19,10 @@ FMPJ_CMD=java -cp $(FMPJ_RUNLIB) runtime.FMPJRun -cp $(CLASSPATH):jas-mpj.jar -n
 
 CLASSPATH=$(LIBPATH)/log4j.jar:$(LIBPATH)/junit.jar:$(FMPJ_LIB):$(LIBPATH)/jas.jar
 
+DOCOPTS=-package
+DOCCLASSES=$(CLASSPATH)
+DOC=javadoc -classpath $(DOCCLASSES)
+
 
 .SUFFIXES : .class .java .jar 
 .PHONY    : clean
@@ -52,3 +56,6 @@ tests: jas-mpj.jar
 
 notest: 
 	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -class edu.jas.gb.HelloWorld
+
+doc: $(FILES)
+	$(DOC) $(DOCOPTS) -d ../doc/mpj $(FILES)
