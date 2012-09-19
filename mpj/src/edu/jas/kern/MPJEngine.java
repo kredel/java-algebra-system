@@ -5,9 +5,6 @@
 package edu.jas.kern;
 
 
-//import java.util.List;
-//import java.util.Arrays;
-
 import org.apache.log4j.Logger;
 
 import mpi.MPI;
@@ -21,13 +18,13 @@ import mpi.Comm;
  *        <code>MPJEngine.getComminicator()</code>. Once an engine has been created
  *        it must be shutdown to exit JAS with
  *        <code>MPJEngine.terminate()</code>.
+ * <b>Note:</b> could eventually be done directly with MPJ, but provides logging.
  */
 
 public class MPJEngine {
 
 
     private static final Logger logger = Logger.getLogger(MPJEngine.class);
-    // private boolean debug = logger.isInfoEnabled(); //logger.isInfoEnabled();
 
 
     /**
@@ -51,9 +48,9 @@ public class MPJEngine {
 
 
     /*
-      * Core number of threads.
-      * N_CPUS x 1.5, x 2, x 2.5, min 3, ?.
-      */
+     * Core number of threads.
+     * N_CPUS x 1.5, x 2, x 2.5, min 3, ?.
+     */
     public static final int N_THREADS = (N_CPUS < 3 ? 3 : N_CPUS + N_CPUS / 2);
 
 
@@ -94,7 +91,7 @@ public class MPJEngine {
             return false;
         }
         if (MPI.Finalized()) {
-	    return false;
+            return false;
         }
         return true;
     }
@@ -119,7 +116,7 @@ public class MPJEngine {
      */
     public static synchronized Comm getCommunicator(String[] args) {
         if (NO_MPJ) {
-	    return null;
+            return null;
         }
         if (mpjComm == null) {
             //String[] args = new String[] { }; //"-np " + N_THREADS };
@@ -127,9 +124,7 @@ public class MPJEngine {
                 if ( args == null ) {
                     throw new IllegalArgumentException("command line is null");
                 }
-                //if ( ! Arrays.equals(args,cmdline) ) {
-		cmdline = args;
-		//}
+                cmdline = args;
                 args = MPI.Init(args);
                 logger.info("MPJ initialized on " + MPI.Get_processor_name());
             }
@@ -150,7 +145,7 @@ public class MPJEngine {
         logger.info("terminating MPJ on rank = " + mpjComm.Rank());
         mpjComm = null;
         if (MPI.Finalized()) {
-	    return;
+            return;
         }
         MPI.Finalize();
     }

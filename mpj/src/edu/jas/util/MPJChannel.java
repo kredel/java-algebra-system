@@ -22,8 +22,7 @@ import edu.jas.kern.MPJEngine;
 
 
 /**
- * MPJChannel provides a communication channel for Java objects using MPJ. 
- * @author Akitoshi Yoshida
+ * MPJChannel provides a communication channel for Java objects using MPJ to a given rank.
  * @author Heinz Kredel.
  */
 public class MPJChannel {
@@ -68,7 +67,7 @@ public class MPJChannel {
     /**
      * Get the MPJ engine.
      */
-    public Comm getSocket() {
+    public Comm getEngine() {
         return engine;
     }
 
@@ -77,20 +76,10 @@ public class MPJChannel {
      * Sends an object
      */
     public void send(Object v) throws IOException {
-        try {
-            Object[] va = new Object[1];
-            va[0] = v;
-            engine.Send(va,0,va.length,MPI.OBJECT,partnerRank,CHANTAG);
-            //System.out.println("send: "+tc+" @ "+listener);
-        } catch (MPIException e) {
-            logger.info("sending(v=" + v + ")");
-            logger.info("send " + e);
-            e.printStackTrace();
-        } catch (Exception e) {
-            logger.info("sending(v=" + v + ")");
-            logger.info("send " + e);
-            e.printStackTrace();
-        }
+        Object[] va = new Object[1];
+        va[0] = v;
+        engine.Send(va,0,va.length,MPI.OBJECT,partnerRank,CHANTAG);
+        //System.out.println("send: "+v);
     }
 
 
@@ -98,16 +87,15 @@ public class MPJChannel {
      * Receives an object
      */
     public Object receive() throws IOException, ClassNotFoundException {
-        Object v = null;
         Object[] va = new Object[1];
-        System.out.println("engine.Recv");
+        //System.out.println("engine.Recv");
         Status stat = engine.Recv(va,0,va.length,MPI.OBJECT,partnerRank,CHANTAG);
         int cnt = stat.Get_count(MPI.OBJECT);
-        System.out.println("engine.Recv, cnt = " + cnt);
+        //System.out.println("engine.Recv, cnt = " + cnt);
         if (cnt == 0) {
             throw new IOException("no object received");
         }
-        v = va[0];
+        Object v = va[0];
         return v;
     }
 
@@ -116,12 +104,7 @@ public class MPJChannel {
      * Closes the channel.
      */
     public void close() {
-        if (engine != null) {
-            //try {
-            //    soc.close();
-            //} catch (IOException e) {
-            //}
-        }
+        // nothing to do
     }
 
 
@@ -130,7 +113,7 @@ public class MPJChannel {
      */
     @Override
     public String toString() {
-        return "MPJChannel(" + engine + ")";
+        return "MPJChannel(on=" + engine.Rank() + ",to=" + partnerRank + ")";
     }
 
 }

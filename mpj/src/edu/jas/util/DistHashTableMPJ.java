@@ -49,6 +49,9 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
     protected DHTMPJListener<K, V> listener;
 
 
+    /**
+     * Message tag for DHT communicaton.
+     */
     public static final int DHTTAG = MPJEngine.TAG + 1;
 
 
@@ -215,9 +218,7 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
         // assume key does not change multiple times before test:
         V val = null;
         do {
-            //System.out.println("putWait: " + value + ", key = " + key);
             val = getWait(key);
-            //System.out.println("putWait: " + value + ", val = " + val);
             //System.out.print("#");
         } while (!value.equals(val));
     }
@@ -240,9 +241,9 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
             tcl[0] = tc;
             int size = engine.Size();
             for ( int i = 0; i < size; i++ ) { // send also to self.listener
-                 engine.Send(tcl,0,tcl.length,MPI.OBJECT,i,DHTTAG);
+                engine.Send(tcl,0,tcl.length,MPI.OBJECT,i,DHTTAG);
             }
-            //System.out.println("send: "+tc+" @ "+listener);
+            //System.out.println("send: "+tc);
         } catch (MPIException e) {
             logger.info("sending(key=" + key + ")");
             logger.info("send " + e);
@@ -379,6 +380,9 @@ class DHTMPJListener<K, V> extends Thread {
     private boolean goon;
 
 
+    /**
+     * Constructor.
+     */
     DHTMPJListener(Comm cm, SortedMap<K, V> list) {
         engine = cm;
         theList = list;
@@ -386,11 +390,17 @@ class DHTMPJListener<K, V> extends Thread {
     }
 
 
+    /**
+     * Test if done.
+     */
     boolean isDone() {
         return !goon;
     }
 
 
+    /**
+     * Set to done status.
+     */
     void setDone() {
         goon = false;
     }
@@ -409,10 +419,10 @@ class DHTMPJListener<K, V> extends Thread {
             tc = null;
             try {
                 DHTTransport[] tcl = new DHTTransport[1];
-                System.out.println("engine.Recv");
+                //System.out.println("engine.Recv");
                 Status stat = engine.Recv(tcl,0,tcl.length,MPI.OBJECT,MPI.ANY_SOURCE,DistHashTableMPJ.DHTTAG);
                 int cnt = stat.Get_count(MPI.OBJECT);
-                System.out.println("engine.Recv, cnt = " + cnt);
+                //System.out.println("engine.Recv, cnt = " + cnt);
                 if (cnt == 0) {
                     goon = false;
                     break;
@@ -425,15 +435,15 @@ class DHTMPJListener<K, V> extends Thread {
                     goon = false;
                     break;
                 }
-		K key = tc.key();
-		if (key != null) {
-		    logger.info("receive, put(key=" + key + ")");
-		    V val = tc.value();
-		    synchronized (theList) {
-			theList.put(key, val);
-			theList.notifyAll();
-		    }
-		}
+                K key = tc.key();
+                if (key != null) {
+                    logger.info("receive, key=" + key);
+                    V val = tc.value();
+                    synchronized (theList) {
+                        theList.put(key, val);
+                        theList.notifyAll();
+                    }
+                }
             } catch (MPIException e) {
                 goon = false;
                 logger.info("receive(MPI) " + e);
