@@ -140,10 +140,11 @@ public class ThreadPool {
      * number of worker threads.
      */
     public int getNumber() {
-        if (workers == null || workers.length < size) {
-            init(); // start threads
-        }
-        return workers.length; // not null
+        return size;
+        //if (workers == null || workers.length < size) {
+        //    init(); // start threads
+        //}
+        //return workers.length; // not null
     }
 
 
