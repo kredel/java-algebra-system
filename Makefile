@@ -85,11 +85,11 @@ DOCOPTS=-package
 MYCLASSPATH = $(LOG4JPATH):.:$(JUNITPATH):$(JOMPPATH):$(PYPATH)
 #:$(TNJPATH)
 
-#JAVA_MEM=-Xms1100M -Xmx1900M
-JAVA_MEM=-Xms350M -Xmx800M
+JAVA_MEM=-Xms1100M -Xmx1900M
+#JAVA_MEM=-Xms350M -Xmx800M
 
-#SOPTS="-J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc -J-Xms1100M -J-Xmx1900M"
-SOPTS="-J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc -J-Xms350M -J-Xmx800M"
+SOPTS="-J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc -J-Xms1100M -J-Xmx1900M"
+#SOPTS="-J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc -J-Xms350M -J-Xmx800M"
 
 
 JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d . -Xlint:unchecked
@@ -370,10 +370,17 @@ tests:
 	make edu.jas.application.RunGB cl="par  examples/trinks6.jas 4" | tee -a tr.out
 	make edu.jas.application.RunGB cl="par+ examples/trinks6.jas 4" | tee -a tr.out
 	cd jython; make tests | tee jsr.out
+	cd mpj; make tests | tee mpj.out
+	cd ../jas-versions/jlinalg_adapter; make tests | tee ja.out
+	cd ../jas-versions/commons-math_adapter; make tests | tee ja.out
 	-grep FAIL t.out
 	-grep Exception e.out | grep -v GCDProxy | grep -v GBProxy
 	-grep File tjy.out
 	-grep -i error tjr.out
+	-grep -i error jython/jsr.out
+	-grep -i error mpj/mpj.out
+	-grep -i error ../jas-versions/jlinalg_adapter/ja.out
+	-grep -i error ../jas-versions/commons-math_adapter/ja.out
 	-egrep '(Exception|Usage)' tr.out
 
 metrics:
@@ -428,6 +435,7 @@ export:
 	cd ~/jas-versions/commons-math_adapter; make > ~/jas-versions/$(VERSION)/make_commons-math.out
 	cp ~/java/lib/commons-math_adapter.jar ~/jas-versions/$(VERSION)/
 	cd ~/jas-versions/$(VERSION)/jython; make > ~/jas-versions/$(VERSION)/make_jython.out
+	cd ~/jas-versions/$(VERSION)/mpj; make > ~/jas-versions/$(VERSION)/make_mpj.out
 
 deploy:
 	$(RSYNC) -e 'ssh -p 2222' --delete-after --exclude=DTD --exclude=*xml ~/jas-versions/$(VERSION)/ krum:htdocs/$(VERSION)
