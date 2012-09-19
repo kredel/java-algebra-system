@@ -26,8 +26,8 @@ import edu.jas.kern.MPJEngine;
 
 
 /**
- * Distributed version of a HashTable using MPJ. Implemented with a SortedMap / TreeMap to
- * keep the sequence order of elements. Implemented using MPJ.
+ * Distributed version of a HashTable using MPJ. Implemented with a SortedMap /
+ * TreeMap to keep the sequence order of elements. Implemented using MPJ.
  * @author Heinz Kredel
  */
 
@@ -240,8 +240,8 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
             DHTTransport[] tcl = new DHTTransport[1];
             tcl[0] = tc;
             int size = engine.Size();
-            for ( int i = 0; i < size; i++ ) { // send also to self.listener
-                engine.Send(tcl,0,tcl.length,MPI.OBJECT,i,DHTTAG);
+            for (int i = 0; i < size; i++) { // send also to self.listener
+                engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
             }
             //System.out.println("send: "+tc);
         } catch (MPIException e) {
@@ -413,21 +413,22 @@ class DHTMPJListener<K, V> extends Thread {
     @Override
     public void run() {
         logger.debug("listener run() " + this);
-        DHTTransport<K,V> tc;
+        DHTTransport<K, V> tc;
         //goon = true;
         while (goon) {
             tc = null;
             try {
                 DHTTransport[] tcl = new DHTTransport[1];
                 //System.out.println("engine.Recv");
-                Status stat = engine.Recv(tcl,0,tcl.length,MPI.OBJECT,MPI.ANY_SOURCE,DistHashTableMPJ.DHTTAG);
+                Status stat = engine.Recv(tcl, 0, tcl.length, MPI.OBJECT, MPI.ANY_SOURCE,
+                                DistHashTableMPJ.DHTTAG);
                 int cnt = stat.Get_count(MPI.OBJECT);
                 //System.out.println("engine.Recv, cnt = " + cnt);
                 if (cnt == 0) {
                     goon = false;
                     break;
                 }
-                tc = (DHTTransport<K,V>) tcl[0];
+                tc = (DHTTransport<K, V>) tcl[0];
                 if (debug) {
                     logger.debug("receive(" + tc + ")");
                 }

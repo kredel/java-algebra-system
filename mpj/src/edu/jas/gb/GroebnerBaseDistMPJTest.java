@@ -5,8 +5,6 @@
 package edu.jas.gb;
 
 
-//import edu.jas.poly.GroebnerBase;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
@@ -17,7 +15,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.log4j.BasicConfigurator; //import org.apache.log4j.Logger;
+import org.apache.log4j.BasicConfigurator; // import org.apache.log4j.Logger;
 
 import mpi.Comm;
 
@@ -168,50 +166,50 @@ public class GroebnerBaseDistMPJTest extends TestCase {
      */
     public void xtestDistributedGBase() {
         L = new ArrayList<GenPolynomial<BigRational>>();
-        if ( engine.Rank() == 0 ) {
+        if (engine.Rank() == 0) {
             a = fac.random(kl, ll, el, q);
             b = fac.random(kl, ll, el, q);
             c = fac.random(kl, ll, el, q);
             d = fac.random(kl, ll, el, q);
             e = d; //fac.random(kl, ll, el, q );
         }
-        if ( engine.Rank() == 0 ) {
+        if (engine.Rank() == 0) {
             assertTrue("not isZERO( a )", !a.isZERO());
             L.add(a);
         }
 
         L = bbdist.GB(L);
-        if ( engine.Rank() == 0 ) {
+        if (engine.Rank() == 0) {
             assertTrue("isGB( { a } )", bbseq.isGB(L));
             assertTrue("not isZERO( b )", !b.isZERO());
             L.add(b);
             //System.out.println("L = " + L.size() );
         }
-        if ( mpjBug ) {
+        if (mpjBug) {
             return;
         }
 
         L = bbdist.GB(L);
-        if ( engine.Rank() == 0 ) {
+        if (engine.Rank() == 0) {
             assertTrue("isGB( { a, b } )", bbseq.isGB(L));
             assertTrue("not isZERO( c )", !c.isZERO());
             L.add(c);
         }
 
         L = bbdist.GB(L);
-        if ( engine.Rank() == 0 ) {
+        if (engine.Rank() == 0) {
             assertTrue("isGB( { a, b, c } )", bbseq.isGB(L));
             assertTrue("not isZERO( d )", !d.isZERO());
             L.add(d);
         }
         L = bbdist.GB(L);
-        if ( engine.Rank() == 0 ) {
+        if (engine.Rank() == 0) {
             assertTrue("isGB( { a, b, c, d } )", bbseq.isGB(L));
             assertTrue("not isZERO( e )", !e.isZERO());
             L.add(e);
         }
         L = bbdist.GB(L);
-        if ( engine.Rank() == 0 ) {
+        if (engine.Rank() == 0) {
             assertTrue("isGB( { a, b, c, d, e } )", bbseq.isGB(L));
         }
     }
@@ -223,21 +221,20 @@ public class GroebnerBaseDistMPJTest extends TestCase {
     public void testTrinks7GBase() {
         List<GenPolynomial<BigRational>> Fl;
         long t = 0;
-        if ( engine.Rank() == 0 ) {
-	    Thread[] clients;
-	    String exam = "(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
-                + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
-                + "( - 9 W + 15 T P + 20 S Z ), " + "( P W + 2 T Z - 11 B**3 ), "
-                + "( 99 W - 11 B S + 3 B**2 ), " 
-                + "( B**2 + 33/50 B + 2673/10000 ) " 
-                + ") ";
-	    Reader source = new StringReader(exam);
-	    GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
-	    try {
-		F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
-	    } catch (IOException e) {
-		fail("" + e);
-	    }
+        if (engine.Rank() == 0) {
+            Thread[] clients;
+            String exam = "(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
+                            + "( 35 P + 40 Z + 25 T - 27 S ), "
+                            + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
+                            + "( - 9 W + 15 T P + 20 S Z ), " + "( P W + 2 T Z - 11 B**3 ), "
+                            + "( 99 W - 11 B S + 3 B**2 ), " + "( B**2 + 33/50 B + 2673/10000 ) " + ") ";
+            Reader source = new StringReader(exam);
+            GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
+            try {
+                F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
+            } catch (IOException e) {
+                fail("" + e);
+            }
             System.out.println("F = " + F);
             Fl = F.list;
             t = System.currentTimeMillis();
@@ -247,13 +244,13 @@ public class GroebnerBaseDistMPJTest extends TestCase {
 
         G = bbdists.GB(Fl);
 
-        if ( engine.Rank() == 0 ) {
+        if (engine.Rank() == 0) {
             t = System.currentTimeMillis() - t;
-	    assertTrue("isGB( GB(Trinks7) )", bbseq.isGB(G));
-	    assertEquals("#GB(Trinks7) == 6", 6, G.size());
-	    PolynomialList<BigRational> trinks = new PolynomialList<BigRational>(F.ring, G);
-	    System.out.println("G = " + G);
-	    System.out.println("executed in " + t + " milliseconds");
+            assertTrue("isGB( GB(Trinks7) )", bbseq.isGB(G));
+            assertEquals("#GB(Trinks7) == 6", 6, G.size());
+            PolynomialList<BigRational> trinks = new PolynomialList<BigRational>(F.ring, G);
+            System.out.println("G = " + G);
+            System.out.println("executed in " + t + " milliseconds");
         }
     }
 

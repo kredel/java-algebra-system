@@ -15,10 +15,10 @@ import mpi.Comm;
  * MPJ engine, provides global MPI service.
  * @author Heinz Kredel
  * @usage To obtain a reference to the MPJ service communicator use
- *        <code>MPJEngine.getComminicator()</code>. Once an engine has been created
- *        it must be shutdown to exit JAS with
- *        <code>MPJEngine.terminate()</code>.
- * <b>Note:</b> could eventually be done directly with MPJ, but provides logging.
+ *        <code>MPJEngine.getComminicator()</code>. Once an engine has been
+ *        created it must be shutdown to exit JAS with
+ *        <code>MPJEngine.terminate()</code>. <b>Note:</b> could eventually be
+ *        done directly with MPJ, but provides logging.
  */
 
 public class MPJEngine {
@@ -28,8 +28,7 @@ public class MPJEngine {
 
 
     /**
-     * Command line arguments. 
-     * Required for MPJ runtime system.
+     * Command line arguments. Required for MPJ runtime system.
      */
     protected static String[] cmdline;
 
@@ -102,7 +101,7 @@ public class MPJEngine {
      * @return a Communicator constructed for cmdline.
      */
     public static synchronized Comm getCommunicator() {
-        if ( cmdline == null ) {
+        if (cmdline == null) {
             throw new IllegalArgumentException("command line not set");
         }
         return getCommunicator(cmdline);
@@ -120,8 +119,8 @@ public class MPJEngine {
         }
         if (mpjComm == null) {
             //String[] args = new String[] { }; //"-np " + N_THREADS };
-            if ( ! MPI.Initialized() ) {
-                if ( args == null ) {
+            if (!MPI.Initialized()) {
+                if (args == null) {
                     throw new IllegalArgumentException("command line is null");
                 }
                 cmdline = args;
