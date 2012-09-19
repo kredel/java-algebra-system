@@ -32,7 +32,7 @@ all: clean jas-mpj.jar
 
 $(CLASSES): $(FILES) Makefile
 	-mkdir classes
-	javac -classpath $(CLASSPATH) -sourcepath src -d classes src/edu/jas/*/*.java
+	javac -classpath $(CLASSPATH) -d classes src/edu/jas/*/*.java
 
 jas-mpj.jar: $(CLASSES) 
 	-mkdir classes/META-INF
@@ -46,6 +46,9 @@ clean:
 	find . -name "*~" -follow -print -exec rm {} \;
 
 tests: jas-mpj.jar
-	#FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -class edu.jas.gb.HelloWorld
-	#FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -class edu.jas.kern.MPJEngineTest -n $(NP)
+	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -class edu.jas.gb.GroebnerBaseDistMPJTest -n $(NP)
+
+notest:
+	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -class edu.jas.gb.HelloWorld
+	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -class edu.jas.kern.MPJEngineTest -n $(NP)
 	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -class edu.jas.util.DistHashTableMPJTest -n $(NP)
