@@ -179,16 +179,16 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
      */
     @SuppressWarnings("unchecked")
     public GBAlgorithmBuilder<C> fractionFree() {
-        if (ring.coFac instanceof BigRational) {
-            BigRational cf = (BigRational) ring.coFac;
+        if (((Object)ring.coFac) instanceof BigRational) {
+            BigRational cf = (BigRational) (Object) ring.coFac;
             GroebnerBaseAbstract<BigRational> bb = GBFactory.getImplementation(cf, GBFactory.Algo.ffgb);
-            GroebnerBaseAbstract<C> cbb = (GroebnerBaseAbstract<C>) bb;
+            GroebnerBaseAbstract<C> cbb = (GroebnerBaseAbstract<C>) (GroebnerBaseAbstract) bb;
             return new GBAlgorithmBuilder<C>(ring, cbb);
         }
-        if (ring.coFac instanceof QuotientRing) {
-            QuotientRing<C> cf = (QuotientRing<C>) ring.coFac;
+        if (((Object)ring.coFac) instanceof QuotientRing) {
+            QuotientRing<C> cf = (QuotientRing<C>) (Object) ring.coFac;
             GroebnerBaseAbstract<Quotient<C>> bb = GBFactory.<C> getImplementation(cf, GBFactory.Algo.ffgb);
-            GroebnerBaseAbstract<C> cbb = (GroebnerBaseAbstract<C>) bb;
+            GroebnerBaseAbstract<C> cbb = (GroebnerBaseAbstract<C>) (GroebnerBaseAbstract) bb;
             return new GBAlgorithmBuilder<C>(ring, cbb);
         }
         logger.warn("no fraction free algorithm implemented for " + ring);
@@ -212,10 +212,10 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
      */
     @SuppressWarnings("unchecked")
     public GBAlgorithmBuilder<C> domainAlgorithm(GBFactory.Algo a) {
-        if (ring.coFac instanceof BigInteger) {
-            BigInteger cf = (BigInteger) ring.coFac;
+        if (((Object)ring.coFac) instanceof BigInteger) {
+            BigInteger cf = (BigInteger) (Object) ring.coFac;
             GroebnerBaseAbstract<BigInteger> bb = GBFactory.getImplementation(cf, a);
-            GroebnerBaseAbstract<C> cbb = (GroebnerBaseAbstract<C>) bb;
+            GroebnerBaseAbstract<C> cbb = (GroebnerBaseAbstract<C>) (GroebnerBaseAbstract) bb;
             return new GBAlgorithmBuilder<C>(ring, cbb);
         }
         logger.warn("no domain algorithm implemented for " + ring);
