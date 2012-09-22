@@ -50,13 +50,17 @@ clean:
 	rm -rf classes
 	find . -name "*~" -follow -print -exec rm {} \;
 
+MFILE=machines
+EFILE=$(JASPATH)/examples/trinks7.jas
+
 tests: jas-mpj.jar
-	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -class edu.jas.kern.MPJEngineTest -n $(NP)
-	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -class edu.jas.util.DistHashTableMPJTest -n $(NP)
-	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -class edu.jas.gb.GroebnerBaseDistMPJTest -n $(NP)
+	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -np $(NP) -machinefile $(MFILE) -class edu.jas.application.RunMPJGB distmpj $(EFILE) $(NP) $(MFILE)
 
 notest: 
 	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -class edu.jas.gb.HelloWorld
+	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -class edu.jas.kern.MPJEngineTest -n $(NP)
+	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -class edu.jas.util.DistHashTableMPJTest -n $(NP)
+	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -class edu.jas.gb.GroebnerBaseDistMPJTest -n $(NP)
 
 doc: $(FILES)
 	$(DOC) $(DOCOPTS) -d ../doc/mpj $(FILES)
