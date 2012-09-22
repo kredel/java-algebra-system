@@ -273,7 +273,7 @@ public class RunMPJGB {
         } else {
             System.out.print("m ");
         }
-        System.out.println("= " + threads + ", time = " + t + " milliseconds, " + (t - t1) + " start-up");
+        System.out.println("= " + threads + ", time = " + t1 + " milliseconds, " + (t-t1) + " start-up " + ", total = " + t);
         checkGB(S);
         System.out.println("");
     }
@@ -316,7 +316,8 @@ public class RunMPJGB {
         } else {
             System.out.print("d ");
         }
-        System.out.println("= " + threads + ", time = " + t + " milliseconds, " + (t - t1) + " start-up");
+        System.out.println("= " + threads + ", time = " + t1 + " milliseconds, " + (t-t1) + " start-up " + ", total = " + t);
+        //System.out.println("= " + threads + ", time = " + t + " milliseconds, " + (t - t1) + " start-up");
         checkGB(S);
         System.out.println("");
     }
@@ -360,7 +361,8 @@ public class RunMPJGB {
         } else {
             System.out.print("d ");
         }
-        System.out.println("= " + threads + ", time = " + t + " milliseconds, " + (t - t1) + " start-up");
+        System.out.println("= " + threads + ", time = " + t1 + " milliseconds, " + (t-t1) + " start-up " + ", total = " + t);
+        //System.out.println("= " + threads + ", time = " + t + " milliseconds, " + (t - t1) + " start-up");
         checkGB(S);
         System.out.println("");
     }
@@ -408,8 +410,9 @@ public class RunMPJGB {
         } else {
             System.out.print("d ");
         }
-        System.out.println("= " + threads + ", ppn = " + threadsPerNode + ", time = " + t + " milliseconds, "
-                        + (t - t1) + " start-up");
+        System.out.println("= " + threads + ", ppn = " + threadsPerNode + ", time = " + t1 + " milliseconds, " + (t-t1) + " start-up " + ", total = " + t);
+        //System.out.println("= " + threads + ", ppn = " + threadsPerNode + ", time = " + t + " milliseconds, "
+        //                + (t - t1) + " start-up");
         checkGB(S);
         System.out.println("");
     }
