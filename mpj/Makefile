@@ -51,7 +51,7 @@ clean:
 	find . -name "*~" -follow -print -exec rm {} \;
 
 MFILE=machines
-EFILE=$(JASPATH)/examples/trinks7.jas
+EFILE=$(JASPATH)/examples/trinks6.jas
 
 tests: jas-mpj.jar
 	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -np $(NP) -machinefile $(MFILE) -class edu.jas.application.RunMPJGB distmpj $(EFILE) $(NP) $(MFILE)
