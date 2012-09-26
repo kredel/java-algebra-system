@@ -1,0 +1,1074 @@
+/*
+ * $Id$
+ */
+
+package edu.jas.gb;
+
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import org.apache.log4j.Logger;
+
+import mpi.Comm;
+import mpi.MPI;
+import mpi.Status;
+import mpi.MPIException;
+
+import edu.jas.poly.ExpVector;
+import edu.jas.poly.GenPolynomial;
+
+import edu.jas.structure.RingElem;
+
+import edu.jas.util.DistHashTableMPJ;
+import edu.jas.util.Terminator;
+import edu.jas.util.ThreadPool;
+
+import edu.jas.kern.MPJEngine;
+import edu.jas.util.MPJChannel;
+
+
+/**
+ * Groebner Base distributed hybrid algorithm with MPJ. Implements a distributed memory
+ * with multi-core CPUs parallel version of Groebner bases with MPJ. Using pairlist
+ * class, distributed multi-threaded tasks do reduction, one communication
+ * channel per remote node.
+ * @param <C> coefficient type
+ * @author Heinz Kredel
+ */
+
+public class GroebnerBaseDistributedHybridMPJ<C extends RingElem<C>> extends GroebnerBaseAbstract<C> {
+
+
+    public static final Logger logger = Logger.getLogger(GroebnerBaseDistributedHybridMPJ.class);
+
+
+    public final boolean debug = logger.isDebugEnabled();
+
+
+    /**
+     * Number of threads to use.
+     */
+    protected final int threads;
+
+
+    /**
+     * Default number of threads.
+     */
+    protected static final int DEFAULT_THREADS = 2;
+
+
+    /**
+     * Number of threads per node to use.
+     */
+    protected final int threadsPerNode;
+
+
+    /**
+     * Default number of threads per compute node.
+     */
+    protected static final int DEFAULT_THREADS_PER_NODE = 1;
+
+
+    /**
+     * Pool of threads to use.
+     */
+    //protected final ExecutorService pool; // not for single node tests
+    protected transient final ThreadPool pool;
+
+
+    /*
+     * Underlying MPJ engine.
+     */
+    protected transient final Comm engine;
+
+
+    /**
+     * Message tag for pairs.
+     */
+    public static final int pairTag = GroebnerBaseDistributedHybrid.pairTag.intValue();
+
+
+    /**
+     * Message tag for results.
+     */
+    public static final int resultTag = GroebnerBaseDistributedHybrid.resultTag.intValue();
+
+
+    /**
+     * Message tag for acknowledgments.
+     */
+    public static final int ackTag = GroebnerBaseDistributedHybrid.ackTag.intValue();
+
+
+    /**
+     * Constructor.
+     */
+    public GroebnerBaseDistributedHybridMPJ() {
+        this(DEFAULT_THREADS);
+    }
+
+
+    /**
+     * Constructor.
+     * @param threads number of threads to use.
+     */
+    public GroebnerBaseDistributedHybridMPJ(int threads) {
+        this(threads, new ThreadPool(threads));
+    }
+
+
+    /**
+     * Constructor.
+     * @param threads number of threads to use.
+     * @param threadsPerNode threads per node to use.
+     */
+    public GroebnerBaseDistributedHybridMPJ(int threads, int threadsPerNode) {
+        this(threads, threadsPerNode, new ThreadPool(threads));
+    }
+
+
+    /**
+     * Constructor.
+     * @param threads number of threads to use.
+     * @param pool ThreadPool to use.
+     */
+    public GroebnerBaseDistributedHybridMPJ(int threads, ThreadPool pool) {
+        this(threads, DEFAULT_THREADS_PER_NODE, pool);
+    }
+
+
+    /**
+     * Constructor.
+     * @param threads number of threads to use.
+     * @param threadsPerNode threads per node to use.
+     * @param pl pair selection strategy
+     */
+    public GroebnerBaseDistributedHybridMPJ(int threads, int threadsPerNode, PairList<C> pl) {
+        this(threads, threadsPerNode, new ThreadPool(threads), pl);
+    }
+
+
+    /**
+     * Constructor.
+     * @param threads number of threads to use.
+     * @param threadsPerNode threads per node to use.
+     */
+    public GroebnerBaseDistributedHybridMPJ(int threads, int threadsPerNode, ThreadPool pool) {
+        this(threads, threadsPerNode, pool, new OrderedPairlist<C>());
+    }
+
+
+    /**
+     * Constructor.
+     * @param threads number of threads to use.
+     * @param threadsPerNode threads per node to use.
+     * @param pool ThreadPool to use.
+     * @param pl pair selection strategy
+     */
+    public GroebnerBaseDistributedHybridMPJ(int threads, int threadsPerNode, ThreadPool pool, PairList<C> pl) {
+        super(new ReductionPar<C>(), pl);
+        this.engine = MPJEngine.getCommunicator();
+        int size = engine.Size();
+        if (size < 2) {
+            throw new IllegalArgumentException("Minimal 2 MPJ processes required, not " + size);
+        }
+        if (threads != size || pool.getNumber() != size) {
+            throw new IllegalArgumentException("threads != size: " + threads + " != " + size + ", #pool "
+                            + pool.getNumber());
+        }
+        this.threads = threads;
+        this.pool = pool;
+        this.threadsPerNode = threadsPerNode;
+        //logger.info("generated pool: " + pool);
+    }
+
+
+    /**
+     * Cleanup and terminate.
+     */
+    @Override
+    public void terminate() {
+        if (pool == null) {
+            return;
+        }
+        pool.terminate();
+    }
+
+
+    /**
+     * Distributed Groebner base.
+     * @param modv number of module variables.
+     * @param F polynomial list.
+     * @return GB(F) a Groebner base of F or null, if a IOException occurs or on
+     *         MPJ client part.
+     */
+    public List<GenPolynomial<C>> GB(int modv, List<GenPolynomial<C>> F) {
+        if (engine.Rank() == 0) {
+            return GBmaster(modv, F);
+        }
+        pool.terminate(); // not used on clients
+        try {
+            clientPart(0);
+        } catch (IOException e) {
+            logger.info("clientPart: " + e);
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    /**
+     * Distributed hybrid Groebner base.
+     * @param modv number of module variables.
+     * @param F polynomial list.
+     * @return GB(F) a Groebner base of F or null, if a IOException occurs.
+     */
+    public List<GenPolynomial<C>> GBmaster(int modv, List<GenPolynomial<C>> F) {
+        long t = System.currentTimeMillis();
+        GenPolynomial<C> p;
+        List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
+        PairList<C> pairlist = null;
+        boolean oneInGB = false;
+        int l = F.size();
+        int unused;
+        ListIterator<GenPolynomial<C>> it = F.listIterator();
+        while (it.hasNext()) {
+            p = it.next();
+            if (p.length() > 0) {
+                p = p.monic();
+                if (p.isONE()) {
+                    oneInGB = true;
+                    G.clear();
+                    G.add(p);
+                    //return G; must signal termination to others
+                }
+                if (!oneInGB) {
+                    G.add(p);
+                }
+                if (pairlist == null) {
+                    //pairlist = new OrderedPairlist<C>(modv, p.ring);
+                    pairlist = strategy.create(modv, p.ring);
+                    if (!p.ring.coFac.isField()) {
+                        throw new IllegalArgumentException("coefficients not from a field");
+                    }
+                }
+                // theList not updated here
+                if (p.isONE()) {
+                    unused = pairlist.putOne();
+                } else {
+                    unused = pairlist.put(p);
+                }
+            } else {
+                l--;
+            }
+        }
+        //if (l <= 1) {
+            //return G; must signal termination to others
+        //}
+        logger.info("pairlist " + pairlist);
+
+        logger.debug("looking for clients");
+        DistHashTableMPJ<Integer, GenPolynomial<C>> theList = new DistHashTableMPJ<Integer, GenPolynomial<C>>(engine);
+        theList.init();
+        List<GenPolynomial<C>> al = pairlist.getList();
+        for (int i = 0; i < al.size(); i++) {
+            // no wait required
+            GenPolynomial<C> nn = theList.put(Integer.valueOf(i), al.get(i));
+            if (nn != null) {
+                logger.info("double polynomials " + i + ", nn = " + nn + ", al(i) = " + al.get(i));
+            }
+        }
+
+        Terminator finner = new Terminator(threads * threadsPerNode);
+        HybridReducerServerMPJ<C> R;
+        logger.info("using pool = " + pool);
+        for (int i = 0; i < threads; i++) {
+            R = new HybridReducerServerMPJ<C>(i,threadsPerNode, finner, engine, theList, pairlist);
+            pool.addJob(R);
+            //logger.info("server submitted " + R);
+        }
+        logger.info("main loop waiting " + finner);
+        finner.waitDone();
+        int ps = theList.size();
+        logger.info("#distributed list = " + ps);
+        // make sure all polynomials arrived: not needed in master
+        // G = (ArrayList)theList.values();
+        G = pairlist.getList();
+        if (ps != G.size()) {
+            logger.info("#distributed list = " + theList.size() + " #pairlist list = " + G.size());
+        }
+        for (GenPolynomial<C> q : theList.getValueList()) {
+            if (q != null && !q.isZERO()) {
+                logger.debug("final q = " + q.leadingExpVector());
+            }
+        }
+        logger.debug("distributed list end");
+        long time = System.currentTimeMillis();
+        List<GenPolynomial<C>> Gp;
+        Gp = minimalGB(G); // not jet distributed but threaded
+        time = System.currentTimeMillis() - time;
+        logger.info("parallel gbmi time = " + time);
+        G = Gp;
+        logger.info("server theList.terminate() " + theList.size());
+        theList.terminate();
+        t = System.currentTimeMillis() - t;
+        logger.info("server GB end, time = " + t + ", " + pairlist.toString());
+        return G;
+    }
+
+
+    /**
+     * GB distributed client.
+     * @param rank of the MPJ where the server runs on.
+     * @throws IOException
+     */
+    public void clientPart(int rank) throws IOException {
+        if (rank != 0) {
+            throw new UnsupportedOperationException("only master at rank 0 implemented: " + rank);
+        }
+        Comm engine = MPJEngine.getCommunicator();
+        MPJChannel chan = new MPJChannel(engine, rank);
+
+        DistHashTableMPJ<Integer, GenPolynomial<C>> theList = new DistHashTableMPJ<Integer, GenPolynomial<C>>();
+        theList.init();
+
+        ThreadPool pool = new ThreadPool(threadsPerNode);
+        logger.info("client using pool = " + pool);
+        for (int i = 0; i < threadsPerNode; i++) {
+            HybridReducerClientMPJ<C> Rr = new HybridReducerClientMPJ<C>(threadsPerNode, chan, i, theList);
+            pool.addJob(Rr);
+        }
+        if (debug) {
+            logger.info("clients submitted");
+        }
+        pool.terminate();
+        logger.info("client pool.terminate()");
+
+        theList.terminate();
+        return;
+    }
+
+
+    /**
+     * Minimal ordered groebner basis.
+     * @param Fp a Groebner base.
+     * @return a reduced Groebner base of Fp.
+     */
+    @Override
+    public List<GenPolynomial<C>> minimalGB(List<GenPolynomial<C>> Fp) {
+        GenPolynomial<C> a;
+        ArrayList<GenPolynomial<C>> G;
+        G = new ArrayList<GenPolynomial<C>>(Fp.size());
+        ListIterator<GenPolynomial<C>> it = Fp.listIterator();
+        while (it.hasNext()) {
+            a = it.next();
+            if (a.length() != 0) { // always true
+                // already monic  a = a.monic();
+                G.add(a);
+            }
+        }
+        if (G.size() <= 1) {
+            return G;
+        }
+
+        ExpVector e;
+        ExpVector f;
+        GenPolynomial<C> p;
+        ArrayList<GenPolynomial<C>> F;
+        F = new ArrayList<GenPolynomial<C>>(G.size());
+        boolean mt;
+
+        while (G.size() > 0) {
+            a = G.remove(0);
+            e = a.leadingExpVector();
+
+            it = G.listIterator();
+            mt = false;
+            while (it.hasNext() && !mt) {
+                p = it.next();
+                f = p.leadingExpVector();
+                mt = e.multipleOf(f);
+            }
+            it = F.listIterator();
+            while (it.hasNext() && !mt) {
+                p = it.next();
+                f = p.leadingExpVector();
+                mt = e.multipleOf(f);
+            }
+            if (!mt) {
+                F.add(a);
+            } else {
+                // System.out.println("dropped " + a.length());
+            }
+        }
+        G = F;
+        if (G.size() <= 1) {
+            return G;
+        }
+        Collections.reverse(G); // important for lex GB
+
+        MiMPJReducerServer<C>[] mirs = (MiMPJReducerServer<C>[]) new MiMPJReducerServer[G.size()];
+        int i = 0;
+        F = new ArrayList<GenPolynomial<C>>(G.size());
+        while (G.size() > 0) {
+            a = G.remove(0);
+            // System.out.println("doing " + a.length());
+            List<GenPolynomial<C>> R = new ArrayList<GenPolynomial<C>>(G.size() + F.size());
+            R.addAll(G);
+            R.addAll(F);
+            mirs[i] = new MiMPJReducerServer<C>(R, a);
+            pool.addJob(mirs[i]);
+            i++;
+            F.add(a);
+        }
+        G = F;
+        F = new ArrayList<GenPolynomial<C>>(G.size());
+        for (i = 0; i < mirs.length; i++) {
+            a = mirs[i].getNF();
+            F.add(a);
+        }
+        return F;
+    }
+
+}
+
+
+/**
+ * Distributed server reducing worker proxy threads.
+ * @param <C> coefficient type
+ */
+
+class HybridReducerServerMPJ<C extends RingElem<C>> implements Runnable {
+
+
+    public static final Logger logger = Logger.getLogger(HybridReducerServerMPJ.class);
+
+
+    public final boolean debug = logger.isDebugEnabled();
+
+
+    private final Terminator finner;
+
+
+    private MPJChannel pairChannel;
+
+
+    protected transient final Comm engine;
+
+
+    private final DistHashTableMPJ<Integer, GenPolynomial<C>> theList;
+
+
+    private final PairList<C> pairlist;
+
+
+    private final int threadsPerNode;
+
+
+    final int rank;
+
+
+    /**
+     * Message tag for pairs.
+     */
+    public static final int pairTag = GroebnerBaseDistributedHybridMPJ.pairTag;
+
+
+    /**
+     * Message tag for results.
+     */
+    public static final int resultTag = GroebnerBaseDistributedHybridMPJ.resultTag;
+
+
+    /**
+     * Message tag for acknowledgments.
+     */
+    public static final int ackTag = GroebnerBaseDistributedHybridMPJ.ackTag;
+
+
+    /**
+     * Constructor.
+     * @param r MPJ rank of partner.
+     * @param tpn number of threads per node
+     * @param fin terminator
+     * @param engine MPJ engine
+     * @param dl distributed hash table
+     * @param L ordered pair list
+     */
+    HybridReducerServerMPJ(int r, int tpn, Terminator fin, Comm engine,
+                    DistHashTableMPJ<Integer, GenPolynomial<C>> dl, PairList<C> L) {
+        rank = r;
+        threadsPerNode = tpn;
+        finner = fin;
+        this.engine = engine;
+        theList = dl;
+        pairlist = L;
+        //logger.info("reducer server created " + this);
+    }
+
+
+    /**
+     * Work loop.
+     * @see java.lang.Runnable#run()
+     */
+    //JAVA6only: @Override
+    public void run() {
+        logger.info("reducer server running with " + engine);
+        try {
+            pairChannel = new MPJChannel(engine,rank);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        if (debug) {
+            logger.info("pairChannel   = " + pairChannel);
+        }
+        // record idle remote workers (minus one?)
+        //finner.beIdle(threadsPerNode-1);
+        finner.initIdle(threadsPerNode);
+        AtomicInteger active = new AtomicInteger(0);
+
+        // start receiver
+        HybridReducerReceiverMPJ<C> receiver = new HybridReducerReceiverMPJ<C>(rank,threadsPerNode, finner, active,
+                        pairChannel, theList, pairlist);
+        receiver.start();
+
+        Pair<C> pair;
+        //boolean set = false;
+        boolean goon = true;
+        //int polIndex = -1;
+        int red = 0;
+        int sleeps = 0;
+
+        // while more requests
+        while (goon) {
+            // receive request if thread is reported incactive
+            logger.debug("receive request");
+            Object req = null;
+            try {
+                req = pairChannel.receive(pairTag);
+		//} catch (InterruptedException e) {
+                //goon = false;
+                //e.printStackTrace();
+            } catch (IOException e) {
+                goon = false;
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                goon = false;
+                e.printStackTrace();
+            }
+            logger.info("received request, req = " + req);
+            if (req == null) {
+                goon = false;
+                break;
+            }
+            if (!(req instanceof GBTransportMessReq)) {
+                goon = false;
+                break;
+            }
+
+            // find pair and manage termination status
+            logger.info("find pair");
+            while (!pairlist.hasNext()) { // wait
+                if (!finner.hasJobs() && !pairlist.hasNext()) {
+                    goon = false;
+                    break;
+                }
+                try {
+                    sleeps++;
+                    //if (sleeps % 10 == 0) {
+                    logger.info("waiting for reducers, remaining = " + finner.getJobs());
+                    //}
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    goon = false;
+                    break;
+                }
+            }
+            if (!pairlist.hasNext() && !finner.hasJobs()) {
+                logger.info("termination detection: no pairs and no jobs left");
+                goon = false;
+                break; //continue; //break?
+            }
+            finner.notIdle(); // before pairlist get!!
+            pair = pairlist.removeNext();
+            // send pair to client, even if null
+            if (debug) {
+                logger.info("active count = " + active.get());
+                logger.info("send pair = " + pair);
+            }
+            GBTransportMess msg = null;
+            if (pair != null) {
+                msg = new GBTransportMessPairIndex(pair);
+            } else {
+                msg = new GBTransportMess(); //not End(); at this time
+                // goon ?= false;
+            }
+            try {
+                red++;
+                pairChannel.send(pairTag, msg);
+                int a = active.getAndIncrement();
+            } catch (IOException e) {
+                e.printStackTrace();
+                goon = false;
+                break;
+            }
+            //logger.debug("#distributed list = " + theList.size());
+        }
+        logger.info("terminated, send " + red + " reduction pairs");
+
+        /*
+         * send end mark to clients
+         */
+        logger.debug("send end");
+        try {
+            for (int i = 0; i < threadsPerNode; i++) { // -1
+                //do not wait: Object rq = pairChannel.receive(pairTag);
+                pairChannel.send(pairTag, new GBTransportMessEnd());
+            }
+            // send also end to receiver
+            pairChannel.send(resultTag, new GBTransportMessEnd());
+            //beware of race condition 
+        } catch (IOException e) {
+            if (logger.isDebugEnabled()) {
+                e.printStackTrace();
+            }
+        }
+        receiver.terminate();
+
+        int d = active.get();
+        logger.info("remaining active tasks = " + d);
+        //logger.info("terminated, send " + red + " reduction pairs");
+        pairChannel.close();
+        logger.info("redServ pairChannel.close()");
+        finner.release();
+    }
+}
+
+
+/**
+ * Distributed server receiving worker thread.
+ * @param <C> coefficient type
+ */
+
+class HybridReducerReceiverMPJ<C extends RingElem<C>> extends Thread {
+
+
+    public static final Logger logger = Logger.getLogger(HybridReducerReceiverMPJ.class);
+
+
+    public final boolean debug = logger.isDebugEnabled();
+
+
+    private final DistHashTableMPJ<Integer, GenPolynomial<C>> theList;
+
+
+    private final PairList<C> pairlist;
+
+
+    private final MPJChannel pairChannel;
+
+    final int rank;
+
+    private final Terminator finner;
+
+
+    private final int threadsPerNode;
+
+
+    private final AtomicInteger active;
+
+
+    private volatile boolean goon;
+
+
+    /**
+     * Message tag for pairs.
+     */
+    public static final int pairTag = GroebnerBaseDistributedHybridMPJ.pairTag;
+
+
+    /**
+     * Message tag for results.
+     */
+    public static final int resultTag = GroebnerBaseDistributedHybridMPJ.resultTag;
+
+
+    /**
+     * Message tag for acknowledgments.
+     */
+    public static final int ackTag = GroebnerBaseDistributedHybridMPJ.ackTag;
+
+
+    /**
+     * Constructor.
+     * @param r MPJ rank of partner.
+     * @param tpn number of threads per node
+     * @param fin terminator
+     * @param a active remote tasks count
+     * @param pc tagged socket channel
+     * @param dl distributed hash table
+     * @param L ordered pair list
+     */
+    HybridReducerReceiverMPJ(int r, int tpn, Terminator fin, AtomicInteger a, MPJChannel pc,
+                    DistHashTableMPJ<Integer, GenPolynomial<C>> dl, PairList<C> L) {
+        rank = r;
+        active = a;
+        threadsPerNode = tpn;
+        finner = fin;
+        pairChannel = pc;
+        theList = dl;
+        pairlist = L;
+        goon = true;
+        //logger.info("reducer server created " + this);
+    }
+
+
+    /**
+     * Work loop.
+     * @see java.lang.Thread#run()
+     */
+    @Override
+    public void run() {
+        //Pair<C> pair = null;
+        GenPolynomial<C> H = null;
+        int red = 0;
+        int polIndex = -1;
+        //Integer senderId; // obsolete
+
+        // while more requests
+        while (goon) {
+            // receive request
+            logger.debug("receive result");
+            //senderId = null;
+            Object rh = null;
+            try {
+                rh = pairChannel.receive(resultTag);
+                int i = active.getAndDecrement();
+		//} catch (InterruptedException e) {
+                //goon = false;
+                ////e.printStackTrace();
+                ////?? finner.initIdle(1);
+                //break;
+            } catch (IOException e) {
+                e.printStackTrace();
+                goon = false;
+                finner.initIdle(1);
+                break;
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                goon = false;
+                finner.initIdle(1);
+                break;
+            }
+            logger.info("received H polynomial");
+            if (rh == null) {
+                if (this.isInterrupted()) {
+                    goon = false;
+                    finner.initIdle(1);
+                    break;
+                }
+                //finner.initIdle(1);
+            } else if (rh instanceof GBTransportMessEnd) { // should only happen from server
+                logger.info("received GBTransportMessEnd");
+                goon = false;
+                //?? finner.initIdle(1);
+                break;
+            } else if (rh instanceof GBTransportMessPoly) {
+                // update pair list
+                red++;
+                GBTransportMessPoly<C> mpi = (GBTransportMessPoly<C>) rh;
+                H = mpi.pol;
+                //senderId = mpi.threadId;
+                if (H != null) {
+                    if (debug) {
+                        logger.info("H = " + H.leadingExpVector());
+                    }
+                    if (!H.isZERO()) {
+                        if (H.isONE()) {
+                            // finner.allIdle();
+                            polIndex = pairlist.putOne();
+                            GenPolynomial<C> nn = theList.put(Integer.valueOf(polIndex), H);
+                            if (nn != null) {
+                                logger.info("double polynomials nn = " + nn + ", H = " + H);
+                            }
+                            //goon = false; must wait for other clients
+                            //finner.initIdle(1);
+                            //break;
+                        } else {
+                            polIndex = pairlist.put(H);
+                            // use putWait ? but still not all distributed
+                            GenPolynomial<C> nn = theList.put(Integer.valueOf(polIndex), H);
+                            if (nn != null) {
+                                logger.info("double polynomials nn = " + nn + ", H = " + H);
+                            }
+                        }
+                    }
+                }
+            }
+            // only after recording in pairlist !
+            finner.initIdle(1);
+            // if ( senderId != null ) { // send acknowledgement after recording
+            try {
+                //pairChannel.send(senderId, new GBTransportMess());
+                pairChannel.send(ackTag, new GBTransportMess());
+                logger.debug("send acknowledgement");
+            } catch (IOException e) {
+                e.printStackTrace();
+                goon = false;
+                break;
+            }
+            //}
+        } // end while
+        goon = false;
+        logger.info("terminated, received " + red + " reductions");
+    }
+
+
+    /**
+     * Terminate.
+     */
+    public void terminate() {
+        goon = false;
+        this.interrupt();
+        try {
+            this.join();
+        } catch (InterruptedException e) {
+            // unfug Thread.currentThread().interrupt();
+        }
+        logger.debug("HybridReducerReceiver terminated");
+    }
+
+}
+
+
+/**
+ * Distributed clients reducing worker threads.
+ */
+
+class HybridReducerClientMPJ<C extends RingElem<C>> implements Runnable {
+
+
+    private static final Logger logger = Logger.getLogger(HybridReducerClientMPJ.class);
+
+
+    public final boolean debug = logger.isDebugEnabled();
+
+
+    private final MPJChannel pairChannel;
+
+
+    private final DistHashTableMPJ<Integer, GenPolynomial<C>> theList;
+
+
+    private final ReductionPar<C> red;
+
+
+    private final int threadsPerNode;
+
+
+    /*
+     * Identification number for this thread.
+     */
+    //public final Integer threadId; // obsolete
+
+
+    /**
+     * Message tag for pairs.
+     */
+    public static final int pairTag = GroebnerBaseDistributedHybrid.pairTag;
+
+
+    /**
+     * Message tag for results.
+     */
+    public static final int resultTag = GroebnerBaseDistributedHybrid.resultTag;
+
+
+    /**
+     * Message tag for acknowledgments.
+     */
+    public static final int ackTag = GroebnerBaseDistributedHybrid.ackTag;
+
+
+    /**
+     * Constructor.
+     * @param tpn number of threads per node
+     * @param tc tagged socket channel
+     * @param tid thread identification
+     * @param dl distributed hash table
+     */
+    HybridReducerClientMPJ(int tpn, MPJChannel tc, Integer tid,
+                    DistHashTableMPJ<Integer, GenPolynomial<C>> dl) {
+        this.threadsPerNode = tpn;
+        pairChannel = tc;
+        //threadId = 100 + tid; // keep distinct from other tags
+        theList = dl;
+        red = new ReductionPar<C>();
+    }
+
+
+    /**
+     * Work loop.
+     * @see java.lang.Runnable#run()
+     */
+    //JAVA6only: @Override
+    public void run() {
+        if (debug) {
+            logger.info("pairChannel   = " + pairChannel + " reducer client running");
+        }
+        Pair<C> pair = null;
+        GenPolynomial<C> pi;
+        GenPolynomial<C> pj;
+        GenPolynomial<C> S;
+        GenPolynomial<C> H = null;
+        //boolean set = false;
+        boolean goon = true;
+        boolean doEnd = false;
+        int reduction = 0;
+        //int sleeps = 0;
+        Integer pix;
+        Integer pjx;
+
+        while (goon) {
+            /* protocol:
+             * request pair, process pair, send result, receive acknowledgment
+             */
+            // pair = (Pair) pairlist.removeNext();
+            Object req = new GBTransportMessReq();
+            logger.info("send request = " + req);
+            try {
+                pairChannel.send(pairTag, req);
+            } catch (IOException e) {
+                goon = false;
+                if (logger.isDebugEnabled()) {
+                    e.printStackTrace();
+                }
+                logger.info("receive pair, exception ");
+                break;
+            }
+            logger.debug("receive pair, goon = " + goon);
+            doEnd = false;
+            Object pp = null;
+            try {
+                pp = pairChannel.receive(pairTag);
+		//} catch (InterruptedException e) {
+                //goon = false;
+                //e.printStackTrace();
+            } catch (IOException e) {
+                goon = false;
+                if (logger.isDebugEnabled()) {
+                    e.printStackTrace();
+                }
+                break;
+            } catch (ClassNotFoundException e) {
+                goon = false;
+                e.printStackTrace();
+            }
+            if (debug) {
+                logger.info("received pair = " + pp);
+            }
+            H = null;
+            if (pp == null) { // should not happen
+                continue;
+            }
+            if (pp instanceof GBTransportMessEnd) {
+                goon = false;
+                doEnd = true;
+                continue;
+            }
+            if (pp instanceof GBTransportMessPair || pp instanceof GBTransportMessPairIndex) {
+                pi = pj = null;
+                if (pp instanceof GBTransportMessPair) {
+                    pair = ((GBTransportMessPair<C>) pp).pair;
+                    if (pair != null) {
+                        pi = pair.pi;
+                        pj = pair.pj;
+                        //logger.debug("pair: pix = " + pair.i 
+                        //               + ", pjx = " + pair.j);
+                    }
+                }
+                if (pp instanceof GBTransportMessPairIndex) {
+                    pix = ((GBTransportMessPairIndex) pp).i;
+                    pjx = ((GBTransportMessPairIndex) pp).j;
+                    pi = theList.getWait(pix);
+                    pj = theList.getWait(pjx);
+                    //logger.info("pix = " + pix + ", pjx = " +pjx);
+                }
+
+                if (pi != null && pj != null) {
+                    S = red.SPolynomial(pi, pj);
+                    //System.out.println("S   = " + S);
+                    if (S.isZERO()) {
+                        // pair.setZero(); does not work in dist
+                    } else {
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("ht(S) = " + S.leadingExpVector());
+                        }
+                        H = red.normalform(theList.getValueList(), S); // TODO
+                        reduction++;
+                        if (H.isZERO()) {
+                            // pair.setZero(); does not work in dist
+                        } else {
+                            H = H.monic();
+                            if (logger.isInfoEnabled()) {
+                                logger.info("ht(H) = " + H.leadingExpVector());
+                            }
+                        }
+                    }
+                }
+            }
+            if (pp instanceof GBTransportMess) {
+                logger.debug("null pair results in null H poly");
+            }
+
+            // send H or must send null, if not at end
+            if (logger.isDebugEnabled()) {
+                logger.debug("#distributed list = " + theList.size());
+                logger.debug("send H polynomial = " + H);
+            }
+            try {
+                pairChannel.send(resultTag, new GBTransportMessPoly<C>(H)); //,threadId));
+                doEnd = true;
+            } catch (IOException e) {
+                goon = false;
+                e.printStackTrace();
+            }
+            logger.info("done send poly message of " + pp);
+            try {
+                //pp = pairChannel.receive(threadId);
+                pp = pairChannel.receive(ackTag);
+                //} catch (InterruptedException e) {
+                //goon = false;
+                //e.printStackTrace();
+            } catch (IOException e) {
+                goon = false;
+                if (logger.isDebugEnabled()) {
+                    e.printStackTrace();
+                }
+                break;
+            } catch (ClassNotFoundException e) {
+                goon = false;
+                e.printStackTrace();
+            }
+            if (!(pp instanceof GBTransportMess)) {
+                logger.error("invalid acknowledgement " + pp);
+            }
+            logger.info("received acknowledgment " + pp);
+        }
+        logger.info("terminated, done " + reduction + " reductions");
+        if (!doEnd) {
+            try {
+                pairChannel.send(resultTag, new GBTransportMessEnd());
+            } catch (IOException e) {
+                //e.printStackTrace();
+            }
+            logger.info("terminated, send done");
+        }
+    }
+}

@@ -39,6 +39,7 @@ import edu.jas.util.CatReader;
 import edu.jas.util.ExecutableServer;
 
 import edu.jas.gb.GroebnerBaseDistributedMPJ;
+import edu.jas.gb.GroebnerBaseDistributedHybridMPJ;
 
 /**
  * Simple setup to run a GB example in MPJ environment. <br />
@@ -247,6 +248,52 @@ public class RunMPJGB {
             gbds = new GroebnerBaseDistributedMPJ(threads, new OrderedSyzPairlist());
         } else {
             gbd = new GroebnerBaseDistributedMPJ(threads);
+        }
+        t1 = System.currentTimeMillis();
+        if (pairseq) {
+            G = gbds.GB(L);
+        } else {
+            G = gbd.GB(L);
+        }
+        t1 = System.currentTimeMillis() - t1;
+        if (pairseq) {
+            gbds.terminate();
+        } else {
+            gbd.terminate();
+        }
+        MPJEngine.terminate();
+        if ( G == null ) {
+            return; // mpi.rank != 0
+        }
+        S = new PolynomialList(S.ring, G);
+        System.out.println("G =\n" + S);
+        System.out.println("G.size() = " + G.size());
+        t = System.currentTimeMillis() - t;
+        if (pairseq) {
+            System.out.print("m+ ");
+        } else {
+            System.out.print("m ");
+        }
+        System.out.println("= " + threads + ", time = " + t1 + " milliseconds, " + (t-t1) + " start-up " + ", total = " + t);
+        checkGB(S);
+        System.out.println("");
+    }
+
+
+    @SuppressWarnings("unchecked")
+    static void runHybridMpj(PolynomialList S, int threads, int threadsPerNode, String mfile, int port, boolean pairseq) {
+        List L = S.list;
+        List G = null;
+        long t, t1;
+
+        t = System.currentTimeMillis();
+        System.out.println("\nGroebner base distributed hybrid MPJ (" + threads + ", " + mfile + ", " + port + ") ...");
+        GroebnerBaseDistributedHybridMPJ gbd = null;
+        GroebnerBaseDistributedHybridMPJ gbds = null;
+        if (pairseq) {
+            gbds = new GroebnerBaseDistributedHybridMPJ(threads, threadsPerNode, new OrderedSyzPairlist());
+        } else {
+            gbd = new GroebnerBaseDistributedHybridMPJ(threads, threadsPerNode);
         }
         t1 = System.currentTimeMillis();
         if (pairseq) {
