@@ -437,7 +437,7 @@ class DHTMPJListener<K, V> extends Thread {
                 }
                 K key = tc.key();
                 if (key != null) {
-                    logger.info("receive, key=" + key);
+                    logger.info("receive(" + engine.Rank() + "," + stat.source + "), key=" + key);
                     V val = tc.value();
                     synchronized (theList) {
                         theList.put(key, val);

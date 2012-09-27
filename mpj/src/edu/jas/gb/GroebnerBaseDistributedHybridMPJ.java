@@ -284,10 +284,10 @@ public class GroebnerBaseDistributedHybridMPJ<C extends RingElem<C>> extends Gro
             }
         }
 
-        Terminator finner = new Terminator(threads * threadsPerNode);
+        Terminator finner = new Terminator((threads-1) * threadsPerNode);
         HybridReducerServerMPJ<C> R;
         logger.info("using pool = " + pool);
-        for (int i = 0; i < threads; i++) {
+        for (int i = 1; i < threads; i++) {
             R = new HybridReducerServerMPJ<C>(i,threadsPerNode, finner, engine, theList, pairlist);
             pool.addJob(R);
             //logger.info("server submitted " + R);
@@ -562,7 +562,7 @@ class HybridReducerServerMPJ<C extends RingElem<C>> implements Runnable {
                 goon = false;
                 e.printStackTrace();
             }
-            logger.info("received request, req = " + req);
+            logger.debug("received request, req = " + req);
             if (req == null) {
                 goon = false;
                 break;
@@ -573,7 +573,7 @@ class HybridReducerServerMPJ<C extends RingElem<C>> implements Runnable {
             }
 
             // find pair and manage termination status
-            logger.info("find pair");
+            logger.debug("find pair");
             while (!pairlist.hasNext()) { // wait
                 if (!finner.hasJobs() && !pairlist.hasNext()) {
                     goon = false;
@@ -941,12 +941,12 @@ class HybridReducerClientMPJ<C extends RingElem<C>> implements Runnable {
              */
             // pair = (Pair) pairlist.removeNext();
             Object req = new GBTransportMessReq();
-            logger.info("send request = " + req);
+            logger.debug("send request = " + req);
             try {
                 pairChannel.send(pairTag, req);
             } catch (IOException e) {
                 goon = false;
-                if (logger.isDebugEnabled()) {
+                if (debug) {
                     e.printStackTrace();
                 }
                 logger.info("receive pair, exception ");
@@ -962,7 +962,7 @@ class HybridReducerClientMPJ<C extends RingElem<C>> implements Runnable {
                 //e.printStackTrace();
             } catch (IOException e) {
                 goon = false;
-                if (logger.isDebugEnabled()) {
+                if (debug) {
                     e.printStackTrace();
                 }
                 break;
@@ -1007,7 +1007,7 @@ class HybridReducerClientMPJ<C extends RingElem<C>> implements Runnable {
                     if (S.isZERO()) {
                         // pair.setZero(); does not work in dist
                     } else {
-                        if (logger.isDebugEnabled()) {
+                        if (debug) {
                             logger.debug("ht(S) = " + S.leadingExpVector());
                         }
                         H = red.normalform(theList.getValueList(), S); // TODO
@@ -1028,7 +1028,7 @@ class HybridReducerClientMPJ<C extends RingElem<C>> implements Runnable {
             }
 
             // send H or must send null, if not at end
-            if (logger.isDebugEnabled()) {
+            if (debug) {
                 logger.debug("#distributed list = " + theList.size());
                 logger.debug("send H polynomial = " + H);
             }
@@ -1039,7 +1039,7 @@ class HybridReducerClientMPJ<C extends RingElem<C>> implements Runnable {
                 goon = false;
                 e.printStackTrace();
             }
-            logger.info("done send poly message of " + pp);
+            logger.debug("done send poly message of " + pp);
             try {
                 //pp = pairChannel.receive(threadId);
                 pp = pairChannel.receive(ackTag);
@@ -1048,7 +1048,7 @@ class HybridReducerClientMPJ<C extends RingElem<C>> implements Runnable {
                 //e.printStackTrace();
             } catch (IOException e) {
                 goon = false;
-                if (logger.isDebugEnabled()) {
+                if (debug) {
                     e.printStackTrace();
                 }
                 break;
@@ -1059,7 +1059,7 @@ class HybridReducerClientMPJ<C extends RingElem<C>> implements Runnable {
             if (!(pp instanceof GBTransportMess)) {
                 logger.error("invalid acknowledgement " + pp);
             }
-            logger.info("received acknowledgment " + pp);
+            logger.debug("received acknowledgment " + pp);
         }
         logger.info("terminated, done " + reduction + " reductions");
         if (!doEnd) {

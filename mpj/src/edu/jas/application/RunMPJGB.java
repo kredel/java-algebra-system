@@ -69,10 +69,10 @@ public class RunMPJGB {
         MPJEngine.setCommandLine(args); //args = MPI.Init(args);
 
         String usage = "Usage: RunMPJGB "
-                        + "[ seq | seq+ | par | par+ " 
-                        + "| dist | dist1 | dist+ | dist1+ | disthyb1 | distmpj " 
-                        + "| cli [port] ] "
-                        + "<file> " + "#procs/#threadsPerNode " + "[machinefile] <check>";
+            + "[ seq | seq+ | par | par+ " 
+            + "| dist | dist1 | dist+ | dist1+ | disthyb1 | distmpj " 
+            + "| cli [port] ] "
+            + "<file> " + "#procs/#threadsPerNode " + "[machinefile] <check>";
         if (args.length < 1) {
             System.out.println("args: " + Arrays.toString(args));
             System.out.println(usage);
@@ -82,7 +82,7 @@ public class RunMPJGB {
         boolean pairseq = false;
         String kind = args[0];
         String[] allkinds = new String[] { "seq", "seq+", "par", "par+", "dist", "dist1", "dist+", "dist1+",
-					   "disthyb1", "distmpj", "cli" };
+                                           "disthyb1", "distmpj", "distmpj+", "disthybmpj", "disthybmpj+", "cli" };
         boolean sup = false;
         int k = -1;
         for (int i = 0; i < args.length; i++) {
@@ -225,7 +225,9 @@ public class RunMPJGB {
         } else if (kind.startsWith("disthyb1")) {
             runMasterOnceHyb(S, threads, threadsPerNode, mfile, port, pairseq);
         } else if (kind.startsWith("distmpj")) {
-            runMpj(S, threads, threadsPerNode, mfile, port, pairseq);
+            runMpj(S, threads, mfile, port, pairseq);
+        } else if (kind.startsWith("disthybmpj")) {
+            runHybridMpj(S, threads, threadsPerNode, mfile, port, pairseq);
         } else if (kind.startsWith("dist")) {
             runMaster(S, threads, mfile, port, pairseq);
         }
@@ -235,7 +237,7 @@ public class RunMPJGB {
 
 
     @SuppressWarnings("unchecked")
-    static void runMpj(PolynomialList S, int threads, int threadsPerNode, String mfile, int port, boolean pairseq) {
+    static void runMpj(PolynomialList S, int threads, String mfile, int port, boolean pairseq) {
         List L = S.list;
         List G = null;
         long t, t1;
@@ -274,7 +276,8 @@ public class RunMPJGB {
         } else {
             System.out.print("m ");
         }
-        System.out.println("= " + threads + ", time = " + t1 + " milliseconds, " + (t-t1) + " start-up " + ", total = " + t);
+        System.out.println("= " + threads 
+                         + ", time = " + t1 + " milliseconds, " + (t-t1) + " start-up " + ", total = " + t);
         checkGB(S);
         System.out.println("");
     }
@@ -287,7 +290,7 @@ public class RunMPJGB {
         long t, t1;
 
         t = System.currentTimeMillis();
-        System.out.println("\nGroebner base distributed hybrid MPJ (" + threads + ", " + mfile + ", " + port + ") ...");
+        System.out.println("\nGroebner base distributed hybrid MPJ (" + threads + "/" + threadsPerNode + ", " + mfile + ", " + port + ") ...");
         GroebnerBaseDistributedHybridMPJ gbd = null;
         GroebnerBaseDistributedHybridMPJ gbds = null;
         if (pairseq) {
@@ -320,7 +323,8 @@ public class RunMPJGB {
         } else {
             System.out.print("m ");
         }
-        System.out.println("= " + threads + ", time = " + t1 + " milliseconds, " + (t-t1) + " start-up " + ", total = " + t);
+        System.out.println("= " + threads + ", ppn = " + threadsPerNode 
+                         + ", time = " + t1 + " milliseconds, " + (t-t1) + " start-up " + ", total = " + t);
         checkGB(S);
         System.out.println("");
     }
@@ -363,8 +367,8 @@ public class RunMPJGB {
         } else {
             System.out.print("d ");
         }
-        System.out.println("= " + threads + ", time = " + t1 + " milliseconds, " + (t-t1) + " start-up " + ", total = " + t);
-        //System.out.println("= " + threads + ", time = " + t + " milliseconds, " + (t - t1) + " start-up");
+        System.out.println("= " + threads 
+                         + ", time = " + t1 + " milliseconds, " + (t-t1) + " start-up " + ", total = " + t);
         checkGB(S);
         System.out.println("");
     }
@@ -378,7 +382,7 @@ public class RunMPJGB {
 
         t = System.currentTimeMillis();
         System.out.println("\nGroebner base distributed[once] (" + threads + ", " + mfile + ", " + port
-                        + ") ...");
+                           + ") ...");
         GBDist gbd = null;
         GBDist gbds = null;
         if (pairseq) {
@@ -408,8 +412,8 @@ public class RunMPJGB {
         } else {
             System.out.print("d ");
         }
-        System.out.println("= " + threads + ", time = " + t1 + " milliseconds, " + (t-t1) + " start-up " + ", total = " + t);
-        //System.out.println("= " + threads + ", time = " + t + " milliseconds, " + (t - t1) + " start-up");
+        System.out.println("= " + threads
+                         + ", time = " + t1 + " milliseconds, " + (t-t1) + " start-up " + ", total = " + t);
         checkGB(S);
         System.out.println("");
     }
@@ -417,14 +421,14 @@ public class RunMPJGB {
 
     @SuppressWarnings("unchecked")
     static void runMasterOnceHyb(PolynomialList S, int threads, int threadsPerNode, String mfile, int port,
-                    boolean pairseq) {
+                                 boolean pairseq) {
         List L = S.list;
         List G = null;
         long t, t1;
 
         t = System.currentTimeMillis();
         System.out.println("\nGroebner base distributed hybrid[once] (" + threads + "/" + threadsPerNode
-                        + ", " + mfile + ", " + port + ") ...");
+                           + ", " + mfile + ", " + port + ") ...");
         GBDistHybrid gbd = null;
         GBDistHybrid gbds = null;
         if (pairseq) {
@@ -457,9 +461,8 @@ public class RunMPJGB {
         } else {
             System.out.print("d ");
         }
-        System.out.println("= " + threads + ", ppn = " + threadsPerNode + ", time = " + t1 + " milliseconds, " + (t-t1) + " start-up " + ", total = " + t);
-        //System.out.println("= " + threads + ", ppn = " + threadsPerNode + ", time = " + t + " milliseconds, "
-        //                + (t - t1) + " start-up");
+        System.out.println("= " + threads + ", ppn = " + threadsPerNode 
+                         + ", time = " + t1 + " milliseconds, " + (t-t1) + " start-up " + ", total = " + t);
         checkGB(S);
         System.out.println("");
     }
@@ -486,9 +489,9 @@ public class RunMPJGB {
         } else {
             bb = new GroebnerBaseParallel(threads);
         }
-        t = System.currentTimeMillis();
         System.out.println("\nGroebner base parallel (" + threads + ") ...");
 
+        t = System.currentTimeMillis();
         if (pairseq) {
             G = bbs.GB(L);
         } else {
@@ -527,8 +530,8 @@ public class RunMPJGB {
         } else {
             bb = new GroebnerBaseSeq();
         }
-        t = System.currentTimeMillis();
         System.out.println("\nGroebner base sequential ...");
+        t = System.currentTimeMillis();
         G = bb.GB(L);
         t = System.currentTimeMillis() - t;
         S = new PolynomialList(S.ring, G);
@@ -555,6 +558,7 @@ public class RunMPJGB {
         t = System.currentTimeMillis() - t;
         System.out.println("check isGB = " + chk + " in " + t + " milliseconds");
     }
+
 
     static int indexOf(String[] args, String s) {
         for (int i = 0; i < args.length; i++) {

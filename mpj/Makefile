@@ -13,7 +13,8 @@ FMPJ_HOME=$(HOME)/java/fastmpj
 FMPJ_LIB=$(FMPJ_HOME)/lib/mpj.jar
 FMPJ_RUNLIB=$(FMPJ_HOME)/lib/runtime.jar
 
-NP=4
+NP=2
+PPN=2
 
 FMPJ_CMD=java -cp $(FMPJ_RUNLIB) runtime.FMPJRun -cp $(CLASSPATH):jas-mpj.jar -np $(NP)
 
@@ -54,9 +55,10 @@ MFILE=machines
 EFILE=$(JASPATH)/examples/trinks6.jas
 
 tests: jas-mpj.jar
-	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -np $(NP) -machinefile $(MFILE) -class edu.jas.application.RunMPJGB distmpj $(EFILE) $(NP) $(MFILE)
+	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -np $(NP) -machinefile $(MFILE) -class edu.jas.application.RunMPJGB disthybmpj $(EFILE) $(NP)/$(PPN) $(MFILE)
 
 notest: 
+	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -np $(NP) -machinefile $(MFILE) -class edu.jas.application.RunMPJGB distmpj $(EFILE) $(NP) $(MFILE)
 	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -class edu.jas.gb.HelloWorld
 	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -class edu.jas.kern.MPJEngineTest -n $(NP)
 	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -class edu.jas.util.DistHashTableMPJTest -n $(NP)
