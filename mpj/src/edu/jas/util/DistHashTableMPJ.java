@@ -124,7 +124,9 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
      */
     @Override
     public Collection<V> values() {
-        return theList.values();
+        synchronized (theList) {
+            return theList.values();
+        }
     }
 
 
@@ -133,7 +135,9 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
      */
     @Override
     public Set<K> keySet() {
-        return theList.keySet();
+        synchronized (theList) {
+            return theList.keySet();
+        }
     }
 
 
@@ -142,7 +146,9 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
      */
     @Override
     public Set<Entry<K, V>> entrySet() {
-        return theList.entrySet();
+        synchronized (theList) {
+            return theList.entrySet();
+        }
     }
 
 

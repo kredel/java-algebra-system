@@ -142,7 +142,9 @@ public class DistHashTable<K, V> extends AbstractMap<K, V> /* implements Map<K,V
      */
     @Override
     public Collection<V> values() {
-        return theList.values();
+        synchronized (theList) {
+            return theList.values();
+        }
     }
 
 
@@ -151,7 +153,9 @@ public class DistHashTable<K, V> extends AbstractMap<K, V> /* implements Map<K,V
      */
     @Override
     public Set<K> keySet() {
-        return theList.keySet();
+        synchronized (theList) {
+            return theList.keySet();
+        }
     }
 
 
@@ -160,7 +164,9 @@ public class DistHashTable<K, V> extends AbstractMap<K, V> /* implements Map<K,V
      */
     @Override
     public Set<Entry<K, V>> entrySet() {
-        return theList.entrySet();
+        synchronized (theList) {
+            return theList.entrySet();
+        }
     }
 
 
