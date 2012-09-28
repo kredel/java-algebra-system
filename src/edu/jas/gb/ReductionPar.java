@@ -137,13 +137,12 @@ public class ReductionPar<C extends RingElem<C>>
     /**
      * Normalform. Allows concurrent modification of the DHT.
      * @param Ap polynomial.
-     * @param Pp distributed hash table, concurrent modification allowed.
+     * @param mp a map from Integers to polynomials, e.g. a distributed hash table, concurrent modification allowed.
      * @return nf(Ap) with respect to Pp.
      */
-    public GenPolynomial<C> 
-           normalform(DistHashTable Pp, 
-                      GenPolynomial<C> Ap) {  
-        if ( Pp == null || Pp.isEmpty() ) {
+    @SuppressWarnings("unchecked")
+    public GenPolynomial<C> normalform(Map<Integer,GenPolynomial<C>> mp, GenPolynomial<C> Ap) {  
+        if ( mp == null || mp.isEmpty() ) {
            return Ap;
         }
         if ( Ap == null || Ap.isZERO() ) {
@@ -151,14 +150,13 @@ public class ReductionPar<C extends RingElem<C>>
         }
         int l;
         GenPolynomial<C>[] P;
-        synchronized ( Pp.getList() ) { // required, ok in dist
-           l = Pp.size();
+        synchronized ( mp ) { // required, ok in dist
+           l = mp.size();
            P = (GenPolynomial<C>[]) new GenPolynomial[l];
-           //P = Pp.values().toArray();
-           Collection<GenPolynomial<C>> Pv 
-               = (Collection<GenPolynomial<C>>)Pp.values();
+           //Collection<GenPolynomial<C>> Pv 
+           //    = (Collection<GenPolynomial<C>>)mp.values();
            int i = 0;
-           for ( GenPolynomial<C> x : Pv ) {
+           for ( GenPolynomial<C> x : mp.values() ) { // Pv
                P[i++] = x;
            }
         }
@@ -175,16 +173,15 @@ public class ReductionPar<C extends RingElem<C>>
         GenPolynomial<C> Q = null;
         GenPolynomial<C> S = Ap;
         while ( S.length() > 0 ) { 
-              if ( Pp.size() != l ) { 
+              if ( mp.size() != l ) { 
                  //long t = System.currentTimeMillis();
-                 synchronized ( Pp.getList() ) { // required, ok in distributed
-                    l = Pp.size();
+                 synchronized ( mp ) { // required, ok in distributed
+                    l = mp.size();
                     P = (GenPolynomial<C>[]) new GenPolynomial[ l ];
-                    //P = Pp.values().toArray();
-                    Collection<GenPolynomial<C>> Pv 
-                        = (Collection<GenPolynomial<C>>)Pp.values();
+                    //Collection<GenPolynomial<C>> Pv 
+                    //    = (Collection<GenPolynomial<C>>)mp.values();
                     int i = 0;
-                    for ( GenPolynomial<C> x : Pv ) {
+                    for ( GenPolynomial<C> x : mp.values() ) { //Pv
                         P[i++] = x;
                     }
                  }

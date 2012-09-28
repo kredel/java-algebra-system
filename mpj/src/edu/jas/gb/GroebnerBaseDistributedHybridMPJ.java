@@ -520,7 +520,7 @@ class HybridReducerServerMPJ<C extends RingElem<C>> implements Runnable {
     public void run() {
         logger.info("reducer server running with " + engine);
         try {
-            pairChannel = new MPJChannel(engine,rank);
+            pairChannel = new MPJChannel(engine,rank); //,pairTag
         } catch (IOException e) {
             e.printStackTrace();
             return;
@@ -1010,7 +1010,7 @@ class HybridReducerClientMPJ<C extends RingElem<C>> implements Runnable {
                         if (debug) {
                             logger.debug("ht(S) = " + S.leadingExpVector());
                         }
-                        H = red.normalform(theList.getValueList(), S); // TODO
+                        H = red.normalform(theList, S); // TODO .getValueList()
                         reduction++;
                         if (H.isZERO()) {
                             // pair.setZero(); does not work in dist

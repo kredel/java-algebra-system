@@ -712,7 +712,7 @@ class MPJReducerClient<C extends RingElem<C>> implements Runnable {
                         if (logger.isDebugEnabled()) {
                             logger.info("ht(S) = " + S.leadingExpVector());
                         }
-                        H = red.normalform(theList.getValueList(), S); // TODO
+                        H = red.normalform(theList, S); // TODO .getValueList()
                         reduction++;
                         if (H.isZERO()) {
                             // pair.setZero(); does not work in dist
