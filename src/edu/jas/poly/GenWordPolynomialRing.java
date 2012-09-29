@@ -65,13 +65,13 @@ public final class GenWordPolynomialRing<C extends RingElem<C>> implements RingF
     /**
      * A default random sequence generator.
      */
-    protected final static Random random = new Random();
+    final static Random random = new Random();
 
 
     /**
      * Indicator if this ring is a field.
      */
-    protected int isField = -1; // initially unknown
+    private int isField = -1; // initially unknown
 
 
     /**

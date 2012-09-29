@@ -340,6 +340,9 @@ public final class WordFactory implements MonoidFactory<Word> {
         List<Word> gens = generators();
         int n = alphabet.length();
         int m = e.length();
+        if (m > n) {
+            throw new IllegalArgumentException("alphabet to short for exponent " + e + ", alpahbet = " + alphabet);
+        }
         for ( int i = 0; i < m; i++ ) {
             int x = (int) e.getVal(m-i-1);
             Word y = gens.get(i);

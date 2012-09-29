@@ -43,7 +43,7 @@ public final class GenWordPolynomial<C extends RingElem<C>>
     /**
      * The data structure for polynomials.
      */
-    protected final SortedMap<Word, C> val; // do not change to TreeMap
+    final SortedMap<Word, C> val; // do not change to TreeMap
 
 
     private static final Logger logger = Logger.getLogger(GenWordPolynomial.class);
