@@ -13,12 +13,13 @@ FMPJ_HOME=$(HOME)/java/fastmpj
 FMPJ_LIB=$(FMPJ_HOME)/lib/mpj.jar
 FMPJ_RUNLIB=$(FMPJ_HOME)/lib/runtime.jar
 
+CLASSPATH=$(LIBPATH)/log4j.jar:$(LIBPATH)/junit.jar:$(FMPJ_LIB):$(JASPATH)
+#$(LIBPATH)/jas.jar
+
 NP=2
-PPN=2
+PPN=3
 
-FMPJ_CMD=java -cp $(FMPJ_RUNLIB) runtime.FMPJRun -cp $(CLASSPATH):jas-mpj.jar -np $(NP)
-
-CLASSPATH=$(LIBPATH)/log4j.jar:$(LIBPATH)/junit.jar:$(FMPJ_LIB):$(LIBPATH)/jas.jar
+FMPJ_CMD=java -cp $(FMPJ_RUNLIB) runtime.FMPJRun -cp $(CLASSPATH):jas-mpj.jar
 
 #DOCOPTS=-package
 DOCOPTS=-package -author -version -linksource

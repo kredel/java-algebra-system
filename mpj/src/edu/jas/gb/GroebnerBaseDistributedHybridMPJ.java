@@ -766,7 +766,7 @@ class HybridReducerReceiverMPJ<C extends RingElem<C>> extends Thread {
                 finner.initIdle(1);
                 break;
             }
-            logger.info("received H polynomial");
+            logger.info("received result");
             if (rh == null) {
                 if (this.isInterrupted()) {
                     goon = false;
@@ -786,7 +786,7 @@ class HybridReducerReceiverMPJ<C extends RingElem<C>> extends Thread {
                 H = mpi.pol;
                 //senderId = mpi.threadId;
                 if (H != null) {
-                    if (debug) {
+                    if (logger.isInfoEnabled()) { // debug
                         logger.info("H = " + H.leadingExpVector());
                     }
                     if (!H.isZERO()) {

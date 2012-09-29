@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+//import java.util.concurrent.ConcurrentSkipListMap;
 
 import org.apache.log4j.Logger;
 
@@ -82,6 +83,7 @@ public class DistHashTable<K, V> extends AbstractMap<K, V> /* implements Map<K,V
         if (debug) {
             logger.debug("dl channel = " + channel);
         }
+        //theList = new ConcurrentSkipListMap<K, V>(); // Java 1.6
         theList = new TreeMap<K, V>();
         listener = new DHTListener<K, V>(channel, theList);
         // listener.start() is in initialize()
@@ -95,6 +97,7 @@ public class DistHashTable<K, V> extends AbstractMap<K, V> /* implements Map<K,V
     public DistHashTable(SocketChannel sc) {
         cf = null;
         channel = sc;
+        //theList = new ConcurrentSkipListMap<K, V>(); // Java 1.6
         theList = new TreeMap<K, V>();
         listener = new DHTListener<K, V>(channel, theList);
         // listener.start() is in initialize()
@@ -143,7 +146,8 @@ public class DistHashTable<K, V> extends AbstractMap<K, V> /* implements Map<K,V
     @Override
     public Collection<V> values() {
         synchronized (theList) {
-            return theList.values();
+            return new ArrayList<V>(theList.values());
+            //return theList.values();
         }
     }
 

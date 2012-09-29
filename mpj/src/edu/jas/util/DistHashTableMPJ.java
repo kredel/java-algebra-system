@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+//import java.util.concurrent.ConcurrentSkipListMap;
 
 import org.apache.log4j.Logger;
 
@@ -78,6 +79,7 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
      */
     public DistHashTableMPJ(Comm cm) {
         engine = cm;
+        //theList = new ConcurrentSkipListMap<K, V>(); // Java 1.6
         theList = new TreeMap<K, V>();
         listener = new DHTMPJListener<K, V>(engine, theList);
     }
@@ -125,7 +127,8 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
     @Override
     public Collection<V> values() {
         synchronized (theList) {
-            return theList.values();
+            return new ArrayList<V>(theList.values());
+            //return theList.values();
         }
     }
 
