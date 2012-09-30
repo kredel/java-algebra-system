@@ -153,10 +153,8 @@ public class ReductionPar<C extends RingElem<C>>
         //synchronized ( mp ) { // no more required
         l = mp.size();
         P = (GenPolynomial<C>[]) new GenPolynomial[l];
-        int k = 0;
-        for ( GenPolynomial<C> x : mp.values() ) { // Pv
-            P[k++] = x;
-        }
+        P = mp.values().toArray(P);
+        l = P.length;
         //}
 
         Map.Entry<ExpVector,C> m;
@@ -174,12 +172,8 @@ public class ReductionPar<C extends RingElem<C>>
             if ( mp.size() != l ) { 
                 //long t = System.currentTimeMillis();
                 //synchronized ( mp ) { // no more required, ok in distributed
-                l = mp.size();
-                P = (GenPolynomial<C>[]) new GenPolynomial[ l ];
-                int j = 0;
-                for ( GenPolynomial<C> x : mp.values() ) { //Pv
-                    P[j++] = x;
-                }
+                P = mp.values().toArray(P);
+                l = P.length;
                 //}
                 //t = System.currentTimeMillis()-t;
                 //logger.info("Pp.toArray() = " + t + " ms, size() = " + l);
