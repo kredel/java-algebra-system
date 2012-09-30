@@ -56,7 +56,7 @@ public class RunGB {
      * Usage: RunGB [seq|par(+)|dist(1)(+)|disthyb|cli] &lt;file&gt;
      * #procs/#threadsPerNode [machinefile]
      */
-
+    @SuppressWarnings("unchecked")
     public static void main(java.lang.String[] args) {
 
         BasicConfigurator.configure();
@@ -214,8 +214,8 @@ public class RunGB {
         List G = null;
         long t, t1;
 
-        t = System.currentTimeMillis();
         System.out.println("\nGroebner base distributed (" + threads + ", " + mfile + ", " + port + ") ...");
+        t = System.currentTimeMillis();
         GBDist gbd = null;
         GBDist gbds = null;
         if (pairseq) {
@@ -245,7 +245,8 @@ public class RunGB {
         } else {
             System.out.print("d ");
         }
-        System.out.println("= " + threads + ", time = " + t + " milliseconds, " + (t - t1) + " start-up");
+        System.out.println("= " + threads 
+                         + ", time = " + t1 + " milliseconds, " + (t-t1) + " start-up " + ", total = " + t);
         checkGB(S);
         System.out.println("");
     }
@@ -257,9 +258,9 @@ public class RunGB {
         List G = null;
         long t, t1;
 
-        t = System.currentTimeMillis();
         System.out.println("\nGroebner base distributed[once] (" + threads + ", " + mfile + ", " + port
                         + ") ...");
+        t = System.currentTimeMillis();
         GBDist gbd = null;
         GBDist gbds = null;
         if (pairseq) {
@@ -289,7 +290,8 @@ public class RunGB {
         } else {
             System.out.print("d ");
         }
-        System.out.println("= " + threads + ", time = " + t + " milliseconds, " + (t - t1) + " start-up");
+        System.out.println("= " + threads 
+                         + ", time = " + t1 + " milliseconds, " + (t-t1) + " start-up " + ", total = " + t);
         checkGB(S);
         System.out.println("");
     }
@@ -337,8 +339,8 @@ public class RunGB {
         } else {
             System.out.print("d ");
         }
-        System.out.println("= " + threads + ", ppn = " + threadsPerNode + ", time = " + t + " milliseconds, "
-                        + (t - t1) + " start-up");
+        System.out.println("= " + threads + ", ppn = " + threadsPerNode 
+                         + ", time = " + t1 + " milliseconds, " + (t-t1) + " start-up " + ", total = " + t);
         checkGB(S);
         System.out.println("");
     }
