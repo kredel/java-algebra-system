@@ -300,7 +300,7 @@ class Executor extends Thread /*implements Runnable*/{
                         try {
                             re.run();
                         } catch(Exception e) {
-                            logger.info("Exception on re.run()", e);
+                            logger.info("Exception on re.run()" + e);
                             e.printStackTrace();
                         } finally {
                             logger.info("finally re.run() " + re);
@@ -319,13 +319,13 @@ class Executor extends Thread /*implements Runnable*/{
                 }
             } catch (IOException e) {
                 goon = false;
-                logger.info("IOException ", e);
+                logger.info("IOException " + e);
                 if (debug) {
                     e.printStackTrace();
                 }
             } catch (ClassNotFoundException e) {
                 goon = false;
-                logger.info("ClassNotFoundException ", e);
+                logger.info("ClassNotFoundException " + e);
                 e.printStackTrace();
             } finally {
                 logger.info("finally " + this);

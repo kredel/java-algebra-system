@@ -384,7 +384,7 @@ class DistPoolThread extends Thread {
     private static final Logger logger = Logger.getLogger(DistPoolThread.class);
 
 
-    private final boolean debug = logger.isInfoEnabled();
+    private final boolean debug = logger.isDebugEnabled();
 
 
     boolean working = false;
@@ -427,7 +427,9 @@ class DistPoolThread extends Thread {
                     } else {
                         ec.send(myId, job);
                     }
-                    logger.info("send " + myId + " at " + ec + " send job " + job);
+                    if (debug) {
+                        logger.info("send " + myId + " at " + ec + " send job " + job);
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                     logger.info("error send " + myId + " at " + ec + " e = " + e);
@@ -439,7 +441,9 @@ class DistPoolThread extends Thread {
                     if (working) {
                         logger.info("waiting " + myId + " on " + job);
                         o = ec.receive(myId);
-                        logger.info("receive " + myId + " at " + ec + " send job " + job + " received " + o);
+                        if (debug) {
+                            logger.info("receive " + myId + " at " + ec + " send job " + job + " received " + o);
+                        }
                     }
                 } catch (IOException e) {
                     logger.info("receive exception " + myId + " send job " + job + ", " + e);
@@ -450,8 +454,10 @@ class DistPoolThread extends Thread {
                     //e.printStackTrace();
                     running = false;
                 } finally {
-                    logger.info("receive finally " + myId + " at " + ec + " send job " + job + " received "
+                    if (debug) {
+                        logger.info("receive finally " + myId + " at " + ec + " send job " + job + " received "
                                     + o + " running " + running);
+                    }
                 }
                 working = false;
                 time += System.currentTimeMillis() - t;
