@@ -18,10 +18,12 @@ import java.util.List;
 
 import org.apache.log4j.BasicConfigurator;
 
-import edu.jas.gb.GBDist;
-import edu.jas.gb.GBDistHybrid;
+//import edu.jas.gb.GBDist;
+//import edu.jas.gb.GBDistHybrid;
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.GroebnerBaseParallel;
+import edu.jas.gb.GroebnerBaseDistributedEC;
+import edu.jas.gb.GroebnerBaseDistributedHybridEC;
 import edu.jas.gb.GroebnerBaseSeq;
 import edu.jas.gb.OrderedSyzPairlist;
 import edu.jas.gb.ReductionPar;
@@ -216,19 +218,19 @@ public class RunGB {
 
         System.out.println("\nGroebner base distributed (" + threads + ", " + mfile + ", " + port + ") ...");
         t = System.currentTimeMillis();
-        GBDist gbd = null;
-        GBDist gbds = null;
+        GroebnerBaseDistributedEC gbd = null;
+        GroebnerBaseDistributedEC gbds = null;
         if (pairseq) {
-            //gbds = new GBDistSP(threads,mfile, port);
-            gbds = new GBDist(threads, new OrderedSyzPairlist(), mfile, port);
+            //gbds = new GroebnerBaseDistributedEC(threads,mfile, port);
+            gbds = new GroebnerBaseDistributedEC(mfile, threads, new OrderedSyzPairlist(), port);
         } else {
-            gbd = new GBDist(threads, mfile, port);
+            gbd = new GroebnerBaseDistributedEC(mfile, threads, port);
         }
         t1 = System.currentTimeMillis();
         if (pairseq) {
-            G = gbds.execute(L);
+            G = gbds.GB(L);
         } else {
-            G = gbd.execute(L);
+            G = gbd.GB(L);
         }
         t1 = System.currentTimeMillis() - t1;
         if (pairseq) {
@@ -261,19 +263,19 @@ public class RunGB {
         System.out.println("\nGroebner base distributed[once] (" + threads + ", " + mfile + ", " + port
                         + ") ...");
         t = System.currentTimeMillis();
-        GBDist gbd = null;
-        GBDist gbds = null;
+        GroebnerBaseDistributedEC gbd = null;
+        GroebnerBaseDistributedEC gbds = null;
         if (pairseq) {
-            //gbds = new GBDistSP(threads, mfile, port);
-            gbds = new GBDist(threads, new OrderedSyzPairlist(), mfile, port);
+            //gbds = new GroebnerBaseDisttributedEC(threads, mfile, port);
+            gbds = new GroebnerBaseDistributedEC(mfile, threads, new OrderedSyzPairlist(), port);
         } else {
-            gbd = new GBDist(threads, mfile, port);
+            gbd = new GroebnerBaseDistributedEC(mfile, threads, port);
         }
         t1 = System.currentTimeMillis();
         if (pairseq) {
-            G = gbds.execute(L);
+            G = gbds.GB(L);
         } else {
-            G = gbd.execute(L);
+            G = gbd.GB(L);
         }
         t1 = System.currentTimeMillis() - t1;
         if (pairseq) {
@@ -307,21 +309,21 @@ public class RunGB {
         t = System.currentTimeMillis();
         System.out.println("\nGroebner base distributed hybrid[once] (" + threads + "/" + threadsPerNode
                         + ", " + mfile + ", " + port + ") ...");
-        GBDistHybrid gbd = null;
-        GBDistHybrid gbds = null;
+        GroebnerBaseDistributedHybridEC gbd = null;
+        GroebnerBaseDistributedHybridEC gbds = null;
         if (pairseq) {
             //System.out.println("... not implemented.");
             //return;
-            // gbds = new GBDistSP(threads, mfile, port);
-            gbds = new GBDistHybrid(threads, threadsPerNode, new OrderedSyzPairlist(), mfile, port);
+            // gbds = new GroebnerBaseDistributedHybridEC(mfile, threads,port);
+            gbds = new GroebnerBaseDistributedHybridEC(mfile, threads, threadsPerNode, new OrderedSyzPairlist(), port);
         } else {
-            gbd = new GBDistHybrid(threads, threadsPerNode, mfile, port);
+            gbd = new GroebnerBaseDistributedHybridEC(mfile, threads, threadsPerNode, port);
         }
         t1 = System.currentTimeMillis();
         if (pairseq) {
-            G = gbds.execute(L);
+            G = gbds.GB(L);
         } else {
-            G = gbd.execute(L);
+            G = gbd.GB(L);
         }
         t1 = System.currentTimeMillis() - t1;
         if (pairseq) {
@@ -351,6 +353,11 @@ public class RunGB {
 
         ExecutableServer es = new ExecutableServer(port);
         es.init();
+        try {
+             es.join();
+        } catch (InterruptedException e) {
+	    // ignored
+        }
     }
 
 

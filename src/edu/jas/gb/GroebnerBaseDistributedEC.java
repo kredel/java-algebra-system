@@ -173,7 +173,7 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
         }
         if ( pool == null ) {
             pool = new ThreadPool(threads);
-	}
+        }
         this.pool = pool;
         this.port = port;
         logger.info("machine file " + mfile + ", port = " + port);
@@ -278,20 +278,23 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
             }
         }
         //if (l <= 1) {
-            //return G; must signal termination to others
+        //return G; must signal termination to others
         //}
 
         logger.debug("looking for clients");
-        DistHashTable<Integer, GenPolynomial<C>> theList = new DistHashTable<Integer, GenPolynomial<C>>(
-                        "localhost", DHT_PORT);
+        DistHashTable<Integer, GenPolynomial<C>> theList = new DistHashTable<Integer, GenPolynomial<C>>("localhost", DHT_PORT);
         theList.init();
         List<GenPolynomial<C>> al = pairlist.getList();
         for (int i = 0; i < al.size(); i++) {
-            // no wait required
             GenPolynomial<C> nn = theList.put(Integer.valueOf(i), al.get(i));
             if (nn != null) {
                 logger.info("double polynomials " + i + ", nn = " + nn + ", al(i) = " + al.get(i));
             }
+        }
+        // wait for arrival
+        while ( theList.size() < al.size() ) {
+            logger.info("#distributed list = " + theList.size() + " #pairlist list = " + al.size());
+            GenPolynomial<C> nn = theList.getWait(al.size()-1);
         }
 
         Terminator fin = new Terminator(threads);
@@ -316,10 +319,10 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
         time = System.currentTimeMillis() - time;
         logger.info("parallel gbmi = " + time);
         /*
-        time = System.currentTimeMillis();
-        G = GroebnerBase.<C>GBmi(G); // sequential
-        time = System.currentTimeMillis() - time;
-        logger.info("sequential gbmi = " + time);
+          time = System.currentTimeMillis();
+          G = GroebnerBase.<C>GBmi(G); // sequential
+          time = System.currentTimeMillis() - time;
+          logger.info("sequential gbmi = " + time);
         */
         G = Gp;
         logger.debug("cf.terminate()");
@@ -937,7 +940,7 @@ class GBExerClient<C extends RingElem<C>> implements RemoteExecutable {
      */
     public void run() {
         try {
-            GroebnerBaseDistributed. <C>clientPart(host,port,dhtport);
+            GroebnerBaseDistributedEC. <C>clientPart(host,port,dhtport);
         } catch (Exception e) {
             e.printStackTrace();
         }
