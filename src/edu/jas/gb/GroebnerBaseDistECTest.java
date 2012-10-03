@@ -91,10 +91,10 @@ public class GroebnerBaseDistECTest extends TestCase {
     GroebnerBase<BigRational> bbseq;
 
 
-    GroebnerBaseDistributed<BigRational> bbdist;
+    GroebnerBaseAbstract<BigRational> bbdist;
 
 
-    GroebnerBaseDistributed<BigRational> bbdists;
+    GroebnerBaseAbstract<BigRational> bbdists;
 
 
     GenPolynomial<BigRational> a;
@@ -146,8 +146,8 @@ public class GroebnerBaseDistECTest extends TestCase {
         fac = new GenPolynomialRing<BigRational>(coeff, rl);
         a = b = c = d = e = null;
         bbseq = new GroebnerBaseSeq<BigRational>();
-        bbdist = new GroebnerBaseDistributed<BigRational>(mfile, threads, port);
-        //bbdists = new GroebnerBaseDistributed<BigRational>(mfile, threads, new OrderedSyzPairlist<BigRational>(), port);
+        bbdist = new GroebnerBaseDistributedEC<BigRational>(mfile, threads, port);
+        //bbdists = new GroebnerBaseDistributedEC<BigRational>(mfile, threads, new OrderedSyzPairlist<BigRational>(), port);
     }
 
 
