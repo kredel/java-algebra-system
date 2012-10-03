@@ -78,7 +78,7 @@ public class DistThreadPool /*extends ThreadPool*/{
     private static final Logger logger = Logger.getLogger(DistThreadPool.class);
 
 
-    private final boolean debug = logger.isDebugEnabled();
+    private final boolean debug = true; //logger.isDebugEnabled();
 
 
     /**
@@ -144,7 +144,7 @@ public class DistThreadPool /*extends ThreadPool*/{
             throw new IllegalArgumentException("DistThreadPool " + e);
         }
         if (debug) {
-            logger.debug("ExecutableChannels = " + ec);
+            logger.info("ec = " + ec);
         }
         try {
             ec.open(threads);
@@ -153,9 +153,23 @@ public class DistThreadPool /*extends ThreadPool*/{
             throw new IllegalArgumentException("DistThreadPool " + e);
         }
         if (debug) {
-            logger.debug("ExecutableChannels = " + ec);
+            logger.info("ec = " + ec);
         }
         workers = new DistPoolThread[0];
+    }
+
+
+    /**
+     * String representation.
+     */
+    @Override
+    public String toString() {
+        StringBuffer s = new StringBuffer("DistThreadPool(");
+        s.append("threads="+threads);
+        s.append(", exchan="+ec);
+        s.append(", workers="+workers.length);
+        s.append(")");
+        return s.toString();
     }
 
 
