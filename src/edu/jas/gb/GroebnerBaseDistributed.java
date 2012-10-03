@@ -32,6 +32,7 @@ import edu.jas.util.ThreadPool;
  * reduction, one communication channel per task.
  * @param <C> coefficient type
  * @author Heinz Kredel
+ * @deprecated use GroebnerBaseDistributedEC
  */
 
 public class GroebnerBaseDistributed<C extends RingElem<C>> extends GroebnerBaseAbstract<C> {

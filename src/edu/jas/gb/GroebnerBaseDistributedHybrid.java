@@ -33,6 +33,7 @@ import edu.jas.util.ThreadPool;
  * channel per remote node.
  * @param <C> coefficient type
  * @author Heinz Kredel
+ * @deprecated use GroebnerBaseDistributedHybridEC
  */
 
 public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends GroebnerBaseAbstract<C> {
