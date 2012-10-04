@@ -234,9 +234,9 @@ public class RunGB {
         }
         t1 = System.currentTimeMillis() - t1;
         if (pairseq) {
-            gbds.terminate(false);
+            gbds.terminate(); //false);
         } else {
-            gbd.terminate(false);
+            gbd.terminate(); //false);
         }
         S = new PolynomialList(S.ring, G);
         System.out.println("G =\n" + S);
@@ -279,9 +279,9 @@ public class RunGB {
         }
         t1 = System.currentTimeMillis() - t1;
         if (pairseq) {
-            gbds.terminate(true);
+            gbds.terminate(); //true);
         } else {
-            gbd.terminate(true);
+            gbd.terminate(); //true);
         }
         S = new PolynomialList(S.ring, G);
         System.out.println("G =\n" + S);

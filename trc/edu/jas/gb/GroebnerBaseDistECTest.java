@@ -142,6 +142,8 @@ public class GroebnerBaseDistECTest extends TestCase {
         es1.init();
         es2 = new ExecutableServer(4711); // == machines.localhost:4711
         es2.init();
+        //System.out.println("es1 = " + es1);
+        //System.out.println("es2 = " + es2);
         BigRational coeff = new BigRational(9);
         fac = new GenPolynomialRing<BigRational>(coeff, rl);
         a = b = c = d = e = null;
