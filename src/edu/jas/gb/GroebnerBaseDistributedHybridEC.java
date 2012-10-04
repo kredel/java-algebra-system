@@ -357,10 +357,10 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
         }
 
         Terminator finner = new Terminator(threads * threadsPerNode);
-        HybridReducerServer<C> R;
+        HybridReducerServerEC<C> R;
         logger.info("using pool = " + pool);
         for (int i = 0; i < threads; i++) {
-            R = new HybridReducerServer<C>(threadsPerNode, finner, cf, theList, pairlist);
+            R = new HybridReducerServerEC<C>(threadsPerNode, finner, cf, theList, pairlist);
             pool.addJob(R);
             //logger.info("server submitted " + R);
         }
@@ -421,7 +421,7 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
         ThreadPool pool = new ThreadPool(threadsPerNode);
         logger.info("client using pool = " + pool);
         for (int i = 0; i < threadsPerNode; i++) {
-            HybridReducerClient<C> Rr = new HybridReducerClient<C>(threadsPerNode, pairChannel, i, theList);
+            HybridReducerClientEC<C> Rr = new HybridReducerClientEC<C>(threadsPerNode, pairChannel, i, theList);
             pool.addJob(Rr);
         }
         logger.debug("clients submitted");
@@ -531,10 +531,10 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
  * @param <C> coefficient type
  */
 
-class HybridReducerServer<C extends RingElem<C>> implements Runnable {
+class HybridReducerServerEC<C extends RingElem<C>> implements Runnable {
 
 
-    public static final Logger logger = Logger.getLogger(HybridReducerServer.class);
+    public static final Logger logger = Logger.getLogger(HybridReducerServerEC.class);
 
 
     public final boolean debug = logger.isDebugEnabled();
@@ -584,8 +584,8 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
      * @param dl distributed hash table
      * @param L ordered pair list
      */
-    HybridReducerServer(int tpn, Terminator fin, ChannelFactory cf,
-                    DistHashTable<Integer, GenPolynomial<C>> dl, PairList<C> L) {
+    HybridReducerServerEC(int tpn, Terminator fin, ChannelFactory cf,
+                         DistHashTable<Integer, GenPolynomial<C>> dl, PairList<C> L) {
         threadsPerNode = tpn;
         finner = fin;
         this.cf = cf;
@@ -746,7 +746,7 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
  * @param <C> coefficient type
  */
 
-class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
+class HybridReducerReceiverEC<C extends RingElem<C>> extends Thread {
 
 
     public static final Logger logger = Logger.getLogger(HybridReducerReceiver.class);
@@ -803,8 +803,8 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
      * @param dl distributed hash table
      * @param L ordered pair list
      */
-    HybridReducerReceiver(int tpn, Terminator fin, AtomicInteger a, TaggedSocketChannel pc,
-                    DistHashTable<Integer, GenPolynomial<C>> dl, PairList<C> L) {
+    HybridReducerReceiverEC(int tpn, Terminator fin, AtomicInteger a, TaggedSocketChannel pc,
+                            DistHashTable<Integer, GenPolynomial<C>> dl, PairList<C> L) {
         active = a;
         threadsPerNode = tpn;
         finner = fin;
@@ -938,7 +938,7 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
  * Distributed clients reducing worker threads.
  */
 
-class HybridReducerClient<C extends RingElem<C>> implements Runnable {
+class HybridReducerClientEC<C extends RingElem<C>> implements Runnable {
 
 
     private static final Logger logger = Logger.getLogger(HybridReducerClient.class);
@@ -990,8 +990,8 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
      * @param tid thread identification
      * @param dl distributed hash table
      */
-    HybridReducerClient(int tpn, TaggedSocketChannel tc, Integer tid,
-                    DistHashTable<Integer, GenPolynomial<C>> dl) {
+    HybridReducerClientEC(int tpn, TaggedSocketChannel tc, Integer tid,
+                          DistHashTable<Integer, GenPolynomial<C>> dl) {
         this.threadsPerNode = tpn;
         pairChannel = tc;
         //threadId = 100 + tid; // keep distinct from other tags

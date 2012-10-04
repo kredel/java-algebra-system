@@ -298,10 +298,10 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
         }
 
         Terminator fin = new Terminator(threads);
-        ReducerServer<C> R;
+        ReducerServerEC<C> R;
         for (int i = 0; i < threads; i++) {
-            R = new ReducerServer<C>(fin, cf, theList, G, pairlist);
-            pool.addJob(R);
+            R = new ReducerServerEC<C>(fin, cf, theList, G, pairlist);
+            pool.addJob(R); 
         }
         logger.debug("main loop waiting");
         fin.waitDone();
@@ -350,7 +350,7 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
         DistHashTable<Integer, GenPolynomial<C>> theList 
             = new DistHashTable<Integer, GenPolynomial<C>>(host, dhtport);
         theList.init();
-        ReducerClient<C> R = new ReducerClient<C>(pairChannel, theList);
+        ReducerClientEC<C> R = new ReducerClientEC<C>(pairChannel, theList);
 
         logger.info("clientPart running on " + host + ", pairChannel = " + pairChannel);
         R.run();
@@ -420,7 +420,7 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
         }
         Collections.reverse(G); // important for lex GB
 
-        MiReducerServer<C>[] mirs = (MiReducerServer<C>[]) new MiReducerServer[G.size()];
+        MiReducerServerEC<C>[] mirs = (MiReducerServerEC<C>[]) new MiReducerServerEC[G.size()];
         int i = 0;
         F = new ArrayList<GenPolynomial<C>>(G.size());
         while (G.size() > 0) {
@@ -429,7 +429,7 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
             List<GenPolynomial<C>> R = new ArrayList<GenPolynomial<C>>(G.size() + F.size());
             R.addAll(G);
             R.addAll(F);
-            mirs[i] = new MiReducerServer<C>(R, a);
+            mirs[i] = new MiReducerServerEC<C>(R, a);
             pool.addJob(mirs[i]);
             i++;
             F.add(a);
@@ -939,6 +939,7 @@ class GBExerClient<C extends RingElem<C>> implements RemoteExecutable {
      * run.
      */
     public void run() {
+        System.out.println("running " + this);
         try {
             GroebnerBaseDistributedEC. <C>clientPart(host,port,dhtport);
         } catch (Exception e) {
