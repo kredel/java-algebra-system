@@ -121,7 +121,7 @@ public class ExecutableServer extends Thread {
      */
     public void init() {
         this.start();
-        logger.debug("ExecutableServer at " + cf);
+        logger.info("ExecutableServer at " + cf);
     }
 
 

@@ -435,7 +435,7 @@ class DistPoolThread extends Thread {
                     logger.info("error send " + myId + " at " + ec + " e = " + e);
                     working = false;
                 }
-                //job.run(); 
+                // remote: job.run(); 
                 Object o = null;
                 try {
                     if (working) {
