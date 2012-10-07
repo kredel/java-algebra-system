@@ -28,9 +28,9 @@ from edu.jas.ps          import UnivPowerSeries, UnivPowerSeriesRing,\
                                 MultiVarPowerSeriesMap, MultiVarCoefficients,\
                                 StandardBaseSeq
 from edu.jas.gb          import EReductionSeq, DGroebnerBaseSeq, EGroebnerBaseSeq,\
-                                GroebnerBaseDistributed, GBDist, GroebnerBaseParallel,\
+                                GroebnerBaseDistributedEC, GroebnerBaseDistributedHybridEC,\
                                 GroebnerBaseSeq, GroebnerBaseSeqPairSeq,\
-                                ReductionSeq, GroebnerBaseSeqPairParallel,\
+                                ReductionSeq, GroebnerBaseParallel, GroebnerBaseSeqPairParallel,\
                                 SolvableGroebnerBaseParallel, SolvableGroebnerBaseSeq,\
                                 WordGroebnerBaseSeq
 from edu.jas.gbufd       import GroebnerBasePseudoRecSeq, GroebnerBasePseudoSeq,\
@@ -558,7 +558,7 @@ class Ideal:
         print "is d-GB test executed in %s ms" % t; 
         return b;
 
-    def parGB(self,th):
+    def parNewGB(self,th):
         '''Compute in parallel a Groebner base.
         '''
         s = self.pset;
@@ -571,7 +571,7 @@ class Ideal:
         print "parallel-new %s executed in %s ms" % (th, t); 
         return Ideal(self.ring,"",G);
 
-    def parOldGB(self,th):
+    def parGB(self,th):
         '''Compute in parallel a Groebner base.
         '''
         s = self.pset;
@@ -581,31 +581,33 @@ class Ideal:
         G = bbpar.GB(F);
         t = System.currentTimeMillis() - t;
         bbpar.terminate();
-        print "parallel-old %s executed in %s ms" % (th, t); 
+        print "parallel %s executed in %s ms" % (th, t); 
         return Ideal(self.ring,"",G);
 
-    def distGB(self,th=2,machine="examples/machines.localhost",port=7114):
+    def distGB(self,th=2,machine="examples/machines.localhost",port=55711):
         '''Compute on a distributed system a Groebner base.
         '''
         s = self.pset;
         F = s.list;
         t = System.currentTimeMillis();
-        # G = GroebnerBaseDistributed.Server(F,th);
-        #G = GBDist(th,machine,port).execute(F);
-        gbd = GBDist(th,machine,port);
+        #old: gbd = GBDist(th,machine,port);
+        gbd = GroebnerBaseDistributedEC(machine,th,port);
+        #gbd = GroebnerBaseDistributedHybridEC(machine,th,port);
         t1 = System.currentTimeMillis();
-        G = gbd.execute(F);
+        G = gbd.GB(F);
         t1 = System.currentTimeMillis() - t1;
-        gbd.terminate(0);
+        gbd.terminate();
         t = System.currentTimeMillis() - t;
         print "distributed %s executed in %s ms (%s ms start-up)" % (th,t1,t-t1); 
         return Ideal(self.ring,"",G);
 
-    def distClient(self,port=8114):
+    def distClient(self,port=4711): #8114
         '''Client for a distributed computation.
         '''
         s = self.pset;
         es = ExecutableServer( port );
+        es.init();
+        es = ExecutableServer( port+1 );
         es.init();
         return None;
 

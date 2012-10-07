@@ -1696,8 +1696,9 @@ end
 include_class "edu.jas.gb.DGroebnerBaseSeq";
 include_class "edu.jas.gb.EGroebnerBaseSeq";
 include_class "edu.jas.gb.EReductionSeq";
-include_class "edu.jas.gb.GroebnerBaseDistributed";
-include_class "edu.jas.gb.GBDist";
+include_class "edu.jas.gb.GroebnerBaseDistributedEC";
+include_class "edu.jas.gb.GroebnerBaseDistributedHybridEC";
+#include_class "edu.jas.gb.GBDist";
 include_class "edu.jas.gb.GroebnerBaseParallel";
 include_class "edu.jas.gb.GroebnerBaseSeq";
 include_class "edu.jas.gb.GroebnerBaseSeqPairSeq";
@@ -1948,15 +1949,15 @@ Compute in parallel a Groebner base.
 =begin rdoc
 Compute on a distributed system a Groebner base.
 =end
-    def distGB(th=2,machine="examples/machines.localhost",port=7114)
+    def distGB(th=2,machine="examples/machines.localhost",port=55711)
         s = @pset;
         ff = s.list;
         t = System.currentTimeMillis();
-        # G = GroebnerBaseDistributed.Server.new(F,th);
-        #G = GBDist.new(th,machine,port).execute(F);
-        gbd = GBDist.new(th,machine,port);
+        # old: gbd = GBDist.new(th,machine,port);
+        gbd = GroebnerBaseDistributedEC.new(machine,th,port);
+        #gbd = GroebnerBaseDistributedHybridEC.new(machine,th,3,port);
         t1 = System.currentTimeMillis();
-        gg = gbd.execute(ff);
+        gg = gbd.GB(ff);
         t1 = System.currentTimeMillis() - t1;
         gbd.terminate(false);
         t = System.currentTimeMillis() - t;
@@ -1967,9 +1968,11 @@ Compute on a distributed system a Groebner base.
 =begin rdoc
 Client for a distributed computation.
 =end
-    def distClient(port=8114)
+    def distClient(port=4711)
         s = @pset;
         es = ExecutableServer.new( port );
+        es.init();
+        es = ExecutableServer.new( port+1 );
         es.init();
         return nil;
     end
