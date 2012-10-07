@@ -148,6 +148,8 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
               H = H.monic();
               if ( H.isONE() ) {
                   G.clear(); G.add( H );
+                  pairlist.putOne();
+                  logger.info("end " + pairlist); 
                   return G; // since no threads are activated
               }
               if ( debug ) {
@@ -159,9 +161,9 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
                  pairlist.put( H );
               }
         }
-        logger.debug("#sequential list = "+G.size());
+        logger.debug("#sequential list = " + G.size());
         G = minimalGB(G);
-        logger.info("" + pairlist); 
+        logger.info("end " + pairlist); 
         return G;
     }
 
