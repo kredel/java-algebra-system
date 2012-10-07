@@ -47,12 +47,12 @@ rg = f.GB();
 
 #sys.exit();
 
-rg = f.parGB(2);
-#print "par Output:", rg;
+rg = f.parNewGB(2);
+#print "par-new Output:", rg;
 #print;
 
-rg = f.parOldGB(2);
-#print "par-old Output:", rg;
+rg = f.parGB(2);
+#print "par Output:", rg;
 #print;
 
 #f.distClient(); # starts in background
