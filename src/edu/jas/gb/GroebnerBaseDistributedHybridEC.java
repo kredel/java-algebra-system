@@ -621,7 +621,7 @@ class HybridReducerServerEC<C extends RingElem<C>> implements Runnable {
         AtomicInteger active = new AtomicInteger(0);
 
         // start receiver
-        HybridReducerReceiver<C> receiver = new HybridReducerReceiver<C>(threadsPerNode, finner, active,
+        HybridReducerReceiverEC<C> receiver = new HybridReducerReceiverEC<C>(threadsPerNode, finner, active,
                         pairChannel, theList, pairlist);
         receiver.start();
 
@@ -691,9 +691,9 @@ class HybridReducerServerEC<C extends RingElem<C>> implements Runnable {
             }
             GBTransportMess msg = null;
             if (pair != null) {
-                msg = new GBTransportMessPairIndex(pair);
+                msg = new GBTransportMessPairIndex(pair); //,pairlist.size()-1); // size-1
             } else {
-                msg = new GBTransportMess(); //not End(); at this time
+                msg = new GBTransportMess(); // not End(); at this time
                 // goon ?= false;
             }
             try {
@@ -749,7 +749,7 @@ class HybridReducerServerEC<C extends RingElem<C>> implements Runnable {
 class HybridReducerReceiverEC<C extends RingElem<C>> extends Thread {
 
 
-    public static final Logger logger = Logger.getLogger(HybridReducerReceiver.class);
+    public static final Logger logger = Logger.getLogger(HybridReducerReceiverEC.class);
 
 
     public final boolean debug = logger.isDebugEnabled();
@@ -853,7 +853,7 @@ class HybridReducerReceiverEC<C extends RingElem<C>> extends Thread {
                 finner.initIdle(1);
                 break;
             }
-            logger.info("received H polynomial");
+            logger.info("received H polynomial " + rh);
             if (rh == null) {
                 if (this.isInterrupted()) {
                     goon = false;
@@ -878,6 +878,7 @@ class HybridReducerReceiverEC<C extends RingElem<C>> extends Thread {
                     }
                     if (!H.isZERO()) {
                         if (H.isONE()) {
+                            logger.info("H = one");
                             // finner.allIdle();
                             polIndex = pairlist.putOne();
                             GenPolynomial<C> nn = theList.put(Integer.valueOf(polIndex), H);
@@ -941,7 +942,7 @@ class HybridReducerReceiverEC<C extends RingElem<C>> extends Thread {
 class HybridReducerClientEC<C extends RingElem<C>> implements Runnable {
 
 
-    private static final Logger logger = Logger.getLogger(HybridReducerClient.class);
+    private static final Logger logger = Logger.getLogger(HybridReducerClientEC.class);
 
 
     public final boolean debug = logger.isDebugEnabled();
@@ -1012,6 +1013,7 @@ class HybridReducerClientEC<C extends RingElem<C>> implements Runnable {
         Pair<C> pair = null;
         GenPolynomial<C> pi;
         GenPolynomial<C> pj;
+        GenPolynomial<C> sp = null;
         GenPolynomial<C> S;
         GenPolynomial<C> H = null;
         //boolean set = false;
@@ -1071,8 +1073,9 @@ class HybridReducerClientEC<C extends RingElem<C>> implements Runnable {
             }
             if (pp instanceof GBTransportMessPair || pp instanceof GBTransportMessPairIndex) {
                 pi = pj = null;
-                if (pp instanceof GBTransportMessPair) {
-                    pair = ((GBTransportMessPair<C>) pp).pair;
+                if (pp instanceof GBTransportMessPair) { // obsolet, for tests
+                    GBTransportMessPair<C> tmp = (GBTransportMessPair<C>) pp;
+                    pair = (Pair<C>) tmp.pair;
                     if (pair != null) {
                         pi = pair.pi;
                         pj = pair.pj;
@@ -1081,16 +1084,18 @@ class HybridReducerClientEC<C extends RingElem<C>> implements Runnable {
                     }
                 }
                 if (pp instanceof GBTransportMessPairIndex) {
-                    pix = ((GBTransportMessPairIndex) pp).i;
-                    pjx = ((GBTransportMessPairIndex) pp).j;
+                    GBTransportMessPairIndex tmpi = (GBTransportMessPairIndex)pp;
+                    pix = tmpi.i;
+                    pjx = tmpi.j;
+                    //Integer sx = tmpi.s; // bug:-1; // last polynomial
+                    //sp = theList.getWait(sx);
                     pi = theList.getWait(pix);
                     pj = theList.getWait(pjx);
-                    //logger.info("pix = " + pix + ", pjx = " +pjx);
+                    //logger.info("pix = " + pix + ", pjx = " + pjx + ", sx = " + sx);
                 }
-
                 if (pi != null && pj != null) {
                     S = red.SPolynomial(pi, pj);
-                    //System.out.println("S   = " + S);
+                    logger.info("ht(S) = " + S.leadingExpVector());
                     if (S.isZERO()) {
                         // pair.setZero(); does not work in dist
                     } else {
@@ -1098,6 +1103,7 @@ class HybridReducerClientEC<C extends RingElem<C>> implements Runnable {
                             logger.debug("ht(S) = " + S.leadingExpVector());
                         }
                         H = red.normalform(theList, S);
+                        logger.info("ht(H) = " + H.leadingExpVector());
                         reduction++;
                         if (H.isZERO()) {
                             // pair.setZero(); does not work in dist
@@ -1108,6 +1114,8 @@ class HybridReducerClientEC<C extends RingElem<C>> implements Runnable {
                             }
                         }
                     }
+                } else {
+                    logger.info("pi = " + pi + ", pj = " + pj + ", sp = " + sp);
                 }
             }
             if (pp instanceof GBTransportMess) {
