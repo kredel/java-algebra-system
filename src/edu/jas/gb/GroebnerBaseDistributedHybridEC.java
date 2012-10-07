@@ -853,7 +853,7 @@ class HybridReducerReceiverEC<C extends RingElem<C>> extends Thread {
                 finner.initIdle(1);
                 break;
             }
-            logger.info("received H polynomial " + rh);
+            logger.info("received H polynomial");
             if (rh == null) {
                 if (this.isInterrupted()) {
                     goon = false;
