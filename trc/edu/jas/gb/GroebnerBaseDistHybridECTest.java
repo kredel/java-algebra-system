@@ -256,12 +256,13 @@ public class GroebnerBaseDistHybridECTest extends TestCase {
      * Test Trinks7 GBase.
      */
     public void testTrinks7GBase() {
+        List<GenPolynomial<BigRational>> Gs, Gp = null;
         String exam = "(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
                 + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
                 + "( - 9 W + 15 T P + 20 S Z ), " + "( P W + 2 T Z - 11 B**3 ), "
                 + "( 99 W - 11 B S + 3 B**2 ), " + "( B**2 + 33/50 B + 2673/10000 ) " + ") ";
         //exam = "(x3,x4,x5) L " + 
-        //        "( (x3^2 - 13974703710478159/3775194259200) , (x4 - 34297/840), (x5^2 - 6389/480), (-4/3 x5^2 + x3^2 + x3 - 833/180) ) ";
+        //       "( (x3^2 - 13974703710478159/3775194259200) , (x4 - 34297/840), (x5^2 - 6389/480), (-4/3 x5^2 + x3^2 + x3 - 833/180) ) ";
         Reader source = new StringReader(exam);
         GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
         try {
@@ -269,16 +270,19 @@ public class GroebnerBaseDistHybridECTest extends TestCase {
         } catch (IOException e) {
             fail("" + e);
         }
-        System.out.println("F = " + F);
+        //System.out.println("F = " + F);
 
-        G = bbdist.GB(F.list);
-        System.out.println("G = " + G);
-        G = bbseq.GB(F.list);
-        System.out.println("G = " + G);
+        Gp = bbdist.GB(F.list);
+        //System.out.println("Gp = " + Gp);
+        Gs = bbseq.GB(F.list);
+        //System.out.println("Gs = " + Gs);
 
-        assertTrue("isGB( GB(Trinks7) )", bbseq.isGB(G));
-        assertEquals("#GB(Trinks7) == 6", 6, G.size());
-        //PolynomialList<BigRational> trinks = new PolynomialList<BigRational>(F.ring, G);
+        assertTrue("isGB( GB(Trinks7) )", bbseq.isGB(Gp));
+        assertTrue("isGB( GB(Trinks7) )", bbseq.isGB(Gs));
+        //assertEquals("#GB(Trinks7) == 6", 6, G.size());
+        assertTrue("Gs.containsAll(Gp)" + Gs + ", " + Gp + ", " + F, Gs.containsAll(Gp));
+        assertTrue("Gp.containsAll(Gs)" + Gs + ", " + Gp + ", " + F, Gp.containsAll(Gs));
+        //PolynomialList<BigRational> trinks = new PolynomialList<BigRational>(F.ring, Gp);
         //System.out.println("G = " + trinks);
     }
 
