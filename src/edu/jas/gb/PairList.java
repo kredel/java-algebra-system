@@ -74,6 +74,13 @@ public interface PairList<C extends RingElem<C> > {
 
 
     /**
+     * Get the size of the list of polynomials.
+     * @return size of the polynomial list.
+     */
+    public int size();
+
+
+    /**
      * Get the list of polynomials.
      * @return the polynomial list.
      */

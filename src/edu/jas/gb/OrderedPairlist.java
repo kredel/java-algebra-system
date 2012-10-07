@@ -245,6 +245,15 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
 
 
     /**
+     * Get the size of the list of polynomials.
+     * @return size of the polynomial list.
+     */
+    public int size() {
+        return P.size();
+    }
+
+
+    /**
      * Get the number of polynomials put to the pairlist.
      * @return the number of calls to put.
      */
