@@ -30,6 +30,7 @@ from edu.jas.ps          import UnivPowerSeries, UnivPowerSeriesRing,\
 from edu.jas.gb          import EReductionSeq, DGroebnerBaseSeq, EGroebnerBaseSeq,\
                                 GroebnerBaseDistributedEC, GroebnerBaseDistributedHybridEC,\
                                 GroebnerBaseSeq, GroebnerBaseSeqPairSeq,\
+                                OrderedPairlist, OrderedSyzPairlist,\
                                 ReductionSeq, GroebnerBaseParallel, GroebnerBaseSeqPairParallel,\
                                 SolvableGroebnerBaseParallel, SolvableGroebnerBaseSeq,\
                                 WordGroebnerBaseSeq
@@ -472,7 +473,8 @@ class Ideal:
         F = s.list;
         t = System.currentTimeMillis();
         if cofac.isField():
-            G = GroebnerBaseSeq().GB(F);
+            G = GroebnerBaseSeq(ReductionSeq(),OrderedSyzPairlist()).GB(F);
+            #G = GroebnerBaseSeq().GB(F);
         else:
             v = None;
             try:
