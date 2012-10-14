@@ -57,11 +57,11 @@ rg = f.parGB(2);
 #print "par Output:", rg;
 #print;
 
-#f.distClient(); # starts in background
-#rg = f.distGB(2);
+f.distClient(); # starts in background
+rg = f.distGB(2);
 #print "dist Output:", rg;
 #print;
 
-#sys.exit();
+sys.exit();
 
 
