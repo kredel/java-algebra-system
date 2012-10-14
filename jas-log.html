@@ -22,9 +22,22 @@
 
 <dl>
 
-<dt>2012, October </dt>
+<dt>2012, November </dt>
 <dd> 
 
+ New distributed Gr&ouml;bner base algorithms using MPI as
+ communication middle-ware. The implementation uses the MPJ (MPI Java)
+ API and can be run with both <a href="http://mpj-express.org/"
+ target="mpj" >MPJ Express</a> or <a href="http://fastmpj.com/"
+ target="mpj" >FastMPJ</a>. The implementing classes are
+ <code>GroebnerBaseDistributedMPJ</code> for the pure distributed
+ version and <code>GroebnerBaseDistributedHybridMPJ</code> for the
+ distributed and multi-threaded version. 
+
+</dd>
+
+<dt>2012, October </dt>
+<dd> 
  New parts for free non-commutative Gr&ouml;bner base computation and
  polynomial reduction.  New interface <code>WordGroebnerBase</code>
  and new classes <code>WordGroebnerBaseAbstract</code> and
@@ -36,7 +49,6 @@
  number coefficients a fraction free algorithm with optimization of
  the variable order can be requested by <code>gbab.fractionFree()
  .optimize() .build()</code>.
-
 </dd>
 
 <dt>2012, September </dt>
@@ -2186,7 +2198,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Sun Sep  9 20:45:58 CEST 2012
+Last modified: Sun Oct 14 20:14:03 CEST 2012
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
