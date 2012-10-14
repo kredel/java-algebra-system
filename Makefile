@@ -76,9 +76,9 @@ cl=
 #DEFS=$(JASPATH)/arith:$(JASPATH)/poly:$(JASPATH)/ps:$(JASPATH)/vector:$(JASPATH)/gb:$(JASPATH)/ufd:$(JASPATH)/gbmod:$(JASPATH)/util:$(JASPATH)/application:$(JASPATH)/root
 DOCCLASSES=$(JUNITPATH):$(LOG4JPATH):$(JOMPPATH)
 #:$(TNJPATH)
-DOCOPTS=-package
+#DOCOPTS=-package
 #DOCOPTS=-package -version -author
-#DOCOPTS=-public -protected -package -author -version
+DOCOPTS=-public -protected -package -author -version
 
 #MYCLASSPATH = .:$(DEFS):$(JUNITPATH):$(JOMPPATH)
 #MYCLASSPATH = $(LOG4JPATH):.:$(DEFS):$(JUNITPATH):$(JOMPPATH):$(PYPATH)
@@ -283,13 +283,13 @@ edu.mas.kern.%: edu/mas/kern/%.class
 	$(JAVA) $@ $(cl)
 
 
-FILES=$(wildcard src/edu/jas/structure/*.java src/edu/jas/arith/*.java src/edu/jas/poly/*.java src/edu/jas/ps/*.java src/edu/jas/gb/*.java src/edu/jas/application/*.java src/edu/jas/vector/*.java src/edu/jas/gbmod/*.java src/edu/jas/util/*.java src/edu/jas/ufd/*.java src/edu/jas/kern/*.java src/edu/jas/root/*.java src/edu/jas/integrate/*.java)
+FILES=$(wildcard src/edu/jas/structure/*.java src/edu/jas/arith/*.java src/edu/jas/poly/*.java src/edu/jas/ps/*.java src/edu/jas/gb/*.java src/edu/jas/application/*.java src/edu/jas/vector/*.java src/edu/jas/gbmod/*.java src/edu/jas/gbufd/*.java src/edu/jas/util/*.java src/edu/jas/ufd/*.java src/edu/jas/kern/*.java src/edu/jas/root/*.java src/edu/jas/integrate/*.java)
 
-TESTFILES=$(wildcard trc/edu/jas/structure/*.java trc/edu/jas/arith/*.java trc/edu/jas/poly/*.java trc/edu/jas/ps/*.java trc/edu/jas/gb/*.java trc/edu/jas/application/*.java trc/edu/jas/vector/*.java trc/edu/jas/gbmod/*.java trc/edu/jas/util/*.java trc/edu/jas/ufd/*.java trc/edu/jas/kern/*.java trc/edu/jas/root/*.java trc/edu/jas/integrate/*.java)
+TESTFILES=$(wildcard trc/edu/jas/structure/*.java trc/edu/jas/arith/*.java trc/edu/jas/poly/*.java trc/edu/jas/ps/*.java trc/edu/jas/gb/*.java trc/edu/jas/application/*.java trc/edu/jas/vector/*.java trc/edu/jas/gbmod/*.java trc/edu/jas/gbufd/*.java trc/edu/jas/util/*.java trc/edu/jas/ufd/*.java trc/edu/jas/kern/*.java trc/edu/jas/root/*.java trc/edu/jas/integrate/*.java)
 
 LIBS=$(JUNITPATH) $(LOG4JPATH) $(JOMPPATH) $(TNJPATH)
 
-CLASSES=edu/jas/structure/ edu/jas/arith/ edu/jas/poly/ edu/jas/ps/ edu/jas/gb/ edu/jas/application/ edu/jas/vector/ edu/jas/gbmod/ edu/jas/util/ edu/jas/ufd/ edu/jas/kern/ edu/jas/root/ edu/jas/integrate/
+CLASSES=edu/jas/structure/ edu/jas/arith/ edu/jas/poly/ edu/jas/ps/ edu/jas/gb/ edu/jas/gbufd edu/jas/application/ edu/jas/vector/ edu/jas/gbmod/ edu/jas/util/ edu/jas/ufd/ edu/jas/kern/ edu/jas/root/ edu/jas/integrate/
 
 PYS=$(wildcard *.py)
 EXAMPY=$(wildcard examples/*.py)
@@ -318,6 +318,7 @@ ALLJAR=$(FILES) $(TESTFILES) $(DOCU) Makefile build.xml log4j.properties $(PYS)
 
 jas-all.jar: $(ALLJAR)
 	$(JDK)/jar -cvf jas.jar $(ALLJAR) edu/ 
+	cp jas.jar $(LIBPATH)/
 	mv jas.jar /tmp/jas-`date +%Y%j`.jar
 
 jas.tgz: $(FILES) $(TESTFILES) *.html TODO
@@ -333,6 +334,7 @@ TOJAR=$(FILES) $(TESTFILES) $(CLASSES) Makefile build.xml log4j.properties $(EXA
 
 jas.jar: $(FILES) $(TESTFILES) Makefile build.xml log4j.properties $(EXAMPY)
 	$(JDK)/jar -cf jas.jar $(TOJAR)
+	cp jas.jar $(LIBPATH)/
 #	$(JDK)/jar -cf jas.jar $(filter-out %/ufd/, $(filter-out src/edu/jas/ufd/%.java, $(TOJAR)))
 
 jas-doc.jar: $(DOCU) doc/
@@ -472,6 +474,10 @@ loc: young
 	find ~/jas-versions/jlinalg_adapter -name "*.java" | xargs cat | wc
 	find ~/jas-versions/commons-math_adapter -name "*.java" | wc -l
 	find ~/jas-versions/commons-math_adapter -name "*.java" | xargs cat | wc
+	find jython -name "*.java" | wc -l 
+	find jython -name "*.java" | xargs cat | wc
+	find mpj -name "*.java" | wc -l 
+	find mpj -name "*.java" | xargs cat | wc
 	cat examples/jas.py | wc
 	find examples -name "*.py" | grep -v jas.py | xargs cat | wc
 	cat examples/jas.rb | wc
