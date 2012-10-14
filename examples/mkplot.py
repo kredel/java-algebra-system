@@ -9,13 +9,18 @@ import re;
 import os
 from os import system
 
-hpat = re.compile(r'd = (\d+), ppn = (\d+), time = (\d+) milliseconds, (\d+) start-up');
-dpat = re.compile(r'd = (\d+), time = (\d+) milliseconds, (\d+) start-up');
+hpat = re.compile(r'm = (\d+), ppn = (\d+), time = (\d+) milliseconds, (\d+) start-up');
+dpat = re.compile(r'm = (\d+), time = (\d+) milliseconds, (\d+) start-up');
+#hpat = re.compile(r'd = (\d+), ppn = (\d+), time = (\d+) milliseconds, (\d+) start-up');
+#dpat = re.compile(r'd = (\d+), time = (\d+) milliseconds, (\d+) start-up');
 ppat = re.compile(r'time = (\d+) milliseconds');
-fpat = re.compile(r'_p(\d+)\.');
-spat = re.compile(r'_s\.');
-rpat = re.compile(r'OrderedPairlist\(size=0, #put=(\d+), #rem=(\d+)\)');
-r1pat = re.compile(r'pairlist #put = (\d+) #rem = (\d+)');
+fpat = re.compile(r'p = (\d+), time = (\d+) milliseconds');
+spat = re.compile(r'seq,');
+####fpat = re.compile(r'_p(\d+)\.');
+####spat = re.compile(r'_s\.');
+#r0pat = re.compile(r'Pairlist\(#put=(\d+), #rem=(\d+), size=(\d+)\)');
+rpat = re.compile(r'Pairlist\(#put=(\d+), #rem=(\d+)\)');
+####r1pat = re.compile(r'pairlist #put = (\d+) #rem = (\d+)');
 res = {};
 pairs = None;
 hybrid = False;
@@ -29,22 +34,22 @@ for fname in argv[1:]:
     for line in f:
         pm = rpat.search(line); # pairlist results
         if pm:
-            print "3: ", line,
+            print "pair: ", line,
             np = pm.group(1);
             nr = pm.group(2);
             if pairs == None:
                 pairs = ( np, nr );
                 #print "put = " + np + ", rem = " + nr;
             continue;
-        pm = r1pat.search(line); # pairlist results
-        if pm:
-            print "3: ", line,
-            np = pm.group(1);
-            nr = pm.group(2);
-            if pairs == None:
-                pairs = ( np, nr );
-                #print "put = " + np + ", rem = " + nr;
-            continue;
+##         pm = r0pat.search(line); # pairlist results
+##         if pm:
+##             print "pair0: ", line,
+##             np = pm.group(1);
+##             nr = pm.group(2);
+##             if pairs != None:
+##                 pairs = ( np, nr );
+##                 #print "put = " + np + ", rem = " + nr;
+##             continue;
         ma = hpat.search(line); # distributed hybrid results
         if ma:
             print "h: ", line,
@@ -97,17 +102,19 @@ for fname in argv[1:]:
         if ma:
             print "p: ", line,
             tm = long( ma.group(1) );
-            fm = fpat.search(fname);
+            fm = fpat.search(line);
             if fm:
-                print fname
+                #print fname
                 dn = 1;
                 pp = int( fm.group(1) );
                 para = True;
             else:
-                if spat.search(fname):
-                    dn = 0;
+                sm = spat.search(line);
+                if sm:
+                    dn = 1;
                     pp = 0;
                 else:
+                    print "invalid: ", line,
                     dn = -1;
                     pp = -1;
             if not dn in res:
@@ -131,6 +138,15 @@ ks = res.keys();
 #print "ks = ", ks;
 ks.sort();
 print "ks = ", ks;
+kpp = [];
+for d in ks:
+    kdd = res[d].keys();
+    for dd in kdd:
+        if dd not in kpp:
+            kpp.append(dd);
+kpp.sort();
+print "kpp = ", kpp;
+
 
 for d in ks:
     rd = res[d].keys();
@@ -208,7 +224,7 @@ tt.write(summary);
 tt.close();
 
 
-# output for gnuplot:
+# output for 2-d gnuplot:
 
 oname = bname+".po";
 o=open(oname,"w");
@@ -221,8 +237,53 @@ for k in ks:
         if ideals == 0:
             ideals = 1;
         ploting += str(k) + " " + str(p) + " " + str(res[k][p]['t']) + " " + str(speed[k][p]) + " " + str(ideals) + "\n";
-
 ploting += "\n";
+
+print ploting;
+o.write(ploting);
+o.close();
+
+
+# output for 1-d gnuplot, colums for nodes:
+
+oname = bname+"_p.po";
+o=open(oname,"w");
+ploting = "\n#ppn time p, time d1, time d2, ... \n";
+for p in kpp:
+    ploting += str(p);
+    for k in ks:
+        #print "p = " + str(p) + ", k = " + str(k)
+        if res[k]:
+            if p in res[k]:
+                ploting += " " + str(float(res[k][p]['t'])/1000.0);
+                #ploting += " " + str(speed[k][p]);
+            else:
+                ploting += " -";
+    ploting += "\n";
+#ploting += "\n";
+
+print ploting;
+o.write(ploting);
+o.close();
+
+
+# output for 1-d gnuplot, colums for ppn:
+
+oname = bname+"_d.po";
+o=open(oname,"w");
+ploting = "\n#nodes time ppn1, time ppn2, time ppn3, ... \n";
+for k in ks:
+    ploting += str(k);
+    for p in kpp:
+        #print "p = " + str(p) + ", k = " + str(k)
+        if res[k]:
+            if p in res[k]:
+                ploting += " " + str(float(res[k][p]['t'])/1000.0); 
+                #ploting += " " + str(speed[k][p]); 
+            else:
+                ploting += " -";
+    ploting += "\n";
+#ploting += "\n";
 
 print ploting;
 o.write(ploting);
@@ -234,8 +295,7 @@ o.close();
 pscript_2d = """
 set grid 
 set term %s
-set output "%s.ps"
-set title "Groebner bases on a grid cluster" 
+set title "Groebner bases on a grid cluster, distributed hybrid version" 
 set time
 set xlabel "number of nodes" 
 set ylabel "threads per node" 
@@ -250,7 +310,7 @@ set yrange [0:7]
 set xtics 1.0
 set ytics 1.0
 
-set data style lines
+set style data lines
 #set contour base
 #set surface
 
@@ -264,6 +324,8 @@ set size 0.95,0.95
 #set size 0.95,0.5
 #set origin 0,0.5
 set origin 0,0
+
+set datafile missing "-"
 
 ##set zlabel "milliseconds" 
 set zlabel "seconds" 
@@ -284,6 +346,7 @@ unset multiplot
 pause mouse
 
 set terminal postscript
+set output "%s.ps"
 replot
 
 """
@@ -293,8 +356,7 @@ replot
 pscript_1d = """
 set grid 
 set term %s
-set output "%s.ps"
-set title "Groebner bases on a grid cluster" 
+set title "Groebner bases on a grid cluster, distributed version" 
 set time
 set xlabel "number of nodes" 
 
@@ -302,7 +364,7 @@ set xlabel "number of nodes"
 
 set xtics 1.0
 
-set data style lines
+set style data lines
 
 set multiplot
 
@@ -327,8 +389,9 @@ plot "%s.po" using 1:4 title '%s speedup', "%s.po" using 1:(($5)) title '%s idea
 unset multiplot
 pause mouse
 
-#set terminal postscript
-#replot
+set terminal postscript
+set output "%s.ps"
+replot
 
 """
 #---------------------------------------
@@ -337,8 +400,7 @@ pause mouse
 pscript_1p = """
 set grid 
 set term %s
-set output "%s.ps"
-set title "Groebner bases on a grid cluster" 
+set title "Groebner bases on a multi-core computer" 
 set time
 set xlabel "number of threads" 
 
@@ -346,7 +408,7 @@ set xlabel "number of threads"
 
 set xtics 1.0
 
-set data style lines
+set style data lines
 
 set multiplot
 
@@ -371,11 +433,102 @@ plot "%s.po" using 2:4 title '%s speedup', "%s.po" using 2:(($5)) title '%s idea
 unset multiplot
 pause mouse
 
-#set terminal postscript
-#replot
+set terminal postscript
+set output "%s.ps"
+replot
 
 """
 #---------------------------------------
+
+
+#---------------------------------------
+pscript_d = """
+set grid 
+set term %s
+set title "Groebner bases on a grid cluster, distributed hybrid version" 
+set time
+set xlabel "number of threads" 
+
+#set xrange [0:8] 
+
+set xtics 1.0
+
+set style data lines
+
+#set multiplot
+
+#set size 0.95,0.5
+#set origin 0,0.5
+set origin 0,0
+
+##set ylabel "milliseconds" 
+set ylabel "seconds" 
+# smooth acsplines
+plot "%s.po" using 1:2 title 'parallel, n = 1',\
+     "%s.po" using 1:3 title 'distributed, n = 2',\
+     "%s.po" using 1:4 title 'distributed, n = 3',\
+     "%s.po" using 1:5 title 'distributed, n = 4',\
+     "%s.po" using 1:6 title 'distributed, n = 5',\
+     "%s.po" using 1:7 title 'distributed, n = 6',\
+     "%s.po" using 1:8 title 'distributed, n = 7'
+
+     #with linespoints
+
+#unset multiplot
+pause mouse
+
+set terminal postscript
+set output "%s.ps"
+replot
+
+"""
+#---------------------------------------
+
+#---------------------------------------
+pscript_dp = """
+set grid 
+set term %s
+set title "Groebner bases on a grid cluster, distributed hybrid version" 
+set time
+set xlabel "number of nodes" 
+
+#set xrange [0:8] 
+
+set xtics 1.0
+
+set style data lines
+
+#set multiplot
+
+#set size 0.95,0.5
+#set origin 0,0.5
+set origin 0,0
+
+##set ylabel "milliseconds" 
+set ylabel "seconds" 
+# smooth acsplines
+# 1:2 ignored
+plot "%s.po" using 1:3 title 'ppn = 1',\
+     "%s.po" using 1:4 title 'ppn = 2',\
+     "%s.po" using 1:5 title 'ppn = 3',\
+     "%s.po" using 1:6 title 'ppn = 4',\
+     "%s.po" using 1:7 title 'ppn = 5',\
+     "%s.po" using 1:8 title 'ppn = 6',\
+     "%s.po" using 1:9 title 'ppn = 7',\
+     "%s.po" using 1:10 title 'ppn = 8'
+
+     #with linespoints
+
+#unset multiplot
+pause mouse
+
+set terminal postscript
+set output "%s.ps"
+replot
+
+"""
+#---------------------------------------
+
 
 exam = bname;
 psname = bname + ".ps";
@@ -385,9 +538,21 @@ print p;
 
 sqt = st;
 print "seq time = ", sqt;
+#print "args: %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s. " % ("x11",bname,exam,bname,str(sqt),exam,bname,exam,bname,exam,bname);
+
+hyb2d = False; # True
+t2n = True; # True  # thread to nodes
 
 if hybrid:
-    pscript = pscript_2d % ("x11",bname,bname,exam,bname,str(sqt),exam,bname,exam,bname,exam);
+    if hyb2d:
+        pscript = pscript_2d % ("x11",bname,exam,bname,str(sqt),exam,bname,exam,bname,exam,bname);
+    else:
+        if t2n:
+            oname = bname+"_p";
+            pscript = pscript_d % ("x11",oname,oname,oname,oname,oname,oname,oname,bname);
+        else:
+            oname = bname+"_d";
+            pscript = pscript_dp % ("x11",oname,oname,oname,oname,oname,oname,oname,oname,bname);
 else:
     if dist:
         pscript = pscript_1d % ("x11",bname,bname,exam,bname,str(sqt),exam,bname,exam,bname,exam);
@@ -413,6 +578,6 @@ if not hybrid:
 
 # convert to pdf, better use pstopdf
 #cmd = "ps2pdf " + psname;
-cmd = "epstopdf " + psname;
+cmd = "epstopdf --autorotate=All --embed " + psname;
 print "cmd: " + cmd;
 os.system(cmd);
