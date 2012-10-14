@@ -221,6 +221,9 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
             pair = null;
         } else {
             remCount++; // count only real pairs
+            if ( logger.isDebugEnabled() ) {
+                logger.info("pair(" + pair.j + "," + pair.i + ")");
+            }
         }
         return pair; 
     }
