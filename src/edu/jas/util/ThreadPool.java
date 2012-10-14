@@ -10,6 +10,7 @@ import java.util.LinkedList;
 
 import org.apache.log4j.Logger;
 
+import edu.jas.kern.PreemptingException;
 
 /**
  * Thread pool using stack / list workpile.
@@ -366,6 +367,9 @@ class PoolThread extends Thread {
                 Thread.currentThread().interrupt();
                 running = false;
                 isWorking = false;
+            } catch (PreemptingException e) {
+                logger.debug("catched " + e);
+                //e.printStackTrace();
             } catch (RuntimeException e) {
                 logger.warn("catched " + e);
                 e.printStackTrace();
