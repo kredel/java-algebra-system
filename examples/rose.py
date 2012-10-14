@@ -5,8 +5,8 @@
 
 import sys;
 
-from jas import Ring
-from jas import Ideal
+from jas import Ring, Ideal
+from jas import startLog
 
 # example from rose (modified)
 
@@ -40,6 +40,8 @@ ps = """
 f = Ideal( r, ps );
 print "Ideal: " + str(f);
 print;
+
+#startLog();
 
 rg = f.GB();
 #print "seq Output:", rg;

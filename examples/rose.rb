@@ -38,6 +38,8 @@ f = r.ideal( ps );
 puts "Ideal: " + str(f);
 puts;
 
+#startLog();
+
 rg = f.GB();
 #puts "seq Output:", rg;
 #puts;
