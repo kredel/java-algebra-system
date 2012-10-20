@@ -2722,7 +2722,7 @@ Constructor for an ideal in a solvable polynomial ring.
 Create a string representation.
 =end
     def to_s()
-        return @pset.toScript().to_s;
+        return @pset.toScript();
     end
 
 =begin rdoc
@@ -3596,7 +3596,7 @@ PSIdeal constructor.
 Create a string representation.
 =end
     def to_s()
-        return @list.map { |a| a.toScript() }.join(", ");
+        return "( " + @list.map { |a| a.toScript() }.join(", ") + " )";
     end
 
 =begin rdoc
@@ -4064,7 +4064,7 @@ Constructor for an ideal in a non-commutative polynomial ring.
 Create a string representation.
 =end
     def to_s()
-        return @list.toString(); #@pset.toScript().to_s;
+        return "( " + @list.map{ |e| e.toScript() }.join(", ") + " )";
     end
 
 =begin rdoc

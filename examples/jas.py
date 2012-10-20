@@ -1816,7 +1816,8 @@ class PSIdeal:
     def __str__(self):
         '''Create a string representation.
         '''
-        return str([ a.toScript() for a in self.list ]);
+        ll = [ e.toScript() for e in self.list ]
+        return "( " + ", ".join(ll) + " )"; 
 
     def STD(self,trunc=None):
         '''Compute a standard base.
@@ -3343,7 +3344,8 @@ class WordIdeal:
     def __str__(self):
         '''Create a string representation.
         '''
-        return str(self.list.toString()); # todo: toScript()
+        ll = [ e.toScript() for e in self.list ]
+        return "( " + ", ".join(ll) + " )"; 
 
     def __cmp__(self,other):
         '''Compare two ideals.
