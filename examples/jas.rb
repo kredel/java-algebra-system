@@ -72,6 +72,7 @@ include_class "edu.jas.arith.BigQuaternion";
 include_class "edu.jas.arith.BigOctonion";
 include_class "edu.jas.arith.Product";
 include_class "edu.jas.arith.ProductRing";
+include_class "edu.jas.arith.PrimeList";
 
 
 =begin rdoc

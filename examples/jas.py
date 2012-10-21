@@ -12,7 +12,7 @@ from org.apache.log4j    import BasicConfigurator;
 from edu.jas.structure   import RingElem, RingFactory, Power
 from edu.jas.arith       import BigInteger, BigRational, BigComplex, BigDecimal,\
                                 ModInteger, ModIntegerRing, BigQuaternion, BigOctonion,\
-                                Product, ProductRing
+                                Product, ProductRing, PrimeList
 from edu.jas.poly        import GenPolynomial, GenPolynomialRing, Monomial,\
                                 GenSolvablePolynomial, GenSolvablePolynomialRing,\
                                 GenWordPolynomial, GenWordPolynomialRing,\
