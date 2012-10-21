@@ -10,10 +10,9 @@ import java.util.Iterator;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import mpi.Comm;
 
 import org.apache.log4j.BasicConfigurator;
-
-import mpi.Comm;
 
 import edu.jas.kern.MPJEngine;
 
@@ -71,11 +70,13 @@ public class DistHashTableMPJTest extends TestCase {
     private DistHashTableMPJ<Integer, Integer> l3;
 
 
+    @Override
     protected void setUp() {
         engine.Barrier();
     }
 
 
+    @Override
     protected void tearDown() {
         engine.Barrier();
         if (l1 != null)
@@ -86,8 +87,9 @@ public class DistHashTableMPJTest extends TestCase {
             l3.terminate();
         l1 = l2 = l3 = null;
         try {
+            //Thread.currentThread();
             //System.out.println("tearDown: sleep = 1");
-            Thread.currentThread().sleep(1);
+            Thread.sleep(1);
         } catch (InterruptedException e) {
         }
         engine.Barrier();
@@ -112,25 +114,29 @@ public class DistHashTableMPJTest extends TestCase {
         l1 = new DistHashTableMPJ<Integer, Integer>(engine);
         l1.init();
         assertTrue("l1==empty", l1.isEmpty());
+        Integer s = 0;
         if (me == 0) {
             l1.putWait(Integer.valueOf(1), Integer.valueOf(1));
         } else {
-            Integer s = l1.getWait(Integer.valueOf(1));
+            s = l1.getWait(Integer.valueOf(1));
         }
         assertFalse("l1!=empty: ", l1.isEmpty());
         assertTrue("#l1==1: " + l1.getList(), l1.size() >= 1);
+        assertEquals("s == 1: ", s, Integer.valueOf(1));
         if (me == 0) {
             l1.putWait(Integer.valueOf(2), Integer.valueOf(2));
         } else {
-            Integer s = l1.getWait(Integer.valueOf(2));
+            s = l1.getWait(Integer.valueOf(2));
         }
         assertTrue("#l1==2: " + l1.getList(), l1.size() >= 2);
+        assertEquals("s == 2: ", s, Integer.valueOf(2));
         if (me == 0) {
             l1.putWait(Integer.valueOf(3), Integer.valueOf(3));
         } else {
-            Integer s = l1.getWait(Integer.valueOf(3));
+            s = l1.getWait(Integer.valueOf(3));
         }
         assertTrue("#l1==3: " + l1.getList(), l1.size() >= 3);
+        assertEquals("s == 3: ", s, Integer.valueOf(3));
 
         Iterator it = null;
         it = l1.iterator();

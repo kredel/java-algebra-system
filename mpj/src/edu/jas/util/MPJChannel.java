@@ -55,7 +55,7 @@ public final class MPJChannel {
      * @param r rank of MPJ partner.
      */
     public MPJChannel(Comm s, int r) throws IOException {
-        this(s,r,CHANTAG);
+        this(s, r, CHANTAG);
     }
 
 
@@ -73,6 +73,7 @@ public final class MPJChannel {
         }
         partnerRank = r;
         tag = t;
+        logger.info("constructor: " + this.toString());
     }
 
 
@@ -89,7 +90,7 @@ public final class MPJChannel {
      * @param v message object.
      */
     public void send(Object v) throws IOException {
-        send(tag,v,partnerRank);
+        send(tag, v, partnerRank);
     }
 
 
@@ -99,7 +100,7 @@ public final class MPJChannel {
      * @param v message object.
      */
     public void send(int t, Object v) throws IOException {
-        send(t,v,partnerRank);
+        send(t, v, partnerRank);
     }
 
 
@@ -162,7 +163,7 @@ public final class MPJChannel {
      */
     @Override
     public String toString() {
-        return "MPJChannel(on=" + engine.Rank() + ",to=" + partnerRank + ",tag=" + tag + ")" ;
+        return "MPJChannel(on=" + engine.Rank() + ",to=" + partnerRank + ",tag=" + tag + ")";
     }
 
 }

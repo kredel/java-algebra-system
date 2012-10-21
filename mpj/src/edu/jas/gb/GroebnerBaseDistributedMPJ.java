@@ -6,31 +6,24 @@ package edu.jas.gb;
 
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.Semaphore;
 
+import mpi.Comm;
+
 import org.apache.log4j.Logger;
 
-import mpi.Comm;
-import mpi.MPI;
-import mpi.Status;
-import mpi.MPIException;
-
+import edu.jas.kern.MPJEngine;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
-
 import edu.jas.structure.RingElem;
-
 import edu.jas.util.DistHashTableMPJ;
+import edu.jas.util.MPJChannel;
 import edu.jas.util.Terminator;
 import edu.jas.util.ThreadPool;
-
-import edu.jas.kern.MPJEngine;
-import edu.jas.util.MPJChannel;
 
 
 /**
@@ -177,7 +170,7 @@ public class GroebnerBaseDistributedMPJ<C extends RingElem<C>> extends GroebnerB
         PairList<C> pairlist = null;
         boolean oneInGB = false;
         int l = F.size();
-        int unused;
+        int unused = 0;
         ListIterator<GenPolynomial<C>> it = F.listIterator();
         while (it.hasNext()) {
             p = it.next();
@@ -211,8 +204,7 @@ public class GroebnerBaseDistributedMPJ<C extends RingElem<C>> extends GroebnerB
         //if (l <= 1) {
         //return G; must signal termination to others
         //}
-
-        logger.debug("initialize DHT");
+        logger.debug("initialize DHT, done pairlist: " + unused);
 
         DistHashTableMPJ<Integer, GenPolynomial<C>> theList = new DistHashTableMPJ<Integer, GenPolynomial<C>>(
                         engine);
@@ -417,9 +409,8 @@ class MPJReducerServer<C extends RingElem<C>> implements Runnable {
      * @param dl DHT to use.
      * @param L pair selection strategy
      */
-    MPJReducerServer(int r, Terminator fin, Comm e, 
-                     DistHashTableMPJ<Integer, GenPolynomial<C>> dl, 
-                     PairList<C> L) {
+    MPJReducerServer(int r, Terminator fin, Comm e, DistHashTableMPJ<Integer, GenPolynomial<C>> dl,
+                    PairList<C> L) {
         rank = r;
         finaler = fin;
         engine = e;
@@ -698,8 +689,8 @@ class MPJReducerClient<C extends RingElem<C>> implements Runnable {
                 if (pp instanceof GBTransportMessPairIndex) {
                     pix = ((GBTransportMessPairIndex) pp).i;
                     pjx = ((GBTransportMessPairIndex) pp).j;
-                    pi = (GenPolynomial<C>) theList.getWait(pix);
-                    pj = (GenPolynomial<C>) theList.getWait(pjx);
+                    pi = theList.getWait(pix);
+                    pj = theList.getWait(pjx);
                     //logger.info("pix = " + pix + ", pjx = " +pjx);
                 }
 
@@ -712,7 +703,7 @@ class MPJReducerClient<C extends RingElem<C>> implements Runnable {
                         if (logger.isDebugEnabled()) {
                             logger.info("ht(S) = " + S.leadingExpVector());
                         }
-                        H = red.normalform(theList, S); // TODO .getValueList()
+                        H = red.normalform(theList, S);
                         reduction++;
                         if (H.isZERO()) {
                             // pair.setZero(); does not work in dist

@@ -5,7 +5,6 @@
 package edu.jas.util;
 
 
-import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,14 +13,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
-//import java.util.concurrent.ConcurrentSkipListMap;
-
-import org.apache.log4j.Logger;
 
 import mpi.Comm;
 import mpi.MPI;
-import mpi.Status;
 import mpi.MPIException;
+import mpi.Status;
+
+import org.apache.log4j.Logger;
 
 import edu.jas.kern.MPJEngine;
 

@@ -5,15 +5,11 @@
 package edu.jas.kern;
 
 
-import java.util.Arrays;
-
-import mpi.Comm;
-import mpi.MPI;
-import mpi.Status;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import mpi.MPI;
+import mpi.Status;
 
 import org.apache.log4j.BasicConfigurator;
 
@@ -61,6 +57,7 @@ public class MPJEngineTest extends TestCase {
     }
 
 
+    @Override
     protected void setUp() {
         if (engine == null) {
             engine = MPJEngine.getCommunicator(cmdline);
@@ -68,6 +65,7 @@ public class MPJEngineTest extends TestCase {
     }
 
 
+    @Override
     protected void tearDown() {
         if (engine == null) {
             return;
@@ -110,6 +108,7 @@ public class MPJEngineTest extends TestCase {
             //System.out.println("testCommunication(): received " + Arrays.toString(data));
             assertTrue("length == count", data.length == cnt);
             assertTrue("recv == me", data[0] == me);
+            assertTrue("elem >= 0: " + elem, elem >= 0);
         }
         //System.out.println("testCommunication(): done");
     }

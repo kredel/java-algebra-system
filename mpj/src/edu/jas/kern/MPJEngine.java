@@ -5,19 +5,20 @@
 package edu.jas.kern;
 
 
-import org.apache.log4j.Logger;
+import java.util.Arrays;
 
-import mpi.MPI;
 import mpi.Comm;
+import mpi.MPI;
+
+import org.apache.log4j.Logger;
 
 
 /**
- * MPJ engine, provides global MPI service.
- * <b>Note:</b> could eventually be done directly with MPJ, but provides logging. 
- * <b>Usage:</b> To obtain a reference to the MPJ service communicator use
- *        <code>MPJEngine.getComminicator()</code>. Once an engine has been
- *        created it must be shutdown to exit JAS with
- *        <code>MPJEngine.terminate()</code>. 
+ * MPJ engine, provides global MPI service. <b>Note:</b> could eventually be
+ * done directly with MPJ, but provides logging. <b>Usage:</b> To obtain a
+ * reference to the MPJ service communicator use
+ * <code>MPJEngine.getComminicator()</code>. Once an engine has been created it
+ * must be shutdown to exit JAS with <code>MPJEngine.terminate()</code>.
  * @author Heinz Kredel
  */
 
@@ -25,6 +26,9 @@ public final class MPJEngine {
 
 
     private static final Logger logger = Logger.getLogger(MPJEngine.class);
+
+
+    private static final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -126,6 +130,9 @@ public final class MPJEngine {
                 cmdline = args;
                 args = MPI.Init(args);
                 logger.info("MPJ initialized on " + MPI.Get_processor_name());
+                if (debug) {
+                    logger.debug("remaining args: " + Arrays.toString(args));
+                }
             }
             mpjComm = MPI.COMM_WORLD;
             logger.info("MPJ size = " + mpjComm.Size() + ", rank = " + mpjComm.Rank());

@@ -14,21 +14,17 @@ import java.util.List;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import org.apache.log4j.BasicConfigurator; // import org.apache.log4j.Logger;
-
 import mpi.Comm;
 
-import edu.jas.kern.MPJEngine;
-import edu.jas.kern.ComputerThreads;
-import edu.jas.arith.BigRational;
+import org.apache.log4j.BasicConfigurator;
 
+import edu.jas.arith.BigRational;
+import edu.jas.kern.ComputerThreads;
+import edu.jas.kern.MPJEngine;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
-
-import edu.jas.structure.RingElem;
 
 
 /**
@@ -222,7 +218,6 @@ public class GroebnerBaseDistMPJTest extends TestCase {
         List<GenPolynomial<BigRational>> Fl;
         long t = 0;
         if (engine.Rank() == 0) {
-            Thread[] clients;
             String exam = "(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
                             + "( 35 P + 40 Z + 25 T - 27 S ), "
                             + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
@@ -248,7 +243,7 @@ public class GroebnerBaseDistMPJTest extends TestCase {
             t = System.currentTimeMillis() - t;
             assertTrue("isGB( GB(Trinks7) )", bbseq.isGB(G));
             assertEquals("#GB(Trinks7) == 6", 6, G.size());
-            PolynomialList<BigRational> trinks = new PolynomialList<BigRational>(F.ring, G);
+            //PolynomialList<BigRational> trinks = new PolynomialList<BigRational>(F.ring, G);
             System.out.println("G = " + G);
             System.out.println("executed in " + t + " milliseconds");
         }

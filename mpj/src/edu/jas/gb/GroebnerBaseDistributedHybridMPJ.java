@@ -12,31 +12,25 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import mpi.Comm;
+
 import org.apache.log4j.Logger;
 
-import mpi.Comm;
-import mpi.MPI;
-import mpi.Status;
-import mpi.MPIException;
-
+import edu.jas.kern.MPJEngine;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
-
 import edu.jas.structure.RingElem;
-
 import edu.jas.util.DistHashTableMPJ;
+import edu.jas.util.MPJChannel;
 import edu.jas.util.Terminator;
 import edu.jas.util.ThreadPool;
 
-import edu.jas.kern.MPJEngine;
-import edu.jas.util.MPJChannel;
-
 
 /**
- * Groebner Base distributed hybrid algorithm with MPJ. Implements a distributed memory
- * with multi-core CPUs parallel version of Groebner bases with MPJ. Using pairlist
- * class, distributed multi-threaded tasks do reduction, one communication
- * channel per remote node.
+ * Groebner Base distributed hybrid algorithm with MPJ. Implements a distributed
+ * memory with multi-core CPUs parallel version of Groebner bases with MPJ.
+ * Using pairlist class, distributed multi-threaded tasks do reduction, one
+ * communication channel per remote node.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
@@ -90,19 +84,19 @@ public class GroebnerBaseDistributedHybridMPJ<C extends RingElem<C>> extends Gro
     /**
      * Message tag for pairs.
      */
-    public static final int pairTag = GroebnerBaseDistributedHybrid.pairTag.intValue();
+    public static final int pairTag = GroebnerBaseDistributedHybridEC.pairTag.intValue();
 
 
     /**
      * Message tag for results.
      */
-    public static final int resultTag = GroebnerBaseDistributedHybrid.resultTag.intValue();
+    public static final int resultTag = GroebnerBaseDistributedHybridEC.resultTag.intValue();
 
 
     /**
      * Message tag for acknowledgments.
      */
-    public static final int ackTag = GroebnerBaseDistributedHybrid.ackTag.intValue();
+    public static final int ackTag = GroebnerBaseDistributedHybridEC.ackTag.intValue();
 
 
     /**
@@ -235,7 +229,7 @@ public class GroebnerBaseDistributedHybridMPJ<C extends RingElem<C>> extends Gro
         PairList<C> pairlist = null;
         boolean oneInGB = false;
         int l = F.size();
-        int unused;
+        int unused = 0;
         ListIterator<GenPolynomial<C>> it = F.listIterator();
         while (it.hasNext()) {
             p = it.next();
@@ -268,12 +262,13 @@ public class GroebnerBaseDistributedHybridMPJ<C extends RingElem<C>> extends Gro
             }
         }
         //if (l <= 1) {
-            //return G; must signal termination to others
+        //return G; must signal termination to others
         //}
-        logger.info("pairlist " + pairlist);
+        logger.info("pairlist " + pairlist + ": " + unused);
 
         logger.debug("looking for clients");
-        DistHashTableMPJ<Integer, GenPolynomial<C>> theList = new DistHashTableMPJ<Integer, GenPolynomial<C>>(engine);
+        DistHashTableMPJ<Integer, GenPolynomial<C>> theList = new DistHashTableMPJ<Integer, GenPolynomial<C>>(
+                        engine);
         theList.init();
         List<GenPolynomial<C>> al = pairlist.getList();
         for (int i = 0; i < al.size(); i++) {
@@ -284,11 +279,11 @@ public class GroebnerBaseDistributedHybridMPJ<C extends RingElem<C>> extends Gro
             }
         }
 
-        Terminator finner = new Terminator((threads-1) * threadsPerNode);
+        Terminator finner = new Terminator((threads - 1) * threadsPerNode);
         HybridReducerServerMPJ<C> R;
         logger.info("using pool = " + pool);
         for (int i = 1; i < threads; i++) {
-            R = new HybridReducerServerMPJ<C>(i,threadsPerNode, finner, engine, theList, pairlist);
+            R = new HybridReducerServerMPJ<C>(i, threadsPerNode, finner, engine, theList, pairlist);
             pool.addJob(R);
             //logger.info("server submitted " + R);
         }
@@ -340,7 +335,7 @@ public class GroebnerBaseDistributedHybridMPJ<C extends RingElem<C>> extends Gro
         ThreadPool pool = new ThreadPool(threadsPerNode);
         logger.info("client using pool = " + pool);
         for (int i = 0; i < threadsPerNode; i++) {
-            HybridReducerClientMPJ<C> Rr = new HybridReducerClientMPJ<C>(threadsPerNode, chan, i, theList);
+            HybridReducerClientMPJ<C> Rr = new HybridReducerClientMPJ<C>(chan, theList); // i
             pool.addJob(Rr);
         }
         if (debug) {
@@ -520,7 +515,7 @@ class HybridReducerServerMPJ<C extends RingElem<C>> implements Runnable {
     public void run() {
         //logger.info("reducer server running with " + engine);
         try {
-            pairChannel = new MPJChannel(engine,rank); //,pairTag
+            pairChannel = new MPJChannel(engine, rank); //,pairTag
         } catch (IOException e) {
             e.printStackTrace();
             return;
@@ -534,7 +529,7 @@ class HybridReducerServerMPJ<C extends RingElem<C>> implements Runnable {
         AtomicInteger active = new AtomicInteger(0);
 
         // start receiver
-        HybridReducerReceiverMPJ<C> receiver = new HybridReducerReceiverMPJ<C>(rank,threadsPerNode, finner, active,
+        HybridReducerReceiverMPJ<C> receiver = new HybridReducerReceiverMPJ<C>(rank, finner, active,
                         pairChannel, theList, pairlist);
         receiver.start();
 
@@ -552,7 +547,7 @@ class HybridReducerServerMPJ<C extends RingElem<C>> implements Runnable {
             Object req = null;
             try {
                 req = pairChannel.receive(pairTag);
-		//} catch (InterruptedException e) {
+                //} catch (InterruptedException e) {
                 //goon = false;
                 //e.printStackTrace();
             } catch (IOException e) {
@@ -671,12 +666,14 @@ class HybridReducerReceiverMPJ<C extends RingElem<C>> extends Thread {
 
     private final MPJChannel pairChannel;
 
+
     final int rank;
+
 
     private final Terminator finner;
 
 
-    private final int threadsPerNode;
+    //private final int threadsPerNode;
 
 
     private final AtomicInteger active;
@@ -706,18 +703,17 @@ class HybridReducerReceiverMPJ<C extends RingElem<C>> extends Thread {
     /**
      * Constructor.
      * @param r MPJ rank of partner.
-     * @param tpn number of threads per node
      * @param fin terminator
      * @param a active remote tasks count
      * @param pc tagged socket channel
      * @param dl distributed hash table
      * @param L ordered pair list
      */
-    HybridReducerReceiverMPJ(int r, int tpn, Terminator fin, AtomicInteger a, MPJChannel pc,
+    HybridReducerReceiverMPJ(int r, Terminator fin, AtomicInteger a, MPJChannel pc,
                     DistHashTableMPJ<Integer, GenPolynomial<C>> dl, PairList<C> L) {
         rank = r;
         active = a;
-        threadsPerNode = tpn;
+        //threadsPerNode = tpn;
         finner = fin;
         pairChannel = pc;
         theList = dl;
@@ -748,7 +744,7 @@ class HybridReducerReceiverMPJ<C extends RingElem<C>> extends Thread {
             try {
                 rh = pairChannel.receive(resultTag);
                 int i = active.getAndDecrement();
-		//} catch (InterruptedException e) {
+                //} catch (InterruptedException e) {
                 //goon = false;
                 ////e.printStackTrace();
                 ////?? finner.initIdle(1);
@@ -864,7 +860,7 @@ class HybridReducerClientMPJ<C extends RingElem<C>> implements Runnable {
     private final ReductionPar<C> red;
 
 
-    private final int threadsPerNode;
+    //private final int threadsPerNode;
 
 
     /*
@@ -876,31 +872,28 @@ class HybridReducerClientMPJ<C extends RingElem<C>> implements Runnable {
     /**
      * Message tag for pairs.
      */
-    public static final int pairTag = GroebnerBaseDistributedHybrid.pairTag;
+    public static final int pairTag = GroebnerBaseDistributedHybridMPJ.pairTag;
 
 
     /**
      * Message tag for results.
      */
-    public static final int resultTag = GroebnerBaseDistributedHybrid.resultTag;
+    public static final int resultTag = GroebnerBaseDistributedHybridMPJ.resultTag;
 
 
     /**
      * Message tag for acknowledgments.
      */
-    public static final int ackTag = GroebnerBaseDistributedHybrid.ackTag;
+    public static final int ackTag = GroebnerBaseDistributedHybridMPJ.ackTag;
 
 
     /**
      * Constructor.
-     * @param tpn number of threads per node
      * @param tc tagged socket channel
-     * @param tid thread identification
      * @param dl distributed hash table
      */
-    HybridReducerClientMPJ(int tpn, MPJChannel tc, Integer tid,
-                    DistHashTableMPJ<Integer, GenPolynomial<C>> dl) {
-        this.threadsPerNode = tpn;
+    HybridReducerClientMPJ(MPJChannel tc, DistHashTableMPJ<Integer, GenPolynomial<C>> dl) {
+        //this.threadsPerNode = tpn;
         pairChannel = tc;
         //threadId = 100 + tid; // keep distinct from other tags
         theList = dl;
@@ -952,7 +945,7 @@ class HybridReducerClientMPJ<C extends RingElem<C>> implements Runnable {
             Object pp = null;
             try {
                 pp = pairChannel.receive(pairTag);
-		//} catch (InterruptedException e) {
+                //} catch (InterruptedException e) {
                 //goon = false;
                 //e.printStackTrace();
             } catch (IOException e) {
@@ -1005,7 +998,7 @@ class HybridReducerClientMPJ<C extends RingElem<C>> implements Runnable {
                         if (debug) {
                             logger.debug("ht(S) = " + S.leadingExpVector());
                         }
-                        H = red.normalform(theList, S); // TODO .getValueList()
+                        H = red.normalform(theList, S);
                         reduction++;
                         if (H.isZERO()) {
                             // pair.setZero(); does not work in dist
