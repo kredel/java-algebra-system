@@ -21,7 +21,7 @@ import mpi.Comm;
  * @author Heinz Kredel
  */
 
-public class MPJEngine {
+public final class MPJEngine {
 
 
     private static final Logger logger = Logger.getLogger(MPJEngine.class);

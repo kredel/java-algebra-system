@@ -22,7 +22,7 @@ import edu.jas.kern.MPJEngine;
  * given rank.
  * @author Heinz Kredel
  */
-public class MPJChannel {
+public final class MPJChannel {
 
 
     private static final Logger logger = Logger.getLogger(MPJChannel.class);
@@ -86,44 +86,64 @@ public class MPJChannel {
 
     /**
      * Sends an object.
+     * @param v message object.
      */
     public void send(Object v) throws IOException {
-        send(tag,v);
+        send(tag,v,partnerRank);
     }
 
 
     /**
      * Sends an object.
      * @param t message tag.
+     * @param v message object.
      */
     public void send(int t, Object v) throws IOException {
+        send(t,v,partnerRank);
+    }
+
+
+    /**
+     * Sends an object.
+     * @param t message tag.
+     * @param v message object.
+     * @param pr partner rank.
+     */
+    void send(int t, Object v, int pr) throws IOException {
         Object[] va = new Object[1];
         va[0] = v;
-        engine.Send(va, 0, va.length, MPI.OBJECT, partnerRank, t);
+        engine.Send(va, 0, va.length, MPI.OBJECT, pr, t);
         //System.out.println("send: "+v);
     }
 
 
     /**
      * Receives an object.
+     * @return a message object.
      */
     public Object receive() throws IOException, ClassNotFoundException {
         return receive(tag);
     }
 
+
     /**
      * Receives an object.
      * @param t message tag.
+     * @return a message object.
      */
     public Object receive(int t) throws IOException, ClassNotFoundException {
         Object[] va = new Object[1];
         //System.out.println("engine.Recv");
+        //Status stat = engine.Recv(va, 0, va.length, MPI.OBJECT, MPI.ANY_SOURCE, t);
         Status stat = engine.Recv(va, 0, va.length, MPI.OBJECT, partnerRank, t);
         int cnt = stat.Get_count(MPI.OBJECT);
-        //System.out.println("engine.Recv, cnt = " + cnt);
         if (cnt == 0) {
             throw new IOException("no object received");
         }
+        //int pr = stat.source;
+        //if (pr != partnerRank) {
+        //    logger.warn("received out of order message from " + pr);
+        //}
         Object v = va[0];
         return v;
     }
