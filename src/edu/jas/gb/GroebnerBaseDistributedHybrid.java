@@ -657,9 +657,8 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
                 //do not wait: Object rq = pairChannel.receive(pairTag);
                 pairChannel.send(pairTag, new GBTransportMessEnd());
             }
-            // send also end to receiver
-            pairChannel.send(resultTag, new GBTransportMessEnd());
-            //beware of race condition 
+            // send also end to receiver, no more, did not work
+            //pairChannel.send(resultTag, new GBTransportMessEnd());
         } catch (IOException e) {
             if (logger.isDebugEnabled()) {
                 e.printStackTrace();
@@ -839,9 +838,7 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
             }
             // only after recording in pairlist !
             finner.initIdle(1);
-            // if ( senderId != null ) { // send acknowledgement after recording
             try {
-                //pairChannel.send(senderId, new GBTransportMess());
                 pairChannel.send(ackTag, new GBTransportMess());
                 logger.debug("send acknowledgement");
             } catch (IOException e) {
@@ -849,7 +846,6 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
                 goon = false;
                 break;
             }
-            //}
         } // end while
         goon = false;
         logger.info("terminated, received " + red + " reductions");
@@ -861,7 +857,7 @@ class HybridReducerReceiver<C extends RingElem<C>> extends Thread {
      */
     public void terminate() {
         goon = false;
-        this.interrupt();
+        //this.interrupt();
         try {
             this.join();
         } catch (InterruptedException e) {
@@ -955,7 +951,7 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
         GenPolynomial<C> H = null;
         //boolean set = false;
         boolean goon = true;
-        boolean doEnd = false;
+        boolean doEnd = true;
         int reduction = 0;
         //int sleeps = 0;
         Integer pix;
@@ -979,7 +975,7 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
                 break;
             }
             logger.debug("receive pair, goon = " + goon);
-            doEnd = false;
+            doEnd = true;
             Object pp = null;
             try {
                 pp = pairChannel.receive(pairTag);
@@ -1005,7 +1001,7 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
             }
             if (pp instanceof GBTransportMessEnd) {
                 goon = false;
-                doEnd = true;
+                //doEnd = false; // bug
                 continue;
             }
             if (pp instanceof GBTransportMessPair || pp instanceof GBTransportMessPairIndex) {
@@ -1060,7 +1056,7 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
             }
             try {
                 pairChannel.send(resultTag, new GBTransportMessPoly<C>(H)); //,threadId));
-                doEnd = true;
+                doEnd = false;
             } catch (IOException e) {
                 goon = false;
                 e.printStackTrace();
@@ -1088,7 +1084,7 @@ class HybridReducerClient<C extends RingElem<C>> implements Runnable {
             logger.info("received acknowledgment " + pp);
         }
         logger.info("terminated, done " + reduction + " reductions");
-        if (!doEnd) {
+        if (doEnd) {
             try {
                 pairChannel.send(resultTag, new GBTransportMessEnd());
             } catch (IOException e) {
