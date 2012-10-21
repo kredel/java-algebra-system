@@ -432,7 +432,7 @@ class MPJReducerServer<C extends RingElem<C>> implements Runnable {
      * Main method.
      */
     public void run() {
-        logger.debug("reducer server running: " + this);
+        //logger.debug("reducer server running: " + this);
         try {
             pairChannel = new MPJChannel(engine, rank);
         } catch (IOException e) {
@@ -440,7 +440,7 @@ class MPJReducerServer<C extends RingElem<C>> implements Runnable {
             return;
         }
         if (logger.isInfoEnabled()) {
-            logger.info("pairChannel = " + pairChannel);
+            logger.info("reducer server running: pairChannel = " + pairChannel);
         }
         Pair<C> pair;
         GenPolynomial<C> H = null;

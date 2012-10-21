@@ -518,15 +518,15 @@ class HybridReducerServerMPJ<C extends RingElem<C>> implements Runnable {
      */
     //JAVA6only: @Override
     public void run() {
-        logger.info("reducer server running with " + engine);
+        //logger.info("reducer server running with " + engine);
         try {
             pairChannel = new MPJChannel(engine,rank); //,pairTag
         } catch (IOException e) {
             e.printStackTrace();
             return;
         }
-        if (debug) {
-            logger.info("pairChannel   = " + pairChannel);
+        if (logger.isInfoEnabled()) {
+            logger.info("reducer server running: pairChannel = " + pairChannel);
         }
         // record idle remote workers (minus one?)
         //finner.beIdle(threadsPerNode-1);
@@ -628,21 +628,19 @@ class HybridReducerServerMPJ<C extends RingElem<C>> implements Runnable {
         logger.debug("send end");
         try {
             for (int i = 0; i < threadsPerNode; i++) { // -1
-                //do not wait: Object rq = pairChannel.receive(pairTag);
                 pairChannel.send(pairTag, new GBTransportMessEnd());
             }
-            // send also end to receiver
-            pairChannel.send(resultTag, new GBTransportMessEnd());
-            //beware of race condition 
+            logger.info("sent end to clients");
+            // send also end to receiver, no more
+            //pairChannel.send(resultTag, new GBTransportMessEnd(), engine.Rank());
         } catch (IOException e) {
             if (logger.isDebugEnabled()) {
                 e.printStackTrace();
             }
         }
-        receiver.terminate();
-
         int d = active.get();
         logger.info("remaining active tasks = " + d);
+        receiver.terminate();
         //logger.info("terminated, send " + red + " reduction pairs");
         pairChannel.close();
         logger.info("redServ pairChannel.close()");
@@ -813,9 +811,7 @@ class HybridReducerReceiverMPJ<C extends RingElem<C>> extends Thread {
             }
             // only after recording in pairlist !
             finner.initIdle(1);
-            // if ( senderId != null ) { // send acknowledgement after recording
             try {
-                //pairChannel.send(senderId, new GBTransportMess());
                 pairChannel.send(ackTag, new GBTransportMess());
                 logger.debug("send acknowledgement");
             } catch (IOException e) {
@@ -823,7 +819,6 @@ class HybridReducerReceiverMPJ<C extends RingElem<C>> extends Thread {
                 goon = false;
                 break;
             }
-            //}
         } // end while
         goon = false;
         logger.info("terminated, received " + red + " reductions");
@@ -835,13 +830,13 @@ class HybridReducerReceiverMPJ<C extends RingElem<C>> extends Thread {
      */
     public void terminate() {
         goon = false;
-        this.interrupt();
         try {
             this.join();
+            //this.interrupt();
         } catch (InterruptedException e) {
             // unfug Thread.currentThread().interrupt();
         }
-        logger.debug("HybridReducerReceiver terminated");
+        logger.info("terminate end");
     }
 
 }
@@ -929,7 +924,7 @@ class HybridReducerClientMPJ<C extends RingElem<C>> implements Runnable {
         GenPolynomial<C> H = null;
         //boolean set = false;
         boolean goon = true;
-        boolean doEnd = false;
+        boolean doEnd = true;
         int reduction = 0;
         //int sleeps = 0;
         Integer pix;
@@ -953,7 +948,7 @@ class HybridReducerClientMPJ<C extends RingElem<C>> implements Runnable {
                 break;
             }
             logger.debug("receive pair, goon = " + goon);
-            doEnd = false;
+            doEnd = true;
             Object pp = null;
             try {
                 pp = pairChannel.receive(pairTag);
@@ -979,7 +974,7 @@ class HybridReducerClientMPJ<C extends RingElem<C>> implements Runnable {
             }
             if (pp instanceof GBTransportMessEnd) {
                 goon = false;
-                doEnd = true;
+                //doEnd = false; // bug
                 continue;
             }
             if (pp instanceof GBTransportMessPair || pp instanceof GBTransportMessPairIndex) {
@@ -1034,14 +1029,13 @@ class HybridReducerClientMPJ<C extends RingElem<C>> implements Runnable {
             }
             try {
                 pairChannel.send(resultTag, new GBTransportMessPoly<C>(H)); //,threadId));
-                doEnd = true;
+                doEnd = false;
             } catch (IOException e) {
                 goon = false;
                 e.printStackTrace();
             }
             logger.debug("done send poly message of " + pp);
             try {
-                //pp = pairChannel.receive(threadId);
                 pp = pairChannel.receive(ackTag);
                 //} catch (InterruptedException e) {
                 //goon = false;
@@ -1062,7 +1056,7 @@ class HybridReducerClientMPJ<C extends RingElem<C>> implements Runnable {
             logger.debug("received acknowledgment " + pp);
         }
         logger.info("terminated, done " + reduction + " reductions");
-        if (!doEnd) {
+        if (doEnd) {
             try {
                 pairChannel.send(resultTag, new GBTransportMessEnd());
             } catch (IOException e) {
