@@ -160,7 +160,7 @@ public class GroebnerBaseDistMPJTest extends TestCase {
     /**
      * Test distributed GBase.
      */
-    public void xtestDistributedGBase() {
+    public void testDistributedGBase() {
         L = new ArrayList<GenPolynomial<BigRational>>();
         if (engine.Rank() == 0) {
             a = fac.random(kl, ll, el, q);
