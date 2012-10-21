@@ -79,6 +79,31 @@ public abstract class DHTTransport<K, V> implements Serializable {
 }
 
 
+/**
+ * Transport container to signal termination for a distributed version
+ * of a HashTable. Contains no objects.
+ * @author Heinz Kredel
+ */
+
+class DHTTransportTerminate<K, V> extends DHTTransport<K, V> {
+
+    /**
+     * Get the key from this DHTTransport Container.
+     */
+    public K key() throws IOException, ClassNotFoundException {
+        throw new UnsupportedOperationException("this should not happen");
+    }
+
+
+    /**
+     * Get the value from this DHTTransport Container.
+     */
+    public V value() throws IOException, ClassNotFoundException {
+        throw new UnsupportedOperationException("this should not happen");
+    }
+
+}
+
 
 /**
  * Transport container for a distributed version of a HashTable. Immutable

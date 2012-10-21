@@ -350,12 +350,28 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
             Runtime rt = Runtime.getRuntime();
             logger.debug("terminate " + listener + ", runtime = " + rt.hashCode());
         }
+        try {
+            DHTTransport<K, V> tc = new DHTTransportTerminate<K, V>();
+            DHTTransport[] tcl = new DHTTransport[1];
+            tcl[0] = tc;
+            // send only to self.listener
+            engine.Send(tcl, 0, tcl.length, MPI.OBJECT, engine.Rank(), DHTTAG);
+            //System.out.println("send: "+tc);
+        } catch (MPIException e) {
+            logger.info("sending(terminate)");
+            logger.info("send " + e);
+            e.printStackTrace();
+        } catch (Exception e) {
+            logger.info("sending(terminate)");
+            logger.info("send " + e);
+            e.printStackTrace();
+        }
         listener.setDone();
         try {
             while (listener.isAlive()) {
                 //System.out.print("+++++");
+                listener.join(999);
                 listener.interrupt();
-                listener.join(100);
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -439,6 +455,10 @@ class DHTMPJListener<K, V> extends Thread {
                 tc = (DHTTransport<K, V>) tcl[0];
                 if (debug) {
                     logger.debug("receive(" + tc + ")");
+                }
+                if (tc instanceof DHTTransportTerminate) {
+                    goon = false;
+                    break;
                 }
                 if (this.isInterrupted()) {
                     goon = false;
