@@ -701,7 +701,7 @@ public class GenPolynomialTokenizer {
                 if (tok.sval != null && tok.sval.length() > 0) {
                     if (digit(tok.sval.charAt(0))) {
                         BigInteger mo = new BigInteger(tok.sval);
-                        BigInteger lm = new BigInteger(Long.MAX_VALUE);
+                        BigInteger lm = new BigInteger(ModLongRing.MAX_LONG); //wrong: Long.MAX_VALUE);
                         if (mo.compareTo(lm) < 0) {
                             coeff = new ModLongRing(mo.getVal());
                         } else {
