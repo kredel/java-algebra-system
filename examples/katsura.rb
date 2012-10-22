@@ -22,8 +22,12 @@ tnum = 2;
 
 k = Katsura.new(knum);
 r = Ring.new( k.varList("Rat","G") );
-#r = Ring.new( k.varList("Mod 19","G") );
+#r = Ring.new( k.varList("Mod 23","G") );
 #r = Ring.new( k.varList("Mod 32003","G") );
+#r = Ring.new( k.varList("Mod 536870909","G") );
+#r = Ring.new( k.varList("Mod 4294967291","G") );
+#r = Ring.new( k.varList("Mod 9223372036854775783","G") );
+#r = Ring.new( k.varList("Mod 170141183460469231731687303715884105727","G") );
 #no?#r = Ring.new( k.varList("Mod 1152921504606846883","G") );
 puts "Ring: " + str(r);
 puts;
