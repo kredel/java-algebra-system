@@ -51,7 +51,7 @@ public class RunMPJGB {
     /**
      * Check result GB if it is a GB.
      */
-    static boolean doCheck = true; //false;
+    static boolean doCheck = false;
 
 
     /**
