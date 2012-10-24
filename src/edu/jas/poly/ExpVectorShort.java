@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * @author Heinz Kredel
  */
 
-public class ExpVectorShort extends ExpVector
+public final class ExpVectorShort extends ExpVector
 /*implements AbelianGroupElem<ExpVectorShort>*/{
 
 

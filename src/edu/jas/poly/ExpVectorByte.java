@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * @author Heinz Kredel
  */
 
-public class ExpVectorByte extends ExpVector
+public final class ExpVectorByte extends ExpVector
 /*implements AbelianGroupElem<ExpVectorByte>*/{
 
 
