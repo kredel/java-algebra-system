@@ -8,7 +8,7 @@ include_class "edu.jas.gb.Katsura";
 
 # katsura examples
 
-knum = 4
+knum = 4;
 tnum = 2;
 
 #r = Ring( "Mod 19 (B,S,T,Z,P,W) L" );
@@ -33,6 +33,10 @@ puts "Ring: " + str(r);
 puts;
 
 ps = k.polyList();
+puts "ps : " + ps;
+puts;
+
+exit(0);
 
 f = r.ideal( ps );
 puts "Ideal: " + str(f);
