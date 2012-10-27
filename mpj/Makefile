@@ -19,7 +19,7 @@ CLASSPATH=$(LIBPATH)/log4j.jar:$(LIBPATH)/junit.jar:$(FMPJ_LIB):$(JASPATH)
 NP=2
 PPN=3
 
-FMPJ_CMD=java -cp $(FMPJ_RUNLIB) runtime.FMPJRun -cp $(CLASSPATH):jas-mpj.jar
+FMPJ_CMD=java -cp $(FMPJ_RUNLIB) runtime.FMPJRun -dev niodev -cp $(CLASSPATH):jas-mpj.jar
 
 #DOCOPTS=-package
 DOCOPTS=-package -author -version -linksource
