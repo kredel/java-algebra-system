@@ -1,5 +1,6 @@
 #
-# read output of jas runnings and prepare input for gnuplot
+# read output of jas GB runs and prepare input for gnuplot
+# $Id$
 #
 
 from sys import argv
@@ -9,8 +10,8 @@ import re;
 import os
 from os import system
 
-hpat = re.compile(r'm = (\d+), ppn = (\d+), time = (\d+) milliseconds, (\d+) start-up');
-dpat = re.compile(r'm = (\d+), time = (\d+) milliseconds, (\d+) start-up');
+hpat = re.compile(r'(m|d) = (\d+), ppn = (\d+), time = (\d+) milliseconds, (\d+) start-up');
+dpat = re.compile(r'(m|d) = (\d+), time = (\d+) milliseconds, (\d+) start-up');
 #hpat = re.compile(r'd = (\d+), ppn = (\d+), time = (\d+) milliseconds, (\d+) start-up');
 #dpat = re.compile(r'd = (\d+), time = (\d+) milliseconds, (\d+) start-up');
 ppat = re.compile(r'time = (\d+) milliseconds');
@@ -53,10 +54,12 @@ for fname in argv[1:]:
         ma = hpat.search(line); # distributed hybrid results
         if ma:
             print "h: ", line,
-            dn = int( ma.group(1) );
-            pp = int( ma.group(2) );
-            tm = long( ma.group(3) );
-            su = long( ma.group(4) );
+            d_h = ma.group(1)
+            print "d_h: ", d_h,
+            dn = int( ma.group(2) );
+            pp = int( ma.group(3) );
+            tm = long( ma.group(4) );
+            su = long( ma.group(5) );
             hybrid = True;
             if not dn in res:
                 res[ dn ] = {};
@@ -77,10 +80,12 @@ for fname in argv[1:]:
         ma = dpat.search(line); # distributed results
         if ma:
             print "d: ", line,
-            dn = int( ma.group(1) );
+            d_h = ma.group(1)
+            print "d_h: ", d_h,
+            dn = int( ma.group(2) );
             pp = 1;
-            tm = long( ma.group(2) );
-            su = long( ma.group(3) );
+            tm = long( ma.group(3) );
+            su = long( ma.group(4) );
             dist = True;
             if not dn in res:
                 res[ dn ] = {};
@@ -196,19 +201,20 @@ print "bname = " + bname;
 # LaTex output:
 
 summary =   "\n% run = " + tag + "\n";
-summary += r"\begin{tabular}{|r|r|r|r|r|r|r|}" + "\n";
+summary += r"\begin{tabular}{|r|r|r|r|r|r|}" + "\n";
 summary += r"\hline" + "\n";
-summary += " nodes & ppn & time & startup & speedup & put & rem \n";
+summary += " nodes & ppn & time & speedup & put & rem \n";
 summary += r"\\ \hline" + "\n";
 
 for d in ks:
     rd = res[d].keys();
     rd.sort();
     for p in rd:
-        if res[d][p]['s'] != "0":
-            summary += " " + str(d) + " & " + str(p) + " & " + str(res[d][p]['t']) + " & " + str(res[d][p]['s']) + " & " + str(speed[d][p])[:4];
-        else:
-            summary += " " + str(d) + " & " + str(p) + " & " + str(res[d][p]['t']) + " & " + " & " + str(speed[d][p])[:4];
+        #if res[d][p]['s'] != "0":
+        #    summary += " " + str(d) + " & " + str(p) + " & " + str(res[d][p]['t']) + " & " + str(res[d][p]['s']) + " & " + str(speed[d][p])[:4];
+        #else:
+        #    summary += " " + str(d) + " & " + str(p) + " & " + str(res[d][p]['t']) + " & " + " & " + str(speed[d][p])[:4];
+        summary += " " + str(d) + " & " + str(p) + " & " + str(res[d][p]['t']) + " & " + str(speed[d][p])[:4];
         if 'p' in res[d][p] and 'r' in res[d][p]:
             summary += " & " + str(res[d][p]['p']) + " & " + str(res[d][p]['r']) + "\n"
         else:
@@ -255,8 +261,8 @@ for p in kpp:
         #print "p = " + str(p) + ", k = " + str(k)
         if res[k]:
             if p in res[k]:
-                ploting += " " + str(float(res[k][p]['t'])/1000.0);
-                #ploting += " " + str(speed[k][p]);
+                #ploting += " " + str(float(res[k][p]['t'])/1000.0);
+                ploting += " " + str(speed[k][p]);
             else:
                 ploting += " -";
     ploting += "\n";
@@ -278,8 +284,8 @@ for k in ks:
         #print "p = " + str(p) + ", k = " + str(k)
         if res[k]:
             if p in res[k]:
-                ploting += " " + str(float(res[k][p]['t'])/1000.0); 
-                #ploting += " " + str(speed[k][p]); 
+                #ploting += " " + str(float(res[k][p]['t'])/1000.0); 
+                ploting += " " + str(speed[k][p]); 
             else:
                 ploting += " -";
     ploting += "\n";
@@ -294,7 +300,7 @@ o.close();
 #---------------------------------------
 pscript_2d = """
 set grid 
-set term %s
+set terminal x11
 set title "Groebner bases on a grid cluster, distributed hybrid version" 
 set time
 set xlabel "number of nodes" 
@@ -355,7 +361,7 @@ replot
 #---------------------------------------
 pscript_1d = """
 set grid 
-set term %s
+set terminal x11
 set title "Groebner bases on a grid cluster, distributed version" 
 set time
 set xlabel "number of nodes" 
@@ -399,7 +405,7 @@ replot
 #---------------------------------------
 pscript_1p = """
 set grid 
-set term %s
+set terminal x11
 set title "Groebner bases on a multi-core computer" 
 set time
 set xlabel "number of threads" 
@@ -444,7 +450,7 @@ replot
 #---------------------------------------
 pscript_d = """
 set grid 
-set term %s
+set terminal x11
 set title "Groebner bases on a grid cluster, distributed hybrid version" 
 set time
 set xlabel "number of threads" 
@@ -462,9 +468,10 @@ set style data lines
 set origin 0,0
 
 ##set ylabel "milliseconds" 
-set ylabel "seconds" 
+#set ylabel "seconds" 
+set ylabel "speedup" 
 # smooth acsplines
-plot "%s.po" using 1:2 title 'parallel, n = 1',\
+plot "%s.po" using 1:2 title '%s, parallel, n = 1',\
      "%s.po" using 1:3 title 'distributed, n = 2',\
      "%s.po" using 1:4 title 'distributed, n = 3',\
      "%s.po" using 1:5 title 'distributed, n = 4',\
@@ -487,7 +494,7 @@ replot
 #---------------------------------------
 pscript_dp = """
 set grid 
-set term %s
+set terminal x11
 set title "Groebner bases on a grid cluster, distributed hybrid version" 
 set time
 set xlabel "number of nodes" 
@@ -505,10 +512,11 @@ set style data lines
 set origin 0,0
 
 ##set ylabel "milliseconds" 
-set ylabel "seconds" 
+#set ylabel "seconds" 
+set ylabel "speedup" 
 # smooth acsplines
 # 1:2 ignored
-plot "%s.po" using 1:3 title 'ppn = 1',\
+plot "%s.po" using 1:3 title '%s, ppn = 1',\
      "%s.po" using 1:4 title 'ppn = 2',\
      "%s.po" using 1:5 title 'ppn = 3',\
      "%s.po" using 1:6 title 'ppn = 4',\
@@ -540,27 +548,27 @@ sqt = st;
 print "seq time = ", sqt;
 #print "args: %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s. " % ("x11",bname,exam,bname,str(sqt),exam,bname,exam,bname,exam,bname);
 
-hyb2d = False; # True
-t2n = True; # True  # thread to nodes
+hyb2d = False; 
+#hyb2d = True
+t2n = True; # thread to nodes
+#t2n = False
 
 if hybrid:
     if hyb2d:
-        pscript = pscript_2d % ("x11",bname,exam,bname,str(sqt),exam,bname,exam,bname,exam,bname);
+        pscript = pscript_2d % (bname,exam,bname,str(sqt),exam,bname,exam,bname,exam,bname);
     else:
         if t2n:
             oname = bname+"_p";
-            pscript = pscript_d % ("x11",oname,oname,oname,oname,oname,oname,oname,bname);
+            pscript = pscript_d % (oname,exam,oname,oname,oname,oname,oname,oname,bname);
         else:
             oname = bname+"_d";
-            pscript = pscript_dp % ("x11",oname,oname,oname,oname,oname,oname,oname,oname,bname);
+            pscript = pscript_dp % (oname,exam,oname,oname,oname,oname,oname,oname,oname,bname);
 else:
     if dist:
-        pscript = pscript_1d % ("x11",bname,bname,exam,bname,str(sqt),exam,bname,exam,bname,exam);
-        pscriptp = pscript_1d % ("postscript",bname,bname,exam,bname,str(sqt),exam,bname,exam,bname,exam);
+        pscript = pscript_1d % (bname,exam,bname,bname,str(sqt),exam,bname,exam,bname,exam);
     else:
         if para:
-            pscript = pscript_1p % ("x11",bname,bname,exam,bname,str(sqt),exam,bname,exam,bname,exam);
-            pscriptp = pscript_1p % ("postscript",bname,bname,exam,bname,str(sqt),exam,bname,exam,bname,exam);
+            pscript = pscript_1p % (bname,exam,bname,bname,str(sqt),exam,bname,exam,bname,exam);
 
 p.write(pscript);
 p.close();
@@ -569,14 +577,7 @@ cmd = "gnuplot " + pname;
 print "cmd: " + cmd;
 os.system(cmd);
 
-if not hybrid:
-    p=open(pname,"w");
-    print p;
-    p.write(pscriptp);
-    p.close();
-    os.system(cmd);
-
-# convert to pdf, better use pstopdf
+# convert to pdf, better use pstopdf, embed all fonts
 #cmd = "ps2pdf " + psname;
 cmd = "epstopdf --autorotate=All --embed " + psname;
 print "cmd: " + cmd;
