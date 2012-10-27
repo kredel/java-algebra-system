@@ -1,5 +1,5 @@
 #
-# $Id: $
+# $Id$
 #
 # Makefile for the (Fast) MPJ (Express) dependend parts
 # by Heinz kredel
