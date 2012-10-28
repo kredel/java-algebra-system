@@ -19,12 +19,17 @@ BOOTCLASSPATH6="/usr/lib64/jvm/java-1.6.0/jre/lib/rt.jar"
 .SUFFIXES : .class .java .jar 
 .PHONY    : clean
 
-FILES=$(wildcard src/edu/jas/kern/*.java)
+FILES=$(wildcard src/edu/jas/*/*.java)
 #echo $(FILES) $(JASPATH)/examples/jas.py
 CLASSES=$(subst src,classes,$(subst java,class,$(FILES)))
 #echo $(CLASSES)
 
-all: clean jas-jython.jar
+#DOCOPTS=-package
+DOCOPTS=-package -author -version -linksource
+DOCCLASSES=$(CLASSPATH)
+DOC=javadoc -classpath $(DOCCLASSES)
+
+all: clean jas-jython.jar doc
 
 $(CLASSES): $(FILES)
 	mkdir classes
@@ -50,3 +55,6 @@ clean:
 tests:
 	java -client -cp $(JYTHONPATH):$(JRUBYPATH):$(CLASSPATH):jas-jython.jar edu.jas.kern.ScriptingExample
 	java -client -cp $(JYTHONPATH):$(JRUBYPATH):$(CLASSPATH):jas-jython.jar edu.jas.gb.GBSigBasedTest
+
+doc: $(FILES)
+	$(DOC) $(DOCOPTS) -d ../doc/jas-jython $(FILES)

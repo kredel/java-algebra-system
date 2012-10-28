@@ -7,6 +7,10 @@
 
   <property name="src"       value="src" />
   <property name="testsrc"   value="trc" />
+  <property name="mpjsrc"    value="mpj/src" />
+  <property name="jysrc"     value="jython/src" />
+  <!--property name="jlinalg"   value="../jas-versions/jlinalg_adapter/edu" /-->
+  <!--property name="ACmath"    value="../jas-versions/commons-math_adapter/edu" /-->
   <property name="bin"       value="edu" />
   <property name="build"     value="." />
   <property name="doc"       value="doc/api" />
@@ -126,12 +130,14 @@
      <!--tag name="typeparam" description="Type parameter: " scope="all" /-->
      <!--tag name="param" /-->
      <!--tag name="return" /-->
+     <!--tag name="unused"    description="Not used"         scope="all" /-->
      <tag name="todo"      description="To do"            scope="all" />
      <tag name="fix"       description="Fix me"           scope="all" />
-     <!--tag name="unused"    description="Not used"         scope="all" /-->
      <tag name="usage"     description="Usage"            scope="all" />
      <fileset dir="${src}" includes="**/*.java"  />
      <fileset dir="${testsrc}" includes="**/*.java"  />
+     <!--fileset dir="${mpjsrc}" includes="**/*.java"  /-->
+     <!--fileset dir="${jysrc}" includes="**/*.java"  /-->
   </javadoc>
 </target>
 
