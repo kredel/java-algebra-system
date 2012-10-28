@@ -215,11 +215,11 @@ public class RunGB {
         List L = S.list;
         List G = null;
         long t, t1;
+        GroebnerBaseDistributedEC gbd = null;
+        GroebnerBaseDistributedEC gbds = null;
 
         System.out.println("\nGroebner base distributed (" + threads + ", " + mfile + ", " + port + ") ...");
         t = System.currentTimeMillis();
-        GroebnerBaseDistributedEC gbd = null;
-        GroebnerBaseDistributedEC gbds = null;
         if (pairseq) {
             //gbds = new GroebnerBaseDistributedEC(threads,mfile, port);
             gbds = new GroebnerBaseDistributedEC(mfile, threads, new OrderedSyzPairlist(), port);
@@ -259,12 +259,12 @@ public class RunGB {
         List L = S.list;
         List G = null;
         long t, t1;
+        GroebnerBaseDistributedEC gbd = null;
+        GroebnerBaseDistributedEC gbds = null;
 
         System.out.println("\nGroebner base distributed[once] (" + threads + ", " + mfile + ", " + port
                         + ") ...");
         t = System.currentTimeMillis();
-        GroebnerBaseDistributedEC gbd = null;
-        GroebnerBaseDistributedEC gbds = null;
         if (pairseq) {
             //gbds = new GroebnerBaseDisttributedEC(threads, mfile, port);
             gbds = new GroebnerBaseDistributedEC(mfile, threads, new OrderedSyzPairlist(), port);
@@ -305,12 +305,12 @@ public class RunGB {
         List L = S.list;
         List G = null;
         long t, t1;
-
-        t = System.currentTimeMillis();
-        System.out.println("\nGroebner base distributed hybrid[once] (" + threads + "/" + threadsPerNode
-                        + ", " + mfile + ", " + port + ") ...");
         GroebnerBaseDistributedHybridEC gbd = null;
         GroebnerBaseDistributedHybridEC gbds = null;
+
+        System.out.println("\nGroebner base distributed hybrid[once] (" + threads + "/" + threadsPerNode
+                        + ", " + mfile + ", " + port + ") ...");
+        t = System.currentTimeMillis();
         if (pairseq) {
             //System.out.println("... not implemented.");
             //return;
@@ -350,7 +350,6 @@ public class RunGB {
 
     static void runClient(int port) {
         System.out.println("\nGroebner base distributed client (" + port + ") ...");
-
         ExecutableServer es = new ExecutableServer(port);
         es.init();
         try {
@@ -374,9 +373,8 @@ public class RunGB {
         } else {
             bb = new GroebnerBaseParallel(threads);
         }
-        t = System.currentTimeMillis();
         System.out.println("\nGroebner base parallel (" + threads + ") ...");
-
+        t = System.currentTimeMillis();
         if (pairseq) {
             G = bbs.GB(L);
         } else {
@@ -415,8 +413,8 @@ public class RunGB {
         } else {
             bb = new GroebnerBaseSeq();
         }
-        t = System.currentTimeMillis();
         System.out.println("\nGroebner base sequential ...");
+        t = System.currentTimeMillis();
         G = bb.GB(L);
         t = System.currentTimeMillis() - t;
         S = new PolynomialList(S.ring, G);
