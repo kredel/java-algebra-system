@@ -27,7 +27,7 @@ CLASSES=$(subst src,classes,$(subst java,class,$(FILES)))
 #DOCOPTS=-package
 DOCOPTS=-package -author -version -linksource
 DOCCLASSES=$(CLASSPATH)
-DOC=javadoc -classpath $(DOCCLASSES)
+DOC=javadoc -classpath $(DOCCLASSES):$(JYTHONPATH)
 
 all: clean jas-jython.jar doc
 
