@@ -19,6 +19,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.PolyUtil;
+import edu.jas.poly.PolynomialList;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.poly.ExpVector;
@@ -106,24 +107,69 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
      * @return true, if F is a Groebner base, else false.
      */
     public boolean isGB(int modv, List<GenPolynomial<C>> F) {  
-        if ( F == null ) {
+        return isGB(modv,F,true);
+    }
+
+
+    /**
+     * Groebner base test.
+     * @param F polynomial list.
+     * @param b true for simple test, false for GB test.
+     * @return true, if F is a Groebner base, else false.
+     */
+    public boolean isGB(List<GenPolynomial<C>> F, boolean b) {  
+        return isGB(0,F,b);
+    }
+
+
+    /**
+     * Groebner base test.
+     * @param modv module variable number.
+     * @param F polynomial list.
+     * @param b true for simple test, false for GB test.
+     * @return true, if F is a Groebner base, else false.
+     */
+    public boolean isGB(int modv, List<GenPolynomial<C>> F, boolean b) {  
+        if ( b ) {
+            return isGBsimple(modv,F);
+        }
+        return isGBidem(modv,F);
+    }
+
+
+    /**
+     * Groebner base simple test.
+     * @param modv module variable number.
+     * @param F polynomial list.
+     * @return true, if F is a Groebner base, else false.
+     */
+    public boolean isGBsimple(int modv, List<GenPolynomial<C>> F) {  
+        if ( F == null || F.isEmpty() ) {
            return true;
         }
         GenPolynomial<C> pi, pj, s, h;
+        ExpVector ei, ej, eij;
         for ( int i = 0; i < F.size(); i++ ) {
             pi = F.get(i);
+            ei = pi.leadingExpVector();
             for ( int j = i+1; j < F.size(); j++ ) {
                 pj = F.get(j);
-                if ( ! red.moduleCriterion( modv, pi, pj ) ) {
+                ej = pj.leadingExpVector();
+                if ( ! red.moduleCriterion(modv, ei, ej) ) {
                    continue;
                 }
-                if ( ! red.criterion4( pi, pj ) ) { 
+                eij = ei.lcm(ej);
+                if ( ! red.criterion4(ei, ej, eij) ) { 
                    continue;
                 }
-                s = red.SPolynomial( pi, pj );
+                if ( ! criterion3(i, j, eij, F) ) { 
+                   continue;
+                }
+                s = red.SPolynomial(pi, pj);
                 if ( s.isZERO() ) {
                    continue;
                 }
+                //System.out.println("i, j = " + i + ", " + j); 
                 h = red.normalform( F, s );
                 if ( ! h.isZERO() ) {
                     logger.info("no GB: pi = " + pi + ", pj = " + pj);
@@ -133,6 +179,43 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
             }
         }
         return true;
+    }
+
+
+    /**
+     * GB criterium 3.
+     * @return true if the S-polynomial(i,j) is required.
+     */
+    boolean criterion3(int i, int j, ExpVector eij, List<GenPolynomial<C>> P) {  
+        assert i < j;
+        //for ( int k = 0; k < P.size(); k++ ) {
+        // not of much use
+        for ( int k = 0; k < i; k++ ) {
+            GenPolynomial<C> A = P.get( k );
+            ExpVector ek = A.leadingExpVector();
+            if ( eij.multipleOf(ek) ) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * Groebner base idempotence test.
+     * @param modv module variable number.
+     * @param F polynomial list.
+     * @return true, if F is equal to GB(F), else false.
+     */
+    public boolean isGBidem(int modv, List<GenPolynomial<C>> F) {  
+        if ( F == null || F.isEmpty() ) {
+           return true;
+        }
+        GenPolynomialRing<C> pring = F.get(0).ring;
+        List<GenPolynomial<C>> G = GB(modv,F);
+        PolynomialList<C> Fp = new PolynomialList<C>(pring,F);
+        PolynomialList<C> Gp = new PolynomialList<C>(pring,G);
+        return Fp.compareTo(Gp) == 0;
     }
 
 

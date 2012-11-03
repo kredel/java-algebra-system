@@ -30,6 +30,7 @@ import edu.jas.gb.ReductionPar;
 import edu.jas.gb.ReductionSeq;
 import edu.jas.gbufd.GBFactory;
 import edu.jas.kern.ComputerThreads;
+import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
@@ -437,7 +438,7 @@ public class RunGB {
         }
         GroebnerBaseAbstract bb = GBFactory.getImplementation(S.ring.coFac);
         long t = System.currentTimeMillis();
-        boolean chk = bb.isGB(S.list);
+        boolean chk = bb.isGB(S.list,false);
         t = System.currentTimeMillis() - t;
         System.out.println("check isGB = " + chk + " in " + t + " milliseconds");
     }

@@ -16,10 +16,8 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
-//import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigRational;
-import edu.jas.gb.GroebnerBase;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
@@ -33,7 +31,6 @@ import edu.jas.poly.PolynomialList;
 
 public class GroebnerBaseSeqTest extends TestCase {
 
-    //private static final Logger logger = Logger.getLogger(GroebnerBaseSeqTest.class);
 
     /**
      * main
@@ -68,7 +65,7 @@ public class GroebnerBaseSeqTest extends TestCase {
     PolynomialList<BigRational> F;
     List<GenPolynomial<BigRational>> G;
 
-    GroebnerBase<BigRational> bb;
+    GroebnerBaseAbstract<BigRational> bb;
 
     GenPolynomial<BigRational> a;
     GenPolynomial<BigRational> b;
@@ -191,7 +188,6 @@ public class GroebnerBaseSeqTest extends TestCase {
 
     /**
      * Test sequential extended GBase.
-     * 
      */
     public void testSequentialExtendedGBase() {
 
@@ -256,7 +252,6 @@ public class GroebnerBaseSeqTest extends TestCase {
 
     /**
      * Test Trinks7 GBase.
-     * 
      */
     @SuppressWarnings("unchecked") 
     public void testTrinks7ExtendedGBase() {
@@ -295,7 +290,6 @@ public class GroebnerBaseSeqTest extends TestCase {
 
     /**
      * Test Trinks7 GBase, syz pair list.
-     * 
      */
     @SuppressWarnings("unchecked") 
     public void testTrinks7GBaseSyz() {
@@ -346,7 +340,6 @@ public class GroebnerBaseSeqTest extends TestCase {
 
     /**
      * Test Trinks7 GBase, min pair list.
-     * 
      */
     @SuppressWarnings("unchecked") 
     public void testTrinks7GBaseMin() {
@@ -385,11 +378,12 @@ public class GroebnerBaseSeqTest extends TestCase {
 
     /**
      * Test sequential GBase, both.
-     * 
+     * Test isGBsimple and isGBidem.
      */
     public void testSequentialGBaseBoth() {
-        GroebnerBase<BigRational> bbs = new GroebnerBaseSeq<BigRational>(new ReductionSeq<BigRational>(),
-                                                                         new OrderedSyzPairlist<BigRational>());
+        GroebnerBaseAbstract<BigRational> bbs 
+          = new GroebnerBaseSeq<BigRational>(new ReductionSeq<BigRational>(),
+                                             new OrderedSyzPairlist<BigRational>());
 
         L = new ArrayList<GenPolynomial<BigRational>>();
         List<GenPolynomial<BigRational>> G;
@@ -408,16 +402,13 @@ public class GroebnerBaseSeqTest extends TestCase {
         } while ( d.isZERO() || d.isONE() );
         e = d; //fac.random(kl, ll, el, q );
 
-        //if ( a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO() ) {
-        //    return;
-        //}
-
         L.add(a);
 
         G = bb.GB( L );
         assertTrue("isGB( { a } )", bb.isGB(G) );
         G = bbs.GB( L );
         assertTrue("isGB( { a } )", bbs.isGB(G) );
+        assertEquals("isGBsimple(G) == isGBidem(G)", bb.isGB(G), bb.isGB(G,false) );
 
         G.add(b);
         L = G;
@@ -426,6 +417,7 @@ public class GroebnerBaseSeqTest extends TestCase {
         assertTrue("isGB( { a, b } )", bb.isGB(G) );
         G = bbs.GB( L );
         assertTrue("isGB( { a, b } )", bbs.isGB(G) );
+        assertEquals("isGBsimple(G) == isGBidem(G)", bb.isGB(G), bb.isGB(G,false) );
 
         G.add(c);
         L = G;
@@ -434,6 +426,7 @@ public class GroebnerBaseSeqTest extends TestCase {
         assertTrue("isGB( { a, b, c } )", bb.isGB(G) );
         G = bbs.GB( L );
         assertTrue("isGB( { a, b, c } )", bbs.isGB(G) );
+        assertEquals("isGBsimple(G) == isGBidem(G)", bb.isGB(G), bb.isGB(G,false) );
 
         G.add(d);
         L = G;
@@ -442,6 +435,7 @@ public class GroebnerBaseSeqTest extends TestCase {
         assertTrue("isGB( { a, b, c, d } )", bb.isGB(G) );
         G = bbs.GB( L );
         assertTrue("isGB( { a, b, c, d } )", bbs.isGB(G) );
+        assertEquals("isGBsimple(G) == isGBidem(G)", bb.isGB(G), bb.isGB(G,false) );
 
         G.add(e);
         L = G;
@@ -450,6 +444,8 @@ public class GroebnerBaseSeqTest extends TestCase {
         assertTrue("isGB( { a, b, c, d, e } )", bb.isGB(G) );
         G = bbs.GB( L );
         assertTrue("isGB( { a, b, c, d, e } )", bbs.isGB(G) );
+        //System.out.println("G = " + G);
+        assertEquals("isGBsimple(G) == isGBidem(G)", bb.isGB(G), bb.isGB(G,false) );
     }
 
 }

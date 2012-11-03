@@ -99,6 +99,16 @@ public interface Reduction<C extends RingElem<C>>
 
 
     /**
+     * GB criterium 4. 
+     * @param ei exponent vector.
+     * @param ej exponent vector.
+     * @param e = lcm(ei,ej)
+     * @return true if the S-polynomial(i,j) is required, else false.
+     */
+    public boolean criterion4(ExpVector ei, ExpVector ej, ExpVector e);
+
+
+    /**
      * Is top reducible.
      * Condition is lt(B) | lt(A) for some B in F.
      * @param A polynomial.
