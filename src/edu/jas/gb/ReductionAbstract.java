@@ -184,11 +184,22 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
         }
         ExpVector ei = A.leadingExpVector();
         ExpVector ej = B.leadingExpVector();
+        return criterion4(ei,ej,e);
+    }
+
+
+    /**
+     * GB criterium 4. Use only for commutative polynomial rings.
+     * @param ei exponent vector.
+     * @param ej exponent vector.
+     * @param e = lcm(ei,ej)
+     * @return true if the S-polynomial(i,j) is required, else false.
+     */
+    public boolean criterion4(ExpVector ei, ExpVector ej, ExpVector e) {
         ExpVector g = ei.sum(ej);
-        // boolean t =  g == e ;
         ExpVector h = g.subtract(e);
         int s = h.signum();
-        return !(s == 0);
+        return s != 0;
     }
 
 
@@ -207,12 +218,8 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
         }
         ExpVector ei = A.leadingExpVector();
         ExpVector ej = B.leadingExpVector();
-        ExpVector g = ei.sum(ej);
         ExpVector e = ei.lcm(ej);
-        // boolean t =  g == e ;
-        ExpVector h = g.subtract(e);
-        int s = h.signum();
-        return !(s == 0);
+        return criterion4(ei,ej,e);
     }
 
 
