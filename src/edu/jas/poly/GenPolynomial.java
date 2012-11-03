@@ -189,6 +189,27 @@ Iterable<Monomial<C>> {
 
 
     /**
+     * Remove an ExpVector to coefficient entry from the internal map of this
+     * GenPolynomial. <b>Note:</b> Do not use this method unless you are
+     * constructing a new polynomial. this is modified and breaks the
+     * immutability promise of this class.
+     * @param e exponent.
+     * @param c expected coefficient, null for ignore.
+     */
+    public void doRemoveFromMap(ExpVector e, C c) {
+        C b = val.remove(e);
+        if (debug) {
+            if ( c == null ) { // ignore b
+                return;
+            }
+            if ( ! c.equals(b) ) {
+                logger.error("map entry wrong " + e + " to " + c + " old " + b);
+            }
+        }
+    }
+
+
+    /**
      * Put an a sorted map of exponents to coefficients into the internal map of
      * this GenPolynomial. <b>Note:</b> Do not use this method unless you are
      * constructing a new polynomial. this is modified and breaks the
@@ -933,6 +954,54 @@ Iterable<Monomial<C>> {
      */
     public GenPolynomial<C> subtract(C a) {
         return subtract(a, ring.evzero);
+    }
+
+
+    /**
+     * GenPolynomial subtract a multiple.
+     * @param a coefficient.
+     * @param e exponent.
+     * @param S GenPolynomial.
+     * @return this - a x<sup>e</sup> S.
+     */
+    public GenPolynomial<C> subtractMultiple(C a, ExpVector e, GenPolynomial<C> S) {
+        if (a == null) {
+            return this;
+        }
+        if (a.isZERO()) {
+            return this;
+        }
+        if (S == null) {
+            return this;
+        }
+        if (S.isZERO()) {
+            return this;
+        }
+        if (this.isZERO()) {
+            return S.multiply(a.negate(),e);
+        }
+        assert (ring.nvar == S.ring.nvar);
+        GenPolynomial<C> n = this.copy(); //new GenPolynomial<C>(ring, val); 
+        SortedMap<ExpVector, C> nv = n.val;
+        SortedMap<ExpVector, C> sv = S.val;
+        for (Map.Entry<ExpVector, C> me : sv.entrySet()) {
+            ExpVector f = me.getKey();
+            f = e.sum(f);
+            C y = me.getValue(); // assert y != null
+            y = a.multiply(y);
+            C x = nv.get(f);
+            if (x != null) {
+                x = x.subtract(y);
+                if (!x.isZERO()) {
+                    nv.put(f, x);
+                } else {
+                    nv.remove(f);
+                }
+            } else {
+                nv.put(f, y.negate());
+            }
+        }
+        return n;
     }
 
 

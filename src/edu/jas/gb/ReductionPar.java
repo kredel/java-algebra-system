@@ -69,10 +69,10 @@ public class ReductionPar<C extends RingElem<C>>
         C a;
         boolean mt = false;
         GenPolynomial<C> Rz = Ap.ring.getZERO();
-        GenPolynomial<C> R = Rz;
+        GenPolynomial<C> R = Rz.copy();
         GenPolynomial<C> p = null;
         GenPolynomial<C> Q = null;
-        GenPolynomial<C> S = Ap;
+        GenPolynomial<C> S = Ap.copy();
         while ( S.length() > 0 ) { 
             if ( Pp.size() != l ) { 
                 //long t = System.currentTimeMillis();
@@ -86,12 +86,13 @@ public class ReductionPar<C extends RingElem<C>>
                 }
                 //t = System.currentTimeMillis()-t;
                 //logger.info("Pp.toArray() = " + t + " ms, size() = " + l);
-                S = Ap; // S.add(R)? // restart reduction ?
-                R = Rz; 
+                S = Ap.copy(); // S.add(R)? // restart reduction ?
+                R = Rz.copy(); 
             }
             m = S.leadingMonomial();
             e = m.getKey();
             a = m.getValue();
+            //System.out.println("S.e = " + e);
             for ( int i = 0; i < P.length ; i++ ) {
                 p = P[i];
                 f = p.leadingExpVector();
@@ -102,18 +103,21 @@ public class ReductionPar<C extends RingElem<C>>
             }
             if ( ! mt ) { 
                 //logger.debug("irred");
-                //T = new OrderedMapPolynomial( a, e );
-                R = R.sum( a, e );
-                S = S.subtract( a, e ); 
-                // System.out.println(" S = " + S);
+                //R = R.sum( a, e );
+                //S = S.subtract( a, e ); 
+                R.doPutToMap(e,a);
+                S.doRemoveFromMap(e,a); 
+                //System.out.println("R = " + R);
             } else { 
                 //logger.debug("red");
                 m1 = p.leadingMonomial();
                 e =  e.subtract( f );
                 a = a.divide( m1.getValue() );
-                Q = p.multiply( a, e );
-                S = S.subtract( Q );
+                //Q = p.multiply( a, e );
+                //S = S.subtract( Q );
+                S = S.subtractMultiple(a,e,p);
             }
+            //System.out.println("S = " + S);
         }
         return R;
     }
@@ -164,10 +168,10 @@ public class ReductionPar<C extends RingElem<C>>
         C a;
         boolean mt = false;
         GenPolynomial<C> Rz = Ap.ring.getZERO();
-        GenPolynomial<C> R = Rz;
+        GenPolynomial<C> R = Rz.copy();
         GenPolynomial<C> p = null;
         GenPolynomial<C> Q = null;
-        GenPolynomial<C> S = Ap;
+        GenPolynomial<C> S = Ap.copy();
         while ( S.length() > 0 ) { 
             if ( mp.size() != l ) { 
                 //long t = System.currentTimeMillis();
@@ -178,8 +182,8 @@ public class ReductionPar<C extends RingElem<C>>
                 //t = System.currentTimeMillis()-t;
                 //logger.info("Pp.toArray() = " + t + " ms, size() = " + l);
                 //logger.info("Pp.toArray() size() = " + l);
-                S = Ap; // S.add(R)? // restart reduction ?
-                R = Rz; 
+                S = Ap.copy(); // S.add(R)? // restart reduction ?
+                R = Rz.copy(); 
             }
 
             m = S.leadingMonomial();
@@ -195,17 +199,19 @@ public class ReductionPar<C extends RingElem<C>>
             }
             if ( ! mt ) { 
                 //logger.debug("irred");
-                //T = new OrderedMapPolynomial( a, e );
-                R = R.sum( a, e );
-                S = S.subtract( a, e ); 
+                //R = R.sum( a, e );
+                //S = S.subtract( a, e ); 
+                R.doPutToMap(e,a);
+                S.doRemoveFromMap(e,a); 
                 // System.out.println(" S = " + S);
             } else { 
                 //logger.debug("red");
                 m1 = p.leadingMonomial();
                 e =  e.subtract( f );
                 a = a.divide( m1.getValue() );
-                Q = p.multiply( a, e );
-                S = S.subtract( Q );
+                //Q = p.multiply( a, e );
+                //S = S.subtract( Q );
+                S = S.subtractMultiple(a,e,p);
             }
         }
         return R;

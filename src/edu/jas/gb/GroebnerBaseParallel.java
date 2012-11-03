@@ -401,7 +401,7 @@ class Reducer<C extends RingElem<C>> implements Runnable {
                 continue;
             }
             if (logger.isDebugEnabled()) {
-                logger.debug("ht(H) = " + H.leadingExpVector());
+                logger.info("ht(H) = " + H.leadingExpVector());
             }
 
             H = H.monic();
