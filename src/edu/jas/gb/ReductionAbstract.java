@@ -42,27 +42,27 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
 
     /**
      * S-Polynomial.
-     * @param Ap polynomial.
-     * @param Bp polynomial.
-     * @return spol(Ap,Bp) the S-polynomial of Ap and Bp.
+     * @param A polynomial.
+     * @param B polynomial.
+     * @return spol(A,B) the S-polynomial of A and B.
      */
-    public GenPolynomial<C> SPolynomial(GenPolynomial<C> Ap, GenPolynomial<C> Bp) {
-        if (Bp == null || Bp.isZERO()) {
-            if (Ap == null) {
-                return Bp;
+    public GenPolynomial<C> SPolynomial(GenPolynomial<C> A, GenPolynomial<C> B) {
+        if (B == null || B.isZERO()) {
+            if (A == null) {
+                return B;
             }
-            return Ap.ring.getZERO();
+            return A.ring.getZERO();
         }
-        if (Ap == null || Ap.isZERO()) {
-            return Bp.ring.getZERO();
+        if (A == null || A.isZERO()) {
+            return B.ring.getZERO();
         }
         if (debug) {
-            if (!Ap.ring.equals(Bp.ring)) {
-                logger.error("rings not equal " + Ap.ring + ", " + Bp.ring);
+            if (!A.ring.equals(B.ring)) {
+                logger.error("rings not equal " + A.ring + ", " + B.ring);
             }
         }
-        Map.Entry<ExpVector, C> ma = Ap.leadingMonomial();
-        Map.Entry<ExpVector, C> mb = Bp.leadingMonomial();
+        Map.Entry<ExpVector, C> ma = A.leadingMonomial();
+        Map.Entry<ExpVector, C> mb = B.leadingMonomial();
 
         ExpVector e = ma.getKey();
         ExpVector f = mb.getKey();
@@ -74,9 +74,10 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
         C a = ma.getValue();
         C b = mb.getValue();
 
-        GenPolynomial<C> App = Ap.multiply(b, e1);
-        GenPolynomial<C> Bpp = Bp.multiply(a, f1);
-        GenPolynomial<C> Cp = App.subtract(Bpp);
+        //GenPolynomial<C> App = A.multiply(b, e1);
+        //GenPolynomial<C> Bpp = B.multiply(a, f1);
+        //GenPolynomial<C> Cp = App.subtract(Bpp);
+        GenPolynomial<C> Cp = A.scaleSubtractMultiple(b,e1,a,f1,B);
         return Cp;
     }
 
@@ -84,28 +85,28 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
     /**
      * S-Polynomial with recording.
      * @param S recording matrix, is modified. <b>Note</b> the negative
-     *            Spolynomial is recorded as required by all applications.
+     *            S-polynomial is recorded as required by all applications.
      * @param i index of Ap in basis list.
-     * @param Ap a polynomial.
+     * @param A a polynomial.
      * @param j index of Bp in basis list.
-     * @param Bp a polynomial.
-     * @return Spol(Ap, Bp), the S-Polynomial for Ap and Bp.
+     * @param B a polynomial.
+     * @return Spol(A, B), the S-Polynomial for A and B.
      */
-    public GenPolynomial<C> SPolynomial(List<GenPolynomial<C>> S, int i, GenPolynomial<C> Ap, int j,
-                    GenPolynomial<C> Bp) {
+    public GenPolynomial<C> SPolynomial(List<GenPolynomial<C>> S, int i, GenPolynomial<C> A, int j,
+                    GenPolynomial<C> B) {
         if (debug) {
-            if (Bp == null || Bp.isZERO()) {
+            if (B == null || B.isZERO()) {
                 throw new ArithmeticException("Spol B is zero");
             }
-            if (Ap == null || Ap.isZERO()) {
+            if (A == null || A.isZERO()) {
                 throw new ArithmeticException("Spol A is zero");
             }
-            if (!Ap.ring.equals(Bp.ring)) {
-                logger.error("rings not equal " + Ap.ring + ", " + Bp.ring);
+            if (!A.ring.equals(B.ring)) {
+                logger.error("rings not equal " + A.ring + ", " + B.ring);
             }
         }
-        Map.Entry<ExpVector, C> ma = Ap.leadingMonomial();
-        Map.Entry<ExpVector, C> mb = Bp.leadingMonomial();
+        Map.Entry<ExpVector, C> ma = A.leadingMonomial();
+        Map.Entry<ExpVector, C> mb = B.leadingMonomial();
 
         ExpVector e = ma.getKey();
         ExpVector f = mb.getKey();
@@ -117,11 +118,12 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
         C a = ma.getValue();
         C b = mb.getValue();
 
-        GenPolynomial<C> App = Ap.multiply(b, e1);
-        GenPolynomial<C> Bpp = Bp.multiply(a, f1);
-        GenPolynomial<C> Cp = App.subtract(Bpp);
+        //GenPolynomial<C> App = A.multiply(b, e1);
+        //GenPolynomial<C> Bpp = B.multiply(a, f1);
+        //GenPolynomial<C> Cp = App.subtract(Bpp);
+        GenPolynomial<C> Cp = A.scaleSubtractMultiple(b,e1,a,f1,B);
 
-        GenPolynomial<C> zero = Ap.ring.getZERO();
+        GenPolynomial<C> zero = A.ring.getZERO();
         GenPolynomial<C> As = zero.sum(b.negate(), e1);
         GenPolynomial<C> Bs = zero.sum(a /*correct .negate()*/, f1);
         S.set(i, As);
