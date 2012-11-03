@@ -68,7 +68,6 @@ public class RatGenPolynomialTest extends TestCase {
 
 /**
  * Test constructor and toString.
- * 
  */
  public void testConstruction() {
      c = fac.getONE();
@@ -101,7 +100,6 @@ public class RatGenPolynomialTest extends TestCase {
 
 /**
  * Test addition.
- * 
  */
  public void testAddition() {
 
@@ -140,7 +138,6 @@ public class RatGenPolynomialTest extends TestCase {
 
 /**
  * Test object multiplication.
- * 
  */
  public void testMultiplication() {
 
@@ -196,8 +193,38 @@ public class RatGenPolynomialTest extends TestCase {
 
 
 /**
+ * Test BLAS level 1.
+ */
+ public void testBLAS1() {
+     a = fac.random(kl,ll,el,q);
+     b = fac.random(kl,ll,el,q);
+     c = fac.random(kl,3,el*el,q);
+     ExpVector ev = ExpVector.EVRAND(rl,el,q);
+     BigRational lc = BigRational.RNRAND(kl);
+
+     d = a.subtractMultiple(lc,b);
+     e = a.subtract( b.multiply(lc) );
+     assertEquals("a - (lc) b == a - ((lc) b)",d,e);
+
+     d = a.subtractMultiple(lc,ev,b);
+     e = a.subtract( b.multiply(lc,ev) );
+     assertEquals("a - (lc ev) b == a - ((lc ev) b)",d,e);
+
+     ExpVector fv = ExpVector.EVRAND(rl,el,q);
+     BigRational tc = BigRational.RNRAND(kl);
+
+     d = a.scaleSubtractMultiple(tc,lc,ev,b);
+     e = a.multiply(tc).subtract( b.multiply(lc,ev) );
+     assertEquals("(tc) a - (lc ev) b == ((tc) a - ((lc ev) b))",d,e);
+
+     d = a.scaleSubtractMultiple(tc,fv,lc,ev,b);
+     e = a.multiply(tc,fv).subtract( b.multiply(lc,ev) );
+     assertEquals("(tc fv) a - (lc ev) b == ((tc fv) a - ((lc ev) b))",d,e);
+ }
+
+
+/**
  * Test distributive law.
- * 
  */
  public void testDistributive() {
      a = fac.random(kl,ll,el,q);
@@ -207,15 +234,13 @@ public class RatGenPolynomialTest extends TestCase {
      d = a.multiply( b.sum(c) );
      e = a.multiply( b ).sum( a.multiply(c) );
 
-     assertEquals("a(b+c) = ab+ac",d,e);
+     assertEquals("a(b+c) == ab+ac",d,e);
  }
 
 
 /**
  * Test object quotient and remainder.
- * 
  */
-
  public void testQuotRem() {
 
      fac = new GenPolynomialRing<BigRational>(new BigRational(1),1);

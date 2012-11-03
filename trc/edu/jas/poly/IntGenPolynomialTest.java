@@ -71,7 +71,6 @@ public class IntGenPolynomialTest extends TestCase {
 
 /**
  * Test constructor and toString.
- * 
  */
  public void testConstruction() {
      c = fac.getONE();
@@ -88,7 +87,6 @@ public class IntGenPolynomialTest extends TestCase {
 
 /**
  * Test random polynomial.
- * 
  */
  public void testRandom() {
      for (int i = 0; i < 7; i++) {
@@ -102,10 +100,8 @@ public class IntGenPolynomialTest extends TestCase {
 
 /**
  * Test addition.
- * 
  */
  public void testAddition() {
-
      a = fac.random(kl,ll,el,q);
      b = fac.random(kl,ll,el,q);
 
@@ -141,11 +137,8 @@ public class IntGenPolynomialTest extends TestCase {
 
 /**
  * Test object multiplication.
- * 
  */
-
  public void testMultiplication() {
-
      a = fac.random(kl,ll,el,q);
      assertTrue("not isZERO( a )", !a.isZERO() );
 
@@ -198,8 +191,37 @@ public class IntGenPolynomialTest extends TestCase {
 
 
 /**
+ * Test BLAS level 1.
+ */
+ public void testBLAS1() {
+     a = fac.random(kl,ll,el,q);
+     b = fac.random(kl,ll,el,q);
+     ExpVector ev = ExpVector.EVRAND(rl,el,q);
+     BigInteger lc = BigInteger.IRAND(kl);
+
+     d = a.subtractMultiple(lc,b);
+     e = a.subtract( b.multiply(lc) );
+     assertEquals("a - (lc) b == a - ((lc) b)",d,e);
+
+     d = a.subtractMultiple(lc,ev,b);
+     e = a.subtract( b.multiply(lc,ev) );
+     assertEquals("a - (lc ev) b == a - ((lc ev) b)",d,e);
+
+     ExpVector fv = ExpVector.EVRAND(rl,el,q);
+     BigInteger tc = BigInteger.IRAND(kl);
+
+     d = a.scaleSubtractMultiple(tc,lc,ev,b);
+     e = a.multiply(tc).subtract( b.multiply(lc,ev) );
+     assertEquals("(tc) a - (lc ev) b == ((tc) a - ((lc ev) b))",d,e);
+
+     d = a.scaleSubtractMultiple(tc,fv,lc,ev,b);
+     e = a.multiply(tc,fv).subtract( b.multiply(lc,ev) );
+     assertEquals("(tc fv) a - (lc ev) b == ((tc fv) a - ((lc ev) b))",d,e);
+ }
+
+
+/**
  * Test distributive law.
- * 
  */
  public void testDistributive() {
      a = fac.random(kl,ll,el,q);
