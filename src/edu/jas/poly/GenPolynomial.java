@@ -1080,7 +1080,7 @@ Iterable<Monomial<C>> {
             ExpVector f = me.getKey();
             f = e.sum(f);
             C y = me.getValue(); // assert y != null
-            y = a.multiply(y);
+            y = a.multiply(y); // now y can be zero
             C x = nv.get(f);
             if (x != null) {
                 x = x.subtract(y);
@@ -1089,7 +1089,7 @@ Iterable<Monomial<C>> {
                 } else {
                     nv.remove(f);
                 }
-            } else {
+            } else if ( !y.isZERO() ) {
                 nv.put(f, y.negate());
             }
         }
@@ -1127,7 +1127,7 @@ Iterable<Monomial<C>> {
             ExpVector f = me.getKey();
             f = e.sum(f);
             C y = me.getValue(); // assert y != null
-            y = a.multiply(y);
+            y = a.multiply(y); // y can be zero now
             C x = nv.get(f);
             if (x != null) {
                 x = x.subtract(y);
@@ -1136,7 +1136,7 @@ Iterable<Monomial<C>> {
                 } else {
                     nv.remove(f);
                 }
-            } else {
+            } else if ( !y.isZERO() ) {
                 nv.put(f, y.negate());
             }
         }
