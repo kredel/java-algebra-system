@@ -317,7 +317,7 @@ public class GBFactory {
             //GroebnerBaseAbstract<C> e2 = new GroebnerBaseParallel<C>(ComputerThreads.N_CPUS,
             //                                                       new ReductionPar<C>(),new OrderedSyzPairlist<C>());
             return new GBProxy<C>(e1, e2);
-        } else if (fac.getONE() instanceof GcdRingElem) {
+        } else if (fac.getONE() instanceof GcdRingElem && fac.characteristic().signum() == 0) {
             GroebnerBaseAbstract<C> e1 = new GroebnerBasePseudoSeq<C>(fac);
             GroebnerBaseAbstract<C> e2 = new GroebnerBasePseudoParallel<C>(ComputerThreads.N_CPUS,fac);
             return new GBProxy<C>(e1, e2);
