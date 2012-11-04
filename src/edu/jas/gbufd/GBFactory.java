@@ -306,16 +306,20 @@ public class GBFactory {
      */
     public static <C extends GcdRingElem<C>> // interface RingElem not sufficient 
       GroebnerBaseAbstract<C> getProxy(RingFactory<C> fac) {
+        if (ComputerThreads.NO_THREADS) {
+            return GBFactory.<C> getImplementation(fac);
+        }
         logger.debug("fac = " + fac.getClass().getName());
         if (fac.isField()) {
-            if (ComputerThreads.NO_THREADS) {
-                return new GroebnerBaseSeq<C>();
-            }
             GroebnerBaseAbstract<C> e1 = new GroebnerBaseSeq<C>();
             //GroebnerBaseAbstract<C> e1 = new GroebnerBaseSeq<C>(new ReductionSeq<C>(),new OrderedSyzPairlist<C>());
             GroebnerBaseAbstract<C> e2 = new GroebnerBaseParallel<C>(ComputerThreads.N_CPUS);
             //GroebnerBaseAbstract<C> e2 = new GroebnerBaseParallel<C>(ComputerThreads.N_CPUS,
             //                                                       new ReductionPar<C>(),new OrderedSyzPairlist<C>());
+            return new GBProxy<C>(e1, e2);
+        } else if (fac.getONE() instanceof GcdRingElem) {
+            GroebnerBaseAbstract<C> e1 = new GroebnerBasePseudoSeq<C>(fac);
+            GroebnerBaseAbstract<C> e2 = new GroebnerBasePseudoParallel<C>(ComputerThreads.N_CPUS,fac);
             return new GBProxy<C>(e1, e2);
         }
         return getImplementation(fac);

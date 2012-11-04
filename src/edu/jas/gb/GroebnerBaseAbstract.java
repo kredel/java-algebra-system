@@ -91,6 +91,16 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
 
 
     /**
+     * Get the String representation with GB engines.
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
+
+
+    /**
      * Groebner base test.
      * @param F polynomial list.
      * @return true, if F is a Groebner base, else false.

@@ -53,6 +53,16 @@ public class GroebnerBaseSeqQuotient<C extends GcdRingElem<C>> extends GroebnerB
 
 
     /**
+     * Get the String representation with GB engines.
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + "(" + bba.toString() + ")";
+    }
+
+
+    /**
      * Groebner base using fraction free computation.
      * @param modv module variable number.
      * @param F polynomial list.

@@ -69,7 +69,7 @@ public class GBOptimized<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<
      */
     @Override
     public String toString() {
-        return "GBOptimized[ " + e1.getClass().getName() + " ]";
+        return "GBOptimized[ " + e1.toString() + " ]";
     }
 
 

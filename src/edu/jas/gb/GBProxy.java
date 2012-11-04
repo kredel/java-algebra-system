@@ -67,7 +67,7 @@ public class GBProxy<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C> {
      */
     @Override
     public String toString() {
-        return "GBProxy[ " + e1.getClass().getName() + ", " + e2.getClass().getName() + " ]";
+        return "GBProxy[ " + e1.toString() + ", " + e2.toString() + " ]";
     }
 
 

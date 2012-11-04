@@ -48,6 +48,16 @@ public class GroebnerBaseSeqRational<C extends BigRational> extends GroebnerBase
 
 
     /**
+     * Get the String representation with GB engines.
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + "(" + bba.toString() + ")";
+    }
+
+
+    /**
      * Groebner base using fraction free computation.
      * @param modv module variable number.
      * @param F polynomial list.
