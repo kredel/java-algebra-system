@@ -412,7 +412,7 @@ public class RunGB {
             //bb = new GroebnerBaseSeqPairSeq();
             bb = new GroebnerBaseSeq(new ReductionSeq(), new OrderedSyzPairlist());
         } else {
-            bb = new GroebnerBaseSeq();
+            bb = GBFactory.getImplementation(S.ring.coFac); //new GroebnerBaseSeq();
         }
         System.out.println("\nGroebner base sequential ...");
         t = System.currentTimeMillis();
