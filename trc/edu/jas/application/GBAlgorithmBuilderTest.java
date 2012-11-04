@@ -25,7 +25,7 @@ import edu.jas.gb.GroebnerBaseSeq;
 import edu.jas.gbufd.GBFactory;
 import edu.jas.gbufd.GroebnerBaseFGLM;
 import edu.jas.gbufd.GroebnerBasePseudoSeq;
-import edu.jas.gbufd.GroebnerBaseSeqRational;
+import edu.jas.gbufd.GroebnerBaseRational;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -95,7 +95,6 @@ public class GBAlgorithmBuilderTest extends TestCase {
 
         GroebnerBaseAbstract<BigRational> bb = ab.build();
         //System.out.println("bb = " + bb);
-
         assertTrue("instance of " + bb, bb instanceof GroebnerBaseSeq);
     }
 
@@ -116,7 +115,6 @@ public class GBAlgorithmBuilderTest extends TestCase {
 
         GroebnerBaseAbstract<BigRational> bb = ab.build();
         //System.out.println("bb = " + bb);
-
         assertTrue("instance of " + bb, bb instanceof GroebnerBaseFGLM);
     }
 
@@ -137,12 +135,38 @@ public class GBAlgorithmBuilderTest extends TestCase {
 
         GroebnerBaseAbstract<BigRational> bb = ab.build();
         //System.out.println("bb = " + bb);
-
         assertTrue("instance of " + bb, bb instanceof GBProxy);
 
         GBProxy<BigRational> bbp = (GBProxy<BigRational>) bb;
         assertTrue("instance of " + bbp.e1, bbp.e1 instanceof GroebnerBaseSeq);
         assertTrue("instance of " + bbp.e2, bbp.e2 instanceof GroebnerBaseParallel);
+    }
+
+
+    /**
+     * Test construction for BigRational fraction free and parallel.
+     */
+    public void testConstructionRationalFFParallel() {
+        BigRational bf = new BigRational(1);
+        String[] vars = new String[] { "a", "b", "c" };
+        GenPolynomialRing<BigRational> pf = new GenPolynomialRing<BigRational>(bf, vars);
+
+        GBAlgorithmBuilder<BigRational> ab = GBAlgorithmBuilder.<BigRational> polynomialRing(pf);
+        //System.out.println("ab = " + ab);
+
+        ab = ab.fractionFree();
+        //System.out.println("ab = " + ab);
+
+        ab = ab.parallel();
+        //System.out.println("ab = " + ab);
+
+        GroebnerBaseAbstract<BigRational> bb = ab.build();
+        //System.out.println("bb = " + bb);
+        assertTrue("instance of " + bb, bb instanceof GBProxy);
+
+        GBProxy<BigRational> bbp = (GBProxy<BigRational>) bb;
+        assertTrue("instance of " + bbp.e1, bbp.e1 instanceof GroebnerBaseRational);
+        assertTrue("instance of " + bbp.e2, bbp.e2 instanceof GroebnerBaseRational);
     }
 
 
@@ -162,7 +186,6 @@ public class GBAlgorithmBuilderTest extends TestCase {
 
         GroebnerBaseAbstract<BigRational> bb = ab.build();
         //System.out.println("bb = " + bb);
-
         assertTrue("instance of " + bb, bb instanceof GBOptimized);
     }
 
@@ -183,8 +206,7 @@ public class GBAlgorithmBuilderTest extends TestCase {
 
         GroebnerBaseAbstract<BigRational> bb = ab.build();
         //System.out.println("bb = " + bb);
-
-        assertTrue("instance of " + bb, bb instanceof GroebnerBaseSeqRational);
+        assertTrue("instance of " + bb, bb instanceof GroebnerBaseRational);
     }
 
 
@@ -201,7 +223,6 @@ public class GBAlgorithmBuilderTest extends TestCase {
 
         GroebnerBaseAbstract<BigInteger> bb = ab.build();
         //System.out.println("bb = " + bb);
-
         assertTrue("instance of " + bb, bb instanceof GroebnerBasePseudoSeq);
     }
 
@@ -222,7 +243,6 @@ public class GBAlgorithmBuilderTest extends TestCase {
 
         GroebnerBaseAbstract<BigInteger> bb = ab.build();
         //System.out.println("bb = " + bb);
-
         assertTrue("instance of " + bb, bb instanceof DGroebnerBaseSeq);
     }
 
@@ -243,7 +263,6 @@ public class GBAlgorithmBuilderTest extends TestCase {
 
         GroebnerBaseAbstract<BigInteger> bb = ab.build();
         //System.out.println("bb = " + bb);
-
         assertTrue("instance of " + bb, bb instanceof EGroebnerBaseSeq);
     }
 
@@ -281,7 +300,8 @@ public class GBAlgorithmBuilderTest extends TestCase {
 
         GroebnerBaseAbstract<BigRational> bb;
         bb = GBAlgorithmBuilder.<BigRational> polynomialRing(pf).fractionFree().parallel().optimize().build();
-        //System.out.println("bb = " + bb);
+        //bb = GBAlgorithmBuilder.<BigRational> polynomialRing(pf).parallel().optimize().build();
+        System.out.println("bb = " + bb);
         assertTrue("instance of " + bb, bb instanceof GBOptimized);
 
         List<GenPolynomial<BigRational>> gb;
@@ -289,22 +309,22 @@ public class GBAlgorithmBuilderTest extends TestCase {
         t = System.currentTimeMillis();
         gb = bb.GB(cp);
         t = System.currentTimeMillis() - t;
-        //System.out.println("time(gb) = " + t);
+        System.out.println("time(gb) = " + t);
 
         t = System.currentTimeMillis();
         gb = bb.GB(cp);
         t = System.currentTimeMillis() - t;
-        //System.out.println("time(gb) = " + t);
+        System.out.println("time(gb) = " + t);
 
         t = System.currentTimeMillis();
         gb = bb.GB(cp);
         t = System.currentTimeMillis() - t;
-        //System.out.println("time(gb) = " + t);
+        System.out.println("time(gb) = " + t);
         assertTrue("t >= 0: ", t >= 0L);
 
         assertTrue("isGB: ", bb.isGB(gb));
         bb.terminate();
-        //System.out.println("gb = " + gb);
-        //System.out.println("bb = " + bb);
+        System.out.println("gb = " + gb);
+        System.out.println("bb = " + bb);
     }
 }
