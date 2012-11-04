@@ -191,7 +191,7 @@ public class GBFactory {
             bba = new GroebnerBaseSeq<BigRational>();
             break;
         case ffgb:
-            bba = new GroebnerBaseSeqRational<BigRational>();
+            bba = new GroebnerBaseRational<BigRational>();
             break;
         default:
             throw new IllegalArgumentException("algorithm not available for BigRational " + a);

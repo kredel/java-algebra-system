@@ -10,22 +10,19 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.arith.BigInteger;
-import edu.jas.arith.BigRational;
 import edu.jas.gb.GroebnerBaseAbstract;
-import edu.jas.gb.GroebnerBaseSeq;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
+import edu.jas.structure.GcdRingElem;
 import edu.jas.ufd.PolyUfdUtil;
 import edu.jas.ufd.Quotient;
 import edu.jas.ufd.QuotientRing;
-import edu.jas.structure.GcdRingElem;
 
 
 /**
- * Groebner Base sequential algorithm for rational function coefficients, fraction free
- * computation. Implements Groebner bases.
+ * Groebner Base sequential algorithm for rational function coefficients,
+ * fraction free computation. Implements Groebner bases.
  * @param <C> Quotient coefficient type
  * @author Heinz Kredel
  */
@@ -158,6 +155,7 @@ public class GroebnerBaseSeqQuotient<C extends GcdRingElem<C>> extends GroebnerB
     /**
      * Cleanup and terminate ThreadPool.
      */
+    @Override
     public void terminate() {
         bba.terminate();
     }
@@ -166,6 +164,7 @@ public class GroebnerBaseSeqQuotient<C extends GcdRingElem<C>> extends GroebnerB
     /**
      * Cancel ThreadPool.
      */
+    @Override
     public int cancel() {
         return bba.cancel();
     }

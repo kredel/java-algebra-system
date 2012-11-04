@@ -115,7 +115,7 @@ public class GroebnerBaseSeqRationalTest extends TestCase {
         BigRational coeff = new BigRational(9);
         fac = new GenPolynomialRing<BigRational>(coeff, rl);
         a = b = c = d = e = null;
-        bb = new GroebnerBaseSeqRational<BigRational>();
+        bb = new GroebnerBaseRational<BigRational>();
     }
 
 

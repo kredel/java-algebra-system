@@ -13,9 +13,8 @@ import java.util.ListIterator;
 import org.apache.log4j.Logger;
 
 import edu.jas.gb.GroebnerBaseAbstract;
-import edu.jas.gb.OrderedPairlist;
-import edu.jas.gb.PairList;
 import edu.jas.gb.Pair;
+import edu.jas.gb.PairList;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
@@ -28,7 +27,7 @@ import edu.jas.ufd.GreatestCommonDivisorAbstract;
  * coefficient fraction free Groebner bases.
  * @param <C> coefficient type
  * @author Heinz Kredel
- *
+ * 
  * @see edu.jas.application.GBAlgorithmBuilder
  * @see edu.jas.gbufd.GBFactory
  */

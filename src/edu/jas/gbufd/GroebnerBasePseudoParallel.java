@@ -14,9 +14,9 @@ import java.util.concurrent.Semaphore;
 import org.apache.log4j.Logger;
 
 import edu.jas.gb.GroebnerBaseAbstract;
-import edu.jas.gb.PairList;
 import edu.jas.gb.OrderedPairlist;
 import edu.jas.gb.Pair;
+import edu.jas.gb.PairList;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
@@ -27,11 +27,11 @@ import edu.jas.util.ThreadPool;
 
 
 /**
- * Groebner Base with pseudo reduction multi-threaded parallel algorithm. Implements
- * coefficient fraction free Groebner bases.
+ * Groebner Base with pseudo reduction multi-threaded parallel algorithm.
+ * Implements coefficient fraction free Groebner bases.
  * @param <C> coefficient type
  * @author Heinz Kredel
- *
+ * 
  * @see edu.jas.application.GBAlgorithmBuilder
  * @see edu.jas.gbufd.GBFactory
  */
@@ -132,8 +132,9 @@ public class GroebnerBasePseudoParallel<C extends GcdRingElem<C>> extends Groebn
      * @param pool ThreadPool to use.
      * @param pl pair selection strategy
      */
-    public GroebnerBasePseudoParallel(int threads, RingFactory<C> rf, PseudoReduction<C> red, ThreadPool pool, PairList<C> pl) {
-        super(red,pl);
+    public GroebnerBasePseudoParallel(int threads, RingFactory<C> rf, PseudoReduction<C> red,
+                    ThreadPool pool, PairList<C> pl) {
+        super(red, pl);
         if (!(red instanceof PseudoReductionPar)) {
             logger.warn("parallel GB should use parallel aware reduction");
         }
@@ -278,6 +279,7 @@ public class GroebnerBasePseudoParallel<C extends GcdRingElem<C>> extends Groebn
         }
         Collections.reverse(G); // important for lex GB
         // reduce remaining polynomials
+        @SuppressWarnings("cast")
         PseudoMiReducer<C>[] mirs = (PseudoMiReducer<C>[]) new PseudoMiReducer[G.size()];
         int i = 0;
         F = new ArrayList<GenPolynomial<C>>(G.size());
@@ -328,7 +330,8 @@ class PseudoReducer<C extends GcdRingElem<C>> implements Runnable {
     private static final Logger logger = Logger.getLogger(PseudoReducer.class);
 
 
-    PseudoReducer(Terminator fin, List<GenPolynomial<C>> G, PairList<C> L, GreatestCommonDivisorAbstract<C> engine) {
+    PseudoReducer(Terminator fin, List<GenPolynomial<C>> G, PairList<C> L,
+                    GreatestCommonDivisorAbstract<C> engine) {
         this.fin = fin;
         this.G = G;
         pairlist = L;

@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.gb.GroebnerBaseAbstract;
-import edu.jas.gb.GroebnerBaseSeq;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
@@ -26,10 +25,10 @@ import edu.jas.poly.PolyUtil;
  * @author Heinz Kredel
  */
 
-public class GroebnerBaseSeqRational<C extends BigRational> extends GroebnerBaseAbstract<BigRational> {
+public class GroebnerBaseRational<C extends BigRational> extends GroebnerBaseAbstract<BigRational> {
 
 
-    private static final Logger logger = Logger.getLogger(GroebnerBaseSeqRational.class);
+    private static final Logger logger = Logger.getLogger(GroebnerBaseRational.class);
 
 
     private final boolean debug = logger.isDebugEnabled();
@@ -41,7 +40,7 @@ public class GroebnerBaseSeqRational<C extends BigRational> extends GroebnerBase
     /**
      * Constructor.
      */
-    public GroebnerBaseSeqRational() {
+    public GroebnerBaseRational() {
         super();
         bba = new GroebnerBasePseudoSeq<BigInteger>(new BigInteger());
     }
@@ -153,6 +152,7 @@ public class GroebnerBaseSeqRational<C extends BigRational> extends GroebnerBase
     /**
      * Cleanup and terminate ThreadPool.
      */
+    @Override
     public void terminate() {
         bba.terminate();
     }
@@ -161,6 +161,7 @@ public class GroebnerBaseSeqRational<C extends BigRational> extends GroebnerBase
     /**
      * Cancel ThreadPool.
      */
+    @Override
     public int cancel() {
         return bba.cancel();
     }
