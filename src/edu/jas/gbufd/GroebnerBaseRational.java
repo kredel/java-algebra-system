@@ -47,6 +47,15 @@ public class GroebnerBaseRational<C extends BigRational> extends GroebnerBaseAbs
 
 
     /**
+     * Constructor.
+     */
+    public GroebnerBaseRational(int threads) {
+        super();
+        bba = new GroebnerBasePseudoParallel<BigInteger>(threads,new BigInteger());
+    }
+
+
+    /**
      * Get the String representation with GB engines.
      * @see java.lang.Object#toString()
      */

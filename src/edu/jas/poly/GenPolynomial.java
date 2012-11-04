@@ -995,7 +995,7 @@ Iterable<Monomial<C>> {
                 } else {
                     nv.remove(f);
                 }
-            } else {
+            } else if ( !y.isZERO() ) {
                 nv.put(f, y.negate());
             }
         }
@@ -1043,7 +1043,7 @@ Iterable<Monomial<C>> {
                 } else {
                     nv.remove(f);
                 }
-            } else {
+            } else if ( !y.isZERO() ) {
                 nv.put(f, y.negate());
             }
         }

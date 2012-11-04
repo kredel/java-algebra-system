@@ -6,6 +6,7 @@ package edu.jas.gbufd;
 
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -53,39 +54,45 @@ public class PseudoReductionPar<C extends RingElem<C>> extends ReductionAbstract
             return Ap;
         }
         GenPolynomial<C>[] P = new GenPolynomial[0];
-        synchronized (Pp) {
-            P = Pp.toArray(P);
+        List<GenPolynomial<C>> Ppp;
+        synchronized (Pp) { 
+           Ppp = new ArrayList<GenPolynomial<C>>(Pp); // sic
         }
-        int l = P.length;
-        boolean mt = false;
+        P = Ppp.toArray(P);
+        int ll = Ppp.size(); 
         GenPolynomial<C> Rz = Ap.ring.getZERO();
         GenPolynomial<C> R = Rz.copy();
 
         GenPolynomial<C> S = Ap.copy();
         while (S.length() > 0) {
-            if (Pp.size() != l) {
+            if (Pp.size() != ll) {
+                //System.out.println("Pp.size() = " + Pp.size() + ", ll = " + ll);
                 //long t = System.currentTimeMillis();
-                synchronized (Pp) {
-                    P = Pp.toArray(P);
+                synchronized (Pp) { 
+                    Ppp = new ArrayList<GenPolynomial<C>>(Pp); // sic
                 }
-                l = P.length;
+                P = Ppp.toArray(P);
+                ll = Ppp.size(); 
+                //ll = P.length; // wrong
                 //t = System.currentTimeMillis()-t;
-                //logger.info("Pp.toArray() = " + t + " ms, size() = " + l);
+                //logger.info("Pp.toArray(): size() = " + l + ", ll = " + ll);
                 S = Ap.copy(); // S.add(R)? // restart reduction ?
                 R = Rz.copy();
             }
+            boolean mt = false;
             Map.Entry<ExpVector, C> m = S.leadingMonomial();
             ExpVector e = m.getKey();
             C a = m.getValue();
             ExpVector f = null;
             int i;
-            for (i = 0; i < l; i++) {
+            for (i = 0; i < ll; i++) {
                 f = P[i].leadingExpVector();
                 mt = e.multipleOf(f);
                 if (mt)
                     break;
             }
             if (!mt) {
+                //System.out.println("m = " + m);
                 //logger.debug("irred");
                 //R = R.sum(a, e);
                 //S = S.subtract(a, e);
@@ -133,10 +140,12 @@ public class PseudoReductionPar<C extends RingElem<C>> extends ReductionAbstract
             return pf;
         }
         GenPolynomial<C>[] P = new GenPolynomial[0];
-        synchronized (Pp) {
-            P = Pp.toArray(P);
+        List<GenPolynomial<C>> Ppp;
+        synchronized (Pp) { 
+             Ppp = new ArrayList<GenPolynomial<C>>(Pp); // sic
         }
-        int l = P.length;
+        P = Ppp.toArray(P);
+        int l = Ppp.size(); 
         boolean mt = false;
         GenPolynomial<C> Rz = Ap.ring.getZERO();
         GenPolynomial<C> R = Rz.copy();
@@ -147,9 +156,10 @@ public class PseudoReductionPar<C extends RingElem<C>> extends ReductionAbstract
             if (Pp.size() != l) {
                 //long t = System.currentTimeMillis();
                 synchronized (Pp) {
-                    P = Pp.toArray(P);
+                    Ppp = new ArrayList<GenPolynomial<C>>(Pp);
                 }
-                l = P.length;
+                P = Ppp.toArray(P);
+                l = Ppp.size();
                 //t = System.currentTimeMillis()-t;
                 //logger.info("Pp.toArray() = " + t + " ms, size() = " + l);
                 S = Ap.copy(); // S.add(R)? // restart reduction ?
