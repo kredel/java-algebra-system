@@ -29,6 +29,7 @@ import edu.jas.gb.OrderedSyzPairlist;
 import edu.jas.gb.ReductionPar;
 import edu.jas.gb.ReductionSeq;
 import edu.jas.gbufd.GBFactory;
+import edu.jas.gbufd.GroebnerBasePseudoParallel;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -372,7 +373,11 @@ public class RunGB {
             //bbs = new GroebnerBaseSeqPairParallel(threads);
             bbs = new GroebnerBaseParallel(threads, new ReductionPar(), new OrderedSyzPairlist());
         } else {
-            bb = new GroebnerBaseParallel(threads);
+            if (S.ring.coFac.isField()) {
+                bb = new GroebnerBaseParallel(threads);
+            } else {
+                bb = new GroebnerBasePseudoParallel(threads,S.ring.coFac);
+            }
         }
         System.out.println("\nGroebner base parallel (" + threads + ") ...");
         t = System.currentTimeMillis();

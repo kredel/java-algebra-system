@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.OrderedPairlist;
+import edu.jas.gb.PairList;
 import edu.jas.gb.Pair;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.GcdRingElem;
@@ -93,7 +94,7 @@ public class GroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends GroebnerBas
     public List<GenPolynomial<C>> GB(int modv, List<GenPolynomial<C>> F) {
         GenPolynomial<C> p;
         List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
-        OrderedPairlist<C> pairlist = null;
+        PairList<C> pairlist = null;
         int l = F.size();
         ListIterator<GenPolynomial<C>> it = F.listIterator();
         while (it.hasNext()) {
@@ -108,7 +109,8 @@ public class GroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends GroebnerBas
                 }
                 G.add(p);
                 if (pairlist == null) {
-                    pairlist = new OrderedPairlist<C>(modv, p.ring);
+                    //pairlist = new OrderedPairlist<C>(modv, p.ring);
+                    pairlist = strategy.create(modv, p.ring);
                 }
                 // putOne not required
                 pairlist.put(p);
