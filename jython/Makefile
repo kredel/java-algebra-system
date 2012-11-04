@@ -40,7 +40,7 @@ jas-jython.jar: $(CLASSES) $(JASPATH)/examples/jas.py services/javax.script.Scri
 	mkdir classes/META-INF/services
 	cp -a manifest.mf classes/META-INF/MANIFEST.MF
 	#cp -a services/javax.script.ScriptEngineFactory classes/META-INF/services/
-	cp -a $(JASPATH)/examples/jas.py $(JASPATH)/examples/*.class classes
+	cp -a $(JASPATH)/examples/jas.py $(JASPATH)/examples/*.class $(JASPATH)/examples/basic_sigbased_gb.py classes
 	-cp -a $(JASPATH)/examples/jas.pyc classes
 	cp -a $(JASPATH)/examples/jas.rb classes
 	cp -a $(JASPATH)/log4j.properties classes
