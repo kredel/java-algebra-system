@@ -23,6 +23,7 @@ import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.GroebnerBaseParallel;
 import edu.jas.gb.GroebnerBaseSeq;
 import edu.jas.gb.ReductionSeq;
+import edu.jas.gb.OrderedSyzPairlist;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -189,6 +190,7 @@ public class GBFactory {
         switch (a) {
         case qgb:
             bba = new GroebnerBaseSeq<BigRational>();
+            //bba = new GroebnerBaseSeq<BigRational>(new ReductionSeq<BigRational>(),new OrderedSyzPairlist<BigRational>());
             break;
         case ffgb:
             bba = new GroebnerBaseRational<BigRational>();
@@ -276,6 +278,7 @@ public class GBFactory {
         logger.debug("fac = " + fac.getClass().getName());
         if (fac.isField()) {
             return new GroebnerBaseSeq<C>();
+            //return new GroebnerBaseSeq<C>(new ReductionSeq<C>(),new OrderedSyzPairlist<C>());
         }
         GroebnerBaseAbstract bba = null;
         Object ofac = fac;
@@ -310,16 +313,17 @@ public class GBFactory {
             return GBFactory.<C> getImplementation(fac);
         }
         logger.debug("fac = " + fac.getClass().getName());
+        int th = ComputerThreads.N_CPUS-1;
         if (fac.isField()) {
             GroebnerBaseAbstract<C> e1 = new GroebnerBaseSeq<C>();
             //GroebnerBaseAbstract<C> e1 = new GroebnerBaseSeq<C>(new ReductionSeq<C>(),new OrderedSyzPairlist<C>());
-            GroebnerBaseAbstract<C> e2 = new GroebnerBaseParallel<C>(ComputerThreads.N_CPUS);
-            //GroebnerBaseAbstract<C> e2 = new GroebnerBaseParallel<C>(ComputerThreads.N_CPUS,
-            //                                                       new ReductionPar<C>(),new OrderedSyzPairlist<C>());
+            GroebnerBaseAbstract<C> e2 = new GroebnerBaseParallel<C>(th);
+            //GroebnerBaseAbstract<C> e2 = new GroebnerBaseParallel<C>(th,
+            //                                       new ReductionPar<C>(),new OrderedSyzPairlist<C>());
             return new GBProxy<C>(e1, e2);
         } else if (fac.getONE() instanceof GcdRingElem && fac.characteristic().signum() == 0) {
             GroebnerBaseAbstract<C> e1 = new GroebnerBasePseudoSeq<C>(fac);
-            GroebnerBaseAbstract<C> e2 = new GroebnerBasePseudoParallel<C>(ComputerThreads.N_CPUS,fac);
+            GroebnerBaseAbstract<C> e2 = new GroebnerBasePseudoParallel<C>(th,fac);
             return new GBProxy<C>(e1, e2);
         }
         return getImplementation(fac);

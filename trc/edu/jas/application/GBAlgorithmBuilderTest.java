@@ -299,10 +299,18 @@ public class GBAlgorithmBuilderTest extends TestCase {
         GenPolynomialRing<BigRational> pf = cp.get(0).ring;
 
         GroebnerBaseAbstract<BigRational> bb;
-        bb = GBAlgorithmBuilder.<BigRational> polynomialRing(pf).fractionFree().parallel().optimize().build();
+        //bb = GBAlgorithmBuilder.<BigRational> polynomialRing(pf).fractionFree().parallel().optimize().build();
         //bb = GBAlgorithmBuilder.<BigRational> polynomialRing(pf).parallel().optimize().build();
+        //bb = GBAlgorithmBuilder.<BigRational> polynomialRing(pf).build();
+        bb = GBAlgorithmBuilder.<BigRational> polynomialRing(pf).optimize().build();
+        //bb = GBAlgorithmBuilder.<BigRational> polynomialRing(pf).fractionFree().build();
+        //bb = GBAlgorithmBuilder.<BigRational> polynomialRing(pf).parallel().build();
+        //bb = GBAlgorithmBuilder.<BigRational> polynomialRing(pf).fractionFree().optimize().build();
+        //bb = GBAlgorithmBuilder.<BigRational> polynomialRing(pf).parallel().fractionFree().optimize().build();
+        //bb = GBAlgorithmBuilder.<BigRational> polynomialRing(pf).optimize().fractionFree().build();
+        //bb = GBAlgorithmBuilder.<BigRational> polynomialRing(pf).fractionFree().optimize().parallel().build();
         System.out.println("bb = " + bb);
-        assertTrue("instance of " + bb, bb instanceof GBOptimized);
+        //assertTrue("instance of " + bb, bb instanceof GBOptimized);
 
         List<GenPolynomial<BigRational>> gb;
         long t;

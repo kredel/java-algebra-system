@@ -181,6 +181,9 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
      */
     @SuppressWarnings("unchecked")
     public GBAlgorithmBuilder<C> fractionFree() {
+        if (algo != null) {
+           logger.warn("selected algorithm ignored: " + algo + ", use fractionFree before");
+        }
         if (((Object)ring.coFac) instanceof BigRational) {
             BigRational cf = (BigRational) (Object) ring.coFac;
             GroebnerBaseAbstract<BigRational> bb = GBFactory.getImplementation(cf, GBFactory.Algo.ffgb);
