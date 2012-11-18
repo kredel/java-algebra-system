@@ -11,7 +11,7 @@ r = PolyRing.new(ZZ(),"t",PolyRing.lex)
 puts "Ring: " + str(r);
 puts;
 
-one,x = r.gens();
+one,t = r.gens();
 
 f1 = 2 * t + 1;
 f2 = t**2 + 1;
