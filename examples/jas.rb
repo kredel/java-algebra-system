@@ -1332,7 +1332,6 @@ Inject variables for generators in given environment.
              end
           rescue 
              puts "error: #{i} = " + i.to_s + ", class = " + i.class.to_s;
-             #pass
           end
        end
     puts "globally defined generators: " + env.generators.keys().join(", ");  
@@ -1343,11 +1342,15 @@ Inject variables for generators in given environment.
 Inject variables for generators in top level environment.
 =end
     def inject_variables() 
-        require "irb/frame" # must be placed here
-        bin = IRB::Frame.bottom(0);
-        env = eval "self", bin;
-        #puts "env = " + str(env)
-        inject_gens(env)
+        begin 
+           require "irb/frame" # must be placed here
+           bin = IRB::Frame.bottom(0);
+           env = eval "self", bin;
+           #puts "env = " + str(env)
+           inject_gens(env)
+           rescue 
+              puts "error: 'irb/frame' not found";
+           end
     end
 
 end
@@ -3922,21 +3925,21 @@ Create a string representation.
     end
 
 =begin rdoc
-Create a solvable ideal.
+Create a word ideal.
 =end
     def ideal(ringstr="",list=nil)
         return WordIdeal.new(self,ringstr,list);
     end
 
 =begin rdoc
-Get the one of the solvable polynomial ring.
+Get the one of the word polynomial ring.
 =end
     def one()
         return RingElem.new( @ring.getONE() );
     end
 
 =begin rdoc
-Get the zero of the solvable polynomial ring.
+Get the zero of the word polynomial ring.
 =end
     def zero()
         return RingElem.new( @ring.getZERO() );
