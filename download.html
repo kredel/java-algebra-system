@@ -57,15 +57,18 @@
 <li><p>Optional libraries and files: 
     </p>
     <ul>
-    <li>A Debian package <a href="http://packages.debian.org/de/sid/libjas-java" target="deb">libjas-java</a> 
-        and an Ubuntu package 
-        <a href="http://packages.ubuntu.com/search?keywords=libjas-java" target="deb">libjas-java</a>
-        is also avalilable.
-    </li>
-    <li>There is a first version of an Android JAS App 
+    <li>Android JAS App 
         <a href="http://krum.rz.uni-mannheim.de/ruboto-irb-jas-debug.apk">Ruboto-IRB_with_JAS</a>.
+        <br />
         The JAS App uses its JRuby scripting interface and runs within the Ruby IRB Android App 
         <a href="http://ruboto.org/">Ruboto</a>.
+    </li>
+    <li>A Debian package <a href="http://packages.debian.org/de/sid/libjas-java" target="deb">libjas-java</a> 
+        and an 
+        <br />
+        Ubuntu package 
+        <a href="http://packages.ubuntu.com/search?keywords=libjas-java" target="deb">libjas-java</a>
+        is also avalilable.
     </li>
     <li><a href="jas-mpj.jar">jas-mpj.jar</a> <br /> This JAR contains
         implementations of distributed Gr&ouml;bner bases using the 
@@ -387,6 +390,47 @@ public class mytests {
 </li>
 </ul>
 
+
+<h2>Using the <a name="ruboto-irb-jas">Ruboto-IRB-JAS</a> Android application</h2>
+
+<ul>
+<li><p>Be sure you have installed the above Android application package  
+    ruboto-irb-jas-debug.apk. It contains all required libraries and scripts. 
+    JAS-2.4 has been tested with Android 2.3 and 4.1 and is using 
+    JRuby 1.6.4 (Ruby 1.8.7 &amp; 1.9.2 compatible) 
+    </p>
+</li>
+<li><p>The JAS app uses the Ruby IRB <a href="http://ruboto.org/">Ruboto</a> for Android.
+    This is just a Ruby interpreter running on Android together with a text editor. 
+    So all JAS JRuby scripts can be run in this environment. 
+    The JAS Java programs are included in compiled and transformed Dalvik "dex" format.
+    Up to now, no functional problems have been encountered, i.e. all JAS Java code runs.
+    However, due to limitations in CPU speed and memory on mobile phones or tablets 
+    eventually not all examples and problems will execute. 
+    In 2012, comparison of a two year old Android tablet (1 GHz, 0.5 GB)
+    and a three year old PC (3 GHz, 4 GB) show that the examples run 
+    about 5 times slower than on the PC.
+    </p>
+</li>
+<li><p>The main Ruboto screen with the "trinks.rb" example and its output looks as follows:
+    </p>
+    <p><img src="images/device-2012-11-18-jas-trinks.png" /> &nbsp;
+       <img src="images/device-2012-11-18-jas-trinks-out.png" />
+    </p>
+    <p>The list of examples can be accessed via the "scripts" button. 
+       Also the arbitrary precision numbers arithmetic works on Android.
+    </p>
+    <p><img src="images/device-2012-11-18-jas-examples.png" /> &nbsp;
+       <img src="images/device-2012-11-18-jas-trinks-out-big-part.png" />
+    </p>
+</li>
+<li><p>For further discussion of the JAS scripting interface 
+    see 
+    <a href="guide.html" target="main">User guide</a>.
+    </p>
+</li>
+</ul>
+
     <hr />
 <address><a name="contact" 
             href="mailto:kredel@at@rz.uni-mannheim.de">Heinz Kredel</a>
@@ -394,11 +438,19 @@ public class mytests {
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Fri Nov 23 21:28:37 CET 2012
+Last modified: Sat Nov 24 15:10:16 CET 2012
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
 $Id$
+<li><p>
+
+    </p>
+</li>
+<li><p>
+
+    </p>
+</li>
 </p-->
   </body>
 </html>
