@@ -45,15 +45,16 @@ puts;
 #startLog();
 
 rg = f.GB();
-#puts "seq Output:", rg;
-#puts;
+puts "seq Output:", rg;
+puts;
 
 #exit!(0); # if using ZZ coefficients
 
 rg = f.parGB(2);
-#puts "par Output:", rg;
-#puts;
+puts "par Output:", rg;
+puts;
 
+return # jirb
 f.distClient(); # starts in background
 rg = f.distGB(2);
 #puts "dist Output:", rg;
