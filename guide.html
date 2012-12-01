@@ -10,12 +10,13 @@
     <h1>Interactive users guide</h1>
 
 <p>
-This document contains some (first) how to and usage 
-information for the JAS project.
+This document contains a first how-to and usage information for the JAS project.
 JAS can be used as any other Java library by adding <code>jas.jar</code> 
-to the classpath and creating and using objects from it.
-JAS can also be used interactively via the Python Java interpreter 
-<code>jython</code>. This is explained in this document.
+to the classpath and creating and using objects from JAS classes.
+JAS can also be used interactively via the Python Java interpreter
+<code>jython</code> (or the Ruby Java interpreter <code>jruby</code>
+or the jruby Android App <code>Ruboto-IRB</code>).
+This is explained in this page.
 For an introduction the API see the <a href="design.html">API guide</a>.
 Since JAS Version 2.2 there is an enhanced interface which allows 
 direct input of algebraic expressions, see <a href="#express">here</a>. 
@@ -507,6 +508,22 @@ ps8 = pr.fixPoint( cosmap( pr.ring.coFac ) );
 </p>
 
 
+<h3>Overview of jas.rb classes and methods</h3>
+
+<p>
+The jruby interface to the JAS library consists essentially of the 
+same classes as the jython interface, but the ruby language, syntax and semantics is used.
+For the Rdoc of them see <a href="doc/jruby/index.html" target="jruby">here</a>.
+</p>
+
+<p>For the Android app the main screen with the "trinks.rb" example and its output looks as follows.
+</p>
+<p><a href="images/device-2012-11-18-jas-trinks.png" ><img src="images/device-2012-11-18-jas-trinks-thumb.png" /></a> &nbsp;
+   <a href="images/device-2012-11-18-jas-trinks-out.png" ><img src="images/device-2012-11-18-jas-trinks-out-thumb.png" /></a> &nbsp;
+   <a href="images/device-2012-11-18-jas-trinks-out-big.png" ><img src="images/device-2012-11-18-jas-trinks-out-big-thumb.png" /></a>
+</p>
+
+
 <h3>Solvable polynomial rings</h3>
 
 <p>
@@ -614,7 +631,7 @@ and a solvable module example is in
 <p>
 <!-- Created: Sun Feb 19 15:49:14 CET 2006 -->
 <!-- hhmts start -->
-Last modified: Fri May  7 22:12:52 CEST 2010
+Last modified: Sat Dec  1 18:52:11 CET 2012
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
