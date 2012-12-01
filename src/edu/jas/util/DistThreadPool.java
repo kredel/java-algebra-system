@@ -361,8 +361,19 @@ class ShutdownRequest implements Runnable {
      * Run the thread.
      */
     public void run() {
-        System.out.println("ShutdownRequest");
+        System.out.println("running ShutdownRequest");
     }
+
+
+    /**
+     * toString.
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "ShutdownRequest";
+    }
+
 }
 
 
