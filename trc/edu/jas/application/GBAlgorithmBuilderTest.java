@@ -309,7 +309,7 @@ public class GBAlgorithmBuilderTest extends TestCase {
         //bb = GBAlgorithmBuilder.<BigRational> polynomialRing(pf).parallel().fractionFree().optimize().build();
         //bb = GBAlgorithmBuilder.<BigRational> polynomialRing(pf).optimize().fractionFree().build();
         //bb = GBAlgorithmBuilder.<BigRational> polynomialRing(pf).fractionFree().optimize().parallel().build();
-        System.out.println("bb = " + bb);
+        //System.out.println("bb = " + bb);
         //assertTrue("instance of " + bb, bb instanceof GBOptimized);
 
         List<GenPolynomial<BigRational>> gb;
@@ -317,22 +317,22 @@ public class GBAlgorithmBuilderTest extends TestCase {
         t = System.currentTimeMillis();
         gb = bb.GB(cp);
         t = System.currentTimeMillis() - t;
-        System.out.println("time(gb) = " + t);
+        //System.out.println("time(gb) = " + t);
 
         t = System.currentTimeMillis();
         gb = bb.GB(cp);
         t = System.currentTimeMillis() - t;
-        System.out.println("time(gb) = " + t);
+        //System.out.println("time(gb) = " + t);
 
         t = System.currentTimeMillis();
         gb = bb.GB(cp);
         t = System.currentTimeMillis() - t;
-        System.out.println("time(gb) = " + t);
-        assertTrue("t >= 0: ", t >= 0L);
+        //System.out.println("time(gb) = " + t);
+        assertTrue("t >= 0: ", t >= 0L); // praise findbugs
 
         assertTrue("isGB: ", bb.isGB(gb));
         bb.terminate();
-        System.out.println("gb = " + gb);
-        System.out.println("bb = " + bb);
+        //System.out.println("gb = " + gb);
+        //System.out.println("bb = " + bb);
     }
 }
