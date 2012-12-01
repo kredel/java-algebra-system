@@ -280,7 +280,7 @@ For example <code>B</code> is the polynomial in ring <code>r</code>
 in the variable named <code>'B'</code>.
 </p>
 <p>
-The so defined polynomial generators can the be used to
+The so defined polynomial generators can then be used to
 build (nearly) arbitrary expressions.
 For example the polynomial <code>f5</code> is defined by the expression
 <code>P * W + 2 * T * Z - 11 * B**3</code>.
@@ -523,6 +523,72 @@ For the Rdoc of them see <a href="doc/jruby/index.html" target="jruby">here</a>.
    <a href="images/device-2012-11-18-jas-trinks-out-big.png" ><img src="images/device-2012-11-18-jas-trinks-out-big-thumb.png" /></a>
 </p>
 
+<p>The Trinks example from above looks in Ruby as follows.
+</p>
+<pre>
+require "examples/jas"
+
+r = PolyRing.new( QQ(),"B,S,T,Z,P,W", PolyRing.lex);
+puts "Ring: " + r.to_s;
+puts;
+
+one,B,S,T,Z,P,W = r.gens(); 
+
+f1 = 45 * P + 35 * S - 165 * B - 36;
+f2 = 35 * P + 40 * Z + 25 * T - 27 * S;
+f3 = 15 * W + 25 * S * P + 30 * Z - 18 * T - 165 * B**2;
+f4 = - 9 * W + 15 * T * P + 20 * S * Z;
+f5 = P * W + 2 * T * Z - 11 * B**3;
+f6 = 99 * W - 11 *B * S + 3 * B**2;
+f7 = B**2 + 33/50 * B + 2673/10000; # fractions work with ruby
+
+F = [ f1, f2, f3, f4, f5, f6, f7 ]; # smaller, faster
+puts "F = " + F.map { |f| f.to_s }.join(",");
+puts
+
+f = r.ideal( "", F );
+puts "Ideal: " + f.to_s;
+puts;
+
+rg = f.GB();
+puts "seq Output:", rg;
+puts;
+</pre>
+<p>
+The definition of the polynomial ring with
+<code>r = PolyRing.new( QQ(),"B,S,T,Z,P,W", PolyRing.lex)</code>
+is obligatory as before. As above many coefficient rings,
+e.g. <code>QQ</code>, and term orders, e.g. <code>PolyRing.lex</code>, can be selected.
+</p>
+<p>
+The setup of a list of generators of the polynomial ring is in Ruby 
+<code>one,B,S,T,Z,P,W = r.gens()</code>. The sequence of jruby variable names 
+<code>B, S, T, Z, P, W</code> should match the sequence of variables as defined 
+in the creation of the ring.
+A jruby variable defined with this idiom then represents a polynomial 
+of the respective ring in the respectively named variable.
+For example <code>B</code> is the polynomial in ring <code>r</code>
+in the variable named <code>'B'</code>.
+</p>
+<p>
+The so defined polynomial generators can then be used to
+build (nearly) arbitrary expressions.
+For example the polynomial <code>f5</code> is defined by the expression
+<code>P * W + 2 * T * Z - 11 * B**3</code>.
+Since Ruby (and jruby) has built-in rational number support, 
+also integer fractions can be used as coefficients.
+For exponentiation one uses the double star <code>**</code> as with Python.
+Additionally all operators must explicitly be written, 
+even between coefficients and variables.
+</p>
+<p>Continuing with the example, we build a list of polynomials 
+with a Ruby list <code>F = [ f1, f2, f3, f4, f5, f6, f7 ]</code>. 
+Finally the ideal is created as usual with the 
+<code>ideal</code> method of <code>r</code> as 
+<code>f = r.ideal( "", F )</code> in the same way as in Python.
+</p>
+
+
 
 <h3>Solvable polynomial rings</h3>
 
@@ -631,7 +697,7 @@ and a solvable module example is in
 <p>
 <!-- Created: Sun Feb 19 15:49:14 CET 2006 -->
 <!-- hhmts start -->
-Last modified: Sat Dec  1 18:52:11 CET 2012
+Last modified: Sat Dec  1 19:25:47 CET 2012
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
