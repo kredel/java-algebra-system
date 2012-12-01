@@ -470,7 +470,7 @@ class ReducerServerEC<C extends RingElem<C>> implements Runnable {
     private final PairList<C> pairlist;
 
 
-    private static final Logger logger = Logger.getLogger(ReducerServer.class);
+    private static final Logger logger = Logger.getLogger(ReducerServerEC.class);
 
 
     ReducerServerEC(Terminator fin, ChannelFactory cf, DistHashTable<Integer, GenPolynomial<C>> dl,
@@ -669,7 +669,7 @@ class ReducerClientEC<C extends RingElem<C>> implements Runnable {
     private final ReductionPar<C> red;
 
 
-    private static final Logger logger = Logger.getLogger(ReducerClient.class);
+    private static final Logger logger = Logger.getLogger(ReducerClientEC.class);
 
 
     ReducerClientEC(SocketChannel pc, DistHashTable<Integer, GenPolynomial<C>> dl) {
@@ -701,6 +701,7 @@ class ReducerClientEC<C extends RingElem<C>> implements Runnable {
             // pair = (Pair) pairlist.removeNext();
             Object req = new GBTransportMessReq();
             logger.debug("send request = " + req);
+            H = null;
             try {
                 pairChannel.send(req);
             } catch (IOException e) {
@@ -725,7 +726,6 @@ class ReducerClientEC<C extends RingElem<C>> implements Runnable {
             if (logger.isDebugEnabled()) {
                 logger.debug("received pair = " + pp);
             }
-            H = null;
             if (pp == null) { // should not happen
                 continue;
             }
