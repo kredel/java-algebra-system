@@ -136,7 +136,7 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
      * @param port server port to use.
      */
     public GroebnerBaseDistributedEC(String mfile, int threads, ThreadPool pool, int port) {
-        this(mfile, threads, pool, new OrderedPairlist<C>(), port);
+        this(mfile, threads, pool, new OrderedSyzPairlist<C>(), port);
     }
 
 
