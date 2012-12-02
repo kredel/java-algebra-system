@@ -58,7 +58,5 @@ rg = f.distGB(2);
 #puts "dist Output:", rg;
 #puts;
 
+f.distClientStop(); # stops them
 terminate();
-
-exit!(0); # required because of distClient, ! for jirb 
-

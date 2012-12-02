@@ -55,6 +55,5 @@ rg = f.distGB(2);
 #puts "dist Output:", rg;
 #puts;
 
-exit();
-
-
+f.distClientStop(); # stops them
+terminate();

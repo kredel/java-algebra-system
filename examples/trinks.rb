@@ -52,9 +52,10 @@ rg = f.parGB(2);
 puts "par Output:", rg;
 puts;
 
-#return # if using ZZ coefficients
+terminate();
+return # if using ZZ coefficients
 
-f.distClient(); # starts in background
+f.distClient(); # starts in background, needs socket permission
 rg = f.distGB(2);
 #puts "dist Output:", rg;
 #puts;

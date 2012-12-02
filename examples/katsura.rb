@@ -36,7 +36,7 @@ ps = k.polyList();
 puts "ps : " + ps;
 puts;
 
-exit(0);
+exit();
 
 f = r.ideal( ps );
 puts "Ideal: " + str(f);
@@ -58,10 +58,4 @@ rg = f.GB();
 puts;
 
 
-# rg = f.distGB(2);
-#puts "dist Output:", rg;
-#puts;
-
-#f.distClient();
-
-
+terminate();
