@@ -151,7 +151,6 @@ def QQ(d=0,n=1)
     return RingElem.new(r);
 end
 
-
 =begin rdoc
 Create JAS BigComplex as ring element.
 =end
@@ -1717,6 +1716,7 @@ include_class "edu.jas.gb.WordGroebnerBaseSeq";
 include_class "edu.jas.gbufd.GroebnerBasePseudoRecSeq";
 include_class "edu.jas.gbufd.GroebnerBasePseudoSeq";
 include_class "edu.jas.gbufd.RGroebnerBasePseudoSeq";
+include_class "edu.jas.gbufd.GroebnerBasePseudoParallel";
 include_class "edu.jas.gbufd.RGroebnerBaseSeq";
 include_class "edu.jas.gbufd.RReductionSeq";
 include_class "edu.jas.gbufd.CharacteristicSetWu";
@@ -1941,7 +1941,12 @@ Compute in parallel a Groebner base.
     def parGB(th)
         s = @pset;
         ff = s.list;
-        bbpar = GroebnerBaseParallel.new(th);
+        cofac = s.ring.coFac;
+        if cofac.isField() 
+           bbpar = GroebnerBaseParallel.new(th);
+        else 
+           bbpar = GroebnerBasePseudoParallel.new(th,cofac);
+        end
         t = System.currentTimeMillis();
         gg = bbpar.GB(ff);
         t = System.currentTimeMillis() - t;
@@ -1974,10 +1979,22 @@ Client for a distributed computation.
 =end
     def distClient(port=4711)
         s = @pset;
-        es = ExecutableServer.new( port );
-        es.init();
-        es = ExecutableServer.new( port+1 );
-        es.init();
+        e1 = ExecutableServer.new( port );
+        e1.init();
+        e2 = ExecutableServer.new( port+1 );
+        e2.init();
+        @exers = [e1,e2];
+        return nil;
+    end
+
+
+=begin rdoc
+Client for a distributed computation.
+=end
+    def distClientStop()
+        for es in @exers;
+            es.terminate();
+        end
         return nil;
     end
 
@@ -4113,6 +4130,13 @@ Test if this is a two-sided Groebner base.
 
 end
 
+# define some shotcuts
+ZZ = ZZ();
+QQ = QQ();
+CC = CC();
+CR = CR();
+DD = DD();
+#no GF = GF();
 
 end
 

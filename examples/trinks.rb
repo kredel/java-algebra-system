@@ -13,9 +13,9 @@ require "examples/jas"
 #r = PolyRing.new( GF(19),"B,S,T,Z,P,W", PolyRing.lex);
 #r = PolyRing.new( GF(1152921504606846883),"B,S,T,Z,P,W", PolyRing.lex);
 #r = PolyRing.new( GF(2**60-93),"B,S,T,Z,P,W", PolyRing.lex);
-#r = PolyRing.new( CC(),"B,S,T,Z,P,W", PolyRing.lex);
-#r = PolyRing.new( ZZ(),"B,S,T,Z,P,W", PolyRing.lex); # not for parallel
-r = PolyRing.new( QQ(),"B,S,T,Z,P,W", PolyRing.lex);
+#r = PolyRing.new( CC,"B,S,T,Z,P,W", PolyRing.lex);
+#r = PolyRing.new( ZZ,"B,S,T,Z,P,W", PolyRing.lex); 
+r = PolyRing.new( QQ,"B,S,T,Z,P,W", PolyRing.lex);
 puts "Ring: " + r.to_s;
 puts;
 
@@ -48,18 +48,17 @@ rg = f.GB();
 puts "seq Output:", rg;
 puts;
 
-#exit!(0); # if using ZZ coefficients
-
 rg = f.parGB(2);
 puts "par Output:", rg;
 puts;
 
-return # jirb
+#return # if using ZZ coefficients
+
 f.distClient(); # starts in background
 rg = f.distGB(2);
 #puts "dist Output:", rg;
 #puts;
 
+f.distClientStop(); # stops them
 terminate();
-exit!(0); # required because of distClient, ! for jirb 
 

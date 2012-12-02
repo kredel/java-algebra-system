@@ -11,6 +11,7 @@ from jas import startLog, terminate
 # trinks 6/7 example
 
 # QQ = rational numbers, ZZ = integers, CC = complex rational numbers, GF = finite field
+#QQ = QQ(); ZZ = ZZ(); CC = CC();
 #r = PolyRing( GF(19),"B,S,T,Z,P,W", PolyRing.lex);
 #r = PolyRing( GF(1152921504606846883),"B,S,T,Z,P,W", PolyRing.lex); # 2^60-93
 #r = PolyRing( GF(2**60-93),"B,S,T,Z,P,W", PolyRing.lex);
@@ -42,27 +43,23 @@ print "Ideal: " + str(I);
 print;
 
 rg = I.GB();
-#print "seq Output:", rg;
-#print;
+print "seq Output:", rg;
+print;
 
 #startLog();
-
-#rg = I.GB();
-#print "seq Output:", rg;
-#print;
-
-#sys.exit(); # if using ZZ coefficients
 
 rg = I.parGB(2);
 #print "par Output:", rg;
 #print;
+
+#sys.exit(); # if using ZZ coefficients
 
 I.distClient(); # starts in background
 rg = I.distGB(2);
 #print "dist Output:", rg;
 #print;
 
+I.distClientStop(); # stops them
 terminate();
-sys.exit(); # required because of distClient
 
 

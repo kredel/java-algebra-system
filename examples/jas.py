@@ -35,6 +35,7 @@ from edu.jas.gb          import EReductionSeq, DGroebnerBaseSeq, EGroebnerBaseSe
                                 SolvableGroebnerBaseParallel, SolvableGroebnerBaseSeq,\
                                 WordGroebnerBaseSeq
 from edu.jas.gbufd       import GroebnerBasePseudoRecSeq, GroebnerBasePseudoSeq,\
+                                GroebnerBasePseudoParallel,\
                                 RGroebnerBasePseudoSeq, RGroebnerBaseSeq, RReductionSeq,\
                                 CharacteristicSetWu
 from edu.jas.gbmod       import ModGroebnerBaseAbstract, ModSolvableGroebnerBaseAbstract,\
@@ -578,7 +579,11 @@ class Ideal:
         '''
         s = self.pset;
         F = s.list;
-        bbpar = GroebnerBaseParallel(th);
+        cofac = s.ring.coFac;
+        if cofac.isField():
+            bbpar = GroebnerBaseParallel(th);
+        else:
+            bbpar = GroebnerBasePseudoParallel(th,cofac);
         t = System.currentTimeMillis();
         G = bbpar.GB(F);
         t = System.currentTimeMillis() - t;
@@ -606,11 +611,18 @@ class Ideal:
     def distClient(self,port=4711): #8114
         '''Client for a distributed computation.
         '''
-        s = self.pset;
-        es = ExecutableServer( port );
-        es.init();
-        es = ExecutableServer( port+1 );
-        es.init();
+        e1 = ExecutableServer( port );
+        e1.init();
+        e2 = ExecutableServer( port+1 );
+        e2.init();
+        self.exers = [e1,e2];
+        return None;
+
+    def distClientStop(self):
+        '''Stop client for a distributed computation.
+        '''
+        for es in self.exers:
+            es.terminate();
         return None;
 
     def eReduction(self,p):
@@ -3387,3 +3399,4 @@ class WordIdeal:
         t = System.currentTimeMillis() - t;
         print "isTwosidedGB executed in %s ms" % t; 
         return b;
+
