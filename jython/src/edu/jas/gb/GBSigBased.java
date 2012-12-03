@@ -49,7 +49,7 @@ public class GBSigBased<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C
      */
     public GBSigBased() {
         engine = new ScriptEngineManager().getEngineByExtension("py");
-        logger.info("Script engine discovered: " + engine);
+        logger.info("Script engine discovered: " + engine.getClass().getName());
         if ( engine == null ) {
             logger.error("no script engine found");
             throw new RuntimeException("no script engine found");
