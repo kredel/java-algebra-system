@@ -76,7 +76,13 @@ public class GBSigBasedTest extends TestCase {
     List<GenPolynomial<BigRational>> G;
 
 
+    List<GenPolynomial<BigRational>> Gn;
+
+
     GroebnerBaseAbstract<BigRational> bb;
+
+
+    GroebnerBaseAbstract<BigRational> bbn;
 
 
     GenPolynomial<BigRational> a;
@@ -115,6 +121,8 @@ public class GBSigBasedTest extends TestCase {
         fac = new GenPolynomialRing<BigRational>(coeff, rl);
         a = b = c = d = e = null;
         bb = new GBSigBased<BigRational>();
+        //bbn = new GroebnerBaseSeq<BigRational>(new ReductionSeq<BigRational>(),new OrderedSyzPairlist<BigRational>());
+        bbn = new GroebnerBaseSeq<BigRational>();
     }
 
 
@@ -126,6 +134,7 @@ public class GBSigBasedTest extends TestCase {
         a = b = c = d = e = null;
         fac = null;
         bb = null;
+        bbn = null;
     }
 
 
@@ -145,34 +154,24 @@ public class GBSigBasedTest extends TestCase {
             return;
         }
 
-        assertTrue("not isZERO( a )", !a.isZERO());
         L.add(a);
-
         L = bb.GB(L);
         assertTrue("isGB( { a } )", bb.isGB(L));
 
-        assertTrue("not isZERO( b )", !b.isZERO());
         L.add(b);
         //System.out.println("L = " + L.size() );
-
         L = bb.GB(L);
         assertTrue("isGB( { a, b } )", bb.isGB(L));
 
-        assertTrue("not isZERO( c )", !c.isZERO());
         L.add(c);
-
         L = bb.GB(L);
         assertTrue("isGB( { a, b, c } )", bb.isGB(L));
 
-        assertTrue("not isZERO( d )", !d.isZERO());
         L.add(d);
-
         L = bb.GB(L);
         assertTrue("isGB( { a, b, c, d } )", bb.isGB(L));
 
-        assertTrue("not isZERO( e )", !e.isZERO());
         L.add(e);
-
         L = bb.GB(L);
         assertTrue("isGB( { a, b, c, d, e } )", bb.isGB(L));
     }
@@ -188,7 +187,9 @@ public class GBSigBasedTest extends TestCase {
             + "( " + "( 45 P + 35 S - 165 B - 36 ), "
             + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
             + "( - 9 W + 15 T P + 20 S Z ), " + "( P W + 2 T Z - 11 B**3 ), "
-            + "( 99 W - 11 B S + 3 B**2 ), " + "10000 B**2 + 6600 B + 2673 ) " + ") ";
+            + "( 99 W - 11 B S + 3 B**2 ) " 
+            + "( 10000 B**2 + 6600 B + 2673 ) " 
+            + ") ";
         Reader source = new StringReader(exam);
         GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
         try {
@@ -200,14 +201,31 @@ public class GBSigBasedTest extends TestCase {
         }
         //System.out.println("F = " + F);
 
+        long t;
+        t = System.currentTimeMillis();
+        Gn = bbn.GB(F.list);
+        t = System.currentTimeMillis() - t;
+        System.out.println("bbn took = " + t);
         G = bb.GB(F.list);
         assertEquals("#GB(Trinks7) == 6", 6, G.size());
         assertTrue("isGB( GB(Trinks7) ) " + G, bb.isGB(G));
+        assertEquals("#G == #Gn", G.size(), Gn.size());
+        assertTrue("t >= 0 ", t >= 0);
         //PolynomialList<BigRational> trinks = new PolynomialList<BigRational>(F.ring, G);
         //System.out.println("G = " + trinks);
-        G = bb.GB(F.list);
-        //G = bb.GB(F.list);
-        assertEquals("#GB(Trinks7) == 6", 6, G.size());
+//         t = System.currentTimeMillis();
+//         Gn = bbn.GB(F.list);
+//         t = System.currentTimeMillis() - t;
+//         System.out.println("bbn took = " + t);
+//         G = bb.GB(F.list);
+//         assertEquals("#G == #Gn", G.size(), Gn.size());
+//         t = System.currentTimeMillis();
+//         Gn = bbn.GB(F.list);
+//         t = System.currentTimeMillis() - t;
+//         System.out.println("bbn took = " + t);
+//         G = bb.GB(F.list);
+//         assertEquals("#G == #Gn", G.size(), Gn.size());
+//         assertEquals("#GB(Trinks7) == 6", 6, G.size());
     }
 
 }
