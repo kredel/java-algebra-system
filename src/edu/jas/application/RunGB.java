@@ -56,18 +56,22 @@ public class RunGB {
 
 
     /**
+     * Enable logging.
+     */
+    static boolean doLog = true;
+
+
+    /**
      * main method to be called from commandline <br />
      * Usage: RunGB [seq|par(+)|dist(1)(+)|disthyb|cli] &lt;file&gt;
-     * #procs/#threadsPerNode [machinefile]
+     * #procs/#threadsPerNode [machinefile] &lt;check&gt; &lt;log&gt;
      */
     @SuppressWarnings("unchecked")
     public static void main(java.lang.String[] args) {
 
-        BasicConfigurator.configure();
-
         String usage = "Usage: RunGB "
                         + "[ seq | seq+ | par | par+ | dist | dist1 | dist+ | dist1+ | disthyb1 | cli [port] ] "
-                        + "<file> " + "#procs/#threadsPerNode " + "[machinefile] <check>";
+                        + "<file> " + "#procs/#threadsPerNode " + "[machinefile] <check> <nolog>";
         if (args.length < 1) {
             System.out.println(usage);
             return;
@@ -122,6 +126,11 @@ public class RunGB {
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("check")) {
                 doCheck = true;
+            }
+        }
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("nolog")) {
+                doLog = false;
             }
         }
 
@@ -192,7 +201,11 @@ public class RunGB {
             e.printStackTrace();
             return;
         }
-        System.out.println("S =\n" + S);
+        System.out.println("input S =\n" + S);
+
+        if (doLog) {
+            BasicConfigurator.configure();
+        }
 
         if (kind.startsWith("seq")) {
             runSequential(S, pairseq);
