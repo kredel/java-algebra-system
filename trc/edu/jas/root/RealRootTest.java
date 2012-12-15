@@ -54,8 +54,6 @@ public class RealRootTest extends TestCase {
     }
 
 
-    //private final static int bitlen = 100;
-
     TermOrder to = new TermOrder(TermOrder.INVLEX);
 
 
@@ -368,7 +366,7 @@ public class RealRootTest extends TestCase {
 
         assertTrue("#roots = " + N + " ", R.size() == N);
 
-        eps = eps.multiply(new BigRational(10000));
+        eps = eps.multiply(new BigRational(100000));
         //System.out.println("eps = " + eps);
         BigDecimal eps1 = new BigDecimal(eps);
         BigDecimal eps2 = eps1.multiply(new BigDecimal("100"));
