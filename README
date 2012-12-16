@@ -1,24 +1,27 @@
 
 JAS: Java Algebra System
-------------------------
+========================
 
-Version 2.4, September-October 2011
+Version 3.0, January 2013
 
 by Heinz Kredel, University of Mannheim, kredel at rz.uni-mannheim.de
 
-Copyright (c) 2005-2011 by Heinz Kredel.
+Copyright (c) 2005-2013 by Heinz Kredel.
 
 Programms released under GPL or LGPL, see COPYING.jas or COPYING.lgpl.jas.
+
+Web home-page: http://krum.rz.uni-mannheim.de/jas/
 
 
 Requirements
 ------------
 
-A Java JDK 1.6 or JDK 1.7, JDK 1.5 now also possible.
+A Java JDK 1.6 or JDK 1.7.
 
 Documentation see index.html.
 
-Required libraries are log4j.jar (from Apache Log4j) and junit.jar (from Junit) 
+Required libraries are log4j.jar (from Apache Log4j, or mylog.jar, droidlog.jar) 
+and junit.jar (from Junit for tests in trc) 
 
 
 Usage
@@ -43,16 +46,22 @@ Versions and jar files
 JAS is distributed in 3 jar files:
 
 jas-<version>-bin.jar:    the Java class files 
-jas-<version>-src.jar:    the java source code
-jas-<version>-doc.jar:    the Java doc and epydoc files
+jas-<version>-src.zip:    the java source code
+jas-<version>-doc.zip:    the Java doc, epydoc, jrdoc and more info files
 
 optional jar files:
 
 jas-meditor.jar:          the interface to meditor
 jas-jython.jar:           an interface for Java scripting
+jas-mpj.jar:              MPI Java depending code
 mylog.jar:                a substitute for log4j to use Java logging
+droidlog.jar:             a substitute for log4j to use Android logging
 jlinalg_adapter.jar:      an adaptor to parts of JLinAlg
 commons-math_adapter.jar: an adaptor to parts of Apache commons.math
+
+There is a GIT repository for the scource code, which can be cloned with
+
+  git clone http://krum.rz.uni-mannheim.de/jas.git  jas
 
 
 The version is specified by a two digit major.minor number
@@ -63,13 +72,13 @@ jas-2.2.2088-bin.jar
 "2.2"  is the JAS version number and
 "2088" is the subversion revision number
 
-The jas-.-bin.jar and jas-.-doc.jar can be generated from jas-.-src.jar.
+The jas-*-bin.jar and jas-*-doc.jar can be generated from jas-*-src.jar.
 The fastest way to get a complete JAS install, is 
 
-> jar -xf jas-<version>-src.jar
+> jar -xf jas-<version>-src.zip
 > cd <JAS version number>
 > jar -xf jas-<version>-bin.jar
-> jar -xf jas-<version>-doc.jar
+> jar -xf jas-<version>-doc.zip
 
 If you have a working ant, the last two steps can be replaced by
 
@@ -82,16 +91,19 @@ provided you have setup build.xml and the required libraries.
 Directory structure
 -------------------
 
-.          main dirrectory, with html documentation
+.          main directory, with html documentation
 +doc       javadocs, jython docs, jruby docs
 +edu       Java class files
 +examples  examples for jython, jruby and jas
 +images    images for html docs
 +jython    JSR 233 scripting interface
 +meditor   JSR 233 scripting interface for meditor
++mpj       MPI Java versions of distributed Groebner bases
 +src       source code
 +test      junit test output and log4j output
 +trc       junit test sources
+
+../lib     directory for required libraries, not included
 
 
 $Id$

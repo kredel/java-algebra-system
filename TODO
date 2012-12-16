@@ -16,6 +16,8 @@ issues to consider:
 
 - test caching results of gcd computation
 
+- refactor BigDecimal to RingElem and RingFactory, make precision variable
+
 - refactor from BasicLinAlg to GenMatrix and GenVector 
 
 - implement univariate power series composition and power
