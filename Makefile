@@ -11,14 +11,6 @@
 # set this to your jdk binaries path
 #JDK=/usr/lib/jvm/java/bin
 #JDK=/usr/java/jdk1.6.0_02/bin
-#JDK=/usr/lib/jvm/java-1.5.0/bin
-#JDK=/usr/java/jdk1.5.0_01/bin
-#JDK=/usr/java/j2sdk1.4.1_01/bin
-#JDK=/usr/java/j2sdk1.4.0_01/bin
-#JDK=/opt/jdk1.4/bin
-#JDK=/opt/jdk1.4.0b3/bin
-#JDK=/usr/lib/jdk1.3/bin
-#JDK=/opt/jdk1.2.2/bin
 #JDK=/usr/lib/java/bin
 JDK=/usr/java/latest/bin
 #JDK=/usr/lib/jvm/java-1.5.0-sun-1.5.0/bin
@@ -428,16 +420,18 @@ export:
 	cp ~/jas-versions/$(VERSION).`$(SVNREV)`-bin.jar ~/jas-versions/$(VERSION)/jas.jar
 	mv ~/jas-versions/$(VERSION).`$(SVNREV)`-*.jar ~/jas-versions/$(VERSION)/
 	mv ~/jas-versions/$(VERSION).`$(SVNREV)`-*.zip ~/jas-versions/$(VERSION)/
+	cd ~/jas-versions/$(VERSION)/jython; make > ~/jas-versions/$(VERSION)/make_jython.out
+	cd ~/jas-versions/$(VERSION)/mpj; make > ~/jas-versions/$(VERSION)/make_mpj.out
 	cd ~/jas-versions/$(VERSION)/meditor; jas_dosed $(VERSION) `$(SVNREV)` manifest.mf
 	cd ~/jas-versions/$(VERSION)/meditor; make > ~/jas-versions/$(VERSION)/make_meditor.out
 	cd ~/jas-versions/log4j_adapter; make > ~/jas-versions/$(VERSION)/make_mylog.out
 	cp ~/java/lib/mylog.jar ~/jas-versions/$(VERSION)/
+	cd ~/jas-versions/log4j_droid_adapter; make > ~/jas-versions/$(VERSION)/make_droidlog.out
+	cp ~/java/lib/droidlog.jar ~/jas-versions/$(VERSION)/
 	cd ~/jas-versions/jlinalg_adapter; make > ~/jas-versions/$(VERSION)/make_jlinalg.out
 	cp ~/java/lib/jlinalg_adapter.jar ~/jas-versions/$(VERSION)/
 	cd ~/jas-versions/commons-math_adapter; make > ~/jas-versions/$(VERSION)/make_commons-math.out
 	cp ~/java/lib/commons-math_adapter.jar ~/jas-versions/$(VERSION)/
-	cd ~/jas-versions/$(VERSION)/jython; make > ~/jas-versions/$(VERSION)/make_jython.out
-	cd ~/jas-versions/$(VERSION)/mpj; make > ~/jas-versions/$(VERSION)/make_mpj.out
 
 deploy:
 	$(RSYNC) -e 'ssh -p 2222' --delete-after --exclude=DTD --exclude=*xml ~/jas-versions/$(VERSION)/ krum:htdocs/$(VERSION)
@@ -451,6 +445,9 @@ git-deploy:
 	$(RSYNC) -e 'ssh -p 2222' --delete-after ~/jas-versions/jas-git/jas.git/ krum:htdocs/jas.git
 	cd ~/jas-versions/jas-git/jas; git push -v $(DRY) google >> ~/jas-versions/$(VERSION)/git_push.out
 
+jas-bin.jar:
+	jar -cfm $(VERSION).`$(SVNREV)`-bin.jar GBManifest.MF edu/ COPYING* log4j.properties
+	jar -uf  $(VERSION).`$(SVNREV)`-bin.jar -C examples jas.rb -C examples jas.py
 
 young:
 	echo youngest revision `svnlook youngest $(SVNREPO)/jas`
