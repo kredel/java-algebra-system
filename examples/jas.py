@@ -3248,8 +3248,8 @@ class WordRing(Ring):
            self.ring = self.pset.ring;
         else:
            self.ring = ring;
-        if not self.ring.isAssociative():
-           print "warning: ring is not associative";
+        #if not self.ring.isAssociative():
+        #   print "warning: ring is not associative";
 
     def __str__(self):
         '''Create a string representation.

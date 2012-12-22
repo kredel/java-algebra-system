@@ -3929,9 +3929,9 @@ Word polynomial ring constructor.
         else
            @ring = ring;
         end
-        if not @ring.isAssociative()
-           puts "warning: ring is not associative";
-        end
+        #if not @ring.isAssociative()
+        #   puts "warning: ring is not associative";
+        #end
     end
 
 =begin rdoc
