@@ -26,6 +26,11 @@ DOCOPTS=-package -author -version -linksource
 DOCCLASSES=$(CLASSPATH)
 DOC=javadoc -classpath $(DOCCLASSES)
 
+# --- syncing ----------
+DRY=--dry-run
+DELETE=
+RSYNC=rsync -e ssh -avuz $(DRY) $(DELETE) --exclude=*~ --exclude=*.log* --exclude=*.out* --exclude=*.txt* --exclude=.svn 
+
 
 .SUFFIXES : .class .java .jar 
 .PHONY    : clean
@@ -58,14 +63,22 @@ EFILE=$(JASPATH)/examples/trinks6.jas
 tests: jas-mpj.jar
 	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -np $(NP) -machinefile $(MFILE) -class edu.jas.application.RunMPJGB disthybmpj $(EFILE) $(NP)/$(PPN) $(MFILE)
 
-notest: 
+notest: jas-mpj.jar
 	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -np $(NP) -machinefile $(MFILE) -class edu.jas.application.RunMPJGB distmpj $(EFILE) $(NP) $(MFILE)
 	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -class edu.jas.gb.HelloWorld
 	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -class edu.jas.kern.MPJEngineTest -n $(NP)
 	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -class edu.jas.util.DistHashTableMPJTest -n $(NP)
 
-gbtest:
+gbtest: jas-mpj.jar
 	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -np $(NP) -machinefile $(MFILE) -class edu.jas.gb.GroebnerBaseDistMPJTest 
 
 doc: $(FILES)
 	$(DOC) $(DOCOPTS) -d ../doc/mpj $(FILES)
+
+BWDIR=java/jas-2.4/mpj
+
+home:
+	$(RSYNC) bwgrid:$(BWDIR)/src/     src
+
+bwgrid:
+	$(RSYNC) src/                     bwgrid:$(BWDIR)/src/
