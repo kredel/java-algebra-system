@@ -113,7 +113,9 @@ public final class MPJChannel {
     void send(int t, Object v, int pr) throws IOException {
         Object[] va = new Object[1];
         va[0] = v;
-        engine.Send(va, 0, va.length, MPI.OBJECT, pr, t);
+        synchronized (MPJEngine.getSendLock(t)) {
+           engine.Send(va, 0, va.length, MPI.OBJECT, pr, t);
+        }
         //System.out.println("send: "+v);
     }
 
@@ -136,7 +138,10 @@ public final class MPJChannel {
         Object[] va = new Object[1];
         //System.out.println("engine.Recv");
         //Status stat = engine.Recv(va, 0, va.length, MPI.OBJECT, MPI.ANY_SOURCE, t);
-        Status stat = engine.Recv(va, 0, va.length, MPI.OBJECT, partnerRank, t);
+        Status stat = null;
+        synchronized (MPJEngine.getRecvLock(t)) {
+           stat = engine.Recv(va, 0, va.length, MPI.OBJECT, partnerRank, t);
+        }
         int cnt = stat.Get_count(MPI.OBJECT);
         if (cnt == 0) {
             throw new IOException("no object received");

@@ -267,8 +267,7 @@ public class GroebnerBaseDistributedHybridMPJ<C extends RingElem<C>> extends Gro
         logger.info("pairlist " + pairlist + ": " + unused);
 
         logger.debug("looking for clients");
-        DistHashTableMPJ<Integer, GenPolynomial<C>> theList = new DistHashTableMPJ<Integer, GenPolynomial<C>>(
-                        engine);
+        DistHashTableMPJ<Integer, GenPolynomial<C>> theList = new DistHashTableMPJ<Integer, GenPolynomial<C>>(engine);
         theList.init();
         List<GenPolynomial<C>> al = pairlist.getList();
         for (int i = 0; i < al.size(); i++) {
@@ -475,18 +474,6 @@ class HybridReducerServerMPJ<C extends RingElem<C>> implements Runnable {
 
 
     /**
-     * Message tag for results.
-     */
-    public static final int resultTag = GroebnerBaseDistributedHybridMPJ.resultTag;
-
-
-    /**
-     * Message tag for acknowledgments.
-     */
-    public static final int ackTag = GroebnerBaseDistributedHybridMPJ.ackTag;
-
-
-    /**
      * Constructor.
      * @param r MPJ rank of partner.
      * @param tpn number of threads per node
@@ -496,7 +483,7 @@ class HybridReducerServerMPJ<C extends RingElem<C>> implements Runnable {
      * @param L ordered pair list
      */
     HybridReducerServerMPJ(int r, int tpn, Terminator fin, Comm engine,
-                    DistHashTableMPJ<Integer, GenPolynomial<C>> dl, PairList<C> L) {
+			   DistHashTableMPJ<Integer, GenPolynomial<C>> dl, PairList<C> L) {
         rank = r;
         threadsPerNode = tpn;
         finner = fin;
@@ -530,7 +517,7 @@ class HybridReducerServerMPJ<C extends RingElem<C>> implements Runnable {
 
         // start receiver
         HybridReducerReceiverMPJ<C> receiver = new HybridReducerReceiverMPJ<C>(rank, finner, active,
-                        pairChannel, theList, pairlist);
+						       pairChannel, theList, pairlist);
         receiver.start();
 
         Pair<C> pair;
@@ -683,12 +670,6 @@ class HybridReducerReceiverMPJ<C extends RingElem<C>> extends Thread {
 
 
     /**
-     * Message tag for pairs.
-     */
-    public static final int pairTag = GroebnerBaseDistributedHybridMPJ.pairTag;
-
-
-    /**
      * Message tag for results.
      */
     public static final int resultTag = GroebnerBaseDistributedHybridMPJ.resultTag;
@@ -710,7 +691,7 @@ class HybridReducerReceiverMPJ<C extends RingElem<C>> extends Thread {
      * @param L ordered pair list
      */
     HybridReducerReceiverMPJ(int r, Terminator fin, AtomicInteger a, MPJChannel pc,
-                    DistHashTableMPJ<Integer, GenPolynomial<C>> dl, PairList<C> L) {
+			     DistHashTableMPJ<Integer, GenPolynomial<C>> dl, PairList<C> L) {
         rank = r;
         active = a;
         //threadsPerNode = tpn;

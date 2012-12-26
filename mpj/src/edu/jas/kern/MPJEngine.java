@@ -6,6 +6,8 @@ package edu.jas.kern;
 
 
 import java.util.Arrays;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import mpi.Comm;
 import mpi.MPI;
@@ -69,6 +71,18 @@ public final class MPJEngine {
     public static final int TAG = 11;
 
 
+    /*
+     * Send locks per tag.
+     */
+    private static SortedMap<Integer,Object> sendLocks = new TreeMap<Integer,Object>();
+
+
+    /*
+     * receive locks per tag.
+     */
+    private static SortedMap<Integer,Object> recvLocks = new TreeMap<Integer,Object>();
+
+
     /**
      * No public constructor.
      */
@@ -128,8 +142,11 @@ public final class MPJEngine {
                     throw new IllegalArgumentException("command line is null");
                 }
                 cmdline = args;
-                args = MPI.Init(args);
+                //args = MPI.Init(args);
+                int tl = MPI.Init_thread(args,MPI.THREAD_MULTIPLE);
                 logger.info("MPJ initialized on " + MPI.Get_processor_name());
+                logger.info("thread level MPI.THREAD_MULTIPLE: " + MPI.THREAD_MULTIPLE 
+                           + ", provided: " + tl);
                 if (debug) {
                     logger.debug("remaining args: " + Arrays.toString(args));
                 }
@@ -171,6 +188,37 @@ public final class MPJEngine {
      */
     public static synchronized void setMPJ() {
         NO_MPJ = false;
+    }
+
+
+    /**
+     * Get send lock per tag.
+     * @param tag message tag.
+     * @return a lock for sends.
+     */
+    public static synchronized Object getSendLock(int tag) {
+        tag = 11; // one global lock
+        Object lock = sendLocks.get(tag);
+        if ( lock == null ) {
+            lock = new Object();
+            sendLocks.put(tag,lock);
+        }
+        return lock;
+    }
+
+
+    /**
+     * Get receive lock per tag.
+     * @param tag message tag.
+     * @return a lock for receives.
+     */
+    public static synchronized Object getRecvLock(int tag) {
+        Object lock = recvLocks.get(tag);
+        if ( lock == null ) {
+            lock = new Object();
+            recvLocks.put(tag,lock);
+        }
+        return lock;
     }
 
 }

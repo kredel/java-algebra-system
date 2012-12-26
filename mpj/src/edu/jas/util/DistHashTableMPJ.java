@@ -247,7 +247,9 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
             tcl[0] = tc;
             int size = engine.Size();
             for (int i = 0; i < size; i++) { // send also to self.listener
-                engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
+                synchronized (MPJEngine.getSendLock(DHTTAG)) {
+                   engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
+                }
             }
             //System.out.println("send: "+tc);
         } catch (MPIException e) {
@@ -353,7 +355,9 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
             DHTTransport[] tcl = new DHTTransport[1];
             tcl[0] = tc;
             // send only to self.listener
-            engine.Send(tcl, 0, tcl.length, MPI.OBJECT, engine.Rank(), DHTTAG);
+            synchronized (MPJEngine.getSendLock(DHTTAG)) {
+               engine.Send(tcl, 0, tcl.length, MPI.OBJECT, engine.Rank(), DHTTAG);
+            }
             //System.out.println("send: "+tc);
         } catch (MPIException e) {
             logger.info("sending(terminate)");
@@ -442,8 +446,11 @@ class DHTMPJListener<K, V> extends Thread {
             try {
                 DHTTransport[] tcl = new DHTTransport[1];
                 //System.out.println("engine.Recv");
-                Status stat = engine.Recv(tcl, 0, tcl.length, MPI.OBJECT, MPI.ANY_SOURCE,
-                                DistHashTableMPJ.DHTTAG);
+                Status stat = null;
+                synchronized (MPJEngine.getRecvLock(DistHashTableMPJ.DHTTAG)) {
+                   stat = engine.Recv(tcl, 0, tcl.length, MPI.OBJECT, MPI.ANY_SOURCE,
+                                      DistHashTableMPJ.DHTTAG);
+                }
                 int cnt = stat.Get_count(MPI.OBJECT);
                 //System.out.println("engine.Recv, cnt = " + cnt);
                 if (cnt == 0) {
