@@ -335,4 +335,41 @@ public class GBAlgorithmBuilderTest extends TestCase {
         //System.out.println("gb = " + gb);
         //System.out.println("bb = " + bb);
     }
+
+
+    /**
+     * Test construction for BigRational and pairlists and compute.
+     */
+    public void testConstructionRationalParilistCompute() {
+        List<GenPolynomial<BigRational>> cp = ExamplesGeoTheorems.getExample();
+        GenPolynomialRing<BigRational> pf = cp.get(0).ring;
+
+        GroebnerBaseAbstract<BigRational> bb;
+        List<GenPolynomial<BigRational>> gb;
+        long t;
+
+        bb = GBAlgorithmBuilder.<BigRational> polynomialRing(pf).normalPairlist().build();
+        t = System.currentTimeMillis();
+        gb = bb.GB(cp);
+        t = System.currentTimeMillis() - t;
+        //System.out.println("time(gb) = " + t);
+        assertTrue("isGB: ", bb.isGB(gb));
+
+        bb = GBAlgorithmBuilder.<BigRational> polynomialRing(pf).syzygyPairlist().build();
+        t = System.currentTimeMillis();
+        gb = bb.GB(cp);
+        t = System.currentTimeMillis() - t;
+        //System.out.println("time(gb) = " + t);
+        assertTrue("isGB: ", bb.isGB(gb));
+
+        bb = GBAlgorithmBuilder.<BigRational> polynomialRing(pf).simplePairlist().build();
+        t = System.currentTimeMillis();
+        gb = bb.GB(cp);
+        t = System.currentTimeMillis() - t;
+        //System.out.println("time(gb) = " + t);
+        assertTrue("isGB: ", bb.isGB(gb));
+
+        assertTrue("t >= 0: ", t >= 0L); // for findbugs
+    }
+
 }
