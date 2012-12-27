@@ -93,7 +93,13 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
      * @param pl pair selection strategy
      */
     public GroebnerBaseAbstract(Reduction<C> red, PairList<C> pl) {
+        if ( red == null ) {
+            red = new ReductionSeq<C>();
+        }
         this.red = red;
+        if ( pl == null ) {
+            pl = new OrderedPairlist<C>();
+        }
         this.strategy = pl;
         blas = new BasicLinAlg<GenPolynomial<C>>();
     }

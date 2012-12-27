@@ -15,6 +15,10 @@ import edu.jas.gb.GBOptimized;
 import edu.jas.gb.GBProxy;
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.GroebnerBaseParallel;
+import edu.jas.gb.PairList;
+import edu.jas.gb.OrderedPairlist;
+import edu.jas.gb.OrderedMinPairlist;
+import edu.jas.gb.OrderedSyzPairlist;
 import edu.jas.gbufd.GBFactory;
 import edu.jas.gbufd.GroebnerBaseFGLM;
 import edu.jas.gbufd.GroebnerBasePseudoParallel;
@@ -38,12 +42,16 @@ import edu.jas.ufd.QuotientRing;
  *        Then continue to construct the algorithm with the methods 
  *        <ul>
  *        <li><code>optimize()</code> or <code>optimize(boolean)</code> for term order (variable order) 
- *            optimization,
+ *            optimization (true for return of permuted polynomials),
+ *        </li>
+ *        <li><code>simplePairlist()</code>, <code>normalPairlist()</code> (default) 
+ *            or <code>syzygyPairlist()</code>
+ *            for pair-list selection strategies, 
  *        </li>
  *        <li><code>fractionFree()</code> for clearing denominators and computing with pseudo reduction,
  *        </li>
- *        <li><code>graded()</code> for using the FGLM algorithm to first compute with a graded term order and 
- *            then constructing a lexicographical Gr&ouml;bner base,
+ *        <li><code>graded()</code> for using the FGLM algorithm to first compute with a 
+ *             graded term order and then constructing a lexicographical Gr&ouml;bner base,
  *        </li>
  *        <li><code>parallel()</code> additionaly compute a Gr&ouml;bner base over a field in parallel,
  *        </li>
@@ -99,6 +107,12 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
 
 
     /**
+     * Requested pairlist strategy.
+     */
+    public final PairList<C> strategy;
+
+
+    /**
      * Constructor not for use.
      */
     protected GBAlgorithmBuilder() {
@@ -121,8 +135,25 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
      * @param algo already determined algorithm.
      */
     public GBAlgorithmBuilder(GenPolynomialRing<C> ring, GroebnerBaseAbstract<C> algo) {
+        this(ring, algo, null);
+    }
+
+
+    /**
+     * Constructor.
+     * @param ring the polynomial ring.
+     * @param algo already determined algorithm.
+     * @param strategy pairlist strategy.
+     */
+    public GBAlgorithmBuilder(GenPolynomialRing<C> ring, 
+                              GroebnerBaseAbstract<C> algo, 
+                              PairList<C> strategy) {
         this.ring = ring;
         this.algo = algo;
+        if ( strategy == null ) {
+            strategy = new OrderedPairlist<C>();
+        }
+        this.strategy = strategy;
     }
 
 
@@ -132,7 +163,11 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
      */
     public GroebnerBaseAbstract<C> build() {
         if (algo == null) {
-            algo = GBFactory.<C> getImplementation(ring.coFac);
+            if ( strategy == null ) { // should not happen
+                algo = GBFactory.<C> getImplementation(ring.coFac);
+            } else {
+                algo = GBFactory.<C> getImplementation(ring.coFac,strategy);
+            }
         }
         return algo;
     }
@@ -145,6 +180,36 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
      */
     public static <C extends GcdRingElem<C>> GBAlgorithmBuilder<C> polynomialRing(GenPolynomialRing<C> fac) {
         return new GBAlgorithmBuilder<C>(fac);
+    }
+
+
+    /**
+     * Select syzygy critical pair-list strategy.
+     * Gebauer and M&ouml;ller algorithm.
+     * @return GBAlgorithmBuilder object.
+     */
+    public GBAlgorithmBuilder<C> syzygyPairlist() {
+        return new GBAlgorithmBuilder<C>(ring, algo, new OrderedSyzPairlist<C>());
+    }
+
+
+    /**
+     * Select normal critical pair-list strategy.
+     * Buchberger, Winkler and Kredel algorithm.
+     * @return GBAlgorithmBuilder object.
+     */
+    public GBAlgorithmBuilder<C> normalPairlist() {
+        return new GBAlgorithmBuilder<C>(ring, algo, new OrderedPairlist<C>());
+    }
+
+
+    /**
+     * Select simple critical pair-list strategy.
+     * Original Buchberger algorithm.
+     * @return GBAlgorithmBuilder object.
+     */
+    public GBAlgorithmBuilder<C> simplePairlist() {
+        return new GBAlgorithmBuilder<C>(ring, algo, new OrderedMinPairlist<C>());
     }
 
 
@@ -166,7 +231,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
      */
     public GBAlgorithmBuilder<C> optimize(boolean rP) {
         if (algo == null) {
-           algo = GBFactory.<C> getImplementation(ring.coFac);
+            algo = GBFactory.<C> getImplementation(ring.coFac,strategy);
         }
         GroebnerBaseAbstract<C> bb = new GBOptimized<C>(algo, rP);
         return new GBAlgorithmBuilder<C>(ring, bb);
@@ -186,13 +251,17 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
         }
         if (((Object)ring.coFac) instanceof BigRational) {
             BigRational cf = (BigRational) (Object) ring.coFac;
-            GroebnerBaseAbstract<BigRational> bb = GBFactory.getImplementation(cf, GBFactory.Algo.ffgb);
+            PairList<BigRational> sty  = (PairList<BigRational>) strategy;
+            GroebnerBaseAbstract<BigRational> bb 
+              = GBFactory.getImplementation(cf, GBFactory.Algo.ffgb, sty);
             GroebnerBaseAbstract<C> cbb = (GroebnerBaseAbstract<C>) (GroebnerBaseAbstract) bb;
             return new GBAlgorithmBuilder<C>(ring, cbb);
         }
         if (((Object)ring.coFac) instanceof QuotientRing) {
             QuotientRing<C> cf = (QuotientRing<C>) (Object) ring.coFac;
-            GroebnerBaseAbstract<Quotient<C>> bb = GBFactory.<C> getImplementation(cf, GBFactory.Algo.ffgb);
+            PairList<Quotient<C>> sty  = (PairList<Quotient<C>>) strategy;
+            GroebnerBaseAbstract<Quotient<C>> bb 
+              = GBFactory.<C> getImplementation(cf, GBFactory.Algo.ffgb, sty);
             GroebnerBaseAbstract<C> cbb = (GroebnerBaseAbstract<C>) (GroebnerBaseAbstract) bb;
             return new GBAlgorithmBuilder<C>(ring, cbb);
         }
@@ -252,23 +321,23 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
             return this;
         }
         if (algo == null) {
-            algo = GBFactory.<C> getImplementation(ring.coFac);
+            algo = GBFactory.<C> getImplementation(ring.coFac, strategy);
         }
         if (ring.coFac instanceof BigRational) {
             GroebnerBaseAbstract<C> bb;
             if (algo instanceof GroebnerBaseRational) { // fraction free requested
                 bb = (GroebnerBaseAbstract) new GroebnerBaseRational<BigRational>(threads);
             } else {
-                bb = (GroebnerBaseAbstract) new GroebnerBaseParallel<C>(threads);
+                bb = (GroebnerBaseAbstract) new GroebnerBaseParallel<C>(threads,strategy);
             }
             GroebnerBaseAbstract<C> pbb = new GBProxy<C>(algo, bb);
             return new GBAlgorithmBuilder<C>(ring, pbb);
         } else if (ring.coFac.isField()) {
-            GroebnerBaseAbstract<C> bb = new GroebnerBaseParallel<C>(threads);
+            GroebnerBaseAbstract<C> bb = new GroebnerBaseParallel<C>(threads, strategy);
             GroebnerBaseAbstract<C> pbb = new GBProxy<C>(algo, bb);
             return new GBAlgorithmBuilder<C>(ring, pbb);
         } else if (ring.coFac.getONE() instanceof GcdRingElem) {
-            GroebnerBaseAbstract<C> bb = new GroebnerBasePseudoParallel<C>(threads,ring.coFac);
+            GroebnerBaseAbstract<C> bb = new GroebnerBasePseudoParallel<C>(threads,ring.coFac,strategy);
             GroebnerBaseAbstract<C> pbb = new GBProxy<C>(algo, bb);
             return new GBAlgorithmBuilder<C>(ring, pbb);
         }
