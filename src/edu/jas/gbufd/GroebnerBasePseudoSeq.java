@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.Pair;
 import edu.jas.gb.PairList;
+import edu.jas.gb.OrderedPairlist;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
@@ -65,7 +66,17 @@ public class GroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends GroebnerBas
      * @param rf coefficient ring factory.
      */
     public GroebnerBasePseudoSeq(RingFactory<C> rf) {
-        this(new PseudoReductionSeq<C>(), rf);
+        this(new PseudoReductionSeq<C>(), rf, new OrderedPairlist<C>());
+    }
+
+
+    /**
+     * Constructor.
+     * @param rf coefficient ring factory.
+     * @param pl pair selection strategy
+     */
+    public GroebnerBasePseudoSeq(RingFactory<C> rf, PairList<C> pl) {
+        this(new PseudoReductionSeq<C>(), rf, pl);
     }
 
 
@@ -75,8 +86,8 @@ public class GroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends GroebnerBas
      * @param rf coefficient ring factory. <b>Note:</b> red must be an instance
      *            of PseudoReductionSeq.
      */
-    public GroebnerBasePseudoSeq(PseudoReduction<C> red, RingFactory<C> rf) {
-        super(red);
+    public GroebnerBasePseudoSeq(PseudoReduction<C> red, RingFactory<C> rf, PairList<C> pl) {
+        super(red,pl);
         this.red = red;
         cofac = rf;
         engine = GCDFactory.<C> getImplementation(rf);

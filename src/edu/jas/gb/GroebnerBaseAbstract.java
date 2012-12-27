@@ -80,6 +80,15 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>>
 
     /**
      * Constructor.
+     * @param pl pair selection strategy
+     */
+    public GroebnerBaseAbstract(PairList<C> pl) {
+        this(new ReductionSeq<C>(), pl );
+    }
+
+
+    /**
+     * Constructor.
      * @param red Reduction engine
      * @param pl pair selection strategy
      */

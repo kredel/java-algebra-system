@@ -24,6 +24,8 @@ import edu.jas.gb.GroebnerBaseParallel;
 import edu.jas.gb.GroebnerBaseSeq;
 import edu.jas.gb.ReductionSeq;
 import edu.jas.gb.OrderedSyzPairlist;
+import edu.jas.gb.OrderedPairlist;
+import edu.jas.gb.PairList;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -92,6 +94,16 @@ public class GBFactory {
 
 
     /**
+     * Get suitable pairlist implementation for GB algorithms.
+     * @return pairlist implementation.
+     */
+    public static <C extends GcdRingElem<C>> PairList<C> getStrategy() {
+        //return new OrderedPairlist<C>();
+        return new OrderedSyzPairlist<C>();
+    }
+
+
+    /**
      * Determine suitable implementation of GB algorithms, no factory case.
      * @return GB algorithm implementation for field coefficients.
      */
@@ -108,11 +120,22 @@ public class GBFactory {
      * @return GB algorithm implementation.
      */
     public static GroebnerBaseAbstract<ModLong> getImplementation(ModLongRing fac) {
+        return getImplementation(fac, new OrderedPairlist<ModLong>());
+    }
+
+
+    /**
+     * Determine suitable implementation of GB algorithms, case ModLong.
+     * @param fac ModLongRing.
+     * @param pl pair selection strategy
+     * @return GB algorithm implementation.
+     */
+    public static GroebnerBaseAbstract<ModLong> getImplementation(ModLongRing fac, PairList<ModLong> pl) {
         GroebnerBaseAbstract<ModLong> bba;
         if (fac.isField()) {
-            bba = new GroebnerBaseSeq<ModLong>();
+            bba = new GroebnerBaseSeq<ModLong>(pl);
         } else {
-            bba = new GroebnerBasePseudoSeq<ModLong>(fac);
+            bba = new GroebnerBasePseudoSeq<ModLong>(fac,pl);
         }
         return bba;
     }
@@ -124,11 +147,22 @@ public class GBFactory {
      * @return GB algorithm implementation.
      */
     public static GroebnerBaseAbstract<ModInteger> getImplementation(ModIntegerRing fac) {
+        return getImplementation(fac, new OrderedPairlist<ModInteger>());
+    }
+
+
+    /**
+     * Determine suitable implementation of GB algorithms, case ModInteger.
+     * @param fac ModIntegerRing.
+     * @param pl pair selection strategy
+     * @return GB algorithm implementation.
+     */
+    public static GroebnerBaseAbstract<ModInteger> getImplementation(ModIntegerRing fac, PairList<ModInteger> pl) {
         GroebnerBaseAbstract<ModInteger> bba;
         if (fac.isField()) {
-            bba = new GroebnerBaseSeq<ModInteger>();
+            bba = new GroebnerBaseSeq<ModInteger>(pl);
         } else {
-            bba = new GroebnerBasePseudoSeq<ModInteger>(fac);
+            bba = new GroebnerBasePseudoSeq<ModInteger>(fac,pl);
         }
         return bba;
     }
@@ -151,16 +185,39 @@ public class GBFactory {
      * @return GB algorithm implementation.
      */
     public static GroebnerBaseAbstract<BigInteger> getImplementation(BigInteger fac, Algo a) {
+        return getImplementation(fac, a, new OrderedPairlist<BigInteger>());
+    }
+
+
+    /**
+     * Determine suitable implementation of GB algorithms, case BigInteger.
+     * @param fac BigInteger.
+     * @param pl pair selection strategy
+     * @return GB algorithm implementation.
+     */
+    public static GroebnerBaseAbstract<BigInteger> getImplementation(BigInteger fac, PairList<BigInteger> pl) {
+        return getImplementation(fac, Algo.igb, new OrderedPairlist<BigInteger>());
+    }
+
+
+    /**
+     * Determine suitable implementation of GB algorithms, case BigInteger.
+     * @param fac BigInteger.
+     * @param a algorithm, a = igb, egb, dgb.
+     * @param pl pair selection strategy
+     * @return GB algorithm implementation.
+     */
+    public static GroebnerBaseAbstract<BigInteger> getImplementation(BigInteger fac, Algo a, PairList<BigInteger> pl) {
         GroebnerBaseAbstract<BigInteger> bba;
         switch (a) {
         case igb:
-            bba = new GroebnerBasePseudoSeq<BigInteger>(fac);
+            bba = new GroebnerBasePseudoSeq<BigInteger>(fac,pl);
             break;
         case egb:
-            bba = new EGroebnerBaseSeq<BigInteger>();
+            bba = new EGroebnerBaseSeq<BigInteger>(); // pl not suitable
             break;
         case dgb:
-            bba = new DGroebnerBaseSeq<BigInteger>();
+            bba = new DGroebnerBaseSeq<BigInteger>(); // pl not suitable
             break;
         default:
             throw new IllegalArgumentException("algorithm not available for BigInteger " + a);
@@ -175,7 +232,7 @@ public class GBFactory {
      * @return GB algorithm implementation.
      */
     public static GroebnerBaseAbstract<BigRational> getImplementation(BigRational fac) {
-        return getImplementation(fac, Algo.qgb);
+        return getImplementation(fac, Algo.qgb, new OrderedPairlist<BigRational>());
     }
 
 
@@ -186,14 +243,36 @@ public class GBFactory {
      * @return GB algorithm implementation.
      */
     public static GroebnerBaseAbstract<BigRational> getImplementation(BigRational fac, Algo a) {
+        return getImplementation(fac, a, new OrderedPairlist<BigRational>());
+    }
+
+
+    /**
+     * Determine suitable implementation of GB algorithms, case BigRational.
+     * @param fac BigRational.
+     * @param pl pair selection strategy
+     * @return GB algorithm implementation.
+     */
+    public static GroebnerBaseAbstract<BigRational> getImplementation(BigRational fac, PairList<BigRational> pl) {
+        return getImplementation(fac, Algo.qgb, pl);
+    }
+
+
+    /**
+     * Determine suitable implementation of GB algorithms, case BigRational.
+     * @param fac BigRational.
+     * @param a algorithm, a = qgb, ffgb.
+     * @param pl pair selection strategy
+     * @return GB algorithm implementation.
+     */
+    public static GroebnerBaseAbstract<BigRational> getImplementation(BigRational fac, Algo a, PairList<BigRational> pl) {
         GroebnerBaseAbstract<BigRational> bba;
         switch (a) {
         case qgb:
-            bba = new GroebnerBaseSeq<BigRational>();
-            //bba = new GroebnerBaseSeq<BigRational>(new ReductionSeq<BigRational>(),new OrderedSyzPairlist<BigRational>());
+            bba = new GroebnerBaseSeq<BigRational>(pl);
             break;
         case ffgb:
-            bba = new GroebnerBaseRational<BigRational>();
+            bba = new GroebnerBaseRational<BigRational>(); // pl not possible
             break;
         default:
             throw new IllegalArgumentException("algorithm not available for BigRational " + a);
@@ -209,7 +288,7 @@ public class GBFactory {
      */
     public static <C extends GcdRingElem<C>>
       GroebnerBaseAbstract<Quotient<C>> getImplementation(QuotientRing<C> fac) {
-        return getImplementation(fac, Algo.qgb);
+        return getImplementation(fac, Algo.qgb, new OrderedPairlist<Quotient<C>>());
     }
 
 
@@ -221,6 +300,31 @@ public class GBFactory {
      */
     public static <C extends GcdRingElem<C>>
       GroebnerBaseAbstract<Quotient<C>> getImplementation(QuotientRing<C> fac, Algo a) {
+        return getImplementation(fac, a, new OrderedPairlist<Quotient<C>>());
+    }
+
+
+    /**
+     * Determine suitable implementation of GB algorithms, case Quotient coefficients.
+     * @param fac QuotientRing.
+     * @param pl pair selection strategy
+     * @return GB algorithm implementation.
+     */
+    public static <C extends GcdRingElem<C>>
+      GroebnerBaseAbstract<Quotient<C>> getImplementation(QuotientRing<C> fac, PairList<Quotient<C>> pl) {
+        return getImplementation(fac, Algo.qgb, pl);
+    }
+
+
+    /**
+     * Determine suitable implementation of GB algorithms, case Quotient coefficients.
+     * @param fac QuotientRing.
+     * @param a algorithm, a = qgb, ffgb.
+     * @param pl pair selection strategy
+     * @return GB algorithm implementation.
+     */
+    public static <C extends GcdRingElem<C>>
+      GroebnerBaseAbstract<Quotient<C>> getImplementation(QuotientRing<C> fac, Algo a, PairList<Quotient<C>> pl) {
         GroebnerBaseAbstract<Quotient<C>> bba;
         switch (a) {
         case qgb:
@@ -272,13 +376,24 @@ public class GBFactory {
      * @param fac RingFactory&lt;C&gt;.
      * @return GB algorithm implementation.
      */
-    @SuppressWarnings("unchecked")
     public static <C extends GcdRingElem<C>> // interface RingElem not sufficient 
       GroebnerBaseAbstract<C> getImplementation(RingFactory<C> fac) {
+        return getImplementation(fac, new OrderedPairlist<C>());
+    }
+
+
+    /**
+     * Determine suitable implementation of GB algorithms, other cases.
+     * @param fac RingFactory&lt;C&gt;.
+     * @param pl pair selection strategy
+     * @return GB algorithm implementation.
+     */
+    @SuppressWarnings("unchecked")
+    public static <C extends GcdRingElem<C>> // interface RingElem not sufficient 
+      GroebnerBaseAbstract<C> getImplementation(RingFactory<C> fac, PairList<C> pl) {
         logger.debug("fac = " + fac.getClass().getName());
         if (fac.isField()) {
-            return new GroebnerBaseSeq<C>();
-            //return new GroebnerBaseSeq<C>(new ReductionSeq<C>(),new OrderedSyzPairlist<C>());
+            return new GroebnerBaseSeq<C>(pl);
         }
         GroebnerBaseAbstract bba = null;
         Object ofac = fac;
@@ -294,7 +409,7 @@ public class GBFactory {
                 bba = new RGroebnerBasePseudoSeq<Product<C>>(pfac);
             }
         } else {
-            bba = new GroebnerBasePseudoSeq<C>(fac);
+            bba = new GroebnerBasePseudoSeq<C>(fac, pl);
         }
         logger.debug("bba = " + bba.getClass().getName());
         return bba;
@@ -309,21 +424,31 @@ public class GBFactory {
      */
     public static <C extends GcdRingElem<C>> // interface RingElem not sufficient 
       GroebnerBaseAbstract<C> getProxy(RingFactory<C> fac) {
+        return getProxy(fac, new OrderedPairlist<C>());
+    }
+
+
+    /**
+     * Determine suitable concurrent implementation of GB algorithms if
+     * possible.
+     * @param fac RingFactory&lt;C&gt;.
+     * @param pl pair selection strategy
+     * @return GB proxy algorithm implementation.
+     */
+    public static <C extends GcdRingElem<C>> // interface RingElem not sufficient 
+      GroebnerBaseAbstract<C> getProxy(RingFactory<C> fac, PairList<C> pl) {
         if (ComputerThreads.NO_THREADS) {
-            return GBFactory.<C> getImplementation(fac);
+            return GBFactory.<C> getImplementation(fac,pl);
         }
         logger.debug("fac = " + fac.getClass().getName());
-        int th = ComputerThreads.N_CPUS-1;
+        int th = ( ComputerThreads.N_CPUS > 2 ? ComputerThreads.N_CPUS-1 : 2 );
         if (fac.isField()) {
-            GroebnerBaseAbstract<C> e1 = new GroebnerBaseSeq<C>();
-            //GroebnerBaseAbstract<C> e1 = new GroebnerBaseSeq<C>(new ReductionSeq<C>(),new OrderedSyzPairlist<C>());
-            GroebnerBaseAbstract<C> e2 = new GroebnerBaseParallel<C>(th);
-            //GroebnerBaseAbstract<C> e2 = new GroebnerBaseParallel<C>(th,
-            //                                       new ReductionPar<C>(),new OrderedSyzPairlist<C>());
+            GroebnerBaseAbstract<C> e1 = new GroebnerBaseSeq<C>(pl);
+            GroebnerBaseAbstract<C> e2 = new GroebnerBaseParallel<C>(th,pl);
             return new GBProxy<C>(e1, e2);
         } else if (fac.getONE() instanceof GcdRingElem && fac.characteristic().signum() == 0) {
-            GroebnerBaseAbstract<C> e1 = new GroebnerBasePseudoSeq<C>(fac);
-            GroebnerBaseAbstract<C> e2 = new GroebnerBasePseudoParallel<C>(th,fac);
+            GroebnerBaseAbstract<C> e1 = new GroebnerBasePseudoSeq<C>(fac,pl);
+            GroebnerBaseAbstract<C> e2 = new GroebnerBasePseudoParallel<C>(th,fac,pl);
             return new GBProxy<C>(e1, e2);
         }
         return getImplementation(fac);

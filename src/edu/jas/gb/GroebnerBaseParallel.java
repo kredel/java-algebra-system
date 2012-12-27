@@ -75,6 +75,16 @@ public class GroebnerBaseParallel<C extends RingElem<C>> extends GroebnerBaseAbs
     }
 
 
+   /**
+     * Constructor.
+     * @param pool ThreadPool to use.
+     * @param red Reduction engine
+     */
+    public GroebnerBaseParallel(int threads, PairList<C> pl) {
+        this(threads, new ThreadPool(threads), new ReductionPar<C>(), pl);
+    }
+
+
     /**
      * Constructor.
      * @param threads number of threads to use.

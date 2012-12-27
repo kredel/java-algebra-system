@@ -54,6 +54,15 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
 
     /**
      * Constructor.
+     * @param pl pair selection strategy
+     */
+    public GroebnerBaseSeq(PairList<C> pl) {
+        super(pl);
+    }
+
+
+    /**
+     * Constructor.
      * @param red Reduction engine
      * @param pl pair selection strategy
      */
