@@ -44,23 +44,26 @@ import edu.jas.ufd.QuotientRing;
  *        <li><code>optimize()</code> or <code>optimize(boolean)</code> for term order (variable order) 
  *            optimization (true for return of permuted polynomials),
  *        </li>
- *        <li><code>simplePairlist()</code>, <code>normalPairlist()</code> (default) 
- *            or <code>syzygyPairlist()</code>
+ *        <li><code>normalPairlist()</code> (default), <code>syzygyPairlist()</code>
+ *            or <code>simplePairlist()</code> 
  *            for pair-list selection strategies, 
  *        </li>
  *        <li><code>fractionFree()</code> for clearing denominators and computing with pseudo reduction,
  *        </li>
- *        <li><code>graded()</code> for using the FGLM algorithm to first compute with a 
- *             graded term order and then constructing a lexicographical Gr&ouml;bner base,
+ *        <li><code>graded()</code> for using the FGLM algorithm to first compute a 
+ *             Gr&ouml;bner base with respect to a 
+ *             graded term order and then constructing a Gr&ouml;bner base 
+ *             wrt. a lexicographical term order,
  *        </li>
- *        <li><code>parallel()</code> additionaly compute a Gr&ouml;bner base over a field in parallel,
+ *        <li><code>parallel()</code> additionaly compute a Gr&ouml;bner base over 
+ *            a field or integral domain in parallel,
  *        </li>
  *        <li><code>euclideanDomain()</code> for computing a e-Gr&ouml;bner base,
  *        </li>
  *        <li><code>domainAlgorithm(Algo)</code> for computing a d- or e-Gr&ouml;bner base,
  *        </li>
  *        </ul>
- *        Finaly call the method <code>build()</code> to obtain an implementaton of
+ *        Finally call the method <code>build()</code> to obtain an implementaton of
  *        class <code>GroebnerBaseAbstract</code>. For example 
  * 
  *        <pre>
