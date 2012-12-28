@@ -63,17 +63,24 @@ EFILE=$(JASPATH)/examples/trinks6.jas
 tests: jas-mpj.jar
 	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -np $(NP) -machinefile $(MFILE) -class edu.jas.application.RunMPJGB disthybmpj $(EFILE) $(NP)/$(PPN) $(MFILE)
 
+
 notest: jas-mpj.jar
 	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -np $(NP) -machinefile $(MFILE) -class edu.jas.application.RunMPJGB distmpj $(EFILE) $(NP) $(MFILE)
 	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -class edu.jas.gb.HelloWorld
 	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -class edu.jas.kern.MPJEngineTest -n $(NP)
 	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -class edu.jas.util.DistHashTableMPJTest -n $(NP)
 
+
 gbtest: jas-mpj.jar
 	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -np $(NP) -machinefile $(MFILE) -class edu.jas.gb.GroebnerBaseDistMPJTest 
 
+gbhybtest: jas-mpj.jar
+	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -np $(NP) -machinefile $(MFILE) -class edu.jas.gb.GroebnerBaseDistHybridMPJTest 
+
+
 doc: $(FILES)
 	$(DOC) $(DOCOPTS) -d ../doc/mpj $(FILES)
+
 
 BWDIR=java/jas-2.4/mpj
 

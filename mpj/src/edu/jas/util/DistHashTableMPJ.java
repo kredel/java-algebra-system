@@ -286,8 +286,9 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
                 }
             }
         } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+            //Thread.currentThread().interrupt();
             e.printStackTrace();
+            return value;
         }
         return value;
     }
@@ -358,7 +359,7 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
             synchronized (MPJEngine.getSendLock(DHTTAG)) {
                engine.Send(tcl, 0, tcl.length, MPI.OBJECT, engine.Rank(), DHTTAG);
             }
-            //System.out.println("send: "+tc);
+            logger.info("send terminate to " + engine.Rank());
         } catch (MPIException e) {
             logger.info("sending(terminate)");
             logger.info("send " + e);
@@ -371,12 +372,12 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
         listener.setDone();
         try {
             while (listener.isAlive()) {
-                //System.out.print("+++++");
+                System.out.print("+++++");
                 listener.join(999);
-                listener.interrupt();
+                //listener.interrupt();
             }
         } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+            //Thread.currentThread().interrupt();
         }
         listener = null;
     }
@@ -492,6 +493,7 @@ class DHTMPJListener<K, V> extends Thread {
                 e.printStackTrace();
             }
         }
+        logger.info("terminated at " + engine.Rank());
     }
 
 }

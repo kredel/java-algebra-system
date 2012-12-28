@@ -625,16 +625,14 @@ class MPJReducerClient<C extends RingElem<C>> implements Runnable {
     public void run() {
         logger.info("pairChannel = " + pairChannel + " reducer client running");
         Pair<C> pair = null;
-        GenPolynomial<C> pi;
-        GenPolynomial<C> pj;
+        GenPolynomial<C> pi, pj, ps;
         GenPolynomial<C> S;
         GenPolynomial<C> H = null;
         //boolean set = false;
         boolean goon = true;
         int reduction = 0;
         //int sleeps = 0;
-        Integer pix;
-        Integer pjx;
+        Integer pix, pjx, psx;
 
         while (goon) {
             /* protocol:
@@ -676,7 +674,7 @@ class MPJReducerClient<C extends RingElem<C>> implements Runnable {
                 continue;
             }
             if (pp instanceof GBTransportMessPair || pp instanceof GBTransportMessPairIndex) {
-                pi = pj = null;
+                pi = pj = ps = null;
                 if (pp instanceof GBTransportMessPair) {
                     pair = ((GBTransportMessPair<C>) pp).pair;
                     if (pair != null) {
@@ -689,9 +687,11 @@ class MPJReducerClient<C extends RingElem<C>> implements Runnable {
                 if (pp instanceof GBTransportMessPairIndex) {
                     pix = ((GBTransportMessPairIndex) pp).i;
                     pjx = ((GBTransportMessPairIndex) pp).j;
+                    psx = ((GBTransportMessPairIndex) pp).s;
                     pi = theList.getWait(pix);
                     pj = theList.getWait(pjx);
-                    //logger.info("pix = " + pix + ", pjx = " +pjx);
+                    ps = theList.getWait(psx);
+                    //logger.info("pix = " + pix + ", pjx = " +pjx + ", psx = " +psx);
                 }
 
                 if (pi != null && pj != null) {
