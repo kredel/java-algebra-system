@@ -61,7 +61,7 @@ The library contains at the moment of the following
   thread parallel and distributed versions of Buchbergers algorithm
   like <code>ReductionSeq</code>, <code>GroebnerBaseAbstract</code>,
   <code>GroebnerBaseSeq</code>, <code>GroebnerBaseParallel</code> and
-  <code>GroebnerBaseDistributed</code>.  There are also Gr&ouml;bner
+  <code>GroebnerBaseDistributedHybridEC</code>.  There are also Gr&ouml;bner
   bases in polynomial rings over principal ideal domains and Euclidean
   domains, so called D- and E-Gr&ouml;bner bases,
   e.g. <code>EGroebnerBaseSeq</code>. New are Gr&ouml;bner bases in
@@ -180,16 +180,17 @@ Older versions (no more supported) can be found here:
 <p>
 For informations on how to get started with JAS see the <a href="guide.html" >users guide</a>.
 For frequently asked question see <a href="faq.html" >FAQ</a>.
-An index of algorithms from the book 
+There is an <a href="gb-book.html">index of algorithms</a> for the book 
 <a href="http://www.springer.com/mathematics/book/978-0-387-97971-7" target="gbb">Gr&ouml;bner bases</a> 
-and their JAS equivalents can be found <a href="gb-book.html">here</a>.
-An index of algorithms from the book 
+and their JAS equivalents.
+An <a href="algo-ca-book.html">index of algorithms</a> for the book 
 <a href="http://www.springer.com/computer/theoretical+computer+science/book/978-0-7923-9259-0" 
 target="gbb">Algorithms for Computer Algebra</a> 
-and their JAS equivalents can be found <a href="algo-ca-book.html">here</a>.
+and their JAS equivalents is also available.
 </p>
 
-<p>The JAS <a href="design.html" target="main" >API guide</a>
+<p>
+The JAS <a href="design.html" target="main" >API guide</a>
 describes the interface and class design considerations and contains
 an overview of the most important classes and methods.  An online
 Javadoc documentation of the API together with source code is
@@ -207,8 +208,8 @@ or
 </p>
 
 
-<h3>Published papers and talks about JAS</h3>
 
+<h3>Published papers and talks about JAS</h3>
 
 <p>Some ideas on categories and mixin composition in ScAS and JAS are presented in the poster 
     <a href="kredel/com-casc2012-poster.pdf" target="casc"  
@@ -470,9 +471,13 @@ app where all ruby examples can be accessed.
 
 <p>The main Ruboto screen with the "trinks.rb" example and its output looks as follows.
 </p>
-<p><a href="images/device-2012-11-18-jas-trinks.png" ><img src="images/device-2012-11-18-jas-trinks-thumb.png" /></a> &nbsp;
-   <a href="images/device-2012-11-18-jas-trinks-out.png" ><img src="images/device-2012-11-18-jas-trinks-out-thumb.png" /></a> &nbsp;
-   <a href="images/device-2012-11-18-jas-trinks-out-big.png" ><img src="images/device-2012-11-18-jas-trinks-out-big-thumb.png" /></a>
+<p>
+<a href="images/device-2012-11-18-jas-trinks.png" 
+   ><img src="images/device-2012-11-18-jas-trinks-thumb.png" /></a> &nbsp;
+<a href="images/device-2012-11-18-jas-trinks-out.png" 
+   ><img src="images/device-2012-11-18-jas-trinks-out-thumb.png" /></a> &nbsp;
+<a href="images/device-2012-11-18-jas-trinks-out-big.png" 
+   ><img src="images/device-2012-11-18-jas-trinks-out-big-thumb.png" /></a>
 </p>
 
 
@@ -482,7 +487,7 @@ app where all ruby examples can be accessed.
 <p>
 The following are examples which can be executed with 
 the class edu.jas.application.RunGB. E.g. <br />
-<code>java -cp .:jas.jar:... edu.jas.application.RunGB &lt;args&gt;</code>
+<code>java -cp .:log4j.jar:jas.jar:... edu.jas.application.RunGB &lt;args&gt;</code>
 </p>
 
 <p>Commutative:
@@ -524,7 +529,7 @@ the class edu.jas.application.RunGB. E.g. <br />
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Dec 27 18:34:51 CET 2012
+Last modified: Dec 28 11:34:51 CET 2012
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
@@ -541,7 +546,6 @@ $Id$
           alt="Valid CSS!" height="31" width="88"
      /></a>
 </p>
-
 
   </body>
 </html>
