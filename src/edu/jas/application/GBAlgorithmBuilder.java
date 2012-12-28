@@ -151,8 +151,11 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
     public GBAlgorithmBuilder(GenPolynomialRing<C> ring, 
                               GroebnerBaseAbstract<C> algo, 
                               PairList<C> strategy) {
+        if ( ring == null ) {
+            throw new IllegalArgumentException("ring may not be null");
+        }
         this.ring = ring;
-        this.algo = algo;
+        this.algo = algo; // null accepted
         if ( strategy == null ) {
             strategy = new OrderedPairlist<C>();
         }
