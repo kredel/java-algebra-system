@@ -132,7 +132,7 @@ final class GBTransportMessPairIndex extends GBTransportMess {
     public final int j;
 
 
-    public final int s; // last polynomial in list, unused
+    public final int s; 
 
 
     /**
@@ -140,17 +140,7 @@ final class GBTransportMessPairIndex extends GBTransportMess {
      * @param p pair for transport.
      */
     public GBTransportMessPairIndex(Pair p) {
-        this(p.i,p.j,0);
-    }
-
-
-    /**
-     * GBTransportMessPairIndex.
-     * @param p pair for transport.
-     * @param s list size.
-     */
-    public GBTransportMessPairIndex(Pair p, int s) {
-        this(p.i,p.j,s);
+        this(p.i,p.j,p.s);
     }
 
 
@@ -159,6 +149,7 @@ final class GBTransportMessPairIndex extends GBTransportMess {
      * @param i first index.
      * @param j second index.
      */
+    @Deprecated
     public GBTransportMessPairIndex(int i, int j) {
         this(i,j,0);
     }
@@ -168,17 +159,13 @@ final class GBTransportMessPairIndex extends GBTransportMess {
      * GBTransportMessPairIndex.
      * @param i first index.
      * @param j second index.
-     * @param s list size.
+     * @param s maximal index.
      */
     public GBTransportMessPairIndex(int i, int j, int s) {
         this.i = i;
         this.j = j;
-        if ( s < i ) {
-            s = i;
-        }
-        if ( s < j ) {
-            s = j;
-        }
+        s = Math.max(this.i,s);
+        s = Math.max(this.j,s);
         this.s = s;
     }
 
@@ -187,7 +174,7 @@ final class GBTransportMessPairIndex extends GBTransportMess {
      * GBTransportMessPairIndex.
      * @param i first index.
      * @param j second index.
-     * @param s list size.
+     * @param s maximal index.
      */
     public GBTransportMessPairIndex(Integer i, Integer j, Integer s) {
         this(i.intValue(),j.intValue(),s.intValue());
@@ -199,7 +186,7 @@ final class GBTransportMessPairIndex extends GBTransportMess {
      */
     @Override
     public String toString() {
-        return super.toString() + "( " + i + "," + j + " )[" + s + "]";
+        return super.toString() + "( " + i + "," + j + "," + s + ")";
     }
 
 }

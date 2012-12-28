@@ -17,7 +17,7 @@ import edu.jas.util.RemoteExecutable;
 /**
  * Setup to run a distributed GB example.
  * @author Heinz Kredel
- * @deprecated
+ * @deprecated use GroebnerBaseDistributedHybridEC
  */
 @Deprecated
 public class GBDistHybrid<C extends RingElem<C>> {

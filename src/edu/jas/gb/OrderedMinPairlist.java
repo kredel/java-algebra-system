@@ -190,7 +190,11 @@ public class OrderedMinPairlist<C extends RingElem<C> > extends OrderedPairlist<
         if ( ! c ) {
             pair = null;
         } else {
+            pair.maxIndex(P.size()-1);
             remCount++; // count only real pairs
+            if ( logger.isDebugEnabled() ) {
+                logger.info("pair(" + pair.j + "," + pair.i + ")");
+            }
         }
         return pair; 
     }

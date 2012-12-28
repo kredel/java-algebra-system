@@ -17,6 +17,7 @@ import edu.jas.util.RemoteExecutable;
 /**
  * Setup to run a distributed GB example.
  * @author Heinz Kredel
+ * TODO: to deprecate
  */
 
 public class GBDistSP<C extends RingElem<C>> {

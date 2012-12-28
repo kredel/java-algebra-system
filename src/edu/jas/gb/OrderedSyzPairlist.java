@@ -279,6 +279,7 @@ public class OrderedSyzPairlist<C extends RingElem<C>> extends OrderedPairlist<C
             }
         }
         if ( pair != null ) {
+            pair.maxIndex(P.size()-1);
             remCount++; // count only real pairs
             if ( logger.isDebugEnabled() ) {
                 logger.info("pair(" + pair.j + "," + pair.i + ")");

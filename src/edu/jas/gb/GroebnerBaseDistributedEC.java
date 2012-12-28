@@ -682,17 +682,14 @@ class ReducerClientEC<C extends RingElem<C>> implements Runnable {
     public void run() {
         logger.debug("pairChannel = " + pairChannel + " reducer client running");
         Pair<C> pair = null;
-        GenPolynomial<C> pi;
-        GenPolynomial<C> pj;
-        GenPolynomial<C> sp = null;
+        GenPolynomial<C> pi, pj, ps;
         GenPolynomial<C> S;
         GenPolynomial<C> H = null;
         //boolean set = false;
         boolean goon = true;
         int reduction = 0;
         //int sleeps = 0;
-        Integer pix;
-        Integer pjx;
+        Integer pix, pjx, psx;
 
         while (goon) {
             /* protocol:
@@ -734,7 +731,7 @@ class ReducerClientEC<C extends RingElem<C>> implements Runnable {
                 continue;
             }
             if (pp instanceof GBTransportMessPair || pp instanceof GBTransportMessPairIndex) {
-                pi = pj = null;
+                pi = pj = ps = null;
                 if (pp instanceof GBTransportMessPair) { // obsolete, for tests
                     GBTransportMessPair<C> tmp = (GBTransportMessPair<C>) pp;
                     pair = (Pair<C>) tmp.pair;
@@ -749,11 +746,11 @@ class ReducerClientEC<C extends RingElem<C>> implements Runnable {
                     GBTransportMessPairIndex tmpi = (GBTransportMessPairIndex)pp;
                     pix = tmpi.i;
                     pjx = tmpi.j;
-                    //Integer sx = tmpi.s; // bug: -1; // last polynomial
-                    //sp = theList.getWait(sx);
+                    psx = tmpi.s;
                     pi = theList.getWait(pix);
                     pj = theList.getWait(pjx);
-                    //logger.info("pix = " + pix + ", pjx = " + pjx + ", sx = " + sx);
+                    ps = theList.getWait(psx);
+                    //logger.info("pix = " + pix + ", pjx = " + pjx + ", psx = " + psx);
                 }
 
                 if (pi != null && pj != null) {
@@ -777,7 +774,7 @@ class ReducerClientEC<C extends RingElem<C>> implements Runnable {
                         }
                     }
                 } else {
-                    logger.info("pi = " + pi + ", pj = " + pj + ", sp = " + sp);
+                    logger.info("pi = " + pi + ", pj = " + pj + ", ps = " + ps);
                 }
             }
 
