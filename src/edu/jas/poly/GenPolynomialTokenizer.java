@@ -1156,7 +1156,7 @@ public class GenPolynomialTokenizer {
         //if (debug) logger.debug("comment = " + comments);
 
         RingFactory coeff = nextCoefficientRing();
-        logger.info("coeff = " + coeff);
+        logger.info("coeff = " + coeff.getClass().getSimpleName());
 
         vars = nextVariableList();
         logger.info("vars = " + Arrays.toString(vars));
@@ -1190,7 +1190,7 @@ public class GenPolynomialTokenizer {
         //if (debug) logger.debug("comment = " + comments);
 
         RingFactory coeff = nextCoefficientRing();
-        logger.info("coeff = " + coeff);
+        logger.info("coeff = " + coeff.getClass().getSimpleName());
 
         vars = nextVariableList();
         logger.info("vars = " + Arrays.toString(vars));
@@ -1268,7 +1268,7 @@ public class GenPolynomialTokenizer {
         //if (debug) logger.debug("comment = " + comments);
 
         RingFactory coeff = nextCoefficientRing();
-        logger.info("coeff = " + coeff);
+        logger.info("coeff = " + coeff.getClass().getSimpleName());
 
         vars = nextVariableList();
         logger.info("vars = " + Arrays.toString(vars));
@@ -1346,7 +1346,7 @@ public class GenPolynomialTokenizer {
         //if (debug) logger.debug("comment = " + comments);
 
         RingFactory coeff = nextCoefficientRing();
-        logger.info("coeff = " + coeff);
+        logger.info("coeff = " + coeff.getClass().getSimpleName());
 
         vars = nextVariableList();
         logger.info("vars = " + Arrays.toString(vars));

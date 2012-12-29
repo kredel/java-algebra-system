@@ -620,7 +620,9 @@ class HybridReducerServerMPJ<C extends RingElem<C>> implements Runnable {
             }
         }
         int d = active.get();
-        logger.info("remaining active tasks = " + d);
+        if ( d > 0 ) {
+            logger.info("remaining active tasks = " + d);
+        }
         receiver.terminate();
         //logger.info("terminated, send " + red + " reduction pairs");
         pairChannel.close();
