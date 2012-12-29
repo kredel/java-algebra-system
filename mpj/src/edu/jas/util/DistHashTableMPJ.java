@@ -359,7 +359,7 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
             synchronized (MPJEngine.getSendLock(DHTTAG)) {
                engine.Send(tcl, 0, tcl.length, MPI.OBJECT, engine.Rank(), DHTTAG);
             }
-            logger.info("send terminate to " + engine.Rank());
+            logger.debug("send terminate to " + engine.Rank());
         } catch (MPIException e) {
             logger.info("sending(terminate)");
             logger.info("send " + e);

@@ -228,7 +228,7 @@ public class GroebnerBaseDistributedMPJ<C extends RingElem<C>> extends GroebnerB
         logger.debug("main loop waiting");
         fin.waitDone();
         int ps = theList.size();
-        logger.debug("#distributed list = " + ps);
+        logger.info("#distributed list = " + ps);
         // make sure all polynomials arrived: not needed in master
         // G = (ArrayList)theList.values();
         G = pairlist.getList();
@@ -238,11 +238,11 @@ public class GroebnerBaseDistributedMPJ<C extends RingElem<C>> extends GroebnerB
         long time = System.currentTimeMillis();
         List<GenPolynomial<C>> Gp = minimalGB(G); // not jet distributed but threaded
         time = System.currentTimeMillis() - time;
-        logger.info("parallel gbmi = " + time);
+        logger.debug("parallel gbmi = " + time);
         G = Gp;
         logger.info("theList.terminate()");
         theList.terminate();
-        logger.info("" + pairlist);
+        logger.info("end" + pairlist);
         return G;
     }
 
@@ -635,7 +635,7 @@ class MPJReducerClient<C extends RingElem<C>> implements Runnable {
              */
             // pair = (Pair) pairlist.removeNext();
             Object req = new GBTransportMessReq();
-            logger.debug("send request = " + req);
+            logger.debug("send request");
             try {
                 pairChannel.send(req);
             } catch (IOException e) {
@@ -643,7 +643,7 @@ class MPJReducerClient<C extends RingElem<C>> implements Runnable {
                 e.printStackTrace();
                 break;
             }
-            logger.debug("receive pair, goon = " + goon);
+            logger.debug("receive pair, goon");
             Object pp = null;
             try {
                 pp = pairChannel.receive();

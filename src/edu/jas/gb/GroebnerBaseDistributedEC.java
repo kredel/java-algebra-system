@@ -317,7 +317,7 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
         List<GenPolynomial<C>> Gp;
         Gp = minimalGB(G); // not jet distributed but threaded
         time = System.currentTimeMillis() - time;
-        logger.info("parallel gbmi = " + time);
+        logger.debug("parallel gbmi = " + time);
         /*
           time = System.currentTimeMillis();
           G = GroebnerBase.<C>GBmi(G); // sequential
@@ -327,7 +327,7 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
         G = Gp;
         logger.debug("cf.terminate()");
         cf.terminate();
-        logger.info("theList.terminate()");
+        logger.debug("theList.terminate()");
         theList.terminate();
         logger.info("" + pairlist);
         return G;
