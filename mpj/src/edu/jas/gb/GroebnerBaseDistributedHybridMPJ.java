@@ -291,7 +291,6 @@ public class GroebnerBaseDistributedHybridMPJ<C extends RingElem<C>> extends Gro
         int ps = theList.size();
         logger.info("#distributed list = " + ps);
         // make sure all polynomials arrived: not needed in master
-        // G = (ArrayList)theList.values();
         G = pairlist.getList();
         if (ps != G.size()) {
             logger.info("#distributed list = " + theList.size() + " #pairlist list = " + G.size());
@@ -766,22 +765,17 @@ class HybridReducerReceiverMPJ<C extends RingElem<C>> extends Thread {
                     }
                     if (!H.isZERO()) {
                         if (H.isONE()) {
-                            // finner.allIdle();
                             polIndex = pairlist.putOne();
-                            GenPolynomial<C> nn = theList.put(Integer.valueOf(polIndex), H);
-                            if (nn != null) {
-                                logger.info("double polynomials nn = " + nn + ", H = " + H);
-                            }
+                            //GenPolynomial<C> nn = 
+                            theList.putWait(Integer.valueOf(polIndex), H);
                             //goon = false; must wait for other clients
                             //finner.initIdle(1);
                             //break;
                         } else {
                             polIndex = pairlist.put(H);
                             // use putWait ? but still not all distributed
-                            GenPolynomial<C> nn = theList.put(Integer.valueOf(polIndex), H);
-                            if (nn != null) {
-                                logger.info("double polynomials nn = " + nn + ", H = " + H);
-                            }
+                            //GenPolynomial<C> nn = 
+                            theList.putWait(Integer.valueOf(polIndex), H);
                         }
                     }
                 }

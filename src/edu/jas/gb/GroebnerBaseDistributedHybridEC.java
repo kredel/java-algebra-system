@@ -878,23 +878,17 @@ class HybridReducerReceiverEC<C extends RingElem<C>> extends Thread {
                     }
                     if (!H.isZERO()) {
                         if (H.isONE()) {
-                            logger.info("H = one");
                             // finner.allIdle();
                             polIndex = pairlist.putOne();
-                            GenPolynomial<C> nn = theList.put(Integer.valueOf(polIndex), H);
-                            if (nn != null) {
-                                logger.info("double polynomials nn = " + nn + ", H = " + H);
-                            }
+                            theList.putWait(Integer.valueOf(polIndex), H);
                             //goon = false; must wait for other clients
                             //finner.initIdle(1);
                             //break;
                         } else {
                             polIndex = pairlist.put(H);
                             // use putWait ? but still not all distributed
-                            GenPolynomial<C> nn = theList.put(Integer.valueOf(polIndex), H);
-                            if (nn != null) {
-                                logger.info("double polynomials nn = " + nn + ", H = " + H);
-                            }
+                            //GenPolynomial<C> nn = 
+                            theList.putWait(Integer.valueOf(polIndex), H);
                         }
                     }
                 }

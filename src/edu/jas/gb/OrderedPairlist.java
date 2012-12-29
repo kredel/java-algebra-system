@@ -302,6 +302,7 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
         P.clear();
         P.add(ring.getONE());
         red.clear();
+        logger.info("outOne " + this.toString());
         return P.size()-1;
     }
 

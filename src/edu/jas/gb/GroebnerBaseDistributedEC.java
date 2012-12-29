@@ -282,7 +282,8 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
         //}
 
         logger.debug("looking for clients");
-        DistHashTable<Integer, GenPolynomial<C>> theList = new DistHashTable<Integer, GenPolynomial<C>>("localhost", DHT_PORT);
+        DistHashTable<Integer, GenPolynomial<C>> theList 
+            = new DistHashTable<Integer, GenPolynomial<C>>("localhost", DHT_PORT);
         theList.init();
         List<GenPolynomial<C>> al = pairlist.getList();
         for (int i = 0; i < al.size(); i++) {
@@ -308,10 +309,9 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
         int ps = theList.size();
         logger.debug("#distributed list = " + ps);
         // make sure all polynomials arrived: not needed in master
-        // G = (ArrayList)theList.values();
         G = pairlist.getList();
         if (ps != G.size()) {
-            logger.info("#distributed list = " + theList.size() + " #pairlist list = " + G.size());
+            logger.warn("#distributed list = " + theList.size() + " #pairlist list = " + G.size());
         }
         long time = System.currentTimeMillis();
         List<GenPolynomial<C>> Gp;
@@ -341,7 +341,8 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
      * @param dhtport of the DHT server.
      * @throws IOException
      */
-    public static <C extends RingElem<C>> void clientPart(String host, int port, int dhtport) throws IOException {
+    public static <C extends RingElem<C>> void clientPart(String host, int port, int dhtport) 
+           throws IOException {
         ChannelFactory cf = new ChannelFactory(port + 10); // != port for localhost
         cf.init();
         logger.info("clientPart connecting to " + host + ", port = " + port + ", dhtport = " + dhtport);
@@ -616,19 +617,13 @@ class ReducerServerEC<C extends RingElem<C>> implements Runnable {
                         if (H.isONE()) {
                             // pool.allIdle();
                             polIndex = pairlist.putOne();
-                            GenPolynomial<C> nn = theList.put(Integer.valueOf(polIndex), H);
-                            if (nn != null) {
-                                logger.info("double polynomials nn = " + nn + ", H = " + H);
-                            }
+                            theList.putWait(Integer.valueOf(polIndex), H);
                             goon = false;
                             break;
                         }
                         polIndex = pairlist.put(H);
                         // use putWait ? but still not all distributed
-                        GenPolynomial<C> nn = theList.put(Integer.valueOf(polIndex), H);
-                        if (nn != null) {
-                            logger.info("double polynomials nn = " + nn + ", H = " + H);
-                        }
+                        theList.putWait(Integer.valueOf(polIndex), H);
                     }
                 }
             }

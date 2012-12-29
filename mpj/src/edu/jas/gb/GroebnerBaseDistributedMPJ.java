@@ -549,21 +549,16 @@ class MPJReducerServer<C extends RingElem<C>> implements Runnable {
                         pair.setZero();
                     } else {
                         if (H.isONE()) {
-                            // finaler.allIdle();
                             polIndex = pairlist.putOne();
-                            GenPolynomial<C> nn = theList.put(Integer.valueOf(polIndex), H);
-                            if (nn != null) {
-                                logger.info("double polynomials nn = " + nn + ", H = " + H);
-                            }
+                            //GenPolynomial<C> nn = 
+                            theList.putWait(Integer.valueOf(polIndex), H);
                             goon = false;
                             break;
                         }
                         polIndex = pairlist.put(H);
                         // use putWait ? but still not all distributed
-                        GenPolynomial<C> nn = theList.put(Integer.valueOf(polIndex), H);
-                        if (nn != null) {
-                            logger.info("double polynomials nn = " + nn + ", H = " + H);
-                        }
+                        //GenPolynomial<C> nn = 
+                        theList.putWait(Integer.valueOf(polIndex), H);
                     }
                 }
             }
