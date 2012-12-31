@@ -225,7 +225,6 @@ public class GCDHenselTest extends TestCase {
             //System.out.println("c  = " + c);
             //System.out.println("d  = " + d);
             //System.out.println("e  = " + e);
-
             assertTrue("c | gcd(ac,bc): " + d + ", c = " + c, e.isZERO());
 
             e = PolyUtil.<BigInteger> basePseudoRemainder(a, d);
@@ -315,7 +314,6 @@ public class GCDHenselTest extends TestCase {
 
     /**
      * Test Hensel gcd 3 variables.
-     * 
      */
     public void testHenselGCD3() {
         BigInteger ifa = new BigInteger(1);

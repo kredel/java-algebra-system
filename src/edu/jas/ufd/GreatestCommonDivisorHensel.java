@@ -357,16 +357,16 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
         GenPolynomial<BigInteger> re0;
         GenPolynomial<BigInteger> ce0 = null;
 
-        for (int i = 0; i < 11; i++) { // meta loop
+        for (int i = 0; i < 10; i++) { // meta loop
             //System.out.println("======================================================= run " 
             //                   + dfac.nvar + ", " + i);
             java.math.BigInteger p = null; //new java.math.BigInteger("19"); //primes.next();
-            // 5 small, 5 medium and 1 large size primes
+            // 4 small, 4 medium and 2 large size primes
             if (i == 0) { // medium size
                 primes = new PrimeList(PrimeList.Range.medium);
                 primeIter = primes.iterator();
             }
-            if (i == 5) { // small size
+            if (i == 4) { // small size
                 primes = new PrimeList(PrimeList.Range.small);
                 primeIter = primes.iterator();
                 p = primeIter.next(); // 2
@@ -374,7 +374,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
                 p = primeIter.next(); // 5
                 p = primeIter.next(); // 7
             }
-            if (i == 10) { // large size
+            if (i == 8) { // large size
                 primes = new PrimeList(PrimeList.Range.large);
                 primeIter = primes.iterator();
             }
