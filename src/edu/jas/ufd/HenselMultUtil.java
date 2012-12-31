@@ -444,13 +444,13 @@ public class HenselMultUtil {
      * @param C monic GenPolynomial with integer coefficients
      * @param Cp GenPolynomial mod p^k
      * @param F list of modular GenPolynomials, mod (I_v, p^k )
-     * @param V list of substitution values, mod p^k
+     * @param V list of integer substitution values
      * @param k desired approximation exponent p^k.
      * @return [g'_1,..., g'_n] with prod_i g'_i = Cp mod p^k.
      */
     public static <MOD extends GcdRingElem<MOD> & Modular> List<GenPolynomial<MOD>> liftHenselMonic(
                     GenPolynomial<BigInteger> C, GenPolynomial<MOD> Cp, List<GenPolynomial<MOD>> F,
-                    List<MOD> V, long k) throws NoLiftingException {
+                    List<BigInteger> V, long k) throws NoLiftingException {
         GenPolynomialRing<MOD> pkfac = Cp.ring;
         //if (pkfac.nvar == 1) { // V ignored
         //    return HenselUtil.<MOD> liftHenselMonic(C,F,k);
@@ -461,7 +461,7 @@ public class HenselMultUtil {
         List<GenPolynomialRing<MOD>> Pfac = new ArrayList<GenPolynomialRing<MOD>>();
         List<GenPolynomial<MOD>> Ap = new ArrayList<GenPolynomial<MOD>>();
         List<MOD> Vb = new ArrayList<MOD>();
-        MOD v = V.get(0);
+        MOD v = pkfac.coFac.fromInteger( V.get(0).getVal() );
         Pfac.add(pkfac);
         Ap.add(Cp);
         Vb.add(v);
@@ -470,7 +470,8 @@ public class HenselMultUtil {
         for (int j = pkfac.nvar; j > 2; j--) {
             pf = pf.contract(1);
             Pfac.add(0, pf);
-            MOD vp = pkfac.coFac.fromInteger(V.get(j - 2).getSymmetricInteger().getVal());
+            //MOD vp = pkfac.coFac.fromInteger(V.get(j - 2).getSymmetricInteger().getVal());
+            MOD vp = pkfac.coFac.fromInteger(V.get(j - 2).getVal());
             //System.out.println("vp     = " + vp);
             Vb.add(1, vp);
             ap = PolyUtil.<MOD> evaluateMain(pf, ap, vp);
@@ -648,14 +649,14 @@ public class HenselMultUtil {
      * @param C GenPolynomial with integer coefficients
      * @param Cp GenPolynomial C mod p^k
      * @param F list of modular GenPolynomials, mod (I_v, p^k )
-     * @param V list of substitution values, mod p^k
+     * @param V list of integral substitution values
      * @param k desired approximation exponent p^k.
      * @param G list of leading coefficients of the factors of C.
      * @return [g'_1,..., g'_n] with prod_i g'_i = Cp mod p^k.
      */
     public static <MOD extends GcdRingElem<MOD> & Modular> List<GenPolynomial<MOD>> liftHensel(
                     GenPolynomial<BigInteger> C, GenPolynomial<MOD> Cp, List<GenPolynomial<MOD>> F,
-                    List<MOD> V, long k, List<GenPolynomial<BigInteger>> G) throws NoLiftingException {
+                    List<BigInteger> V, long k, List<GenPolynomial<BigInteger>> G) throws NoLiftingException {
         GenPolynomialRing<MOD> pkfac = Cp.ring;
         long d = C.degree();
         //System.out.println("C = " + C);
@@ -682,7 +683,7 @@ public class HenselMultUtil {
         List<GenPolynomial<MOD>> Ap = new ArrayList<GenPolynomial<MOD>>();
         List<List<GenPolynomial<MOD>>> Gp = new ArrayList<List<GenPolynomial<MOD>>>();
         List<MOD> Vb = new ArrayList<MOD>();
-        //MOD v = V.get(0);
+        //MOD v = V.get(0); // fromInteger
         Pfac.add(pkfac);
         Ap.add(Cp);
         Gp.add(Lp);
@@ -693,7 +694,8 @@ public class HenselMultUtil {
         for (int j = pkfac.nvar; j > 2; j--) {
             pf = pf.contract(1);
             Pfac.add(0, pf);
-            MOD vp = pkfac.coFac.fromInteger(V.get(pkfac.nvar - j).getSymmetricInteger().getVal());
+            //MOD vp = pkfac.coFac.fromInteger(V.get(pkfac.nvar - j).getSymmetricInteger().getVal());
+            MOD vp = pkfac.coFac.fromInteger(V.get(pkfac.nvar - j).getVal());
             //System.out.println("vp     = " + vp);
             Vb.add(vp);
             ap = PolyUtil.<MOD> evaluateMain(pf, ap, vp);
@@ -707,7 +709,7 @@ public class HenselMultUtil {
             Lpp = Lps;
             Gp.add(0, Lpp);
         }
-        Vb.add(V.get(pkfac.nvar - 2));
+        Vb.add( pkfac.coFac.fromInteger( V.get(pkfac.nvar - 2).getVal() ) );
         //System.out.println("Pfac   = " + Pfac);
         if (debug) {
             logger.debug("Pfac   = " + Pfac);
@@ -906,13 +908,13 @@ public class HenselMultUtil {
      * assume ggt(a,b) == 1 mod p, for a, b in A.
      * @param C GenPolynomial with integer coefficients
      * @param F list of modular GenPolynomials, mod (I_v, p )
-     * @param V list of substitution values, mod p^k
+     * @param V list of integer substitution values 
      * @param k desired approximation exponent p^k.
      * @param G = [g_1,...,g_n] list of factors of leading coefficients.
      * @return [c_1,..., c_n] with prod_i c_i = C mod p^k.
      */
     public static <MOD extends GcdRingElem<MOD> & Modular> List<GenPolynomial<MOD>> liftHenselFull(
-                    GenPolynomial<BigInteger> C, List<GenPolynomial<MOD>> F, List<MOD> V, long k,
+                    GenPolynomial<BigInteger> C, List<GenPolynomial<MOD>> F, List<BigInteger> V, long k,
                     List<GenPolynomial<BigInteger>> G) throws NoLiftingException {
         if (F == null || F.size() == 0) {
             return new ArrayList<GenPolynomial<MOD>>();
@@ -958,7 +960,8 @@ public class HenselMultUtil {
         GenPolynomial<MOD> ap = Cq;
         for (int j = C.ring.nvar; j > 1; j--) {
             pf = pf.contract(1);
-            MOD vp = mcfac.fromInteger(V.get(C.ring.nvar - j).getSymmetricInteger().getVal());
+            //MOD vp = mcfac.fromInteger(V.get(C.ring.nvar - j).getSymmetricInteger().getVal());
+            MOD vp = mcfac.fromInteger(V.get(C.ring.nvar - j).getVal());
             //System.out.println("vp     = " + vp);
             ap = PolyUtil.<MOD> evaluateMain(pf, ap, vp);
             //System.out.println("ap     = " + ap);
@@ -986,7 +989,8 @@ public class HenselMultUtil {
             GenPolynomial<MOD> gp = gq;
             for (int j = gcfac.nvar; j > 1; j--) {
                 gf = gf.contract(1);
-                MOD vp = mcfac.fromInteger(V.get(gcfac.nvar - j).getSymmetricInteger().getVal());
+                //MOD vp = mcfac.fromInteger(V.get(gcfac.nvar - j).getSymmetricInteger().getVal());
+                MOD vp = mcfac.fromInteger(V.get(gcfac.nvar - j).getVal());
                 //System.out.println("vp     = " + vp);
                 gp = PolyUtil.<MOD> evaluateMain(gf, gp, vp);
                 //System.out.println("gp     = " + gp);
