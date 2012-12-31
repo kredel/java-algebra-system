@@ -89,7 +89,8 @@ public class HenselMultUtil {
         //System.out.println("su@p^" + k + " = " + su);
         //System.out.println("coFac = " + su.get(0).ring.coFac.toScript());
         if (pkfac.nvar == 2 && !HenselUtil.<MOD> isDiophantLift(Bp, Ap, su.get(0), su.get(1), Cp)) {
-            System.out.println("isDiophantLift: false");
+            //System.out.println("isDiophantLift: false");
+            throw new NoLiftingException("isDiophantLift: false");
         }
         if (!ckfac.equals(su.get(0).ring)) {
             throw new IllegalArgumentException("qfac != ckfac: " + su.get(0).ring + " != " + ckfac);
@@ -163,7 +164,8 @@ public class HenselMultUtil {
                                 + S.get(0).ring.coFac);
             }
             if (pkfac.nvar == 2 && !HenselUtil.<MOD> isDiophantLift(Ap, Bp, S.get(1), S.get(0), cm)) {
-                System.out.println("isDiophantLift: false");
+                //System.out.println("isDiophantLift: false");
+                throw new NoLiftingException("isDiophantLift: false");
             }
             mon = mon.multiply(xv); // Power.<GenPolynomial<MOD>> power(pkfac,xv,e);
             //System.out.println("mon  = " + mon);
@@ -265,7 +267,8 @@ public class HenselMultUtil {
         //System.out.println("su@p^" + k + " = " + su);
         //System.out.println("coFac = " + su.get(0).ring.coFac.toScript());
         if (pkfac.nvar == 2 && !HenselUtil.<MOD> isDiophantLift(Ap, su, Cp)) {
-            System.out.println("isDiophantLift: false");
+            //System.out.println("isDiophantLift: false");
+            throw new NoLiftingException("isDiophantLift: false");
         }
         if (!ckfac.equals(su.get(0).ring)) {
             throw new IllegalArgumentException("qfac != ckfac: " + su.get(0).ring + " != " + ckfac);
@@ -353,7 +356,8 @@ public class HenselMultUtil {
                                 + S.get(0).ring.coFac);
             }
             if (pkfac.nvar == 2 && !HenselUtil.<MOD> isDiophantLift(Ap, S, cm)) {
-                System.out.println("isDiophantLift: false");
+                //System.out.println("isDiophantLift: false");
+                throw new NoLiftingException("isDiophantLift: false");
             }
             mon = mon.multiply(xv); // Power.<GenPolynomial<MOD>> power(pkfac,xv,e);
             //System.out.println("mon  = " + mon);
