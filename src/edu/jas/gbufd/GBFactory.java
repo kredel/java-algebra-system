@@ -94,16 +94,6 @@ public class GBFactory {
 
 
     /**
-     * Get suitable pairlist implementation for GB algorithms.
-     * @return pairlist implementation.
-     */
-    public static <C extends GcdRingElem<C>> PairList<C> getStrategy() {
-        //return new OrderedPairlist<C>();
-        return new OrderedSyzPairlist<C>();
-    }
-
-
-    /**
      * Determine suitable implementation of GB algorithms, no factory case.
      * @return GB algorithm implementation for field coefficients.
      */
