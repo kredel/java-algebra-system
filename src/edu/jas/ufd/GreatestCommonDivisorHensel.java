@@ -593,13 +593,6 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
             GenPolynomialRing<MOD> qcfac = new GenPolynomialRing<MOD>(muqfac, dfac);
             GenPolynomial<MOD> uq = PolyUtil.<MOD> fromIntegerCoefficients(qcfac, ui);
             logger.info("multivariate modulo p^k: " + uq);
-            if (debug) {
-                if (!uq.equals(cm.multiply(hm))) { // should not happen
-                   System.out.println("uq = " + uq);
-                   System.out.println("cm = " + cm + ", hm = " + hm);
-                   throw new RuntimeException("something is wrong, uq != cm*hm mod p^k");
-                }
-            } 
             //System.out.println("g = " + g + ", c = " + c + ", l(r) = " + r.leadingBaseCoefficient() + ", l(q) = " + q.leadingBaseCoefficient());
 
             List<GenPolynomial<MOD>> F = new ArrayList<GenPolynomial<MOD>>(2);
@@ -642,7 +635,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
         GenPolynomial<GenPolynomial<BigInteger>> T = iufd.recursiveUnivariateGcd(P, S);
         T = T.abs().multiply(c); //.abs();
         logger.info("no lucky prime or evaluation points: giving up on Hensel gcd reverting to Subres gcd: " + T + "=gcd(" + P + "," + S + ")");
-        logger.info("P/T: " + PolyUtil.<BigInteger> recursivePseudoDivide(P,T) + ", S/T: " + PolyUtil.<BigInteger> recursivePseudoDivide(S,T));
+        //System.out.println("P/T: " + PolyUtil.<BigInteger> recursivePseudoDivide(P,T) + ", S/T: " + PolyUtil.<BigInteger> recursivePseudoDivide(S,T));
         return T;
     }
 
