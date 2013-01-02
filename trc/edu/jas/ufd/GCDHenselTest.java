@@ -179,18 +179,10 @@ public class GCDHenselTest extends TestCase {
 
 
     /**
-     * Test univariate Hensel algorithm gcd with subres PRS recursive algorithm.
+     * Test Hensel algorithm gcd with subres PRS recursive algorithm.
      */
     public void testHenselSubresGcd() {
-
-        GenPolynomial<BigInteger> a;
-        GenPolynomial<BigInteger> b;
-        GenPolynomial<BigInteger> c;
-        GenPolynomial<BigInteger> d;
-        GenPolynomial<BigInteger> e;
-
-        GenPolynomialRing<BigInteger> dfac = new GenPolynomialRing<BigInteger>(cofac, rl, to);
-
+        //GenPolynomialRing<BigInteger> dfac = new GenPolynomialRing<BigInteger>(cofac, rl, to);
         for (int i = 0; i < 1; i++) {
             a = dfac.random(kl, ll + i, el + i, q);
             b = dfac.random(kl, ll + i, el + i, q);
@@ -239,20 +231,12 @@ public class GCDHenselTest extends TestCase {
 
 
     /**
-     * Test univariate linear Hensel algorithm gcd with subres PRS recursive
+     * Test linear Hensel algorithm gcd with subres PRS recursive
      * algorithm.
      */
     public void testHenselLinearSubresGcd() {
-
         ufd1 = new GreatestCommonDivisorHensel<ModInteger>(false);
-
-        GenPolynomial<BigInteger> a;
-        GenPolynomial<BigInteger> b;
-        GenPolynomial<BigInteger> c;
-        GenPolynomial<BigInteger> d;
-        GenPolynomial<BigInteger> e;
-
-        GenPolynomialRing<BigInteger> dfac = new GenPolynomialRing<BigInteger>(cofac, rl, to);
+        //GenPolynomialRing<BigInteger> dfac = new GenPolynomialRing<BigInteger>(cofac, rl, to);
 
         for (int i = 0; i < 1; i++) {
             a = dfac.random(kl, ll + i, el + i, q);
