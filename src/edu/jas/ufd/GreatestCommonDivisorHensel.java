@@ -407,7 +407,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
                 break;
             }
             if (cofac == null) { // no lucky prime found
-                logger.info("giving up on Hensel gcd reverting to Subres gcd");
+                logger.info("no lucky prime: giving up on Hensel gcd reverting to Subres gcd");
                 GenPolynomial<GenPolynomial<BigInteger>> T = iufd.recursiveUnivariateGcd(P, S);
                 return T.abs().multiply(c); //.abs();
             }
@@ -438,8 +438,6 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
                         qe = null;
                         re = null;
                         break;
-                        //GenPolynomial<GenPolynomial<BigInteger>> T = iufd.recursiveUnivariateGcd(P, S);
-                        //return T.abs().multiply(c); //.abs();
                     }
                     BigInteger vii = new BigInteger(vi-1);
                     qei = PolyUtil.<BigInteger> evaluateMain(ckfac, qe, vii);
@@ -546,18 +544,39 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
             //System.out.println("mn = " + mn);
             //System.out.println("k = " + k);
 
-            GenPolynomialRing<MOD> mfac = new GenPolynomialRing<MOD>(cofac, ckfac);
-            //System.out.println("mfac = " + mfac.toScript());
-            GenPolynomial<MOD> cm = PolyUtil.<MOD> fromIntegerCoefficients(mfac, ce);
-            GenPolynomial<MOD> hm = PolyUtil.<MOD> fromIntegerCoefficients(mfac, he);
-            //System.out.println("cm = " + cm);
-            //System.out.println("hm = " + hm);
-            if ( cm.isZERO() || hm.isZERO() ) {
-                continue;
+            BigInteger qp = Power.positivePower(cofac.getIntegerModul(), k); // == p
+            ModularRingFactory<MOD> muqfac;
+            if (ModLongRing.MAX_LONG.compareTo(qp.getVal()) > 0) {
+                muqfac = (ModularRingFactory) new ModLongRing(qp.getVal());
+            } else {
+                muqfac = (ModularRingFactory) new ModIntegerRing(qp.getVal());
             }
+            //System.out.println("muqfac = " + muqfac);
+            GenPolynomialRing<MOD> mucpfac = new GenPolynomialRing<MOD>(muqfac, ckfac);
+            //GenPolynomialRing<MOD> mfac = new GenPolynomialRing<MOD>(cofac, ckfac);
+            //System.out.println("mfac = " + mfac.toScript());
+
+            GenPolynomial<MOD> cm = PolyUtil.<MOD> fromIntegerCoefficients(mucpfac, ce);
+            GenPolynomial<MOD> hm = PolyUtil.<MOD> fromIntegerCoefficients(mucpfac, he);
             if ( cm.degree(0) != ce.degree(0) || hm.degree(0) != he.degree(0) ) {
                 continue;
             }
+            if ( cm.isZERO() || hm.isZERO() ) {
+                continue;
+            }
+            logger.info("univariate modulo p^k: " + cm + ", " + hm);
+
+            // convert C from Z[...] to Z_q[...]
+            GenPolynomialRing<MOD> qcfac = new GenPolynomialRing<MOD>(muqfac, dfac);
+            GenPolynomial<MOD> uq = PolyUtil.<MOD> fromIntegerCoefficients(qcfac, ui);
+            logger.info("multivariate modulo p^k: " + uq);
+            if (debug) {
+                if (!uq.equals(cm.multiply(hm))) { // should not happen
+                   System.out.println("uq = " + uq);
+                   System.out.println("cm = " + cm + ", hm = " + hm);
+                   throw new RuntimeException("something is wrong, uq != cm*hm mod p^k");
+                }
+            } 
 
             List<GenPolynomial<MOD>> F = new ArrayList<GenPolynomial<MOD>>(2);
             F.add(cm);
@@ -567,7 +586,8 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
             G.add(g.ring.getONE());
             List<GenPolynomial<MOD>> lift;
             try {
-                lift = HenselMultUtil.<MOD> liftHenselFull(ui, F, V, k, G);
+                //lift = HenselMultUtil.<MOD> liftHenselFull(ui, F, V, k, G);
+                lift = HenselMultUtil.<MOD> liftHensel(ui, uq, F, V, k, G);
                 logger.info("lift = " + lift);
             } catch (NoLiftingException nle) {
                 //System.out.println("exception : " + nle);
@@ -588,16 +608,15 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
             q = q.abs().multiply(c); //.abs();
             if (PolyUtil.<BigInteger> recursivePseudoRemainder(P, q).isZERO()
                             && PolyUtil.<BigInteger> recursivePseudoRemainder(S, q).isZERO()) {
+                logger.info("gcd normal exit: " + q);
                 return q;
             }
             //System.out.println("bad q = " + q);
-            //System.out.println("bad P/q = " + PolyUtil.<BigInteger> recursivePseudoRemainder(P,q));
-            //System.out.println("bad S/q = " + PolyUtil.<BigInteger> recursivePseudoRemainder(S,q));
         } // end for meta loop
         // Hensel gcd failed
         GenPolynomial<GenPolynomial<BigInteger>> T = iufd.recursiveUnivariateGcd(P, S);
         T = T.abs().multiply(c); //.abs();
-        logger.info("giving up on Hensel gcd reverting to Subres gcd: " + T + "=gcd(" + P + "," + S + ")");
+        logger.info("no lucky prime or evaluation points: giving up on Hensel gcd reverting to Subres gcd: " + T + "=gcd(" + P + "," + S + ")");
         return T;
     }
 
