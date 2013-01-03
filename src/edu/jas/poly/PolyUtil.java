@@ -1842,14 +1842,31 @@ public class PolyUtil {
      * @param dfac polynomial ring in n variables. C[x_1, x_2, ..., x_n]
      *            factory.
      * @param A polynomial to be evaluated.
-     * @param a = ( a_1, a_2, ..., a_n) a tuple of values to evaluate at.
-     * @return A( a_1, a_2, ..., a_n).
+     * @param a = (a_1, a_2, ..., a_n) a tuple of values to evaluate at.
+     * @return A(a_1, a_2, ..., a_n).
+     * @deprecated use evaluateAll() with three arguments
      */
+    @Deprecated
     public static <C extends RingElem<C>> C evaluateAll(RingFactory<C> cfac, GenPolynomialRing<C> dfac,
+                    GenPolynomial<C> A, List<C> a) {
+        return evaluateAll(cfac,A,a);
+    }
+
+
+    /**
+     * Evaluate all variables.
+     * @param <C> coefficient type.
+     * @param cfac coefficient ring factory.
+     * @param A polynomial to be evaluated.
+     * @param a = (a_1, a_2, ..., a_n) a tuple of values to evaluate at.
+     * @return A(a_1, a_2, ..., a_n).
+     */
+    public static <C extends RingElem<C>> C evaluateAll(RingFactory<C> cfac,
                     GenPolynomial<C> A, List<C> a) {
         if (A == null || A.isZERO()) {
             return cfac.getZERO();
         }
+        GenPolynomialRing<C> dfac = A.ring;
         if (a == null || a.size() != dfac.nvar) {
             throw new IllegalArgumentException("evaluate tuple size not equal to number of variables");
         }
