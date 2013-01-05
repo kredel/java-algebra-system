@@ -81,9 +81,9 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
      */
     @Override
     public GenPolynomial<BigInteger> baseGcd(GenPolynomial<BigInteger> P, GenPolynomial<BigInteger> S) {
-        if (true) {
-            return iufd.baseGcd(P,S);
-        }
+        //if (true) {
+        //    return iufd.baseGcd(P,S);
+        //}
         if (S == null || S.isZERO()) {
             return P;
         }
@@ -308,8 +308,8 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
         }
         r = r.abs();
         q = q.abs();
-        GenPolynomial<BigInteger> a = iufd.recursiveContent(r);
-        GenPolynomial<BigInteger> b = iufd.recursiveContent(q);
+        GenPolynomial<BigInteger> a = iufd.recursiveContent(r); // TODO remove "iufd."
+        GenPolynomial<BigInteger> b = iufd.recursiveContent(q); // TODO remove "iufd."
 
         GenPolynomial<BigInteger> c = gcd(a, b); // go to recursion
         //System.out.println("rgcd c = " + c);
@@ -647,7 +647,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
             if (!Cs.ring.equals(P.ring)) {
                 System.out.println("Cs.ring = " + Cs.ring + ", P.ring = " + P.ring);
             }
-            GenPolynomial<GenPolynomial<BigInteger>> Q = iufd.recursivePrimitivePart(Cs);
+            GenPolynomial<GenPolynomial<BigInteger>> Q = iufd.recursivePrimitivePart(Cs); // TODO remove "iufd."
             Q = iufd.baseRecursivePrimitivePart(Q);
             Q = Q.abs().multiply(c); //.abs();
             GenPolynomial<GenPolynomial<BigInteger>> Pq, Sq;
