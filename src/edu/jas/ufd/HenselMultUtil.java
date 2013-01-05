@@ -412,9 +412,27 @@ public class HenselMultUtil {
      * @param k approximation exponent.
      * @param L = [g_0,...,g_{n-1}] list of lifted modular polynomials.
      * @return true if C = prod_{0,...,n-1} g_i mod p^k, else false.
+     * @deprecated use isHenselLift() without parameter k 
      */
+    @Deprecated
     public static <MOD extends GcdRingElem<MOD> & Modular> boolean isHenselLift(GenPolynomial<BigInteger> C,
                     GenPolynomial<MOD> Cp, List<GenPolynomial<MOD>> F, long k, List<GenPolynomial<MOD>> L) {
+        return isHenselLift(C,Cp,F,L);
+    } 
+
+
+    /**
+     * Modular Hensel lifting algorithm on coefficients test. Let p =
+     * f_i.ring.coFac.modul() and assume C == prod_{0,...,n-1} f_i mod p with
+     * gcd(f_i,f_j) == 1 mod p for i != j
+     * @param C integer polynomial
+     * @param Cp GenPolynomial mod p^k
+     * @param F = [f_0,...,f_{n-1}] list of monic modular polynomials.
+     * @param L = [g_0,...,g_{n-1}] list of lifted modular polynomials.
+     * @return true if C = prod_{0,...,n-1} g_i mod p^k, else false.
+     */
+    public static <MOD extends GcdRingElem<MOD> & Modular> boolean isHenselLift(GenPolynomial<BigInteger> C,
+                    GenPolynomial<MOD> Cp, List<GenPolynomial<MOD>> F, List<GenPolynomial<MOD>> L) {
         boolean t = true;
         GenPolynomialRing<MOD> qfac = L.get(0).ring;
         GenPolynomial<MOD> q = qfac.getONE();
@@ -771,7 +789,7 @@ public class HenselMultUtil {
                     GenPolynomial<GenPolynomial<MOD>> ls = PolyUtil.<MOD> switchVariables(lr);
                     //System.out.println("ls = " + ls + ", ls.ring = " + ls.ring);
                     if (!ls.isConstant()) {
-                        throw new RuntimeException("ls not constant " + ls);
+                        throw new RuntimeException("ls not constant " + ls + ", li = " + li);
                     }
                     bs.doPutToMap(bs.leadingExpVector(), ls.leadingBaseCoefficient());
                     //System.out.println("bs = " + bs + ", bs.ring = " + bs.ring);
@@ -876,13 +894,13 @@ public class HenselMultUtil {
             for (GenPolynomial<MOD> Upp : U) {
                 Uf = Uf.multiply(Upp);
             }
-            if (false && !Cp.equals(Uf)) {
+            if (!Cp.leadingExpVector().equals(Uf.leadingExpVector())) {
                 System.out.println("\nU    = " + U);
                 System.out.println("Cp   = " + Cp);
                 System.out.println("Uf   = " + Uf);
-                System.out.println("isFactorization: " + Cp.equals(Uf) + ", Cp.ring = " + Cp.ring
-                                + ", Uf.ring = " + Uf.ring);
-                throw new RuntimeException("no factorization, something is wrong");
+                //System.out.println("Cp.ring = " + Cp.ring.toScript() + ", Uf.ring = " + Uf.ring.toScript() + "\n");
+                System.out.println("");
+                //throw new NoLiftingException("no factorization, Cp != Uf");
             }
         }
         if (E.isZERO()) {
@@ -902,7 +920,7 @@ public class HenselMultUtil {
             //Si = Fii;
             //System.out.println("Si  = " + Si);
         }
-        logger.info("multivariate lift = " + U + ", of " + F);
+        logger.info("multivariate lift: U = " + U + ", of " + F);
         return U;
     }
 
