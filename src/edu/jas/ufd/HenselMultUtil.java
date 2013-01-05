@@ -678,7 +678,8 @@ public class HenselMultUtil {
      */
     public static <MOD extends GcdRingElem<MOD> & Modular> List<GenPolynomial<MOD>> liftHensel(
                     GenPolynomial<BigInteger> C, GenPolynomial<MOD> Cp, List<GenPolynomial<MOD>> F,
-                    List<BigInteger> V, long k, List<GenPolynomial<BigInteger>> G) throws NoLiftingException {
+                    List<BigInteger> V, long k, List<GenPolynomial<BigInteger>> G) 
+           throws NoLiftingException {
         GenPolynomialRing<MOD> pkfac = Cp.ring;
         long d = C.degree();
         //System.out.println("C = " + C);
@@ -788,7 +789,7 @@ public class HenselMultUtil {
                     //System.out.println("lr = " + lr);
                     GenPolynomial<GenPolynomial<MOD>> ls = PolyUtil.<MOD> switchVariables(lr);
                     //System.out.println("ls = " + ls + ", ls.ring = " + ls.ring);
-                    if (!ls.isConstant()) {
+                    if (!ls.isConstant() && !ls.isZERO()) {
                         throw new RuntimeException("ls not constant " + ls + ", li = " + li);
                     }
                     bs.doPutToMap(bs.leadingExpVector(), ls.leadingBaseCoefficient());
@@ -894,7 +895,7 @@ public class HenselMultUtil {
             for (GenPolynomial<MOD> Upp : U) {
                 Uf = Uf.multiply(Upp);
             }
-            if (!Cp.leadingExpVector().equals(Uf.leadingExpVector())) {
+            if (false && !Cp.leadingExpVector().equals(Uf.leadingExpVector())) { // not meanigfull test
                 System.out.println("\nU    = " + U);
                 System.out.println("Cp   = " + Cp);
                 System.out.println("Uf   = " + Uf);

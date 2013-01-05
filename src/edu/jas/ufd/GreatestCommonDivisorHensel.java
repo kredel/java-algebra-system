@@ -532,7 +532,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
                     BigInteger bn = qd.maxNorm();
                     mn = bn.multiply(cc).multiply(new BigInteger(2L));
                     g = b;
-                    logger.info("select deg: ui = qd, g = b, qe1 = " + qe1); // + ", qe = " + qe);
+                    logger.debug("select deg: ui = qd, g = b"); //, qe1 = " + qe1); // + ", qe = " + qe);
                 } else {
                     ui = rd;
                     s = r;
@@ -541,7 +541,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
                     BigInteger an = rd.maxNorm();
                     mn = an.multiply(cc).multiply(new BigInteger(2L));
                     g = a;
-                    logger.info("select deg: ui = rd, g = a, re1 = " + re1); // + ", re = " + re);
+                    logger.debug("select deg: ui = rd, g = a"); //, re1 = " + re1); // + ", re = " + re);
                 }
             } else if (gcr.isONE()) {
                 ui = rd;
@@ -551,7 +551,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
                 BigInteger an = rd.maxNorm();
                 mn = an.multiply(cc).multiply(new BigInteger(2L));
                 g = a;
-                logger.info("select: ui = rd, g = a, re1 = " + re1); // + ", re = " + re);
+                logger.debug("select: ui = rd, g = a"); //, re1 = " + re1); // + ", re = " + re);
             } else if (gcq.isONE()) {
                 ui = qd;
                 s = q;
@@ -560,7 +560,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
                 BigInteger bn = qd.maxNorm();
                 mn = bn.multiply(cc).multiply(new BigInteger(2L));
                 g = b;
-                logger.info("select: ui = qd, g = b, qe1 = " + qe1); // + ", qe = " + qe);
+                logger.debug("select: ui = qd, g = b"); //, qe1 = " + qe1); // + ", qe = " + qe);
             } else { // both gcds != 1: method not applicable
                 logger.info("both gcds != 1: method not applicable");
                 break;
@@ -570,13 +570,14 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
             if ( ge.isZERO() ) { // this can happen
                 continue;
             }
-            System.out.println("ui = " + ui + "\ns = " + s + ", lui = " + lui + ", pe-ce*he = " + pe.subtract(ce.multiply(he)));
-            //ce = ce.multiply(ge);
+            //System.out.println("ui = " + ui + "\ns = " + s + ", lui = " + lui); // + ", pe-ce*he = " + pe.subtract(ce.multiply(he)));
+            ce = ce.multiply(ge);
             //he = he.multiply(ge);
             gi = lui.extendLower(dfac,0,0L); 
             ui = ui.multiply(gi); // ! 
-            System.out.println("ui = " + ui + ", deg(ui) = " + ui.degreeVector());
-            System.out.println("ce = " + ce + ", he = " + he + ", ge = " + ge);
+            //System.out.println("ui = " + ui + ", deg(ui) = " + ui.degreeVector());
+            //System.out.println("ce = " + ce + ", he = " + he + ", ge = " + ge);
+            logger.info("ldcf: " + lui + ", base cofactor: " + he);
 
             long k = Power.logarithm(new BigInteger(p), mn);
             //System.out.println("mn = " + mn);
@@ -591,7 +592,9 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
             }
             GenPolynomialRing<MOD> mucpfac = new GenPolynomialRing<MOD>(muqfac, ckfac);
             //System.out.println("mucpfac = " + mucpfac.toScript());
-
+            if ( muqfac.fromInteger(ge.getVal()).isZERO() ) {
+                continue;
+            }
             GenPolynomial<MOD> cm = PolyUtil.<MOD> fromIntegerCoefficients(mucpfac, ce);
             GenPolynomial<MOD> hm = PolyUtil.<MOD> fromIntegerCoefficients(mucpfac, he);
             if ( cm.degree(0) != ce.degree(0) || hm.degree(0) != he.degree(0) ) {
@@ -615,7 +618,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
             F.add(cm);
             F.add(hm);
             List<GenPolynomial<BigInteger>> G = new ArrayList<GenPolynomial<BigInteger>>(2);
-            G.add(lui); // TODO g.ring.getONE()
+            G.add(lui.ring.getONE()); // TODONE 
             G.add(lui);
             List<GenPolynomial<MOD>> lift;
             try {
@@ -631,7 +634,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
                 //System.out.println("exception : " + ae);
                 continue;
             } 
-            if ( ! HenselMultUtil.<MOD> isHenselLift(ui, uq, F, k, lift) ) {
+            if ( false && ! HenselMultUtil.<MOD> isHenselLift(ui, uq, F, k, lift) ) { // not meaningfull test
                 logger.info("isHenselLift: false");
                 //continue;
             }
