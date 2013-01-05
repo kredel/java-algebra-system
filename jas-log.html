@@ -4,10 +4,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <link rel="stylesheet" type="text/css" href="html.css" />
-    <title>jas project web log</title>
+    <title>JAS project web-log</title>
   </head>
   <body class="main">
-    <h1>JAS web-log</h1>
+    <h1>JAS project web-log</h1>
 
 <p>For a detailed list of the latest changes see the 
    <a href="svn_change.log" target="top">Subversion change log</a>.
@@ -25,7 +25,15 @@
 <dt>2013, January </dt>
 <dd> 
 
- New version number 2.5. The JAS Java API will now be more stable.
+ New version number 2.5. The JAS Java API will be more stable from now
+ on.  Fixed a race condition in distributed (hybrid) Gr&ouml;bner
+ bases implementations.  Improved MPJ version of GBs.  Refactoring of
+ <code>GBFactory</code> and added new option to select Gebauer &amp;
+ M&ouml;ller critical pair handling in
+ <code>GBAlgorithmBuilder</code>.  Switch to DECIMAL128 as default in
+ <code>BigDecimal</code>.  Improved
+ <code>GreatestCommonDivisorHensel</code> by using integer 
+ evaluation points and other optimizations.
 
 </dd>
 
@@ -2214,7 +2222,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Fri Nov 30 21:10:34 CET 2012
+Last modified: Sat Jan  5 20:52:11 CET 2013
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
