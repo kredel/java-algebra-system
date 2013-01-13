@@ -302,7 +302,7 @@ public class GCDHenselTest extends TestCase {
             }
             ev = c.leadingExpVector();
             if ( ev != null ) {
-                c.doPutToMap(ev,ifa.getONE());
+                //c.doPutToMap(ev,ifa.getONE());
             }
             assertFalse("ev == null ", ev == null);
             if ( ev.dependencyOnVariables().length > 1 ) {
@@ -316,10 +316,14 @@ public class GCDHenselTest extends TestCase {
             //a = dfac.parse("7 y^4 - (35 x^3 - 32) y^3 - 160 x^3 y^2 + (105 x^2 - 119) y + (480 x^2 - 544) ");
             //b = dfac.parse(" 7 y^4 + 39 y^3 + 32 y^2 ");
             //c = dfac.parse(" 7 y + 32 ");
+
             //a = dfac.parse(" ( -13 x^2 ) z^5 + ( 182 x^2 - 143  ) z^3 - ( x^2 * y^3 - 8 x^2 ) z^2 + ( 14 x^2 * y^3 - 11 y^3 - 112 x^2 + 88  ) ");
             //b = dfac.parse(" ( -13 x^3 * y^3 ) z^6 + ( 65 y ) z^4 - ( x^3 * y^6 - 8 x^3 * y^3 - 52 y^3 - 195 y + 156  ) z^3 + ( 5 y^4 - 40 y ) z + ( 4 y^6 + 15 y^4 - 44 y^3 - 120 y + 96  ) ) ");
             //c = dfac.parse(" 13 z^3 + y^3 - 8 ");
  
+            //a = a.abs();
+            //b = b.abs();
+            //c = c.abs();
             //System.out.println("a = " + a);
             //System.out.println("b = " + b);
             //System.out.println("c = " + c);

@@ -332,13 +332,13 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
         if (q.isONE()) {
             return q.multiply(c);
         }
-        // check monic ldcf, TODO general case
+        // check constant ldcf, TODO general case
         GenPolynomial<BigInteger> la, lb, lc, lh;
         la = r.leadingBaseCoefficient();
         lb = q.leadingBaseCoefficient();
         lc = ufd.gcd(la,lb); 
         //logger.info("la = " + la + ", lb = " + lb + ", lc = " + lc);
-        if ( !lc.isONE() ) {
+        if ( !lc.isConstant() ) {
             //continue; // easy way out
             GenPolynomial<GenPolynomial<BigInteger>> T = iufd.recursiveUnivariateGcd(r, q);
             T = T.abs().multiply(c);
