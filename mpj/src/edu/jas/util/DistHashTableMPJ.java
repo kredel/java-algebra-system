@@ -18,6 +18,7 @@ import mpi.Comm;
 import mpi.MPI;
 import mpi.MPIException;
 import mpi.Status;
+import mpi.Request;
 
 import org.apache.log4j.Logger;
 
@@ -449,8 +450,11 @@ class DHTMPJListener<K, V> extends Thread {
                 //System.out.println("engine.Recv");
                 Status stat = null;
                 synchronized (MPJEngine.getRecvLock(DistHashTableMPJ.DHTTAG)) {
-                   stat = engine.Recv(tcl, 0, tcl.length, MPI.OBJECT, MPI.ANY_SOURCE,
-                                      DistHashTableMPJ.DHTTAG);
+                    //stat = engine.Recv(tcl, 0, tcl.length, MPI.OBJECT, MPI.ANY_SOURCE,
+                    //                  DistHashTableMPJ.DHTTAG);
+                    Request req = engine.Irecv(tcl, 0, tcl.length, MPI.OBJECT, MPI.ANY_SOURCE, 
+                                         DistHashTableMPJ.DHTTAG);
+                    stat = MPJEngine.waitRequest(req); //req.Wait();
                 }
                 int cnt = stat.Get_count(MPI.OBJECT);
                 //System.out.println("engine.Recv, cnt = " + cnt);

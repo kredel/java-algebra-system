@@ -8,9 +8,15 @@ package edu.jas.kern;
 import java.util.Arrays;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import mpi.Comm;
 import mpi.MPI;
+import mpi.Request;
+import mpi.Status;
+import mpi.MPIException;
 
 import org.apache.log4j.Logger;
 
@@ -81,6 +87,18 @@ public final class MPJEngine {
      * receive locks per tag.
      */
     private static SortedMap<Integer,Object> recvLocks = new TreeMap<Integer,Object>();
+
+
+    /*
+     * Request handling list.
+     */
+    private static ConcurrentMap<Integer,Request> requestList = new ConcurrentSkipListMap<Integer,Request>();
+
+
+    /*
+     * Request handling counter.
+     */
+    private static AtomicInteger requestCount = new AtomicInteger(0);
 
 
     /**
@@ -219,6 +237,46 @@ public final class MPJEngine {
             recvLocks.put(tag,lock);
         }
         return lock;
+    }
+
+
+    /**
+     * Wait for termination of a mpj Request.
+     * @param req a Request.
+     * @return a Status after termination of req.Wait().
+     */
+    public static Status waitRequest(Request req) {
+        Integer num = requestCount.getAndIncrement();
+        Request ri = requestList.putIfAbsent(num,req);
+        if ( ri != null ) {
+            throw new IllegalArgumentException("request already registered " + req);
+        }
+        while (true) {
+            Status stat = null;
+            for ( Request r : requestList.values() ) {
+                stat = r.Get_status();
+                if ( req.equals(r) && stat != null ) {
+                    break;
+                }
+                stat = null;
+            }
+            if ( stat != null ) {
+                break;
+            }
+            try {
+                Thread.currentThread().sleep(10); // better to vary a bit
+            } catch (InterruptedException e) {
+                logger.info("sleep interrupted");
+                e.printStackTrace();
+                //throw new MPIException("?", e); // not public
+            }
+        }
+        if ( !requestList.remove(num,req) ) {
+            throw new RuntimeException("removal not successful for " + req);
+        }
+        synchronized (MPJEngine.class) { // global static lock
+            return req.Wait(); // should terminate immediately
+        }
     }
 
 }

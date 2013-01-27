@@ -11,6 +11,7 @@ import java.io.IOException;
 import mpi.Comm;
 import mpi.MPI;
 import mpi.Status;
+import mpi.Request;
 
 import org.apache.log4j.Logger;
 
@@ -140,7 +141,9 @@ public final class MPJChannel {
         //Status stat = engine.Recv(va, 0, va.length, MPI.OBJECT, MPI.ANY_SOURCE, t);
         Status stat = null;
         synchronized (MPJEngine.getRecvLock(t)) {
-           stat = engine.Recv(va, 0, va.length, MPI.OBJECT, partnerRank, t);
+            //stat = engine.Recv(va, 0, va.length, MPI.OBJECT, partnerRank, t);
+            Request req = engine.Irecv(va, 0, va.length, MPI.OBJECT, partnerRank, t);
+            stat = MPJEngine.waitRequest(req); // req.Wait();
         }
         int cnt = stat.Get_count(MPI.OBJECT);
         if (cnt == 0) {
