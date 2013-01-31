@@ -89,18 +89,6 @@ public final class MPJEngine {
     private static SortedMap<Integer,Object> recvLocks = new TreeMap<Integer,Object>();
 
 
-    /*
-     * Request handling list.
-     */
-    //private static ConcurrentMap<Integer,Request> requestList = new ConcurrentSkipListMap<Integer,Request>();
-
-
-    /*
-     * Request handling counter.
-     */
-    private static AtomicInteger requestCount = new AtomicInteger(0);
-
-
     /**
      * No public constructor.
      */
@@ -246,8 +234,6 @@ public final class MPJEngine {
      * @return a Status after termination of req.Wait().
      */
     public static Status waitRequest(final Request req) {
-        //Integer num = requestCount.getAndIncrement();
-        //Request ri = requestList.putIfAbsent(num,req);
         if ( req == null ) {
             throw new IllegalArgumentException("null request");
         }
@@ -259,34 +245,20 @@ public final class MPJEngine {
                 stat = req.Get_status(); // should be non destructive, but is not
                 if ( stat != null ) {
                     return req.Wait(); // should terminate immediately
-                    //continue;
                 }
             }
-            //synchronized (requestCount) {
-                try {
-                    //requestCount.wait(delay); // better to vary a bit
-                    Thread.currentThread().sleep(delay); // varied a bit
-                } catch (InterruptedException e) {
-                    logger.info("sleep interrupted");
-                    e.printStackTrace();
-                    //throw new MPIException("?", e); // not public
-                }
-	    //}
+            try {
+                Thread.currentThread().sleep(delay); // varied a bit
+            } catch (InterruptedException e) {
+                logger.info("sleep interrupted");
+                e.printStackTrace();
+            }
             delcnt++; 
             if ( delcnt % 7 == 0 ) {
                 delay++;
                 System.out.println("delay(" + delay + "): " + Thread.currentThread().toString());
             } 
         }
-        //synchronized (requestCount) {
-        //    requestCount.notifyAll();
-        //}
-        //if ( !requestList.remove(num,req) ) {
-        //    throw new RuntimeException("removal not successful for " + req);
-        //}
-        //synchronized (MPJEngine.class) { // global static lock
-        //    return req.Wait(); // should terminate immediately
-        //}
     }
 
 }

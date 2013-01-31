@@ -373,7 +373,7 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
         listener.setDone();
         try {
             while (listener.isAlive()) {
-                System.out.print("+++++");
+                //System.out.print("+++++");
                 listener.join(999);
                 //listener.interrupt();
             }
