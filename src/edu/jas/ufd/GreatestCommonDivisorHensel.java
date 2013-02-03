@@ -423,8 +423,8 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
                 break;
             }
             if (cofac == null) { // no lucky prime found
-                logger.info("no lucky prime: giving up on Hensel gcd reverting to Subres gcd");
-                GenPolynomial<GenPolynomial<BigInteger>> T = iufd.recursiveUnivariateGcd(P, S);
+                GenPolynomial<GenPolynomial<BigInteger>> T = iufd.recursiveUnivariateGcd(q, r);
+                logger.info("no lucky prime, gave up on Hensel: " + T + "= gcd(" + r + "," + q + ")");
                 return T.abs().multiply(c); //.abs();
             }
             //System.out.println("cofac = " + cofac);
@@ -515,11 +515,10 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
             // d0 == d1 is ok
             long dx = r.degree(0);
             //System.out.println("d0, dx = " + d0 + ", " + dx);
-            if (d0 == dx) { // gcd == r ??
+            if (d0 == dx) { // gcd == r ?
                 if (PolyUtil.<BigInteger> recursivePseudoRemainder(q, r).isZERO()) {
                     r = r.abs().multiply(c); //.abs();
                     logger.info("exit with r | q : " + r);
-                    //throw new RuntimeException("find line");
                     return r;
                 }
                 continue;
@@ -579,22 +578,22 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
             lui = lc; //s.leadingBaseCoefficient();
             lh = PolyUtil.<BigInteger> basePseudoDivide(g, lui);
             BigInteger ge = PolyUtil.<BigInteger> evaluateAll(g.ring.coFac, lui, V);
-            if ( ge.isZERO() ) { // this can happen
+            if ( ge.isZERO() ) {
                 continue;
             }
             BigInteger geh = PolyUtil.<BigInteger> evaluateAll(g.ring.coFac, lh, V);
-            if ( geh.isZERO() ) { // this can happen
+            if ( geh.isZERO() ) {
                 continue;
             }
             BigInteger gg = PolyUtil.<BigInteger> evaluateAll(g.ring.coFac, g, V);
-            if ( gg.isZERO() ) { // this can happen
+            if ( gg.isZERO() ) {
                 continue;
             }
             //System.out.println("ge = " + ge + ", geh = " + geh + ", gg = " + gg + ", pe = " + pe); 
             // 
-            ce = ce.multiply(geh); //ge);
+            //ce = ce.multiply(geh); //ge);
             // 
-            he = he.multiply(ge); //geh);
+            he = he.multiply(ge); //gg); //ge); //geh);
             //
             gi = lui.extendLower(dfac,0,0L); //lui. // g.
             //
