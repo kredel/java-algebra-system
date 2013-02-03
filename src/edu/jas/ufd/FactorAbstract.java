@@ -141,8 +141,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
      *            GenPolynomial over the ring C.
      * @return [p_1,...,p_k] with P = prod_{i=1,...,r} p_i.
      */
-    @Override
-    public List<GenPolynomial<C>> factorsSquarefree(GenPolynomial<C> P) {
+    public List<GenPolynomial<C>> factorsSquarefreeOptimize(GenPolynomial<C> P) {
         GenPolynomialRing<C> pfac = P.ring;
         if (pfac.nvar <= 1) {
             return baseFactorsSquarefree(P);
@@ -170,8 +169,8 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             GenPolynomialRing<C> pf = P.ring;
             //GenPolynomialRing<C> pfu = pu.ring;
             for (GenPolynomial<C> p : facs) {
-		//GenPolynomial<C> pel = p.extendLower(pfu, 0, 0L);
-		GenPolynomial<C> pe = p.extend(pf, 0, 0L); // pel
+                //GenPolynomial<C> pel = p.extendLower(pfu, 0, 0L);
+                GenPolynomial<C> pe = p.extend(pf, 0, 0L); // pel
                 fs.add(pe);
             }
             //System.out.println("fs = " + fs);
@@ -181,6 +180,19 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         logger.info("de-optimized polynomials: " + iopt);
         facs = normalizeFactorization(iopt);
         return facs;
+    }
+
+
+    /**
+     * GenPolynomial factorization of a squarefree polynomial, using Kronecker
+     * substitution.
+     * @param P squarefree and primitive! (respectively monic) GenPolynomial.
+     * @return [p_1,...,p_k] with P = prod_{i=1,...,r} p_i.
+     */
+    @Override
+    public List<GenPolynomial<C>> factorsSquarefree(GenPolynomial<C> P) {
+        return factorsSquarefreeKronecker(P);
+        //return factorsSquarefreeOptimize(P);
     }
 
 
