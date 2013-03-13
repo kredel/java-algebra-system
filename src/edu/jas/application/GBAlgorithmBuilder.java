@@ -26,6 +26,7 @@ import edu.jas.gbufd.GroebnerBaseRational;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.RingFactory;
 import edu.jas.ufd.Quotient;
 import edu.jas.ufd.QuotientRing;
 
@@ -257,7 +258,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
         }
         if (((Object)ring.coFac) instanceof BigRational) {
             BigRational cf = (BigRational) (Object) ring.coFac;
-            PairList<BigRational> sty  = (PairList<BigRational>) strategy;
+            PairList<BigRational> sty  = (PairList) strategy;
             GroebnerBaseAbstract<BigRational> bb 
               = GBFactory.getImplementation(cf, GBFactory.Algo.ffgb, sty);
             GroebnerBaseAbstract<C> cbb = (GroebnerBaseAbstract<C>) (GroebnerBaseAbstract) bb;
@@ -265,7 +266,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
         }
         if (((Object)ring.coFac) instanceof QuotientRing) {
             QuotientRing<C> cf = (QuotientRing<C>) (Object) ring.coFac;
-            PairList<Quotient<C>> sty  = (PairList<Quotient<C>>) strategy;
+            PairList<Quotient<C>> sty  = (PairList) strategy;
             GroebnerBaseAbstract<Quotient<C>> bb 
               = GBFactory.<C> getImplementation(cf, GBFactory.Algo.ffgb, sty);
             GroebnerBaseAbstract<C> cbb = (GroebnerBaseAbstract<C>) (GroebnerBaseAbstract) bb;
@@ -329,7 +330,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
         if (algo == null) {
             algo = GBFactory.<C> getImplementation(ring.coFac, strategy);
         }
-        if (ring.coFac instanceof BigRational) {
+        if ( ((RingFactory)ring.coFac) instanceof BigRational) {
             GroebnerBaseAbstract<C> bb;
             if (algo instanceof GroebnerBaseRational) { // fraction free requested
                 bb = (GroebnerBaseAbstract) new GroebnerBaseRational<BigRational>(threads);
