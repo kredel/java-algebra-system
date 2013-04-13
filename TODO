@@ -8,6 +8,14 @@ issues to consider:
 
 - implement Musers multivariate factorization, evtl. with sparse Hensel lifting
 
+- implement real roots with other methods, e.g. after Uspensky or Rolle
+
+- implement complex roots with other methods, e.g. after Collins and Krandick
+
+- implement involutive bases computation
+
+- implement signature based GB computation
+
 - make hashCode to reuse computed value --> not immutable
 
 - use further util.concurrent algorithms where possible, e.g. in DHT
@@ -33,10 +41,6 @@ issues to consider:
 - implement Boolean with RingElem interface (?)
 
 - check solvable polynomials with integral domain coefficients
-
-- implement real roots with other methods, e.g. after Uspensky or Rolle
-
-- implement complex roots with other methods, e.g. after Collins and Krandick
 
 - refactor method names for groovy operator overloading, make examples for usage
 
