@@ -114,8 +114,11 @@ public final class MPJChannel {
     void send(int t, Object v, int pr) throws IOException {
         Object[] va = new Object[1];
         va[0] = v;
+        Status stat = null;
         synchronized (MPJEngine.getSendLock(t)) {
-           engine.Send(va, 0, va.length, MPI.OBJECT, pr, t);
+            //engine.Send(va, 0, va.length, MPI.OBJECT, pr, t);
+            Request req = engine.Isend(va, 0, va.length, MPI.OBJECT, pr, t);
+            stat = MPJEngine.waitRequest(req); // req.Wait();
         }
         //System.out.println("send: "+v);
     }

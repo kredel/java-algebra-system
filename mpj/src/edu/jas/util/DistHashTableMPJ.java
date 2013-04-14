@@ -249,7 +249,9 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
             int size = engine.Size();
             for (int i = 0; i < size; i++) { // send also to self.listener
                 synchronized (MPJEngine.getSendLock(DHTTAG)) {
-                   engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
+                    //engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
+                    Request req = engine.Isend(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
+                    Status stat = MPJEngine.waitRequest(req); // req.Wait();
                 }
             }
             //System.out.println("send: "+tc);
@@ -358,7 +360,9 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
             tcl[0] = tc;
             // send only to self.listener
             synchronized (MPJEngine.getSendLock(DHTTAG)) {
-               engine.Send(tcl, 0, tcl.length, MPI.OBJECT, engine.Rank(), DHTTAG);
+                //engine.Send(tcl, 0, tcl.length, MPI.OBJECT, engine.Rank(), DHTTAG);
+                Request req = engine.Isend(tcl, 0, tcl.length, MPI.OBJECT, engine.Rank(), DHTTAG);
+                Status stat = MPJEngine.waitRequest(req); // req.Wait();
             }
             logger.debug("send terminate to " + engine.Rank());
         } catch (MPIException e) {
