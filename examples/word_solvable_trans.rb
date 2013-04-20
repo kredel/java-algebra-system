@@ -81,19 +81,26 @@ puts "gens =" + rp.gens().join(", ") { |r| r.to_s };
 one,a,b,e1,e2,e3 = rp.gens();
 #one,I,J,K,a,b,e1,e2,e3 = rp.gens();
 
-f1 = e1 * e3**3 + e2**10 - a;
-f2 = e1**3 * e2**2 + e3;
-f3 = e3**3 + e3**2 - b;
+f1 = - a + e2**10 + e1 * e3**3;
+#puts "f1 = " + f1.to_s;
 
-F = [ f1, f2, f3 ];
-puts "F = " + F.join(", ") { |r| r.to_s };
+f2 = e1**3 * e2**2 + e3;
+#puts "f2 = " + f2.to_s;
+
+f3 = e3**3 + e3**2 - b;
+#puts "f3 = " + f3.to_s;
+#puts "+ f3 type(#{f3}) = #{f3.elem.class}\n";
+#puts "+ f3.val  = " + f3.elem.getMap().map { |e,c| c.to_s + " " + e.to_s }.join(", ");
+
+ff = [ f1, f2, f3 ];
+puts "ff = " + ff.join(", ") { |r| r.to_s };
 puts
 
-I = rp.ideal( "", F );
-puts "SolvableIdeal: " + str(I);
+ii = rp.ideal( "", ff );
+puts "SolvableIdeal: " + str(ii);
 puts;
 
-rgt = I.twosidedGB();
+rgt = ii.twosidedGB();
 puts "seq twosided GB:" + str(rgt);
 puts "isTwosidedGB: " + str(rgt.isTwosidedGB());
 puts
