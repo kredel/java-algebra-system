@@ -12,14 +12,14 @@ require "java"
 require "rational"
 require "mathn"
 
-include_class "java.lang.System"
-include_class "java.io.StringReader"
-include_class "java.util.ArrayList"
-include_class "java.util.Collections"
+java_import "java.lang.System"
+java_import "java.io.StringReader"
+java_import "java.util.ArrayList"
+java_import "java.util.Collections"
 
 #require "../lib/log4j.jar"
-include_class "org.apache.log4j.BasicConfigurator";
-include_class "org.apache.log4j.Logger";
+java_import "org.apache.log4j.BasicConfigurator";
+java_import "org.apache.log4j.Logger";
 
 =begin rdoc
 Configure the log4j system and start logging.
@@ -37,7 +37,7 @@ def str(s)
     return s.to_s;
 end
 
-include_class "edu.jas.kern.ComputerThreads";
+java_import "edu.jas.kern.ComputerThreads";
 
 =begin rdoc
 Terminate the running thread pools.
@@ -57,22 +57,22 @@ def noThreads()
 end
 
 # set output to Ruby scripting
-include_class "edu.jas.kern.Scripting";
+java_import "edu.jas.kern.Scripting";
 Scripting.setLang(Scripting::Lang::Ruby);
 
-include_class "edu.jas.util.ExecutableServer";
-include_class "edu.jas.structure.Power";
-include_class "edu.jas.arith.BigInteger";
-include_class "edu.jas.arith.BigRational";
-include_class "edu.jas.arith.ModInteger";
-include_class "edu.jas.arith.ModIntegerRing";
-include_class "edu.jas.arith.BigDecimal";
-include_class "edu.jas.arith.BigComplex";
-include_class "edu.jas.arith.BigQuaternion";
-include_class "edu.jas.arith.BigOctonion";
-include_class "edu.jas.arith.Product";
-include_class "edu.jas.arith.ProductRing";
-include_class "edu.jas.arith.PrimeList";
+java_import "edu.jas.util.ExecutableServer";
+java_import "edu.jas.structure.Power";
+java_import "edu.jas.arith.BigInteger";
+java_import "edu.jas.arith.BigRational";
+java_import "edu.jas.arith.ModInteger";
+java_import "edu.jas.arith.ModIntegerRing";
+java_import "edu.jas.arith.BigDecimal";
+java_import "edu.jas.arith.BigComplex";
+java_import "edu.jas.arith.BigQuaternion";
+java_import "edu.jas.arith.BigOctonion";
+java_import "edu.jas.arith.Product";
+java_import "edu.jas.arith.ProductRing";
+java_import "edu.jas.arith.PrimeList";
 
 
 =begin rdoc
@@ -82,7 +82,7 @@ def ZZ(z=0)
     if z.is_a? RingElem
         z = z.elem;
     end
-    r = BigInteger.new(z);
+    r = Java::EduJasArith::BigInteger.new(z);
     return RingElem.new(r);
 end
 
@@ -665,8 +665,8 @@ Multiply two ring elements.
 Add two ring elements.
 =end
     def +(other)
-        #puts "+ self  type(#{self}) = #{self.class}\n";
-        #puts "+ other type(#{other}) = #{other.class}\n";
+        #puts "+ self  type(#{self}) = #{self.elem.class}\n";
+        #puts "+ other type(#{other}) = #{other.elem.class}\n";
         s,o = coercePair(self,other);
         return RingElem.new( s.elem.sum( o.elem ) ); 
     end
@@ -675,6 +675,8 @@ Add two ring elements.
 Subtract two ring elements.
 =end
     def -(other)
+        #puts "+ self  type(#{self}) = #{self.elem.class}\n";
+        #puts "+ other type(#{other}) = #{other.elem.class}\n";
         s,o = coercePair(self,other);
         return RingElem.new( s.elem.subtract( o.elem ) ); 
     end
@@ -863,25 +865,25 @@ Get the coefficients of a polynomial.
 end
 
 
-include_class "edu.jas.poly.GenPolynomial";
-include_class "edu.jas.poly.GenPolynomialRing";
-include_class "edu.jas.poly.GenSolvablePolynomial";
-include_class "edu.jas.poly.GenSolvablePolynomialRing";
-include_class "edu.jas.poly.GenWordPolynomial";
-include_class "edu.jas.poly.GenWordPolynomialRing";
-include_class "edu.jas.poly.GenPolynomialTokenizer";
-include_class "edu.jas.poly.TermOrder";
-include_class "edu.jas.poly.OrderedPolynomialList";
-include_class "edu.jas.poly.PolyUtil";
-include_class "edu.jas.poly.TermOrderOptimization";
-include_class "edu.jas.poly.PolynomialList";
-include_class "edu.jas.poly.WordFactory";
-include_class "edu.jas.poly.AlgebraicNumber";
-include_class "edu.jas.poly.AlgebraicNumberRing";
-include_class "edu.jas.poly.OrderedModuleList";
-include_class "edu.jas.poly.ModuleList";
-include_class "edu.jas.poly.Complex";
-include_class "edu.jas.poly.ComplexRing";
+java_import "edu.jas.poly.GenPolynomial";
+java_import "edu.jas.poly.GenPolynomialRing";
+java_import "edu.jas.poly.GenSolvablePolynomial";
+java_import "edu.jas.poly.GenSolvablePolynomialRing";
+java_import "edu.jas.poly.GenWordPolynomial";
+java_import "edu.jas.poly.GenWordPolynomialRing";
+java_import "edu.jas.poly.GenPolynomialTokenizer";
+java_import "edu.jas.poly.TermOrder";
+java_import "edu.jas.poly.OrderedPolynomialList";
+java_import "edu.jas.poly.PolyUtil";
+java_import "edu.jas.poly.TermOrderOptimization";
+java_import "edu.jas.poly.PolynomialList";
+java_import "edu.jas.poly.WordFactory";
+java_import "edu.jas.poly.AlgebraicNumber";
+java_import "edu.jas.poly.AlgebraicNumberRing";
+java_import "edu.jas.poly.OrderedModuleList";
+java_import "edu.jas.poly.ModuleList";
+java_import "edu.jas.poly.Complex";
+java_import "edu.jas.poly.ComplexRing";
 
 
 =begin rdoc
@@ -1390,13 +1392,13 @@ def AN(m,z=0,field=false,pr=nil)
 end
 
 
-include_class "edu.jas.root.RealRootsSturm";
-include_class "edu.jas.root.Interval";
-include_class "edu.jas.root.RealAlgebraicNumber";
-include_class "edu.jas.root.RealAlgebraicRing";
-include_class "edu.jas.root.ComplexRootsSturm";
-include_class "edu.jas.root.Rectangle";
-include_class "edu.jas.root.RootFactory";
+java_import "edu.jas.root.RealRootsSturm";
+java_import "edu.jas.root.Interval";
+java_import "edu.jas.root.RealAlgebraicNumber";
+java_import "edu.jas.root.RealAlgebraicRing";
+java_import "edu.jas.root.ComplexRootsSturm";
+java_import "edu.jas.root.Rectangle";
+java_import "edu.jas.root.RootFactory";
 
 
 =begin rdoc
@@ -1468,14 +1470,14 @@ def RF(pr,d=0,n=1)
 end
 
 
-include_class "edu.jas.application.PolyUtilApp";
-include_class "edu.jas.application.Residue";
-include_class "edu.jas.application.ResidueRing";
-include_class "edu.jas.application.Ideal";
-include_class "edu.jas.application.Local";
-include_class "edu.jas.application.LocalRing";
-include_class "edu.jas.application.IdealWithRealAlgebraicRoots";
-include_class "edu.jas.application.ComprehensiveGroebnerBaseSeq";
+java_import "edu.jas.application.PolyUtilApp";
+java_import "edu.jas.application.Residue";
+java_import "edu.jas.application.ResidueRing";
+java_import "edu.jas.application.Ideal";
+java_import "edu.jas.application.Local";
+java_import "edu.jas.application.LocalRing";
+java_import "edu.jas.application.IdealWithRealAlgebraicRoots";
+java_import "edu.jas.application.ComprehensiveGroebnerBaseSeq";
 
 
 =begin rdoc
@@ -1696,41 +1698,41 @@ def makeJasArith(item)
 end
 
 
-include_class "edu.jas.gb.DGroebnerBaseSeq";
-include_class "edu.jas.gb.EGroebnerBaseSeq";
-include_class "edu.jas.gb.EReductionSeq";
-include_class "edu.jas.gb.GroebnerBaseDistributedEC";
-include_class "edu.jas.gb.GroebnerBaseDistributedHybridEC";
-#include_class "edu.jas.gb.GBDist";
-include_class "edu.jas.gb.GroebnerBaseParallel";
-include_class "edu.jas.gb.GroebnerBaseSeq";
-include_class "edu.jas.gb.GroebnerBaseSeqPairSeq";
-include_class "edu.jas.gb.ReductionSeq";
-include_class "edu.jas.gb.OrderedPairlist";
-include_class "edu.jas.gb.OrderedSyzPairlist";
-include_class "edu.jas.gb.GroebnerBaseSeqPairParallel";
-include_class "edu.jas.gb.SolvableGroebnerBaseParallel";
-include_class "edu.jas.gb.SolvableGroebnerBaseSeq";
-include_class "edu.jas.gb.WordGroebnerBaseSeq";
+java_import "edu.jas.gb.DGroebnerBaseSeq";
+java_import "edu.jas.gb.EGroebnerBaseSeq";
+java_import "edu.jas.gb.EReductionSeq";
+java_import "edu.jas.gb.GroebnerBaseDistributedEC";
+java_import "edu.jas.gb.GroebnerBaseDistributedHybridEC";
+#java_import "edu.jas.gb.GBDist";
+java_import "edu.jas.gb.GroebnerBaseParallel";
+java_import "edu.jas.gb.GroebnerBaseSeq";
+java_import "edu.jas.gb.GroebnerBaseSeqPairSeq";
+java_import "edu.jas.gb.ReductionSeq";
+java_import "edu.jas.gb.OrderedPairlist";
+java_import "edu.jas.gb.OrderedSyzPairlist";
+java_import "edu.jas.gb.GroebnerBaseSeqPairParallel";
+java_import "edu.jas.gb.SolvableGroebnerBaseParallel";
+java_import "edu.jas.gb.SolvableGroebnerBaseSeq";
+java_import "edu.jas.gb.WordGroebnerBaseSeq";
 
-include_class "edu.jas.gbufd.GroebnerBasePseudoRecSeq";
-include_class "edu.jas.gbufd.GroebnerBasePseudoSeq";
-include_class "edu.jas.gbufd.RGroebnerBasePseudoSeq";
-include_class "edu.jas.gbufd.GroebnerBasePseudoParallel";
-include_class "edu.jas.gbufd.RGroebnerBaseSeq";
-include_class "edu.jas.gbufd.RReductionSeq";
-include_class "edu.jas.gbufd.CharacteristicSetWu";
+java_import "edu.jas.gbufd.GroebnerBasePseudoRecSeq";
+java_import "edu.jas.gbufd.GroebnerBasePseudoSeq";
+java_import "edu.jas.gbufd.RGroebnerBasePseudoSeq";
+java_import "edu.jas.gbufd.GroebnerBasePseudoParallel";
+java_import "edu.jas.gbufd.RGroebnerBaseSeq";
+java_import "edu.jas.gbufd.RReductionSeq";
+java_import "edu.jas.gbufd.CharacteristicSetWu";
 
-include_class "edu.jas.ufd.GreatestCommonDivisor";
-include_class "edu.jas.ufd.PolyUfdUtil";
-include_class "edu.jas.ufd.GCDFactory";
-include_class "edu.jas.ufd.FactorFactory";
-include_class "edu.jas.ufd.SquarefreeFactory";
-include_class "edu.jas.ufd.Quotient";
-include_class "edu.jas.ufd.QuotientRing";
-include_class "edu.jas.integrate.ElementaryIntegration";
+java_import "edu.jas.ufd.GreatestCommonDivisor";
+java_import "edu.jas.ufd.PolyUfdUtil";
+java_import "edu.jas.ufd.GCDFactory";
+java_import "edu.jas.ufd.FactorFactory";
+java_import "edu.jas.ufd.SquarefreeFactory";
+java_import "edu.jas.ufd.Quotient";
+java_import "edu.jas.ufd.QuotientRing";
+java_import "edu.jas.integrate.ElementaryIntegration";
 
-#include_class "edu.jas.application.Ideal";
+#java_import "edu.jas.application.Ideal";
 
 =begin rdoc
 Represents a JAS polynomial ideal: PolynomialList and Ideal.
@@ -2561,10 +2563,10 @@ Get each component (slice) of regular ring coefficients separate.
 
 end
 
-include_class "edu.jas.gbmod.ModGroebnerBaseAbstract";
-include_class "edu.jas.gbmod.ModSolvableGroebnerBaseAbstract";
-include_class "edu.jas.gbmod.SolvableSyzygyAbstract";
-include_class "edu.jas.gbmod.SyzygyAbstract";
+java_import "edu.jas.gbmod.ModGroebnerBaseAbstract";
+java_import "edu.jas.gbmod.ModSolvableGroebnerBaseAbstract";
+java_import "edu.jas.gbmod.SolvableSyzygyAbstract";
+java_import "edu.jas.gbmod.SyzygyAbstract";
 
 
 =begin rdoc
@@ -3205,15 +3207,15 @@ Test if this is a right Groebner base.
 end
 
 
-include_class "edu.jas.ps.UnivPowerSeries";
-include_class "edu.jas.ps.UnivPowerSeriesRing";
-include_class "edu.jas.ps.UnivPowerSeriesMap";
-include_class "edu.jas.ps.Coefficients";
-include_class "edu.jas.ps.MultiVarPowerSeries";
-include_class "edu.jas.ps.MultiVarPowerSeriesRing";
-include_class "edu.jas.ps.MultiVarPowerSeriesMap";
-include_class "edu.jas.ps.MultiVarCoefficients";
-include_class "edu.jas.ps.StandardBaseSeq";
+java_import "edu.jas.ps.UnivPowerSeries";
+java_import "edu.jas.ps.UnivPowerSeriesRing";
+java_import "edu.jas.ps.UnivPowerSeriesMap";
+java_import "edu.jas.ps.Coefficients";
+java_import "edu.jas.ps.MultiVarPowerSeries";
+java_import "edu.jas.ps.MultiVarPowerSeriesRing";
+java_import "edu.jas.ps.MultiVarPowerSeriesMap";
+java_import "edu.jas.ps.MultiVarCoefficients";
+java_import "edu.jas.ps.StandardBaseSeq";
 
 
 =begin rdoc
@@ -3749,10 +3751,10 @@ def MPS(cofac,names,truncate=nil,&f)
 
 end
 
-include_class "edu.jas.vector.GenVector";
-include_class "edu.jas.vector.GenVectorModul";
-include_class "edu.jas.vector.GenMatrix";
-include_class "edu.jas.vector.GenMatrixRing";
+java_import "edu.jas.vector.GenVector";
+java_import "edu.jas.vector.GenVectorModul";
+java_import "edu.jas.vector.GenMatrix";
+java_import "edu.jas.vector.GenMatrixRing";
 
 
 =begin rdoc
@@ -3813,7 +3815,7 @@ def Mat(cofac,n,m,v=nil)
 end
 
 
-include_class "edu.jas.application.ExtensionFieldBuilder";
+java_import "edu.jas.application.ExtensionFieldBuilder";
 
 =begin rdoc
 Extension field builder.
