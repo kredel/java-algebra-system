@@ -7,16 +7,24 @@ package edu.jas.gb;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.Set;
+import java.util.HashSet;
 
 import org.apache.log4j.Logger;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolynomialList;
+import edu.jas.poly.PolyUtil;
+import edu.jas.poly.TermOrder;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
 
 import edu.jas.vector.BasicLinAlg;
 
@@ -472,6 +480,162 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
             k++;
         }
         return true;
+    }
+
+
+    /**
+     * Univariate head term degrees.
+     * @param A list of solvable polynomials.
+     * @return a list of the degrees of univariate head terms.
+     */
+    public List<Long> univariateDegrees(List<GenSolvablePolynomial<C>> A) {
+        List<Long> ud = new ArrayList<Long>();
+        if ( A == null || A.size() == 0 ) {
+            return ud;
+        }
+        GenSolvablePolynomialRing<C> pfac = A.get(0).ring;
+        if ( pfac.nvar <= 0) {
+            return ud;
+        }
+        //int uht = 0;
+        Map<Integer, Long> v = new TreeMap<Integer, Long>(); // for non reduced GBs
+        for (GenSolvablePolynomial<C> p : A) {
+            ExpVector e = p.leadingExpVector();
+            if (e == null) {
+                continue;
+            }
+            int[] u = e.dependencyOnVariables();
+            if (u == null) {
+                continue;
+            }
+            if (u.length == 1) {
+                //uht++;
+                Long d = v.get(u[0]);
+                if (d == null) {
+                    v.put(u[0], e.getVal(u[0]));
+                }
+            }
+        }
+        for (int i = 0; i < pfac.nvar; i++) {
+            Long d = v.get(i);
+            ud.add(d);
+        }
+        //Collections.reverse(ud);
+        return ud;
+    }
+
+
+    /**
+     * Construct univariate solvable polynomial of minimal degree in variable i of a zero
+     * dimensional ideal(G).
+     * @param i variable index.
+     * @param G list of solvable polynomials, a monic reduced left Gr&ouml;bner base of a zero
+     *            dimensional ideal.
+     * @return univariate solvable polynomial of minimal degree in variable i in ideal_left(G)
+     */
+    public GenSolvablePolynomial<C> constructUnivariate(int i, List<GenSolvablePolynomial<C>> G) {
+        if (G == null || G.size() == 0) {
+            throw new IllegalArgumentException("G may not be null or empty");
+        }
+        List<Long> ud = univariateDegrees(G);
+        if (ud.size() <= i) {
+            //logger.info("univ pol, ud = " + ud);
+            throw new IllegalArgumentException("ideal(G) not zero dimensional " + ud);
+        }
+        int ll = 0;
+        Long di = ud.get(i);
+        if (di != null) {
+            ll = (int) (long) di;
+        } else {
+            throw new IllegalArgumentException("ideal(G) not zero dimensional");
+        }
+        long vsdim = 1;
+        for ( Long d : ud ) {
+            if ( d != null ) { 
+                vsdim *= d;
+            }
+        }
+        logger.info("univariate construction, deg = " + ll + ", vsdim = " + vsdim);
+        GenSolvablePolynomialRing<C> pfac = G.get(0).ring;
+        RingFactory<C> cfac = pfac.coFac;
+
+        GenPolynomialRing<C> cpfac = new GenPolynomialRing<C>(cfac, ll, new TermOrder(TermOrder.INVLEX));
+        GenSolvablePolynomialRing<GenPolynomial<C>> 
+	    rfac = new GenSolvablePolynomialRing<GenPolynomial<C>>(cpfac, pfac); // relations
+        GenSolvablePolynomial<GenPolynomial<C>> P = rfac.getZERO();
+        for (int k = 0; k < ll; k++) {
+            GenSolvablePolynomial<GenPolynomial<C>> Pp = rfac.univariate(i, k);
+            GenPolynomial<C> cp = cpfac.univariate(cpfac.nvar - 1 - k);
+            Pp = Pp.multiply(cp);
+            P = (GenSolvablePolynomial<GenPolynomial<C>>) P.sum(Pp);
+        }
+        if ( debug ) {
+            logger.info("univariate construction, P = " + P);
+            logger.info("univariate construction, deg_*(G) = " + ud);
+            //throw new RuntimeException("check");
+        }
+        GroebnerBaseAbstract<C> bbc = new GroebnerBaseSeq<C>();
+        GenSolvablePolynomial<C> X;
+        GenSolvablePolynomial<C> XP;
+        // solve system of linear equations for the coefficients of the univariate polynomial
+        List<GenPolynomial<C>> ls;
+        int z = -1;
+        do {
+            //System.out.println("ll  = " + ll);
+            GenSolvablePolynomial<GenPolynomial<C>> Pp = rfac.univariate(i, ll);
+            GenPolynomial<C> cp = cpfac.univariate(cpfac.nvar - 1 - ll);
+            Pp = Pp.multiply(cp);
+            P = (GenSolvablePolynomial<GenPolynomial<C>>) P.sum(Pp);
+            X = pfac.univariate(i, ll);
+            XP = sred.leftNormalform(G, X);
+            //System.out.println("XP = " + XP);
+            GenSolvablePolynomial<GenPolynomial<C>> XPp = PolyUtil.<C> toRecursive(rfac, XP);
+            GenSolvablePolynomial<GenPolynomial<C>> XPs = (GenSolvablePolynomial<GenPolynomial<C>>) XPp.sum(P);
+            ls = new ArrayList<GenPolynomial<C>>(XPs.getMap().values());
+            System.out.println("ls,1 = " + ls);
+            ls = red.irreducibleSet(ls);
+            z = bbc.commonZeroTest(ls);
+            if (z != 0) {
+                ll++;
+                if ( ll > vsdim ) {
+                    logger.info("univariate construction, P = " + P);
+                    logger.info("univariate construction, nf(P) = " + XP);
+                    logger.info("G = " + G);
+                    throw new ArithmeticException("univariate polynomial degree greater than vector space dimansion");
+                }
+                cpfac = cpfac.extend(1);
+                rfac = new GenSolvablePolynomialRing<GenPolynomial<C>>(cpfac, pfac);
+                P = PolyUtil.<C> extendCoefficients(rfac, P, 0, 0L);
+                XPp = PolyUtil.<C> extendCoefficients(rfac, XPp, 0, 1L);
+                P = (GenSolvablePolynomial<GenPolynomial<C>>) P.sum(XPp);
+            }
+        } while (z != 0); // && ll <= 5 && !XP.isZERO()
+        // construct result polynomial
+        String var = pfac.getVars()[pfac.nvar - 1 - i];
+        GenSolvablePolynomialRing<C> ufac = new GenSolvablePolynomialRing<C>(cfac, 1, 
+                                                   new TermOrder(TermOrder.INVLEX),
+                                                   new String[] { var });
+        GenSolvablePolynomial<C> pol = ufac.univariate(0, ll);
+        for (GenPolynomial<C> pc : ls) {
+            ExpVector e = pc.leadingExpVector();
+            if (e == null) {
+                continue;
+            }
+            int[] v = e.dependencyOnVariables();
+            if (v == null || v.length == 0) {
+                continue;
+            }
+            int vi = v[0];
+            C tc = pc.trailingBaseCoefficient();
+            tc = tc.negate();
+            GenSolvablePolynomial<C> pi = ufac.univariate(0, ll - 1 - vi);
+            pi = pi.multiply(tc);
+            pol = (GenSolvablePolynomial<C>) pol.sum(pi);
+        }
+        if (logger.isInfoEnabled()) {
+            logger.info("univariate construction, pol = " + pol);
+        }
+        return pol;
     }
 
 }
