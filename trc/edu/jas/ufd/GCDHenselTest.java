@@ -320,7 +320,11 @@ public class GCDHenselTest extends TestCase {
             //a = dfac.parse(" ( -13 x^2 ) z^5 + ( 182 x^2 - 143  ) z^3 - ( x^2 * y^3 - 8 x^2 ) z^2 + ( 14 x^2 * y^3 - 11 y^3 - 112 x^2 + 88  ) ");
             //b = dfac.parse(" ( -13 x^3 * y^3 ) z^6 + ( 65 y ) z^4 - ( x^3 * y^6 - 8 x^3 * y^3 - 52 y^3 - 195 y + 156  ) z^3 + ( 5 y^4 - 40 y ) z + ( 4 y^6 + 15 y^4 - 44 y^3 - 120 y + 96  ) ) ");
             //c = dfac.parse(" 13 z^3 + y^3 - 8 ");
- 
+
+            //a = dfac.parse(" 3 z^3 + ( 4 y^2 + 25 x^3 + 16 x^2 + 25  ) z^2 - ( 84 y^4 - 22 x^3 * y^2 + 128 x^2 * y^2 + 138 y^2 - 52 x^6 - 71 x^5 + 35 x^4 - 109 x^3 + 59 x^2 + 18  ) z ");
+            //b = dfac.parse(" 10 z^5 + ( 60 y^2 + 40 x^3 + 70 x^2 + 90  ) z^4 + ( 14 x + 3  ) z^2 + ( 84 x * y^2 + 18 y^2 + 56 x^4 + 110 x^3 + 21 x^2 + 126 x + 27  ) z ");
+            //c = dfac.parse("z^2 + ( 6 y^2 + 4 x^3 + 7 x^2 + 9  ) z");
+
             //a = a.abs();
             //b = b.abs();
             //c = c.abs();
