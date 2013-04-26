@@ -56,6 +56,44 @@ def noThreads()
     puts
 end
 
+=begin rdoc
+Inject variables for generators in given environment.
+=end
+def inject_gens(env) 
+    env.class.instance_eval( "attr_accessor :generators;" )
+    if env.generators == nil
+       env.generators = {};
+    end
+    #puts "existing generators: " + env.generators.keys().join(", ");  
+    for i in self.gens()
+       begin 
+          ivs = i.to_s
+          if not ivs.include?(",") and not ivs.include?("(")
+             if ivs == "1" or ivs == "1 "
+                ivs = "one"
+             end
+             if env.generators[ ivs ] != nil
+                puts "redefining #{ivs}";
+             end
+             env.generators[ ivs ] = i;
+             env.instance_eval( "def #{ivs}; @generators[ '#{ivs}' ]; end" )
+             #puts "def #{ivs}; @generators[ '#{ivs}' ]; end"
+             first = ivs.slice(0,1);
+             if first.count('A-Z') > 0
+                first = first.downcase
+                ivl = first + ivs.slice(1,ivs.length);
+                puts "warning: '" + str(ivs) + "' additionaly renamed to '" + str(ivl) + "' to avoid constant semantics"
+                env.instance_eval( "def #{ivl}; @generators[ '#{ivs}' ]; end" )
+             end
+          end
+       rescue 
+          puts "error: #{i} = " + i.to_s + ", class = " + i.class.to_s;
+       end
+    end
+ puts "globally defined generators: " + env.generators.keys().join(", ");  
+ end
+
+
 # set output to Ruby scripting
 java_import "edu.jas.kern.Scripting";
 Scripting.setLang(Scripting::Lang::Ruby);
@@ -925,6 +963,46 @@ Ring constructor.
         rescue
             #pass
         end
+        variable_generators()
+    end
+
+=begin rdoc
+Define instance variables for generators.
+=end
+    def variable_generators() 
+       Ring.instance_eval( "attr_accessor :generators;" )
+       @generators = {};
+       for i in self.gens()
+          begin 
+             ivs = i.to_s
+             if not ivs.include?(",") and not ivs.include?("(")
+                if ivs == "1" or ivs == "1 "
+                   ivs = "one"
+                end
+                @generators[ ivs ] = i;
+                self.instance_eval( "def #{ivs}; @generators[ '#{ivs}' ]; end" )
+             end
+          rescue 
+             puts "error: #{i} = " + i.to_s + ", class = " + i.class.to_s;
+             #pass
+          end
+       end
+    puts "locally defined generators: " + @generators.keys().join(", ");  
+    end
+
+=begin rdoc
+Inject variables for generators in top level environment.
+=end
+    def inject_variables() 
+        begin 
+           require "irb/frame" # must be placed here
+           bin = IRB::Frame.bottom(0);
+           env = eval "self", bin;
+           #puts "env = " + str(env)
+           inject_gens(env)
+           rescue 
+              puts "error: 'irb/frame' not found";
+           end
     end
 
 =begin rdoc
@@ -1263,7 +1341,6 @@ order = term order.
         #want: super(Ring,self).initialize(ring=tring)
         @ring = tring;
         super("",@ring) 
-        variable_generators()
         if self.class.auto_inject 
            inject_variables();
         end
@@ -1274,84 +1351,6 @@ Create a string representation.
 =end
     def to_s()
         return @ring.toScript();
-    end
-
-=begin rdoc
-Define instance variables for generators.
-=end
-    def variable_generators() 
-       PolyRing.instance_eval( "attr_accessor :generators;" )
-       @generators = {};
-       for i in self.gens()
-          begin 
-             ivs = i.to_s
-             if not ivs.include?(",") and not ivs.include?("(")
-                if ivs == "1" or ivs == "1 "
-                   ivs = "one"
-                end
-                @generators[ ivs ] = i;
-                self.instance_eval( "def #{ivs}; @generators[ '#{ivs}' ]; end" )
-             end
-          rescue 
-             puts "error: #{i} = " + i.to_s + ", class = " + i.class.to_s;
-             #pass
-          end
-       end
-    puts "defined generators: " + @generators.keys().join(", ");  
-    end
-
-
-=begin rdoc
-Inject variables for generators in given environment.
-=end
-    def inject_gens(env) 
-       env.class.instance_eval( "attr_accessor :generators;" )
-       if env.generators == nil
-          env.generators = {};
-       end
-       #puts "existing generators: " + env.generators.keys().join(", ");  
-       for i in self.gens()
-          begin 
-             ivs = i.to_s
-             if not ivs.include?(",") and not ivs.include?("(")
-                if ivs == "1" or ivs == "1 "
-                   ivs = "one"
-                end
-                if env.generators[ ivs ] != nil
-                   puts "redefining #{ivs}";
-                end
-                env.generators[ ivs ] = i;
-                env.instance_eval( "def #{ivs}; @generators[ '#{ivs}' ]; end" )
-                #puts "def #{ivs}; @generators[ '#{ivs}' ]; end"
-                first = ivs.slice(0,1);
-                if first.count('A-Z') > 0
-                   first = first.downcase
-                   ivl = first + ivs.slice(1,ivs.length);
-                   puts "warning: '" + str(ivs) + "' additionaly renamed to '" + str(ivl) + "' to avoid constant semantics"
-                   env.instance_eval( "def #{ivl}; @generators[ '#{ivs}' ]; end" )
-                end
-             end
-          rescue 
-             puts "error: #{i} = " + i.to_s + ", class = " + i.class.to_s;
-          end
-       end
-    puts "globally defined generators: " + env.generators.keys().join(", ");  
-    end
-
-
-=begin rdoc
-Inject variables for generators in top level environment.
-=end
-    def inject_variables() 
-        begin 
-           require "irb/frame" # must be placed here
-           bin = IRB::Frame.bottom(0);
-           env = eval "self", bin;
-           #puts "env = " + str(env)
-           inject_gens(env)
-           rescue 
-              puts "error: 'irb/frame' not found";
-           end
     end
 
 end
@@ -2592,7 +2591,7 @@ Solvable polynomial ring constructor.
            puts "warning: ring is not associative";
         end
         #puts "SolvableRing to super()";
-        #super("",@ring) 
+        super("",@ring) 
     end
 
 =begin rdoc
@@ -2653,7 +2652,13 @@ Represents a JAS solvable polynomial ring: GenSolvablePolynomialRing.
 Provides more convenient constructor. 
 Then returns a Ring.
 =end
-class SolvPolyRing < SolvableRing
+class SolvPolyRing < SolvableRing 
+
+    @auto_inject = true
+
+    class << self  # means add to class
+       attr_accessor :auto_inject
+    end
 
 =begin rdoc
 Ring constructor.
@@ -2706,6 +2711,10 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
         @ring = ring;
         #puts "SolvPolyRing to super()";
         super("",@ring) 
+        # puts "ai = " +  self.class.auto_inject.to_s
+        if self.class.auto_inject
+           inject_variables();
+        end
     end
 
 =begin rdoc
