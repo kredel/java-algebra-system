@@ -184,24 +184,24 @@ public class GroebnerBaseDistECTest extends TestCase {
 
         L.add(a);
         L = bbdist.GB(L);
-        assertTrue("isGB( { a } )", bbseq.isGB(L));
+        assertTrue("isGB( { a } ): " + L, bbseq.isGB(L));
 
         L.add(b);
         //System.out.println("L = " + L.size() );
         L = bbdist.GB(L);
-        assertTrue("isGB( { a, b } )", bbseq.isGB(L));
+        assertTrue("isGB( { a, b } ): " + L, bbseq.isGB(L));
 
         L.add(c);
         L = bbdist.GB(L);
-        assertTrue("isGB( { a, b, c } )", bbseq.isGB(L));
+        assertTrue("isGB( { a, b, c } ): " + L, bbseq.isGB(L));
 
         L.add(d);
         L = bbdist.GB(L);
-        assertTrue("isGB( { a, b, c, d } )", bbseq.isGB(L));
+        assertTrue("isGB( { a, b, c, d } ): " + L, bbseq.isGB(L));
 
         L.add(e);
         L = bbdist.GB(L);
-        assertTrue("isGB( { a, b, c, d, e } )", bbseq.isGB(L));
+        assertTrue("isGB( { a, b, c, d, e } ): " + L, bbseq.isGB(L));
     }
 
 
