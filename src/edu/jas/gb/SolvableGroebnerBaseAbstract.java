@@ -47,13 +47,13 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
     /**
      * Solvable reduction engine.
      */
-    protected SolvableReduction<C> sred;
+    public SolvableReduction<C> sred;
 
 
     /**
      * Reduction engine.
      */
-    protected final Reduction<C> red;
+    public final Reduction<C> red;
 
 
     /**
@@ -636,6 +636,25 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
             logger.info("univariate construction, pol = " + pol);
         }
         return pol;
+    }
+
+
+    /**
+     * Construct univariate solvable polynomials of minimal degree in all variables in
+     * zero dimensional left ideal(G).
+     * @return list of univariate polynomial of minimal degree in each variable
+     *         in ideal_left(G)
+     */
+    public List<GenSolvablePolynomial<C>> constructUnivariate(List<GenSolvablePolynomial<C>> G) {
+        List<GenSolvablePolynomial<C>> univs = new ArrayList<GenSolvablePolynomial<C>>();
+        if ( G == null || G.isEmpty() ) {
+            return univs;
+        }
+        for (int i = G.get(0).ring.nvar - 1; i >= 0; i--) {
+            GenSolvablePolynomial<C> u = constructUnivariate(i,G);
+            univs.add(u);
+        }
+        return univs;
     }
 
 }

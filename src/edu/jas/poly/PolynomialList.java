@@ -299,6 +299,26 @@ public class PolynomialList<C extends RingElem<C> >
      * Get list as List of GenSolvablePolynomials.
      * Required because no List casts allowed. Equivalent to 
      * cast (List&lt;GenSolvablePolynomial&lt;C&gt;&gt;) list.
+     * @return solvable polynomial list from this.
+     */
+    public List< GenSolvablePolynomial<C> > getSolvableList() {
+        return castToSolvableList(list);
+    }
+
+
+    /**
+     * Get ring as GenSolvablePolynomialRing.
+     * @return solvable polynomial ring list from this.
+     */
+    public GenSolvablePolynomialRing<C> getSolvableRing() {
+        return (GenSolvablePolynomialRing<C> ) ring;
+    }
+
+
+    /**
+     * Get list as List of GenSolvablePolynomials.
+     * Required because no List casts allowed. Equivalent to 
+     * cast (List&lt;GenSolvablePolynomial&lt;C&gt;&gt;) list.
      * @param list list of extensions of polynomials.
      * @return solvable polynomial list from this.
      */
