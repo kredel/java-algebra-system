@@ -6,7 +6,6 @@
 import sys;
 
 from jas import SolvableRing
-from jas import SolvableIdeal
 from jas import startLog, terminate
 
 
@@ -35,7 +34,7 @@ ps = """
 )
 """;
 
-f = SolvableIdeal( r, ps );
+f = r.ideal( ps );
 print "SolvableIdeal: " + str(f);
 print;
 
@@ -45,7 +44,6 @@ rg = f.leftGB();
 print "seq left GB:", rg;
 print;
 
-#from edu.jas.gb   import SolvableGroebnerBaseSeq;
 
 if rg.isLeftGB():
    print "is left GB";

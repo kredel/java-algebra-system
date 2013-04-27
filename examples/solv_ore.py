@@ -6,7 +6,7 @@
 from java.lang import System
 from java.lang import Integer
 
-from jas import SolvableRing, SolvPolyRing, PolyRing, SolvableIdeal
+from jas import SolvableRing, SolvPolyRing, PolyRing
 from jas import QQ, startLog
 
 # Ore extension solvable polynomial example, Gomez-Torrecillas, 2003

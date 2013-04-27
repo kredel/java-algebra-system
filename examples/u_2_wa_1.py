@@ -4,7 +4,6 @@
 #
 
 from jas import SolvableRing
-from jas import SolvableIdeal
 
 from edu.jas.application import Ideal
 
@@ -65,7 +64,7 @@ for t in (2,3,5,7,11,13,17,19,23,27,31,37,43):
   #print "SolvableRing: " + str(r1);
   #print "SolvableRing: " + str(r1c);
   #print;
-  it = SolvableIdeal( r1, ps % (t,t) );
+  it = r1.ideal( ps % (t,t) );
   #print "SolvableIdeal: " + str(it);
   #print;
   # compute I_{\phi_t} \cap WA_1^opp
@@ -82,7 +81,7 @@ for t in (2,3,5,7,11,13,17,19,23,27,31,37,43):
   #print "SolvableRing: " + str(r2);
   #print "SolvableRing: " + str(r2c);
   #print;
-  ikt = SolvableIdeal( r2, ps % (t,t) );
+  ikt = r2.ideal( ps % (t,t) );
   #print "SolvableIdeal: " + str(ikt);
   print;
   # compute ker(\phi_t)

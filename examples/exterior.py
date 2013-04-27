@@ -4,7 +4,6 @@
 #
 
 from jas import SolvableRing
-from jas import SolvableIdeal
 
 
 # exterior calculus example
@@ -122,7 +121,7 @@ ps = """
 )
 """;
 
-f = SolvableIdeal( r, ps );
+f = r.ideal( ps );
 print "SolvableIdeal: " + str(f);
 print;
 

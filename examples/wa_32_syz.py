@@ -4,7 +4,6 @@
 #
 
 from jas import SolvableRing
-from jas import SolvableIdeal
 
 from edu.jas.poly   import ModuleList;
 from edu.jas.gbmod  import SolvableSyzygyAbstract;
@@ -34,7 +33,7 @@ ps = """
 )
 """;
 
-f = SolvableIdeal( r, ps );
+f = r.ideal( ps );
 print "SolvableIdeal: " + str(f);
 print;
 

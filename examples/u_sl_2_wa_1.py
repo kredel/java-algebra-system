@@ -4,7 +4,6 @@
 #
 
 from jas import SolvableRing
-from jas import SolvableIdeal
 from jas import startLog, terminate
 
 from edu.jas.application import Ideal
@@ -73,7 +72,7 @@ r1c = SolvableRing( rs1c );
 #print "SolvableRing: " + str(r1);
 #print "SolvableRing: " + str(r1c);
 print;
-it = SolvableIdeal( r1, ps );
+it = r1.ideal( ps );
 print "SolvableIdeal: " + str(it);
 print;
 # compute I_{\phi_t} \cap WA_1^opp
@@ -90,7 +89,7 @@ r2c = SolvableRing( rs2c );
 #print "SolvableRing: " + str(r2);
 #print "SolvableRing: " + str(r2c);
 print;
-ikt = SolvableIdeal( r2, ps );
+ikt = r2.ideal( ps );
 print "SolvableIdeal: " + str(ikt);
 print;
 # compute ker(\phi_t)

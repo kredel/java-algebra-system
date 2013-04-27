@@ -2,7 +2,6 @@
 # jython examples for jas.
 
 from jas import SolvableRing
-from jas import SolvableIdeal
 
 
 # U(sl_2_f) example
@@ -27,7 +26,7 @@ ps = """
 )
 """;
 
-f = SolvableIdeal( r, ps );
+f = r.ideal( ps );
 print "SolvableIdeal: " + str(f);
 print;
 

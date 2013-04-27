@@ -4,7 +4,6 @@
 #
 
 from jas import SolvableRing
-from jas import SolvableIdeal
 
 
 # WA_1 example
@@ -30,7 +29,7 @@ ps = """
 )
 """;
 
-i7 = SolvableIdeal( r, ps );
+i7 = r.ideal( ps );
 print "SolvableIdeal: " + str(i7);
 print;
 
@@ -46,7 +45,7 @@ ps = """
 )
 """;
 
-j7 = SolvableIdeal( r, ps );
+j7 = r.ideal( ps );
 print "SolvableIdeal: " + str(j7);
 print;
 
