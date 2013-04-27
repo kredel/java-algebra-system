@@ -1473,6 +1473,7 @@ java_import "edu.jas.application.PolyUtilApp";
 java_import "edu.jas.application.Residue";
 java_import "edu.jas.application.ResidueRing";
 java_import "edu.jas.application.Ideal";
+java_import "edu.jas.application.SolvableIdeal";
 java_import "edu.jas.application.Local";
 java_import "edu.jas.application.LocalRing";
 java_import "edu.jas.application.IdealWithRealAlgebraicRoots";
@@ -1731,7 +1732,6 @@ java_import "edu.jas.ufd.Quotient";
 java_import "edu.jas.ufd.QuotientRing";
 java_import "edu.jas.integrate.ElementaryIntegration";
 
-#java_import "edu.jas.application.Ideal";
 
 =begin rdoc
 Represents a JAS polynomial ideal: PolynomialList and Ideal.
@@ -2605,7 +2605,7 @@ Create a string representation.
 Create a solvable ideal.
 =end
     def ideal(ringstr="",list=nil)
-        return SolvableIdeal.new(self,ringstr,list);
+        return SolvIdeal.new(self,ringstr,list);
     end
 
 =begin rdoc
@@ -2636,7 +2636,7 @@ Create an element from a string or object.
            end
            poly = str(poly);
         end
-        ii = SolvableIdeal.new(self, "( " + poly + " )");
+        ii = SolvIdeal.new(self, "( " + poly + " )");
         list = ii.pset.list;
         if list.size > 0
             return RingElem.new( list[0] );
@@ -2731,7 +2731,7 @@ Represents a JAS solvable polynomial ideal.
 
 Methods for left, right two-sided Groebner basees and others.
 =end
-class SolvableIdeal
+class SolvIdeal
 
     attr_reader :pset, :ring, :list
 
@@ -2767,7 +2767,7 @@ Compute a left Groebner base.
         gg = SolvableGroebnerBaseSeq.new().leftGB(ff);
         t = System.currentTimeMillis() - t;
         puts "executed leftGB in #{t} ms\n"; 
-        return SolvableIdeal.new(@ring,"",gg);
+        return SolvIdeal.new(@ring,"",gg);
     end
 
 =begin rdoc
@@ -2793,7 +2793,7 @@ Compute a two-sided Groebner base.
         gg = SolvableGroebnerBaseSeq.new().twosidedGB(ff);
         t = System.currentTimeMillis() - t;
         puts "executed twosidedGB in #{t} ms\n"; 
-        return SolvableIdeal.new(@ring,"",gg);
+        return SolvIdeal.new(@ring,"",gg);
     end
 
 =begin rdoc
@@ -2819,7 +2819,7 @@ Compute a right Groebner base.
         gg = SolvableGroebnerBaseSeq.new().rightGB(ff);
         t = System.currentTimeMillis() - t;
         puts "executed rightGB in #{t} ms\n"; 
-        return SolvableIdeal.new(@ring,"",gg);
+        return SolvIdeal.new(@ring,"",gg);
     end
 
 =begin rdoc
@@ -2841,7 +2841,7 @@ Compute the intersection of this and the polynomial ring.
     def intersect(ring)
         s = SolvableIdeal.new(@pset);
         nn = s.intersect(ring.ring);
-        return SolvableIdeal.new(@ring,"",nn.getList());
+        return SolvIdeal.new(@ring,"",nn.getList());
     end
 
 =begin rdoc
@@ -2866,7 +2866,7 @@ Compute a left Groebner base in parallel.
         t = System.currentTimeMillis() - t;
         bbpar.terminate();
         puts "parallel #{th} leftGB executed in #{t} ms\n"; 
-        return SolvableIdeal.new(@ring,"",gg);
+        return SolvIdeal.new(@ring,"",gg);
     end
 
 =begin rdoc
@@ -2881,7 +2881,7 @@ Compute a two-sided Groebner base in parallel.
         t = System.currentTimeMillis() - t;
         bbpar.terminate();
         puts "parallel #{th} twosidedGB executed in #{t} ms\n"; 
-        return SolvableIdeal.new(@ring,"",gg);
+        return SolvIdeal.new(@ring,"",gg);
     end
 
 end

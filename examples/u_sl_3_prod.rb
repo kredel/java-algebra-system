@@ -54,7 +54,7 @@ ps = """
 """;
 # ( Xa + Xb + Xc + Ya + Yb + Yc + Ha + Hb )
 
-f = SolvableIdeal.new( r, ps );
+f = r.ideal( ps );
 puts "SolvIdeal: " + str(f);
 puts;
 
@@ -105,7 +105,7 @@ ps = """
 )
 """;
 
-f = SolvableIdeal.new( r, ps );
+f = r.ideal( ps );
 #puts "SolvableIdeal: " + str(f);
 #puts;
 

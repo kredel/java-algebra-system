@@ -42,7 +42,7 @@ from edu.jas.gbmod       import ModGroebnerBaseAbstract, ModSolvableGroebnerBase
                                 SolvableSyzygyAbstract, SyzygyAbstract
 from edu.jas.vector      import GenVector, GenVectorModul,\
                                 GenMatrix, GenMatrixRing
-from edu.jas.application import PolyUtilApp, Residue, ResidueRing, Ideal,\
+from edu.jas.application import PolyUtilApp, Residue, ResidueRing, Ideal, SolvableIdeal,\
                                 Local, LocalRing, IdealWithRealAlgebraicRoots,\
                                 ComprehensiveGroebnerBaseSeq, ExtensionFieldBuilder
 from edu.jas.kern        import ComputerThreads, StringUtil, Scripting

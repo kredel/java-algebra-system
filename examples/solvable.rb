@@ -30,7 +30,7 @@ ps = """
 )
 """;
 
-f = SolvableIdeal.new( r, ps );
+f = r.ideal( ps );
 puts "SolvableIdeal: " + str(f);
 puts;
 
