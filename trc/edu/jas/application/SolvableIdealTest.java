@@ -94,13 +94,13 @@ public class SolvableIdealTest extends TestCase {
     GenSolvablePolynomial<BigRational> a, b, c, d, e;
 
 
-    int rl = 4; //4; //3; 
+    int rl = 4; // even for Weyl relations
 
 
     int kl = 3; //10
 
 
-    int ll = 4; //7
+    int ll = 3; //7
 
 
     int el = 3;
@@ -851,7 +851,7 @@ public class SolvableIdealTest extends TestCase {
         a = fac.parse("( x^3 + 34/55 x^2 + 1/9 x + 99 )");
         b = fac.parse("( y^4 - x )");
         c = fac.parse("( z^3 - x y )");
-        d = fac.parse("( w^3 + 3 )");
+        d = fac.parse("( w^2 + 3 )");
 
         if (a.isZERO() || b.isZERO() || c.isZERO()) {
             return;
