@@ -30,7 +30,7 @@ ps = """
 )
 """;
 
-f = r.ideall( ps );
+f = r.ideal( ps );
 print "SolvableIdeal: " + str(f);
 print;
 
