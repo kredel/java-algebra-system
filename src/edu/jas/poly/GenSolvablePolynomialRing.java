@@ -124,6 +124,18 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
 
     /**
      * The constructor creates a solvable polynomial factory object with the
+     * given term order and commutative relations.
+     * @param cf factory for coefficients of type C.
+     * @param t a term order.
+     * @param v names for the variables.
+     */
+    public GenSolvablePolynomialRing(RingFactory<C> cf, TermOrder t, String[] v) {
+        this(cf, v.length, t, v, null);
+    }
+
+
+    /**
+     * The constructor creates a solvable polynomial factory object with the
      * default term order.
      * @param cf factory for coefficients of type C.
      * @param v names for the variables.

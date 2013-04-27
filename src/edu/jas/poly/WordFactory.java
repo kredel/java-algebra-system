@@ -145,8 +145,7 @@ public final class WordFactory implements MonoidFactory<Word> {
     /**
      * Is this structure finite or infinite.
      * @return true if this structure is finite, else false.
-     * @see edu.jas.structure.ElemFactory#isFinite() <b>Note: </b> returns true
-     *      because of finite String value.
+     * @see edu.jas.structure.ElemFactory#isFinite() 
      */
     public boolean isFinite() {
         if (alphabet.length() == 0) {

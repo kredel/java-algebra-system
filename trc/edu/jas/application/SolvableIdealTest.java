@@ -345,10 +345,10 @@ public class SolvableIdealTest extends TestCase {
      */
     public void testSolvableIdealQuotient() {
         SolvableIdeal<BigRational> I, J, K, H;
-        a = fac.random(kl, ll, el, q);
-        b = fac.random(kl, ll, el, q);
-        c = fac.random(kl, ll, el, q);
-        d = fac.random(kl, ll, el, q);
+        a = fac.random(kl, ll-2, el, q);
+        b = fac.random(kl, ll, el, q/2);
+        c = fac.random(kl, ll, el-1, q);
+        d = c; //fac.random(kl, ll, el, q);
         e = d; //fac.random(kl, ll, el, q );
 
         if (a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO()) {
@@ -444,10 +444,10 @@ public class SolvableIdealTest extends TestCase {
      */
     public void testSolvableIdealInfiniteQuotient() {
         SolvableIdeal<BigRational> I, J, K;
-        a = fac.random(kl, ll, el, q);
-        b = fac.random(kl, ll, el, q);
-        c = fac.random(kl, ll, el, q);
-        d = fac.random(kl, ll, el, q);
+        a = fac.random(kl, ll-2, el, q);
+        b = fac.random(kl, ll-1, el-1, q);
+        c = fac.random(kl, ll/2, el-1, q/2);
+        d = c; //fac.random(kl, ll, el, q);
         e = d; //fac.random(kl, ll, el, q );
 
         if (a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO()) {
@@ -514,9 +514,10 @@ public class SolvableIdealTest extends TestCase {
 
 
     /**
-     * Test SolvableIdeal infinite quotient with Rabinowich trick.
+     * Test (commutative) SolvableIdeal infinite quotient with Rabinowich trick.
      */
     public void testSolvableIdealInfiniteQuotientRabi() {
+        fac = new GenSolvablePolynomialRing<BigRational>(fac.coFac, rl, fac.tord, fac.getVars());
         SolvableIdeal<BigRational> I, J, K, JJ;
         a = fac.random(kl - 1, ll - 1, el - 1, q / 2);
         b = fac.random(kl - 1, ll - 1, el, q / 2);
@@ -598,9 +599,10 @@ public class SolvableIdealTest extends TestCase {
 
 
     /**
-     * Test SolvableIdeal radical membership.
+     * Test (commutative) SolvableIdeal radical membership.
      */
-    public void ztestSolvableIdealRadicalMember() {
+    public void testSolvableIdealRadicalMember() {
+        fac = new GenSolvablePolynomialRing<BigRational>(fac.coFac, rl, fac.tord, fac.getVars());
         SolvableIdeal<BigRational> I;
         a = fac.random(kl - 1, ll, el - 1, q);
         b = fac.random(kl - 1, ll, el, q);
@@ -620,9 +622,9 @@ public class SolvableIdealTest extends TestCase {
         //assertTrue("not isONE( I )", !I.isONE() );
         assertTrue("isGB( I )", I.isGB());
 
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
-        System.out.println("I = " + I);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+        //System.out.println("I = " + I);
 
         if (!I.isONE() && ! a.equals(b)) {
             assertFalse("a in radical(b)", I.isRadicalMember(a));

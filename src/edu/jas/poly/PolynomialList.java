@@ -379,7 +379,7 @@ public class PolynomialList<C extends RingElem<C>> implements Comparable<Polynom
      */
     public static <C extends RingElem<C>> List<GenPolynomial<C>> castToList(
                     List<? extends GenPolynomial<C>> slist) {
-        logger.warn("will lead to wrong method dispatch");
+        logger.debug("warn: can lead to wrong method dispatch");
         List<GenPolynomial<C>> list = null;
         if (slist == null) {
             return list;
@@ -402,7 +402,7 @@ public class PolynomialList<C extends RingElem<C>> implements Comparable<Polynom
      */
     public static <C extends RingElem<C>> List<List<GenPolynomial<C>>> castToMatrix(
                     List<List<? extends GenPolynomial<C>>> slist) {
-        logger.warn("will lead to wrong method dispatch");
+        logger.debug("warn: can lead to wrong method dispatch");
         List<List<GenPolynomial<C>>> list = null;
         if (slist == null) {
             return list;

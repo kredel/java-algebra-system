@@ -790,6 +790,9 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         if (this.isZERO()) {
             return this;
         }
+        if ( ! getRing().isCommutative() ) {
+            throw new UnsupportedOperationException("Rabinowich trick only for commutative polynomial rings");
+        }
         SolvableIdeal<C> I = this.GB(); // should be already
         List<GenSolvablePolynomial<C>> a = I.getList();
         List<GenSolvablePolynomial<C>> c;
@@ -905,7 +908,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         if (this.isZERO()) {
             return true;
         }
-        SolvableIdeal<C> x = infiniteQuotientRab(h);
+        SolvableIdeal<C> x = infiniteQuotientRab(h); // may fail
         if (debug) {
             logger.debug("infiniteQuotientRab = " + x);
         }
