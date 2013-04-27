@@ -2098,6 +2098,16 @@ Compute the sum of this and the ideal.
     end
 
 =begin rdoc
+Compute the univariate polynomials in each variable of this ideal.
+=end
+    def univariates()
+        s = Ideal.new(@pset);
+        ll = s.constructUnivariate();
+        nn = ll.map {|e| RingElem.new(e) };
+        return nn;
+    end
+
+=begin rdoc
 Optimize the term order on the variables.
 =end
     def optimize()
@@ -2747,7 +2757,7 @@ Constructor for an ideal in a solvable polynomial ring.
         else
            @list = rbarray2arraylist(list,rec=1);
         end
-        @pset = OrderedPolynomialList.new(ring.ring,@list);
+        @pset = PolynomialList.new(ring.ring,@list);
     end
 
 =begin rdoc
@@ -2836,11 +2846,21 @@ Test if this is a right Groebner base.
     end
 
 =begin rdoc
-Compute the intersection of this and the polynomial ring.
+Compute the intersection of this and a polynomial ring.
 =end
-    def intersect(ring)
+    def intersectRing(ring)
         s = SolvableIdeal.new(@pset);
         nn = s.intersect(ring.ring);
+        return SolvIdeal.new(@ring,"",nn.getList());
+    end
+
+=begin rdoc
+Compute the intersection of this and the other ideal.
+=end
+    def intersect(other)
+        s = SolvableIdeal.new(@pset);
+        t = SolvableIdeal.new(other.pset);
+        nn = s.intersect( t );
         return SolvIdeal.new(@ring,"",nn.getList());
     end
 
@@ -2851,7 +2871,17 @@ Compute the sum of this and the other ideal.
         s = SolvableIdeal.new(@pset);
         t = SolvableIdeal.new(other.pset);
         nn = s.sum( t );
-        return SolvableIdeal.new(@ring,"",nn.getList());
+        return SolvIdeal.new(@ring,"",nn.getList());
+    end
+
+=begin rdoc
+Compute the univariate polynomials in each variable of this twosided ideal.
+=end
+    def univariates()
+        s = SolvableIdeal.new(@pset);
+        ll = s.constructUnivariate();
+        nn = ll.map {|e| RingElem.new(e) };
+        return nn;
     end
 
 =begin rdoc

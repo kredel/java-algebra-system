@@ -713,6 +713,14 @@ class Ideal:
         N = s.sum( t );
         return Ideal(self.ring,"",N.getList());
 
+    def univariates(self):
+        '''Compute the univariate polynomials in each variable of this ideal.
+        '''
+        s = jas.application.Ideal(self.pset);
+        L = s.constructUnivariate();
+        N = [ RingElem(e) for e in L ];
+        return N;
+
     def optimize(self):
         '''Optimize the term order on the variables.
         '''
@@ -1244,11 +1252,19 @@ class SolvableIdeal:
         print "isRightGB executed in %s ms" % t; 
         return b;
 
-    def intersect(self,ring):
+    def intersectRing(self,ring):
         '''Compute the intersection of this and the polynomial ring.
         '''
         s = jas.application.SolvableIdeal(self.pset);
         N = s.intersect(ring.ring);
+        return SolvableIdeal(self.ring,"",N.getList());
+
+    def intersect(self,other):
+        '''Compute the intersection of this and the other ideal.
+        '''
+        s = jas.application.SolvableIdeal(self.pset);
+        t = jas.application.SolvableIdeal(other.pset);
+        N = s.intersect( t );
         return SolvableIdeal(self.ring,"",N.getList());
 
     def sum(self,other):
@@ -1258,6 +1274,14 @@ class SolvableIdeal:
         t = jas.application.SolvableIdeal(other.pset);
         N = s.sum( t );
         return SolvableIdeal(self.ring,"",N.getList());
+
+    def univariates(self):
+        '''Compute the univariate polynomials in each variable of this twosided ideal.
+        '''
+        s = jas.application.SolvableIdeal(self.pset);
+        L = s.constructUnivariate();
+        N = [ RingElem(e) for e in L ];
+        return N;
 
     def parLeftGB(self,th):
         '''Compute a left Groebner base in parallel.

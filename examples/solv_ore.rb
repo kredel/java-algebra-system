@@ -39,21 +39,35 @@ puts;
 
 
 rgl = ii.leftGB();
-puts "seq left GB:" + str(rgl);
+puts "seq left GB: " + str(rgl);
 puts "isLeftGB: " + str(rgl.isLeftGB());
 puts;
 
 rgr = ii.rightGB();
-puts "seq right GB:" + str(rgr);
+puts "seq right GB: " + str(rgr);
 puts "isRightGB: " + str(rgr.isRightGB());
 puts;
 
-startLog();
+#startLog();
 
 rgt = ii.twosidedGB();
-puts "seq twosided GB:" + str(rgt);
+puts "seq twosided GB: " + str(rgt);
 puts "isTwosidedGB: " + str(rgt.isTwosidedGB());
 puts;
+
+
+#startLog();
+
+rgi = rgl.intersect(rgt);
+puts "leftGB intersect twosidedGB: " + str(rgi);
+puts;
+
+#startLog();
+
+rgtu = rgt.univariates();
+puts "univariate polynomials for twosidedGB: " + rgtu.join(", ");
+puts;
+
 
 #terminate();
 

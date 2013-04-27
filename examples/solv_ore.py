@@ -58,5 +58,11 @@ print "seq twosided GB:" + str(rgt);
 print "isTwosidedGB: " + str(rgt.isTwosidedGB());
 print;
 
+startLog();
+
+rgi = rgl.intersect(rgt);
+print "leftGB intersect twosidedGB:" + str(rgi);
+print;
+
 #exit(0);
 
