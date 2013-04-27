@@ -592,7 +592,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
             GenSolvablePolynomial<GenPolynomial<C>> XPp = PolyUtil.<C> toRecursive(rfac, XP);
             GenSolvablePolynomial<GenPolynomial<C>> XPs = (GenSolvablePolynomial<GenPolynomial<C>>) XPp.sum(P);
             ls = new ArrayList<GenPolynomial<C>>(XPs.getMap().values());
-            System.out.println("ls,1 = " + ls);
+            //System.out.println("ls,1 = " + ls);
             ls = red.irreducibleSet(ls);
             z = bbc.commonZeroTest(ls);
             if (z != 0) {

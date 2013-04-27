@@ -187,13 +187,24 @@ public class PolynomialList<C extends RingElem<C> >
      */
     public String toScript() {
         StringBuffer s = new StringBuffer();
-        switch (Scripting.getLang() ) {
-        case Ruby:
-            s.append("SimIdeal.new(");
-            break;
-        case Python:
-        default:
-            s.append("Ideal(");
+        if ( ring instanceof GenSolvablePolynomialRing ) {
+            switch (Scripting.getLang() ) {
+            case Ruby:
+                s.append("SolvIdeal.new(");
+                break;
+            case Python:
+            default:
+                s.append("SolvableIdeal(");
+            }
+        } else {
+            switch (Scripting.getLang() ) {
+            case Ruby:
+                s.append("SimIdeal.new(");
+                break;
+            case Python:
+            default:
+                s.append("Ideal(");
+            }
         }
         if ( ring != null ) {
             s.append( ring.toScript() );
