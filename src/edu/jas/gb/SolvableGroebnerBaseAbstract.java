@@ -69,6 +69,12 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
 
 
     /**
+     * Commutative Groebner bases engine.
+     */
+    public final GroebnerBaseAbstract<C> cbb;
+
+
+    /**
      * Constructor.
      */
     public SolvableGroebnerBaseAbstract() {
@@ -95,6 +101,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
         this.sred = sred;
         this.strategy = pl;
         blas = new BasicLinAlg<GenPolynomial<C>>();
+        cbb = new GroebnerBaseSeq<C>();
     }
 
 
@@ -104,7 +111,33 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
      * @return true, if F is a left Groebner base, else false.
      */
     public boolean isLeftGB(List<GenSolvablePolynomial<C>> F) {  
-        return isLeftGB(0,F);
+        return isLeftGB(0,F,true);
+    }
+
+
+    /**
+     * Left Groebner base test.
+     * @param F solvable polynomial list.
+     * @param b true for simple test, false for GB test.
+     * @return true, if F is a Groebner base, else false.
+     */
+    public boolean isLeftGB(List<GenSolvablePolynomial<C>> F, boolean b) {  
+        return isLeftGB(0,F,b);
+    }
+
+
+    /**
+     * Left Groebner base test.
+     * @param modv module variable number.
+     * @param F solvable polynomial list.
+     * @param b true for simple test, false for GB test.
+     * @return true, if F is a Groebner base, else false.
+     */
+    public boolean isLeftGB(int modv, List<GenSolvablePolynomial<C>> F, boolean b) {  
+        if ( b ) {
+            return isLeftGBsimple(modv,F);
+        }
+        return isLeftGBidem(modv,F);
     }
 
 
@@ -114,8 +147,8 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
      * @param F solvable polynomial list.
      * @return true, if F is a left Groebner base, else false.
      */
-    public boolean isLeftGB(int modv, 
-                            List<GenSolvablePolynomial<C>> F) {  
+    public boolean isLeftGBsimple(int modv, 
+                                  List<GenSolvablePolynomial<C>> F) {  
         GenSolvablePolynomial<C> pi, pj, s, h;
         for ( int i = 0; i < F.size(); i++ ) {
             pi = F.get(i);
@@ -136,6 +169,24 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
             }
         }
         return true;
+    }
+
+
+    /**
+     * Left Groebner base idempotence test.
+     * @param modv module variable number.
+     * @param F solvable polynomial list.
+     * @return true, if F is equal to GB(F), else false.
+     */
+    public boolean isLeftGBidem(int modv, List<GenSolvablePolynomial<C>> F) {  
+        if ( F == null || F.isEmpty() ) {
+           return true;
+        }
+        GenSolvablePolynomialRing<C> pring = F.get(0).ring;
+        List<GenSolvablePolynomial<C>> G = leftGB(modv,F);
+        PolynomialList<C> Fp = new PolynomialList<C>(pring,F);
+        PolynomialList<C> Gp = new PolynomialList<C>(pring,G);
+        return Fp.compareTo(Gp) == 0;
     }
 
 
@@ -203,6 +254,34 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
 
 
     /**
+     * Twosided Groebner base idempotence test.
+     * @param F solvable polynomial list.
+     * @return true, if F is equal to GB(F), else false.
+     */
+    public boolean isTwosidedGBidem(List<GenSolvablePolynomial<C>> F) {  
+        return isTwosidedGBidem(0,F);
+    }
+
+
+    /**
+     * Twosided Groebner base idempotence test.
+     * @param modv module variable number.
+     * @param F solvable polynomial list.
+     * @return true, if F is equal to GB(F), else false.
+     */
+    public boolean isTwosidedGBidem(int modv, List<GenSolvablePolynomial<C>> F) {  
+        if ( F == null || F.isEmpty() ) {
+           return true;
+        }
+        GenSolvablePolynomialRing<C> pring = F.get(0).ring;
+        List<GenSolvablePolynomial<C>> G = twosidedGB(modv,F);
+        PolynomialList<C> Fp = new PolynomialList<C>(pring,F);
+        PolynomialList<C> Gp = new PolynomialList<C>(pring,G);
+        return Fp.compareTo(Gp) == 0;
+    }
+
+
+    /**
      * Right Groebner base test.
      * @param F solvable polynomial list.
      * @return true, if F is a right Groebner base, else false.
@@ -246,6 +325,34 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
             }
         }
         return true;
+    }
+
+
+    /**
+     * Right Groebner base idempotence test.
+     * @param F solvable polynomial list.
+     * @return true, if F is equal to GB(F), else false.
+     */
+    public boolean isRightGBidem(List<GenSolvablePolynomial<C>> F) {  
+        return isRightGBidem(0,F);
+    }
+
+
+    /**
+     * Right Groebner base idempotence test.
+     * @param modv module variable number.
+     * @param F solvable polynomial list.
+     * @return true, if F is equal to GB(F), else false.
+     */
+    public boolean isRightGBidem(int modv, List<GenSolvablePolynomial<C>> F) {  
+        if ( F == null || F.isEmpty() ) {
+           return true;
+        }
+        GenSolvablePolynomialRing<C> pring = F.get(0).ring;
+        List<GenSolvablePolynomial<C>> G = rightGB(modv,F);
+        PolynomialList<C> Fp = new PolynomialList<C>(pring,F);
+        PolynomialList<C> Gp = new PolynomialList<C>(pring,G);
+        return Fp.compareTo(Gp) == 0;
     }
 
 
@@ -484,44 +591,23 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
 
 
     /**
+     * Ideal common zero test.
+     * @return -1, 0 or 1 if dimension(this) &eq; -1, 0 or &ge; 1.
+     */
+    public int commonZeroTest(List<GenSolvablePolynomial<C>> A) {
+        List<GenPolynomial<C>> cA = PolynomialList.<C> castToList(A);
+        return cbb.commonZeroTest(cA);
+    }
+
+
+    /**
      * Univariate head term degrees.
      * @param A list of solvable polynomials.
      * @return a list of the degrees of univariate head terms.
      */
     public List<Long> univariateDegrees(List<GenSolvablePolynomial<C>> A) {
-        List<Long> ud = new ArrayList<Long>();
-        if ( A == null || A.size() == 0 ) {
-            return ud;
-        }
-        GenSolvablePolynomialRing<C> pfac = A.get(0).ring;
-        if ( pfac.nvar <= 0) {
-            return ud;
-        }
-        //int uht = 0;
-        Map<Integer, Long> v = new TreeMap<Integer, Long>(); // for non reduced GBs
-        for (GenSolvablePolynomial<C> p : A) {
-            ExpVector e = p.leadingExpVector();
-            if (e == null) {
-                continue;
-            }
-            int[] u = e.dependencyOnVariables();
-            if (u == null) {
-                continue;
-            }
-            if (u.length == 1) {
-                //uht++;
-                Long d = v.get(u[0]);
-                if (d == null) {
-                    v.put(u[0], e.getVal(u[0]));
-                }
-            }
-        }
-        for (int i = 0; i < pfac.nvar; i++) {
-            Long d = v.get(i);
-            ud.add(d);
-        }
-        //Collections.reverse(ud);
-        return ud;
+        List<GenPolynomial<C>> cA = PolynomialList.<C> castToList(A);
+        return cbb.univariateDegrees(cA);
     }
 
 
@@ -561,7 +647,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
 
         GenPolynomialRing<C> cpfac = new GenPolynomialRing<C>(cfac, ll, new TermOrder(TermOrder.INVLEX));
         GenSolvablePolynomialRing<GenPolynomial<C>> 
-	    rfac = new GenSolvablePolynomialRing<GenPolynomial<C>>(cpfac, pfac); // relations
+            rfac = new GenSolvablePolynomialRing<GenPolynomial<C>>(cpfac, pfac); // relations
         GenSolvablePolynomial<GenPolynomial<C>> P = rfac.getZERO();
         for (int k = 0; k < ll; k++) {
             GenSolvablePolynomial<GenPolynomial<C>> Pp = rfac.univariate(i, k);
@@ -655,6 +741,24 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>>
             univs.add(u);
         }
         return univs;
+    }
+
+
+    /**
+     * Cleanup and terminate ThreadPool.
+     */
+    public void terminate() {
+        logger.info("terminate not implemented");
+        //throw new RuntimeException("get a stack trace");
+    }
+
+
+    /**
+     * Cancel ThreadPool.
+     */
+    public int cancel() {
+        logger.info("cancel not implemented");
+        return 0;
     }
 
 }
