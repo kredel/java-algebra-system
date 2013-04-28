@@ -96,7 +96,7 @@ public class SolvableSyzygyTest extends TestCase {
     SolvableGroebnerBase<BigRational> sbb;
     ModSolvableGroebnerBase<BigRational> msbb;
 
-    SolvableSyzygy<BigRational> ssz;
+    SolvableSyzygyAbstract<BigRational> ssz;
 
     int rl = 4; //4; //3; 
     int kl = 5;
@@ -452,6 +452,39 @@ public class SolvableSyzygyTest extends TestCase {
         //boolean b = ssz.isLeftZeroRelation(Z,N);
         //System.out.println("boolean = " + b);
         assertTrue("is ZR( { a,b,c } )", ssz.isLeftZeroRelation(Z,M) );
+    }
+
+
+    /**
+     * Test Ore conditions.
+     */
+    public void testOreConditions() {
+        do {
+            a = fac.random(kl, ll-1, el, q);
+            b = fac.random(kl, ll-1, el, q);
+        } while ( a.isZERO() || b.isZERO() );
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+        //SolvableIdeal<BigRational> I = new SolvableIdeal<BigRational>(fac);
+        GenSolvablePolynomial<BigRational>[] oc = ssz.leftOreCond(a,b);
+        //System.out.println("oc[0] = " + oc[0]);
+        //System.out.println("oc[1] = " + oc[1]);
+        c = oc[0].multiply(a);
+        d = oc[1].multiply(b);
+        //System.out.println("c = " + c);
+        //System.out.println("d = " + d);
+        assertEquals("c_0 * a = c_1 * b: ", c, d);
+        assertTrue("left Ore condition: ", ssz.isLeftOreCond(a,b,oc));
+
+        oc = ssz.rightOreCond(a,b);
+        //System.out.println("oc[0] = " + oc[0]);
+        //System.out.println("oc[1] = " + oc[1]);
+        c = a.multiply(oc[0]);
+        d = b.multiply(oc[1]);
+        //System.out.println("c = " + c);
+        //System.out.println("d = " + d);
+        assertEquals("a * c_0 = b * c_1: ", c, d);
+        assertTrue("left Ore condition: ", ssz.isRightOreCond(a,b,oc));
     }
 
 }
