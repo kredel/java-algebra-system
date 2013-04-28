@@ -1191,7 +1191,7 @@ Iterable<Monomial<C>> {
         assert (ring.nvar == S.ring.nvar);
         if (this instanceof GenSolvablePolynomial || S instanceof GenSolvablePolynomial) {
             //throw new RuntimeException("wrong method dispatch in JRE ");
-            logger.warn("wrong method dispatch in JRE multiply(S) - trying to fix");
+            logger.debug("warn: wrong method dispatch in JRE multiply(S) - trying to fix");
             GenSolvablePolynomial<C> T = (GenSolvablePolynomial<C>) this;
             GenSolvablePolynomial<C> Sp = (GenSolvablePolynomial<C>) S;
             return T.multiply(Sp);
@@ -1292,7 +1292,7 @@ Iterable<Monomial<C>> {
         }
         if (this instanceof GenSolvablePolynomial) {
             //throw new RuntimeException("wrong method dispatch in JRE ");
-            logger.warn("wrong method dispatch in JRE multiply(s,e) - trying to fix");
+            logger.debug("warn: wrong method dispatch in JRE multiply(s,e) - trying to fix");
             GenSolvablePolynomial<C> T = (GenSolvablePolynomial<C>) this;
             return T.multiply(s, e);
         }
@@ -1323,7 +1323,7 @@ Iterable<Monomial<C>> {
         }
         if (this instanceof GenSolvablePolynomial) {
             //throw new RuntimeException("wrong method dispatch in JRE ");
-            logger.warn("wrong method dispatch in JRE multiply(e) - trying to fix");
+            logger.debug("warn: wrong method dispatch in JRE multiply(e) - trying to fix");
             GenSolvablePolynomial<C> T = (GenSolvablePolynomial<C>) this;
             return T.multiply(e);
         }
