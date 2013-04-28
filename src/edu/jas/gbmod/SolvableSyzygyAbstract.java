@@ -755,11 +755,22 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>> implements SolvableSy
         if ( Gz.size() < 0 ) {
             System.out.println("Gz = " + Gz);
         }
-        int i = 0;
-        while ( Gz.get(i).get(0).isZERO() ) {
-            i++;
+        List<GenSolvablePolynomial<C>> G1 = null;
+        GenSolvablePolynomial<C> g1 = null;
+        for (List<GenSolvablePolynomial<C>> Gi : Gz ) {
+	    if ( Gi.get(0).isZERO() ) {
+                continue;
+            }
+            if ( G1 == null ) {
+                G1 = Gi;
+            }
+            if ( g1 == null ) {
+                g1 = G1.get(0);
+            } else if ( g1.compareTo(Gi.get(0)) > 0 ) {
+                G1 = Gi;
+                g1 = G1.get(0);
+            }
         }
-        List<GenSolvablePolynomial<C>> G1 = Gz.get(i);
         oc[0] = G1.get(0);
         oc[1] = (GenSolvablePolynomial<C>) G1.get(1).negate();
         return oc;
@@ -794,11 +805,22 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>> implements SolvableSy
         List<GenSolvablePolynomial<C>> F = new ArrayList<GenSolvablePolynomial<C>>(2);
         F.add(a); F.add(b);
         List<List<GenSolvablePolynomial<C>>> Gz = rightZeroRelationsArbitrary(F);
-        int i = 0;
-        while ( Gz.get(i).get(0).isZERO() ) {
-            i++;
+        List<GenSolvablePolynomial<C>> G1 = null;
+        GenSolvablePolynomial<C> g1 = null;
+        for (List<GenSolvablePolynomial<C>> Gi : Gz ) {
+	    if ( Gi.get(0).isZERO() ) {
+                continue;
+            }
+            if ( G1 == null ) {
+                G1 = Gi;
+            }
+            if ( g1 == null ) {
+                g1 = G1.get(0);
+            } else if ( g1.compareTo(Gi.get(0)) > 0 ) {
+                G1 = Gi;
+                g1 = G1.get(0);
+            }
         }
-        List<GenSolvablePolynomial<C>> G1 = Gz.get(i);
         oc[0] = G1.get(0);
         oc[1] = (GenSolvablePolynomial<C>) G1.get(1).negate();
         return oc;

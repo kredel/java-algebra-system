@@ -84,7 +84,9 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
      * @param d denominator polynomial.
      * @param isred true if gcd(n,d) == 1, else false.
      */
-    protected SolvableQuotient(SolvableQuotientRing<C> r, GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d, boolean isred) {
+    protected SolvableQuotient(SolvableQuotientRing<C> r, 
+                               GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d, 
+                               boolean isred) {
         if (d == null || d.isZERO()) {
             throw new IllegalArgumentException("denominator may not be zero");
         }
@@ -102,7 +104,7 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
             n = n.multiply(lc);
             d = d.multiply(lc);
         }
-        if ( n.equals(d) ) {
+        if ( n.compareTo(d) == 0 ) {
             n = ring.ring.getONE();
             d = ring.ring.getONE();
 	}
@@ -239,8 +241,8 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
         if (t != 0) {
             return t;
         }
-        if ( den.equals(b.den) && num.equals(b.num) ) {
-            return 0;
+        if ( den.compareTo(b.den) == 0 ) {
+            return num.compareTo(b.num);
         }
         //System.out.println("a = " + this);
         //System.out.println("b = " + b);
@@ -323,12 +325,19 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
         if (den.isONE()) {
             n = S.den.multiply(num);
             n = (GenSolvablePolynomial<C>) n.sum(S.num);
-            return new SolvableQuotient<C>(ring, n, S.den, true);
+            return new SolvableQuotient<C>(ring, n, S.den, false);
         }
         if (S.den.isONE()) {
             n = den.multiply(S.num);
             n = (GenSolvablePolynomial<C>) n.sum(num);
-            return new SolvableQuotient<C>(ring, n, den, true);
+            return new SolvableQuotient<C>(ring, n, den, false);
+        }
+        if ( den.compareTo(S.den) == 0 ) { // correct ?
+            //d = den.multiply(den);
+            //n1 = den.multiply(S.num);
+            //n2 = S.den.multiply(num);
+            n = (GenSolvablePolynomial<C>) num.sum(S.num);
+            return new SolvableQuotient<C>(ring, n, den, false);
         }
         // general case
         GenSolvablePolynomial<C>[] oc = ring.engine.leftOreCond(den,S.den);
@@ -442,6 +451,11 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
             n = num.multiply(S.num);
             return new SolvableQuotient<C>(ring, n, d, true);
         }
+        // if ( den.compareTo(S.den) == 0 ) { // correct ?
+        //     d = den.multiply(den);
+        //     n = num.multiply(S.num);
+        //     return new SolvableQuotient<C>(ring, n, d, false);
+        // }
         GenSolvablePolynomial<C>[] oc = ring.engine.leftOreCond(num,S.den);
         n = oc[1].multiply(S.num);
         d = oc[0].multiply(den);
@@ -464,8 +478,10 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
         if (b.isONE()) {
             return this;
         }
-        SolvableQuotient<C> bb = new SolvableQuotient<C>(ring, b);
-        return multiply(bb);
+        GenSolvablePolynomial<C> n = num.multiply(b);
+        return new SolvableQuotient<C>(ring, n, den, false);
+        //SolvableQuotient<C> bb = new SolvableQuotient<C>(ring, b);
+        //return multiply(bb);
     }
 
 
@@ -484,9 +500,11 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
         if (b.isONE()) {
             return this;
         }
-        GenSolvablePolynomial<C> n = (GenSolvablePolynomial<C>) num.multiply(b);
-        SolvableQuotient<C> bb = new SolvableQuotient<C>(ring, n);
-        return multiply(bb);
+        GenSolvablePolynomial<C> n = num.multiply(b);
+        return new SolvableQuotient<C>(ring, n, den, false);
+        //wrong: GenSolvablePolynomial<C> n = (GenSolvablePolynomial<C>) num.multiply(b);
+        //SolvableQuotient<C> bb = new SolvableQuotient<C>(ring, n);
+        //return multiply(bb);
     }
 
 

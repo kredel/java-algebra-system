@@ -73,9 +73,9 @@ public class SolvableQuotientTest extends TestCase {
 
     int rl = 4; 
     int kl = 3;
-    int ll = 4; //6;
+    int ll = 3; //6;
     int el = 2;
-    float q = 0.3f;
+    float q = 0.2f;
 
     protected void setUp() {
         a = b = c = d = e = null;
@@ -184,8 +184,8 @@ public class SolvableQuotientTest extends TestCase {
      * 
      */
     public void testMultiplication() {
-        a = efac.random(kl,ll-1,el,q/2);
-        b = efac.random(kl,ll-1,el,q/2);
+        a = efac.random(kl,ll,el,q);
+        b = efac.random(kl,ll,el,q);
         System.out.println("a = " + a);
         System.out.println("b = " + b);
 
@@ -297,7 +297,6 @@ public class SolvableQuotientTest extends TestCase {
      */
     public void testParse() {
         a = efac.random(kl*2,ll*2,el*2,q*2);
-
         //PrettyPrint.setInternal();
         //System.out.println("a = " + a);
         PrettyPrint.setPretty();
