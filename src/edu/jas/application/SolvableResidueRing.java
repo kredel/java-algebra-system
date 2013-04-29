@@ -173,7 +173,7 @@ public class SolvableResidueRing<C extends GcdRingElem<C>> implements RingFactor
      * @return true if this ring is associative, else false.
      */
     public boolean isAssociative() {
-        return ring.isAssociative();
+        return ring.isAssociative(); // sufficient ??
     }
 
 

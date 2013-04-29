@@ -75,6 +75,9 @@ public class SolvableResidueTest extends TestCase {
         mfac = new GenSolvablePolynomialRing<BigRational>( new BigRational(1), rl, to, vars );
         WeylRelations<BigRational> wl = new WeylRelations<BigRational>(mfac);
         wl.generate();
+        if (!mfac.isAssociative() ) {
+           System.out.println("ring not associative: " + mfac);
+        }
         do {
 	    F = new ArrayList<GenSolvablePolynomial<BigRational>>( il );
 	    for ( int i = 0; i < il; i++ ) {
@@ -230,7 +233,7 @@ public class SolvableResidueTest extends TestCase {
                  System.out.println("c = " + c);
                  d = c.multiply(a);
                  System.out.println("d = " + d);
-                 assertTrue("a*1/a = 1",d.isONE()); 
+                 assertTrue("a*1/a = 1: " + fac,d.isONE()); 
             } catch (NotInvertibleException e) {
 		// can happen
             }
