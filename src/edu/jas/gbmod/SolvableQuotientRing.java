@@ -61,8 +61,8 @@ public class SolvableQuotientRing<C extends GcdRingElem<C>> implements RingFacto
 
     /**
      * Least common multiple. 
-     * @param n first polynomial.
-     * @param d second polynomial.
+     * @param n first solvable polynomial.
+     * @param d second solvable polynomial.
      * @return lcm(n,d)
      */
     protected GenSolvablePolynomial<C> syzLcm(GenSolvablePolynomial<C> n, 
@@ -82,31 +82,38 @@ public class SolvableQuotientRing<C extends GcdRingElem<C>> implements RingFacto
     }
 
 
-    /*
+    /**
      * Greatest common divisor. 
-     * @param n first polynomial.
-     * @param d second polynomial.
+     * @param n first solvable polynomial.
+     * @param d second solvable polynomial.
      * @return gcd(n,d)
      */
-    // protected GenSolvablePolynomial<C> syzGcd(GenSolvablePolynomial<C> n, 
-    //                                           GenSolvablePolynomial<C> d) {
-    //     if (n.isZERO()) {
-    //         return d;
-    //     }
-    //     if (d.isZERO()) {
-    //         return n;
-    //     }
-    //     if (n.isONE()) {
-    //         return n;
-    //     }
-    //     if (d.isONE()) {
-    //         return d;
-    //     }
-    //     GenSolvablePolynomial<C> p = n.multiply(d);
-    //     GenSolvablePolynomial<C> lcm = syzLcm(n, d);
-    //     GenSolvablePolynomial<C> gcd = divide(p, lcm);
-    //     return gcd;
-    // }
+    protected GenSolvablePolynomial<C> syzGcd(GenSolvablePolynomial<C> n, 
+                                              GenSolvablePolynomial<C> d) {
+        if (n.isZERO()) {
+            return d;
+        }
+        if (d.isZERO()) {
+            return n;
+        }
+        if (n.isONE()) {
+            return n;
+        }
+        if (d.isONE()) {
+            return d;
+        }
+        GenSolvablePolynomial<C> p = n.multiply(d);
+        GenSolvablePolynomial<C> lcm = syzLcm(n, d);
+        // divide
+        List<GenSolvablePolynomial<C>> Q = new ArrayList<GenSolvablePolynomial<C>>(1);
+        Q.add(ring.getZERO());
+        List<GenSolvablePolynomial<C>> V = new ArrayList<GenSolvablePolynomial<C>>(1);
+        V.add(lcm);
+        GenSolvablePolynomial<C> x = engine.sred.leftNormalform(Q,V, p);
+        GenSolvablePolynomial<C> y = Q.get(0);
+        // GenSolvablePolynomial<C> gcd = divide(p, lcm);
+        return y;
+    }
 
 
     /**
