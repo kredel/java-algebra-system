@@ -1076,16 +1076,21 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
             }
         }
         if (one == null) {
-            throw new NotInvertibleException(" h = " + h);
+            throw new NotInvertibleException("h = " + h);
         }
         List<GenSolvablePolynomial<C>> row = x.G2F.get(i); // != -1
+        //System.out.println("row = " + row);
         GenSolvablePolynomial<C> g = row.get(0);
         if (g == null || g.isZERO()) {
             throw new NotInvertibleException(" h = " + h);
         }
+        //System.out.println("g = " + g);
+        //System.out.println("h = " + h);
         // adjust leading coefficient of g to get g*h == 1
         GenSolvablePolynomial<C> f = g.multiply(h);
+        //System.out.println("f = " + f);
         GenSolvablePolynomial<C> k = red.leftNormalform(getList(), f);
+        //System.out.println("k = " + k);
         if (!k.isONE()) {
             C lbc = k.leadingBaseCoefficient();
             lbc = lbc.inverse();

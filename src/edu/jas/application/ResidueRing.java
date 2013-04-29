@@ -138,6 +138,12 @@ public class ResidueRing<C extends GcdRingElem<C> >
         List<Residue<C>> gens = new ArrayList<Residue<C>>( pgens.size() );
         for ( GenPolynomial<C> p : pgens ) {
             Residue<C> r = new Residue<C>( this, p );
+            if ( r.isZERO() ) {
+                continue;
+            }
+            if ( !r.isONE() && r.val.isConstant() ) {
+                continue;
+            }
             gens.add(r);
         }
         return gens;
