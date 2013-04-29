@@ -698,7 +698,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>> implements SolvableSy
      * Test left Ore condition. 
      * @param a solvable polynomial
      * @param b solvable polynomial
-     * @param [p,q] two solvable polynomials
+     * @param oc = [p,q] two solvable polynomials
      * @return true if p*a = q*b, else false
      */
     public boolean isLeftOreCond(GenSolvablePolynomial<C> a, GenSolvablePolynomial<C> b, 
@@ -713,7 +713,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>> implements SolvableSy
      * Test right Ore condition. 
      * @param a solvable polynomial
      * @param b solvable polynomial
-     * @param [p,q] two solvable polynomials
+     * @param oc = [p,q] two solvable polynomials
      * @return true if a*p = b*q, else false
      */
     public boolean isRightOreCond(GenSolvablePolynomial<C> a, GenSolvablePolynomial<C> b, 
