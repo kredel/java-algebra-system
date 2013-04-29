@@ -1083,7 +1083,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         if (g == null || g.isZERO()) {
             throw new NotInvertibleException(" h = " + h);
         }
-        // adjust g to get g*h == 1
+        // adjust leading coefficient of g to get g*h == 1
         GenSolvablePolynomial<C> f = g.multiply(h);
         GenSolvablePolynomial<C> k = red.leftNormalform(getList(), f);
         if (!k.isONE()) {

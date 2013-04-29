@@ -40,7 +40,7 @@ public class Residue<C extends GcdRingElem<C>> implements GcdRingElem<Residue<C>
 
     /**
      * The constructor creates a Residue object from a ring factory.
-     * @param r ring factory.
+     * @param r residue ring factory.
      */
     public Residue(ResidueRing<C> r) {
         this(r, r.ring.getZERO(), 0);
@@ -50,8 +50,8 @@ public class Residue<C extends GcdRingElem<C>> implements GcdRingElem<Residue<C>
     /**
      * The constructor creates a Residue object from a ring factory and a
      * polynomial.
-     * @param r ring factory.
-     * @param a polynomial list.
+     * @param r residue ring factory.
+     * @param a polynomial.
      */
     public Residue(ResidueRing<C> r, GenPolynomial<C> a) {
         this(r, a, -1);
@@ -61,8 +61,8 @@ public class Residue<C extends GcdRingElem<C>> implements GcdRingElem<Residue<C>
     /**
      * The constructor creates a Residue object from a ring factory, a
      * polynomial and an indicator if a is a unit.
-     * @param r ring factory.
-     * @param a polynomial list.
+     * @param r residue ring factory.
+     * @param a polynomial.
      * @param u isunit indicator, -1, 0, 1.
      */
     public Residue(ResidueRing<C> r, GenPolynomial<C> a, int u) {

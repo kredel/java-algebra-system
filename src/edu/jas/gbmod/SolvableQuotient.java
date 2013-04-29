@@ -510,6 +510,7 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
 
     /**
      * SolvableQuotient monic.
+     * <b>Note:</b> breaks the monic denominator, do not use.
      * @return this with monic value part.
      */
     public SolvableQuotient<C> monic() {
