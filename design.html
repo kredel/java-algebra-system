@@ -305,7 +305,19 @@ of the implemented algebraic algorithms.
 <td><code>QuotientRing</code></td>
 <td>ring of rational functions, 
     i.e. fractions of multivariate polynomials
-    over any implemented unique factorization coefficient domains
+    over any implemented commutative unique factorization coefficient domain
+</td>
+<td>arithmetic
+</td>
+</tr>
+
+<tr>
+<td><code>SolvableQuotient</code></td>
+<td><code>SolvableQuotientRing</code></td>
+<td>ring of rational functions, 
+    i.e. fractions of multivariate solvable polynomials
+    (satisfying the left-, right-Ore condition)
+    over some implemented coefficient domains
 </td>
 <td>arithmetic
 </td>
@@ -315,7 +327,17 @@ of the implemented algebraic algorithms.
 <td><code>Residue</code></td>
 <td><code>ResidueRing</code></td>
 <td>ring of polynomials modulo a given polynomial ideal,
-    over any implemented coefficient ring
+    over any implemented commutative coefficient ring
+</td>
+<td>arithmetic
+</td>
+</tr>
+
+<tr>
+<td><code>SolvableResidue</code></td>
+<td><code>SolvableResidueRing</code></td>
+<td>ring of polynomials modulo a given polynomial ideal,
+    over some implemented coefficient domains
 </td>
 <td>arithmetic
 </td>
@@ -325,7 +347,7 @@ of the implemented algebraic algorithms.
 <td><code>Local</code></td>
 <td><code>LocalRing</code></td>
 <td>ring of polynomials fractions localized with respect to a given polynomial ideal,
-    over any implemented coefficient ring
+    over any implemented commutative coefficient ring
 </td>
 <td>arithmetic
 </td>
@@ -422,7 +444,7 @@ of the implemented algebraic algorithms.
 <p>
 "Arithmetic" means implementation of the methods 
 defined in the interface <code>RingElem</code>.
-As of 2012-09 there are 23 rings implemented. To be continued.
+As of 2013-04 there are 25 rings implemented. To be continued.
 </p>
 
 
@@ -650,6 +672,7 @@ implemented algebraic algorithms.
 <td>leftZeroRelations, rightZeroRelations, 
     isLeftZeroRelation, isRightZeroRelation, 
     (left) resolution, zeroRelationsArbitrary,
+    leftOreCond, rightOreCont(ition),
     left, right, two-sided GB, isGB
 </td>
 </tr>
@@ -668,7 +691,6 @@ implemented algebraic algorithms.
 </td>
 </tr>
 
-
 <tr>
 <td><code>Ideal</code>
 </td>
@@ -677,7 +699,8 @@ implemented algebraic algorithms.
     Coefficients of polynomials must be from a field.
     Prime, primary, irreducible and radical decomposition of zero dimensional ideals.
     Prime, primary, irreducible and radical decomposition of non-zero dimensional ideals.
-    Extension and contraction ideals.
+    Univariate polynomials of minimal degree in ideal as well as
+    elimination, extension and contraction ideals.
 </td>
 <td>sum, product, intersect, contains,
     quotient, infiniteQuotient, inverse modulo ideal, 
@@ -686,6 +709,19 @@ implemented algebraic algorithms.
     zeroDimRootDecomposition,
     radicalDecomposition, primeDecomposition, decomposition,
     primaryDecomposition
+</td>
+</tr>
+
+<tr>
+<td><code>SolvableIdeal</code>
+</td>
+<td>Algorithms to compute sums, products, intersections, containment 
+    and (infinite) quotients of solvable polynomial ideals.
+    Coefficients of solvable polynomials must be from a field.
+</td>
+<td>sum, product, intersect, contains,
+    quotient, infiniteQuotient, inverse modulo ideal,
+    univariate polynomials of minimal degree in ideal
 </td>
 </tr>
 
@@ -1302,7 +1338,7 @@ of the Java algebra system.
 <p>
 <!-- Created: Sat Mar 11 10:51:36 CET 2006 -->
 <!-- hhmts start -->
-Last modified: Sun Sep  9 20:21:26 CEST 2012
+Last modified: Mon Apr 29 20:39:43 CEST 2013
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
