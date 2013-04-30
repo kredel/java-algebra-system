@@ -114,7 +114,6 @@ public class SolvableResidue<C extends GcdRingElem<C>> implements GcdRingElem<So
      * @see edu.jas.structure.RingElem#isZERO()
      */
     public boolean isZERO() {
-        // ??return val.equals( ring.ring.getZERO() );
         return val.isZERO();
     }
 
@@ -125,7 +124,6 @@ public class SolvableResidue<C extends GcdRingElem<C>> implements GcdRingElem<So
      * @see edu.jas.structure.RingElem#isONE()
      */
     public boolean isONE() {
-        // ?? return val.equals( ring.ring.getONE() );
         return val.isONE();
     }
 
@@ -145,7 +143,7 @@ public class SolvableResidue<C extends GcdRingElem<C>> implements GcdRingElem<So
         // not jet known
         boolean u = ring.ideal.isUnit(val);
         if (u) {
-            isunit = 1; // seems to be wrong
+            isunit = 1; // seems to be wrong for solvable polynomial rings
         } else {
             isunit = 0;
         }
@@ -180,7 +178,7 @@ public class SolvableResidue<C extends GcdRingElem<C>> implements GcdRingElem<So
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
      */
-    //JAVA6only: @Override
+    @Override
     public String toScript() {
         // Python case
         return val.toScript();
@@ -194,7 +192,7 @@ public class SolvableResidue<C extends GcdRingElem<C>> implements GcdRingElem<So
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.Element#toScriptFactory()
      */
-    //JAVA6only: @Override
+    @Override
     public String toScriptFactory() {
         // Python case
         return factory().toScript();
@@ -207,7 +205,7 @@ public class SolvableResidue<C extends GcdRingElem<C>> implements GcdRingElem<So
      * @return sign(this-b), 0 means that this and b are equivalent in this
      *         residue class ring.
      */
-    //JAVA6only: @Override
+    @Override
     public int compareTo(SolvableResidue<C> b) {
         GenSolvablePolynomial<C> v = b.val;
         if (!ring.equals(b.ring)) {
@@ -237,12 +235,12 @@ public class SolvableResidue<C extends GcdRingElem<C>> implements GcdRingElem<So
         if (a == null) {
             return false;
         }
-        return 0 == compareTo(a);
+        return compareTo(a) == 0;
     }
 
 
     /**
-     * Hash code for this local.
+     * Hash code for this residue.
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -383,7 +381,7 @@ public class SolvableResidue<C extends GcdRingElem<C>> implements GcdRingElem<So
      * @return gcd(this,b).
      */
     public SolvableResidue<C> gcd(SolvableResidue<C> b) {
-        throw new UnsupportedOperationException("egcd not implemented");
+        throw new UnsupportedOperationException("gcd not implemented");
         // GenSolvablePolynomial<C> x = ring.engine.gcd(val, b.val);
         // int i = -1; // gcd might become a unit
         // if (x.isONE()) {

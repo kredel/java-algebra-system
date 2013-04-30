@@ -77,10 +77,14 @@ public class SolvableResidueRing<C extends GcdRingElem<C>> implements RingFactor
     public SolvableResidueRing(SolvableIdeal<C> i, boolean isMaximal) {
         ideal = i.GB(); // cheap if isGB
         ring = ideal.getRing();
+        bb = new SolvableGroebnerBaseSeq<C>();
         if (isMaximal) {
             isField = 1;
+            return;
         }
-        bb = new SolvableGroebnerBaseSeq<C>();
+        if (ideal.isONE()) {
+            logger.warn("ideal is one, so all residues are 0");
+        }
         //System.out.println("rr ring   = " + ring.getClass().getName());
         //System.out.println("rr cofac  = " + ring.coFac.getClass().getName());
     }
@@ -164,7 +168,7 @@ public class SolvableResidueRing<C extends GcdRingElem<C>> implements RingFactor
      * @return true if this ring is commutative, else false.
      */
     public boolean isCommutative() {
-        return ring.isCommutative();
+        return ring.isCommutative(); // check also vector space structure
     }
 
 
@@ -188,7 +192,7 @@ public class SolvableResidueRing<C extends GcdRingElem<C>> implements RingFactor
         if (isField == 0) {
             return false;
         }
-        // ideal is prime or maximal ?
+        // ideal is (complete) prime or maximal ?
         return false;
     }
 
@@ -237,7 +241,7 @@ public class SolvableResidueRing<C extends GcdRingElem<C>> implements RingFactor
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.ElemFactory#toScript()
      */
-    //JAVA6only: @Override
+    @Override
     public String toScript() {
         // Python case
         return "SRC(" + ideal.list.toScript() + ")";
