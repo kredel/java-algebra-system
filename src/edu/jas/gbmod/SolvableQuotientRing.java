@@ -33,7 +33,7 @@ public class SolvableQuotientRing<C extends GcdRingElem<C>> implements RingFacto
     private static final Logger logger = Logger.getLogger(SolvableQuotientRing.class);
 
 
-    private boolean debug = logger.isDebugEnabled();
+    //private boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -247,7 +247,7 @@ public class SolvableQuotientRing<C extends GcdRingElem<C>> implements RingFacto
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.ElemFactory#toScript()
      */
-    //JAVA6only: @Override
+    @Override
     public String toScript() {
         // Python case
         return "SRF(" + ring.toScript() + ")";
@@ -259,9 +259,8 @@ public class SolvableQuotientRing<C extends GcdRingElem<C>> implements RingFacto
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-        @SuppressWarnings("unchecked")
-        // not jet working
-        public boolean equals(Object b) {
+    @SuppressWarnings("unchecked")
+    public boolean equals(Object b) {
         if (!(b instanceof SolvableQuotientRing)) {
             return false;
         }
