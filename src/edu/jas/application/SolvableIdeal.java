@@ -28,7 +28,8 @@ import edu.jas.structure.NotInvertibleException;
 
 /**
  * Solvable Ideal implements some methods for ideal arithmetic, for example
- * intersection, quotient.
+ * sum, intersection, quotient.
+ * <b>Note:</b> only left ideals at the moment.
  * @author Heinz Kredel
  */
 public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<SolvableIdeal<C>>, Serializable {
@@ -207,7 +208,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
      * @param red Reduction engine
      */
     public SolvableIdeal(PolynomialList<C> list, boolean gb, boolean topt,
-                    SolvableGroebnerBaseAbstract<C> bb, SolvableReduction<C> red) {
+                         SolvableGroebnerBaseAbstract<C> bb, SolvableReduction<C> red) {
         if (list == null || list.list == null) {
             throw new IllegalArgumentException("list and list.list may not be null");
         }
@@ -537,7 +538,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
 
 
     /**
-     * Solvable ummation. Generators for the sum of this ideal and a list of
+     * Solvable summation. Generators for the sum of this ideal and a list of
      * polynomials. Note: if this ideal is a Groebner base, a Groebner base is
      * returned.
      * @param L list of solvable polynomials
@@ -961,7 +962,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         }
         SolvableIdeal<C> Q = null;
         for (GenSolvablePolynomial<C> h : H.getList()) {
-            SolvableIdeal<C> Hi = this.infiniteQuotientRab(h);
+            SolvableIdeal<C> Hi = this.infiniteQuotientRab(h); // may fail
             if (Q == null) {
                 Q = Hi;
             } else {
@@ -996,7 +997,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
     /**
      * Normalform for element.
      * @param h solvable polynomial
-     * @return normalform of h with respect to this
+     * @return left normalform of h with respect to this
      */
     public GenSolvablePolynomial<C> normalform(GenSolvablePolynomial<C> h) {
         if (h == null) {
@@ -1017,7 +1018,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
     /**
      * Normalform for list of solvable elements.
      * @param L solvable polynomial list
-     * @return list of normalforms of the elements of L with respect to this
+     * @return list of left normalforms of the elements of L with respect to this
      */
     public List<GenSolvablePolynomial<C>> normalform(List<GenSolvablePolynomial<C>> L) {
         if (L == null) {
@@ -1082,10 +1083,12 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         //System.out.println("row = " + row);
         GenSolvablePolynomial<C> g = row.get(0);
         if (g == null || g.isZERO()) {
-            throw new NotInvertibleException(" h = " + h);
+            throw new NotInvertibleException("h = " + h);
         }
-        //System.out.println("g = " + g);
-        //System.out.println("h = " + h);
+        GenSolvablePolynomial<C> gp = red.leftNormalform(getList(), g);
+        if (gp.isZERO()) { // can happen with solvable rings
+            throw new NotInvertibleException("h = " + h + ", g = " + g);
+        }
         // adjust leading coefficient of g to get g*h == 1
         GenSolvablePolynomial<C> f = g.multiply(h);
         //System.out.println("f = " + f);
