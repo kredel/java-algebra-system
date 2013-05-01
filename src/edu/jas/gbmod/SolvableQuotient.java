@@ -244,6 +244,18 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
         if ( den.compareTo(b.den) == 0 ) {
             return num.compareTo(b.num);
         }
+        GenSolvablePolynomial<C> r, s;
+        if (den.isONE()) {
+            r = b.den.multiply(num);
+            s = b.num;
+            return r.compareTo(s);
+        }
+        if (b.den.isONE()) {
+            r = num;
+            s = den.multiply(b.num);
+            return r.compareTo(s);
+        }
+        logger.info("computing Ore condition");
         GenSolvablePolynomial<C>[] oc = ring.engine.leftOreCond(den,b.den);
         if (debug) {
             System.out.println("den   = " + den);
@@ -251,7 +263,6 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
             System.out.println("oc[0] = " + oc[0]);
             System.out.println("oc[1] = " + oc[1]);
 	}
-        GenSolvablePolynomial<C> r, s;
         r = oc[0].multiply(num);
         s = oc[1].multiply(b.num);
         //System.out.println("r = " + r);
@@ -342,6 +353,7 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
             return new SolvableQuotient<C>(ring, n, den, false);
         }
         // general case
+        logger.info("computing Ore condition");
         GenSolvablePolynomial<C>[] oc = ring.engine.leftOreCond(den,S.den);
         if (debug) {
             System.out.println("den   = " + den);
@@ -464,6 +476,7 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
         //     n = num.multiply(S.num);
         //     return new SolvableQuotient<C>(ring, n, d, false);
         // }
+        logger.info("computing Ore condition");
         GenSolvablePolynomial<C>[] oc = ring.engine.leftOreCond(num,S.den);
         n = oc[1].multiply(S.num);
         d = oc[0].multiply(den);
