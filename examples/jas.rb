@@ -1430,6 +1430,12 @@ def RealN(m,i,r=0)
 end
 
 
+java_import "edu.jas.ufd.Quotient";
+java_import "edu.jas.ufd.QuotientRing";
+java_import "edu.jas.gbmod.SolvableQuotient";
+java_import "edu.jas.gbmod.SolvableQuotientRing";
+
+
 =begin rdoc
 Create JAS rational function Quotient as ring element.
 =end
@@ -1469,10 +1475,51 @@ def RF(pr,d=0,n=1)
 end
 
 
+=begin rdoc
+Create JAS rational function SolvableQuotient as ring element.
+=end
+def SRF(pr,d=0,n=1)
+    if d.is_a? Array
+        if n != 1
+            puts "#{} ignored\n";
+        end
+        if d.size > 1
+            n = d[1];
+        end
+        d = d[0];
+    end
+    if d.is_a? RingElem
+        d = d.elem;
+    end
+    if n.is_a? RingElem
+        n = n.elem;
+    end
+    if pr.is_a? RingElem
+        pr = pr.elem;
+    end
+    if pr.is_a? Ring
+        pr = pr.ring;
+    end
+    qr = SolvableQuotientRing.new(pr);
+    if d == 0
+        r = SolvableQuotient.new(qr);
+    else
+        if n == 1
+            r = SolvableQuotient.new(qr,d);
+        else
+            r = SolvableQuotient.new(qr,d,n);
+        end
+    end
+    return RingElem.new(r);
+end
+
+
 java_import "edu.jas.application.PolyUtilApp";
 java_import "edu.jas.application.Residue";
 java_import "edu.jas.application.ResidueRing";
 java_import "edu.jas.application.Ideal";
+java_import "edu.jas.application.SolvableResidue";
+java_import "edu.jas.application.SolvableResidueRing";
 java_import "edu.jas.application.SolvableIdeal";
 java_import "edu.jas.application.Local";
 java_import "edu.jas.application.LocalRing";
@@ -1551,6 +1598,37 @@ def LC(ideal,d=0,n=1)
         else
             r = Local.new(lc,d,n);
         end
+    end
+    return RingElem.new(r);
+end
+
+
+=begin rdoc
+Create JAS polynomial SolvableResidue as ring element.
+=end
+def SRC(ideal,r=0)
+    if ideal == nil
+        raise ValueError, "No ideal given."
+    end
+    if ideal.is_a? SolvIdeal
+        #puts "ideal.pset = " + str(ideal.pset) + "\n";
+        #ideal = Java::EduJasApplication::Ideal.new(ideal.ring,ideal.list);
+        ideal = SolvableIdeal.new(ideal.pset);
+        #ideal.doGB();
+    end
+    #puts "ideal.getList().get(0).ring.ideal = #{ideal.getList().get(0).ring.ideal}\n";
+    if ideal.getList().get(0).ring.getClass().getSimpleName() == "SolvableResidueRing"
+        rc = SolvableResidueRing.new( ideal.getList().get(0).ring.ideal );
+    else
+        rc = SolvableResidueRing.new(ideal);
+    end
+    if r.is_a? RingElem
+        r = r.elem;
+    end
+    if r == 0
+        r = SolvableResidue.new(rc);
+    else
+        r = SolvableResidue.new(rc,r);
     end
     return RingElem.new(r);
 end
@@ -1728,8 +1806,6 @@ java_import "edu.jas.ufd.PolyUfdUtil";
 java_import "edu.jas.ufd.GCDFactory";
 java_import "edu.jas.ufd.FactorFactory";
 java_import "edu.jas.ufd.SquarefreeFactory";
-java_import "edu.jas.ufd.Quotient";
-java_import "edu.jas.ufd.QuotientRing";
 java_import "edu.jas.integrate.ElementaryIntegration";
 
 

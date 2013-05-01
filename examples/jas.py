@@ -39,11 +39,13 @@ from edu.jas.gbufd       import GroebnerBasePseudoRecSeq, GroebnerBasePseudoSeq,
                                 RGroebnerBasePseudoSeq, RGroebnerBaseSeq, RReductionSeq,\
                                 CharacteristicSetWu
 from edu.jas.gbmod       import ModGroebnerBaseAbstract, ModSolvableGroebnerBaseAbstract,\
+                                SolvableQuotient, SolvableQuotientRing,\
                                 SolvableSyzygyAbstract, SyzygyAbstract
 from edu.jas.vector      import GenVector, GenVectorModul,\
                                 GenMatrix, GenMatrixRing
-from edu.jas.application import PolyUtilApp, Residue, ResidueRing, Ideal, SolvableIdeal,\
+from edu.jas.application import PolyUtilApp, Residue, ResidueRing, Ideal,\
                                 Local, LocalRing, IdealWithRealAlgebraicRoots,\
+                                SolvableIdeal, SolvableResidue, SolvableResidueRing,\
                                 ComprehensiveGroebnerBaseSeq, ExtensionFieldBuilder
 from edu.jas.kern        import ComputerThreads, StringUtil, Scripting
 from edu.jas.ufd         import GreatestCommonDivisor, PolyUfdUtil, GCDFactory,\
@@ -2301,6 +2303,59 @@ def LC(ideal,d=0,n=1):
             r = Local(lc,d);
         else:
             r = Local(lc,d,n);
+    return RingElem(r);
+
+
+def SRF(pr,d=0,n=1):
+    '''Create JAS rational function SolvableQuotient as ring element.
+    '''
+    if isinstance(d,PyTuple) or isinstance(d,PyList):
+        if n != 1:
+            print "%s ignored" % n;
+        if len(d) > 1:
+            n = d[1];
+        d = d[0];
+    if isinstance(d,RingElem):
+        d = d.elem;
+    if isinstance(n,RingElem):
+        n = n.elem;
+    if isinstance(pr,RingElem):
+        pr = pr.elem;
+    if isinstance(pr,Ring):
+        pr = pr.ring;
+    qr = SolvableQuotientRing(pr);
+    if d == 0:
+        r = SolvableQuotient(qr);
+    else:
+        if n == 1:
+            r = SolvableQuotient(qr,d);
+        else:
+            r = SolvableQuotient(qr,d,n);
+    return RingElem(r);
+
+
+def SRC(ideal,r=0):
+    '''Create JAS polynomial SolvableResidue as ring element.
+    '''
+    if isinstance(ideal,SolvableIdeal):
+        ideal = jas.application.SolvableIdeal(ideal.pset);
+        #ideal.doGB();
+    #print "ideal = " + str(ideal);
+    if ideal == None: # ??
+        #print "ideal = " + str(ideal);
+        raise ValueError, "No ideal given."
+    #ideal = idx;
+    #print "ideal.getList().get(0).ring.ideal = %s" % ideal.getList().get(0).ring.ideal;
+    if ideal.getList().get(0).ring.getClass().getSimpleName() == "SolvableResidueRing":
+        rc = SolvableResidueRing( ideal.getList().get(0).ring.ideal );
+    else:
+        rc = SolvableResidueRing(ideal);
+    if isinstance(r,RingElem):
+        r = r.elem;
+    if r == 0:
+        r = SolvableResidue(rc);
+    else:
+        r = SolvableResidue(rc,r);
     return RingElem(r);
 
 
