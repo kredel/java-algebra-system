@@ -105,7 +105,6 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
      */
     @Override
     public GenSolvablePolynomial<C> copy() {
-        //return ring.copy(this);
         return new GenSolvablePolynomial<C>(ring,this.val);
     }
 
@@ -251,7 +250,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
      * GenSolvablePolynomial multiplication. 
      * Product with coefficient ring element.
      * @param b coefficient.
-     * @return this*b, where * is usual multiplication.
+     * @return this*b, where * is coefficient multiplication.
      */
     @Override
     public GenSolvablePolynomial<C> multiply(C b) {  
@@ -418,7 +417,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
      * GenSolvablePolynomial multiplication. 
      * Left product with coefficient ring element.
      * @param b coefficient.
-     * @return b*this, where * is usual multiplication.
+     * @return b*this, where * is coefficient multiplication.
      */
     public GenSolvablePolynomial<C> multiplyLeft(C b) {  
         GenSolvablePolynomial<C> Cp = ring.getZERO().copy(); 
@@ -441,8 +440,8 @@ public class GenSolvablePolynomial<C extends RingElem<C>>
 
     /**
      * GenSolvablePolynomial multiplication. 
-     * Left product with 'monimial'.
-     * @param m 'monoial'.
+     * Left product with 'monomial'.
+     * @param m 'monomial'.
      * @return m * this, 
      * where * denotes solvable multiplication.
      */
