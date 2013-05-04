@@ -154,6 +154,15 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
 
 
     /**
+     * Test if the table is empty.
+     * @return true if the table is empty, else false.
+     */
+    public boolean isEmpty() {
+        return table.isEmpty();
+    }
+
+
+    /**
      * Get the String representation.
      * @see java.lang.Object#toString()
      */
@@ -331,18 +340,19 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
             ExpVector lp = p.leadingExpVector();
             if (!ef.equals(lp)) { // check for suitable term order
                 logger.error("relation term order = " + ring.tord);
-                throw new IllegalArgumentException("RelationTable update e*f != lt(p)");
+                throw new IllegalArgumentException("RelationTable update e*f != lt(p): " + ef + ", lp = " + lp);
             }
         } else {
             ExpVector lp = p.leadingExpVector();
             if (!e.equals(lp)) { // check for suitable term order
                 logger.error("relation term order = " + ring.tord);
-                throw new IllegalArgumentException("Coefficient RelationTable update e != lt(p)");
+                throw new IllegalArgumentException("Coefficient RelationTable update e != lt(p): " + e + ", lp = " + lp);
             }
             lp = ((GenPolynomial<C>)p.leadingBaseCoefficient()).leadingExpVector();
             if (!f.equals(lp)) { // check for suitable term order
                 logger.error("relation term order = " + ring.tord);
-                throw new IllegalArgumentException("Coefficient RelationTable update f != lt(lfcd(p))");
+                logger.error("Coefficient RelationTable update f != lt(lfcd(p)): "+ e + ", f = " + f + ", p = " + p);
+                //throw new IllegalArgumentException("Coefficient RelationTable update f != lt(lfcd(p)): "+ e + ", f = " + f + ", p = " + p);
             }
         }
         List<Integer> key = makeKey(e, f);
