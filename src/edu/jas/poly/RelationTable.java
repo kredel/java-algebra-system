@@ -99,7 +99,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
     // not jet working
     public boolean equals(Object p) {
         if (!(p instanceof RelationTable)) {
-            System.out.println("no RelationTable");
+            logger.info("no RelationTable");
             return false;
         }
         RelationTable<C> tab = null;
@@ -358,7 +358,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         List<Integer> key = makeKey(e, f);
         ExpVectorPair evp = new ExpVectorPair(e, f);
         if (key.size() != 2) {
-            System.out.println("key = " + key + ", evp = " + evp);
+            logger.warn("key = " + key + ", evp = " + evp);
         }
         List part = table.get(key);
         if (part == null) { // initialization only

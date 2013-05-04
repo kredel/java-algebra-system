@@ -86,9 +86,9 @@ public class RecSolvablePolynomialTest extends TestCase {
     /**
      * Test constructor, generators and properties.
      */
-    public void xtestConstructor() {
-        //assertFalse("not commutative", ring.isCommutative() );
-        //assertTrue("associative", ring.isAssociative() );
+    public void testConstructor() {
+        assertFalse("not commutative", ring.isCommutative() );
+        assertTrue("associative", ring.isAssociative() );
 
         a = new RecSolvablePolynomial<BigRational>(ring);
         assertTrue("length( a ) = 0", a.length() == 0);
@@ -106,19 +106,19 @@ public class RecSolvablePolynomialTest extends TestCase {
         assertTrue("isONE( d )", !d.isONE() );
         //System.out.println("d = " + d);
 
-        System.out.println("");
+        //System.out.println("");
         for (GenPolynomial<GenPolynomial<BigRational>>  g : ring.generators() ) {
-            System.out.print("g = " + g + ", ");
+            //System.out.print("g = " + g + ", ");
             assertFalse("not isZERO( g )", g.isZERO() );
         }
-        System.out.println("");
+        //System.out.println("");
     }
 
 
     /**
      * Test random polynomial.
      */
-    public void xtestRandom() {
+    public void testRandom() {
         for (int i = 0; i < 3; i++) {
             // a = ring.random(ll+2*i);
             a = ring.random(kl*(i+1), ll+2*i, el+i, q );
@@ -133,7 +133,7 @@ public class RecSolvablePolynomialTest extends TestCase {
     /**
      * Test addition.
      */
-    public void xtestAddition() {
+    public void testAddition() {
         a = ring.random(kl, ll, el, q );
         c = (RecSolvablePolynomial<BigRational>) a.subtract(a);
         assertTrue("a-a = 0", c.isZERO() );
@@ -190,8 +190,8 @@ public class RecSolvablePolynomialTest extends TestCase {
     /**
      * Test object multiplication.
      */
-    public void xtestMultiplication() {
-        System.out.println("ring = " + ring);
+    public void testMultiplication() {
+        //System.out.println("ring = " + ring);
         a = ring.random(kl, ll, el, q );
         //a = ring.parse(" b y z + a w z ");  
         b = ring.random(kl, ll, el, q );
@@ -199,10 +199,10 @@ public class RecSolvablePolynomialTest extends TestCase {
 
         c = b.multiply(a);
         d = a.multiply(b);
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
-        System.out.println("c = " + c);
-        System.out.println("d = " + d);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+        //System.out.println("c = " + c);
+        //System.out.println("d = " + d);
         assertTrue("a*b != b*a", ! c.equals(d) && true );
 
         c = ring.random(kl, ll, el, q );
@@ -225,7 +225,7 @@ public class RecSolvablePolynomialTest extends TestCase {
     /**
      * Test commutative ring.
      */
-    public void xtestCommutative() {
+    public void testCommutative() {
         //System.out.println("table = " + table.toString(vars));
         //System.out.println("table = " + table.toScript());
         //System.out.println("ring = " + ring);
@@ -243,10 +243,10 @@ public class RecSolvablePolynomialTest extends TestCase {
 
         a = ring.random(kl, ll, el, q );
         //a = ring.parse(" b x y z + a w z ");
-        System.out.println("a = " + a);
+        //System.out.println("a = " + a);
         b = ring.random(kl, ll, el, q );
         //b = ring.parse(" w y z - b x ");
-        System.out.println("b = " + b);
+        //System.out.println("b = " + b);
 
         // commutative
         c = b.multiply(a);
@@ -261,7 +261,7 @@ public class RecSolvablePolynomialTest extends TestCase {
     /**
      * Test distributive law.
      */
-    public void xtestDistributive() {
+    public void testDistributive() {
         a = ring.random(kl,ll,el,q);
         b = ring.random(kl,ll,el,q);
         c = ring.random(kl,ll,el,q);
@@ -286,18 +286,22 @@ public class RecSolvablePolynomialTest extends TestCase {
         WeylRelations<BigRational> wlc = new WeylRelations<BigRational>(csring);
         wlc.generate();
         assertTrue("# relations == 1", csring.table.size() == 1);
+        assertFalse("isCommutative()",csring.isCommutative());
+        assertTrue("isAssociative()",csring.isAssociative());
         
         ring = new RecSolvablePolynomialRing<BigRational>(csring,ring);
         WeylRelations<GenPolynomial<BigRational>> wl = new WeylRelations<GenPolynomial<BigRational>>(ring);
         wl.generate();
         assertTrue("# relations == 2", ring.table.size() == 2);
+        assertFalse("isCommutative()",ring.isCommutative());
+        assertTrue("isAssociative()",ring.isAssociative());
 
         RecSolvablePolynomial<BigRational> r1 = ring.parse("x");
         GenSolvablePolynomial<BigRational> r2 = csring.parse("b");
         RecSolvablePolynomial<BigRational> rp = ring.parse("b x - a");
-        System.out.println("r1 = " + r1);
-        System.out.println("r2 = " + r2);
-        System.out.println("rp = " + rp);
+        //System.out.println("r1 = " + r1);
+        //System.out.println("r2 = " + r2);
+        //System.out.println("rp = " + rp);
         ring.coeffTable.update(r1.leadingExpVector(),r2.leadingExpVector(),rp);
 
         table = ring.table;
@@ -306,7 +310,7 @@ public class RecSolvablePolynomialTest extends TestCase {
         System.out.println("ring = " + ring);
 
         assertFalse("isCommutative()",ring.isCommutative());
-        //assertTrue("isAssociative()",ring.isAssociative());
+        assertTrue("isAssociative()",ring.isAssociative());
 
         List<GenPolynomial<GenPolynomial<BigRational>>> gens = ring.generators();
         for (GenPolynomial<GenPolynomial<BigRational>> x : gens) {
@@ -326,16 +330,16 @@ public class RecSolvablePolynomialTest extends TestCase {
 
         a = ring.random(kl, ll, el, q );
         //a = ring.getONE();
-        System.out.println("a = " + a);
+        //System.out.println("a = " + a);
         b = ring.random(kl, ll, el, q );
         //b = ring.getONE();
-        System.out.println("b = " + b);
+        //System.out.println("b = " + b);
 
         // non-commutative
         c = b.multiply(a);
         d = a.multiply(b);
         //System.out.println("c = " + c);
-        System.out.println("d = " + d);
+        //System.out.println("d = " + d);
         assertTrue("ba != ab: ", !c.equals(d));
     }
 
