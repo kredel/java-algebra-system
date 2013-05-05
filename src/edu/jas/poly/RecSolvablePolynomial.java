@@ -339,6 +339,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>>
                         Ds = Ds.multiplyLeft(c); // assume c commutes with Cs
                         Dps = (RecSolvablePolynomial<C>) Dps.sum(Ds);
                     } // end Dps loop
+                    Ds = Dps; // bug
                 }
                 //System.out.println("a = " + a + ", Ds = " + Ds + ", Dp = " + Dp);
                 Ds = Ds.multiplyLeft(a); // multiply(a,b); // non-symmetric 

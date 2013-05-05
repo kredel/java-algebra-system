@@ -284,9 +284,9 @@ public class RecSolvablePolynomialTest extends TestCase {
 
         GenSolvablePolynomialRing<BigRational> csring = new GenSolvablePolynomialRing<BigRational>(cfac,tord,cvars);
         WeylRelations<BigRational> wlc = new WeylRelations<BigRational>(csring);
-        //wlc.generate();
-        //assertTrue("# relations == 1", csring.table.size() == 1);
-        //assertFalse("isCommutative()",csring.isCommutative());
+        wlc.generate();
+        assertTrue("# relations == 1", csring.table.size() == 1);
+        assertFalse("isCommutative()",csring.isCommutative());
         assertTrue("isAssociative()",csring.isAssociative());
         
         ring = new RecSolvablePolynomialRing<BigRational>(csring,ring);
