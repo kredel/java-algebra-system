@@ -284,9 +284,9 @@ public class RecSolvablePolynomialTest extends TestCase {
 
         GenSolvablePolynomialRing<BigRational> csring = new GenSolvablePolynomialRing<BigRational>(cfac,tord,cvars);
         WeylRelations<BigRational> wlc = new WeylRelations<BigRational>(csring);
-        wlc.generate();
-        assertTrue("# relations == 1", csring.table.size() == 1);
-        assertFalse("isCommutative()",csring.isCommutative());
+        //wlc.generate();
+        //assertTrue("# relations == 1", csring.table.size() == 1);
+        //assertFalse("isCommutative()",csring.isCommutative());
         assertTrue("isAssociative()",csring.isAssociative());
         
         ring = new RecSolvablePolynomialRing<BigRational>(csring,ring);
@@ -298,7 +298,7 @@ public class RecSolvablePolynomialTest extends TestCase {
 
         RecSolvablePolynomial<BigRational> r1 = ring.parse("x");
         GenSolvablePolynomial<BigRational> r2 = csring.parse("b");
-        RecSolvablePolynomial<BigRational> rp = ring.parse("b x - a");
+        RecSolvablePolynomial<BigRational> rp = ring.parse("b x - a ");
         //System.out.println("r1 = " + r1);
         //System.out.println("r2 = " + r2);
         //System.out.println("rp = " + rp);
