@@ -22,18 +22,17 @@ import edu.jas.structure.RingFactory;
 
 
 /**
- * RecSolvablePolynomialRing generic solvable polynomial factory
- * implementing RingFactory and extending GenPolynomialRing factory;
- * Factory for n-variate ordered solvable polynomials over solvable
- * polynomial coefficients. The non-commutative multiplication
- * relations are maintained in a relation table. Almost immutable
- * object, except variable names and relation table contents.
+ * RecSolvablePolynomialRing generic solvable polynomial factory implementing
+ * RingFactory and extending GenPolynomialRing factory; Factory for n-variate
+ * ordered solvable polynomials over solvable polynomial coefficients. The
+ * non-commutative multiplication relations are maintained in a relation table.
+ * Almost immutable object, except variable names and relation table contents.
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
 
-public class RecSolvablePolynomialRing<C extends RingElem<C>> 
-             extends GenSolvablePolynomialRing<GenPolynomial<C>> {
+public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
+                GenSolvablePolynomialRing<GenPolynomial<C>> {
 
 
     /**
@@ -78,8 +77,8 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>>
      * @param n number of variables.
      * @param rt solvable multiplication relations.
      */
-    public RecSolvablePolynomialRing(RingFactory<GenPolynomial<C>> cf, int n, 
-                                     RelationTable<GenPolynomial<C>> rt) {
+    public RecSolvablePolynomialRing(RingFactory<GenPolynomial<C>> cf, int n,
+                    RelationTable<GenPolynomial<C>> rt) {
         this(cf, n, new TermOrder(), null, rt);
     }
 
@@ -104,8 +103,8 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>>
      * @param t a term order.
      * @param rt solvable multiplication relations.
      */
-    public RecSolvablePolynomialRing(RingFactory<GenPolynomial<C>> cf, int n, TermOrder t, 
-                                     RelationTable<GenPolynomial<C>> rt) {
+    public RecSolvablePolynomialRing(RingFactory<GenPolynomial<C>> cf, int n, TermOrder t,
+                    RelationTable<GenPolynomial<C>> rt) {
         this(cf, n, t, null, rt);
     }
 
@@ -155,11 +154,11 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>>
      * @param v names for the variables.
      * @param rt solvable multiplication relations.
      */
-    public RecSolvablePolynomialRing(RingFactory<GenPolynomial<C>> cf, int n, TermOrder t, String[] v, 
-                                     RelationTable<GenPolynomial<C>> rt) {
+    public RecSolvablePolynomialRing(RingFactory<GenPolynomial<C>> cf, int n, TermOrder t, String[] v,
+                    RelationTable<GenPolynomial<C>> rt) {
         super(cf, n, t, v, rt);
         //if (rt == null) { // handled in super }
-        coeffTable = new RelationTable<GenPolynomial<C>>(this,true);
+        coeffTable = new RelationTable<GenPolynomial<C>>(this, true);
         ZERO = new RecSolvablePolynomial<C>(this);
         GenPolynomial<C> coeff = coFac.getONE();
         //evzero = ExpVector.create(nvar); // from super
@@ -342,7 +341,7 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>>
                     p = Xk.multiply(Xj).multiply(Xi);
                     q = Xk.multiply(Xj.multiply(Xi));
                     if (!p.equals(q)) {
-                        if (true||debug) {
+                        if (true || debug) {
                             logger.info("Xi = " + Xi + ", Xj = " + Xj + ", Xk = " + Xk);
                             logger.info("p = ( Xk * Xj ) * Xi = " + p);
                             logger.info("q = Xk * ( Xj * Xi ) = " + q);

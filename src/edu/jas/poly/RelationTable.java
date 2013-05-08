@@ -24,7 +24,7 @@ import edu.jas.structure.RingElem;
  * RelationTable for solvable polynomials. This class maintains the
  * non-commutative multiplication relations of solvable polynomial rings. The
  * table entries are initialized with relations of the form x<sub>j</sub> *
- * x<sub>i</sub> = p<sub>ij</sub>. During multiplication the ralations are
+ * x<sub>i</sub> = p<sub>ij</sub>. During multiplication the relations are
  * updated by relations of the form x<sub>j</sub><sup>k</sup> *
  * x<sub>i</sub><sup>l</sup> = p<sub>ijkl</sub>. If no relation for
  * x<sub>j</sub> * x<sub>i</sub> is found in the table, this multiplication is
@@ -67,7 +67,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
      * @param r solvable polynomial ring factory.
      */
     protected RelationTable(GenSolvablePolynomialRing<C> r) {
-        this(r,false);
+        this(r, false);
     }
 
 
@@ -199,9 +199,9 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         }
         StringBuffer s = new StringBuffer("");
         String[] cvars = null;
-        if ( coeffTable ) { 
-             cvars = ((GenPolynomialRing<C>)ring.coFac).getVars();
-             s.append("Coefficient ");
+        if (coeffTable) {
+            cvars = ((GenPolynomialRing<C>) ring.coFac).getVars();
+            s.append("Coefficient ");
         }
         s.append("RelationTable\n(");
         List v;
@@ -219,7 +219,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                     ExpVectorPair ep = (ExpVectorPair) jt.next();
                     s.append("( " + ep.getFirst().toString(vars) + " ), ");
                     GenSolvablePolynomial<C> p = (GenSolvablePolynomial<C>) jt.next();
-                    if ( cvars == null ) { 
+                    if (cvars == null) {
                         s.append("( " + ep.getSecond().toString(vars) + " ), ");
                     } else {
                         s.append("( " + ep.getSecond().toString(cvars) + " ), ");
@@ -335,23 +335,26 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
             }
         }
         // test equal HTs for left and right side
-        if ( ! coeffTable ) { 
+        if (!coeffTable) {
             ExpVector ef = e.sum(f);
             ExpVector lp = p.leadingExpVector();
             if (!ef.equals(lp)) { // check for suitable term order
                 logger.error("relation term order = " + ring.tord);
-                throw new IllegalArgumentException("RelationTable update e*f != lt(p): " + ef + ", lp = " + lp);
+                throw new IllegalArgumentException("RelationTable update e*f != lt(p): " + ef + ", lp = "
+                                + lp);
             }
         } else {
             ExpVector lp = p.leadingExpVector();
             if (!e.equals(lp)) { // check for suitable term order
                 logger.error("relation term order = " + ring.tord);
-                throw new IllegalArgumentException("Coefficient RelationTable update e != lt(p): " + e + ", lp = " + lp);
+                throw new IllegalArgumentException("Coefficient RelationTable update e != lt(p): " + e
+                                + ", lp = " + lp);
             }
-            lp = ((GenPolynomial<C>)p.leadingBaseCoefficient()).leadingExpVector();
+            lp = ((GenPolynomial<C>) p.leadingBaseCoefficient()).leadingExpVector();
             if (!f.equals(lp)) { // check for suitable term order
                 logger.error("relation term order = " + ring.tord);
-                logger.error("Coefficient RelationTable update f != lt(lfcd(p)): "+ e + ", f = " + f + ", p = " + p);
+                logger.error("Coefficient RelationTable update f != lt(lfcd(p)): " + e + ", f = " + f
+                                + ", p = " + p);
                 //throw new IllegalArgumentException("Coefficient RelationTable update f != lt(lfcd(p)): "+ e + ", f = " + f + ", p = " + p);
             }
         }
@@ -445,15 +448,15 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         List part = table.get(key);
         if (part == null) { // symmetric product
             GenSolvablePolynomial<C> p;
-            if ( ! coeffTable ) { 
+            if (!coeffTable) {
                 ExpVector ef = e.sum(f);
-                p = new GenSolvablePolynomial<C>(ring,ring.getONECoefficient(),ef);
+                p = new GenSolvablePolynomial<C>(ring, ring.getONECoefficient(), ef);
             } else {
                 GenPolynomialRing<C> cofac = (GenPolynomialRing<C>) ring.coFac;
                 //System.out.println("f = " + f + ", e = " + e);
-                GenPolynomial<C> pc = cofac.getZERO().sum(cofac.getONECoefficient(),f); 
+                GenPolynomial<C> pc = cofac.getZERO().sum(cofac.getONECoefficient(), f);
                 C c = (C) pc;
-                p = new GenSolvablePolynomial<C>(ring,c,e); 
+                p = new GenSolvablePolynomial<C>(ring, c, e);
                 //System.out.println("pc = " + pc + ", p = " + p);
             }
             return new TableRelation<C>(null, null, p);
