@@ -298,16 +298,14 @@ public class RecSolvablePolynomialTest extends TestCase {
 
         RecSolvablePolynomial<BigRational> r1 = ring.parse("x");
         GenSolvablePolynomial<BigRational> r2 = csring.parse("b");
-        RecSolvablePolynomial<BigRational> rp = ring.parse("b x - a ");
+        RecSolvablePolynomial<BigRational> rp = ring.parse("b x + a");
         //System.out.println("r1 = " + r1);
         //System.out.println("r2 = " + r2);
         //System.out.println("rp = " + rp);
         ring.coeffTable.update(r1.leadingExpVector(),r2.leadingExpVector(),rp);
 
         table = ring.table;
-        //System.out.println("table = " + ring.table.toString(vars));
-        //System.out.println("coeffTable = " + ring.coeffTable.toString(vars));
-        System.out.println("ring = " + ring);
+        //System.out.println("ring = " + ring);
 
         assertFalse("isCommutative()",ring.isCommutative());
         assertTrue("isAssociative()",ring.isAssociative());

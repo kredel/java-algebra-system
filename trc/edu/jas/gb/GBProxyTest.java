@@ -98,7 +98,7 @@ public class GBProxyTest extends TestCase {
     int rl = 3; //4; //3; 
 
 
-    int kl = 10;
+    int kl = 7;
 
 
     int ll = 7;
@@ -119,8 +119,8 @@ public class GBProxyTest extends TestCase {
         //GroebnerBaseAbstract<BigRational> bbs = new GroebnerBaseSeqPairSeq<BigRational>();
         int nt = ComputerThreads.N_CPUS;
         //System.out.println("nt = " + nt);
-        //GroebnerBaseAbstract<BigRational> bbp = new GroebnerBaseParallel<BigRational>(nt);
-        GroebnerBaseAbstract<BigRational> bbp = new GroebnerBaseSeqPairParallel<BigRational>(nt);
+        GroebnerBaseAbstract<BigRational> bbp = new GroebnerBaseParallel<BigRational>(nt);
+        //GroebnerBaseAbstract<BigRational> bbp = new GroebnerBaseSeqPairParallel<BigRational>(nt);
         bb = new GBProxy<BigRational>(bbs, bbp);
     }
 

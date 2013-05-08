@@ -22,11 +22,12 @@ import edu.jas.structure.RingFactory;
 
 
 /**
- * RecSolvablePolynomialRing generic solvable polynomial factory implementing
- * RingFactory and extending GenPolynomialRing factory; Factory for n-variate
- * ordered solvable polynomials over C. The non-commutative multiplication
- * relations are maintained in a relation table. Almost immutable object, except
- * variable names and relation table contents.
+ * RecSolvablePolynomialRing generic solvable polynomial factory
+ * implementing RingFactory and extending GenPolynomialRing factory;
+ * Factory for n-variate ordered solvable polynomials over solvable
+ * polynomial coefficients. The non-commutative multiplication
+ * relations are maintained in a relation table. Almost immutable
+ * object, except variable names and relation table contents.
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
@@ -156,13 +157,8 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>>
      */
     public RecSolvablePolynomialRing(RingFactory<GenPolynomial<C>> cf, int n, TermOrder t, String[] v, 
                                      RelationTable<GenPolynomial<C>> rt) {
-        super(cf, n, t, v);
-        if (rt == null) {
-            //table = super.table;
-            //table = new RelationTable<GenPolynomial<C>>(this);
-        } else {
-            //table = rt;
-        }
+        super(cf, n, t, v, rt);
+        //if (rt == null) { // handled in super }
         coeffTable = new RelationTable<GenPolynomial<C>>(this,true);
         ZERO = new RecSolvablePolynomial<C>(this);
         GenPolynomial<C> coeff = coFac.getONE();
@@ -356,7 +352,7 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>>
                 }
             }
         }
-        return true;
+        return coFac.isAssociative();
     }
 
 
@@ -437,9 +433,7 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>>
      */
     @Override
     public RecSolvablePolynomial<C> random(int k, int l, int d, float q, Random rnd) {
-        RecSolvablePolynomial<C> r = getZERO(); //.clone();
-        // copy( ZERO ); 
-        // new GenPolynomial<C>( this, getZERO().val );
+        RecSolvablePolynomial<C> r = getZERO(); // copy( ZERO ); 
         ExpVector e;
         GenPolynomial<C> a;
         // add random coeffs and exponents
@@ -470,7 +464,6 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>>
      */
     @Override
     public RecSolvablePolynomial<C> parse(String s) {
-        //return getZERO();
         return parse(new StringReader(s));
     }
 
@@ -595,30 +588,6 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>>
      List<RecSolvablePolynomial<C>> pols 
      = ListUtil.<GenPolynomial<C>,RecSolvablePolynomial<C>>map(this,pol,fc);
      return pols;
-     }
-    */
-
-
-    /* include here ?
-     * Get list as List of RecSolvablePolynomials.
-     * Required because no List casts allowed. Equivalent to 
-     * cast (List&lt;RecSolvablePolynomial&lt;C&gt;&gt;) list.
-     * @return solvable polynomial list from this.
-     public List<RecSolvablePolynomial<C>> castToSolvableList(List<GenPolynomial<C>> list) {
-     List< RecSolvablePolynomial<C> > slist = null;
-     if ( list == null ) {
-     return slist;
-     }
-     slist = new ArrayList< RecSolvablePolynomial<C> >( list.size() ); 
-     RecSolvablePolynomial<C> s;
-     for ( GenPolynomial<C> p: list ) {
-     if ( ! (p instanceof RecSolvablePolynomial) ) {
-     throw new RuntimeException("no solvable polynomial "+p);
-     }
-     s = (RecSolvablePolynomial<C>) p;
-     slist.add( s );
-     }
-     return slist;
      }
     */
 

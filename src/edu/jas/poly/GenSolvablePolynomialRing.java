@@ -345,7 +345,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
                 }
             }
         }
-        return true;
+        return coFac.isAssociative();
     }
 
 
