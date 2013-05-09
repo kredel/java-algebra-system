@@ -218,7 +218,7 @@ public class RecSolvablePolynomialTest extends TestCase {
 
 
     /**
-     * Test object multiplication.
+     * Test multiplication.
      */
     public void testMultiplication() {
         //System.out.println("ring = " + ring);
@@ -233,7 +233,7 @@ public class RecSolvablePolynomialTest extends TestCase {
         //System.out.println("b = " + b);
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
-        assertTrue("a*b != b*a", !c.equals(d) && true);
+        assertTrue("a*b != b*a", c.equals(d) || c.leadingExpVector().equals(d.leadingExpVector()));
 
         c = ring.random(kl, ll, el, q);
         d = a.multiply(b.multiply(c));
@@ -353,6 +353,10 @@ public class RecSolvablePolynomialTest extends TestCase {
                 //System.out.println("b = " + b);
                 c = a.multiply(b);
                 //System.out.println("gens:" + a + " * " + b + " = " + c);
+                ExpVector ev = a.leadingExpVector().sum(b.leadingExpVector());
+                assertTrue("LT(a)*LT(b) == LT(c)", c.leadingExpVector().equals(ev));
+                ev = a.leadingBaseCoefficient().leadingExpVector().sum(b.leadingBaseCoefficient().leadingExpVector());
+                assertTrue("LT(a)*LT(b) == LT(c)", c.leadingBaseCoefficient().leadingExpVector().equals(ev));
             }
         }
 
@@ -368,7 +372,7 @@ public class RecSolvablePolynomialTest extends TestCase {
         d = a.multiply(b);
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
-        assertTrue("ba != ab: ", !c.equals(d));
+        assertTrue("a*b != b*a", c.equals(d) || c.leadingExpVector().equals(d.leadingExpVector()));
     }
 
 }
