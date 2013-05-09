@@ -588,6 +588,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         List val;
         for (List<Integer> key : tab.table.keySet()) {
             val = tab.table.get(key);
+            //System.out.println("key = " + key + ", val = " + val);
             for (Iterator jt = val.iterator(); jt.hasNext();) {
                 ExpVectorPair ep = (ExpVectorPair) jt.next();
                 ExpVector e = ep.getFirst();
@@ -600,6 +601,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                 } else {
                     fc = f.contract(i, f.length() - i);
                 }
+                //System.out.println("ec = " + ec + ", fc = " + fc);
                 if (ec.isZERO()) {
                     continue;
                 }

@@ -600,8 +600,8 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
     @Override
     public RecSolvablePolynomialRing<C> extend(int i) {
         GenPolynomialRing<GenPolynomial<C>> pfac = super.extend(i);
-        RecSolvablePolynomialRing<C> spfac = new RecSolvablePolynomialRing<C>(pfac.coFac, pfac.nvar,
-                        pfac.tord, pfac.vars);
+        RecSolvablePolynomialRing<C> spfac 
+           = new RecSolvablePolynomialRing<C>(pfac.coFac, pfac.nvar, pfac.tord, pfac.vars);
         spfac.table.extend(this.table);
         spfac.coeffTable.extend(this.coeffTable);
         return spfac;
@@ -617,8 +617,8 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
     @Override
     public RecSolvablePolynomialRing<C> contract(int i) {
         GenPolynomialRing<GenPolynomial<C>> pfac = super.contract(i);
-        RecSolvablePolynomialRing<C> spfac = new RecSolvablePolynomialRing<C>(pfac.coFac, pfac.nvar,
-                        pfac.tord, pfac.vars);
+        RecSolvablePolynomialRing<C> spfac 
+           = new RecSolvablePolynomialRing<C>(pfac.coFac, pfac.nvar, pfac.tord, pfac.vars);
         spfac.table.contract(this.table);
         spfac.coeffTable.contract(this.coeffTable);
         return spfac;

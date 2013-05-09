@@ -6,6 +6,8 @@ package edu.jas.poly;
 
 
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -373,6 +375,56 @@ public class RecSolvablePolynomialTest extends TestCase {
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
         assertTrue("a*b != b*a", c.equals(d) || c.leadingExpVector().equals(d.leadingExpVector()));
+    }
+
+
+    /**
+     * Test extension and contraction for Weyl relations.
+     */
+    public void testExtendContractWeyl() {
+        int k = rl;
+        RecSolvablePolynomialRing<BigRational> pfe = ring.extend(k);
+        //System.out.println("pfe = " + pfe);
+        RecSolvablePolynomialRing<BigRational> pfec = pfe.contract(k);
+        //System.out.println("pfec = " + pfec);
+        assertEquals("ring == pfec", ring, pfec);
+
+        RecSolvablePolynomial<BigRational> a = ring.random(kl,ll,el,q);
+        //System.out.println("a = " + a);
+
+        RecSolvablePolynomial<BigRational> ae 
+            = (RecSolvablePolynomial<BigRational>)a.extend(pfe,0,0);
+        //System.out.println("ae = " + ae);
+
+        Map<ExpVector,GenPolynomial<GenPolynomial<BigRational>>> m = ae.contract(pfec);
+        List<GenPolynomial<GenPolynomial<BigRational>>> ml = new ArrayList<GenPolynomial<GenPolynomial<BigRational>>>( m.values() );
+        GenPolynomial<GenPolynomial<BigRational>> aec = (GenPolynomial<GenPolynomial<BigRational>>)ml.get(0);
+        assertEquals("a == aec",a,aec);
+        //System.out.println("ae = " + ae);
+        //System.out.println("aec = " + aec);
+    }
+
+
+    /**
+     * Test reversion for Weyl relations.
+     */
+    public void testReverseWeyl() {
+        RecSolvablePolynomialRing<BigRational> pfr = ring.reverse();
+        RecSolvablePolynomialRing<BigRational> pfrr = pfr.reverse();
+        assertEquals("pf == pfrr",ring,pfrr);
+        //System.out.println("ring = " + ring);
+        //System.out.println("pfr = " + pfr);
+
+        RecSolvablePolynomial<BigRational> a = ring.random(kl,ll,el,q);
+        //System.out.println("a = " + a);
+
+        RecSolvablePolynomial<BigRational> ar 
+            = (RecSolvablePolynomial<BigRational>)a.reverse(pfr);
+        RecSolvablePolynomial<BigRational> arr 
+            = (RecSolvablePolynomial<BigRational>)ar.reverse(pfrr);
+        assertEquals("a == arr",a,arr);
+        //System.out.println("ar = " + ar);
+        //System.out.println("arr = " + arr);
     }
 
 }
