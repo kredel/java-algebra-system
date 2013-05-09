@@ -251,7 +251,7 @@ public class RecSolvablePolynomialTest extends TestCase {
         GenPolynomial<BigRational> xp = new GenPolynomial<BigRational>(cring, x);
         d = (RecSolvablePolynomial<BigRational>) a.multiply(xp);
         assertTrue("monic(a) = a*(1/ldcf(ldcf(a)))", d.leadingBaseCoefficient().leadingBaseCoefficient()
-                        .isONE());
+                   .isONE());
     }
 
 
@@ -316,7 +316,7 @@ public class RecSolvablePolynomialTest extends TestCase {
         //assertEquals("table == ring.table: ", table, ring.table); // ?
 
         GenSolvablePolynomialRing<BigRational> csring = new GenSolvablePolynomialRing<BigRational>(cfac,
-                        tord, cvars);
+                                                                                                   tord, cvars);
         WeylRelations<BigRational> wlc = new WeylRelations<BigRational>(csring);
         wlc.generate();
         assertTrue("# relations == 1", csring.table.size() == 1);
@@ -382,6 +382,18 @@ public class RecSolvablePolynomialTest extends TestCase {
      * Test extension and contraction for Weyl relations.
      */
     public void testExtendContractWeyl() {
+        GenSolvablePolynomialRing<BigRational> csring 
+            = new GenSolvablePolynomialRing<BigRational>(cfac, tord, cvars);
+        WeylRelations<BigRational> wlc = new WeylRelations<BigRational>(csring);
+        wlc.generate();
+        assertFalse("isCommutative()", csring.isCommutative());
+        assertTrue("isAssociative()", csring.isAssociative());
+
+        RecSolvablePolynomial<BigRational> r1 = ring.parse("x");
+        GenSolvablePolynomial<BigRational> r2 = csring.parse("b");
+        RecSolvablePolynomial<BigRational> rp = ring.parse("b x + a");
+        ring.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(), rp);
+
         int k = rl;
         RecSolvablePolynomialRing<BigRational> pfe = ring.extend(k);
         //System.out.println("pfe = " + pfe);
@@ -409,6 +421,18 @@ public class RecSolvablePolynomialTest extends TestCase {
      * Test reversion for Weyl relations.
      */
     public void testReverseWeyl() {
+        GenSolvablePolynomialRing<BigRational> csring 
+            = new GenSolvablePolynomialRing<BigRational>(cfac, tord, cvars);
+        WeylRelations<BigRational> wlc = new WeylRelations<BigRational>(csring);
+        wlc.generate();
+        assertFalse("isCommutative()", csring.isCommutative());
+        assertTrue("isAssociative()", csring.isAssociative());
+
+        RecSolvablePolynomial<BigRational> r1 = ring.parse("x");
+        GenSolvablePolynomial<BigRational> r2 = csring.parse("b");
+        RecSolvablePolynomial<BigRational> rp = ring.parse("b x + a");
+        ring.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(), rp);
+
         RecSolvablePolynomialRing<BigRational> pfr = ring.reverse();
         RecSolvablePolynomialRing<BigRational> pfrr = pfr.reverse();
         assertEquals("pf == pfrr",ring,pfrr);
