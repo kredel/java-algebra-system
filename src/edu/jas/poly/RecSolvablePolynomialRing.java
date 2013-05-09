@@ -603,7 +603,7 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
         RecSolvablePolynomialRing<C> spfac = new RecSolvablePolynomialRing<C>(pfac.coFac, pfac.nvar,
                         pfac.tord, pfac.vars);
         spfac.table.extend(this.table);
-        //todo spfac.coeffTable.extend(this.coeffTable);
+        spfac.coeffTable.extend(this.coeffTable);
         return spfac;
     }
 
@@ -620,7 +620,7 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
         RecSolvablePolynomialRing<C> spfac = new RecSolvablePolynomialRing<C>(pfac.coFac, pfac.nvar,
                         pfac.tord, pfac.vars);
         spfac.table.contract(this.table);
-        //todo spfac.coeffTable.contract(this.coeffTable);
+        spfac.coeffTable.contract(this.coeffTable);
         return spfac;
     }
 
@@ -647,7 +647,7 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
                         pfac.tord, pfac.vars);
         spfac.partial = partial;
         spfac.table.reverse(this.table);
-        //todo spfac.coeffTable.reverse(this.coeffTable);
+        spfac.coeffTable.reverse(this.coeffTable);
         return spfac;
     }
 

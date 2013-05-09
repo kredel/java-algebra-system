@@ -558,7 +558,12 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                 ExpVector f = ep.getSecond();
                 GenSolvablePolynomial<C> p = (GenSolvablePolynomial<C>) jt.next();
                 ExpVector ex = e.extend(i, j, k);
-                ExpVector fx = f.extend(i, j, k);
+                ExpVector fx;
+                if (coeffTable) {
+                    fx = f;
+                } else {
+                    fx = f.extend(i, j, k);
+                }
                 GenSolvablePolynomial<C> px = (GenSolvablePolynomial<C>) p.extend(ring, j, k);
                 this.update(ex, fx, px);
             }
@@ -589,8 +594,13 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                 ExpVector f = ep.getSecond();
                 GenSolvablePolynomial<C> p = (GenSolvablePolynomial<C>) jt.next();
                 ExpVector ec = e.contract(i, e.length() - i);
-                ExpVector fc = f.contract(i, f.length() - i);
-                if (ec.isZERO() || fc.isZERO()) {
+                ExpVector fc;
+                if (coeffTable) {
+                    fc = f;
+                } else {
+                    fc = f.contract(i, f.length() - i);
+                }
+                if (ec.isZERO()) {
                     continue;
                 }
                 Map<ExpVector, GenPolynomial<C>> mc = p.contract(ring);
@@ -651,26 +661,37 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                 boolean change = true; // if relevant vars reversed
                 if (k >= 0) {
                     ex = e.reverse(k);
-                    fx = f.reverse(k);
+                    if (coeffTable) {
+                        fx = f;
+                    } else {
+                        fx = f.reverse(k);
+                    }
                     int[] ed = ex.dependencyOnVariables(); // = e
                     if (ed.length == 0 || ed[0] >= k) { // k >= 0
                         change = false;
                     }
-                    int[] fd = fx.dependencyOnVariables(); // = f
-                    if (fd.length == 0 || fd[0] >= k) { // k >= 0
-                        change = false;
-                    }
+                    //int[] fd = fx.dependencyOnVariables(); // = f
+                    //if (fd.length == 0 || fd[0] >= k) { // k >= 0
+                    //    change = false;
+                    //}
                 } else {
                     ex = e.reverse();
-                    fx = f.reverse();
+                    if (coeffTable) {
+                        fx = f;
+                    } else {
+                        fx = f.reverse();
+                    }
                 }
                 px = (GenSolvablePolynomial<C>) p.reverse(ring);
                 //System.out.println("change = " + change );
                 if (!change) {
                     this.update(e, f, px); // same order
                 } else {
-                    this.update(fx, ex, px); // opposite order
-                    //this.update( ex, fx, px ); // same order
+                    if (coeffTable) {
+                        this.update(ex, fx, px); // same order
+                    } else {
+                        this.update(fx, ex, px); // opposite order
+                    }
                 }
             }
         }
