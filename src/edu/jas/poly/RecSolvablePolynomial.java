@@ -38,7 +38,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
     private static final Logger logger = Logger.getLogger(RecSolvablePolynomial.class);
 
 
-    private final boolean debug = false; //logger.isDebugEnabled();
+    private final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -225,7 +225,8 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
                             logger.info("coeff, g1 = " + g1 + ", g2 = " + g2);
                         TableRelation<GenPolynomial<C>> crel = ring.coeffTable.lookup(e2, g2);
                         if (debug)
-                            logger.info("coeff, e  = " + e + " g, = " + g + ", crel = " + crel);
+                            logger.info("coeff, crel = " + crel.p);
+                        //logger.info("coeff, e  = " + e + " g, = " + g + ", crel = " + crel);
                         Cs = new RecSolvablePolynomial<C>(ring, crel.p);
                         // rest of multiplication and update relations
                         if (crel.f != null) {

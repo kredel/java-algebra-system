@@ -241,9 +241,14 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                 for (Iterator jt = v.iterator(); jt.hasNext();) {
                     ExpVectorPair ep = (ExpVectorPair) jt.next();
                     s.append("( " + ep.getFirst().toString(vars) + " ), ");
-                    s.append("( " + ep.getSecond().toString(vars) + " ), ");
+                    if (coeffTable) {
+                        s.append("( " + ep.getSecond().toString(cvars) + " ), ");
+                    } else {
+                        s.append("( " + ep.getSecond().toString(vars) + " ), ");
+                    }
                     GenSolvablePolynomial<C> p = (GenSolvablePolynomial<C>) jt.next();
-                    s.append("( " + p.toString(vars) + " )");
+                    //s.append("( " + p.toString(vars) + " )");
+                    s.append(" " + p.toString(vars));
                     if (jt.hasNext()) {
                         s.append(",\n");
                     }
@@ -262,6 +267,10 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
     public String toScript() {
         // Python case
         String[] vars = ring.vars;
+        String[] cvars = null;
+        if (coeffTable) {
+	    cvars = ((GenPolynomialRing<C>)ring.coFac).vars;
+        }
         List v;
         StringBuffer s = new StringBuffer("[");
         boolean first = true;
@@ -276,9 +285,14 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
             for (Iterator jt = v.iterator(); jt.hasNext();) {
                 ExpVectorPair ep = (ExpVectorPair) jt.next();
                 s.append("" + ep.getFirst().toScript(vars) + ", ");
-                s.append("" + ep.getSecond().toScript(vars) + ", ");
+                if (coeffTable) {
+                   s.append("" + ep.getSecond().toScript(cvars) + ", ");
+                } else {
+                   s.append("" + ep.getSecond().toScript(vars) + ", ");
+                }
                 GenPolynomial<C> p = (GenPolynomial<C>) jt.next();
-                s.append("( " + p.toScript() + " )");
+                //s.append("( " + p.toScript() + " )");
+                s.append(" " + p.toScript());
                 if (jt.hasNext()) {
                     s.append(", ");
                 }
