@@ -12,6 +12,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+//import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 
@@ -666,6 +667,36 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
         spfac.partial = partial;
         spfac.table.reverse(this.table);
         return spfac;
+    }
+
+
+    /**
+     * Recursive representation as polynomial with i main variables.
+     * @param i number of main variables.
+     * @return recursive polynomial ring factory.
+     */
+    public GenSolvablePolynomialRing<GenPolynomial<C>> recursive(int i) {
+        if (i <= 0 || i >= nvar) {
+            throw new IllegalArgumentException("wrong: 0 < " + i + " < " + nvar);
+        }
+        GenSolvablePolynomialRing<C> cfac = contract(i);
+        //System.out.println("cvars = " + Arrays.toString(cfac.vars));
+        //System.out.println("vars = " + Arrays.toString(vars));
+        String[] v = null;
+        if (vars != null) {
+            v = new String[i];
+            int k = 0;
+            for (int j = nvar - i; j < nvar; j++) {
+                v[k++] = vars[j];
+            }
+        }
+        //System.out.println("v = " + Arrays.toString(v));
+        TermOrder to = tord.contract(0, i); // ??
+        RecSolvablePolynomialRing<C> pfac = new RecSolvablePolynomialRing<C>(cfac, i, to, v);
+        //System.out.println("pfac = " + pfac.toScript());
+        pfac.table.contractLower(table);
+        pfac.coeffTable.contractLower(table);
+        return pfac;
     }
 
 }

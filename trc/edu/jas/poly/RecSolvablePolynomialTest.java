@@ -411,9 +411,9 @@ public class RecSolvablePolynomialTest extends TestCase {
         Map<ExpVector,GenPolynomial<GenPolynomial<BigRational>>> m = ae.contract(pfec);
         List<GenPolynomial<GenPolynomial<BigRational>>> ml = new ArrayList<GenPolynomial<GenPolynomial<BigRational>>>( m.values() );
         GenPolynomial<GenPolynomial<BigRational>> aec = (GenPolynomial<GenPolynomial<BigRational>>)ml.get(0);
-        assertEquals("a == aec",a,aec);
-        //System.out.println("ae = " + ae);
+        //System.out.println("ae  = " + ae);
         //System.out.println("aec = " + aec);
+        assertEquals("a == aec",a,aec);
     }
 
 
@@ -449,6 +449,46 @@ public class RecSolvablePolynomialTest extends TestCase {
         assertEquals("a == arr",a,arr);
         //System.out.println("ar = " + ar);
         //System.out.println("arr = " + arr);
+    }
+
+
+    /**
+     * Test recursive for Weyl relations.
+     */
+    public void testRecursiveWeyl() {
+        String[] svars = new String[] { "w", "x", "y", "z" };
+        GenSolvablePolynomialRing<BigRational> sring 
+            = new GenSolvablePolynomialRing<BigRational>(cfac, tord, svars);
+        WeylRelations<BigRational> wlc = new WeylRelations<BigRational>(sring);
+        wlc.generate();
+        assertFalse("isCommutative()", sring.isCommutative());
+        assertTrue("isAssociative()", sring.isAssociative());
+        System.out.println("sring = " + sring);
+
+        GenSolvablePolynomialRing<GenPolynomial<BigRational>> rsring 
+	    = sring.recursive(2);
+        System.out.println("rsring = " + rsring);
+
+        GenSolvablePolynomial<BigRational> ad, bd, cd;
+        GenSolvablePolynomial<GenPolynomial<BigRational>> ar, br, cr, dr;
+        ad = sring.random(kl,ll,el,q);
+        bd = sring.random(kl,ll,el,q);
+        cd = ad.multiply(bd);
+        System.out.println("ad = " + ad);
+        System.out.println("bd = " + bd);
+        System.out.println("cd = " + cd);
+
+        ar = (GenSolvablePolynomial<GenPolynomial<BigRational>>) PolyUtil.<BigRational> recursive(rsring,ad);
+        br = (GenSolvablePolynomial<GenPolynomial<BigRational>>) PolyUtil.<BigRational> recursive(rsring,bd);
+        cr = ar.multiply(br);
+        System.out.println("ar = " + ar);
+        System.out.println("br = " + br);
+        System.out.println("cr = " + cr);
+
+        dr = (GenSolvablePolynomial<GenPolynomial<BigRational>>) PolyUtil.<BigRational> recursive(rsring,cd);
+        System.out.println("dr = " + dr);
+
+        assertEquals("cr == dr",cr,dr);
     }
 
 }

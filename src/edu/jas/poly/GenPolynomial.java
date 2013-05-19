@@ -1763,7 +1763,7 @@ Iterable<Monomial<C>> {
      *         return SortedMap
      */
     public Map<ExpVector, GenPolynomial<C>> contract(GenPolynomialRing<C> pfac) {
-        GenPolynomial<C> zero = pfac.getZERO();
+        GenPolynomial<C> zero = pfac.getZERO(); //not pfac.coFac;
         TermOrder t = new TermOrder(TermOrder.INVLEX);
         Map<ExpVector, GenPolynomial<C>> B = new TreeMap<ExpVector, GenPolynomial<C>>(t.getAscendComparator());
         if (this.isZERO()) {
