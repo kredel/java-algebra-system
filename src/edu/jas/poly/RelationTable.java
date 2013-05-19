@@ -692,24 +692,28 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                 if (mc.size() == 1) { // < 1 only for p == 0
                     pc = (GenSolvablePolynomial<C>) mc.values().iterator().next();
                     this.update(ec, fc, pc);
-                } else if (coeffTable) {
+                } else { // construct recursive polynomial
                     GenSolvablePolynomial<C> qr = ring.getZERO();
                     for (Map.Entry<ExpVector,GenPolynomial<C>> mce : mc.entrySet() ) {
                         ExpVector g = mce.getKey();
                         GenPolynomial<C> q = mce.getValue();
-                        //System.out.println("g = " + g + ", q = " + q);
                         C cq = (C) q;
                         GenSolvablePolynomial<C> qp = new GenSolvablePolynomial<C>(ring,cq,g);
-                        //System.out.println("qp = " + qp);
                         qr = (GenSolvablePolynomial<C>) qr.sum(qp);
-                        //System.out.println("qr = " + qr);
                     }
-                    fc = ((GenPolynomial<C>)qr.leadingBaseCoefficient()).leadingExpVector();
+                    if (coeffTable) {
+                       fc = ((GenPolynomial<C>)qr.leadingBaseCoefficient()).leadingExpVector();
+                    }
+                    if ( fc.isZERO() ) {
+                        continue;
+                    }
                     //System.out.println("ec = " + ec + ", fc = " + fc + ", qr = " + qr);
-                    logger.info("coeffTable: adding " + qr);
+                    if ( coeffTable ) {
+                        logger.info("coeffTable: adding " + qr);
+                    } else {
+                        logger.info("no coeffTable: adding " + qr);
+                    }
                     this.update(ec, fc, qr);
-                } else {
-                    logger.info("not coeffTable: ignoring " + p);
                 }
             }
         }

@@ -460,10 +460,11 @@ public class RecSolvablePolynomialTest extends TestCase {
         GenSolvablePolynomialRing<BigRational> sring 
             = new GenSolvablePolynomialRing<BigRational>(cfac, tord, svars);
         WeylRelations<BigRational> wlc = new WeylRelations<BigRational>(sring);
-        wlc.generate();
+        //wlc.generate();
+        wlc.generateIterated();
         assertFalse("isCommutative()", sring.isCommutative());
         assertTrue("isAssociative()", sring.isAssociative());
-        //System.out.println("sring = " + sring); //.toScript());
+        //System.out.println("sring = " + sring); 
         System.out.println("sring = " + sring.toScript());
 
         GenSolvablePolynomialRing<GenPolynomial<BigRational>> rsring = sring.recursive(2);
