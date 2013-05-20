@@ -15,13 +15,11 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * RecSolvablePolynomial generic solvable polynomials implementing RingElem.
- * n-variate ordered solvable polynomials over solvable polynomial coefficients.
- * Objects of this class are intended to be immutable. The implementation is
- * based on TreeMap respectively SortedMap from exponents to coefficients by
- * extension of GenPolybomial. Only the coefficients are modeled with generic
- * types, the exponents are fixed to ExpVector with long entries (this will
- * eventually be changed in the future).
+ * RecSolvablePolynomial generic recursive solvable polynomials implementing
+ * RingElem. n-variate ordered solvable polynomials over solvable polynomial
+ * coefficients. Objects of this class are intended to be immutable. The
+ * implementation is based on TreeMap respectively SortedMap from exponents to
+ * coefficients by extension of GenPolynomial.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */

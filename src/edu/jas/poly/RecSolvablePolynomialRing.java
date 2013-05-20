@@ -22,11 +22,14 @@ import edu.jas.structure.RingFactory;
 
 
 /**
- * RecSolvablePolynomialRing generic solvable polynomial factory implementing
- * RingFactory and extending GenPolynomialRing factory; Factory for n-variate
- * ordered solvable polynomials over solvable polynomial coefficients. The
- * non-commutative multiplication relations are maintained in a relation table.
- * Almost immutable object, except variable names and relation table contents.
+ * RecSolvablePolynomialRing generic recursive solvable polynomial factory
+ * implementing RingFactory and extending GenSolvablePolynomialRing factory.
+ * Factory for n-variate ordered solvable polynomials over solvable polynomial
+ * coefficients. The non-commutative multiplication relations are maintained in
+ * a relation table and the non-commutative multiplication relations between the
+ * coefficients and the main variables are maintained in a coefficient relation
+ * table. Almost immutable object, except variable names and relation table
+ * contents.
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
@@ -323,8 +326,9 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
 
 
     /**
-     * Query if this ring is associative. Test if the relations define an
-     * associative solvable ring.
+     * Query if this ring is associative. Test if the relations between the mian
+     * variables and the coefficient generators define an associative solvable
+     * ring.
      * @return true, if this ring is associative, else false.
      */
     @Override
@@ -333,11 +337,11 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
         List<GenPolynomial<GenPolynomial<C>>> gens = generators();
         int ngen = gens.size();
         for (int i = 0; i < ngen; i++) {
-            Xi = (RecSolvablePolynomial<C>) gens.get(i); //univariate(i);
+            Xi = (RecSolvablePolynomial<C>) gens.get(i);
             for (int j = i + 1; j < ngen; j++) {
-                Xj = (RecSolvablePolynomial<C>) gens.get(j); //univariate(j);
+                Xj = (RecSolvablePolynomial<C>) gens.get(j);
                 for (int k = j + 1; k < ngen; k++) {
-                    Xk = (RecSolvablePolynomial<C>) gens.get(k); //univariate(k);
+                    Xk = (RecSolvablePolynomial<C>) gens.get(k);
                     p = Xk.multiply(Xj).multiply(Xi);
                     q = Xk.multiply(Xj.multiply(Xi));
                     if (!p.equals(q)) {
@@ -600,8 +604,8 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
     @Override
     public RecSolvablePolynomialRing<C> extend(int i) {
         GenPolynomialRing<GenPolynomial<C>> pfac = super.extend(i);
-        RecSolvablePolynomialRing<C> spfac 
-           = new RecSolvablePolynomialRing<C>(pfac.coFac, pfac.nvar, pfac.tord, pfac.vars);
+        RecSolvablePolynomialRing<C> spfac = new RecSolvablePolynomialRing<C>(pfac.coFac, pfac.nvar,
+                        pfac.tord, pfac.vars);
         spfac.table.extend(this.table);
         spfac.coeffTable.extend(this.coeffTable);
         return spfac;
@@ -617,8 +621,8 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
     @Override
     public RecSolvablePolynomialRing<C> contract(int i) {
         GenPolynomialRing<GenPolynomial<C>> pfac = super.contract(i);
-        RecSolvablePolynomialRing<C> spfac 
-           = new RecSolvablePolynomialRing<C>(pfac.coFac, pfac.nvar, pfac.tord, pfac.vars);
+        RecSolvablePolynomialRing<C> spfac = new RecSolvablePolynomialRing<C>(pfac.coFac, pfac.nvar,
+                        pfac.tord, pfac.vars);
         spfac.table.contract(this.table);
         spfac.coeffTable.contract(this.coeffTable);
         return spfac;

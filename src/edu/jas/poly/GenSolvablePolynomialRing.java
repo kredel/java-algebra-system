@@ -12,7 +12,6 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-//import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 
@@ -24,7 +23,7 @@ import edu.jas.structure.RingFactory;
 
 /**
  * GenSolvablePolynomialRing generic solvable polynomial factory implementing
- * RingFactory and extending GenPolynomialRing factory; Factory for n-variate
+ * RingFactory and extending GenPolynomialRing factory. Factory for n-variate
  * ordered solvable polynomials over C. The non-commutative multiplication
  * relations are maintained in a relation table. Almost immutable object, except
  * variable names and relation table contents.
@@ -671,10 +670,11 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
 
 
     /**
-     * Recursive representation as polynomial with i main variables.
+     * Recursive representation as polynomial ring with i main variables.
      * @param i number of main variables.
      * @return recursive polynomial ring factory.
      */
+    @Override
     public GenSolvablePolynomialRing<GenPolynomial<C>> recursive(int i) {
         if (i <= 0 || i >= nvar) {
             throw new IllegalArgumentException("wrong: 0 < " + i + " < " + nvar);
@@ -694,8 +694,8 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
         TermOrder to = tord.contract(0, i); // ??
         RecSolvablePolynomialRing<C> pfac = new RecSolvablePolynomialRing<C>(cfac, i, to, v);
         //System.out.println("pfac = " + pfac.toScript());
-        pfac.table.contractLower(table);
-        pfac.coeffTable.contractLower(table);
+        pfac.table.recursive(table);
+        pfac.coeffTable.recursive(table);
         return pfac;
     }
 
