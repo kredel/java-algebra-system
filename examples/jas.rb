@@ -907,6 +907,8 @@ java_import "edu.jas.poly.GenPolynomial";
 java_import "edu.jas.poly.GenPolynomialRing";
 java_import "edu.jas.poly.GenSolvablePolynomial";
 java_import "edu.jas.poly.GenSolvablePolynomialRing";
+java_import "edu.jas.poly.RecSolvablePolynomial";
+java_import "edu.jas.poly.RecSolvablePolynomialRing";
 java_import "edu.jas.poly.GenWordPolynomial";
 java_import "edu.jas.poly.GenWordPolynomialRing";
 java_import "edu.jas.poly.GenPolynomialTokenizer";
@@ -2777,22 +2779,41 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
         if order.is_a? TermOrder
             to = order;
         end
-        ring = GenSolvablePolynomialRing.new(cf,nv,to,names);
-        if rel != nil
-            #puts "rel = " + str(rel);
-            table = ring.table;
-            ll = [];
-            for x in rel
-                if x.is_a? RingElem
-                    x = x.elem;
-                end
-                ll << x;
+        ll = [];
+        for x in rel
+            if x.is_a? RingElem
+               x = x.elem;
             end
-            #puts "rel = " + str(ll);
+            ll << x;
+        end
+        recSolv = false;
+        (0..ll.size-1).step(3) { |i|
+            if ll[i+1].isConstant()
+               recSolv = true;
+            end
+	}
+        recSolv = recSolv and cf.is_a? GenPolynomial
+        if recSolv
+           ring = RecSolvablePolynomialRing.new(cf,nv,to,names);
+           table = ring.table;
+           coeffTable = ring.coeffTable;
+        else
+           ring = GenSolvablePolynomialRing.new(cf,nv,to,names);
+           table = ring.table;
+           coeffTable = table;
+        end
+        if ll != []
+            #puts "ll = " + str(ll);
 	    (0..ll.size-1).step(3) { |i|
                 #puts "type " + str(ll[i].class);
-                table.update( ll[i], ll[i+1], ll[i+2] );
+                if recSolv and ll[i+1].isConstant() 
+                   coeffTable.update( ll[i], ll[i+1], ll[i+2] );
+                else 
+                   table.update( ll[i], ll[i+1], ll[i+2] );
+                end
 	    }
+            #puts "ring " + ring.toScript();
+            #puts "isAssoc " + str(ring.isAssociative());
         end
         @ring = ring;
         #puts "SolvPolyRing to super()";
