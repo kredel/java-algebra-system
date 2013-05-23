@@ -419,6 +419,9 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 if (pairlist == null) {
                     // pairlist = new OrderedPairlist<C>( modv, p.ring );
                     pairlist = strategy.create(modv, p.ring);
+                    if ( ! p.ring.coFac.isField() ) {
+                        throw new IllegalArgumentException("coefficients not from a field");
+                    }
                 }
                 // putOne not required
                 pairlist.put(p);

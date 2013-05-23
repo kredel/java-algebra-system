@@ -419,11 +419,15 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         }
         C ce = E.leadingBaseCoefficient();
         C cf = F.leadingBaseCoefficient();
-        if (!ce.isONE() || !cf.isONE()) {
-            throw new IllegalArgumentException("lbcf of polynomials must be one: " + ce + ", " + cf);
+        if (!ce.isONE()) {
+            throw new IllegalArgumentException("lbcf of polynomials must be one: " + ce + ", " + cf + ", p = " + p);
         }
         ExpVector e = E.leadingExpVector();
         ExpVector f = F.leadingExpVector();
+        if (coeffTable && f.isZERO() && cf instanceof GenPolynomial) {
+            f = ((GenPolynomial<C>)cf).leadingExpVector();
+        }
+        //logger.info("update: " + e + " .*. " + f + " = " + p);
         update(e, f, p);
     }
 
