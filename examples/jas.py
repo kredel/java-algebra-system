@@ -15,6 +15,7 @@ from edu.jas.arith       import BigInteger, BigRational, BigComplex, BigDecimal,
                                 Product, ProductRing, PrimeList
 from edu.jas.poly        import GenPolynomial, GenPolynomialRing, Monomial,\
                                 GenSolvablePolynomial, GenSolvablePolynomialRing,\
+                                RecSolvablePolynomial, RecSolvablePolynomialRing,\
                                 GenWordPolynomial, GenWordPolynomialRing,\
                                 Word, WordFactory,\
                                 GenPolynomialTokenizer, OrderedPolynomialList, PolyUtil,\
@@ -3211,19 +3212,34 @@ class SolvPolyRing(SolvableRing):
         to = PolyRing.lex;
         if isinstance(order,TermOrder):
             to = order;
-        ring = GenSolvablePolynomialRing(cf,nv,to,names);
-        if rel != None:
-            #print "rel = " + str(rel);
+        L = [];
+        for x in rel:
+            if isinstance(x,RingElem):
+               x = x.elem;
+            L.append(x);
+        recSolv = False;
+        for i in range(0,len(L),3):
+            #print "L[i+1] = " + str(L[i+1]);
+            if L[i+1].isConstant():
+               recSolv = True;
+        #print "cf = " + str(cf.getClass().getSimpleName());
+        recSolv = recSolv and (cf.getClass().getSimpleName() == "GenPolynomialRing" or cf.getClass().getSimpleName() == "GenSolvablePolynomialRing");
+        if recSolv:
+            ring = RecSolvablePolynomialRing(cf,nv,to,names);
             table = ring.table;
-            L = [];
-            for x in rel:
-                if isinstance(x,RingElem):
-                    x = x.elem;
-                L.append(x);
+            coeffTable = ring.coeffTable;
+        else:
+            ring = GenSolvablePolynomialRing(cf,nv,to,names);
+            table = ring.table;
+            coeffTable = table;
+        if L != []:
             #print "rel = " + str(L);
             for i in range(0,len(L),3):
                 #print "adding relation: " + str(L[i]) + " * " + str(L[i+1]) + " = " + str(L[i+2]);
-                table.update( L[i], L[i+1], L[i+2] );
+                if recSolv and L[i+1].isConstant():
+                    coeffTable.update( L[i], L[i+1], L[i+2] );
+                else:
+                    table.update( L[i], L[i+1], L[i+2] );
         self.ring = ring;
         SolvableRing.__init__(self,ring=self.ring)
 

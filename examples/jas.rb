@@ -2792,7 +2792,7 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
                recSolv = true;
             end
 	}
-        recSolv = recSolv and cf.is_a? GenPolynomial
+        recSolv = recSolv and cf.is_a? GenPolynomialRing
         if recSolv
            ring = RecSolvablePolynomialRing.new(cf,nv,to,names);
            table = ring.table;
