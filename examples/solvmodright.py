@@ -7,6 +7,7 @@ from jas import SolvableSubModule
 # Quantum plane example
 
 rsan = """
+# not with twosidedGB, because of field
 AN[ (i) (i^2 + 1) ] (Y,X,x,y) G
 RelationTable
 (
@@ -25,8 +26,8 @@ RelationTable
 )
 """;
 
-#r = SolvableModule( rsc );
-r = SolvableModule( rsan );
+r = SolvableModule( rsc );
+#r = SolvableModule( rsan );
 print "SolvableModule: " + str(r);
 print;
 
