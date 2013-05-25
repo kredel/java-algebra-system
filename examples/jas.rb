@@ -1793,6 +1793,7 @@ java_import "edu.jas.gb.OrderedSyzPairlist";
 java_import "edu.jas.gb.GroebnerBaseSeqPairParallel";
 java_import "edu.jas.gb.SolvableGroebnerBaseParallel";
 java_import "edu.jas.gb.SolvableGroebnerBaseSeq";
+java_import "edu.jas.gb.SolvableReductionSeq";
 java_import "edu.jas.gb.WordGroebnerBaseSeq";
 
 java_import "edu.jas.gbufd.GroebnerBasePseudoRecSeq";
@@ -2086,10 +2087,10 @@ Compute a normal form of p with respect to this ideal.
         if p.is_a? RingElem
             p = p.elem;
         end
-        t = System.currentTimeMillis();
+        #t = System.currentTimeMillis();
         n = ReductionSeq.new().normalform(gg,p);
-        t = System.currentTimeMillis() - t;
-        puts "sequential reduction executed in " + str(t) + " ms"; 
+        #t = System.currentTimeMillis() - t;
+        #puts "sequential reduction executed in " + str(t) + " ms"; 
         return RingElem.new(n);
     end
 
@@ -2183,6 +2184,18 @@ Compute the univariate polynomials in each variable of this ideal.
         ll = s.constructUnivariate();
         nn = ll.map {|e| RingElem.new(e) };
         return nn;
+    end
+
+=begin rdoc
+Compute the inverse polynomial modulo this ideal, if it exists.
+=end
+    def inverse(p)
+        if p.is_a? RingElem
+            p = p.elem;
+        end
+        s = Ideal.new(@pset);
+        i = s.inverse(p);
+        return RingElem.new(i);
     end
 
 =begin rdoc
@@ -2979,6 +2992,44 @@ Compute the univariate polynomials in each variable of this twosided ideal.
         ll = s.constructUnivariate();
         nn = ll.map {|e| RingElem.new(e) };
         return nn;
+    end
+
+=begin rdoc
+Compute the inverse polynomial with respect to this twosided ideal.
+=end
+    def inverse(p)
+        if p.is_a? RingElem
+            p = p.elem;
+        end
+        s = SolvableIdeal.new(@pset);
+        i = s.inverse(p);
+        return RingElem.new(i);
+    end
+
+=begin rdoc
+Compute a left normal form of p with respect to this ideal.
+=end
+    def leftReduction(p)
+        s = @pset;
+        gg = s.list;
+        if p.is_a? RingElem
+            p = p.elem;
+        end
+        n = SolvableReductionSeq.new().leftNormalform(gg,p);
+        return RingElem.new(n);
+    end
+
+=begin rdoc
+Compute a right normal form of p with respect to this ideal.
+=end
+    def rightReduction(p)
+        s = @pset;
+        gg = s.list;
+        if p.is_a? RingElem
+            p = p.elem;
+        end
+        n = SolvableReductionSeq.new().rightNormalform(gg,p);
+        return RingElem.new(n);
     end
 
 =begin rdoc

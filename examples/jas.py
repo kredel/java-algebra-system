@@ -34,7 +34,7 @@ from edu.jas.gb          import EReductionSeq, DGroebnerBaseSeq, EGroebnerBaseSe
                                 OrderedPairlist, OrderedSyzPairlist,\
                                 ReductionSeq, GroebnerBaseParallel, GroebnerBaseSeqPairParallel,\
                                 SolvableGroebnerBaseParallel, SolvableGroebnerBaseSeq,\
-                                WordGroebnerBaseSeq
+                                SolvableReductionSeq, WordGroebnerBaseSeq
 from edu.jas.gbufd       import GroebnerBasePseudoRecSeq, GroebnerBasePseudoSeq,\
                                 GroebnerBasePseudoParallel,\
                                 RGroebnerBasePseudoSeq, RGroebnerBaseSeq, RReductionSeq,\
@@ -648,10 +648,7 @@ class Ideal:
         G = s.list;
         if isinstance(p,RingElem):
             p = p.elem;
-        t = System.currentTimeMillis();
         n = ReductionSeq().normalform(G,p);
-        t = System.currentTimeMillis() - t;
-        print "sequential reduction executed in %s ms" % t; 
         return RingElem(n);
 
     def NF(self,reducer):
@@ -723,6 +720,16 @@ class Ideal:
         L = s.constructUnivariate();
         N = [ RingElem(e) for e in L ];
         return N;
+
+    def inverse(self,p):
+        '''Compute the inverse polynomial modulo this ideal, if it exists.
+        '''
+        s = jas.application.Ideal(self.pset);
+        if isinstance(p,RingElem):
+            p = p.elem;
+        i = s.inverse(p);
+        return RingElem(i);
+
 
     def optimize(self):
         '''Optimize the term order on the variables.
@@ -1285,6 +1292,35 @@ class SolvableIdeal:
         L = s.constructUnivariate();
         N = [ RingElem(e) for e in L ];
         return N;
+
+    def inverse(self,p):
+        '''Compute the inverse polynomial modulo this ideal, if it exists.
+        '''
+        s = jas.application.SolvableIdeal(self.pset);
+        if isinstance(p,RingElem):
+            p = p.elem;
+        i = s.inverse(p);
+        return RingElem(i);
+
+    def leftReduction(self,p):
+        '''Compute a left normal form of p with respect to this ideal.
+        '''
+        s = self.pset;
+        G = s.list;
+        if isinstance(p,RingElem):
+            p = p.elem;
+        n = SolvableReductionSeq().leftNormalform(G,p);
+        return RingElem(n);
+
+    def rightReduction(self,p):
+        '''Compute a right normal form of p with respect to this ideal.
+        '''
+        s = self.pset;
+        G = s.list;
+        if isinstance(p,RingElem):
+            p = p.elem;
+        n = SolvableReductionSeq().rightNormalform(G,p);
+        return RingElem(n);
 
     def parLeftGB(self,th):
         '''Compute a left Groebner base in parallel.
