@@ -3,7 +3,7 @@
 <!-- $Id$ -->
 
 
-<project name="jas" default="usage" basedir="." >
+<project name="jas" default="usage" basedir="." xmlns:jacoco="antlib:org.jacoco.ant">
 
   <property name="src"       value="src" />
   <property name="testsrc"   value="trc" />
@@ -44,6 +44,10 @@
     </classpath>
   </taskdef>
 -->
+
+  <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+        <classpath path="${libs}/jacocoant.jar"/>
+  </taskdef>
 
 <target name="vorher" >
   <!-- set properties DSTAMP, TSTAMP -->
@@ -195,6 +199,23 @@
   </junit>
 </target>
 
+<target name="coverage" 
+        depends="vorher" >
+  <jacoco:coverage>
+  <junit printsummary="yes" 
+         fork="yes" 
+         showoutput="yes"
+         haltonfailure="no" >
+     <classpath path="${cp}" />
+     <formatter type="plain" /> <!-- plain, xml, brief -->
+     <batchtest todir="${test}" >
+        <fileset dir="${build}">
+          <include name="edu/**/*Test.class"/>
+        </fileset>
+     </batchtest>
+  </junit>
+  </jacoco:coverage>
+</target>
 
 <target name="exam" depends="compile" >
   <java classname="edu.jas.poly.Examples" classpath="${cp}" fork="yes" args="1" />
@@ -231,6 +252,24 @@
         <pathelement location="${bin}"/>
       </classespath>
   </jdepend>
+</target>
+
+<target name="jacoco" depends="vorher" >
+  <jacoco:report>
+    <executiondata>
+        <file file="jacoco.exec"/>
+    </executiondata>
+    <structure name="Java Algebra System Jacoco Report">
+        <classfiles>
+            <fileset dir="edu"/>
+        </classfiles>
+        <sourcefiles encoding="UTF-8">
+            <fileset dir="src"/>
+            <!--fileset dir="trc"/-->
+        </sourcefiles>
+    </structure>
+    <html destdir="report"/>        
+  </jacoco:report>
 </target>
 
 <target name="jar" depends="vorher" >
