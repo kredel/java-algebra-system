@@ -52,6 +52,17 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
     /**
      * Constructor for RecSolvablePolynomial.
      * @param r solvable polynomial ring factory.
+     * @param e exponent.
+     */
+    public RecSolvablePolynomial(RecSolvablePolynomialRing<C> r, ExpVector e) {
+        this(r);
+        val.put(e, ring.getONECoefficient());
+    }
+
+
+    /**
+     * Constructor for RecSolvablePolynomial.
+     * @param r solvable polynomial ring factory.
      * @param c coefficient polynomial.
      * @param e exponent.
      */
@@ -382,17 +393,20 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
         if (b == null || b.isZERO()) {
             return Cp;
         }
-        Map<ExpVector, GenPolynomial<C>> Cm = Cp.val; //getMap();
-        Map<ExpVector, GenPolynomial<C>> Am = val;
-        for (Map.Entry<ExpVector, GenPolynomial<C>> y : Am.entrySet()) {
-            ExpVector e = y.getKey();
-            GenPolynomial<C> a = y.getValue();
-            GenPolynomial<C> c = a.multiply(b);
-            if (!c.isZERO()) {
-                Cm.put(e, c);
-            }
-        }
-        return Cp;
+        Cp = new RecSolvablePolynomial<C>(ring, b, ring.evzero);
+        return multiply(Cp);
+        // wrong:
+        // Map<ExpVector, GenPolynomial<C>> Cm = Cp.val; //getMap();
+        // Map<ExpVector, GenPolynomial<C>> Am = val;
+        // for (Map.Entry<ExpVector, GenPolynomial<C>> y : Am.entrySet()) {
+        //     ExpVector e = y.getKey();
+        //     GenPolynomial<C> a = y.getValue();
+        //     GenPolynomial<C> c = a.multiply(b);
+        //     if (!c.isZERO()) {
+        //         Cm.put(e, c);
+        //     }
+        // }
+        // return Cp;
     }
 
 
@@ -412,17 +426,21 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
         if (c == null || c.isZERO()) {
             return Cp;
         }
-        Map<ExpVector, GenPolynomial<C>> Cm = Cp.val; //getMap();
-        Map<ExpVector, GenPolynomial<C>> Am = val;
-        for (Map.Entry<ExpVector, GenPolynomial<C>> y : Am.entrySet()) {
-            ExpVector e = y.getKey();
-            GenPolynomial<C> a = y.getValue();
-            GenPolynomial<C> d = b.multiply(a).multiply(c);
-            if (!d.isZERO()) {
-                Cm.put(e, d);
-            }
-        }
-        return Cp;
+        RecSolvablePolynomial<C> Cb = new RecSolvablePolynomial<C>(ring, b, ring.evzero);
+        RecSolvablePolynomial<C> Cc = new RecSolvablePolynomial<C>(ring, c, ring.evzero);
+        return Cb.multiply(this).multiply(Cc);
+        // wrong:
+        // Map<ExpVector, GenPolynomial<C>> Cm = Cp.val; //getMap();
+        // Map<ExpVector, GenPolynomial<C>> Am = val;
+        // for (Map.Entry<ExpVector, GenPolynomial<C>> y : Am.entrySet()) {
+        //     ExpVector e = y.getKey();
+        //     GenPolynomial<C> a = y.getValue();
+        //     GenPolynomial<C> d = b.multiply(a).multiply(c);
+        //     if (!d.isZERO()) {
+        //         Cm.put(e, d);
+        //     }
+        // }
+        // return Cp;
     }
 
 

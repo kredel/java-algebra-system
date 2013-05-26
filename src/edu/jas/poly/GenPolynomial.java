@@ -682,7 +682,9 @@ Iterable<Monomial<C>> {
         ExpVector lt = ai.next();
         lt = ai.next(); // size > 1
         SortedMap<ExpVector, C> red = val.tailMap(lt);
-        return new GenPolynomial<C>(ring, red);
+        GenPolynomial<C> r = ring.getZERO().copy();
+        r.doPutToMap(red); //  new GenPolynomial<C>(ring, red);
+        return r;
     }
 
 
