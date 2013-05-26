@@ -39,7 +39,7 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
 
 
     /**
-     * The solvable multiplication relations.
+     * The solvable multiplication relations between variables and coefficients.
      */
     public final RelationTable<GenPolynomial<C>> coeffTable;
 

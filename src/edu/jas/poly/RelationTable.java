@@ -18,8 +18,6 @@ import org.apache.log4j.Logger;
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.structure.RingElem;
-import edu.jas.gbmod.SolvableQuotient;
-import edu.jas.gbmod.SolvableQuotientRing;
 
 
 /**
@@ -204,9 +202,6 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         if (coeffTable) {
             if (ring.coFac instanceof GenPolynomialRing) {
                 cvars = ((GenPolynomialRing<C>) ring.coFac).getVars();
-            }
-            if (ring.coFac instanceof SolvableQuotientRing) {
-                cvars = ((SolvableQuotientRing) ring.coFac).ring.getVars();
             }
             s.append("Coefficient ");
         }
@@ -505,16 +500,6 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                     C c = (C) pc;
                     p = new GenSolvablePolynomial<C>(ring, c, e);
                     //System.out.println("pc = " + pc + ", p = " + p);
-                }
-                if (ring.coFac instanceof SolvableQuotientRing) {
-                    SolvableQuotientRing cofac = (SolvableQuotientRing) ring.coFac;
-                    GenSolvablePolynomialRing pcofac = cofac.ring;
-                    System.out.println("f = " + f + ", e = " + e);
-                    GenSolvablePolynomial pc = (GenSolvablePolynomial) pcofac.getZERO().sum(pcofac.getONECoefficient(), f);
-                    SolvableQuotient pcq = new SolvableQuotient(cofac,pc);
-                    C c = (C) pcq;
-                    p = new GenSolvablePolynomial<C>(ring, c, e);
-                    System.out.println("pc = " + pc + ", p = " + p);
                 }
             }
             return new TableRelation<C>(null, null, p);

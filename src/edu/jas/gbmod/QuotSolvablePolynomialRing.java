@@ -12,6 +12,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -23,6 +24,8 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
+import edu.jas.poly.RecSolvablePolynomial;
+import edu.jas.poly.RecSolvablePolynomialRing;
 import edu.jas.poly.RelationTable;
 import edu.jas.poly.TermOrder;
 import edu.jas.structure.GcdRingElem;
@@ -48,9 +51,15 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>> extends
 
 
     /**
-     * The solvable multiplication relations.
+     * The solvable multiplication relations between variables and coefficients.
      */
-    public final RelationTable<SolvableQuotient<C>> coeffTable;
+    public final RelationTable<GenPolynomial<C>> coeffTable;
+
+
+    /**
+     * Recursive solvable polynomial ring with polynomial coefficients.
+     */
+    public final RecSolvablePolynomialRing<C> polCoeff;
 
 
     /**
@@ -170,7 +179,15 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>> extends
                     RelationTable<SolvableQuotient<C>> rt) {
         super(cf, n, t, v, rt);
         //if (rt == null) { // handled in super }
-        coeffTable = new RelationTable<SolvableQuotient<C>>(this, true);
+        SolvableQuotientRing<C> cfring = (SolvableQuotientRing<C>) cf; // == coFac
+        polCoeff = new RecSolvablePolynomialRing<C>(cfring.ring, n, t, v);
+        if (table.size() > 0) { // TODO
+            ExpVector e = null;
+            ExpVector f = null;
+            GenSolvablePolynomial<GenPolynomial<C>> p = null;
+            polCoeff.table.update(e,f,p); // from rt
+        }
+        coeffTable = new RelationTable<GenPolynomial<C>>(polCoeff, true);
         ZERO = new QuotSolvablePolynomial<C>(this);
         SolvableQuotient<C> coeff = coFac.getONE();
         //evzero = ExpVector.create(nvar); // from super
@@ -662,6 +679,63 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>> extends
         spfac.table.reverse(this.table);
         spfac.coeffTable.reverse(this.coeffTable);
         return spfac;
+    }
+
+
+    /**
+     * Rational function from integral polynomial coefficients. Represent as
+     * polynomial with type SolvableQuotient<C> coefficients.
+     * @param A polynomial with integral polynomial coefficients to be
+     *            converted.
+     * @return polynomial with type SolvableQuotient<C> coefficients.
+     */
+    public QuotSolvablePolynomial<C> fromPolyCoefficients(GenSolvablePolynomial<GenPolynomial<C>> A) {
+        QuotSolvablePolynomial<C> B = getZERO().copy();
+        if (A == null || A.isZERO()) {
+            return B;
+        }
+        RingFactory<SolvableQuotient<C>> cfac = coFac;
+        SolvableQuotientRing<C> qfac = (SolvableQuotientRing<C>) cfac;
+        for (Map.Entry<ExpVector, GenPolynomial<C>> y : A.getMap().entrySet()) {
+            ExpVector e = y.getKey();
+            GenSolvablePolynomial<C> a = (GenSolvablePolynomial<C>) y.getValue();
+            SolvableQuotient<C> p = new SolvableQuotient<C>(qfac, a); // can not be zero
+            if (!p.isZERO()) {
+                //B = B.sum( p, e ); // inefficient
+                B.doPutToMap(e, p);
+            }
+        }
+        return B;
+    }
+
+
+    /**
+     * Integral function from rational polynomial coefficients. Represent as
+     * polynomial with type GenSolvablePolynomial<C> coefficients.
+     * @param A polynomial with rational polynomial coefficients to be
+     *            converted.
+     * @return polynomial with type GenSolvablePolynomial<C> coefficients.
+     */
+    public RecSolvablePolynomial<C> toPolyCoefficients(QuotSolvablePolynomial<C> A) {
+        RecSolvablePolynomial<C> B = polCoeff.getZERO().copy();
+        if (A == null || A.isZERO()) {
+            return B;
+        }
+        RingFactory<GenPolynomial<C>> cfac = polCoeff.coFac;
+        GenPolynomialRing<C> qfac = (GenPolynomialRing<C>) cfac;
+        for (Map.Entry<ExpVector, SolvableQuotient<C>> y : A.getMap().entrySet()) {
+            ExpVector e = y.getKey();
+            SolvableQuotient<C> a = y.getValue();
+            if ( !a.den.isONE() ) {
+                throw new IllegalArgumentException("den != 1 not supported: " + a);
+            }
+            GenPolynomial<C> p = a.num; // can not be zero
+            if (!p.isZERO()) {
+                //B = B.sum( p, e ); // inefficient
+                B.doPutToMap(e, p);
+            }
+        }
+        return B;
     }
 
 }
