@@ -18,6 +18,8 @@ import org.apache.log4j.Logger;
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.structure.RingElem;
+import edu.jas.gbmod.SolvableQuotient;
+import edu.jas.gbmod.SolvableQuotientRing;
 
 
 /**
@@ -67,7 +69,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
      * terminated.
      * @param r solvable polynomial ring factory.
      */
-    protected RelationTable(GenSolvablePolynomialRing<C> r) {
+    public RelationTable(GenSolvablePolynomialRing<C> r) {
         this(r, false);
     }
 
@@ -80,7 +82,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
      * @param r solvable polynomial ring factory.
      * @param coeffTable indicator for coeffTable.
      */
-    protected RelationTable(GenSolvablePolynomialRing<C> r, boolean coeffTable) {
+    public RelationTable(GenSolvablePolynomialRing<C> r, boolean coeffTable) {
         table = new HashMap<List<Integer>, List>();
         ring = r;
         if (ring == null) {
@@ -200,7 +202,12 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         StringBuffer s = new StringBuffer("");
         String[] cvars = null;
         if (coeffTable) {
-            cvars = ((GenPolynomialRing<C>) ring.coFac).getVars();
+            if (ring.coFac instanceof GenPolynomialRing) {
+                cvars = ((GenPolynomialRing<C>) ring.coFac).getVars();
+            }
+            if (ring.coFac instanceof SolvableQuotientRing) {
+                cvars = ((SolvableQuotientRing) ring.coFac).ring.getVars();
+            }
             s.append("Coefficient ");
         }
         s.append("RelationTable\n(");
@@ -364,12 +371,14 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                 throw new IllegalArgumentException("Coefficient RelationTable update e != lt(p): " + e
                                 + ", lp = " + lp);
             }
-            lp = ((GenPolynomial<C>) p.leadingBaseCoefficient()).leadingExpVector();
-            if (!f.equals(lp)) { // check for suitable term order
-                logger.error("relation term order = " + ring.tord);
-                logger.error("Coefficient RelationTable update f != lt(lfcd(p)): " + e + ", f = " + f
+            if (p.leadingBaseCoefficient() instanceof GenPolynomial) {
+                lp = ((GenPolynomial<C>) p.leadingBaseCoefficient()).leadingExpVector();
+                if (!f.equals(lp)) { // check for suitable term order
+                    logger.error("relation term order = " + ring.tord);
+                    logger.error("Coefficient RelationTable update f != lt(lfcd(p)): " + e + ", f = " + f
                                 + ", p = " + p);
-                //throw new IllegalArgumentException("Coefficient RelationTable update f != lt(lfcd(p)): "+ e + ", f = " + f + ", p = " + p);
+                    //throw new IllegalArgumentException("Coefficient RelationTable update f != lt(lfcd(p)): "+ e + ", f = " + f + ", p = " + p);
+                }
             }
         }
         List<Integer> key = makeKey(e, f);
@@ -484,17 +493,29 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         List<Integer> key = makeKey(e, f);
         List part = table.get(key);
         if (part == null) { // symmetric product
-            GenSolvablePolynomial<C> p;
+            GenSolvablePolynomial<C> p = null;
             if (!coeffTable) {
                 ExpVector ef = e.sum(f);
                 p = new GenSolvablePolynomial<C>(ring, ring.getONECoefficient(), ef);
             } else {
-                GenPolynomialRing<C> cofac = (GenPolynomialRing<C>) ring.coFac;
-                //System.out.println("f = " + f + ", e = " + e);
-                GenPolynomial<C> pc = cofac.getZERO().sum(cofac.getONECoefficient(), f);
-                C c = (C) pc;
-                p = new GenSolvablePolynomial<C>(ring, c, e);
-                //System.out.println("pc = " + pc + ", p = " + p);
+                if (ring.coFac instanceof GenPolynomialRing) {
+                    GenPolynomialRing<C> cofac = (GenPolynomialRing<C>) ring.coFac;
+                    //System.out.println("f = " + f + ", e = " + e);
+                    GenPolynomial<C> pc = cofac.getZERO().sum(cofac.getONECoefficient(), f);
+                    C c = (C) pc;
+                    p = new GenSolvablePolynomial<C>(ring, c, e);
+                    //System.out.println("pc = " + pc + ", p = " + p);
+                }
+                if (ring.coFac instanceof SolvableQuotientRing) {
+                    SolvableQuotientRing cofac = (SolvableQuotientRing) ring.coFac;
+                    GenSolvablePolynomialRing pcofac = cofac.ring;
+                    System.out.println("f = " + f + ", e = " + e);
+                    GenSolvablePolynomial pc = (GenSolvablePolynomial) pcofac.getZERO().sum(pcofac.getONECoefficient(), f);
+                    SolvableQuotient pcq = new SolvableQuotient(cofac,pc);
+                    C c = (C) pcq;
+                    p = new GenSolvablePolynomial<C>(ring, c, e);
+                    System.out.println("pc = " + pc + ", p = " + p);
+                }
             }
             return new TableRelation<C>(null, null, p);
         }

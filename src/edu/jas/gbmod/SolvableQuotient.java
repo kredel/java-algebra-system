@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.GenSolvablePolynomial;
+import edu.jas.poly.ExpVector;
 import edu.jas.structure.GcdRingElem;
 
 
@@ -526,6 +527,23 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
             return this;
         }
         GenSolvablePolynomial<C> n = num.multiply(b);
+        return new SolvableQuotient<C>(ring, n, den, false);
+    }
+
+
+    /**
+     * SolvableQuotient multiplication by exponent.
+     * @param e exponent vector.
+     * @return this*b.
+     */
+    public SolvableQuotient<C> multiply(ExpVector e) {
+        if (e == null || e.isZERO()) {
+            return this;
+        }
+        if (num.isZERO()) {
+            return this;
+        }
+        GenSolvablePolynomial<C> n = num.multiply(e);
         return new SolvableQuotient<C>(ring, n, den, false);
     }
 
