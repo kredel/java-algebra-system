@@ -187,7 +187,7 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>> extends
             GenSolvablePolynomial<GenPolynomial<C>> p = null;
             polCoeff.table.update(e,f,p); // from rt
         }
-        coeffTable = new RelationTable<GenPolynomial<C>>(polCoeff, true);
+        coeffTable = polCoeff.coeffTable; //new RelationTable<GenPolynomial<C>>(polCoeff, true);
         ZERO = new QuotSolvablePolynomial<C>(this);
         SolvableQuotient<C> coeff = coFac.getONE();
         //evzero = ExpVector.create(nvar); // from super

@@ -330,13 +330,13 @@ public class QuotSolvablePolynomialTest extends TestCase {
         GenSolvablePolynomialRing<BigRational> csring = new GenSolvablePolynomialRing<BigRational>(cfac,
                         tord, cvars);
         WeylRelations<BigRational> wlc = new WeylRelations<BigRational>(csring);
-        wlc.generate();
-        assertTrue("# relations == 1", csring.table.size() == 1);
-        assertFalse("isCommutative()", csring.isCommutative());
+        //wlc.generate();
+        //assertTrue("# relations == 1", csring.table.size() == 1);
+        //assertFalse("isCommutative()", csring.isCommutative());
         assertTrue("isAssociative()", csring.isAssociative());
 
         SolvableQuotientRing<BigRational> qcsring = new SolvableQuotientRing<BigRational>(csring);
-        assertFalse("isCommutative()", qcsring.isCommutative());
+        //assertFalse("isCommutative()", qcsring.isCommutative());
         assertTrue("isAssociative()", qcsring.isAssociative());
 
         ring = new QuotSolvablePolynomialRing<BigRational>(qcsring, ring);
@@ -345,7 +345,7 @@ public class QuotSolvablePolynomialTest extends TestCase {
         assertTrue("# relations == 2", ring.table.size() == 2);
         assertFalse("isCommutative()", ring.isCommutative());
         assertTrue("isAssociative()", ring.isAssociative());
-        System.out.println("ring = " + ring);
+        //System.out.println("ring = " + ring);
 
         RecSolvablePolynomial<BigRational> r1 = ring.polCoeff.parse("x");
         GenSolvablePolynomial<BigRational> r2 = csring.parse("b");
@@ -357,11 +357,14 @@ public class QuotSolvablePolynomialTest extends TestCase {
 
         table = ring.table;
         System.out.println("ring = " + ring);
+        //System.out.println("ring.polCoeff = " + ring.polCoeff);
 
         assertFalse("isCommutative()", ring.isCommutative());
         //assertTrue("isAssociative()", ring.isAssociative());
 
         List<GenPolynomial<SolvableQuotient<BigRational>>> gens = ring.generators();
+        gens = new ArrayList<GenPolynomial<SolvableQuotient<BigRational>>>();
+
         for (GenPolynomial<SolvableQuotient<BigRational>> x : gens) {
             GenSolvablePolynomial<SolvableQuotient<BigRational>> xx = (GenSolvablePolynomial<SolvableQuotient<BigRational>>) x;
             a = new QuotSolvablePolynomial<BigRational>(ring, xx);
@@ -380,19 +383,38 @@ public class QuotSolvablePolynomialTest extends TestCase {
             }
         }
 
-        a = ring.random(kl, ll, el, q);
+        //a = ring.random(kl, ll, el, q);
         //a = ring.getONE();
-        //System.out.println("a = " + a);
-        b = ring.random(kl, ll, el, q);
+        a = ring.parse("x");
+        System.out.println("a = " + a.toScript());
+        //b = ring.random(kl, ll, el, q);
         //b = ring.getONE();
-        //System.out.println("b = " + b);
+        b = ring.parse("b");
+        b = (QuotSolvablePolynomial<BigRational>) b.inverse();
+        System.out.println("b = " + b.toScript());
 
         // non-commutative
         c = b.multiply(a);
         d = a.multiply(b);
-        //System.out.println("c = " + c);
-        //System.out.println("d = " + d);
+        System.out.println("a = " + a.toScript());
+        System.out.println("b = " + b.toScript());
+        System.out.println("c = " + c.toScript());
+        System.out.println("d = " + d.toScript());
         assertTrue("a*b != b*a", c.equals(d) || c.leadingExpVector().equals(d.leadingExpVector()));
+
+        e = (QuotSolvablePolynomial<BigRational>) b.inverse();
+        System.out.println("e = " + e.toScript());
+        assertTrue("b*b^-1 == 1", e.multiply(b).isONE());
+
+        c = e.multiply(c);
+        d = d.multiply(e);
+        System.out.println("a = " + a.toScript());
+        System.out.println("b = " + b.toScript());
+        System.out.println("e = " + e.toScript());
+        System.out.println("c = " + c.toScript());
+        System.out.println("d = " + d.toScript());
+        //System.out.println("g = " + a.multiply(b.multiply(e)).toScript());
+        assertTrue("a == a * 1/b * b", a.equals(d));
     }
 
 
