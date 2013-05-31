@@ -141,6 +141,7 @@ public class QuotSolvablePolynomial<C extends GcdRingElem<C>> extends GenSolvabl
      * @param Bp QuotSolvablePolynomial.
      * @return this*Bp, where * denotes solvable multiplication.
      */
+    // not @Override
     public QuotSolvablePolynomial<C> multiply(QuotSolvablePolynomial<C> Bp) {
         if (Bp == null || Bp.isZERO()) {
             return ring.getZERO();
@@ -158,6 +159,7 @@ public class QuotSolvablePolynomial<C extends GcdRingElem<C>> extends GenSolvabl
         if (debug) {
             logger.debug("ring = " + ring);
         }
+        //System.out.println("this = " + this + ", Bp = " + Bp);
         ExpVector Z = ring.evzero;
         SolvableQuotientRing<C> cfac = (SolvableQuotientRing<C>) ring.coFac;
         ExpVector Zc = cfac.ring.evzero;
@@ -205,38 +207,6 @@ public class QuotSolvablePolynomial<C extends GcdRingElem<C>> extends GenSolvabl
                 } else { // unsymmetric
                     if (debug)
                         logger.info("unsymmetric coeff: b = " + b + ", e = " + e);
-                    /*
-                    if ( false && den.isONE() ) {
-                        qp = ring.getONE();
-		    //} else {
-                        RecSolvablePolynomial<C> qw = new RecSolvablePolynomial<C>(ring.polCoeff,e);
-                        RecSolvablePolynomial<C> w = qw.recMultiply(den);
-                        System.out.println("w = " + w + ", qw = " + qw);
-
-                        RecSolvablePolynomial<C> wr = (RecSolvablePolynomial<C>) w.reductum();
-                        SolvableQuotient<C> qden = new SolvableQuotient<C>(b.ring, b.ring.ring.getONE(), den);
-                        System.out.println("wr = " + wr + ", qden = " + qden);
-
-                        QuotSolvablePolynomial<C> wrq = ring.fromPolyCoefficients(wr);
-                        wrq = (QuotSolvablePolynomial<C>) wrq.multiply(qden); // recursion
-                        System.out.println("wrq = " + wrq);
-
-                        GenSolvablePolynomial<C> qlp = (GenSolvablePolynomial<C>) w.leadingBaseCoefficient();
-                        SolvableQuotient<C> ql = b.ring.getONE(); //new SolvableQuotient<C>(b.ring, qlp);
-                        qp = new QuotSolvablePolynomial<C>(ring,ql,w.leadingExpVector());
-                        SolvableQuotient<C> qdi = qden.inverse();
-                        System.out.println("qp = " + qp);
-                        qp = (QuotSolvablePolynomial<C>) qp.subtract(wrq);  
-                        System.out.println("qp = " + qp + ", qden^-1 = " + qdi);
-                        qp = qp.multiplyLeft(qden);
-                        if ( true || debug ) {
-                            QuotSolvablePolynomial<C> qpi = (QuotSolvablePolynomial<C>) qp.multiply(qdi);
-                            System.out.println("qp = " + qp + ", qp*den = " + qpi);
-                            qpi = (QuotSolvablePolynomial<C>) qpi.sum(wrq);
-                            System.out.println("qpi = " + qpi + ", wrq = " + wrq);
-                        }
-                    } // *1/d
-                    */
                     for (Map.Entry<ExpVector, C> z : b.num.getMap().entrySet()) { // TODO
                         C c = z.getValue();
                         SolvableQuotient<C> cc = b.ring.getONE().multiply(c);
@@ -309,35 +279,32 @@ public class QuotSolvablePolynomial<C extends GcdRingElem<C>> extends GenSolvabl
                     } // end b loop 
                     if (debug)
                         logger.info("coeff, Cs = " + Cs + ", Cps = " + Cps);
-                }
+                    // coefficient multiplication with 1/den
+                    if ( !den.isONE() ) {
+                        QuotSolvablePolynomial<C> qv = Cps;
+                        SolvableQuotient<C> qden = new SolvableQuotient<C>(b.ring, den);
+                        //System.out.println("qv = " + qv + ", qden = " + qden);
+                        QuotSolvablePolynomial<C> v = (QuotSolvablePolynomial<C>) qv.multiply(qden);
+                        //System.out.println("v = " + v + ", qv = " + qv + ", qden = " + qden);
+                        QuotSolvablePolynomial<C> vr = (QuotSolvablePolynomial<C>) v.reductum();
+                        SolvableQuotient<C> qdeni = new SolvableQuotient<C>(b.ring, b.ring.ring.getONE(), den);
+                        //System.out.println("vr = " + vr + ", qdeni = " + qdeni);
+                        // recursion with smaller head term:
+                        QuotSolvablePolynomial<C> rq = (QuotSolvablePolynomial<C>) vr.multiply(qdeni); 
+                        //System.out.println("rq = " + rq);
+                        // qv.leadingBaseCoefficient() ?
+                        //qp = new QuotSolvablePolynomial<C>(ring, qv.leadingBaseCoefficient(), v.leadingExpVector());
+                        qp = new QuotSolvablePolynomial<C>(ring, b.ring.getONE(), v.leadingExpVector());
+                        //System.out.println("qp = " + qp);
+                        qp = (QuotSolvablePolynomial<C>) qp.subtract(rq);  
+                        //System.out.println("qp_s = " + qp);
+                        qp = qp.multiplyLeft(qdeni);
+                        //System.out.println("qp_i = " + qp);
+                        Cps = qp;
+                    }
+                } // end coeff
                 if (debug)
                     logger.info("coeff-poly: Cps = " + Cps);
-                if ( !den.isONE() ) {
-                    QuotSolvablePolynomial<C> qv = Cps;
-                    SolvableQuotient<C> qden = new SolvableQuotient<C>(b.ring, den);
-                    QuotSolvablePolynomial<C> v = (QuotSolvablePolynomial<C>) qv.multiply(qden);
-                    System.out.println("v = " + v + ", qv = " + qv + ", qden = " + qden);
-                    QuotSolvablePolynomial<C> vr = (QuotSolvablePolynomial<C>) v.reductum();
-                    SolvableQuotient<C> qdeni = new SolvableQuotient<C>(b.ring, b.ring.ring.getONE(), den);
-                    System.out.println("vr = " + vr + ", qdeni = " + qdeni);
-                    // recursion with smaller head term:
-                    QuotSolvablePolynomial<C> rq = (QuotSolvablePolynomial<C>) vr.multiply(qdeni); 
-                    System.out.println("rq = " + rq);
-                    // qv.leadingBaseCoefficient()
-                    qp = new QuotSolvablePolynomial<C>(ring, b.ring.getONE(), v.leadingExpVector());
-                    System.out.println("qp = " + qp);
-                    qp = (QuotSolvablePolynomial<C>) qp.subtract(rq);  
-                    System.out.println("qp_s = " + qp);
-                    qp = qp.multiplyLeft(qdeni);
-                    System.out.println("qp_i = " + qp);
-                    if ( false && debug ) {
-                        QuotSolvablePolynomial<C> qpi = (QuotSolvablePolynomial<C>) qp.multiply(qdeni);
-                        System.out.println("qp*1/den = " + qpi);
-                        qpi = (QuotSolvablePolynomial<C>) qpi.sum(rq);
-                        System.out.println("qpi = " + qpi);
-                    }
-                    Cps = qp;
-                }
                 // polynomial multiplication 
                 QuotSolvablePolynomial<C> Dps = ring.getZERO().copy();
                 QuotSolvablePolynomial<C> Ds = null;
@@ -422,6 +389,7 @@ public class QuotSolvablePolynomial<C extends GcdRingElem<C>> extends GenSolvabl
                 Dp = (QuotSolvablePolynomial<C>) Dp.sum(Ds);
             } // end B loop
         } // end A loop
+        //System.out.println("this * Bp = " + Dp);
         return Dp;
     }
 
@@ -433,6 +401,7 @@ public class QuotSolvablePolynomial<C extends GcdRingElem<C>> extends GenSolvabl
      * @param T QuotSolvablePolynomial.
      * @return S*this*T.
      */
+    // not @Override
     public QuotSolvablePolynomial<C> multiply(QuotSolvablePolynomial<C> S, QuotSolvablePolynomial<C> T) {
         if (S.isZERO() || T.isZERO() || this.isZERO()) {
             return ring.getZERO();
