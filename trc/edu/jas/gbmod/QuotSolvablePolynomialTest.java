@@ -132,7 +132,7 @@ public class QuotSolvablePolynomialTest extends TestCase {
     /**
      * Test constructor, generators and properties.
      */
-    public void xtestConstructor() {
+    public void testConstructor() {
         assertFalse("not commutative", ring.isCommutative());
         assertTrue("associative", ring.isAssociative());
 
@@ -164,7 +164,7 @@ public class QuotSolvablePolynomialTest extends TestCase {
     /**
      * Test random polynomial.
      */
-    public void xtestRandom() {
+    public void testRandom() {
         for (int i = 0; i < 3; i++) {
             // a = ring.random(ll+2*i);
             a = ring.random(kl * (i + 1), ll + 2 * i, el + i, q);
@@ -179,7 +179,7 @@ public class QuotSolvablePolynomialTest extends TestCase {
     /**
      * Test addition.
      */
-    public void xtestAddition() {
+    public void testAddition() {
         a = ring.random(kl, ll, el, q);
         c = (QuotSolvablePolynomial<BigRational>) a.subtract(a);
         assertTrue("a-a = 0", c.isZERO());
@@ -236,7 +236,7 @@ public class QuotSolvablePolynomialTest extends TestCase {
     /**
      * Test multiplication.
      */
-    public void xtestMultiplication() {
+    public void testMultiplication() {
         //System.out.println("ring = " + ring);
         a = ring.random(kl, ll-1, el-1, q);
         //a = ring.parse(" b y z + a w z ");  
@@ -245,21 +245,21 @@ public class QuotSolvablePolynomialTest extends TestCase {
 
         c = b.multiply(a);
         d = a.multiply(b);
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
-        System.out.println("c = " + c);
-        System.out.println("d = " + d);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+        //System.out.println("c = " + c);
+        //System.out.println("d = " + d);
         assertTrue("a*b != b*a", c.equals(d) || c.leadingExpVector().equals(d.leadingExpVector()));
 
         c = ring.random(kl, ll-1, el-1, q);
         d = a.multiply(b.multiply(c));
         e = a.multiply(b).multiply(c);
         assertEquals("a(bc) = (ab)c", d, e);
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
-        System.out.println("c = " + c);
-        System.out.println("d = " + d);
-        System.out.println("e = " + e);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+        //System.out.println("c = " + c);
+        //System.out.println("d = " + d);
+        //System.out.println("e = " + e);
 
         SolvableQuotient<BigRational> xp = a.leadingBaseCoefficient().inverse();
         d = (QuotSolvablePolynomial<BigRational>) a.multiply(xp);
@@ -270,7 +270,7 @@ public class QuotSolvablePolynomialTest extends TestCase {
     /**
      * Test commutative ring.
      */
-    public void xtestCommutative() {
+    public void testCommutative() {
         //System.out.println("table = " + table.toString(vars));
         //System.out.println("table = " + table.toScript());
         //System.out.println("ring = " + ring);
@@ -306,7 +306,7 @@ public class QuotSolvablePolynomialTest extends TestCase {
     /**
      * Test distributive law.
      */
-    public void xtestDistributive() {
+    public void testDistributive() {
         a = ring.random(kl, ll, el, q);
         b = ring.random(kl, ll, el, q);
         c = ring.random(kl, ll, el, q);
@@ -356,14 +356,14 @@ public class QuotSolvablePolynomialTest extends TestCase {
         ring.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(), rp);
 
         table = ring.table;
-        System.out.println("ring = " + ring);
+        //System.out.println("ring = " + ring);
         //System.out.println("ring.polCoeff = " + ring.polCoeff);
 
         assertFalse("isCommutative()", ring.isCommutative());
-        //assertTrue("isAssociative()", ring.isAssociative());
+        assertTrue("isAssociative()", ring.isAssociative());
 
         List<GenPolynomial<SolvableQuotient<BigRational>>> gens = ring.generators();
-        gens = new ArrayList<GenPolynomial<SolvableQuotient<BigRational>>>();
+        //gens = new ArrayList<GenPolynomial<SolvableQuotient<BigRational>>>();
 
         for (GenPolynomial<SolvableQuotient<BigRational>> x : gens) {
             GenSolvablePolynomial<SolvableQuotient<BigRational>> xx = (GenSolvablePolynomial<SolvableQuotient<BigRational>>) x;
@@ -374,7 +374,7 @@ public class QuotSolvablePolynomialTest extends TestCase {
                 b = new QuotSolvablePolynomial<BigRational>(ring, yy);
                 //System.out.println("b = " + b);
                 c = a.multiply(b);
-                System.out.println("gens: " + a + " * " + b + " = " + c);
+                //System.out.println("gens: " + a + " * " + b + " = " + c);
                 ExpVector ev = a.leadingExpVector().sum(b.leadingExpVector());
                 assertTrue("LT(a)*LT(b) == LT(c)", c.leadingExpVector().equals(ev));
                 ev = a.leadingBaseCoefficient().num.leadingExpVector()
@@ -385,35 +385,36 @@ public class QuotSolvablePolynomialTest extends TestCase {
 
         //a = ring.random(kl, ll, el, q);
         //a = ring.getONE();
-        a = ring.parse("x");
-        System.out.println("a = " + a.toScript());
+        a = ring.parse("x^2 + a b");
+        //System.out.println("a = " + a.toScript());
         //b = ring.random(kl, ll, el, q);
         //b = ring.getONE();
-        b = ring.parse("b");
+        b = ring.parse("a b^2 + a"); // + a 
         b = (QuotSolvablePolynomial<BigRational>) b.inverse();
-        System.out.println("b = " + b.toScript());
+        //System.out.println("b = " + b.toScript());
 
         // non-commutative
         c = b.multiply(a);
         d = a.multiply(b);
-        System.out.println("a = " + a.toScript());
-        System.out.println("b = " + b.toScript());
-        System.out.println("c = " + c.toScript());
-        System.out.println("d = " + d.toScript());
+        //System.out.println("a = " + a.toScript());
+        //System.out.println("b = " + b.toScript());
+        //System.out.println("c = " + c.toScript());
+        //System.out.println("d = " + d.toScript());
         assertTrue("a*b != b*a", c.equals(d) || c.leadingExpVector().equals(d.leadingExpVector()));
 
         e = (QuotSolvablePolynomial<BigRational>) b.inverse();
-        System.out.println("e = " + e.toScript());
+        //System.out.println("e = " + e.toScript());
         assertTrue("b*b^-1 == 1", e.multiply(b).isONE());
 
         c = e.multiply(c);
         d = d.multiply(e);
-        System.out.println("a = " + a.toScript());
-        System.out.println("b = " + b.toScript());
-        System.out.println("e = " + e.toScript());
-        System.out.println("c = " + c.toScript());
-        System.out.println("d = " + d.toScript());
+        //System.out.println("a = " + a.toScript());
+        //System.out.println("b = " + b.toScript());
+        //System.out.println("e = " + e.toScript());
+        //System.out.println("c = " + c.toScript());
+        //System.out.println("d = " + d.toScript());
         //System.out.println("g = " + a.multiply(b.multiply(e)).toScript());
+        assertTrue("a == b * 1/b * a", a.equals(c));
         assertTrue("a == a * 1/b * b", a.equals(d));
     }
 

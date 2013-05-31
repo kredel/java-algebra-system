@@ -519,7 +519,7 @@ public class RecSolvablePolynomialTest extends TestCase {
 
         GenSolvablePolynomialRing<GenPolynomial<BigRational>> rsring = sring.recursive(2); // 1,2,3
         //System.out.println("rsring = " + rsring); //.toScript());
-        System.out.println("rsring = " + rsring.toScript());
+        //System.out.println("rsring = " + rsring.toScript());
 
         GenSolvablePolynomial<BigRational> ad, bd, cd, dd;
         RecSolvablePolynomial<BigRational> ar, br, cr, dr;
