@@ -1,4 +1,3 @@
-
 /*
  * $Id$
  */
@@ -11,32 +10,31 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
-//import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigRational;
-
+import edu.jas.kern.ComputerThreads;
+import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.WeylRelations;
 
-import edu.jas.kern.PrettyPrint;
-import edu.jas.kern.ComputerThreads;
-
 
 /**
- * SolvableQuotient over BigRational GenSolvablePolynomial tests with JUnit. 
+ * SolvableQuotient over BigRational GenSolvablePolynomial tests with JUnit.
  * @author Heinz Kredel.
  */
 
 public class SolvableQuotientTest extends TestCase {
 
+
     /**
      * main.
      */
-    public static void main (String[] args) {
+    public static void main(String[] args) {
         BasicConfigurator.configure();
-        junit.textui.TestRunner.run( suite() );
+        junit.textui.TestRunner.run(suite());
     }
+
 
     /**
      * Constructs a <CODE>SolvableQuotientTest</CODE> object.
@@ -46,39 +44,60 @@ public class SolvableQuotientTest extends TestCase {
         super(name);
     }
 
+
     /**
      * suite.
-     */ 
+     */
     public static Test suite() {
-        TestSuite suite= new TestSuite(SolvableQuotientTest.class);
+        TestSuite suite = new TestSuite(SolvableQuotientTest.class);
         return suite;
     }
 
 
     SolvableQuotientRing<BigRational> zFac;
+
+
     SolvableQuotientRing<BigRational> efac;
+
+
     GenSolvablePolynomialRing<BigRational> mfac;
 
-    SolvableQuotient< BigRational > a, b, c, d, e;
-    SolvableQuotient< BigRational > az, bz, cz, dz, ez;
 
-    int rl = 4; 
+    SolvableQuotient<BigRational> a, b, c, d, e;
+
+
+    SolvableQuotient<BigRational> az, bz, cz, dz, ez;
+
+
+    int rl = 4;
+
+
     int kl = 3;
+
+
     int ll = 3; //6;
+
+
     int el = 2;
+
+
     float q = 0.2f;
 
+
+    @Override
     protected void setUp() {
         a = b = c = d = e = null;
-        TermOrder to = new TermOrder( TermOrder.INVLEX );
+        TermOrder to = new TermOrder(TermOrder.INVLEX);
         String[] vars = new String[] { "w", "x", "y", "z" };
-        mfac = new GenSolvablePolynomialRing<BigRational>( new BigRational(1), rl, to, vars );
+        mfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), rl, to, vars);
         WeylRelations<BigRational> wl = new WeylRelations<BigRational>(mfac);
         wl.generate();
-        efac = new SolvableQuotientRing<BigRational>( mfac );
-        zFac = new SolvableQuotientRing<BigRational>( mfac );
+        efac = new SolvableQuotientRing<BigRational>(mfac);
+        zFac = new SolvableQuotientRing<BigRational>(mfac);
     }
 
+
+    @Override
     protected void tearDown() {
         a = b = c = d = e = null;
         //efac.terminate();
@@ -96,19 +115,19 @@ public class SolvableQuotientTest extends TestCase {
         //System.out.println("c = " + c);
         //System.out.println("c.val = " + c.val);
         assertTrue("length( c ) = 1", c.num.length() == 1);
-        assertTrue("isZERO( c )", !c.isZERO() );
-        assertTrue("isONE( c )", c.isONE() );
+        assertTrue("isZERO( c )", !c.isZERO());
+        assertTrue("isONE( c )", c.isONE());
 
         d = efac.getZERO();
         //System.out.println("d = " + d);
         //System.out.println("d.val = " + d.val);
         assertTrue("length( d ) = 0", d.num.length() == 0);
-        assertTrue("isZERO( d )", d.isZERO() );
-        assertTrue("isONE( d )", !d.isONE() );
+        assertTrue("isZERO( d )", d.isZERO());
+        assertTrue("isONE( d )", !d.isONE());
 
-        for (SolvableQuotient<BigRational> g : efac.generators() ) {
+        for (SolvableQuotient<BigRational> g : efac.generators()) {
             //System.out.println("g = " + g);
-            assertFalse("not isZERO( g )", g.isZERO() );
+            assertFalse("not isZERO( g )", g.isZERO());
         }
     }
 
@@ -119,15 +138,15 @@ public class SolvableQuotientTest extends TestCase {
     public void testRandom() {
         for (int i = 0; i < 7; i++) {
             //a = efac.random(ll+i);
-            a = efac.random(kl*(i+1), ll+2+2*i, el, q );
+            a = efac.random(kl * (i + 1), ll + 2 + 2 * i, el, q);
             //System.out.println("a = " + a);
-            if ( a.isZERO() || a.isONE() ) {
+            if (a.isZERO() || a.isONE()) {
                 continue;
             }
-            assertTrue("length( a"+i+" ) <> 0", a.num.length() >= 0);
-            assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
-            assertTrue(" not isONE( a"+i+" )", !a.isONE() );
-            assertEquals("a == a: ", a, a );
+            assertTrue("length( a" + i + " ) <> 0", a.num.length() >= 0);
+            assertTrue(" not isZERO( a" + i + " )", !a.isZERO());
+            assertTrue(" not isONE( a" + i + " )", !a.isONE());
+            assertEquals("a == a: ", a, a);
         }
     }
 
@@ -136,18 +155,18 @@ public class SolvableQuotientTest extends TestCase {
      * Test addition.
      */
     public void testAddition() {
-        a = efac.random(kl,ll,el,q);
-        b = efac.random(kl,ll,el,q);
+        a = efac.random(kl, ll, el, q);
+        b = efac.random(kl, ll, el, q);
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
 
-        c = a.sum( efac.getZERO() );
-        d = a.subtract( efac.getZERO() );
-        assertEquals("a+0 = a-0",c,d);
+        c = a.sum(efac.getZERO());
+        d = a.subtract(efac.getZERO());
+        assertEquals("a+0 = a-0", c, d);
 
-        c = efac.getZERO().sum( a );
-        d = efac.getZERO().subtract( a.negate() );
-        assertEquals("0+a = 0+(-a)",c,d);
+        c = efac.getZERO().sum(a);
+        d = efac.getZERO().subtract(a.negate());
+        assertEquals("0+a = 0+(-a)", c, d);
 
         c = a.sum(b);
         d = c.subtract(b);
@@ -159,16 +178,16 @@ public class SolvableQuotientTest extends TestCase {
         d = b.sum(a);
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
-        assertEquals("a+b = b+a",c,d);
+        assertEquals("a+b = b+a", c, d);
 
         //c = efac.random(kl,ll,el,q);
-        c = new SolvableQuotient<BigRational>(efac, mfac.univariate(1,2)); //efac.random(kl,ll,el,q);
+        c = new SolvableQuotient<BigRational>(efac, mfac.univariate(1, 2)); //efac.random(kl,ll,el,q);
         //System.out.println("c = " + c);
-        d = c.sum( a.sum(b) );
-        e = c.sum( a ).sum(b);
+        d = c.sum(a.sum(b));
+        e = c.sum(a).sum(b);
         //System.out.println("d = " + d);
         //System.out.println("e = " + e);
-        assertEquals("c+(a+b) = (c+a)+b",d,e);
+        assertEquals("c+(a+b) = (c+a)+b", d, e);
     }
 
 
@@ -176,17 +195,17 @@ public class SolvableQuotientTest extends TestCase {
      * Test multiplication.
      */
     public void testMultiplication() {
-        a = efac.random(kl,ll,el,q);
-        b = efac.random(kl,ll,el,q);
+        a = efac.random(kl, ll, el, q);
+        b = efac.random(kl, ll, el, q);
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
 
-        c = a.multiply( efac.getONE() );
-        d = efac.getONE().multiply( a );
+        c = a.multiply(efac.getONE());
+        d = efac.getONE().multiply(a);
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
-        assertEquals("a*1 = 1*a",c,a);
-        assertEquals("a*1 = 1*a",c,d);
+        assertEquals("a*1 = 1*a", c, a);
+        assertEquals("a*1 = 1*a", c, d);
 
         c = b.multiply(a);
         d = a.multiply(b);
@@ -196,21 +215,21 @@ public class SolvableQuotientTest extends TestCase {
         //e = d.subtract(c);
         //non-com assertFalse("not isZERO( a*b-b*a ) " + e, e.isZERO() );
 
-        c = new SolvableQuotient<BigRational>(efac, mfac.univariate(1,2)); //efac.random(kl,ll,el,q);
+        c = new SolvableQuotient<BigRational>(efac, mfac.univariate(1, 2)); //efac.random(kl,ll,el,q);
         //System.out.println("c = " + c);
-        d = a.multiply( b.multiply(c) );
+        d = a.multiply(b.multiply(c));
         //System.out.println("d = " + d);
         e = (a.multiply(b)).multiply(c);
         //System.out.println("e = " + e);
-        assertEquals("a(bc) = (ab)c",d,e);
+        assertEquals("a(bc) = (ab)c", d, e);
         //assertTrue("a(bc) = (ab)c", d.equals(e) );
-        if ( a.isUnit() ) {
+        if (a.isUnit()) {
             c = a.inverse();
             d = c.multiply(a);
             //System.out.println("a = " + a);
             //System.out.println("c = " + c);
             //System.out.println("d = " + d);
-            assertTrue("a*1/a = 1",d.isONE()); 
+            assertTrue("a*1/a = 1", d.isONE());
         }
     }
 
@@ -221,14 +240,14 @@ public class SolvableQuotientTest extends TestCase {
     public void ytestAdditionGcd() {
         long te, tz;
 
-        a = efac.random(kl,ll,el,q);
-        b = efac.random(kl,ll,el,q);
+        a = efac.random(kl, ll, el, q);
+        b = efac.random(kl, ll, el, q);
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
 
-        az = new SolvableQuotient<BigRational>(zFac,a.num,a.den,true);
-        bz = new SolvableQuotient<BigRational>(zFac,b.num,b.den,true);
-        if ( true ) {
+        az = new SolvableQuotient<BigRational>(zFac, a.num, a.den, true);
+        bz = new SolvableQuotient<BigRational>(zFac, b.num, b.den, true);
+        if (true) {
             return;
         }
 
@@ -237,14 +256,14 @@ public class SolvableQuotientTest extends TestCase {
         d = c.subtract(b);
         d = d.monic();
         te = System.currentTimeMillis() - te;
-        assertEquals("a+b-b = a",a,d);
+        assertEquals("a+b-b = a", a, d);
 
         tz = System.currentTimeMillis();
         cz = az.sum(bz);
         dz = cz.subtract(bz);
         dz = dz.monic();
         tz = System.currentTimeMillis() - tz;
-        assertEquals("a+b-b = a",az,dz);
+        assertEquals("a+b-b = a", az, dz);
 
         System.out.println("te = " + te);
         System.out.println("tz = " + tz);
@@ -253,34 +272,34 @@ public class SolvableQuotientTest extends TestCase {
         d = b.sum(a);
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
-        assertEquals("a+b = b+a",c,d);
+        assertEquals("a+b = b+a", c, d);
 
-        c = efac.random(kl,ll,el,q);
-        cz = new SolvableQuotient<BigRational>(zFac,c.num,c.den,true);
+        c = efac.random(kl, ll, el, q);
+        cz = new SolvableQuotient<BigRational>(zFac, c.num, c.den, true);
 
 
         te = System.currentTimeMillis();
-        d = c.sum( a.sum(b) );
-        e = c.sum( a ).sum(b);
+        d = c.sum(a.sum(b));
+        e = c.sum(a).sum(b);
         te = System.currentTimeMillis() - te;
-        assertEquals("c+(a+b) = (c+a)+b",d,e);
+        assertEquals("c+(a+b) = (c+a)+b", d, e);
 
         tz = System.currentTimeMillis();
-        dz = cz.sum( az.sum(bz) );
-        ez = cz.sum( az ).sum(bz);
+        dz = cz.sum(az.sum(bz));
+        ez = cz.sum(az).sum(bz);
         tz = System.currentTimeMillis() - tz;
-        assertEquals("c+(a+b) = (c+a)+b",dz,ez);
+        assertEquals("c+(a+b) = (c+a)+b", dz, ez);
 
         System.out.println("te = " + te);
         System.out.println("tz = " + tz);
 
-        c = a.sum( efac.getZERO() );
-        d = a.subtract( efac.getZERO() );
-        assertEquals("a+0 = a-0",c,d);
+        c = a.sum(efac.getZERO());
+        d = a.subtract(efac.getZERO());
+        assertEquals("a+0 = a-0", c, d);
 
-        c = efac.getZERO().sum( a );
-        d = efac.getZERO().subtract( a.negate() );
-        assertEquals("0+a = 0+(-a)",c,d);
+        c = efac.getZERO().sum(a);
+        d = efac.getZERO().subtract(a.negate());
+        assertEquals("0+a = 0+(-a)", c, d);
     }
 
 
@@ -288,7 +307,7 @@ public class SolvableQuotientTest extends TestCase {
      * Test parse.
      */
     public void testParse() {
-        a = efac.random(kl*2,ll*2,el*2,q*2);
+        a = efac.random(kl * 2, ll * 2, el * 2, q * 2);
         //PrettyPrint.setInternal();
         //System.out.println("a = " + a);
         PrettyPrint.setPretty();
@@ -300,7 +319,7 @@ public class SolvableQuotientTest extends TestCase {
 
         //c = a.subtract(b);
         //System.out.println("c = " + c);
-        assertEquals("parse(a.toSting()) = a",a,b);
+        assertEquals("parse(a.toSting()) = a", a, b);
     }
 
 }
