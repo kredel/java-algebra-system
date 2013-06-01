@@ -11,8 +11,8 @@ import java.io.StringReader;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Map;
+import java.util.Random;
 
 import org.apache.log4j.Logger;
 
@@ -47,7 +47,7 @@ import edu.jas.structure.RingFactory;
  */
 
 public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>> extends
-                 GenSolvablePolynomialRing<SolvableQuotient<C>> {
+                GenSolvablePolynomialRing<SolvableQuotient<C>> {
 
 
     /**
@@ -185,7 +185,7 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>> extends
             ExpVector e = null;
             ExpVector f = null;
             GenSolvablePolynomial<GenPolynomial<C>> p = null;
-            polCoeff.table.update(e,f,p); // from rt
+            polCoeff.table.update(e, f, p); // from rt
         }
         coeffTable = polCoeff.coeffTable; //new RelationTable<GenPolynomial<C>>(polCoeff, true);
         ZERO = new QuotSolvablePolynomial<C>(this);
@@ -721,12 +721,10 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>> extends
         if (A == null || A.isZERO()) {
             return B;
         }
-        RingFactory<GenPolynomial<C>> cfac = polCoeff.coFac;
-        GenPolynomialRing<C> qfac = (GenPolynomialRing<C>) cfac;
         for (Map.Entry<ExpVector, SolvableQuotient<C>> y : A.getMap().entrySet()) {
             ExpVector e = y.getKey();
             SolvableQuotient<C> a = y.getValue();
-            if ( !a.den.isONE() ) {
+            if (!a.den.isONE()) {
                 throw new IllegalArgumentException("den != 1 not supported: " + a);
             }
             GenPolynomial<C> p = a.num; // can not be zero
