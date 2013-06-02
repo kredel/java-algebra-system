@@ -154,6 +154,7 @@ public class QuotSolvablePolynomialTest extends TestCase {
             assertFalse("not isZERO( g )", g.isZERO());
         }
         //System.out.println("");
+        assertTrue("isAssociative: ", ring.isAssociative());
     }
 
 
@@ -317,18 +318,12 @@ public class QuotSolvablePolynomialTest extends TestCase {
      * Test solvable coefficient ring.
      */
     public void testSolvableCoeffs() {
-        //System.out.println("table = " + table.toString(vars));
-        //System.out.println("table = " + table.toScript());
-        //System.out.println("ring = " + ring);
-        //System.out.println("ring.table = " + ring.table.toScript());
-        //assertEquals("table == ring.table: ", table, ring.table); // ?
-
         GenSolvablePolynomialRing<BigRational> csring = new GenSolvablePolynomialRing<BigRational>(cfac,
                         tord, cvars);
         WeylRelations<BigRational> wlc = new WeylRelations<BigRational>(csring);
         //no: wlc.generate();
         //assertTrue("# relations == 1", csring.table.size() == 1);
-        //assertFalse("isCommutative()", csring.isCommutative());
+        assertTrue("isCommutative()", csring.isCommutative());
         assertTrue("isAssociative()", csring.isAssociative());
 
         SolvableQuotientRing<BigRational> qcsring = new SolvableQuotientRing<BigRational>(csring);
