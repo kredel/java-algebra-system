@@ -336,6 +336,7 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
             n = (GenSolvablePolynomial<C>) num.sum(S.num);
             return new SolvableQuotient<C>(ring, n, den, true);
         }
+        /*
         if (den.isONE()) {
             n = S.den.multiply(num);
             n = (GenSolvablePolynomial<C>) n.sum(S.num);
@@ -346,6 +347,7 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
             n = (GenSolvablePolynomial<C>) n.sum(num);
             return new SolvableQuotient<C>(ring, n, den, false);
         }
+        */
         if ( den.compareTo(S.den) == 0 ) { // correct ?
             //d = den.multiply(den);
             //n1 = den.multiply(S.num);
@@ -462,16 +464,18 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
             n = num.multiply(S.num);
             return new SolvableQuotient<C>(ring, n, den, true);
         }
-        if (den.isONE()) {
+        /*
+        if (den.isONE()) { // wrong
             d = S.den;
             n = num.multiply(S.num);
             return new SolvableQuotient<C>(ring, n, d, false);
         }
-        if (S.den.isONE()) {
+        if (S.den.isONE()) { // wrong
             d = den;
             n = num.multiply(S.num);
             return new SolvableQuotient<C>(ring, n, d, false);
         }
+        */
         // if ( den.compareTo(S.den) == 0 ) { // not correct ?
         //     d = den.multiply(den);
         //     n = num.multiply(S.num);

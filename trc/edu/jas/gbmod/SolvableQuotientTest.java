@@ -129,6 +129,8 @@ public class SolvableQuotientTest extends TestCase {
             //System.out.println("g = " + g);
             assertFalse("not isZERO( g )", g.isZERO());
         }
+        //wrong, solved: 
+        assertTrue("isAssociative: ", efac.isAssociative());
     }
 
 
