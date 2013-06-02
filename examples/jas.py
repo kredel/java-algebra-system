@@ -136,10 +136,12 @@ def inject_generators(gens):
     '''
     for v in gens:
         #print "vars = " + str(v);
-        if str(v) == "1":
-            inject_variable("one",v)
-        else:
-            inject_variable(str(v),v)
+        s = str(v);
+        if find(s,"/") < 0 and find(s,"(") < 0 and find(s,",") < 0 and find(s,"{") < 0 and find(s,"|") < 0:
+           if s[0:1] == "1":
+              s = "one" + s[1:]
+              #print "var = " + s;
+           inject_variable(s,v)
 
 
 class Ring:
@@ -182,14 +184,18 @@ class Ring:
             vs = str(v);
             vr = RingElem(v);
             vs = vs.replace(" ","");
-            if vs == "1":
-                vs='one';
             if vs.find("(") >= 0:
                 vs = vs.replace("(","");
                 vs = vs.replace(")","");
             if vs.find("{") >= 0:
                 vs = vs.replace("{","");
                 vs = vs.replace("}","");
+            if vs.find("|") >= 0:
+                vs = vs.replace("|","div");
+            if vs.find("/") >= 0:
+                vs = vs.replace("/","div");
+            if vs[0:1] == "1":
+                vs = 'one' + vs[1:];
             try:
                 if self.__dict__[vs] is None:
                     self.__dict__[vs] = vr;

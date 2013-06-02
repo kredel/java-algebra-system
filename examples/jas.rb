@@ -68,10 +68,24 @@ def inject_gens(env)
     for i in self.gens()
        begin 
           ivs = i.to_s
-          if not ivs.include?(",") and not ivs.include?("(")
-             if ivs == "1" or ivs == "1 "
-                ivs = "one"
+          #puts "string1: #{ivs} = " + ivs.class.to_s;
+          ivs = ivs.gsub(" ","");
+          ivs = ivs.gsub(",","");
+          ivs = ivs.gsub("(","");
+          ivs = ivs.gsub(")","");
+          #ivs = ivs.gsub("/","div");
+          #ivs = ivs.gsub("|","div");
+          ivs = ivs.gsub("{","");
+          ivs = ivs.gsub("}","");
+          if ivs[0] == "1" 
+             r = ivs[1,];
+             ivs = "one"
+             if r != nil 
+                ivs = ivs + r
              end
+          end
+          if not ivs.include?(",") and not ivs.include?("(") and not ivs.include?("/") and not ivs.include?("|") and not ivs.include?("{")
+             #puts "string2: #{ivs} = " + ivs.class.to_s;
              if env.generators[ ivs ] != nil
                 puts "redefining #{ivs}";
              end
@@ -977,15 +991,28 @@ Define instance variables for generators.
        for i in self.gens()
           begin 
              ivs = i.to_s
-             if not ivs.include?(",") and not ivs.include?("(")
-                if ivs == "1" or ivs == "1 "
-                   ivs = "one"
+             ivs = ivs.gsub(" ","");
+             ivs = ivs.gsub(",","");
+             ivs = ivs.gsub("(","");
+             ivs = ivs.gsub(")","");
+             #ivs = ivs.gsub("/","div");
+             #ivs = ivs.gsub("|","div");
+             ivs = ivs.gsub("{","");
+             ivs = ivs.gsub("}","");
+             if ivs[0] == "1"
+                r = ivs[1,];
+                ivs = "one"
+                if r != nil 
+                   ivs = ivs + r
                 end
+             end
+             if not ivs.include?(",") and not ivs.include?("(") and not ivs.include?("/") and not ivs.include?("|") and not ivs.include?("{")
+                #puts "string: #{ivs} = " + ivs.class.to_s;
                 @generators[ ivs ] = i;
                 self.instance_eval( "def #{ivs}; @generators[ '#{ivs}' ]; end" )
              end
           rescue 
-             puts "error: #{i} = " + i.to_s + ", class = " + i.class.to_s;
+             puts "ring error: #{i} = " + i.to_s + ", class = " + i.class.to_s;
              #pass
           end
        end

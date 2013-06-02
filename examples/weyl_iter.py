@@ -98,12 +98,14 @@ print;
 #h = p2;
 #h = q2 - p2;
 h = q1 * q2 + p1 * p2 - p1 + q1**2 + 1;
-print "polynomial: " + str(h);
+print "polynomial:         " + str(h);
 hi = rgt.inverse(h);
 print "inverse polynomial: " + str(hi);
-hhi = h*hi;
+print;
+
+hhi = h * hi;
 print "h * hi: " + str(hhi);
-print "h * hi left-mod rgt: " + str(rgt.leftReduction(hhi));
+print "h * hi  left-mod rgt: " + str(rgt.leftReduction(hhi));
 print "h * hi right-mod rgt: " + str(rgt.rightReduction(hhi));
 print;
 

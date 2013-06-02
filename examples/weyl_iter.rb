@@ -94,12 +94,14 @@ puts;
 #h = p2;
 #h = q2 - p2;
 h = q1 * q2 + p1 * p2 - p1 + q1**2 + 1;
-puts "polynomial: " + str(h);
+puts "polynomial:         " + str(h);
 hi = rgt.inverse(h);
 puts "inverse polynomial: " + str(hi);
-hhi = h*hi;
+puts;
+
+hhi = h * hi;
 puts "h * hi: " + str(hhi);
-puts "h * hi left-mod rgt: " + str(rgt.leftReduction(hhi));
+puts "h * hi  left-mod rgt: " + str(rgt.leftReduction(hhi));
 puts "h * hi right-mod rgt: " + str(rgt.rightReduction(hhi));
 puts;
 
