@@ -17,6 +17,7 @@ import edu.jas.gb.SolvableGroebnerBaseAbstract;
 import edu.jas.gb.SolvableGroebnerBaseSeq;
 import edu.jas.gb.SolvableReduction;
 import edu.jas.gb.SolvableReductionSeq;
+import edu.jas.gbmod.SolvableSyzygyAbstract;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
@@ -480,7 +481,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
             }
             GenSolvablePolynomial<C> z = red.leftNormalform(getList(), b);
             if (!z.isZERO()) {
-                //System.out.println("contains nf(b) != 0: " + b);
+                System.out.println("contains nf(b) != 0: " + b + ", z = " + z);
                 return false;
             }
         }
@@ -584,6 +585,32 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         }
         SolvableIdeal<C> I = new SolvableIdeal<C>(getRing(), c, false);
         if (isGB && B.isGB) {
+            I.doGB();
+        }
+        return I;
+    }
+
+
+    /**
+     * Left product. Generators for the product this by a polynomial.
+     * @param b solvable polynomial
+     * @return ideal(this*b)
+     */
+    public SolvableIdeal<C> product(GenSolvablePolynomial<C> b) {
+        if (b == null || b.isZERO()) {
+            return getZERO();
+        }
+        if (this.isZERO()) {
+            return this;
+        }
+        List<GenSolvablePolynomial<C>> c;
+        c = new ArrayList<GenSolvablePolynomial<C>>(getList().size());
+        for (GenSolvablePolynomial<C> p : getList()) {
+             GenSolvablePolynomial<C> q = p.multiply(b);
+             c.add(q);
+        }
+        SolvableIdeal<C> I = new SolvableIdeal<C>(getRing(), c, false);
+        if (isGB) {
             I.doGB();
         }
         return I;
@@ -1038,6 +1065,55 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
             }
         }
         return M;
+    }
+
+
+    /**
+     * Annihilator for element modulo this ideal.
+     * @param h solvable polynomial
+     * @return annihilator of h with respect to this
+     */
+    public SolvableIdeal<C> annihilator(GenSolvablePolynomial<C> h) {
+        if (h == null || h.isZERO()) {
+            return getZERO();
+        }
+        if (this.isZERO()) {
+            return this;
+        }
+        doGB();
+        List<GenSolvablePolynomial<C>> F = new ArrayList<GenSolvablePolynomial<C>>(1 + getList().size());
+        F.add(h);
+        F.addAll(getList());
+        //System.out.println("F = " + F);
+        SolvableSyzygyAbstract<C> syz = new SolvableSyzygyAbstract<C>();
+        List<List<GenSolvablePolynomial<C>>> S = syz.leftZeroRelationsArbitrary(F);
+        //System.out.println("S = " + S);
+        List<GenSolvablePolynomial<C>> gen = new ArrayList<GenSolvablePolynomial<C>>(S.size());
+        for (List<GenSolvablePolynomial<C>> rel : S) {
+            if (rel == null || rel.isEmpty()) {
+                continue;
+            }
+            GenSolvablePolynomial<C> p = rel.get(0);
+            if (p == null || p.isZERO()) {
+                continue;
+            }
+            gen.add(p);
+        }
+        SolvableIdeal<C> ann = new SolvableIdeal<C>(getRing(),gen);
+        //System.out.println("ann = " + ann);
+        return ann;
+    }
+
+
+    /**
+     * Test for annihilator of element modulo this ideal.
+     * @param h solvable polynomial
+     * @param A solvable ideal
+     * @return true, if A is the annihilator of h with respect to this
+     */
+    public boolean isAnnihilator(GenSolvablePolynomial<C> h, SolvableIdeal<C> A) {
+        SolvableIdeal<C> B = A.product(h);
+        return contains(B);
     }
 
 

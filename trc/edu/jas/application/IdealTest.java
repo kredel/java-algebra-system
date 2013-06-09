@@ -1958,4 +1958,36 @@ public class IdealTest extends TestCase {
         assertTrue("I eq cup G_i ", I.isPrimaryDecomposition(qdec));
     }
 
+
+    /**
+     * Test Ideal annihilator for element.
+     */
+    public void testAnnihilator() {
+        Ideal<BigRational> I, J, K;
+        do {
+           a = fac.random(kl, ll, el, q);
+        } while (a.isZERO()||a.isConstant());
+        b = fac.univariate(1);
+        c = fac.univariate(rl-1);
+        //b = fac.random(kl - 1, ll, el, q);
+        //c = fac.random(kl - 1, ll - 1, el, q / 2);
+
+        L = new ArrayList<GenPolynomial<BigRational>>();
+        L.add(a);
+        L.add(b);
+        //L.add(c);
+        //System.out.println("L = " + L);
+        L = bb.GB(L);
+        I = new Ideal<BigRational>(fac, L, true);
+        assertTrue("isGB( I )", I.isGB());
+        //System.out.println("I = " + I + "\n");
+
+        J = I.annihilator(c);
+        //System.out.println("J = " + J + "\n");
+        J.doGB();
+        //System.out.println("c = " + c);
+        //System.out.println("J = " + J + "\n");
+        assertTrue("isAnnihilator(c,J)", I.isAnnihilator(c,J));
+    }
+
 }

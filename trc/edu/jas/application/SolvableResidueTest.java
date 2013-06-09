@@ -79,16 +79,16 @@ public class SolvableResidueTest extends TestCase {
            System.out.println("ring not associative: " + mfac);
         }
         do {
-	    F = new ArrayList<GenSolvablePolynomial<BigRational>>( il );
-	    for ( int i = 0; i < il; i++ ) {
-		GenSolvablePolynomial<BigRational> mo = mfac.random(kl,ll,el,q);
-		while ( mo.isConstant() ) {
-		    mo = mfac.random(kl,ll,el,q);
-		}
-		F.add( mo );
-	    }
-	    id = new SolvableIdeal<BigRational>(mfac,F);
-	    id.doGB();
+            F = new ArrayList<GenSolvablePolynomial<BigRational>>( il );
+            for ( int i = 0; i < il; i++ ) {
+                GenSolvablePolynomial<BigRational> mo = mfac.random(kl,ll,el,q);
+                while ( mo.isConstant() ) {
+                    mo = mfac.random(kl,ll,el,q);
+                }
+                F.add( mo );
+            }
+            id = new SolvableIdeal<BigRational>(mfac,F);
+            id.doGB();
         } while (id.isONE());
         //System.out.println("id = " + id);
         assert !id.isONE() : "id = " + id;
@@ -233,9 +233,9 @@ public class SolvableResidueTest extends TestCase {
                  System.out.println("c = " + c);
                  d = c.multiply(a);
                  System.out.println("d = " + d);
-                 assertTrue("a*1/a = 1: " + fac,d.isONE()); 
+                 assertTrue("a*1/a = 1: " + fac, d.isONE()); // || true 
             } catch (NotInvertibleException e) {
-		// can happen
+                 // can happen
             }
         }
 

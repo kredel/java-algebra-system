@@ -309,12 +309,6 @@ public class RecSolvablePolynomialTest extends TestCase {
      * Test solvable coefficient ring.
      */
     public void testSolvableCoeffs() {
-        //System.out.println("table = " + table.toString(vars));
-        //System.out.println("table = " + table.toScript());
-        //System.out.println("ring = " + ring);
-        //System.out.println("ring.table = " + ring.table.toScript());
-        //assertEquals("table == ring.table: ", table, ring.table); // ?
-
         GenSolvablePolynomialRing<BigRational> csring = new GenSolvablePolynomialRing<BigRational>(cfac,
                         tord, cvars);
         WeylRelations<BigRational> wlc = new WeylRelations<BigRational>(csring);
@@ -465,8 +459,7 @@ public class RecSolvablePolynomialTest extends TestCase {
         //System.out.println("sring = " + sring.toScript());
 
         GenSolvablePolynomialRing<GenPolynomial<BigRational>> rsring = sring.recursive(2); // 1,2,3
-        //System.out.println("rsring = " + rsring); //.toScript());
-        System.out.println("rsring = " + rsring.toScript());
+        //System.out.println("rsring = " + rsring.toScript());
 
         GenSolvablePolynomial<BigRational> ad, bd, cd, dd;
         RecSolvablePolynomial<BigRational> ar, br, cr, dr;
