@@ -781,10 +781,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
      * @return ideal(this : H), a Groebner base
      */
     public SolvableIdeal<C> quotient(SolvableIdeal<C> H) {
-        if (H == null) { // == (0)
-            return this;
-        }
-        if (H.isZERO()) {
+        if (H == null||H.isZERO()) { // == (0)
             return this;
         }
         if (this.isZERO()) {
@@ -1113,6 +1110,43 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
      */
     public boolean isAnnihilator(GenSolvablePolynomial<C> h, SolvableIdeal<C> A) {
         SolvableIdeal<C> B = A.product(h);
+        return contains(B);
+    }
+
+
+    /**
+     * Annihilator for ideal modulo this ideal.
+     * @param H solvable ideal
+     * @return annihilator of H with respect to this
+     */
+    public SolvableIdeal<C> annihilator(SolvableIdeal<C> H) {
+        if (H == null || H.isZERO()) {
+            return getZERO();
+        }
+        if (this.isZERO()) {
+            return this;
+        }
+        SolvableIdeal<C> ann = null;
+        for (GenSolvablePolynomial<C> h : H.getList()) {
+            SolvableIdeal<C> Hi = this.annihilator(h);
+            if (ann == null) {
+                ann = Hi;
+            } else {
+                ann = ann.intersect(Hi);
+            }
+        }
+        return ann;
+    }
+
+
+    /**
+     * Test for annihilator of ideal modulo this ideal.
+     * @param H solvable ideal
+     * @param A solvable ideal
+     * @return true, if A is the annihilator of H with respect to this
+     */
+    public boolean isAnnihilator(SolvableIdeal<C> H, SolvableIdeal<C> A) {
+        SolvableIdeal<C> B = A.product(H);
         return contains(B);
     }
 

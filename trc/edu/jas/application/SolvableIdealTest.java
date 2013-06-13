@@ -76,16 +76,13 @@ public class SolvableIdealTest extends TestCase {
     GenSolvablePolynomialRing<BigRational> fac;
 
 
-    List<GenSolvablePolynomial<BigRational>> L;
+    List<GenSolvablePolynomial<BigRational>> L, M;
 
 
     PolynomialList<BigRational> F;
 
 
     List<GenSolvablePolynomial<BigRational>> G;
-
-
-    //List<? extends GenPolynomial<BigRational>> M;
 
 
     SolvableGroebnerBase<BigRational> bb;
@@ -886,7 +883,7 @@ public class SolvableIdealTest extends TestCase {
 
 
     /**
-     * Test SolvableIdeal annihilator for element.
+     * Test SolvableIdeal annihilator.
      */
     public void testAnnihilator() {
         SolvableIdeal<BigRational> I, J, K;
@@ -914,6 +911,22 @@ public class SolvableIdealTest extends TestCase {
         //System.out.println("c = " + c);
         //System.out.println("J = " + J + "\n");
         assertTrue("isAnnihilator(c,J)", I.isAnnihilator(c,J));
+
+        d = fac.univariate(rl-2);
+        //d = fac.random(kl - 1, ll, el, q);
+        M = new ArrayList<GenSolvablePolynomial<BigRational>>();
+        M.add(c);
+        M.add(d);
+        //System.out.println("M = " + M);
+        K = new SolvableIdeal<BigRational>(fac, M);
+        //System.out.println("K = " + K + "\n");
+
+        J = I.annihilator(K);
+        //System.out.println("J = " + J + "\n");
+        J.doGB();
+        //System.out.println("K = " + K);
+        //System.out.println("J = " + J + "\n");
+        assertTrue("isAnnihilator(M,J)", I.isAnnihilator(K,J));
     }
 
 }
