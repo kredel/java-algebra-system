@@ -74,16 +74,10 @@ public class IdealTest extends TestCase {
     GenPolynomialRing<BigRational> fac;
 
 
-    List<GenPolynomial<BigRational>> L;
+    List<GenPolynomial<BigRational>> L, M, G;
 
 
     PolynomialList<BigRational> F;
-
-
-    List<GenPolynomial<BigRational>> G;
-
-
-    List<? extends GenPolynomial<BigRational>> M;
 
 
     GroebnerBase<BigRational> bb;
@@ -1975,7 +1969,6 @@ public class IdealTest extends TestCase {
         L = new ArrayList<GenPolynomial<BigRational>>();
         L.add(a);
         L.add(b);
-        //L.add(c);
         //System.out.println("L = " + L);
         L = bb.GB(L);
         I = new Ideal<BigRational>(fac, L, true);
@@ -1988,6 +1981,22 @@ public class IdealTest extends TestCase {
         //System.out.println("c = " + c);
         //System.out.println("J = " + J + "\n");
         assertTrue("isAnnihilator(c,J)", I.isAnnihilator(c,J));
+
+        d = fac.univariate(rl-2);
+        //d = fac.random(kl - 1, ll, el, q);
+        M = new ArrayList<GenPolynomial<BigRational>>();
+        M.add(c);
+        M.add(d);
+        //System.out.println("M = " + M);
+        K = new Ideal<BigRational>(fac, M);
+        //System.out.println("K = " + K + "\n");
+
+        J = I.annihilator(K);
+        //System.out.println("J = " + J + "\n");
+        J.doGB();
+        //System.out.println("K = " + K);
+        //System.out.println("J = " + J + "\n");
+        assertTrue("isAnnihilator(M,J)", I.isAnnihilator(K,J));
     }
 
 }

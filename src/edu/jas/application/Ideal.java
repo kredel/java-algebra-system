@@ -1219,7 +1219,6 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
     }
 
 
-
     /**
      * Test for annihilator of element modulo this ideal.
      * @param h polynomial
@@ -1228,6 +1227,43 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
      */
     public boolean isAnnihilator(GenPolynomial<C> h, Ideal<C> A) {
         Ideal<C> B = A.product(h);
+        return contains(B);
+    }
+
+
+    /**
+     * Annihilator for ideal modulo this ideal.
+     * @param H ideal
+     * @return annihilator of H with respect to this
+     */
+    public Ideal<C> annihilator(Ideal<C> H) {
+        if (H == null || H.isZERO()) {
+            return getZERO();
+        }
+        if (this.isZERO()) {
+            return this;
+        }
+        Ideal<C> ann = null;
+        for (GenPolynomial<C> h : H.getList()) {
+            Ideal<C> Hi = this.annihilator(h);
+            if (ann == null) {
+                ann = Hi;
+            } else {
+                ann = ann.intersect(Hi);
+            }
+        }
+        return ann;
+    }
+
+
+    /**
+     * Test for annihilator of ideal modulo this ideal.
+     * @param H ideal
+     * @param A ideal
+     * @return true, if A is the annihilator of H with respect to this
+     */
+    public boolean isAnnihilator(Ideal<C> H, Ideal<C> A) {
+        Ideal<C> B = A.product(H);
         return contains(B);
     }
 
