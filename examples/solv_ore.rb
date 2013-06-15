@@ -123,7 +123,7 @@ puts "SolvableQuotient: " + str(scci);
 puts "SolvableQuotient: " + str(scci*scb);
 puts "SolvableQuotient: " + str(scci*sca*scb);
 puts "SolvableQuotient: " + str(sca*scb*scci);
-puts "SolvableQuotient: " + str(sca*scci*scb);
+#puts "SolvableQuotient: " + str(sca*scci*scb); # expensive
 puts;
 
 scd = scci + scb + sca;
@@ -136,4 +136,5 @@ sce = scai + scbi;
 puts "SolvableQuotient: " + str(sce);
 
 #terminate();
+#exit(0);
 

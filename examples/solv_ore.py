@@ -126,7 +126,7 @@ print "SolvableQuotient: " + str(scci);
 print "SolvableQuotient: " + str(scci*scb);
 print "SolvableQuotient: " + str(scci*sca*scb);
 print "SolvableQuotient: " + str(sca*scb*scci);
-print "SolvableQuotient: " + str(sca*scci*scb);
+#print "SolvableQuotient: " + str(sca*scci*scb); 
 print;
 
 scd = scci + scb + sca;
