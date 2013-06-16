@@ -1463,6 +1463,8 @@ java_import "edu.jas.ufd.Quotient";
 java_import "edu.jas.ufd.QuotientRing";
 java_import "edu.jas.gbmod.SolvableQuotient";
 java_import "edu.jas.gbmod.SolvableQuotientRing";
+java_import "edu.jas.gbmod.QuotSolvablePolynomial";
+java_import "edu.jas.gbmod.QuotSolvablePolynomialRing";
 
 
 =begin rdoc
@@ -1530,6 +1532,10 @@ def SRF(pr,d=0,n=1)
         pr = pr.ring;
     end
     qr = SolvableQuotientRing.new(pr);
+    #puts "qr is associative: " + qr.isAssociative().to_s;
+    #if not qr.isAssociative()
+    #   puts "warning: qr is not associative";
+    #end
     if d == 0
         r = SolvableQuotient.new(qr);
     else
@@ -2826,18 +2832,27 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
             end
             ll << x;
         end
-        recSolv = false;
+        constSolv = false;
         (0..ll.size-1).step(3) { |i|
             if ll[i+1].isConstant()
-               recSolv = true;
+               constSolv = true;
             end
 	}
-        recSolv = recSolv and cf.is_a? GenPolynomialRing
+        recSolv = cf.getClass().getSimpleName() == "GenPolynomialRing"
+        quotSolv = cf.getClass().getSimpleName() == "SolvableQuotientRing"
+        #puts "cf = " + cf.getClass().to_s + ", quotSolv = " + quotSolv.to_s + ", recSolv = " + recSolv.to_s;
         if recSolv
+           #puts "RecSolvablePolynomialRing: " + cf.to_s + ", cf = " + cf.toScript();
            ring = RecSolvablePolynomialRing.new(cf,nv,to,names);
            table = ring.table;
            coeffTable = ring.coeffTable;
+        elsif quotSolv
+           #puts "QuotSolvablePolynomialRing: " + cf.to_s + ", cf = " + cf.toScript();
+           ring = QuotSolvablePolynomialRing.new(cf,nv,to,names);
+           table = ring.table;
+           coeffTable = ring.coeffTable;
         else
+           #puts "GenSolvablePolynomialRing: " + cf.to_s + ", cf = " + cf.toScript();
            ring = GenSolvablePolynomialRing.new(cf,nv,to,names);
            table = ring.table;
            coeffTable = table;
@@ -2845,10 +2860,15 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
         if ll != []
             #puts "ll = " + str(ll);
 	    (0..ll.size-1).step(3) { |i|
-                #puts "type " + str(ll[i].class);
                 if recSolv and ll[i+1].isConstant() 
-                   coeffTable.update( ll[i], ll[i+1], ll[i+2] );
+                   #puts "r coeff type " + str(ll[i].class);
+                   coeffTable.update( ll[i], ll[i+1].leadingBaseCoefficient(), ll[i+2] );
+                elsif quotSolv and ll[i+1].isConstant() 
+                   #puts "q coeff type " + str(ll[i].class);
+                   coeffTable.update( ring.toPolyCoefficients(ll[i]), ring.toPolyCoefficients(ll[i+1]), 
+                                      ring.toPolyCoefficients(ll[i+2]) );
                 else 
+                   #puts "poly type " + str(ll[i].class);
                    table.update( ll[i], ll[i+1], ll[i+2] );
                 end
 	    }
