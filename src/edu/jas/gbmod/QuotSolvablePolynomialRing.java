@@ -371,10 +371,11 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>> extends
                     p = Xk.multiply(Xj).multiply(Xi);
                     q = Xk.multiply(Xj.multiply(Xi));
                     if (!p.equals(q)) {
-                        if (true || debug) {
-                            logger.info("Xi = " + Xi + ", Xj = " + Xj + ", Xk = " + Xk);
+                        if (true || debug) { 
+                            logger.info("Xk = " + Xk + ", Xj = " + Xj + ", Xi = " + Xi);
                             logger.info("p = ( Xk * Xj ) * Xi = " + p);
                             logger.info("q = Xk * ( Xj * Xi ) = " + q);
+                            logger.info("q-p = " + p.subtract(q));
                         }
                         return false;
                     }
@@ -717,6 +718,34 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>> extends
      * @return polynomial with type GenSolvablePolynomial<C> coefficients.
      */
     public RecSolvablePolynomial<C> toPolyCoefficients(QuotSolvablePolynomial<C> A) {
+        RecSolvablePolynomial<C> B = polCoeff.getZERO().copy();
+        if (A == null || A.isZERO()) {
+            return B;
+        }
+        for (Map.Entry<ExpVector, SolvableQuotient<C>> y : A.getMap().entrySet()) {
+            ExpVector e = y.getKey();
+            SolvableQuotient<C> a = y.getValue();
+            if (!a.den.isONE()) {
+                throw new IllegalArgumentException("den != 1 not supported: " + a);
+            }
+            GenPolynomial<C> p = a.num; // can not be zero
+            if (!p.isZERO()) {
+                //B = B.sum( p, e ); // inefficient
+                B.doPutToMap(e, p);
+            }
+        }
+        return B;
+    }
+
+
+    /**
+     * Integral function from rational polynomial coefficients. Represent as
+     * polynomial with type GenSolvablePolynomial<C> coefficients.
+     * @param A polynomial with rational polynomial coefficients to be
+     *            converted.
+     * @return polynomial with type GenSolvablePolynomial<C> coefficients.
+     */
+    public RecSolvablePolynomial<C> toPolyCoefficients(GenPolynomial<SolvableQuotient<C>> A) {
         RecSolvablePolynomial<C> B = polCoeff.getZERO().copy();
         if (A == null || A.isZERO()) {
             return B;

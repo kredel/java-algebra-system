@@ -1954,7 +1954,7 @@ public class IdealTest extends TestCase {
 
 
     /**
-     * Test Ideal annihilator for element.
+     * Test Ideal annihilator.
      */
     public void testAnnihilator() {
         Ideal<BigRational> I, J, K;
