@@ -252,6 +252,9 @@ public class RecSolvablePolynomialTest extends TestCase {
         d = (RecSolvablePolynomial<BigRational>) a.multiply(xp);
         assertTrue("monic(a) = a*(1/ldcf(ldcf(a)))", d.leadingBaseCoefficient().leadingBaseCoefficient()
                         .isONE());
+
+        d = (RecSolvablePolynomial<BigRational>) a.monic();
+        assertTrue("a.monic(): ", d.leadingBaseCoefficient().isONE() || d.leadingBaseCoefficient().equals(a.leadingBaseCoefficient()));
     }
 
 
