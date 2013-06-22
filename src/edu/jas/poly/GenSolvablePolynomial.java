@@ -446,4 +446,23 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
         return multiplyLeft(m.getValue(), m.getKey());
     }
 
+
+    /**
+     * GenSolvablePolynomial monic, i.e. leadingCoefficient == 1. If leadingCoefficient
+     * is not invertible returns this unmodified.
+     * @return monic(this).
+     */
+    public GenSolvablePolynomial<C> monic() {
+        if (this.isZERO()) {
+            return this;
+        }
+        C lc = leadingBaseCoefficient();
+        if (!lc.isUnit()) {
+            //System.out.println("lc = "+lc);
+            return this;
+        }
+        C lm = lc.inverse();
+        return multiplyLeft(lm);
+    }
+
 }
