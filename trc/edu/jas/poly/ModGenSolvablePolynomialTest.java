@@ -217,6 +217,9 @@ public class ModGenSolvablePolynomialTest extends TestCase {
 
         d = e.multiply(b);
         assertEquals("b.monic() = (1/ldcf(b) (0))*b",c,d);
+
+        d = a.monic();
+        assertTrue("a.monic(): ", d.leadingBaseCoefficient().isONE());
     }
 
 

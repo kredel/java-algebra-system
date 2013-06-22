@@ -261,6 +261,9 @@ public class QuotSolvablePolynomialTest extends TestCase {
         SolvableQuotient<BigRational> xp = a.leadingBaseCoefficient().inverse();
         d = a.multiply(xp);
         assertTrue("monic(a) = a*(1/ldcf(ldcf(a)))", d.leadingBaseCoefficient().isONE());
+
+        d = (QuotSolvablePolynomial<BigRational>) a.monic();
+        assertTrue("a.monic(): ", d.leadingBaseCoefficient().isONE());
     }
 
 
