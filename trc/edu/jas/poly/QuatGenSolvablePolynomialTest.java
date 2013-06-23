@@ -187,16 +187,16 @@ public class QuatGenSolvablePolynomialTest extends TestCase {
 
         BigQuaternion x = a.leadingBaseCoefficient().inverse();
         c = (GenSolvablePolynomial<BigQuaternion>) a.monic();
-        d = (GenSolvablePolynomial<BigQuaternion>) a.multiply(x);
+        d = (GenSolvablePolynomial<BigQuaternion>) a.multiplyLeft(x);
         assertEquals("a.monic() = a(1/ldcf(a))",c,d);
 
         BigQuaternion y = b.leadingBaseCoefficient().inverse();
         c = (GenSolvablePolynomial<BigQuaternion>) b.monic();
-        d = (GenSolvablePolynomial<BigQuaternion>) b.multiply(y);
+        d = (GenSolvablePolynomial<BigQuaternion>) b.multiplyLeft(y);
         assertEquals("b.monic() = b(1/ldcf(b))",c,d);
 
         e = new GenSolvablePolynomial<BigQuaternion>(fac,y);
-        d = (GenSolvablePolynomial<BigQuaternion>) b.multiply(e);
+        d = (GenSolvablePolynomial<BigQuaternion>) e.multiply(b);
         assertEquals("b.monic() = b(1/ldcf(b))",c,d);
     }
 
