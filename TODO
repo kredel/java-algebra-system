@@ -30,6 +30,8 @@ issues to consider:
 
 - implement univariate power series composition and power
 
+- add method bitLength() to Element
+
 - make final variables public (?)
 
 - define quotientRemainder in RingElem interface (?)
