@@ -359,6 +359,9 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>> extends
      */
     @Override
     public boolean isAssociative() {
+        if (! coFac.isAssociative() ) {
+            return false;
+        }
         QuotSolvablePolynomial<C> Xi, Xj, Xk, p, q;
         List<GenPolynomial<SolvableQuotient<C>>> gens = generators();
         int ngen = gens.size();
@@ -382,7 +385,7 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>> extends
                 }
             }
         }
-        return coFac.isAssociative();
+        return true; //coFac.isAssociative();
     }
 
 
