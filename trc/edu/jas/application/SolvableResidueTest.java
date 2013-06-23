@@ -229,10 +229,10 @@ public class SolvableResidueTest extends TestCase {
         if ( !a.isZERO() ) { // !a.isZERO() isUnit()
             try {
                  c = a.inverse();
-                 System.out.println("a = " + a);
-                 System.out.println("c = " + c);
+                 //System.out.println("a = " + a);
+                 //System.out.println("c = " + c);
                  d = c.multiply(a);
-                 System.out.println("d = " + d);
+                 //System.out.println("d = " + d);
                  assertTrue("a*1/a = 1: " + fac, d.isONE()); // || true 
             } catch (NotInvertibleException e) {
                  // can happen
