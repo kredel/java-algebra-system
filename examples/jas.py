@@ -137,7 +137,7 @@ def inject_generators(gens):
     for v in gens:
         #print "vars = " + str(v);
         s = str(v);
-        if find(s,"/") < 0 and find(s,"(") < 0 and find(s,",") < 0 and find(s,"{") < 0 and find(s,"|") < 0:
+        if s.find("/") < 0 and s.find("(") < 0 and s.find(",") < 0 and s.find("{") < 0 and s.find("|") < 0:
            if s[0:1] == "1":
               s = "one" + s[1:]
               #print "var = " + s;
