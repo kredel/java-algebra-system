@@ -41,6 +41,7 @@ from edu.jas.gbufd       import GroebnerBasePseudoRecSeq, GroebnerBasePseudoSeq,
                                 CharacteristicSetWu
 from edu.jas.gbmod       import ModGroebnerBaseAbstract, ModSolvableGroebnerBaseAbstract,\
                                 SolvableQuotient, SolvableQuotientRing,\
+                                QuotSolvablePolynomial, QuotSolvablePolynomialRing,\
                                 SolvableSyzygyAbstract, SyzygyAbstract
 from edu.jas.vector      import GenVector, GenVectorModul,\
                                 GenMatrix, GenMatrixRing
@@ -2380,15 +2381,14 @@ def SRF(pr,d=0,n=1):
 def SRC(ideal,r=0):
     '''Create JAS polynomial SolvableResidue as ring element.
     '''
+    #print "ideal = " + str(ideal);
+    if ideal == None: # ??
+        raise ValueError, "No ideal given."
     if isinstance(ideal,SolvableIdeal):
         ideal = jas.application.SolvableIdeal(ideal.pset);
         #ideal.doGB();
-    #print "ideal = " + str(ideal);
-    if ideal == None: # ??
-        #print "ideal = " + str(ideal);
-        raise ValueError, "No ideal given."
-    #ideal = idx;
     #print "ideal.getList().get(0).ring.ideal = %s" % ideal.getList().get(0).ring.ideal;
+
     if ideal.getList().get(0).ring.getClass().getSimpleName() == "SolvableResidueRing":
         rc = SolvableResidueRing( ideal.getList().get(0).ring.ideal );
     else:
@@ -3259,29 +3259,40 @@ class SolvPolyRing(SolvableRing):
             if isinstance(x,RingElem):
                x = x.elem;
             L.append(x);
-        recSolv = False;
+        constSolv = False;
         for i in range(0,len(L),3):
             #print "L[i+1] = " + str(L[i+1]);
             if L[i+1].isConstant():
-               recSolv = True;
+               constSolv = True;
         #print "cf = " + str(cf.getClass().getSimpleName());
-        recSolv = recSolv and (cf.getClass().getSimpleName() == "GenPolynomialRing" or cf.getClass().getSimpleName() == "GenSolvablePolynomialRing");
+        recSolv = cf.getClass().getSimpleName() == "GenPolynomialRing";
+        quotSolv = cf.getClass().getSimpleName() == "SolvableQuotientRing";
         if recSolv:
             ring = RecSolvablePolynomialRing(cf,nv,to,names);
             table = ring.table;
             coeffTable = ring.coeffTable;
         else:
-            ring = GenSolvablePolynomialRing(cf,nv,to,names);
-            table = ring.table;
-            coeffTable = table;
+            if quotSolv:
+                ring = QuotSolvablePolynomialRing(cf,nv,to,names);
+                table = ring.table;
+                coeffTable = ring.coeffTable;
+            else:
+                ring = GenSolvablePolynomialRing(cf,nv,to,names);
+                table = ring.table;
+                coeffTable = table;
         if L != []:
             #print "rel = " + str(L);
             for i in range(0,len(L),3):
                 #print "adding relation: " + str(L[i]) + " * " + str(L[i+1]) + " = " + str(L[i+2]);
                 if recSolv and L[i+1].isConstant():
                     coeffTable.update( L[i], L[i+1], L[i+2] );
-                else:
-                    table.update( L[i], L[i+1], L[i+2] );
+                else: 
+                    if quotSolv and L[i+1].isConstant():
+                        coeffTable.update(ring.toPolyCoefficients(L[i]), 
+                                          ring.toPolyCoefficients(L[i+1]), 
+                                          ring.toPolyCoefficients(L[i+2]) );
+                    else:
+                        table.update( L[i], L[i+1], L[i+2] );
         self.ring = ring;
         SolvableRing.__init__(self,ring=self.ring)
 
