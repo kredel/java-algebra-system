@@ -10,6 +10,7 @@ import java.util.List;
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.GenSolvablePolynomial;
+import edu.jas.poly.ExpVector;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.NotInvertibleException;
 
@@ -19,7 +20,8 @@ import edu.jas.structure.NotInvertibleException;
  * interface. Objects of this class are (nearly) immutable.
  * @author Heinz Kredel
  */
-public class SolvableResidue<C extends GcdRingElem<C>> implements GcdRingElem<SolvableResidue<C>> {
+public class SolvableResidue<C extends GcdRingElem<C>> 
+             implements GcdRingElem<SolvableResidue<C>> {
 
 
     /**
@@ -311,12 +313,19 @@ public class SolvableResidue<C extends GcdRingElem<C>> implements GcdRingElem<So
         if (ring.isField()) {
             return multiply(S.inverse());
         }
+        try {
+            return multiply(S.inverse());
+        } catch (NotInvertibleException ignored) {
+            System.out.println("catch: " + ignored);
+            // ignored
+        }
         List<GenSolvablePolynomial<C>> Q = new ArrayList<GenSolvablePolynomial<C>>(1);
         Q.add(ring.ring.getZERO());
         List<GenSolvablePolynomial<C>> V = new ArrayList<GenSolvablePolynomial<C>>(1);
         V.add(val);
         GenSolvablePolynomial<C> x = ring.bb.sred.leftNormalform(Q, V, S.val);
         GenSolvablePolynomial<C> y = Q.get(0);
+        System.out.println("SolvableResidue val = " + val + ", div = " + S.val + ", quotient = " + y + ", remainder = " + x);
         return new SolvableResidue<C>(ring, y);
     }
 
@@ -360,6 +369,57 @@ public class SolvableResidue<C extends GcdRingElem<C>> implements GcdRingElem<So
         if (isunit == 1 && S.isunit == 1) {
             i = 1;
         } else if (isunit == 0 || S.isunit == 0) {
+            i = 0;
+        }
+        return new SolvableResidue<C>(ring, x, i);
+    }
+
+
+    /**
+     * SolvableResidue multiplication.
+     * @param S GenSolvablePolynomial.
+     * @return this*S.
+     */
+    public SolvableResidue<C> multiply(GenSolvablePolynomial<C> S) {
+        GenSolvablePolynomial<C> x = val.multiply(S);
+        int i = -1;
+        if (isunit == 1 && S.isUnit()) {
+            i = 1;
+        } else if (isunit == 0 || !S.isUnit()) {
+            i = 0;
+        }
+        return new SolvableResidue<C>(ring, x, i);
+    }
+
+
+    /*
+     * SolvableResidue multiplication.
+     * @param s coefficient.
+     * @return this*s.
+     */
+    public SolvableResidue<C> multiply(C s) {
+        GenSolvablePolynomial<C> x = val.multiply(s);
+        int i = -1;
+        if (isunit == 1 && s.isUnit()) {
+            i = 1;
+        } else if (isunit == 0 || !s.isUnit()) {
+            i = 0;
+        }
+        return new SolvableResidue<C>(ring, x, i);
+    }
+
+
+    /**
+     * SolvableResidue multiplication.
+     * @param e exponent.
+     * @return this*X<sup>e</sup>.
+     */
+    public SolvableResidue<C> multiply(ExpVector e) {
+        GenSolvablePolynomial<C> x = val.multiply(e);
+        int i = -1;
+        if (isunit == 1 && e.isZERO()) {
+            i = 1;
+        } else if (isunit == 0 || !e.isZERO()) {
             i = 0;
         }
         return new SolvableResidue<C>(ring, x, i);
