@@ -1187,17 +1187,17 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
             }
         }
         if (one == null) {
-            throw new NotInvertibleException("h = " + h);
+            throw new NotInvertibleException("one == null: h = " + h);
         }
         List<GenSolvablePolynomial<C>> row = x.G2F.get(i); // != -1
         //System.out.println("row = " + row);
         GenSolvablePolynomial<C> g = row.get(0);
         if (g == null || g.isZERO()) {
-            throw new NotInvertibleException("h = " + h);
+            throw new NotInvertibleException("g == 0: h = " + h);
         }
         GenSolvablePolynomial<C> gp = red.leftNormalform(getList(), g);
         if (gp.isZERO()) { // can happen with solvable rings
-            throw new NotInvertibleException("h = " + h + ", g = " + g);
+            throw new NotInvertibleException("solv|gp == 0: h = " + h + ", g = " + g);
         }
         // adjust leading coefficient of g to get g*h == 1
         GenSolvablePolynomial<C> f = g.multiply(h);
