@@ -465,10 +465,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
         try {
             C lm = lc.inverse();
             //System.out.println("lm = "+lm);
-            if (lm.multiply(lc).isONE()) {
-                return multiplyLeft(lm);
-            }
-            return this;
+            return multiplyLeft(lm);
         } catch(NotInvertibleException e) {
             //e.printStackTrace();
         }

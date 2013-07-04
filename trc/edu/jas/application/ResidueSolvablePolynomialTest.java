@@ -20,6 +20,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenSolvablePolynomialRing;
+import edu.jas.poly.RecSolvablePolynomial;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.RelationTable;
@@ -389,18 +390,12 @@ public class ResidueSolvablePolynomialTest extends TestCase {
 
     /**
      * Test extension and contraction for Weyl relations.
+     */
     public void testExtendContractWeyl() {
-        GenSolvablePolynomialRing<BigRational> csring = new GenSolvablePolynomialRing<BigRational>(cfac,
-                        tord, cvars);
-        WeylRelations<BigRational> wlc = new WeylRelations<BigRational>(csring);
-        wlc.generate();
-        assertFalse("isCommutative()", csring.isCommutative());
-        assertTrue("isAssociative()", csring.isAssociative());
-
         ResidueSolvablePolynomial<BigRational> r1 = ring.parse("x");
-        GenSolvablePolynomial<BigRational> r2 = csring.parse("b");
-        ResidueSolvablePolynomial<BigRational> rp = ring.parse("b x + a");
-        ring.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(), rp);
+        GenSolvablePolynomial<BigRational> r2 = sring.parse("a");
+        ResidueSolvablePolynomial<BigRational> rp = ring.parse("a x + b");
+        ring.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(), ring.toPolyCoefficients(rp));
 
         int k = rl;
         ResidueSolvablePolynomialRing<BigRational> pfe = ring.extend(k);
@@ -415,31 +410,24 @@ public class ResidueSolvablePolynomialTest extends TestCase {
         ResidueSolvablePolynomial<BigRational> ae = (ResidueSolvablePolynomial<BigRational>) a.extend(pfe, 0, 0);
         //System.out.println("ae = " + ae);
 
-        Map<ExpVector, GenPolynomial<GenPolynomial<BigRational>>> m = ae.contract(pfec);
-        List<GenPolynomial<GenPolynomial<BigRational>>> ml = new ArrayList<GenPolynomial<GenPolynomial<BigRational>>>(
-                        m.values());
-        GenPolynomial<GenPolynomial<BigRational>> aec = ml.get(0);
+        Map<ExpVector, GenPolynomial<SolvableResidue<BigRational>>> m = ae.contract(pfec);
+        List<GenPolynomial<SolvableResidue<BigRational>>> 
+            ml = new ArrayList<GenPolynomial<SolvableResidue<BigRational>>>(m.values());
+        GenPolynomial<SolvableResidue<BigRational>> aec = ml.get(0);
         //System.out.println("ae  = " + ae);
         //System.out.println("aec = " + aec);
         assertEquals("a == aec", a, aec);
     }
-     */
 
 
     /**
      * Test reversion for Weyl relations.
+     */
     public void testReverseWeyl() {
-        GenSolvablePolynomialRing<BigRational> csring = new GenSolvablePolynomialRing<BigRational>(cfac,
-                        tord, cvars);
-        WeylRelations<BigRational> wlc = new WeylRelations<BigRational>(csring);
-        wlc.generate();
-        assertFalse("isCommutative()", csring.isCommutative());
-        assertTrue("isAssociative()", csring.isAssociative());
-
         ResidueSolvablePolynomial<BigRational> r1 = ring.parse("x");
-        GenSolvablePolynomial<BigRational> r2 = csring.parse("b");
-        ResidueSolvablePolynomial<BigRational> rp = ring.parse("b x + a");
-        ring.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(), rp);
+        GenSolvablePolynomial<BigRational> r2 = sring.parse("a");
+        ResidueSolvablePolynomial<BigRational> rp = ring.parse("a x + b");
+        ring.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(), ring.toPolyCoefficients(rp));
 
         ResidueSolvablePolynomialRing<BigRational> pfr = ring.reverse();
         ResidueSolvablePolynomialRing<BigRational> pfrr = pfr.reverse();
@@ -456,28 +444,19 @@ public class ResidueSolvablePolynomialTest extends TestCase {
         //System.out.println("ar = " + ar);
         //System.out.println("arr = " + arr);
     }
-     */
 
 
     /**
      * Test recursive for Weyl relations.
+     */
     public void testRecursiveWeyl() {
-        String[] svars = new String[] { "w", "x", "y", "z" };
-        GenSolvablePolynomialRing<BigRational> sring = new GenSolvablePolynomialRing<BigRational>(cfac, tord,
-                        svars);
-        WeylRelations<BigRational> wlc = new WeylRelations<BigRational>(sring);
-        wlc.generate();
-        assertFalse("isCommutative()", sring.isCommutative());
-        assertTrue("isAssociative()", sring.isAssociative());
-        //System.out.println("sring = " + sring.toScript());
-
-        GenSolvablePolynomialRing<GenPolynomial<BigRational>> rsring = sring.recursive(2); // 1,2,3
+        GenSolvablePolynomialRing<GenPolynomial<SolvableResidue<BigRational>>> rsring = ring.recursive(2); // 1,2,3
         //System.out.println("rsring = " + rsring.toScript());
 
-        GenSolvablePolynomial<BigRational> ad, bd, cd, dd;
-        ResidueSolvablePolynomial<BigRational> ar, br, cr, dr;
-        ad = sring.random(kl, ll, el, q);
-        bd = sring.random(kl, ll, el, q);
+        GenSolvablePolynomial<SolvableResidue<BigRational>> ad, bd, cd, dd;
+        RecSolvablePolynomial<SolvableResidue<BigRational>> ar, br, cr, dr;
+        ad = ring.random(kl, ll, el, q);
+        bd = ring.random(kl, ll, el, q);
         //ad = sring.parse("7/2 y^2 * z"); // - 15/2 w^2 + 262/225");
         //bd = sring.parse("-10/13 x "); //+ 413/150");
         //ad = (GenSolvablePolynomial<BigRational>) ad.monic();
@@ -489,8 +468,8 @@ public class ResidueSolvablePolynomialTest extends TestCase {
         cd = ad.multiply(bd);
         //System.out.println("cd = " + cd);
 
-        ar = (ResidueSolvablePolynomial<BigRational>) PolyUtil.<BigRational> recursive(rsring, ad);
-        br = (ResidueSolvablePolynomial<BigRational>) PolyUtil.<BigRational> recursive(rsring, bd);
+        ar = (RecSolvablePolynomial<SolvableResidue<BigRational>>) PolyUtil.<SolvableResidue<BigRational>> recursive(rsring, ad);
+        br = (RecSolvablePolynomial<SolvableResidue<BigRational>>) PolyUtil.<SolvableResidue<BigRational>> recursive(rsring, bd);
         //System.out.println("ar = " + ar);
         //System.out.println("br = " + br);
 
@@ -498,66 +477,15 @@ public class ResidueSolvablePolynomialTest extends TestCase {
         //System.out.println("cr = " + cr);
         //System.out.println("cr.ring = " + cr.ring.toScript());
 
-        dr = (ResidueSolvablePolynomial<BigRational>) PolyUtil.<BigRational> recursive(rsring, cd);
+        dr = (RecSolvablePolynomial<SolvableResidue<BigRational>>) PolyUtil.<SolvableResidue<BigRational>> recursive(rsring, cd);
         //System.out.println("dr = " + dr);
 
         assertEquals("dr.ring == cr.ring", dr.ring, cr.ring);
         assertEquals("dr == cr", dr, cr);
 
-        dd = (GenSolvablePolynomial<BigRational>) PolyUtil.<BigRational> distribute(sring, cr);
-        //System.out.println("dd = " + dd);
+        dd = (GenSolvablePolynomial<SolvableResidue<BigRational>>) PolyUtil.<SolvableResidue<BigRational>> distribute(ring, cr);
+        // //System.out.println("dd = " + dd);
         assertEquals("dd == cd", dd, cd);
     }
-     */
-
-
-    /**
-     * Test recursive for iterated Weyl relations.
-    public void testRecursiveIteratedWeyl() {
-        String[] svars = new String[] { "w", "x", "y", "z" };
-        GenSolvablePolynomialRing<BigRational> sring = new GenSolvablePolynomialRing<BigRational>(cfac, tord,
-                        svars);
-        WeylRelations<BigRational> wlc = new WeylRelations<BigRational>(sring);
-        wlc.generateIterated();
-        assertFalse("isCommutative()", sring.isCommutative());
-        assertTrue("isAssociative()", sring.isAssociative());
-        //System.out.println("sring = " + sring.toScript());
-
-        GenSolvablePolynomialRing<GenPolynomial<BigRational>> rsring = sring.recursive(2); // 1,2,3
-        //System.out.println("rsring = " + rsring); //.toScript());
-        //System.out.println("rsring = " + rsring.toScript());
-
-        GenSolvablePolynomial<BigRational> ad, bd, cd, dd;
-        ResidueSolvablePolynomial<BigRational> ar, br, cr, dr;
-        ad = sring.random(kl, ll, el, q);
-        bd = sring.random(kl, ll, el, q);
-        //ad = (GenSolvablePolynomial<BigRational>) ad.monic();
-        //bd = (GenSolvablePolynomial<BigRational>) bd.monic();
-
-        //System.out.println("ad = " + ad);
-        //System.out.println("bd = " + bd);
-
-        cd = ad.multiply(bd);
-        //System.out.println("cd = " + cd);
-
-        ar = (ResidueSolvablePolynomial<BigRational>) PolyUtil.<BigRational> recursive(rsring, ad);
-        br = (ResidueSolvablePolynomial<BigRational>) PolyUtil.<BigRational> recursive(rsring, bd);
-        //System.out.println("ar = " + ar);
-        //System.out.println("br = " + br);
-
-        cr = ar.multiply(br);
-        //System.out.println("cr = " + cr);
-
-        dr = (ResidueSolvablePolynomial<BigRational>) PolyUtil.<BigRational> recursive(rsring, cd);
-        //System.out.println("dr = " + dr);
-
-        assertEquals("dr.ring == cr.ring", dr.ring, cr.ring);
-        assertEquals("dr == cr", dr, cr);
-
-        dd = (GenSolvablePolynomial<BigRational>) PolyUtil.<BigRational> distribute(sring, cr);
-        //System.out.println("dd = " + dd);
-        assertEquals("dd == cd", dd, cd);
-    }
-     */
 
 }

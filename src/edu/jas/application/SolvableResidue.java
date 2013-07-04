@@ -341,6 +341,9 @@ public class SolvableResidue<C extends GcdRingElem<C>>
         if ( xp.isZERO() ) {
             throw new NotInvertibleException("(" + x + ") * (" + val + ") = " + x.multiply(val) + " = 0 mod " + ring.ideal);
         }
+        if ( !xp.multiply(this).isONE() ) {
+            throw new NotInvertibleException("(" + x + ") * (" + val + ") = " + x.multiply(val) + " != 1 mod " + ring.ideal);
+        }
         return xp;
     }
 
