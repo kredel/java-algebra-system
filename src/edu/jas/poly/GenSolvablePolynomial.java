@@ -12,6 +12,7 @@ import java.util.SortedMap;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.RingElem;
+import edu.jas.structure.NotInvertibleException;
 
 
 /**
@@ -457,12 +458,21 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
             return this;
         }
         C lc = leadingBaseCoefficient();
+        //System.out.println("lc = "+lc);
         if (!lc.isUnit()) {
-            //System.out.println("lc = "+lc);
             return this;
         }
-        C lm = lc.inverse();
-        return multiplyLeft(lm);
+        try {
+            C lm = lc.inverse();
+            //System.out.println("lm = "+lm);
+            if (lm.multiply(lc).isONE()) {
+                return multiplyLeft(lm);
+            }
+            return this;
+        } catch(NotInvertibleException e) {
+            //e.printStackTrace();
+        }
+        return this;
     }
 
 }
