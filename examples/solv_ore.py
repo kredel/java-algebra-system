@@ -70,7 +70,7 @@ print;
 #print "univariate polynomials for twosidedGB: " + str([ str(f) for f in rgtu ]);
 #print;
 
-startLog();
+#startLog();
 
 sr = SRC(rgt,one);
 print "SolvableResidue: " + str(sr);

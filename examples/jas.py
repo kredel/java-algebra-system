@@ -2382,13 +2382,14 @@ def SRC(ideal,r=0):
     '''Create JAS polynomial SolvableResidue as ring element.
     '''
     #print "ideal = " + str(ideal);
-    if ideal == None: # ??
-        raise ValueError, "No ideal given."
+    if ideal == None: # does not work
+        print "ideal = " + str(ideal);
+        if False:
+            raise ValueError, "No ideal given."
     if isinstance(ideal,SolvableIdeal):
         ideal = jas.application.SolvableIdeal(ideal.pset);
         #ideal.doGB();
     #print "ideal.getList().get(0).ring.ideal = %s" % ideal.getList().get(0).ring.ideal;
-
     if ideal.getList().get(0).ring.getClass().getSimpleName() == "SolvableResidueRing":
         rc = SolvableResidueRing( ideal.getList().get(0).ring.ideal );
     else:
