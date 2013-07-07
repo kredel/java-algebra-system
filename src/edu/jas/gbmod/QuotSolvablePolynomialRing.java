@@ -203,7 +203,7 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>> extends
      * @param cf factory for coefficients of type C.
      * @param o other solvable polynomial ring.
      */
-    public QuotSolvablePolynomialRing(RingFactory<SolvableQuotient<C>> cf, QuotSolvablePolynomialRing o) {
+    public QuotSolvablePolynomialRing(RingFactory<SolvableQuotient<C>> cf, GenSolvablePolynomialRing o) {
         this(cf, o.nvar, o.tord, o.getVars(), null);
     }
 

@@ -317,13 +317,14 @@ public class SolvableResidue<C extends GcdRingElem<C>>
             return multiply(S.inverse());
         } catch (NotInvertibleException ignored) {
             System.out.println("catch: " + ignored);
+            //ignored.printStackTrace();
             // ignored
         }
         List<GenSolvablePolynomial<C>> Q = new ArrayList<GenSolvablePolynomial<C>>(1);
         Q.add(ring.ring.getZERO());
         List<GenSolvablePolynomial<C>> V = new ArrayList<GenSolvablePolynomial<C>>(1);
-        V.add(val);
-        GenSolvablePolynomial<C> x = ring.bb.sred.leftNormalform(Q, V, S.val);
+        V.add(S.val);
+        GenSolvablePolynomial<C> x = ring.bb.sred.leftNormalform(Q, V, val);
         GenSolvablePolynomial<C> y = Q.get(0);
         System.out.println("SolvableResidue val = " + val + ", div = " + S.val + ", quotient = " + y + ", remainder = " + x);
         return new SolvableResidue<C>(ring, y);
@@ -355,8 +356,8 @@ public class SolvableResidue<C extends GcdRingElem<C>>
      */
     public SolvableResidue<C> remainder(SolvableResidue<C> S) {
         List<GenSolvablePolynomial<C>> V = new ArrayList<GenSolvablePolynomial<C>>(1);
-        V.add(val);
-        GenSolvablePolynomial<C> x = ring.bb.sred.leftNormalform(V, S.val);
+        V.add(S.val);
+        GenSolvablePolynomial<C> x = ring.bb.sred.leftNormalform(V, val);
         return new SolvableResidue<C>(ring, x);
     }
 
