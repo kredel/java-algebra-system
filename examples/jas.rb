@@ -3080,9 +3080,7 @@ Convert to polynomials with SolvableQuotient coefficients.
         end
         rrel = @pset.ring.table.relationList() + @pset.ring.coeffTable.relationList();
         #puts "rrel = " + str(rrel);
-
         qf = SolvableQuotientRing.new(cf);
-        #puts "qf = " + qf.toScript();
         qr = QuotSolvablePolynomialRing.new(qf,@pset.ring);
         #puts "qr = " + str(qr);
         qrel = rrel.map { |r| RingElem.new(qr.fromPolyCoefficients(r)) };

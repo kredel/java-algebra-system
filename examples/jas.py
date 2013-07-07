@@ -48,6 +48,7 @@ from edu.jas.vector      import GenVector, GenVectorModul,\
 from edu.jas.application import PolyUtilApp, Residue, ResidueRing, Ideal,\
                                 Local, LocalRing, IdealWithRealAlgebraicRoots,\
                                 SolvableIdeal, SolvableResidue, SolvableResidueRing,\
+                                ResidueSolvablePolynomial, ResidueSolvablePolynomialRing,\
                                 ComprehensiveGroebnerBaseSeq, ExtensionFieldBuilder
 from edu.jas.kern        import ComputerThreads, StringUtil, Scripting
 from edu.jas.ufd         import GreatestCommonDivisor, PolyUfdUtil, GCDFactory,\
@@ -1299,6 +1300,32 @@ class SolvableIdeal:
         L = s.constructUnivariate();
         N = [ RingElem(e) for e in L ];
         return N;
+
+    def toQuotientCoefficients(self):
+        '''Convert to polynomials with SolvableQuotient coefficients.
+        '''
+        if self.pset.ring.coFac.getClass().getSimpleName() == "SolvableResidueRing":
+           cf = self.pset.ring.coFac.ring;
+        else:
+           if self.pset.ring.coFac.getClass().getSimpleName() == "GenSolvablePolynomialRing":
+              cf = self.pset.ring.coFac;
+              #else: if @pset.ring.coFac.getClass().getSimpleName() == "GenPolynomialRing"
+              #   cf = @pset.ring.coFac;
+              #   puts "cf = " + cf.toScript();
+           else:
+              return self;
+        rrel = self.pset.ring.table.relationList();
+        rrel.addAll(self.pset.ring.coeffTable.relationList());
+        #print "rrel = " + str(rrel);
+        qf = SolvableQuotientRing(cf);
+        qr = QuotSolvablePolynomialRing(qf,self.pset.ring);
+        #print "qr = " + str(qr);
+        qrel = [ RingElem(qr.fromPolyCoefficients(r)) for r in rrel ];
+        qring = SolvPolyRing(qf,self.ring.ring.getVars(),self.ring.ring.tord,qrel);
+        #print "qring = " + str(qring);
+        qlist = [ qr.fromPolyCoefficients(self.ring.ring.toPolyCoefficients(r)) for r in self.list ];
+        qlist = [ RingElem(r) for r in qlist ];
+        return SolvableIdeal(qring,"",qlist);
 
     def inverse(self,p):
         '''Compute the inverse polynomial modulo this ideal, if it exists.
@@ -3268,6 +3295,7 @@ class SolvPolyRing(SolvableRing):
         #print "cf = " + str(cf.getClass().getSimpleName());
         recSolv = cf.getClass().getSimpleName() == "GenPolynomialRing";
         quotSolv = cf.getClass().getSimpleName() == "SolvableQuotientRing";
+        resSolv = cf.getClass().getSimpleName() == "SolvableResidueRing";
         if recSolv:
             ring = RecSolvablePolynomialRing(cf,nv,to,names);
             table = ring.table;
@@ -3278,9 +3306,14 @@ class SolvPolyRing(SolvableRing):
                 table = ring.table;
                 coeffTable = ring.coeffTable;
             else:
-                ring = GenSolvablePolynomialRing(cf,nv,to,names);
-                table = ring.table;
-                coeffTable = table;
+                if resSolv:
+                    ring = ResidueSolvablePolynomialRing(cf,nv,to,names);
+                    table = ring.table;
+                    coeffTable = ring.coeffTable;
+                else:
+                    ring = GenSolvablePolynomialRing(cf,nv,to,names);
+                    table = ring.table;
+                    coeffTable = table;
         if L != []:
             #print "rel = " + str(L);
             for i in range(0,len(L),3):
@@ -3293,7 +3326,14 @@ class SolvPolyRing(SolvableRing):
                                           ring.toPolyCoefficients(L[i+1]), 
                                           ring.toPolyCoefficients(L[i+2]) );
                     else:
-                        table.update( L[i], L[i+1], L[i+2] );
+                        if resSolv and L[i+1].isConstant():
+                            coeffTable.update(ring.toPolyCoefficients(L[i]), 
+                                              ring.toPolyCoefficients(L[i+1]), 
+                                              ring.toPolyCoefficients(L[i+2]) );
+                        else:
+                            print "L[i], L[i+1], L[i+2]: " + str(L[i]) + ", " + str(L[i+1]) + ", " + str(L[i+2]);
+
+                            table.update( L[i], L[i+1], L[i+2] );
         self.ring = ring;
         SolvableRing.__init__(self,ring=self.ring)
 
