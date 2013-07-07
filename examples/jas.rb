@@ -1465,6 +1465,8 @@ java_import "edu.jas.gbmod.SolvableQuotient";
 java_import "edu.jas.gbmod.SolvableQuotientRing";
 java_import "edu.jas.gbmod.QuotSolvablePolynomial";
 java_import "edu.jas.gbmod.QuotSolvablePolynomialRing";
+java_import "edu.jas.application.ResidueSolvablePolynomial";
+java_import "edu.jas.application.ResidueSolvablePolynomialRing";
 
 
 =begin rdoc
@@ -1852,7 +1854,7 @@ Methods for Groebner bases, ideal sum, intersection and others.
 =end
 class SimIdeal
 
-    attr_reader :pset, :ring, :list, :roots, :prime, :primary
+    attr_reader :pset, :ring, :list, :roots, :prime, :primary #, :ideal
 
 =begin rdoc
 SimIdeal constructor.
@@ -1867,6 +1869,7 @@ SimIdeal constructor.
            @list = rbarray2arraylist(list,rec=1);
         end
         @pset = OrderedPolynomialList.new(@ring.ring,@list);
+        #@ideal = Ideal.new(@pset);
         @roots = nil;
         @croots = nil;
         @prime = nil;
@@ -1907,6 +1910,9 @@ Create an ideal in a polynomial ring with parameter coefficients.
 Compute a Groebner base.
 =end
     def GB()
+        #if @ideal != nil
+        #   return SimIdeal.new(@ring,"",nil,@ideal.GB());
+        #end
         s = @pset;
         cofac = s.ring.coFac;
         ff = s.list;
@@ -2840,19 +2846,25 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
 	}
         recSolv = cf.getClass().getSimpleName() == "GenPolynomialRing"
         quotSolv = cf.getClass().getSimpleName() == "SolvableQuotientRing"
+        resSolv = cf.getClass().getSimpleName() == "SolvableResidueRing"
         #puts "cf = " + cf.getClass().to_s + ", quotSolv = " + quotSolv.to_s + ", recSolv = " + recSolv.to_s;
         if recSolv
-           #puts "RecSolvablePolynomialRing: " + cf.to_s + ", cf = " + cf.toScript();
+           puts "RecSolvablePolynomialRing: " + cf.toScript();
            ring = RecSolvablePolynomialRing.new(cf,nv,to,names);
            table = ring.table;
            coeffTable = ring.coeffTable;
         elsif quotSolv
-           #puts "QuotSolvablePolynomialRing: " + cf.to_s + ", cf = " + cf.toScript();
+           puts "QuotSolvablePolynomialRing: " + cf.toScript();
            ring = QuotSolvablePolynomialRing.new(cf,nv,to,names);
            table = ring.table;
            coeffTable = ring.coeffTable;
+        elsif resSolv
+           puts "ResidueSolvablePolynomialRing: " + cf.toScript();
+           ring = ResidueSolvablePolynomialRing.new(cf,nv,to,names);
+           table = ring.table;
+           coeffTable = ring.coeffTable;
         else
-           #puts "GenSolvablePolynomialRing: " + cf.to_s + ", cf = " + cf.toScript();
+           puts "GenSolvablePolynomialRing: " + cf.toScript();
            ring = GenSolvablePolynomialRing.new(cf,nv,to,names);
            table = ring.table;
            coeffTable = table;
@@ -2865,9 +2877,16 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
                    coeffTable.update( ll[i], ll[i+1].leadingBaseCoefficient(), ll[i+2] );
                 elsif quotSolv and ll[i+1].isConstant() 
                    #puts "q coeff type " + str(ll[i].class);
-                   coeffTable.update( ring.toPolyCoefficients(ll[i]), ring.toPolyCoefficients(ll[i+1]), 
+                   coeffTable.update( ring.toPolyCoefficients(ll[i]), 
+                                      ring.toPolyCoefficients(ll[i+1]), 
+                                      ring.toPolyCoefficients(ll[i+2]) );
+                elsif resSolv and ll[i+1].isConstant() 
+                   #puts "q coeff type " + str(ll[i].class);
+                   coeffTable.update( ring.toPolyCoefficients(ll[i]),
+                                      ring.toPolyCoefficients(ll[i+1]), 
                                       ring.toPolyCoefficients(ll[i+2]) );
                 else 
+                   puts "ll[i], ll[i+1], ll[i+2]: " + str(ll[i]) + ", " + str(ll[i+1]) + ", " + str(ll[i+2]);
                    #puts "poly type " + str(ll[i].class);
                    table.update( ll[i], ll[i+1], ll[i+2] );
                 end
@@ -2900,7 +2919,7 @@ Methods for left, right two-sided Groebner basees and others.
 =end
 class SolvIdeal
 
-    attr_reader :pset, :ring, :list
+    attr_reader :pset, :ring, :list #, :ideal
 
 =begin rdoc
 Constructor for an ideal in a solvable polynomial ring.
@@ -2915,6 +2934,7 @@ Constructor for an ideal in a solvable polynomial ring.
            @list = rbarray2arraylist(list,rec=1);
         end
         @pset = PolynomialList.new(ring.ring,@list);
+        #@ideal = SolvableIdeal.new(@pset);
     end
 
 =begin rdoc
@@ -2928,6 +2948,9 @@ Create a string representation.
 Compute a left Groebner base.
 =end
     def leftGB()
+        #if ideal != nil
+        #   return SolvIdeal.new(@ring,"",@ideal.leftGB());
+        #end
         s = @pset;
         ff = s.list;
         t = System.currentTimeMillis();
@@ -3039,6 +3062,36 @@ Compute the univariate polynomials in each variable of this twosided ideal.
         ll = s.constructUnivariate();
         nn = ll.map {|e| RingElem.new(e) };
         return nn;
+    end
+
+=begin rdoc
+Convert to polynomials with SolvableQuotient coefficients.
+=end
+    def toQuotientCoefficients()
+        if @pset.ring.coFac.getClass().getSimpleName() == "SolvableResidueRing"
+           cf = @pset.ring.coFac.ring;
+        elsif @pset.ring.coFac.getClass().getSimpleName() == "GenSolvablePolynomialRing"
+           cf = @pset.ring.coFac;
+        #elsif @pset.ring.coFac.getClass().getSimpleName() == "GenPolynomialRing"
+        #   cf = @pset.ring.coFac;
+        #   puts "cf = " + cf.toScript();
+        else
+           return self;
+        end
+        rrel = @pset.ring.table.relationList() + @pset.ring.coeffTable.relationList();
+        #puts "rrel = " + str(rrel);
+
+        qf = SolvableQuotientRing.new(cf);
+        #puts "qf = " + qf.toScript();
+        qr = QuotSolvablePolynomialRing.new(qf,@pset.ring);
+        #puts "qr = " + str(qr);
+        qrel = rrel.map { |r| RingElem.new(qr.fromPolyCoefficients(r)) };
+        #puts "qrel = " + str(qrel);
+        qring = SolvPolyRing.new(qf,@ring.ring.getVars(),@ring.ring.tord,qrel);
+        #puts "qring = " + str(qring);
+        qlist = @list.map { |r| qr.fromPolyCoefficients(@ring.ring.toPolyCoefficients(r)) };
+        qlist = qlist.map { |r| RingElem.new(r) };
+        return SolvIdeal.new(qring,"",qlist);
     end
 
 =begin rdoc
