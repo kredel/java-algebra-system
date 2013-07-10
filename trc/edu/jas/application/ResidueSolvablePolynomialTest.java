@@ -16,16 +16,15 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigRational;
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenSolvablePolynomial;
-import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.GenSolvablePolynomialRing;
-import edu.jas.poly.RecSolvablePolynomial;
 import edu.jas.poly.ExpVector;
-import edu.jas.poly.TermOrder;
-import edu.jas.poly.RelationTable;
-import edu.jas.poly.TableRelation;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.GenSolvablePolynomial;
+import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolyUtil;
+import edu.jas.poly.RecSolvablePolynomial;
+import edu.jas.poly.RelationTable;
+import edu.jas.poly.TermOrder;
 import edu.jas.poly.WeylRelations;
 
 
@@ -119,13 +118,12 @@ public class ResidueSolvablePolynomialTest extends TestCase {
         sring = new GenSolvablePolynomialRing<BigRational>(cfac, tord, cvars);
         WeylRelations<BigRational> wc = new WeylRelations<BigRational>(sring);
         wc.generate();
-        List<GenSolvablePolynomial<BigRational>> 
-            il = new ArrayList<GenSolvablePolynomial<BigRational>>();
+        List<GenSolvablePolynomial<BigRational>> il = new ArrayList<GenSolvablePolynomial<BigRational>>();
         GenSolvablePolynomial<BigRational> p1 = sring.parse("b - a^2");
         il.add(p1);
         //p1 = sring.parse("a - b^5");
         //il.add(p1);
-        sideal = new SolvableIdeal<BigRational>(sring,il);
+        sideal = new SolvableIdeal<BigRational>(sring, il);
         rring = new SolvableResidueRing<BigRational>(sideal);
         ring = new ResidueSolvablePolynomialRing<BigRational>(rring, tord, vars);
         WeylRelations<SolvableResidue<BigRational>> wl = new WeylRelations<SolvableResidue<BigRational>>(ring);
@@ -222,7 +220,7 @@ public class ResidueSolvablePolynomialTest extends TestCase {
         //System.out.println("x = " + x);
         //System.out.println("u = " + u);
 
-        b = ring.getONE().multiply(x,u);
+        b = ring.getONE().multiply(x, u);
         c = (ResidueSolvablePolynomial<BigRational>) a.sum(b);
         d = (ResidueSolvablePolynomial<BigRational>) a.sum(x, u);
         //System.out.println("a = " + a);
@@ -277,7 +275,8 @@ public class ResidueSolvablePolynomialTest extends TestCase {
 
         d = (ResidueSolvablePolynomial<BigRational>) a.monic();
         //System.out.println("d = " + d);
-        assertTrue("a.monic(): " + d, d.leadingBaseCoefficient().isONE() || d.leadingBaseCoefficient().equals(a.leadingBaseCoefficient()));
+        assertTrue("a.monic(): " + d, d.leadingBaseCoefficient().isONE()
+                        || d.leadingBaseCoefficient().equals(a.leadingBaseCoefficient()));
     }
 
 
@@ -366,9 +365,10 @@ public class ResidueSolvablePolynomialTest extends TestCase {
                 //System.out.println("gens:" + a + " * " + b + " = " + c);
                 ExpVector ev = a.leadingExpVector().sum(b.leadingExpVector());
                 assertTrue("LT(a)*LT(b) == LT(c)", c.leadingExpVector().equals(ev));
-                ev = a.leadingBaseCoefficient().val.leadingExpVector()
-                                .sum(b.leadingBaseCoefficient().val.leadingExpVector());
-                assertTrue("LT(lc(a))*LT(lc(b)) == LT(lc(c))", c.leadingBaseCoefficient().val.leadingExpVector().equals(ev));
+                ev = a.leadingBaseCoefficient().val.leadingExpVector().sum(
+                                b.leadingBaseCoefficient().val.leadingExpVector());
+                assertTrue("LT(lc(a))*LT(lc(b)) == LT(lc(c))", c.leadingBaseCoefficient().val
+                                .leadingExpVector().equals(ev));
             }
         }
 
@@ -407,12 +407,13 @@ public class ResidueSolvablePolynomialTest extends TestCase {
         ResidueSolvablePolynomial<BigRational> a = ring.random(kl, ll, el, q);
         //System.out.println("a = " + a);
 
-        ResidueSolvablePolynomial<BigRational> ae = (ResidueSolvablePolynomial<BigRational>) a.extend(pfe, 0, 0);
+        ResidueSolvablePolynomial<BigRational> ae = (ResidueSolvablePolynomial<BigRational>) a.extend(pfe, 0,
+                        0);
         //System.out.println("ae = " + ae);
 
         Map<ExpVector, GenPolynomial<SolvableResidue<BigRational>>> m = ae.contract(pfec);
-        List<GenPolynomial<SolvableResidue<BigRational>>> 
-            ml = new ArrayList<GenPolynomial<SolvableResidue<BigRational>>>(m.values());
+        List<GenPolynomial<SolvableResidue<BigRational>>> ml = new ArrayList<GenPolynomial<SolvableResidue<BigRational>>>(
+                        m.values());
         GenPolynomial<SolvableResidue<BigRational>> aec = ml.get(0);
         //System.out.println("ae  = " + ae);
         //System.out.println("aec = " + aec);
@@ -439,7 +440,8 @@ public class ResidueSolvablePolynomialTest extends TestCase {
         //System.out.println("a = " + a);
 
         ResidueSolvablePolynomial<BigRational> ar = (ResidueSolvablePolynomial<BigRational>) a.reverse(pfr);
-        ResidueSolvablePolynomial<BigRational> arr = (ResidueSolvablePolynomial<BigRational>) ar.reverse(pfrr);
+        ResidueSolvablePolynomial<BigRational> arr = (ResidueSolvablePolynomial<BigRational>) ar
+                        .reverse(pfrr);
         assertEquals("a == arr", a, arr);
         //System.out.println("ar = " + ar);
         //System.out.println("arr = " + arr);
@@ -468,8 +470,10 @@ public class ResidueSolvablePolynomialTest extends TestCase {
         cd = ad.multiply(bd);
         //System.out.println("cd = " + cd);
 
-        ar = (RecSolvablePolynomial<SolvableResidue<BigRational>>) PolyUtil.<SolvableResidue<BigRational>> recursive(rsring, ad);
-        br = (RecSolvablePolynomial<SolvableResidue<BigRational>>) PolyUtil.<SolvableResidue<BigRational>> recursive(rsring, bd);
+        ar = (RecSolvablePolynomial<SolvableResidue<BigRational>>) PolyUtil
+                        .<SolvableResidue<BigRational>> recursive(rsring, ad);
+        br = (RecSolvablePolynomial<SolvableResidue<BigRational>>) PolyUtil
+                        .<SolvableResidue<BigRational>> recursive(rsring, bd);
         //System.out.println("ar = " + ar);
         //System.out.println("br = " + br);
 
@@ -477,13 +481,15 @@ public class ResidueSolvablePolynomialTest extends TestCase {
         //System.out.println("cr = " + cr);
         //System.out.println("cr.ring = " + cr.ring.toScript());
 
-        dr = (RecSolvablePolynomial<SolvableResidue<BigRational>>) PolyUtil.<SolvableResidue<BigRational>> recursive(rsring, cd);
+        dr = (RecSolvablePolynomial<SolvableResidue<BigRational>>) PolyUtil
+                        .<SolvableResidue<BigRational>> recursive(rsring, cd);
         //System.out.println("dr = " + dr);
 
         assertEquals("dr.ring == cr.ring", dr.ring, cr.ring);
         assertEquals("dr == cr", dr, cr);
 
-        dd = (GenSolvablePolynomial<SolvableResidue<BigRational>>) PolyUtil.<SolvableResidue<BigRational>> distribute(ring, cr);
+        dd = (GenSolvablePolynomial<SolvableResidue<BigRational>>) PolyUtil
+                        .<SolvableResidue<BigRational>> distribute(ring, cr);
         // //System.out.println("dd = " + dd);
         assertEquals("dd == cd", dd, cd);
     }
