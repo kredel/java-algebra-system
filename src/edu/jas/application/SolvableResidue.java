@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.jas.kern.PrettyPrint;
-import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.ExpVector;
+import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.NotInvertibleException;
 
@@ -20,8 +20,7 @@ import edu.jas.structure.NotInvertibleException;
  * interface. Objects of this class are (nearly) immutable.
  * @author Heinz Kredel
  */
-public class SolvableResidue<C extends GcdRingElem<C>> 
-             implements GcdRingElem<SolvableResidue<C>> {
+public class SolvableResidue<C extends GcdRingElem<C>> implements GcdRingElem<SolvableResidue<C>> {
 
 
     /**
@@ -79,6 +78,10 @@ public class SolvableResidue<C extends GcdRingElem<C>>
         }
         if (val.isZERO()) {
             isunit = 0;
+            return;
+        }
+        if (ring.isField()) {
+            isunit = 1;
             return;
         }
         if (val.isUnit()) {
@@ -326,7 +329,8 @@ public class SolvableResidue<C extends GcdRingElem<C>>
         V.add(S.val);
         GenSolvablePolynomial<C> x = ring.bb.sred.leftNormalform(Q, V, val);
         GenSolvablePolynomial<C> y = Q.get(0);
-        System.out.println("SolvableResidue val = " + val + ", div = " + S.val + ", quotient = " + y + ", remainder = " + x);
+        System.out.println("SolvableResidue val = " + val + ", div = " + S.val + ", quotient = " + y
+                        + ", remainder = " + x);
         return new SolvableResidue<C>(ring, y);
     }
 
@@ -339,11 +343,13 @@ public class SolvableResidue<C extends GcdRingElem<C>>
     public SolvableResidue<C> inverse() {
         GenSolvablePolynomial<C> x = ring.ideal.inverse(val);
         SolvableResidue<C> xp = new SolvableResidue<C>(ring, x, 1);
-        if ( xp.isZERO() ) {
-            throw new NotInvertibleException("(" + x + ") * (" + val + ") = " + x.multiply(val) + " = 0 mod " + ring.ideal);
+        if (xp.isZERO()) {
+            throw new NotInvertibleException("(" + x + ") * (" + val + ") = " + x.multiply(val) + " = 0 mod "
+                            + ring.ideal);
         }
-        if ( !xp.multiply(this).isONE() ) {
-            throw new NotInvertibleException("(" + x + ") * (" + val + ") = " + x.multiply(val) + " != 1 mod " + ring.ideal);
+        if (!xp.multiply(this).isONE()) {
+            throw new NotInvertibleException("(" + x + ") * (" + val + ") = " + x.multiply(val)
+                            + " != 1 mod " + ring.ideal);
         }
         return xp;
     }
@@ -435,7 +441,7 @@ public class SolvableResidue<C extends GcdRingElem<C>>
      * @return this with monic value part.
      */
     public SolvableResidue<C> monic() {
-        return new SolvableResidue<C>(ring, (GenSolvablePolynomial<C>) val.monic(), isunit);
+        return new SolvableResidue<C>(ring, val.monic(), isunit);
     }
 
 

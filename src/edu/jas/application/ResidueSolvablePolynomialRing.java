@@ -18,38 +18,36 @@ import org.apache.log4j.Logger;
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.kern.Scripting;
-import edu.jas.structure.RingElem;
-import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingFactory;
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenSolvablePolynomial;
-import edu.jas.poly.RecSolvablePolynomial;
-import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.GenSolvablePolynomialRing;
-import edu.jas.poly.RecSolvablePolynomialRing;
 import edu.jas.poly.ExpVector;
-import edu.jas.poly.TermOrder;
-import edu.jas.poly.RelationTable;
-import edu.jas.poly.TableRelation;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
+import edu.jas.poly.GenSolvablePolynomial;
+import edu.jas.poly.GenSolvablePolynomialRing;
+import edu.jas.poly.RecSolvablePolynomial;
+import edu.jas.poly.RecSolvablePolynomialRing;
+import edu.jas.poly.RelationTable;
+import edu.jas.poly.TermOrder;
+import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
 
 
 /**
- * ResidueSolvablePolynomialRing generic solvable polynomial with
- * residue coefficients factory implementing RingFactory and extending
- * GenSolvablePolynomialRing factory.  Factory for n-variate ordered
- * solvable polynomials over solvable residue coefficients. The
- * non-commutative multiplication relations are maintained in a
- * relation table and the non-commutative multiplication relations
- * between the coefficients and the main variables are maintained in a
- * coefficient relation table. Almost immutable object, except
- * variable names and relation table contents.
+ * ResidueSolvablePolynomialRing generic solvable polynomial with residue
+ * coefficients factory implementing RingFactory and extending
+ * GenSolvablePolynomialRing factory. Factory for n-variate ordered solvable
+ * polynomials over solvable residue coefficients. The non-commutative
+ * multiplication relations are maintained in a relation table and the
+ * non-commutative multiplication relations between the coefficients and the
+ * main variables are maintained in a coefficient relation table. Almost
+ * immutable object, except variable names and relation table contents.
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
 
-public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>> 
-             extends GenSolvablePolynomialRing<SolvableResidue<C>> {
+public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>> extends
+                GenSolvablePolynomialRing<SolvableResidue<C>> {
 
 
     /**
@@ -177,8 +175,8 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>>
      * @param v names for the variables.
      * @param rt solvable multiplication relations.
      */
-    public ResidueSolvablePolynomialRing(RingFactory<SolvableResidue<C>> cf, int n, TermOrder t, 
-                    String[] v, RelationTable<SolvableResidue<C>> rt) {
+    public ResidueSolvablePolynomialRing(RingFactory<SolvableResidue<C>> cf, int n, TermOrder t, String[] v,
+                    RelationTable<SolvableResidue<C>> rt) {
         super(cf, n, t, v, rt);
         //if (rt == null) { // handled in super }
         SolvableResidueRing<C> cfring = (SolvableResidueRing<C>) cf; // == coFac
@@ -205,8 +203,7 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>>
      * @param cf factory for coefficients of type C.
      * @param o other solvable polynomial ring.
      */
-    public ResidueSolvablePolynomialRing(RingFactory<SolvableResidue<C>> cf, 
-                                         ResidueSolvablePolynomialRing o) {
+    public ResidueSolvablePolynomialRing(RingFactory<SolvableResidue<C>> cf, ResidueSolvablePolynomialRing o) {
         this(cf, o.nvar, o.tord, o.getVars(), null);
     }
 
@@ -374,7 +371,7 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>>
                     p = Xk.multiply(Xj).multiply(Xi);
                     q = Xk.multiply(Xj.multiply(Xi));
                     if (!p.equals(q)) {
-                        if (true|| debug) { 
+                        if (true || debug) {
                             logger.info("Xk = " + Xk + ", Xj = " + Xj + ", Xi = " + Xi);
                             logger.info("p = ( Xk * Xj ) * Xi = " + p);
                             logger.info("q = Xk * ( Xj * Xi ) = " + q);
@@ -401,8 +398,8 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>>
 
 
     /**
-     * Get a (constant) ResidueSolvablePolynomial&lt;C&gt; element from a BigInteger
-     * value.
+     * Get a (constant) ResidueSolvablePolynomial&lt;C&gt; element from a
+     * BigInteger value.
      * @param a BigInteger.
      * @return a ResidueSolvablePolynomial&lt;C&gt;.
      */
@@ -635,8 +632,8 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>>
     @Override
     public ResidueSolvablePolynomialRing<C> extend(int i) {
         GenPolynomialRing<SolvableResidue<C>> pfac = super.extend(i);
-        ResidueSolvablePolynomialRing<C> spfac = new ResidueSolvablePolynomialRing<C>(pfac.coFac, 
-                                                 pfac.nvar, pfac.tord, pfac.getVars());
+        ResidueSolvablePolynomialRing<C> spfac = new ResidueSolvablePolynomialRing<C>(pfac.coFac, pfac.nvar,
+                        pfac.tord, pfac.getVars());
         spfac.table.extend(this.table);
         spfac.coeffTable.extend(this.coeffTable);
         return spfac;
@@ -688,8 +685,8 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>>
 
 
     /**
-     * Solvable residue coefficients from integral polynomial coefficients. Represent as
-     * polynomial with type SolvableResidue<C> coefficients.
+     * Solvable residue coefficients from integral polynomial coefficients.
+     * Represent as polynomial with type SolvableResidue<C> coefficients.
      * @param A polynomial with integral polynomial coefficients to be
      *            converted.
      * @return polynomial with type SolvableResidue<C> coefficients.
@@ -717,8 +714,7 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>>
     /**
      * Integral function from solvable residue coefficients. Represent as
      * polynomial with type GenSolvablePolynomial<C> coefficients.
-     * @param A polynomial with solvable residue coefficients to be
-     *            converted.
+     * @param A polynomial with solvable residue coefficients to be converted.
      * @return polynomial with type GenSolvablePolynomial<C> coefficients.
      */
     public RecSolvablePolynomial<C> toPolyCoefficients(ResidueSolvablePolynomial<C> A) {
@@ -742,8 +738,7 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>>
     /**
      * Integral function from solvable residue coefficients. Represent as
      * polynomial with type GenSolvablePolynomial<C> coefficients.
-     * @param A polynomial with solvable residue coefficients to be
-     *            converted.
+     * @param A polynomial with solvable residue coefficients to be converted.
      * @return polynomial with type GenSolvablePolynomial<C> coefficients.
      */
     public RecSolvablePolynomial<C> toPolyCoefficients(GenPolynomial<SolvableResidue<C>> A) {

@@ -28,9 +28,8 @@ import edu.jas.structure.NotInvertibleException;
 
 
 /**
- * Solvable Ideal implements some methods for ideal arithmetic, for example
- * sum, intersection, quotient.
- * <b>Note:</b> only left ideals at the moment.
+ * Solvable Ideal implements some methods for ideal arithmetic, for example sum,
+ * intersection, quotient. <b>Note:</b> only left ideals at the moment.
  * @author Heinz Kredel
  */
 public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<SolvableIdeal<C>>, Serializable {
@@ -209,7 +208,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
      * @param red Reduction engine
      */
     public SolvableIdeal(PolynomialList<C> list, boolean gb, boolean topt,
-                         SolvableGroebnerBaseAbstract<C> bb, SolvableReduction<C> red) {
+                    SolvableGroebnerBaseAbstract<C> bb, SolvableReduction<C> red) {
         if (list == null || list.list == null) {
             throw new IllegalArgumentException("list and list.list may not be null");
         }
@@ -606,8 +605,8 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         List<GenSolvablePolynomial<C>> c;
         c = new ArrayList<GenSolvablePolynomial<C>>(getList().size());
         for (GenSolvablePolynomial<C> p : getList()) {
-             GenSolvablePolynomial<C> q = p.multiply(b);
-             c.add(q);
+            GenSolvablePolynomial<C> q = p.multiply(b);
+            c.add(q);
         }
         SolvableIdeal<C> I = new SolvableIdeal<C>(getRing(), c, false);
         if (isGB) {
@@ -781,7 +780,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
      * @return ideal(this : H), a Groebner base
      */
     public SolvableIdeal<C> quotient(SolvableIdeal<C> H) {
-        if (H == null||H.isZERO()) { // == (0)
+        if (H == null || H.isZERO()) { // == (0)
             return this;
         }
         if (this.isZERO()) {
@@ -815,7 +814,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         if (this.isZERO()) {
             return this;
         }
-        if ( ! getRing().isCommutative() ) {
+        if (!getRing().isCommutative()) {
             throw new UnsupportedOperationException("Rabinowich trick only for commutative polynomial rings");
         }
         SolvableIdeal<C> I = this.GB(); // should be already
@@ -1042,7 +1041,8 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
     /**
      * Normalform for list of solvable elements.
      * @param L solvable polynomial list
-     * @return list of left normalforms of the elements of L with respect to this
+     * @return list of left normalforms of the elements of L with respect to
+     *         this
      */
     public List<GenSolvablePolynomial<C>> normalform(List<GenSolvablePolynomial<C>> L) {
         if (L == null) {
@@ -1096,7 +1096,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
             }
             gen.add(p);
         }
-        SolvableIdeal<C> ann = new SolvableIdeal<C>(getRing(),gen);
+        SolvableIdeal<C> ann = new SolvableIdeal<C>(getRing(), gen);
         //System.out.println("ann = " + ann);
         return ann;
     }
