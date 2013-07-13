@@ -5,8 +5,8 @@
 package edu.jas.gb;
 
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -16,17 +16,15 @@ import org.apache.log4j.Logger;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.OptimizedPolynomialList;
-import edu.jas.poly.TermOrderOptimization;
 import edu.jas.structure.GcdRingElem;
 
 
 /**
  * Groebner bases via signatur based GBs in script.
- * @author Heinz Kredel
- * TODO: Computing via the ScriptEngine is way slower than the direct execution 
- * in the jython interpreter. Check if a different engine is in the path or if it must 
- * be configured in some special way.
+ * @author Heinz Kredel TODO: Computing via the ScriptEngine is way slower than
+ *         the direct execution in the jython interpreter. Check if a different
+ *         engine is in the path or if it must be configured in some special
+ *         way.
  */
 
 public class GBSigBased<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C> {
@@ -49,24 +47,24 @@ public class GBSigBased<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C
      */
     public GBSigBased() {
         engine = new ScriptEngineManager().getEngineByExtension("py");
-        logger.info("Script engine discovered: " + engine.getClass().getName());
-        if ( engine == null ) {
+        if (engine == null) {
             logger.error("no script engine found");
             throw new RuntimeException("no script engine found");
         }
+        logger.info("Script engine discovered: " + engine.getClass().getName());
         StringBuffer sb = new StringBuffer();
-        sb.append("from jas import PolyRing, ZZ, QQ, arraylist2pylist, pylist2arraylist;\n" );
-        sb.append("from basic_sigbased_gb import sigbased_gb, arris_algorithm, ggv, ggv_first_implementation, f5, f5z;\n" );
-        sb.append("sbgb = sigbased_gb();\n" );
-        sb.append("arri = arris_algorithm();\n" );
-        sb.append("ggv = ggv();\n" );
-        sb.append("ggv1 = ggv_first_implementation();\n" );
-        sb.append("ff5 = f5z();\n" );
+        sb.append("from jas import PolyRing, ZZ, QQ, arraylist2pylist, pylist2arraylist;\n");
+        sb.append("from basic_sigbased_gb import sigbased_gb, arris_algorithm, ggv, ggv_first_implementation, f5, f5z;\n");
+        sb.append("sbgb = sigbased_gb();\n");
+        sb.append("arri = arris_algorithm();\n");
+        sb.append("ggv = ggv();\n");
+        sb.append("ggv1 = ggv_first_implementation();\n");
+        sb.append("ff5 = f5z();\n");
         String ex = sb.toString();
         if (debug) {
             logger.info("input for evaluation:\n" + ex);
         }
-        try { 
+        try {
             Object ans = engine.eval(ex);
         } catch (ScriptException e) {
             e.printStackTrace();
@@ -120,7 +118,7 @@ public class GBSigBased<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C
         List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
         long millis = System.currentTimeMillis();
         try {
-            engine.put("F",F);
+            engine.put("F", F);
             StringBuffer sb = new StringBuffer();
             //sb.append("r = " + pfac.toScript() + ";\n");
             //sb.append("print str(r);\n");
@@ -136,7 +134,7 @@ public class GBSigBased<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C
                 logger.info("input for evaluation:\n" + ex);
             }
             Object ans = engine.eval(ex);
-            if ( ans != null ) {
+            if (ans != null) {
                 logger.info("answer: " + ans);
             }
             G = (List<GenPolynomial<C>>) engine.get("G");
