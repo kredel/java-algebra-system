@@ -323,7 +323,7 @@ public class QuotSolvablePolynomialTest extends TestCase {
     public void testSolvableCoeffs() {
         GenSolvablePolynomialRing<BigRational> csring = new GenSolvablePolynomialRing<BigRational>(cfac,
                         tord, cvars);
-        WeylRelations<BigRational> wlc = new WeylRelations<BigRational>(csring);
+        //WeylRelations<BigRational> wlc = new WeylRelations<BigRational>(csring); 
         //no: wlc.generate();
         //assertTrue("# relations == 1", csring.table.size() == 1);
         assertTrue("isCommutative()", csring.isCommutative());
