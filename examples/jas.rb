@@ -73,18 +73,20 @@ def inject_gens(env)
           ivs = ivs.gsub(",","");
           ivs = ivs.gsub("(","");
           ivs = ivs.gsub(")","");
-          #ivs = ivs.gsub("/","div");
+          ivs = ivs.gsub("/","div");
           #ivs = ivs.gsub("|","div");
           ivs = ivs.gsub("{","");
           ivs = ivs.gsub("}","");
-          if ivs[0] == "1" 
-             r = ivs[1,];
+          if ivs[0] == "1"[0] 
+             r = ivs[1,ivs.size-1].to_s;
              ivs = "one"
              if r != nil 
                 ivs = ivs + r
              end
           end
-          if not ivs.include?(",") and not ivs.include?("(") and not ivs.include?("/") and not ivs.include?("|") and not ivs.include?("{") and not ivs[0].match(/[0-9]/)
+          #puts "string: #{ivs} of " + i.to_s;
+          if not ivs.include?(",") and not ivs.include?("(") and not ivs.include?("/") and not ivs.include?("|") and not ivs.include?("{") 
+             #and not ivs[0].match(/[0-9]/)
              #puts "string2: #{ivs} = " + ivs.class.to_s;
              if env.generators[ ivs ] != nil
                 puts "redefining #{ivs}";
@@ -100,8 +102,9 @@ def inject_gens(env)
                 env.instance_eval( "def #{ivl}; @generators[ '#{ivs}' ]; end" )
              end
           end
-       rescue 
-          puts "error: #{i} = " + i.to_s + ", class = " + i.class.to_s;
+       rescue Exception => e 
+          #puts "error: #{ivs} = " + i.to_s + ", class = " + i.class.to_s;
+          puts "error: #{ivs} = " + i.to_s + ", e = " + e.to_s;
        end
     end
  puts "globally defined generators: " + env.generators.keys().join(", ");  
@@ -966,7 +969,7 @@ Ring constructor.
         begin
             @sqf = SquarefreeFactory.getImplementation(@ring.coFac);
             #puts "sqf: ", @sqf;
-        #rescue Rescueion => e
+        #rescue Exception => e
             #puts "error " + str(e)
         rescue
             #pass
@@ -974,7 +977,7 @@ Ring constructor.
         begin
             @factor = FactorFactory.getImplementation(@ring.coFac);
             #puts "factor: ", @factor;
-        #rescue Rescueion => e
+        #rescue Exception => e
             #puts "error " + str(e)
         rescue
             #pass
@@ -995,24 +998,27 @@ Define instance variables for generators.
              ivs = ivs.gsub(",","");
              ivs = ivs.gsub("(","");
              ivs = ivs.gsub(")","");
-             #ivs = ivs.gsub("/","div");
+             ivs = ivs.gsub("/","div");
              #ivs = ivs.gsub("|","div");
              ivs = ivs.gsub("{","");
              ivs = ivs.gsub("}","");
-             if ivs[0] == "1"
-                r = ivs[1,];
+             if ivs[0] == "1"[0]
+                r = ivs[1,ivs.size-1].to_s;
                 ivs = "one"
                 if r != nil 
                    ivs = ivs + r
                 end
              end
-             if not ivs.include?(",") and not ivs.include?("(") and not ivs.include?("/") and not ivs.include?("|") and not ivs.include?("{") and not ivs[0].match(/[0-9]/)
+             #puts "string: #{ivs} of " + i.to_s;
+             if not ivs.include?(",") and not ivs.include?("(") and not ivs.include?("/") and not ivs.include?("|") and not ivs.include?("{") 
+                #and not ivs[0].match(/[0-9]/)
                 #puts "string: #{ivs} = " + ivs.class.to_s;
                 @generators[ ivs ] = i;
                 self.instance_eval( "def #{ivs}; @generators[ '#{ivs}' ]; end" )
              end
-          rescue 
-             puts "ring error: #{i} = " + i.to_s + ", class = " + i.class.to_s;
+          rescue Exception => e
+             #puts "ring error: #{ivs} = " + i.to_s + ", class = " + i.class.to_s;
+             puts "ring error: #{ivs} = " + i.to_s + ", e = " + str(e);
              #pass
           end
        end
@@ -1029,8 +1035,8 @@ Inject variables for generators in top level environment.
            env = eval "self", bin;
            #puts "env = " + str(env)
            inject_gens(env)
-           rescue 
-              puts "error: 'irb/frame' not found";
+           rescue Exception => e
+              puts "error: 'irb/frame' not found, e = " + str(e);
            end
     end
 

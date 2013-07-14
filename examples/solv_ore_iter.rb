@@ -30,6 +30,8 @@ puts;
 
 pct = PolyRing.new(pzq,"t");
 #is automatic: [one,x,y,z,t] = p.gens();
+puts "tgens = " + pct.gens().join(", ") { |r| r.to_s };
+puts;
 
 trelations = [t, y,  y * t + y,
               t, z,  z * t - z
