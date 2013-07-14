@@ -85,8 +85,7 @@ def inject_gens(env)
              end
           end
           #puts "string: #{ivs} of " + i.to_s;
-          if not ivs.include?(",") and not ivs.include?("(") and not ivs.include?("/") and not ivs.include?("|") and not ivs.include?("{") 
-             #and not ivs[0].match(/[0-9]/)
+          if not ivs.include?(",") and not ivs.include?("(") and not ivs.include?("/") and not ivs.include?("|") and not ivs.include?("{") and not ivs.match(/[0-9].*/)
              #puts "string2: #{ivs} = " + ivs.class.to_s;
              if env.generators[ ivs ] != nil
                 puts "redefining #{ivs}";
@@ -1010,8 +1009,7 @@ Define instance variables for generators.
                 end
              end
              #puts "string: #{ivs} of " + i.to_s;
-             if not ivs.include?(",") and not ivs.include?("(") and not ivs.include?("/") and not ivs.include?("|") and not ivs.include?("{") 
-                #and not ivs[0].match(/[0-9]/)
+             if not ivs.include?(",") and not ivs.include?("(") and not ivs.include?("/") and not ivs.include?("|") and not ivs.include?("{") and not ivs.match(/[0-9].*/)
                 #puts "string: #{ivs} = " + ivs.class.to_s;
                 @generators[ ivs ] = i;
                 self.instance_eval( "def #{ivs}; @generators[ '#{ivs}' ]; end" )
