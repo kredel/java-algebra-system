@@ -19,18 +19,18 @@ import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigRational;
 import edu.jas.gb.SolvableGroebnerBase;
+import edu.jas.gb.SolvableGroebnerBaseAbstract;
 import edu.jas.gb.SolvableGroebnerBaseSeq;
 
 import edu.jas.poly.ModuleList;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.GenPolynomialTokenizer;
+import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.WeylRelations;
 import edu.jas.poly.RelationTable;
-
-
 
 
 /**
@@ -39,8 +39,6 @@ import edu.jas.poly.RelationTable;
  */
 
 public class SolvableSyzygyTest extends TestCase {
-
-    //private static final Logger logger = Logger.getLogger(SolvableSyzygyTest.class);
 
     /**
      * main.
@@ -58,12 +56,14 @@ public class SolvableSyzygyTest extends TestCase {
         super(name);
     }
 
+
     /**
      */ 
     public static Test suite() {
         TestSuite suite= new TestSuite(SolvableSyzygyTest.class);
         return suite;
     }
+
 
     int port = 4711;
     String host = "localhost";
@@ -93,7 +93,7 @@ public class SolvableSyzygyTest extends TestCase {
     ModuleList<BigRational> N;
     ModuleList<BigRational> Z;
 
-    SolvableGroebnerBase<BigRational> sbb;
+    SolvableGroebnerBaseAbstract<BigRational> sbb;
     ModSolvableGroebnerBase<BigRational> msbb;
 
     SolvableSyzygyAbstract<BigRational> ssz;
@@ -113,21 +113,24 @@ public class SolvableSyzygyTest extends TestCase {
         L = null;
         K = null;
         V = null;
-
         do {
             a = fac.random(kl, ll, el, q );
+        } while ( a.isZERO() );
+        do {
             b = fac.random(kl, ll, el, q );
+        } while ( b.isZERO() );
+        do {
             c = fac.random(kl, ll, el, q );
+        } while ( c.isZERO() );
+        do {
             d = fac.random(kl, ll, el, q );
-        } while ( a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO() );
+        } while ( d.isZERO() );
         e = d; //fac.random(kl, ll, el, q );
-
         one = fac.getONE();
         zero = fac.getZERO();
         sbb = new SolvableGroebnerBaseSeq<BigRational>();
         msbb = new ModSolvableGroebnerBaseAbstract<BigRational>();
         ssz = new SolvableSyzygyAbstract<BigRational>();
-
     }
 
     protected void tearDown() {
@@ -146,10 +149,8 @@ public class SolvableSyzygyTest extends TestCase {
 
     /**
      * Test sequential SolvableSyzygy.
-     * 
      */
     public void testSequentialSolvableSyzygy() {
-
         L = new ArrayList<GenSolvablePolynomial<BigRational>>();
 
         assertTrue("not isZERO( a )", !a.isZERO() );
@@ -184,17 +185,13 @@ public class SolvableSyzygyTest extends TestCase {
         K = ssz.leftZeroRelations( L );
         //System.out.println("\nK = " + K );
         assertTrue("is ZR( { a, b, c, d } )", ssz.isLeftZeroRelation(K,L) );
-
-        //System.out.println("K = " + K );
     }
 
 
     /**
      * Test sequential Weyl SolvableSyzygy.
-     * 
      */
     public void testSequentialWeylSolvableSyzygy() {
-
         int rloc = 4;
         fac = new GenSolvablePolynomialRing<BigRational>(cfac,rloc);
 
@@ -244,17 +241,13 @@ public class SolvableSyzygyTest extends TestCase {
         K = ssz.leftZeroRelations( L );
         //System.out.println("\nK = " + K );
         assertTrue("is ZR( { a, b, c, d } )", ssz.isLeftZeroRelation(K,L) );
-
-        //System.out.println("K = " + K );
     }
 
 
     /**
      * Test sequential module SolvableSyzygy.
-     * 
      */
     public void testSequentialModSolvableSyzygy() {
-
         W = new ArrayList<List<GenSolvablePolynomial<BigRational>>>();
 
         assertTrue("not isZERO( a )", !a.isZERO() );
@@ -306,10 +299,8 @@ public class SolvableSyzygyTest extends TestCase {
 
     /**
      * Test sequential arbitrary base Syzygy.
-     * 
      */
     public void testSequentialArbitrarySyzygy() {
-
         L = new ArrayList<GenSolvablePolynomial<BigRational>>();
 
         assertTrue("not isZERO( a )", !a.isZERO() );
@@ -335,18 +326,14 @@ public class SolvableSyzygyTest extends TestCase {
         K = ssz.leftZeroRelationsArbitrary( L );
         //System.out.println("\nN = " + N );
         assertTrue("is ZR( { a, b, c, d } )", ssz.isLeftZeroRelation(K,L) );
-
-        //System.out.println("N = " + N );
     }
 
 
     /**
      * Test sequential arbitrary base Syzygy, ex CLO 2, p 214 ff.
-     * 
      */
     @SuppressWarnings("unchecked") 
     public void testSequentialArbitrarySyzygyCLO() {
-
         PolynomialList<BigRational> F = null;
 
         String exam = "Rat(x,y) G "
@@ -374,11 +361,9 @@ public class SolvableSyzygyTest extends TestCase {
 
     /**
      * Test sequential arbitrary base Syzygy, ex WA_32.
-     * 
      */
     @SuppressWarnings("unchecked") 
     public void testSequentialArbitrarySyzygyWA32() {
-
         PolynomialList<BigRational> F = null;
 
         String exam = "Rat(e1,e2,e3) L "
@@ -412,10 +397,8 @@ public class SolvableSyzygyTest extends TestCase {
 
     /**
      * Test sequential arbitrary module SolvableSyzygy.
-     * 
      */
     public void testSequentialArbitraryModSolvableSyzygy() {
-
         W = new ArrayList<List<GenSolvablePolynomial<BigRational>>>();
 
         assertTrue("not isZERO( a )", !a.isZERO() );
@@ -461,11 +444,13 @@ public class SolvableSyzygyTest extends TestCase {
     public void testOreConditions() {
         do {
             a = fac.random(kl, ll-1, el, q);
+        } while ( a.isZERO() );
+        do {
             b = fac.random(kl, ll-1, el, q);
-        } while ( a.isZERO() || b.isZERO() );
+        } while ( b.isZERO() );
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
-        //SolvableIdeal<BigRational> I = new SolvableIdeal<BigRational>(fac);
+
         GenSolvablePolynomial<BigRational>[] oc = ssz.leftOreCond(a,b);
         //System.out.println("oc[0] = " + oc[0]);
         //System.out.println("oc[1] = " + oc[1]);
@@ -484,7 +469,83 @@ public class SolvableSyzygyTest extends TestCase {
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
         assertEquals("a * c_0 = b * c_1: ", c, d);
-        assertTrue("left Ore condition: ", ssz.isRightOreCond(a,b,oc));
+        assertTrue("right Ore condition: ", ssz.isRightOreCond(a,b,oc));
+    }
+
+
+    /**
+     * Test Ore conditions for residues.
+     */
+    public void testResidueOreConditions() {
+        // construct ideal { x_i^2 - i, ... } for generators x_i
+        F = new PolynomialList<BigRational>(fac,fac.generators());
+        //System.out.println("F = " + F);
+        List<GenSolvablePolynomial<BigRational>> gens = F.castToSolvableList();
+        //System.out.println("gens = " + gens);
+        L = new ArrayList<GenSolvablePolynomial<BigRational>>(gens.size()-1); 
+        long i = 2;
+        for ( GenSolvablePolynomial<BigRational> g : gens ) {
+	    if ( g.isONE() ) {
+                continue;
+            }
+            GenSolvablePolynomial<BigRational> p = g.multiply(g);
+            p = (GenSolvablePolynomial<BigRational>) p.subtract(fac.fromInteger(i++));
+            L.add(p);
+        }
+        //System.out.println("L = " + L);
+
+        do {
+            a = fac.random(kl, ll-1, el+1, q);
+        } while ( a.isZERO() );
+        do {
+            b = fac.random(kl, ll-1, el+1, q);
+        } while ( b.isZERO() );
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+
+        GenSolvablePolynomial<BigRational>[] oc = ssz.leftOreCond(a,b);
+        //System.out.println("oc[0] = " + oc[0]);
+        //System.out.println("oc[1] = " + oc[1]);
+        c = oc[0].multiply(a);
+        d = oc[1].multiply(b);
+        //System.out.println("c = " + c);
+        //System.out.println("d = " + d);
+        assertEquals("c_0 * a = c_1 * b: ", c, d);
+        assertTrue("left Ore condition: ", ssz.isLeftOreCond(a,b,oc));
+
+        // now mod ideal(L):
+        GenSolvablePolynomial<BigRational> ar, br, cr, dr, or0, or1;
+        ar = sbb.sred.leftNormalform(L,a);
+        br = sbb.sred.leftNormalform(L,b);
+        //System.out.println("ar = " + ar);
+        //System.out.println("br = " + br);
+        cr = oc[0].multiply(ar);
+        dr = oc[1].multiply(br);
+        //System.out.println("cr = " + cr);
+        //System.out.println("dr = " + dr);
+        //this is not true: assertEquals("c_0 * a = c_1 * b: ", cr, dr);
+        cr = sbb.sred.leftNormalform(L,cr);
+        dr = sbb.sred.leftNormalform(L,dr);
+        //System.out.println("cr = " + cr);
+        //System.out.println("dr = " + dr);
+        assertEquals("cr_0 * ar = cr_1 * br: ", cr, dr);
+
+        or0 = sbb.sred.leftNormalform(L,oc[0]);
+        or1 = sbb.sred.leftNormalform(L,oc[1]);
+        //System.out.println("oc0 = " + oc[0]);
+        //System.out.println("oc1 = " + oc[1]);
+        //System.out.println("or0 = " + or0);
+        //System.out.println("or1 = " + or1);
+        cr = or0.multiply(ar);
+        dr = or1.multiply(br);
+        //okay w/o: cr = sbb.sred.leftNormalform(L,cr);
+        //okay w/o: dr = sbb.sred.leftNormalform(L,dr);
+        //System.out.println("cr = " + cr);
+        //System.out.println("dr = " + dr);
+        assertEquals("cr_0 * ar = cr_1 * br: ", cr, dr);
+        oc[0] = or0;
+        oc[1] = or1;
+        assertTrue("left Ore condition: ", ssz.isLeftOreCond(ar,br,oc));
     }
 
 }

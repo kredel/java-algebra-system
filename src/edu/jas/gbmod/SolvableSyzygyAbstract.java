@@ -49,7 +49,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>> implements SolvableSy
     /**
      * Solvable reduction engine.
      */
-    protected SolvableReduction<C> sred;
+    public final SolvableReduction<C> sred;
 
 
     /**
