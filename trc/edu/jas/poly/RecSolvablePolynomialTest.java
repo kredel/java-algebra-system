@@ -373,6 +373,20 @@ public class RecSolvablePolynomialTest extends TestCase {
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
         assertTrue("a*b != b*a", c.equals(d) || c.leadingExpVector().equals(d.leadingExpVector()));
+
+        // relation table list tests
+        //System.out.println("ring.table.rels = " + ring.table.relationList());
+        //System.out.println("ring.coeffTable.rels = " + ring.coeffTable.relationList());
+
+        RecSolvablePolynomialRing<BigRational> ring2 
+           = new RecSolvablePolynomialRing<BigRational>(ring.coFac, ring);
+        ring2.table.addSolvRelations(ring.table.relationList());
+        ring2.coeffTable.addSolvRelations(ring.coeffTable.relationList());
+
+        //System.out.println("ring2.table.rels = " + ring2.table.relationList());
+        //System.out.println("ring2.coeffTable.rels = " + ring2.coeffTable.relationList());
+        assertEquals("ring.table == ring2.table: ", ring.table, ring2.table);
+        assertEquals("ring.coeffTable == ring2.coeffTable: ", ring.coeffTable, ring2.coeffTable);
     }
 
 

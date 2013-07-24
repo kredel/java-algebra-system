@@ -419,8 +419,7 @@ public class RelationTableTest extends TestCase {
         List<GenSolvablePolynomial<BigRational>> rels = table.relationList();
         assertEquals("list.size() = 0", 0, rels.size());
 
-        PolynomialList<BigRational> Prel = new PolynomialList<BigRational>(ring, rels);
-        table.addRelations(Prel.getList());
+        table.addSolvRelations(rels);
         assertEquals("size() = 0", 0, table.size());
 
         WeylRelations<BigRational> wl = new WeylRelations<BigRational>(ring);
@@ -428,18 +427,15 @@ public class RelationTableTest extends TestCase {
         rels = table.relationList();
         assertEquals("list.size() = r/2", rl / 2, rels.size() / 3);
 
-        Prel = new PolynomialList<BigRational>(ring, rels);
-
-        GenSolvablePolynomialRing<BigRational> ring2 = new GenSolvablePolynomialRing<BigRational>(ring.coFac,
-                        ring);
-        table = ring2.table;
-        assertEquals("size() = 0", 0, table.size());
-        table.addRelations(Prel.getList());
-        assertEquals("size() = r/2", rl / 2, table.size());
-        assertEquals("rel1 == rel2: ", ring.table, table);
+        GenSolvablePolynomialRing<BigRational> ring2; 
+        ring2 = new GenSolvablePolynomialRing<BigRational>(ring.coFac, ring);
+        assertEquals("size() = 0", 0, ring2.table.size());
+        ring2.table.addSolvRelations(rels);
 
         //System.out.println("table1 = " + ring.table.toScript());
         //System.out.println("table2 = " + ring2.table.toScript());
+        assertEquals("size() = r/2", rl / 2, ring2.table.size());
+        assertEquals("rel1 == rel2: ", ring.table, ring2.table);
     }
 
 }

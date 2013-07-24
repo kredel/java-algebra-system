@@ -49,6 +49,14 @@ public class ExpVectorPair implements Serializable {
 
 
     /**
+     * @return total degree of both parts.
+     */
+    public long totalDeg() {
+        return e1.totalDeg() + e2.totalDeg();
+    } 
+
+
+    /**
      * toString.
      */
     @Override
