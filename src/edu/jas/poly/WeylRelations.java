@@ -49,6 +49,20 @@ public class WeylRelations<C extends RingElem<C>> {
      *  Block form: R{x1,...,xn,y1,...,yn; yi*xi = xi yi + 1}.
      */
     public void generate() {
+        generate(ring);
+    }
+
+
+    /** Generates the relation table of this ring.
+     *  Block form: R{x1,...,xn,y1,...,yn; yi*xi = xi yi + 1}.
+     * @param ring solvable polynomial ring factory, 
+     * ring must have even number of variables.
+     */
+    public void generate(GenSolvablePolynomialRing<C> ring) {
+        if ( ring.nvar <= 1 || (ring.nvar % 2) != 0 ) {
+           throw new IllegalArgumentException("WeylRelations, wrong nvar = "
+                                              + ring.nvar);
+        }
         RelationTable<C> table = ring.table;
         int r = ring.nvar;
         int m =  r / 2;
@@ -86,6 +100,16 @@ public class WeylRelations<C extends RingElem<C>> {
      *  Iterated form: R{x1,y1,...,xn,yn; yi*xi = xi yi + 1}.
      */
     public void generateIterated() {
+        generateIterated(ring);
+    }
+
+
+    /** Generates the relation table of this ring.
+     *  Iterated form: R{x1,y1,...,xn,yn; yi*xi = xi yi + 1}.
+     * @param ring solvable polynomial ring factory, 
+     * ring must have even number of variables.
+     */
+    public void generateIterated(GenSolvablePolynomialRing<C> ring) {
         RelationTable<C> table = ring.table;
         int r = ring.nvar;
         int m =  r / 2;
