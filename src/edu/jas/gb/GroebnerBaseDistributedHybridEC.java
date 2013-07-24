@@ -20,20 +20,19 @@ import edu.jas.structure.RingElem;
 import edu.jas.util.ChannelFactory;
 import edu.jas.util.DistHashTable;
 import edu.jas.util.DistHashTableServer;
+import edu.jas.util.DistThreadPool;
+import edu.jas.util.RemoteExecutable;
 import edu.jas.util.SocketChannel;
 import edu.jas.util.TaggedSocketChannel;
 import edu.jas.util.Terminator;
 import edu.jas.util.ThreadPool;
-import edu.jas.util.DistThreadPool;
-import edu.jas.util.RemoteExecutable;
 
 
 /**
- * Groebner Base distributed hybrid algorithm. Implements a
- * distributed memory with multi-core CPUs parallel version of
- * Groebner bases with executable channels. Using pairlist class,
- * distributed multi-threaded tasks do reduction, one communication
- * channel per remote node.
+ * Groebner Base distributed hybrid algorithm. Implements a distributed memory
+ * with multi-core CPUs parallel version of Groebner bases with executable
+ * channels. Using pairlist class, distributed multi-threaded tasks do
+ * reduction, one communication channel per remote node.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
@@ -105,13 +104,13 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
     /**
      * Distributed thread pool to use.
      */
-    private final DistThreadPool dtp;
+    private final transient DistThreadPool dtp;
 
 
     /**
      * Distributed hash table server to use.
      */
-    private final DistHashTableServer<Integer> dhts;
+    private final transient DistHashTableServer<Integer> dhts;
 
 
     /**
@@ -194,7 +193,8 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
      * @param pl pair selection strategy
      * @param port server port to use.
      */
-    public GroebnerBaseDistributedHybridEC(String mfile, int threads, int threadsPerNode, PairList<C> pl, int port) {
+    public GroebnerBaseDistributedHybridEC(String mfile, int threads, int threadsPerNode, PairList<C> pl,
+                    int port) {
         this(mfile, threads, threadsPerNode, new ThreadPool(threads), pl, port);
     }
 
@@ -206,8 +206,8 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
      * @param threadsPerNode threads per node to use.
      * @param port server port to use.
      */
-    public GroebnerBaseDistributedHybridEC(String mfile, int threads, int threadsPerNode, 
-                                           ThreadPool pool, int port) {
+    public GroebnerBaseDistributedHybridEC(String mfile, int threads, int threadsPerNode, ThreadPool pool,
+                    int port) {
         this(mfile, threads, threadsPerNode, pool, new OrderedPairlist<C>(), port);
     }
 
@@ -221,7 +221,7 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
      * @param pl pair selection strategy
      * @param port server port to use.
      */
-    public GroebnerBaseDistributedHybridEC(String mfile, int threads, int threadsPerNode, ThreadPool pool, 
+    public GroebnerBaseDistributedHybridEC(String mfile, int threads, int threadsPerNode, ThreadPool pool,
                     PairList<C> pl, int port) {
         super(new ReductionPar<C>(), pl);
         this.threads = threads;
@@ -234,7 +234,7 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
             threads = 1;
         }
         this.threadsPerNode = threadsPerNode;
-        if ( pool == null ) {
+        if (pool == null) {
             pool = new ThreadPool(threads);
         }
         this.pool = pool;
@@ -341,7 +341,7 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
             }
         }
         //if (l <= 1) {
-            //return G; must signal termination to others
+        //return G; must signal termination to others
         //}
         logger.info("pairlist " + pairlist);
         DistHashTable<Integer, GenPolynomial<C>> theList = new DistHashTable<Integer, GenPolynomial<C>>(
@@ -406,7 +406,8 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
      * @param dhtport of the DHT server.
      * @throws IOException
      */
-    public static <C extends RingElem<C>> void clientPart(String host, int threadsPerNode, int port, int dhtport) throws IOException {
+    public static <C extends RingElem<C>> void clientPart(String host, int threadsPerNode, int port,
+                    int dhtport) throws IOException {
         ChannelFactory cf = new ChannelFactory(port + 10); // != port for localhost
         cf.init();
         logger.info("clientPart connecting to " + host + ", port = " + port + ", dhtport = " + dhtport);
@@ -414,14 +415,15 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
         TaggedSocketChannel pairChannel = new TaggedSocketChannel(channel);
         pairChannel.init();
 
-        DistHashTable<Integer, GenPolynomial<C>> theList 
-            = new DistHashTable<Integer, GenPolynomial<C>>(host, dhtport);
+        DistHashTable<Integer, GenPolynomial<C>> theList = new DistHashTable<Integer, GenPolynomial<C>>(host,
+                        dhtport);
         theList.init();
 
         ThreadPool pool = new ThreadPool(threadsPerNode);
         logger.info("client using pool = " + pool);
         for (int i = 0; i < threadsPerNode; i++) {
-            HybridReducerClientEC<C> Rr = new HybridReducerClientEC<C>(threadsPerNode, pairChannel, i, theList);
+            HybridReducerClientEC<C> Rr = new HybridReducerClientEC<C>(threadsPerNode, pairChannel, i,
+                            theList);
             pool.addJob(Rr);
         }
         logger.debug("clients submitted");
@@ -585,7 +587,7 @@ class HybridReducerServerEC<C extends RingElem<C>> implements Runnable {
      * @param L ordered pair list
      */
     HybridReducerServerEC(int tpn, Terminator fin, ChannelFactory cf,
-                         DistHashTable<Integer, GenPolynomial<C>> dl, PairList<C> L) {
+                    DistHashTable<Integer, GenPolynomial<C>> dl, PairList<C> L) {
         threadsPerNode = tpn;
         finner = fin;
         this.cf = cf;
@@ -729,7 +731,7 @@ class HybridReducerServerEC<C extends RingElem<C>> implements Runnable {
         receiver.terminate();
 
         int d = active.get();
-        if ( d > 0 ) {
+        if (d > 0) {
             logger.info("remaining active tasks = " + d);
         }
         //logger.info("terminated, send " + red + " reduction pairs");
@@ -806,7 +808,7 @@ class HybridReducerReceiverEC<C extends RingElem<C>> extends Thread {
      * @param L ordered pair list
      */
     HybridReducerReceiverEC(int tpn, Terminator fin, AtomicInteger a, TaggedSocketChannel pc,
-                            DistHashTable<Integer, GenPolynomial<C>> dl, PairList<C> L) {
+                    DistHashTable<Integer, GenPolynomial<C>> dl, PairList<C> L) {
         active = a;
         threadsPerNode = tpn;
         finner = fin;
@@ -985,7 +987,7 @@ class HybridReducerClientEC<C extends RingElem<C>> implements Runnable {
      * @param dl distributed hash table
      */
     HybridReducerClientEC(int tpn, TaggedSocketChannel tc, Integer tid,
-                          DistHashTable<Integer, GenPolynomial<C>> dl) {
+                    DistHashTable<Integer, GenPolynomial<C>> dl) {
         this.threadsPerNode = tpn;
         pairChannel = tc;
         //threadId = 100 + tid; // keep distinct from other tags
@@ -1074,7 +1076,7 @@ class HybridReducerClientEC<C extends RingElem<C>> implements Runnable {
                     }
                 }
                 if (pp instanceof GBTransportMessPairIndex) {
-                    GBTransportMessPairIndex tmpi = (GBTransportMessPairIndex)pp;
+                    GBTransportMessPairIndex tmpi = (GBTransportMessPairIndex) pp;
                     pix = tmpi.i;
                     pjx = tmpi.j;
                     psx = tmpi.s;
@@ -1197,7 +1199,7 @@ class GBHybridExerClient<C extends RingElem<C>> implements RemoteExecutable {
      */
     public void run() {
         try {
-            GroebnerBaseDistributedHybridEC. <C>clientPart(host,threadsPerNode,port,dhtport);
+            GroebnerBaseDistributedHybridEC.<C> clientPart(host, threadsPerNode, port, dhtport);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1210,10 +1212,10 @@ class GBHybridExerClient<C extends RingElem<C>> implements RemoteExecutable {
     @Override
     public String toString() {
         StringBuffer s = new StringBuffer("GBHybridExerClient(");
-        s.append("host="+host);
-        s.append(", threadsPerNode="+threadsPerNode);
-        s.append(", port="+port);
-        s.append(", dhtport="+dhtport);
+        s.append("host=" + host);
+        s.append(", threadsPerNode=" + threadsPerNode);
+        s.append(", port=" + port);
+        s.append(", dhtport=" + dhtport);
         s.append(")");
         return s.toString();
     }

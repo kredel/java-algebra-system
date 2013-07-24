@@ -6,7 +6,6 @@ package edu.jas.gb;
 
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -21,18 +20,17 @@ import edu.jas.structure.RingElem;
 import edu.jas.util.ChannelFactory;
 import edu.jas.util.DistHashTable;
 import edu.jas.util.DistHashTableServer;
+import edu.jas.util.DistThreadPool;
+import edu.jas.util.RemoteExecutable;
 import edu.jas.util.SocketChannel;
 import edu.jas.util.Terminator;
 import edu.jas.util.ThreadPool;
-import edu.jas.util.DistThreadPool;
-import edu.jas.util.RemoteExecutable;
 
 
 /**
- * Groebner Base distributed algorithm. Implements a distributed
- * memory parallel version of Groebner bases with executable
- * channels. Using pairlist class, distributed tasks do reduction, one
- * communication channel per task.
+ * Groebner Base distributed algorithm. Implements a distributed memory parallel
+ * version of Groebner bases with executable channels. Using pairlist class,
+ * distributed tasks do reduction, one communication channel per task.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
@@ -89,13 +87,13 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
     /**
      * Distributed thread pool to use.
      */
-    private final DistThreadPool dtp;
+    private final transient DistThreadPool dtp;
 
 
     /**
      * Distributed hash table server to use.
      */
-    private final DistHashTableServer<Integer> dhts;
+    private final transient DistHashTableServer<Integer> dhts;
 
 
     /**
@@ -171,7 +169,7 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
         if (threads < 1) {
             threads = 1;
         }
-        if ( pool == null ) {
+        if (pool == null) {
             pool = new ThreadPool(threads);
         }
         this.pool = pool;
@@ -282,8 +280,8 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
         //}
 
         logger.debug("looking for clients");
-        DistHashTable<Integer, GenPolynomial<C>> theList 
-            = new DistHashTable<Integer, GenPolynomial<C>>("localhost", DHT_PORT);
+        DistHashTable<Integer, GenPolynomial<C>> theList = new DistHashTable<Integer, GenPolynomial<C>>(
+                        "localhost", DHT_PORT);
         theList.init();
         List<GenPolynomial<C>> al = pairlist.getList();
         for (int i = 0; i < al.size(); i++) {
@@ -293,16 +291,16 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
             }
         }
         // wait for arrival
-        while ( theList.size() < al.size() ) {
+        while (theList.size() < al.size()) {
             logger.info("#distributed list = " + theList.size() + " #pairlist list = " + al.size());
-            GenPolynomial<C> nn = theList.getWait(al.size()-1);
+            GenPolynomial<C> nn = theList.getWait(al.size() - 1);
         }
 
         Terminator fin = new Terminator(threads);
         ReducerServerEC<C> R;
         for (int i = 0; i < threads; i++) {
             R = new ReducerServerEC<C>(fin, cf, theList, G, pairlist);
-            pool.addJob(R); 
+            pool.addJob(R);
         }
         logger.debug("main loop waiting");
         fin.waitDone();
@@ -341,15 +339,15 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
      * @param dhtport of the DHT server.
      * @throws IOException
      */
-    public static <C extends RingElem<C>> void clientPart(String host, int port, int dhtport) 
-           throws IOException {
+    public static <C extends RingElem<C>> void clientPart(String host, int port, int dhtport)
+                    throws IOException {
         ChannelFactory cf = new ChannelFactory(port + 10); // != port for localhost
         cf.init();
         logger.info("clientPart connecting to " + host + ", port = " + port + ", dhtport = " + dhtport);
         SocketChannel pairChannel = cf.getChannel(host, port);
 
-        DistHashTable<Integer, GenPolynomial<C>> theList 
-            = new DistHashTable<Integer, GenPolynomial<C>>(host, dhtport);
+        DistHashTable<Integer, GenPolynomial<C>> theList = new DistHashTable<Integer, GenPolynomial<C>>(host,
+                        dhtport);
         theList.init();
         ReducerClientEC<C> R = new ReducerClientEC<C>(pairChannel, theList);
 
@@ -738,7 +736,7 @@ class ReducerClientEC<C extends RingElem<C>> implements Runnable {
                     }
                 }
                 if (pp instanceof GBTransportMessPairIndex) {
-                    GBTransportMessPairIndex tmpi = (GBTransportMessPairIndex)pp;
+                    GBTransportMessPairIndex tmpi = (GBTransportMessPairIndex) pp;
                     pix = tmpi.i;
                     pjx = tmpi.j;
                     psx = tmpi.s;
@@ -811,7 +809,7 @@ class MiReducerServerEC<C extends RingElem<C>> implements Runnable {
     private final Reduction<C> red;
 
 
-    private static final Logger logger = Logger.getLogger(MiReducerServer.class);
+    private static final Logger logger = Logger.getLogger(MiReducerServerEC.class);
 
 
     MiReducerServerEC(List<GenPolynomial<C>> G, GenPolynomial<C> p) {
@@ -867,7 +865,7 @@ class MiReducerClientEC<C extends RingElem<C>> implements Runnable {
     private final Semaphore done = new Semaphore(0);
 
 
-    private static final Logger logger = Logger.getLogger(MiReducerClient.class);
+    private static final Logger logger = Logger.getLogger(MiReducerClientEC.class);
 
 
     MiReducerClientEC(List<GenPolynomial<C>> G, GenPolynomial<C> p) {
@@ -940,7 +938,7 @@ class GBExerClient<C extends RingElem<C>> implements RemoteExecutable {
     public void run() {
         //System.out.println("running " + this);
         try {
-            GroebnerBaseDistributedEC. <C>clientPart(host,port,dhtport);
+            GroebnerBaseDistributedEC.<C> clientPart(host, port, dhtport);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -953,9 +951,9 @@ class GBExerClient<C extends RingElem<C>> implements RemoteExecutable {
     @Override
     public String toString() {
         StringBuffer s = new StringBuffer("GBExerClient(");
-        s.append("host="+host);
-        s.append(", port="+port);
-        s.append(", dhtport="+dhtport);
+        s.append("host=" + host);
+        s.append(", port=" + port);
+        s.append(", dhtport=" + dhtport);
         s.append(")");
         return s.toString();
     }

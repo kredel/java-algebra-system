@@ -25,7 +25,7 @@ import edu.jas.util.ThreadPool;
  * of Groebner bases.
  * @param <C> coefficient type
  * @author Heinz Kredel
- *
+ * 
  * @see edu.jas.application.GBAlgorithmBuilder
  * @see edu.jas.gbufd.GBFactory
  */
@@ -75,7 +75,7 @@ public class GroebnerBaseParallel<C extends RingElem<C>> extends GroebnerBaseAbs
     }
 
 
-   /**
+    /**
      * Constructor.
      * @param threads number of threads to use.
      * @param pl pair selection strategy
