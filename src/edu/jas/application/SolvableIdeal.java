@@ -392,6 +392,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         List<GenSolvablePolynomial<C>> G = getList();
         logger.info("GB computing = " + G);
         G = bb.leftGB(G);
+        //G = bb.twosidedGB(G);
         //if (isTopt) {
         //    List<Integer> perm = ((OptimizedPolynomialList<C>) list).perm;
         //    list = new OptimizedPolynomialList<C>(perm, getRing(), G);
