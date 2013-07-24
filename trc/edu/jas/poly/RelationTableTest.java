@@ -4,7 +4,8 @@
 
 package edu.jas.poly;
 
-//import edu.jas.poly.RelationTable;
+
+import java.util.List;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -14,6 +15,7 @@ import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigRational;
 
+
 /**
  * RelationTable tests with JUnit.
  * @author Heinz Kredel.
@@ -21,390 +23,423 @@ import edu.jas.arith.BigRational;
 
 public class RelationTableTest extends TestCase {
 
-/**
- * main.
- */
-   public static void main (String[] args) {
-          BasicConfigurator.configure();
-          junit.textui.TestRunner.run( suite() );
-   }
-
-/**
- * Constructs a <CODE>RelationTableTest</CODE> object.
- * @param name String.
- */
-   public RelationTableTest(String name) {
-          super(name);
-   }
-
-/**
- * suite.
- */ 
- public static Test suite() {
-     TestSuite suite= new TestSuite(RelationTableTest.class);
-     return suite;
-   }
-
-   RelationTable<BigRational> table;
-   GenSolvablePolynomialRing<BigRational> ring; 
-   int rl = 5;
-
-   protected void setUp() {
-       BigRational cfac = new BigRational(1);
-       ring = new GenSolvablePolynomialRing<BigRational>(cfac,rl);
-       table = ring.table; // non null
-   }
-
-   protected void tearDown() {
-       table = null;
-       ring = null;
-   }
-
-
-/**
- * Test constructor and toString.
- * 
- */
- public void testConstructor() {
-     table = new RelationTable<BigRational>(ring);
-     assertEquals("size() = 0",0,table.size());
-     assertEquals("ring == table.ring",ring,table.ring);
-
-     String s = "RelationTable[]";
-     String t = table.toString();
-     assertEquals("RelationTable[]",s,t);
-   }
-
-
-/**
- * Test update one key.
- * 
- */
- public void testUpdateOneKey() {
-     table = ring.table; 
-     assertEquals("size() = 0",0,table.size());
-
-     //ExpVector z = ring.evzero;
-     ExpVector e = ExpVector.create(rl,2,1);
-     ExpVector f = ExpVector.create(rl,3,1); // insert in empty
-
-     ExpVector ef = e.sum(f);
 
-     GenSolvablePolynomial<BigRational> a = ring.getONE();
-     GenSolvablePolynomial<BigRational> b = ring.getONE().multiply(ef);
-     GenSolvablePolynomial<BigRational> rel 
-        = (GenSolvablePolynomial<BigRational>)a.sum(b);
-
-     table.update(e,f,rel);
-     assertEquals("size() = 1",1,table.size());
+    /**
+     * main.
+     */
+    public static void main(String[] args) {
+        BasicConfigurator.configure();
+        junit.textui.TestRunner.run(suite());
+    }
 
-     e = ExpVector.create(rl,2,2);
-     f = ExpVector.create(rl,3,1); // insert in beginning
-
-     ef = e.sum(f);
-     b = ring.getONE().multiply(ef);
-     rel = (GenSolvablePolynomial<BigRational>)a.sum(b);
-
-     table.update(e,f,rel);
-     assertEquals("size() = 2",2,table.size());
-
-     e = ExpVector.create(rl,2,2);
-     f = ExpVector.create(rl,3,2);
-
-     ef = e.sum(f);
-     b = ring.getONE().multiply(ef);
-     rel = (GenSolvablePolynomial<BigRational>)a.sum(b);
-
-     table.update(e,f,rel);
-     assertEquals("size() = 3",3,table.size());
-
-     e = ExpVector.create(rl,2,2);
-     f = ExpVector.create(rl,3,4);
-
-     ef = e.sum(f);
-     b = ring.getONE().multiply(ef);
-     rel = (GenSolvablePolynomial<BigRational>)a.sum(b);
 
-     table.update(e,f,rel);
-     assertEquals("size() = 4",4,table.size());
+    /**
+     * Constructs a <CODE>RelationTableTest</CODE> object.
+     * @param name String.
+     */
+    public RelationTableTest(String name) {
+        super(name);
+    }
 
-     e = ExpVector.create(rl,2,2);
-     f = ExpVector.create(rl,3,3); // insert in middle
 
-     ef = e.sum(f);
-     b = ring.getONE().multiply(ef);
-     rel = (GenSolvablePolynomial<BigRational>)a.sum(b);
+    /**
+     * suite.
+     */
+    public static Test suite() {
+        TestSuite suite = new TestSuite(RelationTableTest.class);
+        return suite;
+    }
 
-     table.update(e,f,rel);
-     assertEquals("size() = 5",5,table.size());
 
-     //System.out.println("table = " + table);
-   }
+    RelationTable<BigRational> table;
 
 
-/**
- * Test update more keys.
- * 
- */
- public void testUpdateKeys() {
-     table = ring.table; 
-     assertEquals("size() = 0",0,table.size());
+    GenSolvablePolynomialRing<BigRational> ring;
 
-     //ExpVector z = ring.evzero;
-     ExpVector e = ExpVector.create(rl,2,1);
-     ExpVector f = ExpVector.create(rl,3,1); // insert in empty
 
-     ExpVector ef = e.sum(f);
+    int rl = 6;
 
-     GenSolvablePolynomial<BigRational> a = ring.getONE();
-     GenSolvablePolynomial<BigRational> b = ring.getONE().multiply(ef);
-     GenSolvablePolynomial<BigRational> rel 
-        = (GenSolvablePolynomial<BigRational>)a.sum(b);
 
-     table.update(e,f,rel);
-     assertEquals("size() = 1",1,table.size());
+    @Override
+    protected void setUp() {
+        BigRational cfac = new BigRational(1);
+        ring = new GenSolvablePolynomialRing<BigRational>(cfac, rl);
+        table = ring.table; // non null
+    }
 
-     e = ExpVector.create(rl,0,1);
-     f = ExpVector.create(rl,2,1);
 
-     ef = e.sum(f);
+    @Override
+    protected void tearDown() {
+        table = null;
+        ring = null;
+    }
 
-     b = ring.getONE().multiply(ef);
-     rel = (GenSolvablePolynomial<BigRational>)a.sum(b);
 
-     table.update(e,f,rel);
-     assertEquals("size() = 2",2,table.size());
+    /**
+     * Test constructor and toString.
+     */
+    public void testConstructor() {
+        table = new RelationTable<BigRational>(ring);
+        assertEquals("size() = 0", 0, table.size());
+        assertEquals("ring == table.ring", ring, table.ring);
 
-     e = ExpVector.create(rl,2,1);
-     f = ExpVector.create(rl,4,1);
+        String s = "RelationTable[]";
+        String t = table.toString();
+        assertEquals("RelationTable[]", s, t);
+    }
 
-     ef = e.sum(f);
-     b = ring.getONE().multiply(ef);
-     rel = (GenSolvablePolynomial<BigRational>)a.sum(b);
 
-     table.update(e,f,rel);
-     assertEquals("size() = 3",3,table.size());
+    /**
+     * Test update one key.
+     */
+    public void testUpdateOneKey() {
+        table = ring.table;
+        assertEquals("size() = 0", 0, table.size());
 
-     //System.out.println("table = " + table);
-   }
+        //ExpVector z = ring.evzero;
+        ExpVector e = ExpVector.create(rl, 2, 1);
+        ExpVector f = ExpVector.create(rl, 3, 1); // insert in empty
 
+        ExpVector ef = e.sum(f);
 
-/**
- * Test lookup one key.
- * 
- */
- public void testLookupOneKey() {
-     table = ring.table; 
-     assertEquals("size() = 0",0,table.size());
+        GenSolvablePolynomial<BigRational> a = ring.getONE();
+        GenSolvablePolynomial<BigRational> b = ring.getONE().multiply(ef);
+        GenSolvablePolynomial<BigRational> rel = (GenSolvablePolynomial<BigRational>) a.sum(b);
 
-     //ExpVector z = ring.evzero;
-     ExpVector e = ExpVector.create(rl,2,1);
-     ExpVector f = ExpVector.create(rl,3,1); // insert in empty
+        table.update(e, f, rel);
+        assertEquals("size() = 1", 1, table.size());
 
-     ExpVector ef = e.sum(f);
-     GenSolvablePolynomial<BigRational> a = ring.getONE();
-     GenSolvablePolynomial<BigRational> b = ring.getONE().multiply(ef);
-     GenSolvablePolynomial<BigRational> rel 
-        = (GenSolvablePolynomial<BigRational>)a.sum(b);
-     GenSolvablePolynomial<BigRational> r1 = rel; 
+        e = ExpVector.create(rl, 2, 2);
+        f = ExpVector.create(rl, 3, 1); // insert in beginning
 
-     table.update(e,f,rel);
-     assertEquals("size() = 1",1,table.size());
+        ef = e.sum(f);
+        b = ring.getONE().multiply(ef);
+        rel = (GenSolvablePolynomial<BigRational>) a.sum(b);
 
-     TableRelation<BigRational> r = table.lookup(e,f);
-     //System.out.println("relation = " + r);
-     assertEquals("e = e",null,r.e);
-     assertEquals("f = f",null,r.f);
-     assertEquals("p = p",rel,r.p);
+        table.update(e, f, rel);
+        assertEquals("size() = 2", 2, table.size());
 
+        e = ExpVector.create(rl, 2, 2);
+        f = ExpVector.create(rl, 3, 2);
 
-     e = ExpVector.create(rl,2,2);
-     f = ExpVector.create(rl,3,1); // insert in beginning
+        ef = e.sum(f);
+        b = ring.getONE().multiply(ef);
+        rel = (GenSolvablePolynomial<BigRational>) a.sum(b);
 
-     ef = e.sum(f);
-     b = ring.getONE().multiply(ef);
-     rel = (GenSolvablePolynomial<BigRational>)a.sum(b);
+        table.update(e, f, rel);
+        assertEquals("size() = 3", 3, table.size());
 
-     table.update(e,f,rel);
-     assertEquals("size() = 2",2,table.size());
+        e = ExpVector.create(rl, 2, 2);
+        f = ExpVector.create(rl, 3, 4);
 
-     r = table.lookup(e,f);
-     assertEquals("e = e",null,r.e);
-     assertEquals("f = f",null,r.f);
-     assertEquals("p = p",rel,r.p);
+        ef = e.sum(f);
+        b = ring.getONE().multiply(ef);
+        rel = (GenSolvablePolynomial<BigRational>) a.sum(b);
 
+        table.update(e, f, rel);
+        assertEquals("size() = 4", 4, table.size());
 
-     e = ExpVector.create(rl,2,2);
-     f = ExpVector.create(rl,3,2);
+        e = ExpVector.create(rl, 2, 2);
+        f = ExpVector.create(rl, 3, 3); // insert in middle
 
-     ef = e.sum(f);
-     b = ring.getONE().multiply(ef);
-     rel = (GenSolvablePolynomial<BigRational>)a.sum(b);
+        ef = e.sum(f);
+        b = ring.getONE().multiply(ef);
+        rel = (GenSolvablePolynomial<BigRational>) a.sum(b);
 
-     table.update(e,f,rel);
-     assertEquals("size() = 3",3,table.size());
+        table.update(e, f, rel);
+        assertEquals("size() = 5", 5, table.size());
 
-     r = table.lookup(e,f);
-     assertEquals("e = e",null,r.e);
-     assertEquals("f = f",null,r.f);
-     assertEquals("p = p",rel,r.p);
+        //System.out.println("table = " + table);
+    }
 
 
-     e = ExpVector.create(rl,2,2);
-     f = ExpVector.create(rl,3,4);
+    /**
+     * Test update more keys.
+     */
+    public void testUpdateKeys() {
+        table = ring.table;
+        assertEquals("size() = 0", 0, table.size());
 
-     ef = e.sum(f);
-     b = ring.getONE().multiply(ef);
-     rel = (GenSolvablePolynomial<BigRational>)a.sum(b);
+        //ExpVector z = ring.evzero;
+        ExpVector e = ExpVector.create(rl, 2, 1);
+        ExpVector f = ExpVector.create(rl, 3, 1); // insert in empty
 
-     table.update(e,f,rel);
-     assertEquals("size() = 4",4,table.size());
+        ExpVector ef = e.sum(f);
 
-     r = table.lookup(e,f);
-     assertEquals("e = e",null,r.e);
-     assertEquals("f = f",null,r.f);
-     assertEquals("p = p",rel,r.p);
+        GenSolvablePolynomial<BigRational> a = ring.getONE();
+        GenSolvablePolynomial<BigRational> b = ring.getONE().multiply(ef);
+        GenSolvablePolynomial<BigRational> rel = (GenSolvablePolynomial<BigRational>) a.sum(b);
 
+        table.update(e, f, rel);
+        assertEquals("size() = 1", 1, table.size());
 
-     e = ExpVector.create(rl,2,2);
-     f = ExpVector.create(rl,3,3); // insert in middle
+        e = ExpVector.create(rl, 0, 1);
+        f = ExpVector.create(rl, 2, 1);
 
-     ef = e.sum(f);
-     b = ring.getONE().multiply(ef);
-     rel = (GenSolvablePolynomial<BigRational>)a.sum(b);
+        ef = e.sum(f);
 
-     table.update(e,f,rel);
-     assertEquals("size() = 5",5,table.size());
+        b = ring.getONE().multiply(ef);
+        rel = (GenSolvablePolynomial<BigRational>) a.sum(b);
 
-     r = table.lookup(e,f);
-     assertEquals("e = e",null,r.e);
-     assertEquals("f = f",null,r.f);
-     assertEquals("p = p",rel,r.p);
+        table.update(e, f, rel);
+        assertEquals("size() = 2", 2, table.size());
 
+        e = ExpVector.create(rl, 2, 1);
+        f = ExpVector.create(rl, 4, 1);
 
-     // lookup only
-     e = ExpVector.create(rl,2,1);
-     f = ExpVector.create(rl,3,1); 
+        ef = e.sum(f);
+        b = ring.getONE().multiply(ef);
+        rel = (GenSolvablePolynomial<BigRational>) a.sum(b);
 
-     r = table.lookup(e,f);
-     assertEquals("e = e",null,r.e);
-     assertEquals("f = f",null,r.f);
-     assertEquals("p = p",r1,r.p);
+        table.update(e, f, rel);
+        assertEquals("size() = 3", 3, table.size());
 
-     //System.out.println("table = " + table);
-   }
+        //System.out.println("table = " + table);
+    }
 
 
-/**
- * Test lookup keys.
- * 
- */
- public void testLookupKeys() {
-     table = ring.table; 
-     assertEquals("size() = 0",0,table.size());
+    /**
+     * Test lookup one key.
+     */
+    public void testLookupOneKey() {
+        table = ring.table;
+        assertEquals("size() = 0", 0, table.size());
 
-     //ExpVector z = ring.evzero;
-     ExpVector e = ExpVector.create(rl,2,1);
-     ExpVector f = ExpVector.create(rl,3,1);
+        //ExpVector z = ring.evzero;
+        ExpVector e = ExpVector.create(rl, 2, 1);
+        ExpVector f = ExpVector.create(rl, 3, 1); // insert in empty
 
-     ExpVector ef = e.sum(f);
-     GenSolvablePolynomial<BigRational> a = ring.getONE();
-     GenSolvablePolynomial<BigRational> b = ring.getONE().multiply(ef);
-     GenSolvablePolynomial<BigRational> rel 
-        = (GenSolvablePolynomial<BigRational>)a.sum(b);
+        ExpVector ef = e.sum(f);
+        GenSolvablePolynomial<BigRational> a = ring.getONE();
+        GenSolvablePolynomial<BigRational> b = ring.getONE().multiply(ef);
+        GenSolvablePolynomial<BigRational> rel = (GenSolvablePolynomial<BigRational>) a.sum(b);
+        GenSolvablePolynomial<BigRational> r1 = rel;
 
-     table.update(e,f,rel);
-     assertEquals("size() = 1",1,table.size());
+        table.update(e, f, rel);
+        assertEquals("size() = 1", 1, table.size());
 
-     TableRelation<BigRational> r = table.lookup(e,f);
-     assertEquals("e = e",null,r.e);
-     assertEquals("f = f",null,r.f);
-     assertEquals("p = p",rel,r.p);
+        TableRelation<BigRational> r = table.lookup(e, f);
+        //System.out.println("relation = " + r);
+        assertEquals("e = e", null, r.e);
+        assertEquals("f = f", null, r.f);
+        assertEquals("p = p", rel, r.p);
 
 
-     e = ExpVector.create(rl,0,1);
-     f = ExpVector.create(rl,2,1);
-     ef = e.sum(f);
-     b = ring.getONE().multiply(ef);
-     rel = (GenSolvablePolynomial<BigRational>)a.sum(b);
+        e = ExpVector.create(rl, 2, 2);
+        f = ExpVector.create(rl, 3, 1); // insert in beginning
 
-     table.update(e,f,rel);
-     assertEquals("size() = 2",2,table.size());
+        ef = e.sum(f);
+        b = ring.getONE().multiply(ef);
+        rel = (GenSolvablePolynomial<BigRational>) a.sum(b);
 
-     r = table.lookup(e,f);
-     assertEquals("e = e",null,r.e);
-     assertEquals("f = f",null,r.f);
-     assertEquals("p = p",rel,r.p);
+        table.update(e, f, rel);
+        assertEquals("size() = 2", 2, table.size());
 
+        r = table.lookup(e, f);
+        assertEquals("e = e", null, r.e);
+        assertEquals("f = f", null, r.f);
+        assertEquals("p = p", rel, r.p);
 
-     e = ExpVector.create(rl,2,1);
-     f = ExpVector.create(rl,4,1);
-     ef = e.sum(f);
-     b = ring.getONE().multiply(ef);
-     rel = (GenSolvablePolynomial<BigRational>)a.sum(b);
 
-     table.update(e,f,rel);
-     assertEquals("size() = 3",3,table.size());
+        e = ExpVector.create(rl, 2, 2);
+        f = ExpVector.create(rl, 3, 2);
 
-     r = table.lookup(e,f);
-     assertEquals("e = e",null,r.e);
-     assertEquals("f = f",null,r.f);
-     assertEquals("p = p",rel,r.p);
+        ef = e.sum(f);
+        b = ring.getONE().multiply(ef);
+        rel = (GenSolvablePolynomial<BigRational>) a.sum(b);
 
+        table.update(e, f, rel);
+        assertEquals("size() = 3", 3, table.size());
 
-     //System.out.println("table = " + table);
-   }
+        r = table.lookup(e, f);
+        assertEquals("e = e", null, r.e);
+        assertEquals("f = f", null, r.f);
+        assertEquals("p = p", rel, r.p);
 
 
-/**
- * Test lookup symmetric products.
- * 
- */
- public void testSymmetric() {
-     table = ring.table; 
-     assertEquals("size() = 0",0,table.size());
+        e = ExpVector.create(rl, 2, 2);
+        f = ExpVector.create(rl, 3, 4);
 
-     //ExpVector z = ring.evzero;
-     ExpVector e = ExpVector.create(rl,2,1);
-     ExpVector f = ExpVector.create(rl,3,1);
+        ef = e.sum(f);
+        b = ring.getONE().multiply(ef);
+        rel = (GenSolvablePolynomial<BigRational>) a.sum(b);
 
-     ExpVector ef = e.sum(f);
+        table.update(e, f, rel);
+        assertEquals("size() = 4", 4, table.size());
 
-     //GenSolvablePolynomial<BigRational> a = ring.getONE();
-     GenSolvablePolynomial<BigRational> b = ring.getONE().multiply(ef);
-     //GenSolvablePolynomial<BigRational> rel 
-     //   = (GenSolvablePolynomial<BigRational>)a.add(b);
+        r = table.lookup(e, f);
+        assertEquals("e = e", null, r.e);
+        assertEquals("f = f", null, r.f);
+        assertEquals("p = p", rel, r.p);
 
-     TableRelation<BigRational> r = table.lookup(e,f);
-     //System.out.println("relation = " + r);
-     assertEquals("e = e",null,r.e);
-     assertEquals("f = f",null,r.f);
-     assertEquals("p = b",b,r.p);
 
+        e = ExpVector.create(rl, 2, 2);
+        f = ExpVector.create(rl, 3, 3); // insert in middle
 
-     e = ExpVector.create(rl,0,1);
-     f = ExpVector.create(rl,2,1);
-     ef = e.sum(f);
-     b = ring.getONE().multiply(ef);
+        ef = e.sum(f);
+        b = ring.getONE().multiply(ef);
+        rel = (GenSolvablePolynomial<BigRational>) a.sum(b);
 
-     r = table.lookup(e,f);
-     assertEquals("e = e",null,r.e);
-     assertEquals("f = f",null,r.f);
-     assertEquals("p = b",b,r.p);
+        table.update(e, f, rel);
+        assertEquals("size() = 5", 5, table.size());
 
+        r = table.lookup(e, f);
+        assertEquals("e = e", null, r.e);
+        assertEquals("f = f", null, r.f);
+        assertEquals("p = p", rel, r.p);
 
-     e = ExpVector.create(rl,2,1);
-     f = ExpVector.create(rl,4,1);
-     ef = e.sum(f);
-     b = ring.getONE().multiply(ef);
 
-     r = table.lookup(e,f);
-     assertEquals("e = e",null,r.e);
-     assertEquals("f = f",null,r.f);
-     assertEquals("p = b",b,r.p);
+        // lookup only
+        e = ExpVector.create(rl, 2, 1);
+        f = ExpVector.create(rl, 3, 1);
 
-     assertEquals("size() = 0",0,table.size());
-     //System.out.println("table = " + table);
-   }
+        r = table.lookup(e, f);
+        assertEquals("e = e", null, r.e);
+        assertEquals("f = f", null, r.f);
+        assertEquals("p = p", r1, r.p);
+
+        //System.out.println("table = " + table);
+    }
+
+
+    /**
+     * Test lookup keys.
+     */
+    public void testLookupKeys() {
+        table = ring.table;
+        assertEquals("size() = 0", 0, table.size());
+
+        //ExpVector z = ring.evzero;
+        ExpVector e = ExpVector.create(rl, 2, 1);
+        ExpVector f = ExpVector.create(rl, 3, 1);
+
+        ExpVector ef = e.sum(f);
+        GenSolvablePolynomial<BigRational> a = ring.getONE();
+        GenSolvablePolynomial<BigRational> b = ring.getONE().multiply(ef);
+        GenSolvablePolynomial<BigRational> rel = (GenSolvablePolynomial<BigRational>) a.sum(b);
+
+        table.update(e, f, rel);
+        assertEquals("size() = 1", 1, table.size());
+
+        TableRelation<BigRational> r = table.lookup(e, f);
+        assertEquals("e = e", null, r.e);
+        assertEquals("f = f", null, r.f);
+        assertEquals("p = p", rel, r.p);
+
+
+        e = ExpVector.create(rl, 0, 1);
+        f = ExpVector.create(rl, 2, 1);
+        ef = e.sum(f);
+        b = ring.getONE().multiply(ef);
+        rel = (GenSolvablePolynomial<BigRational>) a.sum(b);
+
+        table.update(e, f, rel);
+        assertEquals("size() = 2", 2, table.size());
+
+        r = table.lookup(e, f);
+        assertEquals("e = e", null, r.e);
+        assertEquals("f = f", null, r.f);
+        assertEquals("p = p", rel, r.p);
+
+
+        e = ExpVector.create(rl, 2, 1);
+        f = ExpVector.create(rl, 4, 1);
+        ef = e.sum(f);
+        b = ring.getONE().multiply(ef);
+        rel = (GenSolvablePolynomial<BigRational>) a.sum(b);
+
+        table.update(e, f, rel);
+        assertEquals("size() = 3", 3, table.size());
+
+        r = table.lookup(e, f);
+        assertEquals("e = e", null, r.e);
+        assertEquals("f = f", null, r.f);
+        assertEquals("p = p", rel, r.p);
+
+
+        //System.out.println("table = " + table);
+    }
+
+
+    /**
+     * Test lookup symmetric products.
+     */
+    public void testSymmetric() {
+        table = ring.table;
+        assertEquals("size() = 0", 0, table.size());
+
+        //ExpVector z = ring.evzero;
+        ExpVector e = ExpVector.create(rl, 2, 1);
+        ExpVector f = ExpVector.create(rl, 3, 1);
+
+        ExpVector ef = e.sum(f);
+
+        //GenSolvablePolynomial<BigRational> a = ring.getONE();
+        GenSolvablePolynomial<BigRational> b = ring.getONE().multiply(ef);
+        //GenSolvablePolynomial<BigRational> rel 
+        //   = (GenSolvablePolynomial<BigRational>)a.add(b);
+
+        TableRelation<BigRational> r = table.lookup(e, f);
+        //System.out.println("relation = " + r);
+        assertEquals("e = e", null, r.e);
+        assertEquals("f = f", null, r.f);
+        assertEquals("p = b", b, r.p);
+
+
+        e = ExpVector.create(rl, 0, 1);
+        f = ExpVector.create(rl, 2, 1);
+        ef = e.sum(f);
+        b = ring.getONE().multiply(ef);
+
+        r = table.lookup(e, f);
+        assertEquals("e = e", null, r.e);
+        assertEquals("f = f", null, r.f);
+        assertEquals("p = b", b, r.p);
+
+
+        e = ExpVector.create(rl, 2, 1);
+        f = ExpVector.create(rl, 4, 1);
+        ef = e.sum(f);
+        b = ring.getONE().multiply(ef);
+
+        r = table.lookup(e, f);
+        assertEquals("e = e", null, r.e);
+        assertEquals("f = f", null, r.f);
+        assertEquals("p = b", b, r.p);
+
+        assertEquals("size() = 0", 0, table.size());
+        //System.out.println("table = " + table);
+    }
+
+
+    /**
+     * Test to relation list and back.
+     */
+    public void testRelationList() {
+        List<GenSolvablePolynomial<BigRational>> rels = table.relationList();
+        assertEquals("list.size() = 0", 0, rels.size());
+
+        PolynomialList<BigRational> Prel = new PolynomialList<BigRational>(ring, rels);
+        table.addRelations(Prel.getList());
+        assertEquals("size() = 0", 0, table.size());
+
+        WeylRelations<BigRational> wl = new WeylRelations<BigRational>(ring);
+        wl.generate();
+        rels = table.relationList();
+        assertEquals("list.size() = r/2", rl / 2, rels.size() / 3);
+
+        Prel = new PolynomialList<BigRational>(ring, rels);
+
+        GenSolvablePolynomialRing<BigRational> ring2 = new GenSolvablePolynomialRing<BigRational>(ring.coFac,
+                        ring);
+        table = ring2.table;
+        assertEquals("size() = 0", 0, table.size());
+        table.addRelations(Prel.getList());
+        assertEquals("size() = r/2", rl / 2, table.size());
+        assertEquals("rel1 == rel2: ", ring.table, table);
+
+        //System.out.println("table1 = " + ring.table.toScript());
+        //System.out.println("table2 = " + ring2.table.toScript());
+    }
 
 }

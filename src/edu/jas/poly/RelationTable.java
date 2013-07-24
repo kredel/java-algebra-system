@@ -372,7 +372,8 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                     logger.error("relation term order = " + ring.tord);
                     logger.error("Coefficient RelationTable update f != lt(lfcd(p)): " + e + ", f = " + f
                                     + ", p = " + p);
-                    //throw new IllegalArgumentException("Coefficient RelationTable update f != lt(lfcd(p)): "+ e + ", f = " + f + ", p = " + p);
+                    throw new IllegalArgumentException("Coefficient RelationTable update f != lt(lfcd(p)): "
+                                    + e + ", f = " + f + ", p = " + p);
                 }
             }
         }
@@ -843,6 +844,35 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
             }
         }
         return rels;
+    }
+
+
+    /**
+     * Add list of polynomial triples as relations.
+     * @param rel = (e1,f1,p1, ...) where ei * fi = pi are solvable relations.
+     */
+    @SuppressWarnings("unchecked")
+    public void addRelations(List<GenPolynomial<C>> rel) {
+        if (rel == null || rel.isEmpty()) {
+            return;
+        }
+        Iterator<GenPolynomial<C>> relit = rel.iterator();
+        while (relit.hasNext()) {
+            GenPolynomial<C> E = relit.next();
+            if (!relit.hasNext()) {
+                throw new IllegalArgumentException("F and poly part missing");
+            }
+            GenPolynomial<C> F = relit.next();
+            if (!relit.hasNext()) {
+                throw new IllegalArgumentException("poly part missing");
+            }
+            GenPolynomial<C> P = relit.next();
+            if (coeffTable && F.isConstant()) {
+                F = (GenPolynomial<C>) F.leadingBaseCoefficient(); // up cast
+            }
+            update(E, F, P);
+        }
+        return;
     }
 
 }

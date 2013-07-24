@@ -290,6 +290,15 @@ public class PolynomialList<C extends RingElem<C>> implements Comparable<Polynom
 
 
     /**
+     * Get list. 
+     * @return list from this.
+     */
+    public List<GenPolynomial<C>> getList() {
+        return list;
+    }
+
+
+    /**
      * Get list as List of GenSolvablePolynomials. Required because no List
      * casts allowed. Equivalent to cast
      * (List&lt;GenSolvablePolynomial&lt;C&gt;&gt;) list.
