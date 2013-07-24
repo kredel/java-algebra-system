@@ -122,8 +122,8 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
             List a = table.get(k);
             List b = tab.table.get(k);
             // check contents, but only base relations
-            Map<ExpVectorPair, GenPolynomial> t1ex = fromListDeg2(a);
-            Map<ExpVectorPair, GenPolynomial> t2ex = fromListDeg2(b);
+            Map<ExpVectorPair, GenPolynomial<C>> t1ex = fromListDeg2(a);
+            Map<ExpVectorPair, GenPolynomial<C>> t2ex = fromListDeg2(b);
             if ( !equalMaps(t1ex,t2ex) ) {
                 //System.out.println("a != b, a = " + t1ex + ", b = " + t2ex);
                 return false;
@@ -139,15 +139,15 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
      * @returns a map constructed from the list with deg(key) == 2.
      */
     @SuppressWarnings("unchecked")
-    Map<ExpVectorPair, GenPolynomial> fromListDeg2(List a) {
-        Map<ExpVectorPair, GenPolynomial> tex = new HashMap<ExpVectorPair, GenPolynomial>();
+    Map<ExpVectorPair, GenPolynomial<C>> fromListDeg2(List a) {
+        Map<ExpVectorPair, GenPolynomial<C>> tex = new HashMap<ExpVectorPair, GenPolynomial<C>>();
         Iterator ait = a.iterator();
         while (ait.hasNext()) {
               ExpVectorPair ae = (ExpVectorPair) ait.next();
               if (!ait.hasNext()) {
                   break;
               }
-              GenPolynomial p = (GenPolynomial) ait.next();
+              GenPolynomial<C> p = (GenPolynomial<C>) ait.next();
               if ( ae.totalDeg() == 2 ) { // only base relations
                   //System.out.println("ae => p: " + ae + " => " + p);
                   tex.put(ae,p);
@@ -164,15 +164,17 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
      * @returns true if both maps are equal
      */
     @SuppressWarnings("unchecked")
-    boolean equalMaps(Map<ExpVectorPair, GenPolynomial> m1, Map<ExpVectorPair, GenPolynomial> m2) {
+    boolean equalMaps(Map<ExpVectorPair, GenPolynomial<C>> m1, Map<ExpVectorPair, GenPolynomial<C>> m2) {
         if ( !m1.keySet().equals(m2.keySet()) ) {
             return false;
         }
         for (ExpVectorPair ep : m1.keySet()) {
-	    GenPolynomial p1 = m1.get(ep);
-	    GenPolynomial p2 = m2.get(ep);
-            if (p1.compareTo(p2) != 0) { // not working: !p1.equals(p2)) {
+            GenPolynomial<C> p1 = m1.get(ep);
+            GenPolynomial<C> p2 = m2.get(ep);
+            if (p1.compareTo(p2) != 0) { // not working: !p1.equals(p2)) { // TODO
                 logger.info("ep = " + ep + ", p1 = " + p1 + ", p2 = " + p2);
+                //logger.info("p1.compareTo(p2) = " + p1.compareTo(p2));
+                //logger.info("p1.equals(p2) = " + p1.equals(p2));
                 return false;
             }
         }
