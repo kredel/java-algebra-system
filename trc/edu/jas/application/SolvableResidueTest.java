@@ -18,6 +18,7 @@ import org.apache.log4j.BasicConfigurator;
 import edu.jas.arith.BigRational;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
+import edu.jas.poly.RelationGenerator;
 import edu.jas.poly.WeylRelations;
 import edu.jas.poly.TermOrder;
 import edu.jas.structure.NotInvertibleException;
@@ -73,8 +74,8 @@ public class SolvableResidueTest extends TestCase {
         TermOrder to = new TermOrder( TermOrder.INVLEX );
         String[] vars = new String[] { "w", "x", "y", "z" };
         mfac = new GenSolvablePolynomialRing<BigRational>( new BigRational(1), rl, to, vars );
-        WeylRelations<BigRational> wl = new WeylRelations<BigRational>(mfac);
-        wl.generate();
+        RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
+        wl.generate(mfac);
         if (!mfac.isAssociative() ) {
            System.out.println("ring not associative: " + mfac);
         }

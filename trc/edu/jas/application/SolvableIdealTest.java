@@ -28,6 +28,7 @@ import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
+import edu.jas.poly.RelationGenerator;
 import edu.jas.poly.WeylRelations;
 import edu.jas.ufd.Quotient;
 import edu.jas.util.KsubSet;
@@ -112,8 +113,8 @@ public class SolvableIdealTest extends TestCase {
         to = new TermOrder( /*TermOrder.INVLEX*/);
         String[] vars = new String[] { "w", "x", "y", "z" };
         fac = new GenSolvablePolynomialRing<BigRational>(coeff, rl, to, vars);
-        WeylRelations<BigRational> wl = new WeylRelations<BigRational>(fac);
-        wl.generate();
+        RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
+        wl.generate(fac);
         bb = new SolvableGroebnerBaseSeq<BigRational>();
         //bb = GBFactory.getImplementation(coeff);
         a = b = c = d = e = null;
@@ -812,8 +813,8 @@ public class SolvableIdealTest extends TestCase {
                 }
                 GenSolvablePolynomialRing<BigRational> efac;
                 efac = new GenSolvablePolynomialRing<BigRational>(fac.coFac, evars.length, fac.tord, evars);
-                WeylRelations<BigRational> wl = new WeylRelations<BigRational>(efac);
-                wl.generate();
+                RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
+                wl.generate(efac);
                 //System.out.println("efac = " + efac);
 
                 J = I.eliminate(efac);

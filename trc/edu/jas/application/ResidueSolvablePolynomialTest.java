@@ -25,6 +25,7 @@ import edu.jas.poly.PolyUtil;
 import edu.jas.poly.RecSolvablePolynomial;
 import edu.jas.poly.RelationTable;
 import edu.jas.poly.TermOrder;
+import edu.jas.poly.RelationGenerator;
 import edu.jas.poly.WeylRelations;
 
 
@@ -116,8 +117,8 @@ public class ResidueSolvablePolynomialTest extends TestCase {
         cfac = new BigRational(1);
         //cring = new GenPolynomialRing<BigRational>(cfac, tord, cvars);
         sring = new GenSolvablePolynomialRing<BigRational>(cfac, tord, cvars);
-        WeylRelations<BigRational> wc = new WeylRelations<BigRational>(sring);
-        wc.generate();
+        RelationGenerator<BigRational> wc = new WeylRelations<BigRational>();
+        wc.generate(sring);
         List<GenSolvablePolynomial<BigRational>> il = new ArrayList<GenSolvablePolynomial<BigRational>>();
         GenSolvablePolynomial<BigRational> p1 = sring.parse("b - a^2");
         il.add(p1);
@@ -126,8 +127,8 @@ public class ResidueSolvablePolynomialTest extends TestCase {
         sideal = new SolvableIdeal<BigRational>(sring, il);
         rring = new SolvableResidueRing<BigRational>(sideal);
         ring = new ResidueSolvablePolynomialRing<BigRational>(rring, tord, vars);
-        WeylRelations<SolvableResidue<BigRational>> wl = new WeylRelations<SolvableResidue<BigRational>>(ring);
-        wl.generate();
+        RelationGenerator<SolvableResidue<BigRational>> wl = new WeylRelations<SolvableResidue<BigRational>>();
+        wl.generate(ring);
         table = ring.table;
         a = b = c = d = e = null;
     }
