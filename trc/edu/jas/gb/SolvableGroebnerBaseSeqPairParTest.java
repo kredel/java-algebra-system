@@ -21,6 +21,8 @@ import edu.jas.poly.PolynomialList;
 import edu.jas.poly.RelationTable;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.WeylRelations;
+import edu.jas.poly.RelationGenerator;
+
 
 /**
  * SolvableGroebnerBase parallel tests with JUnit.
@@ -157,8 +159,8 @@ public class SolvableGroebnerBaseSeqPairParTest extends TestCase {
      int rloc = 4;
      ring = new GenSolvablePolynomialRing<BigRational>(cfac,rloc);
 
-     WeylRelations<BigRational> wl = new WeylRelations<BigRational>(ring);
-     wl.generate();
+     RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
+     wl.generate(ring);
      table = ring.table;
 
      a = ring.random(kl, ll, el, q );
@@ -257,8 +259,8 @@ public class SolvableGroebnerBaseSeqPairParTest extends TestCase {
      int rloc = 4;
      ring = new GenSolvablePolynomialRing<BigRational>(cfac,rloc);
 
-     WeylRelations<BigRational> wl = new WeylRelations<BigRational>(ring);
-     wl.generate();
+     RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
+     wl.generate(ring);
      table = ring.table;
 
      a = ring.random(kl, ll, el, q );

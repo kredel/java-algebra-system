@@ -27,7 +27,7 @@ import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.RelationTable;
 import edu.jas.poly.WeylRelations;
-
+import edu.jas.poly.RelationGenerator;
 
 
 /**
@@ -247,9 +247,9 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
      //System.out.println("pfac = " + pfac);
      //System.out.println("pfac end");
 
-     WeylRelations<BigRational> wl = new WeylRelations<BigRational>(pfac);
+     RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
      //System.out.println("wl = ");
-     wl.generate();
+     wl.generate(pfac);
      //System.out.println("generate = ");
      table = pfac.table;
      //System.out.println("table = ");
@@ -390,9 +390,9 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
      //System.out.println("pfac = " + pfac);
      //System.out.println("pfac end");
 
-     WeylRelations<BigRational> wl = new WeylRelations<BigRational>(pfac);
+     RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
      //System.out.println("wl = ");
-     wl.generate();
+     wl.generate(pfac);
      //System.out.println("generate = ");
      table = pfac.table;
      //System.out.println("table = ");

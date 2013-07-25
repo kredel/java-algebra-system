@@ -19,6 +19,7 @@ import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.RelationTable;
 import edu.jas.poly.WeylRelations;
+import edu.jas.poly.RelationGenerator;
 
 
 /**
@@ -138,8 +139,8 @@ public class SolvableReductionTest extends TestCase {
  public void testWeylRatReduction0() {
      L = new ArrayList<GenSolvablePolynomial<BigRational>>();
 
-     WeylRelations<BigRational> wl = new WeylRelations<BigRational>(fac);
-     wl.generate();
+     RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
+     wl.generate(fac);
 
      a = fac.random(kl, ll, el, q );
      c = fac.getONE();
@@ -230,8 +231,8 @@ public class SolvableReductionTest extends TestCase {
  public void testWeylRatReduction() {
      L = new ArrayList<GenSolvablePolynomial<BigRational>>();
 
-     WeylRelations<BigRational> wl = new WeylRelations<BigRational>(fac);
-     wl.generate();
+     RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
+     wl.generate(fac);
 
      a = fac.random(kl, ll, el, q );
      b = fac.random(kl, ll, el, q );
@@ -258,8 +259,8 @@ public class SolvableReductionTest extends TestCase {
  public void testWeylRatReductionPar() {
      L = new ArrayList<GenSolvablePolynomial<BigRational>>();
 
-     WeylRelations<BigRational> wl = new WeylRelations<BigRational>(fac);
-     wl.generate();
+     RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
+     wl.generate(fac);
 
      a = fac.random(kl, ll, el, q );
      b = fac.random(kl, ll, el, q );

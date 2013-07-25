@@ -31,6 +31,7 @@ import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.WeylRelations;
 import edu.jas.poly.RelationTable;
+import edu.jas.poly.RelationGenerator;
 
 
 /**
@@ -108,8 +109,8 @@ public class SolvableSyzygyTest extends TestCase {
         cfac = new BigRational(1);
         tord = new TermOrder();
         fac = new GenSolvablePolynomialRing<BigRational>(cfac,rl,tord);
-        //WeylRelations<BigRational> wl = new WeylRelations<BigRational>(fac);
-        //wl.generate();
+        //RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
+        //wl.generate(fac);
         table = fac.table; 
         a = b = c = d = e = null;
         L = null;
@@ -197,8 +198,8 @@ public class SolvableSyzygyTest extends TestCase {
         int rloc = 4;
         fac = new GenSolvablePolynomialRing<BigRational>(cfac,rloc);
 
-        WeylRelations<BigRational> wl = new WeylRelations<BigRational>(fac);
-        wl.generate();
+        RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
+        wl.generate(fac);
         table = fac.table;
 
         a = fac.random(kl, ll, el, q );
@@ -444,8 +445,8 @@ public class SolvableSyzygyTest extends TestCase {
      * Test Ore conditions.
      */
     public void testOreConditions() {
-        WeylRelations<BigRational> wl = new WeylRelations<BigRational>(fac);
-        wl.generate();
+        RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
+        wl.generate(fac);
         do {
             a = fac.random(kl, ll-1, el, q);
         } while ( a.isZERO() );
@@ -481,8 +482,8 @@ public class SolvableSyzygyTest extends TestCase {
      * Test Ore conditions for residues.
      */
     public void testResidueOreConditions() {
-        WeylRelations<BigRational> wl = new WeylRelations<BigRational>(fac);
-        wl.generate();
+        RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
+        wl.generate(fac);
 
         // construct ideal { x_i^2 - i, ... } for generators x_i
         F = new PolynomialList<BigRational>(fac,fac.generators());

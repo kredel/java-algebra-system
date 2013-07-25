@@ -17,6 +17,7 @@ import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.WeylRelations;
+import edu.jas.poly.RelationGenerator;
 
 
 /**
@@ -90,8 +91,8 @@ public class SolvableQuotientTest extends TestCase {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         String[] vars = new String[] { "w", "x", "y", "z" };
         mfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), rl, to, vars);
-        WeylRelations<BigRational> wl = new WeylRelations<BigRational>(mfac);
-        wl.generate();
+        RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
+        wl.generate(mfac);
         efac = new SolvableQuotientRing<BigRational>(mfac);
         zFac = new SolvableQuotientRing<BigRational>(mfac);
     }
