@@ -114,7 +114,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
             logger.info("not same Ring " + ring.toScript() + ", " + tab.ring.toScript());
             return false;
         }
-        if ( !table.keySet().equals(tab.table.keySet()) ) {
+        if (!table.keySet().equals(tab.table.keySet())) {
             logger.info("keySet != :  a = " + table.keySet() + ", b = " + tab.table.keySet());
             return false;
         }
@@ -124,7 +124,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
             // check contents, but only base relations
             Map<ExpVectorPair, GenPolynomial<C>> t1ex = fromListDeg2(a);
             Map<ExpVectorPair, GenPolynomial<C>> t2ex = fromListDeg2(b);
-            if ( !equalMaps(t1ex,t2ex) ) {
+            if (!equalMaps(t1ex, t2ex)) {
                 //System.out.println("a != b, a = " + t1ex + ", b = " + t2ex);
                 return false;
             }
@@ -143,15 +143,15 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         Map<ExpVectorPair, GenPolynomial<C>> tex = new HashMap<ExpVectorPair, GenPolynomial<C>>();
         Iterator ait = a.iterator();
         while (ait.hasNext()) {
-              ExpVectorPair ae = (ExpVectorPair) ait.next();
-              if (!ait.hasNext()) {
-                  break;
-              }
-              GenPolynomial<C> p = (GenPolynomial<C>) ait.next();
-              if ( ae.totalDeg() == 2 ) { // only base relations
-                  //System.out.println("ae => p: " + ae + " => " + p);
-                  tex.put(ae,p);
-              }
+            ExpVectorPair ae = (ExpVectorPair) ait.next();
+            if (!ait.hasNext()) {
+                break;
+            }
+            GenPolynomial<C> p = (GenPolynomial<C>) ait.next();
+            if (ae.totalDeg() == 2) { // only base relations
+                //System.out.println("ae => p: " + ae + " => " + p);
+                tex.put(ae, p);
+            }
         }
         return tex;
     }
@@ -165,7 +165,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
      */
     @SuppressWarnings("unchecked")
     boolean equalMaps(Map<ExpVectorPair, GenPolynomial<C>> m1, Map<ExpVectorPair, GenPolynomial<C>> m2) {
-        if ( !m1.keySet().equals(m2.keySet()) ) {
+        if (!m1.keySet().equals(m2.keySet())) {
             return false;
         }
         for (ExpVectorPair ep : m1.keySet()) {
@@ -894,7 +894,8 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
     /**
      * Add list of polynomial triples as relations.
      * @param rel = (e1,f1,p1, ...) where ei * fi = pi are solvable relations.
-     * <b>Note:</b> Only because of type erasure, aequivalent to addRelations().
+     *            <b>Note:</b> Only because of type erasure, aequivalent to
+     *            addRelations().
      */
     @SuppressWarnings("unchecked")
     public void addSolvRelations(List<GenSolvablePolynomial<C>> rel) {

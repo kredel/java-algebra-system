@@ -17,7 +17,7 @@ import edu.jas.structure.RingElem;
  * @author Heinz Kredel.
  */
 
-public class WeylRelations<C extends RingElem<C>> {
+public class WeylRelations<C extends RingElem<C>> implements RelationGenerator<C> {
 
 
     /**
@@ -27,6 +27,15 @@ public class WeylRelations<C extends RingElem<C>> {
 
 
     private static final Logger logger = Logger.getLogger(WeylRelations.class);
+
+
+    /**
+     * The no argument constructor. The relation table of this ring is setup to
+     * a Weyl Algebra.
+     */
+    public WeylRelations() {
+        ring = null;
+    }
 
 
     /**
@@ -51,6 +60,9 @@ public class WeylRelations<C extends RingElem<C>> {
      * R{x1,...,xn,y1,...,yn; yi*xi = xi yi + 1}.
      */
     public void generate() {
+        if (ring == null) {
+            throw new IllegalArgumentException("WeylRelations, ring == null");
+        }
         generate(ring);
     }
 
@@ -60,8 +72,13 @@ public class WeylRelations<C extends RingElem<C>> {
      * R{x1,...,xn,y1,...,yn; yi*xi = xi yi + 1}.
      * @param ring solvable polynomial ring factory, ring must have even number
      *            of variables.
+     * @see edu.jas.poly.RelationGenerator#generate(edu.jas.poly.GenSolvablePolynomialRing)
      */
+    @Override
     public void generate(GenSolvablePolynomialRing<C> ring) {
+        if (ring == null) {
+            throw new IllegalArgumentException("WeylRelations, ring == null");
+        }
         if (ring.nvar <= 1 || (ring.nvar % 2) != 0) {
             throw new IllegalArgumentException("WeylRelations, wrong nvar = " + ring.nvar);
         }
@@ -102,6 +119,9 @@ public class WeylRelations<C extends RingElem<C>> {
      * R{x1,y1,...,xn,yn; yi*xi = xi yi + 1}.
      */
     public void generateIterated() {
+        if (ring == null) {
+            throw new IllegalArgumentException("WeylRelations, ring == null");
+        }
         generateIterated(ring);
     }
 
@@ -113,6 +133,12 @@ public class WeylRelations<C extends RingElem<C>> {
      *            of variables.
      */
     public void generateIterated(GenSolvablePolynomialRing<C> ring) {
+        if (ring == null) {
+            throw new IllegalArgumentException("WeylRelations, ring == null");
+        }
+        if (ring.nvar <= 1 || (ring.nvar % 2) != 0) {
+            throw new IllegalArgumentException("WeylRelations, wrong nvar = " + ring.nvar);
+        }
         RelationTable<C> table = ring.table;
         int r = ring.nvar;
         //int m =  r / 2;

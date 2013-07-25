@@ -427,7 +427,7 @@ public class RelationTableTest extends TestCase {
         rels = table.relationList();
         assertEquals("list.size() = r/2", rl / 2, rels.size() / 3);
 
-        GenSolvablePolynomialRing<BigRational> ring2; 
+        GenSolvablePolynomialRing<BigRational> ring2;
         ring2 = new GenSolvablePolynomialRing<BigRational>(ring.coFac, ring);
         assertEquals("size() = 0", 0, ring2.table.size());
         ring2.table.addSolvRelations(rels);
