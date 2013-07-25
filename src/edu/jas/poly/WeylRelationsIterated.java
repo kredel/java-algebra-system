@@ -14,11 +14,11 @@ import edu.jas.structure.RingElem;
  * Generate Relation Table for Weyl Algebras Adds the respective relations to
  * the relation table of the given solvable ring factory. Relations are of the
  * form x<sub>j</sub> * x<sub>i</sub> = x<sub>i</sub> x<sub>j</sub> + 1.
- * Block form: R{x1,...,xn,y1,...,yn; yi*xi = xi yi + 1}.
+ * Iterated form: R{x1,y1,...,xn,yn; yi*xi = xi yi + 1}.
  * @author Heinz Kredel.
  */
 
-public class WeylRelations<C extends RingElem<C>> implements RelationGenerator<C> {
+public class WeylRelationsIterated<C extends RingElem<C>> implements RelationGenerator<C> {
 
 
     /**
@@ -27,14 +27,14 @@ public class WeylRelations<C extends RingElem<C>> implements RelationGenerator<C
     private final GenSolvablePolynomialRing<C> ring;
 
 
-    private static final Logger logger = Logger.getLogger(WeylRelations.class);
+    private static final Logger logger = Logger.getLogger(WeylRelationsIterated.class);
 
 
     /**
      * The no argument constructor. The relation table of this ring is setup to
      * a Weyl Algebra.
      */
-    public WeylRelations() {
+    public WeylRelationsIterated() {
         ring = null;
     }
 
@@ -45,7 +45,7 @@ public class WeylRelations<C extends RingElem<C>> implements RelationGenerator<C
      * @param r solvable polynomial ring factory, r must have even number of
      *            variables.
      */
-    public WeylRelations(GenSolvablePolynomialRing<C> r) {
+    public WeylRelationsIterated(GenSolvablePolynomialRing<C> r) {
         if (r == null) {
             throw new IllegalArgumentException("WeylRelations, ring == null");
         }
@@ -57,8 +57,8 @@ public class WeylRelations<C extends RingElem<C>> implements RelationGenerator<C
 
 
     /**
-     * Generates the relation table of this ring. Block form:
-     * R{x1,...,xn,y1,...,yn; yi*xi = xi yi + 1}.
+     * Generates the relation table of this ring. Iterated form:
+     * R{x1,y1,...,xn,yn; yi*xi = xi yi + 1}.
      */
     public void generate() {
         if (ring == null) {
@@ -69,13 +69,11 @@ public class WeylRelations<C extends RingElem<C>> implements RelationGenerator<C
 
 
     /**
-     * Generates the relation table of this ring. Block form:
-     * R{x1,...,xn,y1,...,yn; yi*xi = xi yi + 1}.
+     * Generates the relation table of this ring. Iterated form:
+     * R{x1,y1,...,xn,yn; yi*xi = xi yi + 1}.
      * @param ring solvable polynomial ring factory, ring must have even number
      *            of variables.
-     * @see edu.jas.poly.RelationGenerator#generate(edu.jas.poly.GenSolvablePolynomialRing)
      */
-    @Override
     public void generate(GenSolvablePolynomialRing<C> ring) {
         if (ring == null) {
             throw new IllegalArgumentException("WeylRelations, ring == null");
@@ -85,12 +83,12 @@ public class WeylRelations<C extends RingElem<C>> implements RelationGenerator<C
         }
         RelationTable<C> table = ring.table;
         int r = ring.nvar;
-        int m = r / 2;
+        //int m =  r / 2;
         GenSolvablePolynomial<C> one = ring.getONE().copy();
         GenSolvablePolynomial<C> zero = ring.getZERO().copy();
-        for (int i = m; i < r; i++) {
+        for (int i = 1; i <= r; i += 2) {
             ExpVector f = ExpVector.create(r, i, 1);
-            int j = i - m;
+            int j = i - 1;
             ExpVector e = ExpVector.create(r, j, 1);
             ExpVector ef = e.sum(f);
             GenSolvablePolynomial<C> b = one.multiply(ef);

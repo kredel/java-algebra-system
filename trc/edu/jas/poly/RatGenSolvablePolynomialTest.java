@@ -226,8 +226,8 @@ public class RatGenSolvablePolynomialTest extends TestCase {
         int rloc = 4;
         ring = new GenSolvablePolynomialRing<BigRational>(cfac,rloc);
 
-        WeylRelations<BigRational> wl = new WeylRelations<BigRational>(ring);
-        wl.generate();
+        RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
+        wl.generate(ring);
         table = ring.table;
         //System.out.println("table = " + table);
         //System.out.println("ring = " + ring);
@@ -288,8 +288,8 @@ public class RatGenSolvablePolynomialTest extends TestCase {
         int rloc = 4;
         ring = new GenSolvablePolynomialRing<BigRational>(cfac,rloc);
 
-        WeylRelations<BigRational> wl = new WeylRelations<BigRational>(ring);
-        wl.generate();
+        RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
+        wl.generate(ring);
         //table = ring.table;
         //System.out.println("table = " + table);
         //System.out.println("ring = " + ring);

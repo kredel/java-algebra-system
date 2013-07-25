@@ -271,8 +271,8 @@ public class SolvableModuleListTest extends TestCase {
      int rloc = 4;
      pfac = new GenSolvablePolynomialRing<BigRational>(cfac,rloc);
 
-     WeylRelations<BigRational> wl = new WeylRelations<BigRational>(pfac);
-     wl.generate();
+     RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
+     wl.generate(pfac);
      RelationTable table1 = pfac.table;
      RelationTable table2 = null;
      RelationTable table3 = null;

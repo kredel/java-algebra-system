@@ -422,8 +422,8 @@ public class RelationTableTest extends TestCase {
         table.addSolvRelations(rels);
         assertEquals("size() = 0", 0, table.size());
 
-        WeylRelations<BigRational> wl = new WeylRelations<BigRational>(ring);
-        wl.generate();
+        RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
+        wl.generate(ring);
         rels = table.relationList();
         assertEquals("list.size() = r/2", rl / 2, rels.size() / 3);
 

@@ -230,8 +230,8 @@ public class ModGenSolvablePolynomialTest extends TestCase {
         int rloc = 4;
         ring = new GenSolvablePolynomialRing<ModInteger>(cfac,rloc);
 
-        WeylRelations<ModInteger> wl = new WeylRelations<ModInteger>(ring);
-        wl.generate();
+        RelationGenerator<ModInteger> wl = new WeylRelations<ModInteger>();
+        wl.generate(ring);
         //table = ring.table;
         //System.out.println("table = " + table);
         //System.out.println("ring = " + ring);
@@ -292,8 +292,8 @@ public class ModGenSolvablePolynomialTest extends TestCase {
         int rloc = 4;
         ring = new GenSolvablePolynomialRing<ModInteger>(cfac,rloc);
 
-        WeylRelations<ModInteger> wl = new WeylRelations<ModInteger>(ring);
-        wl.generate();
+        RelationGenerator<ModInteger> wl = new WeylRelations<ModInteger>();
+        wl.generate(ring);
         //table = ring.table;
         //System.out.println("table = " + table);
         //System.out.println("ring = " + ring);

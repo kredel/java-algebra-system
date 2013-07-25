@@ -525,8 +525,8 @@ public class QuotSolvablePolynomialTest extends TestCase {
      * testRecursiveIteratedWeyl() { String[] svars = new String[] { "w", "x",
      * "y", "z" }; GenSolvablePolynomialRing<BigRational> sring = new
      * GenSolvablePolynomialRing<BigRational>(cfac, tord, svars);
-     * WeylRelations<BigRational> wlc = new WeylRelations<BigRational>(sring);
-     * wlc.generateIterated(); assertFalse("isCommutative()",
+     * WeylRelationsIterated<BigRational> wlc = new WeylRelationsIterated<BigRational>(sring);
+     * wlc.generate(); assertFalse("isCommutative()",
      * sring.isCommutative()); assertTrue("isAssociative()",
      * sring.isAssociative()); //System.out.println("sring = " +
      * sring.toScript());

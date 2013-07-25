@@ -65,8 +65,8 @@ public class QuatGenSolvablePolynomialTest extends TestCase {
         a = b = c = d = e = null;
         cfac = new BigQuaternion(1);
         fac = new GenSolvablePolynomialRing<BigQuaternion>(cfac,rl);
-        WeylRelations<BigQuaternion> rel = new WeylRelations<BigQuaternion>(fac);
-        rel.generate();
+        RelationGenerator<BigQuaternion> rel = new WeylRelations<BigQuaternion>();
+        rel.generate(fac);
     }
 
     protected void tearDown() {

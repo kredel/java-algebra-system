@@ -195,8 +195,8 @@ public class Examples {
         sfac = new GenSolvablePolynomialRing<BigRational>(cfac, 6);
         //System.out.println("sfac = " + sfac);
 
-        WeylRelations<BigRational> wl = new WeylRelations<BigRational>(sfac);
-        wl.generate();
+        RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
+        wl.generate(sfac);
         System.out.println("sfac = " + sfac);
 
         GenSolvablePolynomial<BigRational> a = sfac.random(5);
