@@ -303,7 +303,7 @@ public class ElementaryIntegrationTest extends TestCase {
         assertEquals("a == b: ", a, b);
 
         rint = integrator.integrate(b);
-        System.out.println("QuotIntegral: " + rint);
+        //System.out.println("QuotIntegral: " + rint);
         assertTrue("isIntegral ", integrator.isIntegral(rint));
     }
 
