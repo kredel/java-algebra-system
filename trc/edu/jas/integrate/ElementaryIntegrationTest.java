@@ -94,7 +94,6 @@ public class ElementaryIntegrationTest extends TestCase {
 
     /**
      * Test rational integral.
-     * 
      */
     public void testRational() {
         for (int i = 0; i < 3; i++) {
@@ -115,7 +114,6 @@ public class ElementaryIntegrationTest extends TestCase {
 
     /**
      * Test 1/p pure logarithm integral.
-     * 
      */
     public void testPureLogarithm1() {
         for (int i = 0; i < 3; i++) {
@@ -158,7 +156,6 @@ public class ElementaryIntegrationTest extends TestCase {
 
     /**
      * Test mixed rational with p'/p logarithm integral.
-     * 
      */
     public void testRationalWithLogarithmD() {
         for (int i = 0; i < 3; i++) {
@@ -188,7 +185,6 @@ public class ElementaryIntegrationTest extends TestCase {
 
     /**
      * Test mixed rational with 1/p logarithm integral.
-     * 
      */
     public void xtestRationalWithLogarithm1() {
         for (int i = 0; i < 3; i++) {
@@ -250,10 +246,8 @@ public class ElementaryIntegrationTest extends TestCase {
 
     /**
      * Test rational integral with quotient coefficients.
-     * 
      */
     public void testRationalRecursive() {
-
         QuotientRing<Quotient<BigRational>> qqfac;
         GenPolynomialRing<Quotient<BigRational>> qmfac;
         ElementaryIntegration<Quotient<BigRational>> qintegrator;
@@ -280,6 +274,37 @@ public class ElementaryIntegrationTest extends TestCase {
 
             assertTrue("isIntegral ", qintegrator.isIntegral(qrint));
         }
+    }
+
+
+    /**
+     * Test mixed rational integral.
+     */
+    public void testMixedRational() {
+        //integrate( (3*x^16-19*x^15+43*x^14-20*x^13-91*x^12+183*x^11-81*x^10-166*x^9+271*x^8-101*x^7-127*x^6+168*x^5-53*x^4-31*x^3+41*x^2-2*x-2)/(4*x^14-20*x^13+28*x^12+24*x^11-108*x^10+84*x^9+76*x^8-176*x^7+76*x^6+84*x^5-108*x^4+24*x^3+28*x^2-20*x+4), x)
+
+        BigRational br = new BigRational(1);
+        String[] vars = new String[]{ "x" };
+        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(br,vars);
+        QuotientRing<BigRational> qfac = new QuotientRing<BigRational>(pfac);
+        GenPolynomial<BigRational> n = pfac.parse("(3*x^16-19*x^15+43*x^14-20*x^13-91*x^12+183*x^11-81*x^10-166*x^9+271*x^8-101*x^7-127*x^6+168*x^5-53*x^4-31*x^3+41*x^2-2*x-2)");
+        GenPolynomial<BigRational> d = pfac.parse("(4*x^14-20*x^13+28*x^12+24*x^11-108*x^10+84*x^9+76*x^8-176*x^7+76*x^6+84*x^5-108*x^4+24*x^3+28*x^2-20*x+4)");
+        //System.out.println("n = " + n);
+        //System.out.println("d = " + d);
+        Quotient<BigRational> a = new Quotient<BigRational>(qfac,n,d);
+        //System.out.println("a = " + a);
+
+        QuotIntegral<BigRational> rint = integrator.integrate(a);
+        //System.out.println("QuotIntegral: " + rint);
+        assertTrue("isIntegral ", integrator.isIntegral(rint));
+
+        Quotient<BigRational> b = qfac.parse("{ 3*x^16-19*x^15+43*x^14-20*x^13-91*x^12+183*x^11-81*x^10-166*x^9+271*x^8-101*x^7-127*x^6+168*x^5-53*x^4-31*x^3+41*x^2-2*x-2 | 4*x^14-20*x^13+28*x^12+24*x^11-108*x^10+84*x^9+76*x^8-176*x^7+76*x^6+84*x^5-108*x^4+24*x^3+28*x^2-20*x+4 }");
+        //System.out.println("b = " + b);
+        assertEquals("a == b: ", a, b);
+
+        rint = integrator.integrate(b);
+        System.out.println("QuotIntegral: " + rint);
+        assertTrue("isIntegral ", integrator.isIntegral(rint));
     }
 
 }
