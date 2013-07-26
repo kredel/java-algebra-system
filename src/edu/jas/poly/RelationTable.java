@@ -110,10 +110,11 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         if (tab == null) {
             return false;
         }
-        if (!ring.equals(tab.ring)) {
-            logger.info("not same Ring " + ring.toScript() + ", " + tab.ring.toScript());
-            return false;
-        }
+        // not possible because of endless recursion:
+        //if (!ring.equals(tab.ring)) {
+        //    logger.info("not same Ring " + ring.toScript() + ", " + tab.ring.toScript());
+        //    return false;
+        //}
         if (!table.keySet().equals(tab.table.keySet())) {
             logger.info("keySet != :  a = " + table.keySet() + ", b = " + tab.table.keySet());
             return false;

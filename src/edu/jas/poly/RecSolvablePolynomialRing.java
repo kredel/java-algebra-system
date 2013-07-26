@@ -266,13 +266,13 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
         if (oring == null) {
             return false;
         }
-        // @todo check same base relations
-        //if ( ! table.equals(oring.table) ) {
+        // check same base relations
+        //if ( ! table.equals(oring.table) ) { // done in super
         //    return false;
         //}
-        //if ( ! coeffTable.equals(oring.coeffTable) ) {
-        //    return false;
-        //}
+        if (!coeffTable.equals(oring.coeffTable)) {
+            return false;
+        }
         return true;
     }
 
