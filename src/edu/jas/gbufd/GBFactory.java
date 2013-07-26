@@ -186,7 +186,7 @@ public class GBFactory {
      * @return GB algorithm implementation.
      */
     public static GroebnerBaseAbstract<BigInteger> getImplementation(BigInteger fac, PairList<BigInteger> pl) {
-        return getImplementation(fac, Algo.igb, new OrderedPairlist<BigInteger>());
+        return getImplementation(fac, Algo.igb, pl);
     }
 
 
@@ -222,7 +222,7 @@ public class GBFactory {
      * @return GB algorithm implementation.
      */
     public static GroebnerBaseAbstract<BigRational> getImplementation(BigRational fac) {
-        return getImplementation(fac, Algo.qgb, new OrderedPairlist<BigRational>());
+        return getImplementation(fac, Algo.qgb);
     }
 
 
@@ -278,7 +278,7 @@ public class GBFactory {
      */
     public static <C extends GcdRingElem<C>>
       GroebnerBaseAbstract<Quotient<C>> getImplementation(QuotientRing<C> fac) {
-        return getImplementation(fac, Algo.qgb, new OrderedPairlist<Quotient<C>>());
+        return getImplementation(fac, Algo.qgb);
     }
 
 
@@ -318,10 +318,10 @@ public class GBFactory {
         GroebnerBaseAbstract<Quotient<C>> bba;
         switch (a) {
         case qgb:
-            bba = new GroebnerBaseSeq<Quotient<C>>(new ReductionSeq<Quotient<C>>());
+            bba = new GroebnerBaseSeq<Quotient<C>>(new ReductionSeq<Quotient<C>>(),pl);
             break;
         case ffgb:
-            bba = new GroebnerBaseSeqQuotient<C>(fac);
+            bba = new GroebnerBaseSeqQuotient<C>(fac); // pl not possible
             break;
         default:
             throw new IllegalArgumentException("algorithm not available for Quotient " + a);
@@ -389,7 +389,7 @@ public class GBFactory {
         Object ofac = fac;
         if (ofac instanceof GenPolynomialRing) {
             GenPolynomialRing<C> rofac = (GenPolynomialRing<C>) ofac;
-            GroebnerBaseAbstract<GenPolynomial<C>> bbr = new GroebnerBasePseudoRecSeq<C>(rofac);
+            GroebnerBaseAbstract<GenPolynomial<C>> bbr = new GroebnerBasePseudoRecSeq<C>(rofac); // no pl
             bba = (GroebnerBaseAbstract) bbr;
         } else if (ofac instanceof ProductRing) {
             ProductRing pfac = (ProductRing) ofac;
