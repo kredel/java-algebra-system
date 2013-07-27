@@ -17,8 +17,8 @@ import edu.jas.structure.RingElem;
  * Local ring element based on GenPolynomial with RingElem interface. Objects of
  * this class are (nearly) immutable.
  * @author Heinz Kredel
- * @fix Not jet working because of monic GBs.
  */
+// To be fixed?: Not jet working because of monic GBs.
 public class Local<C extends GcdRingElem<C>> implements RingElem<Local<C>> {
 
 

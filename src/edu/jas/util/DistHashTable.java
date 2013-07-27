@@ -176,8 +176,8 @@ public class DistHashTable<K, V> extends AbstractMap<K, V> /* implements Map<K,V
 
     /**
      * Get the internal list, convert from Collection.
-     * @fix but is ok
      */
+    // To be fixed?, but is ok.
     public List<V> getValueList() {
         synchronized (theList) {
             return new ArrayList<V>(theList.values());
