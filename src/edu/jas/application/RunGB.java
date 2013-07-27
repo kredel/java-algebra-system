@@ -450,6 +450,7 @@ public class RunGB {
     }
 
 
+    @SuppressWarnings("unchecked")
     static void checkGB(PolynomialList S) {
         if (!doCheck) {
             return;

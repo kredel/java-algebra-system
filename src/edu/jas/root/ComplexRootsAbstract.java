@@ -211,6 +211,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
      * @param len rational length for refinement.
      * @return refined complex root.
      */
+    @SuppressWarnings("unchecked")
     public Rectangle<C> complexRootRefinement(Rectangle<C> rect, GenPolynomial<Complex<C>> a, BigRational len)
                     throws InvalidBoundaryException {
         ComplexRing<C> cr = (ComplexRing<C>) a.ring.coFac;
