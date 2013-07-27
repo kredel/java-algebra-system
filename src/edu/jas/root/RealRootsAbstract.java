@@ -99,6 +99,7 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
      * @param f univariate polynomial.
      * @return B such that |f(c)| &lt; B for c in iv.
      */
+    @SuppressWarnings("unchecked")
     public C magnitudeBound(Interval<C> iv, GenPolynomial<C> f) {
         if (f == null) {
             return null;

@@ -36,6 +36,7 @@ public class Pair<C extends RingElem<C> > extends AbstractPair<C>
      * @deprecated obsolete since Java 1.5
      */
     @Deprecated
+    @SuppressWarnings("unchecked")
     public Pair(Object a, GenPolynomial<C> b, int i, int j) {
         this( (GenPolynomial<C>)a, b, i, j); 
     }

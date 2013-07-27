@@ -125,6 +125,7 @@ public class ExtensionFieldBuilderTest extends TestCase {
     /**
      * Test construction Q(sqrt(2))(x)(sqrt(x)) by extension field builder.
      */
+    @SuppressWarnings("unchecked")
     public void testConstructionF1() {
         builder = ExtensionFieldBuilder.baseField(new BigRational(1));
         //System.out.println("builder = " + builder.toString());
@@ -176,6 +177,7 @@ public class ExtensionFieldBuilderTest extends TestCase {
     /**
      * Test construction Q(x)(sqrt(2))(sqrt(x)) by extension field builder.
      */
+    @SuppressWarnings("unchecked")
     public void testConstructionF2() {
         builder = ExtensionFieldBuilder.baseField(new BigRational(1));
         //System.out.println("builder = " + builder.toString());
@@ -226,6 +228,7 @@ public class ExtensionFieldBuilderTest extends TestCase {
     /**
      * Test construction Z_p(sqrt(2))(x)(sqrt(x)) by extension field builder.
      */
+    @SuppressWarnings("unchecked")
     public void testConstructionF3() {
         RingFactory fac = ExtensionFieldBuilder.baseField(new ModLongRing(7))
                         .algebraicExtension("w2", "w2^2 - 3").transcendentExtension("x")
@@ -259,6 +262,7 @@ public class ExtensionFieldBuilderTest extends TestCase {
      * Test construction Q(+3rt(3))(+sqrt(+3rt(3)))(+5rt(2)) by extension field
      * builder.
      */
+    @SuppressWarnings("unchecked")
     public void testConstructionR1() {
         RingFactory fac = ExtensionFieldBuilder.baseField(new BigRational(1))
                         .realAlgebraicExtension("q", "q^3 - 3", "[1,2]")
@@ -299,6 +303,7 @@ public class ExtensionFieldBuilderTest extends TestCase {
     /**
      * Test construction Q(sqrt(-1))(+3rt(i)) by extension field builder.
      */
+    @SuppressWarnings("unchecked")
     public void testConstructionC1() {
         ComplexRing<BigRational> cf = new ComplexRing<BigRational>(new BigRational(1));
         //System.out.println("cf = " + cf.toScript());
@@ -336,6 +341,7 @@ public class ExtensionFieldBuilderTest extends TestCase {
      * Test construction Q(+3rt(3))(+sqrt(+3rt(3)))(+5rt(2))[y] by extension
      * field builder and real root calculation.
      */
+    @SuppressWarnings("unchecked")
     public void testConstructionR2factory() {
         RingFactory fac = ExtensionFieldBuilder.baseField(new BigRational(1))
                         .realAlgebraicExtension("q", "q^3 - 3", "[1,2]")
@@ -379,6 +385,7 @@ public class ExtensionFieldBuilderTest extends TestCase {
      * Test construction by extension field builder and multiple algebraic
      * extension.
      */
+    @SuppressWarnings("unchecked")
     public void testConstructionM1() {
         RingFactory fac = ExtensionFieldBuilder.baseField(new BigRational(1))
                         .algebraicExtension("q,w,s", "( q^3 - 3, w^2 - q, s^5 - 2)").build();
@@ -415,6 +422,7 @@ public class ExtensionFieldBuilderTest extends TestCase {
      * Test construction by extension field builder and multiple transcendent
      * extension.
      */
+    @SuppressWarnings("unchecked")
     public void testConstructionM2() {
         RingFactory fac = ExtensionFieldBuilder.baseField(new BigRational(1)).algebraicExtension("q,w,s", "")
                         .build();

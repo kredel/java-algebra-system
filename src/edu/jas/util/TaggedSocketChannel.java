@@ -213,6 +213,7 @@ public class TaggedSocketChannel extends Thread {
      * @see java.lang.Thread#run()
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void run() {
         if (sc == null) {
             isRunning = false;
@@ -351,6 +352,7 @@ public class TaggedSocketChannel extends Thread {
     /**
      * Terminate the TaggedSocketChannel.
      */
+    @SuppressWarnings("unchecked")
     public void terminate() {
         isRunning = false;
         this.interrupt();

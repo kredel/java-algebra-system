@@ -535,6 +535,7 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
      * @return List(X_1,...,X_n) a list of univariate polynomials.
      */
     //todo Override
+    @SuppressWarnings("unchecked")
     public List<RecSolvablePolynomial<C>> recUnivariateList() {
         //return castToSolvableList( super.univariateList() );
         return (List<RecSolvablePolynomial<C>>) (Object) univariateList(0, 1L);
@@ -547,6 +548,7 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
      * @return List(X_1,...,X_n) a list of univariate polynomials.
      */
     //todo Override
+    @SuppressWarnings("unchecked")
     public List<RecSolvablePolynomial<C>> recUnivariateList(int modv) {
         return (List<RecSolvablePolynomial<C>>) (Object) univariateList(modv, 1L);
     }
