@@ -293,10 +293,6 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>> extends
         if (!(other instanceof QuotSolvablePolynomialRing)) {
             return false;
         }
-        // do a super.equals( )
-        if (!super.equals(other)) {
-            return false;
-        }
         QuotSolvablePolynomialRing<C> oring = null;
         try {
             oring = (QuotSolvablePolynomialRing<C>) other;
@@ -305,13 +301,17 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>> extends
         if (oring == null) {
             return false;
         }
-        // @todo check same base relations
-        //if ( ! table.equals(oring.table) ) {
+        // do a super.equals( )
+        if (!super.equals(other)) {
+            return false;
+        }
+        // check same base relations
+        //if ( ! table.equals(oring.table) ) { // done in super
         //    return false;
         //}
-        //if ( ! coeffTable.equals(oring.coeffTable) ) {
-        //    return false;
-        //}
+        if (!coeffTable.equals(oring.coeffTable)) {
+            return false;
+        }
         return true;
     }
 
@@ -578,6 +578,7 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>> extends
      * @return List(X_1,...,X_n) a list of univariate polynomials.
      */
     //todo Override
+    @SuppressWarnings("unchecked")
     public List<QuotSolvablePolynomial<C>> recUnivariateList() {
         //return castToSolvableList( super.univariateList() );
         return (List<QuotSolvablePolynomial<C>>) (Object) univariateList(0, 1L);
@@ -590,6 +591,7 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>> extends
      * @return List(X_1,...,X_n) a list of univariate polynomials.
      */
     //todo Override
+    @SuppressWarnings("unchecked")
     public List<QuotSolvablePolynomial<C>> recUnivariateList(int modv) {
         return (List<QuotSolvablePolynomial<C>>) (Object) univariateList(modv, 1L);
     }

@@ -280,10 +280,6 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>> extends
         if (!(other instanceof ResidueSolvablePolynomialRing)) {
             return false;
         }
-        // do a super.equals( )
-        if (!super.equals(other)) {
-            return false;
-        }
         ResidueSolvablePolynomialRing<C> oring = null;
         try {
             oring = (ResidueSolvablePolynomialRing<C>) other;
@@ -292,13 +288,17 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>> extends
         if (oring == null) {
             return false;
         }
-        // @todo check same base relations
-        //if ( ! table.equals(oring.table) ) {
+        // do a super.equals( )
+        if (!super.equals(other)) {
+            return false;
+        }
+        // check same base relations
+        //if ( ! table.equals(oring.table) ) { // done in super
         //    return false;
         //}
-        //if ( ! coeffTable.equals(oring.coeffTable) ) {
-        //    return false;
-        //}
+        if (!coeffTable.equals(oring.coeffTable)) {
+            return false;
+        }
         return true;
     }
 
