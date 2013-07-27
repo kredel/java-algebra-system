@@ -90,6 +90,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
      * @return gcd(P,S).
      */
     @Override
+    @SuppressWarnings("unchecked")
     public GenPolynomial<BigInteger> baseGcd(GenPolynomial<BigInteger> P, GenPolynomial<BigInteger> S) {
         if (S == null || S.isZERO()) {
             return P;
@@ -286,6 +287,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
      * @return gcd(P,S).
      */
     @Override
+    @SuppressWarnings("unchecked")
     public GenPolynomial<GenPolynomial<BigInteger>> recursiveUnivariateGcd(
                     GenPolynomial<GenPolynomial<BigInteger>> P, GenPolynomial<GenPolynomial<BigInteger>> S) {
         if (S == null || S.isZERO()) {

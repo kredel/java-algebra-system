@@ -936,6 +936,7 @@ public class HenselMultUtil {
      * @param G = [g_1,...,g_n] list of factors of leading coefficients.
      * @return [c_1,..., c_n] with prod_i c_i = C mod p^k.
      */
+    @SuppressWarnings("unchecked")
     public static <MOD extends GcdRingElem<MOD> & Modular> List<GenPolynomial<MOD>> liftHenselFull(
                     GenPolynomial<BigInteger> C, List<GenPolynomial<MOD>> F, List<BigInteger> V, long k,
                     List<GenPolynomial<BigInteger>> G) throws NoLiftingException {

@@ -536,6 +536,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
      * @param P univariate squarefree GenPolynomial, gcd(A,P) == 1.
      * @return partial fraction container.
      */
+    @SuppressWarnings("unchecked")
     public PartialFraction<C> baseAlgebraicPartialFractionIrreducibleAbsolute(GenPolynomial<C> A, GenPolynomial<C> P) {
         if (P == null || P.isZERO() ) {
             throw new IllegalArgumentException(" P == null or P == 0");
