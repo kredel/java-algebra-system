@@ -194,7 +194,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
     /**
      * Generate the relation table of the solvable polynomial ring 
      * from a polynomial list of relations.
-     * @param rel polynomail list of relations [..., ei, fj, pij, ... ] with ei * fj = pij.
+     * @param rel polynomial list of relations [..., ei, fj, pij, ... ] with ei * fj = pij.
      */
     public void addRelations(List<GenPolynomial<C>> rel) {
         table.addRelations(rel);
@@ -204,7 +204,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
     /**
      * Generate the relation table of the solvable polynomial ring 
      * from a solvable polynomial list of relations.
-     * @param rel solvable polynomail list of relations [..., ei, fj, pij, ... ] with ei * fj = pij.
+     * @param rel solvable polynomial list of relations [..., ei, fj, pij, ... ] with ei * fj = pij.
      */
     public void addSolvRelations(List<GenSolvablePolynomial<C>> rel) {
         table.addSolvRelations(rel);
