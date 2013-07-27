@@ -592,7 +592,7 @@ public class GroebnerBaseFGLMExamples extends TestCase {
     //================================================================================================= 
     //Internal methods
     //=================================================================================================
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public String all(String order, String polynomials) {
         GroebnerBaseFGLM<BigRational> IdealObjectFGLM;
         BigRational coeff = new BigRational();
@@ -609,8 +609,8 @@ public class GroebnerBaseFGLMExamples extends TestCase {
         PolynomialList<BigRational> L = null;
 
         try {
-            G = (PolynomialList) parserG.nextPolynomialSet();
-            L = (PolynomialList) parserL.nextPolynomialSet();
+            G = (PolynomialList<BigRational>) parserG.nextPolynomialSet();
+            L = (PolynomialList<BigRational>) parserL.nextPolynomialSet();
         } catch (IOException e) {
             e.printStackTrace();
             return "fail";
@@ -668,7 +668,7 @@ public class GroebnerBaseFGLMExamples extends TestCase {
     }
 
 
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public String fglm(String order, String polynomials) {
         GroebnerBaseFGLM<BigRational> IdealObjectGrad;
         //GroebnerBaseAbstract<BigRational> IdealObjectLex;
@@ -683,7 +683,7 @@ public class GroebnerBaseFGLMExamples extends TestCase {
         PolynomialList<BigRational> G = null;
 
         try {
-            G = (PolynomialList) parserG.nextPolynomialSet();
+            G = (PolynomialList<BigRational>) parserG.nextPolynomialSet();
         } catch (IOException e) {
             e.printStackTrace();
             return "fail";
@@ -731,7 +731,7 @@ public class GroebnerBaseFGLMExamples extends TestCase {
     }
 
 
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public String grad(String order, String polynomials) {
         BigRational coeff = new BigRational();
         GroebnerBase<BigRational> gb = GBFactory.getImplementation(coeff);
@@ -743,7 +743,7 @@ public class GroebnerBaseFGLMExamples extends TestCase {
         PolynomialList<BigRational> G = null;
 
         try {
-            G = (PolynomialList) parserG.nextPolynomialSet();
+            G = (PolynomialList<BigRational>) parserG.nextPolynomialSet();
         } catch (IOException e) {
             e.printStackTrace();
             return "fail";
@@ -780,7 +780,7 @@ public class GroebnerBaseFGLMExamples extends TestCase {
     }
 
 
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public String lex(String order, String polynomials) {
         //GroebnerBaseAbstract<BigRational> IdealObjectLex;
         BigRational coeff = new BigRational();
@@ -793,7 +793,7 @@ public class GroebnerBaseFGLMExamples extends TestCase {
         PolynomialList<BigRational> L = null;
 
         try {
-            L = (PolynomialList) parserL.nextPolynomialSet();
+            L = (PolynomialList<BigRational>) parserL.nextPolynomialSet();
         } catch (IOException e) {
             e.printStackTrace();
             return "fail";
@@ -823,7 +823,7 @@ public class GroebnerBaseFGLMExamples extends TestCase {
     }
 
 
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public String modAll(String order, String polynomials, Integer m) {
         GroebnerBaseFGLM<ModInteger> IdealObjectFGLM;
         //GroebnerBaseAbstract<ModInteger> IdealObjectLex;
@@ -841,8 +841,8 @@ public class GroebnerBaseFGLMExamples extends TestCase {
         PolynomialList<ModInteger> L = null;
 
         try {
-            G = (PolynomialList) parserG.nextPolynomialSet();
-            L = (PolynomialList) parserL.nextPolynomialSet();
+            G = (PolynomialList<ModInteger>) parserG.nextPolynomialSet();
+            L = (PolynomialList<ModInteger>) parserL.nextPolynomialSet();
         } catch (IOException e) {
             e.printStackTrace();
             return "fail";
@@ -897,7 +897,7 @@ public class GroebnerBaseFGLMExamples extends TestCase {
     }
 
 
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public String modGrad(String order, String polynomials, Integer m) {
         //GroebnerBaseFGLM<ModInteger> IdealObjectFGLM;
         ModIntegerRing ring = new ModIntegerRing(m);
@@ -910,7 +910,7 @@ public class GroebnerBaseFGLMExamples extends TestCase {
         PolynomialList<ModInteger> G = null;
 
         try {
-            G = (PolynomialList) parserG.nextPolynomialSet();
+            G = (PolynomialList<ModInteger>) parserG.nextPolynomialSet();
         } catch (IOException e) {
             e.printStackTrace();
             return "fail";
@@ -940,7 +940,7 @@ public class GroebnerBaseFGLMExamples extends TestCase {
     }
 
 
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public String modfglm(String order, String polynomials, Integer m) {
         GroebnerBaseFGLM<ModInteger> IdealObjectFGLM;
         //GroebnerBaseAbstract<ModInteger> IdealObjectLex;
@@ -954,7 +954,7 @@ public class GroebnerBaseFGLMExamples extends TestCase {
         PolynomialList<ModInteger> G = null;
 
         try {
-            G = (PolynomialList) parserG.nextPolynomialSet();
+            G = (PolynomialList<ModInteger>) parserG.nextPolynomialSet();
         } catch (IOException e) {
             e.printStackTrace();
             return "fail";
