@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.List;
+import java.util.ArrayList;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -379,7 +380,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
      */
     @SuppressWarnings("unchecked")
     public void testSolvableBigRational() {
-        String exam = "Rat(x,y,z) L " + "RelationTable " + "( " + " ( z ), ( y ), ( y z -1 ) " + ") " + "( "
+        String exam = "Rat(x,y,z) L " + "RelationTable " + "( " + " ( z ), ( y ), ( y z - 1 ) " + ") " + "( "
                         + " ( 1 ), " + " ( 0 ), " + " ( 3/4 - 6/8 ), " + " ( 1 x + x^3 + 1/3 y z - x^3 ) "
                         + " )";
         source = new StringReader(exam);
@@ -402,6 +403,11 @@ public class GenPolynomialTokenizerTest extends TestCase {
         String[] vars = new String[] { "x", "y", "z" };
         int nvar = vars.length;
         spfac = new GenSolvablePolynomialRing<BigRational>(fac, nvar, tord, vars);
+        List<GenSolvablePolynomial<BigRational>> rel = new ArrayList<GenSolvablePolynomial<BigRational>>(3);
+        rel.add( spfac.parse("z") );
+        rel.add( spfac.parse("y") );
+        rel.add( spfac.parse("y z - 1") );
+        spfac.addSolvRelations(rel);
         assertEquals("spfac == f.ring", spfac, f.ring);
         //System.out.println("spfac = " + spfac);
         //System.out.println("spfac.table = " + spfac.table);
@@ -430,7 +436,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
      */
     @SuppressWarnings("unchecked")
     public void testSolvableModInteger() {
-        String exam = "Mod 19 (x,y,z) L " + "RelationTable " + "( " + " ( z ), ( y ), ( y z -1 ) " + ") "
+        String exam = "Mod 19 (x,y,z) L " + "RelationTable " + "( " + " ( z ), ( y ), ( y z - 1 ) " + ") "
                         + "( " + "( 1 ), " + "( 0 ), " + "( 3 2 - 6 + 19 ), "
                         + "( 1 x + x^3 + 3 y z - x^3 ) " + " )";
         source = new StringReader(exam);
@@ -453,6 +459,11 @@ public class GenPolynomialTokenizerTest extends TestCase {
         String[] vars = new String[] { "x", "y", "z" };
         int nvar = vars.length;
         spfac = new GenSolvablePolynomialRing<ModLong>(fac, nvar, tord, vars);
+        List<GenSolvablePolynomial<ModLong>> rel = new ArrayList<GenSolvablePolynomial<ModLong>>(3);
+        rel.add( spfac.parse("z") );
+        rel.add( spfac.parse("y") );
+        rel.add( spfac.parse("y z - 1") );
+        spfac.addSolvRelations(rel);
         assertEquals("spfac == f.ring", spfac, f.ring);
         //System.out.println("spfac = " + spfac);
         //System.out.println("spfac.table = " + spfac.table);
@@ -552,7 +563,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
      */
     @SuppressWarnings("unchecked")
     public void testBigRationalSolvableModule() {
-        String exam = "Rat(x,y,z) L " + "RelationTable " + "( " + " ( z ), ( y ), ( y z -1 ) " + ") " + "( "
+        String exam = "Rat(x,y,z) L " + "RelationTable " + "( " + " ( z ), ( y ), ( y z - 1 ) " + ") " + "( "
                         + " ( " + "  ( 1 ), " + "  ( 0 ), " + "  ( 3/4 - 6/8 ), "
                         + "  ( 1 x + x^3 + 1/3 y z - x^3 ) " + " ), " + " ( ( x ), ( 1 ), ( 0 ) ) " + " )";
         source = new StringReader(exam);
@@ -576,6 +587,11 @@ public class GenPolynomialTokenizerTest extends TestCase {
         String[] vars = new String[] { "x", "y", "z" };
         int nvar = vars.length;
         spfac = new GenSolvablePolynomialRing<BigRational>(fac, nvar, tord, vars);
+        List<GenSolvablePolynomial<ModLong>> rel = new ArrayList<GenSolvablePolynomial<ModLong>>(3);
+        rel.add( spfac.parse("z") );
+        rel.add( spfac.parse("y") );
+        rel.add( spfac.parse("y z - 1") );
+        spfac.addSolvRelations(rel);
         assertEquals("spfac == m.ring", spfac, m.ring);
 
         List<List<GenSolvablePolynomial<BigRational>>> rows = m.castToSolvableList();

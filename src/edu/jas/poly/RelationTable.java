@@ -110,7 +110,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         if (tab == null) {
             return false;
         }
-        // not possible because of endless recursion:
+        // not possible because of infinite recursion:
         //if (!ring.equals(tab.ring)) {
         //    logger.info("not same Ring " + ring.toScript() + ", " + tab.ring.toScript());
         //    return false;
