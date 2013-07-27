@@ -4480,7 +4480,7 @@ Test if this is a two-sided Groebner base.
 
 end
 
-# define some shotcuts
+# define some shortcuts
 ZZ = ZZ();
 QQ = QQ();
 CC = CC();
