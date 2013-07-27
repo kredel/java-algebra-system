@@ -10,6 +10,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import edu.jas.arith.BigInteger;
+import edu.jas.arith.ModInteger;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
@@ -147,8 +148,8 @@ public class GCDTimingTest extends TestCase {
         ufd_si = new GreatestCommonDivisorSimple<BigInteger>();
         ufd_pp = new GreatestCommonDivisorPrimitive<BigInteger>();
         ufd_sr = new GreatestCommonDivisorSubres<BigInteger>();
-        ufd_mosi = new GreatestCommonDivisorModular(true);
-        ufd_moevsi = new GreatestCommonDivisorModular();
+        ufd_mosi = new GreatestCommonDivisorModular<ModInteger>(true);
+        ufd_moevsi = new GreatestCommonDivisorModular<ModInteger>();
         dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), rl, to);
         cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), rl - 1, to);
         rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac, 1, to);

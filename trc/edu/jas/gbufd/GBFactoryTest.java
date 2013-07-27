@@ -164,7 +164,6 @@ public class GBFactoryTest extends TestCase {
 
     /**
      * Test get BigInteger implementation.
-     * 
      */
     public void testBigInteger() {
         BigInteger bi = new BigInteger();
@@ -178,7 +177,6 @@ public class GBFactoryTest extends TestCase {
 
     /**
      * Test get ModInteger implementation.
-     * 
      */
     public void testModInteger() {
         ModIntegerRing mi = new ModIntegerRing(19, true);
@@ -197,7 +195,6 @@ public class GBFactoryTest extends TestCase {
 
     /**
      * Test get BigRational implementation.
-     * 
      */
     public void testBigRational() {
         BigRational b = new BigRational();
@@ -211,7 +208,6 @@ public class GBFactoryTest extends TestCase {
 
     /**
      * Test get BigComplex implementation.
-     * 
      */
     public void testBigComplex() {
         BigComplex b = new BigComplex();
@@ -225,7 +221,6 @@ public class GBFactoryTest extends TestCase {
 
     /**
      * Test get AlgebraicNumber&lt;BigRational&gt; implementation.
-     * 
      */
     public void testAlgebraicNumberBigRational() {
         BigRational b = new BigRational();
@@ -256,7 +251,6 @@ public class GBFactoryTest extends TestCase {
 
     /**
      * Test get AlgebraicNumber&lt;ModInteger&gt; implementation.
-     * 
      */
     public void testAlgebraicNumberModInteger() {
         ModIntegerRing b = new ModIntegerRing(19, true);
@@ -282,8 +276,8 @@ public class GBFactoryTest extends TestCase {
 
     /**
      * Test get GenPolynomial implementation.
-     * 
      */
+    @SuppressWarnings("unchecked")
     public void testGenPolynomial() {
         BigRational b = new BigRational();
         GenPolynomialRing<BigRational> fac;
@@ -305,8 +299,8 @@ public class GBFactoryTest extends TestCase {
 
     /**
      * Test get Product implementation.
-     * 
      */
+    @SuppressWarnings("unchecked")
     public void testProduct() {
         ModIntegerRing mi = new ModIntegerRing(19, true);
         ProductRing<ModInteger> fac;
@@ -332,7 +326,6 @@ public class GBFactoryTest extends TestCase {
 
     /**
      * Test get proxy implementation.
-     * 
      */
     public void testProxy() {
         BigRational b = new BigRational();

@@ -183,7 +183,7 @@ public class GCDModularTest extends TestCase {
      */
     public void testModularEvaluationGcd() {
 
-        GreatestCommonDivisorAbstract<BigInteger> ufd_m = new GreatestCommonDivisorModular(/*false*/);
+        GreatestCommonDivisorAbstract<BigInteger> ufd_m = new GreatestCommonDivisorModular<ModInteger>(/*false*/);
         GreatestCommonDivisorAbstract<BigInteger> ufd = new GreatestCommonDivisorPrimitive<BigInteger>();
 
         GenPolynomial<BigInteger> a;
@@ -241,7 +241,7 @@ public class GCDModularTest extends TestCase {
      */
     public void testModularSimpleGcd() {
 
-        GreatestCommonDivisorAbstract<BigInteger> ufd_m = new GreatestCommonDivisorModular(true);
+        GreatestCommonDivisorAbstract<BigInteger> ufd_m = new GreatestCommonDivisorModular<ModInteger>(true);
         GreatestCommonDivisorAbstract<BigInteger> ufd = new GreatestCommonDivisorPrimitive<BigInteger>();
 
         GenPolynomial<BigInteger> a;

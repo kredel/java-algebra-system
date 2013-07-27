@@ -149,7 +149,7 @@ public class GCDModEvalTest extends TestCase {
         //mi = new ModIntegerRing(19*17,true); // failing tests
         //mi = new ModIntegerRing(primes.get(0).multiply(primes.get(1)),false); // failing tests
         //ufd = new GreatestCommonDivisorPrimitive<ModInteger>();
-        ufd = new GreatestCommonDivisorModEval();
+        ufd = new GreatestCommonDivisorModEval<ModInteger>();
         String[] vars = ExpVector.STDVARS(rl);
         String[] cvars = ExpVector.STDVARS(rl - 1);
         String[] rvars = new String[] { vars[rl - 1] };

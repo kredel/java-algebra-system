@@ -125,6 +125,7 @@ class DHTTransportMarshal<K, V> extends DHTTransport<K, V> {
      * @param key
      * @param value
      */
+    @SuppressWarnings("unchecked")
     public DHTTransportMarshal(K key, V value) throws IOException {
         long t = System.currentTimeMillis();
         this.key = new MarshalledObject/*<K>*/(key);
@@ -140,6 +141,7 @@ class DHTTransportMarshal<K, V> extends DHTTransport<K, V> {
     /**
      * Get the key from this DHTTransport Container.
      */
+    @SuppressWarnings("unchecked")
     public K key() throws IOException, ClassNotFoundException {
         long t = System.currentTimeMillis();
         K k = (K) this.key.get();
@@ -154,6 +156,7 @@ class DHTTransportMarshal<K, V> extends DHTTransport<K, V> {
     /**
      * Get the value from this DHTTransport Container.
      */
+    @SuppressWarnings("unchecked")
     public V value() throws IOException, ClassNotFoundException {
         long t = System.currentTimeMillis();
         V v = (V) this.value.get();

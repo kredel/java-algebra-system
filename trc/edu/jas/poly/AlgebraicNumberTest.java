@@ -91,7 +91,6 @@ public class AlgebraicNumberTest extends TestCase {
 
     /**
      * Test constructor and toString.
-     * 
      */
     public void testConstruction() {
         c = fac.getONE();
@@ -112,7 +111,6 @@ public class AlgebraicNumberTest extends TestCase {
 
     /**
      * Test random polynomial.
-     * 
      */
     public void testRandom() {
         for (int i = 0; i < 7; i++) {
@@ -131,7 +129,6 @@ public class AlgebraicNumberTest extends TestCase {
 
     /**
      * Test addition.
-     * 
      */
     public void testAddition() {
         a = fac.random(ll);
@@ -163,8 +160,8 @@ public class AlgebraicNumberTest extends TestCase {
 
     /**
      * Test object multiplication.
-     * 
      */
+    @SuppressWarnings("unchecked")
     public void testMultiplication() {
         a = fac.random(ll);
         assertTrue("not isZERO( a )", !a.isZERO() );
@@ -230,10 +227,12 @@ public class AlgebraicNumberTest extends TestCase {
             //ok
             //expected.printStackTrace();
             //System.out.println("expected = " + expected);
+            GenPolynomial<BigRational> f1 = (GenPolynomial<BigRational>) expected.f1;
+            GenPolynomial<BigRational> f2 = (GenPolynomial<BigRational>) expected.f2;
             assertTrue("f  = " + cp,    expected.f.equals(cp));
-            assertTrue("f1 = " + a.val, expected.f1.equals(a.val));
-            assertTrue("f2 = " + dp,    expected.f2.equals(dp));
-            assertTrue("f  =  f1*f2 ",  expected.f.equals(expected.f1.multiply(expected.f2)));
+            assertTrue("f1 = " + a.val, f1.equals(a.val));
+            assertTrue("f2 = " + dp,    f2.equals(dp));
+            assertTrue("f  =  f1*f2 ",  expected.f.equals(f1.multiply(f2)));
         } catch (NotInvertibleException e) {
             //e.printStackTrace();
             fail("wrong exception " + e);
@@ -243,7 +242,6 @@ public class AlgebraicNumberTest extends TestCase {
 
     /**
      * Test distributive law.
-     * 
      */
     public void testDistributive() {
         a = fac.random( ll );
@@ -259,7 +257,6 @@ public class AlgebraicNumberTest extends TestCase {
 
     /**
      * Test enumerator.
-     * 
      */
     public void testEnumerator() {
         //System.out.println("fac = " + fac);
