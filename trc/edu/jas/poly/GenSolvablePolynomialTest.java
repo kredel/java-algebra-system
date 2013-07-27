@@ -212,7 +212,8 @@ public class GenSolvablePolynomialTest extends TestCase {
         // polynomials over rational numbers
         GenSolvablePolynomialRing<BigRational> pf = new GenSolvablePolynomialRing<BigRational>(cf,rl);
         RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
-        wl.generate(pf);
+        //wl.generate(pf);
+        pf.addRelations(wl);
         // System.out.println("pf = " + pf);
 
         GenSolvablePolynomial<BigRational> a = pf.random(kl,ll,el,q);
@@ -311,7 +312,8 @@ public class GenSolvablePolynomialTest extends TestCase {
         // polynomials over rational numbers
         GenSolvablePolynomialRing<BigRational> pf = new GenSolvablePolynomialRing<BigRational>(rf,4,to,vars);
         RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
-        wl.generate(pf);
+        //wl.generate(pf);
+        pf.addRelations(wl);
         //System.out.println("pf = " + pf);
 
         GenSolvablePolynomial<BigRational> sp = pf.random(5);
@@ -323,7 +325,8 @@ public class GenSolvablePolynomialTest extends TestCase {
         GenSolvablePolynomialRing<GenPolynomial<BigRational>> rpf 
             = new GenSolvablePolynomialRing<GenPolynomial<BigRational>>(pf,2);
         RelationGenerator<GenPolynomial<BigRational>> rwl = new WeylRelations<GenPolynomial<BigRational>>();
-        rwl.generate(rpf);
+        //rwl.generate(rpf);
+        rpf.addRelations(rwl);
         //System.out.println("rpf = " + rpf);
 
         GenSolvablePolynomial<GenPolynomial<BigRational>> rsp = rpf.random(5);

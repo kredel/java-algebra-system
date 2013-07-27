@@ -101,7 +101,8 @@ public class RecSolvablePolynomialTest extends TestCase {
         //sring = new GenSolvablePolynomialRing<GenPolynomial<BigRational>>(cring,rl,tord);
         ring = new RecSolvablePolynomialRing<BigRational>(cring, tord, vars);
         RelationGenerator<GenPolynomial<BigRational>> wl = new WeylRelations<GenPolynomial<BigRational>>();
-        wl.generate(ring);
+        //wl.generate(ring);
+        ring.addRelations(wl);
         table = ring.table;
         a = b = c = d = e = null;
     }
@@ -315,14 +316,16 @@ public class RecSolvablePolynomialTest extends TestCase {
         GenSolvablePolynomialRing<BigRational> csring = new GenSolvablePolynomialRing<BigRational>(cfac,
                         tord, cvars);
         RelationGenerator<BigRational> wlc = new WeylRelations<BigRational>();
-        wlc.generate(csring);
+        //wlc.generate(csring);
+        csring.addRelations(wlc);
         assertTrue("# relations == 1", csring.table.size() == 1);
         assertFalse("isCommutative()", csring.isCommutative());
         assertTrue("isAssociative()", csring.isAssociative());
 
         ring = new RecSolvablePolynomialRing<BigRational>(csring, ring);
         RelationGenerator<GenPolynomial<BigRational>> wl = new WeylRelations<GenPolynomial<BigRational>>();
-        wl.generate(ring);
+        //wl.generate(ring);
+        ring.addRelations(wl);
         assertTrue("# relations == 2", ring.table.size() == 2);
         assertFalse("isCommutative()", ring.isCommutative());
         assertTrue("isAssociative()", ring.isAssociative());
@@ -397,7 +400,8 @@ public class RecSolvablePolynomialTest extends TestCase {
         GenSolvablePolynomialRing<BigRational> csring = new GenSolvablePolynomialRing<BigRational>(cfac,
                         tord, cvars);
         RelationGenerator<BigRational> wlc = new WeylRelations<BigRational>();
-        wlc.generate(csring);
+        //wlc.generate(csring);
+        csring.addRelations(wlc);
         assertFalse("isCommutative()", csring.isCommutative());
         assertTrue("isAssociative()", csring.isAssociative());
 
@@ -436,7 +440,8 @@ public class RecSolvablePolynomialTest extends TestCase {
         GenSolvablePolynomialRing<BigRational> csring = new GenSolvablePolynomialRing<BigRational>(cfac,
                         tord, cvars);
         RelationGenerator<BigRational> wlc = new WeylRelations<BigRational>();
-        wlc.generate(csring);
+        //wlc.generate(csring);
+        csring.addRelations(wlc);
         assertFalse("isCommutative()", csring.isCommutative());
         assertTrue("isAssociative()", csring.isAssociative());
 
@@ -470,7 +475,8 @@ public class RecSolvablePolynomialTest extends TestCase {
         GenSolvablePolynomialRing<BigRational> sring = new GenSolvablePolynomialRing<BigRational>(cfac, tord,
                         svars);
         RelationGenerator<BigRational> wlc = new WeylRelations<BigRational>(sring);
-        wlc.generate(sring);
+        //wlc.generate(sring);
+        sring.addRelations(wlc);
         assertFalse("isCommutative()", sring.isCommutative());
         assertTrue("isAssociative()", sring.isAssociative());
         //System.out.println("sring = " + sring.toScript());
@@ -522,7 +528,8 @@ public class RecSolvablePolynomialTest extends TestCase {
         GenSolvablePolynomialRing<BigRational> sring = new GenSolvablePolynomialRing<BigRational>(cfac, tord,
                         svars);
         RelationGenerator<BigRational> wlc = new WeylRelationsIterated<BigRational>();
-        wlc.generate(sring);
+        //wlc.generate(sring);
+        sring.addRelations(wlc);
         assertFalse("isCommutative()", sring.isCommutative());
         assertTrue("isAssociative()", sring.isAssociative());
         //System.out.println("sring = " + sring.toScript());
