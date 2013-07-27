@@ -3936,7 +3936,17 @@ Compute a standard base.
 end
 
 
+=begin rdoc
+(Was inner) class which extends edu.jas.ps.Coefficients
+=end
 class Coeff < Coefficients
+
+=begin rdoc
+Constructor.
+
+cof RingFactory for coefficients.
+f(int i) must return a value of type cof.
+=end
   def initialize(cof,&f)
       super() # this is important in jruby 1.5.6!
       #puts "cof type(#{cof}) = #{cof.class}\n";
@@ -3944,6 +3954,13 @@ class Coeff < Coefficients
       #puts "f type(#{f}) = #{f.class}\n";
       @func = f
   end
+
+=begin rdoc
+Generator for a coefficient.
+
+long i parameter.
+returns a value of type cof.
+=end
   def generate(i)
       #puts "f_3  type(#{@func}) = #{@func.class}\n";
       #puts "f_3  type(#{i}) = #{i.class}\n";
@@ -3990,12 +4007,29 @@ def PS(cofac,name,truncate=nil,&f) #=nil,truncate=nil)
 end
 
 
+=begin rdoc
+(Was inner) class which extends edu.jas.ps.MultiVarCoefficients
+=end
 class MCoeff < MultiVarCoefficients
+
+=begin rdoc
+Constructor.
+
+r polynomial RingFactory.
+f(ExpVector e) must return a value of type r.coFac.
+=end
   def initialize(r,&f)
       super(r) # this is important in jruby 1.5.6!
       @coFac = r.coFac;
       @func = f
   end
+
+=begin rdoc
+Generator for a coefficient.
+
+ExpVector e parameter.
+returns a value of type r.coFac
+=end
   def generate(i)
       a = @func.call(i);
       if a.is_a? RingElem
