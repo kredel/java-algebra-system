@@ -950,10 +950,13 @@ Methods to create ideals and ideals with parametric coefficients.
 class Ring
     attr_reader :ring, :pset, :engine, :sqf, :factor
 
-    def initialize(ringstr="",ring=nil)
 =begin rdoc
 Ring constructor.
+
+ringstr string representation to be parsed.
+ring JAS ring object.
 =end
+    def initialize(ringstr="",ring=nil)
         if ring == nil
            sr = StringReader.new( ringstr );
            tok = GenPolynomialTokenizer.new(sr);
@@ -3610,11 +3613,15 @@ Get the tangens power series.
 
 =begin rdoc
 (Inner) class which extends edu.jas.ps.Coefficients
+=end
+        class Ucoeff < Coefficients
+
+=begin rdoc
+Constructor.
 
 ifunc(int i) must return a value which is used in ((RingFactory)cofac).fromInteger().
 jfunc(int i) must return a value of type ring.coFac.
 =end
-        class Ucoeff < Coefficients
             def initialize(ifunc,jfunc,cofac=nil)
                 #puts "ifunc = " + ifunc.to_s + ",";
                 #puts "jfunc = " + jfunc.to_s + ",";
@@ -3627,6 +3634,13 @@ jfunc(int i) must return a value of type ring.coFac.
                 @ifunc = ifunc;
                 @jfunc = jfunc;
             end
+
+=begin rdoc
+Generator for a coefficient.
+
+long i parameter.
+returns a value of type ring.coFac.
+=end
             def generate(i)
                 if @jfunc == nil
                     return @coFac.fromInteger( @ifunc.call(i) );
@@ -3796,18 +3810,29 @@ Get the tangens power series, var r.
 
 =begin
 (Inner) class which extends edu.jas.ps.MultiVarCoefficients
+=end
+        class Mcoeff < MultiVarCoefficients
+
+=begin
+Constructor
 
 ring must be a polynomial or multivariate power series ring.
 ifunc(ExpVector i) must return a value which is used in ((RingFactory)cofac).fromInteger().
 jfunc(ExpVector i) must return a value of type ring.coFac.
 =end
-        class Mcoeff < MultiVarCoefficients
             def initialize(ring,ifunc=nil,jfunc=nil)
                 super(ring);
                 @coFac = ring.coFac;
                 @ifunc = ifunc;
                 @jfunc = jfunc;
             end
+
+=begin rdoc
+Generator for a coefficient.
+
+long i parameter.
+returns a value of type ring.coFac.
+=end
             def generate(i)
                 if @jfunc == nil
                     return @coFac.fromInteger( @ifunc.call(i) );
