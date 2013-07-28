@@ -108,10 +108,12 @@ public class SolvableLocal<C extends GcdRingElem<C>> implements RingElem<Solvabl
             den = d;
             return;
         }
-        System.out.println("n = " + n + ", d = " + d);
+        if (debug) {
+            System.out.println("n = " + n + ", d = " + d);
+        }
         GenSolvablePolynomial<C> p = ring.ideal.normalform(d);
         if (p == null || p.isZERO()) {
-            throw new IllegalArgumentException("denominator may not be in ideal");
+            throw new IllegalArgumentException("denominator may not be in ideal, d = " + d);
         }
         //d = p; can't do this
         C lc = d.leadingBaseCoefficient();
@@ -310,8 +312,8 @@ public class SolvableLocal<C extends GcdRingElem<C>> implements RingElem<Solvabl
         if (debug) {
             System.out.println("oc[0] den =<>= oc[1] b.den: (" + oc[0] + ") (" + den + ") = (" + oc[1] + ") (" + b.den + ")");
 	}
-        System.out.println("oc[0] = " + oc[0]);
-        System.out.println("oc[1] = " + oc[1]);
+        //System.out.println("oc[0] = " + oc[0]);
+        //System.out.println("oc[1] = " + oc[1]);
         r = oc[0].multiply(num);
         s = oc[1].multiply(b.num);
         return r.compareTo(s);
@@ -394,8 +396,8 @@ public class SolvableLocal<C extends GcdRingElem<C>> implements RingElem<Solvabl
         if (debug) {
             System.out.println("oc[0] den =sum= oc[1] S.den: (" + oc[0] + ") (" + den + ") = (" + oc[1] + ") (" + S.den + ")");
 	}
-        System.out.println("oc[0] = " + oc[0]);
-        System.out.println("oc[1] = " + oc[1]);
+        //System.out.println("oc[0] = " + oc[0]);
+        //System.out.println("oc[1] = " + oc[1]);
         d = oc[0].multiply(den);
         n1 = oc[0].multiply(num);   
         n2 = oc[1].multiply(S.num); 
@@ -504,8 +506,11 @@ public class SolvableLocal<C extends GcdRingElem<C>> implements RingElem<Solvabl
         if ( den.compareTo(S.den) == 0 ) { }
         */
         GenSolvablePolynomial<C>[] oc = ring.engine.leftOreCond(num,S.den);
-        System.out.println("oc[0] = " + oc[0]);
-        System.out.println("oc[1] = " + oc[1]);
+        if (debug) {
+            System.out.println("oc[0] num =mult= oc[1] S.den: (" + oc[0] + ") (" + num + ") = (" + oc[1] + ") (" + S.den + ")");
+	}
+        //System.out.println("oc[0] = " + oc[0]);
+        //System.out.println("oc[1] = " + oc[1]);
         n = oc[1].multiply(S.num);
         d = oc[0].multiply(den);
         return new SolvableLocal<C>(ring, n, d, false);

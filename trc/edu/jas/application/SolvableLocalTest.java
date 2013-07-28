@@ -105,10 +105,10 @@ public class SolvableLocalTest extends TestCase {
         }
         //id = genRandomIdeal();
         id = genIdealA();
-        System.out.println("id = " + id);
+        //System.out.println("id = " + id);
         assert !id.isONE() : "id = " + id;
         efac = new SolvableLocalRing<BigRational>(id);
-        System.out.println("efac = " + efac);
+        //System.out.println("efac = " + efac);
     }
 
 
@@ -175,10 +175,10 @@ public class SolvableLocalTest extends TestCase {
         assertTrue("isONE( d )", !d.isONE());
 
         for (SolvableLocal<BigRational> g : efac.generators()) {
-            System.out.println("g = " + g);
+            //System.out.println("g = " + g);
             assertFalse("not isZERO( g )", g.isZERO());
         }
-        //wrong, solved: 
+        // solved: not all products are defined 
         assertTrue("isAssociative: ", efac.isAssociative());
     }
 
@@ -186,7 +186,7 @@ public class SolvableLocalTest extends TestCase {
     /**
      * Test random polynomial.
      */
-    public void xtestRandom() {
+    public void testRandom() {
         for (int i = 0; i < 7; i++) {
             //a = efac.random(ll+i);
             a = efac.random(kl * (i + 1), ll + 2 + 2 * i, el, q);
@@ -205,7 +205,7 @@ public class SolvableLocalTest extends TestCase {
     /**
      * Test addition.
      */
-    public void xtestAddition() {
+    public void testAddition() {
         //a = efac.random(kl, ll, el+1, q);
         //b = efac.random(kl, ll, el+1, q);
         //a = efac.parse("{ 1  | w * x + 25/28  }");
@@ -214,8 +214,8 @@ public class SolvableLocalTest extends TestCase {
         //!b = efac.parse("{ 1  | w + 3  }");
         a = efac.parse("{ 1  | y * z + 7/10 }");
         b = efac.parse("{ x - 1/7 | w + 3  }");
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
 
         c = a.sum(efac.getZERO());
         d = a.subtract(efac.getZERO());
@@ -257,7 +257,7 @@ public class SolvableLocalTest extends TestCase {
     /**
      * Test multiplication.
      */
-    public void xtestMultiplication() {
+    public void testMultiplication() {
         a = efac.random(kl, ll, el+1, q);
         b = efac.random(kl, ll, el+1, q);
         //System.out.println("a = " + a);
@@ -300,7 +300,7 @@ public class SolvableLocalTest extends TestCase {
     /**
      * Test parse.
      */
-    public void xtestParse() {
+    public void testParse() {
         a = efac.random(kl * 2, ll * 2, el * 2, q * 2);
         //PrettyPrint.setInternal();
         //System.out.println("a = " + a);
