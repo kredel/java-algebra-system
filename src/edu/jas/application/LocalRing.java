@@ -11,14 +11,14 @@ import java.io.Reader;
 
 import org.apache.log4j.Logger;
 
+import edu.jas.kern.StringUtil;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
-
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-
 import edu.jas.ufd.GreatestCommonDivisor;
 import edu.jas.ufd.GCDFactory;
+
 
 /**
  * Local ring class based on GenPolynomial with RingElem interface.
@@ -54,7 +54,7 @@ public class LocalRing<C extends GcdRingElem<C> >
 
 
     /** The constructor creates a LocalRing object 
-     * from a GenPolynomialRing and a GenPolynomial. 
+     * from an Ideal. 
      * @param i localization polynomial ideal.
      */
     public LocalRing(Ideal<C> i) {
@@ -65,7 +65,10 @@ public class LocalRing<C extends GcdRingElem<C> >
         if ( ideal.isONE() ) {
            throw new IllegalArgumentException("ideal may not be 1");
         }
-        if ( !ideal.isMaximal() ) {
+        if ( ideal.isMaximal() ) {
+            isField = 1;
+        } else {
+            isField = 0;
             //throw new IllegalArgumentException("ideal must be maximal");
             logger.warn("ideal not maximal");
         }
@@ -81,7 +84,7 @@ public class LocalRing<C extends GcdRingElem<C> >
      * @see edu.jas.structure.ElemFactory#isFinite()
      */
     public boolean isFinite() {
-        return false;
+        return ring.isFinite() && ideal.bb.commonZeroTest(ideal.getList()) <= 0;
     }
 
 
@@ -117,9 +120,14 @@ public class LocalRing<C extends GcdRingElem<C> >
     public List<Local<C>> generators() {
         List<GenPolynomial<C>> pgens = ring.generators();
         List<Local<C>> gens = new ArrayList<Local<C>>( pgens.size() );
+        GenPolynomial<C> one = ring.getONE();
         for ( GenPolynomial<C> p : pgens ) {
             Local<C> q = new Local<C>( this, p );
             gens.add(q);
+            if ( !p.isONE() && !ideal.contains(p)) { // q.isUnit()
+                q = new Local<C>(this, one, p);
+                gens.add(q);
+            }
         }
         return gens;
     }
@@ -154,7 +162,7 @@ public class LocalRing<C extends GcdRingElem<C> >
         if ( isField == 0 ) { 
            return false;
         }
-        // ??
+        // not reached
         return false;
     }
 
@@ -191,7 +199,7 @@ public class LocalRing<C extends GcdRingElem<C> >
      */
     @Override
      public String toString() {
-        return "Local[ " 
+        return "LocalRing[ " 
                 + ideal.toString() + " ]";
     }
 
@@ -200,7 +208,7 @@ public class LocalRing<C extends GcdRingElem<C> >
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.ElemFactory#toScript()
      */
-    //JAVA6only: @Override
+    @Override
     public String toScript() {
         // Python case
         return "LC(" + ideal.list.toScript() + ")";
@@ -248,13 +256,12 @@ public class LocalRing<C extends GcdRingElem<C> >
      */
     public Local<C> random(int n) {
       GenPolynomial<C> r = ring.random( n ).monic();
-      GenPolynomial<C> s = ring.random( n ).monic();
-      s = ideal.normalform( s );
-      while ( s.isZERO() ) {
-          logger.info("s was in ideal");
-          s = ring.random( n ).monic();
-          s = ideal.normalform( s );
-      }
+      r = ideal.normalform( r );
+      GenPolynomial<C> s;
+      do {
+          s = ring.random(n).monic();
+          s = ideal.normalform(s);
+      } while (s.isZERO());
       return new Local<C>( this, r, s, false );
     }
 
@@ -269,13 +276,12 @@ public class LocalRing<C extends GcdRingElem<C> >
      */
     public Local<C> random(int k, int l, int d, float q) {
       GenPolynomial<C> r = ring.random(k,l,d,q).monic();
-      GenPolynomial<C> s = ring.random(k,l,d,q).monic();
-      s = ideal.normalform( s );
-      while ( s.isZERO() ) {
-          logger.info("s was in ideal "+ideal);
-          s = ring.random( k,l,d,q ).monic();
-          s = ideal.normalform( s );
-      }
+      r = ideal.normalform( r );
+      GenPolynomial<C> s;
+      do {
+          s = ring.random(k,l,d,q).monic();
+          s = ideal.normalform(s);
+      } while (s.isZERO());
       return new Local<C>( this, r, s, false );
     }
 
@@ -287,13 +293,12 @@ public class LocalRing<C extends GcdRingElem<C> >
      */
     public Local<C> random(int n, Random rnd) {
       GenPolynomial<C> r = ring.random( n, rnd ).monic();
-      GenPolynomial<C> s = ring.random( n, rnd ).monic();
-      s = ideal.normalform( s );
-      while ( s.isZERO() ) {
-          logger.info("s was in ideal");
-          s = ring.random( n, rnd ).monic();
-          s = ideal.normalform( s );
-      }
+      r = ideal.normalform( r );
+      GenPolynomial<C> s;
+      do {
+          s = ring.random(n).monic();
+          s = ideal.normalform(s);
+      } while (s.isZERO());
       return new Local<C>( this, r, s, false);
     }
 
@@ -303,8 +308,24 @@ public class LocalRing<C extends GcdRingElem<C> >
      * @return Local from s.
      */
     public Local<C> parse(String s) {
-        GenPolynomial<C> x = ring.parse( s );
-        return new Local<C>( this, x );
+        int i = s.indexOf("{");
+        if (i >= 0) {
+            s = s.substring(i + 1);
+        }
+        i = s.lastIndexOf("}");
+        if (i >= 0) {
+            s = s.substring(0, i);
+        }
+        i = s.indexOf("|");
+        if (i < 0) {
+            GenPolynomial<C> n = ring.parse(s);
+            return new Local<C>(this, n);
+        }
+        String s1 = s.substring(0, i);
+        String s2 = s.substring(i + 1);
+        GenPolynomial<C> n = ring.parse(s1);
+        GenPolynomial<C> d = ring.parse(s2);
+        return new Local<C>( this, n, d );
     }
 
 
@@ -313,8 +334,8 @@ public class LocalRing<C extends GcdRingElem<C> >
      * @return next Local from r.
      */
     public Local<C> parse(Reader r) {
-        GenPolynomial<C> x = ring.parse( r );
-        return new Local<C>( this, x );
+        String s = StringUtil.nextPairedString(r, '{', '}');
+        return parse(s);
     }
 
 }
