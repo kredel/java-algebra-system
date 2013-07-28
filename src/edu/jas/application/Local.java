@@ -8,8 +8,8 @@ package edu.jas.application;
 import org.apache.log4j.Logger;
 
 import edu.jas.kern.PrettyPrint;
-import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.ExpVector;
+import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingElem;
 
@@ -119,16 +119,16 @@ public class Local<C extends GcdRingElem<C>> implements RingElem<Local<C>> {
             n = n.multiply(lc);
             d = d.multiply(lc);
         }
-        if ( n.compareTo(d) == 0 ) {
+        if (n.compareTo(d) == 0) {
             num = ring.ring.getONE();
             den = ring.ring.getONE();
             return;
-	}
-        if ( n.isZERO() ) {
+        }
+        if (n.isZERO()) {
             num = n;
             den = ring.ring.getONE();
             return;
-	}
+        }
         // must reduce to lowest terms
         //GenPolynomial<C> gcd = ring.ring.getONE();
         GenPolynomial<C> gcd = ring.engine.gcd(n, d);
@@ -294,7 +294,7 @@ public class Local<C extends GcdRingElem<C>> implements RingElem<Local<C>> {
             System.out.println("compareTo: t = " + t);
             return t;
         }
-        if ( den.compareTo(b.den) == 0 ) {
+        if (den.compareTo(b.den) == 0) {
             return num.compareTo(b.num);
         }
         GenPolynomial<C> r = num.multiply(b.den);

@@ -8,15 +8,15 @@ package edu.jas.application;
 import org.apache.log4j.Logger;
 
 import edu.jas.kern.PrettyPrint;
-import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.ExpVector;
+import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingElem;
 
 
 /**
- * SolvableLocal ring element based on GenSolvablePolynomial with GcdRingElem interface. Objects of
- * this class are (nearly) immutable.
+ * SolvableLocal ring element based on GenSolvablePolynomial with GcdRingElem
+ * interface. Objects of this class are (nearly) immutable.
  * @author Heinz Kredel
  */
 // To be fixed?: Not jet working because of monic GBs.
@@ -94,7 +94,8 @@ public class SolvableLocal<C extends GcdRingElem<C>> implements RingElem<Solvabl
      * @param d denominator polynomial.
      * @param isred true if gcd(n,d) == 1, else false.
      */
-    protected SolvableLocal(SolvableLocalRing<C> r, GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d, boolean isred) {
+    protected SolvableLocal(SolvableLocalRing<C> r, GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d,
+                    boolean isred) {
         if (d == null || d.isZERO()) {
             throw new IllegalArgumentException("denominator may not be zero");
         }
@@ -122,21 +123,21 @@ public class SolvableLocal<C extends GcdRingElem<C>> implements RingElem<Solvabl
             n = n.multiplyLeft(lc);
             d = d.multiplyLeft(lc);
         }
-        if ( n.compareTo(d) == 0 ) {
+        if (n.compareTo(d) == 0) {
             num = ring.ring.getONE();
             den = ring.ring.getONE();
             return;
-	}
-        if ( n.isZERO() ) {
+        }
+        if (n.isZERO()) {
             num = n;
             den = ring.ring.getONE();
             return;
-	}
-        if ( n.isONE() ) {
+        }
+        if (n.isONE()) {
             num = n;
             den = d;
             return;
-	}
+        }
         // must reduce to lowest terms
         GenSolvablePolynomial<C> gcd = ring.ring.getONE();
         //GenPolynomial<C> gcd = ring.syzGcd(n, d);
@@ -302,16 +303,17 @@ public class SolvableLocal<C extends GcdRingElem<C>> implements RingElem<Solvabl
             System.out.println("compareTo: t = " + t);
             return t;
         }
-        if ( den.compareTo(b.den) == 0 ) {
+        if (den.compareTo(b.den) == 0) {
             return num.compareTo(b.num);
         }
         GenSolvablePolynomial<C> r, s;
         // if (den.isONE()) { }
         // if (b.den.isONE()) { }
-        GenSolvablePolynomial<C>[] oc = ring.engine.leftOreCond(den,b.den);
+        GenSolvablePolynomial<C>[] oc = ring.engine.leftOreCond(den, b.den);
         if (debug) {
-            System.out.println("oc[0] den =<>= oc[1] b.den: (" + oc[0] + ") (" + den + ") = (" + oc[1] + ") (" + b.den + ")");
-	}
+            System.out.println("oc[0] den =<>= oc[1] b.den: (" + oc[0] + ") (" + den + ") = (" + oc[1]
+                            + ") (" + b.den + ")");
+        }
         //System.out.println("oc[0] = " + oc[0]);
         //System.out.println("oc[1] = " + oc[1]);
         r = oc[0].multiply(num);
@@ -387,20 +389,21 @@ public class SolvableLocal<C extends GcdRingElem<C>> implements RingElem<Solvabl
         if (den.isONE()) { }
         if (S.den.isONE()) { }
         */
-        if ( den.compareTo(S.den) == 0 ) { // correct ?
+        if (den.compareTo(S.den) == 0) { // correct ?
             n = (GenSolvablePolynomial<C>) num.sum(S.num);
             return new SolvableLocal<C>(ring, n, den, false);
         }
         // general case
-        GenSolvablePolynomial<C>[] oc = ring.engine.leftOreCond(den,S.den);
+        GenSolvablePolynomial<C>[] oc = ring.engine.leftOreCond(den, S.den);
         if (debug) {
-            System.out.println("oc[0] den =sum= oc[1] S.den: (" + oc[0] + ") (" + den + ") = (" + oc[1] + ") (" + S.den + ")");
-	}
+            System.out.println("oc[0] den =sum= oc[1] S.den: (" + oc[0] + ") (" + den + ") = (" + oc[1]
+                            + ") (" + S.den + ")");
+        }
         //System.out.println("oc[0] = " + oc[0]);
         //System.out.println("oc[1] = " + oc[1]);
         d = oc[0].multiply(den);
-        n1 = oc[0].multiply(num);   
-        n2 = oc[1].multiply(S.num); 
+        n1 = oc[0].multiply(num);
+        n2 = oc[1].multiply(S.num);
         n = (GenSolvablePolynomial<C>) n1.sum(n2);
         //System.out.println("n = " + n);
         //System.out.println("d = " + d);
@@ -505,10 +508,11 @@ public class SolvableLocal<C extends GcdRingElem<C>> implements RingElem<Solvabl
         if (S.den.isONE()) { }
         if ( den.compareTo(S.den) == 0 ) { }
         */
-        GenSolvablePolynomial<C>[] oc = ring.engine.leftOreCond(num,S.den);
+        GenSolvablePolynomial<C>[] oc = ring.engine.leftOreCond(num, S.den);
         if (debug) {
-            System.out.println("oc[0] num =mult= oc[1] S.den: (" + oc[0] + ") (" + num + ") = (" + oc[1] + ") (" + S.den + ")");
-	}
+            System.out.println("oc[0] num =mult= oc[1] S.den: (" + oc[0] + ") (" + num + ") = (" + oc[1]
+                            + ") (" + S.den + ")");
+        }
         //System.out.println("oc[0] = " + oc[0]);
         //System.out.println("oc[1] = " + oc[1]);
         n = oc[1].multiply(S.num);

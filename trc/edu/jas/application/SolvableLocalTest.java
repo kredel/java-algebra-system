@@ -19,8 +19,8 @@ import edu.jas.kern.ComputerThreads;
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
-import edu.jas.poly.TermOrder;
 import edu.jas.poly.RelationGenerator;
+import edu.jas.poly.TermOrder;
 import edu.jas.poly.WeylRelations;
 
 
@@ -89,7 +89,7 @@ public class SolvableLocalTest extends TestCase {
     float q = 0.2f;
 
 
-    int il = ( rl == 1 ? 1 : 2 ); 
+    int il = (rl == 1 ? 1 : 2);
 
 
     @Override
@@ -100,8 +100,8 @@ public class SolvableLocalTest extends TestCase {
         mfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), rl, to, vars);
         RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
         wl.generate(mfac);
-        if (!mfac.isAssociative() ) {
-           System.out.println("ring not associative: " + mfac);
+        if (!mfac.isAssociative()) {
+            System.out.println("ring not associative: " + mfac);
         }
         //id = genRandomIdeal();
         id = genIdealA();
@@ -115,15 +115,15 @@ public class SolvableLocalTest extends TestCase {
     protected SolvableIdeal<BigRational> genRandomIdeal() {
         List<GenSolvablePolynomial<BigRational>> F;
         do {
-            F = new ArrayList<GenSolvablePolynomial<BigRational>>( il );
-            for ( int i = 0; i < il; i++ ) {
-                GenSolvablePolynomial<BigRational> mo = mfac.random(kl,ll,el+1,q);
-                while ( mo.isConstant() ) {
-                    mo = mfac.random(kl,ll,el+1,q);
+            F = new ArrayList<GenSolvablePolynomial<BigRational>>(il);
+            for (int i = 0; i < il; i++) {
+                GenSolvablePolynomial<BigRational> mo = mfac.random(kl, ll, el + 1, q);
+                while (mo.isConstant()) {
+                    mo = mfac.random(kl, ll, el + 1, q);
                 }
-                F.add( mo );
+                F.add(mo);
             }
-            SolvableIdeal<BigRational> id = new SolvableIdeal<BigRational>(mfac,F);
+            SolvableIdeal<BigRational> id = new SolvableIdeal<BigRational>(mfac, F);
             id.doGB();
         } while (id.isONE());
         return id;
@@ -133,15 +133,15 @@ public class SolvableLocalTest extends TestCase {
     protected SolvableIdeal<BigRational> genIdealA() {
         GenSolvablePolynomial<BigRational> p;
         List<GenSolvablePolynomial<BigRational>> F;
-        F = new ArrayList<GenSolvablePolynomial<BigRational>>( il );
+        F = new ArrayList<GenSolvablePolynomial<BigRational>>(il);
         p = mfac.parse("y^2 - 42/5");
-        F.add( p );
+        F.add(p);
         //p = mfac.parse("z^2");
         p = mfac.parse("x^2");
-        F.add( p );
+        F.add(p);
         //p = mfac.parse("x^2 - w^2 ");
         //F.add( p );
-        SolvableIdeal<BigRational> id = new SolvableIdeal<BigRational>(mfac,F);
+        SolvableIdeal<BigRational> id = new SolvableIdeal<BigRational>(mfac, F);
         id.doGB();
         return id;
     }
@@ -258,8 +258,8 @@ public class SolvableLocalTest extends TestCase {
      * Test multiplication.
      */
     public void testMultiplication() {
-        a = efac.random(kl, ll, el+1, q);
-        b = efac.random(kl, ll, el+1, q);
+        a = efac.random(kl, ll, el + 1, q);
+        b = efac.random(kl, ll, el + 1, q);
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
 
@@ -279,7 +279,7 @@ public class SolvableLocalTest extends TestCase {
         //non-com assertFalse("not isZERO( a*b-b*a ) " + e, e.isZERO() );
 
         //c = efac.random(kl,ll,el,q);
-        c = new SolvableLocal<BigRational>(efac, mfac.univariate(1, 2)); 
+        c = new SolvableLocal<BigRational>(efac, mfac.univariate(1, 2));
         //System.out.println("c = " + c);
         d = a.multiply(b.multiply(c));
         //System.out.println("d = " + d);

@@ -13,24 +13,17 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigRational;
-import edu.jas.gb.GroebnerBase;
 import edu.jas.gb.SolvableGroebnerBase;
 import edu.jas.gb.SolvableGroebnerBaseSeq;
-import edu.jas.gbufd.GBFactory;
 import edu.jas.kern.ComputerThreads;
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
-import edu.jas.poly.PolyUtil;
 import edu.jas.poly.PolynomialList;
-import edu.jas.poly.TermOrder;
 import edu.jas.poly.RelationGenerator;
+import edu.jas.poly.TermOrder;
 import edu.jas.poly.WeylRelations;
-import edu.jas.ufd.Quotient;
 import edu.jas.util.KsubSet;
 
 
@@ -41,7 +34,7 @@ import edu.jas.util.KsubSet;
 public class SolvableIdealTest extends TestCase {
 
 
-    private static final Logger logger = Logger.getLogger(SolvableIdealTest.class);
+    //private static final Logger logger = Logger.getLogger(SolvableIdealTest.class);
 
 
     /**
@@ -243,8 +236,8 @@ public class SolvableIdealTest extends TestCase {
     public void testSolvableIdealProduct() {
         SolvableIdeal<BigRational> I, J, K, H;
         a = fac.random(kl, ll, el, q);
-        b = fac.random(kl, ll, el-1, q);
-        c = fac.random(kl, ll, el-1, q);
+        b = fac.random(kl, ll, el - 1, q);
+        c = fac.random(kl, ll, el - 1, q);
         d = c; //fac.random(kl, ll, el, q);
         e = d; //fac.random(kl, ll, el, q );
 
@@ -343,9 +336,9 @@ public class SolvableIdealTest extends TestCase {
      */
     public void testSolvableIdealQuotient() {
         SolvableIdeal<BigRational> I, J, K, H;
-        a = fac.random(kl, ll-2, el, q);
-        b = fac.random(kl, ll, el, q/2);
-        c = fac.random(kl, ll, el-1, q);
+        a = fac.random(kl, ll - 2, el, q);
+        b = fac.random(kl, ll, el, q / 2);
+        c = fac.random(kl, ll, el - 1, q);
         d = c; //fac.random(kl, ll, el, q);
         e = d; //fac.random(kl, ll, el, q );
 
@@ -442,9 +435,9 @@ public class SolvableIdealTest extends TestCase {
      */
     public void testSolvableIdealInfiniteQuotient() {
         SolvableIdeal<BigRational> I, J, K;
-        a = fac.random(kl, ll-2, el, q);
-        b = fac.random(kl, ll-1, el-1, q);
-        c = fac.random(kl, ll/2, el-1, q/2);
+        a = fac.random(kl, ll - 2, el, q);
+        b = fac.random(kl, ll - 1, el - 1, q);
+        c = fac.random(kl, ll / 2, el - 1, q / 2);
         d = c; //fac.random(kl, ll, el, q);
         e = d; //fac.random(kl, ll, el, q );
 
@@ -624,7 +617,7 @@ public class SolvableIdealTest extends TestCase {
         //System.out.println("b = " + b);
         //System.out.println("I = " + I);
 
-        if (!I.isONE() && ! a.equals(b)) {
+        if (!I.isONE() && !a.equals(b)) {
             assertFalse("a in radical(b)", I.isRadicalMember(a));
             assertTrue("b in radical(b)", I.isRadicalMember(b));
         }
@@ -639,7 +632,7 @@ public class SolvableIdealTest extends TestCase {
 
         //System.out.println("I = " + I);
 
-        if (!I.isONE() && ! a.equals(b)) {
+        if (!I.isONE() && !a.equals(b)) {
             assertFalse("a in radical(b*b)", I.isRadicalMember(a));
             assertTrue("b in radical(b*b)", I.isRadicalMember(b));
         }
@@ -654,7 +647,7 @@ public class SolvableIdealTest extends TestCase {
 
         //System.out.println("I = " + I);
 
-        if (!I.isONE() && ! a.equals(b)) {
+        if (!I.isONE() && !a.equals(b)) {
             assertFalse("a in radical(b*b,c)", I.isRadicalMember(a));
             assertTrue("b in radical(b*b,c)", I.isRadicalMember(b));
         }
@@ -801,7 +794,7 @@ public class SolvableIdealTest extends TestCase {
         }
         //System.out.println("sv    = " + sv);
 
-        for (int i = 2; i <= vars.length; i=i+2) {
+        for (int i = 2; i <= vars.length; i = i + 2) {
             KsubSet<String> ps = new KsubSet<String>(sv, i);
             //System.out.println("========================== ps : " + i);
             for (List<String> ev : ps) {
@@ -889,10 +882,10 @@ public class SolvableIdealTest extends TestCase {
     public void testAnnihilator() {
         SolvableIdeal<BigRational> I, J, K;
         do {
-           a = fac.random(kl, ll, el, q);
-        } while (a.isZERO()||a.isConstant());
+            a = fac.random(kl, ll, el, q);
+        } while (a.isZERO() || a.isConstant());
         b = fac.univariate(1);
-        c = fac.univariate(rl-1);
+        c = fac.univariate(rl - 1);
         //b = fac.random(kl - 1, ll, el, q);
         //c = fac.random(kl - 1, ll - 1, el, q / 2);
 
@@ -911,9 +904,9 @@ public class SolvableIdealTest extends TestCase {
         J.doGB();
         //System.out.println("c = " + c);
         //System.out.println("J = " + J + "\n");
-        assertTrue("isAnnihilator(c,J)", I.isAnnihilator(c,J));
+        assertTrue("isAnnihilator(c,J)", I.isAnnihilator(c, J));
 
-        d = fac.univariate(rl-2);
+        d = fac.univariate(rl - 2);
         //d = fac.random(kl - 1, ll, el, q);
         M = new ArrayList<GenSolvablePolynomial<BigRational>>();
         M.add(c);
@@ -927,7 +920,7 @@ public class SolvableIdealTest extends TestCase {
         J.doGB();
         //System.out.println("K = " + K);
         //System.out.println("J = " + J + "\n");
-        assertTrue("isAnnihilator(M,J)", I.isAnnihilator(K,J));
+        assertTrue("isAnnihilator(M,J)", I.isAnnihilator(K, J));
     }
 
 }
