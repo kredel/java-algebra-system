@@ -108,6 +108,7 @@ public class SolvableLocal<C extends GcdRingElem<C>> implements RingElem<Solvabl
             den = d;
             return;
         }
+        System.out.println("n = " + n + ", d = " + d);
         GenSolvablePolynomial<C> p = ring.ideal.normalform(d);
         if (p == null || p.isZERO()) {
             throw new IllegalArgumentException("denominator may not be in ideal");
@@ -127,6 +128,11 @@ public class SolvableLocal<C extends GcdRingElem<C>> implements RingElem<Solvabl
         if ( n.isZERO() ) {
             num = n;
             den = ring.ring.getONE();
+            return;
+	}
+        if ( n.isONE() ) {
+            num = n;
+            den = d;
             return;
 	}
         // must reduce to lowest terms
@@ -388,6 +394,8 @@ public class SolvableLocal<C extends GcdRingElem<C>> implements RingElem<Solvabl
         if (debug) {
             System.out.println("oc[0] den =sum= oc[1] S.den: (" + oc[0] + ") (" + den + ") = (" + oc[1] + ") (" + S.den + ")");
 	}
+        System.out.println("oc[0] = " + oc[0]);
+        System.out.println("oc[1] = " + oc[1]);
         d = oc[0].multiply(den);
         n1 = oc[0].multiply(num);   
         n2 = oc[1].multiply(S.num); 
@@ -496,6 +504,8 @@ public class SolvableLocal<C extends GcdRingElem<C>> implements RingElem<Solvabl
         if ( den.compareTo(S.den) == 0 ) { }
         */
         GenSolvablePolynomial<C>[] oc = ring.engine.leftOreCond(num,S.den);
+        System.out.println("oc[0] = " + oc[0]);
+        System.out.println("oc[1] = " + oc[1]);
         n = oc[1].multiply(S.num);
         d = oc[0].multiply(den);
         return new SolvableLocal<C>(ring, n, d, false);

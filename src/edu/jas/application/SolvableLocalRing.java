@@ -233,8 +233,11 @@ public class SolvableLocalRing<C extends GcdRingElem<C> >
                 Xj = (SolvableLocal<C>) gens.get(j);
                 for (int k = j + 1; k < ngen; k++) {
                     Xk = (SolvableLocal<C>) gens.get(k);
+                            logger.info("Xk = " + Xk + ", Xj = " + Xj + ", Xi = " + Xi);
                     p = Xk.multiply(Xj).multiply(Xi);
                     q = Xk.multiply(Xj.multiply(Xi));
+                            logger.info("p = ( Xk * Xj ) * Xi = " + p);
+                            logger.info("q = Xk * ( Xj * Xi ) = " + q);
                     if (!p.equals(q)) {
                         if (true || debug) {
                             logger.info("Xk = " + Xk + ", Xj = " + Xj + ", Xi = " + Xi);
