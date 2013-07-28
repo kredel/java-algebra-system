@@ -77,7 +77,7 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>> extends
     private static final Logger logger = Logger.getLogger(QuotSolvablePolynomialRing.class);
 
 
-    private final boolean debug = logger.isDebugEnabled();
+    //private final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -217,7 +217,7 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>> extends
      * @param o other solvable polynomial ring.
      */
     public QuotSolvablePolynomialRing(RingFactory<SolvableQuotient<C>> cf, QuotSolvablePolynomialRing o) {
-        this(cf, (GenSolvablePolynomialRing)o);
+        this(cf, (GenSolvablePolynomialRing) o);
     }
 
 
@@ -372,7 +372,7 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>> extends
      */
     @Override
     public boolean isAssociative() {
-        if (! coFac.isAssociative() ) {
+        if (!coFac.isAssociative()) {
             return false;
         }
         QuotSolvablePolynomial<C> Xi, Xj, Xk, p, q;
@@ -387,7 +387,7 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>> extends
                     p = Xk.multiply(Xj).multiply(Xi);
                     q = Xk.multiply(Xj.multiply(Xi));
                     if (!p.equals(q)) {
-                        if (true || debug) { 
+                        if (logger.isInfoEnabled()) {
                             logger.info("Xk = " + Xk + ", Xj = " + Xj + ", Xi = " + Xi);
                             logger.info("p = ( Xk * Xj ) * Xi = " + p);
                             logger.info("q = Xk * ( Xj * Xi ) = " + q);

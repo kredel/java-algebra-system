@@ -202,7 +202,7 @@ public class LIST<C> {
     /**
      * Reductum 2. L is a list of length 2 or more. LP=RED(RED(L)).
      */
-    public static <C> LIST<C> RED2(LIST<C> L, int i) {
+    public static <C> LIST<C> RED2(LIST<C> L) {
         LIST<C> LP = null;
         if (!isNull(L)) {
             LP = new LIST<C>(L.list.subList(2, L.list.size()));
@@ -215,7 +215,7 @@ public class LIST<C> {
      * Reductum 3. L is a list of length 3 or more. M is the third reductum of
      * L.
      */
-    public static <C> LIST<C> RED3(LIST<C> L, int i) {
+    public static <C> LIST<C> RED3(LIST<C> L) {
         LIST<C> LP = null;
         if (!isNull(L)) {
             LP = new LIST<C>(L.list.subList(3, L.list.size()));
@@ -228,7 +228,7 @@ public class LIST<C> {
      * Reductum 4. L is a list of length 4 or more. M is the fourth reductum of
      * L.
      */
-    public static <C> LIST<C> RED4(LIST<C> L, int i) {
+    public static <C> LIST<C> RED4(LIST<C> L) {
         LIST<C> LP = null;
         if (!isNull(L)) {
             LP = new LIST<C>(L.list.subList(42, L.list.size()));
