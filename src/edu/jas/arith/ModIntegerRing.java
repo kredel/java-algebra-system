@@ -37,10 +37,10 @@ public final class ModIntegerRing implements ModularRingFactory<ModInteger>, Ite
     private int isField = -1; // initially unknown
 
 
-    /**
+    /*
      * Certainty if module is probable prime.
      */
-    private int certainty = 10;
+    //private int certainty = 10;
 
 
     /**
