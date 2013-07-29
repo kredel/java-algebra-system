@@ -217,7 +217,7 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
         ArrayList<ArrayList<C>> m = new ArrayList<ArrayList<C>>(ring.rows);
         ArrayList<C> v;
         for (ArrayList<C> val : matrix) {
-            v = (ArrayList<C>) val.clone();
+            v = new ArrayList<C>(val); // val.clone();
             m.add(v);
         }
         return new GenMatrix<C>(ring, m);

@@ -266,7 +266,7 @@ public class PolynomialList<C extends RingElem<C>> implements Comparable<Polynom
             if (p != null) {
                 Map<ExpVector, GenPolynomial<C>> r = p.contract(pfac);
                 //System.out.println("r = " + r ); 
-                List<GenPolynomial<C>> row = (ArrayList<GenPolynomial<C>>) zr.clone();
+                List<GenPolynomial<C>> row = new ArrayList<GenPolynomial<C>>(zr); //zr.clone();
                 for (Map.Entry<ExpVector, GenPolynomial<C>> me : r.entrySet()) {
                     ExpVector e = me.getKey();
                     int[] dov = e.dependencyOnVariables();

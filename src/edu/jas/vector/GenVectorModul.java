@@ -70,7 +70,7 @@ public class GenVectorModul<C extends RingElem<C>> implements ModulFactory<GenVe
         ArrayList<C> v;
         for (int i = 0; i < cols; i++) {
             for (C g : cgens) {
-                v = (ArrayList<C>) z.clone();
+                v = new ArrayList<C>(z);// z.clone();
                 v.set(i, g);
                 BASIS.add(new GenVector<C>(this, v));
             }
