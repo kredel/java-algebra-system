@@ -87,9 +87,6 @@ public class ResidueSolvablePolynomialTest extends TestCase {
     String[] vars = new String[] { "w", "x", "y", "z" };
 
 
-    RelationTable<SolvableResidue<BigRational>> table;
-
-
     SolvableResidueRing<BigRational> rring;
 
 
@@ -102,7 +99,6 @@ public class ResidueSolvablePolynomialTest extends TestCase {
     BigRational cfac;
 
 
-    //GenSolvablePolynomialRing<SolvableResidue<BigRational>> sring;
     GenSolvablePolynomialRing<BigRational> sring;
 
 
@@ -115,10 +111,9 @@ public class ResidueSolvablePolynomialTest extends TestCase {
     @Override
     protected void setUp() {
         cfac = new BigRational(1);
-        //cring = new GenPolynomialRing<BigRational>(cfac, tord, cvars);
         sring = new GenSolvablePolynomialRing<BigRational>(cfac, tord, cvars);
         RelationGenerator<BigRational> wc = new WeylRelations<BigRational>();
-        wc.generate(sring);
+        sring.addRelations(wc); //wc.generate(sring);
         List<GenSolvablePolynomial<BigRational>> il = new ArrayList<GenSolvablePolynomial<BigRational>>();
         GenSolvablePolynomial<BigRational> p1 = sring.parse("b - a^2");
         il.add(p1);
@@ -129,14 +124,12 @@ public class ResidueSolvablePolynomialTest extends TestCase {
         ring = new ResidueSolvablePolynomialRing<BigRational>(rring, tord, vars);
         RelationGenerator<SolvableResidue<BigRational>> wl = new WeylRelations<SolvableResidue<BigRational>>();
         wl.generate(ring);
-        table = ring.table;
         a = b = c = d = e = null;
     }
 
 
     @Override
     protected void tearDown() {
-        table = null;
         ring = null;
         a = b = c = d = e = null;
     }
@@ -293,8 +286,6 @@ public class ResidueSolvablePolynomialTest extends TestCase {
         assertTrue("# relations == 2", ring.table.size() == 2);
 
         ring = new ResidueSolvablePolynomialRing<BigRational>(rring, ring);
-        table = ring.table;
-        //System.out.println("table = " + table.toString(vars));
         //System.out.println("ring = " + ring);
 
         assertTrue("isCommutative()", ring.isCommutative() || !rring.isCommutative());

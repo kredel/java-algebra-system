@@ -83,9 +83,6 @@ public class QuotSolvablePolynomialTest extends TestCase {
     String[] vars = new String[] { "w", "x", "y", "z" };
 
 
-    RelationTable<SolvableQuotient<BigRational>> table;
-
-
     QuotSolvablePolynomialRing<BigRational> ring;
 
 
@@ -111,15 +108,13 @@ public class QuotSolvablePolynomialTest extends TestCase {
         qcring = new SolvableQuotientRing<BigRational>(cring);
         ring = new QuotSolvablePolynomialRing<BigRational>(qcring, tord, vars);
         RelationGenerator<SolvableQuotient<BigRational>> wl = new WeylRelations<SolvableQuotient<BigRational>>();
-        wl.generate(ring);
-        table = ring.table;
+        ring.addRelations(wl); //wl.generate(ring);
         a = b = c = d = e = null;
     }
 
 
     @Override
     protected void tearDown() {
-        table = null;
         ring = null;
         a = b = c = d = e = null;
     }
@@ -279,8 +274,6 @@ public class QuotSolvablePolynomialTest extends TestCase {
         assertTrue("# relations == 2", ring.table.size() == 2);
 
         ring = new QuotSolvablePolynomialRing<BigRational>(qcring, ring);
-        table = ring.table;
-        //System.out.println("table = " + table.toString(vars));
         //System.out.println("ring = " + ring);
 
         assertTrue("isCommutative()", ring.isCommutative());
@@ -348,9 +341,6 @@ public class QuotSolvablePolynomialTest extends TestCase {
         //System.out.println("r2 = " + r2);
         //System.out.println("rp = " + rp);
         ring.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(), rp);
-
-        table = ring.table;
-        //System.out.println("ring = " + ring);
         //System.out.println("ring.polCoeff = " + ring.polCoeff);
 
         assertFalse("isCommutative()", ring.isCommutative());
