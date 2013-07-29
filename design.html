@@ -301,6 +301,24 @@ of the implemented algebraic algorithms.
 </tr>
 
 <tr>
+<td><code>RecSolvable- Polynomial</code>, <code>QuotSolvable- Polynomial</code>,
+    <code>ResidueSolvable- Polynomial</code>, <code>LocalSolvable- Polynomial</code>
+</td>
+<td><code>RecSolvable- PolynomialRing</code>, <code>QuotSolvable- PolynomialRing</code>,
+    <code>ResidueSolvable- PolynomialRing</code><code>LocalSolvable- PolynomialRing</code>
+</td>
+<td>ring of recursive, solvable polynomials in <code>r</code> variables 
+    over a solvable polynomial coefficient ring over any implemented coefficient ring
+    with respect to any implemented term ordering
+    (compatible with the multiplication).
+    The other variants have coefficient rings <code>SolvableQuotient</code>, 
+    <code>SolvableResidue</code> and <code>SolvableLocal</code> which are all based 
+    on solvable polynomials. 
+</td>
+<td>arithmetic</td>
+</tr>
+
+<tr>
 <td><code>Quotient</code></td>
 <td><code>QuotientRing</code></td>
 <td>ring of rational functions, 
@@ -454,7 +472,7 @@ of the implemented algebraic algorithms.
 <p>
 "Arithmetic" means implementation of the methods 
 defined in the interface <code>RingElem</code>.
-As of 2013-08 there are 28 rings implemented. To be continued.
+As of 2013-08 there are 32 rings implemented. To be continued.
 </p>
 
 
@@ -1348,7 +1366,7 @@ of the Java algebra system.
 <p>
 <!-- Created: Sat Mar 11 10:51:36 CET 2006 -->
 <!-- hhmts start -->
-Last modified: Sun Jul 28 16:21:41 CEST 2013
+Last modified: Mon Jul 29 20:36:02 CEST 2013
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
