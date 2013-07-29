@@ -384,8 +384,13 @@ public class LocalSolvablePolynomialRing<C extends GcdRingElem<C>> extends
                 Xj = (LocalSolvablePolynomial<C>) gens.get(j);
                 for (int k = j + 1; k < ngen; k++) {
                     Xk = (LocalSolvablePolynomial<C>) gens.get(k);
-                    p = Xk.multiply(Xj).multiply(Xi);
-                    q = Xk.multiply(Xj.multiply(Xi));
+                    try {
+                         p = Xk.multiply(Xj).multiply(Xi);
+                         q = Xk.multiply(Xj.multiply(Xi));
+                    } catch (IllegalArgumentException e) {
+                        //e.printStackTrace();
+                        continue;
+                    }
                     if (!p.equals(q)) {
                         if (logger.isInfoEnabled()) {
                             logger.info("Xk = " + Xk + ", Xj = " + Xj + ", Xi = " + Xi);

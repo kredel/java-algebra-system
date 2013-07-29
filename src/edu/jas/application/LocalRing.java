@@ -76,8 +76,8 @@ public class LocalRing<C extends GcdRingElem<C>> implements RingFactory<Local<C>
             isField = 1;
         } else {
             isField = 0;
-            //throw new IllegalArgumentException("ideal must be maximal");
             logger.warn("ideal not maximal");
+            //throw new IllegalArgumentException("ideal must be maximal");
         }
         ring = ideal.list.ring;
         //engine = GCDFactory.<C>getImplementation( ring.coFac );

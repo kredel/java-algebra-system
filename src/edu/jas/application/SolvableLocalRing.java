@@ -87,8 +87,8 @@ public class SolvableLocalRing<C extends GcdRingElem<C>> implements RingFactory<
             isField = 1;
         } else {
             isField = 0;
-            //throw new IllegalArgumentException("ideal must be maximal");
             logger.warn("ideal not maximal");
+            //throw new IllegalArgumentException("ideal must be maximal");
         }
         engine = new SolvableSyzygyAbstract<C>();
         bb = new SolvableGroebnerBaseSeq<C>();
