@@ -1474,6 +1474,8 @@ java_import "edu.jas.gbmod.QuotSolvablePolynomial";
 java_import "edu.jas.gbmod.QuotSolvablePolynomialRing";
 java_import "edu.jas.application.ResidueSolvablePolynomial";
 java_import "edu.jas.application.ResidueSolvablePolynomialRing";
+java_import "edu.jas.application.LocalSolvablePolynomial";
+java_import "edu.jas.application.LocalSolvablePolynomialRing";
 
 
 =begin rdoc
@@ -1567,6 +1569,8 @@ java_import "edu.jas.application.SolvableResidueRing";
 java_import "edu.jas.application.SolvableIdeal";
 java_import "edu.jas.application.Local";
 java_import "edu.jas.application.LocalRing";
+java_import "edu.jas.application.SolvableLocal";
+java_import "edu.jas.application.SolvableLocalRing";
 java_import "edu.jas.application.IdealWithRealAlgebraicRoots";
 java_import "edu.jas.application.ComprehensiveGroebnerBaseSeq";
 
@@ -1673,6 +1677,51 @@ def SRC(ideal,r=0)
         r = SolvableResidue.new(rc);
     else
         r = SolvableResidue.new(rc,r);
+    end
+    return RingElem.new(r);
+end
+
+
+=begin rdoc
+Create JAS polynomial SolvableLocal as ring element.
+=end
+def SLC(ideal,d=0,n=1)
+    if ideal == nil
+        raise ValueError, "No ideal given."
+    end
+    if ideal.is_a? SolvIdeal
+        ideal = SolvableIdeal.new(ideal.pset);
+        #ideal.doGB();
+    end
+    #puts "ideal.getList().get(0).ring.ideal = #{ideal.getList().get(0).ring.ideal}\n";
+    if ideal.getList().get(0).ring.getClass().getSimpleName() == "SolvableLocalRing"
+        lc = SolvableLocalRing.new( ideal.getList().get(0).ring.ideal );
+    else
+        lc = SolvableLocalRing.new(ideal);
+    end
+    if d.is_a? Array
+        if n != 1
+            puts "#{n} ignored\n";
+        end
+        if d.size > 1
+            n = d[1];
+        end
+        d = d[0];
+    end
+    if d.is_a? RingElem
+        d = d.elem;
+    end
+    if n.is_a? RingElem
+        n = n.elem;
+    end
+    if d == 0
+        r = SolvableLocal.new(lc);
+    else
+        if n == 1
+            r = SolvableLocal.new(lc,d);
+        else
+            r = SolvableLocal.new(lc,d,n);
+        end
     end
     return RingElem.new(r);
 end
@@ -2854,6 +2903,7 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
         recSolv = cf.getClass().getSimpleName() == "GenPolynomialRing"
         quotSolv = cf.getClass().getSimpleName() == "SolvableQuotientRing"
         resSolv = cf.getClass().getSimpleName() == "SolvableResidueRing"
+        locSolv = cf.getClass().getSimpleName() == "SolvableLocalRing"
         #puts "cf = " + cf.getClass().to_s + ", quotSolv = " + quotSolv.to_s + ", recSolv = " + recSolv.to_s;
         if recSolv
            puts "RecSolvablePolynomialRing: " + cf.toScript();
@@ -2868,6 +2918,11 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
         elsif resSolv
            puts "ResidueSolvablePolynomialRing: " + cf.toScript();
            ring = ResidueSolvablePolynomialRing.new(cf,nv,to,names);
+           table = ring.table;
+           coeffTable = ring.coeffTable;
+        elsif locSolv
+           puts "LocalSolvablePolynomialRing: " + cf.toScript();
+           ring = LocalSolvablePolynomialRing.new(cf,nv,to,names);
            table = ring.table;
            coeffTable = ring.coeffTable;
         else
@@ -2888,6 +2943,11 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
                                       ring.toPolyCoefficients(ll[i+1]), 
                                       ring.toPolyCoefficients(ll[i+2]) );
                 elsif resSolv and ll[i+1].isConstant() 
+                   #puts "q coeff type " + str(ll[i].class);
+                   coeffTable.update( ring.toPolyCoefficients(ll[i]),
+                                      ring.toPolyCoefficients(ll[i+1]), 
+                                      ring.toPolyCoefficients(ll[i+2]) );
+                elsif locSolv and ll[i+1].isConstant() 
                    #puts "q coeff type " + str(ll[i].class);
                    coeffTable.update( ring.toPolyCoefficients(ll[i]),
                                       ring.toPolyCoefficients(ll[i+1]), 
