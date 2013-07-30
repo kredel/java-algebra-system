@@ -141,7 +141,7 @@ def inject_generators(gens):
     for v in gens:
         #print "vars = " + str(v);
         s = str(v);
-        if s.find("/") < 0 and s.find("(") < 0 and s.find(",") < 0 and s.find("{") < 0 and s.find("|") < 0:
+        if s.find("/") < 0 and s.find("(") < 0 and s.find(",") < 0 and s.find("{") < 0 and s.find("[") < 0 and s.find("|") < 0:
            if s[0:1] == "1":
               s = "one" + s[1:]
               #print "var = " + s;
@@ -183,21 +183,32 @@ class Ring:
 #            print "error " + str(e)
         #print "dict: " + str(self.__dict__)
         vns = ""
+        import re;
+        ri = re.compile(r'\A[0-9].*');
         for v in self.ring.generators():
             #print "vars = " + str(v);
             vs = str(v);
             vr = RingElem(v);
             vs = vs.replace(" ","");
+            vs = vs.replace("\n","");
             if vs.find("(") >= 0:
                 vs = vs.replace("(","");
                 vs = vs.replace(")","");
             if vs.find("{") >= 0:
                 vs = vs.replace("{","");
                 vs = vs.replace("}","");
+            if vs.find("[") >= 0:
+                vs = vs.replace("[","");
+                vs = vs.replace("]","");
+            if vs.find(",") >= 0:
+                vs = vs.replace(",","");
             if vs.find("|") >= 0:
                 vs = vs.replace("|","div");
             if vs.find("/") >= 0:
                 vs = vs.replace("/","div");
+            if ri.match(vs):
+                #print "vs = " + str(vs);
+                continue;
             if vs[0:1] == "1":
                 vs = 'one' + vs[1:];
             try:
