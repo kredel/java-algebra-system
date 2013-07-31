@@ -551,6 +551,10 @@ class ReducerServerEC<C extends RingElem<C>> implements Runnable {
                     break;
                 }
             }
+            if (Thread.currentThread().isInterrupted()) {
+                goon = false;
+                break;
+            }
             if (!pairlist.hasNext() && !pool.hasJobs()) {
                 goon = false;
                 break; //continue; //break?
@@ -727,7 +731,7 @@ class ReducerClientEC<C extends RingElem<C>> implements Runnable {
                 pi = pj = ps = null;
                 if (pp instanceof GBTransportMessPair) { // obsolete, for tests
                     GBTransportMessPair<C> tmp = (GBTransportMessPair<C>) pp;
-                    pair = (Pair<C>) tmp.pair;
+                    pair = tmp.pair;
                     if (pair != null) {
                         pi = pair.pi;
                         pj = pair.pj;

@@ -679,6 +679,10 @@ class HybridReducerServerEC<C extends RingElem<C>> implements Runnable {
                     break;
                 }
             }
+            if (Thread.currentThread().isInterrupted()) {
+                goon = false;
+                break;
+            }
             if (!pairlist.hasNext() && !finner.hasJobs()) {
                 logger.info("termination detection: no pairs and no jobs left");
                 goon = false;
@@ -1067,7 +1071,7 @@ class HybridReducerClientEC<C extends RingElem<C>> implements Runnable {
                 pi = pj = ps = null;
                 if (pp instanceof GBTransportMessPair) { // obsolet, for tests
                     GBTransportMessPair<C> tmp = (GBTransportMessPair<C>) pp;
-                    pair = (Pair<C>) tmp.pair;
+                    pair = tmp.pair;
                     if (pair != null) {
                         pi = pair.pi;
                         pj = pair.pj;
