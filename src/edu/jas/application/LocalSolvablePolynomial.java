@@ -29,7 +29,7 @@ import edu.jas.structure.GcdRingElem;
  */
 
 public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
-                 GenSolvablePolynomial<SolvableLocal<C>> {
+                GenSolvablePolynomial<SolvableLocal<C>> {
 
 
     /**
@@ -83,8 +83,7 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
      * @param r solvable polynomial ring factory.
      * @param S solvable polynomial.
      */
-    public LocalSolvablePolynomial(LocalSolvablePolynomialRing<C> r,
-                                  GenSolvablePolynomial<SolvableLocal<C>> S) {
+    public LocalSolvablePolynomial(LocalSolvablePolynomialRing<C> r, GenSolvablePolynomial<SolvableLocal<C>> S) {
         this(r, S.getMap());
     }
 
@@ -95,7 +94,7 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
      * @param v the SortedMap of some other (solvable) polynomial.
      */
     protected LocalSolvablePolynomial(LocalSolvablePolynomialRing<C> r,
-                                     SortedMap<ExpVector, SolvableLocal<C>> v) {
+                    SortedMap<ExpVector, SolvableLocal<C>> v) {
         this(r);
         val.putAll(v); // assume no zero coefficients
     }
@@ -532,7 +531,7 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
      */
     @Override
     public LocalSolvablePolynomial<C> multiply(SolvableLocal<C> b, ExpVector e, SolvableLocal<C> c,
-                                                  ExpVector f) {
+                    ExpVector f) {
         if (b == null || b.isZERO()) {
             return ring.getZERO();
         }
@@ -549,8 +548,8 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
 
 
     /**
-     * LocalSolvablePolynomial multiplication. Left product with ring element and
-     * exponent vector.
+     * LocalSolvablePolynomial multiplication. Left product with ring element
+     * and exponent vector.
      * @param b coefficient polynomial.
      * @param e exponent.
      * @return b x<sup>e</sup> * this, where * denotes solvable multiplication.
@@ -566,7 +565,8 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
 
 
     /**
-     * LocalSolvablePolynomial multiplication. Left product with exponent vector.
+     * LocalSolvablePolynomial multiplication. Left product with exponent
+     * vector.
      * @param e exponent.
      * @return x<sup>e</sup> * this, where * denotes solvable multiplication.
      */
@@ -582,8 +582,8 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
 
 
     /**
-     * LocalSolvablePolynomial multiplication. Left product with coefficient ring
-     * element.
+     * LocalSolvablePolynomial multiplication. Left product with coefficient
+     * ring element.
      * @param b coefficient polynomial.
      * @return b*this, where * is coefficient multiplication.
      */
