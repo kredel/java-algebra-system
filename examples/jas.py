@@ -202,15 +202,17 @@ class Ring:
                 vs = vs.replace("]","");
             if vs.find(",") >= 0:
                 vs = vs.replace(",","");
-            if vs.find("|") >= 0:
-                vs = vs.replace("|","div");
+            #if vs.find("|") >= 0:
+            #    vs = vs.replace("|","div"); # case "1"?
             if vs.find("/") >= 0:
                 vs = vs.replace("/","div");
+                if vs[0:1] == "1":
+                   vs = 'one' + vs[1:];
+            if vs == "1":
+                vs = "one";
             if ri.match(vs):
                 #print "vs = " + str(vs);
                 continue;
-            if vs[0:1] == "1":
-                vs = 'one' + vs[1:];
             try:
                 if self.__dict__[vs] is None:
                     self.__dict__[vs] = vr;
