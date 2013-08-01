@@ -916,6 +916,233 @@ Get the coefficients of a polynomial.
         return ll
     end
 
+#----------------
+# Compatibility methods for Sage/Singular:
+# Note: the meaning of lt and lm is swapped compared to JAS.
+#----------------
+
+=begin rdoc
+Parent in Sage is factory in JAS.
+
+Compatibility method for Sage/Singular.
+=end
+    def parent()
+        return factory();
+    end
+
+=begin rdoc
+Apply this to num.
+=end
+    def __call__(num)
+        if num == 0 
+            return zero();
+        end
+        if num == 1
+            return one();
+        end
+        return RingElem.new( @ring.fromInteger(num) );
+    end
+
+=begin rdoc
+Leading monomial of a polynomial.
+
+Compatibility method for Sage/Singular.
+Note: the meaning of lt and lm is swapped compared to JAS.
+=end
+    def lm()
+        ev = @elem.leadingExpVector();
+        return ev;
+    end
+
+=begin rdoc
+Leading coefficient of a polynomial.
+
+Compatibility method for Sage/Singular.
+=end
+    def lc()
+        c = @elem.leadingBaseCoefficient();
+        return RingElem.new(c);
+    end
+
+=begin rdoc
+Leading term of a polynomial.
+
+Compatibility method for Sage/Singular.
+Note: the meaning of lt and lm is swapped compared to JAS.
+=end
+    def lt()
+        ev = @elem.leadingMonomial();
+        return Monomial.new(ev);
+    end
+
+=begin rdoc
+Degree of a polynomial.
+=end
+    def degree()
+        begin
+            ev = @elem.degree();
+        rescue
+            return nil;
+        end
+        return ev;
+    end
+
+=begin rdoc
+Coefficient ring of a polynomial.
+=end
+    def base_ring()
+        begin
+            ev = @elem.ring.coFac;
+        rescue
+            return nil;
+        end
+        return RingElem.new(ev);
+    end
+
+=begin rdoc
+Test if this RingElem is field.
+=end
+    def is_field()
+        return @elem.isField();
+    end
+
+=begin rdoc
+All monomials of a polynomial.
+
+Compatibility method for Sage/Singular.
+=end
+    def monomials()
+        ev = @elem.getMap().keySet();
+        return ev;
+    end
+
+=begin rdoc
+Test if self divides other.
+
+Compatibility method for Sage/Singular.
+=end
+    def divides(other)
+        s,o = coercePair(self,other);
+        return o.elem.remainder( s.elem ).isZERO(); 
+    end
+
+=begin rdoc
+Create an ideal.
+
+Compatibility method for Sage/Singular.
+=end
+    def ideal(list)
+        p = Ring.new("",ring=self.ring,fast=true);
+        return p.ideal("",list=list);
+    end
+
+=begin rdoc
+Quotient of ExpVectors.
+
+Compatibility method for Sage/Singular.
+=end
+    def monomial_quotient(a,b,coeff=false)
+        if a.is_a? RingElem
+            a = a.elem;
+        end
+        if b.is_a? RingElem
+            b = b.elem;
+        end
+        if coeff == false
+            if a.getClass().getSimpleName() == "GenPolynomial"
+                return RingElem.new( a.divide(b) );
+            else
+                return RingElem.new( GenPolynomial.new(@ring, a.subtract(b)) );
+            end
+        else
+            # assume JAS Monomial
+            c = a.coefficient().divide(b.coefficient());
+            e = a.exponent().subtract(b.exponent())
+            return RingElem.new( GenPolynomial.new(@ring, c, e) );
+        end
+    end
+
+=begin rdoc
+Test divide of ExpVectors.
+
+Compatibility method for Sage/Singular.
+=end
+    def monomial_divides(a,b)
+        #print "JAS a = " + str(a) + ", b = " + str(b);
+        if a.is_a? RingElem
+            a = a.elem;
+        end
+        if a.getClass().getSimpleName() == "GenPolynomial"
+            a = a.leadingExpVector();
+        end
+        if a.getClass().getSimpleName() != "ExpVectorLong"
+            raise ValueError, "No ExpVector given " + str(a) + ", " + str(b)
+        end
+        if b == nil
+            return False;
+        end
+        if b.is_a? RingElem
+            b = b.elem;
+        end
+        if b.getClass().getSimpleName() == "GenPolynomial"
+            b = b.leadingExpVector();
+        end
+        if b.getClass().getSimpleName() != "ExpVectorLong"
+            raise ValueError, "No ExpVector given " + str(a) + ", " + str(b)
+        end
+        return a.divides(b);
+    end
+
+=begin rdoc
+Test if ExpVectors are pairwise prime.
+
+Compatibility method for Sage/Singular.
+=end
+    def monomial_pairwise_prime(e,f)
+        if e.is_a? RingElem
+            e = e.elem;
+        end
+        if f.is_a? RingElem
+            f = f.elem;
+        end
+        # assume JAS ExpVector
+        c = e.gcd(f);
+        return c.isZERO();
+    end
+
+=begin rdoc
+Lcm of ExpVectors.
+
+Compatibility method for Sage/Singular.
+=end
+    def monomial_lcm(e,f)
+        if e.is_a? RingElem
+            e = e.elem;
+        end
+        if f.is_a? RingElem
+            f = f.elem;
+        end
+        # assume JAS ExpVector
+        c = e.lcm(f);
+        return c;
+    end
+
+=begin rdoc
+Compute a normal form of self with respect to ff.
+
+Compatibility method for Sage/Singular.
+=end
+    def reduce(ff)
+        s = @elem;
+        fe = ff.map {|e| e.elem };
+        n = ReductionSeq.new().normalform(fe,s);
+        return RingElem.new(n);
+    end
+
+#----------------
+# End of compatibility methods
+#----------------
+
 end
 
 
@@ -965,6 +1192,10 @@ ring JAS ring object.
         else
            @ring = ring;
         end
+        # parameter ",fast=false" not possible w/o keyword params
+        #if fast == true
+        #   return
+        #end
         @engine = GCDFactory.getProxy(@ring.coFac);
         @sqf = nil;
         @factor = nil;

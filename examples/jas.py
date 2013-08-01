@@ -2449,7 +2449,7 @@ def SLC(ideal,d=0,n=1):
     '''Create JAS polynomial SolvableLocal as ring element.
     '''
     if ideal == None:
-        print "ideal = " + str(ideal);
+        #print "ideal = " + str(ideal);
         if False:
             raise ValueError, "No ideal given."
     if isinstance(ideal,SolvableIdeal):
