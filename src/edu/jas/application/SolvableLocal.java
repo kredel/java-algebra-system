@@ -128,6 +128,11 @@ public class SolvableLocal<C extends GcdRingElem<C>> implements RingElem<Solvabl
             den = ring.ring.getONE();
             return;
         }
+        if (n.negate().compareTo(d) == 0) {
+            num = (GenSolvablePolynomial<C>) ring.ring.getONE().negate();
+            den = ring.ring.getONE();
+            return;
+        }
         if (n.isZERO()) {
             num = n;
             den = ring.ring.getONE();

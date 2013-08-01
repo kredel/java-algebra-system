@@ -124,6 +124,11 @@ public class Local<C extends GcdRingElem<C>> implements RingElem<Local<C>> {
             den = ring.ring.getONE();
             return;
         }
+        if (n.negate().compareTo(d) == 0) {
+            num = ring.ring.getONE().negate();
+            den = ring.ring.getONE();
+            return;
+        }
         if (n.isZERO()) {
             num = n;
             den = ring.ring.getONE();
