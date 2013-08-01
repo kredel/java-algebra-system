@@ -262,8 +262,11 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                 v = table.get(k);
                 for (Iterator jt = v.iterator(); jt.hasNext();) {
                     ExpVectorPair ep = (ExpVectorPair) jt.next();
-                    s.append("( " + ep.getFirst().toString(vars) + " ), ");
                     GenSolvablePolynomial<C> p = (GenSolvablePolynomial<C>) jt.next();
+                    if (ep.totalDeg() != 2) { // only base relations
+                        continue;
+		    }
+                    s.append("( " + ep.getFirst().toString(vars) + " ), ");
                     if (cvars == null) {
                         s.append("( " + ep.getSecond().toString(vars) + " ), ");
                     } else {
@@ -331,13 +334,16 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
             v = table.get(k);
             for (Iterator jt = v.iterator(); jt.hasNext();) {
                 ExpVectorPair ep = (ExpVectorPair) jt.next();
+                GenPolynomial<C> p = (GenPolynomial<C>) jt.next();
+                if (ep.totalDeg() != 2) { // only base relations
+                    continue;
+		}
                 s.append("" + ep.getFirst().toScript(vars) + ", ");
                 if (coeffTable) {
                     s.append("" + ep.getSecond().toScript(cvars) + ", ");
                 } else {
                     s.append("" + ep.getSecond().toScript(vars) + ", ");
                 }
-                GenPolynomial<C> p = (GenPolynomial<C>) jt.next();
                 //s.append("( " + p.toScript() + " )");
                 s.append(" " + p.toScript());
                 if (jt.hasNext()) {
