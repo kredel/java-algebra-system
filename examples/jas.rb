@@ -932,8 +932,10 @@ Compatibility method for Sage/Singular.
 
 =begin rdoc
 Apply this to num.
+
+Call syntax is ringElem.(num). Only for interger num.
 =end
-    def __call__(num)
+    def call(num)
         if num == 0 
             return zero();
         end
@@ -1003,7 +1005,7 @@ Coefficient ring of a polynomial.
 Test if this RingElem is field.
 =end
     def is_field()
-        return @elem.isField();
+        return @ring.isField();
     end
 
 =begin rdoc
