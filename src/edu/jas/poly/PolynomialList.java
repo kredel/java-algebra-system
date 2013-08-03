@@ -227,7 +227,8 @@ public class PolynomialList<C extends RingElem<C>> implements Comparable<Polynom
             } else {
                 s.append(", ");
             }
-            s.append("( " + sa + " )");
+            //s.append("( " + sa + " )");
+            s.append(sa);
         }
         s.append("])");
         return s.toString();
