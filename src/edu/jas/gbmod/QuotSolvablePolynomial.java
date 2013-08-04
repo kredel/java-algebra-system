@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
+import edu.jas.poly.RecSolvablePolynomial;
 import edu.jas.poly.TableRelation;
 import edu.jas.structure.GcdRingElem;
 
@@ -275,6 +276,17 @@ public class QuotSolvablePolynomial<C extends GcdRingElem<C>> extends
                             Cs = Cs.multiplyLeft(cc); // cc * Cs
                             Cps = (QuotSolvablePolynomial<C>) Cps.sum(Cs);
                         } // end b.num loop 
+                        // recursive polynomial coefficient multiplication : e * b.num
+                        RecSolvablePolynomial<C> rsp1 = new RecSolvablePolynomial<C>(ring.polCoeff,e);
+                        RecSolvablePolynomial<C> rsp2 = new RecSolvablePolynomial<C>(ring.polCoeff,b.num);
+                        RecSolvablePolynomial<C> rsp3 = rsp1.multiply(rsp2);
+                        QuotSolvablePolynomial<C> rsp = ring.fromPolyCoefficients(rsp3);
+                        if (rsp.compareTo(Cps) != 0) {
+                            logger.info("coeff-poly: Cps = " + Cps);
+                            logger.info("coeff-poly: rsp = " + rsp);
+			    //} else {
+                            //System.out.println("rsp.compareTo(Cps) == 0");
+                        }
                     } else { // b.den != 1
                         if (debug)
                             logger.info("coeff-num: Cps = " + Cps + ", num = " + b.num + ", den = " + b.den);

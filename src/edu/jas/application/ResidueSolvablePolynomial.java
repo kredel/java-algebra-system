@@ -15,7 +15,6 @@ import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.RecSolvablePolynomial;
-import edu.jas.poly.RecSolvablePolynomialRing;
 import edu.jas.poly.TableRelation;
 import edu.jas.structure.GcdRingElem;
 
