@@ -3147,7 +3147,7 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
            puts "QuotSolvablePolynomialRing: " + cf.toScript();
            ring = QuotSolvablePolynomialRing.new(cf,nv,to,names);
            table = ring.table;
-           coeffTable = ring.coeffTable;
+           coeffTable = ring.polCoeff.coeffTable;
         elsif resSolv
            puts "ResidueSolvablePolynomialRing: " + cf.toScript();
            ring = ResidueSolvablePolynomialRing.new(cf,nv,to,names);
@@ -3157,7 +3157,7 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
            puts "LocalSolvablePolynomialRing: " + cf.toScript();
            ring = LocalSolvablePolynomialRing.new(cf,nv,to,names);
            table = ring.table;
-           coeffTable = ring.coeffTable;
+           coeffTable = ring.polCoeff.coeffTable;
         else
            puts "GenSolvablePolynomialRing: " + cf.toScript();
            ring = GenSolvablePolynomialRing.new(cf,nv,to,names);

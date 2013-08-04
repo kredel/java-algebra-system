@@ -3355,7 +3355,7 @@ class SolvPolyRing(SolvableRing):
             if quotSolv:
                 ring = QuotSolvablePolynomialRing(cf,nv,to,names);
                 table = ring.table;
-                coeffTable = ring.coeffTable;
+                coeffTable = ring.polCoeff.coeffTable;
             else:
                 if resSolv:
                     ring = ResidueSolvablePolynomialRing(cf,nv,to,names);
@@ -3365,7 +3365,7 @@ class SolvPolyRing(SolvableRing):
                     if locSolv:
                         ring = LocalSolvablePolynomialRing(cf,nv,to,names);
                         table = ring.table;
-                        coeffTable = ring.coeffTable;
+                        coeffTable = ring.polCoeff.coeffTable;
                     else:
                         ring = GenSolvablePolynomialRing(cf,nv,to,names);
                         table = ring.table;
