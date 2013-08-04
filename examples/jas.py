@@ -1330,7 +1330,7 @@ class SolvableIdeal:
            else:
               return self;
         rrel = self.pset.ring.table.relationList();
-        rrel.addAll(self.pset.ring.coeffTable.relationList());
+        rrel.addAll(self.pset.ring.polCoeff.coeffTable.relationList());
         #print "rrel = " + str(rrel);
         qf = SolvableQuotientRing(cf);
         qr = QuotSolvablePolynomialRing(qf,self.pset.ring);
@@ -3360,7 +3360,7 @@ class SolvPolyRing(SolvableRing):
                 if resSolv:
                     ring = ResidueSolvablePolynomialRing(cf,nv,to,names);
                     table = ring.table;
-                    coeffTable = ring.coeffTable;
+                    coeffTable = ring.polCoeff.coeffTable;
                 else:
                     if locSolv:
                         ring = LocalSolvablePolynomialRing(cf,nv,to,names);
