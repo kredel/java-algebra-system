@@ -287,7 +287,6 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
                         LocalSolvablePolynomial<C> v = qv.multiply(qden);
                         LocalSolvablePolynomial<C> vl = qv.multiplyLeft(qden);
                         //System.out.println("v = " + v + ", vl = " + vl + ", qden = " + qden);
-                        //LocalSolvablePolynomial<C> vr = (LocalSolvablePolynomial<C>) v.reductum();
                         LocalSolvablePolynomial<C> vr = (LocalSolvablePolynomial<C>) v.subtract(vl);
                         SolvableLocal<C> qdeni = new SolvableLocal<C>(b.ring, b.ring.ring.getONE(), b.den);
                         //System.out.println("vr = " + vr + ", qdeni = " + qdeni);
@@ -342,14 +341,14 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
                             Ds = (LocalSolvablePolynomial<C>) zero.sum(one, h); // symmetric!
                         } else {
                             ExpVector g1 = g.subst(gl1, 0);
-                            ExpVector g2 = Z.subst(gl1, g.getVal(el1));
+                            ExpVector g2 = Z.subst(gl1, g.getVal(gl1)); // bug el1, gl1
                             ExpVector g4;
                             ExpVector f1 = f.subst(fl1, 0);
                             ExpVector f2 = Z.subst(fl1, f.getVal(fl1));
-                            if (debug)
+                            if (debug) {
                                 logger.info("poly, g1 = " + g1 + ", f1 = " + f1 + ", Dps = " + Dps);
-                            if (debug)
                                 logger.info("poly, g2 = " + g2 + ", f2 = " + f2);
+                            }
                             TableRelation<SolvableLocal<C>> rel = ring.table.lookup(g2, f2);
                             if (debug)
                                 logger.info("poly, g  = " + g + ", f  = " + f + ", rel = " + rel);

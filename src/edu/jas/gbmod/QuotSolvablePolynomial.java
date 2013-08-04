@@ -235,15 +235,15 @@ public class QuotSolvablePolynomial<C extends GcdRingElem<C>> extends
                                 g1 = g.subst(gl1, 0);
                                 g2 = Zc.subst(gl1, g.getVal(gl1));
                             }
-                            if (debug)
+                            if (debug) {
                                 logger.info("coeff, e1 = " + e1 + ", e2 = " + e2);
-                            if (debug)
                                 logger.info("coeff, g1 = " + g1 + ", g2 = " + g2);
+                            }
                             TableRelation<GenPolynomial<C>> crel = ring.coeffTable.lookup(e2, g2);
-                            if (debug)
+                            if (debug) {
                                 logger.info("coeff, crel = " + crel.p);
-                            if (debug)
                                 logger.info("coeff, e  = " + e + " g, = " + g + ", crel = " + crel);
+                            }
                             Cs = ring.fromPolyCoefficients(crel.p); //QuotSolvablePolynomial<C>(ring, crel.p);
                             // rest of multiplication and update relations
                             if (crel.f != null) {
@@ -288,7 +288,6 @@ public class QuotSolvablePolynomial<C extends GcdRingElem<C>> extends
                         QuotSolvablePolynomial<C> v = qv.multiply(qden);
                         QuotSolvablePolynomial<C> vl = qv.multiplyLeft(qden);
                         //System.out.println("v = " + v + ", vl = " + vl + ", qden = " + qden);
-                        //QuotSolvablePolynomial<C> vr = (QuotSolvablePolynomial<C>) v.reductum();
                         QuotSolvablePolynomial<C> vr = (QuotSolvablePolynomial<C>) v.subtract(vl);
                         SolvableQuotient<C> qdeni = new SolvableQuotient<C>(b.ring, b.ring.ring.getONE(), b.den);
                         //System.out.println("vr = " + vr + ", qdeni = " + qdeni);
@@ -343,14 +342,14 @@ public class QuotSolvablePolynomial<C extends GcdRingElem<C>> extends
                             Ds = (QuotSolvablePolynomial<C>) zero.sum(one, h); // symmetric!
                         } else {
                             ExpVector g1 = g.subst(gl1, 0);
-                            ExpVector g2 = Z.subst(gl1, g.getVal(el1));
+                            ExpVector g2 = Z.subst(gl1, g.getVal(gl1)); // bug el1, gl1
                             ExpVector g4;
                             ExpVector f1 = f.subst(fl1, 0);
                             ExpVector f2 = Z.subst(fl1, f.getVal(fl1));
-                            if (debug)
+                            if (debug) {
                                 logger.info("poly, g1 = " + g1 + ", f1 = " + f1 + ", Dps = " + Dps);
-                            if (debug)
                                 logger.info("poly, g2 = " + g2 + ", f2 = " + f2);
+                            }
                             TableRelation<SolvableQuotient<C>> rel = ring.table.lookup(g2, f2);
                             if (debug)
                                 logger.info("poly, g  = " + g + ", f  = " + f + ", rel = " + rel);

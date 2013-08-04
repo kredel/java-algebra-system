@@ -235,10 +235,10 @@ public class ResidueSolvablePolynomial<C extends GcdRingElem<C>> extends
                             g1 = g.subst(gl1, 0);
                             g2 = Zc.subst(gl1, g.getVal(gl1));
                         }
-                        if (debug)
+                        if (debug) {
                             logger.info("coeff, e1 = " + e1 + ", e2 = " + e2 + ", Cps = " + Cps);
-                        if (debug)
                             logger.info("coeff, g1 = " + g1 + ", g2 = " + g2);
+                        }
                         TableRelation<GenPolynomial<C>> crel = ring.coeffTable.lookup(e2, g2);
                         if (debug)
                             logger.info("coeff, crel = " + crel.p);
@@ -314,7 +314,7 @@ public class ResidueSolvablePolynomial<C extends GcdRingElem<C>> extends
                             Ds = (ResidueSolvablePolynomial<C>) zero.sum(one, h); // symmetric!
                         } else {
                             ExpVector g1 = g.subst(gl1, 0);
-                            ExpVector g2 = Z.subst(gl1, g.getVal(el1));
+                            ExpVector g2 = Z.subst(gl1, g.getVal(gl1)); // bug el1, gl1
                             ExpVector g4;
                             ExpVector f1 = f.subst(fl1, 0);
                             ExpVector f2 = Z.subst(fl1, f.getVal(fl1));
