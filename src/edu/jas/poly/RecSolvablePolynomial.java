@@ -446,6 +446,16 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
     }
 
 
+    /*
+     * RecSolvablePolynomial multiplication. Product with coefficient ring
+     * element.
+     * @param b coefficient of coefficient.
+     * @return this*b, where * is coefficient multiplication.
+     */
+    //@Override not possible
+    //public RecSolvablePolynomial<C> multiply(C b) { ... }
+
+
     /**
      * RecSolvablePolynomial multiplication. Product with exponent vector.
      * @param e exponent.

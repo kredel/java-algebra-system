@@ -14,6 +14,8 @@ import org.apache.log4j.Logger;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
+import edu.jas.poly.RecSolvablePolynomial;
+import edu.jas.poly.RecSolvablePolynomialRing;
 import edu.jas.poly.TableRelation;
 import edu.jas.structure.GcdRingElem;
 
@@ -199,86 +201,97 @@ public class ResidueSolvablePolynomial<C extends GcdRingElem<C>> extends
                 // polynomial coefficient multiplication 
                 ResidueSolvablePolynomial<C> Cps = ring.getZERO().copy();
                 ResidueSolvablePolynomial<C> Cs = null;
-                if (ring.coeffTable.isEmpty() || b.isConstant() || e.isZERO()) { // symmetric
+                if (ring.polCoeff.coeffTable.isEmpty() || b.isConstant() || e.isZERO()) { // symmetric
                     Cps = new ResidueSolvablePolynomial<C>(ring, b, e);
                     if (debug)
                         logger.info("symmetric coeff: b = " + b + ", e = " + e);
                 } else { // unsymmetric
                     if (debug)
                         logger.info("unsymmetric coeff: b = " + b + ", e = " + e);
-                    for (Map.Entry<ExpVector, C> z : b.val.getMap().entrySet()) {
-                        C c = z.getValue();
-                        SolvableResidue<C> cc = b.ring.getONE().multiply(c);
-                        ExpVector g = z.getKey();
-                        if (debug)
-                            logger.info("g = " + g + ", c = " + c);
-                        int[] gp = g.dependencyOnVariables();
-                        int gl1 = 0;
-                        if (gp.length > 0) {
-                            gl1 = gp[gp.length - 1];
-                        }
-                        int gl1s = b.ring.ring.nvar + 1 - gl1;
-                        if (debug) {
-                            logger.info("gl1s = " + gl1s);
-                        }
-                        // split e = e1 * e2, g = g1 * g2
-                        ExpVector e1 = e;
-                        ExpVector e2 = Z;
-                        if (!e.isZERO()) {
-                            e1 = e.subst(el1, 0);
-                            e2 = Z.subst(el1, e.getVal(el1));
-                        }
-                        ExpVector e4;
-                        ExpVector g1 = g;
-                        ExpVector g2 = Zc;
-                        if (!g.isZERO()) {
-                            g1 = g.subst(gl1, 0);
-                            g2 = Zc.subst(gl1, g.getVal(gl1));
-                        }
-                        if (debug) {
-                            logger.info("coeff, e1 = " + e1 + ", e2 = " + e2 + ", Cps = " + Cps);
-                            logger.info("coeff, g1 = " + g1 + ", g2 = " + g2);
-                        }
-                        TableRelation<GenPolynomial<C>> crel = ring.coeffTable.lookup(e2, g2);
-                        if (debug)
-                            logger.info("coeff, crel = " + crel.p);
-                        //logger.info("coeff, e  = " + e + " g, = " + g + ", crel = " + crel);
-                        Cs = ring.fromPolyCoefficients(crel.p); //new ResidueSolvablePolynomial<C>(ring, crel.p);
-                        // rest of multiplication and update relations
-                        if (crel.f != null) {
-                            SolvableResidue<C> c2 = b.ring.getONE().multiply(crel.f);
-                            C2 = new ResidueSolvablePolynomial<C>(ring, c2, Z);
-                            Cs = Cs.multiply(C2);
-                            if (crel.e == null) {
-                                e4 = e2;
-                            } else {
-                                e4 = e2.subtract(crel.e);
-                            }
-                            ring.coeffTable.update(e4, g2, ring.toPolyCoefficients(Cs));
-                        }
-                        if (crel.e != null) { // process left part
-                            C1 = new ResidueSolvablePolynomial<C>(ring, one, crel.e);
-                            Cs = C1.multiply(Cs);
-                            ring.coeffTable.update(e2, g2, ring.toPolyCoefficients(Cs));
-                        }
-                        if (!g1.isZERO()) { // process right part
-                            SolvableResidue<C> c2 = b.ring.getONE().multiply(g1);
-                            C2 = new ResidueSolvablePolynomial<C>(ring, c2, Z);
-                            Cs = Cs.multiply(C2);
-                        }
-                        if (!e1.isZERO()) { // process left part
-                            C1 = new ResidueSolvablePolynomial<C>(ring, one, e1);
-                            Cs = C1.multiply(Cs);
-                        }
-                        //System.out.println("e1*Cs*g1 = " + Cs);
-                        Cs = Cs.multiplyLeft(cc); // assume c, coeff(cc) commutes with Cs
-                        Cps = (ResidueSolvablePolynomial<C>) Cps.sum(Cs);
-                    } // end b loop 
-                    if (debug)
-                        logger.info("coeff, Cs = " + Cs + ", Cps = " + Cps);
+                    // for (Map.Entry<ExpVector, C> z : b.val.getMap().entrySet()) {
+                    //     C c = z.getValue();
+                    //     SolvableResidue<C> cc = b.ring.getONE().multiply(c);
+                    //     ExpVector g = z.getKey();
+                    //     if (debug)
+                    //         logger.info("g = " + g + ", c = " + c);
+                    //     int[] gp = g.dependencyOnVariables();
+                    //     int gl1 = 0;
+                    //     if (gp.length > 0) {
+                    //         gl1 = gp[gp.length - 1];
+                    //     }
+                    //     int gl1s = b.ring.ring.nvar + 1 - gl1;
+                    //     if (debug) {
+                    //         logger.info("gl1s = " + gl1s);
+                    //     }
+                    //     // split e = e1 * e2, g = g1 * g2
+                    //     ExpVector e1 = e;
+                    //     ExpVector e2 = Z;
+                    //     if (!e.isZERO()) {
+                    //         e1 = e.subst(el1, 0);
+                    //         e2 = Z.subst(el1, e.getVal(el1));
+                    //     }
+                    //     ExpVector e4;
+                    //     ExpVector g1 = g;
+                    //     ExpVector g2 = Zc;
+                    //     if (!g.isZERO()) {
+                    //         g1 = g.subst(gl1, 0);
+                    //         g2 = Zc.subst(gl1, g.getVal(gl1));
+                    //     }
+                    //     if (debug) {
+                    //         logger.info("coeff, e1 = " + e1 + ", e2 = " + e2 + ", Cps = " + Cps);
+                    //         logger.info("coeff, g1 = " + g1 + ", g2 = " + g2);
+                    //     }
+                    //     TableRelation<GenPolynomial<C>> crel = ring.coeffTable.lookup(e2, g2);
+                    //     if (debug)
+                    //         logger.info("coeff, crel = " + crel.p);
+                    //     //logger.info("coeff, e  = " + e + " g, = " + g + ", crel = " + crel);
+                    //     Cs = ring.fromPolyCoefficients(crel.p); //new ResidueSolvablePolynomial<C>(ring, crel.p);
+                    //     // rest of multiplication and update relations
+                    //     if (crel.f != null) {
+                    //         SolvableResidue<C> c2 = b.ring.getONE().multiply(crel.f);
+                    //         C2 = new ResidueSolvablePolynomial<C>(ring, c2, Z);
+                    //         Cs = Cs.multiply(C2);
+                    //         if (crel.e == null) {
+                    //             e4 = e2;
+                    //         } else {
+                    //             e4 = e2.subtract(crel.e);
+                    //         }
+                    //         ring.coeffTable.update(e4, g2, ring.toPolyCoefficients(Cs));
+                    //     }
+                    //     if (crel.e != null) { // process left part
+                    //         C1 = new ResidueSolvablePolynomial<C>(ring, one, crel.e);
+                    //         Cs = C1.multiply(Cs);
+                    //         ring.coeffTable.update(e2, g2, ring.toPolyCoefficients(Cs));
+                    //     }
+                    //     if (!g1.isZERO()) { // process right part
+                    //         SolvableResidue<C> c2 = b.ring.getONE().multiply(g1);
+                    //         C2 = new ResidueSolvablePolynomial<C>(ring, c2, Z);
+                    //         Cs = Cs.multiply(C2);
+                    //     }
+                    //     if (!e1.isZERO()) { // process left part
+                    //         C1 = new ResidueSolvablePolynomial<C>(ring, one, e1);
+                    //         Cs = C1.multiply(Cs);
+                    //     }
+                    //     //System.out.println("e1*Cs*g1 = " + Cs);
+                    //     Cs = Cs.multiplyLeft(cc); // assume c, coeff(cc) commutes with Cs
+                    //     Cps = (ResidueSolvablePolynomial<C>) Cps.sum(Cs);
+                    // } // end b loop 
+                    // recursive polynomial coefficient multiplication : e * b.bal
+                    RecSolvablePolynomial<C> rsp1 = new RecSolvablePolynomial<C>(ring.polCoeff,e);
+                    RecSolvablePolynomial<C> rsp2 = new RecSolvablePolynomial<C>(ring.polCoeff,b.val);
+                    RecSolvablePolynomial<C> rsp3 = rsp1.multiply(rsp2);
+                    Cps = ring.fromPolyCoefficients(rsp3);
+                    //if (debug)
+                    //    logger.info("coeff, Cps = " + Cps);
+                    //logger.info("coeff-poly: rsp.ring = " + ring.polCoeff.toScript());
+                    //if (rsp.compareTo(Cps) != 0) {
+                    //   logger.info("coeff-poly: Cps = " + Cps);
+                    //   logger.info("coeff-poly: rsp = " + rsp);
+                    //}
                 }
-                if (debug)
+                if (debug) {
                     logger.info("coeff-poly: Cps = " + Cps);
+                }
                 // polynomial multiplication 
                 ResidueSolvablePolynomial<C> Dps = ring.getZERO().copy();
                 ResidueSolvablePolynomial<C> Ds = null;

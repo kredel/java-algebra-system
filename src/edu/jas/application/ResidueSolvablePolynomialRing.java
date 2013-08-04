@@ -50,10 +50,10 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>> extends
                 GenSolvablePolynomialRing<SolvableResidue<C>> {
 
 
-    /**
+    /*
      * The solvable multiplication relations between variables and coefficients.
      */
-    public final RelationTable<GenPolynomial<C>> coeffTable;
+    //public final RelationTable<GenPolynomial<C>> coeffTable;
 
 
     /**
@@ -187,7 +187,7 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>> extends
             GenSolvablePolynomial<GenPolynomial<C>> p = null;
             polCoeff.table.update(e, f, p); // from rt
         }
-        coeffTable = polCoeff.coeffTable; //new RelationTable<GenPolynomial<C>>(polCoeff, true);
+        //coeffTable = polCoeff.coeffTable; //new RelationTable<GenPolynomial<C>>(polCoeff, true);
         ZERO = new ResidueSolvablePolynomial<C>(this);
         SolvableResidue<C> coeff = coFac.getONE();
         //evzero = ExpVector.create(nvar); // from super
@@ -217,9 +217,9 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>> extends
         String res = super.toString();
         if (PrettyPrint.isTrue()) {
             //res += "\n" + table.toString(vars);
-            res += "\n" + coeffTable.toString(vars);
+            res += "\n" + polCoeff.coeffTable.toString(vars);
         } else {
-            res += ", #rel = " + table.size() + " + " + coeffTable.size();
+            res += ", #rel = " + table.size() + " + " + polCoeff.coeffTable.size();
         }
         return res;
     }
@@ -260,8 +260,8 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>> extends
             s.append(",rel=");
             s.append(rel);
         }
-        if (coeffTable.size() > 0) {
-            String rel = coeffTable.toScript();
+        if (polCoeff.coeffTable.size() > 0) {
+            String rel = polCoeff.coeffTable.toScript();
             s.append(",coeffrel=");
             s.append(rel);
         }
@@ -296,7 +296,7 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>> extends
         //if ( ! table.equals(oring.table) ) { // done in super
         //    return false;
         //}
-        if (!coeffTable.equals(oring.coeffTable)) {
+        if (!polCoeff.coeffTable.equals(oring.polCoeff.coeffTable)) {
             return false;
         }
         return true;
@@ -312,7 +312,7 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>> extends
         int h;
         h = super.hashCode();
         h = 37 * h + table.hashCode(); // may be different after some computations
-        h = 37 * h + coeffTable.hashCode(); // may be different
+        h = 37 * h + polCoeff.coeffTable.hashCode(); // may be different
         return h;
     }
 
@@ -343,7 +343,7 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>> extends
      */
     @Override
     public boolean isCommutative() {
-        if (coeffTable.size() == 0) {
+        if (polCoeff.coeffTable.size() == 0) {
             return super.isCommutative();
         }
         // todo: check structure of relations
@@ -635,7 +635,7 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>> extends
         ResidueSolvablePolynomialRing<C> spfac = new ResidueSolvablePolynomialRing<C>(pfac.coFac, pfac.nvar,
                         pfac.tord, pfac.getVars());
         spfac.table.extend(this.table);
-        spfac.coeffTable.extend(this.coeffTable);
+        spfac.polCoeff.coeffTable.extend(this.polCoeff.coeffTable);
         return spfac;
     }
 
@@ -652,7 +652,7 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>> extends
         ResidueSolvablePolynomialRing<C> spfac = new ResidueSolvablePolynomialRing<C>(pfac.coFac, pfac.nvar,
                         pfac.tord, pfac.getVars());
         spfac.table.contract(this.table);
-        spfac.coeffTable.contract(this.coeffTable);
+        spfac.polCoeff.coeffTable.contract(this.polCoeff.coeffTable);
         return spfac;
     }
 
@@ -679,7 +679,7 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>> extends
                         pfac.tord, pfac.getVars());
         spfac.partial = partial;
         spfac.table.reverse(this.table);
-        spfac.coeffTable.reverse(this.coeffTable);
+        spfac.polCoeff.coeffTable.reverse(this.polCoeff.coeffTable);
         return spfac;
     }
 
