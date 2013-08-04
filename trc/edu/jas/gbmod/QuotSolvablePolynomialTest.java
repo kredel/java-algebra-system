@@ -340,7 +340,7 @@ public class QuotSolvablePolynomialTest extends TestCase {
         //System.out.println("r1 = " + r1);
         //System.out.println("r2 = " + r2);
         //System.out.println("rp = " + rp);
-        ring.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(), rp);
+        ring.polCoeff.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(), rp);
         //System.out.println("ring.polCoeff = " + ring.polCoeff);
 
         assertFalse("isCommutative()", ring.isCommutative());
@@ -409,7 +409,7 @@ public class QuotSolvablePolynomialTest extends TestCase {
      * QuotSolvablePolynomial<BigRational> r1 = ring.parse("x");
      * GenSolvablePolynomial<BigRational> r2 = csring.parse("b");
      * QuotSolvablePolynomial<BigRational> rp = ring.parse("b x + a");
-     * ring.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(), rp);
+     * ring.polCoeff.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(), rp);
      * 
      * int k = rl; QuotSolvablePolynomialRing<BigRational> pfe = ring.extend(k);
      * //System.out.println("pfe = " + pfe);
@@ -444,7 +444,7 @@ public class QuotSolvablePolynomialTest extends TestCase {
      * QuotSolvablePolynomial<BigRational> r1 = ring.parse("x");
      * GenSolvablePolynomial<BigRational> r2 = csring.parse("b");
      * QuotSolvablePolynomial<BigRational> rp = ring.parse("b x + a");
-     * ring.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(), rp);
+     * ring.polCoeff.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(), rp);
      * 
      * QuotSolvablePolynomialRing<BigRational> pfr = ring.reverse();
      * QuotSolvablePolynomialRing<BigRational> pfrr = pfr.reverse();

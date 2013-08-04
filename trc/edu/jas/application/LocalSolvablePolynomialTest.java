@@ -374,7 +374,7 @@ public class LocalSolvablePolynomialTest extends TestCase {
         //System.out.println("r1 = " + r1);
         //System.out.println("r2 = " + r2);
         //System.out.println("rp = " + rp);
-        ring.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(), rp);
+        ring.polCoeff.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(), rp);
         //System.out.println("ring = " + ring);
         //System.out.println("ring.polCoeff = " + ring.polCoeff);
         assertFalse("isCommutative()", ring.isCommutative());
@@ -442,7 +442,7 @@ public class LocalSolvablePolynomialTest extends TestCase {
      * LocalSolvablePolynomial<BigRational> r1 = ring.parse("x");
      * GenSolvablePolynomial<BigRational> r2 = csring.parse("b");
      * LocalSolvablePolynomial<BigRational> rp = ring.parse("b x + a");
-     * ring.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(), rp);
+     * ring.polCoeff.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(), rp);
      * 
      * int k = rl; LocalSolvablePolynomialRing<BigRational> pfe = ring.extend(k);
      * //System.out.println("pfe = " + pfe);
@@ -477,7 +477,7 @@ public class LocalSolvablePolynomialTest extends TestCase {
      * LocalSolvablePolynomial<BigRational> r1 = ring.parse("x");
      * GenSolvablePolynomial<BigRational> r2 = csring.parse("b");
      * LocalSolvablePolynomial<BigRational> rp = ring.parse("b x + a");
-     * ring.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(), rp);
+     * ring.polCoeff.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(), rp);
      * 
      * LocalSolvablePolynomialRing<BigRational> pfr = ring.reverse();
      * LocalSolvablePolynomialRing<BigRational> pfrr = pfr.reverse();
