@@ -622,7 +622,21 @@ public class QuotSolvablePolynomial<C extends GcdRingElem<C>> extends
     }
 
 
-    /*
+    /**
+     * QuotSolvablePolynomial multiplication. Product with 'monomial'.
+     * @param m 'monomial'.
+     * @return this * m, where * denotes solvable multiplication.
+     */
+    @Override
+    public QuotSolvablePolynomial<C> multiply(Map.Entry<ExpVector, SolvableQuotient<C>> m) {
+        if (m == null) {
+            return ring.getZERO();
+        }
+        return multiply(m.getValue(), m.getKey());
+    }
+
+
+    /**
      * QuotSolvablePolynomial multiplication. 
      * Left product with coefficient ring element.
      * @param B solvable polynomial.

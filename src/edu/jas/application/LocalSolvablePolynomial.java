@@ -622,7 +622,21 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
     }
 
 
-    /*
+    /**
+     * LocalSolvablePolynomial multiplication. Product with 'monomial'.
+     * @param m 'monomial'.
+     * @return this * m, where * denotes solvable multiplication.
+     */
+    @Override
+    public LocalSolvablePolynomial<C> multiply(Map.Entry<ExpVector, SolvableLocal<C>> m) {
+        if (m == null) {
+            return ring.getZERO();
+        }
+        return multiply(m.getValue(), m.getKey());
+    }
+
+
+    /**
      * LocalSolvablePolynomial multiplication. 
      * Left product with coefficient ring element.
      * @param B solvable polynomial.

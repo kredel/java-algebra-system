@@ -144,6 +144,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
      * @param Bp RecSolvablePolynomial.
      * @return this*Bp, where * denotes solvable multiplication.
      */
+    // not @Override
     public RecSolvablePolynomial<C> multiply(RecSolvablePolynomial<C> Bp) {
         if (Bp == null || Bp.isZERO()) {
             return ring.getZERO();
@@ -367,6 +368,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
      * @param T RecSolvablePolynomial.
      * @return S*this*T.
      */
+    // not @Override
     public RecSolvablePolynomial<C> multiply(RecSolvablePolynomial<C> S, RecSolvablePolynomial<C> T) {
         if (S.isZERO() || T.isZERO() || this.isZERO()) {
             return ring.getZERO();
@@ -606,7 +608,21 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
     }
 
 
-    /*
+    /**
+     * RecSolvablePolynomial multiplication. Product with 'monomial'.
+     * @param m 'monomial'.
+     * @return this * m, where * denotes solvable multiplication.
+     */
+    @Override
+    public RecSolvablePolynomial<C> multiply(Map.Entry<ExpVector, GenPolynomial<C>> m) {
+        if (m == null) {
+            return ring.getZERO();
+        }
+        return multiply(m.getValue(), m.getKey());
+    }
+
+
+    /**
      * RecSolvablePolynomial multiplication. 
      * Left product with coefficient ring element.
      * @param B solvable polynomial.

@@ -395,26 +395,14 @@ public class ResidueSolvablePolynomial<C extends GcdRingElem<C>> extends
      * @param b coefficient polynomial.
      * @return this*b, where * is coefficient multiplication.
      */
-    //todo Override
-    public ResidueSolvablePolynomial<C> recMultiply(SolvableResidue<C> b) {
+    @Override
+    public ResidueSolvablePolynomial<C> multiply(SolvableResidue<C> b) {
         ResidueSolvablePolynomial<C> Cp = ring.getZERO().copy();
         if (b == null || b.isZERO()) {
             return Cp;
         }
         Cp = new ResidueSolvablePolynomial<C>(ring, b, ring.evzero);
         return multiply(Cp);
-        // wrong:
-        // Map<ExpVector, GenPolynomial<C>> Cm = Cp.val; //getMap();
-        // Map<ExpVector, GenPolynomial<C>> Am = val;
-        // for (Map.Entry<ExpVector, GenPolynomial<C>> y : Am.entrySet()) {
-        //     ExpVector e = y.getKey();
-        //     GenPolynomial<C> a = y.getValue();
-        //     GenPolynomial<C> c = a.multiply(b);
-        //     if (!c.isZERO()) {
-        //         Cm.put(e, c);
-        //     }
-        // }
-        // return Cp;
     }
 
 
@@ -437,18 +425,6 @@ public class ResidueSolvablePolynomial<C extends GcdRingElem<C>> extends
         ResidueSolvablePolynomial<C> Cb = new ResidueSolvablePolynomial<C>(ring, b, ring.evzero);
         ResidueSolvablePolynomial<C> Cc = new ResidueSolvablePolynomial<C>(ring, c, ring.evzero);
         return Cb.multiply(this).multiply(Cc);
-        // wrong:
-        // Map<ExpVector, GenPolynomial<C>> Cm = Cp.val; //getMap();
-        // Map<ExpVector, GenPolynomial<C>> Am = val;
-        // for (Map.Entry<ExpVector, GenPolynomial<C>> y : Am.entrySet()) {
-        //     ExpVector e = y.getKey();
-        //     GenPolynomial<C> a = y.getValue();
-        //     GenPolynomial<C> d = b.multiply(a).multiply(c);
-        //     if (!d.isZERO()) {
-        //         Cm.put(e, d);
-        //     }
-        // }
-        // return Cp;
     }
 
 
@@ -605,7 +581,21 @@ public class ResidueSolvablePolynomial<C extends GcdRingElem<C>> extends
     }
 
 
-    /*
+    /**
+     * ResidueSolvablePolynomial multiplication. Product with 'monomial'.
+     * @param m 'monomial'.
+     * @return this * m, where * denotes solvable multiplication.
+     */
+    @Override
+    public ResidueSolvablePolynomial<C> multiply(Map.Entry<ExpVector, SolvableResidue<C>> m) {
+        if (m == null) {
+            return ring.getZERO();
+        }
+        return multiply(m.getValue(), m.getKey());
+    }
+
+
+    /**
      * ResidueSolvablePolynomial multiplication. 
      * Left product with coefficient ring element.
      * @param B solvable polynomial.

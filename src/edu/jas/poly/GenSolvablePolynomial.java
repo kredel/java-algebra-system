@@ -128,6 +128,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
      * @param Bp GenSolvablePolynomial.
      * @return this*Bp, where * denotes solvable multiplication.
      */
+    // not @Override
     public GenSolvablePolynomial<C> multiply(GenSolvablePolynomial<C> Bp) {
         if (Bp == null || Bp.isZERO()) {
             return ring.getZERO();
@@ -449,10 +450,25 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
 
 
     /**
+     * GenSolvablePolynomial multiplication. Product with 'monomial'.
+     * @param m 'monomial'.
+     * @return this * m, where * denotes solvable multiplication.
+     */
+    @Override
+    public GenSolvablePolynomial<C> multiply(Map.Entry<ExpVector, C> m) {
+        if (m == null) {
+            return ring.getZERO();
+        }
+        return multiply(m.getValue(), m.getKey());
+    }
+
+
+    /**
      * GenSolvablePolynomial monic, i.e. leadingCoefficient == 1. If leadingCoefficient
      * is not invertible returns this unmodified.
      * @return monic(this).
      */
+    @Override
     public GenSolvablePolynomial<C> monic() {
         if (this.isZERO()) {
             return this;
