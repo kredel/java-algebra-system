@@ -119,7 +119,8 @@ for i in range(1,30):
     t = System.currentTimeMillis();
     R = r3.realRoots(fr);
     t = System.currentTimeMillis() - t;
-    print "R = ", R;
+#    print "R = " + str([ str(DD(r.elem.getRational())) for r in R ]);
+    print "R = " + str([ r.elem.decimalMagnitude() for r in R ]);
     plot[float(DD(L))] = R;
     #print "real roots time =", t, "milliseconds";
     if len(R) != br:
@@ -130,31 +131,31 @@ for i in range(1,30):
             L = b + (j,100);
             fri = QQ(5) * ( (1,5) ) * A**7 - ( (21,20) * L - (29,20) ) * A**6 - ( (21,10) * L ) * A**5 + ( (1,5) ) * A**2 - ( (1,20) * L - (9,20) ) * A - ( (1,10) * L );
             R = r3.realRoots(fri);
-            print "L = %s, Ri = %s" %(DD(L),R);
+            print "L = %s, Ri = %s" %(DD(L),[ r.elem.decimalMagnitude() for r in R ]);
             plot[float(DD(L))] = R;
             R = r3.realRoots(fri,eps);
-            plotd[float(DD(L))] = R;
+            plotd[float(DD(L))] = [ r.elem.decimalMagnitude() for r in R ];
 
     t = System.currentTimeMillis();
     R = r3.realRoots(fr,eps);
-    plotd[float(DD(L))] = R;
+    plotd[float(DD(L))] = [ r.elem.decimalMagnitude() for r in R ];
     t = System.currentTimeMillis() - t;
-    print "R = ", R;
+    print "R = " + str([ r.elem.decimalMagnitude() for r in R ]);
     print "real roots time =", t, "milliseconds";
     print;
 
-print "intervals:";
+print "real algebraic numbers:";
 pk = plot.keys();
 pk.sort();
 for l in pk:
-    print "%s, %s" %(l,plot[l]);
+    print "%s, %s" %(l,[ str(p.elem) for p in plot[l]]);
 print;
 
-print "real roots:";
+print "real root approxmations:";
 pk = plotd.keys();
 pk.sort();
 for l in pk:
-    print "%s, %s" %(l,plotd[l]);
+    print "%s, %s" %(l,[ str(p) for p in plotd[l]]);
 print;
 
 
@@ -172,20 +173,20 @@ print;
 t = System.currentTimeMillis();
 R = r5.realRoots(frl);
 t = System.currentTimeMillis() - t;
-print "R = ", R;
+print "R = " + str([ r.elem.decimalMagnitude() for r in R ]);
 print "real roots time =", t, "milliseconds";
 
 t = System.currentTimeMillis();
 R = r5.realRoots(frl,eps);
 t = System.currentTimeMillis() - t;
-print "R = ", R;
+print "R = " + str([ r.elem.decimalMagnitude() for r in R ]);
 print "real roots time =", t, "milliseconds";
 
 t = System.currentTimeMillis();
 fk = r5.squarefreeFactors(frl);
 #fk = r5.factors(frl);
 t = System.currentTimeMillis() - t;
-print "fk = ", fk;
+#print "fk = " + str(fk);
 #print "factor time =", t, "milliseconds";
 
 g = one;
