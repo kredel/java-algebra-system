@@ -116,7 +116,7 @@ public class ChannelFactory extends Thread {
      */
     @Override
     public String toString() {
-        return "" + this.getClass().getSimpleName() + "(" + srv + ", buf = " + buf.size() + ")";
+        return this.getClass().getSimpleName() + "(" + srv + ", buf = " + buf.size() + ")";
     }
 
 
@@ -181,7 +181,6 @@ public class ChannelFactory extends Thread {
                     delay += delay;
                     logger.info("Server on " + h + ":" + p + " not ready in " + delay + "ms");
                 }
-                System.out.println("Server on " + h + ":" + p + " not ready in " + delay + "ms");
                 try {
                     Thread.sleep(delay);
                     if (i % 50 == 0 && debug) {
