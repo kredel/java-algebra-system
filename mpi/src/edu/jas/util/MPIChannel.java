@@ -159,6 +159,14 @@ public final class MPIChannel {
      * @param pr partner rank.
      */
     void send(int t, Object v, int pr) throws IOException, MPIException {
+        if ( soc == null ) {
+            logger.warn("soc not initialized: lost " + v);
+            return;
+        }
+        if ( soc[pr] == null ) {
+            logger.warn("soc[" + pr + "] not initialized: lost " + v);
+            return;
+        }
         soc[pr].send(t,v);
         // Object[] va = new Object[1];
         // va[0] = v;
@@ -184,6 +192,14 @@ public final class MPIChannel {
      * @return a message object.
      */
     public Object receive(int t) throws IOException, ClassNotFoundException, MPIException {
+        if ( soc == null ) {
+            logger.warn("soc not initialized");
+            return null;
+        }
+        if ( soc[partnerRank] == null ) {
+            logger.warn("soc[" + partnerRank + "] not initialized");
+            return null;
+        }
         try {
              return soc[partnerRank].receive(t);
         } catch (InterruptedException e) {

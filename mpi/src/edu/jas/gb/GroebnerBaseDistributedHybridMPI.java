@@ -191,7 +191,8 @@ public class GroebnerBaseDistributedHybridMPI<C extends RingElem<C>> extends Gro
         if (pool == null) {
             return;
         }
-        pool.terminate();
+        //pool.terminate();
+        pool.cancel();
     }
 
 
@@ -358,7 +359,7 @@ public class GroebnerBaseDistributedHybridMPI<C extends RingElem<C>> extends Gro
         }
         pool.terminate();
         logger.info("client pool.terminate()");
-
+        chan.close();
         theList.terminate();
         return;
     }

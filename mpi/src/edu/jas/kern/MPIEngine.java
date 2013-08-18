@@ -87,16 +87,22 @@ public final class MPIEngine {
     public static final int TAG = 11;
 
 
-    /*
-     * Send locks per tag.
+    /**
+     * Hostname suffix.
      */
-    private static SortedMap<Integer,Object> sendLocks = new TreeMap<Integer,Object>();
+    public static final String hostSuf = "-ib";
 
 
-    /*
-     * receive locks per tag.
-     */
-    private static SortedMap<Integer,Object> recvLocks = new TreeMap<Integer,Object>();
+    // /*
+    //  * Send locks per tag.
+    //  */
+    // private static SortedMap<Integer,Object> sendLocks = new TreeMap<Integer,Object>();
+
+
+    // /*
+    //  * receive locks per tag.
+    //  */
+    // private static SortedMap<Integer,Object> recvLocks = new TreeMap<Integer,Object>();
 
 
     /**
@@ -171,7 +177,7 @@ public final class MPIEngine {
             for ( int i = 0; i < size; i++ ) {
                  hostNames.add("");
             }
-            hostNames.set(rank,MPI.Get_processor_name());
+            hostNames.set(rank,MPI.Get_processor_name() + hostSuf);
             if (rank == 0) {
                 String[] va = new String[1];
                 va[0] = hostNames.get(0);

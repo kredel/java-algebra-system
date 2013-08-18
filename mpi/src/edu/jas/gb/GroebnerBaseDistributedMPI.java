@@ -133,7 +133,8 @@ public class GroebnerBaseDistributedMPI<C extends RingElem<C>> extends GroebnerB
         if (pool == null) {
             return;
         }
-        pool.terminate();
+        //pool.terminate();
+        pool.cancel();
     }
 
 
@@ -283,6 +284,7 @@ public class GroebnerBaseDistributedMPI<C extends RingElem<C>> extends GroebnerB
         MPIReducerClient<C> R = new MPIReducerClient<C>(chan, theList);
         R.run();
 
+        chan.close();
         theList.terminate();
         return;
     }
