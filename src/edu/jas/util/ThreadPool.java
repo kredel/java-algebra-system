@@ -318,7 +318,7 @@ class PoolThread extends Thread {
     ThreadPool pool;
 
 
-    private static final Logger logger = Logger.getLogger(ThreadPool.class);
+    private static final Logger logger = Logger.getLogger(PoolThread.class);
 
 
     private static boolean debug = logger.isDebugEnabled();
