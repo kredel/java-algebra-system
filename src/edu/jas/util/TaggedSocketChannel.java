@@ -159,7 +159,8 @@ public class TaggedSocketChannel extends Thread {
             throw (ClassNotFoundException) v;
         }
         if ( v instanceof Exception ) {
-            throw new RuntimeException(v.toString());
+            //throw new RuntimeException(v.toString());
+            throw new IOException(v.toString());
         }
         return v;
     }
