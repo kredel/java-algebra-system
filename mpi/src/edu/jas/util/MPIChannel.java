@@ -37,7 +37,13 @@ public final class MPIChannel {
     /*
      * Underlying MPI engine.
      */
-    private final Comm engine;
+    private final Comm engine; // static!
+
+
+    /*
+     * TCP/IP object channels with tags.
+     */
+    private static TaggedSocketChannel[] soc = null;
 
 
     /*
@@ -62,12 +68,6 @@ public final class MPIChannel {
      * Message tag.
      */
     private final int tag;
-
-
-    /*
-     * TCP/IP object channels with tags.
-     */
-    private final TaggedSocketChannel[] soc;
 
 
     /**
@@ -95,27 +95,31 @@ public final class MPIChannel {
         }
         partnerRank = r;
         tag = t;
-        int port = ChannelFactory.DEFAULT_PORT;
-        ChannelFactory cf = new ChannelFactory(port);
-        if (rank == 0) {
-            cf.init();
-            soc = new TaggedSocketChannel[size];
-            soc[0] = null;
-            try {
-                for ( int i = 1; i < size; i++ ) {
-                     SocketChannel sc = cf.getChannel(); // TODO not correct wrt rank
-                     soc[i] = new TaggedSocketChannel(sc); 
-                     soc[i].init();
+        synchronized (engine) {
+            if ( soc == null ) {
+                int port = ChannelFactory.DEFAULT_PORT;
+                ChannelFactory cf = new ChannelFactory(port);
+                if (rank == 0) {
+                    cf.init();
+                    soc = new TaggedSocketChannel[size];
+                    soc[0] = null;
+                    try {
+                        for ( int i = 1; i < size; i++ ) {
+                            SocketChannel sc = cf.getChannel(); // TODO not correct wrt rank
+                            soc[i] = new TaggedSocketChannel(sc); 
+                            soc[i].init();
+                        }
+                    } catch (InterruptedException e) {
+                        throw new IOException(e);
+                    }
+                    cf.terminate();
+                } else {
+                    soc = new TaggedSocketChannel[1];
+                    SocketChannel sc = cf.getChannel(MPIEngine.hostNames.get(0),port);
+                    soc[0] = new TaggedSocketChannel(sc);
+                    soc[0].init();
                 }
-            } catch (InterruptedException e) {
-                throw new IOException(e);
             }
-            cf.terminate();
-        } else {
-            soc = new TaggedSocketChannel[1];
-            SocketChannel sc = cf.getChannel(MPIEngine.hostNames.get(0),port);
-            soc[0] = new TaggedSocketChannel(sc);
-            soc[0].init();
         }
         logger.info("constructor: " + this.toString());
     }

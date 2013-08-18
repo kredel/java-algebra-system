@@ -238,7 +238,8 @@ public class GroebnerBaseDistributedMPI<C extends RingElem<C>> extends GroebnerB
         MPIReducerServer<C> R;
         for (int i = 1; i < threads; i++) {
             logger.debug("addJob " + i + " of " + threads);
-            R = new MPIReducerServer<C>(i, fin, engine, theList, pairlist);
+            MPIChannel chan = new MPIChannel(engine, i); // closed in server
+            R = new MPIReducerServer<C>(i, fin, chan, theList, pairlist);
             pool.addJob(R);
         }
         logger.debug("main loop waiting");
@@ -388,7 +389,7 @@ class MPIReducerServer<C extends RingElem<C>> implements Runnable {
     /*
      * Underlying MPI engine.
      */
-    protected transient final Comm engine;
+    //protected transient final Comm engine;
 
 
     /*
@@ -422,17 +423,18 @@ class MPIReducerServer<C extends RingElem<C>> implements Runnable {
      * Constructor.
      * @param r MPI rank of partner.
      * @param fin termination coordinator to use.
-     * @param e MPI communicator to use.
+     * @param c MPI channel to use.
      * @param dl DHT to use.
      * @param L pair selection strategy
      */
-    MPIReducerServer(int r, Terminator fin, Comm e, DistHashTableMPI<Integer, GenPolynomial<C>> dl,
+    MPIReducerServer(int r, Terminator fin, MPIChannel c, DistHashTableMPI<Integer, GenPolynomial<C>> dl,
                     PairList<C> L) {
         rank = r;
         finaler = fin;
-        engine = e;
+        //engine = e;
         theList = dl;
         pairlist = L;
+        pairChannel = c;
         logger.debug("reducer server constructor: "); // + r);
     }
 
@@ -442,15 +444,15 @@ class MPIReducerServer<C extends RingElem<C>> implements Runnable {
      */
     public void run() {
         logger.debug("reducer server running: "); // + rank);
-        try {
-            pairChannel = new MPIChannel(engine, rank);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        } catch (MPIException e) {
-            e.printStackTrace();
-            return;
-        }
+        // try {
+        //     pairChannel = new MPIChannel(engine, rank);
+        // } catch (IOException e) {
+        //     e.printStackTrace();
+        //     return;
+        // } catch (MPIException e) {
+        //     e.printStackTrace();
+        //     return;
+        // }
         if (logger.isInfoEnabled()) {
             logger.info("reducer server running: pairChannel = " + pairChannel);
         }

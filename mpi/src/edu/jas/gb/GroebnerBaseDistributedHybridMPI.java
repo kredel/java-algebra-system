@@ -297,7 +297,8 @@ public class GroebnerBaseDistributedHybridMPI<C extends RingElem<C>> extends Gro
         HybridReducerServerMPI<C> R;
         logger.info("using pool = " + pool);
         for (int i = 1; i < threads; i++) {
-            R = new HybridReducerServerMPI<C>(i, threadsPerNode, finner, engine, theList, pairlist);
+            MPIChannel chan = new MPIChannel(engine, i); // closed in server
+            R = new HybridReducerServerMPI<C>(i, threadsPerNode, finner, chan, theList, pairlist);
             pool.addJob(R);
             //logger.info("server submitted " + R);
         }
@@ -341,7 +342,7 @@ public class GroebnerBaseDistributedHybridMPI<C extends RingElem<C>> extends Gro
         }
         Comm engine = MPIEngine.getCommunicator();
 
-        DistHashTableMPI<Integer, GenPolynomial<C>> theList = new DistHashTableMPI<Integer, GenPolynomial<C>>();
+        DistHashTableMPI<Integer, GenPolynomial<C>> theList = new DistHashTableMPI<Integer, GenPolynomial<C>>(engine);
         theList.init();
 
         MPIChannel chan = new MPIChannel(engine, rank);
@@ -467,7 +468,7 @@ class HybridReducerServerMPI<C extends RingElem<C>> implements Runnable {
     private MPIChannel pairChannel;
 
 
-    protected transient final Comm engine;
+    //protected transient final Comm engine;
 
 
     private final DistHashTableMPI<Integer, GenPolynomial<C>> theList;
@@ -493,16 +494,16 @@ class HybridReducerServerMPI<C extends RingElem<C>> implements Runnable {
      * @param r MPI rank of partner.
      * @param tpn number of threads per node
      * @param fin terminator
-     * @param engine MPI engine
+     * @param chan MPIChannel
      * @param dl distributed hash table
      * @param L ordered pair list
      */
-    HybridReducerServerMPI(int r, int tpn, Terminator fin, Comm engine,
+    HybridReducerServerMPI(int r, int tpn, Terminator fin, MPIChannel chan,
 			   DistHashTableMPI<Integer, GenPolynomial<C>> dl, PairList<C> L) {
         rank = r;
         threadsPerNode = tpn;
         finner = fin;
-        this.engine = engine;
+        this.pairChannel = chan;
         theList = dl;
         pairlist = L;
         //logger.info("reducer server created " + this);
@@ -516,15 +517,15 @@ class HybridReducerServerMPI<C extends RingElem<C>> implements Runnable {
     @Override
     public void run() {
         //logger.info("reducer server running with " + engine);
-        try {
-            pairChannel = new MPIChannel(engine, rank); //,pairTag
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        } catch (MPIException e) {
-            e.printStackTrace();
-            return;
-        }
+        // try {
+        //     pairChannel = new MPIChannel(engine, rank); //,pairTag
+        // } catch (IOException e) {
+        //     e.printStackTrace();
+        //     return;
+        // } catch (MPIException e) {
+        //     e.printStackTrace();
+        //     return;
+        // }
         if (logger.isInfoEnabled()) {
             logger.info("reducer server running: pairChannel = " + pairChannel);
         }
