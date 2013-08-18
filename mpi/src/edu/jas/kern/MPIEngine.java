@@ -166,6 +166,7 @@ public final class MPIEngine {
             int size = mpiComm.Size();
             int rank = mpiComm.Rank();
             logger.info("MPI size = " + size + ", rank = " + rank);
+            // maintain list of hostnames of partners
             hostNames.ensureCapacity(size);
             for ( int i = 0; i < size; i++ ) {
                  hostNames.add("");
@@ -234,74 +235,74 @@ public final class MPIEngine {
     }
 
 
-    /**
-     * Get send lock per tag.
-     * @param tag message tag.
-     * @return a lock for sends.
-     */
-    public static synchronized Object getSendLock(int tag) {
-        tag = 11; // one global lock
-        Object lock = sendLocks.get(tag);
-        if ( lock == null ) {
-            lock = new Object();
-            sendLocks.put(tag,lock);
-        }
-        return lock;
-    }
+    // /*
+    //  * Get send lock per tag.
+    //  * @param tag message tag.
+    //  * @return a lock for sends.
+    //  */
+    // public static synchronized Object getSendLock(int tag) {
+    //     tag = 11; // one global lock
+    //     Object lock = sendLocks.get(tag);
+    //     if ( lock == null ) {
+    //         lock = new Object();
+    //         sendLocks.put(tag,lock);
+    //     }
+    //     return lock;
+    // }
 
 
-    /**
-     * Get receive lock per tag.
-     * @param tag message tag.
-     * @return a lock for receives.
-     */
-    public static synchronized Object getRecvLock(int tag) {
-        Object lock = recvLocks.get(tag);
-        if ( lock == null ) {
-            lock = new Object();
-            recvLocks.put(tag,lock);
-        }
-        return lock;
-    }
+    // /*
+    //  * Get receive lock per tag.
+    //  * @param tag message tag.
+    //  * @return a lock for receives.
+    //  */
+    // public static synchronized Object getRecvLock(int tag) {
+    //     Object lock = recvLocks.get(tag);
+    //     if ( lock == null ) {
+    //         lock = new Object();
+    //         recvLocks.put(tag,lock);
+    //     }
+    //     return lock;
+    // }
 
 
-    /**
-     * Wait for termination of a mpi Request.
-     * @param req a Request.
-     * @return a Status after termination of req.Wait().
-     */
-    public static Status waitRequest(final Request req) throws MPIException {
-        if ( req == null || req.Is_null() ) {
-            throw new IllegalArgumentException("null request");
-        }
-        int delay = 50;
-        int delcnt = 0;
-        Status stat = null;
-        while (true) {
-            synchronized (MPIEngine.class) { // global static lock
-                stat = req.Test(); 
-                logger.info("Request: " + req + ", Status: " + stat);
-                if (stat != null) {
-                    logger.info("Status: index = " + stat.index + ", source = " + stat.source
-                                      + ", tag = " + stat.tag);
-                    if (!stat.Test_cancelled()) {
-                        logger.info("enter req.Wait(): " + Thread.currentThread().toString());
-                        return req.Wait(); // should terminate immediately
-                    }
-                }
-            }
-            try {
-                Thread.currentThread().sleep(delay); // varied a bit
-            } catch (InterruptedException e) {
-                logger.info("sleep interrupted");
-                e.printStackTrace();
-            }
-            delcnt++; 
-            if ( delcnt % 7 != 0 ) {
-                delay++;
-                logger.info("delay(" + delay + "): " + Thread.currentThread().toString());
-            } 
-        }
-    }
+    // /*
+    //  * Wait for termination of a mpi Request.
+    //  * @param req a Request.
+    //  * @return a Status after termination of req.Wait().
+    //  */
+    // public static Status waitRequest(final Request req) throws MPIException {
+    //     if ( req == null || req.Is_null() ) {
+    //         throw new IllegalArgumentException("null request");
+    //     }
+    //     int delay = 50;
+    //     int delcnt = 0;
+    //     Status stat = null;
+    //     while (true) {
+    //         synchronized (MPIEngine.class) { // global static lock
+    //             stat = req.Test(); 
+    //             logger.info("Request: " + req + ", Status: " + stat);
+    //             if (stat != null) {
+    //                 logger.info("Status: index = " + stat.index + ", source = " + stat.source
+    //                                   + ", tag = " + stat.tag);
+    //                 if (!stat.Test_cancelled()) {
+    //                     logger.info("enter req.Wait(): " + Thread.currentThread().toString());
+    //                     return req.Wait(); // should terminate immediately
+    //                 }
+    //             }
+    //         }
+    //         try {
+    //             Thread.currentThread().sleep(delay); // varied a bit
+    //         } catch (InterruptedException e) {
+    //             logger.info("sleep interrupted");
+    //             e.printStackTrace();
+    //         }
+    //         delcnt++; 
+    //         if ( delcnt % 7 != 0 ) {
+    //             delay++;
+    //             logger.info("delay(" + delay + "): " + Thread.currentThread().toString());
+    //         } 
+    //     }
+    // }
 
 }

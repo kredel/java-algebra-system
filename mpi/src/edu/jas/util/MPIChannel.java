@@ -96,11 +96,8 @@ public final class MPIChannel {
         partnerRank = r;
         tag = t;
         int port = ChannelFactory.DEFAULT_PORT;
-        System.out.println("MPIChannel1: " + rank + "/" + size);
         ChannelFactory cf = new ChannelFactory(port);
-        System.out.println("MPIChannel2: " + rank + "/" + size);
         if (rank == 0) {
-            System.out.println("MPIChannel: rank == 0");
             cf.init();
             soc = new TaggedSocketChannel[size];
             soc[0] = null;
@@ -115,7 +112,6 @@ public final class MPIChannel {
             }
             cf.terminate();
         } else {
-            System.out.println("MPIChannel: rank != 0");
             soc = new TaggedSocketChannel[1];
             SocketChannel sc = cf.getChannel(MPIEngine.hostNames.get(0),port);
             soc[0] = new TaggedSocketChannel(sc);
@@ -165,10 +161,7 @@ public final class MPIChannel {
         // Status stat = null;
         // synchronized (MPIEngine.class) { //(MPIEngine.getSendLock(t)) {
         //     engine.Send(va, 0, va.length, MPI.OBJECT, pr, t);
-        //     //Request req = engine.Isend(va, 0, va.length, MPI.OBJECT, pr, t);
-        //     //stat = MPIEngine.waitRequest(req); // req.Wait();
         // }
-        // //System.out.println("send: "+v);
     }
 
 
@@ -193,8 +186,6 @@ public final class MPIChannel {
             throw new IOException(e);
         }
         // Object[] va = new Object[1];
-        // //System.out.println("engine.Recv");
-        // //Status stat = engine.Recv(va, 0, va.length, MPI.OBJECT, MPI.ANY_SOURCE, t);
         // Status stat = null;
         // Request req = null;
         // synchronized (MPIEngine.getRecvLock(t)) {
@@ -226,11 +217,11 @@ public final class MPIChannel {
      */
     public void close() {
         for ( int i = 0; i < soc.length; i++ ) {
-            if (soc[i] != null ) {
+            if (soc[i] != null) {
                 soc[i].close();
+                soc[i] = null; 
             }
         }
-        // nothing to do
     }
 
 

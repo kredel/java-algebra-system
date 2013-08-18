@@ -101,9 +101,7 @@ public class DistHashTableMPI<K, V> extends AbstractMap<K, V> {
         rank = engine.Rank();
         size = engine.Size();
         int port = ChannelFactory.DEFAULT_PORT + 11;
-        System.out.println("DistHashTableMPI1: " + rank + "/" + size);
         ChannelFactory cf = new ChannelFactory(port);
-        System.out.println("DistHashTableMPI1: " + rank + "/" + size);
         if (rank == 0) {
             cf.init();
             soc = new SocketChannel[size];
@@ -111,8 +109,7 @@ public class DistHashTableMPI<K, V> extends AbstractMap<K, V> {
             try {
                  for ( int i = 1; i < size; i++ ) {
                       SocketChannel sc = cf.getChannel(); // TODO not correct wrt rank
-                      soc[i] = sc; //new TaggedSocketChannel(sc); 
-                      //soc[i].init();
+                      soc[i] = sc; 
                  }
             } catch (InterruptedException e) {
                 throw new IOException(e);
@@ -121,8 +118,7 @@ public class DistHashTableMPI<K, V> extends AbstractMap<K, V> {
         } else {
             soc = new SocketChannel[1];
             SocketChannel sc = cf.getChannel(MPIEngine.hostNames.get(0),port);
-            soc[0] = sc; //new TaggedSocketChannel(sc);
-            //soc[0].init();
+            soc[0] = sc; 
         }
         theList = new TreeMap<K, V>();
         //theList = new ConcurrentSkipListMap<K, V>(); // Java 1.6
@@ -174,7 +170,6 @@ public class DistHashTableMPI<K, V> extends AbstractMap<K, V> {
     public Collection<V> values() {
         synchronized (theList) {
             return new ArrayList<V>(theList.values());
-            //return theList.values();
         }
     }
 
@@ -298,8 +293,6 @@ public class DistHashTableMPI<K, V> extends AbstractMap<K, V> {
                 soc[i].send(tc);
                 // synchronized (MPIEngine.class) { //(MPIEngine.getSendLock(DHTTAG)) {
                 //     engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
-                //     //Request req = engine.Isend(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
-                //     //Status stat = MPIEngine.waitRequest(req); // req.Wait();
                 // }
             }
             synchronized (theList) { // add to self.listener
@@ -309,11 +302,11 @@ public class DistHashTableMPI<K, V> extends AbstractMap<K, V> {
             //System.out.println("send: "+tc);
         } catch (ClassNotFoundException e) {
             logger.info("sending(key=" + key + ")");
-            logger.info("send " + e);
+            logger.warn("send " + e);
             e.printStackTrace();
         } catch (IOException e) {
             logger.info("sending(key=" + key + ")");
-            logger.info("send " + e);
+            logger.warn("send " + e);
             e.printStackTrace();
         }
         return null;
@@ -332,12 +325,10 @@ public class DistHashTableMPI<K, V> extends AbstractMap<K, V> {
         try {
             synchronized (theList) {
                 value = theList.get(key);
-                //value = get(key);
                 while (value == null) {
                     //System.out.print("-");
                     theList.wait(100);
                     value = theList.get(key);
-                    //value = get(key);
                 }
             }
         } catch (InterruptedException e) {
@@ -415,10 +406,6 @@ public class DistHashTableMPI<K, V> extends AbstractMap<K, V> {
                      soc[i].send(tc);
                 }
 	    }
-        // } catch (MPIException e) {
-        //     logger.info("sending(terminate)");
-        //     logger.info("send " + e);
-        //     e.printStackTrace();
         } catch (IOException e) {
             logger.info("sending(terminate)");
             logger.info("send " + e);
@@ -435,14 +422,6 @@ public class DistHashTableMPI<K, V> extends AbstractMap<K, V> {
         //         //Request req = engine.Isend(tcl, 0, tcl.length, MPI.OBJECT, engine.Rank(), DHTTAG);
         //         //Status stat = MPIEngine.waitRequest(req); // req.Wait();
         //     }
-        // } catch (MPIException e) {
-        //     logger.info("sending(terminate)");
-        //     logger.info("send " + e);
-        //     e.printStackTrace();
-        // } catch (Exception e) {
-        //     logger.info("sending(terminate)");
-        //     logger.info("send " + e);
-        //     e.printStackTrace();
         // }
         try {
             while (listener.isAlive()) {
@@ -534,17 +513,14 @@ class DHTMPIListener<K, V> extends Thread {
                 }
                 Object to = soc[0].receive();
                 // DHTTransport[] tcl = new DHTTransport[1];
-                // //System.out.println("engine.Recv");
                 // Status stat = null;
                 // Request req = null;
                 // synchronized (MPIEngine.getRecvLock(DistHashTableMPI.DHTTAG)) {
-                //     //stat = engine.Recv(tcl, 0, tcl.length, MPI.OBJECT, MPI.ANY_SOURCE,
-                //     //                   DistHashTableMPI.DHTTAG);
                 //     synchronized (MPIEngine.class) { // global static lock
                 //         req = engine.Irecv(tcl, 0, tcl.length, MPI.OBJECT, MPI.ANY_SOURCE, 
                 //                            DistHashTableMPI.DHTTAG);
                 //     }
-                //     stat = MPIEngine.waitRequest(req); //req.Wait();
+                //     stat = MPIEngine.waitRequest(req);
                 // }
                 // logger.info("waitRequest done: req = " + req + " stat = " + stat);
                 // if (stat == null) {
@@ -552,7 +528,6 @@ class DHTMPIListener<K, V> extends Thread {
                 //     break;
                 // }
                 // int cnt = stat.Get_count(MPI.OBJECT);
-                // //System.out.println("engine.Recv, cnt = " + cnt);
                 // if (cnt == 0) {
                 //     goon = false;
                 //     break;
@@ -581,7 +556,7 @@ class DHTMPIListener<K, V> extends Thread {
                 }
             } catch (MPIException e) {
                 goon = false;
-                logger.info("receive(MPI) " + e);
+                logger.warn("receive(MPI) " + e);
                 //e.printStackTrace();
             } catch (ClassNotFoundException e) {
                 goon = false;

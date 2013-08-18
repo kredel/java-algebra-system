@@ -283,6 +283,7 @@ public class GroebnerBaseDistributedHybridMPI<C extends RingElem<C>> extends Gro
         logger.debug("looking for clients");
         DistHashTableMPI<Integer, GenPolynomial<C>> theList = new DistHashTableMPI<Integer, GenPolynomial<C>>(engine);
         theList.init();
+
         List<GenPolynomial<C>> al = pairlist.getList();
         for (int i = 0; i < al.size(); i++) {
             // no wait required
@@ -319,7 +320,7 @@ public class GroebnerBaseDistributedHybridMPI<C extends RingElem<C>> extends Gro
         List<GenPolynomial<C>> Gp;
         Gp = minimalGB(G); // not jet distributed but threaded
         time = System.currentTimeMillis() - time;
-        logger.info("parallel gbmi time = " + time);
+        logger.debug("parallel gbmi time = " + time);
         G = Gp;
         logger.info("server theList.terminate() " + theList.size());
         theList.terminate();

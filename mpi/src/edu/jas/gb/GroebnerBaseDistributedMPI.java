@@ -147,7 +147,6 @@ public class GroebnerBaseDistributedMPI<C extends RingElem<C>> extends GroebnerB
     public List<GenPolynomial<C>> GB(int modv, List<GenPolynomial<C>> F) {
         try {
             if (engine.Rank() == 0) {
-                logger.info("GBmaster: rank 0");
                 return GBmaster(modv, F);
             }
         } catch (MPIException e) {
@@ -160,7 +159,6 @@ public class GroebnerBaseDistributedMPI<C extends RingElem<C>> extends GroebnerB
             return null;
         }
         pool.terminate(); // not used on clients
-        logger.info("clientPart: rank != 0");
         try {
             clientPart(0);
         } catch (IOException e) {
@@ -220,12 +218,12 @@ public class GroebnerBaseDistributedMPI<C extends RingElem<C>> extends GroebnerB
         //if (l <= 1) {
         //return G; must signal termination to others
         //}
-        logger.info("initialize DHT, done pairlist: " + unused);
+        logger.info("done pairlist, initialize DHT: " + unused);
 
         DistHashTableMPI<Integer, GenPolynomial<C>> theList = new DistHashTableMPI<Integer, GenPolynomial<C>>(
                         engine);
         theList.init();
-        logger.info("done DHT: " + theList);
+        //logger.info("done DHT: " + theList);
 
         List<GenPolynomial<C>> al = pairlist.getList();
         for (int i = 0; i < al.size(); i++) {
@@ -435,7 +433,7 @@ class MPIReducerServer<C extends RingElem<C>> implements Runnable {
         engine = e;
         theList = dl;
         pairlist = L;
-        logger.info("reducer server constructor: " + r);
+        logger.debug("reducer server constructor: "); // + r);
     }
 
 
@@ -443,7 +441,7 @@ class MPIReducerServer<C extends RingElem<C>> implements Runnable {
      * Main method.
      */
     public void run() {
-        logger.info("reducer server running: " + this);
+        logger.debug("reducer server running: "); // + rank);
         try {
             pairChannel = new MPIChannel(engine, rank);
         } catch (IOException e) {
@@ -656,7 +654,7 @@ class MPIReducerClient<C extends RingElem<C>> implements Runnable {
      * Main run method.
      */
     public void run() {
-        logger.info("pairChannel = " + pairChannel + " reducer client running");
+        logger.debug("reducer client running");
         Pair<C> pair = null;
         GenPolynomial<C> pi, pj, ps;
         GenPolynomial<C> S;
