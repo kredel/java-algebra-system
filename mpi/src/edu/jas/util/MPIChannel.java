@@ -236,6 +236,9 @@ public final class MPIChannel {
      * Closes the channel.
      */
     public void close() {
+        if ( soc == null ) {
+            return;
+        }
         for ( int i = 0; i < soc.length; i++ ) {
             if (soc[i] != null) {
                 soc[i].close();
