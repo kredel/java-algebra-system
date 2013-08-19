@@ -60,7 +60,7 @@ public class RunMPJGB {
      * #procs/#threadsPerNode [machinefile]
      */
 
-    public static void main(java.lang.String[] args) {
+    public static void main(java.lang.String[] args) throws IOException {
 
         BasicConfigurator.configure();
         MPJEngine.setCommandLine(args); //args = MPI.Init(args);
@@ -232,7 +232,7 @@ public class RunMPJGB {
 
 
     @SuppressWarnings("unchecked")
-    static void runMpj(PolynomialList S, int threads, String mfile, int port, boolean pairseq) {
+    static void runMpj(PolynomialList S, int threads, String mfile, int port, boolean pairseq) throws IOException {
         List L = S.list;
         List G = null;
         long t, t1;
@@ -281,7 +281,7 @@ public class RunMPJGB {
 
     @SuppressWarnings("unchecked")
     static void runHybridMpj(PolynomialList S, int threads, int threadsPerNode, String mfile, int port,
-                    boolean pairseq) {
+                    boolean pairseq) throws IOException {
         List L = S.list;
         List G = null;
         long t, t1;

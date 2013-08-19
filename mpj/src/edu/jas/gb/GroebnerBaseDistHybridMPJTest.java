@@ -44,7 +44,7 @@ public class GroebnerBaseDistHybridMPJTest extends TestCase {
     /**
      * main
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         BasicConfigurator.configure();
         engine = MPJEngine.getCommunicator(args);
         junit.textui.TestRunner.run(suite());
@@ -137,13 +137,18 @@ public class GroebnerBaseDistHybridMPJTest extends TestCase {
 
     @Override
     protected void setUp() {
-        threads = engine.Size();
-        BigRational coeff = new BigRational(9);
-        fac = new GenPolynomialRing<BigRational>(coeff, rl);
-        a = b = c = d = e = null;
-        bbseq = new GroebnerBaseSeq<BigRational>();
-        bbdist = new GroebnerBaseDistributedHybridMPJ<BigRational>(threads,threadsPerNode);
-        //bbdists = new GroebnerBaseDistributedHybridMPJ<BigRational>(threads,threadsPerNode, new OrderedSyzPairlist<BigRational>());
+        try {
+            threads = engine.Size();
+            BigRational coeff = new BigRational(9);
+            fac = new GenPolynomialRing<BigRational>(coeff, rl);
+            a = b = c = d = e = null;
+            bbseq = new GroebnerBaseSeq<BigRational>();
+            bbdist = new GroebnerBaseDistributedHybridMPJ<BigRational>(threads,threadsPerNode);
+            //bbdists = new GroebnerBaseDistributedHybridMPJ<BigRational>(threads,threadsPerNode, new OrderedSyzPairlist<BigRational>());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
