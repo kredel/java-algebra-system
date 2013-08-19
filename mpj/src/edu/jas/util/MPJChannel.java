@@ -7,11 +7,13 @@ package edu.jas.util;
 
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import mpi.Comm;
 import mpi.MPI;
 import mpi.Status;
 import mpi.Request;
+import mpi.MPIException;
 
 import org.apache.log4j.Logger;
 
@@ -35,13 +37,31 @@ public final class MPJChannel {
     /*
      * Underlying MPJ engine.
      */
-    private final Comm engine;
+    private final Comm engine; // static !
+
+
+    /*
+     * TCP/IP object channels with tags.
+     */
+    private static TaggedSocketChannel[] soc = null;
+
+
+    /*
+     * Size of Comm.
+     */
+    private final int size;
 
 
     /*
      * Partner rank.
      */
     private final int partnerRank;
+
+
+    /*
+     * This rank.
+     */
+    private final int rank;
 
 
     /*
@@ -68,12 +88,39 @@ public final class MPJChannel {
      */
     public MPJChannel(Comm s, int r, int t) throws IOException {
         engine = s;
-        int size = engine.Size();
+        rank = engine.Rank();
+        size = engine.Size();
         if (r < 0 || size <= r) {
             throw new IOException("r out of bounds: 0 <= r < size: " + r + ", " + size);
         }
         partnerRank = r;
         tag = t;
+        synchronized (engine) {
+            if ( soc == null ) {
+                int port = ChannelFactory.DEFAULT_PORT;
+                ChannelFactory cf = new ChannelFactory(port);
+                if (rank == 0) {
+                    cf.init();
+                    soc = new TaggedSocketChannel[size];
+                    soc[0] = null;
+                    try {
+                        for ( int i = 1; i < size; i++ ) {
+                            SocketChannel sc = cf.getChannel(); // TODO not correct wrt rank
+                            soc[i] = new TaggedSocketChannel(sc); 
+                            soc[i].init();
+                        }
+                    } catch (InterruptedException e) {
+                        throw new IOException(e);
+                    }
+                    cf.terminate();
+                } else {
+                    soc = new TaggedSocketChannel[1];
+                    SocketChannel sc = cf.getChannel(MPJEngine.hostNames.get(0),port);
+                    soc[0] = new TaggedSocketChannel(sc);
+                    soc[0].init();
+                }
+            }
+        }
         logger.info("constructor: " + this.toString());
     }
 
@@ -112,15 +159,21 @@ public final class MPJChannel {
      * @param pr partner rank.
      */
     void send(int t, Object v, int pr) throws IOException {
-        Object[] va = new Object[1];
-        va[0] = v;
-        Status stat = null;
-        synchronized (MPJEngine.getSendLock(t)) {
-            //engine.Send(va, 0, va.length, MPI.OBJECT, pr, t);
-            Request req = engine.Isend(va, 0, va.length, MPI.OBJECT, pr, t);
-            stat = MPJEngine.waitRequest(req); // req.Wait();
+        if ( soc == null ) {
+            logger.warn("soc not initialized: lost " + v);
+            return;
         }
-        //System.out.println("send: "+v);
+        if ( soc[pr] == null ) {
+            logger.warn("soc[" + pr + "] not initialized: lost " + v);
+            return;
+        }
+        soc[pr].send(t,v);
+        // Object[] va = new Object[1];
+        // va[0] = v;
+        // Status stat = null;
+        // synchronized (MPJEngine.class) {
+        //     engine.Send(va, 0, va.length, MPI.OBJECT, pr, t);
+        // }
     }
 
 
@@ -139,25 +192,34 @@ public final class MPJChannel {
      * @return a message object.
      */
     public Object receive(int t) throws IOException, ClassNotFoundException {
-        Object[] va = new Object[1];
-        //System.out.println("engine.Recv");
-        //Status stat = engine.Recv(va, 0, va.length, MPI.OBJECT, MPI.ANY_SOURCE, t);
-        Status stat = null;
-        synchronized (MPJEngine.getRecvLock(t)) {
-            //stat = engine.Recv(va, 0, va.length, MPI.OBJECT, partnerRank, t);
-            Request req = engine.Irecv(va, 0, va.length, MPI.OBJECT, partnerRank, t);
-            stat = MPJEngine.waitRequest(req); // req.Wait();
+        if ( soc == null ) {
+            logger.warn("soc not initialized");
+            return null;
         }
-        int cnt = stat.Get_count(MPI.OBJECT);
-        if (cnt == 0) {
-            throw new IOException("no object received");
+        if ( soc[partnerRank] == null ) {
+            logger.warn("soc[" + partnerRank + "] not initialized");
+            return null;
         }
-        //int pr = stat.source;
-        //if (pr != partnerRank) {
-        //    logger.warn("received out of order message from " + pr);
-        //}
-        Object v = va[0];
-        return v;
+        try {
+             return soc[partnerRank].receive(t);
+        } catch (InterruptedException e) {
+            throw new IOException(e);
+        }
+        // Object[] va = new Object[1];
+        // Status stat = null;
+        // synchronized (MPJEngine.getRecvLock(t)) {
+        //     stat = engine.Recv(va, 0, va.length, MPI.OBJECT, partnerRank, t);
+        // }
+        // int cnt = stat.Get_count(MPI.OBJECT);
+        // if (cnt == 0) {
+        //     throw new IOException("no object received");
+        // }
+        // //int pr = stat.source;
+        // //if (pr != partnerRank) {
+        // //    logger.warn("received out of order message from " + pr);
+        // //}
+        // Object v = va[0];
+        // return v;
     }
 
 
@@ -165,7 +227,15 @@ public final class MPJChannel {
      * Closes the channel.
      */
     public void close() {
-        // nothing to do
+        if ( soc == null ) {
+            return;
+        }
+        for ( int i = 0; i < soc.length; i++ ) {
+            if (soc[i] != null) {
+                soc[i].close();
+                soc[i] = null; 
+            }
+        }
     }
 
 
@@ -174,7 +244,8 @@ public final class MPJChannel {
      */
     @Override
     public String toString() {
-        return "MPJChannel(on=" + engine.Rank() + ",to=" + partnerRank + ",tag=" + tag + ")";
+        return "MPJChannel(on=" + rank + ",to=" + partnerRank + ",tag=" + tag
+               + "," + Arrays.toString(soc) + ")";
     }
 
 }

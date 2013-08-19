@@ -5,9 +5,12 @@
 package edu.jas.kern;
 
 
+import java.io.IOException;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+
 import mpi.MPI;
 import mpi.Status;
 
@@ -58,7 +61,7 @@ public class MPJEngineTest extends TestCase {
 
 
     @Override
-    protected void setUp() {
+    protected void setUp() throws IOException {
         if (engine == null) {
             engine = MPJEngine.getCommunicator(cmdline);
         }

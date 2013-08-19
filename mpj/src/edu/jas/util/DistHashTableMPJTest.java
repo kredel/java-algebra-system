@@ -6,6 +6,7 @@ package edu.jas.util;
 
 
 import java.util.Iterator;
+import java.io.IOException;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -30,7 +31,7 @@ public class DistHashTableMPJTest extends TestCase {
     /**
      * main.
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         //long t = System.currentTimeMillis();
         BasicConfigurator.configure();
         engine = MPJEngine.getCommunicator(args);
@@ -99,7 +100,7 @@ public class DistHashTableMPJTest extends TestCase {
     /**
      * Tests create and terminate DistHashTableMPJ.
      */
-    public void xtestDistHashTable1() {
+    public void xtestDistHashTable1() throws IOException {
         l1 = new DistHashTableMPJ<Integer, Integer>(engine);
         l1.init();
         assertTrue("l1==empty", l1.isEmpty());
@@ -109,7 +110,7 @@ public class DistHashTableMPJTest extends TestCase {
     /**
      * Tests if the created DistHashTable has #n objects as content.
      */
-    public void xtestDistHashTable2() {
+    public void xtestDistHashTable2() throws IOException {
         int me = engine.Rank();
         l1 = new DistHashTableMPJ<Integer, Integer>(engine);
         l1.init();
@@ -156,7 +157,7 @@ public class DistHashTableMPJTest extends TestCase {
     /**
      * Tests if the two created DistHashTables have #n objects as content.
      */
-    public void testDistHashTable3() {
+    public void testDistHashTable3() throws IOException {
         int me = engine.Rank();
         l2 = new DistHashTableMPJ<Integer, Integer>(engine);
         l2.init();

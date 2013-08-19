@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.io.IOException;
+import java.util.Arrays;
 
 import mpi.Comm;
 import mpi.MPI;
@@ -37,7 +39,7 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
     private static final Logger logger = Logger.getLogger(DistHashTableMPJ.class);
 
 
-    private static boolean debug = true; //logger.isDebugEnabled();
+    private static boolean debug = logger.isDebugEnabled();
 
 
     protected final SortedMap<K, V> theList;
@@ -49,16 +51,34 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
     protected DHTMPJListener<K, V> listener;
 
 
+    /*
+     * TCP/IP object channels.
+     */
+    private final SocketChannel[] soc;
+
+
     /**
      * Message tag for DHT communicaton.
      */
     public static final int DHTTAG = MPJEngine.TAG + 1;
 
 
+    /*
+     * Size of Comm.
+     */
+    private final int size;
+
+
+    /*
+     * This rank.
+     */
+    private final int rank;
+
+
     /**
      * DistHashTableMPJ.
      */
-    public DistHashTableMPJ() {
+    public DistHashTableMPJ() throws IOException {
         this(MPJEngine.getCommunicator());
     }
 
@@ -67,7 +87,7 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
      * DistHashTableMPJ.
      * @param args command line for MPJ runtime system.
      */
-    public DistHashTableMPJ(String[] args) {
+    public DistHashTableMPJ(String[] args) throws IOException {
         this(MPJEngine.getCommunicator(args));
     }
 
@@ -76,11 +96,34 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
      * DistHashTableMPJ.
      * @param cm MPJ communicator to use.
      */
-    public DistHashTableMPJ(Comm cm) {
+    public DistHashTableMPJ(Comm cm) throws IOException {
         engine = cm;
-        //theList = new ConcurrentSkipListMap<K, V>(); // Java 1.6
+        rank = engine.Rank();
+        size = engine.Size();
+        int port = ChannelFactory.DEFAULT_PORT + 11;
+        ChannelFactory cf = new ChannelFactory(port);
+        if (rank == 0) {
+            cf.init();
+            soc = new SocketChannel[size];
+            soc[0] = null;
+            try {
+                 for ( int i = 1; i < size; i++ ) {
+                      SocketChannel sc = cf.getChannel(); // TODO not correct wrt rank
+                      soc[i] = sc; 
+                 }
+            } catch (InterruptedException e) {
+                throw new IOException(e);
+            }
+            cf.terminate();
+        } else {
+            soc = new SocketChannel[1];
+            SocketChannel sc = cf.getChannel(MPJEngine.hostNames.get(0),port);
+            soc[0] = sc; 
+        }
         theList = new TreeMap<K, V>();
-        listener = new DHTMPJListener<K, V>(engine, theList);
+        //theList = new ConcurrentSkipListMap<K, V>(); // Java 1.6
+        listener = new DHTMPJListener<K, V>(engine, soc, theList);
+        logger.info("constructor: " + rank + "/" + size);
     }
 
 
@@ -127,7 +170,6 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
     public Collection<V> values() {
         synchronized (theList) {
             return new ArrayList<V>(theList.values());
-            //return theList.values();
         }
     }
 
@@ -246,22 +288,28 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
             DHTTransport<K, V> tc = DHTTransport.<K, V> create(key, value);
             DHTTransport[] tcl = new DHTTransport[1];
             tcl[0] = tc;
-            int size = engine.Size();
-            for (int i = 0; i < size; i++) { // send also to self.listener
-                synchronized (MPJEngine.getSendLock(DHTTAG)) {
-                    //engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
-                    Request req = engine.Isend(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
-                    Status stat = MPJEngine.waitRequest(req); // req.Wait();
-                }
+            for (int i = 1; i < size; i++) { // send not to self.listener
+                soc[i].send(tc);
+                //synchronized (MPJEngine.class) {
+                //    engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
+                //}
+            }
+            synchronized (theList) { // add to self.listener
+                theList.put(tc.key(), tc.value());
+                theList.notifyAll();
             }
             //System.out.println("send: "+tc);
+        } catch (ClassNotFoundException e) {
+            logger.info("sending(key=" + key + ")");
+            logger.warn("send " + e);
+            e.printStackTrace();
         } catch (MPIException e) {
             logger.info("sending(key=" + key + ")");
-            logger.info("send " + e);
+            logger.warn("send " + e);
             e.printStackTrace();
-        } catch (Exception e) {
+        } catch (IOException e) {
             logger.info("sending(key=" + key + ")");
-            logger.info("send " + e);
+            logger.warn("send " + e);
             e.printStackTrace();
         }
         return null;
@@ -280,12 +328,10 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
         try {
             synchronized (theList) {
                 value = theList.get(key);
-                //value = get(key);
                 while (value == null) {
                     //System.out.print("-");
                     theList.wait(100);
                     value = theList.get(key);
-                    //value = get(key);
                 }
             }
         } catch (InterruptedException e) {
@@ -327,7 +373,7 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
      * Initialize and start the list thread.
      */
     public void init() {
-        logger.debug("init " + listener + ", theList = " + theList);
+        logger.info("init " + listener + ", theList = " + theList);
         if (listener == null) {
             return;
         }
@@ -354,32 +400,30 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
             Runtime rt = Runtime.getRuntime();
             logger.debug("terminate " + listener + ", runtime = " + rt.hashCode());
         }
+        listener.setDone();
+        DHTTransport<K, V> tc = new DHTTransportTerminate<K, V>();
+        DHTTransport[] tcl = new DHTTransport[1];
+        tcl[0] = tc;
         try {
-            DHTTransport<K, V> tc = new DHTTransportTerminate<K, V>();
-            DHTTransport[] tcl = new DHTTransport[1];
-            tcl[0] = tc;
-            // send only to self.listener
-            synchronized (MPJEngine.getSendLock(DHTTAG)) {
-                //engine.Send(tcl, 0, tcl.length, MPI.OBJECT, engine.Rank(), DHTTAG);
-                Request req = engine.Isend(tcl, 0, tcl.length, MPI.OBJECT, engine.Rank(), DHTTAG);
-                Status stat = MPJEngine.waitRequest(req); // req.Wait();
-            }
-            logger.debug("send terminate to " + engine.Rank());
-        } catch (MPIException e) {
-            logger.info("sending(terminate)");
-            logger.info("send " + e);
-            e.printStackTrace();
-        } catch (Exception e) {
+            if ( rank == 0 ) {
+                //logger.info("send(" + rank + ") terminate");
+                for (int i = 1; i < size; i++) { // send not to self.listener
+		    soc[i].send(tc);
+                    //synchronized (MPJEngine.class) { 
+                    //    engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
+	            //}
+                }
+	    }
+        } catch (IOException e) {
             logger.info("sending(terminate)");
             logger.info("send " + e);
             e.printStackTrace();
         }
-        listener.setDone();
         try {
             while (listener.isAlive()) {
                 //System.out.print("+++++");
                 listener.join(999);
-                //listener.interrupt();
+                listener.interrupt();
             }
         } catch (InterruptedException e) {
             //Thread.currentThread().interrupt();
@@ -409,16 +453,20 @@ class DHTMPJListener<K, V> extends Thread {
     private final SortedMap<K, V> theList;
 
 
+    private final SocketChannel[] soc;
+
+
     private boolean goon;
 
 
     /**
      * Constructor.
      */
-    DHTMPJListener(Comm cm, SortedMap<K, V> list) {
+    DHTMPJListener(Comm cm, SocketChannel[] s, SortedMap<K, V> list) {
         engine = cm;
         theList = list;
         goon = true;
+        soc = s;
     }
 
 
@@ -444,33 +492,44 @@ class DHTMPJListener<K, V> extends Thread {
     @SuppressWarnings("unchecked")
     @Override
     public void run() {
-        logger.debug("listener run() " + this);
+        logger.info("listener run() " + this);
+        int rank = -1;
         DHTTransport<K, V> tc;
         //goon = true;
         while (goon) {
             tc = null;
             try {
-                DHTTransport[] tcl = new DHTTransport[1];
-                //System.out.println("engine.Recv");
-                Status stat = null;
-                synchronized (MPJEngine.getRecvLock(DistHashTableMPJ.DHTTAG)) {
-                    //stat = engine.Recv(tcl, 0, tcl.length, MPI.OBJECT, MPI.ANY_SOURCE,
-                    //                  DistHashTableMPJ.DHTTAG);
-                    Request req = engine.Irecv(tcl, 0, tcl.length, MPI.OBJECT, MPI.ANY_SOURCE, 
-                                         DistHashTableMPJ.DHTTAG);
-                    stat = MPJEngine.waitRequest(req); //req.Wait();
+                if ( rank < 0 ) {
+                    rank = engine.Rank();
                 }
-                int cnt = stat.Get_count(MPI.OBJECT);
-                //System.out.println("engine.Recv, cnt = " + cnt);
-                if (cnt == 0) {
+                if ( rank == 0 ) {
+                    logger.info("listener on rank 0 stopped");
                     goon = false;
-                    break;
+                    continue;
                 }
-                tc = (DHTTransport<K, V>) tcl[0];
+                Object to = soc[0].receive();
+                DHTTransport[] tcl = new DHTTransport[1];
+                //Status stat = null;
+                //synchronized (MPJEngine.class) { // global static lock , // only from 0:
+                //    stat = engine.Recv(tcl, 0, tcl.length, MPI.OBJECT, MPI.ANY_SOURCE,
+                //                       DistHashTableMPJ.DHTTAG);
+                //}
+                //logger.info("waitRequest done: stat = " + stat);
+                //if (stat == null) {
+                //    goon = false;
+                //    break;
+                //}
+                //int cnt = stat.Get_count(MPI.OBJECT);
+                //if (cnt == 0) {
+                //    goon = false;
+                //    break;
+                //}
+                tc = (DHTTransport<K, V>) to; //tcl[0]; // to
                 if (debug) {
                     logger.debug("receive(" + tc + ")");
                 }
                 if (tc instanceof DHTTransportTerminate) {
+                    logger.info("receive(" + rank + ") terminate");
                     goon = false;
                     break;
                 }
@@ -480,7 +539,7 @@ class DHTMPJListener<K, V> extends Thread {
                 }
                 K key = tc.key();
                 if (key != null) {
-                    logger.info("receive(" + engine.Rank() + "," + stat.source + "), key=" + key);
+                    logger.info("receive(" + rank + "), key=" + key);
                     V val = tc.value();
                     synchronized (theList) {
                         theList.put(key, val);
@@ -489,7 +548,7 @@ class DHTMPJListener<K, V> extends Thread {
                 }
             } catch (MPIException e) {
                 goon = false;
-                logger.info("receive(MPI) " + e);
+                logger.warn("receive(MPI) " + e);
                 //e.printStackTrace();
             } catch (ClassNotFoundException e) {
                 goon = false;
@@ -501,7 +560,7 @@ class DHTMPJListener<K, V> extends Thread {
                 e.printStackTrace();
             }
         }
-        logger.info("terminated at " + engine.Rank());
+        logger.info("terminated at " + rank);
     }
 
 }
