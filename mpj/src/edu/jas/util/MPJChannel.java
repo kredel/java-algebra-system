@@ -177,9 +177,9 @@ public final class MPJChannel {
             soc[pr].send(t, v);
         } else {
             Object[] va = new Object[] { v };
-            synchronized (MPJEngine.class) {
+            //synchronized (MPJEngine.class) {
                 engine.Send(va, 0, va.length, MPI.OBJECT, pr, t);
-            }
+            //}
         }
     }
 
@@ -216,9 +216,9 @@ public final class MPJChannel {
         } else {
             Object[] va = new Object[1];
             Status stat = null;
-            synchronized (MPJEngine.class) {
+            //synchronized (MPJEngine.class) {
                 stat = engine.Recv(va, 0, va.length, MPI.OBJECT, partnerRank, t);
-            }
+            //}
             if (stat == null) {
                 throw new IOException("received null Status");
             }
