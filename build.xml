@@ -8,6 +8,7 @@
   <property name="src"       value="src" />
   <property name="testsrc"   value="trc" />
   <property name="mpjsrc"    value="mpj/src" />
+  <property name="mpisrc"    value="mpi/src" />
   <property name="jysrc"     value="jython/src" />
   <!--property name="jlinalg"   value="../jas-versions/jlinalg_adapter/edu" /-->
   <!--property name="ACmath"    value="../jas-versions/commons-math_adapter/edu" /-->
@@ -322,6 +323,18 @@
        includes="**/*.java" 
   />
   <fixcrlf srcdir="${testsrc}"
+       tab="remove"
+       tablength="8"
+       javafiles="yes"
+       includes="**/*.java" 
+  />
+  <fixcrlf srcdir="${mpisrc}"
+       tab="remove"
+       tablength="8"
+       javafiles="yes"
+       includes="**/*.java" 
+  />
+  <fixcrlf srcdir="${mpjsrc}"
        tab="remove"
        tablength="8"
        javafiles="yes"
