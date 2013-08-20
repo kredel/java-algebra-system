@@ -57,8 +57,8 @@ public final class MPIChannel {
 
     /*
      * Transport layer.
-     * true: use TCP/IP socket layer, false: use MPJ transport layer.
-     * Can not be set to false for OpenMPI Java: programming not done.
+     * true: use TCP/IP socket layer, false: use MPI transport layer.
+     * Can not be set to false for OpenMPI Java: not working and programming not done.
      */
     static final boolean useTCP = true;
 
@@ -126,7 +126,7 @@ public final class MPIChannel {
                 }
             }
         }
-        logger.info("constructor: " + this.toString());
+        logger.info("constructor: " + this.toString() + ", useTCP: " + useTCP);
     }
 
 

@@ -127,7 +127,7 @@ public final class MPJChannel {
                 }
             }
         }
-        logger.info("constructor: " + this.toString());
+        logger.info("constructor: " + this.toString() + ", useTCP: " + useTCP);
     }
 
 

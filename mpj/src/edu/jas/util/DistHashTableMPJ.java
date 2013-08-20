@@ -142,7 +142,7 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
         theList = new TreeMap<K, V>();
         //theList = new ConcurrentSkipListMap<K, V>(); // Java 1.6
         listener = new DHTMPJListener<K, V>(engine, soc, theList);
-        logger.info("constructor: " + rank + "/" + size);
+        logger.info("constructor: " + rank + "/" + size + ", useTCP: " + useTCP);
     }
 
 
