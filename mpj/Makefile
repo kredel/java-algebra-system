@@ -40,7 +40,7 @@ FILES=$(wildcard src/edu/jas/*/*.java)
 CLASSES=$(subst src,classes,$(subst java,class,$(FILES)))
 #echo $(CLASSES)
 
-all: clean jas-mpj.jar doc
+all: jas-mpj.jar
 
 $(CLASSES): $(FILES) Makefile
 	-mkdir classes
@@ -82,7 +82,7 @@ doc: $(FILES)
 	$(DOC) $(DOCOPTS) -d ../doc/mpj $(FILES)
 
 
-BWDIR=java/jas-2.4/mpj
+BWDIR=java/jas-2.5/mpj
 
 home:
 	$(RSYNC) bwgrid:$(BWDIR)/src/     src
