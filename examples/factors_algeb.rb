@@ -85,7 +85,7 @@ t = System.currentTimeMillis();
 #G = r.squarefreeFactors(f);
 G = r.factors(f);
 t = System.currentTimeMillis() - t;
-puts "G = " + str(G);
+puts "#G = " + str(G.size);
 #puts "factor time =", t, "milliseconds";
 puts;
 
