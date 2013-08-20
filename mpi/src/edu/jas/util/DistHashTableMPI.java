@@ -42,25 +42,22 @@ public class DistHashTableMPI<K, V> extends AbstractMap<K, V> {
     private static boolean debug = logger.isDebugEnabled();
 
 
+    /*
+     * Backing data structure.
+     */
     protected final SortedMap<K, V> theList;
 
 
-    protected final Comm engine;
-
-
+    /*
+     * Thread for receiving pairs.
+     */
     protected DHTMPIListener<K, V> listener;
 
 
     /*
-     * TCP/IP object channels.
+     * MPI communicator.
      */
-    private final SocketChannel[] soc;
-
-
-    /**
-     * Message tag for DHT communicaton.
-     */
-    public static final int DHTTAG = MPIEngine.TAG + 1;
+    protected final Comm engine;
 
 
     /*
@@ -73,6 +70,25 @@ public class DistHashTableMPI<K, V> extends AbstractMap<K, V> {
      * This rank.
      */
     private final int rank;
+
+
+    /**
+     * Message tag for DHT communicaton.
+     */
+    public static final int DHTTAG = MPIEngine.TAG + 1;
+
+
+    /*
+     * TCP/IP object channels.
+     */
+    private final SocketChannel[] soc;
+
+
+    /*
+     * Transport layer.
+     * true: use TCP/IP socket layer, false: use MPJ transport layer.
+     */
+    static final boolean useTCP = false;
 
 
     /**
@@ -100,25 +116,29 @@ public class DistHashTableMPI<K, V> extends AbstractMap<K, V> {
         engine = cm;
         rank = engine.Rank();
         size = engine.Size();
-        int port = ChannelFactory.DEFAULT_PORT + 11;
-        ChannelFactory cf = new ChannelFactory(port);
-        if (rank == 0) {
-            cf.init();
-            soc = new SocketChannel[size];
-            soc[0] = null;
-            try {
-                 for ( int i = 1; i < size; i++ ) {
-                      SocketChannel sc = cf.getChannel(); // TODO not correct wrt rank
-                      soc[i] = sc; 
-                 }
-            } catch (InterruptedException e) {
-                throw new IOException(e);
+        if (useTCP) { // && soc == null
+            int port = ChannelFactory.DEFAULT_PORT + 11;
+            ChannelFactory cf = new ChannelFactory(port);
+            if (rank == 0) {
+                cf.init();
+                soc = new SocketChannel[size];
+                soc[0] = null;
+                try {
+                    for ( int i = 1; i < size; i++ ) {
+                        SocketChannel sc = cf.getChannel(); // TODO not correct wrt rank
+                        soc[i] = sc; 
+                    }
+                } catch (InterruptedException e) {
+                    throw new IOException(e);
+                }
+                cf.terminate();
+            } else {
+                soc = new SocketChannel[1];
+                SocketChannel sc = cf.getChannel(MPIEngine.hostNames.get(0),port);
+                soc[0] = sc; 
             }
-            cf.terminate();
         } else {
-            soc = new SocketChannel[1];
-            SocketChannel sc = cf.getChannel(MPIEngine.hostNames.get(0),port);
-            soc[0] = sc; 
+            soc = null;
         }
         theList = new TreeMap<K, V>();
         //theList = new ConcurrentSkipListMap<K, V>(); // Java 1.6
@@ -286,12 +306,14 @@ public class DistHashTableMPI<K, V> extends AbstractMap<K, V> {
         }
         try {
             DHTTransport<K, V> tc = DHTTransport.<K, V> create(key, value);
-            DHTTransport[] tcl = new DHTTransport[1];
-            tcl[0] = tc;
             for (int i = 1; i < size; i++) { // send not to self.listener
-                //soc[i].send(tc);
-                synchronized (MPIEngine.class) { 
-                     engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
+                if (useTCP) {
+                    soc[i].send(tc);
+                } else {
+                    DHTTransport[] tcl = new DHTTransport[] { tc };
+                    synchronized (MPIEngine.class) { // remove
+                        engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
+                    }
                 }
             }
             synchronized (theList) { // add to self.listener
@@ -402,19 +424,25 @@ public class DistHashTableMPI<K, V> extends AbstractMap<K, V> {
         }
         listener.setDone();
         DHTTransport<K, V> tc = new DHTTransportTerminate<K, V>();
-        DHTTransport[] tcl = new DHTTransport[1];
-        tcl[0] = tc;
         try {
             if ( rank == 0 ) {
                 //logger.info("send(" + rank + ") terminate");
                 for (int i = 1; i < size; i++) { // send not to self.listener
-		    //soc[i].send(tc);
-                    synchronized (MPIEngine.class) { 
-                        engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
-	            }
+                    if (useTCP) {
+                        soc[i].send(tc);
+                    } else {
+                        DHTTransport[] tcl = new DHTTransport[] { tc };
+                        synchronized (MPIEngine.class) { 
+                            engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
+                        }
+                    }
                 }
-	    }
+            }
         } catch (MPIException e) {
+            logger.info("sending(terminate)");
+            logger.info("send " + e);
+            e.printStackTrace();
+        } catch (IOException e) {
             logger.info("sending(terminate)");
             logger.info("send " + e);
             e.printStackTrace();
@@ -437,7 +465,6 @@ public class DistHashTableMPI<K, V> extends AbstractMap<K, V> {
 /**
  * Thread to comunicate with the other DHT lists.
  */
-
 class DHTMPIListener<K, V> extends Thread {
 
 
@@ -507,24 +534,29 @@ class DHTMPIListener<K, V> extends Thread {
                     goon = false;
                     continue;
                 }
-                //Object to = soc[0].receive();
-                DHTTransport[] tcl = new DHTTransport[1];
-                Status stat = null;
-                synchronized (MPIEngine.class) { // global static lock , // only from 0:
+                Object to = null;
+                if (DistHashTableMPI.useTCP) {
+                    to = soc[0].receive();
+                } else {
+                    DHTTransport[] tcl = new DHTTransport[1];
+                    Status stat = null;
+                    synchronized (MPIEngine.class) { // global static lock , // only from 0:
                         stat = engine.Recv(tcl, 0, tcl.length, MPI.OBJECT, MPI.ANY_SOURCE, 
                                            DistHashTableMPI.DHTTAG);
+                    }
+                    //logger.info("waitRequest done: stat = " + stat);
+                    if (stat == null) {
+                        goon = false;
+                        break;
+                    }
+                    int cnt = stat.Get_count(MPI.OBJECT);
+                    if (cnt == 0) {
+                        goon = false;
+                        break;
+                    }
+                    to = tcl[0];
                 }
-                //logger.info("waitRequest done: stat = " + stat);
-                if (stat == null) {
-                    goon = false;
-                    break;
-                }
-                int cnt = stat.Get_count(MPI.OBJECT);
-                if (cnt == 0) {
-                    goon = false;
-                    break;
-                }
-                tc = (DHTTransport<K, V>) tcl[0]; // to
+                tc = (DHTTransport<K, V>) to;
                 if (debug) {
                     logger.debug("receive(" + tc + ")");
                 }

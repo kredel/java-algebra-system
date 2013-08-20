@@ -37,13 +37,7 @@ public final class MPIChannel {
     /*
      * Underlying MPI engine.
      */
-    private final Comm engine; // static!
-
-
-    /*
-     * TCP/IP object channels with tags.
-     */
-    private static TaggedSocketChannel[] soc = null;
+    private final Comm engine; // essentially static (when useTCP) !
 
 
     /*
@@ -53,15 +47,29 @@ public final class MPIChannel {
 
 
     /*
-     * Partner rank.
-     */
-    private final int partnerRank;
-
-
-    /*
      * This rank.
      */
     private final int rank;
+
+
+    /*
+     * TCP/IP object channels with tags.
+     */
+    private static TaggedSocketChannel[] soc = null;
+
+
+    /*
+     * Transport layer.
+     * true: use TCP/IP socket layer, false: use MPJ transport layer.
+     * Can not be set to false for OpenMPI Java: programming not done.
+     */
+    static final boolean useTCP = true;
+
+
+    /*
+     * Partner rank.
+     */
+    private final int partnerRank;
 
 
     /*
@@ -208,12 +216,8 @@ public final class MPIChannel {
         // Object[] va = new Object[1];
         // Status stat = null;
         // Request req = null;
-        // synchronized (MPIEngine.getRecvLock(t)) {
-        //     //stat = engine.Recv(va, 0, va.length, MPI.OBJECT, partnerRank, t);
-        //     synchronized (MPIEngine.class) { // global static lock
-        //         req = engine.Irecv(va, 0, va.length, MPI.OBJECT, partnerRank, t);
-        //     }
-        //     stat = MPIEngine.waitRequest(req); // req.Wait();
+        // synchronized (MPIEngine.class) {
+        //     stat = engine.Recv(va, 0, va.length, MPI.OBJECT, partnerRank, t);
         // }
         // logger.info("waitRequest done: req = " + req + " stat = " + stat);
         // if (stat == null) {
