@@ -77,10 +77,10 @@ DOCOPTS=-public -protected -package -author -version
 MYCLASSPATH = $(LOG4JPATH):.:$(JUNITPATH):$(JOMPPATH):$(PYPATH)
 #:$(TNJPATH)
 
-#JAVA_MEM=-Xms1100M -Xmx1900M
+#JAVA_MEM=-Xms1900M -Xmx2900M
 JAVA_MEM=-Xms350M -Xmx800M
 
-#SOPTS="-J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc -J-Xms1100M -J-Xmx1900M"
+#SOPTS="-J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc -J-Xms1900M -J-Xmx2900M"
 SOPTS="-J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc -J-Xms350M -J-Xmx800M"
 
 
@@ -365,6 +365,7 @@ tests:
 	make edu.jas.application.RunGB cl="par+ examples/trinks6.jas 4" | tee -a tr.out
 	cd jython; make tests | tee jsr.out
 	cd mpj; make tests | tee mpj.out
+	#cd mpi; make tests | tee mpi.out
 	cd ../jas-versions/jlinalg_adapter; make tests | tee ja.out
 	cd ../jas-versions/commons-math_adapter; make tests | tee ja.out
 	-grep FAIL t.out
@@ -373,6 +374,7 @@ tests:
 	-grep -i error tjr.out
 	-grep -i error jython/jsr.out
 	-grep -i error mpj/mpj.out
+	#-grep -i error mpi/mpi.out
 	-grep -i error ../jas-versions/jlinalg_adapter/ja.out
 	-grep -i error ../jas-versions/commons-math_adapter/ja.out
 	-egrep '(Exception|Usage)' tr.out
@@ -398,14 +400,15 @@ SVNDATE=svnlook date $(SVNREPO)/jas
 # jun 2010 SVNSRT=3188
 # jan 2011 SVNSRT=3458
 # jul 2011 SVNSRT=3688
-# dec 2011
-SVNSRT=3838
+# dec 2011 SVNSRT=3838
+# jul 2012
+SVNSRT=4008
 
 export:
 	rm -rf ~/jas-versions/$(VERSION)
 	svn export --quiet file:///$(SVNREPO)/jas/trunk ~/jas-versions/$(VERSION)
 	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) `$(SVNREV)` download.html
-	svn log -v -r HEAD:$(SVNSRT) file:///$(SVNREPO)/jas/trunk src trc examples jython mpj > ~/jas-versions/$(VERSION)/svn_change.log
+	svn log -v -r HEAD:$(SVNSRT) file:///$(SVNREPO)/jas/trunk src trc examples jython mpj mpi > ~/jas-versions/$(VERSION)/svn_change.log
 	cd ~/jas-versions/; jar -cfM $(VERSION).`$(SVNREV)`-src.zip $(VERSION)/
 	cd ~/jas-versions/$(VERSION)/; ant compile > ant_compile.out
 	cd ~/jas-versions/$(VERSION)/; jar -cfm ../$(VERSION).`$(SVNREV)`-bin.jar GBManifest.MF edu/ COPYING* log4j.properties
@@ -423,7 +426,8 @@ export:
 	mv ~/jas-versions/$(VERSION).`$(SVNREV)`-*.zip ~/jas-versions/$(VERSION)/
 	cd ~/jas-versions/$(VERSION)/; chmod -v +r *.jar >chmod.out 2>&1
 	cd ~/jas-versions/$(VERSION)/jython; make > ~/jas-versions/$(VERSION)/make_jython.out
-	cd ~/jas-versions/$(VERSION)/mpj; make > ~/jas-versions/$(VERSION)/make_mpj.out
+	cd ~/jas-versions/$(VERSION)/mpi; make all doc > ~/jas-versions/$(VERSION)/make_mpi.out
+	cd ~/jas-versions/$(VERSION)/mpj; make all doc > ~/jas-versions/$(VERSION)/make_mpj.out
 	cd ~/jas-versions/$(VERSION)/meditor; jas_dosed $(VERSION) `$(SVNREV)` manifest.mf
 	cd ~/jas-versions/$(VERSION)/meditor; make > ~/jas-versions/$(VERSION)/make_meditor.out
 	cd ~/jas-versions/log4j_adapter; make > ~/jas-versions/$(VERSION)/make_mylog.out
@@ -475,6 +479,8 @@ loc: young
 	find ~/jas-versions/commons-math_adapter -name "*.java" | xargs cat | wc
 	find jython -name "*.java" | wc -l 
 	find jython -name "*.java" | xargs cat | wc
+	find mpi -name "*.java" | wc -l 
+	find mpi -name "*.java" | xargs cat | wc
 	find mpj -name "*.java" | wc -l 
 	find mpj -name "*.java" | xargs cat | wc
 	cat examples/jas.py | wc
