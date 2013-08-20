@@ -72,4 +72,4 @@ home:
 	$(RSYNC) bwgrid:$(BWDIR)/src/     src
 
 bwgrid:
-	$(RSYNC) ./                       bwgrid:$(BWDIR)/
+	$(RSYNC) src/                     bwgrid:$(BWDIR)/src
