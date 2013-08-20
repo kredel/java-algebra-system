@@ -197,7 +197,7 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
                 s.append(re.toScript());
                 if (mi.signum() > 0) {
                     s.append(" + ");
-	        } else {
+                } else {
                     s.append(" - ");
                     mi = mi.negate();
                 }

@@ -758,7 +758,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>> implements SolvableSy
         List<GenSolvablePolynomial<C>> G1 = null;
         GenSolvablePolynomial<C> g1 = null;
         for (List<GenSolvablePolynomial<C>> Gi : Gz ) {
-	    if ( Gi.get(0).isZERO() ) {
+            if ( Gi.get(0).isZERO() ) {
                 continue;
             }
             if ( G1 == null ) {
@@ -809,7 +809,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>> implements SolvableSy
         List<GenSolvablePolynomial<C>> G1 = null;
         GenSolvablePolynomial<C> g1 = null;
         for (List<GenSolvablePolynomial<C>> Gi : Gz ) {
-	    if ( Gi.get(0).isZERO() ) {
+            if ( Gi.get(0).isZERO() ) {
                 continue;
             }
             if ( G1 == null ) {

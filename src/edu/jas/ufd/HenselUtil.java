@@ -1735,7 +1735,7 @@ public class HenselUtil {
 
         // inplace modify polynomials, replace leading coefficient
         for ( GenPolynomial<BigInteger> ai : Fi ) {
-	    if ( ai.isZERO() ) {
+            if ( ai.isZERO() ) {
                 continue;
             }
             ExpVector ea = ai.leadingExpVector();

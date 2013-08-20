@@ -1664,7 +1664,7 @@ public class PolyUtilTest extends TestCase {
              c = PolyUtil.<BigInteger> removeUnusedMiddleVariables(b);
              fail("c = " + c + ", fac = " + c.ring);
         } catch (RuntimeException e) {
-	    // success
+            // success
         }
 
         c = PolyUtil.<BigInteger> removeUnusedLowerVariables(b);

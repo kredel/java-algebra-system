@@ -285,7 +285,7 @@ public class QuotSolvablePolynomial<C extends GcdRingElem<C>> extends
                         if (rsp.compareTo(Cps) != 0) {
                             logger.info("coeff-poly: Cps = " + Cps);
                             logger.info("coeff-poly: rsp = " + rsp);
-			    //} else {
+                            //} else {
                             //System.out.println("rsp.compareTo(Cps) == 0");
                         }
                     } else { // b.den != 1

@@ -293,10 +293,10 @@ public class WordReductionTest extends TestCase {
              boolean t = false;
              Word ce = fac.alphabet.getONE();
              for ( Overlap ol : oll.ols ) {
-		 ce = ol.l1.multiply(ae).multiply(ol.r1);
+                 ce = ol.l1.multiply(ae).multiply(ol.r1);
                  //System.out.println("ce = " + ce);
                  if (fac.alphabet.getAscendComparator().compare(ce,ee) > 0) {
-		     t = true;
+                     t = true;
                      break;
                  }
              }

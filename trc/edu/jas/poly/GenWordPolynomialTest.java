@@ -605,7 +605,7 @@ public class GenWordPolynomialTest extends TestCase {
         String[] svar = new String[] { "x1", "x2", "y1", "y2" };
         GenSolvablePolynomialRing<GenPolynomial<BigComplex>> sf;
         sf = new GenSolvablePolynomialRing<GenPolynomial<BigComplex>>(cf, svar);
-	//System.out.println("sf = " + sf);
+        //System.out.println("sf = " + sf);
         RelationGenerator<GenPolynomial<BigComplex>> wr = new WeylRelations<GenPolynomial<BigComplex>>();
         wr.generate(sf);
         //System.out.println("sf = " + sf);

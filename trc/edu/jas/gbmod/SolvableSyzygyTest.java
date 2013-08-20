@@ -493,7 +493,7 @@ public class SolvableSyzygyTest extends TestCase {
         L = new ArrayList<GenSolvablePolynomial<BigRational>>(gens.size()-1); 
         long i = 2;
         for ( GenSolvablePolynomial<BigRational> g : gens ) {
-	    if ( g.isONE() ) {
+            if ( g.isONE() ) {
                 continue;
             }
             GenSolvablePolynomial<BigRational> p = g.multiply(g);
