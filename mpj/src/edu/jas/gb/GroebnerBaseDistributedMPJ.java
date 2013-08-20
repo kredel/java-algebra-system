@@ -13,7 +13,6 @@ import java.util.ListIterator;
 import java.util.concurrent.Semaphore;
 
 import mpi.Comm;
-import mpi.MPIException;
 
 import org.apache.log4j.Logger;
 
@@ -390,7 +389,7 @@ class MPJReducerServer<C extends RingElem<C>> implements Runnable {
     /*
      * MPJ channel.
      */
-    private MPJChannel pairChannel;
+    private final MPJChannel pairChannel;
 
 
     /*

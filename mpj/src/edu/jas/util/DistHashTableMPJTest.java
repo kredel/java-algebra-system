@@ -5,8 +5,8 @@
 package edu.jas.util;
 
 
-import java.util.Iterator;
 import java.io.IOException;
+import java.util.Iterator;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

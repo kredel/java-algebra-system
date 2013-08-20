@@ -232,7 +232,8 @@ public class RunMPJGB {
 
 
     @SuppressWarnings("unchecked")
-    static void runMpj(PolynomialList S, int threads, String mfile, int port, boolean pairseq) throws IOException {
+    static void runMpj(PolynomialList S, int threads, String mfile, int port, boolean pairseq)
+                    throws IOException {
         List L = S.list;
         List G = null;
         long t, t1;

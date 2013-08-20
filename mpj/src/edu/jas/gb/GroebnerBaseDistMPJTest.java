@@ -141,7 +141,8 @@ public class GroebnerBaseDistMPJTest extends TestCase {
             a = b = c = d = e = null;
             bbseq = new GroebnerBaseSeq<BigRational>();
             bbdists = new GroebnerBaseDistributedMPJ<BigRational>(threads);
-            bbdist = new GroebnerBaseDistributedMPJ<BigRational>(threads, new OrderedSyzPairlist<BigRational>());
+            bbdist = new GroebnerBaseDistributedMPJ<BigRational>(threads,
+                            new OrderedSyzPairlist<BigRational>());
         } catch (IOException e) {
             e.printStackTrace();
         }

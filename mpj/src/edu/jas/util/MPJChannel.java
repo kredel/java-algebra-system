@@ -12,8 +12,6 @@ import java.util.Arrays;
 import mpi.Comm;
 import mpi.MPI;
 import mpi.Status;
-import mpi.Request;
-import mpi.MPIException;
 
 import org.apache.log4j.Logger;
 
@@ -22,7 +20,7 @@ import edu.jas.kern.MPJEngine;
 
 /**
  * MPJChannel provides a communication channel for Java objects using MPJ to a
- * given rank.
+ * given rank. Can use MPJ transport layer for "niodev" with FastMPJ.
  * @author Heinz Kredel
  */
 public final class MPJChannel {
@@ -104,7 +102,7 @@ public final class MPJChannel {
         partnerRank = r;
         tag = t;
         synchronized (engine) {
-            if ( soc == null && useTCP ) {
+            if (soc == null && useTCP) {
                 int port = ChannelFactory.DEFAULT_PORT;
                 ChannelFactory cf = new ChannelFactory(port);
                 if (rank == 0) {
@@ -112,9 +110,9 @@ public final class MPJChannel {
                     soc = new TaggedSocketChannel[size];
                     soc[0] = null;
                     try {
-                        for ( int i = 1; i < size; i++ ) {
+                        for (int i = 1; i < size; i++) {
                             SocketChannel sc = cf.getChannel(); // TODO not correct wrt rank
-                            soc[i] = new TaggedSocketChannel(sc); 
+                            soc[i] = new TaggedSocketChannel(sc);
                             soc[i].init();
                         }
                     } catch (InterruptedException e) {
@@ -123,7 +121,7 @@ public final class MPJChannel {
                     cf.terminate();
                 } else {
                     soc = new TaggedSocketChannel[1];
-                    SocketChannel sc = cf.getChannel(MPJEngine.hostNames.get(0),port);
+                    SocketChannel sc = cf.getChannel(MPJEngine.hostNames.get(0), port);
                     soc[0] = new TaggedSocketChannel(sc);
                     soc[0].init();
                 }
@@ -167,16 +165,16 @@ public final class MPJChannel {
      * @param pr partner rank.
      */
     void send(int t, Object v, int pr) throws IOException {
-        if ( useTCP ) {
-            if ( soc == null ) {
+        if (useTCP) {
+            if (soc == null) {
                 logger.warn("soc not initialized: lost " + v);
                 return;
             }
-            if ( soc[pr] == null ) {
+            if (soc[pr] == null) {
                 logger.warn("soc[" + pr + "] not initialized: lost " + v);
                 return;
             }
-            soc[pr].send(t,v);
+            soc[pr].send(t, v);
         } else {
             Object[] va = new Object[] { v };
             synchronized (MPJEngine.class) {
@@ -201,12 +199,12 @@ public final class MPJChannel {
      * @return a message object.
      */
     public Object receive(int t) throws IOException, ClassNotFoundException {
-        if ( useTCP ) {
-            if ( soc == null ) {
+        if (useTCP) {
+            if (soc == null) {
                 logger.warn("soc not initialized");
                 return null;
             }
-            if ( soc[partnerRank] == null ) {
+            if (soc[partnerRank] == null) {
                 logger.warn("soc[" + partnerRank + "] not initialized");
                 return null;
             }
@@ -229,7 +227,7 @@ public final class MPJChannel {
                 throw new IOException("no object received");
             }
             if (cnt > 1) {
-                logger.warn("too many objects received, ignored " + (cnt-1));
+                logger.warn("too many objects received, ignored " + (cnt - 1));
             }
             // int pr = stat.source;
             // if (pr != partnerRank) {
@@ -245,13 +243,13 @@ public final class MPJChannel {
      */
     public void close() {
         if (useTCP) {
-            if ( soc == null ) {
+            if (soc == null) {
                 return;
             }
-            for ( int i = 0; i < soc.length; i++ ) {
+            for (int i = 0; i < soc.length; i++) {
                 if (soc[i] != null) {
                     soc[i].close();
-                    soc[i] = null; 
+                    soc[i] = null;
                 }
             }
         }
@@ -263,8 +261,8 @@ public final class MPJChannel {
      */
     @Override
     public String toString() {
-        return "MPJChannel(on=" + rank + ",to=" + partnerRank + ",tag=" + tag
-               + "," + Arrays.toString(soc) + ")";
+        return "MPJChannel(on=" + rank + ",to=" + partnerRank + ",tag=" + tag + "," + Arrays.toString(soc)
+                        + ")";
     }
 
 }

@@ -5,6 +5,7 @@
 package edu.jas.util;
 
 
+import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,14 +14,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.io.IOException;
-import java.util.Arrays;
 
 import mpi.Comm;
 import mpi.MPI;
 import mpi.MPIException;
 import mpi.Status;
-import mpi.Request;
 
 import org.apache.log4j.Logger;
 
@@ -28,9 +26,9 @@ import edu.jas.kern.MPJEngine;
 
 
 /**
- * Distributed version of a HashTable using MPJ. Implemented with a
- * SortedMap / TreeMap to keep the sequence order of
- * elements. Implemented using MPJ transport or TCP transport.
+ * Distributed version of a HashTable using MPJ. Implemented with a SortedMap /
+ * TreeMap to keep the sequence order of elements. Implemented using MPJ
+ * transport or TCP transport.
  * @author Heinz Kredel
  */
 
@@ -86,8 +84,8 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
 
 
     /**
-     * Transport layer.
-     * true: use TCP/IP socket layer, false: use MPJ transport layer.
+     * Transport layer. true: use TCP/IP socket layer, false: use MPJ transport
+     * layer.
      */
     static final boolean useTCP = true;
 
@@ -125,9 +123,9 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
                 soc = new SocketChannel[size];
                 soc[0] = null;
                 try {
-                    for ( int i = 1; i < size; i++ ) {
+                    for (int i = 1; i < size; i++) {
                         SocketChannel sc = cf.getChannel(); // TODO not correct wrt rank
-                        soc[i] = sc; 
+                        soc[i] = sc;
                     }
                 } catch (InterruptedException e) {
                     throw new IOException(e);
@@ -135,8 +133,8 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
                 cf.terminate();
             } else {
                 soc = new SocketChannel[1];
-                SocketChannel sc = cf.getChannel(MPJEngine.hostNames.get(0),port);
-                soc[0] = sc; 
+                SocketChannel sc = cf.getChannel(MPJEngine.hostNames.get(0), port);
+                soc[0] = sc;
             }
         } else {
             soc = null;
@@ -309,13 +307,13 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
             DHTTransport<K, V> tc = DHTTransport.<K, V> create(key, value);
             for (int i = 1; i < size; i++) { // send not to self.listener
                 if (useTCP) {
-                   soc[i].send(tc);
+                    soc[i].send(tc);
                 } else {
-                   DHTTransport[] tcl = new DHTTransport[1];
-                   tcl[0] = tc;
-                   synchronized (MPJEngine.class) { // remove
-                       engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
-                   }
+                    DHTTransport[] tcl = new DHTTransport[1];
+                    tcl[0] = tc;
+                    synchronized (MPJEngine.class) { // remove
+                        engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
+                    }
                 }
             }
             synchronized (theList) { // add to self.listener
@@ -427,7 +425,7 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
         listener.setDone();
         DHTTransport<K, V> tc = new DHTTransportTerminate<K, V>();
         try {
-            if ( rank == 0 ) {
+            if (rank == 0) {
                 //logger.info("send(" + rank + ") terminate");
                 for (int i = 1; i < size; i++) { // send not to self.listener
                     if (useTCP) {
@@ -524,10 +522,10 @@ class DHTMPJListener<K, V> extends Thread {
         while (goon) {
             tc = null;
             try {
-                if ( rank < 0 ) {
+                if (rank < 0) {
                     rank = engine.Rank();
                 }
-                if ( rank == 0 ) {
+                if (rank == 0) {
                     logger.info("listener on rank 0 stopped");
                     goon = false;
                     continue;
@@ -540,7 +538,7 @@ class DHTMPJListener<K, V> extends Thread {
                     Status stat = null;
                     synchronized (MPJEngine.class) { // remove: global static lock, only from 0:
                         stat = engine.Recv(tcl, 0, tcl.length, MPI.OBJECT, MPI.ANY_SOURCE,
-                                           DistHashTableMPJ.DHTTAG);
+                                        DistHashTableMPJ.DHTTAG);
                     }
                     //logger.info("waitRequest done: stat = " + stat);
                     if (stat == null) {
@@ -552,11 +550,11 @@ class DHTMPJListener<K, V> extends Thread {
                         goon = false;
                         break;
                     } else if (cnt > 1) {
-                        logger.warn("ignoring " + (cnt-1) + " received objects");
+                        logger.warn("ignoring " + (cnt - 1) + " received objects");
                     }
                     to = tcl[0];
                 }
-                tc = (DHTTransport<K, V>) to; 
+                tc = (DHTTransport<K, V>) to;
                 if (debug) {
                     logger.debug("receive(" + tc + ")");
                 }
