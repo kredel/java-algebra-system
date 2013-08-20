@@ -37,13 +37,7 @@ public final class MPJChannel {
     /*
      * Underlying MPJ engine.
      */
-    private final Comm engine; // static !
-
-
-    /*
-     * TCP/IP object channels with tags.
-     */
-    private static TaggedSocketChannel[] soc = null;
+    private final Comm engine; // essentially static when useTCP !
 
 
     /*
@@ -53,15 +47,29 @@ public final class MPJChannel {
 
 
     /*
-     * Partner rank.
-     */
-    private final int partnerRank;
-
-
-    /*
      * This rank.
      */
     private final int rank;
+
+
+    /*
+     * TCP/IP object channels with tags.
+     */
+    private static TaggedSocketChannel[] soc = null;
+
+
+    /*
+     * Transport layer.
+     * true: use TCP/IP socket layer, false: use MPJ transport layer.
+     * Can be set to false for "niodev" with FastMPJ.
+     */
+    static final boolean useTCP = true;
+
+
+    /*
+     * Partner rank.
+     */
+    private final int partnerRank;
 
 
     /*
@@ -96,7 +104,7 @@ public final class MPJChannel {
         partnerRank = r;
         tag = t;
         synchronized (engine) {
-            if ( soc == null ) {
+            if ( soc == null && useTCP ) {
                 int port = ChannelFactory.DEFAULT_PORT;
                 ChannelFactory cf = new ChannelFactory(port);
                 if (rank == 0) {
@@ -159,21 +167,22 @@ public final class MPJChannel {
      * @param pr partner rank.
      */
     void send(int t, Object v, int pr) throws IOException {
-        if ( soc == null ) {
-            logger.warn("soc not initialized: lost " + v);
-            return;
+        if ( useTCP ) {
+            if ( soc == null ) {
+                logger.warn("soc not initialized: lost " + v);
+                return;
+            }
+            if ( soc[pr] == null ) {
+                logger.warn("soc[" + pr + "] not initialized: lost " + v);
+                return;
+            }
+            soc[pr].send(t,v);
+        } else {
+            Object[] va = new Object[] { v };
+            synchronized (MPJEngine.class) {
+                engine.Send(va, 0, va.length, MPI.OBJECT, pr, t);
+            }
         }
-        if ( soc[pr] == null ) {
-            logger.warn("soc[" + pr + "] not initialized: lost " + v);
-            return;
-        }
-        soc[pr].send(t,v);
-        // Object[] va = new Object[1];
-        // va[0] = v;
-        // Status stat = null;
-        // synchronized (MPJEngine.class) {
-        //     engine.Send(va, 0, va.length, MPI.OBJECT, pr, t);
-        // }
     }
 
 
@@ -192,34 +201,42 @@ public final class MPJChannel {
      * @return a message object.
      */
     public Object receive(int t) throws IOException, ClassNotFoundException {
-        if ( soc == null ) {
-            logger.warn("soc not initialized");
-            return null;
+        if ( useTCP ) {
+            if ( soc == null ) {
+                logger.warn("soc not initialized");
+                return null;
+            }
+            if ( soc[partnerRank] == null ) {
+                logger.warn("soc[" + partnerRank + "] not initialized");
+                return null;
+            }
+            try {
+                return soc[partnerRank].receive(t);
+            } catch (InterruptedException e) {
+                throw new IOException(e);
+            }
+        } else {
+            Object[] va = new Object[1];
+            Status stat = null;
+            synchronized (MPJEngine.class) {
+                stat = engine.Recv(va, 0, va.length, MPI.OBJECT, partnerRank, t);
+            }
+            if (stat == null) {
+                throw new IOException("received null Status");
+            }
+            int cnt = stat.Get_count(MPI.OBJECT);
+            if (cnt == 0) {
+                throw new IOException("no object received");
+            }
+            if (cnt > 1) {
+                logger.warn("too many objects received, ignored " + (cnt-1));
+            }
+            // int pr = stat.source;
+            // if (pr != partnerRank) {
+            //     logger.warn("received out of order message from " + pr);
+            // }
+            return va[0];
         }
-        if ( soc[partnerRank] == null ) {
-            logger.warn("soc[" + partnerRank + "] not initialized");
-            return null;
-        }
-        try {
-             return soc[partnerRank].receive(t);
-        } catch (InterruptedException e) {
-            throw new IOException(e);
-        }
-        // Object[] va = new Object[1];
-        // Status stat = null;
-        // synchronized (MPJEngine.getRecvLock(t)) {
-        //     stat = engine.Recv(va, 0, va.length, MPI.OBJECT, partnerRank, t);
-        // }
-        // int cnt = stat.Get_count(MPI.OBJECT);
-        // if (cnt == 0) {
-        //     throw new IOException("no object received");
-        // }
-        // //int pr = stat.source;
-        // //if (pr != partnerRank) {
-        // //    logger.warn("received out of order message from " + pr);
-        // //}
-        // Object v = va[0];
-        // return v;
     }
 
 
@@ -227,13 +244,15 @@ public final class MPJChannel {
      * Closes the channel.
      */
     public void close() {
-        if ( soc == null ) {
-            return;
-        }
-        for ( int i = 0; i < soc.length; i++ ) {
-            if (soc[i] != null) {
-                soc[i].close();
-                soc[i] = null; 
+        if (useTCP) {
+            if ( soc == null ) {
+                return;
+            }
+            for ( int i = 0; i < soc.length; i++ ) {
+                if (soc[i] != null) {
+                    soc[i].close();
+                    soc[i] = null; 
+                }
             }
         }
     }

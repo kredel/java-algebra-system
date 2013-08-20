@@ -28,8 +28,9 @@ import edu.jas.kern.MPJEngine;
 
 
 /**
- * Distributed version of a HashTable using MPJ. Implemented with a SortedMap /
- * TreeMap to keep the sequence order of elements. Implemented using MPJ.
+ * Distributed version of a HashTable using MPJ. Implemented with a
+ * SortedMap / TreeMap to keep the sequence order of
+ * elements. Implemented using MPJ transport or TCP transport.
  * @author Heinz Kredel
  */
 
@@ -42,25 +43,22 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
     private static boolean debug = logger.isDebugEnabled();
 
 
+    /*
+     * Backing data structure.
+     */
     protected final SortedMap<K, V> theList;
 
 
-    protected final Comm engine;
-
-
+    /*
+     * Thread for receiving pairs.
+     */
     protected DHTMPJListener<K, V> listener;
 
 
     /*
-     * TCP/IP object channels.
+     * MPJ communicator.
      */
-    private final SocketChannel[] soc;
-
-
-    /**
-     * Message tag for DHT communicaton.
-     */
-    public static final int DHTTAG = MPJEngine.TAG + 1;
+    protected final Comm engine;
 
 
     /*
@@ -73,6 +71,25 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
      * This rank.
      */
     private final int rank;
+
+
+    /**
+     * Message tag for DHT communicaton.
+     */
+    public static final int DHTTAG = MPJEngine.TAG + 1;
+
+
+    /*
+     * TCP/IP object channels.
+     */
+    private final SocketChannel[] soc;
+
+
+    /**
+     * Transport layer.
+     * true: use TCP/IP socket layer, false: use MPJ transport layer.
+     */
+    static final boolean useTCP = true;
 
 
     /**
@@ -100,25 +117,29 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
         engine = cm;
         rank = engine.Rank();
         size = engine.Size();
-        int port = ChannelFactory.DEFAULT_PORT + 11;
-        ChannelFactory cf = new ChannelFactory(port);
-        if (rank == 0) {
-            cf.init();
-            soc = new SocketChannel[size];
-            soc[0] = null;
-            try {
-                 for ( int i = 1; i < size; i++ ) {
-                      SocketChannel sc = cf.getChannel(); // TODO not correct wrt rank
-                      soc[i] = sc; 
-                 }
-            } catch (InterruptedException e) {
-                throw new IOException(e);
+        if (useTCP) { // && soc == null
+            int port = ChannelFactory.DEFAULT_PORT + 11;
+            ChannelFactory cf = new ChannelFactory(port);
+            if (rank == 0) {
+                cf.init();
+                soc = new SocketChannel[size];
+                soc[0] = null;
+                try {
+                    for ( int i = 1; i < size; i++ ) {
+                        SocketChannel sc = cf.getChannel(); // TODO not correct wrt rank
+                        soc[i] = sc; 
+                    }
+                } catch (InterruptedException e) {
+                    throw new IOException(e);
+                }
+                cf.terminate();
+            } else {
+                soc = new SocketChannel[1];
+                SocketChannel sc = cf.getChannel(MPJEngine.hostNames.get(0),port);
+                soc[0] = sc; 
             }
-            cf.terminate();
         } else {
-            soc = new SocketChannel[1];
-            SocketChannel sc = cf.getChannel(MPJEngine.hostNames.get(0),port);
-            soc[0] = sc; 
+            soc = null;
         }
         theList = new TreeMap<K, V>();
         //theList = new ConcurrentSkipListMap<K, V>(); // Java 1.6
@@ -286,13 +307,16 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
         }
         try {
             DHTTransport<K, V> tc = DHTTransport.<K, V> create(key, value);
-            DHTTransport[] tcl = new DHTTransport[1];
-            tcl[0] = tc;
             for (int i = 1; i < size; i++) { // send not to self.listener
-                soc[i].send(tc);
-                //synchronized (MPJEngine.class) {
-                //    engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
-                //}
+                if (useTCP) {
+                   soc[i].send(tc);
+                } else {
+                   DHTTransport[] tcl = new DHTTransport[1];
+                   tcl[0] = tc;
+                   synchronized (MPJEngine.class) { // remove
+                       engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
+                   }
+                }
             }
             synchronized (theList) { // add to self.listener
                 theList.put(tc.key(), tc.value());
@@ -402,18 +426,20 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
         }
         listener.setDone();
         DHTTransport<K, V> tc = new DHTTransportTerminate<K, V>();
-        DHTTransport[] tcl = new DHTTransport[1];
-        tcl[0] = tc;
         try {
             if ( rank == 0 ) {
                 //logger.info("send(" + rank + ") terminate");
                 for (int i = 1; i < size; i++) { // send not to self.listener
-		    soc[i].send(tc);
-                    //synchronized (MPJEngine.class) { 
-                    //    engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
-	            //}
+                    if (useTCP) {
+                        soc[i].send(tc);
+                    } else {
+                        DHTTransport[] tcl = new DHTTransport[] { tc };
+                        synchronized (MPJEngine.class) { // remove
+                            engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
+                        }
+                    }
                 }
-	    }
+            }
         } catch (IOException e) {
             logger.info("sending(terminate)");
             logger.info("send " + e);
@@ -437,7 +463,6 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
 /**
  * Thread to comunicate with the other DHT lists.
  */
-
 class DHTMPJListener<K, V> extends Thread {
 
 
@@ -507,24 +532,31 @@ class DHTMPJListener<K, V> extends Thread {
                     goon = false;
                     continue;
                 }
-                Object to = soc[0].receive();
-                DHTTransport[] tcl = new DHTTransport[1];
-                //Status stat = null;
-                //synchronized (MPJEngine.class) { // global static lock , // only from 0:
-                //    stat = engine.Recv(tcl, 0, tcl.length, MPI.OBJECT, MPI.ANY_SOURCE,
-                //                       DistHashTableMPJ.DHTTAG);
-                //}
-                //logger.info("waitRequest done: stat = " + stat);
-                //if (stat == null) {
-                //    goon = false;
-                //    break;
-                //}
-                //int cnt = stat.Get_count(MPI.OBJECT);
-                //if (cnt == 0) {
-                //    goon = false;
-                //    break;
-                //}
-                tc = (DHTTransport<K, V>) to; //tcl[0]; // to
+                Object to = null;
+                if (DistHashTableMPJ.useTCP) {
+                    to = soc[0].receive();
+                } else {
+                    DHTTransport[] tcl = new DHTTransport[1];
+                    Status stat = null;
+                    synchronized (MPJEngine.class) { // remove: global static lock, only from 0:
+                        stat = engine.Recv(tcl, 0, tcl.length, MPI.OBJECT, MPI.ANY_SOURCE,
+                                           DistHashTableMPJ.DHTTAG);
+                    }
+                    //logger.info("waitRequest done: stat = " + stat);
+                    if (stat == null) {
+                        goon = false;
+                        break;
+                    }
+                    int cnt = stat.Get_count(MPI.OBJECT);
+                    if (cnt == 0) {
+                        goon = false;
+                        break;
+                    } else if (cnt > 1) {
+                        logger.warn("ignoring " + (cnt-1) + " received objects");
+                    }
+                    to = tcl[0];
+                }
+                tc = (DHTTransport<K, V>) to; 
                 if (debug) {
                     logger.debug("receive(" + tc + ")");
                 }
