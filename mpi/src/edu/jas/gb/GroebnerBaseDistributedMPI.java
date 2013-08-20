@@ -179,7 +179,8 @@ public class GroebnerBaseDistributedMPI<C extends RingElem<C>> extends GroebnerB
      * @param F polynomial list.
      * @return GB(F) a Groebner base of F or null, if a IOException occurs.
      */
-    public List<GenPolynomial<C>> GBmaster(int modv, List<GenPolynomial<C>> F) throws MPIException, IOException  {
+    public List<GenPolynomial<C>> GBmaster(int modv, List<GenPolynomial<C>> F) throws MPIException,
+                    IOException {
         List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
         GenPolynomial<C> p;
         PairList<C> pairlist = null;
@@ -397,7 +398,7 @@ class MPIReducerServer<C extends RingElem<C>> implements Runnable {
     /*
      * MPI channel.
      */
-    private MPIChannel pairChannel;
+    private final MPIChannel pairChannel;
 
 
     /*

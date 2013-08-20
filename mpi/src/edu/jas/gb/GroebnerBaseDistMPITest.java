@@ -14,7 +14,6 @@ import java.util.List;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
 import mpi.Comm;
 import mpi.MPIException;
 
@@ -142,7 +141,8 @@ public class GroebnerBaseDistMPITest extends TestCase {
             a = b = c = d = e = null;
             bbseq = new GroebnerBaseSeq<BigRational>();
             bbdists = new GroebnerBaseDistributedMPI<BigRational>(threads);
-            bbdist = new GroebnerBaseDistributedMPI<BigRational>(threads, new OrderedSyzPairlist<BigRational>());
+            bbdist = new GroebnerBaseDistributedMPI<BigRational>(threads,
+                            new OrderedSyzPairlist<BigRational>());
         } catch (MPIException e) {
             e.printStackTrace();
         }

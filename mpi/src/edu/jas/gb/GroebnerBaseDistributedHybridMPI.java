@@ -143,7 +143,8 @@ public class GroebnerBaseDistributedHybridMPI<C extends RingElem<C>> extends Gro
      * @param threadsPerNode threads per node to use.
      * @param pl pair selection strategy
      */
-    public GroebnerBaseDistributedHybridMPI(int threads, int threadsPerNode, PairList<C> pl) throws MPIException {
+    public GroebnerBaseDistributedHybridMPI(int threads, int threadsPerNode, PairList<C> pl)
+                    throws MPIException {
         this(threads, threadsPerNode, new ThreadPool(threads), pl);
     }
 
@@ -153,7 +154,8 @@ public class GroebnerBaseDistributedHybridMPI<C extends RingElem<C>> extends Gro
      * @param threads number of threads to use.
      * @param threadsPerNode threads per node to use.
      */
-    public GroebnerBaseDistributedHybridMPI(int threads, int threadsPerNode, ThreadPool pool) throws MPIException {
+    public GroebnerBaseDistributedHybridMPI(int threads, int threadsPerNode, ThreadPool pool)
+                    throws MPIException {
         this(threads, threadsPerNode, pool, new OrderedPairlist<C>());
     }
 
@@ -165,7 +167,8 @@ public class GroebnerBaseDistributedHybridMPI<C extends RingElem<C>> extends Gro
      * @param pool ThreadPool to use.
      * @param pl pair selection strategy
      */
-    public GroebnerBaseDistributedHybridMPI(int threads, int threadsPerNode, ThreadPool pool, PairList<C> pl) throws MPIException {
+    public GroebnerBaseDistributedHybridMPI(int threads, int threadsPerNode, ThreadPool pool, PairList<C> pl)
+                    throws MPIException {
         super(new ReductionPar<C>(), pl);
         this.engine = MPIEngine.getCommunicator();
         int size = engine.Size();
@@ -237,7 +240,8 @@ public class GroebnerBaseDistributedHybridMPI<C extends RingElem<C>> extends Gro
      * @param F polynomial list.
      * @return GB(F) a Groebner base of F or null, if a IOException occurs.
      */
-    public List<GenPolynomial<C>> GBmaster(int modv, List<GenPolynomial<C>> F) throws MPIException, IOException {
+    public List<GenPolynomial<C>> GBmaster(int modv, List<GenPolynomial<C>> F) throws MPIException,
+                    IOException {
         long t = System.currentTimeMillis();
         GenPolynomial<C> p;
         List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
@@ -282,7 +286,8 @@ public class GroebnerBaseDistributedHybridMPI<C extends RingElem<C>> extends Gro
         logger.info("pairlist " + pairlist + ": " + unused);
 
         logger.debug("looking for clients");
-        DistHashTableMPI<Integer, GenPolynomial<C>> theList = new DistHashTableMPI<Integer, GenPolynomial<C>>(engine);
+        DistHashTableMPI<Integer, GenPolynomial<C>> theList = new DistHashTableMPI<Integer, GenPolynomial<C>>(
+                        engine);
         theList.init();
 
         List<GenPolynomial<C>> al = pairlist.getList();
@@ -343,7 +348,8 @@ public class GroebnerBaseDistributedHybridMPI<C extends RingElem<C>> extends Gro
         }
         Comm engine = MPIEngine.getCommunicator();
 
-        DistHashTableMPI<Integer, GenPolynomial<C>> theList = new DistHashTableMPI<Integer, GenPolynomial<C>>(engine);
+        DistHashTableMPI<Integer, GenPolynomial<C>> theList = new DistHashTableMPI<Integer, GenPolynomial<C>>(
+                        engine);
         theList.init();
 
         MPIChannel chan = new MPIChannel(engine, rank);
@@ -466,7 +472,7 @@ class HybridReducerServerMPI<C extends RingElem<C>> implements Runnable {
     private final Terminator finner;
 
 
-    private MPIChannel pairChannel;
+    private final MPIChannel pairChannel;
 
 
     //protected transient final Comm engine;
@@ -500,7 +506,7 @@ class HybridReducerServerMPI<C extends RingElem<C>> implements Runnable {
      * @param L ordered pair list
      */
     HybridReducerServerMPI(int r, int tpn, Terminator fin, MPIChannel chan,
-			   DistHashTableMPI<Integer, GenPolynomial<C>> dl, PairList<C> L) {
+                    DistHashTableMPI<Integer, GenPolynomial<C>> dl, PairList<C> L) {
         rank = r;
         threadsPerNode = tpn;
         finner = fin;
@@ -537,7 +543,7 @@ class HybridReducerServerMPI<C extends RingElem<C>> implements Runnable {
 
         // start receiver
         HybridReducerReceiverMPI<C> receiver = new HybridReducerReceiverMPI<C>(rank, finner, active,
-						       pairChannel, theList, pairlist);
+                        pairChannel, theList, pairlist);
         receiver.start();
 
         Pair<C> pair;
@@ -650,7 +656,7 @@ class HybridReducerServerMPI<C extends RingElem<C>> implements Runnable {
             e.printStackTrace();
         }
         int d = active.get();
-        if ( d > 0 ) {
+        if (d > 0) {
             logger.info("remaining active tasks = " + d);
         }
         receiver.terminate();
@@ -722,7 +728,7 @@ class HybridReducerReceiverMPI<C extends RingElem<C>> extends Thread {
      * @param L ordered pair list
      */
     HybridReducerReceiverMPI(int r, Terminator fin, AtomicInteger a, MPIChannel pc,
-			     DistHashTableMPI<Integer, GenPolynomial<C>> dl, PairList<C> L) {
+                    DistHashTableMPI<Integer, GenPolynomial<C>> dl, PairList<C> L) {
         rank = r;
         active = a;
         //threadsPerNode = tpn;
@@ -1021,7 +1027,7 @@ class HybridReducerClientMPI<C extends RingElem<C>> implements Runnable {
                 if (pi != null && pj != null) {
                     S = red.SPolynomial(pi, pj);
                     //System.out.println("S   = " + S);
-		    logger.info("ht(S) = " + S.leadingExpVector());
+                    logger.info("ht(S) = " + S.leadingExpVector());
                     if (S.isZERO()) {
                         // pair.setZero(); does not work in dist
                         H = S;

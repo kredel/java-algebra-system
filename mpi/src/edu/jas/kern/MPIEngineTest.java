@@ -8,10 +8,9 @@ package edu.jas.kern;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
 import mpi.MPI;
-import mpi.Status;
 import mpi.MPIException;
+import mpi.Status;
 
 import org.apache.log4j.BasicConfigurator;
 

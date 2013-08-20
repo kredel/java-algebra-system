@@ -10,9 +10,6 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import mpi.Comm;
-import mpi.MPI;
-import mpi.Status;
-import mpi.Request;
 import mpi.MPIException;
 
 import org.apache.log4j.Logger;
@@ -104,7 +101,7 @@ public final class MPIChannel {
         partnerRank = r;
         tag = t;
         synchronized (engine) {
-            if ( soc == null ) {
+            if (soc == null) {
                 int port = ChannelFactory.DEFAULT_PORT;
                 ChannelFactory cf = new ChannelFactory(port);
                 if (rank == 0) {
@@ -112,9 +109,9 @@ public final class MPIChannel {
                     soc = new TaggedSocketChannel[size];
                     soc[0] = null;
                     try {
-                        for ( int i = 1; i < size; i++ ) {
+                        for (int i = 1; i < size; i++) {
                             SocketChannel sc = cf.getChannel(); // TODO not correct wrt rank
-                            soc[i] = new TaggedSocketChannel(sc); 
+                            soc[i] = new TaggedSocketChannel(sc);
                             soc[i].init();
                         }
                     } catch (InterruptedException e) {
@@ -123,7 +120,7 @@ public final class MPIChannel {
                     cf.terminate();
                 } else {
                     soc = new TaggedSocketChannel[1];
-                    SocketChannel sc = cf.getChannel(MPIEngine.hostNames.get(0),port);
+                    SocketChannel sc = cf.getChannel(MPIEngine.hostNames.get(0), port);
                     soc[0] = new TaggedSocketChannel(sc);
                     soc[0].init();
                 }
@@ -167,15 +164,15 @@ public final class MPIChannel {
      * @param pr partner rank.
      */
     void send(int t, Object v, int pr) throws IOException, MPIException {
-        if ( soc == null ) {
+        if (soc == null) {
             logger.warn("soc not initialized: lost " + v);
             return;
         }
-        if ( soc[pr] == null ) {
+        if (soc[pr] == null) {
             logger.warn("soc[" + pr + "] not initialized: lost " + v);
             return;
         }
-        soc[pr].send(t,v);
+        soc[pr].send(t, v);
         // Object[] va = new Object[1];
         // va[0] = v;
         // Status stat = null;
@@ -200,16 +197,16 @@ public final class MPIChannel {
      * @return a message object.
      */
     public Object receive(int t) throws IOException, ClassNotFoundException, MPIException {
-        if ( soc == null ) {
+        if (soc == null) {
             logger.warn("soc not initialized");
             return null;
         }
-        if ( soc[partnerRank] == null ) {
+        if (soc[partnerRank] == null) {
             logger.warn("soc[" + partnerRank + "] not initialized");
             return null;
         }
         try {
-             return soc[partnerRank].receive(t);
+            return soc[partnerRank].receive(t);
         } catch (InterruptedException e) {
             throw new IOException(e);
         }
@@ -240,13 +237,13 @@ public final class MPIChannel {
      * Closes the channel.
      */
     public void close() {
-        if ( soc == null ) {
+        if (soc == null) {
             return;
         }
-        for ( int i = 0; i < soc.length; i++ ) {
+        for (int i = 0; i < soc.length; i++) {
             if (soc[i] != null) {
                 soc[i].close();
-                soc[i] = null; 
+                soc[i] = null;
             }
         }
     }
@@ -257,8 +254,8 @@ public final class MPIChannel {
      */
     @Override
     public String toString() {
-        return "MPIChannel(on=" + rank + ",to=" + partnerRank + ",tag=" + tag 
-            + "," + Arrays.toString(soc) + ")";
+        return "MPIChannel(on=" + rank + ",to=" + partnerRank + ",tag=" + tag + "," + Arrays.toString(soc)
+                        + ")";
     }
 
 }

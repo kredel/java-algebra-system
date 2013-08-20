@@ -16,9 +16,9 @@ import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.log4j.BasicConfigurator;
-
 import mpi.MPIException;
+
+import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.gb.GBDist;
 import edu.jas.gb.GBDistHybrid;
@@ -234,7 +234,8 @@ public class RunMPIGB {
 
 
     @SuppressWarnings("unchecked")
-    static void runMpi(PolynomialList S, int threads, String mfile, int port, boolean pairseq) throws MPIException {
+    static void runMpi(PolynomialList S, int threads, String mfile, int port, boolean pairseq)
+                    throws MPIException {
         List L = S.list;
         List G = null;
         long t, t1;
@@ -331,7 +332,8 @@ public class RunMPIGB {
 
 
     @SuppressWarnings("unchecked")
-    static void runMaster(PolynomialList S, int threads, String mfile, int port, boolean pairseq) throws MPIException {
+    static void runMaster(PolynomialList S, int threads, String mfile, int port, boolean pairseq)
+                    throws MPIException {
         List L = S.list;
         List G = null;
         long t, t1;
@@ -375,7 +377,8 @@ public class RunMPIGB {
 
 
     @SuppressWarnings("unchecked")
-    static void runMasterOnce(PolynomialList S, int threads, String mfile, int port, boolean pairseq) throws MPIException {
+    static void runMasterOnce(PolynomialList S, int threads, String mfile, int port, boolean pairseq)
+                    throws MPIException {
         List L = S.list;
         List G = null;
         long t, t1;

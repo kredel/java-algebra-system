@@ -5,22 +5,14 @@
 package edu.jas.kern;
 
 
-import java.util.Arrays;
-import java.util.SortedMap;
-import java.util.TreeMap;
-//import java.util.List;
 import java.util.ArrayList;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ConcurrentSkipListMap;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Arrays;
 
 import mpi.Comm;
 import mpi.Intracomm;
 import mpi.MPI;
-import mpi.Request;
-import mpi.Status;
 import mpi.MPIException;
-//import mpi.MPI_STATUS_IGNORE;
+import mpi.Status;
 
 import org.apache.log4j.Logger;
 
@@ -174,15 +166,15 @@ public final class MPIEngine {
             logger.info("MPI size = " + size + ", rank = " + rank);
             // maintain list of hostnames of partners
             hostNames.ensureCapacity(size);
-            for ( int i = 0; i < size; i++ ) {
-                 hostNames.add("");
+            for (int i = 0; i < size; i++) {
+                hostNames.add("");
             }
-            hostNames.set(rank,MPI.Get_processor_name() + hostSuf);
+            hostNames.set(rank, MPI.Get_processor_name() + hostSuf);
             if (rank == 0) {
                 String[] va = new String[1];
                 va[0] = hostNames.get(0);
                 mpiComm.Bcast(va, 0, va.length, MPI.OBJECT, 0);
-                for (int i = 1; i < size; i ++) {
+                for (int i = 1; i < size; i++) {
                     Status stat = mpiComm.Recv(va, 0, va.length, MPI.OBJECT, i, TAG);
                     if (stat == null) {
                         throw new MPIException("no Status received");
@@ -191,14 +183,14 @@ public final class MPIEngine {
                     if (cnt == 0) {
                         throw new MPIException("no object received");
                     }
-                    String v = (String) va[0];
-                    hostNames.set(i,v);
+                    String v = va[0];
+                    hostNames.set(i, v);
                 }
                 logger.info("MPI partner host names = " + hostNames);
             } else {
                 String[] va = new String[1];
                 mpiComm.Bcast(va, 0, va.length, MPI.OBJECT, 0);
-                hostNames.set(0,va[0]);
+                hostNames.set(0, va[0]);
                 va[0] = hostNames.get(rank);
                 mpiComm.Send(va, 0, va.length, MPI.OBJECT, 0, TAG);
             }

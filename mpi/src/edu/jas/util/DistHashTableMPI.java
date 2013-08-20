@@ -5,6 +5,7 @@
 package edu.jas.util;
 
 
+import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,14 +14,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.io.IOException;
-import java.util.Arrays;
 
 import mpi.Comm;
 import mpi.MPI;
 import mpi.MPIException;
 import mpi.Status;
-import mpi.Request;
 
 import org.apache.log4j.Logger;
 
@@ -29,7 +27,8 @@ import edu.jas.kern.MPIEngine;
 
 /**
  * Distributed version of a HashTable using MPI. Implemented with a SortedMap /
- * TreeMap to keep the sequence order of elements. Implemented using MPI.
+ * TreeMap to keep the sequence order of elements. Implemented using MPI
+ * transport or TCP transport.
  * @author Heinz Kredel
  */
 
@@ -124,9 +123,9 @@ public class DistHashTableMPI<K, V> extends AbstractMap<K, V> {
                 soc = new SocketChannel[size];
                 soc[0] = null;
                 try {
-                    for ( int i = 1; i < size; i++ ) {
+                    for (int i = 1; i < size; i++) {
                         SocketChannel sc = cf.getChannel(); // TODO not correct wrt rank
-                        soc[i] = sc; 
+                        soc[i] = sc;
                     }
                 } catch (InterruptedException e) {
                     throw new IOException(e);
@@ -134,8 +133,8 @@ public class DistHashTableMPI<K, V> extends AbstractMap<K, V> {
                 cf.terminate();
             } else {
                 soc = new SocketChannel[1];
-                SocketChannel sc = cf.getChannel(MPIEngine.hostNames.get(0),port);
-                soc[0] = sc; 
+                SocketChannel sc = cf.getChannel(MPIEngine.hostNames.get(0), port);
+                soc[0] = sc;
             }
         } else {
             soc = null;
@@ -425,14 +424,14 @@ public class DistHashTableMPI<K, V> extends AbstractMap<K, V> {
         listener.setDone();
         DHTTransport<K, V> tc = new DHTTransportTerminate<K, V>();
         try {
-            if ( rank == 0 ) {
+            if (rank == 0) {
                 //logger.info("send(" + rank + ") terminate");
                 for (int i = 1; i < size; i++) { // send not to self.listener
                     if (useTCP) {
                         soc[i].send(tc);
                     } else {
                         DHTTransport[] tcl = new DHTTransport[] { tc };
-                        synchronized (MPIEngine.class) { 
+                        synchronized (MPIEngine.class) {
                             engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
                         }
                     }
@@ -526,10 +525,10 @@ class DHTMPIListener<K, V> extends Thread {
         while (goon) {
             tc = null;
             try {
-                if ( rank < 0 ) {
+                if (rank < 0) {
                     rank = engine.Rank();
                 }
-                if ( rank == 0 ) {
+                if (rank == 0) {
                     logger.info("listener on rank 0 stopped");
                     goon = false;
                     continue;
@@ -541,8 +540,8 @@ class DHTMPIListener<K, V> extends Thread {
                     DHTTransport[] tcl = new DHTTransport[1];
                     Status stat = null;
                     synchronized (MPIEngine.class) { // global static lock , // only from 0:
-                        stat = engine.Recv(tcl, 0, tcl.length, MPI.OBJECT, MPI.ANY_SOURCE, 
-                                           DistHashTableMPI.DHTTAG);
+                        stat = engine.Recv(tcl, 0, tcl.length, MPI.OBJECT, MPI.ANY_SOURCE,
+                                        DistHashTableMPI.DHTTAG);
                     }
                     //logger.info("waitRequest done: stat = " + stat);
                     if (stat == null) {
