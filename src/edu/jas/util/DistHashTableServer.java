@@ -375,34 +375,37 @@ class DHTBroadcaster<K> extends Thread /*implements Runnable*/{
             }
         }
         logger.info("sending key=" + key + " to " + bcaster.size() + " nodes");
+        List<DHTBroadcaster<K>> bccopy = null;
         synchronized (bcaster) {
-            List<DHTBroadcaster<K>> bccopy = new ArrayList<DHTBroadcaster<K>>(bcaster);
-            Iterator<DHTBroadcaster<K>> it = bccopy.iterator();
-            while (it.hasNext()) {
-                DHTBroadcaster<K> br = it.next();
-                try {
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("bcasting to " + br);
-                    }
-                    br.sendChannel(tc);
-                } catch (IOException e) {
-                    logger.info("bcaster, IOexception " + e);
-                    bcaster.remove(br); //no more: ConcurrentModificationException
-                    try {
-                        br.goon = false;
-                        br.closeChannel();
-                        while (br.isAlive()) {
-                            br.interrupt();
-                            br.join(100);
-                        }
-                    } catch (InterruptedException w) {
-                        Thread.currentThread().interrupt();
-                    }
-                    //
-                    logger.info("bcaster.remove() " + br);
-		} catch (Exception e) {
-                    logger.info("bcaster, exception " + e);
+            bccopy = new ArrayList<DHTBroadcaster<K>>(bcaster);
+        }
+        Iterator<DHTBroadcaster<K>> it = bccopy.iterator();
+        while (it.hasNext()) {
+            DHTBroadcaster<K> br = it.next();
+            try {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("bcasting to " + br);
                 }
+                br.sendChannel(tc);
+            } catch (IOException e) {
+                logger.info("bcaster, IOexception " + e);
+                synchronized (bcaster) {
+                    bcaster.remove(br); //no more: ConcurrentModificationException
+                }
+                try {
+                    br.goon = false;
+                    br.closeChannel();
+                    while (br.isAlive()) {
+                        br.interrupt();
+                        br.join(100);
+                    }
+                } catch (InterruptedException w) {
+                    Thread.currentThread().interrupt();
+                }
+                //
+                logger.info("bcaster.remove() " + br);
+            } catch (Exception e) {
+                logger.info("bcaster, exception " + e);
             }
         }
     }

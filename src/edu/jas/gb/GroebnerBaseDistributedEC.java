@@ -543,7 +543,7 @@ class ReducerServerEC<C extends RingElem<C>> implements Runnable {
                 try {
                     sleeps++;
                     if (sleeps % 10 == 0) {
-                        logger.info(" reducer is sleeping");
+                        logger.info("reducer is sleeping, pool = " + pool);
                     }
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
