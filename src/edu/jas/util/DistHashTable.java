@@ -426,6 +426,7 @@ class DHTListener<K, V> extends Thread {
     @SuppressWarnings("unchecked")
     @Override
     public void run() {
+        logger.debug("running ");
         Object o;
         DHTTransport<K, V> tc;
         //goon = true;
