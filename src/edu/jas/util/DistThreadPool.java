@@ -166,6 +166,7 @@ public class DistThreadPool /*extends ThreadPool*/{
     public String toString() {
         StringBuffer s = new StringBuffer("DistThreadPool(");
         s.append("threads="+threads);
+        s.append(", strategy="+strategy);
         s.append(", exchan="+ec);
         s.append(", workers="+workers.length);
         s.append(")");
@@ -183,7 +184,7 @@ public class DistThreadPool /*extends ThreadPool*/{
                 workers[i] = new DistPoolThread(this, ec, i);
                 workers[i].start();
             }
-            logger.info("size = " + threads + ", strategy = " + strategy);
+            logger.info("init: " + this.toString());
         }
     }
 
