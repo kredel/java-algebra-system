@@ -272,10 +272,10 @@ public class GroebnerBaseDistHybridECTest extends TestCase {
         }
         //System.out.println("F = " + F);
 
-        Gp = bbdist.GB(F.list);
-        //System.out.println("Gp = " + Gp);
         Gs = bbseq.GB(F.list);
         //System.out.println("Gs = " + Gs);
+        Gp = bbdist.GB(F.list);
+        //System.out.println("Gp = " + Gp);
 
         assertTrue("isGB( GB(Trinks7) )", bbseq.isGB(Gp));
         assertTrue("isGB( GB(Trinks7) )", bbseq.isGB(Gs));

@@ -265,6 +265,9 @@ public class GroebnerBaseDistECTest extends TestCase {
                 + "( 99 W - 11 B S + 3 B**2 ), " + "( B**2 + 33/50 B + 2673/10000 ) " + ") ";
         //exam = "(x3,x4,x5) L " + 
         //       "( (x3^2 - 13974703710478159/3775194259200) , (x4 - 34297/840), (x5^2 - 6389/480), (-4/3 x5^2 + x3^2 + x3 - 833/180) ) ";
+        //exam = "(x3,x4,x5) G " +
+        //       "( x4^2 + 1809/30976 x3^2 + 190760/17787 x4 + 1755/10648 x3 + 296895202578451/10529038840320 , x3 * x4 - 15/64 x3^2 + 1223/294 x3 - 68247/58240 , x5 - 11/6 x4 - 3/16 x3 - 44162/4851 , x3^3 + 441280/68651 x3^2 + 29361376/2839655 x4 + 7055752657/687196510 x3 + 28334577136/417429285 , -8/9 x3^2 - 2 x5 + x3 - 159/44 )";
+
         Reader source = new StringReader(exam);
         GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
         try {
@@ -274,10 +277,10 @@ public class GroebnerBaseDistECTest extends TestCase {
         }
         //System.out.println("F = " + F);
 
-        Gp = bbdist.GB(F.list);
-        //System.out.println("Gp = " + Gp);
         Gs = bbseq.GB(F.list);
         //System.out.println("Gs = " + Gs);
+        Gp = bbdist.GB(F.list);
+        //System.out.println("Gp = " + Gp);
 
         assertTrue("isGB( GB(Trinks7) )", bbseq.isGB(Gp));
         assertTrue("isGB( GB(Trinks7) )", bbseq.isGB(Gs));
