@@ -134,7 +134,7 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
      * @param port server port to use.
      */
     public GroebnerBaseDistributedEC(String mfile, int threads, ThreadPool pool, int port) {
-        this(mfile, threads, pool, new OrderedSyzPairlist<C>(), port);
+        this(mfile, threads, pool, new OrderedPairlist<C>(), port);
     }
 
 
@@ -275,10 +275,10 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
                 l--;
             }
         }
+        logger.info("start " + pairlist); 
         //if (l <= 1) {
         //return G; must signal termination to others
         //}
-
         logger.debug("looking for clients");
         DistHashTable<Integer, GenPolynomial<C>> theList = new DistHashTable<Integer, GenPolynomial<C>>(
                         "localhost", DHT_PORT);

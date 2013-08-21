@@ -343,7 +343,7 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
         //if (l <= 1) {
         //return G; must signal termination to others
         //}
-        logger.info("pairlist " + pairlist);
+        logger.info("start " + pairlist); 
         DistHashTable<Integer, GenPolynomial<C>> theList = new DistHashTable<Integer, GenPolynomial<C>>(
                         "localhost", DHT_PORT);
         theList.init();
