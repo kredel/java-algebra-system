@@ -11,6 +11,8 @@ import java.util.Arrays;
 
 import mpi.Comm;
 import mpi.MPIException;
+import mpi.MPI;
+import mpi.Status;
 
 import org.apache.log4j.Logger;
 
@@ -18,8 +20,8 @@ import edu.jas.kern.MPIEngine;
 
 
 /**
- * MPIChannel provides a communication channel for Java objects using MPI to a
- * given rank.
+ * MPIChannel provides a communication channel for Java objects using MPI or TCP/IP 
+ * to a given rank.
  * @author Heinz Kredel
  */
 public final class MPIChannel {
@@ -58,7 +60,7 @@ public final class MPIChannel {
     /*
      * Transport layer.
      * true: use TCP/IP socket layer, false: use MPI transport layer.
-     * Can not be set to false for OpenMPI Java: not working and programming not done.
+     * Can not be set to false for OpenMPI Java: not working.
      */
     static final boolean useTCP = true;
 
@@ -101,7 +103,7 @@ public final class MPIChannel {
         partnerRank = r;
         tag = t;
         synchronized (engine) {
-            if (soc == null) {
+            if (soc == null && useTCP) {
                 int port = ChannelFactory.DEFAULT_PORT;
                 ChannelFactory cf = new ChannelFactory(port);
                 if (rank == 0) {
@@ -164,21 +166,22 @@ public final class MPIChannel {
      * @param pr partner rank.
      */
     void send(int t, Object v, int pr) throws IOException, MPIException {
-        if (soc == null) {
-            logger.warn("soc not initialized: lost " + v);
-            return;
+        if (useTCP) {
+            if (soc == null) {
+                logger.warn("soc not initialized: lost " + v);
+                return;
+            }
+            if (soc[pr] == null) {
+                logger.warn("soc[" + pr + "] not initialized: lost " + v);
+                return;
+            }
+            soc[pr].send(t, v);
+        } else {
+            Object[] va = new Object[] { v };
+            //synchronized (MPJEngine.class) {
+            engine.Send(va, 0, va.length, MPI.OBJECT, pr, t);
+            //}
         }
-        if (soc[pr] == null) {
-            logger.warn("soc[" + pr + "] not initialized: lost " + v);
-            return;
-        }
-        soc[pr].send(t, v);
-        // Object[] va = new Object[1];
-        // va[0] = v;
-        // Status stat = null;
-        // synchronized (MPIEngine.class) { //(MPIEngine.getSendLock(t)) {
-        //     engine.Send(va, 0, va.length, MPI.OBJECT, pr, t);
-        // }
     }
 
 
@@ -197,39 +200,42 @@ public final class MPIChannel {
      * @return a message object.
      */
     public Object receive(int t) throws IOException, ClassNotFoundException, MPIException {
-        if (soc == null) {
-            logger.warn("soc not initialized");
-            return null;
+        if (useTCP) {
+            if (soc == null) {
+                logger.warn("soc not initialized");
+                return null;
+            }
+            if (soc[partnerRank] == null) {
+                logger.warn("soc[" + partnerRank + "] not initialized");
+                return null;
+            }
+            try {
+                return soc[partnerRank].receive(t);
+            } catch (InterruptedException e) {
+                throw new IOException(e);
+            }
+        } else {
+            Object[] va = new Object[1];
+            Status stat = null;
+            //synchronized (MPJEngine.class) {
+            stat = engine.Recv(va, 0, va.length, MPI.OBJECT, partnerRank, t);
+            //}
+            if (stat == null) {
+                throw new IOException("received null Status");
+            }
+            int cnt = stat.Get_count(MPI.OBJECT);
+            if (cnt == 0) {
+                throw new IOException("no object received");
+            }
+            if (cnt > 1) {
+                logger.warn("too many objects received, ignored " + (cnt - 1));
+            }
+            // int pr = stat.source;
+            // if (pr != partnerRank) {
+            //     logger.warn("received out of order message from " + pr);
+            // }
+            return va[0];
         }
-        if (soc[partnerRank] == null) {
-            logger.warn("soc[" + partnerRank + "] not initialized");
-            return null;
-        }
-        try {
-            return soc[partnerRank].receive(t);
-        } catch (InterruptedException e) {
-            throw new IOException(e);
-        }
-        // Object[] va = new Object[1];
-        // Status stat = null;
-        // Request req = null;
-        // synchronized (MPIEngine.class) {
-        //     stat = engine.Recv(va, 0, va.length, MPI.OBJECT, partnerRank, t);
-        // }
-        // logger.info("waitRequest done: req = " + req + " stat = " + stat);
-        // if (stat == null) {
-        //     throw new IOException("no Status received");
-        // }
-        // int cnt = stat.Get_count(MPI.OBJECT);
-        // if (cnt == 0) {
-        //     throw new IOException("no object received");
-        // }
-        // //int pr = stat.source;
-        // //if (pr != partnerRank) {
-        // //    logger.warn("received out of order message from " + pr);
-        // //}
-        // Object v = va[0];
-        // return v;
     }
 
 
@@ -237,13 +243,15 @@ public final class MPIChannel {
      * Closes the channel.
      */
     public void close() {
-        if (soc == null) {
-            return;
-        }
-        for (int i = 0; i < soc.length; i++) {
-            if (soc[i] != null) {
-                soc[i].close();
-                soc[i] = null;
+        if (useTCP) {
+            if (soc == null) {
+                return;
+            }
+            for (int i = 0; i < soc.length; i++) {
+                if (soc[i] != null) {
+                    soc[i].close();
+                    soc[i] = null;
+                }
             }
         }
     }
