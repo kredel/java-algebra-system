@@ -160,7 +160,7 @@ public final class MPJEngine {
                 //int tl = MPI.Init_thread(args,MPI.THREAD_MULTIPLE);
                 logger.info("MPJ initialized on " + MPI.Get_processor_name());
                 //logger.info("thread level MPI.THREAD_MULTIPLE: " + MPI.THREAD_MULTIPLE 
-                //           + ", provided: " + tl);
+                //            + ", provided: " + tl);
                 if (debug) {
                     logger.debug("remaining args: " + Arrays.toString(args));
                 }

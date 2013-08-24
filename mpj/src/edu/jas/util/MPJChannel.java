@@ -19,8 +19,8 @@ import edu.jas.kern.MPJEngine;
 
 
 /**
- * MPJChannel provides a communication channel for Java objects using MPJ to a
- * given rank. Can use MPJ transport layer for "niodev" with FastMPJ.
+ * MPJChannel provides a communication channel for Java objects using MPJ or TCP/IP
+ * to a given rank. Can use MPJ transport layer for "niodev" with FastMPJ.
  * @author Heinz Kredel
  */
 public final class MPJChannel {

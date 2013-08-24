@@ -84,8 +84,8 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
 
 
     /**
-     * Transport layer. true: use TCP/IP socket layer, false: use MPJ transport
-     * layer.
+     * Transport layer. 
+     * true: use TCP/IP socket layer, false: use MPJ transport layer.
      */
     static final boolean useTCP = true;
 
