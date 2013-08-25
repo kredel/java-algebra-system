@@ -169,7 +169,14 @@ public final class MPIEngine {
             for (int i = 0; i < size; i++) {
                 hostNames.add("");
             }
-            hostNames.set(rank, MPI.Get_processor_name() + hostSuf);
+            String myhost = MPI.Get_processor_name();
+            if ( myhost.matches("\\An\\d*") ) { // bwGRiD node names n010207
+                myhost += hostSuf;
+            }
+            if ( myhost.matches("kredel.*") ) { 
+                myhost = "localhost";
+            }
+            hostNames.set(rank, myhost);
             if (rank == 0) {
                 String[] va = new String[1];
                 va[0] = hostNames.get(0);

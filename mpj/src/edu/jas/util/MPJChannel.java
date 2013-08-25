@@ -104,8 +104,9 @@ public final class MPJChannel {
         synchronized (engine) {
             if (soc == null && useTCP) {
                 int port = ChannelFactory.DEFAULT_PORT;
-                ChannelFactory cf = new ChannelFactory(port);
+                ChannelFactory cf;
                 if (rank == 0) {
+                    cf = new ChannelFactory(port);
                     cf.init();
                     soc = new TaggedSocketChannel[size];
                     soc[0] = null;
@@ -120,10 +121,12 @@ public final class MPJChannel {
                     }
                     cf.terminate();
                 } else {
+                    cf = new ChannelFactory(port-1); // in case of localhost
                     soc = new TaggedSocketChannel[1];
                     SocketChannel sc = cf.getChannel(MPJEngine.hostNames.get(0), port);
                     soc[0] = new TaggedSocketChannel(sc);
                     soc[0].init();
+                    cf.terminate();
                 }
             }
         }

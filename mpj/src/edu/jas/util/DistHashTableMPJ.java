@@ -117,8 +117,9 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
         size = engine.Size();
         if (useTCP) { // && soc == null
             int port = ChannelFactory.DEFAULT_PORT + 11;
-            ChannelFactory cf = new ChannelFactory(port);
+            ChannelFactory cf;
             if (rank == 0) {
+                cf = new ChannelFactory(port);
                 cf.init();
                 soc = new SocketChannel[size];
                 soc[0] = null;
@@ -132,9 +133,11 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
                 }
                 cf.terminate();
             } else {
+                cf = new ChannelFactory(port-1); // in case of localhost
                 soc = new SocketChannel[1];
                 SocketChannel sc = cf.getChannel(MPJEngine.hostNames.get(0), port);
                 soc[0] = sc;
+                cf.terminate();
             }
         } else {
             soc = null;
