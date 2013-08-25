@@ -318,13 +318,25 @@ public class DistHashTable<K, V> extends AbstractMap<K, V> /* implements Map<K,V
 
 
     /**
-     * Clear the List. Caveat: must be called on all clients.
+     * Clear the List. 
+     * Clearance request is distributed to all clients.
      */
     @Override
     public void clear() {
-        // send clear message to others
         synchronized (theList) {
             theList.clear();
+        }
+        // done after 11 month: send clear message to others
+        try {
+            DHTTransport<K, V> tc = new DHTTransportClear<K, V>();
+            channel.send(tc);
+            //System.out.println("send: "+tc+" @ "+listener);
+        } catch (IOException e) {
+            logger.info("send, exception " + e);
+            e.printStackTrace();
+        } catch (Exception e) {
+            logger.info("send, exception " + e);
+            e.printStackTrace();
         }
     }
 
@@ -384,7 +396,6 @@ public class DistHashTable<K, V> extends AbstractMap<K, V> /* implements Map<K,V
 /**
  * Thread to comunicate with the list server.
  */
-
 class DHTListener<K, V> extends Thread {
 
 
@@ -445,6 +456,14 @@ class DHTListener<K, V> extends Thread {
                 if (o == null) {
                     goon = false;
                     break;
+                }
+                if (o instanceof DHTTransportClear) {
+                    logger.info("receive, clear");
+                    synchronized (theList) {
+                        theList.clear();
+                        theList.notifyAll();
+                    }
+                    continue;
                 }
                 if (o instanceof DHTTransport) {
                     tc = (DHTTransport<K, V>) o;

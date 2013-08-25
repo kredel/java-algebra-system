@@ -283,7 +283,6 @@ public class DistHashTableServer<K> extends Thread {
 /**
  * Thread for broadcasting all incoming objects to the list clients.
  */
-
 class DHTBroadcaster<K> extends Thread /*implements Runnable*/{
 
 
@@ -361,8 +360,10 @@ class DHTBroadcaster<K> extends Thread /*implements Runnable*/{
             //   logger.info("theList duplicate key " + tc.key );
             //}
             try {
-                key = tc.key();
-                theList.put(key, tc);
+                if ( ! (o instanceof DHTTransportClear) ) {
+                    key = tc.key();
+                    theList.put(key, tc);
+                }
             } catch (IOException e) {
                 logger.warn("IO exception: tc.key() not ok " + tc);
                 e.printStackTrace();
@@ -370,7 +371,7 @@ class DHTBroadcaster<K> extends Thread /*implements Runnable*/{
                 logger.warn("CNF exception: tc.key() not ok " + tc);
                 e.printStackTrace();
             } catch (Exception e) {
-                logger.warn("exception:tc.key() not ok " + tc);
+                logger.warn("exception: tc.key() not ok " + tc);
                 e.printStackTrace();
             }
         }
@@ -427,6 +428,16 @@ class DHTBroadcaster<K> extends Thread /*implements Runnable*/{
                 }
                 if (logger.isDebugEnabled()) {
                     logger.debug("received = " + o);
+                }
+                if (o instanceof DHTTransportClear) {
+                    logger.info("receive, clear");
+                    synchronized (theList) {
+                        theList.clear();
+                        theList.notifyAll();
+                    }
+                    DHTTransport tc = (DHTTransport) o;
+                    broadcast(tc);                    
+                    continue;
                 }
                 if (!(o instanceof DHTTransport)) {
                     logger.warn("wrong object type: " + o);

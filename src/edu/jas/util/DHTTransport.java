@@ -16,7 +16,6 @@ import java.rmi.MarshalledObject;
  * object serialization which can be removed later.
  * @author Heinz Kredel
  */
-
 public abstract class DHTTransport<K, V> implements Serializable {
 
 
@@ -82,10 +81,32 @@ public abstract class DHTTransport<K, V> implements Serializable {
 /**
  * Transport container to signal termination for a distributed version
  * of a HashTable. Contains no objects.
- * @author Heinz Kredel
  */
-
 class DHTTransportTerminate<K, V> extends DHTTransport<K, V> {
+
+    /**
+     * Get the key from this DHTTransport Container.
+     */
+    public K key() throws IOException, ClassNotFoundException {
+        throw new UnsupportedOperationException("this should not happen");
+    }
+
+
+    /**
+     * Get the value from this DHTTransport Container.
+     */
+    public V value() throws IOException, ClassNotFoundException {
+        throw new UnsupportedOperationException("this should not happen");
+    }
+
+}
+
+
+/**
+ * Transport container to signal clearing contents of the 
+ * other HashTables including the server. Contains no objects.
+ */
+class DHTTransportClear<K, V> extends DHTTransport<K, V> {
 
     /**
      * Get the key from this DHTTransport Container.
@@ -108,9 +129,7 @@ class DHTTransportTerminate<K, V> extends DHTTransport<K, V> {
 /**
  * Transport container for a distributed version of a HashTable. Immutable
  * objects. Uses MarshalledObject to avoid deserialization on server side.
- * @author Heinz Kredel
  */
-
 class DHTTransportMarshal<K, V> extends DHTTransport<K, V> {
 
 
@@ -186,6 +205,7 @@ class DHTTransportMarshal<K, V> extends DHTTransport<K, V> {
         }
     }
 
+
     private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
         long t = System.currentTimeMillis();
         in.defaultReadObject();
@@ -201,9 +221,7 @@ class DHTTransportMarshal<K, V> extends DHTTransport<K, V> {
 /**
  * Transport container for a distributed version of a HashTable. Immutable
  * objects. Uses plain objects.
- * @author Heinz Kredel
  */
-
 class DHTTransportPlain<K, V> extends DHTTransport<K, V> {
 
 
@@ -257,6 +275,7 @@ class DHTTransportPlain<K, V> extends DHTTransport<K, V> {
             ertime += t;
         }
     }
+
 
     private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
         long t = System.currentTimeMillis();
