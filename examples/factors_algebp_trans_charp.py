@@ -95,7 +95,7 @@ t = System.currentTimeMillis();
 #ok: G = Yr.factors(f);
 G = Yr.squarefreeFactors(f);
 t = System.currentTimeMillis() - t;
-print "G = ", G;
+print "#G = ", len(G);
 #print "factor time =", t, "milliseconds";
 
 #sys.exit();

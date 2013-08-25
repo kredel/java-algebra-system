@@ -88,7 +88,7 @@ print;
 #startLog();
 
 rfi = rz.squarefreeFactors(rip);
-print "squarefree Output:", str(rfi);
+print "#squarefree Output:", str(len(rfi));
 print;
 
 for h, i in rfi.iteritems():

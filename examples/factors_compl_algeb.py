@@ -58,7 +58,7 @@ startLog();
 t = System.currentTimeMillis();
 G = r.factors(f);
 t = System.currentTimeMillis() - t;
-print "G = ", str(G);
+print "#G = ", str(len(G));
 #print "factor time =", t, "milliseconds";
 
 ## f2 = one;
@@ -103,7 +103,7 @@ print;
 t = System.currentTimeMillis();
 G = r2.factors(g);
 t = System.currentTimeMillis() - t;
-print "G = ", str(G);
+print "#G = ", str(len(G));
 #print "factor time =", t, "milliseconds";
 
 ## g2 = one;

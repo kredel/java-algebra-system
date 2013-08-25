@@ -80,7 +80,7 @@ startLog();
 
 rfi = rz.squarefreeFactors(rip);
 #rfi = rz.factors(rip);
-puts "squarefree Output: " + str(rfi);
+puts "#squarefree Output: " + str(rfi.size);
 puts;
 
 rfi.each{ |h,i| puts "h**i = " + str(h) + "**" + str(i) };
