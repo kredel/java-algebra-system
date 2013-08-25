@@ -36,7 +36,7 @@ public final class MPIChannel {
     /*
      * Underlying MPI engine.
      */
-    private final Comm engine; // essentially static (when useTCP) !
+    private final Comm engine; // essentially static when useTCP !
 
 
     /*

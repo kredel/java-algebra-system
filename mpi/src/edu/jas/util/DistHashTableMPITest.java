@@ -32,7 +32,7 @@ public class DistHashTableMPITest extends TestCase {
     /**
      * main.
      */
-    public static void main(String[] args) throws MPIException {
+    public static void main(String[] args) throws IOException, MPIException {
         //long t = System.currentTimeMillis();
         BasicConfigurator.configure();
         engine = MPIEngine.getCommunicator(args);

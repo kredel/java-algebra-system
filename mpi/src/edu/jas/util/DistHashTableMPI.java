@@ -83,7 +83,7 @@ public class DistHashTableMPI<K, V> extends AbstractMap<K, V> {
     private final SocketChannel[] soc;
 
 
-    /*
+    /**
      * Transport layer.
      * true: use TCP/IP socket layer, false: use MPI transport layer.
      */
@@ -313,9 +313,9 @@ public class DistHashTableMPI<K, V> extends AbstractMap<K, V> {
                     soc[i].send(tc);
                 } else {
                     DHTTransport[] tcl = new DHTTransport[] { tc };
-                    synchronized (MPIEngine.class) { // remove
+                    //synchronized (MPIEngine.class) { // remove
                         engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
-                    }
+                    //}
                 }
             }
             synchronized (theList) { // add to self.listener
@@ -434,9 +434,9 @@ public class DistHashTableMPI<K, V> extends AbstractMap<K, V> {
                         soc[i].send(tc);
                     } else {
                         DHTTransport[] tcl = new DHTTransport[] { tc };
-                        synchronized (MPIEngine.class) {
+                        //synchronized (MPIEngine.class) {
                             engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
-                        }
+                        //}
                     }
                 }
             }
@@ -542,10 +542,10 @@ class DHTMPIListener<K, V> extends Thread {
                 } else {
                     DHTTransport[] tcl = new DHTTransport[1];
                     Status stat = null;
-                    synchronized (MPIEngine.class) { // global static lock , // only from 0:
+                    //synchronized (MPIEngine.class) { // global static lock , // only from 0:
                         stat = engine.Recv(tcl, 0, tcl.length, MPI.OBJECT, MPI.ANY_SOURCE,
                                         DistHashTableMPI.DHTTAG);
-                    }
+                    //}
                     //logger.info("waitRequest done: stat = " + stat);
                     if (stat == null) {
                         goon = false;
@@ -555,6 +555,8 @@ class DHTMPIListener<K, V> extends Thread {
                     if (cnt == 0) {
                         goon = false;
                         break;
+                    } else if (cnt > 1) {
+                        logger.warn("ignoring " + (cnt - 1) + " received objects");
                     }
                     to = tcl[0];
                 }

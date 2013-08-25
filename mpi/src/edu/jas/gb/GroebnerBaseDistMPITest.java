@@ -45,7 +45,7 @@ public class GroebnerBaseDistMPITest extends TestCase {
     /**
      * main
      */
-    public static void main(String[] args) throws MPIException {
+    public static void main(String[] args) throws IOException, MPIException {
         BasicConfigurator.configure();
         engine = MPIEngine.getCommunicator(args);
         junit.textui.TestRunner.run(suite());
@@ -133,7 +133,7 @@ public class GroebnerBaseDistMPITest extends TestCase {
 
 
     @Override
-    protected void setUp() {
+    protected void setUp() throws IOException {
         try {
             threads = engine.Size();
             BigRational coeff = new BigRational(9);

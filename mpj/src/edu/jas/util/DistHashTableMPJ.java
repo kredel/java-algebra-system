@@ -26,8 +26,8 @@ import edu.jas.kern.MPJEngine;
 
 
 /**
- * Distributed version of a HashTable using MPJ. Implemented with a SortedMap /
- * TreeMap to keep the sequence order of elements. Implemented using MPJ
+ * Distributed version of a HashTable using MPI. Implemented with a SortedMap /
+ * TreeMap to keep the sequence order of elements. Implemented using MPI
  * transport or TCP transport.
  * @author Heinz Kredel
  */
@@ -54,7 +54,7 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
 
 
     /*
-     * MPJ communicator.
+     * MPI communicator.
      */
     protected final Comm engine;
 
@@ -85,9 +85,9 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
 
     /**
      * Transport layer. 
-     * true: use TCP/IP socket layer, false: use MPJ transport layer.
+     * true: use TCP/IP socket layer, false: use MPI transport layer.
      */
-    static final boolean useTCP = true;
+    static final boolean useTCP = false;
 
 
     /**
@@ -312,8 +312,7 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
                 if (useTCP) {
                     soc[i].send(tc);
                 } else {
-                    DHTTransport[] tcl = new DHTTransport[1];
-                    tcl[0] = tc;
+                    DHTTransport[] tcl = new DHTTransport[] { tc };
                     //synchronized (MPJEngine.class) { // remove
                         engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
                     //}
@@ -441,6 +440,10 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
                     }
                 }
             }
+        } catch (MPIException e) {
+            logger.info("sending(terminate)");
+            logger.info("send " + e);
+            e.printStackTrace();
         } catch (IOException e) {
             logger.info("sending(terminate)");
             logger.info("send " + e);
@@ -470,7 +473,7 @@ class DHTMPJListener<K, V> extends Thread {
     private static final Logger logger = Logger.getLogger(DHTMPJListener.class);
 
 
-    private static boolean debug = true; //logger.isDebugEnabled();
+    private static boolean debug = logger.isDebugEnabled();
 
 
     private final Comm engine;

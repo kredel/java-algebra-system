@@ -5,6 +5,7 @@
 package edu.jas.kern;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -129,7 +130,7 @@ public final class MPIEngine {
      * Get the MPI communicator.
      * @return a Communicator constructed for cmdline.
      */
-    public static synchronized Comm getCommunicator() throws MPIException {
+    public static synchronized Comm getCommunicator() throws IOException, MPIException {
         if (cmdline == null) {
             throw new IllegalArgumentException("command line not set");
         }
@@ -142,7 +143,7 @@ public final class MPIEngine {
      * @param args the command line to use for the MPI runtime system.
      * @return a Communicator.
      */
-    public static synchronized Comm getCommunicator(String[] args) throws MPIException {
+    public static synchronized Comm getCommunicator(String[] args) throws IOException, MPIException {
         if (NO_MPI) {
             return null;
         }
@@ -184,11 +185,13 @@ public final class MPIEngine {
                 for (int i = 1; i < size; i++) {
                     Status stat = mpiComm.Recv(va, 0, va.length, MPI.OBJECT, i, TAG);
                     if (stat == null) {
-                        throw new MPIException("no Status received");
+                        throw new IOException("no Status received");
+                        //throw new MPIException("no Status received");
                     }
                     int cnt = stat.Get_count(MPI.OBJECT);
                     if (cnt == 0) {
-                        throw new MPIException("no object received");
+                        throw new IOException("no Object received");
+                        //throw new MPIException("no object received");
                     }
                     String v = va[0];
                     hostNames.set(i, v);

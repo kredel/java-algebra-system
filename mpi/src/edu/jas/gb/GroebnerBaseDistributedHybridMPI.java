@@ -103,7 +103,7 @@ public class GroebnerBaseDistributedHybridMPI<C extends RingElem<C>> extends Gro
     /**
      * Constructor.
      */
-    public GroebnerBaseDistributedHybridMPI() throws MPIException {
+    public GroebnerBaseDistributedHybridMPI() throws IOException {
         this(DEFAULT_THREADS);
     }
 
@@ -112,7 +112,7 @@ public class GroebnerBaseDistributedHybridMPI<C extends RingElem<C>> extends Gro
      * Constructor.
      * @param threads number of threads to use.
      */
-    public GroebnerBaseDistributedHybridMPI(int threads) throws MPIException {
+    public GroebnerBaseDistributedHybridMPI(int threads) throws IOException {
         this(threads, new ThreadPool(threads));
     }
 
@@ -122,7 +122,7 @@ public class GroebnerBaseDistributedHybridMPI<C extends RingElem<C>> extends Gro
      * @param threads number of threads to use.
      * @param threadsPerNode threads per node to use.
      */
-    public GroebnerBaseDistributedHybridMPI(int threads, int threadsPerNode) throws MPIException {
+    public GroebnerBaseDistributedHybridMPI(int threads, int threadsPerNode) throws IOException {
         this(threads, threadsPerNode, new ThreadPool(threads));
     }
 
@@ -132,7 +132,7 @@ public class GroebnerBaseDistributedHybridMPI<C extends RingElem<C>> extends Gro
      * @param threads number of threads to use.
      * @param pool ThreadPool to use.
      */
-    public GroebnerBaseDistributedHybridMPI(int threads, ThreadPool pool) throws MPIException {
+    public GroebnerBaseDistributedHybridMPI(int threads, ThreadPool pool) throws IOException {
         this(threads, DEFAULT_THREADS_PER_NODE, pool);
     }
 
@@ -144,7 +144,7 @@ public class GroebnerBaseDistributedHybridMPI<C extends RingElem<C>> extends Gro
      * @param pl pair selection strategy
      */
     public GroebnerBaseDistributedHybridMPI(int threads, int threadsPerNode, PairList<C> pl)
-                    throws MPIException {
+                    throws IOException {
         this(threads, threadsPerNode, new ThreadPool(threads), pl);
     }
 
@@ -155,7 +155,7 @@ public class GroebnerBaseDistributedHybridMPI<C extends RingElem<C>> extends Gro
      * @param threadsPerNode threads per node to use.
      */
     public GroebnerBaseDistributedHybridMPI(int threads, int threadsPerNode, ThreadPool pool)
-                    throws MPIException {
+                    throws IOException {
         this(threads, threadsPerNode, pool, new OrderedPairlist<C>());
     }
 
@@ -168,10 +168,15 @@ public class GroebnerBaseDistributedHybridMPI<C extends RingElem<C>> extends Gro
      * @param pl pair selection strategy
      */
     public GroebnerBaseDistributedHybridMPI(int threads, int threadsPerNode, ThreadPool pool, PairList<C> pl)
-                    throws MPIException {
+                    throws IOException {
         super(new ReductionPar<C>(), pl);
-        this.engine = MPIEngine.getCommunicator();
-        int size = engine.Size();
+        int size = 0;
+        try {
+            engine = MPIEngine.getCommunicator();
+            size = engine.Size();
+        } catch (MPIException e) {
+            throw new IOException(e);
+        }
         if (size < 2) {
             throw new IllegalArgumentException("Minimal 2 MPI processes required, not " + size);
         }

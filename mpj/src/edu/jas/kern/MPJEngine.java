@@ -12,15 +12,16 @@ import java.util.Arrays;
 import mpi.Comm;
 import mpi.Intracomm;
 import mpi.MPI;
+import mpi.MPIException;
 import mpi.Status;
 
 import org.apache.log4j.Logger;
 
 
 /**
- * MPJ engine, provides global MPI service. <b>Note:</b> could eventually be
- * done directly with MPJ, but provides logging. <b>Usage:</b> To obtain a
- * reference to the MPJ service communicator use
+ * MPI engine, provides global MPI service. <b>Note:</b> could eventually be
+ * done directly with MPI, but provides logging. <b>Usage:</b> To obtain a
+ * reference to the MPI service communicator use
  * <code>MPJEngine.getComminicator()</code>. Once an engine has been created it
  * must be shutdown to exit JAS with <code>MPJEngine.terminate()</code>.
  * @author Heinz Kredel
@@ -36,7 +37,7 @@ public final class MPJEngine {
 
 
     /**
-     * Command line arguments. Required for MPJ runtime system.
+     * Command line arguments. Required for MPI runtime system.
      */
     protected static String[] cmdline;
 
@@ -48,8 +49,8 @@ public final class MPJEngine {
 
 
     /**
-     * Flag for MPJ usage. <b>Note:</b> Only introduced because Google app
-     * engine does not support MPJ.
+     * Flag for MPI usage. <b>Note:</b> Only introduced because Google app
+     * engine does not support MPI.
      */
     public static boolean NO_MPI = false;
 
@@ -68,13 +69,13 @@ public final class MPJEngine {
 
 
     /**
-     * MPJ communicator engine.
+     * MPI communicator engine.
      */
     static Intracomm mpiComm;
 
 
     /**
-     * MPJ engine base tag number.
+     * MPI engine base tag number.
      */
     public static final int TAG = 11;
 
@@ -106,7 +107,7 @@ public final class MPJEngine {
 
     /**
      * Set the commandline.
-     * @param args the command line to use for the MPJ runtime system.
+     * @param args the command line to use for the MPI runtime system.
      */
     public static synchronized void setCommandLine(String[] args) {
         cmdline = args;
@@ -129,7 +130,7 @@ public final class MPJEngine {
 
 
     /**
-     * Get the MPJ communicator.
+     * Get the MPI communicator.
      * @return a Communicator constructed for cmdline.
      */
     public static synchronized Comm getCommunicator() throws IOException {
@@ -141,8 +142,8 @@ public final class MPJEngine {
 
 
     /**
-     * Get the MPJ communicator.
-     * @param args the command line to use for the MPJ runtime system.
+     * Get the MPI communicator.
+     * @param args the command line to use for the MPI runtime system.
      * @return a Communicator.
      */
     public static synchronized Comm getCommunicator(String[] args) throws IOException {
@@ -158,7 +159,7 @@ public final class MPJEngine {
                 cmdline = args;
                 args = MPI.Init(args);
                 //int tl = MPI.Init_thread(args,MPI.THREAD_MULTIPLE);
-                logger.info("MPJ initialized on " + MPI.Get_processor_name());
+                logger.info("MPI initialized on " + MPI.Get_processor_name());
                 //logger.info("thread level MPI.THREAD_MULTIPLE: " + MPI.THREAD_MULTIPLE 
                 //            + ", provided: " + tl);
                 if (debug) {
@@ -200,7 +201,7 @@ public final class MPJEngine {
                     String v = va[0];
                     hostNames.set(i, v);
                 }
-                logger.info("MPJ partner host names = " + hostNames);
+                logger.info("MPI partner host names = " + hostNames);
             } else {
                 String[] va = new String[1];
                 mpiComm.Bcast(va, 0, va.length, MPI.OBJECT, 0);
@@ -220,12 +221,16 @@ public final class MPJEngine {
         if (mpiComm == null) {
             return;
         }
-        logger.info("terminating MPJ on rank = " + mpiComm.Rank());
-        mpiComm = null;
         if (MPI.Finalized()) {
             return;
         }
-        MPI.Finalize();
+        try {
+            logger.info("terminating MPI on rank = " + mpiComm.Rank());
+            mpiComm = null;
+            MPI.Finalize();
+        } catch (MPIException e) {
+            e.printStackTrace();
+        }
     }
 
 

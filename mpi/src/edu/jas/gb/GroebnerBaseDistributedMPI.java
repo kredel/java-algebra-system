@@ -69,7 +69,7 @@ public class GroebnerBaseDistributedMPI<C extends RingElem<C>> extends GroebnerB
     /**
      * Constructor.
      */
-    public GroebnerBaseDistributedMPI() throws MPIException {
+    public GroebnerBaseDistributedMPI() throws IOException {
         this(DEFAULT_THREADS);
     }
 
@@ -78,7 +78,7 @@ public class GroebnerBaseDistributedMPI<C extends RingElem<C>> extends GroebnerB
      * Constructor.
      * @param threads number of threads to use.
      */
-    public GroebnerBaseDistributedMPI(int threads) throws MPIException {
+    public GroebnerBaseDistributedMPI(int threads) throws IOException {
         this(threads, new ThreadPool(threads));
     }
 
@@ -88,7 +88,7 @@ public class GroebnerBaseDistributedMPI<C extends RingElem<C>> extends GroebnerB
      * @param threads number of threads to use.
      * @param pool ThreadPool to use.
      */
-    public GroebnerBaseDistributedMPI(int threads, ThreadPool pool) throws MPIException {
+    public GroebnerBaseDistributedMPI(int threads, ThreadPool pool) throws IOException {
         this(threads, pool, new OrderedPairlist<C>());
     }
 
@@ -98,7 +98,7 @@ public class GroebnerBaseDistributedMPI<C extends RingElem<C>> extends GroebnerB
      * @param threads number of threads to use.
      * @param pl pair selection strategy
      */
-    public GroebnerBaseDistributedMPI(int threads, PairList<C> pl) throws MPIException {
+    public GroebnerBaseDistributedMPI(int threads, PairList<C> pl) throws IOException {
         this(threads, new ThreadPool(threads), pl);
     }
 
@@ -109,10 +109,15 @@ public class GroebnerBaseDistributedMPI<C extends RingElem<C>> extends GroebnerB
      * @param pool ThreadPool to use.
      * @param pl pair selection strategy
      */
-    public GroebnerBaseDistributedMPI(int threads, ThreadPool pool, PairList<C> pl) throws MPIException {
+    public GroebnerBaseDistributedMPI(int threads, ThreadPool pool, PairList<C> pl) throws IOException {
         super(new ReductionPar<C>(), pl);
-        this.engine = MPIEngine.getCommunicator();
-        int size = engine.Size();
+        int size = 0;
+        try {
+            engine = MPIEngine.getCommunicator();
+            size = engine.Size();
+        } catch (MPIException e) {
+            throw new IOException(e);
+        }
         if (size < 2) {
             throw new IllegalArgumentException("Minimal 2 MPI processes required, not " + size);
         }

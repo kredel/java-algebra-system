@@ -5,9 +5,12 @@
 package edu.jas.kern;
 
 
+import java.io.IOException;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+
 import mpi.MPI;
 import mpi.MPIException;
 import mpi.Status;
@@ -63,6 +66,8 @@ public class MPIEngineTest extends TestCase {
         if (engine == null) {
             try {
                 engine = MPIEngine.getCommunicator(cmdline);
+            } catch (IOException e) {
+                e.printStackTrace();
             } catch (MPIException e) {
                 e.printStackTrace();
             }

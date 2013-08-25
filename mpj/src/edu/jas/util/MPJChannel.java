@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import mpi.Comm;
+import mpi.MPIException;
 import mpi.MPI;
 import mpi.Status;
 
@@ -19,8 +20,8 @@ import edu.jas.kern.MPJEngine;
 
 
 /**
- * MPJChannel provides a communication channel for Java objects using MPJ or TCP/IP
- * to a given rank. Can use MPJ transport layer for "niodev" with FastMPJ.
+ * MPJChannel provides a communication channel for Java objects using MPI or TCP/IP
+ * to a given rank. Can use MPI transport layer for "niodev" with FastMPJ.
  * @author Heinz Kredel
  */
 public final class MPJChannel {
@@ -33,7 +34,7 @@ public final class MPJChannel {
 
 
     /*
-     * Underlying MPJ engine.
+     * Underlying MPI engine.
      */
     private final Comm engine; // essentially static when useTCP !
 
@@ -58,7 +59,7 @@ public final class MPJChannel {
 
     /*
      * Transport layer.
-     * true: use TCP/IP socket layer, false: use MPJ transport layer.
+     * true: use TCP/IP socket layer, false: use MPI transport layer.
      * Can be set to false for "niodev" with FastMPJ.
      */
     static final boolean useTCP = true;
@@ -77,22 +78,22 @@ public final class MPJChannel {
 
 
     /**
-     * Constructs a MPJ channel on the given MPJ engine.
-     * @param s MPJ communicator object.
-     * @param r rank of MPJ partner.
+     * Constructs a MPI channel on the given MPI engine.
+     * @param s MPI communicator object.
+     * @param r rank of MPI partner.
      */
-    public MPJChannel(Comm s, int r) throws IOException {
+    public MPJChannel(Comm s, int r) throws IOException, MPIException {
         this(s, r, CHANTAG);
     }
 
 
     /**
-     * Constructs a MPJ channel on the given MPJ engine.
-     * @param s MPJ communicator object.
-     * @param r rank of MPJ partner.
+     * Constructs a MPI channel on the given MPI engine.
+     * @param s MPI communicator object.
+     * @param r rank of MPI partner.
      * @param t tag for messages.
      */
-    public MPJChannel(Comm s, int r, int t) throws IOException {
+    public MPJChannel(Comm s, int r, int t) throws IOException, MPIException {
         engine = s;
         rank = engine.Rank();
         size = engine.Size();
@@ -135,7 +136,7 @@ public final class MPJChannel {
 
 
     /**
-     * Get the MPJ engine.
+     * Get the MPI engine.
      */
     public Comm getEngine() {
         return engine;
@@ -146,7 +147,7 @@ public final class MPJChannel {
      * Sends an object.
      * @param v message object.
      */
-    public void send(Object v) throws IOException {
+    public void send(Object v) throws IOException, MPIException {
         send(tag, v, partnerRank);
     }
 
@@ -156,7 +157,7 @@ public final class MPJChannel {
      * @param t message tag.
      * @param v message object.
      */
-    public void send(int t, Object v) throws IOException {
+    public void send(int t, Object v) throws IOException, MPIException {
         send(t, v, partnerRank);
     }
 
@@ -167,7 +168,7 @@ public final class MPJChannel {
      * @param v message object.
      * @param pr partner rank.
      */
-    void send(int t, Object v, int pr) throws IOException {
+    void send(int t, Object v, int pr) throws IOException, MPIException {
         if (useTCP) {
             if (soc == null) {
                 logger.warn("soc not initialized: lost " + v);
@@ -191,7 +192,7 @@ public final class MPJChannel {
      * Receives an object.
      * @return a message object.
      */
-    public Object receive() throws IOException, ClassNotFoundException {
+    public Object receive() throws IOException, ClassNotFoundException, MPIException {
         return receive(tag);
     }
 
@@ -201,7 +202,7 @@ public final class MPJChannel {
      * @param t message tag.
      * @return a message object.
      */
-    public Object receive(int t) throws IOException, ClassNotFoundException {
+    public Object receive(int t) throws IOException, ClassNotFoundException, MPIException {
         if (useTCP) {
             if (soc == null) {
                 logger.warn("soc not initialized");
