@@ -458,7 +458,7 @@ class DHTListener<K, V> extends Thread {
                     break;
                 }
                 if (o instanceof DHTTransportClear) {
-                    logger.info("receive, clear");
+                    logger.debug("receive, clear");
                     synchronized (theList) {
                         theList.clear();
                         theList.notifyAll();

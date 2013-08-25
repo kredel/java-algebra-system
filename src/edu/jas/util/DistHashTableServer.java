@@ -149,7 +149,7 @@ public class DistHashTableServer<K> extends Thread {
                             s.start();
                         }
                     }
-                    if (logger.isInfoEnabled()) {
+                    if (logger.isDebugEnabled()) {
                         logger.info("server " + s + " started " + s.isAlive());
                     }
                     if (ls > 0) {
@@ -429,20 +429,17 @@ class DHTBroadcaster<K> extends Thread /*implements Runnable*/{
                 if (logger.isDebugEnabled()) {
                     logger.debug("received = " + o);
                 }
+                if (!(o instanceof DHTTransport)) {
+                    logger.warn("wrong object type: " + o);
+                    goon = false;
+                    break; //continue;
+                }
                 if (o instanceof DHTTransportClear) {
                     logger.info("receive, clear");
                     synchronized (theList) {
                         theList.clear();
                         theList.notifyAll();
                     }
-                    DHTTransport tc = (DHTTransport) o;
-                    broadcast(tc);                    
-                    continue;
-                }
-                if (!(o instanceof DHTTransport)) {
-                    logger.warn("wrong object type: " + o);
-                    goon = false;
-                    break; //continue;
                 }
                 DHTTransport tc = (DHTTransport) o;
                 broadcast(tc);

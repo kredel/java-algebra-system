@@ -162,6 +162,17 @@ public class DistHashTableTest extends TestCase {
             assertEquals("l2(i)==k(i)", x, k );
             assertEquals("l2(i)==v(i)", x, o );
         }
+
+        l1.clear();
+        assertTrue("l1==empty",l1.isEmpty());
+        while ( l2.size() > 0 ) {
+            try {
+                //System.out.print("*5");
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+            }
+        }
+        assertTrue("l2==empty",l2.isEmpty());
     }
 
 
@@ -213,6 +224,18 @@ public class DistHashTableTest extends TestCase {
             assertEquals("l2(i)==v(i)", x, v1 );
             assertEquals("l1(i)==v(i)", x, v2 );
         }
+        
+        l1.clear();
+        assertTrue("l1==empty",l1.isEmpty());
+        while ( l2.size() > 0 || l3.size() > 0 ) {
+            try {
+                //System.out.print("*4");
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+            }
+        }
+        assertTrue("l2==empty",l2.isEmpty());
+        assertTrue("l3==empty",l3.isEmpty());
     }
 
 
