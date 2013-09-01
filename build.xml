@@ -46,9 +46,11 @@
   </taskdef>
 -->
 
+<!--
   <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
         <classpath path="${libs}/jacocoant.jar"/>
   </taskdef>
+-->
 
 <target name="vorher" >
   <!-- set properties DSTAMP, TSTAMP -->
