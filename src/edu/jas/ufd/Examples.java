@@ -6,6 +6,8 @@ package edu.jas.ufd;
 
 
 import java.util.SortedMap;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.BasicConfigurator;
 
@@ -39,6 +41,7 @@ public class Examples {
         //BasicConfigurator.configure();
         //example9();
         example1();
+        example2();
         BasicConfigurator.configure();
         example10();
         ComputerThreads.terminate();
@@ -60,28 +63,59 @@ public class Examples {
         cfac = new BigInteger();
         System.out.println("cfac = " + cfac);
 
-        fac = new GenPolynomialRing<BigInteger>(cfac,2);
-        System.out.println(" fac = " + fac);
+        String[] vc = new String[] {"a", "b"};
+        fac = new GenPolynomialRing<BigInteger>(cfac,vc);
+        System.out.println(" fac = " + fac.toScript());
 
         efac = new QuotientRing<BigInteger>( fac );
-        System.out.println("efac = " + efac);
+        System.out.println("efac = " + efac.toScript());
 
         String[] v = new String[] {"x", "y", "z" };
         qfac = new GenPolynomialRing<Quotient<BigInteger>>( efac, 3, v );
-        System.out.println("qfac = " + qfac);
+        System.out.println("qfac = " + qfac.toScript());
 
         mfac = new GenMatrixRing<GenPolynomial<Quotient<BigInteger>>>( qfac, 3, 3 );
-        System.out.println("mfac = " + mfac);
+        System.out.println("mfac = " + mfac.toScript());
 
         GenPolynomial<Quotient<BigInteger>> p;
         p = qfac.random(3,4,2,0.3f);
         System.out.println("\np = " + p);
 
-
         GenMatrix<GenPolynomial<Quotient<BigInteger>>> m;
         m = mfac.random(3,0.4f);
-        System.out.println("\nm = " + m);
+        System.out.println("\nm = " + m.toScript());
+    }
 
+
+    /**
+     * example2 with GenPolynomial. 
+     */
+    public static void example2() {
+        System.out.println("\n\n example 2");
+
+        BigInteger fac = new BigInteger();
+        String[] var = new String[]{ "a", "b", "c", "d"};
+        int numvars = var.length;
+        //not needed: TermOrder tord = new TermOrder(TermOrder.INVLEX);
+        GenPolynomialRing<BigInteger> ring = new GenPolynomialRing<BigInteger>(fac,var);
+        List<GenPolynomial<BigInteger>> vars=new ArrayList<GenPolynomial<BigInteger>>();
+        
+        // Build up the polynomial from vars.
+        for(int i=0; i<numvars; i++) vars.add(ring.univariate(i));
+        System.out.println("vars = " + vars);
+        
+        // Silly demo one first. 
+        //  ab+ac+db+dc   ->  (a+d)(b+c)
+        GenPolynomial<BigInteger> tmp=( vars.get(0).multiply(vars.get(1)) ).sum( vars.get(0).multiply(vars.get(2)) )
+        .sum( vars.get(3).multiply(vars.get(1)) ).sum( vars.get(3).multiply(vars.get(2)) );
+        
+        //alternative: tmp = ring.parse("a b + a c + d b + d c");
+        System.out.println("tmp = " +tmp); 
+        
+        Factorization<BigInteger> engine = FactorFactory.getImplementation(fac);
+        SortedMap<GenPolynomial<BigInteger>,Long> factors = engine.factors(tmp);
+        
+        System.out.println("factors = " + factors);
     }
 
 
