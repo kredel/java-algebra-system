@@ -22,9 +22,29 @@
 
 <dl>
 
-<dt>2013, August </dt>
+<dt>2013, September </dt>
 <dd> 
 
+ New distributed computation algorithm versions based on Java bindings
+ of <a href="http://www.open-mpi.org" target="mpi" >OpenMPI</a>
+ similarly to the MPJ version.  Both OpenMPI and MPJ are not
+ thread-safe for all devices (in particular not for the
+ <code>ibvdev</code> InfiniBand device), MPJ is thread-safe for
+ <code>niodev</code> Java NewIO device. So the the transport layer of
+ both versions is now split to allow selection of TCP/IP sockets or
+ MPI/MPJ channels for transport. The channels and distributed hash
+ tables have been simplified for both MPJ and MPI.
+
+ Socket based distributed hash table now implements the
+ <code>clear()</code> method. This caused unspecific errors in
+ iterated distributed Gr&ouml;bner base computations. Simplified
+ solvable multiplication. Fixes and improvements to Jython and JRuby
+ scripts.
+
+</dd>
+
+<dt>2013, August </dt>
+<dd> 
  New algorithms for solvable polynomial rings over solvable local
  rings in classes <code>LocalSolvablePolynomialRing</code> and
  <code>LocalSolvablePolynomial</code>. New scripting examples for
@@ -33,7 +53,6 @@
  interface <code>RelationGenerator</code>.  Fixed and cleanup some
  more <em>Findbugs</em> and <em>Eclipse</em> issues.  Several fixes
  and improvements for jruby of Android.
-
 </dd>
 
 <dt>2013, July </dt>
@@ -2270,7 +2289,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Mon Jul 29 21:05:05 CEST 2013
+Last modified: Sat Sep  7 14:19:34 CEST 2013
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
