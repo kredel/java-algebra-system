@@ -25,14 +25,14 @@
 <dt>2013, September </dt>
 <dd> 
 
- New distributed computation algorithm versions based on Java bindings
- of <a href="http://www.open-mpi.org" target="mpi" >OpenMPI</a>
- similarly to the MPJ version.  Both OpenMPI and MPJ are not
- thread-safe for all devices (in particular not for the
+ New distributed Gr&ouml;bner base algorithms based on the Java
+ bindings of <a href="http://www.open-mpi.org" target="mpi"
+ >OpenMPI</a> similarly to the MPJ version.  Both OpenMPI and MPJ are
+ not thread-safe for all devices (in particular not for the
  <code>ibvdev</code> InfiniBand device), MPJ is thread-safe for
- <code>niodev</code> Java NewIO device. So the the transport layer of
- both versions is now split to allow selection of TCP/IP sockets or
- MPI/MPJ channels for transport. The channels and distributed hash
+ <code>niodev</code> Java NewIO device. As work-around the transport
+ layer of both versions is split to allow selection of TCP/IP sockets
+ or MPI/MPJ channels for transport. The channels and distributed hash
  tables have been simplified for both MPJ and MPI.
 
  Socket based distributed hash table now implements the
@@ -2289,7 +2289,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Sat Sep  7 14:19:34 CEST 2013
+Last modified: Sat Sep  7 21:36:36 CEST 2013
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
