@@ -382,6 +382,16 @@ implements GcdRingElem<RealAlgebraicNumber<C>>, Rational {
 
 
     /**
+     * Quotient and remainder by division of this by S.
+     * @param S a RealAlgebraicNumber
+     * @return [this/S, this - (this/S)*S].
+     */
+    public RealAlgebraicNumber<C>[] quotientRemainder(RealAlgebraicNumber<C> S) {
+        return new RealAlgebraicNumber[] { divide(S), remainder(S) };
+    }
+
+
+    /**
      * RealAlgebraicNumber multiplication.
      * @param S RealAlgebraicNumber.
      * @return this*S.

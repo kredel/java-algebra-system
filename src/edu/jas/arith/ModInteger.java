@@ -459,6 +459,16 @@ public final class ModInteger implements GcdRingElem<ModInteger>, Modular {
 
 
     /**
+     * Quotient and remainder by division of this by S.
+     * @param S a modular integer
+     * @return [this/S, this - (this/S)*S].
+     */
+    public ModInteger[] quotientRemainder(ModInteger S) {
+        return new ModInteger[] { divide(S), remainder(S) };
+    }
+
+
+    /**
      * ModInteger multiply.
      * @param S ModInteger.
      * @return this*S.

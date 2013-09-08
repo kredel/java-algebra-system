@@ -730,6 +730,16 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
 
 
     /**
+     * Quotient and remainder by division of this by S.
+     * @param S a UnivPowerSeries
+     * @return [this/S, this - (this/S)*S].
+     */
+    public UnivPowerSeries<C>[] quotientRemainder(UnivPowerSeries<C> S) {
+        return new UnivPowerSeries[] { divide(S), remainder(S) };
+    }
+
+
+    /**
      * Differentiate.
      * @return differentiate(this).
      */

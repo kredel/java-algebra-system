@@ -436,6 +436,16 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
 
 
     /**
+     * Quotient and remainder by division of this by S.
+     * @param S a SolvableQuotient
+     * @return [this/S, this - (this/S)*S].
+     */
+    public SolvableQuotient<C>[] quotientRemainder(SolvableQuotient<C> S) {
+        return new SolvableQuotient[] { divide(S), remainder(S) };
+    }
+
+
+    /**
      * SolvableQuotient multiplication.
      * @param S SolvableQuotient.
      * @return this*S.

@@ -886,6 +886,16 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
 
 
     /**
+     * Quotient and remainder by division of this by S.
+     * @param S a quaternion number
+     * @return [this/S, this - (this/S)*S].
+     */
+    public BigQuaternion[] quotientRemainder(BigQuaternion S) {
+        return new BigQuaternion[] { divide(S), ZERO };
+    }
+
+
+    /**
      * BigQuaternion random. Random rational numbers A, B, C and D are generated
      * using random(n). Then R is the quaternion number with real part A and
      * imaginary parts B, C and D.

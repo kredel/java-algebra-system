@@ -668,6 +668,16 @@ public class Product<C extends RingElem<C>> implements RegularRingElem<Product<C
 
 
     /**
+     * Quotient and remainder by division of this by S.
+     * @param S a product
+     * @return [this/S, this - (this/S)*S].
+     */
+    public Product<C>[] quotientRemainder(Product<C> S) {
+        return new Product[] { divide(S), remainder(S) };
+    }
+
+
+    /**
      * Product multiplication.
      * @param S Product.
      * @return this*S.

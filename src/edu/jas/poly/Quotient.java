@@ -360,6 +360,16 @@ public class Quotient<C extends RingElem<C>> implements RingElem<Quotient<C>> {
 
 
     /**
+     * Quotient and remainder by division of this by S.
+     * @param S a Quotient
+     * @return [this/S, this - (this/S)*S].
+     */
+    public Quotient<C>[] quotientRemainder(Quotient<C> S) {
+        return new Quotient[] { divide(S), remainder(S) };
+    }
+
+
+    /**
      * Quotient multiplication.
      * @param S Quotient.
      * @return this*S.

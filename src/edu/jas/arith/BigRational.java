@@ -870,6 +870,16 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
 
 
     /**
+     * Quotient and remainder by division of this by S.
+     * @param S a rational number
+     * @return [this/S, this - (this/S)*S].
+     */
+    public BigRational[] quotientRemainder(BigRational S) {
+        return new BigRational[] { divide(S), ZERO };
+    }
+
+
+    /**
      * Rational number, random. Random integers A, B and a random sign s are
      * generated using BigInteger(n,random) and random.nextBoolen(). Then R =
      * s*A/(B+1), reduced to lowest terms.

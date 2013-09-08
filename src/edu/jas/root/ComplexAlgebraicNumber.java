@@ -335,6 +335,16 @@ implements GcdRingElem<ComplexAlgebraicNumber<C>> {
 
 
     /**
+     * Quotient and remainder by division of this by S.
+     * @param S a ComplexAlgebraicNumber
+     * @return [this/S, this - (this/S)*S].
+     */
+    public ComplexAlgebraicNumber<C>[] quotientRemainder(ComplexAlgebraicNumber<C> S) {
+        return new ComplexAlgebraicNumber[] { divide(S), remainder(S) };
+    }
+
+
+    /**
      * ComplexAlgebraicNumber multiplication.
      * @param S ComplexAlgebraicNumber.
      * @return this*S.

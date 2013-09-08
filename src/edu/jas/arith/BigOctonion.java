@@ -723,6 +723,16 @@ public final class BigOctonion implements StarRingElem<BigOctonion>, GcdRingElem
 
 
     /**
+     * Quotient and remainder by division of this by S.
+     * @param S a octonion number
+     * @return [this/S, this - (this/S)*S].
+     */
+    public BigOctonion[] quotientRemainder(BigOctonion S) {
+        return new BigOctonion[] { divide(S), ZERO };
+    }
+
+
+    /**
      * BigOctonion random. Random rational numbers A, B, C and D are generated
      * using random(n). Then R is the quaternion number with real part A and
      * imaginary parts B, C and D.

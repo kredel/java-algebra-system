@@ -705,6 +705,16 @@ public final class BigComplex implements StarRingElem<BigComplex>, GcdRingElem<B
 
 
     /**
+     * Quotient and remainder by division of this by S.
+     * @param S a complex number
+     * @return [this/S, this - (this/S)*S].
+     */
+    public BigComplex[] quotientRemainder(BigComplex S) {
+        return new BigComplex[] { divide(S), ZERO };
+    }
+
+
+    /**
      * Complex number, random. Random rational numbers A and B are generated
      * using random(n). Then R is the complex number with real part A and
      * imaginary part B.
