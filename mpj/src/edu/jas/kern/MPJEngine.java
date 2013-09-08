@@ -176,10 +176,10 @@ public final class MPJEngine {
                 hostNames.add("");
             }
             String myhost = MPI.Get_processor_name();
-            if ( myhost.matches("\\An\\d*") ) { // bwGRiD node names n010207
+            if (myhost.matches("\\An\\d*")) { // bwGRiD node names n010207
                 myhost += hostSuf;
             }
-            if ( myhost.matches("kredel.*") ) { 
+            if (myhost.matches("kredel.*")) {
                 myhost = "localhost";
             }
             hostNames.set(rank, myhost);

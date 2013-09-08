@@ -84,8 +84,8 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
 
 
     /**
-     * Transport layer. 
-     * true: use TCP/IP socket layer, false: use MPI transport layer.
+     * Transport layer. true: use TCP/IP socket layer, false: use MPI transport
+     * layer.
      */
     static final boolean useTCP = false;
 
@@ -133,7 +133,7 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
                 }
                 cf.terminate();
             } else {
-                cf = new ChannelFactory(port-1); // in case of localhost
+                cf = new ChannelFactory(port - 1); // in case of localhost
                 soc = new SocketChannel[1];
                 SocketChannel sc = cf.getChannel(MPJEngine.hostNames.get(0), port);
                 soc[0] = sc;
@@ -314,7 +314,7 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
                 } else {
                     DHTTransport[] tcl = new DHTTransport[] { tc };
                     //synchronized (MPJEngine.class) { // remove
-                        engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
+                    engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
                     //}
                 }
             }
@@ -435,7 +435,7 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
                     } else {
                         DHTTransport[] tcl = new DHTTransport[] { tc };
                         //synchronized (MPJEngine.class) { // remove
-                            engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
+                        engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
                         //}
                     }
                 }
@@ -543,8 +543,8 @@ class DHTMPJListener<K, V> extends Thread {
                     DHTTransport[] tcl = new DHTTransport[1];
                     Status stat = null;
                     //synchronized (MPJEngine.class) { // remove: global static lock, only from 0:
-                        stat = engine.Recv(tcl, 0, tcl.length, MPI.OBJECT, MPI.ANY_SOURCE,
-                                        DistHashTableMPJ.DHTTAG);
+                    stat = engine.Recv(tcl, 0, tcl.length, MPI.OBJECT, MPI.ANY_SOURCE,
+                                    DistHashTableMPJ.DHTTAG);
                     //}
                     //logger.info("waitRequest done: stat = " + stat);
                     if (stat == null) {

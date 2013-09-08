@@ -10,8 +10,8 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import mpi.Comm;
-import mpi.MPIException;
 import mpi.MPI;
+import mpi.MPIException;
 import mpi.Status;
 
 import org.apache.log4j.Logger;
@@ -20,8 +20,9 @@ import edu.jas.kern.MPJEngine;
 
 
 /**
- * MPJChannel provides a communication channel for Java objects using MPI or TCP/IP
- * to a given rank. Can use MPI transport layer for "niodev" with FastMPJ.
+ * MPJChannel provides a communication channel for Java objects using MPI or
+ * TCP/IP to a given rank. Can use MPI transport layer for "niodev" with
+ * FastMPJ.
  * @author Heinz Kredel
  */
 public final class MPJChannel {
@@ -122,7 +123,7 @@ public final class MPJChannel {
                     }
                     cf.terminate();
                 } else {
-                    cf = new ChannelFactory(port-1); // in case of localhost
+                    cf = new ChannelFactory(port - 1); // in case of localhost
                     soc = new TaggedSocketChannel[1];
                     SocketChannel sc = cf.getChannel(MPJEngine.hostNames.get(0), port);
                     soc[0] = new TaggedSocketChannel(sc);
@@ -182,7 +183,7 @@ public final class MPJChannel {
         } else {
             Object[] va = new Object[] { v };
             //synchronized (MPJEngine.class) {
-                engine.Send(va, 0, va.length, MPI.OBJECT, pr, t);
+            engine.Send(va, 0, va.length, MPI.OBJECT, pr, t);
             //}
         }
     }
@@ -221,7 +222,7 @@ public final class MPJChannel {
             Object[] va = new Object[1];
             Status stat = null;
             //synchronized (MPJEngine.class) {
-                stat = engine.Recv(va, 0, va.length, MPI.OBJECT, partnerRank, t);
+            stat = engine.Recv(va, 0, va.length, MPI.OBJECT, partnerRank, t);
             //}
             if (stat == null) {
                 throw new IOException("received null Status");
