@@ -17,6 +17,7 @@ import edu.jas.gb.SolvableGroebnerBaseAbstract;
 import edu.jas.gb.SolvableGroebnerBaseSeq;
 import edu.jas.gb.SolvableReduction;
 import edu.jas.gb.SolvableReductionSeq;
+import edu.jas.gbufd.PolyGBUtil;
 import edu.jas.gbmod.SolvableSyzygyAbstract;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -655,31 +656,8 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         if (this.isZERO()) {
             return this;
         }
-        int s = getList().size() + B.getList().size();
-        List<GenSolvablePolynomial<C>> c;
-        c = new ArrayList<GenSolvablePolynomial<C>>(s);
-        List<GenSolvablePolynomial<C>> a = getList();
-        List<GenSolvablePolynomial<C>> b = B.getList();
-
-        GenSolvablePolynomialRing<C> tfac = getRing().extend(1);
-        // term order is also adjusted
-        for (GenSolvablePolynomial<C> p : a) {
-            p = (GenSolvablePolynomial<C>) p.extend(tfac, 0, 1L); // t*p
-            c.add(p);
-        }
-        for (GenSolvablePolynomial<C> p : b) {
-            GenSolvablePolynomial<C> q = (GenSolvablePolynomial<C>) p.extend(tfac, 0, 1L);
-            GenSolvablePolynomial<C> r = (GenSolvablePolynomial<C>) p.extend(tfac, 0, 0L);
-            p = (GenSolvablePolynomial<C>) r.subtract(q); // (1-t)*p
-            c.add(p);
-        }
-        logger.warn("intersect computing GB");
-        List<GenSolvablePolynomial<C>> g = bb.leftGB(c);
-        if (debug) {
-            logger.debug("intersect GB = " + g);
-        }
-        SolvableIdeal<C> E = new SolvableIdeal<C>(tfac, g, true);
-        SolvableIdeal<C> I = E.intersect(getRing());
+        List<GenSolvablePolynomial<C>> c = PolyGBUtil.<C> intersect(getRing(),getList(),B.getList());
+        SolvableIdeal<C> I = new SolvableIdeal<C>(getRing(), c, true);
         return I;
     }
 
@@ -695,7 +673,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         if (R == null) {
             throw new IllegalArgumentException("R may not be null");
         }
-        List<GenSolvablePolynomial<C>> H = PolyUtil.<C> intersect(getList(),R);
+        List<GenSolvablePolynomial<C>> H = PolyUtil.<C> intersect(R,getList());
         return new SolvableIdeal<C>(R, H, isGB, isTopt);
     }
 

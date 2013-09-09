@@ -11,9 +11,15 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import edu.jas.gb.GroebnerBaseAbstract;
+import edu.jas.gb.SolvableGroebnerBaseAbstract;
+import edu.jas.gb.SolvableGroebnerBaseSeq;
+import edu.jas.gb.SolvableReductionAbstract;
+import edu.jas.gb.SolvableReductionSeq;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.GenSolvablePolynomial;
+import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingElem;
@@ -174,8 +180,7 @@ public class PolyGBUtil {
      *         ldcf(A)<sup>m'</sup> P = quotient * A + remainder.
      */
     public static <C extends RingElem<C>> 
-      GenPolynomial<GenPolynomial<GenPolynomial<C>>> coefficientPseudoRemainder(
-                    GenPolynomial<GenPolynomial<GenPolynomial<C>>> P, GenPolynomial<GenPolynomial<C>> A) {
+      GenPolynomial<GenPolynomial<GenPolynomial<C>>> coefficientPseudoRemainder(GenPolynomial<GenPolynomial<GenPolynomial<C>>> P, GenPolynomial<GenPolynomial<C>> A) {
         if (A == null || A.isZERO()) { // findbugs
             throw new ArithmeticException(P + " division by zero " + A);
         }
@@ -232,8 +237,7 @@ public class PolyGBUtil {
      *         ldcf(A)<sup>m'</sup> P = quotient * A + remainder.
      */
     public static <C extends RingElem<C>> 
-      GenPolynomial<GenPolynomial<C>> coefficientPseudoRemainderBase(
-                    GenPolynomial<GenPolynomial<C>> P, GenPolynomial<C> A) {
+      GenPolynomial<GenPolynomial<C>> coefficientPseudoRemainderBase(GenPolynomial<GenPolynomial<C>> P, GenPolynomial<C> A) {
         if (A == null || A.isZERO()) { // findbugs
             throw new ArithmeticException(P + " division by zero " + A);
         }
@@ -287,7 +291,8 @@ public class PolyGBUtil {
      * @param A list of generic polynomials in n variables.
      * @return Z = [a_i] with deg(a_i,x_n) = 0 and in n-1 variables.
      */
-    public static <C extends RingElem<C>> List<GenPolynomial<C>> zeroDegrees(List<GenPolynomial<C>> A) {
+    public static <C extends RingElem<C>> 
+      List<GenPolynomial<C>> zeroDegrees(List<GenPolynomial<C>> A) {
         if (A == null || A.isEmpty()) {
             return A;
         }
@@ -302,6 +307,195 @@ public class PolyGBUtil {
             }
         }
         return zeroDeg;
+    }
+
+
+    /**
+     * Intersection. Generators for the intersection of ideals.
+     * @param pfac polynomial ring
+     * @param A list of polynomials
+     * @param B list of polynomials
+     * @return generators for (A \cap B)
+     */
+    public static <C extends GcdRingElem<C>> 
+      List<GenPolynomial<C>> intersect(GenPolynomialRing<C> pfac, List<GenPolynomial<C>> A, List<GenPolynomial<C>> B) {
+        if (A == null || A.isEmpty()) { // (0)
+            return B;
+        }
+        if (B == null || B.isEmpty()) { // (0)
+            return A;
+        }
+        int s = A.size() + B.size();
+        List<GenPolynomial<C>> c = new ArrayList<GenPolynomial<C>>(s);
+        GenPolynomialRing<C> tfac = pfac.extend(1);
+        // term order is also adjusted
+        for (GenPolynomial<C> p : A) {
+            p = p.extend(tfac, 0, 1L); // t*p
+            c.add(p);
+        }
+        for (GenPolynomial<C> p : B) {
+            GenPolynomial<C> q = p.extend(tfac, 0, 1L);
+            GenPolynomial<C> r = p.extend(tfac, 0, 0L);
+            p = r.subtract(q); // (1-t)*p
+            c.add(p);
+        }
+        GroebnerBaseAbstract<C> bb = GBFactory.<C> getImplementation(tfac.coFac);
+        logger.warn("intersect computing GB");
+        List<GenPolynomial<C>> G = bb.GB(c);
+        if (debug) {
+            logger.debug("intersect GB = " + G);
+        }
+        List<GenPolynomial<C>> I = PolyUtil.<C> intersect(pfac,G);
+        return I;
+    }
+
+
+    /**
+     * Intersection. Generators for the intersection of ideals.
+     * @param pfac solvable polynomial ring
+     * @param A list of polynomials
+     * @param B list of polynomials
+     * @return generators for (A \cap B)
+     */
+    public static <C extends GcdRingElem<C>> 
+      List<GenSolvablePolynomial<C>> intersect(GenSolvablePolynomialRing<C> pfac, List<GenSolvablePolynomial<C>> A, List<GenSolvablePolynomial<C>> B) {
+        if (A == null || A.isEmpty()) { // (0)
+            return B;
+        }
+        if (B == null || B.isEmpty()) { // (0)
+            return A;
+        }
+        int s = A.size() + B.size();
+        List<GenSolvablePolynomial<C>> c = new ArrayList<GenSolvablePolynomial<C>>(s);
+        GenSolvablePolynomialRing<C> tfac = pfac.extend(1);
+        // term order is also adjusted
+        for (GenSolvablePolynomial<C> p : A) {
+            p = (GenSolvablePolynomial<C>) p.extend(tfac, 0, 1L); // t*p
+            c.add(p);
+        }
+        for (GenSolvablePolynomial<C> p : B) {
+            GenSolvablePolynomial<C> q = (GenSolvablePolynomial<C>) p.extend(tfac, 0, 1L);
+            GenSolvablePolynomial<C> r = (GenSolvablePolynomial<C>) p.extend(tfac, 0, 0L);
+            p = (GenSolvablePolynomial<C>) r.subtract(q); // (1-t)*p
+            c.add(p);
+        }
+        SolvableGroebnerBaseAbstract<C> bb = new SolvableGroebnerBaseSeq<C>();
+        //GBFactory.<C> getImplementation(tfac.coFac);
+        logger.warn("intersect computing GB");
+        List<GenSolvablePolynomial<C>> g = bb.leftGB(c);
+        if (debug) {
+            logger.debug("intersect GB = " + g);
+        }
+        List<GenSolvablePolynomial<C>> I = PolyUtil.<C> intersect(pfac,g);
+        return I;
+    }
+
+
+    /**
+     * Least common multiple via ideal intersection.
+     * @param r solvable polynomial ring.
+     * @param n first solvable polynomial.
+     * @param d second solvable polynomial.
+     * @return lcm(n,d)
+     */
+    public static <C extends GcdRingElem<C>> 
+      GenSolvablePolynomial<C> syzLcm(GenSolvablePolynomialRing<C> r, GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d) {
+        List<GenSolvablePolynomial<C>> A = new ArrayList<GenSolvablePolynomial<C>>(1);
+        A.add(n);
+        List<GenSolvablePolynomial<C>> B = new ArrayList<GenSolvablePolynomial<C>>(1);
+        B.add(d);
+        List<GenSolvablePolynomial<C>> c = PolyGBUtil.<C> intersect(r,A,B);
+        if (c.size() != 1) {
+            throw new RuntimeException("lcm not uniqe");
+        }
+        GenSolvablePolynomial<C> lcm = c.get(0);
+        return lcm;
+    }
+
+
+    /**
+     * Greatest common divisor via least common multiple.
+     * @param r solvable polynomial ring.
+     * @param n first solvable polynomial.
+     * @param d second solvable polynomial.
+     * @return gcd(n,d)
+     */
+    public static <C extends GcdRingElem<C>> 
+      GenSolvablePolynomial<C> syzGcd(GenSolvablePolynomialRing<C> r, GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d) {
+        if (n.isZERO()) {
+            return d;
+        }
+        if (d.isZERO()) {
+            return n;
+        }
+        if (n.isONE()) {
+            return n;
+        }
+        if (d.isONE()) {
+            return d;
+        }
+        GenSolvablePolynomial<C> p = n.multiply(d);
+        GenSolvablePolynomial<C> lcm = syzLcm(r, n, d);
+        // divide
+        List<GenSolvablePolynomial<C>> Q = new ArrayList<GenSolvablePolynomial<C>>(1);
+        Q.add(r.getZERO());
+        List<GenSolvablePolynomial<C>> V = new ArrayList<GenSolvablePolynomial<C>>(1);
+        V.add(lcm);
+        SolvableReductionAbstract<C> sred = new SolvableReductionSeq<C>();
+        GenSolvablePolynomial<C> x = sred.leftNormalform(Q, V, p);
+        GenSolvablePolynomial<C> y = Q.get(0);
+        // GenSolvablePolynomial<C> gcd = divide(p, lcm);
+        return y;
+    }
+
+
+    /**
+     * Least common multiple. Just for fun, is not efficient.
+     * @param r polynomial ring.
+     * @param n first polynomial.
+     * @param d second polynomial.
+     * @return lcm(n,d)
+     */
+    public static <C extends GcdRingElem<C>> 
+      GenPolynomial<C> syzLcm(GenPolynomialRing<C> r, GenPolynomial<C> n, GenPolynomial<C> d) {
+        List<GenPolynomial<C>> A = new ArrayList<GenPolynomial<C>>(1);
+        A.add(n);
+        List<GenPolynomial<C>> B = new ArrayList<GenPolynomial<C>>(1);
+        B.add(d);
+        List<GenPolynomial<C>> c = PolyGBUtil.<C> intersect(r,A,B);
+        if (c.size() != 1) {
+            throw new RuntimeException("lcm not uniqe");
+        }
+        GenPolynomial<C> lcm = c.get(0);
+        return lcm;
+    }
+
+
+    /**
+     * Greatest common divisor. Just for fun, is not efficient.
+     * @param r polynomial ring.
+     * @param n first polynomial.
+     * @param d second polynomial.
+     * @return gcd(n,d)
+     */
+    public static <C extends GcdRingElem<C>> 
+      GenPolynomial<C> syzGcd(GenPolynomialRing<C> r, GenPolynomial<C> n, GenPolynomial<C> d) {
+        if (n.isZERO()) {
+            return d;
+        }
+        if (d.isZERO()) {
+            return n;
+        }
+        if (n.isONE()) {
+            return n;
+        }
+        if (d.isONE()) {
+            return d;
+        }
+        GenPolynomial<C> p = n.multiply(d);
+        GenPolynomial<C> lcm = syzLcm(r, n, d);
+        GenPolynomial<C> gcd = PolyUtil.<C> basePseudoDivide(p, lcm);
+        return gcd;
     }
 
 }

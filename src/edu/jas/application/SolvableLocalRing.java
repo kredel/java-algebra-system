@@ -97,61 +97,6 @@ public class SolvableLocalRing<C extends GcdRingElem<C>> implements RingFactory<
 
 
     /**
-     * Least common multiple.
-     * @param n first solvable polynomial.
-     * @param d second solvable polynomial.
-     * @return lcm(n,d)
-     */
-    protected GenSolvablePolynomial<C> syzLcm(GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d) {
-        List<GenSolvablePolynomial<C>> list = new ArrayList<GenSolvablePolynomial<C>>(1);
-        list.add(n);
-        SolvableIdeal<C> N = new SolvableIdeal<C>(n.ring, list, true);
-        list = new ArrayList<GenSolvablePolynomial<C>>(1);
-        list.add(d);
-        SolvableIdeal<C> D = new SolvableIdeal<C>(n.ring, list, true);
-        SolvableIdeal<C> L = N.intersect(D);
-        if (L.getList().size() != 1) {
-            throw new RuntimeException("lcm not uniqe");
-        }
-        GenSolvablePolynomial<C> lcm = L.getList().get(0);
-        return lcm;
-    }
-
-
-    /**
-     * Greatest common divisor.
-     * @param n first solvable polynomial.
-     * @param d second solvable polynomial.
-     * @return gcd(n,d)
-     */
-    protected GenSolvablePolynomial<C> syzGcd(GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d) {
-        if (n.isZERO()) {
-            return d;
-        }
-        if (d.isZERO()) {
-            return n;
-        }
-        if (n.isONE()) {
-            return n;
-        }
-        if (d.isONE()) {
-            return d;
-        }
-        GenSolvablePolynomial<C> p = n.multiply(d);
-        GenSolvablePolynomial<C> lcm = syzLcm(n, d);
-        // divide
-        List<GenSolvablePolynomial<C>> Q = new ArrayList<GenSolvablePolynomial<C>>(1);
-        Q.add(ring.getZERO());
-        List<GenSolvablePolynomial<C>> V = new ArrayList<GenSolvablePolynomial<C>>(1);
-        V.add(lcm);
-        // GenSolvablePolynomial<C> gcd = divide(p, lcm);
-        GenSolvablePolynomial<C> x = engine.sred.leftNormalform(Q, V, p);
-        GenSolvablePolynomial<C> y = Q.get(0);
-        return y;
-    }
-
-
-    /**
      * Is this structure finite or infinite.
      * @return true if this structure is finite, else false.
      * @see edu.jas.structure.ElemFactory#isFinite()

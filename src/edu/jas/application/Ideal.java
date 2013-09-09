@@ -21,6 +21,7 @@ import edu.jas.gb.ExtendedGB;
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.Reduction;
 import edu.jas.gbufd.GBFactory;
+import edu.jas.gbufd.PolyGBUtil;
 import edu.jas.gbufd.GroebnerBasePartial;
 import edu.jas.gbmod.SyzygyAbstract;
 import edu.jas.poly.AlgebraicNumber;
@@ -698,31 +699,8 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         if (this.isZERO()) {
             return this;
         }
-        int s = getList().size() + B.getList().size();
-        List<GenPolynomial<C>> c;
-        c = new ArrayList<GenPolynomial<C>>(s);
-        List<GenPolynomial<C>> a = getList();
-        List<GenPolynomial<C>> b = B.getList();
-
-        GenPolynomialRing<C> tfac = getRing().extend(1);
-        // term order is also adjusted
-        for (GenPolynomial<C> p : a) {
-            p = p.extend(tfac, 0, 1L); // t*p
-            c.add(p);
-        }
-        for (GenPolynomial<C> p : b) {
-            GenPolynomial<C> q = p.extend(tfac, 0, 1L);
-            GenPolynomial<C> r = p.extend(tfac, 0, 0L);
-            p = r.subtract(q); // (1-t)*p
-            c.add(p);
-        }
-        logger.warn("intersect computing GB");
-        List<GenPolynomial<C>> g = bb.GB(c);
-        if (debug) {
-            logger.debug("intersect GB = " + g);
-        }
-        Ideal<C> E = new Ideal<C>(tfac, g, true);
-        Ideal<C> I = E.intersect(getRing());
+        List<GenPolynomial<C>> c = PolyGBUtil.<C> intersect(getRing(),getList(),B.getList());
+        Ideal<C> I = new Ideal<C>(getRing(), c, true);
         return I;
     }
 
@@ -739,7 +717,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         if (R == null) {
             throw new IllegalArgumentException("R may not be null");
         }
-        List<GenPolynomial<C>> H = PolyUtil.<C> intersect(getList(),R);
+        List<GenPolynomial<C>> H = PolyUtil.<C> intersect(R,getList());
         return new Ideal<C>(R, H, isGB, isTopt);
     }
 

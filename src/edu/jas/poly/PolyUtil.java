@@ -2434,11 +2434,11 @@ public class PolyUtil {
      * polynomial ring. The polynomial ring must be a contraction of
      * the polynomial ring of the list of polynomials and the
      * TermOrder must be an elimination order.
-     * @param F list of polynomials
      * @param R polynomial ring
+     * @param F list of polynomials
      * @return R \cap F
      */
-    public static <C extends RingElem<C>> List<GenPolynomial<C>> intersect(List<GenPolynomial<C>> F, GenPolynomialRing<C> R) {
+    public static <C extends RingElem<C>> List<GenPolynomial<C>> intersect(GenPolynomialRing<C> R, List<GenPolynomial<C>> F) {
         if (F == null || F.isEmpty() ) {
             return F; 
         }
@@ -2479,14 +2479,14 @@ public class PolyUtil {
      * must be a contraction of the solvable polynomial ring of the
      * list of polynomials and the TermOrder must be an elimination
      * order.
-     * @param F list of solvable polynomials
      * @param R solvable polynomial ring
+     * @param F list of solvable polynomials
      * @return R \cap F
      */
-    public static <C extends RingElem<C>> List<GenSolvablePolynomial<C>> intersect(List<GenSolvablePolynomial<C>> F, GenSolvablePolynomialRing<C> R) {
+    public static <C extends RingElem<C>> List<GenSolvablePolynomial<C>> intersect(GenSolvablePolynomialRing<C> R, List<GenSolvablePolynomial<C>> F) {
         List<GenPolynomial<C>> Fp = PolynomialList.<C> castToList(F);
         GenPolynomialRing<C> Rp = (GenPolynomialRing<C>) R;
-        List<GenPolynomial<C>> H = intersect(Fp,Rp);
+        List<GenPolynomial<C>> H = intersect(Rp,Fp);
         return PolynomialList.<C> castToSolvableList(H); 
     }
 
