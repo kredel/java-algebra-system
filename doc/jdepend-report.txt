@@ -4,12 +4,12 @@
 --------------------------------------------------
 
 Stats:
-    Total Classes: 57
-    Concrete Classes: 57
+    Total Classes: 77
+    Concrete Classes: 77
     Abstract Classes: 0
 
     Ca: 0
-    Ce: 10
+    Ce: 11
 
     A: 0
     I: 1
@@ -33,7 +33,9 @@ Concrete Classes:
     edu.jas.application.Condition$1
     edu.jas.application.Condition$Color
     edu.jas.application.Dimension
+    edu.jas.application.EvaluateToComplexReal
     edu.jas.application.Examples
+    edu.jas.application.ExamplesGeoTheorems
     edu.jas.application.ExtensionFieldBuilder
     edu.jas.application.ExtensionFieldBuilderTest
     edu.jas.application.FactorAlgebraicPrim
@@ -42,6 +44,8 @@ Concrete Classes:
     edu.jas.application.FactorRealReal
     edu.jas.application.FactorRealRealTest
     edu.jas.application.FactorTest
+    edu.jas.application.GBAlgorithmBuilder
+    edu.jas.application.GBAlgorithmBuilderTest
     edu.jas.application.GroebnerSystem
     edu.jas.application.HenselMultUtilTest
     edu.jas.application.Ideal
@@ -53,6 +57,10 @@ Concrete Classes:
     edu.jas.application.IdealWithUniv
     edu.jas.application.Local
     edu.jas.application.LocalRing
+    edu.jas.application.LocalSolvablePolynomial
+    edu.jas.application.LocalSolvablePolynomialRing
+    edu.jas.application.LocalSolvablePolynomialRing$1
+    edu.jas.application.LocalSolvablePolynomialTest
     edu.jas.application.LocalTest
     edu.jas.application.OrderedCPairlist
     edu.jas.application.PolyUtilApp
@@ -67,6 +75,10 @@ Concrete Classes:
     edu.jas.application.ReductionTest
     edu.jas.application.Residue
     edu.jas.application.ResidueRing
+    edu.jas.application.ResidueSolvablePolynomial
+    edu.jas.application.ResidueSolvablePolynomialRing
+    edu.jas.application.ResidueSolvablePolynomialRing$1
+    edu.jas.application.ResidueSolvablePolynomialTest
     edu.jas.application.ResidueTest
     edu.jas.application.RingFactoryTokenizer
     edu.jas.application.RingFactoryTokenizer$1
@@ -75,10 +87,19 @@ Concrete Classes:
     edu.jas.application.RootFactory
     edu.jas.application.RunGB
     edu.jas.application.RunSGB
+    edu.jas.application.SolvableIdeal
+    edu.jas.application.SolvableIdealTest
+    edu.jas.application.SolvableLocal
+    edu.jas.application.SolvableLocalRing
+    edu.jas.application.SolvableLocalTest
+    edu.jas.application.SolvableResidue
+    edu.jas.application.SolvableResidueRing
+    edu.jas.application.SolvableResidueTest
 
 Depends Upon:
     edu.jas.arith
     edu.jas.gb
+    edu.jas.gbmod
     edu.jas.gbufd
     edu.jas.kern
     edu.jas.poly
@@ -173,16 +194,16 @@ Used By:
 --------------------------------------------------
 
 Stats:
-    Total Classes: 104
-    Concrete Classes: 92
-    Abstract Classes: 12
+    Total Classes: 128
+    Concrete Classes: 111
+    Abstract Classes: 17
 
     Ca: 4
     Ce: 6
 
-    A: 0,12
+    A: 0,13
     I: 0,6
-    D: 0,28
+    D: 0,27
 
 Abstract Classes:
     edu.jas.gb.AbstractPair
@@ -197,6 +218,11 @@ Abstract Classes:
     edu.jas.gb.SolvableGroebnerBaseAbstract
     edu.jas.gb.SolvableReduction
     edu.jas.gb.SolvableReductionAbstract
+    edu.jas.gb.WordGroebnerBase
+    edu.jas.gb.WordGroebnerBaseAbstract
+    edu.jas.gb.WordPairList
+    edu.jas.gb.WordReduction
+    edu.jas.gb.WordReductionAbstract
 
 Concrete Classes:
     edu.jas.gb.CriticalPair
@@ -215,6 +241,9 @@ Concrete Classes:
     edu.jas.gb.GBDist
     edu.jas.gb.GBDistHybrid
     edu.jas.gb.GBDistSP
+    edu.jas.gb.GBExerClient
+    edu.jas.gb.GBHybridExerClient
+    edu.jas.gb.GBOptimized
     edu.jas.gb.GBProxy
     edu.jas.gb.GBProxy$1
     edu.jas.gb.GBProxy$2
@@ -231,10 +260,14 @@ Concrete Classes:
     edu.jas.gb.GBTransportMessPairIndex
     edu.jas.gb.GBTransportMessPoly
     edu.jas.gb.GBTransportMessReq
+    edu.jas.gb.GroebnerBaseDistECTest
+    edu.jas.gb.GroebnerBaseDistHybridECTest
     edu.jas.gb.GroebnerBaseDistHybridTest
     edu.jas.gb.GroebnerBaseDistTest
     edu.jas.gb.GroebnerBaseDistributed
+    edu.jas.gb.GroebnerBaseDistributedEC
     edu.jas.gb.GroebnerBaseDistributedHybrid
+    edu.jas.gb.GroebnerBaseDistributedHybridEC
     edu.jas.gb.GroebnerBaseParSyzPairTest
     edu.jas.gb.GroebnerBaseParTest
     edu.jas.gb.GroebnerBaseParallel
@@ -247,8 +280,11 @@ Concrete Classes:
     edu.jas.gb.GroebnerBaseSeqPairSeqTest
     edu.jas.gb.GroebnerBaseSeqTest
     edu.jas.gb.HybridReducerClient
+    edu.jas.gb.HybridReducerClientEC
     edu.jas.gb.HybridReducerReceiver
+    edu.jas.gb.HybridReducerReceiverEC
     edu.jas.gb.HybridReducerServer
+    edu.jas.gb.HybridReducerServerEC
     edu.jas.gb.JunitClient
     edu.jas.gb.JunitClientHybrid
     edu.jas.gb.JunitSeqPairClient
@@ -257,22 +293,26 @@ Concrete Classes:
     edu.jas.gb.LeftSolvableReducerSeqPair
     edu.jas.gb.MiReducer
     edu.jas.gb.MiReducerClient
+    edu.jas.gb.MiReducerClientEC
     edu.jas.gb.MiReducerClientSeqPair
     edu.jas.gb.MiReducerSeqPair
     edu.jas.gb.MiReducerServer
+    edu.jas.gb.MiReducerServerEC
     edu.jas.gb.MiReducerServerSeqPair
-    edu.jas.gb.MiniPair
     edu.jas.gb.OrderedDPairlist
     edu.jas.gb.OrderedMinPairlist
     edu.jas.gb.OrderedPairlist
     edu.jas.gb.OrderedSyzPairlist
+    edu.jas.gb.OrderedWordPairlist
     edu.jas.gb.Pair
     edu.jas.gb.PairListTest
     edu.jas.gb.Reducer
     edu.jas.gb.ReducerClient
+    edu.jas.gb.ReducerClientEC
     edu.jas.gb.ReducerClientSeqPair
     edu.jas.gb.ReducerSeqPair
     edu.jas.gb.ReducerServer
+    edu.jas.gb.ReducerServerEC
     edu.jas.gb.ReducerServerSeqPair
     edu.jas.gb.ReductionPar
     edu.jas.gb.ReductionSeq
@@ -291,6 +331,11 @@ Concrete Classes:
     edu.jas.gb.SolvableReductionTest
     edu.jas.gb.TwosidedSolvableReducer
     edu.jas.gb.TwosidedSolvableReducerSeqPair
+    edu.jas.gb.WordGroebnerBaseSeq
+    edu.jas.gb.WordGroebnerBaseSeqTest
+    edu.jas.gb.WordPair
+    edu.jas.gb.WordReductionSeq
+    edu.jas.gb.WordReductionTest
 
 Depends Upon:
     edu.jas.arith
@@ -311,16 +356,16 @@ Used By:
 --------------------------------------------------
 
 Stats:
-    Total Classes: 16
-    Concrete Classes: 12
+    Total Classes: 23
+    Concrete Classes: 19
     Abstract Classes: 4
 
-    Ca: 0
-    Ce: 6
+    Ca: 1
+    Ce: 7
 
-    A: 0,25
-    I: 1
-    D: 0,25
+    A: 0,17
+    I: 0,88
+    D: 0,05
 
 Abstract Classes:
     edu.jas.gbmod.ModGroebnerBase
@@ -333,10 +378,17 @@ Concrete Classes:
     edu.jas.gbmod.ModGroebnerBaseTest
     edu.jas.gbmod.ModSolvableGroebnerBaseAbstract
     edu.jas.gbmod.ModSolvableGroebnerBaseTest
+    edu.jas.gbmod.QuotSolvablePolynomial
+    edu.jas.gbmod.QuotSolvablePolynomialRing
+    edu.jas.gbmod.QuotSolvablePolynomialRing$1
+    edu.jas.gbmod.QuotSolvablePolynomialTest
     edu.jas.gbmod.ResPart
     edu.jas.gbmod.ResPolPart
     edu.jas.gbmod.SolvResPart
     edu.jas.gbmod.SolvResPolPart
+    edu.jas.gbmod.SolvableQuotient
+    edu.jas.gbmod.SolvableQuotientRing
+    edu.jas.gbmod.SolvableQuotientTest
     edu.jas.gbmod.SolvableSyzygyAbstract
     edu.jas.gbmod.SolvableSyzygyTest
     edu.jas.gbmod.SyzygyAbstract
@@ -346,21 +398,22 @@ Depends Upon:
     edu.jas.arith
     edu.jas.gb
     edu.jas.gbufd
+    edu.jas.kern
     edu.jas.poly
     edu.jas.structure
     edu.jas.vector
 
 Used By:
-    Not used by any packages.
+    edu.jas.application
 
 --------------------------------------------------
 - Package: edu.jas.gbufd
 --------------------------------------------------
 
 Stats:
-    Total Classes: 33
-    Concrete Classes: 30
-    Abstract Classes: 3
+    Total Classes: 45
+    Concrete Classes: 41
+    Abstract Classes: 4
 
     Ca: 2
     Ce: 7
@@ -370,24 +423,33 @@ Stats:
     D: 0,13
 
 Abstract Classes:
+    edu.jas.gbufd.CharacteristicSet
     edu.jas.gbufd.PseudoReduction
     edu.jas.gbufd.RPseudoReduction
     edu.jas.gbufd.RReduction
 
 Concrete Classes:
+    edu.jas.gbufd.CharSetTest
+    edu.jas.gbufd.CharacteristicSetSimple
+    edu.jas.gbufd.CharacteristicSetWu
     edu.jas.gbufd.Examples
     edu.jas.gbufd.GBFactory
     edu.jas.gbufd.GBFactory$1
     edu.jas.gbufd.GBFactory$Algo
     edu.jas.gbufd.GBFactoryTest
-    edu.jas.gbufd.GroebnerBaseExamplesFGLM
     edu.jas.gbufd.GroebnerBaseFGLM
+    edu.jas.gbufd.GroebnerBaseFGLMExamples
     edu.jas.gbufd.GroebnerBaseFGLMTest
     edu.jas.gbufd.GroebnerBasePartTest
     edu.jas.gbufd.GroebnerBasePartial
+    edu.jas.gbufd.GroebnerBasePseudoParTest
+    edu.jas.gbufd.GroebnerBasePseudoParallel
     edu.jas.gbufd.GroebnerBasePseudoRecSeq
     edu.jas.gbufd.GroebnerBasePseudoSeq
     edu.jas.gbufd.GroebnerBasePseudoSeqTest
+    edu.jas.gbufd.GroebnerBaseRational
+    edu.jas.gbufd.GroebnerBaseSeqQuotient
+    edu.jas.gbufd.GroebnerBaseSeqRationalTest
     edu.jas.gbufd.MultiplicativeSet
     edu.jas.gbufd.MultiplicativeSetCoPrime
     edu.jas.gbufd.MultiplicativeSetFactors
@@ -396,7 +458,10 @@ Concrete Classes:
     edu.jas.gbufd.OrderedRPairlist
     edu.jas.gbufd.PolyGBUtil
     edu.jas.gbufd.PolyGBUtilTest
+    edu.jas.gbufd.PseudoMiReducer
+    edu.jas.gbufd.PseudoReducer
     edu.jas.gbufd.PseudoReductionEntry
+    edu.jas.gbufd.PseudoReductionPar
     edu.jas.gbufd.PseudoReductionSeq
     edu.jas.gbufd.RGroebnerBasePseudoSeq
     edu.jas.gbufd.RGroebnerBasePseudoSeqTest
@@ -464,7 +529,7 @@ Stats:
     Concrete Classes: 11
     Abstract Classes: 0
 
-    Ca: 11
+    Ca: 13
     Ce: 0
 
     A: 0
@@ -493,6 +558,7 @@ Used By:
     edu.jas.application
     edu.jas.arith
     edu.jas.gb
+    edu.jas.gbmod
     edu.jas.gbufd
     edu.jas.integrate
     edu.jas.poly
@@ -500,6 +566,7 @@ Used By:
     edu.jas.root
     edu.jas.ufd
     edu.jas.ufdroot
+    edu.jas.util
     edu.jas.vector
 
 --------------------------------------------------
@@ -507,22 +574,24 @@ Used By:
 --------------------------------------------------
 
 Stats:
-    Total Classes: 187
-    Concrete Classes: 183
-    Abstract Classes: 4
+    Total Classes: 209
+    Concrete Classes: 203
+    Abstract Classes: 6
 
     Ca: 9
     Ce: 5
 
-    A: 0,02
+    A: 0,03
     I: 0,36
-    D: 0,62
+    D: 0,61
 
 Abstract Classes:
     edu.jas.poly.ExpVector
     edu.jas.poly.Polynomial
     edu.jas.poly.PolynomialRing
-    edu.jas.poly.TermOrder$EVorder
+    edu.jas.poly.RelationGenerator
+    edu.jas.poly.TermOrder$EVComparator
+    edu.jas.poly.WordFactory$WordComparator
 
 Concrete Classes:
     edu.jas.poly.ANumGenPolynomialTest
@@ -577,6 +646,10 @@ Concrete Classes:
     edu.jas.poly.GenSolvablePolynomialRing$1
     edu.jas.poly.GenSolvablePolynomialTest
     edu.jas.poly.GenVectorTest
+    edu.jas.poly.GenWordPolynomial
+    edu.jas.poly.GenWordPolynomialRing
+    edu.jas.poly.GenWordPolynomialRing$1
+    edu.jas.poly.GenWordPolynomialTest
     edu.jas.poly.ImagPart
     edu.jas.poly.ImagPartComplex
     edu.jas.poly.IntGenPolynomialTest
@@ -598,18 +671,22 @@ Concrete Classes:
     edu.jas.poly.OrderedModuleList$1
     edu.jas.poly.OrderedPolynomialList
     edu.jas.poly.OrderedPolynomialList$1
+    edu.jas.poly.Overlap
+    edu.jas.poly.OverlapList
     edu.jas.poly.PolyIterator
     edu.jas.poly.PolyToAlg
     edu.jas.poly.PolyUtil
     edu.jas.poly.PolyUtil$1
     edu.jas.poly.PolyUtil$2
     edu.jas.poly.PolyUtil$3
+    edu.jas.poly.PolyUtil$4
     edu.jas.poly.PolyUtilTest
     edu.jas.poly.PolynomialComparator
     edu.jas.poly.PolynomialList
     edu.jas.poly.PolynomialList$1
     edu.jas.poly.PolynomialListTest
     edu.jas.poly.QuatGenPolynomialTest
+    edu.jas.poly.QuatGenSolvablePolynomialTest
     edu.jas.poly.Quotient
     edu.jas.poly.QuotientRing
     edu.jas.poly.QuotientTest
@@ -624,6 +701,10 @@ Concrete Classes:
     edu.jas.poly.RatToIntPoly
     edu.jas.poly.RealPart
     edu.jas.poly.RealPartComplex
+    edu.jas.poly.RecSolvablePolynomial
+    edu.jas.poly.RecSolvablePolynomialRing
+    edu.jas.poly.RecSolvablePolynomialRing$1
+    edu.jas.poly.RecSolvablePolynomialTest
     edu.jas.poly.RecToDist
     edu.jas.poly.RelationTable
     edu.jas.poly.RelationTableTest
@@ -708,6 +789,14 @@ Concrete Classes:
     edu.jas.poly.TermOrderTest
     edu.jas.poly.ToComplex
     edu.jas.poly.WeylRelations
+    edu.jas.poly.WeylRelationsIterated
+    edu.jas.poly.Word
+    edu.jas.poly.WordFactory
+    edu.jas.poly.WordFactory$1
+    edu.jas.poly.WordFactory$2
+    edu.jas.poly.WordMonomial
+    edu.jas.poly.WordPolyIterator
+    edu.jas.poly.WordTest
 
 Depends Upon:
     edu.jas.arith
@@ -732,14 +821,14 @@ Used By:
 --------------------------------------------------
 
 Stats:
-    Total Classes: 111
-    Concrete Classes: 105
+    Total Classes: 108
+    Concrete Classes: 102
     Abstract Classes: 6
 
     Ca: 1
     Ce: 5
 
-    A: 0,05
+    A: 0,06
     I: 0,83
     D: 0,11
 
@@ -817,14 +906,9 @@ Concrete Classes:
     edu.jas.ps.MultiVarPowerSeriesRing$8
     edu.jas.ps.MultiVarPowerSeriesRing$9
     edu.jas.ps.MultiVarPowerSeriesTest
-    edu.jas.ps.MultiVarPowerSeriesTest$1
-    edu.jas.ps.MultiVarPowerSeriesTest$2
-    edu.jas.ps.MultiVarPowerSeriesTest$3
-    edu.jas.ps.MultiVarPowerSeriesTest$4
-    edu.jas.ps.MultiVarPowerSeriesTest$5
-    edu.jas.ps.MultiVarPowerSeriesTest$6
     edu.jas.ps.Multiply
     edu.jas.ps.Negate
+    edu.jas.ps.Ones
     edu.jas.ps.OrderedPairlist
     edu.jas.ps.Pair
     edu.jas.ps.PolynomialTaylorFunction
@@ -857,6 +941,8 @@ Concrete Classes:
     edu.jas.ps.UnivPowerSeriesRing$8
     edu.jas.ps.UnivPowerSeriesRing$9
     edu.jas.ps.UnivPowerSeriesTest
+    edu.jas.ps.Vars
+    edu.jas.ps.Zeros
 
 Depends Upon:
     edu.jas.arith
@@ -1159,16 +1245,16 @@ Used By:
 --------------------------------------------------
 
 Stats:
-    Total Classes: 67
-    Concrete Classes: 65
+    Total Classes: 69
+    Concrete Classes: 67
     Abstract Classes: 2
 
     Ca: 6
-    Ce: 2
+    Ce: 3
 
     A: 0,03
-    I: 0,25
-    D: 0,72
+    I: 0,33
+    D: 0,64
 
 Abstract Classes:
     edu.jas.util.DHTTransport
@@ -1192,8 +1278,10 @@ Concrete Classes:
     edu.jas.util.DHTListener
     edu.jas.util.DHTTransport$1
     edu.jas.util.DHTTransport$Stor
+    edu.jas.util.DHTTransportClear
     edu.jas.util.DHTTransportMarshal
     edu.jas.util.DHTTransportPlain
+    edu.jas.util.DHTTransportTerminate
     edu.jas.util.DistFastWorker
     edu.jas.util.DistHashTable
     edu.jas.util.DistHashTableServer
@@ -1243,6 +1331,7 @@ Concrete Classes:
 
 Depends Upon:
     edu.jas.arith
+    edu.jas.kern
     edu.jas.structure
 
 Used By:
@@ -1332,19 +1421,19 @@ Used By:
 
 Name, Class Count, Abstract Class Count, Ca, Ce, A, I, D, V:
 
-edu.jas.application,57,0,0,10,0,1,0,1
+edu.jas.application,77,0,0,11,0,1,0,1
 edu.jas.arith,38,3,13,2,0,08,0,13,0,79,1
-edu.jas.gb,104,12,4,6,0,12,0,6,0,28,1
-edu.jas.gbmod,16,4,0,6,0,25,1,0,25,1
-edu.jas.gbufd,33,3,2,7,0,09,0,78,0,13,1
+edu.jas.gb,128,17,4,6,0,13,0,6,0,27,1
+edu.jas.gbmod,23,4,1,7,0,17,0,88,0,05,1
+edu.jas.gbufd,45,4,2,7,0,09,0,78,0,13,1
 edu.jas.integrate,6,0,0,5,0,1,0,1
-edu.jas.kern,11,0,11,0,0,0,1,1
-edu.jas.poly,187,4,9,5,0,02,0,36,0,62,1
-edu.jas.ps,111,6,1,5,0,05,0,83,0,11,1
+edu.jas.kern,11,0,13,0,0,0,1,1
+edu.jas.poly,209,6,9,5,0,03,0,36,0,61,1
+edu.jas.ps,108,6,1,5,0,06,0,83,0,11,1
 edu.jas.root,34,4,2,5,0,12,0,71,0,17,1
 edu.jas.structure,22,20,12,0,0,91,0,0,09,1
 edu.jas.ufd,93,8,5,8,0,09,0,62,0,3,1
 edu.jas.ufdroot,2,0,1,5,0,0,83,0,17,1
-edu.jas.util,67,2,6,2,0,03,0,25,0,72,1
+edu.jas.util,69,2,6,3,0,03,0,33,0,64,1
 edu.jas.vector,8,0,4,3,0,0,43,0,57,1
 edu.mas.kern,2,0,0,1,0,1,0,1
