@@ -23,6 +23,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolynomialList;
+import edu.jas.poly.PolyUtil;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.NotInvertibleException;
 
@@ -694,34 +695,8 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         if (R == null) {
             throw new IllegalArgumentException("R may not be null");
         }
-        int d = getRing().nvar - R.nvar;
-        if (d <= 0) {
-            return this;
-        }
-        List<GenSolvablePolynomial<C>> H = new ArrayList<GenSolvablePolynomial<C>>(getList().size());
-        for (GenSolvablePolynomial<C> p : getList()) {
-            Map<ExpVector, GenPolynomial<C>> m = null;
-            m = p.contract(R);
-            if (debug) {
-                logger.debug("intersect contract m = " + m);
-            }
-            if (m.size() == 1) { // contains one power of variables
-                for (Map.Entry<ExpVector, GenPolynomial<C>> me : m.entrySet()) {
-                    ExpVector e = me.getKey();
-                    GenSolvablePolynomial<C> mv = (GenSolvablePolynomial<C>) me.getValue();
-                    if (e.isZERO()) {
-                        H.add(mv); //m.get(e));
-                    }
-                }
-            }
-        }
-        GenSolvablePolynomialRing<C> tfac = getRing().contract(d);
-        if (tfac.equals(R)) { // check 
-            return new SolvableIdeal<C>(R, H, isGB, isTopt);
-        }
-        logger.info("tfac, R = " + tfac + ", " + R);
-        // throw new RuntimeException("contract(this) != R");
-        return new SolvableIdeal<C>(R, H); // compute GB
+        List<GenSolvablePolynomial<C>> H = PolyUtil.<C> intersect(getList(),R);
+        return new SolvableIdeal<C>(R, H, isGB, isTopt);
     }
 
 

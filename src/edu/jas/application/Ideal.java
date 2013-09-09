@@ -729,8 +729,9 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
     /**
      * Intersection. Generators for the intersection of a ideal with a
-     * polynomial ring. The polynomial ring of this ideal must be a contraction
-     * of R and the TermOrder must be an elimination order.
+     * polynomial ring. The polynomial ring of this ideal must be a
+     * contraction of R and the TermOrder must be an elimination
+     * order.
      * @param R polynomial ring
      * @return ideal(this \cap R)
      */
@@ -738,33 +739,8 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         if (R == null) {
             throw new IllegalArgumentException("R may not be null");
         }
-        int d = getRing().nvar - R.nvar;
-        if (d <= 0) {
-            return this;
-        }
-        List<GenPolynomial<C>> H = new ArrayList<GenPolynomial<C>>(getList().size());
-        for (GenPolynomial<C> p : getList()) {
-            Map<ExpVector, GenPolynomial<C>> m = null;
-            m = p.contract(R);
-            if (debug) {
-                logger.debug("intersect contract m = " + m);
-            }
-            if (m.size() == 1) { // contains one power of variables
-                for (Map.Entry<ExpVector, GenPolynomial<C>> me : m.entrySet()) {
-                    ExpVector e = me.getKey();
-                    if (e.isZERO()) {
-                        H.add(me.getValue()); //m.get(e));
-                    }
-                }
-            }
-        }
-        GenPolynomialRing<C> tfac = getRing().contract(d);
-        if (tfac.equals(R)) { // check 
-            return new Ideal<C>(R, H, isGB, isTopt);
-        }
-        logger.info("tfac, R = " + tfac + ", " + R);
-        // throw new RuntimeException("contract(this) != R");
-        return new Ideal<C>(R, H); // compute GB
+        List<GenPolynomial<C>> H = PolyUtil.<C> intersect(getList(),R);
+        return new Ideal<C>(R, H, isGB, isTopt);
     }
 
 

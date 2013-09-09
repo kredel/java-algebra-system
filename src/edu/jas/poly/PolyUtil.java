@@ -2430,6 +2430,68 @@ public class PolyUtil {
 
 
     /**
+     * Intersection. Intersection of a list of polynomials with a
+     * polynomial ring. The polynomial ring must be a contraction of
+     * the polynomial ring of the list of polynomials and the
+     * TermOrder must be an elimination order.
+     * @param F list of polynomials
+     * @param R polynomial ring
+     * @return R \cap F
+     */
+    public static <C extends RingElem<C>> List<GenPolynomial<C>> intersect(List<GenPolynomial<C>> F, GenPolynomialRing<C> R) {
+        if (F == null || F.isEmpty() ) {
+            return F; 
+        }
+        GenPolynomialRing<C> pfac = F.get(0).ring;
+        int d = pfac.nvar - R.nvar;
+        if (d <= 0) {
+            return F;
+        }
+        List<GenPolynomial<C>> H = new ArrayList<GenPolynomial<C>>(F.size());
+        for (GenPolynomial<C> p : F) {
+            Map<ExpVector, GenPolynomial<C>> m = null;
+            m = p.contract(R);
+            if (logger.isDebugEnabled()) {
+                logger.debug("intersect contract m = " + m);
+            }
+            if (m.size() == 1) { // contains one power of variables
+                for (Map.Entry<ExpVector, GenPolynomial<C>> me : m.entrySet()) {
+                    ExpVector e = me.getKey();
+                    if (e.isZERO()) {
+                        H.add(me.getValue());
+                    }
+                }
+            }
+        }
+        GenPolynomialRing<C> tfac = pfac.contract(d);
+        if (tfac.equals(R)) { // check 
+            return H;
+        }
+        logger.info("tfac, R = " + tfac + ", " + R);
+        // throw new RuntimeException("contract(pfac) != R");
+        return H;
+    }
+
+
+    /**
+     * Intersection. Intersection of a list of solvable polynomials
+     * with a solvable polynomial ring. The solvable polynomial ring
+     * must be a contraction of the solvable polynomial ring of the
+     * list of polynomials and the TermOrder must be an elimination
+     * order.
+     * @param F list of solvable polynomials
+     * @param R solvable polynomial ring
+     * @return R \cap F
+     */
+    public static <C extends RingElem<C>> List<GenSolvablePolynomial<C>> intersect(List<GenSolvablePolynomial<C>> F, GenSolvablePolynomialRing<C> R) {
+        List<GenPolynomial<C>> Fp = PolynomialList.<C> castToList(F);
+        GenPolynomialRing<C> Rp = (GenPolynomialRing<C>) R;
+        List<GenPolynomial<C>> H = intersect(Fp,Rp);
+        return PolynomialList.<C> castToSolvableList(H); 
+    }
+
+
+    /**
      * Remove all upper variables which do not occur in polynomial.
      * @param p polynomial.
      * @return polynomial with removed variables
