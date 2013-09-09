@@ -282,12 +282,12 @@ public class QuotSolvablePolynomial<C extends GcdRingElem<C>> extends
                         RecSolvablePolynomial<C> rsp3 = rsp1.multiply(rsp2);
                         QuotSolvablePolynomial<C> rsp = ring.fromPolyCoefficients(rsp3);
                         Cps = rsp;
-                        if (rsp.compareTo(Cps) != 0) {
-                            logger.info("coeff-poly: Cps = " + Cps);
-                            logger.info("coeff-poly: rsp = " + rsp);
-                            //} else {
-                            //System.out.println("rsp.compareTo(Cps) == 0");
-                        }
+                        // if (rsp.compareTo(Cps) != 0) {
+                        //     logger.info("coeff-poly: Cps = " + Cps);
+                        //     logger.info("coeff-poly: rsp = " + rsp);
+                        //     //} else {
+                        //     //System.out.println("rsp.compareTo(Cps) == 0");
+                        // }
                     } else { // b.den != 1
                         if (debug)
                             logger.info("coeff-num: Cps = " + Cps + ", num = " + b.num + ", den = " + b.den);
