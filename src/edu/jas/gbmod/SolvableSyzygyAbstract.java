@@ -754,10 +754,16 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>> implements SolvableSy
         List<List<GenSolvablePolynomial<C>>> Gz = leftZeroRelationsArbitrary(F);
         if ( Gz.size() < 0 ) {
             System.out.println("Gz = " + Gz);
+            ModuleList<C> M = new ModuleList<C>(pfac,Gz);
+            ModSolvableGroebnerBase<C> msbb = new ModSolvableGroebnerBaseAbstract<C>();
+            ModuleList<C> GM = msbb.leftGB(M);
+            System.out.println("GM = " + GM);
+            //Gz = GM.castToSolvableList();
         }
         List<GenSolvablePolynomial<C>> G1 = null;
         GenSolvablePolynomial<C> g1 = null;
         for (List<GenSolvablePolynomial<C>> Gi : Gz ) {
+            //System.out.println("Gi = " + Gi);
             if ( Gi.get(0).isZERO() ) {
                 continue;
             }

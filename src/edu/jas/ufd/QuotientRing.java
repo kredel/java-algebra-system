@@ -16,6 +16,7 @@ import edu.jas.kern.StringUtil;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
+//import edu.jas.gbufd.PolyGBUtil;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 
@@ -100,7 +101,7 @@ public class QuotientRing<C extends GcdRingElem<C>> implements RingFactory<Quoti
             return engine.gcd(n, d);
         }
         return engine.gcd(n, d);
-        //return syzGcd(n, d);
+        //return PolyGBUtil.<C> syzGcd(ring, n, d);
     }
 
 

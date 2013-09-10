@@ -15,6 +15,7 @@ import edu.jas.gb.SolvableGroebnerBaseAbstract;
 import edu.jas.gb.SolvableGroebnerBaseSeq;
 import edu.jas.gb.SolvableReductionAbstract;
 import edu.jas.gb.SolvableReductionSeq;
+import edu.jas.gbmod.SolvableSyzygyAbstract;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -405,10 +406,30 @@ public class PolyGBUtil {
         List<GenSolvablePolynomial<C>> B = new ArrayList<GenSolvablePolynomial<C>>(1);
         B.add(d);
         List<GenSolvablePolynomial<C>> c = PolyGBUtil.<C> intersect(r,A,B);
-        if (c.size() != 1) {
-            throw new RuntimeException("lcm not uniqe");
+        //if (c.size() != 1) {
+        // SolvableSyzygyAbstract<C> sz = new SolvableSyzygyAbstract<C>();
+        // GenSolvablePolynomial<C>[] oc = sz.leftOreCond(n,d);
+        // GenSolvablePolynomial<C> nc = oc[0].multiply(n);
+        // System.out.println("nc = " + nc);
+        // return nc;
+        //}
+        GenSolvablePolynomial<C> lcm = null;
+        for (GenSolvablePolynomial<C> p : c) {
+	    if ( p == null || p.isZERO() ) {
+                continue;
+            }
+            //System.out.println("p = " + p);
+            if ( lcm == null ) {
+                lcm = p;
+                continue;
+            }
+            if ( lcm.compareTo(p) > 0 ) {
+                lcm = p;
+            }
         }
-        GenSolvablePolynomial<C> lcm = c.get(0);
+        if ( lcm == null ) {
+            throw new RuntimeException("this cannot happen: lcm == null: " + c);
+        }
         return lcm;
     }
 
@@ -434,18 +455,52 @@ public class PolyGBUtil {
         if (d.isONE()) {
             return d;
         }
-        GenSolvablePolynomial<C> p = n.multiply(d);
-        GenSolvablePolynomial<C> lcm = syzLcm(r, n, d);
+        List<GenSolvablePolynomial<C>> A = new ArrayList<GenSolvablePolynomial<C>>(2);
+        A.add(n);
+        A.add(d);
+        SolvableGroebnerBaseAbstract<C> sbb = new SolvableGroebnerBaseSeq<C>();
+        List<GenSolvablePolynomial<C>> G = sbb.leftGB(A); //not: sbb.twosidedGB(A);
+        //System.out.println("G = " + G);
+        if ( G.size() == 1 ) {
+            return G.get(0);
+        }
+        logger.warn("gcd not determined, set to 1: " + G);
+        return r.getONE();
+    }
+
+
+    /**
+     * Solvable quotient and remainder via reduction.
+     * @param n first solvable polynomial.
+     * @param d second solvable polynomial.
+     * @return [ n/d, n - (n/d)*d ]
+     */
+    public static <C extends GcdRingElem<C>> 
+      GenSolvablePolynomial<C>[] quotientRemainder(GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d) {
+        GenSolvablePolynomial<C>[] res = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[2];
+        if (d.isZERO()) {
+            throw new RuntimeException("division by zero: " + n + "/" + d);
+        }
+        if (n.isZERO()) {
+            res[0] = n;
+            res[1] = n;
+            return res;
+        }
+        GenSolvablePolynomialRing<C> r = n.ring;
+        if (d.isONE()) {
+            res[0] = n;
+            res[1] = r.getZERO();
+            return res;
+        }
         // divide
         List<GenSolvablePolynomial<C>> Q = new ArrayList<GenSolvablePolynomial<C>>(1);
         Q.add(r.getZERO());
-        List<GenSolvablePolynomial<C>> V = new ArrayList<GenSolvablePolynomial<C>>(1);
-        V.add(lcm);
+        List<GenSolvablePolynomial<C>> D = new ArrayList<GenSolvablePolynomial<C>>(1);
+        D.add(d);
         SolvableReductionAbstract<C> sred = new SolvableReductionSeq<C>();
-        GenSolvablePolynomial<C> x = sred.leftNormalform(Q, V, p);
-        GenSolvablePolynomial<C> y = Q.get(0);
-        // GenSolvablePolynomial<C> gcd = divide(p, lcm);
-        return y;
+        res[1] = sred.leftNormalform(Q, D, n);
+        res[0] = Q.get(0);
+        return res;
     }
 
 
@@ -464,7 +519,8 @@ public class PolyGBUtil {
         B.add(d);
         List<GenPolynomial<C>> c = PolyGBUtil.<C> intersect(r,A,B);
         if (c.size() != 1) {
-            throw new RuntimeException("lcm not uniqe");
+            logger.warn("lcm not uniqe: " + c);
+            //throw new RuntimeException("lcm not uniqe: " + c);
         }
         GenPolynomial<C> lcm = c.get(0);
         return lcm;

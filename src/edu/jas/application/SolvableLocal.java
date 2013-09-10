@@ -38,13 +38,13 @@ public class SolvableLocal<C extends GcdRingElem<C>> implements RingElem<Solvabl
     /**
      * Numerator part of the element data structure.
      */
-    protected final GenSolvablePolynomial<C> num;
+    public final GenSolvablePolynomial<C> num;
 
 
     /**
      * Denominator part of the element data structure.
      */
-    protected final GenSolvablePolynomial<C> den;
+    public final GenSolvablePolynomial<C> den;
 
 
     /**
