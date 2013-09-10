@@ -505,6 +505,23 @@ public class PolyGBUtil {
 
 
     /**
+     * Greatest common divisor and cofactors via least common multiple and reduction.
+     * @param r solvable polynomial ring.
+     * @param n first solvable polynomial.
+     * @param d second solvable polynomial.
+     * @return [ g=gcd(n,d), n/g, d/g ]
+     */
+    public static <C extends GcdRingElem<C>> 
+      GenSolvablePolynomial<C>[] syzGcdCofactors(GenSolvablePolynomialRing<C> r, GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d) {
+        GenSolvablePolynomial<C>[] res = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[3];
+        res[0] = PolyGBUtil.<C> syzGcd(r,n,d);
+        res[1] = PolyGBUtil.<C> quotientRemainder(n,res[0])[0];
+        res[2] = PolyGBUtil.<C> quotientRemainder(d,res[0])[0];
+        return res;
+    }
+
+
+    /**
      * Least common multiple. Just for fun, is not efficient.
      * @param r polynomial ring.
      * @param n first polynomial.
