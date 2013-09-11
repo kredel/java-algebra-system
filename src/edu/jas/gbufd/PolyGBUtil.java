@@ -473,12 +473,13 @@ public class PolyGBUtil {
         A.add(n);
         A.add(d);
         SolvableGroebnerBaseAbstract<C> sbb = new SolvableGroebnerBaseSeq<C>();
-        List<GenSolvablePolynomial<C>> G = sbb.leftGB(A); //not: sbb.twosidedGB(A);
+        logger.warn("syzGcd computing GB: " + A);
+        List<GenSolvablePolynomial<C>> G = sbb.rightGB(A); //leftGB, not: sbb.twosidedGB(A);
         //System.out.println("G = " + G);
         if (G.size() == 1) {
             return G.get(0);
         }
-        logger.warn("gcd not determined, set to 1: " + G);
+        //logger.warn("gcd not determined, set to 1: " + G + ", A = " + A);
         return r.getONE();
     }
 
@@ -512,7 +513,7 @@ public class PolyGBUtil {
         List<GenSolvablePolynomial<C>> D = new ArrayList<GenSolvablePolynomial<C>>(1);
         D.add(d);
         SolvableReductionAbstract<C> sred = new SolvableReductionSeq<C>();
-        res[1] = sred.leftNormalform(Q, D, n);
+        res[1] = sred.rightNormalform(Q, D, n); // left
         res[0] = Q.get(0);
         return res;
     }
@@ -530,8 +531,23 @@ public class PolyGBUtil {
                     GenSolvablePolynomialRing<C> r, GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d) {
         GenSolvablePolynomial<C>[] res = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[3];
         res[0] = PolyGBUtil.<C> syzGcd(r, n, d);
-        res[1] = PolyGBUtil.<C> quotientRemainder(n, res[0])[0];
-        res[2] = PolyGBUtil.<C> quotientRemainder(d, res[0])[0];
+        res[1] = n;
+        res[2] = d;
+        if ( res[0].isONE() ) {
+            return res;
+        }
+        GenSolvablePolynomial<C>[] nqr = PolyGBUtil.<C> quotientRemainder(n, res[0]);
+        if ( !nqr[1].isZERO() ) {
+            res[0] = r.getONE();
+            return res;
+	}
+        GenSolvablePolynomial<C>[] dqr = PolyGBUtil.<C> quotientRemainder(d, res[0]);
+        if ( !dqr[1].isZERO() ) {
+            res[0] = r.getONE();
+            return res;
+	}
+        res[1] = nqr[0];
+        res[2] = dqr[0];
         return res;
     }
 

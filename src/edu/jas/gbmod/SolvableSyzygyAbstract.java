@@ -7,6 +7,7 @@ package edu.jas.gbmod;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -748,17 +749,17 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>> implements SolvableSy
             oc[1] = a.multiply(c);
             return oc;
         }
-        logger.info("computing Ore condition");
+        logger.info("computing Ore condition: " + a + ", " + b);
         List<GenSolvablePolynomial<C>> F = new ArrayList<GenSolvablePolynomial<C>>(2);
         F.add(a); F.add(b);
         List<List<GenSolvablePolynomial<C>>> Gz = leftZeroRelationsArbitrary(F);
-        if ( Gz.size() < 0 ) {
-            System.out.println("Gz = " + Gz);
+        if ( Gz.size() < 0 ) { // always false
+            //System.out.println("Gz = " + Gz);
             ModuleList<C> M = new ModuleList<C>(pfac,Gz);
             ModSolvableGroebnerBase<C> msbb = new ModSolvableGroebnerBaseAbstract<C>();
             ModuleList<C> GM = msbb.leftGB(M);
-            System.out.println("GM = " + GM);
-            //Gz = GM.castToSolvableList();
+            //System.out.println("GM = " + GM);
+            Gz = GM.castToSolvableList();
         }
         List<GenSolvablePolynomial<C>> G1 = null;
         GenSolvablePolynomial<C> g1 = null;
@@ -772,13 +773,14 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>> implements SolvableSy
             }
             if ( g1 == null ) {
                 g1 = G1.get(0);
-            } else if ( g1.compareTo(Gi.get(0)) > 0 ) {
+            } else if ( g1.compareTo(Gi.get(0)) > 0 ) { //g1.degree() > Gi.get(0).degree() 
                 G1 = Gi;
                 g1 = G1.get(0);
             }
         }
-        oc[0] = G1.get(0);
+        oc[0] = g1; //G1.get(0);
         oc[1] = (GenSolvablePolynomial<C>) G1.get(1).negate();
+        //logger.info("Ore multiple: " + oc[0].multiply(a) + ", " + Arrays.toString(oc));
         return oc;
     }
 
