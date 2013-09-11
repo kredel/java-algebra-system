@@ -131,4 +131,16 @@ public interface SolvableReduction<C extends RingElem<C>>  {
            rightNormalform(List<GenSolvablePolynomial<C>> Pp, 
                            GenSolvablePolynomial<C> Ap);
 
+    /**
+     * RightNormalform with recording.
+     * @param row recording matrix, is modified.
+     * @param Pp a polynomial list for reduction.
+     * @param Ap a polynomial.
+     * @return nf(Pp,Ap), the right normal form of Ap wrt. Pp.
+     */
+    public GenSolvablePolynomial<C> 
+           rightNormalform(List<GenSolvablePolynomial<C>> row,
+                           List<GenSolvablePolynomial<C>> Pp, 
+                           GenSolvablePolynomial<C> Ap);
+
 }
