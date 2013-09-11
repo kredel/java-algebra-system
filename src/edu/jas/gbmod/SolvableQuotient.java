@@ -5,11 +5,14 @@
 package edu.jas.gbmod;
 
 
+import java.util.Arrays;
+
 import org.apache.log4j.Logger;
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenSolvablePolynomial;
+import edu.jas.gbufd.PolyGBUtil;
 import edu.jas.structure.GcdRingElem;
 
 
@@ -96,8 +99,10 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
             n = (GenSolvablePolynomial<C>) n.negate();
             d = (GenSolvablePolynomial<C>) d.negate();
         }
-        if (!isred) {
-            // TODO
+        if (isred) { 
+            num = n;
+            den = d;
+            return;
         }
         C lc = d.leadingBaseCoefficient();
         if (!lc.isONE() && lc.isUnit()) {
@@ -106,11 +111,31 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
             d = d.multiply(lc);
         }
         if (n.compareTo(d) == 0) {
-            n = ring.ring.getONE();
-            d = ring.ring.getONE();
+            num = ring.ring.getONE();
+            den = ring.ring.getONE();
+            return;
+        }
+        if (n.negate().compareTo(d) == 0) {
+            num = (GenSolvablePolynomial<C>) ring.ring.getONE().negate();
+            den = ring.ring.getONE();
+            return;
         }
         if (n.isZERO()) {
-            d = ring.ring.getONE();
+            num = n;
+            den = ring.ring.getONE();
+            return;
+        }
+        if (n.isONE()) {
+            num = n;
+            den = d;
+            return;
+        }
+        // not perfect, TODO 
+        GenSolvablePolynomial<C>[] gcd = PolyGBUtil.<C> syzGcdCofactors(r.ring,n,d);
+        if (!gcd[0].isONE()) {
+            System.out.println("isred: gcd = " + Arrays.toString(gcd) + ", " + n + ", " +d);
+            n = gcd[1];
+            d = gcd[2];
         }
         num = n;
         den = d;

@@ -5,11 +5,14 @@
 package edu.jas.application;
 
 
+import java.util.Arrays;
+
 import org.apache.log4j.Logger;
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenSolvablePolynomial;
+import edu.jas.gbufd.PolyGBUtil;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingElem;
 
@@ -144,25 +147,21 @@ public class SolvableLocal<C extends GcdRingElem<C>> implements RingElem<Solvabl
             return;
         }
         // must reduce to lowest terms
-        GenSolvablePolynomial<C> gcd = ring.ring.getONE();
-        //GenPolynomial<C> gcd = ring.syzGcd(n, d);
-        //if (debug) {
-        //    logger.info("gcd = " + gcd);
-        //}
-        if (gcd.isONE()) {
-            num = n;
-            den = d;
-        } else {
-            // d not in ideal --> gcd not in ideal 
-            //p = ring.ideal.normalform( gcd );
-            //if ( p == null || p.isZERO() ) { // todo: find nonzero factor
-            //   num = n;
-            //   den = d;
-            //} else {
-            num = n; //n.divide(gcd);
-            den = d; //d.divide(gcd);
-            //}
+        // not perfect, TODO
+        if (n.degree() > 0 && d.degree() > 0 ) { // how avoid too long running GBs ?
+            GenSolvablePolynomial<C>[] gcd = PolyGBUtil.<C> syzGcdCofactors(r.ring,n,d);
+            if (!gcd[0].isONE()) {
+                logger.info("isred: gcd = " + Arrays.toString(gcd)); // + ", " + n + ", " +d);
+                n = gcd[1];
+                d = gcd[2];
+                // d not in ideal --> gcd not in ideal 
+                //p = ring.ideal.normalform( gcd );
+                //if ( p == null || p.isZERO() ) { // todo: find nonzero factor
+                //}
+            }
         }
+        num = n;
+        den = d;
     }
 
 
