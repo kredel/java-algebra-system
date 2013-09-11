@@ -148,7 +148,7 @@ public class SolvableLocal<C extends GcdRingElem<C>> implements RingElem<Solvabl
         }
         // must reduce to lowest terms
         // not perfect, TODO
-        if (n.degree() > 0 && d.degree() > 0 ) { // how avoid too long running GBs ?
+        if (n.degree() < 3 && d.degree() < 3 && n.length() < 10 && d.length() < 10 ) { // how avoid too long running GBs ?
             GenSolvablePolynomial<C>[] gcd = PolyGBUtil.<C> syzGcdCofactors(r.ring,n,d);
             if (!gcd[0].isONE()) {
                 logger.info("isred: gcd = " + Arrays.toString(gcd)); // + ", " + n + ", " +d);

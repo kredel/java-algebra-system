@@ -131,11 +131,13 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
             return;
         }
         // not perfect, TODO 
-        GenSolvablePolynomial<C>[] gcd = PolyGBUtil.<C> syzGcdCofactors(r.ring,n,d);
-        if (!gcd[0].isONE()) {
-            System.out.println("isred: gcd = " + Arrays.toString(gcd) + ", " + n + ", " +d);
-            n = gcd[1];
-            d = gcd[2];
+        if (n.degree() < 3 && d.degree() < 3 && n.length() < 10 && d.length() < 10 ) { // how avoid too long running GBs ?
+            GenSolvablePolynomial<C>[] gcd = PolyGBUtil.<C> syzGcdCofactors(r.ring,n,d);
+            if (!gcd[0].isONE()) {
+                logger.info("isred: gcd = " + Arrays.toString(gcd)); // + ", " + n + ", " +d);
+                n = gcd[1];
+                d = gcd[2];
+            }
         }
         num = n;
         den = d;

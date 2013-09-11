@@ -83,7 +83,7 @@ public class SolvableLocalTest extends TestCase {
     int ll = 3; //6;
 
 
-    int el = 3;
+    int el = 2;
 
 
     float q = 0.2f;
@@ -187,9 +187,9 @@ public class SolvableLocalTest extends TestCase {
      * Test random polynomial.
      */
     public void testRandom() {
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 3; i++) {
             //a = efac.random(ll+i);
-            a = efac.random(kl * (i + 1), ll + 2 + 2 * i, el, q);
+            a = efac.random(kl + i, ll + 2, el, q);
             //System.out.println("a = " + a);
             if (a.isZERO() || a.isONE()) {
                 continue;
@@ -206,14 +206,14 @@ public class SolvableLocalTest extends TestCase {
      * Test addition.
      */
     public void testAddition() {
-        //a = efac.random(kl, ll, el+1, q);
-        //b = efac.random(kl, ll, el+1, q);
+        a = efac.random(kl, ll, el+1, q);
+        b = efac.random(kl, ll, el+1, q);
         //a = efac.parse("{ 1  | w * x + 25/28  }");
         //b = efac.parse("{ x - 35/18  | x + 2 w - 6  }");
         //!a = efac.parse("{ x - 1/7  | y * z + 7/10  }");
         //!b = efac.parse("{ 1  | w + 3  }");
-        a = efac.parse("{ 1  | y * z + 7/10 }");
-        b = efac.parse("{ x - 1/7 | w + 3  }");
+        //a = efac.parse("{ 1  | y * z + 7/10 }");
+        //b = efac.parse("{ x - 1/7 | w + 3  }");
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
 
@@ -258,8 +258,8 @@ public class SolvableLocalTest extends TestCase {
      * Test multiplication.
      */
     public void testMultiplication() {
-        a = efac.random(kl, ll, el + 1, q);
-        b = efac.random(kl, ll, el + 1, q);
+        a = efac.random(kl, ll, el + 0, q);
+        b = efac.random(kl, ll, el + 0, q);
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
 
@@ -301,7 +301,7 @@ public class SolvableLocalTest extends TestCase {
      * Test parse.
      */
     public void testParse() {
-        a = efac.random(kl * 2, ll * 2, el * 2, q * 2);
+        a = efac.random(kl, ll, el, q * 2);
         //PrettyPrint.setInternal();
         //System.out.println("a = " + a);
         PrettyPrint.setPretty();

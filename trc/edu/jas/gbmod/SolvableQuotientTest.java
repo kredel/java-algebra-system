@@ -139,9 +139,9 @@ public class SolvableQuotientTest extends TestCase {
      * Test random polynomial.
      */
     public void testRandom() {
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 3; i++) {
             //a = efac.random(ll+i);
-            a = efac.random(kl * (i + 1), ll + 2 + 2 * i, el, q);
+            a = efac.random(kl * (i + 1), ll + i, el, q);
             //System.out.println("a = " + a);
             if (a.isZERO() || a.isONE()) {
                 continue;
@@ -238,9 +238,9 @@ public class SolvableQuotientTest extends TestCase {
 
 
     /**
-     * Test addition with syzygy gcd and euclids gcd.
+     * Test addition without syzygy gcd.
      */
-    public void ytestAdditionGcd() {
+    public void testAdditionGcd() {
         long te, tz;
 
         a = efac.random(kl, ll, el, q);
@@ -250,7 +250,7 @@ public class SolvableQuotientTest extends TestCase {
 
         az = new SolvableQuotient<BigRational>(zFac, a.num, a.den, true);
         bz = new SolvableQuotient<BigRational>(zFac, b.num, b.den, true);
-        if (true) {
+        if (false) {
             return;
         }
 
@@ -268,6 +268,9 @@ public class SolvableQuotientTest extends TestCase {
         tz = System.currentTimeMillis() - tz;
         assertEquals("a+b-b = a", az, dz);
 
+        if (true) {
+            return;
+        }
         System.out.println("te = " + te);
         System.out.println("tz = " + tz);
 
@@ -310,7 +313,7 @@ public class SolvableQuotientTest extends TestCase {
      * Test parse.
      */
     public void testParse() {
-        a = efac.random(kl * 2, ll * 2, el * 2, q * 2);
+        a = efac.random(kl, ll, el + 1, q);
         //PrettyPrint.setInternal();
         //System.out.println("a = " + a);
         PrettyPrint.setPretty();
