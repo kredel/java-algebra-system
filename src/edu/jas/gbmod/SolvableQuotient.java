@@ -125,7 +125,7 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
             den = ring.ring.getONE();
             return;
         }
-        if (n.isONE()) {
+        if (n.isONE()||d.isONE()) {
             num = n;
             den = d;
             return;
@@ -138,6 +138,13 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
                 n = gcd[1];
                 d = gcd[2];
             }
+        }
+        // not perfect, TODO 
+        if (n.degree() < 3 && d.degree() < 3 && n.length() < 10 && d.length() < 10) { // how avoid too long running GBs ?
+            GenSolvablePolynomial<C>[] simp = ring.engine.leftSimplifier(n,d);
+            logger.info("simp: " + Arrays.toString(simp) + ", " + n + ", " +d);
+            n = simp[0];
+            d = simp[1];
         }
         num = n;
         den = d;

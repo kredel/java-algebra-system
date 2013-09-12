@@ -660,9 +660,9 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>> implements SolvableSy
                 rF.add(q);
             }
         }
-        if (logger.isInfoEnabled()) {
+        if (debug) {
             PolynomialList<C> pl = new PolynomialList<C>(rring, rF);
-            logger.info("reversed problem = " + pl);
+            logger.info("reversed problem = " + pl.toScript());
             //System.out.println("reversed problem = " + pl);
         }
         List<List<GenSolvablePolynomial<C>>> rZ = leftZeroRelationsArbitrary(modv, rF);
@@ -832,6 +832,74 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>> implements SolvableSy
         }
         oc[0] = G1.get(0);
         oc[1] = (GenSolvablePolynomial<C>) G1.get(1).negate();
+        return oc;
+    }
+
+
+    /**
+     * Left simplifier. 
+     * Method of Apel &amp; Lassner (1987).
+     * @param a solvable polynomial
+     * @param b solvable polynomial
+     * @return [p,q] with a/b = p/q and q is minimal and monic
+     */
+    public GenSolvablePolynomial<C>[] leftSimplifier(GenSolvablePolynomial<C> a, GenSolvablePolynomial<C> b) {
+        if (a == null || a.isZERO() || b == null || b.isZERO()) {
+            throw new IllegalArgumentException("a and b must be non zero");
+        }
+        GenSolvablePolynomialRing<C> pfac = a.ring;
+        GenSolvablePolynomial<C>[] oc = rightOreCond(a,b);
+        logger.info("oc = " + Arrays.toString(oc)); // + ", a = " + a + ", b = " + b);
+        //System.out.println("a*oc[0] = " + a.multiply(oc[0]) + ", b*oc[1] = " + b.multiply(oc[1]));
+        List<GenSolvablePolynomial<C>> F = new ArrayList<GenSolvablePolynomial<C>>(oc.length);
+        // opposite order and undo negation
+        F.add( (GenSolvablePolynomial<C>) oc[1].negate()); 
+        F.add(                            oc[0] ); 
+        logger.info("F: " + F);
+        List<List<GenSolvablePolynomial<C>>> Gz = leftZeroRelationsArbitrary(F);
+        //logger.info("Gz: " + Gz);
+        List<GenSolvablePolynomial<C>> G1 = new ArrayList<GenSolvablePolynomial<C>>(Gz.size());
+        List<GenSolvablePolynomial<C>> G2 = new ArrayList<GenSolvablePolynomial<C>>(Gz.size());
+        for ( List<GenSolvablePolynomial<C>> ll : Gz) {
+            if ( !ll.get(0).isZERO() && !ll.get(1).isZERO() ) {
+                G1.add(ll.get(0)); // denominators
+                G2.add(ll.get(1)); // numerators
+            }
+        }
+        logger.info("G1(den): " + G1 + ", G2(num): " + G2);
+        SolvableGroebnerBaseSeq<C> sgb = new SolvableGroebnerBaseSeq<C>();
+        SolvableExtendedGB<C> exgb = sgb.extLeftGB(G1);
+        logger.info("exgb.F: " + exgb.F + ", exgb.G: " + exgb.G);
+        List<GenSolvablePolynomial<C>> G = exgb.G;
+        int m = 0;
+        GenSolvablePolynomial<C> min = null;
+        for ( int i = 0; i < G.size(); i++ ) {
+	    if ( min == null ) {
+                min = G.get(i);  
+                m = i;
+            } else if (min.compareTo(G.get(i)) > 0 ) {
+                min = G.get(i);  
+                m = i;
+	    }
+        }
+        GenSolvablePolynomial<C> min2 = (GenSolvablePolynomial<C>) blas.scalarProduct(PolynomialList.<C> castToList(G2), PolynomialList.<C> castToList(exgb.G2F.get(m)));
+        logger.info("min: " + min + ", min2: " + min2 + ", m = " + m + ", " + exgb.G2F.get(m));
+        // opposite order
+        GenSolvablePolynomial<C> n = min2; // nominator
+        GenSolvablePolynomial<C> d = min;  // denominator
+        // normalize
+        if (d.signum() < 0) {
+            n = (GenSolvablePolynomial<C>) n.negate();
+            d = (GenSolvablePolynomial<C>) d.negate();
+        }
+        C lc = d.leadingBaseCoefficient();
+        if (!lc.isONE() && lc.isUnit()) {
+            lc = lc.inverse();
+            n = n.multiplyLeft(lc);
+            d = d.multiplyLeft(lc);
+        }
+        oc[0] = n; // nominator
+        oc[1] = d;  // denominator
         return oc;
     }
 

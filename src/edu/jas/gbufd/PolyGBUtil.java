@@ -479,7 +479,7 @@ public class PolyGBUtil {
         if (G.size() == 1) {
             return G.get(0);
         }
-        //logger.warn("gcd not determined, set to 1: " + G + ", A = " + A);
+        logger.warn("gcd not determined, set to 1: " + G); // + ", A = " + A);
         return r.getONE();
     }
 
