@@ -341,6 +341,41 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
 
 
     /**
+     * SolvableQuotient right fraction.  <b>Note:</b> It is not
+     * possible to distinguish right from left fractions in the
+     * current implementation. So it is not possible to compute with right fractions.
+     * @return SolvableQuotient(a,b), where den<sup>-1</sup> num = a b<sup>-1</sup>
+     */
+    public SolvableQuotient<C> rightFraction() {
+        if ( isZERO() || isONE() ) {
+            return this;
+        }
+        GenSolvablePolynomial<C>[] oc = ring.engine.rightOreCond(num,den);
+        return new SolvableQuotient<C>(ring, oc[1], oc[0], true); // reversed, true is wrong but okay
+    }
+
+
+    /**
+     * Test if SolvableQuotient right fraction.  <b>Note:</b> It is not
+     * possible to distinguish right from left fractions in the
+     * current implementation. So it is not possible to compute with right fractions.
+     * @param s = SolvableQuotient(a,b)
+     * @return true if s is a right fraction of this, i.e. den<sup>-1</sup> num = a b<sup>-1</sup>
+     */
+    public boolean isRightFraction(SolvableQuotient<C> s) {
+        if ( isZERO() ) {
+            return s.isZERO();
+        }
+        if ( isONE() ) {
+            return s.isONE();
+        }
+        GenSolvablePolynomial<C> x = den.multiply(s.num);
+        GenSolvablePolynomial<C> y = num.multiply(s.den);
+        return x.compareTo(y) == 0;
+    }
+
+
+    /**
      * SolvableQuotient absolute value.
      * @return the absolute value of this.
      * @see edu.jas.structure.RingElem#abs()
