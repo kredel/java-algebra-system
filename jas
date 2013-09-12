@@ -1,12 +1,14 @@
 #!/bin/bash
 # $Id$
 #
+SCRIPT_LANG="unknown"
 SCRIPT_LANG="python"
 SCRIPT_LANG="ruby"
 #
 DEBUG=0
 #
 # setup required libs: JAVA_LIBS="../lib/log4j.jar:../lib/junit.jar:../lib/jas.jar"
+# check fpr jython or jruby
 #
 if [ -f "../lib/log4j.jar" ] ; then
    JAVA_LIBS="../lib/log4j.jar"
@@ -91,6 +93,27 @@ do
     shift
 done
 
+if [ "$SCRIPT_LANG" = "python" ]; then
+   if [ -f "examples/jas.py" ] ; then
+      echo -n "" 
+   else 
+      echo "===========================================" 
+      echo "Error: library examples/jas.py not found" 
+      echo "Please install examples/jas.py" 
+      echo "===========================================" 
+      exit 0
+   fi
+   if [ -x `which jython` ] ; then
+      echo -n ""
+   else 
+      echo "===========================================" 
+      echo "Error: jython script not found" 
+      echo "Please install jython in your PATH" 
+      echo "===========================================" 
+      exit 0
+   fi
+fi
+
 if [ "$SCRIPT_LANG" = "ruby" ]; then
    if [ -f "examples/jas.rb" ] ; then
       echo -n "" 
@@ -98,6 +121,15 @@ if [ "$SCRIPT_LANG" = "ruby" ]; then
       echo "===========================================" 
       echo "Error: library examples/jas.rb not found" 
       echo "Please install examples/jas.rb" 
+      echo "===========================================" 
+      exit 0
+   fi
+   if [ -x `which jruby` ] ; then
+      echo -n "" 
+   else 
+      echo "===========================================" 
+      echo "Error: jruby script not found" 
+      echo "Please install jruby in your PATH" 
       echo "===========================================" 
       exit 0
    fi
@@ -126,5 +158,10 @@ if [ "$SCRIPT_LANG" = "python" ]; then
 elif [ "$SCRIPT_LANG" = "ruby" ]; then
    [[ $DEBUG > 0 ]] && echo jruby $SCRIPT_OPTS -J-cp "$JAVA_LIBS" $JAVA_OPTS -S jirb --noinspect --readline -r "examples/jas.rb" $*
    jruby $SCRIPT_OPTS -J-cp "$JAVA_LIBS" $JAVA_OPTS -S jirb --noinspect --readline -r "examples/jas.rb" $*
+else 
+   echo "===========================================" 
+   echo "Unknown scripting language $SCRIPT_LANG" 
+   echo "===========================================" 
+   exit 0
 fi
 #

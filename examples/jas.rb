@@ -1517,7 +1517,7 @@ Compute complex roots of univariate polynomial.
                    rr = RootFactory.complexAlgebraicNumbers( a, eps );
                 end
             end
-            rr = rr.map{ |e| RingElem.new(e) };
+            rr = rr.map{ |y| RingElem.new(y) };
             return rr;
         rescue Exception => e
             puts "error " + str(e)
