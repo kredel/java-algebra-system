@@ -160,6 +160,13 @@ public class SolvableLocal<C extends GcdRingElem<C>> implements RingElem<Solvabl
                 //}
             }
         }
+        // not perfect, TODO 
+        if (n.degree() < 3 && d.degree() < 3 && n.length() < 10 && d.length() < 10) { // how avoid too long running GBs ?
+            GenSolvablePolynomial<C>[] simp = ring.engine.leftSimplifier(n,d);
+            logger.info("simp: " + Arrays.toString(simp) + ", " + n + ", " +d);
+            n = simp[0];
+            d = simp[1];
+        }
         num = n;
         den = d;
     }
