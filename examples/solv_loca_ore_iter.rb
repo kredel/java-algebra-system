@@ -188,9 +188,25 @@ puts;
 
 s = RingElem.new(llu.list[0]);
 puts "s     = " + str(s);
-puts "s*z   = " + str(s*z);
-puts "z*s   = " + str(z*s);
-#puts "z^-1*z*s   = " + str(1/z*z*s);
-#puts "z*s*z^-1   = " + str(z*s*1/z);
-puts;
+sz = s * z;
+puts "s*z   = " + str(sz);
+zs = z * s;
+puts "z*s   = " + str(zs);
+csz = sz - zs;
+puts "s*z-z*s = " + str(csz);
+#csz = csz.monic();
+#puts "s*z-z*s = " + str(csz);
+#puts;
 
+java_import "edu.jas.gbufd.PolyGBUtil";
+
+q = csz.elem.trailingBaseCoefficient();
+puts "q = " + q.toScript();
+qn = q.num;
+qd = q.den;
+qr = qn.ring;
+ql = PolyGBUtil.syzLcm(qr,qn,qd);
+qg = PolyGBUtil.syzGcd(qr,qn,qd);
+puts "ql = " + ql.toScript();
+puts "qg = " + qg.toScript();
+puts;

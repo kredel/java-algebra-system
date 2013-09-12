@@ -71,69 +71,91 @@ puts;
 startLog();
 
 sr = SRC(rgt,one);
-puts "SolvableResidue: " + str(sr);
-puts "SolvableResidue: " + str(sr-sr);
+puts "SolvableResidue: sr = " + str(sr);
+puts "SolvableResidue:      " + str(sr-sr);
 puts;
 
 st = SRC(rgt,t-x);
-puts "SolvableResidue: " + str(st);
-puts "SolvableResidue: " + str(st-st);
-puts "SolvableResidue: " + str(st**4+3*st);
+puts "SolvableResidue: st = " + str(st);
+puts "SolvableResidue:      " + str(st-st);
+puts "SolvableResidue:      " + str(st**4+3*st);
 puts;
 
 
 sc = SRF(rp,one);
-puts "SolvableQuotient: " + str(sc);
-puts "SolvableQuotient: " + str(sc-sc);
+puts "SolvableQuotient: sc = " + str(sc);
+puts "SolvableQuotient:      " + str(sc-sc);
 puts;
 
 scx = SRF(rp,x);
-puts "SolvableQuotient: " + str(scx);
-puts "SolvableQuotient: " + str(scx*scx);
+puts "SolvableQuotient: scx  = " + str(scx);
+puts "SolvableQuotient:      = " + str(scx*scx);
 puts;
 
 scy = SRF(rp,y);
 scyi = 1 / scy;
-puts "SolvableQuotient: " + str(scy);
-puts "SolvableQuotient: " + str(scyi);
-puts "SolvableQuotient: " + str(scyi*scy);
-puts "SolvableQuotient: " + str(scy*scyi);
+puts "SolvableQuotient: scy  = " + str(scy);
+puts "SolvableQuotient: scyi = " + str(scyi);
+puts "SolvableQuotient:        " + str(scyi*scy);
+puts "SolvableQuotient:        " + str(scy*scyi);
 puts;
 
 sca = SRF(rp,x*y + t*z*x);
 scai = 1 / sca;
-puts "SolvableQuotient: " + str(sca);
-puts "SolvableQuotient: " + str(scai);
-puts "SolvableQuotient: " + str(scai*sca);
-puts "SolvableQuotient: " + str(sca*scai);
+puts "SolvableQuotient: scb  = " + str(sca);
+puts "SolvableQuotient: scbi = " + str(scai);
+puts "SolvableQuotient:        " + str(scai*sca);
+puts "SolvableQuotient:        " + str(sca*scai);
 puts;
 
 scb = SRF(rp, z*(x-y) - t*z );
 scbi = 1 / scb;
-puts "SolvableQuotient: " + str(scb);
-puts "SolvableQuotient: " + str(scbi);
-puts "SolvableQuotient: " + str(scbi*scb);
-puts "SolvableQuotient: " + str(scb*scbi);
+puts "SolvableQuotient: scb  = " + str(scb);
+puts "SolvableQuotient: scbi = " + str(scbi);
+puts "SolvableQuotient:        " + str(scbi*scb);
+puts "SolvableQuotient:        " + str(scb*scbi);
 puts;
 
 scc = sca*scb;
 scci = 1 / scc;
-puts "SolvableQuotient: " + str(scc);
-puts "SolvableQuotient: " + str(scci);
-puts "SolvableQuotient: " + str(scci*scb);
-puts "SolvableQuotient: " + str(scci*sca*scb);
-puts "SolvableQuotient: " + str(sca*scb*scci);
-#puts "SolvableQuotient: " + str(sca*scci*scb); # expensive
+puts "SolvableQuotient: scc  =   " + str(scc);
+puts "SolvableQuotient: scci =   " + str(scci);
+#puts "SolvableQuotient:          " + str(scci*scb); # expensive
+#puts "SolvableQuotient:          " + str(scci*sca*scb); # expensive
+#puts "SolvableQuotient: a b ci = " + str(sca*scb*scci); # expensive
+##puts "SolvableQuotient: " + str(sca*scci*scb); # expensive
 puts;
 
-scd = scci + scb + sca;
-puts "SolvableQuotient: " + str(scd);
-puts "SolvableQuotient: " + str(scd-(scci+scb) == sca);
-puts "SolvableQuotient: " + str(sca == scd-(scci+scb));
+#scd = SRF(rp, y*z + x*z, y*z );
+#scd = SRF(rp, z*y + z*x, z*y );
+#scd = SRF(rp, y*t + x*t, y*t );
+#scd = SRF(rp, z*t + y*t + x*t, y*t );
+scd = SRF(rp, (t + y + x)*z, -y*z );
+puts "SolvableQuotient: scd = " + str(scd);
+puts;
+#sce = scd - 2*scd + scd;
+#puts "SolvableQuotient: sce = " + str(sce);
+#puts;
+
+sce = SRF(rp, y*(t + y + x), y*z );
+puts "SolvableQuotient: sce = " + str(sce);
 puts;
 
-sce = scai + scbi;
-puts "SolvableQuotient: " + str(sce);
+scf = scd * sce;
+puts "SolvableQuotient: scf   = " + str(scf);
+puts;
+
+sr = scf.elem.rightFraction();
+puts "SolvableQuotient: sr    = " + sr.toScript();
+puts;
+
+sx = scf.elem.den.multiply(sr.num);
+sy = scf.elem.num.multiply(sr.den);
+puts "SolvableQuotient: sx    = " + sx.toScript();
+puts "SolvableQuotient: sy    = " + sy.toScript();
+puts "SolvableQuotient: sx-sy = " + sx.subtract(sy).toScript();
+puts "SolvableQuotient: isRF  = " + str(scf.elem.isRightFraction(sr));
+puts;
 
 #terminate();
 #exit(0);
