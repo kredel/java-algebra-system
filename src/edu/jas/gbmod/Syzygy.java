@@ -5,6 +5,7 @@
 package edu.jas.gbmod;
 
 import java.util.List;
+import java.io.Serializable;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.ModuleList;
@@ -20,7 +21,7 @@ import edu.jas.vector.GenVector;
  * @author Heinz Kredel
  */
 
-public interface Syzygy<C extends RingElem<C>>  {
+public interface Syzygy<C extends RingElem<C>> extends Serializable {
 
 
     /**

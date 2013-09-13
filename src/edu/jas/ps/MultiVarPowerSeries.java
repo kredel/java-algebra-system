@@ -911,7 +911,8 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      */
     @SuppressWarnings("unused")
     public ExpVector orderExpVector() {
-        int x = order(); // ensure evorder is set
+        //int x = 
+        order(); // ensure evorder is set
         return evorder;
     }
 

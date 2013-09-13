@@ -5,6 +5,7 @@
 package edu.jas.gb;
 
 import java.util.List;
+import java.io.Serializable;
 
 import edu.jas.structure.RingElem;
 import edu.jas.poly.ExpVector;
@@ -18,7 +19,7 @@ import edu.jas.poly.GenPolynomialRing;
  * @author Heinz Kredel
  */
 
-public interface PairList<C extends RingElem<C> > {
+public interface PairList<C extends RingElem<C> > extends Serializable {
 
 
     /**

@@ -160,8 +160,6 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
         }
         //System.out.println("this = " + this + ", Bp = " + Bp);
         ExpVector Z = ring.evzero;
-        SolvableLocalRing<C> cfac = (SolvableLocalRing<C>) ring.coFac;
-        ExpVector Zc = cfac.ring.evzero;
         LocalSolvablePolynomial<C> Dp = ring.getZERO().copy();
         LocalSolvablePolynomial<C> zero = ring.getZERO().copy();
         SolvableLocal<C> one = ring.getONECoefficient();

@@ -242,7 +242,8 @@ public class DistHashTable<K, V> extends AbstractMap<K, V> /* implements Map<K,V
      * @param value
      */
     public void putWait(K key, V value) {
-        V o = put(key, value); // = send
+        //V o = 
+        put(key, value); // = send
         // assume key does not change multiple times before test:
         while (!value.equals(getWait(key))) {
             //System.out.print("#");

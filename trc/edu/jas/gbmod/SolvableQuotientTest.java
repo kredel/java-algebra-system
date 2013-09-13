@@ -268,7 +268,7 @@ public class SolvableQuotientTest extends TestCase {
         tz = System.currentTimeMillis() - tz;
         assertEquals("a+b-b = a", az, dz);
 
-        if (true) {
+        if (tz >= 0L||te >= 0L) { // true, findbugs
             return;
         }
         System.out.println("te = " + te);

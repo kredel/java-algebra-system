@@ -7,6 +7,7 @@ package edu.jas.poly;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 /**
@@ -57,7 +58,7 @@ public final class ExpVectorLong extends ExpVector
         if (v == null) {
             throw new IllegalArgumentException("null val not allowed");
         }
-        val = v;
+        val = Arrays.copyOf(v,v.length); // > Java-5
     }
 
 
@@ -395,8 +396,8 @@ public final class ExpVectorLong extends ExpVector
     @Override
     public ExpVectorLong subst(int i, long d) {
         ExpVectorLong V = this.copy();
-        @SuppressWarnings("unused")
-        long e = V.setVal(i, d);
+        //long e = 
+        V.setVal(i, d);
         return V;
         //return EVSU(this, i, d);
     }

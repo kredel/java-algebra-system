@@ -161,8 +161,6 @@ public class QuotSolvablePolynomial<C extends GcdRingElem<C>> extends
         }
         //System.out.println("this = " + this + ", Bp = " + Bp);
         ExpVector Z = ring.evzero;
-        SolvableQuotientRing<C> cfac = (SolvableQuotientRing<C>) ring.coFac;
-        ExpVector Zc = cfac.ring.evzero;
         QuotSolvablePolynomial<C> Dp = ring.getZERO().copy();
         QuotSolvablePolynomial<C> zero = ring.getZERO().copy();
         SolvableQuotient<C> one = ring.getONECoefficient();

@@ -52,7 +52,7 @@ public class Dimension implements Serializable {
         this.d = d;
         this.S = S;
         this.M = M;
-        this.v = v;
+        this.v = Arrays.copyOf(v,v.length); // > Java-5
     }
 
 

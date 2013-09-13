@@ -458,8 +458,8 @@ public final class ExpVectorInteger extends ExpVector
     @Override
     public ExpVectorInteger subst(int i, long d) {
         ExpVectorInteger V = this.copy();
-        @SuppressWarnings("unused")
-        long e = V.setVal(i, d);
+        //long e = 
+        V.setVal(i, d);
         return V;
         //return EVSU(this, i, d);
     }
@@ -473,8 +473,8 @@ public final class ExpVectorInteger extends ExpVector
      */
     public ExpVectorInteger subst(int i, int d) {
         ExpVectorInteger V = this.copy();
-        @SuppressWarnings("unused")
-        long e = V.setVal(i, d);
+        //long e = 
+        V.setVal(i, d);
         return V;
         //return EVSU(this, i, d);
     }

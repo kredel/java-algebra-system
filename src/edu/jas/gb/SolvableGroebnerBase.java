@@ -6,6 +6,7 @@ package edu.jas.gb;
 
 
 import java.util.List;
+import java.io.Serializable;
 
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.structure.RingElem;
@@ -18,7 +19,7 @@ import edu.jas.structure.RingElem;
  * @author Heinz Kredel.
  */
 
-public interface SolvableGroebnerBase<C extends RingElem<C>> {
+public interface SolvableGroebnerBase<C extends RingElem<C>> extends Serializable {
 
 
     /**

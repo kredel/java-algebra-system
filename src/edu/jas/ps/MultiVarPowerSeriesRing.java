@@ -156,7 +156,11 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
         this.coFac = cofac;
         this.nvar = nv;
         this.truncate = truncate;
-        vars = names;
+        if (names == null) {
+            vars = null;
+        } else {
+            vars = Arrays.copyOf(names,names.length); // > Java-5
+        }
         if (vars == null) {
             if (PrettyPrint.isTrue()) {
                 vars = GenPolynomialRing.newVars("x", nvar);
@@ -235,7 +239,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
      * @return names.
      */
     public String[] getVars() {
-        return vars; // Java-5: Arrays.copyOf(vars,vars.length);
+        return Arrays.copyOf(vars,vars.length); // > Java-5
     }
 
 

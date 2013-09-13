@@ -326,8 +326,8 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
         //System.out.println("rgcd c = " + c);
         r = PolyUtil.<BigInteger> recursiveDivide(r, a);
         q = PolyUtil.<BigInteger> recursiveDivide(q, b);
-        a = PolyUtil.<BigInteger> basePseudoDivide(a, c);
-        b = PolyUtil.<BigInteger> basePseudoDivide(b, c);
+        a = PolyUtil.<BigInteger> basePseudoDivide(a, c); // unused ?
+        b = PolyUtil.<BigInteger> basePseudoDivide(b, c); // unused ?
         if (r.isONE()) {
             return r.multiply(c);
         }

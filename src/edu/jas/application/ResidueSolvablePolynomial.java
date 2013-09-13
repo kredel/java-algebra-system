@@ -164,8 +164,6 @@ public class ResidueSolvablePolynomial<C extends GcdRingElem<C>> extends
             logger.debug("ring = " + ring);
         }
         ExpVector Z = ring.evzero;
-        SolvableResidueRing<C> cfac = (SolvableResidueRing<C>) ring.coFac;
-        ExpVector Zc = cfac.ring.evzero;
         ResidueSolvablePolynomial<C> Dp = ring.getZERO().copy();
         ResidueSolvablePolynomial<C> zero = ring.getZERO().copy();
         SolvableResidue<C> one = ring.getONECoefficient();
