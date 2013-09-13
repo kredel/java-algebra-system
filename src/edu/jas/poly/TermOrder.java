@@ -1314,6 +1314,9 @@ public final class TermOrder implements Serializable {
      * @return weight.
      */
     public long[][] getWeight() {
+        if (weight == null) {
+            return null;
+        }
         return Arrays.copyOf(weight,weight.length); // > Java-5
     }
 
