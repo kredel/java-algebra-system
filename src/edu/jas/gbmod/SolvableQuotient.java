@@ -497,8 +497,8 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
      * @return this - (this/S)*S.
      */
     public SolvableQuotient<C> remainder(SolvableQuotient<C> S) {
-        if (num.isZERO()) {
-            throw new ArithmeticException("element not invertible " + this);
+        if (S.isZERO()) {
+            throw new ArithmeticException("element not invertible " + S);
         }
         return ring.getZERO();
     }

@@ -103,7 +103,8 @@ if [ "$SCRIPT_LANG" = "python" ]; then
       echo "===========================================" 
       exit 0
    fi
-   if [ -x `which jython` ] ; then
+   TMPX=`which jython`
+   if [[ -n $TMPX && -x $TMPX ]] ; then
       echo -n ""
    else 
       echo "===========================================" 
@@ -124,7 +125,8 @@ if [ "$SCRIPT_LANG" = "ruby" ]; then
       echo "===========================================" 
       exit 0
    fi
-   if [ -x `which jruby` ] ; then
+   TMPX=`which jruby`
+   if [[ -n $TMPX && -x $TMPX ]] ; then
       echo -n "" 
    else 
       echo "===========================================" 

@@ -421,8 +421,8 @@ public class Quotient<C extends GcdRingElem<C>> implements GcdRingElem<Quotient<
      * @return this - (this/S)*S.
      */
     public Quotient<C> remainder(Quotient<C> S) {
-        if (num.isZERO()) {
-            throw new ArithmeticException("element not invertible " + this);
+        if (S.isZERO()) {
+            throw new ArithmeticException("element not invertible " + S);
         }
         return ring.getZERO();
     }
