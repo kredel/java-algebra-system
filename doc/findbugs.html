@@ -78,8 +78,8 @@
 <br/>
 </p>
 <h2>Metrics</h2>
-<p>78222 lines of code analyzed,
-	in 792 classes, 
+<p>91274 lines of code analyzed,
+	in 873 classes, 
 	in 15 packages.</p>
 <table width="500" cellpadding="5" cellspacing="2">
 <tr class="tableheader">
@@ -94,18 +94,18 @@
 </tr>
 <tr class="tablerow1">
 <td>Medium Priority Warnings</td>
-<td align="right">37</td>
-<td align="right">0.47</td>
+<td align="right">24</td>
+<td align="right">0.26</td>
 </tr>
 <tr class="$totalClass">
 <td>
 <b>Total Warnings</b>
 </td>
 <td align="right">
-<b>38</b>
+<b>25</b>
 </td>
 <td align="right">
-<b>0.49</b>
+<b>0.27</b>
 </td>
 </tr>
 </table>
@@ -147,7 +147,7 @@
 <td>
 <a href="#Warnings_BAD_PRACTICE">Bad practice Warnings</a>
 </td>
-<td align="right">11</td>
+<td align="right">17</td>
 </tr>
 <tr class="tablerow1">
 <td>
@@ -159,26 +159,26 @@
 <td>
 <a href="#Warnings_MALICIOUS_CODE">Malicious code vulnerability Warnings</a>
 </td>
-<td align="right">10</td>
+<td align="right">1</td>
 </tr>
 <tr class="tablerow1">
 <td>
 <a href="#Warnings_PERFORMANCE">Performance Warnings</a>
 </td>
-<td align="right">1</td>
+<td align="right">2</td>
 </tr>
 <tr class="tablerow0">
 <td>
 <a href="#Warnings_STYLE">Dodgy code Warnings</a>
 </td>
-<td align="right">15</td>
+<td align="right">4</td>
 </tr>
 <tr class="tablerow1">
 <td>
 <b>Total</b>
 </td>
 <td align="right">
-<b>38</b>
+<b>25</b>
 </td>
 </tr>
 </table>
@@ -192,7 +192,7 @@
 <th align="left">Code</th>
 <th align="left">Warning</th>
 </tr>
-<tr class="tablerow1" onclick="toggleRow('N65622');">
+<tr class="tablerow1" onclick="toggleRow('N65548');">
 <td>
 <span class="priority-1">Nm</span>
 </td>
@@ -201,12 +201,12 @@
 <tr class="detailrow1">
 <td/>
 <td>
-<p id="N65622" style="display: none;">
+<p id="N65548" style="display: none;">
 <a href="#NM_SAME_SIMPLE_NAME_AS_SUPERCLASS">Bug type NM_SAME_SIMPLE_NAME_AS_SUPERCLASS (click for details)</a>
 <br/>In class edu.jas.application.FactorFactory<br/>In class edu.jas.ufd.FactorFactory<br/>At FactorFactory.java:[lines 65-209]</p>
 </td>
 </tr>
-<tr class="tablerow0" onclick="toggleRow('N66994');">
+<tr class="tablerow0" onclick="toggleRow('N66263');">
 <td>
 <span class="priority-2">RV</span>
 </td>
@@ -215,12 +215,12 @@
 <tr class="detailrow0">
 <td/>
 <td>
-<p id="N66994" style="display: none;">
+<p id="N66263" style="display: none;">
 <a href="#RV_NEGATING_RESULT_OF_COMPARETO">Bug type RV_NEGATING_RESULT_OF_COMPARETO (click for details)</a>
 <br/>In class edu.jas.poly.PolynomialComparator<br/>In method edu.jas.poly.PolynomialComparator.compare(GenPolynomial, GenPolynomial)<br/>Called method edu.jas.poly.GenPolynomial.compareTo(GenPolynomial)<br/>Return value of edu.jas.poly.GenPolynomial.compareTo(GenPolynomial)<br/>At PolynomialComparator.java:[line 51]</p>
 </td>
 </tr>
-<tr class="tablerow1" onclick="toggleRow('N67220');">
+<tr class="tablerow1" onclick="toggleRow('N66401');">
 <td>
 <span class="priority-2">RV</span>
 </td>
@@ -229,12 +229,12 @@
 <tr class="detailrow1">
 <td/>
 <td>
-<p id="N67220" style="display: none;">
+<p id="N66401" style="display: none;">
 <a href="#RV_NEGATING_RESULT_OF_COMPARETO">Bug type RV_NEGATING_RESULT_OF_COMPARETO (click for details)</a>
 <br/>In class edu.jas.poly.TermOrder$69<br/>In method edu.jas.poly.TermOrder$69.compare(ExpVector, ExpVector)<br/>Called method edu.jas.poly.TermOrder$EVComparator.compare(ExpVector, ExpVector)<br/>Return value of edu.jas.poly.TermOrder$EVComparator.compare(ExpVector, ExpVector)<br/>At TermOrder.java:[line 1269]</p>
 </td>
 </tr>
-<tr class="tablerow0" onclick="toggleRow('N67297');">
+<tr class="tablerow0" onclick="toggleRow('N66478');">
 <td>
 <span class="priority-2">RV</span>
 </td>
@@ -243,40 +243,68 @@
 <tr class="detailrow0">
 <td/>
 <td>
-<p id="N67297" style="display: none;">
+<p id="N66478" style="display: none;">
 <a href="#RV_NEGATING_RESULT_OF_COMPARETO">Bug type RV_NEGATING_RESULT_OF_COMPARETO (click for details)</a>
 <br/>In class edu.jas.poly.TermOrder$9<br/>In method edu.jas.poly.TermOrder$9.compare(ExpVector, ExpVector)<br/>Called method edu.jas.poly.TermOrder$EVComparator.compare(ExpVector, ExpVector)<br/>Return value of edu.jas.poly.TermOrder$EVComparator.compare(ExpVector, ExpVector)<br/>At TermOrder.java:[line 249]</p>
 </td>
 </tr>
-<tr class="tablerow1" onclick="toggleRow('N65732');">
+<tr class="tablerow1" onclick="toggleRow('N66555');">
+<td>
+<span class="priority-2">RV</span>
+</td>
+<td>edu.jas.poly.Word.gradInvlexCompareTo(Word) negates the return value of edu.jas.poly.Word.compareTo(Word)</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N66555" style="display: none;">
+<a href="#RV_NEGATING_RESULT_OF_COMPARETO">Bug type RV_NEGATING_RESULT_OF_COMPARETO (click for details)</a>
+<br/>In class edu.jas.poly.Word<br/>In method edu.jas.poly.Word.gradInvlexCompareTo(Word)<br/>Called method edu.jas.poly.Word.compareTo(Word)<br/>Return value of edu.jas.poly.Word.compareTo(Word)<br/>At Word.java:[line 452]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N65658');">
 <td>
 <span class="priority-2">SnVI</span>
 </td>
 <td>edu.jas.gb.GBProxy is Serializable; consider declaring a serialVersionUID</td>
 </tr>
-<tr class="detailrow1">
+<tr class="detailrow0">
 <td/>
 <td>
-<p id="N65732" style="display: none;">
+<p id="N65658" style="display: none;">
 <a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
-<br/>In class edu.jas.gb.GBProxy<br/>At GBProxy.java:[lines 27-156]</p>
+<br/>In class edu.jas.gb.GBProxy<br/>At GBProxy.java:[lines 27-160]</p>
 </td>
 </tr>
-<tr class="tablerow0" onclick="toggleRow('N65767');">
+<tr class="tablerow1" onclick="toggleRow('N65693');">
 <td>
 <span class="priority-2">SnVI</span>
 </td>
 <td>edu.jas.gb.GroebnerBaseDistributed is Serializable; consider declaring a serialVersionUID</td>
 </tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N65693" style="display: none;">
+<a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
+<br/>In class edu.jas.gb.GroebnerBaseDistributed<br/>At GroebnerBaseDistributed.java:[lines 41-371]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N65728');">
+<td>
+<span class="priority-2">SnVI</span>
+</td>
+<td>edu.jas.gb.GroebnerBaseDistributedEC is Serializable; consider declaring a serialVersionUID</td>
+</tr>
 <tr class="detailrow0">
 <td/>
 <td>
-<p id="N65767" style="display: none;">
+<p id="N65728" style="display: none;">
 <a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
-<br/>In class edu.jas.gb.GroebnerBaseDistributed<br/>At GroebnerBaseDistributed.java:[lines 40-370]</p>
+<br/>In class edu.jas.gb.GroebnerBaseDistributedEC<br/>At GroebnerBaseDistributedEC.java:[lines 41-444]</p>
 </td>
 </tr>
-<tr class="tablerow1" onclick="toggleRow('N65802');">
+<tr class="tablerow1" onclick="toggleRow('N65763');">
 <td>
 <span class="priority-2">SnVI</span>
 </td>
@@ -285,54 +313,110 @@
 <tr class="detailrow1">
 <td/>
 <td>
-<p id="N65802" style="display: none;">
+<p id="N65763" style="display: none;">
 <a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
-<br/>In class edu.jas.gb.GroebnerBaseDistributedHybrid<br/>At GroebnerBaseDistributedHybrid.java:[lines 41-461]</p>
+<br/>In class edu.jas.gb.GroebnerBaseDistributedHybrid<br/>At GroebnerBaseDistributedHybrid.java:[lines 42-462]</p>
 </td>
 </tr>
-<tr class="tablerow0" onclick="toggleRow('N65837');">
+<tr class="tablerow0" onclick="toggleRow('N65798');">
+<td>
+<span class="priority-2">SnVI</span>
+</td>
+<td>edu.jas.gb.GroebnerBaseDistributedHybridEC is Serializable; consider declaring a serialVersionUID</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N65798" style="display: none;">
+<a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
+<br/>In class edu.jas.gb.GroebnerBaseDistributedHybridEC<br/>At GroebnerBaseDistributedHybridEC.java:[lines 43-527]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N65833');">
 <td>
 <span class="priority-2">SnVI</span>
 </td>
 <td>edu.jas.gb.GroebnerBaseParallel is Serializable; consider declaring a serialVersionUID</td>
 </tr>
-<tr class="detailrow0">
+<tr class="detailrow1">
 <td/>
 <td>
-<p id="N65837" style="display: none;">
+<p id="N65833" style="display: none;">
 <a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
-<br/>In class edu.jas.gb.GroebnerBaseParallel<br/>At GroebnerBaseParallel.java:[lines 33-285]</p>
+<br/>In class edu.jas.gb.GroebnerBaseParallel<br/>At GroebnerBaseParallel.java:[lines 36-297]</p>
 </td>
 </tr>
-<tr class="tablerow1" onclick="toggleRow('N65872');">
+<tr class="tablerow0" onclick="toggleRow('N65868');">
 <td>
 <span class="priority-2">SnVI</span>
 </td>
 <td>edu.jas.gb.GroebnerBaseSeqPairDistributed is Serializable; consider declaring a serialVersionUID</td>
 </tr>
-<tr class="detailrow1">
+<tr class="detailrow0">
 <td/>
 <td>
-<p id="N65872" style="display: none;">
+<p id="N65868" style="display: none;">
 <a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
 <br/>In class edu.jas.gb.GroebnerBaseSeqPairDistributed<br/>At GroebnerBaseSeqPairDistributed.java:[lines 42-381]</p>
 </td>
 </tr>
-<tr class="tablerow0" onclick="toggleRow('N65907');">
+<tr class="tablerow1" onclick="toggleRow('N65903');">
 <td>
 <span class="priority-2">SnVI</span>
 </td>
 <td>edu.jas.gb.GroebnerBaseSeqPairParallel is Serializable; consider declaring a serialVersionUID</td>
 </tr>
-<tr class="detailrow0">
+<tr class="detailrow1">
 <td/>
 <td>
-<p id="N65907" style="display: none;">
+<p id="N65903" style="display: none;">
 <a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
 <br/>In class edu.jas.gb.GroebnerBaseSeqPairParallel<br/>At GroebnerBaseSeqPairParallel.java:[lines 35-265]</p>
 </td>
 </tr>
-<tr class="tablerow1" onclick="toggleRow('N67733');">
+<tr class="tablerow0" onclick="toggleRow('N65991');">
+<td>
+<span class="priority-2">SnVI</span>
+</td>
+<td>edu.jas.gb.SolvableGroebnerBaseParallel is Serializable; consider declaring a serialVersionUID</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N65991" style="display: none;">
+<a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
+<br/>In class edu.jas.gb.SolvableGroebnerBaseParallel<br/>At SolvableGroebnerBaseParallel.java:[lines 33-370]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N66026');">
+<td>
+<span class="priority-2">SnVI</span>
+</td>
+<td>edu.jas.gb.SolvableGroebnerBaseSeqPairParallel is Serializable; consider declaring a serialVersionUID</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N66026" style="display: none;">
+<a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
+<br/>In class edu.jas.gb.SolvableGroebnerBaseSeqPairParallel<br/>At SolvableGroebnerBaseSeqPairParallel.java:[lines 37-338]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N66061');">
+<td>
+<span class="priority-2">SnVI</span>
+</td>
+<td>edu.jas.gbufd.GroebnerBasePseudoParallel is Serializable; consider declaring a serialVersionUID</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N66061" style="display: none;">
+<a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
+<br/>In class edu.jas.gbufd.GroebnerBasePseudoParallel<br/>At GroebnerBasePseudoParallel.java:[lines 42-303]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N66700');">
 <td>
 <span class="priority-2">SnVI</span>
 </td>
@@ -341,7 +425,7 @@
 <tr class="detailrow1">
 <td/>
 <td>
-<p id="N67733" style="display: none;">
+<p id="N66700" style="display: none;">
 <a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
 <br/>In class edu.jas.ufd.GCDProxy<br/>At GCDProxy.java:[lines 29-582]</p>
 </td>
@@ -355,7 +439,7 @@
 <th align="left">Code</th>
 <th align="left">Warning</th>
 </tr>
-<tr class="tablerow1" onclick="toggleRow('N67374');">
+<tr class="tablerow1" onclick="toggleRow('N66640');">
 <td>
 <span class="priority-2">SA</span>
 </td>
@@ -364,7 +448,7 @@
 <tr class="detailrow1">
 <td/>
 <td>
-<p id="N67374" style="display: none;">
+<p id="N66640" style="display: none;">
 <a href="#SA_LOCAL_SELF_COMPARISON">Bug type SA_LOCAL_SELF_COMPARISON (click for details)</a>
 <br/>In class edu.jas.ps.Examples<br/>In method edu.jas.ps.Examples.example11()<br/>Local variable stored in JVM register 0<br/>At Examples.java:[line 273]</p>
 </td>
@@ -378,142 +462,16 @@
 <th align="left">Code</th>
 <th align="left">Warning</th>
 </tr>
-<tr class="tablerow1" onclick="toggleRow('N66663');">
-<td>
-<span class="priority-2">EI</span>
-</td>
-<td>edu.jas.poly.GenPolynomialRing.getVars() may expose internal representation by returning GenPolynomialRing.vars</td>
-</tr>
-<tr class="detailrow1">
-<td/>
-<td>
-<p id="N66663" style="display: none;">
-<a href="#EI_EXPOSE_REP">Bug type EI_EXPOSE_REP (click for details)</a>
-<br/>In class edu.jas.poly.GenPolynomialRing<br/>In method edu.jas.poly.GenPolynomialRing.getVars()<br/>Field edu.jas.poly.GenPolynomialRing.vars<br/>At GenPolynomialRing.java:[line 409]</p>
-</td>
-</tr>
-<tr class="tablerow0" onclick="toggleRow('N67079');">
-<td>
-<span class="priority-2">EI</span>
-</td>
-<td>edu.jas.poly.TermOrder.getWeight() may expose internal representation by returning TermOrder.weight</td>
-</tr>
-<tr class="detailrow0">
-<td/>
-<td>
-<p id="N67079" style="display: none;">
-<a href="#EI_EXPOSE_REP">Bug type EI_EXPOSE_REP (click for details)</a>
-<br/>In class edu.jas.poly.TermOrder<br/>In method edu.jas.poly.TermOrder.getWeight()<br/>Field edu.jas.poly.TermOrder.weight<br/>At TermOrder.java:[line 1317]</p>
-</td>
-</tr>
-<tr class="tablerow1" onclick="toggleRow('N67506');">
-<td>
-<span class="priority-2">EI</span>
-</td>
-<td>edu.jas.ps.MultiVarPowerSeriesRing.getVars() may expose internal representation by returning MultiVarPowerSeriesRing.vars</td>
-</tr>
-<tr class="detailrow1">
-<td/>
-<td>
-<p id="N67506" style="display: none;">
-<a href="#EI_EXPOSE_REP">Bug type EI_EXPOSE_REP (click for details)</a>
-<br/>In class edu.jas.ps.MultiVarPowerSeriesRing<br/>In method edu.jas.ps.MultiVarPowerSeriesRing.getVars()<br/>Field edu.jas.ps.MultiVarPowerSeriesRing.vars<br/>At MultiVarPowerSeriesRing.java:[line 238]</p>
-</td>
-</tr>
-<tr class="tablerow0" onclick="toggleRow('N65548');">
-<td>
-<span class="priority-2">EI2</span>
-</td>
-<td>new edu.jas.application.Dimension(int, Set, Set, String[]) may expose internal representation by storing an externally mutable object into Dimension.v</td>
-</tr>
-<tr class="detailrow0">
-<td/>
-<td>
-<p id="N65548" style="display: none;">
-<a href="#EI_EXPOSE_REP2">Bug type EI_EXPOSE_REP2 (click for details)</a>
-<br/>In class edu.jas.application.Dimension<br/>In method new edu.jas.application.Dimension(int, Set, Set, String[])<br/>Field edu.jas.application.Dimension.v<br/>Local variable stored in JVM register 4<br/>At Dimension.java:[line 55]</p>
-</td>
-</tr>
-<tr class="tablerow1" onclick="toggleRow('N66454');">
-<td>
-<span class="priority-2">EI2</span>
-</td>
-<td>new edu.jas.poly.ExpVectorLong(long[]) may expose internal representation by storing an externally mutable object into ExpVectorLong.val</td>
-</tr>
-<tr class="detailrow1">
-<td/>
-<td>
-<p id="N66454" style="display: none;">
-<a href="#EI_EXPOSE_REP2">Bug type EI_EXPOSE_REP2 (click for details)</a>
-<br/>In class edu.jas.poly.ExpVectorLong<br/>In method new edu.jas.poly.ExpVectorLong(long[])<br/>Field edu.jas.poly.ExpVectorLong.val<br/>Local variable stored in JVM register 1<br/>At ExpVectorLong.java:[line 60]</p>
-</td>
-</tr>
-<tr class="tablerow0" onclick="toggleRow('N66730');">
-<td>
-<span class="priority-2">EI2</span>
-</td>
-<td>new edu.jas.poly.GenPolynomialRing(RingFactory, int, TermOrder, String[]) may expose internal representation by storing an externally mutable object into GenPolynomialRing.vars</td>
-</tr>
-<tr class="detailrow0">
-<td/>
-<td>
-<p id="N66730" style="display: none;">
-<a href="#EI_EXPOSE_REP2">Bug type EI_EXPOSE_REP2 (click for details)</a>
-<br/>In class edu.jas.poly.GenPolynomialRing<br/>In method new edu.jas.poly.GenPolynomialRing(RingFactory, int, TermOrder, String[])<br/>Field edu.jas.poly.GenPolynomialRing.vars<br/>Local variable stored in JVM register 4<br/>At GenPolynomialRing.java:[line 200]</p>
-</td>
-</tr>
-<tr class="tablerow1" onclick="toggleRow('N66804');">
-<td>
-<span class="priority-2">EI2</span>
-</td>
-<td>edu.jas.poly.GenPolynomialRing.setVars(String[]) may expose internal representation by storing an externally mutable object into GenPolynomialRing.vars</td>
-</tr>
-<tr class="detailrow1">
-<td/>
-<td>
-<p id="N66804" style="display: none;">
-<a href="#EI_EXPOSE_REP2">Bug type EI_EXPOSE_REP2 (click for details)</a>
-<br/>In class edu.jas.poly.GenPolynomialRing<br/>In method edu.jas.poly.GenPolynomialRing.setVars(String[])<br/>Field edu.jas.poly.GenPolynomialRing.vars<br/>Local variable stored in JVM register 1<br/>At GenPolynomialRing.java:[line 423]</p>
-</td>
-</tr>
-<tr class="tablerow0" onclick="toggleRow('N67146');">
-<td>
-<span class="priority-2">EI2</span>
-</td>
-<td>new edu.jas.poly.TermOrder(long[][]) may expose internal representation by storing an externally mutable object into TermOrder.weight</td>
-</tr>
-<tr class="detailrow0">
-<td/>
-<td>
-<p id="N67146" style="display: none;">
-<a href="#EI_EXPOSE_REP2">Bug type EI_EXPOSE_REP2 (click for details)</a>
-<br/>In class edu.jas.poly.TermOrder<br/>In method new edu.jas.poly.TermOrder(long[][])<br/>Field edu.jas.poly.TermOrder.weight<br/>Local variable stored in JVM register 1<br/>At TermOrder.java:[line 282]</p>
-</td>
-</tr>
-<tr class="tablerow1" onclick="toggleRow('N67573');">
-<td>
-<span class="priority-2">EI2</span>
-</td>
-<td>new edu.jas.ps.MultiVarPowerSeriesRing(RingFactory, int, int, String[]) may expose internal representation by storing an externally mutable object into MultiVarPowerSeriesRing.vars</td>
-</tr>
-<tr class="detailrow1">
-<td/>
-<td>
-<p id="N67573" style="display: none;">
-<a href="#EI_EXPOSE_REP2">Bug type EI_EXPOSE_REP2 (click for details)</a>
-<br/>In class edu.jas.ps.MultiVarPowerSeriesRing<br/>In method new edu.jas.ps.MultiVarPowerSeriesRing(RingFactory, int, int, String[])<br/>Field edu.jas.ps.MultiVarPowerSeriesRing.vars<br/>Local variable stored in JVM register 4<br/>At MultiVarPowerSeriesRing.java:[line 159]</p>
-</td>
-</tr>
-<tr class="tablerow0" onclick="toggleRow('N65995');">
+<tr class="tablerow1" onclick="toggleRow('N66096');">
 <td>
 <span class="priority-2">MS</span>
 </td>
 <td>edu.jas.kern.ComputerThreads.NO_THREADS isn't final and can't be protected from malicious code </td>
 </tr>
-<tr class="detailrow0">
+<tr class="detailrow1">
 <td/>
 <td>
-<p id="N65995" style="display: none;">
+<p id="N66096" style="display: none;">
 <a href="#MS_CANNOT_BE_FINAL">Bug type MS_CANNOT_BE_FINAL (click for details)</a>
 <br/>In class edu.jas.kern.ComputerThreads<br/>Field edu.jas.kern.ComputerThreads.NO_THREADS<br/>At ComputerThreads.java:[line 40]</p>
 </td>
@@ -527,7 +485,7 @@
 <th align="left">Code</th>
 <th align="left">Warning</th>
 </tr>
-<tr class="tablerow1" onclick="toggleRow('N65942');">
+<tr class="tablerow1" onclick="toggleRow('N65938');">
 <td>
 <span class="priority-2">WMI</span>
 </td>
@@ -536,9 +494,23 @@
 <tr class="detailrow1">
 <td/>
 <td>
-<p id="N65942" style="display: none;">
+<p id="N65938" style="display: none;">
 <a href="#WMI_WRONG_MAP_ITERATOR">Bug type WMI_WRONG_MAP_ITERATOR (click for details)</a>
 <br/>In class edu.jas.gb.OrderedSyzPairlist<br/>In method edu.jas.gb.OrderedSyzPairlist.put(GenPolynomial)<br/>At OrderedSyzPairlist.java:[line 226]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N66348');">
+<td>
+<span class="priority-2">WMI</span>
+</td>
+<td>edu.jas.poly.RelationTable.equalMaps(Map, Map) makes inefficient use of keySet iterator instead of entrySet iterator</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N66348" style="display: none;">
+<a href="#WMI_WRONG_MAP_ITERATOR">Bug type WMI_WRONG_MAP_ITERATOR (click for details)</a>
+<br/>In class edu.jas.poly.RelationTable<br/>In method edu.jas.poly.RelationTable.equalMaps(Map, Map)<br/>At RelationTable.java:[line 173]</p>
 </td>
 </tr>
 </table>
@@ -550,7 +522,7 @@
 <th align="left">Code</th>
 <th align="left">Warning</th>
 </tr>
-<tr class="tablerow1" onclick="toggleRow('N65669');">
+<tr class="tablerow1" onclick="toggleRow('N65595');">
 <td>
 <span class="priority-2">DB</span>
 </td>
@@ -559,12 +531,12 @@
 <tr class="detailrow1">
 <td/>
 <td>
-<p id="N65669" style="display: none;">
+<p id="N65595" style="display: none;">
 <a href="#DB_DUPLICATE_BRANCHES">Bug type DB_DUPLICATE_BRANCHES (click for details)</a>
 <br/>In class edu.jas.application.RingFactoryTokenizer<br/>In method edu.jas.application.RingFactoryTokenizer.nextCoefficientRing()<br/>At RingFactoryTokenizer.java:[line 499]<br/>At RingFactoryTokenizer.java:[line 501]</p>
 </td>
 </tr>
-<tr class="tablerow0" onclick="toggleRow('N66878');">
+<tr class="tablerow0" onclick="toggleRow('N66147');">
 <td>
 <span class="priority-2">DB</span>
 </td>
@@ -573,189 +545,35 @@
 <tr class="detailrow0">
 <td/>
 <td>
-<p id="N66878" style="display: none;">
+<p id="N66147" style="display: none;">
 <a href="#DB_DUPLICATE_BRANCHES">Bug type DB_DUPLICATE_BRANCHES (click for details)</a>
 <br/>In class edu.jas.poly.GenPolynomialTokenizer<br/>In method edu.jas.poly.GenPolynomialTokenizer.nextCoefficientRing()<br/>At GenPolynomialTokenizer.java:[line 765]<br/>At GenPolynomialTokenizer.java:[line 767]</p>
 </td>
 </tr>
-<tr class="tablerow1" onclick="toggleRow('N66046');">
+<tr class="tablerow1" onclick="toggleRow('N66735');">
 <td>
 <span class="priority-2">DLS</span>
 </td>
-<td>Dead store to $L5 in edu.jas.poly.ExpVector.subst(int, long)</td>
+<td>Dead store to $L10 in edu.jas.ufd.GreatestCommonDivisorHensel.recursiveUnivariateGcd(GenPolynomial, GenPolynomial)</td>
 </tr>
 <tr class="detailrow1">
 <td/>
 <td>
-<p id="N66046" style="display: none;">
+<p id="N66735" style="display: none;">
 <a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
-<br/>In class edu.jas.poly.ExpVector<br/>In method edu.jas.poly.ExpVector.subst(int, long)<br/>Local variable stored in JVM register 5<br/>At ExpVector.java:[line 689]</p>
+<br/>In class edu.jas.ufd.GreatestCommonDivisorHensel<br/>In method edu.jas.ufd.GreatestCommonDivisorHensel.recursiveUnivariateGcd(GenPolynomial, GenPolynomial)<br/>Local variable stored in JVM register 10<br/>At GreatestCommonDivisorHensel.java:[line 329]<br/>Another occurrence at GreatestCommonDivisorHensel.java:[line 330]</p>
 </td>
 </tr>
-<tr class="tablerow0" onclick="toggleRow('N66115');">
-<td>
-<span class="priority-2">DLS</span>
-</td>
-<td>Dead store to $L4 in edu.jas.poly.ExpVectorByte.subst(int, byte)</td>
-</tr>
-<tr class="detailrow0">
-<td/>
-<td>
-<p id="N66115" style="display: none;">
-<a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
-<br/>In class edu.jas.poly.ExpVectorByte<br/>In method edu.jas.poly.ExpVectorByte.subst(int, byte)<br/>Local variable stored in JVM register 4<br/>At ExpVectorByte.java:[line 461]</p>
-</td>
-</tr>
-<tr class="tablerow1" onclick="toggleRow('N66181');">
-<td>
-<span class="priority-2">DLS</span>
-</td>
-<td>Dead store to $L5 in edu.jas.poly.ExpVectorByte.subst(int, long)</td>
-</tr>
-<tr class="detailrow1">
-<td/>
-<td>
-<p id="N66181" style="display: none;">
-<a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
-<br/>In class edu.jas.poly.ExpVectorByte<br/>In method edu.jas.poly.ExpVectorByte.subst(int, long)<br/>Local variable stored in JVM register 5<br/>At ExpVectorByte.java:[line 477]</p>
-</td>
-</tr>
-<tr class="tablerow0" onclick="toggleRow('N66250');">
-<td>
-<span class="priority-2">DLS</span>
-</td>
-<td>Dead store to $L4 in edu.jas.poly.ExpVectorInteger.subst(int, int)</td>
-</tr>
-<tr class="detailrow0">
-<td/>
-<td>
-<p id="N66250" style="display: none;">
-<a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
-<br/>In class edu.jas.poly.ExpVectorInteger<br/>In method edu.jas.poly.ExpVectorInteger.subst(int, int)<br/>Local variable stored in JVM register 4<br/>At ExpVectorInteger.java:[line 477]</p>
-</td>
-</tr>
-<tr class="tablerow1" onclick="toggleRow('N66316');">
-<td>
-<span class="priority-2">DLS</span>
-</td>
-<td>Dead store to $L5 in edu.jas.poly.ExpVectorInteger.subst(int, long)</td>
-</tr>
-<tr class="detailrow1">
-<td/>
-<td>
-<p id="N66316" style="display: none;">
-<a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
-<br/>In class edu.jas.poly.ExpVectorInteger<br/>In method edu.jas.poly.ExpVectorInteger.subst(int, long)<br/>Local variable stored in JVM register 5<br/>At ExpVectorInteger.java:[line 462]</p>
-</td>
-</tr>
-<tr class="tablerow0" onclick="toggleRow('N66385');">
-<td>
-<span class="priority-2">DLS</span>
-</td>
-<td>Dead store to $L5 in edu.jas.poly.ExpVectorLong.subst(int, long)</td>
-</tr>
-<tr class="detailrow0">
-<td/>
-<td>
-<p id="N66385" style="display: none;">
-<a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
-<br/>In class edu.jas.poly.ExpVectorLong<br/>In method edu.jas.poly.ExpVectorLong.subst(int, long)<br/>Local variable stored in JVM register 5<br/>At ExpVectorLong.java:[line 399]</p>
-</td>
-</tr>
-<tr class="tablerow1" onclick="toggleRow('N66528');">
-<td>
-<span class="priority-2">DLS</span>
-</td>
-<td>Dead store to $L5 in edu.jas.poly.ExpVectorShort.subst(int, long)</td>
-</tr>
-<tr class="detailrow1">
-<td/>
-<td>
-<p id="N66528" style="display: none;">
-<a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
-<br/>In class edu.jas.poly.ExpVectorShort<br/>In method edu.jas.poly.ExpVectorShort.subst(int, long)<br/>Local variable stored in JVM register 5<br/>At ExpVectorShort.java:[line 477]</p>
-</td>
-</tr>
-<tr class="tablerow0" onclick="toggleRow('N66597');">
-<td>
-<span class="priority-2">DLS</span>
-</td>
-<td>Dead store to $L4 in edu.jas.poly.ExpVectorShort.subst(int, short)</td>
-</tr>
-<tr class="detailrow0">
-<td/>
-<td>
-<p id="N66597" style="display: none;">
-<a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
-<br/>In class edu.jas.poly.ExpVectorShort<br/>In method edu.jas.poly.ExpVectorShort.subst(int, short)<br/>Local variable stored in JVM register 4<br/>At ExpVectorShort.java:[line 461]</p>
-</td>
-</tr>
-<tr class="tablerow1" onclick="toggleRow('N67434');">
-<td>
-<span class="priority-2">DLS</span>
-</td>
-<td>Dead store to $L1 in edu.jas.ps.MultiVarPowerSeries.orderExpVector()</td>
-</tr>
-<tr class="detailrow1">
-<td/>
-<td>
-<p id="N67434" style="display: none;">
-<a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
-<br/>In class edu.jas.ps.MultiVarPowerSeries<br/>In method edu.jas.ps.MultiVarPowerSeries.orderExpVector()<br/>Local variable stored in JVM register 1<br/>At MultiVarPowerSeries.java:[line 914]</p>
-</td>
-</tr>
-<tr class="tablerow0" onclick="toggleRow('N67647');">
-<td>
-<span class="priority-2">DLS</span>
-</td>
-<td>Dead store to $L14 in edu.jas.ufd.FactorAbsolute.factorsAbsoluteIrreducible(GenPolynomial)</td>
-</tr>
-<tr class="detailrow0">
-<td/>
-<td>
-<p id="N67647" style="display: none;">
-<a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
-<br/>In class edu.jas.ufd.FactorAbsolute<br/>In method edu.jas.ufd.FactorAbsolute.factorsAbsoluteIrreducible(GenPolynomial)<br/>Local variable stored in JVM register 14<br/>At FactorAbsolute.java:[line 849]<br/>Another occurrence at FactorAbsolute.java:[line 850]</p>
-</td>
-</tr>
-<tr class="tablerow1" onclick="toggleRow('N67768');">
-<td>
-<span class="priority-2">DLS</span>
-</td>
-<td>Dead store to $L4 in new edu.jas.util.CartesianTwoProductInfiniteIterator(Iterable, Iterable)</td>
-</tr>
-<tr class="detailrow1">
-<td/>
-<td>
-<p id="N67768" style="display: none;">
-<a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
-<br/>In class edu.jas.util.CartesianTwoProductInfiniteIterator<br/>In method new edu.jas.util.CartesianTwoProductInfiniteIterator(Iterable, Iterable)<br/>Local variable stored in JVM register 4<br/>At CartesianProductInfinite.java:[line 181]</p>
-</td>
-</tr>
-<tr class="tablerow0" onclick="toggleRow('N67840');">
-<td>
-<span class="priority-2">DLS</span>
-</td>
-<td>Dead store to $L4 in new edu.jas.util.CartesianTwoProductInfiniteIteratorList(Iterable, Iterable)</td>
-</tr>
-<tr class="detailrow0">
-<td/>
-<td>
-<p id="N67840" style="display: none;">
-<a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
-<br/>In class edu.jas.util.CartesianTwoProductInfiniteIteratorList<br/>In method new edu.jas.util.CartesianTwoProductInfiniteIteratorList(Iterable, Iterable)<br/>Local variable stored in JVM register 4<br/>At CartesianProductInfinite.java:[line 317]</p>
-</td>
-</tr>
-<tr class="tablerow1" onclick="toggleRow('N66941');">
+<tr class="tablerow0" onclick="toggleRow('N66210');">
 <td>
 <span class="priority-2">SF</span>
 </td>
 <td>Switch statement found in edu.jas.poly.GenPolynomialTokenizer.nextPolynomial() where one case falls through to the next case</td>
 </tr>
-<tr class="detailrow1">
+<tr class="detailrow0">
 <td/>
 <td>
-<p id="N66941" style="display: none;">
+<p id="N66210" style="display: none;">
 <a href="#SF_SWITCH_FALLTHROUGH">Bug type SF_SWITCH_FALLTHROUGH (click for details)</a>
 <br/>In class edu.jas.poly.GenPolynomialTokenizer<br/>In method edu.jas.poly.GenPolynomialTokenizer.nextPolynomial()<br/>At GenPolynomialTokenizer.java:[lines 307-310]</p>
 </td>
@@ -789,32 +607,6 @@ Note that Sun's javac compiler often generates dead stores for
 final local variables.  Because FindBugs is a bytecode-based tool,
 there is no easy way to eliminate these false positives.
 </p>
-
-    
-<h2>
-<a name="EI_EXPOSE_REP">EI_EXPOSE_REP: May expose internal representation by returning reference to mutable object</a>
-</h2>
-
-  <p> Returning a reference to a mutable object value stored in one of the object's fields
-  exposes the internal representation of the object.&nbsp;
-   If instances
-   are accessed by untrusted code, and unchecked changes to
-   the mutable object would compromise security or other
-   important properties, you will need to do something different.
-  Returning a new copy of the object is better approach in many situations.</p>
-
-    
-<h2>
-<a name="EI_EXPOSE_REP2">EI_EXPOSE_REP2: May expose internal representation by incorporating reference to mutable object</a>
-</h2>
-
-  <p> This code stores a reference to an externally mutable object into the
-  internal representation of the object.&nbsp;
-   If instances
-   are accessed by untrusted code, and unchecked changes to
-   the mutable object would compromise security or other
-   important properties, you will need to do something different.
-  Storing a copy of the object is better approach in many situations.</p>
 
     
 <h2>
