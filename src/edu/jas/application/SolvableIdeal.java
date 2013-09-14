@@ -477,13 +477,14 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         if (!isGB) {
             doGB();
         }
+        List<GenSolvablePolynomial<C>> si = getList();
         for (GenSolvablePolynomial<C> b : B) {
             if (b == null) {
                 continue;
             }
-            GenSolvablePolynomial<C> z = red.leftNormalform(getList(), b);
+            GenSolvablePolynomial<C> z = red.leftNormalform(si, b);
             if (!z.isZERO()) {
-                System.out.println("contains nf(b) != 0: " + b + ", z = " + z);
+                System.out.println("contains nf(b) != 0: " + b + ", z = " + z + ", si = " + si);
                 return false;
             }
         }

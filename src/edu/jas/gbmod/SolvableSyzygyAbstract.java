@@ -882,7 +882,8 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>> implements SolvableSy
                 m = i;
 	    }
         }
-        GenSolvablePolynomial<C> min2 = (GenSolvablePolynomial<C>) blas.scalarProduct(PolynomialList.<C> castToList(G2), PolynomialList.<C> castToList(exgb.G2F.get(m)));
+        //wrong: blas.scalarProduct(G2,exgb.G2F.get(m));
+        GenSolvablePolynomial<C> min2 = (GenSolvablePolynomial<C>) blas.scalarProduct(PolynomialList.<C> castToList(exgb.G2F.get(m)), PolynomialList.<C> castToList(G2));
         logger.info("min: " + min + ", min2: " + min2 + ", m = " + m + ", " + exgb.G2F.get(m));
         // opposite order
         GenSolvablePolynomial<C> n = min2; // nominator
@@ -898,9 +899,61 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>> implements SolvableSy
             n = n.multiplyLeft(lc);
             d = d.multiplyLeft(lc);
         }
+        int t = compare(a,b,n,d);
+        if (t != 0) {
+             oc[0] = a; // nominator
+             oc[1] = b; // denominator
+             throw new RuntimeException("simp wrong, giving up: t = " + t);
+             //logger.error("simp wrong, giving up: t = " + t);
+             //return oc;
+        }
         oc[0] = n; // nominator
-        oc[1] = d;  // denominator
+        oc[1] = d; // denominator
         return oc;
+    }
+
+
+    /**
+     * Comparison like SolvableLocal or SolvableQuotient.
+     * @param num SolvablePolynomial.
+     * @param den SolvablePolynomial.
+     * @param n SolvablePolynomial.
+     * @param d SolvablePolynomial.
+     * @return sign((num/den)-(n/d)).
+     */
+    public int compare(GenSolvablePolynomial<C> num, GenSolvablePolynomial<C> den, 
+                       GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d) {
+        if (n == null || n.isZERO()) {
+            return num.signum();
+        }
+        if (num.isZERO()) {
+            return -n.signum();
+        }
+        // assume sign(den,b.den) > 0
+        int s1 = num.signum();
+        int s2 = n.signum();
+        int t = (s1 - s2) / 2;
+        if (t != 0) {
+            System.out.println("compareTo: t = " + t);
+            //return t;
+        }
+        if (den.compareTo(d) == 0) {
+            return num.compareTo(n);
+        }
+        GenSolvablePolynomial<C> r, s;
+        // if (den.isONE()) { }
+        // if (b.den.isONE()) { }
+        GenSolvablePolynomial<C>[] oc = leftOreCond(den, d);
+        if (debug) {
+            System.out.println("oc[0] den =<>= oc[1] d: (" + oc[0] + ") (" + den + ") = (" + oc[1]
+                            + ") (" + d + ")");
+        }
+        //System.out.println("oc[0] = " + oc[0]);
+        //System.out.println("oc[1] = " + oc[1]);
+        r = oc[0].multiply(num);
+        s = oc[1].multiply(n);
+        logger.info("compare: r = " + r + ", s = " + s);
+        return r.compareTo(s);
     }
 
 }
