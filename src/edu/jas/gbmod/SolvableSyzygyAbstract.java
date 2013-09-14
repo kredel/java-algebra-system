@@ -861,7 +861,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>> implements SolvableSy
         List<GenSolvablePolynomial<C>> G1 = new ArrayList<GenSolvablePolynomial<C>>(Gz.size());
         List<GenSolvablePolynomial<C>> G2 = new ArrayList<GenSolvablePolynomial<C>>(Gz.size());
         for ( List<GenSolvablePolynomial<C>> ll : Gz) {
-            if ( !ll.get(0).isZERO() && !ll.get(1).isZERO() ) {
+            if ( !ll.get(0).isZERO() ) { // && !ll.get(1).isZERO()
                 G1.add(ll.get(0)); // denominators
                 G2.add(ll.get(1)); // numerators
             }

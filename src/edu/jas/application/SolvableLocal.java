@@ -148,7 +148,8 @@ public class SolvableLocal<C extends GcdRingElem<C>> implements RingElem<Solvabl
         }
         // must reduce to lowest terms
         // not perfect, TODO
-        if (n.degree() < 3 && d.degree() < 3 && n.length() < 10 && d.length() < 10 ) { // how avoid too long running GBs ?
+        if (n.totalDegree() < 3 && d.totalDegree() < 3) { // how avoid too long running GBs ?
+            // && n.length() < 10 && d.length() < 10
             GenSolvablePolynomial<C>[] gcd = PolyGBUtil.<C> syzGcdCofactors(r.ring,n,d);
             if (!gcd[0].isONE()) {
                 logger.info("isred: gcd = " + Arrays.toString(gcd)); // + ", " + n + ", " +d);
@@ -161,7 +162,8 @@ public class SolvableLocal<C extends GcdRingElem<C>> implements RingElem<Solvabl
             }
         }
         // not perfect, TODO 
-        if (n.degree() < 3 && d.degree() < 3 && n.length() < 10 && d.length() < 10) { // how avoid too long running GBs ?
+        if (n.totalDegree() < 3 && d.totalDegree() < 3) { // how avoid too long running GBs ?
+            // && n.length() < 10 && d.length() < 10
             GenSolvablePolynomial<C>[] simp = ring.engine.leftSimplifier(n,d);
             logger.info("simp: " + Arrays.toString(simp) + ", " + n + ", " +d);
             n = simp[0];
