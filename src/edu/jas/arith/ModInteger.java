@@ -201,7 +201,7 @@ public final class ModInteger implements GcdRingElem<ModInteger>, Modular {
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
      */
-    //JAVA6only: @Override
+    @Override
     public String toScript() {
         // Python case
         return toString();
@@ -213,7 +213,7 @@ public final class ModInteger implements GcdRingElem<ModInteger>, Modular {
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.Element#toScriptFactory()
      */
-    //JAVA6only: @Override
+    @Override
     public String toScriptFactory() {
         // Python case
         return factory().toScript();
@@ -225,7 +225,7 @@ public final class ModInteger implements GcdRingElem<ModInteger>, Modular {
      * @param b ModInteger.
      * @return sign(this-b).
      */
-    //JAVA6only: @Override
+    @Override
     public int compareTo(ModInteger b) {
         java.math.BigInteger v = b.val;
         if (ring != b.ring) {

@@ -213,7 +213,7 @@ public class Product<C extends RingElem<C>> implements RegularRingElem<Product<C
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
      */
-    //JAVA6only: @Override
+    @Override
     public String toScript() {
         // Python case
         StringBuffer s = new StringBuffer("( ");
@@ -245,7 +245,7 @@ public class Product<C extends RingElem<C>> implements RegularRingElem<Product<C
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.Element#toScriptFactory()
      */
-    //JAVA6only: @Override
+    @Override
     public String toScriptFactory() {
         // Python case
         return factory().toScript();
@@ -257,7 +257,7 @@ public class Product<C extends RingElem<C>> implements RegularRingElem<Product<C
      * @param b Product.
      * @return sign(this-b).
      */
-    //JAVA6only: @Override
+    @Override
     public int compareTo(Product<C> b) {
         if (!ring.equals(b.ring)) {
             logger.info("other ring " + b.ring);

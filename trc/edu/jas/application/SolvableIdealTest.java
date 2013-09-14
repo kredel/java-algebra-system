@@ -251,7 +251,7 @@ public class SolvableIdealTest extends TestCase {
 
         I = new SolvableIdeal<BigRational>(fac, L, false);
         assertTrue("not isZERO( I )", !I.isZERO());
-        assertTrue("not isONE( I )", !I.isONE());
+        assertTrue("not isONE( I )", !I.isONE()||a.isConstant());
         assertTrue("isGB( I )", I.isGB());
 
         L = new ArrayList<GenSolvablePolynomial<BigRational>>();
@@ -260,7 +260,7 @@ public class SolvableIdealTest extends TestCase {
 
         J = new SolvableIdeal<BigRational>(fac, L, false);
         assertTrue("not isZERO( J )", !J.isZERO());
-        assertTrue("not isONE( J )", !J.isONE());
+        assertTrue("not isONE( J )", !J.isONE()||a.isConstant()||b.isConstant());
         assertTrue("isGB( J )", J.isGB());
 
         K = I.product(J);

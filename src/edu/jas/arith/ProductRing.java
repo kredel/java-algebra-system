@@ -410,7 +410,7 @@ public class ProductRing<C extends RingElem<C>> implements RingFactory<Product<C
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.ElemFactory#toScript()
      */
-    //JAVA6only: @Override
+    @Override
     public String toScript() {
         // Python case
         StringBuffer s = new StringBuffer("RR( [ ");

@@ -73,7 +73,7 @@ public class SolvableQuotientTest extends TestCase {
     int rl = 4;
 
 
-    int kl = 3;
+    int kl = 2;
 
 
     int ll = 3; //6;
