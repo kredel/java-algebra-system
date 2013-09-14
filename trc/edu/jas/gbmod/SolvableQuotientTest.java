@@ -175,7 +175,7 @@ public class SolvableQuotientTest extends TestCase {
         d = c.subtract(b);
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
-        assertEquals("a+b-b = a", a, d);
+        assertEquals("(a+b-b) == a: " + a + ", " + b, a, d);
 
         c = a.sum(b);
         d = b.sum(a);

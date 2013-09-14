@@ -214,6 +214,8 @@ public class SolvableLocalTest extends TestCase {
         //!b = efac.parse("{ 1  | w + 3  }");
         //a = efac.parse("{ 1  | y * z + 7/10 }");
         //b = efac.parse("{ x - 1/7 | w + 3  }");
+        //a = efac.parse("{ 91/15 | y - 3/14  }");
+        //b = efac.parse("{ 11/12 | w * z^2 + 4/3 }");
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
 
@@ -237,10 +239,10 @@ public class SolvableLocalTest extends TestCase {
         //d = c.sum(b.negate());
         //System.out.println("d = " + d);
         //System.out.println("a = " + a);
-        assertEquals("(a+b)-b = a", a, d);
+        assertEquals("(a+b)-b == a: " + a + ", " + b, a, d);
         e = d.subtract(a);
         //System.out.println("d-a = " + e);
-        assertTrue("((a+b)-b)-a = 0", e.isZERO());
+        assertTrue("((a+b)-b)-a == 0", e.isZERO());
 
         //c = efac.random(kl,ll,el,q);
         c = new SolvableLocal<BigRational>(efac, mfac.univariate(1, 2));
@@ -250,7 +252,6 @@ public class SolvableLocalTest extends TestCase {
         //System.out.println("d = " + d);
         //System.out.println("e = " + e);
         assertEquals("c+(a+b) = (c+a)+b", d, e);
-
     }
 
 
