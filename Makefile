@@ -77,11 +77,11 @@ DOCOPTS=-public -protected -package -author -version
 MYCLASSPATH = $(LOG4JPATH):.:$(JUNITPATH):$(JOMPPATH):$(PYPATH)
 #:$(TNJPATH)
 
-JAVA_MEM=-Xms1500M -Xmx2900M
-#JAVA_MEM=-Xms350M -Xmx800M
+#JAVA_MEM=-Xms1500M -Xmx2900M
+JAVA_MEM=-Xms350M -Xmx800M
 
-SOPTS="-J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc -J-Xms1500M -J-Xmx2900M"
-#SOPTS="-J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc -J-Xms350M -J-Xmx800M"
+#SOPTS="-J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc -J-Xms1500M -J-Xmx2900M"
+SOPTS="-J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc -J-Xms350M -J-Xmx800M"
 
 
 JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d . -Xlint:unchecked
@@ -384,7 +384,10 @@ metrics:
 	../java/javancss-32.53/bin/javancss -all -recursive -out test/javanccs-`date +%Y-%m-%d`.out src
 
 findbugs:
-	cd ~/java/findbugs; bin/fb analyze -sortByClass -medium -html -nested:false /home/kredel/jas/edu/jas/ > jas.findbugs-report.medium.html
+	cd ~/java/findbugs; bin/fb analyze -sortByClass -medium -html -nested:false /home/kredel/jas/edu/jas/ > jas.findbugs-report.medium_`date +"%Y-%m-%d"`_.html
+
+findbugs-low:
+	cd ~/java/findbugs; bin/fb analyze -sortByClass -low -html -nested:false /home/kredel/jas/edu/jas/ > jas.findbugs-report.low_`date +"%Y-%m-%d"`_.html
 
 
 #svn copy file:///$(SVNREPO)/jas/trunk file:///$(SVNREPO)/jas/tags/$(VERSION)
