@@ -130,26 +130,19 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
             den = d;
             return;
         }
+        // must reduce to lowest terms
         // not perfect, TODO 
-        if (n.totalDegree() < 3 && d.totalDegree() < 3) { // how avoid too long running GBs ?
-            // && n.length() < 10 && d.length() < 10
-            GenSolvablePolynomial<C>[] gcd = PolyGBUtil.<C> syzGcdCofactors(r.ring,n,d);
-            if (!gcd[0].isONE()) {
-                logger.info("isred: gcd = " + Arrays.toString(gcd)); // + ", " + n + ", " +d);
-                n = gcd[1];
-                d = gcd[2];
-            }
+        GenSolvablePolynomial<C>[] gcd = PolyGBUtil.<C> syzGcdCofactors(r.ring,n,d);
+        if (!gcd[0].isONE()) {
+            logger.info("constructor: gcd = " + Arrays.toString(gcd)); // + ", " + n + ", " +d);
+            n = gcd[1];
+            d = gcd[2];
         }
         // not perfect, TODO 
-        if (n.totalDegree() < 3 && d.totalDegree() < 3) { // how avoid too long running GBs ?
-            // && n.length() < 10 && d.length() < 10
-            GenSolvablePolynomial<C>[] simp = ring.engine.leftSimplifier(n,d);
-            logger.info("simp: " + Arrays.toString(simp) + ", " + n + ", " +d);
-            n = simp[0];
-            d = simp[1];
-        }
-        num = n;
-        den = d;
+        GenSolvablePolynomial<C>[] simp = ring.engine.leftSimplifier(n,d);
+        logger.info("simp: " + Arrays.toString(simp) + ", " + n + ", " +d);
+        num = simp[0];
+        den = simp[1];
     }
 
 

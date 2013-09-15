@@ -469,6 +469,11 @@ public class PolyGBUtil {
         if (d.isONE()) {
             return d;
         }
+        if (n.totalDegree() > 3 || d.totalDegree() > 3) { // how avoid too long running GBs ?
+            // && n.length() < 10 && d.length() < 10
+            logger.warn("skipping GB computation: degs = " + n.totalDegree() + ", " + d.totalDegree());
+            return r.getONE();
+        }
         List<GenSolvablePolynomial<C>> A = new ArrayList<GenSolvablePolynomial<C>>(2);
         A.add(n);
         A.add(d);

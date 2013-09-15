@@ -148,29 +148,21 @@ public class SolvableLocal<C extends GcdRingElem<C>> implements RingElem<Solvabl
         }
         // must reduce to lowest terms
         // not perfect, TODO
-        if (n.totalDegree() < 3 && d.totalDegree() < 3) { // how avoid too long running GBs ?
-            // && n.length() < 10 && d.length() < 10
-            GenSolvablePolynomial<C>[] gcd = PolyGBUtil.<C> syzGcdCofactors(r.ring,n,d);
-            if (!gcd[0].isONE()) {
-                logger.info("isred: gcd = " + Arrays.toString(gcd)); // + ", " + n + ", " +d);
-                n = gcd[1];
-                d = gcd[2];
-                // d not in ideal --> gcd not in ideal 
-                //p = ring.ideal.normalform( gcd );
-                //if ( p == null || p.isZERO() ) { // todo: find nonzero factor
-                //}
-            }
+        GenSolvablePolynomial<C>[] gcd = PolyGBUtil.<C> syzGcdCofactors(r.ring,n,d);
+        if (!gcd[0].isONE()) {
+            logger.info("isred: gcd = " + Arrays.toString(gcd)); // + ", " + n + ", " +d);
+            n = gcd[1];
+            d = gcd[2];
+            // d not in ideal --> gcd not in ideal 
+            //p = ring.ideal.normalform( gcd );
+            //if ( p == null || p.isZERO() ) { // todo: find nonzero factor
+            //}
         }
         // not perfect, TODO 
-        if (n.totalDegree() < 3 && d.totalDegree() < 3) { // how avoid too long running GBs ?
-            // && n.length() < 10 && d.length() < 10
-            GenSolvablePolynomial<C>[] simp = ring.engine.leftSimplifier(n,d);
-            logger.info("simp: " + Arrays.toString(simp) + ", " + n + ", " +d);
-            n = simp[0];
-            d = simp[1];
-        }
-        num = n;
-        den = d;
+        GenSolvablePolynomial<C>[] simp = ring.engine.leftSimplifier(n,d);
+        logger.info("simp: " + Arrays.toString(simp) + ", " + n + ", " +d);
+        num = simp[0];
+        den = simp[1];
     }
 
 

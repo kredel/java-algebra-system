@@ -847,8 +847,15 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>> implements SolvableSy
         if (a == null || a.isZERO() || b == null || b.isZERO()) {
             throw new IllegalArgumentException("a and b must be non zero");
         }
+        GenSolvablePolynomial<C>[] oc = null;
+        if (a.totalDegree() > 3 || b.totalDegree() > 3) { // how avoid too long running GBs ?
+            // && a.length() < 10 && b.length() < 10
+            logger.warn("skipping GB computation: degs = " + a.totalDegree() + ", " + b.totalDegree());
+            oc = new GenSolvablePolynomial[] { a, b };
+            return oc;
+        }
         GenSolvablePolynomialRing<C> pfac = a.ring;
-        GenSolvablePolynomial<C>[] oc = rightOreCond(a,b);
+        oc = rightOreCond(a,b);
         logger.info("oc = " + Arrays.toString(oc)); // + ", a = " + a + ", b = " + b);
         //System.out.println("a*oc[0] = " + a.multiply(oc[0]) + ", b*oc[1] = " + b.multiply(oc[1]));
         List<GenSolvablePolynomial<C>> F = new ArrayList<GenSolvablePolynomial<C>>(oc.length);
