@@ -150,7 +150,7 @@ public class SolvableLocal<C extends GcdRingElem<C>> implements RingElem<Solvabl
         // not perfect, TODO
         GenSolvablePolynomial<C>[] gcd = PolyGBUtil.<C> syzGcdCofactors(r.ring,n,d);
         if (!gcd[0].isONE()) {
-            logger.info("isred: gcd = " + Arrays.toString(gcd)); // + ", " + n + ", " +d);
+            logger.info("constructor: gcd = " + Arrays.toString(gcd)); // + ", " + n + ", " +d);
             n = gcd[1];
             d = gcd[2];
             // d not in ideal --> gcd not in ideal 

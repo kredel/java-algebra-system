@@ -313,9 +313,9 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
                     soc[i].send(tc);
                 } else {
                     DHTTransport[] tcl = new DHTTransport[] { tc };
-                    //synchronized (MPJEngine.class) { // remove
-                    engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
-                    //}
+                    synchronized (MPJEngine.class) { // not remove
+                        engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
+                    }
                 }
             }
             synchronized (theList) { // add to self.listener
@@ -434,9 +434,9 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
                         soc[i].send(tc);
                     } else {
                         DHTTransport[] tcl = new DHTTransport[] { tc };
-                        //synchronized (MPJEngine.class) { // remove
-                        engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
-                        //}
+                        synchronized (MPJEngine.class) { // not remove
+                            engine.Send(tcl, 0, tcl.length, MPI.OBJECT, i, DHTTAG);
+                        }
                     }
                 }
             }
@@ -542,10 +542,10 @@ class DHTMPJListener<K, V> extends Thread {
                 } else {
                     DHTTransport[] tcl = new DHTTransport[1];
                     Status stat = null;
-                    //synchronized (MPJEngine.class) { // remove: global static lock, only from 0:
-                    stat = engine.Recv(tcl, 0, tcl.length, MPI.OBJECT, MPI.ANY_SOURCE,
-                                    DistHashTableMPJ.DHTTAG);
-                    //}
+                    synchronized (MPJEngine.class) { // not remove: global static lock
+                        stat = engine.Recv(tcl, 0, tcl.length, MPI.OBJECT, MPI.ANY_SOURCE,
+                                      DistHashTableMPJ.DHTTAG);
+                    }
                     //logger.info("waitRequest done: stat = " + stat);
                     if (stat == null) {
                         goon = false;
