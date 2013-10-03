@@ -22,9 +22,27 @@
 
 <dl>
 
-<dt>2013, September </dt>
+<dt>2013, October </dt>
 <dd> 
 
+ Android version of JAS based on Ruboto (JRuby for Android) now with
+ signed code and installable from <a href="download.html"
+ target="main">download</a>.
+
+ Least common multiple for solvable polynomials and <em>trial</em>
+ greatest common divisor for solvable polynomials. 
+ Apel-Lassner canonical simplifier to obtain &quote;smaller&quote;
+ solvable quotients in method <code>leftSimplifier()</code>.
+
+ Some code refactoring to break package dependency cycles. Fixed,
+ worked-around and cleaned some more <em>Findbugs</em> and
+ <em>Eclipse</em> issues. Droped Java-5 compatiblity in several
+ places.
+
+</dd>
+
+<dt>2013, September </dt>
+<dd> 
  New distributed Gr&ouml;bner base algorithms based on the Java
  bindings of <a href="http://www.open-mpi.org" target="mpi"
  >OpenMPI</a> similarly to the MPJ version.  Both OpenMPI and MPJ are
@@ -33,14 +51,11 @@
  <code>niodev</code> Java NewIO device. As work-around the transport
  layer of both versions is split to allow selection of TCP/IP sockets
  or MPI/MPJ channels for transport. The channels and distributed hash
- tables have been simplified for both MPJ and MPI.
-
- Socket based distributed hash table now implements the
- <code>clear()</code> method. This caused unspecific errors in
- iterated distributed Gr&ouml;bner base computations. Simplified
- solvable multiplication. Fixes and improvements to Jython and JRuby
- scripts.
-
+ tables have been simplified for both MPJ and MPI.  Socket based
+ distributed hash table now implements the <code>clear()</code>
+ method. This caused unspecific errors in iterated distributed
+ Gr&ouml;bner base computations. Simplified solvable
+ multiplication. Fixes and improvements to Jython and JRuby scripts.
 </dd>
 
 <dt>2013, August </dt>
@@ -2289,7 +2304,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Sat Sep  7 21:36:36 CEST 2013
+Last modified: Thu Oct  3 20:59:12 CEST 2013
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
