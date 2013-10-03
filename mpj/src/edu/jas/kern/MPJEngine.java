@@ -195,7 +195,7 @@ public final class MPJEngine {
                     }
                     int cnt = stat.Get_count(MPI.OBJECT);
                     if (cnt == 0) {
-                        throw new IOException("no object received");
+                        throw new IOException("no Object received");
                         //throw new MPIException("no object received");
                     }
                     String v = va[0];

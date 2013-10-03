@@ -10,8 +10,8 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import mpi.Comm;
-import mpi.MPIException;
 import mpi.MPI;
+import mpi.MPIException;
 import mpi.Status;
 
 import org.apache.log4j.Logger;
