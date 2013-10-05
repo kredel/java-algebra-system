@@ -123,7 +123,7 @@ public class GenVectorTest extends TestCase {
         for (int i = 0; i < 7; i++) {
             a = mfac.random(kl, q);
             //System.out.println("a = " + a);
-            assertTrue(" not isZERO( a" + i + " )", !a.isZERO());
+            assertTrue(" not isZERO( " + a + " )", !a.isZERO());
         }
     }
 

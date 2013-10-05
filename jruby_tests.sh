@@ -15,10 +15,10 @@ echo jruby -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/cgb_
 time jruby -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/cgb_0.rb
 echo jruby -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/cgb_2.rb
 time jruby -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/cgb_2.rb
-echo jruby -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/cgb_3.rb
-time jruby -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/cgb_3.rb
-echo jruby -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/cgbmmn15.rb
-time jruby -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/cgbmmn15.rb
+#echo jruby -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/cgb_3.rb
+#time jruby -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/cgb_3.rb
+#echo jruby -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/cgbmmn15.rb
+#time jruby -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/cgbmmn15.rb
 echo jruby -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/chebyshev.rb
 time jruby -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/chebyshev.rb
 echo jruby -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/e-gb.rb
