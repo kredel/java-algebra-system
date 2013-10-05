@@ -86,6 +86,7 @@ puts "SolvableIdeal: " + str(ii);
 puts;
 
 #exit(0);
+startLog();
 
 rgl = ii.leftGB();
 puts "seq left GB: " + str(rgl);

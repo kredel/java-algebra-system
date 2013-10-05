@@ -194,19 +194,19 @@ zs = z * s;
 puts "z*s   = " + str(zs);
 csz = sz - zs;
 puts "s*z-z*s = " + str(csz);
-#csz = csz.monic();
-#puts "s*z-z*s = " + str(csz);
-#puts;
-
-java_import "edu.jas.gbufd.PolyGBUtil";
-
-q = csz.elem.trailingBaseCoefficient();
-puts "q = " + q.toScript();
-qn = q.num;
-qd = q.den;
-qr = qn.ring;
-ql = PolyGBUtil.syzLcm(qr,qn,qd);
-qg = PolyGBUtil.syzGcd(qr,qn,qd);
-puts "ql = " + ql.toScript();
-puts "qg = " + qg.toScript();
+csz = csz.monic();
+puts "monic(s*z-z*s) = " + str(csz);
 puts;
+
+#q = csz.elem.trailingBaseCoefficient();
+#puts "q = " + q.toScript();
+#qn = q.num;
+#qd = q.den;
+#qr = qn.ring;
+
+#java_import "edu.jas.gbufd.PolyGBUtil";
+#ql = PolyGBUtil.syzLcm(qr,qn,qd);
+#qg = PolyGBUtil.syzGcd(qr,qn,qd);
+#puts "ql = " + ql.toScript();
+#puts "qg = " + qg.toScript();
+#puts;
