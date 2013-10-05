@@ -312,7 +312,7 @@ public class AlgebraicNumberRing<C extends RingElem<C>> implements RingFactory<A
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.ElemFactory#toScript()
      */
-    //JAVA6only: @Override
+    @Override
     public String toScript() {
         StringBuffer s = new StringBuffer();
         s.append("AN(");

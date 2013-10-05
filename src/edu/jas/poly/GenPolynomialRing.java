@@ -327,7 +327,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
      */
-    //JAVA6only: @Override
+    @Override
     public String toScript() {
         StringBuffer s = new StringBuffer();
         switch (Scripting.getLang()) {

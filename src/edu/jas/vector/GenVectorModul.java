@@ -97,7 +97,7 @@ public class GenVectorModul<C extends RingElem<C>> implements ModulFactory<GenVe
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.ElemFactory#toScript()
      */
-    //JAVA6only: @Override
+    @Override
     public String toScript() {
         // Python case
         StringBuffer s = new StringBuffer("Vec(");

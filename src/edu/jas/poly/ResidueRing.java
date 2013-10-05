@@ -192,7 +192,7 @@ public class ResidueRing<C extends RingElem<C> >
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.ElemFactory#toScript()
      */
-    //JAVA6only: @Override
+    @Override
     public String toScript() {
         // Python case
         return "ResidueRing(" + modul.toScript() + ")";
@@ -203,7 +203,7 @@ public class ResidueRing<C extends RingElem<C> >
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    @SuppressWarnings("unchecked") // not jet working
+    @SuppressWarnings("unchecked")
     public boolean equals(Object b) {
         if ( ! ( b instanceof ResidueRing ) ) {
            return false;

@@ -306,7 +306,7 @@ implements RingFactory<ComplexAlgebraicNumber<C>> {
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.ElemFactory#toScript()
      */
-    //JAVA6only: @Override
+    @Override
     public String toScript() {
         // Python case
         return "ComplexN( " + algebraic.modul.toScript() + ", " + root.toScript()
@@ -322,7 +322,6 @@ implements RingFactory<ComplexAlgebraicNumber<C>> {
      */
     @Override
     @SuppressWarnings("unchecked")
-    // not jet working
     public boolean equals(Object b) {
         if (!(b instanceof ComplexAlgebraicRing)) {
             return false;

@@ -331,7 +331,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational> implements
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.ElemFactory#toScript()
      */
-    //JAVA6only: @Override
+    @Override
     public String toScript() {
         // Python case
         return "RealRecN( " + realRing.toScript() + ", " + root.toScript()

@@ -230,7 +230,7 @@ public class SolvableLocal<C extends GcdRingElem<C>> implements RingElem<Solvabl
         } else {
             isunit = 0;
         }
-        return (u);
+        return u;
     }
 
 

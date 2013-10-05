@@ -266,7 +266,7 @@ public final class GenWordPolynomial<C extends RingElem<C>>
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
      */
-    //JAVA6only: @Override
+    @Override
     public String toScript() {
         if (isZERO()) {
             return "0";
@@ -319,7 +319,7 @@ public final class GenWordPolynomial<C extends RingElem<C>>
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.Element#toScriptFactory()
      */
-    //JAVA6only: @Override
+    @Override
     public String toScriptFactory() {
         // Python case
         return factory().toScript();

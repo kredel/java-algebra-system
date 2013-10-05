@@ -602,7 +602,7 @@ class HybridReducerServerEC<C extends RingElem<C>> implements Runnable {
      * Work loop.
      * @see java.lang.Runnable#run()
      */
-    //JAVA6only: @Override
+    @Override
     public void run() {
         logger.info("reducer server running with " + cf);
         SocketChannel channel = null;
@@ -1003,7 +1003,7 @@ class HybridReducerClientEC<C extends RingElem<C>> implements Runnable {
      * Work loop.
      * @see java.lang.Runnable#run()
      */
-    //JAVA6only: @Override
+    @Override
     public void run() {
         if (debug) {
             logger.info("pairChannel   = " + pairChannel + " reducer client running");

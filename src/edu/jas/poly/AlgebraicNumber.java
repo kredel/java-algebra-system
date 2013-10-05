@@ -165,7 +165,7 @@ public class AlgebraicNumber<C extends RingElem<C>> implements GcdRingElem<Algeb
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
      */
-    //JAVA6only: @Override
+    @Override
     public String toScript() {
         // Python case
         return val.toScript();
@@ -177,7 +177,7 @@ public class AlgebraicNumber<C extends RingElem<C>> implements GcdRingElem<Algeb
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.Element#toScriptFactory()
      */
-    //JAVA6only: @Override
+    @Override
     public String toScriptFactory() {
         // Python case
         return factory().toScript();
@@ -189,7 +189,7 @@ public class AlgebraicNumber<C extends RingElem<C>> implements GcdRingElem<Algeb
      * @param b AlgebraicNumber.
      * @return sign(this-b).
      */
-    //JAVA6only: @Override
+    @Override
     public int compareTo(AlgebraicNumber<C> b) {
         int s = 0;
         if (ring.modul != b.ring.modul) { // avoid compareTo if possible
@@ -208,7 +208,6 @@ public class AlgebraicNumber<C extends RingElem<C>> implements GcdRingElem<Algeb
      */
     @Override
     @SuppressWarnings("unchecked")
-    // not jet working
     public boolean equals(Object b) {
         if (!(b instanceof AlgebraicNumber)) {
             return false;

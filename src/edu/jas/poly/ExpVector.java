@@ -375,7 +375,7 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
      */
-    //JAVA6only: @Override
+    @Override
     public String toScript() {
         return toScript(stdVars());
     }
@@ -430,7 +430,7 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.Element#toScriptFactory()
      */
-    //JAVA6only: @Override
+    @Override
     public String toScriptFactory() {
         // Python case
         return "ExpVector()";
@@ -932,7 +932,7 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
      * @param V
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
-    //JAVA6only: @Override
+    @Override
     public int compareTo(ExpVector V) {
         return this.invLexCompareTo(V);
     }

@@ -155,7 +155,7 @@ public final class GenWordPolynomialRing<C extends RingElem<C>> implements RingF
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
      */
-    //JAVA6only: @Override
+    @Override
     public String toScript() {
         StringBuffer s = new StringBuffer();
         switch (Scripting.getLang()) {

@@ -262,7 +262,7 @@ public final class WordFactory implements MonoidFactory<Word> {
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
      */
-    //JAVA6only: @Override
+    @Override
     public String toScript() {
         return toString();
     }

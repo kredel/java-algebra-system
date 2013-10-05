@@ -207,7 +207,7 @@ public class ComplexRing<C extends RingElem<C>> implements RingFactory<Complex<C
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
      */
-    //JAVA6only: @Override
+    @Override
     public String toScript() {
         // Python case
         StringBuffer s = new StringBuffer();

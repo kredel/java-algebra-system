@@ -53,7 +53,7 @@ public class PolynomialTaylorFunction<C extends RingElem<C>> implements TaylorFu
      * Get the factorial coefficient.
      * @return factorial coefficient.
      */
-    //JAVA6only: @Override
+    @Override
     public long getFacul() {
         return facul;
     }
@@ -72,7 +72,7 @@ public class PolynomialTaylorFunction<C extends RingElem<C>> implements TaylorFu
      * Deriviative.
      * @return deriviative of this.
      */
-    //JAVA6only: @Override
+    @Override
     public TaylorFunction<C> deriviative() {
         return new PolynomialTaylorFunction<C>(PolyUtil.<C> baseDeriviative(pol));
     }
@@ -123,7 +123,7 @@ public class PolynomialTaylorFunction<C extends RingElem<C>> implements TaylorFu
      * @param a element.
      * @return this(a).
      */
-    //JAVA6only: @Override
+    @Override
     public C evaluate(C a) {
         return PolyUtil.<C> evaluateMain(pol.ring.coFac, pol, a);
     }
