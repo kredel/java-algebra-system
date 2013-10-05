@@ -25,7 +25,7 @@
     <br />
     The source code is in 
     <a href="@VERSION@.@SVNREV@-src.zip">@VERSION@.@SVNREV@-src.zip</a> 
-    current version should compile on Java 1.5, 1.6 and 1.7 (aka Java 5, 6 and 7).  
+    current version should compile on Java 1.6 and 1.7 (aka Java 6 and 7).  
     (right click on the link and chose "save link as")
     <br />
     The Javadoc API documentation is in 
@@ -79,6 +79,13 @@
         <a href="http://fastmpj.com/" target="mpj" >FastMPJ</a>. 
         <br />
         The Javadocs can be found <a href="doc/mpj/index.html" target="api">here</a>.
+    </li>
+    <li><a href="jas-mpi.jar">jas-mpi.jar</a> <br /> This JAR contains
+        implementations of distributed Gr&ouml;bner bases using the 
+        Open-MPI middle-ware (with Java support). It requires an MPI implementation 
+        such as <a href="http://www.open-mpi.org/" target="mpi" >Open-MPI</a>.
+        <br />
+        The Javadocs can be found <a href="doc/mpi/index.html" target="api">here</a>.
     </li>
     <li><a href="jas-meditor.jar">jas-meditor.jar</a> 
         <br />
@@ -134,10 +141,9 @@ java  -classpath log4j.jar:junit.jar:jas.jar:.      edu.jas.gb.Examples
      <code>jar -xvf jas-[version]-src.jar</code>
     </p>
 </li>
-<li><p>JAS is currently developed for Java 6 (Sun JDK 1.6 and OpenJDK 1.6).
-    It will compile also under Java 5 (Sun JDK 1.5), but some (concurrency) classes may 
-    not work under the Java Virtual Machine (JVM) of JRE-1.5. It seems best to disable 
-    automatic parallel computation then (see edu.jas.kern.ComputerThreads.NO_THREADS).
+<li><p>JAS is currently developed for Java 7 (OpenJDK 1.7).
+    It will compile also under Java 6 (OpenJDK 1.6). 
+    It will <b>no more</b> compile under Java 5 or older versions. 
     </p>
 </li>
 <li><p>Among the extracted files, there is an Ant build script
@@ -330,7 +336,7 @@ public class mytests {
 </li-->
 <li><p>Be sure you have downloaded the above libraries 
     log4j.jar, junit.jar and jas*-bin.jar. 
-    JAS-2.4 is using and has been tested with Jython 2.5.2. 
+    JAS-2.5 is using and has been tested with Jython 2.5.2. 
     </p>
 </li>
 <li><p>The main file to interface to the JAS library is  
@@ -368,7 +374,7 @@ public class mytests {
 <ul>
 <li><p>Be sure you have downloaded the above libraries 
     log4j.jar, junit.jar and jas*-bin.jar.
-    JAS-2.4 is using and has been tested with JRuby 1.6.4 (Ruby 1.8.7 &amp; 1.9.2 compatible) 
+    JAS-2.5 is using and has been tested with JRuby 1.7.3 (Ruby 1.8.7 &amp; 1.9.2 compatible) 
     </p>
 </li>
 <li><p>The main file to interface to the JAS library is  
@@ -401,7 +407,7 @@ public class mytests {
 <ul>
 <li><p>Be sure you have installed the above Android application package  
     <code>ruboto-irb-jas-release.apk</code>. It contains all required libraries and scripts. 
-    JAS-2.4 has been tested with Android 2.3 and 4.1 and is using 
+    JAS-2.5 has been tested with Android 2.3 and 4.1 and is using 
     JRuby 1.6.4 (Ruby 1.8.7 &amp; 1.9.2 compatible) 
     </p>
 </li>
@@ -443,7 +449,7 @@ public class mytests {
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Sat Sep  7 13:42:54 CEST 2013
+Last modified: Sat Oct  5 18:33:25 CEST 2013
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
