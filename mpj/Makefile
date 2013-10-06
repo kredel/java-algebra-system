@@ -24,7 +24,7 @@ FMPJ_CMD=$(FMPJ_HOME)/bin/fmpjrun -dev niodev -dmap -cp $(CLASSPATH):jas-mpj.jar
 #FMPJ_CMD=$(FMPJ_HOME)/bin/fmpjrun -dev psmdev -dmap -cp $(CLASSPATH):jas-mpj.jar
 
 #DOCOPTS=-package
-DOCOPTS=-package -author -version -linksource
+DOCOPTS=-package -author -version -linksource -overview overview.html
 DOCCLASSES=$(CLASSPATH)
 DOC=javadoc -classpath $(DOCCLASSES)
 
