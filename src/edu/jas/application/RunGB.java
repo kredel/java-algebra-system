@@ -67,7 +67,7 @@ public class RunGB {
      * #procs/#threadsPerNode [machinefile] &lt;check&gt; &lt;log&gt;
      */
     @SuppressWarnings("unchecked")
-    public static void main(java.lang.String[] args) {
+    public static void main(String[] args) {
 
         String[] allkinds = new String[] { "seq", "seq+", 
                                            "par", "par+", 
@@ -81,7 +81,8 @@ public class RunGB {
                         + "[port] ] " 
                         + "<file> " 
                         + "#procs/#threadsPerNode " 
-                        + "[machinefile] [check] [nolog]";
+                        + "[machinefile] " 
+                        + "[check] [nolog]";
 
         if (args.length < 1) {
             System.out.println("args: " + Arrays.toString(args));

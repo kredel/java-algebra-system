@@ -65,7 +65,7 @@ public class RunMPJGB {
      * Usage: RunMPJGB [seq|par(+)|dist(1)(+)|disthyb|cli] &lt;file&gt;
      * #procs/#threadsPerNode [machinefile]
      */
-    public static void main(java.lang.String[] args) throws IOException {
+    public static void main(String[] args) throws IOException {
 
         MPJEngine.setCommandLine(args); //args = MPI.Init(args);
 
@@ -83,7 +83,8 @@ public class RunMPJGB {
                         + "[port] ] " 
                         + "<file> " 
                         + "#procs/#threadsPerNode " 
-                        + "[machinefile] [check] [nolog]";
+                        + "[machinefile] " 
+                        + "[check] [nolog]";
 
         if (args.length < 1) {
             System.out.println("args: " + Arrays.toString(args));

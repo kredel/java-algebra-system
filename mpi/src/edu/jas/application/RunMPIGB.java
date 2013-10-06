@@ -68,7 +68,7 @@ public class RunMPIGB {
      * #procs/#threadsPerNode [machinefile]
      */
 
-    public static void main(java.lang.String[] args) throws IOException, MPIException {
+    public static void main(String[] args) throws IOException, MPIException {
 
         MPIEngine.setCommandLine(args); //args = MPI.Init(args);
 
@@ -86,7 +86,8 @@ public class RunMPIGB {
                         + "[port] ] " 
                         + "<file> " 
                         + "#procs/#threadsPerNode " 
-                        + "[machinefile] [check] [nolog]";
+                        + "[machinefile] " 
+                        + "[check] [nolog]";
 
         if (args.length < 1) {
             System.out.println("args: " + Arrays.toString(args));

@@ -59,7 +59,7 @@ public class RunSGB {
      * [seq|par|par+] [irr|left|right|two] &lt;file&gt; #procs
      */
     @SuppressWarnings("unchecked")
-    public static void main(java.lang.String[] args) {
+    public static void main(String[] args) {
 
         String[] allkinds = new String[] { "seq", "seq+", 
                                            "par", "par+", 
@@ -69,13 +69,18 @@ public class RunSGB {
                                            // "irr", "left", "right", "two" 
                                            //"cli" 
                                          }; // must be last
+        String[] allmeth = new String[] { "irr", "left", "right", "two" };
 
         String usage = "Usage: RunGB [ "
                         + join(allkinds, " | ") 
                         //+ "[port] ] " 
-                        + "<file> " 
-                        + "#procs/#threadsPerNode " 
-                        + "[machinefile] [check] [nolog]";
+                        + " ] ["
+                        + join(allmeth, " | ") 
+                        + "] <file> " 
+                        + "#threads " 
+                        //+ "#procs/#threadsPerNode " 
+                        //+ "[machinefile] ";
+                        + "[check] [nolog]";
 
         if (args.length < 3) {
             System.out.println("args: " + Arrays.toString(args));
@@ -107,7 +112,6 @@ public class RunSGB {
         }
         System.out.println("kind: " + kind + ", k = " + k);
 
-        String[] allmeth = new String[] { "irr", "left", "right", "two" };
         String action = args[k + 1];
         sup = false;
         int j = indexOf(allmeth, action);
