@@ -15,16 +15,19 @@ import java.io.Reader;
 import java.io.BufferedReader;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Arrays;
 
 import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.gb.SolvableGroebnerBase;
+import edu.jas.gb.SolvableGroebnerBaseAbstract;
 import edu.jas.gb.SolvableGroebnerBaseParallel;
 import edu.jas.gb.SolvableGroebnerBaseSeq;
 import edu.jas.gb.SolvableGroebnerBaseSeqPairParallel;
 import edu.jas.gb.SolvableReduction;
 import edu.jas.gb.SolvableReductionPar;
 import edu.jas.gb.SolvableReductionSeq;
+import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
@@ -37,8 +40,18 @@ import edu.jas.util.CatReader;
  * [seq|par|par+] [irr|left|right|two] &lt;file&gt; #procs
  * @author Heinz Kredel
  */
-
 public class RunSGB {
+
+    /**
+     * Check result GB if it is a GB.
+     */
+    static boolean doCheck = false;
+
+
+    /**
+     * Enable logging.
+     */
+    static boolean doLog = true;
 
 
     /**
@@ -48,67 +61,91 @@ public class RunSGB {
     @SuppressWarnings("unchecked")
     public static void main(java.lang.String[] args) {
 
-        BasicConfigurator.configure();
+        String[] allkinds = new String[] { "seq", "seq+", 
+                                           "par", "par+", 
+                                           //"dist", "dist1", 
+                                           //"dist+", "dist1+",
+                                           //"disthyb1", 
+                                           // "irr", "left", "right", "two" 
+                                           //"cli" 
+                                         }; // must be last
 
-        String usage = "Usage: RunSGB " + "[ seq | par | par+ ] "
-        //        + "[ seq | par | dist | cli [port] ] "
-                + "[ irr | left | right | two ] " + "<file> " + "#procs ";
-        //  + "[machinefile]";
+        String usage = "Usage: RunGB [ "
+                        + join(allkinds, " | ") 
+                        //+ "[port] ] " 
+                        + "<file> " 
+                        + "#procs/#threadsPerNode " 
+                        + "[machinefile] [check] [nolog]";
+
         if (args.length < 3) {
+            System.out.println("args: " + Arrays.toString(args));
             System.out.println(usage);
             return;
         }
 
         boolean pairseq = false;
         String kind = args[0];
-        String[] allkinds = new String[] { "seq", "par", "par+" };
-        // String[] allkinds = new String[] { "seq", "par", "dist", "cli"  };
         boolean sup = false;
-        for (int i = 0; i < allkinds.length; i++) {
-            if (kind.equals(allkinds[i])) {
-                sup = true;
-                if (kind.indexOf("+") >= 0) {
-                    pairseq = true;
-                }
+        int k = -1;
+        for (int i = 0; i < args.length; i++) {
+            int j = indexOf(allkinds, args[i]);
+            if (j < 0) {
+                continue;
             }
+            sup = true;
+            k = i;
+            kind = args[k];
+            break;
         }
         if (!sup) {
+            System.out.println("args(sup): " + Arrays.toString(args));
             System.out.println(usage);
             return;
         }
-        String[] allmeth = new String[] { "irr", "left", "right", "two" };
-        String action = args[1];
-        sup = false;
-        for (int i = 0; i < allmeth.length; i++) {
-            if (action.equals(allmeth[i])) {
-                sup = true;
-            }
+        if (kind.indexOf("+") >= 0) {
+            pairseq = true;
         }
-        if (!sup) {
+        System.out.println("kind: " + kind + ", k = " + k);
+
+        String[] allmeth = new String[] { "irr", "left", "right", "two" };
+        String action = args[k + 1];
+        sup = false;
+        int j = indexOf(allmeth, action);
+        if (j < 0) {
             System.out.println(usage);
             return;
         }
 
-        String filename = args[2];
+        String filename = args[k + 2];
 
         int threads = 0;
         if (kind.startsWith("par")) {
             if (args.length < 4) {
+                System.out.println("args(par): " + Arrays.toString(args));
                 System.out.println(usage);
                 return;
             }
-            String tup = args[3];
+            String tup = args[k + 3];
             String t = tup;
             try {
                 threads = Integer.parseInt(t);
             } catch (NumberFormatException e) {
                 e.printStackTrace();
+                System.out.println("args(threads): " + Arrays.toString(args));
                 System.out.println(usage);
                 return;
             }
             if (threads < 1) {
                 threads = 1;
             }
+        }
+        j = indexOf(args, "check");
+        if (j >= 0) {
+            doCheck = true;
+        }
+        j = indexOf(args, "nolog");
+        if (j >= 0) {
+            doLog = false;
         }
 
         Reader problem = null;
@@ -117,6 +154,7 @@ public class RunSGB {
             problem = new BufferedReader(problem);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            System.out.println("args(file): " + Arrays.toString(args));
             System.out.println(usage);
             return;
         }
@@ -141,6 +179,10 @@ public class RunSGB {
         }
         System.out.println("S =\n" + S);
 
+        if (doLog) {
+            BasicConfigurator.configure();
+        }
+
         if (kind.startsWith("seq")) {
             runSequential(S, action, pairseq);
         }
@@ -148,6 +190,7 @@ public class RunSGB {
         if (kind.startsWith("par")) {
             runParallel(S, threads, action, pairseq);
         }
+        ComputerThreads.terminate();
     }
 
 
@@ -165,8 +208,7 @@ public class RunSGB {
         SolvableGroebnerBase sbb = null;
         if (pairseq) {
             //sbb = new SolvableGroebnerBaseSeqPairSeq();
-            System.out
-                    .println("SolvableGroebnerBaseSeqPairSeq not implemented using SolvableGroebnerBaseSeq");
+            //System.out.println("SolvableGroebnerBaseSeqPairSeq not implemented using SolvableGroebnerBaseSeq");
             sbb = new SolvableGroebnerBaseSeq();
         } else {
             sbb = new SolvableGroebnerBaseSeq();
@@ -199,6 +241,7 @@ public class RunSGB {
             System.out.print("seq, ");
         }
         System.out.println("time = " + t + " milliseconds");
+        checkGB(S);
         System.out.println("");
     }
 
@@ -266,12 +309,48 @@ public class RunSGB {
             System.out.print("p ");
         }
         System.out.println("= " + threads + ", time = " + t + " milliseconds");
+        checkGB(S);
         System.out.println("");
         if (pairseq) {
             sbbs.terminate();
         } else {
             sbb.terminate();
         }
+    }
+
+
+    @SuppressWarnings("unchecked")
+    static void checkGB(PolynomialList S) {
+        if (!doCheck) {
+            return;
+        }
+        SolvableGroebnerBaseAbstract sbb = new SolvableGroebnerBaseSeq();
+        long t = System.currentTimeMillis();
+        boolean chk = sbb.isLeftGB(S.list,false);
+        t = System.currentTimeMillis() - t;
+        System.out.println("check isGB = " + chk + " in " + t + " milliseconds");
+    }
+
+
+    static int indexOf(String[] args, String s) {
+        for (int i = 0; i < args.length; i++) {
+            if (s.equals(args[i])) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
+    static String join(String[] args, String d) {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < args.length; i++) {
+            if (i > 0) {
+                sb.append(d);
+            }
+            sb.append(args[i]);
+        }
+        return sb.toString();
     }
 
 }
