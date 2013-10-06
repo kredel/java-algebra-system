@@ -15,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Arrays;
 
 import org.apache.log4j.BasicConfigurator;
 
@@ -41,11 +42,10 @@ import edu.jas.util.ExecutableServer;
 
 /**
  * Simple setup to run a GB example. <br />
- * Usage: RunGB [seq(+)|par(+)|dist(1)(+)|disthyb|cli] &lt;file&gt;
+ * Usage: RunGB [seq(+)|par(+)|dist(+)|disthyb|cli] &lt;file&gt;
  * #procs/#threadsPerNode [machinefile]
  * @author Heinz Kredel
  */
-
 public class RunGB {
 
 
@@ -69,43 +69,60 @@ public class RunGB {
     @SuppressWarnings("unchecked")
     public static void main(java.lang.String[] args) {
 
-        String usage = "Usage: RunGB "
-                        + "[ seq | seq+ | par | par+ | dist | dist1 | dist+ | dist1+ | disthyb1 | cli [port] ] "
-                        + "<file> " + "#procs/#threadsPerNode " + "[machinefile] <check> <nolog>";
+        String[] allkinds = new String[] { "seq", "seq+", 
+                                           "par", "par+", 
+                                           "dist", "dist1", 
+                                           "dist+", "dist1+",
+                                           "disthyb1", 
+                                           "cli" }; // must be last
+
+        String usage = "Usage: RunGB [ "
+                        + join(allkinds, " | ") 
+                        + "[port] ] " 
+                        + "<file> " 
+                        + "#procs/#threadsPerNode " 
+                        + "[machinefile] [check] [nolog]";
+
         if (args.length < 1) {
+            System.out.println("args: " + Arrays.toString(args));
             System.out.println(usage);
             return;
         }
 
         boolean pairseq = false;
         String kind = args[0];
-        String[] allkinds = new String[] { "seq", "seq+", "par", "par+", "dist", "dist1", "dist+", "dist1+",
-                "disthyb1", "cli" };
         boolean sup = false;
-        for (int i = 0; i < allkinds.length; i++) {
-            if (kind.equals(allkinds[i])) {
-                sup = true;
-                if (kind.indexOf("+") >= 0) {
-                    pairseq = true;
-                }
+        int k = -1;
+        for (int i = 0; i < args.length; i++) {
+            int j = indexOf(allkinds, args[i]);
+            if (j < 0) {
+                continue;
             }
+            sup = true;
+            k = i;
+            kind = args[k];
+            break;
         }
         if (!sup) {
+            System.out.println("args(sup): " + Arrays.toString(args));
             System.out.println(usage);
             return;
         }
+        if (kind.indexOf("+") >= 0) {
+            pairseq = true;
+        }
+        System.out.println("kind: " + kind + ", k = " + k);
 
-        //boolean once = false;
         final int GB_SERVER_PORT = 7114;
-        //inal int EX_CLIENT_PORT = GB_SERVER_PORT + 1000; 
         int port = GB_SERVER_PORT;
 
         if (kind.equals("cli")) {
-            if (args.length >= 2) {
+            if (args.length - k >= 2) {
                 try {
-                    port = Integer.parseInt(args[1]);
+                    port = Integer.parseInt(args[k + 1]);
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
+                    System.out.println("args(port): " + Arrays.toString(args));
                     System.out.println(usage);
                     return;
                 }
@@ -116,32 +133,32 @@ public class RunGB {
 
         String filename = null;
         if (!kind.equals("cli")) {
-            if (args.length < 2) {
+            if (args.length - k < 2) {
+                System.out.println("args(file): " + Arrays.toString(args));
                 System.out.println(usage);
                 return;
             }
-            filename = args[1];
+            filename = args[k + 1];
         }
 
-        for (int i = 0; i < args.length; i++) {
-            if (args[i].equals("check")) {
-                doCheck = true;
-            }
+        int j = indexOf(args, "check");
+        if (j >= 0) {
+            doCheck = true;
         }
-        for (int i = 0; i < args.length; i++) {
-            if (args[i].equals("nolog")) {
-                doLog = false;
-            }
+        j = indexOf(args, "nolog");
+        if (j >= 0) {
+            doLog = false;
         }
 
         int threads = 0;
         int threadsPerNode = 1;
         if (kind.startsWith("par") || kind.startsWith("dist")) {
-            if (args.length < 3) {
+            if (args.length - k < 3) {
+                System.out.println("args(par|dist): " + Arrays.toString(args));
                 System.out.println(usage);
                 return;
             }
-            String tup = args[2];
+            String tup = args[k + 2];
             String t = tup;
             int i = tup.indexOf("/");
             if (i >= 0) {
@@ -151,6 +168,7 @@ public class RunGB {
                     threadsPerNode = Integer.parseInt(tup);
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
+                    System.out.println("args(threadsPerNode): " + Arrays.toString(args));
                     System.out.println(usage);
                     return;
                 }
@@ -159,6 +177,7 @@ public class RunGB {
                 threads = Integer.parseInt(t);
             } catch (NumberFormatException e) {
                 e.printStackTrace();
+                System.out.println("args(threads): " + Arrays.toString(args));
                 System.out.println(usage);
                 return;
             }
@@ -166,8 +185,8 @@ public class RunGB {
 
         String mfile = null;
         if (kind.startsWith("dist")) {
-            if (args.length >= 4) {
-                mfile = args[3];
+            if (args.length - k >= 4) {
+                mfile = args[k + 3];
             } else {
                 mfile = "machines";
             }
@@ -179,6 +198,8 @@ public class RunGB {
             problem = new BufferedReader(problem);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            System.out.println("args(file): " + filename);
+            System.out.println("args(file): " + Arrays.toString(args));
             System.out.println(usage);
             return;
         }
@@ -460,6 +481,28 @@ public class RunGB {
         boolean chk = bb.isGB(S.list,false);
         t = System.currentTimeMillis() - t;
         System.out.println("check isGB = " + chk + " in " + t + " milliseconds");
+    }
+
+
+    static int indexOf(String[] args, String s) {
+        for (int i = 0; i < args.length; i++) {
+            if (s.equals(args[i])) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
+    static String join(String[] args, String d) {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < args.length; i++) {
+            if (i > 0) {
+                sb.append(d);
+            }
+            sb.append(args[i]);
+        }
+        return sb.toString();
     }
 
 }

@@ -55,19 +55,36 @@ public class RunMPJGB {
 
 
     /**
+     * Enable logging.
+     */
+    static boolean doLog = true;
+
+
+    /**
      * main method to be called from commandline <br />
      * Usage: RunMPJGB [seq|par(+)|dist(1)(+)|disthyb|cli] &lt;file&gt;
      * #procs/#threadsPerNode [machinefile]
      */
-
     public static void main(java.lang.String[] args) throws IOException {
 
-        BasicConfigurator.configure();
         MPJEngine.setCommandLine(args); //args = MPI.Init(args);
 
-        String usage = "Usage: RunMPJGB " + "[ seq | seq+ | par | par+ "
-                        + "| dist | dist1 | dist+ | dist1+ | disthyb1 | distmpj " + "| cli [port] ] "
-                        + "<file> " + "#procs/#threadsPerNode " + "[machinefile] <check>";
+        String[] allkinds = new String[] { "seq", "seq+", 
+                                           "par", "par+", 
+                                           "dist", "dist1", 
+                                           "dist+", "dist1+",
+                                           "disthyb1", 
+                                           "distmpj", "distmpj+", 
+                                           "disthybmpj", "disthybmpj+", 
+                                           "cli" };
+
+        String usage = "Usage: RunGB [ "
+                        + join(allkinds, " | ") 
+                        + "[port] ] " 
+                        + "<file> " 
+                        + "#procs/#threadsPerNode " 
+                        + "[machinefile] [check] [nolog]";
+
         if (args.length < 1) {
             System.out.println("args: " + Arrays.toString(args));
             System.out.println(usage);
@@ -76,8 +93,6 @@ public class RunMPJGB {
 
         boolean pairseq = false;
         String kind = args[0];
-        String[] allkinds = new String[] { "seq", "seq+", "par", "par+", "dist", "dist1", "dist+", "dist1+",
-                "disthyb1", "distmpj", "distmpj+", "disthybmpj", "disthybmpj+", "cli" };
         boolean sup = false;
         int k = -1;
         for (int i = 0; i < args.length; i++) {
@@ -88,9 +103,6 @@ public class RunMPJGB {
             sup = true;
             k = i;
             kind = args[k];
-            if (kind.indexOf("+") >= 0) {
-                pairseq = true;
-            }
             break;
         }
         if (!sup) {
@@ -98,11 +110,12 @@ public class RunMPJGB {
             System.out.println(usage);
             return;
         }
+        if (kind.indexOf("+") >= 0) {
+            pairseq = true;
+        }
         System.out.println("kind: " + kind + ", k = " + k);
 
-        //boolean once = false;
         final int GB_SERVER_PORT = 7114;
-        //inal int EX_CLIENT_PORT = GB_SERVER_PORT + 1000; 
         int port = GB_SERVER_PORT;
 
         if (kind.equals("cli")) {
@@ -134,6 +147,10 @@ public class RunMPJGB {
         if (j >= 0) {
             doCheck = true;
         }
+        j = indexOf(args, "nolog");
+        if (j >= 0) {
+            doLog = false;
+        }
 
         int threads = 0;
         int threadsPerNode = 1;
@@ -153,7 +170,7 @@ public class RunMPJGB {
                     threadsPerNode = Integer.parseInt(tup);
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
-                    System.out.println("args(int): " + Arrays.toString(args));
+                    System.out.println("args(threadsPerNode): " + Arrays.toString(args));
                     System.out.println(usage);
                     return;
                 }
@@ -162,7 +179,7 @@ public class RunMPJGB {
                 threads = Integer.parseInt(t);
             } catch (NumberFormatException e) {
                 e.printStackTrace();
-                System.out.println("args(int): " + Arrays.toString(args));
+                System.out.println("args(threads): " + Arrays.toString(args));
                 System.out.println(usage);
                 return;
             }
@@ -208,6 +225,10 @@ public class RunMPJGB {
             return;
         }
         System.out.println("S =\n" + S);
+
+        if (doLog) {
+            BasicConfigurator.configure();
+        }
 
         if (kind.startsWith("seq")) {
             runSequential(S, pairseq);
@@ -566,6 +587,18 @@ public class RunMPJGB {
             }
         }
         return -1;
+    }
+
+
+    static String join(String[] args, String d) {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < args.length; i++) {
+            if (i > 0) {
+                sb.append(d);
+            }
+            sb.append(args[i]);
+        }
+        return sb.toString();
     }
 
 }
