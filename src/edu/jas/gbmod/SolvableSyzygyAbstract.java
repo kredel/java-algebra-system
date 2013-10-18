@@ -855,6 +855,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>> implements SolvableSy
         }
         GenSolvablePolynomial<C>[] oc = null;
         if (a.totalDegree() > 3 || b.totalDegree() > 3) { // how avoid too long running GBs ?
+        //if (a.totalDegree() + b.totalDegree() > 6) { // how avoid too long running GBs ?
             // && a.length() < 10 && b.length() < 10
             logger.warn("skipping GB computation: degs = " + a.totalDegree() + ", " + b.totalDegree());
             oc = new GenSolvablePolynomial[] { a, b };
