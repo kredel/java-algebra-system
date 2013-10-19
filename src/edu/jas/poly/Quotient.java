@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingElem;
+import edu.jas.structure.QuotElem;
 
 
 /**
@@ -16,7 +17,8 @@ import edu.jas.structure.RingElem;
  * immutable.
  * @author Heinz Kredel
  */
-public class Quotient<C extends RingElem<C>> implements RingElem<Quotient<C>> {
+public class Quotient<C extends RingElem<C>> 
+    implements RingElem<Quotient<C>>, QuotElem<C> {
 
 
     private static final Logger logger = Logger.getLogger(Quotient.class);
@@ -130,6 +132,24 @@ public class Quotient<C extends RingElem<C>> implements RingElem<Quotient<C>> {
      */
     public QuotientRing<C> factory() {
         return ring;
+    }
+
+
+    /**
+     * Numerator.
+     * @see edu.jas.structure.QuotElem#numerator()
+     */
+    public C numerator() {
+        return num;
+    }
+
+
+    /**
+     * Denominator.
+     * @see edu.jas.structure.QuotElem#denominator()
+     */
+    public C denominator() {
+        return den;
     }
 
 
@@ -403,24 +423,54 @@ public class Quotient<C extends RingElem<C>> implements RingElem<Quotient<C>> {
 
 
     /**
-     * Greatest common divisor. <b>Note: </b>Not implemented, throws
+     * Greatest common divisor. <b>Note:</b> If not defined, throws
      * UnsupportedOperationException.
      * @param b other element.
      * @return gcd(this,b).
      */
     public Quotient<C> gcd(Quotient<C> b) {
-        throw new UnsupportedOperationException("gcd not implemented " + this.getClass().getName());
+        if (b == null || b.isZERO()) {
+            return this;
+        }
+        if (this.isZERO()) {
+            return b;
+        }
+        if (num instanceof GcdRingElem && den instanceof GcdRingElem
+            && b.num instanceof GcdRingElem && b.den instanceof GcdRingElem) {
+            return ring.getONE();
+        }
+        throw new UnsupportedOperationException("gcd not implemented " + num.getClass().getName());
     }
 
 
     /**
-     * Extended greatest common divisor. <b>Note: </b>Not implemented, throws
+     * Extended greatest common divisor. <b>Note:</b> If not defined, throws
      * UnsupportedOperationException.
      * @param b other element.
      * @return [ gcd(this,b), c1, c2 ] with c1*this + c2*b = gcd(this,b).
      */
     public Quotient<C>[] egcd(Quotient<C> b) {
-        throw new UnsupportedOperationException("egcd not implemented " + this.getClass().getName());
+        Quotient<C>[] ret = (Quotient<C>[]) new Quotient[3];
+        ret[0] = null;
+        ret[1] = null;
+        ret[2] = null;
+        if (b == null || b.isZERO()) {
+            ret[0] = this;
+            return ret;
+        }
+        if (this.isZERO()) {
+            ret[0] = b;
+            return ret;
+        }
+        if (num instanceof GcdRingElem && den instanceof GcdRingElem
+            && b.num instanceof GcdRingElem && b.den instanceof GcdRingElem) {
+            Quotient<C> two = ring.fromInteger(2);
+            ret[0] = ring.getONE();
+            ret[1] = (this.multiply(two)).inverse();
+            ret[2] = (b.multiply(two)).inverse();
+            return ret;
+        }
+        throw new UnsupportedOperationException("egcd not implemented " + num.getClass().getName());
     }
 
 }

@@ -11,10 +11,12 @@ import org.apache.log4j.Logger;
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.ExpVector;
+import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.gbufd.PolyGBUtil;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingElem;
+import edu.jas.structure.QuotElem;
 
 
 /**
@@ -23,7 +25,8 @@ import edu.jas.structure.RingElem;
  * @author Heinz Kredel
  */
 // To be fixed?: Not jet working because of monic GBs.
-public class SolvableLocal<C extends GcdRingElem<C>> implements RingElem<SolvableLocal<C>> {
+public class SolvableLocal<C extends GcdRingElem<C>> 
+       implements RingElem<SolvableLocal<C>>, QuotElem<GenPolynomial<C>> {
 
 
     private static final Logger logger = Logger.getLogger(SolvableLocal.class);
@@ -173,6 +176,24 @@ public class SolvableLocal<C extends GcdRingElem<C>> implements RingElem<Solvabl
      */
     public SolvableLocalRing<C> factory() {
         return ring;
+    }
+
+
+    /**
+     * Numerator.
+     * @see edu.jas.structure.QuotElem#numerator()
+     */
+    public GenSolvablePolynomial<C> numerator() {
+        return num;
+    }
+
+
+    /**
+     * Denominator.
+     * @see edu.jas.structure.QuotElem#denominator()
+     */
+    public GenSolvablePolynomial<C> denominator() {
+        return den;
     }
 
 

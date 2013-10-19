@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.QuotElem;
 
 
 /**
@@ -17,7 +18,8 @@ import edu.jas.structure.GcdRingElem;
  * interface. Objects of this class are immutable.
  * @author Heinz Kredel
  */
-public class Quotient<C extends GcdRingElem<C>> implements GcdRingElem<Quotient<C>> {
+public class Quotient<C extends GcdRingElem<C>> 
+    implements GcdRingElem<Quotient<C>>, QuotElem<GenPolynomial<C>> {
 
 
     private static final Logger logger = Logger.getLogger(Quotient.class);
@@ -124,6 +126,24 @@ public class Quotient<C extends GcdRingElem<C>> implements GcdRingElem<Quotient<
      */
     public QuotientRing<C> factory() {
         return ring;
+    }
+
+
+    /**
+     * Numerator.
+     * @see edu.jas.structure.QuotElem#numerator()
+     */
+    public GenPolynomial<C> numerator() {
+        return num;
+    }
+
+
+    /**
+     * Denominator.
+     * @see edu.jas.structure.QuotElem#denominator()
+     */
+    public GenPolynomial<C> denominator() {
+        return den;
     }
 
 

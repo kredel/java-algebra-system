@@ -33,6 +33,8 @@ import edu.jas.application.SolvableIdeal;
  */
 public class SolvableLocalResidueRing<C extends GcdRingElem<C>> 
              implements RingFactory<SolvableLocalResidue<C>> {
+// Can not extend SolvableLocalRing or SolvableQuotientRing 
+// because of different constructor semantics.
 
 
     private static final Logger logger = Logger.getLogger(SolvableLocalResidueRing.class);

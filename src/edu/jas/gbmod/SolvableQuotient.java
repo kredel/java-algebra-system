@@ -11,9 +11,11 @@ import org.apache.log4j.Logger;
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.ExpVector;
+import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.gbufd.PolyGBUtil;
 import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.QuotElem;
 
 
 /**
@@ -22,7 +24,8 @@ import edu.jas.structure.GcdRingElem;
  * immutable.
  * @author Heinz Kredel
  */
-public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<SolvableQuotient<C>> {
+public class SolvableQuotient<C extends GcdRingElem<C>> 
+    implements GcdRingElem<SolvableQuotient<C>>, QuotElem<GenPolynomial<C>> {
 
 
     private static final Logger logger = Logger.getLogger(SolvableQuotient.class);
@@ -153,6 +156,24 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
      */
     public SolvableQuotientRing<C> factory() {
         return ring;
+    }
+
+
+    /**
+     * Numerator.
+     * @see edu.jas.structure.QuotElem#numerator()
+     */
+    public GenSolvablePolynomial<C> numerator() {
+        return num;
+    }
+
+
+    /**
+     * Denominator.
+     * @see edu.jas.structure.QuotElem#denominator()
+     */
+    public GenSolvablePolynomial<C> denominator() {
+        return den;
     }
 
 

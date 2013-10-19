@@ -10,10 +10,12 @@ import java.util.Arrays;
 import org.apache.log4j.Logger;
 
 import edu.jas.kern.PrettyPrint;
+import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.ExpVector;
 import edu.jas.gbufd.PolyGBUtil;
 import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.QuotElem;
 
 
 /**
@@ -23,7 +25,9 @@ import edu.jas.structure.GcdRingElem;
  * @author Heinz Kredel
  */
 public class SolvableLocalResidue<C extends GcdRingElem<C>> 
-             implements GcdRingElem<SolvableLocalResidue<C>> {
+       implements GcdRingElem<SolvableLocalResidue<C>>, QuotElem<GenPolynomial<C>>  {
+// Can not extend SolvableLocal or SolvableQuotient because of 
+// different constructor semantics.
 
 
     private static final Logger logger = Logger.getLogger(SolvableLocalResidue.class);
@@ -170,6 +174,24 @@ public class SolvableLocalResidue<C extends GcdRingElem<C>>
      */
     public SolvableLocalResidueRing<C> factory() {
         return ring;
+    }
+
+
+    /**
+     * Numerator.
+     * @see edu.jas.structure.QuotElem#numerator()
+     */
+    public GenSolvablePolynomial<C> numerator() {
+        return num;
+    }
+
+
+    /**
+     * Denominator.
+     * @see edu.jas.structure.QuotElem#denominator()
+     */
+    public GenSolvablePolynomial<C> denominator() {
+        return den;
     }
 
 
