@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.QuotElem;
+import edu.jas.structure.QuotPair;
 
 
 /**
@@ -19,7 +19,7 @@ import edu.jas.structure.QuotElem;
  * @author Heinz Kredel
  */
 public class Quotient<C extends GcdRingElem<C>> 
-    implements GcdRingElem<Quotient<C>>, QuotElem<GenPolynomial<C>> {
+    implements GcdRingElem<Quotient<C>>, QuotPair<GenPolynomial<C>> {
 
 
     private static final Logger logger = Logger.getLogger(Quotient.class);
@@ -131,7 +131,7 @@ public class Quotient<C extends GcdRingElem<C>>
 
     /**
      * Numerator.
-     * @see edu.jas.structure.QuotElem#numerator()
+     * @see edu.jas.structure.QuotPair#numerator()
      */
     public GenPolynomial<C> numerator() {
         return num;
@@ -140,7 +140,7 @@ public class Quotient<C extends GcdRingElem<C>>
 
     /**
      * Denominator.
-     * @see edu.jas.structure.QuotElem#denominator()
+     * @see edu.jas.structure.QuotPair#denominator()
      */
     public GenPolynomial<C> denominator() {
         return den;

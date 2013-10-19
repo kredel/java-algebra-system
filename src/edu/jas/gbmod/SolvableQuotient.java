@@ -15,7 +15,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.gbufd.PolyGBUtil;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.QuotElem;
+import edu.jas.structure.QuotPair;
 
 
 /**
@@ -25,7 +25,7 @@ import edu.jas.structure.QuotElem;
  * @author Heinz Kredel
  */
 public class SolvableQuotient<C extends GcdRingElem<C>> 
-    implements GcdRingElem<SolvableQuotient<C>>, QuotElem<GenPolynomial<C>> {
+    implements GcdRingElem<SolvableQuotient<C>>, QuotPair<GenPolynomial<C>> {
 
 
     private static final Logger logger = Logger.getLogger(SolvableQuotient.class);
@@ -161,7 +161,7 @@ public class SolvableQuotient<C extends GcdRingElem<C>>
 
     /**
      * Numerator.
-     * @see edu.jas.structure.QuotElem#numerator()
+     * @see edu.jas.structure.QuotPair#numerator()
      */
     public GenSolvablePolynomial<C> numerator() {
         return num;
@@ -170,7 +170,7 @@ public class SolvableQuotient<C extends GcdRingElem<C>>
 
     /**
      * Denominator.
-     * @see edu.jas.structure.QuotElem#denominator()
+     * @see edu.jas.structure.QuotPair#denominator()
      */
     public GenSolvablePolynomial<C> denominator() {
         return den;

@@ -19,8 +19,8 @@ import edu.jas.kern.ComputerThreads;
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
-import edu.jas.poly.TermOrder;
 import edu.jas.poly.RelationGenerator;
+import edu.jas.poly.TermOrder;
 import edu.jas.poly.WeylRelations;
 
 
@@ -32,7 +32,7 @@ public class SolvableLocalResidueTest extends TestCase {
 
 
     /**
-     * main. 
+     * main.
      */
     public static void main(String[] args) {
         BasicConfigurator.configure();
@@ -88,7 +88,7 @@ public class SolvableLocalResidueTest extends TestCase {
     float q = 0.15f;
 
 
-    int il = ( rl == 1 ? 1 : 2 ); 
+    int il = (rl == 1 ? 1 : 2);
 
 
     @Override
@@ -99,8 +99,8 @@ public class SolvableLocalResidueTest extends TestCase {
         mfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), rl, to, vars);
         RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
         wl.generate(mfac);
-        if (!mfac.isAssociative() ) {
-           System.out.println("ring not associative: " + mfac);
+        if (!mfac.isAssociative()) {
+            System.out.println("ring not associative: " + mfac);
         }
         //id = genRandomIdeal();
         //id = genIdealA();
@@ -115,15 +115,15 @@ public class SolvableLocalResidueTest extends TestCase {
     protected SolvableIdeal<BigRational> genRandomIdeal() {
         List<GenSolvablePolynomial<BigRational>> F;
         do {
-            F = new ArrayList<GenSolvablePolynomial<BigRational>>( il );
-            for ( int i = 0; i < il; i++ ) {
-                GenSolvablePolynomial<BigRational> mo = mfac.random(kl,ll,el+1,q);
-                while ( mo.isConstant() ) {
-                    mo = mfac.random(kl,ll,el+1,q);
+            F = new ArrayList<GenSolvablePolynomial<BigRational>>(il);
+            for (int i = 0; i < il; i++) {
+                GenSolvablePolynomial<BigRational> mo = mfac.random(kl, ll, el + 1, q);
+                while (mo.isConstant()) {
+                    mo = mfac.random(kl, ll, el + 1, q);
                 }
-                F.add( mo );
+                F.add(mo);
             }
-            SolvableIdeal<BigRational> id = new SolvableIdeal<BigRational>(mfac,F);
+            SolvableIdeal<BigRational> id = new SolvableIdeal<BigRational>(mfac, F);
             id.doGB();
         } while (id.isONE());
         return id;
@@ -133,15 +133,15 @@ public class SolvableLocalResidueTest extends TestCase {
     protected SolvableIdeal<BigRational> genIdealA() {
         GenSolvablePolynomial<BigRational> p;
         List<GenSolvablePolynomial<BigRational>> F;
-        F = new ArrayList<GenSolvablePolynomial<BigRational>>( il );
+        F = new ArrayList<GenSolvablePolynomial<BigRational>>(il);
         p = mfac.parse("y^2 - 42/5");
-        F.add( p );
+        F.add(p);
         //p = mfac.parse("z^2");
         p = mfac.parse("x^2");
-        F.add( p );
+        F.add(p);
         //p = mfac.parse("x^2 - w^2 ");
         //F.add( p );
-        SolvableIdeal<BigRational> id = new SolvableIdeal<BigRational>(mfac,F);
+        SolvableIdeal<BigRational> id = new SolvableIdeal<BigRational>(mfac, F);
         id.doGB();
         return id;
     }
@@ -150,12 +150,12 @@ public class SolvableLocalResidueTest extends TestCase {
     protected SolvableIdeal<BigRational> genPrimeIdealA() { // well, almost
         GenSolvablePolynomial<BigRational> p;
         List<GenSolvablePolynomial<BigRational>> F;
-        F = new ArrayList<GenSolvablePolynomial<BigRational>>( il );
+        F = new ArrayList<GenSolvablePolynomial<BigRational>>(il);
         p = mfac.parse("y^2 + 5");
-        F.add( p );
+        F.add(p);
         p = mfac.parse("x^2 + 3");
-        F.add( p );
-        SolvableIdeal<BigRational> id = new SolvableIdeal<BigRational>(mfac,F);
+        F.add(p);
+        SolvableIdeal<BigRational> id = new SolvableIdeal<BigRational>(mfac, F);
         id.doGB();
         return id;
     }
@@ -260,7 +260,7 @@ public class SolvableLocalResidueTest extends TestCase {
         //System.out.println("a = " + a);
         assertEquals("(a+b)-b = a: b = " + b, a, d);
 
-        c = efac.random(kl,ll,el,q);
+        c = efac.random(kl, ll, el, q);
         //c = new SolvableLocalResidue<BigRational>(efac, mfac.univariate(1, 2));
         //c = efac.parse("{ 42/5 }");
         //System.out.println("c = " + c);
@@ -297,7 +297,7 @@ public class SolvableLocalResidueTest extends TestCase {
         //assertTrue("a*b != b*a", c.equals(d) || c.leadingExpVector().equals(d.leadingExpVector()) );
 
         //c = efac.random(kl,ll,el,q);
-        c = new SolvableLocalResidue<BigRational>(efac, mfac.univariate(1, 2)); 
+        c = new SolvableLocalResidue<BigRational>(efac, mfac.univariate(1, 2));
         //System.out.println("c = " + c);
         d = a.multiply(b.multiply(c));
         //System.out.println("d = " + d);
@@ -311,9 +311,9 @@ public class SolvableLocalResidueTest extends TestCase {
      * Test inverse.
      */
     public void testInverse() {
-        a = efac.random(kl, ll+1, el+1, q*1.15f);
+        a = efac.random(kl, ll + 1, el + 1, q * 1.15f);
         //System.out.println("a = " + a);
-        b = new SolvableLocalResidue<BigRational>(efac, mfac.getONE(), mfac.univariate(1, 2)); 
+        b = new SolvableLocalResidue<BigRational>(efac, mfac.getONE(), mfac.univariate(1, 2));
         //System.out.println("b = " + b);
         a = a.multiply(b);
         //System.out.println("a = " + a);
@@ -346,12 +346,12 @@ public class SolvableLocalResidueTest extends TestCase {
         e = c.multiply(c).sum(d);
         //System.out.println("e = " + e);
         assertTrue("e == 0 mod ideal", e.isZERO());
-        for ( GenSolvablePolynomial<BigRational> p : efac.ideal.getList() ) {
-             String s = p.toString();
-             //System.out.println("s = " + s);
-             e = efac.parse( s ); // eval mod ideal
-             //System.out.println("e = " + e);
-             assertTrue("e == 0 mod ideal", e.isZERO());
+        for (GenSolvablePolynomial<BigRational> p : efac.ideal.getList()) {
+            String s = p.toString();
+            //System.out.println("s = " + s);
+            e = efac.parse(s); // eval mod ideal
+            //System.out.println("e = " + e);
+            assertTrue("e == 0 mod ideal", e.isZERO());
         }
     }
 

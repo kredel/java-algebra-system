@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingElem;
-import edu.jas.structure.QuotElem;
+import edu.jas.structure.QuotPair;
 
 
 /**
@@ -18,7 +18,7 @@ import edu.jas.structure.QuotElem;
  * @author Heinz Kredel
  */
 public class Local<C extends RingElem<C>> 
-    implements RingElem<Local<C>>, QuotElem<C> {
+    implements RingElem<Local<C>>, QuotPair<C> {
 
 
     private static final Logger logger = Logger.getLogger(Local.class);
@@ -148,7 +148,7 @@ public class Local<C extends RingElem<C>>
 
     /**
      * Numerator.
-     * @see edu.jas.structure.QuotElem#numerator()
+     * @see edu.jas.structure.QuotPair#numerator()
      */
     public C numerator() {
         return num;
@@ -157,7 +157,7 @@ public class Local<C extends RingElem<C>>
 
     /**
      * Denominator.
-     * @see edu.jas.structure.QuotElem#denominator()
+     * @see edu.jas.structure.QuotPair#denominator()
      */
     public C denominator() {
         return den;

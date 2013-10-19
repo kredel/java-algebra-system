@@ -11,7 +11,7 @@ package edu.jas.structure;
  * @param C base element type
  * @author Heinz Kredel
  */
-public interface QuotElem<C extends RingElem<C>> {
+public interface QuotPair<C extends RingElem<C>> {
 
 
     /**

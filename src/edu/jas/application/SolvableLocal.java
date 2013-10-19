@@ -16,7 +16,7 @@ import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.gbufd.PolyGBUtil;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingElem;
-import edu.jas.structure.QuotElem;
+import edu.jas.structure.QuotPair;
 
 
 /**
@@ -26,7 +26,7 @@ import edu.jas.structure.QuotElem;
  */
 // To be fixed?: Not jet working because of monic GBs.
 public class SolvableLocal<C extends GcdRingElem<C>> 
-       implements RingElem<SolvableLocal<C>>, QuotElem<GenPolynomial<C>> {
+       implements RingElem<SolvableLocal<C>>, QuotPair<GenPolynomial<C>> {
 
 
     private static final Logger logger = Logger.getLogger(SolvableLocal.class);
@@ -181,7 +181,7 @@ public class SolvableLocal<C extends GcdRingElem<C>>
 
     /**
      * Numerator.
-     * @see edu.jas.structure.QuotElem#numerator()
+     * @see edu.jas.structure.QuotPair#numerator()
      */
     public GenSolvablePolynomial<C> numerator() {
         return num;
@@ -190,7 +190,7 @@ public class SolvableLocal<C extends GcdRingElem<C>>
 
     /**
      * Denominator.
-     * @see edu.jas.structure.QuotElem#denominator()
+     * @see edu.jas.structure.QuotPair#denominator()
      */
     public GenSolvablePolynomial<C> denominator() {
         return den;

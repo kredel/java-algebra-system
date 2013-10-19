@@ -12,6 +12,9 @@ import java.util.Random;
 
 import org.apache.log4j.Logger;
 
+import edu.jas.gb.SolvableGroebnerBaseAbstract;
+import edu.jas.gb.SolvableGroebnerBaseSeq;
+import edu.jas.gbmod.SolvableSyzygyAbstract;
 import edu.jas.kern.StringUtil;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
@@ -19,28 +22,25 @@ import edu.jas.poly.PolynomialList;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 
-import edu.jas.gb.SolvableGroebnerBaseAbstract;
-import edu.jas.gb.SolvableGroebnerBaseSeq;
-import edu.jas.gbmod.SolvableSyzygyAbstract;
-import edu.jas.application.SolvableIdeal;
-
 
 /**
  * SolvableLocalResidue ring factory based on SolvableResidue and
- * GenSolvablePolynomial with RingElem interface. Objects of this
- * class are immutable.
+ * GenSolvablePolynomial with RingElem interface. Objects of this class are
+ * immutable.
  * @author Heinz Kredel
  */
-public class SolvableLocalResidueRing<C extends GcdRingElem<C>> 
-             implements RingFactory<SolvableLocalResidue<C>> {
-// Can not extend SolvableLocalRing or SolvableQuotientRing 
-// because of different constructor semantics.
+public class SolvableLocalResidueRing<C extends GcdRingElem<C>> implements
+                RingFactory<SolvableLocalResidue<C>> {
+
+
+    // Can not extend SolvableLocalRing or SolvableQuotientRing 
+    // because of different constructor semantics.
 
 
     private static final Logger logger = Logger.getLogger(SolvableLocalResidueRing.class);
 
 
-    private boolean debug = logger.isDebugEnabled();
+    private final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -74,8 +74,8 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>>
 
 
     /**
-     * The constructor creates a SolvableLocalResidueRing object
-     * from a SolvableIdeal.
+     * The constructor creates a SolvableLocalResidueRing object from a
+     * SolvableIdeal.
      * @param i ideal in solvable polynomial ring.
      */
     public SolvableLocalResidueRing(SolvableIdeal<C> i) {
@@ -89,8 +89,8 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>>
         }
         if (ideal.isMaximal()) {
             isField = 1;
-        //} else if (ideal.isPrime()) {
-        //    isField = 1;
+            //} else if (ideal.isPrime()) {
+            //    isField = 1;
         } else {
             //isField = 0;
             logger.warn("ideal not maximal and not known to be prime");
@@ -147,12 +147,12 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>>
      */
     public List<SolvableLocalResidue<C>> generators() {
         List<GenSolvablePolynomial<C>> pgens = PolynomialList.<C> castToSolvableList(ring.generators());
-        List<SolvableLocalResidue<C>> gens = new ArrayList<SolvableLocalResidue<C>>(pgens.size()*2-1);
+        List<SolvableLocalResidue<C>> gens = new ArrayList<SolvableLocalResidue<C>>(pgens.size() * 2 - 1);
         GenSolvablePolynomial<C> one = ring.getONE();
         for (GenSolvablePolynomial<C> p : pgens) {
             SolvableLocalResidue<C> q = new SolvableLocalResidue<C>(this, p);
             gens.add(q);
-            if ( !p.isONE() && !ideal.contains(p) ) {
+            if (!p.isONE() && !ideal.contains(p)) {
                 q = new SolvableLocalResidue<C>(this, one, p);
                 gens.add(q);
             }
@@ -303,7 +303,7 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>>
      * @see java.lang.Object#hashCode()
      */
     @Override
-        public int hashCode() {
+    public int hashCode() {
         int h;
         h = ideal.hashCode();
         return h;
@@ -366,8 +366,9 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>>
 
 
     /**
-     * Parse SolvableLocalResidue from String. Syntax: "{ polynomial | polynomial }" or
-     * "{ polynomial }" or " polynomial | polynomial " or " polynomial "
+     * Parse SolvableLocalResidue from String. Syntax:
+     * "{ polynomial | polynomial }" or "{ polynomial }" or
+     * " polynomial | polynomial " or " polynomial "
      * @param s String.
      * @return SolvableLocalResidue from s.
      */

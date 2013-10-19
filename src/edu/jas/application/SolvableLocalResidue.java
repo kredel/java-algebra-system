@@ -9,25 +9,27 @@ import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 
+import edu.jas.gbufd.PolyGBUtil;
 import edu.jas.kern.PrettyPrint;
+import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
-import edu.jas.poly.ExpVector;
-import edu.jas.gbufd.PolyGBUtil;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.QuotElem;
+import edu.jas.structure.QuotPair;
 
 
 /**
- * SolvableLocalResidue, that is a (left) rational function, based
- * on SolvableResidue and GenSolvablePolynomial with RingElem
- * interface. Objects of this class are immutable.
+ * SolvableLocalResidue, that is a (left) rational function, based on
+ * SolvableResidue and GenSolvablePolynomial with RingElem interface. Objects of
+ * this class are immutable.
  * @author Heinz Kredel
  */
-public class SolvableLocalResidue<C extends GcdRingElem<C>> 
-       implements GcdRingElem<SolvableLocalResidue<C>>, QuotElem<GenPolynomial<C>>  {
-// Can not extend SolvableLocal or SolvableQuotient because of 
-// different constructor semantics.
+public class SolvableLocalResidue<C extends GcdRingElem<C>> implements GcdRingElem<SolvableLocalResidue<C>>,
+                QuotPair<GenPolynomial<C>> {
+
+
+    // Can not extend SolvableLocal or SolvableQuotient because of 
+    // different constructor semantics.
 
 
     private static final Logger logger = Logger.getLogger(SolvableLocalResidue.class);
@@ -55,7 +57,8 @@ public class SolvableLocalResidue<C extends GcdRingElem<C>>
 
 
     /**
-     * The constructor creates a SolvableLocalResidue object from a ring factory.
+     * The constructor creates a SolvableLocalResidue object from a ring
+     * factory.
      * @param r ring factory.
      */
     public SolvableLocalResidue(SolvableLocalResidueRing<C> r) {
@@ -64,8 +67,8 @@ public class SolvableLocalResidue<C extends GcdRingElem<C>>
 
 
     /**
-     * The constructor creates a SolvableLocalResidue object from a ring factory and a
-     * numerator polynomial. The denominator is assumed to be 1.
+     * The constructor creates a SolvableLocalResidue object from a ring factory
+     * and a numerator polynomial. The denominator is assumed to be 1.
      * @param r ring factory.
      * @param n numerator solvable polynomial.
      */
@@ -75,29 +78,28 @@ public class SolvableLocalResidue<C extends GcdRingElem<C>>
 
 
     /**
-     * The constructor creates a SolvableLocalResidue object from a ring factory and a
-     * numerator and denominator solvable polynomial.
+     * The constructor creates a SolvableLocalResidue object from a ring factory
+     * and a numerator and denominator solvable polynomial.
      * @param r ring factory.
      * @param n numerator polynomial.
      * @param d denominator polynomial.
      */
-    public SolvableLocalResidue(SolvableLocalResidueRing<C> r, 
-                                GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d) {
+    public SolvableLocalResidue(SolvableLocalResidueRing<C> r, GenSolvablePolynomial<C> n,
+                    GenSolvablePolynomial<C> d) {
         this(r, n, d, false);
     }
 
 
     /**
-     * The constructor creates a SolvableLocalResidue object from a ring factory and a
-     * numerator and denominator polynomial.
+     * The constructor creates a SolvableLocalResidue object from a ring factory
+     * and a numerator and denominator polynomial.
      * @param r ring factory.
      * @param n numerator polynomial.
      * @param d denominator polynomial.
      * @param isred <em>unused at the moment</em>.
      */
-    protected SolvableLocalResidue(SolvableLocalResidueRing<C> r, 
-                      GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d, 
-                      boolean isred) {
+    protected SolvableLocalResidue(SolvableLocalResidueRing<C> r, GenSolvablePolynomial<C> n,
+                    GenSolvablePolynomial<C> d, boolean isred) {
         if (d == null || d.isZERO()) {
             throw new IllegalArgumentException("denominator may not be zero");
         }
@@ -117,7 +119,7 @@ public class SolvableLocalResidue<C extends GcdRingElem<C>>
         }
         //d = p; // not always working
         GenSolvablePolynomial<C> nr = ring.ideal.normalform(n); // leftNF
-        if ( nr.isZERO() ) {
+        if (nr.isZERO()) {
             num = nr;
             den = ring.ring.getONE();
             return;
@@ -134,17 +136,17 @@ public class SolvableLocalResidue<C extends GcdRingElem<C>>
             num = ring.ring.getONE();
             den = ring.ring.getONE();
             return;
-	}
+        }
         if (n.negate().compareTo(d) == 0) {
             num = (GenSolvablePolynomial<C>) ring.ring.getONE().negate();
             den = ring.ring.getONE();
             return;
         }
-        if ( n.isZERO() ) {
+        if (n.isZERO()) {
             num = n;
             den = ring.ring.getONE();
             return;
-	}
+        }
         if (n.isONE()) {
             num = n;
             den = d;
@@ -152,7 +154,7 @@ public class SolvableLocalResidue<C extends GcdRingElem<C>>
         }
         // must reduce to lowest terms
         // not perfect, TODO
-        GenSolvablePolynomial<C>[] gcd = PolyGBUtil.<C> syzGcdCofactors(r.ring,n,d);
+        GenSolvablePolynomial<C>[] gcd = PolyGBUtil.<C> syzGcdCofactors(r.ring, n, d);
         if (!gcd[0].isONE()) {
             logger.info("constructor: gcd = " + Arrays.toString(gcd)); // + ", " + n + ", " +d);
             n = gcd[1];
@@ -160,8 +162,8 @@ public class SolvableLocalResidue<C extends GcdRingElem<C>>
             // d not in ideal --> gcd not in ideal 
         }
         // not perfect, TODO 
-        GenSolvablePolynomial<C>[] simp = ring.engine.leftSimplifier(n,d);
-        logger.info("simp: " + Arrays.toString(simp) + ", " + n + ", " +d);
+        GenSolvablePolynomial<C>[] simp = ring.engine.leftSimplifier(n, d);
+        logger.info("simp: " + Arrays.toString(simp) + ", " + n + ", " + d);
         num = simp[0];
         den = simp[1];
     }
@@ -179,7 +181,7 @@ public class SolvableLocalResidue<C extends GcdRingElem<C>>
 
     /**
      * Numerator.
-     * @see edu.jas.structure.QuotElem#numerator()
+     * @see edu.jas.structure.QuotPair#numerator()
      */
     public GenSolvablePolynomial<C> numerator() {
         return num;
@@ -188,7 +190,7 @@ public class SolvableLocalResidue<C extends GcdRingElem<C>>
 
     /**
      * Denominator.
-     * @see edu.jas.structure.QuotElem#denominator()
+     * @see edu.jas.structure.QuotPair#denominator()
      */
     public GenSolvablePolynomial<C> denominator() {
         return den;
@@ -352,7 +354,7 @@ public class SolvableLocalResidue<C extends GcdRingElem<C>>
         if (a == null) {
             return false;
         }
-        return compareTo( a ) == 0;
+        return compareTo(a) == 0;
     }
 
 
@@ -406,11 +408,11 @@ public class SolvableLocalResidue<C extends GcdRingElem<C>>
             return new SolvableLocalResidue<C>(ring, n, den, false);
         }
         // general case
-        GenSolvablePolynomial<C>[] oc = ring.engine.leftOreCond(den,S.den);
+        GenSolvablePolynomial<C>[] oc = ring.engine.leftOreCond(den, S.den);
         if (debug) {
-            logger.info("oc[0] den =sum= oc[1] S.den: (" + oc[0] + ") (" + den + ") = (" + oc[1]
-                            + ") (" + S.den + ")");
-	}
+            logger.info("oc[0] den =sum= oc[1] S.den: (" + oc[0] + ") (" + den + ") = (" + oc[1] + ") ("
+                            + S.den + ")");
+        }
         d = oc[0].multiply(den);
         n1 = oc[0].multiply(num);
         n2 = oc[1].multiply(S.num);
@@ -515,7 +517,7 @@ public class SolvableLocalResidue<C extends GcdRingElem<C>>
         if (S.den.isONE()) { }
         if ( den.compareTo(S.den) == 0 ) { }
         */
-        GenSolvablePolynomial<C>[] oc = ring.engine.leftOreCond(num,S.den);
+        GenSolvablePolynomial<C>[] oc = ring.engine.leftOreCond(num, S.den);
         if (debug) {
             System.out.println("oc[0] num =mult= oc[1] S.den: (" + oc[0] + ") (" + num + ") = (" + oc[1]
                             + ") (" + S.den + ")");
