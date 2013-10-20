@@ -24,8 +24,8 @@ import edu.jas.structure.QuotPair;
  * this class are immutable.
  * @author Heinz Kredel
  */
-public class SolvableLocalResidue<C extends GcdRingElem<C>> implements GcdRingElem<SolvableLocalResidue<C>>,
-                QuotPair<GenPolynomial<C>> {
+public class SolvableLocalResidue<C extends GcdRingElem<C>> 
+       implements GcdRingElem<SolvableLocalResidue<C>>, QuotPair<GenPolynomial<C>> {
 
 
     // Can not extend SolvableLocal or SolvableQuotient because of 
@@ -241,7 +241,7 @@ public class SolvableLocalResidue<C extends GcdRingElem<C>> implements GcdRingEl
 
 
     /**
-     * Is Qoutient a constant.
+     * Is Quotient a constant.
      * @return true, if this has constant numerator and denominator, else false.
      */
     public boolean isConstant() {

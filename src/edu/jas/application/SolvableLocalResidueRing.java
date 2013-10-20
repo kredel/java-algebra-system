@@ -16,11 +16,13 @@ import edu.jas.gb.SolvableGroebnerBaseAbstract;
 import edu.jas.gb.SolvableGroebnerBaseSeq;
 import edu.jas.gbmod.SolvableSyzygyAbstract;
 import edu.jas.kern.StringUtil;
+import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolynomialList;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.QuotPairFactory;
 
 
 /**
@@ -29,8 +31,8 @@ import edu.jas.structure.RingFactory;
  * immutable.
  * @author Heinz Kredel
  */
-public class SolvableLocalResidueRing<C extends GcdRingElem<C>> implements
-                RingFactory<SolvableLocalResidue<C>> {
+public class SolvableLocalResidueRing<C extends GcdRingElem<C>> 
+    implements RingFactory<SolvableLocalResidue<C>>, QuotPairFactory<GenPolynomial<C>,SolvableLocalResidue<C>> {
 
 
     // Can not extend SolvableLocalRing or SolvableQuotientRing 
@@ -99,6 +101,33 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>> implements
         engine = new SolvableSyzygyAbstract<C>();
         bb = new SolvableGroebnerBaseSeq<C>();
         logger.debug("solvable local residue ring constructed");
+    }
+
+
+    /**
+     * Factory for base elements.
+     * @see edu.jas.structure.QuotPairFactory#pairFactory()
+     */
+    public GenSolvablePolynomialRing<C> pairFactory() {
+        return ring;
+    }
+
+
+    /**
+     * Create from numerator.
+     * @see edu.jas.structure.QuotPairFactory#create(GenPolynomial)
+     */
+    public SolvableLocalResidue<C> create(GenPolynomial<C> n) {
+        return new SolvableLocalResidue<C>(this,(GenSolvablePolynomial<C>)n);
+    }
+
+
+    /**
+     * Create from numerator, denominator pair.
+     * @see edu.jas.structure.QuotPairFactory#create(GenPolynomial, GenPolynomial)
+     */
+    public SolvableLocalResidue<C> create(GenPolynomial<C> n, GenPolynomial<C> d) {
+        return new SolvableLocalResidue<C>(this,(GenSolvablePolynomial<C>)n,(GenSolvablePolynomial<C>)d);
     }
 
 
