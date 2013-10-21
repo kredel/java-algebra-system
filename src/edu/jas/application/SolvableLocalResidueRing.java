@@ -115,7 +115,7 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>>
 
     /**
      * Create from numerator.
-     * @see edu.jas.structure.QuotPairFactory#create(GenPolynomial)
+     * @see edu.jas.structure.QuotPairFactory#create(C)
      */
     public SolvableLocalResidue<C> create(GenPolynomial<C> n) {
         return new SolvableLocalResidue<C>(this,(GenSolvablePolynomial<C>)n);
@@ -124,7 +124,7 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>>
 
     /**
      * Create from numerator, denominator pair.
-     * @see edu.jas.structure.QuotPairFactory#create(GenPolynomial, GenPolynomial)
+     * @see edu.jas.structure.QuotPairFactory#create(C, C)
      */
     public SolvableLocalResidue<C> create(GenPolynomial<C> n, GenPolynomial<C> d) {
         return new SolvableLocalResidue<C>(this,(GenSolvablePolynomial<C>)n,(GenSolvablePolynomial<C>)d);
