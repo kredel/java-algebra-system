@@ -154,6 +154,16 @@ public class Quotient<C extends RingElem<C>>
 
 
     /**
+     * Is Quotient a constant.
+     * Not implemented.
+     * @throws UnsupportedOperationException.
+     */
+    public boolean isConstant() {
+        throw new UnsupportedOperationException("isConstant not implemented");
+    }
+
+
+    /**
      * Clone this.
      * @see java.lang.Object#clone()
      */

@@ -50,7 +50,8 @@ import edu.jas.structure.QuotPairFactory;
  * @author Heinz Kredel
  */
 
-public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPolynomial<D>>, D extends GcdRingElem<D> > 
+public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPolynomial<D>>, 
+                                       D extends GcdRingElem<D> > 
        extends GenSolvablePolynomialRing<C> {
 
 

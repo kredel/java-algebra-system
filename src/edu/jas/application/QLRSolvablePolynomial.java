@@ -33,7 +33,8 @@ import edu.jas.structure.QuotPair;
  * @author Heinz Kredel
  */
 
-public class QLRSolvablePolynomial<C extends GcdRingElem<C> & QuotPair<GenPolynomial<D>>, D extends GcdRingElem<D> >
+public class QLRSolvablePolynomial<C extends GcdRingElem<C> & QuotPair<GenPolynomial<D>>, 
+                                   D extends GcdRingElem<D> >
        extends GenSolvablePolynomial<C> {
 
 

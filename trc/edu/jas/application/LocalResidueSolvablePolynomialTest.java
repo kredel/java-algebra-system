@@ -399,12 +399,12 @@ public class LocalResidueSolvablePolynomialTest extends TestCase {
         //a = ring.random(kl, ll, el, q);
         //a = ring.getONE();
         a = ring.parse("x^2 + a b");
-        System.out.println("a = " + a.toScript());
+        //System.out.println("a = " + a.toScript());
         //b = ring.random(kl, ll, el, q);
         //b = ring.getONE();
         b = ring.parse("a b + a"); // a b^2 + a 
         b = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>,BigRational>) b.inverse();
-        System.out.println("b = " + b.toScript());
+        //System.out.println("b = " + b.toScript());
 
         // non-commutative
         c = b.multiply(a);

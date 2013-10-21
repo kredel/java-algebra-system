@@ -165,6 +165,16 @@ public class Local<C extends RingElem<C>>
 
 
     /**
+     * Is Local a constant.
+     * Not implemented.
+     * @throws UnsupportedOperationException.
+     */
+    public boolean isConstant() {
+        throw new UnsupportedOperationException("isConstant not implemented");
+    }
+
+
+    /**
      * Clone this.
      * @see java.lang.Object#clone()
      */
