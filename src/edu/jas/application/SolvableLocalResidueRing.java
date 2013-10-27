@@ -106,7 +106,7 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>>
 
     /**
      * Factory for base elements.
-     * @see edu.jas.structure.QuotPairFactory#pairFactory()
+     * see edu.jas.structure.QuotPairFactory#pairFactory()
      */
     public GenSolvablePolynomialRing<C> pairFactory() {
         return ring;
@@ -115,7 +115,7 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>>
 
     /**
      * Create from numerator.
-     * @see edu.jas.structure.QuotPairFactory#create(C)
+     * see edu.jas.structure.QuotPairFactory#create(C)
      */
     public SolvableLocalResidue<C> create(GenPolynomial<C> n) {
         return new SolvableLocalResidue<C>(this,(GenSolvablePolynomial<C>)n);
@@ -124,7 +124,7 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>>
 
     /**
      * Create from numerator, denominator pair.
-     * @see edu.jas.structure.QuotPairFactory#create(C, C)
+     * see edu.jas.structure.QuotPairFactory#create(C, C)
      */
     public SolvableLocalResidue<C> create(GenPolynomial<C> n, GenPolynomial<C> d) {
         return new SolvableLocalResidue<C>(this,(GenSolvablePolynomial<C>)n,(GenSolvablePolynomial<C>)d);
@@ -134,7 +134,7 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>>
     /**
      * Is this structure finite or infinite.
      * @return true if this structure is finite, else false.
-     * @see edu.jas.structure.ElemFactory#isFinite()
+     * see edu.jas.structure.ElemFactory#isFinite()
      */
     public boolean isFinite() {
         return ring.isFinite() && bb.commonZeroTest(ideal.getList()) <= 0;
@@ -172,7 +172,7 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>>
     /**
      * Get a list of the generating elements.
      * @return list of generators for the algebraic structure.
-     * @see edu.jas.structure.ElemFactory#generators()
+     * see edu.jas.structure.ElemFactory#generators()
      */
     public List<SolvableLocalResidue<C>> generators() {
         List<GenSolvablePolynomial<C>> pgens = PolynomialList.<C> castToSolvableList(ring.generators());
@@ -285,7 +285,7 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>>
 
     /**
      * Get the String representation as RingFactory.
-     * @see java.lang.Object#toString()
+     * see java.lang.Object#toString()
      */
     @Override
     public String toString() {
@@ -296,7 +296,7 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>>
     /**
      * Get a scripting compatible string representation.
      * @return script compatible representation for this ElemFactory.
-     * @see edu.jas.structure.ElemFactory#toScript()
+     * see edu.jas.structure.ElemFactory#toScript()
      */
     @Override
     public String toScript() {
@@ -307,7 +307,7 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>>
 
     /**
      * Comparison with any other object.
-     * @see java.lang.Object#equals(java.lang.Object)
+     * see java.lang.Object#equals(java.lang.Object)
      */
     @Override
     @SuppressWarnings("unchecked")
@@ -329,7 +329,7 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>>
 
     /**
      * Hash code for this quotient ring.
-     * @see java.lang.Object#hashCode()
+     * see java.lang.Object#hashCode()
      */
     @Override
     public int hashCode() {

@@ -105,7 +105,7 @@ public class SolvableLocalRing<C extends GcdRingElem<C>>
 
     /**
      * Factory for base elements.
-     * @see edu.jas.structure.QuotPairFactory#pairFactory()
+     * see edu.jas.structure.QuotPairFactory#pairFactory()
      */
     public GenSolvablePolynomialRing<C> pairFactory() {
         return ring;
@@ -114,7 +114,7 @@ public class SolvableLocalRing<C extends GcdRingElem<C>>
 
     /**
      * Create from numerator.
-     * @see edu.jas.structure.QuotPairFactory#create(C)
+     * see edu.jas.structure.QuotPairFactory#create(C)
      */
     public SolvableLocal<C> create(GenPolynomial<C> n) {
         return new SolvableLocal<C>(this,(GenSolvablePolynomial<C>)n);
@@ -123,7 +123,7 @@ public class SolvableLocalRing<C extends GcdRingElem<C>>
 
     /**
      * Create from numerator, denominator pair.
-     * @see edu.jas.structure.QuotPairFactory#create(C, C)
+     * see edu.jas.structure.QuotPairFactory#create(C, C)
      */
     public SolvableLocal<C> create(GenPolynomial<C> n, GenPolynomial<C> d) {
         return new SolvableLocal<C>(this,(GenSolvablePolynomial<C>)n,(GenSolvablePolynomial<C>)d);
@@ -133,7 +133,7 @@ public class SolvableLocalRing<C extends GcdRingElem<C>>
     /**
      * Is this structure finite or infinite.
      * @return true if this structure is finite, else false.
-     * @see edu.jas.structure.ElemFactory#isFinite()
+     * see edu.jas.structure.ElemFactory#isFinite()
      */
     public boolean isFinite() {
         return ring.isFinite() && bb.commonZeroTest(ideal.getList()) <= 0;
@@ -142,7 +142,7 @@ public class SolvableLocalRing<C extends GcdRingElem<C>>
 
     /**
      * Copy SolvableLocal element c.
-     * @param c
+     * @param c element to copy
      * @return a copy of c.
      */
     public SolvableLocal<C> copy(SolvableLocal<C> c) {
@@ -171,7 +171,7 @@ public class SolvableLocalRing<C extends GcdRingElem<C>>
     /**
      * Get a list of the generating elements.
      * @return list of generators for the algebraic structure.
-     * @see edu.jas.structure.ElemFactory#generators()
+     * see edu.jas.structure.ElemFactory#generators()
      */
     public List<SolvableLocal<C>> generators() {
         List<GenSolvablePolynomial<C>> pgens = PolynomialList.<C> castToSolvableList(ring.generators());
