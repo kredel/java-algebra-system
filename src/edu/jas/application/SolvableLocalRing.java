@@ -16,11 +16,13 @@ import edu.jas.gb.SolvableGroebnerBaseAbstract;
 import edu.jas.gb.SolvableGroebnerBaseSeq;
 import edu.jas.gbmod.SolvableSyzygyAbstract;
 import edu.jas.kern.StringUtil;
+import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolynomialList;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.QuotPairFactory;
 
 
 // import edu.jas.ufd.GreatestCommonDivisor;
@@ -31,7 +33,12 @@ import edu.jas.structure.RingFactory;
  * interface. Objects of this class are effective immutable.
  * @author Heinz Kredel
  */
-public class SolvableLocalRing<C extends GcdRingElem<C>> implements RingFactory<SolvableLocal<C>> {
+public class SolvableLocalRing<C extends GcdRingElem<C>> 
+       implements RingFactory<SolvableLocal<C>>, QuotPairFactory<GenPolynomial<C>,SolvableLocal<C>> {
+
+
+    // Can not extend SolvableQuotientRing 
+    // because of different constructor semantics.
 
 
     private static final Logger logger = Logger.getLogger(SolvableLocalRing.class);
@@ -93,6 +100,33 @@ public class SolvableLocalRing<C extends GcdRingElem<C>> implements RingFactory<
         engine = new SolvableSyzygyAbstract<C>();
         bb = new SolvableGroebnerBaseSeq<C>();
         logger.debug("solvable local ring constructed");
+    }
+
+
+    /**
+     * Factory for base elements.
+     * @see edu.jas.structure.QuotPairFactory#pairFactory()
+     */
+    public GenSolvablePolynomialRing<C> pairFactory() {
+        return ring;
+    }
+
+
+    /**
+     * Create from numerator.
+     * @see edu.jas.structure.QuotPairFactory#create(C)
+     */
+    public SolvableLocal<C> create(GenPolynomial<C> n) {
+        return new SolvableLocal<C>(this,(GenSolvablePolynomial<C>)n);
+    }
+
+
+    /**
+     * Create from numerator, denominator pair.
+     * @see edu.jas.structure.QuotPairFactory#create(C, C)
+     */
+    public SolvableLocal<C> create(GenPolynomial<C> n, GenPolynomial<C> d) {
+        return new SolvableLocal<C>(this,(GenSolvablePolynomial<C>)n,(GenSolvablePolynomial<C>)d);
     }
 
 

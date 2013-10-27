@@ -183,6 +183,7 @@ public class LocalResidueSolvablePolynomialTest extends TestCase {
     /**
      * Test addition.
      */
+    @SuppressWarnings("unchecked")
     public void testAddition() {
         a = ring.random(kl+1, ll, el, q);
         c = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>,BigRational>) a.subtract(a);
@@ -246,6 +247,7 @@ public class LocalResidueSolvablePolynomialTest extends TestCase {
     /**
      * Test multiplication.
      */
+    @SuppressWarnings("unchecked")
     public void testMultiplication() {
         //System.out.println("ring = " + ring);
         a = ring.random(kl, ll - 1, el - 1, q);
@@ -285,6 +287,7 @@ public class LocalResidueSolvablePolynomialTest extends TestCase {
     /**
      * Test commutative ring.
      */
+    @SuppressWarnings("unchecked")
     public void testCommutative() {
         //System.out.println("table = " + ring.table.toString(vars));
         //System.out.println("table = " + ring.table.toScript());
@@ -327,6 +330,7 @@ public class LocalResidueSolvablePolynomialTest extends TestCase {
     /**
      * Test distributive law.
      */
+    @SuppressWarnings("unchecked")
     public void testDistributive() {
         a = ring.random(kl, ll, el, q);
         b = ring.random(kl, ll, el, q);
@@ -341,6 +345,7 @@ public class LocalResidueSolvablePolynomialTest extends TestCase {
     /**
      * Test solvable coefficient ring.
      */
+    @SuppressWarnings("unchecked")
     public void testSolvableCoeffs() {
         GenSolvablePolynomialRing<BigRational> csring = new GenSolvablePolynomialRing<BigRational>(cfac,
                         tord, cvars);
@@ -375,7 +380,7 @@ public class LocalResidueSolvablePolynomialTest extends TestCase {
         //System.out.println("r2 = " + r2);
         //System.out.println("rp = " + rp);
         ring.polCoeff.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(), rp);
-        //System.out.println("ring = " + ring);
+        //System.out.println("ring = " + ring.toScript());
         //System.out.println("ring.polCoeff = " + ring.polCoeff);
         assertFalse("isCommutative()", ring.isCommutative());
         assertTrue("isAssociative()", ring.isAssociative());

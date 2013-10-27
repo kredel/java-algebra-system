@@ -26,7 +26,7 @@ import edu.jas.structure.QuotPair;
  */
 // To be fixed?: Not jet working because of monic GBs.
 public class SolvableLocal<C extends GcdRingElem<C>> 
-       implements RingElem<SolvableLocal<C>>, QuotPair<GenPolynomial<C>> {
+       implements GcdRingElem<SolvableLocal<C>>, QuotPair<GenPolynomial<C>> {
 
 
     private static final Logger logger = Logger.getLogger(SolvableLocal.class);

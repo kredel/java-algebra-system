@@ -13,12 +13,14 @@ import java.util.Random;
 import org.apache.log4j.Logger;
 
 import edu.jas.kern.StringUtil;
+import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolynomialList;
 import edu.jas.gbufd.PolyGBUtil;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.QuotPairFactory;
 
 
 /**
@@ -26,7 +28,8 @@ import edu.jas.structure.RingFactory;
  * Objects of this class are immutable.
  * @author Heinz Kredel
  */
-public class SolvableQuotientRing<C extends GcdRingElem<C>> implements RingFactory<SolvableQuotient<C>> {
+public class SolvableQuotientRing<C extends GcdRingElem<C>> 
+       implements RingFactory<SolvableQuotient<C>>, QuotPairFactory<GenPolynomial<C>,SolvableQuotient<C>> {
 
 
     private static final Logger logger = Logger.getLogger(SolvableQuotientRing.class);
@@ -56,6 +59,34 @@ public class SolvableQuotientRing<C extends GcdRingElem<C>> implements RingFacto
         ring = r;
         engine = new SolvableSyzygyAbstract<C>();
         logger.debug("quotient ring constructed");
+    }
+
+
+
+    /**
+     * Factory for base elements.
+     * @see edu.jas.structure.QuotPairFactory#pairFactory()
+     */
+    public GenSolvablePolynomialRing<C> pairFactory() {
+        return ring;
+    }
+
+
+    /**
+     * Create from numerator.
+     * @see edu.jas.structure.QuotPairFactory#create(C)
+     */
+    public SolvableQuotient<C> create(GenPolynomial<C> n) {
+        return new SolvableQuotient<C>(this,(GenSolvablePolynomial<C>)n);
+    }
+
+
+    /**
+     * Create from numerator, denominator pair.
+     * @see edu.jas.structure.QuotPairFactory#create(C, C)
+     */
+    public SolvableQuotient<C> create(GenPolynomial<C> n, GenPolynomial<C> d) {
+        return new SolvableQuotient<C>(this,(GenSolvablePolynomial<C>)n,(GenSolvablePolynomial<C>)d);
     }
 
 
