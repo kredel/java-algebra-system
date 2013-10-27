@@ -149,6 +149,7 @@ public class RunMPIGB {
         int j = RunGB.indexOf(args, "check");
         if (j >= 0) {
             doCheck = true;
+            RunGB.doCheck = true;
         }
 
         int threads = 0;

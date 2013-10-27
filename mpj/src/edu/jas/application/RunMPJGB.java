@@ -146,6 +146,7 @@ public class RunMPJGB {
         int j = RunGB.indexOf(args, "check");
         if (j >= 0) {
             doCheck = true;
+            RunGB.doCheck = true;
         }
         j = RunGB.indexOf(args, "nolog");
         if (j >= 0) {
