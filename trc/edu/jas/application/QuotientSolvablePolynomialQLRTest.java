@@ -71,13 +71,13 @@ public class QuotientSolvablePolynomialQLRTest extends TestCase {
     int kl = 1;
 
 
-    int ll = 4;
+    int ll = 3;
 
 
     int el = 3;
 
 
-    float q = 0.2f;
+    float q = 0.17f;
 
 
     String[] cvars = new String[] { "a", "b" };
@@ -109,17 +109,11 @@ public class QuotientSolvablePolynomialQLRTest extends TestCase {
         cfac = new BigRational(1);
         cring = new GenSolvablePolynomialRing<BigRational>(cfac, tord, cvars);
         RelationGenerator<BigRational> wc = new WeylRelations<BigRational>();
-        cring.addRelations(wc); //wc.generate(cring);
-        // List<GenSolvablePolynomial<BigRational>> il = new ArrayList<GenSolvablePolynomial<BigRational>>();
-        // GenSolvablePolynomial<BigRational> p1 = cring.parse("b - a^2");
-        // il.add(p1);
-        // //p1 = cring.parse("a - b^5"); 
-        // //il.add(p1);
-        // sideal = new SolvableIdeal<BigRational>(cring, il);
+        cring.addRelations(wc); 
         qcring = new SolvableQuotientRing<BigRational>(cring);
         ring = new QLRSolvablePolynomialRing<SolvableQuotient<BigRational>,BigRational>(qcring, tord, vars);
         RelationGenerator<SolvableQuotient<BigRational>> wl = new WeylRelations<SolvableQuotient<BigRational>>();
-        ring.addRelations(wl); //wl.generate(ring);
+        ring.addRelations(wl); 
         a = b = c = d = e = null;
     }
 
@@ -296,14 +290,8 @@ public class QuotientSolvablePolynomialQLRTest extends TestCase {
         assertTrue("# relations == 2", ring.table.size() == 2);
 
         cring = new GenSolvablePolynomialRing<BigRational>(cfac, tord, cvars);
-        // List<GenSolvablePolynomial<BigRational>> il = new ArrayList<GenSolvablePolynomial<BigRational>>();
-        // GenSolvablePolynomial<BigRational> p1 = cring.parse("b - a^2");
-        // il.add(p1);
-        // sideal = new SolvableIdeal<BigRational>(cring, il);
         qcring = new SolvableQuotientRing<BigRational>(cring);
         ring = new QLRSolvablePolynomialRing<SolvableQuotient<BigRational>,BigRational>(qcring, ring);
-        //table = ring.table;
-        //System.out.println("table = " + table.toString(vars));
         //System.out.println("ring = " + ring);
 
         assertTrue("isCommutative()", ring.isCommutative());
@@ -354,12 +342,6 @@ public class QuotientSolvablePolynomialQLRTest extends TestCase {
         assertTrue("isCommutative()", csring.isCommutative());
         assertTrue("isAssociative()", csring.isAssociative());
 
-        //List<GenSolvablePolynomial<BigRational>> il = new ArrayList<GenSolvablePolynomial<BigRational>>();
-        // GenSolvablePolynomial<BigRational> p1 = csring.parse("b - a^2");
-        // il.add(p1);
-        // //p1 = csring.parse("a - b^5");
-        // //il.add(p1);
-        // sideal = new SolvableIdeal<BigRational>(csring, il);
         SolvableQuotientRing<BigRational> qcsring = new SolvableQuotientRing<BigRational>(csring);
         assertTrue("isCommutative()", qcsring.isCommutative());
         assertTrue("isAssociative()", qcsring.isAssociative());

@@ -336,10 +336,9 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
      */
     @Override
     public boolean isCommutative() {
-        if (table.size() == 0) {
+        if (table.isEmpty()) {
             return super.isCommutative();
         }
-        // todo: check structure of relations
         return false;
     }
 

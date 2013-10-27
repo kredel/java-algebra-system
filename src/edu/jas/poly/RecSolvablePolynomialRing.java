@@ -317,10 +317,9 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
      */
     @Override
     public boolean isCommutative() {
-        if (coeffTable.size() == 0) {
+        if (coeffTable.isEmpty()) {
             return super.isCommutative();
         }
-        // todo: check structure of relations
         return false;
     }
 

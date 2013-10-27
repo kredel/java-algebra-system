@@ -3,6 +3,7 @@
  */
 
 package edu.jas.application;
+// todo: move to edu.jas.poly
 
 
 import java.util.Map;
@@ -29,7 +30,8 @@ import edu.jas.structure.QuotPair;
  * this class are intended to be immutable. The implementation is
  * based on TreeMap respectively SortedMap from exponents to
  * coefficients by extension of GenPolynomial.
- * @param <C> coefficient type
+ * @param <C> polynomial coefficient type
+ * @param <D> quotient coefficient type
  * @author Heinz Kredel
  */
 
@@ -38,16 +40,16 @@ public class QLRSolvablePolynomial<C extends GcdRingElem<C> & QuotPair<GenPolyno
        extends GenSolvablePolynomial<C> {
 
 
-    /**
-     * The factory for the recursive solvable polynomial ring. Hides super.ring.
-     */
-    public final QLRSolvablePolynomialRing<C,D> ring;
-
-
     private static final Logger logger = Logger.getLogger(QLRSolvablePolynomial.class);
 
 
     private final boolean debug = logger.isDebugEnabled();
+
+
+    /**
+     * The factory for the recursive solvable polynomial ring. Hides super.ring.
+     */
+    public final QLRSolvablePolynomialRing<C,D> ring;
 
 
     /**
@@ -146,6 +148,7 @@ public class QLRSolvablePolynomial<C extends GcdRingElem<C> & QuotPair<GenPolyno
      * @return this*Bp, where * denotes solvable multiplication.
      */
     // not @Override
+    @SuppressWarnings("unchecked")
     public QLRSolvablePolynomial<C,D> multiply(QLRSolvablePolynomial<C,D> Bp) {
         if (Bp == null || Bp.isZERO()) {
             return ring.getZERO();
@@ -258,8 +261,8 @@ public class QLRSolvablePolynomial<C extends GcdRingElem<C> & QuotPair<GenPolyno
                 if (ring.isCommutative() || Cps.isConstant() || f.isZERO()) { // symmetric
                     if (debug)
                         logger.info("symmetric poly: b = " + b + ", e = " + e);
-                    ExpVector g = e.sum(f);
                     if (Cps.isConstant()) {
+                        ExpVector g = e.sum(f);
                         Ds = new QLRSolvablePolynomial<C,D>(ring, Cps.leadingBaseCoefficient(), g); // symmetric!
                     } else {
                         Ds = shift(Cps, f); // symmetric
@@ -335,7 +338,7 @@ public class QLRSolvablePolynomial<C extends GcdRingElem<C> & QuotPair<GenPolyno
                 Dp = (QLRSolvablePolynomial<C,D>) Dp.sum(Ds);
             } // end B loop
         } // end A loop
-          //System.out.println("this * Bp = " + Dp);
+        //System.out.println("this * Bp = " + Dp);
         return Dp;
     }
 
