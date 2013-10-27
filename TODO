@@ -36,6 +36,8 @@ issues to consider:
 
 - define quotientRemainder in RingElem interface (?)
 
+- remove unnecessary @see since JavaDoc 7 
+
 - make use of gcd in pseudo reduction, needs other coefficient type
 
 - implement matrices to vector

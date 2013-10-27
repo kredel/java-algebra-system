@@ -105,7 +105,6 @@ public class SolvableLocalRing<C extends GcdRingElem<C>>
 
     /**
      * Factory for base elements.
-     * see edu.jas.structure.QuotPairFactory#pairFactory()
      */
     public GenSolvablePolynomialRing<C> pairFactory() {
         return ring;
@@ -114,7 +113,6 @@ public class SolvableLocalRing<C extends GcdRingElem<C>>
 
     /**
      * Create from numerator.
-     * see edu.jas.structure.QuotPairFactory#create(C)
      */
     public SolvableLocal<C> create(GenPolynomial<C> n) {
         return new SolvableLocal<C>(this,(GenSolvablePolynomial<C>)n);
@@ -123,7 +121,6 @@ public class SolvableLocalRing<C extends GcdRingElem<C>>
 
     /**
      * Create from numerator, denominator pair.
-     * see edu.jas.structure.QuotPairFactory#create(C, C)
      */
     public SolvableLocal<C> create(GenPolynomial<C> n, GenPolynomial<C> d) {
         return new SolvableLocal<C>(this,(GenSolvablePolynomial<C>)n,(GenSolvablePolynomial<C>)d);
@@ -133,7 +130,6 @@ public class SolvableLocalRing<C extends GcdRingElem<C>>
     /**
      * Is this structure finite or infinite.
      * @return true if this structure is finite, else false.
-     * see edu.jas.structure.ElemFactory#isFinite()
      */
     public boolean isFinite() {
         return ring.isFinite() && bb.commonZeroTest(ideal.getList()) <= 0;
@@ -171,7 +167,6 @@ public class SolvableLocalRing<C extends GcdRingElem<C>>
     /**
      * Get a list of the generating elements.
      * @return list of generators for the algebraic structure.
-     * see edu.jas.structure.ElemFactory#generators()
      */
     public List<SolvableLocal<C>> generators() {
         List<GenSolvablePolynomial<C>> pgens = PolynomialList.<C> castToSolvableList(ring.generators());
@@ -284,7 +279,6 @@ public class SolvableLocalRing<C extends GcdRingElem<C>>
 
     /**
      * Get the String representation as RingFactory.
-     * @see java.lang.Object#toString()
      */
     @Override
     public String toString() {
@@ -295,7 +289,6 @@ public class SolvableLocalRing<C extends GcdRingElem<C>>
     /**
      * Get a scripting compatible string representation.
      * @return script compatible representation for this ElemFactory.
-     * @see edu.jas.structure.ElemFactory#toScript()
      */
     @Override
     public String toScript() {
@@ -306,7 +299,6 @@ public class SolvableLocalRing<C extends GcdRingElem<C>>
 
     /**
      * Comparison with any other object.
-     * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
     @SuppressWarnings("unchecked")
@@ -331,7 +323,6 @@ public class SolvableLocalRing<C extends GcdRingElem<C>>
 
     /**
      * Hash code for this local ring.
-     * @see java.lang.Object#hashCode()
      */
     @Override
     public int hashCode() {

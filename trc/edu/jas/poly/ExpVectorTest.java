@@ -20,7 +20,7 @@ import edu.jas.arith.BigInteger;
 
 /**
  * ExpVector tests with JUnit.
- * Tests arithmetic operations, for comparison tests @see TermOrderTest.java 
+ * Tests arithmetic operations, for comparison tests see TermOrderTest. 
  * @author Heinz Kredel.
  */
 
