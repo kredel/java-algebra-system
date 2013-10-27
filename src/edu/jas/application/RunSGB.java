@@ -56,17 +56,15 @@ public class RunSGB {
 
     /**
      * main method to be called from commandline <br /> Usage: RunSGB
-     * [seq|par|par+] [irr|left|right|two] &lt;file&gt; #procs
+     * [seq|seq+|par|par+] [irr|left|right|two] &lt;file&gt; #procs
      */
     @SuppressWarnings("unchecked")
     public static void main(String[] args) {
 
         String[] allkinds = new String[] { "seq", "seq+", 
                                            "par", "par+", 
-                                           //"dist", "dist1", 
-                                           //"dist+", "dist1+",
-                                           //"disthyb1", 
-                                           // "irr", "left", "right", "two" 
+                                           //"dist", "dist+", ,
+                                           //"disthyb", "disthyb+", 
                                            //"cli" 
                                          }; // must be last
         String[] allmeth = new String[] { "irr", "left", "right", "two" };
@@ -88,7 +86,7 @@ public class RunSGB {
             return;
         }
 
-        boolean pairseq = false;
+        boolean plusextra = false;
         String kind = args[0];
         boolean sup = false;
         int k = -1;
@@ -108,7 +106,7 @@ public class RunSGB {
             return;
         }
         if (kind.indexOf("+") >= 0) {
-            pairseq = true;
+            plusextra = true;
         }
         System.out.println("kind: " + kind + ", k = " + k);
 
@@ -188,11 +186,9 @@ public class RunSGB {
         }
 
         if (kind.startsWith("seq")) {
-            runSequential(S, action, pairseq);
-        }
-
-        if (kind.startsWith("par")) {
-            runParallel(S, threads, action, pairseq);
+            runSequential(S, action, plusextra);
+        } else if (kind.startsWith("par")) {
+            runParallel(S, threads, action, plusextra);
         }
         ComputerThreads.terminate();
     }
@@ -204,15 +200,15 @@ public class RunSGB {
      * @param action what to to.
      */
     @SuppressWarnings("unchecked")
-    static void runSequential(PolynomialList S, String action, boolean pairseq) {
+    static void runSequential(PolynomialList S, String action, boolean plusextra) {
         List<GenSolvablePolynomial> L = S.list;
         List<GenSolvablePolynomial> G = null;
         long t;
         SolvableReduction sred = new SolvableReductionSeq();
         SolvableGroebnerBase sbb = null;
-        if (pairseq) {
-            //sbb = new SolvableGroebnerBaseSeqPairSeq();
-            //System.out.println("SolvableGroebnerBaseSeqPairSeq not implemented using SolvableGroebnerBaseSeq");
+        if (plusextra) {
+            //sbb = new SolvableGroebnerBaseSeqPlusextra();
+            //System.out.println("SolvableGroebnerBaseSeqPlusextra not implemented using SolvableGroebnerBaseSeq");
             sbb = new SolvableGroebnerBaseSeq();
         } else {
             sbb = new SolvableGroebnerBaseSeq();
@@ -239,7 +235,7 @@ public class RunSGB {
         System.out.println("G =\n" + S);
         System.out.println("G.size() = " + G.size());
         t = System.currentTimeMillis() - t;
-        if (pairseq) {
+        if (plusextra) {
             System.out.print("seq+, ");
         } else {
             System.out.print("seq, ");
@@ -256,14 +252,14 @@ public class RunSGB {
      * @param action what to to.
      */
     @SuppressWarnings("unchecked")
-    static void runParallel(PolynomialList S, int threads, String action, boolean pairseq) {
+    static void runParallel(PolynomialList S, int threads, String action, boolean plusextra) {
         List<GenSolvablePolynomial> L = S.list;
         List<GenSolvablePolynomial> G = null;
         long t;
         SolvableReduction sred = new SolvableReductionPar();
         SolvableGroebnerBaseParallel sbb = null;
         SolvableGroebnerBaseSeqPairParallel sbbs = null;
-        if (pairseq) {
+        if (plusextra) {
             sbbs = new SolvableGroebnerBaseSeqPairParallel(threads);
         } else {
             sbb = new SolvableGroebnerBaseParallel(threads);
@@ -275,21 +271,21 @@ public class RunSGB {
             G = sred.leftIrreducibleSet(L);
         }
         if (action.equals("left")) {
-            if (pairseq) {
+            if (plusextra) {
                 G = sbbs.leftGB(L);
             } else {
                 G = sbb.leftGB(L);
             }
         }
         if (action.equals("right")) {
-            if (pairseq) {
+            if (plusextra) {
                 G = sbbs.rightGB(L);
             } else {
                 G = sbb.rightGB(L);
             }
         }
         if (action.equals("two")) {
-            if (pairseq) {
+            if (plusextra) {
                 G = sbbs.twosidedGB(L);
             } else {
                 G = sbb.twosidedGB(L);
@@ -307,7 +303,7 @@ public class RunSGB {
         System.out.println("G =\n" + S);
         System.out.println("G.size() = " + G.size());
         t = System.currentTimeMillis() - t;
-        if (pairseq) {
+        if (plusextra) {
             System.out.print("p+ ");
         } else {
             System.out.print("p ");
@@ -315,7 +311,7 @@ public class RunSGB {
         System.out.println("= " + threads + ", time = " + t + " milliseconds");
         checkGB(S);
         System.out.println("");
-        if (pairseq) {
+        if (plusextra) {
             sbbs.terminate();
         } else {
             sbb.terminate();

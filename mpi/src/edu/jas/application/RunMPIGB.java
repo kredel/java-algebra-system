@@ -20,9 +20,9 @@ import mpi.MPIException;
 
 import org.apache.log4j.BasicConfigurator;
 
-import edu.jas.gb.GBDist;
-import edu.jas.gb.GBDistHybrid;
 import edu.jas.gb.GroebnerBaseAbstract;
+import edu.jas.gb.GroebnerBaseDistributedEC;
+import edu.jas.gb.GroebnerBaseDistributedHybridEC;
 import edu.jas.gb.GroebnerBaseDistributedHybridMPI;
 import edu.jas.gb.GroebnerBaseDistributedMPI;
 import edu.jas.gb.GroebnerBaseParallel;
@@ -74,15 +74,14 @@ public class RunMPIGB {
 
         String[] allkinds = new String[] { "seq", "seq+", 
                                            "par", "par+", 
-                                           "dist", "dist1", 
-                                           "dist+", "dist1+",
-                                           "disthyb1", 
+                                           "dist", "dist+", 
+                                           "disthyb", "disthyb+", 
                                            "distmpi", "distmpi+", 
                                            "disthybmpi", "disthybmpi+", 
                                            "cli" };
 
         String usage = "Usage: RunGB [ "
-                        + join(allkinds, " | ") 
+                        + RunGB.join(allkinds, " | ") 
                         + "[port] ] " 
                         + "<file> " 
                         + "#procs/#threadsPerNode " 
@@ -95,12 +94,12 @@ public class RunMPIGB {
             return;
         }
 
-        boolean pairseq = false;
+        boolean plusextra = false;
         String kind = args[0];
         boolean sup = false;
         int k = -1;
         for (int i = 0; i < args.length; i++) {
-            int j = indexOf(allkinds, args[i]);
+            int j = RunGB.indexOf(allkinds, args[i]);
             if (j < 0) {
                 continue;
             }
@@ -115,7 +114,7 @@ public class RunMPIGB {
             return;
         }
         if (kind.indexOf("+") >= 0) {
-            pairseq = true;
+            plusextra = true;
         }
         System.out.println("kind: " + kind + ", k = " + k);
 
@@ -133,7 +132,7 @@ public class RunMPIGB {
                     return;
                 }
             }
-            runClient(port);
+            RunGB.runClient(port);
             return;
         }
 
@@ -147,7 +146,7 @@ public class RunMPIGB {
             filename = args[k + 1];
         }
 
-        int j = indexOf(args, "check");
+        int j = RunGB.indexOf(args, "check");
         if (j >= 0) {
             doCheck = true;
         }
@@ -231,21 +230,17 @@ public class RunMPIGB {
         }
 
         if (kind.startsWith("seq")) {
-            runSequential(S, pairseq);
-        }
-        if (kind.startsWith("par")) {
-            runParallel(S, threads, pairseq);
-        }
-        if (kind.startsWith("dist1")) {
-            runMasterOnce(S, threads, mfile, port, pairseq);
-        } else if (kind.startsWith("disthyb1")) {
-            runMasterOnceHyb(S, threads, threadsPerNode, mfile, port, pairseq);
+            RunGB.runSequential(S, plusextra);
+        } else if (kind.startsWith("par")) {
+            RunGB.runParallel(S, threads, plusextra);
         } else if (kind.startsWith("distmpi")) {
-            runMpi(S, threads, mfile, port, pairseq);
+            runMpi(S, threads, mfile, port, plusextra);
         } else if (kind.startsWith("disthybmpi")) {
-            runHybridMpi(S, threads, threadsPerNode, mfile, port, pairseq);
+            runHybridMpi(S, threads, threadsPerNode, mfile, port, plusextra);
+        } else if (kind.startsWith("disthyb")) {
+            RunGB.runMasterHyb(S, threads, threadsPerNode, mfile, port, plusextra);
         } else if (kind.startsWith("dist")) {
-            runMaster(S, threads, mfile, port, pairseq);
+            RunGB.runMaster(S, threads, mfile, port, plusextra);
         }
         ComputerThreads.terminate();
         //System.exit(0);
@@ -253,7 +248,7 @@ public class RunMPIGB {
 
 
     @SuppressWarnings("unchecked")
-    static void runMpi(PolynomialList S, int threads, String mfile, int port, boolean pairseq)
+    static void runMpi(PolynomialList S, int threads, String mfile, int port, boolean plusextra)
                     throws IOException, MPIException {
         List L = S.list;
         List G = null;
@@ -264,19 +259,19 @@ public class RunMPIGB {
                         + ") ...");
         GroebnerBaseDistributedMPI gbd = null;
         GroebnerBaseDistributedMPI gbds = null;
-        if (pairseq) {
+        if (plusextra) {
             gbds = new GroebnerBaseDistributedMPI(threads, new OrderedSyzPairlist());
         } else {
             gbd = new GroebnerBaseDistributedMPI(threads);
         }
         t1 = System.currentTimeMillis();
-        if (pairseq) {
+        if (plusextra) {
             G = gbds.GB(L);
         } else {
             G = gbd.GB(L);
         }
         t1 = System.currentTimeMillis() - t1;
-        if (pairseq) {
+        if (plusextra) {
             gbds.terminate();
         } else {
             gbd.terminate();
@@ -289,21 +284,21 @@ public class RunMPIGB {
         System.out.println("G =\n" + S);
         System.out.println("G.size() = " + G.size());
         t = System.currentTimeMillis() - t;
-        if (pairseq) {
+        if (plusextra) {
             System.out.print("m+ ");
         } else {
             System.out.print("m ");
         }
         System.out.println("= " + threads + ", time = " + t1 + " milliseconds, " + (t - t1) + " start-up "
                         + ", total = " + t);
-        checkGB(S);
+        RunGB.checkGB(S);
         System.out.println("");
     }
 
 
     @SuppressWarnings("unchecked")
     static void runHybridMpi(PolynomialList S, int threads, int threadsPerNode, String mfile, int port,
-			     boolean pairseq) throws IOException, MPIException {
+			     boolean plusextra) throws IOException, MPIException {
         List L = S.list;
         List G = null;
         long t, t1;
@@ -313,19 +308,19 @@ public class RunMPIGB {
                         + mfile + ", " + port + ") ...");
         GroebnerBaseDistributedHybridMPI gbd = null;
         GroebnerBaseDistributedHybridMPI gbds = null;
-        if (pairseq) {
+        if (plusextra) {
             gbds = new GroebnerBaseDistributedHybridMPI(threads, threadsPerNode, new OrderedSyzPairlist());
         } else {
             gbd = new GroebnerBaseDistributedHybridMPI(threads, threadsPerNode);
         }
         t1 = System.currentTimeMillis();
-        if (pairseq) {
+        if (plusextra) {
             G = gbds.GB(L);
         } else {
             G = gbd.GB(L);
         }
         t1 = System.currentTimeMillis() - t1;
-        if (pairseq) {
+        if (plusextra) {
             gbds.terminate();
         } else {
             gbd.terminate();
@@ -338,269 +333,15 @@ public class RunMPIGB {
         System.out.println("G =\n" + S);
         System.out.println("G.size() = " + G.size());
         t = System.currentTimeMillis() - t;
-        if (pairseq) {
+        if (plusextra) {
             System.out.print("m+ ");
         } else {
             System.out.print("m ");
         }
         System.out.println("= " + threads + ", ppn = " + threadsPerNode + ", time = " + t1
                         + " milliseconds, " + (t - t1) + " start-up " + ", total = " + t);
-        checkGB(S);
+        RunGB.checkGB(S);
         System.out.println("");
-    }
-
-
-    @SuppressWarnings("unchecked")
-    static void runMaster(PolynomialList S, int threads, String mfile, int port, boolean pairseq)
-                    throws MPIException {
-        List L = S.list;
-        List G = null;
-        long t, t1;
-
-        t = System.currentTimeMillis();
-        System.out.println("\nGroebner base distributed (" + threads + ", " + mfile + ", " + port + ") ...");
-        GBDist gbd = null;
-        GBDist gbds = null;
-        if (pairseq) {
-            //gbds = new GBDistSP(threads,mfile, port);
-            gbds = new GBDist(threads, new OrderedSyzPairlist(), mfile, port);
-        } else {
-            gbd = new GBDist(threads, mfile, port);
-        }
-        t1 = System.currentTimeMillis();
-        if (pairseq) {
-            G = gbds.execute(L);
-        } else {
-            G = gbd.execute(L);
-        }
-        t1 = System.currentTimeMillis() - t1;
-        if (pairseq) {
-            gbds.terminate(false);
-        } else {
-            gbd.terminate(false);
-        }
-        S = new PolynomialList(S.ring, G);
-        System.out.println("G =\n" + S);
-        System.out.println("G.size() = " + G.size());
-        t = System.currentTimeMillis() - t;
-        if (pairseq) {
-            System.out.print("d+ ");
-        } else {
-            System.out.print("d ");
-        }
-        System.out.println("= " + threads + ", time = " + t1 + " milliseconds, " + (t - t1) + " start-up "
-                        + ", total = " + t);
-        checkGB(S);
-        System.out.println("");
-    }
-
-
-    @SuppressWarnings("unchecked")
-    static void runMasterOnce(PolynomialList S, int threads, String mfile, int port, boolean pairseq)
-                    throws MPIException {
-        List L = S.list;
-        List G = null;
-        long t, t1;
-
-        t = System.currentTimeMillis();
-        System.out.println("\nGroebner base distributed[once] (" + threads + ", " + mfile + ", " + port
-                        + ") ...");
-        GBDist gbd = null;
-        GBDist gbds = null;
-        if (pairseq) {
-            //gbds = new GBDistSP(threads, mfile, port);
-            gbds = new GBDist(threads, new OrderedSyzPairlist(), mfile, port);
-        } else {
-            gbd = new GBDist(threads, mfile, port);
-        }
-        t1 = System.currentTimeMillis();
-        if (pairseq) {
-            G = gbds.execute(L);
-        } else {
-            G = gbd.execute(L);
-        }
-        t1 = System.currentTimeMillis() - t1;
-        if (pairseq) {
-            gbds.terminate(true);
-        } else {
-            gbd.terminate(true);
-        }
-        S = new PolynomialList(S.ring, G);
-        System.out.println("G =\n" + S);
-        System.out.println("G.size() = " + G.size());
-        t = System.currentTimeMillis() - t;
-        if (pairseq) {
-            System.out.print("d+ ");
-        } else {
-            System.out.print("d ");
-        }
-        System.out.println("= " + threads + ", time = " + t1 + " milliseconds, " + (t - t1) + " start-up "
-                        + ", total = " + t);
-        checkGB(S);
-        System.out.println("");
-    }
-
-
-    @SuppressWarnings("unchecked")
-    static void runMasterOnceHyb(PolynomialList S, int threads, int threadsPerNode, String mfile, int port,
-                    boolean pairseq) throws MPIException {
-        List L = S.list;
-        List G = null;
-        long t, t1;
-
-        t = System.currentTimeMillis();
-        System.out.println("\nGroebner base distributed hybrid[once] (" + threads + "/" + threadsPerNode
-                        + ", " + mfile + ", " + port + ") ...");
-        GBDistHybrid gbd = null;
-        GBDistHybrid gbds = null;
-        if (pairseq) {
-            //System.out.println("... not implemented.");
-            //return;
-            // gbds = new GBDistSP(threads, mfile, port);
-            gbds = new GBDistHybrid(threads, threadsPerNode, new OrderedSyzPairlist(), mfile, port);
-        } else {
-            gbd = new GBDistHybrid(threads, threadsPerNode, mfile, port);
-        }
-        t1 = System.currentTimeMillis();
-        if (pairseq) {
-            G = gbds.execute(L);
-        } else {
-            G = gbd.execute(L);
-        }
-        t1 = System.currentTimeMillis() - t1;
-        if (pairseq) {
-            //gbds.terminate(true);
-        } else {
-            //gbd.terminate(true);
-            gbd.terminate(false); // plus eventually killed by script
-        }
-        t = System.currentTimeMillis() - t;
-        S = new PolynomialList(S.ring, G);
-        System.out.println("G =\n" + S);
-        System.out.println("G.size() = " + G.size());
-        if (pairseq) {
-            System.out.print("d+ ");
-        } else {
-            System.out.print("d ");
-        }
-        System.out.println("= " + threads + ", ppn = " + threadsPerNode + ", time = " + t1
-                        + " milliseconds, " + (t - t1) + " start-up " + ", total = " + t);
-        checkGB(S);
-        System.out.println("");
-    }
-
-
-    static void runClient(int port) {
-        System.out.println("\nGroebner base distributed client (" + port + ") ...");
-
-        ExecutableServer es = new ExecutableServer(port);
-        es.init();
-    }
-
-
-    @SuppressWarnings("unchecked")
-    static void runParallel(PolynomialList S, int threads, boolean pairseq) {
-        List L = S.list;
-        List G;
-        long t;
-        GroebnerBaseAbstract bb = null;
-        GroebnerBaseAbstract bbs = null;
-        if (pairseq) {
-            //bbs = new GroebnerBaseSeqPairParallel(threads);
-            bbs = new GroebnerBaseParallel(threads, new ReductionPar(), new OrderedSyzPairlist());
-        } else {
-            bb = new GroebnerBaseParallel(threads);
-        }
-        System.out.println("\nGroebner base parallel (" + threads + ") ...");
-
-        t = System.currentTimeMillis();
-        if (pairseq) {
-            G = bbs.GB(L);
-        } else {
-            G = bb.GB(L);
-        }
-        t = System.currentTimeMillis() - t;
-        S = new PolynomialList(S.ring, G);
-        System.out.println("G =\n" + S);
-        System.out.println("G.size() = " + G.size());
-
-        if (pairseq) {
-            System.out.print("p+ ");
-        } else {
-            System.out.print("p ");
-        }
-        System.out.println("= " + threads + ", time = " + t + " milliseconds");
-        if (pairseq) {
-            bbs.terminate();
-        } else {
-            bb.terminate();
-        }
-        checkGB(S);
-        System.out.println("");
-    }
-
-
-    @SuppressWarnings("unchecked")
-    static void runSequential(PolynomialList S, boolean pairseq) {
-        List L = S.list;
-        List G;
-        long t;
-        GroebnerBaseAbstract bb = null;
-        if (pairseq) {
-            //bb = new GroebnerBaseSeqPairSeq();
-            bb = new GroebnerBaseSeq(new ReductionSeq(), new OrderedSyzPairlist());
-        } else {
-            bb = new GroebnerBaseSeq();
-        }
-        System.out.println("\nGroebner base sequential ...");
-        t = System.currentTimeMillis();
-        G = bb.GB(L);
-        t = System.currentTimeMillis() - t;
-        S = new PolynomialList(S.ring, G);
-        System.out.println("G =\n" + S);
-        System.out.println("G.size() = " + G.size());
-        if (pairseq) {
-            System.out.print("seq+, ");
-        } else {
-            System.out.print("seq, ");
-        }
-        System.out.println("time = " + t + " milliseconds");
-        checkGB(S);
-        System.out.println("");
-    }
-
-
-    static void checkGB(PolynomialList S) {
-        if (!doCheck) {
-            return;
-        }
-        GroebnerBaseAbstract bb = GBFactory.getImplementation(S.ring.coFac);
-        long t = System.currentTimeMillis();
-        boolean chk = bb.isGB(S.list);
-        t = System.currentTimeMillis() - t;
-        System.out.println("check isGB = " + chk + " in " + t + " milliseconds");
-    }
-
-
-    static int indexOf(String[] args, String s) {
-        for (int i = 0; i < args.length; i++) {
-            if (s.equals(args[i])) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-
-    static String join(String[] args, String d) {
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < args.length; i++) {
-            if (i > 0) {
-                sb.append(d);
-            }
-            sb.append(args[i]);
-        }
-        return sb.toString();
     }
 
 }

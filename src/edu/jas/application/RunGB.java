@@ -19,8 +19,6 @@ import java.util.Arrays;
 
 import org.apache.log4j.BasicConfigurator;
 
-//import edu.jas.gb.GBDist;
-//import edu.jas.gb.GBDistHybrid;
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.GroebnerBaseParallel;
 import edu.jas.gb.GroebnerBaseDistributedEC;
@@ -63,7 +61,7 @@ public class RunGB {
 
     /**
      * main method to be called from commandline <br />
-     * Usage: RunGB [seq|par(+)|dist(1)(+)|disthyb|cli] &lt;file&gt;
+     * Usage: RunGB [seq|par(+)|dist(+)|disthyb(+)|cli] &lt;file&gt;
      * #procs/#threadsPerNode [machinefile] &lt;check&gt; &lt;log&gt;
      */
     @SuppressWarnings("unchecked")
@@ -71,9 +69,8 @@ public class RunGB {
 
         String[] allkinds = new String[] { "seq", "seq+", 
                                            "par", "par+", 
-                                           "dist", "dist1", 
-                                           "dist+", "dist1+",
-                                           "disthyb1", 
+                                           "dist", "dist+", 
+                                           "disthyb", "disthyb+", 
                                            "cli" }; // must be last
 
         String usage = "Usage: RunGB [ "
@@ -90,7 +87,7 @@ public class RunGB {
             return;
         }
 
-        boolean pairseq = false;
+        boolean plusextra = false;
         String kind = args[0];
         boolean sup = false;
         int k = -1;
@@ -110,7 +107,7 @@ public class RunGB {
             return;
         }
         if (kind.indexOf("+") >= 0) {
-            pairseq = true;
+            plusextra = true;
         }
         System.out.println("kind: " + kind + ", k = " + k);
 
@@ -230,17 +227,13 @@ public class RunGB {
         }
 
         if (kind.startsWith("seq")) {
-            runSequential(S, pairseq);
-        }
-        if (kind.startsWith("par")) {
-            runParallel(S, threads, pairseq);
-        }
-        if (kind.startsWith("dist1")) {
-            runMasterOnce(S, threads, mfile, port, pairseq);
-        } else if (kind.startsWith("disthyb1")) {
-            runMasterOnceHyb(S, threads, threadsPerNode, mfile, port, pairseq);
+            runSequential(S, plusextra);
+        } else if (kind.startsWith("par")) {
+            runParallel(S, threads, plusextra);
+        } else if (kind.startsWith("disthyb")) {
+            runMasterHyb(S, threads, threadsPerNode, mfile, port, plusextra);
         } else if (kind.startsWith("dist")) {
-            runMaster(S, threads, mfile, port, pairseq);
+            runMaster(S, threads, mfile, port, plusextra);
         }
         ComputerThreads.terminate();
         //System.exit(0);
@@ -248,7 +241,7 @@ public class RunGB {
 
 
     @SuppressWarnings("unchecked")
-    static void runMaster(PolynomialList S, int threads, String mfile, int port, boolean pairseq) {
+    static void runMaster(PolynomialList S, int threads, String mfile, int port, boolean plusextra) {
         List L = S.list;
         List G = null;
         long t, t1;
@@ -257,20 +250,20 @@ public class RunGB {
 
         System.out.println("\nGroebner base distributed (" + threads + ", " + mfile + ", " + port + ") ...");
         t = System.currentTimeMillis();
-        if (pairseq) {
+        if (plusextra) {
             //gbds = new GroebnerBaseDistributedEC(threads,mfile, port);
             gbds = new GroebnerBaseDistributedEC(mfile, threads, new OrderedSyzPairlist(), port);
         } else {
             gbd = new GroebnerBaseDistributedEC(mfile, threads, port);
         }
         t1 = System.currentTimeMillis();
-        if (pairseq) {
+        if (plusextra) {
             G = gbds.GB(L);
         } else {
             G = gbd.GB(L);
         }
         t1 = System.currentTimeMillis() - t1;
-        if (pairseq) {
+        if (plusextra) {
             gbds.terminate(); //false);
         } else {
             gbd.terminate(); //false);
@@ -279,7 +272,7 @@ public class RunGB {
         System.out.println("G =\n" + S);
         System.out.println("G.size() = " + G.size());
         t = System.currentTimeMillis() - t;
-        if (pairseq) {
+        if (plusextra) {
             System.out.print("d+ ");
         } else {
             System.out.print("d ");
@@ -292,88 +285,40 @@ public class RunGB {
 
 
     @SuppressWarnings("unchecked")
-    static void runMasterOnce(PolynomialList S, int threads, String mfile, int port, boolean pairseq) {
-        List L = S.list;
-        List G = null;
-        long t, t1;
-        GroebnerBaseDistributedEC gbd = null;
-        GroebnerBaseDistributedEC gbds = null;
-
-        System.out.println("\nGroebner base distributed[once] (" + threads + ", " + mfile + ", " + port
-                        + ") ...");
-        t = System.currentTimeMillis();
-        if (pairseq) {
-            //gbds = new GroebnerBaseDisttributedEC(threads, mfile, port);
-            gbds = new GroebnerBaseDistributedEC(mfile, threads, new OrderedSyzPairlist(), port);
-        } else {
-            gbd = new GroebnerBaseDistributedEC(mfile, threads, port);
-        }
-        t1 = System.currentTimeMillis();
-        if (pairseq) {
-            G = gbds.GB(L);
-        } else {
-            G = gbd.GB(L);
-        }
-        t1 = System.currentTimeMillis() - t1;
-        if (pairseq) {
-            gbds.terminate(); //true);
-        } else {
-            gbd.terminate(); //true);
-        }
-        S = new PolynomialList(S.ring, G);
-        System.out.println("G =\n" + S);
-        System.out.println("G.size() = " + G.size());
-        t = System.currentTimeMillis() - t;
-        if (pairseq) {
-            System.out.print("d+ ");
-        } else {
-            System.out.print("d ");
-        }
-        System.out.println("= " + threads 
-                         + ", time = " + t1 + " milliseconds, " + (t-t1) + " start-up " + ", total = " + t);
-        checkGB(S);
-        System.out.println("");
-    }
-
-
-    @SuppressWarnings("unchecked")
-    static void runMasterOnceHyb(PolynomialList S, int threads, int threadsPerNode, String mfile, int port,
-                    boolean pairseq) {
+    static void runMasterHyb(PolynomialList S, int threads, int threadsPerNode, String mfile, int port,
+                    boolean plusextra) {
         List L = S.list;
         List G = null;
         long t, t1;
         GroebnerBaseDistributedHybridEC gbd = null;
         GroebnerBaseDistributedHybridEC gbds = null;
 
-        System.out.println("\nGroebner base distributed hybrid[once] (" + threads + "/" + threadsPerNode
+        System.out.println("\nGroebner base distributed hybrid (" + threads + "/" + threadsPerNode
                         + ", " + mfile + ", " + port + ") ...");
         t = System.currentTimeMillis();
-        if (pairseq) {
-            //System.out.println("... not implemented.");
-            //return;
+        if (plusextra) {
             // gbds = new GroebnerBaseDistributedHybridEC(mfile, threads,port);
             gbds = new GroebnerBaseDistributedHybridEC(mfile, threads, threadsPerNode, new OrderedSyzPairlist(), port);
         } else {
             gbd = new GroebnerBaseDistributedHybridEC(mfile, threads, threadsPerNode, port);
         }
         t1 = System.currentTimeMillis();
-        if (pairseq) {
+        if (plusextra) {
             G = gbds.GB(L);
         } else {
             G = gbd.GB(L);
         }
         t1 = System.currentTimeMillis() - t1;
-        if (pairseq) {
-            //gbds.terminate(true);
+        if (plusextra) {
+            gbds.terminate(); // true
         } else {
-            //gbd.terminate(true);
-            gbd.terminate(false); // plus eventually killed by script
+            gbd.terminate(); // false plus eventually killed by script
         }
         t = System.currentTimeMillis() - t;
         S = new PolynomialList(S.ring, G);
         System.out.println("G =\n" + S);
         System.out.println("G.size() = " + G.size());
-        if (pairseq) {
+        if (plusextra) {
             System.out.print("d+ ");
         } else {
             System.out.print("d ");
@@ -398,13 +343,13 @@ public class RunGB {
 
 
     @SuppressWarnings("unchecked")
-    static void runParallel(PolynomialList S, int threads, boolean pairseq) {
+    static void runParallel(PolynomialList S, int threads, boolean plusextra) {
         List L = S.list;
         List G;
         long t;
         GroebnerBaseAbstract bb = null;
         GroebnerBaseAbstract bbs = null;
-        if (pairseq) {
+        if (plusextra) {
             //bbs = new GroebnerBaseSeqPairParallel(threads);
             bbs = new GroebnerBaseParallel(threads, new ReductionPar(), new OrderedSyzPairlist());
         } else {
@@ -416,7 +361,7 @@ public class RunGB {
         }
         System.out.println("\nGroebner base parallel (" + threads + ") ...");
         t = System.currentTimeMillis();
-        if (pairseq) {
+        if (plusextra) {
             G = bbs.GB(L);
         } else {
             G = bb.GB(L);
@@ -426,13 +371,13 @@ public class RunGB {
         System.out.println("G =\n" + S);
         System.out.println("G.size() = " + G.size());
 
-        if (pairseq) {
+        if (plusextra) {
             System.out.print("p+ ");
         } else {
             System.out.print("p ");
         }
         System.out.println("= " + threads + ", time = " + t + " milliseconds");
-        if (pairseq) {
+        if (plusextra) {
             bbs.terminate();
         } else {
             bb.terminate();
@@ -443,13 +388,13 @@ public class RunGB {
 
 
     @SuppressWarnings("unchecked")
-    static void runSequential(PolynomialList S, boolean pairseq) {
+    static void runSequential(PolynomialList S, boolean plusextra) {
         List L = S.list;
         List G;
         long t;
         GroebnerBaseAbstract bb = null;
-        if (pairseq) {
-            //bb = new GroebnerBaseSeqPairSeq();
+        if (plusextra) {
+            //bb = new GroebnerBaseSeqPlusextra();
             bb = new GroebnerBaseSeq(new ReductionSeq(), new OrderedSyzPairlist());
         } else {
             bb = GBFactory.getImplementation(S.ring.coFac); //new GroebnerBaseSeq();
@@ -461,7 +406,7 @@ public class RunGB {
         S = new PolynomialList(S.ring, G);
         System.out.println("G =\n" + S);
         System.out.println("G.size() = " + G.size());
-        if (pairseq) {
+        if (plusextra) {
             System.out.print("seq+, ");
         } else {
             System.out.print("seq, ");
