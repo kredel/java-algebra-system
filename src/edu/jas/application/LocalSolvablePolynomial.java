@@ -27,6 +27,7 @@ import edu.jas.structure.GcdRingElem;
  * coefficients by extension of GenPolynomial.
  * @param <C> coefficient type
  * @author Heinz Kredel
+ * will be deprecated use QLRSolvablePolynomial
  */
 
 public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends

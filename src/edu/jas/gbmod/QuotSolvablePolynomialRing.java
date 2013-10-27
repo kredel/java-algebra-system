@@ -44,6 +44,7 @@ import edu.jas.structure.RingFactory;
  * contents.
  * @param <C> coefficient type.
  * @author Heinz Kredel
+ * will be deprecated use QLRSolvablePolynomialRing
  */
 
 public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>> extends

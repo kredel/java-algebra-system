@@ -210,7 +210,7 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
                     RelationTable<C> rt) {
         super(cf, n, t, v, rt);
         //if (rt == null) { // handled in super }
-        qpfac = (QuotPairFactory<GenPolynomial<D>,C>) cf; 
+        qpfac = (QuotPairFactory<GenPolynomial<D>,C>) cf; // crucial part of type
         RingFactory<GenPolynomial<D>> cfring = qpfac.pairFactory(); // == coFac.ring
         polCoeff = new RecSolvablePolynomialRing<D>(cfring, n, t, v);
         if (table.size() > 0) { // TODO
