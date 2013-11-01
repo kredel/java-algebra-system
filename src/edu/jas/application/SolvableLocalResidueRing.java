@@ -175,10 +175,12 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>>
         GenSolvablePolynomial<C> one = ring.getONE();
         for (GenSolvablePolynomial<C> p : pgens) {
             SolvableLocalResidue<C> q = new SolvableLocalResidue<C>(this, p);
-            gens.add(q);
-            if (!p.isONE() && !ideal.contains(p)) {
-                q = new SolvableLocalResidue<C>(this, one, p);
+            if (!q.isZERO()) {
                 gens.add(q);
+                if (!p.isONE() && !ideal.contains(p)) {
+                    q = new SolvableLocalResidue<C>(this, one, p);
+                    gens.add(q);
+                }
             }
         }
         return gens;
