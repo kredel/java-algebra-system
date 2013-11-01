@@ -1709,6 +1709,8 @@ java_import "edu.jas.application.ResidueSolvablePolynomial";
 java_import "edu.jas.application.ResidueSolvablePolynomialRing";
 java_import "edu.jas.application.LocalSolvablePolynomial";
 java_import "edu.jas.application.LocalSolvablePolynomialRing";
+java_import "edu.jas.application.QLRSolvablePolynomial";
+java_import "edu.jas.application.QLRSolvablePolynomialRing";
 
 
 =begin rdoc
@@ -1804,6 +1806,8 @@ java_import "edu.jas.application.Local";
 java_import "edu.jas.application.LocalRing";
 java_import "edu.jas.application.SolvableLocal";
 java_import "edu.jas.application.SolvableLocalRing";
+java_import "edu.jas.application.SolvableLocalResidue";
+java_import "edu.jas.application.SolvableLocalResidueRing";
 java_import "edu.jas.application.IdealWithRealAlgebraicRoots";
 java_import "edu.jas.application.ComprehensiveGroebnerBaseSeq";
 
@@ -1954,6 +1958,52 @@ def SLC(ideal,d=0,n=1)
             r = SolvableLocal.new(lc,d);
         else
             r = SolvableLocal.new(lc,d,n);
+        end
+    end
+    return RingElem.new(r);
+end
+
+
+=begin rdoc
+Create JAS polynomial SolvableLocalResidue as ring element.
+=end
+def SLR(ideal,d=0,n=1)
+    if ideal == nil
+        raise ValueError, "No ideal given."
+    end
+    if ideal.is_a? SolvIdeal
+        ideal = SolvableIdeal.new(ideal.pset);
+        #ideal.doGB();
+    end
+    cfr = ideal.getList().get(0).ring;
+    #puts "ideal.getList().get(0).ring.ideal = #{ideal.getList().get(0).ring.ideal}\n";
+    if cfr.getClass().getSimpleName() == "SolvableLocalResidueRing"
+        lc = SolvableLocalResidueRing.new( cfr.ideal );
+    else
+        lc = SolvableLocalResidueRing.new(ideal);
+    end
+    if d.is_a? Array
+        if n != 1
+            puts "#{n} ignored\n";
+        end
+        if d.size > 1
+            n = d[1];
+        end
+        d = d[0];
+    end
+    if d.is_a? RingElem
+        d = d.elem;
+    end
+    if n.is_a? RingElem
+        n = n.elem;
+    end
+    if d == 0
+        r = SolvableLocalResidue.new(lc);
+    else
+        if n == 1
+            r = SolvableLocalResidue.new(lc,d);
+        else
+            r = SolvableLocalResidue.new(lc,d,n);
         end
     end
     return RingElem.new(r);
@@ -3137,25 +3187,31 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
         quotSolv = cf.getClass().getSimpleName() == "SolvableQuotientRing"
         resSolv = cf.getClass().getSimpleName() == "SolvableResidueRing"
         locSolv = cf.getClass().getSimpleName() == "SolvableLocalRing"
+        locresSolv = cf.getClass().getSimpleName() == "SolvableLocalResidueRing"
         #puts "cf = " + cf.getClass().to_s + ", quotSolv = " + quotSolv.to_s + ", recSolv = " + recSolv.to_s;
         if recSolv
            puts "RecSolvablePolynomialRing: " + cf.toScript();
            ring = RecSolvablePolynomialRing.new(cf,nv,to,names);
            table = ring.table;
            coeffTable = ring.coeffTable;
-        elsif quotSolv
-           puts "QuotSolvablePolynomialRing: " + cf.toScript();
-           ring = QuotSolvablePolynomialRing.new(cf,nv,to,names);
-           table = ring.table;
-           coeffTable = ring.polCoeff.coeffTable;
         elsif resSolv
            puts "ResidueSolvablePolynomialRing: " + cf.toScript();
            ring = ResidueSolvablePolynomialRing.new(cf,nv,to,names);
            table = ring.table;
            coeffTable = ring.polCoeff.coeffTable;
+        elsif quotSolv
+           puts "QuotSolvablePolynomialRing: " + cf.toScript();
+           ring = QuotSolvablePolynomialRing.new(cf,nv,to,names);
+           table = ring.table;
+           coeffTable = ring.polCoeff.coeffTable;
         elsif locSolv
            puts "LocalSolvablePolynomialRing: " + cf.toScript();
            ring = LocalSolvablePolynomialRing.new(cf,nv,to,names);
+           table = ring.table;
+           coeffTable = ring.polCoeff.coeffTable;
+        elsif locresSolv
+           puts "QLRSolvablePolynomialRing: " + cf.toScript();
+           ring = QLRSolvablePolynomialRing.new(cf,nv,to,names);
            table = ring.table;
            coeffTable = ring.polCoeff.coeffTable;
         else
@@ -3170,17 +3226,22 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
                 if recSolv and ll[i+1].isConstant() 
                    #puts "r coeff type " + str(ll[i].class);
                    coeffTable.update( ll[i], ll[i+1].leadingBaseCoefficient(), ll[i+2] );
-                elsif quotSolv and ll[i+1].isConstant() 
-                   #puts "q coeff type " + str(ll[i].class);
-                   coeffTable.update( ring.toPolyCoefficients(ll[i]), 
-                                      ring.toPolyCoefficients(ll[i+1]), 
-                                      ring.toPolyCoefficients(ll[i+2]) );
                 elsif resSolv and ll[i+1].isConstant() 
                    #puts "q coeff type " + str(ll[i].class);
                    coeffTable.update( ring.toPolyCoefficients(ll[i]),
                                       ring.toPolyCoefficients(ll[i+1]), 
                                       ring.toPolyCoefficients(ll[i+2]) );
+                elsif quotSolv and ll[i+1].isConstant() 
+                   #puts "q coeff type " + str(ll[i].class);
+                   coeffTable.update( ring.toPolyCoefficients(ll[i]), 
+                                      ring.toPolyCoefficients(ll[i+1]), 
+                                      ring.toPolyCoefficients(ll[i+2]) );
                 elsif locSolv and ll[i+1].isConstant() 
+                   #puts "q coeff type " + str(ll[i].class);
+                   coeffTable.update( ring.toPolyCoefficients(ll[i]),
+                                      ring.toPolyCoefficients(ll[i+1]), 
+                                      ring.toPolyCoefficients(ll[i+2]) );
+                elsif locresSolv and ll[i+1].isConstant() 
                    #puts "q coeff type " + str(ll[i].class);
                    coeffTable.update( ring.toPolyCoefficients(ll[i]),
                                       ring.toPolyCoefficients(ll[i+1]), 

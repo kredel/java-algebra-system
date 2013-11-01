@@ -49,8 +49,10 @@ from edu.jas.application import PolyUtilApp, Residue, ResidueRing, Ideal,\
                                 Local, LocalRing, IdealWithRealAlgebraicRoots,\
                                 SolvableIdeal, SolvableResidue, SolvableResidueRing,\
                                 SolvableLocal, SolvableLocalRing,\
+                                SolvableLocalResidue, SolvableLocalResidueRing,\
                                 ResidueSolvablePolynomial, ResidueSolvablePolynomialRing,\
                                 LocalSolvablePolynomial, LocalSolvablePolynomialRing,\
+                                QLRSolvablePolynomial, QLRSolvablePolynomialRing,\
                                 ComprehensiveGroebnerBaseSeq, ExtensionFieldBuilder
 from edu.jas.kern        import ComputerThreads, StringUtil, Scripting
 from edu.jas.ufd         import GreatestCommonDivisor, PolyUfdUtil, GCDFactory,\
@@ -2480,6 +2482,43 @@ def SLC(ideal,d=0,n=1):
     return RingElem(r);
 
 
+def SLR(ideal,d=0,n=1):
+    '''Create JAS polynomial SolvableLocalResidue as ring element.
+    '''
+    if ideal == None:
+        #print "ideal = " + str(ideal);
+        if False:
+            raise ValueError, "No ideal given."
+    if isinstance(ideal,SolvableIdeal):
+        ideal = jas.application.SolvableIdeal(ideal.pset);
+        #ideal.doGB();
+    #print "ideal.getList().get(0).ring.ideal = %s" % ideal.getList().get(0).ring.ideal;
+    cfr = ideal.getList().get(0).ring;
+    if cfr.getClass().getSimpleName() == "SolvableLocalResidueRing":
+        lc = SolvableLocalResidueRing( cfr.ideal );
+    else:
+        lc = SolvableLocalResidueRing(ideal);
+    if isinstance(d,PyTuple) or isinstance(d,PyList):
+        if n != 1:
+            print "%s ignored" % n;
+        if len(d) > 1:
+            n = d[1];
+        d = d[0];
+    if isinstance(d,RingElem):
+        d = d.elem;
+    if isinstance(n,RingElem):
+        n = n.elem;
+    if d == 0:
+        r = SolvableLocalResidue(lc);
+    else:
+        if n == 1:
+            r = SolvableLocalResidue(lc,d);
+        else:
+            r = SolvableLocalResidue(lc,d,n);
+    return RingElem(r);
+
+
+
 def RR(flist,n=1,r=0):
     '''Create JAS regular ring Product as ring element.
     '''
@@ -3347,18 +3386,19 @@ class SolvPolyRing(SolvableRing):
         quotSolv = cf.getClass().getSimpleName() == "SolvableQuotientRing";
         resSolv = cf.getClass().getSimpleName() == "SolvableResidueRing";
         locSolv = cf.getClass().getSimpleName() == "SolvableLocalRing";
+        locresSolv = cf.getClass().getSimpleName() == "SolvableLocalResidueRing";
         if recSolv:
             ring = RecSolvablePolynomialRing(cf,nv,to,names);
             table = ring.table;
             coeffTable = ring.coeffTable;
         else:
-            if quotSolv:
-                ring = QuotSolvablePolynomialRing(cf,nv,to,names);
+            if resSolv:
+                ring = ResidueSolvablePolynomialRing(cf,nv,to,names);
                 table = ring.table;
                 coeffTable = ring.polCoeff.coeffTable;
             else:
-                if resSolv:
-                    ring = ResidueSolvablePolynomialRing(cf,nv,to,names);
+                if quotSolv:
+                    ring = QuotSolvablePolynomialRing(cf,nv,to,names);
                     table = ring.table;
                     coeffTable = ring.polCoeff.coeffTable;
                 else:
@@ -3367,9 +3407,14 @@ class SolvPolyRing(SolvableRing):
                         table = ring.table;
                         coeffTable = ring.polCoeff.coeffTable;
                     else:
-                        ring = GenSolvablePolynomialRing(cf,nv,to,names);
-                        table = ring.table;
-                        coeffTable = table;
+                        if locresSolv:
+                            ring = QLRSolvablePolynomialRing(cf,nv,to,names);
+                            table = ring.table;
+                            coeffTable = ring.polCoeff.coeffTable;
+                        else:
+                            ring = GenSolvablePolynomialRing(cf,nv,to,names);
+                            table = ring.table;
+                            coeffTable = table;
         if L != []:
             #print "rel = " + str(L);
             for i in range(0,len(L),3):
@@ -3377,12 +3422,12 @@ class SolvPolyRing(SolvableRing):
                 if recSolv and L[i+1].isConstant():
                     coeffTable.update( L[i], L[i+1], L[i+2] );
                 else: 
-                    if quotSolv and L[i+1].isConstant():
+                    if resSolv and L[i+1].isConstant():
                         coeffTable.update(ring.toPolyCoefficients(L[i]), 
                                           ring.toPolyCoefficients(L[i+1]), 
                                           ring.toPolyCoefficients(L[i+2]) );
                     else:
-                        if resSolv and L[i+1].isConstant():
+                        if quotSolv and L[i+1].isConstant():
                             coeffTable.update(ring.toPolyCoefficients(L[i]), 
                                               ring.toPolyCoefficients(L[i+1]), 
                                               ring.toPolyCoefficients(L[i+2]) );
@@ -3392,9 +3437,13 @@ class SolvPolyRing(SolvableRing):
                                                   ring.toPolyCoefficients(L[i+1]), 
                                                   ring.toPolyCoefficients(L[i+2]) );
                             else:
-                                print "L[i], L[i+1], L[i+2]: " + str(L[i]) + ", " + str(L[i+1]) + ", " + str(L[i+2]);
-
-                                table.update( L[i], L[i+1], L[i+2] );
+                                if locresSolv and L[i+1].isConstant():
+                                    coeffTable.update(ring.toPolyCoefficients(L[i]), 
+                                                      ring.toPolyCoefficients(L[i+1]), 
+                                                      ring.toPolyCoefficients(L[i+2]) );
+                                else:
+                                    print "L[i], L[i+1], L[i+2]: " + str(L[i]) + ", " + str(L[i+1]) + ", " + str(L[i+2]);
+                                    table.update( L[i], L[i+1], L[i+2] );
         self.ring = ring;
         SolvableRing.__init__(self,ring=self.ring)
 
