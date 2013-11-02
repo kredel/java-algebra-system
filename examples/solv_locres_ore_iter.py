@@ -163,3 +163,9 @@ print "d     = " + str(d);
 print "d-q   = " + str(d-q);
 print;
 
+fn = z**2 - y;
+print "fn    = " + str(fn);
+#fn = x; # undefined/wrong variable, since == 0
+fn = fn + 2*y;
+print "fn    = " + str(fn) + ", " + str(fn.isZERO());
+print;

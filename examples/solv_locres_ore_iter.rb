@@ -162,3 +162,9 @@ puts "d     = " + str(d);
 puts "q-d   = " + str(q-d);
 puts;
 
+fn = z**2 - y;
+puts "fn    = " + str(fn);
+#fn = x; # undefined/wrong variable, since == 0
+fn = fn + 2*y;
+puts "fn    = " + str(fn) + ", " + str(fn.isZERO());
+puts;
