@@ -22,23 +22,36 @@
 
 <dl>
 
-<dt>2013, October </dt>
+<dt>2013, November </dt>
 <dd> 
 
+ New solvable local residue ring <code>SolvableLocalResidue</code> as
+ solvable quotient field modulo an ideal.  New generic solvable
+ polynomials <code>QLRSolvablePolynomial</code> with abstacted generic
+ coefficients fom solvable quotient, local oder local-residue rings.
+ Implement corresponding interfaces <code>QuotPair</code> and
+ <code>QuotPairFactory</code> in respective classes.
+
+ Adjust and extend scripting examples for the new classes.
+
+ Removed differences and clean-up different versions of
+ <code>Run*GB</code> stand alone Gr&ouml;bner base programs.
+
+</dd>
+
+<dt>2013, October </dt>
+<dd> 
  Android version of JAS based on Ruboto (JRuby for Android) now with
  signed code and installable from <a href="download.html"
  target="main">download</a>.
-
  Least common multiple for solvable polynomials and <em>trial</em>
  greatest common divisor for solvable polynomials. 
  Apel-Lassner canonical simplifier to obtain &quot;smaller&quot;
  solvable quotients in method <code>leftSimplifier()</code>.
-
  Some code refactoring to break package dependency cycles. Fixed, cleaned
  and worked-around some more <em>Findbugs</em> and
  <em>Eclipse</em> issues. Dropped Java-5 compatibility in most
  places.
-
 </dd>
 
 <dt>2013, September </dt>
@@ -2304,7 +2317,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Sun Oct  6 12:38:59 CEST 2013
+Last modified: Sat Nov  2 22:08:11 CET 2013
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
