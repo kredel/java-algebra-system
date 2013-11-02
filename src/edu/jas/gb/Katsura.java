@@ -30,10 +30,10 @@ public class Katsura {
            k = new Katsura("u",n, args[1]);
         }
         if ( args.length == 3 ) {               
-        k = new Katsura(args[2],n, args[1]);
-                        }
+           k = new Katsura(args[2],n, args[1]);
+        }
         System.out.println("#Katsura equations for N = " + n + ":");
-                System.out.println("" + k);
+        System.out.println("" + k);
     }
 
     final int N;
