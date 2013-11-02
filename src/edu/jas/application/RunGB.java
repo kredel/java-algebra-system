@@ -16,6 +16,8 @@ import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Arrays;
+import java.util.jar.JarFile;
+import java.util.jar.JarEntry;
 
 import org.apache.log4j.BasicConfigurator;
 
@@ -190,18 +192,14 @@ public class RunGB {
             }
         }
 
-        Reader problem = null;
-        try {
-            problem = new InputStreamReader(new FileInputStream(filename),Charset.forName("UTF8"));
-            problem = new BufferedReader(problem);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        Reader problem = getReader(filename);
+        if (problem == null) {
             System.out.println("args(file): " + filename);
+            System.out.println("args(file): examples.jar(" + filename + ")");
             System.out.println("args(file): " + Arrays.toString(args));
             System.out.println(usage);
             return;
         }
-
         RingFactoryTokenizer rftok = new RingFactoryTokenizer(problem);
         GenPolynomialRing pfac = null;
         try {
@@ -449,6 +447,39 @@ public class RunGB {
             sb.append(args[i]);
         }
         return sb.toString();
+    }
+
+
+    static Reader getReader(String filename) {
+        Reader problem = null;
+        Exception fnf = null;
+        try {
+            problem = new InputStreamReader(new FileInputStream(filename),Charset.forName("UTF8"));
+            problem = new BufferedReader(problem);
+        } catch (FileNotFoundException e) {
+            fnf = e;
+        }
+        if (problem != null) {
+            return problem;
+        }
+        String examples = "examples.jar";
+        try {
+            JarFile jf = new JarFile(examples);
+            JarEntry je = jf.getJarEntry(filename);
+            if (je == null) {
+               fnf.printStackTrace();
+               return problem;
+            }
+            problem = new InputStreamReader(jf.getInputStream(je),Charset.forName("UTF8"));
+            problem = new BufferedReader(problem);
+        } catch (FileNotFoundException e) {
+            fnf.printStackTrace();
+            e.printStackTrace();
+        } catch (IOException e) {
+            fnf.printStackTrace();
+            e.printStackTrace();
+        }
+        return problem;
     }
 
 }

@@ -195,18 +195,14 @@ public class RunMPJGB {
             }
         }
 
-        Reader problem = null;
-        try {
-            problem = new InputStreamReader(new FileInputStream(filename), Charset.forName("UTF8"));
-            problem = new BufferedReader(problem);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        Reader problem = RunGB.getReader(filename);
+        if (problem == null) {
             System.out.println("args(file): " + filename);
+            System.out.println("args(file): examples.jar(" + filename + ")");
             System.out.println("args(file): " + Arrays.toString(args));
             System.out.println(usage);
             return;
         }
-
         RingFactoryTokenizer rftok = new RingFactoryTokenizer(problem);
         GenPolynomialRing pfac = null;
         try {
