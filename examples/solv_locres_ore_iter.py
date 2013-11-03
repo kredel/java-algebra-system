@@ -9,7 +9,7 @@ from java.lang import Integer
 from jas import SolvableRing, SolvPolyRing, PolyRing, RingElem
 from jas import QQ, startLog, SLR
 
-# Ore extension solvable polynomial example, Gomez-Torrecillas, 2003
+# Ore extension solvable polynomial example, roots
 
 pcz = PolyRing(QQ(),"x,y,z");
 #is automatic: [one,x,y,z] = pcz.gens();
@@ -72,7 +72,7 @@ print "SolvableLocalResidueRing: " + str(pzc.toScript()) + ", assoz: " + str(pzc
 print "gens =" + str([ str(f) for f in pzc.generators() ]);
 print;
 
-pct = PolyRing(pzc,"t,u");
+pct = PolyRing(pzc,"t");
 #is automatic: [one,y,z,t] = p.gens(); # no x
 
 #exit(0);
@@ -86,7 +86,7 @@ print;
 
 #startLog();
 
-pt = SolvPolyRing(pzc, "t,u", PolyRing.lex, trelations);
+pt = SolvPolyRing(pzc, "t", PolyRing.lex, trelations);
 print "SolvPolyRing: " + str(pt);
 print "sp.gens =" + str([ str(f) for f in pt.gens() ]);
 #is automatic: one,y,z,t = rp.gens(); # no x
@@ -163,9 +163,20 @@ print "d     = " + str(d);
 print "d-q   = " + str(d-q);
 print;
 
-fn = z**2 - y;
-print "fn    = " + str(fn);
+f1 = t - z**2;
+print "f1    = " + str(f1);
 #fn = x; # undefined/wrong variable, since == 0
-fn = fn + 2*y;
-print "fn    = " + str(fn) + ", " + str(fn.isZERO());
+f2 = t + y;
+print "f2    = " + str(f2); 
+f3 = f1 - f2;
+print "f3    = " + str(f3) + ", " + str(f3.isZERO());
+print;
+
+iil = pt.ideal( "", [ f1, f2 ] );
+print "SolvableIdeal_local: " + str(iil);
+print;
+
+rgll = iil.leftGB();
+print "seq left GB: " + str(rgll);
+print "isLeftGB: " + str(rgll.isLeftGB());
 print;

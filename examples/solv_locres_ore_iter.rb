@@ -5,7 +5,7 @@
 
 require "examples/jas"
 
-# Ore extension solvable polynomial example, Gomez-Torrecillas, 2003
+# Ore extension solvable polynomial example, roots
 
 pcz = PolyRing.new(QQ(),"x,y,z");
 #is automatic: [one,x,y,z] = p.gens();
@@ -69,7 +69,7 @@ puts "SolvableLocalResidueRing: " + str(pzc.toScript) + ", assoz: " + str(pzc::r
 puts "gens =" + pzc.generators().join(", ") { |r| r.to_s };
 puts;
 
-pct = PolyRing.new(pzc,"t,u");
+pct = PolyRing.new(pzc,"t");
 #is automatic: [one,y,z,t] = p.gens(); # 1/y, 1/z
 
 #exit(0);
@@ -83,7 +83,7 @@ puts;
 
 #startLog();
 
-pt = SolvPolyRing.new(pzc, "t,u", PolyRing.lex, trelations);
+pt = SolvPolyRing.new(pzc, "t", PolyRing.lex, trelations);
 puts "SolvPolyRing: " + str(pt);
 puts "sp.gens(t) = " + pt.gens().join(", ") { |r| r.to_s };
 #is automatic: one,y,z,t = rp.gens(); # no x?
@@ -162,9 +162,20 @@ puts "d     = " + str(d);
 puts "q-d   = " + str(q-d);
 puts;
 
-fn = z**2 - y;
-puts "fn    = " + str(fn);
+f1 = t - z**2;
+puts "f1    = " + str(f1);
 #fn = x; # undefined/wrong variable, since == 0
-fn = fn + 2*y;
-puts "fn    = " + str(fn) + ", " + str(fn.isZERO());
+f2 = t + y;
+puts "f2    = " + str(f2); 
+f3 = f1 - f2;
+puts "f3    = " + str(f3) + ", " + str(f3.isZERO());
+puts;
+
+iil = pt.ideal( "", [ f1, f2 ] );
+puts "SolvableIdeal_local: " + str(iil);
+puts;
+
+rgll = iil.leftGB();
+puts "seq left GB: " + str(rgll);
+puts "isLeftGB: " + str(rgll.isLeftGB());
 puts;
