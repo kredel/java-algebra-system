@@ -167,7 +167,8 @@ public class RunSGB {
             e.printStackTrace();
             return;
         }
-        Reader polyreader = new CatReader(new StringReader("("),problem); // ( has gone
+        //Reader polyreader = new CatReader(new StringReader("("),problem); // ( has gone
+        Reader polyreader = problem; 
         GenPolynomialTokenizer tok = new GenPolynomialTokenizer(spfac,polyreader);
         PolynomialList S = null;
         try {

@@ -211,7 +211,8 @@ public class RunMPIGB {
             e.printStackTrace();
             return;
         }
-        Reader polyreader = new CatReader(new StringReader("("), problem); // ( has gone
+        //Reader polyreader = new CatReader(new StringReader("("), problem); // ( has gone
+        Reader polyreader = problem;
         GenPolynomialTokenizer tok = new GenPolynomialTokenizer(pfac, polyreader);
         PolynomialList S = null;
         try {

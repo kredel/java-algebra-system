@@ -851,6 +851,8 @@ public class GenPolynomialTokenizer {
                 }
                 tt = tok.nextToken(); // also comma
             }
+        } else {
+            tok.pushBack();
         }
         Object[] ol = l.toArray();
         w = new long[ol.length];
@@ -900,6 +902,8 @@ public class GenPolynomialTokenizer {
                 }
                 tt = tok.nextToken(); // also comma
             }
+        } else {
+            tok.pushBack();
         }
         Object[] ol = l.toArray();
         w = new long[ol.length][];
@@ -1011,6 +1015,8 @@ public class GenPolynomialTokenizer {
                     return new TermOrder(w);
                 }
             }
+        } else {
+            tok.pushBack();
         }
         int s = nextSplitIndex();
         if (s <= 0) {
