@@ -48,6 +48,8 @@ issues to consider:
 
 - refactor method names for groovy operator overloading, make examples for usage
 
+- check usage SDP (Socked Direct Protokol) with Java 7 and InfiniBand
+
 - algebraic number theory
 
 - algebraic topology
