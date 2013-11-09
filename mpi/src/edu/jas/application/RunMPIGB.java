@@ -151,6 +151,10 @@ public class RunMPIGB {
             doCheck = true;
             RunGB.doCheck = true;
         }
+        j = RunGB.indexOf(args, "nolog");
+        if (j >= 0) {
+            doLog = false;
+        }
 
         int threads = 0;
         int threadsPerNode = 1;

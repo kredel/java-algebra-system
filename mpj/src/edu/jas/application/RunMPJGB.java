@@ -124,7 +124,7 @@ public class RunMPJGB {
                     port = Integer.parseInt(args[k + 1]);
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
-                    System.out.println("args(int): " + Arrays.toString(args));
+                    System.out.println("args(port): " + Arrays.toString(args));
                     System.out.println(usage);
                     return;
                 }
@@ -136,7 +136,7 @@ public class RunMPJGB {
         String filename = null;
         if (!kind.equals("cli")) {
             if (args.length - k < 2) {
-                System.out.println("args(cli): " + Arrays.toString(args));
+                System.out.println("args(file): " + Arrays.toString(args));
                 System.out.println(usage);
                 return;
             }
