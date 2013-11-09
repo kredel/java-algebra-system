@@ -319,8 +319,19 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
                 }
             }
             synchronized (theList) { // add to self.listener
-                theList.put(tc.key(), tc.value());
+                theList.put(key, value); //avoid seri: tc.key(), tc.value());
                 theList.notifyAll();
+            }
+            if (debug) {
+                K k = tc.key();
+                if (!key.equals(k)) {
+                    logger.warn("deserial(serial)) != key: " + key + " != " + k);
+                }
+                V v = tc.value();
+                if (!value.equals(v)) {
+                    logger.warn("deserial(serial)) != value: " + value + " != " + v);
+                }
+
             }
             //System.out.println("send: "+tc);
         } catch (ClassNotFoundException e) {
@@ -542,8 +553,8 @@ class DHTMPJListener<K, V> extends Thread {
                 } else {
                     DHTTransport[] tcl = new DHTTransport[1];
                     Status stat = null;
-                    synchronized (MPJEngine.class) { // not remove: global static lock
-                        stat = engine.Recv(tcl, 0, tcl.length, MPI.OBJECT, MPI.ANY_SOURCE,
+                    synchronized (MPJEngine.class) { // not remove global static lock  // only from 0
+                        stat = engine.Recv(tcl, 0, tcl.length, MPI.OBJECT, 0,          //MPI.ANY_SOURCE,
                                       DistHashTableMPJ.DHTTAG);
                     }
                     //logger.info("waitRequest done: stat = " + stat);

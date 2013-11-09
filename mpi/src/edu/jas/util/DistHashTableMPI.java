@@ -319,8 +319,19 @@ public class DistHashTableMPI<K, V> extends AbstractMap<K, V> {
                 }
             }
             synchronized (theList) { // add to self.listener
-                theList.put(tc.key(), tc.value());
+                theList.put(key, value); //avoid seri: tc.key(), tc.value());
                 theList.notifyAll();
+            }
+            if (debug) {
+                K k = tc.key();
+                if (!key.equals(k)) {
+                    logger.warn("deserial(serial)) != key: " + key + " != " + k);
+                }
+                V v = tc.value();
+                if (!value.equals(v)) {
+                    logger.warn("deserial(serial)) != value: " + value + " != " + v);
+                }
+
             }
             //System.out.println("send: "+tc);
         } catch (ClassNotFoundException e) {
