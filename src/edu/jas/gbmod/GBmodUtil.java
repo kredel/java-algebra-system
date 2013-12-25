@@ -17,6 +17,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenSolvablePolynomialRing;
+import edu.jas.poly.RecSolvablePolynomial;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.Element;
@@ -41,16 +42,16 @@ public class GBmodUtil {
 
 
     /**
-     * GenPolynomial sparse pseudo remainder. For univariate polynomials.
+     * GenSolvablePolynomial sparse pseudo remainder. For univariate polynomials.
      * @param <C> coefficient type.
-     * @param P GenPolynomial.
-     * @param S nonzero GenPolynomial.
+     * @param P GenSolvablePolynomial.
+     * @param S nonzero GenSolvablePolynomial.
      * @return remainder with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
      *         m' &le; deg(P)-deg(S)
      * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
      */
-    public static <C extends RingElem<C>> GenPolynomial<C> baseSparsePseudoRemainder(GenPolynomial<C> P,
-                    GenPolynomial<C> S) {
+    public static <C extends RingElem<C>> GenSolvablePolynomial<C> 
+           baseSparsePseudoRemainder(GenSolvablePolynomial<C> P, GenSolvablePolynomial<C> S) {
         if (S == null || S.isZERO()) {
             throw new ArithmeticException(P.toString() + " division by zero " + S);
         }
@@ -62,8 +63,8 @@ public class GBmodUtil {
         }
         C c = S.leadingBaseCoefficient();
         ExpVector e = S.leadingExpVector();
-        GenPolynomial<C> h;
-        GenPolynomial<C> r = P;
+        GenSolvablePolynomial<C> h;
+        GenSolvablePolynomial<C> r = P;
         while (!r.isZERO()) {
             ExpVector f = r.leadingExpVector();
             if (f.multipleOf(e)) {
@@ -77,7 +78,7 @@ public class GBmodUtil {
                     r = r.multiply(c); // coeff ac
                     h = S.multiply(a, f); // coeff ac
                 }
-                r = r.subtract(h);
+                r = (GenSolvablePolynomial<C>) r.subtract(h);
             } else {
                 break;
             }
@@ -87,33 +88,31 @@ public class GBmodUtil {
 
 
     /**
-     * GenPolynomial sparse pseudo divide. For univariate polynomials or exact
+     * GenSolvablePolynomial sparse pseudo divide. For univariate polynomials or exact
      * division.
      * @param <C> coefficient type.
-     * @param P GenPolynomial.
-     * @param S nonzero GenPolynomial.
+     * @param P GenSolvablePolynomial.
+     * @param S nonzero GenSolvablePolynomial.
      * @return quotient with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
      *         m' &le; deg(P)-deg(S)
      * @see edu.jas.poly.GenPolynomial#divide(edu.jas.poly.GenPolynomial).
      */
-    public static <C extends RingElem<C>> GenPolynomial<C> basePseudoDivide(GenPolynomial<C> P,
-                    GenPolynomial<C> S) {
+    public static <C extends RingElem<C>> GenSolvablePolynomial<C> 
+           basePseudoDivide(GenSolvablePolynomial<C> P, GenSolvablePolynomial<C> S) {
         if (S == null || S.isZERO()) {
             throw new ArithmeticException(P.toString() + " division by zero " + S);
         }
-        //if (S.ring.nvar != 1) {
-            // ok if exact division
-            // throw new RuntimeException(this.getClass().getName()
-            //                            + " univariate polynomials only");
+        //if (S.ring.nvar != 1) { // ok if exact division
+            // throw new RuntimeException("univariate polynomials only");
         //}
         if (P.isZERO() || S.isONE()) {
             return P;
         }
         C c = S.leadingBaseCoefficient();
         ExpVector e = S.leadingExpVector();
-        GenPolynomial<C> h;
-        GenPolynomial<C> r = P;
-        GenPolynomial<C> q = S.ring.getZERO().copy();
+        GenSolvablePolynomial<C> h;
+        GenSolvablePolynomial<C> r = P;
+        GenSolvablePolynomial<C> q = S.ring.getZERO().copy();
 
         while (!r.isZERO()) {
             ExpVector f = r.leadingExpVector();
@@ -123,20 +122,82 @@ public class GBmodUtil {
                 C x = a.remainder(c);
                 if (x.isZERO()) {
                     C y = a.divide(c);
-                    q = q.sum(y, f);
+                    q = (GenSolvablePolynomial<C>) q.sum(y, f);
                     h = S.multiply(y, f); // coeff a
                 } else {
                     q = q.multiply(c);
-                    q = q.sum(a, f);
+                    q = (GenSolvablePolynomial<C>) q.sum(a, f);
                     r = r.multiply(c); // coeff ac
                     h = S.multiply(a, f); // coeff ac
                 }
-                r = r.subtract(h);
+                r = (GenSolvablePolynomial<C>) r.subtract(h);
             } else {
                 break;
             }
         }
         return q;
+    }
+
+
+    /**
+     * GenSolvablePolynomial sparse pseudo quotient and remainder. For univariate
+     * polynomials or exact division.
+     * @param <C> coefficient type.
+     * @param P GenSolvablePolynomial.
+     * @param S nonzero GenSolvablePolynomial.
+     * @return [ quotient, remainder ] with ldcf(S)<sup>m'</sup> P = quotient *
+     *         S + remainder. m' &le; deg(P)-deg(S)
+     * @see edu.jas.poly.GenPolynomial#divide(edu.jas.poly.GenPolynomial).
+     */
+    @SuppressWarnings("unchecked")
+    public static <C extends RingElem<C>> GenSolvablePolynomial<C>[] 
+           basePseudoQuotientRemainder(GenSolvablePolynomial<C> P, GenSolvablePolynomial<C> S) {
+        if (S == null || S.isZERO()) {
+            throw new ArithmeticException(P.toString() + " division by zero " + S);
+        }
+        //if (S.ring.nvar != 1) { // ok if exact division
+            // throw new RuntimeException("univariate polynomials only");
+        //}
+        GenSolvablePolynomial<C>[] ret = new GenSolvablePolynomial[2];
+        ret[0] = null;
+        ret[1] = null;
+        if (P.isZERO() || S.isONE()) {
+            ret[0] = P;
+            ret[1] = S.ring.getZERO();
+            return ret;
+        }
+        C c = S.leadingBaseCoefficient();
+        ExpVector e = S.leadingExpVector();
+        GenSolvablePolynomial<C> h;
+        GenSolvablePolynomial<C> r = P;
+        GenSolvablePolynomial<C> q = S.ring.getZERO().copy();
+
+        while (!r.isZERO()) {
+            ExpVector f = r.leadingExpVector();
+            if (f.multipleOf(e)) {
+                C a = r.leadingBaseCoefficient();
+                f = f.subtract(e);
+                C x = a.remainder(c);
+                if (x.isZERO()) {
+                    C y = a.divide(c);
+                    q = (GenSolvablePolynomial<C>) q.sum(y, f);
+                    h = S.multiply(y, f); // coeff a
+                } else {
+                    q = q.multiply(c);
+                    q = (GenSolvablePolynomial<C>) q.sum(a, f);
+                    r = r.multiply(c); // coeff ac
+                    h = S.multiply(a, f); // coeff ac
+                }
+                r = (GenSolvablePolynomial<C>) r.subtract(h);
+            } else {
+                break;
+            }
+        }
+        //GenPolynomial<C> rhs = q.multiply(S).sum(r);
+        //GenPolynomial<C> lhs = P;
+        ret[0] = q;
+        ret[1] = r;
+        return ret;
     }
 
 
@@ -249,22 +310,22 @@ public class GBmodUtil {
 
 
     /**
-     * GenPolynomial recursive pseudo divide. For recursive polynomials.
+     * GenSolvablePolynomial recursive pseudo divide. For recursive polynomials.
      * @param <C> coefficient type.
-     * @param P recursive GenPolynomial.
-     * @param S nonzero recursive GenPolynomial.
+     * @param P recursive GenSolvablePolynomial.
+     * @param S nonzero recursive GenSolvablePolynomial.
      * @return quotient with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
      * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
      */
-    public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<C>> recursivePseudoDivide(
-                    GenPolynomial<GenPolynomial<C>> P, GenPolynomial<GenPolynomial<C>> S) {
+    public static <C extends RingElem<C>> GenSolvablePolynomial<GenPolynomial<C>> 
+           recursivePseudoDivide(
+                    GenSolvablePolynomial<GenPolynomial<C>> P, GenSolvablePolynomial<GenPolynomial<C>> S) {
         if (S == null || S.isZERO()) {
             throw new ArithmeticException(P + " division by zero " + S);
         }
         //if (S.ring.nvar != 1) {
             // ok if exact division
-            // throw new RuntimeException(this.getClass().getName()
-            //                            + " univariate polynomials only");
+            // throw new RuntimeException("univariate polynomials only");
         //}
         if (P == null || P.isZERO()) {
             return P;
@@ -272,28 +333,34 @@ public class GBmodUtil {
         if (S.isONE()) {
             return P;
         }
-        GenPolynomial<C> c = S.leadingBaseCoefficient();
+        SolvableSyzygyAbstract<C> syz = new SolvableSyzygyAbstract<C>();
+
+        //GenPolynomial<C> c = S.leadingBaseCoefficient();
         ExpVector e = S.leadingExpVector();
-        GenPolynomial<GenPolynomial<C>> h;
-        GenPolynomial<GenPolynomial<C>> r = P;
-        GenPolynomial<GenPolynomial<C>> q = S.ring.getZERO().copy();
+        GenSolvablePolynomial<GenPolynomial<C>> h;
+        GenSolvablePolynomial<GenPolynomial<C>> r = P;
+        GenSolvablePolynomial<GenPolynomial<C>> q = S.ring.getZERO().copy();
         while (!r.isZERO()) {
             ExpVector f = r.leadingExpVector();
             if (f.multipleOf(e)) {
-                GenPolynomial<C> a = r.leadingBaseCoefficient();
+                GenSolvablePolynomial<C> a = (GenSolvablePolynomial<C>) r.leadingBaseCoefficient();
                 f = f.subtract(e);
-                GenPolynomial<C> x = GBmodUtil.<C> baseSparsePseudoRemainder(a, c);
-                if (x.isZERO() && !c.isConstant()) {
-                    GenPolynomial<C> y = GBmodUtil.<C> basePseudoDivide(a, c);
-                    q = q.sum(y, f);
-                    h = S.multiply(y, f); // coeff a
-                } else {
-                    q = q.multiply(c);
-                    q = q.sum(a, f);
-                    r = r.multiply(c); // coeff ac
-                    h = S.multiply(a, f); // coeff ac
-                }
-                r = r.subtract(h);
+                //
+                h = S.multiplyLeft(f);  // coeff c, exp (f-e) e
+                GenSolvablePolynomial<C> d = (GenSolvablePolynomial<C>) h.leadingBaseCoefficient();
+                GenSolvablePolynomial<C>[] oc = syz.leftOreCond(a,d);
+                GenPolynomial<C> ga = oc[0];
+                GenPolynomial<C> gd = oc[1];
+                //System.out.println("OreCond:  a = " +  a + ",  d = " +  d);
+                //System.out.println("OreCond: ga = " + ga + ", gd = " + gd);
+                // ga a = gd d
+                r = r.multiplyLeft(ga);  // coeff ga a, exp f
+                h = h.multiplyLeft(gd);  // coeff gd d, exp f
+                //
+                q = q.multiply(gd);
+                q = (GenSolvablePolynomial<GenPolynomial<C>>) q.sum(ga, f);
+                //
+                r = (GenSolvablePolynomial<GenPolynomial<C>>) r.subtract(h);
             } else {
                 break;
             }
@@ -303,15 +370,15 @@ public class GBmodUtil {
 
 
     /**
-     * GenPolynomial divide. For recursive polynomials. Division by coefficient
+     * GenSolvablePolynomial divide. For recursive polynomials. Division by coefficient
      * ring element.
      * @param <C> coefficient type.
-     * @param P recursive GenPolynomial.
+     * @param P recursive GenSolvablePolynomial.
      * @param s GenPolynomial.
      * @return this/s.
      */
-    public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<C>> recursiveDivide(
-                    GenPolynomial<GenPolynomial<C>> P, GenPolynomial<C> s) {
+    public static <C extends RingElem<C>> GenSolvablePolynomial<GenPolynomial<C>> 
+           recursiveDivide(GenSolvablePolynomial<GenPolynomial<C>> P, GenSolvablePolynomial<C> s) {
         if (s == null || s.isZERO()) {
             throw new ArithmeticException("division by zero " + P + ", " + s);
         }
@@ -321,12 +388,12 @@ public class GBmodUtil {
         if (s.isONE()) {
             return P;
         }
-        GenPolynomial<GenPolynomial<C>> p = P.ring.getZERO().copy();
-        //SortedMap<ExpVector, GenPolynomial<C>> pv = p.getMap();
+        GenSolvablePolynomial<GenPolynomial<C>> p = P.ring.getZERO().copy();
+        //SortedMap<ExpVector, GenPolynomial<C>> pv = p.val; //getMap();
         for (Map.Entry<ExpVector, GenPolynomial<C>> m1 : P.getMap().entrySet()) {
-            GenPolynomial<C> c1 = m1.getValue();
+            GenSolvablePolynomial<C> c1 = (GenSolvablePolynomial<C>) m1.getValue();
             ExpVector e1 = m1.getKey();
-            GenPolynomial<C> c = PolyUtil.<C> basePseudoDivide(c1, s);
+            GenSolvablePolynomial<C> c = GBmodUtil.<C> basePseudoDivide(c1, s);
             if (!c.isZERO()) {
                 //pv.put(e1, c); 
                 p.doPutToMap(e1, c); 
