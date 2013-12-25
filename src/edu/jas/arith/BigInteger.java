@@ -14,6 +14,7 @@ import java.util.Random;
 import edu.jas.kern.StringUtil;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.NotInvertibleException;
 
 
 /**
@@ -470,14 +471,16 @@ public final class BigInteger implements GcdRingElem<BigInteger>, RingFactory<Bi
 
 
     /**
-     * Integer inverse. R is a non-zero integer. S=1/R if defined else 0.
+     * Integer inverse. R is a non-zero integer. S=1/R if defined else 
+     * throws not invertible exception.
      * @see edu.jas.structure.RingElem#inverse()
      */
     public BigInteger inverse() {
         if (this.isONE() || this.negate().isONE()) {
             return this;
         }
-        return ZERO;
+        //return ZERO;
+        throw new NotInvertibleException("element not invertible " + this + " :: BigInteger");
     }
 
 
