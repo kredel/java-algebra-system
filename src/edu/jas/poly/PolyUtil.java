@@ -1269,8 +1269,8 @@ public class PolyUtil {
                     GenPolynomial<C> y = PolyUtil.<C> basePseudoDivide(a, c);
                     h = S.multiply(y, f); // coeff a
                 } else {
-                    r = r.multiply(c); // coeff ac
-                    h = S.multiply(a, f); // coeff ac
+                    r = r.multiply(c);    // coeff a c
+                    h = S.multiply(a, f); // coeff c a
                 }
                 r = r.subtract(h);
             } else {
