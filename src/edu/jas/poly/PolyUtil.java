@@ -595,6 +595,29 @@ public class PolyUtil {
 
 
     /**
+     * GenSolvablePolynomial monic, i.e. leadingBaseCoefficient == 1. If
+     * leadingBaseCoefficient is not invertible returns this unmodified.
+     * @param <C> coefficient type.
+     * @param p recursive GenSolvablePolynomial<GenPolynomial<C>>.
+     * @return monic(p).
+     */
+    public static <C extends RingElem<C>> GenSolvablePolynomial<GenPolynomial<C>> monic(
+                    GenSolvablePolynomial<GenPolynomial<C>> p) {
+        if (p == null || p.isZERO()) {
+            return p;
+        }
+        C lc = p.leadingBaseCoefficient().leadingBaseCoefficient();
+        if (!lc.isUnit()) {
+            return p;
+        }
+        C lm = lc.inverse();
+        GenSolvablePolynomial<C> L = (GenSolvablePolynomial<C>) p.ring.coFac.getONE();
+        L = L.multiply(lm);
+        return p.multiplyLeft(L);
+    }
+
+
+    /**
      * Polynomial list monic.
      * @param <C> coefficient type.
      * @param L list of polynomials with field coefficients.
@@ -833,7 +856,7 @@ public class PolyUtil {
         if (P.isZERO()) {
             return P;
         }
-        if (S.isONE()) {
+        if (S.isConstant()) {
             return P.ring.getZERO();
         }
         C c = S.leadingBaseCoefficient();
@@ -878,7 +901,7 @@ public class PolyUtil {
         if (P.isZERO()) {
             return P;
         }
-        if (S.degree() <= 0) {
+        if (S.isConstant()) {
             return P.ring.getZERO();
         }
         long m = P.degree(0);
@@ -1146,9 +1169,10 @@ public class PolyUtil {
             if (!c.isZERO()) {
                 pv.put(e1, c); // or m1.setValue( c )
             } else {
-                System.out.println("pu, c1 = " + c1);
-                System.out.println("pu, s  = " + s);
-                System.out.println("pu, c  = " + c);
+                System.out.println("rDiv, P  = " + P);
+                System.out.println("rDiv, c1 = " + c1);
+                System.out.println("rDiv, s  = " + s);
+                System.out.println("rDiv, c  = " + c);
                 throw new RuntimeException("something is wrong");
             }
         }
@@ -1228,7 +1252,7 @@ public class PolyUtil {
         if (P == null || P.isZERO()) {
             return P;
         }
-        if (S.isONE()) {
+        if (S.isConstant()) {
             return P.ring.getZERO();
         }
         GenPolynomial<C> c = S.leadingBaseCoefficient();
@@ -1272,7 +1296,7 @@ public class PolyUtil {
         if (P == null || P.isZERO()) {
             return P;
         }
-        if (S.degree() <= 0) {
+        if (S.isConstant()) {
             return P.ring.getZERO();
         }
         long m = P.degree(0);
