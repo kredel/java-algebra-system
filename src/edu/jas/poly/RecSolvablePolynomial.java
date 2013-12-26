@@ -194,16 +194,16 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
                     fl1 = fp[fp.length - 1];
                 }
                 int fl1s = ring.nvar + 1 - fl1;
-                // polynomial coefficient multiplication e*b = p_eb
+                // polynomial coefficient multiplication e*b = P_eb, for a*((e*b)*f)
                 RecSolvablePolynomial<C> Cps = ring.getZERO().copy();
                 RecSolvablePolynomial<C> Cs = null;
                 if (ring.coeffTable.isEmpty() || b.isConstant() || e.isZERO()) { // symmetric
                     Cps = new RecSolvablePolynomial<C>(ring, b, e);
                     if (debug)
-                        logger.info("symmetric coeff, b*e: b = " + b + ", e = " + e);
+                        logger.info("symmetric coeff, e*b: b = " + b + ", e = " + e);
                 } else { // unsymmetric
                     if (debug)
-                        logger.info("unsymmetric coeff, b*e: b = " + b + ", e = " + e);
+                        logger.info("unsymmetric coeff, e*b: b = " + b + ", e = " + e);
                     for (Map.Entry<ExpVector, C> z : b.val.entrySet()) {
                         C c = z.getValue();
                         GenPolynomial<C> cc = b.ring.getONE().multiply(c);
@@ -277,7 +277,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
                 }
                 if (debug)
                     logger.info("coeff-poly: Cps = " + Cps);
-                // polynomial multiplication P_eb*f
+                // polynomial multiplication P_eb*f, for a*(P_eb*f)
                 RecSolvablePolynomial<C> Dps = ring.getZERO().copy();
                 RecSolvablePolynomial<C> Ds = null;
                 RecSolvablePolynomial<C> D1, D2;
@@ -358,6 +358,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
                 if (debug) {
                     logger.info("recursion+: Ds = " + Ds + ", a = " + a);
                 }
+                // polynomial coefficient multiplication a*(P_eb*f) = a*Ds
                 Ds = Ds.multiplyLeft(a); // multiply(a,b); // non-symmetric 
                 if (debug)
                     logger.info("recursion-: Ds = " + Ds);
