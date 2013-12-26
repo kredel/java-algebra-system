@@ -181,10 +181,10 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
                 r = x;
             }
         }
-        //if (!r.isZERO()) {
-        //    logger.info("GCD simple, r = " + r);
-        //}
         q = recursivePrimitivePart(q);
+        if (debug) {
+            logger.info("var = " + P.ring.varsToString() + ", pp(gcd) = " + q);
+        }
         q = (GenSolvablePolynomial<GenPolynomial<C>>) q.abs().multiply(c);
         return q;
     }

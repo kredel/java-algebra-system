@@ -134,7 +134,7 @@ public class GCDSimpleTest extends TestCase {
     /**
      * Test base gcd simple.
      */
-    public void xtestBaseGcdSimple() {
+    public void testBaseGcdSimple() {
 
         String[] uvars = new String[] { "x" };
         dfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), 1, to, uvars);
@@ -180,7 +180,7 @@ public class GCDSimpleTest extends TestCase {
     /**
      * Test recursive gcd simple.
      */
-    public void testRecursiveGCDSimple() {
+    public void xtestRecursiveGCDSimple() {
 
         di = new BigRational(1);
         String[] vars = new String[] { "a", "b", "c", "d" };
