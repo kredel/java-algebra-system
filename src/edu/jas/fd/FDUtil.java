@@ -15,7 +15,7 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * GB modular utilities, for example recursive pseudo remainder.
+ * Factorization domain utilities, for example recursive pseudo remainder.
  * @author Heinz Kredel
  */
 
@@ -29,7 +29,7 @@ public class FDUtil {
 
 
     /**
-     * GenSolvablePolynomial sparse pseudo remainder. For univariate
+     * GenSolvablePolynomial sparse pseudo remainder for univariate
      * polynomials.
      * @param <C> coefficient type.
      * @param P GenSolvablePolynomial.
@@ -75,7 +75,7 @@ public class FDUtil {
 
 
     /**
-     * GenSolvablePolynomial sparse pseudo divide. For univariate polynomials or
+     * GenSolvablePolynomial sparse pseudo quotient for univariate polynomials or
      * exact division.
      * @param <C> coefficient type.
      * @param P GenSolvablePolynomial.
@@ -127,7 +127,7 @@ public class FDUtil {
 
 
     /**
-     * GenSolvablePolynomial sparse pseudo quotient and remainder. For
+     * GenSolvablePolynomial sparse pseudo quotient and remainder for
      * univariate polynomials or exact division.
      * @param <C> coefficient type.
      * @param P GenSolvablePolynomial.
@@ -189,7 +189,7 @@ public class FDUtil {
 
 
     /**
-     * GenSolvablePolynomial sparse pseudo remainder. For recursive solvable
+     * GenSolvablePolynomial sparse pseudo remainder for recursive solvable
      * polynomials.
      * @param <C> coefficient type.
      * @param P recursive GenSolvablePolynomial.
@@ -250,7 +250,7 @@ public class FDUtil {
 
 
     /**
-     * GenSolvablePolynomial sparse pseudo remainder. For recursive solvable
+     * GenSolvablePolynomial right sparse pseudo remainder for recursive solvable
      * polynomials. <b>Note:</b> uses right multiplication of P by ldcf(S), not
      * always applicable.
      * @param <C> coefficient type.
@@ -303,11 +303,11 @@ public class FDUtil {
 
 
     /**
-     * GenSolvablePolynomial recursive pseudo divide. For recursive polynomials.
+     * GenSolvablePolynomial recursive pseudo quotient for recursive polynomials.
      * @param <C> coefficient type.
      * @param P recursive GenSolvablePolynomial.
      * @param S nonzero recursive GenSolvablePolynomial.
-     * @return quotient with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
+     * @return quotient with ore(ldcf(S)<sup>m'</sup>) P = quotient * S + remainder.
      * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
      */
     public static <C extends GcdRingElem<C>> GenSolvablePolynomial<GenPolynomial<C>> recursivePseudoDivide(
@@ -363,7 +363,7 @@ public class FDUtil {
 
 
     /**
-     * GenSolvablePolynomial divide. For recursive polynomials. Division by
+     * GenSolvablePolynomial recursive quotient for recursive polynomials and division by
      * coefficient ring element.
      * @param <C> coefficient type.
      * @param P recursive GenSolvablePolynomial.

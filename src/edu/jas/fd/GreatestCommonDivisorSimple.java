@@ -14,9 +14,11 @@ import edu.jas.structure.GcdRingElem;
 
 
 /**
- * Greatest common divisor algorithms with monic polynomial remainder sequence.
+ * (Non-unique) factorization domain greatest common divisor common algorithms
+ * with monic polynomial remainder sequence.
  * If C is a field, then the monic PRS (on coefficients) is computed otherwise
  * no simplifications in the reduction are made.
+ * @param <C> coefficient type
  * @author Heinz Kredel
  */
 

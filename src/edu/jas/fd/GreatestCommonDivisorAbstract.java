@@ -22,7 +22,8 @@ import edu.jas.ufd.GCDFactory;
 
 
 /**
- * Greatest common divisor algorithms.
+ * (Non-unique) factorization domain greatest common divisor common algorithms.
+ * @param <C> coefficient type
  * @author Heinz Kredel
  */
 

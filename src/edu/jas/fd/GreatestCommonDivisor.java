@@ -6,13 +6,14 @@ package edu.jas.fd;
 
 
 import java.io.Serializable;
+import java.util.List;
 
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.structure.GcdRingElem;
 
 
 /**
- * Greatest common divisor algorithm interface.
+ * (Non-unique) factorization domain greatest common divisor algorithm interface.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
@@ -54,21 +55,21 @@ public interface GreatestCommonDivisor<C extends GcdRingElem<C>> extends Seriali
     public GenSolvablePolynomial<C> lcm(GenSolvablePolynomial<C> P, GenSolvablePolynomial<C> S);
 
 
-    /*
+    /**
      * GenSolvablePolynomial co-prime list.
      * @param A list of GenSolvablePolynomials.
      * @return B with gcd(b,c) = 1 for all b != c in B and for all non-constant
      *         a in A there exists b in B with b|a. B does not contain zero or
      *         constant polynomials.
-    public List<GenSolvablePolynomial<C>> coPrime(List<GenSolvablePolynomial<C>> A);
      */
+    public List<GenSolvablePolynomial<C>> coPrime(List<GenSolvablePolynomial<C>> A);
 
 
-    /*
+    /**
      * GenSolvablePolynomial test for co-prime list.
      * @param A list of GenSolvablePolynomials.
      * @return true if gcd(b,c) = 1 for all b != c in B, else false.
-    public boolean isCoPrime(List<GenSolvablePolynomial<C>> A);
      */
+    public boolean isCoPrime(List<GenSolvablePolynomial<C>> A);
 
 }
