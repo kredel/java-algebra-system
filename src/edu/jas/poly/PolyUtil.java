@@ -1083,8 +1083,8 @@ public class PolyUtil {
                 } else {
                     q = q.multiply(c);
                     q = q.sum(a, f);
-                    r = r.multiply(c); // coeff ac
-                    h = S.multiply(a, f); // coeff ac
+                    r = r.multiply(c);    // coeff a c
+                    h = S.multiply(a, f); // coeff c a
                 }
                 r = r.subtract(h);
             } else {
@@ -1105,7 +1105,7 @@ public class PolyUtil {
      * @param <C> coefficient type.
      * @param P base GenPolynomial.
      * @param S nonzero base GenPolynomial.
-     * @return remainder with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
+     * @return true, if P = q * S + r, else false.
      * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
      *      <b>Note:</b> not always meaningful and working
      */
@@ -1119,7 +1119,7 @@ public class PolyUtil {
         d = (d > 0 ? d : -d + 2);
         for (long i = 0; i <= d; i++) {
             //System.out.println("lhs-rhs = " + lhs.subtract(rhs));
-            if (lhs.equals(rhs)) {
+            if (lhs.equals(rhs) || lhs.negate().equals(rhs)) {
                 //System.out.println("lhs,1 = " + lhs);
                 return true;
             }
@@ -1131,11 +1131,22 @@ public class PolyUtil {
         for (long i = 0; i <= d; i++) {
             lhs = Pp.subtract(r);
             //System.out.println("lhs-rhs = " + lhs.subtract(rhs));
-            if (lhs.equals(rhs)) {
+            if (lhs.equals(rhs) || lhs.negate().equals(rhs)) {
                 //System.out.println("lhs,2 = " + lhs);
                 return true;
             }
             Pp = Pp.multiply(ldcf);
+        }
+        C a = P.leadingBaseCoefficient();
+        rhs = q.multiply(S).sum(r);
+        C b = rhs.leadingBaseCoefficient();
+        C gcd = a.gcd(b);
+        C p = a.multiply(b);
+        C lcm = p.divide(gcd);
+        C ap = lcm.divide(a);
+        C bp = lcm.divide(b);
+        if (P.multiply(ap).equals( rhs.multiply(bp) )) {
+            return true;
         }
         return false;
     }
@@ -1386,7 +1397,7 @@ public class PolyUtil {
      * @param <C> coefficient type.
      * @param P recursive GenPolynomial.
      * @param S nonzero recursive GenPolynomial.
-     * @return remainder with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
+     * @return true, if P = q * S + r, else false.
      * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
      *      <b>Note:</b> not always meaningful and working
      */
