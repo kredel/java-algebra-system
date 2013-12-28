@@ -7,6 +7,7 @@ package edu.jas.fd;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 
@@ -757,6 +758,47 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
 
 
     /**
+     * Coefficient left Ore condition. Generators for the left Ore condition of two 
+     * coefficients. 
+     * @param a coefficient.
+     * @param b coefficient.
+     * @return [oa, ob] = leftOreCond(a,b), with oa*a == ob*b.
+     */
+    public C[] leftOreCond(C a, C b) {
+        if (a == null || a.isZERO() || b == null || b.isZERO()) {
+            throw new IllegalArgumentException("a and b must be non zero");
+        }
+        C[] oc = (C[]) new GcdRingElem[2];
+        if (a instanceof GenSolvablePolynomial && b instanceof GenSolvablePolynomial) {
+            GenSolvablePolynomial ap = (GenSolvablePolynomial) a;
+            GenSolvablePolynomial bp = (GenSolvablePolynomial) b;
+            GenSolvablePolynomial[] ocp = leftOreCond(ap,bp);
+            oc[0] = (C) ocp[0];
+            oc[1] = (C) ocp[1];
+            return oc;
+        }
+        RingFactory<C> rf = (RingFactory<C>) a.factory();
+        if (a.equals(b)) {
+            oc[0] = rf.getONE();
+            oc[1] = rf.getONE();
+            return oc;
+        }
+        if (rf.isCommutative()) {
+            logger.info("left Ore condition on coefficients, commutative case: " + a + ", " + b);
+            C gcd = a.gcd(b);
+            C p = a.multiply(b);
+            C lcm = p.divide(gcd);
+            oc[0] = lcm.divide(a);
+            oc[1] = lcm.divide(b);
+            logger.info("Ore multiple: " + lcm + ", " + Arrays.toString(oc));
+            return oc;
+        }
+        throw new UnsupportedOperationException("leftOreCond not implemented for " + rf.toScript());
+        //return oc;
+    }
+
+
+    /** 
      * Left Ore condition. Generators for the left Ore condition of two solvable
      * polynomials.
      * @param a solvable polynomial
@@ -769,13 +811,20 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         }
         GenSolvablePolynomialRing<C> pfac = a.ring;
         GenSolvablePolynomial<C>[] oc = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[2];
+        if (a.equals(b)) {
+            oc[0] = pfac.getONE();
+            oc[1] = pfac.getONE();
+            return oc;
+        }
         if (pfac.isCommutative()) {
-            logger.info("left Ore condition, commutative case: " + a + ", " + b);
+            logger.info("left Ore condition, polynomial commutative case: " + a + ", " + b);
             edu.jas.ufd.GreatestCommonDivisorAbstract<C> cgcd = GCDFactory.<C> getImplementation(pfac.coFac);
             GenSolvablePolynomial<C> lcm = (GenSolvablePolynomial<C>) cgcd.lcm(a, b);
-            oc[0] = FDUtil.<C> basePseudoQuotient(lcm, a);
-            oc[1] = FDUtil.<C> basePseudoQuotient(lcm, b);
-            //logger.info("Ore multiple: " + lcm + ", " + Arrays.toString(oc));
+            //oc[0] = FDUtil.<C> basePseudoQuotient(lcm, a);
+            //oc[1] = FDUtil.<C> basePseudoQuotient(lcm, b);
+            oc[0] = (GenSolvablePolynomial<C>) PolyUtil.<C> basePseudoDivide(lcm, a);
+            oc[1] = (GenSolvablePolynomial<C>) PolyUtil.<C> basePseudoDivide(lcm, b);
+            logger.info("Ore multiple: " + lcm + ", " + Arrays.toString(oc));
             return oc;
         }
         oc = syz.leftOreCond(a, b);

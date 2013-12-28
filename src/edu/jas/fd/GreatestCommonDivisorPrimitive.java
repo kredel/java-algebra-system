@@ -105,7 +105,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends Gr
      * pseudoRemainder for remainder.
      * @param P univariate recursive GenSolvablePolynomial.
      * @param S univariate recursive GenSolvablePolynomial.
-     * @return gcd(P,S).
+     * @return gcd(P,S). 
      */
     @Override
     public GenSolvablePolynomial<GenPolynomial<C>> recursiveUnivariateGcd(
