@@ -133,7 +133,7 @@ public class GCDPrimitiveTest extends TestCase {
 
 
     /**
-     * Test base gcd simple.
+     * Test base gcd primitive.
      */
     public void xtestBaseGcdPrimitive() {
 
@@ -179,7 +179,7 @@ public class GCDPrimitiveTest extends TestCase {
 
 
     /**
-     * Test recursive gcd simple.
+     * Test univariate recursive gcd primitive.
      */
     public void testRecursiveGCDPrimitive() {
 
@@ -193,7 +193,8 @@ public class GCDPrimitiveTest extends TestCase {
         rfac = (RecSolvablePolynomialRing<BigRational>) dfac.recursive(1);
         System.out.println("rfac = " + rfac.toScript());
 
-        //kl = 3; ll = 4; //el = 2;
+        //kl = 3; ll = 4; //
+        el = 2;
 
         for (int i = 0; i < 1; i++) { // 3
             ar = rfac.random(kl, ll, el + i, q);
@@ -203,10 +204,7 @@ public class GCDPrimitiveTest extends TestCase {
             cr = (RecSolvablePolynomial<BigRational>) PolyUtil.<BigRational> monic(cr);
             //cr = (RecSolvablePolynomial<BigRational>) fd.recursivePrimitivePart(cr).abs();
             //cr = rfac.getONE();
-            //ar = rfac.parse("a^2 + 208131/1111951 a - 60493565/23350971"); 
-            //br = rfac.parse("a^2 - 3024819/28868450 a + 831915/1915552"); 
-            //cr = rfac.parse("( a + 2573/84  ) b^2 + ( 217/2 a - 22206199/382536  )"); 
-            //cr = rfac.parse("a+b"); //+c+d");
+            cr = rfac.parse("a+b+c+d");
             System.out.println("ar = " + ar);
             System.out.println("br = " + br);
             System.out.println("cr = " + cr);
@@ -217,7 +215,7 @@ public class GCDPrimitiveTest extends TestCase {
             }
             //assertTrue("length( cr " + i + " ) <> 0", cr.length() > 0);
 
-            //ar = cr.multiply(ar);
+            //ar = cr.multiply(ar); 
             //br = cr.multiply(br);
             ar = ar.multiply(cr);
             br = br.multiply(cr);
@@ -226,7 +224,7 @@ public class GCDPrimitiveTest extends TestCase {
             //if (true) return;
 
             long ts = System.currentTimeMillis();
-            sr = fds.recursiveUnivariateGcd(ar, br);
+            sr = rfac.getONE(); //fds.recursiveUnivariateGcd(ar, br);
             ts = System.currentTimeMillis() - ts;
             //System.out.println("cr = " + cr);
 
@@ -257,7 +255,7 @@ public class GCDPrimitiveTest extends TestCase {
 
 
     /**
-     * Test arbitrary recursive gcd simple.
+     * Test arbitrary recursive gcd primitive.
      */
     public void xtestArbitraryRecursiveGCDPrimitive() {
 
@@ -314,7 +312,7 @@ public class GCDPrimitiveTest extends TestCase {
 
 
     /**
-     * Test gcd simple.
+     * Test gcd primitive.
      */
     public void xtestGCDPrimitive() {
 

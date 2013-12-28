@@ -134,7 +134,7 @@ public class GCDSimpleTest extends TestCase {
     /**
      * Test base gcd simple.
      */
-    public void testBaseGcdSimple() {
+    public void xtestBaseGcdSimple() {
 
         String[] uvars = new String[] { "x" };
         dfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), 1, to, uvars);
@@ -178,9 +178,9 @@ public class GCDSimpleTest extends TestCase {
 
 
     /**
-     * Test recursive gcd simple.
+     * Test univariate recursive gcd simple.
      */
-    public void xtestRecursiveGCDSimple() {
+    public void testRecursiveGCDSimple() {
 
         di = new BigRational(1);
         String[] vars = new String[] { "a", "b", "c", "d" };
@@ -192,7 +192,8 @@ public class GCDSimpleTest extends TestCase {
         rfac = (RecSolvablePolynomialRing<BigRational>) dfac.recursive(1);
         System.out.println("rfac = " + rfac.toScript());
 
-        //kl = 3; ll = 4; //el = 2;
+        //kl = 3; ll = 4; //
+        el = 2;
 
         for (int i = 0; i < 1; i++) { // 3
             ar = rfac.random(kl, ll, el + i, q);
@@ -202,16 +203,13 @@ public class GCDSimpleTest extends TestCase {
             cr = (RecSolvablePolynomial<BigRational>) PolyUtil.<BigRational> monic(cr);
             //cr = (RecSolvablePolynomial<BigRational>) fd.recursivePrimitivePart(cr).abs();
             //cr = rfac.getONE();
-            //ar = rfac.parse("a^2 + 208131/1111951 a - 60493565/23350971"); 
-            //br = rfac.parse("a^2 - 3024819/28868450 a + 831915/1915552"); 
-            //cr = rfac.parse("( a + 2573/84  ) b^2 + ( 217/2 a - 22206199/382536  )"); 
-            //cr = rfac.parse("a+b"); //+c+d");
+            //cr = rfac.parse("a+b+c+d");
             System.out.println("ar = " + ar);
             System.out.println("br = " + br);
             System.out.println("cr = " + cr);
 
             if (ar.isZERO() || br.isZERO() || cr.isZERO()) {
-                // skip for this turn
+                // skip for this turn 
                 continue;
             }
             //assertTrue("length( cr " + i + " ) <> 0", cr.length() > 0);
