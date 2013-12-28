@@ -282,6 +282,67 @@ public class FDUtil {
 
 
     /**
+     * Is recursive GenSolvablePolynomial pseudo quotient and remainder. For recursive
+     * polynomials.
+     * @param <C> coefficient type.
+     * @param P recursive GenSolvablePolynomial.
+     * @param S nonzero recursive GenSolvablePolynomial.
+     * @return true, if P ~= q * S + r, else false.
+     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
+     *      <b>Note:</b> not always meaningful and working
+     */
+    public static <C extends GcdRingElem<C>> boolean isRecursivePseudoQuotientRemainder(
+                    GenSolvablePolynomial<GenPolynomial<C>> P, GenSolvablePolynomial<GenPolynomial<C>> S,
+                    GenSolvablePolynomial<GenPolynomial<C>> q, GenSolvablePolynomial<GenPolynomial<C>> r) {
+        GenSolvablePolynomial<GenPolynomial<C>> rhs = (GenSolvablePolynomial<GenPolynomial<C>>) q.multiply(S).sum(r);
+        GenSolvablePolynomial<GenPolynomial<C>> lhs = P;
+        GenPolynomial<C> ldcf = S.leadingBaseCoefficient();
+        long d = P.degree(0) - S.degree(0) + 1;
+        d = (d > 0 ? d : -d + 2);
+        for (long i = 0; i <= d; i++) {
+            //System.out.println("lhs = " + lhs);
+            //System.out.println("rhs = " + rhs);
+            //System.out.println("lhs-rhs = " + lhs.subtract(rhs));
+            if (lhs.equals(rhs)) {
+                return true;
+            }
+            lhs = lhs.multiply(ldcf);
+        }
+        GenSolvablePolynomial<GenPolynomial<C>> Pp = P;
+        rhs = q.multiply(S);
+        //System.out.println("rhs,2 = " + rhs);
+        for (long i = 0; i <= d; i++) {
+            lhs = (GenSolvablePolynomial<GenPolynomial<C>>) Pp.subtract(r);
+            //System.out.println("lhs-rhs = " + lhs.subtract(rhs));
+            if (lhs.equals(rhs)) {
+                //System.out.println("lhs,2 = " + lhs);
+                return true;
+            }
+            Pp = Pp.multiply(ldcf);
+        }
+        GreatestCommonDivisorAbstract<C> fd = new GreatestCommonDivisorSimple<C>();
+        GenSolvablePolynomial<C> a = (GenSolvablePolynomial<C>) P.leadingBaseCoefficient();
+        rhs = (GenSolvablePolynomial<GenPolynomial<C>>) q.multiply(S).sum(r);
+        GenSolvablePolynomial<C> b = (GenSolvablePolynomial<C>) rhs.leadingBaseCoefficient();
+        GenSolvablePolynomial<C>[] oc = fd.leftOreCond(a, b);
+        GenPolynomial<C> ga = oc[0];
+        GenPolynomial<C> gb = oc[1];
+        System.out.println("OreCond:  a = " +  a + ",  b = " +  b);
+        System.out.println("OreCond: ga = " + ga + ", gb = " + gb);
+        // ga a = gd d
+        GenSolvablePolynomial<GenPolynomial<C>> Pa = P.multiplyLeft(ga);   // coeff ga a
+        GenSolvablePolynomial<GenPolynomial<C>> Rb = rhs.multiplyLeft(gb); // coeff gb b
+        System.out.println("Pa = " + Pa);
+        System.out.println("Rb = " + Rb);
+        System.out.println("Pa-Rb = " + Pa.subtract(Rb));
+        if (Pa.equals(Rb)) {
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
      * GenSolvablePolynomial recursive pseudo quotient for recursive polynomials.
      * @param <C> coefficient type.
      * @param P recursive GenSolvablePolynomial.

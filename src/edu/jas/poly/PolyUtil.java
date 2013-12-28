@@ -1392,12 +1392,12 @@ public class PolyUtil {
 
 
     /**
-     * Is GenPolynomial pseudo quotient and remainder. For recursive
+     * Is recursive GenPolynomial pseudo quotient and remainder. For recursive
      * polynomials.
      * @param <C> coefficient type.
      * @param P recursive GenPolynomial.
      * @param S nonzero recursive GenPolynomial.
-     * @return true, if P = q * S + r, else false.
+     * @return true, if P ~= q * S + r, else false.
      * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
      *      <b>Note:</b> not always meaningful and working
      */
@@ -1429,6 +1429,12 @@ public class PolyUtil {
                 return true;
             }
             Pp = Pp.multiply(ldcf);
+        }
+        GenPolynomial<C> a = P.leadingBaseCoefficient();
+        rhs = q.multiply(S).sum(r);
+        GenPolynomial<C> b = rhs.leadingBaseCoefficient();
+        if (P.multiply(b).equals( rhs.multiply(a) )) {
+            return true;
         }
         return false;
     }
