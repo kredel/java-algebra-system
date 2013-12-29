@@ -152,7 +152,7 @@ public class FDUtilTest extends TestCase {
     /**
      * Test base pseudo division.
      */
-    public void xtestBasePseudoDivision() {
+    public void testBasePseudoDivision() {
         String[] names = new String[] { "x" };
         dfac = new GenSolvablePolynomialRing<BigInteger>(new BigInteger(1),to,names);
         GenSolvablePolynomialRing<BigRational> rdfac;
@@ -215,6 +215,10 @@ public class FDUtilTest extends TestCase {
         GenSolvablePolynomial<BigRational> rp = (GenSolvablePolynomial<BigRational>) ap.remainder(bp);
         //System.out.println("qp  = " + qp);
         //System.out.println("rp  = " + rp);
+        GenSolvablePolynomial<BigRational>[] QRr = (GenSolvablePolynomial<BigRational>[]) ap.quotientRemainder(bp);
+        assertEquals("qp == QRr[0]: ", qp, QRr[0]);
+        assertEquals("rp == QRr[1]: ", rp, QRr[1]);
+
         GenSolvablePolynomial<BigRational> rhs = (GenSolvablePolynomial<BigRational>) qp.multiply(bp).sum(rp);
         //System.out.println("qp bp + rp  = " + rhs);
         assertEquals("ap == qp bp + rp: ", ap, rhs);
@@ -255,22 +259,22 @@ public class FDUtilTest extends TestCase {
         System.out.println("qfac   = " + qfac.toScript());
         System.out.println("rqfac  = " + rqfac.toScript());
 
-        // kl = 2;
-        q = q / 2.0f;
+        // q = q;
+        kl = 2;
+        ll = 2;
 
-        //ar = rfac.random(kl, ll, el, q);
+        arr = rrfac.random(kl, ll, el, q);
         //arr = rrfac.parse(" ( t + x + y ) z^2 + ( 2 x - 8 ) y^2 - ( 13 t^4 - 13 t^3 + t^2 + 2 t - 13 ) ");
-        arr = rrfac.parse(" ( t + x ) z^2 + ( x + y ) ");
-        //br = rrfac.random(kl, ll, el, q);
-        //ar = ar.multiply(br);
-        //brr = rrfac.parse(" ( 3 x^2 - 6  ) z - ( 13 y^4 - 8 y^3 + 10 y^2 + 22 y + 21  ) ");
-        brr = rrfac.parse(" ( x ) z - ( t ) ");
+        brr = rrfac.random(kl, ll, el, q);
+        if (brr.isZERO()) { 
+            brr = rrfac.parse(" ( x - 2 ) z - ( t - y^2 + y ) ");
+        }
         System.out.println("FDQR: arr  = " + arr);
         System.out.println("FDQR: brr  = " + brr);
 
         drr = (GenSolvablePolynomial<GenPolynomial<BigRational>>) FDUtil.<BigRational> recursivePseudoQuotient(arr, brr);
-        System.out.println("FDQR: qr  = " + drr);
         crr = (GenSolvablePolynomial<GenPolynomial<BigRational>>) FDUtil.<BigRational> recursiveSparsePseudoRemainder(arr, brr);
+        System.out.println("FDQR: qr  = " + drr);
         System.out.println("FDQR: rr  = " + crr);
 
         GenSolvablePolynomial<GenPolynomial<BigRational>>[] QR; 
@@ -280,10 +284,11 @@ public class FDUtilTest extends TestCase {
 
         //boolean t = PolyUtil.<BigRational> isRecursivePseudoQuotientRemainder(arr, brr, drr, crr);
         boolean t = FDUtil.<BigRational> isRecursivePseudoQuotientRemainder(arr, brr, drr, crr);
-        System.out.println("FDQR: ore(lc^n) a == q b + r: " + t);
-        //assertTrue("ore(lc^n) a = q b + r: " + crr, t); // ?? not always true
+        //System.out.println("FDQR: ore(lc^n) a == q b + r: " + t);
+        assertTrue("ore(lc^n) a = q b + r: " + crr, t); // ?? 
 
-        GenSolvablePolynomial<SolvableQuotient<BigRational>> ap, bp, cp, dp, qp, rp, rhs, apm, bpm, cpm, dpm, qpm, rpm, rhsm;
+        GenSolvablePolynomial<SolvableQuotient<BigRational>> ap, bp, cp, dp, qp, rp, rhs, 
+                                                             apm, bpm, cpm, dpm, qpm, rpm, rhsm;
         ap = FDUtil.<BigRational> quotientFromIntegralCoefficients(rqfac,arr);
         bp = FDUtil.<BigRational> quotientFromIntegralCoefficients(rqfac,brr);
         cp = FDUtil.<BigRational> quotientFromIntegralCoefficients(rqfac,crr);
@@ -292,37 +297,37 @@ public class FDUtilTest extends TestCase {
         bpm = bp.monic();
         cpm = cp.monic();
         dpm = dp.monic();
-        System.out.println("FDQR: ap  = " + ap);
+        //System.out.println("FDQR: ap  = " + ap);
         System.out.println("FDQR: apm = " + apm);
-        System.out.println("FDQR: bp  = " + bp);
+        //System.out.println("FDQR: bp  = " + bp);
         System.out.println("FDQR: bpm = " + bpm);
-        System.out.println("FDQR: cp  = " + cp);
+        //System.out.println("FDQR: cp  = " + cp);
         System.out.println("FDQR: cpm = " + cpm);
-        System.out.println("FDQR: dp  = " + dp);
+        //System.out.println("FDQR: dp  = " + dp);
         System.out.println("FDQR: dpm = " + dpm);
 
         qp = (GenSolvablePolynomial<SolvableQuotient<BigRational>>) ap.divide(bp);
         rp = (GenSolvablePolynomial<SolvableQuotient<BigRational>>) ap.remainder(bp);
         qpm = qp.monic();
         rpm = rp.monic();
-        System.out.println("FDQR: qp  = " + qp);
+        //System.out.println("FDQR: qp  = " + qp);
         System.out.println("FDQR: qpm = " + qpm);
-        System.out.println("FDQR: rp  = " + rp);
+        //System.out.println("FDQR: rp  = " + rp);
         System.out.println("FDQR: rpm = " + rpm);
         rhs = (GenSolvablePolynomial<SolvableQuotient<BigRational>>) qp.multiply(bp).sum(rp);
         //for commutative divide: rhs = (GenSolvablePolynomial<SolvableQuotient<BigRational>>) bp.multiply(qp).sum(rp);
         rhsm = rhs.monic();
-        System.out.println("FDQR: qp bp + rp  = " + rhs);
-        System.out.println("FDQR: qp bp + rp  = " + rhsm);
-        System.out.println("FDQR: rpm  == cpm: " + rpm.equals(cpm) );
-        System.out.println("FDQR: qpm  == dpm: " + qpm.equals(dpm) );
-        System.out.println("FDQR: rhs  == ap : " + rhs.equals(ap) );
-        System.out.println("FDQR: rhsm == apm: " + rhsm.equals(apm) );
+        //System.out.println("FDQR: qp bp + rp  = " + rhs);
+        //System.out.println("FDQR: qp bp + rp  = " + rhsm);
+        //System.out.println("FDQR: rpm  == cpm: " + rpm.equals(cpm) ); // to weak ??
+        //System.out.println("FDQR: qpm  == dpm: " + qpm.equals(dpm) );
+        //System.out.println("FDQR: rhs  == ap : " + rhs.equals(ap) );
+        //System.out.println("FDQR: rhsm == apm: " + rhsm.equals(apm) );
 
         assertEquals("ap == qp bp + rp: ", ap, rhs);
         //assertEquals("apm == qp bp + rp,m: ", apm, rhsm);
-        assertEquals("cpm = rpm: ", rpm, cpm );
-        // assertEquals("dp = qp: ", qp.monic(), dp.monic() ); // ??
+        assertEquals("cpm == rpm: ", rpm, cpm );
+        assertEquals("dpm == qpm: ", qpm, dpm ); // ??
     }
 
 }

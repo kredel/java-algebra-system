@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
+
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
@@ -31,10 +33,10 @@ import edu.jas.gbmod.QuotSolvablePolynomialRing;
 public class FDUtil {
 
 
-    //private static final Logger logger = Logger.getLogger(FDUtil.class);
+    private static final Logger logger = Logger.getLogger(FDUtil.class);
 
 
-    //private static boolean debug = logger.isDebugEnabled();
+    private static boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -221,12 +223,10 @@ public class FDUtil {
                 h = h.multiplyLeft(gd); // coeff gd d, exp f
 
                 if (!r.leadingBaseCoefficient().equals(h.leadingBaseCoefficient())) {
-                    System.out.println("OreCond:  a = " +  a + ",  d = " +  d);
-                    System.out.println("OreCond: ga = " + ga + ", gd = " + gd);
+                    //System.out.println("OreCond:  a = " +  a + ",  d = " +  d);
+                    //System.out.println("OreCond: ga = " + ga + ", gd = " + gd);
                     throw new RuntimeException("should not happen: lc(r) = " + r.leadingBaseCoefficient()
                                     + ", lc(h) = " + h.leadingBaseCoefficient());
-                    //} else {
-                    //System.out.println("lc(r) = " + r.leadingBaseCoefficient());
                 }
                 r = (GenSolvablePolynomial<GenPolynomial<C>>) r.subtract(h);
             } else {
@@ -336,8 +336,8 @@ public class FDUtil {
         GenSolvablePolynomial<C>[] oc = fd.leftOreCond(a, b);
         GenPolynomial<C> ga = oc[0];
         GenPolynomial<C> gb = oc[1];
-        System.out.println("OreCond:  a = " +  a + ",  b = " +  b);
-        System.out.println("OreCond: ga = " + ga + ", gb = " + gb);
+        //System.out.println("FDQR: OreCond:  a = " +  a + ",  b = " +  b);
+        //System.out.println("FDQR: OreCond: ga = " + ga + ", gb = " + gb);
         // ga a = gd d
         GenSolvablePolynomial<GenPolynomial<C>> Pa = P.multiplyLeft(ga);   // coeff ga a
         GenSolvablePolynomial<GenPolynomial<C>> Rb = rhs.multiplyLeft(gb); // coeff gb b  
@@ -345,9 +345,12 @@ public class FDUtil {
         if (D.isZERO()) {
             return true;
         }
-        System.out.println("FDQR: Pa = " + Pa);
-        System.out.println("FDQR: Rb = " + Rb);
-        System.out.println("FDQR: Pa-Rb = " + D);
+        if (debug) {
+            logger.info("not QR: D = " + D);
+        }
+        //System.out.println("FDQR: Pa = " + Pa);
+        //System.out.println("FDQR: Rb = " + Rb);
+        //System.out.println("FDQR: Pa-Rb = " + D);
         return false;
     }
 
@@ -405,23 +408,20 @@ public class FDUtil {
         while (!r.isZERO()) {
             ExpVector f = r.leadingExpVector();
             if (f.multipleOf(e)) {
-                GenSolvablePolynomial<C> a = (GenSolvablePolynomial<C>) r.leadingBaseCoefficient();
                 f = f.subtract(e);
-                //
                 h = S.multiplyLeft(f); // coeff c, exp (f-e) e
+                GenSolvablePolynomial<C> a = (GenSolvablePolynomial<C>) r.leadingBaseCoefficient();
                 GenSolvablePolynomial<C> d = (GenSolvablePolynomial<C>) h.leadingBaseCoefficient();
                 GenSolvablePolynomial<C>[] oc = fd.leftOreCond(a, d);
-                GenPolynomial<C> ga = oc[0];
-                GenPolynomial<C> gd = oc[1];
+                GenPolynomial<C> ga = oc[0]; // d
+                GenPolynomial<C> gd = oc[1]; // a
                 //System.out.println("OreCond:  a = " +  a + ",  d = " +  d);
                 //System.out.println("OreCond: ga = " + ga + ", gd = " + gd);
                 // ga a = gd d
                 r = r.multiplyLeft(ga); // coeff ga a, exp f
                 h = h.multiplyLeft(gd); // coeff gd d, exp f
-                //
-                q = q.multiply(ga); // d
+                q = q.multiplyLeft(ga); // d
                 q = (GenSolvablePolynomial<GenPolynomial<C>>) q.sum(gd, f); // a
-                //
                 r = (GenSolvablePolynomial<GenPolynomial<C>>) r.subtract(h);
             } else {
                 break;
