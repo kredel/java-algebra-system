@@ -6,12 +6,21 @@ package edu.jas.fd;
 
 
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
+import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
+import edu.jas.gbmod.SolvableQuotient;
+import edu.jas.gbmod.SolvableQuotientRing;
+import edu.jas.gbmod.QuotSolvablePolynomial;
+import edu.jas.gbmod.QuotSolvablePolynomialRing;
 
 
 /**
@@ -331,13 +340,14 @@ public class FDUtil {
         System.out.println("OreCond: ga = " + ga + ", gb = " + gb);
         // ga a = gd d
         GenSolvablePolynomial<GenPolynomial<C>> Pa = P.multiplyLeft(ga);   // coeff ga a
-        GenSolvablePolynomial<GenPolynomial<C>> Rb = rhs.multiplyLeft(gb); // coeff gb b
-        System.out.println("Pa = " + Pa);
-        System.out.println("Rb = " + Rb);
-        System.out.println("Pa-Rb = " + Pa.subtract(Rb));
-        if (Pa.equals(Rb)) {
+        GenSolvablePolynomial<GenPolynomial<C>> Rb = rhs.multiplyLeft(gb); // coeff gb b  
+        GenSolvablePolynomial<GenPolynomial<C>> D = (GenSolvablePolynomial<GenPolynomial<C>>) Pa.subtract(Rb);
+        if (D.isZERO()) {
             return true;
         }
+        System.out.println("FDQR: Pa = " + Pa);
+        System.out.println("FDQR: Rb = " + Rb);
+        System.out.println("FDQR: Pa-Rb = " + D);
         return false;
     }
 
@@ -352,6 +362,20 @@ public class FDUtil {
      */
     public static <C extends GcdRingElem<C>> GenSolvablePolynomial<GenPolynomial<C>> recursivePseudoQuotient(
                     GenSolvablePolynomial<GenPolynomial<C>> P, GenSolvablePolynomial<GenPolynomial<C>> S) {
+        return recursivePseudoQuotientRemainder(P,S)[0]; 
+    }
+
+
+    /**
+     * GenSolvablePolynomial recursive pseudo quotient and remainder for recursive polynomials.
+     * @param <C> coefficient type.
+     * @param P recursive GenSolvablePolynomial.
+     * @param S nonzero recursive GenSolvablePolynomial.
+     * @return [ quotient, remainder ] with ore(ldcf(S)<sup>m'</sup>) P = quotient * S + remainder.
+     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
+     */
+    public static <C extends GcdRingElem<C>> GenSolvablePolynomial<GenPolynomial<C>>[] recursivePseudoQuotientRemainder(
+                    GenSolvablePolynomial<GenPolynomial<C>> P, GenSolvablePolynomial<GenPolynomial<C>> S) {
         if (S == null || S.isZERO()) {
             throw new ArithmeticException(P + " division by zero " + S);
         }
@@ -359,11 +383,16 @@ public class FDUtil {
         // ok if exact division
         // throw new RuntimeException("univariate polynomials only");
         //}
+        GenSolvablePolynomial<GenPolynomial<C>>[] ret = new GenSolvablePolynomial[2];
         if (P == null || P.isZERO()) {
-            return P;
+            ret[0] = S.ring.getZERO();
+            ret[1] = S.ring.getZERO();
+            return ret;
         }
         if (S.isONE()) {
-            return P;
+            ret[0] = P;
+            ret[1] = S.ring.getZERO();
+            return ret;
         }
         //SolvableSyzygyAbstract<C> syz = new SolvableSyzygyAbstract<C>();
         GreatestCommonDivisorAbstract<C> fd = new GreatestCommonDivisorSimple<C>();
@@ -398,7 +427,9 @@ public class FDUtil {
                 break;
             }
         }
-        return q;
+        ret[0] = q;
+        ret[1] = r; 
+        return ret;
     }
 
 
@@ -439,6 +470,131 @@ public class FDUtil {
             }
         }
         return p;
+    }
+
+
+    /**
+     * Integral solvable polynomial from solvable rational function coefficients. Represent as
+     * polynomial with integral solvable polynomial coefficients by multiplication with
+     * the lcm(??) of the numerators of the rational function coefficients.
+     * @param fac result polynomial factory.
+     * @param A polynomial with solvable rational function coefficients to be converted.
+     * @return polynomial with integral solvable polynomial coefficients.
+     */
+    public static <C extends GcdRingElem<C>> GenSolvablePolynomial<GenPolynomial<C>> integralFromQuotientCoefficients(
+                    GenSolvablePolynomialRing<GenPolynomial<C>> fac, GenSolvablePolynomial<SolvableQuotient<C>> A) {
+        GenSolvablePolynomial<GenPolynomial<C>> B = fac.getZERO().copy();
+        if (A == null || A.isZERO()) {
+            return B;
+        }
+        GenSolvablePolynomial<C> c = null;
+        GenSolvablePolynomial<C> d;
+        GenSolvablePolynomial<C> x;
+        GenSolvablePolynomial<C> z;
+        GreatestCommonDivisorAbstract<C> fd = new GreatestCommonDivisorPrimitive<C>();
+        int s = 0;
+        // lcm/ore of denominators ??
+        for (SolvableQuotient<C> y : A.getMap().values()) {
+            x = y.den;
+            // c = lcm(c,x)
+            if (c == null) {
+                c = x;
+                s = x.signum();
+            } else {
+                d = fd.gcd(c, x);
+                z = (GenSolvablePolynomial<C>) x.divide(d); // ??
+                c = z.multiply(c); // ?? multiplyLeft
+            }
+        }
+        if (s < 0) {
+            c = (GenSolvablePolynomial<C>) c.negate();
+        }
+        for (Map.Entry<ExpVector, SolvableQuotient<C>> y : A.getMap().entrySet()) {
+            ExpVector e = y.getKey();
+            SolvableQuotient<C> a = y.getValue();
+            // p = n*(c/d)
+            GenPolynomial<C> b = c.divide(a.den);
+            GenPolynomial<C> p = a.num.multiply(b);
+            //B = B.sum( p, e ); // inefficient
+            B.doPutToMap(e, p);
+        }
+        return B;
+    }
+
+
+    /**
+     * Integral solvable polynomial from solvable rational function coefficients. Represent as
+     * polynomial with integral solvable polynomial coefficients by multiplication with
+     * the lcm(??) of the numerators of the solvable rational function coefficients.
+     * @param fac result polynomial factory.
+     * @param L list of polynomials with solvable rational function coefficients to be
+     *            converted.
+     * @return list of polynomials with integral solvable polynomial coefficients.
+     */
+    public static <C extends GcdRingElem<C>> List<GenSolvablePolynomial<GenPolynomial<C>>> 
+           integralFromQuotientCoefficients(
+                   GenSolvablePolynomialRing<GenPolynomial<C>> fac, 
+                   Collection<GenSolvablePolynomial<SolvableQuotient<C>>> L) {
+        if (L == null) {
+            return null;
+        }
+        List<GenSolvablePolynomial<GenPolynomial<C>>> list = new ArrayList<GenSolvablePolynomial<GenPolynomial<C>>>(L.size());
+        for (GenSolvablePolynomial<SolvableQuotient<C>> p : L) {
+            list.add(integralFromQuotientCoefficients(fac, p));
+        }
+        return list;
+    }
+
+
+    /**
+     * Solvable rational function from integral solvable polynomial coefficients. Represent as
+     * polynomial with type SolvableQuotient<C> coefficients.
+     * @param fac result polynomial factory.
+     * @param A polynomial with integral solvable polynomial coefficients to be
+     *            converted.
+     * @return polynomial with type SolvableQuotient<C> coefficients.
+     */
+    public static <C extends GcdRingElem<C>> GenSolvablePolynomial<SolvableQuotient<C>> quotientFromIntegralCoefficients(
+                    GenSolvablePolynomialRing<SolvableQuotient<C>> fac, GenSolvablePolynomial<GenPolynomial<C>> A) {
+        GenSolvablePolynomial<SolvableQuotient<C>> B = fac.getZERO().copy();
+        if (A == null || A.isZERO()) {
+            return B;
+        }
+        RingFactory<SolvableQuotient<C>> cfac = fac.coFac;
+        SolvableQuotientRing<C> qfac = (SolvableQuotientRing<C>) cfac;
+        for (Map.Entry<ExpVector, GenPolynomial<C>> y : A.getMap().entrySet()) {
+            ExpVector e = y.getKey();
+            GenSolvablePolynomial<C> a = (GenSolvablePolynomial<C>) y.getValue();
+            SolvableQuotient<C> p = new SolvableQuotient<C>(qfac, a); // can not be zero
+            if (!p.isZERO()) {
+                //B = B.sum( p, e ); // inefficient
+                B.doPutToMap(e, p);
+            }
+        }
+        return B;
+    }
+
+
+    /**
+     * Solvable rational function from integral solvable polynomial coefficients. Represent as
+     * polynomial with type SolvableQuotient<C> coefficients.
+     * @param fac result polynomial factory.
+     * @param L list of polynomials with integral solvable polynomial coefficients to be
+     *            converted.
+     * @return list of polynomials with type SolvableQuotient<C> coefficients.
+     */
+    public static <C extends GcdRingElem<C>> List<GenSolvablePolynomial<SolvableQuotient<C>>> 
+           quotientFromIntegralCoefficients(
+                   GenSolvablePolynomialRing<SolvableQuotient<C>> fac, 
+                   Collection<GenSolvablePolynomial<GenPolynomial<C>>> L) {
+        if (L == null) {
+            return null;
+        }
+        List<GenSolvablePolynomial<SolvableQuotient<C>>> list = new ArrayList<GenSolvablePolynomial<SolvableQuotient<C>>>(L.size());
+        for (GenSolvablePolynomial<GenPolynomial<C>> p : L) {
+            list.add(quotientFromIntegralCoefficients(fac, p));
+        }
+        return list;
     }
 
 }
