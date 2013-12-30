@@ -457,7 +457,16 @@ public class FDUtil {
         for (Map.Entry<ExpVector, GenPolynomial<C>> m1 : P.getMap().entrySet()) {
             GenSolvablePolynomial<C> c1 = (GenSolvablePolynomial<C>) m1.getValue();
             ExpVector e1 = m1.getKey();
-            GenSolvablePolynomial<C> c = FDUtil.<C> basePseudoQuotient(c1, s);
+            //GenSolvablePolynomial<C> c = FDUtil.<C> basePseudoQuotient(c1, s);
+            GenSolvablePolynomial<C>[] QR = FDUtil.<C> basePseudoQuotientRemainder(c1, s);
+            GenSolvablePolynomial<C> c = QR[0];
+            if ( !QR[1].isZERO() ) {
+                System.out.println("rDiv, P  = " + P);
+                System.out.println("rDiv, c1 = " + c1);
+                System.out.println("rDiv, s  = " + s);
+                System.out.println("rDiv, c  = " + c);
+                throw new RuntimeException("something is wrong: rem = " + QR[1]);
+            }
             if (!c.isZERO()) {
                 //pv.put(e1, c); 
                 p.doPutToMap(e1, c);
@@ -466,7 +475,7 @@ public class FDUtil {
                 System.out.println("rDiv, c1 = " + c1);
                 System.out.println("rDiv, s  = " + s);
                 System.out.println("rDiv, c  = " + c);
-                throw new RuntimeException("something is wrong");
+                throw new RuntimeException("something is wrong: c is zero");
             }
         }
         return p;

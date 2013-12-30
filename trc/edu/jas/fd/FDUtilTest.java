@@ -198,12 +198,13 @@ public class FDUtilTest extends TestCase {
         assertTrue("ore(lc^n) a = q b + r: " + f, t);
 
         // compare with field coefficients:
-        GenSolvablePolynomial<BigRational> ap = (GenSolvablePolynomial<BigRational>) PolyUtil.<BigRational> fromIntegerCoefficients(rdfac,a);
-        GenSolvablePolynomial<BigRational> bp = (GenSolvablePolynomial<BigRational>) PolyUtil.<BigRational> fromIntegerCoefficients(rdfac,b);
-        GenSolvablePolynomial<BigRational> cp = (GenSolvablePolynomial<BigRational>) PolyUtil.<BigRational> fromIntegerCoefficients(rdfac,c);
-        GenSolvablePolynomial<BigRational> dp = (GenSolvablePolynomial<BigRational>) PolyUtil.<BigRational> fromIntegerCoefficients(rdfac,d);
-        GenSolvablePolynomial<BigRational> ep = (GenSolvablePolynomial<BigRational>) PolyUtil.<BigRational> fromIntegerCoefficients(rdfac,e);
-        GenSolvablePolynomial<BigRational> fp = (GenSolvablePolynomial<BigRational>) PolyUtil.<BigRational> fromIntegerCoefficients(rdfac,f);
+        GenSolvablePolynomial<BigRational> ap, bp, cp, dp, ep, fp, qp, rp, rhs;
+        ap = (GenSolvablePolynomial<BigRational>) PolyUtil.<BigRational> fromIntegerCoefficients(rdfac,a);
+        bp = (GenSolvablePolynomial<BigRational>) PolyUtil.<BigRational> fromIntegerCoefficients(rdfac,b);
+        cp = (GenSolvablePolynomial<BigRational>) PolyUtil.<BigRational> fromIntegerCoefficients(rdfac,c);
+        dp = (GenSolvablePolynomial<BigRational>) PolyUtil.<BigRational> fromIntegerCoefficients(rdfac,d);
+        ep = (GenSolvablePolynomial<BigRational>) PolyUtil.<BigRational> fromIntegerCoefficients(rdfac,e);
+        fp = (GenSolvablePolynomial<BigRational>) PolyUtil.<BigRational> fromIntegerCoefficients(rdfac,f);
         //System.out.println("ap  = " + ap);
         //System.out.println("bp  = " + bp);
         //System.out.println("cp  = " + cp);
@@ -211,15 +212,15 @@ public class FDUtilTest extends TestCase {
         //System.out.println("ep  = " + ep);
         //System.out.println("fp  = " + fp);
 
-        GenSolvablePolynomial<BigRational> qp = (GenSolvablePolynomial<BigRational>) ap.divide(bp);
-        GenSolvablePolynomial<BigRational> rp = (GenSolvablePolynomial<BigRational>) ap.remainder(bp);
+        qp = (GenSolvablePolynomial<BigRational>) ap.divide(bp);
+        rp = (GenSolvablePolynomial<BigRational>) ap.remainder(bp);
         //System.out.println("qp  = " + qp);
         //System.out.println("rp  = " + rp);
         GenSolvablePolynomial<BigRational>[] QRr = (GenSolvablePolynomial<BigRational>[]) ap.quotientRemainder(bp);
         assertEquals("qp == QRr[0]: ", qp, QRr[0]);
         assertEquals("rp == QRr[1]: ", rp, QRr[1]);
 
-        GenSolvablePolynomial<BigRational> rhs = (GenSolvablePolynomial<BigRational>) qp.multiply(bp).sum(rp);
+        rhs = (GenSolvablePolynomial<BigRational>) qp.multiply(bp).sum(rp);
         //System.out.println("qp bp + rp  = " + rhs);
         assertEquals("ap == qp bp + rp: ", ap, rhs);
 
@@ -253,11 +254,11 @@ public class FDUtilTest extends TestCase {
         List<GenSolvablePolynomial<GenPolynomial<BigRational>>> rl = rrfacTemp.coeffTable.relationList();
         List<GenPolynomial<GenPolynomial<BigRational>>> rlc = PolynomialList.<GenPolynomial<BigRational>> castToList(rl);
         rqfac.polCoeff.coeffTable.addRelations(rlc);
-        System.out.println("\nrdfac  = " + rdfac.toScript());
-        System.out.println("rrfac  = " + rrfac.toScript());
-        System.out.println("rcfac  = " + rcfac.toScript());
-        System.out.println("qfac   = " + qfac.toScript());
-        System.out.println("rqfac  = " + rqfac.toScript());
+        //System.out.println("\nrdfac  = " + rdfac.toScript());
+        //System.out.println("rrfac  = " + rrfac.toScript());
+        //System.out.println("rcfac  = " + rcfac.toScript());
+        //System.out.println("qfac   = " + qfac.toScript());
+        //System.out.println("rqfac  = " + rqfac.toScript());
 
         // q = q;
         kl = 2;

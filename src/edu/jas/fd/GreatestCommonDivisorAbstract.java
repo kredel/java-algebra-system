@@ -265,6 +265,8 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         RingFactory<GenPolynomial<C>> rrfac = rfac.coFac;
         GenSolvablePolynomialRing<C> cfac = (GenSolvablePolynomialRing<C>) rrfac;
         GenSolvablePolynomialRing<C> dfac = cfac.extend(rfac.nvar);
+
+
         GenSolvablePolynomial<C> Pd = (GenSolvablePolynomial<C>) PolyUtil.<C> distribute(dfac, P);
         GenSolvablePolynomial<C> Sd = (GenSolvablePolynomial<C>) PolyUtil.<C> distribute(dfac, S);
         GenSolvablePolynomial<C> Dd = gcd(Pd, Sd);

@@ -94,7 +94,7 @@ public class GCDSimpleTest extends TestCase {
     int kl = 2;
 
 
-    int ll = 3;
+    int ll = 2;
 
 
     int el = 3;
@@ -180,7 +180,7 @@ public class GCDSimpleTest extends TestCase {
     /**
      * Test univariate recursive gcd simple.
      */
-    public void testRecursiveGCDSimple() {
+    public void xtestRecursiveGCDSimple() {
 
         di = new BigRational(1);
         String[] vars = new String[] { "a", "b", "c", "d" };
@@ -247,32 +247,33 @@ public class GCDSimpleTest extends TestCase {
     /**
      * Test arbitrary recursive gcd simple.
      */
-    public void xtestArbitraryRecursiveGCDSimple() {
+    public void testArbitraryRecursiveGCDSimple() {
 
-        di = new BigRational(1);
-        dfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), 2, to);
+        String[] vars = new String[] { "a", "b", "c", "d" };
+        //String[] vars = new String[] { "a", "b" };
+        dfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), to, vars);
         RelationGenerator<BigRational> wl = new WeylRelationsIterated<BigRational>();
         dfac.addRelations(wl);
-        //cfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), 2 - 1, to);
-        //rfac = new GenSolvablePolynomialRing<GenPolynomial<BigRational>>(cfac, 1, to);
-        rfac = (RecSolvablePolynomialRing<BigRational>) dfac.recursive(1);
+        System.out.println("dfac = " + dfac.toScript());
+        rfac = (RecSolvablePolynomialRing<BigRational>) dfac.recursive(2);
+        System.out.println("rfac = " + rfac.toScript());
 
         //kl = 3; ll = 2;
+        el = 2;
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 1; i++) {
             ar = rfac.random(kl, ll, el + i, q);
             br = rfac.random(kl, ll, el, q);
             cr = rfac.random(kl, ll, el, q);
-            cr = (RecSolvablePolynomial<BigRational>) fd.recursivePrimitivePart(cr).abs();
-            //System.out.println("ar = " + ar);
-            //System.out.println("br = " + br);
-            //System.out.println("cr = " + cr);
+            //cr = (RecSolvablePolynomial<BigRational>) fd.recursivePrimitivePart(cr).abs();
+            System.out.println("ar = " + ar);
+            System.out.println("br = " + br);
+            System.out.println("cr = " + cr);
 
             if (ar.isZERO() || br.isZERO() || cr.isZERO()) {
                 // skip for this turn
                 continue;
             }
-            //assertTrue("length( cr" + i + " ) <> 0", cr.length() > 0);
 
             ar = ar.multiply(cr);
             br = br.multiply(cr);
@@ -280,8 +281,8 @@ public class GCDSimpleTest extends TestCase {
             //System.out.println("br = " + br);
 
             dr = fd.recursiveGcd(ar, br);
-            //System.out.println("cr = " + cr);
-            //System.out.println("dr = " + dr);
+            System.out.println("cr = " + cr);
+            System.out.println("dr = " + dr);
 
             er = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveSparsePseudoRemainder(
                             dr, cr);
@@ -304,21 +305,26 @@ public class GCDSimpleTest extends TestCase {
     /**
      * Test gcd simple.
      */
-    public void xtestGCDSimple() {
+    public void ytestGCDSimple() {
 
-        dfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), 4, to);
+        String[] vars = new String[] { "a", "b", "c", "d" };
+        //String[] vars = new String[] { "a", "b" };
+        dfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), to, vars);
         RelationGenerator<BigRational> wl = new WeylRelationsIterated<BigRational>();
         dfac.addRelations(wl);
+        System.out.println("dfac = " + dfac.toScript());
 
-        for (int i = 0; i < 2; i++) {
+        ll = 4;
+
+        for (int i = 0; i < 1; i++) {
             a = dfac.random(kl, ll, el, q);
             b = dfac.random(kl, ll, el, q);
             c = dfac.random(kl, ll, el, q);
             c = c.multiply(dfac.univariate(0));
-            c = (GenSolvablePolynomial<BigRational>) fd.primitivePart(c).abs();
-            //System.out.println("a = " + a);
-            //System.out.println("b = " + b);
-            //System.out.println("c = " + c);
+            //c = (GenSolvablePolynomial<BigRational>) fd.primitivePart(c).abs();
+            System.out.println("a = " + a);
+            System.out.println("b = " + b);
+            System.out.println("c = " + c);
 
             if (a.isZERO() || b.isZERO() || c.isZERO()) {
                 // skip for this turn
@@ -328,13 +334,13 @@ public class GCDSimpleTest extends TestCase {
 
             a = a.multiply(c);
             b = b.multiply(c);
-            //System.out.println("a = " + a);
-            //System.out.println("b = " + b);
+            System.out.println("a = " + a);
+            System.out.println("b = " + b);
             //System.out.println("c = " + c);
 
             d = fd.gcd(a, b);
-            //System.out.println("c = " + c);
-            //System.out.println("d = " + d);
+            System.out.println("c = " + c);
+            System.out.println("d = " + d);
 
             e = (GenSolvablePolynomial<BigRational>) PolyUtil.<BigRational> basePseudoRemainder(d, c);
             //System.out.println("e = " + e);

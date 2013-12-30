@@ -183,7 +183,8 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
         }
         q = recursivePrimitivePart(q);
         if (debug) {
-            logger.info("var = " + P.ring.varsToString() + ", pp(gcd) = " + q);
+            //logger.info("var = " + P.ring.varsToString() + ", gcd(pp) = " + q);
+            logger.info(P.ring.toScript() + ": gcd(pp) = " + q);
         }
         q = (GenSolvablePolynomial<GenPolynomial<C>>) q.abs().multiply(c);
         return q;
