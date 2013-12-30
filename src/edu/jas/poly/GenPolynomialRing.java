@@ -924,6 +924,27 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
 
 
     /**
+     * Distributive representation as polynomial with all main variables.
+     * @return distributive polynomial ring factory.
+     */
+    public GenPolynomialRing<C> distribute() {
+        if ( !(coFac instanceof GenPolynomialRing) ) {
+            return this;
+        }
+        RingFactory cf = coFac;
+        RingFactory<GenPolynomial<C>> cfp = (RingFactory<GenPolynomial<C>>) cf;
+        GenPolynomialRing cr = (GenPolynomialRing) cfp;
+        GenPolynomialRing<C> pfac;
+        if ( cr.vars != null ) {
+            pfac = extend(cr.vars);
+        } else {
+            pfac = extend(cr.nvar);
+        }
+        return pfac;
+    }
+
+
+    /**
      * Reverse variables. Used e.g. in opposite rings.
      * @return polynomial ring factory with reversed variables.
      */
