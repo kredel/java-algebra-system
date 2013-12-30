@@ -261,8 +261,8 @@ public class FDUtilTest extends TestCase {
         //System.out.println("rqfac  = " + rqfac.toScript());
 
         // q = q;
-        kl = 2;
-        ll = 2;
+        kl = 1;
+        ll = 3;
 
         arr = rrfac.random(kl, ll, el, q);
         //arr = rrfac.parse(" ( t + x + y ) z^2 + ( 2 x - 8 ) y^2 - ( 13 t^4 - 13 t^3 + t^2 + 2 t - 13 ) ");

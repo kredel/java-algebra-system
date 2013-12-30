@@ -525,10 +525,15 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
             ExpVector f = r.leadingExpVector();
             if (f.multipleOf(e)) {
                 C a = r.leadingBaseCoefficient();
+                //System.out.println("FDQR: f = " + f + ", a = " + a);
                 f = f.subtract(e);
-                a = ci.multiply(a); // multiplyLeft
+                //a = ci.multiply(a); // multiplyLeft
+                a = a.multiply(ci); // this is correct!
                 q = (GenSolvablePolynomial<C>) q.sum(a, f);
                 h = S.multiplyLeft(a, f);
+                if ( !h.leadingBaseCoefficient().equals(r.leadingBaseCoefficient()) ) {
+                    throw new RuntimeException("something is wrong: r = " + r + ", h = " + h);
+                }
                 r = (GenSolvablePolynomial<C>) r.subtract(h);
             } else {
                 break;
