@@ -17,6 +17,7 @@ import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.RecSolvablePolynomial;
+import edu.jas.poly.RecSolvablePolynomialRing;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.ufd.GCDFactory;
@@ -262,17 +263,20 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         }
         // distributed polynomials gcd
         GenSolvablePolynomialRing<GenPolynomial<C>> rfac = P.ring;
-        RingFactory<GenPolynomial<C>> rrfac = rfac.coFac;
-        GenSolvablePolynomialRing<C> cfac = (GenSolvablePolynomialRing<C>) rrfac;
-        GenSolvablePolynomialRing<C> dfac = cfac.extend(rfac.nvar);
-
-
+        GenSolvablePolynomialRing<C> dfac;
+        if (rfac instanceof RecSolvablePolynomialRing) {
+            RecSolvablePolynomialRing<C> rf = (RecSolvablePolynomialRing<C>) rfac;
+            dfac = RecSolvablePolynomialRing.<C> distribute(rf);
+        } else {
+            GenSolvablePolynomialRing<C> df = (GenSolvablePolynomialRing) rfac;
+            dfac = df.distribute();
+        }
         GenSolvablePolynomial<C> Pd = (GenSolvablePolynomial<C>) PolyUtil.<C> distribute(dfac, P);
         GenSolvablePolynomial<C> Sd = (GenSolvablePolynomial<C>) PolyUtil.<C> distribute(dfac, S);
         GenSolvablePolynomial<C> Dd = gcd(Pd, Sd);
         // convert to recursive
-        GenSolvablePolynomial<GenPolynomial<C>> C = (GenSolvablePolynomial<GenPolynomial<C>>) PolyUtil
-                        .<C> recursive(rfac, Dd);
+        GenSolvablePolynomial<GenPolynomial<C>> C 
+            = (GenSolvablePolynomial<GenPolynomial<C>>) PolyUtil.<C> recursive(rfac, Dd);
         return C;
     }
 
@@ -330,13 +334,9 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         if (pfac.nvar <= 1) {
             return basePrimitivePart(P);
         }
-        //GenSolvablePolynomialRing<C> cfac = pfac.contract(1);
-        //GenSolvablePolynomialRing<GenPolynomial<C>> rfac = new GenSolvablePolynomialRing<GenPolynomial<C>>(cfac, 1);
-        GenSolvablePolynomialRing<GenPolynomial<C>> rfac = /*(RecSolvablePolynomialRing<C>)*/pfac
-                        .recursive(1);
+        GenSolvablePolynomialRing<GenPolynomial<C>> rfac = /*(RecSolvablePolynomialRing<C>)*/pfac.recursive(1);
 
-        GenSolvablePolynomial<GenPolynomial<C>> Pr = (RecSolvablePolynomial<C>) PolyUtil.<C> recursive(rfac,
-                        P);
+        GenSolvablePolynomial<GenPolynomial<C>> Pr = (RecSolvablePolynomial<C>) PolyUtil.<C> recursive(rfac, P);
         GenSolvablePolynomial<GenPolynomial<C>> PP = recursivePrimitivePart(Pr);
 
         GenSolvablePolynomial<C> D = (GenSolvablePolynomial<C>) PolyUtil.<C> distribute(pfac, PP);
@@ -398,13 +398,10 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             GenSolvablePolynomial<C> T = baseGcd(P, S);
             return T;
         }
-        GenSolvablePolynomialRing<GenPolynomial<C>> rfac = /*(RecSolvablePolynomialRing<C>)*/pfac
-                        .recursive(1);
+        GenSolvablePolynomialRing<GenPolynomial<C>> rfac = /*(RecSolvablePolynomialRing<C>)*/pfac.recursive(1);
 
-        GenSolvablePolynomial<GenPolynomial<C>> Pr = (RecSolvablePolynomial<C>) PolyUtil.<C> recursive(rfac,
-                        P);
-        GenSolvablePolynomial<GenPolynomial<C>> Sr = (RecSolvablePolynomial<C>) PolyUtil.<C> recursive(rfac,
-                        S);
+        GenSolvablePolynomial<GenPolynomial<C>> Pr = (RecSolvablePolynomial<C>) PolyUtil.<C> recursive(rfac, P);
+        GenSolvablePolynomial<GenPolynomial<C>> Sr = (RecSolvablePolynomial<C>) PolyUtil.<C> recursive(rfac, S);
         GenSolvablePolynomial<GenPolynomial<C>> Dr = recursiveUnivariateGcd(Pr, Sr);
         GenSolvablePolynomial<C> D = (GenSolvablePolynomial<C>) PolyUtil.<C> distribute(pfac, Dr);
         return D;
