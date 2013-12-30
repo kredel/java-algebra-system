@@ -706,33 +706,30 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
         RingFactory cf = coFac;
         RingFactory<GenPolynomial<C>> cfp = (RingFactory<GenPolynomial<C>>) cf;
         GenPolynomialRing cr = (GenPolynomialRing) cfp;
-        System.out.println("cr = " + cr.toScript());
+        //System.out.println("cr = " + cr.toScript());
         GenPolynomialRing<C> fac;
         if ( cr.vars != null ) {
             fac = cr.extend(vars);
         } else {
             fac = cr.extend(nvar);
         }
-        System.out.println("fac = " + fac.toScript());
-        // fac could be a commutative polynomial ring
+        //System.out.println("fac = " + fac.toScript());
+        // fac could be a commutative polynomial ring, coefficient relations
         GenSolvablePolynomialRing<C> pfac 
             = new GenSolvablePolynomialRing<C>(fac.coFac, fac.nvar, this.tord, fac.vars);
-        System.out.println("pfac = " + pfac.toScript());
+        //System.out.println("pfac = " + pfac.toScript());
         if (fac instanceof GenSolvablePolynomialRing) {
             GenSolvablePolynomialRing<C> sfac = (GenSolvablePolynomialRing<C>) fac;
             List<GenSolvablePolynomial<C>> rlc = sfac.table.relationList(); 
             pfac.table.addSolvRelations(rlc);
-            System.out.println("pfac = " + pfac.toScript());
+            //System.out.println("pfac = " + pfac.toScript());
         }
+        // main relations
         List<GenPolynomial<GenPolynomial<C>>> rl = (List<GenPolynomial<GenPolynomial<C>>>) (List) 
 	    PolynomialList.castToList( table.relationList() ); 
-        System.out.println("rl = " + rl.get(0).toScriptFactory());
-        System.out.println("rl = " + rl);
-        //pfac.table.extend(this.table);
-        //System.out.println("pfac = " + pfac.toScript());
         List<GenPolynomial<C>> rld = PolyUtil.<C> distribute(pfac,rl); 
         pfac.table.addRelations(rld);
-        System.out.println("pfac = " + pfac.toScript());
+        //System.out.println("pfac = " + pfac.toScript());
         // coeffTable not avaliable here
         return pfac;
     }
