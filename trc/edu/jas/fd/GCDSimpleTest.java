@@ -62,8 +62,8 @@ public class GCDSimpleTest extends TestCase {
     GreatestCommonDivisorAbstract<BigRational> fd;
 
 
-    //TermOrder to = new TermOrder(TermOrder.INVLEX);
-    TermOrder to = new TermOrder(TermOrder.IGRLEX);
+    TermOrder to = new TermOrder(TermOrder.INVLEX);
+    //TermOrder to = new TermOrder(TermOrder.IGRLEX);
 
 
     GenSolvablePolynomialRing<BigRational> dfac;
@@ -247,7 +247,7 @@ public class GCDSimpleTest extends TestCase {
     /**
      * Test arbitrary recursive gcd simple.
      */
-    public void testArbitraryRecursiveGCDSimple() {
+    public void xtestArbitraryRecursiveGCDSimple() {
 
         String[] vars = new String[] { "a", "b", "c", "d" };
         //String[] vars = new String[] { "a", "b" };
@@ -305,23 +305,29 @@ public class GCDSimpleTest extends TestCase {
     /**
      * Test gcd simple.
      */
-    public void ytestGCDSimple() {
+    public void testGCDSimple() {
 
-        String[] vars = new String[] { "a", "b", "c", "d" };
-        //String[] vars = new String[] { "a", "b" };
+        //String[] vars = new String[] { "a", "b", "c", "d" };
+        String[] vars = new String[] { "a", "b" };
         dfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), to, vars);
         RelationGenerator<BigRational> wl = new WeylRelationsIterated<BigRational>();
         dfac.addRelations(wl);
         System.out.println("dfac = " + dfac.toScript());
 
+        //kl = 3; 
         ll = 4;
+        el = 4;
 
         for (int i = 0; i < 1; i++) {
             a = dfac.random(kl, ll, el, q);
             b = dfac.random(kl, ll, el, q);
             c = dfac.random(kl, ll, el, q);
             c = c.multiply(dfac.univariate(0));
+            c = c.monic();
             //c = (GenSolvablePolynomial<BigRational>) fd.primitivePart(c).abs();
+            a = dfac.parse("1/3 b^3 - 1/6");
+            b = dfac.parse("( -1/2 ) b + 3 a");
+            c = dfac.parse("a * b - 5 b");
             System.out.println("a = " + a);
             System.out.println("b = " + b);
             System.out.println("c = " + c);
@@ -342,15 +348,15 @@ public class GCDSimpleTest extends TestCase {
             System.out.println("c = " + c);
             System.out.println("d = " + d);
 
-            e = (GenSolvablePolynomial<BigRational>) PolyUtil.<BigRational> basePseudoRemainder(d, c);
+            e = (GenSolvablePolynomial<BigRational>) FDUtil.<BigRational> baseSparsePseudoRemainder(d, c);
             //System.out.println("e = " + e);
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
 
-            e = (GenSolvablePolynomial<BigRational>) PolyUtil.<BigRational> basePseudoRemainder(a, d);
+            e = (GenSolvablePolynomial<BigRational>) FDUtil.<BigRational> baseSparsePseudoRemainder(a, d);
             //System.out.println("e = " + e);
             assertTrue("gcd(a,b) | a " + e, e.isZERO());
 
-            e = (GenSolvablePolynomial<BigRational>) PolyUtil.<BigRational> basePseudoRemainder(b, d);
+            e = (GenSolvablePolynomial<BigRational>) FDUtil.<BigRational> baseSparsePseudoRemainder(b, d);
             //System.out.println("e = " + e);
             assertTrue("gcd(a,b) | b " + e, e.isZERO());
         }
