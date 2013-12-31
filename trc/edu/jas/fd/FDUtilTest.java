@@ -331,4 +331,36 @@ public class FDUtilTest extends TestCase {
         assertEquals("dpm == qpm: ", qpm, dpm ); // ??
     }
 
+
+    /**
+     * Test recursive right coefficient polynomial.
+     */
+    public void testRightRecursivePolynomial() {
+        //String[] names = new String[] { "t", "x", "y", "z" };
+        String[] names = new String[] { "y", "z" };
+        rdfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1),to,names);
+        RelationGenerator<BigRational> wl = new WeylRelationsIterated<BigRational>();
+        rdfac.addRelations(wl);
+        rrfac = (RecSolvablePolynomialRing<BigRational>) rdfac.recursive(1);
+        //System.out.println("\nrdfac  = " + rdfac.toScript());
+        //System.out.println("rrfac  = " + rrfac.toScript());
+
+        // q = q;
+        kl = 5;
+        ll = 5;
+        el = 7;
+
+        arr = rrfac.random(kl, ll, el, q);
+        //System.out.println("FDQR: arr  = " + arr);
+
+        brr = (GenSolvablePolynomial<GenPolynomial<BigRational>>) FDUtil.<BigRational> rightRecursivePolynomial(arr);
+        //System.out.println("FDQR: brr  = " + brr);
+
+        //System.out.println("FDQR: arr == brr: " + arr.equals(brr));
+        //assertFalse("arr != brr: ", arr.equals(brr) && false); // mostly unequal
+
+        boolean t = FDUtil.<BigRational> isRightRecursivePolynomial(arr, brr);
+        assertTrue("arr == eval(brr): ", t); 
+    }
+
 }

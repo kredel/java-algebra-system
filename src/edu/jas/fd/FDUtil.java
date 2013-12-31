@@ -13,9 +13,13 @@ import java.util.Collection;
 import org.apache.log4j.Logger;
 
 import edu.jas.poly.ExpVector;
+import edu.jas.poly.PolyUtil;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
+import edu.jas.poly.RecSolvablePolynomial;
+import edu.jas.poly.RecSolvablePolynomialRing;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
@@ -158,7 +162,7 @@ public class FDUtil {
                     C gc = oc[1];
                     r = r.multiplyLeft(ga); // coeff ga a, exp f
                     h = h.multiplyLeft(gc); // coeff gc c, exp f
-                    q = q.multiply(ga); // c
+                    q = q.multiplyLeft(ga); // c
                     q = (GenSolvablePolynomial<C>) q.sum(gc, f); // a
                 }
 
@@ -480,6 +484,104 @@ public class FDUtil {
         }
         return p;
     }
+
+
+    /**
+     * RecSolvablePolynomial right coefficients from left
+     * coefficients.  <b>Note:</b> R is represented as a polynomial
+     * with left coefficients, the implementation can at the moment
+     * not distinguish between left and right coefficients.
+     * @param <C> coefficient type.
+     * @param P GenSolvablePolynomial.
+     * @return R = sum( X<sup>i</sup> b<sub>i</sub> ), with P = sum(a<sub>i</sub> X<sup>i</sup> ) 
+     * and X<sup>i</sup> b<sub>i</sub> == a<sub>i</sub> X<sup>i</sup>
+     */
+    public static <C extends RingElem<C>> GenSolvablePolynomial<GenPolynomial<C>> 
+           rightRecursivePolynomial(GenSolvablePolynomial<GenPolynomial<C>> P) {
+        if (P == null || P.isZERO()) {
+            return P;
+        }
+        if ( !(P instanceof RecSolvablePolynomial)) {
+            return P;
+        }
+        RecSolvablePolynomialRing<C> rfac = (RecSolvablePolynomialRing<C>) P.ring;
+        if (rfac.coeffTable.isEmpty()) {
+            return P;
+        }
+        GenPolynomialRing<C> cfac = (GenPolynomialRing<C>) rfac.coFac;
+        GenPolynomial<C> one = cfac.getONE();
+        RecSolvablePolynomial<C> onep = rfac.getONE();
+        ExpVector zero = rfac.evzero;
+        RecSolvablePolynomial<C> R = rfac.getZERO();
+        RecSolvablePolynomial<C> r;
+        RecSolvablePolynomial<C> p = (RecSolvablePolynomial<C>) P;
+        while (!p.isZERO()) {
+            ExpVector f = p.leadingExpVector();
+            GenPolynomial<C> a = p.leadingBaseCoefficient();
+            //r = h.multiply(a); // wrong method dispatch // right: f*a
+            r = onep.multiply(one,f,a,zero); // right: (1 f) * 1 * (a zero)
+            //System.out.println("a,f = " + a + ", " + f); // + ", h.ring = " + h.ring.toScript());
+            //System.out.println("f*a = " + r); // + ", r.ring = " + r.ring.toScript());
+            p = (RecSolvablePolynomial<C>) p.subtract(r);
+            R = (RecSolvablePolynomial<C>) R.sum(a,f);
+        }
+        return R;
+    }
+
+
+
+    /**
+     * Test RecSolvablePolynomial right coefficients polynomial.
+     * <b>Note:</b> R is represented as a polynomial with left
+     * coefficients, the implementation can at the moment not
+     * distinguish between left and right coefficients.
+     * @param <C> coefficient type.
+     * @param P GenSolvablePolynomial with left coefficients.
+     * @param R GenSolvablePolynomial with right coefficients.
+     * @return true, if R is polynomial with right coefficients of P.
+     * R = sum( X<sup>i</sup> b<sub>i</sub> ), with P = sum(a<sub>i</sub> X<sup>i</sup> ) 
+     * and X<sup>i</sup> b<sub>i</sub> == a<sub>i</sub> X<sup>i</sup>
+     */
+    public static <C extends RingElem<C>> boolean
+           isRightRecursivePolynomial(GenSolvablePolynomial<GenPolynomial<C>> P, 
+                                      GenSolvablePolynomial<GenPolynomial<C>> R) {
+        if (P == null) {
+            return R == null;
+        }
+        if (P.isZERO()) {
+            return R.isZERO();
+        }
+        if ( !(P instanceof RecSolvablePolynomial)) {
+            return !(R instanceof RecSolvablePolynomial);
+        }
+        RecSolvablePolynomialRing<C> rfac = (RecSolvablePolynomialRing<C>) P.ring;
+        if (rfac.coeffTable.isEmpty()) {
+            RecSolvablePolynomialRing<C> rf = (RecSolvablePolynomialRing<C>) R.ring;
+            return rf.coeffTable.isEmpty();
+        }
+        GenPolynomialRing<C> cfac = (GenPolynomialRing<C>) rfac.coFac;
+        GenPolynomial<C> one = cfac.getONE();
+        RecSolvablePolynomial<C> onep = rfac.getONE();
+        ExpVector zero = rfac.evzero;
+        RecSolvablePolynomial<C> q = rfac.getZERO();
+        RecSolvablePolynomial<C> s;
+        RecSolvablePolynomial<C> p = (RecSolvablePolynomial<C>) P;
+        RecSolvablePolynomial<C> r = (RecSolvablePolynomial<C>) R;
+        for (Map.Entry<ExpVector, GenPolynomial<C>> y : r.getMap().entrySet()) {
+            ExpVector f = y.getKey();
+            GenPolynomial<C> a = y.getValue();
+            //  f.multiply(a); // wrong method dispatch // right: f*a
+            s = onep.multiply(one,f,a,zero); // right: (1 f) * 1 * (a zero)
+            q = (RecSolvablePolynomial<C>) q.sum(s);
+        }
+        //r = (RecSolvablePolynomial<C>) PolyUtil.<C> monic(r);
+        p = (RecSolvablePolynomial<C>) PolyUtil.<C> monic(p);
+        q = (RecSolvablePolynomial<C>) PolyUtil.<C> monic(q);
+        return p.equals(q);
+    }
+
+
+
 
 
     /**
