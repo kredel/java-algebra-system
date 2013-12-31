@@ -350,15 +350,29 @@ public class GCDSimpleTest extends TestCase {
 
             e = (GenSolvablePolynomial<BigRational>) FDUtil.<BigRational> baseSparsePseudoRemainder(d, c);
             //System.out.println("e = " + e);
-            assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
+            //assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
 
             e = (GenSolvablePolynomial<BigRational>) FDUtil.<BigRational> baseSparsePseudoRemainder(a, d);
             //System.out.println("e = " + e);
             assertTrue("gcd(a,b) | a " + e, e.isZERO());
+            e = (GenSolvablePolynomial<BigRational>) FDUtil.<BigRational> baseSparsePseudoRemainder(a, c);
+            //System.out.println("e = " + e);
+            assertTrue("c | ac " + e, e.isZERO());
+            e = (GenSolvablePolynomial<BigRational>) FDUtil.<BigRational> basePseudoQuotient(a, d);
+            System.out.println("a/d = " + e);
+            e = (GenSolvablePolynomial<BigRational>) FDUtil.<BigRational> basePseudoQuotient(a, c);
+            System.out.println("a/c = " + e);
 
             e = (GenSolvablePolynomial<BigRational>) FDUtil.<BigRational> baseSparsePseudoRemainder(b, d);
             //System.out.println("e = " + e);
             assertTrue("gcd(a,b) | b " + e, e.isZERO());
+            e = (GenSolvablePolynomial<BigRational>) FDUtil.<BigRational> baseSparsePseudoRemainder(b, c);
+            //System.out.println("e = " + e);
+            assertTrue("c | bc " + e, e.isZERO());
+            e = (GenSolvablePolynomial<BigRational>) FDUtil.<BigRational> basePseudoQuotient(b, d);
+            System.out.println("b/d = " + e);
+            e = (GenSolvablePolynomial<BigRational>) FDUtil.<BigRational> basePseudoQuotient(b, c);
+            System.out.println("b/c = " + e);
         }
     }
 

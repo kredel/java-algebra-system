@@ -281,7 +281,7 @@ public class FDUtil {
 
                 if (!r.leadingBaseCoefficient().equals(h.leadingBaseCoefficient())) {
                     throw new RuntimeException("should not happen: lc(r) = " + r.leadingBaseCoefficient()
-					       + ", lc(h) = " + h.leadingBaseCoefficient());
+                                               + ", lc(h) = " + h.leadingBaseCoefficient());
                     //} else {
                     //System.out.println("lc(r) = " + r.leadingBaseCoefficient());
                 }
@@ -494,7 +494,7 @@ public class FDUtil {
      * @param <C> coefficient type.
      * @param P GenSolvablePolynomial.
      * @return R = sum( X<sup>i</sup> b<sub>i</sub> ), with P = sum(a<sub>i</sub> X<sup>i</sup> ) 
-     * and X<sup>i</sup> b<sub>i</sub> == a<sub>i</sub> X<sup>i</sup>
+     * and eval(sum(X<sup>i</sup> b<sub>i</sub>)) == sum(a<sub>i</sub> X<sup>i</sup>)
      */
     public static <C extends RingElem<C>> GenSolvablePolynomial<GenPolynomial<C>> 
            rightRecursivePolynomial(GenSolvablePolynomial<GenPolynomial<C>> P) {
@@ -540,7 +540,7 @@ public class FDUtil {
      * @param R GenSolvablePolynomial with right coefficients.
      * @return true, if R is polynomial with right coefficients of P.
      * R = sum( X<sup>i</sup> b<sub>i</sub> ), with P = sum(a<sub>i</sub> X<sup>i</sup> ) 
-     * and X<sup>i</sup> b<sub>i</sub> == a<sub>i</sub> X<sup>i</sup>
+     * and eval(sum(X<sup>i</sup> b<sub>i</sub>)) == sum(a<sub>i</sub> X<sup>i</sup>)
      */
     public static <C extends RingElem<C>> boolean
            isRightRecursivePolynomial(GenSolvablePolynomial<GenPolynomial<C>> P, 

@@ -182,6 +182,9 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         if (d.isONE()) {
             return P;
         }
+        if(debug) {
+           logger.info("content(P) = " + d);
+        }
         GenSolvablePolynomial<GenPolynomial<C>> pp = FDUtil.<C> recursiveDivide(P, d);
         return pp;
     }
@@ -413,7 +416,9 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
      * @return lcm(P,S).
      */
     public GenSolvablePolynomial<C> lcm(GenSolvablePolynomial<C> P, GenSolvablePolynomial<C> S) {
-        throw new UnsupportedOperationException("lcm not implemented");
+        GenSolvablePolynomial<C>[] oc = leftOreCond(P,S);
+        return oc[0].multiply(P);
+        //throw new UnsupportedOperationException("lcm not implemented");
     }
 
 

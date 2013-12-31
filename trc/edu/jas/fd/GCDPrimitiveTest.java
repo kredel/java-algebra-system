@@ -79,7 +79,7 @@ public class GCDPrimitiveTest extends TestCase {
     BigRational ai, bi, ci, di, ei;
 
 
-    GenSolvablePolynomial<BigRational> a, b, c, d, e;
+    GenSolvablePolynomial<BigRational> a, b, c, d, e, a1, b1;
 
 
     GenSolvablePolynomial<GenPolynomial<BigRational>> ar, br, cr, dr, er, sr;
@@ -382,6 +382,14 @@ public class GCDPrimitiveTest extends TestCase {
             System.out.println("b/d = " + e);
             e = (GenSolvablePolynomial<BigRational>) FDUtil.<BigRational> basePseudoQuotient(b, c);
             System.out.println("b/c = " + e);
+
+            // a1 = (GenSolvablePolynomial<BigRational>) FDUtil.<BigRational> basePseudoQuotient(a, d);
+            // b1 = (GenSolvablePolynomial<BigRational>) FDUtil.<BigRational> basePseudoQuotient(b, d);
+            // d = fd.gcd(a1, b1);
+            // System.out.println("c = " + c);
+            // System.out.println("d = " + d);
+            // System.out.println("a1 = " + a1);
+            // System.out.println("b1 = " + b1);
         }
     }
 
