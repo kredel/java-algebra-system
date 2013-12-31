@@ -306,13 +306,11 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             // baseContent not possible by return type
             throw new IllegalArgumentException("use baseContent() for univariate polynomials");
         }
-        //GenSolvablePolynomialRing<C> cfac = pfac.contract(1);
-        //GenSolvablePolynomialRing<GenPolynomial<C>> rfac = new GenSolvablePolynomialRing<GenPolynomial<C>>(cfac, 1);
-        GenSolvablePolynomialRing<GenPolynomial<C>> rfac = /*(RecSolvablePolynomialRing<C>)*/pfac
-                        .recursive(1);
+        GenSolvablePolynomialRing<GenPolynomial<C>> rfac // = (RecSolvablePolynomialRing<C>) 
+            = pfac.recursive(1);
 
-        GenSolvablePolynomial<GenPolynomial<C>> Pr = (RecSolvablePolynomial<C>) PolyUtil.<C> recursive(rfac,
-                        P);
+        GenSolvablePolynomial<GenPolynomial<C>> Pr 
+            = (RecSolvablePolynomial<C>) PolyUtil.<C> recursive(rfac, P);
         GenSolvablePolynomial<C> D = recursiveContent(Pr);
         return D;
     }
