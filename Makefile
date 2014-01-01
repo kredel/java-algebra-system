@@ -285,6 +285,8 @@ CLASSES=edu/jas/structure/ edu/jas/arith/ edu/jas/poly/ edu/jas/ps/ edu/jas/gb/ 
 
 PYS=$(wildcard *.py)
 EXAMPY=$(wildcard examples/*.py)
+EXAMRB=$(wildcard examples/*.rb)
+EXAMJAS=$(subst examples/,, $(wildcard examples/*.jas))
 
 DOCU=$(wildcard jas-log.html index.html problems.html design.html COPYING* sample.jythonrc overview.html)
 # */package.html 
@@ -457,6 +459,18 @@ git-deploy:
 jas-bin.jar:
 	jar -cfm $(VERSION).`$(SVNREV)`-bin.jar GBManifest.MF edu/ COPYING* log4j.properties
 	jar -uf  $(VERSION).`$(SVNREV)`-bin.jar -C examples jas.rb -C examples jas.py
+
+#jar -ufm ../$(VERSION)-gbb-bin.jar ~/java/lib/log4j.dir/META-INF/MANIFEST.MF -C ~/java	/lib/log4j.dir/ org/ 
+#echo "EXAMJAS" $(EXAMJAS)
+mkbench:
+	jar -cfm $(VERSION)-gbb-bin.jar GBManifest.MF edu/ COPYING* log4j.properties
+	#jar -ufe $(VERSION)-gbb-bin.jar edu.jas.application.RunMPJGB -C mpj/classes/ edu/
+	jar -uf $(VERSION)-gbb-bin.jar -C mpj/classes/ edu/
+	jar -uf $(VERSION)-gbb-bin.jar -C ~/java/lib/log4j.dir/ org/ 
+	cd examples; jar -cf examples.jar $(EXAMJAS)
+
+runbench:
+	java -jar $(VERSION)-gbb-bin.jar seq katsura5.jas
 
 young:
 	echo youngest revision `svnlook youngest $(SVNREPO)/jas`
