@@ -166,14 +166,14 @@ public class FDUtilTest extends TestCase {
         //a = a.multiply(b);
         //a = a.sum(b);
         //b = dfac.parse(" 2 x^2 + 40 ");
-        System.out.println("a   = " + a);
-        System.out.println("b   = " + b);
+        //System.out.println("a   = " + a);
+        //System.out.println("b   = " + b);
 
         GenPolynomial<BigInteger>[] QR = PolyUtil.<BigInteger> basePseudoQuotientRemainder(a, b);
         c = (GenSolvablePolynomial<BigInteger>) QR[0];
         d = (GenSolvablePolynomial<BigInteger>) QR[1];
-        System.out.println("q   = " + c);
-        System.out.println("r   = " + d);
+        //System.out.println("q   = " + c);
+        //System.out.println("r   = " + d);
 
         GenSolvablePolynomial<BigInteger> n = (GenSolvablePolynomial<BigInteger>) c.multiply(b).sum(d);
         //System.out.println("n   = " + n); // + ", " + m.monic());
@@ -185,14 +185,14 @@ public class FDUtilTest extends TestCase {
         GenSolvablePolynomial<BigInteger>[] QRs = FDUtil.<BigInteger> basePseudoQuotientRemainder(a, b);
         e = QRs[0];
         f = QRs[1];
-        System.out.println("");
-        System.out.println("q   = " + e);
-        System.out.println("r   = " + f);
+        //System.out.println("");
+        //System.out.println("q   = " + e);
+        //System.out.println("r   = " + f);
 
         GenSolvablePolynomial<BigInteger> m = (GenSolvablePolynomial<BigInteger>) e.multiply(b).sum(f);
-        System.out.println("n   = " + n); // + ", " + m.monic());
-        System.out.println("m   = " + m); // + ", " + m.monic());
-        System.out.println("a   = " + a); // + ", " + a.monic());
+        //System.out.println("n   = " + n); // + ", " + m.monic());
+        //System.out.println("m   = " + m); // + ", " + m.monic());
+        //System.out.println("a   = " + a); // + ", " + a.monic());
 
         t = PolyUtil.<BigInteger> isBasePseudoQuotientRemainder(a, b, e, f);
         assertTrue("ore(lc^n) a = q b + r: " + f, t);
@@ -270,13 +270,13 @@ public class FDUtilTest extends TestCase {
         if (brr.isZERO()) { 
             brr = rrfac.parse(" ( x - 2 ) z - ( t - y^2 + y ) ");
         }
-        System.out.println("FDQR: arr  = " + arr);
-        System.out.println("FDQR: brr  = " + brr);
+        //System.out.println("FDQR: arr  = " + arr);
+        //System.out.println("FDQR: brr  = " + brr);
 
         drr = (GenSolvablePolynomial<GenPolynomial<BigRational>>) FDUtil.<BigRational> recursivePseudoQuotient(arr, brr);
         crr = (GenSolvablePolynomial<GenPolynomial<BigRational>>) FDUtil.<BigRational> recursiveSparsePseudoRemainder(arr, brr);
-        System.out.println("FDQR: qr  = " + drr);
-        System.out.println("FDQR: rr  = " + crr);
+        //System.out.println("FDQR: qr  = " + drr);
+        //System.out.println("FDQR: rr  = " + crr);
 
         GenSolvablePolynomial<GenPolynomial<BigRational>>[] QR; 
         QR = (GenSolvablePolynomial<GenPolynomial<BigRational>>[]) FDUtil.<BigRational> recursivePseudoQuotientRemainder(arr, brr);
@@ -299,22 +299,22 @@ public class FDUtilTest extends TestCase {
         cpm = cp.monic();
         dpm = dp.monic();
         //System.out.println("FDQR: ap  = " + ap);
-        System.out.println("FDQR: apm = " + apm);
+        //System.out.println("FDQR: apm = " + apm);
         //System.out.println("FDQR: bp  = " + bp);
-        System.out.println("FDQR: bpm = " + bpm);
+        //System.out.println("FDQR: bpm = " + bpm);
         //System.out.println("FDQR: cp  = " + cp);
-        System.out.println("FDQR: cpm = " + cpm);
+        //System.out.println("FDQR: cpm = " + cpm);
         //System.out.println("FDQR: dp  = " + dp);
-        System.out.println("FDQR: dpm = " + dpm);
+        //System.out.println("FDQR: dpm = " + dpm);
 
         qp = (GenSolvablePolynomial<SolvableQuotient<BigRational>>) ap.divide(bp);
         rp = (GenSolvablePolynomial<SolvableQuotient<BigRational>>) ap.remainder(bp);
         qpm = qp.monic();
         rpm = rp.monic();
         //System.out.println("FDQR: qp  = " + qp);
-        System.out.println("FDQR: qpm = " + qpm);
+        //System.out.println("FDQR: qpm = " + qpm);
         //System.out.println("FDQR: rp  = " + rp);
-        System.out.println("FDQR: rpm = " + rpm);
+        //System.out.println("FDQR: rpm = " + rpm);
         rhs = (GenSolvablePolynomial<SolvableQuotient<BigRational>>) qp.multiply(bp).sum(rp);
         //for commutative divide: rhs = (GenSolvablePolynomial<SolvableQuotient<BigRational>>) bp.multiply(qp).sum(rp);
         rhsm = rhs.monic();

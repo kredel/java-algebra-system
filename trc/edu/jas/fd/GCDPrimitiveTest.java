@@ -136,7 +136,6 @@ public class GCDPrimitiveTest extends TestCase {
      * Test base gcd primitive.
      */
     public void xtestBaseGcdPrimitive() {
-
         String[] uvars = new String[] { "x" };
         dfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), 1, to, uvars);
 
@@ -182,7 +181,6 @@ public class GCDPrimitiveTest extends TestCase {
      * Test univariate recursive gcd primitive.
      */
     public void xtestRecursiveGCDPrimitive() {
-
         String[] vars = new String[] { "a", "b", "c", "d" };
         //String[] vars = new String[] { "a", "b" };
         dfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), to, vars);
@@ -258,7 +256,6 @@ public class GCDPrimitiveTest extends TestCase {
      * Test arbitrary recursive gcd primitive.
      */
     public void xtestArbitraryRecursiveGCDPrimitive() {
-
         String[] vars = new String[] { "a", "b", "c", "d" };
         //String[] vars = new String[] { "a", "b" };
         dfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), to, vars);
@@ -316,7 +313,6 @@ public class GCDPrimitiveTest extends TestCase {
      * Test gcd primitive.
      */
     public void testGCDPrimitive() {
-
         //String[] vars = new String[] { "a", "b", "c", "d" };
         String[] vars = new String[] { "a", "b" };
         dfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), to, vars);
