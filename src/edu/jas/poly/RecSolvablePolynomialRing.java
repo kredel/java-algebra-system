@@ -616,7 +616,7 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
     /**
      * Extend variables. Used e.g. in module embedding. Extend number of
      * variables by length(vn). New variables commute with the exiting variables.
-     * @param vn names for extended variables.
+     * @param vs names for extended variables.
      * @return extended polynomial ring factory.
      */
     @Override

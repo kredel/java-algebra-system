@@ -187,8 +187,7 @@ public class FDUtil {
      * @param S nonzero recursive GenSolvablePolynomial.
      * @return remainder with ore(ldcf(S)<sup>m'</sup>) P = quotient * S +
      *         remainder.
-     * @see edu.jas.poly.GenSolvablePolynomial#remainder(edu.jas.poly.GenSolvablePolynomial)
-     *      .
+     * @see edu.jas.poly.PolyUtil#recursiveSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial).
      */
     public static <C extends GcdRingElem<C>> GenSolvablePolynomial<GenPolynomial<C>> 
            recursiveSparsePseudoRemainder(
@@ -249,8 +248,7 @@ public class FDUtil {
      * @param P recursive GenSolvablePolynomial.
      * @param S nonzero recursive GenSolvablePolynomial.
      * @return remainder with P ldcf(S)<sup>m'</sup> = quotient * S + remainder.
-     * @see edu.jas.poly.GenSolvablePolynomial#remainder(edu.jas.poly.GenSolvablePolynomial)
-     *      .
+     * @see edu.jas.poly.PolyUtil#recursiveSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial).
      */
     public static <C extends RingElem<C>> GenSolvablePolynomial<GenPolynomial<C>> recursiveSparsePseudoRemainderRight(
                     GenSolvablePolynomial<GenPolynomial<C>> P, GenSolvablePolynomial<GenPolynomial<C>> S) {

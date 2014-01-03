@@ -503,7 +503,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
      * @param S nonzero GenSolvablePolynomial with invertible leading coefficient.
      * @return [ quotient , remainder ] with this = quotient * S + remainder and
      *         deg(remainder) &lt; deg(S) or remiander = 0.
-     * @see edu.jas.poly.FDUtil#baseSparsePseudoRemainder(edu.jas.poly.GenSolvablePolynomial,edu.jas.poly.GenSolvablePolynomial).
+     * @see edu.jas.poly.PolyUtil#baseSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial).
      */
     //@Override
     @SuppressWarnings("unchecked")
