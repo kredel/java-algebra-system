@@ -1,5 +1,5 @@
 #
-# $Id: $
+# $Id$
 #
 # Makefile for the JLinAlg Adapter parts
 # by Heinz kredel
