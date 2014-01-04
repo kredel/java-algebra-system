@@ -368,7 +368,7 @@ tests:
 	cd jython; make tests | tee jsr.out
 	cd mpj; make tests | tee mpj.out
 	#cd mpi; make tests | tee mpi.out
-	cd ../jas-versions/jlinalg_adapter; make tests | tee ja.out
+	cd jlinalg_adapter; make tests | tee ja.out
 	cd ../jas-versions/commons-math_adapter; make tests | tee ja.out
 	-grep FAIL t.out
 	-grep Exception e.out | grep -v GCDProxy | grep -v GBProxy
@@ -377,7 +377,7 @@ tests:
 	-grep -i error jython/jsr.out
 	-grep -i error mpj/mpj.out
 	#-grep -i error mpi/mpi.out
-	-grep -i error ../jas-versions/jlinalg_adapter/ja.out
+	-grep -i error jlinalg_adapter/ja.out
 	-grep -i error ../jas-versions/commons-math_adapter/ja.out
 	-egrep '(Exception|Usage)' tr.out
 
@@ -413,7 +413,7 @@ export:
 	rm -rf ~/jas-versions/$(VERSION)
 	svn export --quiet file:///$(SVNREPO)/jas/trunk ~/jas-versions/$(VERSION)
 	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) `$(SVNREV)` download.html
-	svn log -v -r HEAD:$(SVNSRT) file:///$(SVNREPO)/jas/trunk src trc examples jython mpj mpi > ~/jas-versions/$(VERSION)/svn_change.log
+	svn log -v -r HEAD:$(SVNSRT) file:///$(SVNREPO)/jas/trunk src trc examples jython mpj mpi jlinalg_adapter > ~/jas-versions/$(VERSION)/svn_change.log
 	cd ~/jas-versions/; jar -cfM $(VERSION).`$(SVNREV)`-src.zip $(VERSION)/
 	cd ~/jas-versions/$(VERSION)/; ant compile > ant_compile.out
 	cd ~/jas-versions/$(VERSION)/; jar -cfm ../$(VERSION).`$(SVNREV)`-bin.jar GBManifest.MF edu/ COPYING* log4j.properties
@@ -439,8 +439,8 @@ export:
 	cp ~/java/lib/mylog.jar ~/jas-versions/$(VERSION)/
 	cd ~/jas-versions/log4j_droid_adapter; make > ~/jas-versions/$(VERSION)/make_droidlog.out
 	cp ~/java/lib/droidlog.jar ~/jas-versions/$(VERSION)/
-	cd ~/jas-versions/jlinalg_adapter; make > ~/jas-versions/$(VERSION)/make_jlinalg.out
-	cp ~/java/lib/jlinalg_adapter.jar ~/jas-versions/$(VERSION)/
+	cd ~/jas-versions/$(VERSION)/jlinalg_adapter; make all doc > ~/jas-versions/$(VERSION)/make_jlinalg.out
+	#cp ~/java/lib/jlinalg_adapter.jar ~/jas-versions/$(VERSION)/
 	cd ~/jas-versions/commons-math_adapter; make > ~/jas-versions/$(VERSION)/make_commons-math.out
 	cp ~/java/lib/commons-math_adapter.jar ~/jas-versions/$(VERSION)/
 
@@ -490,8 +490,8 @@ loc: young
 	find trc -name "*.java" | grep    Test | xargs cat | grep "void test" | wc -l 
 	find ~/jas-versions/log4j_adapter -name "*.java" | wc -l 
 	find ~/jas-versions/log4j_adapter -name "*.java" | xargs cat | wc
-	find ~/jas-versions/jlinalg_adapter -name "*.java" | wc -l
-	find ~/jas-versions/jlinalg_adapter -name "*.java" | xargs cat | wc
+	find jlinalg_adapter -name "*.java" | wc -l
+	find jlinalg_adapter -name "*.java" | xargs cat | wc
 	find ~/jas-versions/commons-math_adapter -name "*.java" | wc -l
 	find ~/jas-versions/commons-math_adapter -name "*.java" | xargs cat | wc
 	find jython -name "*.java" | wc -l 
