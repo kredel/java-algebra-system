@@ -21,6 +21,8 @@ The focus of JAS is at the moment on commutative, solvable and non-commutative p
 power series, Groebner bases, factorization, real and complex roots and applications. 
 By the use of Java as implementation language JAS is 64-bit and multi-core CPU
 ready and can make use of mutiple CPUs where available.
+JAS can run on a wide variety of devices ranging from Android to
+compute clusters (using MPJ a Java Message Passing Interface (MPI) or OpenMPI).
 </p>
 
 <p>
@@ -157,6 +159,17 @@ The library contains at the moment of the following
   like <code>ThreadPool</code>, <code>DistThreadPool</code> or
   <code>DistHashTable</code>. Part of this package has become obsolete
   with JDK 1.5.
+</dd>
+<dt>edu.jas.fd:</dt>
+<dd>
+  contains classes for solvable polynomials rings as (non-unique)
+  factorization domains. There are methods for polynomial pseudo
+  remainder computation over Ore domains in class <code>FDUtil</code>.
+  Further, methods for common divisors are included, but not yet
+  finished.
+  <!-- Methods provided with interface
+  <code>GreatestCommonDivisor</code> are e.g. greatest common divisors
+  <code>gcd()</code>, primitive part <code>primitivePart()</code>.-->
 </dd>
 </dl>
 
@@ -542,7 +555,7 @@ the class edu.jas.application.RunGB. E.g. <br />
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Sun Jul  7 17:20:00 CEST 2013
+Last modified: Sat Jan  4 13:52:01 CET 2014
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
