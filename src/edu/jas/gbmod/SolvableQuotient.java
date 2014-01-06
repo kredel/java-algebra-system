@@ -670,6 +670,9 @@ public class SolvableQuotient<C extends GcdRingElem<C>>
         if (this.isZERO()) {
             return b;
         }
+        if (this.equals(b)) {
+            return this;
+        }
         return ring.getONE();
     }
 
