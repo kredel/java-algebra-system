@@ -66,7 +66,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends Gr
             logger.debug("degrees: e = " + e + ", f = " + f);
         }
         C c;
-        if (field) {
+        if (false&&field) {
             r = r.monic();
             q = q.monic();
         }
@@ -75,6 +75,9 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends Gr
         C a = baseContent(r);
         C b = baseContent(q);
         c = gcd(a, b); // indirection
+        //System.out.println("baseCont: a = " + a);
+        //System.out.println("baseCont: b = " + b);
+        System.out.println("baseCont: gcd(cont) = " + b);
         r = divide(r, a); // indirection
         q = divide(q, b); // indirection
         if (r.isONE()) {
@@ -84,17 +87,18 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends Gr
             return q.multiply(c);
         }
         GenSolvablePolynomial<C> x;
-        //System.out.println("q = " + q);
-        //System.out.println("r = " + r);
+        //System.out.println("baseGCD: q = " + q);
+        //System.out.println("baseGCD: r = " + r);
         while (!r.isZERO()) {
             x = FDUtil.<C> baseSparsePseudoRemainder(q, r);
+            //System.out.println("baseGCD: x = " + x);
             q = r;
             r = basePrimitivePart(x);
-            if (field) {
+            if (false&&field) {
                 r = r.monic();
             }
-            //System.out.println("q = " + q);
-            //System.out.println("r = " + r);
+            //System.out.println("baseGCD: q = " + q);
+            System.out.println("baseGCD: r = " + r);
         }
         return (GenSolvablePolynomial<C>) (q.multiply(c)).abs();
     }
@@ -150,8 +154,8 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends Gr
 
         GenSolvablePolynomial<C> c = gcd(a, b); // go to recursion
         logger.info("Gcd(contents) c = " + c);
-        r = FDUtil.<C> recursiveDivide(r, a);
-        q = FDUtil.<C> recursiveDivide(q, b);
+        r = FDUtil.<C> recursiveRightDivide(r, a);
+        q = FDUtil.<C> recursiveRightDivide(q, b);
         if (r.isONE()) {
             return r.multiply(c);
         }
