@@ -327,7 +327,8 @@ public class GCDSimpleTest extends TestCase {
             //c = (GenSolvablePolynomial<BigRational>) fd.primitivePart(c).abs();
             a = dfac.parse("1/3 b^3 - 1/6");
             b = dfac.parse("( -1/2 ) b + 3 a");
-            c = dfac.parse("a * b - 5 b");
+            //c = dfac.parse("a * b - 5 b");
+            c = dfac.parse("a - 5");
             System.out.println("a = " + a);
             System.out.println("b = " + b);
             System.out.println("c = " + c);
