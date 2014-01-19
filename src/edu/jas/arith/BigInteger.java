@@ -676,6 +676,16 @@ public final class BigInteger implements GcdRingElem<BigInteger>, RingFactory<Bi
 
 
     /**
+     * BigInteger shift left.
+     * @param n bits to shift.
+     * @return this &lt;&lt; n.
+     */
+    public BigInteger shiftLeft(int n) {
+        return new BigInteger(val.shiftLeft(n));
+    }
+    
+
+    /**
      * BigInteger multiply.
      * @param A BigInteger.
      * @param B BigInteger.
