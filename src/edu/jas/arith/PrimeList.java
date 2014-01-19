@@ -296,7 +296,11 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
      * @return 2**n - m
      */
     public static java.math.BigInteger getLongPrime(int n, int m) {
-        return java.math.BigInteger.valueOf((1 << n) - m);
+        if (n < 30) {
+            return java.math.BigInteger.valueOf((1 << n) - m);
+        } else {
+            return java.math.BigInteger.ONE.shiftLeft(n).subtract(java.math.BigInteger.valueOf(m));
+        }
     }
 
 
