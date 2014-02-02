@@ -227,6 +227,9 @@ public class Quotient<C extends GcdRingElem<C>>
         if (den.isONE()) {
             return num.toScript();
         }
+        if (den.length() == 1 && den.totalDegree() > 1) {
+            return num.toScript() + " / (" + den.toScript() + " )";
+        }
         return num.toScript() + " / " + den.toScript();
     }
 
