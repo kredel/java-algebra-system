@@ -7,7 +7,7 @@ require "examples/jas"
 
 # performance analysis of multi-core clusters
 
-startLog();
+#startLog();
 
 
 # first ring with variables q,p,r,v,x,b,l1
@@ -40,7 +40,8 @@ puts "s = " + str(s);
 
 # q\, p\, l_c \cdot 
 # \frac{s(\frac{x}{q})}{1 + \frac{q\, p}{\beta(p)} \cdot \frac{s(\frac{x}{q})}{v\, r\, \frac{x}{q}}}
-lcl = q * p * l1 * ( s / ( s + (q*(p/b)) * ( 1 / (v*r*(x/q))) ));
+#wrong: lcl = q * p * l1 * ( s / ( s + (q*q*(p/b)) * ( 1 / (v*r*x)) ));
+lcl = q * p * l1 * ( s / ( 1 + (q*q*(p/b)) * ( s / (v*r*x)) ));
 puts "lcl = " + str(lcl);
 
 etacl = lcl / (q*p*l1);
@@ -73,8 +74,9 @@ if false
   hashop = 2*n - 1
   hashx  = p*w
 end
-if true
+if false
   puts "mat-mult:" 
+  b = p
   hashb  = 2*n**2*w
   hashop = 2*n**3 - n**2
   hashx  = 2*n**2*wp*w
@@ -91,11 +93,14 @@ if false
   hashop = n*ln
   hashx  = (n/p)*lp*c 
 end
-if false
+if true
   puts "2-dim FFT:" 
   hashb  = n**2*c
   hashop = 2*n**2*ln
-  hashx  = (n**2/p)*lp*c 
+  hashx  = (n*ln)*lp*c 
+#  hashx  = (n)*lp*c 
+#  hashx  = (n/p)*lp*c 
+#  hashx  = (n**2/p)*lp*c 
 end
 puts "w   = " + str(w);
 puts "b   = " + str(b);
@@ -113,24 +118,22 @@ puts
 if true
   puts "bwGRiD:" 
   l1  = 8
-  lm  = l1*q
   bm  = 3
   bcl = 3/2
 end
 if false
   puts "bw*Cluster:" 
   l1  = 18
-  lm  = l1*q
   bm  = 6
   bcl = 3
 end
 puts "l1  = " + str(l1);
-puts "lm  = " + str(lm);
 puts "bm  = " + str(bm);
 puts "bcl = " + str(bcl);
 puts
 
-as = lm / bcl
+#as = lm / bcl
+as = l1 / bm
 v  = bcl / bm
 puts "as = " + str(as);
 puts "v  = " + str(v);
@@ -143,10 +146,14 @@ rvxq = r * v * x / q;
 puts "rvxq = " + str(rvxq);
 puts
 
-etacl  =          r * v * x**2 * b / ( r * v * x**2 * b + q**2 * p * x + q**3 * p )
+#wrong: lcl = q * p * r * v * x**2 * b * l1 / ( r * v * x**2 * b + q**2 * p * x + q**3 * p )
+#lcl = q * p * r * v * x * b * l1 / ( r * v * x * b + q * r * v * b + q**2 * p )
+
+etacl =              r * v * x * b / ( r * v * x * b + q * r * v * b + q**2 * p )
+#etacl =              r * v * x * b / ( r * v * x * b + q**2 * p )
 puts "etacl = " + str(etacl);
 puts
-speedcl  = q * p* r * v * x**2 * b / ( r * v * x**2 * b + q**2 * p * x + q**3 * p )
+speedcl =    q * p * r * v * x * b / ( r * v * x * b + q * r * v * b + q**2 * p )
 puts "speedcl = " + str(speedcl);
 puts
 
