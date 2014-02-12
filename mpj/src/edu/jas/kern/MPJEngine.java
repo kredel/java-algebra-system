@@ -122,9 +122,9 @@ public final class MPJEngine {
         if (mpiComm == null) {
             return false;
         }
-        if (MPI.Finalized()) {
-            return false;
-        }
+        //if (MPI.Finalized()) { // FMPJ only
+        //    return false;
+        //}
         return true;
     }
 
@@ -221,9 +221,9 @@ public final class MPJEngine {
         if (mpiComm == null) {
             return;
         }
-        if (MPI.Finalized()) {
-            return;
-        }
+        //if (MPI.Finalized()) { // FMPJ only
+        //    return;
+        //}
         try {
             logger.info("terminating MPI on rank = " + mpiComm.Rank());
             mpiComm = null;
