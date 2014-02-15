@@ -255,7 +255,9 @@ public class RecSolvablePolynomialTest extends TestCase {
                         .isONE());
 
         d = (RecSolvablePolynomial<BigRational>) a.monic();
-        assertTrue("a.monic(): ", d.leadingBaseCoefficient().isONE() || d.leadingBaseCoefficient().equals(a.leadingBaseCoefficient()));
+        assertTrue("a.monic(): ",
+                        d.leadingBaseCoefficient().isONE()
+                                        || d.leadingBaseCoefficient().equals(a.leadingBaseCoefficient()));
     }
 
 
@@ -381,8 +383,8 @@ public class RecSolvablePolynomialTest extends TestCase {
         //System.out.println("ring.table.rels = " + ring.table.relationList());
         //System.out.println("ring.coeffTable.rels = " + ring.coeffTable.relationList());
 
-        RecSolvablePolynomialRing<BigRational> ring2 
-           = new RecSolvablePolynomialRing<BigRational>(ring.coFac, ring);
+        RecSolvablePolynomialRing<BigRational> ring2 = new RecSolvablePolynomialRing<BigRational>(ring.coFac,
+                        ring);
         ring2.table.addSolvRelations(ring.table.relationList());
         ring2.coeffTable.addSolvRelations(ring.coeffTable.relationList());
 
@@ -449,24 +451,24 @@ public class RecSolvablePolynomialTest extends TestCase {
         ring.addRelations(wl);
 
         // first distribute solvable polynomial only
-        GenSolvablePolynomialRing<BigRational> fring =  (GenSolvablePolynomialRing) ring;
-        GenSolvablePolynomialRing<BigRational> pfd = fring.<BigRational>distribute();
+        GenSolvablePolynomialRing<BigRational> fring = (GenSolvablePolynomialRing) ring;
+        GenSolvablePolynomialRing<BigRational> pfd = fring.distribute();
         //System.out.println("pfd = " + pfd.toScript());
-        RecSolvablePolynomialRing<BigRational> pfdr 
-            = (RecSolvablePolynomialRing<BigRational>) pfd.recursive(ring.nvar);
+        RecSolvablePolynomialRing<BigRational> pfdr = (RecSolvablePolynomialRing<BigRational>) pfd
+                        .recursive(ring.nvar);
         //System.out.println("pfdr = " + pfdr.toScript());
         //System.out.println("ring = " + ring.toScript());
         assertEquals("ring == pfdr", ring, pfdr);
 
-        RecSolvablePolynomial<BigRational> a = ring.random(kl, 2*ll, el, 2.0f*q);
+        RecSolvablePolynomial<BigRational> a = ring.random(kl, 2 * ll, el, 2.0f * q);
         //System.out.println("a   = " + a);
 
-        GenSolvablePolynomial<BigRational> ad 
-            = (GenSolvablePolynomial<BigRational>) PolyUtil.<BigRational> distribute(pfd, a);
+        GenSolvablePolynomial<BigRational> ad = (GenSolvablePolynomial<BigRational>) PolyUtil
+                        .<BigRational> distribute(pfd, a);
         //System.out.println("ad  = " + ad);
 
-        GenSolvablePolynomial<GenPolynomial<BigRational>> adr 
-            = (GenSolvablePolynomial<GenPolynomial<BigRational>>) PolyUtil.<BigRational> recursive(pfdr,ad);
+        GenSolvablePolynomial<GenPolynomial<BigRational>> adr = (GenSolvablePolynomial<GenPolynomial<BigRational>>) PolyUtil
+                        .<BigRational> recursive(pfdr, ad);
         //System.out.println("adr = " + adr);
         assertEquals("a == adr", a, adr);
 
@@ -477,10 +479,11 @@ public class RecSolvablePolynomialTest extends TestCase {
         ring.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(), rp);
         //System.out.println("ring = " + ring.toScript());
 
-        GenSolvablePolynomialRing<BigRational> pfrd = RecSolvablePolynomialRing.<BigRational> distribute(ring);
+        GenSolvablePolynomialRing<BigRational> pfrd = RecSolvablePolynomialRing
+                        .<BigRational> distribute(ring);
         //System.out.println("pfrd = " + pfrd.toScript());
-        RecSolvablePolynomialRing<BigRational> pfrdr 
-            = (RecSolvablePolynomialRing<BigRational>) pfrd.recursive(ring.nvar);
+        RecSolvablePolynomialRing<BigRational> pfrdr = (RecSolvablePolynomialRing<BigRational>) pfrd
+                        .recursive(ring.nvar);
         //System.out.println("pfrdr = " + pfrdr.toScript());
         //System.out.println("ring = " + ring.toScript());
         assertEquals("ring == pfrdr", ring, pfrdr);
@@ -488,7 +491,7 @@ public class RecSolvablePolynomialTest extends TestCase {
         //System.out.println("a   = " + a);
         ad = (GenSolvablePolynomial<BigRational>) PolyUtil.<BigRational> distribute(pfrd, a);
         //System.out.println("ad  = " + ad);
-        adr = (GenSolvablePolynomial<GenPolynomial<BigRational>>) PolyUtil.<BigRational> recursive(pfrdr,ad);
+        adr = (GenSolvablePolynomial<GenPolynomial<BigRational>>) PolyUtil.<BigRational> recursive(pfrdr, ad);
         //System.out.println("adr = " + adr);
         assertEquals("a == adr", a, adr);
     }
