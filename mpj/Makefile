@@ -12,16 +12,23 @@ LIBPATH=$(HOME)/java/lib
 FMPJ_HOME=$(HOME)/java/fastmpj
 FMPJ_LIB=$(FMPJ_HOME)/lib/mpj.jar
 
+MPJE_HOME=$(HOME)/java/mpj-v0_38
+MPJE_BIN=$(MPJE_HOME)/bin
+
 NP=2
 PPN=3
 
 CLASSPATH=$(LIBPATH)/log4j.jar:$(LIBPATH)/junit.jar:$(FMPJ_LIB):$(JASPATH)
 #$(LIBPATH)/jas.jar
+CLASSPATHE=$(LIBPATH)/log4j.jar:$(LIBPATH)/junit.jar:$(JASPATH)
 
 #FMPJ_RUNLIB=$(FMPJ_HOME)/lib/runtime.jar
 #FMPJ_CMD=java -cp $(FMPJ_RUNLIB) runtime.FMPJRun -dev niodev -cp $(CLASSPATH):jas-mpj.jar
 FMPJ_CMD=$(FMPJ_HOME)/bin/fmpjrun -dev niodev -dmap -cp $(CLASSPATH):jas-mpj.jar
 #FMPJ_CMD=$(FMPJ_HOME)/bin/fmpjrun -dev psmdev -dmap -cp $(CLASSPATH):jas-mpj.jar
+
+#MPJE_CMD=$(MPJE_HOME)/bin/mpjrun.sh -dev niodev -cp $(CLASSPATHE):jas-mpj.jar
+MPJE_CMD=mpjrun.sh -dev niodev -cp $(CLASSPATHE):jas-mpj.jar
 
 #DOCOPTS=-package
 DOCOPTS=-package -author -version -linksource -overview overview.html
@@ -80,6 +87,11 @@ gbtest: jas-mpj.jar
 
 gbhybtest: jas-mpj.jar
 	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -np $(NP) -machinefile $(MFILE) -class edu.jas.gb.GroebnerBaseDistHybridMPJTest 
+
+
+mpjetest: jas-mpj.jar 
+	export PATH=$(PATH):$(MPJE_BIN); export MPJ_HOME=$(MPJE_HOME); $(MPJE_CMD) -np $(NP) edu.jas.application.RunMPJGB disthybmpj $(EFILE) $(NP)/$(PPN) $(MFILE) 
+#nolog nocheck
 
 
 doc: $(FILES)
