@@ -188,10 +188,10 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             // g * d = c
             logger.info("content gcd = " + d + ", g = " + g + ", f = " + f);
             r = onep.multiply(g,f,d,zero); // right: (g f) * 1 * (d zero)
-            //System.out.println("content r   = " + r);
+            System.out.println("content r   = " + r);
             p = (RecSolvablePolynomial<C>) p.subtract(r);
             c = (GenSolvablePolynomial<C>) p.leadingBaseCoefficient();
-            //System.out.println("content p_2 = " + p);
+            System.out.println("content p_2 = " + p);
             if ( !c.remainder(d).isZERO() ) { // restart
                 d = gcd(d, c); // go to recursion
                 if (d.isONE()) {
@@ -911,6 +911,41 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             return oc;
         }
         oc = syz.leftOreCond(a, b);
+        //logger.info("Ore multiple: " + oc[0].multiply(a) + ", " + Arrays.toString(oc));
+        return oc;
+    }
+
+
+    /** 
+     * Right Ore condition. Generators for the right Ore condition of two solvable
+     * polynomials.
+     * @param a solvable polynomial
+     * @param b solvable polynomial
+     * @return [p,q] with a*p = b*q
+     */
+    public GenSolvablePolynomial<C>[] rightOreCond(GenSolvablePolynomial<C> a, GenSolvablePolynomial<C> b) {
+        if (a == null || a.isZERO() || b == null || b.isZERO()) {
+            throw new IllegalArgumentException("a and b must be non zero");
+        }
+        GenSolvablePolynomialRing<C> pfac = a.ring;
+        GenSolvablePolynomial<C>[] oc = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[2];
+        if (a.equals(b)) {
+            oc[0] = pfac.getONE();
+            oc[1] = pfac.getONE();
+            return oc;
+        }
+        if (pfac.isCommutative()) {
+            logger.info("right Ore condition, polynomial commutative case: " + a + ", " + b);
+            edu.jas.ufd.GreatestCommonDivisorAbstract<C> cgcd = GCDFactory.<C> getImplementation(pfac.coFac);
+            GenSolvablePolynomial<C> lcm = (GenSolvablePolynomial<C>) cgcd.lcm(a, b);
+            //oc[0] = FDUtil.<C> basePseudoQuotient(lcm, a);
+            //oc[1] = FDUtil.<C> basePseudoQuotient(lcm, b);
+            oc[0] = (GenSolvablePolynomial<C>) PolyUtil.<C> basePseudoDivide(lcm, a);
+            oc[1] = (GenSolvablePolynomial<C>) PolyUtil.<C> basePseudoDivide(lcm, b);
+            logger.info("Ore multiple: " + lcm + ", " + Arrays.toString(oc));
+            return oc;
+        }
+        oc = syz.rightOreCond(a, b);
         //logger.info("Ore multiple: " + oc[0].multiply(a) + ", " + Arrays.toString(oc));
         return oc;
     }
