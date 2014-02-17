@@ -339,23 +339,29 @@ public class FDUtilTest extends TestCase {
         ll = 5;
         el = 6;
 
-        //arr = rrfac.random(kl, ll, el, q);
+        //arr = rrfac.random(kl, ll, el+1, q);
         //arr = rrfac.parse("( ( -167/150 ) y^2 - 5/23  ) z^5 - ( 1260/551 y^2 - 143/35 y - 33/100  ) z - ( 1/3 y^2 + 419/299 y - 19/56  )");
         //arr = rrfac.parse("( y^2 - 5/23  ) z^5 - ( 1260/551 y^2 - 143/35 y - 33/100  ) z - ( 1/3 y^2 + 419/299 y - 19/56  )");
-        arr = rrfac.parse("z^5 - ( 1260/551 y^2 - 143/35 y - 33/100  ) z - ( 1/3 y^2 + 419/299 y - 19/56  )");
+        //arr = rrfac.parse("z^5 - ( 1260/551 y^2 - 143/35 y - 33/100  ) z - ( 1/3 y^2 + 419/299 y - 19/56  )");
+        // b * q + r:
+        //arr = rrfac.parse("(z^3 - ( 377/140 y^2 + 211/232 y + 1213967/85560  )) * z^2 + ( y + 1 ) z^2 ");
+        //arr = rrfac.parse("( ( -5/18 ) y - 17/12  ) z^5 + ( y^2 - 27/28 y + 20/9  ) z^2 - ( 338/23 y^2 - 491/378 y + 2559/476 )");
+        arr = rrfac.parse("z^5 + z^2 - 1");
         System.out.println("arr  = " + arr);
 
         //brr = rrfac.random(kl, ll, el, q);
         //brr = rrfac.parse("( ( -4/5 ) y^2 + 15/11 y - 8/15  ) z^3 - ( 377/140 y^2 + 211/232 y + 1213967/85560  )");
         //brr = rrfac.parse("( y^2 + 15/11 y - 8/15  ) z^3 - ( 377/140 y^2 + 211/232 y + 1213967/85560  )");
-        brr = rrfac.parse("z^3 - ( 377/140 y^2 + 211/232 y + 1213967/85560  )");
+        //brr = rrfac.parse("z^3 - ( 377/140 y^2 + 211/232 y + 1213967/85560  )");
+        //brr = rrfac.parse("( 25/18 y + 73/143  ) z^3 - ( 29/27 y + 53/5  ) z^2 + ( 2117/510 y^2 - 1/2 y + 577/168  )");
+        brr = rrfac.parse("( y ) z^3 - ( 1 ) z + ( 2 )");
         System.out.println("brr  = " + brr);
 
         // left division
         drr = FDUtil.<BigRational> recursivePseudoQuotient(arr, brr);
         crr = FDUtil.<BigRational> recursiveSparsePseudoRemainder(arr, brr);
-        System.out.println("qr  = " + drr);
-        System.out.println("rr  = " + crr);
+        //System.out.println("qr  = " + drr);
+        //System.out.println("rr  = " + crr);
 
         QR = FDUtil.<BigRational> recursivePseudoQuotientRemainder(arr, brr);
         assertEquals("drr == QR[0]: ", drr, QR[0]);
@@ -367,18 +373,19 @@ public class FDUtilTest extends TestCase {
         assertTrue("ore(lc^n) a = q b + r: " + crr, t); // ?? 
 
         // right division
-        drr = FDUtil.<BigRational> recursiveRightPseudoQuotient(arr, brr);
-        crr = FDUtil.<BigRational> recursiveRightSparsePseudoRemainder(arr, brr);
+        //drr = FDUtil.<BigRational> recursiveRightPseudoQuotient(arr, brr);
+        //crr = FDUtil.<BigRational> recursiveRightSparsePseudoRemainder(arr, brr);
+        QR = FDUtil.<BigRational> recursiveRightPseudoQuotientRemainder(arr, brr);
+        drr = QR[0];
+        crr = QR[1];
         System.out.println("qr  = " + drr);
         System.out.println("rr  = " + crr);
-
-        QR = FDUtil.<BigRational> recursiveRightPseudoQuotientRemainder(arr, brr);
-        assertEquals("drr == QR[0]: ", drr, QR[0]);
-        assertEquals("crr == QR[1]: ", crr, QR[1]);
+        //assertEquals("drr == QR[0]: ", drr, QR[0]);
+        //assertEquals("crr == QR[1]: ", crr, QR[1]);
 
         t = FDUtil.<BigRational> isRecursiveRightPseudoQuotientRemainder(arr, brr, drr, crr);
         //System.out.println("FDQR: a ore(lc^n) == b q + r: " + t);
-        assertTrue("ore(lc^n) a = b q + r: " + crr, t); // ?? 
+        assertTrue("a ore(lc^n) = b q + r: " + crr, t); // ?? 
     }
 
 
