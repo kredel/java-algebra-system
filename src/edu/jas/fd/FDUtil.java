@@ -623,8 +623,6 @@ public class FDUtil {
         //    ret[1] = S.ring.getZERO();
         //    return ret;
         //}
-        //GenPolynomial<C> c = S.leadingBaseCoefficient();
-        //SolvableSyzygyAbstract<C> syz = new SolvableSyzygyAbstract<C>();
         GreatestCommonDivisorAbstract<C> fd = new GreatestCommonDivisorSimple<C>();
 
         ExpVector e = S.leadingExpVector();
@@ -638,8 +636,8 @@ public class FDUtil {
                 h = S.multiply(f); // coeff c, exp e (f/e)
                 hr = FDUtil.<C> rightRecursivePolynomial(h); 
                 rr = FDUtil.<C> rightRecursivePolynomial(r); 
-                System.out.println("right(h)= " +  hr + ",  h = " +  h);
-                System.out.println("right(r)= " +  rr + ",  r = " +  r);
+                //System.out.println("right(h)= " +  hr + ",  h = " +  h);
+                //System.out.println("right(r)= " +  rr + ",  r = " +  r);
                 GenSolvablePolynomial<C> a = (GenSolvablePolynomial<C>) rr.leadingBaseCoefficient();
                 GenSolvablePolynomial<C> d = (GenSolvablePolynomial<C>) hr.leadingBaseCoefficient();
                 GenSolvablePolynomial<C>[] oc = fd.rightOreCond(a, d);
@@ -659,7 +657,7 @@ public class FDUtil {
                 qr = FDUtil.<C> multiplyRightRecursivePolynomial(qr,ga); // d
                 qr = (GenSolvablePolynomial<GenPolynomial<C>>) qr.sum(gd, f); // a // same for right coefficients
                 r = (GenSolvablePolynomial<GenPolynomial<C>>) r.subtract(h);
-                System.out.println("r = " +  r + ", qr = " +  qr);
+                //System.out.println("r = " +  r + ", qr = " +  qr);
             } else {
                 break;
             }
