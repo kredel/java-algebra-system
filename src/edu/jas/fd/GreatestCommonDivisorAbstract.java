@@ -916,6 +916,47 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
     }
 
 
+    /**
+     * Coefficient rigth Ore condition. Generators for the right Ore condition of two 
+     * coefficients. 
+     * @param a coefficient.
+     * @param b coefficient.
+     * @return [oa, ob] = rightOreCond(a,b), with a*oa == b*ob.
+     */
+    public C[] rightOreCond(C a, C b) {
+        if (a == null || a.isZERO() || b == null || b.isZERO()) {
+            throw new IllegalArgumentException("a and b must be non zero");
+        }
+        C[] oc = (C[]) new GcdRingElem[2];
+        if (a instanceof GenSolvablePolynomial && b instanceof GenSolvablePolynomial) {
+            GenSolvablePolynomial ap = (GenSolvablePolynomial) a;
+            GenSolvablePolynomial bp = (GenSolvablePolynomial) b;
+            GenSolvablePolynomial[] ocp = rightOreCond(ap,bp);
+            oc[0] = (C) ocp[0];
+            oc[1] = (C) ocp[1];
+            return oc;
+        }
+        RingFactory<C> rf = (RingFactory<C>) a.factory();
+        if (a.equals(b)) {
+            oc[0] = rf.getONE();
+            oc[1] = rf.getONE();
+            return oc;
+        }
+        if (rf.isCommutative()) {
+            logger.info("right Ore condition on coefficients, commutative case: " + a + ", " + b);
+            C gcd = a.gcd(b);
+            C p = a.multiply(b);
+            C lcm = p.divide(gcd);
+            oc[0] = lcm.divide(a);
+            oc[1] = lcm.divide(b);
+            logger.info("Ore multiple: " + lcm + ", " + Arrays.toString(oc));
+            return oc;
+        }
+        throw new UnsupportedOperationException("rightOreCond not implemented for " + rf.toScript());
+        //return oc;
+    }
+
+
     /** 
      * Right Ore condition. Generators for the right Ore condition of two solvable
      * polynomials.

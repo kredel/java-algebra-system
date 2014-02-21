@@ -49,7 +49,7 @@ public class FDUtil {
      * @param <C> coefficient type.
      * @param P GenSolvablePolynomial.
      * @param S nonzero GenSolvablePolynomial.
-     * @return remainder with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
+     * @return remainder with ore(ldcf(S)<sup>m'</sup>) P = quotient * S + remainder.
      *         m' &le; deg(P)-deg(S)
      * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
      */
@@ -64,6 +64,7 @@ public class FDUtil {
         if (S.isConstant()) {
             return P.ring.getZERO();
         }
+        // TODO: is only for non RecSolvablePolynomial or coeffTable is empty
         GreatestCommonDivisorAbstract<C> fd = new GreatestCommonDivisorSimple<C>();
         ExpVector e = S.leadingExpVector();
         GenSolvablePolynomial<C> h;
@@ -73,9 +74,8 @@ public class FDUtil {
             if (f.multipleOf(e)) {
                 C a = r.leadingBaseCoefficient();
                 f = f.subtract(e);
-
                 h = S.multiplyLeft(f); // coeff a
-                System.out.println("bSPR: h = " +  h + ",  f = " +  f + ",  S = " +  S);
+                //System.out.println("bSPR: h = " +  h + ",  f = " +  f + ",  S = " +  S);
                 C c = h.leadingBaseCoefficient();
                 // need ga, gc: ga a = gc c
                 C[] oc = fd.leftOreCond(a,c);
@@ -83,7 +83,6 @@ public class FDUtil {
                 C gc = oc[1];
                 r = r.multiplyLeft(ga); // coeff ga a, exp f
                 h = h.multiplyLeft(gc); // coeff gc c, exp f
-
                 r = (GenSolvablePolynomial<C>) r.subtract(h);
             } else {
                 break;
@@ -99,7 +98,7 @@ public class FDUtil {
      * @param <C> coefficient type.
      * @param P GenSolvablePolynomial.
      * @param S nonzero GenSolvablePolynomial.
-     * @return remainder with ldcf(S)<sup>m'</sup> P = S * quotient + remainder.
+     * @return remainder with P ore(ldcf(S)<sup>m'</sup>) = S * quotient + remainder.
      *         m' &le; deg(P)-deg(S)
      * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
      */
@@ -114,6 +113,7 @@ public class FDUtil {
         if (S.isConstant()) {
             return P.ring.getZERO();
         }
+        // TODO: is only for non RecSolvablePolynomial or coeffTable is empty
         GreatestCommonDivisorAbstract<C> fd = new GreatestCommonDivisorSimple<C>();
         ExpVector e = S.leadingExpVector();
         GenSolvablePolynomial<C> h;
@@ -122,21 +122,18 @@ public class FDUtil {
             ExpVector f = r.leadingExpVector();
             if (f.multipleOf(e)) {
                 f = f.subtract(e);
-
                 h = S.multiply(f); // coeff a
-                System.out.println("bSPRRight: h = " +  h + ",  f = " +  f + ",  S = " +  S);
-
+                //System.out.println("bSPRRight: h = " +  h + ",  f = " +  f + ",  S = " +  S);
                 C a = r.leadingBaseCoefficient();
                 C c = h.leadingBaseCoefficient();
                 // need ga, gc: ga a = gc c
-                //C[] oc = fd.leftOreCond(a,c);
-                //C ga = oc[0];
-                //C gc = oc[1];
+                C[] oc = fd.rightOreCond(a,c);
+                C ga = oc[0];
+                C gc = oc[1];
                 //r = r.multiplyLeft(ga); // coeff ga a, exp f
                 //h = h.multiplyLeft(gc); // coeff gc c, exp f
-                r = r.multiply(c);     // coeff a c, exp f
-                h = h.multiplyLeft(a); // coeff a c, exp f
-
+                r = r.multiply(ga);     // coeff a c, exp f
+                h = h.multiply(gc);     // coeff a c, exp f
                 r = (GenSolvablePolynomial<C>) r.subtract(h);
             } else {
                 break;
@@ -189,6 +186,7 @@ public class FDUtil {
             ret[1] = S.ring.getZERO();
             return ret;
         }
+        // TODO: is only for non RecSolvablePolynomial or coeffTable is empty
         GreatestCommonDivisorAbstract<C> fd = new GreatestCommonDivisorSimple<C>();
         ExpVector e = S.leadingExpVector();
         GenSolvablePolynomial<C> h;
@@ -203,30 +201,19 @@ public class FDUtil {
                 f = f.subtract(e);
                 h = S.multiplyLeft(f); // coeff a
                 C c = h.leadingBaseCoefficient();
-
-                C x = a.remainder(c);
-                if (false&&x.isZERO()) {
-                    C y = a.divide(c);
-                    q = (GenSolvablePolynomial<C>) q.sum(y, f);
-                    h = S.multiply(y, f); // coeff a
-                } else {
-                    // need ga, gc: ga a = gc c
-                    C[] oc = fd.leftOreCond(a,c);
-                    C ga = oc[0];
-                    C gc = oc[1];
-                    r = r.multiplyLeft(ga); // coeff ga a, exp f
-                    h = h.multiplyLeft(gc); // coeff gc c, exp f
-                    q = q.multiplyLeft(ga); // c
-                    q = (GenSolvablePolynomial<C>) q.sum(gc, f); // a
-                }
-
+                // need ga, gc: ga a = gc c
+                C[] oc = fd.leftOreCond(a,c);
+                C ga = oc[0];
+                C gc = oc[1];
+                r = r.multiplyLeft(ga); // coeff ga a, exp f
+                h = h.multiplyLeft(gc); // coeff gc c, exp f
+                q = q.multiplyLeft(ga); // c
+                q = (GenSolvablePolynomial<C>) q.sum(gc, f); // a
                 r = (GenSolvablePolynomial<C>) r.subtract(h);
             } else {
                 break;
             }
         }
-        //GenPolynomial<C> rhs = q.multiply(S).sum(r);
-        //GenPolynomial<C> lhs = P;
         ret[0] = q;
         ret[1] = r;
         return ret;
