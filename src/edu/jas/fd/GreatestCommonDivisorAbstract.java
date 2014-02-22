@@ -186,18 +186,19 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             }
             g = (GenSolvablePolynomial<C>) c.divide(d);
             // g * d = c
-            logger.info("content gcd = " + d + ", g = " + g + ", f = " + f);
+            logger.info("content d = " + d); // + ", g = " + g + ", f = " + f);
             r = onep.multiply(g,f,d,zero); // right: (g f) * 1 * (d zero)
-            System.out.println("content r   = " + r);
+            //System.out.println("content r   = " + r);
             p = (RecSolvablePolynomial<C>) p.subtract(r);
             c = (GenSolvablePolynomial<C>) p.leadingBaseCoefficient();
-            System.out.println("content p_2 = " + p);
+            //System.out.println("content p_2 = " + p);
             if ( !c.remainder(d).isZERO() ) { // restart
                 d = gcd(d, c); // go to recursion
+                logger.info("content d_2 = " + d);
                 if (d.isONE()) {
                     return d;
                 }
-                System.out.println("content restart d_2 = " + d);
+                //System.out.println("content restart");
                 p = (RecSolvablePolynomial<C>) P; // restart
             }
         }
@@ -266,7 +267,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         if(debug) {
            logger.info("content(P) = " + d);
         }
-        GenSolvablePolynomial<GenPolynomial<C>> pp = FDUtil.<C> recursiveRightDivide(P, d);
+        GenSolvablePolynomial<GenPolynomial<C>> pp = FDUtil.<C> recursiveDivide(P, d);
         return pp;
     }
 

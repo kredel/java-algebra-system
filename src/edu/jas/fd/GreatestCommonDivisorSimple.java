@@ -157,8 +157,8 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
 
         GenSolvablePolynomial<C> c = gcd(a, b); // go to recursion
         logger.info("Gcd(contents) c = " + c);
-        r = FDUtil.<C> recursiveRightDivide(r, a);
-        q = FDUtil.<C> recursiveRightDivide(q, b);
+        r = FDUtil.<C> recursiveDivide(r, a);
+        q = FDUtil.<C> recursiveDivide(q, b);
         if (r.isONE()) {
             return r.multiply(c);
         }
