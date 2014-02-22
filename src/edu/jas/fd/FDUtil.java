@@ -64,7 +64,12 @@ public class FDUtil {
         if (S.isConstant()) {
             return P.ring.getZERO();
         }
-        // TODO: is only for non RecSolvablePolynomial or coeffTable is empty
+        if (P instanceof RecSolvablePolynomial) {
+            RecSolvablePolynomial<C> Pr = (RecSolvablePolynomial) P;
+            if (!Pr.ring.coeffTable.isEmpty()) {
+                throw new UnsupportedOperationException("RecSolvablePolynomial with twisted coeffs not supported");
+            }
+        }
         GreatestCommonDivisorAbstract<C> fd = new GreatestCommonDivisorSimple<C>();
         ExpVector e = S.leadingExpVector();
         GenSolvablePolynomial<C> h;
@@ -113,7 +118,12 @@ public class FDUtil {
         if (S.isConstant()) {
             return P.ring.getZERO();
         }
-        // TODO: is only for non RecSolvablePolynomial or coeffTable is empty
+        if (P instanceof RecSolvablePolynomial) {
+            RecSolvablePolynomial<C> Pr = (RecSolvablePolynomial) P;
+            if (!Pr.ring.coeffTable.isEmpty()) {
+                throw new UnsupportedOperationException("RecSolvablePolynomial with twisted coeffs not supported");
+            }
+        }
         GreatestCommonDivisorAbstract<C> fd = new GreatestCommonDivisorSimple<C>();
         ExpVector e = S.leadingExpVector();
         GenSolvablePolynomial<C> h;
@@ -186,7 +196,12 @@ public class FDUtil {
             ret[1] = S.ring.getZERO();
             return ret;
         }
-        // TODO: is only for non RecSolvablePolynomial or coeffTable is empty
+        if (P instanceof RecSolvablePolynomial) {
+            RecSolvablePolynomial<C> Pr = (RecSolvablePolynomial) P;
+            if (!Pr.ring.coeffTable.isEmpty()) {
+                throw new UnsupportedOperationException("RecSolvablePolynomial with twisted coeffs not supported");
+            }
+        }
         GreatestCommonDivisorAbstract<C> fd = new GreatestCommonDivisorSimple<C>();
         ExpVector e = S.leadingExpVector();
         GenSolvablePolynomial<C> h;
