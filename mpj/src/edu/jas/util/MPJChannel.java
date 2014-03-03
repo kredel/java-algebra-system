@@ -63,7 +63,7 @@ public final class MPJChannel {
      * true: use TCP/IP socket layer, false: use MPI transport layer.
      * Can be set to false for "niodev" with FastMPJ.
      */
-    static final boolean useTCP = true;
+    static final boolean useTCP = false;
 
 
     /*
