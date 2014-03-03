@@ -906,7 +906,16 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             logger.info("Ore multiple: lcm=" + lcm + ", gcd=" + gcd + ", " + Arrays.toString(oc));
             return oc;
         }
-        throw new UnsupportedOperationException("leftOreCond not implemented for " + rf.toScript());
+        if (rf.isField()) { // non-commutative
+            logger.info("left Ore condition on coefficients, field case: " + a + ", " + b);
+            //C gcd = a.gcd(b); // always one 
+            //C lcm = rf.getONE();
+            oc[0] = a.inverse(); //lcm.divide(a);
+            oc[1] = b.inverse(); //lcm.divide(b);
+            logger.info("Ore multiple: " + Arrays.toString(oc));
+            return oc;
+        }
+        throw new UnsupportedOperationException("leftOreCond not implemented for " + rf.getClass() + ", rf = " + rf.toScript());
         //return oc;
     }
 
@@ -997,7 +1006,16 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             logger.info("Ore multiple: " + lcm + ", " + Arrays.toString(oc));
             return oc;
         }
-        throw new UnsupportedOperationException("rightOreCond not implemented for " + rf.toScript());
+        if (rf.isField()) { // non-commutative
+            logger.info("right Ore condition on coefficients, field case: " + a + ", " + b);
+            //C gcd = a.gcd(b); // always one 
+            //C lcm = rf.getONE();
+            oc[0] = a.inverse(); //lcm.divide(a);
+            oc[1] = b.inverse(); //lcm.divide(b);
+            logger.info("Ore multiple: " + Arrays.toString(oc));
+            return oc;
+        }
+        throw new UnsupportedOperationException("rightOreCond not implemented for " + rf.getClass() + ", rf = " + rf.toScript());
         //return oc;
     }
 
