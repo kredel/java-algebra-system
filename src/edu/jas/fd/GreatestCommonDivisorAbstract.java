@@ -185,8 +185,13 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
                 return d;
             }
             GenSolvablePolynomial<C>[] QR = FDUtil.<C> basePseudoQuotientRemainder(c, d);
+            GenSolvablePolynomial<C> cc = (GenSolvablePolynomial<C>) QR[0].multiply(d).sum(QR[1]);
+            if ( !cc.equals(c) ) {
+                System.out.println("bDiv, c     = " + c + ", d     = " + d + ", g     = " + QR[0]);
+                throw new RuntimeException("something is wrong: cc = " + cc);
+            }
             if ( !QR[1].isZERO() ) {
-                System.out.println("bDiv, c     = " + c + ", d     = " + d + ", g     = " + g);
+                System.out.println("bDiv, c     = " + c + ", d     = " + d + ", g     = " + QR[0]);
                 throw new RuntimeException("something is wrong: rem = " + QR[1]);
             }
             g = QR[0];
@@ -871,19 +876,29 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             return oc;
         }
         RingFactory<C> rf = (RingFactory<C>) a.factory();
-        if (a.equals(b)) {
+        if (a.equals(b)) { // required because of rationals gcd
             oc[0] = rf.getONE();
             oc[1] = rf.getONE();
+            return oc;
+        }
+        if (a.equals(b.negate())) { // required because of rationals gcd
+            oc[0] = rf.getONE();
+            oc[1] = rf.getONE().negate();
             return oc;
         }
         if (rf.isCommutative()) {
             logger.info("left Ore condition on coefficients, commutative case: " + a + ", " + b);
             C gcd = a.gcd(b);
+            if (gcd.isONE()) {
+               oc[0] = b;
+               oc[1] = a;
+               return oc;
+            }
             C p = a.multiply(b);
             C lcm = p.divide(gcd);
             oc[0] = lcm.divide(a);
             oc[1] = lcm.divide(b);
-            logger.info("Ore multiple: " + lcm + ", " + Arrays.toString(oc));
+            logger.info("Ore multiple: lcm=" + lcm + ", gcd=" + gcd + ", " + Arrays.toString(oc));
             return oc;
         }
         throw new UnsupportedOperationException("leftOreCond not implemented for " + rf.toScript());
@@ -907,6 +922,11 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         if (a.equals(b)) {
             oc[0] = pfac.getONE();
             oc[1] = pfac.getONE();
+            return oc;
+        }
+        if (a.equals(b.negate())) {
+            oc[0] = pfac.getONE();
+            oc[1] = (GenSolvablePolynomial<C>) pfac.getONE().negate();
             return oc;
         }
         if (pfac.isCommutative()) {
@@ -947,14 +967,24 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             return oc;
         }
         RingFactory<C> rf = (RingFactory<C>) a.factory();
-        if (a.equals(b)) {
+        if (a.equals(b)) { // required because of rationals gcd
             oc[0] = rf.getONE();
             oc[1] = rf.getONE();
+            return oc;
+        }
+        if (a.equals(b.negate())) { // required because of rationals gcd
+            oc[0] = rf.getONE();
+            oc[1] = rf.getONE().negate();
             return oc;
         }
         if (rf.isCommutative()) {
             logger.info("right Ore condition on coefficients, commutative case: " + a + ", " + b);
             C gcd = a.gcd(b);
+            if (gcd.isONE()) {
+               oc[0] = b;
+               oc[1] = a;
+               return oc;
+            }
             C p = a.multiply(b);
             C lcm = p.divide(gcd);
             oc[0] = lcm.divide(a);
@@ -983,6 +1013,11 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         if (a.equals(b)) {
             oc[0] = pfac.getONE();
             oc[1] = pfac.getONE();
+            return oc;
+        }
+        if (a.equals(b.negate())) {
+            oc[0] = pfac.getONE();
+            oc[1] = (GenSolvablePolynomial<C>) pfac.getONE().negate();
             return oc;
         }
         if (pfac.isCommutative()) {
