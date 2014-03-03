@@ -195,7 +195,7 @@ public class GCDSimpleTest extends TestCase {
         //br = rfac.random(kl, ll, el, q);
         //cr = rfac.random(kl, ll, el, q);
         //cr = (RecSolvablePolynomial<BigRational>) cr.abs();
-        cr = (RecSolvablePolynomial<BigRational>) PolyUtil.<BigRational> monic(cr);
+        //cr = (RecSolvablePolynomial<BigRational>) PolyUtil.<BigRational> monic(cr);
         //cr = (RecSolvablePolynomial<BigRational>) fd.recursivePrimitivePart(cr).abs();
         //cr = rfac.getONE();
         //cr = rfac.parse("a+b+c+d");
@@ -203,12 +203,14 @@ public class GCDSimpleTest extends TestCase {
         //ar = rfac.parse("( ( -31/19 )  ) b^3 - ( 781/260 a - 641/372  )");
         //br = rfac.parse("( ( -1/5 ) a - 1/4  ) b^2 - 11/12  b - ( 47/17 a + 29/30  )");
         //cr = rfac.parse(" ( a + 9/8  ) b + ( 285/208 a + 191/280  )");
-        //br = rfac.parse("( a ) b^2 - 1/2  b - ( a + 2/3  )");
-        //cr = rfac.parse("( a ) b + ( a + 1/8 )");
-
         ar = rfac.parse("b^3 - ( a )");
         br = rfac.parse("( a ) b^2 - 1/2 b");
-        cr = rfac.parse("b + ( a )");
+        //cr = rfac.parse("b + ( a )");
+        cr = rfac.parse("(a^2 + a) b + 4");
+
+        //ar = rfac.parse("( 2/23 a - 1/2  ) b^3 + 617/672  b^2 - ( 5 a + 307/154  )");
+        //br = rfac.parse("( ( -673/330 )  ) b - ( 2/5 a - 566969/1651860  )");
+        //cr = rfac.parse("( a - 2287945/213324  )");
 
         System.out.println("ar = " + ar);
         System.out.println("br = " + br);
@@ -233,6 +235,7 @@ public class GCDSimpleTest extends TestCase {
         //System.out.println("dr/cr = " + er);
 
         er = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveSparsePseudoRemainder(dr, cr);
+        //er = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveRightSparsePseudoRemainder(dr, cr);
         System.out.println("er = " + er);
         assertTrue("c | gcd(ac,bc) " + er, er.isZERO());
 
