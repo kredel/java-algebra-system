@@ -702,7 +702,7 @@ public class FDUtil {
                 System.out.println("rDiv, P  = " + P);
                 System.out.println("rDiv, c1 = " + c1);
                 System.out.println("rDiv, s  = " + s);
-                System.out.println("rDiv, c  = " + c);
+                System.out.println("rDiv, c  = " + c + ", r = " + QR[1]);
                 throw new RuntimeException("something is wrong: rem = " + QR[1]);
             }
             if (!c.isZERO()) {

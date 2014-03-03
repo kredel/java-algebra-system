@@ -128,8 +128,7 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
         boolean field = P.leadingBaseCoefficient().ring.coFac.isField();
         long e = P.degree(0);
         long f = S.degree(0);
-        GenSolvablePolynomial<GenPolynomial<C>> q;
-        GenSolvablePolynomial<GenPolynomial<C>> r;
+        GenSolvablePolynomial<GenPolynomial<C>> q, r, qr, rr;
         if (f > e) {
             r = P;
             q = S;
@@ -157,8 +156,14 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
 
         GenSolvablePolynomial<C> c = gcd(a, b); // go to recursion
         logger.info("Gcd(contents) c = " + c);
-        r = FDUtil.<C> recursiveRightDivide(r, a);
-        q = FDUtil.<C> recursiveRightDivide(q, b);
+        try {
+            rr = FDUtil.<C> recursiveRightDivide(r, a);
+            qr = FDUtil.<C> recursiveRightDivide(q, b);
+            r = rr;
+            q = qr;
+        } catch (RuntimeException ex) {
+            //ex.printStackTrace();
+        }
         if (r.isONE()) {
             return r.multiply(c);
         }
@@ -167,7 +172,7 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
         }
         GenSolvablePolynomial<GenPolynomial<C>> x;
         if (debug) {
-            logger.debug("r.ring = " + r.ring.toScript());
+            logger.info("r.ring = " + r.ring.toScript());
         }
         while (!r.isZERO()) { //&& r.degree()>0
             if (debug) {
@@ -192,7 +197,6 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
             q = r;
         }
         if (debug) {
-            //logger.info("var = " + P.ring.varsToString() + ", gcd(pp) = " + q);
             logger.info("gcd(pp) = " + q); // + ", ring = " + P.ring.toScript());
         }
         // multiply left:

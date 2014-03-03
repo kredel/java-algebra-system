@@ -206,7 +206,6 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends Gr
             } 
         }
         if (debug) {
-            //logger.info("var = " + P.ring.varsToString() + ", gcd(pp) = " + q);
             logger.info("gcd(pp) = " + q + ", ring = " + P.ring.toScript());
         }
         q = (GenSolvablePolynomial<GenPolynomial<C>>) q.abs().multiply(qp).multiply(c);
