@@ -754,13 +754,19 @@ public class FDUtil {
         RecSolvablePolynomial<C> q = rfac.getZERO();
         RecSolvablePolynomial<C> r;
         RecSolvablePolynomial<C> p = (RecSolvablePolynomial<C>) P;
-        System.out.println("recRightDivide: p = " + p + ", s = " + s);
+        //System.out.println("recRightDivide: p = " + p + ", s = " + s);
         while (!p.isZERO()) {
             ExpVector f = p.leadingExpVector();
-            GenPolynomial<C> a = p.leadingBaseCoefficient();
-            //GenSolvablePolynomial<C> c = FDUtil.<C> basePseudoQuotient(c1, s);
-            //GenSolvablePolynomial<C>[] QR = FDUtil.<C> basePseudoQuotientRemainder(c1, s);
-            GenSolvablePolynomial<C> c = (GenSolvablePolynomial<C>) a.divide(s);
+            GenSolvablePolynomial<C> a = (GenSolvablePolynomial<C>) p.leadingBaseCoefficient();
+            //GenSolvablePolynomial<C> c = FDUtil.<C> basePseudoQuotient(a, s);
+            GenSolvablePolynomial<C>[] QR = FDUtil.<C> basePseudoQuotientRemainder(a, s);
+            //GenSolvablePolynomial<C> c = (GenSolvablePolynomial<C>) a.divide(s);
+            //System.out.println("content QR[1] = " + QR[1]);
+            if ( !QR[1].isZERO() || !a.remainder(s).isZERO() ) {
+                logger.info("no exact division, rem = " + a.remainder(s));
+                throw new RuntimeException("no exact division: r = " + QR[1]);
+            }
+            GenSolvablePolynomial<C> c = QR[0];
             // c * s = a
             if (c.isZERO()) {
                 System.out.println("rDiv, P  = " + P);
@@ -769,9 +775,9 @@ public class FDUtil {
                 System.out.println("rDiv, c  = " + c);
                 throw new RuntimeException("something is wrong: c is zero");
             }
-            System.out.println("recRightDivide: a = " + a + ", c = " + c + ", f = " + f);
+            //System.out.println("recRightDivide: a = " + a + ", c = " + c + ", f = " + f);
             r = onep.multiply(c,f,s,zero); // right: (c f) * 1 * (s zero)
-            System.out.println("content r   = " + r);
+            //System.out.println("recRightDivide: r   = " + r);
             p = (RecSolvablePolynomial<C>) p.subtract(r);
             q = (RecSolvablePolynomial<C>) q.sum(c,f);
         }
