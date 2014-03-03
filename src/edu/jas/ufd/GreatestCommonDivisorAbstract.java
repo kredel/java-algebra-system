@@ -336,6 +336,9 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         if (a == null || a.isZERO()) {
             return b;
         }
+        if (a.equals(b) || a.equals(b.negate())) { // because of rationals gcd
+            return a.abs();
+        }
         return a.gcd(b);
     }
 
