@@ -38,7 +38,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
     private static final Logger logger = Logger.getLogger(GreatestCommonDivisorAbstract.class);
 
 
-    private final boolean debug = logger.isDebugEnabled();
+    private final boolean debug = true || logger.isDebugEnabled();
 
 
     /**
@@ -184,23 +184,32 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             if (d.isONE()) {
                 return d;
             }
-            g = (GenSolvablePolynomial<C>) c.divide(d);
+            GenSolvablePolynomial<C>[] QR = FDUtil.<C> basePseudoQuotientRemainder(c, d);
+            if ( !QR[1].isZERO() ) {
+                System.out.println("bDiv, c     = " + c + ", d     = " + d + ", g     = " + g);
+                throw new RuntimeException("something is wrong: rem = " + QR[1]);
+            }
+            g = QR[0];
             // g * d = c
-            logger.info("content d = " + d); // + ", g = " + g + ", f = " + f);
+            logger.info("content c = " + c + ", d = " + d + ", g = " + g + ", f = " + f);
             r = onep.multiply(g,f,d,zero); // right: (g f) * 1 * (d zero)
-            //System.out.println("content r   = " + r);
             p = (RecSolvablePolynomial<C>) p.subtract(r);
+            //logger.info("content r = " + r + ", p = " + p);
             c = (GenSolvablePolynomial<C>) p.leadingBaseCoefficient();
-            //System.out.println("content p_2 = " + p);
             if ( !c.remainder(d).isZERO() ) { // restart
-                d = gcd(d, c); // go to recursion
-                logger.info("content d_2 = " + d);
+                d = gcd(d, c); // not okay // go to recursion
+                logger.info("content c_2 = " + c + ", d_2 = " + d);
                 if (d.isONE()) {
                     return d;
                 }
-                //System.out.println("content restart");
                 p = (RecSolvablePolynomial<C>) P; // restart
             }
+        }
+        try {
+            GenSolvablePolynomial<GenPolynomial<C>> pp = FDUtil.<C> recursiveRightDivide(P, d);
+        } catch (RuntimeException e) {
+            logger.info("no exact division, setting d to 1");
+            return (GenSolvablePolynomial<C>) P.ring.getONECoefficient();
         }
         return (GenSolvablePolynomial<C>) d.abs();
     }
@@ -267,7 +276,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         if(debug) {
            logger.info("content(P) = " + d);
         }
-        GenSolvablePolynomial<GenPolynomial<C>> pp = FDUtil.<C> recursiveDivide(P, d);
+        GenSolvablePolynomial<GenPolynomial<C>> pp = FDUtil.<C> recursiveRightDivide(P, d);
         return pp;
     }
 
