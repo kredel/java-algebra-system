@@ -66,7 +66,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends Gr
             logger.debug("degrees: e = " + e + ", f = " + f);
         }
         C c;
-        if (false&&field) {
+        if (field) {
             r = r.monic();
             q = q.monic();
         }
@@ -77,7 +77,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends Gr
         c = gcd(a, b); // indirection
         //System.out.println("baseCont: a = " + a);
         //System.out.println("baseCont: b = " + b);
-        System.out.println("baseCont: gcd(cont) = " + b);
+        //System.out.println("baseCont: gcd(cont) = " + b);
         r = divide(r, a); // indirection
         q = divide(q, b); // indirection
         if (r.isONE()) {
@@ -91,14 +91,13 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends Gr
         //System.out.println("baseGCD: r = " + r);
         while (!r.isZERO()) {
             x = FDUtil.<C> baseSparsePseudoRemainder(q, r);
-            //System.out.println("baseGCD: x = " + x);
             q = r;
             r = basePrimitivePart(x);
-            if (false&&field) {
+            if (field) {
                 r = r.monic();
             }
             //System.out.println("baseGCD: q = " + q);
-            System.out.println("baseGCD: r = " + r);
+            //System.out.println("baseGCD: r = " + r);
         }
         return (GenSolvablePolynomial<C>) (q.multiply(c)).abs();
     }
@@ -126,8 +125,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends Gr
         boolean field = P.leadingBaseCoefficient().ring.coFac.isField();
         long e = P.degree(0);
         long f = S.degree(0);
-        GenSolvablePolynomial<GenPolynomial<C>> q;
-        GenSolvablePolynomial<GenPolynomial<C>> r;
+        GenSolvablePolynomial<GenPolynomial<C>> q, r, qp, rp, qr, rr, x;
         if (f > e) {
             r = P;
             q = S;
@@ -147,6 +145,31 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends Gr
         } 
         r = (GenSolvablePolynomial<GenPolynomial<C>>) r.abs();
         q = (GenSolvablePolynomial<GenPolynomial<C>>) q.abs();
+        // ------------------
+        rp = r;
+        qp = q;
+        while (!rp.isZERO()) { //&& r.degree()>0
+            if (debug) {
+                //logger.info("deg(qp) = " + qp.degree() + ", deg(rp) = " + rp.degree());
+                logger.info("deg(qp) = " + qp + ", deg(rp) = " + rp);
+            }
+            x = FDUtil.<C> recursiveSparsePseudoRemainder(qp, rp);
+            qp = rp;
+            //not here: rp = recursivePrimitivePart(x);
+            rp = x;
+            if (field) {
+                rp = PolyUtil.<C> monic(rp);
+            } 
+        }
+        logger.info("recGcd qp = " + qp);
+        //not here: qp = recursivePrimitivePart(qp);
+        qp = P.ring.getONE(); // don't use qp
+        //if ( !qp.isONE() ) {
+        //    r = FDUtil.<C> recursiveRightPseudoQuotient(r, qp);
+        //    q = FDUtil.<C> recursiveRightPseudoQuotient(q, qp);
+        //    logger.info("recGcd q = " + q + ", r = " + r);
+        //}
+        // ------------------
         GenSolvablePolynomial<C> a = recursiveContent(r);
         GenSolvablePolynomial<C> b = recursiveContent(q);
         logger.info("recCont a = " + a + ", r = " + r);
@@ -154,15 +177,20 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends Gr
 
         GenSolvablePolynomial<C> c = gcd(a, b); // go to recursion
         logger.info("Gcd(contents) c = " + c);
-        r = FDUtil.<C> recursiveRightDivide(r, a);
-        q = FDUtil.<C> recursiveRightDivide(q, b);
+        try {
+            rr = FDUtil.<C> recursiveRightDivide(r, a);
+            qr = FDUtil.<C> recursiveRightDivide(q, b);
+            r = rr;
+            q = qr;
+        } catch (RuntimeException ex) {
+            ex.printStackTrace();
+        }
         if (r.isONE()) {
             return r.multiply(c);
         }
         if (q.isONE()) {
             return q.multiply(c);
         }
-        GenSolvablePolynomial<GenPolynomial<C>> x;
         if (debug) {
             logger.debug("r.ring = " + r.ring.toScript());
         }
@@ -181,7 +209,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends Gr
             //logger.info("var = " + P.ring.varsToString() + ", gcd(pp) = " + q);
             logger.info("gcd(pp) = " + q + ", ring = " + P.ring.toScript());
         }
-        q = (GenSolvablePolynomial<GenPolynomial<C>>) q.abs().multiply(c);
+        q = (GenSolvablePolynomial<GenPolynomial<C>>) q.abs().multiply(qp).multiply(c);
         return q;
     }
 

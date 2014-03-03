@@ -281,7 +281,12 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         if(debug) {
            logger.info("content(P) = " + d);
         }
-        GenSolvablePolynomial<GenPolynomial<C>> pp = FDUtil.<C> recursiveRightDivide(P, d);
+        GenSolvablePolynomial<GenPolynomial<C>> pp = P; 
+        try {
+            pp = FDUtil.<C> recursiveRightDivide(P, d);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
         return pp;
     }
 
