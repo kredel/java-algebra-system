@@ -741,16 +741,6 @@ public class FDUtil {
             //GenSolvablePolynomial<C> c = FDUtil.<C> basePseudoQuotient(c1, s);
             GenSolvablePolynomial<C> c = FDUtil.<C> divideRightPolynomial(c1,s);
             //GenSolvablePolynomial<C>[] QR = FDUtil.<C> basePseudoQuotientRemainder(c1, s);
-            //GenSolvablePolynomial<C> c = QR[0];
-            //if ( !QR[1].isZERO() ) {
-            //    System.out.println("rDiv, P  = " + P);
-            //    System.out.println("rDiv, c1 = " + c1);
-            //    System.out.println("rDiv, s  = " + s);
-            //    System.out.println("rDiv, c  = " + c + ", r = " + QR[1]);
-            //    GenSolvablePolynomial<C> q = FDUtil.<C> divideRightPolynomial(c1,s);
-            //    System.out.println("rDiv, q  = " + q);
-            //    throw new RuntimeException("something is wrong: rem = " + QR[1]);
-            //}
             if (!c.isZERO()) {
                 //pv.put(e1, c); 
                 p.doPutToMap(e1, c);
@@ -780,9 +770,6 @@ public class FDUtil {
         if (s.isONE()) {
             return P;
         }
-        //if (s.degree(0) != 0) {
-        //    throw new ArithmeticException("not constant polynomial s = " + s);
-        //}
         GenSolvablePolynomialRing<C> pfac = P.ring;
         GenSolvablePolynomial<C> q;
         if (pfac.nvar <= 1) {
@@ -790,6 +777,8 @@ public class FDUtil {
             QR1 = FDUtil.<C> basePseudoQuotientRemainder(P,s);
             q = QR1[0];
             if (!QR1[1].isZERO()) {
+                System.out.println("rDivPol, P = " + P);
+                System.out.println("rDivPol, s = " + s);
                 throw new RuntimeException("non zero remainder, q = " + q + ", r = " + QR1[1]);
             }
             return q;            
@@ -799,15 +788,13 @@ public class FDUtil {
         GenSolvablePolynomial<GenPolynomial<C>>[] QR;
         pr = (GenSolvablePolynomial<GenPolynomial<C>>) PolyUtil.<C> recursive(rfac, P);
         sr = (GenSolvablePolynomial<GenPolynomial<C>>) PolyUtil.<C> recursive(rfac, s);
-        //if (!sr.isConstant()) {
-        //    throw new ArithmeticException("not constant polynomial sr = " + sr);
-        //}
-        //sc = (GenSolvablePolynomial<C>) sr.leadingBaseCoefficient();
         //qr = FDUtil.<C> recursiveDivideRightPolynomial(pr,sc);
         QR = FDUtil.<C> recursiveRightPseudoQuotientRemainder(pr,sr);
         qr = QR[0];
         rr = QR[1];
         if (!rr.isZERO()) {
+            System.out.println("rDivPol, pr = " + pr);
+            System.out.println("rDivPol, sr = " + sr);
             throw new RuntimeException("non zero remainder, q = " + qr + ", r = " + rr);
         }
         q = (GenSolvablePolynomial<C>) PolyUtil.<C> distribute(pfac, qr);

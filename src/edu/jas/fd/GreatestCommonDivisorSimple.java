@@ -157,14 +157,8 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
 
         GenSolvablePolynomial<C> c = gcd(a, b); // go to recursion
         logger.info("Gcd(contents) c = " + c);
-        //try {
-            //rr = FDUtil.<C> recursiveRightDivide(r, a);
-            //qr = FDUtil.<C> recursiveRightDivide(q, b);
-            //r = rr;
-            //q = qr;
-        //} catch (RuntimeException ex) {
-        //    //ex.printStackTrace();
-        //}
+        //rr = FDUtil.<C> recursiveRightDivide(r, a);
+        //qr = FDUtil.<C> recursiveRightDivide(q, b);
         r = FDUtil.<C> recursiveDivideRightPolynomial(r, a);
         q = FDUtil.<C> recursiveDivideRightPolynomial(q, b);
         if (r.isONE()) {
@@ -190,14 +184,6 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
         }
         logger.info("gcd(div) = " + q);
         q = recursivePrimitivePart(q);
-        //GenSolvablePolynomial<C> d = recursiveContent(q);
-        //r = FDUtil.<C> recursiveRightDivide(q, d);
-        //if (   FDUtil.<C> recursiveRightSparsePseudoRemainder(q, r).isZERO()
-        //    && FDUtil.<C> recursiveRightSparsePseudoRemainder(P, r).isZERO()
-        //    && FDUtil.<C> recursiveRightSparsePseudoRemainder(S, r).isZERO()
-        //   ) {
-        //    q = r;
-        //}
         if (debug) {
             logger.info("gcd(pp) = " + q); // + ", ring = " + P.ring.toScript());
         }
