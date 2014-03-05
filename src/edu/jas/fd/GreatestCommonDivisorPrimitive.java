@@ -125,7 +125,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends Gr
         boolean field = P.leadingBaseCoefficient().ring.coFac.isField();
         long e = P.degree(0);
         long f = S.degree(0);
-        GenSolvablePolynomial<GenPolynomial<C>> q, r, qp, rp, qr, rr, x;
+        GenSolvablePolynomial<GenPolynomial<C>> q, r, x;
         if (f > e) {
             r = P;
             q = S;
@@ -210,9 +210,8 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends Gr
         if (debug) {
             logger.info("gcd(pp) = " + q + ", ring = " + P.ring.toScript());
         }
-        // multiply left:
-        q = (GenSolvablePolynomial<GenPolynomial<C>>) q.multiply(c,P.ring.getONECoefficient()).abs();
-        //q = (GenSolvablePolynomial<GenPolynomial<C>>) q.abs().multiply(qp).multiply(c);
+        // no: q = (GenSolvablePolynomial<GenPolynomial<C>>) q.multiply(c,P.ring.getONECoefficient()).abs();
+        q = (GenSolvablePolynomial<GenPolynomial<C>>) q.multiply(c).abs();
         return q;
     }
 
