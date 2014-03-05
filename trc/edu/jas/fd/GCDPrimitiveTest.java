@@ -432,13 +432,17 @@ public class GCDPrimitiveTest extends TestCase {
         //c = dfac.random(kl, ll, el, q);
         //c = c.multiply(dfac.univariate(0));
 
-        a = dfac.parse("1/3 b^3 - 1/6 + d");
-        //b = dfac.parse("( -1/2 ) b + 3 a^2 + c");
-        b = dfac.parse("( -1/2 ) b + 3 a^2 + d");
-        //c = dfac.parse("(a - 5 b) + c + d");
-        //ok: c = dfac.parse("(a - b) c");
-        //c = dfac.parse("c (a - b)");
-        c = dfac.parse("(a - b) + c + d ");
+        //a = dfac.parse("1/3 b^3 - 1/6 + d");
+        //b = dfac.parse("( -1/2 ) b + 3 a^2 + d");
+        ////b = dfac.parse("( -1/2 ) b + 3 a^2 + c");
+        ////c = dfac.parse("(a - 5 b) + c + d");
+        ////ok: c = dfac.parse("(a - b) c");
+        ////c = dfac.parse("c (a - b)");
+        //c = dfac.parse("(a - b) + c + d ");
+
+        a = dfac.parse("2 b^3 * d^2 + 2/3 a + 3/2");
+        b = dfac.parse("2/3 d + 1/2 a^3 + 3/4");
+        c = dfac.parse("c^2 * d - 1/2 a^3 * d + 5/4 d");
 
         //c = (GenSolvablePolynomial<BigRational>) fd.primitivePart(c).abs();
         c = c.monic();

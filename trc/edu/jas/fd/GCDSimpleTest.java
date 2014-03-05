@@ -420,20 +420,21 @@ public class GCDSimpleTest extends TestCase {
         ll = 4;
         el = 4;
 
-        a = dfac.random(kl, ll, el, q);
-        b = dfac.random(kl, ll, el, q);
-        c = dfac.random(kl, ll, el, q);
-        c = c.multiply(dfac.univariate(0));
+        //a = dfac.random(kl, ll, el, q);
+        //b = dfac.random(kl, ll, el, q);
+        //c = dfac.random(kl, ll, el, q);
+        //c = c.multiply(dfac.univariate(0));
 
-        //a = dfac.parse("1/3 b^3 - 1/6 + d");
-        //b = dfac.parse("( -1/2 ) b + 3 a^2 + d");
+        a = dfac.parse("1/3 b^3 - 1/6 + d");
+        b = dfac.parse("( -1/2 ) b + 3 a^2 + d");
         //c = dfac.parse("(a - 5 b) + c + d");
         //ok: c = dfac.parse("(a - b) c");
         //c = dfac.parse("(a - b) + c + d ");
+        c = dfac.parse("(a - b) + c");
 
-        a = dfac.parse("2 b^3 * d^2 + 2/3 a + 3/2");
-        b = dfac.parse("2/3 d + 1/2 a^3 + 3/4");
-        c = dfac.parse("c^2 * d - 1/2 a^3 * d + 5/4 d");
+        //a = dfac.parse("2 b^3 * d^2 + 2/3 a + 3/2");
+        //b = dfac.parse("2/3 d + 1/2 a^3 + 3/4");
+        //c = dfac.parse("c^2 * d - 1/2 a^3 * d + 5/4 d");
 
         //c = (GenSolvablePolynomial<BigRational>) fd.primitivePart(c).abs();
         c = c.monic();
@@ -456,21 +457,25 @@ public class GCDSimpleTest extends TestCase {
 
         e = FDUtil.<BigRational> baseSparsePseudoRemainder(d, c);
         System.out.println("e = " + e);
-        assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
+        assertTrue("c | gcd(ac,bc): " + e, e.isZERO());
 
         e = FDUtil.<BigRational> baseSparsePseudoRemainder(a, c);
         System.out.println("e = " + e);
-        assertTrue("c | ac " + e, e.isZERO());
+        assertTrue("c | ac: " + e, e.isZERO());
         e = FDUtil.<BigRational> baseSparsePseudoRemainder(a, d);
         System.out.println("e = " + e);
-        assertTrue("gcd(a,b) | a " + e, e.isZERO());
+        //e = FDUtil.<BigRational> divideRightPolynomial(a,d);
+        //System.out.println("e = " + e);
+        assertTrue("gcd(a,b) | a: " + e, e.isZERO());
 
         e = FDUtil.<BigRational> baseSparsePseudoRemainder(b, c);
-        //System.out.println("e = " + e);
-        assertTrue("c | bc " + e, e.isZERO());
+        System.out.println("e = " + e);
+        assertTrue("c | bc: " + e, e.isZERO());
         e = FDUtil.<BigRational> baseSparsePseudoRemainder(b, d);
+        System.out.println("e = " + e);
+        //e = FDUtil.<BigRational> divideRightPolynomial(b,d);
         //System.out.println("e = " + e);
-        assertTrue("gcd(a,b) | b " + e, e.isZERO());
+        assertTrue("gcd(a,b) | b: " + e, e.isZERO());
     }
 
 }
