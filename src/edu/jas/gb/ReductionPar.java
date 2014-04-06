@@ -14,7 +14,7 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Polynomial Reduction parallel usable algorithm. Implements normalform.
+ * Polynomial reduction parallel usable algorithm. Implements normalform.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */

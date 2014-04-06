@@ -14,7 +14,7 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Polynomial Reduction sequential use algorithm. Implements normalform.
+ * Polynomial reduction sequential use algorithm. Implements normalform.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
