@@ -11,8 +11,8 @@ import java.util.SortedMap;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.structure.RingElem;
 import edu.jas.structure.NotInvertibleException;
+import edu.jas.structure.RingElem;
 
 
 /**
@@ -471,8 +471,8 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
 
 
     /**
-     * GenSolvablePolynomial monic, i.e. leadingCoefficient == 1. If leadingCoefficient
-     * is not invertible returns this unmodified.
+     * GenSolvablePolynomial left monic, i.e. leadingCoefficient == 1. If
+     * leadingCoefficient is not invertible returns this unmodified.
      * @return monic(this).
      */
     @Override
@@ -489,7 +489,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
             C lm = lc.inverse();
             //System.out.println("lm = "+lm);
             return multiplyLeft(lm);
-        } catch(NotInvertibleException e) {
+        } catch (NotInvertibleException e) {
             //e.printStackTrace();
         }
         return this;
@@ -497,13 +497,15 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
 
 
     /**
-     * GenSolvablePolynomial left division with remainder. Fails, if exact division by
-     * leading base coefficient is not possible. Meaningful only for univariate
-     * polynomials over fields, but works in any case.
-     * @param S nonzero GenSolvablePolynomial with invertible leading coefficient.
+     * GenSolvablePolynomial left division with remainder. Fails, if exact
+     * division by leading base coefficient is not possible. Meaningful only for
+     * univariate polynomials over fields, but works in any case.
+     * @param S nonzero GenSolvablePolynomial with invertible leading
+     *            coefficient.
      * @return [ quotient , remainder ] with this = quotient * S + remainder and
      *         deg(remainder) &lt; deg(S) or remiander = 0.
-     * @see edu.jas.poly.PolyUtil#baseSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial).
+     * @see edu.jas.poly.PolyUtil#baseSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial)
+     *      .
      */
     //@Override
     @SuppressWarnings("unchecked")
@@ -531,7 +533,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
                 a = a.multiply(ci); // this is correct!
                 q = (GenSolvablePolynomial<C>) q.sum(a, f);
                 h = S.multiplyLeft(a, f);
-                if ( !h.leadingBaseCoefficient().equals(r.leadingBaseCoefficient()) ) {
+                if (!h.leadingBaseCoefficient().equals(r.leadingBaseCoefficient())) {
                     throw new RuntimeException("something is wrong: r = " + r + ", h = " + h);
                 }
                 r = (GenSolvablePolynomial<C>) r.subtract(h);

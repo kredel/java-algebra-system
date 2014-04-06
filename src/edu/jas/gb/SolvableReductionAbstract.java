@@ -161,7 +161,7 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>> implement
         ArrayList<GenSolvablePolynomial<C>> P = new ArrayList<GenSolvablePolynomial<C>>();
         for (GenSolvablePolynomial<C> a : Pp) {
             if (a.length() != 0) {
-                a = (GenSolvablePolynomial<C>) a.monic();
+                a = a.monic();
                 P.add(a);
             }
         }
@@ -191,14 +191,14 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>> implement
                 f = a.leadingExpVector();
                 if (f.signum() == 0) {
                     P = new ArrayList<GenSolvablePolynomial<C>>();
-                    P.add((GenSolvablePolynomial<C>) a.monic());
+                    P.add(a.monic());
                     return P;
                 }
                 if (e.equals(f)) {
                     irr++;
                 } else {
                     irr = 0;
-                    a = (GenSolvablePolynomial<C>) a.monic();
+                    a = a.monic();
                 }
                 P.add(a);
             }

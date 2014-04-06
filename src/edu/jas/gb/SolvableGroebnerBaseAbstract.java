@@ -323,7 +323,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
                     logger.info("isRightGB non zero h = " + h + " :: " + h.ring);
                     logger.info("p" + i + " = " + pi + ", p" + j + " = " + pj);
                     return false;
-                } else {
+                    //} else {
                     //logger.info("isRightGB zero h = " + h);
                 }
             }
