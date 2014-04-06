@@ -15,16 +15,15 @@ import javax.script.ScriptException;
 import org.apache.log4j.Logger;
 
 import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.GcdRingElem;
 
 
 /**
- * Groebner bases via signatur based GBs in script.
- * @author Heinz Kredel TODO: Computing via the ScriptEngine is way slower than
- *         the direct execution in the jython interpreter. Check if a different
- *         engine is in the path or if it must be configured in some special
- *         way.
+ * Groebner bases via signatur based GBs using jython script. TODO: Computing
+ * via the ScriptEngine is way slower than the direct execution in the jython
+ * interpreter. Check if a different engine is in the path or if it must be
+ * configured in some special way.
+ * @author Heinz Kredel
  */
 
 public class GBSigBased<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C> {
@@ -66,6 +65,9 @@ public class GBSigBased<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C
         }
         try {
             Object ans = engine.eval(ex);
+            if (ans != null) {
+                logger.info("constructor answer: " + ans);
+            }
         } catch (ScriptException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -106,7 +108,7 @@ public class GBSigBased<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C
      * @param F polynomial list.
      * @return GB(F) a Groebner base of F.
      */
-    //JAVA6only: @Override
+    @Override
     public List<GenPolynomial<C>> GB(int modv, List<GenPolynomial<C>> F) {
         if (F == null || F.isEmpty()) {
             return F;
@@ -114,7 +116,7 @@ public class GBSigBased<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C
         if (modv != 0) {
             throw new UnsupportedOperationException("implemented only for modv = 0, not " + modv);
         }
-        GenPolynomialRing<C> pfac = F.get(0).ring;
+        //GenPolynomialRing<C> pfac = F.get(0).ring;
         List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
         long millis = System.currentTimeMillis();
         try {
