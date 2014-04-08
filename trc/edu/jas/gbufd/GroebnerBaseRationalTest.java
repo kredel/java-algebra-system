@@ -68,31 +68,24 @@ public class GroebnerBaseRationalTest extends TestCase {
     GenPolynomialRing<BigRational> fac;
 
 
-    List<GenPolynomial<BigRational>> L;
+    List<GenPolynomial<BigRational>> L, Lp;
 
 
     PolynomialList<BigRational> F;
 
 
-    List<GenPolynomial<BigRational>> G;
+    List<GenPolynomial<BigRational>> G, Gp;
 
 
     GroebnerBaseAbstract<BigRational> bb;
 
 
-    GenPolynomial<BigRational> a;
+    GroebnerBaseAbstract<BigRational> bbp;
 
 
-    GenPolynomial<BigRational> b;
+    GenPolynomial<BigRational> a, b, c, d, e;
 
-
-    GenPolynomial<BigRational> c;
-
-
-    GenPolynomial<BigRational> d;
-
-
-    GenPolynomial<BigRational> e;
+    int threads = 2;
 
 
     int rl = 4; //4; //3; 
@@ -116,14 +109,17 @@ public class GroebnerBaseRationalTest extends TestCase {
         fac = new GenPolynomialRing<BigRational>(coeff, rl);
         a = b = c = d = e = null;
         bb = new GroebnerBaseRational<BigRational>();
+        bbp = new GroebnerBaseRational<BigRational>(threads);
     }
 
 
     @Override
     protected void tearDown() {
+        bbp.terminate();
         a = b = c = d = e = null;
         fac = null;
         bb = null;
+        bbp = null;
     }
 
 
@@ -182,6 +178,60 @@ public class GroebnerBaseRationalTest extends TestCase {
 
 
     /**
+     * Test parallel GBase.
+     */
+    public void testParallelGBase() {
+        L = new ArrayList<GenPolynomial<BigRational>>();
+
+        a = fac.random(kl, ll, el, q);
+        b = fac.random(kl, ll, el, q);
+        c = fac.random(kl, ll, el, q);
+        d = fac.random(kl, ll, el, q);
+        e = d; //fac.random(kl, ll, el, q );
+
+        if (a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO()) {
+            return;
+        }
+
+        assertTrue("not isZERO( a )", !a.isZERO());
+        L.add(a);
+
+        L = bbp.GB(L);
+        assertTrue("isGB( { a } )", bbp.isGB(L));
+        assertTrue("isMinimalGB( { a } )", bbp.isMinimalGB(L));
+
+        assertTrue("not isZERO( b )", !b.isZERO());
+        L.add(b);
+        //System.out.println("L = " + L.size() );
+
+        L = bbp.GB(L);
+        assertTrue("isGB( { a, b } )", bbp.isGB(L));
+        assertTrue("isMinimalGB( { a, b } )", bbp.isMinimalGB(L));
+
+        assertTrue("not isZERO( c )", !c.isZERO());
+        L.add(c);
+
+        L = bbp.GB(L);
+        assertTrue("isGB( { a, b, c } )", bbp.isGB(L));
+        assertTrue("isMinimalGB( { a, b, c } )", bbp.isMinimalGB(L));
+
+        assertTrue("not isZERO( d )", !d.isZERO());
+        L.add(d);
+
+        L = bbp.GB(L);
+        assertTrue("isGB( { a, b, c, d } )", bbp.isGB(L));
+        assertTrue("isMinimalGB( { a, b, c, d } )", bbp.isMinimalGB(L));
+
+        assertTrue("not isZERO( e )", !e.isZERO());
+        L.add(e);
+
+        L = bbp.GB(L);
+        assertTrue("isGB( { a, b, c, d, e } )", bbp.isGB(L));
+        assertTrue("isMinimalGB( { a, b, c, d, e } )", bbp.isMinimalGB(L));
+    }
+
+
+    /**
      * Test Trinks7 GBase.
      */
     @SuppressWarnings("unchecked")
@@ -208,6 +258,11 @@ public class GroebnerBaseRationalTest extends TestCase {
         assertTrue("isGB( GB(Trinks7) )", bb.isGB(G));
         assertTrue("isMinimalGB( GB(Trinks7) )", bb.isMinimalGB(G));
         assertEquals("#GB(Trinks7) == 6", 6, G.size());
+        Gp = bbp.GB(F.list);
+        assertTrue("isGB( GB(Trinks7) )", bb.isGB(Gp));
+        assertTrue("isMinimalGB( GB(Trinks7) )", bb.isMinimalGB(Gp));
+        assertEquals("#GB(Trinks7) == 6", 6, Gp.size());
+        assertEquals("G == Gp: ", G, Gp);
         //PolynomialList<BigRational> trinks = new PolynomialList<BigRational>(F.ring,G);
         //System.out.println("G = " + trinks);
     }
@@ -243,6 +298,13 @@ public class GroebnerBaseRationalTest extends TestCase {
         assertTrue("isMinimalGB( GB(Trinks7) )", bb.isMinimalGB(G));
         assertEquals("#GB(Trinks7) == 6", 6, G.size());
 
+        long p = System.currentTimeMillis();
+        Gp = bbp.GB(F.list);
+        p = System.currentTimeMillis() - p;
+        assertTrue("isGB( GB(Trinks7) )", bbp.isGB(G));
+        assertTrue("isMinimalGB( GB(Trinks7) )", bbp.isMinimalGB(G));
+        assertEquals("#GB(Trinks7) == 6", 6, Gp.size());
+
         GroebnerBaseAbstract<BigRational> bbr = new GroebnerBaseSeq<BigRational>();
         List<GenPolynomial<BigRational>> Gr;
         long r = System.currentTimeMillis();
@@ -253,10 +315,10 @@ public class GroebnerBaseRationalTest extends TestCase {
         assertEquals("#GB(Trinks7) == 6", 6, Gr.size());
 
         if (logger.isInfoEnabled()) {
-            logger.info("i = " + i + ", r = " + r);
+            logger.info("time: seq = " + i + ", par = " + p + ", rat = " + r);
         }
         assertEquals("GB_r == GB_i", G, Gr);
-
+        assertEquals("GB_r == GB_p", G, Gp);
         //PolynomialList<BigRational> trinks = new PolynomialList<BigRational>(F.ring,G);
         //System.out.println("G = " + trinks);
     }
