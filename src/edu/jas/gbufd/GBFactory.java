@@ -22,6 +22,8 @@ import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.GroebnerBaseParallel;
 import edu.jas.gb.GroebnerBaseSeq;
 import edu.jas.gb.OrderedPairlist;
+import edu.jas.gb.OrderedMinPairlist;
+import edu.jas.gb.OrderedSyzPairlist;
 import edu.jas.gb.PairList;
 import edu.jas.gb.ReductionSeq;
 import edu.jas.kern.ComputerThreads;
@@ -264,7 +266,15 @@ public class GBFactory {
             bba = new GroebnerBaseSeq<BigRational>(pl);
             break;
         case ffgb:
-            bba = new GroebnerBaseRational<BigRational>(); // pl not possible
+            PairList<BigInteger> pli;
+            if (pl instanceof OrderedMinPairlist) {
+                pli = new OrderedMinPairlist<BigInteger>();
+            } else if (pl instanceof OrderedSyzPairlist) {
+                pli = new OrderedSyzPairlist<BigInteger>();
+            } else {
+                pli = new OrderedPairlist<BigInteger>();
+            }
+            bba = new GroebnerBaseRational<BigRational>(pli); // pl not possible
             break;
         default:
             throw new IllegalArgumentException("algorithm not available for BigRational " + a);
@@ -327,7 +337,15 @@ public class GBFactory {
             bba = new GroebnerBaseSeq<Quotient<C>>(new ReductionSeq<Quotient<C>>(), pl);
             break;
         case ffgb:
-            bba = new GroebnerBaseSeqQuotient<C>(fac); // pl not possible
+            PairList<GenPolynomial<C>> pli;
+            if (pl instanceof OrderedMinPairlist) {
+                pli = new OrderedMinPairlist<GenPolynomial<C>>();
+            } else if (pl instanceof OrderedSyzPairlist) {
+                pli = new OrderedSyzPairlist<GenPolynomial<C>>();
+            } else {
+                pli = new OrderedPairlist<GenPolynomial<C>>();
+            }
+            bba = new GroebnerBaseSeqQuotient<C>(fac,pli); // pl not possible
             break;
         default:
             throw new IllegalArgumentException("algorithm not available for Quotient " + a);
