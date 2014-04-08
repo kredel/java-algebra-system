@@ -82,9 +82,10 @@ public class GroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends GroebnerBas
 
     /**
      * Constructor.
-     * @param red pseudo reduction engine.
-     * @param rf coefficient ring factory. <b>Note:</b> red must be an instance
+     * @param red pseudo reduction engine. <b>Note:</b> red must be an instance
      *            of PseudoReductionSeq.
+     * @param rf coefficient ring factory. 
+     * @param pl pair selection strategy
      */
     public GroebnerBasePseudoSeq(PseudoReduction<C> red, RingFactory<C> rf, PairList<C> pl) {
         super(red,pl);

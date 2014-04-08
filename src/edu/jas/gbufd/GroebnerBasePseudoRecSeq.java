@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.OrderedPairlist;
+import edu.jas.gb.PairList;
 import edu.jas.gb.Pair;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -74,18 +75,31 @@ public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
      * @param rf coefficient ring factory.
      */
     public GroebnerBasePseudoRecSeq(RingFactory<GenPolynomial<C>> rf) {
-        this(new PseudoReductionSeq<GenPolynomial<C>>(), rf);
+        this(new PseudoReductionSeq<GenPolynomial<C>>(), rf, 
+             new OrderedPairlist<GenPolynomial<C>>( new GenPolynomialRing<GenPolynomial<C>>(rf,1) )); // 1=hack
     }
 
 
     /**
      * Constructor.
-     * @param red pseudo reduction engine.
-     * @param rf coefficient ring factory. <b>Note:</b> red must be an instance
-     *            of PseudoReductionSeq.
+     * @param rf coefficient ring factory.
+     * @param pl pair selection strategy
      */
-    public GroebnerBasePseudoRecSeq(PseudoReduction<GenPolynomial<C>> red, RingFactory<GenPolynomial<C>> rf) {
-        super(red);
+    public GroebnerBasePseudoRecSeq(RingFactory<GenPolynomial<C>> rf, PairList<GenPolynomial<C>> pl) {
+        this(new PseudoReductionSeq<GenPolynomial<C>>(), rf, pl);
+    }
+
+
+    /**
+     * Constructor.
+     * @param red pseudo reduction engine. <b>Note:</b> red must be an instance
+     *            of PseudoReductionSeq.
+     * @param rf coefficient ring factory. 
+     * @param pl pair selection strategy
+     */
+    public GroebnerBasePseudoRecSeq(PseudoReduction<GenPolynomial<C>> red, 
+                       RingFactory<GenPolynomial<C>> rf, PairList<GenPolynomial<C>> pl) {
+        super(red,pl);
         this.red = red;
         cofac = rf;
         GenPolynomialRing<C> rp = (GenPolynomialRing<C>) cofac;
@@ -106,7 +120,7 @@ public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
     public List<GenPolynomial<GenPolynomial<C>>> GB(int modv, List<GenPolynomial<GenPolynomial<C>>> F) {
         GenPolynomial<GenPolynomial<C>> p;
         List<GenPolynomial<GenPolynomial<C>>> G = new ArrayList<GenPolynomial<GenPolynomial<C>>>();
-        OrderedPairlist<GenPolynomial<C>> pairlist = null;
+        PairList<GenPolynomial<C>> pairlist = null;
         int l = F.size();
         ListIterator<GenPolynomial<GenPolynomial<C>>> it = F.listIterator();
         while (it.hasNext()) {
@@ -121,7 +135,8 @@ public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
                 }
                 G.add(p);
                 if (pairlist == null) {
-                    pairlist = new OrderedPairlist<GenPolynomial<C>>(modv, p.ring);
+                    //pairlist = new OrderedPairlist<GenPolynomial<C>>(modv, p.ring);
+                    pairlist = strategy.create(modv, p.ring);
                 }
                 // putOne not required
                 pairlist.put(p);

@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import edu.jas.gb.GroebnerBaseAbstract;
+import edu.jas.gb.PairList;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
@@ -44,8 +45,27 @@ public class GroebnerBaseSeqQuotient<C extends GcdRingElem<C>> extends GroebnerB
      * @param rf quotient coefficient ring factory.
      */
     public GroebnerBaseSeqQuotient(QuotientRing<C> rf) {
+        this(new GroebnerBasePseudoRecSeq<C>(rf.ring));
+    }
+
+
+    /**
+     * Constructor.
+     * @param rf quotient coefficient ring factory.
+     * @param pl pair selection strategy (for fraction parts).
+     */
+    public GroebnerBaseSeqQuotient(QuotientRing<C> rf, PairList<GenPolynomial<C>> pl) {
+        this(new GroebnerBasePseudoRecSeq<C>(rf.ring,pl));
+    }
+
+
+    /**
+     * Constructor.
+     * @param bba Groebner base algorithm for GenPolynomial coefficients.
+     */
+    public GroebnerBaseSeqQuotient(GroebnerBaseAbstract<GenPolynomial<C>> bba) {
         super();
-        bba = new GroebnerBasePseudoRecSeq<C>(rf.ring);
+        this.bba = bba;
     }
 
 
