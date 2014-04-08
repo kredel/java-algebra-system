@@ -32,10 +32,10 @@ import edu.jas.poly.PolynomialList;
  * @author Heinz Kredel.
  */
 
-public class GroebnerBaseSeqRationalTest extends TestCase {
+public class GroebnerBaseRationalTest extends TestCase {
 
 
-    private static final Logger logger = Logger.getLogger(GroebnerBaseSeqRationalTest.class);
+    private static final Logger logger = Logger.getLogger(GroebnerBaseRationalTest.class);
 
 
     /**
@@ -48,10 +48,10 @@ public class GroebnerBaseSeqRationalTest extends TestCase {
 
 
     /**
-     * Constructs a <CODE>GroebnerBaseSeqRationalTest</CODE> object.
+     * Constructs a <CODE>GroebnerBaseRationalTest</CODE> object.
      * @param name String.
      */
-    public GroebnerBaseSeqRationalTest(String name) {
+    public GroebnerBaseRationalTest(String name) {
         super(name);
     }
 
@@ -60,7 +60,7 @@ public class GroebnerBaseSeqRationalTest extends TestCase {
      * suite.
      */
     public static Test suite() {
-        TestSuite suite = new TestSuite(GroebnerBaseSeqRationalTest.class);
+        TestSuite suite = new TestSuite(GroebnerBaseRationalTest.class);
         return suite;
     }
 
