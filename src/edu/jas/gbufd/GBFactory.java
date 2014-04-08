@@ -345,7 +345,7 @@ public class GBFactory {
             } else {
                 pli = new OrderedPairlist<GenPolynomial<C>>();
             }
-            bba = new GroebnerBaseSeqQuotient<C>(fac,pli); // pl not possible
+            bba = new GroebnerBaseQuotient<C>(fac,pli); // pl not possible
             break;
         default:
             throw new IllegalArgumentException("algorithm not available for Quotient " + a);

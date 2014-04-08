@@ -23,7 +23,9 @@ import edu.jas.gbufd.GBFactory;
 import edu.jas.gbufd.GroebnerBaseFGLM;
 import edu.jas.gbufd.GroebnerBasePseudoParallel;
 import edu.jas.gbufd.GroebnerBaseRational;
+import edu.jas.gbufd.GroebnerBaseQuotient;
 import edu.jas.kern.ComputerThreads;
+import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
@@ -287,7 +289,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
 
 
     /**
-     * Request d- or e-GB algorithm.
+     * Request d-, e- or i-GB algorithm.
      * @param a algorithm from GBFactory.Algo.
      * @return GBAlgorithmBuilder object.
      */
@@ -333,7 +335,34 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
         if ( ((RingFactory)ring.coFac) instanceof BigRational) {
             GroebnerBaseAbstract<C> bb;
             if (algo instanceof GroebnerBaseRational) { // fraction free requested
-                bb = (GroebnerBaseAbstract) new GroebnerBaseRational<BigRational>(threads);
+                PairList<BigInteger> pli;
+                if (strategy instanceof OrderedMinPairlist) {
+                    pli = new OrderedMinPairlist<BigInteger>();
+                } else if (strategy instanceof OrderedSyzPairlist) {
+                    pli = new OrderedSyzPairlist<BigInteger>();
+                } else {
+                    pli = new OrderedPairlist<BigInteger>();
+                }
+                bb = (GroebnerBaseAbstract) new GroebnerBaseRational<BigRational>(threads, pli);
+                //bb = GBFactory.<C> getImplementation(ring.coFac, strategy);
+            } else {
+                bb = (GroebnerBaseAbstract) new GroebnerBaseParallel<C>(threads,strategy);
+            }
+            GroebnerBaseAbstract<C> pbb = new GBProxy<C>(algo, bb);
+            return new GBAlgorithmBuilder<C>(ring, pbb);
+        } else if ( ((RingFactory)ring.coFac) instanceof QuotientRing) {
+            GroebnerBaseAbstract<C> bb;
+            if (algo instanceof GroebnerBaseQuotient) { // fraction free requested
+                PairList<GenPolynomial<C>> pli;
+                if (strategy instanceof OrderedMinPairlist) {
+                    pli = new OrderedMinPairlist<GenPolynomial<C>>();
+                } else if (strategy  instanceof OrderedSyzPairlist) {
+                    pli = new OrderedSyzPairlist<GenPolynomial<C>>();
+                } else {
+                    pli = new OrderedPairlist<GenPolynomial<C>>();
+                }
+                QuotientRing<C> fac = (QuotientRing) ring.coFac;   
+                bb = (GroebnerBaseAbstract) new GroebnerBaseQuotient<C>(fac,pli); // pl not possible
             } else {
                 bb = (GroebnerBaseAbstract) new GroebnerBaseParallel<C>(threads,strategy);
             }

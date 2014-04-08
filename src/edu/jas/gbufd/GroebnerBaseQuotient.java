@@ -28,10 +28,10 @@ import edu.jas.ufd.QuotientRing;
  * @author Heinz Kredel
  */
 
-public class GroebnerBaseSeqQuotient<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<Quotient<C>> {
+public class GroebnerBaseQuotient<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<Quotient<C>> {
 
 
-    private static final Logger logger = Logger.getLogger(GroebnerBaseSeqQuotient.class);
+    private static final Logger logger = Logger.getLogger(GroebnerBaseQuotient.class);
 
 
     private final boolean debug = logger.isDebugEnabled();
@@ -44,7 +44,7 @@ public class GroebnerBaseSeqQuotient<C extends GcdRingElem<C>> extends GroebnerB
      * Constructor.
      * @param rf quotient coefficient ring factory.
      */
-    public GroebnerBaseSeqQuotient(QuotientRing<C> rf) {
+    public GroebnerBaseQuotient(QuotientRing<C> rf) {
         this(new GroebnerBasePseudoRecSeq<C>(rf.ring));
     }
 
@@ -54,7 +54,7 @@ public class GroebnerBaseSeqQuotient<C extends GcdRingElem<C>> extends GroebnerB
      * @param rf quotient coefficient ring factory.
      * @param pl pair selection strategy (for fraction parts).
      */
-    public GroebnerBaseSeqQuotient(QuotientRing<C> rf, PairList<GenPolynomial<C>> pl) {
+    public GroebnerBaseQuotient(QuotientRing<C> rf, PairList<GenPolynomial<C>> pl) {
         this(new GroebnerBasePseudoRecSeq<C>(rf.ring,pl));
     }
 
@@ -63,7 +63,7 @@ public class GroebnerBaseSeqQuotient<C extends GcdRingElem<C>> extends GroebnerB
      * Constructor.
      * @param bba Groebner base algorithm for GenPolynomial coefficients.
      */
-    public GroebnerBaseSeqQuotient(GroebnerBaseAbstract<GenPolynomial<C>> bba) {
+    public GroebnerBaseQuotient(GroebnerBaseAbstract<GenPolynomial<C>> bba) {
         super();
         this.bba = bba;
     }
