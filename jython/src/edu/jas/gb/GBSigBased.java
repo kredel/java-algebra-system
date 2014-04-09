@@ -38,10 +38,10 @@ public class GBSigBased<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C
     /**
      * GB algorithm indicators:
      * sbgb = sigbased_gb(), arri = arris_algorithm(), 
-     * ggv = ggv(), ggv1 = ggv_first_implementation(), f5 = f5z().
+     * ggv = ggv(), ggv1 = ggv_first_implementation(), f5 = f5(), ff5 = f5z().
      */
     public static enum GBAlgo {
-        sbgb, arri, ggv, ggv1, ff5
+        sbgb, arri, ggv, ggv1, f5, ff5
     }
 
 
@@ -83,6 +83,7 @@ public class GBSigBased<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C
         sb.append("arri = arris_algorithm();\n");
         sb.append("ggv = ggv();\n");
         sb.append("ggv1 = ggv_first_implementation();\n");
+        sb.append("f5 = f5();\n");
         sb.append("ff5 = f5z();\n");
         String ex = sb.toString();
         if (debug) {
