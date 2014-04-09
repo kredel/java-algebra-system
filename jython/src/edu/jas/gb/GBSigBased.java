@@ -36,21 +36,46 @@ public class GBSigBased<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C
 
 
     /**
+     * GB algorithm indicators:
+     * sbgb = sigbased_gb(), arri = arris_algorithm(), 
+     * ggv = ggv(), ggv1 = ggv_first_implementation(), f5 = f5z().
+     */
+    public static enum GBAlgo {
+        sbgb, arri, ggv, ggv1, ff5
+    }
+
+
+    /**
      * Scripting engine.
      */
     public final ScriptEngine engine;
 
 
     /**
+     * Selected GB algorithm.
+     */
+    public final GBAlgo algo;
+
+
+    /**
      * GBSigBased constructor.
      */
     public GBSigBased() {
+        this(GBAlgo.ggv1);
+    }
+
+
+    /**
+     * GBSigBased constructor.
+     * @param a GB algorithm indicator.
+     */
+    public GBSigBased(GBAlgo a) {
+        algo = a;
         engine = new ScriptEngineManager().getEngineByExtension("py");
         if (engine == null) {
             logger.error("no script engine found");
             throw new RuntimeException("no script engine found");
         }
-        logger.info("Script engine discovered: " + engine.getClass().getName());
         StringBuffer sb = new StringBuffer();
         sb.append("from jas import PolyRing, ZZ, QQ, arraylist2pylist, pylist2arraylist;\n");
         sb.append("from basic_sigbased_gb import sigbased_gb, arris_algorithm, ggv, ggv_first_implementation, f5, f5z;\n");
@@ -72,6 +97,7 @@ public class GBSigBased<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+        logger.info(toString());
     }
 
 
@@ -81,7 +107,7 @@ public class GBSigBased<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C
      */
     @Override
     public String toString() {
-        return "GBSigBased[ " + engine.getClass().getName() + " ]";
+        return "GBSigBased[ " + engine.getClass().getName() + ", GBAlgo = " + algo + " ]";
     }
 
 
@@ -126,11 +152,14 @@ public class GBSigBased<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C
             //sb.append("print str(r);\n");
             //sb.append("print \"F = \" + str(F);\n");
             sb.append("Fp = arraylist2pylist(F);\n");
+
             //sb.append("Gp = sbgb.basis_sig(Fp);\n");
             //sb.append("Gp = ff5.basis_sig(Fp);\n");
             //sb.append("Gp = arri.basis_sig(Fp);\n");
-            sb.append("Gp = ggv1.basis_sig(Fp);\n");
+            //sb.append("Gp = ggv1.basis_sig(Fp);\n");
+            sb.append("Gp = " + algo + ".basis_sig(Fp);\n");
             sb.append("G = pylist2arraylist(Gp);\n");
+
             String ex = sb.toString();
             if (debug) {
                 logger.info("input for evaluation:\n" + ex);

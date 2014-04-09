@@ -73,10 +73,7 @@ public class GBSigBasedTest extends TestCase {
     PolynomialList<BigRational> F;
 
 
-    List<GenPolynomial<BigRational>> G;
-
-
-    List<GenPolynomial<BigRational>> Gn;
+    List<GenPolynomial<BigRational>> G, Gn;
 
 
     GroebnerBaseAbstract<BigRational> bb;
@@ -85,19 +82,7 @@ public class GBSigBasedTest extends TestCase {
     GroebnerBaseAbstract<BigRational> bbn;
 
 
-    GenPolynomial<BigRational> a;
-
-
-    GenPolynomial<BigRational> b;
-
-
-    GenPolynomial<BigRational> c;
-
-
-    GenPolynomial<BigRational> d;
-
-
-    GenPolynomial<BigRational> e;
+    GenPolynomial<BigRational> a, b, c, d, e;
 
 
     int rl = 3; //4; //3; 
@@ -121,8 +106,10 @@ public class GBSigBasedTest extends TestCase {
         fac = new GenPolynomialRing<BigRational>(coeff, rl);
         a = b = c = d = e = null;
         bb = new GBSigBased<BigRational>();
+        //bb = new GBSigBased<BigRational>(GBSigBased.GBAlgo.ff5);
         //bbn = new GroebnerBaseSeq<BigRational>(new ReductionSeq<BigRational>(),new OrderedSyzPairlist<BigRational>());
         bbn = new GroebnerBaseSeq<BigRational>();
+        //logger.info("using " + bb);
     }
 
 
