@@ -93,7 +93,7 @@ public class GroebnerBaseQuotientTest extends TestCase {
     int rl = 4;
 
 
-    int kl = 2; //7; // 10
+    int kl = 1; //7; // 10
 
 
     int ll = 3; //7;
