@@ -360,10 +360,70 @@ public class GBFactory {
      * @param fac GenPolynomialRing&lt;C&gt;.
      * @return GB algorithm implementation.
      */
-    public static <C extends GcdRingElem<C>> GroebnerBaseAbstract<GenPolynomial<C>> getImplementation(
-                    GenPolynomialRing<C> fac) {
+    public static <C extends GcdRingElem<C>> 
+    GroebnerBaseAbstract<GenPolynomial<C>> getImplementation(GenPolynomialRing<C> fac) {
+        return getImplementation(fac, Algo.igb);
+    }
+
+
+    /**
+     * Determine suitable implementation of GB algorithms, case (recursive)
+     * polynomial.
+     * @param fac GenPolynomialRing&lt;C&gt;.
+     * @param a algorithm, a = igb or egb, dgb if fac is univariate over a field.
+     * @return GB algorithm implementation.
+     */
+    public static <C extends GcdRingElem<C>> GroebnerBaseAbstract<GenPolynomial<C>> 
+        getImplementation(GenPolynomialRing<C> fac, Algo a) {
+        return getImplementation(fac, a, new OrderedPairlist<GenPolynomial<C>>());
+    }
+
+
+    /**
+     * Determine suitable implementation of GB algorithms, case (recursive)
+     * polynomial.
+     * @param fac GenPolynomialRing&lt;C&gt;.
+     * @param pl pair selection strategy
+     * @return GB algorithm implementation.
+     */
+    public static <C extends GcdRingElem<C>> 
+    GroebnerBaseAbstract<GenPolynomial<C>> getImplementation(GenPolynomialRing<C> fac, 
+                                                             PairList<GenPolynomial<C>> pl) {
+        return getImplementation(fac, Algo.igb, pl);
+    }
+
+
+    /**
+     * Determine suitable implementation of GB algorithms, case (recursive)
+     * polynomial.
+     * @param fac GenPolynomialRing&lt;C&gt;.
+     * @param a algorithm, a = igb or egb, dgb if fac is univariate over a field.
+     * @param pl pair selection strategy
+     * @return GB algorithm implementation.
+     */
+    public static <C extends GcdRingElem<C>> 
+    GroebnerBaseAbstract<GenPolynomial<C>> getImplementation(GenPolynomialRing<C> fac, 
+                                                             Algo a, PairList<GenPolynomial<C>> pl) {
         GroebnerBaseAbstract<GenPolynomial<C>> bba;
-        bba = new GroebnerBasePseudoRecSeq<C>(fac);
+        switch (a) {
+        case igb:
+            bba = new GroebnerBasePseudoRecSeq<C>(fac);
+            break;
+        case egb:
+            if (fac.nvar > 1 || !fac.coFac.isField()) {
+                throw new IllegalArgumentException("coefficients not univariate or not over a field" + fac);
+            }
+            bba = new EGroebnerBaseSeq<GenPolynomial<C>>(); // pl not suitable
+            break;
+        case dgb:
+            if (fac.nvar > 1 || !fac.coFac.isField()) {
+                throw new IllegalArgumentException("coefficients not univariate or not over a field" + fac);
+            }
+            bba = new DGroebnerBaseSeq<GenPolynomial<C>>(); // pl not suitable
+            break;
+        default:
+            throw new IllegalArgumentException("algorithm not available for GenPolynomial<C> " + a);
+        }
         return bba;
     }
 
@@ -465,7 +525,7 @@ public class GBFactory {
             GroebnerBaseAbstract<C> e2 = new GroebnerBasePseudoParallel<C>(th, fac, pl);
             return new GBProxy<C>(e1, e2);
         }
-        return getImplementation(fac);
+        return getImplementation(fac,pl);
     }
 
 }

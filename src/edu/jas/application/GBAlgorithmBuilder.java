@@ -301,6 +301,12 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
             GroebnerBaseAbstract<C> cbb = (GroebnerBaseAbstract<C>) (GroebnerBaseAbstract) bb;
             return new GBAlgorithmBuilder<C>(ring, cbb);
         }
+        if (((Object)ring.coFac) instanceof GenPolynomial) {
+            GenPolynomialRing<C> cf = (GenPolynomialRing) (Object) ring.coFac;
+            GroebnerBaseAbstract<GenPolynomial<C>> bb = GBFactory.<C> getImplementation(cf, a);
+            GroebnerBaseAbstract<C> cbb = (GroebnerBaseAbstract<C>) (GroebnerBaseAbstract) bb;
+            return new GBAlgorithmBuilder<C>(ring, cbb);
+        }
         logger.warn("no domain algorithm implemented for " + ring);
         return this;
     }
@@ -344,7 +350,6 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
                     pli = new OrderedPairlist<BigInteger>();
                 }
                 bb = (GroebnerBaseAbstract) new GroebnerBaseRational<BigRational>(threads, pli);
-                //bb = GBFactory.<C> getImplementation(ring.coFac, strategy);
             } else {
                 bb = (GroebnerBaseAbstract) new GroebnerBaseParallel<C>(threads,strategy);
             }
@@ -362,7 +367,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
                     pli = new OrderedPairlist<GenPolynomial<C>>();
                 }
                 QuotientRing<C> fac = (QuotientRing) ring.coFac;   
-                bb = (GroebnerBaseAbstract) new GroebnerBaseQuotient<C>(fac,pli); // pl not possible
+                bb = (GroebnerBaseAbstract) new GroebnerBaseQuotient<C>(fac,threads,pli); // pl not possible
             } else {
                 bb = (GroebnerBaseAbstract) new GroebnerBaseParallel<C>(threads,strategy);
             }
