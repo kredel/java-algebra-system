@@ -85,6 +85,7 @@ public class GroebnerBaseRationalTest extends TestCase {
 
     GenPolynomial<BigRational> a, b, c, d, e;
 
+
     int threads = 2;
 
 

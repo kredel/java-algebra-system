@@ -51,7 +51,7 @@ public class GroebnerBaseRational<C extends BigRational> extends GroebnerBaseAbs
      * @param threads the number of parallel threads.
      */
     public GroebnerBaseRational(int threads) {
-        this(new GroebnerBasePseudoParallel<BigInteger>(threads,new BigInteger()));
+        this(new GroebnerBasePseudoParallel<BigInteger>(threads, new BigInteger()));
     }
 
 
@@ -60,7 +60,7 @@ public class GroebnerBaseRational<C extends BigRational> extends GroebnerBaseAbs
      * @param pl pair selection strategy
      */
     public GroebnerBaseRational(PairList<BigInteger> pl) {
-        this(new GroebnerBasePseudoSeq<BigInteger>(new BigInteger(),pl));
+        this(new GroebnerBasePseudoSeq<BigInteger>(new BigInteger(), pl));
     }
 
 
@@ -70,7 +70,7 @@ public class GroebnerBaseRational<C extends BigRational> extends GroebnerBaseAbs
      * @param pl pair selection strategy
      */
     public GroebnerBaseRational(int threads, PairList<BigInteger> pl) {
-        this(new GroebnerBasePseudoParallel<BigInteger>(threads,new BigInteger(),pl));
+        this(new GroebnerBasePseudoParallel<BigInteger>(threads, new BigInteger(), pl));
     }
 
 

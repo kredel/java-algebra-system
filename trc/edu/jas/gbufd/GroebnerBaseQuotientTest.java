@@ -5,9 +5,6 @@
 package edu.jas.gbufd;
 
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,29 +13,27 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
+// import org.apache.log4j.Logger;
 
-import edu.jas.kern.ComputerThreads;
 import edu.jas.arith.BigRational;
 import edu.jas.gb.GroebnerBaseAbstract;
-import edu.jas.gb.GroebnerBaseSeq;
+import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
 import edu.jas.ufd.Quotient;
 import edu.jas.ufd.QuotientRing;
 
 
 /**
- * Groebner base sequential rational fraction free tests with JUnit.
+ * Groebner base sequential quotient fraction free tests with JUnit.
  * @author Heinz Kredel.
  */
 
 public class GroebnerBaseQuotientTest extends TestCase {
 
 
-    private static final Logger logger = Logger.getLogger(GroebnerBaseQuotientTest.class);
+    //private static final Logger logger = Logger.getLogger(GroebnerBaseQuotientTest.class);
 
 
     /**
@@ -95,7 +90,7 @@ public class GroebnerBaseQuotientTest extends TestCase {
     int threads = 2;
 
 
-    int rl = 4; 
+    int rl = 4;
 
 
     int kl = 2; //7; // 10
@@ -113,12 +108,13 @@ public class GroebnerBaseQuotientTest extends TestCase {
     @Override
     protected void setUp() {
         BigRational coeff = new BigRational(9);
-        GenPolynomialRing<BigRational> cf = new GenPolynomialRing<BigRational>(coeff, rl/2, new String[]{"a","b"});
+        GenPolynomialRing<BigRational> cf = new GenPolynomialRing<BigRational>(coeff, rl / 2, new String[] {
+                "a", "b" });
         QuotientRing<BigRational> qf = new QuotientRing<BigRational>(cf);
-        fac = new GenPolynomialRing<Quotient<BigRational>>(qf, rl/2, new String[]{"x","y"});
+        fac = new GenPolynomialRing<Quotient<BigRational>>(qf, rl / 2, new String[] { "x", "y" });
         a = b = c = d = e = null;
         bb = new GroebnerBaseQuotient<BigRational>(qf);
-        bbp = new GroebnerBaseQuotient<BigRational>(qf,threads);
+        bbp = new GroebnerBaseQuotient<BigRational>(qf, threads);
         //bbq = new GroebnerBaseSeq<Quotient<BigRational>>();
         bbq = GBFactory.<Quotient<BigRational>> getImplementation(qf);
     }
@@ -264,7 +260,7 @@ public class GroebnerBaseQuotientTest extends TestCase {
         L.add(a);
         Lp = bbp.GB(L);
         Lq = bbq.GB(L);
-        L  = bb.GB(L);
+        L = bb.GB(L);
         assertTrue("isGB( { a } )", bb.isGB(L));
         assertTrue("isMinimalGB( { a } )", bb.isMinimalGB(L));
         assertEquals("Lp == L: ", Lp, L);
@@ -274,7 +270,7 @@ public class GroebnerBaseQuotientTest extends TestCase {
         L.add(b);
         Lp = bbp.GB(L);
         Lq = bbq.GB(L);
-        L  = bb.GB(L);
+        L = bb.GB(L);
         assertTrue("isGB( { a, b } )", bb.isGB(L));
         assertTrue("isMinimalGB( { a, b } )", bb.isMinimalGB(L));
         assertEquals("Lp == L: ", Lp, L);
@@ -284,7 +280,7 @@ public class GroebnerBaseQuotientTest extends TestCase {
         L.add(c);
         Lp = bbp.GB(L);
         Lq = bbq.GB(L);
-        L  = bb.GB(L);
+        L = bb.GB(L);
         assertTrue("isGB( { a, b, c } )", bb.isGB(L));
         assertTrue("isMinimalGB( { a, b, c } )", bb.isMinimalGB(L));
         assertEquals("Lp == L: ", Lp, L);

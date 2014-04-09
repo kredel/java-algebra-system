@@ -33,7 +33,7 @@ import edu.jas.poly.TermOrder;
 
 
 /**
- * Groebner base sequential tests with JUnit.
+ * Groebner base via FGLM tests with JUnit.
  * @author Heinz Kredel.
  */
 
