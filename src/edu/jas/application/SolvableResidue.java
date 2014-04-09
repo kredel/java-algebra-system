@@ -16,8 +16,8 @@ import edu.jas.structure.NotInvertibleException;
 
 
 /**
- * SolvableResidue ring element based on GenSolvablePolynomial with RingElem
- * interface. Objects of this class are (nearly) immutable.
+ * SolvableResidue ring element based on GenSolvablePolynomial with GcdRingElem
+ * interface. Objects of this class are immutable.
  * @author Heinz Kredel
  */
 public class SolvableResidue<C extends GcdRingElem<C>> implements GcdRingElem<SolvableResidue<C>> {

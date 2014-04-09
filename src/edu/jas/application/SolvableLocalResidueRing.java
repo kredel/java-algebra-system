@@ -21,18 +21,19 @@ import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolynomialList;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingFactory;
 import edu.jas.structure.QuotPairFactory;
+import edu.jas.structure.RingFactory;
 
 
 /**
- * SolvableLocalResidue ring factory based on SolvableResidue and
- * GenSolvablePolynomial with RingElem interface. Objects of this class are
+ * SolvableLocalResidue ring factory for SolvableLocalResidue based on
+ * GenSolvablePolynomial with GcdRingElem interface. Objects of this class are
  * immutable.
  * @author Heinz Kredel
  */
-public class SolvableLocalResidueRing<C extends GcdRingElem<C>> 
-    implements RingFactory<SolvableLocalResidue<C>>, QuotPairFactory<GenPolynomial<C>,SolvableLocalResidue<C>> {
+public class SolvableLocalResidueRing<C extends GcdRingElem<C>> implements
+                RingFactory<SolvableLocalResidue<C>>,
+                QuotPairFactory<GenPolynomial<C>, SolvableLocalResidue<C>> {
 
 
     // Can not extend SolvableLocalRing or SolvableQuotientRing 
@@ -116,7 +117,7 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>>
      * Create from numerator.
      */
     public SolvableLocalResidue<C> create(GenPolynomial<C> n) {
-        return new SolvableLocalResidue<C>(this,(GenSolvablePolynomial<C>)n);
+        return new SolvableLocalResidue<C>(this, (GenSolvablePolynomial<C>) n);
     }
 
 
@@ -124,7 +125,7 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>>
      * Create from numerator, denominator pair.
      */
     public SolvableLocalResidue<C> create(GenPolynomial<C> n, GenPolynomial<C> d) {
-        return new SolvableLocalResidue<C>(this,(GenSolvablePolynomial<C>)n,(GenSolvablePolynomial<C>)d);
+        return new SolvableLocalResidue<C>(this, (GenSolvablePolynomial<C>) n, (GenSolvablePolynomial<C>) d);
     }
 
 

@@ -21,20 +21,20 @@ import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolynomialList;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingFactory;
 import edu.jas.structure.QuotPairFactory;
+import edu.jas.structure.RingFactory;
 
 
 // import edu.jas.ufd.GreatestCommonDivisor;
 // import edu.jas.ufd.GCDFactory;
 
 /**
- * SolvableLocal ring class based on GenSolvablePolynomial with RingElem
- * interface. Objects of this class are effective immutable.
+ * SolvableLocal ring factory for SolvableLocal with GcdRingElem interface.
+ * Objects of this class are immutable.
  * @author Heinz Kredel
  */
-public class SolvableLocalRing<C extends GcdRingElem<C>> 
-       implements RingFactory<SolvableLocal<C>>, QuotPairFactory<GenPolynomial<C>,SolvableLocal<C>> {
+public class SolvableLocalRing<C extends GcdRingElem<C>> implements RingFactory<SolvableLocal<C>>,
+                QuotPairFactory<GenPolynomial<C>, SolvableLocal<C>> {
 
 
     // Can not extend SolvableQuotientRing 
@@ -115,7 +115,7 @@ public class SolvableLocalRing<C extends GcdRingElem<C>>
      * Create from numerator.
      */
     public SolvableLocal<C> create(GenPolynomial<C> n) {
-        return new SolvableLocal<C>(this,(GenSolvablePolynomial<C>)n);
+        return new SolvableLocal<C>(this, (GenSolvablePolynomial<C>) n);
     }
 
 
@@ -123,7 +123,7 @@ public class SolvableLocalRing<C extends GcdRingElem<C>>
      * Create from numerator, denominator pair.
      */
     public SolvableLocal<C> create(GenPolynomial<C> n, GenPolynomial<C> d) {
-        return new SolvableLocal<C>(this,(GenSolvablePolynomial<C>)n,(GenSolvablePolynomial<C>)d);
+        return new SolvableLocal<C>(this, (GenSolvablePolynomial<C>) n, (GenSolvablePolynomial<C>) d);
     }
 
 

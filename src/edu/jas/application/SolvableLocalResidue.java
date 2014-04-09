@@ -19,13 +19,13 @@ import edu.jas.structure.QuotPair;
 
 
 /**
- * SolvableLocalResidue, that is a (left) rational function, based on
- * SolvableResidue and GenSolvablePolynomial with RingElem interface. Objects of
- * this class are immutable.
+ * SolvableLocalResidue, that is a (left) rational function, based on pairs of
+ * GenSolvablePolynomial with GcdRingElem interface. Objects of this class are
+ * immutable.
  * @author Heinz Kredel
  */
-public class SolvableLocalResidue<C extends GcdRingElem<C>> 
-       implements GcdRingElem<SolvableLocalResidue<C>>, QuotPair<GenPolynomial<C>> {
+public class SolvableLocalResidue<C extends GcdRingElem<C>> implements GcdRingElem<SolvableLocalResidue<C>>,
+                QuotPair<GenPolynomial<C>> {
 
 
     // Can not extend SolvableLocal or SolvableQuotient because of 
