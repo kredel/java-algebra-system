@@ -132,9 +132,17 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends Gr
             long g = f;
             f = e;
             e = g;
-        } else {
+        } else if (f < e) {
             q = P;
             r = S;
+        } else { // f == e
+            if ( P.leadingBaseCoefficient().degree() > S.leadingBaseCoefficient().degree() ) {
+                q = P;
+                r = S;
+	    } else {
+                r = P;
+                q = S;
+            }
         }
         if (debug) {
             logger.debug("degrees: e = " + e + ", f = " + f);
@@ -154,8 +162,10 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends Gr
         logger.info("Gcd(contents) c = " + c);
         // rr = FDUtil.<C> recursiveRightDivide(r, a);
         // qr = FDUtil.<C> recursiveRightDivide(q, b);
-        r = FDUtil.<C> recursiveDivideRightPolynomial(r, a);
-        q = FDUtil.<C> recursiveDivideRightPolynomial(q, b);
+        //r = FDUtil.<C> recursiveDivideRightPolynomial(r, a);
+        //q = FDUtil.<C> recursiveDivideRightPolynomial(q, b);
+        r = FDUtil.<C> recursiveDivideRightEval(r, a);
+        q = FDUtil.<C> recursiveDivideRightEval(q, b);
         if (r.isONE()) {
             return r.multiply(c);
         }

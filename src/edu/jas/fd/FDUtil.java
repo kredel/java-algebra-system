@@ -648,9 +648,9 @@ public class FDUtil {
                     throw new RuntimeException("can not happen: lc(r) = " + r.leadingBaseCoefficient()
                                                + ", lc(h) = " + h.leadingBaseCoefficient());
                 }
+                r = (GenSolvablePolynomial<GenPolynomial<C>>) r.subtract(h);
                 qr = FDUtil.<C> multiplyRightRecursivePolynomial(qr,ga); // d
                 qr = (GenSolvablePolynomial<GenPolynomial<C>>) qr.sum(gd, f); // a // same for right coefficients
-                r = (GenSolvablePolynomial<GenPolynomial<C>>) r.subtract(h);
                 //System.out.println("r = " +  r + ", qr = " +  qr);
             } else {
                 break;
@@ -660,6 +660,25 @@ public class FDUtil {
         ret[0] = q;
         ret[1] = r; 
         return ret;
+    }
+
+
+    /**
+     * GenSolvablePolynomial recursive quotient for recursive
+     * polynomials and exact division by coefficient ring element.
+     * @param <C> coefficient type.
+     * @param P recursive GenSolvablePolynomial.
+     * @param s GenSolvablePolynomial.
+     * @return this/s.
+     */
+    public static <C extends GcdRingElem<C>> GenSolvablePolynomial<GenPolynomial<C>> 
+           recursiveDivideRightEval(GenSolvablePolynomial<GenPolynomial<C>> P, GenSolvablePolynomial<C> s) {
+        GenSolvablePolynomial<GenPolynomial<C>> Pr = FDUtil.<C> rightRecursivePolynomial(P);
+        logger.info("rDivREval: P = " + P + ", right(P) = " + Pr);
+        GenSolvablePolynomial<GenPolynomial<C>> Qr = FDUtil.<C> recursiveDivide(Pr,s);
+        GenSolvablePolynomial<GenPolynomial<C>> Q = FDUtil.<C> evalAsRightRecursivePolynomial(Qr);
+        logger.info("rDivREval: Q = " + Q + ", right(Q) = " + Qr);
+        return Q;
     }
 
 
@@ -691,10 +710,12 @@ public class FDUtil {
             GenSolvablePolynomial<C>[] QR = FDUtil.<C> basePseudoQuotientRemainder(c1, s);
             GenSolvablePolynomial<C> c = QR[0];
             if ( !QR[1].isZERO() ) {
-                System.out.println("rDiv, P  = " + P);
-                System.out.println("rDiv, c1 = " + c1);
-                System.out.println("rDiv, s  = " + s);
-                System.out.println("rDiv, c  = " + c + ", r = " + QR[1]);
+                System.out.println("rDiv, P   = " + P);
+                System.out.println("rDiv, c1  = " + c1);
+                System.out.println("rDiv, s   = " + s);
+                System.out.println("rDiv, c   = " + c + ", r = " + QR[1]);
+                System.out.println("rDiv, c*s = " + c.multiply(s));
+                System.out.println("rDiv, s*c = " + s.multiply(c));
                 throw new RuntimeException("something is wrong: rem = " + QR[1]);
             }
             if (!c.isZERO()) {
@@ -734,7 +755,7 @@ public class FDUtil {
         }
         GenSolvablePolynomial<GenPolynomial<C>> p = P.ring.getZERO().copy();
         GenSolvablePolynomial<GenPolynomial<C>> Pr = FDUtil.<C> rightRecursivePolynomial(P);
-        logger.info("P = " + P + ", right(P) = " + Pr);
+        logger.info("P = " + P + ", right(P) = " + Pr + ", left(s) = " + s);
         for (Map.Entry<ExpVector, GenPolynomial<C>> m1 : Pr.getMap().entrySet()) {
             GenSolvablePolynomial<C> c1 = (GenSolvablePolynomial<C>) m1.getValue();
             ExpVector e1 = m1.getKey();
@@ -746,8 +767,9 @@ public class FDUtil {
                 p.doPutToMap(e1, c);
             }
         }
-        logger.info("p = " + p + ", s = " + s);
-        return p;
+        GenSolvablePolynomial<GenPolynomial<C>> pl = FDUtil.<C> evalAsRightRecursivePolynomial(p);
+        logger.info("pl = " + pl + ", p = " + p);
+        return pl;
     }
 
 
@@ -790,6 +812,7 @@ public class FDUtil {
         sr = (GenSolvablePolynomial<GenPolynomial<C>>) PolyUtil.<C> recursive(rfac, s);
         //qr = FDUtil.<C> recursiveDivideRightPolynomial(pr,sc);
         QR = FDUtil.<C> recursiveRightPseudoQuotientRemainder(pr,sr);
+        //QR = FDUtil.<C> recursivePseudoQuotientRemainder(pr,sr);
         qr = QR[0];
         rr = QR[1];
         if (!rr.isZERO()) {

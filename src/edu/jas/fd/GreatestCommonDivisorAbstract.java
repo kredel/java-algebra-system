@@ -164,6 +164,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             } else {
                 d = gcd(d, cs); // go to recursion
             }
+            logger.info("rCont: cs = " + cs + ", d = " + d); // + ", ring = " + d.ring.toScript());
             if (d.isONE()) {
                 return d;
             }
@@ -318,9 +319,11 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         if(debug) {
            logger.info("content(P) = " + d);
         }
-        GenSolvablePolynomial<GenPolynomial<C>> pp = null; 
-        pp = FDUtil.<C> recursiveDivideRightPolynomial(P, d);
-        //pp = FDUtil.<C> recursiveRightDivide(P, d);
+        GenSolvablePolynomial<GenPolynomial<C>> pp;
+        //wrong type: pp = FDUtil.<C> recursivePseudoQuotient(P, d);
+        //pp = FDUtil.<C> recursiveDivide(P, d);
+        //pp = FDUtil.<C> recursiveDivideRightPolynomial(P, d);
+        pp = FDUtil.<C> recursiveDivideRightEval(P, d);
         return pp;
     }
 
