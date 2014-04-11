@@ -201,7 +201,9 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends Gr
                 System.out.println("recGcd, qs = " + qs);
                 System.out.println("recGcd, rs = " + rs);
                 throw new RuntimeException("recGcd: not divisible");
-            }
+            } else {
+                logger.info("recGcd(P,S) okay: q = " + q);
+            } 
         }
         return q;
     }

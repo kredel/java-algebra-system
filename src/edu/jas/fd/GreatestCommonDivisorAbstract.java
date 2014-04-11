@@ -164,7 +164,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             } else {
                 d = gcd(d, cs); // go to recursion
             }
-            logger.info("rCont: cs = " + cs + ", d = " + d); // + ", ring = " + d.ring.toScript());
+            logger.info("recCont: cs = " + cs + ", d = " + d); 
             if (d.isONE()) {
                 return d;
             }
@@ -316,9 +316,9 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         if (d.isONE()) {
             return P;
         }
-        if(debug) {
-           logger.info("content(P) = " + d);
-        }
+        //if(debug) {
+        //   logger.info("content(P) = " + d);
+        //}
         GenSolvablePolynomial<GenPolynomial<C>> pp;
         //wrong type: pp = FDUtil.<C> recursivePseudoQuotient(P, d);
         //pp = FDUtil.<C> recursiveDivide(P, d);
@@ -329,7 +329,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             System.out.println("ppart, cont(P)   = " + d);
             System.out.println("ppart, pp(P)     = " + pp);
             System.out.println("ppart, pp(P)c(P) = " + pp.multiply(d));
-            throw new RuntimeException("primitivePart: P != pp)P)*cont(P)");
+            throw new RuntimeException("primitivePart: P != pp(P)*cont(P)");
         }
         return pp;
     }
@@ -542,19 +542,33 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             return T;
         }
         GenSolvablePolynomialRing<GenPolynomial<C>> rfac = /*(RecSolvablePolynomialRing<C>)*/pfac.recursive(1);
-        GenSolvablePolynomial<GenPolynomial<C>> Pr, Sr, Dr, er;
+        GenSolvablePolynomial<GenPolynomial<C>> Pr, Sr, Dr, er, fr;
         Pr = (RecSolvablePolynomial<C>) PolyUtil.<C> recursive(rfac, P);
         Sr = (RecSolvablePolynomial<C>) PolyUtil.<C> recursive(rfac, S);
         Dr = recursiveUnivariateGcd(Pr, Sr);
-        //er = (RecSolvablePolynomial<C>) FDUtil.<C> recursiveSparsePseudoRemainder(Pr, Dr);
-        //if ( !er.isZERO()) {
-        //    logger.info("gcd(P,S) | P: " + er + ", Pr = " + Pr);
-        //}
-        //er = (RecSolvablePolynomial<C>) FDUtil.<C> recursiveSparsePseudoRemainder(Sr, Dr);
-        //if ( !er.isZERO()) {
-        //    logger.info("gcd(P,S) | S: " + er + ", Sr = " + Sr);
+        //if (debug) { // done in recUnicGcd:
+        //    er = (RecSolvablePolynomial<C>) FDUtil.<C> recursiveSparsePseudoRemainder(Pr, Dr);
+        //    fr = (RecSolvablePolynomial<C>) FDUtil.<C> recursiveSparsePseudoRemainder(Sr, Dr);
+        //    if ( !er.isZERO() || !fr.isZERO()) {
+        //        logger.info("gcd(P,S) | P: " + er + ", Pr = " + Pr);
+        //        logger.info("gcd(P,S) | S: " + fr + ", Sr = " + Sr);
+        //        throw new RuntimeException("fullRecGcd: not divisible");
+        //    }
         //}
         GenSolvablePolynomial<C> D = (GenSolvablePolynomial<C>) PolyUtil.<C> distribute(pfac, Dr);
+        if (debug) {
+            GenSolvablePolynomial<C> ps = FDUtil.<C> baseSparsePseudoRemainder(P, D);
+            GenSolvablePolynomial<C> ss = FDUtil.<C> baseSparsePseudoRemainder(S, D);
+            if (!ps.isZERO()||!ss.isZERO()) {
+                System.out.println("recGcd, P  = " + P);
+                System.out.println("recGcd, S  = " + S);
+                System.out.println("recGcd, ps = " + ps);
+                System.out.println("recGcd, ss = " + ss);
+                throw new RuntimeException("fullGcd: not divisible");
+            } else {
+                logger.info("fullGcd(P,S) okay: D = " + D);
+            }
+        }
         return D;
     }
 
