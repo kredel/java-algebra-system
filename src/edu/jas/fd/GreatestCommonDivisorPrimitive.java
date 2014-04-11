@@ -125,7 +125,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends Gr
         boolean field = P.leadingBaseCoefficient().ring.coFac.isField();
         long e = P.degree(0);
         long f = S.degree(0);
-        GenSolvablePolynomial<GenPolynomial<C>> q, r, x;
+        GenSolvablePolynomial<GenPolynomial<C>> q, r, x, qs, rs;
         if (f > e) {
             r = P;
             q = S;
@@ -191,6 +191,18 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends Gr
         }
         // no: q = (GenSolvablePolynomial<GenPolynomial<C>>) q.multiply(c,P.ring.getONECoefficient()).abs();
         q = (GenSolvablePolynomial<GenPolynomial<C>>) q.multiply(c).abs();
+        if (debug) {
+            qs = FDUtil.<C> recursiveSparsePseudoRemainder(P, q);
+            rs = FDUtil.<C> recursiveSparsePseudoRemainder(S, q);
+            if (!qs.isZERO()||!rs.isZERO()) {
+                System.out.println("recGcd, P  = " + P);
+                System.out.println("recGcd, S  = " + S);
+                System.out.println("recGcd, q  = " + q);
+                System.out.println("recGcd, qs = " + qs);
+                System.out.println("recGcd, rs = " + rs);
+                throw new RuntimeException("recGcd: not divisible");
+            }
+        }
         return q;
     }
 

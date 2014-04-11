@@ -324,6 +324,13 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         //pp = FDUtil.<C> recursiveDivide(P, d);
         //pp = FDUtil.<C> recursiveDivideRightPolynomial(P, d);
         pp = FDUtil.<C> recursiveDivideRightEval(P, d);
+        if ( !P.equals(pp.multiply(d)) ) {
+            System.out.println("ppart, P         = " + P);
+            System.out.println("ppart, cont(P)   = " + d);
+            System.out.println("ppart, pp(P)     = " + pp);
+            System.out.println("ppart, pp(P)c(P) = " + pp.multiply(d));
+            throw new RuntimeException("primitivePart: P != pp)P)*cont(P)");
+        }
         return pp;
     }
 
