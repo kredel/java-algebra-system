@@ -248,9 +248,9 @@ public class FDUtil {
         if (P == null || P.isZERO()) {
             return P;
         }
-        if (S.isConstant()) {
-            return P.ring.getZERO();
-        }
+        //if (S.isConstant()) {
+        //    return P.ring.getZERO();
+        //}
         //SolvableSyzygyAbstract<C> syz = new SolvableSyzygyAbstract<C>();
         GreatestCommonDivisorAbstract<C> fd = new GreatestCommonDivisorSimple<C>();
 
@@ -263,6 +263,7 @@ public class FDUtil {
                 GenSolvablePolynomial<C> a = (GenSolvablePolynomial<C>) r.leadingBaseCoefficient();
                 f = f.subtract(e);
                 h = S.multiplyLeft(f); // coeff c, exp (f-e) e
+                //wrong: h = S.multiply(f); // coeff c, exp e (f-e)
                 GenSolvablePolynomial<C> d = (GenSolvablePolynomial<C>) h.leadingBaseCoefficient();
                 GenSolvablePolynomial<C>[] oc = fd.leftOreCond(a, d);
                 GenPolynomial<C> ga = oc[0];
@@ -277,6 +278,7 @@ public class FDUtil {
                                     + ", lc(h) = " + h.leadingBaseCoefficient());
                 }
                 r = (GenSolvablePolynomial<GenPolynomial<C>>) r.subtract(h);
+                //System.out.println("recRem:  lm(r) = " +  r.leadingMonomial());
             } else {
                 break;
             }
@@ -673,6 +675,9 @@ public class FDUtil {
      */
     public static <C extends GcdRingElem<C>> GenSolvablePolynomial<GenPolynomial<C>> 
            recursiveDivideRightEval(GenSolvablePolynomial<GenPolynomial<C>> P, GenSolvablePolynomial<C> s) {
+        if (s.isONE()) {
+            return P;
+        }
         GenSolvablePolynomial<GenPolynomial<C>> Pr = FDUtil.<C> rightRecursivePolynomial(P);
         logger.info("rDivREval: P = " + P + ", right(P) = " + Pr);
         GenSolvablePolynomial<GenPolynomial<C>> Qr = FDUtil.<C> recursiveDivide(Pr,s);

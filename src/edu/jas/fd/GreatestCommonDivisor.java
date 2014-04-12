@@ -24,7 +24,7 @@ public interface GreatestCommonDivisor<C extends GcdRingElem<C>> extends Seriali
     /**
      * GenSolvablePolynomial content.
      * @param P GenSolvablePolynomial.
-     * @return cont(P).
+     * @return cont(P) with pp(P)*cont(P) = P.
      */
     public GenSolvablePolynomial<C> content(GenSolvablePolynomial<C> P);
 
@@ -32,7 +32,7 @@ public interface GreatestCommonDivisor<C extends GcdRingElem<C>> extends Seriali
     /**
      * GenSolvablePolynomial primitive part.
      * @param P GenSolvablePolynomial.
-     * @return pp(P).
+     * @return pp(P) with pp(P)*cont(P) = P.
      */
     public GenSolvablePolynomial<C> primitivePart(GenSolvablePolynomial<C> P);
 
@@ -41,7 +41,7 @@ public interface GreatestCommonDivisor<C extends GcdRingElem<C>> extends Seriali
      * GenSolvablePolynomial greatest comon divisor.
      * @param P GenSolvablePolynomial.
      * @param S GenSolvablePolynomial.
-     * @return gcd(P,S).
+     * @return gcd(P,S) with P = P'*gcd(P,S) and S = S'*gcd(P,S).
      */
     public GenSolvablePolynomial<C> gcd(GenSolvablePolynomial<C> P, GenSolvablePolynomial<C> S);
 
