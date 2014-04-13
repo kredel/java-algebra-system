@@ -339,7 +339,7 @@ public class GCDPrimitiveTest extends TestCase {
         System.out.println("ar = " + ar);
         System.out.println("br = " + br);
 
-        dr = fd.recursiveGcd(ar, br);
+        dr = fd.leftRecursiveGcd(ar, br);
         System.out.println("cr = " + cr);
         System.out.println("dr = " + dr);
 
