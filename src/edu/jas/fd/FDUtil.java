@@ -1078,7 +1078,7 @@ public class FDUtil {
                 c = x;
                 s = x.signum();
             } else {
-                d = fd.gcd(c, x);
+                d = fd.leftGcd(c, x);
                 z = (GenSolvablePolynomial<C>) x.divide(d); // ??
                 c = z.multiply(c); // ?? multiplyLeft
             }
