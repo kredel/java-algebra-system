@@ -360,7 +360,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
                     pli = new OrderedPairlist<GenPolynomial<C>>();
                 }
                 QuotientRing<C> fac = (QuotientRing) ring.coFac;
-                bb = (GroebnerBaseAbstract) new GroebnerBaseQuotient<C>(fac, threads, pli); // pl not possible
+                bb = (GroebnerBaseAbstract) new GroebnerBaseQuotient<C>(threads, fac, pli); // pl not possible
             } else {
                 bb = (GroebnerBaseAbstract) new GroebnerBaseParallel<C>(threads, strategy);
             }

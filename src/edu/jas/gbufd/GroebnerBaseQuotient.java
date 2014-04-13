@@ -51,10 +51,10 @@ public class GroebnerBaseQuotient<C extends GcdRingElem<C>> extends GroebnerBase
 
     /**
      * Constructor.
-     * @param rf quotient coefficient ring factory.
      * @param threads the number of parallel threads.
+     * @param rf quotient coefficient ring factory.
      */
-    public GroebnerBaseQuotient(QuotientRing<C> rf, int threads) {
+    public GroebnerBaseQuotient(int threads, QuotientRing<C> rf) {
         this(new GroebnerBasePseudoRecParallel<C>(threads, rf.ring));
     }
 
@@ -71,11 +71,11 @@ public class GroebnerBaseQuotient<C extends GcdRingElem<C>> extends GroebnerBase
 
     /**
      * Constructor.
-     * @param rf quotient coefficient ring factory.
      * @param threads the number of parallel threads.
+     * @param rf quotient coefficient ring factory.
      * @param pl pair selection strategy (for fraction parts).
      */
-    public GroebnerBaseQuotient(QuotientRing<C> rf, int threads, PairList<GenPolynomial<C>> pl) {
+    public GroebnerBaseQuotient(int threads, QuotientRing<C> rf, PairList<GenPolynomial<C>> pl) {
         this(new GroebnerBasePseudoRecParallel<C>(threads, rf.ring, pl));
     }
 

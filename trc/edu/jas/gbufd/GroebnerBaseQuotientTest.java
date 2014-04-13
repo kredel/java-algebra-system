@@ -114,7 +114,7 @@ public class GroebnerBaseQuotientTest extends TestCase {
         fac = new GenPolynomialRing<Quotient<BigRational>>(qf, rl / 2, new String[] { "x", "y" });
         a = b = c = d = e = null;
         bb = new GroebnerBaseQuotient<BigRational>(qf);
-        bbp = new GroebnerBaseQuotient<BigRational>(qf, threads);
+        bbp = new GroebnerBaseQuotient<BigRational>(threads, qf);
         //bbq = new GroebnerBaseSeq<Quotient<BigRational>>();
         bbq = GBFactory.<Quotient<BigRational>> getImplementation(qf);
     }
