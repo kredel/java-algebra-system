@@ -153,7 +153,7 @@ public class FDUtilTest extends TestCase {
         //a = a.multiply(b);
         //a = a.sum(b);
         if (b.isZERO()) {
-           b = dfac.parse(" 2 x^2 + 40 ");
+            b = dfac.parse(" 2 x^2 + 40 ");
         }
         //System.out.println("a   = " + a);
         //System.out.println("b   = " + b);
@@ -341,7 +341,7 @@ public class FDUtilTest extends TestCase {
         ll = 5;
         el = 6;
 
-        arr = rrfac.random(kl, ll, el+1, q);
+        arr = rrfac.random(kl, ll, el + 1, q);
         //arr = rrfac.parse("z^5 - ( 1260/551 y^2 - 143/35 y - 33/100  ) z - ( 1/3 y^2 + 419/299 y - 19/56  )");
         // b * q + r:
         //arr = rrfac.parse("z^5 + z^2 - 1");

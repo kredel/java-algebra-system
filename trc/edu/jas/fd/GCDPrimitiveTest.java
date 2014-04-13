@@ -14,6 +14,9 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigRational;
+import edu.jas.gbmod.QuotSolvablePolynomialRing;
+import edu.jas.gbmod.SolvableQuotient;
+import edu.jas.gbmod.SolvableQuotientRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
@@ -25,11 +28,6 @@ import edu.jas.poly.RelationGenerator;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.WeylRelationsIterated;
 
-import edu.jas.ufd.PolyUfdUtil;
-import edu.jas.gbmod.SolvableQuotient;
-import edu.jas.gbmod.SolvableQuotientRing;
-import edu.jas.gbmod.QuotSolvablePolynomial;
-import edu.jas.gbmod.QuotSolvablePolynomialRing;
 
 /**
  * GCD Primitive PRS algorithm tests with JUnit.
@@ -69,6 +67,8 @@ public class GCDPrimitiveTest extends TestCase {
 
 
     TermOrder to = new TermOrder(TermOrder.INVLEX);
+
+
     //TermOrder to = new TermOrder(TermOrder.IGRLEX);
 
 
@@ -185,12 +185,13 @@ public class GCDPrimitiveTest extends TestCase {
         RecSolvablePolynomialRing<BigRational> rrfacTemp = rfac;
         GenSolvablePolynomialRing<GenPolynomial<BigRational>> rrfac = rfac;
 
-        GenSolvablePolynomialRing<BigRational> rcfac = (GenSolvablePolynomialRing<BigRational>) rfac.coFac; 
+        GenSolvablePolynomialRing<BigRational> rcfac = (GenSolvablePolynomialRing<BigRational>) rfac.coFac;
         SolvableQuotientRing<BigRational> qfac = new SolvableQuotientRing<BigRational>(rcfac);
-        QuotSolvablePolynomialRing<BigRational> rqfac 
-           = new QuotSolvablePolynomialRing<BigRational>(qfac,rrfac);
+        QuotSolvablePolynomialRing<BigRational> rqfac = new QuotSolvablePolynomialRing<BigRational>(qfac,
+                        rrfac);
         List<GenSolvablePolynomial<GenPolynomial<BigRational>>> rl = rrfacTemp.coeffTable.relationList();
-        List<GenPolynomial<GenPolynomial<BigRational>>> rlc = PolynomialList.<GenPolynomial<BigRational>> castToList(rl);
+        List<GenPolynomial<GenPolynomial<BigRational>>> rlc = PolynomialList
+                        .<GenPolynomial<BigRational>> castToList(rl);
         rqfac.polCoeff.coeffTable.addRelations(rlc);
         //System.out.println("rrfac  = " + rrfac.toScript());
         //System.out.println("rcfac  = " + rcfac.toScript());
@@ -234,12 +235,12 @@ public class GCDPrimitiveTest extends TestCase {
 
         long ts = System.currentTimeMillis();
         //sr = rfac.getONE(); 
-        sr = fds.recursiveUnivariateGcd(ar, br);
+        sr = fds.leftRecursiveUnivariateGcd(ar, br);
         ts = System.currentTimeMillis() - ts;
         //System.out.println("cr = " + cr);
 
         long tp = System.currentTimeMillis();
-        dr = fd.recursiveUnivariateGcd(ar, br);
+        dr = fd.leftRecursiveUnivariateGcd(ar, br);
         tp = System.currentTimeMillis() - tp;
         //System.out.println("cr = " + cr);
         //System.out.println("dr = " + dr);
@@ -260,12 +261,11 @@ public class GCDPrimitiveTest extends TestCase {
         //System.out.println("er = " + er);
         assertTrue("gcd(a,b) | b: " + er, er.isZERO());
 
-        GenSolvablePolynomial<SolvableQuotient<BigRational>> ap, bp, cp, dp, gp, ep, 
-            apm, bpm, cpm, dpm, gpm;
-        ap = FDUtil.<BigRational> quotientFromIntegralCoefficients(rqfac,ar);
-        bp = FDUtil.<BigRational> quotientFromIntegralCoefficients(rqfac,br);
-        cp = FDUtil.<BigRational> quotientFromIntegralCoefficients(rqfac,cr);
-        dp = FDUtil.<BigRational> quotientFromIntegralCoefficients(rqfac,dr);
+        GenSolvablePolynomial<SolvableQuotient<BigRational>> ap, bp, cp, dp, gp, ep, apm, bpm, cpm, dpm, gpm;
+        ap = FDUtil.<BigRational> quotientFromIntegralCoefficients(rqfac, ar);
+        bp = FDUtil.<BigRational> quotientFromIntegralCoefficients(rqfac, br);
+        cp = FDUtil.<BigRational> quotientFromIntegralCoefficients(rqfac, cr);
+        dp = FDUtil.<BigRational> quotientFromIntegralCoefficients(rqfac, dr);
         apm = ap.monic();
         bpm = bp.monic();
         cpm = cp.monic();
@@ -279,9 +279,8 @@ public class GCDPrimitiveTest extends TestCase {
         //System.out.println("dp  = " + dp);
         //System.out.println("dpm = " + dpm);
 
-        GreatestCommonDivisorAbstract<SolvableQuotient<BigRational>> fdq = 
-            new GreatestCommonDivisorPrimitive<SolvableQuotient<BigRational>>();
-        gp = fdq.baseGcd(ap,bp);
+        GreatestCommonDivisorAbstract<SolvableQuotient<BigRational>> fdq = new GreatestCommonDivisorPrimitive<SolvableQuotient<BigRational>>();
+        gp = fdq.baseGcd(ap, bp);
         gpm = gp.monic();
         //System.out.println("gp  = " + gp);
         //System.out.println("gpm = " + gpm);
@@ -360,24 +359,24 @@ public class GCDPrimitiveTest extends TestCase {
         RecSolvablePolynomialRing<BigRational> rrfacTemp = rfac;
         GenSolvablePolynomialRing<GenPolynomial<BigRational>> rrfac = rfac;
 
-        GenSolvablePolynomialRing<BigRational> rcfac = (GenSolvablePolynomialRing<BigRational>) rfac.coFac; 
+        GenSolvablePolynomialRing<BigRational> rcfac = (GenSolvablePolynomialRing<BigRational>) rfac.coFac;
         SolvableQuotientRing<BigRational> qfac = new SolvableQuotientRing<BigRational>(rcfac);
-        QuotSolvablePolynomialRing<BigRational> rqfac 
-           = new QuotSolvablePolynomialRing<BigRational>(qfac,rrfac);
+        QuotSolvablePolynomialRing<BigRational> rqfac = new QuotSolvablePolynomialRing<BigRational>(qfac,
+                        rrfac);
         List<GenSolvablePolynomial<GenPolynomial<BigRational>>> rl = rrfacTemp.coeffTable.relationList();
-        List<GenPolynomial<GenPolynomial<BigRational>>> rlc = PolynomialList.<GenPolynomial<BigRational>> castToList(rl);
+        List<GenPolynomial<GenPolynomial<BigRational>>> rlc = PolynomialList
+                        .<GenPolynomial<BigRational>> castToList(rl);
         rqfac.polCoeff.coeffTable.addRelations(rlc);
         System.out.println("rrfac  = " + rrfac.toScript());
         System.out.println("rcfac  = " + rcfac.toScript());
         System.out.println("qfac   = " + qfac.toScript());
         System.out.println("rqfac  = " + rqfac.toScript());
 
-        GenSolvablePolynomial<SolvableQuotient<BigRational>> ap, bp, cp, dp, gp, ep, 
-            apm, bpm, cpm, dpm, gpm;
-        ap = FDUtil.<BigRational> quotientFromIntegralCoefficients(rqfac,ar);
-        bp = FDUtil.<BigRational> quotientFromIntegralCoefficients(rqfac,br);
-        cp = FDUtil.<BigRational> quotientFromIntegralCoefficients(rqfac,cr);
-        dp = FDUtil.<BigRational> quotientFromIntegralCoefficients(rqfac,dr);
+        GenSolvablePolynomial<SolvableQuotient<BigRational>> ap, bp, cp, dp, gp, ep, apm, bpm, cpm, dpm, gpm;
+        ap = FDUtil.<BigRational> quotientFromIntegralCoefficients(rqfac, ar);
+        bp = FDUtil.<BigRational> quotientFromIntegralCoefficients(rqfac, br);
+        cp = FDUtil.<BigRational> quotientFromIntegralCoefficients(rqfac, cr);
+        dp = FDUtil.<BigRational> quotientFromIntegralCoefficients(rqfac, dr);
         apm = ap.monic();
         bpm = bp.monic();
         cpm = cp.monic();
@@ -391,9 +390,8 @@ public class GCDPrimitiveTest extends TestCase {
         System.out.println("dp  = " + dp);
         System.out.println("dpm = " + dpm);
 
-        GreatestCommonDivisorAbstract<SolvableQuotient<BigRational>> fdq = 
-            new GreatestCommonDivisorPrimitive<SolvableQuotient<BigRational>>();
-        gp = fdq.baseGcd(ap,bp);
+        GreatestCommonDivisorAbstract<SolvableQuotient<BigRational>> fdq = new GreatestCommonDivisorPrimitive<SolvableQuotient<BigRational>>();
+        gp = fdq.baseGcd(ap, bp);
         gpm = gp.monic();
         System.out.println("gp  = " + gp);
         System.out.println("gpm = " + gpm);
@@ -432,17 +430,20 @@ public class GCDPrimitiveTest extends TestCase {
         //c = dfac.random(kl, ll, el, q);
         //c = c.multiply(dfac.univariate(0));
 
-        //a = dfac.parse("1/3 b^3 - 1/6 + d");
-        //b = dfac.parse("( -1/2 ) b + 3 a^2 + d");
+        a = dfac.parse("1/3 b^3 - 1/6 + d");
+        b = dfac.parse("( -1/2 ) b + 3 a^2 + d");
         ////b = dfac.parse("( -1/2 ) b + 3 a^2 + c");
         ////c = dfac.parse("(a - 5 b) + c + d");
         ////ok: c = dfac.parse("(a - b) c");
         ////c = dfac.parse("c (a - b)");
         //c = dfac.parse("(a - b) + c + d ");
+        //c = dfac.parse("(a - b) + c");
+        c = dfac.parse("(a - b) + b^3");
+        //c = dfac.parse("(a - b) + d");
 
-        a = dfac.parse("2 b^3 * d^2 + 2/3 a + 3/2");
-        b = dfac.parse("2/3 d + 1/2 a^3 + 3/4");
-        c = dfac.parse("c^2 * d - 1/2 a^3 * d + 5/4 d");
+        //a = dfac.parse("2 b^3 * d^2 + 2/3 a + 3/2");
+        //b = dfac.parse("2/3 d + 1/2 a^3 + 3/4");
+        //c = dfac.parse("c^2 * d - 1/2 a^3 * d + 5/4 d");
 
         //c = (GenSolvablePolynomial<BigRational>) fd.primitivePart(c).abs();
         c = c.monic();
@@ -459,7 +460,7 @@ public class GCDPrimitiveTest extends TestCase {
         System.out.println("b = " + b);
         //System.out.println("c = " + c);
 
-        d = fd.gcd(a, b);
+        d = fd.leftGcd(a, b);
         System.out.println("c = " + c);
         System.out.println("d = " + d);
 
