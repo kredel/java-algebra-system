@@ -1188,7 +1188,7 @@ Iterable<Monomial<C>> {
             return this;
         }
         assert (ring.nvar == S.ring.nvar);
-        if (this instanceof GenSolvablePolynomial || S instanceof GenSolvablePolynomial) {
+        if (this instanceof GenSolvablePolynomial && S instanceof GenSolvablePolynomial) {
             //throw new RuntimeException("wrong method dispatch in JRE ");
             logger.debug("warn: wrong method dispatch in JRE multiply(S) - trying to fix");
             GenSolvablePolynomial<C> T = (GenSolvablePolynomial<C>) this;
@@ -1238,6 +1238,12 @@ Iterable<Monomial<C>> {
         }
         if (this.isZERO()) {
             return this;
+        }
+        if (this instanceof GenSolvablePolynomial) {
+            //throw new RuntimeException("wrong method dispatch in JRE ");
+            logger.debug("warn: wrong method dispatch in JRE multiply(s) - trying to fix");
+            GenSolvablePolynomial<C> T = (GenSolvablePolynomial<C>) this;
+            return T.multiply(s);
         }
         GenPolynomial<C> p = ring.getZERO().copy();
         SortedMap<ExpVector, C> pv = p.val;
@@ -1396,7 +1402,6 @@ Iterable<Monomial<C>> {
      * @return [ quotient , remainder ] with this = quotient * S + remainder and
      *         deg(remainder) &lt; deg(S) or remiander = 0.
      * @see edu.jas.poly.PolyUtil#baseSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial)
-     *      .
      */
     @SuppressWarnings("unchecked")
     public GenPolynomial<C>[] quotientRemainder(GenPolynomial<C> S) {
@@ -1441,7 +1446,6 @@ Iterable<Monomial<C>> {
      * @return [ quotient , remainder ] with this = quotient * S + remainder and
      *         deg(remainder) &lt; deg(S) or remiander = 0.
      * @see edu.jas.poly.PolyUtil#baseSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial)
-     *      .
      * @deprecated use quotientRemainder()
      */
     @Deprecated

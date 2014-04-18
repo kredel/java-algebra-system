@@ -270,6 +270,13 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
         if (b == null || b.isZERO()) {
             return Cp;
         }
+        if (this instanceof RecSolvablePolynomial && b instanceof GenSolvablePolynomial) {
+            //throw new RuntimeException("wrong method dispatch in JRE ");
+            logger.info("warn: wrong method dispatch in JRE multiply(b) - trying to fix");
+            RecSolvablePolynomial T = (RecSolvablePolynomial) this; // no <C>
+            GenSolvablePolynomial Sp = (GenSolvablePolynomial) b;
+            return (GenSolvablePolynomial<C>) T.recMultiply(Sp);
+        }
         Map<ExpVector, C> Cm = Cp.val; //getMap();
         Map<ExpVector, C> Am = val;
         for (Map.Entry<ExpVector, C> y : Am.entrySet()) {
@@ -299,6 +306,15 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
         }
         if (c == null || c.isZERO()) {
             return Cp;
+        }
+        if (this instanceof RecSolvablePolynomial && b instanceof GenSolvablePolynomial
+                 && c instanceof GenSolvablePolynomial) {
+            //throw new RuntimeException("wrong method dispatch in JRE ");
+            logger.info("warn: wrong method dispatch in JRE multiply(b,c) - trying to fix");
+            RecSolvablePolynomial T = (RecSolvablePolynomial) this; // no <C>
+            GenSolvablePolynomial Bp = (GenSolvablePolynomial) b;
+            GenSolvablePolynomial Dp = (GenSolvablePolynomial) c;
+            return (GenSolvablePolynomial<C>) T.multiply(Bp,Dp);
         }
         Map<ExpVector, C> Cm = Cp.val; //getMap();
         Map<ExpVector, C> Am = val;
