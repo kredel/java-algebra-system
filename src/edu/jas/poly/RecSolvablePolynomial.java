@@ -144,7 +144,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
      * @param Bp RecSolvablePolynomial.
      * @return this*Bp, where * denotes solvable multiplication.
      */
-    // not @Override
+    // cannot @Override, @NoOverride
     public RecSolvablePolynomial<C> multiply(RecSolvablePolynomial<C> Bp) {
         if (Bp == null || Bp.isZERO()) {
             return ring.getZERO();
@@ -380,7 +380,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
      * @param T RecSolvablePolynomial.
      * @return S*this*T.
      */
-    // not @Override
+    // cannot @Override, @NoOverride
     public RecSolvablePolynomial<C> multiply(RecSolvablePolynomial<C> S, RecSolvablePolynomial<C> T) {
         if (S.isZERO() || T.isZERO() || this.isZERO()) {
             return ring.getZERO();
@@ -401,7 +401,9 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
      * @param b coefficient polynomial.
      * @return this*b, where * is coefficient multiplication.
      */
-    //todo Override
+    //todo @Override, @NoOverride
+    //public RecSolvablePolynomial<C> multiply(GenPolynomial<C> b) {
+    //public GenSolvablePolynomial<GenPolynomial<C>> multiply(GenPolynomial<C> b) {
     public RecSolvablePolynomial<C> recMultiply(GenPolynomial<C> b) {
         RecSolvablePolynomial<C> Cp = ring.getZERO().copy();
         if (b == null || b.isZERO()) {
@@ -464,7 +466,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
      * @param b coefficient of coefficient.
      * @return this*b, where * is coefficient multiplication.
      */
-    //@Override not possible
+    //@Override not possible, @NoOverride
     //public RecSolvablePolynomial<C> multiply(C b) { ... }
 
 
@@ -645,8 +647,8 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
 
 
     /**
-     * RecSolvablePolynomial multiplication. 
-     * Left product with coefficient ring element.
+     * RecSolvablePolynomial multiplication. Left product with coefficient ring
+     * element.
      * @param B solvable polynomial.
      * @param f exponent vector.
      * @return B*f, where * is commutative multiplication.

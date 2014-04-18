@@ -1457,7 +1457,6 @@ Iterable<Monomial<C>> {
      * @param S nonzero GenPolynomial with invertible leading coefficient.
      * @return quotient with this = quotient * S + remainder.
      * @see edu.jas.poly.PolyUtil#baseSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial)
-     *      .
      */
     public GenPolynomial<C> divide(GenPolynomial<C> S) {
         if (this instanceof GenSolvablePolynomial || S instanceof GenSolvablePolynomial) {
@@ -1478,7 +1477,6 @@ Iterable<Monomial<C>> {
      * @param S nonzero GenPolynomial with invertible leading coefficient.
      * @return remainder with this = quotient * S + remainder.
      * @see edu.jas.poly.PolyUtil#baseSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial)
-     *      .
      */
     public GenPolynomial<C> remainder(GenPolynomial<C> S) {
         if (this instanceof GenSolvablePolynomial || S instanceof GenSolvablePolynomial) {

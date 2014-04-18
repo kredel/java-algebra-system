@@ -128,7 +128,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
      * @param Bp GenSolvablePolynomial.
      * @return this*Bp, where * denotes solvable multiplication.
      */
-    // not @Override
+    // cannot @Override, @NoOverride
     public GenSolvablePolynomial<C> multiply(GenSolvablePolynomial<C> Bp) {
         if (Bp == null || Bp.isZERO()) {
             return ring.getZERO();
@@ -243,6 +243,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
      * @param T GenSolvablePolynomial.
      * @return S*this*T.
      */
+    // new method, @NoOverride
     public GenSolvablePolynomial<C> multiply(GenSolvablePolynomial<C> S, GenSolvablePolynomial<C> T) {
         if (S.isZERO() || T.isZERO() || this.isZERO()) {
             return ring.getZERO();
@@ -290,6 +291,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
      * @param c coefficient.
      * @return b*this*c, where * is coefficient multiplication.
      */
+    // new method, @NoOverride
     public GenSolvablePolynomial<C> multiply(C b, C c) {
         GenSolvablePolynomial<C> Cp = ring.getZERO().copy();
         if (b == null || b.isZERO()) {
@@ -335,6 +337,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
      * @return x<sup>e</sup> * this * x<sup>f</sup>, where * denotes solvable
      *         multiplication.
      */
+    // new method, @NoOverride
     public GenSolvablePolynomial<C> multiply(ExpVector e, ExpVector f) {
         if (e == null || e.isZERO()) {
             return this;
@@ -374,6 +377,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
      * @return b x<sup>e</sup> * this * c x<sup>f</sup>, where * denotes
      *         solvable multiplication.
      */
+    // new method, @NoOverride
     public GenSolvablePolynomial<C> multiply(C b, ExpVector e, C c, ExpVector f) {
         if (b == null || b.isZERO()) {
             return ring.getZERO();
@@ -394,6 +398,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
      * @param e exponent.
      * @return b x<sup>e</sup> * this, where * denotes solvable multiplication.
      */
+    // new method, @NoOverride
     public GenSolvablePolynomial<C> multiplyLeft(C b, ExpVector e) {
         if (b == null || b.isZERO()) {
             return ring.getZERO();
@@ -408,6 +413,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
      * @param e exponent.
      * @return x<sup>e</sup> * this, where * denotes solvable multiplication.
      */
+    // new method, @NoOverride
     public GenSolvablePolynomial<C> multiplyLeft(ExpVector e) {
         if (e == null || e.isZERO()) {
             return this;
@@ -424,6 +430,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
      * @param b coefficient.
      * @return b*this, where * is coefficient multiplication.
      */
+    // new method, @NoOverride
     public GenSolvablePolynomial<C> multiplyLeft(C b) {
         GenSolvablePolynomial<C> Cp = ring.getZERO().copy();
         if (b == null || b.isZERO()) {
@@ -448,6 +455,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
      * @param m 'monomial'.
      * @return m * this, where * denotes solvable multiplication.
      */
+    // new method, @NoOverride
     public GenSolvablePolynomial<C> multiplyLeft(Map.Entry<ExpVector, C> m) {
         if (m == null) {
             return ring.getZERO();
@@ -505,9 +513,8 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
      * @return [ quotient , remainder ] with this = quotient * S + remainder and
      *         deg(remainder) &lt; deg(S) or remiander = 0.
      * @see edu.jas.poly.PolyUtil#baseSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial)
-     *      .
      */
-    //@Override
+    // cannot @Override, @NoOverride
     @SuppressWarnings("unchecked")
     public GenSolvablePolynomial<C>[] quotientRemainder(GenSolvablePolynomial<C> S) {
         if (S == null || S.isZERO()) {
