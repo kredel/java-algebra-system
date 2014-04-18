@@ -140,7 +140,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
         if (debug) {
             logger.debug("ring = " + ring);
         }
-        if (this instanceof RecSolvablePolynomial || Bp instanceof RecSolvablePolynomial) {
+        if (this instanceof RecSolvablePolynomial && Bp instanceof RecSolvablePolynomial) {
             //throw new RuntimeException("wrong method dispatch in JRE ");
             logger.info("warn: wrong method dispatch in JRE multiply(Bp) - trying to fix");
             RecSolvablePolynomial T = (RecSolvablePolynomial) this; // no <C>

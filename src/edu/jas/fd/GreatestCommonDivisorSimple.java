@@ -167,7 +167,7 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
         //System.out.println("q = " + q);
         //System.out.println("r = " + r);
         while (!r.isZERO()) {
-            x = FDUtil.<C> rightBaseSparsePseudoRemainder(q, r); // TODO
+            x = FDUtil.<C> rightBaseSparsePseudoRemainder(q, r); //
             q = r;
             if (field) {
                 r = x.monic();
@@ -409,7 +409,8 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
         }
         GenSolvablePolynomial<C> a = leftRecursiveContent(r);
         logger.info("RI-recCont a = " + a + ", r = " + r);
-        rs = FDUtil.<C> recursiveDivideRightEval(r, a); // TODO
+        //rs = FDUtil.<C> recursiveDivideRightEval(r, a); // TODO
+        rs = FDUtil.<C> recursiveDivide(r, a); // 
         logger.info("RI-recCont r/a = " + r + ", r%a = " + r.subtract(rs.multiply(a)));
         if (!r.equals(rs.multiplyLeft(a))) {
             System.out.println("RI-recGcd, r         = " + r);
@@ -421,7 +422,8 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
         r = rs;
         GenSolvablePolynomial<C> b = leftRecursiveContent(q);
         logger.info("RI-recCont b = " + b + ", q = " + q);
-        qs = FDUtil.<C> recursiveDivideRightEval(q, b); // TODO
+        //qs = FDUtil.<C> recursiveDivideRightEval(q, b); // TODO
+        qs = FDUtil.<C> recursiveDivide(q, b); // 
         logger.info("RI-recCont q/b = " + qs + ", q%b = " + q.subtract(qs.multiply(b)));
         if (!q.equals(qs.multiplyLeft(b))) {
             System.out.println("RI-recGcd, q         = " + q);
@@ -456,8 +458,8 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
             if (debug) {
                 //logger.info("deg(q) = " + q.degree() + ", deg(r) = " + r.degree());
             }
-            //x = FDUtil.<C> recursiveSparsePseudoRemainder(q, r); // TODO
-            x = FDUtil.<C> recursiveRightSparsePseudoRemainder(q, r); // TODO
+            //x = FDUtil.<C> recursiveSparsePseudoRemainder(q, r); // 
+            x = FDUtil.<C> recursiveRightSparsePseudoRemainder(q, r); // 
             q = r;
             if (field) {
                 r = PolyUtil.<C> monic(x);

@@ -373,9 +373,8 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         //}
         GenSolvablePolynomial<GenPolynomial<C>> pp;
         //wrong type: pp = FDUtil.<C> recursivePseudoQuotient(P, d);
-        //pp = FDUtil.<C> recursiveDivide(P, d);
-        //pp = FDUtil.<C> recursiveDivideRightPolynomial(P, d);
-        pp = FDUtil.<C> recursiveDivideRightPolynomial(P, d); // TODO
+        pp = FDUtil.<C> recursiveDivide(P, d);
+        //pp = FDUtil.<C> recursiveDivideRightPolynomial(P, d); // TODO
         if (!P.equals(pp.multiplyLeft(d))) {
             System.out.println("ppart, P         = " + P);
             System.out.println("ppart, cont(P)   = " + d);
