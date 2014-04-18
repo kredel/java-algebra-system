@@ -54,7 +54,7 @@ public class FDUtil {
      * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
      */
     public static <C extends GcdRingElem<C>> GenSolvablePolynomial<C> 
-           baseSparsePseudoRemainder(GenSolvablePolynomial<C> P, GenSolvablePolynomial<C> S) {
+           leftBaseSparsePseudoRemainder(GenSolvablePolynomial<C> P, GenSolvablePolynomial<C> S) {
         if (S == null || S.isZERO()) {
             throw new ArithmeticException(P.toString() + " division by zero " + S);
         }
@@ -107,7 +107,7 @@ public class FDUtil {
      * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
      */
     public static <C extends GcdRingElem<C>> GenSolvablePolynomial<C> 
-           baseRightSparsePseudoRemainder(GenSolvablePolynomial<C> P, GenSolvablePolynomial<C> S) {
+           rightBaseSparsePseudoRemainder(GenSolvablePolynomial<C> P, GenSolvablePolynomial<C> S) {
         if (S == null || S.isZERO()) {
             throw new ArithmeticException(P.toString() + " division by zero " + S);
         }
@@ -160,8 +160,8 @@ public class FDUtil {
      * @see edu.jas.poly.GenPolynomial#divide(edu.jas.poly.GenPolynomial).
      */
     public static <C extends GcdRingElem<C>> GenSolvablePolynomial<C> 
-           basePseudoQuotient(GenSolvablePolynomial<C> P, GenSolvablePolynomial<C> S) {
-        return basePseudoQuotientRemainder(P,S)[0];
+           leftBasePseudoQuotient(GenSolvablePolynomial<C> P, GenSolvablePolynomial<C> S) {
+        return leftBasePseudoQuotientRemainder(P,S)[0];
     }
 
 
@@ -177,7 +177,7 @@ public class FDUtil {
      */
     @SuppressWarnings("unchecked")
     public static <C extends GcdRingElem<C>> GenSolvablePolynomial<C>[] 
-           basePseudoQuotientRemainder(GenSolvablePolynomial<C> P, GenSolvablePolynomial<C> S) {
+           leftBasePseudoQuotientRemainder(GenSolvablePolynomial<C> P, GenSolvablePolynomial<C> S) {
         if (S == null || S.isZERO()) {
             throw new ArithmeticException(P.toString() + " division by zero " + S);
         }
@@ -678,11 +678,19 @@ public class FDUtil {
         if (s.isONE()) {
             return P;
         }
-        GenSolvablePolynomial<GenPolynomial<C>> Pr = FDUtil.<C> rightRecursivePolynomial(P);
-        logger.info("rDivREval: P = " + P + ", right(P) = " + Pr);
-        GenSolvablePolynomial<GenPolynomial<C>> Qr = FDUtil.<C> recursiveDivide(Pr,s);
-        GenSolvablePolynomial<GenPolynomial<C>> Q = FDUtil.<C> evalAsRightRecursivePolynomial(Qr);
-        logger.info("rDivREval: Q = " + Q + ", right(Q) = " + Qr);
+        //GenSolvablePolynomial<GenPolynomial<C>> Pr = FDUtil.<C> rightRecursivePolynomial(P);
+        //GenSolvablePolynomial<GenPolynomial<C>> Qr = FDUtil.<C> recursiveDivide(Pr,s);
+        //GenSolvablePolynomial<GenPolynomial<C>> Q = FDUtil.<C> evalAsRightRecursivePolynomial(Qr);
+        RecSolvablePolynomial<C> Pr = (RecSolvablePolynomial<C>) FDUtil.<C> rightRecursivePolynomial(P);
+        RecSolvablePolynomial<C> Qr = (RecSolvablePolynomial<C>) FDUtil.<C> recursiveDivide(Pr,s);
+        RecSolvablePolynomial<C> Q  = (RecSolvablePolynomial<C>) FDUtil.<C> evalAsRightRecursivePolynomial(Qr);
+        if ( !Q.recMultiply(s).equals(P) ) { 
+            System.out.println("rDivREval: P   = " + P + ", right(P) = " + Pr);
+            System.out.println("rDivREval: Q   = " + Q + ", right(Q) = " + Qr);
+            System.out.println("rDivREval: Q*s = " + Q.recMultiply(s) + ", s = " + s);
+            //System.out.println("rDivREval: P.ring == Q.ring: " + P.ring.equals(Q.ring) );
+            throw new RuntimeException("rDivREval: Q*s != P");
+	}
         return Q;
     }
 
@@ -712,7 +720,7 @@ public class FDUtil {
             GenSolvablePolynomial<C> c1 = (GenSolvablePolynomial<C>) m1.getValue();
             ExpVector e1 = m1.getKey();
             //GenSolvablePolynomial<C> c = FDUtil.<C> basePseudoQuotient(c1, s);
-            GenSolvablePolynomial<C>[] QR = FDUtil.<C> basePseudoQuotientRemainder(c1, s);
+            GenSolvablePolynomial<C>[] QR = FDUtil.<C> leftBasePseudoQuotientRemainder(c1, s);
             GenSolvablePolynomial<C> c = QR[0];
             if ( !QR[1].isZERO() ) {
                 System.out.println("rDiv, P   = " + P);
@@ -801,7 +809,7 @@ public class FDUtil {
         GenSolvablePolynomial<C> q;
         if (pfac.nvar <= 1) {
             GenSolvablePolynomial<C>[] QR1;
-            QR1 = FDUtil.<C> basePseudoQuotientRemainder(P,s);
+            QR1 = FDUtil.<C> leftBasePseudoQuotientRemainder(P,s);
             q = QR1[0];
             if (!QR1[1].isZERO()) {
                 System.out.println("rDivPol, P = " + P);
@@ -869,7 +877,7 @@ public class FDUtil {
             ExpVector f = p.leadingExpVector();
             GenSolvablePolynomial<C> a = (GenSolvablePolynomial<C>) p.leadingBaseCoefficient();
             //GenSolvablePolynomial<C> c = FDUtil.<C> basePseudoQuotient(a, s);
-            GenSolvablePolynomial<C>[] QR = FDUtil.<C> basePseudoQuotientRemainder(a, s);
+            GenSolvablePolynomial<C>[] QR = FDUtil.<C> leftBasePseudoQuotientRemainder(a, s);
             //GenSolvablePolynomial<C> c = (GenSolvablePolynomial<C>) a.divide(s);
             //System.out.println("content QR[1] = " + QR[1]);
             if ( !QR[1].isZERO() || !a.remainder(s).isZERO() ) {

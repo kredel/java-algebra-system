@@ -38,7 +38,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends
      * @return gcd(P,S) with P = P'*gcd(P,S) and S = S'*gcd(P,S).
      */
     @Override
-    public GenSolvablePolynomial<C> baseGcd(GenSolvablePolynomial<C> P, GenSolvablePolynomial<C> S) {
+    public GenSolvablePolynomial<C> leftBaseGcd(GenSolvablePolynomial<C> P, GenSolvablePolynomial<C> S) {
         if (S == null || S.isZERO()) {
             return P;
         }
@@ -73,8 +73,8 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends
         }
         r = (GenSolvablePolynomial<C>) r.abs();
         q = (GenSolvablePolynomial<C>) q.abs();
-        C a = baseContent(r);
-        C b = baseContent(q);
+        C a = leftBaseContent(r);
+        C b = leftBaseContent(q);
         c = gcd(a, b); // indirection
         //System.out.println("baseCont: a = " + a);
         //System.out.println("baseCont: b = " + b);
@@ -91,7 +91,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends
         //System.out.println("baseGCD: q = " + q);
         //System.out.println("baseGCD: r = " + r);
         while (!r.isZERO()) {
-            x = FDUtil.<C> baseSparsePseudoRemainder(q, r);
+            x = FDUtil.<C> leftBaseSparsePseudoRemainder(q, r);
             q = r;
             r = rightBasePrimitivePart(x);
             if (field) {
@@ -165,9 +165,9 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends
         //System.out.println("baseGCD: q = " + q);
         //System.out.println("baseGCD: r = " + r);
         while (!r.isZERO()) {
-            x = FDUtil.<C> baseSparsePseudoRemainder(q, r);
+            x = FDUtil.<C> leftBaseSparsePseudoRemainder(q, r);
             q = r;
-            r = basePrimitivePart(x);
+            r = leftBasePrimitivePart(x);
             if (field) {
                 r = r.monic();
             }
