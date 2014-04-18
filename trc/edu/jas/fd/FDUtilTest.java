@@ -171,7 +171,7 @@ public class FDUtilTest extends TestCase {
         boolean t = PolyUtil.<BigInteger> isBasePseudoQuotientRemainder(a, b, c, d);
         assertTrue("lc^n a = q b + r: " + d, t);
 
-        GenSolvablePolynomial<BigInteger>[] QRs = FDUtil.<BigInteger> basePseudoQuotientRemainder(a, b);
+        GenSolvablePolynomial<BigInteger>[] QRs = FDUtil.<BigInteger> leftBasePseudoQuotientRemainder(a, b);
         e = QRs[0];
         f = QRs[1];
         //System.out.println("");

@@ -142,7 +142,7 @@ public class GCDPrimitiveTest extends TestCase {
             }
             //a = fd.basePrimitivePart(a);
             //b = fd.basePrimitivePart(b);
-            c = (GenSolvablePolynomial<BigRational>) fd.basePrimitivePart(c).abs();
+            c = (GenSolvablePolynomial<BigRational>) fd.leftBasePrimitivePart(c).abs();
 
             //System.out.println("a  = " + a);
             //System.out.println("b  = " + b);
@@ -152,7 +152,7 @@ public class GCDPrimitiveTest extends TestCase {
             a = a.multiply(c);
             b = b.multiply(c);
 
-            d = fd.baseGcd(a, b);
+            d = fd.leftBaseGcd(a, b);
             e = (GenSolvablePolynomial<BigRational>) PolyUtil.<BigRational> basePseudoRemainder(d, c);
             //System.out.println("d  = " + d);
             //System.out.println("c  = " + c);
@@ -280,20 +280,20 @@ public class GCDPrimitiveTest extends TestCase {
         //System.out.println("dpm = " + dpm);
 
         GreatestCommonDivisorAbstract<SolvableQuotient<BigRational>> fdq = new GreatestCommonDivisorPrimitive<SolvableQuotient<BigRational>>();
-        gp = fdq.baseGcd(ap, bp);
+        gp = fdq.leftBaseGcd(ap, bp);
         gpm = gp.monic();
         //System.out.println("gp  = " + gp);
         //System.out.println("gpm = " + gpm);
 
-        ep = FDUtil.<SolvableQuotient<BigRational>> baseSparsePseudoRemainder(gp, dp);
+        ep = FDUtil.<SolvableQuotient<BigRational>> leftBaseSparsePseudoRemainder(gp, dp);
         //System.out.println("ep  = " + ep);
         assertTrue("c | gcd(ac,bc): " + ep, ep.isZERO());
 
-        ep = FDUtil.<SolvableQuotient<BigRational>> baseSparsePseudoRemainder(ap, gp);
+        ep = FDUtil.<SolvableQuotient<BigRational>> leftBaseSparsePseudoRemainder(ap, gp);
         //System.out.println("ep  = " + ep);
         assertTrue("gcd(ac,bc)| ac): " + ep, ep.isZERO());
 
-        ep = FDUtil.<SolvableQuotient<BigRational>> baseSparsePseudoRemainder(bp, gp);
+        ep = FDUtil.<SolvableQuotient<BigRational>> leftBaseSparsePseudoRemainder(bp, gp);
         //System.out.println("ep  = " + ep);
         assertTrue("gcd(ac,bc)| bc): " + ep, ep.isZERO());
     }
@@ -391,20 +391,20 @@ public class GCDPrimitiveTest extends TestCase {
         System.out.println("dpm = " + dpm);
 
         GreatestCommonDivisorAbstract<SolvableQuotient<BigRational>> fdq = new GreatestCommonDivisorPrimitive<SolvableQuotient<BigRational>>();
-        gp = fdq.baseGcd(ap, bp);
+        gp = fdq.leftBaseGcd(ap, bp);
         gpm = gp.monic();
         System.out.println("gp  = " + gp);
         System.out.println("gpm = " + gpm);
 
-        ep = FDUtil.<SolvableQuotient<BigRational>> baseSparsePseudoRemainder(gp, dp);
+        ep = FDUtil.<SolvableQuotient<BigRational>> leftBaseSparsePseudoRemainder(gp, dp);
         //System.out.println("ep  = " + ep);
         assertTrue("c | gcd(ac,bc): " + ep, ep.isZERO());
 
-        ep = FDUtil.<SolvableQuotient<BigRational>> baseSparsePseudoRemainder(ap, gp);
+        ep = FDUtil.<SolvableQuotient<BigRational>> leftBaseSparsePseudoRemainder(ap, gp);
         //System.out.println("ep  = " + ep);
         assertTrue("gcd(ac,bc)| ac): " + ep, ep.isZERO());
 
-        ep = FDUtil.<SolvableQuotient<BigRational>> baseSparsePseudoRemainder(bp, gp);
+        ep = FDUtil.<SolvableQuotient<BigRational>> leftBaseSparsePseudoRemainder(bp, gp);
         //System.out.println("ep  = " + ep);
         assertTrue("gcd(ac,bc)| bc): " + ep, ep.isZERO());
     }
@@ -464,21 +464,21 @@ public class GCDPrimitiveTest extends TestCase {
         System.out.println("c = " + c);
         System.out.println("d = " + d);
 
-        e = FDUtil.<BigRational> baseSparsePseudoRemainder(d, c);
+        e = FDUtil.<BigRational> leftBaseSparsePseudoRemainder(d, c);
         System.out.println("e = " + e);
         assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
 
-        e = FDUtil.<BigRational> baseSparsePseudoRemainder(a, c);
+        e = FDUtil.<BigRational> leftBaseSparsePseudoRemainder(a, c);
         System.out.println("e = " + e);
         assertTrue("c | ac " + e, e.isZERO());
-        e = FDUtil.<BigRational> baseSparsePseudoRemainder(a, d);
+        e = FDUtil.<BigRational> leftBaseSparsePseudoRemainder(a, d);
         System.out.println("e = " + e);
         assertTrue("gcd(a,b) | a " + e, e.isZERO());
 
-        e = FDUtil.<BigRational> baseSparsePseudoRemainder(b, c);
+        e = FDUtil.<BigRational> leftBaseSparsePseudoRemainder(b, c);
         //System.out.println("e = " + e);
         assertTrue("c | bc " + e, e.isZERO());
-        e = FDUtil.<BigRational> baseSparsePseudoRemainder(b, d);
+        e = FDUtil.<BigRational> leftBaseSparsePseudoRemainder(b, d);
         //System.out.println("e = " + e);
         assertTrue("gcd(a,b) | b " + e, e.isZERO());
     }
