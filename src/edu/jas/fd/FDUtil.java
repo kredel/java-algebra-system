@@ -678,16 +678,16 @@ public class FDUtil {
         if (s.isONE()) {
             return P;
         }
-        //GenSolvablePolynomial<GenPolynomial<C>> Pr = FDUtil.<C> rightRecursivePolynomial(P);
-        //GenSolvablePolynomial<GenPolynomial<C>> Qr = FDUtil.<C> recursiveDivide(Pr,s);
-        //GenSolvablePolynomial<GenPolynomial<C>> Q = FDUtil.<C> evalAsRightRecursivePolynomial(Qr);
-        RecSolvablePolynomial<C> Pr = (RecSolvablePolynomial<C>) FDUtil.<C> rightRecursivePolynomial(P);
-        RecSolvablePolynomial<C> Qr = (RecSolvablePolynomial<C>) FDUtil.<C> recursiveDivide(Pr,s);
-        RecSolvablePolynomial<C> Q  = (RecSolvablePolynomial<C>) FDUtil.<C> evalAsRightRecursivePolynomial(Qr);
-        if ( !Q.recMultiply(s).equals(P) ) { 
+        GenSolvablePolynomial<GenPolynomial<C>> Pr = FDUtil.<C> rightRecursivePolynomial(P);
+        GenSolvablePolynomial<GenPolynomial<C>> Qr = FDUtil.<C> recursiveDivide(Pr,s);
+        GenSolvablePolynomial<GenPolynomial<C>> Q = FDUtil.<C> evalAsRightRecursivePolynomial(Qr);
+        //RecSolvablePolynomial<C> Pr = (RecSolvablePolynomial<C>) FDUtil.<C> rightRecursivePolynomial(P);
+        //RecSolvablePolynomial<C> Qr = (RecSolvablePolynomial<C>) FDUtil.<C> recursiveDivide(Pr,s);
+        //RecSolvablePolynomial<C> Q  = (RecSolvablePolynomial<C>) FDUtil.<C> evalAsRightRecursivePolynomial(Qr);
+        if ( !Q.multiply(s).equals(P) ) { 
             System.out.println("rDivREval: P   = " + P + ", right(P) = " + Pr);
             System.out.println("rDivREval: Q   = " + Q + ", right(Q) = " + Qr);
-            System.out.println("rDivREval: Q*s = " + Q.recMultiply(s) + ", s = " + s);
+            System.out.println("rDivREval: Q*s = " + Q.multiply(s) + ", s = " + s);
             //System.out.println("rDivREval: P.ring == Q.ring: " + P.ring.equals(Q.ring) );
             throw new RuntimeException("rDivREval: Q*s != P");
 	}
