@@ -50,6 +50,15 @@ public interface GreatestCommonDivisor<C extends GcdRingElem<C>> extends Seriali
 
 
     /**
+     * GenSolvablePolynomial right least common multiple.
+     * @param P GenSolvablePolynomial.
+     * @param S GenSolvablePolynomial.
+     * @return lcm(P,S) with lcm(P,S) = P*P' = S*S'.
+     */
+    public GenSolvablePolynomial<C> rightLcm(GenSolvablePolynomial<C> P, GenSolvablePolynomial<C> S);
+
+
+    /**
      * GenSolvablePolynomial right content.
      * @param P GenSolvablePolynomial.
      * @return cont(P) with pp(P)*cont(P) = P.
