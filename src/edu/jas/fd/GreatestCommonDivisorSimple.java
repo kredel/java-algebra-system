@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
-import edu.jas.poly.RecSolvablePolynomial;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.GcdRingElem;
 
@@ -236,7 +235,7 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
             q = (GenSolvablePolynomial<GenPolynomial<C>>) q.abs();
         }
         GenSolvablePolynomial<C> a = rightRecursiveContent(r);
-        rs = FDUtil.<C> recursiveDivideRightEval(r, a); 
+        rs = FDUtil.<C> recursiveDivideRightEval(r, a);
         if (debug) {
             logger.info("recCont a = " + a + ", r = " + r);
             logger.info("recCont r/a = " + rs + ", r%a = " + r.subtract(rs.multiply(a)));
@@ -274,12 +273,12 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
         if (debug) {
             logger.info("r.ring = " + r.ring.toScript());
         }
-        rs = (RecSolvablePolynomial<C>) r;
-        qs = (RecSolvablePolynomial<C>) q;
+        rs = r;
+        qs = q;
         if (debug) {
             logger.info("gcd-loop, start: q = " + q + ", r = " + r);
         }
-        while (!r.isZERO()) { 
+        while (!r.isZERO()) {
             x = FDUtil.<C> recursiveSparsePseudoRemainder(q, r);
             q = r;
             if (field) {
@@ -393,7 +392,7 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
             q = (GenSolvablePolynomial<GenPolynomial<C>>) q.abs();
         }
         GenSolvablePolynomial<C> a = leftRecursiveContent(r);
-        rs = FDUtil.<C> recursiveDivide(r, a);  
+        rs = FDUtil.<C> recursiveDivide(r, a);
         if (debug) {
             logger.info("RI-recCont a = " + a + ", r = " + r);
             logger.info("RI-recCont r/a = " + r + ", r%a = " + r.subtract(rs.multiplyLeft(a)));
@@ -407,7 +406,7 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
         }
         r = rs;
         GenSolvablePolynomial<C> b = leftRecursiveContent(q);
-        qs = FDUtil.<C> recursiveDivide(q, b); 
+        qs = FDUtil.<C> recursiveDivide(q, b);
         if (debug) {
             logger.info("RI-recCont b = " + b + ", q = " + q);
             logger.info("RI-recCont q/b = " + qs + ", q%b = " + q.subtract(qs.multiplyLeft(b)));
@@ -434,7 +433,7 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
             logger.info("RI-r.ring = " + r.ring.toScript());
             logger.info("RI-gcd-loop, start: q = " + q + ", r = " + r);
         }
-        while (!r.isZERO()) { 
+        while (!r.isZERO()) {
             x = FDUtil.<C> recursiveRightSparsePseudoRemainder(q, r);
             q = r;
             if (field) {
@@ -475,7 +474,7 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
             }
             logger.info("RI-recGcd(P,S) pre pp okay: qp = " + qp);
         }
-        q = rightRecursivePrimitivePart(q); 
+        q = rightRecursivePrimitivePart(q);
         if (!qp.equals(q)) {
             logger.info("RI-gcd(pp) = " + q + ", qp = " + qp); // + ", ring = " + P.ring.toScript());
         }
