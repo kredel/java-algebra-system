@@ -298,20 +298,16 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         if (d.isONE()) {
             return P;
         }
-        //if(debug) {
-        //   logger.info("content(P) = " + d);
-        //}
         GenSolvablePolynomial<GenPolynomial<C>> pp;
-        //wrong type: pp = FDUtil.<C> recursivePseudoQuotient(P, d);
-        //pp = FDUtil.<C> recursiveDivide(P, d);
-        //pp = FDUtil.<C> recursiveDivideRightPolynomial(P, d);
         pp = FDUtil.<C> recursiveDivideRightEval(P, d);
-        if (!P.equals(pp.multiply(d))) {
-            System.out.println("RI-ppart, P         = " + P);
-            System.out.println("RI-ppart, cont(P)   = " + d);
-            System.out.println("RI-ppart, pp(P)     = " + pp);
-            System.out.println("RI-ppart, pp(P)c(P) = " + pp.multiply(d));
-            throw new RuntimeException("RI-primitivePart: P != pp(P)*cont(P)");
+        if (debug) {
+	    if (!P.equals(pp.multiply(d))) {
+		System.out.println("RI-ppart, P         = " + P);
+		System.out.println("RI-ppart, cont(P)   = " + d);
+		System.out.println("RI-ppart, pp(P)     = " + pp);
+		System.out.println("RI-ppart, pp(P)c(P) = " + pp.multiply(d));
+		throw new RuntimeException("RI-primitivePart: P != pp(P)*cont(P)");
+	    }
         }
         return pp;
     }
@@ -368,19 +364,16 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         if (d.isONE()) {
             return P;
         }
-        //if(debug) {
-        //   logger.info("content(P) = " + d);
-        //}
         GenSolvablePolynomial<GenPolynomial<C>> pp;
-        //wrong type: pp = FDUtil.<C> recursivePseudoQuotient(P, d);
         pp = FDUtil.<C> recursiveDivide(P, d);
-        //pp = FDUtil.<C> recursiveDivideRightPolynomial(P, d); // TODO
-        if (!P.equals(pp.multiplyLeft(d))) {
-            System.out.println("ppart, P         = " + P);
-            System.out.println("ppart, cont(P)   = " + d);
-            System.out.println("ppart, pp(P)     = " + pp);
-            System.out.println("ppart, pp(P)c(P) = " + pp.multiplyLeft(d));
-            throw new RuntimeException("primitivePart: P != cont(P)*pp(P)");
+        if (debug) {
+	    if (!P.equals(pp.multiplyLeft(d))) {
+		System.out.println("ppart, P         = " + P);
+		System.out.println("ppart, cont(P)   = " + d);
+		System.out.println("ppart, pp(P)     = " + pp);
+		System.out.println("ppart, pp(P)c(P) = " + pp.multiplyLeft(d));
+		throw new RuntimeException("primitivePart: P != cont(P)*pp(P)");
+	    }
         }
         return pp;
     }
@@ -704,8 +697,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             GenSolvablePolynomial<C> T = leftBaseGcd(P, S);
             return T;
         }
-        GenSolvablePolynomialRing<GenPolynomial<C>> rfac = /*(RecSolvablePolynomialRing<C>)*/pfac
-                        .recursive(1);
+        GenSolvablePolynomialRing<GenPolynomial<C>> rfac = pfac.recursive(1); //RecSolvablePolynomialRing<C>
         GenSolvablePolynomial<GenPolynomial<C>> Pr, Sr, Dr, er, fr;
         Pr = (RecSolvablePolynomial<C>) PolyUtil.<C> recursive(rfac, P);
         Sr = (RecSolvablePolynomial<C>) PolyUtil.<C> recursive(rfac, S);
@@ -721,9 +713,8 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
                 System.out.println("fullGcd, ps = " + ps);
                 System.out.println("fullGcd, ss = " + ss);
                 throw new RuntimeException("fullGcd: not divisible");
-            } else {
-                logger.info("fullGcd(P,S) okay: D = " + D + ", P = " + P + ", S = " + S);
             }
+            logger.info("fullGcd(P,S) okay: D = " + D + ", P = " + P + ", S = " + S);
         }
         return D;
     }
@@ -765,8 +756,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             GenSolvablePolynomial<C> T = rightBaseGcd(P, S);
             return T;
         }
-        GenSolvablePolynomialRing<GenPolynomial<C>> rfac = /*(RecSolvablePolynomialRing<C>)*/pfac
-                        .recursive(1);
+        GenSolvablePolynomialRing<GenPolynomial<C>> rfac = pfac.recursive(1); //RecSolvablePolynomialRing<C>
         GenSolvablePolynomial<GenPolynomial<C>> Pr, Sr, Dr, er, fr;
         Pr = (RecSolvablePolynomial<C>) PolyUtil.<C> recursive(rfac, P);
         Sr = (RecSolvablePolynomial<C>) PolyUtil.<C> recursive(rfac, S);
@@ -782,9 +772,8 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
                 System.out.println("RI-fullGcd, ps = " + ps);
                 System.out.println("RI-fullGcd, ss = " + ss);
                 throw new RuntimeException("RI-fullGcd: not divisible");
-            } else {
-                logger.info("RI-fullGcd(P,S) okay: D = " + D);
             }
+            logger.info("RI-fullGcd(P,S) okay: D = " + D);
         }
         return D;
     }
@@ -1046,9 +1035,9 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
     @SuppressWarnings("unchecked")
     public GenSolvablePolynomial<C>[] baseHalfExtendedGcd(GenSolvablePolynomial<C> P,
                     GenSolvablePolynomial<C> S) {
-        //if ( P == null ) {
-        //    throw new IllegalArgumentException("null P not allowed");
-        //}
+        if (P == null || S == null) {
+            throw new IllegalArgumentException("null P or S not allowed");
+        }
         GenSolvablePolynomial<C>[] ret = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[2];
         ret[0] = null;
         ret[1] = null;
