@@ -259,7 +259,8 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends
             }
         }
         q = qs;
-        GenSolvablePolynomial<C> c = leftGcd(a, b); // go to recursion
+        //no: GenSolvablePolynomial<C> c = leftGcd(a, b); // go to recursion
+        GenSolvablePolynomial<C> c = rightGcd(a, b); // go to recursion
         logger.info("Gcd(contents) c = " + c + ", a = " + a + ", b = " + b);
         if (r.isONE()) {
             return r.multiply(c);
@@ -382,7 +383,8 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends
             }
         }
         q = qs;
-        GenSolvablePolynomial<C> c = rightGcd(a, b); // go to recursion
+        //no: GenSolvablePolynomial<C> c = rightGcd(a, b); // go to recursion
+        GenSolvablePolynomial<C> c = leftGcd(a, b); // go to recursion
         logger.info("RI-Gcd(contents) c = " + c + ", a = " + a + ", b = " + b);
         if (r.isONE()) {
             return r.multiplyLeft(c);
