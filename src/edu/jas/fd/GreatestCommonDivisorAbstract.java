@@ -710,7 +710,11 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
                 System.out.println("fullGcd, S  = " + S);
                 System.out.println("fullGcd, ps = " + ps);
                 System.out.println("fullGcd, ss = " + ss);
-                throw new RuntimeException("fullGcd: not divisible");
+                ss = FDUtil.<C> rightBaseSparsePseudoRemainder(S, D);
+                System.out.println("fullGcd, ss = " + ss);
+                if (!ss.isZERO()) {
+                   throw new RuntimeException("fullGcd: not divisible");
+                }
             }
             logger.info("fullGcd(P,S) okay: D = " + D + ", P = " + P + ", S = " + S);
         }
