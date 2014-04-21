@@ -271,10 +271,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends
         if (debug) {
             logger.info("r.ring = " + r.ring.toScript());
         }
-        if (debug) {
-            //logger.info("deg(q) = " + q.degree() + ", deg(r) = " + r.degree());
-        }
-        while (!r.isZERO()) { //&& r.degree()>0
+        while (!r.isZERO()) { 
             x = FDUtil.<C> recursiveSparsePseudoRemainder(q, r);
             q = r;
             r = leftRecursivePrimitivePart(x);
@@ -285,9 +282,8 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends
         if (debug) {
             logger.info("gcd(pp) = " + q + ", ring = " + P.ring.toScript());
         }
-        // no: q = (GenSolvablePolynomial<GenPolynomial<C>>) q.multiply(c,P.ring.getONECoefficient()).abs();
         q = (GenSolvablePolynomial<GenPolynomial<C>>) q.multiply(c).abs();
-        if (debug) {
+        if (false) { // not checkable
             qs = FDUtil.<C> recursiveSparsePseudoRemainder(P, q);
             rs = FDUtil.<C> recursiveSparsePseudoRemainder(S, q);
             if (!qs.isZERO() || !rs.isZERO()) {
@@ -394,7 +390,6 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends
         }
         if (debug) {
             logger.info("RI-r.ring = " + r.ring.toScript());
-            //logger.info("deg(q) = " + q.degree() + ", deg(r) = " + r.degree());
         }
         while (!r.isZERO()) { //&& r.degree()>0
             x = FDUtil.<C> recursiveRightSparsePseudoRemainder(q, r); 
@@ -408,7 +403,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends
             logger.info("RI-gcd(pp) = " + q + ", ring = " + P.ring.toScript());
         }
         q = (GenSolvablePolynomial<GenPolynomial<C>>) q.multiplyLeft(c).abs();
-        if (debug) {
+        if (false) { // not checkable
             qs = FDUtil.<C> recursiveRightSparsePseudoRemainder(P, q);
             rs = FDUtil.<C> recursiveRightSparsePseudoRemainder(S, q);
             if (!qs.isZERO() || !rs.isZERO()) {

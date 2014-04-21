@@ -301,7 +301,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         }
         GenSolvablePolynomial<GenPolynomial<C>> pp;
         pp = FDUtil.<C> recursiveDivideRightEval(P, d);
-        if (debug) {
+        if (false) { // not checkable
             if (!P.equals(pp.multiply(d))) {
                 System.out.println("RI-ppart, P         = " + P);
                 System.out.println("RI-ppart, cont(P)   = " + d);
@@ -367,7 +367,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         }
         GenSolvablePolynomial<GenPolynomial<C>> pp;
         pp = FDUtil.<C> recursiveDivide(P, d);
-        if (debug) {
+        if (false) { // not checkable
             if (!P.equals(pp.multiplyLeft(d))) {
                 System.out.println("ppart, P         = " + P);
                 System.out.println("ppart, cont(P)   = " + d);
@@ -701,7 +701,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         Sr = (RecSolvablePolynomial<C>) PolyUtil.<C> recursive(rfac, S);
         Dr = leftRecursiveUnivariateGcd(Pr, Sr);
         GenSolvablePolynomial<C> D = (GenSolvablePolynomial<C>) PolyUtil.<C> distribute(pfac, Dr);
-        if (debug) {
+        if (false) { // not checkable
             GenSolvablePolynomial<C> ps = FDUtil.<C> leftBaseSparsePseudoRemainder(P, D);
             GenSolvablePolynomial<C> ss = FDUtil.<C> leftBaseSparsePseudoRemainder(S, D);
             if (!ps.isZERO() || !ss.isZERO()) {
@@ -764,7 +764,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         Sr = (RecSolvablePolynomial<C>) PolyUtil.<C> recursive(rfac, S);
         Dr = rightRecursiveUnivariateGcd(Pr, Sr);
         GenSolvablePolynomial<C> D = (GenSolvablePolynomial<C>) PolyUtil.<C> distribute(pfac, Dr);
-        if (debug) {
+        if (false) { // not checkable
             GenSolvablePolynomial<C> ps = FDUtil.<C> rightBaseSparsePseudoRemainder(P, D);
             GenSolvablePolynomial<C> ss = FDUtil.<C> rightBaseSparsePseudoRemainder(S, D);
             if (!ps.isZERO() || !ss.isZERO()) {

@@ -419,7 +419,7 @@ public class GCDPrimitiveTest extends TestCase {
         dfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), to, vars);
         RelationGenerator<BigRational> wl = new WeylRelationsIterated<BigRational>();
         dfac.addRelations(wl);
-        System.out.println("dfac = " + dfac.toScript());
+        //System.out.println("dfac = " + dfac.toScript());
 
         //kl = 3; 
         ll = 4;
@@ -437,8 +437,8 @@ public class GCDPrimitiveTest extends TestCase {
         ////ok: c = dfac.parse("(a - b) c");
         ////c = dfac.parse("c (a - b)");
         //c = dfac.parse("(a - b) + c + d ");
-        //c = dfac.parse("(a - b) + c");
-        c = dfac.parse("(a - b) + b^3");
+        c = dfac.parse("(a - b) + c");
+        //c = dfac.parse("(a - b) + b^3");
         //c = dfac.parse("(a - b) + d");
 
         //a = dfac.parse("2 b^3 * d^2 + 2/3 a + 3/2");
@@ -450,29 +450,29 @@ public class GCDPrimitiveTest extends TestCase {
         if (c.isZERO()) {
             c = dfac.getONE();
         }
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
-        System.out.println("c = " + c);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+        //System.out.println("c = " + c);
 
         a = a.multiply(c);
         b = b.multiply(c);
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
         //System.out.println("c = " + c);
 
         d = fd.leftGcd(a, b);
-        System.out.println("c = " + c);
-        System.out.println("d = " + d);
+        //System.out.println("c = " + c);
+        //System.out.println("d = " + d);
 
         e = FDUtil.<BigRational> leftBaseSparsePseudoRemainder(d, c);
-        System.out.println("e = " + e);
+        //System.out.println("e = " + e);
         assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
 
         e = FDUtil.<BigRational> leftBaseSparsePseudoRemainder(a, c);
-        System.out.println("e = " + e);
+        //System.out.println("e = " + e);
         assertTrue("c | ac " + e, e.isZERO());
         e = FDUtil.<BigRational> leftBaseSparsePseudoRemainder(a, d);
-        System.out.println("e = " + e);
+        //System.out.println("e = " + e);
         assertTrue("gcd(a,b) | a " + e, e.isZERO());
 
         e = FDUtil.<BigRational> leftBaseSparsePseudoRemainder(b, c);
