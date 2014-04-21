@@ -30,7 +30,8 @@ import edu.jas.poly.WeylRelationsIterated;
 
 
 /**
- * GCD Primitive PRS algorithm tests with JUnit.
+ * GCD Primitive PRS algorithm tests with JUnit. <b>Note:</b> not in sync with
+ * implementation.
  * @author Heinz Kredel.
  */
 

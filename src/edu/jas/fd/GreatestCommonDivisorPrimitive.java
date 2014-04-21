@@ -185,7 +185,8 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends
      * Uses pseudoRemainder for remainder.
      * @param P univariate recursive GenSolvablePolynomial.
      * @param S univariate recursive GenSolvablePolynomial.
-     * @return gcd(P,S) with P = P'*gcd(P,S) and S = S'*gcd(P,S).
+     * @return gcd(P,S) with P = P'*gcd(P,S)*p and S = S'*gcd(P,S)*s, where
+     *         deg_main(p) = deg_main(s) == 0.
      */
     @Override
     public GenSolvablePolynomial<GenPolynomial<C>> leftRecursiveUnivariateGcd(
@@ -271,7 +272,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends
         if (debug) {
             logger.info("r.ring = " + r.ring.toScript());
         }
-        while (!r.isZERO()) { 
+        while (!r.isZERO()) {
             x = FDUtil.<C> recursiveSparsePseudoRemainder(q, r);
             q = r;
             r = leftRecursivePrimitivePart(x);
@@ -305,7 +306,8 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends
      * Uses pseudoRemainder for remainder.
      * @param P univariate recursive GenSolvablePolynomial.
      * @param S univariate recursive GenSolvablePolynomial.
-     * @return gcd(P,S) with P = gcd(P,S)*P' and S = gcd(P,S)*S'.
+     * @return gcd(P,S) with P = p*gcd(P,S)*P' and S = s*gcd(P,S)*S', where
+     *         deg_main(p) = deg_main(s) == 0.
      */
     @Override
     public GenSolvablePolynomial<GenPolynomial<C>> rightRecursiveUnivariateGcd(
@@ -366,7 +368,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends
         }
         r = rs;
         GenSolvablePolynomial<C> b = leftRecursiveContent(q);
-        qs = FDUtil.<C> recursiveDivide(q, b); 
+        qs = FDUtil.<C> recursiveDivide(q, b);
         if (debug) {
             logger.info("RI-recCont b = " + b + ", q = " + q);
             logger.info("RI-recCont q/b = " + qs + ", q%b = " + q.subtract(qs.multiplyLeft(b)));
@@ -391,8 +393,8 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends
         if (debug) {
             logger.info("RI-r.ring = " + r.ring.toScript());
         }
-        while (!r.isZERO()) { //&& r.degree()>0
-            x = FDUtil.<C> recursiveRightSparsePseudoRemainder(q, r); 
+        while (!r.isZERO()) {
+            x = FDUtil.<C> recursiveRightSparsePseudoRemainder(q, r);
             q = r;
             r = rightRecursivePrimitivePart(x);
             if (field) {

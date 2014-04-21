@@ -33,7 +33,8 @@ import edu.jas.poly.WeylRelationsIterated;
 
 
 /**
- * GCD Simple PRS algorithm tests with JUnit.
+ * GCD Simple PRS algorithm tests with JUnit. <b>Note:</b> not in sync with
+ * implementation.
  * @author Heinz Kredel.
  */
 
@@ -356,15 +357,18 @@ public class GCDSimpleTest extends TestCase {
         //er = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveRightPseudoQuotient(dr, cr);
         //System.out.println("dr/cr = " + er);
 
-        er = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveRightSparsePseudoRemainder(dr, cr);
+        er = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveRightSparsePseudoRemainder(
+                        dr, cr);
         //System.out.println("er = " + er);
         assertTrue("c | gcd(ac,bc) " + er, er.isZERO());
 
-        er = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveRightSparsePseudoRemainder(ar, dr);
+        er = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveRightSparsePseudoRemainder(
+                        ar, dr);
         //System.out.println("er = " + er);
         assertTrue("gcd(a,b) | a " + er, er.isZERO());
 
-        er = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveRightSparsePseudoRemainder(br, dr);
+        er = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveRightSparsePseudoRemainder(
+                        br, dr);
         //System.out.println("er = " + er);
         assertTrue("gcd(a,b) | b " + er, er.isZERO());
     }

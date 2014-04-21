@@ -165,7 +165,7 @@ public class FDUtilTest extends TestCase {
         //System.out.println("r   = " + d);
 
         GenSolvablePolynomial<BigInteger> n = (GenSolvablePolynomial<BigInteger>) c.multiply(b).sum(d);
-        //System.out.println("n   = " + n); // + ", " + m.monic());
+        //System.out.println("n   = " + n); // + ", " + n.monic());
         //System.out.println("a   = " + a); // + ", " + a.monic());
 
         boolean t = PolyUtil.<BigInteger> isBasePseudoQuotientRemainder(a, b, c, d);

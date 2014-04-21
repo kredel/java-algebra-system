@@ -26,7 +26,8 @@ public interface GreatestCommonDivisor<C extends GcdRingElem<C>> extends Seriali
      * GenSolvablePolynomial left greatest common divisor.
      * @param P GenSolvablePolynomial.
      * @param S GenSolvablePolynomial.
-     * @return gcd(P,S) with P = P'*gcd(P,S) and S = S'*gcd(P,S).
+     * @return gcd(P,S) with P = P'*gcd(P,S)*p and S = S'*gcd(P,S)*s, where
+     *         deg_main(p) = deg_main(s) == 0.
      */
     public GenSolvablePolynomial<C> leftGcd(GenSolvablePolynomial<C> P, GenSolvablePolynomial<C> S);
 
@@ -35,7 +36,8 @@ public interface GreatestCommonDivisor<C extends GcdRingElem<C>> extends Seriali
      * GenSolvablePolynomial right greatest common divisor.
      * @param P GenSolvablePolynomial.
      * @param S GenSolvablePolynomial.
-     * @return gcd(P,S) with P = gcd(P,S)*P' and S = gcd(P,S)*S'.
+     * @return gcd(P,S) with P = p*gcd(P,S)*P' and S = s*gcd(P,S)*S', where
+     *         deg_main(p) = deg_main(s) == 0.
      */
     public GenSolvablePolynomial<C> rightGcd(GenSolvablePolynomial<C> P, GenSolvablePolynomial<C> S);
 

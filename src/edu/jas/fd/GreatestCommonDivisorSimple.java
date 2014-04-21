@@ -188,7 +188,8 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
      * Uses pseudoRemainder for remainder.
      * @param P univariate recursive GenSolvablePolynomial.
      * @param S univariate recursive GenSolvablePolynomial.
-     * @return gcd(P,S) with P = P'*gcd(P,S) and S = S'*gcd(P,S).
+     * @return gcd(P,S) with P = P'*gcd(P,S)*p and S = S'*gcd(P,S)*s, where
+     *         deg_main(p) = deg_main(s) == 0.
      */
     @Override
     public GenSolvablePolynomial<GenPolynomial<C>> leftRecursiveUnivariateGcd(
@@ -240,7 +241,7 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
             logger.info("recCont a = " + a + ", r = " + r);
             logger.info("recCont r/a = " + rs + ", r%a = " + r.subtract(rs.multiply(a)));
             if (!r.equals(rs.multiply(a))) {
-                if ( !rs.multiplyLeft(a).equals(r) ) {
+                if (!rs.multiplyLeft(a).equals(r)) {
                     System.out.println("recGcd, r         = " + r);
                     System.out.println("recGcd, cont(r)   = " + a);
                     System.out.println("recGcd, pp(r)     = " + rs);
@@ -257,7 +258,7 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
             logger.info("recCont b = " + b + ", q = " + q);
             logger.info("recCont q/b = " + qs + ", q%b = " + q.subtract(qs.multiply(b)));
             if (!q.equals(qs.multiply(b))) {
-                if ( !qs.multiplyLeft(b).equals(q) ) {
+                if (!qs.multiplyLeft(b).equals(q)) {
                     System.out.println("recGcd, q         = " + q);
                     System.out.println("recGcd, cont(q)   = " + b);
                     System.out.println("recGcd, pp(q)     = " + qs);
@@ -330,11 +331,11 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
         }
         q = leftRecursivePrimitivePart(q);
         if (!qp.equals(q)) {
-            logger.info("gcd(pp) = " + q + ", qp = " + qp); 
+            logger.info("gcd(pp) = " + q + ", qp = " + qp);
         }
         q = (GenSolvablePolynomial<GenPolynomial<C>>) q.multiply(c).abs();
         if (false) { // not checkable
-            logger.info("gcd(pp) = " + q + ", c = " + c); 
+            logger.info("gcd(pp) = " + q + ", c = " + c);
             qs = FDUtil.<C> recursiveSparsePseudoRemainder(P, q);
             rs = FDUtil.<C> recursiveSparsePseudoRemainder(S, q);
             if (!qs.isZERO() || !rs.isZERO()) {
@@ -343,7 +344,7 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
                 System.out.println("recGcd-pp, q  = " + q);
                 System.out.println("recGcd-pp, qs = " + qs);
                 System.out.println("recGcd-pp, rs = " + rs);
-                rs = FDUtil.<C> recursiveRightSparsePseudoRemainder(S, q); 
+                rs = FDUtil.<C> recursiveRightSparsePseudoRemainder(S, q);
                 System.out.println("recGcd-pp, rs = " + rs);
                 if (!rs.isZERO()) {
                     throw new RuntimeException("recGcd: not divisible");
@@ -360,7 +361,8 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
      * Uses pseudoRemainder for remainder.
      * @param P univariate recursive GenSolvablePolynomial.
      * @param S univariate recursive GenSolvablePolynomial.
-     * @return gcd(P,S) with P = gcd(P,S)*P' and S = gcd(P,S)*S'.
+     * @return gcd(P,S) with P = p*gcd(P,S)*P' and S = s*gcd(P,S)*S', where
+     *         deg_main(p) = deg_main(s) == 0.
      */
     @Override
     public GenSolvablePolynomial<GenPolynomial<C>> rightRecursiveUnivariateGcd(
