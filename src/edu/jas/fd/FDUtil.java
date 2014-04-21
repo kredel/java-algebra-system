@@ -16,7 +16,6 @@ import edu.jas.gbmod.SolvableQuotient;
 import edu.jas.gbmod.SolvableQuotientRing;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolyUtil;
@@ -471,11 +470,11 @@ public class FDUtil {
         }
         GreatestCommonDivisorAbstract<C> fd = new GreatestCommonDivisorSimple<C>();
 
-        GenSolvablePolynomial<GenPolynomial<C>> pr = FDUtil.<C> rightRecursivePolynomial(P);
+        GenSolvablePolynomial<GenPolynomial<C>> pr = P.rightRecursivePolynomial();
         GenSolvablePolynomial<C> a = (GenSolvablePolynomial<C>) pr.leadingBaseCoefficient();
 
         rhs = (GenSolvablePolynomial<GenPolynomial<C>>) S.multiply(q).sum(r);
-        GenSolvablePolynomial<GenPolynomial<C>> rr = FDUtil.<C> rightRecursivePolynomial(rhs);
+        GenSolvablePolynomial<GenPolynomial<C>> rr = rhs.rightRecursivePolynomial();
         GenSolvablePolynomial<C> b = (GenSolvablePolynomial<C>) rr.leadingBaseCoefficient();
 
         GenSolvablePolynomial<C>[] oc = fd.rightOreCond(a, b);
@@ -632,8 +631,8 @@ public class FDUtil {
             if (f.multipleOf(e)) {
                 f = f.subtract(e);
                 h = S.multiply(f); // coeff c, exp e (f/e)
-                hr = FDUtil.<C> rightRecursivePolynomial(h);
-                rr = FDUtil.<C> rightRecursivePolynomial(r);
+                hr = h.rightRecursivePolynomial();
+                rr = r.rightRecursivePolynomial();
                 GenSolvablePolynomial<C> a = (GenSolvablePolynomial<C>) rr.leadingBaseCoefficient();
                 GenSolvablePolynomial<C> d = (GenSolvablePolynomial<C>) hr.leadingBaseCoefficient();
                 GenSolvablePolynomial<C>[] oc = fd.rightOreCond(a, d);
@@ -644,8 +643,8 @@ public class FDUtil {
                 // a ga = d gd
                 rr = FDUtil.<C> multiplyRightRecursivePolynomial(rr, ga); // exp f, coeff a ga, 
                 hr = FDUtil.<C> multiplyRightRecursivePolynomial(hr, gd); // exp f, coeff d gd
-                h = FDUtil.<C> evalAsRightRecursivePolynomial(hr);
-                r = FDUtil.<C> evalAsRightRecursivePolynomial(rr);
+                h = hr.evalAsRightRecursivePolynomial();
+                r = rr.evalAsRightRecursivePolynomial();
                 //if (!r.leadingBaseCoefficient().equals(h.leadingBaseCoefficient())) {
                 //    throw new RuntimeException("can not happen: lc(r) = " + r.leadingBaseCoefficient()
                 //                               + ", lc(h) = " + h.leadingBaseCoefficient());
@@ -658,7 +657,7 @@ public class FDUtil {
                 break;
             }
         }
-        q = FDUtil.<C> evalAsRightRecursivePolynomial(qr);
+        q = qr.evalAsRightRecursivePolynomial();
         ret[0] = q;
         ret[1] = r;
         return ret;
@@ -678,9 +677,9 @@ public class FDUtil {
         if (s.isONE()) {
             return P;
         }
-        GenSolvablePolynomial<GenPolynomial<C>> Pr = FDUtil.<C> rightRecursivePolynomial(P);
+        GenSolvablePolynomial<GenPolynomial<C>> Pr = P.rightRecursivePolynomial();
         GenSolvablePolynomial<GenPolynomial<C>> Qr = FDUtil.<C> recursiveDivide(Pr, s);
-        GenSolvablePolynomial<GenPolynomial<C>> Q = FDUtil.<C> evalAsRightRecursivePolynomial(Qr);
+        GenSolvablePolynomial<GenPolynomial<C>> Q = Qr.evalAsRightRecursivePolynomial();
         if (debug) {
             if (!Q.multiply(s).equals(P)) {
                 System.out.println("rDivREval: P   = " + P + ", right(P) = " + Pr);
@@ -766,7 +765,7 @@ public class FDUtil {
             return P;
         }
         GenSolvablePolynomial<GenPolynomial<C>> p = P.ring.getZERO().copy();
-        GenSolvablePolynomial<GenPolynomial<C>> Pr = FDUtil.<C> rightRecursivePolynomial(P);
+        GenSolvablePolynomial<GenPolynomial<C>> Pr = P.rightRecursivePolynomial();
         logger.info("P = " + P + ", right(P) = " + Pr + ", left(s) = " + s);
         for (Map.Entry<ExpVector, GenPolynomial<C>> m1 : Pr.getMap().entrySet()) {
             GenSolvablePolynomial<C> c1 = (GenSolvablePolynomial<C>) m1.getValue();
@@ -779,7 +778,7 @@ public class FDUtil {
                 p.doPutToMap(e1, c);
             }
         }
-        GenSolvablePolynomial<GenPolynomial<C>> pl = FDUtil.<C> evalAsRightRecursivePolynomial(p);
+        GenSolvablePolynomial<GenPolynomial<C>> pl = p.evalAsRightRecursivePolynomial();
         logger.info("pl = " + pl + ", p = " + p);
         return pl;
     }
@@ -907,7 +906,7 @@ public class FDUtil {
     }
 
 
-    /**
+    /*
      * RecSolvablePolynomial right coefficients from left coefficients.
      * <b>Note:</b> R is represented as a polynomial with left coefficients, the
      * implementation can at the moment not distinguish between left and right
@@ -917,7 +916,7 @@ public class FDUtil {
      * @return R = sum( X<sup>i</sup> b<sub>i</sub> ), with P =
      *         sum(a<sub>i</sub> X<sup>i</sup> ) and eval(sum(X<sup>i</sup>
      *         b<sub>i</sub>)) == sum(a<sub>i</sub> X<sup>i</sup>)
-     */
+
     public static <C extends RingElem<C>> GenSolvablePolynomial<GenPolynomial<C>> rightRecursivePolynomial(
                     GenSolvablePolynomial<GenPolynomial<C>> P) {
         if (P == null || P.isZERO()) {
@@ -949,9 +948,9 @@ public class FDUtil {
         }
         return R;
     }
+    */
 
-
-    /**
+    /*
      * Evaluate RecSolvablePolynomial as right coefficients polynomial.
      * <b>Note:</b> R is represented as a polynomial with left coefficients, the
      * implementation can at the moment not distinguish between left and right
@@ -961,7 +960,7 @@ public class FDUtil {
      * @return P as evaluated polynomial R. R = sum( X<sup>i</sup> b<sub>i</sub>
      *         ), P = sum(a<sub>i</sub> X<sup>i</sup> ) = eval(sum(X<sup>i</sup>
      *         b<sub>i</sub>))
-     */
+
     public static <C extends RingElem<C>> GenSolvablePolynomial<GenPolynomial<C>> evalAsRightRecursivePolynomial(
                     GenSolvablePolynomial<GenPolynomial<C>> R) {
         if (R == null || R.isZERO()) {
@@ -991,9 +990,9 @@ public class FDUtil {
         }
         return q;
     }
+    */
 
-
-    /**
+    /*
      * Test RecSolvablePolynomial right coefficients polynomial. <b>Note:</b> R
      * is represented as a polynomial with left coefficients, the implementation
      * can at the moment not distinguish between left and right coefficients.
@@ -1004,7 +1003,7 @@ public class FDUtil {
      *         X<sup>i</sup> b<sub>i</sub> ), with P = sum(a<sub>i</sub>
      *         X<sup>i</sup> ) and eval(sum(X<sup>i</sup> b<sub>i</sub>)) ==
      *         sum(a<sub>i</sub> X<sup>i</sup>)
-     */
+              
     public static <C extends RingElem<C>> boolean isRightRecursivePolynomial(
                     GenSolvablePolynomial<GenPolynomial<C>> P, GenSolvablePolynomial<GenPolynomial<C>> R) {
         if (P == null) {
@@ -1016,18 +1015,21 @@ public class FDUtil {
         if (!(P instanceof RecSolvablePolynomial)) {
             return !(R instanceof RecSolvablePolynomial);
         }
+        if (!(R instanceof RecSolvablePolynomial)) {
+            return false;
+        }
         RecSolvablePolynomialRing<C> rfac = (RecSolvablePolynomialRing<C>) P.ring;
         if (rfac.coeffTable.isEmpty()) {
             RecSolvablePolynomialRing<C> rf = (RecSolvablePolynomialRing<C>) R.ring;
             return rf.coeffTable.isEmpty();
         }
         RecSolvablePolynomial<C> p = (RecSolvablePolynomial<C>) P;
-        RecSolvablePolynomial<C> q = (RecSolvablePolynomial<C>) FDUtil.<C> evalAsRightRecursivePolynomial(R);
+        RecSolvablePolynomial<C> q = (RecSolvablePolynomial<C>) R.evalAsRightRecursivePolynomial();
         p = (RecSolvablePolynomial<C>) PolyUtil.<C> monic(p);
         q = (RecSolvablePolynomial<C>) PolyUtil.<C> monic(q);
         return p.equals(q);
     }
-
+    */
 
     /**
      * RecSolvablePolynomial right coefficients multiply. <b>Note:</b> R is

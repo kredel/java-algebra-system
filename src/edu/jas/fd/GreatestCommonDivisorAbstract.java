@@ -264,7 +264,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             return (GenSolvablePolynomial<C>) P.ring.getONECoefficient();
         }
         GenSolvablePolynomial<C> d = null, cs = null;
-        GenSolvablePolynomial<GenPolynomial<C>> Pr = FDUtil.<C> rightRecursivePolynomial(P);
+        GenSolvablePolynomial<GenPolynomial<C>> Pr = P.rightRecursivePolynomial();
         logger.info("RI-recCont: P = " + P + ", right(P) = " + Pr);
         for (GenPolynomial<C> c : Pr.getMap().values()) {
             cs = (GenSolvablePolynomial<C>) c;

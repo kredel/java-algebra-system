@@ -570,4 +570,91 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
         return ret;
     }
 
+
+    /**
+     * RecSolvablePolynomial right coefficients from left coefficients.
+     * <b>Note:</b> R is represented as a polynomial with left coefficients, the
+     * implementation can at the moment not distinguish between left and right
+     * coefficients.
+     * @param <C> coefficient type.
+     * @return R = sum( X<sup>i</sup> b<sub>i</sub> ), with P =
+     *         sum(a<sub>i</sub> X<sup>i</sup> ) and eval(sum(X<sup>i</sup>
+     *         b<sub>i</sub>)) == sum(a<sub>i</sub> X<sup>i</sup>)
+     */
+    public GenSolvablePolynomial<C> rightRecursivePolynomial() {
+        if (this.isONE() || this.isZERO()) {
+            return this;
+        }
+        if (!(this instanceof RecSolvablePolynomial)) {
+            return this;
+        }
+        RecSolvablePolynomialRing<C> rfac = (RecSolvablePolynomialRing<C>) ring;
+        if (rfac.coeffTable.isEmpty()) {
+            return this;
+        }
+        RecSolvablePolynomial<C> p = (RecSolvablePolynomial<C>) this;
+        RecSolvablePolynomial<C> R = (RecSolvablePolynomial<C>) p.rightRecursivePolynomial();
+        return (GenSolvablePolynomial<C> ) R;
+    }
+
+
+    /**
+     * Evaluate RecSolvablePolynomial as right coefficients polynomial.
+     * <b>Note:</b> R is represented as a polynomial with left coefficients, the
+     * implementation can at the moment not distinguish between left and right
+     * coefficients.
+     * @return this as evaluated polynomial R. R = sum( X<sup>i</sup> b<sub>i</sub>
+     *         ), this = sum(a<sub>i</sub> X<sup>i</sup> ) = eval(sum(X<sup>i</sup>
+     *         b<sub>i</sub>))
+     */
+    public GenSolvablePolynomial<C> evalAsRightRecursivePolynomial() {
+        if (this.isONE() || this.isZERO()) {
+            return this;
+        }
+        if (!(this instanceof RecSolvablePolynomial)) {
+            return this;
+        }
+        RecSolvablePolynomialRing<C> rfac = (RecSolvablePolynomialRing<C>) ring;
+        if (rfac.coeffTable.isEmpty()) {
+            return this;
+        }
+        RecSolvablePolynomial<C> p = (RecSolvablePolynomial<C>) this;
+        RecSolvablePolynomial<C> R = (RecSolvablePolynomial<C>) p.evalAsRightRecursivePolynomial();
+        return (GenSolvablePolynomial<C> ) R;
+    }
+
+
+    /**
+     * Test RecSolvablePolynomial right coefficients polynomial. <b>Note:</b> R
+     * is represented as a polynomial with left coefficients, the implementation
+     * can at the moment not distinguish between left and right coefficients.
+     * @param R GenSolvablePolynomial with right coefficients.
+     * @return true, if R is polynomial with right coefficients of this. R = sum(
+     *         X<sup>i</sup> b<sub>i</sub> ), with this = sum(a<sub>i</sub>
+     *         X<sup>i</sup> ) and eval(sum(X<sup>i</sup> b<sub>i</sub>)) ==
+     *         sum(a<sub>i</sub> X<sup>i</sup>)
+     */
+    public boolean isRightRecursivePolynomial(GenSolvablePolynomial<C> R) {
+        if (this.isZERO()) {
+            return R.isZERO();
+        }
+        if (this.isONE()) {
+            return R.isONE();
+        }
+        if (!(this instanceof RecSolvablePolynomial)) {
+            return !(R instanceof RecSolvablePolynomial);
+        }
+        if (!(R instanceof RecSolvablePolynomial)) {
+            return false;
+        }
+        RecSolvablePolynomialRing<C> rfac = (RecSolvablePolynomialRing<C>) ring;
+        if (rfac.coeffTable.isEmpty()) {
+            RecSolvablePolynomialRing<C> rf = (RecSolvablePolynomialRing<C>) R.ring;
+            return rf.coeffTable.isEmpty();
+        }
+        RecSolvablePolynomial<C> p = (RecSolvablePolynomial<C>) this;
+        RecSolvablePolynomial<C> q = (RecSolvablePolynomial<C>) R;
+        return p.isRightRecursivePolynomial(q);
+    }
+
 }

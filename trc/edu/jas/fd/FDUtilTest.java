@@ -405,13 +405,13 @@ public class FDUtilTest extends TestCase {
         arr = rrfac.random(kl, ll, el, q);
         //System.out.println("FDQR: arr  = " + arr);
 
-        brr = FDUtil.<BigRational> rightRecursivePolynomial(arr);
+        brr = arr.rightRecursivePolynomial();
         //System.out.println("FDQR: brr  = " + brr);
 
         //System.out.println("FDQR: arr == brr: " + arr.equals(brr));
         //assertFalse("arr != brr: ", arr.equals(brr) && false); // mostly unequal
 
-        boolean t = FDUtil.<BigRational> isRightRecursivePolynomial(arr, brr);
+        boolean t = arr.isRightRecursivePolynomial(brr);
         assertTrue("arr == eval(brr): ", t);
     }
 
