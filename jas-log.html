@@ -22,15 +22,32 @@
 
 <dl>
 
-<dt>2014, March </dt>
+<dt>2014, April </dt>
 <dd> 
 
+ The solvable polynomial common divisor package
+ <code>edu.jas.fd</code> is now in a usable condition. The definition
+ of greatest common divisor has changed slightly and left and right
+ gcds are now distinguished. Various improvements, refactorings and
+ bug fixes. Detection of wrong method dispatching by JRE in
+ <code>GenSolvablePolynomial</code> and <code>GenPolynomial</code>.
+
+ Cleanup of Gr&ouml;bner base packages. Completion of GB class
+ constructors with <code>PairList</code> parameters. New parallel
+ recursive polynomial Gr&ouml;bner base computation. Refactoring of
+ <code>Quotient</code> coefficient cases. Handle more cases in
+ <code>GBAlgorithmBuilder</code> and <code>GBFactory</code>. jython
+ scripting GB with selectable sig-based GB algorithm.  Unit tests for
+ the new algorithms.
+
+</dd>
+
+<dt>2014, March </dt>
+<dd> 
  Small improvements in solvable polynomial common divisor computation,
  more cases working. New method for right pseudo division.
-
  Performance improvements in <code>PrimeList</code>. Restore and keep
  MPJ Express compatibility and test cases.
-
 </dd>
 
 <dt>2014, January </dt>
@@ -2335,7 +2352,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Mon Mar  3 14:23:34 CET 2014
+Last modified: Mon Apr 21 10:24:18 CEST 2014
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
