@@ -576,7 +576,6 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
      * <b>Note:</b> R is represented as a polynomial with left coefficients, the
      * implementation can at the moment not distinguish between left and right
      * coefficients.
-     * @param <C> coefficient type.
      * @return R = sum( X<sup>i</sup> b<sub>i</sub> ), with P =
      *         sum(a<sub>i</sub> X<sup>i</sup> ) and eval(sum(X<sup>i</sup>
      *         b<sub>i</sub>)) == sum(a<sub>i</sub> X<sup>i</sup>)
