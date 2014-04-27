@@ -298,7 +298,7 @@ epydoc: examples/jas.py
 	epydoc -o doc/jython -n "Python to JAS" -u ../../index.html examples/jas.py
 
 rdoc: examples/jas.rb
-	jrdoc -o doc/jruby -U -S -N -t "Ruby to JAS" examples/jas.rb
+	jrdoc -o doc/jruby -U -N -t "Ruby to JAS" examples/jas.rb
 
 texdoc: $(FILES) $(TESTFILES)
 	mkdir -p doc/tex
@@ -406,8 +406,9 @@ SVNDATE=svnlook date $(SVNREPO)/jas
 # jan 2011 SVNSRT=3458
 # jul 2011 SVNSRT=3688
 # dec 2011 SVNSRT=3838
-# jul 2012
-SVNSRT=4008
+# jul 2012 SVNSRT=4008
+# aug 2013
+SVNSRT=4588
 
 export:
 	rm -rf ~/jas-versions/$(VERSION)
