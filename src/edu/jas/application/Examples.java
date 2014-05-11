@@ -21,15 +21,22 @@ import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.Product;
 import edu.jas.arith.ProductRing;
 import edu.jas.gb.GroebnerBase;
+import edu.jas.gb.GroebnerBaseAbstract;
+import edu.jas.gb.GroebnerBaseSeq;
 import edu.jas.gbufd.GBFactory;
 import edu.jas.gbufd.RGroebnerBasePseudoSeq;
 import edu.jas.gbufd.RReductionSeq;
 import edu.jas.kern.ComputerThreads;
+import edu.jas.kern.Scripting;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
+import edu.jas.poly.AlgebraicNumber;
+import edu.jas.poly.AlgebraicNumberRing;
+import edu.jas.ufd.Quotient;
+import edu.jas.ufd.QuotientRing;
 
 
 /**
@@ -54,6 +61,9 @@ public class Examples {
         }
         example5();
         example6();
+        example10();
+        example11();
+        example12();
         ComputerThreads.terminate();
     }
 
@@ -567,4 +577,222 @@ public class Examples {
         System.out.println("dim = " + dim);
     }
 
+
+    /**
+     * example10. abtract types: GB of List<GenPolynomial<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>>>.
+     */
+    public static void example10() {
+        Scripting.setLang(Scripting.Lang.Ruby);
+        BigRational bfac = new BigRational(1);
+        GenPolynomialRing<BigRational> pfac;
+        pfac = new GenPolynomialRing<BigRational>(bfac, new String[] { "w2" });
+        System.out.println("pfac = " + pfac.toScript());
+
+        // p = w2^2 - 2
+        GenPolynomial<BigRational> p = pfac.univariate(0,2).subtract(pfac.fromInteger(2L));
+        System.out.println("p = " + p.toScript());
+
+        AlgebraicNumberRing<BigRational> afac;
+        afac = new AlgebraicNumberRing<BigRational>(p, true);
+        System.out.println("afac = " + afac.toScript());
+
+        GenPolynomialRing<AlgebraicNumber<BigRational>> pafac;
+        pafac = new GenPolynomialRing<AlgebraicNumber<BigRational>>(afac, new String[] { "x" } );
+        System.out.println("pafac = " + pafac.toScript());
+
+        QuotientRing<AlgebraicNumber<BigRational>> qafac;
+        qafac = new QuotientRing<AlgebraicNumber<BigRational>>(pafac);
+        System.out.println("qafac = " + qafac.toScript());
+
+        GenPolynomialRing<Quotient<AlgebraicNumber<BigRational>>> pqafac;
+        pqafac = new GenPolynomialRing<Quotient<AlgebraicNumber<BigRational>>>(qafac, new String[] { "wx" });
+        System.out.println("pqafac = " + pqafac.toScript());
+        List<GenPolynomial<Quotient<AlgebraicNumber<BigRational>>>> qgen = pqafac.generators();
+        System.out.println("qgen = " + qgen);
+
+        // q = wx^2 - x
+        GenPolynomial<Quotient<AlgebraicNumber<BigRational>>> q;
+        q = pqafac.univariate(0,2).subtract(qgen.get(2)); 
+        System.out.println("q = " + q.toScript());
+
+        AlgebraicNumberRing<Quotient<AlgebraicNumber<BigRational>>> aqafac;
+        aqafac = new AlgebraicNumberRing<Quotient<AlgebraicNumber<BigRational>>>(q,true);
+        System.out.println("aqafac = " + aqafac.toScript());
+
+        GenPolynomialRing<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>> paqafac;
+        paqafac = new GenPolynomialRing<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>>(aqafac, new String[] { "y", "z" });
+        System.out.println("paqafac = " + paqafac.toScript());
+
+        List<GenPolynomial<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>>> L;
+        L = new ArrayList<GenPolynomial<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>>>();
+
+        GenPolynomial<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>> pp;
+        /*
+        for (int i = 0; i < 2; i++) {
+            pp = paqafac.random(2, 3, 3, 0.2f);
+            System.out.println("pp = " + pp.toScript());
+            if (pp.isConstant()) {
+                pp = paqafac.univariate(0,3);
+            }
+            L.add(pp);
+        }
+        */
+        pp = paqafac.parse("(( y^2 - x )*( z^2 - 2 ) )");
+        System.out.println("pp = " + pp.toScript());
+        L.add(pp);
+        pp = paqafac.parse("( y^2 z - x^3 z - w2*wx )");
+        System.out.println("pp = " + pp.toScript());
+        L.add(pp);
+        //System.out.println("L = " + L);
+
+        GroebnerBaseAbstract<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>> bb;
+        //bb = new GroebnerBaseSeq<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>>(); //aqafac);
+        bb = GBFactory.getImplementation(aqafac);
+        //bb = GBFactory.getProxy(aqafac);
+
+        System.out.println("isGB(L) = " + bb.isGB(L));
+
+        long t = System.currentTimeMillis();
+        List<GenPolynomial<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>>> G = bb.GB(L);
+        t = System.currentTimeMillis()-t;
+        System.out.println("time = " + t + " milliseconds");
+        //System.out.println("G = " + G);
+        for ( GenPolynomial<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>> g : G ) {
+	    System.out.println("g = " + g.toScript());
+        }
+        System.out.println("isGB(G) = " + bb.isGB(G));
+        bb.terminate();
+    }
+
+
+    /**
+     * example11. abtract types: GB of List<GenPolynomial<BigRational>>>.
+     */
+    public static void example11() {
+        Scripting.setLang(Scripting.Lang.Ruby);
+        BigRational bfac = new BigRational(1);
+        GenPolynomialRing<BigRational> pfac;
+        String[] vars = new String[] { "w2", "xi", "x", "wx", "y", "z" };
+        TermOrder to = new TermOrder(TermOrder.INVLEX);
+        pfac = new GenPolynomialRing<BigRational>(bfac, vars, to);
+        System.out.println("pfac = " + pfac.toScript());
+
+        List<GenPolynomial<BigRational>> L = new ArrayList<GenPolynomial<BigRational>>();
+        GenPolynomial<BigRational> pp;
+        pp = pfac.parse("( w2^2 - 2 )");
+        System.out.println("pp = " + pp.toScript());
+        L.add(pp);
+        pp = pfac.parse("( wx^2 - x )");
+        System.out.println("pp = " + pp.toScript());
+        L.add(pp);
+        pp = pfac.parse("( xi * x - 1 )");
+        System.out.println("pp = " + pp.toScript());
+        L.add(pp);
+        pp = pfac.parse("(( y^2 - x )*( z^2 - 2 ) )");
+        System.out.println("pp = " + pp.toScript());
+        L.add(pp);
+        pp = pfac.parse("( y^2 z - x^3 z - w2*wx )");
+        System.out.println("pp = " + pp.toScript());
+        L.add(pp);
+
+        GroebnerBaseAbstract<BigRational> bb;
+        //bb = new GroebnerBaseSeq<BigRational>(); //bfac);
+        bb = GBFactory.getImplementation(bfac);
+        //bb = GBFactory.getProxy(bfac);
+
+        System.out.println("isGB(L) = " + bb.isGB(L));
+        long t = System.currentTimeMillis();
+        List<GenPolynomial<BigRational>> G = bb.GB(L);
+        t = System.currentTimeMillis()-t;
+        System.out.println("time = " + t + " milliseconds");
+        for ( GenPolynomial<BigRational> g : G ) {
+	    System.out.println("g = " + g.toScript());
+        }
+        System.out.println("isGB(G) = " + bb.isGB(G));
+        bb.terminate();
+    }
+
+
+    /**
+     * example12. abtract types: GB of List<GenPolynomial<Quotient<BigRational>>>>.
+     */
+    public static void example12() {
+        Scripting.setLang(Scripting.Lang.Ruby);
+        BigRational bfac = new BigRational(1);
+        GenPolynomialRing<BigRational> cfac;
+        String[] cvars = new String[] { "x" };
+        TermOrder to = new TermOrder(TermOrder.INVLEX);
+        cfac = new GenPolynomialRing<BigRational>(bfac, cvars, to);
+        System.out.println("cfac = " + cfac.toScript());
+
+        QuotientRing<BigRational> qfac;
+        qfac = new QuotientRing<BigRational>(cfac); 
+        System.out.println("qfac = " + qfac.toScript());
+
+        String[] vars = new String[] { "w2", "wx", "y", "z" };
+        GenPolynomialRing<Quotient<BigRational>> pfac;
+        pfac = new GenPolynomialRing<Quotient<BigRational>>(qfac, vars, to);
+        System.out.println("pfac = " + pfac.toScript());
+
+        List<GenPolynomial<Quotient<BigRational>>> L = new ArrayList<GenPolynomial<Quotient<BigRational>>>();
+        GenPolynomial<Quotient<BigRational>> pp;
+        pp = pfac.parse("( w2^2 - 2 )");
+        System.out.println("pp = " + pp.toScript());
+        L.add(pp);
+        pp = pfac.parse("( wx^2 - x )");
+        System.out.println("pp = " + pp.toScript());
+        L.add(pp);
+        pp = pfac.parse("(( y^2 - x )*( z^2 - 2 ) )");
+        System.out.println("pp = " + pp.toScript());
+        L.add(pp);
+        pp = pfac.parse("( y^2 z - x^3 z - w2*wx )");
+        System.out.println("pp = " + pp.toScript());
+        L.add(pp);
+
+        GroebnerBaseAbstract<Quotient<BigRational>> bb;
+        //bb = new GroebnerBaseSeq<Quotient<BigRational>>(); //bfac);
+
+        // sequential
+        bb = GBFactory.getImplementation(qfac);
+        System.out.println("isGB(L) = " + bb.isGB(L));
+        long t = System.currentTimeMillis();
+        List<GenPolynomial<Quotient<BigRational>>> G = bb.GB(L);
+        t = System.currentTimeMillis()-t;
+        System.out.println("time = " + t + " milliseconds");
+        for ( GenPolynomial<Quotient<BigRational>> g : G ) {
+	    System.out.println("g = " + g.toScript());
+        }
+        System.out.println("isGB(G) = " + bb.isGB(G));
+        bb.terminate();
+
+        // parallel
+        bb = GBFactory.getProxy(qfac);
+        System.out.println("isGB(L) = " + bb.isGB(L));
+        t = System.currentTimeMillis();
+        G = bb.GB(L);
+        t = System.currentTimeMillis()-t;
+        System.out.println("time = " + t + " milliseconds");
+        for ( GenPolynomial<Quotient<BigRational>> g : G ) {
+	    System.out.println("g = " + g.toScript());
+        }
+        System.out.println("isGB(G) = " + bb.isGB(G));
+        bb.terminate();
+
+        // builder
+        bb = GBAlgorithmBuilder.polynomialRing(pfac)
+                               .fractionFree()
+                               .syzygyPairlist()
+                               .parallel(3)
+                               .build();
+        System.out.println("isGB(L) = " + bb.isGB(L));
+        t = System.currentTimeMillis();
+        G = bb.GB(L);
+        t = System.currentTimeMillis()-t;
+        System.out.println("time = " + t + " milliseconds");
+        for ( GenPolynomial<Quotient<BigRational>> g : G ) {
+	    System.out.println("g = " + g.toScript());
+        }
+        System.out.println("isGB(G) = " + bb.isGB(G));
+        bb.terminate();
+    }
 }

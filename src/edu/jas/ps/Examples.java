@@ -4,11 +4,14 @@
 
 package edu.jas.ps;
 
+import java.util.List;
 
 import edu.jas.arith.BigComplex;
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.BinaryFunctor;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
@@ -40,6 +43,7 @@ public class Examples {
             example12();
         }
         example13();
+        example14();
     }
 
 
@@ -483,6 +487,31 @@ public class Examples {
         System.out.println("exp = " + dexp);
         System.out.println("exp(1) = " + dexp.evaluate(dfac.getONE()));
         System.out.println("exp(0) = " + dexp.evaluate(dfac.getZERO()));
+    }
+
+
+    public static void example14() {
+        BigRational cfac = new BigRational();
+        UnivPowerSeriesRing<BigRational> pfac = new UnivPowerSeriesRing<BigRational>(cfac, 11, "t");
+        System.out.println("pfac = " + pfac);
+        System.out.println("pfac = " + pfac.toScript());
+
+        GenPolynomialRing<UnivPowerSeries<BigRational>> fac = new GenPolynomialRing<UnivPowerSeries<BigRational>>(pfac,new String[] { "x"} ); 
+        System.out.println("fac = " + fac);
+        System.out.println("fac = " + fac.toScript());
+        List<UnivPowerSeries<BigRational>> gens = pfac.generators();
+        System.out.println("gens = " + gens);
+
+        GenPolynomial<UnivPowerSeries<BigRational>> p = fac.parse("x^2 - x");
+        System.out.println("p = " + p);
+        GenPolynomial<UnivPowerSeries<BigRational>> s = p.sum(gens.get(1).multiply(gens.get(1)));
+        System.out.println("s = " + s);
+
+        GenPolynomial<UnivPowerSeries<BigRational>> q = p.multiply(s);
+        System.out.println("q = " + q);
+
+        GenPolynomial<UnivPowerSeries<BigRational>> r = q.gcd(s);
+        System.out.println("r = " + r);
     }
 
 }
