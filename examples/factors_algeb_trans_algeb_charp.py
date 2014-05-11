@@ -11,13 +11,13 @@ from java.lang import Integer
 from jas import Ring
 from jas import PolyRing
 from jas import Ideal
-from jas import ZM, QQ, AN, RF
+from jas import ZM, QQ, AN, RF, GF
 from jas import terminate
 from jas import startLog
 
 # polynomial examples: factorization over Z_p(sqrt(2))(x)(sqrt(x))[y]
 
-Q = PolyRing(ZM(5),"w2",PolyRing.lex);
+Q = PolyRing(GF(5),"w2",PolyRing.lex);
 print "Q     = " + str(Q);
 [e,a] = Q.gens();
 #print "e     = " + str(e);

@@ -15,7 +15,7 @@ from jas import ZM, QQ, AN, RF
 from jas import terminate
 from jas import startLog
 
-# polynomial examples: factorization over Z_p(x)(sqrt3(x))[y]
+# polynomial examples: factorization over Z_p(x)(sqrt{3}(x))[y]
 
 Q = PolyRing(ZM(5),"x",PolyRing.lex);
 print "Q     = " + str(Q);
