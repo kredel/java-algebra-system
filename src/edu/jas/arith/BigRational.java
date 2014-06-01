@@ -79,7 +79,6 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
     public BigRational(BigInteger n) {
         num = n;
         den = BigInteger.ONE; // be aware of static initialization order
-        //den = BigInteger.ONE;
     }
 
 
@@ -522,9 +521,19 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
             den = BigInteger.ONE;
             return new BigRational(num, den);
         }
-        BigInteger C = n.gcd(d);
-        num = n.divide(C);
-        den = d.divide(C);
+        if (n.equals(d)) {
+            num = BigInteger.ONE;
+            den = BigInteger.ONE;
+            return new BigRational(num, den);
+        }
+        BigInteger c = n.gcd(d);
+        if (c.equals(BigInteger.ONE)) {
+            num = n;
+            den = d;
+        } else {
+            num = n.divide(c);
+            den = d.divide(c);
+        }
         if (den.signum() < 0) {
             num = num.negate();
             den = den.negate();
@@ -1226,7 +1235,6 @@ class BigRationalIterator implements Iterator<BigRational> {
         numit = num.iterator();
         denlist = new ArrayList<edu.jas.arith.BigInteger>();
         numlist = new ArrayList<edu.jas.arith.BigInteger>();
-        @SuppressWarnings("unused")
         edu.jas.arith.BigInteger unused = denit.next(); // skip zero denominator
         unused = numit.next();
         if (unused == null) { // use for findbugs

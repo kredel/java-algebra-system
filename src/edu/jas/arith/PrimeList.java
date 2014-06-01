@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import edu.jas.structure.Power;
-
 
 /**
  * List of big primes. Provides an Iterator for generating prime numbers.
@@ -298,15 +296,14 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
     public static java.math.BigInteger getLongPrime(int n, int m) {
         if (n < 30) {
             return java.math.BigInteger.valueOf((1 << n) - m);
-        } else {
-            return java.math.BigInteger.ONE.shiftLeft(n).subtract(java.math.BigInteger.valueOf(m));
         }
+        return java.math.BigInteger.ONE.shiftLeft(n).subtract(java.math.BigInteger.valueOf(m));
     }
 
 
     /**
      * Method to compute a Mersenne prime as 2**n - 1.
-     * @param n  power for 2.
+     * @param n power for 2.
      * @return 2**n - 1
      */
     public static java.math.BigInteger getMersennePrime(int n) {
