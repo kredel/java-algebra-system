@@ -164,7 +164,7 @@ public class GCDSimpleTest extends TestCase {
             a = dfac.random(kl * (i + 2), ll + 2 * i, el + 2, q);
             b = dfac.random(kl * (i + 2), ll + 2 * i, el + 2, q);
             c = dfac.random(kl * (i + 2), ll + 2, el + 2, q);
-            c = c.multiply(cfac.univariate(0));
+            c = c.multiply(dfac.univariate(0));
             if (c.isZERO()) {
                 // skip for this turn
                 continue;

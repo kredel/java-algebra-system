@@ -103,7 +103,7 @@ public class PolyUtil {
                 ExpVector f = x.getKey();
                 C b = x.getValue();
                 ExpVector g = e.combine(f);
-                assert (Cm.get(g) != null);
+                assert (Cm.get(g) == null);
                 //if ( Cm.get(g) != null ) { // todo assert, done
                 //   throw new RuntimeException("PolyUtil debug error");
                 //}
