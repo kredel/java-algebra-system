@@ -218,7 +218,7 @@ public class AlgebraicNumberTest extends TestCase {
         //System.out.println("cp = " + cp);
         fac = new AlgebraicNumberRing<BigRational>( cp );
         a = new AlgebraicNumber<BigRational>(fac,a.val.monic());
-        assertFalse("a !unit mod m*a", a.isUnit());
+        assertFalse("a !unit mod m*a: " + a, a.isUnit());
 
         try {
             b = a.inverse();
