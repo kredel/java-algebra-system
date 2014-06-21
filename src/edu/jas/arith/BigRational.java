@@ -1003,7 +1003,11 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
             T = new BigRational(T1, R2);
             return T;
         }
-        D = R2.gcd(S2);
+        if (R2.equals(S2)) {
+            D = R2;
+        } else {
+            D = R2.gcd(S2);
+        }
         RB2 = R2.divide(D);
         SB2 = S2.divide(D);
         J1Y = R1.multiply(SB2);
