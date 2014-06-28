@@ -2,11 +2,11 @@
 JAS: Java Algebra System
 ========================
 
-Version 2.5, January 2013
+Version 2.5, June 2014
 
 by Heinz Kredel, University of Mannheim, kredel at rz.uni-mannheim.de
 
-Copyright (c) 2005-2013 by Heinz Kredel.
+Copyright (c) 2005-2014 by Heinz Kredel.
 
 Programms released under GPL or LGPL, see COPYING.jas or COPYING.lgpl.jas.
 
@@ -16,7 +16,7 @@ Web home-page: http://krum.rz.uni-mannheim.de/jas/
 Requirements
 ------------
 
-A Java JDK 1.6 or JDK 1.7.
+A Java JDK 1.7.
 
 Documentation see index.html.
 
@@ -99,6 +99,9 @@ Directory structure
 +jython    JSR 233 scripting interface
 +meditor   JSR 233 scripting interface for meditor
 +mpj       MPI Java versions of distributed Groebner bases
++mpi       OpenMPI Java versions of distributed Groebner bases
++jlinalg_adaper some adapter classes to JLinAlg
++commons-math_adaper some adapter classes to Apache Commons Math3
 +src       source code
 +test      junit test output and log4j output
 +trc       junit test sources
