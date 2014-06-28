@@ -369,7 +369,7 @@ tests:
 	cd mpj; make tests | tee mpj.out
 	#cd mpi; make tests | tee mpi.out
 	cd jlinalg_adapter; make tests | tee ja.out
-	cd ../jas-versions/commons-math_adapter; make tests | tee ja.out
+	cd commons-math_adapter; make tests | tee ja.out
 	-grep FAIL t.out
 	-grep Exception e.out | grep -v GCDProxy | grep -v GBProxy
 	-grep File tjy.out
@@ -378,7 +378,7 @@ tests:
 	-grep -i error mpj/mpj.out
 	#-grep -i error mpi/mpi.out
 	-grep -i error jlinalg_adapter/ja.out
-	-grep -i error ../jas-versions/commons-math_adapter/ja.out
+	-grep -i error commons-math_adapter/ja.out
 	-egrep '(Exception|Usage)' tr.out
 
 metrics:
@@ -421,7 +421,7 @@ export:
 	cd ~/jas-versions/$(VERSION)/; jar -uf ../$(VERSION).`$(SVNREV)`-bin.jar -C ~/jas-versions/$(VERSION)/examples jas.rb -C ~/jas-versions/$(VERSION)/examples jas.py
 	cd ~/jas-versions/$(VERSION)/; ant doc > ant_doc.out
 	cd ~/jas-versions/$(VERSION)/; epydoc -v -o doc/jython -n "Python to JAS" -u ../../index.html examples/jas.py > epydoc.out
-	cd ~/jas-versions/$(VERSION)/; jrdoc -o doc/jruby -U -S -N -t "Ruby to JAS" examples/jas.rb > rdoc.out 2>&1
+	cd ~/jas-versions/$(VERSION)/; jrdoc -o doc/jruby -U -N -t "Ruby to JAS" examples/jas.rb > rdoc.out 2>&1
 	cd ~/jas-versions/$(VERSION)/; jar -cfM ../$(VERSION).`$(SVNREV)`-doc.zip doc/ *.html *.css
 	cd ~/jas-versions/$(VERSION)/; ant test > ant_test.out
 	cd ~/jas-versions/$(VERSION)/; sh ./jython_tests.sh >jython_tests.out 2>&1
@@ -441,9 +441,8 @@ export:
 	cd ~/jas-versions/log4j_droid_adapter; make > ~/jas-versions/$(VERSION)/make_droidlog.out
 	cp ~/java/lib/droidlog.jar ~/jas-versions/$(VERSION)/
 	cd ~/jas-versions/$(VERSION)/jlinalg_adapter; make all doc > ~/jas-versions/$(VERSION)/make_jlinalg.out
-	#cp ~/java/lib/jlinalg_adapter.jar ~/jas-versions/$(VERSION)/
-	cd ~/jas-versions/commons-math_adapter; make > ~/jas-versions/$(VERSION)/make_commons-math.out
-	cp ~/java/lib/commons-math_adapter.jar ~/jas-versions/$(VERSION)/
+	cd ~/jas-versions/$(VERSION)/commons-math_adapter; make all doc > ~/jas-versions/$(VERSION)/make_commons-math.out
+	#cp ~/jas-versions/$(VERSION)/commons-math_adapter.jar ~/jas-versions/$(VERSION)/
 
 deploy:
 	$(RSYNC) -e 'ssh -p 2222' --delete-after --exclude=DTD --exclude=*xml ~/jas-versions/$(VERSION)/ krum:htdocs/$(VERSION)
@@ -493,8 +492,8 @@ loc: young
 	find ~/jas-versions/log4j_adapter -name "*.java" | xargs cat | wc
 	find jlinalg_adapter -name "*.java" | wc -l
 	find jlinalg_adapter -name "*.java" | xargs cat | wc
-	find ~/jas-versions/commons-math_adapter -name "*.java" | wc -l
-	find ~/jas-versions/commons-math_adapter -name "*.java" | xargs cat | wc
+	find commons-math_adapter -name "*.java" | wc -l
+	find commons-math_adapter -name "*.java" | xargs cat | wc
 	find jython -name "*.java" | wc -l 
 	find jython -name "*.java" | xargs cat | wc
 	find mpi -name "*.java" | wc -l 
