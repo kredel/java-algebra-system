@@ -38,6 +38,7 @@ jlinalg_adapter.jar: $(CLASSES)
 	-mkdir classes/META-INF
 	cp -a manifest.mf classes/META-INF/MANIFEST.MF
 	jar cfM jlinalg_adapter.jar -C classes .
+	jar uf  jlinalg_adapter.jar -C src .
 	cp -f jlinalg_adapter.jar $(LIBPATH)
 	cp -f jlinalg_adapter.jar ..
 
