@@ -26,7 +26,7 @@ import edu.jas.vector.GenMatrixRing;
  */
 
 public class JLAdapterUtil {
-
+ 
 
     public static <C extends RingElem<C>> C[] toArray(GenVector<C> a) {
         if (a == null) {

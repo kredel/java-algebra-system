@@ -21,7 +21,7 @@ import edu.jas.structure.RingFactory;
  * @author Heinz Kredel.
  */
 
-public class JLAdapterTest extends TestCase {
+public class JLAdapterTest extends TestCase {  
 
 
     /**

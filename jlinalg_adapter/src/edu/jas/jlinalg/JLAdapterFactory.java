@@ -20,7 +20,7 @@ import edu.jas.structure.RingFactory;
 
 /**
  * Class that wraps a JAS <code>RingFactory</code> in an JLinALg
- * <code>IRingElementFactory</code>.
+ * <code>IRingElementFactory</code>. 
  * @param <C> JAS ring element type
  * @author Heinz Kredel
  */
