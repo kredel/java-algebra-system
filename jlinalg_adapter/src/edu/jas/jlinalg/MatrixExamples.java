@@ -20,9 +20,9 @@ import edu.jas.vector.GenVectorModul;
 
 /**
  * Example that computes a solution of a linear equation system.
- * 
  * @author Heinz Kredel
  */
+
 public class MatrixExamples {
 
 
@@ -33,7 +33,6 @@ public class MatrixExamples {
     }
 
 
-    @SuppressWarnings("unchecked")
     public static void example1() {
         BigRational r1, r2, r3, r4, r5, r6, z;
         r1 = new BigRational(1, 10);
@@ -105,7 +104,6 @@ public class MatrixExamples {
     }
 
 
-    @SuppressWarnings("unchecked")
     public static void example2() {
         BigRational r1, r2, r3, r4, r5, r6, z;
         r1 = new BigRational(1, 10);
@@ -175,20 +173,18 @@ public class MatrixExamples {
     }
 
 
-    @SuppressWarnings("unchecked")
     public static void example3() {
-        BigRational r1, r2, r3, r4, r5, r6, z, fac;
+        BigRational r1, r2, r3, r4, r5, r6, fac;
         r1 = new BigRational(1, 10);
         r2 = new BigRational(6, 5);
         r3 = new BigRational(1, 9);
         r4 = new BigRational(1, 1);
         r5 = r2.sum(r3);
         r6 = r1.multiply(r4);
-        z = new BigRational();
 
         fac = new BigRational();
 
-        JLAdapter<BigRational> d, t;
+        //JLAdapter<BigRational> d, t;
 
         BigRational[][] aa = new BigRational[][] { { r1, r2, r3 }, { r4, r5, r6 } };
         GenMatrixRing<BigRational> mfac = new GenMatrixRing<BigRational>(fac, aa.length, aa[0].length);

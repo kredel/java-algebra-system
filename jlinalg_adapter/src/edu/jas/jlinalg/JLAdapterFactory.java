@@ -40,7 +40,7 @@ public class JLAdapterFactory<C extends RingElem<C>> implements IRingElementFact
 
 
     /**
-     * @param f
+     * @param f element factory
      */
     @SuppressWarnings("unchecked")
     public JLAdapterFactory(ElemFactory<C> f) {

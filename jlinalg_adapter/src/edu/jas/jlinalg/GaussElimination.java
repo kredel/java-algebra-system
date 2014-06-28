@@ -25,10 +25,10 @@ import edu.jas.vector.GenVectorModul;
 /**
  * Algorithms related to Gaussian elimination. Conversion to JLinAlg classes and
  * delegation to JLinAlg algorithms.
- * 
  * @param <C> coefficient ring element type
  * @author Heinz Kredel
  */
+
 public class GaussElimination<C extends RingElem<C>> {
 
 
@@ -110,9 +110,9 @@ public class GaussElimination<C extends RingElem<C>> {
 
 
     /**
-     * Charactersitic polynomial of a matrix.
+     * Characteristic polynomial of a matrix.
      * @param a matrix
-     * @return charactersitic polynomial of a
+     * @return characteristic polynomial of a
      */
     public GenPolynomial<C> characteristicPolynomial(GenMatrix<C> a) {
         Matrix<JLAdapter<C>> am = JLAdapterUtil.<C> toJLAdapterMatrix(a);

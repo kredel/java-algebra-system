@@ -73,7 +73,6 @@ public class JLAdapterTest extends TestCase {
 
     /**
      * Test constructor and toString.
-     * 
      */
     public void testConstruction() {
         BigRational z = new BigRational(0);
@@ -111,7 +110,6 @@ public class JLAdapterTest extends TestCase {
 
     /**
      * Test factory and toString.
-     * 
      */
     public void testFactory() {
         RingFactory<BigRational> z = new BigRational(0);
@@ -132,17 +130,15 @@ public class JLAdapterTest extends TestCase {
 
     /**
      * Test matrix solve.
-     * 
      */
     public void xtestGenMatrixSolv() {
-        MatrixExamples gms = new MatrixExamples();
-        gms.main(null);
+        //MatrixExamples gms = new MatrixExamples();
+        MatrixExamples.main(null);
     }
 
 
     /**
      * Test vector conversions.
-     * 
      */
     public void testVectorConversion() {
         RingFactory<BigRational> z = new BigRational(0);
@@ -173,13 +169,11 @@ public class JLAdapterTest extends TestCase {
         //System.out.println("v3   =" + Arrays.toString(v3));
 
         assertTrue("v2[] == v3[] ", Arrays.equals(v2, v3));
-
     }
 
 
     /**
      * Test matrix conversions.
-     * 
      */
     public void testMatrixConversion() {
         RingFactory<BigRational> z = new BigRational(0);
@@ -214,7 +208,6 @@ public class JLAdapterTest extends TestCase {
 
         //v3[0][0] = v3[1][1];
         assertMatrixEquals(v2, v3);
-
     }
 
 

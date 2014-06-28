@@ -21,8 +21,8 @@ import edu.jas.vector.GenVectorModul;
 
 
 /**
+ * Conversion utilities.
  * @author Heinz Kredel
- * 
  */
 
 public class JLAdapterUtil {

@@ -45,6 +45,9 @@ public class JLAdapter<C extends RingElem<C>> implements IRingElement<JLAdapter<
     }
 
 
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {
@@ -56,6 +59,9 @@ public class JLAdapter<C extends RingElem<C>> implements IRingElement<JLAdapter<
     }
 
 
+    /**
+     * @see java.lang.Object#hashCode()
+     */
     @Override
     public int hashCode() {
         return val.hashCode();
