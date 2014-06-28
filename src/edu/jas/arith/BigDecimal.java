@@ -343,6 +343,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
      */
     public boolean isZERO() {
         return val.compareTo(java.math.BigDecimal.ZERO) == 0;
+        //return compareTo(ZERO) == 0;
     }
 
 
@@ -352,6 +353,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
      */
     public boolean isONE() {
         return val.compareTo(java.math.BigDecimal.ONE) == 0;
+        //return compareTo(ONE) == 0;
     }
 
 
@@ -412,7 +414,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
     /**
      * Compare to BigDecimal b. Experimental, is hacked.
      * @param b BigDecimal.
-     * @return 0 if abs(this-b) < epsilon, 1 if this > b, -1 if this < b.
+     * @return 0 if abs(this-b) &lt; epsilon, 1 if this &gt; b, -1 if this &lt; b.
      */
     @Override
     public int compareTo(BigDecimal b) {
@@ -452,6 +454,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
         }
         BigDecimal bi = (BigDecimal) b;
         return val.equals(bi.val);
+        //return this.compareTo(bi) == 0;
     }
 
 
