@@ -57,7 +57,6 @@ public class BigRationalTest extends TestCase {
 
     /**
      * Test static initialization and constants.
-     * 
      */
     public void testConstants() {
         a = BigRational.ZERO;
@@ -78,7 +77,6 @@ public class BigRationalTest extends TestCase {
 
     /**
      * Test constructor and toString.
-     * 
      */
     public void testConstructor() {
         a = new BigRational( "6/8" );
@@ -134,7 +132,6 @@ public class BigRationalTest extends TestCase {
 
     /**
      * Test random rationals.
-     * 
      */
     public void testRandom() {
         a = BigRational.RNRAND( 500 );
@@ -150,7 +147,6 @@ public class BigRationalTest extends TestCase {
 
     /**
      * Test addition.
-     * 
      */
     public void testAddition() {
         a = BigRational.RNRAND( 100 );
@@ -172,7 +168,6 @@ public class BigRationalTest extends TestCase {
 
     /**
      * Test multiplication.
-     * 
      */
     public void testMultiplication() {
         a = BigRational.RNRAND( 100 );
@@ -197,7 +192,6 @@ public class BigRationalTest extends TestCase {
 
     /**
      * Test distributive law.
-     * 
      */
     public void testDistributive() {
         BigRational fac = new BigRational();
@@ -283,4 +277,35 @@ public class BigRationalTest extends TestCase {
         assertTrue("j == 10 ", j.equals(elem) );
     }
 
+
+    /**
+     * Test doubleValue.
+     */
+    public void testDoubleValue() {
+        BigRational fac = new BigRational();
+
+        //a = fac.getONE(); 
+        //a = fac.getZERO(); 
+        a = fac.random( 5000 );
+        //System.out.println("a = " + a.toString());
+        //System.out.println("a = " + a.toString(16+2));
+        double d = a.doubleValue();
+        //System.out.println("d = "  + d + ", a = " + a.toString(16));
+        String as = a.toString(16);
+        String ds = Double.toString(d);
+        if (ds.endsWith(".0")) {
+            ds = ds.substring(0,ds.length()-2);
+        }
+        if (ds.indexOf(".") >=0 ) {
+            while (ds.endsWith("0")) {
+                ds = ds.substring(0,ds.length()-1);
+            }
+        }
+        if (as.indexOf(".") >= 0) {
+            while (as.endsWith("0")) {
+                as = as.substring(0,as.length()-1);
+            }
+        }
+        assertEquals("a = decimal(d): " + d, as, ds);
+    }
 }

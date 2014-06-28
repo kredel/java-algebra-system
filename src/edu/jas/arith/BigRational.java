@@ -7,6 +7,7 @@ package edu.jas.arith;
 
 import java.io.Reader;
 import java.math.BigInteger;
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -302,6 +303,17 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
         java.math.MathContext mc = new java.math.MathContext(n);
         BigDecimal d = new BigDecimal(this, mc);
         return d.toString();
+    }
+
+
+    /**
+     * Get this as a <tt>double</tt>. 
+     * @return this as a <tt>double</tt>
+     * @see java.lang.Number#doubleValue()
+     */
+    public double doubleValue() {
+        BigDecimal d = new BigDecimal(this, MathContext.DECIMAL64);
+        return d.doubleValue();
     }
 
 

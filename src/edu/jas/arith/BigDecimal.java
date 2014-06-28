@@ -376,6 +376,16 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
 
 
     /**
+     * Get this decimal as a <tt>double</tt>. 
+     * @return the decimal as a <tt>double</tt>
+     * @see java.lang.Number#doubleValue()
+     */
+    public double doubleValue() {
+        return val.doubleValue();
+    }
+
+
+    /**
      * Get a scripting compatible string representation.
      * @return script compatible representation for this Element.
      * @see edu.jas.structure.Element#toScript()
