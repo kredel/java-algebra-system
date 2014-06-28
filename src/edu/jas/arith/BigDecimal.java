@@ -112,7 +112,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
      * @param mc MathContext.
      */
     public BigDecimal(double a, MathContext mc) {
-        this(new java.math.BigDecimal(a), mc);
+        this(new java.math.BigDecimal(a, mc), mc);
     }
 
 
