@@ -18,6 +18,7 @@ import edu.jas.structure.RingFactory;
 
 /**
  * CMFieldElementTest tests with JUnit
+ * @author Heinz Kredel
  */
 
 public class CMFieldElementTest extends TestCase {
@@ -72,7 +73,6 @@ public class CMFieldElementTest extends TestCase {
 
     /**
      * Test constructor and toString.
-     * 
      */
     public void testConstruction() {
         BigRational z = new BigRational(0);
@@ -110,7 +110,6 @@ public class CMFieldElementTest extends TestCase {
 
     /**
      * Test factory and toString.
-     * 
      */
     public void testFactory() {
         RingFactory<BigRational> z = new BigRational(0);
@@ -141,7 +140,6 @@ public class CMFieldElementTest extends TestCase {
 
     /**
      * Test vector conversions.
-     * 
      */
     public void testVectorConversion() {
         RingFactory<BigRational> z = new BigRational(0);
@@ -178,7 +176,6 @@ public class CMFieldElementTest extends TestCase {
 
     /**
      * Test matrix conversions.
-     * 
      */
     public void testMatrixConversion() {
         RingFactory<BigRational> z = new BigRational(0);

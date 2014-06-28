@@ -27,14 +27,14 @@ import edu.jas.structure.RingElem;
  * Algorithms related to polynomial roots. Conversion to commons-math classes
  * and delegation to commons-math algorithms.
  * @param <C> ring element type
- * 
+ * @author Heinz Kredel
  */
+
 public class Roots<C extends RingElem<C> & Rational> {
 
 
     /**
-     * Complex root approximation.
-     * 
+     * Complex root approximation using companion matrix.
      * @param a squarefree univariate polynomial
      * @return list of approximations of complex roots of the polynomial
      */

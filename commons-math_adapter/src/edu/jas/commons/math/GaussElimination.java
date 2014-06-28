@@ -18,15 +18,15 @@ import edu.jas.vector.GenVector;
 /**
  * Algorithms related to Gaussian elimination. Conversion to commons-math
  * classes and delegation to commons-math algorithms.
- * 
  * @param <C> ring element type
+ * @author Heinz Kredel
  */
+
 public class GaussElimination<C extends RingElem<C>> {
 
 
     /**
      * Determinant of a matrix.
-     * 
      * @param a matrix
      * @return determinant of a
      */
@@ -42,7 +42,6 @@ public class GaussElimination<C extends RingElem<C>> {
 
     /**
      * Inverse of a matrix.
-     * 
      * @param a matrix
      * @return inverse matrix of a
      */
@@ -57,8 +56,7 @@ public class GaussElimination<C extends RingElem<C>> {
 
 
     /**
-     * Test if n is a null space for the linear system: a n = 0.
-     * 
+     * Test if n is a null space for the linear system: a * n = 0.
      * @param a matrix
      * @param n matrix
      * @return true, if n is a nullspace of a, else false
@@ -73,7 +71,6 @@ public class GaussElimination<C extends RingElem<C>> {
 
     /**
      * Solve a linear system: a x = b.
-     * 
      * @param a matrix
      * @param b vector of right hand side
      * @return a solution vector x
@@ -92,7 +89,6 @@ public class GaussElimination<C extends RingElem<C>> {
 
     /**
      * Trace of a matrix.
-     * 
      * @param a matrix
      * @return trace of a
      */

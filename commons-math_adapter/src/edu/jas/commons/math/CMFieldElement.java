@@ -14,8 +14,8 @@ import edu.jas.structure.RingElem;
 /**
  * Class that wraps a JAS <code>RingElem</code> in a commons-math
  * <code>FieldElement</code>.
- * 
  * @param <C> JAS ring element type
+ * @author Heinz Kredel
  */
 public class CMFieldElement<C extends RingElem<C>> implements FieldElement<CMFieldElement<C>>,
                 Comparable<CMFieldElement<C>> {
@@ -102,7 +102,6 @@ public class CMFieldElement<C extends RingElem<C>> implements FieldElement<CMFie
 
     /**
      * Get the string representation.
-     * 
      * @see java.lang.Object#toString()
      */
     @Override

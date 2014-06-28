@@ -22,8 +22,9 @@ import edu.jas.vector.GenVectorModul;
 
 /**
  * Conversion methods from JAS to commons-math and vice versa.
- * 
+ * @author Heinz Kredel
  */
+
 public class CMFieldElementUtil {
 
 
@@ -100,7 +101,6 @@ public class CMFieldElementUtil {
     /**
      * Convert JAS <code>RingElem</code> to commons-math
      * <code>FieldElement</code>.
-     * 
      * @param <C> ring element type
      * @param v array of ring elements
      * @return array of CMFieldElement objects
@@ -121,7 +121,6 @@ public class CMFieldElementUtil {
     /**
      * Convert JAS <code>RingElem</code> to commons-math
      * <code>FieldElement</code>.
-     * 
      * @param <C> ring element type
      * @param v array of ring elements
      * @return array of CMFieldElement objects
@@ -142,7 +141,6 @@ public class CMFieldElementUtil {
     /**
      * Convert JAS <code>RingElem</code> to commons-math
      * <code>FieldElement</code>.
-     * 
      * @param <C> ring element type
      * @param v JAS vector of ring elements
      * @return array of CMFieldElement objects
@@ -159,7 +157,6 @@ public class CMFieldElementUtil {
     /**
      * Convert JAS <code>RingElem</code> to commons-math
      * <code>FieldElement</code>.
-     * 
      * @param <C> ring element type
      * @param v list of ring elements
      * @return array of CMFieldElement objects
@@ -180,7 +177,6 @@ public class CMFieldElementUtil {
     /**
      * Convert JAS <code>RingElem</code> to commons-math
      * <code>FieldElement</code>.
-     * 
      * @param <C> ring element type
      * @param v JAS vector of ring elements
      * @return commons-math vector of CMFieldElementr objects
@@ -196,7 +192,6 @@ public class CMFieldElementUtil {
     /**
      * Convert JAS <code>RingElem</code> to commons-math
      * <code>FieldElement</code>.
-     * 
      * @param <C> ring element type
      * @param v matrix of ring elements
      * @return matrix of CMFieldElement objects
@@ -217,7 +212,6 @@ public class CMFieldElementUtil {
     /**
      * Convert JAS <code>RingElem</code> to commons-math
      * <code>FieldElement</code>.
-     * 
      * @param <C> ring element type
      * @param v matrix of ring elements
      * @return matrix of CMFieldElement objects
@@ -238,7 +232,6 @@ public class CMFieldElementUtil {
     /**
      * Convert JAS <code>RingElem</code> to commons-math
      * <code>FieldElement</code>.
-     * 
      * @param <C> ring element type
      * @param v JAS matrix of ring elements
      * @return matrix of CMFieldElement objects
@@ -255,7 +248,6 @@ public class CMFieldElementUtil {
     /**
      * Convert JAS <code>RingElem</code> to commons-math
      * <code>FieldElement</code>.
-     * 
      * @param <C> ring element type
      * @param v list of lists of ring elements
      * @return array of CMFieldElement objects
@@ -277,7 +269,6 @@ public class CMFieldElementUtil {
     /**
      * Convert JAS <code>RingElem</code> to commons-math
      * <code>FieldElement</code>.
-     * 
      * @param <C> ring element type
      * @param v JAS vector of ring elements
      * @return commons-math FieldMatrix of CMFieldElement objects
@@ -295,7 +286,6 @@ public class CMFieldElementUtil {
     /**
      * Convert commons-math <code>FieldElement</code> to JAS
      * <code>RingElem</code> to.
-     * 
      * @param <C> ring element type
      * @param v array of CMFieldElement objects
      * @return array of ring elements
@@ -320,7 +310,6 @@ public class CMFieldElementUtil {
     /**
      * Convert commons-math <code>FieldElement</code> to JAS
      * <code>RingElem</code> to.
-     * 
      * @param <C> ring element type
      * @param v matrix of CMFieldElement objects
      * @return matrix of ring elements
@@ -341,7 +330,6 @@ public class CMFieldElementUtil {
     /**
      * Convert commons-math <code>FieldElement</code> to JAS
      * <code>RingElem</code> to.
-     * 
      * @param <C> ring element type
      * @param v Commons-math vector of CMFieldElement objects
      * @return array of ring elements
@@ -411,7 +399,6 @@ public class CMFieldElementUtil {
     /**
      * Convert commons-math <code>FieldElement</code> to JAS
      * <code>RingElem</code> to.
-     * 
      * @param <C> ring element type
      * @param v commons-math FieldMatrix of CMFieldElement objects
      * @return java.util.List of ring elements
@@ -433,7 +420,6 @@ public class CMFieldElementUtil {
     /**
      * Convert commons-math <code>FieldMatrix</code> to JAS
      * <code>RingElem</code> to.
-     * 
      * @param <C> ring element type
      * @param v commons-math <code>FieldMatrix</code> of CMFieldElement objects
      * @return JAS matrix of ring elements

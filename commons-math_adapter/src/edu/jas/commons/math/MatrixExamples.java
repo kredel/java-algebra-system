@@ -22,8 +22,10 @@ import edu.jas.vector.GenVectorModul;
 
 
 /**
- * Example that computes a solution of a linear equation system.
+ * Examples that compute solutions of linear equation systems.
+ * @author Heinz Kredel
  */
+
 public class MatrixExamples {
 
 

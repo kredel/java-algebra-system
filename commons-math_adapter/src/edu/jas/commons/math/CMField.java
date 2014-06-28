@@ -16,7 +16,7 @@ import edu.jas.structure.RingFactory;
 /**
  * Class that wraps a JAS <code>RingFactory</code> in a commons-math
  * <code>Field</code>.
- * 
+ * @author Heinz Kredel
  * @param <C> JAS ring element type
  */
 public class CMField<C extends RingElem<C>> implements Field<CMFieldElement<C>> {
