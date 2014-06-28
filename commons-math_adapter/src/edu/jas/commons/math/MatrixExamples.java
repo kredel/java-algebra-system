@@ -1,3 +1,7 @@
+/*
+ * $Id$
+ */
+
 package edu.jas.commons.math;
 
 import java.util.List;

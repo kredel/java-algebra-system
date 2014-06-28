@@ -1,3 +1,7 @@
+/*
+ * $Id$
+ */
+
 package edu.jas.commons.math;
 
 import org.apache.commons.math3.linear.FieldLUDecomposition;

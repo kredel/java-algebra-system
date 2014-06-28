@@ -2,7 +2,7 @@
 # $Id: $
 #
 # Makefile for the Apache Commons Math Adapter parts
-# by Heinz kredel
+# by Heinz Kredel
 #
 
 #JASPATH=$(HOME)/jas
