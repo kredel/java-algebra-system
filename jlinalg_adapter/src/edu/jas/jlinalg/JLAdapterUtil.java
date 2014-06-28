@@ -5,7 +5,7 @@
 package edu.jas.jlinalg;
 
 
-//import static edu.jas.jlinalg.JLAdapterUtil.toArray;
+// import static edu.jas.jlinalg.JLAdapterUtil.toArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +14,10 @@ import org.jlinalg.Matrix;
 import org.jlinalg.Vector;
 
 import edu.jas.structure.RingElem;
-import edu.jas.vector.GenVector;
 import edu.jas.vector.GenMatrix;
-import edu.jas.vector.GenVectorModul;
 import edu.jas.vector.GenMatrixRing;
+import edu.jas.vector.GenVector;
+import edu.jas.vector.GenVectorModul;
 
 
 /**
@@ -26,7 +26,7 @@ import edu.jas.vector.GenMatrixRing;
  */
 
 public class JLAdapterUtil {
- 
+
 
     public static <C extends RingElem<C>> C[] toArray(GenVector<C> a) {
         if (a == null) {
@@ -371,7 +371,7 @@ public class JLAdapterUtil {
      * @return JAS vector of ring elements
      */
     public static <C extends RingElem<C>> GenVector<C> vectorFromJLAdapter(GenVectorModul<C> fac,
-            Vector<JLAdapter<C>> v) {
+                    Vector<JLAdapter<C>> v) {
         if (v == null) {
             return null;
         }
@@ -410,7 +410,7 @@ public class JLAdapterUtil {
      * @return JAS matrix of ring elements
      */
     public static <C extends RingElem<C>> GenMatrix<C> matrixFromJLAdapter(GenMatrixRing<C> fac,
-            Matrix<JLAdapter<C>> v) {
+                    Matrix<JLAdapter<C>> v) {
         if (v == null) {
             return null;
         }

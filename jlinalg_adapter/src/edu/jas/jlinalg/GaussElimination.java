@@ -16,10 +16,10 @@ import org.jlinalg.polynomial.Polynomial;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.RingElem;
-import edu.jas.vector.GenVector;
 import edu.jas.vector.GenMatrix;
-import edu.jas.vector.GenVectorModul;
 import edu.jas.vector.GenMatrixRing;
+import edu.jas.vector.GenVector;
+import edu.jas.vector.GenVectorModul;
 
 
 /**

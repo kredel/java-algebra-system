@@ -14,8 +14,9 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Class that wraps a JAS <code>RingElem</code> in an JLinALg <code>IRingElement</code>.
- * @param <C> JAS ring element type 
+ * Class that wraps a JAS <code>RingElem</code> in an JLinALg
+ * <code>IRingElement</code>.
+ * @param <C> JAS ring element type
  * @author Heinz Kredel
  */
 

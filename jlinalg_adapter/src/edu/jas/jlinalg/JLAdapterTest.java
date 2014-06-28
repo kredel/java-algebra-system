@@ -21,7 +21,7 @@ import edu.jas.structure.RingFactory;
  * @author Heinz Kredel.
  */
 
-public class JLAdapterTest extends TestCase {  
+public class JLAdapterTest extends TestCase {
 
 
     /**
@@ -116,7 +116,7 @@ public class JLAdapterTest extends TestCase {
     public void testFactory() {
         RingFactory<BigRational> z = new BigRational(0);
 
-        JLAdapterFactory<BigRational> fac = new JLAdapterFactory<BigRational>( z );
+        JLAdapterFactory<BigRational> fac = new JLAdapterFactory<BigRational>(z);
         //System.out.println("fac = " + fac);
 
         JLAdapter<BigRational> a = fac.zero();
@@ -146,33 +146,33 @@ public class JLAdapterTest extends TestCase {
      */
     public void testVectorConversion() {
         RingFactory<BigRational> z = new BigRational(0);
-        JLAdapterFactory<BigRational> fac = new JLAdapterFactory<BigRational>( z );
+        JLAdapterFactory<BigRational> fac = new JLAdapterFactory<BigRational>(z);
 
         JLAdapter<BigRational>[] vec1 = fac.getArray(ll);
         //System.out.println("vec1 =" + Arrays.toString(vec1));
 
-        RingElem<BigRational>[] v1 = JLAdapterUtil.<BigRational>fromJLAdapter(vec1);
+        RingElem<BigRational>[] v1 = JLAdapterUtil.<BigRational> fromJLAdapter(vec1);
         //System.out.println("v1   =" + Arrays.toString(v1));
 
-        JLAdapter<BigRational>[] vec2 = JLAdapterUtil.<BigRational>toJLAdapterRE(v1);
+        JLAdapter<BigRational>[] vec2 = JLAdapterUtil.<BigRational> toJLAdapterRE(v1);
         //System.out.println("vec2 =" + Arrays.toString(vec2));
 
-        assertTrue("v1[] == v2[] ", Arrays.equals(vec1,vec2));
+        assertTrue("v1[] == v2[] ", Arrays.equals(vec1, vec2));
 
 
         BigRational[] v2 = new BigRational[ll];
-        for ( int i = 0; i < v2.length; i++ ) {
+        for (int i = 0; i < v2.length; i++) {
             v2[i] = z.random(kl);
         }
         //System.out.println("v2   =" + Arrays.toString(v2));
 
-        JLAdapter<BigRational>[] vec3 = JLAdapterUtil.<BigRational>toJLAdapter(v2);
+        JLAdapter<BigRational>[] vec3 = JLAdapterUtil.<BigRational> toJLAdapter(v2);
         //System.out.println("vec3 =" + Arrays.toString(vec3));
 
-        RingElem<BigRational>[] v3 =  JLAdapterUtil.<BigRational>fromJLAdapter(vec3);
+        RingElem<BigRational>[] v3 = JLAdapterUtil.<BigRational> fromJLAdapter(vec3);
         //System.out.println("v3   =" + Arrays.toString(v3));
 
-        assertTrue("v2[] == v3[] ", Arrays.equals(v2,v3));
+        assertTrue("v2[] == v3[] ", Arrays.equals(v2, v3));
 
     }
 
@@ -183,48 +183,48 @@ public class JLAdapterTest extends TestCase {
      */
     public void testMatrixConversion() {
         RingFactory<BigRational> z = new BigRational(0);
-        JLAdapterFactory<BigRational> fac = new JLAdapterFactory<BigRational>( z );
+        JLAdapterFactory<BigRational> fac = new JLAdapterFactory<BigRational>(z);
 
-        JLAdapter<BigRational>[][] vec1 = fac.getArray(ll,ll);
+        JLAdapter<BigRational>[][] vec1 = fac.getArray(ll, ll);
         //System.out.println("vec1   =" + matrixToString(vec1));
 
-        RingElem<BigRational>[][] v1 = JLAdapterUtil.<BigRational>fromJLAdapter(vec1);
+        RingElem<BigRational>[][] v1 = JLAdapterUtil.<BigRational> fromJLAdapter(vec1);
         //System.out.println("v1     =" + matrixToString(v1));
 
-        JLAdapter<BigRational>[][] vec2 = JLAdapterUtil.<BigRational>toJLAdapterRE(v1);
+        JLAdapter<BigRational>[][] vec2 = JLAdapterUtil.<BigRational> toJLAdapterRE(v1);
         //System.out.println("vec2   =" + matrixToString(vec2));
 
-        assertMatrixEquals(vec1,vec2);
+        assertMatrixEquals(vec1, vec2);
 
 
         BigRational[][] v2 = new BigRational[ll][];
-        for ( int i = 0; i < v2.length; i++ ) {
+        for (int i = 0; i < v2.length; i++) {
             v2[i] = new BigRational[ll];
-            for ( int j = 0; j < v2.length; j++ ) {
+            for (int j = 0; j < v2.length; j++) {
                 v2[i][j] = z.random(kl);
             }
         }
         //System.out.println("v2     =" + matrixToString(v2));
 
-        JLAdapter<BigRational>[][] vec3 = JLAdapterUtil.<BigRational>toJLAdapter(v2);
+        JLAdapter<BigRational>[][] vec3 = JLAdapterUtil.<BigRational> toJLAdapter(v2);
         //System.out.println("vec1   =" + matrixToString(vec3));
 
-        RingElem<BigRational>[][] v3 =  JLAdapterUtil.<BigRational>fromJLAdapter(vec3);
+        RingElem<BigRational>[][] v3 = JLAdapterUtil.<BigRational> fromJLAdapter(vec3);
         //System.out.println("v3     =" + matrixToString(v3));
 
         //v3[0][0] = v3[1][1];
-        assertMatrixEquals(v2,v3);
+        assertMatrixEquals(v2, v3);
 
     }
 
 
     public String matrixToString(Object[][] m) {
         StringBuffer s = new StringBuffer("[");
-        for ( int i = 0; i < m.length; i++ ) {
-            if ( i != 0 ) {
+        for (int i = 0; i < m.length; i++) {
+            if (i != 0) {
                 s.append(", ");
             }
-            s.append( Arrays.toString(m[i]) );
+            s.append(Arrays.toString(m[i]));
         }
         s.append("]");
         return s.toString();
@@ -232,8 +232,8 @@ public class JLAdapterTest extends TestCase {
 
 
     public void assertMatrixEquals(Object[][] m1, Object[][] m2) {
-        for ( int i = 0; i < m1.length; i++ ) {
-            assertTrue("m1[][] == m2[][] ", Arrays.equals(m1[i],m2[i]));
+        for (int i = 0; i < m1.length; i++) {
+            assertTrue("m1[][] == m2[][] ", Arrays.equals(m1[i], m2[i]));
         }
     }
 
