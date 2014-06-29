@@ -38,7 +38,7 @@ commons-math_adapter.jar: $(CLASSES)
 	-mkdir classes/META-INF
 	cp -a manifest.mf classes/META-INF/MANIFEST.MF
 	jar cfM commons-math_adapter.jar -C classes .
-	jar uf  commons-math_adapter.jar -C src .
+	#jar uf  commons-math_adapter.jar -C src .
 	cp -f commons-math_adapter.jar $(LIBPATH)
 	cp -f commons-math_adapter.jar ..
 
