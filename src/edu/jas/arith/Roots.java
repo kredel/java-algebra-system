@@ -157,7 +157,7 @@ public class Roots {
             return A;
         }
         // for small A use root of inverse
-        if (A.val.compareTo(BigDecimal.ONE.val) < 0) {
+        if (A.abs().val.compareTo(BigDecimal.ONE.val) < 0) {
             BigDecimal Ap = A.inverse();
             //System.out.println("A.inverse() = " + Ap);
             Ap = sqrt(Ap);
@@ -168,7 +168,7 @@ public class Roots {
         BigDecimal Ap = new BigDecimal(A.val, mc);
         BigDecimal ninv = new BigDecimal(0.5, mc);
         BigDecimal R1, R = Ap.multiply(ninv); // initial guess
-        BigDecimal eps = new BigDecimal("1.0e-20"); // TODO
+        BigDecimal eps = new BigDecimal("1.0e-10"); // TODO
         BigDecimal d;
         while (true) {
             R1 = R.sum(Ap.divide(R));
@@ -204,7 +204,7 @@ public class Roots {
             return A;
         }
         // for small A use root of inverse
-        if (A.val.compareTo(BigDecimal.ONE.val) < 0) {
+        if (A.abs().val.compareTo(BigDecimal.ONE.val) < 0) {
             BigDecimal Ap = A.inverse();
             //System.out.println("A.inverse() = " + Ap);
             Ap = root(Ap, n);
@@ -220,7 +220,7 @@ public class Roots {
         nsub = nsub.subtract(ninv);
         //BigDecimal half = BigDecimal.ONE.sum(BigDecimal.ONE).inverse();
         //BigDecimal half = new BigDecimal(BigDecimal.ONE.val.divide(java.math.BigDecimal.TEN));
-        BigDecimal eps = new BigDecimal("1.0e-20"); // TODO
+        BigDecimal eps = new BigDecimal("1.0e-10"); // TODO
         BigDecimal P, R1, R = Ap.multiply(ninv); // initial guess
         BigDecimal d;
         while (true) {

@@ -962,19 +962,19 @@ public class ArithTest extends TestCase {
         b = Roots.sqrt(a);
         //b = Roots.root(a,2);
         c = b.multiply(b);
-        assertTrue("sqrt(4)*sqrt(4) == 4: " + b, a.compareTo(c) == 0);
+        assertTrue("sqrt(4)*sqrt(4) == 4: " + a.subtract(c), a.compareTo(c) == 0);
 
         a = new BigDecimal("0.5");
         b = Roots.sqrt(a);
         //b = Roots.root(a,2);
         c = b.multiply(b);
-        assertTrue("sqrt(0.5)*sqrt(0.5) == 0.5: " + b, a.compareTo(c) == 0);
+        assertTrue("sqrt(0.5)*sqrt(0.5) == 0.5: " + a.subtract(c), a.compareTo(c) == 0);
 
         a = a.random(5);
         b = Roots.sqrt(a);
         //b = Roots.root(a,2);
         c = b.multiply(b);
-        assertTrue("sqrt(a)*sqrt(a) == a: " + b, a.compareTo(c) == 0);
+        assertTrue("sqrt(a)*sqrt(a) == a: " + a.subtract(c), a.compareTo(c) == 0);
     }
 
 
