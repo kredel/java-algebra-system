@@ -260,7 +260,7 @@ public class ModLongTest extends TestCase {
             //ok
         }
 
-        zm = new ModLongRing(5*3);
+        zm = new ModLongRing(5 * 3);
         a = new ModLong(zm, 5);
         assertFalse("5 !unit mod 15", a.isUnit());
 
@@ -278,7 +278,7 @@ public class ModLongTest extends TestCase {
             //e.printStackTrace();
             fail("wrong exception " + e);
         }
-        
+
     }
 
 
@@ -384,15 +384,15 @@ public class ModLongTest extends TestCase {
      * Test iterator.
      */
     public void testIterator() {
-        int m = 5*2;
+        int m = 5 * 2;
         zm = new ModLongRing(m);
         ModLong j = null;
-        for ( ModLong i : zm ) {
+        for (ModLong i : zm) {
             //System.out.println("i = " + i);
             j = i;
         }
-        ModLong end = new ModLong(zm,m-1);
-        assertTrue("j == m-1 ", j.equals(end) );
+        ModLong end = new ModLong(zm, m - 1);
+        assertTrue("j == m-1 ", j.equals(end));
     }
 
 }

@@ -763,7 +763,6 @@ public class Product<C extends RingElem<C>> implements RegularRingElem<Product<C
      * @param S other element.
      * @return [ gcd(this,S), c1, c2 ] with c1*this + c2*b = gcd(this,S).
      */
-    @SuppressWarnings("unchecked")
     public Product<C>[] egcd(Product<C> S) {
         Product<C>[] ret = (Product<C>[]) new Product[3];
         ret[0] = null;
