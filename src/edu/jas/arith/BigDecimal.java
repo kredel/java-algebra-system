@@ -40,10 +40,19 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
     //public static final MathContext DEFAULT_CONTEXT = new MathContext(DEFAULT_PRECISION);
 
     public static final MathContext DEFAULT_CONTEXT = MathContext.DECIMAL128;
+
+
     public static final int DEFAULT_PRECISION = DEFAULT_CONTEXT.getPrecision();
 
 
     public final MathContext context;
+
+
+    /**
+     * If true, then use equals from java.math.BigDecimal, else use hacked
+     * approximate compareTo().
+     */
+    public final static boolean EXACT_EQUAL = true;
 
 
     /**
@@ -150,7 +159,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
      * @param mc MathContext.
      */
     public BigDecimal(BigRational a, MathContext mc) {
-        this((new java.math.BigDecimal(a.num,mc)).divide(new java.math.BigDecimal(a.den,mc), mc), mc);
+        this((new java.math.BigDecimal(a.num, mc)).divide(new java.math.BigDecimal(a.den, mc), mc), mc);
     }
 
 
@@ -181,7 +190,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
     }
 
 
-    /**
+    /*
      * Get the value.
      * @return val java.math.BigDecimal. public java.math.BigDecimal getVal() {
      *         return val; }
@@ -342,8 +351,10 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
      * @see edu.jas.structure.RingElem#isZERO()
      */
     public boolean isZERO() {
-        return val.compareTo(java.math.BigDecimal.ZERO) == 0;
-        //return compareTo(ZERO) == 0;
+        if (EXACT_EQUAL) {
+            return val.compareTo(java.math.BigDecimal.ZERO) == 0;
+        }
+        return compareTo(ZERO) == 0;
     }
 
 
@@ -352,8 +363,10 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
      * @see edu.jas.structure.RingElem#isONE()
      */
     public boolean isONE() {
-        return val.compareTo(java.math.BigDecimal.ONE) == 0;
-        //return compareTo(ONE) == 0;
+        if (EXACT_EQUAL) {
+            return val.compareTo(java.math.BigDecimal.ONE) == 0;
+        }
+        return compareTo(ONE) == 0;
     }
 
 
@@ -378,7 +391,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
 
 
     /**
-     * Get this decimal as a <tt>double</tt>. 
+     * Get this decimal as a <tt>double</tt>.
      * @return the decimal as a <tt>double</tt>
      * @see java.lang.Number#doubleValue()
      */
@@ -394,7 +407,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
      */
     @Override
     public String toScript() {
-        // Python case
+        // Python+Ruby case
         return toString();
     }
 
@@ -406,7 +419,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
      */
     @Override
     public String toScriptFactory() {
-        // Python case
+        // Python+Ruby case
         return "DD()";
     }
 
@@ -414,11 +427,12 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
     /**
      * Compare to BigDecimal b. Experimental, is hacked.
      * @param b BigDecimal.
-     * @return 0 if abs(this-b) &lt; epsilon, 1 if this &gt; b, -1 if this &lt; b.
+     * @return 0 if abs(this-b) &lt; epsilon, 1 if this &gt; b, -1 if this &lt;
+     *         b.
      */
     @Override
     public int compareTo(BigDecimal b) {
-        //if (false) {
+        //if (EXACT_EQUAL) {
         //    return val.compareTo(b.val);
         //}
         java.math.BigDecimal s = val.subtract(b.val, context);
@@ -453,8 +467,10 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
             return false;
         }
         BigDecimal bi = (BigDecimal) b;
-        return val.equals(bi.val);
-        //return this.compareTo(bi) == 0;
+        if (EXACT_EQUAL) {
+            return val.equals(bi.val);
+        }
+        return compareTo(bi) == 0;
     }
 
 
@@ -500,7 +516,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
      * @return this-S.
      */
     public BigDecimal subtract(BigDecimal S) {
-        return new BigDecimal(val.subtract(S.val, context));
+        return new BigDecimal(val.subtract(S.val, context), context);
     }
 
 
@@ -510,7 +526,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
      * @return this/S.
      */
     public BigDecimal divide(BigDecimal S) {
-        return new BigDecimal(val.divide(S.val, context));
+        return new BigDecimal(val.divide(S.val, context), context);
     }
 
 
@@ -529,7 +545,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
      * @return this - (this/S)*S.
      */
     public BigDecimal remainder(BigDecimal S) {
-        return new BigDecimal(val.remainder(S.val, context));
+        return new BigDecimal(val.remainder(S.val, context), context);
     }
 
 
@@ -541,8 +557,8 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
     public BigDecimal[] quotientRemainder(BigDecimal S) {
         BigDecimal[] qr = new BigDecimal[2];
         java.math.BigDecimal[] C = val.divideAndRemainder(S.val, context);
-        qr[0] = new BigDecimal(C[0]);
-        qr[1] = new BigDecimal(C[1]);
+        qr[0] = new BigDecimal(C[0], context);
+        qr[1] = new BigDecimal(C[1], context);
         return qr;
     }
 
@@ -641,7 +657,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
      * @return this*S.
      */
     public BigDecimal multiply(BigDecimal S) {
-        return new BigDecimal(val.multiply(S.val, context));
+        return new BigDecimal(val.multiply(S.val, context), context);
     }
 
 
@@ -651,7 +667,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
      * @return this+S.
      */
     public BigDecimal sum(BigDecimal S) {
-        return new BigDecimal(val.add(S.val, context));
+        return new BigDecimal(val.add(S.val, context), context);
     }
 
 
