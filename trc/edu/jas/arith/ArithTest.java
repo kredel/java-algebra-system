@@ -948,8 +948,8 @@ public class ArithTest extends TestCase {
     /**
      * Test root decimal.
      */
-    public void xtest2RootDecimal() {
-        BigDecimal a, b, c, d, e;
+    public void test2RootDecimal() {
+        BigDecimal a, b, c;
         a = BigDecimal.ZERO;
         b = Roots.sqrt(a);
         assertTrue("sqrt(0) == 0: " + b, b.isZERO());
@@ -969,6 +969,12 @@ public class ArithTest extends TestCase {
         //b = Roots.root(a,2);
         c = b.multiply(b);
         assertTrue("sqrt(0.5)*sqrt(0.5) == 0.5: " + b, a.compareTo(c) == 0);
+
+        a = a.random(5);
+        b = Roots.sqrt(a);
+        //b = Roots.root(a,2);
+        c = b.multiply(b);
+        assertTrue("sqrt(a)*sqrt(a) == a: " + b, a.compareTo(c) == 0);
     }
 
 
@@ -976,7 +982,7 @@ public class ArithTest extends TestCase {
      * Test root complex decimal.
      */
     public void testRootDecimalComplex() {
-        BigDecimalComplex a, b, c, d, e;
+        BigDecimalComplex a, b, c, d;
         a = BigDecimalComplex.ZERO;
         b = Roots.sqrt(a);
         assertTrue("sqrt(0) == 0: " + b, b.isZERO());

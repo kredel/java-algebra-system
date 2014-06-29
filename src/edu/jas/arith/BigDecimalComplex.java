@@ -613,7 +613,7 @@ public final class BigDecimalComplex implements StarRingElem<BigDecimalComplex>,
             return new BigDecimalComplex(re.abs());
         }
         BigDecimalComplex n = norm();
-        BigDecimal d = Roots.sqrt(n.getRe());
+        BigDecimal d = Roots.sqrt(n.re);
         return new BigDecimalComplex(d);
     }
 

@@ -168,13 +168,14 @@ public class Roots {
         BigDecimal Ap = new BigDecimal(A.val, mc);
         BigDecimal ninv = new BigDecimal(0.5, mc);
         BigDecimal R1, R = Ap.multiply(ninv); // initial guess
+        BigDecimal eps = new BigDecimal("1.0e-20"); // TODO
         BigDecimal d;
         while (true) {
             R1 = R.sum(Ap.divide(R));
             R1 = R1.multiply(ninv); // div n
             d = R.subtract(R1).abs();
             R = R1;
-            if (d.val.compareTo(BigDecimal.ZERO.val) <= 0) {
+            if (d.val.compareTo(eps.val) <= 0) {
                 //System.out.println("d  = " + d + ", R = " + R);
                 break;
             }
@@ -218,7 +219,8 @@ public class Roots {
         BigDecimal nsub = new BigDecimal(1.0, mc); // because of precision
         nsub = nsub.subtract(ninv);
         //BigDecimal half = BigDecimal.ONE.sum(BigDecimal.ONE).inverse();
-        BigDecimal half = new BigDecimal(BigDecimal.ONE.val.divide(java.math.BigDecimal.TEN));
+        //BigDecimal half = new BigDecimal(BigDecimal.ONE.val.divide(java.math.BigDecimal.TEN));
+        BigDecimal eps = new BigDecimal("1.0e-20"); // TODO
         BigDecimal P, R1, R = Ap.multiply(ninv); // initial guess
         BigDecimal d;
         while (true) {
@@ -229,7 +231,7 @@ public class Roots {
             R = R1;
             //if ( d.compareTo( BigDecimal.ONE ) <= 0 ) {
             //    System.out.println("d  = " + d);
-            if (d.val.compareTo(half.val) <= 0) {
+            if (d.val.compareTo(eps.val) <= 0) {
                 //System.out.println("d.val  = " + d.val);
                 break;
             }
@@ -245,7 +247,7 @@ public class Roots {
      * @return sqrt(a).
      */
     public static BigDecimalComplex sqrt(BigDecimalComplex a) {
-        if (a.isZERO()||a.isONE()) {
+        if (a.isZERO() || a.isONE()) {
             return a;
         }
         BigDecimal r = a.re.abs().sum(a.abs().re);
@@ -254,14 +256,14 @@ public class Roots {
         BigDecimal v = Roots.sqrt(u);
         //System.out.println("r = " + r + ", a = " + a);
         //System.out.println("v = " + v + ", u = " + u);
-        if ( a.re.signum() >= 0 ) {
-            return new BigDecimalComplex(v,a.im.divide(v.multiply(t)));
-        } 
+        if (a.re.signum() >= 0) {
+            return new BigDecimalComplex(v, a.im.divide(v.multiply(t)));
+        }
         u = v;
         if (a.im.signum() < 0) {
             u = u.negate();
         }
-        return new BigDecimalComplex(a.im.abs().divide(v.multiply(t)),u);
+        return new BigDecimalComplex(a.im.abs().divide(v.multiply(t)), u);
     }
 
 }
