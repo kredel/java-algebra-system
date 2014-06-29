@@ -174,8 +174,8 @@ public class Roots {
             R1 = R1.multiply(ninv); // div n
             d = R.subtract(R1).abs();
             R = R1;
-            if (d.val.compareTo(BigDecimal.ONE.val) <= 0) {
-                //System.out.println("d  = " + d);
+            if (d.val.compareTo(BigDecimal.ZERO.val) <= 0) {
+                //System.out.println("d  = " + d + ", R = " + R);
                 break;
             }
         }
@@ -236,6 +236,32 @@ public class Roots {
             //}
         }
         return R;
+    }
+
+
+    /**
+     * Complex decimal number square root.
+     * @param a big decimal complex.
+     * @return sqrt(a).
+     */
+    public static BigDecimalComplex sqrt(BigDecimalComplex a) {
+        if (a.isZERO()||a.isONE()) {
+            return a;
+        }
+        BigDecimal r = a.re.abs().sum(a.abs().re);
+        BigDecimal t = new BigDecimal(2);
+        BigDecimal u = r.divide(t);
+        BigDecimal v = Roots.sqrt(u);
+        //System.out.println("r = " + r + ", a = " + a);
+        //System.out.println("v = " + v + ", u = " + u);
+        if ( a.re.signum() >= 0 ) {
+            return new BigDecimalComplex(v,a.im.divide(v.multiply(t)));
+        } 
+        u = v;
+        if (a.im.signum() < 0) {
+            u = u.negate();
+        }
+        return new BigDecimalComplex(a.im.abs().divide(v.multiply(t)),u);
     }
 
 }

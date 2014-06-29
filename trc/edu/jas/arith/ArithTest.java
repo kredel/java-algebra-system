@@ -944,4 +944,70 @@ public class ArithTest extends TestCase {
         }
     }
 
+
+    /**
+     * Test root decimal.
+     */
+    public void xtest2RootDecimal() {
+        BigDecimal a, b, c, d, e;
+        a = BigDecimal.ZERO;
+        b = Roots.sqrt(a);
+        assertTrue("sqrt(0) == 0: " + b, b.isZERO());
+
+        a = BigDecimal.ONE;
+        b = Roots.sqrt(a);
+        assertTrue("sqrt(1) == 1: " + b, b.isONE());
+
+        a = new BigDecimal("4");
+        b = Roots.sqrt(a);
+        //b = Roots.root(a,2);
+        c = b.multiply(b);
+        assertTrue("sqrt(4)*sqrt(4) == 4: " + b, a.compareTo(c) == 0);
+
+        a = new BigDecimal("0.5");
+        b = Roots.sqrt(a);
+        //b = Roots.root(a,2);
+        c = b.multiply(b);
+        assertTrue("sqrt(0.5)*sqrt(0.5) == 0.5: " + b, a.compareTo(c) == 0);
+    }
+
+
+    /**
+     * Test root complex decimal.
+     */
+    public void testRootDecimalComplex() {
+        BigDecimalComplex a, b, c, d, e;
+        a = BigDecimalComplex.ZERO;
+        b = Roots.sqrt(a);
+        assertTrue("sqrt(0) == 0: " + b, b.isZERO());
+
+        a = BigDecimalComplex.ONE;
+        b = Roots.sqrt(a);
+        assertTrue("sqrt(1) == 1: " + b, b.isONE());
+
+        b = BigDecimalComplex.I;
+        c = Roots.sqrt(b);
+        d = c.multiply(c);
+        //System.out.println("b = " + b + ", c = " + c + ", d = " + d);
+        assertTrue("sqrt(b)*sqrt(b) == b: " + c + ", b = " + b, b.compareTo(d) == 0);
+
+        b = a.fromInteger(4);
+        c = Roots.sqrt(b);
+        d = BigDecimalComplex.ONE.sum(BigDecimalComplex.ONE);
+        //System.out.println("b = " + b + ", c = " + c + ", d = " + d);
+        assertTrue("sqrt(4) == 2: " + c, c.compareTo(d) == 0);
+
+        b = b.multiply(BigDecimalComplex.I);
+        c = Roots.sqrt(b);
+        d = c.multiply(c);
+        //System.out.println("b = " + b + ", c = " + c + ", d = " + d);
+        assertTrue("sqrt(b)*sqrt(b) == b: " + c + ", b = " + b, b.compareTo(d) == 0);
+
+        b = a.random(5);
+        c = Roots.sqrt(b);
+        d = c.multiply(c);
+        //System.out.println("b = " + b + ", c = " + c + ", d = " + d);
+        assertTrue("sqrt(b)*sqrt(b) == b: " + c + ", b = " + b, b.compareTo(d) == 0);
+    }
+
 }

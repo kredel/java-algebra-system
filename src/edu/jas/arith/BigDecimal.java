@@ -599,7 +599,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
     /**
      * BigDecimal random.
      * @param n such that 0 &le; val(r) &le; (2<sup>n</sup>-1). 0 &le; exp(r)
-     *            &le; (100-1).
+     *            &le; (10-1).
      * @return r, a random BigDecimal.
      */
     public BigDecimal random(int n) {
@@ -610,12 +610,12 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
     /**
      * BigDecimal random.
      * @param n such that 0 &le; val(r) &le; (2<sup>n</sup>-1). 0 &le; exp(r)
-     *            &le; (100-1).
+     *            &le; (10-1).
      * @param rnd is a source for random bits.
      * @return r, a random BigDecimal.
      */
     public BigDecimal random(int n, Random rnd) {
-        return random(n, 100, rnd);
+        return random(n, 10, rnd);
     }
 
 
