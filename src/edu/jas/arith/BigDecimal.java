@@ -432,6 +432,18 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
      */
     @Override
     public int compareTo(BigDecimal b) {
+        //return compareToAbsolute(b);
+        return compareToRelative(b);
+    }
+
+
+    /**
+     * Compare absolute to BigDecimal b. Experimental, is hacked.
+     * @param b BigDecimal.
+     * @return 0 if abs(this-b) &lt; epsilon, 1 if this &gt; b, -1 if this &lt;
+     *         b.
+     */
+    public int compareToAbsolute(BigDecimal b) {
         //if (EXACT_EQUAL) {
         //    return val.compareTo(b.val);
         //}
@@ -450,6 +462,44 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
         //System.out.println("ctx = " + context);
         //System.out.println("eps = " + eps);
         int t = s.abs().compareTo(eps);
+        if (t < 1) {
+            return 0;
+        }
+        return s.signum();
+    }
+
+
+    /**
+     * Compare to relative BigDecimal b. Experimental, is hacked.
+     * @param b BigDecimal.
+     * @return 0 if abs(this-b)/max(this,b) &lt; epsilon, 1 if this &gt; b, -1 if this &lt;
+     *         b.
+     */
+    public int compareToRelative(BigDecimal b) {
+        //if (EXACT_EQUAL) {
+        //    return val.compareTo(b.val);
+        //}
+        java.math.BigDecimal s = val.subtract(b.val, context);
+        java.math.BigDecimal u1 = val.ulp();
+        java.math.BigDecimal u2 = b.val.ulp();
+        int u = Math.min(u1.scale(), u2.scale());
+        //System.out.println("u = " + u + ", s = " + s);
+        java.math.BigDecimal eps;
+        if (u <= 0) {
+            eps = u1.max(u2);
+        } else {
+            eps = u1.min(u2);
+        }
+        eps = eps.movePointRight(1);
+        //System.out.println("ctx = " + context);
+        //System.out.println("eps = " + eps);
+        java.math.BigDecimal m = val.abs().max(b.val.abs());
+        int t;
+        if (m.compareTo(java.math.BigDecimal.ONE) <= 1) {
+            t = s.abs().compareTo(eps);
+        } else {
+            t = s.abs().divide(m, context).compareTo(eps);
+        }
         if (t < 1) {
             return 0;
         }

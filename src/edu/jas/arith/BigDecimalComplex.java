@@ -462,24 +462,27 @@ public final class BigDecimalComplex implements StarRingElem<BigDecimalComplex>,
     /**
      * Since complex numbers are unordered, we use lexicographical order of re
      * and im.
-     * @return 0 if this is equal to b; 1 if re > b.re, or re == b.re and im >
-     *         b.im; -1 if re < b.re, or re == b.re and im < b.im
+     * @return 0 if this is equal to b; 1 if re &gt; b.re, or re == b.re and im &gt;
+     *         b.im; -1 if re &lt; b.re, or re == b.re and im &lt; b.im
      */
     @Override
     public int compareTo(BigDecimalComplex b) {
         int s = re.compareTo(b.re);
+        //System.out.println("compareTo(a.re,b.re) = " + s);
         if (s != 0) {
             return s;
         }
-        return im.compareTo(b.im);
+        s = im.compareTo(b.im);
+        //System.out.println("compareTo(a.im,b.im) = " + s);
+        return s;
     }
 
 
     /**
      * Since complex numbers are unordered, we use lexicographical order of re
      * and im.
-     * @return 0 if this is equal to 0; 1 if re > 0, or re == 0 and im > 0; -1
-     *         if re < 0, or re == 0 and im < 0
+     * @return 0 if this is equal to 0; 1 if re &gt; 0, or re == 0 and im &gt; 0; -1
+     *         if re &lt; 0, or re == 0 and im &lt; 0
      * @see edu.jas.structure.RingElem#signum()
      */
     public int signum() {

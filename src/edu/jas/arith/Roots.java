@@ -161,24 +161,33 @@ public class Roots {
             BigDecimal Ap = A.inverse();
             //System.out.println("A.inverse() = " + Ap);
             Ap = sqrt(Ap);
-            return Ap.inverse();
+            //System.out.println("sqrt(A) = " + Ap);
+            Ap = Ap.inverse();
+            //System.out.println("sqrt(A).inverse() = " + Ap);
+            return Ap;
         }
         MathContext mc = A.context;
         // newton iteration
         BigDecimal Ap = new BigDecimal(A.val, mc);
         BigDecimal ninv = new BigDecimal(0.5, mc);
         BigDecimal R1, R = Ap.multiply(ninv); // initial guess
-        BigDecimal eps = new BigDecimal("1.0e-10"); // TODO
+        BigDecimal eps = new BigDecimal("1.0e-12"); // TODO
         BigDecimal d;
+        int i = 0;
         while (true) {
             R1 = R.sum(Ap.divide(R));
             R1 = R1.multiply(ninv); // div n
             d = R.subtract(R1).abs();
             R = R1;
-            if (d.val.compareTo(eps.val) <= 0) {
+            //if (d.val.compareTo(eps.val) <= 0) {
+            if (d.compareTo(eps) <= 0) {
                 //System.out.println("d  = " + d + ", R = " + R);
                 break;
             }
+            if (i++ % 7 == 0) {
+                eps = eps.sum(eps);
+            }
+            //System.out.println("eps  = " + eps + ", d = " + d);
         }
         return R;
     }

@@ -139,13 +139,17 @@ public class BigDecimalComplexTest extends TestCase {
         assertEquals("a+a-a == a", c, a);
         assertEquals("a+a-a == a", 0, c.compareTo(a));
 
+        b = fac.random(5);
+        c = a.sum(b);
+        d = b.sum(a);
+        assertEquals("a+b == b+a: " + c.subtract(d), c, d);
+
         d = a.sum(BigDecimalComplex.ZERO);
         assertEquals("a+0 == a", d, a);
         d = a.subtract(BigDecimalComplex.ZERO);
         assertEquals("a-0 == a", d, a);
         d = a.subtract(a);
         assertEquals("a-a == 0", d, BigDecimalComplex.ZERO);
-
     }
 
 
@@ -157,19 +161,24 @@ public class BigDecimalComplexTest extends TestCase {
         b = a.multiply(a);
         c = b.divide(a);
 
-        assertEquals("a*a/a == a" + c.subtract(a), c, a);
-        assertEquals("a*a/a == a" + c.subtract(a), 0, c.compareTo(a));
+        assertEquals("a*a/a == a: " + c.subtract(a), c, a);
+        assertEquals("a*a/a == a: " + c.subtract(a), 0, c.compareTo(a));
 
         d = a.multiply(BigDecimalComplex.ONE);
         assertEquals("a*1 == a", d, a);
         d = a.divide(BigDecimalComplex.ONE);
         assertEquals("a/1 == a", d, a);
 
+        b = fac.random(5);
+        c = a.multiply(b);
+        d = b.multiply(a);
+        assertEquals("a*b == b*a: " + c.subtract(d), c, d);
+
         a = fac.random(5);
         b = a.inverse();
         c = a.multiply(b);
-
-        assertTrue("a*1/a == 1: " + c, c.isONE());
+        //assertTrue("a*1/a == 1: " + c, c.isONE());
+        assertTrue("a*1/a == 1: " + c, c.compareTo(fac.getONE()) == 0);
     }
 
 
@@ -200,7 +209,7 @@ public class BigDecimalComplexTest extends TestCase {
         e = b.subtract(d);
         //System.out.println("e = " + e);
 
-        assertEquals("||a|| == |a|*|a|: " + e, b, d);
+        assertTrue("||a|| == |a|*|a|: " + e, b.compareTo(d) == 0);
     }
 
 }

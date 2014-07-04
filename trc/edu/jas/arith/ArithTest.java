@@ -969,6 +969,7 @@ public class ArithTest extends TestCase {
         //b = Roots.root(a,2);
         c = b.multiply(b);
         assertTrue("sqrt(0.5)*sqrt(0.5) == 0.5: " + a.subtract(c), a.compareTo(c) == 0);
+        assertTrue("sqrt(0.5)*sqrt(0.5) == 0.5: " + b, a.compareTo(c) == 0);
 
         a = a.random(5);
         b = Roots.sqrt(a);
@@ -1013,7 +1014,7 @@ public class ArithTest extends TestCase {
         c = Roots.sqrt(b);
         d = c.multiply(c);
         //System.out.println("b = " + b + ", c = " + c + ", d = " + d);
-        assertTrue("sqrt(b)*sqrt(b) == b: " + c + ", b = " + b, b.compareTo(d) == 0);
+        assertTrue("sqrt(b)*sqrt(b) == b: b-d = " + b.subtract(d), b.compareTo(d) == 0);
     }
 
 }
