@@ -943,13 +943,13 @@ public class ArithTest extends TestCase {
         //b = Roots.root(a,2);
         c = b.multiply(b);
         assertTrue("sqrt(4)*sqrt(4) == 4: " + a.subtract(c), a.compareTo(c) == 0);
-        System.out.println("DEFAULT_PRECISION = " + BigDecimal.DEFAULT_PRECISION);
+        //System.out.println("DEFAULT_PRECISION = " + BigDecimal.DEFAULT_PRECISION);
 
         a = new BigDecimal("0.5");
         b = Roots.sqrt(a);
         //b = Roots.root(a,2);
         c = b.multiply(b);
-        System.out.println("a = " + a + ", sqrt(a) = " + b + ", b^2 = " + c);
+        //System.out.println("a = " + a + ", sqrt(a) = " + b + ", b^2 = " + c);
         assertTrue("sqrt(0.5)*sqrt(0.5) == 0.5: " + a.subtract(c), a.compareTo(c) == 0);
         assertTrue("sqrt(0.5)*sqrt(0.5) == 0.5: " + b, a.compareTo(c) == 0);
 
@@ -957,7 +957,7 @@ public class ArithTest extends TestCase {
         b = Roots.sqrt(a);
         //b = Roots.root(a,2);
         c = b.multiply(b);
-        System.out.println("a = " + a + ", sqrt(a) = " + b + ", b^2 = " + c);
+        //System.out.println("a = " + a + ", sqrt(a) = " + b + ", b^2 = " + c);
         assertTrue("sqrt(a)*sqrt(a) == a: " + a.subtract(c), a.compareTo(c) == 0);
     }
 
@@ -1003,7 +1003,9 @@ public class ArithTest extends TestCase {
         b = a.random(5);
         c = Roots.sqrt(b);
         d = c.multiply(c);
-        //System.out.println("b = " + b + ", c = " + c + ", d = " + d);
+        if (b.compareTo(d) != 0) {
+           System.out.println("b = " + b + ", c = " + c + ", d = " + d);
+        }
         assertTrue("sqrt(b)*sqrt(b) == b: b-d = " + b.subtract(d), b.compareTo(d) == 0);
     }
 

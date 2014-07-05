@@ -162,9 +162,7 @@ public class Roots {
         // for small A use root of inverse
         if (A.abs().val.compareTo(BigDecimal.ONE.val) < 0) {
             BigDecimal Ap = A.inverse();
-            //System.out.println("A.inverse() = " + Ap);
             Ap = sqrt(Ap);
-            //System.out.println("sqrt(A) = " + Ap);
             Ap = Ap.inverse();
             //System.out.println("sqrt(A).inverse() = " + Ap);
             return Ap;
@@ -174,7 +172,10 @@ public class Roots {
         BigDecimal Ap = new BigDecimal(A.val, mc);
         BigDecimal ninv = new BigDecimal(0.5, mc);
         BigDecimal R1, R = Ap.multiply(ninv); // initial guess
-        BigDecimal eps = new BigDecimal("1.0e-13"); // TODO
+        BigDecimal eps = new BigDecimal("0.1"); //e-13"); // TODO
+        int p = Math.max(mc.getPrecision(),java.math.MathContext.DECIMAL64.getPrecision());
+        //java.math.MathContext.UNLIMITED.getPrecision() == 0
+        eps = Power.positivePower(eps,p/2);
         BigDecimal d;
         int i = 0;
         while (true) {
@@ -182,15 +183,14 @@ public class Roots {
             R1 = R1.multiply(ninv); // div n
             d = R.subtract(R1).abs();
             R = R1;
-            //if (d.val.compareTo(eps.val) <= 0) {
-            if (d.compareTo(eps) <= 0) {
+            if (d.val.compareTo(eps.val) <= 0) {
                 //System.out.println("d  = " + d + ", R = " + R);
                 break;
             }
             if (i++ % 7 == 0) {
                 eps = eps.sum(eps);
             }
-            System.out.println("eps  = " + eps + ", d = " + d);
+            //System.out.println("eps  = " + eps + ", d = " + d);
         }
         return R;
     }
