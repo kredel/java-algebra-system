@@ -167,15 +167,16 @@ public class Roots {
             //System.out.println("sqrt(A).inverse() = " + Ap);
             return Ap;
         }
+        // ensure enough precision
         MathContext mc = A.context;
-        // newton iteration
-        BigDecimal Ap = new BigDecimal(A.val, mc);
-        BigDecimal ninv = new BigDecimal(0.5, mc);
-        BigDecimal R1, R = Ap.multiply(ninv); // initial guess
         BigDecimal eps = new BigDecimal("0.1"); //e-13"); // TODO
         int p = Math.max(mc.getPrecision(),java.math.MathContext.DECIMAL64.getPrecision());
         //java.math.MathContext.UNLIMITED.getPrecision() == 0
         eps = Power.positivePower(eps,p/2);
+        // newton iteration
+        BigDecimal Ap = new BigDecimal(A.val, mc);
+        BigDecimal ninv = new BigDecimal(0.5, mc);
+        BigDecimal R1, R = Ap.multiply(ninv); // initial guess
         BigDecimal d;
         int i = 0;
         while (true) {
@@ -187,7 +188,7 @@ public class Roots {
                 //System.out.println("d  = " + d + ", R = " + R);
                 break;
             }
-            if (i++ % 7 == 0) {
+            if (i++ % 11 == 0) {
                 eps = eps.sum(eps);
             }
             //System.out.println("eps  = " + eps + ", d = " + d);
@@ -227,31 +228,34 @@ public class Roots {
         }
         // ensure enough precision
         MathContext mc = A.context;
+        BigDecimal eps = new BigDecimal("0.1"); //e-10"); // TODO
+        int p = Math.max(mc.getPrecision(),java.math.MathContext.DECIMAL64.getPrecision());
+        //java.math.MathContext.UNLIMITED.getPrecision() == 0
+        eps = Power.positivePower(eps,(p*2)/3);
         // newton iteration
         BigDecimal Ap = A;
         BigDecimal N = new BigDecimal(n, mc);
         BigDecimal ninv = new BigDecimal(1.0 / n, mc);
         BigDecimal nsub = new BigDecimal(1.0, mc); // because of precision
         nsub = nsub.subtract(ninv);
-        //BigDecimal half = BigDecimal.ONE.sum(BigDecimal.ONE).inverse();
-        //BigDecimal half = new BigDecimal(BigDecimal.ONE.val.divide(java.math.BigDecimal.TEN));
-        BigDecimal eps = new BigDecimal("1.0e-10"); // TODO
         BigDecimal P, R1, R = Ap.multiply(ninv); // initial guess
         BigDecimal d;
+        int i = 0;
         while (true) {
             P = Power.positivePower(R, n - 1);
             R1 = Ap.divide(P.multiply(N));
             R1 = R.multiply(nsub).sum(R1);
             d = R.subtract(R1).abs();
             R = R1;
-            //if ( d.compareTo( BigDecimal.ONE ) <= 0 ) {
-            //    System.out.println("d  = " + d);
             if (d.val.compareTo(eps.val) <= 0) {
                 //System.out.println("d.val  = " + d.val);
                 break;
             }
-            //}
+            if (i++ % 11 == 0) {
+                eps = eps.sum(eps);
+            }
         }
+        // System.out.println("eps  = " + eps + ", d = " + d);
         return R;
     }
 

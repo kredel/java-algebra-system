@@ -912,14 +912,11 @@ public class ArithTest extends TestCase {
             //System.out.println(n+"-th root = " + d);
             e = Power.positivePower(d, n);
             //System.out.println("root^"+n+"    = " + e);
-            e = e.subtract(d).abs();
-            //System.out.println("e         = " + e);
-            e = e.divide(b);
-            //System.out.println("e         = " + e);
-            if (b.compareTo(a) > 0) {
-                assertTrue("root^" + n + " == a: " + e, a.compareTo(e) >= 0);
+            if (b.compareTo(e) == 0) {
+                assertTrue("root^" + n + " == b: " + e, b.compareTo(e) == 0);
             } else {
-                assertTrue("root^" + n + " == a: " + e, a.compareTo(e) <= 0);
+                System.out.println("b   = " + b + ", root(b," + n +") = " + d);
+                System.out.println("d^" + n + " = " + e + ", b-e = " + b.subtract(e).abs());
             }
         }
     }
