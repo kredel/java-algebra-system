@@ -156,6 +156,9 @@ public class Roots {
         if (A == null || A.isZERO() || A.isONE()) {
             return A;
         }
+        if ( A.signum() < 0 ) {
+            throw new ArithmeticException("root of negative not defined");
+        }
         // for small A use root of inverse
         if (A.abs().val.compareTo(BigDecimal.ONE.val) < 0) {
             BigDecimal Ap = A.inverse();
@@ -171,7 +174,7 @@ public class Roots {
         BigDecimal Ap = new BigDecimal(A.val, mc);
         BigDecimal ninv = new BigDecimal(0.5, mc);
         BigDecimal R1, R = Ap.multiply(ninv); // initial guess
-        BigDecimal eps = new BigDecimal("1.0e-12"); // TODO
+        BigDecimal eps = new BigDecimal("1.0e-13"); // TODO
         BigDecimal d;
         int i = 0;
         while (true) {
@@ -187,7 +190,7 @@ public class Roots {
             if (i++ % 7 == 0) {
                 eps = eps.sum(eps);
             }
-            //System.out.println("eps  = " + eps + ", d = " + d);
+            System.out.println("eps  = " + eps + ", d = " + d);
         }
         return R;
     }
@@ -211,6 +214,9 @@ public class Roots {
         }
         if (A == null || A.isZERO() || A.isONE()) {
             return A;
+        }
+        if ( A.signum() < 0 ) {
+            throw new ArithmeticException("root of negative not defined");
         }
         // for small A use root of inverse
         if (A.abs().val.compareTo(BigDecimal.ONE.val) < 0) {
@@ -261,7 +267,9 @@ public class Roots {
         }
         BigDecimal r = a.re.abs().sum(a.abs().re);
         BigDecimal t = new BigDecimal(2);
-        BigDecimal u = r.divide(t);
+        BigDecimal ti = new BigDecimal("0.5");
+        //BigDecimal u = r.divide(t);
+        BigDecimal u = r.multiply(ti);
         BigDecimal v = Roots.sqrt(u);
         //System.out.println("r = " + r + ", a = " + a);
         //System.out.println("v = " + v + ", u = " + u);

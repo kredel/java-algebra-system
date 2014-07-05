@@ -133,7 +133,6 @@ public class ArithTest extends TestCase {
 
     /**
      * Test random and compares Integer.
-     * 
      */
     public void testIntegerRandom() {
         BigInteger a, b, c;
@@ -152,7 +151,6 @@ public class ArithTest extends TestCase {
 
     /**
      * Test addition for Integer.
-     * 
      */
     public void testIntegerAddition() {
         BigInteger a, b, c, d, e;
@@ -195,7 +193,6 @@ public class ArithTest extends TestCase {
 
     /**
      * Test multiplication for Integer.
-     * 
      */
     public void testIntegerMultiplication() {
         BigInteger a, b, c, d, e;
@@ -236,7 +233,6 @@ public class ArithTest extends TestCase {
 
     /**
      * Test static initialization and constants for BigRational.
-     * 
      */
     public void testRationalConstants() {
         BigRational a, b, c, d;
@@ -262,7 +258,6 @@ public class ArithTest extends TestCase {
 
     /**
      * Test static initialization and constants for BigComplex.
-     * 
      */
     public void testComplexConstants() {
         BigComplex a, b, c, d;
@@ -286,7 +281,6 @@ public class ArithTest extends TestCase {
 
     /**
      * Test static initialization and constants for BigQuaternion.
-     * 
      */
     public void testQuaternionConstants() {
         BigQuaternion a, b, c, d;
@@ -313,7 +307,6 @@ public class ArithTest extends TestCase {
 
     /**
      * Test string constructor and toString for BigRational.
-     * 
      */
     public void testRationalConstructor() {
         BigRational a, b, c, d;
@@ -359,7 +352,6 @@ public class ArithTest extends TestCase {
 
     /**
      * Test string constructor and toString for BigComplex.
-     * 
      */
     public void testComplexConstructor() {
         BigComplex a, b, c, d;
@@ -397,7 +389,6 @@ public class ArithTest extends TestCase {
 
     /**
      * Test string constructor and toString for BigQuaternion.
-     * 
      */
     public void testQuaternionConstructor() {
         BigQuaternion a, b, c, d;
@@ -438,7 +429,6 @@ public class ArithTest extends TestCase {
 
     /**
      * Test random and compares Rational.
-     * 
      */
     public void testRationalRandom() {
         BigRational a, b, c;
@@ -454,7 +444,6 @@ public class ArithTest extends TestCase {
 
     /**
      * Test random and compares Complex.
-     * 
      */
     public void testComplexRandom() {
         BigComplex a, b, c;
@@ -470,7 +459,6 @@ public class ArithTest extends TestCase {
 
     /**
      * Test random and compares Quaternion.
-     * 
      */
     public void testQuaternionRandom() {
         BigQuaternion a, b, c;
@@ -489,7 +477,6 @@ public class ArithTest extends TestCase {
 
     /**
      * Test addition for Rational.
-     * 
      */
     public void testRationalAddition() {
         BigRational a, b, c, d, e;
@@ -529,7 +516,6 @@ public class ArithTest extends TestCase {
 
     /**
      * Test addition for Complex.
-     * 
      */
     public void testComplexAddition() {
         BigComplex a, b, c, d, e;
@@ -569,7 +555,6 @@ public class ArithTest extends TestCase {
 
     /**
      * Test addition for Quaternion.
-     * 
      */
     public void testQuaternionAddition() {
         BigQuaternion a, b, c, d, e;
@@ -612,7 +597,6 @@ public class ArithTest extends TestCase {
 
     /**
      * Test multiplication for Rational.
-     * 
      */
     public void testRationalMultiplication() {
         BigRational a, b, c, d, e;
@@ -653,7 +637,6 @@ public class ArithTest extends TestCase {
 
     /**
      * Test multiplication for Complex.
-     * 
      */
     public void testComplexMultiplication() {
         BigComplex a, b, c, d, e;
@@ -694,7 +677,6 @@ public class ArithTest extends TestCase {
 
     /**
      * Test multiplication for Quaternion.
-     * 
      */
     public void testQuaternionMultiplication() {
         BigQuaternion a, b, c, d, e;
@@ -748,7 +730,6 @@ public class ArithTest extends TestCase {
 
     /**
      * Test power for Rational.
-     * 
      */
     public void testRationalPower() {
         BigRational a, b, c, d;
@@ -782,7 +763,6 @@ public class ArithTest extends TestCase {
 
     /**
      * Test power for Integer.
-     * 
      */
     public void testIntegerPower() {
         BigInteger a, b, c, d, e;
@@ -963,18 +943,21 @@ public class ArithTest extends TestCase {
         //b = Roots.root(a,2);
         c = b.multiply(b);
         assertTrue("sqrt(4)*sqrt(4) == 4: " + a.subtract(c), a.compareTo(c) == 0);
+        System.out.println("DEFAULT_PRECISION = " + BigDecimal.DEFAULT_PRECISION);
 
         a = new BigDecimal("0.5");
         b = Roots.sqrt(a);
         //b = Roots.root(a,2);
         c = b.multiply(b);
+        System.out.println("a = " + a + ", sqrt(a) = " + b + ", b^2 = " + c);
         assertTrue("sqrt(0.5)*sqrt(0.5) == 0.5: " + a.subtract(c), a.compareTo(c) == 0);
         assertTrue("sqrt(0.5)*sqrt(0.5) == 0.5: " + b, a.compareTo(c) == 0);
 
-        a = a.random(5);
+        a = a.random(5).abs();
         b = Roots.sqrt(a);
         //b = Roots.root(a,2);
         c = b.multiply(b);
+        System.out.println("a = " + a + ", sqrt(a) = " + b + ", b^2 = " + c);
         assertTrue("sqrt(a)*sqrt(a) == a: " + a.subtract(c), a.compareTo(c) == 0);
     }
 
@@ -991,6 +974,13 @@ public class ArithTest extends TestCase {
         a = BigDecimalComplex.ONE;
         b = Roots.sqrt(a);
         assertTrue("sqrt(1) == 1: " + b, b.isONE());
+
+        a = BigDecimalComplex.ONE.negate();
+        b = Roots.sqrt(a);
+        d = b.multiply(b);
+        //System.out.println("a = " + a + ", b = " + b + ", d = " + d);
+        assertTrue("sqrt(-1) == I: " + b, b.isIMAG());
+        assertTrue("sqrt(-1)*sqrt(-1) == -1: " + a + ", b = " + b, a.compareTo(d) == 0);
 
         b = BigDecimalComplex.I;
         c = Roots.sqrt(b);

@@ -46,30 +46,23 @@ public class BigComplexTest extends TestCase {
     }
 
 
-    BigComplex a;
+    BigComplex a, b, c, d, e;
 
 
-    BigComplex b;
-
-
-    BigComplex c;
-
-
-    BigComplex d;
-
-
-    BigComplex e;
+    BigComplex fac;
 
 
     @Override
     protected void setUp() {
         a = b = c = d = e = null;
+        fac = new BigComplex();
     }
 
 
     @Override
     protected void tearDown() {
         a = b = c = d = e = null;
+        fac = null;
     }
 
 
@@ -152,13 +145,17 @@ public class BigComplexTest extends TestCase {
         assertEquals("a+a-a = a", c, a);
         assertEquals("a+a-a = a", 0, c.compareTo(a));
 
+        b = fac.random(5);
+        c = a.sum(b);
+        d = b.sum(a);
+        assertEquals("a+b == b+a: " + c.subtract(d), c, d);
+
         d = BigComplex.CSUM(a, BigComplex.ZERO);
         assertEquals("a+0 = a", d, a);
         d = BigComplex.CDIF(a, BigComplex.ZERO);
         assertEquals("a-0 = a", d, a);
         d = BigComplex.CDIF(a, a);
         assertEquals("a-a = 0", d, BigComplex.ZERO);
-
     }
 
 
@@ -178,6 +175,11 @@ public class BigComplexTest extends TestCase {
         assertEquals("a*1 = a", d, a);
         d = BigComplex.CQ(a, BigComplex.ONE);
         assertEquals("a/1 = a", d, a);
+
+        b = fac.random(5);
+        c = a.multiply(b);
+        d = b.multiply(a);
+        assertEquals("a*b == b*a: " + c.subtract(d), c, d);
 
         a = BigComplex.CRAND(100);
         b = BigComplex.CINV(a);
