@@ -29,7 +29,7 @@ public interface MonoidFactory<C extends MonoidElem<C>> extends ElemFactory<C> {
 
 
     /**
-     * Query if this ring is associative.
+     * Query if this monoid is associative.
      * @return true if this monoid is associative, else false.
      */
     public boolean isAssociative();

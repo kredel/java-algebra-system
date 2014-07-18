@@ -6,7 +6,7 @@ package edu.jas.structure;
 
 
 /**
- * Ring factory interface. Defines test for field and access of characteristic.
+ * Ring factory interface. Defines test for field and query of characteristic.
  * @author Heinz Kredel
  */
 
@@ -14,7 +14,7 @@ public interface RingFactory<C extends RingElem<C>> extends AbelianGroupFactory<
 
 
     /**
-     * Query if this ring is a field. May return false if it is to hard to
+     * Query if this ring is a field. May return false if it is too hard to
      * determine if this ring is a field.
      * @return true if it is known that this ring is a field, else false.
      */
