@@ -123,6 +123,20 @@
   </javac>
 </target>
 
+<target name="recomp7" depends="distclean" >
+  <javac destdir="${build}"
+         debug="on" debuglevel="lines,source"
+         classpath="${cp}" 
+         source="1.7" 
+         target="1.7" 
+         bootclasspath="/usr/lib64/jvm/java-1.7.0/jre/lib/rt.jar"
+         includeantruntime="false"
+  >
+     <src path="${src}" />
+     <src path="${testsrc}" />
+  </javac>
+</target>
+
 <target name="doc" >
   <javadoc destdir="${doc}" 
            classpath="${doccp}" 
@@ -168,7 +182,7 @@
 </target>
 
 <target name="run" depends="compile" >
-  <java  classname="${run}" 
+  <java  classname="${class}" 
          classpath="${cp}" 
          fork="yes" />
 </target>
@@ -192,6 +206,11 @@
          fork="yes" 
          showoutput="yes"
          haltonfailure="no" >
+     <jvmarg value="-server"/>
+     <jvmarg value="-Xmx2900M"/>
+     <jvmarg value="-Xms2900M"/>
+     <jvmarg value="-verbose:gc"/>
+     <jvmarg value="-ea"/>
      <classpath path="${cp}" />
      <formatter type="plain" /> <!-- plain, xml, brief -->
      <batchtest todir="${test}" >
