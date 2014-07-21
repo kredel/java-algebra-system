@@ -733,7 +733,7 @@ public class ArithTest extends TestCase {
      */
     public void testRationalPower() {
         BigRational a, b, c, d;
-        a = BigRational.ZERO.random(500);
+        a = BigRational.ZERO.random(100);
 
         // power operations
         b = Power.<BigRational> positivePower(a, 1);
@@ -758,6 +758,11 @@ public class ArithTest extends TestCase {
         d = pow.power(a, -3);
         c = b.multiply(d);
         assertTrue("a^3 * a^-3 = 1", c.isONE());
+
+        //Java 8:
+        //d = a.power(-3);
+        //c = b.multiply(d);
+        //assertTrue("a^3 * a^-3 = 1", c.isONE());
     }
 
 
@@ -803,6 +808,20 @@ public class ArithTest extends TestCase {
 
         c = pow.modPower(a, 11, b);
         assertEquals("a^p = a mod p", c, d);
+
+        //Java 8:
+        //a = BigInteger.ZERO.random(100);
+        //d = a.power(1);
+        //c = a;
+        //assertEquals("a^1 == a", c, d);
+
+        //d = a.power(0);
+        //c = BigInteger.ONE;
+        //assertEquals("a^0 == 1", c, d);
+ 
+        //d = a.power(3);
+        //c = a.multiply(a).multiply(a);
+        //assertEquals("a^3 == a*a*a", c, d);
     }
 
 
