@@ -370,10 +370,11 @@ tests:
 	#cd mpi; make tests | tee mpi.out
 	cd jlinalg_adapter; make tests | tee ja.out
 	cd commons-math_adapter; make tests | tee ja.out
+	echo "--------------------"
 	-grep FAIL t.out
 	-grep Exception e.out | grep -v GCDProxy | grep -v GBProxy
 	-grep File tjy.out
-	-grep -i error tjr.out
+	-egrep -i '(error|__file__)' tjr.out
 	-grep -i error jython/jsr.out
 	-grep -i error mpj/mpj.out
 	#-grep -i error mpi/mpi.out
@@ -422,15 +423,11 @@ export:
 	cd ~/jas-versions/$(VERSION)/; ant doc > ant_doc.out
 	cd ~/jas-versions/$(VERSION)/; epydoc -v -o doc/jython -n "Python to JAS" -u ../../index.html examples/jas.py > epydoc.out
 	cd ~/jas-versions/$(VERSION)/; jrdoc -o doc/jruby -U -N -t "Ruby to JAS" examples/jas.rb > rdoc.out 2>&1
-	cd ~/jas-versions/$(VERSION)/; jar -cfM ../$(VERSION).`$(SVNREV)`-doc.zip doc/ *.html *.css
 	cd ~/jas-versions/$(VERSION)/; ant test > ant_test.out
 	cd ~/jas-versions/$(VERSION)/; sh ./jython_tests.sh >jython_tests.out 2>&1
 	cd ~/jas-versions/$(VERSION)/; sh ./jruby_tests.sh >jruby_tests.out 2>&1
 	cp ~/jas-versions/$(VERSION).`$(SVNREV)`-bin.jar $(LIBPATH)/jas.jar
 	cp ~/jas-versions/$(VERSION).`$(SVNREV)`-bin.jar ~/jas-versions/$(VERSION)/jas.jar
-	mv ~/jas-versions/$(VERSION).`$(SVNREV)`-*.jar ~/jas-versions/$(VERSION)/
-	mv ~/jas-versions/$(VERSION).`$(SVNREV)`-*.zip ~/jas-versions/$(VERSION)/
-	cd ~/jas-versions/$(VERSION)/; chmod -v +r *.jar >chmod.out 2>&1
 	cd ~/jas-versions/$(VERSION)/jython; make > ~/jas-versions/$(VERSION)/make_jython.out
 	cd ~/jas-versions/$(VERSION)/mpi; make all doc > ~/jas-versions/$(VERSION)/make_mpi.out
 	cd ~/jas-versions/$(VERSION)/mpj; make all doc > ~/jas-versions/$(VERSION)/make_mpj.out
@@ -442,7 +439,10 @@ export:
 	cp ~/java/lib/droidlog.jar ~/jas-versions/$(VERSION)/
 	cd ~/jas-versions/$(VERSION)/jlinalg_adapter; make all doc > ~/jas-versions/$(VERSION)/make_jlinalg.out
 	cd ~/jas-versions/$(VERSION)/commons-math_adapter; make all doc > ~/jas-versions/$(VERSION)/make_commons-math.out
-	#cp ~/jas-versions/$(VERSION)/commons-math_adapter.jar ~/jas-versions/$(VERSION)/
+	cd ~/jas-versions/$(VERSION)/; jar -cfM ../$(VERSION).`$(SVNREV)`-doc.zip doc/ *.html *.css
+	mv ~/jas-versions/$(VERSION).`$(SVNREV)`-*.jar ~/jas-versions/$(VERSION)/
+	mv ~/jas-versions/$(VERSION).`$(SVNREV)`-*.zip ~/jas-versions/$(VERSION)/
+	cd ~/jas-versions/$(VERSION)/; chmod -v +r *.jar *.zip >chmod.out 2>&1
 
 deploy:
 	$(RSYNC) -e 'ssh -p 2222' --delete-after --exclude=DTD --exclude=*xml ~/jas-versions/$(VERSION)/ krum:htdocs/$(VERSION)
