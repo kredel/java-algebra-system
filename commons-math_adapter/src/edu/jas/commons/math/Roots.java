@@ -73,7 +73,7 @@ public class Roots<C extends RingElem<C> & Rational> {
         //RealMatrix V = ed.getV();
         //System.out.println("V = " + V);
         //RealMatrix D = ed.getD();
-        //System.out.println("D = " + D);
+        //System.out.println("D = " + D); 
 
         // construct root list
         for (int i = 0; i < N; i++) {
