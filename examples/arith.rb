@@ -15,6 +15,7 @@ puts "zn^2: " + str(zn*zn);
 puts;
 
 x = 10000000000000000000000000000000000000000000000000;
+puts "x:    " + str(x);
 rn = QQ(2*x,4*x);
 puts "rn:   " + str(rn);
 puts "rn^2: " + str(rn*rn);
@@ -40,7 +41,7 @@ puts "c:   " + str(c);
 puts;
 
 
-r = PolyRing.new(QQ(), "(x,y)", PolyRing.lex );
+r = PolyRing.new(QQ(), "x,y", PolyRing.lex );
 puts "Ring: " + str(r);
 puts;
 
@@ -56,6 +57,7 @@ end
 puts "f: " + str(f);
 
 d = x**2 + 5 * x - 6;
+puts "d: " + str(d);
 f = RF(r,d);
 puts "f: " + str(f);
 
@@ -78,7 +80,7 @@ puts "f: " + str(f);
 f = RF(r,zero);
 puts "f: " + str(f);
 
-f = RF(r,d,y);
+f = RF(r,d,y); 
 puts "f: " + str(f);
 
 puts "one:  " + str(f.one());

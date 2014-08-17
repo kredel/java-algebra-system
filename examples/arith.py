@@ -5,7 +5,7 @@
 
 import sys;
 
-from jas import Ring
+from jas import PolyRing
 from jas import ZZ
 from jas import QQ
 from jas import CC
@@ -47,12 +47,12 @@ print "c:", c;
 print;
 
 
-r = Ring( "Q(x,y) L" );
+r = PolyRing(QQ(), "x,y", PolyRing.lex );
 print "Ring: " + str(r);
 print;
 
 # sage like: with generators for the polynomial ring
-[one,x,y] = r.gens();
+#is automatic: [one,x,y] = r.gens();
 zero = r.zero();
 
 try:
