@@ -12,7 +12,7 @@ r = PolyRing.new(QQ(),"x,y,z",PolyRing.lex);
 puts "Ring: " + str(r);
 puts;
 
-one,x,y,z = r.gens();
+#is automatic: one,x,y,z = r.gens();
 
 f1 = (x**2 - 5)*(x**2 - 3)**2;
 f2 = y**2 - 3;
