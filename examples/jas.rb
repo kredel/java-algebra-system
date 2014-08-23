@@ -1270,9 +1270,9 @@ Inject variables for generators in top level environment.
            env = eval "self", bin;
            #puts "env = " + str(env)
            inject_gens(env)
-           rescue Exception => e
-              puts "error: 'irb/frame' not found, e = " + str(e);
-           end
+        rescue Exception => e
+           puts "error: 'irb/frame' not found, e = " + str(e);
+        end
     end
 
 =begin rdoc

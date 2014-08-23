@@ -12,7 +12,7 @@ require "examples/jas"
 r = PolyRing.new(PolyRing.new(QQ(),"a1,a2,a3,a4",PolyRing.grad),"x1,x2,x3,x4",PolyRing.lex);
 puts "r  = " + str(r);
 
-one,a1,a2,a3,a4,x1,x2,x3,x4 = r.gens();
+#is automatic: one,a1,a2,a3,a4,x1,x2,x3,x4 = r.gens();
 puts "one = " + str(one);
 puts "a1  = " + str(a1);
 puts "a2  = " + str(a2);

@@ -16,7 +16,7 @@ from jas import startLog, terminate
 r = PolyRing(PolyRing(QQ(),"a1,a2,a3,a4",PolyRing.grad),"x1,x2,x3,x4",PolyRing.lex);
 #print "r  = " + str(r);
 
-[one,a1,a2,a3,a4,x1,x2,x3,x4] = r.gens();
+#is automatic: [one,a1,a2,a3,a4,x1,x2,x3,x4] = r.gens();
 
 pl = [ ( x4 - ( a4 - a2 ) ),
       ( x1 + x2 + x3 + x4 - ( a1 + a3 + a4 ) ),
