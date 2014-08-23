@@ -5,23 +5,19 @@
 
 import sys;
 from java.lang import System
-from java.lang import Integer
 
 from jas import Ring, PolyRing
 from jas import terminate
 from jas import startLog
-
 from jas import QQ, DD
 
 # polynomial examples: real roots over Q for zero dimensional ideal `cyclic5'
 
-#r = Ring( "Q(x) L" );
 r = PolyRing(QQ(),"a,b,c,d,e",PolyRing.lex);
-
 print "Ring: " + str(r);
 print;
 
-[one,a,b,c,d,e] = r.gens();
+#is automatic: [one,a,b,c,d,e] = r.gens();
 
 f1 = a + b + c + d + e;
 f2 = a*b + b*c + c*d + d*e + e*a;
@@ -42,12 +38,6 @@ print "F = ", F;
 print;
 
 startLog();
-
-#G = F.GB();
-#print "G = ", G;
-#print;
-
-#sys.exit();
 
 t = System.currentTimeMillis();
 R = F.realRoots();

@@ -10,18 +10,15 @@ from java.lang import Integer
 from jas import Ring, PolyRing
 from jas import terminate
 from jas import startLog
-
 from jas import QQ, DD
 
 # polynomial examples: complex roots over Q for zero dimensional ideal `cyclic5'
 
-#r = Ring( "Q(x) L" );
 r = PolyRing(QQ(),"a,b,c,d,e",PolyRing.lex);
-
 print "Ring: " + str(r);
 print;
 
-[one,a,b,c,d,e] = r.gens();
+#is automatic: [one,a,b,c,d,e] = r.gens();
 
 f1 = a + b + c + d + e;
 f2 = a*b + b*c + c*d + d*e + e*a;
@@ -37,17 +34,10 @@ print "f5 = ", f5;
 print;
 
 F = r.ideal( list=[f1,f2,f3,f4,f5] );
-
 print "F = ", F;
 print;
 
 startLog();
-
-#G = F.GB();
-#print "G = ", G;
-#print;
-
-#sys.exit();
 
 t = System.currentTimeMillis();
 R = F.complexRoots();

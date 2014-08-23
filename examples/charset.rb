@@ -7,12 +7,10 @@ require "examples/jas"
 
 # characteristic set example Circle of Apollonius, from CLO IVA
 
-#r = PolyRing.new( QQ(),"u1,u2,u3,u4,x1,x2,x3,x4,x5,x6,x7,x8",PolyRing.lex );
 r = PolyRing.new( QQ(),"u1,u2,x1,x2,x3,x4,x5,x6,x7,x8",PolyRing.lex );
 puts "Ring: " + str(r);
 puts;
 
-#one,u1,u2,u3,u4,x1,x2,x3,x4,x5,x6,x7,x8 = r.gens();
 #one,u1,u2,x1,x2,x3,x4,x5,x6,x7,x8 = r.gens();
 #h3 = 2 * x3 - u3; typo
 #h4 = 2 * x4 - u4;

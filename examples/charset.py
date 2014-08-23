@@ -7,7 +7,7 @@ import sys;
 
 from jas import Ring, PolyRing, Ideal
 from jas import QQ, ZZ
-from jas import startLog
+from jas import startLog, terminate
 
 # characteristic set example Circle of Apollonius, from CLO IVA
 
@@ -44,9 +44,10 @@ print "is char set:", c.isCS();
 print;
 
 print "g:", g;
+print;
 h = c.csReduction(g);
 print "h:", h;
 print;
 
-sys.exit();
+#sys.exit();
 

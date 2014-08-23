@@ -27,7 +27,6 @@ puts "f5 = " + str(f5);
 puts;
 
 F = r.ideal( "", list=[f1,f2,f3,f4,f5] );
-
 puts "F = " + str(F);
 puts;
 

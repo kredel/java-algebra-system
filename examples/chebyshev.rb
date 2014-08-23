@@ -10,12 +10,13 @@ require "examples/jas"
 # T(1) = x
 # T(n) = 2 * x * T(n-1) - T(n-2)
 
-r = Ring.new( "Z(x) L" );
+#r = Ring.new( "Z(x) L" );
+r = PolyRing.new( ZZ(), "(x)", PolyRing.lex );
 puts "Ring: " + str(r);
 puts;
 
 # sage like: with generators for the polynomial ring
-one,x = r.gens();
+#is automatic: one,x = r.gens();
 
 x2 = 2 * x;
 
