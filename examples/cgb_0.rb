@@ -8,8 +8,7 @@ require "examples/jas"
 # simple example for comprehensive GB
 # integral/rational function coefficients
 
-#r = Ring( "RatFunc(u,v) (x,y) L" );
-#r = Ring.new( "IntFunc(u,v) (x,y) L" );
+#r = Ring( "IntFunc(u,v) (x,y) L" );
 r = PolyRing.new( PolyRing.new(ZZ(),"(u,v)",PolyRing.lex),"(x,y)", PolyRing.lex );
 puts "Ring: " + str(r);
 puts;
@@ -21,7 +20,11 @@ ps = """
 ) 
 """;
 
-f = r.paramideal( ps );
+p1 = v * x * y + x;
+p2 = u * y**2 + x**2;
+
+#f = r.paramideal( ps );
+f = r.paramideal( "", [p1,p2] );
 puts "ParamIdeal: " + str(f);
 puts;
 

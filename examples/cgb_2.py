@@ -5,7 +5,7 @@
 
 import sys;
 
-from jas import Ring
+from jas import ZZ, Ring, PolyRing
 from jas import ParamIdeal
 from jas import startLog
 from jas import terminate
@@ -14,8 +14,8 @@ from jas import terminate
 # 2 univariate polynomials of degree 2 example for comprehensive GB
 # integral/rational function coefficients
 
-#r = Ring( "RatFunc(u,v) (x,y) L" );
-r = Ring( "IntFunc(a2, a1, a0, b2, b1, b0) (x) L" );
+#r = Ring( "IntFunc(a2, a1, a0, b2, b1, b0) (x) L" );
+r = PolyRing( PolyRing(ZZ(),"(a2, a1, a0, b2, b1, b0)",PolyRing.lex),"(x)", PolyRing.lex );
 print "Ring: " + str(r);
 print;
 
@@ -26,7 +26,11 @@ ps = """
 ) 
 """;
 
-f = r.paramideal( ps );
+p1 = a2 * x**2 + a1 * x + a0;
+p2 = b2 * x**2 + b1 * x + b0;
+
+#f = r.paramideal( ps );
+f = r.paramideal( "", [p1,p2] );
 print "ParamIdeal: " + str(f);
 print;
 

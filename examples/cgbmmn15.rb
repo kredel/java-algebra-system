@@ -13,7 +13,8 @@ require "examples/jas"
 # ( - { gamma } c1 c2 + { epsilon + theta } c3 - { gamma } c2 ),
 # ( { gamma } c2 c3 + { eta } c2 - { epsilon + theta } c3 )
 
-r = Ring.new( "IntFunc(a,b,g,e,t,eta)(c3,c2,c1) G" );
+#r = Ring.new( "IntFunc(a,b,g,e,t,eta)(c3,c2,c1) G" );
+r = PolyRing.new( PolyRing.new(QQ(),"(a,b,g,e,t,eta)", PolyRing.lex), "(c3,c2,c1)", PolyRing.grad );
 puts "Ring: " + str(r);
 puts;
 
@@ -25,7 +26,12 @@ ps = """
 )
 """;
 
-f = r.paramideal( ps );
+p1 = a * c1 -  b * c1**2 - g * c1 * c2 + e * c3;
+p2 = - g * c1 * c2 + (e + t) * c3 - g * c2;
+p3 = g * c2 * c3 + eta * c2 - (e + t) * c3;
+
+#f = r.paramideal( ps );
+f = r.paramideal( "", [p1,p2,p3] );
 puts "ParamIdeal: " + str(f);
 puts;
 

@@ -20,7 +20,11 @@ ps = """
 ) 
 """;
 
-f = r.paramideal( ps );
+p1 = a2 * x**2 + a1 * x + a0;
+p2 = b2 * x**2 + b1 * x + b0;
+
+#f = r.paramideal( ps );
+f = r.paramideal( "", [p1,p2] );
 puts "ParamIdeal: " + str(f);
 puts;
 

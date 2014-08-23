@@ -9,18 +9,15 @@ from jas import Ring, PolyRing, ParamIdeal, QQ
 from jas import startLog
 from jas import terminate
 
-
 # 2 univariate polynomials of degree 2 example for comprehensive GB
 # integral/rational function coefficients
 
-#rp = PolyRing(QQ(), "a,b" );
 rp = PolyRing(QQ(), "a" );
 r = PolyRing( rp, "x,y,z", PolyRing.lex );
 print "Ring: " + str(r);
 print;
 
-#one,a,b,x,y = r.gens();
-one,a,x,y,z = r.gens();
+#is automatic: one,a,x,y,z = r.gens();
 
 #f1 = x * ( x**2 + a * y + b );
 #f2 = x * ( y**2 + b * x + a );

@@ -5,7 +5,7 @@
 
 import sys;
 
-from jas import Ring
+from jas import ZZ, Ring, PolyRing
 from jas import ParamIdeal
 from jas import startLog
 from jas import terminate
@@ -14,8 +14,8 @@ from jas import terminate
 # simple example for comprehensive GB
 # integral/rational function coefficients
 
-#r = Ring( "RatFunc(u,v) (x,y) L" );
-r = Ring( "IntFunc(u,v) (x,y) L" );
+#r = Ring( "IntFunc(u,v) (x,y) L" );
+r = PolyRing( PolyRing(ZZ(),"(u,v)",PolyRing.lex),"(x,y)", PolyRing.lex );
 print "Ring: " + str(r);
 print;
 
@@ -26,7 +26,11 @@ ps = """
 ) 
 """;
 
-f = r.paramideal( ps );
+p1 = v * x * y + x;
+p2 = u * y**2 + x**2;
+
+#f = r.paramideal( ps );
+f = r.paramideal( "", [p1,p2] );
 print "ParamIdeal: " + str(f);
 print;
 
