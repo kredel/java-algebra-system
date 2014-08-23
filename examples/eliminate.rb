@@ -19,7 +19,13 @@ ps1 = """
 )
 """;
 
-F1 = r.ideal( ps1 );
+ff = [ x**2 - 2,
+       y**2 - 3,
+       z**3 - x * y
+     ]
+
+#F1 = r.ideal( ps1 );
+F1 = r.ideal( "", ff );
 puts "Ideal: " + str(F1);
 puts;
 

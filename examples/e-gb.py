@@ -5,7 +5,7 @@
 
 #import sys;
 
-from jas import Ring, PolyRing, Ideal
+from jas import Ring, PolyRing
 from jas import ZZ
 from jas import startLog
 
@@ -15,7 +15,7 @@ r = PolyRing( ZZ(), "x4,x3,x2,x1", PolyRing.lex );
 print "Ring: " + str(r);
 print;
 
-[one,x4,x3,x2,x1] = r.gens();
+#is automatic: [one,x4,x3,x2,x1] = r.gens();
 
 f1 = x1 + 2 * x2 + 3 * x3 + 4 * x4 + 3;
 f2 =      3 * x2 + 2 * x3 +     x4 + 2;

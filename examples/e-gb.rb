@@ -11,7 +11,7 @@ r = PolyRing.new( ZZ(), "x4,x3,x2,x1", PolyRing.lex );
 puts "Ring: " + str(r);
 puts;
 
-one,x4,x3,x2,x1 = r.gens();
+#is automatic: one,x4,x3,x2,x1 = r.gens();
 
 f1 = x1 + 2 * x2 + 3 * x3 + 4 * x4 + 3;
 f2 =      3 * x2 + 2 * x3 +     x4 + 2;

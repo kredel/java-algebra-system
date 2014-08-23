@@ -5,15 +5,15 @@
 
 import sys;
 
-from jas import Ring
-from jas import Ideal
+from jas import QQ, PolyRing
 from jas import startLog
 from jas import terminate
 
 
 # ideal elimination example
 
-r = Ring( "Rat(x,y,z) G" );
+#r = Ring( "Rat(x,y,z) G" );
+r = PolyRing( QQ(), "(x,y,z)", PolyRing.grad );
 print "Ring: " + str(r);
 print;
 
@@ -25,11 +25,18 @@ ps1 = """
 )
 """;
 
-F1 = r.ideal( ps1 );
+ff = [ x**2 - 2,
+       y**2 - 3,
+       z**3 - x * y
+     ]
+
+#F1 = r.ideal( ps1 );
+F1 = r.ideal( "", ff );
 print "Ideal: " + str(F1);
 print;
 
-e = Ring( "Rat(z) G" );
+#e = Ring( "Rat(z) G" );
+e = PolyRing( QQ(), "(x,z)", PolyRing.grad );
 print "Ring: " + str(e);
 print;
 
