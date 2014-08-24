@@ -7,11 +7,11 @@ require "examples/jas"
 
 # polynomial examples: absolute factorization over Q
 
-r = Ring.new( "Q(x) L" );
+r = PolyRing.new( QQ(), "(x)", PolyRing.lex );
 puts "Ring: " + str(r);
 puts;
 
-one,x = r.gens();
+#is automatic: one,x = r.gens();
 
 #f = x**5 - 1;
 #f = x**6 - 1;
@@ -37,15 +37,10 @@ f = f*f;
 #f = x**10 - 212 * x**9 - 1760 * x**8 + 529 * x**7 - 93699 * x**6 - 726220 * x**5 + 37740 * x**4 + 169141 * x**3 + 24517680 * x**2 - 9472740;
 
 #f = x**2 + 1;
-
 #f = x**3 - x**2 + x - 1;
-
 #f = x**6 - 5 * x**4 + 5 * x**2 + 4;
-
 #f = x**8 + 4 * x**6 + 8 * x**4 - 8 * x**2 + 4;
-
 #f = x**4 + 2 * x**2 - 4 * x + 2;
-
 #f = x**16 + 272 * x**12 - 7072 * x**8 + 3207424 * x**4 + 12960000;
 #f = x**16 + 16 * x**12 + 96 * x**8 + 256 * x**4 + 256;
 #f = x**24 + 272 * x**20 - 7072 * x**16 + 3207424 * x**12 + 12960000 * x**8;
