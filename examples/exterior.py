@@ -126,15 +126,19 @@ print "SolvableIdeal: " + str(f);
 print;
 
 
-rg = f.leftGB();
-print "seq left GB:", rg;
+lg = f.leftGB();
+print "seq left GB:", lg;
 print;
 
+tg = f.twosidedGB();
+print "seq twosided GB:", tg;
+print;
 
-#rg = f.twosidedGB();
-#print "seq twosided GB:", rg;
-#print;
+rg = f.rightGB();
+print "seq right GB:", rg;
+print;
 
-#rg = f.rightGB();
-#print "seq right GB:", rg;
-#print;
+print "left == right GB:      " + str(lg == rg);
+print "left == twosided GB:   " + str(lg == tg);
+print "two sided == right GB: " + str(tg == rg);
+

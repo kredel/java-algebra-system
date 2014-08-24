@@ -124,17 +124,20 @@ f = r.ideal(ps);
 puts "SolvableIdeal: " + str(f);
 puts;
 
-startLog();
+#startLog();
 
-rg = f.leftGB();
-puts "seq left GB: " + str(rg);
+lg = f.leftGB();
+puts "seq left GB: " + str(lg);
 puts;
 
-
-rg = f.twosidedGB();
-puts "seq twosided GB: " + str(rg);
+tg = f.twosidedGB();
+puts "seq twosided GB: " + str(tg);
 puts;
 
 rg = f.rightGB();
 puts "seq right GB: " + str(rg);
 puts;
+
+puts "left == right GB:      " + str(lg == rg);
+puts "left == twosided GB:   " + str(lg == tg);
+puts "two sided == right GB: " + str(tg == rg);

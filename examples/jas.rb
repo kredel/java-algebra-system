@@ -689,6 +689,9 @@ Compare two ring elements.
 Test if two ring elements are equal.
 =end
     def ===(other)
+        if not other.is_a? RingElem
+           return false;
+        end
         return (self <=> other) == 0; 
     end
 
@@ -2193,7 +2196,7 @@ Represents a JAS polynomial ideal: PolynomialList and Ideal.
 Methods for Groebner bases, ideal sum, intersection and others.
 =end
 class SimIdeal
-
+    include Comparable
     attr_reader :pset, :ring, :list, :roots, :prime, :primary #, :ideal
 
 =begin rdoc
@@ -2228,14 +2231,18 @@ Create a string representation.
 Compare two ideals.
 =end
     def <=>(other)
-        s,o = self, other
-        return s.pset.compareTo( o.pset ); 
+        s = SimIdeal.new(@pset);
+        o = SimIdeal.new(other.pset);
+        return s.compareTo(o);
     end
 
 =begin rdoc
-Compare two ideals.
+Test if two ideals are equal.
 =end
     def ===(other)
+        if not other.is_a? SimIdeal
+           return false;
+        end
         return (self <=> other) == 0; 
     end
 
@@ -3280,7 +3287,7 @@ Represents a JAS solvable polynomial ideal.
 Methods for left, right two-sided Groebner basees and others.
 =end
 class SolvIdeal
-
+    include Comparable
     attr_reader :pset, :ring, :list #, :ideal
 
 =begin rdoc
@@ -3304,6 +3311,26 @@ Create a string representation.
 =end
     def to_s()
         return @pset.toScript();
+    end
+
+=begin rdoc
+Compare two ideals.
+=end
+    def <=>(other)
+        s = SolvableIdeal.new(@pset);
+        o = SolvableIdeal.new(other.pset);
+        return s.compareTo(o); 
+    end
+
+=begin rdoc
+Test if two ideals are equal.
+=end
+    def ===(other)
+        if not other.is_a? SolvIdeal
+           return false;
+        end
+        s, o = self, other;
+        return (s <=> o) == 0; 
     end
 
 =begin rdoc
