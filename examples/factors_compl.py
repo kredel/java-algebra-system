@@ -6,30 +6,21 @@
 import sys;
 
 from java.lang import System
-from java.lang import Integer
 
-from jas import Ring
-from jas import PolyRing
-from jas import Ideal
-from jas import terminate
-from jas import startLog
-
-from jas import QQ, DD, CR
+from jas import Ring, PolyRing
+from jas import ZM, QQ, AN, RF, CR
+from jas import terminate, startLog
 
 # polynomial examples: complex factorization via algebraic factorization
 
 r = PolyRing( CR(QQ()), "x", PolyRing.lex );
-
 print "Ring: " + str(r);
 print;
-
 [one,I,x] = r.gens();
 
 
 f1 = x**3 - 2;
-
 f2 = ( x - I ) * ( x + I );
-
 f3 = ( x**3 - 2 * I );
 
 #f = f1**2 * f2 * f3;
@@ -58,6 +49,7 @@ for h, i in R.iteritems():
     h = h**i;
     g = g*h;
 #print "g = ", g;
+print
 
 if cmp(f,g) == 0:
     print "complex factor time =", t, "milliseconds,", "isFactors(f,g): true" ;

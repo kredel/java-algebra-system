@@ -12,6 +12,8 @@ puts "Qr    = " + str(Qr);
 e,a = Qr.gens();
 puts "e     = " + str(e);
 puts "a     = " + str(a);
+puts;
+
 imag = a**2 + 1;
 puts "imag  = " + str(imag);
 Qi = AN(imag,true);
@@ -21,11 +23,9 @@ puts "one   = " + str(one);
 puts "i     = " + str(i);
 puts;
 
-
 r = PolyRing.new(Qi,"x",PolyRing.lex)
 puts "r    = " + str(r);
-
-one,i,x = r.gens();
+#is automatic: one,i,x = r.gens();
 puts "one   = " + str(one);
 puts "i     = " + str(i);
 puts "x     = " + str(x);
@@ -71,7 +71,7 @@ startLog();
 t = System.currentTimeMillis();
 g = r.factorsAbsolute(f);
 t = System.currentTimeMillis() - t;
-puts "G = ", g.toScript();
+puts "G = " + g.toScript();
 puts
 puts "factor time = " + str(t) + " milliseconds";
 puts

@@ -4,22 +4,18 @@
 #
 
 from java.lang import System
-from java.lang import Integer
 
-from jas import Ring
-from jas import Ideal
-from jas import terminate
-from jas import startLog
+from jas import QQ, Ring, PolyRing
+from jas import terminate, startLog
 
 # polynomial examples: absolute factorization over Q
 
-#r = Ring( "Rat(x) L" );
-r = Ring( "Q(x,y) L" );
-
+#r = Ring( "Q(x,y) L" );
+r = PolyRing( QQ(), "(x,y)", PolyRing.lex );
 print "Ring: " + str(r);
 print;
 
-[one,x,y] = r.gens();
+#is automatic: [one,x,y] = r.gens();
 
 f1 = x**2 + y**2;
 f2 = x**3 + y**2;
@@ -33,7 +29,6 @@ print;
 startLog();
 
 t = System.currentTimeMillis();
-#G = r.squarefreeFactors(f);
 G = r.factorsAbsolute(f);
 t = System.currentTimeMillis() - t;
 print "G = ", G.toScript();

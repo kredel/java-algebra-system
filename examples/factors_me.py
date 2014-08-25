@@ -4,26 +4,17 @@
 #
 
 from java.lang import System
-from java.lang import Integer
 
-from jas import Ring
-from jas import Ideal
-from jas import terminate
-from jas import startLog
+from jas import Ring, PolyRing
+from jas import ZZ, ZM, QQ, AN, RF, CR
+from jas import terminate, startLog
 
 # polynomial examples: factorization
 
-#r = Ring( "Mod 1152921504606846883 (x,y,z) L" );
-#r = Ring( "Rat(x,y,z) L" );
-#r = Ring( "C(x,y,z) L" );
-#r = Ring( "Z(x,y,z) L" );
-#r = Ring( "Q(x) L" );
-r = Ring( "Z(x) L" );
-#r = Ring( "Mod 11 (x) L" );
-
+#r = Ring( "Z(x) L" );
+r = PolyRing( ZZ(), "(x)", PolyRing.lex );
 print "Ring: " + str(r);
 print;
-
 [one,x] = r.gens();
 
 #f = x**15 - 1;
@@ -45,7 +36,6 @@ print;
 #f = x**10 - 212 * x**9 - 1760 * x**8 + 529 * x**7 - 93699 * x**6 - 726220 * x**5 + 37740 * x**4 + 169141 * x**3 + 24517680 * x**2 - 9472740;
 
 #f = x**4 - 1;
-
 #f = x**3 - x**2 + x - 1;
 #f = x**8 + 4 * x**6 + 8 * x**4 - 8 * x**2 + 4;
 #f = x**16 + 272 * x**12 - 7072 * x**8 + 3207424 * x**4 + 12960000;
@@ -56,7 +46,6 @@ print;
 f = x**16 - 1;
 # == 
 #f = (-1+x)*(1+x)*(1+x**2)*(1+x**4)*(1+x**8);
-
 
 print "f = ", f;
 print;
@@ -76,6 +65,7 @@ for h, i in G.iteritems():
     h = h**i;
     g = g*h;
 #print "g = ", g;
+print
 
 if cmp(f,g) == 0:
     print "factor time =", t, "milliseconds,", "isFactors(f,g): true" ;

@@ -7,11 +7,12 @@ require "examples/jas"
 
 # polynomial examples: absolute factorization over Q
 
-r = Ring.new( "Q(x,y) L" );
+#r = Ring.new( "Q(x,y) L" );
+r = PolyRing.new( QQ(), "(x,y)", PolyRing.lex );
 puts "Ring: " + str(r);
 puts;
 
-one,x,y = r.gens();
+#is automatic: one,x,y = r.gens();
 
 f1 = x**2 + y**2;
 f2 = x**3 + y**2;
@@ -25,10 +26,9 @@ puts;
 startLog();
 
 t = System.currentTimeMillis();
-#G = r.squarefreeFactors(f);
 G = r.factorsAbsolute(f);
 t = System.currentTimeMillis() - t;
-puts "G = " + str(G.toScript());
+puts "G = " + G.toScript();
 puts
 puts "factor time = " + str(t) + " milliseconds";
 puts

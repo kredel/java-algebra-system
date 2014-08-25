@@ -6,21 +6,16 @@
 import sys
 
 from java.lang import System
-from java.lang import Integer
 
-from jas import Ring
-from jas import PolyRing
-from jas import Ideal
-from jas import QQ, AN, RF
-from jas import terminate
-from jas import startLog
+from jas import QQ, AN, RF, Ring, PolyRing
+from jas import terminate, startLog
 
 # polynomial examples: factorization over Q(sqrt(2))(x)(sqrt(x))[y]
 
 Q = PolyRing(QQ(),"w2",PolyRing.lex);
 print "Q     = " + str(Q);
 [e,a] = Q.gens();
-#print "e     = " + str(e);
+print "e     = " + str(e);
 print "a     = " + str(a);
 
 root = a**2 - 2;
@@ -68,12 +63,10 @@ print "Q2x   = " + str(Q2x.factory());
 #print "wx    = " + str(wx);
 print;
 
-
 Yr = PolyRing(Q2x,"y",PolyRing.lex)
 print "Yr    = " + str(Yr);
-
-[e,w2,x,wx,y] = Yr.gens();
-print "e     = " + str(e);
+#is automatic: [e,w2,x,wx,y] = Yr.gens();
+print "e     = " + str(one);
 print "w2    = " + str(w2);
 print "x     = " + str(x);
 print "wx    = " + str(wx);
@@ -116,6 +109,7 @@ for h, i in G.iteritems():
     h = h**i;
     g = g*h;
 #print "g = ", g;
+print;
 
 if cmp(f,g) == 0:
     print "factor time =", t, "milliseconds,", "isFactors(f,g): true" ;
@@ -123,6 +117,7 @@ else:
     print "factor time =", t, "milliseconds,", "isFactors(f,g): ",  cmp(f,g);
 print;
 
+terminate();
 sys.exit();
 
 t = System.currentTimeMillis();

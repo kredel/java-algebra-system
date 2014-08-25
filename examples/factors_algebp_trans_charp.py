@@ -6,14 +6,10 @@
 import sys
 
 from java.lang import System
-from java.lang import Integer
 
-from jas import Ring
-from jas import PolyRing
-from jas import Ideal
+from jas import Ring, PolyRing
 from jas import ZM, QQ, AN, RF
-from jas import terminate
-from jas import startLog
+from jas import terminate, startLog
 
 # polynomial examples: factorization over Z_p(x)(sqrt{p}(x))[y]
 
@@ -109,7 +105,8 @@ for h, i in G.iteritems():
         print "h    = ", h;
     h = h**i;
     g = g*h;
-print "g = ", g;
+#print "g = ", g;
+print;
 
 if cmp(f,g) == 0:
     print "factor time =", t, "milliseconds,", "isFactors(f,g): true" ;

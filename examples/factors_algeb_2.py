@@ -6,46 +6,43 @@
 import sys
 
 from java.lang import System
-from java.lang import Integer
 
-from jas import Ring
-from jas import PolyRing
-from jas import Ideal
-from jas import QQ, AN
-from jas import terminate
-from jas import startLog
+from jas import QQ, AN, Ring, PolyRing
+from jas import terminate, startLog
 
 # polynomial examples: factorization over Q(i)(sqrt2)
 
 Q = PolyRing(QQ(),"i",PolyRing.lex);
 print "Q     = " + str(Q);
-Q.inject_variables();
+#is automatic: Q.inject_variables();
 print "i     = " + str(i);
+
 imag = i**2 + 1;
 print "imag  = " + str(imag);
 Qi = AN(imag,field=True);
 print "Qi    = " + str(Qi.factory());
-Qi.inject_variables();
+#is automatic: Qi.inject_variables();
 print "i     = " + str(i);
 print;
 
 Wr = PolyRing(Qi,"w2",PolyRing.lex)
 print "Wr    = " + str(Wr);
-Wr.inject_variables();
+#is automatic: Wr.inject_variables();
 print "i     = " + str(i);
 print "w2    = " + str(w2);
+
 w2p = w2**2 - 2;
 print "w2p   = " + str(w2p);
 Qw2 = AN(w2p,field=True);
 print "Qw2   = " + str(Qw2.factory());
-Qw2.inject_variables();
+#is automatic: Qw2.inject_variables();
 print "i     = " + str(i);
 print "w2    = " + str(w2);
 print;
 
 Qiw2 = PolyRing(Qw2,"x",PolyRing.lex)
 print "Qiw2  = " + str(Qiw2);
-Qiw2.inject_variables();
+#is automatic: Qiw2.inject_variables();
 print "i     = " + str(i);
 print "w2    = " + str(w2);
 print "x     = " + str(x);
@@ -72,6 +69,7 @@ for h, i in G.iteritems():
     h = h**i;
     g = g*h;
 #print "g = ", g;
+print;
 
 if cmp(f,g) == 0:
     print "factor time =", t, "milliseconds,", "isFactors(f,g): true" ;

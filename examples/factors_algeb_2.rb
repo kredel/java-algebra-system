@@ -12,6 +12,7 @@ puts "Q     = " + str(Q);
 e,a = Q.gens();
 puts "e     = " + str(e);
 puts "a     = " + str(a);
+
 imag = a**2 + 1;
 puts "imag  = " + str(imag);
 Qi = AN(imag,true);
@@ -27,6 +28,7 @@ e,a,b = Wr.gens();
 puts "e     = " + str(e);
 puts "a     = " + str(a);
 puts "b     = " + str(b);
+
 w2 = b**2 - 2;
 puts "w2    = " + str(w2);
 Qw2 = AN(w2,true);
@@ -39,7 +41,6 @@ puts;
 
 Qiw2 = PolyRing.new(Qw2,"x",PolyRing.lex)
 puts "Qiw2  = " + str(Qiw2);
-
 one,i,w2,x  = Qiw2.gens();
 puts "one   = " + str(one);
 puts "i     = " + str(i);

@@ -6,22 +6,17 @@
 import sys
 
 from java.lang import System
-from java.lang import Integer
 
-from jas import Ring
-from jas import PolyRing
-from jas import Ideal
-from jas import QQ, AN, RF, EF
-from jas import terminate
-from jas import startLog
+from jas import QQ, AN, RF, EF, Ring, PolyRing
+from jas import terminate, startLog
 
 # polynomial examples: factorization over Q(sqrt(2))(x)(sqrt(x))[y]
 
 Yr = EF(QQ()).extend("w2","w2^2 - 2").extend("x").extend("wx","wx^2 - x").polynomial("y").build();
-#print "Yr    = " + str(Yr);
-#print
+print "Yr    = " + str(Yr);
+print
 
-[one,w2,x,wx,y] = Yr.gens();
+#is automatic: [one,w2,x,wx,y] = Yr.gens();
 print "one   = " + str(one);
 print "w2    = " + str(w2);
 print "x     = " + str(x);
@@ -66,6 +61,7 @@ for h, i in G.iteritems():
     h = h**i;
     g = g*h;
 #print "g = ", g;
+print;
 
 if cmp(f,g) == 0:
     print "factor time =", t, "milliseconds,", "isFactors(f,g): true" ;

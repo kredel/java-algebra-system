@@ -5,8 +5,6 @@
 
 require "examples/jas"
 
-#startLog();
-
 # polynomial examples: factorization over Q(sqrt(2))(x)(sqrt(x))[y]
 
 Q = PolyRing.new(QQ(),"w2",PolyRing.lex);
@@ -60,12 +58,10 @@ ex2,w2x2,ax2,wx = Q2x.gens();
 #puts "wx    = " + str(wx);
 puts;
 
-
 Yr = PolyRing.new(Q2x,"y",PolyRing.lex)
 puts "Yr    = " + str(Yr);
-
-e,w2,x,wx,y = Yr.gens();
-puts "e     = " + str(e);
+#is automatic: e,w2,x,wx,y = Yr.gens();
+puts "e     = " + str(one);
 puts "w2    = " + str(w2);
 puts "x     = " + str(x);
 puts "wx    = " + str(wx);
@@ -83,7 +79,7 @@ f = ( y**2 - x ) * ( y**2 - 2 );
 #f = ( y**2 - (1,2) );
 #f = ( y**2 - 1/x ) * ( y**2 - (1,2) );
 
-puts "f = ", f;
+puts "f = " + str(f);
 puts;
 
 #sys.exit();
@@ -110,6 +106,7 @@ for h, i in G do
     g = g*h;
 end
 #puts "g    = " +  str(g);
+puts;
 
 if f == g then
     puts "factor time = " + str(t) + " milliseconds," + " isFactors(f,g): true" ;

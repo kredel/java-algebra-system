@@ -6,14 +6,10 @@
 import sys
 
 from java.lang import System
-from java.lang import Integer
 
-from jas import Ring
-from jas import PolyRing
-from jas import Ideal
+from jas import Ring, PolyRing
 from jas import ZM, QQ, AN, RF, GF
-from jas import terminate
-from jas import startLog
+from jas import terminate, startLog
 
 # polynomial examples: factorization over Z_p(sqrt(2))(x)(sqrt(x))[y]
 
@@ -57,8 +53,8 @@ print "ax    = " + str(ax);
 print "wx    = " + str(wx);
 print;
 
-#rootx = wx**5 - ax;
-rootx = wx**2 - ax;
+#rootx = wx**5 - ax; # difficult 
+rootx = wx**2 - ax; # simple
 print "rootx = " + str(rootx);
 Q2x = AN(rootx,field=True);
 print "Q2x   = " + str(Q2x.factory());
@@ -68,7 +64,6 @@ print "Q2x   = " + str(Q2x.factory());
 #print "ax2   = " + str(ax2);
 #print "wx    = " + str(wx);
 print;
-
 
 Yr = PolyRing(Q2x,"y",PolyRing.lex)
 print "Yr    = " + str(Yr);
@@ -118,6 +113,7 @@ for h, i in G.iteritems():
     h = h**i;
     g = g*h;
 #print "g = ", g;
+print;
 
 if cmp(f,g) == 0:
     print "factor time =", t, "milliseconds,", "isFactors(f,g): true" ;

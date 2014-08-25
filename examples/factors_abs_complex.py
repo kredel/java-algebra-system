@@ -6,14 +6,10 @@
 import sys;
 
 from java.lang import System
-from java.lang import Integer
 
-from jas import Ring
-from jas import PolyRing
-from jas import Ideal
+from jas import Ring, PolyRing
 from jas import QQ, AN
-from jas import terminate
-from jas import startLog
+from jas import terminate, startLog
 
 # polynomial examples: absolute factorization over Q(i)
 
@@ -22,6 +18,8 @@ print "Qr    = " + str(Qr);
 [e,a] = Qr.gens();
 print "e     = " + str(e);
 print "a     = " + str(a);
+print;
+
 imag = a**2 + 1;
 print "imag  = " + str(imag);
 Qi = AN(imag,field=True);
@@ -31,11 +29,9 @@ print "one   = " + str(one);
 print "i     = " + str(i);
 print;
 
-
 r = PolyRing(Qi,"x",PolyRing.lex)
 print "r    = " + str(r);
-
-[one,i,x] = r.gens();
+#is automatic: [one,i,x] = r.gens();
 print "one   = " + str(one);
 print "i     = " + str(i);
 print "x     = " + str(x);

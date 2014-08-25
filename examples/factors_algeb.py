@@ -4,12 +4,9 @@
 #
 
 from java.lang import System
-from java.lang import Integer
 
 from jas import PolyRing, AN, QQ
-from jas import Ideal
-from jas import terminate
-from jas import startLog
+from jas import terminate, startLog
 
 # polynomial examples: factorization over Q(i)
 
@@ -17,14 +14,12 @@ from jas import startLog
 #r = Ring( "AN[ (a) (4 a^2 + 1) ] (x) L" );
 #r = Ring( "AN[ (a) (a^4 + 2 a^2 - 4 a + 2) ] (x) L" );
 
-#print "Ring: " + str(r);
-#print;
-
 Qr = PolyRing(QQ(),"i",PolyRing.lex);
 print "Qr    = " + str(Qr);
 [e,a] = Qr.gens();
 print "e     = " + str(e);
 print "a     = " + str(a);
+
 imag = a**2 + 1;
 print "imag  = " + str(imag);
 Qi = AN(imag,field=True);
@@ -42,8 +37,7 @@ print;
 
 r = PolyRing(Qi,"x",PolyRing.lex)
 print "r    = " + str(r);
-
-[one,i,x] = r.gens();
+#is automatic: [one,i,x] = r.gens();
 print "one   = " + str(one);
 print "i     = " + str(i);
 print "x     = " + str(x);
@@ -68,9 +62,7 @@ print "x     = " + str(x);
 #f = x**10 - 212 * x**9 - 1760 * x**8 + 529 * x**7 - 93699 * x**6 - 726220 * x**5 + 37740 * x**4 + 169141 * x**3 + 24517680 * x**2 - 9472740;
 
 #f = x**4 + 1;
-
 #f = x**3 - x**2 + x - 1;
-
 #f = x**8 + 4 * x**6 + 8 * x**4 - 8 * x**2 + 4;
 
 f = x**6 - 5 * x**4 + 5 * x**2 + 4;
@@ -88,7 +80,6 @@ print;
 startLog();
 
 t = System.currentTimeMillis();
-#G = r.squarefreeFactors(f);
 G = r.factors(f);
 t = System.currentTimeMillis() - t;
 print "#G = ", len(G);
@@ -96,10 +87,11 @@ print "#G = ", len(G);
 
 g = one;
 for h, i in G.iteritems():
-    print "h**i = (", h, ")**" + str(i);
+    print "h**i = ", h, "**" + str(i);
     h = h**i;
     g = g*h;
 #print "g = ", g;
+print;
 
 if cmp(f,g) == 0:
     print "factor time =", t, "milliseconds,", "isFactors(f,g): true" ;

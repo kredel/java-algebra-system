@@ -11,14 +11,12 @@ require "examples/jas"
 #r = Ring( "AN[ (a) (4 a^2 + 1) ] (x) L" );
 #r = Ring( "AN[ (a) (a^4 + 2 a^2 - 4 a + 2) ] (x) L" );
 
-#puts "Ring: " + str(r);
-#puts;
-
 Qr = PolyRing.new(QQ(),"i",PolyRing.lex);
 puts "Qr    = " + str(Qr);
 e,a = Qr.gens();
 puts "e     = " + str(e);
 puts "a     = " + str(a);
+
 imag = a**2 + 1;
 puts "imag  = " + str(imag);
 Qi = AN(imag,true);
@@ -36,8 +34,7 @@ puts;
 
 r = PolyRing.new(Qi,"x",PolyRing.lex)
 puts "r    = " + str(r);
-
-one,i,x = r.gens();
+#is automatic: one,i,x = r.gens();
 puts "one   = " + str(one);
 puts "i     = " + str(i);
 puts "x     = " + str(x);
@@ -82,7 +79,6 @@ puts;
 startLog();
 
 t = System.currentTimeMillis();
-#G = r.squarefreeFactors(f);
 G = r.factors(f);
 t = System.currentTimeMillis() - t;
 puts "#G = " + str(G.size);
@@ -91,7 +87,7 @@ puts;
 
 g = one;
 for h, i in G
-    puts "h**i = (" + str(h) + ")**" + str(i);
+    puts "h**i = " + str(h) + "**" + str(i);
     h = h**i;
     g = g*h;
 end

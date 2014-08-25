@@ -5,15 +5,13 @@
 
 require "examples/jas"
 
-#startLog();
-
 # polynomial examples: factorization over Q(sqrt(2))(x)(sqrt(x))[y]
 
 Yr = EF.new(QQ()).extend("w2","w2^2 - 2").extend("x").extend("wx","wx^2 - x").polynomial("y").build();
 puts "Yr    = " + str(Yr);
 puts
 
-one,w2,x,wx,y = Yr.gens();
+#is automatic: one,w2,x,wx,y = Yr.gens();
 puts "one   = " + str(one);
 puts "w2    = " + str(w2);
 puts "x     = " + str(x);
@@ -59,6 +57,7 @@ for h, i in G do
     g = g*h;
 end
 #puts "g    = " +  str(g);
+puts;
 
 if f == g then
     puts "factor time = " + str(t) + " milliseconds," + " isFactors(f,g): true" ;
