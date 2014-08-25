@@ -161,11 +161,10 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
             //sb.append("( " + ap.toScript() + " )");
             sb.append(ap.toScript());
         }
-        sb.append("   ## over " + afac.toScript() + "\n");
+        sb.append("   #:: " + afac.toScript() + "");
         if (arfactors == null) {
             return sb.toString();
         }
-        first = true;
         for (Factors<AlgebraicNumber<C>> arp : arfactors) {
             if (first) {
                 first = false;
