@@ -61,10 +61,13 @@
 </target>
 
 <target name="usage" >
+  <echo message="ant compile"  />
+  <echo message="ant run -Dclass=&lt;class&gt; -Dargs='command-line arguments'"  />
   <echo message="ant &lt;target&gt;"  />
-  <echo message="ant run -Dclass=&lt;class&gt;"  />
   <echo message="basedir = ${basedir}"  />
   <echo message="libs = ${libs}"  />
+  <echo message="java -version = ${ant.java.version}"  />
+  <!--echo message="java.home = ${java.home}"  /-->
   <!--echoproperties /-->
 </target>
 
@@ -184,7 +187,9 @@
 <target name="run" depends="compile" >
   <java  classname="${class}" 
          classpath="${cp}" 
-         fork="yes" />
+         fork="yes" >
+    <arg line="${args}"/>
+  </java>
 </target>
 
 <target name="testsingle"
