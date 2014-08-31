@@ -5,19 +5,17 @@
 
 require "examples/jas"
 
-#startLog();
-
-# polynomial examples: factorization
+# polynomial examples: recursive factorization
 
 
 cr = PolyRing.new( QQ(), "x", PolyRing.lex );
 puts "Ring: " + str(cr);
-
+puts;
 r = PolyRing.new( cr, "y,z", PolyRing.lex );
 puts "Ring: " + str(r);
 puts
 
-one,x,y,z = r.gens();
+#one,x,y,z = r.gens();
 
 #f = z * ( y + 1 )**2 * ( x**2 + x + 1 )**3;
 #f = z * ( y + 1 ) * ( x**2 + x + 1 );

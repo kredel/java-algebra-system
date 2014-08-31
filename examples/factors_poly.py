@@ -4,17 +4,15 @@
 #
 
 from java.lang import System
-from java.lang import Integer
 
 from jas import PolyRing, QQ
-from jas import terminate
-from jas import startLog
+from jas import terminate, startLog
 
-# polynomial examples: factorization
+# polynomial examples: recursive factorization
 
 cr = PolyRing(QQ(),"x",PolyRing.lex );
 print "Ring cr: " + str(cr);
-
+print;
 r = PolyRing(cr,"y,z",PolyRing.lex );
 print "Ring: " + str(r);
 print;

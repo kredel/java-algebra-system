@@ -5,14 +5,12 @@
 
 require "examples/jas"
 
-#startLog();
+# GB examples
 
-# ? example
-
-#r = Ring.new( "Rat(t,x,y,z) L" );
 #r = Ring.new( "Z(t,x,y,z) L" );
 #r = Ring.new( "Mod 11(t,x,y,z) L" );
-r = Ring.new( "Rat(t,x,y) L" );
+#r = Ring.new( "Rat(t,x,y) L" );
+r = PolyRing.new( QQ(), "t,x,y", PolyRing.lex );
 puts "Ring: " + str(r);
 puts;
 
@@ -44,7 +42,7 @@ puts;
 startLog();
 
 rg = f.GB();
-puts "seq Output:", rg;
+puts "seq GB:", rg;
 puts;
 
 terminate();

@@ -5,10 +5,7 @@
 
 require "examples/jas"
 
-#startLog();
-
-# polynomial examples: factorization
-
+# polynomial examples: multivariate factorization
 
 r = PolyRing.new( ZZ(), "x,y,z", PolyRing.lex );
 puts "Ring: " + str(r);

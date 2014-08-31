@@ -4,22 +4,19 @@
 #
 
 from java.lang import System
-from java.lang import Integer
 
-from jas import Ring
-from jas import Ideal
-from jas import terminate
-from jas import startLog
+from jas import PolyRing, QQ
+from jas import terminate, startLog
 
 # polynomial examples: factorization over Q
 
 #r = Ring( "Rat(x) L" );
-r = Ring( "Q(x) L" );
-
+#r = Ring( "Q(x) L" );
+r = PolyRing( QQ(), "x", PolyRing.lex );
 print "Ring: " + str(r);
 print;
 
-[one,x] = r.gens();
+#[one,x] = r.gens();
 
 #f = x**15 - 1;
 #f = x * ( x + 1 )**2 * ( x**2 + x + 1 )**3;

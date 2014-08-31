@@ -4,27 +4,22 @@
 #
 
 from java.lang import System
-from java.lang import Integer
 
-from jas import Ring
-from jas import Ideal
-from jas import terminate
-from jas import startLog
+from jas import PolyRing, ZZ, GF, QQ
+from jas import terminate, startLog
 
-# polynomial examples: factorization
+# polynomial examples: multivariate factorization
 
 #r = Ring( "Mod 1152921504606846883 (x,y,z) L" );
 #r = Ring( "Rat(x,y,z) L" );
 #r = Ring( "C(x,y,z) L" );
-r = Ring( "Z(x,y,z) L" );
-#r = Ring( "Z(x) L" );
 #r = Ring( "Mod 3 (x,y,z) L" );
-#r = Ring( "Z(y,x) L" );
-
+#r = Ring( "Z(x,y,z) L" );
+r = PolyRing( ZZ(), "x,y,z", PolyRing.lex );
 print "Ring: " + str(r);
 print;
 
-[one,x,y,z] = r.gens();
+#[one,x,y,z] = r.gens();
 
 #f = z * ( y + 1 )**2 * ( x**2 + x + 1 )**3;
 #f = z * ( y + 1 ) * ( x**2 + x + 1 );

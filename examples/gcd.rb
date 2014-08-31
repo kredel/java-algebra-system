@@ -8,14 +8,13 @@ require "examples/jas"
 # polynomial examples: gcd
 
 #r = PolyRing.new( ZM(1152921504606846883), "(x,y,z)", PolyRing.lex );
-r = PolyRing.new( QQ(), "(x,y,z)", PolyRing.lex );
 #r = PolyRing.new( CC(), "(x,y,z)", PolyRing.lex );
 #r = PolyRing.new( ZZ(), "(x,y,z)", PolyRing.lex );
-
+r = PolyRing.new( QQ(), "x,y,z", PolyRing.lex );
 puts "Ring: " + str(r);
 puts;
 
-one,x,y,z = r.gens();
+#one,x,y,z = r.gens();
 
 a = r.random();
 b = r.random();
@@ -51,7 +50,7 @@ puts "gcd time = " + str(t) + " milliseconds" ;
 if r.ring.coFac.isField()
    m = c % d;
    #puts "m = " + str(m);
-   puts;
+   #puts;
    if m.isZERO()
       puts "isGcd(c,d): true" ;
    else

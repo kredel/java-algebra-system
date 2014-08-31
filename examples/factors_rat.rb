@@ -5,15 +5,13 @@
 
 require "examples/jas"
 
-#startLog();
-
 # polynomial examples: factorization over Q
 
 r = PolyRing.new( QQ(), "x", PolyRing.lex );
 puts "Ring: " + str(r);
 puts
 
-one,x = r.gens();
+#one,x = r.gens();
 
 #f = x**15 - 1;
 #f = x * ( x + 1 )**2 * ( x**2 + x + 1 )**3;

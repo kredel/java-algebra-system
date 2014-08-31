@@ -5,18 +5,15 @@
 
 import sys;
 
-from jas import Ring
-from jas import Ideal
-from jas import startLog
-from jas import terminate
+from jas import Ring, PolyRing, QQ, ZZ
+from jas import startLog, terminate
 
+# GB examples
 
-# ? example
-
-#r = Ring( "Rat(t,x,y,z) L" );
 #r = Ring( "Z(t,x,y,z) L" );
 #r = Ring( "Mod 11(t,x,y,z) L" );
-r = Ring( "Rat(t,x,y) L" );
+#r = Ring( "Rat(t,x,y) L" );
+r = PolyRing( QQ(), "t,x,y", PolyRing.lex );
 print "Ring: " + str(r);
 print;
 
@@ -45,11 +42,10 @@ f = r.ideal( ps );
 print "Ideal: " + str(f);
 print;
 
-#startLog();
+startLog();
 
 rg = f.GB();
-print "seq Output:", rg;
+print "seq GB:", rg;
 print;
 
 terminate();
-

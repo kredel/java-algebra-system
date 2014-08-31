@@ -3,13 +3,13 @@
 # $Id$
 #
 
-from jas import Ring
-from jas import Ideal
+from jas import PolyRing, Ring, QQ
+from jas import startLog
 
 # trinks 7 example
 
-r = Ring( "Rat(B,S,T,Z,P,W) L" );
-
+#r = Ring( "Rat(B,S,T,Z,P,W) L" );
+r = PolyRing( QQ(), "B,S,T,Z,P,W", PolyRing.lex); # or PolyRing.grad
 print "Ring: " + str(r);
 print;
 
@@ -25,10 +25,12 @@ ps = """
 ) 
 """;
 
-f = Ideal( r, ps );
+#f = Ideal( r, ps );
+f = r.ideal( ps );
 print "Ideal: " + str(f);
 print;
 
+startLog();
 g = f.GB();
 print "Groebner base:", g;
 print;
