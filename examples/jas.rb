@@ -2235,8 +2235,8 @@ Create a string representation.
 Compare two ideals.
 =end
     def <=>(other)
-        s = SimIdeal.new(@pset);
-        o = SimIdeal.new(other.pset);
+        s = Ideal.new(@pset);
+        o = Ideal.new(other.pset);
         return s.compareTo(o);
     end
 
