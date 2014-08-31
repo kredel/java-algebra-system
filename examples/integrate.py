@@ -8,8 +8,7 @@ import sys
 from java.lang import System
 
 from jas import Ring, RF, QQ, PolyRing
-from jas import terminate
-from jas import startLog
+from jas import terminate, startLog
 
 # elementary integration
 
@@ -37,9 +36,7 @@ f = ( x**7 - 24 * x**4 - 4 * x**2 + 8 * x - 8 ) / ( x**8 + 6 * x**6 + 12 * x**4 
 print "f = ", f;
 print;
 
-#sys.exit();
-
-#startLog();
+startLog();
 
 t = System.currentTimeMillis();
 e1 = r.integrate(f);
@@ -60,5 +57,3 @@ print
 
 #startLog();
 terminate();
-
-#sys.exit();

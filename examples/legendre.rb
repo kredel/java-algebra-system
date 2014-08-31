@@ -9,13 +9,13 @@ require "examples/jas"
 # P(1) = x
 # P(n) = 1/n [ (2n-1) * x * P(n-1) - (n-1) * P(n-2) ]
 
-r = Ring.new( "Q(x) L" );
+r = PolyRing.new( QQ(), "x", PolyRing.lex );
 #r = Ring.new( "C(x) L" );
 puts "Ring: " + str(r);
 puts;
 
 # sage like: with generators for the polynomial ring
-one,x = r.gens();
+#auto: one,x = r.gens();
 
 N = 10;
 P = [one,x];
@@ -30,5 +30,3 @@ for n in 0...N do
 end
 
 puts;
-
-#sys.exit();

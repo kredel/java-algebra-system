@@ -12,7 +12,6 @@
 import sys;
 
 from jas import Ring
-from jas import Ideal
 
 #r = Ring( "Rat(w1,w2,w3,w4,z1,z2) W( (0,0,0,0,1,1),(-2,-3,-1,-5,0,0) )" );
 #r = Ring( "Rat(w1,w2,w3,w4,z1,z2) W( (0,0,0,0,1,1),( 7, 3, 2, 1,0,0)*6 )" );
@@ -30,7 +29,7 @@ ps = """
 ) 
 """;
 
-f = Ideal( r, ps );
+f = r.ideal( ps );
 print "Ideal: " + str(f);
 print;
 
@@ -46,22 +45,11 @@ pf = """
 ) 
 """;
 
-fp = Ideal( r, pf );
+fp = r.ideal( pf );
 print "Ideal: " + str(fp);
 print;
 
 nf = fp.NF(rg);
 print "NFs: " + str(nf);
 print;
-
-#rg = f.parGB(2);
-#print "par Output:", rg;
-#print;
-
-#f.distClient(); # starts in background
-#rg = f.distGB(2);
-#print "dist Output:", rg;
-#print;
-
-#sys.exit();
 

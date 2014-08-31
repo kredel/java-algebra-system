@@ -5,15 +5,11 @@
 
 require "examples/jas"
 
-#startLog();
-
 # elementary integration
-
 
 r = PolyRing.new( QQ(), "x", PolyRing.lex );
 puts "Ring: " + str(r);
 puts
-
 rf = RF(r);
 puts "Ring: " + str(rf.factory());
 puts

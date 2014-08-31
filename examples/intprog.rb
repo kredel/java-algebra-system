@@ -25,7 +25,7 @@ ps = """
 ) 
 """;
 
-f = SimIdeal.new( r, ps );
+f = r.ideal( ps );
 puts "Ideal: " + str(f);
 puts;
 
@@ -42,7 +42,7 @@ pf = """
 ) 
 """;
 
-fp = SimIdeal.new( r, pf );
+fp = r.ideal( pf );
 puts "Ideal: " + str(fp);
 puts;
 
@@ -51,5 +51,4 @@ puts "NFs: " + str(nf);
 puts;
 
 terminate()
-#sys.exit();
 

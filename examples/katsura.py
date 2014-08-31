@@ -13,23 +13,15 @@ from edu.jas.gb import Katsura;
 knum = 4
 tnum = 2;
 
-#r = Ring( "Mod 19 (B,S,T,Z,P,W) L" );
-#r = Ring( "Mod 1152921504606846883 (B,S,T,Z,P,W) L" ); # 2^60-93
-#r = Ring( "Quat(B,S,T,Z,P,W) L" );
-#r = Ring( "Z(B,S,T,Z,P,W) L" );
-#r = Ring( "C(B,S,T,Z,P,W) L" );
-#r = Ring( "Rat(B,S,T,Z,P,W) L" );
-#print "Ring: " + str(r);
-#print;
-
 k = Katsura(knum);
 r = Ring( k.varList("Rat","G") );
+#r = Ring.new( k.varList("Mod 23","G") );
 print "Ring: " + str(r);
 print;
 
 ps = k.polyList();
 
-f = Ideal( r, ps );
+f = r.ideal( ps );
 print "Ideal: " + str(f);
 print;
 
@@ -42,12 +34,4 @@ for th in range(tnum,0,-1):
 rg = f.GB();
 #print "seq Output:", rg;
 print;
-
-
-# rg = f.distGB(2);
-#print "dist Output:", rg;
-#print;
-
-#f.distClient();
-
 

@@ -5,15 +5,14 @@
 
 import sys;
 
-from jas import Ring
-from jas import Ideal
-from jas import startLog
-from jas import terminate
+from jas import Ring, PolyRing, QQ
+from jas import startLog, terminate
 
 
 # ideal intersection example
 
-r = Ring( "Rat(x,y,z) L" );
+#r = Ring( "Rat(x,y,z) L" );
+r = PolyRing( QQ(), "(x,y,z)", PolyRing.lex );
 print "Ring: " + str(r);
 print;
 
@@ -58,4 +57,3 @@ print "rg1 intersect rg2 = ", ig;
 print;
 
 terminate();
-#sys.exit();

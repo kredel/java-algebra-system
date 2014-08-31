@@ -53,4 +53,3 @@ puts "rg1 intersect rg2 = " + str(ig);
 puts;
 
 terminate();
-#sys.exit();
