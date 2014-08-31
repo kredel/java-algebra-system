@@ -5,9 +5,7 @@
 
 require "examples/jas"
 
-#startLog();
-
-# polynomial examples: factorization over Z_p
+# polynomial examples: absolute factorization over Z_p
 
 #r = PolyRing.new( GF(19), "x", PolyRing.lex );
 r = PolyRing.new( GF(1152921504606846883), "x", PolyRing.lex );

@@ -5,14 +5,10 @@
 
 require "examples/jas"
 
-#startLog();
-
 # polynomial examples: factorization over Z_p
 
 #r = Ring( "Mod 1152921504606846883 (x) L" );
 #r = Ring( "Mod 19 (x) L" );
-#r = Ring( "Mod 19 (x) L" );
-
 r = PolyRing.new( GF(19), "x", PolyRing.lex );
 puts "Ring: " + str(r);
 puts
@@ -38,8 +34,8 @@ puts
 #f = x**10 - 212 * x**9 - 1760 * x**8 + 529 * x**7 - 93699 * x**6 - 726220 * x**5 + 37740 * x**4 + 169141 * x**3 + 24517680 * x**2 - 9472740;
 
 #f = x**4 - 1;
-f = x**2 + 1;
-#f = x**19 + x;
+#f = x**2 + 1;
+f = x**19 + x;
 
 #f = x**3 - x**2 + x - 1;
 
@@ -59,12 +55,13 @@ t = System.currentTimeMillis();
 #G = r.squarefreeFactors(f);
 G = r.factors(f);
 t = System.currentTimeMillis() - t;
-puts "G = ", str(G.map{ |h,i| str(h)+"**"+str(i)+" " });
-#puts "G = ", G;
+#puts "G = ", str(G.map{ |h,i| str(h)+"**"+str(i)+" " });
+puts "#G = ", G.size();
 #puts "factor time =", t, "milliseconds";
 
 puts;
 puts "f    = " + str(f);
+puts
 g = one;
 for h, i in G do
     if i > 1 then

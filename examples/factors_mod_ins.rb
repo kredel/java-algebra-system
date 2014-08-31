@@ -5,9 +5,7 @@
 
 require "examples/jas"
 
-#startLog();
-
-# polynomial examples: factorization over Z_p
+# polynomial examples: factorization over Z_p, with p-th root
 
 p = 5;
 cr = PolyRing.new( GF(p), "u", PolyRing.lex );
@@ -60,8 +58,8 @@ t = System.currentTimeMillis();
 G = r.squarefreeFactors(f);
 #G = r.factors(f);
 t = System.currentTimeMillis() - t;
-puts "G = ", str(G.map{ |h,i| str(h)+"**"+str(i)+" " });
-#puts "G = ", G;
+#puts "G = ", str(G.map{ |h,i| str(h)+"**"+str(i)+" " });
+puts "#G = ", G.size();
 puts "factor time = " + str(t) + " milliseconds";
 
 gu = u**2+u+1;

@@ -106,7 +106,7 @@ print "#G = ", str(len(G));
 ##     print "h**i = (", h, ")**" + str(i);
 ##     h = h**i;
 ##     g2 = g2*h;
-#print "g2 = ", g2;
+print "g = ", g;
 print;
 
 ## if cmp(g,g2) == 0:

@@ -7,20 +7,20 @@ import sys
 
 from java.lang import System
 
-from jas import PolyRing, ZM, QQ, RF
-from jas import terminate
-from jas import startLog
+from jas import PolyRing, ZM, QQ, RF, GF
+from jas import terminate, startLog
 
-# polynomial examples: factorization over Z_p
+# polynomial examples: factorization over Z_p, with p-th root
 
 p = 5;
-cr = PolyRing(ZM(p,field=True),"u",PolyRing.lex );
+cr = PolyRing(GF(p),"u",PolyRing.lex );
 print "Ring cr: " + str(cr);
 
-[one,u] = cr.gens();
+#[one,u] = cr.gens();
 
 fu = (u**2+u+1)**p;
 print "fu = ", fu;
+print;
 
 t = System.currentTimeMillis();
 G = cr.squarefreeFactors(fu);
@@ -43,7 +43,7 @@ print "Ring r: " + str(r);
 #print "Ring qr: " + str(qr.factory());
 print;
 
-[one,u,x] = r.gens();
+#[one,u,x] = r.gens();
 print "one = " + str(one);
 print "u   = " + str(u);
 print "x   = " + str(x);

@@ -64,7 +64,7 @@ for h, i in G.iteritems():
     print "h**i = (", h, ")**" + str(i);
     h = h**i;
     g = g*h;
-#print "g = ", g;
+print "g = ", g;
 print
 
 if cmp(f,g) == 0:
