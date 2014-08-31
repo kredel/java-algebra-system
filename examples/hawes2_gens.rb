@@ -17,8 +17,6 @@
 
 require "examples/jas"
 
-#startLog();
-
 # Hawes & Gibson example 2
 # rational function coefficients
 
@@ -27,7 +25,7 @@ r = PolyRing.new( PolyRing.new(QQ(),"a, c, b",PolyRing.lex), "y2, y1, z1, z2, x"
 puts "Ring: " + str(r);
 puts;
 
-one,a,c,b,y2,y1,z1,z2,x = r.gens();
+#one,a,c,b,y2,y1,z1,z2,x = r.gens();
 
 p1 = x + 2 * y1 * z1 + 3 * a * y1**2 + 5 * y1**4 + 2 * c * y1;
 p2 = x + 2 * y2 * z2 + 3 * a * y2**2 + 5 * y2**4 + 2 * c * y2;
@@ -52,11 +50,10 @@ bg = rg.isGB();
 puts "isGB: " + str(bg);
 puts;
 
-p7 = ( x + 1 ) / ( x**2 - x + 1 );
-puts "p7 = " + str(p7);
-
-p8 = ( x + 1 ) % ( x**2 - x + 1 );
-puts "p8 = " + str(p8);
+#p7 = ( x + 1 ) / ( x**2 - x + 1 );
+#puts "p7 = " + str(p7);
+#p8 = ( x + 1 ) % ( x**2 - x + 1 );
+#puts "p8 = " + str(p8);
 
 startLog();
 terminate();

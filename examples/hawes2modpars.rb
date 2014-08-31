@@ -20,14 +20,14 @@ require "examples/jas"
 #startLog();
 
 # Hawes & Gibson example 2
-# rational function coefficients
+# modular rational function coefficients, ruby expresion
 
 #r = Ring.new( "ModFunc 17 (a, c, b) (y2, y1, z1, z2, x) G" );
-r = PolyRing.new( PolyRing.new(ZM(17),"a, c, b",PolyRing.lex), "y2, y1, z1, z2, x", PolyRing.grad );
+r = PolyRing.new( PolyRing.new(GF(17),"a, c, b",PolyRing.lex), "y2, y1, z1, z2, x", PolyRing.grad );
 puts "Ring: " + str(r);
 puts;
 
-one,a,c,b,y2,y1,z1,z2,x = r.gens();
+#one,a,c,b,y2,y1,z1,z2,x = r.gens();
 
 p1 = x + 2 * y1 * z1 + 3 * a * y1**2 + 5 * y1**4 + 2 * c * y1;
 p2 = x + 2 * y2 * z2 + 3 * a * y2**2 + 5 * y2**4 + 2 * c * y2;
@@ -53,5 +53,4 @@ puts;
 
 startLog();
 terminate();
-#sys.exit();
 

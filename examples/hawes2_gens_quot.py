@@ -15,15 +15,10 @@
 ## \end{Equations}
 ## \end{PossoExample}
 
-
 import sys;
 
 from jas import Ring, PolyRing, RF, ZZ
-from jas import Ideal
-from jas import startLog
-from jas import terminate
-
-#startLog();
+from jas import startLog, terminate
 
 # Hawes & Gibson example 2
 # rational function coefficients
@@ -44,7 +39,7 @@ p5 = 3 * z2**2 + y2**2 + b;
 p6 = ( ( p5 / a ) / b ) / c;
 print "p6 = ", p6;
 
-F = [p1,p2,p3,p4,p6];
+F = [p1,p2,p3,p4,p5];
 
 g = r.ideal( list=F );
 print "Ideal: " + str(g);

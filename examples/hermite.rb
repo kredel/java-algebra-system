@@ -10,12 +10,12 @@ require "examples/jas"
 # H(1) = 2 * x
 # H(n) = 2 * x * H(n-1) - 2 * (n-1) * H(n-2)
 
-r = Ring.new( "Z(x) L" );
+r = PolyRing.new( ZZ(), "x", PolyRing.lex );
 puts "Ring: " + str(r);
 puts;
 
 # sage like: with generators for the polynomial ring
-one,x = r.gens();
+#auto: one,x = r.gens();
 
 x2 = 2 * x;
 
@@ -30,5 +30,3 @@ for n in 0..N
   puts "H[#{n}] = #{H[n]}";
 end
 puts;
-
-#sys.exit();

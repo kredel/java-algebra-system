@@ -18,18 +18,15 @@
 
 import sys;
 
-from jas import Ring
-from jas import Ideal
-from jas import startLog
-from jas import terminate
-
-#startLog();
+from jas import Ring, PolyRing, QQ
+from jas import startLog, terminate
 
 # Hawes & Gibson example 2
 # rational function coefficients
 
 #r = Ring( "IntFunc(a, c, b) (y2, y1, z1, z2, x) L" );
-r = Ring( "IntFunc(b, c, a) (y2, y1, z2, z1, x) G" );
+#r = Ring( "IntFunc(b, c, a) (y2, y1, z2, z1, x) G" );
+r = PolyRing( PolyRing(QQ(),"b, c, a",PolyRing.lex), "y2, y1, z1, z2, x", PolyRing.grad );
 print "Ring: " + str(r);
 print;
 
@@ -53,14 +50,14 @@ gs = f.CGBsystem();
 print "CGBsystem: " + str(gs);
 print;
 
+sys.exit();
+
 bg = gs.isCGBsystem();
 if bg:
     print "isCGBsystem: true";
 else:
     print "isCGBsystem: false";
 print;
-
-sys.exit();
 
 gs = f.CGBsystem();
 gs = f.CGBsystem();
@@ -81,6 +78,4 @@ else:
 print;
 
 terminate();
-#------------------------------------------
-#sys.exit();
 

@@ -17,8 +17,6 @@
 
 require "examples/jas"
 
-#startLog();
-
 # Hawes & Gibson example 2
 # rational function coefficients
 

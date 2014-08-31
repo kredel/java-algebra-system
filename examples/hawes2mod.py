@@ -19,9 +19,7 @@
 import sys;
 
 from jas import Ring, PolyRing, RF, ZZ, QQ
-from jas import Ideal
-from jas import startLog
-from jas import terminate
+from jas import startLog, terminate
 
 from edu.jas.arith import ModIntegerRing
 

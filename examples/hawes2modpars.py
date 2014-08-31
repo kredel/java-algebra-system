@@ -18,18 +18,14 @@
 
 import sys;
 
-from jas import Ring, PolyRing, ZM
-from jas import Ideal
-from jas import startLog
-from jas import terminate
-
-#startLog();
+from jas import Ring, PolyRing, ZM, GF
+from jas import startLog, terminate
 
 # Hawes & Gibson example 2
-# rational function coefficients
+# modular rational function coefficients, token parsing
 
 #r = Ring( "ModFunc 17 (a, c, b) (y2, y1, z1, z2, x) G" );
-r = PolyRing( PolyRing(ZM(17),"a, c, b",PolyRing.lex), "y2, y1, z1, z2, x", PolyRing.grad );
+r = PolyRing( PolyRing(GF(17),"a, c, b",PolyRing.lex), "y2, y1, z1, z2, x", PolyRing.grad );
 print "Ring: " + str(r);
 print;
 
@@ -48,6 +44,8 @@ print "Ideal: " + str(f);
 print;
 
 rg = f.GB();
+rg = f.GB();
+rg = f.GB();
 print "GB:", rg;
 print;
 
@@ -55,6 +53,6 @@ bg = rg.isGB();
 print "isGB:", bg;
 print;
 
+startLog();
 terminate();
-#sys.exit();
 

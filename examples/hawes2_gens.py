@@ -18,21 +18,18 @@
 
 import sys;
 
-from jas import Ring
-from jas import Ideal
-from jas import startLog
-from jas import terminate
-
-#startLog();
+from jas import Ring, PolyRing, QQ
+from jas import startLog, terminate
 
 # Hawes & Gibson example 2
 # rational function coefficients
 
-r = Ring( "IntFunc(a, c, b) (y2, y1, z1, z2, x) G" );
+#r = Ring( "IntFunc(a, c, b) (y2, y1, z1, z2, x) G" );
+r = PolyRing( PolyRing(QQ(),"a, c, b",PolyRing.lex), "y2, y1, z1, z2, x", PolyRing.grad );
 print "Ring: " + str(r);
 print;
 
-[one,a,c,b,y2,y1,z1,z2,x] = r.gens();
+#[one,a,c,b,y2,y1,z1,z2,x] = r.gens();
 
 p1 = x + 2 * y1 * z1 + 3 * a * y1**2 + 5 * y1**4 + 2 * c * y1;
 p2 = x + 2 * y2 * z2 + 3 * a * y2**2 + 5 * y2**4 + 2 * c * y2;
@@ -57,11 +54,10 @@ bg = rg.isGB();
 print "isGB:", bg;
 print;
 
-p7 = ( x + 1 ) / ( x**2 - x + 1 );
-print "p7 = ", p7;
-
-p8 = ( x + 1 ) % ( x**2 - x + 1 );
-print "p8 = ", p8;
+#p7 = ( x + 1 ) / ( x**2 - x + 1 );
+#print "p7 = ", p7;
+#p8 = ( x + 1 ) % ( x**2 - x + 1 );
+#print "p8 = ", p8;
 
 startLog();
 terminate();

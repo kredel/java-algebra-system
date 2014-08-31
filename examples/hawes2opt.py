@@ -19,11 +19,7 @@
 import sys;
 
 from jas import Ring, PolyRing, RF, ZZ
-from jas import Ideal
-from jas import startLog
-from jas import terminate
-
-#startLog();
+from jas import startLog, terminate
 
 # Hawes & Gibson example 2
 # rational function coefficients
@@ -59,15 +55,14 @@ p = p.optimizeCoeffQuot();
 print "optimized coeff Ideal: " + str(p);
 print;
 
-#rg = o.GB();
+#rg = p.GB();
 #print "GB:", rg;
 #print;
 
-rg = p;
-bg = rg.isGB();
-print "isGB:", bg;
-print;
+#rg = p;
+#bg = rg.isGB();
+#print "isGB:", bg;
+#print;
 
 terminate();
-#sys.exit();
 
