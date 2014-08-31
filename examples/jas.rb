@@ -94,12 +94,14 @@ def inject_gens(env)
              env.generators[ ivs ] = i;
              env.instance_eval( "def #{ivs}; @generators[ '#{ivs}' ]; end" )
              #puts "def #{ivs}; @generators[ '#{ivs}' ]; end"
-             first = ivs.slice(0,1);
-             if first.count('A-Z') > 0
-                first = first.downcase
-                ivl = first + ivs.slice(1,ivs.length);
-                puts "warning: '" + str(ivs) + "' additionaly renamed to '" + str(ivl) + "' to avoid constant semantics"
-                env.instance_eval( "def #{ivl}; @generators[ '#{ivs}' ]; end" )
+             if self.class.auto_lowervar 
+               first = ivs.slice(0,1);
+               if first.count('A-Z') > 0
+                 first = first.downcase
+                 ivl = first + ivs.slice(1,ivs.length);
+                 puts "warning: '" + str(ivs) + "' additionaly renamed to '" + str(ivl) + "' to avoid constant semantics"
+                 env.instance_eval( "def #{ivl}; @generators[ '#{ivs}' ]; end" )
+               end
              end
           end
        rescue Exception => e 
@@ -1573,10 +1575,12 @@ class PolyRing < Ring
     @grad = TermOrder.new(TermOrder::IGRLEX)
 
     @auto_inject = true
+    @auto_lowervar = false
 
     class << self  # means add to class
        attr_reader :lex, :grad
        attr_accessor :auto_inject
+       attr_accessor :auto_lowervar
     end
 
 
