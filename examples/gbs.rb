@@ -1,6 +1,6 @@
 #
 # jruby examples for jas.
-# $Id: $
+# $Id$
 #
 
 require "examples/jas"
