@@ -38,7 +38,7 @@ VERSION=jas-2.5
 #BRANCH=2.3
 SVNVERSION=`grep committed-rev .svn/entries |head -1|awk -F = '{ print $2 }'|sed 's/"//g'`
 
-all:
+all: usage
 
 home:
 	$(RSYNC) krum:java/$(PART)/     .
@@ -60,8 +60,9 @@ compute:
 
 # no need to change below this line
 
-# command line arguments
+# command line arguments, cl is deprecated, use args
 cl=
+args=$(cl)
 
 #.EXPORT_ALL_VARIABLES :
 
@@ -96,7 +97,7 @@ JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -server $(JAVA_MEM) -XX:+AggressiveHe
 DOC=$(JDK)/javadoc -classpath $(DOCCLASSES)
 
 usage:
-	echo; echo "usage: make <name> cl='cmd'"; echo
+	echo; echo "usage: make <class> args='cmd'"; echo
 
 
 FIX       = fixm2j
@@ -227,52 +228,52 @@ edu/mas/kern/%.class: src/edu/mas/kern/%.java
 
 
 edu.jas.%: edu/jas/%.class
-	$(JAVA) $@ $(cl)
+	$(JAVA) $@ $(args)
 
 edu.jas.arith.%: edu/jas/arith/%.class
-	$(JAVA) $@ $(cl)
+	$(JAVA) $@ $(args)
 
 edu.jas.poly.%: edu/jas/poly/%.class
-	$(JAVA) $@ $(cl)
+	$(JAVA) $@ $(args)
 
 edu.jas.ps.%: edu/jas/ps/%.class
-	$(JAVA) $@ $(cl)
+	$(JAVA) $@ $(args)
 
 edu.jas.gb.%: edu/jas/gb/%.class
-	$(JAVA) $@ $(cl)
+	$(JAVA) $@ $(args)
 
 edu.jas.ufd.%: edu/jas/ufd/%.class
-	$(JAVA) $@ $(cl)
+	$(JAVA) $@ $(args)
 
 edu.jas.gbufd.%: edu/jas/gbufd/%.class
-	$(JAVA) $@ $(cl)
+	$(JAVA) $@ $(args)
 
 edu.jas.vector.%: edu/jas/vector/%.class
-	$(JAVA) $@ $(cl)
+	$(JAVA) $@ $(args)
 
 edu.jas.gbmod.%: edu/jas/gbmod/%.class
-	$(JAVA) $@ $(cl)
+	$(JAVA) $@ $(args)
 
 edu.jas.structure.%: edu/jas/structure/%.class
-	$(JAVA) $@ $(cl)
+	$(JAVA) $@ $(args)
 
 edu.jas.util.%: edu/jas/util/%.class
-	$(JAVA) $@ $(cl)
+	$(JAVA) $@ $(args)
 
 edu.jas.application.%: edu/jas/application/%.class
-	$(JAVA) $@ $(cl)
+	$(JAVA) $@ $(args)
 
 edu.jas.root.%: edu/jas/root/%.class
-	$(JAVA) $@ $(cl)
+	$(JAVA) $@ $(args)
 
 edu.jas.kern.%: edu/jas/kern/%.class
-	$(JAVA) $@ $(cl)
+	$(JAVA) $@ $(args)
 
 edu.jas.integrate.%: edu/jas/integrate/%.class
-	$(JAVA) $@ $(cl)
+	$(JAVA) $@ $(args)
 
 edu.mas.kern.%: edu/mas/kern/%.class
-	$(JAVA) $@ $(cl)
+	$(JAVA) $@ $(args)
 
 
 FILES=$(wildcard src/edu/jas/structure/*.java src/edu/jas/arith/*.java src/edu/jas/poly/*.java src/edu/jas/ps/*.java src/edu/jas/gb/*.java src/edu/jas/application/*.java src/edu/jas/vector/*.java src/edu/jas/gbmod/*.java src/edu/jas/gbufd/*.java src/edu/jas/util/*.java src/edu/jas/ufd/*.java src/edu/jas/kern/*.java src/edu/jas/root/*.java src/edu/jas/integrate/*.java)
