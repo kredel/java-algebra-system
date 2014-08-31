@@ -7,7 +7,7 @@ require "examples/jas"
 
 # module example
 
-p = PolyRing.new(QQ(),"(u,v,l)", PolyRing.lex);
+p = PolyRing.new(QQ(),"u,v,l", PolyRing.lex);
 #r = CommutativeModule.new( "Rat(u,v,l) L", nil, 4 );
 r = CommutativeModule.new( "", p, 4 );
 puts "Module: " + str(r);

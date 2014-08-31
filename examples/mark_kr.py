@@ -5,8 +5,7 @@
 
 #import sys;
 
-from jas import Ring
-from jas import Ideal
+from jas import Ring, PolyRing, ZZ
 from jas import startLog
 
 # mark, d-gb diplom example, due to kandri-rody 1984
@@ -25,7 +24,8 @@ from jas import startLog
 # Frist polynomial produces a different e-GB. 
 # Second polynomial reproduces the e-GB with the second polynomial. 
 
-r = Ring( "Z(x,y) L" );
+#r = Ring( "Z(x,y) L" );
+r = PolyRing( ZZ(), "x,y", PolyRing.lex );
 print "Ring: " + str(r);
 print;
 

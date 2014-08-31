@@ -5,13 +5,12 @@
 
 #import sys;
 
-from jas import Ring
-from jas import Ideal
+from jas import Ring, PolyRing, ZZ
 from jas import startLog
 
 # mark, d-gb diplom example
 
-r = Ring( "Z(x,y,z) L" );
+r = PolyRing( ZZ(), "x,y,z", PolyRing.lex );
 print "Ring: " + str(r);
 print;
 

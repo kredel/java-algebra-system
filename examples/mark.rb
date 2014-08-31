@@ -7,7 +7,7 @@ require "examples/jas"
 
 # mark, d-gb diplom example
 
-r = Ring.new( "Z(x,y,z) L" );
+r = PolyRing.new( ZZ(), "x,y,z", PolyRing.lex );
 puts "Ring: " + str(r);
 puts;
 

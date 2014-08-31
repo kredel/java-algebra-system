@@ -1,11 +1,9 @@
 #
 # jruby examples for jas.
-# $Id: $
+# $Id$
 #
 
 require "examples/jas"
-
-#startLog();
 
 # example form Moeller, Mora, Traverso
 
@@ -15,9 +13,7 @@ r = PolyRing.new(QQ(),"z,y,x",PolyRing.grad);
 print "Ring: " + str(r);
 print;
 
-#one,t,z,y,x = r.gens();
-one,z,y,x = r.gens();
-#one,x,y,z = r.gens();
+#auto: one,z,y,x = r.gens();
 
 f0 = x**2 * y - z**2;
 f1 = x * z**2 - y**2;
@@ -29,6 +25,7 @@ f2 = y * z**3 - x**2;
 
 f = r.ideal("",[f0,f1,f2]);
 #f = r.ideal("",[f0h,f1h,f2h]);
+
 print "Ideal: " + str(f);
 print;
 

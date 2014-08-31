@@ -8,7 +8,7 @@ require "examples/jas"
 # logic example from Kreutzer JdM 2008
 
 #r = Ring.new( "Mod 2 (a,f,p,u) G" );
-r = PolyRing.new( ZM(2), "(a,f,p,u)", PolyRing.grad );
+r = PolyRing.new( GF(2), "(a,f,p,u)", PolyRing.grad );
 puts "Ring: " + str(r);
 puts;
 

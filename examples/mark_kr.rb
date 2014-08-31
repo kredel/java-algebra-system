@@ -22,7 +22,7 @@ require "examples/jas"
 # Second polynomial reproduces the e-GB with the second polynomial. 
 
 #r = Ring.new( "Z(x,y) L" );
-r = PolyRing.new( ZZ(), "(x,y)", PolyRing.lex );
+r = PolyRing.new( ZZ(), "x,y", PolyRing.lex );
 puts "Ring: " + str(r);
 puts;
 

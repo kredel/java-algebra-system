@@ -3,12 +3,12 @@
 # $Id$
 #
 
-from jas import Ring
-from jas import Ideal
+from jas import Ring, PolyRing, GF
 
 # logic example from Kreutzer JdM 2008
 
-r = Ring( "Mod 2 (a,f,p,u) G" );
+#r = Ring( "Mod 2 (a,f,p,u) G" );
+r = PolyRing( GF(2), "(a,f,p,u)", PolyRing.grad );
 print "Ring: " + str(r);
 print;
 

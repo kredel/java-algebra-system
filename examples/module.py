@@ -1,12 +1,14 @@
 #
 # jython examples for jas.
 
-from jas import Module
-from jas import SubModule
+from jas import PolyRing, QQ, Module
+#, SubModule
 
 # module example
 
-r = Module( "Rat(u,v,l) L", cols=4 );
+p = PolyRing(QQ(),"u,v,l", PolyRing.lex);
+#r = Module( "Rat(u,v,l) L", cols=4 );
+r = Module( "", p, cols=4 );
 print "Module: " + str(r);
 print;
 
