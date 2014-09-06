@@ -163,7 +163,7 @@ fi
 #
 if [ "$SCRIPT_LANG" = "python" ]; then
    if [[ $LANGOPT > 0 ]] ; then
-      JAVA_LIBS="J-cp $JAVA_LIBS"
+      JAVA_LIBS="-J-cp $JAVA_LIBS"
    else
       export CLASSPATH=$CLASSPATH:$JAVA_LIBS
       [[ $DEBUG > 0 ]] && echo CLASSPATH: $CLASSPATH
