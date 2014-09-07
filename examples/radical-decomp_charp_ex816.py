@@ -6,19 +6,16 @@
 import sys;
 
 from java.lang import System
-from java.lang import Integer
 
-from jas import Ring, PolyRing
+from jas import Ring, PolyRing, QQ, ZM, GF, RF, AN
 from jas import terminate, startLog, noThreads
-
-from jas import QQ, ZM, RF, AN
 
 # polynomial examples: ideal radical decomposition, modified from example 8.16 in GB book
 
 # noThreads(); # must be called very early
 
 prime = 5;
-cf = ZM(prime);
+cf = GF(prime);
 #cf = QQ();
 
 ca = PolyRing(cf,"a",PolyRing.lex);
@@ -52,16 +49,13 @@ r = PolyRing(rf,"x,y",PolyRing.lex);
 print "Ring: " + str(r);
 #print;
 
-[one,a,t,x,y] = r.gens();
-#print one,a,t,x,y;
+#automatic: [one,a,t,x,y] = r.gens();
 print "one = " + str(one);
 print "a   = " + str(a);
 print "t   = " + str(t);
 print "x   = " + str(x);
 print "y   = " + str(y);
 print;
-
-#sys.exit();
 
 #f1 = x**prime - t;
 #f2 = y**prime - t;
@@ -81,7 +75,6 @@ print "f2 = ", f2;
 print;
 
 F = r.ideal( list=[f1,f2] );
-
 print "F = ", F;
 print;
 

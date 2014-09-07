@@ -4,24 +4,17 @@
 #
 
 from java.lang import System
-from java.lang import Integer
 
-from jas import Ring, PolyRing
-from jas import terminate
-from jas import startLog
-
-from jas import QQ, ZM
+from jas import Ring, PolyRing, QQ, ZM, GF
+from jas import terminate, startLog
 
 # polynomial examples: ideal radical decomposition, dim > 0, char p separable
 
-#r = Ring( "Rat(x) L" );
-#r = Ring( "Q(x) L" );
-r = PolyRing(ZM(5),"x,y,z",PolyRing.lex);
-
+r = PolyRing(GF(5),"x,y,z",PolyRing.lex);
 print "Ring: " + str(r);
 print;
 
-[one,x,y,z] = r.gens();
+#automatic: [one,x,y,z] = r.gens();
 
 #f1 = (x**2 - 5)**2;
 #f1 = (y**10 - x**5)**3;
@@ -38,7 +31,6 @@ print "f3 = ", f3;
 print;
 
 F = r.ideal( list=[f2,f3] );
-
 print "F = ", F;
 print;
 

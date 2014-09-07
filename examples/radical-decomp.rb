@@ -10,11 +10,10 @@ require "examples/jas"
 #r = Ring.new( "Rat(x) L" );
 #r = Ring.new( "Q(x) L" );
 r = PolyRing.new(QQ(),"x,y,z",PolyRing.lex);
-
 puts "Ring: " + str(r);
 puts;
 
-one,x,y,z = r.gens();
+#automatic: one,x,y,z = r.gens();
 
 f1 = (x**2 - 5)**2;
 f2 = (y**2 - 3)**3 * (y**2 - 5);
@@ -26,7 +25,6 @@ puts "f3 = " + str(f3);
 puts;
 
 F = r.ideal( "", list=[f2,f3] );
-
 puts "F = " + str(F);
 puts;
 

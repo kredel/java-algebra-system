@@ -7,17 +7,16 @@ require "examples/jas"
 
 # polynomial examples: ideal radical decomposition, inseparable case, 0-dim
 
-cr = PolyRing.new(ZM(5),"c",PolyRing.lex);
+cr = PolyRing.new(GF(5),"c",PolyRing.lex);
 puts "coefficient Ring: " + str(cr);
 rf = RF(cr);
 puts "coefficient quotient Ring: " + str(rf);
 
 r = PolyRing.new(rf,"x,y,z",PolyRing.lex);
-
 puts "Ring: " + str(r);
 puts;
 
-one,c,x,y,z = r.gens();
+#automatic: one,c,x,y,z = r.gens();
 puts one,c,x,y,z;
 
 #sys.exit();

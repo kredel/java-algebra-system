@@ -6,28 +6,24 @@
 import sys;
 
 from java.lang import System
-from java.lang import Integer
 
-from jas import Ring, PolyRing
+from jas import Ring, PolyRing, QQ, ZM, RF, GF
 from jas import terminate, startLog, noThreads
-
-from jas import QQ, ZM, RF
 
 # polynomial examples: ideal radical decomposition, inseparable cases, dim > 0
 
 #noThreads(); # must be called very early
 
-cr = PolyRing(ZM(5),"c",PolyRing.lex);
+cr = PolyRing(GF(5),"c",PolyRing.lex);
 print "coefficient Ring: " + str(cr);
 rf = RF(cr);
 print "coefficient quotient Ring: " + str(rf.ring);
 
 r = PolyRing(rf,"x,y,z",PolyRing.lex);
-
 print "Ring: " + str(r);
 print;
 
-[one,c,x,y,z] = r.gens();
+#automatic: [one,c,x,y,z] = r.gens();
 print one,c,x,y,z;
 
 #sys.exit();
@@ -49,7 +45,6 @@ print;
 
 #F = r.ideal( list=[f1,f2,f3] );
 F = r.ideal( list=[f2,f3] );
-
 print "F = ", F;
 print;
 

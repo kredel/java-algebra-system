@@ -10,7 +10,7 @@ require "examples/jas"
 # noThreads(); # must be called very early
 
 prime = 5;
-cf = ZM(prime);
+cf = GF(prime);
 #cf = QQ();
 
 ca = PolyRing.new(cf,"a",PolyRing.lex);
@@ -44,7 +44,7 @@ r = PolyRing.new(rf,"x,y",PolyRing.lex);
 puts "Ring: " + str(r);
 #puts;
 
-one,a,t,x,y = r.gens();
+#automatic: one,a,t,x,y = r.gens();
 #puts one,a,t,x,y;
 puts "one = " + str(one);
 puts "a   = " + str(a);
@@ -52,8 +52,6 @@ puts "t   = " + str(t);
 puts "x   = " + str(x);
 puts "y   = " + str(y);
 puts;
-
-#sys.exit();
 
 #f1 = x**prime - t;
 #f2 = y**prime - t;
@@ -73,7 +71,6 @@ puts "f2 = " + str(f2);
 puts;
 
 F = r.ideal( "", list=[f1,f2] );
-
 puts "F = " + str(F);
 puts;
 
