@@ -6,7 +6,6 @@
 import sys;
 
 from jas import Ring
-from jas import Ideal
 from jas import startLog
 from jas import terminate
 
@@ -60,5 +59,3 @@ else:
 print;
 
 terminate();
-#------------------------------------------
-#sys.exit();
