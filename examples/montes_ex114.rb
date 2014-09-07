@@ -12,6 +12,7 @@ R = PolyRing.new( PolyRing.new(QQ(),"Q2, P2, Q1, P1",PolyRing.lex), "f3, e3, f2,
 puts "Ring: " + str(R);
 puts;
 
+#not automatic, since capital letters : 
 one, Q2, P2, Q1, P1, f3, e3, f2, e2 = R.gens();
 puts "gens: " + R.gens().each{ |f| str(f) }.join(",");
 puts;

@@ -16,7 +16,7 @@ puts "Ring: " + str(r);
 puts;
 
 #one,e,d,c,b,f,a,y,x = r.gens();
-one,f,e,d,c,b,a,y,x = r.gens();
+#automatic: one,f,e,d,c,b,a,y,x = r.gens();
 puts "gens: " + r.gens().each{ |f| str(f) }.join(",");
 puts;
 

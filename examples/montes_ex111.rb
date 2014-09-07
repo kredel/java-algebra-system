@@ -12,7 +12,7 @@ r = PolyRing.new( PolyRing.new(QQ(),"c, b, a",PolyRing.lex), "z,y,x", PolyRing.l
 puts "Ring: " + str(r);
 puts;
 
-one,c,b,a,z,y,x = r.gens();
+#automatic: one,c,b,a,z,y,x = r.gens();
 puts "gens: " + r.gens().each{ |f| str(f) }.join(",");
 puts;
 

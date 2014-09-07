@@ -6,7 +6,6 @@
 import sys;
 
 from jas import PolyRing, QQ, RF
-from jas import Ideal
 from jas import startLog
 from jas import terminate
 
@@ -18,7 +17,7 @@ r = PolyRing( PolyRing(QQ(),"c, b, a",PolyRing.lex), "z,y,x", PolyRing.lex );
 print "Ring: " + str(r);
 print;
 
-[one,c,b,a,z,y,x] = r.gens();
+#automatic: [one,c,b,a,z,y,x] = r.gens();
 print "gens: ", [ str(f) for f in r.gens() ];
 print;
 
