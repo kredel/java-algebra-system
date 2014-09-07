@@ -7,8 +7,7 @@ import sys
 
 from java.lang import System
 
-from jas import PolyRing, Ideal
-from jas import QQ, AN, RF
+from jas import PolyRing, QQ, AN, RF
 from jas import terminate, startLog
 
 # polynomial examples: prime/primary decomposition in Q(sqrt(2))(x)(sqrt(x))[y,z]
@@ -86,12 +85,10 @@ print "f2 = ", f2;
 print;
 
 F = Yr.ideal( list=[f1,f2] );
-
 print "F = ", F;
 print;
 
 #sys.exit();
-
 startLog();
 
 t = System.currentTimeMillis();

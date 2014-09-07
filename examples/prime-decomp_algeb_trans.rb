@@ -5,8 +5,6 @@
 
 require "examples/jas"
 
-#startLog();
-
 # polynomial examples: prime / primary decomposition in Q(sqrt(2))(x)(sqrt(x))[y,z]
 
 Q = PolyRing.new(QQ(),"w2",PolyRing.lex);

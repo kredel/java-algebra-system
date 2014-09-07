@@ -32,11 +32,9 @@ puts "f2 = " + str(f2);
 puts;
 
 #sys.exit();
-
 startLog();
 
 F = Q.ideal( "", [w1,w2,f1,f2] );
-
 puts "F = ", F;
 puts;
 

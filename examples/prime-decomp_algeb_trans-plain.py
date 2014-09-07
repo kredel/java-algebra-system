@@ -7,8 +7,7 @@ import sys
 
 from java.lang import System
 
-from jas import PolyRing, Ideal
-from jas import QQ, AN, RF
+from jas import PolyRing, QQ, AN, RF
 from jas import terminate, startLog
 
 # polynomial examples: prime/primary decomposition in Q[w2,x,wx,y,z]
@@ -38,7 +37,6 @@ print "f2 = ", f2;
 print;
 
 F = Q.ideal( list=[w1,w2,f1,f2] );
-
 print "F = ", F;
 print;
 
