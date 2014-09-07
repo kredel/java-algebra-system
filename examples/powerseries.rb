@@ -7,7 +7,6 @@ require "examples/jas"
 
 # examples for power series
 
-#
 # rational number examples
 #
 
@@ -26,7 +25,7 @@ puts;
 r1 = psr.random(4);
 puts "r1: " + str(r1);
 #puts;
-puts "r1: " + str(r1);
+#puts "r1: " + str(r1);
 #puts;
 puts "r1-r1: " + str(r1-r1);
 puts;
@@ -34,12 +33,12 @@ puts;
 r2 = psr.random(4);
 puts "r2: " + str(r2);
 #puts;
-puts "r2: " + str(r2);
+#puts "r2: " + str(r2);
 #puts;
 puts "r2-r2: " + str(r2-r2);
 puts;
 
-#sys.exit();
+#exit();
 
 r3 = r1 + r2;
 puts "r3: " + str(r3);
@@ -263,6 +262,5 @@ puts "ps3: " + str(ps3);
 puts "ps4: " + str(ps4);
 puts "ps5: " + str(ps5);
 puts;
-
 
 #exit();

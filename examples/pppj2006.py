@@ -5,51 +5,46 @@
 
 import sys;
 
-from jas import Ring
-from jas import Ideal
+from jas import PolyRing, ZZ
+from jas import startLog
 
 # pppj 2006 paper examples
 
-r = Ring( "Z(x1,x2,x3) L" );
+#r = Ring( "Z(x1,x2,x3) L" );
+r = PolyRing( ZZ(), "x1,x2,x3", PolyRing.lex );
 print "Ring: " + str(r);
 print;
 
-
+#unused:
 ps = """
 ( 
  ( 3 x1^2 x3^4 + 7 x2^5 - 61 )
 ) 
 """;
 
-#f = Ideal( r, ps );
-#print "Ideal: " + str(f);
-#print;
-
-f = r.ideal( ps );
-print "Ideal: " + str(f);
+f = 3 * x1**2 * x3**4 + 7 * x2**5 - 61;
+print "f = " + str(f);
 print;
 
-from java.lang import System
-from java.io import StringReader
+#id = r.ideal( ps );
+id = r.ideal( "", [f] );
+print "Ideal: " + str(id);
+print;
 
-from edu.jas.structure   import *
-from edu.jas.arith       import *
-from edu.jas.poly        import *
-
-from org.apache.log4j import BasicConfigurator;
-BasicConfigurator.configure();
+#startLog();
 
 pps = """
  3 x1^2 x3^4 + 7 x2^5 - 61
 """;
 
 ri = r.ring;
-
 print "ri = " + str(ri);
+print
 
-pol = r.pset;
+pol = id.pset;
 print "pol = " + str(pol);
+print
 
 pol = ri.parse( pps );
-
 print "pol = " + str(pol);
+print

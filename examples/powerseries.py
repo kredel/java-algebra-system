@@ -5,10 +5,7 @@
 
 import sys;
 
-from jas import QQ
-from jas import DD
-from jas import Ring
-from jas import SeriesRing
+from jas import QQ, DD, Ring, SeriesRing
 from jas import startLog
 
 from edu.jas.ps import Coefficients
@@ -16,9 +13,7 @@ from edu.jas.ps import UnivPowerSeriesMap
 
 # example for power series
 #
-#
 
-#
 # rational number examples
 #
 
@@ -260,6 +255,5 @@ print "ps3:", ps3;
 print "ps4:", ps4;
 print "ps5:", ps5;
 print;
-
 
 #sys.exit();

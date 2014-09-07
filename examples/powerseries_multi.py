@@ -14,9 +14,7 @@ from edu.jas.ps import MultiVarPowerSeriesMap
 
 # example for power series
 #
-#
 
-#
 # rational number examples
 #
 

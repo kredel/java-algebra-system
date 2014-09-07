@@ -7,7 +7,6 @@ require "examples/jas"
 
 # examples for power series
 
-#
 # rational number examples
 #
 

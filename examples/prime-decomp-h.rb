@@ -17,13 +17,13 @@ require "examples/jas"
 #c = PolyRing.new(QQ(),"t,y",PolyRing.lex);
 
 #c = PolyRing.new(ZM(32003,0,True),"t",PolyRing.lex);
+#c = PolyRing.new(GF(32003),"t",PolyRing.lex);
 c = PolyRing.new(ZZ(),"t",PolyRing.lex);
 r = PolyRing.new(RF(c),"z,y,x",PolyRing.lex);
-
 puts "Ring: " + str(r);
 puts;
 
-one,t,z,y,x = r.gens();
+#automatic: one,t,z,y,x = r.gens();
 puts "one = " + str(one);
 puts "x   = " + str(x);
 puts "y   = " + str(y);
@@ -41,7 +41,6 @@ puts "f3 = " + str(f3);
 puts;
 
 F = r.ideal( "", list=[f1,f2,f3] );
-
 puts "F = " + str(F);
 puts;
 

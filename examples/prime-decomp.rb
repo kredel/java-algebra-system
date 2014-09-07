@@ -14,7 +14,7 @@ r = PolyRing.new(QQ(),"x,y,z",PolyRing.lex);
 puts "Ring: " + str(r);
 puts;
 
-one,x,y,z = r.gens();
+#automatic: one,x,y,z = r.gens();
 
 f1 = (x**2 - 5)**2;
 f2 = y**3 - x;

@@ -13,14 +13,13 @@ rf = RF(cr);
 puts "coefficient quotient Ring: " + str(rf.ring);
 
 r = PolyRing.new(rf,"x,y,z",PolyRing.lex);
-
 puts "Ring: " + str(r);
 puts;
 
-#automatic one,c,x,y,z = r.gens();
+#automatic: one,c,x,y,z = r.gens();
 puts one,c,x,y,z;
 
-#sys.exit();
+#exit();
 
 f1 = (x**2 - 2); #**2;
 f2 = (y**2 - c)**5;
@@ -42,7 +41,7 @@ puts;
 startLog();
 
 t = System.currentTimeMillis();
-P = F.primeDecomp();
+P = F.primaryDecomp();
 t = System.currentTimeMillis() - t;
 puts "P = " + str(P);
 puts;

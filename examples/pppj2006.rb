@@ -17,19 +17,19 @@ f = 3 * x1**2 * x3**4 + 7 * x2**5 - 61;
 puts "f = " + str(f);
 puts;
 
-id = r.ideal( "", list=[f] );
+id = r.ideal( "", [f] );
 puts "Ideal: " + str(id);
 puts;
 
 ri = r.ring;
 puts "ri = " + str(ri);
 
-pol = r.pset;
+pol = id.pset;
 puts "pol = " + str(pol);
+puts
 
 pol = ri.parse( str(f) );
 puts "pol = " + str(pol);
 puts;
 
 #startLog();
-#terminate();

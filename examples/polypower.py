@@ -6,15 +6,15 @@
 from java.lang import System
 from java.lang import Integer
 
-from jas import Ring
-from jas import Ideal
+from jas import PolyRing, ZZ, QQ, GF, ZM
 
 # sparse polynomial powers
 
 #r = Ring( "Mod 1152921504606846883 (x,y,z) G" );
 #r = Ring( "Rat(x,y,z) G" );
 #r = Ring( "C(x,y,z) G" );
-r = Ring( "Z(x,y,z) L" );
+#r = Ring( "Z(x,y,z) L" );
+r = PolyRing( ZZ(), "(x,y,z)", PolyRing.lex );
 
 print "Ring: " + str(r);
 print;
@@ -27,7 +27,7 @@ ps = """
 ) 
 """;
 
-f = Ideal( r, ps );
+f = r.ideal( ps );
 print "Ideal: " + str(f);
 print;
 

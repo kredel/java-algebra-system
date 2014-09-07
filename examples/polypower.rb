@@ -15,7 +15,7 @@ r = PolyRing.new( ZZ(), "(x,y,z)", PolyRing.lex );
 puts "Ring: " + str(r);
 puts;
 
-one,x,y,z = r.gens();
+#automatic: one,x,y,z = r.gens();
 puts "one = " + str(one);
 puts "x   = " + str(x);
 puts "y   = " + str(y);
@@ -54,6 +54,7 @@ p = plist[0];
 
 p = p2;
 #p = p1;
+#p = p3;
 puts "p: " + str(p);
 puts;
 

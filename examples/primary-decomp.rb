@@ -5,26 +5,20 @@
 
 require "examples/jas"
 
-# polynomial examples: ideal prime decomposition in char p > 0, inseparable cases
+# polynomial examples: ideal primary decomposition in char 0
 
-cr = PolyRing.new(ZM(5),"c",PolyRing.lex);
-puts "coefficient Ring: " + str(cr);
-rf = RF(cr);
-puts "coefficient quotient Ring: " + str(rf.ring);
-
-r = PolyRing.new(rf,"x,y,z",PolyRing.lex);
-
+r = PolyRing.new(QQ(),"x,y,z",PolyRing.lex);
 puts "Ring: " + str(r);
 puts;
 
-one,c,x,y,z = r.gens();
-puts one,c,x,y,z;
+#automatic: one,x,y,z = r.gens();
+puts one,x,y,z;
 
 #exit();
 
-f1 = (x**2 - 2); #**2;
-f2 = (y**2 - c)**5;
-f3 = (z**2 - 2 * c); #**5;
+f1 = (x**2 - 2)**2;
+f2 = (y**2 - x)**2;
+f3 = (z**2 - x); 
 
 puts "f1 = " + str(f1);
 puts "f2 = " + str(f2);
@@ -42,7 +36,7 @@ puts;
 startLog();
 
 t = System.currentTimeMillis();
-P = F.primeDecomp();
+P = F.primaryDecomp();
 t = System.currentTimeMillis() - t;
 puts "P = " + str(P);
 puts;
