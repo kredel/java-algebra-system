@@ -6,13 +6,15 @@
 import sys;
 
 from jas import Ring, PolyRing, RF, ZZ
-from jas import Ideal
+from jas import terminate
+
 
 # Raksanyi & Walter example
 # rational function coefficients
 
 #r = Ring( "RatFunc(a1, a2, a3, a4) (x1, x2, x3, x4) G" );
-r = PolyRing( RF(PolyRing(ZZ(),"a1, a2, a3, a4",PolyRing.lex)), "x1, x2, x3, x4", PolyRing.grad );
+r = PolyRing( RF(PolyRing(ZZ(),"a1, a2, a3, a4",PolyRing.lex)), 
+              "x1, x2, x3, x4", PolyRing.grad );
 print "Ring: " + str(r);
 print;
 
@@ -31,9 +33,9 @@ print;
 
 rg = f.GB();
 rg = f.GB();
+rg = f.GB();
 print "GB:", rg;
 print;
 
-from edu.jas.kern import ComputerThreads;
-ComputerThreads.terminate();
-#sys.exit();
+terminate();
+

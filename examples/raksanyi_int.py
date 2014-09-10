@@ -6,9 +6,8 @@
 import sys;
 
 from jas import Ring
-from jas import Ideal
-from jas import startLog
-from jas import terminate
+from jas import startLog, terminate
+
 
 # Raksanyi & Walter example
 # rational function coefficients
@@ -34,6 +33,7 @@ print;
 
 rg = f.GB();
 rg = f.GB();
+rg = f.GB();
 print "Ideal: " + str(rg);
 print;
 
@@ -45,4 +45,3 @@ else:
 print;
 
 terminate();
-#sys.exit();

@@ -11,7 +11,8 @@ require "examples/jas"
 #r = Ring.new( "RatFunc(a1, a2, a3, a4) (x1, x2, x3, x4) L" );
 #r = Ring.new( "IntFunc(a1, a2, a3, a4) (x1, x2, x3, x4) L" );
 #r = PolyRing.new( PolyRing.new(QQ(),"a1, a2, a3, a4",PolyRing.lex), "x1, x2, x3, x4", PolyRing.grad);
-r = PolyRing.new( PolyRing.new(QQ(),"a1, a2, a3, a4",PolyRing.lex), "x1, x2, x3, x4", PolyRing.lex);
+r = PolyRing.new( PolyRing.new(QQ(),"a1, a2, a3, a4",PolyRing.lex), 
+                  "x1, x2, x3, x4", PolyRing.lex);
 puts "Ring: " + str(r);
 puts;
 
@@ -71,5 +72,4 @@ puts "regular string slice: " + str(ss);
 puts;
 
 terminate();
-#sys.exit();
 

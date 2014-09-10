@@ -11,7 +11,7 @@ r = PolyRing.new(QQ(),"q,w,s,x",PolyRing.lex);
 puts "Ring: " + str(r);
 puts;
 
-one,q,w,s,x = r.gens();
+#automatic: one,q,w,s,x = r.gens();
 
 # EF.new(QQ()).realExtend("q","q^3 - 3", "[1,2]").realExtend("w", "w^2 - q", "[1,2]").realExtend("s", "s^5 - 2", "[1,2]").polynomial("x").build();
 
@@ -28,7 +28,6 @@ puts "f4 = " + str(f4);
 puts;
 
 F = r.ideal( "", list=[f1,f2,f3,f4] );
-
 puts "F = " + str(F);
 puts;
 

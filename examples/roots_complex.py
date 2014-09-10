@@ -6,26 +6,20 @@
 import sys;
 
 from java.lang import System
-from java.lang import Integer
 
-from jas import Ring
-from jas import PolyRing
-from jas import Ideal
-from jas import terminate
-from jas import startLog
+from jas import PolyRing, QQ, DD, CR
+from jas import terminate, startLog
 
-from jas import QQ, DD, CR
 
 # polynomial examples: complex roots over Q
 
 #r = Ring( "Rat(x) L" );
 #r = Ring( "Q(x) L" );
 r = PolyRing( CR(QQ()), "x", PolyRing.lex );
-
 print "Ring: " + str(r);
 print;
 
-[one,I,x] = r.gens();
+#automatic: [one,I,x] = r.gens();
 print "one = ", one;
 print "I   = ", I;
 print "x   = ", x;

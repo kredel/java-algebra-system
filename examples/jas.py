@@ -212,8 +212,10 @@ class Ring:
                    vs = 'one' + vs[1:];
             if vs == "1":
                 vs = "one";
+            if vs == "0i1" or vs == "0I1":
+                vs = "I";
             if ri.match(vs):
-                #print "vs = " + str(vs);
+                #print "0vs = " + str(vs);
                 continue;
             try:
                 if self.__dict__[vs] is None:

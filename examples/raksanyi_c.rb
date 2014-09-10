@@ -11,7 +11,8 @@ require "examples/jas"
 #nono: r = Ring.new( "RatFunc(a1, a2, a3, a4) (x1, x2, x3, x4) L" );
 #r = Ring.new( "IntFunc(a1, a2, a3, a4) (x1, x2, x3, x4) G" );
 #r = Ring.new( "IntFunc(a1, a2, a3, a4) (x4, x3, x2, x1) L" );
-r = PolyRing.new( PolyRing.new(QQ(),"a1, a2, a3, a4",PolyRing.lex), "x1, x2, x3, x4", PolyRing.grad );
+r = PolyRing.new( PolyRing.new(QQ(),"a1, a2, a3, a4",PolyRing.lex), 
+                  "x1, x2, x3, x4", PolyRing.grad );
 puts "Ring: " + str(r);
 puts;
 
@@ -60,5 +61,4 @@ puts "isCGB: " + str(bg);
 puts;
 
 terminate();
-#sys.exit();
 

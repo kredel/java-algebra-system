@@ -5,17 +5,17 @@
 
 import sys;
 
-from jas import Ring
-from jas import ParamIdeal
-from jas import startLog
-from jas import terminate
+from jas import PolyRing, QQ
+from jas import startLog, terminate
 
 
 # Raksanyi & Walter example
 # integral/rational function coefficients
 
 #r = Ring( "RatFunc(a1, a2, a3, a4) (x1, x2, x3, x4) L" );
-r = Ring( "IntFunc(a1, a2, a3, a4) (x1, x2, x3, x4) L" );
+#r = Ring( "IntFunc(a1, a2, a3, a4) (x1, x2, x3, x4) L" );
+r = PolyRing( PolyRing(QQ(),"a1, a2, a3, a4",PolyRing.lex), 
+              "x1, x2, x3, x4", PolyRing.lex);
 print "Ring: " + str(r);
 print;
 
@@ -83,5 +83,3 @@ ss = rsg.stringSlice();
 print "regular string slice: " + str(ss);
 
 terminate();
-#sys.exit();
-

@@ -8,7 +8,6 @@ require "examples/jas"
 # polynomial examples: complex roots over Q
 
 r = PolyRing.new(CR(QQ()),"x",PolyRing.lex);
-
 puts "Ring: " + str(r);
 puts;
 
@@ -40,7 +39,7 @@ t = System.currentTimeMillis();
 rr = r.complexRoots(f);
 t = System.currentTimeMillis() - t;
 #puts "rr = " + str(rr);
-puts "rr = " + str(rr.map{ |a| str(a.elem.ring.getRoot())+"," }); 
+puts "rr = " + str(rr.map{ |a| str(a.elem.ring.getRoot()) }); 
 puts "complex roots time = " + str(t) + " milliseconds";
 
 #eps = QQ(1,10) ** (BigDecimal::DEFAULT_PRECISION-3);
@@ -51,8 +50,8 @@ t = System.currentTimeMillis();
 rr = r.complexRoots(f,eps);
 t = System.currentTimeMillis() - t;
 #puts "rr = ", [ str(r) for r in rr ];
-puts "rr = " + str(rr.map{ |a| str(a.elem.decimalMagnitude())+"," }); 
-puts "complex roots time = " + str(t) + " milliseconds";
+puts "rr = " + str(rr.map{ |a| str(a.elem.decimalMagnitude()) }); 
+puts "complex roots refinement time = " + str(t) + " milliseconds";
 
 #startLog();
 terminate();

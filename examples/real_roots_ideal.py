@@ -4,22 +4,18 @@
 #
 
 from java.lang import System
-from java.lang import Integer
 
-from jas import Ring, PolyRing
-from jas import terminate
-from jas import startLog
+from jas import Ring, PolyRing, QQ, DD
+from jas import terminate, startLog
 
-from jas import QQ, DD
 
 # polynomial examples: real roots over Q for zero dimensional ideals
 
 r = PolyRing(QQ(),"q,w,s,x",PolyRing.lex);
-
 print "Ring: " + str(r);
 print;
 
-[one,q,w,s,x] = r.gens();
+#automatic: [one,q,w,s,x] = r.gens();
 
 # EF(QQ()).realExtend("q","q^3 - 3", "[1,2]").realExtend("w", "w^2 - q", "[1,2]").realExtend("s", "s^5 - 2", "[1,2]").polynomial("x").build();
 
@@ -36,7 +32,6 @@ print "f4 = ", f4;
 print;
 
 F = r.ideal( list=[f1,f2,f3,f4] );
-
 print "F = ", F;
 print;
 
