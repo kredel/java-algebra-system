@@ -1,26 +1,75 @@
 #!/bin/bash
 # $Id$
 #
-SCRIPT_LANG="unknown"
-SCRIPT_LANG="python"
+#SCRIPT_LANG="unknown"
+#SCRIPT_LANG="python"
 SCRIPT_LANG="ruby"
 #
 DEBUG=0
+
+## resolve links - $0 may be a link to home
+PRG=$0
+
+while [ -h "$PRG" ] ; do
+  ls=`ls -ld "$PRG"`
+  link=`expr "$ls" : '.*-> \(.*\)$'`
+  if expr "$link" : '.*/.*' > /dev/null; then
+    if expr "$link" : '/' > /dev/null; then
+      PRG="$link"
+    else
+      PRG="`dirname ${PRG}`/${link}"
+    fi
+  else
+    PRG="`dirname $PRG`/$link"
+  fi
+done
+
+# try to dynamically determine JAS home
+# (this script typically resides in JAS home)
+if [ -z "$JAS_HOME" ] ; then
+  if [ "$PRG" = "./jas" ] ; then
+    # current dir is the script dir
+    JAS_HOME_1=`pwd`
+  else
+    # current dir is not the script dir
+    JAS_HOME_1=`dirname "$PRG"`
+  fi
+  if [ -f "$JAS_HOME_1"/examples/jas.rb -o -f "$JAS_HOME_1"/examples/jas.py ] ; then
+    JAS_HOME="$JAS_HOME_1"
+  else
+    JAS_HOME=`dirname "$JAS_HOME_1"`
+  fi
+fi
+
+# verify that JAS home is found
+if [ -d "$JAS_HOME/examples" ] ; then
+   JAVA_LIBS="$JAS_HOME/examples"
+elif [ -d "examples" ] ; then
+   JAVA_LIBS="examples"
+else
+   echo "===================================" 
+   echo "Error: examples directory not found" 
+   echo "Please install JAS properly"
+   echo "===================================" 
+   exit 0
+fi
+
 #
-# setup required libs: JAVA_LIBS="../lib/log4j.jar:../lib/junit.jar:../lib/jas.jar"
-# check fpr jython or jruby
+# setup required libs: JAVA_LIBS="log4j.jar:junit.jar:jas.jar:examples"
 #
 if [ -f "../lib/log4j.jar" ] ; then
-   JAVA_LIBS="../lib/log4j.jar"
+   JAVA_LIBS="$JAVA_LIBS:../lib/log4j.jar"
 elif [ -f "lib/log4j.jar" ] ; then
-   JAVA_LIBS="lib/log4j.jar"
+   JAVA_LIBS="$JAVA_LIBS:lib/log4j.jar"
+elif [ -f "$JAS_HOME/../lib/log4j.jar" ] ; then
+   JAVA_LIBS="$JAVA_LIBS:$JAS_HOME/..lib/log4j.jar"
 elif [ -f `ls /usr/share/java/log4j*.jar|tail -1` ] ; then
-   JAVA_LIBS=`ls /usr/share/java/log4j*.jar|tail -1`
+   JAVA_LIBS="$JAVA_LIBS:`ls /usr/share/java/log4j*.jar|tail -1`"
 else
-   echo "===========================================" 
+   echo "==================================" 
    echo "Error: library log4j.jar not found" 
-   echo "Please install log4j.jar in lib/ or ../lib/" 
-   echo "===========================================" 
+   echo "Please install log4j.jar" 
+   echo "==================================" 
    exit 0
 fi
 #
@@ -28,18 +77,17 @@ if [ -f "../lib/junit.jar" ] ; then
    JAVA_LIBS="$JAVA_LIBS:../lib/junit.jar"
 elif [ -f "lib/junit.jar" ] ; then
    JAVA_LIBS="$JAVA_LIBS:lib/junit.jar"
+elif [ -f "$JAS_HOME/../lib/junit.jar" ] ; then
+   JAVA_LIBS="$JAVA_LIBS:$JAS_HOME/../lib/junit.jar"
 elif [ -f `ls /usr/share/java/junit*.jar|tail -1` ] ; then
-   JAVA_LIBS=`ls /usr/share/java/junit*.jar|tail -1`
+   JAVA_LIBS=$JAVA_LIBS:`ls /usr/share/java/junit*.jar|tail -1`
 else
-   echo "===========================================" 
+   echo "====================================" 
    echo "Warning: library junit.jar not found" 
-   echo "Please install junit.jar in lib/ or ../lib/" 
-   echo "===========================================" 
+   echo "Please install junit.jar"
+   echo "====================================" 
 fi
 #
-if [ -d "examples" ] ; then
-   JAVA_LIBS="$JAVA_LIBS:examples"
-fi
 if [ -d "edu/jas" ] ; then
    JAVA_LIBS="$JAVA_LIBS:."
 elif [ -f "../lib/jas.jar" ] ; then
@@ -48,13 +96,15 @@ elif [ -f "lib/jas.jar" ] ; then
    JAVA_LIBS="$JAVA_LIBS:lib/jas.jar"
 elif [ -f "jas.jar" ] ; then
    JAVA_LIBS="$JAVA_LIBS:jas.jar"
+elif [ -f "$JAS_HOME/jas.jar" ] ; then
+   JAVA_LIBS="$JAVA_LIBS:$JAS_HOME/jas.jar"
 elif [ -f `ls /usr/share/java/jas*.jar|tail -1` ] ; then
-   JAVA_LIBS=`ls /usr/share/java/jas*.jar|tail -1`
+   JAVA_LIBS=$JAVA_LIBS:`ls /usr/share/java/jas*.jar|tail -1`
 else
-   echo "===========================================" 
-   echo "Error: library jas.jar not found" 
-   echo "Please install jas.jar in lib/ or ../lib/" 
-   echo "===========================================" 
+   echo "===============================================" 
+   echo "Error: library jas.jar or class files not found" 
+   echo "Please install jas.jar or JAS classes" 
+   echo "===============================================" 
    exit 0
 fi
 #
@@ -99,47 +149,57 @@ do
     esac
     shift
 done
+[[ $DEBUG > 0 ]] && echo "PRG      :" $PRG
+[[ $DEBUG > 0 ]] && echo "JAS_HOME :" $JAS_HOME
+[[ $DEBUG > 0 ]] && echo "JAVA_LIBS:" $JAVA_LIBS
 
 if [ "$SCRIPT_LANG" = "python" ]; then
    if [ -f "examples/jas.py" ] ; then
       echo -n "" 
+   elif [ -f "$JAS_HOME/examples/jas.py" ] ; then
+      echo -n "" 
    else 
-      echo "===========================================" 
-      echo "Error: library examples/jas.py not found" 
-      echo "Please install examples/jas.py" 
-      echo "===========================================" 
+      echo "===============================" 
+      echo "Error: library jas.py not found" 
+      echo "Please install jas.py" 
+      echo "===============================" 
       exit 0
    fi
    TMPX=`which jython`
    if [[ -n $TMPX && -x $TMPX ]] ; then
       echo -n ""
    else 
-      echo "===========================================" 
+      echo "==================================" 
       echo "Error: jython script not found" 
       echo "Please install jython in your PATH" 
-      echo "===========================================" 
+      echo "==================================" 
       exit 0
    fi
 fi
 
+JASRB=
 if [ "$SCRIPT_LANG" = "ruby" ]; then
    if [ -f "examples/jas.rb" ] ; then
+      JASRB="examples/jas.rb"
+      echo -n "" 
+   elif [ -f "$JAS_HOME/examples/jas.rb" ] ; then
+      JASRB="$JAS_HOME/examples/jas.rb"
       echo -n "" 
    else 
-      echo "===========================================" 
-      echo "Error: library examples/jas.rb not found" 
-      echo "Please install examples/jas.rb" 
-      echo "===========================================" 
+      echo "===============================" 
+      echo "Error: library jas.rb not found" 
+      echo "Please install jas.rb" 
+      echo "===============================" 
       exit 0
    fi
    TMPX=`which jruby`
    if [[ -n $TMPX && -x $TMPX ]] ; then
       echo -n "" 
    else 
-      echo "===========================================" 
+      echo "=================================" 
       echo "Error: jruby script not found" 
       echo "Please install jruby in your PATH" 
-      echo "===========================================" 
+      echo "=================================" 
       exit 0
    fi
 fi
@@ -171,10 +231,11 @@ if [ "$SCRIPT_LANG" = "python" ]; then
       JAVA_LIBS=""
    fi
    [[ $DEBUG > 0 ]] && echo jython $SCRIPT_OPTS "$JAVA_LIBS" $JAVA_OPTS $* 
+   [[ $DEBUG > 0 ]] && jython --print $SCRIPT_OPTS "$JAVA_LIBS" $JAVA_OPTS $* 
    jython $SCRIPT_OPTS $JAVA_LIBS $JAVA_OPTS $* 
 elif [ "$SCRIPT_LANG" = "ruby" ]; then
-   [[ $DEBUG > 0 ]] && echo jruby $SCRIPT_OPTS -J-cp "$JAVA_LIBS" $JAVA_OPTS -S jirb --noinspect --readline -r "examples/jas.rb" $*
-   jruby $SCRIPT_OPTS -J-cp "$JAVA_LIBS" $JAVA_OPTS -S jirb --noinspect --readline -r "examples/jas.rb" $*
+   [[ $DEBUG > 0 ]] && echo jruby $SCRIPT_OPTS -J-cp "$JAVA_LIBS" $JAVA_OPTS -S jirb --noinspect --readline -r "$JASRB" $*
+   jruby $SCRIPT_OPTS -J-cp "$JAVA_LIBS" $JAVA_OPTS -S jirb --noinspect --readline -r "$JASRB" $*
 else 
    echo "===========================================" 
    echo "Unknown scripting language $SCRIPT_LANG" 
