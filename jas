@@ -34,18 +34,23 @@ if [ -z "$JAS_HOME" ] ; then
     # current dir is not the script dir
     JAS_HOME_1=`dirname "$PRG"`
   fi
-  if [ -f "$JAS_HOME_1"/examples/jas.rb -o -f "$JAS_HOME_1"/examples/jas.py ] ; then
+  if [ -f "$JAS_HOME_1"/examples/jas.rb -a -f "$JAS_HOME_1"/examples/jas.py ] ; then
     JAS_HOME="$JAS_HOME_1"
   else
     JAS_HOME=`dirname "$JAS_HOME_1"`
+    if [ -f "$JAS_HOME"/examples/jas.rb -a -f "$JAS_HOME"/examples/jas.py ] ; then
+       echo -n ""
+    else
+       JAS_HOME="/usr/local/jas"
+    fi
   fi
 fi
 
 # verify that JAS home is found
 if [ -d "$JAS_HOME/examples" ] ; then
-   JAVA_LIBS="$JAS_HOME/examples"
+   JAVA_LIBS=".:$JAS_HOME/examples"
 elif [ -d "examples" ] ; then
-   JAVA_LIBS="examples"
+   JAVA_LIBS=".:examples"
 else
    echo "===================================" 
    echo "Error: examples directory not found" 
@@ -62,7 +67,7 @@ if [ -f "../lib/log4j.jar" ] ; then
 elif [ -f "lib/log4j.jar" ] ; then
    JAVA_LIBS="$JAVA_LIBS:lib/log4j.jar"
 elif [ -f "$JAS_HOME/../lib/log4j.jar" ] ; then
-   JAVA_LIBS="$JAVA_LIBS:$JAS_HOME/..lib/log4j.jar"
+   JAVA_LIBS="$JAVA_LIBS:$JAS_HOME/../lib/log4j.jar"
 elif [ -f `ls /usr/share/java/log4j*.jar|tail -1` ] ; then
    JAVA_LIBS="$JAVA_LIBS:`ls /usr/share/java/log4j*.jar|tail -1`"
 else
@@ -98,6 +103,8 @@ elif [ -f "jas.jar" ] ; then
    JAVA_LIBS="$JAVA_LIBS:jas.jar"
 elif [ -f "$JAS_HOME/jas.jar" ] ; then
    JAVA_LIBS="$JAVA_LIBS:$JAS_HOME/jas.jar"
+elif [ -f `ls $JAS_HOME/jas*bin.jar|tail -1` ] ; then
+   JAVA_LIBS=$JAVA_LIBS:`ls $JAS_HOME/jas*bin.jar|tail -1`
 elif [ -f `ls /usr/share/java/jas*.jar|tail -1` ] ; then
    JAVA_LIBS=$JAVA_LIBS:`ls /usr/share/java/jas*.jar|tail -1`
 else
@@ -220,6 +227,8 @@ if [ -n "$help_requested" ] ; then
   exit 0
 fi
 
+#
+# run scripting language
 #
 if [ "$SCRIPT_LANG" = "python" ]; then
    if [[ $LANGOPT > 0 ]] ; then
