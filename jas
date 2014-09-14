@@ -101,6 +101,8 @@ elif [ -f "lib/jas.jar" ] ; then
    JAVA_LIBS="$JAVA_LIBS:lib/jas.jar"
 elif [ -f "jas.jar" ] ; then
    JAVA_LIBS="$JAVA_LIBS:jas.jar"
+elif [ -f "$JAS_HOME/../lib/jas.jar" ] ; then
+   JAVA_LIBS="$JAVA_LIBS:$JAS_HOME/../lib/jas.jar"
 elif [ -f "$JAS_HOME/jas.jar" ] ; then
    JAVA_LIBS="$JAVA_LIBS:$JAS_HOME/jas.jar"
 elif [ -f `ls $JAS_HOME/jas*bin.jar|tail -1` ] ; then
@@ -120,7 +122,7 @@ fi
 #JAVA_OPTS="-J-verbose:gc -J-Xms1100M -J-Xmx1900M"
 JAVA_OPTS="-J-verbose:gc -J-Xms350M -J-Xmx800M"
 #JAVA_OPTS="-J-verbose:gc"
-SCRIPT_OPTS=""
+SCRIPT_OPTS=
 #
 # check for scripting language
 # Scanning for args is aborted by '--'.
@@ -236,12 +238,12 @@ if [ "$SCRIPT_LANG" = "python" ]; then
    else
       export CLASSPATH=$CLASSPATH:$JAVA_LIBS
       [[ $DEBUG > 0 ]] && echo CLASSPATH: $CLASSPATH
-      JAVA_OPTS=""
-      JAVA_LIBS=""
+      JAVA_OPTS=
+      JAVA_LIBS=
    fi
-   [[ $DEBUG > 0 ]] && echo jython $SCRIPT_OPTS "$JAVA_LIBS" $JAVA_OPTS $* 
-   [[ $DEBUG > 0 ]] && jython --print $SCRIPT_OPTS "$JAVA_LIBS" $JAVA_OPTS $* 
-   jython $SCRIPT_OPTS $JAVA_LIBS $JAVA_OPTS $* 
+   [[ $DEBUG > 0 ]] && echo jython $SCRIPT_OPTS $JAVA_LIBS $JAVA_OPTS $* 
+   #[[ $DEBUG > 0 ]] && jython --print $SCRIPT_OPTS "$JAVA_LIBS" $JAVA_OPTS $* 
+   jython $SCRIPT_OPTS $JAVA_LIBS $JAVA_OPTS $*
 elif [ "$SCRIPT_LANG" = "ruby" ]; then
    [[ $DEBUG > 0 ]] && echo jruby $SCRIPT_OPTS -J-cp "$JAVA_LIBS" $JAVA_OPTS -S jirb --noinspect --readline -r "$JASRB" $*
    jruby $SCRIPT_OPTS -J-cp "$JAVA_LIBS" $JAVA_OPTS -S jirb --noinspect --readline -r "$JASRB" $*
