@@ -4,24 +4,19 @@
 #
 
 from java.lang import System
-from java.lang import Integer
 
-from jas import Ring, PolyRing
-from jas import terminate
-from jas import startLog
-
-from jas import QQ, DD
+from jas import Ring, PolyRing, QQ, DD
+from jas import terminate, startLog
 
 # polynomial examples: real roots over Q
 
 #r = Ring( "Rat(x) L" );
 #r = Ring( "Q(x) L" );
 r = PolyRing(QQ(),"x",PolyRing.lex);
-
 print "Ring: " + str(r);
 print;
 
-[one,x] = r.gens();
+#automatic: [one,x] = r.gens();
 
 
 f1 = x * ( x - 1 ) * ( x - 2 ) * ( x - 3 ) * ( x - 4 ) * ( x - 5 ) * ( x - 6 ) * ( x - 7 ) ;

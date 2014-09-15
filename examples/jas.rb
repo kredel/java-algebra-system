@@ -2718,6 +2718,9 @@ Convert integer coefficients to modular coefficients.
         p = @pset;
         l = p.list;
         r = p.ring;
+        if mf.is_a? RingElem
+            mf = mf.ring;
+        end
         rm = GenPolynomialRing.new( mf, r.nvar, r.tord, r.vars );
         pm = PolyUtil.fromIntegerCoefficients(rm,l);
         r = Ring.new("",rm);
@@ -2891,6 +2894,9 @@ Convert integral function coefficients to modular function coefficients.
         r = p.ring;
         c = r.coFac;
         #puts "c = ", c;
+        if mf.is_a? RingElem
+            mf = mf.ring;
+        end
         cm = GenPolynomialRing.new( mf, c.nvar, c.tord, c.vars );
         #puts "cm = ", cm;
         rm = GenPolynomialRing.new( cm, r.nvar, r.tord, r.vars );

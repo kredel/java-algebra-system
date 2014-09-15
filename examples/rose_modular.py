@@ -5,10 +5,9 @@
 
 import sys;
 
-from jas import Ring
-from jas import Ideal
+from jas import Ring, GF
 
-from edu.jas.arith import ModIntegerRing
+#from edu.jas.arith import ModIntegerRing
 
 # example from rose (modified) modular computation
 
@@ -39,7 +38,7 @@ ps = """
 ) 
 """;
 
-f = Ideal( r, ps );
+f = r.ideal( ps );
 print "Ideal: " + str(f);
 print;
 
@@ -47,8 +46,9 @@ fi = f.toInteger();
 print "Ideal: " + str(fi);
 print;
 #                    "1152921504606846883"
-mf = ModIntegerRing( str(2**60-93), True );
+#mf = ModIntegerRing( str(2**60-93), True );
 #mf = ModIntegerRing( str(19), True );
+mf = GF( 2**60-93);
 fm = fi.toModular( mf );
 print "Ideal: " + str(fm);
 

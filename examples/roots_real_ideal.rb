@@ -24,15 +24,14 @@ puts "f2 = " + str(f2);
 puts "f3 = " + str(f3);
 puts;
 
-F = r.ideal( "", list=[f1,f2,f3] );
-
-puts "F = " + str(F);
+ff = r.ideal( "", list=[f1,f2,f3] );
+puts "ff = " + str(ff);
 puts;
 
 startLog();
 
-G = F.GB();
-puts "G = " + str(G);
+gg = ff.GB();
+puts "gg = " + str(gg);
 puts;
 
 
@@ -58,26 +57,26 @@ puts "fr = " + str(fr);
 puts "fi = " + str(fi);
 puts;
 
-F = r.ideal( "", list=[fr,fi] );
-puts "F = " + str(F);
+ff = r.ideal( "", list=[fr,fi] );
+puts "ff = " + str(ff);
 puts;
 
-G = F.GB();
-puts "G = " + str(G);
+gg = ff.GB();
+puts "gg = " + str(gg);
 puts;
 
 t = System.currentTimeMillis();
-R = G.realRoots();
+R = gg.realRoots();
 t = System.currentTimeMillis() - t;
 puts "R = " + str(R);
 puts;
 puts "real roots: ";
-G.realRootsPrint()
+gg.realRootsPrint()
 puts;
 puts "real roots time = " + str(t) + " milliseconds";
 puts;
 
-puts "G = " + str(G);
+puts "gg = " + str(gg);
 puts;
 
 #startLog();

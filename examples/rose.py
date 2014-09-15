@@ -5,7 +5,7 @@
 
 import sys;
 
-from jas import Ring, Ideal
+from jas import Ring
 from jas import startLog
 
 # example from rose (modified)
@@ -37,7 +37,7 @@ ps = """
 ) 
 """;
 
-f = Ideal( r, ps );
+f = r.ideal( ps );
 print "Ideal: " + str(f);
 print;
 

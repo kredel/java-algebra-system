@@ -5,10 +5,8 @@
 
 import sys;
 
-from jas import Ring
-from jas import Ideal
-from jas import startLog
-from jas import terminate
+from jas import Ring, QQ
+from jas import startLog, terminate
 
 # example from rose (modified)
 
@@ -50,7 +48,7 @@ pp2 = """
 
 pp = ps % pp1;
 
-f = Ideal( r, pp );
+f = r.ideal( pp );
 print "Ideal: " + str(f);
 print;
 

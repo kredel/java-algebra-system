@@ -857,6 +857,8 @@ class Ideal:
         p = self.pset;
         l = p.list;
         r = p.ring;
+        if isinstance(mf,RingElem):
+            mf = mf.ring;
         rm = GenPolynomialRing( mf, r.nvar, r.tord, r.vars );
         pm = PolyUtil.fromIntegerCoefficients(rm,l);
         r = Ring("",rm);
@@ -1002,6 +1004,8 @@ class ParamIdeal:
         r = p.ring;
         c = r.coFac;
         #print "c = ", c;
+        if isinstance(mf,RingElem):
+            mf = mf.ring;
         cm = GenPolynomialRing( mf, c.nvar, c.tord, c.vars );
         #print "cm = ", cm;
         rm = GenPolynomialRing( cm, r.nvar, r.tord, r.vars );

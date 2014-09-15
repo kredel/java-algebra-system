@@ -12,7 +12,7 @@ r = EF.new(QQ()).realExtend("q","q^3 - 3", "[1,2]").realExtend("w", "w^2 - q", "
 puts "Ring: " + str(r);
 puts;
 
-one,q,w,s,x = r.gens();
+#automatic: one,q,w,s,x = r.gens();
 
 
 f = x**2 - w * s;

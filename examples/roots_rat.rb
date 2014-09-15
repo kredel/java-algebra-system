@@ -8,11 +8,10 @@ require "examples/jas"
 # polynomial examples: real roots over Q
 
 r = PolyRing.new(QQ(),"x",PolyRing.lex);
-
 puts "Ring: " + str(r);
 puts;
 
-one,x = r.gens();
+#automatic: one,x = r.gens();
 
 
 f1 = x * ( x - 1 ) * ( x - 2 ) * ( x - 3 ) * ( x - 4 ) * ( x - 5 ) * ( x - 6 ) * ( x - 7 ) ;

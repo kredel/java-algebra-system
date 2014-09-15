@@ -84,7 +84,6 @@ puts "#squarefree Output: " + str(rfi.size);
 puts;
 
 rfi.each{ |h,i| puts "h**i = " + str(h) + "**" + str(i) };
-#puts "g = ", g;
 puts;
 
 #startLog();

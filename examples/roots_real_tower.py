@@ -6,13 +6,9 @@
 import sys;
 
 from java.lang import System
-from java.lang import Integer
 
-from jas import Ring, PolyRing
-from jas import QQ, DD, EF
-from jas import terminate
-from jas import startLog
-
+from jas import Ring, PolyRing, QQ, DD, EF
+from jas import terminate, startLog
 
 # polynomial examples: real root tower over Q
 
@@ -21,7 +17,7 @@ r = EF(QQ()).realExtend("q","q^3 - 3", "[1,2]").realExtend("w", "w^2 - q", "[1,2
 print "Ring: " + str(r);
 print;
 
-[one,q,w,s,x] = r.gens();
+#automatic: [one,q,w,s,x] = r.gens();
 print "one   = " + str(one);
 print "q     = " + str(q);
 print "w     = " + str(w);
@@ -30,7 +26,6 @@ print "x     = " + str(x);
 print;
 
 f = x**2 - w * s;
-
 
 print "f = ", f;
 print;
