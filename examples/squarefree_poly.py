@@ -4,22 +4,19 @@
 #
 
 from java.lang import System
-from java.lang import Integer
 
-from jas import PolyRing, QQ, ZM, ZZ
-from jas import terminate
-from jas import startLog
+from jas import PolyRing, QQ, ZM, ZZ, GF
+from jas import terminate, startLog
 
 # polynomial examples: squarefree: characteristic 0
 
 #r = PolyRing(PolyRing(QQ(),"u,v",PolyRing.lex),"x, y",PolyRing.lex)
 #r = PolyRing(PolyRing(ZZ(),"u,v",PolyRing.lex),"x, y",PolyRing.lex)
-r = PolyRing(PolyRing(ZM(7),"u,v",PolyRing.lex),"x, y",PolyRing.lex)
-
+r = PolyRing(PolyRing(GF(7),"u,v",PolyRing.lex),"x, y",PolyRing.lex)
 print "Ring: " + str(r);
 print;
 
-[one,u,v,x,y] = r.gens();
+#automatic: [one,u,v,x,y] = r.gens();
 
 a = r.random(k=1,l=3);
 b = r.random(k=1,l=3);
@@ -50,5 +47,5 @@ for g in F.keys():
 print
 print "factor time =", t, "milliseconds";
 
-#startLog();
+startLog();
 terminate();

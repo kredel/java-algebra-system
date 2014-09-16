@@ -4,18 +4,16 @@
 #
 
 from java.lang import System
-from java.lang import Integer
 
-from jas import PolyRing, QQ, ZM, RF
-from jas import terminate
-from jas import startLog
+from jas import PolyRing, QQ, ZM, RF, GF
+from jas import terminate, startLog
 
 # polynomial examples: squarefree: characteristic p, infinite
 
-r = PolyRing( RF(PolyRing(ZM(5,field=True),"u, v",PolyRing.lex)), "x y z",PolyRing.lex);
-
+r = PolyRing( RF(PolyRing(GF(5),"u, v",PolyRing.lex)), "x y z",PolyRing.lex);
 print "r = " + str(r);
-[one,u,v,x,y,z] = r.gens();
+
+#automatic: [one,u,v,x,y,z] = r.gens();
 print "one   = " + str(one);
 print "u     = " + str(u);
 print "v     = " + str(v);
@@ -56,5 +54,5 @@ for g in F.keys():
 print
 print "factor time =", t, "milliseconds";
 
-#startLog();
+startLog();
 terminate();

@@ -7,9 +7,10 @@ require "examples/jas"
 
 # polynomial examples: squarefree: characteristic p, infinite
 
-r = PolyRing.new( RF(PolyRing.new(ZM(5,field=true),"u, v",PolyRing.lex)), "x y z",PolyRing.lex);
+r = PolyRing.new( RF(PolyRing.new(GF(5),"u, v",PolyRing.lex)), "x y z",PolyRing.lex);
 puts "r = " + str(r);
-one,u,v,x,y,z = r.gens();
+
+#automatic: one,u,v,x,y,z = r.gens();
 puts "one   = " + str(one);
 puts "u     = " + str(u);
 puts "v     = " + str(v);

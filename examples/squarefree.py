@@ -4,20 +4,17 @@
 #
 
 from java.lang import System
-from java.lang import Integer
 
 from jas import PolyRing, QQ, ZM
-from jas import terminate
-from jas import startLog
+from jas import terminate, startLog
 
 # polynomial examples: squarefree: characteristic 0
 
 r = PolyRing(QQ(),"x, y, z",PolyRing.lex)
-
 print "Ring: " + str(r);
 print;
 
-[one,x,y,z] = r.gens();
+#automatic: [one,x,y,z] = r.gens();
 
 a = r.random(k=2,l=3);
 b = r.random(k=2,l=3);
@@ -48,5 +45,5 @@ for g in F.keys():
 print
 print "factor time =", t, "milliseconds";
 
-#startLog();
+startLog();
 terminate();

@@ -8,12 +8,11 @@ require "examples/jas"
 # polynomial examples: squarefree: characteristic p, finite
 
 #r = PolyRing.new(QQ(),"x, y, z",PolyRing.lex)
-r = PolyRing.new(ZM(5,field=true),"x, y, z",PolyRing.lex)
-
+r = PolyRing.new(GF(5),"x, y, z",PolyRing.lex)
 puts "Ring: " + str(r);
 puts;
 
-one,x,y,z = r.gens();
+#automatic: one,x,y,z = r.gens();
 
 a = r.random(k=2,l=3);
 b = r.random(k=2,l=3);

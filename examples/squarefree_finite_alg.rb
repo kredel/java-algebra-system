@@ -7,15 +7,15 @@ require "examples/jas"
 
 # polynomial examples: squarefree: characteristic p, finite algebraic
 
-ar = PolyRing.new(ZM(7,field=true),"i",PolyRing.lex)
-one,i = ar.gens();
+ar = PolyRing.new(GF(7),"i",PolyRing.lex)
+#automatic: one,i = ar.gens();
 
 # irred for 7, 11, 19
 r = PolyRing.new(AN(i**2+1,field=true),"x, y, z",PolyRing.lex)
 puts "Ring: " + str(r);
 puts;
 
-one,i,x,y,z = r.gens();
+#automatic: one,i,x,y,z = r.gens();
 
 a = r.random(k=2,l=3);
 b = r.random(k=2,l=3);
