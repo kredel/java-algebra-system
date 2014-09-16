@@ -3152,9 +3152,11 @@ Then returns a Ring.
 class SolvPolyRing < SolvableRing 
 
     @auto_inject = true
+    @auto_lowervar = false
 
     class << self  # means add to class
        attr_accessor :auto_inject
+       attr_accessor :auto_lowervar
     end
 
 =begin rdoc
