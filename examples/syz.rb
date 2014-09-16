@@ -23,7 +23,8 @@ ps = """
 ) 
 """;
 
-f = SimIdeal.new( r, ps );
+#f = SimIdeal.new( r, ps );
+f = r.ideal( ps );
 puts "Ideal: " + str(f);
 puts;
 
@@ -43,7 +44,7 @@ ps = """
 )
 """;
 
-#f = SimIdeal.new( r, ps );
+#f = r.ideal( ps );
 #puts "Ideal: " + str(f);
 #puts;
 

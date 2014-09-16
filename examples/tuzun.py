@@ -13,7 +13,7 @@ from jas import startLog, terminate
 r = PolyRing(ZZ(), "(t)" );
 print "Ring: " + str(r);
 
-[one,t] = r.gens();
+#automatic: [one,t] = r.gens();
 print "one: " + str(one);
 print "t:   " + str(t);
 print;

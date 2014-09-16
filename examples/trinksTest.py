@@ -6,9 +6,7 @@
 import sys;
 
 from jas import Ring
-from jas import Ideal
-from jas import startLog
-from jas import terminate
+from jas import startLog, terminate
 
 
 # trinks 6/7 example

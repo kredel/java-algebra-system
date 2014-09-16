@@ -9,10 +9,11 @@ require "examples/jas"
 # see: Informatik Spektrum, 2009, February,
 # Laubenbacher, Sturmfels: Computer Algebra in der Systembiologie
 
-r = PolyRing.new(ZM(2),"M, B, A, L, P",PolyRing.lex);
+r = PolyRing.new(GF(2),"M, B, A, L, P",PolyRing.lex);
 puts "PolyRing: " + str(r);
 puts;
 
+#automatic not possible, since capital letters
 one,M,B,A,L,P = r.gens();
 
 f1 = M - A;

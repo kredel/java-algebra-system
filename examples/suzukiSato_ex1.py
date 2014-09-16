@@ -6,9 +6,7 @@
 import sys;
 
 from jas import PolyRing, QQ, RF
-from jas import Ideal
-from jas import startLog
-from jas import terminate
+from jas import startLog, terminate
 
 
 # Suzuki and Sato, ISSAC 2006, example 1
@@ -16,12 +14,11 @@ from jas import terminate
 
 #r = PolyRing( QQ(),"b,a,z,y,x", PolyRing.lex );
 #r = PolyRing( RF( PolyRing(QQ(),"a, b",PolyRing.lex) ), "z,y,x", PolyRing.lex );
-
 r = PolyRing( PolyRing(QQ(),"b, a",PolyRing.lex), "z,y,x", PolyRing.lex );
 print "Ring: " + str(r);
 print;
 
-[one,b,a,z,y,x] = r.gens();
+#automatic: [one,b,a,z,y,x] = r.gens();
 print "gens: ", [ str(f) for f in r.gens() ];
 print;
 

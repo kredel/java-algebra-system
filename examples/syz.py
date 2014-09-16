@@ -4,7 +4,6 @@
 #
 
 from jas import Ring
-from jas import Ideal
 
 # trinks 7 example
 
@@ -24,7 +23,7 @@ ps = """
 ) 
 """;
 
-f = Ideal( r, ps );
+f = r.ideal( ps );
 print "Ideal: " + str(f);
 print;
 

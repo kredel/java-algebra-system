@@ -8,14 +8,13 @@ require "examples/jas"
 # Suzuki and Sato, ISSAC 2006, example 1
 # integral function coefficients
 
-
 #r = PolyRing.new( QQ(),"b,a,z,y,x", PolyRing.lex );
 #r = PolyRing.new( RF( PolyRing.new(QQ(),"a, b",PolyRing.lex) ), "z,y,x", PolyRing.lex );
 r = PolyRing.new( PolyRing.new(QQ(),"b, a",PolyRing.lex), "z,y,x", PolyRing.lex );
 puts "Ring: " + str(r);
 puts;
 
-#one,c,b,a,z,y,x = r.gens();
+#one,b,a,z,y,x = r.gens();
 puts "gens: " + r.gens().each{ |f| str(f) }.join(",");
 puts;
 

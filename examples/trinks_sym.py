@@ -5,11 +5,8 @@
 
 import sys;
 
-from jas import Ring
-from jas import PolyRing
-from jas import Ideal
-from jas import startLog
-from jas import terminate
+from jas import Ring, PolyRing
+from jas import startLog, terminate
 from jas import ZZ, QQ, ZM, DD, RF, CC
 
 #r = Ring( "Mod 19 (B,S,T,Z,P,W) L" );

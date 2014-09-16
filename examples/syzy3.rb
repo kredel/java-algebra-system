@@ -20,7 +20,7 @@ ps = """
 ) 
 """;
 
-f = SimIdeal.new( r, ps );
+f = r.ideal( ps );
 print "Ideal: " + str(f);
 print;
 

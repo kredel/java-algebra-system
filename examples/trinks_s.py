@@ -6,9 +6,7 @@
 import sys;
 
 from jas import Ring
-from jas import Ideal
-from jas import startLog
-from jas import terminate
+from jas import startLog, terminate
 
 #import rational;
 
@@ -30,7 +28,7 @@ print;
 print "r.gens() = ", [ str(f) for f in r.gens() ];
 print;
 #[one,e,f,B,S,T,Z,P,W] = r.gens();
-[one,B,S,T,Z,P,W] = r.gens();
+#automatic: [one,B,S,T,Z,P,W] = r.gens();
 
 f1 = 45 * P + 35 * S - 165 * B - 36;
 f2 = 35 * P + 40 * Z + 25 * T - 27 * S;

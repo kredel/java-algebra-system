@@ -5,20 +5,18 @@
 
 from java.lang import System
 
-from jas import PolyRing, Ideal
+from jas import PolyRing, ZM, GF
 from jas import terminate, startLog
-from jas import ZM
 
 # system biology examples: GB in Z_2
 # see: Informatik Spektrum, 2009, February,
 # Laubenbacher, Sturmfels: Computer Algebra in der Systembiologie
 
-r = PolyRing(ZM(2),"M, B, A, L, P",PolyRing.lex);
-
+r = PolyRing(GF(2),"M, B, A, L, P",PolyRing.lex);
 print "PolyRing: " + str(r);
 print;
 
-[one,M,B,A,L,P] = r.gens();
+#automatic: [one,M,B,A,L,P] = r.gens();
 
 f1 = M - A;
 f2 = B - M;

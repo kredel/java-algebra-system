@@ -7,9 +7,8 @@ import sys
 
 from java.lang import System
 
-from jas import PolyRing, Ideal
+from jas import PolyRing, QQ, RF, DD
 from jas import terminate, startLog
-from jas import ZM, RF, QQ, DD
 
 # system biology examples: GB in RF()
 # see: Informatik Spektrum, 2009, February,
@@ -22,7 +21,7 @@ r = PolyRing(RF(PolyRing(QQ(),"A",PolyRing.lex)),"L, M, R",PolyRing.lex);
 print "PolyRing: " + str(r);
 print;
 
-[one,A,L,M,R] = r.gens();
+#automatic: [one,A,L,M,R] = r.gens();
 
 c = 1;
 gamma = 1;
@@ -61,7 +60,7 @@ r2 = PolyRing(PolyRing(QQ(),"L",PolyRing.lex),"A, M, R",PolyRing.lex);
 print "PolyRing: " + str(r2);
 print;
 
-[one,L,A,M,R] = r2.gens();
+#automatic: [one,L,A,M,R] = r2.gens();
 
 fi1 = ( (21,20) * A**6 + (21,10) * A**5 + (1,20) * A + (1,10) ) * L - ( (1,5) * A**7 + (29,20) * A**6 + (1,5) * A**2 + (9,20) * A ); 
 fi2 = ( A**5 + 1 ) * M - ( (21,20) * A**5 + (1,20) );

@@ -7,12 +7,12 @@ require "examples/jas"
 
 # example from CLO(UAG), 4.4
 
-#R = PolyRing( ZM(32003), "x,y,z" );
+#R = PolyRing( GF(32003), "x,y,z" );
 R = PolyRing.new( QQ(), "x,y,z" );
 puts "Ring: " + str(R);
 puts;
 
-one,x,y,z = R.gens();
+#automatic: one,x,y,z = R.gens();
 
 f1 = x**5 - x * y**6 - z**7;
 f2 = x * y + y**3 + z**3;

@@ -10,12 +10,12 @@ from jas import startLog, terminate
 
 # example from CLO(UAG), 4.4
 
-#R = PolyRing( ZM(32003), "x,y,z" );
+#R = PolyRing( GF(32003), "x,y,z" );
 R = PolyRing( QQ(), "x,y,z" );
 print "Ring: " + str(R);
 print;
 
-[one,x,y,z] = R.gens();
+#automatic: [one,x,y,z] = R.gens();
 
 f1 = x**5 - x * y**6 - z**7;
 f2 = x * y + y**3 + z**3;
