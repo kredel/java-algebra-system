@@ -9,7 +9,7 @@ time jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/int
 time jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/intprog4a.py
 time jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/katsura.py
 time jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/preimage.py
-time jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/quantumplane.py
+time jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/quantumplane_syz.py
 time jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/rose.py
 time jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/solvablemodule.py
 time jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/solvmodright.py
