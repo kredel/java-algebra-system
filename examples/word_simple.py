@@ -4,7 +4,6 @@
 #
 
 from java.lang import System
-from java.lang import Integer
 
 from jas import WordRing, WordPolyRing, WordIdeal
 from jas import terminate, startLog
