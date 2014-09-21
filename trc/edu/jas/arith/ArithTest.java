@@ -934,8 +934,10 @@ public class ArithTest extends TestCase {
             if (b.compareTo(e) == 0) {
                 assertTrue("root^" + n + " == b: " + e, b.compareTo(e) == 0);
             } else {
-                System.out.println("b   = " + b + ", root(b," + n +") = " + d);
+                //System.out.println("b   = " + b + ", root(b," + n +") = " + d);
+                System.out.print("b   = " + b + ", "); 
                 System.out.println("d^" + n + " = " + e + ", b-e = " + b.subtract(e).abs());
+                //System.out.println("b~e = " + b.compareToAbsolute(e) + ", (b-e)/e = " + b.compareToRelative(e));
             }
         }
     }
