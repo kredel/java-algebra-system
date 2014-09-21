@@ -22,6 +22,24 @@ Since JAS Version 2.2 there is an enhanced interface which allows
 direct input of algebraic expressions, see <a href="#express">here</a>. 
 </p>
 
+<p>
+JAS can be started with the script "<code>jas</code>" in the JAS home
+directory. By default the JRuby interactive shell ist used. For the
+Jython shell use "<code>jas -py</code>". When started from a desktop,
+like <a href="http://www.mathlibre.org" target="new">MathLibre</a>,
+the shells will look as in the following picture. The upper right
+terminal shows a Jython shell and the lower left terminal shows a JRuby
+shell.
+</p>
+
+<p align="center">
+<img src="images/mathlibre-jas-py-rb_deb.png" width="90%" 
+     alt="JAS in MathLibre" />
+<br />&nbsp;
+<br />
+<b>JAS jython and jruby interface in MathLibre</b>
+</p>
+
 
 <h3>Getting started</h3>
 
@@ -35,9 +53,13 @@ This script file is executed by calling
   jython getstart.py
 </pre>
 <p>
-The script file first imports the desired mathematical classes from the 
-<code>jas.py</code> script which does all interfacing to the Java library.
-For the Epydoc of it see <a href="doc/jython/index.html" target="jython">here</a>.
+If you start <code>jython</code> (or <code>jas -py</code>) without a
+file name, then an interactive shell is opened and you can type
+commands and expressions as desired.
+The script file first imports the desired mathematical classes from
+the <code>jas.py</code> script which does all interfacing to the Java
+library.  For the Epydoc of it see <a href="doc/jython/index.html"
+target="jython">here</a>.
 </p>
 <pre>
   from jas import Ring
@@ -697,7 +719,7 @@ and a solvable module example is in
 <p>
 <!-- Created: Sun Feb 19 15:49:14 CET 2006 -->
 <!-- hhmts start -->
-Last modified: Sat Dec  1 19:25:47 CET 2012
+Last modified: Sun Sep 21 22:02:53 CEST 2014
 <!-- hhmts end -->
 </p>
 <!--p align="right" >

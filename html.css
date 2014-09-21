@@ -13,6 +13,11 @@ pre  { background-color: silver;
        padding: 1em; 
      }
 
+code { font-family: Courier, monospace; 
+       white-space: pre;
+       /* background:  silver; */
+     } 
+
 dt   { font-weight: bolder; 
        margin-top: 1em;
      }
