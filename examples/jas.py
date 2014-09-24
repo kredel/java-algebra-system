@@ -3116,6 +3116,31 @@ class RingElem:
             e = self.elem.factory().getZERO();
         return RingElem( e );
 
+    def random(self,n=3):
+        '''Random element.
+
+        n size for random element will be less than 2**n.
+        '''
+        if isinstance(n,RingElem):
+            n = n.elem;
+        return RingElem( self.elem.factory().random(n) );
+
+    def gcd(self,b):
+        '''Compute the greatest common divisor of this/self and b.
+
+        '''
+        a = self.elem;
+        if isinstance(b,RingElem):
+            b = b.elem;
+        else:
+            b = element( b );
+            b = b.elem;
+        if self.isPolynomial():
+           r = Ring("",self.ring); # how to avoid?
+           return RingElem( r.engine.gcd(a,b) );
+        else:
+           return RingElem( a.gcd(b) );
+
     def coefficients(self):
         '''Get the coefficients of a polynomial.
         '''

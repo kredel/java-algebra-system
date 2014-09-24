@@ -37,7 +37,8 @@ puts;
 #startLog();
 
 t = System.currentTimeMillis();
-d = r.gcd(ac,bc);
+#d = r.gcd(ac,bc);
+d = ac.gcd(bc);
 t = System.currentTimeMillis() - t;
 
 #d = d.monic();
@@ -48,7 +49,7 @@ puts;
 puts "gcd time = " + str(t) + " milliseconds" ;
 
 if r.ring.coFac.isField()
-   m = c % d;
+   m = d % c;
    #puts "m = " + str(m);
    #puts;
    if m.isZERO()
@@ -58,7 +59,6 @@ if r.ring.coFac.isField()
    end
 end
 puts;
-
 
 #startLog();
 terminate();

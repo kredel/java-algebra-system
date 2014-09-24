@@ -913,6 +913,47 @@ r is for partial differentiation in variable r.
     end
 
 =begin rdoc
+Random element.
+
+n size for random element will be less than 2**n.
+=end
+    def random(n=3)
+        if n.is_a? RingElem
+           n = n.elem
+        end
+        return RingElem.new( @elem.factory().random(n) );
+    end
+
+=begin rdoc
+Compute the greatest common divisor of this/self and b.
+=end
+    def gcd(b)
+        a = @elem;
+        if b.is_a? RingElem
+            b = b.elem;
+        else
+            b = element( b );
+            b = b.elem;
+        end
+        if isPolynomial()
+           r = Ring.new("",@ring); # how to avoid?
+           return RingElem.new( r.engine.gcd(a,b) );
+        else
+           return RingElem.new( a.gcd(b) );
+        end
+    end
+
+
+
+
+
+
+
+
+
+
+
+=begin rdoc
 Get the coefficients of a polynomial.
 =end
     def coefficients()
@@ -921,6 +962,7 @@ Get the coefficients of a polynomial.
         ll = a.coefficientIterator().map { |c| RingElem.new(c) }; 
         return ll
     end
+
 
 #----------------
 # Compatibility methods for Sage/Singular:
