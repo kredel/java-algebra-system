@@ -8,6 +8,8 @@ from java.lang import System
 from jas import PolyRing, QQ, ZM
 from jas import terminate, startLog
 
+import operator
+
 # polynomial examples: squarefree: characteristic 0
 
 r = PolyRing(QQ(),"x, y, z",PolyRing.lex)
@@ -36,12 +38,13 @@ print "f = ", f;
 print;
 
 t = System.currentTimeMillis();
-F = r.squarefreeFactors(f);
+#F = r.squarefreeFactors(f);
+F = f.squarefreeFactors();
 t = System.currentTimeMillis() - t;
 print "factors:";
-for g in F.keys():
-    i = F[g];
-    print "g = %s**%s" % (g,i);
+print ", ".join([ str(k)+"**"+str(v) for k,v in F.items() ] );
+print
+print "f == prod(F): " + str(f == reduce(operator.mul, [ k**v for k,v in F.items()]))
 print
 print "factor time =", t, "milliseconds";
 

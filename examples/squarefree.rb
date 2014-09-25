@@ -36,13 +36,13 @@ puts "f = " + str(f);
 puts;
 
 t = System.currentTimeMillis();
-F = r.squarefreeFactors(f);
+#F = r.squarefreeFactors(f);
+F = f.squarefreeFactors();
 t = System.currentTimeMillis() - t;
 puts "factors:";
-for g in F.keys()
-    i = F[g];
-    puts "g = #{g}**#{i}";
-end
+puts F.map { |k,v| k.to_s + ( v == 1 ? "" : "**" + v.to_s ) }.join(", ")
+puts
+puts "f == prod(F): " + (f == F.map { |k,v| k**v }.reduce(:*)).to_s
 puts
 puts "factor time = " + str(t) + " milliseconds";
 

@@ -943,15 +943,29 @@ Compute the greatest common divisor of this/self and b.
         end
     end
 
-
-
-
-
-
-
-
-
-
+=begin rdoc
+Compute squarefree factors of polynomial.
+=end
+    def squarefreeFactors()
+        a = @elem;
+        if isPolynomial()
+           r = Ring.new("",@ring); # how to avoid?
+           cf = @ring.coFac;
+           if cf.getClass().getSimpleName() == "GenPolynomialRing"
+               e = r.sqf.recursiveSquarefreeFactors( a );
+           else
+               e = r.sqf.squarefreeFactors( a );
+           end
+           ll = {};
+           for k in e.keySet()
+               i = e.get(k);
+               ll[ RingElem.new( k ) ] = i;
+           end
+           return ll;
+        else
+           raise ValueError, "squarefreeFactors not implemented for " + a.to_s;
+        end
+    end
 
 =begin rdoc
 Get the coefficients of a polynomial.
