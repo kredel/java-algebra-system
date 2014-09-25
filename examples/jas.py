@@ -3161,6 +3161,29 @@ class RingElem:
         else:
            raise ValueError, "squarefreeFactors not implemented for " + a.to_s;
 
+    def factors(self):
+        '''Compute irreducible factorization for modular, integer,
+           rational number and algebriac number coefficients.
+
+        '''
+        a = self.elem;
+        if self.isPolynomial():
+           r = Ring("",self.ring); # how to avoid?
+           #if not defined(r.factor):
+           #   raise ValueError, "factors not implemented for " + a.to_s;
+           cf = self.ring.coFac;
+           if cf.getClass().getSimpleName() == "GenPolynomialRing":
+               e = r.factor.recursiveFactors( a );
+           else:
+               e = r.factor.factors( a );
+           L = {};
+           for a in e.keySet():
+               i = e.get(a);
+               L[ RingElem( a ) ] = i;
+           return L;
+        else:
+           raise ValueError, "factors not implemented for " + a.to_s;
+
     def coefficients(self):
         '''Get the coefficients of a polynomial.
         '''

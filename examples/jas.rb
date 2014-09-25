@@ -968,6 +968,32 @@ Compute squarefree factors of polynomial.
     end
 
 =begin rdoc
+Compute irreducible factorization for modular, integer,
+rational number and algebriac number coefficients.
+=end
+    def factors()
+        a = @elem;
+        if isPolynomial()
+           r = Ring.new("",@ring); # how to avoid?
+           cf = @ring.coFac;
+           if cf.getClass().getSimpleName() == "GenPolynomialRing"
+               e = r.factor.recursiveFactors( a );
+           else
+               e = r.factor.factors( a );
+           end
+           ll = {};
+           for k in e.keySet()
+               i = e.get(k);
+               ll[ RingElem.new( k ) ] = i;
+           end
+           return ll;
+        else
+           raise ValueError, "factors not implemented for " + a.to_s;
+        end
+    end
+
+
+=begin rdoc
 Get the coefficients of a polynomial.
 =end
     def coefficients()

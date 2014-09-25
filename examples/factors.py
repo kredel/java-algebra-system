@@ -47,11 +47,12 @@ f = f * (x**24 + 272 * x**20 - 7072 * x**16 + 3207424 * x**12 + 12960000 * x**8)
 print "f = ", f;
 print;
 
-startLog();
+#startLog();
 
 t = System.currentTimeMillis();
 #G = r.squarefreeFactors(f);
-G = r.factors(f);
+#G = r.factors(f);
+G = f.factors();
 t = System.currentTimeMillis() - t;
 print "G = ", [ str(h)+"**"+str(i) for (h,i) in G.iteritems() ];
 #print "factor time =", t, "milliseconds";
@@ -72,5 +73,5 @@ else:
     print "factor time =", t, "milliseconds,", "isFactors(f,g): ",  cmp(f,g);
 print;
 
-#startLog();
+startLog();
 terminate();

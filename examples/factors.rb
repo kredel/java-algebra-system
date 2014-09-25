@@ -44,11 +44,12 @@ f = f * (x**24 + 272 * x**20 - 7072 * x**16 + 3207424 * x**12 + 12960000 * x**8)
 puts "f = ", f;
 puts;
 
-startLog();
+#startLog();
 
 t = System.currentTimeMillis();
 #G = r.squarefreeFactors(f);
-G = r.factors(f);
+#G = r.factors(f);
+G = f.factors();
 t = System.currentTimeMillis() - t;
 puts "G = ", str(G.map{ |h,i| str(h)+"**"+str(i)+" " });
 #puts "G = ", G;
@@ -76,5 +77,5 @@ else
 end
 puts;
 
-#startLog();
+startLog();
 terminate();
