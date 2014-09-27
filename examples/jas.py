@@ -372,25 +372,9 @@ class Ring:
     def realRoots(self,a,eps=None):
         '''Compute real roots of univariate polynomial.
         '''
-        if isinstance(a,RingElem):
-            a = a.elem;
-        else:
-            a = self.element( a );
-            a = a.elem;
-        if isinstance(eps,RingElem):
-            eps = eps.elem;
-        try:
-            if eps == None:
-                #R = RealRootsSturm().realRoots( a );
-                R = RootFactory.realAlgebraicNumbers( a );
-            else:
-                R = RootFactory.realAlgebraicNumbers( a, eps );
-            R = [ RingElem(r) for r in R ];
-            #R = [ RingElem(BigDecimal(r.getRational())) for r in R ];
-            return R;
-        except Exception, e:
-            print "error " + str(e)
-            return None
+        if not isinstance(a,RingElem):
+            a = RingElem(a);
+        return a.realRoots(eps);
 
     def complexRoots(self,a,eps=None):
         '''Compute complex roots of univariate polynomial.
@@ -3151,6 +3135,24 @@ class RingElem:
         else:
            raise ValueError, "factors not implemented for " + a.to_s;
 
+    def realRoots(self,eps=None):
+        '''Compute real roots of univariate polynomial.
+        '''
+        a = self.elem;
+        if isinstance(eps,RingElem):
+            eps = eps.elem;
+        try:
+            if eps == None:
+                #R = RealRootsSturm().realRoots( a );
+                R = RootFactory.realAlgebraicNumbers( a );
+            else:
+                R = RootFactory.realAlgebraicNumbers( a, eps );
+            R = [ RingElem(r) for r in R ];
+            #R = [ RingElem(BigDecimal(r.getRational())) for r in R ];
+            return R;
+        except Exception, e:
+            print "error " + str(e)
+            return None
 
     def complexRoots(self,eps=None):
         '''Compute complex roots of univariate polynomial.

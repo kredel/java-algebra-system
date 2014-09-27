@@ -993,6 +993,32 @@ rational number and algebriac number coefficients.
     end
 
 =begin rdoc
+Compute real roots of univariate polynomial.
+=end
+    def realRoots(eps=nil)
+        a = @elem;
+        if eps.is_a? RingElem
+            eps = eps.elem;
+        end
+        begin
+            if eps == nil
+                #rr = RealRootsSturm.new().realRoots( a );
+                rr = RootFactory.realAlgebraicNumbers( a )
+            else
+                rr = RootFactory.realAlgebraicNumbers( a, eps );
+                ## rr = RealRootsSturm.new().realRoots( a, eps );
+                ## rr = [ r.toDecimal() for r in rr ];
+                #rr = RealRootsSturm.new().approximateRoots(a,eps);
+            end
+            rr = rr.map{ |e| RingElem.new(e) };
+            return rr;
+        rescue Exception => e
+            puts "error " + str(e)
+            return nil
+        end
+    end
+
+=begin rdoc
 Compute complex roots of univariate polynomial.
 =end
     def complexRoots(eps=nil)
@@ -1581,31 +1607,10 @@ rational number coefficients.
 Compute real roots of univariate polynomial.
 =end
     def realRoots(a,eps=nil)
-        if a.is_a? RingElem
-            a = a.elem;
-        else
-            a = element( a );
-            a = a.elem;
+        if not a.is_a? RingElem
+            a = RingElem.new(a);
         end
-        if eps.is_a? RingElem
-            eps = eps.elem;
-        end
-        begin
-            if eps == nil
-                #rr = RealRootsSturm.new().realRoots( a );
-                rr = RootFactory.realAlgebraicNumbers( a )
-            else
-                rr = RootFactory.realAlgebraicNumbers( a, eps );
-                ## rr = RealRootsSturm.new().realRoots( a, eps );
-                ## rr = [ r.toDecimal() for r in rr ];
-                #rr = RealRootsSturm.new().approximateRoots(a,eps);
-            end
-            rr = rr.map{ |e| RingElem.new(e) };
-            return rr;
-        rescue Exception => e
-            puts "error " + str(e)
-            return nil
-        end
+        return a.realRoots(eps);
     end
 
 =begin rdoc

@@ -31,14 +31,16 @@ f = f1 * f2;
 puts "f = " + f.to_s;
 puts;
 
-startLog();
+#startLog();
 
 t = System.currentTimeMillis();
-rr = r.realRoots(f);
+#rr = r.realRoots(f);
+rr = f.realRoots();
 t = System.currentTimeMillis() - t;
 #puts "rr = " + str(rr);
-puts "rr = " + str(rr.map{ |a| str(a.elem.ring.getRoot())+"," }); 
+puts "rr = " + rr.map{ |a| str(a.elem.ring.getRoot()) }.join(",\n "); 
 puts "real roots time = " + str(t) + " milliseconds";
+puts
 
 eps = QQ(1,10) ** (BigDecimal::DEFAULT_PRECISION-3);
 puts "eps = " + str(eps);
@@ -47,8 +49,9 @@ t = System.currentTimeMillis();
 rr = r.realRoots(f,eps);
 t = System.currentTimeMillis() - t;
 #puts "rr = ", [ str(r) for r in rr ];
-puts "rr = " + str(rr.map{ |a| str(a.elem.decimalMagnitude())+"," }); 
+puts "rr = " + rr.map{ |a| str(a.elem.decimalMagnitude())}.join(",\n "); 
 puts "real roots time = " + str(t) + " milliseconds";
+puts
 
-#startLog();
+startLog();
 terminate();
