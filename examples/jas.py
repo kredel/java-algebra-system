@@ -395,42 +395,9 @@ class Ring:
     def complexRoots(self,a,eps=None):
         '''Compute complex roots of univariate polynomial.
         '''
-        if isinstance(a,RingElem):
-            a = a.elem;
-        else:
-            a = self.element( a );
-            a = a.elem;
-        if isinstance(eps,RingElem):
-            eps = eps.elem;
-        cmplx = False;
-        try:
-            x = a.ring.coFac.getONE().getRe();
-            cmplx = True;
-        except Exception, e:
-            pass;
-        try:
-            if eps == None:
-                if cmplx:
-                    R = RootFactory.complexAlgebraicNumbersComplex(a);
-                else:
-                    R = RootFactory.complexAlgebraicNumbers(a);
-#                R = ComplexRootsSturm(a.ring.coFac).complexRoots( a );
-#                R = [ r.centerApprox() for r in R ];
-#                R = [ r.ring.getRoot() for r in R ];
-                R = [ RingElem(r) for r in R ];
-            else:
-                if cmplx:
-                    R = RootFactory.complexAlgebraicNumbersComplex(a,eps);
-                else:
-                    R = RootFactory.complexAlgebraicNumbers(a,eps);
-                R = [ RingElem(r) for r in R ];
-#                R = [ r.decimalMagnitude() for r in R ];
-#                R = ComplexRootsSturm(a.ring.coFac).complexRoots( a, eps );
-#                R = ComplexRootsSturm(a.ring.coFac).approximateRoots( a, eps );
-            return R;
-        except Exception, e:
-            print "error " + str(e)
-            return None
+        if not isinstance(a,RingElem):
+            a = RingElem(a);
+        return a.complexRoots(eps);
 
     def integrate(self,a):
         '''Integrate (univariate) rational function.
@@ -3183,6 +3150,44 @@ class RingElem:
            return L;
         else:
            raise ValueError, "factors not implemented for " + a.to_s;
+
+
+    def complexRoots(self,eps=None):
+        '''Compute complex roots of univariate polynomial.
+        '''
+        a = self.elem;
+        if isinstance(eps,RingElem):
+            eps = eps.elem;
+        cmplx = False;
+        try:
+            x = a.ring.coFac.getONE().getRe();
+            cmplx = True;
+        except Exception, e:
+            pass;
+        try:
+            if eps == None:
+                if cmplx:
+                    R = RootFactory.complexAlgebraicNumbersComplex(a);
+                else:
+                    R = RootFactory.complexAlgebraicNumbers(a);
+#                R = ComplexRootsSturm(a.ring.coFac).complexRoots( a );
+#                R = [ r.centerApprox() for r in R ];
+#                R = [ r.ring.getRoot() for r in R ];
+                R = [ RingElem(r) for r in R ];
+            else:
+                if cmplx:
+                    R = RootFactory.complexAlgebraicNumbersComplex(a,eps);
+                else:
+                    R = RootFactory.complexAlgebraicNumbers(a,eps);
+                R = [ RingElem(r) for r in R ];
+#                R = [ r.decimalMagnitude() for r in R ];
+#                R = ComplexRootsSturm(a.ring.coFac).complexRoots( a, eps );
+#                R = ComplexRootsSturm(a.ring.coFac).approximateRoots( a, eps );
+            return R;
+        except Exception, e:
+            print "error " + str(e)
+            return None
+
 
     def coefficients(self):
         '''Get the coefficients of a polynomial.

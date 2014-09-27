@@ -44,11 +44,13 @@ print;
 startLog();
 
 t = System.currentTimeMillis();
-R = r.complexRoots(f);
+#R = r.complexRoots(f);
+R = f.complexRoots();
 t = System.currentTimeMillis() - t;
 #print "R = ", [ a.elem.ring for a in R ];
 print "R = ", [ a.elem.ring.getRoot() for a in R ];
 print "complex roots time =", t, "milliseconds";
+print
 
 #terminate();
 #sys.exit();
@@ -63,6 +65,7 @@ t = System.currentTimeMillis() - t;
 #print "R = ", [ str(a) for a in R ];
 print "R = ", [ a.elem.decimalMagnitude() for a in R ];
 print "complex root refinement time =", t, "milliseconds";
+print
 
 #startLog();
 terminate();

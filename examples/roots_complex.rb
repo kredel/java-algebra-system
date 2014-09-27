@@ -36,22 +36,26 @@ puts;
 startLog();
 
 t = System.currentTimeMillis();
-rr = r.complexRoots(f);
+#rr = r.complexRoots(f);
+rr = f.complexRoots();
 t = System.currentTimeMillis() - t;
 #puts "rr = " + str(rr);
-puts "rr = " + str(rr.map{ |a| str(a.elem.ring.getRoot()) }); 
+puts "rr = " + str(rr.map{ |a| str(a.elem.ring.getRoot()) }.join(",\n ")); 
 puts "complex roots time = " + str(t) + " milliseconds";
+puts
 
 #eps = QQ(1,10) ** (BigDecimal::DEFAULT_PRECISION-3);
 eps = QQ(1,10) ** 10;
 puts "eps = " + str(eps);
 
 t = System.currentTimeMillis();
-rr = r.complexRoots(f,eps);
+#rr = r.complexRoots(f,eps);
+rr = f.complexRoots(eps);
 t = System.currentTimeMillis() - t;
 #puts "rr = ", [ str(r) for r in rr ];
-puts "rr = " + str(rr.map{ |a| str(a.elem.decimalMagnitude()) }); 
+puts "rr = " + str(rr.map{ |a| str(a.elem.decimalMagnitude()) }.join(",\n ")); 
 puts "complex roots refinement time = " + str(t) + " milliseconds";
+puts
 
 #startLog();
 terminate();

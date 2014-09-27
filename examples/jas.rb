@@ -992,6 +992,48 @@ rational number and algebriac number coefficients.
         end
     end
 
+=begin rdoc
+Compute complex roots of univariate polynomial.
+=end
+    def complexRoots(eps=nil)
+        a = @elem;
+        if eps.is_a? RingElem
+            eps = eps.elem;
+        end
+        cmplx = false;
+        begin
+            x = a.ring.coFac.getONE().getRe();
+            cmplx = true;
+        rescue Exception => e
+            #pass;
+        end
+        begin
+            if eps == nil
+                #rr = ComplexRootsSturm.new(a.ring.coFac).complexRoots( a );
+                if cmplx
+                   rr = RootFactory.complexAlgebraicNumbersComplex( a );
+                else 
+                   rr = RootFactory.complexAlgebraicNumbers( a );
+                end
+                #R = [ r.centerApprox() for r in R ];
+            else
+                ## rr = ComplexRootsSturm.new(a.ring.coFac).complexRoots( a, eps );
+                ## rr = [ r.centerApprox() for r in rr ];
+                ##rr = ComplexRootsSturm.new(a.ring.coFac).approximateRoots( a, eps );
+                if cmplx
+                   rr = RootFactory.complexAlgebraicNumbersComplex( a, eps );
+                else
+                   rr = RootFactory.complexAlgebraicNumbers( a, eps );
+                end
+            end
+            rr = rr.map{ |y| RingElem.new(y) };
+            return rr;
+        rescue Exception => e
+            puts "error " + str(e)
+            return nil
+        end
+    end
+
 
 =begin rdoc
 Get the coefficients of a polynomial.
@@ -1570,47 +1612,10 @@ Compute real roots of univariate polynomial.
 Compute complex roots of univariate polynomial.
 =end
     def complexRoots(a,eps=nil)
-        if a.is_a? RingElem
-            a = a.elem;
-        else
-            a = element( a );
-            a = a.elem;
+        if not a.is_a? RingElem
+            a = RingElem.new(a);
         end
-        if eps.is_a? RingElem
-            eps = eps.elem;
-        end
-        cmplx = false;
-        begin
-            x = a.ring.coFac.getONE().getRe();
-            cmplx = true;
-        rescue Exception => e
-            #pass;
-        end
-        begin
-            if eps == nil
-                #rr = ComplexRootsSturm.new(a.ring.coFac).complexRoots( a );
-                if cmplx
-                   rr = RootFactory.complexAlgebraicNumbersComplex( a );
-                else 
-                   rr = RootFactory.complexAlgebraicNumbers( a );
-                end
-                #R = [ r.centerApprox() for r in R ];
-            else
-                ## rr = ComplexRootsSturm.new(a.ring.coFac).complexRoots( a, eps );
-                ## rr = [ r.centerApprox() for r in rr ];
-                ##rr = ComplexRootsSturm.new(a.ring.coFac).approximateRoots( a, eps );
-                if cmplx
-                   rr = RootFactory.complexAlgebraicNumbersComplex( a, eps );
-                else
-                   rr = RootFactory.complexAlgebraicNumbers( a, eps );
-                end
-            end
-            rr = rr.map{ |y| RingElem.new(y) };
-            return rr;
-        rescue Exception => e
-            puts "error " + str(e)
-            return nil
-        end
+        return a.complexRoots(eps);
     end
 
 =begin rdoc
