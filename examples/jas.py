@@ -246,6 +246,12 @@ class Ring:
         '''
         return ParamIdeal(self,ringstr,list,gbsys);
 
+    def powerseriesRing(self):
+        '''Get a power series ring from this ring.
+        '''
+        pr = MultiVarPowerSeriesRing(self.ring);
+        return MultiSeriesRing(ring=pr);
+
     def gens(self):
         '''Get list of generators of the polynomial ring.
         '''
@@ -384,27 +390,11 @@ class Ring:
         return a.complexRoots(eps);
 
     def integrate(self,a):
-        '''Integrate (univariate) rational function.
+        '''Integrate rational function or power series.
         '''
-        if isinstance(a,RingElem):
-            a = a.elem;
-        else:
-            a = self.element( a );
-            a = a.elem;
-        cf = self.ring;
-        try:
-            cf = cf.ring;
-        except:
-            pass;
-        integrator = ElementaryIntegration(cf.coFac);
-        ei = integrator.integrate(a); 
-        return ei;
-
-    def powerseriesRing(self):
-        '''Get a power series ring from this ring.
-        '''
-        pr = MultiVarPowerSeriesRing(self.ring);
-        return MultiSeriesRing(ring=pr);
+        if not isinstance(a,RingElem):
+            a = RingElem(a);
+        return a.integrate();
 
 
 class Ideal:
@@ -3023,7 +3013,7 @@ class RingElem:
         return RingElem( e );
 
     def integrate(self,a=0,r=None):
-        '''Integrate a power series with constant a or as rational function.
+        '''Integrate a power series or rational function with constant a.
 
         a is the integration constant, r is for partial integration in variable r.
         '''
@@ -3036,6 +3026,7 @@ class RingElem:
             # assume BigRational or BigComplex
             # assume self will be compatible with them. todo: check this
             x = makeJasArith(a);
+        # power series
         try:
             if r != None:
                 e = self.elem.integrate(x,r);
@@ -3049,6 +3040,7 @@ class RingElem:
             cf = cf.ring;
         except:
             pass;
+        # rational function
         integrator = ElementaryIntegration(cf.coFac);
         ei = integrator.integrate(self.elem); 
         return ei;
@@ -3206,7 +3198,6 @@ class RingElem:
         except Exception, e:
             print "error " + str(e)
             return None
-
 
     def coefficients(self):
         '''Get the coefficients of a polynomial.

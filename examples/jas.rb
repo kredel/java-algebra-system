@@ -857,7 +857,7 @@ Evaluate at a for power series.
     end
 
 =begin rdoc
-Integrate a power series with constant a or as rational function.
+Integrate a power series or rational function with constant a.
 
 a is the integration constant, r is for partial integration in variable r.
 =end
@@ -873,7 +873,8 @@ a is the integration constant, r is for partial integration in variable r.
             # assume self will be compatible with them. todo: check this
             x = makeJasArith(a);
         end
-        begin
+        # power series
+        begin 
             if r != nil
                 e = @elem.integrate(x,r);
             else
@@ -889,6 +890,7 @@ a is the integration constant, r is for partial integration in variable r.
         rescue
             #pass;
         end
+        # rational function
         integrator = ElementaryIntegration.new(cf.coFac);
         ei = integrator.integrate(@elem); 
         return ei;
@@ -1079,7 +1081,6 @@ Compute complex roots of univariate polynomial.
             return nil
         end
     end
-
 
 =begin rdoc
 Get the coefficients of a polynomial.
@@ -1472,6 +1473,14 @@ Create an ideal in a polynomial ring with parameter coefficients.
     end
 
 =begin rdoc
+Get a power series ring from this ring.
+=end
+    def powerseriesRing()
+        pr = MultiVarPowerSeriesRing.new(@ring);
+        return MultiSeriesRing.new("",nil,pr);
+    end
+
+=begin rdoc
 Get list of generators of the polynomial ring.
 =end
     def gens()
@@ -1644,32 +1653,13 @@ Compute complex roots of univariate polynomial.
     end
 
 =begin rdoc
-Integrate (univariate) rational function.
+Integrate rational function or power series.
 =end
     def integrate(a)
-        if a.is_a? RingElem
-            a = a.elem;
-        else
-            a = element( a );
-            a = a.elem;
+        if not a.is_a? RingElem
+            a = RingElem.new(a);
         end
-        cf = @ring;
-        begin
-            cf = cf.ring;
-        rescue
-            #pass;
-        end
-        integrator = ElementaryIntegration.new(cf.coFac);
-        ei = integrator.integrate(a); 
-        return ei;
-    end
-
-=begin rdoc
-Get a power series ring from this ring.
-=end
-    def powerseriesRing()
-        pr = MultiVarPowerSeriesRing.new(@ring);
-        return MultiSeriesRing.new("",nil,pr);
+        return a.integrate();
     end
 end
 
