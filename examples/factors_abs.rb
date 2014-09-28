@@ -7,7 +7,8 @@ require "examples/jas"
 
 # polynomial examples: absolute factorization over Q
 
-r = PolyRing.new( QQ(), "(x)", PolyRing.lex );
+#r = PolyRing.new( GF(19), "x", PolyRing.lex );
+r = PolyRing.new( QQ(), "x", PolyRing.lex );
 puts "Ring: " + str(r);
 puts;
 
@@ -52,7 +53,8 @@ startLog();
 
 t = System.currentTimeMillis();
 #G = r.squarefreeFactors(f);
-G = r.factorsAbsolute(f);
+#G = r.factorsAbsolute(f);
+G = f.factorsAbsolute();
 t = System.currentTimeMillis() - t;
 puts "G = " + str(G.toScript());
 puts

@@ -3135,6 +3135,23 @@ class RingElem:
         else:
            raise ValueError, "factors not implemented for " + a.to_s;
 
+    def factorsAbsolute(self):
+        '''Compute absolute irreducible factorization for (modular,)
+        rational number coefficients.
+        '''
+        a = self.elem;
+        r = Ring("",self.ring); # how to avoid?
+        try:
+            L = r.factor.factorsAbsolute( a );
+##             L = {};
+##             for a in e.keySet():
+##                 i = e.get(a);
+##                 L[ RingElem( a ) ] = i;
+            return L;
+        except Exception, e:
+            print "error in factorsAbsolute " + str(e)
+            return None
+
     def realRoots(self,eps=None):
         '''Compute real roots of univariate polynomial.
         '''

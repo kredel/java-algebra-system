@@ -5,13 +5,13 @@
 
 from java.lang import System
 
-from jas import QQ, PolyRing
+from jas import QQ, GF, ZZ, PolyRing
 from jas import terminate, startLog
 
 # polynomial examples: absolute factorization over Q
 
-#r = Ring( "Q(x) L" );
-r = PolyRing( QQ(), "(x)", PolyRing.lex );
+#r = PolyRing( GF(19), "x", PolyRing.lex );
+r = PolyRing( QQ(), "x", PolyRing.lex );
 print "Ring: " + str(r);
 print;
 
@@ -56,7 +56,8 @@ startLog();
 
 t = System.currentTimeMillis();
 #G = r.squarefreeFactors(f);
-G = r.factorsAbsolute(f);
+#G = r.factorsAbsolute(f);
+G = f.factorsAbsolute();
 t = System.currentTimeMillis() - t;
 print "G = ", G.toScript();
 print

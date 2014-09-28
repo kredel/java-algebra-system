@@ -993,6 +993,26 @@ rational number and algebriac number coefficients.
     end
 
 =begin rdoc
+Compute absolute irreducible factorization for (modular,)
+rational number coefficients.
+=end
+    def factorsAbsolute()
+        a = @elem;
+        r = Ring.new("",@ring); # how to avoid?
+        begin
+           ll = r.factor.factorsAbsolute( a );
+##             ll = {};
+##             for a in e.keySet()
+##                 i = e.get(a);
+##                 ll[ RingElem.new( a ) ] = i;
+               return ll;
+        rescue Exception => e
+           puts "error in factorsAbsolute " + str(e)
+           return nil
+        end
+    end
+
+=begin rdoc
 Compute real roots of univariate polynomial.
 =end
     def realRoots(eps=nil)
