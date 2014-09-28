@@ -938,8 +938,8 @@ Compute the greatest common divisor of this/self and b.
             b = b.elem;
         end
         if isPolynomial()
-           r = Ring.new("",@ring); # how to avoid?
-           return RingElem.new( r.engine.gcd(a,b) );
+           engine = Ring.getEngineGcd(@ring); 
+           return RingElem.new( engine.gcd(a,b) );
         else
            return RingElem.new( a.gcd(b) );
         end
@@ -951,12 +951,15 @@ Compute squarefree factors of polynomial.
     def squarefreeFactors()
         a = @elem;
         if isPolynomial()
-           r = Ring.new("",@ring); # how to avoid?
+           sqf = Ring.getEngineSqf(@ring); 
+           if sqf == nil 
+              raise ValueError, "squarefreeFactors not implemented for " + @ring.to_s;
+           end
            cf = @ring.coFac;
            if cf.getClass().getSimpleName() == "GenPolynomialRing"
-               e = r.sqf.recursiveSquarefreeFactors( a );
+               e = sqf.recursiveSquarefreeFactors( a );
            else
-               e = r.sqf.squarefreeFactors( a );
+               e = sqf.squarefreeFactors( a );
            end
            ll = {};
            for k in e.keySet()
@@ -976,12 +979,15 @@ rational number and algebriac number coefficients.
     def factors()
         a = @elem;
         if isPolynomial()
-           r = Ring.new("",@ring); # how to avoid?
+           factor = Ring.getEngineFactor(@ring); 
+           if factor == nil 
+              raise ValueError, "factors not implemented for " + @ring.to_s;
+           end
            cf = @ring.coFac;
            if cf.getClass().getSimpleName() == "GenPolynomialRing"
-               e = r.factor.recursiveFactors( a );
+               e = factor.recursiveFactors( a );
            else
-               e = r.factor.factors( a );
+               e = factor.factors( a );
            end
            ll = {};
            for k in e.keySet()
@@ -1000,17 +1006,23 @@ rational number coefficients.
 =end
     def factorsAbsolute()
         a = @elem;
-        r = Ring.new("",@ring); # how to avoid?
-        begin
-           ll = r.factor.factorsAbsolute( a );
+        if isPolynomial()
+           factor = Ring.getEngineFactor(@ring); 
+           if factor == nil 
+              raise ValueError, "factors not implemented for " + @ring.to_s;
+           end
+           begin
+               ll = factor.factorsAbsolute( a );
 ##             ll = {};
 ##             for a in e.keySet()
 ##                 i = e.get(a);
 ##                 ll[ RingElem.new( a ) ] = i;
                return ll;
-        rescue Exception => e
-           puts "error in factorsAbsolute " + str(e)
-           return nil
+           rescue Exception => e
+               raise ValueError, "error factorsAbsolute " + @ring.to_s;
+           end
+        else
+           raise ValueError, "factors not implemented for " + a.to_s;
         end
     end
 
@@ -1375,26 +1387,57 @@ ring JAS ring object.
         #if fast == true
         #   return
         #end
-        @engine = GCDFactory.getProxy(@ring.coFac);
-        @sqf = nil;
-        @factor = nil;
-        begin
-            @sqf = SquarefreeFactory.getImplementation(@ring.coFac);
+        #@engine = GCDFactory.getProxy(@ring.coFac);
+        @engine = Ring.getEngineGcd(@ring);
+        @sqf = Ring.getEngineSqf(@ring);
+        @factor = Ring.getEngineFactor(@ring);
+        #begin
+            #@sqf = SquarefreeFactory.getImplementation(@ring.coFac);
             #puts "sqf: ", @sqf;
         #rescue Exception => e
             #puts "error " + str(e)
-        rescue
+        #rescue
             #pass
-        end
-        begin
-            @factor = FactorFactory.getImplementation(@ring.coFac);
+        #end
+        #begin
+            #@factor = FactorFactory.getImplementation(@ring.coFac);
             #puts "factor: ", @factor;
         #rescue Exception => e
             #puts "error " + str(e)
-        rescue
+        #rescue
             #pass
-        end
+        #end
         variable_generators()
+    end
+
+    def Ring.getEngineGcd(r)
+        if r.is_a? RingElem
+            r = r.elem;
+        end
+        if r.getClass().getSimpleName() != "GenPolynomialRing"
+           return nil;
+        end
+        GCDFactory.getProxy(r.coFac);
+    end
+
+    def Ring.getEngineSqf(r)
+        if r.is_a? RingElem
+            r = r.elem;
+        end
+        if r.getClass().getSimpleName() != "GenPolynomialRing"
+           return nil;
+        end
+        SquarefreeFactory.getImplementation(r.coFac);
+    end
+
+    def Ring.getEngineFactor(r)
+        if r.is_a? RingElem
+            r = r.elem;
+        end
+        if r.getClass().getSimpleName() != "GenPolynomialRing"
+           return nil;
+        end
+        FactorFactory.getImplementation(r.coFac);
     end
 
 =begin rdoc

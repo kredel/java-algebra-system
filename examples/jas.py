@@ -168,19 +168,22 @@ class Ring:
            self.ring = ring;
         if fast:
             return;
-        self.engine = GCDFactory.getProxy(self.ring.coFac);
-        try:
-            self.sqf = SquarefreeFactory.getImplementation(self.ring.coFac);
+        #self.engine = GCDFactory.getProxy(self.ring.coFac);
+        self.engine = Ring.getEngineGcd(self.ring);
+        self.sqf = Ring.getEngineSqf(self.ring);
+        self.factor = Ring.getEngineFactor(self.ring);
+#       try:
+#            self.sqf = SquarefreeFactory.getImplementation(self.ring.coFac);
 #            print "sqf: ", self.sqf;
 #        except Exception, e:
 #            print "error " + str(e)
-        except:
-            pass
-        try:
-            self.factor = FactorFactory.getImplementation(self.ring.coFac);
+#        except:
+#            pass
+#        try:
+#            self.factor = FactorFactory.getImplementation(self.ring.coFac);
             #print "factor: ", self.factor;
-        except:
-            pass
+#        except:
+#            pass
 #        except Exception, e:
 #            print "error " + str(e)
         #print "dict: " + str(self.__dict__)
@@ -230,6 +233,33 @@ class Ring:
         if auto_inject:
             print "globally defined variables: " + vns
         #print "dict: " + str(self.__dict__)
+
+    def getEngineGcd(r):
+        if isinstance(r,RingElem):
+            r = r.elem;
+        if not isinstance(r,GenPolynomialRing):
+            return None;
+        return GCDFactory.getProxy(r.coFac);
+    
+    getEngineGcd = staticmethod(getEngineGcd);
+
+    def getEngineSqf(r):
+        if isinstance(r,RingElem):
+            r = r.elem;
+        if not isinstance(r,GenPolynomialRing):
+            return None;
+        return SquarefreeFactory.getImplementation(r.coFac);
+    
+    getEngineSqf = staticmethod(getEngineSqf);
+
+    def getEngineFactor(r):
+        if isinstance(r,RingElem):
+            r = r.elem;
+        if not isinstance(r,GenPolynomialRing):
+            return None;
+        return FactorFactory.getImplementation(r.coFac);
+    
+    getEngineFactor = staticmethod(getEngineFactor);
 
     def __str__(self):
         '''Create a string representation.
@@ -3079,8 +3109,8 @@ class RingElem:
             b = element( b );
             b = b.elem;
         if self.isPolynomial():
-           r = Ring("",self.ring); # how to avoid?
-           return RingElem( r.engine.gcd(a,b) );
+           engine = Ring.getEngineGcd(self.ring); 
+           return RingElem( engine.gcd(a,b) );
         else:
            return RingElem( a.gcd(b) );
 
@@ -3090,12 +3120,14 @@ class RingElem:
         '''
         a = self.elem;
         if self.isPolynomial():
-           r = Ring("",self.ring); # how to avoid?
+           sqf = Ring.getEngineSqf(self.ring); 
+           if sqf == None:
+              raise ValueError, "squarefreeFactors not implemented for " + self.ring.to_s;
            cf = self.ring.coFac;
            if cf.getClass().getSimpleName() == "GenPolynomialRing":
-               e = r.sqf.recursiveSquarefreeFactors( a );
+               e = sqf.recursiveSquarefreeFactors( a );
            else:
-               e = r.sqf.squarefreeFactors( a );
+               e = sqf.squarefreeFactors( a );
            L = {};
            for a in e.keySet():
                i = e.get(a);
@@ -3111,14 +3143,14 @@ class RingElem:
         '''
         a = self.elem;
         if self.isPolynomial():
-           r = Ring("",self.ring); # how to avoid?
-           #if not defined(r.factor):
-           #   raise ValueError, "factors not implemented for " + a.to_s;
+           factor = Ring.getEngineFactor(self.ring); 
+           if factor == None:
+              raise ValueError, "factors not implemented for " + self.ring.to_s;
            cf = self.ring.coFac;
            if cf.getClass().getSimpleName() == "GenPolynomialRing":
-               e = r.factor.recursiveFactors( a );
+               e = factor.recursiveFactors( a );
            else:
-               e = r.factor.factors( a );
+               e = factor.factors( a );
            L = {};
            for a in e.keySet():
                i = e.get(a);
@@ -3132,17 +3164,21 @@ class RingElem:
         rational number coefficients.
         '''
         a = self.elem;
-        r = Ring("",self.ring); # how to avoid?
-        try:
-            L = r.factor.factorsAbsolute( a );
-##             L = {};
-##             for a in e.keySet():
-##                 i = e.get(a);
-##                 L[ RingElem( a ) ] = i;
-            return L;
-        except Exception, e:
-            print "error in factorsAbsolute " + str(e)
-            return None
+        if self.isPolynomial():
+           factor = Ring.getEngineFactor(self.ring); 
+           if factor == None:
+              raise ValueError, "factors not implemented for " + self.ring.to_s;
+           try:
+              L = factor.factorsAbsolute( a );
+##            L = {};
+##            for a in e.keySet():
+##                i = e.get(a);
+##                L[ RingElem( a ) ] = i;
+              return L;
+           except Exception, e:
+              raise ValueError, "error in factorsAbsolute " + str(e)
+        else:
+           raise ValueError, "factors not implemented for " + a.to_s;
 
     def realRoots(self,eps=None):
         '''Compute real roots of univariate polynomial.
