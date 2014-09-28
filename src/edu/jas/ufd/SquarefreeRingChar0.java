@@ -359,6 +359,10 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>> extends SquarefreeAbs
         if (P.isZERO()) {
             return sfactors;
         }
+        if (P.isONE()) {
+            sfactors.put(P, 1L);
+            return sfactors;
+        }
         GenPolynomialRing<C> cfac = pfac.contract(1);
         GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(cfac, 1);
 
