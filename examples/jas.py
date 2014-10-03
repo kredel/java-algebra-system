@@ -149,6 +149,42 @@ def inject_generators(gens):
               #print "var = " + s;
            inject_variable(s,v)
 
+def nameFromValue(v):
+    '''Get a meaningful name from a value.
+
+    v ist the given value.
+    '''
+    vs = str(v);
+    vs = vs.replace(" ","");
+    vs = vs.replace("\n","");
+    if vs.find("(") >= 0:
+       vs = vs.replace("(","");
+       vs = vs.replace(")","");
+    if vs.find("{") >= 0:
+       vs = vs.replace("{","");
+       vs = vs.replace("}","");
+    if vs.find("[") >= 0:
+       vs = vs.replace("[","");
+       vs = vs.replace("]","");
+    if vs.find(",") >= 0:
+       vs = vs.replace(",","");
+    #if vs.find("|") >= 0:
+    #    vs = vs.replace("|","div"); # case "1"?
+    if vs.find("/") >= 0:
+       vs = vs.replace("/","div");
+    if vs[0:1] == "1":
+       vs = 'one' + vs[1:];
+    if vs == "1":
+       vs = "one";
+    if vs == "0i1" or vs == "0I1":
+       vs = "I";
+    import re;
+    ri = re.compile(r'\A[0-9].*');
+    if ri.match(vs):
+       #print "0vs = " + str(vs);
+       return None;
+    return vs;
+
 
 class Ring:
     '''Represents a JAS polynomial ring: GenPolynomialRing.
@@ -171,71 +207,10 @@ class Ring:
            self.ring = ring;
         if fast:
             return;
-        #self.engine = GCDFactory.getProxy(self.ring.coFac);
         self.engine = Ring.getEngineGcd(self.ring);
         self.sqf = Ring.getEngineSqf(self.ring);
         self.factor = Ring.getEngineFactor(self.ring);
-#       try:
-#            self.sqf = SquarefreeFactory.getImplementation(self.ring.coFac);
-#            print "sqf: ", self.sqf;
-#        except Exception, e:
-#            print "error " + str(e)
-#        except:
-#            pass
-#        try:
-#            self.factor = FactorFactory.getImplementation(self.ring.coFac);
-            #print "factor: ", self.factor;
-#        except:
-#            pass
-#        except Exception, e:
-#            print "error " + str(e)
-        #print "dict: " + str(self.__dict__)
-        vns = []
-        import re;
-        ri = re.compile(r'\A[0-9].*');
-        for v in self.ring.generators():
-            #print "vars = " + str(v);
-            vs = str(v);
-            vr = RingElem(v);
-            vs = vs.replace(" ","");
-            vs = vs.replace("\n","");
-            if vs.find("(") >= 0:
-                vs = vs.replace("(","");
-                vs = vs.replace(")","");
-            if vs.find("{") >= 0:
-                vs = vs.replace("{","");
-                vs = vs.replace("}","");
-            if vs.find("[") >= 0:
-                vs = vs.replace("[","");
-                vs = vs.replace("]","");
-            if vs.find(",") >= 0:
-                vs = vs.replace(",","");
-            #if vs.find("|") >= 0:
-            #    vs = vs.replace("|","div"); # case "1"?
-            if vs.find("/") >= 0:
-                vs = vs.replace("/","div");
-                if vs[0:1] == "1":
-                   vs = 'one' + vs[1:];
-            if vs == "1":
-                vs = "one";
-            if vs == "0i1" or vs == "0I1":
-                vs = "I";
-            if ri.match(vs):
-                #print "0vs = " + str(vs);
-                continue;
-            try:
-                if self.__dict__[vs] is None:
-                    self.__dict__[vs] = vr;
-                else:
-                    print vs + " not redefined to " + str(v);
-            except:
-                self.__dict__[vs] = vr;
-            if auto_inject:
-                inject_variable(vs,vr)
-                vns.append(vs)
-        if auto_inject:
-            print "globally defined variables: " + ", ".join(vns)
-        #print "dict: " + str(self.__dict__)
+        self.variable_generators();
 
     def getEngineGcd(r):
         '''Get the polynomial gcd engine implementation.
@@ -275,6 +250,32 @@ class Ring:
         return FactorFactory.getImplementation(r.coFac);
     
     getEngineFactor = staticmethod(getEngineFactor);
+
+    def variable_generators(self):
+        '''Define instance variables for generators.
+        '''
+        vns = []
+        #print "dict: " + str(self.__dict__)
+        for v in self.gens(): #ring.generators():
+            #vr = RingElem(v);
+            #print "vars = " + str(v);
+            vs = nameFromValue(v);
+            if vs is None:
+                #print "0vs = " + str(vs);
+                continue;
+            try:
+                if self.__dict__[vs] is None:
+                    self.__dict__[vs] = v;
+                else:
+                    print vs + " not redefined to " + str(v);
+            except:
+                self.__dict__[vs] = v;
+            if auto_inject:
+                inject_variable(vs,v)
+                vns.append(vs)
+        if auto_inject:
+            print "globally defined variables: " + ", ".join(vns)
+        #print "dict: " + str(self.__dict__)
 
     def __str__(self):
         '''Create a string representation.
@@ -3349,8 +3350,8 @@ class RingElem:
 
         Compatibility method for Sage/Singular.
         '''
-        p = Ring("",ring=self.ring,fast=True);
-        return p.ideal("",list=list);
+        r = Ring("",ring=self.ring,fast=True);
+        return r.ideal("",list=list);
 
     def monomial_quotient(self,a,b,coeff=False):
         '''Quotient of ExpVectors.

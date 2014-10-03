@@ -67,41 +67,25 @@ def inject_gens(env)
     #puts "existing generators: " + env.generators.keys().join(", ");  
     for i in self.gens()
        begin 
-          ivs = i.to_s
-          #puts "string1: #{ivs} = " + ivs.class.to_s;
-          ivs = ivs.gsub(" ","");
-          ivs = ivs.gsub(",","");
-          ivs = ivs.gsub("(","");
-          ivs = ivs.gsub(")","");
-          ivs = ivs.gsub("/","div");
-          #ivs = ivs.gsub("|","div");
-          ivs = ivs.gsub("{","");
-          ivs = ivs.gsub("}","");
-          if ivs[0] == "1"[0] 
-             r = ivs[1,ivs.size-1].to_s;
-             ivs = "one"
-             if r != nil 
-                ivs = ivs + r
-             end
+          ivs = nameFromValue(i);
+          if ivs == nil
+             continue;
+          end;
+          #puts "string2: #{ivs} = " + ivs.class.to_s;
+          #puts "string3: #{ivs} = " + (env.instance_eval( "#{ivs};" ));
+          if env.generators[ ivs ] != nil
+             puts "redefining #{ivs}";
           end
-          #puts "string: #{ivs} of " + i.to_s;
-          if not ivs.include?(",") and not ivs.include?("(") and not ivs.include?("/") and not ivs.include?("|") and not ivs.include?("{") and not ivs.match(/\A[0-9].*/)
-             #puts "string2: #{ivs} = " + ivs.class.to_s;
-             #puts "string3: #{ivs} = " + (env.instance_eval( "#{ivs};" ));
-             if env.generators[ ivs ] != nil
-                puts "redefining #{ivs}";
-             end
-             env.generators[ ivs ] = i;
-             env.instance_eval( "def #{ivs}; @generators[ '#{ivs}' ]; end" )
-             #puts "def #{ivs}; @generators[ '#{ivs}' ]; end"
-             if self.class.auto_lowervar 
-               first = ivs.slice(0,1);
-               if first.count('A-Z') > 0
-                 first = first.downcase
-                 ivl = first + ivs.slice(1,ivs.length);
-                 puts "warning: '" + str(ivs) + "' additionaly renamed to '" + str(ivl) + "' to avoid constant semantics"
-                 env.instance_eval( "def #{ivl}; @generators[ '#{ivs}' ]; end" )
-               end
+          env.generators[ ivs ] = i;
+          env.instance_eval( "def #{ivs}; @generators[ '#{ivs}' ]; end" )
+          #puts "def #{ivs}; @generators[ '#{ivs}' ]; end"
+          if self.class.auto_lowervar 
+             first = ivs.slice(0,1);
+             if first.count('A-Z') > 0
+                first = first.downcase
+                ivl = first + ivs.slice(1,ivs.length);
+                puts "warning: '" + str(ivs) + "' additionaly renamed to '" + str(ivl) + "' to avoid constant semantics"
+                env.instance_eval( "def #{ivl}; @generators[ '#{ivs}' ]; end" )
              end
           end
        rescue Exception => e 
@@ -111,6 +95,49 @@ def inject_gens(env)
     end
  puts "globally defined generators: " + env.generators.keys().join(", ");  
  end
+
+=begin rdoc
+Get a meaningful name from a value.
+
+i ist the given value.
+=end
+def nameFromValue(i) 
+    ivs = i.to_s
+    #puts "string1: #{ivs} = " + ivs.class.to_s;
+    ivs = ivs.gsub(" ","");
+    ivs = ivs.gsub(",","");
+    ivs = ivs.gsub("(","");
+    ivs = ivs.gsub(")","");
+    ivs = ivs.gsub("/","div");
+    #ivs = ivs.gsub("|","div");
+    ivs = ivs.gsub("{","");
+    ivs = ivs.gsub("}","");
+    if ivs[0] == "1"[0] 
+       r = ivs[1,ivs.size-1].to_s;
+       ivs = "one"
+       if r != nil 
+          ivs = ivs + r
+       end
+    end
+    if ivs[0,2] == "0i1"[0,2] or ivs[0,2] == "0I1"[0,2] 
+       r = ivs[2,ivs.size-1].to_s;
+       ivs = "i"
+       if r != nil 
+          ivs = ivs + r
+       end
+    end
+    #puts "string: #{ivs} of " + i.to_s;
+    if     not ivs.include?(",") \
+       and not ivs.include?("(") \
+       and not ivs.include?("/") \
+       and not ivs.include?("|") \
+       and not ivs.include?("{") \
+       and not ivs.match(/\A[0-9].*/)
+           #puts "string2: #{ivs} = " + ivs.class.to_s;
+           return ivs
+    end
+    return nil
+end
 
 
 # set output to Ruby scripting
@@ -139,7 +166,11 @@ def ZZ(z=0)
     if z.is_a? RingElem
         z = z.elem;
     end
-    r = Java::EduJasArith::BigInteger.new(z);
+    if z == 0 
+       r = Java::EduJasArith::BigInteger.new();
+    else
+       r = Java::EduJasArith::BigInteger.new(z);
+    end
     return RingElem.new(r);
 end
 
@@ -822,7 +853,6 @@ Get the generators for the factory of this element.
         ll = @elem.factory().generators();
         #puts "L = #{ll}";
         nn = ll.map {|e| RingElem.new(e) };
-        #puts "N = #{nn}";
         return nn;
     end
 
@@ -1223,8 +1253,8 @@ Create an ideal.
 Compatibility method for Sage/Singular.
 =end
     def ideal(list)
-        p = Ring.new("",ring=self.ring,fast=true);
-        return p.ideal("",list=list);
+        r = Ring.new("",ring=self.ring); #,fast=true
+        return r.ideal("",list=list);
     end
 
 =begin rdoc
@@ -1387,26 +1417,9 @@ ring JAS ring object.
         #if fast == true
         #   return
         #end
-        #@engine = GCDFactory.getProxy(@ring.coFac);
         @engine = Ring.getEngineGcd(@ring);
         @sqf = Ring.getEngineSqf(@ring);
         @factor = Ring.getEngineFactor(@ring);
-        #begin
-            #@sqf = SquarefreeFactory.getImplementation(@ring.coFac);
-            #puts "sqf: ", @sqf;
-        #rescue Exception => e
-            #puts "error " + str(e)
-        #rescue
-            #pass
-        #end
-        #begin
-            #@factor = FactorFactory.getImplementation(@ring.coFac);
-            #puts "factor: ", @factor;
-        #rescue Exception => e
-            #puts "error " + str(e)
-        #rescue
-            #pass
-        #end
         variable_generators()
     end
 
@@ -1463,30 +1476,13 @@ Define instance variables for generators.
        @generators = {};
        for i in self.gens()
           begin 
-             ivs = i.to_s
-             ivs = ivs.gsub(" ","");
-             ivs = ivs.gsub(",","");
-             ivs = ivs.gsub("(","");
-             ivs = ivs.gsub(")","");
-             ivs = ivs.gsub("/","div");
-             #ivs = ivs.gsub("|","div");
-             ivs = ivs.gsub("{","");
-             ivs = ivs.gsub("}","");
-             if ivs[0] == "1"[0]
-                r = ivs[1,ivs.size-1].to_s;
-                ivs = "one"
-                if r != nil 
-                   ivs = ivs + r
-                end
-             end
-             #puts "string: #{ivs} of " + i.to_s;
-             if not ivs.include?(",") and not ivs.include?("(") and not ivs.include?("/") and not ivs.include?("|") and not ivs.include?("{") and not ivs.match(/\A[0-9].*/)
+             ivs = nameFromValue(i);
+             if ivs != nil
                 #puts "string: #{ivs} = " + ivs.class.to_s;
                 @generators[ ivs ] = i;
                 self.instance_eval( "def #{ivs}; @generators[ '#{ivs}' ]; end" )
              end
           rescue Exception => e
-             #puts "ring error: #{ivs} = " + i.to_s + ", class = " + i.class.to_s;
              puts "ring error: #{ivs} = " + i.to_s + ", e = " + str(e);
              #pass
           end
