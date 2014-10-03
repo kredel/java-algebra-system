@@ -1410,6 +1410,11 @@ ring JAS ring object.
         variable_generators()
     end
 
+=begin rdoc
+Get the polynomial gcd engine implementation.
+
+r is the given polynomial ring.
+=end
     def Ring.getEngineGcd(r)
         if r.is_a? RingElem
             r = r.elem;
@@ -1420,6 +1425,11 @@ ring JAS ring object.
         GCDFactory.getProxy(r.coFac);
     end
 
+=begin rdoc
+Get the polynomial squarefree engine implementation.
+
+r is the given polynomial ring.
+=end
     def Ring.getEngineSqf(r)
         if r.is_a? RingElem
             r = r.elem;
@@ -1430,6 +1440,11 @@ ring JAS ring object.
         SquarefreeFactory.getImplementation(r.coFac);
     end
 
+=begin rdoc
+Get the polynomial factorization engine implementation.
+
+r is the given polynomial ring.
+=end
     def Ring.getEngineFactor(r)
         if r.is_a? RingElem
             r = r.elem;

@@ -158,6 +158,9 @@ class Ring:
 
     def __init__(self,ringstr="",ring=None,fast=False):
         '''Ring constructor.
+
+        ringstr string representation to be parsed.
+        ring JAS ring object.
         '''
         if ring == None:
            sr = StringReader( ringstr );
@@ -187,7 +190,7 @@ class Ring:
 #        except Exception, e:
 #            print "error " + str(e)
         #print "dict: " + str(self.__dict__)
-        vns = ""
+        vns = []
         import re;
         ri = re.compile(r'\A[0-9].*');
         for v in self.ring.generators():
@@ -229,12 +232,16 @@ class Ring:
                 self.__dict__[vs] = vr;
             if auto_inject:
                 inject_variable(vs,vr)
-                vns = vns + vs + " "
+                vns.append(vs)
         if auto_inject:
-            print "globally defined variables: " + vns
+            print "globally defined variables: " + ", ".join(vns)
         #print "dict: " + str(self.__dict__)
 
     def getEngineGcd(r):
+        '''Get the polynomial gcd engine implementation.
+
+        r is the given polynomial ring.
+        '''
         if isinstance(r,RingElem):
             r = r.elem;
         if not isinstance(r,GenPolynomialRing):
@@ -244,6 +251,10 @@ class Ring:
     getEngineGcd = staticmethod(getEngineGcd);
 
     def getEngineSqf(r):
+        '''Get the polynomial squarefree engine implementation.
+
+        r is the given polynomial ring.
+        '''
         if isinstance(r,RingElem):
             r = r.elem;
         if not isinstance(r,GenPolynomialRing):
@@ -253,6 +264,10 @@ class Ring:
     getEngineSqf = staticmethod(getEngineSqf);
 
     def getEngineFactor(r):
+        '''Get the polynomial factorization engine implementation.
+
+        r is the given polynomial ring.
+        '''
         if isinstance(r,RingElem):
             r = r.elem;
         if not isinstance(r,GenPolynomialRing):
@@ -3425,6 +3440,20 @@ class PolyRing(Ring):
 
     Provides more convenient constructor. 
     Then returns a Ring.
+
+    Example of the construction a polynomial ring over the 
+    rational numbers QQ() in the variables 'x' and 'y', together 
+    with the input of a polynomial (x+y)**3.
+    >>> from jas import PolyRing, QQ
+    >>> r = PolyRing(QQ(),"x,y")
+    globally defined variables: one, x, y
+
+    The example works with p = (x+y)**3, but in doctests the
+    full notation r.x and r.y must be used for x respectively y.
+    >>> p = (r.x+r.y)**3
+    >>> print p
+    ( y**3 + 3 * x * y**2 + 3 * x**2 * y + x**3 )
+
     '''
 
     def __init__(self,coeff,vars,order=TermOrder(TermOrder.IGRLEX)):
@@ -3824,3 +3853,7 @@ class WordIdeal:
         print "isTwosidedGB executed in %s ms" % t; 
         return b;
 
+# doctest:
+if __name__ == '__main__':
+   import doctest, sys
+   doctest.testmod(sys.modules[__name__])
