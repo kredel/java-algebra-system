@@ -169,6 +169,7 @@ def ZZ(z=0)
     if z == 0 
        r = Java::EduJasArith::BigInteger.new();
     else
+       #puts "z = #{z} : #{z.class} " 
        r = Java::EduJasArith::BigInteger.new(z);
     end
     return RingElem.new(r);
@@ -1435,7 +1436,12 @@ r is the given polynomial ring.
         if r.getClass().getSimpleName() != "GenPolynomialRing"
            return nil;
         end
-        GCDFactory.getProxy(r.coFac);
+        begin
+           i = GCDFactory.getProxy(r.coFac);
+        rescue Exception => e
+           i = nil
+        end
+        return i;
     end
 
 =begin rdoc
@@ -1450,7 +1456,12 @@ r is the given polynomial ring.
         if r.getClass().getSimpleName() != "GenPolynomialRing"
            return nil;
         end
-        SquarefreeFactory.getImplementation(r.coFac);
+        begin 
+           i = SquarefreeFactory.getImplementation(r.coFac);
+        rescue Exception => e
+           i = nil
+        end
+        return i;
     end
 
 =begin rdoc
@@ -1465,7 +1476,12 @@ r is the given polynomial ring.
         if r.getClass().getSimpleName() != "GenPolynomialRing"
            return nil;
         end
-        FactorFactory.getImplementation(r.coFac);
+        begin 
+           i = FactorFactory.getImplementation(r.coFac);
+        rescue Exception => e
+           i = nil
+        end
+        return i;
     end
 
 =begin rdoc

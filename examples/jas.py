@@ -221,7 +221,11 @@ class Ring:
             r = r.elem;
         if not isinstance(r,GenPolynomialRing):
             return None;
-        return GCDFactory.getProxy(r.coFac);
+        try:  
+            i = GCDFactory.getProxy(r.coFac);
+        except:
+            i = None
+        return i;
     
     getEngineGcd = staticmethod(getEngineGcd);
 
@@ -234,7 +238,11 @@ class Ring:
             r = r.elem;
         if not isinstance(r,GenPolynomialRing):
             return None;
-        return SquarefreeFactory.getImplementation(r.coFac);
+        try:  
+            i = SquarefreeFactory.getImplementation(r.coFac);
+        except:
+            i = None
+        return i;
     
     getEngineSqf = staticmethod(getEngineSqf);
 
@@ -247,7 +255,11 @@ class Ring:
             r = r.elem;
         if not isinstance(r,GenPolynomialRing):
             return None;
-        return FactorFactory.getImplementation(r.coFac);
+        try:  
+            i = FactorFactory.getImplementation(r.coFac);
+        except:
+            i = None
+        return i;
     
     getEngineFactor = staticmethod(getEngineFactor);
 
