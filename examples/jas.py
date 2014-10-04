@@ -154,6 +154,8 @@ def nameFromValue(v):
 
     v ist the given value.
     '''
+    import re;
+    ri = re.compile(r'\A[0-9].*');
     vs = str(v);
     vs = vs.replace(" ","");
     vs = vs.replace("\n","");
@@ -172,15 +174,13 @@ def nameFromValue(v):
     #    vs = vs.replace("|","div"); # case "1"?
     if vs.find("/") >= 0:
        vs = vs.replace("/","div");
-    if vs[0:1] == "1":
+    if vs[0:1] == "1" and not ri.match(vs):
        vs = 'one' + vs[1:];
     if vs == "1":
        vs = "one";
     if vs == "0i1" or vs == "0I1":
        vs = "I";
-    import re;
-    ri = re.compile(r'\A[0-9].*');
-    if ri.match(vs):
+    if vs.find("|") >= 0 or ri.match(vs):
        #print "0vs = " + str(vs);
        return None;
     return vs;

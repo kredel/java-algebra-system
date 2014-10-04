@@ -69,12 +69,12 @@ def inject_gens(env)
        begin 
           ivs = nameFromValue(i);
           if ivs == nil
-             continue;
+             next
           end;
           #puts "string2: #{ivs} = " + ivs.class.to_s;
           #puts "string3: #{ivs} = " + (env.instance_eval( "#{ivs};" ));
           if env.generators[ ivs ] != nil
-             puts "redefining #{ivs}";
+             puts "redefining global variable #{ivs}";
           end
           env.generators[ ivs ] = i;
           env.instance_eval( "def #{ivs}; @generators[ '#{ivs}' ]; end" )
@@ -105,6 +105,7 @@ def nameFromValue(i)
     ivs = i.to_s
     #puts "string1: #{ivs} = " + ivs.class.to_s;
     ivs = ivs.gsub(" ","");
+    ivs = ivs.gsub("\n","");
     ivs = ivs.gsub(",","");
     ivs = ivs.gsub("(","");
     ivs = ivs.gsub(")","");
@@ -112,7 +113,9 @@ def nameFromValue(i)
     #ivs = ivs.gsub("|","div");
     ivs = ivs.gsub("{","");
     ivs = ivs.gsub("}","");
-    if ivs[0] == "1"[0] 
+    ivs = ivs.gsub("[","");
+    ivs = ivs.gsub("]","");
+    if ivs[0] == "1"[0] and not ivs.match(/\A[0-9].*/)
        r = ivs[1,ivs.size-1].to_s;
        ivs = "one"
        if r != nil 
@@ -127,16 +130,11 @@ def nameFromValue(i)
        end
     end
     #puts "string: #{ivs} of " + i.to_s;
-    if     not ivs.include?(",") \
-       and not ivs.include?("(") \
-       and not ivs.include?("/") \
-       and not ivs.include?("|") \
-       and not ivs.include?("{") \
-       and not ivs.match(/\A[0-9].*/)
-           #puts "string2: #{ivs} = " + ivs.class.to_s;
-           return ivs
+    if ivs.include?("|") or ivs.match(/\A[0-9].*/)
+       #puts "string2: #{ivs} = " + ivs.class.to_s;
+       return nil
     end
-    return nil
+    return ivs
 end
 
 
@@ -1495,6 +1493,9 @@ Define instance variables for generators.
              ivs = nameFromValue(i);
              if ivs != nil
                 #puts "string: #{ivs} = " + ivs.class.to_s;
+                if @generators[ ivs ] != nil
+                   puts "redefining local variable #{ivs}";
+                end
                 @generators[ ivs ] = i;
                 self.instance_eval( "def #{ivs}; @generators[ '#{ivs}' ]; end" )
              end
