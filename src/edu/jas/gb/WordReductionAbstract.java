@@ -50,6 +50,18 @@ public abstract class WordReductionAbstract<C extends RingElem<C>> implements Wo
      */
     public List<GenWordPolynomial<C>> SPolynomials(GenWordPolynomial<C> Ap, GenWordPolynomial<C> Bp) {
         List<GenWordPolynomial<C>> sp = new ArrayList<GenWordPolynomial<C>>();
+        if (Bp == null || Bp.isZERO()) {
+            if (Ap == null) {
+                sp.add(Bp);
+                return sp;
+            }
+            sp.add(Ap.ring.getZERO());
+            return sp;
+        }
+        if (Ap == null || Ap.isZERO()) {
+            sp.add(Bp.ring.getZERO());
+            return sp;
+        }
         Map.Entry<Word, C> ma = Ap.leadingMonomial();
         Map.Entry<Word, C> mb = Bp.leadingMonomial();
         Word e = ma.getKey();

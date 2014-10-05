@@ -65,8 +65,11 @@ public class WordGroebnerBaseSeq<C extends RingElem<C>> extends WordGroebnerBase
      */
     @Override
     public List<GenWordPolynomial<C>> GB(List<GenWordPolynomial<C>> F) {
-        GenWordPolynomial<C> p;
         List<GenWordPolynomial<C>> G = new ArrayList<GenWordPolynomial<C>>();
+        if ( F == null || F.isEmpty() ) {
+            return G;
+        }
+        GenWordPolynomial<C> p;
         WordPairList<C> pairlist = null;
         int l = F.size();
         ListIterator<GenWordPolynomial<C>> it = F.listIterator();

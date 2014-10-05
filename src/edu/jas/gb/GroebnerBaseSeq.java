@@ -187,6 +187,9 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
     public ExtendedGB<C> 
              extGB( int modv, 
                     List<GenPolynomial<C>> F ) {  
+        if ( F == null || F.isEmpty() ) {
+            throw new IllegalArgumentException("null or empty F not allowed");
+        }
         List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
         List<List<GenPolynomial<C>>> F2G = new ArrayList<List<GenPolynomial<C>>>();
         List<List<GenPolynomial<C>>> G2F = new ArrayList<List<GenPolynomial<C>>>();
