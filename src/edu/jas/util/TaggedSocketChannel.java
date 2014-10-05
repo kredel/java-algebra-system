@@ -190,7 +190,7 @@ public class TaggedSocketChannel extends Thread {
      * @return size of key set.
      */
     public int tagSize() {
-        return queues.keySet().size();
+        return queues.size();
     }
 
 

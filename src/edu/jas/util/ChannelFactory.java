@@ -215,6 +215,9 @@ public class ChannelFactory extends Thread {
                 if (this.isInterrupted()) {
                     //System.out.println("ChannelFactory interrupted");
                     srvrun = false;
+                    if (s != null) { // by code-spotter
+                        s.close();
+                    }
                     return;
                 }
                 //logger.debug("Socket = " +s);
