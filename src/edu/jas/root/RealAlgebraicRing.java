@@ -331,17 +331,13 @@ implements RingFactory<RealAlgebraicNumber<C>> {
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object b) {
+        if (b == null) {
+            return false;
+        }
         if (!(b instanceof RealAlgebraicRing)) {
             return false;
         }
-        RealAlgebraicRing<C> a = null;
-        try {
-            a = (RealAlgebraicRing<C>) b;
-        } catch (ClassCastException e) {
-        }
-        if (a == null) {
-            return false;
-        }
+        RealAlgebraicRing<C> a = (RealAlgebraicRing<C>) b;
         return algebraic.equals(a.algebraic) && root.equals(a.root);
     }
 

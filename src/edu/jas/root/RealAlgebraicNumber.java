@@ -210,17 +210,13 @@ implements GcdRingElem<RealAlgebraicNumber<C>>, Rational {
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object b) {
+        if (b == null) {
+            return false;
+        }
         if (!(b instanceof RealAlgebraicNumber)) {
             return false;
         }
-        RealAlgebraicNumber<C> a = null;
-        try {
-            a = (RealAlgebraicNumber<C>) b;
-        } catch (ClassCastException e) {
-        }
-        if (a == null) {
-            return false;
-        }
+        RealAlgebraicNumber<C> a = (RealAlgebraicNumber<C>) b;
         if (!ring.equals(a.ring)) {
             return false;
         }

@@ -398,6 +398,9 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      */
     public MultiVarPowerSeries<C> reductum() {
         Map.Entry<ExpVector, C> m = orderMonomial();
+        if (m == null) {
+            return ring.getZERO();
+        } 
         ExpVector e = m.getKey();
         long d = e.totalDeg();
         MultiVarCoefficients<C> mc = lazyCoeffs;
@@ -680,7 +683,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                 if (i.signum() > 0) {
                     int[] deps = i.dependencyOnVariables();
                     ExpVector x = i.subst(deps[0], i.getVal(deps[0]) - 1L);
-                    c = get(x);
+                    c = get(x); // ensure all coefficients are generated
                 }
                 do {
                     c = null;
@@ -1062,17 +1065,13 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object B) {
+        if (B == null) {
+            return false;
+        }
         if (!(B instanceof MultiVarPowerSeries)) {
             return false;
         }
-        MultiVarPowerSeries<C> a = null;
-        try {
-            a = (MultiVarPowerSeries<C>) B;
-        } catch (ClassCastException ignored) {
-        }
-        if (a == null) {
-            return false;
-        }
+        MultiVarPowerSeries<C> a = (MultiVarPowerSeries<C>) B;
         return compareTo(a) == 0;
     }
 

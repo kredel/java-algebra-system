@@ -323,17 +323,13 @@ implements RingFactory<ComplexAlgebraicNumber<C>> {
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object b) {
+        if (b == null) {
+            return false;
+        }
         if (!(b instanceof ComplexAlgebraicRing)) {
             return false;
         }
-        ComplexAlgebraicRing<C> a = null;
-        try {
-            a = (ComplexAlgebraicRing<C>) b;
-        } catch (ClassCastException e) {
-        }
-        if (a == null) {
-            return false;
-        }
+        ComplexAlgebraicRing<C> a = (ComplexAlgebraicRing<C>) b;
         return algebraic.equals(a.algebraic) && root.equals(a.root);
     }
 

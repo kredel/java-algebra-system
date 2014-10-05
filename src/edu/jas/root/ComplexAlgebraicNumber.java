@@ -202,17 +202,13 @@ implements GcdRingElem<ComplexAlgebraicNumber<C>> {
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object b) {
+        if (b == null) {
+            return false;
+        }
         if (!(b instanceof ComplexAlgebraicNumber)) {
             return false;
         }
-        ComplexAlgebraicNumber<C> a = null;
-        try {
-            a = (ComplexAlgebraicNumber<C>) b;
-        } catch (ClassCastException e) {
-        }
-        if (a == null) {
-            return false;
-        }
+        ComplexAlgebraicNumber<C> a = (ComplexAlgebraicNumber<C>) b;
         if (!ring.equals(a.ring)) {
             return false;
         }
