@@ -209,17 +209,13 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object B) {
+        if (B == null) {
+            return false;
+        }
         if (!(B instanceof Factors)) {
             return false;
         }
-        Factors<C> a = null;
-        try {
-            a = (Factors<C>) B;
-        } catch (ClassCastException ignored) {
-        }
-        if (a == null) {
-            return false;
-        }
+        Factors<C> a = (Factors<C>) B;
         return this.compareTo(a) == 0;
     }
 

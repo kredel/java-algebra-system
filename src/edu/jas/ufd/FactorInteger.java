@@ -254,7 +254,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             return factors;
         }
 
-        boolean allLists = false; //true; //false;
+        final boolean allLists = false; //true; //false;
         if (allLists) {
             // try each factor list
             for (int k = 0; k < TT; k++) {

@@ -323,13 +323,11 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         }
         if (!u.isONE() && !u.equals(P)) {
             logger.info("rest u = " + u);
-            //System.out.println("rest u = " + u);
             factors.add(u);
         }
         if (factors.size() == 0) {
-            logger.info("irred u = " + u);
-            //System.out.println("irred u = " + u);
-            factors.add(P);
+            logger.info("irred P = " + P);
+            factors.add(P); // == u
         }
         return normalizeFactorization(factors);
     }

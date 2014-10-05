@@ -278,17 +278,13 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object B) {
+        if (B == null) {
+            return false;
+        }
         if (!(B instanceof PartialFraction)) {
             return false;
         }
-        PartialFraction<C> a = null;
-        try {
-            a = (PartialFraction<C>) B;
-        } catch (ClassCastException ignored) {
-        }
-        if (a == null) {
-            return false;
-        }
+        PartialFraction<C> a = (PartialFraction<C>) B;
         boolean t = num.equals(a.num) && den.equals(a.den);
         if (!t) {
             return t;

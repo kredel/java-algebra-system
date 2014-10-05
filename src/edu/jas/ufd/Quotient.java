@@ -282,17 +282,13 @@ public class Quotient<C extends GcdRingElem<C>>
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object b) {
+        if (b == null) {
+            return false;
+        }
         if (!(b instanceof Quotient)) {
             return false;
         }
-        Quotient<C> a = null;
-        try {
-            a = (Quotient<C>) b;
-        } catch (ClassCastException e) {
-        }
-        if (a == null) {
-            return false;
-        }
+        Quotient<C> a = (Quotient<C>) b;
         return compareTo(a) == 0;
         //return num.equals(a.num) && den.equals(a.den);
     }
