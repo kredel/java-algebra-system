@@ -5,6 +5,7 @@
 package edu.jas.gbmod;
 
 import java.util.List;
+import java.io.Serializable;
 
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.ModuleList;
@@ -19,7 +20,7 @@ import edu.jas.structure.RingElem;
  * @author Heinz Kredel
  */
 
-public interface ModSolvableGroebnerBase<C extends RingElem<C>> {
+public interface ModSolvableGroebnerBase<C extends RingElem<C>> extends Serializable {
 
 
     /**

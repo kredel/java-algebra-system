@@ -291,17 +291,13 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>> extends
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object other) {
+        if (other == null) {
+            return false;
+        }
         if (!(other instanceof QuotSolvablePolynomialRing)) {
             return false;
         }
-        QuotSolvablePolynomialRing<C> oring = null;
-        try {
-            oring = (QuotSolvablePolynomialRing<C>) other;
-        } catch (ClassCastException ignored) {
-        }
-        if (oring == null) {
-            return false;
-        }
+        QuotSolvablePolynomialRing<C> oring = (QuotSolvablePolynomialRing<C>) other;
         // do a super.equals( )
         if (!super.equals(other)) {
             return false;

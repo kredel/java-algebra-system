@@ -115,7 +115,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>> implements SolvableSy
         zero = null;
         for (int i = 0; i < F.size(); i++) {
             pi = F.get(i);
-            if (pi != null && zero == null) {
+            if (zero == null) {
                 zero = pi.ring.getZERO();
             }
             for (int j = i + 1; j < F.size(); j++) {

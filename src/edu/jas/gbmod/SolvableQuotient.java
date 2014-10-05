@@ -326,17 +326,13 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object b) {
+        if (b == null) {
+            return false;
+        }
         if (!(b instanceof SolvableQuotient)) {
             return false;
         }
-        SolvableQuotient<C> a = null;
-        try {
-            a = (SolvableQuotient<C>) b;
-        } catch (ClassCastException e) {
-        }
-        if (a == null) {
-            return false;
-        }
+        SolvableQuotient<C> a = (SolvableQuotient<C>) b;
         return compareTo(a) == 0;
         //return num.equals(a.num) && den.equals(a.den);
     }

@@ -262,10 +262,10 @@ public class MultiplicativeSet<C extends GcdRingElem<C>> implements Serializable
                 GenPolynomial<C>[] qr = c.quotientRemainder(n);
                 q = qr[0];
                 r = qr[1];
-                if (r != null && !r.isZERO()) {
+                if (!r.isZERO()) {
                     continue;
                 }
-                if (q != null && q.isConstant()) {
+                if (q.isConstant()) {
                     return q;
                 }
                 c = q;
