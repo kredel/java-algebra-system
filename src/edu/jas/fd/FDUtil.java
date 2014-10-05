@@ -1088,7 +1088,8 @@ public class FDUtil {
         GreatestCommonDivisorAbstract<C> fd = new GreatestCommonDivisorPrimitive<C>();
         int s = 0;
         // lcm/ore of denominators ??
-        for (SolvableQuotient<C> y : A.getMap().values()) {
+        Map<ExpVector, SolvableQuotient<C>> Am = A.getMap();
+        for (SolvableQuotient<C> y : Am.values()) {
             x = y.den;
             // c = lcm(c,x)
             if (c == null) {
@@ -1103,7 +1104,7 @@ public class FDUtil {
         if (s < 0) {
             c = (GenSolvablePolynomial<C>) c.negate();
         }
-        for (Map.Entry<ExpVector, SolvableQuotient<C>> y : A.getMap().entrySet()) {
+        for (Map.Entry<ExpVector, SolvableQuotient<C>> y : Am.entrySet()) {
             ExpVector e = y.getKey();
             SolvableQuotient<C> a = y.getValue();
             // p = n*(c/d)

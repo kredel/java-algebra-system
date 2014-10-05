@@ -296,17 +296,13 @@ public class Product<C extends RingElem<C>> implements RegularRingElem<Product<C
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object b) {
+        if (b == null) {
+            return false;
+        }
         if (!(b instanceof Product)) {
             return false;
         }
-        Product<C> a = null;
-        try {
-            a = (Product<C>) b;
-        } catch (ClassCastException e) {
-        }
-        if (a == null) {
-            return false;
-        }
+        Product<C> a = (Product<C>) b;
         return (0 == compareTo(a));
     }
 

@@ -363,7 +363,12 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
         java.math.BigInteger p;
         if (i < size()) {
             p = val.get(i);
+        } else if (i == size()) {
+            p = last.nextProbablePrime();
+            val.add(p);
+            last = p;
         } else {
+            p = get(i-1);
             p = last.nextProbablePrime();
             val.add(p);
             last = p;
