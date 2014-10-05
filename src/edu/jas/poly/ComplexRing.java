@@ -230,17 +230,13 @@ public class ComplexRing<C extends RingElem<C>> implements RingFactory<Complex<C
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object b) {
+        if (b == null) {
+            return false;
+        }
         if (!(b instanceof ComplexRing)) {
             return false;
         }
-        ComplexRing<C> a = null;
-        try {
-            a = (ComplexRing<C>) b;
-        } catch (ClassCastException e) {
-        }
-        if (a == null) {
-            return false;
-        }
+        ComplexRing<C> a = (ComplexRing<C>) b;
         if (!ring.equals(a.ring)) {
             return false;
         }

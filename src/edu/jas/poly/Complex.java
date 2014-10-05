@@ -277,17 +277,13 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object b) {
+        if (b == null) {
+            return false;
+        }
         if (!(b instanceof Complex)) {
             return false;
         }
-        Complex<C> bc = null;
-        try {
-            bc = (Complex<C>) b;
-        } catch (ClassCastException e) {
-        }
-        if (bc == null) {
-            return false;
-        }
+        Complex<C> bc = (Complex<C>) b;
         if (!ring.equals(bc.ring)) {
             return false;
         }

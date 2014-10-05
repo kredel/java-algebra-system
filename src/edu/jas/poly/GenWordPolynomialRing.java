@@ -185,17 +185,13 @@ public final class GenWordPolynomialRing<C extends RingElem<C>> implements RingF
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object other) {
+        if (other == null) {
+            return false;
+        }
         if (!(other instanceof GenWordPolynomialRing)) {
             return false;
         }
-        GenWordPolynomialRing<C> oring = null;
-        try {
-            oring = (GenWordPolynomialRing<C>) other;
-        } catch (ClassCastException ignored) {
-        }
-        if (oring == null) {
-            return false;
-        }
+        GenWordPolynomialRing<C> oring = (GenWordPolynomialRing<C>) other;
         if (!coFac.equals(oring.coFac)) {
             return false;
         }

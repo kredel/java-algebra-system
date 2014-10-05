@@ -278,7 +278,7 @@ public final class GenWordPolynomial<C extends RingElem<C>>
         if (val.size() > 1) {
             s.append("( ");
         }
-        boolean parenthesis = false;
+        final boolean parenthesis = false;
         boolean first = true;
         for (Map.Entry<Word, C> m : val.entrySet()) {
             C c = m.getValue();
@@ -414,17 +414,13 @@ public final class GenWordPolynomial<C extends RingElem<C>>
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object B) {
+        if (B == null) {
+            return false;
+        }
         if (!(B instanceof GenWordPolynomial)) {
             return false;
         }
-        GenWordPolynomial<C> a = null;
-        try {
-            a = (GenWordPolynomial<C>) B;
-        } catch (ClassCastException ignored) {
-        }
-        if (a == null) {
-            return false;
-        }
+        GenWordPolynomial<C> a = (GenWordPolynomial<C>) B;
         return this.compareTo(a) == 0;
     }
 

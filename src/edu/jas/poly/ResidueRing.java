@@ -205,17 +205,13 @@ public class ResidueRing<C extends RingElem<C> >
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object b) {
+        if ( b == null ) {
+            return false;
+        }
         if ( ! ( b instanceof ResidueRing ) ) {
            return false;
         }
-        ResidueRing<C> a = null;
-        try {
-            a = (ResidueRing<C>) b;
-        } catch (ClassCastException e) {
-        }
-        if ( a == null ) {
-            return false;
-        }
+        ResidueRing<C> a = (ResidueRing<C>) b;
         if ( ! ring.equals( a.ring ) ) {
             return false;
         }

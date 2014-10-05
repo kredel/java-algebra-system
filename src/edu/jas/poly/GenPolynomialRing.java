@@ -260,7 +260,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
     @Override
     public String toString() {
         String res = null;
-        if (PrettyPrint.isTrue() && coFac != null) {
+        if (PrettyPrint.isTrue()) { // wrong: && coFac != null
             String scf = coFac.getClass().getSimpleName();
             if (coFac instanceof AlgebraicNumberRing) {
                 AlgebraicNumberRing an = (AlgebraicNumberRing) coFac;
@@ -364,17 +364,13 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object other) {
+        if (other == null) {
+            return false;
+        }
         if (!(other instanceof GenPolynomialRing)) {
             return false;
         }
-        GenPolynomialRing<C> oring = null;
-        try {
-            oring = (GenPolynomialRing<C>) other;
-        } catch (ClassCastException ignored) {
-        }
-        if (oring == null) {
-            return false;
-        }
+        GenPolynomialRing<C> oring = (GenPolynomialRing<C>) other;
         if (nvar != oring.nvar) {
             return false;
         }

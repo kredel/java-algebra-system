@@ -291,8 +291,8 @@ public class GenPolynomialTokenizer {
         ExpVector e;
         int ix;
         long ie;
-        boolean done = false;
-        while (!done) {
+        //boolean done = false;
+        while (true) { //!done
             // next input. determine next action
             tt = tok.nextToken();
             //System.out.println("while tt = " + tok);
@@ -493,8 +493,8 @@ public class GenPolynomialTokenizer {
 
             default: //skip 
             }
-            if (done)
-                break; // unknown variable
+            //if (done)
+            //    break; // unknown variable
             if (tt == StreamTokenizer.TT_EOF)
                 break;
             // complete polynomial
@@ -1022,7 +1022,7 @@ public class GenPolynomialTokenizer {
         if (s <= 0) {
             return new TermOrder(evord);
         }
-        return new TermOrder(evord, evord, vars.length, s);
+        return new TermOrder(evord, evord, nvars, s);
     }
 
 

@@ -274,17 +274,13 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object other) {
+        if (other == null) {
+            return false;
+        }
         if (!(other instanceof GenSolvablePolynomialRing)) {
             return false;
         }
-        GenSolvablePolynomialRing<C> oring = null;
-        try {
-            oring = (GenSolvablePolynomialRing<C>) other;
-        } catch (ClassCastException ignored) {
-        }
-        if (oring == null) {
-            return false;
-        }
+        GenSolvablePolynomialRing<C> oring = (GenSolvablePolynomialRing<C>) other;
         // do a super.equals( )
         if (!super.equals(other)) {
             return false;

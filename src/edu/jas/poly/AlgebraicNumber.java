@@ -209,17 +209,13 @@ public class AlgebraicNumber<C extends RingElem<C>> implements GcdRingElem<Algeb
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object b) {
+        if (b == null) {
+            return false;
+        }
         if (!(b instanceof AlgebraicNumber)) {
             return false;
         }
-        AlgebraicNumber<C> a = null;
-        try {
-            a = (AlgebraicNumber<C>) b;
-        } catch (ClassCastException e) {
-        }
-        if (a == null) {
-            return false;
-        }
+        AlgebraicNumber<C> a = (AlgebraicNumber<C>) b;
         if (!ring.equals(a.ring)) {
             return false;
         }

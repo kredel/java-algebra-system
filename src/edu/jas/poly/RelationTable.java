@@ -91,25 +91,20 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
 
 
     /**
-     * RelationTable equals. Tests same keySets only, not relations itself. Will
-     * be improved in the future.
+     * RelationTable equals. Tests same keySets and base relations. 
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object p) {
+        if (p == null) {
+            return false;
+        }
         if (!(p instanceof RelationTable)) {
             logger.info("no RelationTable");
             return false;
         }
-        RelationTable<C> tab = null;
-        try {
-            tab = (RelationTable<C>) p;
-        } catch (ClassCastException ignored) {
-        }
-        if (tab == null) {
-            return false;
-        }
+        RelationTable<C> tab = (RelationTable<C>) p;
         // not possible because of infinite recursion:
         //if (!ring.equals(tab.ring)) {
         //    logger.info("not same Ring " + ring.toScript() + ", " + tab.ring.toScript());
@@ -169,8 +164,9 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         if (!m1.keySet().equals(m2.keySet())) {
             return false;
         }
-        for (ExpVectorPair ep : m1.keySet()) {
-            GenPolynomial<C> p1 = m1.get(ep);
+        for (Map.Entry<ExpVectorPair, GenPolynomial<C>> me : m1.entrySet()) {
+            GenPolynomial<C> p1 = me.getValue();
+            ExpVectorPair ep = me.getKey();
             GenPolynomial<C> p2 = m2.get(ep);
             if (p1.compareTo(p2) != 0) { // not working: !p1.equals(p2)) { // TODO
                 logger.info("ep = " + ep + ", p1 = " + p1 + ", p2 = " + p2);
@@ -290,10 +286,10 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                 for (Iterator jt = v.iterator(); jt.hasNext();) {
                     ExpVectorPair ep = (ExpVectorPair) jt.next();
                     s.append("( " + ep.getFirst().toString(vars) + " ), ");
-                    if (coeffTable) {
-                        s.append("( " + ep.getSecond().toString(cvars) + " ), ");
-                    } else {
+                    if (cvars == null) {
                         s.append("( " + ep.getSecond().toString(vars) + " ), ");
+                    } else {
+                        s.append("( " + ep.getSecond().toString(cvars) + " ), ");
                     }
                     GenSolvablePolynomial<C> p = (GenSolvablePolynomial<C>) jt.next();
                     //s.append("( " + p.toString(vars) + " )");

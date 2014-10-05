@@ -290,17 +290,13 @@ public class Local<C extends RingElem<C>>
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object b) {
+        if (b == null) {
+            return false;
+        }
         if (!(b instanceof Local)) {
             return false;
         }
-        Local<C> a = null;
-        try {
-            a = (Local<C>) b;
-        } catch (ClassCastException e) {
-        }
-        if (a == null) {
-            return false;
-        }
+        Local<C> a = (Local<C>) b;
         return (0 == compareTo(a));
     }
 

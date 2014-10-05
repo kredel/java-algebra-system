@@ -100,18 +100,14 @@ public class ModuleList<C extends RingElem<C> > implements Serializable {
     @Override
     @SuppressWarnings("unchecked") // not jet working
     public boolean equals(Object m) {
+        if ( m == null ) { 
+            return false;
+        }
         if ( ! (m instanceof ModuleList) ) {
             //System.out.println("ModuleList");
             return false;
         }
-        ModuleList<C> ml = null;
-        try {
-            ml = (ModuleList<C>)m;
-        } catch (ClassCastException ignored) {
-        }
-        if ( ml == null ) { 
-            return false;
-        }
+        ModuleList<C> ml = (ModuleList<C>)m;
         if ( ! ring.equals( ml.ring ) ) {
             //System.out.println("Ring");
             return false;

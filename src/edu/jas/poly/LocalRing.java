@@ -223,17 +223,13 @@ public class LocalRing<C extends RingElem<C> >
     @Override
     @SuppressWarnings("unchecked") // not jet working
     public boolean equals(Object b) {
+        if ( b == null ) {
+            return false;
+        }
         if ( ! ( b instanceof LocalRing ) ) {
            return false;
         }
-        LocalRing<C> a = null;
-        try {
-            a = (LocalRing<C>) b;
-        } catch (ClassCastException e) {
-        }
-        if ( a == null ) {
-            return false;
-        }
+        LocalRing<C> a = (LocalRing<C>) b;
         if ( ! ring.equals( a.ring ) ) {
             return false;
         }

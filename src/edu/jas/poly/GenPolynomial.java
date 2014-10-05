@@ -499,17 +499,13 @@ Iterable<Monomial<C>> {
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object B) {
+        if (B == null) {
+            return false;
+        }
         if (!(B instanceof GenPolynomial)) {
             return false;
         }
-        GenPolynomial<C> a = null;
-        try {
-            a = (GenPolynomial<C>) B;
-        } catch (ClassCastException ignored) {
-        }
-        if (a == null) {
-            return false;
-        }
+        GenPolynomial<C> a = (GenPolynomial<C>) B;
         return this.compareTo(a) == 0;
     }
 

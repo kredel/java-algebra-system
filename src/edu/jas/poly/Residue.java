@@ -230,17 +230,13 @@ public class Residue<C extends RingElem<C>> implements RingElem<Residue<C>> {
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object b) {
+        if (b == null) {
+            return false;
+        }
         if (!(b instanceof Residue)) {
             return false;
         }
-        Residue<C> a = null;
-        try {
-            a = (Residue<C>) b;
-        } catch (ClassCastException e) {
-        }
-        if (a == null) {
-            return false;
-        }
+        Residue<C> a = (Residue<C>) b;
         return (0 == compareTo(a));
     }
 

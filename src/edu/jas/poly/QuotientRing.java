@@ -199,17 +199,13 @@ public class QuotientRing<C extends RingElem<C> >
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object b) {
+        if ( b == null ) {
+            return false;
+        }
         if ( ! ( b instanceof QuotientRing ) ) {
            return false;
         }
-        QuotientRing<C> a = null;
-        try {
-            a = (QuotientRing<C>) b;
-        } catch (ClassCastException e) {
-        }
-        if ( a == null ) {
-            return false;
-        }
+        QuotientRing<C> a = (QuotientRing<C>) b;
         return ring.equals( a.ring );
     }
 

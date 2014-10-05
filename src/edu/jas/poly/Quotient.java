@@ -264,17 +264,13 @@ public class Quotient<C extends RingElem<C>>
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object b) {
+        if (b == null) {
+            return false;
+        }
         if (!(b instanceof Quotient)) {
             return false;
         }
-        Quotient<C> a = null;
-        try {
-            a = (Quotient<C>) b;
-        } catch (ClassCastException e) {
-        }
-        if (a == null) {
-            return false;
-        }
+        Quotient<C> a = (Quotient<C>) b;
         return (0 == compareTo(a));
     }
 

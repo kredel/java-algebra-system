@@ -340,17 +340,13 @@ public class AlgebraicNumberRing<C extends RingElem<C>> implements RingFactory<A
     @SuppressWarnings("unchecked")
     // not jet working
     public boolean equals(Object b) {
+        if (b == null) {
+            return false;
+        }
         if (!(b instanceof AlgebraicNumberRing)) {
             return false;
         }
-        AlgebraicNumberRing<C> a = null;
-        try {
-            a = (AlgebraicNumberRing<C>) b;
-        } catch (ClassCastException e) {
-        }
-        if (a == null) {
-            return false;
-        }
+        AlgebraicNumberRing<C> a = (AlgebraicNumberRing<C>) b;
         return modul.equals(a.modul);
     }
 

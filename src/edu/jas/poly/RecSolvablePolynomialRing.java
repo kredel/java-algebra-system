@@ -251,6 +251,9 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object other) {
+        if (other == null) {
+            return false;
+        }
         if (!(other instanceof RecSolvablePolynomialRing)) {
             return false;
         }
@@ -258,14 +261,7 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
         if (!super.equals(other)) {
             return false;
         }
-        RecSolvablePolynomialRing<C> oring = null;
-        try {
-            oring = (RecSolvablePolynomialRing<C>) other;
-        } catch (ClassCastException ignored) {
-        }
-        if (oring == null) {
-            return false;
-        }
+        RecSolvablePolynomialRing<C> oring = (RecSolvablePolynomialRing<C>) other;
         // check same base relations
         //if ( ! table.equals(oring.table) ) { // done in super
         //    return false;
