@@ -106,10 +106,16 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
      * @return GB(F) a D-Groebner base of F.
      */
     public List<GenPolynomial<C>> GB(int modv, List<GenPolynomial<C>> F) {
+        List<GenPolynomial<C>> G = normalizeZerosOnes(F);
+        if ( G.size() <= 1 ) {
+            return G;
+        }
+        OrderedDPairlist<C> pairlist = new OrderedDPairlist<C>(modv, G.get(0).ring);
+        pairlist.put(G);
+        /*
+        int l = G.size();
         GenPolynomial<C> p;
-        List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
-        OrderedDPairlist<C> pairlist = null;
-        int l = F.size();
+        //new ArrayList<GenPolynomial<C>>();
         ListIterator<GenPolynomial<C>> it = F.listIterator();
         while (it.hasNext()) {
             p = it.next();
@@ -133,15 +139,10 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
         if (l <= 1) {
             return G; // since no threads are activated
         }
+        */
 
         Pair<C> pair;
-        GenPolynomial<C> pi;
-        GenPolynomial<C> pj;
-        GenPolynomial<C> S;
-        GenPolynomial<C> D;
-        GenPolynomial<C> H;
-        //int len = G.size();
-        //System.out.println("len = " + len);
+        GenPolynomial<C> pi, pj, S, D, H;
         while (pairlist.hasNext()) {
             pair = pairlist.removeNext();
             //System.out.println("pair = " + pair);
@@ -167,7 +168,7 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
                 }
                 if (!H.isZERO()) {
                     logger.info("Dred = " + H);
-                    l++;
+                    //l++;
                     G.add(H);
                     pairlist.put(H);
                 }
@@ -205,7 +206,7 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
                 if (!H.isZERO()) {
                     logger.info("Sred = " + H);
                     //len = G.size();
-                    l++;
+                    //l++;
                     G.add(H);
                     pairlist.put(H);
                 }
