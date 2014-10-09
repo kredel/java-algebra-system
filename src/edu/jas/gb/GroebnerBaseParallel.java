@@ -13,8 +13,10 @@ import java.util.concurrent.Semaphore;
 
 import org.apache.log4j.Logger;
 
+import edu.jas.poly.PolyUtil;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.RingElem;
 import edu.jas.util.Terminator;
 import edu.jas.util.ThreadPool;
@@ -167,37 +169,51 @@ public class GroebnerBaseParallel<C extends RingElem<C>> extends GroebnerBaseAbs
      * @return GB(F) a Groebner base of F.
      */
     public List<GenPolynomial<C>> GB(int modv, List<GenPolynomial<C>> F) {
-        GenPolynomial<C> p;
-        List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
-        PairList<C> pairlist = null;
-        int l = F.size();
-        ListIterator<GenPolynomial<C>> it = F.listIterator();
-        while (it.hasNext()) {
-            p = it.next();
-            if (p.length() > 0) {
-                p = p.monic();
-                if (p.isONE()) {
-                    G.clear();
-                    G.add(p);
-                    return G; // since no threads activated jet
-                }
-                G.add(p);
-                if (pairlist == null) {
-                    //pairlist = new OrderedPairlist<C>( modv, p.ring );
-                    pairlist = strategy.create(modv, p.ring);
-                    if (!p.ring.coFac.isField()) {
-                        throw new IllegalArgumentException("coefficients not from a field");
-                    }
-                }
-                // putOne not required
-                pairlist.put(p);
-            } else {
-                l--;
-            }
+        List<GenPolynomial<C>> G = normalizeZerosOnes(F);
+        G = PolyUtil.<C> monic(G);
+        if ( G.size() <= 1 ) {
+            return G;
         }
-        if (l <= 1) {
-            return G; // since no threads activated jet
+        GenPolynomialRing<C> ring = G.get(0).ring;
+        if ( ! ring.coFac.isField() ) {
+            throw new IllegalArgumentException("coefficients not from a field");
         }
+        PairList<C> pairlist = strategy.create( modv, ring ); 
+        pairlist.put(G);
+
+        /*
+          GenPolynomial<C> p;
+          List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
+          PairList<C> pairlist = null;
+          int l = F.size();
+          ListIterator<GenPolynomial<C>> it = F.listIterator();
+          while (it.hasNext()) {
+          p = it.next();
+          if (p.length() > 0) {
+          p = p.monic();
+          if (p.isONE()) {
+          G.clear();
+          G.add(p);
+          return G; // since no threads activated jet
+          }
+          G.add(p);
+          if (pairlist == null) {
+          //pairlist = new OrderedPairlist<C>( modv, p.ring );
+          pairlist = strategy.create(modv, p.ring);
+          if (!p.ring.coFac.isField()) {
+          throw new IllegalArgumentException("coefficients not from a field");
+          }
+          }
+          // putOne not required
+          pairlist.put(p);
+          } else {
+          l--;
+          }
+          }
+          if (l <= 1) {
+          return G; // since no threads activated jet
+          }
+        */
         logger.info("start " + pairlist);
 
         Terminator fin = new Terminator(threads);
@@ -341,10 +357,7 @@ class Reducer<C extends RingElem<C>> implements Runnable {
 
     public void run() {
         Pair<C> pair;
-        GenPolynomial<C> pi;
-        GenPolynomial<C> pj;
-        GenPolynomial<C> S;
-        GenPolynomial<C> H;
+        GenPolynomial<C> pi, pj, S, H;
         //boolean set = false;
         int reduction = 0;
         int sleeps = 0;

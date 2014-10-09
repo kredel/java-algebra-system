@@ -53,6 +53,14 @@ public interface PairList<C extends RingElem<C> > extends Serializable {
 
 
     /**
+     * Put all polynomials in F to the pairlist and reduction matrix.
+     * @param F polynomial list.
+     * @return the index of the last added polynomial.
+     */
+    public int put(List<GenPolynomial<C>> F);
+
+
+    /**
      * Put to ONE-Polynomial to the pairlist.
      * @return the index of the last polynomial.
      */
