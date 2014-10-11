@@ -115,6 +115,9 @@ def nameFromValue(i)
     ivs = ivs.gsub("}","");
     ivs = ivs.gsub("[","");
     ivs = ivs.gsub("]","");
+    if ivs == "1"
+       ivs = "one"
+    end
     if ivs[0] == "1"[0] and not ivs.match(/\A[0-9].*/)
        r = ivs[1,ivs.size-1].to_s;
        ivs = "one"
@@ -122,17 +125,14 @@ def nameFromValue(i)
           ivs = ivs + r
        end
     end
-    if ivs[0,2] == "0i1"[0,2] or ivs[0,2] == "0I1"[0,2] 
-       r = ivs[2,ivs.size-1].to_s;
+    #if ivs[0,2] == "0i1"[0,2] or ivs[0,2] == "0I1"[0,2] 
+    if ivs == "0i1" or ivs == "0I1"
        ivs = "i"
-       if r != nil 
-          ivs = ivs + r
-       end
     end
     #puts "string: #{ivs} of " + i.to_s;
     if ivs.include?("|") or ivs.match(/\A[0-9].*/)
        #puts "string2: #{ivs} = " + ivs.class.to_s;
-       return nil
+       ivs = nil
     end
     return ivs
 end
