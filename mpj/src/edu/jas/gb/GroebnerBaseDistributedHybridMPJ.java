@@ -18,7 +18,9 @@ import org.apache.log4j.Logger;
 
 import edu.jas.kern.MPJEngine;
 import edu.jas.poly.ExpVector;
+import edu.jas.poly.PolyUtil;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.RingElem;
 import edu.jas.util.DistHashTableMPJ;
 import edu.jas.util.MPJChannel;
@@ -232,8 +234,25 @@ public class GroebnerBaseDistributedHybridMPJ<C extends RingElem<C>> extends Gro
      * @param F polynomial list.
      * @return GB(F) a Groebner base of F or null, if a IOException occurs.
      */
-    public List<GenPolynomial<C>> GBmaster(int modv, List<GenPolynomial<C>> F) throws IOException {
+    List<GenPolynomial<C>> GBmaster(int modv, List<GenPolynomial<C>> F) throws IOException {
         long t = System.currentTimeMillis();
+
+        List<GenPolynomial<C>> G = normalizeZerosOnes(F);
+        G = PolyUtil.<C> monic(G);
+        if (G.size() <= 1) {
+            //return G; 
+        }
+        if ( G.isEmpty() ) {
+            throw new IllegalArgumentException("empty F / zero ideal not allowed");
+        }
+        GenPolynomialRing<C> ring = G.get(0).ring;
+        if ( ! ring.coFac.isField() ) {
+            throw new IllegalArgumentException("coefficients not from a field");
+        }
+        PairList<C> pairlist = strategy.create( modv, ring ); 
+        pairlist.put(G);
+
+        /*
         GenPolynomial<C> p;
         List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
         PairList<C> pairlist = null;
@@ -274,7 +293,8 @@ public class GroebnerBaseDistributedHybridMPJ<C extends RingElem<C>> extends Gro
         //if (l <= 1) {
         //return G; must signal termination to others
         //}
-        logger.info("pairlist " + pairlist + ": " + unused);
+        */
+        logger.info("pairlist " + pairlist);
 
         logger.debug("looking for clients");
         DistHashTableMPJ<Integer, GenPolynomial<C>> theList = new DistHashTableMPJ<Integer, GenPolynomial<C>>(

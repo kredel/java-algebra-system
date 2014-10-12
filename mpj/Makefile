@@ -68,6 +68,8 @@ clean:
 	find . -name "*~" -follow -print -exec rm {} \;
 
 MFILE=machines
+#EFILE=$(JASPATH)/examples/ideal_one.jas
+#EFILE=$(JASPATH)/examples/ideal_zero.jas
 EFILE=$(JASPATH)/examples/trinks6.jas
 
 tests: jas-mpj.jar
