@@ -89,7 +89,8 @@
          listfiles="true"
          includeantruntime="false"
   >
-     <compilerarg value="-Xlint:unchecked" />
+     <compilerarg value="-Xlint:-unchecked" />
+     <!--compilerarg value="-Xlint:deprecation" /-->
      <src path="${src}" />
      <src path="${testsrc}" />
   </javac>
@@ -189,6 +190,10 @@
          classpath="${cp}" 
          fork="yes" >
     <arg line="${args}"/>
+    <!--jvmarg value="-verbose:gc"/>
+    <jvmarg value="-server"/>
+    <jvmarg value="-Xmx2900M"/>
+    <jvmarg value="-Xms2900M"/-->
   </java>
 </target>
 
