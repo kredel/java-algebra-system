@@ -15,7 +15,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.log4j.Logger;
 
 import edu.jas.poly.ExpVector;
+import edu.jas.poly.PolyUtil;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.RingElem;
 import edu.jas.util.ChannelFactory;
 import edu.jas.util.DistHashTable;
@@ -278,6 +280,15 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
      * @return GB(F) a Groebner base of F or null, if a IOException occurs.
      */
     public List<GenPolynomial<C>> GB(int modv, List<GenPolynomial<C>> F) {
+        List<GenPolynomial<C>> Fp = normalizeZerosOnes(F);
+        Fp = PolyUtil.<C> monic(Fp);
+        if (Fp.size() <= 1) {
+            return Fp; 
+        }
+        if ( ! Fp.get(0).ring.coFac.isField() ) {
+            throw new IllegalArgumentException("coefficients not from a field");
+        }
+
         String master = dtp.getEC().getMasterHost();
         //int port = dtp.getEC().getMasterPort(); // wrong port
         GBHybridExerClient<C> gbc = new GBHybridExerClient<C>(master, threadsPerNode, port, DHT_PORT);
@@ -286,8 +297,7 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
             dtp.addJob(gbc);
         }
         // run master
-        List<GenPolynomial<C>> G = GBMaster(modv, F);
-
+        List<GenPolynomial<C>> G = GBMaster(modv, Fp);
         return G;
     }
 
@@ -295,14 +305,23 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
     /**
      * Distributed hybrid Groebner base.
      * @param modv number of module variables.
-     * @param F polynomial list.
+     * @param F non empty monic polynomial list without zeros.
      * @return GB(F) a Groebner base of F or null, if a IOException occurs.
      */
-    public List<GenPolynomial<C>> GBMaster(int modv, List<GenPolynomial<C>> F) {
+    List<GenPolynomial<C>> GBMaster(int modv, List<GenPolynomial<C>> F) {
         long t = System.currentTimeMillis();
         ChannelFactory cf = new ChannelFactory(port);
         cf.init();
 
+        List<GenPolynomial<C>> G = F;
+        if (G.isEmpty()) {
+           throw new IllegalArgumentException("empty polynomial list not allowed");
+        }
+        GenPolynomialRing<C> ring = G.get(0).ring;
+        PairList<C> pairlist = strategy.create( modv, ring ); 
+        pairlist.put(G);
+
+        /*
         GenPolynomial<C> p;
         List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
         PairList<C> pairlist = null;
@@ -343,6 +362,7 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
         //if (l <= 1) {
         //return G; must signal termination to others
         //}
+        */
         logger.info("start " + pairlist); 
         DistHashTable<Integer, GenPolynomial<C>> theList = new DistHashTable<Integer, GenPolynomial<C>>(
                         "localhost", DHT_PORT);
@@ -375,7 +395,7 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
             logger.info("#distributed list = " + theList.size() + " #pairlist list = " + G.size());
         }
         for (GenPolynomial<C> q : theList.getValueList()) {
-            if (q != null && !q.isZERO()) {
+            if (debug && q != null && !q.isZERO()) {
                 logger.debug("final q = " + q.leadingExpVector());
             }
         }
@@ -388,9 +408,6 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
         G = Gp;
         logger.debug("server cf.terminate()");
         cf.terminate();
-        // no more required // 
-        //logger.info("server not pool.terminate() " + pool);
-        //pool.terminate();
         logger.debug("server theList.terminate() " + theList.size());
         theList.clear();
         theList.terminate();
