@@ -171,6 +171,28 @@ public class GroebnerBaseDistECTest extends TestCase {
 
 
     /**
+     * Test distributed GBase corner cases.
+     */
+    public void testDistributedGBaseCorner() {
+        L = new ArrayList<GenPolynomial<BigRational>>();
+
+        a = fac.getZERO();
+
+        L.add(a);
+        L = bbdist.GB(L);
+        assertTrue("isGB( { a } ): " + L, bbseq.isGB(L));
+        assertTrue("L == {}: " + L, L.isEmpty());
+
+        b = fac.getONE();
+
+        L.add(b);
+        L = bbdist.GB(L);
+        assertTrue("isGB( { a } ): " + L, bbseq.isGB(L));
+        assertTrue("L == {1}: " + L, L.size()==1);
+    }
+
+
+    /**
      * Test distributed GBase.
      */
     public void testDistributedGBase() {
