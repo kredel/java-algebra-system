@@ -753,7 +753,7 @@ public class RingFactoryTokenizer {
         if (s <= 0) {
             return new TermOrder(evord);
         }
-        return new TermOrder(evord, evord, vars.length, s);
+        return new TermOrder(evord, evord, nvars, s);
     }
 
 

@@ -150,7 +150,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
                     List<ColoredSystem<C>> CS) {
 
         List<GenPolynomial<Product<Residue<C>>>> list = new ArrayList<GenPolynomial<Product<Residue<C>>>>();
-        if (CS == null || CS.size() == 0) {
+        if (CS == null || CS.isEmpty()) {
             return list;
         }
         GenPolynomialRing<GenPolynomial<C>> pr = null;
@@ -166,6 +166,9 @@ public class PolyUtilApp<C extends RingElem<C>> {
                     pr = cs.list.get(0).green.ring;
                 }
             }
+        } 
+        if (pr == null) {
+            throw new IllegalArgumentException("no polynomial ring found");
         }
         ProductRing<Residue<C>> pfac;
         pfac = new ProductRing<Residue<C>>(rrl);
@@ -604,7 +607,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
             //System.out.println("dp = " + dp);
             for (List<BigDecimal> r : roots) {
                 //System.out.println("r = " + r);
-                BigDecimal ev = PolyUtil.<BigDecimal> evaluateAll(dc, dfac, dp, r);
+                BigDecimal ev = PolyUtil.<BigDecimal> evaluateAll(dc, dp, r);
                 if (ev.abs().compareTo(eps) > 0) {
                     System.out.println("ev = " + ev);
                     return false;
@@ -637,7 +640,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
             //System.out.println("dp = " + dp);
             for (List<Complex<BigDecimal>> r : roots) {
                 //System.out.println("r = " + r);
-                Complex<BigDecimal> ev = PolyUtil.<Complex<BigDecimal>> evaluateAll(dcc, dfac, dp, r);
+                Complex<BigDecimal> ev = PolyUtil.<Complex<BigDecimal>> evaluateAll(dcc, dp, r);
                 if (ev.norm().getRe().compareTo(eps) > 0) {
                     System.out.println("ev = " + ev);
                     return false;
