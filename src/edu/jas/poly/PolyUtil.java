@@ -639,6 +639,27 @@ public class PolyUtil {
 
 
     /**
+     * Word polynomial list monic.
+     * @param <C> coefficient type.
+     * @param L list of word polynomials with field coefficients.
+     * @return list of word polynomials with leading coefficient 1.
+     */
+    public static <C extends RingElem<C>> List<GenWordPolynomial<C>> wordMonic(List<GenWordPolynomial<C>> L) {
+        return ListUtil.<GenWordPolynomial<C>, GenWordPolynomial<C>> map(L,
+                        new UnaryFunctor<GenWordPolynomial<C>, GenWordPolynomial<C>>() {
+
+
+                            public GenWordPolynomial<C> eval(GenWordPolynomial<C> c) {
+                                if (c == null) {
+                                    return null;
+                                }
+                                return c.monic();
+                            }
+                        });
+    }
+
+
+    /**
      * Recursive polynomial list monic.
      * @param <C> coefficient type.
      * @param L list of recursive polynomials with field coefficients.

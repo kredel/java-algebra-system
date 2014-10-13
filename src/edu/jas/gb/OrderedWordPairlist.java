@@ -158,6 +158,20 @@ public class OrderedWordPairlist<C extends RingElem<C>> implements WordPairList<
 
 
     /**
+     * Put all word polynomials in F to the pairlist and reduction matrix.
+     * @param F word polynomial list.
+     * @return the index of the last added word polynomial.
+     */
+    public int put(List<GenWordPolynomial<C>> F) { 
+        int i = 0;
+        for (GenWordPolynomial<C> p : F) {
+            i = put(p);
+        }
+        return i;
+    }
+
+
+    /**
      * Remove the next required pair from the pairlist and reduction matrix.
      * Appy the criterions 3 and 4 to see if the S-polynomial is required.
      * @return the next pair if one exists, otherwise null.

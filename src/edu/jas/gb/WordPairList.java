@@ -43,6 +43,14 @@ public interface WordPairList<C extends RingElem<C>> {
 
 
     /**
+     * Put all word polynomials in F to the pairlist and reduction matrix.
+     * @param F word polynomial list.
+     * @return the index of the last added word polynomial.
+     */
+    public int put(List<GenWordPolynomial<C>> F);
+
+
+    /**
      * Put to ONE-Polynomial to the pairlist.
      * @return the index of the last polynomial.
      */

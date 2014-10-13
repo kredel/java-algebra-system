@@ -72,6 +72,42 @@ public abstract class WordGroebnerBaseAbstract<C extends RingElem<C>> implements
 
 
     /**
+     * Get the String representation with GB engines.
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
+
+
+    /**
+     * Normalize polynomial list.
+     * @param A list of polynomials.
+     * @return list of polynomials with zeros removed and ones/units reduced.
+     */
+    public List<GenWordPolynomial<C>> normalizeZerosOnes(List<GenWordPolynomial<C>> A) {
+        List<GenWordPolynomial<C>> N = new ArrayList<GenWordPolynomial<C>>(A.size());
+        if ( A == null || A.isEmpty() ) {
+            return N;
+        }
+        for (GenWordPolynomial<C> p : A) {
+            if ( p == null || p.isZERO() ) {
+                continue;
+            }
+            if ( p.isUnit() ) {
+                N.clear();
+                N.add( p.ring.getONE() );
+                return N;
+            }
+            N.add( p.abs() );
+        }
+        //N.trimToSize();
+        return N;
+    }
+
+
+    /**
      * Word Groebner base test.
      * @param F Word polynomial list.
      * @return true, if F is a Groebner base, else false.
