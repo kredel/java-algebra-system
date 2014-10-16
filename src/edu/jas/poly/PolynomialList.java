@@ -287,7 +287,7 @@ public class PolynomialList<C extends RingElem<C>> implements Comparable<Polynom
 
 
     /**
-     * Get list. 
+     * Get list.
      * @return list from this.
      */
     public List<GenPolynomial<C>> getList() {

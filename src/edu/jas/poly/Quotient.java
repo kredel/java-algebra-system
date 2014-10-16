@@ -8,8 +8,8 @@ package edu.jas.poly;
 import org.apache.log4j.Logger;
 
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingElem;
 import edu.jas.structure.QuotPair;
+import edu.jas.structure.RingElem;
 
 
 /**
@@ -17,8 +17,7 @@ import edu.jas.structure.QuotPair;
  * immutable.
  * @author Heinz Kredel
  */
-public class Quotient<C extends RingElem<C>> 
-    implements RingElem<Quotient<C>>, QuotPair<C> {
+public class Quotient<C extends RingElem<C>> implements RingElem<Quotient<C>>, QuotPair<C> {
 
 
     private static final Logger logger = Logger.getLogger(Quotient.class);
@@ -154,8 +153,7 @@ public class Quotient<C extends RingElem<C>>
 
 
     /**
-     * Is Quotient a constant.
-     * Not implemented.
+     * Is Quotient a constant. Not implemented.
      * @throws UnsupportedOperationException.
      */
     public boolean isConstant() {
@@ -441,8 +439,8 @@ public class Quotient<C extends RingElem<C>>
         if (this.isZERO()) {
             return b;
         }
-        if (num instanceof GcdRingElem && den instanceof GcdRingElem
-            && b.num instanceof GcdRingElem && b.den instanceof GcdRingElem) {
+        if (num instanceof GcdRingElem && den instanceof GcdRingElem && b.num instanceof GcdRingElem
+                        && b.den instanceof GcdRingElem) {
             return ring.getONE();
         }
         throw new UnsupportedOperationException("gcd not implemented " + num.getClass().getName());
@@ -456,6 +454,7 @@ public class Quotient<C extends RingElem<C>>
      * @return [ gcd(this,b), c1, c2 ] with c1*this + c2*b = gcd(this,b).
      */
     public Quotient<C>[] egcd(Quotient<C> b) {
+        @SuppressWarnings("cast")
         Quotient<C>[] ret = (Quotient<C>[]) new Quotient[3];
         ret[0] = null;
         ret[1] = null;
@@ -468,8 +467,8 @@ public class Quotient<C extends RingElem<C>>
             ret[0] = b;
             return ret;
         }
-        if (num instanceof GcdRingElem && den instanceof GcdRingElem
-            && b.num instanceof GcdRingElem && b.den instanceof GcdRingElem) {
+        if (num instanceof GcdRingElem && den instanceof GcdRingElem && b.num instanceof GcdRingElem
+                        && b.den instanceof GcdRingElem) {
             Quotient<C> two = ring.fromInteger(2);
             ret[0] = ring.getONE();
             ret[1] = (this.multiply(two)).inverse();

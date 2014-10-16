@@ -326,6 +326,7 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
      * ring.
      * @return true, if this ring is associative, else false.
      */
+    @SuppressWarnings("unused")
     @Override
     public boolean isAssociative() {
         RecSolvablePolynomial<C> Xi, Xj, Xk, p, q;
@@ -675,6 +676,7 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
      * Distributive representation as polynomial with all main variables.
      * @return distributive polynomial ring factory.
      */
+    @SuppressWarnings("cast")
     public static <C extends RingElem<C>> // must be static because of types
     GenSolvablePolynomialRing<C> distribute(RecSolvablePolynomialRing<C> rf) {
         // setup solvable polynomial ring
