@@ -448,6 +448,7 @@ public class Examples {
      * example11. degree matrix;
      * 
      */
+    @SuppressWarnings("cast")
     public static void example11() {
         int n = 50;
         BigRational fac = new BigRational();

@@ -76,7 +76,7 @@ public class OrderedModuleList<C extends RingElem<C>> extends ModuleList<C> {
      * @param l list of polynomial lists.
      * @return sorted list of polynomial lists from l.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public static <C extends RingElem<C>> List<List<GenPolynomial<C>>> sort(GenPolynomialRing<C> r,
                     List<List<GenPolynomial<C>>> l) {
         if (l == null) {
