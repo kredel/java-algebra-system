@@ -12,7 +12,7 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Algebraic number class based on GenPolynomial with RingElem interface.
+ * Algebraic number class. Based on GenPolynomial with RingElem interface.
  * Objects of this class are immutable.
  * @author Heinz Kredel
  */
@@ -87,8 +87,8 @@ public class AlgebraicNumber<C extends RingElem<C>> implements GcdRingElem<Algeb
 
 
     /**
-     * Clone this.
-     * @see java.lang.Object#clone()
+     * Copy this.
+     * @see edu.jas.structure.Element#copy()
      */
     @Override
     public AlgebraicNumber<C> copy() {

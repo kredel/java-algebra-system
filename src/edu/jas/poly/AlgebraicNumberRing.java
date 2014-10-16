@@ -21,7 +21,7 @@ import edu.jas.util.CartesianProductInfinite;
 
 
 /**
- * Algebraic number factory class based on GenPolynomial with RingElem
+ * Algebraic number factory. Based on GenPolynomial factory with RingElem
  * interface. Objects of this class are immutable.
  * @author Heinz Kredel
  */
@@ -468,7 +468,7 @@ public class AlgebraicNumberRing<C extends RingElem<C>> implements RingFactory<A
      * Depth of extension field tower.
      * @return number of nested algebraic extension fields
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public int depth() {
         AlgebraicNumberRing<C> arr = this;
         int depth = 1;
@@ -495,7 +495,7 @@ public class AlgebraicNumberRing<C extends RingElem<C>> implements RingFactory<A
      * Total degree of nested extension fields.
      * @return degree of tower of algebraic extension fields
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public long totalExtensionDegree() {
         long degree = modul.degree(0);
         AlgebraicNumberRing<C> arr = this;

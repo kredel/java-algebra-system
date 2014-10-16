@@ -91,6 +91,7 @@ public class GenPolynomialTokenizer {
     };
 
 
+    @SuppressWarnings("unused")
     private polyType parsedPoly = polyType.PolBigRat;
 
 
@@ -101,7 +102,7 @@ public class GenPolynomialTokenizer {
      * noargs constructor reads from System.in.
      */
     public GenPolynomialTokenizer() {
-        this(new BufferedReader(new InputStreamReader(System.in,Charset.forName("UTF8"))));
+        this(new BufferedReader(new InputStreamReader(System.in, Charset.forName("UTF8"))));
     }
 
 
@@ -660,7 +661,7 @@ public class GenPolynomialTokenizer {
      * @return the next coefficient factory.
      * @throws IOException
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public RingFactory nextCoefficientRing() throws IOException {
         RingFactory coeff = null;
         coeffType ct = null;
@@ -1439,6 +1440,7 @@ public class GenPolynomialTokenizer {
             String sn = sc.next();
             sl.add(sn);
         }
+        sc.close();
         vl = new String[sl.size()];
         int i = 0;
         for (String si : sl) {
@@ -1503,6 +1505,7 @@ public class GenPolynomialTokenizer {
             //System.out.println("sn = " + sn);
             sl.add(sn);
         }
+        sc.close();
         vl = new String[sl.size()];
         int i = 0;
         for (String si : sl) {

@@ -11,8 +11,8 @@ import edu.jas.arith.BigComplex;
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
-import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.RingElem;
 import edu.jas.structure.StarRingElem;
 
 
@@ -155,8 +155,8 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
 
 
     /**
-     * Clone this.
-     * @see java.lang.Object#clone()
+     * Copy this.
+     * @see edu.jas.structure.Element#copy()
      */
     @Override
     public Complex<C> copy() {
@@ -461,7 +461,7 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
      * @param S Complex.
      * @return Complex[] { q, r } with q = this/S and r = rem(this,S).
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public Complex<C>[] quotientRemainder(Complex<C> S) {
         Complex<C>[] ret = new Complex[2];
         C n = S.norm().re;

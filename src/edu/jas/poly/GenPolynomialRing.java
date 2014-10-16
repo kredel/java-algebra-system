@@ -16,7 +16,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -201,7 +200,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
         if (v == null) {
             vars = null;
         } else {
-            vars = Arrays.copyOf(v,v.length); // > Java-5
+            vars = Arrays.copyOf(v, v.length); // > Java-5
         }
         ZERO = new GenPolynomial<C>(this);
         C coeff = coFac.getONE();
@@ -257,6 +256,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
      * Get the String representation.
      * @see java.lang.Object#toString()
      */
+    @SuppressWarnings("cast")
     @Override
     public String toString() {
         String res = null;
@@ -407,7 +407,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
      * @return vars.
      */
     public String[] getVars() {
-        return Arrays.copyOf(vars,vars.length); // > Java-5
+        return Arrays.copyOf(vars, vars.length); // > Java-5
     }
 
 
@@ -421,7 +421,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
                             + ", nvar " + nvar);
         }
         String[] t = vars;
-        vars = Arrays.copyOf(v,v.length); // > Java-5 
+        vars = Arrays.copyOf(v, v.length); // > Java-5 
         return t;
     }
 
@@ -668,7 +668,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
      * @param r Reader.
      * @return next GenPolynomial from r.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public GenPolynomial<C> parse(Reader r) {
         GenPolynomialTokenizer pt = new GenPolynomialTokenizer(this, r);
         GenPolynomial<C> p = null;
@@ -923,15 +923,16 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
      * Distributive representation as polynomial with all main variables.
      * @return distributive polynomial ring factory.
      */
+    @SuppressWarnings("cast")
     public GenPolynomialRing<C> distribute() {
-        if ( !(coFac instanceof GenPolynomialRing) ) {
+        if (!(coFac instanceof GenPolynomialRing)) {
             return this;
         }
         RingFactory cf = coFac;
         RingFactory<GenPolynomial<C>> cfp = (RingFactory<GenPolynomial<C>>) cf;
         GenPolynomialRing cr = (GenPolynomialRing) cfp;
         GenPolynomialRing<C> pfac;
-        if ( cr.vars != null ) {
+        if (cr.vars != null) {
             pfac = extend(cr.vars);
         } else {
             pfac = extend(cr.nvar);

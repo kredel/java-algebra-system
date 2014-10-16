@@ -199,10 +199,10 @@ Iterable<Monomial<C>> {
     public void doRemoveFromMap(ExpVector e, C c) {
         C b = val.remove(e);
         if (debug) {
-            if ( c == null ) { // ignore b
+            if (c == null) { // ignore b
                 return;
             }
-            if ( ! c.equals(b) ) {
+            if (!c.equals(b)) {
                 logger.error("map entry wrong " + e + " to " + c + " old " + b);
             }
         }
@@ -924,7 +924,7 @@ Iterable<Monomial<C>> {
         if (a.isZERO()) {
             return this;
         }
-        GenPolynomial<C> n = this.copy(); 
+        GenPolynomial<C> n = this.copy();
         SortedMap<ExpVector, C> nv = n.val;
         C x = nv.get(e);
         if (x != null) {
@@ -975,7 +975,7 @@ Iterable<Monomial<C>> {
             return S.multiply(a.negate());
         }
         assert (ring.nvar == S.ring.nvar);
-        GenPolynomial<C> n = this.copy(); 
+        GenPolynomial<C> n = this.copy();
         SortedMap<ExpVector, C> nv = n.val;
         SortedMap<ExpVector, C> sv = S.val;
         for (Map.Entry<ExpVector, C> me : sv.entrySet()) {
@@ -990,7 +990,7 @@ Iterable<Monomial<C>> {
                 } else {
                     nv.remove(f);
                 }
-            } else if ( !y.isZERO() ) {
+            } else if (!y.isZERO()) {
                 nv.put(f, y.negate());
             }
         }
@@ -1019,10 +1019,10 @@ Iterable<Monomial<C>> {
             return this;
         }
         if (this.isZERO()) {
-            return S.multiply(a.negate(),e);
+            return S.multiply(a.negate(), e);
         }
         assert (ring.nvar == S.ring.nvar);
-        GenPolynomial<C> n = this.copy(); 
+        GenPolynomial<C> n = this.copy();
         SortedMap<ExpVector, C> nv = n.val;
         SortedMap<ExpVector, C> sv = S.val;
         for (Map.Entry<ExpVector, C> me : sv.entrySet()) {
@@ -1038,7 +1038,7 @@ Iterable<Monomial<C>> {
                 } else {
                     nv.remove(f);
                 }
-            } else if ( !y.isZERO() ) {
+            } else if (!y.isZERO()) {
                 nv.put(f, y.negate());
             }
         }
@@ -1062,10 +1062,10 @@ Iterable<Monomial<C>> {
             return this.multiply(b);
         }
         if (this.isZERO() || b == null || b.isZERO()) {
-            return S.multiply(a.negate(),e);
+            return S.multiply(a.negate(), e);
         }
         if (b.isONE()) {
-            return subtractMultiple(a,e,S);
+            return subtractMultiple(a, e, S);
         }
         assert (ring.nvar == S.ring.nvar);
         GenPolynomial<C> n = this.multiply(b);
@@ -1084,7 +1084,7 @@ Iterable<Monomial<C>> {
                 } else {
                     nv.remove(f);
                 }
-            } else if ( !y.isZERO() ) {
+            } else if (!y.isZERO()) {
                 nv.put(f, y.negate());
             }
         }
@@ -1103,19 +1103,19 @@ Iterable<Monomial<C>> {
      */
     public GenPolynomial<C> scaleSubtractMultiple(C b, ExpVector g, C a, ExpVector e, GenPolynomial<C> S) {
         if (a == null || S == null) {
-            return this.multiply(b,g);
+            return this.multiply(b, g);
         }
         if (a.isZERO() || S.isZERO()) {
-            return this.multiply(b,g);
+            return this.multiply(b, g);
         }
         if (this.isZERO() || b == null || b.isZERO()) {
-            return S.multiply(a.negate(),e);
+            return S.multiply(a.negate(), e);
         }
         if (b.isONE() && g.isZERO()) {
-            return subtractMultiple(a,e,S);
+            return subtractMultiple(a, e, S);
         }
         assert (ring.nvar == S.ring.nvar);
-        GenPolynomial<C> n = this.multiply(b,g);
+        GenPolynomial<C> n = this.multiply(b, g);
         SortedMap<ExpVector, C> nv = n.val;
         SortedMap<ExpVector, C> sv = S.val;
         for (Map.Entry<ExpVector, C> me : sv.entrySet()) {
@@ -1131,7 +1131,7 @@ Iterable<Monomial<C>> {
                 } else {
                     nv.remove(f);
                 }
-            } else if ( !y.isZERO() ) {
+            } else if (!y.isZERO()) {
                 nv.put(f, y.negate());
             }
         }
