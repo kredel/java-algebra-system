@@ -18,8 +18,8 @@ import edu.jas.structure.QuotPair;
  * interface. Objects of this class are immutable.
  * @author Heinz Kredel
  */
-public class Quotient<C extends GcdRingElem<C>> 
-    implements GcdRingElem<Quotient<C>>, QuotPair<GenPolynomial<C>> {
+public class Quotient<C extends GcdRingElem<C>> implements GcdRingElem<Quotient<C>>,
+                QuotPair<GenPolynomial<C>> {
 
 
     private static final Logger logger = Logger.getLogger(Quotient.class);
@@ -609,7 +609,7 @@ public class Quotient<C extends GcdRingElem<C>>
      * @param b other element.
      * @return [ gcd(this,b), c1, c2 ] with c1*this + c2*b = gcd(this,b).
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public Quotient<C>[] egcd(Quotient<C> b) {
         Quotient<C>[] ret = (Quotient<C>[]) new Quotient[3];
         ret[0] = null;

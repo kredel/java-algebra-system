@@ -400,7 +400,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         Map.Entry<ExpVector, C> m = orderMonomial();
         if (m == null) {
             return ring.getZERO();
-        } 
+        }
         ExpVector e = m.getKey();
         long d = e.totalDeg();
         MultiVarCoefficients<C> mc = lazyCoeffs;
@@ -912,7 +912,6 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      * Order ExpVector.
      * @return ExpVector of first non zero coefficient.
      */
-    @SuppressWarnings("unused")
     public ExpVector orderExpVector() {
         //int x = 
         order(); // ensure evorder is set

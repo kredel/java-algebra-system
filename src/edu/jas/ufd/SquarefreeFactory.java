@@ -166,7 +166,7 @@ public class SquarefreeFactory {
      * @param <C> coefficient type, e.g. BigRational, ModInteger.
      * @return squarefree factorization algorithm implementation.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     protected static <C extends GcdRingElem<C>> SquarefreeAbstract<C> getImplementationPoly(
                     GenPolynomialRing<C> fac) {
         if (fac.characteristic().signum() == 0) {
@@ -202,7 +202,7 @@ public class SquarefreeFactory {
      * @param fac RingFactory&lt;C&gt;.
      * @return squarefree factorization algorithm implementation.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public static <C extends GcdRingElem<C>> SquarefreeAbstract<C> getImplementation(RingFactory<C> fac) {
         //logger.info("fac = " + fac.getClass().getName());
         //System.out.println("fac_o = " + fac.getClass().getName());

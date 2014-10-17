@@ -36,7 +36,8 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>> extends Squa
 
 
     /**
-     * Squarefree engine for infinite ring of characteristic p base coefficients.
+     * Squarefree engine for infinite ring of characteristic p base
+     * coefficients.
      */
     protected final SquarefreeAbstract<C> qengine;
 
@@ -44,6 +45,7 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>> extends Squa
     /**
      * Constructor.
      */
+    @SuppressWarnings("cast")
     public SquarefreeInfiniteFieldCharP(RingFactory<Quotient<C>> fac) {
         super(fac);
         // isFinite() predicate now present

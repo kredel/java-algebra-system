@@ -501,6 +501,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
      * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k}
      *         p_i^{e_i} and p_i squarefree.
      */
+    @SuppressWarnings("cast")
     @Override
     public SortedMap<C, Long> squarefreeFactors(C coeff) {
         if (coeff == null) {

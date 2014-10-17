@@ -19,8 +19,8 @@ import edu.jas.kern.TimeStatus;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.PolyUtil;
 import edu.jas.poly.OptimizedPolynomialList;
+import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrderOptimization;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
@@ -148,7 +148,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         }
         List<GenPolynomial<C>> topt = new ArrayList<GenPolynomial<C>>(1);
         topt.add(P);
-        OptimizedPolynomialList<C> opt = TermOrderOptimization.<C> optimizeTermOrder(pfac,topt);
+        OptimizedPolynomialList<C> opt = TermOrderOptimization.<C> optimizeTermOrder(pfac, topt);
         P = opt.list.get(0);
         logger.info("optimized polynomial: " + P);
         List<Integer> iperm = TermOrderOptimization.inversePermutation(opt.perm);
@@ -176,7 +176,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             //System.out.println("fs = " + fs);
             facs = fs;
         }
-        List<GenPolynomial<C>> iopt = TermOrderOptimization.<C> permutation(iperm, pfac,facs);
+        List<GenPolynomial<C>> iopt = TermOrderOptimization.<C> permutation(iperm, pfac, facs);
         logger.info("de-optimized polynomials: " + iopt);
         facs = normalizeFactorization(iopt);
         return facs;
@@ -344,6 +344,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         List<T> res = new ArrayList<T>();
         res.addAll(a);
         for (T e : b) {
+            @SuppressWarnings("unused")
             boolean t = res.remove(e);
         }
         return res;

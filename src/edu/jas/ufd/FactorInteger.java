@@ -76,7 +76,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
      * Constructor.
      * @param cfac coefficient ring factory.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public FactorInteger(RingFactory<BigInteger> cfac) {
         super(cfac);
         ModularRingFactory<MOD> mcofac = (ModularRingFactory<MOD>) (Object) new ModLongRing(13, true); // hack
