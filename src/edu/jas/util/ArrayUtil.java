@@ -5,13 +5,12 @@
 package edu.jas.util;
 
 
-//import org.apache.log4j.Logger;
+// import org.apache.log4j.Logger;
 
 
 /**
- * Array utilities.
- * For example copyOf from Java 6.
- * <b>Note:</b> unused at the moment since it is not working in Java 5.
+ * Array utilities. For example copyOf from Java 6. <b>Note:</b> unused at the
+ * moment since it is not working in Java 5.
  * @author Heinz Kredel
  */
 public class ArrayUtil {
@@ -21,7 +20,7 @@ public class ArrayUtil {
     // private static boolean debug = logger.isDebugEnabled();
 
 
-    /** 
+    /**
      * Copy the specified array.
      * @param original array.
      * @param newLength new array length.
@@ -40,7 +39,7 @@ public class ArrayUtil {
      * @return copy of original.
      */
     public static <T> T[] copyOf(T[] original) {
-        return (T[]) copyOf(original,original.length);
+        return copyOf(original, original.length);
     }
 
 }

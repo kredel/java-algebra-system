@@ -18,8 +18,8 @@ import org.apache.log4j.Logger;
 
 /**
  * Server for the distributed version of a list.
- * @author Heinz Kredel
- * TODO: redistribute list for late coming clients, removal of elements.
+ * @author Heinz Kredel TODO: redistribute list for late coming clients, removal
+ *         of elements.
  */
 
 public class DistHashTableServer<K> extends Thread {
@@ -260,7 +260,7 @@ public class DistHashTableServer<K> extends Thread {
      * number of servers.
      */
     public int size() {
-        if ( servers == null ) {
+        if (servers == null) {
             return -1;
         }
         //synchronized (servers) removed
@@ -339,7 +339,7 @@ class DHTBroadcaster<K> extends Thread /*implements Runnable*/{
      * broadcast.
      * @param o DHTTransport element to broadcast.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public void broadcast(DHTTransport o) {
         if (logger.isDebugEnabled()) {
             logger.debug("broadcast = " + o);
@@ -360,7 +360,7 @@ class DHTBroadcaster<K> extends Thread /*implements Runnable*/{
             //   logger.info("theList duplicate key " + tc.key );
             //}
             try {
-                if ( ! (o instanceof DHTTransportClear) ) {
+                if (!(o instanceof DHTTransportClear)) {
                     key = tc.key();
                     theList.put(key, tc);
                 }

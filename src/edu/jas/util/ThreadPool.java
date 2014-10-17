@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import edu.jas.kern.PreemptingException;
 
+
 /**
  * Thread pool using stack / list workpile.
  * @author Akitoshi Yoshida
@@ -195,7 +196,7 @@ public class ThreadPool {
                 notifyAll(); // for getJob
             }
         }
-        int re = 0;
+        //int re = 0;
         for (int i = 0; i < workers.length; i++) {
             if (workers[i] == null) {
                 continue;
@@ -207,7 +208,7 @@ public class ThreadPool {
                         notifyAll(); // for getJob
                         workers[i].interrupt();
                     }
-                    re++;
+                    //re++;
                     //if ( re > 3 * workers.length ) {
                     //    logger.info("give up on: " + workers[i]);
                     //    break; // give up
