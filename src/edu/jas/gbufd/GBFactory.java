@@ -462,7 +462,7 @@ public class GBFactory {
      * @param pl pair selection strategy
      * @return GB algorithm implementation.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public static <C extends GcdRingElem<C>> // interface RingElem not sufficient 
     GroebnerBaseAbstract<C> getImplementation(RingFactory<C> fac, PairList<C> pl) {
         logger.debug("fac = " + fac.getClass().getName());

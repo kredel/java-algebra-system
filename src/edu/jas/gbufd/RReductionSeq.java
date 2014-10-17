@@ -183,7 +183,7 @@ public class RReductionSeq<C extends RegularRingElem<C>> extends ReductionAbstra
      * @param Pp polynomial list.
      * @return r-nf(Ap) with respect to Pp.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public GenPolynomial<C> normalform(List<GenPolynomial<C>> Pp, GenPolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
             return Ap;
@@ -234,7 +234,7 @@ public class RReductionSeq<C extends RegularRingElem<C>> extends ReductionAbstra
             e = m.getKey();
             a = m.getValue();
             if (debug) {
-                if ( a.isZERO() ) {
+                if (a.isZERO()) {
                     throw new RuntimeException("a.isZERO(): S = " + S);
                 }
             }
@@ -353,7 +353,7 @@ public class RReductionSeq<C extends RegularRingElem<C>> extends ReductionAbstra
      * @param Ap a polynomial.
      * @return Ap - row*Pp = nf(Pp,Ap) , the normal form of Ap wrt. Pp.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public GenPolynomial<C> normalform(List<GenPolynomial<C>> row, List<GenPolynomial<C>> Pp,
                     GenPolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {

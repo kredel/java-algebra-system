@@ -46,7 +46,7 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>> extends RReductio
      * @return r-nf(Ap) with respect to Pp.
      */
     @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public GenPolynomial<C> normalform(List<GenPolynomial<C>> Pp, GenPolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
             return Ap;
@@ -145,7 +145,7 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>> extends RReductio
      * @return ( nf(Ap), mf ) with respect to Pp and mf as multiplication factor
      *         for Ap.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public PseudoReductionEntry<C> normalformFactor(List<GenPolynomial<C>> Pp, GenPolynomial<C> Ap) {
         if (Ap == null) {
             return null;
@@ -255,7 +255,7 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>> extends RReductio
      * @return nf(Pp,Ap), the normal form of Ap wrt. Pp.
      */
     @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public GenPolynomial<C> normalform(List<GenPolynomial<C>> row, List<GenPolynomial<C>> Pp,
                     GenPolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {

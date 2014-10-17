@@ -680,7 +680,7 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
      * @param b other element.
      * @return [ gcd(this,b), c1, c2 ] with c1*this + c2*b = gcd(this,b).
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public SolvableQuotient<C>[] egcd(SolvableQuotient<C> b) {
         SolvableQuotient<C>[] ret = (SolvableQuotient<C>[]) new SolvableQuotient[3];
         ret[0] = null;
