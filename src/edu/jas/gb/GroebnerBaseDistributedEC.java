@@ -15,9 +15,9 @@ import java.util.concurrent.Semaphore;
 import org.apache.log4j.Logger;
 
 import edu.jas.poly.ExpVector;
-import edu.jas.poly.PolyUtil;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.PolyUtil;
 import edu.jas.structure.RingElem;
 import edu.jas.util.ChannelFactory;
 import edu.jas.util.DistHashTable;
@@ -218,9 +218,9 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
         List<GenPolynomial<C>> Fp = normalizeZerosOnes(F);
         Fp = PolyUtil.<C> monic(Fp);
         if (Fp.size() <= 1) {
-            return Fp; 
+            return Fp;
         }
-        if ( ! Fp.get(0).ring.coFac.isField() ) {
+        if (!Fp.get(0).ring.coFac.isField()) {
             throw new IllegalArgumentException("coefficients not from a field");
         }
 
@@ -250,13 +250,13 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
 
         List<GenPolynomial<C>> G = F;
         if (G.isEmpty()) {
-           throw new IllegalArgumentException("empty polynomial list not allowed");
+            throw new IllegalArgumentException("empty polynomial list not allowed");
         }
         GenPolynomialRing<C> ring = G.get(0).ring;
-        if ( ! ring.coFac.isField() ) {
+        if (!ring.coFac.isField()) {
             throw new IllegalArgumentException("coefficients not from a field");
         }
-        PairList<C> pairlist = strategy.create( modv, ring ); 
+        PairList<C> pairlist = strategy.create(modv, ring);
         pairlist.put(G);
 
         /*
@@ -316,13 +316,14 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
         // wait for arrival
         while (theList.size() < al.size()) {
             logger.info("#distributed list = " + theList.size() + " #pairlist list = " + al.size());
+            @SuppressWarnings("unused")
             GenPolynomial<C> nn = theList.getWait(al.size() - 1);
         }
 
         Terminator fin = new Terminator(threads);
         ReducerServerEC<C> R;
         for (int i = 0; i < threads; i++) {
-            R = new ReducerServerEC<C>(fin, cf, theList, G, pairlist);
+            R = new ReducerServerEC<C>(fin, cf, theList, pairlist);
             pool.addJob(R);
         }
         logger.debug("main loop waiting");
@@ -444,6 +445,7 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
         }
         Collections.reverse(G); // important for lex GB
 
+        @SuppressWarnings("cast")
         MiReducerServerEC<C>[] mirs = (MiReducerServerEC<C>[]) new MiReducerServerEC[G.size()];
         int i = 0;
         F = new ArrayList<GenPolynomial<C>>(G.size());
@@ -498,7 +500,7 @@ class ReducerServerEC<C extends RingElem<C>> implements Runnable {
 
 
     ReducerServerEC(Terminator fin, ChannelFactory cf, DistHashTable<Integer, GenPolynomial<C>> dl,
-                    List<GenPolynomial<C>> G, PairList<C> L) {
+                    PairList<C> L) {
         pool = fin;
         this.cf = cf;
         theList = dl;

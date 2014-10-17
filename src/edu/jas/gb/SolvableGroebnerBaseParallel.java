@@ -161,7 +161,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>> extends Solvabl
         List<GenSolvablePolynomial<C>> G = new ArrayList<GenSolvablePolynomial<C>>();
         if (F == null) {
             return G;
-        } 
+        }
         GenSolvablePolynomial<C> p;
         PairList<C> pairlist = null;
         int l = F.size();
@@ -264,6 +264,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>> extends Solvabl
             return G;
         }
 
+        @SuppressWarnings("cast")
         SolvableMiReducer<C>[] mirs = (SolvableMiReducer<C>[]) new SolvableMiReducer[G.size()];
         int i = 0;
         F = new ArrayList<GenSolvablePolynomial<C>>(G.size());

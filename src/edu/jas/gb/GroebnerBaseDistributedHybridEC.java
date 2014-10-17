@@ -15,9 +15,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.log4j.Logger;
 
 import edu.jas.poly.ExpVector;
-import edu.jas.poly.PolyUtil;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.PolyUtil;
 import edu.jas.structure.RingElem;
 import edu.jas.util.ChannelFactory;
 import edu.jas.util.DistHashTable;
@@ -283,9 +283,9 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
         List<GenPolynomial<C>> Fp = normalizeZerosOnes(F);
         Fp = PolyUtil.<C> monic(Fp);
         if (Fp.size() <= 1) {
-            return Fp; 
+            return Fp;
         }
-        if ( ! Fp.get(0).ring.coFac.isField() ) {
+        if (!Fp.get(0).ring.coFac.isField()) {
             throw new IllegalArgumentException("coefficients not from a field");
         }
 
@@ -315,10 +315,10 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
 
         List<GenPolynomial<C>> G = F;
         if (G.isEmpty()) {
-           throw new IllegalArgumentException("empty polynomial list not allowed");
+            throw new IllegalArgumentException("empty polynomial list not allowed");
         }
         GenPolynomialRing<C> ring = G.get(0).ring;
-        PairList<C> pairlist = strategy.create( modv, ring ); 
+        PairList<C> pairlist = strategy.create(modv, ring);
         pairlist.put(G);
 
         /*
@@ -363,7 +363,7 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
         //return G; must signal termination to others
         //}
         */
-        logger.info("start " + pairlist); 
+        logger.info("start " + pairlist);
         DistHashTable<Integer, GenPolynomial<C>> theList = new DistHashTable<Integer, GenPolynomial<C>>(
                         "localhost", DHT_PORT);
         theList.init();
@@ -440,8 +440,8 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
         ThreadPool pool = new ThreadPool(threadsPerNode);
         logger.info("client using pool = " + pool);
         for (int i = 0; i < threadsPerNode; i++) {
-            HybridReducerClientEC<C> Rr = new HybridReducerClientEC<C>(threadsPerNode, pairChannel, i,
-                            theList);
+            HybridReducerClientEC<C> Rr = new HybridReducerClientEC<C>(/*threadsPerNode,*/pairChannel, /*i,*/
+            theList);
             pool.addJob(Rr);
         }
         logger.debug("clients submitted");
@@ -521,6 +521,7 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
         }
         Collections.reverse(G); // important for lex GB
 
+        @SuppressWarnings("cast")
         MiReducerServer<C>[] mirs = (MiReducerServer<C>[]) new MiReducerServer[G.size()];
         int i = 0;
         F = new ArrayList<GenPolynomial<C>>(G.size());
@@ -581,19 +582,19 @@ class HybridReducerServerEC<C extends RingElem<C>> implements Runnable {
     /**
      * Message tag for pairs.
      */
-    public final Integer pairTag = GroebnerBaseDistributedHybrid.pairTag;
+    public final Integer pairTag = GroebnerBaseDistributedHybridEC.pairTag;
 
 
     /**
      * Message tag for results.
      */
-    public final Integer resultTag = GroebnerBaseDistributedHybrid.resultTag;
+    public final Integer resultTag = GroebnerBaseDistributedHybridEC.resultTag;
 
 
     /**
      * Message tag for acknowledgments.
      */
-    public final Integer ackTag = GroebnerBaseDistributedHybrid.ackTag;
+    public final Integer ackTag = GroebnerBaseDistributedHybridEC.ackTag;
 
 
     /**
@@ -641,8 +642,8 @@ class HybridReducerServerEC<C extends RingElem<C>> implements Runnable {
         AtomicInteger active = new AtomicInteger(0);
 
         // start receiver
-        HybridReducerReceiverEC<C> receiver = new HybridReducerReceiverEC<C>(threadsPerNode, finner, active,
-                        pairChannel, theList, pairlist);
+        HybridReducerReceiverEC<C> receiver = new HybridReducerReceiverEC<C>(/*threadsPerNode,*/finner,
+                        active, pairChannel, theList, pairlist);
         receiver.start();
 
         Pair<C> pair;
@@ -723,6 +724,7 @@ class HybridReducerServerEC<C extends RingElem<C>> implements Runnable {
             try {
                 red++;
                 pairChannel.send(pairTag, msg);
+                @SuppressWarnings("unused")
                 int a = active.getAndIncrement();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -792,7 +794,7 @@ class HybridReducerReceiverEC<C extends RingElem<C>> extends Thread {
     private final Terminator finner;
 
 
-    private final int threadsPerNode;
+    //private final int threadsPerNode;
 
 
     private final AtomicInteger active;
@@ -804,34 +806,34 @@ class HybridReducerReceiverEC<C extends RingElem<C>> extends Thread {
     /**
      * Message tag for pairs.
      */
-    public final Integer pairTag = GroebnerBaseDistributedHybrid.pairTag;
+    public final Integer pairTag = GroebnerBaseDistributedHybridEC.pairTag;
 
 
     /**
      * Message tag for results.
      */
-    public final Integer resultTag = GroebnerBaseDistributedHybrid.resultTag;
+    public final Integer resultTag = GroebnerBaseDistributedHybridEC.resultTag;
 
 
     /**
      * Message tag for acknowledgments.
      */
-    public final Integer ackTag = GroebnerBaseDistributedHybrid.ackTag;
+    public final Integer ackTag = GroebnerBaseDistributedHybridEC.ackTag;
 
 
     /**
      * Constructor.
-     * @param tpn number of threads per node
      * @param fin terminator
      * @param a active remote tasks count
      * @param pc tagged socket channel
      * @param dl distributed hash table
      * @param L ordered pair list
      */
-    HybridReducerReceiverEC(int tpn, Terminator fin, AtomicInteger a, TaggedSocketChannel pc,
+    //param tpn number of threads per node
+    HybridReducerReceiverEC(/*int tpn,*/Terminator fin, AtomicInteger a, TaggedSocketChannel pc,
                     DistHashTable<Integer, GenPolynomial<C>> dl, PairList<C> L) {
         active = a;
-        threadsPerNode = tpn;
+        //threadsPerNode = tpn;
         finner = fin;
         pairChannel = pc;
         theList = dl;
@@ -861,6 +863,7 @@ class HybridReducerReceiverEC<C extends RingElem<C>> extends Thread {
             Object rh = null;
             try {
                 rh = pairChannel.receive(resultTag);
+                @SuppressWarnings("unused")
                 int i = active.getAndDecrement();
             } catch (InterruptedException e) {
                 goon = false;
@@ -972,7 +975,7 @@ class HybridReducerClientEC<C extends RingElem<C>> implements Runnable {
     private final ReductionPar<C> red;
 
 
-    private final int threadsPerNode;
+    //private final int threadsPerNode;
 
 
     /*
@@ -984,31 +987,31 @@ class HybridReducerClientEC<C extends RingElem<C>> implements Runnable {
     /**
      * Message tag for pairs.
      */
-    public final Integer pairTag = GroebnerBaseDistributedHybrid.pairTag;
+    public final Integer pairTag = GroebnerBaseDistributedHybridEC.pairTag;
 
 
     /**
      * Message tag for results.
      */
-    public final Integer resultTag = GroebnerBaseDistributedHybrid.resultTag;
+    public final Integer resultTag = GroebnerBaseDistributedHybridEC.resultTag;
 
 
     /**
      * Message tag for acknowledgments.
      */
-    public final Integer ackTag = GroebnerBaseDistributedHybrid.ackTag;
+    public final Integer ackTag = GroebnerBaseDistributedHybridEC.ackTag;
 
 
     /**
      * Constructor.
-     * @param tpn number of threads per node
      * @param tc tagged socket channel
-     * @param tid thread identification
      * @param dl distributed hash table
      */
-    HybridReducerClientEC(int tpn, TaggedSocketChannel tc, Integer tid,
+    //param tpn number of threads per node
+    //param tid thread identification
+    HybridReducerClientEC(/*int tpn,*/TaggedSocketChannel tc, /*Integer tid,*/
                     DistHashTable<Integer, GenPolynomial<C>> dl) {
-        this.threadsPerNode = tpn;
+        //threadsPerNode = tpn;
         pairChannel = tc;
         //threadId = 100 + tid; // keep distinct from other tags
         theList = dl;

@@ -140,7 +140,7 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
      * @param Pp polynomial list.
      * @return d-nf(Ap) with respect to Pp.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public GenPolynomial<C> normalform(List<GenPolynomial<C>> Pp, GenPolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
             return Ap;

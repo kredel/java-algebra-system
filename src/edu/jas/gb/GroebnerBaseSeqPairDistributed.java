@@ -8,9 +8,9 @@ package edu.jas.gb;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Collections;
 import java.util.concurrent.Semaphore;
 
 import org.apache.log4j.Logger;
@@ -35,7 +35,7 @@ import edu.jas.util.ThreadPool;
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
-
+@Deprecated
 public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends GroebnerBaseAbstract<C> {
 
 
@@ -213,7 +213,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
             }
         }
         //if (l <= 1) {
-            //return G; must signal termination to others
+        //return G; must signal termination to others
         //}
 
         logger.debug("looking for clients");
@@ -222,7 +222,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
         //while ( dls.size() < threads ) { sleep(); }
 
         DistHashTable<Integer, GenPolynomial<C>> theList = new DistHashTable<Integer, GenPolynomial<C>>(
-                "localhost", DL_PORT);
+                        "localhost", DL_PORT);
         theList.init();
         List<GenPolynomial<C>> al = pairlist.getList();
         for (int i = 0; i < al.size(); i++) {
@@ -287,7 +287,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
 
         final int DL_PORT = port + 100;
         DistHashTable<Integer, GenPolynomial<C>> theList = new DistHashTable<Integer, GenPolynomial<C>>(host,
-                DL_PORT);
+                        DL_PORT);
         theList.init();
 
         ReducerClientSeqPair<C> R = new ReducerClientSeqPair<C>(pairChannel, theList);
@@ -364,10 +364,10 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
         while (G.size() > 0) {
             a = G.remove(0);
             // System.out.println("doing " + a.length());
-            List<GenPolynomial<C>> R = new ArrayList<GenPolynomial<C>>(G.size()+F.size());
+            List<GenPolynomial<C>> R = new ArrayList<GenPolynomial<C>>(G.size() + F.size());
             R.addAll(G);
             R.addAll(F);
-            mirs[i] = new MiReducerServerSeqPair<C>(R,a);
+            mirs[i] = new MiReducerServerSeqPair<C>(R, a);
             pool.addJob(mirs[i]);
             i++;
             F.add(a);
@@ -412,7 +412,7 @@ class ReducerServerSeqPair<C extends RingElem<C>> implements Runnable {
 
 
     ReducerServerSeqPair(Terminator fin, ChannelFactory cf, DistHashTable<Integer, GenPolynomial<C>> dl,
-            List<GenPolynomial<C>> G, CriticalPairList<C> L) {
+                    List<GenPolynomial<C>> G, CriticalPairList<C> L) {
         pool = fin;
         this.cf = cf;
         theList = dl;
@@ -471,9 +471,7 @@ class ReducerServerSeqPair<C extends RingElem<C>> implements Runnable {
             // find pair
             if (logger.isDebugEnabled()) {
                 logger.debug("find pair");
-                logger
-                        .debug("pool.hasJobs() " + pool.hasJobs() + " pairlist.hasNext() "
-                                + pairlist.hasNext());
+                logger.debug("pool.hasJobs() " + pool.hasJobs() + " pairlist.hasNext() " + pairlist.hasNext());
             }
             while (!pairlist.hasNext()) { // wait
                 pairlist.update();

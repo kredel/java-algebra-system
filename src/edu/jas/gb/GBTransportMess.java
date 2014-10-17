@@ -15,6 +15,7 @@ import edu.jas.structure.RingElem;
  * Distributed GB transport message. This class and its subclasses are used for
  * transport of polynomials and pairs and as markers in distributed GB
  * algorithms.
+ * @author Heinz Kredel
  */
 
 public class GBTransportMess implements Serializable {

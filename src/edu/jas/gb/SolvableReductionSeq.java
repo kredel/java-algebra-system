@@ -38,7 +38,7 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
      * @param Pp solvable polynomial list.
      * @return left-nf(Ap) with respect to Pp.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public GenSolvablePolynomial<C> leftNormalform(List<GenSolvablePolynomial<C>> Pp,
                     GenSolvablePolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
@@ -119,7 +119,7 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
      * @param Ap a polynomial.
      * @return nf(Pp,Ap), the left normal form of Ap wrt. Pp.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public GenSolvablePolynomial<C> leftNormalform(List<GenSolvablePolynomial<C>> row,
                     List<GenSolvablePolynomial<C>> Pp, GenSolvablePolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
@@ -206,7 +206,7 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
      * @param Pp solvable polynomial list.
      * @return right-nf(Ap) with respect to Pp.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public GenSolvablePolynomial<C> rightNormalform(List<GenSolvablePolynomial<C>> Pp,
                     GenSolvablePolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
@@ -287,7 +287,7 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
      * @param Ap a polynomial.
      * @return nf(Pp,Ap), the right normal form of Ap wrt. Pp.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public GenSolvablePolynomial<C> rightNormalform(List<GenSolvablePolynomial<C>> row,
                     List<GenSolvablePolynomial<C>> Pp, GenSolvablePolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {

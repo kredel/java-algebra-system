@@ -13,10 +13,10 @@ import java.util.concurrent.Semaphore;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.poly.PolyUtil;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.PolyUtil;
 import edu.jas.structure.RingElem;
 import edu.jas.util.Terminator;
 import edu.jas.util.ThreadPool;
@@ -171,14 +171,14 @@ public class GroebnerBaseParallel<C extends RingElem<C>> extends GroebnerBaseAbs
     public List<GenPolynomial<C>> GB(int modv, List<GenPolynomial<C>> F) {
         List<GenPolynomial<C>> G = normalizeZerosOnes(F);
         G = PolyUtil.<C> monic(G);
-        if ( G.size() <= 1 ) {
+        if (G.size() <= 1) {
             return G;
         }
         GenPolynomialRing<C> ring = G.get(0).ring;
-        if ( ! ring.coFac.isField() ) {
+        if (!ring.coFac.isField()) {
             throw new IllegalArgumentException("coefficients not from a field");
         }
-        PairList<C> pairlist = strategy.create( modv, ring ); 
+        PairList<C> pairlist = strategy.create(modv, ring);
         pairlist.put(G);
 
         /*
@@ -290,6 +290,7 @@ public class GroebnerBaseParallel<C extends RingElem<C>> extends GroebnerBaseAbs
         }
         Collections.reverse(G); // important for lex GB
 
+        @SuppressWarnings("cast")
         MiReducer<C>[] mirs = (MiReducer<C>[]) new MiReducer[G.size()];
         int i = 0;
         F = new ArrayList<GenPolynomial<C>>(G.size());

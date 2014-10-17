@@ -136,7 +136,7 @@ public class EReductionSeq<C extends RingElem<C>> extends DReductionSeq<C> imple
      * @param Pp polynomial list.
      * @return e-nf(Ap) with respect to Pp.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     @Override
     public GenPolynomial<C> normalform(List<GenPolynomial<C>> Pp, GenPolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
