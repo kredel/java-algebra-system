@@ -201,6 +201,7 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>> implements
      * Query if this ring is associative.
      * @return true if this ring is associative, else false.
      */
+    @SuppressWarnings("unused")
     public boolean isAssociative() {
         if (!ring.isAssociative()) {
             return false;

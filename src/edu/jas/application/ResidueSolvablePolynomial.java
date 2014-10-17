@@ -12,7 +12,6 @@ import java.util.SortedMap;
 import org.apache.log4j.Logger;
 
 import edu.jas.poly.ExpVector;
-import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.RecSolvablePolynomial;
 import edu.jas.poly.TableRelation;
@@ -168,8 +167,8 @@ public class ResidueSolvablePolynomial<C extends GcdRingElem<C>> extends
         ResidueSolvablePolynomial<C> zero = ring.getZERO().copy();
         SolvableResidue<C> one = ring.getONECoefficient();
 
-        ResidueSolvablePolynomial<C> C1 = null;
-        ResidueSolvablePolynomial<C> C2 = null;
+        //ResidueSolvablePolynomial<C> C1 = null;
+        //ResidueSolvablePolynomial<C> C2 = null;
         Map<ExpVector, SolvableResidue<C>> A = val;
         Map<ExpVector, SolvableResidue<C>> B = Bp.val;
         Set<Map.Entry<ExpVector, SolvableResidue<C>>> Bk = B.entrySet();
@@ -178,11 +177,11 @@ public class ResidueSolvablePolynomial<C extends GcdRingElem<C>> extends
             ExpVector e = y.getKey();
             if (debug)
                 logger.info("e = " + e + ", a = " + a);
-            int[] ep = e.dependencyOnVariables();
-            int el1 = ring.nvar + 1;
-            if (ep.length > 0) {
-                el1 = ep[0];
-            }
+            //int[] ep = e.dependencyOnVariables();
+            //int el1 = ring.nvar + 1;
+            //if (ep.length > 0) {
+            //    el1 = ep[0];
+            //}
             //int el1s = ring.nvar + 1 - el1;
             for (Map.Entry<ExpVector, SolvableResidue<C>> x : Bk) {
                 SolvableResidue<C> b = x.getValue();
@@ -197,7 +196,7 @@ public class ResidueSolvablePolynomial<C extends GcdRingElem<C>> extends
                 int fl1s = ring.nvar + 1 - fl1;
                 // polynomial coefficient multiplication 
                 ResidueSolvablePolynomial<C> Cps = ring.getZERO().copy();
-                ResidueSolvablePolynomial<C> Cs = null;
+                //ResidueSolvablePolynomial<C> Cs = null;
                 if (ring.polCoeff.coeffTable.isEmpty() || b.isConstant() || e.isZERO()) { // symmetric
                     Cps = new ResidueSolvablePolynomial<C>(ring, b, e);
                     if (debug)
@@ -206,8 +205,8 @@ public class ResidueSolvablePolynomial<C extends GcdRingElem<C>> extends
                     if (debug)
                         logger.info("unsymmetric coeff: b = " + b + ", e = " + e);
                     // recursive polynomial coefficient multiplication : e * b.bal
-                    RecSolvablePolynomial<C> rsp1 = new RecSolvablePolynomial<C>(ring.polCoeff,e);
-                    RecSolvablePolynomial<C> rsp2 = new RecSolvablePolynomial<C>(ring.polCoeff,b.val);
+                    RecSolvablePolynomial<C> rsp1 = new RecSolvablePolynomial<C>(ring.polCoeff, e);
+                    RecSolvablePolynomial<C> rsp2 = new RecSolvablePolynomial<C>(ring.polCoeff, b.val);
                     RecSolvablePolynomial<C> rsp3 = rsp1.multiply(rsp2);
                     Cps = ring.fromPolyCoefficients(rsp3);
                 }
@@ -531,8 +530,8 @@ public class ResidueSolvablePolynomial<C extends GcdRingElem<C>> extends
 
 
     /**
-     * ResidueSolvablePolynomial multiplication. 
-     * Left product with coefficient ring element.
+     * ResidueSolvablePolynomial multiplication. Left product with coefficient
+     * ring element.
      * @param B solvable polynomial.
      * @param f exponent vector.
      * @return B*f, where * is commutative multiplication.

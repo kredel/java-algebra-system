@@ -357,6 +357,7 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>> extends
      * ring.
      * @return true, if this ring is associative, else false.
      */
+    @SuppressWarnings("unused")
     @Override
     public boolean isAssociative() {
         ResidueSolvablePolynomial<C> Xi, Xj, Xk, p, q;

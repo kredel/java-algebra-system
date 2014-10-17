@@ -12,7 +12,6 @@ import java.util.SortedMap;
 import org.apache.log4j.Logger;
 
 import edu.jas.poly.ExpVector;
-import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.RecSolvablePolynomial;
 import edu.jas.poly.TableRelation;
@@ -26,8 +25,7 @@ import edu.jas.structure.GcdRingElem;
  * implementation is based on TreeMap respectively SortedMap from exponents to
  * coefficients by extension of GenPolynomial.
  * @param <C> coefficient type
- * @author Heinz Kredel
- * will be deprecated use QLRSolvablePolynomial
+ * @author Heinz Kredel will be deprecated use QLRSolvablePolynomial
  */
 
 public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
@@ -165,8 +163,8 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
         LocalSolvablePolynomial<C> zero = ring.getZERO().copy();
         SolvableLocal<C> one = ring.getONECoefficient();
 
-        LocalSolvablePolynomial<C> C1 = null;
-        LocalSolvablePolynomial<C> C2 = null;
+        //LocalSolvablePolynomial<C> C1 = null;
+        //LocalSolvablePolynomial<C> C2 = null;
         Map<ExpVector, SolvableLocal<C>> A = val;
         Map<ExpVector, SolvableLocal<C>> B = Bp.val;
         Set<Map.Entry<ExpVector, SolvableLocal<C>>> Bk = B.entrySet();
@@ -175,11 +173,11 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
             ExpVector e = y.getKey();
             if (debug)
                 logger.info("e = " + e + ", a = " + a);
-            int[] ep = e.dependencyOnVariables();
-            int el1 = ring.nvar + 1;
-            if (ep.length > 0) {
-                el1 = ep[0];
-            }
+            //int[] ep = e.dependencyOnVariables();
+            //int el1 = ring.nvar + 1;
+            //if (ep.length > 0) {
+            //    el1 = ep[0];
+            //}
             //int el1s = ring.nvar + 1 - el1;
             for (Map.Entry<ExpVector, SolvableLocal<C>> x : Bk) {
                 SolvableLocal<C> b = x.getValue();
@@ -194,7 +192,7 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
                 int fl1s = ring.nvar + 1 - fl1;
                 // polynomial with coefficient multiplication 
                 LocalSolvablePolynomial<C> Cps = ring.getZERO().copy();
-                LocalSolvablePolynomial<C> Cs;
+                //LocalSolvablePolynomial<C> Cs;
                 LocalSolvablePolynomial<C> qp;
                 if (ring.polCoeff.coeffTable.isEmpty() || b.isConstant() || e.isZERO()) { // symmetric
                     Cps = new LocalSolvablePolynomial<C>(ring, b, e);
@@ -275,8 +273,8 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
                         //     Cps = (LocalSolvablePolynomial<C>) Cps.sum(Cs);
                         // } // end b.num loop 
                         // recursive polynomial coefficient multiplication : e * b.num
-                        RecSolvablePolynomial<C> rsp1 = new RecSolvablePolynomial<C>(ring.polCoeff,e);
-                        RecSolvablePolynomial<C> rsp2 = new RecSolvablePolynomial<C>(ring.polCoeff,b.num);
+                        RecSolvablePolynomial<C> rsp1 = new RecSolvablePolynomial<C>(ring.polCoeff, e);
+                        RecSolvablePolynomial<C> rsp2 = new RecSolvablePolynomial<C>(ring.polCoeff, b.num);
                         RecSolvablePolynomial<C> rsp3 = rsp1.multiply(rsp2);
                         LocalSolvablePolynomial<C> rsp = ring.fromPolyCoefficients(rsp3);
                         Cps = rsp;
@@ -649,8 +647,8 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
 
 
     /**
-     * LocalSolvablePolynomial multiplication. 
-     * Left product with coefficient ring element.
+     * LocalSolvablePolynomial multiplication. Left product with coefficient
+     * ring element.
      * @param B solvable polynomial.
      * @param f exponent vector.
      * @return B*f, where * is commutative multiplication.

@@ -152,11 +152,12 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
 
     /**
      * Comprehensive-Groebner system test.
-     * @param modv module variable number.
+     * @param modv module variable number, unused.
      * @param CS list of colored systems.
      * @return true, if CS is a Comprehensive-Groebner system, else false.
      */
     // @Override
+    @SuppressWarnings("unused")
     public boolean isGBsys(int modv, List<ColoredSystem<C>> CS) {
         if (CS == null || CS.size() == 0) {
             return true;
@@ -222,7 +223,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
 
     /**
      * Comprehensive-Groebner base test using substitution.
-     * @param modv module variable number.
+     * @param modv module variable number, unused.
      * @param F polynomial list.
      * @return true, if F is a Comprehensive-Groebner base, else false.
      */

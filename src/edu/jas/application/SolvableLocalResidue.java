@@ -618,7 +618,7 @@ public class SolvableLocalResidue<C extends GcdRingElem<C>> implements GcdRingEl
      * @param b other element.
      * @return [ gcd(this,b), c1, c2 ] with c1*this + c2*b = gcd(this,b).
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public SolvableLocalResidue<C>[] egcd(SolvableLocalResidue<C> b) {
         SolvableLocalResidue<C>[] ret = (SolvableLocalResidue<C>[]) new SolvableLocalResidue[3];
         ret[0] = null;

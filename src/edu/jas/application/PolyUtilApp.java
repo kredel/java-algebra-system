@@ -166,7 +166,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
                     pr = cs.list.get(0).green.ring;
                 }
             }
-        } 
+        }
         if (pr == null) {
             throw new IllegalArgumentException("no polynomial ring found");
         }
@@ -601,7 +601,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
         }
         // polynomials with decimal coefficients
         BigDecimal dc = BigDecimal.ONE;
-        GenPolynomialRing<BigDecimal> dfac = L.get(0).ring;
+        //GenPolynomialRing<BigDecimal> dfac = L.get(0).ring;
         //System.out.println("dfac = " + dfac);
         for (GenPolynomial<BigDecimal> dp : L) {
             //System.out.println("dp = " + dp);
@@ -634,7 +634,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
         // polynomials with decimal coefficients
         BigDecimal dc = BigDecimal.ONE;
         ComplexRing<BigDecimal> dcc = new ComplexRing<BigDecimal>(dc);
-        GenPolynomialRing<Complex<BigDecimal>> dfac = L.get(0).ring;
+        //GenPolynomialRing<Complex<BigDecimal>> dfac = L.get(0).ring;
         //System.out.println("dfac = " + dfac);
         for (GenPolynomial<Complex<BigDecimal>> dp : L) {
             //System.out.println("dp = " + dp);
@@ -1710,7 +1710,7 @@ class ReAlgFromRealCoeff<C extends GcdRingElem<C> & Rational> implements
     }
 
 
-    @SuppressWarnings("unchecked") 
+    @SuppressWarnings("cast")
     public edu.jas.root.RealAlgebraicNumber<C> eval(edu.jas.application.RealAlgebraicNumber<C> c) {
         if (c == null) {
             return afac.getZERO();
@@ -1738,7 +1738,7 @@ class RealFromReAlgCoeff<C extends GcdRingElem<C> & Rational> implements
     }
 
 
-    @SuppressWarnings("unchecked") 
+    @SuppressWarnings("cast")
     public edu.jas.application.RealAlgebraicNumber<C> eval(edu.jas.root.RealAlgebraicNumber<C> c) {
         if (c == null) {
             return rfac.getZERO();

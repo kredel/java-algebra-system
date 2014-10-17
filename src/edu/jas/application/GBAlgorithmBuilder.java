@@ -247,7 +247,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
      * coefficients denominators are cleared and pseudo reduction is used.
      * @return GBAlgorithmBuilder object.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public GBAlgorithmBuilder<C> fractionFree() {
         if (algo != null) {
             logger.warn("selected algorithm ignored: " + algo + ", use fractionFree before");
@@ -286,7 +286,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
      * @param a algorithm from GBFactory.Algo.
      * @return GBAlgorithmBuilder object.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public GBAlgorithmBuilder<C> domainAlgorithm(GBFactory.Algo a) {
         if (((Object) ring.coFac) instanceof BigInteger) {
             BigInteger cf = (BigInteger) (Object) ring.coFac;
@@ -322,7 +322,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
      * @param threads number of threads requested.
      * @return GBAlgorithmBuilder object.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public GBAlgorithmBuilder<C> parallel(int threads) {
         if (ComputerThreads.NO_THREADS) {
             logger.warn("parallel algorithms disabled");

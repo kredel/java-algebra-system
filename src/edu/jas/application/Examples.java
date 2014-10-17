@@ -22,19 +22,18 @@ import edu.jas.arith.Product;
 import edu.jas.arith.ProductRing;
 import edu.jas.gb.GroebnerBase;
 import edu.jas.gb.GroebnerBaseAbstract;
-import edu.jas.gb.GroebnerBaseSeq;
 import edu.jas.gbufd.GBFactory;
 import edu.jas.gbufd.RGroebnerBasePseudoSeq;
 import edu.jas.gbufd.RReductionSeq;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.kern.Scripting;
+import edu.jas.poly.AlgebraicNumber;
+import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
-import edu.jas.poly.AlgebraicNumber;
-import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.ufd.Quotient;
 import edu.jas.ufd.QuotientRing;
 
@@ -365,7 +364,7 @@ public class Examples {
     /**
      * Example GBase and real root.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public static void example6() {
         BigRational coeff = new BigRational();
         GroebnerBase<BigRational> gb = GBFactory.getImplementation(coeff);
@@ -579,7 +578,9 @@ public class Examples {
 
 
     /**
-     * example10. abtract types: GB of List<GenPolynomial<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>>>.
+     * example10. abtract types: GB of
+     * List<GenPolynomial<AlgebraicNumber<Quotient
+     * <AlgebraicNumber<BigRational>>>>>.
      */
     public static void example10() {
         Scripting.setLang(Scripting.Lang.Ruby);
@@ -589,7 +590,7 @@ public class Examples {
         System.out.println("pfac = " + pfac.toScript());
 
         // p = w2^2 - 2
-        GenPolynomial<BigRational> p = pfac.univariate(0,2).subtract(pfac.fromInteger(2L));
+        GenPolynomial<BigRational> p = pfac.univariate(0, 2).subtract(pfac.fromInteger(2L));
         System.out.println("p = " + p.toScript());
 
         AlgebraicNumberRing<BigRational> afac;
@@ -597,7 +598,7 @@ public class Examples {
         System.out.println("afac = " + afac.toScript());
 
         GenPolynomialRing<AlgebraicNumber<BigRational>> pafac;
-        pafac = new GenPolynomialRing<AlgebraicNumber<BigRational>>(afac, new String[] { "x" } );
+        pafac = new GenPolynomialRing<AlgebraicNumber<BigRational>>(afac, new String[] { "x" });
         System.out.println("pafac = " + pafac.toScript());
 
         QuotientRing<AlgebraicNumber<BigRational>> qafac;
@@ -612,15 +613,16 @@ public class Examples {
 
         // q = wx^2 - x
         GenPolynomial<Quotient<AlgebraicNumber<BigRational>>> q;
-        q = pqafac.univariate(0,2).subtract(qgen.get(2)); 
+        q = pqafac.univariate(0, 2).subtract(qgen.get(2));
         System.out.println("q = " + q.toScript());
 
         AlgebraicNumberRing<Quotient<AlgebraicNumber<BigRational>>> aqafac;
-        aqafac = new AlgebraicNumberRing<Quotient<AlgebraicNumber<BigRational>>>(q,true);
+        aqafac = new AlgebraicNumberRing<Quotient<AlgebraicNumber<BigRational>>>(q, true);
         System.out.println("aqafac = " + aqafac.toScript());
 
         GenPolynomialRing<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>> paqafac;
-        paqafac = new GenPolynomialRing<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>>(aqafac, new String[] { "y", "z" });
+        paqafac = new GenPolynomialRing<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>>(aqafac,
+                        new String[] { "y", "z" });
         System.out.println("paqafac = " + paqafac.toScript());
 
         List<GenPolynomial<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>>> L;
@@ -654,11 +656,11 @@ public class Examples {
 
         long t = System.currentTimeMillis();
         List<GenPolynomial<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>>> G = bb.GB(L);
-        t = System.currentTimeMillis()-t;
+        t = System.currentTimeMillis() - t;
         System.out.println("time = " + t + " milliseconds");
         //System.out.println("G = " + G);
-        for ( GenPolynomial<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>> g : G ) {
-	    System.out.println("g = " + g.toScript());
+        for (GenPolynomial<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>> g : G) {
+            System.out.println("g = " + g.toScript());
         }
         System.out.println("isGB(G) = " + bb.isGB(G));
         bb.terminate();
@@ -703,10 +705,10 @@ public class Examples {
         System.out.println("isGB(L) = " + bb.isGB(L));
         long t = System.currentTimeMillis();
         List<GenPolynomial<BigRational>> G = bb.GB(L);
-        t = System.currentTimeMillis()-t;
+        t = System.currentTimeMillis() - t;
         System.out.println("time = " + t + " milliseconds");
-        for ( GenPolynomial<BigRational> g : G ) {
-	    System.out.println("g = " + g.toScript());
+        for (GenPolynomial<BigRational> g : G) {
+            System.out.println("g = " + g.toScript());
         }
         System.out.println("isGB(G) = " + bb.isGB(G));
         bb.terminate();
@@ -714,7 +716,8 @@ public class Examples {
 
 
     /**
-     * example12. abtract types: GB of List<GenPolynomial<Quotient<BigRational>>>>.
+     * example12. abtract types: GB of
+     * List<GenPolynomial<Quotient<BigRational>>>>.
      */
     public static void example12() {
         Scripting.setLang(Scripting.Lang.Ruby);
@@ -726,7 +729,7 @@ public class Examples {
         System.out.println("cfac = " + cfac.toScript());
 
         QuotientRing<BigRational> qfac;
-        qfac = new QuotientRing<BigRational>(cfac); 
+        qfac = new QuotientRing<BigRational>(cfac);
         System.out.println("qfac = " + qfac.toScript());
 
         String[] vars = new String[] { "w2", "wx", "y", "z" };
@@ -757,10 +760,10 @@ public class Examples {
         System.out.println("isGB(L) = " + bb.isGB(L));
         long t = System.currentTimeMillis();
         List<GenPolynomial<Quotient<BigRational>>> G = bb.GB(L);
-        t = System.currentTimeMillis()-t;
+        t = System.currentTimeMillis() - t;
         System.out.println("time = " + t + " milliseconds");
-        for ( GenPolynomial<Quotient<BigRational>> g : G ) {
-	    System.out.println("g = " + g.toScript());
+        for (GenPolynomial<Quotient<BigRational>> g : G) {
+            System.out.println("g = " + g.toScript());
         }
         System.out.println("isGB(G) = " + bb.isGB(G));
         bb.terminate();
@@ -770,27 +773,23 @@ public class Examples {
         System.out.println("isGB(L) = " + bb.isGB(L));
         t = System.currentTimeMillis();
         G = bb.GB(L);
-        t = System.currentTimeMillis()-t;
+        t = System.currentTimeMillis() - t;
         System.out.println("time = " + t + " milliseconds");
-        for ( GenPolynomial<Quotient<BigRational>> g : G ) {
-	    System.out.println("g = " + g.toScript());
+        for (GenPolynomial<Quotient<BigRational>> g : G) {
+            System.out.println("g = " + g.toScript());
         }
         System.out.println("isGB(G) = " + bb.isGB(G));
         bb.terminate();
 
         // builder
-        bb = GBAlgorithmBuilder.polynomialRing(pfac)
-                               .fractionFree()
-                               .syzygyPairlist()
-                               .parallel(3)
-                               .build();
+        bb = GBAlgorithmBuilder.polynomialRing(pfac).fractionFree().syzygyPairlist().parallel(3).build();
         System.out.println("isGB(L) = " + bb.isGB(L));
         t = System.currentTimeMillis();
         G = bb.GB(L);
-        t = System.currentTimeMillis()-t;
+        t = System.currentTimeMillis() - t;
         System.out.println("time = " + t + " milliseconds");
-        for ( GenPolynomial<Quotient<BigRational>> g : G ) {
-	    System.out.println("g = " + g.toScript());
+        for (GenPolynomial<Quotient<BigRational>> g : G) {
+            System.out.println("g = " + g.toScript());
         }
         System.out.println("isGB(G) = " + bb.isGB(G));
         bb.terminate();

@@ -5,26 +5,25 @@
 package edu.jas.application;
 
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.io.IOException;
-import java.io.Reader;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.StringReader;
 import java.nio.charset.Charset;
-import java.util.List;
 import java.util.Arrays;
-import java.util.jar.JarFile;
+import java.util.List;
 import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.gb.GroebnerBaseAbstract;
-import edu.jas.gb.GroebnerBaseParallel;
 import edu.jas.gb.GroebnerBaseDistributedEC;
 import edu.jas.gb.GroebnerBaseDistributedHybridEC;
+import edu.jas.gb.GroebnerBaseParallel;
 import edu.jas.gb.GroebnerBaseSeq;
 import edu.jas.gb.OrderedSyzPairlist;
 import edu.jas.gb.ReductionPar;
@@ -32,7 +31,6 @@ import edu.jas.gb.ReductionSeq;
 import edu.jas.gbufd.GBFactory;
 import edu.jas.gbufd.GroebnerBasePseudoParallel;
 import edu.jas.kern.ComputerThreads;
-import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
@@ -69,19 +67,11 @@ public class RunGB {
     @SuppressWarnings("unchecked")
     public static void main(String[] args) {
 
-        String[] allkinds = new String[] { "seq", "seq+", 
-                                           "par", "par+", 
-                                           "dist", "dist+", 
-                                           "disthyb", "disthyb+", 
-                                           "cli" }; // must be last
+        String[] allkinds = new String[] { "seq", "seq+", "par", "par+", "dist", "dist+", "disthyb",
+                "disthyb+", "cli" }; // must be last
 
-        String usage = "Usage: RunGB [ "
-                        + join(allkinds, " | ") 
-                        + "[port] ] " 
-                        + "<file> " 
-                        + "#procs/#threadsPerNode " 
-                        + "[machinefile] " 
-                        + "[check] [nolog]";
+        String usage = "Usage: RunGB [ " + join(allkinds, " | ") + "[port] ] " + "<file> "
+                        + "#procs/#threadsPerNode " + "[machinefile] " + "[check] [nolog]";
 
         if (args.length < 1) {
             System.out.println("args: " + Arrays.toString(args));
@@ -276,8 +266,8 @@ public class RunGB {
         } else {
             System.out.print("d ");
         }
-        System.out.println("= " + threads 
-                         + ", time = " + t1 + " milliseconds, " + (t-t1) + " start-up " + ", total = " + t);
+        System.out.println("= " + threads + ", time = " + t1 + " milliseconds, " + (t - t1) + " start-up "
+                        + ", total = " + t);
         checkGB(S);
         System.out.println("");
     }
@@ -292,12 +282,13 @@ public class RunGB {
         GroebnerBaseDistributedHybridEC gbd = null;
         GroebnerBaseDistributedHybridEC gbds = null;
 
-        System.out.println("\nGroebner base distributed hybrid (" + threads + "/" + threadsPerNode
-                        + ", " + mfile + ", " + port + ") ...");
+        System.out.println("\nGroebner base distributed hybrid (" + threads + "/" + threadsPerNode + ", "
+                        + mfile + ", " + port + ") ...");
         t = System.currentTimeMillis();
         if (plusextra) {
             // gbds = new GroebnerBaseDistributedHybridEC(mfile, threads,port);
-            gbds = new GroebnerBaseDistributedHybridEC(mfile, threads, threadsPerNode, new OrderedSyzPairlist(), port);
+            gbds = new GroebnerBaseDistributedHybridEC(mfile, threads, threadsPerNode,
+                            new OrderedSyzPairlist(), port);
         } else {
             gbd = new GroebnerBaseDistributedHybridEC(mfile, threads, threadsPerNode, port);
         }
@@ -322,8 +313,8 @@ public class RunGB {
         } else {
             System.out.print("d ");
         }
-        System.out.println("= " + threads + ", ppn = " + threadsPerNode 
-                         + ", time = " + t1 + " milliseconds, " + (t-t1) + " start-up " + ", total = " + t);
+        System.out.println("= " + threads + ", ppn = " + threadsPerNode + ", time = " + t1
+                        + " milliseconds, " + (t - t1) + " start-up " + ", total = " + t);
         checkGB(S);
         System.out.println("");
     }
@@ -334,7 +325,7 @@ public class RunGB {
         ExecutableServer es = new ExecutableServer(port);
         es.init();
         try {
-             es.join();
+            es.join();
         } catch (InterruptedException e) {
             // ignored
         }
@@ -355,7 +346,7 @@ public class RunGB {
             if (S.ring.coFac.isField()) {
                 bb = new GroebnerBaseParallel(threads);
             } else {
-                bb = new GroebnerBasePseudoParallel(threads,S.ring.coFac);
+                bb = new GroebnerBasePseudoParallel(threads, S.ring.coFac);
             }
         }
         System.out.println("\nGroebner base parallel (" + threads + ") ...");
@@ -423,7 +414,7 @@ public class RunGB {
         }
         GroebnerBaseAbstract bb = GBFactory.getImplementation(S.ring.coFac);
         long t = System.currentTimeMillis();
-        boolean chk = bb.isGB(S.list,false);
+        boolean chk = bb.isGB(S.list, false);
         t = System.currentTimeMillis() - t;
         System.out.println("check isGB = " + chk + " in " + t + " milliseconds");
     }
@@ -451,11 +442,12 @@ public class RunGB {
     }
 
 
+    @SuppressWarnings("resource")
     static Reader getReader(String filename) {
         Reader problem = null;
         Exception fnf = null;
         try {
-            problem = new InputStreamReader(new FileInputStream(filename),Charset.forName("UTF8"));
+            problem = new InputStreamReader(new FileInputStream(filename), Charset.forName("UTF8"));
             problem = new BufferedReader(problem);
         } catch (FileNotFoundException e) {
             fnf = e;
@@ -468,10 +460,10 @@ public class RunGB {
             JarFile jf = new JarFile(examples);
             JarEntry je = jf.getJarEntry(filename);
             if (je == null) {
-               fnf.printStackTrace();
-               return problem;
+                fnf.printStackTrace();
+                return problem;
             }
-            problem = new InputStreamReader(jf.getInputStream(je),Charset.forName("UTF8"));
+            problem = new InputStreamReader(jf.getInputStream(je), Charset.forName("UTF8"));
             problem = new BufferedReader(problem);
         } catch (FileNotFoundException e) {
             fnf.printStackTrace();
@@ -479,6 +471,8 @@ public class RunGB {
         } catch (IOException e) {
             fnf.printStackTrace();
             e.printStackTrace();
+            //} finally { not possible, problem must remain open
+            //jf.close();
         }
         return problem;
     }
