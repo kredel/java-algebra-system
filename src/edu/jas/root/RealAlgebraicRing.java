@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.Rational;
 import edu.jas.poly.AlgebraicNumber;
@@ -23,8 +22,8 @@ import edu.jas.structure.RingFactory;
 
 /**
  * Real algebraic number factory class based on AlgebraicNumberRing with
- * RingElem interface. Objects of this class are immutable with the exception of
- * the isolating intervals.
+ * RingFactory interface. Objects of this class are immutable with the exception
+ * of the isolating intervals.
  * @author Heinz Kredel
  */
 

@@ -5,7 +5,6 @@
 package edu.jas.root;
 
 
-// import edu.jas.structure.RingElem;
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.Rational;
@@ -86,8 +85,8 @@ implements GcdRingElem<ComplexAlgebraicNumber<C>> {
 
 
     /**
-     * Clone this.
-     * @see java.lang.Object#clone()
+     * Copy this.
+     * @see edu.jas.structure.Element#copy()
      */
     @Override
     public ComplexAlgebraicNumber<C> copy() {

@@ -232,7 +232,7 @@ class CoeffToRecReAlg<C extends GcdRingElem<C> & Rational> implements UnaryFunct
     final int depth;
 
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public CoeffToRecReAlg(int depth, RealAlgebraicRing<C> fac) {
         if (fac == null) {
             throw new IllegalArgumentException("fac must not be null");
@@ -252,7 +252,7 @@ class CoeffToRecReAlg<C extends GcdRingElem<C> & Rational> implements UnaryFunct
     }
 
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public RealAlgebraicNumber<C> eval(C c) {
         if (c == null) {
             return lfac.get(0).getZERO();

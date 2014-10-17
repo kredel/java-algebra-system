@@ -21,8 +21,8 @@ import edu.jas.structure.GcdRingElem;
 
 
 /**
- * Condition. An ideal of polynomials considered to be zero and a multiplicative
- * set of polynomials considered to be non-zero.
+ * Condition. Container for an ideal of polynomials considered to be zero and a
+ * multiplicative set of polynomials considered to be non-zero.
  * @param <C> coefficient type
  * @author Heinz Kredel.
  */
