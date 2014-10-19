@@ -191,7 +191,7 @@ public class GroebnerBasePseudoRecSeqTest extends TestCase {
         GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
         PolynomialList<GenPolynomial<BigRational>> Fr = null;
         GenPolynomialRing<BigRational> cofac;
-        GenPolynomialRing<BigInteger> ifac;
+        GenPolynomialRing<BigInteger> ifac = null;
         try {
             Fr = parser.nextPolynomialSet();
             cofac = (GenPolynomialRing<BigRational>) Fr.ring.coFac;
@@ -206,7 +206,7 @@ public class GroebnerBasePseudoRecSeqTest extends TestCase {
         System.out.println("F = " + L);
         System.out.println("Fr = " + Fr);
 
-        long s, t, q;
+        long s, t, q, i;
         t = System.currentTimeMillis();
         G = bb.GB(L);
         t = System.currentTimeMillis() - t;
@@ -216,6 +216,7 @@ public class GroebnerBasePseudoRecSeqTest extends TestCase {
             Gp = new PolynomialList<GenPolynomial<BigInteger>>(fac,G);
         System.out.println("G = " + Gp);
         assertTrue("nonsense ", t >= 0L);
+
 
         GenPolynomialRing<BigRational> rfac = (GenPolynomialRing<BigRational>) Fr.ring.coFac;
         List<GenPolynomial<GenPolynomial<BigRational>>> Gr, Kr, Lr = Fr.list;
@@ -238,6 +239,7 @@ public class GroebnerBasePseudoRecSeqTest extends TestCase {
 
         assertEquals("ratGB == intGB", Kr, Gr);
         assertTrue("nonsense ", s >= 0L);
+
 
         QuotientRing<BigRational> qr = new QuotientRing<BigRational>(rfac);
         GenPolynomialRing<Quotient<BigRational>> rring = new GenPolynomialRing<Quotient<BigRational>>(qr,fac);
@@ -263,7 +265,33 @@ public class GroebnerBasePseudoRecSeqTest extends TestCase {
         Kq = PolyUtil.<Quotient<BigRational>> monic(Kq);
         assertEquals("ratGB == quotGB", Kq, Gq);
 
-        System.out.println("time: ratGB = " + s + ", intGB = " + t + ", quotGB = " + q);
+
+        QuotientRing<BigInteger> qi = new QuotientRing<BigInteger>(ifac);
+        GenPolynomialRing<Quotient<BigInteger>> iring = new GenPolynomialRing<Quotient<BigInteger>>(qi,fac);
+
+        List<GenPolynomial<Quotient<BigInteger>>> Gqi, Lqi, Kqi;
+        Lqi = PolyUfdUtil.<BigInteger> quotientFromIntegralCoefficients(iring, L);
+        Lqi = PolyUtil.<Quotient<BigInteger>> monic(Lqi);
+        System.out.println("Lqi = " + Lqi);
+
+        GroebnerBaseAbstract<Quotient<BigInteger>> bbqi;
+        bbqi = new GroebnerBaseSeq<Quotient<BigInteger>>(); //qr);
+
+        i = System.currentTimeMillis();
+        Gqi = bbqi.GB(Lqi);
+        i = System.currentTimeMillis() - i;
+        assertTrue("isGB( GB(Hawes2) )", bbqi.isGB(Gqi));
+        assertEquals("#GB(Hawes2) == 8", 8, Gqi.size());
+        PolynomialList<Quotient<BigInteger>> 
+            Gpqi = new PolynomialList<Quotient<BigInteger>>(iring,Gqi);
+        System.out.println("Gpqi = " + Gpqi);
+        assertTrue("nonsense ", i >= 0L);
+
+        Kqi = PolyUfdUtil.<BigInteger> quotientFromIntegralCoefficients(iring, G);
+        Kqi = PolyUtil.<Quotient<BigInteger>> monic(Kqi);
+        assertEquals("quotRatGB == quotIntGB", Gqi, Kqi);
+
+        System.out.println("time: ratGB = " + s + ", intGB = " + t + ", quotRatGB = " + q + ", quotIntGB = " + i);
     }
 
 }
