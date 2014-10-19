@@ -100,6 +100,24 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
 
 
     /**
+     * List of GenPolynomial base coefficient primitive part.
+     * @param F list of GenPolynomials.
+     * @return pp(F).
+     */
+    public List<GenPolynomial<C>> basePrimitivePart(List<GenPolynomial<C>> F) {
+        if (F == null||F.isEmpty()) {
+            return F;
+        }
+        List<GenPolynomial<C>> Pp = new ArrayList<GenPolynomial<C>>(F.size());
+        for (GenPolynomial<C> f : F ) {
+	    GenPolynomial<C> p = basePrimitivePart(f);
+            Pp.add(p);
+        }
+        return Pp;
+    }
+
+
+    /**
      * Univariate GenPolynomial greatest common divisor. Uses sparse
      * pseudoRemainder for remainder.
      * @param P univariate GenPolynomial.
@@ -154,6 +172,24 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         }
         GenPolynomial<GenPolynomial<C>> pp = PolyUtil.<C> recursiveDivide(P, d);
         return pp;
+    }
+
+
+    /**
+     * List of recursive GenPolynomial base coefficient primitive part.
+     * @param F list of recursive GenPolynomials.
+     * @return pp(F).
+     */
+    public List<GenPolynomial<GenPolynomial<C>>> recursivePrimitivePart(List<GenPolynomial<GenPolynomial<C>>> F) {
+        if (F == null||F.isEmpty()) {
+            return F;
+        }
+        List<GenPolynomial<GenPolynomial<C>>> Pp = new ArrayList<GenPolynomial<GenPolynomial<C>>>(F.size());
+        for (GenPolynomial<GenPolynomial<C>> f : F ) {
+	    GenPolynomial<GenPolynomial<C>> p = recursivePrimitivePart(f);
+            Pp.add(p);
+        }
+        return Pp;
     }
 
 

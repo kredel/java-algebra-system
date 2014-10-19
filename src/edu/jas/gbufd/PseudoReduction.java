@@ -30,4 +30,12 @@ public interface PseudoReduction<C extends RingElem<C>> extends Reduction<C> {
      */
     public PseudoReductionEntry<C> normalformFactor(List<GenPolynomial<C>> Pp, GenPolynomial<C> Ap);
 
+    /**
+     * Normalform recursive.
+     * @param Ap recursive polynomial.
+     * @param Pp recursive polynomial list.
+     * @return nf(Ap) with respect to Pp.
+     */
+    public GenPolynomial<GenPolynomial<C>> normalformRecursive(List<GenPolynomial<GenPolynomial<C>>> Pp, GenPolynomial<GenPolynomial<C>> Ap);
+
 }
