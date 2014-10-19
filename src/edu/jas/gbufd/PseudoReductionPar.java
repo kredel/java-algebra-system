@@ -224,4 +224,16 @@ public class PseudoReductionPar<C extends RingElem<C>> extends ReductionAbstract
         throw new RuntimeException("normalform with recording not implemented");
     }
 
+
+    /**
+     * Normalform recursive.
+     * @param Ap recursive polynomial.
+     * @param Pp recursive polynomial list.
+     * @return nf(Ap) with respect to Pp.
+     */
+    @SuppressWarnings("unchecked")
+    public GenPolynomial<GenPolynomial<C>> normalformRecursive(List<GenPolynomial<GenPolynomial<C>>> Pp, GenPolynomial<GenPolynomial<C>> Ap) {
+	throw new UnsupportedOperationException("not implemented"); 
+    }
+
 }

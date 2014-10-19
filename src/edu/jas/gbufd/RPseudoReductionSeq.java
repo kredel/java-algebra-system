@@ -359,6 +359,18 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>> extends RReductio
     }
 
 
+    /**
+     * Normalform recursive.
+     * @param Ap recursive polynomial.
+     * @param Pp recursive polynomial list.
+     * @return nf(Ap) with respect to Pp.
+     */
+    @SuppressWarnings("unchecked")
+    public GenPolynomial<GenPolynomial<C>> normalformRecursive(List<GenPolynomial<GenPolynomial<C>>> Pp, GenPolynomial<GenPolynomial<C>> Ap) {
+	throw new UnsupportedOperationException("not implemented"); 
+    }
+
+
     /*
      * -------- boolean closure stuff -----------------------------------------
      * -------- is all in superclass
