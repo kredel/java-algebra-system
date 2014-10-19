@@ -43,7 +43,7 @@ public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
     private static final Logger logger = Logger.getLogger(GroebnerBasePseudoRecSeq.class);
 
 
-    private final boolean debug = true; //logger.isDebugEnabled();
+    private final boolean debug = logger.isDebugEnabled();
 
 
     /**

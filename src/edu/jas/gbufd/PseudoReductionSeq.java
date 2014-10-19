@@ -32,7 +32,7 @@ public class PseudoReductionSeq<C extends RingElem<C>> extends ReductionAbstract
     private static final Logger logger = Logger.getLogger(PseudoReductionSeq.class);
 
 
-    private final boolean debug = true; //logger.isDebugEnabled();
+    private final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -191,7 +191,7 @@ public class PseudoReductionSeq<C extends RingElem<C>> extends ReductionAbstract
                 f = e.subtract(htl[i]);
                 if (debug) {
                     logger.info("red div = " + f);
-                    logger.info("red a = " + a);
+                    //logger.info("red a = " + a);
                 }
                 @SuppressWarnings("cast")
                 GenPolynomial<C> c = (GenPolynomial<C>) lbc[i];
@@ -203,7 +203,7 @@ public class PseudoReductionSeq<C extends RingElem<C>> extends ReductionAbstract
                     //a = a.divide(c);
                     b = PolyUtil.<C> basePseudoDivide(a,c);
                     GenPolynomial<GenPolynomial<C>> Sp = S.subtractMultiple(b, f, p[i]);
-                    if (e.equals(Sp.leadingExpVector())) {
+                    if (e.equals(Sp.leadingExpVector())) { // TODO: avoid
                         //throw new RuntimeException("degree not descending");
                         logger.info("degree not descending: S = " + S + ", Sp = " + Sp);
                         R = R.multiply(c);

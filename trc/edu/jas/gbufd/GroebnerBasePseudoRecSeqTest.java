@@ -28,6 +28,9 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.PolynomialList;
+import edu.jas.ufd.PolyUfdUtil;
+import edu.jas.ufd.Quotient;
+import edu.jas.ufd.QuotientRing;
 
 
 /**
@@ -81,6 +84,9 @@ public class GroebnerBasePseudoRecSeqTest extends TestCase {
 
 
     GroebnerBaseAbstract<GenPolynomial<BigInteger>> bb;
+
+
+    GroebnerBaseAbstract<GenPolynomial<BigRational>> bbr;
 
 
     GenPolynomial<GenPolynomial<BigInteger>> a, b, c, d, e;
@@ -169,52 +175,95 @@ public class GroebnerBasePseudoRecSeqTest extends TestCase {
 
 
     /**
-     * Test Trinks7 GBase.
+     * Test Hawes2 GBase.
+     */
     @SuppressWarnings("unchecked")
-    public void testTrinks7GBase() {
-        String exam = "Z(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
-                        + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
-                        + "( - 9 W + 15 T P + 20 S Z ), " + "( P W + 2 T Z - 11 B**3 ), "
-                        + "( 99 W - 11 B S + 3 B**2 ), " + "( 10000 B**2 + 6600 B + 2673 ) " + ") ";
+    public void testHawes2GBase() {
+        String exam = "IntFunc(a, c, b) (y2, y1, z1, z2, x) G"
+                      + "(" 
+                      + "( x + 2 y1 z1 + { 3 a } y1^2 + 5 y1^4 + { 2 c } y1 ),"
+                      + "( x + 2 y2 z2 + { 3 a } y2^2 + 5 y2^4 + { 2 c } y2 )," 
+                      + "( 2 z2 + { 6 a } y2 + 20 y2^3 + { 2 c } )," 
+                      + "( 3 z1^2 + y1^2 + { b } )," 
+                      + "( 3 z2^2 + y2^2 + { b } )" 
+                      + ")";
         Reader source = new StringReader(exam);
         GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
+        PolynomialList<GenPolynomial<BigRational>> Fr = null;
+        GenPolynomialRing<BigRational> cofac;
+        GenPolynomialRing<BigInteger> ifac;
         try {
-            F = (PolynomialList<BigInteger>) parser.nextPolynomialSet();
+            Fr = parser.nextPolynomialSet();
+            cofac = (GenPolynomialRing<BigRational>) Fr.ring.coFac;
+            ifac = new GenPolynomialRing<BigInteger>(new BigInteger(),cofac);
+            fac = new GenPolynomialRing<GenPolynomial<BigInteger>>(ifac,Fr.ring);
+            L = PolyUfdUtil.integerFromRationalCoefficients(fac, Fr.list);
         } catch (ClassCastException e) {
             fail("" + e);
         } catch (IOException e) {
             fail("" + e);
         }
-        //System.out.println("F = " + F);
+        System.out.println("F = " + L);
+        System.out.println("Fr = " + Fr);
 
-        long s, t;
+        long s, t, q;
         t = System.currentTimeMillis();
-        G = bb.GB(F.list);
+        G = bb.GB(L);
         t = System.currentTimeMillis() - t;
-        assertTrue("isGB( GB(Trinks7) )", bb.isGB(G));
-        assertEquals("#GB(Trinks7) == 6", 6, G.size());
-        //PolynomialList<BigInteger> trinks = new PolynomialList<BigInteger>(F.ring,G);
-        //System.out.println("G = " + trinks);
+        assertTrue("isGB( GB(Hawes2) )", bb.isGB(G));
+        assertEquals("#GB(Hawes2) == 8", 8, G.size());
+        PolynomialList<GenPolynomial<BigInteger>> 
+            Gp = new PolynomialList<GenPolynomial<BigInteger>>(fac,G);
+        System.out.println("G = " + Gp);
         assertTrue("nonsense ", t >= 0L);
 
-        GenPolynomialRing<BigInteger> ifac = F.ring;
-        BigRational cf = new BigRational();
-        GenPolynomialRing<BigRational> rfac = new GenPolynomialRing<BigRational>(cf, ifac);
+        GenPolynomialRing<BigRational> rfac = (GenPolynomialRing<BigRational>) Fr.ring.coFac;
+        List<GenPolynomial<GenPolynomial<BigRational>>> Gr, Kr, Lr = Fr.list;
+        //System.out.println("Fr = " + Fr);
 
-        List<GenPolynomial<BigRational>> Gr, Fr, Gir;
-        Fr = PolyUtil.<BigRational> fromIntegerCoefficients(rfac, F.list);
-        GroebnerBaseSeq<BigRational> bbr = new GroebnerBaseSeq<BigRational>();
+        bbr = new GroebnerBasePseudoRecSeq<BigRational>(rfac);
         s = System.currentTimeMillis();
-        Gr = bbr.GB(Fr);
+        Gr = bbr.GB(Lr);
         s = System.currentTimeMillis() - s;
+        Gr = PolyUtil.<BigRational>monicRec(Gr);
+        System.out.println("Gr = " + Gr);
 
-        Gir = PolyUtil.<BigRational> fromIntegerCoefficients(rfac, G);
-        Gir = PolyUtil.<BigRational> monic(Gir);
+        Kr = PolyUfdUtil.<BigRational>fromIntegerCoefficients(Fr.ring, G);
+        Kr = PolyUtil.<BigRational>monicRec(Kr);
+        //System.out.println("Kr = " + Kr);
 
-        assertEquals("ratGB == intGB", Gr, Gir);
-        //System.out.println("time: ratGB = " + s + ", intGB = " + t);
+        //List<GenPolynomial<GenPolynomial<BigInteger>>> Li;
+        //Li = PolyUfdUtil.integerFromRationalCoefficients(fac, Gr);
+        //System.out.println("Li = " + Li);
+
+        assertEquals("ratGB == intGB", Kr, Gr);
         assertTrue("nonsense ", s >= 0L);
+
+        QuotientRing<BigRational> qr = new QuotientRing<BigRational>(rfac);
+        GenPolynomialRing<Quotient<BigRational>> rring = new GenPolynomialRing<Quotient<BigRational>>(qr,fac);
+
+        List<GenPolynomial<Quotient<BigRational>>> Gq, Lq, Kq;
+        Lq = PolyUfdUtil.<BigRational> quotientFromIntegralCoefficients(rring, Lr);
+        Lq = PolyUtil.<Quotient<BigRational>> monic(Lq);
+
+        GroebnerBaseAbstract<Quotient<BigRational>> bbq;
+        bbq = new GroebnerBaseSeq<Quotient<BigRational>>(); //qr);
+
+        q = System.currentTimeMillis();
+        Gq = bbq.GB(Lq);
+        q = System.currentTimeMillis() - q;
+        assertTrue("isGB( GB(Hawes2) )", bbq.isGB(Gq));
+        assertEquals("#GB(Hawes2) == 8", 8, Gq.size());
+        PolynomialList<Quotient<BigRational>> 
+            Gpq = new PolynomialList<Quotient<BigRational>>(rring,Gq);
+        System.out.println("Gq = " + Gpq);
+        assertTrue("nonsense ", q >= 0L);
+
+        Kq = PolyUfdUtil.<BigRational> quotientFromIntegralCoefficients(rring, Gr);
+        Kq = PolyUtil.<Quotient<BigRational>> monic(Kq);
+        assertEquals("ratGB == quotGB", Kq, Gq);
+
+        System.out.println("time: ratGB = " + s + ", intGB = " + t + ", quotGB = " + q);
     }
-     */
 
 }
