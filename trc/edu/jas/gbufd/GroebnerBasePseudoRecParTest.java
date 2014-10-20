@@ -23,6 +23,7 @@ import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.GroebnerBaseSeq;
+import edu.jas.gb.GroebnerBaseParallel;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
@@ -180,7 +181,7 @@ public class GroebnerBasePseudoRecParTest extends TestCase {
      * Test Hawes2 GBase.
      */
     //@SuppressWarnings("unchecked")
-    public void xtestHawes2GBase() {
+    public void testHawes2GBase() {
         String exam = "IntFunc(a, c, b) (y2, y1, z1, z2, x) G"
                       + "(" 
                       + "( x + 2 y1 z1 + { 3 a } y1^2 + 5 y1^4 + { 2 c } y1 ),"
@@ -222,7 +223,7 @@ public class GroebnerBasePseudoRecParTest extends TestCase {
 
         GenPolynomialRing<BigRational> rfac = (GenPolynomialRing<BigRational>) Fr.ring.coFac;
         List<GenPolynomial<GenPolynomial<BigRational>>> Gr, Kr, Lr = Fr.list;
-        bbr = new GroebnerBasePseudoRecSeq<BigRational>(rfac);
+        bbr = new GroebnerBasePseudoRecParallel<BigRational>(threads,rfac);
 
         s = System.currentTimeMillis();
         Gr = bbr.GB(Lr);
@@ -245,7 +246,7 @@ public class GroebnerBasePseudoRecParTest extends TestCase {
         Lq = PolyUfdUtil.<BigRational> quotientFromIntegralCoefficients(rring, Lr);
         Lq = PolyUtil.<Quotient<BigRational>> monic(Lq);
         GroebnerBaseAbstract<Quotient<BigRational>> bbq;
-        bbq = new GroebnerBaseSeq<Quotient<BigRational>>(); //qr);
+        bbq = new GroebnerBaseParallel<Quotient<BigRational>>(threads); //qr);
 
         q = System.currentTimeMillis();
         Gq = bbq.GB(Lq);
@@ -270,7 +271,7 @@ public class GroebnerBasePseudoRecParTest extends TestCase {
         Lqi = PolyUtil.<Quotient<BigInteger>> monic(Lqi);
         //System.out.println("Lqi = " + Lqi);
         GroebnerBaseAbstract<Quotient<BigInteger>> bbqi;
-        bbqi = new GroebnerBaseSeq<Quotient<BigInteger>>(); //qr);
+        bbqi = new GroebnerBaseParallel<Quotient<BigInteger>>(threads); //qr);
 
         i = System.currentTimeMillis();
         Gqi = bbqi.GB(Lqi);
