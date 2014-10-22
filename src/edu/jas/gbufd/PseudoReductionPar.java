@@ -33,7 +33,7 @@ public class PseudoReductionPar<C extends RingElem<C>> extends ReductionAbstract
     private static final Logger logger = Logger.getLogger(PseudoReductionPar.class);
 
 
-    private final boolean debug = true; //logger.isDebugEnabled();
+    private final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -296,7 +296,7 @@ public class PseudoReductionPar<C extends RingElem<C>> extends ReductionAbstract
                 }
                 GenPolynomial<C> c = P[i].leadingBaseCoefficient();
                 //if (a.remainder(c).isZERO()) { //c.isUnit() ) {
-                if (PolyUtil.<C> baseSparsePseudoRemainder(a,c).isZERO()) { //c.isUnit() ) {
+                if (PolyUtil.<C> baseSparsePseudoRemainder(a,c).isZERO()) { 
                     if (debug) {
                         logger.info("red c = " + c);
                     }
@@ -310,14 +310,13 @@ public class PseudoReductionPar<C extends RingElem<C>> extends ReductionAbstract
                         //S = S.multiply(c);
                         Sp = S.scaleSubtractMultiple(c, a, f, P[i]);
                     }
-                    S = Sp; //.subtractMultiple(a, e, P[i]);
+                    S = Sp; 
                 } else {
                     R = R.multiply(c);
                     //S = S.multiply(c);
-                    //S = S.scaleSubtractMultiple(c, a, e, P[i]);
                     S = S.scaleSubtractMultiple(c, a, f, P[i]);
                 }
-                //Q = p[i].multiply(a, e);
+                //Q = p[i].multiply(a, f);
                 //S = S.subtract(Q);
             }
         }

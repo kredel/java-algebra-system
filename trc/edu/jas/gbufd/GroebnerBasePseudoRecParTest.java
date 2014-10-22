@@ -29,6 +29,7 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.PolynomialList;
+import edu.jas.poly.OrderedPolynomialList;
 import edu.jas.ufd.PolyUfdUtil;
 import edu.jas.ufd.Quotient;
 import edu.jas.ufd.QuotientRing;
@@ -108,7 +109,7 @@ public class GroebnerBasePseudoRecParTest extends TestCase {
     float q = 0.3f; //0.4f
 
 
-    int threads = 2;
+    int threads = 3;
 
 
     @Override
@@ -215,6 +216,7 @@ public class GroebnerBasePseudoRecParTest extends TestCase {
         t = System.currentTimeMillis() - t;
         assertTrue("isGB( GB(Hawes2) )", bb.isGB(G));
         assertEquals("#GB(Hawes2) == 8", 8, G.size());
+        G = OrderedPolynomialList.<GenPolynomial<BigInteger>> sort(G);
         PolynomialList<GenPolynomial<BigInteger>> 
             Gp = new PolynomialList<GenPolynomial<BigInteger>>(fac,G);
         //System.out.println("G = " + Gp);
@@ -229,6 +231,9 @@ public class GroebnerBasePseudoRecParTest extends TestCase {
         Gr = bbr.GB(Lr);
         s = System.currentTimeMillis() - s;
         Gr = PolyUtil.<BigRational>monicRec(Gr);
+        assertTrue("isGB( GB(Hawes2) )", bbr.isGB(Gr));
+        assertEquals("#GB(Hawes2) == 8", 8, Gr.size());
+        Gr = OrderedPolynomialList.<GenPolynomial<BigRational>> sort(Gr);
         PolynomialList<GenPolynomial<BigRational>> 
             Grp = new PolynomialList<GenPolynomial<BigRational>>(Fr.ring,Gr);
         //System.out.println("Gr = " + Grp);
@@ -253,9 +258,10 @@ public class GroebnerBasePseudoRecParTest extends TestCase {
         q = System.currentTimeMillis() - q;
         assertTrue("isGB( GB(Hawes2) )", bbq.isGB(Gq));
         assertEquals("#GB(Hawes2) == 8", 8, Gq.size());
+        Gq = OrderedPolynomialList.<Quotient<BigRational>> sort(Gq);
         PolynomialList<Quotient<BigRational>> 
             Gpq = new PolynomialList<Quotient<BigRational>>(rring,Gq);
-        //System.out.println("Gpq = " + Gpq);
+        //System.out.println("Gq = " + Gpq);
         bbq.terminate();
 
         Kq = PolyUfdUtil.<BigRational> quotientFromIntegralCoefficients(rring, Gr);
@@ -278,9 +284,10 @@ public class GroebnerBasePseudoRecParTest extends TestCase {
         i = System.currentTimeMillis() - i;
         assertTrue("isGB( GB(Hawes2) )", bbqi.isGB(Gqi));
         assertEquals("#GB(Hawes2) == 8", 8, Gqi.size());
+        Gqi = OrderedPolynomialList.<Quotient<BigInteger>> sort(Gqi);
         PolynomialList<Quotient<BigInteger>> 
             Gpqi = new PolynomialList<Quotient<BigInteger>>(iring,Gqi);
-        //System.out.println("Gpqi = " + Gpqi);
+        //System.out.println("Gqi = " + Gpqi);
         bbqi.terminate();
 
         Kqi = PolyUfdUtil.<BigInteger> quotientFromIntegralCoefficients(iring, G);
