@@ -70,6 +70,24 @@ public class OrderedPolynomialList<C extends RingElem<C>> extends PolynomialList
     /**
      * Sort a list of polynomials with respect to the ascending order of the
      * leading Exponent vectors. The term order is taken from the ring.
+     * @param L polynomial list.
+     * @return sorted polynomial list from L.
+     */
+    public static <C extends RingElem<C>> List<GenPolynomial<C>> sort(List<GenPolynomial<C>> L) {
+        if (L == null) {
+            return L;
+        }
+        if (L.size() <= 1) { // nothing to sort
+            return L;
+        }
+        GenPolynomialRing<C> r = L.get(0).ring;
+        return sort(r,L);
+    }
+
+
+    /**
+     * Sort a list of polynomials with respect to the ascending order of the
+     * leading Exponent vectors. The term order is taken from the ring.
      * @param r polynomial ring factory.
      * @param L polynomial list.
      * @return sorted polynomial list from L.

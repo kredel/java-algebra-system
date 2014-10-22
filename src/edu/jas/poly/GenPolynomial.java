@@ -544,8 +544,8 @@ Iterable<Monomial<C>> {
             ExpVector ae = aie.getKey();
             ExpVector be = bie.getKey();
             s = ae.compareTo(be);
-            //System.out.println("s = " + s + ", " + ae + ", " +be);
             if (s != 0) {
+                //System.out.println("s = " + s + ", " + ring.toScript(ae) + ", " + ring.toScript(be));
                 return s;
             }
             if (c == 0) {
@@ -555,11 +555,16 @@ Iterable<Monomial<C>> {
             }
         }
         if (ai.hasNext()) {
+            //System.out.println("ai = " + ai);
             return 1;
         }
         if (bi.hasNext()) {
+            //System.out.println("bi = " + bi);
             return -1;
         }
+        //if (c != 0) {
+            //System.out.println("c = " + c);
+        //}
         // now all keys are equal
         return c;
     }
