@@ -157,7 +157,7 @@ public class OrderedPairlist<C extends RingElem<C>> {
      * @param F power series list.
      * @return the index of the last added power series.
      */
-    public int put(List<MultiVarPowerSeries<C>> F) { 
+    public int put(List<MultiVarPowerSeries<C>> F) {
         int i = 0;
         for (MultiVarPowerSeries<C> p : F) {
             i = put(p);
@@ -275,7 +275,7 @@ public class OrderedPairlist<C extends RingElem<C>> {
      * Put the ONE-power-series to the pairlist.
      * @return the index of the last power-series.
      */
-    public synchronized int putOne() { 
+    public synchronized int putOne() {
         oneInGB = true;
         pairlist.clear();
         P.clear();

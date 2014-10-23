@@ -7,12 +7,11 @@ package edu.jas.ps;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.structure.RingElem;
 import edu.jas.poly.ExpVector;
+import edu.jas.structure.RingElem;
 
 
 /**
@@ -24,7 +23,7 @@ import edu.jas.poly.ExpVector;
  */
 
 public class StandardBaseSeq<C extends RingElem<C>>
-    /*todo: extends StandardBaseAbstract<C>*/{
+/*todo: extends StandardBaseAbstract<C>*/{
 
 
     private static final Logger logger = Logger.getLogger(StandardBaseSeq.class);
@@ -149,11 +148,11 @@ public class StandardBaseSeq<C extends RingElem<C>>
     public List<MultiVarPowerSeries<C>> STD(int modv, List<MultiVarPowerSeries<C>> F) {
         List<MultiVarPowerSeries<C>> G = normalizeZerosOnes(F);
         G = PSUtil.<C> monic(G);
-        if ( G.size() <= 1 ) {
+        if (G.size() <= 1) {
             return G;
         }
         MultiVarPowerSeriesRing<C> ring = G.get(0).ring;
-        if ( ! ring.coFac.isField() ) {
+        if (!ring.coFac.isField()) {
             throw new IllegalArgumentException("coefficients not from a field");
         }
         OrderedPairlist<C> pairlist = new OrderedPairlist<C>(modv, ring); //strategy.create( modv, ring ); 
@@ -191,7 +190,7 @@ public class StandardBaseSeq<C extends RingElem<C>>
             return G; // since no threads are activated
         }
         */
-        logger.info("start " + pairlist); 
+        logger.info("start " + pairlist);
 
         Pair<C> pair;
         MultiVarPowerSeries<C> pi, pj, S, H;
@@ -243,8 +242,8 @@ public class StandardBaseSeq<C extends RingElem<C>>
             }
             //if (!H.isZERO()) {
             //l++;
-                G.add(H);
-                pairlist.put(H);
+            G.add(H);
+            pairlist.put(H);
             //}
         }
         logger.debug("#sequential list = " + G.size());
