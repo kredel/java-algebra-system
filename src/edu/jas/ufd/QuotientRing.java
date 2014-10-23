@@ -274,8 +274,7 @@ public class QuotientRing<C extends GcdRingElem<C>>
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    @SuppressWarnings("unchecked")
-    // not jet working
+    @SuppressWarnings("cast")
     public boolean equals(Object b) {
         if (b == null) {
             return false;

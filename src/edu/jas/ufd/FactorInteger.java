@@ -618,7 +618,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             factors.add(u);
         }
         if (factors.size() == 0) {
-            logger.info("irred u = " + u);
+            logger.info("irred u = " + PP);
             //System.out.println("irred u = " + u);
             factors.add(PP);
         }
