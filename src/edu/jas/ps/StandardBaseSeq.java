@@ -58,6 +58,32 @@ public class StandardBaseSeq<C extends RingElem<C>>
 
 
     /**
+     * Normalize power series list.
+     * @param A list of power series.
+     * @return list of power series with zeros removed and ones/units reduced.
+     */
+    public List<MultiVarPowerSeries<C>> normalizeZerosOnes(List<MultiVarPowerSeries<C>> A) {
+        List<MultiVarPowerSeries<C>> N = new ArrayList<MultiVarPowerSeries<C>>(A.size());
+        if (A == null || A.isEmpty()) {
+            return N;
+        }
+        for (MultiVarPowerSeries<C> p : A) {
+            if (p == null || p.isZERO()) {
+                continue;
+            }
+            if (p.isUnit()) {
+                N.clear();
+                N.add(p.ring.getONE());
+                return N;
+            }
+            N.add(p.abs());
+        }
+        //N.trimToSize();
+        return N;
+    }
+
+
+    /**
      * Standard base test.
      * @param F power series list.
      * @return true, if F is a Standard base, else false.
@@ -85,9 +111,9 @@ public class StandardBaseSeq<C extends RingElem<C>>
                 if (!red.moduleCriterion(modv, pi, pj)) {
                     continue;
                 }
-                //                 if ( ! red.criterion4( pi, pj ) ) { 
-                //                    continue;
-                //                 }
+                // if ( ! red.criterion4( pi, pj ) ) { 
+                //       continue;
+                // }
                 s = red.SPolynomial(pi, pj);
                 if (s.isZERO()) {
                     continue;
@@ -121,6 +147,19 @@ public class StandardBaseSeq<C extends RingElem<C>>
      * @return STD(F) a Standard base of F.
      */
     public List<MultiVarPowerSeries<C>> STD(int modv, List<MultiVarPowerSeries<C>> F) {
+        List<MultiVarPowerSeries<C>> G = normalizeZerosOnes(F);
+        G = PSUtil.<C> monic(G);
+        if ( G.size() <= 1 ) {
+            return G;
+        }
+        MultiVarPowerSeriesRing<C> ring = G.get(0).ring;
+        if ( ! ring.coFac.isField() ) {
+            throw new IllegalArgumentException("coefficients not from a field");
+        }
+        OrderedPairlist<C> pairlist = new OrderedPairlist<C>(modv, ring); //strategy.create( modv, ring ); 
+        pairlist.put(G);
+
+        /*
         MultiVarPowerSeries<C> p = null;
         List<MultiVarPowerSeries<C>> G = new ArrayList<MultiVarPowerSeries<C>>();
         OrderedPairlist<C> pairlist = null;
@@ -151,12 +190,11 @@ public class StandardBaseSeq<C extends RingElem<C>>
         if (l <= 1) {
             return G; // since no threads are activated
         }
+        */
+        logger.info("start " + pairlist); 
 
         Pair<C> pair;
-        MultiVarPowerSeries<C> pi;
-        MultiVarPowerSeries<C> pj;
-        MultiVarPowerSeries<C> S;
-        MultiVarPowerSeries<C> H;
+        MultiVarPowerSeries<C> pi, pj, S, H;
         while (pairlist.hasNext()) {
             pair = pairlist.removeNext();
             //logger.debug("pair = " + pair);
@@ -204,7 +242,7 @@ public class StandardBaseSeq<C extends RingElem<C>>
                 logger.info("H = " + H);
             }
             //if (!H.isZERO()) {
-                l++;
+            //l++;
                 G.add(H);
                 pairlist.put(H);
             //}

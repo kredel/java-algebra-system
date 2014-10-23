@@ -449,6 +449,31 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
 
 
     /**
+     * Monic.
+     * @return 1/orderCoeff() * this.
+     */
+    public UnivPowerSeries<C> monic() {
+        int i = order();
+        C a = coefficient(i);
+        if (a.isONE()) {
+            return this;
+        }
+        if (a.isZERO()) { // sic
+            return this;
+        }
+        final C b = a.inverse();
+        return map(new UnaryFunctor<C, C>() {
+
+
+            @Override
+            public C eval(C c) {
+                return b.multiply(c);
+            }
+        });
+    }
+
+
+    /**
      * Negate.
      * @return - this.
      */
