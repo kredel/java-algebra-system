@@ -61,8 +61,8 @@ from edu.jas.root        import RealRootsSturm, Interval, RealAlgebraicNumber, R
                                 ComplexRootsSturm, Rectangle, RootFactory
 from edu.jas.integrate   import ElementaryIntegration
 from edu.jas.util        import ExecutableServer
-from edu.jas             import structure, arith, poly, ps, gb, gbmod, vector,\
-                                application, util, ufd
+#from edu.jas             import structure, arith, poly, ps, gb, gbmod, vector,\
+#                                application, util, ufd
 from edu                 import jas
 #PrettyPrint.setInternal();
 
