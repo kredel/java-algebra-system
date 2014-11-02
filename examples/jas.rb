@@ -446,7 +446,10 @@ Methods to be used as + - * ** / %.
 =end
 class RingElem
     include Comparable
-    attr_reader :elem, :ring
+    # the JAS Java element object
+    attr_reader :elem
+    # the JAS Java factory object
+    attr_reader :ring
 
 =begin rdoc
 Constructor for ring element.
@@ -1395,6 +1398,7 @@ Represents a JAS polynomial ring: GenPolynomialRing.
 Methods to create ideals and ideals with parametric coefficients.
 =end
 class Ring
+    # the JAS Java factoy object, polynomial list, gcd engine, sqf engine, factorization
     attr_reader :ring, :pset, :engine, :sqf, :factor
 
 =begin rdoc
