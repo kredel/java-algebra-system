@@ -10,4 +10,4 @@ Exec=gnome-terminal --show-menubar -x jas -rb
 #Terminal=true
 Categories=Math;
 #
-#$Id: $
+#$Id$
