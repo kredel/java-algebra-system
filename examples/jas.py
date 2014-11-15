@@ -152,7 +152,8 @@ def inject_generators(gens):
 def nameFromValue(v):
     '''Get a meaningful name from a value.
 
-    v ist the given value.
+    INPUT:
+    - "v" - the given value.
     '''
     import re;
     ri = re.compile(r'\A[0-9].*');
@@ -501,10 +502,12 @@ class Ideal:
         s = self.pset;
         cofac = s.ring.coFac;
         F = s.list;
+        kind = "";
         t = System.currentTimeMillis();
         if cofac.isField():
             G = GroebnerBaseSeq(ReductionSeq(),OrderedSyzPairlist()).GB(F);
             #G = GroebnerBaseSeq().GB(F);
+            kind = "field"
         else:
             v = None;
             try:
@@ -513,10 +516,12 @@ class Ideal:
                 pass
             if v == None:
                 G = GroebnerBasePseudoSeq(cofac).GB(F);
+                kind = "pseudo"
             else:
                 G = GroebnerBasePseudoRecSeq(cofac).GB(F);
+                kind = "pseudoRec"
         t = System.currentTimeMillis() - t;
-        print "sequential GB executed in %s ms" % t; 
+        print "sequential(%s) GB executed in %s ms" % (kind, t); 
         return Ideal(self.ring,"",G);
 
     def isGB(self):
@@ -3051,6 +3056,23 @@ class RingElem:
         '''Monic polynomial.
         '''
         return RingElem( self.elem.monic() ); 
+
+    def homogenize(self,var='h'):
+        '''homogenize polynomial.
+
+        INPUT:
+           - "var" - variable name to use for homogenization
+        '''
+        if not self.isPolynomial():
+           return self
+        if var in self.ring.vars:
+           r = self.ring.extend(1);
+           print "WARN: case for variable %s not implemented, new name %s" % (var,r.vars[-1])
+        else:
+           r = self.ring.extend([var]);
+        h = self.elem;
+        h = h.homogenize(r);
+        return RingElem(h);
 
     def evaluate(self,a):
         '''Evaluate at a for power series.
