@@ -11,8 +11,8 @@ sd = sdjas.SymbolicData()
 #sd.list_ideals()
 print
 
-#bb87 = sd.get_ideal('Buchberger-87')
-bb87 = sd.get_ideal('Buchberger-87.Homog')
+bb87 = sd.get_ideal('Buchberger-87')
+#bb87 = sd.get_ideal('Buchberger-87.Homog')
 print
 print "bb87 = " + str(bb87) 
 print
@@ -21,8 +21,8 @@ print "G = " + str(G)
 print
 
 startLog()
-terminate()
-exit();
+#terminate()
+#exit();
 
 
 cz86c = sd.get_ideal('Czapor-86c')
@@ -35,7 +35,7 @@ G = cz86c.GB()
 print "G = " + str(G) 
 print
 
-startLog()
+#startLog()
 terminate()
 exit();
 

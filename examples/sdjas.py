@@ -92,16 +92,17 @@ class SymbolicData:
         self._sparql = sparql
         self._ideals = None
         self._parser = SafeConfigParser()
-        self._parser.read('sd.ini')
+        self._parser.read(['sd.ini','examples/sd.ini'])
         self.sd = self._parser.get('symbolicdata', 'sd')
         try:
             self.url = self._parser.get('sparql', self._sparql)
         except:
             raise ValueError("The SPARQL endpoint referenced by '%s' was not found in the sd.ini file." % self._sparql)
-        self.sdhost = self._parser.get('symbolicdata', 'sdhost')
-        print "SymbolicData() initialized"
-        print "url    = " + str(self.url)
-        print "sdhost = " + str(self.sdhost)
+        self.sdhost = self._parser.get('DEFAULT', 'sdhost')
+        self.sqpath = self._parser.get('sparql', 'path')
+        #print "SymbolicData() initialized"
+        #print "url    = " + str(self.url)
+        #print "sdhost = " + str(self.sdhost)
 
     def get_ideals(self, force_reload = False):
         """
@@ -143,7 +144,7 @@ class SPARQL:
     This is a 'wrapper' class for SPARQL queries. A class might be
     a slight overkill. It was made with the idea, that one can store
     the query and the result together, to re-evaluate both without
-    having to access the server. However, it the end this feature
+    having to access the server. However, in the end this feature
     was not really needed.
     """
     def __init__(self, sd, query, output = 'json'):
@@ -154,16 +155,18 @@ class SPARQL:
             'query' : query
         }
         #self.response = requests.get(self._sd.url, params = self._data)
-        print "url = " + str(self._sd.url)
+        #print "url = " + str(self._sd.url)
         conn = httplib.HTTPConnection(self._sd.url)
         #print "conn = " + str(conn)
-        #print "query = " + str(query)
 
-        _path = "/sparql?" + urllib.urlencode(self._data)
-        print "path = " + str(_path)
+        #print "query = " + str(query)
+        _path = self._sd.sqpath + "?" + urllib.urlencode(self._data)
+        #print "path = " + str(_path)
         conn.request("GET", _path );
         self.response = conn.getresponse();
-        print self.response.status, self.response.reason, "\n"
+        if self.response.status != 200:
+           print self.response.status, self.response.reason, "\n"
+           raise IOError, "HTTP GET %s not successful" % _path
 
         self.head = self.response.msg
         #print "head = " + str(self.head)
@@ -251,7 +254,7 @@ class SD_Ideal:
         if 'relatedPolynomialSystem' in self.__dict__.keys():
             self.__addXMLResource(get_value_for_URI(self._sd, self.relatedPolynomialSystem, self._sd.sd+'relatedXMLResource'))
             self.hasXMLResource = True
-            print "relatedPolynomialSystem " + str(name)
+            #print "relatedPolynomialSystem " + str(name)
 
         # case 2
         if 'flatten' in self.__dict__.keys():
@@ -260,7 +263,7 @@ class SD_Ideal:
             self.variablesCSV = self.hasVariables
             self.variables = map(lambda x: str(x).strip(), self.variablesCSV.rsplit(","))
             self.basis = parent.basis
-            print "flatten " + str(parent_name)
+            #print "flatten " + str(parent_name) + ", name = " + str(name)
 
         # case 3
         if 'homogenize' in self.__dict__.keys():
@@ -272,7 +275,7 @@ class SD_Ideal:
                 self.variables = parent.variables
                 self.variables.append(hv)
                 self.basis = parent.jas_homogenize(hv)
-            print "homogenize " + str(parent_name)
+            #print "homogenize " + str(parent_name) + ", name = " + str(name)
 
         # case 4
         if 'parameterize' in self.__dict__.keys():
@@ -281,7 +284,7 @@ class SD_Ideal:
             self.variablesCSV = self.hasVariables
             self.variables = map(lambda x: str(x).strip(), self.variablesCSV.rsplit(","))
             self.basis = parent.basis
-            print "parameterize " + str(parent_name)
+            #print "parameterize " + str(parent_name) + ", name = " + str(name)
 
         # now we got the variables, the parameters and
         # the strings/expressions for the polynomials
@@ -292,7 +295,7 @@ class SD_Ideal:
         Return the ideal as a Jas objects.
         """
         #return ideal(self.sageBasis)
-        print "self.jasRing = " + str(self.jasRing)
+        #print "jasRing = " + str(self.jasRing)
         return self.jasRing.ideal(list=self.jasBasis)
 
     def __addXMLResource(self, link):
@@ -303,13 +306,13 @@ class SD_Ideal:
         #print "url = " + str(url)
         #url = self._sd.url[:-5]
         url = self._sd.sdhost
-        print "url = " + str(url)
+        #print "url = " + str(url)
         conn = httplib.HTTPConnection(url)
         #print "conn = " + str(conn)
-        print "path = " + str(path)
+        #print "path = " + str(path)
         conn.request("GET", path );
         xml = conn.getresponse().read();
-        print "xml = " + str(xml)
+        print _uri_to_name(link) + " = " + str(xml)
 
         xmlTree = parseString(xml)
 
@@ -342,20 +345,21 @@ class SD_Ideal:
         # translate Jas syntax to pure Python and execute
         #exec(preparse(R))
         R = R + "; " + gens + " = R.gens();"
-        print str(R)
+        #print str(R)
         exec(str(R))
+        print "R = " + str(R)
         self.jasRing = R;
         # construct polynomials in the constructed ring from
         # the polynomial expressions
         self.jasBasis = []
         for ps in self.basis:
-            print "ps = " + str(ps)
-            if type(ps) is StringType and '^' in ps:  #.find('^') >= 0:
+            #print "ps = " + str(ps)
+            if type(ps) is StringType and '^' in ps:
                ps = ps.replace('^', '**')
             #exec(preparse("symbdata_ideal = %s" % ps))
             exec("symbdata_poly = %s" % ps)
             self.jasBasis.append(symbdata_poly)
-        print "jasBasis = " + str([ str(p) for p in self.jasBasis])
+        #print "jasBasis = " + str([ str(p) for p in self.jasBasis])
 
     # the following functions will all use Jas to
     # calculate metadata
