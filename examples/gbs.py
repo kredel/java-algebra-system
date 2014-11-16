@@ -5,7 +5,7 @@
 
 import sys;
 
-from jas import Ring, PolyRing, QQ, ZZ
+from jas import Ring, PolyRing, QQ, ZZ, RingElem
 from jas import startLog, terminate
 
 # GB examples
@@ -14,9 +14,9 @@ from jas import startLog, terminate
 #r = Ring( "Mod 11(t,x,y,z) L" );
 #r = Ring( "Rat(t,x,y) L" );
 r = PolyRing( QQ(), "t,x,y", PolyRing.lex );
+#r = PolyRing( ZZ(), "t,x,y", PolyRing.lex );
 print "Ring: " + str(r);
 print;
-
 
 ps = """
 (
@@ -47,5 +47,25 @@ startLog();
 rg = f.GB();
 print "seq GB:", rg;
 print;
+
+#p = t**16 + 272 * t**12 - 7072 * t**8 + 3207424 * t**4 + 12960000;
+p = t - x - 2*y;
+#p = p * (y**4 + 4);
+p = abs(p);
+
+n = f.reduction(p);
+print "p = %s, n = %s " % (p,n);
+print;
+
+n = rg.reduction(p);
+print "p = %s, n = %s " % (p,n);
+print;
+
+
+N = rg.lift(p);
+print "p = %s, N = %s " % (p,[ str(a) for a in N ]);
+print;
+
+print "N * rg == p:", sum([ ci * RingElem(ni) for ci, ni in zip( N, rg.list ) ]) == p
 
 terminate();

@@ -27,7 +27,7 @@ startLog()
 
 cz86c = sd.get_ideal('Czapor-86c')
 #cz86c = sd.get_ideal('Czapor-86c.Flat')
-#cz86c = sd.get_ideal('Czapor-86c.Homog')
+#cz86c = sd.get_ideal('Czapor-86c.Flat.Homog')
 print
 print "cz86c = " + str(cz86c) 
 print

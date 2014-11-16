@@ -31,12 +31,12 @@ from edu.jas.ps          import UnivPowerSeries, UnivPowerSeriesRing,\
 from edu.jas.gb          import EReductionSeq, DGroebnerBaseSeq, EGroebnerBaseSeq,\
                                 GroebnerBaseDistributedEC, GroebnerBaseDistributedHybridEC,\
                                 GroebnerBaseSeq, GroebnerBaseSeqPairSeq,\
-                                OrderedPairlist, OrderedSyzPairlist,\
-                                ReductionSeq, GroebnerBaseParallel, GroebnerBaseSeqPairParallel,\
+                                OrderedPairlist, OrderedSyzPairlist, ReductionSeq,\
+                                GroebnerBaseParallel, GroebnerBaseSeqPairParallel,\
                                 SolvableGroebnerBaseParallel, SolvableGroebnerBaseSeq,\
                                 SolvableReductionSeq, WordGroebnerBaseSeq
 from edu.jas.gbufd       import GroebnerBasePseudoRecSeq, GroebnerBasePseudoSeq,\
-                                GroebnerBasePseudoParallel,\
+                                PseudoReductionSeq, GroebnerBasePseudoParallel,\
                                 RGroebnerBasePseudoSeq, RGroebnerBaseSeq, RReductionSeq,\
                                 CharacteristicSetWu
 from edu.jas.gbmod       import ModGroebnerBaseAbstract, ModSolvableGroebnerBaseAbstract,\
@@ -679,7 +679,13 @@ class Ideal:
         G = s.list;
         if isinstance(p,RingElem):
             p = p.elem;
-        n = ReductionSeq().normalform(G,p);
+        if self.ring.ring.coFac.isField():
+           n = ReductionSeq().normalform(G,p);
+        else:
+           n = PseudoReductionSeq().normalform(G,p);
+           #F = PseudoReductionSeq().normalformFactor(G,p);
+           #print "F.multiplicator = " + str(F.multiplicator)
+           #n = F.pol
         return RingElem(n);
 
     def NF(self,reducer):
@@ -693,6 +699,22 @@ class Ideal:
         t = System.currentTimeMillis() - t;
         print "sequential NF executed in %s ms" % t; 
         return Ideal(self.ring,"",N);
+
+    def lift(self,p):
+        '''Represent p as element of this ideal.
+        '''
+        G = self.pset.list;
+        z = self.ring.ring.getZERO();
+        R = [ z for x in G];
+        if isinstance(p,RingElem):
+            p = p.elem;
+        if self.ring.ring.coFac.isField():
+           n = ReductionSeq().normalform(R,G,p);
+        else:
+           n = PseudoReductionSeq().normalform(R,G,p);
+        if not n.isZERO():
+           raise ValueError, "p ist not a member of the ideal"
+        return [ RingElem(f) for f in R ];
 
     def interreduced_basis(self):
         '''Compute a interreduced ideal basis of this.
