@@ -2359,6 +2359,7 @@ java_import "edu.jas.gbufd.GroebnerBasePseudoRecSeq";
 java_import "edu.jas.gbufd.GroebnerBasePseudoSeq";
 java_import "edu.jas.gbufd.RGroebnerBasePseudoSeq";
 java_import "edu.jas.gbufd.GroebnerBasePseudoParallel";
+java_import "edu.jas.gbufd.PseudoReductionSeq";
 java_import "edu.jas.gbufd.RGroebnerBaseSeq";
 java_import "edu.jas.gbufd.RReductionSeq";
 java_import "edu.jas.gbufd.CharacteristicSetWu";
@@ -2441,14 +2442,15 @@ Compute a Groebner base.
         #if @ideal != nil
         #   return SimIdeal.new(@ring,"",nil,@ideal.GB());
         #end
-        s = @pset;
-        cofac = s.ring.coFac;
-        ff = s.list;
+        cofac = @ring.ring.coFac;
+        ff = @pset.list;
+        kind = "";
         t = System.currentTimeMillis();
         if cofac.isField()
             #gg = GroebnerBaseSeq.new().GB(ff);
             #gg = GroebnerBaseSeq.new(ReductionSeq.new(),OrderedPairlist.new()).GB(ff);
             gg = GroebnerBaseSeq.new(ReductionSeq.new(),OrderedSyzPairlist.new()).GB(ff);
+            kind = "field"
         else
             v = nil;
             begin
@@ -2458,12 +2460,14 @@ Compute a Groebner base.
             end
             if v == nil
                 gg = GroebnerBasePseudoSeq.new(cofac).GB(ff);
+                kind = "pseudo"
             else
                 gg = GroebnerBasePseudoRecSeq.new(cofac).GB(ff);
+                kind = "pseudoRec"
             end
         end
         t = System.currentTimeMillis() - t;
-        puts "sequential GB executed in #{t} ms\n"; 
+        puts "sequential(#{kind}) GB executed in #{t} ms\n"; 
         return SimIdeal.new(@ring,"",gg);
     end
 
@@ -2655,7 +2659,13 @@ Compute a normal form of p with respect to this ideal.
             p = p.elem;
         end
         #t = System.currentTimeMillis();
-        n = ReductionSeq.new().normalform(gg,p);
+        if @ring.ring.coFac.isField()
+           n = ReductionSeq.new().normalform(gg,p);
+        else 
+           n = PseudoReductionSeq.new().normalform(gg,p);
+           #ff = PseudoReductionSeq.New().normalformFactor(gg,p);
+           #print "ff.multiplicator = " + str(ff.multiplicator)
+        end
         #t = System.currentTimeMillis() - t;
         #puts "sequential reduction executed in " + str(t) + " ms"; 
         return RingElem.new(n);
@@ -2691,6 +2701,38 @@ Compute a normal form of this ideal with respect to reducer.
         return SimIdeal.new(@ring,"",nn);
     end
 
+=begin rdoc
+Represent p as element of this ideal.
+=end
+    def lift(p)
+        gg = @pset.list;
+        z = @ring.ring.getZERO();
+        rr = gg.map { |x| z };
+        if p.is_a? RingElem
+            p = p.elem;
+        end
+        #t = System.currentTimeMillis();
+        if @ring.ring.coFac.isField()
+           n = ReductionSeq.new().normalform(rr,gg,p);
+        else 
+           n = PseudoReductionSeq.new().normalform(rr,gg,p);
+        end
+        if not n.isZERO()
+           raise ValueError, "p ist not a member of the ideal"
+        end
+        #t = System.currentTimeMillis() - t;
+        #puts "sequential reduction executed in " + str(t) + " ms"; 
+        return rr.map { |x| RingElem.new(x) };
+    end
+
+=begin rdoc
+Compute a interreduced ideal basis of this.
+=end
+    def interreduced_basis()
+        ff = @pset.list;
+        nn = ReductionSeq.new().irreducibleSet(ff);
+        return nn.map{ |x| RingElem.new(x) };
+    end
 
 =begin rdoc
 Compute the intersection of this and the given polynomial ring.

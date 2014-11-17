@@ -11,6 +11,7 @@ require "examples/jas"
 #r = Ring.new( "Mod 11(t,x,y,z) L" );
 #r = Ring.new( "Rat(t,x,y) L" );
 r = PolyRing.new( QQ(), "t,x,y", PolyRing.lex );
+#r = PolyRing.new( ZZ(), "t,x,y", PolyRing.lex );
 puts "Ring: " + str(r);
 puts;
 
@@ -44,6 +45,27 @@ startLog();
 rg = f.GB();
 puts "seq GB:", rg;
 puts;
+
+#p = t**16 + 272 * t**12 - 7072 * t**8 + 3207424 * t**4 + 12960000;
+p = t - x - 2*y;
+#p = p * (y**4 + 4);
+p = p.abs();
+
+n = f.reduction(p);
+puts "p = #{p}, n = #{n} "; 
+puts;
+
+n = rg.reduction(p);
+puts "p = #{p}, n = #{n} "; 
+puts;
+
+
+nn = rg.lift(p);
+ns = nn.map { |x| x.to_s }
+puts "p = #{p}, ns = #{ns} "; 
+puts;
+
+puts "N * rg == p: " + str(nn.zip(rg.list).map{ |ci,ni| ci*RingElem.new(ni) }.reduce(:+) == p)
 
 terminate();
 
