@@ -722,7 +722,10 @@ class Ideal:
         Compatibility method for Sage/Singular.
         '''
         F = self.pset.list;
-        N = ReductionSeq().irreducibleSet(F);
+        if self.ring.ring.coFac.isField():
+           N = ReductionSeq().irreducibleSet(F);
+        else:
+           N = PseudoReductionSeq().irreducibleSet(F);
         #N = GroebnerBaseSeq().minimalGB(F);
         return [ RingElem(n) for n in N ];
 
@@ -3484,7 +3487,10 @@ class RingElem:
         '''
         s = self.elem;
         Fe = [ e.elem for e in F ];
-        n = ReductionSeq().normalform(Fe,s);
+        if self.ring.coFac.isField():
+           n = ReductionSeq().normalform(Fe,s);
+        else:
+           n = PseudoReductionSeq().normalform(Fe,s);
         return RingElem(n);
 
 #----------------

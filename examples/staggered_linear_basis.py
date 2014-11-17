@@ -131,7 +131,7 @@ def staglinbasis(F):
       num_zrs += 1
     else:
       # new polynomial; add to basis
-      r *= r.lc()**(-1)
+      r = r.monic() # JAS #r *= r.lc()**(-1)
       G.append(r)
       # update ideals here, also below
       # need new ideal for G[-1]=r, essentially

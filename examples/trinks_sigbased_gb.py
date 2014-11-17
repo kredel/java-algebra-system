@@ -18,6 +18,7 @@ from staggered_linear_basis import staglinbasis
 
 
 #r = PolyRing( QQ(), "(B,S,T,Z,P,W)", PolyRing.lex );
+#r = PolyRing( ZZ(), "(B,S,T,Z,P,W)", PolyRing.lex );
 r = PolyRing( ZM(32003), "(B,S,T,Z,P,W)", PolyRing.lex );
 #r = PolyRing( ZM(19), "(B,S,T,Z,P,W)", PolyRing.lex );
 print "Ring: " + str(r);
