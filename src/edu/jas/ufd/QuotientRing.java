@@ -16,10 +16,10 @@ import edu.jas.kern.StringUtil;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
-//import edu.jas.gbufd.PolyGBUtil;
+// import edu.jas.gbufd.PolyGBUtil;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingFactory;
 import edu.jas.structure.QuotPairFactory;
+import edu.jas.structure.RingFactory;
 
 
 /**
@@ -27,8 +27,8 @@ import edu.jas.structure.QuotPairFactory;
  * of this class are immutable.
  * @author Heinz Kredel
  */
-public class QuotientRing<C extends GcdRingElem<C>> 
-       implements RingFactory<Quotient<C>>, QuotPairFactory<GenPolynomial<C>,Quotient<C>> {
+public class QuotientRing<C extends GcdRingElem<C>> implements RingFactory<Quotient<C>>,
+                QuotPairFactory<GenPolynomial<C>, Quotient<C>> {
 
 
     private static final Logger logger = Logger.getLogger(QuotientRing.class);
@@ -274,7 +274,6 @@ public class QuotientRing<C extends GcdRingElem<C>>
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    @SuppressWarnings("cast")
     public boolean equals(Object b) {
         if (b == null) {
             return false;

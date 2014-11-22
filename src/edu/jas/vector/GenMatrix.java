@@ -692,7 +692,7 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
      * @return [this/S, this - (this/S)*S].
      */
     public GenMatrix<C>[] quotientRemainder(GenMatrix<C> S) {
-        throw new UnsupportedOperationException("quotientRemainder not implemented");
+        throw new UnsupportedOperationException("quotientRemainder not implemented, input = " + S);
     }
 
 

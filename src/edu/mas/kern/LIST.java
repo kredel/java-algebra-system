@@ -127,7 +127,7 @@ public class LIST<C> {
         if (L.iter == null) {
             LP = new LIST<C>(L.list);
             LP.iter = LP.list.iterator();
-            C x = LP.iter.next();
+            /*C x =*/LP.iter.next();
             //System.out.println("x = " + x);
         } // else noop
         return LP;

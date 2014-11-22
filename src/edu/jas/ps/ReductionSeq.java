@@ -169,7 +169,7 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
         ArrayList<MultiVarPowerSeries<C>> p = new ArrayList<MultiVarPowerSeries<C>>(P.size());
         ArrayList<Long> ecart = new ArrayList<Long>(P.size());
         Map.Entry<ExpVector, C> m;
-        int j = 0;
+        //int j = 0;
         for (int i = 0; i < P.size(); i++) {
             m = P.get(i).orderMonomial();
             //System.out.println("m_i = " + m);
@@ -179,7 +179,7 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 htl.add(m.getKey());
                 lbc.add(m.getValue());
                 ecart.add(P.get(i).ecart());
-                j++;
+                //j++;
             }
         }
         //int ll = j;
