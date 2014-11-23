@@ -163,14 +163,14 @@ class SPARQL:
         _path = self._sd.sqpath + "?" + urllib.urlencode(self._data)
         #print "path = " + str(_path)
         conn.request("GET", _path );
-        self.response = conn.getresponse();
-        if self.response.status != 200:
-           print self.response.status, self.response.reason, "\n"
+        response = conn.getresponse();
+        if response.status != 200:
+           print response.status, response.reason, "\n"
            raise IOError, "HTTP GET %s not successful" % _path
 
-        self.head = self.response.msg
-        #print "head = " + str(self.head)
-        self.text = self.response.read()
+        head = response.msg
+        #print "head = " + str(head)
+        self.text = response.read()
         #print "body = " + str(self.text)
         self.json = json.loads(self.text)
         #print "json = " + str(self.json)

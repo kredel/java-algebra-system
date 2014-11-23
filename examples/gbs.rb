@@ -65,7 +65,8 @@ ns = nn.map { |x| x.to_s }
 puts "p = #{p}, ns = #{ns} "; 
 puts;
 
-puts "N * rg == p: " + str(nn.zip(rg.list).map{ |ci,ni| ci*RingElem.new(ni) }.reduce(:+) == p)
+pp = nn.zip(rg.list).map{ |ci,ni| ci*RingElem.new(ni) }.reduce(:+);
+puts "N * rg == p: " + str(pp == p)
 
-terminate();
+#terminate();
 
