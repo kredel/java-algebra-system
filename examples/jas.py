@@ -153,7 +153,7 @@ def nameFromValue(v):
     '''Get a meaningful name from a value.
 
     INPUT:
-    - "v" - the given value.
+     - "v" - the given value.
     '''
     import re;
     ri = re.compile(r'\A[0-9].*');

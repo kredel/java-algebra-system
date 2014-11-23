@@ -56,8 +56,11 @@ end
 =end
 def _pprint(l)
     col = l.map{ |x| x.length }.max + 3 #  [len(x) for x in l]) + 3
-    padded = l.map{|x| x.ljust(col) }.join('')
-    print textwrap(padded).join('\n')
+    num = 70
+    padded = l.map{|x| x.ljust(col) } #.join('')
+    #print textwrap(padded).join('\n')
+    line = ''
+    padded.map{|x| line.length > 70 ? begin puts line; line='' end : line+=x }
 end
 
 =begin rdoc
@@ -134,12 +137,12 @@ class SymbolicData
 =end
     def list_ideals(output = true, force_reload = false)
         if @_ideals == nil or force_reload == true
-            r = SPARQL.new(self, @_parser.get('queries', 'list_ideals'))
+            r = SPARQL.new(self, @_parser['queries']['list_ideals'])
             ids = r.json['results']['bindings']
             @_ideals = ids.map{ |x| _uri_to_name(x['ideal']['value']) }
         end
         if output
-            _pputs(@_ideals)
+            _pprint(@_ideals)
         end
     end
 
