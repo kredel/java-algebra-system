@@ -55,7 +55,7 @@ end
     do this.
 =end
 def _pprint(l)
-    col = max(l.map { |x| x.length } ) + 3 #  [len(x) for x in l]) + 3
+    col = l.map{ |x| x.length }.max + 3 #  [len(x) for x in l]) + 3
     padded = l.map{|x| x.ljust(col) }.join('')
     print textwrap(padded).join('\n')
 end
@@ -465,7 +465,7 @@ class SD_Ideal
 =end
     def jas_hasLengthsList()
         begin
-            ll = @jasBasis.map{|x| x.size() }.sort()
+            ll = @jasBasis.map{|x| x.size() }.sort
             @FROM_JAS_hasLengthsList = ll.map{|x| x.to_s}.join(",") 
         rescue
             @FROM_JAS_hasLengthsList = ''
@@ -503,7 +503,8 @@ class SD_Ideal
         #K = []
         #DL = map(lambda m : K.extend(map(lambda l : str(l), m.variables())), @sageBasis)
         kk = @jasRing.ring.vars
-        return sorted(list(set(kk))).join(",")
+        #return sorted(list(set(kk))).join(",")
+        return kk.sort().uniq().join(",")
     end
 
 =begin rdoc
