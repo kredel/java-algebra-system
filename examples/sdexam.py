@@ -8,8 +8,10 @@ from jas import terminate, startLog, auto_inject
 
 auto_inject = False
 sd = sdjas.SymbolicData()
-#sd.list_ideals()
 print
+#sd.list_ideals()
+#print
+#exit();
 
 bb87 = sd.get_ideal('Buchberger-87')
 #bb87 = sd.get_ideal('Buchberger-87.Homog')

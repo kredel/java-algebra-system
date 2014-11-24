@@ -8,8 +8,10 @@ require "examples/sdjas"
 startLog()
 
 sd = SymbolicData.new()
-#sd.list_ideals()
 puts
+#sd.list_ideals()
+#puts
+#exit();
 
 bb87 = sd.get_ideal('Buchberger-87')
 #bb87 = sd.get_ideal('Buchberger-87.Homog')

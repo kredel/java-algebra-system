@@ -56,11 +56,11 @@ end
 =end
 def _pprint(l)
     col = l.map{ |x| x.length }.max + 3 #  [len(x) for x in l]) + 3
-    num = 70
     padded = l.map{|x| x.ljust(col) } #.join('')
     #print textwrap(padded).join('\n')
     line = ''
-    padded.map{|x| line.length > 70 ? begin puts line; line='' end : line+=x }
+    num = 70
+    padded.each{|x| line.length < num ? line+=x : begin puts line; line=x end }
 end
 
 =begin rdoc
@@ -117,8 +117,8 @@ class SymbolicData
         sh, sp, port = @url.partition(':') # hack for subst and GI host error
         @url = @sdhost + sp + port
         @sqpath = @_parser['sparql']['path']
-        puts "SymbolicData() initialized"
-        puts "url    = " + str(@url)
+        #puts "SymbolicData() initialized"
+        #puts "url    = " + str(@url)
         #puts "sdhost = " + str(@sdhost)
     end
 
