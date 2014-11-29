@@ -355,13 +355,19 @@ clean:
 	#rm -f application/application arith/arith kern/kern gbmod/gbmod poly/poly ps/ps gb/gb structure/structure ufd/ufd util/util vector/vector
 
 
+testp:
+	find examples -name "*.py"|grep -v jas.py |grep -v sdexam.py |grep -v plot|grep -v versuch|sort|xargs -L 1 echo "time jython $(SOPTS)" | awk '{ printf "echo %s\n", $$0; printf "%s\n", $$0 }' > ./all_jython.sh
+	time bash all_jython.sh 2>&1 | tee tjy.out
+	-grep File tjy.out
+
+testr:
+	find examples -name "*.rb"|grep -v jas.rb |grep -v versuch|sort|xargs -L 1 echo "time jruby $(SOPTS)" | awk '{ printf "echo %s\n", $$0; printf "%s\n", $$0 }' > ./all_jruby.sh
+	time bash all_jruby.sh 2>&1 | tee tjr.out
+	-egrep -i '(error|__file__)' tjr.out
+
 tests:
 	ant test 2>&1 | tee t.out
 	ant exam 2>&1 | tee e.out
-	find examples -name "*.py"|grep -v jas.py |grep -v plot|grep -v versuch|sort|xargs -L 1 echo "time jython $(SOPTS)" | awk '{ printf "echo %s\n", $$0; printf "%s\n", $$0 }' > ./all_jython.sh
-	time bash all_jython.sh 2>&1 | tee tjy.out
-	find examples -name "*.rb"|grep -v jas.rb |grep -v versuch|sort|xargs -L 1 echo "time jruby $(SOPTS)" | awk '{ printf "echo %s\n", $$0; printf "%s\n", $$0 }' > ./all_jruby.sh
-	time bash all_jruby.sh 2>&1 | tee tjr.out
 	make edu.jas.application.RunGB cl="seq  examples/trinks6.jas"   | tee tr.out
 	make edu.jas.application.RunGB cl="seq+ examples/trinks6.jas"   | tee -a tr.out
 	make edu.jas.application.RunGB cl="par  examples/trinks6.jas 4" | tee -a tr.out
