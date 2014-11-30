@@ -75,6 +75,7 @@ def get_value_for_URI(sd, uri, predicate)
     query = "SELECT * WHERE { <#{uri}> <#{predicate}> ?x }"
     begin
         qj = SPARQL.new(sd, query)
+        #puts "qj.json = " + str(qj.json)
         result = qj.json['results']['bindings'][0]['x']['value']
     rescue
         #pass 
@@ -111,7 +112,7 @@ class SymbolicData
         begin
             @url = @_parser['sparql'][@_sparql]
         rescue
-            raise ValueError("The SPARQL endpoint referenced by '#{@_sparql}' was not found in the sd.ini file." )
+            raise SyntaxError, "The SPARQL endpoint referenced by '#{@_sparql}' was not found in the sd.ini file." 
         end
         @sdhost = @_parser['DEFAULT']['sdhost']
         sh, sp, port = @url.partition(':') # hack for subst and GI host error
@@ -205,7 +206,7 @@ class SPARQL
            response = conn.request( req );
            if not response.is_a?(Net::HTTPSuccess)
               puts "response = " + response.to_s + "\n"
-              raise ValueError, "HTTP GET #{uri} not successful" 
+              raise SyntaxError, "HTTP GET #{uri} not successful" 
            end
 
            #head = response.code.to_s + " " + response.msg
@@ -276,8 +277,9 @@ class SD_Ideal
         @_request = SPARQL.new(@_sd, query)
 
         if @_request.json['results']['bindings'].size == 0
-            raise ValueError("No data found for <#{@uri}>.\nMaybe the name was misspelled or the SPARQL endpoint is unavailable.")
+            raise SyntaxError, "No data found for <#{@uri}>.\nMaybe the name was misspelled or the SPARQL endpoint is unavailable."
         end
+        #puts "@_request.json = " + str(@_request.json) 
 
         # append the keys to the @dict.
         for t in @_request.json['results']['bindings']
@@ -285,6 +287,7 @@ class SD_Ideal
             obj = t['o']['value']
             @dict[_uri_to_name(uri)] = obj
         end
+        #puts "@dict = " + str(@dict) 
 
         # Next we need a resource file with the actual expressions that are
         # used to generate the ideal.
@@ -383,7 +386,7 @@ class SD_Ideal
            response = conn.request( req );
            if not response.is_a?(Net::HTTPSuccess)
               puts "response = " + response.to_s + "\n"
-              raise ValueError, "HTTP GET #{url} not successful" 
+              raise SyntaxError, "HTTP GET #{url} not successful" 
            end
            #puts "head = " + response.code.to_s + " " + response.msg + "\n"
            xml = response.body();
@@ -392,13 +395,14 @@ class SD_Ideal
 
         #xmlTree = parseString(xml)
         xmlTree = REXML::Document.new(xml)
+        #puts "xmlTree = " + str(xmlTree)
 
         # Code snipped borrowed from Albert Heinle
         if xmlTree.elements.to_a("*/vars").empty? # Check, if vars are there
-            raise ValueError("The given XMLString does not contain variables for the IntPS System")
+            raise SyntaxError, "The given XMLString does not contain variables for the IntPS System"
         end
         if xmlTree.elements.to_a("*/basis").empty? # Check, if we have a basis
-            raise ValueError("The given XMLString does not contain a basis for the IntPS System")
+            raise SyntaxError, "The given XMLString does not contain a basis for the IntPS System"
         end
         # -------------------- Input Check finished --------------------
         # From here, we can assume that the input is given correct
@@ -419,33 +423,50 @@ class SD_Ideal
         if @dict.include?('hasParameters') and @dict['hasParameters'] != ''
             #K = 'K.<%s> = PolynomialRing(ZZ)' % @hasParameters
             #R = K + '; R.<%s> = PolynomialRing(K)' % @hasVariables
-            kk = 'PolyRing.new(ZZ(),"%s")' % @dict['hasParameters']
-            rr = 'rr = PolyRing.new(%s,"%s")' % [ kk, @dict['hasVariables']]
-            gens = 'one,%s,%s' % [@dict['hasParameters'], @dict['hasVariables']]
+            kk = PolyRing.new(ZZ(), @dict['hasParameters'].to_s ) 
+            rr = PolyRing.new(kk, @dict['hasVariables'].to_s )
+            gens = '%s,%s' % [@dict['hasParameters'], @dict['hasVariables']]
         else
             #R = 'R.<%s> = PolynomialRing(ZZ)' % (@hasVariables)
-            rr = 'rr = PolyRing.new(ZZ(),"%s")' % @dict['hasVariables']
-            gens = 'one,%s' % @dict['hasVariables']
+            rr = PolyRing.new(ZZ(), @dict['hasVariables'].to_s )
+            gens = '%s' % @dict['hasVariables']
         end
         # translate JAS syntax to pure Python and execute
         #exec(preparse(R))
-        rr = rr + "; " + gens + " = rr.gens();"
+        ##rr = rr + "; " + gens + " = rr.gens();"
         #puts "rr = " + str(rr)
+        rv = "one," + gens + " = rr.gens();"
+        #puts "rv = " + str(rv)
         myb = binding
-        eval(rr.to_s, myb)
+        #pr = eval(rr.to_s, myb)
+        pr = eval(rv.to_s, myb) # safe here since rr did evaluate
         @jasRing = rr;
+        #puts "pr = " + str(pr.map{|x| x.to_s})
+        #puts "pr = " + str(pr)
         #eval(gens + " = rr.gens();", myb)
+        # avoid XSS: check if polynomials are clean
+        vs = GenPolynomialTokenizer.expressionVariables(gens.to_s)
+        vs = vs.sort
+        #puts "vs = " + str(vs)
+        vsb = []
+        @basis.each{ |s| vsb += GenPolynomialTokenizer.expressionVariables(s.to_s) }
+        vsb = vsb.sort.uniq
+        #puts "vsb = " + str(vsb)
+        if vs != vsb 
+           raise SyntaxError, "invalid variables: expected " + vs.to_s + ", got " + vsb.to_s
+        end
         # construct polynomials in the constructed ring from
         # the polynomial expressions
         @jasBasis = []
         for ps in @basis
             #puts "ps = " + str(ps)
-            if ps.is_a? String and ps.include?('^')
-               ps = ps.sub('^', '**')
-            end
+            ps = ps.to_s
+            ps = ps.gsub('^', '**')
             #exec(preparse("symbdata_ideal = %s" % ps))
-            eval("symbdata_poly = %s" % ps, myb)
-            @jasBasis.push(myb.eval("symbdata_poly"))
+            pol = eval("symbdata_poly = %s" % ps, myb)
+            #puts "pol = " + str(pol)
+            #@jasBasis.push(myb.eval("symbdata_poly"))
+            @jasBasis.push(pol)
         end
         #puts "jasBasis = " + str(@jasBasis)
     end
