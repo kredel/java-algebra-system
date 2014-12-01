@@ -329,36 +329,49 @@ class SD_Ideal:
         self.basis = map(lambda poly: str(poly.firstChild.data).strip(),polynomials.getElementsByTagName("poly"))
 
     def __constructJasObject(self):
-        from types import StringType
+        #from types import StringType
         from jas import PolyRing, ZZ
         # set up the polynomial ring (Jas syntax)
         if 'hasParameters' in self.__dict__ and self.hasParameters != '':
             #K = 'K.<%s> = PolynomialRing(ZZ)' % self.hasParameters
             #R = K + '; R.<%s> = PolynomialRing(K)' % self.hasVariables
-            K = 'PolyRing(ZZ(),"%s")' % self.hasParameters
-            R = 'R = PolyRing(%s,"%s")' % (K, self.hasVariables)
-            gens = '(one,%s,%s)' % (self.hasParameters, self.hasVariables)
+            K = PolyRing(ZZ(), str(self.hasParameters) )
+            R = PolyRing(K, str(self.hasVariables))
+            gens = '%s,%s' % (self.hasParameters, self.hasVariables)
         else:
             #R = 'R.<%s> = PolynomialRing(ZZ)' % (self.hasVariables)
-            R = 'R = PolyRing(ZZ(),"%s")' % (self.hasVariables)
-            gens = '(one,%s)' % self.hasVariables
+            R = PolyRing(ZZ(), str(self.hasVariables) )
+            gens = str(self.hasVariables)
         # translate Jas syntax to pure Python and execute
         #exec(preparse(R))
-        R = R + "; " + gens + " = R.gens();"
+        Rg = "(one," + gens + ") = R.gens();"
         #print str(R)
-        exec(str(R))
-        print "R = " + str(R)
+        exec(str(Rg)) # safe here since R did evaluate
+        #print "R = " + str(R)
         self.jasRing = R;
+
+        # avoid XSS: check if polynomials are clean
+        from edu.jas.poly import GenPolynomialTokenizer
+        vs = GenPolynomialTokenizer.expressionVariables(str(gens))
+        vs = sorted(vs)
+        #print "vs = " + str(vs)
+        vsb = set()
+        [ vsb.update(GenPolynomialTokenizer.expressionVariables(str(s))) for s in self.basis]
+        vsb = sorted(list(vsb)) 
+        #print "vsb = " + str(vsb)
+        if vs != vsb:
+           raise ValueError("invalid variables: expected " + str(vs) + ", got " + str(vsb))
         # construct polynomials in the constructed ring from
         # the polynomial expressions
         self.jasBasis = []
         for ps in self.basis:
             #print "ps = " + str(ps)
-            if type(ps) is StringType and '^' in ps:
-               ps = ps.replace('^', '**')
+            ps = str(ps)
+            ps = ps.replace('^', '**')
             #exec(preparse("symbdata_ideal = %s" % ps))
-            exec("symbdata_poly = %s" % ps)
-            self.jasBasis.append(symbdata_poly)
+            #exec("symbdata_poly = %s" % ps)
+            pol = eval(ps)
+            self.jasBasis.append(pol)
         #print "jasBasis = " + str([ str(p) for p in self.jasBasis])
 
     # the following functions will all use Jas to

@@ -112,7 +112,7 @@ class SymbolicData
         begin
             @url = @_parser['sparql'][@_sparql]
         rescue
-            raise SyntaxError, "The SPARQL endpoint referenced by '#{@_sparql}' was not found in the sd.ini file." 
+            raise ArgumentError, "The SPARQL endpoint referenced by '#{@_sparql}' was not found in the sd.ini file." 
         end
         @sdhost = @_parser['DEFAULT']['sdhost']
         sh, sp, port = @url.partition(':') # hack for subst and GI host error
@@ -206,7 +206,7 @@ class SPARQL
            response = conn.request( req );
            if not response.is_a?(Net::HTTPSuccess)
               puts "response = " + response.to_s + "\n"
-              raise SyntaxError, "HTTP GET #{uri} not successful" 
+              raise RuntimeError, "HTTP GET #{uri} not successful" 
            end
 
            #head = response.code.to_s + " " + response.msg
@@ -277,7 +277,7 @@ class SD_Ideal
         @_request = SPARQL.new(@_sd, query)
 
         if @_request.json['results']['bindings'].size == 0
-            raise SyntaxError, "No data found for <#{@uri}>.\nMaybe the name was misspelled or the SPARQL endpoint is unavailable."
+            raise ArgumentError, "No data found for <#{@uri}>.\nMaybe the name was misspelled or the SPARQL endpoint is unavailable."
         end
         #puts "@_request.json = " + str(@_request.json) 
 
@@ -376,17 +376,15 @@ class SD_Ideal
 
         xml = nil
         Net::HTTP.start( url.host, url.port ) do |conn|
-           #conn = httplib.HTTPConnection(url)
-           #puts "conn = " + str(conn)
            #puts "path = " + str(path)
            url.path = path
            #puts "path = " + str(url.request_uri)
+           #conn.request("GET", path );
            req = Net::HTTP::Get.new(url.request_uri)
-                 #conn.request("GET", path );
            response = conn.request( req );
            if not response.is_a?(Net::HTTPSuccess)
               puts "response = " + response.to_s + "\n"
-              raise SyntaxError, "HTTP GET #{url} not successful" 
+              raise RuntimeError, "HTTP GET #{url} not successful" 
            end
            #puts "head = " + response.code.to_s + " " + response.msg + "\n"
            xml = response.body();
@@ -399,10 +397,10 @@ class SD_Ideal
 
         # Code snipped borrowed from Albert Heinle
         if xmlTree.elements.to_a("*/vars").empty? # Check, if vars are there
-            raise SyntaxError, "The given XMLString does not contain variables for the IntPS System"
+            raise ArgumentError, "The given XMLString does not contain variables for the IntPS System"
         end
         if xmlTree.elements.to_a("*/basis").empty? # Check, if we have a basis
-            raise SyntaxError, "The given XMLString does not contain a basis for the IntPS System"
+            raise ArgumentError, "The given XMLString does not contain a basis for the IntPS System"
         end
         # -------------------- Input Check finished --------------------
         # From here, we can assume that the input is given correct
@@ -417,7 +415,6 @@ class SD_Ideal
 =begin rdoc
 =end
     def __constructJasObject()
-        #from jas import PolyRing, ZZ
         #require "jas"
         # set up the polynomial ring (Jas syntax)
         if @dict.include?('hasParameters') and @dict['hasParameters'] != ''
@@ -431,7 +428,7 @@ class SD_Ideal
             rr = PolyRing.new(ZZ(), @dict['hasVariables'].to_s )
             gens = '%s' % @dict['hasVariables']
         end
-        # translate JAS syntax to pure Python and execute
+        # execute remaining JAS semantic constructs
         #exec(preparse(R))
         ##rr = rr + "; " + gens + " = rr.gens();"
         #puts "rr = " + str(rr)
@@ -441,9 +438,8 @@ class SD_Ideal
         #pr = eval(rr.to_s, myb)
         pr = eval(rv.to_s, myb) # safe here since rr did evaluate
         @jasRing = rr;
-        #puts "pr = " + str(pr.map{|x| x.to_s})
         #puts "pr = " + str(pr)
-        #eval(gens + " = rr.gens();", myb)
+
         # avoid XSS: check if polynomials are clean
         vs = GenPolynomialTokenizer.expressionVariables(gens.to_s)
         vs = vs.sort
@@ -465,7 +461,6 @@ class SD_Ideal
             #exec(preparse("symbdata_ideal = %s" % ps))
             pol = eval("symbdata_poly = %s" % ps, myb)
             #puts "pol = " + str(pol)
-            #@jasBasis.push(myb.eval("symbdata_poly"))
             @jasBasis.push(pol)
         end
         #puts "jasBasis = " + str(@jasBasis)
