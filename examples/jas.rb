@@ -985,7 +985,7 @@ Compute squarefree factors of polynomial.
         if isPolynomial()
            sqf = Ring.getEngineSqf(@ring); 
            if sqf == nil 
-              raise ValueError, "squarefreeFactors not implemented for " + @ring.to_s;
+              raise NotImplementedError, "squarefreeFactors not implemented for " + @ring.to_s;
            end
            cf = @ring.coFac;
            if cf.getClass().getSimpleName() == "GenPolynomialRing"
@@ -1000,7 +1000,7 @@ Compute squarefree factors of polynomial.
            end
            return ll;
         else
-           raise ValueError, "squarefreeFactors not implemented for " + a.to_s;
+           raise NotImplementedError, "squarefreeFactors not implemented for " + a.to_s;
         end
     end
 
@@ -1013,7 +1013,7 @@ rational number and algebriac number coefficients.
         if isPolynomial()
            factor = Ring.getEngineFactor(@ring); 
            if factor == nil 
-              raise ValueError, "factors not implemented for " + @ring.to_s;
+              raise NotImplementedError, "factors not implemented for " + @ring.to_s;
            end
            cf = @ring.coFac;
            if cf.getClass().getSimpleName() == "GenPolynomialRing"
@@ -1028,7 +1028,7 @@ rational number and algebriac number coefficients.
            end
            return ll;
         else
-           raise ValueError, "factors not implemented for " + a.to_s;
+           raise NotImplementedError, "factors not implemented for " + a.to_s;
         end
     end
 
@@ -1041,7 +1041,7 @@ rational number coefficients.
         if isPolynomial()
            factor = Ring.getEngineFactor(@ring); 
            if factor == nil 
-              raise ValueError, "factors not implemented for " + @ring.to_s;
+              raise NotImplementedError, "factors not implemented for " + @ring.to_s;
            end
            begin
                ll = factor.factorsAbsolute( a );
@@ -1051,10 +1051,10 @@ rational number coefficients.
 ##                 ll[ RingElem.new( a ) ] = i;
                return ll;
            rescue Exception => e
-               raise ValueError, "error factorsAbsolute " + @ring.to_s;
+               raise RuntimeError, "error factorsAbsolute " + @ring.to_s;
            end
         else
-           raise ValueError, "factors not implemented for " + a.to_s;
+           raise NotImplementedError, "factors not implemented for " + a.to_s;
         end
     end
 
@@ -1299,7 +1299,7 @@ Compatibility method for Sage/Singular.
             a = a.leadingExpVector();
         end
         if a.getClass().getSimpleName() != "ExpVectorLong"
-            raise ValueError, "No ExpVector given " + str(a) + ", " + str(b)
+            raise ArgumentError, "No ExpVector given " + str(a) + ", " + str(b)
         end
         if b == nil
             return False;
@@ -1311,7 +1311,7 @@ Compatibility method for Sage/Singular.
             b = b.leadingExpVector();
         end
         if b.getClass().getSimpleName() != "ExpVectorLong"
-            raise ValueError, "No ExpVector given " + str(a) + ", " + str(b)
+            raise ArgumentError, "No ExpVector given " + str(a) + ", " + str(b)
         end
         return a.divides(b);
     end
@@ -1770,7 +1770,7 @@ order = term order.
 =end
     def initialize(coeff,vars,order=self.class.grad)
         if coeff == nil
-            raise ValueError, "No coefficient given."
+            raise ArgumentError, "No coefficient given."
         end
         cf = coeff;
         if coeff.is_a? RingElem
@@ -1780,7 +1780,7 @@ order = term order.
             cf = coeff.ring;
         end
         if vars == nil
-            raise ValueError, "No variable names given."
+            raise ArgumentError, "No variable names given."
         end
         names = vars;
         if vars.is_a? String
@@ -2002,7 +2002,7 @@ Create JAS polynomial Residue as ring element.
 =end
 def RC(ideal,r=0)
     if ideal == nil
-        raise ValueError, "No ideal given."
+        raise ArgumentError, "No ideal given."
     end
     if ideal.is_a? SimIdeal
         #puts "ideal.pset = " + str(ideal.pset) + "\n";
@@ -2033,7 +2033,7 @@ Create JAS polynomial Local as ring element.
 =end
 def LC(ideal,d=0,n=1)
     if ideal == nil
-        raise ValueError, "No ideal given."
+        raise ArgumentError, "No ideal given."
     end
     if ideal.is_a? SimIdeal
         ideal = Ideal.new(ideal.pset);
@@ -2078,7 +2078,7 @@ Create JAS polynomial SolvableResidue as ring element.
 =end
 def SRC(ideal,r=0)
     if ideal == nil
-        raise ValueError, "No ideal given."
+        raise ArgumentError, "No ideal given."
     end
     if ideal.is_a? SolvIdeal
         #puts "ideal.pset = " + str(ideal.pset) + "\n";
@@ -2109,7 +2109,7 @@ Create JAS polynomial SolvableLocal as ring element.
 =end
 def SLC(ideal,d=0,n=1)
     if ideal == nil
-        raise ValueError, "No ideal given."
+        raise ArgumentError, "No ideal given."
     end
     if ideal.is_a? SolvIdeal
         ideal = SolvableIdeal.new(ideal.pset);
@@ -2154,7 +2154,7 @@ Create JAS polynomial SolvableLocalResidue as ring element.
 =end
 def SLR(ideal,d=0,n=1)
     if ideal == nil
-        raise ValueError, "No ideal given."
+        raise ArgumentError, "No ideal given."
     end
     if ideal.is_a? SolvIdeal
         ideal = SolvableIdeal.new(ideal.pset);
@@ -2204,7 +2204,7 @@ def RR(flist,n=1,r=0)
         n = 1;
     end
     if flist == nil
-        raise ValueError, "No list given."
+        raise ArgumentError, "No list given."
     end
     if flist.is_a? Array
         flist = rbarray2arraylist( flist.map { |x| x.factory() }, rec=1);
@@ -2718,7 +2718,7 @@ Represent p as element of this ideal.
            n = PseudoReductionSeq.new().normalform(rr,gg,p);
         end
         if not n.isZERO()
-           raise ValueError, "p ist not a member of the ideal"
+           raise StandardError, "p ist not a member of the ideal"
         end
         #t = System.currentTimeMillis() - t;
         #puts "sequential reduction executed in " + str(t) + " ms"; 
@@ -3388,7 +3388,7 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
 =end
     def initialize(coeff,vars,order,rel=nil)
         if coeff == nil
-            raise ValueError, "No coefficient given."
+            raise ArgumentError, "No coefficient given."
         end
         cf = coeff;
         if coeff.is_a? RingElem
@@ -3398,7 +3398,7 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
             cf = coeff.ring;
         end
         if vars == nil
-            raise ValueError, "No variable names given."
+            raise ArgumentError, "No variable names given."
         end
         names = vars;
         if vars.is_a? String
@@ -4988,7 +4988,7 @@ vars = string with variable names.
 =end
     def initialize(coeff,vars)
         if coeff == nil
-            raise ValueError, "No coefficient given."
+            raise ArgumentError, "No coefficient given."
         end
         cf = coeff;
         if coeff.is_a? RingElem
@@ -4998,7 +4998,7 @@ vars = string with variable names.
             cf = coeff.ring;
         end
         if vars == nil
-            raise ValueError, "No variable names given."
+            raise ArgumentError, "No variable names given."
         end
         names = vars;
         if vars.is_a? String
