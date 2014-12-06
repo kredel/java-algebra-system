@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 
 import edu.jas.gbufd.MultiplicativeSet;
 import edu.jas.gbufd.MultiplicativeSetSquarefree;
+//import edu.jas.gbufd.MultiplicativeSetFactors;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -62,7 +63,7 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
      */
     public Condition(GenPolynomialRing<C> ring) {
         this(new Ideal<C>(ring), new MultiplicativeSetSquarefree<C>(ring));
-        //this(new Ideal<C>(ring),new MultiplicativeSetFactors<C>(ring));
+        //this(new Ideal<C>(ring), new MultiplicativeSetFactors<C>(ring));
         //if (ring == null) { // too late to test
         //    throw new IllegalArgumentException("only for non null rings");
         //}
@@ -75,7 +76,7 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
      * @param z an ideal of zero polynomials.
      */
     public Condition(Ideal<C> z) {
-        this(z, new MultiplicativeSetSquarefree<C>(z.getRing()));
+        this(z, new MultiplicativeSetSquarefree<C>(z.list.ring));
         //this(z,new MultiplicativeSetFactors<C>(z.list.ring));
     }
 
@@ -278,8 +279,8 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
             idz = new Ideal<C>(zero.getRing(), Z); // changes ideal
         }
         Condition<C> nc = new Condition<C>(idz, ms);
-        if (nc.isContradictory()) { // evenatually a factor became 1
-            //logger.info("simplify contradiction: " + nc);
+        if (nc.isContradictory()) { // eventually a factor became 1
+            logger.info("simplify contradiction: " + nc);
             return null;
         }
         if (idz.equals(zero) && ms.equals(nonZero)) {
@@ -355,12 +356,26 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
                 white = Bp;
                 return new ColorPolynomial<C>(green, red, white);
                 // since break is not possible
+            case WHITE:
             default:
+                logger.info("recheck undetermined coeff c = " + c + ", cond = " + this);
+                if (extendZero(c) == null) { // contradiction if colored green
+                    logger.info("recheck assume red");
+                    red = red.sum(c, e); // assume red
+                    white = Bp;
+                    return new ColorPolynomial<C>(green, red, white);
+                }
+                if (extendNonZero(c) == null) { // contradiction if colored red
+                    logger.info("recheck assume green");
+                    green = green.sum(c, e); // assume green
+                    Ap = Bp;
+                    continue;
+                }
                 System.out.println("undetermined cond       = " + this);
                 System.out.println("undetermined poly     A = " + A);
                 System.out.println("undetermined poly green = " + green);
                 System.out.println("undetermined poly   red = " + red);
-                System.out.println("undetermined poly    Ap = " + Ap);
+                System.out.println("undetermined poly    Bp = " + Bp);
                 System.out.println("undetermined coeff    c = " + c);
                 throw new RuntimeException("undetermined, c is white = " + c);
                 // is catched in minimalGB

@@ -441,8 +441,9 @@ public class CReductionSeq<C extends GcdRingElem<C>> implements Serializable
                             Ap = A.ring.getZERO();
                             continue;
                         }
-                    } else {
-                        System.out.println("this should not be printed " + c);
+                    } else { // contradiction
+                        System.out.println("this should not be printed, c  = " + c);
+                        System.out.println("this should not be printed, cz = " + cz);
                     }
                     Condition<C> ez = cz.extendZero(c);
                     if (ez != null) {
