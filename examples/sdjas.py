@@ -26,6 +26,7 @@ from textwrap import wrap as textwrap
 
 # Some internal helper functions that are not meant to be
 # called by the user
+
 def _uri_to_name(uri):
     """
     Converts a uri to a name or key by only taking everything
