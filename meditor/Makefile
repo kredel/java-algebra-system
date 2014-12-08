@@ -28,7 +28,7 @@ all: jas-meditor.jar
 
 $(CLASSES): $(FILES)
 	-mkdir classes
-	javac -g -source 1.4 -target 1.4 -classpath $(CLASSPATH) -sourcepath src -d classes src/edu/jas/editorengine/*.java
+	javac -g -source 1.5 -target 1.5 -classpath $(CLASSPATH) -sourcepath src -d classes src/edu/jas/editorengine/*.java
 
 jas-meditor.jar: $(CLASSES) $(JASPATH)/examples/jas.py manifest.mf services/jscl.editor.EngineFactory
 	-mkdir classes/META-INF
