@@ -33,8 +33,8 @@ def _uri_to_name(uri):
     after the last / or (if present) #.
 
     Examples:
-        http://example.com/test             ->   test
-        http://example.com/model#testedBy   ->   testedBy
+     - http://example.com/test             ->   test
+     - http://example.com/model#testedBy   ->   testedBy
     """
     usplit = urlsplit(uri)
     if usplit.fragment != '':
