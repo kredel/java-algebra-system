@@ -6,6 +6,7 @@ package edu.jas.gb;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -141,7 +142,7 @@ public class WordGroebnerBaseSeq<C extends RingElem<C>> extends WordGroebnerBase
                     continue;
                 }
                 if (debug) {
-                    logger.debug("ht(S) = " + s.leadingWord());
+                    logger.info("ht(S) = " + s.leadingWord());
                 }
 
                 H = red.normalform(G, s);
@@ -173,9 +174,11 @@ public class WordGroebnerBaseSeq<C extends RingElem<C>> extends WordGroebnerBase
                 }
             }
         }
-        logger.debug("#sequential list = " + G.size());
+        logger.info("#sequential list = " + G.size());
         G = minimalGB(G);
         logger.info("" + pairlist);
+        Collections.sort(G);
+        //Collections.reverse(G);
         return G;
     }
 
