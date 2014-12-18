@@ -1995,6 +1995,7 @@ java_import "edu.jas.application.SolvableLocalResidue";
 java_import "edu.jas.application.SolvableLocalResidueRing";
 java_import "edu.jas.application.IdealWithRealAlgebraicRoots";
 java_import "edu.jas.application.ComprehensiveGroebnerBaseSeq";
+java_import "edu.jas.application.WordIdeal";
 
 
 =begin rdoc
@@ -4908,7 +4909,7 @@ Create a string representation.
 Create a word ideal.
 =end
     def ideal(ringstr="",list=nil)
-        return WordIdeal.new(self,ringstr,list);
+        return WordPolyIdeal.new(self,ringstr,list);
     end
 
 =begin rdoc
@@ -4961,7 +4962,7 @@ Create an element from a string or object.
            end
            poly = str(poly);
         end
-        ii = WordIdeal.new(self, "( " + poly + " )");
+        ii = WordPolyIdeal.new(self, "( " + poly + " )");
         list = ii.pset.list;
         if list.size > 0
             return RingElem.new( list[0] );
@@ -5024,7 +5025,7 @@ Represents a JAS non-commutative polynomial ideal.
 Methods for two-sided Groebner bases and others.
 <b>Note:</b> watch your step: check that jruby does not reorder multiplication.
 =end
-class WordIdeal
+class WordPolyIdeal
 
     attr_reader :ring, :list
 
@@ -5068,7 +5069,7 @@ Compute a two-sided Groebner base.
         gg = WordGroebnerBaseSeq.new().GB(ff);
         t = System.currentTimeMillis() - t;
         puts "executed twosidedGB in #{t} ms\n"; 
-        return WordIdeal.new(@ring,"",gg);
+        return WordPolyIdeal.new(@ring, "", gg);
     end
 
 =begin rdoc
@@ -5091,14 +5092,49 @@ Test if this is a two-sided Groebner base.
         return b;
     end
 
+=begin rdoc
+Compare two ideals.
+=end
+    def <=>(other)
+        #return @list <=> other.list;
+        s = WordIdeal.new(@ring.ring, @list);
+        o = WordIdeal.new(@ring.ring, other.list);
+        return s.compareTo(o); 
+    end
+
+=begin rdoc
+Test if two ideals are equal.
+=end
+    def ===(other)
+        if not other.is_a? WordPolyIdeal
+           return false;
+        end
+        #s, o = self, other;
+        #return (s <=> o) == 0; 
+        s = WordIdeal.new(@ring.ring, @list);
+        t = WordIdeal.new(@ring.ring, other.list);
+        return s.equals(t); 
+    end
+
+=begin rdoc
+Compute the sum of this and the ideal.
+=end
+    def sum(other)
+        s = WordIdeal.new(@ring.ring, @list);
+        t = WordIdeal.new(@ring.ring, other.list);
+        #nn = @list + other.list; #
+        nn = s.sum( t );
+        return WordPolyIdeal.new(@ring,"",nn.list);
+    end
+
 end
 
 # define some shortcuts
-ZZ = ZZ();
-QQ = QQ();
-CC = CC();
-CR = CR();
-DD = DD();
+#ZZ = ZZ();
+#QQ = QQ();
+#CC = CC();
+#CR = CR();
+#DD = DD();
 #no GF = GF();
 
 end
