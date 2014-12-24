@@ -113,7 +113,7 @@ public abstract class WordGroebnerBaseAbstract<C extends RingElem<C>> implements
      * @return true, if F is a Groebner base, else false.
      */
     public boolean isGB(List<GenWordPolynomial<C>> F) {
-        if (F == null || F.isEmpty()) {
+        if (F == null || F.size() <= 1) {
             return true;
         }
         for (int i = 0; i < F.size(); i++) {
@@ -121,13 +121,19 @@ public abstract class WordGroebnerBaseAbstract<C extends RingElem<C>> implements
             for (int j = i + 1; j < F.size(); j++) {
                 GenWordPolynomial<C> pj = F.get(j);
                 List<GenWordPolynomial<C>> S = red.SPolynomials(pi, pj);
-                if (S.isEmpty()) {
-                    continue;
-                }
                 for (GenWordPolynomial<C> s : S) {
                     GenWordPolynomial<C> h = red.normalform(F, s);
                     if (!h.isZERO()) {
                         logger.info("no GB: pi = " + pi + ", pj = " + pj);
+                        logger.info("s  = " + s + ", h = " + h);
+                        return false;
+                    }
+                }
+                S = red.SPolynomials(pj, pi);
+                for (GenWordPolynomial<C> s : S) {
+                    GenWordPolynomial<C> h = red.normalform(F, s);
+                    if (!h.isZERO()) {
+                        logger.info("no GB: pj = " + pj + ", pi = " + pi);
                         logger.info("s  = " + s + ", h = " + h);
                         return false;
                     }

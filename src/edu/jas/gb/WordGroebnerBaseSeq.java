@@ -77,41 +77,9 @@ public class WordGroebnerBaseSeq<C extends RingElem<C>> extends WordGroebnerBase
         if ( ! ring.coFac.isField() ) {
             throw new IllegalArgumentException("coefficients not from a field");
         }
+        //Collections.sort(G);
         WordPairList<C> pairlist = strategy.create( ring ); 
         pairlist.put(G);
-
-        /*
-        GenWordPolynomial<C> p;
-        WordPairList<C> pairlist = null;
-        int l = F.size();
-        ListIterator<GenWordPolynomial<C>> it = F.listIterator();
-        while (it.hasNext()) {
-            p = it.next();
-            if (p.length() > 0) {
-                p = p.monic();
-                if (p.isONE()) {
-                    G.clear();
-                    G.add(p);
-                    return G; // since no threads are activated
-                }
-                G.add(p);
-                if (pairlist == null) {
-                    //pairlist = new OrderedPairlist<C>(p.ring );
-                    pairlist = strategy.create(p.ring);
-                    if (!p.ring.coFac.isField()) {
-                        throw new IllegalArgumentException("coefficients not from a field");
-                    }
-                }
-                // putOne not required
-                pairlist.put(p);
-            } else {
-                l--;
-            }
-        }
-        if (l <= 1) {
-            return G; // since no threads are activated
-        }
-        */
         logger.info("start " + pairlist);
 
         WordPair<C> pair;
@@ -127,9 +95,9 @@ public class WordGroebnerBaseSeq<C extends RingElem<C>> extends WordGroebnerBase
             }
             pi = pair.pi;
             pj = pair.pj;
-            if ( /*false &&*/debug) {
-                logger.debug("pi    = " + pi);
-                logger.debug("pj    = " + pj);
+            if (debug) {
+                logger.info("pi   = " + pi + ", pj = " + pj);
+                //logger.info("pj    = " + pj);
             }
 
             S = red.SPolynomials(pi, pj);
@@ -177,7 +145,7 @@ public class WordGroebnerBaseSeq<C extends RingElem<C>> extends WordGroebnerBase
         logger.info("#sequential list = " + G.size());
         G = minimalGB(G);
         logger.info("" + pairlist);
-        Collections.sort(G);
+        //Collections.sort(G);
         //Collections.reverse(G);
         return G;
     }
