@@ -78,7 +78,7 @@ public class WordGroebnerBaseSeq<C extends RingElem<C>> extends WordGroebnerBase
             throw new IllegalArgumentException("coefficients not from a field");
         }
         //Collections.sort(G);
-        WordPairList<C> pairlist = strategy.create( ring ); 
+        OrderedWordPairlist<C> pairlist = (OrderedWordPairlist<C>) strategy.create( ring ); 
         pairlist.put(G);
         logger.info("start " + pairlist);
 
@@ -112,6 +112,11 @@ public class WordGroebnerBaseSeq<C extends RingElem<C>> extends WordGroebnerBase
                 if (debug) {
                     logger.info("ht(S) = " + s.leadingWord());
                 }
+                boolean t = pairlist.criterion3(pair.i, pair.j, s.leadingWord());
+                //System.out.println("criterion3(" + pair.i + "," + pair.j + ") = " + t);
+                //if ( !t ) {
+                //    continue;  
+                //}
 
                 H = red.normalform(G, s);
                 if (debug) {
@@ -123,6 +128,10 @@ public class WordGroebnerBaseSeq<C extends RingElem<C>> extends WordGroebnerBase
                     //pair.setZero();
                     continue;
                 }
+                if ( !t ) {
+                    System.out.println("criterion3(" + pair.i + "," + pair.j + ") = " + H); 
+                }
+
                 H = H.monic();
                 if (debug) {
                     logger.info("ht(H) = " + H.leadingWord());
