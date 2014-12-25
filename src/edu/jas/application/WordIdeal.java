@@ -29,6 +29,7 @@ import edu.jas.poly.PolyUtil;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.NotInvertibleException;
+import edu.jas.kern.Scripting;
 
 
 /**
@@ -227,7 +228,7 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
             } else {
                 first = false;
             }
-	    sb.append(p.toString());
+            sb.append(p.toString());
         }
         sb.append(")");
         return sb.toString();
@@ -240,19 +241,44 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
      * @see edu.jas.structure.Element#toScript()
      */
     public String toScript() {
-        // any script case
-        StringBuffer sb = new StringBuffer("[");
-        boolean first = true;
-        for (GenWordPolynomial<C> p: list) {
-            if (!first) {
-                sb.append(",");
-            } else {
-                first = false;
-            }
-	    sb.append(p.toScript());
+        StringBuffer s = new StringBuffer();
+        switch (Scripting.getLang()) {
+        case Ruby:
+            s.append("WordPolyIdeal.new(");
+            break;
+        case Python:
+        default:
+            s.append("WordIdeal(");
         }
-        sb.append("]");
-        return sb.toString();
+        if (ring != null) {
+            s.append(ring.toScript());
+        }
+        if (list == null) {
+            s.append(")");
+            return s.toString();
+        }
+        switch (Scripting.getLang()) {
+        case Ruby:
+            s.append(",\"\",[");
+            break;
+        case Python:
+        default:
+            s.append(",list=[");
+        }
+        boolean first = true;
+        String sa = null;
+        for (GenWordPolynomial<C> oa : list) {
+            sa = oa.toScript();
+            if (first) {
+                first = false;
+            } else {
+                s.append(", ");
+            }
+            //s.append("( " + sa + " )");
+            s.append(sa);
+        }
+        s.append("])");
+        return s.toString();
     }
 
 
