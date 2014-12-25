@@ -9,6 +9,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -272,11 +274,17 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
         } catch (ClassCastException ignored) {
             return false;
         }
-        //if ( isGB && B.isGB ) {
-        //   return list.equals( B.list ); requires also monic polys
-        //} else { // compute GBs ?
-        return this.contains(B) && B.contains(this);
-        //}
+        SortedSet<GenWordPolynomial<C>> s = new TreeSet<GenWordPolynomial<C>>(list);
+        SortedSet<GenWordPolynomial<C>> t = new TreeSet<GenWordPolynomial<C>>(B.list);
+        if ( isGB && B.isGB ) {
+            return s.equals( t ); //requires also monic polys
+        } else { // compute GBs in contains
+            if ( s.equals( t ) ) {
+                return true;
+            } 
+            //System.out.println("no GBs contains");
+            return this.contains(B) && B.contains(this);
+        }
     }
 
 
@@ -512,7 +520,8 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
             }
             GenWordPolynomial<C> z = red.normalform(si, b);
             if (!z.isZERO()) {
-                System.out.println("contains nf(b) != 0: " + b + ", z = " + z + ", si = " + si);
+                System.out.println("contains nf(b) != 0: " + b + ", z = " + z);
+                //System.out.println("contains nf(b) != 0: si = " + si);
                 return false;
             }
         }
