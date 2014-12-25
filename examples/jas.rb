@@ -4893,9 +4893,6 @@ Word polynomial ring constructor.
         else
            @ring = ring;
         end
-        #if not @ring.isAssociative()
-        #   puts "warning: ring is not associative";
-        #end
     end
 
 =begin rdoc
@@ -4909,7 +4906,7 @@ Create a string representation.
 Create a word ideal.
 =end
     def ideal(ringstr="",list=nil)
-        return WordPolyIdeal.new(self,ringstr,list);
+        return WordPolyIdeal.new(self, ringstr, list);
     end
 
 =begin rdoc
@@ -4962,8 +4959,8 @@ Create an element from a string or object.
            end
            poly = str(poly);
         end
-        ii = WordPolyIdeal.new(self, "( " + poly + " )");
-        list = ii.pset.list;
+        ii = WordPolyIdeal.new(self, "( " + poly + " )"); # not working
+        list = ii.list;
         if list.size > 0
             return RingElem.new( list[0] );
         end
@@ -5006,8 +5003,7 @@ vars = string with variable names.
             names = GenPolynomialTokenizer.variableList(vars);
         end
         wf = WordFactory.new(names);
-        ring = GenWordPolynomialRing.new(cf,wf);
-        @ring = ring;
+        @ring = GenWordPolynomialRing.new(cf, wf);
     end
 
 =begin rdoc
@@ -5027,7 +5023,7 @@ Methods for two-sided Groebner bases and others.
 =end
 class WordPolyIdeal
 
-    attr_reader :ring, :list
+    attr_reader :ring, :list, :ideal
 
 =begin rdoc
 Constructor for an ideal in a non-commutative polynomial ring.
@@ -5037,19 +5033,27 @@ Constructor for an ideal in a non-commutative polynomial ring.
         if list == nil
            raise "parse of non-commutative polynomials not implemented"
            sr = StringReader.new( ringstr );
-           tok = GenPolynomialTokenizer.new(ring.ring,sr);
+           tok = GenPolynomialTokenizer.new(ring.ring, sr);
            @list = tok.nextWordPolynomialList();
+           @ideal = WordIdeal.new(ring.ring,@list);
         else
-           @list = rbarray2arraylist(list,rec=1);
+           if list.is_a? WordIdeal
+              @list = list.list;
+              @ideal = list;
+           else 
+              @list = rbarray2arraylist(list,rec=1);
+              @ideal = WordIdeal.new(ring.ring,@list);
+           end
         end
-        #@pset = OrderedPolynomialList.new(ring.ring,@list);
     end
 
 =begin rdoc
 Create a string representation.
 =end
     def to_s()
-        return "( " + @list.map{ |e| e.toScript() }.join(", ") + " )";
+        # return "( " + @list.map{ |e| e.toScript() }.join(", ") + " )";
+        #return "( " + @list.map{ |e| e.toScript() }.join(",\n") + " )";
+        return @ideal.toScript();
     end
 
 =begin rdoc
@@ -5063,13 +5067,11 @@ Compute a two-sided Groebner base.
 Compute a two-sided Groebner base.
 =end
     def twosidedGB()
-        #s = @pset;
-        ff = @list;
         t = System.currentTimeMillis();
-        gg = WordGroebnerBaseSeq.new().GB(ff);
+        gg = @ideal.GB();
         t = System.currentTimeMillis() - t;
         puts "executed twosidedGB in #{t} ms\n"; 
-        return WordPolyIdeal.new(@ring, "", gg);
+        return self;
     end
 
 =begin rdoc
@@ -5083,10 +5085,8 @@ Test if this is a two-sided Groebner base.
 Test if this is a two-sided Groebner base.
 =end
     def isTwosidedGB()
-        #s = @pset;
-        ff = @list;
         t = System.currentTimeMillis();
-        b = WordGroebnerBaseSeq.new().isGB(ff);
+        b = @ideal.isGB();
         t = System.currentTimeMillis() - t;
         puts "isTwosidedGB executed in #{t} ms\n"; 
         return b;
@@ -5096,9 +5096,8 @@ Test if this is a two-sided Groebner base.
 Compare two ideals.
 =end
     def <=>(other)
-        #return @list <=> other.list;
-        s = WordIdeal.new(@ring.ring, @list);
-        o = WordIdeal.new(@ring.ring, other.list);
+        s = @ideal; 
+        o = other.ideal; 
         return s.compareTo(o); 
     end
 
@@ -5109,10 +5108,8 @@ Test if two ideals are equal.
         if not other.is_a? WordPolyIdeal
            return false;
         end
-        #s, o = self, other;
-        #return (s <=> o) == 0; 
-        s = WordIdeal.new(@ring.ring, @list);
-        t = WordIdeal.new(@ring.ring, other.list);
+        s = @ideal; 
+        t = other.ideal; 
         return s.equals(t); 
     end
 
@@ -5120,21 +5117,20 @@ Test if two ideals are equal.
 Compute the sum of this and the ideal.
 =end
     def sum(other)
-        s = WordIdeal.new(@ring.ring, @list);
-        t = WordIdeal.new(@ring.ring, other.list);
-        #nn = @list + other.list; #
+        s = @ideal; 
+        t = other.ideal; 
         nn = s.sum( t );
-        return WordPolyIdeal.new(@ring,"",nn.list);
+        return WordPolyIdeal.new(@ring,"",nn);
     end
 
 end
 
 # define some shortcuts
-#ZZ = ZZ();
-#QQ = QQ();
-#CC = CC();
-#CR = CR();
-#DD = DD();
+ZZ = ZZ();
+QQ = QQ();
+CC = CC();
+CR = CR();
+DD = DD();
 #no GF = GF();
 
 end
