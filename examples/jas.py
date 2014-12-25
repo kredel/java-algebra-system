@@ -1251,10 +1251,19 @@ class SolvableIdeal:
         '''Compare two ideals.
         '''
         t = False;
-        if not isinstance(other,WordIdeal):
+        if not isinstance(other,SolvableIdeal):
             return t;
-        t = self.list.equals(other.list);
+        t = self.pset.compareTo(other.pset);
         return t; 
+
+    def __eq__(self,other):
+        '''Test if two ideals are equal.
+        '''
+        if not isinstance(other, SolvableIdeal):
+            return False;
+        s = self.pset;
+        t = other.pset;
+        return s.equals(t)
 
     def leftGB(self):
         '''Compute a left Groebner base.
@@ -3764,8 +3773,6 @@ class WordRing(Ring):
            self.ring = self.pset.ring;
         else:
            self.ring = ring;
-        #if not self.ring.isAssociative():
-        #   print "warning: ring is not associative";
 
     def __str__(self):
         '''Create a string representation.
@@ -3807,7 +3814,7 @@ class WordRing(Ring):
             except Exception, e:
                 pass
             poly = str(poly);
-        I = WordIdeal(self, "( " + poly + " )");
+        I = WordIdeal(self, "( " + poly + " )"); # not working
         list = I.list;
         if len(list) > 0:
             return RingElem( list[0] );
@@ -3866,23 +3873,19 @@ class WordIdeal:
            tok = GenPolynomialTokenizer(ring.ring,sr);
            self.list = tok.nextSolvablePolynomialList();
         else:
-           self.list = pylist2arraylist(list,rec=1);
-        #self.pset = PolynomialList(ring.ring,self.list);
+           if isinstance(list,WordIdeal):
+              self.list = list.list;
+              self.ideal = list;
+           else:
+              self.list = pylist2arraylist(list,rec=1);
+              self.ideal = jas.application.WordIdeal(ring.ring, self.list);
 
     def __str__(self):
         '''Create a string representation.
         '''
-        ll = [ e.toScript() for e in self.list ]
-        return "( " + ", ".join(ll) + " )"; 
-
-    def __cmp__(self,other):
-        '''Compare two ideals.
-        '''
-        t = False;
-        if not isinstance(other,WordIdeal):
-            return t;
-        t = self.list.equals(other.list);
-        return t; 
+        #ll = [ e.toScript() for e in self.list ]
+        #return "( " + ", ".join(ll) + " )"; 
+        return self.ideal.toScript();
 
     def GB(self):
         '''Compute a two-sided Groebner base.
@@ -3892,13 +3895,11 @@ class WordIdeal:
     def twosidedGB(self):
         '''Compute a two-sided Groebner base.
         '''
-        #s = self.pset;
-        F = self.list;
         t = System.currentTimeMillis();
-        G = WordGroebnerBaseSeq().GB(F);
+        G = self.ideal.GB();
         t = System.currentTimeMillis() - t;
         print "executed twosidedGB in %s ms" % t; 
-        return WordIdeal(self.ring,"",G);
+        return self;
 
     def isGB(self):
         '''Test if this is a two-sided Groebner base.
@@ -3908,13 +3909,41 @@ class WordIdeal:
     def isTwosidedGB(self):
         '''Test if this is a two-sided Groebner base.
         '''
-        #s = self.pset;
         F = self.list;
         t = System.currentTimeMillis();
-        b = WordGroebnerBaseSeq().isGB(F);
+        b = self.ideal.isGB();
         t = System.currentTimeMillis() - t;
         print "isTwosidedGB executed in %s ms" % t; 
         return b;
+
+    def __cmp__(self, other):
+        '''Compare two ideals.
+        '''
+        if not isinstance(other, WordIdeal):
+            return False;
+        s = self.ideal;
+        t = other.ideal;
+        print "__cmp__"
+        return s.compareTo(t);
+
+    def __eq__(self,other):
+        '''Test if two ideals are equal.
+        '''
+        if not isinstance(other, WordIdeal):
+            return False;
+        s = self.ideal;
+        t = other.ideal;
+        print "__eq__"
+        return s.equals(t)
+
+    def sum(self,other):
+        '''Compute the sum of this and the other ideal.
+        '''
+        s = self.ideal;
+        t = other.ideal;
+        N = s.sum(t);
+        return WordIdeal(self.ring, "", N);
+
 
 # doctest:
 if __name__ == '__main__':
