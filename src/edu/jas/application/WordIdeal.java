@@ -33,8 +33,8 @@ import edu.jas.kern.Scripting;
 
 
 /**
- * Word Ideal implements some methods for ideal arithmetic, for example sum,
- * intersection, quotient. <b>Note:</b> only left ideals at the moment.
+ * Word Ideal implements some methods for ideal arithmetic, for example containment,
+ * sum or product. <b>Note:</b> only two-sided ideals.
  * @author Heinz Kredel
  */
 public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal<C>>, Serializable {
@@ -302,8 +302,8 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
         }
         SortedSet<GenWordPolynomial<C>> s = new TreeSet<GenWordPolynomial<C>>(list);
         SortedSet<GenWordPolynomial<C>> t = new TreeSet<GenWordPolynomial<C>>(B.list);
-        if ( isGB && B.isGB ) {
-            return s.equals( t ); //requires also monic polys
+        if ( isGB && B.isGB ) { //requires also monic polys
+            return s.equals( t ); 
         } else { // compute GBs in contains
             if ( s.equals( t ) ) {
                 return true;
@@ -320,15 +320,10 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
      * @return compareTo() of polynomial lists.
      */
     public int compareTo(WordIdeal<C> L) {
-        //return list.compareTo(L.list);
-        int si = L.list.size();
-        if (list.size() < si) { // minimum
-            si = list.size();
-        }
+        int si = Math.min( L.list.size(), list.size() );
         int s = 0;
         final Comparator<Word> wc = ring.alphabet.getAscendComparator();
         Comparator<GenWordPolynomial<C>> cmp = new Comparator<GenWordPolynomial<C>>() {
-
 
             public int compare(GenWordPolynomial<C> p1, GenWordPolynomial<C> p2) {
                 Word w1 = p1.leadingWord();
@@ -350,13 +345,11 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
         };
 
         List<GenWordPolynomial<C>> l1 = new ArrayList<GenWordPolynomial<C>>(list); 
-             //OrderedPolynomialList.<C> sort(ring, list);
         List<GenWordPolynomial<C>> l2 = new ArrayList<GenWordPolynomial<C>>(L.list); 
-             //OrderedPolynomialList.<C> sort(ring, L.list);
-        Collections.sort(l1);
-        Collections.sort(l2);
-        //Collections.sort(l1, cmp);
-        //Collections.sort(l2, cmp);
+        //Collections.sort(l1);
+        //Collections.sort(l2);
+        Collections.sort(l1, cmp);
+        Collections.sort(l2, cmp);
         for (int i = 0; i < si; i++) {
             GenWordPolynomial<C> a = l1.get(i);
             GenWordPolynomial<C> b = l2.get(i);
