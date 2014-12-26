@@ -127,10 +127,10 @@ public class WordIdealTest extends TestCase {
         d = fac.random(kl, ll, el);
         e = d; //fac.random(kl, ll, el);
 
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
-        System.out.println("c = " + c);
-        System.out.println("d = " + d);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+        //System.out.println("c = " + c);
+        //System.out.println("d = " + d);
 
         L.add(a);
         //System.out.println("L = " + L.size() );
@@ -225,9 +225,9 @@ public class WordIdealTest extends TestCase {
         d = c; //fac.random(kl, ll, el);
         e = d; //fac.random(kl, ll, el);
 
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
-        System.out.println("c = " + c);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+        //System.out.println("c = " + c);
         //System.out.println("d = " + d);
 
         L = new ArrayList<GenWordPolynomial<BigRational>>();
@@ -245,13 +245,13 @@ public class WordIdealTest extends TestCase {
         assertTrue("isGB( J )", J.isGB());
 
         K = I.product(J);
-        System.out.println("I = " + I);
-        System.out.println("J = " + J);
-        System.out.println("K = " + K);
+        //System.out.println("I = " + I);
+        //System.out.println("J = " + J);
+        //System.out.println("K = " + K);
         H = J.product(I);
-        System.out.println("H = " + H);
+        //System.out.println("H = " + H);
         G = K.sum(H);
-        System.out.println("G = " + G);
+        //System.out.println("G = " + G);
 	//assertTrue("not isZERO( K )", !K.isZERO());
         assertTrue("isGB( K )", K.isGB());
         assertTrue("isGB( H )", H.isGB());
@@ -283,13 +283,56 @@ public class WordIdealTest extends TestCase {
         assertTrue("isGB( I )", I.isGB());
 
         K = I.product(J);
-        System.out.println("I = " + I);
-        System.out.println("J = " + J);
-        System.out.println("K = " + K);
+        //System.out.println("I = " + I);
+        //System.out.println("J = " + J);
+        //System.out.println("K = " + K);
         //assertTrue("not isZERO( K )", !K.isZERO());
         assertTrue("isGB( K )", K.isGB());
         //non-com assertTrue("I contains(K)", I.contains(K));
         assertTrue("J contains(K)", J.contains(K));
+    }
+
+
+    /**
+     * Test WordIdeal common zeros.
+     */
+    public void testWordIdealCommonZeros() {
+        WordIdeal<BigRational> I, J;
+        L = new ArrayList<GenWordPolynomial<BigRational>>();
+
+        I = new WordIdeal<BigRational>(fac, L, true);
+        assertEquals("commonZeroTest( I )", I.commonZeroTest(), 1);
+
+        a = fac.getZERO();
+        L.add(a);
+        I = new WordIdeal<BigRational>(fac, L, true);
+        assertEquals("commonZeroTest( I )", I.commonZeroTest(), 1);
+
+        b = fac.getONE();
+        L.add(b);
+        I = new WordIdeal<BigRational>(fac, L, true);
+        assertEquals("commonZeroTest( I )", I.commonZeroTest(), -1);
+
+        L = new ArrayList<GenWordPolynomial<BigRational>>();
+        a = fac.random(kl, ll, el);
+        if (!a.isZERO() && !a.isConstant()) {
+            L.add(a);
+            I = new WordIdeal<BigRational>(fac, L, true);
+            assertEquals("commonZeroTest( I )", I.commonZeroTest(), 1);
+        }
+
+        L = (List<GenWordPolynomial<BigRational>>) fac.univariateList();
+        //System.out.println("L = " + L);
+        I = new WordIdeal<BigRational>(fac, L, true);
+        assertEquals("commonZeroTest( I )", I.commonZeroTest(), 0);
+
+        J = I.product(I);
+        //System.out.println("J = " + J);
+        assertEquals("commonZeroTest( J )", J.commonZeroTest(), 0);
+
+        L.remove(0);
+        I = new WordIdeal<BigRational>(fac, L, true);
+        assertEquals("commonZeroTest( I )", I.commonZeroTest(), 1);
     }
 
 }
