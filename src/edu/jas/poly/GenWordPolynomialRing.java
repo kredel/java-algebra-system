@@ -105,6 +105,26 @@ public final class GenWordPolynomialRing<C extends RingElem<C>> implements RingF
     /**
      * The constructor creates a polynomial factory object.
      * @param cf factory for coefficients of type C.
+     * @param s array of variable names.
+     */
+    public GenWordPolynomialRing(RingFactory<C> cf, String[] s) {
+        this(cf, new WordFactory(s));
+    }
+
+
+    /**
+     * The constructor creates a polynomial factory object.
+     * @param cf factory for coefficients of type C.
+     * @param s string of single letter variable names.
+     */
+    public GenWordPolynomialRing(RingFactory<C> cf, String s) {
+        this(cf, new WordFactory(s));
+    }
+
+
+    /**
+     * The constructor creates a polynomial factory object.
+     * @param cf factory for coefficients of type C.
      * @param o other polynomial ring.
      */
     public GenWordPolynomialRing(RingFactory<C> cf, GenWordPolynomialRing o) {

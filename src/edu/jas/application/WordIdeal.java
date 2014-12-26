@@ -879,10 +879,11 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
     }
 
 
-    /*
+    /**
      * Inverse for element modulo this ideal.
-     * @param h solvable polynomial
+     * @param h word polynomial
      * @return inverse of h with respect to this, if defined
+     */
     public GenWordPolynomial<C> inverse(GenWordPolynomial<C> h) {
         if (h == null || h.isZERO()) {
             throw new NotInvertibleException("zero not invertible");
@@ -891,8 +892,10 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
             throw new NotInvertibleException("zero ideal");
         }
         if (h.isUnit()) {
-            return (GenWordPolynomial<C>) h.inverse();
+            return h.inverse();
         }
+        throw new UnsupportedOperationException("inverse of " + h);
+        /*
         doGB();
         List<GenWordPolynomial<C>> F = new ArrayList<GenWordPolynomial<C>>(1 + list.list.size());
         F.add(h);
@@ -951,8 +954,8 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
             }
         }
         return g;
+        */
     }
-     */
 
 
     /**
@@ -983,9 +986,10 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
     }
 
 
-    /*
+    /**
      * Ideal common zero test.
      * @return -1, 0 or 1 if dimension(this) &eq; -1, 0 or &ge; 1.
+     */
     public int commonZeroTest() {
         if (this.isZERO()) {
             return 1;
@@ -998,12 +1002,12 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
         }
         return bb.commonZeroTest(getList());
     }
-     */
 
 
-    /*
+    /**
      * Test if this ideal is maximal.
      * @return true, if this is maximal and not one, else false.
+     */
     public boolean isMaximal() {
         if (commonZeroTest() != 0) {
             return false;
@@ -1016,12 +1020,12 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
         }
         return true;
     }
-     */
 
 
-    /*
+    /**
      * Univariate head term degrees.
      * @return a list of the degrees of univariate head terms.
+     */
     public List<Long> univariateDegrees() {
         List<Long> ud = new ArrayList<Long>();
         if (this.isZERO()) {
@@ -1035,7 +1039,6 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
         }
         return bb.univariateDegrees(getList());
     }
-     */
 
 
     /*

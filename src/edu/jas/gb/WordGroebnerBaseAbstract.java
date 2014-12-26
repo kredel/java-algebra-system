@@ -8,10 +8,16 @@ package edu.jas.gb;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
+import edu.jas.poly.Word;
 import edu.jas.poly.GenWordPolynomial;
+import edu.jas.poly.GenWordPolynomialRing;
 import edu.jas.structure.RingElem;
 
 
@@ -104,6 +110,83 @@ public abstract class WordGroebnerBaseAbstract<C extends RingElem<C>> implements
         }
         //N.trimToSize();
         return N;
+    }
+
+
+    /**
+     * Common zero test, test if univariate leading words exist for all variables.
+     * @param F polynomial list.
+     * @return -1, 0 or 1 if "dimension"(ideal(F)) &eq; -1, 0 or &ge; 1.
+     */
+    public int commonZeroTest(List<GenWordPolynomial<C>> F) {
+        if (F == null || F.isEmpty()) {
+            return 1;
+        }
+        GenWordPolynomialRing<C> pfac = F.get(0).ring;
+        if (pfac.alphabet.length() <= 0) {
+            return -1;
+        }
+        Set<String> v = new HashSet<String>(); // for non reduced GBs
+        for (GenWordPolynomial<C> p : F) {
+            if (p.isZERO()) {
+                continue;
+            }
+            if (p.isConstant()) { // for non-monic lists
+                return -1;
+            }
+            Word e = p.leadingWord();
+            if (e == null) {
+                continue;
+            }
+            SortedMap<String,Integer> u = e.dependencyOnVariables();
+            if (u == null) {
+                continue;
+            }
+            if (u.size() == 1) {
+                v.add(u.firstKey());
+            }
+        }
+        if (pfac.alphabet.length() == v.size()) {
+            return 0;
+        }
+        return 1;
+    }
+
+
+    /**
+     * Univariate head term degrees.
+     * @param A list of polynomials.
+     * @return a list of the degrees of univariate head terms.
+     */
+    public List<Long> univariateDegrees(List<GenWordPolynomial<C>> A) {
+        List<Long> ud = new ArrayList<Long>();
+        if (A == null || A.size() == 0) {
+            return ud;
+        }
+        GenWordPolynomialRing<C> pfac = A.get(0).ring;
+        if (pfac.alphabet.length() <= 0) {
+            return ud;
+        }
+        SortedMap<String, Long> v = new TreeMap<String, Long>(); // for non reduced GBs
+        for (GenWordPolynomial<C> p : A) {
+            Word e = p.leadingWord();
+            if (e == null) {
+                continue;
+            }
+            SortedMap<String,Integer> u = e.dependencyOnVariables();
+            if (u == null) {
+                continue;
+            }
+            if (u.size() == 1) {
+                Long d = v.get( u.firstKey() );
+                if (d == null) { // record only once
+                    v.put( u.firstKey(), Long.valueOf( u.get(u.firstKey()) ) );
+                }
+            }
+        }
+        ud.addAll( v.values() );
+        //Collections.reverse(ud);
+        return ud;
     }
 
 
