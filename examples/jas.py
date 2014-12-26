@@ -3923,7 +3923,6 @@ class WordIdeal:
             return False;
         s = self.ideal;
         t = other.ideal;
-        print "__cmp__"
         return s.compareTo(t);
 
     def __eq__(self,other):
@@ -3933,7 +3932,6 @@ class WordIdeal:
             return False;
         s = self.ideal;
         t = other.ideal;
-        print "__eq__"
         return s.equals(t)
 
     def sum(self,other):

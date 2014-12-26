@@ -160,6 +160,9 @@ public final class WordFactory implements MonoidFactory<Word> {
      * @return true if this monoid is commutative, else false.
      */
     public boolean isCommutative() {
+        if (alphabet.length() == 0) {
+            return true;
+        }
         return false;
     }
 

@@ -86,10 +86,10 @@ public class WordIdealTest extends TestCase {
     int kl = 3; //10
 
 
-    int ll = 3; //7
+    int ll = 5; //7
 
 
-    int el = 3;
+    int el = 2;
 
 
     @Override
@@ -127,6 +127,11 @@ public class WordIdealTest extends TestCase {
         d = fac.random(kl, ll, el);
         e = d; //fac.random(kl, ll, el);
 
+        System.out.println("a = " + a);
+        System.out.println("b = " + b);
+        System.out.println("c = " + c);
+        System.out.println("d = " + d);
+
         L.add(a);
         //System.out.println("L = " + L.size() );
 
@@ -140,16 +145,12 @@ public class WordIdealTest extends TestCase {
         assertTrue("isGB( { a } )", bb.isGB(L));
 
         I = new WordIdeal<BigRational>(fac, L, true);
-        //assertTrue("not isZERO( I )", !I.isZERO());
-        //assertTrue("not isONE( I )", !I.isONE() );
         assertTrue("isGB( I )", I.isGB());
 
         I = new WordIdeal<BigRational>(fac, L, false);
-        //assertTrue("not isZERO( I )", !I.isZERO());
-        //assertTrue("not isONE( I )", !I.isONE() );
         assertTrue("isGB( I )", I.isGB());
 
-        if (true) {
+        if (!true) {
             return;
         }
 
@@ -214,14 +215,20 @@ public class WordIdealTest extends TestCase {
 
     /**
      * Test WordIdeal product.
+     * Sometimes non-terminating.
      */
-    public void xtestWordIdealProduct() {
-        WordIdeal<BigRational> I, J, K, H;
+    public void testWordIdealProduct() {
+        WordIdeal<BigRational> I, J, K, H, G;
         a = fac.random(kl, ll, el);
-        b = fac.random(kl, ll, el - 1);
-        c = fac.random(kl, ll, el - 1);
+        b = fac.random(kl, ll, el);
+        c = fac.random(kl, ll, el);
         d = c; //fac.random(kl, ll, el);
         e = d; //fac.random(kl, ll, el);
+
+        System.out.println("a = " + a);
+        System.out.println("b = " + b);
+        System.out.println("c = " + c);
+        //System.out.println("d = " + d);
 
         L = new ArrayList<GenWordPolynomial<BigRational>>();
         L.add(a);
@@ -238,13 +245,23 @@ public class WordIdealTest extends TestCase {
         assertTrue("isGB( J )", J.isGB());
 
         K = I.product(J);
-        //System.out.println("I = " + I);
-        //System.out.println("J = " + J);
-        //System.out.println("K = " + K);
+        System.out.println("I = " + I);
+        System.out.println("J = " + J);
+        System.out.println("K = " + K);
+        H = J.product(I);
+        System.out.println("H = " + H);
+        G = K.sum(H);
+        System.out.println("G = " + G);
 	//assertTrue("not isZERO( K )", !K.isZERO());
         assertTrue("isGB( K )", K.isGB());
+        assertTrue("isGB( H )", H.isGB());
+        assertTrue("isGB( G )", G.isGB());
         //non-com assertTrue("I contains(K)", I.contains(K));
         assertTrue("J contains(K)", J.contains(K));
+
+        if (true) {
+            return;
+        }
 
         /*
         H = I.intersect(J);
@@ -266,44 +283,13 @@ public class WordIdealTest extends TestCase {
         assertTrue("isGB( I )", I.isGB());
 
         K = I.product(J);
+        System.out.println("I = " + I);
+        System.out.println("J = " + J);
+        System.out.println("K = " + K);
         //assertTrue("not isZERO( K )", !K.isZERO());
         assertTrue("isGB( K )", K.isGB());
         //non-com assertTrue("I contains(K)", I.contains(K));
         assertTrue("J contains(K)", J.contains(K));
-
-        /*
-        H = I.intersect(J);
-        assertTrue("not isZERO( H )", !H.isZERO());
-        assertTrue("isGB( H )", H.isGB());
-        assertTrue("I contains(H)", I.contains(H));
-        assertTrue("J contains(H)", J.contains(H));
-        //non-com assertTrue("H contains(K)", H.contains(K));
-
-        L = new ArrayList<GenWordPolynomial<BigRational>>();
-        assertTrue("not isZERO( b )", !b.isZERO());
-        L.add(b);
-        assertTrue("not isZERO( d )", !d.isZERO());
-        L.add(d);
-        L = bb.GB(L);
-
-        J = new WordIdeal<BigRational>(fac, L, true);
-        assertTrue("not isZERO( J )", !J.isZERO());
-        //assertTrue("not isONE( J )", !J.isONE() );
-        assertTrue("isGB( J )", J.isGB());
-
-        K = I.product(J);
-        assertTrue("not isZERO( K )", !K.isZERO());
-        assertTrue("isGB( K )", K.isGB());
-        //non-com assertTrue("I contains(K)", I.contains(K));
-        assertTrue("J contains(K)", J.contains(K));
-
-        H = I.intersect(J);
-        assertTrue("not isZERO( H )", !H.isZERO());
-        assertTrue("isGB( H )", H.isGB());
-        assertTrue("I contains(H)", I.contains(H));
-        assertTrue("J contains(H)", J.contains(H));
-        //non-com assertTrue("H contains(K)", H.contains(K));
-        */
     }
 
 }
