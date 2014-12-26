@@ -129,7 +129,8 @@ public class WordGroebnerBaseSeq<C extends RingElem<C>> extends WordGroebnerBase
                     continue;
                 }
                 if ( !t ) {
-                    System.out.println("criterion3(" + pair.i + "," + pair.j + ") = " + H); 
+                    logger.info("criterion3(" + pair.i + "," + pair.j + ") wrong: " 
+                                + s.leadingWord() + " --> " + H.leadingWord()); 
                 }
 
                 H = H.monic();

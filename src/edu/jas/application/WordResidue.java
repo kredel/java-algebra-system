@@ -323,7 +323,7 @@ public class WordResidue<C extends GcdRingElem<C>> implements GcdRingElem<WordRe
             //ignored.printStackTrace();
             // ignored
         } catch (UnsupportedOperationException ignored) {
-            System.out.println("catch: " + ignored);
+            //System.out.println("catch: " + ignored);
             //ignored.printStackTrace();
             // ignored
         }
@@ -336,8 +336,8 @@ public class WordResidue<C extends GcdRingElem<C>> implements GcdRingElem<WordRe
         GenWordPolynomial<C> x = ring.bb.red.normalform(L, R, V, val);
         GenWordPolynomial<C> y = L.get(0);
         GenWordPolynomial<C> z = R.get(0);
-        System.out.println("WordResidue val = " + val + ", div = " + S.val + ", leftquotient = " + y
-                        + ", rightquotient = " + z + ", remainder = " + x);
+        //System.out.println("WordResidue val = " + val + ", div = " + S.val + ", leftquotient = " + y
+        //                + ", rightquotient = " + z + ", remainder = " + x);
         return new WordResidue<C>(ring, y);
     }
 
