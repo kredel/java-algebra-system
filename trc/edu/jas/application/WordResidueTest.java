@@ -71,7 +71,7 @@ public class WordResidueTest extends TestCase {
         TermOrder to = new TermOrder( TermOrder.INVLEX );
         String[] vars = new String[] { "w", "x", "y", "z" };
         mfac = new GenWordPolynomialRing<BigRational>( new BigRational(1), vars );
-        System.out.println("mfac = " + mfac.toScript());
+        //System.out.println("mfac = " + mfac.toScript());
         do {
             F = new ArrayList<GenWordPolynomial<BigRational>>( il );
             for ( int i = 0; i < il; i++ ) {
@@ -87,7 +87,7 @@ public class WordResidueTest extends TestCase {
         //System.out.println("id = " + id);
         assert !id.isONE() : "id = " + id;
         fac = new WordResidueRing<BigRational>( id );
-        System.out.println("fac = " + fac.toScript());
+        //System.out.println("fac = " + fac.toScript());
         F = null;
     }
 
@@ -118,7 +118,7 @@ public class WordResidueTest extends TestCase {
         assertTrue("isONE( d )", !d.isONE() );
 
         for (WordResidue<BigRational> g : fac.generators() ) {
-            System.out.println("g = " + g);
+            //System.out.println("g = " + g);
             assertFalse("not isZERO( g )", g.isZERO() );
         }
     }

@@ -8,6 +8,8 @@ import java.util.Random;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.Reader;
+import java.util.TreeSet;
+import java.util.SortedSet;
 
 import org.apache.log4j.Logger;
 
@@ -140,6 +142,10 @@ public class ResidueRing<C extends GcdRingElem<C> >
     public List<Residue<C>> generators() {
         List<GenPolynomial<C>> pgens = ring.generators();
         List<Residue<C>> gens = new ArrayList<Residue<C>>( pgens.size() );
+        SortedSet<Residue<C>> sgens = new TreeSet<Residue<C>>();
+        List<GenPolynomial<C>> rgens = new ArrayList<GenPolynomial<C>>(pgens.size());
+        Ideal<C> gi = new Ideal<C>(ring,rgens);
+        ResidueRing<C> gr = new ResidueRing<C>(gi);
         for ( GenPolynomial<C> p : pgens ) {
             Residue<C> r = new Residue<C>( this, p );
             if ( r.isZERO() ) {
@@ -148,8 +154,28 @@ public class ResidueRing<C extends GcdRingElem<C> >
             if ( !r.isONE() && r.val.isConstant() ) {
                 continue;
             }
-            gens.add(r);
+            // avoid duplicate generators
+            Residue<C> x = new Residue<C>(gr, r.val);
+            if (x.isZERO()) {
+                continue;
+            }
+            if (!x.isONE() && x.val.isConstant()) {
+                continue;
+            }
+            r = new Residue<C>(this, x.val);
+            if (r.isZERO()) {
+                continue;
+            }
+            r = r.monic();
+            if (!r.isONE() && !r.val.isConstant()) {
+                rgens.add(r.val);
+                //System.out.println("rgens = " + rgens);
+                gi = new Ideal<C>(ring,rgens);
+                gr = new ResidueRing<C>(gi);
+            }
+            sgens.add(r);
         }
+        gens.addAll(sgens);
         return gens;
     }
 

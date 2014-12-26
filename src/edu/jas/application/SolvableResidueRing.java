@@ -8,6 +8,8 @@ package edu.jas.application;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
+import java.util.SortedSet;
 import java.util.Random;
 
 import org.apache.log4j.Logger;
@@ -147,6 +149,10 @@ public class SolvableResidueRing<C extends GcdRingElem<C>> implements RingFactor
     public List<SolvableResidue<C>> generators() {
         List<GenPolynomial<C>> pgens = ring.generators();
         List<SolvableResidue<C>> gens = new ArrayList<SolvableResidue<C>>(pgens.size());
+        SortedSet<SolvableResidue<C>> sgens = new TreeSet<SolvableResidue<C>>();
+        List<GenSolvablePolynomial<C>> rgens = new ArrayList<GenSolvablePolynomial<C>>(pgens.size());
+        SolvableIdeal<C> gi = new SolvableIdeal<C>(ring,rgens);
+        SolvableResidueRing<C> gr = new SolvableResidueRing<C>(gi);
         for (GenPolynomial<C> p : pgens) {
             GenSolvablePolynomial<C> s = (GenSolvablePolynomial<C>) p;
             SolvableResidue<C> r = new SolvableResidue<C>(this, s);
@@ -156,9 +162,29 @@ public class SolvableResidueRing<C extends GcdRingElem<C>> implements RingFactor
             if (!r.isONE() && r.val.isConstant()) {
                 continue;
             }
-
-            gens.add(r);
+            // avoid duplicate generators
+            SolvableResidue<C> x = new SolvableResidue<C>(gr, r.val);
+            if (x.isZERO()) {
+                continue;
+            }
+            if (!x.isONE() && x.val.isConstant()) {
+                continue;
+            }
+            r = new SolvableResidue<C>(this, x.val);
+            if (r.isZERO()) {
+                continue;
+            }
+            r = r.monic();
+            if (!r.isONE() && !r.val.isConstant()) {
+                rgens.add(r.val);
+                //System.out.println("rgens = " + rgens);
+                gi = new SolvableIdeal<C>(ring,rgens);
+                gr = new SolvableResidueRing<C>(gi);
+            }
+            //gens.add(r);
+            sgens.add(r);
         }
+        gens.addAll(sgens);
         return gens;
     }
 
