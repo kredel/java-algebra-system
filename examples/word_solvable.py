@@ -5,7 +5,7 @@
 
 #from java.lang import System
 
-from jas import WordRing, WordPolyRing, WordIdeal, PolyRing, SolvPolyRing
+from jas import WordRing, WordPolyRing, WordPolyIdeal, PolyRing, SolvPolyRing
 from jas import terminate, startLog
 from jas import QQ, ZZ, GF, ZM
 

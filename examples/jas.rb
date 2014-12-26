@@ -1996,6 +1996,8 @@ java_import "edu.jas.application.SolvableLocalResidueRing";
 java_import "edu.jas.application.IdealWithRealAlgebraicRoots";
 java_import "edu.jas.application.ComprehensiveGroebnerBaseSeq";
 java_import "edu.jas.application.WordIdeal";
+java_import "edu.jas.application.WordResidue";
+java_import "edu.jas.application.WordResidueRing";
 
 
 =begin rdoc
@@ -5124,6 +5126,41 @@ Compute the sum of this and the ideal.
     end
 
 end
+
+
+=begin rdoc
+Create JAS polynomial WordResidue as ring element.
+=end
+def WRC(ideal,r=0)
+    if ideal == nil
+        raise ArgumentError, "No ideal given."
+    end
+    if ideal.is_a? WordPolyIdeal
+        #puts "ideal = " + str(ideal) + "\n";
+        #ideal = Java::EduJasApplication::WordIdeal.new(ideal.ring,ideal.list);
+        ideal = ideal.ideal;
+        #ideal.doGB();
+    end
+    if not ideal.is_a? WordIdeal
+        raise ArgumentError, "No word ideal given."
+    end
+    #puts "ideal.getList().get(0).ring.ideal = #{ideal.getList().get(0).ring.ideal}\n";
+    if ideal.getList().get(0).ring.getClass().getSimpleName() == "WordResidueRing"
+        rc = WordResidueRing.new( ideal.getList().get(0).ring.ideal );
+    else
+        rc = WordResidueRing.new(ideal);
+    end
+    if r.is_a? RingElem
+        r = r.elem;
+    end
+    if r == 0
+        r = WordResidue.new(rc);
+    else
+        r = WordResidue.new(rc,r);
+    end
+    return RingElem.new(r);
+end
+
 
 # define some shortcuts
 ZZ = ZZ();

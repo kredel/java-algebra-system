@@ -3,9 +3,9 @@
 # $Id$
 #
 
-from java.lang import System
+#from java.lang import System
 
-from jas import WordRing, WordPolyRing, WordIdeal
+from jas import WordRing, WordPolyRing, WordPolyIdeal
 from jas import terminate, startLog
 from jas import QQ, ZZ, GF, ZM
 

@@ -1,13 +1,13 @@
 #
-# jython examples for jas.
+# jruby examples for jas.
 # $Id$
 #
 
-from java.lang import System
+#from java.lang import System
 
 from jas import WordRing, WordPolyRing, WordPolyIdeal
 from jas import terminate, startLog
-from jas import QQ, ZZ, GF, ZM
+from jas import QQ, ZZ, GF, ZM, WRC
 
 # exterior calculus example
 # Hartley and Tuckey, 1993,
@@ -115,55 +115,45 @@ rs = [
   z * z 
 ];
 
-# ( a*b + c*f + g*h ),
-# ( u*v + w*x + y*z ),
-# ( a*v + w*x + y*z )
 
-ff = [
- ( a*b + c*f + g*h ),
- ( u*v + w*x + y*z )
-];
-
-
-fi = r.ideal("", ff + rs); 
+fi = r.ideal("", rs); 
 print "WordPolyIdeal: " + str(fi);
 print;
 
-#startLog();
 
-gi = fi.GB();
-print "seq GB: " + str(gi);
-print;
-
-# from exterior.rb
-#
-ee = [
- ( g * h + c * f + a * b ), 
- ( y * z + w * x + u * v ), 
- ( c * f * g + a * b * g ),  
- ( c * f * h + a * b * h ), 
- ( w * x * y + u * v * y ), 
- ( w * x * z + u * v * z ), 
-  a * b * c * g, 
-  a * b * f * g, 
-  a * b * c * h, 
-  a * b * f * h, 
-  a * b * c * f, 
-  u * v * w * y, 
-  u * v * x * y, 
-  u * v * w * z, 
-  u * v * x * z, 
-  u * v * w * x
+ff = [
+ ( a*b + c*f + g*h ),
+ ( u*v + w*x + y*z ),
+ ( a*v + w*x + y*z )
 ];
 
 
-ei = r.ideal("", ee + rs); 
-print "WordPolyIdeal: " + str(ei);
+r1 = WRC(fi,ff[0]);
+print "r1: " + str(r1);
+r2 = WRC(fi,ff[1]);
+print "r2: " + str(r2);
+r3 = WRC(fi,ff[2]);
+print "r3: " + str(r3);
 print;
 
-hi = ei.GB();
-print "seq GB: " + str(hi);
+
+r4 = r1*r2 + r3;
+print "r4 = r1*r2 + r3: " + str(r4);
+r5 = r2*r1 + r3;
+print "r5 = r2*r1 + r3: " + str(r5);
 print;
 
-print "gi == hi: " + str(gi == hi);
-print
+print "r4 == r5: " + str(r4 == r5);
+print;
+
+r6 = r4**3;
+print "r6 = r4**3: " + str(r6);
+print;
+
+
+r7 = r6/r4;
+print "r7 = r6 / r4: " + str(r7);
+r8 = r6 % r4;
+print "r8 = r6 % r4: " + str(r8);
+print;
+

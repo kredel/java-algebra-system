@@ -53,6 +53,7 @@ from edu.jas.application import PolyUtilApp, Residue, ResidueRing, Ideal,\
                                 ResidueSolvablePolynomial, ResidueSolvablePolynomialRing,\
                                 LocalSolvablePolynomial, LocalSolvablePolynomialRing,\
                                 QLRSolvablePolynomial, QLRSolvablePolynomialRing,\
+                                WordIdeal, WordResidue, WordResidueRing,\
                                 ComprehensiveGroebnerBaseSeq, ExtensionFieldBuilder
 from edu.jas.kern        import ComputerThreads, StringUtil, Scripting
 from edu.jas.ufd         import GreatestCommonDivisor, PolyUfdUtil, GCDFactory,\
@@ -3782,7 +3783,7 @@ class WordRing(Ring):
     def ideal(self,ringstr="",list=None):
         '''Create a word ideal.
         '''
-        return WordIdeal(self,ringstr,list);
+        return WordPolyIdeal(self,ringstr,list);
 
     def one(self):
         '''Get the one of the word polynomial ring.
@@ -3814,7 +3815,7 @@ class WordRing(Ring):
             except Exception, e:
                 pass
             poly = str(poly);
-        I = WordIdeal(self, "( " + poly + " )"); # not working
+        I = WordPolyIdeal(self, "( " + poly + " )"); # not working
         list = I.list;
         if len(list) > 0:
             return RingElem( list[0] );
@@ -3856,7 +3857,7 @@ class WordPolyRing(WordRing):
         return self.ring.toScript();
 
 
-class WordIdeal:
+class WordPolyIdeal:
     '''Represents a JAS word polynomial ideal.
 
     Methods for two-sided Groebner basees and others.
@@ -3873,7 +3874,7 @@ class WordIdeal:
            tok = GenPolynomialTokenizer(ring.ring,sr);
            self.list = tok.nextSolvablePolynomialList();
         else:
-           if isinstance(list,WordIdeal):
+           if isinstance(list,WordPolyIdeal):
               self.list = list.list;
               self.ideal = list;
            else:
@@ -3919,7 +3920,7 @@ class WordIdeal:
     def __cmp__(self, other):
         '''Compare two ideals.
         '''
-        if not isinstance(other, WordIdeal):
+        if not isinstance(other, WordPolyIdeal):
             return False;
         s = self.ideal;
         t = other.ideal;
@@ -3928,7 +3929,7 @@ class WordIdeal:
     def __eq__(self,other):
         '''Test if two ideals are equal.
         '''
-        if not isinstance(other, WordIdeal):
+        if not isinstance(other, WordPolyIdeal):
             return False;
         s = self.ideal;
         t = other.ideal;
@@ -3941,6 +3942,33 @@ class WordIdeal:
         t = other.ideal;
         N = s.sum(t);
         return WordIdeal(self.ring, "", N);
+
+
+def WRC(ideal,r=0):
+    '''Create JAS polynomial WordResidue as ring element.
+    '''
+    #print "ideal = " + str(ideal);
+    if ideal == None: # does not work
+        print "ideal = " + str(ideal);
+        if False:
+            raise ValueError, "No ideal given."
+    if isinstance(ideal,WordPolyIdeal):
+        ideal = ideal.ideal
+        #ideal.doGB();
+    if not isinstance(ideal,WordIdeal):
+       raise ValueError, "No ideal given."
+    #print "ideal.getList().get(0).ring.ideal = %s" % ideal.getList().get(0).ring.ideal;
+    if ideal.getList().get(0).ring.getClass().getSimpleName() == "WordResidueRing":
+        rc = WordResidueRing( ideal.getList().get(0).ring.ideal );
+    else:
+        rc = WordResidueRing(ideal);
+    if isinstance(r,RingElem):
+        r = r.elem;
+    if r == 0:
+        r = WordResidue(rc);
+    else:
+        r = WordResidue(rc,r);
+    return RingElem(r);
 
 
 # doctest:

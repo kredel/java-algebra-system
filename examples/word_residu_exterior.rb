@@ -1,26 +1,22 @@
 #
-# jython examples for jas.
+# jruby examples for jas.
 # $Id$
 #
 
-from java.lang import System
-
-from jas import WordRing, WordPolyRing, WordPolyIdeal
-from jas import terminate, startLog
-from jas import QQ, ZZ, GF, ZM
+require "examples/jas"
 
 # exterior calculus example
 # Hartley and Tuckey, 1993,
 # GB in Clifford and Grassmann algebras
 
-r = WordPolyRing(QQ(), "a,b,c,f,g,h,u,v,w,x,y,z");
-print "WordPolyRing: " + str(r);
-print;
+r = WordPolyRing.new(QQ(), "a,b,c,f,g,h,u,v,w,x,y,z");
+puts "WordPolyRing: " + str(r);
+puts;
 
 one,a,b,c,f,g,h,u,v,w,x,y,z = r.gens();
-print "a = %s" % a;
-print "z = %s" % z;
-print;
+puts "a = %s" % a;
+puts "z = %s" % z;
+puts;
 
 # exterior algebra relations
 rs = [
@@ -115,55 +111,44 @@ rs = [
   z * z 
 ];
 
-# ( a*b + c*f + g*h ),
-# ( u*v + w*x + y*z ),
-# ( a*v + w*x + y*z )
+
+fi = r.ideal("", rs); 
+puts "WordPolyIdeal: " + str(fi);
+puts;
+
 
 ff = [
  ( a*b + c*f + g*h ),
- ( u*v + w*x + y*z )
+ ( u*v + w*x + y*z ),
+ ( a*v + w*x + y*z )
 ];
 
 
-fi = r.ideal("", ff + rs); 
-print "WordPolyIdeal: " + str(fi);
-print;
-
-#startLog();
-
-gi = fi.GB();
-print "seq GB: " + str(gi);
-print;
-
-# from exterior.rb
-#
-ee = [
- ( g * h + c * f + a * b ), 
- ( y * z + w * x + u * v ), 
- ( c * f * g + a * b * g ),  
- ( c * f * h + a * b * h ), 
- ( w * x * y + u * v * y ), 
- ( w * x * z + u * v * z ), 
-  a * b * c * g, 
-  a * b * f * g, 
-  a * b * c * h, 
-  a * b * f * h, 
-  a * b * c * f, 
-  u * v * w * y, 
-  u * v * x * y, 
-  u * v * w * z, 
-  u * v * x * z, 
-  u * v * w * x
-];
+r1 = WRC(fi,ff[0]);
+puts "r1: " + str(r1);
+r2 = WRC(fi,ff[1]);
+puts "r2: " + str(r2);
+r3 = WRC(fi,ff[2]);
+puts "r3: " + str(r3);
+puts;
 
 
-ei = r.ideal("", ee + rs); 
-print "WordPolyIdeal: " + str(ei);
-print;
+r4 = r1*r2 + r3;
+puts "r4 = r1*r2 + r3: " + str(r4);
+r5 = r2*r1 + r3;
+puts "r5 = r2*r1 + r3: " + str(r5);
+puts;
 
-hi = ei.GB();
-print "seq GB: " + str(hi);
-print;
+puts "r4 == r5: " + str(r4 == r5);
+puts;
 
-print "gi == hi: " + str(gi == hi);
-print
+r6 = r4**3;
+puts "r6 = r4**3: " + str(r6);
+puts;
+
+
+r7 = r6/r4;
+puts "r7 = r6 / r4: " + str(r7);
+r8 = r6 % r4;
+puts "r8 = r6 % r4: " + str(r8);
+puts;
