@@ -124,8 +124,6 @@ public class PseudoReductionSeq<C extends RingElem<C>> extends ReductionAbstract
     }
 
 
-
-
     /**
      * Normalform recursive.
      * @param Ap recursive polynomial.
@@ -224,102 +222,6 @@ public class PseudoReductionSeq<C extends RingElem<C>> extends ReductionAbstract
     }
 
 
-
-
-
-
-    /**
-     * Normalform.
-     * @param Pp polynomial list.
-     * @param Ap polynomial.
-     * @return ( nf(Ap), mf ) with respect to Pp and mf as multiplication factor
-     *         for Ap.
-     */
-    @SuppressWarnings("unchecked")
-    public PseudoReductionEntry<C> normalformFactor(List<GenPolynomial<C>> Pp, GenPolynomial<C> Ap) {
-        if (Ap == null) {
-            return null;
-        }
-        C mfac = Ap.ring.getONECoefficient();
-        PseudoReductionEntry<C> pf = new PseudoReductionEntry<C>(Ap, mfac);
-        if (Pp == null || Pp.isEmpty()) {
-            return pf;
-        }
-        if (Ap.isZERO()) {
-            return pf;
-        }
-        Map.Entry<ExpVector, C> m;
-        GenPolynomial<C>[] P = new GenPolynomial[0];
-        synchronized (Pp) {
-            P = Pp.toArray(P);
-        }
-        int l = P.length;
-        ExpVector[] htl = new ExpVector[l];
-        C[] lbc = (C[]) new RingElem[l]; // want C[] 
-        GenPolynomial<C>[] p = new GenPolynomial[l];
-        int i;
-        int j = 0;
-        for (i = 0; i < l; i++) {
-            if (P[i] == null) {
-                continue;
-            }
-            p[i] = P[i];
-            m = p[i].leadingMonomial();
-            if (m != null) {
-                p[j] = p[i];
-                htl[j] = m.getKey();
-                lbc[j] = m.getValue();
-                j++;
-            }
-        }
-        l = j;
-        ExpVector e;
-        C a;
-        boolean mt = false;
-        GenPolynomial<C> R = Ap.ring.getZERO().copy();
-
-        GenPolynomial<C> S = Ap.copy();
-        while (S.length() > 0) {
-            m = S.leadingMonomial();
-            e = m.getKey();
-            a = m.getValue();
-            for (i = 0; i < l; i++) {
-                mt = e.multipleOf(htl[i]);
-                if (mt)
-                    break;
-            }
-            if (!mt) {
-                //logger.debug("irred");
-                //R = R.sum(a, e);
-                //S = S.subtract(a, e);
-                R.doPutToMap(e, a);
-                S.doRemoveFromMap(e, a);
-                //System.out.println(" S = " + S);
-            } else {
-                e = e.subtract(htl[i]);
-                //logger.info("red div = " + e);
-                C c = lbc[i];
-                if (a.remainder(c).isZERO()) { //c.isUnit() ) {
-                    a = a.divide(c);
-                    S = S.subtractMultiple(a, e, p[i]);
-                } else {
-                    mfac = mfac.multiply(c);
-                    R = R.multiply(c);
-                    //S = S.multiply(c);
-                    S = S.scaleSubtractMultiple(c, a, e, p[i]);
-                }
-                //Q = p[i].multiply(a, e);
-                //S = S.subtract(Q);
-            }
-        }
-        if (logger.isInfoEnabled()) {
-            logger.info("multiplicative factor = " + mfac);
-        }
-        pf = new PseudoReductionEntry<C>(R, mfac);
-        return pf;
-    }
-
-
     /**
      * Normalform with recording. <b>Note:</b> Only meaningful if all divisions
      * are exact. Compute first the multiplication factor <code>m</code> with
@@ -411,6 +313,98 @@ public class PseudoReductionSeq<C extends RingElem<C>> extends ReductionAbstract
             }
         }
         return R;
+    }
+
+
+    /**
+     * Normalform.
+     * @param Pp polynomial list.
+     * @param Ap polynomial.
+     * @return ( nf(Ap), mf ) with respect to Pp and mf as multiplication factor
+     *         for Ap.
+     */
+    @SuppressWarnings("unchecked")
+    public PseudoReductionEntry<C> normalformFactor(List<GenPolynomial<C>> Pp, GenPolynomial<C> Ap) {
+        if (Ap == null) {
+            return null;
+        }
+        C mfac = Ap.ring.getONECoefficient();
+        PseudoReductionEntry<C> pf = new PseudoReductionEntry<C>(Ap, mfac);
+        if (Pp == null || Pp.isEmpty()) {
+            return pf;
+        }
+        if (Ap.isZERO()) {
+            return pf;
+        }
+        Map.Entry<ExpVector, C> m;
+        GenPolynomial<C>[] P = new GenPolynomial[0];
+        synchronized (Pp) {
+            P = Pp.toArray(P);
+        }
+        int l = P.length;
+        ExpVector[] htl = new ExpVector[l];
+        C[] lbc = (C[]) new RingElem[l]; // want C[] 
+        GenPolynomial<C>[] p = new GenPolynomial[l];
+        int i;
+        int j = 0;
+        for (i = 0; i < l; i++) {
+            if (P[i] == null) {
+                continue;
+            }
+            p[i] = P[i];
+            m = p[i].leadingMonomial();
+            if (m != null) {
+                p[j] = p[i];
+                htl[j] = m.getKey();
+                lbc[j] = m.getValue();
+                j++;
+            }
+        }
+        l = j;
+        ExpVector e;
+        C a;
+        boolean mt = false;
+        GenPolynomial<C> R = Ap.ring.getZERO().copy();
+
+        GenPolynomial<C> S = Ap.copy();
+        while (S.length() > 0) {
+            m = S.leadingMonomial();
+            e = m.getKey();
+            a = m.getValue();
+            for (i = 0; i < l; i++) {
+                mt = e.multipleOf(htl[i]);
+                if (mt)
+                    break;
+            }
+            if (!mt) {
+                //logger.debug("irred");
+                //R = R.sum(a, e);
+                //S = S.subtract(a, e);
+                R.doPutToMap(e, a);
+                S.doRemoveFromMap(e, a);
+                //System.out.println(" S = " + S);
+            } else {
+                e = e.subtract(htl[i]);
+                //logger.info("red div = " + e);
+                C c = lbc[i];
+                if (a.remainder(c).isZERO()) { //c.isUnit() ) {
+                    a = a.divide(c);
+                    S = S.subtractMultiple(a, e, p[i]);
+                } else {
+                    mfac = mfac.multiply(c);
+                    R = R.multiply(c);
+                    //S = S.multiply(c);
+                    S = S.scaleSubtractMultiple(c, a, e, p[i]);
+                }
+                //Q = p[i].multiply(a, e);
+                //S = S.subtract(Q);
+            }
+        }
+        if (logger.isInfoEnabled()) {
+            logger.info("multiplicative factor = " + mfac);
+        }
+        pf = new PseudoReductionEntry<C>(R, mfac);
+        return pf;
     }
 
 }
