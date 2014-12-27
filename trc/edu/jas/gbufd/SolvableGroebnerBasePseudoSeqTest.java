@@ -179,7 +179,7 @@ public class SolvableGroebnerBasePseudoSeqTest extends TestCase {
     /**
      * Test sequential twosided GBase.
      */
-    public void xtestSequentialTSGBase() {
+    public void testSequentialTSGBase() {
         L = new ArrayList<GenSolvablePolynomial<BigInteger>>();
 
         L.add(a);
@@ -214,7 +214,7 @@ public class SolvableGroebnerBasePseudoSeqTest extends TestCase {
      * Test Weyl sequential twosided GBase
      * is always 1.
      */
-    public void xtestWeylSequentialTSGBase() {
+    public void testWeylSequentialTSGBase() {
         //int rloc = 4;
         //ring = new GenSolvablePolynomialRing<BigInteger>(cfac,rloc);
 
