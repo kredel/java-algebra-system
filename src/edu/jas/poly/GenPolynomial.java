@@ -961,7 +961,7 @@ Iterable<Monomial<C>> {
      * GenPolynomial subtract a multiple.
      * @param a coefficient.
      * @param S GenPolynomial.
-     * @return this - a x<sup>e</sup> S.
+     * @return this - a S.
      */
     public GenPolynomial<C> subtractMultiple(C a, GenPolynomial<C> S) {
         if (a == null) {
@@ -1035,6 +1035,51 @@ Iterable<Monomial<C>> {
             f = e.sum(f);
             C y = me.getValue(); // assert y != null
             y = a.multiply(y);
+            C x = nv.get(f);
+            if (x != null) {
+                x = x.subtract(y);
+                if (!x.isZERO()) {
+                    nv.put(f, x);
+                } else {
+                    nv.remove(f);
+                }
+            } else if (!y.isZERO()) {
+                nv.put(f, y.negate());
+            }
+        }
+        return n;
+    }
+
+
+    /**
+     * GenPolynomial scale and subtract a multiple.
+     * @param b scale factor.
+     * @param a coefficient.
+     * @param S GenPolynomial.
+     * @return this * b - a S.
+     */
+    public GenPolynomial<C> scaleSubtractMultiple(C b, C a, GenPolynomial<C> S) {
+        if (a == null || S == null) {
+            return this.multiply(b);
+        }
+        if (a.isZERO() || S.isZERO()) {
+            return this.multiply(b);
+        }
+        if (this.isZERO() || b == null || b.isZERO()) {
+            return S.multiply(a.negate()); //left?
+        }
+        if (b.isONE()) {
+            return subtractMultiple(a, S);
+        }
+        assert (ring.nvar == S.ring.nvar);
+        GenPolynomial<C> n = this.multiply(b);
+        SortedMap<ExpVector, C> nv = n.val;
+        SortedMap<ExpVector, C> sv = S.val;
+        for (Map.Entry<ExpVector, C> me : sv.entrySet()) {
+            ExpVector f = me.getKey();
+            //f = e.sum(f);
+            C y = me.getValue(); // assert y != null
+            y = a.multiply(y); // now y can be zero
             C x = nv.get(f);
             if (x != null) {
                 x = x.subtract(y);
