@@ -102,6 +102,35 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
 
 
     /**
+     * Normalize polynomial list.
+     * @param A list of polynomials.
+     * @return list of polynomials with zeros removed and ones/units reduced.
+     */
+    public List<GenSolvablePolynomial<C>> normalizeZerosOnes(List<GenSolvablePolynomial<C>> A) {
+        //List<GenPolynomial<C>> a = PolynomialList.<C> castToList(A);
+        //List<GenPolynomial<C>> n = cbb.normalizeZeroOnes(a);
+        //List<GenSolvablePolynomial<C>> N = PolynomialList.<C> castToSolvableList(n);
+        List<GenSolvablePolynomial<C>> N = new ArrayList<GenSolvablePolynomial<C>>(A.size());
+        if (A == null || A.isEmpty()) {
+            return N;
+        }
+        for (GenSolvablePolynomial<C> p : A) {
+            if (p == null || p.isZERO()) {
+                continue;
+            }
+            if (p.isUnit()) {
+                N.clear();
+                N.add(p.ring.getONE());
+                return N;
+            }
+            N.add( (GenSolvablePolynomial<C>)p.abs() );
+        }
+        //N.trimToSize();
+        return N;
+    }
+
+
+    /**
      * Left Groebner base test.
      * @param F solvable polynomial list.
      * @return true, if F is a left Groebner base, else false.
