@@ -89,4 +89,20 @@ public class ListUtil {
         }
         return T;
     }
+
+
+    /**
+     * Create a list of given length and content.
+     * @param n length of new list
+     * @param e object to be filled in
+     * @return list (e, ..., e) of length n
+     */
+    public static <C> List<C> fill(int n, C e) {
+        List<C> r = new ArrayList<C>( n );
+        for ( int m = 0; m < n; m++ ) {
+            r.add(e);
+        }
+        return r;
+    }
+
 }
