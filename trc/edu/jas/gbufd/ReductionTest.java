@@ -58,19 +58,13 @@ public class ReductionTest extends TestCase {
         return suite;
     }
 
-    //private final static int bitlen = 100;
 
     GenPolynomialRing<BigRational> fac;
 
-    GenPolynomial<BigRational> a;
-    GenPolynomial<BigRational> b;
-    GenPolynomial<BigRational> c;
-    GenPolynomial<BigRational> d;
-    GenPolynomial<BigRational> e;
+    GenPolynomial<BigRational> a, b, c, d, e;
 
     List<GenPolynomial<BigRational>> L;
-    PolynomialList<BigRational> F;
-    PolynomialList<BigRational> G;
+    PolynomialList<BigRational> F, G;
 
     //ReductionSeq<BigRational> red;
     //Reduction<BigRational> redpar;
@@ -98,10 +92,8 @@ public class ReductionTest extends TestCase {
 
     /**
      * Test rational coefficient r-reduction.
-     * 
      */
     public void testRationalRReduction() {
-
         RingFactory<BigRational> bi = new BigRational(0);
         ProductRing<BigRational> pr = new ProductRing<BigRational>(bi,3);
 
@@ -233,10 +225,8 @@ public class ReductionTest extends TestCase {
 
     /**
      * Test rational coefficient r-reduction with recording.
-     * 
      */
     public void testRatRReductionRecording() {
-
         RingFactory<BigRational> bi = new BigRational(0);
         ProductRing<BigRational> pr = new ProductRing<BigRational>(bi,3);
 
@@ -310,10 +300,8 @@ public class ReductionTest extends TestCase {
 
     /**
      * Test integer coefficient pseudo-reduction.
-     * 
      */
     public void testIntegerPseudoReduction() {
-
         BigInteger bi = new BigInteger(0);
         GenPolynomialRing<BigInteger> fac 
             = new GenPolynomialRing<BigInteger>( bi, rl );
@@ -386,10 +374,8 @@ public class ReductionTest extends TestCase {
 
     /**
      * Test integer pseudo coefficient reduction with recording.
-     * 
      */
     public void testIntReductionRecording() {
-
         BigInteger bi = new BigInteger(0);
         GenPolynomialRing<BigInteger> fac 
             = new GenPolynomialRing<BigInteger>( bi, rl );
@@ -479,10 +465,8 @@ public class ReductionTest extends TestCase {
 
     /**
      * Test integer coefficient pseudo r-reduction.
-     * 
      */
     public void testIntegerRReduction() {
-
         RingFactory<BigInteger> bi = new BigInteger(0);
         ProductRing<BigInteger> pr = new ProductRing<BigInteger>(bi,3);
 
@@ -595,10 +579,8 @@ public class ReductionTest extends TestCase {
 
     /**
      * Test integer pseudo coefficient r-reduction with recording.
-     * 
      */
     public void testIntRReductionRecording() {
-
         RingFactory<BigInteger> bi = new BigInteger(0);
         ProductRing<BigInteger> pr = new ProductRing<BigInteger>(bi,3);
 
