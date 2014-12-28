@@ -2361,6 +2361,7 @@ java_import "edu.jas.gb.WordGroebnerBaseSeq";
 java_import "edu.jas.gbufd.GroebnerBasePseudoRecSeq";
 java_import "edu.jas.gbufd.GroebnerBasePseudoSeq";
 java_import "edu.jas.gbufd.SolvableGroebnerBasePseudoSeq";
+java_import "edu.jas.gbufd.WordGroebnerBasePseudoSeq";
 java_import "edu.jas.gbufd.RGroebnerBasePseudoSeq";
 java_import "edu.jas.gbufd.GroebnerBasePseudoParallel";
 java_import "edu.jas.gbufd.PseudoReductionSeq";
@@ -5080,14 +5081,14 @@ Constructor for an ideal in a non-commutative polynomial ring.
            sr = StringReader.new( ringstr );
            tok = GenPolynomialTokenizer.new(ring.ring, sr);
            @list = tok.nextWordPolynomialList();
-           @ideal = WordIdeal.new(ring.ring,@list);
+           @ideal = WordIdeal.new(ring.ring, @list);
         else
            if list.is_a? WordIdeal
               @list = list.list;
               @ideal = list;
            else 
-              @list = rbarray2arraylist(list,rec=1);
-              @ideal = WordIdeal.new(ring.ring,@list);
+              @list = rbarray2arraylist(list, rec=1);
+              @ideal = WordIdeal.new(ring.ring, @list);
            end
         end
     end
@@ -5112,10 +5113,20 @@ Compute a two-sided Groebner base.
 Compute a two-sided Groebner base.
 =end
     def twosidedGB()
+        cofac = @ring.ring.coFac;
+        kind = "";
         t = System.currentTimeMillis();
-        gg = @ideal.GB();
+        if cofac.isField()
+           gg = @ideal.GB();
+           kind = "field"
+        else 
+           ff = @ideal.list;
+           fg = WordGroebnerBasePseudoSeq.new(cofac).GB(ff);
+           @ideal = WordIdeal.new(ring.ring, fg);
+           kind = "pseudo"
+        end
         t = System.currentTimeMillis() - t;
-        puts "executed twosidedGB in #{t} ms\n"; 
+        puts "executed(#{kind}) twosidedGB in #{t} ms\n"; 
         return self;
     end
 
@@ -5130,10 +5141,19 @@ Test if this is a two-sided Groebner base.
 Test if this is a two-sided Groebner base.
 =end
     def isTwosidedGB()
+        cofac = @ring.ring.coFac;
+        kind = "";
         t = System.currentTimeMillis();
-        b = @ideal.isGB();
+        if cofac.isField()
+           b = @ideal.isGB();
+           kind = "field"
+        else 
+           ff = @ideal.list;
+           b = WordGroebnerBasePseudoSeq.new(cofac).isGB(ff);
+           kind = "pseudo"
+        end
         t = System.currentTimeMillis() - t;
-        puts "isTwosidedGB executed in #{t} ms\n"; 
+        puts "executed(#{kind}) isTwosidedGB in #{t} ms\n"; 
         return b;
     end
 

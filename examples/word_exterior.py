@@ -14,6 +14,7 @@ from jas import QQ, ZZ, GF, ZM
 # GB in Clifford and Grassmann algebras
 
 r = WordPolyRing(QQ(), "a,b,c,f,g,h,u,v,w,x,y,z");
+#r = WordPolyRing(ZZ(), "a,b,c,f,g,h,u,v,w,x,y,z");
 print "WordPolyRing: " + str(r);
 print;
 

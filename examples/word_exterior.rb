@@ -10,6 +10,7 @@ require "examples/jas"
 # GB in Clifford and Grassmann algebras
 
 r = WordPolyRing.new(QQ(), "a,b,c,f,g,h,u,v,w,x,y,z");
+#r = WordPolyRing.new(ZZ(), "a,b,c,f,g,h,u,v,w,x,y,z");
 puts "WordPolyRing: " + str(r);
 puts;
 

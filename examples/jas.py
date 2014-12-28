@@ -38,6 +38,7 @@ from edu.jas.gb          import EReductionSeq, DGroebnerBaseSeq, EGroebnerBaseSe
 from edu.jas.gbufd       import GroebnerBasePseudoRecSeq, GroebnerBasePseudoSeq,\
                                 SolvableGroebnerBasePseudoSeq, SolvablePseudoReductionSeq,\
                                 PseudoReductionSeq, GroebnerBasePseudoParallel,\
+                                WordGroebnerBasePseudoSeq, WordPseudoReductionSeq,\
                                 RGroebnerBasePseudoSeq, RGroebnerBaseSeq, RReductionSeq,\
                                 CharacteristicSetWu
 from edu.jas.gbmod       import ModGroebnerBaseAbstract, ModSolvableGroebnerBaseAbstract,\
@@ -3933,10 +3934,19 @@ class WordPolyIdeal:
     def twosidedGB(self):
         '''Compute a two-sided Groebner base.
         '''
+        cofac = self.ring.ring.coFac;
+        F = self.ideal.list;
+        kind = "";
         t = System.currentTimeMillis();
-        G = self.ideal.GB();
+        if cofac.isField():
+            G = self.ideal.GB();
+            kind = "field"
+        else:
+            G = WordGroebnerBasePseudoSeq(cofac).GB(F);
+            self.ideal = WordIdeal(self.ring.ring, G);
+            kind = "pseudo"
         t = System.currentTimeMillis() - t;
-        print "executed twosidedGB in %s ms" % t; 
+        print "sequential(%s) twosidedGB executed in %s ms" % (kind, t); 
         return self;
 
     def isGB(self):
@@ -3947,11 +3957,18 @@ class WordPolyIdeal:
     def isTwosidedGB(self):
         '''Test if this is a two-sided Groebner base.
         '''
-        F = self.list;
+        cofac = self.ring.ring.coFac;
+        F = self.ideal.list;
+        kind = "";
         t = System.currentTimeMillis();
-        b = self.ideal.isGB();
+        if cofac.isField():
+            b = self.ideal.isGB();
+            kind = "field"
+        else:
+            b = WordGroebnerBasePseudoSeq(cofac).isGB(F);
+            kind = "pseudo"
         t = System.currentTimeMillis() - t;
-        print "isTwosidedGB executed in %s ms" % t; 
+        print "sequential(%s) isTwosidedGB executed in %s ms" % (kind, t); 
         return b;
 
     def __cmp__(self, other):
