@@ -98,6 +98,10 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>>
         super(red,pl);
         this.red = red;
         cofac = rf;
+        if (!cofac.isCommutative()) {
+            logger.warn("right reduction not correct for " + cofac.toScript());
+        }
+        // TODO check that also coeffTable is empty for recursive solvable poly ring
         engine = GCDFactory.<C> getImplementation(rf);
         //not used: engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getProxy( rf );
     }
@@ -109,6 +113,7 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>>
      * @param F polynomial list.
      * @return GB(F) a Groebner base of F.
      */
+    @Override
     public List<GenSolvablePolynomial<C>> leftGB(int modv, List<GenSolvablePolynomial<C>> F) {
         List<GenSolvablePolynomial<C>> G = normalizeZerosOnes(F);
         G = PolynomialList.<C> castToSolvableList( engine.basePrimitivePart(PolynomialList.<C> castToList(G)) );
@@ -236,7 +241,7 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>>
      * @param Fp solvable polynomial list.
      * @return tsGB(Fp) a twosided Groebner base of Fp.
      */
-    //@SuppressWarnings("unchecked")
+    @Override
     public List<GenSolvablePolynomial<C>> twosidedGB(int modv, 
                                           List<GenSolvablePolynomial<C>> Fp) {
         List<GenSolvablePolynomial<C>> G = normalizeZerosOnes(Fp);
@@ -351,6 +356,7 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>>
      * <b>Note: </b> not implemented;
      */
     //@SuppressWarnings("unchecked")
+    @Override
     public SolvableExtendedGB<C> extLeftGB(int modv, List<GenSolvablePolynomial<C>> F) {
 	throw new UnsupportedOperationException(); // TODO
     }

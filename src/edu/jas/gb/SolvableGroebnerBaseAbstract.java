@@ -502,16 +502,11 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
      */
     @SuppressWarnings("unchecked")
     public List<GenSolvablePolynomial<C>> rightGB(int modv, List<GenSolvablePolynomial<C>> F) {
-        GenSolvablePolynomialRing<C> ring = null;
-        for (GenSolvablePolynomial<C> p : F) {
-            if (p != null) {
-                ring = p.ring;
-                break;
-            }
+        List<GenSolvablePolynomial<C>> G = normalizeZerosOnes(F);
+        if ( G.size() <= 1 ) {
+            return G;
         }
-        if (ring == null) {
-            return F;
-        }
+        GenSolvablePolynomialRing<C> ring = G.get(0).ring; // assert != null
         GenSolvablePolynomialRing<C> rring = ring.reverse(true); //true
         //System.out.println("reversed ring = " + rring);
         GenSolvablePolynomial<C> q;
@@ -538,7 +533,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
         }
         //System.out.println("reversed left GB = " + rG);
         ring = rring.reverse(true); // true
-        List<GenSolvablePolynomial<C>> G = new ArrayList<GenSolvablePolynomial<C>>(rG.size());
+        G = new ArrayList<GenSolvablePolynomial<C>>(rG.size());
         for (GenSolvablePolynomial<C> p : rG) {
             if (p != null) {
                 q = (GenSolvablePolynomial<C>) p.reverse(ring);

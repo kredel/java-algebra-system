@@ -420,10 +420,86 @@ public class SolvablePseudoReductionSeq<C extends RingElem<C>> extends SolvableR
      * @return nf(Ap) with respect to Pp.
      * <b>Note: </b> not implemented;
      */
-    //@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     public GenSolvablePolynomial<C> rightNormalform(List<GenSolvablePolynomial<C>> Pp, 
                                                     GenSolvablePolynomial<C> Ap) {
-	throw new UnsupportedOperationException(); // TODO
+	//throw new UnsupportedOperationException(); // TODO
+        if (Pp == null || Pp.isEmpty()) {
+            return Ap;
+        }
+        if (Ap == null || Ap.isZERO()) {
+            return Ap;
+        }
+        Map.Entry<ExpVector, C> m;
+        GenSolvablePolynomial<C>[] P = new GenSolvablePolynomial[0];
+        synchronized (Pp) {
+            P = Pp.toArray(P);
+        }
+        int l = P.length;
+        ExpVector[] htl = new ExpVector[l];
+        C[] lbc = (C[]) new RingElem[l];
+        GenSolvablePolynomial<C>[] p = new GenSolvablePolynomial[l];
+        int i;
+        int j = 0;
+        for (i = 0; i < l; i++) {
+            if (P[i] == null) {
+                continue;
+            }
+            p[i] = P[i];
+            m = p[i].leadingMonomial();
+            if (m != null) {
+                p[j] = p[i];
+                htl[j] = m.getKey();
+                lbc[j] = m.getValue();
+                j++;
+            }
+        }
+        l = j;
+        ExpVector e;
+        C a;
+        boolean mt = false;
+        GenSolvablePolynomial<C> R = Ap.ring.getZERO().copy();
+        GenSolvablePolynomial<C> Q = null;
+        GenSolvablePolynomial<C> S = Ap.copy();
+        while (S.length() > 0) {
+            m = S.leadingMonomial();
+            e = m.getKey();
+            a = m.getValue();
+            for (i = 0; i < l; i++) {
+                mt = e.multipleOf(htl[i]);
+                if (mt)
+                    break;
+            }
+            if (!mt) {
+                //logger.debug("irred");
+                //R = R.sum(a, e);
+                //S = S.subtract(a, e);
+                R.doPutToMap(e, a);
+                S.doRemoveFromMap(e, a);
+                //System.out.println(" S = " + S);
+            } else {
+                e = e.subtract(htl[i]);
+                //logger.info("red div = " + e);
+                // need pi * a * e, but only pi * e * a or a * pi * e available
+                Q = p[i].multiply(e); 
+                assert Q.multiply(a).equals(Q.multiplyLeft(a));
+                C c = Q.leadingBaseCoefficient();
+                if (a.remainder(c).isZERO()) { 
+                    a = a.divide(c); // left?
+                    //S = (GenSolvablePolynomial<C>) S.subtractMultiple(a, Q);
+                    S = (GenSolvablePolynomial<C>) S.subtract(Q.multiply(a));
+                } else {
+                    R = R.multiply(c);
+                    S = S.multiply(c);
+                    //S = (GenSolvablePolynomial<C>) S.scaleSubtractMultiple(c, a, Q);
+                    S = (GenSolvablePolynomial<C>) S.subtract(Q.multiply(a));
+                }
+                //Q = p[i].multiply(a, e);
+                //S = S.subtract(Q);
+            }
+        }
+        //System.out.println("R = " + R);
+        return R;
     }
 
 
