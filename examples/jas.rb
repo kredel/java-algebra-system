@@ -2360,6 +2360,7 @@ java_import "edu.jas.gb.WordGroebnerBaseSeq";
 
 java_import "edu.jas.gbufd.GroebnerBasePseudoRecSeq";
 java_import "edu.jas.gbufd.GroebnerBasePseudoSeq";
+java_import "edu.jas.gbufd.SolvableGroebnerBasePseudoSeq";
 java_import "edu.jas.gbufd.RGroebnerBasePseudoSeq";
 java_import "edu.jas.gbufd.GroebnerBasePseudoParallel";
 java_import "edu.jas.gbufd.PseudoReductionSeq";
@@ -3574,12 +3575,19 @@ Compute a left Groebner base.
         #if ideal != nil
         #   return SolvIdeal.new(@ring,"",@ideal.leftGB());
         #end
-        s = @pset;
-        ff = s.list;
+        cofac = @ring.ring.coFac;
+        ff = @pset.list;
+        kind = "";
         t = System.currentTimeMillis();
-        gg = SolvableGroebnerBaseSeq.new().leftGB(ff);
+        if cofac.isField()
+           gg = SolvableGroebnerBaseSeq.new().leftGB(ff);
+           kind = "field"
+        else 
+           gg = SolvableGroebnerBasePseudoSeq.new(cofac).leftGB(ff);
+           kind = "pseudo"
+        end
         t = System.currentTimeMillis() - t;
-        puts "executed leftGB in #{t} ms\n"; 
+        puts "sequential(#{kind}) leftGB executed in #{t} ms\n"; 
         return SolvIdeal.new(@ring,"",gg);
     end
 
@@ -3587,12 +3595,19 @@ Compute a left Groebner base.
 Test if this is a left Groebner base.
 =end
     def isLeftGB()
-        s = @pset;
-        ff = s.list;
+        cofac = @ring.ring.coFac;
+        ff = @pset.list;
+        kind = "";
         t = System.currentTimeMillis();
-        b = SolvableGroebnerBaseSeq.new().isLeftGB(ff);
+        if cofac.isField()
+           b = SolvableGroebnerBaseSeq.new().isLeftGB(ff);
+           kind = "field"
+        else 
+           b = SolvableGroebnerBasePseudoSeq.new(cofac).isLeftGB(ff);
+           kind = "pseudo"
+        end
         t = System.currentTimeMillis() - t;
-        puts "isLeftGB executed in #{t} ms\n"; 
+        puts "isLeftGB(#{kind}) executed in #{t} ms\n"; 
         return b;
     end
 
@@ -3600,12 +3615,19 @@ Test if this is a left Groebner base.
 Compute a two-sided Groebner base.
 =end
     def twosidedGB()
-        s = @pset;
-        ff = s.list;
+        cofac = @ring.ring.coFac;
+        ff = @pset.list;
+        kind = "";
         t = System.currentTimeMillis();
-        gg = SolvableGroebnerBaseSeq.new().twosidedGB(ff);
+        if cofac.isField()
+           gg = SolvableGroebnerBaseSeq.new().twosidedGB(ff);
+           kind = "field"
+        else 
+           gg = SolvableGroebnerBasePseudoSeq.new(cofac).twosidedGB(ff);
+           kind = "pseudo"
+        end
         t = System.currentTimeMillis() - t;
-        puts "executed twosidedGB in #{t} ms\n"; 
+        puts "sequential(#{kind}) twosidedGB executed in #{t} ms\n"; 
         return SolvIdeal.new(@ring,"",gg);
     end
 
@@ -3613,12 +3635,19 @@ Compute a two-sided Groebner base.
 Test if this is a two-sided Groebner base.
 =end
     def isTwosidedGB()
-        s = @pset;
-        ff = s.list;
+        cofac = @ring.ring.coFac;
+        ff = @pset.list;
+        kind = "";
         t = System.currentTimeMillis();
-        b = SolvableGroebnerBaseSeq.new().isTwosidedGB(ff);
+        if cofac.isField()
+           b = SolvableGroebnerBaseSeq.new().isTwosidedGB(ff);
+           kind = "field"
+        else 
+           b = SolvableGroebnerBasePseudoSeq.new(cofac).isTwosidedGB(ff);
+           kind = "pseudo"
+        end
         t = System.currentTimeMillis() - t;
-        puts "isTwosidedGB executed in #{t} ms\n"; 
+        puts "isTwosidedGB(#{kind}) executed in #{t} ms\n"; 
         return b;
     end
 
@@ -3626,12 +3655,19 @@ Test if this is a two-sided Groebner base.
 Compute a right Groebner base.
 =end
     def rightGB()
-        s = @pset;
-        ff = s.list;
+        cofac = @ring.ring.coFac;
+        ff = @pset.list;
+        kind = "";
         t = System.currentTimeMillis();
-        gg = SolvableGroebnerBaseSeq.new().rightGB(ff);
+        if cofac.isField()
+           gg = SolvableGroebnerBaseSeq.new().rightGB(ff);
+           kind = "field"
+        else 
+           gg = SolvableGroebnerBasePseudoSeq.new(cofac).rightGB(ff);
+           kind = "pseudo"
+        end
         t = System.currentTimeMillis() - t;
-        puts "executed rightGB in #{t} ms\n"; 
+        puts "sequential(#{kind}) rightGB executed in #{t} ms\n"; 
         return SolvIdeal.new(@ring,"",gg);
     end
 
@@ -3639,12 +3675,19 @@ Compute a right Groebner base.
 Test if this is a right Groebner base.
 =end
     def isRightGB()
-        s = @pset;
-        ff = s.list;
+        cofac = @ring.ring.coFac;
+        ff = @pset.list;
+        kind = "";
         t = System.currentTimeMillis();
-        b = SolvableGroebnerBaseSeq.new().isRightGB(ff);
+        if cofac.isField()
+           b = SolvableGroebnerBaseSeq.new().isRightGB(ff);
+           kind = "field"
+        else 
+           b = SolvableGroebnerBasePseudoSeq.new(cofac).isRightGB(ff);
+           kind = "pseudo"
+        end
         t = System.currentTimeMillis() - t;
-        puts "isRightGB executed in #{t} ms\n"; 
+        puts "isRightGB(#{kind}) executed in #{t} ms\n"; 
         return b;
     end
 

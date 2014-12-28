@@ -36,6 +36,7 @@ from edu.jas.gb          import EReductionSeq, DGroebnerBaseSeq, EGroebnerBaseSe
                                 SolvableGroebnerBaseParallel, SolvableGroebnerBaseSeq,\
                                 SolvableReductionSeq, WordGroebnerBaseSeq
 from edu.jas.gbufd       import GroebnerBasePseudoRecSeq, GroebnerBasePseudoSeq,\
+                                SolvableGroebnerBasePseudoSeq, SolvablePseudoReductionSeq,\
                                 PseudoReductionSeq, GroebnerBasePseudoParallel,\
                                 RGroebnerBasePseudoSeq, RGroebnerBaseSeq, RReductionSeq,\
                                 CharacteristicSetWu
@@ -1269,67 +1270,103 @@ class SolvableIdeal:
     def leftGB(self):
         '''Compute a left Groebner base.
         '''
-        s = self.pset;
-        F = s.list;
+        cofac = self.ring.ring.coFac;
+        F = self.pset.list;
+        kind = "";
         t = System.currentTimeMillis();
-        G = SolvableGroebnerBaseSeq().leftGB(F);
+        if cofac.isField():
+            G = SolvableGroebnerBaseSeq().leftGB(F);
+            kind = "field"
+        else:
+            G = SolvableGroebnerBasePseudoSeq(cofac).leftGB(F);
+            kind = "pseudo"
         t = System.currentTimeMillis() - t;
-        print "executed leftGB in %s ms" % t; 
+        print "sequential(%s) left GB executed in %s ms" % (kind, t); 
         return SolvableIdeal(self.ring,"",G);
 
     def isLeftGB(self):
         '''Test if this is a left Groebner base.
         '''
-        s = self.pset;
-        F = s.list;
+        cofac = self.ring.ring.coFac;
+        F = self.pset.list;
+        kind = "";
         t = System.currentTimeMillis();
-        b = SolvableGroebnerBaseSeq().isLeftGB(F);
+        if cofac.isField():
+            b = SolvableGroebnerBaseSeq().isLeftGB(F);
+            kind = "field"
+        else:
+            b = SolvableGroebnerBasePseudoSeq(cofac).isLeftGB(F);
+            kind = "pseudo"
         t = System.currentTimeMillis() - t;
-        print "isLeftGB executed in %s ms" % t; 
+        print "sequential(%s) isLeftGB executed in %s ms" % (kind, t); 
         return b;
 
     def twosidedGB(self):
         '''Compute a two-sided Groebner base.
         '''
-        s = self.pset;
-        F = s.list;
+        cofac = self.ring.ring.coFac;
+        F = self.pset.list;
+        kind = "";
         t = System.currentTimeMillis();
-        G = SolvableGroebnerBaseSeq().twosidedGB(F);
+        if cofac.isField():
+            G = SolvableGroebnerBaseSeq().twosidedGB(F);
+            kind = "field"
+        else:
+            G = SolvableGroebnerBasePseudoSeq(cofac).twosidedGB(F);
+            kind = "pseudo"
         t = System.currentTimeMillis() - t;
-        print "executed twosidedGB in %s ms" % t; 
+        print "sequential(%s) twosided GB executed in %s ms" % (kind, t); 
         return SolvableIdeal(self.ring,"",G);
 
     def isTwosidedGB(self):
         '''Test if this is a two-sided Groebner base.
         '''
-        s = self.pset;
-        F = s.list;
+        cofac = self.ring.ring.coFac;
+        F = self.pset.list;
+        kind = "";
         t = System.currentTimeMillis();
-        b = SolvableGroebnerBaseSeq().isTwosidedGB(F);
+        if cofac.isField():
+            b = SolvableGroebnerBaseSeq().isTwosidedGB(F);
+            kind = "field"
+        else:
+            b = SolvableGroebnerBasePseudoSeq(cofac).isTwosidedGB(F);
+            kind = "pseudo"
         t = System.currentTimeMillis() - t;
-        print "isTwosidedGB executed in %s ms" % t; 
+        print "sequential(%s) isTwosidedGB executed in %s ms" % (kind, t); 
         return b;
 
     def rightGB(self):
         '''Compute a right Groebner base.
         '''
-        s = self.pset;
-        F = s.list;
+        cofac = self.ring.ring.coFac;
+        F = self.pset.list;
+        kind = "";
         t = System.currentTimeMillis();
-        G = SolvableGroebnerBaseSeq().rightGB(F);
+        if cofac.isField():
+            G = SolvableGroebnerBaseSeq().rightGB(F);
+            kind = "field"
+        else:
+            G = SolvableGroebnerBasePseudoSeq(cofac).rightGB(F);
+            kind = "pseudo"
         t = System.currentTimeMillis() - t;
-        print "executed rightGB in %s ms" % t; 
+        print "sequential(%s) right GB executed in %s ms" % (kind, t); 
         return SolvableIdeal(self.ring,"",G);
 
     def isRightGB(self):
         '''Test if this is a right Groebner base.
         '''
-        s = self.pset;
-        F = s.list;
+        cofac = self.ring.ring.coFac;
+        F = self.pset.list;
+        kind = "";
         t = System.currentTimeMillis();
-        b = SolvableGroebnerBaseSeq().isRightGB(F);
+        if cofac.isField():
+            b = SolvableGroebnerBaseSeq().isRightGB(F);
+            kind = "field"
+        else:
+            b = SolvableGroebnerBasePseudoSeq(cofac).isRightGB(F);
+            kind = "pseudo"
         t = System.currentTimeMillis() - t;
-        print "isRightGB executed in %s ms" % t; 
+        print "sequential(%s) isRightGB executed in %s ms" % (kind, t); 
         return b;
 
     def intersectRing(self,ring):

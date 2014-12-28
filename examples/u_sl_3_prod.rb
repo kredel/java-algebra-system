@@ -9,7 +9,8 @@ require "examples/jas"
 
 rs = """
 # solvable polynomials, U(sl_3):
-Rat(Xa,Xb,Xc,Ya,Yb,Yc,Ha,Hb) G
+#Rat(Xa,Xb,Xc,Ya,Yb,Yc,Ha,Hb) G
+Int(Xa,Xb,Xc,Ya,Yb,Yc,Ha,Hb) G
 RelationTable
 (
  ( Xb ), ( Xa ), ( Xa Xb - Xc ),

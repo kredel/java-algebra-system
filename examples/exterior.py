@@ -13,6 +13,7 @@ from jas import SolvableRing
 rs = """
 # exterior calculus example:
 Rat(a,b,c,f,g,h,u,v,w,x,y,z) L
+#Int(a,b,c,f,g,h,u,v,w,x,y,z) L
 RelationTable
 (
  ( b ), ( a ), ( - a b ),
@@ -142,3 +143,7 @@ print "left == right GB:      " + str(lg == rg);
 print "left == twosided GB:   " + str(lg == tg);
 print "two sided == right GB: " + str(tg == rg);
 
+print "is left GB:            " + str(lg.isLeftGB());
+print "is twosided GB:        " + str(tg.isTwosidedGB());
+print "is right GB:           " + str(rg.isRightGB());
+print

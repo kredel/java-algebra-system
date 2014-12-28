@@ -12,6 +12,7 @@ require "examples/jas"
 rs = """
 # exterior calculus example:
 Rat(a,b,c,f,g,h,u,v,w,x,y,z) L
+#Int(a,b,c,f,g,h,u,v,w,x,y,z) L
 RelationTable
 (
  ( b ), ( a ), ( - a b ),
@@ -141,3 +142,8 @@ puts;
 puts "left == right GB:      " + str(lg == rg);
 puts "left == twosided GB:   " + str(lg == tg);
 puts "two sided == right GB: " + str(tg == rg);
+
+puts "is left GB:            " + str(lg.isLeftGB());
+puts "is twosided GB:        " + str(tg.isTwosidedGB());
+puts "is right GB:           " + str(rg.isRightGB());
+puts
