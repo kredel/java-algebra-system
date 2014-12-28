@@ -165,7 +165,7 @@ public final class GenWordPolynomial<C extends RingElem<C>> implements RingElem<
 
 
     /**
-     * Put an Word to coefficient entry into the internal map of this
+     * Put a Word to coefficient entry into the internal map of this
      * GenWordPolynomial. <b>Note:</b> Do not use this method unless you are
      * constructing a new polynomial. this is modified and breaks the
      * immutability promise of this class.
@@ -181,6 +181,27 @@ public final class GenWordPolynomial<C extends RingElem<C>> implements RingElem<
         }
         if (!c.isZERO()) {
             val.put(e, c);
+        }
+    }
+
+
+    /**
+     * Remove a Word to coefficient entry from the internal map of this
+     * GenWordPolynomial. <b>Note:</b> Do not use this method unless you are
+     * constructing a new polynomial. this is modified and breaks the
+     * immutability promise of this class.
+     * @param e Word.
+     * @param c expected coefficient, null for ignore.
+     */
+    public void doRemoveFromMap(Word e, C c) {
+        C b = val.remove(e);
+        if (debug) {
+            if (c == null) { // ignore b
+                return;
+            }
+            if (!c.equals(b)) {
+                logger.error("map entry wrong " + e + " to " + c + " old " + b);
+            }
         }
     }
 

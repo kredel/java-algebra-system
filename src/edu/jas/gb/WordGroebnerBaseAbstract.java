@@ -205,6 +205,7 @@ public abstract class WordGroebnerBaseAbstract<C extends RingElem<C>> implements
                 GenWordPolynomial<C> pj = F.get(j);
                 List<GenWordPolynomial<C>> S = red.SPolynomials(pi, pj);
                 for (GenWordPolynomial<C> s : S) {
+                    //System.out.println("s-pol("+i+","+j+"): " + s.leadingWord());
                     GenWordPolynomial<C> h = red.normalform(F, s);
                     if (!h.isZERO()) {
                         logger.info("no GB: pi = " + pi + ", pj = " + pj);
@@ -214,6 +215,7 @@ public abstract class WordGroebnerBaseAbstract<C extends RingElem<C>> implements
                 }
                 S = red.SPolynomials(pj, pi);
                 for (GenWordPolynomial<C> s : S) {
+                    //System.out.println("s-pol("+j+","+i+"): " + s.leadingWord());
                     GenWordPolynomial<C> h = red.normalform(F, s);
                     if (!h.isZERO()) {
                         logger.info("no GB: pj = " + pj + ", pi = " + pi);
