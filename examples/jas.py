@@ -1275,7 +1275,7 @@ class SolvableIdeal:
         F = self.pset.list;
         kind = "";
         t = System.currentTimeMillis();
-        if cofac.isField():
+        if cofac.isField() or not cofac.isCommutative():
             G = SolvableGroebnerBaseSeq().leftGB(F);
             kind = "field"
         else:
@@ -1292,7 +1292,7 @@ class SolvableIdeal:
         F = self.pset.list;
         kind = "";
         t = System.currentTimeMillis();
-        if cofac.isField():
+        if cofac.isField() or not cofac.isCommutative():
             b = SolvableGroebnerBaseSeq().isLeftGB(F);
             kind = "field"
         else:
@@ -1309,7 +1309,7 @@ class SolvableIdeal:
         F = self.pset.list;
         kind = "";
         t = System.currentTimeMillis();
-        if cofac.isField():
+        if cofac.isField() or not cofac.isCommutative():
             G = SolvableGroebnerBaseSeq().twosidedGB(F);
             kind = "field"
         else:
@@ -1326,7 +1326,7 @@ class SolvableIdeal:
         F = self.pset.list;
         kind = "";
         t = System.currentTimeMillis();
-        if cofac.isField():
+        if cofac.isField() or not cofac.isCommutative():
             b = SolvableGroebnerBaseSeq().isTwosidedGB(F);
             kind = "field"
         else:
@@ -1343,7 +1343,7 @@ class SolvableIdeal:
         F = self.pset.list;
         kind = "";
         t = System.currentTimeMillis();
-        if cofac.isField():
+        if cofac.isField() or not cofac.isCommutative():
             G = SolvableGroebnerBaseSeq().rightGB(F);
             kind = "field"
         else:
@@ -1360,7 +1360,7 @@ class SolvableIdeal:
         F = self.pset.list;
         kind = "";
         t = System.currentTimeMillis();
-        if cofac.isField():
+        if cofac.isField() or not cofac.isCommutative():
             b = SolvableGroebnerBaseSeq().isRightGB(F);
             kind = "field"
         else:
@@ -3938,7 +3938,7 @@ class WordPolyIdeal:
         F = self.ideal.list;
         kind = "";
         t = System.currentTimeMillis();
-        if cofac.isField():
+        if cofac.isField() or not cofac.isCommutative():
             G = self.ideal.GB();
             kind = "field"
         else:
@@ -3961,7 +3961,7 @@ class WordPolyIdeal:
         F = self.ideal.list;
         kind = "";
         t = System.currentTimeMillis();
-        if cofac.isField():
+        if cofac.isField() or not cofac.isCommutative():
             b = self.ideal.isGB();
             kind = "field"
         else:

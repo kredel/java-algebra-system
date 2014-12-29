@@ -3580,7 +3580,7 @@ Compute a left Groebner base.
         ff = @pset.list;
         kind = "";
         t = System.currentTimeMillis();
-        if cofac.isField()
+        if cofac.isField() or not cofac.isCommutative()
            gg = SolvableGroebnerBaseSeq.new().leftGB(ff);
            kind = "field"
         else 
@@ -3600,7 +3600,7 @@ Test if this is a left Groebner base.
         ff = @pset.list;
         kind = "";
         t = System.currentTimeMillis();
-        if cofac.isField()
+        if cofac.isField() or not cofac.isCommutative()
            b = SolvableGroebnerBaseSeq.new().isLeftGB(ff);
            kind = "field"
         else 
@@ -3620,7 +3620,7 @@ Compute a two-sided Groebner base.
         ff = @pset.list;
         kind = "";
         t = System.currentTimeMillis();
-        if cofac.isField()
+        if cofac.isField() or not cofac.isCommutative()
            gg = SolvableGroebnerBaseSeq.new().twosidedGB(ff);
            kind = "field"
         else 
@@ -3640,7 +3640,7 @@ Test if this is a two-sided Groebner base.
         ff = @pset.list;
         kind = "";
         t = System.currentTimeMillis();
-        if cofac.isField()
+        if cofac.isField() or not cofac.isCommutative()
            b = SolvableGroebnerBaseSeq.new().isTwosidedGB(ff);
            kind = "field"
         else 
@@ -3660,7 +3660,7 @@ Compute a right Groebner base.
         ff = @pset.list;
         kind = "";
         t = System.currentTimeMillis();
-        if cofac.isField()
+        if cofac.isField() or not cofac.isCommutative()
            gg = SolvableGroebnerBaseSeq.new().rightGB(ff);
            kind = "field"
         else 
@@ -3680,7 +3680,7 @@ Test if this is a right Groebner base.
         ff = @pset.list;
         kind = "";
         t = System.currentTimeMillis();
-        if cofac.isField()
+        if cofac.isField() or not cofac.isCommutative()
            b = SolvableGroebnerBaseSeq.new().isRightGB(ff);
            kind = "field"
         else 
@@ -5116,7 +5116,7 @@ Compute a two-sided Groebner base.
         cofac = @ring.ring.coFac;
         kind = "";
         t = System.currentTimeMillis();
-        if cofac.isField()
+        if cofac.isField() or not cofac.isCommutative()
            gg = @ideal.GB();
            kind = "field"
         else 
@@ -5144,7 +5144,7 @@ Test if this is a two-sided Groebner base.
         cofac = @ring.ring.coFac;
         kind = "";
         t = System.currentTimeMillis();
-        if cofac.isField()
+        if cofac.isField() or not cofac.isCommutative()
            b = @ideal.isGB();
            kind = "field"
         else 
