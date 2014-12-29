@@ -103,6 +103,7 @@ public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
      * @param rf coefficient ring factory.
      * @param pl pair selection strategy
      */
+    @SuppressWarnings("cast")
     public GroebnerBasePseudoRecSeq(PseudoReduction<GenPolynomial<C>> red, RingFactory<GenPolynomial<C>> rf,
                     PairList<GenPolynomial<C>> pl) {
         super(red, pl);

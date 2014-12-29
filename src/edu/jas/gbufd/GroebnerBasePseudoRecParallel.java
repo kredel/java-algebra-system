@@ -8,7 +8,6 @@ package edu.jas.gbufd;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.concurrent.Semaphore;
 
 import org.apache.log4j.Logger;
@@ -152,6 +151,7 @@ public class GroebnerBasePseudoRecParallel<C extends GcdRingElem<C>> extends
      * @param pool ThreadPool to use.
      * @param pl pair selection strategy
      */
+    @SuppressWarnings("cast")
     public GroebnerBasePseudoRecParallel(int threads, RingFactory<GenPolynomial<C>> rf,
                     PseudoReduction<GenPolynomial<C>> red, ThreadPool pool, PairList<GenPolynomial<C>> pl) {
         super(red, pl);
@@ -208,14 +208,14 @@ public class GroebnerBasePseudoRecParallel<C extends GcdRingElem<C>> extends
     public List<GenPolynomial<GenPolynomial<C>>> GB(int modv, List<GenPolynomial<GenPolynomial<C>>> F) {
         List<GenPolynomial<GenPolynomial<C>>> G = normalizeZerosOnes(F);
         G = engine.recursivePrimitivePart(G);
-        if ( G.size() <= 1 ) {
+        if (G.size() <= 1) {
             return G;
         }
         GenPolynomialRing<GenPolynomial<C>> ring = G.get(0).ring;
-        if ( ring.coFac.isField() ) { // TODO remove
+        if (ring.coFac.isField()) { // TODO remove
             throw new IllegalArgumentException("coefficients from a field");
         }
-        PairList<GenPolynomial<C>> pairlist = strategy.create( modv, ring ); 
+        PairList<GenPolynomial<C>> pairlist = strategy.create(modv, ring);
         pairlist.put(G);
 
         /*
@@ -353,6 +353,7 @@ public class GroebnerBasePseudoRecParallel<C extends GcdRingElem<C>> extends
      * @param F recursive polynomial list.
      * @return true, if F is a Groebner base, else false.
      */
+    @Override
     public boolean isGBsimple(int modv, List<GenPolynomial<GenPolynomial<C>>> F) {
         if (F == null || F.isEmpty()) {
             return true;
@@ -411,7 +412,9 @@ class PseudoReducerRec<C extends GcdRingElem<C>> implements Runnable {
 
     private final PseudoReductionPar<GenPolynomial<C>> red;
 
+
     private final PseudoReductionPar<C> redRec;
+
 
     private final GreatestCommonDivisorAbstract<C> engine;
 
@@ -549,7 +552,7 @@ class PseudoMiReducerRec<C extends GcdRingElem<C>> implements Runnable {
     private GenPolynomial<GenPolynomial<C>> H;
 
 
-    private final PseudoReductionPar<GenPolynomial<C>> red;
+    //private final PseudoReductionPar<GenPolynomial<C>> red;
 
 
     private final PseudoReductionPar<C> redRec;
@@ -569,7 +572,7 @@ class PseudoMiReducerRec<C extends GcdRingElem<C>> implements Runnable {
         this.G = G;
         this.engine = engine;
         H = p;
-        red = new PseudoReductionPar<GenPolynomial<C>>();
+        //red = new PseudoReductionPar<GenPolynomial<C>>();
         redRec = new PseudoReductionPar<C>();
     }
 
