@@ -8,7 +8,6 @@ package edu.jas.gbufd;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.ListIterator;
 
 import org.apache.log4j.Logger;
 
@@ -128,14 +127,14 @@ public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
     public List<GenPolynomial<GenPolynomial<C>>> GB(int modv, List<GenPolynomial<GenPolynomial<C>>> F) {
         List<GenPolynomial<GenPolynomial<C>>> G = normalizeZerosOnes(F);
         G = engine.recursivePrimitivePart(G);
-        if ( G.size() <= 1 ) {
+        if (G.size() <= 1) {
             return G;
         }
         GenPolynomialRing<GenPolynomial<C>> ring = G.get(0).ring;
-        if ( ring.coFac.isField() ) { // TODO remove
+        if (ring.coFac.isField()) { // TODO remove
             throw new IllegalArgumentException("coefficients from a field");
         }
-        PairList<GenPolynomial<C>> pairlist = strategy.create( modv, ring ); 
+        PairList<GenPolynomial<C>> pairlist = strategy.create(modv, ring);
         pairlist.put(G);
 
         /*
@@ -201,7 +200,7 @@ public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
             if (debug) {
                 logger.info("ht(H) = " + H.leadingExpVector());
             }
-            H = engine.recursivePrimitivePart(H); 
+            H = engine.recursivePrimitivePart(H);
             H = H.abs();
             if (H.isConstant()) {
                 G.clear();
@@ -298,6 +297,7 @@ public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
      * @param F recursive polynomial list.
      * @return true, if F is a Groebner base, else false.
      */
+    @Override
     public boolean isGBsimple(int modv, List<GenPolynomial<GenPolynomial<C>>> F) {
         if (F == null || F.isEmpty()) {
             return true;

@@ -7,17 +7,17 @@ package edu.jas.gb;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.HashSet;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.poly.Word;
 import edu.jas.poly.GenWordPolynomial;
 import edu.jas.poly.GenWordPolynomialRing;
+import edu.jas.poly.Word;
 import edu.jas.structure.RingElem;
 
 
@@ -94,19 +94,19 @@ public abstract class WordGroebnerBaseAbstract<C extends RingElem<C>> implements
      */
     public List<GenWordPolynomial<C>> normalizeZerosOnes(List<GenWordPolynomial<C>> A) {
         List<GenWordPolynomial<C>> N = new ArrayList<GenWordPolynomial<C>>(A.size());
-        if ( A == null || A.isEmpty() ) {
+        if (A == null || A.isEmpty()) {
             return N;
         }
         for (GenWordPolynomial<C> p : A) {
-            if ( p == null || p.isZERO() ) {
+            if (p == null || p.isZERO()) {
                 continue;
             }
-            if ( p.isUnit() ) {
+            if (p.isUnit()) {
                 N.clear();
-                N.add( p.ring.getONE() );
+                N.add(p.ring.getONE());
                 return N;
             }
-            N.add( p.abs() );
+            N.add(p.abs());
         }
         //N.trimToSize();
         return N;
@@ -114,7 +114,8 @@ public abstract class WordGroebnerBaseAbstract<C extends RingElem<C>> implements
 
 
     /**
-     * Common zero test, test if univariate leading words exist for all variables.
+     * Common zero test, test if univariate leading words exist for all
+     * variables.
      * @param F polynomial list.
      * @return -1, 0 or 1 if "dimension"(ideal(F)) &eq; -1, 0 or &ge; 1.
      */
@@ -138,7 +139,7 @@ public abstract class WordGroebnerBaseAbstract<C extends RingElem<C>> implements
             if (e == null) {
                 continue;
             }
-            SortedMap<String,Integer> u = e.dependencyOnVariables();
+            SortedMap<String, Integer> u = e.dependencyOnVariables();
             if (u == null) {
                 continue;
             }
@@ -173,18 +174,18 @@ public abstract class WordGroebnerBaseAbstract<C extends RingElem<C>> implements
             if (e == null) {
                 continue;
             }
-            SortedMap<String,Integer> u = e.dependencyOnVariables();
+            SortedMap<String, Integer> u = e.dependencyOnVariables();
             if (u == null) {
                 continue;
             }
             if (u.size() == 1) {
-                Long d = v.get( u.firstKey() );
+                Long d = v.get(u.firstKey());
                 if (d == null) { // record only once
-                    v.put( u.firstKey(), Long.valueOf( u.get(u.firstKey()) ) );
+                    v.put(u.firstKey(), Long.valueOf(u.get(u.firstKey())));
                 }
             }
         }
-        ud.addAll( v.values() );
+        ud.addAll(v.values());
         //Collections.reverse(ud);
         return ud;
     }

@@ -11,9 +11,9 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import edu.jas.gb.ReductionAbstract;
-import edu.jas.poly.PolyUtil;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.PolyUtil;
 import edu.jas.structure.RingElem;
 
 
@@ -130,8 +130,9 @@ public class PseudoReductionSeq<C extends RingElem<C>> extends ReductionAbstract
      * @param Pp recursive polynomial list.
      * @return nf(Ap) with respect to Pp.
      */
-    @SuppressWarnings("unchecked")
-    public GenPolynomial<GenPolynomial<C>> normalformRecursive(List<GenPolynomial<GenPolynomial<C>>> Pp, GenPolynomial<GenPolynomial<C>> Ap) {
+    @SuppressWarnings("cast")
+    public GenPolynomial<GenPolynomial<C>> normalformRecursive(List<GenPolynomial<GenPolynomial<C>>> Pp,
+                    GenPolynomial<GenPolynomial<C>> Ap) {
         if (Pp == null || Pp.isEmpty()) {
             return Ap;
         }
@@ -191,15 +192,14 @@ public class PseudoReductionSeq<C extends RingElem<C>> extends ReductionAbstract
                     logger.info("red div = " + f);
                     //logger.info("red a = " + a);
                 }
-                @SuppressWarnings("cast")
                 GenPolynomial<C> c = (GenPolynomial<C>) lbc[i];
                 //if (a.remainder(c).isZERO()) { //c.isUnit() ) {
-                if (PolyUtil.<C> baseSparsePseudoRemainder(a,c).isZERO()) { //c.isUnit() ) {
+                if (PolyUtil.<C> baseSparsePseudoRemainder(a, c).isZERO()) { //c.isUnit() ) {
                     if (debug) {
                         logger.info("red c = " + c);
                     }
                     //a = a.divide(c);
-                    b = PolyUtil.<C> basePseudoDivide(a,c);
+                    b = PolyUtil.<C> basePseudoDivide(a, c);
                     GenPolynomial<GenPolynomial<C>> Sp = S.subtractMultiple(b, f, p[i]);
                     if (e.equals(Sp.leadingExpVector())) { // TODO: avoid
                         //throw new RuntimeException("degree not descending");

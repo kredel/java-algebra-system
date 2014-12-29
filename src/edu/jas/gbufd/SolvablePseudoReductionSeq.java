@@ -11,10 +11,10 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import edu.jas.gb.SolvableReductionAbstract;
-import edu.jas.poly.PolyUtil;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
+import edu.jas.poly.PolyUtil;
 import edu.jas.structure.RingElem;
 
 
@@ -50,7 +50,8 @@ public class SolvablePseudoReductionSeq<C extends RingElem<C>> extends SolvableR
      * @return nf(Ap) with respect to Pp.
      */
     @SuppressWarnings("unchecked")
-    public GenSolvablePolynomial<C> leftNormalform(List<GenSolvablePolynomial<C>> Pp, GenSolvablePolynomial<C> Ap) {
+    public GenSolvablePolynomial<C> leftNormalform(List<GenSolvablePolynomial<C>> Pp,
+                    GenSolvablePolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
             return Ap;
         }
@@ -109,7 +110,7 @@ public class SolvablePseudoReductionSeq<C extends RingElem<C>> extends SolvableR
                 //logger.info("red div = " + e);
                 Q = p[i].multiplyLeft(e);
                 C c = Q.leadingBaseCoefficient();
-                if (a.remainder(c).isZERO()) { 
+                if (a.remainder(c).isZERO()) {
                     a = a.divide(c);
                     S = (GenSolvablePolynomial<C>) S.subtractMultiple(a, Q);
                 } else {
@@ -131,8 +132,10 @@ public class SolvablePseudoReductionSeq<C extends RingElem<C>> extends SolvableR
      * @param Pp recursive polynomial list.
      * @return nf(Ap) with respect to Pp.
      */
-    @SuppressWarnings("unchecked")
-    public GenSolvablePolynomial<GenPolynomial<C>> leftNormalformRecursive(List<GenSolvablePolynomial<GenPolynomial<C>>> Pp, GenSolvablePolynomial<GenPolynomial<C>> Ap) {
+    @SuppressWarnings("cast")
+    public GenSolvablePolynomial<GenPolynomial<C>> leftNormalformRecursive(
+                    List<GenSolvablePolynomial<GenPolynomial<C>>> Pp,
+                    GenSolvablePolynomial<GenPolynomial<C>> Ap) {
         if (Pp == null || Pp.isEmpty()) {
             return Ap;
         }
@@ -196,12 +199,12 @@ public class SolvablePseudoReductionSeq<C extends RingElem<C>> extends SolvableR
                 Q = p[i].multiplyLeft(f);
                 GenPolynomial<C> c = Q.leadingBaseCoefficient();
                 //if (a.remainder(c).isZERO()) { //c.isUnit() ) {
-                if (PolyUtil.<C> baseSparsePseudoRemainder(a,c).isZERO()) { 
+                if (PolyUtil.<C> baseSparsePseudoRemainder(a, c).isZERO()) {
                     if (debug) {
                         logger.info("red c = " + c);
                     }
                     //a = a.divide(c);
-                    b = PolyUtil.<C> basePseudoDivide(a,c);
+                    b = PolyUtil.<C> basePseudoDivide(a, c);
                     Sp = (GenSolvablePolynomial<GenPolynomial<C>>) S.subtractMultiple(b, Q);
                     if (e.equals(Sp.leadingExpVector())) { // TODO: avoid
                         //throw new RuntimeException("degree not descending");
@@ -225,18 +228,18 @@ public class SolvablePseudoReductionSeq<C extends RingElem<C>> extends SolvableR
 
 
     /**
-     * Left normalform with recording. <b>Note:</b> Only meaningful if all divisions
-     * are exact. Compute first the multiplication factor <code>m</code> with
-     * <code>normalform(Pp,Ap,m)</code>, then call this method with
-     * <code>normalform(row,Pp,m*Ap)</code>.
+     * Left normalform with recording. <b>Note:</b> Only meaningful if all
+     * divisions are exact. Compute first the multiplication factor
+     * <code>m</code> with <code>normalform(Pp,Ap,m)</code>, then call this
+     * method with <code>normalform(row,Pp,m*Ap)</code>.
      * @param row recording matrix, is modified.
      * @param Pp a polynomial list for reduction.
      * @param Ap a polynomial.
      * @return nf(Pp,Ap), the normal form of Ap wrt. Pp.
      */
     @SuppressWarnings("unchecked")
-    public GenSolvablePolynomial<C> leftNormalform(List<GenSolvablePolynomial<C>> row, 
-               List<GenSolvablePolynomial<C>> Pp, GenSolvablePolynomial<C> Ap) {
+    public GenSolvablePolynomial<C> leftNormalform(List<GenSolvablePolynomial<C>> row,
+                    List<GenSolvablePolynomial<C>> Pp, GenSolvablePolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
             return Ap;
         }
@@ -249,7 +252,7 @@ public class SolvablePseudoReductionSeq<C extends RingElem<C>> extends SolvableR
         }
         int l = P.length;
         ExpVector[] htl = new ExpVector[l];
-        C[] lbc = (C[]) new RingElem[l]; 
+        C[] lbc = (C[]) new RingElem[l];
         GenSolvablePolynomial<C>[] p = new GenSolvablePolynomial[l];
         Map.Entry<ExpVector, C> m;
         int j = 0;
@@ -328,7 +331,8 @@ public class SolvablePseudoReductionSeq<C extends RingElem<C>> extends SolvableR
      *         for Ap.
      */
     @SuppressWarnings("unchecked")
-    public PseudoReductionEntry<C> leftNormalformFactor(List<GenSolvablePolynomial<C>> Pp, GenSolvablePolynomial<C> Ap) {
+    public PseudoReductionEntry<C> leftNormalformFactor(List<GenSolvablePolynomial<C>> Pp,
+                    GenSolvablePolynomial<C> Ap) {
         if (Ap == null) {
             return null;
         }
@@ -392,7 +396,7 @@ public class SolvablePseudoReductionSeq<C extends RingElem<C>> extends SolvableR
                 //logger.info("red div = " + e);
                 Q = p[i].multiplyLeft(e);
                 C c = Q.leadingBaseCoefficient();
-                if (a.remainder(c).isZERO()) { 
+                if (a.remainder(c).isZERO()) {
                     a = a.divide(c);
                     S = (GenSolvablePolynomial<C>) S.subtractMultiple(a, Q);
                 } else {
@@ -417,13 +421,12 @@ public class SolvablePseudoReductionSeq<C extends RingElem<C>> extends SolvableR
      * Right normalform.
      * @param Ap polynomial.
      * @param Pp polynomial list.
-     * @return nf(Ap) with respect to Pp.
-     * <b>Note: </b> not implemented;
+     * @return nf(Ap) with respect to Pp. <b>Note: </b> not implemented;
      */
-    @SuppressWarnings("unchecked")
-    public GenSolvablePolynomial<C> rightNormalform(List<GenSolvablePolynomial<C>> Pp, 
-                                                    GenSolvablePolynomial<C> Ap) {
-	//throw new UnsupportedOperationException(); // TODO
+    //@SuppressWarnings("unchecked")
+    public GenSolvablePolynomial<C> rightNormalform(List<GenSolvablePolynomial<C>> Pp,
+                    GenSolvablePolynomial<C> Ap) {
+        //throw new UnsupportedOperationException();
         if (Pp == null || Pp.isEmpty()) {
             return Ap;
         }
@@ -481,10 +484,10 @@ public class SolvablePseudoReductionSeq<C extends RingElem<C>> extends SolvableR
                 e = e.subtract(htl[i]);
                 //logger.info("red div = " + e);
                 // need pi * a * e, but only pi * e * a or a * pi * e available
-                Q = p[i].multiply(e); 
+                Q = p[i].multiply(e);
                 assert Q.multiply(a).equals(Q.multiplyLeft(a));
                 C c = Q.leadingBaseCoefficient();
-                if (a.remainder(c).isZERO()) { 
+                if (a.remainder(c).isZERO()) {
                     a = a.divide(c); // left?
                     //S = (GenSolvablePolynomial<C>) S.subtractMultiple(a, Q);
                     S = (GenSolvablePolynomial<C>) S.subtract(Q.multiply(a));
@@ -507,32 +510,30 @@ public class SolvablePseudoReductionSeq<C extends RingElem<C>> extends SolvableR
      * Right normalform recursive.
      * @param Ap recursive polynomial.
      * @param Pp recursive polynomial list.
-     * @return nf(Ap) with respect to Pp.
-     * <b>Note: </b> not implemented;
+     * @return nf(Ap) with respect to Pp. <b>Note: </b> not implemented;
      */
     public GenSolvablePolynomial<GenPolynomial<C>> rightNormalformRecursive(
-                      List<GenSolvablePolynomial<GenPolynomial<C>>> Pp, 
-                      GenSolvablePolynomial<GenPolynomial<C>> Ap) {
-	throw new UnsupportedOperationException(); // TODO
+                    List<GenSolvablePolynomial<GenPolynomial<C>>> Pp,
+                    GenSolvablePolynomial<GenPolynomial<C>> Ap) {
+        throw new UnsupportedOperationException(); // TODO
     }
 
 
     /**
-     * Left normalform with recording. <b>Note:</b> Only meaningful if all divisions
-     * are exact. Compute first the multiplication factor <code>m</code> with
-     * <code>normalform(Pp,Ap,m)</code>, then call this method with
-     * <code>normalform(row,Pp,m*Ap)</code>.
+     * Left normalform with recording. <b>Note:</b> Only meaningful if all
+     * divisions are exact. Compute first the multiplication factor
+     * <code>m</code> with <code>normalform(Pp,Ap,m)</code>, then call this
+     * method with <code>normalform(row,Pp,m*Ap)</code>.
      * @param row recording matrix, is modified.
      * @param Pp a polynomial list for reduction.
      * @param Ap a polynomial.
-     * @return nf(Pp,Ap), the normal form of Ap wrt. Pp.
-     * <b>Note: </b> not implemented;
+     * @return nf(Pp,Ap), the normal form of Ap wrt. Pp. <b>Note: </b> not
+     *         implemented;
      */
     //@SuppressWarnings("unchecked")
-    public GenSolvablePolynomial<C> rightNormalform(List<GenSolvablePolynomial<C>> row, 
-                                                    List<GenSolvablePolynomial<C>> Pp,
-                                                    GenSolvablePolynomial<C> Ap) {
-	throw new UnsupportedOperationException(); // TODO
+    public GenSolvablePolynomial<C> rightNormalform(List<GenSolvablePolynomial<C>> row,
+                    List<GenSolvablePolynomial<C>> Pp, GenSolvablePolynomial<C> Ap) {
+        throw new UnsupportedOperationException(); // TODO
     }
 
 
@@ -541,12 +542,11 @@ public class SolvablePseudoReductionSeq<C extends RingElem<C>> extends SolvableR
      * @param Pp polynomial list.
      * @param Ap polynomial.
      * @return ( nf(Ap), mf ) with respect to Pp and mf as multiplication factor
-     *         for Ap.
-     * <b>Note: </b> not implemented;
+     *         for Ap. <b>Note: </b> not implemented;
      */
-    public PseudoReductionEntry<C> rightNormalformFactor(List<GenSolvablePolynomial<C>> Pp, 
-                                                         GenSolvablePolynomial<C> Ap) {
-	throw new UnsupportedOperationException(); // TODO
+    public PseudoReductionEntry<C> rightNormalformFactor(List<GenSolvablePolynomial<C>> Pp,
+                    GenSolvablePolynomial<C> Ap) {
+        throw new UnsupportedOperationException(); // TODO
     }
 
 }

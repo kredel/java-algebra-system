@@ -5,16 +5,13 @@
 package edu.jas.gb;
 
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.ListIterator;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.poly.PolyUtil;
 import edu.jas.poly.GenWordPolynomial;
 import edu.jas.poly.GenWordPolynomialRing;
+import edu.jas.poly.PolyUtil;
 import edu.jas.structure.RingElem;
 
 
@@ -70,15 +67,15 @@ public class WordGroebnerBaseSeq<C extends RingElem<C>> extends WordGroebnerBase
     public List<GenWordPolynomial<C>> GB(List<GenWordPolynomial<C>> F) {
         List<GenWordPolynomial<C>> G = normalizeZerosOnes(F);
         G = PolyUtil.<C> wordMonic(G);
-        if ( G.size() <= 1 ) {
+        if (G.size() <= 1) {
             return G;
         }
         GenWordPolynomialRing<C> ring = G.get(0).ring;
-        if ( ! ring.coFac.isField() ) {
+        if (!ring.coFac.isField()) {
             throw new IllegalArgumentException("coefficients not from a field");
         }
         //Collections.sort(G);
-        OrderedWordPairlist<C> pairlist = (OrderedWordPairlist<C>) strategy.create( ring ); 
+        OrderedWordPairlist<C> pairlist = (OrderedWordPairlist<C>) strategy.create(ring);
         pairlist.put(G);
         logger.info("start " + pairlist);
 
@@ -128,9 +125,9 @@ public class WordGroebnerBaseSeq<C extends RingElem<C>> extends WordGroebnerBase
                     //pair.setZero();
                     continue;
                 }
-                if ( !t ) {
-                    logger.info("criterion3(" + pair.i + "," + pair.j + ") wrong: " 
-                                + s.leadingWord() + " --> " + H.leadingWord()); 
+                if (!t) {
+                    logger.info("criterion3(" + pair.i + "," + pair.j + ") wrong: " + s.leadingWord()
+                                    + " --> " + H.leadingWord());
                 }
 
                 H = H.monic();

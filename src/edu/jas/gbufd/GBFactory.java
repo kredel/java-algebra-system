@@ -277,7 +277,8 @@ public class GBFactory {
             bba = new GroebnerBaseRational<BigRational>(pli); // pl not possible
             break;
         default:
-            throw new IllegalArgumentException("algorithm not available for BigRational " + a);
+            throw new IllegalArgumentException("algorithm not available for " + fac.toScriptFactory()
+                            + ", Algo = " + a);
         }
         return bba;
     }

@@ -123,7 +123,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
                 N.add(p.ring.getONE());
                 return N;
             }
-            N.add( (GenSolvablePolynomial<C>)p.abs() );
+            N.add((GenSolvablePolynomial<C>) p.abs());
         }
         //N.trimToSize();
         return N;
@@ -503,7 +503,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
     @SuppressWarnings("unchecked")
     public List<GenSolvablePolynomial<C>> rightGB(int modv, List<GenSolvablePolynomial<C>> F) {
         List<GenSolvablePolynomial<C>> G = normalizeZerosOnes(F);
-        if ( G.size() <= 1 ) {
+        if (G.size() <= 1) {
             return G;
         }
         GenSolvablePolynomialRing<C> ring = G.get(0).ring; // assert != null

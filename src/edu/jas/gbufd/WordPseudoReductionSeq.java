@@ -10,11 +10,10 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import edu.jas.gb.WordReductionAbstract;
 import edu.jas.poly.GenWordPolynomial;
 import edu.jas.poly.Word;
-import edu.jas.gb.WordReductionAbstract;
 import edu.jas.structure.RingElem;
-import edu.jas.structure.GcdRingElem;
 
 
 /**
@@ -23,8 +22,7 @@ import edu.jas.structure.GcdRingElem;
  * @author Heinz Kredel
  */
 
-public class WordPseudoReductionSeq<C extends RingElem<C>> 
-                extends WordReductionAbstract<C> {
+public class WordPseudoReductionSeq<C extends RingElem<C>> extends WordReductionAbstract<C> {
 
 
     private static final Logger logger = Logger.getLogger(WordPseudoReductionSeq.class);
@@ -46,7 +44,7 @@ public class WordPseudoReductionSeq<C extends RingElem<C>>
      * @param Pp polynomial list.
      * @return nf(Ap) with respect to Pp.
      */
-    @SuppressWarnings("unchecked")
+    //@SuppressWarnings("unchecked")
     public GenWordPolynomial<C> normalform(List<GenWordPolynomial<C>> Pp, GenWordPolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
             return Ap;
@@ -64,7 +62,7 @@ public class WordPseudoReductionSeq<C extends RingElem<C>>
         }
         int l = P.length;
         Word[] htl = new Word[l];
-        C[] lbc = (C[]) new RingElem[l]; 
+        C[] lbc = (C[]) new RingElem[l];
         GenWordPolynomial<C>[] p = new GenWordPolynomial[l];
         int i;
         int j = 0;
@@ -110,7 +108,7 @@ public class WordPseudoReductionSeq<C extends RingElem<C>>
                     logger.info("red divideWord: e = " + e + ", f = " + f);
                 }
                 C c = lbc[i];
-                if (a.remainder(c).isZERO()) { 
+                if (a.remainder(c).isZERO()) {
                     a = a.divide(c);
                     Q = p[i].multiply(a, e, cone, f);
                 } else {
@@ -133,7 +131,7 @@ public class WordPseudoReductionSeq<C extends RingElem<C>>
      * @param Ap a polynomial.
      * @return nf(Pp,Ap), the normal form of Ap wrt. Pp.
      */
-    @SuppressWarnings("unchecked")
+    //@SuppressWarnings("unchecked")
     public GenWordPolynomial<C> normalform(List<GenWordPolynomial<C>> lrow, List<GenWordPolynomial<C>> rrow,
                     List<GenWordPolynomial<C>> Pp, GenWordPolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
@@ -151,7 +149,7 @@ public class WordPseudoReductionSeq<C extends RingElem<C>>
         }
         int l = P.length;
         Word[] htl = new Word[l];
-        C[] lbc = (C[]) new RingElem[l]; 
+        C[] lbc = (C[]) new RingElem[l];
         GenWordPolynomial<C>[] p = new GenWordPolynomial[l];
         Map.Entry<Word, C> m;
         int j = 0;
@@ -201,7 +199,7 @@ public class WordPseudoReductionSeq<C extends RingElem<C>>
                     logger.info("redRec divideWord: e = " + e + ", f = " + f);
                 }
                 C c = lbc[i];
-                if (a.remainder(c).isZERO()) { 
+                if (a.remainder(c).isZERO()) {
                     a = a.divide(c);
                     Q = p[i].multiply(a, e, cone, f);
                 } else {

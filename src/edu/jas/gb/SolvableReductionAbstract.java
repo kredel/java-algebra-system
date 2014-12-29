@@ -310,8 +310,7 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>> implement
      * @param P solvable polynomial list.
      * @return true if A is top reducible with respect to P.
      */
-    public boolean isTopReducible(List<GenSolvablePolynomial<C>> P, 
-                                  GenSolvablePolynomial<C> A) {
+    public boolean isTopReducible(List<GenSolvablePolynomial<C>> P, GenSolvablePolynomial<C> A) {
         if (P == null || P.isEmpty()) {
             return false;
         }

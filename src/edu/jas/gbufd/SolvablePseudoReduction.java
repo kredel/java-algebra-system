@@ -14,7 +14,7 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Polynomial pseudo reduction interface. Defines additionaly normalformFactor 
+ * Polynomial pseudo reduction interface. Defines additionally normalformFactor
  * and normalformRecursive.
  * @param <C> coefficient type.
  * @author Heinz Kredel
@@ -30,7 +30,8 @@ public interface SolvablePseudoReduction<C extends RingElem<C>> extends Solvable
      * @return ( nf(Ap), mf ) with respect to Pp and mf as multiplication factor
      *         for Ap.
      */
-    public PseudoReductionEntry<C> leftNormalformFactor(List<GenSolvablePolynomial<C>> Pp, GenSolvablePolynomial<C> Ap);
+    public PseudoReductionEntry<C> leftNormalformFactor(List<GenSolvablePolynomial<C>> Pp,
+                    GenSolvablePolynomial<C> Ap);
 
 
     /*
@@ -49,7 +50,9 @@ public interface SolvablePseudoReduction<C extends RingElem<C>> extends Solvable
      * @param Pp recursive polynomial list.
      * @return nf(Ap) with respect to Pp.
      */
-    public GenSolvablePolynomial<GenPolynomial<C>> leftNormalformRecursive(List<GenSolvablePolynomial<GenPolynomial<C>>> Pp, GenSolvablePolynomial<GenPolynomial<C>> Ap);
+    public GenSolvablePolynomial<GenPolynomial<C>> leftNormalformRecursive(
+                    List<GenSolvablePolynomial<GenPolynomial<C>>> Pp,
+                    GenSolvablePolynomial<GenPolynomial<C>> Ap);
 
 
     /*

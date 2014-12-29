@@ -6,25 +6,18 @@ package edu.jas.gbufd;
 
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.ListIterator;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.poly.PolyUtil;
-import edu.jas.poly.GenWordPolynomial;
-import edu.jas.poly.GenWordPolynomialRing;
-import edu.jas.structure.RingElem;
-import edu.jas.structure.RingFactory;
-import edu.jas.structure.GcdRingElem;
-import edu.jas.gb.WordReduction;
-import edu.jas.gb.WordReductionAbstract;
-import edu.jas.gb.WordGroebnerBase;
+import edu.jas.gb.OrderedWordPairlist;
 import edu.jas.gb.WordGroebnerBaseAbstract;
 import edu.jas.gb.WordPair;
 import edu.jas.gb.WordPairList;
-import edu.jas.gb.OrderedWordPairlist;
+import edu.jas.poly.GenWordPolynomial;
+import edu.jas.poly.GenWordPolynomialRing;
+import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.RingFactory;
 import edu.jas.ufd.GCDFactory;
 import edu.jas.ufd.GreatestCommonDivisorAbstract;
 
@@ -89,7 +82,6 @@ public class WordGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends WordGro
         if (!cofac.isCommutative()) {
             logger.warn("reduction not correct for " + cofac.toScript());
         }
-        // TODO check that also coeffTable is empty for recursive solvable poly ring
         engine = GCDFactory.<C> getImplementation(rf);
         //not used: engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getProxy( rf );
     }
@@ -104,16 +96,16 @@ public class WordGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends WordGro
     public List<GenWordPolynomial<C>> GB(List<GenWordPolynomial<C>> F) {
         List<GenWordPolynomial<C>> G = normalizeZerosOnes(F);
         //G = PolyUtil.<C> wordMonic(G);
-        G = basePrimitivePart(G); 
-        if ( G.size() <= 1 ) {
+        G = basePrimitivePart(G);
+        if (G.size() <= 1) {
             return G;
         }
         GenWordPolynomialRing<C> ring = G.get(0).ring;
-        if ( ! ring.coFac.isCommutative() ) {
+        if (!ring.coFac.isCommutative()) {
             throw new IllegalArgumentException("coefficient ring not commutative");
         }
         //Collections.sort(G);
-        OrderedWordPairlist<C> pairlist = (OrderedWordPairlist<C>) strategy.create( ring ); 
+        OrderedWordPairlist<C> pairlist = (OrderedWordPairlist<C>) strategy.create(ring);
         pairlist.put(G);
         logger.info("start " + pairlist);
 
@@ -163,14 +155,14 @@ public class WordGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends WordGro
                     //pair.setZero();
                     continue;
                 }
-                if ( !t ) {
-                    logger.info("criterion3(" + pair.i + "," + pair.j + ") wrong: " 
-                                + s.leadingWord() + " --> " + H.leadingWord()); 
+                if (!t) {
+                    logger.info("criterion3(" + pair.i + "," + pair.j + ") wrong: " + s.leadingWord()
+                                    + " --> " + H.leadingWord());
                 }
 
                 //H = H.monic();
                 H = basePrimitivePart(H);
-                H = H.abs(); 
+                H = H.abs();
                 if (debug) {
                     logger.info("ht(H) = " + H.leadingWord());
                 }
@@ -261,12 +253,12 @@ public class WordGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends WordGro
      * @return pp(F).
      */
     public List<GenWordPolynomial<C>> basePrimitivePart(List<GenWordPolynomial<C>> F) {
-        if (F == null||F.isEmpty()) {
+        if (F == null || F.isEmpty()) {
             return F;
         }
         List<GenWordPolynomial<C>> Pp = new ArrayList<GenWordPolynomial<C>>(F.size());
-        for (GenWordPolynomial<C> f : F ) {
-	    GenWordPolynomial<C> p = basePrimitivePart(f);
+        for (GenWordPolynomial<C> f : F) {
+            GenWordPolynomial<C> p = basePrimitivePart(f);
             Pp.add(p);
         }
         return Pp;
