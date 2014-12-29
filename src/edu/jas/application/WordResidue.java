@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.jas.kern.PrettyPrint;
-import edu.jas.poly.Word;
 import edu.jas.poly.GenWordPolynomial;
+import edu.jas.poly.Word;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.NotInvertibleException;
 
@@ -52,8 +52,8 @@ public class WordResidue<C extends GcdRingElem<C>> implements GcdRingElem<WordRe
 
 
     /**
-     * The constructor creates a WordResidue object from a ring factory and
-     * a polynomial.
+     * The constructor creates a WordResidue object from a ring factory and a
+     * polynomial.
      * @param r solvable residue ring factory.
      * @param a solvable polynomial.
      */
@@ -263,7 +263,7 @@ public class WordResidue<C extends GcdRingElem<C>> implements GcdRingElem<WordRe
      * @see edu.jas.structure.RingElem#abs()
      */
     public WordResidue<C> abs() {
-        return new WordResidue<C>(ring, (GenWordPolynomial<C>) val.abs(), isunit);
+        return new WordResidue<C>(ring, val.abs(), isunit);
     }
 
 
@@ -273,7 +273,7 @@ public class WordResidue<C extends GcdRingElem<C>> implements GcdRingElem<WordRe
      * @return this+S.
      */
     public WordResidue<C> sum(WordResidue<C> S) {
-        return new WordResidue<C>(ring, (GenWordPolynomial<C>) val.sum(S.val));
+        return new WordResidue<C>(ring, val.sum(S.val));
     }
 
 
@@ -283,7 +283,7 @@ public class WordResidue<C extends GcdRingElem<C>> implements GcdRingElem<WordRe
      * @see edu.jas.structure.RingElem#negate()
      */
     public WordResidue<C> negate() {
-        return new WordResidue<C>(ring, (GenWordPolynomial<C>) val.negate(), isunit);
+        return new WordResidue<C>(ring, val.negate(), isunit);
     }
 
 
@@ -303,7 +303,7 @@ public class WordResidue<C extends GcdRingElem<C>> implements GcdRingElem<WordRe
      * @return this-S.
      */
     public WordResidue<C> subtract(WordResidue<C> S) {
-        return new WordResidue<C>(ring, (GenWordPolynomial<C>) val.subtract(S.val));
+        return new WordResidue<C>(ring, val.subtract(S.val));
     }
 
 
@@ -333,9 +333,10 @@ public class WordResidue<C extends GcdRingElem<C>> implements GcdRingElem<WordRe
         R.add(ring.ring.getZERO());
         List<GenWordPolynomial<C>> V = new ArrayList<GenWordPolynomial<C>>(1);
         V.add(S.val);
+        @SuppressWarnings("unused")
         GenWordPolynomial<C> x = ring.bb.red.normalform(L, R, V, val);
         GenWordPolynomial<C> y = L.get(0);
-        GenWordPolynomial<C> z = R.get(0);
+        //GenWordPolynomial<C> z = R.get(0);
         //System.out.println("WordResidue val = " + val + ", div = " + S.val + ", leftquotient = " + y
         //                + ", rightquotient = " + z + ", remainder = " + x);
         return new WordResidue<C>(ring, y);

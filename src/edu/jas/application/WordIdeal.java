@@ -7,12 +7,11 @@ package edu.jas.application;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 
@@ -20,21 +19,17 @@ import edu.jas.gb.WordGroebnerBaseAbstract;
 import edu.jas.gb.WordGroebnerBaseSeq;
 import edu.jas.gb.WordReduction;
 import edu.jas.gb.WordReductionSeq;
-import edu.jas.gbufd.PolyGBUtil;
-import edu.jas.poly.Word;
-import edu.jas.poly.GenPolynomial;
+import edu.jas.kern.Scripting;
 import edu.jas.poly.GenWordPolynomial;
 import edu.jas.poly.GenWordPolynomialRing;
-import edu.jas.poly.PolyUtil;
-import edu.jas.structure.RingElem;
+import edu.jas.poly.Word;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.NotInvertibleException;
-import edu.jas.kern.Scripting;
 
 
 /**
- * Word Ideal implements some methods for ideal arithmetic, for example containment,
- * sum or product. <b>Note:</b> only two-sided ideals.
+ * Word Ideal implements some methods for ideal arithmetic, for example
+ * containment, sum or product. <b>Note:</b> only two-sided ideals.
  * @author Heinz Kredel
  */
 public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal<C>>, Serializable {
@@ -108,8 +103,8 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
      * @param bb Groebner Base engine
      * @param red Reduction engine
      */
-    public WordIdeal(GenWordPolynomialRing<C> ring, List<GenWordPolynomial<C>> list, 
-                     WordGroebnerBaseAbstract<C> bb, WordReduction<C> red) {
+    public WordIdeal(GenWordPolynomialRing<C> ring, List<GenWordPolynomial<C>> list,
+                    WordGroebnerBaseAbstract<C> bb, WordReduction<C> red) {
         this(ring, list, false, bb, red);
     }
 
@@ -120,8 +115,7 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
      * @param list word polynomial list
      * @param gb true if list is known to be a Groebner Base, else false
      */
-    public WordIdeal(GenWordPolynomialRing<C> ring, List<GenWordPolynomial<C>> list, 
-                     boolean gb) {
+    public WordIdeal(GenWordPolynomialRing<C> ring, List<GenWordPolynomial<C>> list, boolean gb) {
         this(ring, list, gb, new WordGroebnerBaseSeq<C>(), new WordReductionSeq<C>());
         //this(list, gb, topt, GBFactory.getImplementation(list.ring.coFac));
     }
@@ -134,8 +128,8 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
      * @param gb true if list is known to be a Groebner Base, else false
      * @param bb Groebner Base engine
      */
-    public WordIdeal(GenWordPolynomialRing<C> ring, List<GenWordPolynomial<C>> list,
-                     boolean gb, WordGroebnerBaseAbstract<C> bb) {
+    public WordIdeal(GenWordPolynomialRing<C> ring, List<GenWordPolynomial<C>> list, boolean gb,
+                    WordGroebnerBaseAbstract<C> bb) {
         this(ring, list, gb, bb, bb.red);
     }
 
@@ -148,9 +142,8 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
      * @param bb Groebner Base engine
      * @param red Reduction engine
      */
-    public WordIdeal(GenWordPolynomialRing<C> ring, List<GenWordPolynomial<C>> list, 
-                     boolean gb,
-                     WordGroebnerBaseAbstract<C> bb, WordReduction<C> red) {
+    public WordIdeal(GenWordPolynomialRing<C> ring, List<GenWordPolynomial<C>> list, boolean gb,
+                    WordGroebnerBaseAbstract<C> bb, WordReduction<C> red) {
         if (ring == null) {
             throw new IllegalArgumentException("ring may not be null");
         }
@@ -199,7 +192,7 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
      */
     public WordIdeal<C> getZERO() {
         List<GenWordPolynomial<C>> z = new ArrayList<GenWordPolynomial<C>>(0);
-        return new WordIdeal<C>(ring,z, true, bb, red);
+        return new WordIdeal<C>(ring, z, true, bb, red);
     }
 
 
@@ -222,7 +215,7 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
     public String toString() {
         StringBuffer sb = new StringBuffer("(");
         boolean first = true;
-        for (GenWordPolynomial<C> p: list) {
+        for (GenWordPolynomial<C> p : list) {
             if (!first) {
                 sb.append(",");
             } else {
@@ -302,15 +295,14 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
         }
         SortedSet<GenWordPolynomial<C>> s = new TreeSet<GenWordPolynomial<C>>(list);
         SortedSet<GenWordPolynomial<C>> t = new TreeSet<GenWordPolynomial<C>>(B.list);
-        if ( isGB && B.isGB ) { //requires also monic polys
-            return s.equals( t ); 
-        } else { // compute GBs in contains
-            if ( s.equals( t ) ) {
-                return true;
-            } 
-            //System.out.println("no GBs contains");
-            return this.contains(B) && B.contains(this);
+        if (isGB && B.isGB) { //requires also monic polys
+            return s.equals(t);
         }
+        if (s.equals(t)) {
+            return true;
+        }
+        //System.out.println("no GBs contains");
+        return this.contains(B) && B.contains(this);
     }
 
 
@@ -320,10 +312,11 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
      * @return compareTo() of polynomial lists.
      */
     public int compareTo(WordIdeal<C> L) {
-        int si = Math.min( L.list.size(), list.size() );
+        int si = Math.min(L.list.size(), list.size());
         int s = 0;
         final Comparator<Word> wc = ring.alphabet.getAscendComparator();
         Comparator<GenWordPolynomial<C>> cmp = new Comparator<GenWordPolynomial<C>>() {
+
 
             public int compare(GenWordPolynomial<C> p1, GenWordPolynomial<C> p2) {
                 Word w1 = p1.leadingWord();
@@ -344,8 +337,8 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
             }
         };
 
-        List<GenWordPolynomial<C>> l1 = new ArrayList<GenWordPolynomial<C>>(list); 
-        List<GenWordPolynomial<C>> l2 = new ArrayList<GenWordPolynomial<C>>(L.list); 
+        List<GenWordPolynomial<C>> l1 = new ArrayList<GenWordPolynomial<C>>(list);
+        List<GenWordPolynomial<C>> l2 = new ArrayList<GenWordPolynomial<C>>(L.list);
         //Collections.sort(l1);
         //Collections.sort(l2);
         Collections.sort(l1, cmp);
@@ -452,7 +445,6 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
         if (isGB && testGB) {
             return;
         }
-        //logger.warn("GB computing");
         List<GenWordPolynomial<C>> G = getList();
         logger.info("GB computing = " + G);
         list = bb.GB(G);
@@ -476,8 +468,8 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
 
 
     /**
-     * Word ideal containment. Test if B is contained in this ideal. Note:
-     * this is eventually modified to become a Groebner Base.
+     * Word ideal containment. Test if B is contained in this ideal. Note: this
+     * is eventually modified to become a Groebner Base.
      * @param B solvable ideal
      * @return true, if B is contained in this, else false
      */
@@ -490,8 +482,8 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
 
 
     /**
-     * Word ideal containment. Test if b is contained in this ideal. Note:
-     * this is eventually modified to become a Groebner Base.
+     * Word ideal containment. Test if b is contained in this ideal. Note: this
+     * is eventually modified to become a Groebner Base.
      * @param b solvable polynomial
      * @return true, if b is contained in this, else false
      */
@@ -517,8 +509,8 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
 
 
     /**
-     * Word ideal containment. Test if each b in B is contained in this
-     * ideal. Note: this is eventually modified to become a Groebner Base.
+     * Word ideal containment. Test if each b in B is contained in this ideal.
+     * Note: this is eventually modified to become a Groebner Base.
      * @param B list of solvable polynomials
      * @return true, if each b in B is contained in this, else false
      */
@@ -575,8 +567,8 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
 
 
     /**
-     * Word summation. Generators for the sum of ideal and a polynomial.
-     * Note: if this ideal is a Groebner base, a Groebner base is returned.
+     * Word summation. Generators for the sum of ideal and a polynomial. Note:
+     * if this ideal is a Groebner base, a Groebner base is returned.
      * @param b solvable polynomial
      * @return ideal(this+{b})
      */
@@ -974,6 +966,9 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
         F.add(h);
         F.addAll(getList());
         List<GenWordPolynomial<C>> G = bb.GB(F);
+        if (debug) {
+            logger.debug("isUnit GB = " + G);
+        }
         for (GenWordPolynomial<C> p : G) {
             if (p == null) {
                 continue;

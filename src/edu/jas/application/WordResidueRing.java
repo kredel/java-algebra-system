@@ -9,14 +9,13 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.TreeSet;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 
 import edu.jas.gb.WordGroebnerBaseAbstract;
 import edu.jas.gb.WordGroebnerBaseSeq;
-import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenWordPolynomial;
 import edu.jas.poly.GenWordPolynomialRing;
 import edu.jas.structure.GcdRingElem;
@@ -24,8 +23,8 @@ import edu.jas.structure.RingFactory;
 
 
 /**
- * WordResidue ring factory based on GenWordPolynomialRing with
- * GcdRingFactory interface. Objects of this class are immutable.
+ * WordResidue ring factory based on GenWordPolynomialRing with GcdRingFactory
+ * interface. Objects of this class are immutable.
  * @author Heinz Kredel
  */
 public class WordResidueRing<C extends GcdRingElem<C>> implements RingFactory<WordResidue<C>> {
@@ -71,8 +70,7 @@ public class WordResidueRing<C extends GcdRingElem<C>> implements RingFactory<Wo
 
 
     /**
-     * The constructor creates a WordResidueRing object from an
-     * WordIdeal.
+     * The constructor creates a WordResidueRing object from an WordIdeal.
      * @param i solvable polynomial ideal.
      * @param isMaximal true, if ideal is maxmal.
      */
@@ -151,7 +149,7 @@ public class WordResidueRing<C extends GcdRingElem<C>> implements RingFactory<Wo
         List<WordResidue<C>> gens = new ArrayList<WordResidue<C>>(pgens.size());
         SortedSet<WordResidue<C>> sgens = new TreeSet<WordResidue<C>>();
         List<GenWordPolynomial<C>> rgens = new ArrayList<GenWordPolynomial<C>>(pgens.size());
-        WordIdeal<C> gi = new WordIdeal<C>(ring,rgens);
+        WordIdeal<C> gi = new WordIdeal<C>(ring, rgens);
         WordResidueRing<C> gr = new WordResidueRing<C>(gi);
         for (GenWordPolynomial<C> s : pgens) {
             WordResidue<C> r = new WordResidue<C>(this, s);
@@ -177,13 +175,13 @@ public class WordResidueRing<C extends GcdRingElem<C>> implements RingFactory<Wo
             if (!r.isONE() && !r.val.isConstant()) {
                 rgens.add(r.val);
                 //System.out.println("rgens = " + rgens);
-                gi = new WordIdeal<C>(ring,rgens);
+                gi = new WordIdeal<C>(ring, rgens);
                 gr = new WordResidueRing<C>(gi);
             }
             //gens.add(r);
             sgens.add(r);
         }
-        gens.addAll(sgens);        
+        gens.addAll(sgens);
         return gens;
     }
 

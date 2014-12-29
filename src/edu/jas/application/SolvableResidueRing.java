@@ -8,9 +8,9 @@ package edu.jas.application;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeSet;
-import java.util.SortedSet;
 import java.util.Random;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 
@@ -151,7 +151,7 @@ public class SolvableResidueRing<C extends GcdRingElem<C>> implements RingFactor
         List<SolvableResidue<C>> gens = new ArrayList<SolvableResidue<C>>(pgens.size());
         SortedSet<SolvableResidue<C>> sgens = new TreeSet<SolvableResidue<C>>();
         List<GenSolvablePolynomial<C>> rgens = new ArrayList<GenSolvablePolynomial<C>>(pgens.size());
-        SolvableIdeal<C> gi = new SolvableIdeal<C>(ring,rgens);
+        SolvableIdeal<C> gi = new SolvableIdeal<C>(ring, rgens);
         SolvableResidueRing<C> gr = new SolvableResidueRing<C>(gi);
         for (GenPolynomial<C> p : pgens) {
             GenSolvablePolynomial<C> s = (GenSolvablePolynomial<C>) p;
@@ -178,7 +178,7 @@ public class SolvableResidueRing<C extends GcdRingElem<C>> implements RingFactor
             if (!r.isONE() && !r.val.isConstant()) {
                 rgens.add(r.val);
                 //System.out.println("rgens = " + rgens);
-                gi = new SolvableIdeal<C>(ring,rgens);
+                gi = new SolvableIdeal<C>(ring, rgens);
                 gr = new SolvableResidueRing<C>(gi);
             }
             //gens.add(r);
