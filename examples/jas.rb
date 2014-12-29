@@ -3582,7 +3582,7 @@ Compute a left Groebner base.
         t = System.currentTimeMillis();
         if cofac.isField() or not cofac.isCommutative()
            gg = SolvableGroebnerBaseSeq.new().leftGB(ff);
-           kind = "field"
+           kind = "field|nocom"
         else 
            gg = SolvableGroebnerBasePseudoSeq.new(cofac).leftGB(ff);
            kind = "pseudo"
@@ -3602,7 +3602,7 @@ Test if this is a left Groebner base.
         t = System.currentTimeMillis();
         if cofac.isField() or not cofac.isCommutative()
            b = SolvableGroebnerBaseSeq.new().isLeftGB(ff);
-           kind = "field"
+           kind = "field|nocom"
         else 
            b = SolvableGroebnerBasePseudoSeq.new(cofac).isLeftGB(ff);
            kind = "pseudo"
@@ -3622,7 +3622,7 @@ Compute a two-sided Groebner base.
         t = System.currentTimeMillis();
         if cofac.isField() or not cofac.isCommutative()
            gg = SolvableGroebnerBaseSeq.new().twosidedGB(ff);
-           kind = "field"
+           kind = "field|nocom"
         else 
            gg = SolvableGroebnerBasePseudoSeq.new(cofac).twosidedGB(ff);
            kind = "pseudo"
@@ -3642,7 +3642,7 @@ Test if this is a two-sided Groebner base.
         t = System.currentTimeMillis();
         if cofac.isField() or not cofac.isCommutative()
            b = SolvableGroebnerBaseSeq.new().isTwosidedGB(ff);
-           kind = "field"
+           kind = "field|nocom"
         else 
            b = SolvableGroebnerBasePseudoSeq.new(cofac).isTwosidedGB(ff);
            kind = "pseudo"
@@ -3662,7 +3662,7 @@ Compute a right Groebner base.
         t = System.currentTimeMillis();
         if cofac.isField() or not cofac.isCommutative()
            gg = SolvableGroebnerBaseSeq.new().rightGB(ff);
-           kind = "field"
+           kind = "field|nocom"
         else 
            gg = SolvableGroebnerBasePseudoSeq.new(cofac).rightGB(ff);
            kind = "pseudo"
@@ -3682,7 +3682,7 @@ Test if this is a right Groebner base.
         t = System.currentTimeMillis();
         if cofac.isField() or not cofac.isCommutative()
            b = SolvableGroebnerBaseSeq.new().isRightGB(ff);
-           kind = "field"
+           kind = "field|nocom"
         else 
            b = SolvableGroebnerBasePseudoSeq.new(cofac).isRightGB(ff);
            kind = "pseudo"
@@ -5118,7 +5118,7 @@ Compute a two-sided Groebner base.
         t = System.currentTimeMillis();
         if cofac.isField() or not cofac.isCommutative()
            gg = @ideal.GB();
-           kind = "field"
+           kind = "field|nocom"
         else 
            ff = @ideal.list;
            fg = WordGroebnerBasePseudoSeq.new(cofac).GB(ff);
@@ -5146,7 +5146,7 @@ Test if this is a two-sided Groebner base.
         t = System.currentTimeMillis();
         if cofac.isField() or not cofac.isCommutative()
            b = @ideal.isGB();
-           kind = "field"
+           kind = "field|nocom"
         else 
            ff = @ideal.list;
            b = WordGroebnerBasePseudoSeq.new(cofac).isGB(ff);

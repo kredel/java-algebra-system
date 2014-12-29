@@ -1277,7 +1277,7 @@ class SolvableIdeal:
         t = System.currentTimeMillis();
         if cofac.isField() or not cofac.isCommutative():
             G = SolvableGroebnerBaseSeq().leftGB(F);
-            kind = "field"
+            kind = "field|nocom"
         else:
             G = SolvableGroebnerBasePseudoSeq(cofac).leftGB(F);
             kind = "pseudo"
@@ -1294,7 +1294,7 @@ class SolvableIdeal:
         t = System.currentTimeMillis();
         if cofac.isField() or not cofac.isCommutative():
             b = SolvableGroebnerBaseSeq().isLeftGB(F);
-            kind = "field"
+            kind = "field|nocom"
         else:
             b = SolvableGroebnerBasePseudoSeq(cofac).isLeftGB(F);
             kind = "pseudo"
@@ -1311,7 +1311,7 @@ class SolvableIdeal:
         t = System.currentTimeMillis();
         if cofac.isField() or not cofac.isCommutative():
             G = SolvableGroebnerBaseSeq().twosidedGB(F);
-            kind = "field"
+            kind = "field|nocom"
         else:
             G = SolvableGroebnerBasePseudoSeq(cofac).twosidedGB(F);
             kind = "pseudo"
@@ -1328,7 +1328,7 @@ class SolvableIdeal:
         t = System.currentTimeMillis();
         if cofac.isField() or not cofac.isCommutative():
             b = SolvableGroebnerBaseSeq().isTwosidedGB(F);
-            kind = "field"
+            kind = "field|nocom"
         else:
             b = SolvableGroebnerBasePseudoSeq(cofac).isTwosidedGB(F);
             kind = "pseudo"
@@ -1345,7 +1345,7 @@ class SolvableIdeal:
         t = System.currentTimeMillis();
         if cofac.isField() or not cofac.isCommutative():
             G = SolvableGroebnerBaseSeq().rightGB(F);
-            kind = "field"
+            kind = "field|nocom"
         else:
             G = SolvableGroebnerBasePseudoSeq(cofac).rightGB(F);
             kind = "pseudo"
@@ -1362,7 +1362,7 @@ class SolvableIdeal:
         t = System.currentTimeMillis();
         if cofac.isField() or not cofac.isCommutative():
             b = SolvableGroebnerBaseSeq().isRightGB(F);
-            kind = "field"
+            kind = "field|nocom"
         else:
             b = SolvableGroebnerBasePseudoSeq(cofac).isRightGB(F);
             kind = "pseudo"
@@ -3940,7 +3940,7 @@ class WordPolyIdeal:
         t = System.currentTimeMillis();
         if cofac.isField() or not cofac.isCommutative():
             G = self.ideal.GB();
-            kind = "field"
+            kind = "field|nocom"
         else:
             G = WordGroebnerBasePseudoSeq(cofac).GB(F);
             self.ideal = WordIdeal(self.ring.ring, G);
@@ -3963,7 +3963,7 @@ class WordPolyIdeal:
         t = System.currentTimeMillis();
         if cofac.isField() or not cofac.isCommutative():
             b = self.ideal.isGB();
-            kind = "field"
+            kind = "field|nocom"
         else:
             b = WordGroebnerBasePseudoSeq(cofac).isGB(F);
             kind = "pseudo"
