@@ -251,7 +251,7 @@ public class SolvableIdealTest extends TestCase {
 
         I = new SolvableIdeal<BigRational>(fac, L, false);
         assertTrue("not isZERO( I )", !I.isZERO());
-        assertTrue("not isONE( I )", !I.isONE()||a.isConstant());
+        assertTrue("not isONE( I )", !I.isONE() || a.isConstant());
         assertTrue("isGB( I )", I.isGB());
 
         L = new ArrayList<GenSolvablePolynomial<BigRational>>();
@@ -260,7 +260,7 @@ public class SolvableIdealTest extends TestCase {
 
         J = new SolvableIdeal<BigRational>(fac, L, false);
         assertTrue("not isZERO( J )", !J.isZERO());
-        assertTrue("not isONE( J )", !J.isONE()||a.isConstant()||b.isConstant());
+        assertTrue("not isONE( J )", !J.isONE() || a.isConstant() || b.isConstant());
         assertTrue("isGB( J )", J.isGB());
 
         K = I.product(J);
@@ -657,6 +657,7 @@ public class SolvableIdealTest extends TestCase {
     /**
      * Test SolvableIdeal common zeros.
      */
+    @SuppressWarnings("cast")
     public void testSolvableIdealCommonZeros() {
         SolvableIdeal<BigRational> I;
         L = new ArrayList<GenSolvablePolynomial<BigRational>>();
@@ -695,6 +696,7 @@ public class SolvableIdealTest extends TestCase {
     /**
      * Test SolvableIdeal dimension.
      */
+    @SuppressWarnings("cast")
     public void testSolvableIdealDimension() {
         SolvableIdeal<BigRational> I;
         L = new ArrayList<GenSolvablePolynomial<BigRational>>();

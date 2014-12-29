@@ -171,7 +171,7 @@ public class GroebnerBasePseudoParTest extends TestCase {
      * Test Trinks6/7 GBase.
      * 
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public void testTrinks7GBase() {
         String exam = "Z(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
                         + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "

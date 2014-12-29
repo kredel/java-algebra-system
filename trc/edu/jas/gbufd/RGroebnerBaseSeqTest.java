@@ -76,31 +76,16 @@ public class RGroebnerBaseSeqTest extends TestCase {
     GenPolynomialRing<Product<BigRational>> fac;
 
 
-    List<GenPolynomial<Product<BigRational>>> L;
+    List<GenPolynomial<Product<BigRational>>> L, G;
 
 
     PolynomialList<Product<BigRational>> F;
 
 
-    List<GenPolynomial<Product<BigRational>>> G;
-
-
     GroebnerBase<Product<BigRational>> bb;
 
 
-    GenPolynomial<Product<BigRational>> a;
-
-
-    GenPolynomial<Product<BigRational>> b;
-
-
-    GenPolynomial<Product<BigRational>> c;
-
-
-    GenPolynomial<Product<BigRational>> d;
-
-
-    GenPolynomial<Product<BigRational>> e;
+    GenPolynomial<Product<BigRational>> a, b, c, d, e;
 
 
     int rl = 3; //4; //3; 
@@ -138,10 +123,8 @@ public class RGroebnerBaseSeqTest extends TestCase {
 
     /**
      * Test sequential GBase.
-     * 
      */
     public void testSequentialGBase() {
-
         L = new ArrayList<GenPolynomial<Product<BigRational>>>();
 
         a = fac.random(kl, ll, el, q);
@@ -194,9 +177,8 @@ public class RGroebnerBaseSeqTest extends TestCase {
 
     /**
      * Test Trinks7 GBase.
-     * 
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public void testTrinks7() {
         String exam = "Z(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
                         + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "

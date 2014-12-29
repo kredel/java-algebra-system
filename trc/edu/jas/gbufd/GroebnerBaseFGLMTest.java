@@ -132,7 +132,7 @@ public class GroebnerBaseFGLMTest extends TestCase {
     /**
      * Test Trinks7 GBase.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public void testTrinks7GBase() {
         GroebnerBase<BigRational> bbs = new GroebnerBaseSeq<BigRational>(new ReductionSeq<BigRational>(),
                         new OrderedSyzPairlist<BigRational>());
@@ -172,7 +172,7 @@ public class GroebnerBaseFGLMTest extends TestCase {
     /**
      * Test Trinks6 GBase.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public void testTrinks6GBase() {
         GroebnerBase<BigRational> bbs = new GroebnerBaseSeq<BigRational>(new ReductionSeq<BigRational>(),
                         new OrderedSyzPairlist<BigRational>());
@@ -210,7 +210,7 @@ public class GroebnerBaseFGLMTest extends TestCase {
     /**
      * Test Trinks7 GBase over Q(sqrt(2)).
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public void testTrinks7GBaseSqrt() {
         GroebnerBase<AlgebraicNumber<BigRational>> bbs = new GroebnerBaseSeq<AlgebraicNumber<BigRational>>(
                         new ReductionSeq<AlgebraicNumber<BigRational>>(),
@@ -268,7 +268,7 @@ public class GroebnerBaseFGLMTest extends TestCase {
     /**
      * Test Trinks7 GBase over Q(i).
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public void testTrinks7GBaseCompl() {
         GroebnerBase<Complex<BigRational>> bbs = new GroebnerBaseSeq<Complex<BigRational>>(
                         new ReductionSeq<Complex<BigRational>>(),

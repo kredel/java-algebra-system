@@ -75,19 +75,7 @@ public class CGBSeqTest extends TestCase {
     ComprehensiveGroebnerBaseSeq<BigRational> bb;
 
 
-    GenPolynomial<GenPolynomial<BigRational>> a;
-
-
-    GenPolynomial<GenPolynomial<BigRational>> b;
-
-
-    GenPolynomial<GenPolynomial<BigRational>> c;
-
-
-    GenPolynomial<GenPolynomial<BigRational>> d;
-
-
-    GenPolynomial<GenPolynomial<BigRational>> e;
+    GenPolynomial<GenPolynomial<BigRational>> a, b, c, d, e;
 
 
     int rl = 2; //4; //3; 
@@ -177,7 +165,7 @@ public class CGBSeqTest extends TestCase {
      * Test Trinks CGB.
      * 
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public void testTrinks7GBase() {
         PolynomialList<GenPolynomial<BigRational>> F = null;
         List<GenPolynomial<GenPolynomial<BigRational>>> G = null;

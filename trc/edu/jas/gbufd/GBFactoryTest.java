@@ -5,7 +5,7 @@
 package edu.jas.gbufd;
 
 
-//import java.util.Map;
+// import java.util.Map;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -291,7 +291,7 @@ public class GBFactoryTest extends TestCase {
         assertTrue("bba recursive polynomial " + bba, bba instanceof GroebnerBasePseudoRecSeq);
 
         GroebnerBase<BigRational> bb;
-        bb = GBFactory.<BigRational>getImplementation((RingFactory)rf);
+        bb = GBFactory.<BigRational> getImplementation((RingFactory) rf);
         //System.out.println("bb = " + bb);
         assertTrue("bba recursive polynomial " + bb, bb instanceof GroebnerBasePseudoRecSeq);
     }
@@ -300,7 +300,7 @@ public class GBFactoryTest extends TestCase {
     /**
      * Test get Product implementation.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public void testProduct() {
         ModIntegerRing mi = new ModIntegerRing(19, true);
         ProductRing<ModInteger> fac;
@@ -318,7 +318,7 @@ public class GBFactoryTest extends TestCase {
         rf = fac;
 
         GroebnerBase<Product<ModInteger>> bb;
-        bb = GBFactory.<Product<ModInteger>>getImplementation((RingFactory)rf);
+        bb = GBFactory.<Product<ModInteger>> getImplementation((RingFactory) rf);
         //System.out.println("bb = " + bb);
         assertTrue("bba product " + bb, bb instanceof RGroebnerBasePseudoSeq);
     }
@@ -337,12 +337,12 @@ public class GBFactoryTest extends TestCase {
         bba.terminate();
 
 
-        ModIntegerRing m = new ModIntegerRing(2*3);
+        ModIntegerRing m = new ModIntegerRing(2 * 3);
         GroebnerBaseAbstract<ModInteger> bbm;
 
         bbm = GBFactory.getProxy(m);
         //System.out.println("bba = " + bba);
-        assertTrue("bbm ! field " + bbm, ! (bbm instanceof GBProxy) );
+        assertTrue("bbm ! field " + bbm, !(bbm instanceof GBProxy));
         bbm.terminate();
     }
 

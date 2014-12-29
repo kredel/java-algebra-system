@@ -20,16 +20,15 @@ import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
-import edu.jas.kern.ComputerThreads;
 import edu.jas.gb.GroebnerBaseAbstract;
-import edu.jas.gb.GroebnerBaseSeq;
 import edu.jas.gb.GroebnerBaseParallel;
+import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
+import edu.jas.poly.OrderedPolynomialList;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.PolynomialList;
-import edu.jas.poly.OrderedPolynomialList;
 import edu.jas.ufd.PolyUfdUtil;
 import edu.jas.ufd.Quotient;
 import edu.jas.ufd.QuotientRing;
@@ -118,7 +117,7 @@ public class GroebnerBasePseudoRecParTest extends TestCase {
         GenPolynomialRing<BigInteger> cofac = new GenPolynomialRing<BigInteger>(coeff, 1);
         fac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cofac, rl);
         a = b = c = d = e = null;
-        bb = new GroebnerBasePseudoRecParallel<BigInteger>(threads,cofac);
+        bb = new GroebnerBasePseudoRecParallel<BigInteger>(threads, cofac);
     }
 
 
@@ -181,16 +180,13 @@ public class GroebnerBasePseudoRecParTest extends TestCase {
     /**
      * Test Hawes2 GBase.
      */
-    //@SuppressWarnings("unchecked")
+    //@SuppressWarnings("cast")
     public void testHawes2GBase() {
-        String exam = "IntFunc(a, c, b) (y2, y1, z1, z2, x) G"
-                      + "(" 
-                      + "( x + 2 y1 z1 + { 3 a } y1^2 + 5 y1^4 + { 2 c } y1 ),"
-                      + "( x + 2 y2 z2 + { 3 a } y2^2 + 5 y2^4 + { 2 c } y2 )," 
-                      + "( 2 z2 + { 6 a } y2 + 20 y2^3 + { 2 c } )," 
-                      + "( 3 z1^2 + y1^2 + { b } )," 
-                      + "( 3 z2^2 + y2^2 + { b } )" 
-                      + ")";
+        String exam = "IntFunc(a, c, b) (y2, y1, z1, z2, x) G" + "("
+                        + "( x + 2 y1 z1 + { 3 a } y1^2 + 5 y1^4 + { 2 c } y1 ),"
+                        + "( x + 2 y2 z2 + { 3 a } y2^2 + 5 y2^4 + { 2 c } y2 ),"
+                        + "( 2 z2 + { 6 a } y2 + 20 y2^3 + { 2 c } )," + "( 3 z1^2 + y1^2 + { b } ),"
+                        + "( 3 z2^2 + y2^2 + { b } )" + ")";
         Reader source = new StringReader(exam);
         GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
         PolynomialList<GenPolynomial<BigRational>> Fr = null;
@@ -201,11 +197,9 @@ public class GroebnerBasePseudoRecParTest extends TestCase {
         } catch (IOException e) {
             fail("" + e);
         }
-        GenPolynomialRing<BigRational> 
-           cofac = (GenPolynomialRing<BigRational>) Fr.ring.coFac;
-        GenPolynomialRing<BigInteger> 
-           ifac = new GenPolynomialRing<BigInteger>(new BigInteger(),cofac);
-        fac = new GenPolynomialRing<GenPolynomial<BigInteger>>(ifac,Fr.ring);
+        GenPolynomialRing<BigRational> cofac = (GenPolynomialRing<BigRational>) Fr.ring.coFac;
+        GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(), cofac);
+        fac = new GenPolynomialRing<GenPolynomial<BigInteger>>(ifac, Fr.ring);
         L = PolyUfdUtil.integerFromRationalCoefficients(fac, Fr.list);
         //System.out.println("F = " + L);
         //System.out.println("Fr = " + Fr);
@@ -217,36 +211,35 @@ public class GroebnerBasePseudoRecParTest extends TestCase {
         assertTrue("isGB( GB(Hawes2) )", bb.isGB(G));
         assertEquals("#GB(Hawes2) == 8", 8, G.size());
         G = OrderedPolynomialList.<GenPolynomial<BigInteger>> sort(G);
-        PolynomialList<GenPolynomial<BigInteger>> 
-            Gp = new PolynomialList<GenPolynomial<BigInteger>>(fac,G);
+        PolynomialList<GenPolynomial<BigInteger>> Gp = new PolynomialList<GenPolynomial<BigInteger>>(fac, G);
         //System.out.println("G = " + Gp);
         assertTrue("nonsense ", t >= 0L);
 
 
         GenPolynomialRing<BigRational> rfac = (GenPolynomialRing<BigRational>) Fr.ring.coFac;
         List<GenPolynomial<GenPolynomial<BigRational>>> Gr, Kr, Lr = Fr.list;
-        bbr = new GroebnerBasePseudoRecParallel<BigRational>(threads,rfac);
+        bbr = new GroebnerBasePseudoRecParallel<BigRational>(threads, rfac);
 
         s = System.currentTimeMillis();
         Gr = bbr.GB(Lr);
         s = System.currentTimeMillis() - s;
-        Gr = PolyUtil.<BigRational>monicRec(Gr);
+        Gr = PolyUtil.<BigRational> monicRec(Gr);
         assertTrue("isGB( GB(Hawes2) )", bbr.isGB(Gr));
         assertEquals("#GB(Hawes2) == 8", 8, Gr.size());
         Gr = OrderedPolynomialList.<GenPolynomial<BigRational>> sort(Gr);
-        PolynomialList<GenPolynomial<BigRational>> 
-            Grp = new PolynomialList<GenPolynomial<BigRational>>(Fr.ring,Gr);
+        PolynomialList<GenPolynomial<BigRational>> Grp = new PolynomialList<GenPolynomial<BigRational>>(
+                        Fr.ring, Gr);
         //System.out.println("Gr = " + Grp);
         bbr.terminate();
 
-        Kr = PolyUfdUtil.<BigRational>fromIntegerCoefficients(Fr.ring, G);
-        Kr = PolyUtil.<BigRational>monicRec(Kr);
+        Kr = PolyUfdUtil.<BigRational> fromIntegerCoefficients(Fr.ring, G);
+        Kr = PolyUtil.<BigRational> monicRec(Kr);
         assertEquals("ratGB == intGB", Kr, Gr);
         assertTrue("nonsense ", s >= 0L);
 
 
         QuotientRing<BigRational> qr = new QuotientRing<BigRational>(rfac);
-        GenPolynomialRing<Quotient<BigRational>> rring = new GenPolynomialRing<Quotient<BigRational>>(qr,fac);
+        GenPolynomialRing<Quotient<BigRational>> rring = new GenPolynomialRing<Quotient<BigRational>>(qr, fac);
         List<GenPolynomial<Quotient<BigRational>>> Gq, Lq, Kq;
         Lq = PolyUfdUtil.<BigRational> quotientFromIntegralCoefficients(rring, Lr);
         Lq = PolyUtil.<Quotient<BigRational>> monic(Lq);
@@ -259,8 +252,7 @@ public class GroebnerBasePseudoRecParTest extends TestCase {
         assertTrue("isGB( GB(Hawes2) )", bbq.isGB(Gq));
         assertEquals("#GB(Hawes2) == 8", 8, Gq.size());
         Gq = OrderedPolynomialList.<Quotient<BigRational>> sort(Gq);
-        PolynomialList<Quotient<BigRational>> 
-            Gpq = new PolynomialList<Quotient<BigRational>>(rring,Gq);
+        PolynomialList<Quotient<BigRational>> Gpq = new PolynomialList<Quotient<BigRational>>(rring, Gq);
         //System.out.println("Gq = " + Gpq);
         bbq.terminate();
 
@@ -271,7 +263,7 @@ public class GroebnerBasePseudoRecParTest extends TestCase {
 
 
         QuotientRing<BigInteger> qi = new QuotientRing<BigInteger>(ifac);
-        GenPolynomialRing<Quotient<BigInteger>> iring = new GenPolynomialRing<Quotient<BigInteger>>(qi,fac);
+        GenPolynomialRing<Quotient<BigInteger>> iring = new GenPolynomialRing<Quotient<BigInteger>>(qi, fac);
         List<GenPolynomial<Quotient<BigInteger>>> Gqi, Lqi, Kqi;
         Lqi = PolyUfdUtil.<BigInteger> quotientFromIntegralCoefficients(iring, L);
         Lqi = PolyUtil.<Quotient<BigInteger>> monic(Lqi);
@@ -285,8 +277,7 @@ public class GroebnerBasePseudoRecParTest extends TestCase {
         assertTrue("isGB( GB(Hawes2) )", bbqi.isGB(Gqi));
         assertEquals("#GB(Hawes2) == 8", 8, Gqi.size());
         Gqi = OrderedPolynomialList.<Quotient<BigInteger>> sort(Gqi);
-        PolynomialList<Quotient<BigInteger>> 
-            Gpqi = new PolynomialList<Quotient<BigInteger>>(iring,Gqi);
+        PolynomialList<Quotient<BigInteger>> Gpqi = new PolynomialList<Quotient<BigInteger>>(iring, Gqi);
         //System.out.println("Gqi = " + Gpqi);
         bbqi.terminate();
 
@@ -295,7 +286,8 @@ public class GroebnerBasePseudoRecParTest extends TestCase {
         assertEquals("quotRatGB == quotIntGB", Gqi, Kqi);
         assertTrue("nonsense ", i >= 0L);
 
-        System.out.println("time: ratGB = " + s + ", intGB = " + t + ", quotRatGB = " + q + ", quotIntGB = " + i);
+        System.out.println("time: ratGB = " + s + ", intGB = " + t + ", quotRatGB = " + q + ", quotIntGB = "
+                        + i);
     }
 
 }

@@ -1,8 +1,10 @@
 /*
- * $Id$
+ * $Id: SolvableGroebnerBasePseudoSeqTest.java 5029 2014-12-27 19:30:04Z kredel
+ * $
  */
 
 package edu.jas.gbufd;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,18 +14,17 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
-//import org.apache.log4j.Logger;
+// import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigInteger;
+import edu.jas.gb.SolvableGroebnerBaseAbstract;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolynomialList;
+import edu.jas.poly.RelationGenerator;
 import edu.jas.poly.RelationTable;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.WeylRelations;
-import edu.jas.poly.RelationGenerator;
-import edu.jas.gb.SolvableExtendedGB;
-import edu.jas.gb.SolvableGroebnerBaseAbstract;
 
 
 /**
@@ -33,15 +34,18 @@ import edu.jas.gb.SolvableGroebnerBaseAbstract;
 
 public class SolvableGroebnerBasePseudoSeqTest extends TestCase {
 
+
     //private static final Logger logger = Logger.getLogger(SolvableGroebnerBasePseudoSeqTest.class);
+
 
     /**
      * main.
      */
-    public static void main (String[] args) {
+    public static void main(String[] args) {
         BasicConfigurator.configure();
-        junit.textui.TestRunner.run( suite() );
+        junit.textui.TestRunner.run(suite());
     }
+
 
     /**
      * Constructs a <CODE>SolvableGroebnerBasePseudoSeqTest</CODE> object.
@@ -51,50 +55,74 @@ public class SolvableGroebnerBasePseudoSeqTest extends TestCase {
         super(name);
     }
 
+
     /**
      * suite.
-     */ 
+     */
     public static Test suite() {
-        TestSuite suite= new TestSuite(SolvableGroebnerBasePseudoSeqTest.class);
+        TestSuite suite = new TestSuite(SolvableGroebnerBasePseudoSeqTest.class);
         return suite;
     }
 
 
     GenSolvablePolynomial<BigInteger> a, b, c, d, e;
 
+
     List<GenSolvablePolynomial<BigInteger>> L;
+
+
     PolynomialList<BigInteger> F, G;
+
 
     GenSolvablePolynomialRing<BigInteger> ring;
 
+
     SolvableGroebnerBaseAbstract<BigInteger> sbb;
 
+
     BigInteger cfac;
+
+
     TermOrder tord;
+
+
     RelationTable<BigInteger> table;
 
+
     int rl = 4; //4; //3; 
+
+
     int kl = 3;
+
+
     int ll = 4;
+
+
     int el = 3;
+
+
     float q = 0.25f; //0.4f
 
+
+    @Override
     protected void setUp() {
         cfac = new BigInteger(9);
         tord = new TermOrder();
         String[] vars = new String[] { "w", "x", "y", "z" };
-        ring = new GenSolvablePolynomialRing<BigInteger>(cfac,tord,vars);
+        ring = new GenSolvablePolynomialRing<BigInteger>(cfac, tord, vars);
         table = ring.table;
         a = b = c = d = e = null;
         sbb = new SolvableGroebnerBasePseudoSeq<BigInteger>(cfac);
 
-        a = ring.random(kl, ll, el, q );
-        b = ring.random(kl, ll, el, q );
-        c = ring.random(kl, ll, el, q );
-        d = ring.random(kl, ll, el, q );
+        a = ring.random(kl, ll, el, q);
+        b = ring.random(kl, ll, el, q);
+        c = ring.random(kl, ll, el, q);
+        d = ring.random(kl, ll, el, q);
         e = d; //ring.random(kl, ll, el, q );
     }
 
+
+    @Override
     protected void tearDown() {
         a = b = c = d = e = null;
         ring = null;
@@ -112,25 +140,25 @@ public class SolvableGroebnerBasePseudoSeqTest extends TestCase {
         L = new ArrayList<GenSolvablePolynomial<BigInteger>>();
 
         L.add(a);
-        L = sbb.leftGB( L );
-        assertTrue("isLeftGB( { a } )", sbb.isLeftGB(L) );
+        L = sbb.leftGB(L);
+        assertTrue("isLeftGB( { a } )", sbb.isLeftGB(L));
 
         L.add(b);
         //System.out.println("L = " + L.size() );
-        L = sbb.leftGB( L );
-        assertTrue("isLeftGB( { a, b } )", sbb.isLeftGB(L) );
+        L = sbb.leftGB(L);
+        assertTrue("isLeftGB( { a, b } )", sbb.isLeftGB(L));
 
         L.add(c);
-        L = sbb.leftGB( L );
-        assertTrue("isLeftGB( { a, b, c } )", sbb.isLeftGB(L) );
+        L = sbb.leftGB(L);
+        assertTrue("isLeftGB( { a, b, c } )", sbb.isLeftGB(L));
 
         L.add(d);
-        L = sbb.leftGB( L );
-        assertTrue("isLeftGB( { a, b, c, d } )", sbb.isLeftGB(L) );
+        L = sbb.leftGB(L);
+        assertTrue("isLeftGB( { a, b, c, d } )", sbb.isLeftGB(L));
 
         L.add(e);
-        L = sbb.leftGB( L );
-        assertTrue("isLeftGB( { a, b, c, d, e } )", sbb.isLeftGB(L) );
+        L = sbb.leftGB(L);
+        assertTrue("isLeftGB( { a, b, c, d, e } )", sbb.isLeftGB(L));
     }
 
 
@@ -145,34 +173,34 @@ public class SolvableGroebnerBasePseudoSeqTest extends TestCase {
         wl.generate(ring);
         table = ring.table;
 
-        a = ring.random(kl, ll, el, q );
-        b = ring.random(kl, ll, el, q );
-        c = ring.random(kl, ll, el, q );
-        d = ring.random(kl, ll, el, q );
+        a = ring.random(kl, ll, el, q);
+        b = ring.random(kl, ll, el, q);
+        c = ring.random(kl, ll, el, q);
+        d = ring.random(kl, ll, el, q);
         e = d; //ring.random(kl, ll, el, q );
 
         L = new ArrayList<GenSolvablePolynomial<BigInteger>>();
 
         L.add(a);
-        L = sbb.leftGB( L );
-        assertTrue("isLeftGB( { a } )", sbb.isLeftGB(L) );
+        L = sbb.leftGB(L);
+        assertTrue("isLeftGB( { a } )", sbb.isLeftGB(L));
 
         L.add(b);
         //System.out.println("L = " + L.size() );
-        L = sbb.leftGB( L );
-        assertTrue("isLeftGB( { a, b } )", sbb.isLeftGB(L) );
+        L = sbb.leftGB(L);
+        assertTrue("isLeftGB( { a, b } )", sbb.isLeftGB(L));
 
         L.add(c);
-        L = sbb.leftGB( L );
-        assertTrue("isLeftGB( { a, b, c } )", sbb.isLeftGB(L) );
+        L = sbb.leftGB(L);
+        assertTrue("isLeftGB( { a, b, c } )", sbb.isLeftGB(L));
 
         L.add(d);
-        L = sbb.leftGB( L );
-        assertTrue("isLeftGB( { a, b, c, d } )", sbb.isLeftGB(L) );
+        L = sbb.leftGB(L);
+        assertTrue("isLeftGB( { a, b, c, d } )", sbb.isLeftGB(L));
 
         L.add(e);
-        L = sbb.leftGB( L );
-        assertTrue("isLeftGB( { a, b, c, d, e } )", sbb.isLeftGB(L) );
+        L = sbb.leftGB(L);
+        assertTrue("isLeftGB( { a, b, c, d, e } )", sbb.isLeftGB(L));
     }
 
 
@@ -183,36 +211,34 @@ public class SolvableGroebnerBasePseudoSeqTest extends TestCase {
         L = new ArrayList<GenSolvablePolynomial<BigInteger>>();
 
         L.add(a);
-        L = sbb.twosidedGB( L );
+        L = sbb.twosidedGB(L);
         //System.out.println("L = " + L.size() );
-        assertTrue("isTwosidedGB( { a } )", sbb.isTwosidedGB(L) );
+        assertTrue("isTwosidedGB( { a } )", sbb.isTwosidedGB(L));
 
         L.add(b);
-        L = sbb.twosidedGB( L );
+        L = sbb.twosidedGB(L);
         //System.out.println("L = " + L.size() );
-        assertTrue("isTwosidedGB( { a, b } )", sbb.isTwosidedGB(L) );
+        assertTrue("isTwosidedGB( { a, b } )", sbb.isTwosidedGB(L));
 
         L.add(c);
-        L = sbb.twosidedGB( L );
+        L = sbb.twosidedGB(L);
         //System.out.println("L = " + L.size() );
-        assertTrue("isTwosidedGB( { a, b, c } )", sbb.isTwosidedGB(L) );
+        assertTrue("isTwosidedGB( { a, b, c } )", sbb.isTwosidedGB(L));
 
         L.add(d);
-        L = sbb.twosidedGB( L );
+        L = sbb.twosidedGB(L);
         //System.out.println("L = " + L.size() );
-        assertTrue("isTwosidedGB( { a, b, c, d } )", sbb.isTwosidedGB(L) );
+        assertTrue("isTwosidedGB( { a, b, c, d } )", sbb.isTwosidedGB(L));
 
         L.add(e);
-        L = sbb.twosidedGB( L );
+        L = sbb.twosidedGB(L);
         //System.out.println("L = " + L.size() );
-        assertTrue("isTwosidedGB( { a, b, c, d, e } )", sbb.isTwosidedGB(L) );
+        assertTrue("isTwosidedGB( { a, b, c, d, e } )", sbb.isTwosidedGB(L));
     }
 
 
-
     /**
-     * Test Weyl sequential twosided GBase
-     * is always 1.
+     * Test Weyl sequential twosided GBase is always 1.
      */
     public void testWeylSequentialTSGBase() {
         //int rloc = 4;
@@ -222,39 +248,39 @@ public class SolvableGroebnerBasePseudoSeqTest extends TestCase {
         wl.generate(ring);
         table = ring.table;
 
-        a = ring.random(kl, ll, el, q );
-        b = ring.random(kl, ll, el, q );
-        c = ring.random(kl, ll, el, q );
-        d = ring.random(kl, ll, el, q );
+        a = ring.random(kl, ll, el, q);
+        b = ring.random(kl, ll, el, q);
+        c = ring.random(kl, ll, el, q);
+        d = ring.random(kl, ll, el, q);
         e = d; //ring.random(kl, ll, el, q );
 
         L = new ArrayList<GenSolvablePolynomial<BigInteger>>();
 
         L.add(a);
         //System.out.println("La = " + L );
-        L = sbb.twosidedGB( L );
+        L = sbb.twosidedGB(L);
         //System.out.println("L = " + L );
-        assertTrue("isTwosidedGB( { a } )", sbb.isTwosidedGB(L) );
+        assertTrue("isTwosidedGB( { a } )", sbb.isTwosidedGB(L));
 
         L.add(b);
-        L = sbb.twosidedGB( L );
+        L = sbb.twosidedGB(L);
         //System.out.println("L = " + L );
-        assertTrue("isTwosidedGB( { a, b } )", sbb.isTwosidedGB(L) );
+        assertTrue("isTwosidedGB( { a, b } )", sbb.isTwosidedGB(L));
 
         L.add(c);
-        L = sbb.twosidedGB( L );
+        L = sbb.twosidedGB(L);
         //System.out.println("L = " + L );
-        assertTrue("isTwosidedGB( { a, b, c } )", sbb.isTwosidedGB(L) );
+        assertTrue("isTwosidedGB( { a, b, c } )", sbb.isTwosidedGB(L));
 
         L.add(d);
-        L = sbb.twosidedGB( L );
+        L = sbb.twosidedGB(L);
         //System.out.println("L = " + L );
-        assertTrue("isTwosidedGB( { a, b, c, d } )", sbb.isTwosidedGB(L) );
+        assertTrue("isTwosidedGB( { a, b, c, d } )", sbb.isTwosidedGB(L));
 
         L.add(e);
-        L = sbb.twosidedGB( L );
+        L = sbb.twosidedGB(L);
         //System.out.println("L = " + L );
-        assertTrue("isTwosidedGB( { a, b, c, d, e } )", sbb.isTwosidedGB(L) );
+        assertTrue("isTwosidedGB( { a, b, c, d, e } )", sbb.isTwosidedGB(L));
     }
 
 

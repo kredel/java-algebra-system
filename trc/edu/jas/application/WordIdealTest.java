@@ -17,8 +17,7 @@ import org.apache.log4j.BasicConfigurator;
 import edu.jas.arith.BigRational;
 import edu.jas.gb.WordGroebnerBase;
 import edu.jas.gb.WordGroebnerBaseSeq;
-//import edu.jas.kern.ComputerThreads;
-//import edu.jas.poly.WordFactory;
+// import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenWordPolynomial;
 import edu.jas.poly.GenWordPolynomialRing;
 import edu.jas.poly.PolynomialList;
@@ -150,7 +149,7 @@ public class WordIdealTest extends TestCase {
         I = new WordIdeal<BigRational>(fac, L, false);
         assertTrue("isGB( I )", I.isGB());
 
-        if (!true) {
+        if (!true) { // TODO
             return;
         }
 
@@ -214,8 +213,7 @@ public class WordIdealTest extends TestCase {
 
 
     /**
-     * Test WordIdeal product.
-     * Sometimes non-terminating.
+     * Test WordIdeal product. Sometimes non-terminating.
      */
     public void testWordIdealProduct() {
         WordIdeal<BigRational> I, J, K, H, G;
@@ -234,14 +232,14 @@ public class WordIdealTest extends TestCase {
         L.add(a);
 
         I = new WordIdeal<BigRational>(fac, L, false);
-        assertTrue("not isONE( I )", !I.isONE()||a.isConstant());
+        assertTrue("not isONE( I )", !I.isONE() || a.isConstant());
         assertTrue("isGB( I )", I.isGB());
 
         L = new ArrayList<GenWordPolynomial<BigRational>>();
         L.add(b);
 
         J = new WordIdeal<BigRational>(fac, L, false);
-        assertTrue("not isONE( J )", !J.isONE()||a.isConstant()||b.isConstant());
+        assertTrue("not isONE( J )", !J.isONE() || a.isConstant() || b.isConstant());
         assertTrue("isGB( J )", J.isGB());
 
         K = I.product(J);
@@ -252,14 +250,14 @@ public class WordIdealTest extends TestCase {
         //System.out.println("H = " + H);
         G = K.sum(H);
         //System.out.println("G = " + G);
-	//assertTrue("not isZERO( K )", !K.isZERO());
+        //assertTrue("not isZERO( K )", !K.isZERO());
         assertTrue("isGB( K )", K.isGB());
         assertTrue("isGB( H )", H.isGB());
         assertTrue("isGB( G )", G.isGB());
         //non-com assertTrue("I contains(K)", I.contains(K));
         assertTrue("J contains(K)", J.contains(K));
 
-        if (true) {
+        if (true) { // TODO
             return;
         }
 
@@ -296,6 +294,7 @@ public class WordIdealTest extends TestCase {
     /**
      * Test WordIdeal common zeros.
      */
+    @SuppressWarnings("cast")
     public void testWordIdealCommonZeros() {
         WordIdeal<BigRational> I, J;
         L = new ArrayList<GenWordPolynomial<BigRational>>();

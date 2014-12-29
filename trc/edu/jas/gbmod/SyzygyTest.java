@@ -82,19 +82,7 @@ public class SyzygyTest extends TestCase {
     Syzygy<BigRational> sz;
 
 
-    GenPolynomial<BigRational> a;
-
-
-    GenPolynomial<BigRational> b;
-
-
-    GenPolynomial<BigRational> c;
-
-
-    GenPolynomial<BigRational> d;
-
-
-    GenPolynomial<BigRational> e;
+    GenPolynomial<BigRational> a, b, c, d, e;
 
 
     GenPolynomial<BigRational> zero;
@@ -186,10 +174,8 @@ public class SyzygyTest extends TestCase {
 
     /**
      * Test sequential Syzygy.
-     * 
      */
     public void testSequentialSyzygy() {
-
         L = new ArrayList<GenPolynomial<BigRational>>();
 
         assertTrue("not isZERO( a )", !a.isZERO());
@@ -233,10 +219,8 @@ public class SyzygyTest extends TestCase {
 
     /**
      * Test sequential module Syzygy.
-     * 
      */
     public void testSequentialModSyzygy() {
-
         W = new ArrayList<List<GenPolynomial<BigRational>>>();
 
         assertTrue("not isZERO( a )", !a.isZERO());
@@ -295,10 +279,8 @@ public class SyzygyTest extends TestCase {
 
     /**
      * Test sequential arbitrary base Syzygy.
-     * 
      */
     public void testSequentialArbitrarySyzygy() {
-
         L = new ArrayList<GenPolynomial<BigRational>>();
 
         assertTrue("not isZERO( a )", !a.isZERO());
@@ -341,10 +323,8 @@ public class SyzygyTest extends TestCase {
 
     /**
      * Test sequential arbitrary base Syzygy, ex CLO 2, p 214 ff.
-     * 
      */
-    @SuppressWarnings("unchecked")
-    // not jet working
+    @SuppressWarnings("cast")
     public void testSequentialArbitrarySyzygyCLO() {
 
         PolynomialList<BigRational> F = null;
@@ -369,10 +349,8 @@ public class SyzygyTest extends TestCase {
 
     /**
      * Test sequential arbitrary module Syzygy.
-     * 
      */
     public void testSequentialArbitraryModSyzygy() {
-
         W = new ArrayList<List<GenPolynomial<BigRational>>>();
 
         assertTrue("not isZERO( a )", !a.isZERO());

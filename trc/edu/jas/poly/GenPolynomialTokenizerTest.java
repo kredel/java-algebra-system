@@ -8,8 +8,8 @@ package edu.jas.poly;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -99,7 +99,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
     /**
      * Test rational polynomial.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public void testBigRational() {
         String exam = "Rat(x,y,z) L " + "( " + "( 1 ), " + "( 0 ), " + "( 3/4 - 6/8 ), "
                         + "( 1 x + x^3 + 1/3 y z - x^3 ) " + " )";
@@ -145,7 +145,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
     /**
      * Test integer polynomial.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public void testBigInteger() {
         String exam = "Int(x,y,z) L " + "( " + "( 1 ), " + "( 0 ), " + "( 3 2 - 6 ), "
                         + "( 1 x + x^3 + 3 y z - x^3 ) " + " )";
@@ -192,7 +192,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
     /**
      * Test modular integer polynomial.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public void testModInteger() {
         String exam = "Mod 19 (x,y,z) L " + "( " + "( 1 ), " + "( 0 ), " + "( 3 2 - 6 + 19 ), "
                         + "( 1 x + x^3 + 3 y z - x^3 ) " + " )";
@@ -238,7 +238,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
     /**
      * Test complex polynomial.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public void testBigComplex() {
         String exam = "Complex(x,y,z) L " + "( " + "( 1i0 ), " + "( 0i0 ), " + "( 3/4i2 - 6/8i2 ), "
                         + "( 1i0 x + x^3 + 1i3 y z - x^3 ) " + " )";
@@ -285,7 +285,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
     /**
      * Test decimal polynomial.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public void testBigDecimal() {
         String exam = "D(x,y,z) L " + "( " + "( 1 ), " + "( 0 ), " + "( 0.25 * 0.25 - 0.25^2 ), "
                         + "( 1 x + x^3 + 0.3333333333333333333333 y z - x^3 ) " + " )";
@@ -331,7 +331,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
     /**
      * Test quaternion polynomial.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public void testBigQuaternion() {
         String exam = "Quat(x,y,z) L " + "( " + "( 1i0j0k0 ), " + "( 0i0j0k0 ), "
                         + "( 3/4i2j1k3 - 6/8i2j1k3 ), " + "( 1 x + x^3 + 1i2j3k4 y z - x^3 ) " + " )";
@@ -378,7 +378,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
     /**
      * Test rational solvable polynomial.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public void testSolvableBigRational() {
         String exam = "Rat(x,y,z) L " + "RelationTable " + "( " + " ( z ), ( y ), ( y z - 1 ) " + ") " + "( "
                         + " ( 1 ), " + " ( 0 ), " + " ( 3/4 - 6/8 ), " + " ( 1 x + x^3 + 1/3 y z - x^3 ) "
@@ -404,9 +404,9 @@ public class GenPolynomialTokenizerTest extends TestCase {
         int nvar = vars.length;
         spfac = new GenSolvablePolynomialRing<BigRational>(fac, nvar, tord, vars);
         List<GenSolvablePolynomial<BigRational>> rel = new ArrayList<GenSolvablePolynomial<BigRational>>(3);
-        rel.add( spfac.parse("z") );
-        rel.add( spfac.parse("y") );
-        rel.add( spfac.parse("y z - 1") );
+        rel.add(spfac.parse("z"));
+        rel.add(spfac.parse("y"));
+        rel.add(spfac.parse("y z - 1"));
         spfac.addSolvRelations(rel);
         assertEquals("spfac == f.ring", spfac, f.ring);
         //System.out.println("spfac = " + spfac);
@@ -434,7 +434,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
     /**
      * Test mod integer solvable polynomial.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public void testSolvableModInteger() {
         String exam = "Mod 19 (x,y,z) L " + "RelationTable " + "( " + " ( z ), ( y ), ( y z - 1 ) " + ") "
                         + "( " + "( 1 ), " + "( 0 ), " + "( 3 2 - 6 + 19 ), "
@@ -460,9 +460,9 @@ public class GenPolynomialTokenizerTest extends TestCase {
         int nvar = vars.length;
         spfac = new GenSolvablePolynomialRing<ModLong>(fac, nvar, tord, vars);
         List<GenSolvablePolynomial<ModLong>> rel = new ArrayList<GenSolvablePolynomial<ModLong>>(3);
-        rel.add( spfac.parse("z") );
-        rel.add( spfac.parse("y") );
-        rel.add( spfac.parse("y z - 1") );
+        rel.add(spfac.parse("z"));
+        rel.add(spfac.parse("y"));
+        rel.add(spfac.parse("y z - 1"));
         spfac.addSolvRelations(rel);
         assertEquals("spfac == f.ring", spfac, f.ring);
         //System.out.println("spfac = " + spfac);
@@ -490,7 +490,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
     /**
      * Test integer polynomial module.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public void testBigIntegerModule() {
         String exam = "Int(x,y,z) L " + "( " + " ( " + "  ( 1 ), " + "  ( 0 ), " + "  ( 3 2 - 6 ), "
                         + "  ( 1 x + x^3 + 3 y z - x^3 ) " + " ), " + " ( ( 1 ), ( 0 ) ) " + ")";
@@ -561,7 +561,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
     /**
      * Test rational solvable polynomial module.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public void testBigRationalSolvableModule() {
         String exam = "Rat(x,y,z) L " + "RelationTable " + "( " + " ( z ), ( y ), ( y z - 1 ) " + ") " + "( "
                         + " ( " + "  ( 1 ), " + "  ( 0 ), " + "  ( 3/4 - 6/8 ), "
@@ -588,9 +588,9 @@ public class GenPolynomialTokenizerTest extends TestCase {
         int nvar = vars.length;
         spfac = new GenSolvablePolynomialRing<BigRational>(fac, nvar, tord, vars);
         List<GenSolvablePolynomial<ModLong>> rel = new ArrayList<GenSolvablePolynomial<ModLong>>(3);
-        rel.add( spfac.parse("z") );
-        rel.add( spfac.parse("y") );
-        rel.add( spfac.parse("y z - 1") );
+        rel.add(spfac.parse("z"));
+        rel.add(spfac.parse("y"));
+        rel.add(spfac.parse("y z - 1"));
         spfac.addSolvRelations(rel);
         assertEquals("spfac == m.ring", spfac, m.ring);
 
@@ -639,7 +639,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
     /**
      * Test algebraic number polynomial. <b>Note: </b> Syntax no more supported.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public void removedTestAlgebraicNumber() {
         String exam = "AN[ (i) ( i^2 + 1 ) ] (x,y,z) L " + "( " + "( 1 ), " + "( _i_ ), " + "( 0 ), "
                         + "( _i^2_ + 1 ), " + "( 1 x + x^3 + _3 i_ y z - x^3 ) " + " )";
@@ -695,7 +695,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
      * Test Galois field coefficient polynomial. <b>Note: </b> Syntax no more
      * supported.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public void removedTestGaloisField() {
         String exam = "AN[ 19 (i) ( i^2 + 1 ) ] (x,y,z) L " + "( " + "( 20 ), " + "( _i_ ), " + "( 0 ), "
                         + "( _i^2_ + 20 ), " + "( 1 x + x^3 + _3 i_ y z - x^3 ) " + " )";
@@ -750,7 +750,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
     /**
      * Test algebraic number polynomial with braces.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public void testAlgebraicNumberBrace() {
         String exam = "AN[ (i) ( i^2 + 1 ) ] (x,y,z) L " + "( " + "( 1 ), " + "( { i } ), " + "( 0 ), "
                         + "( { i^2 } + 1 ), " + "( 1 x + x^3 + { 3 i }^2  y z - x^3 ) " + " )";
@@ -805,7 +805,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
     /**
      * Test Galois field coefficient polynomial with braces.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public void testGaloisFieldBrace() {
         String exam = "AN[ 19 (i) ( i^2 + 1 ) ] (x,y,z) L " + "( " + "( 20 ), " + "( { i } ), " + "( 0 ), "
                         + "( { i^2 } + 20 ), " + "( 1 x + x^3 + { 3 i }^3 y z + { -1 }^3 x^3 ) " + " )";
@@ -860,7 +860,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
     /**
      * Test Galois field coefficient polynomial without braces.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public void testGaloisFieldWoBrace() {
         String exam = "AN[ 19 (i) ( i^2 + 1 ) ] (x,y,z) L " + "( " + "( 20 ), " + "( i ), " + "( 0 ), "
                         + "( i^2 + 20 ), " + "( 1 x + x^3 + 3^3 i^3 y z - (x)^3 ) " + " )";
@@ -915,7 +915,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
     /**
      * Test rational polynomial with generic coefficients.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public void testBigRationalGeneric() {
         String exam = "Rat(x,y,z) L " + "( " + "( 1^3 ), " + "( 0^3 ), " + "( { 3/4 }^2 - 6/8^2 ), "
                         + "( { 1 }^2 x + x^3 + 1/3 y z - x^3 ), "
@@ -967,7 +967,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
     /**
      * Test rational polynomial with errors.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public void testBigRationalErorr() {
         // brace mismatch
         String exam = "Rat(x,y,z) L " + "( " + "( { 3 ), " + " )";
