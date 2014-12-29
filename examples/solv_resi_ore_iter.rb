@@ -13,11 +13,11 @@ pcz = PolyRing.new(QQ(),"x,y,z");
 zrelations = [z, y,  y * z + x
              ];
 
-puts "zrelations: = [" + zrelations.join(", ") { |r| r.to_s } + "]";
+puts "zrelations: = [" + zrelations.join(", "){ |r| r.to_s } + "]";
 puts;
 
 pz = SolvPolyRing.new(QQ(), "x,y,z", PolyRing.lex, zrelations);
-puts "SolvPolyRing: " + str(pz);
+puts "SolvPolyRing: pz = " + str(pz);
 puts;
 
 #startLog();
@@ -54,8 +54,8 @@ puts;
 #exit(0);
 
 pzc = f0.elem.ring;
-puts "SolvableResidueRing: " + str(pzc.toScript); # + ", assoz: " + str(pzc::ring.isAssociative);
-puts "gens =" + pzc.generators().join(", ") { |r| r.to_s };
+puts "SolvableResidueRing: pzc = " + str(pzc.toScript); # + ", assoz: " + str(pzc::ring.isAssociative);
+puts "gens = " + pzc.generators().join(", ") { |r| r.to_s };
 puts;
 
 pct = PolyRing.new(pzc,"t");
@@ -70,16 +70,17 @@ trelations = [t, y,  y * t + y,
 puts "trelations: = [" + trelations.join(", ") { |r| r.to_s } + "]";
 puts;
 
-startLog();
+#startLog();
 
 pt = SolvPolyRing.new(pzc, "t", PolyRing.lex, trelations);
-puts "SolvPolyRing: " + str(pt);
+puts "SolvPolyRing: pt = " + str(pt);
 puts;
 
 puts "sp.gens(t) = " + pt.gens().join(", ") { |r| r.to_s };
 #is automatic: one,y,z,t = rp.gens(); # no x
 
 #exit(0);
+#startLog();
 
 #yi = 1 / y; # not invertible
 #puts "yi   = " + str(yi);
@@ -97,7 +98,7 @@ puts "ff = [" + ff.join(", ") { |r| r.to_s } + "]";
 puts
 
 ii = pt.ideal( "", ff );
-puts "SolvableIdeal: " + str(ii);
+puts "SolvableIdeal: ii = " + str(ii);
 puts;
 
 #exit(0);
@@ -132,18 +133,19 @@ puts "fl = [" + fl.join(", ") { |r| r.to_s } + "]";
 puts
 
 iil = pt.ideal( "", fl );
-puts "SolvableIdeal_res: " + str(iil);
+puts "SolvableIdeal_res: il1 = " + str(iil);
 puts;
 
 iiq = iil.toQuotientCoefficients(); # beware of redefined generators
-puts "SolvableIdeal_quot: " + str(iiq);
+puts "SolvableIdeal_quot: iiq = " + str(iiq);
 puts;
 
 #exit(0);
+startLog();
 
 rgll = iiq.leftGB();
-puts "seq left GB: " + str(rgll);
-puts "isLeftGB: " + str(rgll.isLeftGB());
+puts "seq left GB: rgl1 = " + str(rgll);
+puts "isLeftGB: rgl1 = " + str(rgll.isLeftGB());
 puts;
 
 #rgr = rgl.rightGB();
@@ -154,8 +156,8 @@ puts;
 #startLog();
 
 rgt = iiq.twosidedGB();
-puts "seq twosided GB: " + str(rgt);
-puts "isTwosidedGB: " + str(rgt.isTwosidedGB());
+puts "seq twosided GB: rgt = " + str(rgt);
+puts "isTwosidedGB: rgt = " + str(rgt.isTwosidedGB());
 puts;
 
 #terminate();

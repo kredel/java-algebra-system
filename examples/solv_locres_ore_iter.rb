@@ -17,7 +17,7 @@ puts "zrelations: = [" + zrelations.join(", ") { |r| r.to_s } + "]";
 puts;
 
 pz = SolvPolyRing.new(QQ(), "x,y,z", PolyRing.lex, zrelations);
-puts "SolvPolyRing: " + str(pz);
+puts "SolvPolyRing: pz = " + str(pz);
 puts;
 
 #startLog();
@@ -65,7 +65,7 @@ puts;
 #exit(0);
 
 pzc = f0.ring;
-puts "SolvableLocalResidueRing: " + str(pzc.toScript) + ", assoz: " + str(pzc::ring.isAssociative);
+puts "SolvableLocalResidueRing: pzc = " + str(pzc.toScript) + ", assoz: " + str(pzc::ring.isAssociative);
 puts "gens =" + pzc.generators().join(", ") { |r| r.to_s };
 puts;
 
@@ -84,7 +84,7 @@ puts;
 #startLog();
 
 pt = SolvPolyRing.new(pzc, "t", PolyRing.lex, trelations);
-puts "SolvPolyRing: " + str(pt);
+puts "SolvPolyRing: pt = " + str(pt);
 puts "sp.gens(t) = " + pt.gens().join(", ") { |r| r.to_s };
 #is automatic: one,y,z,t = rp.gens(); # no x?
 puts;
@@ -106,15 +106,15 @@ puts "ff = [" + ff.join(", ") { |r| r.to_s } + "]";
 puts
 
 ii = pt.ideal( "", ff );
-puts "SolvableIdeal: " + str(ii);
+puts "SolvableIdeal: ii = " + str(ii);
 puts;
 
 #exit(0);
 #startLog();
 
 rgl = ii.leftGB();
-puts "seq left GB: " + str(rgl);
-puts "isLeftGB: " + str(rgl.isLeftGB());
+puts "seq left GB: rg1 = " + str(rgl);
+puts "isLeftGB: rg1 = " + str(rgl.isLeftGB());
 puts;
 
 #p = RingElem.new(rgl.list.get(0));
@@ -141,12 +141,12 @@ puts "fl = [" + fl.join(", ") { |r| r.to_s } + "]";
 puts
 
 iil = pt.ideal( "", fl );
-puts "SolvableIdeal_local: " + str(iil);
+puts "SolvableIdeal_local: iil = " + str(iil);
 puts;
 
 rgll = iil.leftGB();
-puts "seq left GB: " + str(rgll);
-puts "isLeftGB: " + str(rgll.isLeftGB());
+puts "seq left GB: rgll = " + str(rgll);
+puts "isLeftGB: rgll = " + str(rgll.isLeftGB());
 puts;
 
 #exit(0);
@@ -172,10 +172,10 @@ puts "f3    = " + str(f3) + ", " + str(f3.isZERO());
 puts;
 
 iil = pt.ideal( "", [ f1, f2 ] );
-puts "SolvableIdeal_local: " + str(iil);
+puts "SolvableIdeal_local: iil = " + str(iil);
 puts;
 
 rgll = iil.leftGB();
-puts "seq left GB: " + str(rgll);
-puts "isLeftGB: " + str(rgll.isLeftGB());
+puts "seq left GB: rgll = " + str(rgll);
+puts "isLeftGB: rgll = " + str(rgll.isLeftGB());
 puts;
