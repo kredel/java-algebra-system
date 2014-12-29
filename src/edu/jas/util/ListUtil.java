@@ -24,7 +24,7 @@ public class ListUtil {
     //private static final Logger logger = Logger.getLogger(ListUtil.class);
 
 
-    // private static boolean debug = logger.isDebugEnabled();
+    // private static boolean debug = logger.isDebugEnabled(); 
 
 
     /**
@@ -98,8 +98,8 @@ public class ListUtil {
      * @return list (e, ..., e) of length n
      */
     public static <C> List<C> fill(int n, C e) {
-        List<C> r = new ArrayList<C>( n );
-        for ( int m = 0; m < n; m++ ) {
+        List<C> r = new ArrayList<C>(n);
+        for (int m = 0; m < n; m++) {
             r.add(e);
         }
         return r;

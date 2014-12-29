@@ -563,7 +563,7 @@ Iterable<Monomial<C>> {
             return -1;
         }
         //if (c != 0) {
-            //System.out.println("c = " + c);
+        //System.out.println("c = " + c);
         //}
         // now all keys are equal
         return c;

@@ -358,17 +358,18 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
 
 
     /**
-     * Get a scripting compatible string representation of an ExpVector of this ring.
+     * Get a scripting compatible string representation of an ExpVector of this
+     * ring.
      * @param e exponent vector
      * @return script compatible representation for the ExpVector.
      */
     public String toScript(ExpVector e) {
-        if (vars != null ) {
+        if (vars != null) {
             return e.toScript(vars);
         }
         return e.toScript();
     }
-    
+
 
     /**
      * Comparison with any other object.

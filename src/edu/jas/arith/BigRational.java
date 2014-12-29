@@ -307,7 +307,7 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
 
 
     /**
-     * Get this as a <tt>double</tt>. 
+     * Get this as a <tt>double</tt>.
      * @return this as a <tt>double</tt>
      * @see java.lang.Number#doubleValue()
      */
