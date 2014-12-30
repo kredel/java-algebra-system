@@ -5,7 +5,7 @@
 package edu.jas.gb;
 
 
-//import edu.jas.poly.GroebnerBase;
+// import edu.jas.poly.GroebnerBase;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -17,16 +17,14 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.log4j.BasicConfigurator; //import org.apache.log4j.Logger;
+import org.apache.log4j.BasicConfigurator; // import org.apache.log4j.Logger;
 
-import edu.jas.kern.ComputerThreads;
 import edu.jas.arith.BigRational;
-
+import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
-
 import edu.jas.structure.RingElem;
 
 
@@ -135,7 +133,8 @@ public class GroebnerBaseDistTest extends TestCase {
         a = b = c = d = e = null;
         bbseq = new GroebnerBaseSeq<BigRational>();
         bbdists = new GroebnerBaseDistributed<BigRational>(threads, port);
-        bbdist = new GroebnerBaseDistributed<BigRational>(threads, new OrderedSyzPairlist<BigRational>(), port);
+        bbdist = new GroebnerBaseDistributed<BigRational>(threads, new OrderedSyzPairlist<BigRational>(),
+                        port);
     }
 
 
@@ -296,12 +295,13 @@ public class GroebnerBaseDistTest extends TestCase {
      * Test Trinks7 GBase.
      * 
      */
+    @SuppressWarnings("cast")
     public void testTrinks7GBase() {
         Thread[] clients;
         String exam = "(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
-                + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
-                + "( - 9 W + 15 T P + 20 S Z ), " + "( P W + 2 T Z - 11 B**3 ), "
-                + "( 99 W - 11 B S + 3 B**2 ), " + "( B**2 + 33/50 B + 2673/10000 ) " + ") ";
+                        + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
+                        + "( - 9 W + 15 T P + 20 S Z ), " + "( P W + 2 T Z - 11 B**3 ), "
+                        + "( 99 W - 11 B S + 3 B**2 ), " + "( B**2 + 33/50 B + 2673/10000 ) " + ") ";
         Reader source = new StringReader(exam);
         GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
         try {

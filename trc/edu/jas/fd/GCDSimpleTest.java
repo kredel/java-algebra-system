@@ -173,6 +173,7 @@ public class GCDSimpleTest extends TestCase {
     /**
      * Test univariate recursive left gcd simple.
      */
+    @SuppressWarnings("cast")
     public void xtestRecursiveLeftGCDSimple() {
         String[] vars = new String[] { "a", "b" };
         dfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), to, vars);
@@ -299,6 +300,7 @@ public class GCDSimpleTest extends TestCase {
     /**
      * Test univariate recursive right gcd simple.
      */
+    @SuppressWarnings("cast")
     public void xtestRecursiveRightGCDSimple() {
         String[] vars = new String[] { "a", "b" };
         dfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), to, vars);
@@ -377,6 +379,7 @@ public class GCDSimpleTest extends TestCase {
     /**
      * Test arbitrary recursive gcd simple.
      */
+    @SuppressWarnings("cast")
     public void testArbitraryRecursiveGCDSimple() {
         String[] cvars = new String[] { "a", "b" };
         String[] vars = new String[] { "c" };
@@ -487,6 +490,12 @@ public class GCDSimpleTest extends TestCase {
         ep = FDUtil.<SolvableQuotient<BigRational>> leftBaseSparsePseudoRemainder(bp, gp);
         //System.out.println("ep  = " + ep);
         assertTrue("gcd(ac,bc)| bc): " + ep, ep.isZERO());
+
+        assertEquals("nonsense", apm, ap.monic());
+        assertEquals("nonsense", bpm, bp.monic());
+        assertEquals("nonsense", cpm, cp.monic());
+        assertEquals("nonsense", dpm, dp.monic());
+        assertEquals("nonsense", gpm, gp.monic());
     }
 
 

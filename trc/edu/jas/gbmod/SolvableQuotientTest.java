@@ -15,9 +15,9 @@ import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.GenSolvablePolynomialRing;
+import edu.jas.poly.RelationGenerator;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.WeylRelations;
-import edu.jas.poly.RelationGenerator;
 
 
 /**
@@ -250,9 +250,9 @@ public class SolvableQuotientTest extends TestCase {
 
         az = new SolvableQuotient<BigRational>(zFac, a.num, a.den, true);
         bz = new SolvableQuotient<BigRational>(zFac, b.num, b.den, true);
-        if (false) {
-            return;
-        }
+        //if (false) {
+        //    return;
+        //}
 
         te = System.currentTimeMillis();
         c = a.sum(b);
@@ -268,7 +268,7 @@ public class SolvableQuotientTest extends TestCase {
         tz = System.currentTimeMillis() - tz;
         assertEquals("a+b-b = a", az, dz);
 
-        if (tz >= 0L||te >= 0L) { // true, findbugs
+        if (tz >= 0L || te >= 0L) { // true, findbugs
             return;
         }
         System.out.println("te = " + te);

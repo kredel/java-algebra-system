@@ -489,7 +489,9 @@ public class HenselUtilTest extends TestCase {
                 fail("" + e);
             }
 
-            if (false) {
+            boolean x = false;
+            if (x) {
+                x = true; // nonsense
                 long t = System.currentTimeMillis();
                 try {
                     lift = HenselUtil.<ModInteger> liftHensel(c, mi, ap, bp, sp, tp);

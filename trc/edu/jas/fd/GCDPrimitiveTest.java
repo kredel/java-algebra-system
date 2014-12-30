@@ -173,6 +173,7 @@ public class GCDPrimitiveTest extends TestCase {
     /**
      * Test univariate recursive gcd primitive.
      */
+    @SuppressWarnings("cast")
     public void xtestRecursiveGCDPrimitive() {
         //String[] vars = new String[] { "a", "b", "c", "d" };
         String[] vars = new String[] { "a", "b" };
@@ -297,12 +298,19 @@ public class GCDPrimitiveTest extends TestCase {
         ep = FDUtil.<SolvableQuotient<BigRational>> leftBaseSparsePseudoRemainder(bp, gp);
         //System.out.println("ep  = " + ep);
         assertTrue("gcd(ac,bc)| bc): " + ep, ep.isZERO());
+
+        assertEquals("nonsense", apm, ap.monic());
+        assertEquals("nonsense", bpm, bp.monic());
+        assertEquals("nonsense", cpm, cp.monic());
+        assertEquals("nonsense", dpm, dp.monic());
+        assertEquals("nonsense", gpm, gp.monic());
     }
 
 
     /**
      * Test arbitrary recursive gcd primitive.
      */
+    @SuppressWarnings("cast")
     public void xtestArbitraryRecursiveGCDPrimitive() {
         String[] cvars = new String[] { "a", "b" };
         String[] vars = new String[] { "c" };

@@ -213,7 +213,7 @@ public class GroebnerBasePseudoRecParTest extends TestCase {
         G = OrderedPolynomialList.<GenPolynomial<BigInteger>> sort(G);
         PolynomialList<GenPolynomial<BigInteger>> Gp = new PolynomialList<GenPolynomial<BigInteger>>(fac, G);
         //System.out.println("G = " + Gp);
-        assertTrue("nonsense ", t >= 0L);
+        assertTrue("nonsense ", !Gp.getList().isEmpty());
 
 
         GenPolynomialRing<BigRational> rfac = (GenPolynomialRing<BigRational>) Fr.ring.coFac;
@@ -229,7 +229,8 @@ public class GroebnerBasePseudoRecParTest extends TestCase {
         Gr = OrderedPolynomialList.<GenPolynomial<BigRational>> sort(Gr);
         PolynomialList<GenPolynomial<BigRational>> Grp = new PolynomialList<GenPolynomial<BigRational>>(
                         Fr.ring, Gr);
-        //System.out.println("Gr = " + Grp);
+        //System.out.println("Gr = " + Grp)
+        assertTrue("nonsense ", !Grp.getList().isEmpty());;
         bbr.terminate();
 
         Kr = PolyUfdUtil.<BigRational> fromIntegerCoefficients(Fr.ring, G);
@@ -254,6 +255,7 @@ public class GroebnerBasePseudoRecParTest extends TestCase {
         Gq = OrderedPolynomialList.<Quotient<BigRational>> sort(Gq);
         PolynomialList<Quotient<BigRational>> Gpq = new PolynomialList<Quotient<BigRational>>(rring, Gq);
         //System.out.println("Gq = " + Gpq);
+        assertTrue("nonsense ", !Gpq.getList().isEmpty());
         bbq.terminate();
 
         Kq = PolyUfdUtil.<BigRational> quotientFromIntegralCoefficients(rring, Gr);
@@ -279,6 +281,7 @@ public class GroebnerBasePseudoRecParTest extends TestCase {
         Gqi = OrderedPolynomialList.<Quotient<BigInteger>> sort(Gqi);
         PolynomialList<Quotient<BigInteger>> Gpqi = new PolynomialList<Quotient<BigInteger>>(iring, Gqi);
         //System.out.println("Gqi = " + Gpqi);
+        assertTrue("nonsense ", !Gpqi.getList().isEmpty());
         bbqi.terminate();
 
         Kqi = PolyUfdUtil.<BigInteger> quotientFromIntegralCoefficients(iring, G);

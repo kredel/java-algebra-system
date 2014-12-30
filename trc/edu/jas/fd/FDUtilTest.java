@@ -167,6 +167,7 @@ public class FDUtilTest extends TestCase {
         GenSolvablePolynomial<BigInteger> n = (GenSolvablePolynomial<BigInteger>) c.multiply(b).sum(d);
         //System.out.println("n   = " + n); // + ", " + n.monic());
         //System.out.println("a   = " + a); // + ", " + a.monic());
+        assertTrue("nonsense", !n.isZERO());
 
         boolean t = PolyUtil.<BigInteger> isBasePseudoQuotientRemainder(a, b, c, d);
         assertTrue("lc^n a = q b + r: " + d, t);
@@ -182,6 +183,7 @@ public class FDUtilTest extends TestCase {
         //System.out.println("n   = " + n); // + ", " + m.monic());
         //System.out.println("m   = " + m); // + ", " + m.monic());
         //System.out.println("a   = " + a); // + ", " + a.monic());
+        assertTrue("nonsense", !m.isZERO());
 
         t = PolyUtil.<BigInteger> isBasePseudoQuotientRemainder(a, b, e, f);
         assertTrue("ore(lc^n) a = q b + r: " + f, t);
@@ -318,6 +320,10 @@ public class FDUtilTest extends TestCase {
         //assertEquals("apm == qp bp + rp,m: ", apm, rhsm);
         assertEquals("cpm == rpm: ", rpm, cpm);
         assertEquals("dpm == qpm: ", qpm, dpm); // ??
+
+        assertEquals("nonsense", apm, ap.monic());
+        assertEquals("nonsense", bpm, bp.monic());
+        assertEquals("nonsense", rhsm, rhsm.monic());
     }
 
 

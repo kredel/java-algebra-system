@@ -149,9 +149,9 @@ public class WordIdealTest extends TestCase {
         I = new WordIdeal<BigRational>(fac, L, false);
         assertTrue("isGB( I )", I.isGB());
 
-        if (!true) { // TODO
-            return;
-        }
+        //if (!true) { 
+        //    return;
+        //}
 
         //assertTrue("not isZERO( b )", !b.isZERO());
         L.add(b);
@@ -257,9 +257,9 @@ public class WordIdealTest extends TestCase {
         //non-com assertTrue("I contains(K)", I.contains(K));
         assertTrue("J contains(K)", J.contains(K));
 
-        if (true) { // TODO
-            return;
-        }
+        //if (true) { // TODO
+        //    return;
+        //}
 
         /*
         H = I.intersect(J);
@@ -270,6 +270,7 @@ public class WordIdealTest extends TestCase {
         //non-com assertTrue("H contains(K)", H.contains(K));
         */
 
+        /*
         L = new ArrayList<GenWordPolynomial<BigRational>>();
         L.add(a);
         L.add(c);
@@ -288,6 +289,7 @@ public class WordIdealTest extends TestCase {
         assertTrue("isGB( K )", K.isGB());
         //non-com assertTrue("I contains(K)", I.contains(K));
         assertTrue("J contains(K)", J.contains(K));
+        */
     }
 
 

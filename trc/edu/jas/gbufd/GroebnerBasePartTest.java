@@ -203,6 +203,7 @@ public class GroebnerBasePartTest extends TestCase {
         //System.out.println("\nG = " + trinks);
 
         try {
+            @SuppressWarnings("unused")
             PolynomialList<GenPolynomial<BigRational>> tr = bbp.partialGBrec(F.list, new String[] { "B", "S",
                     "P", "Z", "T", "W" });
             fail("must throw exception");

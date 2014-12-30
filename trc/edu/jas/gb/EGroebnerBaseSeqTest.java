@@ -180,7 +180,7 @@ public class EGroebnerBaseSeqTest extends TestCase {
      * Test Trinks7 GBase over Z.
      * 
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public void xtestTrinks7GBaseZ() { // needs 20 sec
         String exam = "Z(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
                         + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
@@ -210,7 +210,7 @@ public class EGroebnerBaseSeqTest extends TestCase {
      * Test Trinks7 GBase over Z(B).
      * 
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public void xtestTrinks7GBaseZ_B() {
         String exam = "IntFunc{ B } (S,T,Z,P,W) G " + "( " + "( { 45 } P + { 35 } S - { 165 B } - { 36 } ), "
                         + "( { 35 } P + { 40 } Z + { 25 } T - { 27 } S ), "

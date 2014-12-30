@@ -1361,10 +1361,11 @@ public class IdealTest extends TestCase {
                 Ld.add(dpc);
             }
             d += ds;
+            @SuppressWarnings("unused")
             List<List<Complex<BigDecimal>>> droot = Ic.decimalApproximation();
-            for (List<Complex<BigDecimal>> dr : droot) {
-                //System.out.println("dr = " + dr); // TODO
-            }
+            //for (List<Complex<BigDecimal>> dr : droot) {
+            //System.out.println("dr = " + dr); // TODO
+            //}
         }
         logger.info("#roots = " + s + ", #vr-dim = " + d);
         assertTrue("#roots(" + s + ") == degree(" + d + "): ", s == d);
@@ -1620,6 +1621,7 @@ public class IdealTest extends TestCase {
         for (IdealWithRealAlgebraicRoots<BigRational> iu : iur) {
             //System.out.println("iu = " + iu);
             //System.out.println("");
+            @SuppressWarnings("unused")
             List<List<BigDecimal>> rd = iu.decimalApproximation(); // TODO
             //System.out.println("iu = " + iu);
             //System.out.println("");
@@ -1959,10 +1961,10 @@ public class IdealTest extends TestCase {
     public void testAnnihilator() {
         Ideal<BigRational> I, J, K;
         do {
-           a = fac.random(kl, ll, el, q);
-        } while (a.isZERO()||a.isConstant());
+            a = fac.random(kl, ll, el, q);
+        } while (a.isZERO() || a.isConstant());
         b = fac.univariate(1);
-        c = fac.univariate(rl-1);
+        c = fac.univariate(rl - 1);
         //b = fac.random(kl - 1, ll, el, q);
         //c = fac.random(kl - 1, ll - 1, el, q / 2);
 
@@ -1980,9 +1982,9 @@ public class IdealTest extends TestCase {
         J.doGB();
         //System.out.println("c = " + c);
         //System.out.println("J = " + J + "\n");
-        assertTrue("isAnnihilator(c,J)", I.isAnnihilator(c,J));
+        assertTrue("isAnnihilator(c,J)", I.isAnnihilator(c, J));
 
-        d = fac.univariate(rl-2);
+        d = fac.univariate(rl - 2);
         //d = fac.random(kl - 1, ll, el, q);
         M = new ArrayList<GenPolynomial<BigRational>>();
         M.add(c);
@@ -1996,7 +1998,7 @@ public class IdealTest extends TestCase {
         J.doGB();
         //System.out.println("K = " + K);
         //System.out.println("J = " + J + "\n");
-        assertTrue("isAnnihilator(M,J)", I.isAnnihilator(K,J));
+        assertTrue("isAnnihilator(M,J)", I.isAnnihilator(K, J));
     }
 
 }

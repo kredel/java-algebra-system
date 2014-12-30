@@ -11,8 +11,6 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.log4j.BasicConfigurator;
-
 import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.Complex;
@@ -100,7 +98,7 @@ public class FactorComplexTest extends TestCase {
         BigRational rfac = new BigRational(1);
         ComplexRing<BigRational> cfac = new ComplexRing<BigRational>(rfac);
         GenPolynomialRing<Complex<BigRational>> cpfac = new GenPolynomialRing<Complex<BigRational>>(cfac, 1,
-                to);
+                        to);
         //System.out.println("cfac  = " + cfac);
         //System.out.println("cpfac = " + cpfac);
 
@@ -153,7 +151,7 @@ public class FactorComplexTest extends TestCase {
         BigRational rfac = new BigRational(1);
         ComplexRing<BigRational> cfac = new ComplexRing<BigRational>(rfac);
         GenPolynomialRing<Complex<BigRational>> cpfac = new GenPolynomialRing<Complex<BigRational>>(cfac, 1,
-                to);
+                        to);
         //System.out.println("cfac  = " + cfac);
         //System.out.println("cpfac = " + cpfac);
 
@@ -187,6 +185,7 @@ public class FactorComplexTest extends TestCase {
             boolean t = fac.isAbsoluteFactorization(sm);
             //System.out.println("t        = " + t);
             assertTrue("prod(factor(a)) = a", t);
+            assertTrue("facs == #sm", facs == sm.length());
         }
     }
 
@@ -201,7 +200,7 @@ public class FactorComplexTest extends TestCase {
         BigRational rfac = new BigRational(1);
         ComplexRing<BigRational> cfac = new ComplexRing<BigRational>(rfac);
         GenPolynomialRing<Complex<BigRational>> cpfac = new GenPolynomialRing<Complex<BigRational>>(cfac, 2,
-                to);
+                        to);
         //System.out.println("cfac  = " + cfac);
         //System.out.println("cpfac = " + cpfac);
 

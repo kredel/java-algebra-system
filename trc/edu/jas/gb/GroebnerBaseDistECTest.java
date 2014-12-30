@@ -5,7 +5,7 @@
 package edu.jas.gb;
 
 
-//import edu.jas.poly.GroebnerBase;
+// import edu.jas.poly.GroebnerBase;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -17,15 +17,14 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.log4j.BasicConfigurator; //import org.apache.log4j.Logger;
+import org.apache.log4j.BasicConfigurator; // import org.apache.log4j.Logger;
 
-import edu.jas.kern.ComputerThreads;
 import edu.jas.arith.BigRational;
+import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
-import edu.jas.structure.RingElem;
 import edu.jas.util.ExecutableServer;
 
 
@@ -188,7 +187,7 @@ public class GroebnerBaseDistECTest extends TestCase {
         L.add(b);
         L = bbdist.GB(L);
         assertTrue("isGB( { a } ): " + L, bbseq.isGB(L));
-        assertTrue("L == {1}: " + L, L.size()==1);
+        assertTrue("L == {1}: " + L, L.size() == 1);
     }
 
 
@@ -279,12 +278,13 @@ public class GroebnerBaseDistECTest extends TestCase {
     /**
      * Test Trinks7 GBase.
      */
+    @SuppressWarnings("cast")
     public void testTrinks7GBase() {
         List<GenPolynomial<BigRational>> Gs, Gp = null;
         String exam = "(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
-                + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
-                + "( - 9 W + 15 T P + 20 S Z ), " + "( P W + 2 T Z - 11 B**3 ), "
-                + "( 99 W - 11 B S + 3 B**2 ), " + "( B**2 + 33/50 B + 2673/10000 ) " + ") ";
+                        + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
+                        + "( - 9 W + 15 T P + 20 S Z ), " + "( P W + 2 T Z - 11 B**3 ), "
+                        + "( 99 W - 11 B S + 3 B**2 ), " + "( B**2 + 33/50 B + 2673/10000 ) " + ") ";
         //exam = "(x3,x4,x5) L " + 
         //       "( (x3^2 - 13974703710478159/3775194259200) , (x4 - 34297/840), (x5^2 - 6389/480), (-4/3 x5^2 + x3^2 + x3 - 833/180) ) ";
         //exam = "(x3,x4,x5) G " +
