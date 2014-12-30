@@ -484,7 +484,8 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
             }
             GenSolvablePolynomial<C> z = red.leftNormalform(si, b);
             if (!z.isZERO()) {
-                System.out.println("contains nf(b) != 0: " + b + ", z = " + z + ", si = " + si);
+                logger.info("contains nf(b) != 0: " + z + " of " + b);
+		//        + ", si = " + si + ", ring = " + z.ring.toScript());
                 return false;
             }
         }
@@ -721,9 +722,20 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
 
         List<GenSolvablePolynomial<C>> Q;
         Q = new ArrayList<GenSolvablePolynomial<C>>(I.getList().size());
+        GenSolvablePolynomial<C> p;
         for (GenSolvablePolynomial<C> q : I.getList()) {
-            q = (GenSolvablePolynomial<C>) q.divide(h); // remainder == 0
-            Q.add(q);
+            p = (GenSolvablePolynomial<C>) q.divide(h); // remainder == 0
+            if (!p.isZERO()) {
+                p = p.monic();
+                Q.add(p);
+            }
+            if (debug) {
+		GenSolvablePolynomial<C> r = (GenSolvablePolynomial<C>) q.remainder(h);
+                if (!r.isZERO()) {
+		    System.out.println("error remainder !=0: " + r + ", q = " + q + ", h = " + h);
+                    throw new RuntimeException("remainder !=0");
+                }
+            }
         }
         return new SolvableIdeal<C>(getRing(), Q, true /*false?*/);
     }
@@ -854,15 +866,31 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         int s = 0;
         SolvableIdeal<C> I = this.GB(); // should be already
         GenSolvablePolynomial<C> hs = h;
-        SolvableIdeal<C> Is = I;
-
+        SolvableIdeal<C> Is = null;
+        logger.info("infiniteQuotient hs = " + hs);
+        long dm = -1;
         boolean eq = false;
         while (!eq) {
             Is = I.quotient(hs);
             Is = Is.GB(); // should be already
+            //logger.info("ideal Is = " + Is);
             logger.info("infiniteQuotient s = " + s);
+            if (Is.isZERO()) {
+                logger.warn("infiniteQuotient does not exist");
+                return I;
+            }
             eq = Is.contains(I); // I.contains(Is) always
             if (!eq) {
+                long ds = PolyUtil.<C> totalDegree(Is.list.getList());
+                if (dm < 0) {
+                    dm = ds;
+                }
+                //System.out.println("deg(Is) = " + ds);
+                if (ds > dm) {
+                    logger.warn("no convergence in infiniteQuotient (dm,ds): " + dm + " < " + ds);
+                    return I;
+                    //throw new RuntimeException("no convergence in infiniteQuotient");
+                }
                 I = Is;
                 s++;
                 // hs = hs.multiply( h );

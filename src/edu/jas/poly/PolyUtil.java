@@ -2244,10 +2244,26 @@ public class PolyUtil {
 
 
     /**
-     * Maximal degree of polynomial list.
-     * @return maximum degree of the polynomial list.
+     * Total degree of polynomial list.
+     * @return total degree of the polynomial list.
      */
     public static <C extends RingElem<C>> long totalDegree(List<GenPolynomial<C>> P) {
+        long degree = 0;
+        for (GenPolynomial<C> g : P) {
+            long total = g.totalDegree();
+            if (degree < total) {
+                degree = total;
+            }
+        }
+        return degree;
+    }
+
+
+    /**
+     * Maximal degree of polynomial list.
+     * @return maximal degree of the polynomial list.
+     */
+    public static <C extends RingElem<C>> long maxDegree(List<GenPolynomial<C>> P) {
         long degree = 0;
         for (GenPolynomial<C> g : P) {
             long total = g.degree();

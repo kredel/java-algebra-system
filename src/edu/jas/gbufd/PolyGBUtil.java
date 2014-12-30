@@ -386,6 +386,7 @@ public class PolyGBUtil {
         //GBFactory.<C> getImplementation(tfac.coFac);
         logger.warn("intersect computing GB");
         List<GenSolvablePolynomial<C>> g = sbb.leftGB(c);
+        //List<GenSolvablePolynomial<C>> g = sbb.twosidedGB(c);
         if (debug) {
             logger.debug("intersect GB = " + g);
         }
