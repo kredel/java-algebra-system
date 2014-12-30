@@ -1970,6 +1970,7 @@ public class PolyUtil {
      * @deprecated use evaluateAll() with three arguments
      */
     @Deprecated
+    @SuppressWarnings("unused")
     public static <C extends RingElem<C>> C evaluateAll(RingFactory<C> cfac, GenPolynomialRing<C> dfac,
                     GenPolynomial<C> A, List<C> a) {
         return evaluateAll(cfac, A, a);
@@ -2546,7 +2547,8 @@ public class PolyUtil {
         if (tfac.equals(R)) { // check 
             return H;
         }
-        logger.warn("tfac != R: tfac = " + tfac.toScript() + ", R = " + R.toScript() + ", pfac = " + pfac.toScript());
+        logger.warn("tfac != R: tfac = " + tfac.toScript() + ", R = " + R.toScript() + ", pfac = "
+                        + pfac.toScript());
         // throw new RuntimeException("contract(pfac) != R");
         return H;
     }
