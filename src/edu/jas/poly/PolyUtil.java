@@ -2546,7 +2546,7 @@ public class PolyUtil {
         if (tfac.equals(R)) { // check 
             return H;
         }
-        logger.warn("tfac != R: tfac = " + tfac.toScript() + ", R = " + R.toScript());
+        logger.warn("tfac != R: tfac = " + tfac.toScript() + ", R = " + R.toScript() + ", pfac = " + pfac.toScript());
         // throw new RuntimeException("contract(pfac) != R");
         return H;
     }

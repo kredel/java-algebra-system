@@ -366,8 +366,9 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>> extends RReductio
      * @return nf(Ap) with respect to Pp.
      */
     @SuppressWarnings("unchecked")
-    public GenPolynomial<GenPolynomial<C>> normalformRecursive(List<GenPolynomial<GenPolynomial<C>>> Pp, GenPolynomial<GenPolynomial<C>> Ap) {
-	throw new UnsupportedOperationException("not implemented"); 
+    public GenPolynomial<GenPolynomial<C>> normalformRecursive(List<GenPolynomial<GenPolynomial<C>>> Pp,
+                    GenPolynomial<GenPolynomial<C>> Ap) {
+        throw new UnsupportedOperationException("not implemented");
     }
 
 

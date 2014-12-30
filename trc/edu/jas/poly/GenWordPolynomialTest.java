@@ -616,8 +616,8 @@ public class GenWordPolynomialTest extends TestCase {
         // non-commuting polynomials over commuting and solvable coefficients
         GenWordPolynomialRing<GenPolynomial<GenPolynomial<BigComplex>>> nf;
         nf = new GenWordPolynomialRing<GenPolynomial<GenPolynomial<BigComplex>>>(sf, wf);
-        //System.out.println("nf = " + nf);
         //want: GenWordPolynomialRing<GenSolvablePolynomial<GenPolynomial<BigComplex>>> nf;
+        //System.out.println("nf = " + nf.toScript());
 
         assertFalse("not commutative",nf.isCommutative());
         assertTrue("associative",nf.isAssociative());
@@ -631,6 +631,7 @@ public class GenWordPolynomialTest extends TestCase {
         assertTrue("p == 0", p.isZERO());
         p = nf.random(3);
         //System.out.println("p = " + p);
+        //p = p.sum(p);
         p = p.multiply(p);
         //System.out.println("p = " + p);
         p = p.subtract(p);

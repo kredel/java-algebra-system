@@ -105,12 +105,12 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
      * @return pp(F).
      */
     public List<GenPolynomial<C>> basePrimitivePart(List<GenPolynomial<C>> F) {
-        if (F == null||F.isEmpty()) {
+        if (F == null || F.isEmpty()) {
             return F;
         }
         List<GenPolynomial<C>> Pp = new ArrayList<GenPolynomial<C>>(F.size());
-        for (GenPolynomial<C> f : F ) {
-	    GenPolynomial<C> p = basePrimitivePart(f);
+        for (GenPolynomial<C> f : F) {
+            GenPolynomial<C> p = basePrimitivePart(f);
             Pp.add(p);
         }
         return Pp;
@@ -180,13 +180,14 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
      * @param F list of recursive GenPolynomials.
      * @return pp(F).
      */
-    public List<GenPolynomial<GenPolynomial<C>>> recursivePrimitivePart(List<GenPolynomial<GenPolynomial<C>>> F) {
-        if (F == null||F.isEmpty()) {
+    public List<GenPolynomial<GenPolynomial<C>>> recursivePrimitivePart(
+                    List<GenPolynomial<GenPolynomial<C>>> F) {
+        if (F == null || F.isEmpty()) {
             return F;
         }
         List<GenPolynomial<GenPolynomial<C>>> Pp = new ArrayList<GenPolynomial<GenPolynomial<C>>>(F.size());
-        for (GenPolynomial<GenPolynomial<C>> f : F ) {
-	    GenPolynomial<GenPolynomial<C>> p = recursivePrimitivePart(f);
+        for (GenPolynomial<GenPolynomial<C>> f : F) {
+            GenPolynomial<GenPolynomial<C>> p = recursivePrimitivePart(f);
             Pp.add(p);
         }
         return Pp;
@@ -455,6 +456,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
      * @throws UnsupportedOperationException if there is no implementation in
      *             the sub-class.
      */
+    @SuppressWarnings("unused")
     public GenPolynomial<C> baseResultant(GenPolynomial<C> P, GenPolynomial<C> S) {
         // can not be abstract
         throw new UnsupportedOperationException("not implmented");
@@ -469,6 +471,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
      * @throws UnsupportedOperationException if there is no implementation in
      *             the sub-class.
      */
+    @SuppressWarnings("unused")
     public GenPolynomial<GenPolynomial<C>> recursiveUnivariateResultant(GenPolynomial<GenPolynomial<C>> P,
                     GenPolynomial<GenPolynomial<C>> S) {
         // can not be abstract
