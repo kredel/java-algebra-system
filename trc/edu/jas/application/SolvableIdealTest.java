@@ -438,6 +438,10 @@ public class SolvableIdealTest extends TestCase {
         a = fac.random(kl, ll - 2, el, q);
         b = fac.random(kl, ll - 1, el - 1, q);
         c = fac.random(kl, ll / 2, el - 1, q / 2);
+        //a = fac.parse(" -1/2 w");
+        //b = fac.parse(" y - 2/3");
+        //c = fac.parse(" -2 w * y + 4/3 w + 2");
+        //c = fac.parse(" -2 y^2 + 8/3 y - 8/9");
         d = c; //fac.random(kl, ll, el, q);
         e = d; //fac.random(kl, ll, el, q );
 

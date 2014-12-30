@@ -220,13 +220,13 @@ public class WordGroebnerBasePseudoSeqTest extends TestCase {
         } catch (IOException e) {
             fail("" + e);
         }
-        System.out.println("F = " + F);
+        //System.out.println("F = " + F);
 
         fac = new GenWordPolynomialRing(F.ring);
         //System.out.println("fac = " + fac);
 
         L = fac.valueOf(F.list);
-        System.out.println("L = " + L);
+        //System.out.println("L = " + L);
 
         G = bb.GB(L);
         //System.out.println("G = " + G);
