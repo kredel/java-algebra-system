@@ -185,7 +185,7 @@ public class FactorComplexTest extends TestCase {
             boolean t = fac.isAbsoluteFactorization(sm);
             //System.out.println("t        = " + t);
             assertTrue("prod(factor(a)) = a", t);
-            assertTrue("facs == #sm", facs == sm.length());
+            assertTrue("facs <= #sm", facs <= sm.length());
         }
     }
 
