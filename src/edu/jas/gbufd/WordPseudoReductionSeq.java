@@ -11,8 +11,10 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import edu.jas.gb.WordReductionAbstract;
+import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenWordPolynomial;
 import edu.jas.poly.Word;
+import edu.jas.poly.PolyUtil;
 import edu.jas.structure.RingElem;
 
 
@@ -22,7 +24,8 @@ import edu.jas.structure.RingElem;
  * @author Heinz Kredel
  */
 
-public class WordPseudoReductionSeq<C extends RingElem<C>> extends WordReductionAbstract<C> {
+public class WordPseudoReductionSeq<C extends RingElem<C>> extends WordReductionAbstract<C> 
+                                                           implements WordPseudoReduction<C> {
 
 
     private static final Logger logger = Logger.getLogger(WordPseudoReductionSeq.class);
@@ -224,6 +227,106 @@ public class WordPseudoReductionSeq<C extends RingElem<C>> extends WordReduction
                     fac = fac.sum(a, f);
                 }
                 rrow.set(i, fac);
+            }
+        }
+        return R;
+    }
+
+
+    /**
+     * Normalform with multiplication factor.
+     * @param Pp polynomial list.
+     * @param Ap polynomial.
+     * @return ( nf(Ap), mf ) with respect to Pp and mf as multiplication factor
+     *         for Ap.
+     */
+    public WordPseudoReductionEntry<C> normalformFactor(List<GenWordPolynomial<C>> Pp,
+                                                        GenWordPolynomial<C> Ap) {
+            throw new UnsupportedOperationException("normalformFactor not imlemented");
+    }
+
+
+    /**
+     * Normalform with polynomial coefficients.
+     * @param Ap polynomial.
+     * @param Pp polynomial list.
+     * @return nf(Ap) with respect to Pp.
+     */
+    //@SuppressWarnings("unchecked")
+    public GenWordPolynomial<GenPolynomial<C>> normalformRecursive(
+                             List<GenWordPolynomial<GenPolynomial<C>>> Pp, 
+                             GenWordPolynomial<GenPolynomial<C>> Ap) {
+        if (Pp == null || Pp.isEmpty()) {
+            return Ap;
+        }
+        if (Ap == null || Ap.isZERO()) {
+            return Ap;
+        }
+        if (!Ap.ring.coFac.isCommutative()) {
+            throw new IllegalArgumentException("coefficient ring not commutative");
+        }
+        Map.Entry<Word, GenPolynomial<C>> m;
+        GenWordPolynomial<GenPolynomial<C>>[] P = new GenWordPolynomial[0];
+        synchronized (Pp) {
+            P = Pp.toArray(P);
+        }
+        int l = P.length;
+        Word[] htl = new Word[l];
+        GenPolynomial<C>[] lbc = new GenPolynomial[l]; //(GenPolynomial<C>[]) 
+        GenWordPolynomial<GenPolynomial<C>>[] p = new GenWordPolynomial[l];
+        int i;
+        int j = 0;
+        for (i = 0; i < l; i++) {
+            p[i] = P[i];
+            m = p[i].leadingMonomial();
+            if (m != null) {
+                p[j] = p[i];
+                htl[j] = m.getKey();
+                lbc[j] = m.getValue();
+                j++;
+            }
+        }
+        l = j;
+        Word e;
+        GenPolynomial<C> a;
+        boolean mt = false;
+        GenWordPolynomial<GenPolynomial<C>> R = Ap.ring.getZERO().copy();
+        GenPolynomial<C> cone = Ap.ring.coFac.getONE();
+        GenWordPolynomial<GenPolynomial<C>> Q = null;
+        GenWordPolynomial<GenPolynomial<C>> S = Ap.copy();
+        while (S.length() > 0) {
+            m = S.leadingMonomial();
+            e = m.getKey();
+            a = m.getValue();
+            for (i = 0; i < l; i++) {
+                mt = e.multipleOf(htl[i]);
+                if (mt)
+                    break;
+            }
+            if (!mt) {
+                //logger.debug("irred");
+                //R = R.sum(a, e);
+                //S = S.subtract(a, e);
+                R.doPutToMap(e, a);
+                S.doRemoveFromMap(e, a);
+                // System.out.println(" S = " + S);
+            } else {
+                Word[] elr = e.divideWord(htl[i]);
+                e = elr[0];
+                Word f = elr[1];
+                if (debug) {
+                    logger.info("redRec divideWord: e = " + e + ", f = " + f);
+                }
+                GenPolynomial<C> c = lbc[i];
+                if (false&&PolyUtil.<C> baseSparsePseudoRemainder(a, c).isZERO()) {
+                    a = PolyUtil.<C> basePseudoDivide(a, c);
+                    Q = p[i].multiply(a, e, cone, f);
+                } else {
+                    R = R.multiply(c);
+                    S = S.multiply(c);
+                    Q = p[i].multiply(a, e, cone, f);
+                }
+                S = S.subtract(Q);
             }
         }
         return R;

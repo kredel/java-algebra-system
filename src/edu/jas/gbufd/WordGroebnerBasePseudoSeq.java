@@ -38,11 +38,11 @@ public class WordGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends WordGro
     private final boolean debug = logger.isDebugEnabled();
 
 
-    /**
+    /*
      * Greatest common divisor engine for coefficient content and primitive
      * parts.
      */
-    protected final GreatestCommonDivisorAbstract<C> engine;
+    //protected final GreatestCommonDivisorAbstract<C> engine;
 
 
     /**
@@ -82,7 +82,7 @@ public class WordGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends WordGro
         if (!cofac.isCommutative()) {
             logger.warn("reduction not correct for " + cofac.toScript());
         }
-        engine = GCDFactory.<C> getImplementation(rf);
+        //engine = GCDFactory.<C> getImplementation(rf);
         //not used: engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getProxy( rf );
     }
 
