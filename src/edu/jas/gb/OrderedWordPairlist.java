@@ -126,6 +126,9 @@ public class OrderedWordPairlist<C extends RingElem<C>> implements WordPairList<
         if (oneInGB) {
             return P.size() - 1;
         }
+        if (p.isONE()) {
+            return putOne();
+        }
         Word e = p.leadingWord();
         Word g;
         int l = P.size();
@@ -137,7 +140,7 @@ public class OrderedWordPairlist<C extends RingElem<C>> implements WordPairList<
 
             // pj, p
             g = f.lcm(e);
-            //System.out.println("g = " + g);
+            //System.out.println("g(f,g) = " + g);
             if (g != null) {
                 WordPair<C> pair = new WordPair<C>(pj, p, j, l);
                 //System.out.println("pair.new      = " + pair);
@@ -154,7 +157,7 @@ public class OrderedWordPairlist<C extends RingElem<C>> implements WordPairList<
 
             // p, pj
             g = e.lcm(f);
-            //System.out.println("g = " + g);
+            //System.out.println("g(e,f) = " + g);
             if (g != null) {
                 WordPair<C> pair = new WordPair<C>(p, pj, l, j);
                 //System.out.println("pair.new      = " + pair);
@@ -184,6 +187,7 @@ public class OrderedWordPairlist<C extends RingElem<C>> implements WordPairList<
      * @return the index of the last added word polynomial.
      */
     public int put(List<GenWordPolynomial<C>> F) {
+        //System.out.println("pairlist.F = " + F );  
         int i = 0;
         for (GenWordPolynomial<C> p : F) {
             i = put(p);
