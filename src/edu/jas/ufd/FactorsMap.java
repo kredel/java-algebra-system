@@ -161,14 +161,16 @@ public class FactorsMap<C extends GcdRingElem<C>> implements Serializable {
 
     /**
      * Length. Number of factors.
-     * @return number of factors.
+     * @return number of distinct factors.
      */
     public int length() {
         int i = factors.keySet().size();
         if (afactors == null) {
             return i;
         }
-        i += afactors.keySet().size();
+        for (Factors<C> f : afactors.keySet()) {
+             i += f.length();
+        }
         return i;
     }
 

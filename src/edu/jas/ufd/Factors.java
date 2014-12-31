@@ -182,6 +182,26 @@ public class Factors<C extends GcdRingElem<C>> implements Comparable<Factors<C>>
 
 
     /**
+     * Length. Number of factors.
+     * @return number of factors.
+     */
+    public int length() {
+        int i = 0;
+        if (afac == null) {
+            return i;
+        }
+        i += afactors.size();
+        if (arfactors == null) {
+            return i;
+        }
+        for (Factors<AlgebraicNumber<C>> f : arfactors) {
+             i += f.length();
+        }
+        return i;
+    }
+
+
+    /**
      * Hash code for this Factors.
      * @see java.lang.Object#hashCode()
      */
