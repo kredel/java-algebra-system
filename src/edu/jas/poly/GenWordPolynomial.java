@@ -265,7 +265,12 @@ public final class GenWordPolynomial<C extends RingElem<C>> implements RingElem<
                 if (parenthesis) {
                     s.append("( ");
                 }
-                s.append(c.toString());
+                String cs = c.toString();
+                if (cs.indexOf("+")>=0||cs.indexOf("-")>=0) {
+                    s.append("( " + cs + " )");
+                } else {
+                    s.append(cs);
+                }
                 if (parenthesis) {
                     s.append(" )");
                 }
@@ -318,7 +323,12 @@ public final class GenWordPolynomial<C extends RingElem<C>> implements RingElem<
                 if (parenthesis) {
                     s.append("( ");
                 }
-                s.append(c.toScript());
+                String cs = c.toScript();
+                if (cs.indexOf("+")>=0||cs.indexOf("-")>=0) {
+                    s.append("( " + cs + " )");
+                } else {
+                    s.append(cs);
+                }
                 if (parenthesis) {
                     s.append(" )");
                 }

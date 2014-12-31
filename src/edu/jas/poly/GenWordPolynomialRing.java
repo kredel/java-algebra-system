@@ -551,6 +551,60 @@ public final class GenWordPolynomialRing<C extends RingElem<C>> implements RingF
 
 
     /**
+     * Generate commute polynomial in two variables.
+     * @param i the index of the first variable.
+     * @param j the index of the second variable.
+     * @return X_i * x_j - X_j * X_i as polynomial.
+     */
+    public GenWordPolynomial<C> commute(int i, int j) {
+        GenWordPolynomial<C> p = getZERO();
+        List<Word> wgen = alphabet.generators();
+        if (0 <= i && i < wgen.size() && 0 <= j && j < wgen.size()) {
+            C one = coFac.getONE();
+            Word f = wgen.get(i);
+            Word e = wgen.get(j);
+            p = p.sum(one, e.multiply(f));
+            p = p.subtract(one, f.multiply(e));
+            if (i > j) {
+		p = p.negate();
+            }
+        }
+        return p;
+    }
+
+
+    /**
+     * Generate commute polynomials for given variable.
+     * @param i the index of the variable.
+     * @return [X_i * x_j - X_j * X_i, i != j] as list of polynomials.
+     */
+    public List<GenWordPolynomial<C>> commute(int i) {
+        int n = alphabet.length();
+        List<GenWordPolynomial<C>> pols = new ArrayList<GenWordPolynomial<C>>(n-1);
+        for ( int j = 0; j < n; j++ ) {
+	    if (i != j) {
+                pols.add(commute(i,j));
+            }
+        }
+        return pols;
+    }
+
+
+    /**
+     * Generate commute polynomials for all variables.
+     * @return [X_i * x_j - X_j * X_i, i != j] as list of polynomials.
+     */
+    public List<GenWordPolynomial<C>> commute() {
+        int n = alphabet.length();
+        List<GenWordPolynomial<C>> pols = new ArrayList<GenWordPolynomial<C>>(n*(n-1));
+        for ( int i = 0; i < n; i++ ) {
+             pols.addAll( commute(i) );
+        }
+        return pols;
+    }
+
+
+    /**
      * Generate list of univariate polynomials in all variables.
      * @return List(X_1,...,X_n) a list of univariate polynomials.
      */
