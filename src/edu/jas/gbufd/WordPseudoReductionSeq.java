@@ -13,8 +13,8 @@ import org.apache.log4j.Logger;
 import edu.jas.gb.WordReductionAbstract;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenWordPolynomial;
-import edu.jas.poly.Word;
 import edu.jas.poly.PolyUtil;
+import edu.jas.poly.Word;
 import edu.jas.structure.RingElem;
 
 
@@ -24,8 +24,8 @@ import edu.jas.structure.RingElem;
  * @author Heinz Kredel
  */
 
-public class WordPseudoReductionSeq<C extends RingElem<C>> extends WordReductionAbstract<C> 
-                                                           implements WordPseudoReduction<C> {
+public class WordPseudoReductionSeq<C extends RingElem<C>> extends WordReductionAbstract<C> implements
+                WordPseudoReduction<C> {
 
 
     private static final Logger logger = Logger.getLogger(WordPseudoReductionSeq.class);
@@ -240,9 +240,8 @@ public class WordPseudoReductionSeq<C extends RingElem<C>> extends WordReduction
      * @return ( nf(Ap), mf ) with respect to Pp and mf as multiplication factor
      *         for Ap.
      */
-    public WordPseudoReductionEntry<C> normalformFactor(List<GenWordPolynomial<C>> Pp,
-                                                        GenWordPolynomial<C> Ap) {
-            throw new UnsupportedOperationException("normalformFactor not imlemented");
+    public WordPseudoReductionEntry<C> normalformFactor(List<GenWordPolynomial<C>> Pp, GenWordPolynomial<C> Ap) {
+        throw new UnsupportedOperationException("normalformFactor not imlemented");
     }
 
 
@@ -254,8 +253,7 @@ public class WordPseudoReductionSeq<C extends RingElem<C>> extends WordReduction
      */
     //@SuppressWarnings("unchecked")
     public GenWordPolynomial<GenPolynomial<C>> normalformRecursive(
-                             List<GenWordPolynomial<GenPolynomial<C>>> Pp, 
-                             GenWordPolynomial<GenPolynomial<C>> Ap) {
+                    List<GenWordPolynomial<GenPolynomial<C>>> Pp, GenWordPolynomial<GenPolynomial<C>> Ap) {
         if (Pp == null || Pp.isEmpty()) {
             return Ap;
         }
@@ -318,7 +316,7 @@ public class WordPseudoReductionSeq<C extends RingElem<C>> extends WordReduction
                     logger.info("redRec divideWord: e = " + e + ", f = " + f);
                 }
                 GenPolynomial<C> c = lbc[i];
-                if (false&&PolyUtil.<C> baseSparsePseudoRemainder(a, c).isZERO()) {
+                if (false && PolyUtil.<C> baseSparsePseudoRemainder(a, c).isZERO()) {
                     a = PolyUtil.<C> basePseudoDivide(a, c);
                     Q = p[i].multiply(a, e, cone, f);
                 } else {

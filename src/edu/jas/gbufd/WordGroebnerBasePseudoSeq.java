@@ -18,13 +18,12 @@ import edu.jas.poly.GenWordPolynomial;
 import edu.jas.poly.GenWordPolynomialRing;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
-import edu.jas.ufd.GCDFactory;
-import edu.jas.ufd.GreatestCommonDivisorAbstract;
 
 
 /**
  * Non-commutative word Groebner Base sequential algorithm. Implements Groebner
- * bases and GB test.
+ * bases and GB test. Coefficients can for example be integers or (commutative)
+ * univariate polynomials.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
@@ -36,13 +35,6 @@ public class WordGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends WordGro
 
 
     private final boolean debug = logger.isDebugEnabled();
-
-
-    /*
-     * Greatest common divisor engine for coefficient content and primitive
-     * parts.
-     */
-    //protected final GreatestCommonDivisorAbstract<C> engine;
 
 
     /**

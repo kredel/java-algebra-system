@@ -29,6 +29,7 @@ import edu.jas.structure.RingFactory;
  * SolvableLocalResidue ring factory for SolvableLocalResidue based on
  * GenSolvablePolynomial with GcdRingElem interface. Objects of this class are
  * immutable.
+ * It represents the "classical quotient ring modulo an ideal".
  * @author Heinz Kredel
  */
 public class SolvableLocalResidueRing<C extends GcdRingElem<C>> implements

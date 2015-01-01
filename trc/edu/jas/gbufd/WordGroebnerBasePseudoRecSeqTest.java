@@ -25,9 +25,9 @@ import edu.jas.gb.WordGroebnerBaseSeq;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.GenWordPolynomial;
 import edu.jas.poly.GenWordPolynomialRing;
-import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.PolynomialList;
 import edu.jas.ufd.PolyUfdUtil;
@@ -103,9 +103,9 @@ public class WordGroebnerBasePseudoRecSeqTest extends TestCase {
     @Override
     protected void setUp() {
         BigInteger coeff = new BigInteger(9);
-        String[] cvars = new String[] { "x", "y" }; 
+        String[] cvars = new String[] { "x", "y" };
         GenPolynomialRing<BigInteger> cofac = new GenPolynomialRing<BigInteger>(coeff, cvars);
-        String vars = "a b"; 
+        String vars = "a b";
         fac = new GenWordPolynomialRing<GenPolynomial<BigInteger>>(cofac, vars);
         System.out.println("fac = " + fac.toScript());
         a = b = c = d = e = null;
@@ -125,7 +125,7 @@ public class WordGroebnerBasePseudoRecSeqTest extends TestCase {
     /**
      * Test recursive sequential GBase.
      */
-    public void xtestRecSequentialGBase() {
+    public void testRecSequentialGBase() {
         L = new ArrayList<GenWordPolynomial<GenPolynomial<BigInteger>>>();
 
         a = fac.random(kl, ll, el);
@@ -138,36 +138,36 @@ public class WordGroebnerBasePseudoRecSeqTest extends TestCase {
         System.out.println("c = " + c);
 
         L.add(a);
-        System.out.println("La = " + L );
+        //System.out.println("La = " + L );
 
         L = bb.GB(L);
         assertTrue("isGB( { a } )", bb.isGB(L));
 
         L.add(b);
-        System.out.println("Lb = " + L );
+        //System.out.println("Lb = " + L );
 
         L = bb.GB(L);
         assertTrue("isGB( { a, b } )", bb.isGB(L));
 
         if (bb.commonZeroTest(L) < 0) {
-            System.out.println("Gb = " + L );
+            //System.out.println("Gb = " + L );
             //d = a;
             L.clear();
         }
         L.add(c);
-        System.out.println("Lc = " + L );
+        //System.out.println("Lc = " + L );
 
         L = bb.GB(L);
         assertTrue("isGB( { a, b, c } )", bb.isGB(L));
 
         L.add(d);
-        System.out.println("Ld = " + L );
+        //System.out.println("Ld = " + L );
 
         L = bb.GB(L);
         assertTrue("isGB( { a, b, c, d } )", bb.isGB(L));
 
         L.add(e);
-        System.out.println("Le = " + L );
+        //System.out.println("Le = " + L );
 
         L = bb.GB(L);
         assertTrue("isGB( { a, b, c, d, e } )", bb.isGB(L));
@@ -175,17 +175,15 @@ public class WordGroebnerBasePseudoRecSeqTest extends TestCase {
 
 
     /**
-     * Test Hawes2 GBase.
+     * Test Hawes2 GBase with commutative relations.
      */
     //@SuppressWarnings("unchecked")
     public void testHawes2GBase() {
         String exam = "IntFunc(a, c, b) (y2, y1, z1, z2, x) G" + "("
-	      + "( x + 2 y1 z1 + { 3 a } y1^2 + 5 y1^4 + { 2 c } y1 ),"
-	      + "( x + 2 y2 z2 + { 3 a } y2^2 + 5 y2^4 + { 2 c } y2 ),"
-	      + "( 2 z2 + { 6 a } y2 + 20 y2^3 + { 2 c } )," 
-              + "( 3 z1^2 + y1^2 + { b } ),"
-              + "( 3 z2^2 + y2^2 + { b } )" 
-              + ")";
+                        + "( x + 2 y1 z1 + { 3 a } y1^2 + 5 y1^4 + { 2 c } y1 ),"
+                        + "( x + 2 y2 z2 + { 3 a } y2^2 + 5 y2^4 + { 2 c } y2 ),"
+                        + "( 2 z2 + { 6 a } y2 + 20 y2^3 + { 2 c } )," + "( 3 z1^2 + y1^2 + { b } ),"
+                        + "( 3 z2^2 + y2^2 + { b } )" + ")";
         Reader source = new StringReader(exam);
         GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
         PolynomialList<GenPolynomial<BigRational>> Fr = null;
@@ -212,7 +210,7 @@ public class WordGroebnerBasePseudoRecSeqTest extends TestCase {
         L.addAll(fac.commute());
         System.out.println("L = " + L);
 
-        long s, t, q, i;
+        long t, i;
         t = System.currentTimeMillis();
         G = bb.GB(L);
         t = System.currentTimeMillis() - t;
@@ -221,9 +219,9 @@ public class WordGroebnerBasePseudoRecSeqTest extends TestCase {
 
 
         QuotientRing<BigInteger> qi = new QuotientRing<BigInteger>(ifac);
-        GenPolynomialRing<Quotient<BigInteger>> iring; 
+        GenPolynomialRing<Quotient<BigInteger>> iring;
         iring = new GenPolynomialRing<Quotient<BigInteger>>(qi, rifac);
-        List<GenPolynomial<Quotient<BigInteger>>> Gqi, Lqi, Kqi;
+        List<GenPolynomial<Quotient<BigInteger>>> Lqi;
         Lqi = PolyUfdUtil.<BigInteger> quotientFromIntegralCoefficients(iring, Li);
         Lqi = PolyUtil.<Quotient<BigInteger>> monic(Lqi);
         System.out.println("Lqi = " + Lqi);

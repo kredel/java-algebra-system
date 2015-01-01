@@ -28,7 +28,7 @@ import edu.jas.poly.WordFactory;
 
 
 /**
- * Groebner base sequential tests with JUnit.
+ * Word Groebner base sequential tests with JUnit.
  * @author Heinz Kredel.
  */
 
