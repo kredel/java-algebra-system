@@ -285,13 +285,14 @@ public class WordPseudoReductionSeq<C extends RingElem<C>> extends WordReduction
             }
         }
         l = j;
-        Word e;
-        GenPolynomial<C> a;
+        Word e, fr, fl;
+        GenPolynomial<C> a, b = null;
         boolean mt = false;
         GenWordPolynomial<GenPolynomial<C>> R = Ap.ring.getZERO().copy();
         GenPolynomial<C> cone = Ap.ring.coFac.getONE();
         GenWordPolynomial<GenPolynomial<C>> Q = null;
         GenWordPolynomial<GenPolynomial<C>> S = Ap.copy();
+        GenWordPolynomial<GenPolynomial<C>> Sp;
         while (S.length() > 0) {
             m = S.leadingMonomial();
             e = m.getKey();
@@ -310,21 +311,31 @@ public class WordPseudoReductionSeq<C extends RingElem<C>> extends WordReduction
                 // System.out.println(" S = " + S);
             } else {
                 Word[] elr = e.divideWord(htl[i]);
-                e = elr[0];
-                Word f = elr[1];
+                fl = elr[0];
+                fr = elr[1];
                 if (debug) {
-                    logger.info("redRec divideWord: e = " + e + ", f = " + f);
+                    logger.info("redRec divideWord: e = " + e + ", fl = " + fl + ", fr = " + fr);
                 }
                 GenPolynomial<C> c = lbc[i];
-                if (false && PolyUtil.<C> baseSparsePseudoRemainder(a, c).isZERO()) {
-                    a = PolyUtil.<C> basePseudoDivide(a, c);
-                    Q = p[i].multiply(a, e, cone, f);
+                if (PolyUtil.<C> baseSparsePseudoRemainder(a, c).isZERO()) {
+                    b = PolyUtil.<C> basePseudoDivide(a, c);
+                    Q = p[i].multiply(b, fl, cone, fr);
                 } else {
                     R = R.multiply(c);
                     S = S.multiply(c);
-                    Q = p[i].multiply(a, e, cone, f);
+                    Q = p[i].multiply(a, fl, cone, fr);
                 }
-                S = S.subtract(Q);
+                Sp = S.subtract(Q);
+                if (e.equals(Sp.leadingWord())) { // TODO: avoid
+                    //logger.info("redRec: e = " + e + ", hti = " + htl[i] + ", fl = " + fl + ", fr = " + fr);
+                    //logger.info("redRec: S = " + S + ", Sp = " + Sp + ", a = " + a + ", b = " + b + ", c = " + c);
+                    //throw new RuntimeException("degree not descending");
+                    R = R.multiply(c);
+                    S = S.multiply(c);
+                    Q = p[i].multiply(a, fl, cone, fr);
+                    Sp = S.subtract(Q);
+		}
+                S = Sp;
             }
         }
         return R;

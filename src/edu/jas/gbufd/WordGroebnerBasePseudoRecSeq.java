@@ -52,13 +52,6 @@ public class WordGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
 
 
     /**
-     * Coefficient ring factory.
-     */
-    //protected final RingFactory<GenPolynomial<C>> cofac;
-    protected final GenPolynomialRing<C> cofac;
-
-
-    /**
      * Reduction engine.
      */
     protected final WordPseudoReduction<C> redRec;
@@ -68,6 +61,13 @@ public class WordGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
      * Reduction engine.
      */
     protected final WordPseudoReduction<GenPolynomial<C>> red;
+
+
+    /**
+     * Coefficient ring factory.
+     */
+    //protected final RingFactory<GenPolynomial<C>> cofac;
+    protected final GenPolynomialRing<C> cofac;
 
 
     /**
