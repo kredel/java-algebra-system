@@ -29,6 +29,7 @@ import edu.jas.ufd.GreatestCommonDivisorAbstract;
 /**
  * Solvable Groebner Base with pseudo reduction sequential algorithm. Implements
  * coefficient fraction free Groebner bases.
+ * Coefficients can for example be integers or (commutative) univariate polynomials.
  * @param <C> coefficient type
  * @author Heinz Kredel
  * 
@@ -55,7 +56,7 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends Sol
     /**
      * Pseudo reduction engine.
      */
-    protected final SolvablePseudoReduction<C> red;
+    protected final SolvablePseudoReduction<C> sred;
 
 
     /**
@@ -92,7 +93,7 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends Sol
      */
     public SolvableGroebnerBasePseudoSeq(SolvablePseudoReduction<C> red, RingFactory<C> rf, PairList<C> pl) {
         super(red, pl);
-        this.red = red;
+        this.sred = red;
         cofac = rf;
         if (!cofac.isCommutative()) {
             logger.warn("right reduction not correct for " + cofac.toScript());
@@ -137,7 +138,7 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends Sol
                 logger.debug("pj    = " + pj);
             }
 
-            S = red.leftSPolynomial(pi, pj);
+            S = sred.leftSPolynomial(pi, pj);
             if (S.isZERO()) {
                 pair.setZero();
                 continue;
@@ -146,7 +147,7 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends Sol
                 logger.debug("ht(S) = " + S.leadingExpVector());
             }
 
-            H = red.leftNormalform(G, S);
+            H = sred.leftNormalform(G, S);
             if (H.isZERO()) {
                 pair.setZero();
                 continue;
@@ -192,14 +193,14 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends Sol
         List<GenSolvablePolynomial<C>> F = new ArrayList<GenSolvablePolynomial<C>>(G.size());
         while (G.size() > 0) {
             a = G.remove(0);
-            if (red.isTopReducible(G, a) || red.isTopReducible(F, a)) {
+            if (sred.isTopReducible(G, a) || sred.isTopReducible(F, a)) {
                 // drop polynomial 
                 if (debug) {
                     System.out.println("dropped " + a);
                     List<GenSolvablePolynomial<C>> ff;
                     ff = new ArrayList<GenSolvablePolynomial<C>>(G);
                     ff.addAll(F);
-                    a = red.leftNormalform(ff, a);
+                    a = sred.leftNormalform(ff, a);
                     if (!a.isZERO()) {
                         System.out.println("error, nf(a) " + a);
                     }
@@ -219,10 +220,10 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends Sol
         while (i < len) {
             a = G.remove(0);
             //System.out.println("doing " + a.length());
-            a = red.leftNormalform(G, a);
+            a = sred.leftNormalform(G, a);
             a = (GenSolvablePolynomial<C>) engine.basePrimitivePart(a); //a.monic(); not possible
             a = (GenSolvablePolynomial<C>) a.abs();
-            //a = red.normalform( F, a );
+            //a = sred.normalform( F, a );
             G.add(a); // adds as last
             i++;
         }

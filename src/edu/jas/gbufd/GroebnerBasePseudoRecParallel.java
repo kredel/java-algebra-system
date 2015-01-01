@@ -30,6 +30,7 @@ import edu.jas.util.ThreadPool;
 /**
  * Groebner Base with recursive pseudo reduction multi-threaded parallel
  * algorithm. Implements coefficient fraction free Groebner bases.
+ * Coefficients can for example be (commutative) multivariate polynomials. 
  * @param <C> coefficient type
  * @author Heinz Kredel
  * 

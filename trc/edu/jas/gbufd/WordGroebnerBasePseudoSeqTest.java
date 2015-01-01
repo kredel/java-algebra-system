@@ -227,6 +227,7 @@ public class WordGroebnerBasePseudoSeqTest extends TestCase {
 
         L = fac.valueOf(F.list);
         //System.out.println("L = " + L);
+        L.addAll(fac.commute()); // add commute relations for all variables
 
         G = bb.GB(L);
         //System.out.println("G = " + G);
