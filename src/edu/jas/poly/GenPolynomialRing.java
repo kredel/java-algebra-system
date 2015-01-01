@@ -600,17 +600,17 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
 
 
     /**
-     * Random polynomial. Generates a random polynomial with k = 5, l = n, d =
-     * (nvar == 1) ? n : 3, q = (nvar == 1) ? 0.7 : 0.3.
+     * Random polynomial. Generates a random polynomial with k = 5, l = n, d = n,
+     * q = (nvar == 1) ? 0.5 : 0.3.
      * @param n number of terms.
      * @param rnd is a source for random bits.
      * @return a random polynomial.
      */
     public GenPolynomial<C> random(int n, Random rnd) {
         if (nvar == 1) {
-            return random(3, n, n, 0.7f, rnd);
+            return random(3, n, n, 0.5f, rnd);
         }
-        return random(5, n, 3, 0.3f, rnd);
+        return random(3, n, n, 0.3f, rnd);
     }
 
 
