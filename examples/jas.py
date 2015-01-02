@@ -39,6 +39,7 @@ from edu.jas.gbufd       import GroebnerBasePseudoRecSeq, GroebnerBasePseudoSeq,
                                 SolvableGroebnerBasePseudoSeq, SolvablePseudoReductionSeq,\
                                 PseudoReductionSeq, GroebnerBasePseudoParallel,\
                                 WordGroebnerBasePseudoSeq, WordPseudoReductionSeq,\
+                                SolvableGroebnerBasePseudoRecSeq, WordGroebnerBasePseudoRecSeq,\
                                 RGroebnerBasePseudoSeq, RGroebnerBaseSeq, RReductionSeq,\
                                 CharacteristicSetWu
 from edu.jas.gbmod       import ModGroebnerBaseAbstract, ModSolvableGroebnerBaseAbstract,\
@@ -404,7 +405,7 @@ class Ring:
             a = a.elem;
         try:
             cf = self.ring.coFac;
-            if cf.getClass().getSimpleName() == "GenPolynomialRing":
+            if isinstance(cf,GenPolynomialRing) and cf.isCommutative():
                 e = self.factor.recursiveFactors( a );
             else:
                 e = self.factor.factors( a );
@@ -512,17 +513,12 @@ class Ideal:
             #G = GroebnerBaseSeq().GB(F);
             kind = "field"
         else:
-            v = None;
-            try:
-                v = cofac.vars;
-            except:
-                pass
-            if v == None:
+            if isinstance(cofac,GenPolynomialRing) and cofac.isCommutative():
+                G = GroebnerBasePseudoRecSeq(cofac).GB(F);
+                kind = "pseudorec"
+            else:
                 G = GroebnerBasePseudoSeq(cofac).GB(F);
                 kind = "pseudo"
-            else:
-                G = GroebnerBasePseudoRecSeq(cofac).GB(F);
-                kind = "pseudoRec"
         t = System.currentTimeMillis() - t;
         print "sequential(%s) GB executed in %s ms" % (kind, t); 
         return Ideal(self.ring,"",G);
@@ -537,15 +533,10 @@ class Ideal:
         if cofac.isField():
             b = GroebnerBaseSeq().isGB(F);
         else:
-            v = None;
-            try:
-                v = cofac.vars;
-            except:
-                pass
-            if v == None:
-                b = GroebnerBasePseudoSeq(cofac).isGB(F);
-            else:
+            if isinstance(cofac,GenPolynomialRing) and cofac.isCommutative():
                 b = GroebnerBasePseudoRecSeq(cofac).isGB(F);
+            else:
+                b = GroebnerBasePseudoSeq(cofac).isGB(F);
         t = System.currentTimeMillis() - t;
         #print "isGB executed in %s ms" % t; 
         return b;
@@ -1279,8 +1270,12 @@ class SolvableIdeal:
             G = SolvableGroebnerBaseSeq().leftGB(F);
             kind = "field|nocom"
         else:
-            G = SolvableGroebnerBasePseudoSeq(cofac).leftGB(F);
-            kind = "pseudo"
+            if isinstance(cofac,GenPolynomialRing) and cofac.isCommutative():
+                G = SolvableGroebnerBasePseudoRecSeq(cofac).leftGB(F);
+                kind = "pseudorec"
+            else:
+                G = SolvableGroebnerBasePseudoSeq(cofac).leftGB(F);
+                kind = "pseudo"
         t = System.currentTimeMillis() - t;
         print "sequential(%s) left GB executed in %s ms" % (kind, t); 
         return SolvableIdeal(self.ring,"",G);
@@ -1296,8 +1291,12 @@ class SolvableIdeal:
             b = SolvableGroebnerBaseSeq().isLeftGB(F);
             kind = "field|nocom"
         else:
-            b = SolvableGroebnerBasePseudoSeq(cofac).isLeftGB(F);
-            kind = "pseudo"
+            if isinstance(cofac,GenPolynomialRing) and cofac.isCommutative():
+                b = SolvableGroebnerBasePseudoRecSeq(cofac).isLeftGB(F);
+                kind = "pseudorec"
+            else:
+                b = SolvableGroebnerBasePseudoSeq(cofac).isLeftGB(F);
+                kind = "pseudo"
         t = System.currentTimeMillis() - t;
         print "sequential(%s) isLeftGB executed in %s ms" % (kind, t); 
         return b;
@@ -1313,8 +1312,12 @@ class SolvableIdeal:
             G = SolvableGroebnerBaseSeq().twosidedGB(F);
             kind = "field|nocom"
         else:
-            G = SolvableGroebnerBasePseudoSeq(cofac).twosidedGB(F);
-            kind = "pseudo"
+            if isinstance(cofac,GenPolynomialRing) and cofac.isCommutative():
+                G = SolvableGroebnerBasePseudoRecSeq(cofac).twosidedGB(F);
+                kind = "pseudorec"
+            else:
+                G = SolvableGroebnerBasePseudoSeq(cofac).twosidedGB(F);
+                kind = "pseudo"
         t = System.currentTimeMillis() - t;
         print "sequential(%s) twosided GB executed in %s ms" % (kind, t); 
         return SolvableIdeal(self.ring,"",G);
@@ -1330,8 +1333,12 @@ class SolvableIdeal:
             b = SolvableGroebnerBaseSeq().isTwosidedGB(F);
             kind = "field|nocom"
         else:
-            b = SolvableGroebnerBasePseudoSeq(cofac).isTwosidedGB(F);
-            kind = "pseudo"
+            if isinstance(cofac,GenPolynomialRing) and cofac.isCommutative():
+                b = SolvableGroebnerBasePseudoRecSeq(cofac).isTwosidedGB(F);
+                kind = "pseudorec"
+            else:
+                b = SolvableGroebnerBasePseudoSeq(cofac).isTwosidedGB(F);
+                kind = "pseudo"
         t = System.currentTimeMillis() - t;
         print "sequential(%s) isTwosidedGB executed in %s ms" % (kind, t); 
         return b;
@@ -1347,8 +1354,12 @@ class SolvableIdeal:
             G = SolvableGroebnerBaseSeq().rightGB(F);
             kind = "field|nocom"
         else:
-            G = SolvableGroebnerBasePseudoSeq(cofac).rightGB(F);
-            kind = "pseudo"
+            if isinstance(cofac,GenPolynomialRing) and cofac.isCommutative():
+                G = SolvableGroebnerBasePseudoRecSeq(cofac).rightGB(F);
+                kind = "pseudorec"
+            else:
+                G = SolvableGroebnerBasePseudoSeq(cofac).rightGB(F);
+                kind = "pseudo"
         t = System.currentTimeMillis() - t;
         print "sequential(%s) right GB executed in %s ms" % (kind, t); 
         return SolvableIdeal(self.ring,"",G);
@@ -1364,8 +1375,12 @@ class SolvableIdeal:
             b = SolvableGroebnerBaseSeq().isRightGB(F);
             kind = "field|nocom"
         else:
-            b = SolvableGroebnerBasePseudoSeq(cofac).isRightGB(F);
-            kind = "pseudo"
+            if isinstance(cofac,GenPolynomialRing) and cofac.isCommutative():
+                b = SolvableGroebnerBasePseudoRecSeq(cofac).isRightGB(F);
+                kind = "pseudorec"
+            else:
+                b = SolvableGroebnerBasePseudoSeq(cofac).isRightGB(F);
+                kind = "pseudo"
         t = System.currentTimeMillis() - t;
         print "sequential(%s) isRightGB executed in %s ms" % (kind, t); 
         return b;
@@ -2630,7 +2645,7 @@ def RR(flist,n=1,r=0):
         r = r.elem;
     try:
         #print "r.class() = %s" % r.getClass().getSimpleName();
-        if r.getClass().getSimpleName() == "Product":
+        if isinstance(r,Product):
             #print "r.val = %s" % r.val;
             r = r.val;
     except:
@@ -3611,7 +3626,7 @@ class SolvPolyRing(SolvableRing):
     Then returns a Ring.
     '''
 
-    def __init__(self,coeff,vars,order=PolyRing.lex,rel=None):
+    def __init__(self,coeff,vars,order=PolyRing.lex,rel=[]):
         '''Ring constructor.
 
         coeff = factory for coefficients,
@@ -3942,9 +3957,14 @@ class WordPolyIdeal:
             G = self.ideal.GB();
             kind = "field|nocom"
         else:
-            G = WordGroebnerBasePseudoSeq(cofac).GB(F);
-            self.ideal = WordIdeal(self.ring.ring, G);
-            kind = "pseudo"
+            if isinstance(cofac,GenPolynomialRing): # and cofac.isCommutative():
+                G = WordGroebnerBasePseudoRecSeq(cofac).GB(F);
+                self.ideal = WordIdeal(self.ring.ring, G);
+                kind = "pseudorec"
+            else:
+                G = WordGroebnerBasePseudoSeq(cofac).GB(F);
+                self.ideal = WordIdeal(self.ring.ring, G);
+                kind = "pseudo"
         t = System.currentTimeMillis() - t;
         print "sequential(%s) twosidedGB executed in %s ms" % (kind, t); 
         return self;
@@ -3965,8 +3985,12 @@ class WordPolyIdeal:
             b = self.ideal.isGB();
             kind = "field|nocom"
         else:
-            b = WordGroebnerBasePseudoSeq(cofac).isGB(F);
-            kind = "pseudo"
+            if isinstance(cofac,GenPolynomialRing):
+                b = WordGroebnerBasePseudoRecSeq(cofac).isGB(F);
+                kind = "pseudorec"
+            else:
+                b = WordGroebnerBasePseudoSeq(cofac).isGB(F);
+                kind = "pseudo"
         t = System.currentTimeMillis() - t;
         print "sequential(%s) isTwosidedGB executed in %s ms" % (kind, t); 
         return b;
