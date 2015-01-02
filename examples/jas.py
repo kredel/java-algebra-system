@@ -3583,7 +3583,7 @@ class PolyRing(Ring):
 
     '''
 
-    def __init__(self,coeff,vars,order):
+    def __init__(self,coeff,vars,order=TermOrder(TermOrder.IGRLEX)):
         '''Ring constructor.
 
         coeff = factory for coefficients,
@@ -3627,7 +3627,7 @@ class SolvPolyRing(SolvableRing):
     Then returns a Ring.
     '''
 
-    def __init__(self,coeff,vars,order,rel=[]):
+    def __init__(self,coeff,vars,order=PolyRing.grad,rel=[]):
         '''Ring constructor.
 
         coeff = factory for coefficients,

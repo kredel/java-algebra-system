@@ -1768,7 +1768,7 @@ coeff = factory for coefficients,
 vars = string with variable names,
 order = term order.
 =end
-    def initialize(coeff,vars,order)
+    def initialize(coeff,vars,order=PolyRing.grad)
         if coeff == nil
             raise ArgumentError, "No coefficient given."
         end
