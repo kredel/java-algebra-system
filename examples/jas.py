@@ -1235,6 +1235,7 @@ class SolvableIdeal:
         else:
            self.list = pylist2arraylist(list,rec=1);
         self.pset = OrderedPolynomialList(ring.ring,self.list);
+        #self.pset = PolynomialList(ring.ring,self.list);
 
     def __str__(self):
         '''Create a string representation.
@@ -3582,7 +3583,7 @@ class PolyRing(Ring):
 
     '''
 
-    def __init__(self,coeff,vars,order=TermOrder(TermOrder.IGRLEX)):
+    def __init__(self,coeff,vars,order):
         '''Ring constructor.
 
         coeff = factory for coefficients,
@@ -3602,7 +3603,7 @@ class PolyRing(Ring):
         if isinstance(vars,PyString):
             names = GenPolynomialTokenizer.variableList(vars);
         nv = len(names);
-        to = PolyRing.lex;
+        to = PolyRing.grad;
         if isinstance(order,TermOrder):
             to = order;
         tring = GenPolynomialRing(cf,nv,to,names);
@@ -3626,7 +3627,7 @@ class SolvPolyRing(SolvableRing):
     Then returns a Ring.
     '''
 
-    def __init__(self,coeff,vars,order=PolyRing.lex,rel=[]):
+    def __init__(self,coeff,vars,order,rel=[]):
         '''Ring constructor.
 
         coeff = factory for coefficients,
@@ -3648,7 +3649,8 @@ class SolvPolyRing(SolvableRing):
         if isinstance(vars,PyString):
             names = GenPolynomialTokenizer.variableList(vars);
         nv = len(names);
-        to = PolyRing.lex;
+        #to = PolyRing.lex;
+        to = PolyRing.grad;
         if isinstance(order,TermOrder):
             to = order;
         L = [];

@@ -1768,7 +1768,7 @@ coeff = factory for coefficients,
 vars = string with variable names,
 order = term order.
 =end
-    def initialize(coeff,vars,order=self.class.grad)
+    def initialize(coeff,vars,order)
         if coeff == nil
             raise ArgumentError, "No coefficient given."
         end
@@ -3400,7 +3400,8 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
             names = GenPolynomialTokenizer.variableList(vars);
         end
         nv = names.size;
-        to = PolyRing.lex;
+        #to = PolyRing.lex;
+        to = PolyRing.grad;
         if order.is_a? TermOrder
             to = order;
         end
@@ -3528,7 +3529,7 @@ Constructor for an ideal in a solvable polynomial ring.
         else
            @list = rbarray2arraylist(list,rec=1);
         end
-        @pset = PolynomialList.new(ring.ring,@list);
+        @pset = OrderedPolynomialList.new(ring.ring,@list);
         #@ideal = SolvableIdeal.new(@pset);
     end
 
