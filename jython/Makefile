@@ -25,11 +25,11 @@ CLASSES=$(subst src,classes,$(subst java,class,$(FILES)))
 #echo $(CLASSES)
 
 #DOCOPTS=-package
-DOCOPTS=-package -author -version -linksource
+DOCOPTS=-package -author -version -linksource -overview overview.html
 DOCCLASSES=$(CLASSPATH)
 DOC=javadoc -classpath $(DOCCLASSES):$(JYTHONPATH)
 
-all: clean jas-jython.jar doc
+all: clean jas-jython.jar
 
 $(CLASSES): $(FILES)
 	-mkdir classes
