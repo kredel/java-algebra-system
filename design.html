@@ -232,6 +232,16 @@ of the implemented algebraic algorithms.
 </tr>
 
 <tr>
+<td><code>BigDecimalComplex</code></td>
+<td>self</td>
+<td>ring of arbitrary precision complex floating point numbers,
+    i.e. pairs of BigDecimal numbers
+</td>
+<td>arithmetic, <code>compareTo()</code> with given precision</td>
+</tr>
+
+
+<tr>
 <td><code>BigQuaternion</code></td>
 <td>self</td>
 <td>ring of arbitrary precision quaternion numbers,
@@ -305,8 +315,8 @@ of the implemented algebraic algorithms.
 </tr>
 
 <tr>
-<td><code>GenWordPolynomial</code></td>
-<td><code>GenWordPolynomialRing</code></td>
+<td><code>GenWord- Polynomial</code></td>
+<td><code>GenWord- PolynomialRing</code></td>
 <td>ring of free non-commutative polynomials in <code>r</code> letters 
     over any implemented coefficient ring
     with respect to a graded term ordering
@@ -315,11 +325,17 @@ of the implemented algebraic algorithms.
 </tr>
 
 <tr>
-<td><code>RecSolvable- Polynomial</code>, <code>QuotSolvable- Polynomial</code>,
-    <code>ResidueSolvable- Polynomial</code>, <code>LocalSolvable- Polynomial</code>
+<td><code>RecSolvable- Polynomial</code>, 
+    <code>QuotSolvable- Polynomial</code>,
+    <code>ResidueSolvable- Polynomial</code>, 
+    <code>LocalSolvable- Polynomial</code>,
+    <code>QLRSolvable- Polynomial</code>
 </td>
-<td><code>RecSolvable- PolynomialRing</code>, <code>QuotSolvable- PolynomialRing</code>,
-    <code>ResidueSolvable- PolynomialRing</code><code>LocalSolvable- PolynomialRing</code>
+<td><code>RecSolvable- PolynomialRing</code>, 
+    <code>QuotSolvable- PolynomialRing</code>,
+    <code>ResidueSolvable- PolynomialRing</code>,
+    <code>LocalSolvable- PolynomialRing</code>,
+    <code>QLRSolvable- PolynomialRing</code>
 </td>
 <td>ring of recursive, solvable polynomials in <code>r</code> variables 
     over a solvable polynomial coefficient ring over any implemented coefficient ring
@@ -328,6 +344,7 @@ of the implemented algebraic algorithms.
     The other variants have coefficient rings <code>SolvableQuotient</code>, 
     <code>SolvableResidue</code> and <code>SolvableLocal</code> which are all based 
     on solvable polynomials. 
+    The <code>QLRSolvablePolynomial</code> is a unification of the others.
 </td>
 <td>arithmetic</td>
 </tr>
@@ -388,7 +405,18 @@ of the implemented algebraic algorithms.
 <tr>
 <td><code>SolvableLocal</code></td>
 <td><code>SolvableLocalRing</code></td>
-<td>ring of solvable polynomials fractions localized with respect to a given solvable polynomial ideal,
+<td>ring of solvable polynomials fractions localized with respect to a given solvable polynomial ideal, 
+    over some implemented coefficient rings
+</td>
+<td>arithmetic
+</td>
+</tr>
+
+<tr>
+<td><code>SolvableLocalResidue</code></td>
+<td><code>SolvableLocalResidueRing</code></td>
+<td>ring of solvable polynomials fractions localized with respect to a given solvable polynomial ideal
+    and modulo the given polynomial ideal,
     over some implemented coefficient rings
 </td>
 <td>arithmetic
@@ -525,9 +553,9 @@ implemented algebraic algorithms.
 </tr>
 
 <tr>
-<td><code>DReduction</code>
-    <code>EReduction</code>
-    <code>DReductionSeq</code>
+<td><code>DReduction</code>,
+    <code>EReduction</code>,
+    <code>DReductionSeq</code>,
     <code>EReductionSeq</code>
 </td>
 <td>Reduction of polynomial(s) wrt. a set of polynomials.
@@ -543,14 +571,16 @@ implemented algebraic algorithms.
 </tr>
 
 <tr>
-<td><code>SolvableReduction</code>
-    <code>SolvableReduction- Abstract</code>
-    <code>Solvable- ReductionSeq</code>
-    <code>Solvable- ReductionPar</code>
+<td><code>SolvableReduction</code>,
+    <code>SolvableReduction- Abstract</code>,
+    <code>Solvable- ReductionSeq</code>,
+    <code>Solvable- ReductionPar</code>,
+    <code>Solvable- PseudoReduction</code>
 </td>
 <td>Left and right reduction of solvable polynomial(s) wrt. a 
     set of solvable polynomials.
-    Coefficients of polynomials must be from a field.
+    Coefficients of polynomials must be from a field and for the 
+    Pseudo* version from a ring with gcd.
 </td>
 <td>left/right normalform,
     left/right S-polynomial,
@@ -610,7 +640,7 @@ implemented algebraic algorithms.
     Coefficients of polynomials must be from a field.
     <code>*Parallel</code> is a multi-threaded and 
     <code>*Distributed</code> is a message passing implementation.  
-    The <code>*Pseudo</code> version is for non-field coefficients.
+    The <code>*Pseudo</code> versions are for coefficient domains with gcd.
 </td>
 <td>GB, isGB, extended GB, minimal GB
 </td>
@@ -633,12 +663,14 @@ implemented algebraic algorithms.
 <td><code>SolvableGroebnerBase</code>,
     <code>SolvableGroebnerBase- Abstract</code>,
     <code>SolvableGroebnerBaseSeq</code>,
-    <code>SolvableGroebnerBase- Parallel</code>
+    <code>SolvableGroebnerBase- Parallel</code>,
+    <code>SolvableGroebnerBase- PseudoSeq</code>
 </td>
 <td>Algorithm to compute left, right and two-sided Groebner bases 
     of sets of solvable polynomials.
     Coefficients of polynomials must be from a field.
     Parallel is a multi-threaded implementation.  
+    The <code>*Pseudo</code> versions are for coefficient domains with gcd.
 </td>
 <td>left, right, two-sided versions of GB, isGB, extended GB, minimal GB
 </td>
@@ -647,11 +679,13 @@ implemented algebraic algorithms.
 <tr>
 <td><code>WordGroebnerBase</code>,
     <code>WordGroebnerBase- Abstract</code>,
-    <code>WordGroebnerBaseSeq</code>
+    <code>WordGroebner- BaseSeq</code>,
+    <code>WordGroebner- BasePseudoSeq</code>
 </td>
 <td>Algorithm to compute two-sided Groebner bases 
     of sets of free non-commutative polynomials.
     Coefficients of polynomials must be from a field.
+    The <code>*Pseudo</code> versions are for coefficient domains with gcd.
 </td>
 <td>two-sided versions of GB, isGB, minimal GB
 </td>
@@ -670,7 +704,7 @@ implemented algebraic algorithms.
 </tr>
 
 <tr>
-<td><code>ComprehensiveGroebnerBaseSeq</code>,
+<td><code>Comprehensive- GroebnerBaseSeq</code>,
     <code>GroebnerSystem</code>,
     <code>ColoredSystem</code>
 </td>
@@ -768,14 +802,25 @@ implemented algebraic algorithms.
 </tr>
 
 <tr>
-<td><code>GreatestCommonDivisor</code>,
+<td><code>WordIdeal</code>
+</td>
+<td>Algorithms to compute sums, products, and containment 
+    word polynomial ideals (free algebra twosided ideals).
+    Coefficients of word polynomials must be from a field.
+</td>
+<td>sum, product, contains
+</td>
+</tr>
+
+<tr>
+<td><code>Greatest- CommonDivisor</code>,
     <code>GCDFactory</code>,
-    <code>GreatestCommonDivisorAbstract</code>,
-    <code>GreatestCommonDivisorSimple</code>,
-    <code>GreatestCommonDivisorPrimitive</code>,
-    <code>GreatestCommonDivisorSubres</code>,
-    <code>GreatestCommonDivisorModular</code>,
-    <code>GreatestCommonDivisorModEval</code>,
+    <code>Greatest- CommonDivisorAbstract</code>,
+    <code>Greatest- CommonDivisorSimple</code>,
+    <code>Greatest- CommonDivisorPrimitive</code>,
+    <code>Greatest- CommonDivisorSubres</code>,
+    <code>Greatest- CommonDivisorModular</code>,
+    <code>Greatest- CommonDivisorModEval</code>,
     <code>GCDProxy</code>
 </td>
 <td>Algorithms to compute greatest common divisors of polynomials 
@@ -794,11 +839,11 @@ implemented algebraic algorithms.
     <code>SquarefreeFactory</code>,
     <code>SquarefreeAbstract</code>,
     <code>SquarefreeFieldChar0</code>,
-    <code>SquarefreeFieldCharP</code>,
-    <code>SquarefreeFiniteFieldCharP</code>,
-    <code>SquarefreeInfiniteFieldCharP</code>,
-    <code>SquarefreeInfiniteAlgebraicFieldCharP</code>,
-    <code>SquarefreeRingChar0</code>
+    <code>Squarefree- FieldCharP</code>,
+    <code>Squarefree- FiniteFieldCharP</code>,
+    <code>Squarefree- InfiniteFieldCharP</code>,
+    <code>Squarefree- InfiniteAlgebraicFieldCharP</code>,
+    <code>Squarefree- RingChar0</code>
 </td>
 <td>Algorithms to compute squarefree decomposition of polynomials 
     over fields of characteristic zero, finite and infinite fields of characteristic p
@@ -1382,7 +1427,7 @@ of the Java algebra system.
 <p>
 <!-- Created: Sat Mar 11 10:51:36 CET 2006 -->
 <!-- hhmts start -->
-Last modified: Sun Sep 21 22:22:55 CEST 2014
+Last modified: Sun Jan  4 13:33:17 CET 2015
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
