@@ -272,7 +272,7 @@ of the implemented algebraic algorithms.
 
 <tr>
 <td><code>AlgebraicNumber</code></td>
-<td><code>AlgebraicNumber- Ring</code></td>
+<td><code>AlgebraicNumberRing</code></td>
 <td>ring of algebraic numbers, represented as 
     univariate polynomials 
     over any implemented coefficient field
@@ -282,7 +282,7 @@ of the implemented algebraic algorithms.
 </tr>
 
 <tr>
-<td><code>Real- AlgebraicNumber</code></td>
+<td><code>RealAlgebraicNumber</code></td>
 <td><code>RealAlgebraicRing</code></td>
 <td>ring of real algebraic numbers, represented as 
     algebraic number and an isolating interval for a real root
@@ -293,7 +293,7 @@ of the implemented algebraic algorithms.
 </tr>
 
 <tr>
-<td><code>Complex- AlgebraicNumber</code></td>
+<td><code>ComplexAlgebraicNumber</code></td>
 <td><code>ComplexAlgebraicRing</code></td>
 <td>ring of complex algebraic numbers, represented as 
     algebraic number and an isolating rectangle for a complex root
@@ -304,8 +304,8 @@ of the implemented algebraic algorithms.
 </tr>
 
 <tr>
-<td><code>GenSolvable- Polynomial</code></td>
-<td><code>GenSolvable- PolynomialRing</code></td>
+<td><code>GenSolvablePolynomial</code></td>
+<td><code>GenSolvablePolynomialRing</code></td>
 <td>ring of non-commutative, solvable polynomials in <code>r</code> variables 
     over any implemented coefficient ring
     with respect to any implemented term ordering
@@ -315,8 +315,8 @@ of the implemented algebraic algorithms.
 </tr>
 
 <tr>
-<td><code>GenWord- Polynomial</code></td>
-<td><code>GenWord- PolynomialRing</code></td>
+<td><code>GenWordPolynomial</code></td>
+<td><code>GenWordPolynomialRing</code></td>
 <td>ring of free non-commutative polynomials in <code>r</code> letters 
     over any implemented coefficient ring
     with respect to a graded term ordering
@@ -325,17 +325,17 @@ of the implemented algebraic algorithms.
 </tr>
 
 <tr>
-<td><code>RecSolvable- Polynomial</code>, 
-    <code>QuotSolvable- Polynomial</code>,
-    <code>ResidueSolvable- Polynomial</code>, 
-    <code>LocalSolvable- Polynomial</code>,
-    <code>QLRSolvable- Polynomial</code>
+<td><code>RecSolvablePolynomial</code>, 
+    <code>QuotSolvablePolynomial</code>,
+    <code>ResidueSolvablePolynomial</code>, 
+    <code>LocalSolvablePolynomial</code>,
+    <code>QLRSolvablePolynomial</code>
 </td>
-<td><code>RecSolvable- PolynomialRing</code>, 
-    <code>QuotSolvable- PolynomialRing</code>,
-    <code>ResidueSolvable- PolynomialRing</code>,
-    <code>LocalSolvable- PolynomialRing</code>,
-    <code>QLRSolvable- PolynomialRing</code>
+<td><code>RecSolvablePolynomialRing</code>, 
+    <code>QuotSolvablePolynomialRing</code>,
+    <code>ResidueSolvablePolynomialRing</code>,
+    <code>LocalSolvablePolynomialRing</code>,
+    <code>QLRSolvablePolynomialRing</code>
 </td>
 <td>ring of recursive, solvable polynomials in <code>r</code> variables 
     over a solvable polynomial coefficient ring over any implemented coefficient ring
@@ -534,7 +534,7 @@ implemented algebraic algorithms.
 
 <tr>
 <td><code>Reduction</code>,
-    <code>Reduction- Abstract</code>,
+    <code>ReductionAbstract</code>,
     <code>ReductionSeq</code>,
     <code>ReductionPar</code>,
     <code>PseudoReduction</code>
@@ -572,10 +572,10 @@ implemented algebraic algorithms.
 
 <tr>
 <td><code>SolvableReduction</code>,
-    <code>SolvableReduction- Abstract</code>,
-    <code>Solvable- ReductionSeq</code>,
-    <code>Solvable- ReductionPar</code>,
-    <code>Solvable- PseudoReduction</code>
+    <code>SolvableReductionAbstract</code>,
+    <code>SolvableReductionSeq</code>,
+    <code>SolvableReductionPar</code>,
+    <code>SolvablePseudoReduction</code>
 </td>
 <td>Left and right reduction of solvable polynomial(s) wrt. a 
     set of solvable polynomials.
@@ -628,11 +628,11 @@ implemented algebraic algorithms.
 
 <tr>
 <td><code>GroebnerBase</code>,
-    <code>GroebnerBase- Abstract</code>,
+    <code>GroebnerBaseAbstract</code>,
     <code>GroebnerBaseSeq</code>,
-    <code>GroebnerBase- Parallel</code>,
-    <code>GroebnerBase- Distributed</code>,
-    <code>GroebnerBase- PseudoSeq</code>,
+    <code>GroebnerBaseParallel</code>,
+    <code>GroebnerBaseDistributed</code>,
+    <code>GroebnerBasePseudoSeq</code>
     etc.
 </td>
 <td>Buchberger algorithm to compute Groebner bases 
@@ -661,10 +661,10 @@ implemented algebraic algorithms.
 
 <tr>
 <td><code>SolvableGroebnerBase</code>,
-    <code>SolvableGroebnerBase- Abstract</code>,
+    <code>SolvableGroebnerBaseAbstract</code>,
     <code>SolvableGroebnerBaseSeq</code>,
-    <code>SolvableGroebnerBase- Parallel</code>,
-    <code>SolvableGroebnerBase- PseudoSeq</code>
+    <code>SolvableGroebnerBaseParallel</code>,
+    <code>SolvableGroebnerBasePseudoSeq</code>
 </td>
 <td>Algorithm to compute left, right and two-sided Groebner bases 
     of sets of solvable polynomials.
@@ -678,9 +678,9 @@ implemented algebraic algorithms.
 
 <tr>
 <td><code>WordGroebnerBase</code>,
-    <code>WordGroebnerBase- Abstract</code>,
-    <code>WordGroebner- BaseSeq</code>,
-    <code>WordGroebner- BasePseudoSeq</code>
+    <code>WordGroebnerBaseAbstract</code>,
+    <code>WordGroebnerBaseSeq</code>,
+    <code>WordGroebnerBasePseudoSeq</code>
 </td>
 <td>Algorithm to compute two-sided Groebner bases 
     of sets of free non-commutative polynomials.
@@ -704,7 +704,7 @@ implemented algebraic algorithms.
 </tr>
 
 <tr>
-<td><code>Comprehensive- GroebnerBaseSeq</code>,
+<td><code>ComprehensiveGroebnerBaseSeq</code>,
     <code>GroebnerSystem</code>,
     <code>ColoredSystem</code>
 </td>
@@ -721,7 +721,7 @@ implemented algebraic algorithms.
 <td><code>Syzygy</code>,
     <code>SyzygyAbstract</code>,
     <code>ModGroebnerBase</code>,
-    <code>ModGroebnerBaseAbstract</code>,
+    <code>ModGroebnerBaseAbstract</code>
 </td>
 <td>Algorithm to compute syzygies of lists of polynomials 
     or Groebner Bases, free resolutions.
@@ -736,9 +736,9 @@ implemented algebraic algorithms.
 
 <tr>
 <td><code>SolvableSyzygy</code>,
-    <code>Solvable- SyzygyAbstract</code>,
-    <code>ModSolvable- GroebnerBase</code>,
-    <code>ModSolvable- GroebnerBaseAbstract</code>,
+    <code>SolvableSyzygyAbstract</code>,
+    <code>ModSolvableGroebnerBase</code>,
+    <code>ModSolvableGroebnerBaseAbstract</code>
 </td>
 <td>Algorithm to compute left and right syzygies of lists 
     of solvable polynomials or Groebner Bases, free left resolutions.
@@ -813,14 +813,14 @@ implemented algebraic algorithms.
 </tr>
 
 <tr>
-<td><code>Greatest- CommonDivisor</code>,
+<td><code>GreatestCommonDivisor</code>,
     <code>GCDFactory</code>,
-    <code>Greatest- CommonDivisorAbstract</code>,
-    <code>Greatest- CommonDivisorSimple</code>,
-    <code>Greatest- CommonDivisorPrimitive</code>,
-    <code>Greatest- CommonDivisorSubres</code>,
-    <code>Greatest- CommonDivisorModular</code>,
-    <code>Greatest- CommonDivisorModEval</code>,
+    <code>GreatestCommonDivisorAbstract</code>,
+    <code>GreatestCommonDivisorSimple</code>,
+    <code>GreatestCommonDivisorPrimitive</code>,
+    <code>GreatestCommonDivisorSubres</code>,
+    <code>GreatestCommonDivisorModular</code>,
+    <code>GreatestCommonDivisorModEval</code>,
     <code>GCDProxy</code>
 </td>
 <td>Algorithms to compute greatest common divisors of polynomials 
@@ -839,11 +839,12 @@ implemented algebraic algorithms.
     <code>SquarefreeFactory</code>,
     <code>SquarefreeAbstract</code>,
     <code>SquarefreeFieldChar0</code>,
-    <code>Squarefree- FieldCharP</code>,
-    <code>Squarefree- FiniteFieldCharP</code>,
-    <code>Squarefree- InfiniteFieldCharP</code>,
-    <code>Squarefree- InfiniteAlgebraicFieldCharP</code>,
-    <code>Squarefree- RingChar0</code>
+    <code>SquarefreeFieldCharP</code>,
+    <code>SquarefreeFiniteFieldCharP</code>,
+    <code>SquarefreeInfiniteFieldCharP</code>,
+    <code>Squarefree</code>-
+     <code>InfiniteAlgebraicFieldCharP</code>,
+    <code>SquarefreeRingChar0</code>
 </td>
 <td>Algorithms to compute squarefree decomposition of polynomials 
     over fields of characteristic zero, finite and infinite fields of characteristic p
@@ -1427,7 +1428,7 @@ of the Java algebra system.
 <p>
 <!-- Created: Sat Mar 11 10:51:36 CET 2006 -->
 <!-- hhmts start -->
-Last modified: Sun Jan  4 13:33:17 CET 2015
+Last modified: Sun Jan  4 13:42:12 CET 2015
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
