@@ -29,7 +29,7 @@ PYPATH=$(LIBPATH)/jython.jar
 # --- syncing ----------
 DRY=--dry-run
 DELETE=
-RSYNC=rsync -e ssh -avuz $(DRY) $(DELETE) --exclude=*~ --include=svn_change.log --include=jdepend-report.txt --exclude=*.log* --exclude=*.out* --exclude=*.txt* --exclude=.svn 
+RSYNC=rsync -e ssh -avuz $(DRY) $(DELETE) --exclude=*~ --include=svn_change.log --include=jdepend-report.txt --exclude=*.log* --exclude=*.out* --exclude=*.txt* --exclude=.svn --exclude=build/ --exclude=target/ --exclude=reports/ --exclude=.gradle/
 ####--exclude=./test
 ####--exclude=*.ps --exclude=*.pdf --exclude=spin*
 ####--exclude=*/.jxta/
@@ -78,11 +78,11 @@ DOCOPTS=-public -protected -package -author -version
 MYCLASSPATH = $(LOG4JPATH):.:$(JUNITPATH):$(JOMPPATH):$(PYPATH)
 #:$(TNJPATH)
 
-#JAVA_MEM=-Xms1500M -Xmx2900M
-JAVA_MEM=-Xms350M -Xmx800M
+JAVA_MEM=-Xms1500M -Xmx2900M
+#JAVA_MEM=-Xms350M -Xmx800M
 
-#SOPTS="-J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc -J-Xms1500M -J-Xmx2900M"
-SOPTS="-J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc -J-Xms350M -J-Xmx800M"
+SOPTS="-J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc -J-Xms1500M -J-Xmx2900M"
+#SOPTS="-J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc -J-Xms350M -J-Xmx800M"
 
 
 JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d . -Xlint:unchecked
