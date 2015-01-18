@@ -13,9 +13,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+//import junit.framework.Test;
+//import junit.framework.TestCase;
+//import junit.framework.TestSuite;
 
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
@@ -31,11 +31,11 @@ import edu.jas.poly.PolynomialList;
 
 
 /**
- * Groebner base FGLM examples with JUnit.
+ * Groebner base FGLM examples. Without JUnit.
  * @author Jan Suess.
  */
 
-public class GroebnerBaseFGLMExamples extends TestCase {
+public class GroebnerBaseFGLMExamples /*extends TestCase*/ {
 
 
     /**
@@ -43,26 +43,44 @@ public class GroebnerBaseFGLMExamples extends TestCase {
      */
     public static void main(String[] args) {
         //BasicConfigurator.configure();
-        junit.textui.TestRunner.run(suite());
+        //junit.textui.TestRunner.run(suite());
+        GroebnerBaseFGLMExamples ex = new GroebnerBaseFGLMExamples();
+        ex.testC5();
+        /*
+        ex.xtestFiveVarsOrder();
+        ex.xtestCAP();
+        ex.xtestAUX();
+        ex.xtestModC5();
+        ex.xtestC6();
+        ex.xtestIsaac();
+        ex.xtestNiermann();
+        ex.ytestWalkS7();
+        ex.ytestCassouMod1();
+        ex.ytestOmdi1();
+        ex.ytestLamm1();
+        ex.xtestEquilibrium();
+        ex.xtestTrinks2();
+        ex.xtestHairerRungeKutta_1();
+        */
     }
 
 
-    /**
+    /*
      * Constructs a <CODE>GroebnerBaseFGLMExamples</CODE> object.
      * @param name String.
-     */
     public GroebnerBaseFGLMExamples(String name) {
         super(name);
     }
-
-
-    /**
-     * suite.
      */
+
+
+    /*
+     * suite.
     public static Test suite() {
         TestSuite suite = new TestSuite(GroebnerBaseFGLMExamples.class);
         return suite;
     }
+     */
 
 
     //field Q
@@ -88,6 +106,7 @@ public class GroebnerBaseFGLMExamples extends TestCase {
     String modfglm = "Zahlbereich | Ordnung      | Elements G | Elements L | Deg G | Deg L | Time G | Time FGLM";
 
 
+    /*
     @Override
     protected void setUp() {
         System.out.println("Setup");
@@ -98,7 +117,7 @@ public class GroebnerBaseFGLMExamples extends TestCase {
     protected void tearDown() {
         System.out.println("Tear Down");
     }
-
+    */
 
     //Test with five variables and different variable orders
     public void xtestFiveVarsOrder() {
@@ -663,7 +682,10 @@ public class GroebnerBaseFGLMExamples extends TestCase {
                         + "           |" + grad_maxPolyGrad + "      |" + lex_maxPolyGrad + "    |"
                         + buchberger_Grad + "      |" + tconv + "       |" + buchberger_Lex;
 
-        assertEquals(o2, o3);
+        //assertEquals(o2, o3);
+        if (! o2.equals(o3) ) {
+            throw new RuntimeException("FGLM != GB: " + o2 + " != " + o3);
+        }
         return erg;
     }
 
@@ -892,7 +914,10 @@ public class GroebnerBaseFGLMExamples extends TestCase {
                         + lex_numberOfElements + "          |" + grad_maxPolyGrad + "    |" + lex_maxPolyGrad
                         + "    |" + buchberger_Grad + "     |" + tconv + "    |" + buchberger_Lex;
 
-        assertEquals(o2, o3);
+        //assertEquals(o2, o3);
+        if (! o2.equals(o3) ) {
+            throw new RuntimeException("FGLM != GB: " + o2 + " != " + o3);
+        }
         return erg;
     }
 
@@ -997,7 +1022,9 @@ public class GroebnerBaseFGLMExamples extends TestCase {
     }
 
 
-    //Method shuffle returns a random permutation of a string of variables
+    /**
+     * Method shuffle returns a random permutation of a string of variables.
+     */
     public String shuffle(String[] tempOrder) {
         Collections.shuffle(Arrays.asList(tempOrder));
         StringBuffer ret = new StringBuffer("(");
@@ -1006,8 +1033,11 @@ public class GroebnerBaseFGLMExamples extends TestCase {
         return ret.toString();
     }
 
-
-    //Method bitHeight returns the bitlength of the greatest number occurring during the computation of a groebnerbase  
+ 
+    /**
+     * Method bitHeight returns the bitlength of the greatest number 
+     * occurring during the computation of a Groebner base.
+     */
     public int bitHeight(List<GenPolynomial<BigRational>> list) {
         BigInteger denom = BigInteger.ONE;
         BigInteger num = BigInteger.ONE;
