@@ -138,7 +138,7 @@ public class SyzygyTest extends TestCase {
 
         bb = GBFactory.getImplementation(coeff);
         mbb = new ModGroebnerBaseSeq<BigRational>(coeff);
-        sz = new SyzygyAbstract<BigRational>();
+        sz = new SyzygySeq<BigRational>(coeff);
 
         a = b = c = d = e = null;
         L = null;
