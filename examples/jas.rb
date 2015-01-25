@@ -1390,6 +1390,7 @@ java_import "edu.jas.poly.OrderedModuleList";
 java_import "edu.jas.poly.ModuleList";
 java_import "edu.jas.poly.Complex";
 java_import "edu.jas.poly.ComplexRing";
+java_import "edu.jas.application.RingFactoryTokenizer";
 
 
 =begin rdoc
@@ -1399,7 +1400,8 @@ Methods to create ideals and ideals with parametric coefficients.
 =end
 class Ring
     # the JAS Java factoy object, polynomial list, gcd engine, sqf engine, factorization
-    attr_reader :ring, :pset, :engine, :sqf, :factor
+    attr_reader :ring, :engine, :sqf, :factor
+    #:pset,
 
 =begin rdoc
 Ring constructor.
@@ -1410,11 +1412,17 @@ ring JAS ring object.
     def initialize(ringstr="",ring=nil)
         if ring == nil
            sr = StringReader.new( ringstr );
-           tok = GenPolynomialTokenizer.new(sr);
-           @pset = tok.nextPolynomialSet();
-           @ring = @pset.ring;
+           tok = RingFactoryTokenizer.new(sr);
+           pfac = tok.nextPolynomialRing();
+           #tok = GenPolynomialTokenizer.new(sr);
+           #@pset = tok.nextPolynomialSet();
+           @ring = pfac;
         else
-           @ring = ring;
+           if ring.is_a? Ring
+              @ring = ring.ring
+           else 
+              @ring = ring;
+           end
         end
         # parameter ",fast=false" not possible w/o keyword params
         #if fast == true
@@ -1531,6 +1539,16 @@ Create a string representation.
 =end
     def to_s()
         return @ring.toScript();
+    end
+
+=begin rdoc
+Test if two rings are equal.
+=end
+    def ===(other)
+        if not other.is_a? Ring
+           return false;
+        end
+        return @ring.equals(other.ring);
     end
 
 =begin rdoc
@@ -3292,11 +3310,17 @@ Solvable polynomial ring constructor.
     def initialize(ringstr="",ring=nil)
         if ring == nil
            sr = StringReader.new( ringstr );
-           tok = GenPolynomialTokenizer.new(sr);
-           @pset = tok.nextSolvablePolynomialSet();
-           @ring = @pset.ring;
+           tok = RingFactoryTokenizer.new(sr);
+           pfac = tok.nextSolvablePolynomialRing();
+           #tok = GenPolynomialTokenizer.new(sr);
+           #@pset = tok.nextSolvablePolynomialSet();
+           @ring = pfac;
         else
-           @ring = ring;
+           if ring.is_a? Ring
+              @ring = ring.ring
+           else 
+              @ring = ring;
+           end
         end
         if not @ring.isAssociative()
            puts "warning: ring is not associative";
@@ -3857,7 +3881,7 @@ Represents a JAS module over a polynomial ring.
 Method to create sub-modules.
 =end
 class CommutativeModule
-    attr_reader :ring, :mset, :cols
+    attr_reader :ring, :cols, :mset
 
 =begin rdoc
 Module constructor.
@@ -3865,18 +3889,27 @@ Module constructor.
     def initialize(modstr="",ring=nil,cols=0)
         if ring == nil
            sr = StringReader.new( modstr );
-           tok = GenPolynomialTokenizer.new(sr);
-           @mset = tok.nextSubModuleSet();
-           if @mset.cols >= 0
-               @cols = @mset.cols;
-           else
-               @cols = cols;
-           end
+           tok = RingFactoryTokenizer.new(sr);
+           pfac = tok.nextPolynomialRing();
+           #tok = GenPolynomialTokenizer.new(sr);
+           #@mset = tok.nextSubModuleSet();
+           #if @mset.cols >= 0
+           #    @cols = @mset.cols;
+           #else
+           #end
+           @ring = pfac;
         else
-           @mset = ModuleList.new(ring.ring,nil);
-           @cols = cols;
+           if ring.is_a? Ring
+              @ring = ring.ring
+           else 
+              @ring = ring;
+           end
         end
-        @ring = @mset.ring;
+        @mset = ModuleList.new(@ring,nil);
+        if cols < 0 
+           cols = 0;
+        end
+        @cols = cols;
     end
 
 =begin rdoc
@@ -4017,7 +4050,7 @@ Represents a JAS module over a solvable polynomial ring.
 Method to create solvable sub-modules.
 =end
 class SolvableModule < CommutativeModule
-    attr_reader :ring, :mset, :cols
+    attr_reader :ring, :cols, :mset 
 
 =begin rdoc
 Solvable module constructor.
@@ -4025,16 +4058,26 @@ Solvable module constructor.
     def initialize(modstr="",ring=nil,cols=0)
         if ring == nil
            sr = StringReader.new( modstr );
-           tok = GenPolynomialTokenizer.new(sr);
-           @mset = tok.nextSolvableSubModuleSet();
-           if @mset.cols >= 0
-               @cols = @mset.cols;
-           end
+           tok = RingFactoryTokenizer.new(sr);
+           pfac = tok.nextSolvablePolynomialRing();
+           #tok = GenPolynomialTokenizer.new(sr);
+           #@mset = tok.nextSolvableSubModuleSet();
+           #if @mset.cols >= 0
+           #    @cols = @mset.cols;
+           #end
+           @ring = pfac;
         else
-           @mset = ModuleList.new(ring.ring,nil);
-           @cols = cols;
+           if ring.is_a? Ring
+              @ring = ring.ring
+           else 
+              @ring = ring;
+           end
         end
-        @ring = @mset.ring;
+        @mset = ModuleList.new(@ring,nil);
+        if cols < 0 
+           cols = 0;
+        end
+        @cols = cols;
     end
 
 =begin rdoc
@@ -4207,9 +4250,11 @@ Ring constructor.
         if ring == nil
             if ringstr.size > 0
                 sr = StringReader.new( ringstr );
-                tok = GenPolynomialTokenizer.new(sr);
-                pset = tok.nextPolynomialSet();
-                ring = pset.ring;
+                tok = RingFactoryTokenizer.new(sr);
+                pfac = tok.nextPolynomialRing();
+                #tok = GenPolynomialTokenizer.new(sr);
+                #pset = tok.nextPolynomialSet();
+                ring = pfac;
                 vname = ring.vars;
                 name = vname[0];
                 cofac = ring.coFac;
@@ -4404,9 +4449,11 @@ Ring constructor.
         if ring == nil
             if ringstr.size > 0
                 sr = StringReader.new( ringstr );
-                tok = GenPolynomialTokenizer.new(sr);
-                pset = tok.nextPolynomialSet();
-                ring = pset.ring;
+                tok = RingFactoryTokenizer.new(sr);
+                pfac = tok.nextPolynomialRing();
+                #tok = GenPolynomialTokenizer.new(sr);
+                #pset = tok.nextPolynomialSet();
+                ring = pfac;
                 names = ring.vars;
                 cofac = ring.coFac;
             end
@@ -4954,11 +5001,17 @@ Word polynomial ring constructor.
         if ring == nil
            raise "parse of word polynomial rings not implemented"
            sr = StringReader.new( ringstr );
-           tok = GenPolynomialTokenizer.new(sr);
-           @pset = tok.nextWordPolynomialSet();
-           @ring = @pset.ring;
+           tok = RingFactoryTokenizer.new(sr);
+           pfac = tok.nextPolynomialRing();
+           #tok = GenPolynomialTokenizer.new(sr);
+           #@pset = tok.nextWordPolynomialSet();
+           @ring = pfac;
         else
-           @ring = ring;
+           if ring.is_a? Ring
+              @ring = ring.ring
+           else 
+              @ring = ring;
+           end
         end
     end
 
