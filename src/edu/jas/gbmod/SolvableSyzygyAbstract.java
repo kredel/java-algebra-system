@@ -85,7 +85,7 @@ public class SolvableSyzygyAbstract<C extends RingElem<C>> implements SolvableSy
         sred = new SolvableReductionSeq<C>();
         blas = new BasicLinAlg<GenPolynomial<C>>();
         sbb = new SolvableGroebnerBaseSeq<C>();
-        msbb = new ModSolvableGroebnerBaseAbstract<C>();
+        msbb = new ModSolvableGroebnerBaseSeq<C>();
     }
 
 
