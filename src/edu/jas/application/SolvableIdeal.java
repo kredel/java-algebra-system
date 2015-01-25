@@ -17,6 +17,7 @@ import edu.jas.gb.SolvableGroebnerBaseSeq;
 import edu.jas.gb.SolvableReduction;
 import edu.jas.gb.SolvableReductionSeq;
 import edu.jas.gbmod.SolvableSyzygyAbstract;
+import edu.jas.gbmod.SolvableSyzygySeq;
 import edu.jas.gbufd.PolyGBUtil;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
@@ -1062,7 +1063,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         F.add(h);
         F.addAll(getList());
         //System.out.println("F = " + F);
-        SolvableSyzygyAbstract<C> syz = new SolvableSyzygyAbstract<C>();
+        SolvableSyzygyAbstract<C> syz = new SolvableSyzygySeq<C>();
         List<List<GenSolvablePolynomial<C>>> S = syz.leftZeroRelationsArbitrary(F);
         //System.out.println("S = " + S);
         List<GenSolvablePolynomial<C>> gen = new ArrayList<GenSolvablePolynomial<C>>(S.size());

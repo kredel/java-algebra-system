@@ -12,6 +12,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import edu.jas.gbmod.SolvableSyzygyAbstract;
+import edu.jas.gbmod.SolvableSyzygySeq;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
@@ -55,7 +56,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
      * Constructor.
      */
     public GreatestCommonDivisorAbstract() {
-        syz = new SolvableSyzygyAbstract<C>();
+        syz = new SolvableSyzygySeq<C>();
         //cgcd = GCDFactory.<C> getImplementation(pfac.coFac);
     }
 

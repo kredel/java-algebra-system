@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import edu.jas.gb.SolvableGroebnerBaseAbstract;
 import edu.jas.gb.SolvableGroebnerBaseSeq;
 import edu.jas.gbmod.SolvableSyzygyAbstract;
+import edu.jas.gbmod.SolvableSyzygySeq;
 import edu.jas.kern.StringUtil;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
@@ -97,7 +98,7 @@ public class SolvableLocalRing<C extends GcdRingElem<C>> implements RingFactory<
             logger.warn("ideal not maximal");
             //throw new IllegalArgumentException("ideal must be maximal");
         }
-        engine = new SolvableSyzygyAbstract<C>();
+        engine = new SolvableSyzygySeq<C>();
         bb = new SolvableGroebnerBaseSeq<C>();
         logger.debug("solvable local ring constructed");
     }

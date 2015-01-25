@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import edu.jas.gb.SolvableGroebnerBaseAbstract;
 import edu.jas.gb.SolvableGroebnerBaseSeq;
 import edu.jas.gbmod.SolvableSyzygyAbstract;
+import edu.jas.gbmod.SolvableSyzygySeq;
 import edu.jas.kern.StringUtil;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
@@ -28,8 +29,7 @@ import edu.jas.structure.RingFactory;
 /**
  * SolvableLocalResidue ring factory for SolvableLocalResidue based on
  * GenSolvablePolynomial with GcdRingElem interface. Objects of this class are
- * immutable.
- * It represents the "classical quotient ring modulo an ideal".
+ * immutable. It represents the "classical quotient ring modulo an ideal".
  * @author Heinz Kredel
  */
 public class SolvableLocalResidueRing<C extends GcdRingElem<C>> implements
@@ -100,7 +100,7 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>> implements
             logger.warn("ideal not maximal and not known to be prime");
             //throw new IllegalArgumentException("ideal must be prime or maximal");
         }
-        engine = new SolvableSyzygyAbstract<C>();
+        engine = new SolvableSyzygySeq<C>();
         bb = new SolvableGroebnerBaseSeq<C>();
         logger.debug("solvable local residue ring constructed");
     }

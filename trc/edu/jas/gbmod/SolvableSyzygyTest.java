@@ -185,7 +185,7 @@ public class SolvableSyzygyTest extends TestCase {
         zero = fac.getZERO();
         sbb = new SolvableGroebnerBaseSeq<BigRational>();
         msbb = new ModSolvableGroebnerBaseSeq<BigRational>();
-        ssz = new SolvableSyzygyAbstract<BigRational>();
+        ssz = new SolvableSyzygySeq<BigRational>();
     }
 
 
