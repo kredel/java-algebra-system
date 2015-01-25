@@ -269,7 +269,7 @@ public class SyzygyAbstract<C extends GcdRingElem<C>> implements Syzygy<C> {
         ModuleList<C> MM = M;
         ModuleList<C> GM;
         ModuleList<C> Z;
-        ModGroebnerBase<C> mbb = new ModGroebnerBaseAbstract<C>(M.ring.coFac);
+        ModGroebnerBase<C> mbb = new ModGroebnerBaseSeq<C>(M.ring.coFac);
         while (true) {
             GM = mbb.GB(MM);
             Z = zeroRelations(GM);
@@ -290,7 +290,7 @@ public class SyzygyAbstract<C extends GcdRingElem<C>> implements Syzygy<C> {
      */
     @SuppressWarnings("unchecked")
     public List // <ResPart<C>|ResPolPart<C>>
-      resolution(PolynomialList<C> F) {
+    resolution(PolynomialList<C> F) {
         List<List<GenPolynomial<C>>> Z;
         ModuleList<C> Zm;
         List<GenPolynomial<C>> G;
@@ -315,7 +315,7 @@ public class SyzygyAbstract<C extends GcdRingElem<C>> implements Syzygy<C> {
      */
     @SuppressWarnings("unchecked")
     public List // <ResPart<C>|ResPolPart<C>>
-      resolutionArbitrary(PolynomialList<C> F) {
+    resolutionArbitrary(PolynomialList<C> F) {
         List<List<GenPolynomial<C>>> Z;
         ModuleList<C> Zm;
         //List<GenPolynomial<C>> G;
