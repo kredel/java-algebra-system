@@ -40,7 +40,16 @@ public class ModSolvableGroebnerBaseSeq<C extends RingElem<C>> extends ModSolvab
      * Constructor.
      */
     public ModSolvableGroebnerBaseSeq() {
-        sbb = new SolvableGroebnerBaseSeq<C>();
+        this(new SolvableGroebnerBaseSeq<C>());
+    }
+
+
+    /**
+     * Constructor.
+     * @param sbb solvable Groebner base implementation.
+     */
+    public ModSolvableGroebnerBaseSeq(SolvableGroebnerBaseAbstract<C> sbb) {
+        this.sbb = sbb;
     }
 
 

@@ -34,9 +34,19 @@ public class ModGroebnerBaseSeq<C extends GcdRingElem<C>> extends ModGroebnerBas
 
     /**
      * Constructor.
+     * @param cf coefficient ring.
      */
     public ModGroebnerBaseSeq(RingFactory<C> cf) {
-        bb = GBFactory.getImplementation(cf);
+        this(GBFactory.getImplementation(cf));
+    }
+
+
+    /**
+     * Constructor.
+     * @param bb Groebner base algorithm.
+     */
+    public ModGroebnerBaseSeq(GroebnerBaseAbstract<C> bb) {
+        this.bb = bb;
     }
 
 

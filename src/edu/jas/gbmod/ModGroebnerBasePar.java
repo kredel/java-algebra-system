@@ -20,39 +20,33 @@ import edu.jas.structure.RingFactory;
  * @author Heinz Kredel
  */
 
-public class ModGroebnerBasePar<C extends GcdRingElem<C>> extends ModGroebnerBaseAbstract<C> {
+public class ModGroebnerBasePar<C extends GcdRingElem<C>> extends ModGroebnerBaseSeq<C> {
 
 
     //private static final Logger logger = Logger.getLogger(ModGroebnerBasePar.class);
 
 
-    /**
+    /*
      * Used Groebner base algorithm.
      */
-    protected final GroebnerBaseAbstract<C> bb;
+    //protected final GroebnerBaseAbstract<C> bb;
 
 
     /**
      * Constructor.
+     * @param cf coefficient ring.
      */
     public ModGroebnerBasePar(RingFactory<C> cf) {
-        bb = GBFactory.getProxy(cf);
+        this(GBFactory.getProxy(cf));
     }
 
 
     /**
-     * Module Groebner base test.
+     * Constructor.
+     * @param bb Groebner base algorithm.
      */
-    public boolean isGB(int modv, List<GenPolynomial<C>> F) {
-        return bb.isGB(modv, F);
-    }
-
-
-    /**
-     * Groebner base using pairlist class.
-     */
-    public List<GenPolynomial<C>> GB(int modv, List<GenPolynomial<C>> F) {
-        return bb.GB(modv, F);
+    public ModGroebnerBasePar(GroebnerBaseAbstract<C> bb) {
+        super(bb);
     }
 
 
