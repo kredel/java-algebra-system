@@ -48,7 +48,8 @@ from edu.jas.gbmod       import ModGroebnerBaseAbstract, ModSolvableGroebnerBase
                                 SolvableSyzygyAbstract, SyzygyAbstract
 from edu.jas.vector      import GenVector, GenVectorModul,\
                                 GenMatrix, GenMatrixRing
-from edu.jas.application import PolyUtilApp, Residue, ResidueRing, Ideal,\
+from edu.jas.application import PolyUtilApp, RingFactoryTokenizer,\
+                                Residue, ResidueRing, Ideal,\
                                 Local, LocalRing, IdealWithRealAlgebraicRoots,\
                                 SolvableIdeal, SolvableResidue, SolvableResidueRing,\
                                 SolvableLocal, SolvableLocalRing,\
@@ -205,11 +206,17 @@ class Ring:
         '''
         if ring == None:
            sr = StringReader( ringstr );
-           tok = GenPolynomialTokenizer(sr);
-           self.pset = tok.nextPolynomialSet();
-           self.ring = self.pset.ring;
+           tok = RingFactoryTokenizer(sr);
+           pfac = tok.nextPolynomialRing();
+           #tok = GenPolynomialTokenizer(pfac,sr);
+           #plist = tok.nextPolynomialList();
+           #self.pset = PolynomialList(pfac,plist);
+           self.ring = pfac;
         else:
-           self.ring = ring;
+           if isinstance(ring,Ring):
+              self.ring = ring.ring;
+           else:
+              self.ring = ring;
         if fast:
             return;
         self.engine = Ring.getEngineGcd(self.ring);
@@ -298,6 +305,15 @@ class Ring:
         '''Create a string representation.
         '''
         return str(self.ring.toScript());
+
+    def __eq__(self,other):
+        '''Test if two rings are equal.
+        '''
+        if not isinstance(other, Ring):
+            return False;
+        s = self.ring;
+        t = other.ring;
+        return s.equals(t)
 
     def ideal(self,ringstr="",list=None):
         '''Create an ideal.
@@ -1173,11 +1189,17 @@ class SolvableRing(Ring):
         '''
         if ring == None:
            sr = StringReader( ringstr );
-           tok = GenPolynomialTokenizer(sr);
-           self.pset = tok.nextSolvablePolynomialSet();
-           self.ring = self.pset.ring;
+           tok = RingFactoryTokenizer(sr);
+           pfac = tok.nextSolvablePolynomialRing();
+           #tok = GenPolynomialTokenizer(pfac,sr);
+           #plist = tok.nextSolvablePolynomialList();
+           #self.pset = PolynomialList(pfac,plist);
+           self.ring = pfac;
         else:
-           self.ring = ring;
+           if isinstance(ring,Ring):
+              self.ring = ring.ring;
+           else:
+              self.ring = ring;
         if not self.ring.isAssociative():
            print "warning: ring is not associative";
         Ring.__init__(self,ring=self.ring)
@@ -1510,16 +1532,24 @@ class Module:
         '''
         if ring == None:
            sr = StringReader( modstr );
-           tok = GenPolynomialTokenizer(sr);
-           self.mset = tok.nextSubModuleSet();
-           if self.mset.cols >= 0:
-               self.cols = self.mset.cols;
-           else:
-               self.cols = cols;
+           tok = RingFactoryTokenizer(sr);
+           pfac = tok.nextPolynomialRing();
+           #tok = GenPolynomialTokenizer(pfac,sr);
+           #mlist = tok.nextSubModuleList();
+           #self.mset = ModuleList(pfac,mlist);
+           #if self.mset.cols >= 0:
+           #    self.cols = self.mset.cols;
+           #else:
+           self.ring = pfac
         else:
-           self.mset = ModuleList(ring.ring,None);
-           self.cols = cols;
-        self.ring = self.mset.ring;
+           if isinstance(ring,Ring):
+              self.ring = ring.ring;
+           else:
+              self.ring = ring;
+        self.mset = ModuleList(self.ring,None); # because of toScript
+        if cols < 0:
+           cols = 0;
+        self.cols = cols;
 
     def __str__(self):
         '''Create a string representation.
@@ -1643,14 +1673,23 @@ class SolvableModule(Module):
         '''
         if ring == None:
            sr = StringReader( modstr );
-           tok = GenPolynomialTokenizer(sr);
-           self.mset = tok.nextSolvableSubModuleSet();
-           if self.mset.cols >= 0:
-               self.cols = self.mset.cols;
+           tok = RingFactoryTokenizer(sr);
+           pfac = tok.nextSolvablePolynomialRing();
+           #tok = GenPolynomialTokenizer(pfac,sr);
+           #mlist = tok.nextSolvableSubModuleList();
+           #self.mset = PolynomialList(pfac,mlist);
+           #if self.mset.cols >= 0:
+           #    self.cols = self.mset.cols;
+           self.ring = pfac;
         else:
-           self.mset = ModuleList(ring.ring,None);
-           self.cols = cols;
-        self.ring = self.mset.ring;
+           if isinstance(ring,Ring):
+              self.ring = ring.ring;
+           else:
+              self.ring = ring;
+        self.mset = ModuleList(self.ring,None);
+        if cols < 0:
+           cols = 0;
+        self.cols = cols;
 
     def __str__(self):
         '''Create a string representation.
@@ -1773,9 +1812,12 @@ class SeriesRing:
         if ring == None:
             if len(ringstr) > 0:
                 sr = StringReader( ringstr );
-                tok = GenPolynomialTokenizer(sr);
-                pset = tok.nextPolynomialSet();
-                ring = pset.ring;
+                tok = RingFactoryTokenizer(sr);
+                pfac = tok.nextPolynomialRing();
+                #tok = GenPolynomialTokenizer(pfac,sr);
+                #plist = tok.nextPolynomialList();
+                #pset = PolynomialList(pfac,plist);
+                ring = pfac;
                 vname = ring.vars;
                 name = vname[0];
                 cofac = ring.coFac;
@@ -1898,9 +1940,12 @@ class MultiSeriesRing:
         if ring == None:
             if len(ringstr) > 0:
                 sr = StringReader( ringstr );
-                tok = GenPolynomialTokenizer(sr);
-                pset = tok.nextPolynomialSet();
-                ring = pset.ring;
+                tok = RingFactoryTokenizer(sr);
+                pfac = tok.nextPolynomialRing();
+                #tok = GenPolynomialTokenizer(pfac,sr);
+                #plist = tok.nextPolynomialList();
+                #pset = PolynomialList(pfac,plist);
+                ring = pfac;
                 names = ring.vars;
                 cofac = ring.coFac;
             if isinstance(cofac,RingElem):
@@ -3608,6 +3653,7 @@ class PolyRing(Ring):
             to = order;
         tring = GenPolynomialRing(cf,nv,to,names);
         #want: super(Ring,self).__init__(ring=tring)
+        self.ring = tring;
         Ring.__init__(self,ring=tring)
 
     def __str__(self):
@@ -3824,11 +3870,17 @@ class WordRing(Ring):
         if ring == None:
            raise ValueError, "parse of word polynomials not implemented" 
            sr = StringReader( ringstr );
-           tok = GenPolynomialTokenizer(sr);
-           self.pset = tok.nextWordPolynomialSet();
-           self.ring = self.pset.ring;
+           tok = RingFactoryTokenizer(sr);
+           pfac = tok.nextPolynomialRing();
+           #tok = GenPolynomialTokenizer(pfac,sr);
+           #plist = tok.nextWordPolynomialList();
+           #self.pset = PolynomialList(pfac,plist);
+           self.ring = pfac;
         else:
-           self.ring = ring;
+           if isinstance(ring,Ring):
+              self.ring = ring.ring;
+           else:
+              self.ring = ring;
 
     def __str__(self):
         '''Create a string representation.
