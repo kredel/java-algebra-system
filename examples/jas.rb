@@ -3021,7 +3021,7 @@ Compute a normal form of polynomial p with respect this characteristic set.
 ##     def syzygy()
 ##         p = @pset;
 ##         l = p.list;
-##         s = SyzygyAbstract().zeroRelations( l );
+##         s = SyzygySeq().zeroRelations( l );
 ##         m = Module("",p.ring);
 ##         return SubModule(m,"",s);
 ##     end
@@ -3291,10 +3291,10 @@ Get each component (slice) of regular ring coefficients separate.
 
 end
 
-java_import "edu.jas.gbmod.ModGroebnerBaseAbstract";
-java_import "edu.jas.gbmod.ModSolvableGroebnerBaseAbstract";
-java_import "edu.jas.gbmod.SolvableSyzygyAbstract";
-java_import "edu.jas.gbmod.SyzygyAbstract";
+java_import "edu.jas.gbmod.ModGroebnerBaseSeq";
+java_import "edu.jas.gbmod.ModSolvableGroebnerBaseSeq";
+java_import "edu.jas.gbmod.SolvableSyzygySeq";
+java_import "edu.jas.gbmod.SyzygySeq";
 
 
 =begin rdoc
@@ -4010,7 +4010,7 @@ Compute a Groebner base.
 =end
     def GB()
         t = System.currentTimeMillis();
-        gg = ModGroebnerBaseAbstract.new().GB(@mset);
+        gg = ModGroebnerBaseSeq.new().GB(@mset);
         t = System.currentTimeMillis() - t;
         puts "executed module GB in #{t} ms\n"; 
         return SubModule.new(@modu,"",gg.list);
@@ -4021,7 +4021,7 @@ Test if this is a Groebner base.
 =end
     def isGB()
         t = System.currentTimeMillis();
-        b = ModGroebnerBaseAbstract.new().isGB(@mset);
+        b = ModGroebnerBaseSeq.new().isGB(@mset);
         t = System.currentTimeMillis() - t;
         puts "module isGB executed in #{t} ms\n"; 
         return b;
@@ -4035,7 +4035,7 @@ Test if this is a Groebner base.
 ##         puts "l = #{l}"; 
 ##         puts "g = #{g}"; 
 ##         t = System.currentTimeMillis();
-##         z = SyzygyAbstract().isZeroRelation( l, g.list );
+##         z = SyzygySeq().isZeroRelation( l, g.list );
 ##         t = System.currentTimeMillis() - t;
 ##         puts "executed isSyzygy in #{t} ms\n"; 
 ##         return z;
@@ -4159,7 +4159,7 @@ Compute a left Groebner base.
 =end
     def leftGB()
         t = System.currentTimeMillis();
-        gg = ModSolvableGroebnerBaseAbstract.new().leftGB(@mset);
+        gg = ModSolvableGroebnerBaseSeq.new().leftGB(@mset);
         t = System.currentTimeMillis() - t;
         puts "executed left module GB in #{t} ms\n"; 
         return SolvableSubModule.new(@modu,"",gg.list);
@@ -4170,7 +4170,7 @@ Test if this is a left Groebner base.
 =end
     def isLeftGB()
         t = System.currentTimeMillis();
-        b = ModSolvableGroebnerBaseAbstract.new().isLeftGB(@mset);
+        b = ModSolvableGroebnerBaseSeq.new().isLeftGB(@mset);
         t = System.currentTimeMillis() - t;
         puts "module isLeftGB executed in #{t} ms\n"; 
         return b;
@@ -4181,7 +4181,7 @@ Compute a two-sided Groebner base.
 =end
     def twosidedGB()
         t = System.currentTimeMillis();
-        gg = ModSolvableGroebnerBaseAbstract.new().twosidedGB(@mset);
+        gg = ModSolvableGroebnerBaseSeq.new().twosidedGB(@mset);
         t = System.currentTimeMillis() - t;
         puts "executed in #{t} ms\n"; 
         return SolvableSubModule.new(@modu,"",gg.list);
@@ -4192,7 +4192,7 @@ Test if this is a two-sided Groebner base.
 =end
     def isTwosidedGB()
         t = System.currentTimeMillis();
-        b = ModSolvableGroebnerBaseAbstract.new().isTwosidedGB(@mset);
+        b = ModSolvableGroebnerBaseSeq.new().isTwosidedGB(@mset);
         t = System.currentTimeMillis() - t;
         puts "module isTwosidedGB executed in #{t} ms\n"; 
         return b;
@@ -4203,7 +4203,7 @@ Compute a right Groebner base.
 =end
     def rightGB()
         t = System.currentTimeMillis();
-        gg = ModSolvableGroebnerBaseAbstract.new().rightGB(@mset);
+        gg = ModSolvableGroebnerBaseSeq.new().rightGB(@mset);
         t = System.currentTimeMillis() - t;
         puts "executed module rightGB in #{t} ms\n"; 
         return SolvableSubModule.new(@modu,"",gg.list);
@@ -4214,7 +4214,7 @@ Test if this is a right Groebner base.
 =end
     def isRightGB()
         t = System.currentTimeMillis();
-        b = ModSolvableGroebnerBaseAbstract.new().isRightGB(@mset);
+        b = ModSolvableGroebnerBaseSeq.new().isRightGB(@mset);
         t = System.currentTimeMillis() - t;
         puts "module isRightGB executed in #{t} ms\n"; 
         return b;
