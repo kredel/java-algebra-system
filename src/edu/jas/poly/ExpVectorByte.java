@@ -342,6 +342,22 @@ public final class ExpVectorByte extends ExpVector
 
 
     /**
+     * Permutation of exponent vector.
+     * @param P permutation.
+     * @return P(e).
+     */
+    @Override
+    public ExpVectorByte permutation(List<Integer> P) {
+        byte[] w = new byte[val.length];
+        int j = 0;
+        for (Integer i : P) {
+            w[j++] = val[(int) i];
+        }
+        return new ExpVectorByte(w);
+    }
+
+
+    /**
      * Get the string representation.
      * @see java.lang.Object#toString()
      */

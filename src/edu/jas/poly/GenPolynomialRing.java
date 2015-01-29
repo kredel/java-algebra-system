@@ -937,7 +937,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
      * Distributive representation as polynomial with all main variables.
      * @return distributive polynomial ring factory.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public GenPolynomialRing<C> distribute() {
         if (!(coFac instanceof GenPolynomialRing)) {
             return this;
@@ -1082,6 +1082,51 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
                 knownVars.add(vars[i]); // eventualy names 'overwritten'
             }
         }
+    }
+
+
+    /**
+     * Permute variable names.
+     * @param vars variable names.
+     * @param P permutation.
+     * @return P(vars).
+     */
+    public static String[] permuteVars(List<Integer> P, String[] vars) {
+        if (vars == null || vars.length <= 1) {
+            return vars;
+        }
+        String[] b = new String[vars.length]; 
+        int j = 0;
+        for (Integer i : P) {
+            b[j++] = vars[(int) i];
+        }
+        return b;
+    }
+
+
+    /**
+     * Permutation of polynomial ring variables.
+     * @param P permutation.
+     * @return P(this).
+     */
+    public GenPolynomialRing<C> permutation(List<Integer> P) {
+        if (nvar <= 1) {
+            return this;
+        }
+        TermOrder tp = tord.permutation(P);
+        if (vars == null) {
+            return new GenPolynomialRing<C>(coFac, nvar, tp);
+        }
+        String[] v1 = new String[vars.length];
+        for (int i = 0; i < v1.length; i++) {
+            v1[i] = vars[v1.length - 1 - i];
+        }
+        String[] vp = permuteVars(P,v1);
+        String[] v2 = new String[vp.length];
+        for (int i = 0; i < vp.length; i++) {
+            v2[i] = vp[vp.length - 1 - i];
+        }
+        return new GenPolynomialRing<C>(coFac, nvar, tp, v2);
     }
 
 

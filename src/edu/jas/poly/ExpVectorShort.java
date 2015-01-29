@@ -342,6 +342,22 @@ public final class ExpVectorShort extends ExpVector
 
 
     /**
+     * Permutation of exponent vector.
+     * @param P permutation.
+     * @return P(e).
+     */
+    @Override
+    public ExpVectorShort permutation(List<Integer> P) {
+        short[] w = new short[val.length];
+        int j = 0;
+        for (Integer i : P) {
+            w[j++] = val[(int) i];
+        }
+        return new ExpVectorShort(w);
+    }
+
+
+    /**
      * Get the string representation.
      * @see java.lang.Object#toString()
      */

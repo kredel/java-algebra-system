@@ -342,6 +342,22 @@ public final class ExpVectorInteger extends ExpVector
 
 
     /**
+     * Permutation of exponent vector.
+     * @param P permutation.
+     * @return P(e).
+     */
+    @Override
+    public ExpVectorInteger permutation(List<Integer> P) {
+        int[] w = new int[val.length];
+        int j = 0;
+        for (Integer i : P) {
+            w[j++] = val[(int) i];
+        }
+        return new ExpVectorInteger(w);
+    }
+
+
+    /**
      * Get the string representation.
      * @see java.lang.Object#toString()
      */

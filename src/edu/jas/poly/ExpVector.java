@@ -286,6 +286,14 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
 
 
     /**
+     * Permutation of exponent vector.
+     * @param P permutation.
+     * @return P(e).
+     */
+    public abstract ExpVector permutation(List<Integer> P);
+
+
+    /**
      * Get the string representation.
      * @see java.lang.Object#toString()
      */

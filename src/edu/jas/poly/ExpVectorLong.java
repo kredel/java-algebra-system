@@ -280,6 +280,22 @@ public final class ExpVectorLong extends ExpVector
 
 
     /**
+     * Permutation of exponent vector.
+     * @param P permutation.
+     * @return P(e).
+     */
+    @Override
+    public ExpVectorLong permutation(List<Integer> P) {
+        long[] w = new long[val.length];
+        int j = 0;
+        for (Integer i : P) {
+            w[j++] = val[(int) i];
+        }
+        return new ExpVectorLong(w);
+    }
+
+
+    /**
      * Get the string representation.
      * @see java.lang.Object#toString()
      */
