@@ -698,7 +698,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
      * Distributive representation as polynomial with all main variables.
      * @return distributive polynomial ring factory.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings({ "unchecked", "cast" })
     @Override
     public GenSolvablePolynomialRing<C> distribute() {
         if (!(coFac instanceof GenPolynomialRing)) {
@@ -733,6 +733,25 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
         //System.out.println("pfac = " + pfac.toScript());
         // coeffTable not avaliable here
         return pfac;
+    }
+
+
+    /**
+     * Permutation of polynomial ring variables.
+     * @param P permutation.
+     * @return P(this).
+     */
+    @Override
+    public GenPolynomialRing<C> permutation(List<Integer> P) {
+        GenPolynomialRing<C> pfac = super.permutation(P);
+        GenSolvablePolynomialRing<C> spfac;
+        spfac = new GenSolvablePolynomialRing<C>(pfac.coFac, pfac.nvar, pfac.tord, pfac.vars);
+        List<GenSolvablePolynomial<C>> rl = this.table.relationList();
+        PolynomialList<C> prl = new PolynomialList<C>(spfac,rl);
+        List<GenPolynomial<C>> pl = prl.getList();
+        pl = TermOrderOptimization.permutation(P, spfac, pl);
+        spfac.table.addRelations(pl);
+        return spfac;
     }
 
 }
