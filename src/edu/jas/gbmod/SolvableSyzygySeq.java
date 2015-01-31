@@ -36,7 +36,15 @@ public class SolvableSyzygySeq<C extends RingElem<C>> extends SolvableSyzygyAbst
     private static final Logger logger = Logger.getLogger(SolvableSyzygySeq.class);
 
 
-    private final boolean debug = logger.isDebugEnabled();
+    private static final boolean debug = logger.isDebugEnabled();
+
+
+    private static boolean assertEnabled = false;
+
+
+    static {
+        assert assertEnabled = true; // official hack
+    }
 
 
     /**
@@ -170,11 +178,13 @@ public class SolvableSyzygySeq<C extends RingElem<C>> extends SolvableSyzygyAbst
         if (debug) {
             logger.info("exgb = " + exgb);
         }
-        logger.info("check exgb start");
-        if (!sbb.isLeftReductionMatrix(exgb)) {
-            logger.error("is reduction matrix ? false");
+        if (assertEnabled) {
+            logger.info("check1 exgb start");
+            if (!sbb.isLeftReductionMatrix(exgb)) {
+                logger.error("is reduction matrix ? false");
+            }
+            logger.info("check1 exgb end");
         }
-        logger.info("check exgb end");
         List<GenSolvablePolynomial<C>> G = exgb.G;
         List<List<GenSolvablePolynomial<C>>> G2F = exgb.G2F;
         List<List<GenSolvablePolynomial<C>>> F2G = exgb.F2G;
@@ -185,11 +195,13 @@ public class SolvableSyzygySeq<C extends RingElem<C>> extends SolvableSyzygyAbst
         if (debug) {
             logger.info("syz = " + S);
         }
-        logger.info("check left syz start");
-        if (!isLeftZeroRelation(sg, G)) {
-            logger.error("is syzygy ? false");
+        if (assertEnabled) {
+            logger.info("check2 left syz start");
+            if (!isLeftZeroRelation(sg, G)) {
+                logger.error("is syzygy ? false");
+            }
+            logger.info("check2 left syz end");
         }
-        logger.info("check left syz end");
 
         List<List<GenSolvablePolynomial<C>>> sf;
         sf = new ArrayList<List<GenSolvablePolynomial<C>>>(sg.size());
@@ -224,11 +236,13 @@ public class SolvableSyzygySeq<C extends RingElem<C>> extends SolvableSyzygyAbst
             //System.out.println("\nrf = " + rf + "\n");
             sf.add(rf);
         }
-        logger.info("check left syz start");
-        if (!isLeftZeroRelation(sf, F)) {
-            logger.error("is partial syz sf ? false");
+        if (assertEnabled) {
+            logger.info("check3 left syz start");
+            if (!isLeftZeroRelation(sf, F)) {
+                logger.error("is partial syz sf ? false");
+            }
+            logger.info("check3 left syz end");
         }
-        logger.info("check left syz end");
 
         List<List<GenSolvablePolynomial<C>>> M;
         M = new ArrayList<List<GenSolvablePolynomial<C>>>(lenf);
@@ -315,11 +329,13 @@ public class SolvableSyzygySeq<C extends RingElem<C>> extends SolvableSyzygyAbst
             logger.debug("syz sf = " + SF);
             logger.debug("#syz " + sflen + ", " + sf.size());
         }
-        logger.info("check left syz start");
-        if (!isLeftZeroRelation(sf, F)) {
-            logger.error("is syz sf ? false");
+        if (assertEnabled) {
+            logger.info("check4 left syz start");
+            if (!isLeftZeroRelation(sf, F)) {
+                logger.error("is syz sf ? false");
+            }
+            logger.info("check4 left syz end");
         }
-        logger.info("check left syz end");
         return sf;
     }
 
