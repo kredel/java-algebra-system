@@ -475,6 +475,69 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
 
 
     /**
+     * Right minimal ordered groebner basis.
+     * @param Gp a right Groebner base.
+     * @return rightGBmi(F) a minimal right Groebner base of Gp.
+     */
+    public List<GenSolvablePolynomial<C>> rightMinimalGB(List<GenSolvablePolynomial<C>> Gp) {
+        ArrayList<GenSolvablePolynomial<C>> G = new ArrayList<GenSolvablePolynomial<C>>();
+        ListIterator<GenSolvablePolynomial<C>> it = Gp.listIterator();
+        for (GenSolvablePolynomial<C> a : Gp) {
+            if (a.length() != 0) { // always true
+                G.add(a);
+            }
+        }
+        if (G.size() <= 1) {
+            return G;
+        }
+
+        ExpVector e;
+        ExpVector f;
+        GenSolvablePolynomial<C> a, p;
+        ArrayList<GenSolvablePolynomial<C>> F = new ArrayList<GenSolvablePolynomial<C>>();
+        boolean mt;
+
+        while (G.size() > 0) {
+            a = G.remove(0);
+            e = a.leadingExpVector();
+
+            it = G.listIterator();
+            mt = false;
+            while (it.hasNext() && !mt) {
+                p = it.next();
+                f = p.leadingExpVector();
+                mt = e.multipleOf(f);
+            }
+            it = F.listIterator();
+            while (it.hasNext() && !mt) {
+                p = it.next();
+                f = p.leadingExpVector();
+                mt = e.multipleOf(f);
+            }
+            if (!mt) {
+                F.add(a);
+            } else {
+                // System.out.println("dropped " + a.length());
+            }
+        }
+        G = F;
+        if (G.size() <= 1) {
+            return G;
+        }
+
+        F = new ArrayList<GenSolvablePolynomial<C>>();
+        while (G.size() > 0) {
+            a = G.remove(0);
+            // System.out.println("doing " + a.length());
+            a = sred.rightNormalform(G, a);
+            a = sred.rightNormalform(F, a);
+            F.add(a);
+        }
+        return F;
+    }
+
+
+    /**
      * Twosided Groebner base using pairlist class.
      * @param Fp solvable polynomial list.
      * @return tsGB(Fp) a twosided Groebner base of Fp.

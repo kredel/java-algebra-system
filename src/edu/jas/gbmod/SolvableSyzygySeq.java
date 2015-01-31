@@ -170,9 +170,11 @@ public class SolvableSyzygySeq<C extends RingElem<C>> extends SolvableSyzygyAbst
         if (debug) {
             logger.info("exgb = " + exgb);
         }
+        logger.info("check exgb start");
         if (!sbb.isLeftReductionMatrix(exgb)) {
             logger.error("is reduction matrix ? false");
         }
+        logger.info("check exgb end");
         List<GenSolvablePolynomial<C>> G = exgb.G;
         List<List<GenSolvablePolynomial<C>>> G2F = exgb.G2F;
         List<List<GenSolvablePolynomial<C>>> F2G = exgb.F2G;
@@ -183,9 +185,11 @@ public class SolvableSyzygySeq<C extends RingElem<C>> extends SolvableSyzygyAbst
         if (debug) {
             logger.info("syz = " + S);
         }
+        logger.info("check left syz start");
         if (!isLeftZeroRelation(sg, G)) {
             logger.error("is syzygy ? false");
         }
+        logger.info("check left syz end");
 
         List<List<GenSolvablePolynomial<C>>> sf;
         sf = new ArrayList<List<GenSolvablePolynomial<C>>>(sg.size());
@@ -220,9 +224,11 @@ public class SolvableSyzygySeq<C extends RingElem<C>> extends SolvableSyzygyAbst
             //System.out.println("\nrf = " + rf + "\n");
             sf.add(rf);
         }
+        logger.info("check left syz start");
         if (!isLeftZeroRelation(sf, F)) {
             logger.error("is partial syz sf ? false");
         }
+        logger.info("check left syz end");
 
         List<List<GenSolvablePolynomial<C>>> M;
         M = new ArrayList<List<GenSolvablePolynomial<C>>>(lenf);
@@ -309,9 +315,11 @@ public class SolvableSyzygySeq<C extends RingElem<C>> extends SolvableSyzygyAbst
             logger.debug("syz sf = " + SF);
             logger.debug("#syz " + sflen + ", " + sf.size());
         }
+        logger.info("check left syz start");
         if (!isLeftZeroRelation(sf, F)) {
             logger.error("is syz sf ? false");
         }
+        logger.info("check left syz end");
         return sf;
     }
 
@@ -323,7 +331,7 @@ public class SolvableSyzygySeq<C extends RingElem<C>> extends SolvableSyzygyAbst
      * @param b solvable polynomial
      * @return [p,q] with p*a = q*b
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings({"cast","unchecked"})
     public GenSolvablePolynomial<C>[] leftOreCond(GenSolvablePolynomial<C> a, GenSolvablePolynomial<C> b) {
         if (a == null || a.isZERO() || b == null || b.isZERO()) {
             throw new IllegalArgumentException("a and b must be non zero");
@@ -400,7 +408,7 @@ public class SolvableSyzygySeq<C extends RingElem<C>> extends SolvableSyzygyAbst
      * @param b solvable polynomial
      * @return [p,q] with a*p = b*q
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings({"cast","unchecked"})
     public GenSolvablePolynomial<C>[] rightOreCond(GenSolvablePolynomial<C> a, GenSolvablePolynomial<C> b) {
         if (a == null || a.isZERO() || b == null || b.isZERO()) {
             throw new IllegalArgumentException("a and b must be non zero");
@@ -469,6 +477,7 @@ public class SolvableSyzygySeq<C extends RingElem<C>> extends SolvableSyzygyAbst
      * @return [p,q] with a/b = p/q and q is minimal and monic
      */
     @Override
+    @SuppressWarnings({"cast","unchecked"})
     public GenSolvablePolynomial<C>[] leftSimplifier(GenSolvablePolynomial<C> a, GenSolvablePolynomial<C> b) {
         if (a == null || a.isZERO() || b == null || b.isZERO()) {
             throw new IllegalArgumentException("a and b must be non zero");
