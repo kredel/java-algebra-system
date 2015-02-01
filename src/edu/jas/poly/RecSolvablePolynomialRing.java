@@ -676,7 +676,7 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
      * Distributive representation as polynomial with all main variables.
      * @return distributive polynomial ring factory.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings({"cast","unchecked"})
     public static <C extends RingElem<C>> // must be static because of types
     GenSolvablePolynomialRing<C> distribute(RecSolvablePolynomialRing<C> rf) {
         // setup solvable polynomial ring
@@ -689,6 +689,21 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
         pfd.table.addRelations(rld);
         //System.out.println("pfd = " + pfd.toScript());
         return pfd;
+    }
+
+
+    /**
+     * Permutation of polynomial ring variables.
+     * @param P permutation.
+     * @return P(this).
+     */
+    @Override
+    public GenSolvablePolynomialRing<GenPolynomial<C>> permutation(List<Integer> P) {
+        if (!coeffTable.isEmpty()) {
+            throw new UnsupportedOperationException("permutation with coeff relations: " + this);
+        }
+        GenSolvablePolynomialRing<GenPolynomial<C>> pfac = (GenSolvablePolynomialRing<GenPolynomial<C>>) super.permutation(P);
+        return pfac;
     }
 
 }
