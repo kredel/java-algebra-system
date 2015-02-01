@@ -25,7 +25,7 @@ print "Ideal: " + str(f);
 print;
 
 
-include_class "edu.jas.gbmod.SyzygySeq";
+java_import "edu.jas.gbmod.SyzygySeq";
 
 #startLog();
 

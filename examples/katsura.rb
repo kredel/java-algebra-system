@@ -4,7 +4,7 @@
 
 require "examples/jas"
 
-include_class "edu.jas.gb.Katsura";
+java_import "edu.jas.gb.Katsura";
 
 # katsura examples
 

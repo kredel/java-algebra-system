@@ -54,9 +54,9 @@ puts;
 
 #startLog();
 
-include_class "edu.jas.poly.ModuleList";
-include_class "edu.jas.gbmod.SyzygySeq";
-include_class "edu.jas.gbmod.ModGroebnerBaseSeq";
+java_import "edu.jas.poly.ModuleList";
+java_import "edu.jas.gbmod.SyzygySeq";
+java_import "edu.jas.gbmod.ModGroebnerBaseSeq";
 
 s = SyzygySeq.new(r.ring.coFac).zeroRelations( rg.list );
 sl = ModuleList.new(rg.pset.ring,s);
