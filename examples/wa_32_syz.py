@@ -6,7 +6,7 @@
 from jas import SolvableRing
 
 from edu.jas.poly   import ModuleList;
-from edu.jas.gbmod  import SolvableSyzygyAbstract;
+from edu.jas.gbmod  import SolvableSyzygySeq;
 
 # WA_32 example
 
@@ -38,21 +38,21 @@ print "SolvableIdeal: " + str(f);
 print;
 
 
-Z = SolvableSyzygyAbstract().leftZeroRelationsArbitrary( f.list );
+Z = SolvableSyzygySeq().leftZeroRelationsArbitrary( f.list );
 Zp = ModuleList( r.ring, Z );
 print "seq left syz Output:", Zp;
 print;
-if SolvableSyzygyAbstract().isLeftZeroRelation( Zp.list, f.list ):
+if SolvableSyzygySeq().isLeftZeroRelation( Zp.list, f.list ):
    print "is left syzygy";
 else:
    print "is not left syzygy";
 
 
-Zr = SolvableSyzygyAbstract().rightZeroRelationsArbitrary( f.list );
+Zr = SolvableSyzygySeq().rightZeroRelationsArbitrary( f.list );
 Zpr = ModuleList( r.ring, Zr );
 print "seq right syz Output:", Zpr;
 print;
-if SolvableSyzygyAbstract().isRightZeroRelation( Zpr.list, f.list ):
+if SolvableSyzygySeq().isRightZeroRelation( Zpr.list, f.list ):
    print "is right syzygy";
 else:
    print "is not right syzygy";

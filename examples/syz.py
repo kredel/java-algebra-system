@@ -51,17 +51,17 @@ rg = f.GB();
 print "seq Output:", rg;
 print;
 
-from edu.jas.gbmod  import SyzygyAbstract;
-from edu.jas.gbmod  import ModGroebnerBaseAbstract;
+from edu.jas.gbmod  import SyzygySeq;
+from edu.jas.gbmod  import ModGroebnerBaseSeq;
 from edu.jas.poly   import ModuleList;
 
-s = SyzygyAbstract().zeroRelations( rg.list );
+s = SyzygySeq(r.ring.coFac).zeroRelations( rg.list );
 sl = ModuleList(rg.pset.ring,s);
 
 print "syzygy:", sl;
 print;
 
-z = SyzygyAbstract().isZeroRelation( s, rg.list );
+z = SyzygySeq(r.ring.coFac).isZeroRelation( s, rg.list );
 
 print "is Syzygy ?",
 if z:
@@ -76,20 +76,20 @@ for i in range(1,len(r.ring.vars)+1):
    print "\n %s. resolution" % i;
 
    sl = zg;
-   mg = ModGroebnerBaseAbstract().GB(sl);
+   mg = ModGroebnerBaseSeq(r.ring.coFac).GB(sl);
    print "Mod GB: ", mg;
    print;
 
-   zg = SyzygyAbstract().zeroRelations(mg);
+   zg = SyzygySeq(r.ring.coFac).zeroRelations(mg);
    print "syzygies of Mod GB: ", zg;
    print;
 
-   if ModGroebnerBaseAbstract().isGB( mg ):
+   if ModGroebnerBaseSeq(r.ring.coFac).isGB( mg ):
        print "is GB";
    else:
        print "is not GB";
 
-   if SyzygyAbstract().isZeroRelation(zg,mg):
+   if SyzygySeq(r.ring.coFac).isZeroRelation(zg,mg):
        print "is Syzygy";
    else:
        print "is not Syzygy";

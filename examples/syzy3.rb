@@ -25,11 +25,11 @@ print "Ideal: " + str(f);
 print;
 
 
-include_class "edu.jas.gbmod.SyzygyAbstract";
+include_class "edu.jas.gbmod.SyzygySeq";
 
 #startLog();
 
-R = SyzygyAbstract.new().resolution( f.pset );
+R = SyzygySeq.new(r.ring.coFac).resolution( f.pset );
 
 for i in 0..R.size() 
     puts "\n #{i+1}. resolution";

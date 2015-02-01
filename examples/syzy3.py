@@ -24,11 +24,9 @@ f = r.ideal( ps );
 print "Ideal: " + str(f);
 print;
 
-from edu.jas.gbmod  import SyzygyAbstract;
-from edu.jas.poly   import ModuleList;
-from edu.jas.gbmod  import ModGroebnerBaseAbstract;
+from edu.jas.gbmod  import SyzygySeq;
 
-R = SyzygyAbstract().resolution( f.pset );
+R = SyzygySeq(r.ring.coFac).resolution( f.pset );
 
 for i in range(0,R.size()): 
    print "\n %s. resolution" % (i+1);

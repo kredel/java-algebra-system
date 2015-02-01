@@ -32,9 +32,9 @@ f = r.ideal( ps );
 print "SolvIdeal: " + str(f);
 print;
 
-from edu.jas.gbmod import SolvableSyzygyAbstract;
+from edu.jas.gbmod import SolvableSyzygySeq;
 
-R = SolvableSyzygyAbstract().resolution( f.pset );
+R = SolvableSyzygySeq().resolution( f.pset );
 
 for i in range(0,R.size()): 
    print "\n %s. resolution" % (i+1);

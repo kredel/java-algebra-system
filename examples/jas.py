@@ -1635,7 +1635,7 @@ class SubModule:
         '''Compute a Groebner base.
         '''
         t = System.currentTimeMillis();
-        G = ModGroebnerBaseSeq().GB(self.mset);
+        G = ModGroebnerBaseSeq(self.module.ring.coFac).GB(self.mset);
         t = System.currentTimeMillis() - t;
         print "executed module GB in %s ms" % t; 
         return SubModule(self.module,"",G.list);
@@ -1644,7 +1644,7 @@ class SubModule:
         '''Test if this is a Groebner base.
         '''
         t = System.currentTimeMillis();
-        b = ModGroebnerBaseSeq().isGB(self.mset);
+        b = ModGroebnerBaseSeq(self.module.ring.coFac).isGB(self.mset);
         t = System.currentTimeMillis() - t;
         print "module isGB executed in %s ms" % t; 
         return b;

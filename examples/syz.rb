@@ -55,16 +55,16 @@ puts;
 #startLog();
 
 include_class "edu.jas.poly.ModuleList";
-include_class "edu.jas.gbmod.SyzygyAbstract";
-include_class "edu.jas.gbmod.ModGroebnerBaseAbstract";
+include_class "edu.jas.gbmod.SyzygySeq";
+include_class "edu.jas.gbmod.ModGroebnerBaseSeq";
 
-s = SyzygyAbstract.new().zeroRelations( rg.list );
+s = SyzygySeq.new(r.ring.coFac).zeroRelations( rg.list );
 sl = ModuleList.new(rg.pset.ring,s);
 
 puts "syzygy:" + str(sl);
 puts;
 
-z = SyzygyAbstract.new().isZeroRelation( s, rg.list );
+z = SyzygySeq.new(r.ring.coFac).isZeroRelation( s, rg.list );
 
 print "is Syzygy ? "
 if z
@@ -80,21 +80,21 @@ for i in 1..(r.ring.nvar)
    puts "\n #{i}. resolution";
 
    sl = zg;
-   mg = ModGroebnerBaseAbstract.new().GB(sl);
+   mg = ModGroebnerBaseSeq.new(r.ring.coFac).GB(sl);
    puts "Mod GB: " + str(mg);
    puts;
 
-   zg = SyzygyAbstract.new().zeroRelations(mg);
+   zg = SyzygySeq.new(r.ring.coFac).zeroRelations(mg);
    puts "syzygies of Mod GB: " + str(zg);
    puts;
 
-   if ModGroebnerBaseAbstract.new().isGB( mg )
+   if ModGroebnerBaseSeq.new(r.ring.coFac).isGB( mg )
        puts "is GB";
    else
        puts "is not GB";
    end
 
-   if SyzygyAbstract.new().isZeroRelation(zg,mg)
+   if SyzygySeq.new(r.ring.coFac).isZeroRelation(zg,mg)
        puts "is Syzygy";
    else
        puts "is not Syzygy";

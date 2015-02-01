@@ -4010,7 +4010,7 @@ Compute a Groebner base.
 =end
     def GB()
         t = System.currentTimeMillis();
-        gg = ModGroebnerBaseSeq.new().GB(@mset);
+        gg = ModGroebnerBaseSeq.new(@modu.ring.coFac).GB(@mset);
         t = System.currentTimeMillis() - t;
         puts "executed module GB in #{t} ms\n"; 
         return SubModule.new(@modu,"",gg.list);
@@ -4021,7 +4021,7 @@ Test if this is a Groebner base.
 =end
     def isGB()
         t = System.currentTimeMillis();
-        b = ModGroebnerBaseSeq.new().isGB(@mset);
+        b = ModGroebnerBaseSeq.new(@modu.ring.coFac).isGB(@mset);
         t = System.currentTimeMillis() - t;
         puts "module isGB executed in #{t} ms\n"; 
         return b;

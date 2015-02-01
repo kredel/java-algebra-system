@@ -60,16 +60,16 @@ print "seq twosided GB Output:", ftg;
 print;
 
 
-from edu.jas.gbmod  import SolvableSyzygyAbstract;
+from edu.jas.gbmod  import SolvableSyzygySeq;
 from edu.jas.gbmod  import ModSolvableGroebnerBase;
 
-s = SolvableSyzygyAbstract().leftZeroRelations( ftg.mset );
+s = SolvableSyzygySeq().leftZeroRelations( ftg.mset );
 #sl = ModuleList(f.pset.vars,f.pset.tord,s,f.pset.table);
 
 print "leftSyzygy:", s;
 print;
 
-if SolvableSyzygyAbstract().isLeftZeroRelation(s,ftg.mset):
+if SolvableSyzygySeq().isLeftZeroRelation(s,ftg.mset):
    print "is Syzygy";
 else:
    print "is not Syzygy";
