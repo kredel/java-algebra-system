@@ -361,21 +361,17 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
      */
     @SuppressWarnings({ "unchecked", "cast" })
     public synchronized void update(ExpVector e, ExpVector f, GenSolvablePolynomial<C> p) {
-        if (debug) {
-            //System.out.println("new relation = " + e + " .*. " + f + " = " + p);
-            if (p != null && p.ring.vars != null) {
-                logger.info("new relation = " + e.toString(p.ring.vars) + " .*. " + f.toString(p.ring.vars)
-                                + " = " + p);
-                //logger.info("existing relations = " + toString(p.ring.vars));
-            } else {
-                logger.info("new relation = " + e + " .*. " + f + " = " + p);
-            }
-        }
         if (p == null || e == null || f == null) {
             throw new IllegalArgumentException("RelationTable update e|f|p == null");
         }
+        GenSolvablePolynomialRing<C> sring = p.ring;
         if (debug) {
-            if (e.totalDeg() == 1 && f.totalDeg() == 1) {
+            logger.info("new relation = " + sring.toScript(e) + " .*. " + sring.toScript(f)
+                        + " = " + p.toScript());
+        }
+        // test equal HTs for left and right side
+        if (!coeffTable) { // old case
+            if (e.totalDeg() == 1 && f.totalDeg() == 1) { // higher or mixed degrees TODO
                 int[] de = e.dependencyOnVariables();
                 int[] df = f.dependencyOnVariables();
                 logger.debug("update e ? f " + de[0] + " " + df[0]);
@@ -385,39 +381,45 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                     throw new IllegalArgumentException("RelationTable update e==f");
                 }
                 if (de[0] > df[0]) { // invalid update 
-                    logger.error("warning: update e > f " + e + " " + f + " changed");
+                    logger.warn("update e < f: " + sring.toScript(e) 
+                                + " < " + sring.toScript(f));
+                    if (debug&&false) {
+                        throw new IllegalArgumentException("update e < f");
+                    }
                     ExpVector tmp = e;
                     e = f;
                     f = tmp;
                     Map.Entry<ExpVector, C> m = p.leadingMonomial();
-                    GenPolynomial<C> r = p.subtract(m.getValue(), m.getKey());
+                    ExpVector ef = e.sum(f);
+                    if (!ef.equals(m.getKey())) {
+                        throw new IllegalArgumentException("update e*f != lt(p): " 
+                                                           + sring.toScript(ef) + ", lt = "
+                                                           + sring.toScript(m.getKey()));
+                    }
+                    GenPolynomial<C> r = p.reductum(); //subtract(m.getValue(), m.getKey());
                     r = r.negate();
-                    p = (GenSolvablePolynomial<C>) r.sum(m.getValue(), m.getKey());
+                    //p = (GenSolvablePolynomial<C>) r.sum(m.getValue(), m.getKey());
+                    p = (GenSolvablePolynomial<C>) r;
+                    p.doPutToMap(m.getKey(), m.getValue());
                 }
             }
-        }
-        // test equal HTs for left and right side
-        if (!coeffTable) {
             ExpVector ef = e.sum(f);
             ExpVector lp = p.leadingExpVector();
             if (!ef.equals(lp)) { // check for suitable term order
                 logger.error("relation term order = " + ring.tord);
-                throw new IllegalArgumentException("RelationTable update e*f != lt(p): " + ef + ", lp = "
-                                + lp);
+                throw new IllegalArgumentException("update e*f != lt(p): " + sring.toScript(ef) + ", lp = " + sring.toScript(lp));
             }
-        } else {
+        } else { // is coeffTable
             ExpVector lp = p.leadingExpVector();
             if (!e.equals(lp)) { // check for suitable term order
                 logger.error("relation term order = " + ring.tord);
-                throw new IllegalArgumentException("Coefficient RelationTable update e != lt(p): " + e
-                                + ", lp = " + lp);
+                throw new IllegalArgumentException("Coefficient RelationTable update e != lt(p): " + sring.toScript(e) + ", lp = " + sring.toScript(lp));
             }
             if (p.leadingBaseCoefficient() instanceof GenPolynomial) {
                 lp = ((GenPolynomial<C>) (Object) p.leadingBaseCoefficient()).leadingExpVector();
                 if (!f.equals(lp)) { // check for suitable term order
                     logger.error("relation term order = " + ring.tord);
-                    logger.error("Coefficient RelationTable update f != lt(lfcd(p)): " + e + ", f = " + f
-                                    + ", p = " + p);
+                    logger.error("Coefficient RelationTable update f != lt(lfcd(p)): " + sring.toScript(e) + ", f = " + f + ", p = " + p.toScript());
                     throw new IllegalArgumentException("Coefficient RelationTable update f != lt(lfcd(p)): "
                                     + e + ", f = " + f + ", p = " + p);
                 }
@@ -901,7 +903,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
      *            <b>Note:</b> Only because of type erasure, aequivalent to
      *            addRelations().
      */
-    @SuppressWarnings("unchecked")
+    //@SuppressWarnings("unchecked")
     public void addSolvRelations(List<GenSolvablePolynomial<C>> rel) {
         PolynomialList<C> Prel = new PolynomialList<C>(ring, rel);
         addRelations(Prel.getList());

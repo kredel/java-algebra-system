@@ -174,9 +174,9 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
      * polynomial factory, only the coefficient factories differ and the
      * solvable multiplication relations are <b>empty</b>.
      * @param cf factory for coefficients of type C.
-     * @param o other solvable polynomial ring.
+     * @param o other (solvable) polynomial ring.
      */
-    public GenSolvablePolynomialRing(RingFactory<C> cf, GenSolvablePolynomialRing o) {
+    public GenSolvablePolynomialRing(RingFactory<C> cf, GenPolynomialRing o) {
         this(cf, o.nvar, o.tord, o.getVars(), null);
     }
 
