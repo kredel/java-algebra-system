@@ -381,7 +381,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                     throw new IllegalArgumentException("RelationTable update e==f");
                 }
                 if (de[0] > df[0]) { // invalid update 
-                    logger.warn("update e < f: " + sring.toScript(e) 
+                    logger.error("update e < f: " + sring.toScript(e) 
                                 + " < " + sring.toScript(f));
                     if (debug&&false) {
                         throw new IllegalArgumentException("update e < f");
