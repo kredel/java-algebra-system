@@ -723,8 +723,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
         RingFactory<C> cfac = pfac.coFac;
 
         GenPolynomialRing<C> cpfac = new GenPolynomialRing<C>(cfac, ll, new TermOrder(TermOrder.INVLEX));
-        GenSolvablePolynomialRing<GenPolynomial<C>> rfac = new GenSolvablePolynomialRing<GenPolynomial<C>>(
-                        cpfac, pfac); // relations
+        GenSolvablePolynomialRing<GenPolynomial<C>> rfac = new GenSolvablePolynomialRing<GenPolynomial<C>>(cpfac, pfac); // relations
         GenSolvablePolynomial<GenPolynomial<C>> P = rfac.getZERO();
         for (int k = 0; k < ll; k++) {
             GenSolvablePolynomial<GenPolynomial<C>> Pp = rfac.univariate(i, k);

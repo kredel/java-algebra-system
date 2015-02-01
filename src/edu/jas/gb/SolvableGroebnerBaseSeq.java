@@ -68,8 +68,8 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
             return G;
         }
         GenSolvablePolynomialRing<C> ring = G.get(0).ring;
-        if ( ! ring.coFac.isField() ) {
-            throw new IllegalArgumentException("coefficients not from a field");
+        if ( !ring.coFac.isField() && ring.coFac.isCommutative() ) {
+            throw new IllegalArgumentException("coefficients not from a field: " + ring.coFac.toScript());
         }
         PairList<C> pairlist = strategy.create( modv, ring ); 
         pairlist.put(PolynomialList.castToList(G));
@@ -405,7 +405,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
             return F;
         }
         GenSolvablePolynomialRing<C> ring = F.get(0).ring;
-        if ( ! ring.coFac.isField() ) {
+        if ( !ring.coFac.isField() && ring.coFac.isCommutative() ) {
             throw new IllegalArgumentException("coefficients not from a field");
         }
 
@@ -760,7 +760,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
             return G;
         }
         GenSolvablePolynomialRing<C> ring = G.get(0).ring;
-        if ( ! ring.coFac.isField() ) {
+        if ( !ring.coFac.isField() && ring.coFac.isCommutative() ) {
             throw new IllegalArgumentException("coefficients not from a field");
         }
         PairList<C> pairlist = strategy.create( modv, ring ); 
