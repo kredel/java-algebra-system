@@ -148,6 +148,8 @@ java_import "edu.jas.arith.BigInteger";
 java_import "edu.jas.arith.BigRational";
 java_import "edu.jas.arith.ModInteger";
 java_import "edu.jas.arith.ModIntegerRing";
+java_import "edu.jas.arith.ModLong";
+java_import "edu.jas.arith.ModLongRing";
 java_import "edu.jas.arith.BigDecimal";
 java_import "edu.jas.arith.BigComplex";
 java_import "edu.jas.arith.BigQuaternion";
@@ -188,20 +190,42 @@ def ZM(m,z=0,field=false)
         field = z;
         z = 0;
     end
-    if field
-        mf = ModIntegerRing.new(m,field);
+    if m < ModLongRing.MAX_LONG 
+       if field
+          mf = ModLongRing.new(m,field);
+       else
+          mf = ModLongRing.new(m);
+       end
+       r = ModLong.new(mf,z);
     else
-        mf = ModIntegerRing.new(m);
+       if field
+          mf = ModIntegerRing.new(m,field);
+       else
+          mf = ModIntegerRing.new(m);
+       end
+       r = ModInteger.new(mf,z);
     end
-    r = ModInteger.new(mf,z);
     return RingElem.new(r);
 end
 
+=begin rdoc
+Create JAS ModLong as ring element.
+=end
+def ZML(m,z=0,field=false)
+    return ZM(m,z,field);
+end
 
 =begin rdoc
 Create JAS ModInteger as field element.
 =end
 def GF(m,z=0)
+    return ZM(m,z,true);
+end
+
+=begin rdoc
+Create JAS ModLong as field element.
+=end
+def GFL(m,z=0)
     return ZM(m,z,true);
 end
 

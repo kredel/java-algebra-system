@@ -11,7 +11,8 @@ from org.apache.log4j    import BasicConfigurator;
 
 from edu.jas.structure   import RingElem, RingFactory, Power
 from edu.jas.arith       import BigInteger, BigRational, BigComplex, BigDecimal,\
-                                ModInteger, ModIntegerRing, BigQuaternion, BigOctonion,\
+                                ModInteger, ModIntegerRing, ModLong, ModLongRing,\
+                                BigQuaternion, BigOctonion,\
                                 Product, ProductRing, PrimeList
 from edu.jas.poly        import GenPolynomial, GenPolynomialRing, Monomial,\
                                 GenSolvablePolynomial, GenSolvablePolynomialRing,\
@@ -2217,16 +2218,36 @@ def ZM(m,z=0,field=False):
 #    if z != 0 and ( z == False ): # never true
 #        field = z;
 #        z = 0;
-    if field:
-        mf = ModIntegerRing(m,field);
+    if m < ModLongRing.MAX_LONG:
+       if field:
+          mf = ModLongRing(m,field);
+       else:
+          mf = ModLongRing(m);
+       r = ModLong(mf,z);
     else:
-        mf = ModIntegerRing(m);
-    r = ModInteger(mf,z);
+       if field:
+          mf = ModIntegerRing(m,field);
+       else:
+          mf = ModIntegerRing(m);
+       r = ModInteger(mf,z);
     return RingElem(r);
+
+
+def ZML(m,z=0,field=False):
+    '''Create JAS ModLong as ring element.
+    '''
+    return ZM(m,z,field);
 
 
 def GF(m,z=0):
     '''Create JAS ModInteger as field element.
+    '''
+    #print "m = %s" % m
+    return ZM(m,z,True);
+
+
+def GFL(m,z=0):
+    '''Create JAS ModLong as field element.
     '''
     #print "m = %s" % m
     return ZM(m,z,True);
