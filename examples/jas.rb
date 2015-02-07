@@ -190,7 +190,7 @@ def ZM(m,z=0,field=false)
         field = z;
         z = 0;
     end
-    if m < ModLongRing.MAX_LONG 
+    if m < ModLongRing::MAX_LONG 
        if field
           mf = ModLongRing.new(m,field);
        else

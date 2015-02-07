@@ -22,9 +22,26 @@
 
 <dl>
 
-<dt>2015, January </dt>
+<dt>2015, February </dt>
 <dd> 
 
+ Parallel versions for module Gr&ouml;bner bases. Refactor syzygy
+ computation classes into abstract and sequential classes.  Disable
+ some correctness checks in syzygy computation depending on disabled
+ Java assertions. Improve solvable relation table updates.  Proxy and
+ factory for solvable Gr&ouml;bner bases <code>SGBProxy</code> and
+ <code>SGBFactory</code>.
+
+ Refactor term order optimization methods to naturally / better suited
+ classes.  Make use of <code>ModLong</code> classes and the improved
+ <code>RingFactory</code> parser in the scripting interfaces.  Remove
+ the dependency on Junit from the src-tree. Some more small fixes and
+ improvements. Ivy resolve task for log4j and junit libraries.
+
+</dd> 
+
+<dt>2015, January </dt>
+<dd> 
  Integer and (commutative) polynomial coefficients in solvable and
  word Gr&ouml;bner bases. New classes <code>WordResidue</code> and
  <code>WordResidueRing</code> for residue classes modulo twosided
@@ -32,7 +49,6 @@
  non-commutative algebas). Fix missing critical pairs to consider in
  word Gr&ouml;bner bases. Code cleanup and small fixes and
  improvements.
-
 </dd> 
 
 <dt>2014, December </dt>
@@ -2404,7 +2420,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Fri Jan  2 13:27:24 CET 2015
+Last modified: Sat Feb  7 14:42:39 CET 2015
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
