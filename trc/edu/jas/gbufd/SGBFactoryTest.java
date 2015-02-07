@@ -18,26 +18,27 @@ import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
-import edu.jas.arith.Product;
-import edu.jas.arith.ProductRing;
-import edu.jas.gb.GBProxy;
-import edu.jas.gb.GroebnerBase;
-import edu.jas.gb.GroebnerBaseAbstract;
-import edu.jas.gb.GroebnerBaseSeq;
+import edu.jas.gb.SGBProxy;
+import edu.jas.gb.SolvableGroebnerBase;
+import edu.jas.gb.SolvableGroebnerBaseAbstract;
+import edu.jas.gb.SolvableGroebnerBaseSeq;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.GenSolvablePolynomial;
+import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.TermOrder;
 import edu.jas.structure.RingFactory;
+import edu.jas.kern.ComputerThreads;
 
 
 /**
- * Groebner base factory tests with JUnit.
+ * Solvable Groebner base factory tests with JUnit.
  * @author Heinz Kredel.
  */
 
-public class GBFactoryTest extends TestCase {
+public class SGBFactoryTest extends TestCase {
 
 
     /**
@@ -46,14 +47,15 @@ public class GBFactoryTest extends TestCase {
     public static void main(String[] args) {
         BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
+        ComputerThreads.terminate();
     }
 
 
     /**
-     * Constructs a <CODE>GBFactoryTest</CODE> object.
+     * Constructs a <CODE>SGBFactoryTest</CODE> object.
      * @param name String.
      */
-    public GBFactoryTest(String name) {
+    public SGBFactoryTest(String name) {
         super(name);
     }
 
@@ -61,7 +63,7 @@ public class GBFactoryTest extends TestCase {
     /**
      */
     public static Test suite() {
-        TestSuite suite = new TestSuite(GBFactoryTest.class);
+        TestSuite suite = new TestSuite(SGBFactoryTest.class);
         return suite;
     }
 
@@ -71,58 +73,22 @@ public class GBFactoryTest extends TestCase {
     TermOrder to = new TermOrder(TermOrder.INVLEX);
 
 
-    GenPolynomialRing<BigInteger> dfac;
+    GenSolvablePolynomialRing<BigInteger> dfac;
 
 
-    GenPolynomialRing<BigInteger> cfac;
+    GenSolvablePolynomialRing<BigInteger> cfac;
 
 
-    GenPolynomialRing<GenPolynomial<BigInteger>> rfac;
+    GenSolvablePolynomialRing<GenPolynomial<BigInteger>> rfac;
 
 
-    BigInteger ai;
+    BigInteger ai, bi, ci, di, ei;
 
 
-    BigInteger bi;
+    GenSolvablePolynomial<BigInteger> a, b, c, d, e;
 
 
-    BigInteger ci;
-
-
-    BigInteger di;
-
-
-    BigInteger ei;
-
-
-    GenPolynomial<BigInteger> a;
-
-
-    GenPolynomial<BigInteger> b;
-
-
-    GenPolynomial<BigInteger> c;
-
-
-    GenPolynomial<BigInteger> d;
-
-
-    GenPolynomial<BigInteger> e;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> ar;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> br;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> cr;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> dr;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> er;
+    GenSolvablePolynomial<GenPolynomial<BigInteger>> ar, br, cr, dr, er;
 
 
     int rl = 5;
@@ -145,9 +111,9 @@ public class GBFactoryTest extends TestCase {
         a = b = c = d = e = null;
         ai = bi = ci = di = ei = null;
         ar = br = cr = dr = er = null;
-        dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), rl, to);
-        cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), rl - 1, to);
-        rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac, 1, to);
+        dfac = new GenSolvablePolynomialRing<BigInteger>(new BigInteger(1), rl, to);
+        cfac = new GenSolvablePolynomialRing<BigInteger>(new BigInteger(1), rl - 1, to);
+        rfac = new GenSolvablePolynomialRing<GenPolynomial<BigInteger>>(cfac, 1, to);
     }
 
 
@@ -167,11 +133,11 @@ public class GBFactoryTest extends TestCase {
      */
     public void testBigInteger() {
         BigInteger bi = new BigInteger();
-        GroebnerBase<BigInteger> bba;
+        SolvableGroebnerBase<BigInteger> bba;
 
-        bba = GBFactory.getImplementation(bi);
+        bba = SGBFactory.getImplementation(bi);
         //System.out.println("bba = " + bba);
-        assertTrue("bba integer " + bba, bba instanceof GroebnerBasePseudoSeq);
+        assertTrue("bba integer " + bba, bba instanceof SolvableGroebnerBasePseudoSeq);
     }
 
 
@@ -180,16 +146,16 @@ public class GBFactoryTest extends TestCase {
      */
     public void testModInteger() {
         ModIntegerRing mi = new ModIntegerRing(19, true);
-        GroebnerBase<ModInteger> bba;
+        SolvableGroebnerBase<ModInteger> bba;
 
-        bba = GBFactory.getImplementation(mi);
+        bba = SGBFactory.getImplementation(mi);
         //System.out.println("bba = " + bba);
-        assertTrue("bba modular field " + bba, bba instanceof GroebnerBaseSeq);
+        assertTrue("bba modular field " + bba, bba instanceof SolvableGroebnerBaseSeq);
 
         mi = new ModIntegerRing(30);
-        bba = GBFactory.getImplementation(mi);
+        bba = SGBFactory.getImplementation(mi);
         //System.out.println("bba = " + bba);
-        assertTrue("bba modular ring " + bba, bba instanceof GroebnerBasePseudoSeq);
+        assertTrue("bba modular ring " + bba, bba instanceof SolvableGroebnerBasePseudoSeq);
     }
 
 
@@ -198,11 +164,11 @@ public class GBFactoryTest extends TestCase {
      */
     public void testBigRational() {
         BigRational b = new BigRational();
-        GroebnerBase<BigRational> bba;
+        SolvableGroebnerBase<BigRational> bba;
 
-        bba = GBFactory.getImplementation(b);
+        bba = SGBFactory.getImplementation(b);
         //System.out.println("bba = " + bba);
-        assertTrue("bba field " + bba, bba instanceof GroebnerBaseSeq);
+        assertTrue("bba field " + bba, bba instanceof SolvableGroebnerBaseSeq);
     }
 
 
@@ -211,11 +177,11 @@ public class GBFactoryTest extends TestCase {
      */
     public void testBigComplex() {
         BigComplex b = new BigComplex();
-        GroebnerBase<BigComplex> bba;
+        SolvableGroebnerBase<BigComplex> bba;
 
-        bba = GBFactory.<BigComplex> getImplementation(b);
+        bba = SGBFactory.<BigComplex> getImplementation(b);
         //System.out.println("bba = " + bba);
-        assertTrue("bba field " + bba, bba instanceof GroebnerBaseSeq);
+        assertTrue("bba field " + bba, bba instanceof SolvableGroebnerBaseSeq);
     }
 
 
@@ -234,18 +200,18 @@ public class GBFactoryTest extends TestCase {
         AlgebraicNumberRing<BigRational> afac;
         afac = new AlgebraicNumberRing<BigRational>(mo);
 
-        GroebnerBase<AlgebraicNumber<BigRational>> bba;
+        SolvableGroebnerBase<AlgebraicNumber<BigRational>> bba;
 
-        bba = GBFactory.<AlgebraicNumber<BigRational>> getImplementation(afac);
+        bba = SGBFactory.<AlgebraicNumber<BigRational>> getImplementation(afac);
         //System.out.println("bba1 = " + bba);
-        assertTrue("bba algebraic ring " + bba, bba instanceof GroebnerBasePseudoSeq);
+        assertTrue("bba algebraic ring " + bba, bba instanceof SolvableGroebnerBasePseudoSeq);
 
         mo = fac.univariate(0).subtract(fac.getONE());
         afac = new AlgebraicNumberRing<BigRational>(mo, true);
 
-        bba = GBFactory.<AlgebraicNumber<BigRational>> getImplementation(afac);
+        bba = SGBFactory.<AlgebraicNumber<BigRational>> getImplementation(afac);
         //System.out.println("bba1 = " + bba);
-        assertTrue("bba algebraic field " + bba, bba instanceof GroebnerBaseSeq);
+        assertTrue("bba algebraic field " + bba, bba instanceof SolvableGroebnerBaseSeq);
     }
 
 
@@ -266,11 +232,11 @@ public class GBFactoryTest extends TestCase {
 
         AlgebraicNumber<ModInteger> a = afac.getONE();
         assertTrue("a == 1 " + a, a.isONE());
-        GroebnerBase<AlgebraicNumber<ModInteger>> bba;
+        SolvableGroebnerBase<AlgebraicNumber<ModInteger>> bba;
 
-        bba = GBFactory.<AlgebraicNumber<ModInteger>> getImplementation(afac);
+        bba = SGBFactory.<AlgebraicNumber<ModInteger>> getImplementation(afac);
         //System.out.println("bba2 = " + bba);
-        assertTrue("bba algebraic ring " + bba, bba instanceof GroebnerBasePseudoSeq);
+        assertTrue("bba algebraic ring " + bba, bba instanceof SolvableGroebnerBasePseudoSeq);
     }
 
 
@@ -284,43 +250,16 @@ public class GBFactoryTest extends TestCase {
         fac = new GenPolynomialRing<BigRational>(b, rl, to);
         RingFactory<GenPolynomial<BigRational>> rf = fac;
 
-        GroebnerBase<GenPolynomial<BigRational>> bba;
+        SolvableGroebnerBase<GenPolynomial<BigRational>> bba;
 
-        bba = GBFactory.getImplementation(fac);
+        bba = SGBFactory.getImplementation(fac);
         //System.out.println("bba = " + bba);
-        assertTrue("bba recursive polynomial " + bba, bba instanceof GroebnerBasePseudoRecSeq);
+        assertTrue("bba recursive polynomial " + bba, bba instanceof SolvableGroebnerBasePseudoRecSeq);
 
-        GroebnerBase<BigRational> bb;
-        bb = GBFactory.<BigRational> getImplementation((RingFactory) rf);
+        SolvableGroebnerBase<BigRational> bb;
+        bb = SGBFactory.<BigRational> getImplementation((RingFactory) rf);
         //System.out.println("bb = " + bb);
-        assertTrue("bba recursive polynomial " + bb, bb instanceof GroebnerBasePseudoRecSeq);
-    }
-
-
-    /**
-     * Test get Product implementation.
-     */
-    @SuppressWarnings("cast")
-    public void testProduct() {
-        ModIntegerRing mi = new ModIntegerRing(19, true);
-        ProductRing<ModInteger> fac;
-        fac = new ProductRing<ModInteger>(mi, 3);
-        RingFactory<Product<ModInteger>> rf = fac;
-
-        GroebnerBase<Product<ModInteger>> bba;
-
-        bba = GBFactory.getImplementation(fac);
-        //System.out.println("bba = " + bba);
-        assertTrue("bba product " + bba, bba instanceof RGroebnerBaseSeq);
-
-        mi = new ModIntegerRing(30);
-        fac = new ProductRing<ModInteger>(mi, 3);
-        rf = fac;
-
-        GroebnerBase<Product<ModInteger>> bb;
-        bb = GBFactory.<Product<ModInteger>> getImplementation((RingFactory) rf);
-        //System.out.println("bb = " + bb);
-        assertTrue("bba product " + bb, bb instanceof RGroebnerBasePseudoSeq);
+        assertTrue("bba recursive polynomial " + bb, bb instanceof SolvableGroebnerBasePseudoRecSeq);
     }
 
 
@@ -329,20 +268,20 @@ public class GBFactoryTest extends TestCase {
      */
     public void testProxy() {
         BigRational b = new BigRational();
-        GroebnerBaseAbstract<BigRational> bba;
+        SolvableGroebnerBaseAbstract<BigRational> bba;
 
-        bba = GBFactory.getProxy(b);
+        bba = SGBFactory.getProxy(b);
         //System.out.println("bba = " + bba);
-        assertTrue("bba field " + bba, bba instanceof GBProxy);
+        assertTrue("bba field " + bba, bba instanceof SGBProxy);
         bba.terminate();
 
 
         ModIntegerRing m = new ModIntegerRing(2 * 3);
-        GroebnerBaseAbstract<ModInteger> bbm;
+        SolvableGroebnerBaseAbstract<ModInteger> bbm;
 
-        bbm = GBFactory.getProxy(m);
+        bbm = SGBFactory.getProxy(m);
         //System.out.println("bba = " + bba);
-        assertTrue("bbm ! field " + bbm, !(bbm instanceof GBProxy));
+        assertTrue("bbm ! field " + bbm, !(bbm instanceof SGBProxy));
         bbm.terminate();
     }
 

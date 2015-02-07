@@ -27,7 +27,7 @@ import edu.jas.poly.PolynomialList;
 
 
 /**
- * Groebner base sequential tests with JUnit.
+ * Groebner base proxy of sequential and parallel tests with JUnit.
  * @author Heinz Kredel.
  */
 
@@ -80,19 +80,7 @@ public class GBProxyTest extends TestCase {
     GroebnerBaseAbstract<BigRational> bb;
 
 
-    GenPolynomial<BigRational> a;
-
-
-    GenPolynomial<BigRational> b;
-
-
-    GenPolynomial<BigRational> c;
-
-
-    GenPolynomial<BigRational> d;
-
-
-    GenPolynomial<BigRational> e;
+    GenPolynomial<BigRational> a, b, c, d, e;
 
 
     int rl = 3; //4; //3; 
@@ -117,7 +105,7 @@ public class GBProxyTest extends TestCase {
         a = b = c = d = e = null;
         GroebnerBaseAbstract<BigRational> bbs = new GroebnerBaseSeq<BigRational>();
         //GroebnerBaseAbstract<BigRational> bbs = new GroebnerBaseSeqPairSeq<BigRational>();
-        int nt = ComputerThreads.N_CPUS;
+        int nt = ComputerThreads.N_CPUS-1;
         //System.out.println("nt = " + nt);
         GroebnerBaseAbstract<BigRational> bbp = new GroebnerBaseParallel<BigRational>(nt);
         //GroebnerBaseAbstract<BigRational> bbp = new GroebnerBaseSeqPairParallel<BigRational>(nt);
@@ -130,7 +118,7 @@ public class GBProxyTest extends TestCase {
         int s = bb.cancel();
         logger.info("canceled tasks: " + s);
         //assertTrue("s >= 0 " + s, s >= 0);
-        ComputerThreads.terminate();
+        bb.terminate();
         a = b = c = d = e = null;
         fac = null;
         bb = null;
@@ -139,10 +127,8 @@ public class GBProxyTest extends TestCase {
 
     /**
      * Test GBase.
-     * 
      */
     public void testGBase() {
-
         L = new ArrayList<GenPolynomial<BigRational>>();
 
         a = fac.random(kl, ll, el, q);
@@ -151,38 +137,25 @@ public class GBProxyTest extends TestCase {
         d = fac.random(kl, ll, el, q);
         e = d; //fac.random(kl, ll, el, q );
 
-        if (a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO()) {
-            return;
-        }
 
-        assertTrue("not isZERO( a )", !a.isZERO());
         L.add(a);
-
         L = bb.GB(L);
         assertTrue("isGB( { a } )", bb.isGB(L));
 
-        assertTrue("not isZERO( b )", !b.isZERO());
         L.add(b);
         //System.out.println("L = " + L.size() );
-
         L = bb.GB(L);
         assertTrue("isGB( { a, b } )", bb.isGB(L));
 
-        assertTrue("not isZERO( c )", !c.isZERO());
         L.add(c);
-
         L = bb.GB(L);
         assertTrue("isGB( { a, b, c } )", bb.isGB(L));
 
-        assertTrue("not isZERO( d )", !d.isZERO());
         L.add(d);
-
         L = bb.GB(L);
         assertTrue("isGB( { a, b, c, d } )", bb.isGB(L));
 
-        assertTrue("not isZERO( e )", !e.isZERO());
         L.add(e);
-
         L = bb.GB(L);
         assertTrue("isGB( { a, b, c, d, e } )", bb.isGB(L));
     }
@@ -190,14 +163,13 @@ public class GBProxyTest extends TestCase {
 
     /**
      * Test Trinks7 GBase.
-     * 
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings({"cast","unchecked"})
     public void testTrinks7GBase() {
         String exam = "(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
-                        + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
-                        + "( - 9 W + 15 T P + 20 S Z ), " + "( P W + 2 T Z - 11 B**3 ), "
-                        + "( 99 W - 11 B S + 3 B**2 ), " + "( B**2 + 33/50 B + 2673/10000 ) " + ") ";
+            + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
+            + "( - 9 W + 15 T P + 20 S Z ), " + "( P W + 2 T Z - 11 B**3 ), "
+            + "( 99 W - 11 B S + 3 B**2 ), " + "( B**2 + 33/50 B + 2673/10000 ) " + ") ";
         Reader source = new StringReader(exam);
         GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
         try {
