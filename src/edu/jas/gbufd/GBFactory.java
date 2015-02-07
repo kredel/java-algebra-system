@@ -403,8 +403,7 @@ public class GBFactory {
      * @param pl pair selection strategy
      * @return GB algorithm implementation.
      */
-    public static <C extends GcdRingElem<C>> 
-    GroebnerBaseAbstract<GenPolynomial<C>> getImplementation(
+    public static <C extends GcdRingElem<C>> GroebnerBaseAbstract<GenPolynomial<C>> getImplementation(
                     GenPolynomialRing<C> fac, Algo a, PairList<GenPolynomial<C>> pl) {
         GroebnerBaseAbstract<GenPolynomial<C>> bba;
         switch (a) {
@@ -537,11 +536,10 @@ public class GBFactory {
                 GroebnerBaseAbstract e1 = new GroebnerBasePseudoRecSeq<C>(pfac, ppl);
                 GroebnerBaseAbstract e2 = new GroebnerBasePseudoRecParallel<C>(th, pfac, ppl);
                 return new GBProxy<C>(e1, e2);
-            } else {
-                GroebnerBaseAbstract<C> e1 = new GroebnerBasePseudoSeq<C>(fac, pl);
-                GroebnerBaseAbstract<C> e2 = new GroebnerBasePseudoParallel<C>(th, fac, pl);
-                return new GBProxy<C>(e1, e2);
             }
+            GroebnerBaseAbstract<C> e1 = new GroebnerBasePseudoSeq<C>(fac, pl);
+            GroebnerBaseAbstract<C> e2 = new GroebnerBasePseudoParallel<C>(th, fac, pl);
+            return new GBProxy<C>(e1, e2);
         }
         return getImplementation(fac, pl);
     }
