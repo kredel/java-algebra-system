@@ -439,7 +439,7 @@ public class TermOrderOptimization {
 
     /**
      * Optimize variable order on coefficients.
-     * @param R polynomial ring.
+     * @param ring polynomial ring.
      * @param L list of polynomials.
      * @return optimized polynomial list.
      */

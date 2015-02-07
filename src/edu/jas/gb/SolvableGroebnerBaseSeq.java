@@ -47,6 +47,24 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
     /**
      * Constructor.
      * @param sred Solvable reduction engine
+     */
+    public SolvableGroebnerBaseSeq(SolvableReduction<C> sred) {
+        super(sred);
+    }
+
+
+    /**
+     * Constructor.
+     * @param pl pair selection strategy
+     */
+    public SolvableGroebnerBaseSeq(PairList<C> pl) {
+        super(pl);
+    }
+
+
+    /**
+     * Constructor.
+     * @param sred Solvable reduction engine
      * @param pl pair selection strategy
      */
     public SolvableGroebnerBaseSeq(SolvableReduction<C> sred, PairList<C> pl) {
@@ -117,8 +135,8 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
             pi = (GenSolvablePolynomial<C>) pair.pi;
             pj = (GenSolvablePolynomial<C>) pair.pj;
             if (debug) {
-                logger.info("pi    = " + pi);
-                logger.info("pj    = " + pj);
+                logger.info("pi    = " + pi.leadingExpVector());
+                logger.info("pj    = " + pj.leadingExpVector());
             }
 
             S = sred.leftSPolynomial(pi, pj);
@@ -127,7 +145,8 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 continue;
             }
             if (debug) {
-                logger.info("ht(S) = " + S.leadingExpVector());
+                //logger.info("ht(S) = " + S.leadingExpVector());
+                logger.info("ht(S) = " + S.leadingExpVector() + ", lc(S) = " + S.leadingBaseCoefficient());
             }
 
             H = sred.leftNormalform(G, S);
@@ -136,7 +155,8 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 continue;
             }
             if (debug) {
-                logger.info("ht(H) = " + H.leadingExpVector());
+                //logger.info("ht(H) = " + H.leadingExpVector());
+                logger.info("ht(H) = " + H.leadingExpVector() + ", #H = " + H.length() + ", lc(H) = " + H.leadingBaseCoefficient());
             }
 
             H = H.monic();
@@ -146,7 +166,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 return G; // since no threads are activated
             }
             if (debug) {
-                logger.info("H = " + H);
+                // logger.info("H = " + H);
             }
             if (H.length() > 0) {
                 //l++;
