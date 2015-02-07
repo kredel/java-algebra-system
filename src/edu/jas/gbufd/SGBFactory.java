@@ -13,44 +13,36 @@ import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.ModLong;
 import edu.jas.arith.ModLongRing;
-import edu.jas.arith.Product;
-import edu.jas.arith.ProductRing;
-import edu.jas.gb.SGBProxy;
-import edu.jas.gb.GroebnerBaseAbstract;
-import edu.jas.gb.GroebnerBaseParallel;
-import edu.jas.gb.GroebnerBaseSeq;
-import edu.jas.gb.SolvableGroebnerBaseAbstract;
-import edu.jas.gb.SolvableGroebnerBaseParallel;
-import edu.jas.gb.SolvableGroebnerBaseSeq;
 import edu.jas.gb.OrderedMinPairlist;
 import edu.jas.gb.OrderedPairlist;
 import edu.jas.gb.OrderedSyzPairlist;
 import edu.jas.gb.PairList;
+import edu.jas.gb.SGBProxy;
+import edu.jas.gb.SolvableGroebnerBaseAbstract;
+import edu.jas.gb.SolvableGroebnerBaseParallel;
+import edu.jas.gb.SolvableGroebnerBaseSeq;
 import edu.jas.gb.SolvableReductionSeq;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.GenSolvablePolynomial;
-import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.ufd.Quotient;
 import edu.jas.ufd.QuotientRing;
 
 
 /**
- * Solvable Groebner bases algorithms factory. Select appropriate
- * Solvable Groebner bases engine based on the coefficient types.
+ * Solvable Groebner bases algorithms factory. Select appropriate Solvable
+ * Groebner bases engine based on the coefficient types.
  * @author Heinz Kredel
  * @usage To create objects that implement the <code>SolvableGroebnerBase</code>
  *        interface use the <code>SGBFactory</code>. It will select an
  *        appropriate implementation based on the types of polynomial
  *        coefficients C. The method to obtain an implementation is
- *        <code>getImplementation()</code>. It
- *        returns an object of a class which implements the
- *        <code>SolvableGroebnerBase</code> interface, more precisely an object of
- *        abstract class <code>SolvableGroebnerBaseAbstract</code>.
+ *        <code>getImplementation()</code>. It returns an object of a class
+ *        which implements the <code>SolvableGroebnerBase</code> interface, more
+ *        precisely an object of abstract class
+ *        <code>SolvableGroebnerBaseAbstract</code>.
  * 
  *        <pre>
  * 
@@ -115,7 +107,8 @@ public class SGBFactory {
      * @param pl pair selection strategy
      * @return GB algorithm implementation.
      */
-    public static SolvableGroebnerBaseAbstract<ModLong> getImplementation(ModLongRing fac, PairList<ModLong> pl) {
+    public static SolvableGroebnerBaseAbstract<ModLong> getImplementation(ModLongRing fac,
+                    PairList<ModLong> pl) {
         SolvableGroebnerBaseAbstract<ModLong> bba;
         if (fac.isField()) {
             bba = new SolvableGroebnerBaseSeq<ModLong>(pl);
@@ -181,7 +174,8 @@ public class SGBFactory {
      * @param pl pair selection strategy
      * @return GB algorithm implementation.
      */
-    public static SolvableGroebnerBaseAbstract<BigInteger> getImplementation(BigInteger fac, PairList<BigInteger> pl) {
+    public static SolvableGroebnerBaseAbstract<BigInteger> getImplementation(BigInteger fac,
+                    PairList<BigInteger> pl) {
         return getImplementation(fac, GBFactory.Algo.igb, pl);
     }
 
@@ -193,8 +187,8 @@ public class SGBFactory {
      * @param pl pair selection strategy
      * @return GB algorithm implementation.
      */
-    public static SolvableGroebnerBaseAbstract<BigInteger> getImplementation(BigInteger fac, GBFactory.Algo a,
-                    PairList<BigInteger> pl) {
+    public static SolvableGroebnerBaseAbstract<BigInteger> getImplementation(BigInteger fac,
+                    GBFactory.Algo a, PairList<BigInteger> pl) {
         SolvableGroebnerBaseAbstract<BigInteger> bba;
         switch (a) {
         case igb:
@@ -227,7 +221,8 @@ public class SGBFactory {
      * @param a algorithm, a = qgb, ffgb.
      * @return GB algorithm implementation.
      */
-    public static SolvableGroebnerBaseAbstract<BigRational> getImplementation(BigRational fac, GBFactory.Algo a) {
+    public static SolvableGroebnerBaseAbstract<BigRational> getImplementation(BigRational fac,
+                    GBFactory.Algo a) {
         return getImplementation(fac, a, new OrderedPairlist<BigRational>());
     }
 
@@ -251,8 +246,8 @@ public class SGBFactory {
      * @param pl pair selection strategy
      * @return GB algorithm implementation.
      */
-    public static SolvableGroebnerBaseAbstract<BigRational> getImplementation(BigRational fac, GBFactory.Algo a,
-                    PairList<BigRational> pl) {
+    public static SolvableGroebnerBaseAbstract<BigRational> getImplementation(BigRational fac,
+                    GBFactory.Algo a, PairList<BigRational> pl) {
         SolvableGroebnerBaseAbstract<BigRational> bba;
         switch (a) {
         case qgb:
@@ -327,6 +322,9 @@ public class SGBFactory {
     public static <C extends GcdRingElem<C>> SolvableGroebnerBaseAbstract<Quotient<C>> getImplementation(
                     QuotientRing<C> fac, GBFactory.Algo a, PairList<Quotient<C>> pl) {
         SolvableGroebnerBaseAbstract<Quotient<C>> bba;
+        if (logger.isDebugEnabled()) {
+            logger.debug("fac = " + fac);
+        }
         switch (a) {
         case qgb:
             bba = new SolvableGroebnerBaseSeq<Quotient<C>>(new SolvableReductionSeq<Quotient<C>>(), pl);
@@ -398,8 +396,7 @@ public class SGBFactory {
      * @param pl pair selection strategy
      * @return GB algorithm implementation.
      */
-    public static <C extends GcdRingElem<C>> 
-    SolvableGroebnerBaseAbstract<GenPolynomial<C>> getImplementation(
+    public static <C extends GcdRingElem<C>> SolvableGroebnerBaseAbstract<GenPolynomial<C>> getImplementation(
                     GenPolynomialRing<C> fac, GBFactory.Algo a, PairList<GenPolynomial<C>> pl) {
         SolvableGroebnerBaseAbstract<GenPolynomial<C>> bba;
         switch (a) {
@@ -461,7 +458,7 @@ public class SGBFactory {
      * @param pl pair selection strategy
      * @return GB algorithm implementation.
      */
-    @SuppressWarnings({"cast","unchecked"})
+    @SuppressWarnings({ "cast", "unchecked" })
     public static <C extends GcdRingElem<C>> // interface RingElem not sufficient 
     SolvableGroebnerBaseAbstract<C> getImplementation(RingFactory<C> fac, PairList<C> pl) {
         logger.debug("fac = " + fac.getClass().getName());
@@ -480,15 +477,16 @@ public class SGBFactory {
                 pli = new OrderedPairlist<GenPolynomial<C>>();
             }
             GenPolynomialRing<C> rofac = (GenPolynomialRing<C>) ofac;
-            SolvableGroebnerBaseAbstract<GenPolynomial<C>> bbr = new SolvableGroebnerBasePseudoRecSeq<C>(rofac, pli); // not pl
+            SolvableGroebnerBaseAbstract<GenPolynomial<C>> bbr = new SolvableGroebnerBasePseudoRecSeq<C>(
+                            rofac, pli); // not pl
             bba = (SolvableGroebnerBaseAbstract) bbr;
-	//} else if (ofac instanceof ProductRing) {
-        //    ProductRing pfac = (ProductRing) ofac;
-        //    if (pfac.onlyFields()) {
-        //        bba = new RSolvableGroebnerBaseSeq<Product<C>>();
-        //    } else {
-        //        bba = new RSolvableGroebnerBasePseudoSeq<Product<C>>(pfac);
-        //    }
+            //} else if (ofac instanceof ProductRing) {
+            //    ProductRing pfac = (ProductRing) ofac;
+            //    if (pfac.onlyFields()) {
+            //        bba = new RSolvableGroebnerBaseSeq<Product<C>>();
+            //    } else {
+            //        bba = new RSolvableGroebnerBasePseudoSeq<Product<C>>(pfac);
+            //    }
         } else {
             bba = new SolvableGroebnerBasePseudoSeq<C>(fac, pl);
         }
@@ -516,7 +514,7 @@ public class SGBFactory {
      * @param pl pair selection strategy
      * @return GB proxy algorithm implementation.
      */
-    @SuppressWarnings({"cast","unchecked"})
+    @SuppressWarnings({ "cast", "unchecked" })
     public static <C extends GcdRingElem<C>> // interface RingElem not sufficient 
     SolvableGroebnerBaseAbstract<C> getProxy(RingFactory<C> fac, PairList<C> pl) {
         if (ComputerThreads.NO_THREADS) {
@@ -537,13 +535,12 @@ public class SGBFactory {
                 return e1;
                 //SolvableGroebnerBaseAbstract e2 = new SolvableGroebnerBasePseudoRecParallel<C>(th, pfac, ppl);
                 //return new SGBProxy<C>(e1, e2);
-            } else {
-                SolvableGroebnerBaseAbstract<C> e1 = new SolvableGroebnerBasePseudoSeq<C>(fac, pl);
-                logger.warn("no parallel version available, returning sequential version");
-                return e1;
-                //SolvableGroebnerBaseAbstract<C> e2 = new SolvableGroebnerBasePseudoParallel<C>(th, fac, pl);
-                //return new SGBProxy<C>(e1, e2);
             }
+            SolvableGroebnerBaseAbstract<C> e1 = new SolvableGroebnerBasePseudoSeq<C>(fac, pl);
+            logger.warn("no parallel version available, returning sequential version");
+            return e1;
+            //SolvableGroebnerBaseAbstract<C> e2 = new SolvableGroebnerBasePseudoParallel<C>(th, fac, pl);
+            //return new SGBProxy<C>(e1, e2);
         }
         return getImplementation(fac, pl);
     }
@@ -562,7 +559,7 @@ public class SGBFactory {
             return SGBFactory.getImplementation(fac);
         }
         logger.debug("fac = " + fac.getClass().getName());
-        int th = (ComputerThreads.N_CPUS > 2 ? ComputerThreads.N_CPUS - 1 : 2);
+        //int th = (ComputerThreads.N_CPUS > 2 ? ComputerThreads.N_CPUS - 1 : 2);
         OrderedPairlist<GenPolynomial<C>> ppl = new OrderedPairlist<GenPolynomial<C>>();
         SolvableGroebnerBaseAbstract<GenPolynomial<C>> e1 = new SolvableGroebnerBasePseudoRecSeq<C>(fac, ppl);
         logger.warn("no parallel version available, returning sequential version");

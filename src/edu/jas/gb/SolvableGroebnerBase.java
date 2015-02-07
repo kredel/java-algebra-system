@@ -5,8 +5,8 @@
 package edu.jas.gb;
 
 
-import java.util.List;
 import java.io.Serializable;
+import java.util.List;
 
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.structure.RingElem;

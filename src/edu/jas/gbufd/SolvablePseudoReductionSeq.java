@@ -132,7 +132,7 @@ public class SolvablePseudoReductionSeq<C extends RingElem<C>> extends SolvableR
      * @param Pp recursive polynomial list.
      * @return nf(Ap) with respect to Pp.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings({"cast","unchecked"})
     public GenSolvablePolynomial<GenPolynomial<C>> leftNormalformRecursive(
                     List<GenSolvablePolynomial<GenPolynomial<C>>> Pp,
                     GenSolvablePolynomial<GenPolynomial<C>> Ap) {
@@ -423,7 +423,7 @@ public class SolvablePseudoReductionSeq<C extends RingElem<C>> extends SolvableR
      * @param Pp polynomial list.
      * @return nf(Ap) with respect to Pp. <b>Note: </b> not implemented;
      */
-    //@SuppressWarnings("unchecked")
+    @SuppressWarnings({"cast","unchecked"})
     public GenSolvablePolynomial<C> rightNormalform(List<GenSolvablePolynomial<C>> Pp,
                     GenSolvablePolynomial<C> Ap) {
         //throw new UnsupportedOperationException();

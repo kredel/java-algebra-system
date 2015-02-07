@@ -28,8 +28,8 @@ import edu.jas.ufd.GreatestCommonDivisorAbstract;
 
 /**
  * Solvable Groebner Base with pseudo reduction sequential algorithm. Implements
- * coefficient fraction free Groebner bases.
- * Coefficients can for example be integers or (commutative) univariate polynomials.
+ * coefficient fraction free Groebner bases. Coefficients can for example be
+ * integers or (commutative) univariate polynomials.
  * @param <C> coefficient type
  * @author Heinz Kredel
  * 

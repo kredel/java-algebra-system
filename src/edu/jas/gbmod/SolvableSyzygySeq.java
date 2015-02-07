@@ -347,7 +347,7 @@ public class SolvableSyzygySeq<C extends RingElem<C>> extends SolvableSyzygyAbst
      * @param b solvable polynomial
      * @return [p,q] with p*a = q*b
      */
-    @SuppressWarnings({"cast","unchecked"})
+    @SuppressWarnings({ "cast", "unchecked" })
     public GenSolvablePolynomial<C>[] leftOreCond(GenSolvablePolynomial<C> a, GenSolvablePolynomial<C> b) {
         if (a == null || a.isZERO() || b == null || b.isZERO()) {
             throw new IllegalArgumentException("a and b must be non zero");
@@ -424,7 +424,7 @@ public class SolvableSyzygySeq<C extends RingElem<C>> extends SolvableSyzygyAbst
      * @param b solvable polynomial
      * @return [p,q] with a*p = b*q
      */
-    @SuppressWarnings({"cast","unchecked"})
+    @SuppressWarnings({ "cast", "unchecked" })
     public GenSolvablePolynomial<C>[] rightOreCond(GenSolvablePolynomial<C> a, GenSolvablePolynomial<C> b) {
         if (a == null || a.isZERO() || b == null || b.isZERO()) {
             throw new IllegalArgumentException("a and b must be non zero");
@@ -493,7 +493,7 @@ public class SolvableSyzygySeq<C extends RingElem<C>> extends SolvableSyzygyAbst
      * @return [p,q] with a/b = p/q and q is minimal and monic
      */
     @Override
-    @SuppressWarnings({"cast","unchecked"})
+    @SuppressWarnings({ "cast", "unchecked" })
     public GenSolvablePolynomial<C>[] leftSimplifier(GenSolvablePolynomial<C> a, GenSolvablePolynomial<C> b) {
         if (a == null || a.isZERO() || b == null || b.isZERO()) {
             throw new IllegalArgumentException("a and b must be non zero");

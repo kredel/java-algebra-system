@@ -15,7 +15,6 @@ import org.apache.log4j.Logger;
 
 import edu.jas.kern.ComputerThreads;
 import edu.jas.kern.PreemptingException;
-import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.structure.GcdRingElem;
 
@@ -100,18 +99,21 @@ public class SGBProxy<C extends GcdRingElem<C>> extends SolvableGroebnerBaseAbst
      * @return GB(F) a Groebner base of F.
      */
     @Override
-    public List<GenSolvablePolynomial<C>> leftGB( final int modv, final List<GenSolvablePolynomial<C>> F ) {
+    public List<GenSolvablePolynomial<C>> leftGB(final int modv, final List<GenSolvablePolynomial<C>> F) {
         if (F == null || F.isEmpty()) {
             return F;
         }
         // parallel case
         List<GenSolvablePolynomial<C>> G = null;
-        List<Callable<List<GenSolvablePolynomial<C>>>> cs = new ArrayList<Callable<List<GenSolvablePolynomial<C>>>>(2);
+        List<Callable<List<GenSolvablePolynomial<C>>>> cs = new ArrayList<Callable<List<GenSolvablePolynomial<C>>>>(
+                        2);
         cs.add(new Callable<List<GenSolvablePolynomial<C>>>() {
+
+
             public List<GenSolvablePolynomial<C>> call() {
                 try {
                     //System.out.println("starting e1 " + e1.getClass().getName());
-                    List<GenSolvablePolynomial<C>> G = e1.leftGB(modv,F);
+                    List<GenSolvablePolynomial<C>> G = e1.leftGB(modv, F);
                     if (debug) {
                         logger.info("SGBProxy done e1 " + e1.getClass().getName());
                     }
@@ -129,10 +131,12 @@ public class SGBProxy<C extends GcdRingElem<C>> extends SolvableGroebnerBaseAbst
             }
         });
         cs.add(new Callable<List<GenSolvablePolynomial<C>>>() {
+
+
             public List<GenSolvablePolynomial<C>> call() {
                 try {
                     //System.out.println("starting e2 " + e2.getClass().getName());
-                    List<GenSolvablePolynomial<C>> G = e2.leftGB(modv,F);
+                    List<GenSolvablePolynomial<C>> G = e2.leftGB(modv, F);
                     if (debug) {
                         logger.info("SGBProxy done e2 " + e2.getClass().getName());
                     }
@@ -169,18 +173,21 @@ public class SGBProxy<C extends GcdRingElem<C>> extends SolvableGroebnerBaseAbst
      * @return rightGB(F) a Groebner base of F.
      */
     @Override
-    public List<GenSolvablePolynomial<C>> rightGB( final int modv, final List<GenSolvablePolynomial<C>> F ) {
+    public List<GenSolvablePolynomial<C>> rightGB(final int modv, final List<GenSolvablePolynomial<C>> F) {
         if (F == null || F.isEmpty()) {
             return F;
         }
         // parallel case
         List<GenSolvablePolynomial<C>> G = null;
-        List<Callable<List<GenSolvablePolynomial<C>>>> cs = new ArrayList<Callable<List<GenSolvablePolynomial<C>>>>(2);
+        List<Callable<List<GenSolvablePolynomial<C>>>> cs = new ArrayList<Callable<List<GenSolvablePolynomial<C>>>>(
+                        2);
         cs.add(new Callable<List<GenSolvablePolynomial<C>>>() {
+
+
             public List<GenSolvablePolynomial<C>> call() {
                 try {
                     //System.out.println("starting e1 " + e1.getClass().getName());
-                    List<GenSolvablePolynomial<C>> G = e1.rightGB(modv,F);
+                    List<GenSolvablePolynomial<C>> G = e1.rightGB(modv, F);
                     if (debug) {
                         logger.info("SGBProxy done e1 " + e1.getClass().getName());
                     }
@@ -198,10 +205,12 @@ public class SGBProxy<C extends GcdRingElem<C>> extends SolvableGroebnerBaseAbst
             }
         });
         cs.add(new Callable<List<GenSolvablePolynomial<C>>>() {
+
+
             public List<GenSolvablePolynomial<C>> call() {
                 try {
                     //System.out.println("starting e2 " + e2.getClass().getName());
-                    List<GenSolvablePolynomial<C>> G = e2.rightGB(modv,F);
+                    List<GenSolvablePolynomial<C>> G = e2.rightGB(modv, F);
                     if (debug) {
                         logger.info("SGBProxy done e2 " + e2.getClass().getName());
                     }
@@ -238,18 +247,21 @@ public class SGBProxy<C extends GcdRingElem<C>> extends SolvableGroebnerBaseAbst
      * @return twosidedGB(F) a Groebner base of F.
      */
     @Override
-    public List<GenSolvablePolynomial<C>> twosidedGB( final int modv, final List<GenSolvablePolynomial<C>> F ) {
+    public List<GenSolvablePolynomial<C>> twosidedGB(final int modv, final List<GenSolvablePolynomial<C>> F) {
         if (F == null || F.isEmpty()) {
             return F;
         }
         // parallel case
         List<GenSolvablePolynomial<C>> G = null;
-        List<Callable<List<GenSolvablePolynomial<C>>>> cs = new ArrayList<Callable<List<GenSolvablePolynomial<C>>>>(2);
+        List<Callable<List<GenSolvablePolynomial<C>>>> cs = new ArrayList<Callable<List<GenSolvablePolynomial<C>>>>(
+                        2);
         cs.add(new Callable<List<GenSolvablePolynomial<C>>>() {
+
+
             public List<GenSolvablePolynomial<C>> call() {
                 try {
                     //System.out.println("starting e1 " + e1.getClass().getName());
-                    List<GenSolvablePolynomial<C>> G = e1.twosidedGB(modv,F);
+                    List<GenSolvablePolynomial<C>> G = e1.twosidedGB(modv, F);
                     if (debug) {
                         logger.info("SGBProxy done e1 " + e1.getClass().getName());
                     }
@@ -267,10 +279,12 @@ public class SGBProxy<C extends GcdRingElem<C>> extends SolvableGroebnerBaseAbst
             }
         });
         cs.add(new Callable<List<GenSolvablePolynomial<C>>>() {
+
+
             public List<GenSolvablePolynomial<C>> call() {
                 try {
                     //System.out.println("starting e2 " + e2.getClass().getName());
-                    List<GenSolvablePolynomial<C>> G = e2.twosidedGB(modv,F);
+                    List<GenSolvablePolynomial<C>> G = e2.twosidedGB(modv, F);
                     if (debug) {
                         logger.info("SGBProxy done e2 " + e2.getClass().getName());
                     }
