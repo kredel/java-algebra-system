@@ -23,6 +23,7 @@ import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.ModuleList;
 import edu.jas.poly.PolynomialList;
 import edu.jas.structure.RingElem;
+import edu.jas.structure.GcdRingElem;
 import edu.jas.vector.BasicLinAlg;
 
 
@@ -33,7 +34,7 @@ import edu.jas.vector.BasicLinAlg;
  * @author Heinz Kredel
  */
 
-public abstract class SolvableSyzygyAbstract<C extends RingElem<C>> implements SolvableSyzygy<C> {
+public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implements SolvableSyzygy<C> {
 
 
     private static final Logger logger = Logger.getLogger(SolvableSyzygyAbstract.class);

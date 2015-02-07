@@ -106,9 +106,10 @@ public class GCDPrimitiveTest extends TestCase {
         a = b = c = d = e = null;
         ar = br = cr = dr = er = null;
         String[] vars = new String[] { "a", "b", "c", "d" };
-        fd = new GreatestCommonDivisorPrimitive<BigRational>();
-        fds = new GreatestCommonDivisorSimple<BigRational>();
-        dfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), rl, to, vars);
+        BigRational cf = new BigRational(1);
+        fd = new GreatestCommonDivisorPrimitive<BigRational>(cf);
+        fds = new GreatestCommonDivisorSimple<BigRational>(cf);
+        dfac = new GenSolvablePolynomialRing<BigRational>(cf, rl, to, vars);
         RelationGenerator<BigRational> wl = new WeylRelationsIterated<BigRational>();
         dfac.addRelations(wl);
         rfac = (RecSolvablePolynomialRing<BigRational>) dfac.recursive(1);
@@ -281,7 +282,8 @@ public class GCDPrimitiveTest extends TestCase {
         //System.out.println("dp  = " + dp);
         //System.out.println("dpm = " + dpm);
 
-        GreatestCommonDivisorAbstract<SolvableQuotient<BigRational>> fdq = new GreatestCommonDivisorPrimitive<SolvableQuotient<BigRational>>();
+        GreatestCommonDivisorAbstract<SolvableQuotient<BigRational>> fdq = new GreatestCommonDivisorPrimitive<SolvableQuotient<BigRational>>(
+                        qfac);
         gp = fdq.leftBaseGcd(ap, bp);
         gpm = gp.monic();
         //System.out.println("gp  = " + gp);
@@ -399,7 +401,8 @@ public class GCDPrimitiveTest extends TestCase {
         System.out.println("dp  = " + dp);
         System.out.println("dpm = " + dpm);
 
-        GreatestCommonDivisorAbstract<SolvableQuotient<BigRational>> fdq = new GreatestCommonDivisorPrimitive<SolvableQuotient<BigRational>>();
+        GreatestCommonDivisorAbstract<SolvableQuotient<BigRational>> fdq = new GreatestCommonDivisorPrimitive<SolvableQuotient<BigRational>>(
+                        qfac);
         gp = fdq.leftBaseGcd(ap, bp);
         gpm = gp.monic();
         System.out.println("gp  = " + gp);

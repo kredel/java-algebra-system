@@ -5,11 +5,8 @@
 package edu.jas.gbmod;
 
 
-import java.util.List;
-
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gbufd.GBFactory;
-import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 
@@ -24,12 +21,6 @@ public class ModGroebnerBasePar<C extends GcdRingElem<C>> extends ModGroebnerBas
 
 
     //private static final Logger logger = Logger.getLogger(ModGroebnerBasePar.class);
-
-
-    /*
-     * Used Groebner base algorithm.
-     */
-    //protected final GroebnerBaseAbstract<C> bb;
 
 
     /**

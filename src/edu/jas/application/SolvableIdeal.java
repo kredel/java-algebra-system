@@ -1063,7 +1063,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         F.add(h);
         F.addAll(getList());
         //System.out.println("F = " + F);
-        SolvableSyzygyAbstract<C> syz = new SolvableSyzygySeq<C>();
+        SolvableSyzygyAbstract<C> syz = new SolvableSyzygySeq<C>(getRing().coFac);
         List<List<GenSolvablePolynomial<C>>> S = syz.leftZeroRelationsArbitrary(F);
         //System.out.println("S = " + S);
         List<GenSolvablePolynomial<C>> gen = new ArrayList<GenSolvablePolynomial<C>>(S.size());

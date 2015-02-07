@@ -77,28 +77,13 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
     GenSolvablePolynomialRing<BigRational> pfac;
 
 
-    GenSolvablePolynomial<BigRational> a;
-
-
-    GenSolvablePolynomial<BigRational> b;
-
-
-    GenSolvablePolynomial<BigRational> c;
-
-
-    GenSolvablePolynomial<BigRational> d;
-
-
-    GenSolvablePolynomial<BigRational> e;
+    GenSolvablePolynomial<BigRational> a, b, c, d, e;
 
 
     TermOrder tord;
 
 
-    GenSolvablePolynomial<BigRational> one;
-
-
-    GenSolvablePolynomial<BigRational> zero;
+    GenSolvablePolynomial<BigRational> one, zero;
 
 
     RelationTable<BigRational> table;
@@ -110,16 +95,10 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
     List<GenSolvablePolynomial<BigRational>> V;
 
 
-    PolynomialList<BigRational> F;
+    PolynomialList<BigRational> F, G;
 
 
-    PolynomialList<BigRational> G;
-
-
-    ModuleList<BigRational> M;
-
-
-    ModuleList<BigRational> N;
+    ModuleList<BigRational> M, N;
 
 
     ModSolvableGroebnerBase<BigRational> msbb;
@@ -147,7 +126,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
         cfac = new BigRational(1);
         tord = new TermOrder();
         pfac = new GenSolvablePolynomialRing<BigRational>(cfac, rl, tord);
-        msbb = new ModSolvableGroebnerBaseSeq<BigRational>();
+        msbb = new ModSolvableGroebnerBaseSeq<BigRational>(cfac);
 
         do {
             a = pfac.random(kl, ll, el, q);

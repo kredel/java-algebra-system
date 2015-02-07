@@ -13,9 +13,9 @@ import java.util.Random;
 import org.apache.log4j.Logger;
 
 import edu.jas.gb.SolvableGroebnerBaseAbstract;
-import edu.jas.gb.SolvableGroebnerBaseSeq;
 import edu.jas.gbmod.SolvableSyzygyAbstract;
 import edu.jas.gbmod.SolvableSyzygySeq;
+import edu.jas.gbufd.SGBFactory;
 import edu.jas.kern.StringUtil;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
@@ -100,8 +100,8 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>> implements
             logger.warn("ideal not maximal and not known to be prime");
             //throw new IllegalArgumentException("ideal must be prime or maximal");
         }
-        engine = new SolvableSyzygySeq<C>();
-        bb = new SolvableGroebnerBaseSeq<C>();
+        engine = new SolvableSyzygySeq<C>(ring.coFac);
+        bb = SGBFactory.getImplementation(ring.coFac); //new SolvableGroebnerBaseSeq<C>();
         logger.debug("solvable local residue ring constructed");
     }
 

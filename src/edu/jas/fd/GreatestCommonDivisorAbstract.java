@@ -46,7 +46,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
     final SolvableSyzygyAbstract<C> syz;
 
 
-    /**
+    /*
      * Engine for commutative gcd computation.
      */
     //edu.jas.ufd.GreatestCommonDivisorAbstract<C> cgcd;
@@ -54,9 +54,10 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
 
     /**
      * Constructor.
+     * @param cf coefficient ring.
      */
-    public GreatestCommonDivisorAbstract() {
-        syz = new SolvableSyzygySeq<C>();
+    public GreatestCommonDivisorAbstract(RingFactory<C> cf) {
+        syz = new SolvableSyzygySeq<C>(cf);
         //cgcd = GCDFactory.<C> getImplementation(pfac.coFac);
     }
 

@@ -14,13 +14,14 @@ import org.apache.log4j.Logger;
 
 import edu.jas.gb.SolvableExtendedGB;
 import edu.jas.gb.SolvableGroebnerBase;
-import edu.jas.gb.SolvableGroebnerBaseSeq;
+import edu.jas.gbufd.SGBFactory;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.ModuleList;
 import edu.jas.poly.PolynomialList;
-import edu.jas.structure.RingElem;
+import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.RingFactory;
 
 
 /**
@@ -30,7 +31,7 @@ import edu.jas.structure.RingElem;
  * @author Heinz Kredel
  */
 
-public class SolvableSyzygySeq<C extends RingElem<C>> extends SolvableSyzygyAbstract<C> {
+public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyAbstract<C> {
 
 
     private static final Logger logger = Logger.getLogger(SolvableSyzygySeq.class);
@@ -61,10 +62,11 @@ public class SolvableSyzygySeq<C extends RingElem<C>> extends SolvableSyzygyAbst
 
     /**
      * Constructor.
+     * @param cf coefficient ring.
      */
-    public SolvableSyzygySeq() { // not needed RingFactory<C> cf
-        sbb = new SolvableGroebnerBaseSeq<C>();
-        msbb = new ModSolvableGroebnerBaseSeq<C>();
+    public SolvableSyzygySeq(RingFactory<C> cf) {
+        sbb = SGBFactory.getImplementation(cf);
+        msbb = new ModSolvableGroebnerBaseSeq<C>(cf);
     }
 
 

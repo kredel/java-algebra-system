@@ -11,6 +11,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.RingFactory;
 
 
 /**
@@ -29,6 +30,15 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
 
 
     private final boolean debug = true; //logger.isDebugEnabled();
+
+
+    /**
+     * Constructor.
+     * @param cf coefficient ring.
+     */
+    public GreatestCommonDivisorSimple(RingFactory<C> cf) {
+        super(cf);
+    }
 
 
     /**

@@ -7,11 +7,12 @@ package edu.jas.gbmod;
 
 import java.util.List;
 
-import edu.jas.poly.GenSolvablePolynomial;
-import edu.jas.structure.RingElem;
 // import org.apache.log4j.Logger;
 import edu.jas.gb.SolvableGroebnerBaseAbstract;
-import edu.jas.gb.SolvableGroebnerBaseSeq;
+import edu.jas.gbufd.SGBFactory;
+import edu.jas.poly.GenSolvablePolynomial;
+import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.RingFactory;
 
 
 /**
@@ -21,7 +22,7 @@ import edu.jas.gb.SolvableGroebnerBaseSeq;
  * @author Heinz Kredel
  */
 
-public class ModSolvableGroebnerBaseSeq<C extends RingElem<C>> extends ModSolvableGroebnerBaseAbstract<C> {
+public class ModSolvableGroebnerBaseSeq<C extends GcdRingElem<C>> extends ModSolvableGroebnerBaseAbstract<C> {
 
 
     //private static final Logger logger = Logger.getLogger(ModSolvableGroebnerBaseSeq.class);
@@ -38,9 +39,10 @@ public class ModSolvableGroebnerBaseSeq<C extends RingElem<C>> extends ModSolvab
 
     /**
      * Constructor.
+     * @param cf coefficient ring.
      */
-    public ModSolvableGroebnerBaseSeq() {
-        this(new SolvableGroebnerBaseSeq<C>());
+    public ModSolvableGroebnerBaseSeq(RingFactory<C> cf) {
+        this(SGBFactory.getImplementation(cf));
     }
 
 

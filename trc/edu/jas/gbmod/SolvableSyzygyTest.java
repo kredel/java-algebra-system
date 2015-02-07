@@ -20,7 +20,7 @@ import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigRational;
 import edu.jas.gb.SolvableGroebnerBaseAbstract;
-import edu.jas.gb.SolvableGroebnerBaseSeq;
+import edu.jas.gbufd.SGBFactory;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
@@ -84,25 +84,10 @@ public class SolvableSyzygyTest extends TestCase {
     List<GenSolvablePolynomial<BigRational>> G;
 
 
-    GenSolvablePolynomial<BigRational> a;
+    GenSolvablePolynomial<BigRational> a, b, c, d, e;
 
 
-    GenSolvablePolynomial<BigRational> b;
-
-
-    GenSolvablePolynomial<BigRational> c;
-
-
-    GenSolvablePolynomial<BigRational> d;
-
-
-    GenSolvablePolynomial<BigRational> e;
-
-
-    GenSolvablePolynomial<BigRational> zero;
-
-
-    GenSolvablePolynomial<BigRational> one;
+    GenSolvablePolynomial<BigRational> zero, one;
 
 
     TermOrder tord;
@@ -123,13 +108,7 @@ public class SolvableSyzygyTest extends TestCase {
     List<List<GenSolvablePolynomial<BigRational>>> W;
 
 
-    ModuleList<BigRational> M;
-
-
-    ModuleList<BigRational> N;
-
-
-    ModuleList<BigRational> Z;
+    ModuleList<BigRational> M, N, Z;
 
 
     SolvableGroebnerBaseAbstract<BigRational> sbb;
@@ -183,9 +162,9 @@ public class SolvableSyzygyTest extends TestCase {
         e = d; //fac.random(kl, ll, el, q );
         one = fac.getONE();
         zero = fac.getZERO();
-        sbb = new SolvableGroebnerBaseSeq<BigRational>();
-        msbb = new ModSolvableGroebnerBaseSeq<BigRational>();
-        ssz = new SolvableSyzygySeq<BigRational>();
+        sbb = SGBFactory.getImplementation(cfac);
+        msbb = new ModSolvableGroebnerBaseSeq<BigRational>(cfac);
+        ssz = new SolvableSyzygySeq<BigRational>(cfac);
     }
 
 
