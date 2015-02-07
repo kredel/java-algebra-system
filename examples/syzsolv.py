@@ -34,7 +34,7 @@ print;
 
 from edu.jas.gbmod import SolvableSyzygySeq;
 
-R = SolvableSyzygySeq().resolution( f.pset );
+R = SolvableSyzygySeq(r.ring.coFac).resolution( f.pset );
 
 for i in range(0,R.size()): 
    print "\n %s. resolution" % (i+1);

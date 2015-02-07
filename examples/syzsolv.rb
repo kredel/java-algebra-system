@@ -36,7 +36,7 @@ java_import "edu.jas.gbmod.SolvableSyzygySeq";
 
 #startLog();
 
-R = SolvableSyzygySeq.new().resolution( f.pset );
+R = SolvableSyzygySeq.new(r.ring.coFac).resolution( f.pset );
 
 for i in 0..R.size() 
     puts "\n #{i+1}. resolution";

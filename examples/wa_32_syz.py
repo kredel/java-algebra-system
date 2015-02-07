@@ -38,21 +38,21 @@ print "SolvableIdeal: " + str(f);
 print;
 
 
-Z = SolvableSyzygySeq().leftZeroRelationsArbitrary( f.list );
+Z = SolvableSyzygySeq(r.ring.coFac).leftZeroRelationsArbitrary( f.list );
 Zp = ModuleList( r.ring, Z );
 print "seq left syz Output:", Zp;
 print;
-if SolvableSyzygySeq().isLeftZeroRelation( Zp.list, f.list ):
+if SolvableSyzygySeq(r.ring.coFac).isLeftZeroRelation( Zp.list, f.list ):
    print "is left syzygy";
 else:
    print "is not left syzygy";
 
 
-Zr = SolvableSyzygySeq().rightZeroRelationsArbitrary( f.list );
+Zr = SolvableSyzygySeq(r.ring.coFac).rightZeroRelationsArbitrary( f.list );
 Zpr = ModuleList( r.ring, Zr );
 print "seq right syz Output:", Zpr;
 print;
-if SolvableSyzygySeq().isRightZeroRelation( Zpr.list, f.list ):
+if SolvableSyzygySeq(r.ring.coFac).isRightZeroRelation( Zpr.list, f.list ):
    print "is right syzygy";
 else:
    print "is not right syzygy";

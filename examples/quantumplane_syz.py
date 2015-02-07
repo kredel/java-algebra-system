@@ -61,15 +61,15 @@ print;
 
 
 from edu.jas.gbmod  import SolvableSyzygySeq;
-from edu.jas.gbmod  import ModSolvableGroebnerBase;
+#from edu.jas.gbmod  import ModSolvableGroebnerBase;
 
-s = SolvableSyzygySeq().leftZeroRelations( ftg.mset );
+s = SolvableSyzygySeq(r.ring.coFac).leftZeroRelations( ftg.mset );
 #sl = ModuleList(f.pset.vars,f.pset.tord,s,f.pset.table);
 
 print "leftSyzygy:", s;
 print;
 
-if SolvableSyzygySeq().isLeftZeroRelation(s,ftg.mset):
+if SolvableSyzygySeq(r.ring.coFac).isLeftZeroRelation(s,ftg.mset):
    print "is Syzygy";
 else:
    print "is not Syzygy";
