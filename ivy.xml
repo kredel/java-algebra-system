@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ivy-module version="2.0" xmlns:m="http://ant.apache.org/ivy/maven">
-  <info organisation="JavaAlgebraSystem" module="jas" revision="2.5.*" status="integration" publication="20150124"/>
+  <info organisation="JavaAlgebraSystem" module="jas" revision="2.5.*" status="integration" />
   <configurations>
     <conf name="default" visibility="public" extends="runtime"/>
     <conf name="runtime" visibility="public"/>
