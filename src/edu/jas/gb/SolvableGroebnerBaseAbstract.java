@@ -89,6 +89,15 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
 
     /**
      * Constructor.
+     * @param pl pair selection strategy
+     */
+    public SolvableGroebnerBaseAbstract(PairList<C> pl) {
+        this(new SolvableReductionSeq<C>(), pl);
+    }
+
+
+    /**
+     * Constructor.
      * @param sred Solvable reduction engine
      * @param pl pair selection strategy
      */
@@ -406,6 +415,18 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
      */
     public SolvableExtendedGB<C> extLeftGB(List<GenSolvablePolynomial<C>> F) {
         return extLeftGB(0, F);
+    }
+
+
+    /**
+     * Solvable Extended Groebner base using critical pair class.
+     * @param modv module variable number.
+     * @param F polynomial list.
+     * @return a container for an extended left Groebner base G of F together with
+     *         back-and-forth transformations.
+     */
+    public SolvableExtendedGB<C> extLeftGB(int modv, List<GenSolvablePolynomial<C>> F) {
+        throw new UnsupportedOperationException("extLeftGB not implemented in " + this.getClass().getSimpleName());
     }
 
 
