@@ -611,7 +611,7 @@ public class PolyUtil {
             return p;
         }
         C lm = lc.inverse();
-        GenSolvablePolynomial<C> L = (GenSolvablePolynomial<C>) p.ring.coFac.getONE();
+        GenPolynomial<C> L = p.ring.coFac.getONE();
         L = L.multiply(lm);
         return p.multiplyLeft(L);
     }
