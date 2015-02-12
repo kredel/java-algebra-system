@@ -312,7 +312,6 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>> extends Solvabl
             return new ArrayList<GenSolvablePolynomial<C>>();
         }
         GenSolvablePolynomialRing<C> fac = Fp.get(0).ring; // assert != null
-        //List<GenSolvablePolynomial<C>> X = generateUnivar( modv, Fp );
         List<GenSolvablePolynomial<C>> X = fac.univariateList(modv);
         //System.out.println("X univ = " + X);
         List<GenSolvablePolynomial<C>> F = new ArrayList<GenSolvablePolynomial<C>>(Fp.size() * (1 + X.size()));
@@ -364,7 +363,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>> extends Solvabl
         Terminator fin = new Terminator(threads);
         TwosidedSolvableReducer<C> R;
         for (int i = 0; i < threads; i++) {
-            R = new TwosidedSolvableReducer<C>(fin, X, G, pairlist);
+            R = new TwosidedSolvableReducer<C>(fin, modv, X, G, pairlist);
             pool.addJob(R);
         }
         fin.waitDone();
@@ -519,6 +518,9 @@ class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
     private final PairList<C> pairlist;
 
 
+    private final int modv;
+
+
     private final Terminator pool;
 
 
@@ -531,9 +533,10 @@ class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
     private static final boolean debug = logger.isDebugEnabled();
 
 
-    TwosidedSolvableReducer(Terminator fin, List<GenSolvablePolynomial<C>> X,
+    TwosidedSolvableReducer(Terminator fin, int modv, List<GenSolvablePolynomial<C>> X,
                     List<GenSolvablePolynomial<C>> G, PairList<C> L) {
         pool = fin;
+        this.modv = modv;
         this.X = X;
         this.G = G;
         pairlist = L;

@@ -84,6 +84,7 @@ public class GCDFactory {
         GreatestCommonDivisorAbstract<ModLong> ufd;
         if (fac.isField()) {
             ufd = new GreatestCommonDivisorModEval<ModLong>();
+            //ufd = new GreatestCommonDivisorSimple<ModLong>();
             return ufd;
         }
         ufd = new GreatestCommonDivisorSubres<ModLong>();
@@ -117,6 +118,7 @@ public class GCDFactory {
         GreatestCommonDivisorAbstract<ModInteger> ufd;
         if (fac.isField()) {
             ufd = new GreatestCommonDivisorModEval<ModInteger>();
+            //ufd = new GreatestCommonDivisorSimple<ModInteger>();
             return ufd;
         }
         ufd = new GreatestCommonDivisorSubres<ModInteger>();
@@ -215,8 +217,10 @@ public class GCDFactory {
             //ufd = new GreatestCommonDivisorModular<ModInteger>(true);
         } else if (ofac instanceof ModIntegerRing) {
             ufd = new GreatestCommonDivisorModEval<ModInteger>();
+            //ufd = new GreatestCommonDivisorSimple<ModInteger>();
         } else if (ofac instanceof ModLongRing) {
             ufd = new GreatestCommonDivisorModEval<ModLong>();
+            //ufd = new GreatestCommonDivisorSimple<ModLong>();
         } else if (ofac instanceof BigRational) {
             ufd = new GreatestCommonDivisorSubres<BigRational>();
         } else {
