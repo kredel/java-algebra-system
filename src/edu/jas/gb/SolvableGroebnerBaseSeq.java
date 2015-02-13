@@ -11,11 +11,11 @@ import java.util.ListIterator;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.poly.PolyUtil;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
+import edu.jas.poly.PolyUtil;
 import edu.jas.poly.PolynomialList;
 import edu.jas.structure.RingElem;
 
@@ -81,49 +81,17 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
     @SuppressWarnings("unchecked")
     public List<GenSolvablePolynomial<C>> leftGB(int modv, List<GenSolvablePolynomial<C>> F) {
         List<GenSolvablePolynomial<C>> G = normalizeZerosOnes(F);
-        G = PolynomialList.castToSolvableList( PolyUtil.<C> monic(PolynomialList.castToList(G)) );
-        if ( G.size() <= 1 ) {
+        G = PolynomialList.castToSolvableList(PolyUtil.<C> monic(PolynomialList.castToList(G)));
+        if (G.size() <= 1) {
             return G;
         }
         GenSolvablePolynomialRing<C> ring = G.get(0).ring;
-        if ( !ring.coFac.isField() && ring.coFac.isCommutative() ) {
+        if (!ring.coFac.isField() && ring.coFac.isCommutative()) {
             throw new IllegalArgumentException("coefficients not from a field: " + ring.coFac.toScript());
         }
-        PairList<C> pairlist = strategy.create( modv, ring ); 
+        PairList<C> pairlist = strategy.create(modv, ring);
         pairlist.put(PolynomialList.castToList(G));
-        /*
-        List<GenSolvablePolynomial<C>> G = new ArrayList<GenSolvablePolynomial<C>>();
-        if (F == null) {
-            return G;
-        }
-        PairList<C> pairlist = null;
-        int l = F.size();
-        //  ListIterator it = F.listIterator();
-        for (GenSolvablePolynomial<C> p : F) {
-            //  p = (SolvablePolynomial) it.next();
-            if (p.length() > 0) {
-                p = p.monic();
-                if (p.isONE()) {
-                    G.clear();
-                    G.add(p);
-                    return G; // since no threads are activated
-                }
-                G.add(p);
-                if (pairlist == null) {
-                    //pairlist = new OrderedPairlist<C>( modv, p.ring );
-                    pairlist = strategy.create(modv, p.ring);
-                }
-                // putOne not required
-                pairlist.put(p);
-            } else {
-                l--;
-            }
-        }
-        if (l <= 1) {
-            return G; // since no threads are activated
-        }
-        */
-        logger.info("start " + pairlist); 
+        logger.info("start " + pairlist);
 
         GenSolvablePolynomial<C> pi, pj, S, H;
         Pair<C> pair;
@@ -187,6 +155,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
      * @param F solvable polynomial list.
      * @return a container for an extended left Groebner base of F.
      */
+    @Override
     @SuppressWarnings("unchecked")
     public SolvableExtendedGB<C> extLeftGB(int modv, List<GenSolvablePolynomial<C>> F) {
         if (F == null || F.isEmpty()) {
@@ -203,7 +172,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
         List<GenSolvablePolynomial<C>> rows = null;
         List<GenSolvablePolynomial<C>> rowh = null;
         GenSolvablePolynomialRing<C> ring = null;
-        GenSolvablePolynomial<C> p, H, P;
+        GenSolvablePolynomial<C> p, H;
 
         int nzlen = 0;
         for (GenSolvablePolynomial<C> f : F) {
@@ -267,7 +236,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
             //System.out.println("exgb 1 = " + exgb);
             return exgb;
         }
-        logger.info("start " + pairlist); 
+        logger.info("start " + pairlist);
 
         Pair<C> pair;
         int i, j;
@@ -417,15 +386,15 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
     @SuppressWarnings("unchecked")
     public List<GenSolvablePolynomial<C>> twosidedGB(int modv, List<GenSolvablePolynomial<C>> Fp) {
         List<GenSolvablePolynomial<C>> F = normalizeZerosOnes(Fp);
-        F = PolynomialList.castToSolvableList( PolyUtil.<C> monic(PolynomialList.castToList(F)) );
-        if ( F.size() < 1 ) { // 0 not 1
+        F = PolynomialList.castToSolvableList(PolyUtil.<C> monic(PolynomialList.castToList(F)));
+        if (F.size() < 1) { // 0 not 1
             return F;
         }
-        if ( F.size() == 1 && F.get(0).isONE() ) { 
+        if (F.size() == 1 && F.get(0).isONE()) {
             return F;
         }
         GenSolvablePolynomialRing<C> ring = F.get(0).ring;
-        if ( !ring.coFac.isField() && ring.coFac.isCommutative() ) {
+        if (!ring.coFac.isField() && ring.coFac.isCommutative()) {
             throw new IllegalArgumentException("coefficients not from a field");
         }
 
@@ -452,44 +421,13 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
             }
         }
         //System.out.println("G generated = " + G);
-        PairList<C> pairlist = strategy.create( modv, ring ); 
+        PairList<C> pairlist = strategy.create(modv, ring);
         pairlist.put(PolynomialList.castToList(G));
 
-        /*
-        List<GenSolvablePolynomial<C>> G = new ArrayList<GenSolvablePolynomial<C>>();
-        PairList<C> pairlist = null;
-        int l = F.size();
-        ListIterator<GenSolvablePolynomial<C>> it = F.listIterator();
-        while (it.hasNext()) {
-            p = it.next();
-            if (p.length() > 0) {
-                p = p.monic();
-                if (p.isONE()) {
-                    G.clear();
-                    G.add(p);
-                    return G; // since no threads are activated
-                }
-                G.add(p);
-                if (pairlist == null) {
-                    // pairlist = new OrderedPairlist<C>( modv, p.ring );
-                    pairlist = strategy.create(modv, p.ring);
-                    if (!p.ring.coFac.isField()) {
-                        //throw new IllegalArgumentException("coefficients not from a field");
-                        logger.warn("coefficients not from a field " + p.ring.coFac);
-                    }
-                }
-                // putOne not required
-                pairlist.put(p);
-            } else {
-                l--;
-            }
-        }
-        //System.out.println("G to check = " + G);
-        */
-        if (G. size() <= 1) { // 1 ok
+        if (G.size() <= 1) { // 1 ok
             return G; // since no threads are activated
         }
-        logger.info("start " + pairlist); 
+        logger.info("start " + pairlist);
 
         Pair<C> pair;
         GenSolvablePolynomial<C> p, pi, pj, S, H;
@@ -765,26 +703,27 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
 
 
     /**
-     * Right Groebner base using pairlist class.
-     * Overides rightGB() via opposite ring.
+     * Right Groebner base using pairlist class. Overides rightGB() via opposite
+     * ring.
      * @param modv number of module variables.
      * @param F solvable polynomial list.
      * @return rightGB(F) a right Groebner base of F.
      */
+    @Override
     @SuppressWarnings("unchecked")
     public List<GenSolvablePolynomial<C>> rightGB(int modv, List<GenSolvablePolynomial<C>> F) {
         List<GenSolvablePolynomial<C>> G = normalizeZerosOnes(F);
-        G = PolynomialList.castToSolvableList( PolyUtil.<C> monic(PolynomialList.castToList(G)) );
-        if ( G.size() <= 1 ) {
+        G = PolynomialList.castToSolvableList(PolyUtil.<C> monic(PolynomialList.castToList(G)));
+        if (G.size() <= 1) {
             return G;
         }
         GenSolvablePolynomialRing<C> ring = G.get(0).ring;
-        if ( !ring.coFac.isField() && ring.coFac.isCommutative() ) {
+        if (!ring.coFac.isField() && ring.coFac.isCommutative()) {
             throw new IllegalArgumentException("coefficients not from a field");
         }
-        PairList<C> pairlist = strategy.create( modv, ring ); 
+        PairList<C> pairlist = strategy.create(modv, ring);
         pairlist.put(PolynomialList.castToList(G));
-        logger.info("start " + pairlist); 
+        logger.info("start " + pairlist);
 
         GenSolvablePolynomial<C> pi, pj, S, H;
         Pair<C> pair;

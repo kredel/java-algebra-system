@@ -295,6 +295,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>> extends Solvabl
      * @param F solvable polynomial list.
      * @return a container for an extended left Groebner base of F.
      */
+    @Override
     public SolvableExtendedGB<C> extLeftGB(int modv, List<GenSolvablePolynomial<C>> F) {
         throw new UnsupportedOperationException("parallel extLeftGB not implemented");
     }
@@ -545,13 +546,12 @@ class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
 
 
     public void run() {
-        GenSolvablePolynomial<C> p, x;
+        GenSolvablePolynomial<C> p, x, S, H;
         Pair<C> pair;
-        GenSolvablePolynomial<C> S;
-        GenSolvablePolynomial<C> H;
         boolean set = false;
         int reduction = 0;
         int sleeps = 0;
+        logger.debug("modv = " + modv); // avoid "unused"
         while (pairlist.hasNext() || pool.hasJobs()) {
             while (!pairlist.hasNext()) {
                 // wait

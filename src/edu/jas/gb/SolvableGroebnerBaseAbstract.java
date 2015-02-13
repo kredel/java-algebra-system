@@ -422,11 +422,12 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
      * Solvable Extended Groebner base using critical pair class.
      * @param modv module variable number.
      * @param F polynomial list.
-     * @return a container for an extended left Groebner base G of F together with
-     *         back-and-forth transformations.
+     * @return a container for an extended left Groebner base G of F together
+     *         with back-and-forth transformations.
      */
     public SolvableExtendedGB<C> extLeftGB(int modv, List<GenSolvablePolynomial<C>> F) {
-        throw new UnsupportedOperationException("extLeftGB not implemented in " + this.getClass().getSimpleName());
+        throw new UnsupportedOperationException("extLeftGB not implemented in "
+                        + this.getClass().getSimpleName());
     }
 
 
@@ -744,7 +745,8 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
         RingFactory<C> cfac = pfac.coFac;
 
         GenPolynomialRing<C> cpfac = new GenPolynomialRing<C>(cfac, ll, new TermOrder(TermOrder.INVLEX));
-        GenSolvablePolynomialRing<GenPolynomial<C>> rfac = new GenSolvablePolynomialRing<GenPolynomial<C>>(cpfac, pfac); // relations
+        GenSolvablePolynomialRing<GenPolynomial<C>> rfac = new GenSolvablePolynomialRing<GenPolynomial<C>>(
+                        cpfac, pfac); // relations
         GenSolvablePolynomial<GenPolynomial<C>> P = rfac.getZERO();
         for (int k = 0; k < ll; k++) {
             GenSolvablePolynomial<GenPolynomial<C>> Pp = rfac.univariate(i, k);

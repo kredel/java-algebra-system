@@ -18,6 +18,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigRational;
+import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.ModuleList;
@@ -26,7 +27,6 @@ import edu.jas.poly.RelationGenerator;
 import edu.jas.poly.RelationTable;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.WeylRelations;
-import edu.jas.kern.ComputerThreads;
 
 
 /**
@@ -127,10 +127,10 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
         cfac = new BigRational(1);
         tord = new TermOrder();
         pfac = new GenSolvablePolynomialRing<BigRational>(cfac, rl, tord);
-        if (Math.random() > 0.5) { 
-           msbb = new ModSolvableGroebnerBaseSeq<BigRational>(cfac);
+        if (Math.random() > 0.5) {
+            msbb = new ModSolvableGroebnerBaseSeq<BigRational>(cfac);
         } else {
-           msbb = new ModSolvableGroebnerBasePar<BigRational>(cfac);
+            msbb = new ModSolvableGroebnerBasePar<BigRational>(cfac);
         }
         logger.info("test with " + msbb.getClass().getSimpleName());
 

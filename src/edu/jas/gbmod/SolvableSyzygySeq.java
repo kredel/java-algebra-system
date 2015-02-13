@@ -44,7 +44,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
 
 
     static {
-        assert assertEnabled = true; // official hack
+        assert assertEnabled = true; // official hack to check assertions enabled
     }
 
 

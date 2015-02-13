@@ -166,10 +166,10 @@ public class IteratorsTest extends TestCase {
         Set<List<BigInteger>> set = new HashSet<List<BigInteger>>();
 
         int s2 = 5;
-        int s = 1;
-        for (int i = 0; i < s1; i++) {
-            s *= s2;
-        }
+        //int s = 1;
+        //for (int i = 0; i < s1; i++) {
+        //    s *= s2;
+        //}
         //System.out.println("s = " + s);
         List<Iterable<BigInteger>> ftlist = new ArrayList<Iterable<BigInteger>>(s1);
         for (int i = 0; i < s1; i++) {
@@ -226,10 +226,10 @@ public class IteratorsTest extends TestCase {
         Set<List<BigInteger>> set = new HashSet<List<BigInteger>>();
 
         int s2 = 5;
-        int s = 1;
-        for (int i = 0; i < s1; i++) {
-            s *= s2;
-        }
+        //int s = 1;
+        //for (int i = 0; i < s1; i++) {
+        //    s *= s2;
+        //}
         //System.out.println("s = " + s);
         List<Iterable<BigInteger>> ftlist = new ArrayList<Iterable<BigInteger>>(s1);
         for (int i = 0; i < s1; i++) {

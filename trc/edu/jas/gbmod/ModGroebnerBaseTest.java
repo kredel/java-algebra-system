@@ -15,18 +15,18 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 // import org.apache.log4j.Logger;
 
+// import edu.jas.structure.RingElem;
+import edu.jas.arith.BigRational;
+import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.ModuleList;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
-// import edu.jas.structure.RingElem;
-import edu.jas.arith.BigRational;
-import edu.jas.kern.ComputerThreads;
 
 
 /**
- * ModGroebnerBase tests with JUnit.
+ * ModGroebnerBase sequential and parallel tests with JUnit.
  * @author Heinz Kredel.
  */
 

@@ -5,14 +5,14 @@
 package edu.jas.ufd;
 
 
-import java.util.SortedMap;
 import java.util.List;
-
-import org.apache.log4j.BasicConfigurator;
+import java.util.SortedMap;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+
+import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
@@ -98,7 +98,7 @@ public class FactorIntegerTest extends TestCase {
         BigInteger cfac = new BigInteger(4);
         BigInteger one = cfac.getONE();
         GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, 1, to,
-                new String[] { "x" });
+                        new String[] { "x" });
         FactorAbstract<BigInteger> fac = new FactorInteger<ModInteger>();
 
         for (int i = 1; i < 3; i++) {
@@ -129,7 +129,7 @@ public class FactorIntegerTest extends TestCase {
             if (a.isConstant()) {
                 continue;
             }
-            GreatestCommonDivisorAbstract<BigInteger> engine = GCDFactory.getProxy(cfac);
+            //GreatestCommonDivisorAbstract<BigInteger> engine = GCDFactory.getProxy(cfac);
             //a = engine.basePrimitivePart(a);
             // a = a.abs();
             //System.out.println("\na = " + a);
@@ -187,7 +187,7 @@ public class FactorIntegerTest extends TestCase {
             if (a.isConstant()) {
                 continue;
             }
-            GreatestCommonDivisorAbstract<BigInteger> engine = GCDFactory.getProxy(cfac);
+            //GreatestCommonDivisorAbstract<BigInteger> engine = GCDFactory.getProxy(cfac);
             //a = engine.basePrimitivePart(a);
             // a = a.abs();
             //System.out.println("\na = " + a);
@@ -266,9 +266,9 @@ public class FactorIntegerTest extends TestCase {
             GenPolynomial<BigInteger> b = pfac.random(kl, 3, el, q / 2.0f);
             GenPolynomial<BigInteger> c = pfac.random(kl, 2, el, q);
             GenPolynomial<BigInteger> d = pfac.random(kl, 2, el, q);
-            b = pfac.parse(" ( x y^2 - 1 ) "); 
-            c = pfac.parse(" ( 2 x y + 1 ) "); 
-            d = pfac.parse(" ( y^4 + 3 x )"); 
+            b = pfac.parse(" ( x y^2 - 1 ) ");
+            c = pfac.parse(" ( 2 x y + 1 ) ");
+            d = pfac.parse(" ( y^4 + 3 x )");
 
             //b = pfac.parse(" ( y + x + 1 ) "); 
             //c = pfac.parse(" ( y ) "); 
@@ -299,7 +299,7 @@ public class FactorIntegerTest extends TestCase {
     public void ytestTrivariateIntegerFactorization() {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
-        String[] vars = new String[] { "x", "y", "z"};
+        String[] vars = new String[] { "x", "y", "z" };
         //vars = new String[] { "x", "y"};
         GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, vars.length, to, vars);
         //FactorAbstract<BigInteger> fac = new FactorInteger<ModInteger>();
@@ -309,9 +309,9 @@ public class FactorIntegerTest extends TestCase {
             GenPolynomial<BigInteger> b = pfac.random(kl, 3, el, q / 2.0f);
             GenPolynomial<BigInteger> c = pfac.random(kl, 2, el, q);
             GenPolynomial<BigInteger> d = pfac.random(kl, 2, el, q);
-            b = pfac.parse(" ( 5 x y^2 - 1 ) "); 
-            c = pfac.parse(" ( 2 x y z^2 + 1 ) "); 
-            d = pfac.parse(" ( y^3 z + 3 x )"); 
+            b = pfac.parse(" ( 5 x y^2 - 1 ) ");
+            c = pfac.parse(" ( 2 x y z^2 + 1 ) ");
+            d = pfac.parse(" ( y^3 z + 3 x )");
             GenPolynomial<BigInteger> a;
             a = b.multiply(c).multiply(d);
             //System.out.println("a = " + a);
@@ -351,9 +351,9 @@ public class FactorIntegerTest extends TestCase {
             GenPolynomial<BigInteger> b = pfac.random(kl, 3, el, q / 2.0f);
             GenPolynomial<BigInteger> c = pfac.random(kl, 2, el, q);
             GenPolynomial<BigInteger> d = pfac.random(kl, 2, el, q);
-            b = pfac.parse(" ( 5 x y^2 - 1 ) "); 
-            c = pfac.parse(" ( 2 x z^2 + w^2 y ) "); 
-            d = pfac.parse(" ( y^3 z + 7 x )"); 
+            b = pfac.parse(" ( 5 x y^2 - 1 ) ");
+            c = pfac.parse(" ( 2 x z^2 + w^2 y ) ");
+            d = pfac.parse(" ( y^3 z + 7 x )");
             GenPolynomial<BigInteger> a;
             a = b.multiply(c).multiply(d);
             //System.out.println("a = " + a);
@@ -390,8 +390,8 @@ public class FactorIntegerTest extends TestCase {
         for (int i = 1; i < 2; i++) {
             GenPolynomial<BigInteger> b = pfac.random(kl, 3, el, q / 2.0f);
             GenPolynomial<BigInteger> c = pfac.random(kl, 2, el, q);
-            b = pfac.parse("( z - y )"); 
-            c = pfac.parse("( z + x )"); 
+            b = pfac.parse("( z - y )");
+            c = pfac.parse("( z + x )");
             GenPolynomial<BigInteger> a;
             //             if ( !a.leadingBaseCoefficient().isUnit()) {
             //                 //continue;
@@ -419,15 +419,15 @@ public class FactorIntegerTest extends TestCase {
     public void testIntegerFactorizationEx1() {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
-        String[] vars = new String[] { "x", "y", "z"};
+        String[] vars = new String[] { "x", "y", "z" };
         GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, vars.length, to, vars);
         FactorInteger<ModInteger> fac = new FactorInteger<ModInteger>();
         GenPolynomial<BigInteger> a, b, c, d;
 
         // (z + xy + 10)(xz + y + 30)(yz + x + 20),
-        b = pfac.parse(" (z + x y + 10) "); 
-        c = pfac.parse(" (x z + y + 30) "); 
-        d = pfac.parse(" (y z + x + 20) "); 
+        b = pfac.parse(" (z + x y + 10) ");
+        c = pfac.parse(" (x z + y + 30) ");
+        d = pfac.parse(" (y z + x + 20) ");
 
         a = b.multiply(c).multiply(d);
         //System.out.println("a = " + a);
@@ -453,11 +453,11 @@ public class FactorIntegerTest extends TestCase {
         String[] vars = new String[] { "x", "y", "z" };
         GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, vars.length, to, vars);
         FactorInteger<ModInteger> fac = new FactorInteger<ModInteger>();
-        GenPolynomial<BigInteger> a, b, c, d;
+        GenPolynomial<BigInteger> a, b, c;
 
         // (x^3(z + y) + z - 11) (x^(z^2 + y^2) + y + 90),
-        b = pfac.parse(" (x^3 (z + y) + z - 11) "); 
-        c = pfac.parse(" (x^2 (z^2 + y^2) + y + 90) "); 
+        b = pfac.parse(" (x^3 (z + y) + z - 11) ");
+        c = pfac.parse(" (x^2 (z^2 + y^2) + y + 90) ");
 
         a = b.multiply(c);
         //System.out.println("a = " + a);
@@ -479,15 +479,15 @@ public class FactorIntegerTest extends TestCase {
     public void testIntegerFactorizationEx3() {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
-        String[] vars = new String[] { "x", "y", "z"};
+        String[] vars = new String[] { "x", "y", "z" };
         GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, vars.length, to, vars);
         FactorInteger<ModInteger> fac = new FactorInteger<ModInteger>();
-        GenPolynomial<BigInteger> a, b, c, d;
+        GenPolynomial<BigInteger> a, b, c;
 
         // (y z^3 + x y z + y^2 + x^3) (x (z^4 + 1) + z + x^3 y^2)
 
-        b = pfac.parse(" (y z^3 + x y z + y^2 + x^3) "); 
-        c = pfac.parse(" (x (z^4 + 1) + z + x^3 y^2) "); 
+        b = pfac.parse(" (y z^3 + x y z + y^2 + x^3) ");
+        c = pfac.parse(" (x (z^4 + 1) + z + x^3 y^2) ");
 
         a = b.multiply(c);
         //System.out.println("a = " + a);
@@ -503,23 +503,23 @@ public class FactorIntegerTest extends TestCase {
     }
 
 
-    /** 
+    /**
      * Test integer factorization, example 4 from Wang.
      */
     public void testIntegerFactorizationEx4() {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
-        String[] vars = new String[] { "x", "y", "z"};
+        String[] vars = new String[] { "x", "y", "z" };
         GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, vars.length, to, vars);
         FactorInteger<ModInteger> fac = new FactorInteger<ModInteger>();
         GenPolynomial<BigInteger> a, b, c, d, e;
 
         // (z^2 - x^3 y + 3) (z^2 + x y^3) (z^2 + x^3 y^4) (y^4 z^2 + x^2 z + 5)
 
-        b = pfac.parse(" ( z^2 - x^3 y + 3 ) "); 
-        c = pfac.parse(" (z^2 + x y^3) "); 
-        d = pfac.parse(" (z^2 + x^3 y^4) "); 
-        e = pfac.parse(" (y^4 z^2 + x^2 z + 5) "); 
+        b = pfac.parse(" ( z^2 - x^3 y + 3 ) ");
+        c = pfac.parse(" (z^2 + x y^3) ");
+        d = pfac.parse(" (z^2 + x^3 y^4) ");
+        e = pfac.parse(" (y^4 z^2 + x^2 z + 5) ");
 
         a = b.multiply(c).multiply(d).multiply(e);
         //System.out.println("a = " + a);
@@ -538,20 +538,20 @@ public class FactorIntegerTest extends TestCase {
     }
 
 
-    /** 
+    /**
      * Test integer factorization, example 5 from Wang.
      */
     public void testIntegerFactorizationEx5() {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
-        String[] vars = new String[] { "x", "y", "z", "u"};
+        String[] vars = new String[] { "x", "y", "z", "u" };
         GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, vars.length, to, vars);
         FactorInteger<ModInteger> fac = new FactorInteger<ModInteger>();
-        GenPolynomial<BigInteger> a, b, c, d;
+        GenPolynomial<BigInteger> a, b, c;
 
         // (z^2 + x^3 y^4 + u^2) ( (y^2 + x) z^2 + 3 u^2 x^3 y^4 z + 19 y^2) (u^2 y^4 z^2 + x^2 z + 5),
-        b = pfac.parse(" (z^2 + x^3 y^4 + u^2) "); 
-        c = pfac.parse(" ( (y^2 + x ) z^2 + 3 u^2 x^3 y^4 z + 19 y^2 )"); 
+        b = pfac.parse(" (z^2 + x^3 y^4 + u^2) ");
+        c = pfac.parse(" ( (y^2 + x ) z^2 + 3 u^2 x^3 y^4 z + 19 y^2 )");
         //d = pfac.parse(" (u^2 y^4 z^2 + x^2 z + 5) "); 
 
         a = b.multiply(c); // .multiply(d); // all factors need 256 sec
@@ -569,16 +569,16 @@ public class FactorIntegerTest extends TestCase {
     }
 
 
-    /** 
+    /**
      * Test integer factorization, example 6 from Wang.
      */
     public void testIntegerFactorizationEx6() {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(1);
-        String[] vars = new String[] { "x", "y", "z", "w"};
+        String[] vars = new String[] { "x", "y", "z", "w" };
         GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, vars.length, to, vars);
         FactorInteger<ModInteger> fac = new FactorInteger<ModInteger>();
-        GenPolynomial<BigInteger> a, b, c, d;
+        GenPolynomial<BigInteger> a, b, c;
 
         // (w^4 z^3 -x y^2 z^2 - w^4 x^5 y^6 - w^2 x^3 y) (- x^5 z^3 + y z + x^2 y^3) 
         // . (w^4 z^6 + y^2 z^3 - w^2 x^2 y^2 z^2 + x^5 z - x^4 y^2  - w^3 x^3 y)
@@ -587,8 +587,8 @@ public class FactorIntegerTest extends TestCase {
         //d = pfac.parse(" (w^4 z^6 + y^2 z^3 - w^2 x^2 y^2 z^2 + x^5 z - x^4 y^2  - w^3 x^3 y) "); 
 
         // with smaller degrees:
-        b = pfac.parse(" (w z^2 - x y^1 z^1 - w x^5 y^2 - w x^3 y) "); 
-        c = pfac.parse(" (- x^5 z^2 + y z + x^2 y^1) "); 
+        b = pfac.parse(" (w z^2 - x y^1 z^1 - w x^5 y^2 - w x^3 y) ");
+        c = pfac.parse(" (- x^5 z^2 + y z + x^2 y^1) ");
         //d = pfac.parse(" (w z^3 + y^2 z^2 - w x^2 y^2 z^1 + x^5 - x^4 y^2  - w x^3 y) "); 
 
         a = b.multiply(c); //.multiply(d); // all factors with small degrees need 684 sec
@@ -615,19 +615,19 @@ public class FactorIntegerTest extends TestCase {
         String[] vars = new String[] { "x", "y", "z" };
         GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, vars.length, to, vars);
         FactorInteger<ModInteger> fac = new FactorInteger<ModInteger>();
-        GenPolynomial<BigInteger> a, b, c, d;
+        GenPolynomial<BigInteger> a, b, c;
 
         // (z + y + x- 3)^3 (z + y + x-2)^2,
 
-        b = pfac.parse(" ( (z + y^2 + x - 3 )^3 ) "); 
-        c = pfac.parse(" ( (z + y + x^2 - 2 )^2 ) "); 
+        b = pfac.parse(" ( (z + y^2 + x - 3 )^3 ) ");
+        c = pfac.parse(" ( (z + y + x^2 - 2 )^2 ) ");
 
         a = b.multiply(c);
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
         //System.out.println("c = " + c);
 
-        SortedMap<GenPolynomial<BigInteger>,Long> sm = fac.factors(a);
+        SortedMap<GenPolynomial<BigInteger>, Long> sm = fac.factors(a);
         //System.out.println("sm = " + sm);
         boolean t = fac.isFactorization(a, sm);
         //System.out.println("t        = " + t);
@@ -661,10 +661,10 @@ public class FactorIntegerTest extends TestCase {
         //a = pfac.parse(" ( 4 t * x^3 + 6 x^3 + 4 t * x^2 + 9 x^2 + 2 x - 1 ) ");
         a = pfac.parse(" ( 2 t * x^2 - 7 x^2 + 2 t * x - 11 x - 4 ) "); // example to parts of Wangs condition: [2 , x, x + 1 ]
         a = pfac.parse(" ( 3 x^4 - ( 7 t + 2  ) x^2 + ( 4 t^2 + 2 t ) ) "); // was not applicable or failed for t < x
- 
+
         //System.out.println("a = " + a);
 
-        SortedMap<GenPolynomial<BigInteger>,Long> sm = fac.factors(a);
+        SortedMap<GenPolynomial<BigInteger>, Long> sm = fac.factors(a);
         //System.out.println("sm = " + sm);
         boolean t = fac.isFactorization(a, sm);
         //System.out.println("t        = " + t);
