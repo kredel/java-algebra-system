@@ -21,6 +21,7 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolynomialList;
+import edu.jas.poly.PolyUtil;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.ufd.GCDFactory;
@@ -123,8 +124,9 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
             logger.warn("right reduction not correct for " + cofac.toScript());
         }
         // TODO check that also coeffTable is empty for recursive solvable poly ring
-        engine = GCDFactory.<C> getImplementation(cofac.coFac);
-        //not used: engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getProxy( cofac.coFac );
+        //engine = GCDFactory.<C> getImplementation(cofac.coFac);
+        //
+        engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getProxy(cofac.coFac);
     }
 
 
@@ -138,8 +140,7 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
     public List<GenSolvablePolynomial<GenPolynomial<C>>> leftGB(int modv,
                     List<GenSolvablePolynomial<GenPolynomial<C>>> F) {
         List<GenSolvablePolynomial<GenPolynomial<C>>> G = normalizeZerosOnes(F);
-        G = PolynomialList.<GenPolynomial<C>> castToSolvableList(engine.recursivePrimitivePart(PolynomialList
-                        .<GenPolynomial<C>> castToList(G)));
+        G = PolynomialList.<GenPolynomial<C>> castToSolvableList(PolyUtil.<C> monicRec(engine.recursivePrimitivePart(PolynomialList.<GenPolynomial<C>> castToList(G))));
         if (G.size() <= 1) {
             return G;
         }
@@ -149,6 +150,7 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
         }
         PairList<GenPolynomial<C>> pairlist = strategy.create(modv, ring);
         pairlist.put(PolynomialList.<GenPolynomial<C>> castToList(G));
+        logger.info("leftGB start " + pairlist);
 
         Pair<GenPolynomial<C>> pair;
         GenSolvablePolynomial<GenPolynomial<C>> pi, pj, S, H;
@@ -170,7 +172,7 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
                 continue;
             }
             if (debug) {
-                logger.debug("ht(S) = " + S.leadingExpVector());
+                logger.info("ht(S) = " + S.leadingExpVector());
             }
 
             H = sredRec.leftNormalformRecursive(G, S);
@@ -179,17 +181,17 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
                 continue;
             }
             if (debug) {
-                logger.debug("ht(H) = " + H.leadingExpVector());
+                logger.info("ht(H) = " + H.leadingExpVector() + ", #(H) = " + H.length());
             }
             H = (GenSolvablePolynomial<GenPolynomial<C>>) engine.recursivePrimitivePart(H);
-            H = (GenSolvablePolynomial<GenPolynomial<C>>) H.abs();
+            H = PolyUtil.<C> monic(H);
             if (H.isConstant()) {
                 G.clear();
                 G.add(H);
                 return G; // since no threads are activated
             }
-            if (logger.isDebugEnabled()) {
-                logger.debug("H = " + H);
+            if (debug) {
+                logger.info("lc(pp(H)) = " + H.leadingBaseCoefficient().toScript());
             }
             if (H.length() > 0) {
                 G.add(H);
@@ -198,7 +200,7 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
         }
         logger.debug("#sequential list = " + G.size());
         G = leftMinimalGB(G);
-        logger.info("" + pairlist);
+        logger.info("leftGB end  " + pairlist);
         return G;
     }
 
@@ -250,7 +252,7 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
             //System.out.println("doing " + a.length());
             a = sredRec.leftNormalformRecursive(G, a);
             a = (GenSolvablePolynomial<GenPolynomial<C>>) engine.recursivePrimitivePart(a); //a.monic(); not possible
-            a = (GenSolvablePolynomial<GenPolynomial<C>>) a.abs();
+            a = PolyUtil.<C> monic(a);
             G.add(a); // adds as last
             i++;
         }
@@ -268,8 +270,7 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
     public List<GenSolvablePolynomial<GenPolynomial<C>>> twosidedGB(int modv,
                     List<GenSolvablePolynomial<GenPolynomial<C>>> Fp) {
         List<GenSolvablePolynomial<GenPolynomial<C>>> G = normalizeZerosOnes(Fp);
-        G = PolynomialList.<GenPolynomial<C>> castToSolvableList(engine.recursivePrimitivePart(PolynomialList
-                        .<GenPolynomial<C>> castToList(G)));
+        G = PolynomialList.<GenPolynomial<C>> castToSolvableList(PolyUtil.<C> monicRec(engine.recursivePrimitivePart(PolynomialList.<GenPolynomial<C>> castToList(G))));
         if (G.size() < 1) { // two-sided!
             return G;
         }
@@ -292,7 +293,7 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
                 q = sredRec.leftNormalformRecursive(F, q);
                 if (!q.isZERO()) {
                     q = (GenSolvablePolynomial<GenPolynomial<C>>) engine.recursivePrimitivePart(q);
-                    q = (GenSolvablePolynomial<GenPolynomial<C>>) q.abs();
+                    q = PolyUtil.<C> monic(q);
                     F.add(q);
                 }
             }
@@ -301,6 +302,7 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
         //System.out.println("G generated = " + G);
         PairList<GenPolynomial<C>> pairlist = strategy.create(modv, ring);
         pairlist.put(PolynomialList.<GenPolynomial<C>> castToList(G));
+        logger.info("twosidedGB start " + pairlist);
 
         Pair<GenPolynomial<C>> pair;
         GenSolvablePolynomial<GenPolynomial<C>> pi, pj, S, H;
@@ -323,7 +325,7 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
                 continue;
             }
             if (debug) {
-                logger.debug("ht(S) = " + S.leadingExpVector());
+                logger.info("ht(S) = " + S.leadingExpVector());
             }
 
             H = sredRec.leftNormalformRecursive(G, S);
@@ -332,18 +334,18 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
                 continue;
             }
             if (debug) {
-                logger.debug("ht(H) = " + H.leadingExpVector());
+                logger.info("ht(H) = " + H.leadingExpVector());
             }
 
             H = (GenSolvablePolynomial<GenPolynomial<C>>) engine.recursivePrimitivePart(H);
-            H = (GenSolvablePolynomial<GenPolynomial<C>>) H.abs();
+            H = PolyUtil.<C> monic(H);
             if (H.isONE()) {
                 G.clear();
                 G.add(H);
                 return G; // since no threads are activated
             }
             if (debug) {
-                logger.debug("H = " + H);
+                logger.info("lc(pp(H)) = " + H.leadingBaseCoefficient());
             }
             if (H.length() > 0) {
                 G.add(H);
@@ -354,7 +356,7 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
                     p = sredRec.leftNormalformRecursive(G, p);
                     if (!p.isZERO()) {
                         p = (GenSolvablePolynomial<GenPolynomial<C>>) engine.recursivePrimitivePart(p);
-                        p = (GenSolvablePolynomial<GenPolynomial<C>>) p.abs();
+                        p = PolyUtil.<C> monic(p);
                         if (p.isONE()) {
                             G.clear();
                             G.add(p);
@@ -368,7 +370,7 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
         }
         logger.debug("#sequential list = " + G.size());
         G = leftMinimalGB(G);
-        logger.info("" + pairlist);
+        logger.info("twosidedGB end  " + pairlist);
         return G;
     }
 

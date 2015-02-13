@@ -145,8 +145,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 continue;
             }
             if (debug) {
-                //logger.info("ht(S) = " + S.leadingExpVector());
-                logger.info("ht(S) = " + S.leadingExpVector() + ", lc(S) = " + S.leadingBaseCoefficient());
+                logger.info("ht(S) = " + S.leadingExpVector());
             }
 
             H = sred.leftNormalform(G, S);
@@ -155,8 +154,8 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 continue;
             }
             if (debug) {
-                //logger.info("ht(H) = " + H.leadingExpVector());
-                logger.info("ht(H) = " + H.leadingExpVector() + ", #H = " + H.length() + ", lc(H) = " + H.leadingBaseCoefficient());
+                logger.info("ht(H) = " + H.leadingExpVector());
+                //logger.info("ht(H) = " + H.leadingExpVector() + ", lc(H) = " + H.leadingBaseCoefficient().toScript());
             }
 
             H = H.monic();
@@ -167,6 +166,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
             }
             if (debug) {
                 // logger.info("H = " + H);
+                logger.info("#monic(H) = " + H.length());
             }
             if (H.length() > 0) {
                 //l++;
@@ -431,28 +431,27 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
 
         List<GenSolvablePolynomial<C>> X = ring.univariateList(modv);
         //System.out.println("X univ = " + X);
-        F = new ArrayList<GenSolvablePolynomial<C>>(F.size() * (1 + X.size()));
-        F.addAll(Fp);
+        List<GenSolvablePolynomial<C>> G = new ArrayList<GenSolvablePolynomial<C>>(F.size() * (1 + X.size()));
+        G.addAll(F);
         GenSolvablePolynomial<C> q;
-        for (GenSolvablePolynomial<C> p : Fp) {
+        for (GenSolvablePolynomial<C> p : F) {
             //p = Fp.get(i);
             for (GenSolvablePolynomial<C> x : X) {
                 //x = X.get(j);
                 q = p.multiply(x);
-                q = sred.leftNormalform(F, q);
+                q = sred.leftNormalform(G, q);
                 q = q.monic();
                 if (!q.isZERO()) {
                     if (q.isONE()) {
-                        F.clear();
-                        F.add(q);
-                        return F; // since no threads are activated
+                        G.clear();
+                        G.add(q);
+                        return G; // since no threads are activated
                     }
-                    F.add(q);
+                    G.add(q);
                 }
             }
         }
-        //System.out.println("F generated = " + F);
-        List<GenSolvablePolynomial<C>> G = F;
+        //System.out.println("G generated = " + G);
         PairList<C> pairlist = strategy.create( modv, ring ); 
         pairlist.put(PolynomialList.castToList(G));
 
