@@ -22,6 +22,7 @@ import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
 // import edu.jas.structure.RingElem;
 import edu.jas.arith.BigRational;
+import edu.jas.kern.ComputerThreads;
 
 
 /**
@@ -40,6 +41,7 @@ public class ModGroebnerBaseTest extends TestCase {
     public static void main(String[] args) {
         BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
+        ComputerThreads.terminate();
     }
 
 
@@ -70,19 +72,7 @@ public class ModGroebnerBaseTest extends TestCase {
     List<GenPolynomial<BigRational>> G;
 
 
-    GenPolynomial<BigRational> a;
-
-
-    GenPolynomial<BigRational> b;
-
-
-    GenPolynomial<BigRational> c;
-
-
-    GenPolynomial<BigRational> d;
-
-
-    GenPolynomial<BigRational> e;
+    GenPolynomial<BigRational> a, b, c, d, e;
 
 
     TermOrder tord;
@@ -94,19 +84,16 @@ public class ModGroebnerBaseTest extends TestCase {
     List<GenPolynomial<BigRational>> V;
 
 
-    ModuleList<BigRational> M;
+    ModuleList<BigRational> M, N;
 
 
-    ModuleList<BigRational> N;
-
-
-    ModGroebnerBase<BigRational> mbb;
+    ModGroebnerBaseAbstract<BigRational> mbb;
 
 
     int rl = 3; //4; //3; 
 
 
-    int kl = 8;
+    int kl = 7;
 
 
     int ll = 5;
@@ -118,9 +105,12 @@ public class ModGroebnerBaseTest extends TestCase {
     float q = 0.2f; //0.4f
 
 
+    BigRational coeff;
+
+
     @Override
     protected void setUp() {
-        BigRational coeff = new BigRational(9);
+        coeff = new BigRational();
         tord = new TermOrder();
         fac = new GenPolynomialRing<BigRational>(coeff, rl, tord);
         mbb = new ModGroebnerBaseSeq<BigRational>(coeff);
@@ -138,6 +128,7 @@ public class ModGroebnerBaseTest extends TestCase {
 
     @Override
     protected void tearDown() {
+        mbb.terminate();
         mbb = null;
         a = b = c = d = e = null;
         fac = null;
@@ -147,13 +138,10 @@ public class ModGroebnerBaseTest extends TestCase {
 
     /**
      * Test sequential GBase.
-     * 
      */
     public void testSequentialModGB() {
-
         L = new ArrayList<List<GenPolynomial<BigRational>>>();
 
-        assertTrue("not isZERO( a )", !a.isZERO());
         V = new ArrayList<GenPolynomial<BigRational>>();
         V.add(a);
         V.add(fac.getZERO());
@@ -163,9 +151,8 @@ public class ModGroebnerBaseTest extends TestCase {
         assertTrue("isGB( { (a,0,1) } )", mbb.isGB(M));
 
         N = mbb.GB(M);
-        assertTrue("isGB( { (a,0,1) } )", mbb.isGB(N));
+        assertTrue("is( { (a,0,1) } )", mbb.isGB(N));
 
-        assertTrue("not isZERO( b )", !b.isZERO());
         V = new ArrayList<GenPolynomial<BigRational>>();
         V.add(b);
         V.add(fac.getONE());
@@ -175,10 +162,9 @@ public class ModGroebnerBaseTest extends TestCase {
         //System.out.println("L = " + L.size() );
 
         N = mbb.GB(M);
-        assertTrue("isDIRPGB( { (a,0,1),(b,1,0) } )", mbb.isGB(N));
+        assertTrue("isGB( { (a,0,1),(b,1,0) } )", mbb.isGB(N));
         //System.out.println("N = " + N );
 
-        assertTrue("not isZERO( c )", !c.isZERO());
         V = new ArrayList<GenPolynomial<BigRational>>();
         V.add(c);
         V.add(fac.getZERO());
@@ -188,10 +174,9 @@ public class ModGroebnerBaseTest extends TestCase {
         //System.out.println("L = " + L.size() );
 
         N = mbb.GB(M);
-        assertTrue("isDIRPGB( { (a,),(b,),(c,) } )", mbb.isGB(N));
+        assertTrue("isGB( { (a,),(b,),(c,) } )", mbb.isGB(N));
         //System.out.println("N = " + N );
 
-        assertTrue("not isZERO( d )", !d.isZERO());
         V = new ArrayList<GenPolynomial<BigRational>>();
         V.add(d);
         V.add(fac.getZERO());
@@ -201,9 +186,65 @@ public class ModGroebnerBaseTest extends TestCase {
         //System.out.println("L = " + L.size() );
 
         N = mbb.GB(M);
-        assertTrue("isDIRPGB( { (a,b,c,d) } )", mbb.isGB(N));
+        assertTrue("isGB( { (a,b,c,d) } )", mbb.isGB(N));
+        //System.out.println("N = " + N );
+    }
+
+
+    /**
+     * Test parallel GBase.
+     */
+    public void testParallelModGB() {
+        mbb = new ModGroebnerBasePar<BigRational>(coeff);
+
+        L = new ArrayList<List<GenPolynomial<BigRational>>>();
+
+        V = new ArrayList<GenPolynomial<BigRational>>();
+        V.add(a);
+        V.add(fac.getZERO());
+        V.add(fac.getONE());
+        L.add(V);
+        M = new ModuleList<BigRational>(fac, L);
+        assertTrue("isGB( { (a,0,1) } )", mbb.isGB(M));
+
+        N = mbb.GB(M);
+        assertTrue("is( { (a,0,1) } )", mbb.isGB(N));
+
+        V = new ArrayList<GenPolynomial<BigRational>>();
+        V.add(b);
+        V.add(fac.getONE());
+        V.add(fac.getZERO());
+        L.add(V);
+        M = new ModuleList<BigRational>(fac, L);
+        //System.out.println("L = " + L.size() );
+
+        N = mbb.GB(M);
+        assertTrue("isGB( { (a,0,1),(b,1,0) } )", mbb.isGB(N));
         //System.out.println("N = " + N );
 
+        V = new ArrayList<GenPolynomial<BigRational>>();
+        V.add(c);
+        V.add(fac.getZERO());
+        V.add(fac.getZERO());
+        L.add(V);
+        M = new ModuleList<BigRational>(fac, L);
+        //System.out.println("L = " + L.size() );
+
+        N = mbb.GB(M);
+        assertTrue("isGB( { (a,),(b,),(c,) } )", mbb.isGB(N));
+        //System.out.println("N = " + N );
+
+        V = new ArrayList<GenPolynomial<BigRational>>();
+        V.add(d);
+        V.add(fac.getZERO());
+        V.add(fac.getZERO());
+        L.add(V);
+        M = new ModuleList<BigRational>(fac, L);
+        //System.out.println("L = " + L.size() );
+
+        N = mbb.GB(M);
+        assertTrue("isGB( { (a,b,c,d) } )", mbb.isGB(N));
+        //System.out.println("N = " + N );
     }
 
 }
