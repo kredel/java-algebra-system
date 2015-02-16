@@ -185,9 +185,8 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
      */
     @Override
     public int hashCode() {
-        int h;
-        h = ring.hashCode();
-        h = 31 * h + table.hashCode();
+        //int h = ring.hashCode(); // infinite recursion
+        int h = table.hashCode();
         return h;
     }
 
