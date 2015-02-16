@@ -986,8 +986,8 @@ class ParamIdeal:
         if self.gbsys == None:
             return self.pset.toScript();
         else:
-            return self.gbsys.toString(); # toScript() not available
-#            return self.pset.toScript() + "\n" + self.gbsys.toScript();
+#            return self.gbsys.toString(); # toScript() not available
+            return self.pset.toScript() + "\n" + self.gbsys.toScript();
 
     def optimizeCoeff(self):
         '''Optimize the term order on the variables of the coefficients.
@@ -3730,12 +3730,14 @@ class SolvPolyRing(SolvableRing):
             #print "L[i+1] = " + str(L[i+1]);
             if L[i+1].isConstant():
                constSolv = True;
-        #print "cf = " + str(cf.getClass().getSimpleName());
         recSolv = cf.getClass().getSimpleName() == "GenPolynomialRing";
         quotSolv = cf.getClass().getSimpleName() == "SolvableQuotientRing";
         resSolv = cf.getClass().getSimpleName() == "SolvableResidueRing";
         locSolv = cf.getClass().getSimpleName() == "SolvableLocalRing";
         locresSolv = cf.getClass().getSimpleName() == "SolvableLocalResidueRing";
+        if recSolv and not constSolv:
+           recSolv = False;
+        #print "cf = " + str(cf.getClass().getSimpleName()) + ", quotSolv = " + str(quotSolv) + ", recSolv = " + str(recSolv);
         if recSolv:
             ring = RecSolvablePolynomialRing(cf,nv,to,names);
             table = ring.table;

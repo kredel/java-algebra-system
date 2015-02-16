@@ -3083,8 +3083,8 @@ Create a string representation.
         if @gbsys == nil
             return @pset.toScript();
         else
-#            return @pset.toScript() + "\n" + @gbsys.toScript();
-            return @pset.toScript() + "\n" + @gbsys.to_s;
+            return @pset.toScript() + "\n" + @gbsys.toScript();
+#            return @pset.toScript() + "\n" + @gbsys.to_s;
         end
     end
 
@@ -3471,6 +3471,9 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
         resSolv = cf.getClass().getSimpleName() == "SolvableResidueRing"
         locSolv = cf.getClass().getSimpleName() == "SolvableLocalRing"
         locresSolv = cf.getClass().getSimpleName() == "SolvableLocalResidueRing"
+        if recSolv and not constSolv
+           recSolv = false;
+        end
         #puts "cf = " + cf.getClass().to_s + ", quotSolv = " + quotSolv.to_s + ", recSolv = " + recSolv.to_s;
         if recSolv
            puts "RecSolvablePolynomialRing: " + cf.toScript();
