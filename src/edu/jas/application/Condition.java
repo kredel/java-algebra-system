@@ -115,6 +115,15 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
 
 
     /**
+     * toScript.
+     * @see java.lang.Object#toScript()
+     */
+    public String toScript() {
+        return "Condition[ 0 == " + zero.getList().toString() + ", 0 != " + nonZero.mset.toString() + " ]";
+    }
+
+
+    /**
      * equals.
      * @param ob an Object.
      * @return true if this is equal to o, else false.

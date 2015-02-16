@@ -111,6 +111,51 @@ public class GroebnerSystem<C extends GcdRingElem<C>> {
 
 
     /**
+     * Get the Script representation.
+     * @see java.lang.Object#toScript()
+     */
+    public String toScript() {
+        StringBuffer sb = new StringBuffer("GroebnerSystem: \n");
+        boolean first = true;
+        for (ColoredSystem<C> cs : list) {
+            if ( first ) {
+               first = false;
+            } else {
+               sb.append("\n");
+            }
+            sb.append( cs.toScript() );
+        }
+        sb.append("Conditions:\n");
+        first = true;
+        for ( Condition<C> cond : getConditions() ) {
+            if ( first ) {
+                first = false;
+            } else {
+                sb.append("\n");
+            }
+            sb.append( cond.toScript() );
+        }
+        sb.append("\n");
+        if ( cgb == null ) {
+           sb.append("Comprehensive Groebner Base not jet computed\n");
+        } else {
+           sb.append("Comprehensive Groebner Base:\n");
+           first = true;
+           for ( GenPolynomial<GenPolynomial<C>> p : getCGB() ) {
+               if ( first ) {
+                  first = false;
+               } else {
+                  sb.append(",\n");
+               }
+               sb.append( p.toScript() );
+           }
+           sb.append("\n");
+        }
+        return sb.toString();
+    }
+
+
+    /**
      * Is this Groebner system equal to other.
      * @param c other Groebner system.
      * @return true, if this is equal to other, else false.
@@ -203,6 +248,7 @@ public class GroebnerSystem<C extends GcdRingElem<C>> {
         if ( unused.isEmpty() ) { // use for findbugs
             logger.info("unused is empty");
         }
+        //System.out.println("unused ");
         // combine for CGB
         Set<GenPolynomial<GenPolynomial<C>>> Gs 
            = new HashSet<GenPolynomial<GenPolynomial<C>>>();
