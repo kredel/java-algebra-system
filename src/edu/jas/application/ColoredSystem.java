@@ -138,7 +138,7 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
 
     /**
      * Get the Script representation.
-     * @see java.lang.Object#toScript()
+     * @see edu.jas.structure.Element#toScript()
      */
     public String toScript() {
         StringBuffer s = new StringBuffer("ColoredSystem: \n");
