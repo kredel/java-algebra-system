@@ -154,6 +154,31 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
 
 
     /**
+     * Hash code for base relations.
+     * @param a mixed list
+     * @returns hashCode(a)
+     */
+    @SuppressWarnings("unchecked")
+    int fromListDeg2HashCode(List a) {
+        int h = 0;
+        Iterator ait = a.iterator();
+        while (ait.hasNext()) {
+            ExpVectorPair ae = (ExpVectorPair) ait.next();
+            h = 31 * h + ae.hashCode();
+            if (!ait.hasNext()) {
+                break;
+            }
+            GenPolynomial<C> p = (GenPolynomial<C>) ait.next();
+            if (ae.totalDeg() == 2) { // only base relations
+                //System.out.println("ae => p: " + ae + " => " + p);
+                h = 31 * h + p.val.hashCode(); // avoid hash of ring
+            }
+        }
+        return h;
+    }
+
+
+    /**
      * Equals for special maps.
      * @param m1 first map
      * @param m2 second map
@@ -186,7 +211,13 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
     @Override
     public int hashCode() {
         //int h = ring.hashCode(); // infinite recursion
-        int h = table.hashCode();
+        int h = 0; //table.hashCode();
+        h = table.keySet().hashCode();
+        for (List<Integer> k : table.keySet()) {
+            List a = table.get(k);
+            int t1 = fromListDeg2HashCode(a);
+            h = 31 * h + t1;
+        }
         return h;
     }
 
