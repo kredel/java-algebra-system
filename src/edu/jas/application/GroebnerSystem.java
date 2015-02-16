@@ -112,7 +112,7 @@ public class GroebnerSystem<C extends GcdRingElem<C>> {
 
     /**
      * Get the Script representation.
-     * @see java.lang.Object#toScript()
+     * @see edu.jas.structure.Element#toScript()
      */
     public String toScript() {
         StringBuffer sb = new StringBuffer("GroebnerSystem: \n");

@@ -116,7 +116,7 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
 
     /**
      * toScript.
-     * @see java.lang.Object#toScript()
+     * @see edu.jas.structure.Element#toScript()
      */
     public String toScript() {
         return "Condition[ 0 == " + zero.getList().toString() + ", 0 != " + nonZero.mset.toString() + " ]";

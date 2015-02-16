@@ -208,6 +208,8 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
                 }
                 h = sred.leftNormalform(F, s);
                 if (!h.isZERO()) {
+                    logger.info("no left GB: pi = " + pi + ", pj = " + pj);
+                    logger.info("s  = " + s + ", h = " + h);
                     return false;
                 }
             }
