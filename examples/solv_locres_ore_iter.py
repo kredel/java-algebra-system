@@ -92,6 +92,7 @@ print "sp.gens =" + str([ str(f) for f in pt.gens() ]);
 print;
 
 #exit(0);
+#startLog();
 
 a = t**2 + y;
 b = t + y + 1;
@@ -121,12 +122,12 @@ print;
 
 #p = RingElem(rgl.list.get(0));
 p = RingElem(rgl.list[0]);
-print "p     = " + str(p);
-print "c     = " + str(c);
-print "c-p   = " + str(c-p);
+print "p          = " + str(p);
+print "c          = " + str(c);
+#print "c-p        = " + str(c-p);
 d = c.monic();
-print "d     = " + str(d);
-print "d-p   = " + str(d-p);
+print "d=monic(c) = " + str(d);
+print "d-p        = " + str(d-p);
 print;
 
 #exit(0);
@@ -156,11 +157,13 @@ q = RingElem(rgll.list[0]);
 print "p     = " + str(p);
 print "q     = " + str(q);
 print "q-p   = " + str(q-p);
-print "c     = " + str(c);
-print "c-q   = " + str(c-q);
+#print "c     = " + str(c);
+#print "c-q   = " + str(c-q);
 print "d     = " + str(d);
 print "d-q   = " + str(d-q);
 print;
+
+startLog();
 
 f1 = t - z**2;
 print "f1    = " + str(f1);
@@ -168,7 +171,7 @@ print "f1    = " + str(f1);
 f2 = t + y;
 print "f2    = " + str(f2); 
 f3 = f1 - f2;
-print "f3    = " + str(f3) + ", " + str(f3.isZERO());
+print "f1-f2 = " + str(f3) + ", " + str(f3.isZERO());
 print;
 
 iil = pt.ideal( "", [ f1, f2 ] );
@@ -179,3 +182,15 @@ rgll = iil.leftGB();
 print "seq left GB: " + str(rgll);
 print "isLeftGB: " + str(rgll.isLeftGB());
 print;
+
+# == leftGB:
+#rgll = iil.rightGB();
+#print "seq right GB: " + str(rgll);
+#print "isRightGB: " + str(rgll.isRightGB());
+#print;
+
+# == 1:
+#rgll = iil.twosidedGB();
+#print "seq twosided GB: " + str(rgll);
+#print "isTwosidedGB: " + str(rgll.isTwosidedGB());
+#print;
