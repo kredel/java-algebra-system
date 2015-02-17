@@ -106,9 +106,10 @@ public class CReductionSeq<C extends GcdRingElem<C>> implements Serializable
             b = b.divide(c);
         }
 
-        ColorPolynomial<C> App = Ap.multiply(b, e1);
-        ColorPolynomial<C> Bpp = Bp.multiply(a, f1);
+        ColorPolynomial<C> App = Ap.multiply(b, e1); // multiplyLeft in poly
+        ColorPolynomial<C> Bpp = Bp.multiply(a, f1); // multiplyLeft in poly
         ColorPolynomial<C> Cp = App.subtract(Bpp);
+        assert (! g.equals(Cp.getEssentialPolynomial().leadingExpVector())) : "g == lt(Cp)";
         return Cp;
     }
 
@@ -295,7 +296,7 @@ public class CReductionSeq<C extends GcdRingElem<C>> implements Serializable
             }
         }
         l = j;
-        ExpVector e;
+        ExpVector e, f;
         GenPolynomial<C> a;
         boolean mt = false;
         GenPolynomial<GenPolynomial<C>> zero = p[0].red.ring.getZERO();
@@ -341,6 +342,7 @@ public class CReductionSeq<C extends GcdRingElem<C>> implements Serializable
                 S = S.subtract(a, e);
                 // System.out.println(" S = " + S);
             } else {
+                f = e;
                 e = e.subtract(htl[i]); // EVDIF( e, htl[i] );
                 // logger.info("red div = " + e);
                 GenPolynomial<C> c = (GenPolynomial<C>) lbc[i];
@@ -352,8 +354,9 @@ public class CReductionSeq<C extends GcdRingElem<C>> implements Serializable
                 }
                 S = S.multiply(c);
                 R = R.multiply(c);
-                Q = p[i].multiply(a, e);
+                Q = p[i].multiply(a, e); // multiplyLeft in poly
                 S = S.subtract(Q);
+                assert (! f.equals(S.getEssentialPolynomial().leadingExpVector()) ) : "f == lt(S)";
             }
         }
         return R;
