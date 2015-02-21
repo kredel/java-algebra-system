@@ -14,6 +14,9 @@ import org.apache.log4j.Logger;
 import edu.jas.structure.NotInvertibleException;
 import edu.jas.structure.RingElem;
 
+import edu.jas.application.QLRSolvablePolynomial;
+import edu.jas.application.ResidueSolvablePolynomial;
+
 
 /**
  * GenSolvablePolynomial generic solvable polynomials implementing RingElem.
@@ -148,6 +151,20 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
             RecSolvablePolynomial Sp = (RecSolvablePolynomial) Bp;
             return (GenSolvablePolynomial<C>) T.multiply(Sp);
         }
+        if (this instanceof QLRSolvablePolynomial && Bp instanceof QLRSolvablePolynomial) {
+            //throw new RuntimeException("wrong method dispatch in JRE ");
+            logger.info("warn: wrong method dispatch in JRE multiply(Bp) - trying to fix");
+            QLRSolvablePolynomial T = (QLRSolvablePolynomial) this; // no <C>
+            QLRSolvablePolynomial Sp = (QLRSolvablePolynomial) Bp;
+            return (GenSolvablePolynomial<C>) T.multiply(Sp);
+        }
+        if (this instanceof ResidueSolvablePolynomial && Bp instanceof ResidueSolvablePolynomial) {
+            //throw new RuntimeException("wrong method dispatch in JRE ");
+            logger.info("warn: wrong method dispatch in JRE multiply(Bp) - trying to fix");
+            ResidueSolvablePolynomial T = (ResidueSolvablePolynomial) this; // no <C>
+            ResidueSolvablePolynomial Sp = (ResidueSolvablePolynomial) Bp;
+            return (GenSolvablePolynomial<C>) T.multiply(Sp);
+        }
         ExpVector Z = ring.evzero;
         GenSolvablePolynomial<C> Cp = ring.getZERO().copy();
         GenSolvablePolynomial<C> zero = ring.getZERO().copy();
@@ -188,7 +205,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
                     ExpVector g = e.sum(f);
                     //if ( debug ) logger.debug("g = " + g);
                     Cs = (GenSolvablePolynomial<C>) zero.sum(one, g); // symmetric!
-                    //Cs = new GenSolvablePolynomial<C>(ring,one,g); // symmetric!
+                    //System.out.println("Cs(sym) = " + Cs + ", g = " + g);
                 } else { // unsymmetric
                     // split e = e1 * e2, f = f1 * f2
                     ExpVector e1 = e.subst(el1, 0);
@@ -227,6 +244,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
                         //ring.table.update(e1,?,Cs)
                     }
                 }
+                //System.out.println("Cs = " + Cs + ", a = " + a + ", b = " + b);
                 //C c = a.multiply(b);
                 Cs = Cs.multiply(a, b); // now non-symmetric // Cs.multiply(c); is symmetric!
                 //if ( debug ) logger.debug("Cs = " + Cs);

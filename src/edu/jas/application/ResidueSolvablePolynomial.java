@@ -204,7 +204,7 @@ public class ResidueSolvablePolynomial<C extends GcdRingElem<C>> extends
                 } else { // unsymmetric
                     if (debug)
                         logger.info("unsymmetric coeff: b = " + b + ", e = " + e);
-                    // recursive polynomial coefficient multiplication : e * b.bal
+                    // recursive polynomial coefficient multiplication : e * b.val
                     RecSolvablePolynomial<C> rsp1 = new RecSolvablePolynomial<C>(ring.polCoeff, e);
                     RecSolvablePolynomial<C> rsp2 = new RecSolvablePolynomial<C>(ring.polCoeff, b.val);
                     RecSolvablePolynomial<C> rsp3 = rsp1.multiply(rsp2);
@@ -530,8 +530,7 @@ public class ResidueSolvablePolynomial<C extends GcdRingElem<C>> extends
 
 
     /**
-     * ResidueSolvablePolynomial multiplication. Left product with coefficient
-     * ring element.
+     * ResidueSolvablePolynomial multiplication with exponent vector.
      * @param B solvable polynomial.
      * @param f exponent vector.
      * @return B*f, where * is commutative multiplication.

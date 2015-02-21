@@ -581,8 +581,7 @@ public class QLRSolvablePolynomial<C extends GcdRingElem<C> & QuotPair<GenPolyno
 
 
     /**
-     * QLRSolvablePolynomial multiplication. Left product with coefficient ring
-     * element.
+     * QLRSolvablePolynomial multiplication with exponent vector. 
      * @param B solvable polynomial.
      * @param f exponent vector.
      * @return B*f, where * is commutative multiplication.
