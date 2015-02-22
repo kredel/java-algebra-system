@@ -10,13 +10,12 @@ require "examples/jas"
 pcz = PolyRing.new(QQ(),"x,y,z");
 #is automatic: [one,x,y,z] = p.gens();
 
-zrelations = [z, y,  y * z + x
-             ];
+zrel = [z, y,  y * z + x ];
 
-puts "zrelations: = [" + zrelations.join(", ") { |r| r.to_s } + "]";
+puts "zrel: = [" + zrel.join(", ") { |r| r.to_s } + "]";
 puts;
 
-pz = SolvPolyRing.new(QQ(), "x,y,z", PolyRing.lex, zrelations);
+pz = SolvPolyRing.new(QQ(), "x,y,z", PolyRing.lex, zrel);
 puts "SolvPolyRing: pz = " + str(pz);
 puts;
 
@@ -74,16 +73,16 @@ pct = PolyRing.new(pzc,"t");
 
 #exit(0);
 
-trelations = [t, y,  y * t + y,
-              t, z,  z * t - z
-             ];
+trel = [t, y,  y * t + y,
+        t, z,  z * t - z
+       ];
 
-puts "trelations: = [" + trelations.join(", ") { |r| r.to_s } + "]";
+puts "trel: = [" + trel.join(", ") { |r| r.to_s } + "]";
 puts;
 
 #startLog();
 
-pt = SolvPolyRing.new(pzc, "t", PolyRing.lex, trelations);
+pt = SolvPolyRing.new(pzc, "t", PolyRing.lex, trel);
 puts "SolvPolyRing: pt = " + str(pt);
 puts "sp.gens(t) = " + pt.gens().join(", ") { |r| r.to_s };
 #is automatic: one,y,z,t = rp.gens(); # no x?
@@ -101,11 +100,11 @@ puts "c   = " + str(c);
 #puts "c   = " + str(c);
 puts
 
-ff = [ a*c, b*c, (a+b)*c ];
-puts "ff = [" + ff.join(", ") { |r| r.to_s } + "]";
+ff1 = [ a*c, b*c, (a+b)*c ];
+puts "ff1 = [" + ff1.join(", ") { |r| r.to_s } + "]";
 puts
 
-ii = pt.ideal( "", ff );
+ii = pt.ideal( "", ff1 );
 puts "SolvableIdeal: ii = " + str(ii);
 puts;
 
@@ -168,7 +167,7 @@ puts "f1    = " + str(f1);
 f2 = t + y;
 puts "f2    = " + str(f2); 
 f3 = f1 - f2;
-puts "f3    = " + str(f3) + ", " + str(f3.isZERO());
+puts "f1-f2 = " + str(f3); # + ", " + str(f3.isZERO());
 puts;
 
 iil = pt.ideal( "", [ f1, f2 ] );
@@ -179,3 +178,80 @@ rgll = iil.leftGB();
 puts "seq left GB: rgll = " + str(rgll);
 puts "isLeftGB: rgll = " + str(rgll.isLeftGB());
 puts;
+
+# new
+
+f3 = f1 * f2;
+#f3 = f2 * f1;
+#f3 = f2;
+puts "f3    = " + str(f3)
+#puts;
+#f4 = f2*f2;
+#puts "f4    = " + str(f4)
+puts "f1    = " + str(f1)
+puts "f2    = " + str(f2)
+
+iil = pt.ideal( "", [ f2, f3 ] );
+puts "SolvableIdeal_local: iil = " + str(iil);
+puts;
+
+rgll = iil.leftGB();
+puts "seq left GB: rgll = " + str(rgll);
+puts "isLeftGB: rgll = " + str(rgll.isLeftGB());
+puts;
+f5 = RingElem.new(rgll.list[0]);
+puts "f5    = " + str(f5)
+puts "f2-f5 = " + str(f2-f5)
+
+#f3 = f4;
+puts "f3    = " + str(f3)
+puts "f2*f1 = " + str(f2*f1)
+puts "f1*f2 = " + str(f1*f2)
+e = f3.evaluate( -y );
+puts "e     = " + str(e); 
+puts;
+
+#     ( t - z**2 ) * ( t + y )
+f4c = (t**2 - z**2 * t + t * y - z**2 * y);
+puts "f4c   = " + str(f4c)
+
+t = -y;
+#
+# ( t**2 - ( ( z**2 - y ) ) * t - ( ( y * z**2 + 2 * x * z - y ) ) )
+#
+#puts "t**2     = " + str(t**2)
+#puts "-2y t    = " + str(-2*y*t)
+#puts "z^2*y    = " + str( z**2 * y )
+f4 = (t**2 - z**2 * t + t * y - z**2 * y);
+puts "f4    = " + str(f4)
+puts
+
+f4d =  ( (-y) - z**2 ) * ( (-y) + y );
+puts "f4c   = " + str(f4c)
+puts "f4d   = " + str(f4d)
+puts;
+
+f6 = f3 / f2;
+f7 = f3 % f2;
+puts "f3/f2 = " + str(f6)
+puts "f3%f2 = " + str(f7)
+
+#exit(0);
+
+iil = pt.ideal( "", [ f2, f1*f2 ] );
+puts "SolvableIdeal_local: iil = " + str(iil);
+puts;
+
+rgll = iil.leftGB();
+puts "seq left GB: rgll = " + str(rgll);
+puts "isLeftGB: rgll = " + str(rgll.isLeftGB());
+puts;
+
+e = f3.evaluate( z**2 );
+puts "e     = " + str(e); 
+#puts;
+
+e = f3.evaluate( y-z**2 );
+puts "e     = " + str(e); 
+puts;
+
