@@ -18,6 +18,7 @@ from edu.jas.poly        import GenPolynomial, GenPolynomialRing, Monomial,\
                                 GenSolvablePolynomial, GenSolvablePolynomialRing,\
                                 RecSolvablePolynomial, RecSolvablePolynomialRing,\
                                 GenWordPolynomial, GenWordPolynomialRing,\
+                                ExpVector,\
                                 Word, WordFactory,\
                                 GenPolynomialTokenizer, OrderedPolynomialList, PolyUtil,\
                                 TermOrderOptimization, TermOrder, PolynomialList,\
@@ -401,7 +402,7 @@ class Ring:
             a = self.element( a );
             a = a.elem;
         cf = self.ring.coFac;
-        if cf.getClass().getSimpleName() == "GenPolynomialRing":
+        if isinstance(cf,GenPolynomialRing):
             e = self.sqf.recursiveSquarefreeFactors( a );
         else:
             e = self.sqf.squarefreeFactors( a );
@@ -1443,10 +1444,10 @@ class SolvableIdeal:
     def toQuotientCoefficients(self):
         '''Convert to polynomials with SolvableQuotient coefficients.
         '''
-        if self.pset.ring.coFac.getClass().getSimpleName() == "SolvableResidueRing":
+        if isinstance(self.pset.ring.coFac,SolvableResidueRing):
            cf = self.pset.ring.coFac.ring;
         else:
-           if self.pset.ring.coFac.getClass().getSimpleName() == "GenSolvablePolynomialRing":
+           if isinstance(self.pset.ring.coFac,GenSolvablePolynomialRing):
               cf = self.pset.ring.coFac;
               #else: if @pset.ring.coFac.getClass().getSimpleName() == "GenPolynomialRing"
               #   cf = @pset.ring.coFac;
@@ -2130,8 +2131,8 @@ def pylist2arraylist(list,fac=None,rec=1):
                    t = False;
                    e = pylist2arraylist(e,fac,rec-1);
            try:
-               n = e.getClass().getSimpleName();
-               if n == "ArrayList":
+               #n = e.getClass().getSimpleName();
+               if isinstance(e,ArrayList) or isinstance(e,LinkedList):
                    t = False;
            except:
                pass;
@@ -2438,7 +2439,7 @@ def AN(m,z=0,field=False,pr=None):
 #        z = 0;
     #print "m.getClass() = " + str(m.getClass().getName());
     #print "field = " + str(field);
-    if m.getClass().getSimpleName() == "AlgebraicNumber":
+    if isinstance(m,AlgebraicNumber):
         mf = AlgebraicNumberRing(m.factory().modul,m.factory().isField());
     else:
         if field:
@@ -2465,7 +2466,7 @@ def RealN(m,i,r=0):
         ir = BigRational(i[1]);
         i = Interval(il,ir);
     #print "m.getClass() = " + str(m.getClass().getName());
-    if m.getClass().getSimpleName() == "RealAlgebraicNumber":
+    if isinstance(m,RealAlgebraicNumber):
         mf = RealAlgebraicRing(m.factory().algebraic.modul,i);
     else:
         mf = RealAlgebraicRing(m,i);
@@ -2513,7 +2514,7 @@ def RC(ideal,r=0):
         ideal = jas.application.Ideal(ideal.pset);
         #ideal.doGB();
     #print "ideal.getList().get(0).ring.ideal = %s" % ideal.getList().get(0).ring.ideal;
-    if ideal.getList().get(0).ring.getClass().getSimpleName() == "ResidueRing":
+    if isinstance(ideal.getList().get(0).ring,ResidueRing):
         rc = ResidueRing( ideal.getList().get(0).ring.ideal );
     else:
         rc = ResidueRing(ideal);
@@ -2535,7 +2536,7 @@ def LC(ideal,d=0,n=1):
         ideal = jas.application.Ideal(ideal.pset);
         #ideal.doGB();
     #print "ideal.getList().get(0).ring.ideal = %s" % ideal.getList().get(0).ring.ideal;
-    if ideal.getList().get(0).ring.getClass().getSimpleName() == "LocalRing":
+    if isinstance(ideal.getList().get(0).ring,LocalRing):
         lc = LocalRing( ideal.getList().get(0).ring.ideal );
     else:
         lc = LocalRing(ideal);
@@ -2599,7 +2600,7 @@ def SRC(ideal,r=0):
         ideal = jas.application.SolvableIdeal(ideal.pset);
         #ideal.doGB();
     #print "ideal.getList().get(0).ring.ideal = %s" % ideal.getList().get(0).ring.ideal;
-    if ideal.getList().get(0).ring.getClass().getSimpleName() == "SolvableResidueRing":
+    if isinstance(ideal.getList().get(0).ring,SolvableResidueRing):
         rc = SolvableResidueRing( ideal.getList().get(0).ring.ideal );
     else:
         rc = SolvableResidueRing(ideal);
@@ -2623,7 +2624,7 @@ def SLC(ideal,d=0,n=1):
         ideal = jas.application.SolvableIdeal(ideal.pset);
         #ideal.doGB();
     #print "ideal.getList().get(0).ring.ideal = %s" % ideal.getList().get(0).ring.ideal;
-    if ideal.getList().get(0).ring.getClass().getSimpleName() == "SolvableLocalRing":
+    if isinstance(ideal.getList().get(0).ring,SolvableLocalRing):
         lc = SolvableLocalRing( ideal.getList().get(0).ring.ideal );
     else:
         lc = SolvableLocalRing(ideal);
@@ -2659,7 +2660,7 @@ def SLR(ideal,d=0,n=1):
         #ideal.doGB();
     #print "ideal.getList().get(0).ring.ideal = %s" % ideal.getList().get(0).ring.ideal;
     cfr = ideal.getList().get(0).ring;
-    if cfr.getClass().getSimpleName() == "SolvableLocalResidueRing":
+    if isinstance(cfr,SolvableLocalResidueRing):
         lc = SolvableLocalResidueRing( cfr.ideal );
     else:
         lc = SolvableLocalResidueRing(ideal);
@@ -2883,7 +2884,10 @@ class RingElem:
     def __str__(self):
         '''Create a string representation.
         '''
-        return str(self.elem.toScript()); 
+        try:
+            return str(self.elem.toScript()); 
+        except:
+            return str(self.elem); 
 
     def zero(self):
         '''Zero element of this ring.
@@ -2931,20 +2935,20 @@ class RingElem:
         #print "self  type(%s) = %s" % (self,type(self));
         #print "other type(%s) = %s" % (other,type(other));
         #print "self.elem class(%s) = %s" % (self.elem,self.elem.getClass());
-        if self.elem.getClass().getSimpleName() == "GenVector":
+        if isinstance(self.elem,GenVector):
             #print "self, other = %s, %s " % (self,other);
             if isinstance(other,PyTuple) or isinstance(other,PyList):
                 o = pylist2arraylist(other,self.elem.factory().coFac,rec=1);
                 o = GenVector(self.elem.factory(),o);
                 return RingElem( o );
-        if self.elem.getClass().getSimpleName() == "GenMatrix":
+        if isinstance(self.elem,GenMatrix):
             #print "self, other = %s, %s " % (type(self),type(other));
             #print "o type(%s) = %s, str = %s" % (o,type(o),str(o));
             if isinstance(other,PyTuple) or isinstance(other,PyList):
                 o = pylist2arraylist(other,self.elem.factory().coFac,rec=2);
                 o = GenMatrix(self.elem.factory(),o);
                 return RingElem( o );
-        if self.elem.getClass().getSimpleName() == "GenPolynomial":
+        if isinstance(self.elem,GenPolynomial):
             #print "self, other = %s, %s " % (type(self),type(other));
             #print "o type(%s) = %s, str = %s" % (o,type(o),str(o));
             if isinstance(other,PyInteger) or isinstance(other,PyLong):
@@ -2958,7 +2962,7 @@ class RingElem:
                 return RingElem( GenPolynomial(self.ring) )
             if isJavaInstance(o):
                 #print "self.elem, o = %s, %s " % (type(self.ring.coFac),type(o));
-                if o.getClass().getSimpleName() == "ExpVectorLong": # want startsWith or substring(0,8) == "ExpVector":
+                if isinstance(o,ExpVector): # want startsWith or substring(0,8) == "ExpVector":
                     o = GenPolynomial(self.ring,o);
                     return RingElem( o );
                 if self.ring.coFac.getClass().getSimpleName() == o.getClass().getSimpleName():
@@ -2981,19 +2985,19 @@ class RingElem:
                 #print "other type(%s) = %s" % (o,type(o));
                 o = self.ring.parse( o.toString() ); # not toScript();
                 #o = o.elem;
-            if self.elem.getClass().getSimpleName() == "BigComplex":
+            if isinstance(self.elem,BigComplex):
                 #print "other type(%s) = %s" % (o,type(o));
                 o = CC( o );
                 o = o.elem;
-            if self.elem.getClass().getSimpleName() == "BigQuaternion":
+            if isinstance(self.elem,BigQuaternion):
                 #print "other type(%s) = %s" % (o,type(o));
                 o = Quat( o );
                 o = o.elem;
-            if self.elem.getClass().getSimpleName() == "BigOctonion":
+            if isinstance(self.elem,BigOctonion):
                 #print "other type(%s) = %s" % (o,type(o));
                 o = Oct( Quat(o) );
                 o = o.elem;
-            if self.elem.getClass().getSimpleName() == "Product":
+            if isinstance(self.elem,Product):
                 #print "other type(%s) = %s" % (o,type(o));
                 o = RR(self.ring, self.elem.multiply(o) ); # valueOf
                 #print "o = %s" % o;
@@ -3021,7 +3025,7 @@ class RingElem:
                 #print "other type(%s) = %s" % (other,type(other));
                 #print "self  type(%s) = %s" % (self.elem,self.elem.getClass().getName());
                 o = BigDecimal(other);
-                if self.elem.getClass().getSimpleName() == "Product":
+                if isinstance(self.elem,Product):
                     o = RR(self.ring, self.elem.idempotent().multiply(o) ); # valueOf
                     o = o.elem;
                 else:
@@ -3139,10 +3143,10 @@ class RingElem:
             if isinstance(other,RingElem): 
                 n = other.elem;
                 #if isinstance(n,BigRational): # does not work
-                if n.getClass().getSimpleName() == "BigRational": 
+                if isinstance(n,BigRational): 
                     n = n.numerator().intValue() / n.denominator().intValue();
                 #if isinstance(n,BigInteger):  # does not work
-                if n.getClass().getSimpleName() == "BigInteger": 
+                if isinstance(n,BigInteger) or isinstance(n,Long) or isinstance(n,Integer): 
                     n = n.intValue();
         if n == None:
             n = other;
@@ -3173,11 +3177,11 @@ class RingElem:
         '''
         #print "self  type(%s) = %s" % (self,type(self));
         e = self.elem;
-        if e.getClass().getSimpleName() == "BigInteger":
+        if isinstance(e,BigInteger):
             e = BigRational(e);
-        if e.getClass().getSimpleName() == "BigRational":
+        if isinstance(e,BigRational):
             e = BigDecimal(e);
-        if e.getClass().getSimpleName() == "BigDecimal":
+        if isinstance(e,BigDecimal):
             e = e.toString();
         e = float(e);
         return e;
@@ -3230,7 +3234,7 @@ class RingElem:
         return RingElem(h);
 
     def evaluate(self,a):
-        '''Evaluate at a for power series.
+        '''Evaluate at a for power series or polynomial.
         '''
         #print "self  type(%s) = %s" % (self,type(self));
         #print "a     type(%s) = %s" % (a,type(a));
@@ -3240,9 +3244,20 @@ class RingElem:
         if isinstance(a,PyTuple) or isinstance(a,PyList):
             # assume BigRational or BigComplex
             # assume self will be compatible with them. todo: check this
-            x = makeJasArith(a);
+            #x = makeJasArith(a);
+            x = pylist2arraylist(a);
+        else:
+            x = pylist2arraylist([a]);
         try:
-            e = self.elem.evaluate(x);
+            if isinstance(self.elem,UnivPowerSeries):
+                e = self.elem.evaluate(x[0]);
+            else: 
+                if isinstance(self.elem,MultiVarPowerSeries):
+                    e = self.elem.evaluate(x);
+                else:
+                    x = [ p.leadingBaseCoefficient() for p in x ];
+                    #puts "x     = " + x[0].getClass().getSimpleName().to_s;
+                    e = PolyUtil.evaluateAll(self.ring.coFac, self.elem, x);
         except:
             e = 0;            
         return RingElem( e );
@@ -3329,7 +3344,7 @@ class RingElem:
            if sqf == None:
               raise ValueError, "squarefreeFactors not implemented for " + self.ring.to_s;
            cf = self.ring.coFac;
-           if cf.getClass().getSimpleName() == "GenPolynomialRing":
+           if isinstance(cf,GenPolynomialRing):
                e = sqf.recursiveSquarefreeFactors( a );
            else:
                e = sqf.squarefreeFactors( a );
@@ -3352,7 +3367,7 @@ class RingElem:
            if factor == None:
               raise ValueError, "factors not implemented for " + self.ring.to_s;
            cf = self.ring.coFac;
-           if cf.getClass().getSimpleName() == "GenPolynomialRing":
+           if isinstance(cf,GenPolynomialRing):
                e = factor.recursiveFactors( a );
            else:
                e = factor.factors( a );
@@ -3552,7 +3567,7 @@ class RingElem:
         if isinstance(b,RingElem):
             b = b.elem;
         if coeff == False:
-            if a.getClass().getSimpleName() == "GenPolynomial":
+            if isinstance(a,GenPolynomial):
                 return RingElem( a.divide(b) );
             else:
                 return RingElem( GenPolynomial(self.ring, a.subtract(b)) );
@@ -3570,17 +3585,17 @@ class RingElem:
         #print "JAS a = " + str(a) + ", b = " + str(b);
         if isinstance(a,RingElem):
             a = a.elem;
-        if a.getClass().getSimpleName() == "GenPolynomial":
+        if isinstance(a,GenPolynomial):
             a = a.leadingExpVector();
-        if a.getClass().getSimpleName() != "ExpVectorLong":
+        if isinstance(a,ExpVector):
             raise ValueError, "No ExpVector given " + str(a) + ", " + str(b)
         if b == None:
             return False;
         if isinstance(b,RingElem):
             b = b.elem;
-        if b.getClass().getSimpleName() == "GenPolynomial":
+        if isinstance(b,GenPolynomial):
             b = b.leadingExpVector();
-        if b.getClass().getSimpleName() != "ExpVectorLong":
+        if isinstance(b,ExpVector):
             raise ValueError, "No ExpVector given " + str(a) + ", " + str(b)
         return a.divides(b);
 
@@ -3730,11 +3745,11 @@ class SolvPolyRing(SolvableRing):
             #print "L[i+1] = " + str(L[i+1]);
             if L[i+1].isConstant():
                constSolv = True;
-        recSolv = cf.getClass().getSimpleName() == "GenPolynomialRing";
-        quotSolv = cf.getClass().getSimpleName() == "SolvableQuotientRing";
-        resSolv = cf.getClass().getSimpleName() == "SolvableResidueRing";
-        locSolv = cf.getClass().getSimpleName() == "SolvableLocalRing";
-        locresSolv = cf.getClass().getSimpleName() == "SolvableLocalResidueRing";
+        recSolv = isinstance(cf,GenPolynomialRing);
+        quotSolv = isinstance(cf,SolvableQuotientRing);
+        resSolv = isinstance(cf,SolvableResidueRing);
+        locSolv = isinstance(cf,SolvableLocalRing);
+        locresSolv = isinstance(cf,SolvableLocalResidueRing);
         if recSolv and not constSolv:
            recSolv = False;
         #print "cf = " + str(cf.getClass().getSimpleName()) + ", quotSolv = " + str(quotSolv) + ", recSolv = " + str(recSolv);
@@ -4113,7 +4128,7 @@ def WRC(ideal,r=0):
     if not isinstance(ideal,WordIdeal):
        raise ValueError, "No ideal given."
     #print "ideal.getList().get(0).ring.ideal = %s" % ideal.getList().get(0).ring.ideal;
-    if ideal.getList().get(0).ring.getClass().getSimpleName() == "WordResidueRing":
+    if isinstance(ideal.getList().get(0).ring,WordResidueRing):
         rc = WordResidueRing( ideal.getList().get(0).ring.ideal );
     else:
         rc = WordResidueRing(ideal);
