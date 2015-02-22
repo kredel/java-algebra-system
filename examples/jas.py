@@ -3587,16 +3587,16 @@ class RingElem:
             a = a.elem;
         if isinstance(a,GenPolynomial):
             a = a.leadingExpVector();
-        if isinstance(a,ExpVector):
-            raise ValueError, "No ExpVector given " + str(a) + ", " + str(b)
+        if not isinstance(a,ExpVector):
+            raise ValueError, "No ExpVector a given " + str(a) + ", " + str(b)
         if b == None:
             return False;
         if isinstance(b,RingElem):
             b = b.elem;
         if isinstance(b,GenPolynomial):
             b = b.leadingExpVector();
-        if isinstance(b,ExpVector):
-            raise ValueError, "No ExpVector given " + str(a) + ", " + str(b)
+        if not isinstance(b,ExpVector):
+            raise ValueError, "No ExpVector b given " + str(a) + ", " + str(b)
         return a.divides(b);
 
     def monomial_pairwise_prime(self,e,f):
