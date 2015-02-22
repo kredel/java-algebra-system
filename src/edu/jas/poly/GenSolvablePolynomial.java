@@ -297,6 +297,20 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
             GenSolvablePolynomial Sp = (GenSolvablePolynomial) b;
             return (GenSolvablePolynomial<C>) T.recMultiply(Sp);
         }
+        if (this instanceof QLRSolvablePolynomial && b instanceof GenSolvablePolynomial) {
+            //throw new RuntimeException("wrong method dispatch in JRE ");
+            logger.info("warn: wrong method dispatch in JRE multiply(Bp) - trying to fix");
+            QLRSolvablePolynomial T = (QLRSolvablePolynomial) this; // no <C>
+            GenSolvablePolynomial Sp = (GenSolvablePolynomial) b;
+            return (GenSolvablePolynomial<C>) T.multiply(Sp);
+        }
+        if (this instanceof ResidueSolvablePolynomial && b instanceof GenSolvablePolynomial) {
+            //throw new RuntimeException("wrong method dispatch in JRE ");
+            logger.info("warn: wrong method dispatch in JRE multiply(Bp) - trying to fix");
+            ResidueSolvablePolynomial T = (ResidueSolvablePolynomial) this; // no <C>
+            GenSolvablePolynomial Sp = (GenSolvablePolynomial) b;
+            return (GenSolvablePolynomial<C>) T.multiply(Sp);
+        }
         Map<ExpVector, C> Cm = Cp.val; //getMap();
         Map<ExpVector, C> Am = val;
         for (Map.Entry<ExpVector, C> y : Am.entrySet()) {
@@ -333,6 +347,24 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
             //throw new RuntimeException("wrong method dispatch in JRE ");
             logger.info("warn: wrong method dispatch in JRE multiply(b,c) - trying to fix");
             RecSolvablePolynomial T = (RecSolvablePolynomial) this; // no <C>
+            GenSolvablePolynomial Bp = (GenSolvablePolynomial) b;
+            GenSolvablePolynomial Dp = (GenSolvablePolynomial) c;
+            return (GenSolvablePolynomial<C>) T.multiply(Bp, Dp);
+        }
+        if (this instanceof QLRSolvablePolynomial && b instanceof GenSolvablePolynomial
+                        && c instanceof GenSolvablePolynomial) {
+            //throw new RuntimeException("wrong method dispatch in JRE ");
+            logger.info("warn: wrong method dispatch in JRE multiply(b,c) - trying to fix");
+            QLRSolvablePolynomial T = (QLRSolvablePolynomial) this; // no <C>
+            GenSolvablePolynomial Bp = (GenSolvablePolynomial) b;
+            GenSolvablePolynomial Dp = (GenSolvablePolynomial) c;
+            return (GenSolvablePolynomial<C>) T.multiply(Bp, Dp);
+        }
+        if (this instanceof ResidueSolvablePolynomial && b instanceof GenSolvablePolynomial
+                        && c instanceof GenSolvablePolynomial) {
+            //throw new RuntimeException("wrong method dispatch in JRE ");
+            logger.info("warn: wrong method dispatch in JRE multiply(b,c) - trying to fix");
+            ResidueSolvablePolynomial T = (ResidueSolvablePolynomial) this; // no <C>
             GenSolvablePolynomial Bp = (GenSolvablePolynomial) b;
             GenSolvablePolynomial Dp = (GenSolvablePolynomial) c;
             return (GenSolvablePolynomial<C>) T.multiply(Bp, Dp);
