@@ -498,8 +498,11 @@ Constructor for ring element.
 Create a string representation.
 =end
     def to_s()
-        return @elem.toScript(); 
-        #return @elem.toString(); 
+        begin 
+           return @elem.toScript();
+        rescue 
+           return @elem.to_s(); 
+        end
     end
 
 =begin rdoc
@@ -775,6 +778,7 @@ Multiply two ring elements.
         #puts "* self  type(#{self}) = #{self.class}\n";
         #puts "* other type(#{other}) = #{other.class}\n";
         s,o = coercePair(self,other);
+        #puts "* s = #{s}, o = #{o}, s*o = #{s.elem.multiply(o.elem)}\n";
         return RingElem.new( s.elem.multiply( o.elem ) ); 
     end
 
@@ -842,7 +846,9 @@ Power of this to other.
         if isFactory()
             p = Power.new(@elem).power( @elem, n );
         else
-            p = Power.new(@elem.ring).power( @elem, n );
+            p = Power.new(@elem.factory()).power( @elem, n );
+            #puts "@elem**#{n} = #{p}, @elem = #{@elem}"
+            #puts "@elem.ring = #{@elem.ring.toScript()}";
         end
         return RingElem.new( p ); 
     end
@@ -890,7 +896,7 @@ Monic polynomial.
     end
 
 =begin rdoc
-Evaluate at a for power series.
+Evaluate at a for power series or polynomial.
 =end
     def evaluate(a)
         #puts "self  type(#{@elem}) = #{@elen.class}";
@@ -902,11 +908,24 @@ Evaluate at a for power series.
         if a.is_a? Array 
             # assume BigRational or BigComplex
             # assume self will be compatible with them. todo: check this
-            x = makeJasArith(a);
+            #x = makeJasArith(a);
+            x = rbarray2arraylist(a);
+        else
+            x = rbarray2arraylist([a]);
         end
         begin
-            e = @elem.evaluate(x);
-        rescue
+            if @elem.is_a? UnivPowerSeries
+               e = @elem.evaluate(x[0]);
+            else if @elem.is_a? MultiVarPowerSeries
+                  e = @elem.evaluate(x);
+               else  
+                  #puts "x     = " + x[0].getClass().getSimpleName().to_s;
+                  x = x.map{ |p| p.leadingBaseCoefficient() };
+                  e = PolyUtil.evaluateAll(@ring.coFac, @elem, x);
+               end
+            end
+        rescue Exception => e
+            raise RuntimeError, e.to_s; 
             e = 0;            
         end
         return RingElem.new( e );
@@ -3466,11 +3485,11 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
                constSolv = true;
             end
 	}
-        recSolv = cf.getClass().getSimpleName() == "GenPolynomialRing"
-        quotSolv = cf.getClass().getSimpleName() == "SolvableQuotientRing"
-        resSolv = cf.getClass().getSimpleName() == "SolvableResidueRing"
-        locSolv = cf.getClass().getSimpleName() == "SolvableLocalRing"
-        locresSolv = cf.getClass().getSimpleName() == "SolvableLocalResidueRing"
+        recSolv = cf.is_a? GenPolynomialRing
+        quotSolv = cf.is_a? SolvableQuotientRing
+        resSolv = cf.is_a? SolvableResidueRing
+        locSolv = cf.is_a? SolvableLocalRing
+        locresSolv = cf.is_a? SolvableLocalResidueRing
         if recSolv and not constSolv
            recSolv = false;
         end
