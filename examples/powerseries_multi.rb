@@ -85,6 +85,14 @@ puts;
 ## puts "s1: " + str(s1);
 ## puts;
 
+r9 = psr.random(4);
+puts "r9: " + str(r9);
+puts;
+e = r9.evaluate( [QQ(1), QQ(0), QQ(1,2)] );
+puts "e:  " + str(e);
+puts;
+
+
 c = psr.cos(1);
 puts "c: " + str(c);
 puts;

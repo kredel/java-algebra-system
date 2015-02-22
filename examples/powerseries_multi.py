@@ -92,6 +92,13 @@ print;
 ## print "s1:", s1;
 ## print;
 
+r9 = psr.random(4);
+print "r9: " + str(r9);
+print;
+e = r9.evaluate( [QQ(0), QQ(0), QQ(0)] );
+print "e:  " + str(e);
+print;
+
 c = psr.cos(1);
 print "c:", c;
 print;
