@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.application;
+package edu.jas.poly;
 
 
 // todo: move to edu.jas.poly
@@ -14,11 +14,6 @@ import java.util.SortedMap;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.poly.ExpVector;
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenSolvablePolynomial;
-import edu.jas.poly.RecSolvablePolynomial;
-import edu.jas.poly.TableRelation;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.QuotPair;
 import edu.jas.structure.RingFactory;

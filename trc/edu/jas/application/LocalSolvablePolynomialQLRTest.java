@@ -19,6 +19,8 @@ import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
+import edu.jas.poly.QLRSolvablePolynomial;
+import edu.jas.poly.QLRSolvablePolynomialRing;
 import edu.jas.poly.RecSolvablePolynomial;
 import edu.jas.poly.RelationTable;
 import edu.jas.poly.TermOrder;

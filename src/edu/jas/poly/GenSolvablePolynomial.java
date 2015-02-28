@@ -13,8 +13,6 @@ import org.apache.log4j.Logger;
 
 import edu.jas.structure.NotInvertibleException;
 import edu.jas.structure.RingElem;
-
-import edu.jas.application.QLRSolvablePolynomial;
 import edu.jas.application.ResidueSolvablePolynomial;
 
 
