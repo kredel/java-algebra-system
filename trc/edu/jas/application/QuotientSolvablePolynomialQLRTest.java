@@ -1,12 +1,12 @@
 /*
- * $Id$
+ * $Id: QuotientSolvablePolynomialQLRTest.java 5134 2015-02-28 18:36:43Z kredel
+ * $
  */
 
 package edu.jas.application;
 
 
 import java.util.List;
-import java.util.ArrayList;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -15,6 +15,8 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigRational;
+import edu.jas.gbmod.SolvableQuotient;
+import edu.jas.gbmod.SolvableQuotientRing;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
@@ -22,16 +24,14 @@ import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.QLRSolvablePolynomial;
 import edu.jas.poly.QLRSolvablePolynomialRing;
 import edu.jas.poly.RecSolvablePolynomial;
-import edu.jas.poly.RelationTable;
+import edu.jas.poly.RelationGenerator;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.WeylRelations;
-import edu.jas.poly.RelationGenerator;
-import edu.jas.gbmod.SolvableQuotient;
-import edu.jas.gbmod.SolvableQuotientRing;
 
 
 /**
- * BigRational coefficients QuotientSolvablePolynomial tests with JUnit.
+ * BigRational coefficients QuotientSolvablePolynomial QLR representation tests
+ * with JUnit.
  * @author Heinz Kredel.
  */
 
@@ -64,7 +64,7 @@ public class QuotientSolvablePolynomialQLRTest extends TestCase {
     }
 
 
-    QLRSolvablePolynomial<SolvableQuotient<BigRational>,BigRational> a, b, c, d, e, f, x1, x2;
+    QLRSolvablePolynomial<SolvableQuotient<BigRational>, BigRational> a, b, c, d, e, f, x1, x2;
 
 
     int rl = 4;
@@ -88,7 +88,7 @@ public class QuotientSolvablePolynomialQLRTest extends TestCase {
     String[] vars = new String[] { "w", "x", "y", "z" };
 
 
-    QLRSolvablePolynomialRing<SolvableQuotient<BigRational>,BigRational> ring;
+    QLRSolvablePolynomialRing<SolvableQuotient<BigRational>, BigRational> ring;
 
 
     BigRational cfac;
@@ -111,11 +111,11 @@ public class QuotientSolvablePolynomialQLRTest extends TestCase {
         cfac = new BigRational(1);
         cring = new GenSolvablePolynomialRing<BigRational>(cfac, tord, cvars);
         RelationGenerator<BigRational> wc = new WeylRelations<BigRational>();
-        cring.addRelations(wc); 
+        cring.addRelations(wc);
         qcring = new SolvableQuotientRing<BigRational>(cring);
-        ring = new QLRSolvablePolynomialRing<SolvableQuotient<BigRational>,BigRational>(qcring, tord, vars);
+        ring = new QLRSolvablePolynomialRing<SolvableQuotient<BigRational>, BigRational>(qcring, tord, vars);
         RelationGenerator<SolvableQuotient<BigRational>> wl = new WeylRelations<SolvableQuotient<BigRational>>();
-        ring.addRelations(wl); 
+        ring.addRelations(wl);
         a = b = c = d = e = null;
     }
 
@@ -134,7 +134,7 @@ public class QuotientSolvablePolynomialQLRTest extends TestCase {
         assertFalse("not commutative", ring.isCommutative());
         assertTrue("associative", ring.isAssociative());
 
-        a = new QLRSolvablePolynomial<SolvableQuotient<BigRational>,BigRational>(ring);
+        a = new QLRSolvablePolynomial<SolvableQuotient<BigRational>, BigRational>(ring);
         assertTrue("length( a ) = 0", a.length() == 0);
         assertTrue("isZERO( a )", a.isZERO());
         assertTrue("isONE( a )", !a.isONE());
@@ -180,28 +180,28 @@ public class QuotientSolvablePolynomialQLRTest extends TestCase {
      */
     @SuppressWarnings("unchecked")
     public void testAddition() {
-        a = ring.random(kl+1, ll, el, q);
-        c = (QLRSolvablePolynomial<SolvableQuotient<BigRational>,BigRational>) a.subtract(a);
+        a = ring.random(kl + 1, ll, el, q);
+        c = (QLRSolvablePolynomial<SolvableQuotient<BigRational>, BigRational>) a.subtract(a);
         assertTrue("a-a = 0", c.isZERO());
 
-        b = (QLRSolvablePolynomial<SolvableQuotient<BigRational>,BigRational>) a.sum(a);
-        c = (QLRSolvablePolynomial<SolvableQuotient<BigRational>,BigRational>) b.subtract(a);
+        b = (QLRSolvablePolynomial<SolvableQuotient<BigRational>, BigRational>) a.sum(a);
+        c = (QLRSolvablePolynomial<SolvableQuotient<BigRational>, BigRational>) b.subtract(a);
         assertEquals("a+a-a = a", c, a);
 
         b = ring.random(kl, ll, el, q);
-        c = (QLRSolvablePolynomial<SolvableQuotient<BigRational>,BigRational>) b.sum(a);
-        d = (QLRSolvablePolynomial<SolvableQuotient<BigRational>,BigRational>) a.sum(b);
+        c = (QLRSolvablePolynomial<SolvableQuotient<BigRational>, BigRational>) b.sum(a);
+        d = (QLRSolvablePolynomial<SolvableQuotient<BigRational>, BigRational>) a.sum(b);
         assertEquals("a+b = b+a", c, d);
 
-        c = (QLRSolvablePolynomial<SolvableQuotient<BigRational>,BigRational>) a.sum(b);
-        d = (QLRSolvablePolynomial<SolvableQuotient<BigRational>,BigRational>) c.subtract(b);
+        c = (QLRSolvablePolynomial<SolvableQuotient<BigRational>, BigRational>) a.sum(b);
+        d = (QLRSolvablePolynomial<SolvableQuotient<BigRational>, BigRational>) c.subtract(b);
         //System.out.println("a = " + a);
         //System.out.println("d = " + d);
         assertEquals("a+b-b = a", a, d);
 
         c = ring.random(kl, ll, el, q);
-        d = (QLRSolvablePolynomial<SolvableQuotient<BigRational>,BigRational>) a.sum(b.sum(c));
-        e = (QLRSolvablePolynomial<SolvableQuotient<BigRational>,BigRational>) a.sum(b).sum(c);
+        d = (QLRSolvablePolynomial<SolvableQuotient<BigRational>, BigRational>) a.sum(b.sum(c));
+        e = (QLRSolvablePolynomial<SolvableQuotient<BigRational>, BigRational>) a.sum(b).sum(c);
         assertEquals("a+(b+c) = (a+b)+c", d, e);
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
@@ -215,26 +215,26 @@ public class QuotientSolvablePolynomialQLRTest extends TestCase {
         //System.out.println("u = " + u);
 
         b = ring.getONE().multiply(x, u);
-        c = (QLRSolvablePolynomial<SolvableQuotient<BigRational>,BigRational>) a.sum(b);
-        d = (QLRSolvablePolynomial<SolvableQuotient<BigRational>,BigRational>) a.sum(x, u);
+        c = (QLRSolvablePolynomial<SolvableQuotient<BigRational>, BigRational>) a.sum(b);
+        d = (QLRSolvablePolynomial<SolvableQuotient<BigRational>, BigRational>) a.sum(x, u);
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
         assertEquals("a+p(x,u) = a+(x,u)", c, d);
 
-        c = (QLRSolvablePolynomial<SolvableQuotient<BigRational>,BigRational>) a.subtract(b);
-        d = (QLRSolvablePolynomial<SolvableQuotient<BigRational>,BigRational>) a.subtract(x, u);
+        c = (QLRSolvablePolynomial<SolvableQuotient<BigRational>, BigRational>) a.subtract(b);
+        d = (QLRSolvablePolynomial<SolvableQuotient<BigRational>, BigRational>) a.subtract(x, u);
         assertEquals("a-p(x,u) = a-(x,u)", c, d);
 
         a = ring.getZERO();
         b = ring.getONE().multiply(x, u);
-        c = (QLRSolvablePolynomial<SolvableQuotient<BigRational>,BigRational>) b.sum(a);
-        d = (QLRSolvablePolynomial<SolvableQuotient<BigRational>,BigRational>) a.sum(x, u);
+        c = (QLRSolvablePolynomial<SolvableQuotient<BigRational>, BigRational>) b.sum(a);
+        d = (QLRSolvablePolynomial<SolvableQuotient<BigRational>, BigRational>) a.sum(x, u);
         assertEquals("a+p(x,u) = a+(x,u)", c, d);
 
-        c = (QLRSolvablePolynomial<SolvableQuotient<BigRational>,BigRational>) a.subtract(b);
-        d = (QLRSolvablePolynomial<SolvableQuotient<BigRational>,BigRational>) a.subtract(x, u);
+        c = (QLRSolvablePolynomial<SolvableQuotient<BigRational>, BigRational>) a.subtract(b);
+        d = (QLRSolvablePolynomial<SolvableQuotient<BigRational>, BigRational>) a.subtract(x, u);
         assertEquals("a-p(x,u) = a-(x,u)", c, d);
     }
 
@@ -274,7 +274,7 @@ public class QuotientSolvablePolynomialQLRTest extends TestCase {
         //System.out.println("a = " + a);
         //System.out.println("d = " + d);
 
-        d = (QLRSolvablePolynomial<SolvableQuotient<BigRational>,BigRational>) a.monic();
+        d = (QLRSolvablePolynomial<SolvableQuotient<BigRational>, BigRational>) a.monic();
         assertTrue("a.monic(): ", d.leadingBaseCoefficient().isONE());
     }
 
@@ -293,7 +293,7 @@ public class QuotientSolvablePolynomialQLRTest extends TestCase {
 
         cring = new GenSolvablePolynomialRing<BigRational>(cfac, tord, cvars);
         qcring = new SolvableQuotientRing<BigRational>(cring);
-        ring = new QLRSolvablePolynomialRing<SolvableQuotient<BigRational>,BigRational>(qcring, ring);
+        ring = new QLRSolvablePolynomialRing<SolvableQuotient<BigRational>, BigRational>(qcring, ring);
         //System.out.println("ring = " + ring);
 
         assertTrue("isCommutative()", ring.isCommutative());
@@ -325,8 +325,9 @@ public class QuotientSolvablePolynomialQLRTest extends TestCase {
         b = ring.random(kl, ll, el, q);
         c = ring.random(kl, ll, el, q);
 
-        d = a.multiply((QLRSolvablePolynomial<SolvableQuotient<BigRational>,BigRational>) b.sum(c));
-        e = (QLRSolvablePolynomial<SolvableQuotient<BigRational>,BigRational>) a.multiply(b).sum(a.multiply(c));
+        d = a.multiply((QLRSolvablePolynomial<SolvableQuotient<BigRational>, BigRational>) b.sum(c));
+        e = (QLRSolvablePolynomial<SolvableQuotient<BigRational>, BigRational>) a.multiply(b).sum(
+                        a.multiply(c));
         assertEquals("a*(b+c) = a*b+a*c", d, e);
     }
 
@@ -348,7 +349,7 @@ public class QuotientSolvablePolynomialQLRTest extends TestCase {
         assertTrue("isCommutative()", qcsring.isCommutative());
         assertTrue("isAssociative()", qcsring.isAssociative());
 
-        ring = new QLRSolvablePolynomialRing<SolvableQuotient<BigRational>,BigRational>(qcsring, ring);
+        ring = new QLRSolvablePolynomialRing<SolvableQuotient<BigRational>, BigRational>(qcsring, ring);
         RelationGenerator<SolvableQuotient<BigRational>> wl = new WeylRelations<SolvableQuotient<BigRational>>();
         ring.addRelations(wl); //wl.generate(ring);
         assertTrue("# relations == 2", ring.table.size() == 2);
@@ -371,11 +372,11 @@ public class QuotientSolvablePolynomialQLRTest extends TestCase {
         List<GenPolynomial<SolvableQuotient<BigRational>>> gens = ring.generators();
         for (GenPolynomial<SolvableQuotient<BigRational>> x : gens) {
             GenSolvablePolynomial<SolvableQuotient<BigRational>> xx = (GenSolvablePolynomial<SolvableQuotient<BigRational>>) x;
-            a = new QLRSolvablePolynomial<SolvableQuotient<BigRational>,BigRational>(ring, xx);
+            a = new QLRSolvablePolynomial<SolvableQuotient<BigRational>, BigRational>(ring, xx);
             //System.out.println("a = " + a);
             for (GenPolynomial<SolvableQuotient<BigRational>> y : gens) {
                 GenSolvablePolynomial<SolvableQuotient<BigRational>> yy = (GenSolvablePolynomial<SolvableQuotient<BigRational>>) y;
-                b = new QLRSolvablePolynomial<SolvableQuotient<BigRational>,BigRational>(ring, yy);
+                b = new QLRSolvablePolynomial<SolvableQuotient<BigRational>, BigRational>(ring, yy);
                 //System.out.println("b = " + b);
                 c = a.multiply(b);
                 //System.out.println("gens: " + a + " * " + b + " = " + c);
@@ -391,7 +392,7 @@ public class QuotientSolvablePolynomialQLRTest extends TestCase {
         //b = ring.random(kl, ll, el, q);
         //b = ring.getONE();
         b = ring.parse("a b + a"); // a b^2 + a 
-        b = (QLRSolvablePolynomial<SolvableQuotient<BigRational>,BigRational>) b.inverse();
+        b = (QLRSolvablePolynomial<SolvableQuotient<BigRational>, BigRational>) b.inverse();
         //System.out.println("b = " + b.toScript());
 
         // non-commutative
@@ -403,7 +404,7 @@ public class QuotientSolvablePolynomialQLRTest extends TestCase {
         //System.out.println("d = " + d.toScript());
         assertTrue("a*b != b*a", c.equals(d) || c.leadingExpVector().equals(d.leadingExpVector()));
 
-        e = (QLRSolvablePolynomial<SolvableQuotient<BigRational>,BigRational>) b.inverse();
+        e = (QLRSolvablePolynomial<SolvableQuotient<BigRational>, BigRational>) b.inverse();
         //System.out.println("e = " + e.toScript());
         assertTrue("b*b^-1 == 1", e.multiply(b).isONE());
 

@@ -1,12 +1,13 @@
 /*
- * $Id$
+ * $Id: LocalResidueSolvablePolynomialQLRTest.java 5134 2015-02-28 18:36:43Z
+ * kredel $
  */
 
 package edu.jas.application;
 
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -22,14 +23,14 @@ import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.QLRSolvablePolynomial;
 import edu.jas.poly.QLRSolvablePolynomialRing;
 import edu.jas.poly.RecSolvablePolynomial;
-import edu.jas.poly.RelationTable;
+import edu.jas.poly.RelationGenerator;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.WeylRelations;
-import edu.jas.poly.RelationGenerator;
 
 
 /**
- * BigRational coefficients LocalResidueSolvablePolynomial tests with JUnit.
+ * BigRational coefficients LocalResidueSolvablePolynomial QLR representation
+ * tests with JUnit.
  * @author Heinz Kredel.
  */
 
@@ -62,7 +63,7 @@ public class LocalResidueSolvablePolynomialQLRTest extends TestCase {
     }
 
 
-    QLRSolvablePolynomial<SolvableLocalResidue<BigRational>,BigRational> a, b, c, d, e, f, x1, x2;
+    QLRSolvablePolynomial<SolvableLocalResidue<BigRational>, BigRational> a, b, c, d, e, f, x1, x2;
 
 
     int rl = 4;
@@ -86,7 +87,7 @@ public class LocalResidueSolvablePolynomialQLRTest extends TestCase {
     String[] vars = new String[] { "w", "x", "y", "z" };
 
 
-    QLRSolvablePolynomialRing<SolvableLocalResidue<BigRational>,BigRational> ring;
+    QLRSolvablePolynomialRing<SolvableLocalResidue<BigRational>, BigRational> ring;
 
 
     BigRational cfac;
@@ -120,7 +121,8 @@ public class LocalResidueSolvablePolynomialQLRTest extends TestCase {
         //il.add(p1);
         sideal = new SolvableIdeal<BigRational>(cring, il);
         qcring = new SolvableLocalResidueRing<BigRational>(sideal);
-        ring = new QLRSolvablePolynomialRing<SolvableLocalResidue<BigRational>,BigRational>(qcring, tord, vars);
+        ring = new QLRSolvablePolynomialRing<SolvableLocalResidue<BigRational>, BigRational>(qcring, tord,
+                        vars);
         RelationGenerator<SolvableLocalResidue<BigRational>> wl = new WeylRelations<SolvableLocalResidue<BigRational>>();
         ring.addRelations(wl); //wl.generate(ring);
         a = b = c = d = e = null;
@@ -141,7 +143,7 @@ public class LocalResidueSolvablePolynomialQLRTest extends TestCase {
         assertFalse("not commutative", ring.isCommutative());
         assertTrue("associative", ring.isAssociative());
 
-        a = new QLRSolvablePolynomial<SolvableLocalResidue<BigRational>,BigRational>(ring);
+        a = new QLRSolvablePolynomial<SolvableLocalResidue<BigRational>, BigRational>(ring);
         assertTrue("length( a ) = 0", a.length() == 0);
         assertTrue("isZERO( a )", a.isZERO());
         assertTrue("isONE( a )", !a.isONE());
@@ -187,28 +189,28 @@ public class LocalResidueSolvablePolynomialQLRTest extends TestCase {
      */
     @SuppressWarnings("unchecked")
     public void testAddition() {
-        a = ring.random(kl+1, ll, el, q);
-        c = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>,BigRational>) a.subtract(a);
+        a = ring.random(kl + 1, ll, el, q);
+        c = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>, BigRational>) a.subtract(a);
         assertTrue("a-a = 0", c.isZERO());
 
-        b = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>,BigRational>) a.sum(a);
-        c = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>,BigRational>) b.subtract(a);
+        b = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>, BigRational>) a.sum(a);
+        c = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>, BigRational>) b.subtract(a);
         assertEquals("a+a-a = a", c, a);
 
         b = ring.random(kl, ll, el, q);
-        c = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>,BigRational>) b.sum(a);
-        d = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>,BigRational>) a.sum(b);
+        c = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>, BigRational>) b.sum(a);
+        d = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>, BigRational>) a.sum(b);
         assertEquals("a+b = b+a", c, d);
 
-        c = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>,BigRational>) a.sum(b);
-        d = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>,BigRational>) c.subtract(b);
+        c = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>, BigRational>) a.sum(b);
+        d = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>, BigRational>) c.subtract(b);
         //System.out.println("a = " + a);
         //System.out.println("d = " + d);
         assertEquals("a+b-b = a", a, d);
 
         c = ring.random(kl, ll, el, q);
-        d = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>,BigRational>) a.sum(b.sum(c));
-        e = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>,BigRational>) a.sum(b).sum(c);
+        d = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>, BigRational>) a.sum(b.sum(c));
+        e = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>, BigRational>) a.sum(b).sum(c);
         assertEquals("a+(b+c) = (a+b)+c", d, e);
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
@@ -222,26 +224,26 @@ public class LocalResidueSolvablePolynomialQLRTest extends TestCase {
         //System.out.println("u = " + u);
 
         b = ring.getONE().multiply(x, u);
-        c = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>,BigRational>) a.sum(b);
-        d = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>,BigRational>) a.sum(x, u);
+        c = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>, BigRational>) a.sum(b);
+        d = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>, BigRational>) a.sum(x, u);
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
         assertEquals("a+p(x,u) = a+(x,u)", c, d);
 
-        c = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>,BigRational>) a.subtract(b);
-        d = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>,BigRational>) a.subtract(x, u);
+        c = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>, BigRational>) a.subtract(b);
+        d = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>, BigRational>) a.subtract(x, u);
         assertEquals("a-p(x,u) = a-(x,u)", c, d);
 
         a = ring.getZERO();
         b = ring.getONE().multiply(x, u);
-        c = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>,BigRational>) b.sum(a);
-        d = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>,BigRational>) a.sum(x, u);
+        c = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>, BigRational>) b.sum(a);
+        d = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>, BigRational>) a.sum(x, u);
         assertEquals("a+p(x,u) = a+(x,u)", c, d);
 
-        c = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>,BigRational>) a.subtract(b);
-        d = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>,BigRational>) a.subtract(x, u);
+        c = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>, BigRational>) a.subtract(b);
+        d = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>, BigRational>) a.subtract(x, u);
         assertEquals("a-p(x,u) = a-(x,u)", c, d);
     }
 
@@ -281,7 +283,7 @@ public class LocalResidueSolvablePolynomialQLRTest extends TestCase {
         //System.out.println("a = " + a);
         //System.out.println("d = " + d);
 
-        d = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>,BigRational>) a.monic();
+        d = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>, BigRational>) a.monic();
         assertTrue("a.monic(): ", d.leadingBaseCoefficient().isONE());
     }
 
@@ -304,7 +306,7 @@ public class LocalResidueSolvablePolynomialQLRTest extends TestCase {
         il.add(p1);
         sideal = new SolvableIdeal<BigRational>(cring, il);
         qcring = new SolvableLocalResidueRing<BigRational>(sideal);
-        ring = new QLRSolvablePolynomialRing<SolvableLocalResidue<BigRational>,BigRational>(qcring, ring);
+        ring = new QLRSolvablePolynomialRing<SolvableLocalResidue<BigRational>, BigRational>(qcring, ring);
         //table = ring.table;
         //System.out.println("table = " + table.toString(vars));
         //System.out.println("ring = " + ring);
@@ -338,8 +340,9 @@ public class LocalResidueSolvablePolynomialQLRTest extends TestCase {
         b = ring.random(kl, ll, el, q);
         c = ring.random(kl, ll, el, q);
 
-        d = a.multiply((QLRSolvablePolynomial<SolvableLocalResidue<BigRational>,BigRational>) b.sum(c));
-        e = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>,BigRational>) a.multiply(b).sum(a.multiply(c));
+        d = a.multiply((QLRSolvablePolynomial<SolvableLocalResidue<BigRational>, BigRational>) b.sum(c));
+        e = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>, BigRational>) a.multiply(b).sum(
+                        a.multiply(c));
         assertEquals("a*(b+c) = a*b+a*c", d, e);
     }
 
@@ -367,7 +370,7 @@ public class LocalResidueSolvablePolynomialQLRTest extends TestCase {
         assertTrue("isCommutative()", qcsring.isCommutative());
         assertTrue("isAssociative()", qcsring.isAssociative());
 
-        ring = new QLRSolvablePolynomialRing<SolvableLocalResidue<BigRational>,BigRational>(qcsring, ring);
+        ring = new QLRSolvablePolynomialRing<SolvableLocalResidue<BigRational>, BigRational>(qcsring, ring);
         RelationGenerator<SolvableLocalResidue<BigRational>> wl = new WeylRelations<SolvableLocalResidue<BigRational>>();
         ring.addRelations(wl); //wl.generate(ring);
         assertTrue("# relations == 2", ring.table.size() == 2);
@@ -390,11 +393,11 @@ public class LocalResidueSolvablePolynomialQLRTest extends TestCase {
         List<GenPolynomial<SolvableLocalResidue<BigRational>>> gens = ring.generators();
         for (GenPolynomial<SolvableLocalResidue<BigRational>> x : gens) {
             GenSolvablePolynomial<SolvableLocalResidue<BigRational>> xx = (GenSolvablePolynomial<SolvableLocalResidue<BigRational>>) x;
-            a = new QLRSolvablePolynomial<SolvableLocalResidue<BigRational>,BigRational>(ring, xx);
+            a = new QLRSolvablePolynomial<SolvableLocalResidue<BigRational>, BigRational>(ring, xx);
             //System.out.println("a = " + a);
             for (GenPolynomial<SolvableLocalResidue<BigRational>> y : gens) {
                 GenSolvablePolynomial<SolvableLocalResidue<BigRational>> yy = (GenSolvablePolynomial<SolvableLocalResidue<BigRational>>) y;
-                b = new QLRSolvablePolynomial<SolvableLocalResidue<BigRational>,BigRational>(ring, yy);
+                b = new QLRSolvablePolynomial<SolvableLocalResidue<BigRational>, BigRational>(ring, yy);
                 //System.out.println("b = " + b);
                 c = a.multiply(b);
                 //System.out.println("gens: " + a + " * " + b + " = " + c);
@@ -410,7 +413,7 @@ public class LocalResidueSolvablePolynomialQLRTest extends TestCase {
         //b = ring.random(kl, ll, el, q);
         //b = ring.getONE();
         b = ring.parse("a b + a"); // a b^2 + a 
-        b = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>,BigRational>) b.inverse();
+        b = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>, BigRational>) b.inverse();
         //System.out.println("b = " + b.toScript());
 
         // non-commutative
@@ -422,7 +425,7 @@ public class LocalResidueSolvablePolynomialQLRTest extends TestCase {
         //System.out.println("d = " + d.toScript());
         assertTrue("a*b != b*a", c.equals(d) || c.leadingExpVector().equals(d.leadingExpVector()));
 
-        e = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>,BigRational>) b.inverse();
+        e = (QLRSolvablePolynomial<SolvableLocalResidue<BigRational>, BigRational>) b.inverse();
         //System.out.println("e = " + e.toScript());
         assertTrue("b*b^-1 == 1", e.multiply(b).isONE());
 
