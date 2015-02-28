@@ -10,9 +10,12 @@ import java.util.List;
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.ExpVector;
+import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.NotInvertibleException;
+import edu.jas.structure.QuotPair;
+import edu.jas.structure.QuotPairFactory;
 
 
 /**
@@ -20,7 +23,8 @@ import edu.jas.structure.NotInvertibleException;
  * interface. Objects of this class are immutable.
  * @author Heinz Kredel
  */
-public class SolvableResidue<C extends GcdRingElem<C>> implements GcdRingElem<SolvableResidue<C>> {
+public class SolvableResidue<C extends GcdRingElem<C>> 
+    implements GcdRingElem<SolvableResidue<C>>, QuotPair<GenPolynomial<C>> {
 
 
     /**
@@ -100,6 +104,24 @@ public class SolvableResidue<C extends GcdRingElem<C>> implements GcdRingElem<So
      */
     public SolvableResidueRing<C> factory() {
         return ring;
+    }
+
+
+    /**
+     * Numerator. Returns the value.
+     * @see edu.jas.structure.QuotPair#numerator()
+     */
+    public GenSolvablePolynomial<C> numerator() {
+        return val;
+    }
+
+
+    /**
+     * Denominator. Returns 1.
+     * @see edu.jas.structure.QuotPair#denominator()
+     */
+    public GenSolvablePolynomial<C> denominator() {
+        return ring.ring.getONE();
     }
 
 

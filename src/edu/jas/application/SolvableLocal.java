@@ -23,7 +23,6 @@ import edu.jas.structure.QuotPair;
  * GcdRingElem interface. Objects of this class are immutable.
  * @author Heinz Kredel
  */
-// To be fixed?: Not jet working because of monic GBs.
 public class SolvableLocal<C extends GcdRingElem<C>> implements GcdRingElem<SolvableLocal<C>>,
                 QuotPair<GenPolynomial<C>> {
 

@@ -21,6 +21,8 @@ import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.QuotPair;
+import edu.jas.structure.QuotPairFactory;
 
 
 /**
@@ -28,7 +30,9 @@ import edu.jas.structure.RingFactory;
  * GcdRingFactory interface. Objects of this class are immutable.
  * @author Heinz Kredel
  */
-public class SolvableResidueRing<C extends GcdRingElem<C>> implements RingFactory<SolvableResidue<C>> {
+public class SolvableResidueRing<C extends GcdRingElem<C>> 
+    implements RingFactory<SolvableResidue<C>>, 
+               QuotPairFactory<GenPolynomial<C>, SolvableResidue<C>> {
 
 
     private static final Logger logger = Logger.getLogger(SolvableResidueRing.class);
@@ -89,6 +93,33 @@ public class SolvableResidueRing<C extends GcdRingElem<C>> implements RingFactor
         }
         //System.out.println("rr ring   = " + ring.getClass().getName());
         //System.out.println("rr cofac  = " + ring.coFac.getClass().getName());
+    }
+
+
+    /**
+     * Factory for base elements.
+     */
+    public GenSolvablePolynomialRing<C> pairFactory() {
+        return ring;
+    }
+
+
+    /**
+     * Create from numerator.
+     */
+    public SolvableResidue<C> create(GenPolynomial<C> n) {
+        return new SolvableResidue<C>(this, (GenSolvablePolynomial<C>) n);
+    }
+
+
+    /**
+     * Create from numerator, denominator pair.
+     */
+    public SolvableResidue<C> create(GenPolynomial<C> n, GenPolynomial<C> d) {
+        if (d != null && !d.isONE()) {
+            throw new UnsupportedOperationException("d must be 1, but d = " + d);
+        }
+        return new SolvableResidue<C>(this, (GenSolvablePolynomial<C>) n);
     }
 
 
