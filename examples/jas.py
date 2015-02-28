@@ -17,6 +17,7 @@ from edu.jas.arith       import BigInteger, BigRational, BigComplex, BigDecimal,
 from edu.jas.poly        import GenPolynomial, GenPolynomialRing, Monomial,\
                                 GenSolvablePolynomial, GenSolvablePolynomialRing,\
                                 RecSolvablePolynomial, RecSolvablePolynomialRing,\
+                                QLRSolvablePolynomial, QLRSolvablePolynomialRing,\
                                 GenWordPolynomial, GenWordPolynomialRing,\
                                 ExpVector,\
                                 Word, WordFactory,\
@@ -58,7 +59,6 @@ from edu.jas.application import PolyUtilApp, RingFactoryTokenizer,\
                                 SolvableLocalResidue, SolvableLocalResidueRing,\
                                 ResidueSolvablePolynomial, ResidueSolvablePolynomialRing,\
                                 LocalSolvablePolynomial, LocalSolvablePolynomialRing,\
-                                QLRSolvablePolynomial, QLRSolvablePolynomialRing,\
                                 WordIdeal, WordResidue, WordResidueRing,\
                                 ComprehensiveGroebnerBaseSeq, ExtensionFieldBuilder
 from edu.jas.kern        import ComputerThreads, StringUtil, Scripting

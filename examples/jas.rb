@@ -649,6 +649,7 @@ Coerce other to self
                 o = @ring.parse( other.elem.toString() ); # not toScript()
                 return RingElem.new( o );
             end
+            #puts "other type(#{other}) = #{other.class}\n";
             return other;
         end
         #puts "--1";
@@ -731,7 +732,7 @@ Test if this is a polynomial.
 =end
     def isPolynomial()
         begin
-            nv = @elem.ring.nvar;
+            nv = @elem.ring.coFac; #nvar;
         rescue
             return false;
         end
@@ -775,8 +776,8 @@ Hash value.
 Multiply two ring elements.
 =end
     def *(other)
-        #puts "* self  type(#{self}) = #{self.class}\n";
-        #puts "* other type(#{other}) = #{other.class}\n";
+        #puts "* self  type(#{self.elem}) = #{self.elem.class}\n";
+        #puts "* other type(#{other.elem}) = #{other.elem.class}\n";
         s,o = coercePair(self,other);
         #puts "* s = #{s}, o = #{o}, s*o = #{s.elem.multiply(o.elem)}\n";
         return RingElem.new( s.elem.multiply( o.elem ) ); 
@@ -1955,8 +1956,8 @@ java_import "edu.jas.application.ResidueSolvablePolynomial";
 java_import "edu.jas.application.ResidueSolvablePolynomialRing";
 java_import "edu.jas.application.LocalSolvablePolynomial";
 java_import "edu.jas.application.LocalSolvablePolynomialRing";
-java_import "edu.jas.application.QLRSolvablePolynomial";
-java_import "edu.jas.application.QLRSolvablePolynomialRing";
+java_import "edu.jas.poly.QLRSolvablePolynomial";
+java_import "edu.jas.poly.QLRSolvablePolynomialRing";
 
 
 =begin rdoc
