@@ -360,6 +360,16 @@ public final class WordFactory implements MonoidFactory<Word> {
 
 
     /**
+     * IndexOf for letter in alphabet.
+     * @param s letter character.
+     * @return index of s in the alphabet, or -1 if s is not contained in the alphabet.
+     */
+    public int indexOf(char s) {
+        return alphabet.indexOf(s);
+    }
+
+
+    /**
      * Generate a random Element with size less equal to n.
      * @param n
      * @return a random element.

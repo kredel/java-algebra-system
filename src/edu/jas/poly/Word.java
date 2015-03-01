@@ -242,7 +242,7 @@ public final class Word implements MonoidElem<Word> {
      * @return If this is the empty word then true is returned, else false.
      */
     public boolean isONE() {
-        return (0 == this.length());
+        return (0 == val.length());
     }
 
 
@@ -377,6 +377,60 @@ public final class Word implements MonoidElem<Word> {
             map.put(s, n);
         }
         return map;
+    }
+
+
+    /**
+     * Word leading exponent vector.
+     * @return an ExpVector for the first power of a letter.
+     */
+    public ExpVector leadingExpVector() {
+        long n = 0;
+        char letter = ' ';
+        for (int i = 0; i < val.length(); i++) {
+            char s = val.charAt(i);
+            if (n == 0) {
+                letter = s;
+                n++;
+            } else if (letter == s) {
+                n++;
+            } else {
+                break;
+            }
+        }
+        int k = mono.length();
+        if (n == 0L){ // == isONE()
+            return ExpVector.create(k);
+        }
+        int j = k - mono.indexOf(letter) - 1;
+        return ExpVector.create(k,j,n);
+    }
+
+
+    /**
+     * Word without leading exponent vector.
+     * @return an Word without the first power of a letter.
+     */
+    public Word reductum() {
+        if (isONE()) {
+            return this;
+        }
+        int n = 0;
+        char letter = ' ';
+        for (int i = 0; i < val.length(); i++) {
+            char s = val.charAt(i);
+            if (n == 0) {
+                letter = s;
+                n++;
+            } else if (letter == s) {
+                n++;
+            } else {
+                break;
+            }
+        }
+        // n != 0
+        String r = val.substring(n); // n-1+1
+        return new Word(mono, r, false);
     }
 
 

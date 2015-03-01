@@ -391,4 +391,31 @@ public class WordTest extends TestCase {
         }
     }
 
+
+    /**
+     * Test leadingExpVector and reductum.
+     */
+    public void testExpVector() {
+        String[] vars = new String[] { "a", "b", "cc", "d1", "g" };
+        WordFactory wf = new WordFactory(vars);
+
+        Word w = wf.random(10);
+        //System.out.println("w = " + w);
+        long lw = w.degree();
+        long le = 0L;
+
+        Word r = w;
+        while ( !r.isONE() ) {
+            ExpVector ef = r.leadingExpVector();
+            Word r1 = r.reductum();
+            //System.out.println("ef = " + ef.toString(vars) + ", r1 = " + r1);
+            le += ef.degree();
+            Word w1 = wf.valueOf(ef);
+            Word w2 = w1.multiply(r1);
+            assertEquals("r == w2", r, w2);
+            r = r1;
+        }
+        assertTrue("deg(prod(ef)) == deg(w): " + lw + ", " + le, lw == le );
+    }
+
 }
