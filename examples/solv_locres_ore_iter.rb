@@ -70,6 +70,8 @@ puts;
 
 pct = PolyRing.new(pzc,"t");
 #is automatic: [one,y,z,t] = p.gens(); # 1/y, 1/z
+puts "cp.gens(t) = " + pct.gens().join(", ") { |r| r.to_s };
+puts
 
 #exit(0);
 

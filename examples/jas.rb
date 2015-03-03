@@ -3502,17 +3502,20 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
            coeffTable = ring.coeffTable;
         elsif resSolv
            puts "ResidueSolvablePolynomialRing: " + cf.toScript();
-           ring = ResidueSolvablePolynomialRing.new(cf,nv,to,names);
+           #ring = ResidueSolvablePolynomialRing.new(cf,nv,to,names);
+           ring = QLRSolvablePolynomialRing.new(cf,nv,to,names);
            table = ring.table;
            coeffTable = ring.polCoeff.coeffTable;
         elsif quotSolv
            puts "QuotSolvablePolynomialRing: " + cf.toScript();
-           ring = QuotSolvablePolynomialRing.new(cf,nv,to,names);
+           #ring = QuotSolvablePolynomialRing.new(cf,nv,to,names);
+           ring = QLRSolvablePolynomialRing.new(cf,nv,to,names);
            table = ring.table;
            coeffTable = ring.polCoeff.coeffTable;
         elsif locSolv
            puts "LocalSolvablePolynomialRing: " + cf.toScript();
-           ring = LocalSolvablePolynomialRing.new(cf,nv,to,names);
+           #ring = LocalSolvablePolynomialRing.new(cf,nv,to,names);
+           ring = QLRSolvablePolynomialRing.new(cf,nv,to,names);
            table = ring.table;
            coeffTable = ring.polCoeff.coeffTable;
         elsif locresSolv

@@ -3759,17 +3759,20 @@ class SolvPolyRing(SolvableRing):
             coeffTable = ring.coeffTable;
         else:
             if resSolv:
-                ring = ResidueSolvablePolynomialRing(cf,nv,to,names);
+                #ring = ResidueSolvablePolynomialRing(cf,nv,to,names);
+                ring = QLRSolvablePolynomialRing(cf,nv,to,names);
                 table = ring.table;
                 coeffTable = ring.polCoeff.coeffTable;
             else:
                 if quotSolv:
-                    ring = QuotSolvablePolynomialRing(cf,nv,to,names);
+                    #ring = QuotSolvablePolynomialRing(cf,nv,to,names);
+                    ring = QLRSolvablePolynomialRing(cf,nv,to,names);
                     table = ring.table;
                     coeffTable = ring.polCoeff.coeffTable;
                 else:
                     if locSolv:
-                        ring = LocalSolvablePolynomialRing(cf,nv,to,names);
+                        #ring = LocalSolvablePolynomialRing(cf,nv,to,names);
+                        ring = QLRSolvablePolynomialRing(cf,nv,to,names);
                         table = ring.table;
                         coeffTable = ring.polCoeff.coeffTable;
                     else:
