@@ -3787,7 +3787,7 @@ class SolvPolyRing(SolvableRing):
         if L != []:
             #print "rel = " + str(L);
             for i in range(0,len(L),3):
-                #print "adding relation: " + str(L[i]) + " * " + str(L[i+1]) + " = " + str(L[i+2]);
+                print "adding relation: " + str(L[i]) + " * " + str(L[i+1]) + " = " + str(L[i+2]);
                 if recSolv and L[i+1].isConstant():
                     coeffTable.update( L[i], L[i+1], L[i+2] );
                 else: 
@@ -3811,8 +3811,14 @@ class SolvPolyRing(SolvableRing):
                                                       ring.toPolyCoefficients(L[i+1]), 
                                                       ring.toPolyCoefficients(L[i+2]) );
                                 else:
-                                    print "L[i], L[i+1], L[i+2]: " + str(L[i]) + ", " + str(L[i+1]) + ", " + str(L[i+2]);
+                                    #print "L[i], L[i+1], L[i+2]: " + str(L[i]) + ", " + str(L[i+1]) + ", " + str(L[i+2]);
                                     table.update( L[i], L[i+1], L[i+2] );
+                                    if (locresSolv or locSolv or quotSolv or resSolv) and (not L[i+1].isConstant()):
+                                        #print "ring.polCoeff.table " + str(ring.polCoeff.table.toScript());
+                                        ring.polCoeff.table.update( ring.toPolyCoefficients(L[i]),
+                                                                    ring.toPolyCoefficients(L[i+1]), 
+                                                                    ring.toPolyCoefficients(L[i+2]) );
+
         self.ring = ring;
         SolvableRing.__init__(self,ring=self.ring)
 

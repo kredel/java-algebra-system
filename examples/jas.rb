@@ -3532,6 +3532,7 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
         if ll != []
             #puts "ll = " + str(ll);
 	    (0..ll.size-1).step(3) { |i|
+                puts "adding relation: " + str(ll[i]) + " * " + str(ll[i+1]) + " = " + str(ll[i+2]);
                 if recSolv and ll[i+1].isConstant() 
                    #puts "r coeff type " + str(ll[i].class);
                    coeffTable.update( ll[i], ll[i+1].leadingBaseCoefficient(), ll[i+2] );
@@ -3556,9 +3557,15 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
                                       ring.toPolyCoefficients(ll[i+1]), 
                                       ring.toPolyCoefficients(ll[i+2]) );
                 else 
-                   puts "ll[i], ll[i+1], ll[i+2]: " + str(ll[i]) + ", " + str(ll[i+1]) + ", " + str(ll[i+2]);
+                   #puts "ll[i], ll[i+1], ll[i+2]: " + str(ll[i]) + ", " + str(ll[i+1]) + ", " + str(ll[i+2]);
                    #puts "poly type " + str(ll[i].class);
                    table.update( ll[i], ll[i+1], ll[i+2] );
+                   if (locresSolv or locSolv or quotSolv or resSolv) and (not ll[i+1].isConstant())
+                      #puts "ring.polCoeff.table " + str(ring.polCoeff.table.toScript());
+                      ring.polCoeff.table.update( ring.toPolyCoefficients(ll[i]),
+                                                  ring.toPolyCoefficients(ll[i+1]), 
+                                                  ring.toPolyCoefficients(ll[i+2]) );
+                   end
                 end
 	    }
             #puts "ring " + ring.toScript();
