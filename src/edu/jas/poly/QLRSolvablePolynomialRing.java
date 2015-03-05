@@ -224,8 +224,9 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
         String res = super.toString();
         if (PrettyPrint.isTrue()) {
             res += "\n" + polCoeff.coeffTable.toString(vars);
+            res += "\n" + polCoeff.table.toString(vars);
         } else {
-            res += ", #rel = " + table.size() + " + " + polCoeff.coeffTable.size();
+            res += ", #rel = " + table.size() + " + " + polCoeff.coeffTable.size() + " + " + polCoeff.table.size();
         }
         return res;
     }
@@ -261,15 +262,23 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
             to = "PolyRing.grad";
         }
         s.append(to);
+        String rel = "";
         if (table.size() > 0) {
-            String rel = table.toScript();
+            rel = table.toScript();
             s.append(",rel=");
             s.append(rel);
         }
         if (polCoeff.coeffTable.size() > 0) {
-            String rel = polCoeff.coeffTable.toScript();
+            String crel = polCoeff.coeffTable.toScript();
             s.append(",coeffrel=");
-            s.append(rel);
+            s.append(crel);
+        }
+        if (polCoeff.table.size() > 0) { // should not be printed
+            String polrel = polCoeff.table.toScript();
+            if (!rel.equals(polrel)) {
+                s.append(",polrel=");
+                s.append(polrel);
+            }
         }
         s.append(")");
         return s.toString();
