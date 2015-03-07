@@ -457,7 +457,7 @@ export:
 	cp ~/java/lib/droidlog.jar ~/jas-versions/$(VERSION)/
 	cd ~/jas-versions/$(VERSION)/jlinalg_adapter; make all doc > ~/jas-versions/$(VERSION)/make_jlinalg.out
 	cd ~/jas-versions/$(VERSION)/commons-math_adapter; make all doc > ~/jas-versions/$(VERSION)/make_commons-math.out
-	cd ~/jas-versions/$(VERSION)/; jar -cfM ../$(VERSION).`$(SVNREV)`-doc.zip doc/ *.html *.css
+	cd ~/jas-versions/$(VERSION)/; jar -cfM ../$(VERSION).`$(SVNREV)`-doc.zip doc/ images/ *.html *.css
 	mv ~/jas-versions/$(VERSION).`$(SVNREV)`-*.jar ~/jas-versions/$(VERSION)/
 	mv ~/jas-versions/$(VERSION).`$(SVNREV)`-*.zip ~/jas-versions/$(VERSION)/
 	cd ~/jas-versions/$(VERSION)/; chmod -v +r *.jar *.zip >chmod.out 2>&1
