@@ -22,22 +22,31 @@
 
 <dl>
 
-<dt>2015, February </dt>
+<dt>2014, March </dt>
 <dd> 
 
+ Small modifications to comprehensive Gr&ouml;bner bases
+ implementation to allow computation of left comprehensive
+ Gr&ouml;bner bases in case of solvable polynomials with commutative
+ parameter coefficients.  Shared memory parallel versions for module
+ Gr&ouml;bner bases.  Refactoring to remove package dependecy cycles.
+ Code cleanup, small fixes and improvements.
+
+</dd>
+
+<dt>2015, February </dt>
+<dd> 
  Parallel versions for module Gr&ouml;bner bases. Refactor syzygy
  computation classes into abstract and sequential classes.  Disable
  some correctness checks in syzygy computation depending on disabled
  Java assertions. Improve solvable relation table updates.  Proxy and
  factory for solvable Gr&ouml;bner bases <code>SGBProxy</code> and
  <code>SGBFactory</code>.
-
  Refactor term order optimization methods to naturally / better suited
  classes.  Make use of <code>ModLong</code> classes and the improved
  <code>RingFactory</code> parser in the scripting interfaces.  Remove
  the dependency on Junit from the src-tree. Some more small fixes and
  improvements. Ivy resolve task for log4j and junit libraries.
-
 </dd> 
 
 <dt>2015, January </dt>
@@ -2420,7 +2429,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Sat Feb  7 14:42:39 CET 2015
+Last modified: Sat Mar  7 11:55:39 CET 2015
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
