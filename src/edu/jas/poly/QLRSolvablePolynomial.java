@@ -232,6 +232,9 @@ public class QLRSolvablePolynomial<C extends GcdRingElem<C> & QuotPair<GenPolyno
                         C qdeni = ring.qpfac.create(ring.qpfac.pairFactory().getONE(), b.denominator()); // 1/den
                         //System.out.println("vr = " + vr + ", qdeni = " + qdeni);
                         // recursion with smaller head term:
+                        if (qv.leadingExpVector().equals(vr.leadingExpVector())) {
+                            throw new IllegalArgumentException("qr !> vr: qv = " + qv + ", vr = " + vr);
+                        }
                         QLRSolvablePolynomial<C, D> rq = vr.multiply(qdeni);
                         qp = (QLRSolvablePolynomial<C, D>) qv.subtract(rq);
                         qp = qp.multiplyLeft(qdeni);

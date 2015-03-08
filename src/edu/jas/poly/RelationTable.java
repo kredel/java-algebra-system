@@ -361,12 +361,16 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
             for (Iterator jt = v.iterator(); jt.hasNext();) {
                 ExpVectorPair ep = (ExpVectorPair) jt.next();
                 GenPolynomial<C> p = (GenPolynomial<C>) jt.next();
-                if (ep.totalDeg() != 2) { // only base relations
+                if (ep.totalDeg() > 2) { // only base relations
                     continue;
                 }
                 s.append("" + ep.getFirst().toScript(vars) + ", ");
                 if (coeffTable) {
-                    s.append("" + ep.getSecond().toScript(cvars) + ", ");
+                    String eps = ep.getSecond().toScript(cvars);
+                    if (eps.isEmpty()) { // if from a deeper down ring
+                        eps = p.leadingBaseCoefficient().abs().toScript();
+                    }
+                    s.append("" + eps + ", ");
                 } else {
                     s.append("" + ep.getSecond().toScript(vars) + ", ");
                 }
