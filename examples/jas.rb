@@ -3537,7 +3537,7 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
                    #puts "r coeff type " + str(ll[i].class);
                    coeffTable.update( ll[i], ll[i+1].leadingBaseCoefficient(), ll[i+2] );
                 elsif resSolv and ll[i+1].isConstant() 
-                   #puts "q coeff type " + str(ll[i].class);
+                   #puts "ri coeff type " + str(ll[i].class);
                    coeffTable.update( ring.toPolyCoefficients(ll[i]),
                                       ring.toPolyCoefficients(ll[i+1]), 
                                       ring.toPolyCoefficients(ll[i+2]) );
@@ -3547,12 +3547,12 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
                                       ring.toPolyCoefficients(ll[i+1]), 
                                       ring.toPolyCoefficients(ll[i+2]) );
                 elsif locSolv and ll[i+1].isConstant() 
-                   #puts "q coeff type " + str(ll[i].class);
+                   #puts "l coeff type " + str(ll[i].class);
                    coeffTable.update( ring.toPolyCoefficients(ll[i]),
                                       ring.toPolyCoefficients(ll[i+1]), 
                                       ring.toPolyCoefficients(ll[i+2]) );
                 elsif locresSolv and ll[i+1].isConstant() 
-                   #puts "q coeff type " + str(ll[i].class);
+                   puts "lr coeff type " + str(ll[i].class);
                    coeffTable.update( ring.toPolyCoefficients(ll[i]),
                                       ring.toPolyCoefficients(ll[i+1]), 
                                       ring.toPolyCoefficients(ll[i+2]) );
