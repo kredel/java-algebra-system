@@ -354,6 +354,9 @@ public class SolvableLocalResidue<C extends GcdRingElem<C>> implements GcdRingEl
         if (a == null) {
             return false;
         }
+        if (num.equals(a.num) && den.equals(a.den)) { // short cut
+            return true;
+        }
         return compareTo(a) == 0;
     }
 
