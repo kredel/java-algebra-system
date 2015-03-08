@@ -333,8 +333,10 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
             return false;
         }
         SolvableQuotient<C> a = (SolvableQuotient<C>) b;
+        if (num.equals(a.num) && den.equals(a.den)) { // short cut
+            return true;
+        }
         return compareTo(a) == 0;
-        //return num.equals(a.num) && den.equals(a.den);
     }
 
 
