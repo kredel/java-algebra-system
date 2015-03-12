@@ -107,7 +107,6 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
                 //Q = Q.multiplyLeft(a);
                 //S = (GenSolvablePolynomial<C>) S.subtract(Q);
                 S = (GenSolvablePolynomial<C>) S.subtractMultiple(a, Q);
-
                 //S = (GenSolvablePolynomial<C>) S.subtractMultiple(a, e, p[i]);
             }
         }
@@ -247,11 +246,11 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
         ExpVector e;
         C a;
         boolean mt = false;
-        GenSolvablePolynomial<C> R = Ap.ring.getZERO();
+        GenSolvablePolynomial<C> R = Ap.ring.getZERO().copy();
 
         //GenSolvablePolynomial<C> T = null;
         GenSolvablePolynomial<C> Q = null;
-        GenSolvablePolynomial<C> S = Ap;
+        GenSolvablePolynomial<C> S = Ap.copy();
         while (S.length() > 0) {
             m = S.leadingMonomial();
             e = m.getKey();
@@ -265,17 +264,20 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
             if (!mt) {
                 //logger.debug("irred");
                 //T = new OrderedMapPolynomial( a, e );
-                R = (GenSolvablePolynomial<C>) R.sum(a, e);
-                S = (GenSolvablePolynomial<C>) S.subtract(a, e);
+                //R = (GenSolvablePolynomial<C>) R.sum(a, e);
+                //S = (GenSolvablePolynomial<C>) S.subtract(a, e);
+                R.doPutToMap(e, a);
+                S.doRemoveFromMap(e, a);
                 // System.out.println(" S = " + S);
             } else {
                 //logger.debug("red");
                 e = e.subtract(htl[i]);
                 //a = a.divide( (C)lbc[i] );
-                Q = p[i].multiply(e);
+                Q = p[i].multiply(e); // p_i * (a e) todo
                 a = a.divide(Q.leadingBaseCoefficient());
                 Q = Q.multiply(a);
                 S = (GenSolvablePolynomial<C>) S.subtract(Q);
+                //S = (GenSolvablePolynomial<C>) S.subtractMultiple(a, Q);
             }
         }
         return R;
@@ -327,12 +329,12 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
         C a;
         boolean mt = false;
         GenSolvablePolynomial<C> zero = Ap.ring.getZERO();
-        GenSolvablePolynomial<C> R = Ap.ring.getZERO();
+        GenSolvablePolynomial<C> R = Ap.ring.getZERO().copy();
 
         GenSolvablePolynomial<C> fac = null;
         // GenSolvablePolynomial<C> T = null;
         GenSolvablePolynomial<C> Q = null;
-        GenSolvablePolynomial<C> S = Ap;
+        GenSolvablePolynomial<C> S = Ap.copy();
         while (S.length() > 0) {
             m = S.leadingMonomial();
             e = m.getKey();
@@ -344,18 +346,21 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
             }
             if (!mt) {
                 //logger.debug("irred");
-                R = (GenSolvablePolynomial<C>) R.sum(a, e);
-                S = (GenSolvablePolynomial<C>) S.subtract(a, e);
+                //R = (GenSolvablePolynomial<C>) R.sum(a, e);
+                //S = (GenSolvablePolynomial<C>) S.subtract(a, e);
+                R.doPutToMap(e, a);
+                S.doRemoveFromMap(e, a);
                 // System.out.println(" S = " + S);
             } else {
                 e = e.subtract(htl[i]);
                 //logger.info("red div = " + e);
                 //a = a.divide( (C)lbc[i] );
                 //Q = p[i].multiply( a, e );
-                Q = p[i].multiply(e);
+                Q = p[i].multiply(e); // p_i * (a e) todo
                 a = a.divide(Q.leadingBaseCoefficient());
-                Q = Q.multiply(a);
+                Q = Q.multiply(a); 
                 S = (GenSolvablePolynomial<C>) S.subtract(Q);
+                //S = (GenSolvablePolynomial<C>) S.subtractMultiple(a, Q);
                 fac = row.get(i);
                 if (fac == null) {
                     fac = (GenSolvablePolynomial<C>) zero.sum(a, e);
