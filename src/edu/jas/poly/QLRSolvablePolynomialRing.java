@@ -377,27 +377,51 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
         if (!coFac.isAssociative()) {
             return false;
         }
-        //if (!polCoeff.isAssociative()) { // done via generators
-        //    return false;
-        //}
+        if (!polCoeff.isAssociative()) { // not done via generators??
+            return false;
+        }
         QLRSolvablePolynomial<C,D> Xi, Xj, Xk, p, q;
         List<GenPolynomial<C>> gens = generators();
         int ngen = gens.size();
         for (int i = 0; i < ngen; i++) {
             Xi = (QLRSolvablePolynomial<C,D>) gens.get(i);
+            if(Xi.degree() == 0) {
+                C lbc = Xi.leadingBaseCoefficient();
+                if (lbc.numerator().degree() == 0 && lbc.denominator().degree() == 0) {
+                    //System.out.println("qlr assoc skip: Xi = " + lbc);
+                    continue; // skip
+                }
+            }
             for (int j = i + 1; j < ngen; j++) {
                 Xj = (QLRSolvablePolynomial<C,D>) gens.get(j);
+                if(Xj.degree() == 0) {
+                   C lbc = Xi.leadingBaseCoefficient();
+                   if (lbc.numerator().degree() == 0 && lbc.denominator().degree() == 0) {
+                       //System.out.println("qlr assoc skip: Xj = " + lbc);
+                       continue; // skip
+                   }
+                }
                 for (int k = j + 1; k < ngen; k++) {
                     Xk = (QLRSolvablePolynomial<C,D>) gens.get(k);
+                    if (Xi.degree() == 0 && Xj.degree() == 0 && Xk.degree() == 0) {
+                        //System.out.println("qlr assoc degree == 0");
+                        continue; // skip
+                    }
                     try {
                         p = Xk.multiply(Xj).multiply(Xi);
                         q = Xk.multiply(Xj.multiply(Xi));
+                        //System.out.println("qlr assoc: p = " + p);
+                        //System.out.println("qlr assoc: q = " + q);
                     } catch (IllegalArgumentException e) {
-                        //e.printStackTrace();
+                        System.out.println("qlr assoc: Xi = " + Xi);
+                        System.out.println("qlr assoc: Xj = " + Xj);
+                        System.out.println("qlr assoc: Xk = " + Xk);
+                        e.printStackTrace();
                         continue;
                     }
                     if (!p.equals(q)) {
                         if (logger.isInfoEnabled()) {
+                            //System.out.println("qlr assoc: Xk = " + Xk + ", Xj = " + Xj + ", Xi = " + Xi);
                             logger.info("Xk = " + Xk + ", Xj = " + Xj + ", Xi = " + Xi);
                             logger.info("p = ( Xk * Xj ) * Xi = " + p);
                             logger.info("q = Xk * ( Xj * Xi ) = " + q);

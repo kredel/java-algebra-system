@@ -177,7 +177,7 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>> implements
         GenSolvablePolynomial<C> one = ring.getONE();
         for (GenSolvablePolynomial<C> p : pgens) {
             SolvableLocalResidue<C> q = new SolvableLocalResidue<C>(this, p);
-            if (!q.isZERO()) {
+            if (!q.isZERO() && !gens.contains(q)) {
                 gens.add(q);
                 if (!p.isONE() && !ideal.contains(p)) {
                     q = new SolvableLocalResidue<C>(this, one, p);
@@ -216,15 +216,35 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>> implements
                 Xj = gens.get(j);
                 for (int k = j + 1; k < ngen; k++) {
                     Xk = gens.get(k);
+                    if (Xi.num.degree() == 0 && Xj.num.degree() == 0 && Xk.num.degree() == 0 &&
+                        Xi.den.degree() == 0 && Xj.den.degree() == 0 && Xk.den.degree() == 0) {
+                        //System.out.println("lr degree == 0");
+                        continue; // skip all base elements
+                    }
                     try {
                         p = Xk.multiply(Xj).multiply(Xi);
                         q = Xk.multiply(Xj.multiply(Xi));
                     } catch (IllegalArgumentException e) {
-                        //e.printStackTrace();
+                        e.printStackTrace();
                         continue; // ignore undefined multiplication
+                    }
+                    if (p.num.equals(q.num) && p.den.equals(q.den)) { // short cut
+                        continue;
+                    // } else {
+                    //     int s = p.num.length() + q.num.length() + p.den.length() + q.den.length();
+                    //     if (s > 5) {
+                    //         System.out.println("lr assoc: p = " + p.toScript());
+                    //         System.out.println("lr assoc: q = " + q.toScript());
+                    //         System.out.println("lr assoc: Xk = " + Xk.toScript() + ", Xj = " + Xj.toScript() + ", Xi = " + Xi.toScript());
+                    //         System.out.println("lr size = " + s);
+                    //      continue;
+                    //     }
                     }
                     if (!p.equals(q)) {
                         if (true || debug) {
+                            System.out.println("lr assoc: p = " + p.toScript());
+                            System.out.println("lr assoc: q = " + q.toScript());
+                            System.out.println("lr assoc: Xk = " + Xk.toScript() + ", Xj = " + Xj.toScript() + ", Xi = " + Xi.toScript());
                             logger.info("Xk = " + Xk + ", Xj = " + Xj + ", Xi = " + Xi);
                             logger.info("p = ( Xk * Xj ) * Xi = " + p);
                             logger.info("q = Xk * ( Xj * Xi ) = " + q);
