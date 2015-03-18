@@ -2227,6 +2227,10 @@ def SLR(ideal,d=0,n=1)
     end
     cfr = ideal.getList().get(0).ring;
     #puts "ideal.getList().get(0).ring.ideal = #{ideal.getList().get(0).ring.ideal}\n";
+    if n == true
+       isfield = true;
+       n = 1;
+    end
     if cfr.getClass().getSimpleName() == "SolvableLocalResidueRing"
         lc = SolvableLocalResidueRing.new( cfr.ideal );
     else
@@ -2495,6 +2499,22 @@ Test if two ideals are equal.
            return false;
         end
         return (self <=> other) == 0; 
+    end
+
+=begin rdoc
+Test if ideal is one.
+=end
+    def isONE()
+        s = Ideal.new(@pset);
+        return s.isONE(); 
+    end
+
+=begin rdoc
+Test if ideal is zero.
+=end
+    def isZERO()
+        s = Ideal.new(@pset);
+        return s.isZERO(); 
     end
 
 =begin rdoc
@@ -3639,6 +3659,22 @@ Test if two ideals are equal.
         end
         s, o = self, other;
         return (s <=> o) == 0; 
+    end
+
+=begin rdoc
+Test if ideal is one.
+=end
+    def isONE()
+        s = SolvableIdeal.new(@pset);
+        return s.isONE(); 
+    end
+
+=begin rdoc
+Test if ideal is zero.
+=end
+    def isZERO()
+        s = SolvableIdeal.new(@pset);
+        return s.isZERO(); 
     end
 
 =begin rdoc
