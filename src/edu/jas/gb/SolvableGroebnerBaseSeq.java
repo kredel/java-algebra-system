@@ -15,6 +15,7 @@ import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
+import edu.jas.poly.QLRSolvablePolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.PolynomialList;
 import edu.jas.structure.RingElem;
@@ -398,8 +399,16 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
             throw new IllegalArgumentException("coefficients not from a field");
         }
 
-        List<GenSolvablePolynomial<C>> X = ring.univariateList(modv);
-        //System.out.println("X univ = " + X);
+        List<GenSolvablePolynomial<C>> X;
+        if (ring instanceof QLRSolvablePolynomialRing) {
+            if (modv != 0){
+                throw new IllegalArgumentException("modv != 0: " + modv);
+            }
+            X = PolynomialList.castToSolvableList(ring.generators()); // todo check modv
+            System.out.println("X univ = " + X);
+        } else {
+            X = ring.univariateList(modv);
+        }
         List<GenSolvablePolynomial<C>> G = new ArrayList<GenSolvablePolynomial<C>>(F.size() * (1 + X.size()));
         G.addAll(F);
         GenSolvablePolynomial<C> q;
@@ -407,6 +416,9 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
             //p = Fp.get(i);
             for (GenSolvablePolynomial<C> x : X) {
                 //x = X.get(j);
+                if (x.isONE()) {
+                    continue;
+                }
                 q = p.multiply(x);
                 q = sred.leftNormalform(G, q);
                 q = q.monic();
@@ -476,6 +488,9 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 pairlist.put(H);
                 for (GenSolvablePolynomial<C> x : X) {
                     //x = X.get(j);
+                    if (x.isONE()) {
+                        continue;
+                    }
                     p = H.multiply(x);
                     p = sred.leftNormalform(G, p);
                     if (!p.isZERO()) {

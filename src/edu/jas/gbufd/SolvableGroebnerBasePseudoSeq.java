@@ -353,7 +353,7 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends Sol
     //@SuppressWarnings("unchecked")
     @Override
     public SolvableExtendedGB<C> extLeftGB(int modv, List<GenSolvablePolynomial<C>> F) {
-        throw new UnsupportedOperationException(); // TODO
+        throw new UnsupportedOperationException("TODO"); // TODO
     }
 
 }
