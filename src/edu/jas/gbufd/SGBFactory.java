@@ -27,6 +27,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.ValueFactory;
 import edu.jas.structure.QuotPairFactory;
 import edu.jas.ufd.Quotient;
 import edu.jas.ufd.QuotientRing;
@@ -467,11 +468,10 @@ public class SGBFactory {
         if (fac.isField()) {
             return new SolvableGroebnerBaseSeq<C>(pl);
         }
+        if (fac instanceof ValueFactory) {
+            return new SolvableGroebnerBasePseudoSeq<C>(fac, pl);
+        }
         if (fac instanceof QuotPairFactory) {
-            // residue ring makes a package cycle: TODO with ValueFactory
-            //if (fac instanceof SolvableResidueRing) {
-            //    return new SolvableGroebnerBasePseudoSeq<C>(fac, pl);
-            //}
             return new SolvableGroebnerBaseSeq<C>(pl);
         }
         SolvableGroebnerBaseAbstract bba = null;

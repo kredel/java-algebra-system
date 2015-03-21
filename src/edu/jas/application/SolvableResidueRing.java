@@ -23,6 +23,8 @@ import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.QuotPair;
 import edu.jas.structure.QuotPairFactory;
+import edu.jas.structure.Value;
+import edu.jas.structure.ValueFactory;
 
 
 /**
@@ -32,7 +34,8 @@ import edu.jas.structure.QuotPairFactory;
  */
 public class SolvableResidueRing<C extends GcdRingElem<C>> 
     implements RingFactory<SolvableResidue<C>>, 
-               QuotPairFactory<GenPolynomial<C>, SolvableResidue<C>> {
+               QuotPairFactory<GenPolynomial<C>, SolvableResidue<C>>,
+               ValueFactory<GenPolynomial<C>, SolvableResidue<C>> {
 
 
     private static final Logger logger = Logger.getLogger(SolvableResidueRing.class);
@@ -95,11 +98,19 @@ public class SolvableResidueRing<C extends GcdRingElem<C>>
         //System.out.println("rr cofac  = " + ring.coFac.getClass().getName());
     }
 
-
+ 
     /**
      * Factory for base elements.
      */
     public GenSolvablePolynomialRing<C> pairFactory() {
+        return ring;
+    }
+
+
+    /**
+     * Factory for base elements.
+     */
+    public GenSolvablePolynomialRing<C> valueFactory() {
         return ring;
     }
 

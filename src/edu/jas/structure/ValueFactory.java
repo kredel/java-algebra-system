@@ -24,6 +24,6 @@ public interface ValueFactory<C extends RingElem<C>, D extends RingElem<D>> {
     /**
      * Factory for value elements.
      */
-    public RingFactory<C> pairFactory();
+    public RingFactory<C> valueFactory();
 
 }

@@ -16,6 +16,8 @@ import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.NotInvertibleException;
 import edu.jas.structure.QuotPair;
 import edu.jas.structure.QuotPairFactory;
+import edu.jas.structure.Value;
+import edu.jas.structure.ValueFactory;
 
 
 /**
@@ -24,7 +26,7 @@ import edu.jas.structure.QuotPairFactory;
  * @author Heinz Kredel
  */
 public class SolvableResidue<C extends GcdRingElem<C>> 
-    implements GcdRingElem<SolvableResidue<C>>, QuotPair<GenPolynomial<C>> {
+    implements GcdRingElem<SolvableResidue<C>>, QuotPair<GenPolynomial<C>>, Value<GenPolynomial<C>> {
 
 
     /**
@@ -104,6 +106,15 @@ public class SolvableResidue<C extends GcdRingElem<C>>
      */
     public SolvableResidueRing<C> factory() {
         return ring;
+    }
+
+
+    /**
+     * Value. Returns the value.
+     * @see edu.jas.structure.Value#value()
+     */
+    public GenSolvablePolynomial<C> value() {
+        return val;
     }
 
 
