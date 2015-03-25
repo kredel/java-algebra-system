@@ -334,18 +334,20 @@ public class ResidueSolvablePolynomialQLRTest extends TestCase {
         assertTrue("isAssociative()", ring.isAssociative());
         //System.out.println("ring = " + ring.toScript());
 
-        QLRSolvablePolynomial<SolvableResidue<BigRational>, BigRational> r1 = ring.parse("x");
+        QLRSolvablePolynomial<SolvableResidue<BigRational>, BigRational> r1 = ring.parse("z");
         GenSolvablePolynomial<BigRational> r2 = sring.parse("a");
-        QLRSolvablePolynomial<SolvableResidue<BigRational>, BigRational> rp = ring.parse("a x + b");
+        QLRSolvablePolynomial<SolvableResidue<BigRational>, BigRational> rp = ring.parse("a z + x");
         GenSolvablePolynomial<GenPolynomial<BigRational>> pp = ring.toPolyCoefficients(rp);
         //System.out.println("r1 = " + r1);
         //System.out.println("r2 = " + r2);
         //System.out.println("rp = " + rp);
         //System.out.println("pp = " + pp);
         ring.polCoeff.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(), pp);
+        //ring.polCoeff.table.update(r1.leadingExpVector(), r2.leadingExpVector(), pp);
+        //ring.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(), rp);
 
         //table = ring.table;
-        //System.out.println("ring = " + ring);
+        //System.out.println("ring = " + ring.toScript());
 
         assertFalse("isCommutative()", ring.isCommutative());
         assertTrue("isAssociative()", ring.isAssociative());
