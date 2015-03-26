@@ -329,8 +329,12 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
     @SuppressWarnings("unused")
     @Override
     public boolean isAssociative() {
+        if (!coFac.isAssociative()) {
+            return false;
+        }
         RecSolvablePolynomial<C> Xi, Xj, Xk, p, q;
         List<GenPolynomial<GenPolynomial<C>>> gens = generators();
+        //System.out.println("Rec gens = " + gens);
         int ngen = gens.size();
         for (int i = 0; i < ngen; i++) {
             Xi = (RecSolvablePolynomial<C>) gens.get(i);
@@ -351,7 +355,7 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
                 }
             }
         }
-        return coFac.isAssociative();
+        return true;
     }
 
 

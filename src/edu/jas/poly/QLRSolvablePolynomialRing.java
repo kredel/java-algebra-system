@@ -208,6 +208,7 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
             ExpVector f = null;
             GenSolvablePolynomial<GenPolynomial<D>> p = null;
             polCoeff.table.update(e, f, p); // from rt
+            throw new RuntimeException("TODO");
         }
         ZERO = new QLRSolvablePolynomial<C,D>(this);
         C coeff = coFac.getONE();
@@ -377,11 +378,13 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
         if (!coFac.isAssociative()) {
             return false;
         }
+        //System.out.println("polCoeff = " + polCoeff.toScript());
         if (!polCoeff.isAssociative()) { // not done via generators??
             return false;
         }
         QLRSolvablePolynomial<C,D> Xi, Xj, Xk, p, q;
         List<GenPolynomial<C>> gens = generators();
+        //System.out.println("QLR gens = " + gens);
         int ngen = gens.size();
         for (int i = 0; i < ngen; i++) {
             Xi = (QLRSolvablePolynomial<C,D>) gens.get(i);
