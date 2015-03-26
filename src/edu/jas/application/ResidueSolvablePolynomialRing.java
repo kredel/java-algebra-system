@@ -360,8 +360,16 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>> extends
     @SuppressWarnings("unused")
     @Override
     public boolean isAssociative() {
+        if (!coFac.isAssociative()) {
+            return false;
+        }
+        //System.out.println("polCoeff = " + polCoeff.toScript());
+        if (!polCoeff.isAssociative()) { // not done via generators??
+            return false;
+        }
         ResidueSolvablePolynomial<C> Xi, Xj, Xk, p, q;
         List<GenPolynomial<SolvableResidue<C>>> gens = generators();
+        //System.out.println("Residu gens = " + gens);
         int ngen = gens.size();
         for (int i = 0; i < ngen; i++) {
             Xi = (ResidueSolvablePolynomial<C>) gens.get(i);
@@ -382,7 +390,7 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>> extends
                 }
             }
         }
-        return coFac.isAssociative();
+        return true;
     }
 
 
