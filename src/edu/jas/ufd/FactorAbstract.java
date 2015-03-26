@@ -16,6 +16,7 @@ import java.util.TreeSet;
 import org.apache.log4j.Logger;
 
 import edu.jas.kern.TimeStatus;
+import edu.jas.kern.StringUtil;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -191,6 +192,9 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
      */
     @Override
     public List<GenPolynomial<C>> factorsSquarefree(GenPolynomial<C> P) {
+        if (logger.isInfoEnabled()) {
+            logger.info(StringUtil.selectStackTrace("edu\\.jas.*"));
+        }
         return factorsSquarefreeKronecker(P);
         //return factorsSquarefreeOptimize(P);
     }
@@ -402,6 +406,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         }
         if (logger.isInfoEnabled()) {
             logger.info("base facs for P = " + P);
+            //System.out.println(StringUtil.selectStackTrace("edu\\.jas.*"));
         }
         SortedMap<GenPolynomial<C>, Long> facs = sengine.baseSquarefreeFactors(P);
         if (facs == null || facs.size() == 0) {
