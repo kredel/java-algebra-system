@@ -11,6 +11,7 @@ require "examples/jas"
 #r = Ring( "Rat(x,y,z) G" );
 #r = Ring( "C(x,y,z) G" );
 r = PolyRing.new( ZZ(), "(x,y,z)", PolyRing.lex );
+#r = SolvPolyRing.new( ZZ(), "(x,y,z)", PolyRing.lex );
 
 puts "Ring: " + str(r);
 puts;
@@ -79,5 +80,7 @@ puts "q2: " + str(q2.elem.length());
 puts "time " + str(t) + " milliseconds";
 puts;
 
+puts "creations: " + str(r.ring.getCreations);
+puts;
 
 #puts "Integer.MAX_VALUE = " +str(Integer::MAX_VALUE);

@@ -6,7 +6,7 @@
 from java.lang import System
 from java.lang import Integer
 
-from jas import PolyRing, ZZ, QQ, GF, ZM
+from jas import PolyRing, SolvPolyRing, ZZ, QQ, GF, ZM
 
 # sparse polynomial powers
 
@@ -15,6 +15,7 @@ from jas import PolyRing, ZZ, QQ, GF, ZM
 #r = Ring( "C(x,y,z) G" );
 #r = Ring( "Z(x,y,z) L" );
 r = PolyRing( ZZ(), "(x,y,z)", PolyRing.lex );
+#r = SolvPolyRing( ZZ(), "(x,y,z)", PolyRing.lex );
 
 print "Ring: " + str(r);
 print;
@@ -39,13 +40,14 @@ plist = pset.list;
 print "plist:", plist;
 print;
 
+#p = plist[1];
 p = plist[0];
 #p = plist[2];
 print "p:", p;
 print;
 
 q = p;
-for i in range(1,20):
+for i in range(1,20): 
     q = q.multiply(p);
 
 print "q:", q.length();
