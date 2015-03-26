@@ -115,17 +115,31 @@ public class ResidueSolvablePolynomialQLRTest extends TestCase {
         cfac = new BigRational(1);
         sring = new GenSolvablePolynomialRing<BigRational>(cfac, tord, cvars);
         RelationGenerator<BigRational> wc = new WeylRelations<BigRational>();
-        sring.addRelations(wc); //wc.generate(sring);
+        // not possible, TODO: sring.addRelations(wc); //wc.generate(sring);
         List<GenSolvablePolynomial<BigRational>> il = new ArrayList<GenSolvablePolynomial<BigRational>>();
         GenSolvablePolynomial<BigRational> p1 = sring.parse("b - a^2");
         il.add(p1);
         //p1 = sring.parse("a - b^5");
         //il.add(p1);
         sideal = new SolvableIdeal<BigRational>(sring, il);
+        sideal = sideal.twosidedGB();
+        if (sideal.isONE()) {
+            System.out.println("twosided sideal = " + sideal.toScript());
+            throw new IllegalArgumentException("ideal is one");
+        }
         rring = new SolvableResidueRing<BigRational>(sideal);
         ring = new QLRSolvablePolynomialRing<SolvableResidue<BigRational>, BigRational>(rring, tord, vars);
         RelationGenerator<SolvableResidue<BigRational>> wl = new WeylRelations<SolvableResidue<BigRational>>();
         wl.generate(ring);
+        List<GenSolvablePolynomial<SolvableResidue<BigRational>>> qrel = ring.table.relationList();
+        //System.out.println("qrel = " + qrel);
+        List<GenSolvablePolynomial<GenPolynomial<BigRational>>> prel = new ArrayList<GenSolvablePolynomial<GenPolynomial<BigRational>>>();
+        for (GenSolvablePolynomial<SolvableResidue<BigRational>> q : qrel) {
+	    GenSolvablePolynomial<GenPolynomial<BigRational>> p = ring.toPolyCoefficients(q);
+            prel.add(p);
+        }
+        //System.out.println("prel = " + prel);
+        ring.polCoeff.table.addSolvRelations(prel);
         a = b = c = d = e = null;
     }
 
@@ -328,7 +342,7 @@ public class ResidueSolvablePolynomialQLRTest extends TestCase {
     /**
      * Test solvable coefficient ring.
      */
-    public void testSolvableCoeffs() {
+    public void testSolvableCoeffsRelations() {
         assertTrue("# relations == 2", ring.table.size() == 2);
         assertFalse("isCommutative()", ring.isCommutative());
         assertTrue("isAssociative()", ring.isAssociative());
@@ -336,7 +350,7 @@ public class ResidueSolvablePolynomialQLRTest extends TestCase {
 
         QLRSolvablePolynomial<SolvableResidue<BigRational>, BigRational> r1 = ring.parse("z");
         GenSolvablePolynomial<BigRational> r2 = sring.parse("a");
-        QLRSolvablePolynomial<SolvableResidue<BigRational>, BigRational> rp = ring.parse("a z + x");
+        QLRSolvablePolynomial<SolvableResidue<BigRational>, BigRational> rp = ring.parse("a z + b");
         GenSolvablePolynomial<GenPolynomial<BigRational>> pp = ring.toPolyCoefficients(rp);
         //System.out.println("r1 = " + r1);
         //System.out.println("r2 = " + r2);
@@ -346,7 +360,6 @@ public class ResidueSolvablePolynomialQLRTest extends TestCase {
         //ring.polCoeff.table.update(r1.leadingExpVector(), r2.leadingExpVector(), pp);
         //ring.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(), rp);
 
-        //table = ring.table;
         //System.out.println("ring = " + ring.toScript());
 
         assertFalse("isCommutative()", ring.isCommutative());
