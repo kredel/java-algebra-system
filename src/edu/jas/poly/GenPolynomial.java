@@ -125,7 +125,10 @@ Iterable<Monomial<C>> {
      */
     protected GenPolynomial(GenPolynomialRing<C> r, SortedMap<ExpVector, C> v) {
         this(r);
-        val.putAll(v); // assume no zero coefficients
+        if (v.size()>0) {
+            ring.creations++;
+            val.putAll(v); // assume no zero coefficients and val is empty
+        }
     }
 
 
@@ -874,6 +877,75 @@ Iterable<Monomial<C>> {
      */
     public GenPolynomial<C> sum(C a) {
         return sum(a, ring.evzero);
+    }
+
+
+    /**
+     * GenPolynomial destructive summation.
+     * @param S GenPolynomial.
+     */
+    public void doAddTo(GenPolynomial<C> S) {
+        if (S == null||S.isZERO()) {
+            return;
+        }
+        if (this.isZERO()) {
+            this.val.putAll(S.val);
+            return;
+        }
+        assert (ring.nvar == S.ring.nvar);
+        SortedMap<ExpVector, C> nv = this.val;
+        SortedMap<ExpVector, C> sv = S.val;
+        for (Map.Entry<ExpVector, C> me : sv.entrySet()) {
+            ExpVector e = me.getKey();
+            C y = me.getValue(); //sv.get(e); // assert y != null
+            C x = nv.get(e);
+            if (x != null) {
+                x = x.sum(y);
+                if (!x.isZERO()) {
+                    nv.put(e, x);
+                } else {
+                    nv.remove(e);
+                }
+            } else {
+                nv.put(e, y);
+            }
+        }
+        return;
+    }
+
+
+    /**
+     * GenPolynomial destructive summation.
+     * @param a coefficient.
+     * @param e exponent.
+     */
+    public void doAddTo(C a, ExpVector e) {
+        if (a == null||a.isZERO()) {
+            return;
+        }
+        SortedMap<ExpVector, C> nv = this.val;
+        C x = nv.get(e);
+        if (x != null) {
+            x = x.sum(a);
+            if (!x.isZERO()) {
+                nv.put(e, x);
+            } else {
+                nv.remove(e);
+            }
+        } else {
+            nv.put(e, a);
+        }
+        return;
+    }
+
+
+    /**
+     * GenPolynomial destructive summation.
+     * copied.
+     * @param a coefficient.
+     */
+    public void doAddTo(C a) {
+        doAddTo(a, ring.evzero);
     }
 
 

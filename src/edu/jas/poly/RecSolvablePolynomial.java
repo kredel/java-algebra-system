@@ -156,11 +156,13 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
         if (debug) {
             logger.info("ring = " + ring.toScript());
         }
-        ExpVector Z = ring.evzero;
+        final boolean commute = ring.table.isEmpty();
+        final boolean commuteCoeff = ring.coeffTable.isEmpty();
         GenPolynomialRing<C> cfac = (GenPolynomialRing<C>) ring.coFac;
-        ExpVector Zc = cfac.evzero;
         RecSolvablePolynomial<C> Dp = ring.getZERO().copy();
-        RecSolvablePolynomial<C> zero = ring.getZERO().copy();
+        RecSolvablePolynomial<C> zero = ring.getZERO(); //.copy(); not needed
+        ExpVector Z = ring.evzero;
+        ExpVector Zc = cfac.evzero;
         GenPolynomial<C> one = ring.getONECoefficient();
 
         RecSolvablePolynomial<C> C1 = null;
@@ -197,8 +199,10 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
                 // polynomial coefficient multiplication e*b = P_eb, for a*((e*b)*f)
                 RecSolvablePolynomial<C> Cps = ring.getZERO().copy();
                 RecSolvablePolynomial<C> Cs = null;
-                if (ring.coeffTable.isEmpty() || b.isConstant() || e.isZERO()) { // symmetric
-                    Cps = new RecSolvablePolynomial<C>(ring, b, e);
+                if (commuteCoeff || b.isConstant() || e.isZERO()) { // symmetric
+                    //Cps = new RecSolvablePolynomial<C>(ring, b, e);
+                    //Cps = (RecSolvablePolynomial<C>) zero.sum(b, e);
+                    Cps.doAddTo(b, e);
                     if (debug)
                         logger.info("symmetric coeff, e*b: b = " + b + ", e = " + e);
                 } else { // unsymmetric
@@ -270,7 +274,8 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
                         }
                         //System.out.println("e1*Cs*g1 = " + Cs);
                         Cs = Cs.multiplyLeft(cc); // assume c, coeff(cc) commutes with Cs
-                        Cps = (RecSolvablePolynomial<C>) Cps.sum(Cs);
+                        //Cps = (RecSolvablePolynomial<C>) Cps.sum(Cs);
+                        Cps.doAddTo(Cs);
                     } // end b loop 
                     if (debug)
                         logger.info("coeff, Cs = " + Cs + ", Cps = " + Cps);
@@ -281,7 +286,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
                 RecSolvablePolynomial<C> Dps = ring.getZERO().copy();
                 RecSolvablePolynomial<C> Ds = null;
                 RecSolvablePolynomial<C> D1, D2;
-                if (ring.table.isEmpty() || Cps.isConstant() || f.isZERO()) { // symmetric
+                if (commute || Cps.isConstant() || f.isZERO()) { // symmetric
                     if (debug)
                         logger.info("symmetric poly, P_eb*f: Cps = " + Cps + ", f = " + f);
                     ExpVector g = e.sum(f);
@@ -351,7 +356,8 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
                             }
                         }
                         Ds = Ds.multiplyLeft(c); // assume c commutes with Cs
-                        Dps = (RecSolvablePolynomial<C>) Dps.sum(Ds);
+                        //Dps = (RecSolvablePolynomial<C>) Dps.sum(Ds);
+                        Dps.doAddTo(Ds);
                     } // end Dps loop
                     Ds = Dps;
                 }
@@ -362,7 +368,8 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
                 Ds = Ds.multiplyLeft(a); // multiply(a,b); // non-symmetric 
                 if (debug)
                     logger.info("recursion-: Ds = " + Ds);
-                Dp = (RecSolvablePolynomial<C>) Dp.sum(Ds);
+                //Dp = (RecSolvablePolynomial<C>) Dp.sum(Ds);
+                Dp.doAddTo(Ds);
                 if (debug)
                     logger.info("end B loop: Dp = " + Dp);
             } // end B loop

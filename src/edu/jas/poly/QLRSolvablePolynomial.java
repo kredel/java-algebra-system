@@ -164,8 +164,6 @@ public class QLRSolvablePolynomial<C extends GcdRingElem<C> & QuotPair<GenPolyno
         QLRSolvablePolynomial<C, D> zero = ring.getZERO().copy();
         C one = ring.getONECoefficient();
 
-        //QLRSolvablePolynomial<C, D> C1 = null;
-        //QLRSolvablePolynomial<C, D> C2 = null;
         Map<ExpVector, C> A = val;
         Map<ExpVector, C> B = Bp.val;
         Set<Map.Entry<ExpVector, C>> Bk = B.entrySet();
@@ -325,14 +323,16 @@ public class QLRSolvablePolynomial<C extends GcdRingElem<C> & QuotPair<GenPolyno
                             }
                         }
                         Ds = Ds.multiplyLeft(c); // c * Ds
-                        Dps = (QLRSolvablePolynomial<C, D>) Dps.sum(Ds);
+                        //Dps = (QLRSolvablePolynomial<C, D>) Dps.sum(Ds);
+                        Dps.doAddTo(Ds);
                     } // end Dps loop
                     Ds = Dps;
                 }
                 Ds = Ds.multiplyLeft(a); // multiply(a,b); // non-symmetric 
                 if (debug)
                     logger.debug("Ds = " + Ds);
-                Dp = (QLRSolvablePolynomial<C, D>) Dp.sum(Ds);
+                //Dp = (QLRSolvablePolynomial<C, D>) Dp.sum(Ds);
+                Dp.doAddTo(Ds);
             } // end B loop
         } // end A loop
           //System.out.println("this * Bp = " + Dp);

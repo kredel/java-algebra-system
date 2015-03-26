@@ -115,6 +115,12 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
 
 
     /**
+     * Count for number of polynomial creations.
+     */
+    public static int creations = 0;
+
+
+    /**
      * Flag to enable if preemptive interrrupt is checked.
      */
     final boolean checkPreempt = PreemptStatus.isAllowed();
@@ -413,6 +419,15 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
         h += (coFac.hashCode() << 11);
         h += tord.hashCode();
         return h;
+    }
+
+
+    /**
+     * Get the number of polynomial creations.
+     * @return creations.
+     */
+    public int getCreations() {
+        return creations;
     }
 
 
