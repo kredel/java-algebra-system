@@ -40,8 +40,18 @@ s = rg.syzygy();
 print "syzygy: " + str(s);
 print;
 
-t = rg.isSyzygy(s);
-print "is syzygy: " + str(t);
+#print "is syzygy: " + str(rg.isSyzygy(s));
 print "is syzygy: " + str(s.isSyzygy(rg));
 print;
 
+
+sg = s.GB();
+print "seq module GB: sg = " + str(sg);
+print
+
+sm = sg.syzygy();
+print "syzygy: sm = " + str(sm);
+print;
+
+print "is syzygy: " + str(sm.isSyzygy(sg));
+print;

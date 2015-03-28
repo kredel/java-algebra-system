@@ -960,7 +960,7 @@ class Ideal:
         s = SyzygySeq(p.ring.coFac).zeroRelations( l );
         t = System.currentTimeMillis() - t;
         print "executed syzygy in %s ms" % t; 
-        m = Module("",p.ring);
+        m = Module("",p.ring); #cols=s[0].size()
         return SubModule(m,"",s);
 
     def isSyzygy(self,m):
@@ -1714,17 +1714,36 @@ class SubModule:
         return b;
 
     def isSyzygy(self,g):
-        '''Test if this is a syzygy of the polynomials in g.
+        '''Test if this is a syzygy of the vectors in g.
         '''
         l = self.list;
-        s = g.pset.list;
-        #print "l = %s" % l; 
-        #print "g = %s" % g; 
+        if isinstance(g,Ideal):
+           s = g.pset.list;
+        else:
+           if isinstance(g,SubModule):
+              s = g.mset;
+              l = self.mset;
+           else:
+              raise ValueError, "unknown type %s" % g.getClass().getName();
+        #print "l = %s" % l;
+        #print "s = %s" % s;
         t = System.currentTimeMillis();
         z = SyzygySeq(self.module.ring.coFac).isZeroRelation( l, s );
         t = System.currentTimeMillis() - t;
         print "executed isSyzygy in %s ms" % t; 
         return z;
+
+    def syzygy(self):
+        '''Compute a syzygy of this module.
+        '''
+        l = self.mset;
+        t = System.currentTimeMillis();
+        p = SyzygySeq(self.module.ring.coFac).zeroRelations( l );
+        t = System.currentTimeMillis() - t;
+        print "executed module syzygy in %s ms" % t; 
+        #print "p = " + str(p.ring.toScript());
+        m = Module("",p.ring,p.cols);
+        return SubModule(m,"",p.list);
 
 
 class SolvableModule(Module):

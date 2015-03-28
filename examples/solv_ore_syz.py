@@ -54,10 +54,6 @@ print "is syzygy: " + str(t);
 print "is syzygy: " + str(s.isLeftSyzygy(rgl));
 print;
 
-#sgl = s.leftGB();
-#print "seq left GB: " + str(sgl);
-#print
-
 
 rgr = ii.rightGB();
 print "seq right GB: " + str(rgr);
@@ -77,4 +73,8 @@ sgr = sr.rightGB();
 print "seq right GB: " + str(sgr);
 print
 
+
+sgl = s.leftGB();
+print "seq left GB: " + str(sgl);
+print
 

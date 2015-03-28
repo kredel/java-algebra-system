@@ -4204,7 +4204,16 @@ Test if this is a syzygy of the polynomials in g.
 =end
     def isSyzygy(g)
         l = @list;
-        s = g.pset.list; # not g.list
+        if g.is_a? SimIdeal
+           s = g.pset.list; # not g.list
+        else 
+           if g.is_a? SubModule
+              s = g.mset;
+              l = @mset;
+           else
+              raise "unknown type %s" % g.getClass().getName();
+           end
+        end
         #puts "l = #{l}"; 
         #puts "s = #{s}"; 
         t = System.currentTimeMillis();
@@ -4212,6 +4221,21 @@ Test if this is a syzygy of the polynomials in g.
         t = System.currentTimeMillis() - t;
         puts "executed isSyzygy in #{t} ms\n"; 
         return z;
+    end
+
+=begin rdoc
+Compute syzygys of this module.
+=end
+    def syzygy()
+        l = @mset;
+        #puts "l = #{l}"; 
+        #puts "s = #{s}"; 
+        t = System.currentTimeMillis();
+        p = SyzygySeq.new(@modu.ring.coFac).zeroRelations( l );
+        t = System.currentTimeMillis() - t;
+        puts "executed module syzygy in #{t} ms\n"; 
+        m = CommutativeModule.new("",p.ring,p.cols);
+        return SubModule.new(m,"",p.list);
     end
 
 end
