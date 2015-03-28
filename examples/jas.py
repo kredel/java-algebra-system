@@ -951,15 +951,29 @@ class Ideal:
         #print "sequential char set reduction executed in %s ms" % t; 
         return RingElem(n);
 
+    def syzygy(self):
+        '''Syzygy of generating polynomials.
+        '''
+        p = self.pset;
+        l = p.list;
+        t = System.currentTimeMillis();
+        s = SyzygySeq(p.ring.coFac).zeroRelations( l );
+        t = System.currentTimeMillis() - t;
+        print "executed syzygy in %s ms" % t; 
+        m = Module("",p.ring);
+        return SubModule(m,"",s);
 
-##     def syzygy(self):
-##         '''Syzygy of generating polynomials.
-##         '''
-##         p = self.pset;
-##         l = p.list;
-##         s = SyzygySeq().zeroRelations( l );
-##         m = Module("",p.ring);
-##         return SubModule(m,"",s);
+    def isSyzygy(self,m):
+        '''Test if this is a syzygy of the module in m.
+        '''
+        p = self.pset;
+        g = p.list;
+        l = m.list;
+        t = System.currentTimeMillis();
+        z = SyzygySeq(p.ring.coFac).isZeroRelation( l, g );
+        t = System.currentTimeMillis() - t;
+        print "executed isSyzygy in %s ms" % t; 
+        return z;
 
 
 class ParamIdeal:
@@ -1522,6 +1536,54 @@ class SolvableIdeal:
         print "parallel %s twosidedGB executed in %s ms" % (th, t); 
         return SolvableIdeal(self.ring,"",G);
 
+    def leftSyzygy(self):
+        '''left Syzygy of generating polynomials.
+        '''
+        p = self.pset;
+        l = p.list;
+        t = System.currentTimeMillis();
+        s = SolvableSyzygySeq(p.ring.coFac).leftZeroRelations( l );
+        t = System.currentTimeMillis() - t;
+        print "executed left syzygy in %s ms" % t; 
+        m = SolvableModule("",p.ring);
+        return SolvableSubModule(m,"",s);
+
+    def isLeftSyzygy(self,m):
+        '''Test if this is a left syzygy of the module in m.
+        '''
+        p = self.pset;
+        g = p.list;
+        l = m.list;
+        t = System.currentTimeMillis();
+        z = SolvableSyzygySeq(p.ring.coFac).isLeftZeroRelation( l, g );
+        t = System.currentTimeMillis() - t;
+        print "executed isLeftSyzygy in %s ms" % t; 
+        return z;
+
+    def rightSyzygy(self):
+        '''right Syzygy of generating polynomials.
+        '''
+        p = self.pset;
+        l = p.list;
+        t = System.currentTimeMillis();
+        s = SolvableSyzygySeq(p.ring.coFac).rightZeroRelations( l );
+        t = System.currentTimeMillis() - t;
+        print "executed right syzygy in %s ms" % t; 
+        m = SolvableModule("",p.ring);
+        return SolvableSubModule(m,"",s);
+
+    def isRightSyzygy(self,m):
+        '''Test if this is a right syzygy of the module in m.
+        '''
+        p = self.pset;
+        g = p.list;
+        l = m.list;
+        t = System.currentTimeMillis();
+        z = SolvableSyzygySeq(p.ring.coFac).isRightZeroRelation( l, g );
+        t = System.currentTimeMillis() - t;
+        print "executed isRightSyzygy in %s ms" % t; 
+        return z;
+
 
 class Module:
     '''Represents a JAS module over a polynomial ring.
@@ -1651,17 +1713,18 @@ class SubModule:
         print "module isGB executed in %s ms" % t; 
         return b;
 
-##     def isSyzygy(self,g):
-##         '''Test if this is a syzygy of the polynomials in g.
-##         '''
-##         l = self.list;
-##         print "l = %s" % l; 
-##         print "g = %s" % g; 
-##         t = System.currentTimeMillis();
-##         z = SyzygySeq().isZeroRelation( l, g.list );
-##         t = System.currentTimeMillis() - t;
-##         print "executed isSyzygy in %s ms" % t; 
-##         return z;
+    def isSyzygy(self,g):
+        '''Test if this is a syzygy of the polynomials in g.
+        '''
+        l = self.list;
+        s = g.pset.list;
+        #print "l = %s" % l; 
+        #print "g = %s" % g; 
+        t = System.currentTimeMillis();
+        z = SyzygySeq(self.module.ring.coFac).isZeroRelation( l, s );
+        t = System.currentTimeMillis() - t;
+        print "executed isSyzygy in %s ms" % t; 
+        return z;
 
 
 class SolvableModule(Module):
@@ -1800,6 +1863,32 @@ class SolvableSubModule:
         t = System.currentTimeMillis() - t;
         print "module isRightGB executed in %s ms" % t; 
         return b;
+
+    def isLeftSyzygy(self,g):
+        '''Test if this is a syzygy of the polynomials in g.
+        '''
+        l = self.list;
+        s = g.pset.list;
+        #print "l = %s" % l; 
+        #print "g = %s" % g; 
+        t = System.currentTimeMillis();
+        z = SolvableSyzygySeq(self.module.ring.coFac).isLeftZeroRelation( l, s );
+        t = System.currentTimeMillis() - t;
+        print "executed isLeftSyzygy in %s ms" % t; 
+        return z;
+
+    def isRightSyzygy(self,g):
+        '''Test if this is a syzygy of the polynomials in g.
+        '''
+        l = self.list;
+        s = g.pset.list;
+        #print "l = %s" % l; 
+        #print "g = %s" % g; 
+        t = System.currentTimeMillis();
+        z = SolvableSyzygySeq(self.module.ring.coFac).isRightZeroRelation( l, s );
+        t = System.currentTimeMillis() - t;
+        print "executed isRightSyzygy in %s ms" % t; 
+        return z;
 
 
 class SeriesRing:

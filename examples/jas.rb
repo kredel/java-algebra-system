@@ -2444,6 +2444,11 @@ java_import "edu.jas.ufd.FactorFactory";
 java_import "edu.jas.ufd.SquarefreeFactory";
 java_import "edu.jas.integrate.ElementaryIntegration";
 
+java_import "edu.jas.gbmod.ModGroebnerBaseSeq";
+java_import "edu.jas.gbmod.SyzygySeq";
+java_import "edu.jas.gbmod.ModSolvableGroebnerBaseSeq";
+java_import "edu.jas.gbmod.SolvableSyzygySeq";
+
 
 =begin rdoc
 Represents a JAS polynomial ideal: PolynomialList and Ideal.
@@ -2472,7 +2477,7 @@ SimIdeal constructor.
         @croots = nil;
         @prime = nil;
         @primary = nil;
-        #super(@ring::ring,@list) # non-sense, JRuby extends edu.jas.application.Ideal without beeing told
+        #super(@ring::ring,@list) # non-sense, JRuby extends application.Ideal
     end
 
 =begin rdoc
@@ -3079,16 +3084,35 @@ Compute a normal form of polynomial p with respect this characteristic set.
         return RingElem.new(nn);
     end
 
-## =begin rdoc
-## Syzygy of generating polynomials.
-## =end
-##     def syzygy()
-##         p = @pset;
-##         l = p.list;
-##         s = SyzygySeq().zeroRelations( l );
-##         m = Module("",p.ring);
-##         return SubModule(m,"",s);
-##     end
+=begin rdoc
+Syzygy of generating polynomials.
+=end
+    def syzygy()
+        p = @pset;
+        l = p.list;
+        t = System.currentTimeMillis();
+        s = SyzygySeq.new(p.ring.coFac).zeroRelations( l );
+        t = System.currentTimeMillis() - t;
+        puts "executed Syzygy in #{t} ms\n"; 
+        m = CommutativeModule.new("",p.ring);
+        return SubModule.new(m,"",s);
+    end
+
+=begin rdoc
+Test if this is a syzygy of the module in m.
+=end
+    def isSyzygy(m)
+        p = @pset;
+        g = p.list;
+        l = m.list;
+        #puts "l = #{l}"; 
+        #puts "g = #{g}"; 
+        t = System.currentTimeMillis();
+        z = SyzygySeq.new(p.ring.coFac).isZeroRelation( l, g );
+        t = System.currentTimeMillis() - t;
+        puts "executed isSyzygy in #{t} ms\n"; 
+        return z;
+    end
 
 end
 
@@ -3354,11 +3378,6 @@ Get each component (slice) of regular ring coefficients separate.
     end
 
 end
-
-java_import "edu.jas.gbmod.ModGroebnerBaseSeq";
-java_import "edu.jas.gbmod.ModSolvableGroebnerBaseSeq";
-java_import "edu.jas.gbmod.SolvableSyzygySeq";
-java_import "edu.jas.gbmod.SyzygySeq";
 
 
 =begin rdoc
@@ -3965,6 +3984,66 @@ Compute a two-sided Groebner base in parallel.
         return SolvIdeal.new(@ring,"",gg);
     end
 
+=begin rdoc
+Left Syzygy of generating polynomials.
+=end
+    def leftSyzygy()
+        p = @pset;
+        l = p.list;
+        t = System.currentTimeMillis();
+        s = SolvableSyzygySeq.new(p.ring.coFac).leftZeroRelations( l );
+        m = SolvableModule.new("",p.ring);
+        t = System.currentTimeMillis() - t;
+        puts "executed leftSyzygy in #{t} ms\n"; 
+        return SolvableSubModule.new(m,"",s);
+    end
+
+=begin rdoc
+Right Syzygy of generating polynomials.
+=end
+    def rightSyzygy()
+        p = @pset;
+        l = p.list;
+        t = System.currentTimeMillis();
+        s = SolvableSyzygySeq.new(p.ring.coFac).rightZeroRelations( l );
+        m = SolvableModule.new("",p.ring);
+        t = System.currentTimeMillis() - t;
+        puts "executed rightSyzygy in #{t} ms\n"; 
+        return SolvableSubModule.new(m,"",s);
+    end
+
+=begin rdoc
+Test if this is a left syzygy of the module in m.
+=end
+    def isLeftSyzygy(m)
+        p = @pset;
+        g = p.list;
+        l = m.list;
+        #puts "l = #{l}"; 
+        #puts "g = #{g}"; 
+        t = System.currentTimeMillis();
+        z = SolvableSyzygySeq.new(p.ring.coFac).isLeftZeroRelation( l, g );
+        t = System.currentTimeMillis() - t;
+        puts "executed isLeftSyzygy in #{t} ms\n"; 
+        return z;
+    end
+
+=begin rdoc
+Test if this is a right syzygy of the module in m.
+=end
+    def isRightSyzygy(m)
+        p = @pset;
+        g = p.list;
+        l = m.list;
+        #puts "l = #{l}"; 
+        #puts "g = #{g}"; 
+        t = System.currentTimeMillis();
+        z = SolvableSyzygySeq.new(p.ring.coFac).isRightZeroRelation( l, g );
+        t = System.currentTimeMillis() - t;
+        puts "executed isRightSyzygy in #{t} ms\n"; 
+        return z;
+    end
+
 end
 
 
@@ -4120,19 +4199,20 @@ Test if this is a Groebner base.
         return b;
     end
 
-## =begin rdoc
-## Test if this is a syzygy of the polynomials in g.
-## =end
-##     def isSyzygy(g):
-##         l = @list;
-##         puts "l = #{l}"; 
-##         puts "g = #{g}"; 
-##         t = System.currentTimeMillis();
-##         z = SyzygySeq().isZeroRelation( l, g.list );
-##         t = System.currentTimeMillis() - t;
-##         puts "executed isSyzygy in #{t} ms\n"; 
-##         return z;
-##     end
+=begin rdoc
+Test if this is a syzygy of the polynomials in g.
+=end
+    def isSyzygy(g)
+        l = @list;
+        s = g.pset.list; # not g.list
+        #puts "l = #{l}"; 
+        #puts "s = #{s}"; 
+        t = System.currentTimeMillis();
+        z = SyzygySeq.new(@modu.ring.coFac).isZeroRelation( l, s );
+        t = System.currentTimeMillis() - t;
+        puts "executed isSyzygy in #{t} ms\n"; 
+        return z;
+    end
 
 end
 
@@ -4311,6 +4391,51 @@ Test if this is a right Groebner base.
         t = System.currentTimeMillis() - t;
         puts "module isRightGB executed in #{t} ms\n"; 
         return b;
+    end
+
+=begin rdoc
+Test if this is a left syzygy of the polynomials in g.
+=end
+    def isLeftSyzygy(g)
+        l = @list;
+        s = g.pset.list; # not g.list
+        #puts "l = #{l}"; 
+        #puts "s = #{s}"; 
+        t = System.currentTimeMillis();
+        z = SolvableSyzygySeq.new(@modu.ring.coFac).isLeftZeroRelation( l, s );
+        t = System.currentTimeMillis() - t;
+        puts "executed isLeftSyzygy in #{t} ms\n"; 
+        return z;
+    end
+
+=begin rdoc
+Test if this is a right syzygy of the polynomials in g.
+=end
+    def isRightSyzygy(g)
+        l = @list;
+        s = g.pset.list; # not g.list
+        #puts "l = #{l}"; 
+        #puts "s = #{s}"; 
+        t = System.currentTimeMillis();
+        z = SolvableSyzygySeq.new(@modu.ring.coFac).isRightZeroRelation( l, s );
+        t = System.currentTimeMillis() - t;
+        puts "executed isRightSyzygy in #{t} ms\n"; 
+        return z;
+    end
+
+=begin rdoc
+Test if this is a twosided syzygy of the polynomials in g.
+=end
+    def isTwosidedSyzygy(g)
+        l = @list;
+        s = g.pset.list; # not g.list
+        #puts "l = #{l}"; 
+        #puts "s = #{s}"; 
+        t = System.currentTimeMillis();
+        z = SolvableSyzygySeq.new(@modu.ring.coFac).isTwosidedZeroRelation( l, s );
+        t = System.currentTimeMillis() - t;
+        puts "executed isTwosidedSyzygy in #{t} ms\n"; 
+        return z;
     end
 
 end
