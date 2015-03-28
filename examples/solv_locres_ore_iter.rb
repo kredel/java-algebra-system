@@ -88,6 +88,7 @@ pt = SolvPolyRing.new(pzc, "t", PolyRing.lex, trel);
 puts "SolvPolyRing: pt = " + str(pt);
 puts "sp.gens(t) = " + pt.gens().join(", ") { |r| r.to_s };
 #is automatic: one,y,z,t = rp.gens(); # no x?
+puts "pt.isAssociative: " + str(pt.ring.isAssociative());
 puts;
 
 #exit(0);
