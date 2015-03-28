@@ -399,16 +399,21 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
             throw new IllegalArgumentException("coefficients not from a field");
         }
 
-        List<GenSolvablePolynomial<C>> X;
-        if (ring instanceof QLRSolvablePolynomialRing) {
-            if (modv != 0){
-                throw new IllegalArgumentException("modv != 0: " + modv);
+        List<GenSolvablePolynomial<C>> X, Y;
+        if (ring instanceof QLRSolvablePolynomialRing) { // add also coefficient generators
+            X = PolynomialList.castToSolvableList(ring.generators()); // todo use? modv
+            Y = new ArrayList<GenSolvablePolynomial<C>>();
+            for (GenSolvablePolynomial<C> x : X) {
+		if (x.isConstant()) {
+                    Y.add(x);
+                }
             }
-            X = PolynomialList.castToSolvableList(ring.generators()); // todo check modv
-            System.out.println("X univ = " + X);
+            X = Y;
+            X.addAll(ring.univariateList(modv));
         } else {
             X = ring.univariateList(modv);
         }
+        logger.info("right multipliers = " + X);
         List<GenSolvablePolynomial<C>> G = new ArrayList<GenSolvablePolynomial<C>>(F.size() * (1 + X.size()));
         G.addAll(F);
         GenSolvablePolynomial<C> q;

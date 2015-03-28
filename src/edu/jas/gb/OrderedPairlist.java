@@ -122,6 +122,9 @@ public class OrderedPairlist<C extends RingElem<C> > implements PairList<C> {
         if ( pairlist != null && pairlist.size() != 0 ) {
             s.append(", size="+pairlist.size());
         }
+        if (moduleVars > 0) {
+            s.append(", modv="+moduleVars);
+        }
         s.append(")");
         return s.toString();
     }
