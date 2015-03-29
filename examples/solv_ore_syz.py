@@ -69,12 +69,30 @@ print "is syzygy: " + str(t);
 print "is syzygy: " + str(sr.isRightSyzygy(rgr));
 print;
 
-sgr = sr.rightGB();
-print "seq right GB: " + str(sgr);
-print
 
+# module syzy
 
 sgl = s.leftGB();
-print "seq left GB: " + str(sgl);
+print "seq left module GB: sgl = " + str(sgl);
 print
+
+sml = sgl.leftSyzygy();
+print "left syzygy: sml = " + str(sml);
+print;
+
+print "is left syzygy: " + str(sml.isLeftSyzygy(sgl));
+print;
+
+
+sgr = sr.rightGB();
+print "seq right module GB: sgl = " + str(sgr);
+print
+
+#startLog();
+smr = sgr.rightSyzygy();
+print "right syzygy: smr = " + str(smr);
+print;
+
+print "is right syzygy: " + str(smr.isRightSyzygy(sgr));
+print;
 

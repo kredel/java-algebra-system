@@ -51,10 +51,6 @@ puts "is syzygy: " + str(t);
 puts "is syzygy: " + str(s.isLeftSyzygy(rgl));
 puts;
 
-#sgl = s.leftGB();
-#puts "seq left GB: " + str(sgl);
-#puts
-
 
 rgr = ii.rightGB();
 puts "seq right GB: " + str(rgr);
@@ -70,7 +66,30 @@ puts "is syzygy: " + str(t);
 puts "is syzygy: " + str(sr.isRightSyzygy(rgr));
 puts;
 
-sgr = sr.rightGB();
-puts "seq right GB: " + str(sgr);
+
+
+# module syzy
+
+sgl = s.leftGB();
+puts "seq left module GB: sgl = " + str(sgl);
 puts
 
+sml = sgl.leftSyzygy();
+puts "left syzygy: sml = " + str(sml);
+puts;
+
+puts "is left syzygy: " + str(sml.isLeftSyzygy(sgl));
+puts;
+
+
+sgr = sr.rightGB();
+puts "seq right module GB: sgl = " + str(sgr);
+puts
+
+#startLog();
+smr = sgr.rightSyzygy();
+puts "right syzygy: smr = " + str(smr);
+puts;
+
+puts "is right syzygy: " + str(smr.isRightSyzygy(sgr));
+puts;

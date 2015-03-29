@@ -3991,7 +3991,7 @@ Left Syzygy of generating polynomials.
         p = @pset;
         l = p.list;
         t = System.currentTimeMillis();
-        s = SolvableSyzygySeq.new(p.ring.coFac).leftZeroRelations( l );
+        s = SolvableSyzygySeq.new(p.ring.coFac).leftZeroRelationsArbitrary( l );
         m = SolvableModule.new("",p.ring);
         t = System.currentTimeMillis() - t;
         puts "executed leftSyzygy in #{t} ms\n"; 
@@ -4005,7 +4005,7 @@ Right Syzygy of generating polynomials.
         p = @pset;
         l = p.list;
         t = System.currentTimeMillis();
-        s = SolvableSyzygySeq.new(p.ring.coFac).rightZeroRelations( l );
+        s = SolvableSyzygySeq.new(p.ring.coFac).rightZeroRelationsArbitrary( l );
         m = SolvableModule.new("",p.ring);
         t = System.currentTimeMillis() - t;
         puts "executed rightSyzygy in #{t} ms\n"; 
@@ -4228,8 +4228,6 @@ Compute syzygys of this module.
 =end
     def syzygy()
         l = @mset;
-        #puts "l = #{l}"; 
-        #puts "s = #{s}"; 
         t = System.currentTimeMillis();
         p = SyzygySeq.new(@modu.ring.coFac).zeroRelations( l );
         t = System.currentTimeMillis() - t;
@@ -4418,11 +4416,20 @@ Test if this is a right Groebner base.
     end
 
 =begin rdoc
-Test if this is a left syzygy of the polynomials in g.
+Test if this is a left syzygy of the vectors in g.
 =end
     def isLeftSyzygy(g)
         l = @list;
-        s = g.pset.list; # not g.list
+        if g.is_a? SolvIdeal
+           s = g.pset.list; # not g.list
+        else 
+           if g.is_a? SolvableSubModule
+              s = g.mset;
+              l = @mset;
+           else
+              raise "unknown type #{g.getClass().getName()}";
+           end
+        end
         #puts "l = #{l}"; 
         #puts "s = #{s}"; 
         t = System.currentTimeMillis();
@@ -4433,11 +4440,33 @@ Test if this is a left syzygy of the polynomials in g.
     end
 
 =begin rdoc
-Test if this is a right syzygy of the polynomials in g.
+Compute left syzygys of this module.
+=end
+    def leftSyzygy()
+        l = @mset;
+        t = System.currentTimeMillis();
+        p = SolvableSyzygySeq.new(@modu.ring.coFac).leftZeroRelationsArbitrary( l );
+        t = System.currentTimeMillis() - t;
+        puts "executed left module syzygy in #{t} ms\n"; 
+        m = SolvableModule.new("",p.ring,p.cols);
+        return SolvableSubModule.new(m,"",p.list);
+    end
+
+=begin rdoc
+Test if this is a right syzygy of the vectors in g.
 =end
     def isRightSyzygy(g)
         l = @list;
-        s = g.pset.list; # not g.list
+        if g.is_a? SolvIdeal
+           s = g.pset.list; # not g.list
+        else 
+           if g.is_a? SolvableSubModule
+              s = g.mset;
+              l = @mset;
+           else
+              raise "unknown type #{g.getClass().getName()}";
+           end
+        end
         #puts "l = #{l}"; 
         #puts "s = #{s}"; 
         t = System.currentTimeMillis();
@@ -4448,18 +4477,17 @@ Test if this is a right syzygy of the polynomials in g.
     end
 
 =begin rdoc
-Test if this is a twosided syzygy of the polynomials in g.
+Compute right syzygys of this module.
 =end
-    def isTwosidedSyzygy(g)
-        l = @list;
-        s = g.pset.list; # not g.list
-        #puts "l = #{l}"; 
-        #puts "s = #{s}"; 
+    def rightSyzygy()
+        l = @mset;
         t = System.currentTimeMillis();
-        z = SolvableSyzygySeq.new(@modu.ring.coFac).isTwosidedZeroRelation( l, s );
+        #no: p = SolvableSyzygySeq.new(@modu.ring.coFac).rightZeroRelations( l );
+        p = SolvableSyzygySeq.new(@modu.ring.coFac).rightZeroRelationsArbitrary( l );
         t = System.currentTimeMillis() - t;
-        puts "executed isTwosidedSyzygy in #{t} ms\n"; 
-        return z;
+        puts "executed right module syzygy in #{t} ms\n"; 
+        m = SolvableModule.new("",p.ring,p.cols);
+        return SolvableSubModule.new(m,"",p.list);
     end
 
 end

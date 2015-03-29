@@ -1542,7 +1542,7 @@ class SolvableIdeal:
         p = self.pset;
         l = p.list;
         t = System.currentTimeMillis();
-        s = SolvableSyzygySeq(p.ring.coFac).leftZeroRelations( l );
+        s = SolvableSyzygySeq(p.ring.coFac).leftZeroRelationsArbitrary( l );
         t = System.currentTimeMillis() - t;
         print "executed left syzygy in %s ms" % t; 
         m = SolvableModule("",p.ring);
@@ -1566,7 +1566,7 @@ class SolvableIdeal:
         p = self.pset;
         l = p.list;
         t = System.currentTimeMillis();
-        s = SolvableSyzygySeq(p.ring.coFac).rightZeroRelations( l );
+        s = SolvableSyzygySeq(p.ring.coFac).rightZeroRelationsArbitrary( l );
         t = System.currentTimeMillis() - t;
         print "executed right syzygy in %s ms" % t; 
         m = SolvableModule("",p.ring);
@@ -1734,7 +1734,7 @@ class SubModule:
         return z;
 
     def syzygy(self):
-        '''Compute a syzygy of this module.
+        '''Compute syzygys of this module.
         '''
         l = self.mset;
         t = System.currentTimeMillis();
@@ -1884,10 +1884,17 @@ class SolvableSubModule:
         return b;
 
     def isLeftSyzygy(self,g):
-        '''Test if this is a syzygy of the polynomials in g.
+        '''Test if this is a syzygy of the vectors in g.
         '''
         l = self.list;
-        s = g.pset.list;
+        if isinstance(g,SolvableIdeal):
+           s = g.pset.list;
+        else:
+           if isinstance(g,SolvableSubModule):
+              s = g.mset;
+              l = self.mset;
+           else:
+              raise ValueError, "unknown type %s" % g.getClass().getName();
         #print "l = %s" % l; 
         #print "g = %s" % g; 
         t = System.currentTimeMillis();
@@ -1896,11 +1903,30 @@ class SolvableSubModule:
         print "executed isLeftSyzygy in %s ms" % t; 
         return z;
 
+    def leftSyzygy(self):
+        '''Compute left syzygys of this module.
+        '''
+        l = self.mset;
+        t = System.currentTimeMillis();
+        p = SolvableSyzygySeq(self.module.ring.coFac).leftZeroRelationsArbitrary( l );
+        t = System.currentTimeMillis() - t;
+        print "executed left module syzygy in %s ms" % t; 
+        #print "p = " + str(p.ring.toScript());
+        m = SolvableModule("",p.ring,p.cols);
+        return SolvableSubModule(m,"",p.list);
+
     def isRightSyzygy(self,g):
-        '''Test if this is a syzygy of the polynomials in g.
+        '''Test if this is a syzygy of the vectors in g.
         '''
         l = self.list;
-        s = g.pset.list;
+        if isinstance(g,SolvableIdeal):
+           s = g.pset.list;
+        else:
+           if isinstance(g,SolvableSubModule):
+              s = g.mset;
+              l = self.mset;
+           else:
+              raise ValueError, "unknown type %s" % g.getClass().getName();
         #print "l = %s" % l; 
         #print "g = %s" % g; 
         t = System.currentTimeMillis();
@@ -1908,6 +1934,19 @@ class SolvableSubModule:
         t = System.currentTimeMillis() - t;
         print "executed isRightSyzygy in %s ms" % t; 
         return z;
+
+    def rightSyzygy(self):
+        '''Compute right syzygys of this module.
+        '''
+        l = self.mset;
+        t = System.currentTimeMillis();
+        # no: p = SolvableSyzygySeq(self.module.ring.coFac).rightZeroRelations( l );
+        p = SolvableSyzygySeq(self.module.ring.coFac).rightZeroRelationsArbitrary( l );
+        t = System.currentTimeMillis() - t;
+        print "executed right module syzygy in %s ms" % t; 
+        #print "p = " + str(p.ring.toScript());
+        m = SolvableModule("",p.ring,p.cols);
+        return SolvableSubModule(m,"",p.list);
 
 
 class SeriesRing:
