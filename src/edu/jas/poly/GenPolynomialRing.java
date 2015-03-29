@@ -989,18 +989,24 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
         if (vars != null) { // vars are not inversed
             v = new String[vars.length];
             int k = tord.getSplit();
-            if (partial && k < vars.length) {
-                for (int j = 0; j < k; j++) {
-                    v[vars.length - k + j] = vars[vars.length - 1 - j];
+            if (partial && k < vars.length) { 
+                // copy upper
+                for (int j = 0; j < k; j++) { 
+                    //v[vars.length - k + j] = vars[vars.length - 1 - j]; // reverse upper
+                    v[vars.length - k + j] = vars[vars.length - k + j];
                 }
+                // reverse lower
                 for (int j = 0; j < vars.length - k; j++) {
-                    v[j] = vars[j];
+                    //v[j] = vars[j]; // copy upper
+                    v[j] = vars[vars.length - k - j - 1];
                 }
             } else {
                 for (int j = 0; j < vars.length; j++) {
                     v[j] = vars[vars.length - 1 - j];
                 }
             }
+            //System.out.println("vars = " + Arrays.toString(vars));
+            //System.out.println("v    = " + Arrays.toString(v));
         }
         TermOrder to = tord.reverse(partial);
         GenPolynomialRing<C> pfac = new GenPolynomialRing<C>(coFac, nvar, to, v);

@@ -298,9 +298,9 @@ public final class ExpVectorInteger extends ExpVector
 
 
     /**
-     * Reverse j variables. Used e.g. in opposite rings. Reverses the first j-1
-     * variables, the rest is unchanged.
-     * @param j index of first variable not reversed.
+     * Reverse lower j variables. Used e.g. in opposite
+     * rings. Reverses the first j-1 variables, the rest is unchanged.
+     * @param j index of first variable reversed.
      * @return reversed exponent vector.
      */
     @Override
@@ -310,11 +310,11 @@ public final class ExpVectorInteger extends ExpVector
         }
         int[] w = new int[val.length];
         for (int i = 0; i < j; i++) {
-            w[i] = val[j - 1 - i];
+            w[i] = val[i];
         }
         // copy rest
         for (int i = j; i < val.length; i++) {
-            w[i] = val[i];
+            w[i] = val[val.length + j - 1 - i];
         }
         return new ExpVectorInteger(w);
     }

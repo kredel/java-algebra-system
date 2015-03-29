@@ -236,13 +236,38 @@ public final class ExpVectorLong extends ExpVector
 
 
     /**
-     * Reverse j variables. Used e.g. in opposite rings. Reverses the first j-1
-     * variables, the rest is unchanged.
-     * @param j index of first variable not reversed.
+     * Reverse lower j variables. Used e.g. in opposite
+     * rings. Reverses the first j-1 variables, the rest is unchanged.
+     * @param j index of first variable reversed.
      * @return reversed exponent vector.
      */
     @Override
     public ExpVectorLong reverse(int j) {
+        if (j <= 0 || j > val.length) {
+            return this;
+        }
+        long[] w = new long[val.length];
+        // copy first
+        for (int i = 0; i < j; i++) {
+            w[i] = val[i];
+        }
+        // reverse rest
+        for (int i = j; i < val.length; i++) {
+            w[i] = val[val.length + j - 1 - i];
+        }
+        //System.out.println("val = " + Arrays.toString(val));
+        //System.out.println("w   = " + Arrays.toString(w));
+        return new ExpVectorLong(w);
+    }
+
+
+    /**
+     * Reverse upper j variables. Reverses the last j-1
+     * variables, the rest is unchanged.
+     * @param j index of first variable not reversed.
+     * @return reversed exponent vector.
+     */
+    public ExpVectorLong reverseUpper(int j) {
         if (j <= 0 || j > val.length) {
             return this;
         }
