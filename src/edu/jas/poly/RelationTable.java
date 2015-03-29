@@ -441,13 +441,13 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
             ExpVector lp = p.leadingExpVector();
             if (!ef.equals(lp)) { // check for suitable term order
                 logger.error("relation term order = " + ring.tord);
-                throw new IllegalArgumentException("update e*f != lt(p): " + sring.toScript(ef) + ", lp = " + sring.toScript(lp));
+                throw new IllegalArgumentException("update e*f != lt(p): " + sring.toScript(ef) + " != " + sring.toScript(lp));
             }
         } else { // is coeffTable
             ExpVector lp = p.leadingExpVector();
             if (!e.equals(lp)) { // check for suitable term order
                 logger.error("relation term order = " + ring.tord);
-                throw new IllegalArgumentException("Coefficient RelationTable update e != lt(p): " + sring.toScript(e) + ", lp = " + sring.toScript(lp));
+                throw new IllegalArgumentException("Coefficient RelationTable update e != lt(p): " + sring.toScript(e) + " != " + sring.toScript(lp));
             }
             if (p.leadingBaseCoefficient() instanceof GenPolynomial) {
                 lp = ((GenPolynomial<C>) (Object) p.leadingBaseCoefficient()).leadingExpVector();
@@ -840,6 +840,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         }
         logger.debug("k split = " + k);
         //System.out.println("k split = " + k );
+        //System.out.println("reversed ring = " + ring.toScript() );
         for (List<Integer> key : tab.table.keySet()) {
             List val = tab.table.get(key);
             for (Iterator jt = val.iterator(); jt.hasNext();) {
@@ -850,6 +851,9 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                 //logger.info("e pre reverse = " + e );
                 //logger.info("f pre reverse = " + f );
                 //logger.info("p pre reverse = " + p );
+                //if (e.degree() > 1 || f.degree() > 1) { // not required
+                //    continue; // revert only base relations
+                //}
                 ExpVector ex;
                 ExpVector fx;
                 GenSolvablePolynomial<C> px;
@@ -861,13 +865,13 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                     } else {
                         fx = f.reverse(k);
                     }
-                    int[] ed = ex.dependencyOnVariables(); // = e
-                    if (ed.length == 0 || ed[0] >= k) { // k >= 0
-                        change = false;
-                    }
+                    //int[] ed = ex.dependencyOnVariables(); // = e
+                    //if (ed.length == 0 || ed[0] >= k) { // k >= 0
+                    //    change = false; todo
+                    //}
                     //int[] fd = fx.dependencyOnVariables(); // = f
                     //if (fd.length == 0 || fd[0] >= k) { // k >= 0
-                    //    change = false;
+                    //    change = false; todo
                     //}
                 } else {
                     ex = e.reverse();
@@ -878,7 +882,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                     }
                 }
                 px = (GenSolvablePolynomial<C>) p.reverse(ring);
-                //System.out.println("change = " + change );
+                //System.out.println("update, p, px: " + p.toScript() + " reverse:" + px.toScript() );
                 if (!change) {
                     this.update(e, f, px); // same order
                 } else {
