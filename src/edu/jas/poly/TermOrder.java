@@ -1673,7 +1673,7 @@ public final class TermOrder implements Serializable {
                 w[i] = wj;
             }
             t = new TermOrder(w);
-            logger.info("new TO = " + t);
+            logger.info("reverse = " + t + ", from = " + this);
             return t;
         }
         if (evord2 == 0) {
@@ -1685,7 +1685,7 @@ public final class TermOrder implements Serializable {
         } else {
             t = new TermOrder(revert(evord2), revert(evord), evend2, evend2 - evbeg2);
         }
-        logger.info("new TO = " + t);
+        logger.info("reverse = " + t + ", from = " + this);
         return t;
     }
 
