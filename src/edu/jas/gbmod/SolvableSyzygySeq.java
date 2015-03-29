@@ -176,7 +176,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
             return leftZeroRelations(modv, F);
         }
         final int lenf = F.size();
-        SolvableExtendedGB<C> exgb = sbb.extLeftGB(F);
+        SolvableExtendedGB<C> exgb = sbb.extLeftGB(modv,F);
         if (debug) {
             logger.info("exgb = " + exgb);
         }
