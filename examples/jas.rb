@@ -470,9 +470,9 @@ Methods to be used as + - * ** / %.
 =end
 class RingElem
     include Comparable
-    # the JAS Java element object
+    # the Java element object
     attr_reader :elem
-    # the JAS Java factory object
+    # the Java factory object
     attr_reader :ring
 
 =begin rdoc
@@ -1443,7 +1443,7 @@ Represents a JAS polynomial ring: GenPolynomialRing.
 Methods to create ideals and ideals with parametric coefficients.
 =end
 class Ring
-    # the JAS Java factoy object, polynomial list, gcd engine, sqf engine, factorization
+    # the Java factoy object, gcd engine, sqf engine, factorization engine
     attr_reader :ring, :engine, :sqf, :factor
     #:pset,
 
@@ -1817,8 +1817,11 @@ class PolyRing < Ring
     @auto_lowervar = false
 
     class << self  # means add to class
+       # the Java term orderings
        attr_reader :lex, :grad
+       # inject variables into environment
        attr_accessor :auto_inject
+       # avoid capital letter variables
        attr_accessor :auto_lowervar
     end
 
@@ -2457,6 +2460,7 @@ Methods for Groebner bases, ideal sum, intersection and others.
 =end
 class SimIdeal
     include Comparable
+    # the Java polynomial list, polynomial ring, and ideal decompositions
     attr_reader :pset, :ring, :list, :roots, :prime, :primary #, :ideal
 
 =begin rdoc
@@ -3476,7 +3480,9 @@ class SolvPolyRing < SolvableRing
     @auto_lowervar = false
 
     class << self  # means add to class
+       # inject variables into environment 
        attr_accessor :auto_inject
+       # avoid capital letter variables 
        attr_accessor :auto_lowervar
     end
 
@@ -3635,6 +3641,7 @@ Methods for left, right two-sided Groebner basees and others.
 =end
 class SolvIdeal
     include Comparable
+    # the Java ordered polynomial list, polynomial ring, and polynomial list  
     attr_reader :pset, :ring, :list #, :ideal
 
 =begin rdoc
@@ -4053,6 +4060,7 @@ Represents a JAS module over a polynomial ring.
 Method to create sub-modules.
 =end
 class CommutativeModule
+    # the Java polynomial ring, number of columns, module list 
     attr_reader :ring, :cols, :mset
 
 =begin rdoc
@@ -4138,6 +4146,7 @@ Represents a JAS sub-module over a polynomial ring.
 Methods to compute Groebner bases.
 =end
 class SubModule
+    # the Java module, module list, polynomial list, number of columns and rows, module list 
     attr_reader :modu, :mset, :pset, :cols, :rows, :list
 
 =begin rdoc
@@ -4245,6 +4254,7 @@ Represents a JAS module over a solvable polynomial ring.
 Method to create solvable sub-modules.
 =end
 class SolvableModule < CommutativeModule
+    # the Java polynomial ring, number of columns, module list 
     attr_reader :ring, :cols, :mset 
 
 =begin rdoc
@@ -4319,6 +4329,7 @@ Represents a JAS sub-module over a solvable polynomial ring.
 Methods to compute left, right and two-sided Groebner bases.
 =end
 class SolvableSubModule
+    # the Java module, module list, number of columns and rows, module list 
     attr_reader :modu, :mset, :cols, :rows, :list
 
 =begin rdoc
@@ -4511,6 +4522,7 @@ Methods for univariate power series arithmetic.
 =end
 class SeriesRing
 
+    # the Java polynomial ring
     attr_reader :ring
 
 =begin rdoc
@@ -4710,6 +4722,7 @@ Methods for multivariate power series arithmetic.
 =end
 class MultiSeriesRing
 
+    # the Java polynomial ring 
     attr_reader :ring
 
 =begin rdoc
@@ -4901,6 +4914,8 @@ Represents a JAS power series ideal.
 Method for Standard bases.
 =end
 class PSIdeal
+
+    # the Java powerseries ring, powerseries list 
     attr_reader :ring, :list
 
 =begin rdoc
@@ -5168,6 +5183,8 @@ Extension field builder.
 Construction of extension field towers according to then builder pattern.
 =end
 class EF
+
+    # the Java extension field builder 
     attr_reader :builder
 
 =begin rdoc
@@ -5413,6 +5430,7 @@ Methods for two-sided Groebner bases and others.
 =end
 class WordPolyIdeal
 
+    # the Java word polynomial ring, word polynomial list, word ideal
     attr_reader :ring, :list, :ideal
 
 =begin rdoc
