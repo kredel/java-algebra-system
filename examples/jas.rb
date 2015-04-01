@@ -2581,7 +2581,7 @@ Test if this is a Groebner base.
             end
         end
         t = System.currentTimeMillis() - t;
-        puts "isGB executed in #{t} ms\n"; 
+        puts "isGB = #{b} executed in #{t} ms\n"; 
         return b;
     end
 
@@ -2617,7 +2617,7 @@ Test if this is an e-Groebner base.
             b = EGroebnerBaseSeq.new().isGB(ff)
         end
         t = System.currentTimeMillis() - t;
-        puts "is e-GB test executed in #{t} ms\n"; 
+        puts "is e-GB = #{b} executed in #{t} ms\n"; 
         return b;
     end
 
@@ -2653,7 +2653,7 @@ Test if this is a d-Groebner base.
             b = DGroebnerBaseSeq.new().isGB(ff)
         end
         t = System.currentTimeMillis() - t;
-        puts "is d-GB test executed in #{t} ms\n"; 
+        puts "is d-GB = #{b} executed in #{t} ms\n"; 
         return b;
     end
 
@@ -3303,7 +3303,7 @@ Test if this is a comprehensive Groebner base.
         t = System.currentTimeMillis();
         b = ComprehensiveGroebnerBaseSeq.new(@ring.ring.coFac).isGB(ff);
         t = System.currentTimeMillis() - t;
-        puts "isCGB executed in #{t} ms\n"; 
+        puts "isCGB = #{b} executed in #{t} ms\n"; 
         return b;
     end
 
@@ -3316,7 +3316,7 @@ Test if this is a comprehensive Groebner system.
         t = System.currentTimeMillis();
         b = ComprehensiveGroebnerBaseSeq.new(@ring.ring.coFac).isGBsys(ss);
         t = System.currentTimeMillis() - t;
-        puts "isCGBsystem executed in #{t} ms\n"; 
+        puts "isCGBsystem = #{b} executed in #{t} ms\n"; 
         return b;
     end
 
@@ -3368,7 +3368,7 @@ Test if this is Groebner base over a regular ring.
         t = System.currentTimeMillis();
         b = RGroebnerBasePseudoSeq.new(@ring.ring.coFac).isGB(ff);
         t = System.currentTimeMillis() - t;
-        puts "isRegularGB executed in #{t} ms\n"; 
+        puts "isRegularGB = #{b} executed in #{t} ms\n"; 
         return b;
     end
 
@@ -3752,7 +3752,7 @@ Test if this is a left Groebner base.
            end
         end
         t = System.currentTimeMillis() - t;
-        puts "isLeftGB(#{kind}) executed in #{t} ms\n"; 
+        puts "isLeftGB(#{kind}) = #{b} executed in #{t} ms\n"; 
         return b;
     end
 
@@ -3802,7 +3802,7 @@ Test if this is a two-sided Groebner base.
            end
         end
         t = System.currentTimeMillis() - t;
-        puts "isTwosidedGB(#{kind}) executed in #{t} ms\n"; 
+        puts "isTwosidedGB(#{kind}) = #{b} executed in #{t} ms\n"; 
         return b;
     end
 
@@ -3852,7 +3852,7 @@ Test if this is a right Groebner base.
            end
         end
         t = System.currentTimeMillis() - t;
-        puts "isRightGB(#{kind}) executed in #{t} ms\n"; 
+        puts "isRightGB(#{kind}) = #{b} executed in #{t} ms\n"; 
         return b;
     end
 
@@ -5529,7 +5529,7 @@ Test if this is a two-sided Groebner base.
             end
         end
         t = System.currentTimeMillis() - t;
-        puts "executed(#{kind}) isTwosidedGB in #{t} ms\n"; 
+        puts "isTwosidedGB(#{kind}) = #{b} executed in #{t} ms\n"; 
         return b;
     end
 
@@ -5602,10 +5602,15 @@ end
 
 
 # define some shortcuts
+# big integers
 ZZ = ZZ();
+# big rational numbers
 QQ = QQ();
+# complex big rational numbers
 CC = CC();
+#generic complex numbers
 CR = CR();
+#big decimal numbers
 DD = DD();
 #no GF = GF();
 
