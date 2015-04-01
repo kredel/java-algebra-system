@@ -210,7 +210,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
                         logger.info("unsymmetric coeff, e*b: b = " + b + ", e = " + e);
                     for (Map.Entry<ExpVector, C> z : b.val.entrySet()) {
                         C c = z.getValue();
-                        GenPolynomial<C> cc = b.ring.getONE().multiply(c);
+                        GenPolynomial<C> cc = b.ring.valueOf(c); // getONE().multiply(c);
                         ExpVector g = z.getKey();
                         if (debug)
                             logger.info("g = " + g + ", c = " + c);
@@ -223,7 +223,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
                         if (debug) {
                             logger.info("gl1s = " + gl1s);
                         }
-                        // split e = e1 * e2, g = g1 * g2
+                        // split e = e1 * e2, g = g2 * g1 (= g1 * g2)
                         ExpVector e1 = e;
                         ExpVector e2 = Z;
                         if (!e.isZERO()) {
@@ -247,8 +247,8 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
                         //logger.info("coeff, e  = " + e + " g, = " + g + ", crel = " + crel);
                         Cs = new RecSolvablePolynomial<C>(ring, crel.p);
                         // rest of multiplication and update relations
-                        if (crel.f != null) {
-                            GenPolynomial<C> c2 = b.ring.getONE().multiply(crel.f);
+                        if (crel.f != null) { // process remaining right power
+                            GenPolynomial<C> c2 = b.ring.valueOf(crel.f); //getONE().multiply(crel.f);
                             C2 = new RecSolvablePolynomial<C>(ring, c2, Z);
                             Cs = Cs.multiply(C2);
                             if (crel.e == null) {
@@ -258,17 +258,17 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
                             }
                             ring.coeffTable.update(e4, g2, Cs);
                         }
-                        if (crel.e != null) { // process left part
+                        if (crel.e != null) { // process remaining left power
                             C1 = new RecSolvablePolynomial<C>(ring, one, crel.e);
                             Cs = C1.multiply(Cs);
                             ring.coeffTable.update(e2, g2, Cs);
                         }
-                        if (!g1.isZERO()) { // process right part
-                            GenPolynomial<C> c2 = b.ring.getONE().multiply(g1);
+                        if (!g1.isZERO()) { // process remaining right part
+                            GenPolynomial<C> c2 = b.ring.valueOf(g1); //getONE().multiply(g1);
                             C2 = new RecSolvablePolynomial<C>(ring, c2, Z);
                             Cs = Cs.multiply(C2);
                         }
-                        if (!e1.isZERO()) { // process left part
+                        if (!e1.isZERO()) { // process remaining left part
                             C1 = new RecSolvablePolynomial<C>(ring, one, e1);
                             Cs = C1.multiply(Cs);
                         }
