@@ -116,6 +116,27 @@ public final class GenWordPolynomial<C extends RingElem<C>> implements RingElem<
 
 
     /**
+     * Constructor for GenWordPolynomial x<sup>e</sup>.
+     * @param r polynomial ring factory.
+     * @param e exponent vector.
+     */
+    public GenWordPolynomial(GenWordPolynomialRing<C> r, ExpVector e) {
+        this(r, r.coFac.getONE(), r.alphabet.valueOf(e));
+    }
+
+
+    /**
+     * Constructor for GenWordPolynomial c * x<sup>e</sup>.
+     * @param r polynomial ring factory.
+     * @param c coefficient.
+     * @param e exponent vector.
+     */
+    public GenWordPolynomial(GenWordPolynomialRing<C> r, C c, ExpVector e) {
+        this(r, c, r.alphabet.valueOf(e));
+    }
+
+
+    /**
      * Constructor for GenWordPolynomial.
      * @param r polynomial ring factory.
      * @param v the SortedMap of some other polynomial.
