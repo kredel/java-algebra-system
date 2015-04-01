@@ -360,8 +360,43 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
 
 
     /**
+     * Get a (constant) RecSolvablePolynomial&lt;C&gt; element from a coefficient value.
+     * @param a coefficient.
+     * @return a RecSolvablePolynomial&lt;C&gt;.
+     */
+    @Override
+    public RecSolvablePolynomial<C> valueOf(GenPolynomial<C> a) {
+        return new RecSolvablePolynomial<C>(this, a);
+    }
+
+
+    /**
+     * Get a RecSolvablePolynomial&lt;C&gt; element from an exponent vector.
+     * @param e exponent vector.
+     * @return a RecSolvablePolynomial&lt;C&gt;.
+     */
+    @Override
+    public RecSolvablePolynomial<C> valueOf(ExpVector e) {
+        return new RecSolvablePolynomial<C>(this, coFac.getONE(), e);
+    }
+
+
+    /**
+     * Get a RecSolvablePolynomial&lt;C&gt; element from a coeffcient and an exponent
+     * vector.
+     * @param a coefficient.
+     * @param e exponent vector.
+     * @return a RecSolvablePolynomial&lt;C&gt;.
+     */
+    @Override
+    public RecSolvablePolynomial<C> valueOf(GenPolynomial<C> a, ExpVector e) {
+        return new RecSolvablePolynomial<C>(this, a, e);
+    }
+
+
+    /**
      * Get a (constant) RecSolvablePolynomial&lt;C&gt; element from a long
-     * value.
+     * value
      * @param a long.
      * @return a RecSolvablePolynomial&lt;C&gt;.
      */

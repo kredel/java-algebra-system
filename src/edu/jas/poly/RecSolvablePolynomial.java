@@ -314,7 +314,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
                             ExpVector h = g.sum(f);
                             if (debug)
                                 logger.info("disjoint poly: g = " + g + ", f = " + f + ", h = " + h);
-                            Ds = (RecSolvablePolynomial<C>) zero.sum(one, h); // symmetric!
+                            Ds = ring.valueOf(h); // symmetric! //(RecSolvablePolynomial<C>) zero.sum(one, h); 
                         } else {
                             ExpVector g1 = g.subst(gl1, 0);
                             ExpVector g2 = Z.subst(gl1, g.getVal(gl1)); // bug el1, gl1
@@ -330,7 +330,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
                                 logger.info("poly, g  = " + g + ", f  = " + f + ", rel = " + rel);
                             Ds = new RecSolvablePolynomial<C>(ring, rel.p); //ring.copy(rel.p);
                             if (rel.f != null) {
-                                D2 = new RecSolvablePolynomial<C>(ring, one, rel.f);
+                                D2 = ring.valueOf(rel.f); //new RecSolvablePolynomial<C>(ring, one, rel.f);
                                 Ds = Ds.multiply(D2);
                                 if (rel.e == null) {
                                     g4 = g2;
@@ -340,17 +340,17 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
                                 ring.table.update(g4, f2, Ds);
                             }
                             if (rel.e != null) {
-                                D1 = new RecSolvablePolynomial<C>(ring, one, rel.e);
+                                D1 = ring.valueOf(rel.e); // new RecSolvablePolynomial<C>(ring, one, rel.e);
                                 Ds = D1.multiply(Ds);
                                 ring.table.update(g2, f2, Ds);
                             }
                             if (!f1.isZERO()) {
-                                D2 = new RecSolvablePolynomial<C>(ring, one, f1);
+                                D2 = ring.valueOf(f1); //new RecSolvablePolynomial<C>(ring, one, f1);
                                 Ds = Ds.multiply(D2);
                                 //ring.table.update(?,f1,Ds)
                             }
                             if (!g1.isZERO()) {
-                                D1 = new RecSolvablePolynomial<C>(ring, one, g1);
+                                D1 = ring.valueOf(g1); //new RecSolvablePolynomial<C>(ring, one, g1);
                                 Ds = D1.multiply(Ds);
                                 //ring.table.update(e1,?,Ds)
                             }
@@ -449,8 +449,8 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
         if (c == null || c.isZERO()) {
             return Cp;
         }
-        RecSolvablePolynomial<C> Cb = new RecSolvablePolynomial<C>(ring, b, ring.evzero);
-        RecSolvablePolynomial<C> Cc = new RecSolvablePolynomial<C>(ring, c, ring.evzero);
+        RecSolvablePolynomial<C> Cb = ring.valueOf(b); //new RecSolvablePolynomial<C>(ring, b, ring.evzero);
+        RecSolvablePolynomial<C> Cc = ring.valueOf(c); //new RecSolvablePolynomial<C>(ring, c, ring.evzero);
         return Cb.multiply(this).multiply(Cc);
         // wrong:
         // Map<ExpVector, GenPolynomial<C>> Cm = Cp.val; //getMap();
@@ -525,7 +525,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
         if (b == null || b.isZERO()) {
             return ring.getZERO();
         }
-        RecSolvablePolynomial<C> Cp = new RecSolvablePolynomial<C>(ring, b, e);
+        RecSolvablePolynomial<C> Cp = ring.valueOf(b,e); //new RecSolvablePolynomial<C>(ring, b, e);
         return multiply(Cp);
     }
 
@@ -548,8 +548,8 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
         if (c == null || c.isZERO()) {
             return ring.getZERO();
         }
-        RecSolvablePolynomial<C> Cp = new RecSolvablePolynomial<C>(ring, b, e);
-        RecSolvablePolynomial<C> Dp = new RecSolvablePolynomial<C>(ring, c, f);
+        RecSolvablePolynomial<C> Cp = ring.valueOf(b,e); //new RecSolvablePolynomial<C>(ring, b, e);
+        RecSolvablePolynomial<C> Dp = ring.valueOf(c,f); //new RecSolvablePolynomial<C>(ring, c, f);
         return multiply(Cp, Dp);
     }
 
@@ -566,7 +566,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
         if (b == null || b.isZERO()) {
             return ring.getZERO();
         }
-        RecSolvablePolynomial<C> Cp = new RecSolvablePolynomial<C>(ring, b, e);
+        RecSolvablePolynomial<C> Cp = ring.valueOf(b,e); //new RecSolvablePolynomial<C>(ring, b, e);
         return Cp.multiply(this);
     }
 
@@ -581,8 +581,8 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
         if (e == null || e.isZERO()) {
             return this;
         }
-        GenPolynomial<C> b = ring.getONECoefficient();
-        RecSolvablePolynomial<C> Cp = new RecSolvablePolynomial<C>(ring, b, e);
+        //GenPolynomial<C> b = ring.getONECoefficient();
+        RecSolvablePolynomial<C> Cp = ring.valueOf(e); // new RecSolvablePolynomial<C>(ring, b, e);
         return Cp.multiply(this);
     }
 
