@@ -234,6 +234,25 @@ public final class WordFactory implements MonoidFactory<Word> {
 
 
     /**
+     * Get the variable names.
+     * @return array of variable names
+     */
+    public String[] getVars() {
+        String[] vars = new String[alphabet.length()];
+        if (translation == null) {
+            for (int i = 0; i < alphabet.length(); i++) {
+                vars[i] = String.valueOf(getVal(i));
+            }
+        } else {
+            for (int i = 0; i < alphabet.length(); i++) {
+                vars[i] = translation[i];
+            }
+        }
+        return vars;
+    }
+
+
+    /**
      * Get the string representation.
      * @see java.lang.Object#toString()
      */
