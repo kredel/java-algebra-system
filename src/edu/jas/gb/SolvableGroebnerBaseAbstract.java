@@ -16,6 +16,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
+import edu.jas.poly.QLRSolvablePolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
@@ -256,9 +257,23 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
         if (Fp == null || Fp.size() == 0) { // 0 not 1
             return true;
         }
-        GenSolvablePolynomialRing<C> fac = Fp.get(0).ring; // assert != null
-        //List<GenSolvablePolynomial<C>> X = generateUnivar( modv, Fp );
-        List<GenSolvablePolynomial<C>> X = fac.univariateList(modv);
+        GenSolvablePolynomialRing<C> ring = Fp.get(0).ring; // assert != null
+        List<GenSolvablePolynomial<C>> X, Y;
+        if (ring instanceof QLRSolvablePolynomialRing) { // add also coefficient generators
+            X = PolynomialList.castToSolvableList(ring.generators()); // todo use? modv
+            Y = new ArrayList<GenSolvablePolynomial<C>>();
+            for (GenSolvablePolynomial<C> x : X) {
+                if (x.isConstant()) {
+                    Y.add(x);
+                }
+            }
+            X = Y;
+            X.addAll(ring.univariateList(modv));
+        } else {
+            X = ring.univariateList(modv);
+        }
+        logger.info("right multipliers = " + X);
+        //System.out.println("right multipliers = " + X);
         List<GenSolvablePolynomial<C>> F = new ArrayList<GenSolvablePolynomial<C>>(Fp.size() * (1 + X.size()));
         F.addAll(Fp);
         GenSolvablePolynomial<C> p, x, pi, pj, s, h;
@@ -266,6 +281,9 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
             p = Fp.get(i);
             for (int j = 0; j < X.size(); j++) {
                 x = X.get(j);
+                if (x.isONE()) {
+                    continue;
+                }
                 p = p.multiply(x);
                 p = sred.leftNormalform(F, p);
                 if (!p.isZERO()) {
