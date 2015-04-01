@@ -374,6 +374,41 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
 
 
     /**
+     * Get a (constant) GenPolynomial&lt;C&gt; element from a coefficient value.
+     * @param a coefficient.
+     * @return a GenPolynomial&lt;C&gt;.
+     */
+    @Override
+    public GenSolvablePolynomial<C> valueOf(C a) {
+        return new GenSolvablePolynomial<C>(this, a);
+    }
+
+
+    /**
+     * Get a GenPolynomial&lt;C&gt; element from an exponent vector.
+     * @param e exponent vector.
+     * @return a GenPolynomial&lt;C&gt;.
+     */
+    @Override
+    public GenSolvablePolynomial<C> valueOf(ExpVector e) {
+        return new GenSolvablePolynomial<C>(this, coFac.getONE(), e);
+    }
+
+
+    /**
+     * Get a GenPolynomial&lt;C&gt; element from a coeffcient and an exponent
+     * vector.
+     * @param a coefficient.
+     * @param e exponent vector.
+     * @return a GenPolynomial&lt;C&gt;.
+     */
+    @Override
+    public GenSolvablePolynomial<C> valueOf(C a, ExpVector e) {
+        return new GenSolvablePolynomial<C>(this, a, e);
+    }
+
+
+    /**
      * Get a (constant) GenSolvablePolynomial&lt;C&gt; element from a long
      * value.
      * @param a long.
