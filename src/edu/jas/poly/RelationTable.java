@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
 
 
 /**
@@ -271,6 +272,8 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         if (coeffTable) {
             if (ring.coFac instanceof GenPolynomialRing) {
                 cvars = ((GenPolynomialRing<C>) (Object) ring.coFac).getVars();
+            } else if (ring.coFac instanceof GenWordPolynomialRing) {
+                cvars = ((GenWordPolynomialRing<C>) (Object) ring.coFac).getVars();
             }
             s.append("Coefficient ");
         }
@@ -345,7 +348,11 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         String[] vars = ring.vars;
         String[] cvars = null;
         if (coeffTable) {
-            cvars = ((GenPolynomialRing<C>) (Object) ring.coFac).vars;
+            if (ring.coFac instanceof GenPolynomialRing) {
+                cvars = ((GenPolynomialRing<C>) (Object) ring.coFac).getVars();
+            } else if (ring.coFac instanceof GenWordPolynomialRing) {
+                cvars = ((GenWordPolynomialRing<C>) (Object) ring.coFac).getVars();
+            }
         }
         List v;
         StringBuffer s = new StringBuffer("[");
@@ -387,8 +394,8 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
 
 
     /**
-     * Update or initialize RelationTable with new relation. relation is e * f =
-     * p.
+     * Update or initialize RelationTable with new relation. 
+     * relation is e * f = p.
      * @param e first term.
      * @param f second term.
      * @param p solvable product polynomial.
@@ -457,6 +464,14 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                     throw new IllegalArgumentException("Coefficient RelationTable update f != lt(lfcd(p)): "
                                     + e + ", f = " + f + ", p = " + p);
                 }
+            } else if (p.leadingBaseCoefficient() instanceof GenWordPolynomial) {
+                lp = ((GenWordPolynomial<C>) (Object) p.leadingBaseCoefficient()).leadingWord().leadingExpVector();
+                if (!f.equals(lp)) { // check for suitable term order and word structure
+                    logger.error("relation term order = " + ring.tord);
+                    logger.error("Coefficient RelationTable update f != lt(lfcd(p)): " + sring.toScript(e) + ", f = " + f + ", p = " + p.toScript());
+                    throw new IllegalArgumentException("Coefficient RelationTable update f != lt(lfcd(p)): "
+                                    + e + ", f = " + f + ", p = " + p);
+                }
             }
         }
         List<Integer> key = makeKey(e, f);
@@ -514,8 +529,12 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         }
         ExpVector e = E.leadingExpVector();
         ExpVector f = F.leadingExpVector();
-        if (coeffTable && f.isZERO() && cf instanceof GenPolynomial) {
-            f = ((GenPolynomial<C>) (Object) cf).leadingExpVector();
+        if (coeffTable && f.isZERO()) {
+            if (cf instanceof GenPolynomial) {
+                f = ((GenPolynomial<C>) (Object) cf).leadingExpVector();
+            } else if (cf instanceof GenWordPolynomial) {
+                f = ((GenWordPolynomial<C>) (Object) cf).leadingWord().leadingExpVector();
+            }
         }
         //logger.info("update: " + e + " .*. " + f + " = " + p);
         update(e, f, p);
@@ -575,18 +594,25 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         List part = table.get(key);
         if (part == null) { // symmetric product
             GenSolvablePolynomial<C> p = null;
+            C c = null; 
             if (!coeffTable) {
                 ExpVector ef = e.sum(f);
-                p = new GenSolvablePolynomial<C>(ring, ring.getONECoefficient(), ef);
+                //p = new GenSolvablePolynomial<C>(ring, ring.getONECoefficient(), ef);
+                p = ring.valueOf(ef);
             } else {
                 if (ring.coFac instanceof GenPolynomialRing) {
                     GenPolynomialRing<C> cofac = (GenPolynomialRing<C>) (Object) ring.coFac;
                     //System.out.println("f = " + f + ", e = " + e);
-                    GenPolynomial<C> pc = cofac.getZERO().sum(cofac.getONECoefficient(), f);
-                    C c = (C) (Object) pc;
-                    p = new GenSolvablePolynomial<C>(ring, c, e);
-                    //System.out.println("pc = " + pc + ", p = " + p);
+                    GenPolynomial<C> pc = cofac.valueOf(f);
+                    c = (C) (Object) pc;
+                } else if (ring.coFac instanceof GenWordPolynomialRing) {
+                    GenWordPolynomialRing<C> cofac = (GenWordPolynomialRing<C>) (Object) ring.coFac;
+                    //System.out.println("f = " + f + ", e = " + e);
+                    GenWordPolynomial<C> pc = cofac.valueOf(f);
+                    c = (C) (Object) pc;
                 }
+                p = new GenSolvablePolynomial<C>(ring, c, e);
+                //System.out.println("pc = " + pc + ", p = " + p);
             }
             return new TableRelation<C>(null, null, p);
         }
@@ -652,7 +678,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
      */
     public int size() {
         int s = 0;
-        if (table == null) {
+        if (table == null || table.isEmpty()) {
             return s;
         }
         for (Iterator<List> it = table.values().iterator(); it.hasNext();) {
@@ -671,7 +697,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
      */
     @SuppressWarnings("unchecked")
     public void extend(RelationTable<C> tab) {
-        if (tab.table.size() == 0) {
+        if (tab.table.isEmpty()) {
             return;
         }
         // assert this.size() == 0
@@ -709,7 +735,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
      */
     @SuppressWarnings("unchecked")
     public void contract(RelationTable<C> tab) {
-        if (tab.table.size() == 0) {
+        if (tab.table.isEmpty()) {
             return;
         }
         // assert this.size() == 0
@@ -755,7 +781,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
      */
     @SuppressWarnings({ "unchecked", "cast" })
     public void recursive(RelationTable tab) { //<C>
-        if (tab.table.size() == 0) {
+        if (tab.table.isEmpty()) {
             return;
         }
         //System.out.println("rel ring = " + ring.toScript());
@@ -827,11 +853,11 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
      */
     @SuppressWarnings("unchecked")
     public void reverse(RelationTable<C> tab) {
-        if (tab.table.size() == 0) {
+        if (tab.table.isEmpty()) {
             return;
         }
         // assert this.size() == 0
-        if (table.size() != 0) {
+        if (!table.isEmpty()) {
             logger.error("reverse table not empty");
         }
         int k = -1;
@@ -905,25 +931,30 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
     @SuppressWarnings({ "unchecked", "cast" })
     public List<GenSolvablePolynomial<C>> relationList() {
         List<GenSolvablePolynomial<C>> rels = new ArrayList<GenSolvablePolynomial<C>>();
-        C one = ring.getONECoefficient();
-        GenPolynomialRing<C> cofac = null;
-        if (coeffTable) {
-            cofac = (GenPolynomialRing<C>) (Object) ring.coFac; // up cast
-        }
+        //C one = ring.getONECoefficient();
         for (List<Integer> k : table.keySet()) {
             List v = table.get(k);
             for (Iterator jt = v.iterator(); jt.hasNext();) {
                 ExpVectorPair ep = (ExpVectorPair) jt.next();
                 ExpVector e = ep.getFirst();
-                GenSolvablePolynomial<C> pe = new GenSolvablePolynomial<C>(ring, one, e);
+                GenSolvablePolynomial<C> pe = ring.valueOf(e);
                 ExpVector f = ep.getSecond();
                 GenSolvablePolynomial<C> pf = null;
-                if (coeffTable) {
-                    GenPolynomial<C> cpf = cofac.getONE().multiply(f);
-                    C cf = (C) (Object) cpf; // down cast
-                    pf = new GenSolvablePolynomial<C>(ring, cf);
+                if (coeffTable) { // todo
+                    C cf = null;
+                    if (ring.coFac instanceof GenPolynomialRing) {
+                        GenPolynomial<C> cpf;
+                        cpf = ((GenPolynomialRing<C>) (Object) ring.coFac).valueOf(f);
+                        cf = (C) (Object) cpf; // down cast
+	            } else if (ring.coFac instanceof GenWordPolynomialRing) {
+                        GenWordPolynomial<C> cpf;
+                        cpf = ((GenWordPolynomialRing<C>) (Object) ring.coFac).valueOf(f);
+                        cf = (C) (Object) cpf; // down cast
+	            }
+                    //pf = new GenSolvablePolynomial<C>(ring, cf);
+                    pf = ring.valueOf(cf);
                 } else {
-                    pf = new GenSolvablePolynomial<C>(ring, one, f);
+                    pf = ring.valueOf(f);
                 }
                 GenSolvablePolynomial<C> p = (GenSolvablePolynomial<C>) jt.next();
                 rels.add(pe);
@@ -960,6 +991,8 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         Iterator<GenPolynomial<C>> relit = rel.iterator();
         while (relit.hasNext()) {
             GenPolynomial<C> E = relit.next();
+            ExpVector e = E.leadingExpVector();
+            ExpVector f = null;
             if (!relit.hasNext()) {
                 throw new IllegalArgumentException("F and poly part missing");
             }
@@ -968,10 +1001,16 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                 throw new IllegalArgumentException("poly part missing");
             }
             GenPolynomial<C> P = relit.next();
-            if (coeffTable && F.isConstant()) {
-                F = (GenPolynomial<C>) (Object) F.leadingBaseCoefficient(); // up cast
+            if (coeffTable && F.isConstant()) { // todo
+                if (ring.coFac instanceof GenPolynomialRing) {
+                    f = ((GenPolynomial<C>) (Object) F.leadingBaseCoefficient()).leadingExpVector();
+                } else if (ring.coFac instanceof GenWordPolynomialRing) {
+                    f = ((GenWordPolynomial<C>) (Object) F.leadingBaseCoefficient()).leadingWord().leadingExpVector();
+                }
+            } else {
+                f = F.leadingExpVector();
             }
-            update(E, F, P);
+            update(e, f, P);
         }
         return;
     }
