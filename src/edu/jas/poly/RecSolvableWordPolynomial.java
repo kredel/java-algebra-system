@@ -217,6 +217,7 @@ public class RecSolvableWordPolynomial<C extends RingElem<C>> extends GenSolvabl
                         ExpVector g2 = g.leadingExpVector();
                         Word g1 = g.reductum();
                         //ExpVector g1;
+                        //System.out.println("c = " + c + ", g = " + g + ", g1 = " + g1 + ", g1 == 1: " + g1.isONE());
                         ExpVector e1 = e;
                         ExpVector e2 = Z;
                         if (!e.isZERO()) {
@@ -230,7 +231,7 @@ public class RecSolvableWordPolynomial<C extends RingElem<C>> extends GenSolvabl
                         TableRelation<GenWordPolynomial<C>> crel = ring.coeffTable.lookup(e2, g2);
                         if (debug)
                             logger.info("coeff, crel = " + crel.p);
-                        //System.out.println("coeff, e  = " + e + " g, = " + g + ", crel = " + crel);
+                        //System.out.println("coeff, e  = " + e + ", g = " + g + ", crel = " + crel);
                         Cs = new RecSolvableWordPolynomial<C>(ring, crel.p);
                         // rest of multiplication and update relations
                         if (crel.f != null) { // process remaining right power
@@ -268,6 +269,7 @@ public class RecSolvableWordPolynomial<C extends RingElem<C>> extends GenSolvabl
                     } // end b loop 
                     if (debug)
                         logger.info("coeff, Cs = " + Cs + ", Cps = " + Cps);
+                    //System.out.println("coeff loop end, Cs = " + Cs + ", Cps = " + Cps);
                 }
                 if (debug)
                     logger.info("coeff-poly: Cps = " + Cps);
@@ -280,7 +282,7 @@ public class RecSolvableWordPolynomial<C extends RingElem<C>> extends GenSolvabl
                         logger.info("symmetric poly, P_eb*f: Cps = " + Cps + ", f = " + f);
                     ExpVector g = e.sum(f);
                     if (Cps.isConstant()) {
-                        Ds = new RecSolvableWordPolynomial<C>(ring, Cps.leadingBaseCoefficient(), g); // symmetric!
+                        Ds = ring.valueOf(Cps.leadingBaseCoefficient(), g); //new RecSolvableWordPolynomial<C>(ring, Cps.leadingBaseCoefficient(), g); // symmetric!
                     } else {
                         Ds = shift(Cps, f); // symmetric
                     }
@@ -319,7 +321,7 @@ public class RecSolvableWordPolynomial<C extends RingElem<C>> extends GenSolvabl
                                 logger.info("poly, g  = " + g + ", f  = " + f + ", rel = " + rel);
                             Ds = new RecSolvableWordPolynomial<C>(ring, rel.p); //ring.copy(rel.p);
                             if (rel.f != null) {
-                                D2 = new RecSolvableWordPolynomial<C>(ring, one, rel.f);
+                                D2 = ring.valueOf(rel.f); //new RecSolvableWordPolynomial<C>(ring, one, rel.f);
                                 Ds = Ds.multiply(D2);
                                 if (rel.e == null) {
                                     g4 = g2;
@@ -329,21 +331,22 @@ public class RecSolvableWordPolynomial<C extends RingElem<C>> extends GenSolvabl
                                 ring.table.update(g4, f2, Ds);
                             }
                             if (rel.e != null) {
-                                D1 = new RecSolvableWordPolynomial<C>(ring, one, rel.e);
+                                D1 = ring.valueOf(rel.e); //new RecSolvableWordPolynomial<C>(ring, one, rel.e);
                                 Ds = D1.multiply(Ds);
                                 ring.table.update(g2, f2, Ds);
                             }
                             if (!f1.isZERO()) {
-                                D2 = new RecSolvableWordPolynomial<C>(ring, one, f1);
+                                D2 = ring.valueOf(f1); //new RecSolvableWordPolynomial<C>(ring, one, f1);
                                 Ds = Ds.multiply(D2);
                                 //ring.table.update(?,f1,Ds)
                             }
                             if (!g1.isZERO()) {
-                                D1 = new RecSolvableWordPolynomial<C>(ring, one, g1);
+                                D1 = ring.valueOf(g1); //new RecSolvableWordPolynomial<C>(ring, one, g1);
                                 Ds = D1.multiply(Ds);
                                 //ring.table.update(e1,?,Ds)
                             }
                         }
+                        //System.out.println("main loop, Cs = " + Cs + ", c = " + c);
                         Ds = Ds.multiplyLeft(c); // assume c commutes with Cs
                         //Dps = (RecSolvableWordPolynomial<C>) Dps.sum(Ds);
                         Dps.doAddTo(Ds);
@@ -354,6 +357,7 @@ public class RecSolvableWordPolynomial<C extends RingElem<C>> extends GenSolvabl
                     logger.info("recursion+: Ds = " + Ds + ", a = " + a);
                 }
                 // polynomial coefficient multiplication a*(P_eb*f) = a*Ds
+                //System.out.println("main loop, Ds = " + Ds + ", a = " + a);
                 Ds = Ds.multiplyLeft(a); // multiply(a,b); // non-symmetric 
                 if (debug)
                     logger.info("recursion-: Ds = " + Ds);
