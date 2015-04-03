@@ -20,6 +20,10 @@ import edu.jas.poly.GenWordPolynomial;
 import edu.jas.poly.GenWordPolynomialRing;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.QuotPair;
+import edu.jas.structure.QuotPairFactory;
+import edu.jas.structure.Value;
+import edu.jas.structure.ValueFactory;
 
 
 /**
@@ -27,7 +31,10 @@ import edu.jas.structure.RingFactory;
  * interface. Objects of this class are immutable.
  * @author Heinz Kredel
  */
-public class WordResidueRing<C extends GcdRingElem<C>> implements RingFactory<WordResidue<C>> {
+public class WordResidueRing<C extends GcdRingElem<C>> 
+       implements RingFactory<WordResidue<C>>, 
+               QuotPairFactory<GenWordPolynomial<C>, WordResidue<C>>,
+               ValueFactory<GenWordPolynomial<C>, WordResidue<C>> {
 
 
     private static final Logger logger = Logger.getLogger(WordResidueRing.class);
@@ -87,6 +94,41 @@ public class WordResidueRing<C extends GcdRingElem<C>> implements RingFactory<Wo
         }
         //System.out.println("rr ring   = " + ring.getClass().getName());
         //System.out.println("rr cofac  = " + ring.coFac.getClass().getName());
+    }
+
+
+    /**
+     * Factory for base elements.
+     */
+    public GenWordPolynomialRing<C> pairFactory() {
+        return ring;
+    }
+
+
+    /**
+     * Factory for base elements.
+     */
+    public GenWordPolynomialRing<C> valueFactory() {
+        return ring;
+    }
+
+
+    /**
+     * Create from numerator.
+     */
+    public WordResidue<C> create(GenWordPolynomial<C> n) {
+        return new WordResidue<C>(this, n);
+    }
+
+
+    /**
+     * Create from numerator, denominator pair.
+     */
+    public WordResidue<C> create(GenWordPolynomial<C> n, GenWordPolynomial<C> d) {
+        if (d != null && !d.isONE()) {
+            throw new UnsupportedOperationException("d must be 1, but d = " + d);
+        }
+        return new WordResidue<C>(this, n);
     }
 
 

@@ -13,6 +13,10 @@ import edu.jas.poly.GenWordPolynomial;
 import edu.jas.poly.Word;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.NotInvertibleException;
+import edu.jas.structure.QuotPair;
+import edu.jas.structure.QuotPairFactory;
+import edu.jas.structure.Value;
+import edu.jas.structure.ValueFactory;
 
 
 /**
@@ -20,7 +24,8 @@ import edu.jas.structure.NotInvertibleException;
  * interface. Objects of this class are immutable.
  * @author Heinz Kredel
  */
-public class WordResidue<C extends GcdRingElem<C>> implements GcdRingElem<WordResidue<C>> {
+public class WordResidue<C extends GcdRingElem<C>> 
+       implements GcdRingElem<WordResidue<C>>, QuotPair<GenWordPolynomial<C>>, Value<GenWordPolynomial<C>> {
 
 
     /**
@@ -100,6 +105,33 @@ public class WordResidue<C extends GcdRingElem<C>> implements GcdRingElem<WordRe
      */
     public WordResidueRing<C> factory() {
         return ring;
+    }
+
+
+    /**
+     * Value. Returns the value.
+     * @see edu.jas.structure.Value#value()
+     */
+    public GenWordPolynomial<C> value() {
+        return val;
+    }
+
+
+    /**
+     * Numerator. Returns the value.
+     * @see edu.jas.structure.QuotPair#numerator()
+     */
+    public GenWordPolynomial<C> numerator() {
+        return val;
+    }
+
+
+    /**
+     * Denominator. Returns 1.
+     * @see edu.jas.structure.QuotPair#denominator()
+     */
+    public GenWordPolynomial<C> denominator() {
+        return ring.ring.getONE();
     }
 
 
