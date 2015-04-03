@@ -554,6 +554,230 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
 
 
     /**
+     * GenSolvablePolynomial subtract a multiple.
+     * @param a coefficient.
+     * @param S GenSolvablePolynomial.
+     * @return this - a * S.
+     */
+    public GenSolvablePolynomial<C> subtractMultiple(C a, GenSolvablePolynomial<C> S) {
+        if (a == null||a.isZERO()) {
+            return this;
+        }
+        if (S == null||S.isZERO()) {
+            return this;
+        }
+        if (this.isZERO()) {
+            return S.multiplyLeft(a.negate());
+        }
+        assert (ring.nvar == S.ring.nvar);
+        GenSolvablePolynomial<C> n = this.copy();
+        SortedMap<ExpVector, C> nv = n.val;
+        SortedMap<ExpVector, C> sv = S.val;
+        for (Map.Entry<ExpVector, C> me : sv.entrySet()) {
+            ExpVector f = me.getKey();
+            C y = me.getValue(); // assert y != null
+            y = a.multiply(y);
+            C x = nv.get(f);
+            if (x != null) {
+                x = x.subtract(y);
+                if (!x.isZERO()) {
+                    nv.put(f, x);
+                } else {
+                    nv.remove(f);
+                }
+            } else if (!y.isZERO()) {
+                nv.put(f, y.negate());
+            }
+        }
+        return n;
+    }
+
+
+    /**
+     * GenSolvablePolynomial subtract a multiple.
+     * @param a coefficient.
+     * @param e exponent.
+     * @param S GenSolvablePolynomial.
+     * @return this - a * x<sup>e</sup> * S.
+     */
+    public GenSolvablePolynomial<C> subtractMultiple(C a, ExpVector e, GenSolvablePolynomial<C> S) {
+        if (a == null||a.isZERO()) {
+            return this;
+        }
+        if (S == null||S.isZERO()) {
+            return this;
+        }
+        if (this.isZERO()) {
+            return S.multiplyLeft(a.negate(), e);
+        }
+        assert (ring.nvar == S.ring.nvar);
+        GenSolvablePolynomial<C> n = this.copy();
+        SortedMap<ExpVector, C> nv = n.val;
+        GenSolvablePolynomial<C> s = S.multiplyLeft(e);
+        SortedMap<ExpVector, C> sv = s.val;
+        for (Map.Entry<ExpVector, C> me : sv.entrySet()) {
+            ExpVector f = me.getKey();
+            //f = e.sum(f);
+            C y = me.getValue(); // assert y != null
+            y = a.multiply(y);
+            C x = nv.get(f);
+            if (x != null) {
+                x = x.subtract(y);
+                if (!x.isZERO()) {
+                    nv.put(f, x);
+                } else {
+                    nv.remove(f);
+                }
+            } else if (!y.isZERO()) {
+                nv.put(f, y.negate());
+            }
+        }
+        return n;
+    }
+
+
+    /**
+     * GenSolvablePolynomial scale and subtract a multiple.
+     * @param b scale factor.
+     * @param a coefficient.
+     * @param S GenSolvablePolynomial.
+     * @return b * this - a * S.
+     */
+    //@Override
+    public GenSolvablePolynomial<C> scaleSubtractMultiple(C b, C a, GenSolvablePolynomial<C> S) {
+        if (a == null || S == null) {
+            return this.multiplyLeft(b);
+        }
+        if (a.isZERO() || S.isZERO()) {
+            return this.multiplyLeft(b);
+        }
+        if (this.isZERO() || b == null || b.isZERO()) {
+            return S.multiplyLeft(a.negate()); 
+        }
+        if (b.isONE()) {
+            return subtractMultiple(a, S);
+        }
+        assert (ring.nvar == S.ring.nvar);
+        GenSolvablePolynomial<C> n = this.multiplyLeft(b);
+        SortedMap<ExpVector, C> nv = n.val;
+        SortedMap<ExpVector, C> sv = S.val;
+        for (Map.Entry<ExpVector, C> me : sv.entrySet()) {
+            ExpVector f = me.getKey();
+            //f = e.sum(f);
+            C y = me.getValue(); // assert y != null
+            y = a.multiply(y); // now y can be zero
+            C x = nv.get(f);
+            if (x != null) {
+                x = x.subtract(y);
+                if (!x.isZERO()) {
+                    nv.put(f, x);
+                } else {
+                    nv.remove(f);
+                }
+            } else if (!y.isZERO()) {
+                nv.put(f, y.negate());
+            }
+        }
+        return n;
+    }
+
+
+    /**
+     * GenSolvablePolynomial scale and subtract a multiple.
+     * @param b scale factor.
+     * @param a coefficient.
+     * @param e exponent.
+     * @param S GenSolvablePolynomial.
+     * @return b * this - a * x<sup>e</sup> * S.
+     */
+    public GenSolvablePolynomial<C> scaleSubtractMultiple(C b, C a, ExpVector e, GenSolvablePolynomial<C> S) {
+        if (a == null || S == null) {
+            return this.multiplyLeft(b);
+        }
+        if (a.isZERO() || S.isZERO()) {
+            return this.multiplyLeft(b);
+        }
+        if (this.isZERO() || b == null || b.isZERO()) {
+            return S.multiplyLeft(a.negate(), e);
+        }
+        if (b.isONE()) {
+            return subtractMultiple(a, e, S);
+        }
+        assert (ring.nvar == S.ring.nvar);
+        GenSolvablePolynomial<C> n = this.multiplyLeft(b);
+        SortedMap<ExpVector, C> nv = n.val;
+        GenSolvablePolynomial<C> s = S.multiplyLeft(e);
+        SortedMap<ExpVector, C> sv = s.val;
+        for (Map.Entry<ExpVector, C> me : sv.entrySet()) {
+            ExpVector f = me.getKey();
+            //f = e.sum(f);
+            C y = me.getValue(); // assert y != null
+            y = a.multiply(y); // now y can be zero
+            C x = nv.get(f);
+            if (x != null) {
+                x = x.subtract(y);
+                if (!x.isZERO()) {
+                    nv.put(f, x);
+                } else {
+                    nv.remove(f);
+                }
+            } else if (!y.isZERO()) {
+                nv.put(f, y.negate());
+            }
+        }
+        return n;
+    }
+
+
+    /**
+     * GenSolvablePolynomial scale and subtract a multiple.
+     * @param b scale factor.
+     * @param g scale exponent.
+     * @param a coefficient.
+     * @param e exponent.
+     * @param S GenSolvablePolynomial.
+     * @return a * x<sup>g</sup> * this - a * x<sup>e</sup> * S.
+     */
+    public GenSolvablePolynomial<C> scaleSubtractMultiple(C b, ExpVector g, C a, ExpVector e, GenSolvablePolynomial<C> S) {
+        if (a == null || S == null) {
+            return this.multiplyLeft(b, g);
+        }
+        if (a.isZERO() || S.isZERO()) {
+            return this.multiplyLeft(b, g);
+        }
+        if (this.isZERO() || b == null || b.isZERO()) {
+            return S.multiplyLeft(a.negate(), e);
+        }
+        if (b.isONE() && g.isZERO()) {
+            return subtractMultiple(a, e, S);
+        }
+        assert (ring.nvar == S.ring.nvar);
+        GenSolvablePolynomial<C> n = this.multiplyLeft(b, g);
+        SortedMap<ExpVector, C> nv = n.val;
+        GenSolvablePolynomial<C> s = S.multiplyLeft(e);
+        SortedMap<ExpVector, C> sv = s.val;
+        for (Map.Entry<ExpVector, C> me : sv.entrySet()) {
+            ExpVector f = me.getKey();
+            //f = e.sum(f);
+            C y = me.getValue(); // assert y != null
+            y = a.multiply(y); // y can be zero now
+            C x = nv.get(f);
+            if (x != null) {
+                x = x.subtract(y);
+                if (!x.isZERO()) {
+                    nv.put(f, x);
+                } else {
+                    nv.remove(f);
+                }
+            } else if (!y.isZERO()) {
+                nv.put(f, y.negate());
+            }
+        }
+        return n;
+    }
+
+
+    /**
      * GenSolvablePolynomial left monic, i.e. leadingCoefficient == 1. If
      * leadingCoefficient is not invertible returns this unmodified.
      * @return monic(this).
