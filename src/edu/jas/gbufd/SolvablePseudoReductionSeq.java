@@ -110,13 +110,21 @@ public class SolvablePseudoReductionSeq<C extends RingElem<C>> extends SolvableR
                 //logger.info("red div = " + e);
                 Q = p[i].multiplyLeft(e);
                 C c = Q.leadingBaseCoefficient();
-                if (a.remainder(c).isZERO()) {
+                ExpVector g = S.leadingExpVector();
+                C ap = a;
+                if (a.remainder(c).isZERO()) { // && !c.isConstant()) {
                     a = a.divide(c);
-                    S = (GenSolvablePolynomial<C>) S.subtractMultiple(a, Q);
+                    S = S.subtractMultiple(a, Q);
                 } else {
-                    R = R.multiply(c);
-                    //S = S.multiply(c);
-                    S = (GenSolvablePolynomial<C>) S.scaleSubtractMultiple(c, a, Q);
+                    R = R.multiplyLeft(c);
+                    S = S.scaleSubtractMultiple(c, a, Q);
+                }
+                ExpVector h = S.leadingExpVector();
+                System.out.println("g = " + g + ", h = " + h);
+                System.out.println("c*ap = " + c.multiply(ap) + ", ap*c = " + ap.multiply(c));
+                if (g.equals(h)) {
+                    System.out.println("lc(S) = " + S.leadingBaseCoefficient());
+                    throw new RuntimeException("g.equals(h): a = " + a  + ", ap = " + ap + ", c = " + c);
                 }
                 //Q = p[i].multiply(a, e);
                 //S = S.subtract(Q);
@@ -199,25 +207,28 @@ public class SolvablePseudoReductionSeq<C extends RingElem<C>> extends SolvableR
                 Q = p[i].multiplyLeft(f);
                 GenPolynomial<C> c = Q.leadingBaseCoefficient();
                 //if (a.remainder(c).isZERO()) { //c.isUnit() ) {
-                if (PolyUtil.<C> baseSparsePseudoRemainder(a, c).isZERO()) {
+                ExpVector g = S.leadingExpVector();
+                if (PolyUtil.<C> baseSparsePseudoRemainder(a, c).isZERO() && !c.isConstant()) {
                     if (debug) {
                         logger.info("red c = " + c);
                     }
                     //a = a.divide(c);
                     b = PolyUtil.<C> basePseudoDivide(a, c);
-                    Sp = (GenSolvablePolynomial<GenPolynomial<C>>) S.subtractMultiple(b, Q);
+                    Sp = S.subtractMultiple(b, Q);
                     if (e.equals(Sp.leadingExpVector())) { // TODO: avoid
                         //throw new RuntimeException("degree not descending");
                         logger.info("degree not descending: S = " + S + ", Sp = " + Sp);
-                        R = R.multiply(c);
-                        //S = S.multiply(c);
-                        Sp = (GenSolvablePolynomial<GenPolynomial<C>>) S.scaleSubtractMultiple(c, a, Q);
+                        R = R.multiplyLeft(c);
+                        Sp = S.scaleSubtractMultiple(c, a, Q);
                     }
                     S = Sp;
                 } else {
-                    R = R.multiply(c);
-                    //S = S.multiply(c);
-                    S = (GenSolvablePolynomial<GenPolynomial<C>>) S.scaleSubtractMultiple(c, a, Q);
+                    R = R.multiplyLeft(c);
+                    S = S.scaleSubtractMultiple(c, a, Q);
+                }
+                ExpVector h = S.leadingExpVector();
+                if (g.equals(h)) {
+                    throw new RuntimeException("g.equals(h): " + S.leadingBaseCoefficient() + ", a = " + a);
                 }
                 //Q = p[i].multiply(a, e);
                 //S = S.subtract(Q);
@@ -300,20 +311,19 @@ public class SolvablePseudoReductionSeq<C extends RingElem<C>> extends SolvableR
                 C c = Q.leadingBaseCoefficient();
                 if (a.remainder(c).isZERO()) { //c.isUnit() ) {
                     a = a.divide(c);
-                    S = (GenSolvablePolynomial<C>) S.subtractMultiple(a, Q);
+                    S = S.subtractMultiple(a, Q);
                     //System.out.print("|");
                 } else {
                     //System.out.print("*");
-                    R = R.multiply(c);
-                    //S = S.multiply(c);
-                    S = (GenSolvablePolynomial<C>) S.scaleSubtractMultiple(c, a, Q);
+                    R = R.multiplyLeft(c);
+                    S = S.scaleSubtractMultiple(c, a, Q);
                 }
                 //Q = p[i].multiply(a, e);
                 //S = S.subtract(Q);
                 fac = row.get(i);
                 if (fac == null) {
                     fac = (GenSolvablePolynomial<C>) zero.sum(a, e);
-                } else {
+                } else { // doAddTo ??
                     fac = (GenSolvablePolynomial<C>) fac.sum(a, e);
                 }
                 row.set(i, fac);
@@ -398,12 +408,11 @@ public class SolvablePseudoReductionSeq<C extends RingElem<C>> extends SolvableR
                 C c = Q.leadingBaseCoefficient();
                 if (a.remainder(c).isZERO()) {
                     a = a.divide(c);
-                    S = (GenSolvablePolynomial<C>) S.subtractMultiple(a, Q);
+                    S = S.subtractMultiple(a, Q);
                 } else {
-                    mfac = mfac.multiply(c);
-                    R = R.multiply(c);
-                    //S = S.multiply(c);
-                    S = (GenSolvablePolynomial<C>) S.scaleSubtractMultiple(c, a, Q);
+                    mfac = c.multiply(mfac); // left
+                    R = R.multiplyLeft(c);
+                    S = S.scaleSubtractMultiple(c, a, Q);
                 }
                 //Q = p[i].multiply(a, e);
                 //S = S.subtract(Q);
@@ -489,12 +498,12 @@ public class SolvablePseudoReductionSeq<C extends RingElem<C>> extends SolvableR
                 C c = Q.leadingBaseCoefficient();
                 if (a.remainder(c).isZERO()) {
                     a = a.divide(c); // left?
-                    //S = (GenSolvablePolynomial<C>) S.subtractMultiple(a, Q);
+                    //S = S.subtractMultiple(Q,a);
                     S = (GenSolvablePolynomial<C>) S.subtract(Q.multiply(a));
                 } else {
                     R = R.multiply(c);
                     S = S.multiply(c);
-                    //S = (GenSolvablePolynomial<C>) S.scaleSubtractMultiple(c, a, Q);
+                    //S = S.scaleSubtractMultiple(c, Q, a);
                     S = (GenSolvablePolynomial<C>) S.subtract(Q.multiply(a));
                 }
                 //Q = p[i].multiply(a, e);
