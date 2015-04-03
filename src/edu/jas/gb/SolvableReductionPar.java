@@ -112,7 +112,7 @@ public class SolvableReductionPar<C extends RingElem<C>> extends SolvableReducti
                 a = a.divide(Q.leadingBaseCoefficient());
                 //Q = Q.multiplyLeft(a);
                 //S = (GenSolvablePolynomial<C>) S.subtract(Q);
-                S = (GenSolvablePolynomial<C>) S.subtractMultiple(a,Q);
+                S = S.subtractMultiple(a,Q);
             }
         }
         return R;
@@ -206,11 +206,11 @@ public class SolvableReductionPar<C extends RingElem<C>> extends SolvableReducti
             } else {
                 //logger.debug("red");
                 e = e.subtract(f);
-                Q = p.multiply(e); // p * (a e) todo
+                Q = p.multiply(e); // p * (a e) TODO
                 a = a.divide(Q.leadingBaseCoefficient());
-                Q = Q.multiply(a);
+                Q = Q.multiply(a); // p * (e a) !!
                 S = (GenSolvablePolynomial<C>) S.subtract(Q);
-                //S = (GenSolvablePolynomial<C>) S.subtractMultiple(a, Q);
+                //S = S.subtractMultiple(Q, a);
             }
         }
         return R;
