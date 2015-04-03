@@ -120,9 +120,9 @@ public class SolvablePseudoReductionSeq<C extends RingElem<C>> extends SolvableR
                     S = S.scaleSubtractMultiple(c, a, Q);
                 }
                 ExpVector h = S.leadingExpVector();
-                System.out.println("g = " + g + ", h = " + h);
-                System.out.println("c*ap = " + c.multiply(ap) + ", ap*c = " + ap.multiply(c));
                 if (g.equals(h)) {
+                    System.out.println("g = " + g + ", h = " + h);
+                    System.out.println("c*ap = " + c.multiply(ap) + ", ap*c = " + ap.multiply(c));
                     System.out.println("lc(S) = " + S.leadingBaseCoefficient());
                     throw new RuntimeException("g.equals(h): a = " + a  + ", ap = " + ap + ", c = " + c);
                 }
@@ -208,6 +208,7 @@ public class SolvablePseudoReductionSeq<C extends RingElem<C>> extends SolvableR
                 GenPolynomial<C> c = Q.leadingBaseCoefficient();
                 //if (a.remainder(c).isZERO()) { //c.isUnit() ) {
                 ExpVector g = S.leadingExpVector();
+                GenPolynomial<C> ap = a;
                 if (PolyUtil.<C> baseSparsePseudoRemainder(a, c).isZERO() && !c.isConstant()) {
                     if (debug) {
                         logger.info("red c = " + c);
@@ -228,9 +229,11 @@ public class SolvablePseudoReductionSeq<C extends RingElem<C>> extends SolvableR
                 }
                 ExpVector h = S.leadingExpVector();
                 if (g.equals(h)) {
-                    throw new RuntimeException("g.equals(h): " + S.leadingBaseCoefficient() + ", a = " + a);
+                    System.out.println("g = " + g + ", h = " + h);
+                    System.out.println("c*ap = " + c.multiply(ap) + ", ap*c = " + ap.multiply(c));
+                    System.out.println("lc(S) = " + S.leadingBaseCoefficient());
+                    throw new RuntimeException("g.equals(h): a = " + a  + ", ap = " + ap + ", c = " + c);
                 }
-                //Q = p[i].multiply(a, e);
                 //S = S.subtract(Q);
             }
         }
@@ -309,6 +312,8 @@ public class SolvablePseudoReductionSeq<C extends RingElem<C>> extends SolvableR
                 //logger.info("red div = " + e);
                 Q = p[i].multiplyLeft(e);
                 C c = Q.leadingBaseCoefficient();
+                ExpVector g = S.leadingExpVector();
+                C ap = a;
                 if (a.remainder(c).isZERO()) { //c.isUnit() ) {
                     a = a.divide(c);
                     S = S.subtractMultiple(a, Q);
@@ -317,6 +322,11 @@ public class SolvablePseudoReductionSeq<C extends RingElem<C>> extends SolvableR
                     //System.out.print("*");
                     R = R.multiplyLeft(c);
                     S = S.scaleSubtractMultiple(c, a, Q);
+                }
+                ExpVector h = S.leadingExpVector();
+                if (g.equals(h)) {
+                    System.out.println("lc(S) = " + S.leadingBaseCoefficient());
+                    throw new RuntimeException("g.equals(h): a = " + a  + ", ap = " + ap + ", c = " + c);
                 }
                 //Q = p[i].multiply(a, e);
                 //S = S.subtract(Q);
@@ -406,6 +416,8 @@ public class SolvablePseudoReductionSeq<C extends RingElem<C>> extends SolvableR
                 //logger.info("red div = " + e);
                 Q = p[i].multiplyLeft(e);
                 C c = Q.leadingBaseCoefficient();
+                ExpVector g = S.leadingExpVector();
+                C ap = a;
                 if (a.remainder(c).isZERO()) {
                     a = a.divide(c);
                     S = S.subtractMultiple(a, Q);
@@ -413,6 +425,11 @@ public class SolvablePseudoReductionSeq<C extends RingElem<C>> extends SolvableR
                     mfac = c.multiply(mfac); // left
                     R = R.multiplyLeft(c);
                     S = S.scaleSubtractMultiple(c, a, Q);
+                }
+                ExpVector h = S.leadingExpVector();
+                if (g.equals(h)) {
+                    System.out.println("lc(S) = " + S.leadingBaseCoefficient());
+                    throw new RuntimeException("g.equals(h): a = " + a  + ", ap = " + ap + ", c = " + c);
                 }
                 //Q = p[i].multiply(a, e);
                 //S = S.subtract(Q);
@@ -496,6 +513,8 @@ public class SolvablePseudoReductionSeq<C extends RingElem<C>> extends SolvableR
                 Q = p[i].multiply(e);
                 assert Q.multiply(a).equals(Q.multiplyLeft(a));
                 C c = Q.leadingBaseCoefficient();
+                ExpVector g = S.leadingExpVector();
+                C ap = a;
                 if (a.remainder(c).isZERO()) {
                     a = a.divide(c); // left?
                     //S = S.subtractMultiple(Q,a);
@@ -505,6 +524,11 @@ public class SolvablePseudoReductionSeq<C extends RingElem<C>> extends SolvableR
                     S = S.multiply(c);
                     //S = S.scaleSubtractMultiple(c, Q, a);
                     S = (GenSolvablePolynomial<C>) S.subtract(Q.multiply(a));
+                }
+                ExpVector h = S.leadingExpVector();
+                if (g.equals(h)) {
+                    System.out.println("lc(S) = " + S.leadingBaseCoefficient());
+                    throw new RuntimeException("g.equals(h): a = " + a  + ", ap = " + ap + ", c = " + c);
                 }
                 //Q = p[i].multiply(a, e);
                 //S = S.subtract(Q);
