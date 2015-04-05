@@ -1421,6 +1421,10 @@ java_import "edu.jas.poly.RecSolvablePolynomial";
 java_import "edu.jas.poly.RecSolvablePolynomialRing";
 java_import "edu.jas.poly.GenWordPolynomial";
 java_import "edu.jas.poly.GenWordPolynomialRing";
+java_import "edu.jas.poly.RecSolvableWordPolynomial";
+java_import "edu.jas.poly.RecSolvableWordPolynomialRing";
+java_import "edu.jas.poly.QLRSolvablePolynomial";
+java_import "edu.jas.poly.QLRSolvablePolynomialRing";
 java_import "edu.jas.poly.GenPolynomialTokenizer";
 java_import "edu.jas.poly.TermOrder";
 java_import "edu.jas.poly.OrderedPolynomialList";
@@ -1959,8 +1963,6 @@ java_import "edu.jas.application.ResidueSolvablePolynomial";
 java_import "edu.jas.application.ResidueSolvablePolynomialRing";
 java_import "edu.jas.application.LocalSolvablePolynomial";
 java_import "edu.jas.application.LocalSolvablePolynomialRing";
-java_import "edu.jas.poly.QLRSolvablePolynomial";
-java_import "edu.jas.poly.QLRSolvablePolynomialRing";
 
 
 =begin rdoc
@@ -3409,7 +3411,9 @@ Solvable polynomial ring constructor.
               @ring = ring;
            end
         end
-        if not @ring.isAssociative()
+        if @ring.isAssociative()
+           puts "ring is associative";
+        else
            puts "warning: ring is not associative";
         end
         #puts "SolvableRing to super()";
@@ -3518,6 +3522,9 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
         if order.is_a? TermOrder
             to = order;
         end
+        if order.is_a? Array # ruby has no keyword params
+            rel = order;
+        end
         ll = [];
         for x in rel
             if x.is_a? RingElem
@@ -3527,11 +3534,20 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
         end
         constSolv = false;
         (0..ll.size-1).step(3) { |i|
+            #puts "ll[i+1] = #{ll[i+1]}"
             if ll[i+1].isConstant()
                constSolv = true;
             end
 	}
+        puts "constSolv = #{constSolv}"
+        cfs = cf.toScript();
+        if cfs[0] == "0"
+           cfs = cf.toScriptFactory();
+        end
+        puts "cf = #{cfs}"
         recSolv = cf.is_a? GenPolynomialRing
+        recSolvWord = cf.is_a? GenWordPolynomialRing
+        resWord = cf.is_a? WordResidueRing
         quotSolv = cf.is_a? SolvableQuotientRing
         resSolv = cf.is_a? SolvableResidueRing
         locSolv = cf.is_a? SolvableLocalRing
@@ -3541,81 +3557,102 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
         end
         #puts "cf = " + cf.getClass().to_s + ", quotSolv = " + quotSolv.to_s + ", recSolv = " + recSolv.to_s;
         if recSolv
-           puts "RecSolvablePolynomialRing: " + cf.toScript();
+           puts "RecSolvablePolynomialRing: " + cfs;
            ring = RecSolvablePolynomialRing.new(cf,nv,to,names);
            table = ring.table;
            coeffTable = ring.coeffTable;
+        elsif recSolvWord
+           puts "RecSolvableWordPolynomialRing: " + cfs;
+           ring = RecSolvableWordPolynomialRing.new(cf,nv,to,names);
+           table = ring.table;
+           coeffTable = ring.coeffTable;
+        elsif resWord
+           puts "ResWordSolvablePolynomialRing: " + cfs;
+           ring = GenSolvablePolynomialRing.new(cf,nv,to,names);
+           #ring = RecSolvableWordPolynomialRing.new(cf,nv,to,names);
+           #ring = QLRSolvablePolynomialRing.new(cf,nv,to,names);
+           puts "ring = #{ring.toScript()}";
+           table = ring.table;
+           #coeffTable = ring.polCoeff.coeffTable;
+           #coeffTable = ring.coeffTable;
         elsif resSolv
-           puts "ResidueSolvablePolynomialRing: " + cf.toScript();
+           puts "ResidueSolvablePolynomialRing: " + cfs;
            #ring = ResidueSolvablePolynomialRing.new(cf,nv,to,names);
            ring = QLRSolvablePolynomialRing.new(cf,nv,to,names);
            table = ring.table;
            coeffTable = ring.polCoeff.coeffTable;
         elsif quotSolv
-           puts "QuotSolvablePolynomialRing: " + cf.toScript();
+           puts "QuotSolvablePolynomialRing: " + cfs;
            #ring = QuotSolvablePolynomialRing.new(cf,nv,to,names);
            ring = QLRSolvablePolynomialRing.new(cf,nv,to,names);
            table = ring.table;
            coeffTable = ring.polCoeff.coeffTable;
         elsif locSolv
-           puts "LocalSolvablePolynomialRing: " + cf.toScript();
+           puts "LocalSolvablePolynomialRing: " + cfs;
            #ring = LocalSolvablePolynomialRing.new(cf,nv,to,names);
            ring = QLRSolvablePolynomialRing.new(cf,nv,to,names);
            table = ring.table;
            coeffTable = ring.polCoeff.coeffTable;
         elsif locresSolv
-           puts "QLRSolvablePolynomialRing: " + cf.toScript();
+           puts "QLRSolvablePolynomialRing: " + cfs;
            ring = QLRSolvablePolynomialRing.new(cf,nv,to,names);
            table = ring.table;
            coeffTable = ring.polCoeff.coeffTable;
         else
-           puts "GenSolvablePolynomialRing: " + cf.toScript();
+           puts "GenSolvablePolynomialRing: " + cfs;
            ring = GenSolvablePolynomialRing.new(cf,nv,to,names);
            table = ring.table;
            coeffTable = table;
         end
-        if ll != []
-            #puts "ll = " + str(ll);
-	    (0..ll.size-1).step(3) { |i|
-                puts "adding relation: " + str(ll[i]) + " * " + str(ll[i+1]) + " = " + str(ll[i+2]);
-                if recSolv and ll[i+1].isConstant() 
-                   #puts "r coeff type " + str(ll[i].class);
-                   coeffTable.update( ll[i], ll[i+1].leadingBaseCoefficient(), ll[i+2] );
-                elsif resSolv and ll[i+1].isConstant() 
-                   #puts "ri coeff type " + str(ll[i].class);
-                   coeffTable.update( ring.toPolyCoefficients(ll[i]),
-                                      ring.toPolyCoefficients(ll[i+1]), 
-                                      ring.toPolyCoefficients(ll[i+2]) );
-                elsif quotSolv and ll[i+1].isConstant() 
-                   #puts "q coeff type " + str(ll[i].class);
-                   coeffTable.update( ring.toPolyCoefficients(ll[i]), 
-                                      ring.toPolyCoefficients(ll[i+1]), 
-                                      ring.toPolyCoefficients(ll[i+2]) );
-                elsif locSolv and ll[i+1].isConstant() 
-                   #puts "l coeff type " + str(ll[i].class);
-                   coeffTable.update( ring.toPolyCoefficients(ll[i]),
-                                      ring.toPolyCoefficients(ll[i+1]), 
-                                      ring.toPolyCoefficients(ll[i+2]) );
-                elsif locresSolv and ll[i+1].isConstant() 
-                   puts "lr coeff type " + str(ll[i].class);
-                   coeffTable.update( ring.toPolyCoefficients(ll[i]),
-                                      ring.toPolyCoefficients(ll[i+1]), 
-                                      ring.toPolyCoefficients(ll[i+2]) );
-                else 
-                   #puts "ll[i], ll[i+1], ll[i+2]: " + str(ll[i]) + ", " + str(ll[i+1]) + ", " + str(ll[i+2]);
-                   #puts "poly type " + str(ll[i].class);
-                   table.update( ll[i], ll[i+1], ll[i+2] );
-                   if (locresSolv or locSolv or quotSolv or resSolv) and (not ll[i+1].isConstant())
-                      #puts "ring.polCoeff.table " + str(ring.polCoeff.table.toScript());
-                      ring.polCoeff.table.update( ring.toPolyCoefficients(ll[i]),
-                                                  ring.toPolyCoefficients(ll[i+1]), 
-                                                  ring.toPolyCoefficients(ll[i+2]) );
-                   end
+        #puts "ll = " + str(ll);
+        (0..ll.size-1).step(3) { |i|
+            puts "adding relation: " + str(ll[i]) + " * " + str(ll[i+1]) + " = " + str(ll[i+2]);
+            if ll[i+1].isConstant() 
+               if recSolv
+                  #puts "r coeff type " + str(ll[i].class);
+                  #coeffTable.update( ll[i], ll[i+1].leadingBaseCoefficient(), ll[i+2] );
+                  coeffTable.update( ll[i], ll[i+1], ll[i+2] );
+               elsif recSolvWord
+                  #puts "rw coeff type " + str(ll[i].class);
+                  coeffTable.update( ll[i], ll[i+1], ll[i+2] );
+               elsif resWord
+                  #puts "rw coeff type " + str(ll[i].class);
+                  ##coeffTable.update( ll[i], ll[i+1], ll[i+2] );
+               elsif resSolv
+                  #puts "ri coeff type " + str(ll[i].class);
+                  coeffTable.update( ring.toPolyCoefficients(ll[i]),
+                                     ring.toPolyCoefficients(ll[i+1]), 
+                                     ring.toPolyCoefficients(ll[i+2]) );
+                elsif quotSolv
+                  #puts "q coeff type " + str(ll[i].class);
+                  coeffTable.update( ring.toPolyCoefficients(ll[i]), 
+                                     ring.toPolyCoefficients(ll[i+1]), 
+                                     ring.toPolyCoefficients(ll[i+2]) );
+                elsif locSolv
+                  #puts "l coeff type " + str(ll[i].class);
+                  coeffTable.update( ring.toPolyCoefficients(ll[i]),
+                                     ring.toPolyCoefficients(ll[i+1]), 
+                                     ring.toPolyCoefficients(ll[i+2]) );
+                elsif locresSolv
+                  #puts "lr coeff type " + str(ll[i].class);
+                  coeffTable.update( ring.toPolyCoefficients(ll[i]),
+                                     ring.toPolyCoefficients(ll[i+1]), 
+                                     ring.toPolyCoefficients(ll[i+2]) );
                 end
-	    }
-            #puts "ring " + ring.toScript();
-            #puts "isAssoc " + str(ring.isAssociative());
-        end
+            else # no coeff relation
+                puts "ll[i], ll[i+1], ll[i+2]: " + str(ll[i]) + ", " + str(ll[i+1]) + ", " + str(ll[i+2]);
+                #puts "poly type " + str(ll[i].class);
+                table.update( ll[i], ll[i+1], ll[i+2] );
+                if locresSolv or locSolv or quotSolv or resSolv or resWord
+                   #puts "ring.polCoeff.table " + str(ring.polCoeff.table.toScript());
+                   ring.polCoeff.table.update( ring.toPolyCoefficients(ll[i]),
+                                               ring.toPolyCoefficients(ll[i+1]), 
+                                               ring.toPolyCoefficients(ll[i+2]) );
+                end
+            end
+	}
+        #puts "ring " + ring.toScript();
+        #puts "isAssoc " + str(ring.isAssociative());
         @ring = ring;
         #puts "SolvPolyRing to super()";
         super("",@ring) 
@@ -3714,13 +3751,13 @@ Compute a left Groebner base.
         ff = @pset.list;
         kind = "";
         t = System.currentTimeMillis();
-        if cofac.isField() or not cofac.isCommutative()
-           gg = SolvableGroebnerBaseSeq.new().leftGB(ff);
-           kind = "field|nocom"
+        if cofac.is_a? GenPolynomialRing #and cofac.isCommutative()
+           gg = SolvableGroebnerBasePseudoRecSeq.new(cofac).leftGB(ff);
+           kind = "pseudorec"
         else 
-           if cofac.is_a? GenPolynomialRing and cofac.isCommutative()
-              gg = SolvableGroebnerBasePseudoRecSeq.new(cofac).leftGB(ff);
-              kind = "pseudorec"
+           if cofac.isField() or not cofac.isCommutative()
+              gg = SolvableGroebnerBaseSeq.new().leftGB(ff);
+              kind = "field|nocom"
            else
               gg = SolvableGroebnerBasePseudoSeq.new(cofac).leftGB(ff);
               kind = "pseudo"
@@ -3739,13 +3776,13 @@ Test if this is a left Groebner base.
         ff = @pset.list;
         kind = "";
         t = System.currentTimeMillis();
-        if cofac.isField() or not cofac.isCommutative()
-           b = SolvableGroebnerBaseSeq.new().isLeftGB(ff);
-           kind = "field|nocom"
+        if cofac.is_a? GenPolynomialRing #and cofac.isCommutative()
+           b = SolvableGroebnerBasePseudoRecSeq.new(cofac).isLeftGB(ff);
+           kind = "pseudorec"
         else 
-           if cofac.is_a? GenPolynomialRing and cofac.isCommutative()
-              b = SolvableGroebnerBasePseudoRecSeq.new(cofac).isLeftGB(ff);
-              kind = "pseudorec"
+           if cofac.isField() or not cofac.isCommutative()
+              b = SolvableGroebnerBaseSeq.new().isLeftGB(ff);
+              kind = "field|nocom"
            else
               b = SolvableGroebnerBasePseudoSeq.new(cofac).isLeftGB(ff);
               kind = "pseudo"
@@ -3764,13 +3801,13 @@ Compute a two-sided Groebner base.
         ff = @pset.list;
         kind = "";
         t = System.currentTimeMillis();
-        if cofac.isField() or not cofac.isCommutative()
-           gg = SolvableGroebnerBaseSeq.new().twosidedGB(ff);
-           kind = "field|nocom"
+        if cofac.is_a? GenPolynomialRing #and cofac.isCommutative()
+           gg = SolvableGroebnerBasePseudoRecSeq.new(cofac).twosidedGB(ff);
+           kind = "pseudorec"
         else 
-           if cofac.is_a? GenPolynomialRing and cofac.isCommutative()
-              gg = SolvableGroebnerBasePseudoRecSeq.new(cofac).twosidedGB(ff);
-              kind = "pseudorec"
+           if cofac.isField() or not cofac.isCommutative()
+              gg = SolvableGroebnerBaseSeq.new().twosidedGB(ff);
+              kind = "field|nocom"
            else
               gg = SolvableGroebnerBasePseudoSeq.new(cofac).twosidedGB(ff);
               kind = "pseudo"
@@ -3789,14 +3826,14 @@ Test if this is a two-sided Groebner base.
         ff = @pset.list;
         kind = "";
         t = System.currentTimeMillis();
-        if cofac.isField() or not cofac.isCommutative()
-           b = SolvableGroebnerBaseSeq.new().isTwosidedGB(ff);
-           kind = "field|nocom"
-        else 
-           if cofac.is_a? GenPolynomialRing and cofac.isCommutative()
-              b = SolvableGroebnerBasePseudoRecSeq.new(cofac).isTwosidedGB(ff);
-              kind = "pseudorec"
-           else
+        if cofac.is_a? GenPolynomialRing #and cofac.isCommutative()
+           b = SolvableGroebnerBasePseudoRecSeq.new(cofac).isTwosidedGB(ff);
+           kind = "pseudorec"
+        else
+           if cofac.isField() or not cofac.isCommutative()
+              b = SolvableGroebnerBaseSeq.new().isTwosidedGB(ff);
+              kind = "field|nocom"
+           else 
               b = SolvableGroebnerBasePseudoSeq.new(cofac).isTwosidedGB(ff);
               kind = "pseudo"
            end
@@ -3814,14 +3851,14 @@ Compute a right Groebner base.
         ff = @pset.list;
         kind = "";
         t = System.currentTimeMillis();
-        if cofac.isField() or not cofac.isCommutative()
-           gg = SolvableGroebnerBaseSeq.new().rightGB(ff);
-           kind = "field|nocom"
-        else 
-           if cofac.is_a? GenPolynomialRing and cofac.isCommutative()
-              gg = SolvableGroebnerBasePseudoRecSeq.new(cofac).rightGB(ff);
-              kind = "pseudorec"
-           else
+        if cofac.is_a? GenPolynomialRing #and cofac.isCommutative()
+           gg = SolvableGroebnerBasePseudoRecSeq.new(cofac).rightGB(ff);
+           kind = "pseudorec"
+        else
+           if cofac.isField() or not cofac.isCommutative()
+              gg = SolvableGroebnerBaseSeq.new().rightGB(ff);
+              kind = "field|nocom"
+           else 
               gg = SolvableGroebnerBasePseudoSeq.new(cofac).rightGB(ff);
               kind = "pseudo"
            end
@@ -3839,14 +3876,14 @@ Test if this is a right Groebner base.
         ff = @pset.list;
         kind = "";
         t = System.currentTimeMillis();
-        if cofac.isField() or not cofac.isCommutative()
-           b = SolvableGroebnerBaseSeq.new().isRightGB(ff);
-           kind = "field|nocom"
-        else 
-           if cofac.is_a? GenPolynomialRing and cofac.isCommutative()
-              b = SolvableGroebnerBasePseudoRecSeq.new(cofac).isRightGB(ff);
-              kind = "pseudorec"
-           else
+        if cofac.is_a? GenPolynomialRing #and cofac.isCommutative()
+           b = SolvableGroebnerBasePseudoRecSeq.new(cofac).isRightGB(ff);
+           kind = "pseudorec"
+        else
+           if cofac.isField() or not cofac.isCommutative()
+              b = SolvableGroebnerBaseSeq.new().isRightGB(ff);
+              kind = "field|nocom"
+           else 
               b = SolvableGroebnerBasePseudoSeq.new(cofac).isRightGB(ff);
               kind = "pseudo"
            end

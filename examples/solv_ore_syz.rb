@@ -93,3 +93,17 @@ puts;
 
 puts "is right syzygy: " + str(smr.isRightSyzygy(sgr));
 puts;
+
+
+
+smr = smr.rightGB();
+puts "seq right module GB: sgl = " + str(smr);
+puts
+
+smr = smr.rightSyzygy();
+puts "right syzygy: smr = " + str(smr);
+puts;
+
+smr = smr.rightSyzygy();
+puts "right syzygy: smr = " + str(smr);
+puts;

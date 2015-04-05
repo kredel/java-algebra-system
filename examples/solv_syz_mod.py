@@ -16,10 +16,12 @@ startLog();
 mod=32003; 
 #mod=536870909; 
 #mod=1152921504606846883;
-#GF(mod)
+
+coeff = GF(mod)
+#coeff = QQ()
 
 p = PolyRing( 
-        RF(PolyRing(GF(mod),"b1,c1",PolyRing.lex)), 
+        RF(PolyRing(coeff,"b1,c1",PolyRing.lex)), 
         "E,D1,D2,D3",PolyRing.grad);
 print "PolyRing: " + str(p);
 print;
@@ -34,7 +36,7 @@ print "relations: = " + str([ str(f) for f in relations ]);
 print;
 
 rp = SolvPolyRing( 
-         RF(PolyRing(GF(mod),"b1,c1",PolyRing.lex)),
+         RF(PolyRing(coeff,"b1,c1",PolyRing.lex)),
          "E,D1,D2,D3",PolyRing.grad,relations);
 print "SolvPolyRing: rp = " + str(rp);
 print;
@@ -154,4 +156,4 @@ else:
 print;
 
 terminate();
-sys.exit(); # for parallel 
+#sys.exit(); # for parallel 

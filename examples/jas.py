@@ -17,6 +17,7 @@ from edu.jas.arith       import BigInteger, BigRational, BigComplex, BigDecimal,
 from edu.jas.poly        import GenPolynomial, GenPolynomialRing, Monomial,\
                                 GenSolvablePolynomial, GenSolvablePolynomialRing,\
                                 RecSolvablePolynomial, RecSolvablePolynomialRing,\
+                                RecSolvableWordPolynomial, RecSolvableWordPolynomialRing,\
                                 QLRSolvablePolynomial, QLRSolvablePolynomialRing,\
                                 GenWordPolynomial, GenWordPolynomialRing,\
                                 ExpVector,\
@@ -1218,6 +1219,8 @@ class SolvableRing(Ring):
               self.ring = ring;
         if not self.ring.isAssociative():
            print "warning: ring is not associative";
+        else:
+           print "ring is associative";
         Ring.__init__(self,ring=self.ring)
 
     def __str__(self):
@@ -3892,7 +3895,12 @@ class SolvPolyRing(SolvableRing):
             #print "L[i+1] = " + str(L[i+1]);
             if L[i+1].isConstant():
                constSolv = True;
+        cfs = cf.toScript();
+        if cfs[0] == "0":
+           cfs = cf.toScriptFactory();
         recSolv = isinstance(cf,GenPolynomialRing);
+        recSolvWord = isinstance(cf,GenWordPolynomialRing);
+        resWord = isinstance(cf,WordResidueRing);
         quotSolv = isinstance(cf,SolvableQuotientRing);
         resSolv = isinstance(cf,SolvableResidueRing);
         locSolv = isinstance(cf,SolvableLocalRing);
@@ -3911,60 +3919,83 @@ class SolvPolyRing(SolvableRing):
                 table = ring.table;
                 coeffTable = ring.polCoeff.coeffTable;
             else:
-                if quotSolv:
-                    #ring = QuotSolvablePolynomialRing(cf,nv,to,names);
-                    ring = QLRSolvablePolynomialRing(cf,nv,to,names);
-                    table = ring.table;
-                    coeffTable = ring.polCoeff.coeffTable;
+                if recSolvWord:
+                   print "RecSolvableWordPolynomialRing: " + cfs;
+                   ring = RecSolvableWordPolynomialRing(cf,nv,to,names);
+                   table = ring.table;
+                   coeffTable = ring.coeffTable;
                 else:
-                    if locSolv:
-                        #ring = LocalSolvablePolynomialRing(cf,nv,to,names);
-                        ring = QLRSolvablePolynomialRing(cf,nv,to,names);
-                        table = ring.table;
-                        coeffTable = ring.polCoeff.coeffTable;
-                    else:
-                        if locresSolv:
+                   if resWord:
+                      print "ResWordSolvablePolynomialRing: " + cfs;
+                      ring = GenSolvablePolynomialRing.new(cf,nv,to,names);
+                      #ring = RecSolvableWordPolynomialRing.new(cf,nv,to,names);
+                      #ring = QLRSolvablePolynomialRing.new(cf,nv,to,names);
+                      print "ring = " + str(ring.toScript());
+                      table = ring.table;
+                      #coeffTable = ring.polCoeff.coeffTable;
+                      #coeffTable = ring.coeffTable;
+                   else:
+                      if quotSolv:
+                         #ring = QuotSolvablePolynomialRing(cf,nv,to,names);
+                         ring = QLRSolvablePolynomialRing(cf,nv,to,names);
+                         table = ring.table;
+                         coeffTable = ring.polCoeff.coeffTable;
+                      else:
+                         if locSolv:
+                            #ring = LocalSolvablePolynomialRing(cf,nv,to,names);
                             ring = QLRSolvablePolynomialRing(cf,nv,to,names);
                             table = ring.table;
                             coeffTable = ring.polCoeff.coeffTable;
-                        else:
-                            ring = GenSolvablePolynomialRing(cf,nv,to,names);
-                            table = ring.table;
-                            coeffTable = table;
-        if L != []:
-            #print "rel = " + str(L);
-            for i in range(0,len(L),3):
-                print "adding relation: " + str(L[i]) + " * " + str(L[i+1]) + " = " + str(L[i+2]);
-                if recSolv and L[i+1].isConstant():
-                    coeffTable.update( L[i], L[i+1], L[i+2] );
-                else: 
-                    if resSolv and L[i+1].isConstant():
-                        coeffTable.update(ring.toPolyCoefficients(L[i]), 
-                                          ring.toPolyCoefficients(L[i+1]), 
-                                          ring.toPolyCoefficients(L[i+2]) );
-                    else:
-                        if quotSolv and L[i+1].isConstant():
-                            coeffTable.update(ring.toPolyCoefficients(L[i]), 
-                                              ring.toPolyCoefficients(L[i+1]), 
-                                              ring.toPolyCoefficients(L[i+2]) );
-                        else:
-                            if locSolv and L[i+1].isConstant():
-                                coeffTable.update(ring.toPolyCoefficients(L[i]), 
-                                                  ring.toPolyCoefficients(L[i+1]), 
-                                                  ring.toPolyCoefficients(L[i+2]) );
+                         else:
+                            if locresSolv:
+                               ring = QLRSolvablePolynomialRing(cf,nv,to,names);
+                               table = ring.table;
+                               coeffTable = ring.polCoeff.coeffTable;
                             else:
-                                if locresSolv and L[i+1].isConstant():
+                               ring = GenSolvablePolynomialRing(cf,nv,to,names);
+                               table = ring.table;
+                               coeffTable = table;
+        #print "rel = " + str(L);
+        for i in range(0,len(L),3):
+            print "adding relation: " + str(L[i]) + " * " + str(L[i+1]) + " = " + str(L[i+2]);
+            if L[i+1].isConstant():
+               if recSolv:
+                  coeffTable.update( L[i], L[i+1], L[i+2] );
+               else: 
+                  if resSolv:
+                     coeffTable.update(ring.toPolyCoefficients(L[i]), 
+                                       ring.toPolyCoefficients(L[i+1]), 
+                                       ring.toPolyCoefficients(L[i+2]) );
+                  else:
+                     if recSolvWord:
+                        coeffTable.update(L[i],L[i+1],L[i+2]);
+                     else:
+                        if resWord:
+                           print "cf = " + cfs;
+                           #coeffTable.update(L[i],L[i+1],L[i+2]);
+                        else: 
+                           if quotSolv:
+                              coeffTable.update(ring.toPolyCoefficients(L[i]), 
+                                                ring.toPolyCoefficients(L[i+1]), 
+                                                ring.toPolyCoefficients(L[i+2]) );
+                           else:
+                              if locSolv:
+                                 coeffTable.update(ring.toPolyCoefficients(L[i]), 
+                                                   ring.toPolyCoefficients(L[i+1]), 
+                                                   ring.toPolyCoefficients(L[i+2]) );
+                              else:
+                                 if locresSolv:
                                     coeffTable.update(ring.toPolyCoefficients(L[i]), 
                                                       ring.toPolyCoefficients(L[i+1]), 
                                                       ring.toPolyCoefficients(L[i+2]) );
-                                else:
-                                    #print "L[i], L[i+1], L[i+2]: " + str(L[i]) + ", " + str(L[i+1]) + ", " + str(L[i+2]);
-                                    table.update( L[i], L[i+1], L[i+2] );
-                                    if (locresSolv or locSolv or quotSolv or resSolv) and (not L[i+1].isConstant()):
-                                        #print "ring.polCoeff.table " + str(ring.polCoeff.table.toScript());
-                                        ring.polCoeff.table.update( ring.toPolyCoefficients(L[i]),
-                                                                    ring.toPolyCoefficients(L[i+1]), 
-                                                                    ring.toPolyCoefficients(L[i+2]) );
+            else:
+                #print "L[i], L[i+1], L[i+2]: " + str(L[i]) + ", " + str(L[i+1]) + ", " + str(L[i+2]);
+                table.update( L[i], L[i+1], L[i+2] );
+                if locresSolv or locSolv or quotSolv or resSolv or resWord:
+                    #print "ring.polCoeff.table " + str(ring.polCoeff.table.toScript());
+                    ring.polCoeff.table.update( ring.toPolyCoefficients(L[i]),
+                                                ring.toPolyCoefficients(L[i+1]), 
+                                                ring.toPolyCoefficients(L[i+2]) );
 
         self.ring = ring;
         SolvableRing.__init__(self,ring=self.ring)
