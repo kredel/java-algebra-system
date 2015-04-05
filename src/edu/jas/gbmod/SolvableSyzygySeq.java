@@ -176,7 +176,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
             return leftZeroRelations(modv, F);
         }
         final int lenf = F.size();
-        SolvableExtendedGB<C> exgb = sbb.extLeftGB(modv,F);
+        SolvableExtendedGB<C> exgb = sbb.extLeftGB(modv, F);
         if (debug) {
             logger.info("exgb = " + exgb);
         }
@@ -495,7 +495,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
      * @return [p,q] with a/b = p/q and q is minimal and monic
      */
     @Override
-    @SuppressWarnings({ "cast", "unchecked" })
+    @SuppressWarnings({ "unchecked" })
     public GenSolvablePolynomial<C>[] leftSimplifier(GenSolvablePolynomial<C> a, GenSolvablePolynomial<C> b) {
         if (a == null || a.isZERO() || b == null || b.isZERO()) {
             throw new IllegalArgumentException("a and b must be non zero");

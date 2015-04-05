@@ -22,8 +22,8 @@ import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.ModuleList;
 import edu.jas.poly.PolynomialList;
-import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.RingElem;
 import edu.jas.vector.BasicLinAlg;
 
 
@@ -210,8 +210,7 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
      * @return syz(F), a basis for the module of right syzygies for F.
      */
     @SuppressWarnings("unchecked")
-    public List<List<GenSolvablePolynomial<C>>> rightZeroRelations(int modv,
-                    List<GenSolvablePolynomial<C>> F) {
+    public List<List<GenSolvablePolynomial<C>>> rightZeroRelations(int modv, List<GenSolvablePolynomial<C>> F) {
         GenSolvablePolynomialRing<C> ring = null;
         for (GenSolvablePolynomial<C> p : F) {
             if (p != null) {
