@@ -8,15 +8,12 @@ package edu.jas.ufd;
 import org.apache.log4j.Logger;
 
 import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.PolyUtil;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingFactory;
-import edu.jas.structure.Power;
 
 
 /**
- * Greatest common divisor algorithms with gcd always 1.
- * The computation is faked as the gcd is always 1.
+ * Greatest common divisor algorithms with gcd always 1. The computation is
+ * faked as the gcd is always 1.
  * @author Heinz Kredel
  */
 
@@ -26,12 +23,11 @@ public class GreatestCommonDivisorFake<C extends GcdRingElem<C>> extends Greates
     private static final Logger logger = Logger.getLogger(GreatestCommonDivisorFake.class);
 
 
-    private final boolean debug = logger.isDebugEnabled();
+    //private final boolean debug = logger.isDebugEnabled();
 
 
     /**
-     * GenPolynomial base coefficient content.
-     * Always returns 1.
+     * GenPolynomial base coefficient content. Always returns 1.
      * @param P GenPolynomial.
      * @return cont(P).
      */
@@ -48,8 +44,7 @@ public class GreatestCommonDivisorFake<C extends GcdRingElem<C>> extends Greates
 
 
     /**
-     * GenPolynomial base coefficient primitive part.
-     * Always returns P.
+     * GenPolynomial base coefficient primitive part. Always returns P.
      * @param P GenPolynomial.
      * @return pp(P).
      */
@@ -66,8 +61,7 @@ public class GreatestCommonDivisorFake<C extends GcdRingElem<C>> extends Greates
 
 
     /**
-     * Univariate GenPolynomial greatest comon divisor. 
-     * Always returns 1.
+     * Univariate GenPolynomial greatest comon divisor. Always returns 1.
      * @param P univariate GenPolynomial.
      * @param S univariate GenPolynomial.
      * @return gcd(P,S).
@@ -88,8 +82,7 @@ public class GreatestCommonDivisorFake<C extends GcdRingElem<C>> extends Greates
 
 
     /**
-     * GenPolynomial recursive content.
-     * Always returns 1.
+     * GenPolynomial recursive content. Always returns 1.
      * @param P recursive GenPolynomial.
      * @return cont(P).
      */
@@ -106,8 +99,7 @@ public class GreatestCommonDivisorFake<C extends GcdRingElem<C>> extends Greates
 
 
     /**
-     * GenPolynomial recursive primitive part.
-     * Always returns P.
+     * GenPolynomial recursive primitive part. Always returns P.
      * @param P recursive GenPolynomial.
      * @return pp(P).
      */
@@ -124,15 +116,15 @@ public class GreatestCommonDivisorFake<C extends GcdRingElem<C>> extends Greates
 
 
     /**
-     * Univariate GenPolynomial recursive greatest comon divisor. 
-     * Always returns 1.
+     * Univariate GenPolynomial recursive greatest comon divisor. Always returns
+     * 1.
      * @param P univariate recursive GenPolynomial.
      * @param S univariate recursive GenPolynomial.
      * @return gcd(P,S).
      */
     @Override
     public GenPolynomial<GenPolynomial<C>> recursiveUnivariateGcd(GenPolynomial<GenPolynomial<C>> P,
-            GenPolynomial<GenPolynomial<C>> S) {
+                    GenPolynomial<GenPolynomial<C>> S) {
         if (S == null || S.isZERO()) {
             return P;
         }
@@ -142,6 +134,7 @@ public class GreatestCommonDivisorFake<C extends GcdRingElem<C>> extends Greates
         if (P.ring.nvar > 1) {
             throw new IllegalArgumentException(this.getClass().getName() + " no univariate polynomial");
         }
+        logger.debug("returning 1");
         return P.ring.getONE();
     }
 
