@@ -5,9 +5,7 @@
 package edu.jas.poly;
 
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -258,7 +256,7 @@ public class RecSolvableWordPolynomialTest extends TestCase {
         d = (RecSolvableWordPolynomial<BigRational>) a.monic();
         assertTrue("a.monic(): ",
                         d.leadingBaseCoefficient().isONE()
-                     || d.leadingBaseCoefficient().equals(a.leadingBaseCoefficient()));
+                                        || d.leadingBaseCoefficient().equals(a.leadingBaseCoefficient()));
     }
 
 
@@ -273,7 +271,7 @@ public class RecSolvableWordPolynomialTest extends TestCase {
         //assertEquals("table == ring.table: ", table, ring.table); // ?
         assertTrue("# relations == 2", ring.table.size() == 2);
 
-        cring = new GenWordPolynomialRing<BigRational>(cfac, new String[] {"a"});
+        cring = new GenWordPolynomialRing<BigRational>(cfac, new String[] { "a" });
         ring = new RecSolvableWordPolynomialRing<BigRational>(cring, ring);
         //table = ring.table;
         //System.out.println("table = " + table.toString(vars));
@@ -368,8 +366,8 @@ public class RecSolvableWordPolynomialTest extends TestCase {
         //System.out.println("ring.table.rels = " + ring.table.relationList());
         //System.out.println("ring.coeffTable.rels = " + ring.coeffTable.relationList());
 
-        RecSolvableWordPolynomialRing<BigRational> ring2 
-           = new RecSolvableWordPolynomialRing<BigRational>(ring.coFac,ring);
+        RecSolvableWordPolynomialRing<BigRational> ring2 = new RecSolvableWordPolynomialRing<BigRational>(
+                        ring.coFac, ring);
         ring2.table.addSolvRelations(ring.table.relationList());
         ring2.coeffTable.addSolvRelations(ring.coeffTable.relationList());
 
