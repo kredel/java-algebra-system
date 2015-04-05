@@ -24,12 +24,12 @@ import edu.jas.structure.RingFactory;
 /**
  * RecSolvableWordPolynomialRing generic recursive solvable polynomial factory
  * implementing RingFactory and extending GenSolvablePolynomialRing factory.
- * Factory for n-variate ordered solvable polynomials over non-commutative word polynomial
- * coefficients. The non-commutative multiplication relations are maintained in
- * a relation table and the non-commutative multiplication relations between the
- * coefficients and the main variables are maintained in a coefficient relation
- * table. Almost immutable object, except variable names and relation table
- * contents.
+ * Factory for n-variate ordered solvable polynomials over non-commutative word
+ * polynomial coefficients. The non-commutative multiplication relations are
+ * maintained in a relation table and the non-commutative multiplication
+ * relations between the coefficients and the main variables are maintained in a
+ * coefficient relation table. Almost immutable object, except variable names
+ * and relation table contents.
  * @param <C> base coefficient type.
  * @author Heinz Kredel
  */
@@ -157,8 +157,8 @@ public class RecSolvableWordPolynomialRing<C extends RingElem<C>> extends
      * @param v names for the variables.
      * @param rt solvable multiplication relations.
      */
-    public RecSolvableWordPolynomialRing(RingFactory<GenWordPolynomial<C>> cf, int n, TermOrder t, String[] v,
-                    RelationTable<GenWordPolynomial<C>> rt) {
+    public RecSolvableWordPolynomialRing(RingFactory<GenWordPolynomial<C>> cf, int n, TermOrder t,
+                    String[] v, RelationTable<GenWordPolynomial<C>> rt) {
         super(cf, n, t, v, rt);
         //if (rt == null) { // handled in super }
         coeffTable = new RelationTable<GenWordPolynomial<C>>(this, true);
@@ -356,7 +356,7 @@ public class RecSolvableWordPolynomialRing<C extends RingElem<C>> extends
                             }
                             return false;
                         }
-                    } catch(RuntimeException e) {
+                    } catch (RuntimeException e) {
                         e.printStackTrace();
                         System.out.println("Xk = " + Xk + ", Xj = " + Xj + ", Xi = " + Xi);
                     }
@@ -368,11 +368,12 @@ public class RecSolvableWordPolynomialRing<C extends RingElem<C>> extends
 
 
     /**
-     * Get a (constant) RecSolvableWordPolynomial&lt;C&gt; element from a coefficient
-     * value.
+     * Get a (constant) RecSolvableWordPolynomial&lt;C&gt; element from a
+     * coefficient value.
      * @param a coefficient.
      * @return a RecSolvableWordPolynomial&lt;C&gt;.
      */
+    @Override
     public RecSolvableWordPolynomial<C> valueOf(GenWordPolynomial<C> a) {
         return new RecSolvableWordPolynomial<C>(this, a);
     }
@@ -383,17 +384,20 @@ public class RecSolvableWordPolynomialRing<C extends RingElem<C>> extends
      * @param e exponent vector.
      * @return a RecSolvableWordPolynomial&lt;C&gt;.
      */
+    @Override
     public RecSolvableWordPolynomial<C> valueOf(ExpVector e) {
         return valueOf(coFac.getONE(), e);
     }
 
 
     /**
-     * Get a RecSolvableWordPolynomial&lt;C&gt; element from a coeffcient and an ExpVector.
+     * Get a RecSolvableWordPolynomial&lt;C&gt; element from a coeffcient and an
+     * ExpVector.
      * @param a coefficient.
      * @param e exponent vector.
      * @return a RecSolvableWordPolynomial&lt;C&gt;.
      */
+    @Override
     public RecSolvableWordPolynomial<C> valueOf(GenWordPolynomial<C> a, ExpVector e) {
         return new RecSolvableWordPolynomial<C>(this, a, e);
     }
@@ -412,8 +416,8 @@ public class RecSolvableWordPolynomialRing<C extends RingElem<C>> extends
 
 
     /**
-     * Get a (constant) RecSolvableWordPolynomial&lt;C&gt; element from a BigInteger
-     * value.
+     * Get a (constant) RecSolvableWordPolynomial&lt;C&gt; element from a
+     * BigInteger value.
      * @param a BigInteger.
      * @return a RecSolvableWordPolynomial&lt;C&gt;.
      */
@@ -736,7 +740,8 @@ public class RecSolvableWordPolynomialRing<C extends RingElem<C>> extends
         if (!coeffTable.isEmpty()) {
             throw new UnsupportedOperationException("permutation with coeff relations: " + this);
         }
-        GenSolvablePolynomialRing<GenWordPolynomial<C>> pfac = (GenSolvablePolynomialRing<GenWordPolynomial<C>>) super.permutation(P);
+        GenSolvablePolynomialRing<GenWordPolynomial<C>> pfac = (GenSolvablePolynomialRing<GenWordPolynomial<C>>) super
+                        .permutation(P);
         return pfac;
     }
 
