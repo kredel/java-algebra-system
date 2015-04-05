@@ -24,7 +24,7 @@ import edu.jas.structure.RingElem;
 public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReductionAbstract<C> {
 
 
-    private static final Logger logger = Logger.getLogger(SolvableReductionSeq.class); 
+    private static final Logger logger = Logger.getLogger(SolvableReductionSeq.class);
 
 
     /**
@@ -111,7 +111,8 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
                 //S = S.subtractMultiple(a, e, p[i]);
                 ExpVector g2 = S.leadingExpVector();
                 if (g1.equals(g2)) {
-                    throw new RuntimeException("g1.equals(g2): " + g1 + ", a = " + a + ", lc(S) = " + S.leadingBaseCoefficient());
+                    throw new RuntimeException("g1.equals(g2): " + g1 + ", a = " + a + ", lc(S) = "
+                                    + S.leadingBaseCoefficient());
                 }
             }
         }
@@ -126,7 +127,7 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
      * @param Ap a polynomial.
      * @return nf(Pp,Ap), the left normal form of Ap wrt. Pp.
      */
-    @SuppressWarnings({"cast","unchecked"})
+    @SuppressWarnings({ "cast", "unchecked" })
     public GenSolvablePolynomial<C> leftNormalform(List<GenSolvablePolynomial<C>> row,
                     List<GenSolvablePolynomial<C>> Pp, GenSolvablePolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
@@ -196,7 +197,8 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
                 S = S.subtractMultiple(a, Q);
                 ExpVector g2 = S.leadingExpVector();
                 if (g1.equals(g2)) {
-                    throw new RuntimeException("g1.equals(g2): " + g1 + ", a = " + a + ", lc(S) = " + S.leadingBaseCoefficient());
+                    throw new RuntimeException("g1.equals(g2): " + g1 + ", a = " + a + ", lc(S) = "
+                                    + S.leadingBaseCoefficient());
                 }
                 fac = row.get(i);
                 if (fac == null) {
@@ -217,7 +219,7 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
      * @param Pp solvable polynomial list.
      * @return right-nf(Ap) with respect to Pp.
      */
-    @SuppressWarnings({"cast","unchecked"})
+    @SuppressWarnings({ "cast", "unchecked" })
     public GenSolvablePolynomial<C> rightNormalform(List<GenSolvablePolynomial<C>> Pp,
                     GenSolvablePolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
@@ -291,7 +293,8 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
                 //S = S.subtractMultiple(Q, a);
                 ExpVector g2 = S.leadingExpVector();
                 if (g1.equals(g2)) {
-                    throw new RuntimeException("g1.equals(g2): " + g1 + ", a = " + a + ", lc(S) = " + S.leadingBaseCoefficient());
+                    throw new RuntimeException("g1.equals(g2): " + g1 + ", a = " + a + ", lc(S) = "
+                                    + S.leadingBaseCoefficient());
                 }
             }
         }
@@ -306,7 +309,7 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
      * @param Ap a polynomial.
      * @return nf(Pp,Ap), the right normal form of Ap wrt. Pp.
      */
-    @SuppressWarnings({"cast","unchecked"})
+    @SuppressWarnings({ "cast", "unchecked" })
     public GenSolvablePolynomial<C> rightNormalform(List<GenSolvablePolynomial<C>> row,
                     List<GenSolvablePolynomial<C>> Pp, GenSolvablePolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
@@ -379,7 +382,8 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
                 //S = S.subtractMultiple(Q, a);
                 ExpVector g2 = S.leadingExpVector();
                 if (g1.equals(g2)) {
-                    throw new RuntimeException("g1.equals(g2): " + g1 + ", a = " + a + ", lc(S) = " + S.leadingBaseCoefficient());
+                    throw new RuntimeException("g1.equals(g2): " + g1 + ", a = " + a + ", lc(S) = "
+                                    + S.leadingBaseCoefficient());
                 }
                 fac = row.get(i);
                 if (fac == null) {
