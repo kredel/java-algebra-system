@@ -101,8 +101,7 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
      * @param red pseudo reduction engine. <b>Note:</b> red must be an instance
      *            of PseudoReductionSeq.
      */
-    public SolvableGroebnerBasePseudoRecSeq(RingFactory<GenPolynomial<C>> rf,
-                    SolvablePseudoReduction<C> red) {
+    public SolvableGroebnerBasePseudoRecSeq(RingFactory<GenPolynomial<C>> rf, SolvablePseudoReduction<C> red) {
         this(rf, red, new OrderedPairlist<GenPolynomial<C>>());
     }
 
@@ -115,8 +114,8 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
      * @param pl pair selection strategy
      */
     @SuppressWarnings({ "cast", "unchecked" })
-    public SolvableGroebnerBasePseudoRecSeq(RingFactory<GenPolynomial<C>> rf,
-                    SolvablePseudoReduction<C> red, PairList<GenPolynomial<C>> pl) {
+    public SolvableGroebnerBasePseudoRecSeq(RingFactory<GenPolynomial<C>> rf, SolvablePseudoReduction<C> red,
+                    PairList<GenPolynomial<C>> pl) {
         super((SolvablePseudoReduction<GenPolynomial<C>>) (SolvablePseudoReduction) red, pl);
         this.sred = (SolvablePseudoReduction<GenPolynomial<C>>) (SolvablePseudoReduction) red;
         sredRec = red;

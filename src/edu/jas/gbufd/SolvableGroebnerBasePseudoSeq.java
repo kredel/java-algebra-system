@@ -102,7 +102,7 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends Sol
             // TODO check that also coeffTable is empty for recursive solvable poly ring
         } else {
             //engine = GCDFactory.<C> getImplementation(rf);
-            engine = GCDFactory.<C>getProxy( rf );
+            engine = GCDFactory.<C> getProxy(rf);
         }
     }
 

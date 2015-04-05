@@ -326,7 +326,7 @@ public class WordPseudoReductionSeq<C extends RingElem<C>> extends WordReduction
                     Q = p[i].multiply(a, fl, cone, fr);
                 }
                 Sp = S.subtract(Q);
-                if (e.equals(Sp.leadingWord())) { // TODO: avoid
+                if (e.equals(Sp.leadingWord())) { // TODO: avoid not possible in general
                     //logger.info("redRec: e = " + e + ", hti = " + htl[i] + ", fl = " + fl + ", fr = " + fr);
                     //logger.info("redRec: S = " + S + ", Sp = " + Sp + ", a = " + a + ", b = " + b + ", c = " + c);
                     //throw new RuntimeException("degree not descending");
@@ -334,7 +334,7 @@ public class WordPseudoReductionSeq<C extends RingElem<C>> extends WordReduction
                     S = S.multiply(c);
                     Q = p[i].multiply(a, fl, cone, fr);
                     Sp = S.subtract(Q);
-		}
+                }
                 S = Sp;
             }
         }
