@@ -623,7 +623,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
                 rF.add(q);
             }
         }
-        if (debug) {
+        if (logger.isInfoEnabled()) {
             PolynomialList<C> pl = new PolynomialList<C>(rring, rF);
             logger.info("reversed problem = " + pl.toScript());
         }

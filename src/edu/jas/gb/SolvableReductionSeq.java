@@ -192,7 +192,12 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
                 a = a.divide(Q.leadingBaseCoefficient());
                 //Q = Q.multiplyLeft(a);
                 //S = (GenSolvablePolynomial<C>) S.subtract(Q);
+                ExpVector g1 = S.leadingExpVector();
                 S = S.subtractMultiple(a, Q);
+                ExpVector g2 = S.leadingExpVector();
+                if (g1.equals(g2)) {
+                    throw new RuntimeException("g1.equals(g2): " + g1 + ", a = " + a + ", lc(S) = " + S.leadingBaseCoefficient());
+                }
                 fac = row.get(i);
                 if (fac == null) {
                     fac = (GenSolvablePolynomial<C>) zero.sum(a, e);
@@ -281,8 +286,13 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
                 Q = p[i].multiply(e); // p_i * (a e) TODO
                 a = a.divide(Q.leadingBaseCoefficient());
                 Q = Q.multiply(a); // p_i * (e a) !!
+                ExpVector g1 = S.leadingExpVector();
                 S = (GenSolvablePolynomial<C>) S.subtract(Q);
                 //S = S.subtractMultiple(Q, a);
+                ExpVector g2 = S.leadingExpVector();
+                if (g1.equals(g2)) {
+                    throw new RuntimeException("g1.equals(g2): " + g1 + ", a = " + a + ", lc(S) = " + S.leadingBaseCoefficient());
+                }
             }
         }
         return R;
@@ -364,8 +374,13 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
                 Q = p[i].multiply(e); // p_i * (a e) TODO
                 a = a.divide(Q.leadingBaseCoefficient());
                 Q = Q.multiply(a); // p_i * (e a)
+                ExpVector g1 = S.leadingExpVector();
                 S = (GenSolvablePolynomial<C>) S.subtract(Q);
                 //S = S.subtractMultiple(Q, a);
+                ExpVector g2 = S.leadingExpVector();
+                if (g1.equals(g2)) {
+                    throw new RuntimeException("g1.equals(g2): " + g1 + ", a = " + a + ", lc(S) = " + S.leadingBaseCoefficient());
+                }
                 fac = row.get(i);
                 if (fac == null) {
                     fac = (GenSolvablePolynomial<C>) zero.sum(a, e);
