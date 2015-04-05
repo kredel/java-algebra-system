@@ -140,12 +140,12 @@ public class RecSolvableWordPolynomialTest extends TestCase {
         assertTrue("isONE( d )", !d.isONE());
         //System.out.println("d = " + d);
 
-        System.out.println("");
+        //System.out.println("");
         for (GenPolynomial<GenWordPolynomial<BigRational>> g : ring.generators()) {
-            System.out.print("g = " + g + ", ");
+            //System.out.print("g = " + g + ", ");
             assertFalse("not isZERO( g )", g.isZERO());
         }
-        System.out.println("");
+        //System.out.println("");
     }
 
 
@@ -277,7 +277,7 @@ public class RecSolvableWordPolynomialTest extends TestCase {
         ring = new RecSolvableWordPolynomialRing<BigRational>(cring, ring);
         //table = ring.table;
         //System.out.println("table = " + table.toString(vars));
-        System.out.println("ring = " + ring);
+        //System.out.println("ring = " + ring.toScript());
 
         assertFalse("isCommutative()", ring.isCommutative());
         assertTrue("isAssociative()", ring.isAssociative());
@@ -326,7 +326,7 @@ public class RecSolvableWordPolynomialTest extends TestCase {
         ring.coeffTable.update(r1.leadingExpVector(), r2.leadingWord().leadingExpVector(), rp);
 
         //table = ring.table;
-        System.out.println("ring = " + ring.toScript());
+        //System.out.println("ring = " + ring.toScript());
 
         assertFalse("isCommutative()", ring.isCommutative());
         assertTrue("isAssociative()", ring.isAssociative());
@@ -365,9 +365,8 @@ public class RecSolvableWordPolynomialTest extends TestCase {
         assertTrue("a*b != b*a", c.equals(d) || c.leadingExpVector().equals(d.leadingExpVector()));
 
         // relation table list tests
-        System.out.println("ring.table.rels = " + ring.table.relationList());
-        System.out.println("ring.coeffTable.rels = " + ring.coeffTable.relationList());
-
+        //System.out.println("ring.table.rels = " + ring.table.relationList());
+        //System.out.println("ring.coeffTable.rels = " + ring.coeffTable.relationList());
 
         RecSolvableWordPolynomialRing<BigRational> ring2 
            = new RecSolvableWordPolynomialRing<BigRational>(ring.coFac,ring);

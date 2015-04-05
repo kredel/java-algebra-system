@@ -334,7 +334,7 @@ public class RecSolvableWordPolynomialRing<C extends RingElem<C>> extends
         }
         RecSolvableWordPolynomial<C> Xi, Xj, Xk, p, q;
         List<GenPolynomial<GenWordPolynomial<C>>> gens = generators();
-        System.out.println("Rec word gens = " + gens);
+        //System.out.println("Rec word gens = " + gens);
         int ngen = gens.size();
         for (int i = 0; i < ngen; i++) {
             Xi = (RecSolvableWordPolynomial<C>) gens.get(i);
