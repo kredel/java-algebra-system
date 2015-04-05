@@ -6,8 +6,7 @@ package edu.jas.structure;
 
 
 /**
- * Value factory interface. 
- * Defines constructor from value.
+ * Value factory interface. Defines constructor from value.
  * @param C base element type
  * @param D result element type
  * @author Heinz Kredel

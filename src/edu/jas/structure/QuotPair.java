@@ -6,8 +6,7 @@ package edu.jas.structure;
 
 
 /**
- * Quotient pair interface. 
- * Defines selectors for numerator and denominator.
+ * Quotient pair interface. Defines selectors for numerator and denominator.
  * @param C base element type
  * @author Heinz Kredel
  */

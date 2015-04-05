@@ -6,8 +6,8 @@ package edu.jas.structure;
 
 
 /**
- * Quotient pair factory interface. 
- * Defines constructors from numerators and denominators.
+ * Quotient pair factory interface. Defines constructors from numerators and
+ * denominators.
  * @param C base element type
  * @param D result element type
  * @author Heinz Kredel
