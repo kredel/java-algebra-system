@@ -24,6 +24,7 @@ import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.ufd.GCDFactory;
 import edu.jas.ufd.GreatestCommonDivisorAbstract;
+import edu.jas.ufd.GreatestCommonDivisorFake;
 
 
 /**
@@ -97,10 +98,12 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends Sol
         cofac = rf;
         if (!cofac.isCommutative()) {
             logger.warn("right reduction not correct for " + cofac.toScript());
+            engine = new GreatestCommonDivisorFake<C>();
+            // TODO check that also coeffTable is empty for recursive solvable poly ring
+        } else {
+            //engine = GCDFactory.<C> getImplementation(rf);
+            engine = GCDFactory.<C>getProxy( rf );
         }
-        // TODO check that also coeffTable is empty for recursive solvable poly ring
-        engine = GCDFactory.<C> getImplementation(rf);
-        //not used: engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getProxy( rf );
     }
 
 

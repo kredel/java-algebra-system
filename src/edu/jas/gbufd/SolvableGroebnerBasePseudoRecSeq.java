@@ -26,6 +26,7 @@ import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.ufd.GCDFactory;
 import edu.jas.ufd.GreatestCommonDivisorAbstract;
+import edu.jas.ufd.GreatestCommonDivisorFake;
 
 
 /**
@@ -80,7 +81,7 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
      * @param rf coefficient ring factory.
      */
     public SolvableGroebnerBasePseudoRecSeq(RingFactory<GenPolynomial<C>> rf) {
-        this(rf, new SolvablePseudoReductionSeq<GenPolynomial<C>>());
+        this(rf, new SolvablePseudoReductionSeq<C>());
     }
 
 
@@ -90,7 +91,7 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
      * @param pl pair selection strategy
      */
     public SolvableGroebnerBasePseudoRecSeq(RingFactory<GenPolynomial<C>> rf, PairList<GenPolynomial<C>> pl) {
-        this(rf, new SolvablePseudoReductionSeq<GenPolynomial<C>>(), pl);
+        this(rf, new SolvablePseudoReductionSeq<C>(), pl);
     }
 
 
@@ -101,7 +102,7 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
      *            of PseudoReductionSeq.
      */
     public SolvableGroebnerBasePseudoRecSeq(RingFactory<GenPolynomial<C>> rf,
-                    SolvablePseudoReduction<GenPolynomial<C>> red) {
+                    SolvablePseudoReduction<C> red) {
         this(rf, red, new OrderedPairlist<GenPolynomial<C>>());
     }
 
@@ -115,18 +116,21 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
      */
     @SuppressWarnings({ "cast", "unchecked" })
     public SolvableGroebnerBasePseudoRecSeq(RingFactory<GenPolynomial<C>> rf,
-                    SolvablePseudoReduction<GenPolynomial<C>> red, PairList<GenPolynomial<C>> pl) {
-        super(red, pl);
-        this.sred = red;
-        sredRec = (SolvablePseudoReduction<C>) (SolvablePseudoReduction) red;
+                    SolvablePseudoReduction<C> red, PairList<GenPolynomial<C>> pl) {
+        super((SolvablePseudoReduction<GenPolynomial<C>>) (SolvablePseudoReduction) red, pl);
+        this.sred = (SolvablePseudoReduction<GenPolynomial<C>>) (SolvablePseudoReduction) red;
+        sredRec = red;
+        //this.red = sred;
         cofac = (GenPolynomialRing<C>) rf;
         if (!cofac.isCommutative()) {
             logger.warn("right reduction not correct for " + cofac.toScript());
+            engine = new GreatestCommonDivisorFake<C>();
+            // TODO check that also coeffTable is empty for recursive solvable poly ring
+        } else {
+            //engine = GCDFactory.<C> getImplementation(cofac.coFac);
+            //
+            engine = GCDFactory.<C> getProxy(cofac.coFac);
         }
-        // TODO check that also coeffTable is empty for recursive solvable poly ring
-        //engine = GCDFactory.<C> getImplementation(cofac.coFac);
-        //
-        engine = GCDFactory.<C> getProxy(cofac.coFac);
     }
 
 
