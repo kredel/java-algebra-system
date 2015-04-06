@@ -424,7 +424,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 q = sred.leftNormalform(G, q);
                 q = q.monic();
                 if (!q.isZERO()) {
-                    System.out.println("q generated = " + q + ", p = " + p + ", x = " + x);
+                    //System.out.println("q generated = " + q + ", p = " + p + ", x = " + x);
                     if (q.isONE()) {
                         G.clear();
                         G.add(q);
@@ -488,7 +488,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
             if (H.length() > 0) {
                 G.add(H);
                 pairlist.put(H);
-                System.out.println("H generated = " + H);
+                //System.out.println("H generated = " + H);
                 for (GenSolvablePolynomial<C> x : X) {
                     //x = X.get(j);
                     if (x.isONE()) {
@@ -497,7 +497,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                     q = H.multiply(x);
                     p = sred.leftNormalform(G, q);
                     if (!p.isZERO()) {
-                        System.out.println("p generated = " + p + ", x = " + x);
+                        //System.out.println("p generated = " + p + ", x = " + x);
                         p = p.monic();
                         if (p.isONE()) {
                             G.clear();
@@ -508,7 +508,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                         pairlist.put(p);
                     }
                 }
-                System.out.println("G generated = " + G);
+                //System.out.println("G generated = " + G);
             }
         }
         logger.debug("#sequential list = " + G.size());
