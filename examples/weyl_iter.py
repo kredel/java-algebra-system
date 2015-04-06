@@ -89,9 +89,9 @@ print "isTwosidedGB: " + str(rgt.isTwosidedGB());
 print;
 
 
-urgt = rgt.univariates();
-print "univariate polynomials: " + str([ str(f) for f in urgt ]);
-print;
+#urgt = rgt.univariates();
+#print "univariate polynomials: " + str([ str(f) for f in urgt ]);
+#print;
 
 #h = q1;
 #h = q2;
@@ -100,9 +100,11 @@ print;
 #h = q1 * q2 + p1 * p2 - p1 + q1**2 + 1;
 h = q1 * q2 + p1 * p2 + q1;
 print "polynomial:         " + str(h);
-hi = rgt.inverse(h);
-print "inverse polynomial: " + str(hi);
+#hi = rgt.inverse(h);
+#print "inverse polynomial: " + str(hi);
 print;
+
+exit();
 
 hhi = h * hi;
 print "h * hi: " + str(hhi);

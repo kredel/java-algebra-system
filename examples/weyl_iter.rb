@@ -84,9 +84,9 @@ puts "isTwosidedGB: " + str(rgt.isTwosidedGB());
 puts;
 
 
-urgt = rgt.univariates();
-puts "univariate polynomials: " + urgt.join(", ") { |r| r.to_s };
-puts;
+#urgt = rgt.univariates();
+#puts "univariate polynomials: " + urgt.join(", ") { |r| r.to_s };
+#puts;
 
 
 #h = q1;
@@ -96,9 +96,11 @@ puts;
 #h = q1 * q2 + p1 * p2 - p1 + q1**2 + 1;
 h = q1 * q2 + p1 * p2 + q1;
 puts "polynomial:         " + str(h);
-hi = rgt.inverse(h);
-puts "inverse polynomial: " + str(hi);
+#hi = rgt.inverse(h);
+#puts "inverse polynomial: " + str(hi);
 puts;
+
+exit;
 
 hhi = h * hi;
 puts "h * hi: " + str(hhi);
