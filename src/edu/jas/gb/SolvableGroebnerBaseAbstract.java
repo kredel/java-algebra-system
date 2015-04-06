@@ -257,26 +257,25 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
         if (Fp == null || Fp.size() == 0) { // 0 not 1
             return true;
         }
+        if (Fp.size() == 1 && Fp.get(0).isONE()) { 
+            return true;
+        }
         GenSolvablePolynomialRing<C> ring = Fp.get(0).ring; // assert != null
         List<GenSolvablePolynomial<C>> X, Y;
-        if (ring instanceof QLRSolvablePolynomialRing) { // add also coefficient generators
-            X = PolynomialList.castToSolvableList(ring.generators()); // todo use? modv
-            Y = new ArrayList<GenSolvablePolynomial<C>>();
-            for (GenSolvablePolynomial<C> x : X) {
-                if (x.isConstant()) {
-                    Y.add(x);
-                }
-            }
-            X = Y;
-            X.addAll(ring.univariateList(modv));
-        } else {
-            X = ring.univariateList(modv);
+        // add also coefficient generators
+        X = PolynomialList.castToSolvableList(ring.generators()); // todo use? modv
+        Y = new ArrayList<GenSolvablePolynomial<C>>();
+        for (GenSolvablePolynomial<C> x : X) {
+             if (x.isConstant()) {
+                 Y.add(x);
+             }
         }
+        X = Y;
+        X.addAll(ring.univariateList(modv));
         logger.info("right multipliers = " + X);
-        //System.out.println("right multipliers = " + X);
         List<GenSolvablePolynomial<C>> F = new ArrayList<GenSolvablePolynomial<C>>(Fp.size() * (1 + X.size()));
         F.addAll(Fp);
-        GenSolvablePolynomial<C> p, x, pi, pj, s, h;
+        GenSolvablePolynomial<C> p, q, x, pi, pj, s, h;
         for (int i = 0; i < Fp.size(); i++) {
             p = Fp.get(i);
             for (int j = 0; j < X.size(); j++) {
@@ -284,10 +283,12 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
                 if (x.isONE()) {
                     continue;
                 }
-                p = p.multiply(x);
-                p = sred.leftNormalform(F, p);
-                if (!p.isZERO()) {
-                    F.add(p);
+                q = p.multiply(x);
+                q = sred.leftNormalform(F, q);
+                System.out.println("is: q generated = " + q + ", p = " + p + ", x = " + x);
+                if (!q.isZERO()) {
+                    return false;
+                    //F.add(q);
                 }
             }
         }

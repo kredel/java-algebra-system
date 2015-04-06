@@ -20,6 +20,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
+import edu.jas.poly.QLRSolvablePolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.PolynomialList;
 import edu.jas.structure.GcdRingElem;
@@ -284,16 +285,28 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
         if (ring.coFac.isField()) { // TODO remove
             throw new IllegalArgumentException("coefficients from a field");
         }
-        List<GenSolvablePolynomial<GenPolynomial<C>>> X = ring.univariateList(modv);
-        //System.out.println("X univ = " + X);
+        List<GenSolvablePolynomial<GenPolynomial<C>>> X, Y;
+        X = PolynomialList.castToSolvableList(ring.generators()); // todo use? modv
+        Y = new ArrayList<GenSolvablePolynomial<GenPolynomial<C>>>();
+        for (GenSolvablePolynomial<GenPolynomial<C>> x : X) {
+             if (x.isConstant()) {
+                 Y.add(x);
+             }
+        }
+        X = Y;
+        X.addAll(ring.univariateList(modv));
+        logger.info("right multipliers = " + X);
         List<GenSolvablePolynomial<GenPolynomial<C>>> F = new ArrayList<GenSolvablePolynomial<GenPolynomial<C>>>(
                         G.size() * (1 + X.size()));
         F.addAll(G);
         GenSolvablePolynomial<GenPolynomial<C>> p, x, q;
-        for (int i = 0; i < G.size(); i++) {
-            p = G.get(i);
+        for (int i = 0; i < F.size(); i++) { // F changes
+            p = F.get(i);
             for (int j = 0; j < X.size(); j++) {
                 x = X.get(j);
+                if (x.isONE()) {
+                    continue;
+                }
                 q = p.multiply(x);
                 q = sredRec.leftNormalformRecursive(F, q);
                 if (!q.isZERO()) {
@@ -357,6 +370,9 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
                 pairlist.put(H);
                 for (int j = 0; j < X.size(); j++) {
                     x = X.get(j);
+                    if (x.isONE()) {
+                        continue;
+                    }
                     p = H.multiply(x);
                     p = sredRec.leftNormalformRecursive(G, p);
                     if (!p.isZERO()) {
@@ -443,9 +459,19 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
         if (Fp == null || Fp.size() == 0) { // 0 not 1
             return true;
         }
-        GenSolvablePolynomialRing<GenPolynomial<C>> fac = Fp.get(0).ring; // assert != null
+        GenSolvablePolynomialRing<GenPolynomial<C>> ring = Fp.get(0).ring; // assert != null
         //List<GenSolvablePolynomial<C>> X = generateUnivar( modv, Fp );
-        List<GenSolvablePolynomial<GenPolynomial<C>>> X = fac.univariateList(modv);
+        List<GenSolvablePolynomial<GenPolynomial<C>>> X, Y;
+        X = PolynomialList.castToSolvableList(ring.generators()); // todo use? modv
+        Y = new ArrayList<GenSolvablePolynomial<GenPolynomial<C>>>();
+        for (GenSolvablePolynomial<GenPolynomial<C>> x : X) {
+             if (x.isConstant()) {
+                 Y.add(x);
+             }
+        }
+        X = Y;
+        X.addAll(ring.univariateList(modv));
+        logger.info("right multipliers = " + X);
         List<GenSolvablePolynomial<GenPolynomial<C>>> F = new ArrayList<GenSolvablePolynomial<GenPolynomial<C>>>(
                         Fp.size() * (1 + X.size()));
         F.addAll(Fp);
@@ -454,10 +480,14 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
             p = Fp.get(i);
             for (int j = 0; j < X.size(); j++) {
                 x = X.get(j);
+                if (x.isONE()) {
+                    continue;
+                }
                 p = p.multiply(x);
                 p = sredRec.leftNormalformRecursive(F, p);
                 if (!p.isZERO()) {
-                    F.add(p);
+                    return false;
+                    //F.add(p);
                 }
             }
         }

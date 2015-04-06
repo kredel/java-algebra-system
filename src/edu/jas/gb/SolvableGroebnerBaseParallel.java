@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
+import edu.jas.poly.PolynomialList;
 import edu.jas.structure.RingElem;
 import edu.jas.util.Terminator;
 import edu.jas.util.ThreadPool;
@@ -312,16 +313,29 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>> extends Solvabl
         if (Fp == null || Fp.size() == 0) { // 0 not 1
             return new ArrayList<GenSolvablePolynomial<C>>();
         }
-        GenSolvablePolynomialRing<C> fac = Fp.get(0).ring; // assert != null
-        List<GenSolvablePolynomial<C>> X = fac.univariateList(modv);
-        //System.out.println("X univ = " + X);
+        GenSolvablePolynomialRing<C> ring = Fp.get(0).ring; // assert != null
+        // add also coefficient generators
+        List<GenSolvablePolynomial<C>> X, Y;
+        X = PolynomialList.castToSolvableList(ring.generators()); // todo use? modv
+        Y = new ArrayList<GenSolvablePolynomial<C>>();
+        for (GenSolvablePolynomial<C> x : X) {
+	     if (x.isConstant()) {
+                 Y.add(x);
+             }
+        }
+        X = Y;
+        X.addAll(ring.univariateList(modv));
+        logger.info("right multipliers = " + X);
         List<GenSolvablePolynomial<C>> F = new ArrayList<GenSolvablePolynomial<C>>(Fp.size() * (1 + X.size()));
         F.addAll(Fp);
         GenSolvablePolynomial<C> p, x, q;
-        for (int i = 0; i < Fp.size(); i++) {
-            p = Fp.get(i);
+        for (int i = 0; i < F.size(); i++) { // F changes
+            p = F.get(i);
             for (int j = 0; j < X.size(); j++) {
                 x = X.get(j);
+                if (x.isONE()) {
+                    continue;
+                }
                 q = p.multiply(x);
                 q = sred.leftNormalform(F, q);
                 if (!q.isZERO()) {
