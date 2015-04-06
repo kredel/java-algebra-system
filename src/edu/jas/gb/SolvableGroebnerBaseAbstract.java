@@ -285,7 +285,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
                 }
                 q = p.multiply(x);
                 q = sred.leftNormalform(F, q);
-                System.out.println("is: q generated = " + q + ", p = " + p + ", x = " + x);
+                //System.out.println("is: q generated = " + q + ", p = " + p + ", x = " + x);
                 if (!q.isZERO()) {
                     return false;
                     //F.add(q);
