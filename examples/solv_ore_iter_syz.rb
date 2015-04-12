@@ -72,14 +72,11 @@ f3 = v*f1*u;
 #puts "f3 = " + str(f3);
 
 #ff = [ f3, f3 ];
-#ff = [ f1, f2, f3 ];
+ff = [ f1, f2, f3 ];
 #ff = [ f1 ];
-#ff = [ v**2 ]; #isTwosided ideal
-#ff = [ u**2 ]; #isTwosided ideal
-#ff = [ w**2 ]; # twosided == 1
-#ff = [ (v-u)**7 ]; #isTwosided ideal
-#ff = [ (v-u)**5 ]; #isTwosided ideal
-ff = [ (v-u)**3 ]; #isTwosided ideal
+#ff = [ u ]; # isTwoSided ideal if uv = vu
+#ff = [ v ]; # isTwoSided ideal if uv = vu
+#ff = [ w ]; # no twoSided ideal
 puts "ff = [" + ff.join(", ") { |r| r.to_s } + "]";
 puts
 
@@ -116,7 +113,7 @@ puts "seq twosided GB: " + str(rgt);
 puts "isTwosidedGB: " + str(rgt.isTwosidedGB());
 puts;
 
-exit(0);
+#exit(0);
 #startLog();
 
 #rgi = rgl.intersect(rgt);
@@ -128,11 +125,13 @@ exit(0);
 
 #exit(0);
 
-syl = rgt.leftSyzygy().leftGB();
+#syl = rgl.leftSyzygy().leftGB();
+syl = ii.leftSyzygy().leftGB();
 puts "left syzygy: " + str(syl);
 puts;
 
-syr = rgt.rightSyzygy().rightGB();
+#syr = rgr.rightSyzygy().rightGB();
+syr = ii.rightSyzygy().rightGB();
 puts "right syzygy: " + str(syr);
 puts;
 
