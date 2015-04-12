@@ -261,17 +261,9 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
             return true;
         }
         GenSolvablePolynomialRing<C> ring = Fp.get(0).ring; // assert != null
-        List<GenSolvablePolynomial<C>> X, Y;
         // add also coefficient generators
-        X = PolynomialList.castToSolvableList(ring.generators()); // todo use? modv
-        Y = new ArrayList<GenSolvablePolynomial<C>>();
-        for (GenSolvablePolynomial<C> x : X) {
-             if (x.isConstant()) {
-                 Y.add(x);
-             }
-        }
-        X = Y;
-        X.addAll(ring.univariateList(modv));
+        List<GenSolvablePolynomial<C>> X;
+        X = PolynomialList.castToSolvableList(ring.generators(modv)); 
         logger.info("right multipliers = " + X);
         List<GenSolvablePolynomial<C>> F = new ArrayList<GenSolvablePolynomial<C>>(Fp.size() * (1 + X.size()));
         F.addAll(Fp);

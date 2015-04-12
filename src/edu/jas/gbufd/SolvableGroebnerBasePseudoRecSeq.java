@@ -285,16 +285,9 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
         if (ring.coFac.isField()) { // TODO remove
             throw new IllegalArgumentException("coefficients from a field");
         }
-        List<GenSolvablePolynomial<GenPolynomial<C>>> X, Y;
-        X = PolynomialList.castToSolvableList(ring.generators()); // todo use? modv
-        Y = new ArrayList<GenSolvablePolynomial<GenPolynomial<C>>>();
-        for (GenSolvablePolynomial<GenPolynomial<C>> x : X) {
-             if (x.isConstant()) {
-                 Y.add(x);
-             }
-        }
-        X = Y;
-        X.addAll(ring.univariateList(modv));
+        // add also coefficient generators
+        List<GenSolvablePolynomial<GenPolynomial<C>>> X;
+        X = PolynomialList.castToSolvableList(ring.generators(modv)); 
         logger.info("right multipliers = " + X);
         List<GenSolvablePolynomial<GenPolynomial<C>>> F = new ArrayList<GenSolvablePolynomial<GenPolynomial<C>>>(
                         G.size() * (1 + X.size()));
