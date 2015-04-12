@@ -786,6 +786,23 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
 
 
     /**
+     * Get a list of the generating elements excluding the module variables.
+     * @param modv number of module variables
+     * @return list of generators for the polynomial ring.
+     */
+    public List<GenPolynomial<C>> generators(int modv) {
+        List<? extends C> cogens = coFac.generators();
+        List<? extends GenPolynomial<C>> univs = univariateList(modv);
+        List<GenPolynomial<C>> gens = new ArrayList<GenPolynomial<C>>(univs.size() + cogens.size());
+        for (C c : cogens) {
+            gens.add(getONE().multiply(c));
+        }
+        gens.addAll(univs);
+        return gens;
+    }
+
+
+    /**
      * Is this structure finite or infinite.
      * @return true if this structure is finite, else false.
      * @see edu.jas.structure.ElemFactory#isFinite()
