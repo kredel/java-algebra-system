@@ -60,7 +60,7 @@ public class GreatestCommonDivisorFake<C extends GcdRingElem<C>> extends Greates
             return P.ring.getONE();
         }
         if (P.length() == 1) { // one term
-            System.out.println("P = " + P);
+            //System.out.println("P = " + P);
             return P.ring.valueOf(P.leadingExpVector());
         }
         return P;
@@ -122,7 +122,7 @@ public class GreatestCommonDivisorFake<C extends GcdRingElem<C>> extends Greates
             return P.ring.getONE();
         }
         if (P.length() == 1) { // one term
-            System.out.println("P = " + P);
+            //System.out.println("P = " + P);
             return P.ring.valueOf(P.leadingExpVector());
         }
         return P;

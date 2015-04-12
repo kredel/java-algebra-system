@@ -416,8 +416,9 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 q = sred.leftNormalform(G, q);
                 q = q.monic();
                 if (!q.isZERO()) {
-                    //System.out.println("q generated = " + q + ", p = " + p + ", x = " + x);
+                    //System.out.println("q generating: = " + q + ", p = " + p + ", x = " + x);
                     if (q.isONE()) {
+                        //System.out.println("G generated so far: " + G);
                         G.clear();
                         G.add(q);
                         return G; // since no threads are activated
@@ -433,7 +434,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
         if (G.size() <= 1) { // 1 ok
             return G; // since no threads are activated
         }
-        logger.info("start " + pairlist);
+        logger.info("twosided start " + pairlist);
 
         Pair<C> pair;
         GenSolvablePolynomial<C> pi, pj, S, H;
@@ -505,7 +506,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
         }
         logger.debug("#sequential list = " + G.size());
         G = leftMinimalGB(G);
-        logger.info("end " + pairlist);
+        logger.info("twosided end " + pairlist);
         return G;
     }
 
