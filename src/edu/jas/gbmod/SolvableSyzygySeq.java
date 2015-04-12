@@ -501,6 +501,10 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
             throw new IllegalArgumentException("a and b must be non zero");
         }
         GenSolvablePolynomial<C>[] oc = null;
+        if (a.isConstant() || b.isConstant()) {
+            oc = new GenSolvablePolynomial[] { a, b };
+            return oc;
+        }
         if (a.totalDegree() > 3 || b.totalDegree() > 3) { // how avoid too long running GBs ?
             //if (a.totalDegree() + b.totalDegree() > 6) { // how avoid too long running GBs ?
             // && a.length() < 10 && b.length() < 10

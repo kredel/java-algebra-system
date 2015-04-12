@@ -464,11 +464,11 @@ public class PolyGBUtil {
         if (d.isZERO()) {
             return n;
         }
-        if (n.isONE()) {
-            return n;
+        if (n.isConstant()) {
+            return r.getONE();
         }
-        if (d.isONE()) {
-            return d;
+        if (d.isConstant()) {
+            return r.getONE();
         }
         if (n.totalDegree() > 3 || d.totalDegree() > 3) { // how avoid too long running GBs ?
             //if (n.totalDegree() + d.totalDegree() > 6) { // how avoid too long running GBs ?
@@ -482,7 +482,7 @@ public class PolyGBUtil {
         SolvableGroebnerBaseAbstract<C> sbb = new SolvableGroebnerBaseSeq<C>();
         logger.warn("syzGcd computing GB: " + A);
         List<GenSolvablePolynomial<C>> G = sbb.rightGB(A); //leftGB, not: sbb.twosidedGB(A);
-        if (logger.isInfoEnabled()) {
+        if (logger.isDebugEnabled()) {
             logger.info("G = " + G);
         }
         if (G.size() == 1) {
