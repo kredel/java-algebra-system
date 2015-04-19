@@ -5,8 +5,8 @@
 package edu.jas.poly;
 
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -298,8 +298,8 @@ public final class ExpVectorShort extends ExpVector
 
 
     /**
-     * Reverse lower j variables. Used e.g. in opposite
-     * rings. Reverses the first j-1 variables, the rest is unchanged.
+     * Reverse lower j variables. Used e.g. in opposite rings. Reverses the
+     * first j-1 variables, the rest is unchanged.
      * @param j index of first variable reversed.
      * @return reversed exponent vector.
      */
@@ -351,7 +351,7 @@ public final class ExpVectorShort extends ExpVector
         short[] w = new short[val.length];
         int j = 0;
         for (Integer i : P) {
-            w[j++] = val[(int) i];
+            w[j++] = val[i];
         }
         return new ExpVectorShort(w);
     }

@@ -615,8 +615,8 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
 
 
     /**
-     * Random polynomial. Generates a random polynomial with k = 5, l = n, d = n,
-     * q = (nvar == 1) ? 0.5 : 0.3.
+     * Random polynomial. Generates a random polynomial with k = 5, l = n, d =
+     * n, q = (nvar == 1) ? 0.5 : 0.3.
      * @param n number of terms.
      * @param rnd is a source for random bits.
      * @return a random polynomial.
@@ -969,7 +969,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
      * Distributive representation as polynomial with all main variables.
      * @return distributive polynomial ring factory.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("cast")
     public GenPolynomialRing<C> distribute() {
         if (!(coFac instanceof GenPolynomialRing)) {
             return this;
@@ -1006,9 +1006,9 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
         if (vars != null) { // vars are not inversed
             v = new String[vars.length];
             int k = tord.getSplit();
-            if (partial && k < vars.length) { 
+            if (partial && k < vars.length) {
                 // copy upper
-                for (int j = 0; j < k; j++) { 
+                for (int j = 0; j < k; j++) {
                     //v[vars.length - k + j] = vars[vars.length - 1 - j]; // reverse upper
                     v[vars.length - k + j] = vars[vars.length - k + j];
                 }
@@ -1133,10 +1133,10 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
         if (vars == null || vars.length <= 1) {
             return vars;
         }
-        String[] b = new String[vars.length]; 
+        String[] b = new String[vars.length];
         int j = 0;
         for (Integer i : P) {
-            b[j++] = vars[(int) i];
+            b[j++] = vars[i];
         }
         return b;
     }
@@ -1159,7 +1159,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
         for (int i = 0; i < v1.length; i++) {
             v1[i] = vars[v1.length - 1 - i];
         }
-        String[] vp = permuteVars(P,v1);
+        String[] vp = permuteVars(P, v1);
         String[] v2 = new String[vp.length];
         for (int i = 0; i < vp.length; i++) {
             v2[i] = vp[vp.length - 1 - i];

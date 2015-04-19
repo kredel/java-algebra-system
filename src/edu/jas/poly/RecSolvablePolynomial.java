@@ -160,7 +160,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
         final boolean commuteCoeff = ring.coeffTable.isEmpty();
         GenPolynomialRing<C> cfac = (GenPolynomialRing<C>) ring.coFac;
         RecSolvablePolynomial<C> Dp = ring.getZERO().copy();
-        RecSolvablePolynomial<C> zero = ring.getZERO(); //.copy(); not needed
+        //RecSolvablePolynomial<C> zero = ring.getZERO(); //.copy(); not needed
         ExpVector Z = ring.evzero;
         ExpVector Zc = cfac.evzero;
         GenPolynomial<C> one = ring.getONECoefficient();
@@ -525,7 +525,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
         if (b == null || b.isZERO()) {
             return ring.getZERO();
         }
-        RecSolvablePolynomial<C> Cp = ring.valueOf(b,e); //new RecSolvablePolynomial<C>(ring, b, e);
+        RecSolvablePolynomial<C> Cp = ring.valueOf(b, e); //new RecSolvablePolynomial<C>(ring, b, e);
         return multiply(Cp);
     }
 
@@ -548,8 +548,8 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
         if (c == null || c.isZERO()) {
             return ring.getZERO();
         }
-        RecSolvablePolynomial<C> Cp = ring.valueOf(b,e); //new RecSolvablePolynomial<C>(ring, b, e);
-        RecSolvablePolynomial<C> Dp = ring.valueOf(c,f); //new RecSolvablePolynomial<C>(ring, c, f);
+        RecSolvablePolynomial<C> Cp = ring.valueOf(b, e); //new RecSolvablePolynomial<C>(ring, b, e);
+        RecSolvablePolynomial<C> Dp = ring.valueOf(c, f); //new RecSolvablePolynomial<C>(ring, c, f);
         return multiply(Cp, Dp);
     }
 
@@ -566,7 +566,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
         if (b == null || b.isZERO()) {
             return ring.getZERO();
         }
-        RecSolvablePolynomial<C> Cp = ring.valueOf(b,e); //new RecSolvablePolynomial<C>(ring, b, e);
+        RecSolvablePolynomial<C> Cp = ring.valueOf(b, e); //new RecSolvablePolynomial<C>(ring, b, e);
         return Cp.multiply(this);
     }
 

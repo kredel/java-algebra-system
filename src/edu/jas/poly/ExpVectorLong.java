@@ -5,9 +5,9 @@
 package edu.jas.poly;
 
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -58,7 +58,7 @@ public final class ExpVectorLong extends ExpVector
         if (v == null) {
             throw new IllegalArgumentException("null val not allowed");
         }
-        val = Arrays.copyOf(v,v.length); // > Java-5
+        val = Arrays.copyOf(v, v.length); // > Java-5
     }
 
 
@@ -236,8 +236,8 @@ public final class ExpVectorLong extends ExpVector
 
 
     /**
-     * Reverse lower j variables. Used e.g. in opposite
-     * rings. Reverses the first j-1 variables, the rest is unchanged.
+     * Reverse lower j variables. Used e.g. in opposite rings. Reverses the
+     * first j-1 variables, the rest is unchanged.
      * @param j index of first variable reversed.
      * @return reversed exponent vector.
      */
@@ -262,8 +262,8 @@ public final class ExpVectorLong extends ExpVector
 
 
     /**
-     * Reverse upper j variables. Reverses the last j-1
-     * variables, the rest is unchanged.
+     * Reverse upper j variables. Reverses the last j-1 variables, the rest is
+     * unchanged.
      * @param j index of first variable not reversed.
      * @return reversed exponent vector.
      */
@@ -314,7 +314,7 @@ public final class ExpVectorLong extends ExpVector
         long[] w = new long[val.length];
         int j = 0;
         for (Integer i : P) {
-            w[j++] = val[(int) i];
+            w[j++] = val[i];
         }
         return new ExpVectorLong(w);
     }

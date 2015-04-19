@@ -175,6 +175,9 @@ public class TermOrderOptimization {
         }
         List<List<Integer>> V = new ArrayList<List<Integer>>(map.values());
         //System.out.println("V = " + V);
+        if (logger.isDebugEnabled()) {
+            logger.info("V = " + V);
+        }
         //for ( int j = V.size()-1; j >= 0; j-- ) {
         for (int j = 0; j < V.size(); j++) {
             List<Integer> v = V.get(j);
@@ -403,7 +406,7 @@ public class TermOrderOptimization {
         List<GenPolynomial<C>> Lp = new ArrayList<GenPolynomial<C>>(L);
         if (R instanceof GenSolvablePolynomialRing) { // look also on solvable relations
             GenSolvablePolynomialRing<C> Rs = (GenSolvablePolynomialRing<C>) R;
-            Lp.addAll( Rs.table.relationList() );
+            Lp.addAll(Rs.table.relationList());
         }
         List<Integer> perm = optimalPermutation(degreeMatrix(Lp));
         GenPolynomialRing<C> pring = R.permutation(perm);
@@ -431,8 +434,8 @@ public class TermOrderOptimization {
      * @param P polynomial list.
      * @return optimized polynomial list.
      */
-    public static <C extends RingElem<C>> OptimizedPolynomialList<GenPolynomial<C>> 
-                  optimizeTermOrderOnCoefficients(PolynomialList<GenPolynomial<C>> P) {
+    public static <C extends RingElem<C>> OptimizedPolynomialList<GenPolynomial<C>> optimizeTermOrderOnCoefficients(
+                    PolynomialList<GenPolynomial<C>> P) {
         return optimizeTermOrderOnCoefficients(P.ring, P.list);
     }
 
@@ -443,8 +446,9 @@ public class TermOrderOptimization {
      * @param L list of polynomials.
      * @return optimized polynomial list.
      */
-    public static <C extends RingElem<C>> OptimizedPolynomialList<GenPolynomial<C>> 
-			     optimizeTermOrderOnCoefficients(GenPolynomialRing<GenPolynomial<C>> ring, List<GenPolynomial<GenPolynomial<C>>> L) {
+    @SuppressWarnings("cast")
+    public static <C extends RingElem<C>> OptimizedPolynomialList<GenPolynomial<C>> optimizeTermOrderOnCoefficients(
+                    GenPolynomialRing<GenPolynomial<C>> ring, List<GenPolynomial<GenPolynomial<C>>> L) {
         if (L == null) {
             return null;
         }
@@ -452,7 +456,7 @@ public class TermOrderOptimization {
         //GenPolynomialRing<GenPolynomial<C>> ring = P.ring;
         if (ring instanceof GenSolvablePolynomialRing) { // look also on solvable relations
             GenSolvablePolynomialRing<GenPolynomial<C>> Rs = (GenSolvablePolynomialRing<GenPolynomial<C>>) ring;
-            Lp.addAll( Rs.table.relationList() );
+            Lp.addAll(Rs.table.relationList());
         }
         List<Integer> perm = optimalPermutation(degreeMatrixOfCoefficients(Lp));
 
@@ -463,7 +467,8 @@ public class TermOrderOptimization {
         if (ring instanceof GenSolvablePolynomialRing) { // permute also solvable relations
             sring = (GenSolvablePolynomialRing<GenPolynomial<C>>) ring;
             psring = new GenSolvablePolynomialRing<GenPolynomial<C>>(pFac, sring);
-            List<GenPolynomial<GenPolynomial<C>>> ir = PolynomialList.<GenPolynomial<C>>castToList(sring.table.relationList()); 
+            List<GenPolynomial<GenPolynomial<C>>> ir = PolynomialList
+                            .<GenPolynomial<C>> castToList(sring.table.relationList());
             ir = permutationOnCoefficients(perm, psring, ir);
             psring.addRelations(ir);
             pring = (GenPolynomialRing<GenPolynomial<C>>) psring;
@@ -473,7 +478,7 @@ public class TermOrderOptimization {
         List<GenPolynomial<GenPolynomial<C>>> ppolys;
         ppolys = permutationOnCoefficients(perm, pring, L);
 
-        OptimizedPolynomialList<GenPolynomial<C>> op; 
+        OptimizedPolynomialList<GenPolynomial<C>> op;
         op = new OptimizedPolynomialList<GenPolynomial<C>>(perm, pring, ppolys);
         return op;
     }
@@ -500,21 +505,21 @@ public class TermOrderOptimization {
      */
     public static <C extends RingElem<C>> OptimizedModuleList<C> optimizeTermOrderModule(
                     GenPolynomialRing<C> R, List<List<GenPolynomial<C>>> L) {
-        List<GenPolynomial<C>> M =  new ArrayList<GenPolynomial<C>>();
+        List<GenPolynomial<C>> M = new ArrayList<GenPolynomial<C>>();
         for (List<GenPolynomial<C>> ll : L) {
             M.addAll(ll);
         }
         if (R instanceof GenSolvablePolynomialRing) { // look also on solvable relations
             GenSolvablePolynomialRing<C> Rs = (GenSolvablePolynomialRing<C>) R;
-            M.addAll( Rs.table.relationList() );
+            M.addAll(Rs.table.relationList());
         }
         List<Integer> perm = optimalPermutation(degreeMatrix(M));
         GenPolynomialRing<C> pring = R.permutation(perm);
         List<List<GenPolynomial<C>>> mpolys = new ArrayList<List<GenPolynomial<C>>>();
         List<GenPolynomial<C>> pp;
         for (List<GenPolynomial<C>> ll : L) {
-             pp = permutation(perm, pring, ll);
-             mpolys.add(pp);
+            pp = permutation(perm, pring, ll);
+            mpolys.add(pp);
         }
         OptimizedModuleList<C> op = new OptimizedModuleList<C>(perm, pring, mpolys);
         return op;
@@ -526,19 +531,20 @@ public class TermOrderOptimization {
      * @param P module list.
      * @return optimized module list.
      */
-    public static <C extends RingElem<C>> 
-      OptimizedModuleList<GenPolynomial<C>> optimizeTermOrderOnCoefficients(ModuleList<GenPolynomial<C>> P) {
+    @SuppressWarnings("cast")
+    public static <C extends RingElem<C>> OptimizedModuleList<GenPolynomial<C>> optimizeTermOrderOnCoefficients(
+                    ModuleList<GenPolynomial<C>> P) {
         if (P == null) {
             return null;
         }
         GenPolynomialRing<GenPolynomial<C>> ring = P.ring;
-        List<GenPolynomial<GenPolynomial<C>>> M =  new ArrayList<GenPolynomial<GenPolynomial<C>>>();
+        List<GenPolynomial<GenPolynomial<C>>> M = new ArrayList<GenPolynomial<GenPolynomial<C>>>();
         for (List<GenPolynomial<GenPolynomial<C>>> ll : P.list) {
             M.addAll(ll);
         }
         if (ring instanceof GenSolvablePolynomialRing) { // look also on solvable relations
             GenSolvablePolynomialRing<GenPolynomial<C>> Rs = (GenSolvablePolynomialRing<GenPolynomial<C>>) ring;
-            M.addAll( Rs.table.relationList() );
+            M.addAll(Rs.table.relationList());
         }
         List<Integer> perm = optimalPermutation(degreeMatrixOfCoefficients(M));
 
@@ -549,7 +555,8 @@ public class TermOrderOptimization {
         if (ring instanceof GenSolvablePolynomialRing) { // permute also solvable relations
             sring = (GenSolvablePolynomialRing<GenPolynomial<C>>) ring;
             psring = new GenSolvablePolynomialRing<GenPolynomial<C>>(pFac, sring);
-            List<GenPolynomial<GenPolynomial<C>>> ir = PolynomialList.<GenPolynomial<C>>castToList(sring.table.relationList()); 
+            List<GenPolynomial<GenPolynomial<C>>> ir = PolynomialList
+                            .<GenPolynomial<C>> castToList(sring.table.relationList());
             ir = permutationOnCoefficients(perm, psring, ir);
             psring.addRelations(ir);
             pring = (GenPolynomialRing<GenPolynomial<C>>) psring;
@@ -563,8 +570,8 @@ public class TermOrderOptimization {
             pp = permutationOnCoefficients(perm, pring, ll);
             mpolys.add(pp);
         }
-        OptimizedModuleList<GenPolynomial<C>> op 
-          = new OptimizedModuleList<GenPolynomial<C>>(perm, pring, mpolys);
+        OptimizedModuleList<GenPolynomial<C>> op = new OptimizedModuleList<GenPolynomial<C>>(perm, pring,
+                        mpolys);
         return op;
     }
 

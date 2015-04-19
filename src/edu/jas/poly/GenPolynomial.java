@@ -125,8 +125,8 @@ Iterable<Monomial<C>> {
      */
     protected GenPolynomial(GenPolynomialRing<C> r, SortedMap<ExpVector, C> v) {
         this(r);
-        if (v.size()>0) {
-            ring.creations++;
+        if (v.size() > 0) {
+            GenPolynomialRing.creations++;
             val.putAll(v); // assume no zero coefficients and val is empty
         }
     }
@@ -885,7 +885,7 @@ Iterable<Monomial<C>> {
      * @param S GenPolynomial.
      */
     public void doAddTo(GenPolynomial<C> S) {
-        if (S == null||S.isZERO()) {
+        if (S == null || S.isZERO()) {
             return;
         }
         if (this.isZERO()) {
@@ -920,7 +920,7 @@ Iterable<Monomial<C>> {
      * @param e exponent.
      */
     public void doAddTo(C a, ExpVector e) {
-        if (a == null||a.isZERO()) {
+        if (a == null || a.isZERO()) {
             return;
         }
         SortedMap<ExpVector, C> nv = this.val;
@@ -941,7 +941,6 @@ Iterable<Monomial<C>> {
 
     /**
      * GenPolynomial destructive summation.
-     * copied.
      * @param a coefficient.
      */
     public void doAddTo(C a) {
@@ -995,7 +994,7 @@ Iterable<Monomial<C>> {
      * @return this - a x<sup>e</sup>.
      */
     public GenPolynomial<C> subtract(C a, ExpVector e) {
-        if (a == null||a.isZERO()) {
+        if (a == null || a.isZERO()) {
             return this;
         }
         GenPolynomial<C> n = this.copy();
@@ -1033,10 +1032,10 @@ Iterable<Monomial<C>> {
      * @return this - a S.
      */
     public GenPolynomial<C> subtractMultiple(C a, GenPolynomial<C> S) {
-        if (a == null||a.isZERO()) {
+        if (a == null || a.isZERO()) {
             return this;
         }
-        if (S == null||S.isZERO()) {
+        if (S == null || S.isZERO()) {
             return this;
         }
         if (this.isZERO()) {
@@ -1074,10 +1073,10 @@ Iterable<Monomial<C>> {
      * @return this - a x<sup>e</sup> S.
      */
     public GenPolynomial<C> subtractMultiple(C a, ExpVector e, GenPolynomial<C> S) {
-        if (a == null|a.isZERO()) {
+        if (a == null || a.isZERO()) {
             return this;
         }
-        if (S == null||S.isZERO()) {
+        if (S == null || S.isZERO()) {
             return this;
         }
         if (this.isZERO()) {

@@ -7,8 +7,8 @@ package edu.jas.poly;
 
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Comparator;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -280,7 +280,7 @@ public final class TermOrder implements Serializable {
         if (w == null || w.length == 0) {
             throw new IllegalArgumentException("invalid term order weight");
         }
-        weight = Arrays.copyOf(w,w.length); // > Java-5
+        weight = Arrays.copyOf(w, w.length); // > Java-5
         this.evord = 0;
         this.evord2 = 0;
         evbeg1 = 0;
@@ -740,7 +740,7 @@ public final class TermOrder implements Serializable {
             }
             break;
         }
-            //----- begin reversed -----------
+        //----- begin reversed -----------
         case TermOrder.REVLEX: {
             switch (evord2) {
             case TermOrder.LEX: {
@@ -1253,7 +1253,7 @@ public final class TermOrder implements Serializable {
             }
             break;
         }
-            //----- end reversed-----------
+        //----- end reversed-----------
         default: {
             horder = null;
         }
@@ -1318,7 +1318,7 @@ public final class TermOrder implements Serializable {
         if (weight == null) {
             return null;
         }
-        return Arrays.copyOf(weight,weight.length); // > Java-5
+        return Arrays.copyOf(weight, weight.length); // > Java-5
     }
 
 
@@ -1743,7 +1743,7 @@ public final class TermOrder implements Serializable {
         long[] b = new long[a.length];
         int j = 0;
         for (Integer i : P) {
-            b[j] = a[(int) i];
+            b[j] = a[i];
             j++;
         }
         return b;
@@ -1760,8 +1760,8 @@ public final class TermOrder implements Serializable {
         if (getEvord2() != 0) {
             //throw new IllegalArgumentException("split term orders not permutable");
             tord = new TermOrder(getEvord2());
-            logger.warn("split term order '" + this
-                      + "' not permutable, resetting to most base term order " + tord);
+            logger.warn("split term order '" + this + "' not permutable, resetting to most base term order "
+                            + tord);
         }
         long[][] weight = getWeight();
         if (weight != null) {
