@@ -94,7 +94,9 @@
          listfiles="true"
          includeantruntime="false"
   >
-     <!--compilerarg value="-Xlint:unchecked" /-->
+     <!--
+     <compilerarg value="-Xlint:unchecked" />
+     -->
      <compilerarg value="-Xlint:-unchecked" />
      <compilerarg value="-Xlint:deprecation" />
      <src path="${src}" />
@@ -150,7 +152,7 @@
 <target name="doc" >
   <javadoc destdir="${doc}" 
            classpath="${doccp}" 
-           overview="overview.html" 
+           overview="doc/overview.html" 
            author="true" 
            linksource="true" 
            >
@@ -196,8 +198,8 @@
          classpath="${cp}" 
          fork="yes" >
     <arg line="${args}"/>
-    <jvmarg value="-server"/>
     <!--
+    <jvmarg value="-server"/>
     <jvmarg value="-verbose:gc"/>
     <jvmarg value="-Xmx2900M"/>
     <jvmarg value="-Xms2900M"/>
