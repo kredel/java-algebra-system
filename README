@@ -2,11 +2,11 @@
 JAS: Java Algebra System
 ========================
 
-Version 2.5, June 2014
+Version 2.5, May 2015
 
 by Heinz Kredel, University of Mannheim, kredel at rz.uni-mannheim.de
 
-Copyright (c) 2005-2014 by Heinz Kredel.
+Copyright (c) 2005-2015 by Heinz Kredel.
 
 Programms released under GPL or LGPL, see COPYING.jas or COPYING.lgpl.jas.
 
@@ -91,8 +91,8 @@ provided you have setup build.xml and the required libraries.
 Directory structure
 -------------------
 
-.          main directory, with html documentation
-+doc       javadocs, jython docs, jruby docs
+.          main directory, entry to html documentation
++doc       html documentation, javadocs, jython docs, jruby docs
 +edu       Java class files
 +examples  examples for jython, jruby and jas
 +images    images for html docs

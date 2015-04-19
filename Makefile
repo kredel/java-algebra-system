@@ -299,7 +299,7 @@ EXAMPY=$(wildcard examples/*.py)
 EXAMRB=$(wildcard examples/*.rb)
 EXAMJAS=$(subst examples/,, $(wildcard examples/*.jas))
 
-DOCU=$(wildcard jas-log.html index.html problems.html design.html COPYING* sample.jythonrc overview.html)
+DOCU=$(wildcard doc/jas-log.html index.html doc/problems.html doc/design.html COPYING* sample.jythonrc doc/overview.html)
 # */package.html 
 
 doc: $(FILES) $(TESTFILES)
@@ -326,8 +326,8 @@ jas-all.jar: $(ALLJAR)
 	cp jas.jar $(LIBPATH)/
 	mv jas.jar /tmp/jas-`date +%Y%j`.jar
 
-jas.tgz: $(FILES) $(TESTFILES) *.html TODO
-	tar -cvzf jas.tgz $(FILES) $(TESTFILES) *.html TODO
+jas.tgz: $(FILES) $(TESTFILES) *.html doc/*.html TODO
+	tar -cvzf jas.tgz $(FILES) $(TESTFILES) *.html doc/*.html TODO
 	cp jas.tgz /tmp/jas-`date +%Y%j`.tgz
 
 #	cp jas.jar ...../jas-`date +%Y%j`.jar
@@ -431,7 +431,7 @@ SVNSRT=4588
 export:
 	rm -rf ~/jas-versions/$(VERSION)
 	svn export --quiet file:///$(SVNREPO)/jas/trunk ~/jas-versions/$(VERSION)
-	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) `$(SVNREV)` download.html
+	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) `$(SVNREV)` doc/download.html
 	svn log -v -r HEAD:$(SVNSRT) file:///$(SVNREPO)/jas/trunk src trc examples jython mpj mpi jlinalg_adapter commons-math_adapter > ~/jas-versions/$(VERSION)/svn_change.log
 	cd ~/jas-versions/; jar -cfM $(VERSION).`$(SVNREV)`-src.zip $(VERSION)/
 	cd ~/jas-versions/$(VERSION)/; ant compile > ant_compile.out
@@ -457,7 +457,7 @@ export:
 	cp ~/java/lib/droidlog.jar ~/jas-versions/$(VERSION)/
 	cd ~/jas-versions/$(VERSION)/jlinalg_adapter; make all doc > ~/jas-versions/$(VERSION)/make_jlinalg.out
 	cd ~/jas-versions/$(VERSION)/commons-math_adapter; make all doc > ~/jas-versions/$(VERSION)/make_commons-math.out
-	cd ~/jas-versions/$(VERSION)/; jar -cfM ../$(VERSION).`$(SVNREV)`-doc.zip doc/ images/ *.html *.css
+	cd ~/jas-versions/$(VERSION)/; jar -cfM ../$(VERSION).`$(SVNREV)`-doc.zip doc/ images/ *.html doc/*.html *.css doc/*.css
 	mv ~/jas-versions/$(VERSION).`$(SVNREV)`-*.jar ~/jas-versions/$(VERSION)/
 	mv ~/jas-versions/$(VERSION).`$(SVNREV)`-*.zip ~/jas-versions/$(VERSION)/
 	cd ~/jas-versions/$(VERSION)/; chmod -v +r *.jar *.zip >chmod.out 2>&1
@@ -473,6 +473,7 @@ git-export:
 git-deploy:
 	$(RSYNC) -e 'ssh -p 2222' --delete-after ~/jas-versions/jas-git/jas.git/ krum:htdocs/jas.git
 	cd ~/jas-versions/jas-git/jas; git push -v $(DRY) google >> ~/jas-versions/$(VERSION)/git_push.out
+	cd ~/jas-versions/jas-git/jas; git push -v $(DRY) github >> ~/jas-versions/$(VERSION)/git_push.out
 
 jas-bin.jar:
 	jar -cfm $(VERSION).`$(SVNREV)`-bin.jar GBManifest.MF edu/ COPYING* log4j.properties
@@ -494,7 +495,7 @@ young:
 	echo youngest revision `svnlook youngest $(SVNREPO)/jas`
 
 subst:
-	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) `$(SVNREV)` download.html
+	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) `$(SVNREV)` doc/download.html
 
 
 # lines of code and number of classes
