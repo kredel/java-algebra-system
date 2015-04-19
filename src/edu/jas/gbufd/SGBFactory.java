@@ -26,12 +26,14 @@ import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.QuotPairFactory;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.ValueFactory;
-import edu.jas.structure.QuotPairFactory;
 import edu.jas.ufd.Quotient;
 import edu.jas.ufd.QuotientRing;
-//import edu.jas.application.SolvableResidueRing; // cycle
+
+
+// import edu.jas.application.SolvableResidueRing; // package cycle
 
 
 /**
@@ -523,7 +525,7 @@ public class SGBFactory {
      * @param pl pair selection strategy
      * @return GB proxy algorithm implementation.
      */
-    @SuppressWarnings({ "cast", "unchecked" })
+    @SuppressWarnings({ "unchecked" })
     public static <C extends GcdRingElem<C>> // interface RingElem not sufficient 
     SolvableGroebnerBaseAbstract<C> getProxy(RingFactory<C> fac, PairList<C> pl) {
         if (ComputerThreads.NO_THREADS) {

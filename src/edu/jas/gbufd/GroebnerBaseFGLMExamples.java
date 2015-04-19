@@ -13,13 +13,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-//import junit.framework.Test;
-//import junit.framework.TestCase;
-//import junit.framework.TestSuite;
-
-import edu.jas.arith.BigRational;
-import edu.jas.arith.ModInteger;
-import edu.jas.arith.ModIntegerRing;
 import edu.jas.gb.GroebnerBase;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -28,14 +21,17 @@ import edu.jas.poly.Monomial;
 import edu.jas.poly.OrderedPolynomialList;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.PolynomialList;
+import edu.jas.arith.BigRational;
+import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
 
 
 /**
- * Groebner base FGLM examples. Without JUnit.
+ * Groebner base FGLM examples. 
  * @author Jan Suess.
  */
 
-public class GroebnerBaseFGLMExamples /*extends TestCase*/ {
+public class GroebnerBaseFGLMExamples {
 
 
     /**
@@ -683,7 +679,7 @@ public class GroebnerBaseFGLMExamples /*extends TestCase*/ {
                         + buchberger_Grad + "      |" + tconv + "       |" + buchberger_Lex;
 
         //assertEquals(o2, o3);
-        if (! o2.equals(o3) ) {
+        if (!o2.equals(o3)) {
             throw new RuntimeException("FGLM != GB: " + o2 + " != " + o3);
         }
         return erg;
@@ -915,7 +911,7 @@ public class GroebnerBaseFGLMExamples /*extends TestCase*/ {
                         + "    |" + buchberger_Grad + "     |" + tconv + "    |" + buchberger_Lex;
 
         //assertEquals(o2, o3);
-        if (! o2.equals(o3) ) {
+        if (!o2.equals(o3)) {
             throw new RuntimeException("FGLM != GB: " + o2 + " != " + o3);
         }
         return erg;
@@ -1033,10 +1029,10 @@ public class GroebnerBaseFGLMExamples /*extends TestCase*/ {
         return ret.toString();
     }
 
- 
+
     /**
-     * Method bitHeight returns the bitlength of the greatest number 
-     * occurring during the computation of a Groebner base.
+     * Method bitHeight returns the bitlength of the greatest number occurring
+     * during the computation of a Groebner base.
      */
     public int bitHeight(List<GenPolynomial<BigRational>> list) {
         BigInteger denom = BigInteger.ONE;
