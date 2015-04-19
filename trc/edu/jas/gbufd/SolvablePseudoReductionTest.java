@@ -15,6 +15,7 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigInteger;
+import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolynomialList;
@@ -38,6 +39,7 @@ public class SolvablePseudoReductionTest extends TestCase {
     public static void main(String[] args) {
         BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
+        ComputerThreads.terminate();
     }
 
 

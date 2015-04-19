@@ -17,6 +17,7 @@ import org.apache.log4j.BasicConfigurator;
 // import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigInteger;
+import edu.jas.kern.ComputerThreads;
 import edu.jas.gb.SolvableGroebnerBaseAbstract;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
@@ -44,6 +45,7 @@ public class SolvableGroebnerBasePseudoSeqTest extends TestCase {
     public static void main(String[] args) {
         BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
+        ComputerThreads.terminate();
     }
 
 
