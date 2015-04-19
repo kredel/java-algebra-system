@@ -114,8 +114,8 @@ public class ResidueSolvablePolynomialQLRTest extends TestCase {
     protected void setUp() {
         cfac = new BigRational(1);
         sring = new GenSolvablePolynomialRing<BigRational>(cfac, tord, cvars);
-        RelationGenerator<BigRational> wc = new WeylRelations<BigRational>();
-        // not possible, TODO: sring.addRelations(wc); //wc.generate(sring);
+        //RelationGenerator<BigRational> wc = new WeylRelations<BigRational>();
+        //not possible: sring.addRelations(wc); //wc.generate(sring);
         List<GenSolvablePolynomial<BigRational>> il = new ArrayList<GenSolvablePolynomial<BigRational>>();
         GenSolvablePolynomial<BigRational> p1 = sring.parse("b - a^2");
         il.add(p1);
@@ -135,7 +135,7 @@ public class ResidueSolvablePolynomialQLRTest extends TestCase {
         //System.out.println("qrel = " + qrel);
         List<GenSolvablePolynomial<GenPolynomial<BigRational>>> prel = new ArrayList<GenSolvablePolynomial<GenPolynomial<BigRational>>>();
         for (GenSolvablePolynomial<SolvableResidue<BigRational>> q : qrel) {
-	    GenSolvablePolynomial<GenPolynomial<BigRational>> p = ring.toPolyCoefficients(q);
+            GenSolvablePolynomial<GenPolynomial<BigRational>> p = ring.toPolyCoefficients(q);
             prel.add(p);
         }
         //System.out.println("prel = " + prel);

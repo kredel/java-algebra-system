@@ -23,9 +23,8 @@ import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.RecSolvablePolynomial;
-import edu.jas.poly.RelationTable;
-import edu.jas.poly.TermOrder;
 import edu.jas.poly.RelationGenerator;
+import edu.jas.poly.TermOrder;
 import edu.jas.poly.WeylRelations;
 
 
@@ -112,8 +111,8 @@ public class ResidueSolvablePolynomialTest extends TestCase {
     protected void setUp() {
         cfac = new BigRational(1);
         sring = new GenSolvablePolynomialRing<BigRational>(cfac, tord, cvars);
-        RelationGenerator<BigRational> wc = new WeylRelations<BigRational>();
-        // not possible, TODO: sring.addRelations(wc); 
+        //RelationGenerator<BigRational> wc = new WeylRelations<BigRational>();
+        //not possible: sring.addRelations(wc); 
         List<GenSolvablePolynomial<BigRational>> il = new ArrayList<GenSolvablePolynomial<BigRational>>();
         GenSolvablePolynomial<BigRational> p1 = sring.parse("b - a^2");
         il.add(p1);
@@ -133,7 +132,7 @@ public class ResidueSolvablePolynomialTest extends TestCase {
         //System.out.println("qrel = " + qrel);
         List<GenSolvablePolynomial<GenPolynomial<BigRational>>> prel = new ArrayList<GenSolvablePolynomial<GenPolynomial<BigRational>>>();
         for (GenSolvablePolynomial<SolvableResidue<BigRational>> q : qrel) {
-	    GenSolvablePolynomial<GenPolynomial<BigRational>> p = ring.toPolyCoefficients(q);
+            GenSolvablePolynomial<GenPolynomial<BigRational>> p = ring.toPolyCoefficients(q);
             prel.add(p);
         }
         //System.out.println("prel = " + prel);
@@ -402,7 +401,8 @@ public class ResidueSolvablePolynomialTest extends TestCase {
         ResidueSolvablePolynomial<BigRational> r1 = ring.parse("x");
         GenSolvablePolynomial<BigRational> r2 = sring.parse("a");
         ResidueSolvablePolynomial<BigRational> rp = ring.parse("a x + b");
-        ring.polCoeff.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(), ring.toPolyCoefficients(rp));
+        ring.polCoeff.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(),
+                        ring.toPolyCoefficients(rp));
 
         int k = rl;
         ResidueSolvablePolynomialRing<BigRational> pfe = ring.extend(k);
@@ -435,7 +435,8 @@ public class ResidueSolvablePolynomialTest extends TestCase {
         ResidueSolvablePolynomial<BigRational> r1 = ring.parse("x");
         GenSolvablePolynomial<BigRational> r2 = sring.parse("a");
         ResidueSolvablePolynomial<BigRational> rp = ring.parse("a x + b");
-        ring.polCoeff.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(), ring.toPolyCoefficients(rp));
+        ring.polCoeff.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(),
+                        ring.toPolyCoefficients(rp));
 
         ResidueSolvablePolynomialRing<BigRational> pfr = ring.reverse();
         ResidueSolvablePolynomialRing<BigRational> pfrr = pfr.reverse();
