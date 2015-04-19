@@ -16,11 +16,11 @@ import edu.jas.gb.SolvableGroebnerBase;
 import edu.jas.gbufd.GBFactory;
 import edu.jas.gbufd.SGBFactory;
 import edu.jas.poly.ExpVector;
-import edu.jas.poly.PolynomialList;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
+import edu.jas.poly.PolynomialList;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.ufd.SquarefreeAbstract;
@@ -253,10 +253,10 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             boolean t;
             if (cf instanceof GenSolvablePolynomialRing) {
                 GenSolvablePolynomialRing<Residue<C>> rf = new GenSolvablePolynomialRing<Residue<C>>(r, cf);
-                List<GenSolvablePolynomial<GenPolynomial<C>>> rel 
-		    = ((GenSolvablePolynomialRing<GenPolynomial<C>>)cf).table.relationList();
-                List<GenPolynomial<Residue<C>>> relres  
-                    = PolyUtilApp.<C> toResidue(rf, PolynomialList.<GenPolynomial<C>> castToList(rel));
+                List<GenSolvablePolynomial<GenPolynomial<C>>> rel = ((GenSolvablePolynomialRing<GenPolynomial<C>>) cf).table
+                                .relationList();
+                List<GenPolynomial<Residue<C>>> relres = PolyUtilApp.<C> toResidue(rf,
+                                PolynomialList.<GenPolynomial<C>> castToList(rel));
                 rf.addRelations(relres);
                 //System.out.println("rf = " + rf.toScript());
                 list = PolyUtilApp.<C> toResidue(rf, F);
@@ -286,10 +286,10 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         }
         List<GenPolynomial<C>> il = new ArrayList<GenPolynomial<C>>();
         int i = 0;
-        int j = 1;
+        //int j = 1;
         while (i < nv) {
-            j++;
-            GenPolynomial<C> p = ccf.random(3,3,3,0.3f); //j + 1);
+            //j++;
+            GenPolynomial<C> p = ccf.random(3, 3, 3, 0.3f); //j + 1);
             // System.out.println("p = " + p);
             if (p.isConstant()) {
                 continue;
@@ -305,26 +305,26 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         Ideal<C> id = new Ideal<C>(ccf, il);
         ResidueRing<C> r = new ResidueRing<C>(id);
         //GroebnerBase<Residue<C>> bb = new GroebnerBasePseudoSeq<Residue<C>>(r);
-	List<GenPolynomial<Residue<C>>> list;
-	boolean t;
-	if (cf instanceof GenSolvablePolynomialRing) {
-	    GenSolvablePolynomialRing<Residue<C>> rf = new GenSolvablePolynomialRing<Residue<C>>(r, cf);
-	    List<GenSolvablePolynomial<GenPolynomial<C>>> rel 
-		= ((GenSolvablePolynomialRing<GenPolynomial<C>>)cf).table.relationList();
-	    List<GenPolynomial<Residue<C>>> relres  
-		= PolyUtilApp.<C> toResidue(rf, PolynomialList.<GenPolynomial<C>> castToList(rel));
+        List<GenPolynomial<Residue<C>>> list;
+        boolean t;
+        if (cf instanceof GenSolvablePolynomialRing) {
+            GenSolvablePolynomialRing<Residue<C>> rf = new GenSolvablePolynomialRing<Residue<C>>(r, cf);
+            List<GenSolvablePolynomial<GenPolynomial<C>>> rel = ((GenSolvablePolynomialRing<GenPolynomial<C>>) cf).table
+                            .relationList();
+            List<GenPolynomial<Residue<C>>> relres = PolyUtilApp.<C> toResidue(rf,
+                            PolynomialList.<GenPolynomial<C>> castToList(rel));
             rf.addRelations(relres);
-	    //System.out.println("rf = " + rf.toScript());
-	    list = PolyUtilApp.<C> toResidue(rf, F);
-	    SolvableGroebnerBase<Residue<C>> bb = SGBFactory.getImplementation(r);
-	    t = bb.isLeftGB(PolynomialList.<Residue<C>> castToSolvableList(list));
-	} else {
-	    GenPolynomialRing<Residue<C>> rf = new GenPolynomialRing<Residue<C>>(r, cf);
-	    //System.out.println("rf = " + rf.toScript());
-	    list = PolyUtilApp.<C> toResidue(rf, F);
-	    GroebnerBase<Residue<C>> bb = GBFactory.getImplementation(r);
-	    t = bb.isGB(list);
-	}
+            //System.out.println("rf = " + rf.toScript());
+            list = PolyUtilApp.<C> toResidue(rf, F);
+            SolvableGroebnerBase<Residue<C>> bb = SGBFactory.getImplementation(r);
+            t = bb.isLeftGB(PolynomialList.<Residue<C>> castToSolvableList(list));
+        } else {
+            GenPolynomialRing<Residue<C>> rf = new GenPolynomialRing<Residue<C>>(r, cf);
+            //System.out.println("rf = " + rf.toScript());
+            list = PolyUtilApp.<C> toResidue(rf, F);
+            GroebnerBase<Residue<C>> bb = GBFactory.getImplementation(r);
+            t = bb.isGB(list);
+        }
         if (!t) {
             System.out.println("test random ideal = " + id.toScript());
             System.out.println("no GB for residue coefficients = " + list);
