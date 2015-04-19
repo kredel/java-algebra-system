@@ -731,10 +731,10 @@ xm = SubModule.new(PolyRing.new(QQ(),"u, v, l",PolyRing.lex),"",list=[ [ 0, 1, (
 
 puts "xm = " + str(xm);
 puts;
-#rg = sm.GB();
-#puts "rg:", rg;
-#puts "isGB:", rg.isGB();
-#puts;
+## rg = sm.GB();
+## puts "rg: " + str(rg);
+## puts "isGB: " + str(rg.isGB());
+## puts;
 
 
 puts "------- SolvableSubModule(SolvPolyRing(CC(),\"X,Y,x,y\")) ---------";
@@ -783,11 +783,11 @@ puts "xsm: " + str(xsm);
 puts;
 
 ## mlg = ssm.leftGB();
-## puts "mlg:", mlg;
+## puts "mlg: " + str(mlg);
 ## puts;
 
 ## mtg = ssm.twosidedGB();
-## puts "mtg:", mtg;
+## puts "mtg: " + str(mtg);
 ## puts;
 
 puts "------------------------------------";
@@ -800,9 +800,8 @@ terminate();
 #puts "locals()  = " + str(locals());
 #puts "vars()    = " + str(vars());
 
-terminate();
-__END__
-
-to_skip = <<TOSKIP
-
-TOSKIP
+#terminate();
+#__END__
+#to_skip = <<TOSKIP
+#
+#TOSKIP

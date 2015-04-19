@@ -4426,7 +4426,7 @@ Compute a two-sided Groebner base.
         t = System.currentTimeMillis();
         gg = ModSolvableGroebnerBaseSeq.new(@modu.ring.coFac).twosidedGB(@mset);
         t = System.currentTimeMillis() - t;
-        puts "executed in #{t} ms\n"; 
+        puts "executed twosided module GB in #{t} ms\n"; 
         return SolvableSubModule.new(@modu,"",gg.list);
     end
 
@@ -4448,7 +4448,7 @@ Compute a right Groebner base.
         t = System.currentTimeMillis();
         gg = ModSolvableGroebnerBaseSeq.new(@modu.ring.coFac).rightGB(@mset);
         t = System.currentTimeMillis() - t;
-        puts "executed module rightGB in #{t} ms\n"; 
+        puts "executed right module GB in #{t} ms\n"; 
         return SolvableSubModule.new(@modu,"",gg.list);
     end
 

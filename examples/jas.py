@@ -1856,7 +1856,7 @@ class SolvableSubModule:
         t = System.currentTimeMillis();
         G = ModSolvableGroebnerBaseSeq(self.module.ring.coFac).twosidedGB(self.mset);
         t = System.currentTimeMillis() - t;
-        print "executed in %s ms" % t; 
+        print "executed twosided module GB in %s ms" % t; 
         return SolvableSubModule(self.module,"",G.list);
 
     def isTwosidedGB(self):
@@ -1874,7 +1874,7 @@ class SolvableSubModule:
         t = System.currentTimeMillis();
         G = ModSolvableGroebnerBaseSeq(self.module.ring.coFac).rightGB(self.mset);
         t = System.currentTimeMillis() - t;
-        print "executed module rightGB in %s ms" % t; 
+        print "executed right module GB in %s ms" % t; 
         return SolvableSubModule(self.module,"",G.list);
 
     def isRightGB(self):
