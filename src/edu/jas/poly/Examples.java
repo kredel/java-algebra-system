@@ -8,6 +8,8 @@ package edu.jas.poly;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.BasicConfigurator;
+
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
@@ -26,15 +28,16 @@ public class Examples {
      * main.
      */
     public static void main(String[] args) {
+        BasicConfigurator.configure();
         //example0();
         /*
-        example1();
-        example2();
-        example3();
-        example4();
-        example5();
+          example1();
+          example2();
+          example3();
+          example4();
+          example5();
         */
-        //example6();
+        //example6(); 
         example7();
         example7();
         //example8();
@@ -42,6 +45,7 @@ public class Examples {
         //example10();
         //example11();
         //example12();
+        //example13();
     }
 
 
@@ -543,4 +547,27 @@ public class Examples {
         System.out.println("t5.isAssignableFrom(t3) = " + t5.getClass().isAssignableFrom(t3.getClass()));
     }
 
+
+    /**
+     * example13. poly parser for strange syntax.
+     */
+    public static void example13() {
+        System.out.println("\n\n example 13");
+        TermOrder to = new TermOrder(TermOrder.INVLEX);
+        BigRational cfraction = new BigRational(1);
+        String[] vars = new String[] { "x" };
+
+        GenPolynomialRing<BigRational> pfac 
+            = new GenPolynomialRing<BigRational>(cfraction, 1, to, vars);
+        GenPolynomial<BigRational> FF0 = pfac.parse("19(6)/10");
+        System.out.println("FF0 = " + FF0);
+        FF0 = pfac.parse("19(6)1/10");
+        System.out.println("FF0 = " + FF0);
+        FF0 = pfac.parse("19 6/10");
+        System.out.println("FF0 = " + FF0);
+        FF0 = pfac.parse("19*6/10");
+        System.out.println("FF0 = " + FF0);
+        FF0 = pfac.parse("(x).2");
+        System.out.println("FF0 = " + FF0);
+    }
 }

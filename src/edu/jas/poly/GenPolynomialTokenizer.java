@@ -163,6 +163,7 @@ public class GenPolynomialTokenizer {
         tok.wordChars('A', 'Z');
         tok.wordChars('_', '_'); // for subscripts x_i
         tok.wordChars('/', '/'); // wg. rational numbers
+        tok.wordChars('.', '.'); // wg. floats
         tok.wordChars(128 + 32, 255);
         tok.whitespaceChars(0, ' ');
         tok.commentChar('#');
@@ -368,16 +369,29 @@ public class GenPolynomialTokenizer {
                 //no break;
                 break;
 
+                //case '.': // eventually a float
+                //System.out.println("start . = " + reader);
+                //throw new InvalidExpressionException("float must start with a digit ");
+
             case StreamTokenizer.TT_WORD:
                 //System.out.println("TT_WORD: " + tok.sval);
                 if (tok.sval == null || tok.sval.length() == 0)
                     break;
                 // read coefficient
                 first = tok.sval.charAt(0);
-                if (digit(first)) {
+                if (digit(first)||first == '/'||first == '.') {
                     //System.out.println("coeff 0 = " + tok.sval );
                     StringBuffer df = new StringBuffer();
                     df.append(tok.sval);
+                    if (tok.sval.length() > 1 && digit(tok.sval.charAt(1))) {
+                        //System.out.println("start / or . = " + tok.sval);
+                        if (first == '/') { // let x/2 be x 1/2
+                            df.insert(0,"1");
+                        }
+                        if (first == '.') { // let x.2 be x 0.2
+                            df.insert(0,"0");
+                        }
+                    }
                     if (tok.sval.charAt(tok.sval.length() - 1) == 'i') { // complex number
                         tt = tok.nextToken();
                         if (debug)
