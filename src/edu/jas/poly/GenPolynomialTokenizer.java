@@ -267,7 +267,17 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * Parsing method for GenPolynomial. syntax ? (simple)
+     * Parsing method for GenPolynomial. syntax depends also on the 
+     * syntax of the coefficients, as the respective parser is used.
+     * Basic term/monomial syntax:
+     * <pre>
+     ... coefficient_j variable_i**exponent_i ... variable_k**exponent_K
+</pre>
+     * Juxtaposizion means multiplication <pre>*</pre>. Then term/monoials can be 
+     * added or subtracted <pre>+, -</pre> and grouped by parenthesis <pre>()</pre>. 
+     * There are some heuristics to detect when a coefficient should 
+     * be parsed. To force parsing of a coefficient enclose it in 
+     * braces <pre>{}</pre>  
      * @return the next polynomial.
      * @throws IOException
      */
@@ -416,7 +426,7 @@ public class GenPolynomialTokenizer {
                         }
                     }
                     tt = tok.nextToken();
-                    if (tt == '.') { // decimal number
+                    if (tt == '.') { // decimal number, obsolete by word char?
                         tt = tok.nextToken();
                         if (debug)
                             logger.debug("tt,dot = " + tok);
@@ -548,7 +558,8 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * Parsing method for exponent (of variable). syntax: ^long | **long.
+     * Parsing method for exponent (of variable). syntax: 
+     * <pre>^long | **long</pre>.
      * @return the next exponent or 1.
      * @throws IOException
      */
@@ -591,8 +602,10 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * Parsing method for comments. syntax: (* comment *) | /_* comment *_/
-     * without _ Does not work with this pushBack(), unused.
+     * Parsing method for comments. syntax: 
+     * <pre>(* comment *) | /_* comment *_/</pre>
+     * without <pre>_</pre>. 
+     * Unused, as it does not work with this pushBack().
      */
     public String nextComment() throws IOException {
         // syntax: (* comment *) | /* comment */ 
@@ -634,8 +647,9 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * Parsing method for variable list. syntax: (a, b c, de) gives [ "a", "b",
-     * "c", "de" ]
+     * Parsing method for variable list. syntax: 
+     * <pre>(a, b c, de)</pre> gives <pre>[ "a", "b",
+     * "c", "de" ]</pre>
      * @return the next variable list.
      * @throws IOException
      */
@@ -669,9 +683,8 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * Parsing method for coefficient ring. syntax: Rat | Q | Int | Z | Mod
-     * modul | Complex | C | D | Quat | AN[ (var) ( poly ) ] | AN[ modul (var) (
-     * poly ) ] | IntFunc (var_list)
+     * Parsing method for coefficient ring. syntax: 
+     * <pre>Rat | Q | Int | Z | Mod modul | Complex | C | D | Quat | AN[ (var) ( poly ) ] | AN[ modul (var) ( poly ) ] | IntFunc (var_list)</pre>
      * @return the next coefficient factory.
      * @throws IOException
      */
@@ -837,7 +850,8 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * Parsing method for weight list. syntax: (w1, w2, w3, ..., wn)
+     * Parsing method for weight list. syntax: 
+     * <pre>(w1, w2, w3, ..., wn)</pre>
      * @return the next weight list.
      * @throws IOException
      */
@@ -879,8 +893,8 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * Parsing method for weight array. syntax: ( (w11, ...,w1n), ..., (wm1,
-     * ..., wmn) )
+     * Parsing method for weight array. syntax: 
+     * <pre>( (w11, ...,w1n), ..., (wm1, ..., wmn) )</pre>
      * @return the next weight array.
      * @throws IOException
      */
@@ -930,7 +944,7 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * Parsing method for split index. syntax: |i|
+     * Parsing method for split index. syntax: <pre>|i|</pre>
      * @return the next split index.
      * @throws IOException
      */
@@ -995,8 +1009,8 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * Parsing method for term order name. syntax: termOrderName = L, IL, LEX,
-     * G, IG, GRLEX, W(weights) |split index|
+     * Parsing method for term order name. syntax: 
+     * <pre>L, IL, LEX, G, IG, GRLEX, W(weights) |split index|</pre>
      * @return the next term order.
      * @throws IOException
      */
@@ -1042,7 +1056,8 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * Parsing method for polynomial list. syntax: ( p1, p2, p3, ..., pn )
+     * Parsing method for polynomial list. syntax: 
+     * <pre>( p1, p2, p3, ..., pn )</pre>
      * @return the next polynomial list.
      * @throws IOException
      */
@@ -1081,8 +1096,8 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * Parsing method for submodule list. syntax: ( ( p11, p12, p13, ..., p1n ),
-     * ..., ( pm1, pm2, pm3, ..., pmn ) )
+     * Parsing method for submodule list. syntax: 
+     * <pre>( ( p11, p12, p13, ..., p1n ), ..., ( pm1, pm2, pm3, ..., pmn ) )</pre>
      * @return the next list of polynomial lists.
      * @throws IOException
      */
@@ -1116,8 +1131,9 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * Parsing method for solvable polynomial relation table. syntax: ( p_1,
-     * p_2, p_3, ..., p_{n+3} ) semantics: p_{n+1} * p_{n+2} = p_{n+3} The next
+     * Parsing method for solvable polynomial relation table. syntax: 
+     * <pre>( p_1, p_2, p_3, ..., p_{n+3} )<pre>
+     * semantics: p_{n+1} * p_{n+2} = p_{n+3} The next
      * relation table is stored into the solvable polynomial factory.
      * @throws IOException
      */
@@ -1165,8 +1181,8 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * Parsing method for polynomial set. syntax: coeffRing varList
-     * termOrderName polyList.
+     * Parsing method for polynomial set. syntax: <pre>coeffRing varList
+     * termOrderName polyList</pre>.
      * @return the next polynomial set.
      * @throws IOException
      */
@@ -1199,8 +1215,8 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * Parsing method for module set. syntax: coeffRing varList termOrderName
-     * moduleList.
+     * Parsing method for module set. syntax: <pre>coeffRing varList termOrderName
+     * moduleList</pre>.
      * @return the next module set.
      * @throws IOException
      */
@@ -1234,8 +1250,8 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * Parsing method for solvable polynomial list. syntax: ( p1, p2, p3, ...,
-     * pn )
+     * Parsing method for solvable polynomial list. syntax: 
+     * <pre>( p1, p2, p3, ..., pn )</pre>
      * @return the next solvable polynomial list.
      * @throws IOException
      */
@@ -1259,7 +1275,9 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * Parsing method for solvable polynomial. syntax: p.
+     * Parsing method for solvable polynomial. syntax: same as for polynomial.
+     * If the relation table is set-up, then multiplication will mean 
+     * solvable-multiplication.
      * @return the next polynomial.
      * @throws IOException
      */
@@ -1276,12 +1294,11 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * Parsing method for solvable polynomial set. syntax: varList termOrderName
-     * relationTable polyList.
+     * Parsing method for solvable polynomial set. syntax: 
+     * <pre>varList termOrderName relationTable polyList</pre>.
      * @return the next solvable polynomial set.
      * @throws IOException
      */
-
     @SuppressWarnings("unchecked")
     public PolynomialList nextSolvablePolynomialSet() throws IOException {
         //String comments = "";
@@ -1320,8 +1337,8 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * Parsing method for solvable submodule list. syntax: ( ( p11, p12, p13,
-     * ..., p1n ), ..., ( pm1, pm2, pm3, ..., pmn ) )
+     * Parsing method for solvable submodule list. syntax: 
+     * <pre>( ( p11, p12, p13, ..., p1n ), ..., ( pm1, pm2, pm3, ..., pmn ) )</pre>
      * @return the next list of solvable polynomial lists.
      * @throws IOException
      */
@@ -1355,8 +1372,8 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * Parsing method for solvable module set. syntax: varList termOrderName
-     * relationTable moduleList.
+     * Parsing method for solvable module set. syntax: 
+     * <pre>varList termOrderName relationTable moduleList</pre>.
      * @return the next solvable module set.
      * @throws IOException
      */
@@ -1404,12 +1421,12 @@ public class GenPolynomialTokenizer {
     //}
 
 
-    private static boolean digit(char x) {
+    static boolean digit(char x) {
         return '0' <= x && x <= '9';
     }
 
 
-    private static boolean letter(char x) {
+    static boolean letter(char x) {
         return ('a' <= x && x <= 'z') || ('A' <= x && x <= 'Z');
     }
 
@@ -1428,8 +1445,9 @@ public class GenPolynomialTokenizer {
 
     /**
      * Parse variable list from String.
-     * @param s String. Syntax: (n1,...,nk) or (n1 ... nk), parenthesis are also
-     *            optional.
+     * @param s String. Syntax: 
+     * <pre>(n1,...,nk)</pre> or <pre>(n1 ... nk)</pre>, 
+     * parenthesis are optional.
      * @return array of variable names found in s.
      */
     public static String[] variableList(String s) {
