@@ -286,9 +286,9 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * Parsing method for variable list. syntax: 
+     * Parsing method for variable list. Syntax: 
      * <pre>(a, b c, de)</pre> gives 
-     * <pre>[ "a", "b", "c", "de" ]</pre>
+     * <code>[ "a", "b", "c", "de" ]</code>
      * @return the next variable list.
      * @throws IOException
      */
@@ -324,7 +324,7 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * Parsing method for coefficient ring. syntax: 
+     * Parsing method for coefficient ring. Syntax: 
      * <pre>Rat | Q | Int | Z | Mod modul | Complex | C | D | Quat |
  AN[ (var) ( poly ) | AN[ modul (var) ( poly ) ] | 
  RatFunc (var_list) | ModFunc modul (var_list) | IntFunc (var_list)
@@ -510,7 +510,7 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * Parsing method for weight list. syntax: 
+     * Parsing method for weight list. Syntax: 
      * <pre>(w1, w2, w3, ..., wn)</pre>
      * @return the next weight list.
      * @throws IOException
@@ -553,7 +553,7 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * Parsing method for weight array. syntax: 
+     * Parsing method for weight array. Syntax: 
      * <pre>( (w11, ...,w1n), ..., (wm1, ..., wmn) )</pre>
      * @return the next weight array.
      * @throws IOException
@@ -604,7 +604,7 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * Parsing method for split index. syntax: <pre>|i|</pre>
+     * Parsing method for split index. Syntax: <pre>|i|</pre>
      * @return the next split index.
      * @throws IOException
      */
@@ -673,7 +673,7 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * Parsing method for term order name. syntax: 
+     * Parsing method for term order name. Syntax: 
      * <pre>L | IL | LEX | G | IG | GRLEX | W(weights) | '|'split index'|'</pre>
      * @return the next term order.
      * @throws IOException
@@ -720,9 +720,9 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * Parsing method for solvable polynomial relation table. syntax: 
-     * <pre>( p_1, p_2, p_3, ..., p_{n+3} )</pre>
-     * semantics: p_{n+1} * p_{n+2} = p_{n+3} The next
+     * Parsing method for solvable polynomial relation table. Syntax: 
+     * <pre>( p_1, p_2, p_3, ..., p_{n+1}, p_{n+2}, p_{n+3} )</pre>
+     * semantics: <code>p_{n+1} * p_{n+2} = p_{n+3}</code> The next
      * relation table is stored into the solvable polynomial factory.
      * @throws IOException
      */
@@ -773,8 +773,8 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * Parsing method for polynomial ring. syntax: 
-     * <pre>coeffRing varList termOrderName polyList</pre>.
+     * Parsing method for polynomial ring. Syntax: 
+     * <pre>coeffRing varList termOrderName polyList</pre>
      * @return the next polynomial ring.
      * @throws IOException
      */
@@ -804,8 +804,8 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * Parsing method for solvable polynomial ring. syntax: 
-     * <pre>varList termOrderName relationTable polyList</pre>.
+     * Parsing method for solvable polynomial ring. Syntax: 
+     * <pre>varList termOrderName relationTable polyList</pre>
      * @return the next solvable polynomial ring.
      * @throws IOException
      */
@@ -867,7 +867,7 @@ public class RingFactoryTokenizer {
     /**
      * Parse variable list from String.
      * @param s String. Syntax: 
-     * <pre>(n1,...,nk)</pre> or <pre>(n1 ... nk)</pre>, 
+     * <pre>(n1,...,nk)</pre> or <pre>(n1 ... nk)</pre>
      * parenthesis are optional.
      * @return array of variable names found in s.
      */
