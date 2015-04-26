@@ -270,13 +270,13 @@ public class GenPolynomialTokenizer {
      * syntax of the coefficients, as the respective parser is used.
      * Basic term/monomial syntax:
      * <pre>
-     ... coefficient_j variable_i**exponent_i ... variable_k**exponent_K
+ ... coefficient variable**exponent ... variable^exponent + ... - ....
 </pre>
-     * Juxtaposizion means multiplication <code>*</code>. Then term/monoials can be 
+     * Juxtaposition means multiplication <code>*</code>. Then terms/monomials can be 
      * added or subtracted <code>+, -</code> and grouped by parenthesis <code>()</code>. 
      * There are some heuristics to detect when a coefficient should 
      * be parsed. To force parsing of a coefficient enclose it in 
-     * braces <code>{}</code>  
+     * braces <code>{}</code>.
      * @return the next polynomial.
      * @throws IOException
      */
@@ -1138,7 +1138,7 @@ public class GenPolynomialTokenizer {
     /**
      * Parsing method for solvable polynomial relation table. Syntax: 
      * <pre>( p_1, p_2, p_3, ..., p_{n+1}, p_{n+2}, p_{n+3} )</pre>
-     * semantics: <code>p_{n+1} * p_{n+2} = p_{n+3}</code> The next
+     * semantics: <code>p_{n+1} * p_{n+2} = p_{n+3}</code>. The next
      * relation table is stored into the solvable polynomial factory.
      * @throws IOException
      */
