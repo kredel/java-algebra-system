@@ -567,6 +567,8 @@ public class Examples {
         System.out.println("FF0 = " + FF0);
         FF0 = pfac.parse("19*6/10");
         System.out.println("FF0 = " + FF0);
+        FF0 = pfac.parse("19+6/10");
+        System.out.println("FF0 = " + FF0);
         FF0 = pfac.parse("(x).2");
         System.out.println("FF0 = " + FF0);
     }

@@ -65,7 +65,6 @@ public class GenPolynomialTokenizer {
     private RelationTable table;
 
 
-    //private Reader in;
     private final StreamTokenizer tok;
 
 
@@ -99,7 +98,7 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * noargs constructor reads from System.in.
+     * No-args constructor reads from System.in.
      */
     public GenPolynomialTokenizer() {
         this(new BufferedReader(new InputStreamReader(System.in, Charset.forName("UTF8"))));
@@ -107,7 +106,7 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * constructor with Ring and Reader.
+     * Constructor with Ring and Reader.
      * @param rf ring factory.
      * @param r reader stream.
      */
@@ -139,7 +138,7 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * constructor with Reader.
+     * Constructor with Reader.
      * @param r reader stream.
      */
     @SuppressWarnings("unchecked")
@@ -221,7 +220,7 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * Initialize polynomial and solvable polynomial factories.
+     * Initialize coefficient and solvable polynomial factories.
      * @param rf ring factory.
      * @param ct coefficient type.
      */
@@ -648,8 +647,8 @@ public class GenPolynomialTokenizer {
 
     /**
      * Parsing method for variable list. syntax: 
-     * <pre>(a, b c, de)</pre> gives <pre>[ "a", "b",
-     * "c", "de" ]</pre>
+     * <pre>(a, b c, de)</pre> gives 
+     * <pre>[ "a", "b", "c", "de" ]</pre>
      * @return the next variable list.
      * @throws IOException
      */
@@ -672,6 +671,8 @@ public class GenPolynomialTokenizer {
                 }
                 tt = tok.nextToken();
             }
+        } else {
+            tok.pushBack();
         }
         Object[] ol = l.toArray();
         String[] v = new String[ol.length];
@@ -955,7 +956,9 @@ public class GenPolynomialTokenizer {
         int tt;
         tt = tok.nextToken();
         if (tt == '|') {
-            logger.debug("split index");
+            if (debug) {
+                logger.debug("split index");
+            }
             tt = tok.nextToken();
             if (tt == StreamTokenizer.TT_EOF) {
                 return e;
@@ -972,7 +975,9 @@ public class GenPolynomialTokenizer {
                 }
             }
         } else if (tt == '[') {
-            logger.debug("split index");
+            if (debug) {
+                logger.debug("split index");
+            }
             tt = tok.nextToken();
             if (tt == StreamTokenizer.TT_EOF) {
                 return e;
@@ -1010,7 +1015,7 @@ public class GenPolynomialTokenizer {
 
     /**
      * Parsing method for term order name. syntax: 
-     * <pre>L, IL, LEX, G, IG, GRLEX, W(weights) |split index|</pre>
+     * <pre>L | IL | LEX | G | IG | GRLEX | W(weights) | '|'split index'|'</pre>
      * @return the next term order.
      * @throws IOException
      */
@@ -1132,7 +1137,7 @@ public class GenPolynomialTokenizer {
 
     /**
      * Parsing method for solvable polynomial relation table. syntax: 
-     * <pre>( p_1, p_2, p_3, ..., p_{n+3} )<pre>
+     * <pre>( p_1, p_2, p_3, ..., p_{n+3} )</pre>
      * semantics: p_{n+1} * p_{n+2} = p_{n+3} The next
      * relation table is stored into the solvable polynomial factory.
      * @throws IOException
@@ -1149,7 +1154,7 @@ public class GenPolynomialTokenizer {
         int tt;
         tt = tok.nextToken();
         if (debug) {
-            logger.debug("relation table: " + tt);
+            logger.debug("start relation table: " + tt);
         }
         if (tok.sval != null) {
             if (tok.sval.equalsIgnoreCase("RelationTable")) {
@@ -1181,8 +1186,8 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * Parsing method for polynomial set. syntax: <pre>coeffRing varList
-     * termOrderName polyList</pre>.
+     * Parsing method for polynomial set. syntax: 
+     * <pre>coeffRing varList termOrderName polyList</pre>.
      * @return the next polynomial set.
      * @throws IOException
      */
@@ -1215,8 +1220,8 @@ public class GenPolynomialTokenizer {
 
 
     /**
-     * Parsing method for module set. syntax: <pre>coeffRing varList termOrderName
-     * moduleList</pre>.
+     * Parsing method for module set. syntax: 
+     * <pre>coeffRing varList termOrderName moduleList</pre>.
      * @return the next module set.
      * @throws IOException
      */
