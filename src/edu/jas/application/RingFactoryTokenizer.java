@@ -722,7 +722,7 @@ public class RingFactoryTokenizer {
     /**
      * Parsing method for solvable polynomial relation table. Syntax: 
      * <pre>( p_1, p_2, p_3, ..., p_{n+1}, p_{n+2}, p_{n+3} )</pre>
-     * semantics: <code>p_{n+1} * p_{n+2} = p_{n+3}</code> The next
+     * semantics: <code>p_{n+1} * p_{n+2} = p_{n+3}</code>. The next
      * relation table is stored into the solvable polynomial factory.
      * @throws IOException
      */

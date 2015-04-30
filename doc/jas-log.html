@@ -25,7 +25,21 @@
 <dt>2015, May </dt> <!-- 2.5.52xx -->
 <dd> 
 
- Bugfix in two-sided Gr&ouml;bner bases methods.
+ New experimental solvable polynomials with non-commutative word
+ polynomials as coefficients. Adjustments for solvable left
+ multiplication of word polynomial coefficients and corresponding
+ changes for Gr&ouml;bner bases, if existing.
+
+ More methods <code>valueOf</code> in polynomial rings to construct
+ polynomials from coefficients and exponents or words. Check for
+ missing Ore conditions in solvable reduction algorithms. Use Ore
+ condition in solvable pseudo reduction algorithms for solvable
+ polynomial coefficients. New class <code>GreatestCommonDivisorFake</code>
+ returning always 1 for gcds.
+
+ Bugfix in two-sided Gr&ouml;bner bases right coefficient multipliers.
+ Fix in polynomial parser to accept some ASCIIMath expressions.
+ Small improvements and refactoring of the HTML documentation.
 
 </dd>
 
@@ -395,7 +409,7 @@
 <dt>2011, October</dt> 
 <dd>
  Separated test classes to new test source tree (trc). New <a
- href="examples/basic_sigbased_gb.py" target ="py">scripting
+ href="../examples/basic_sigbased_gb.py" target ="py">scripting
  classes</a> for Gr&ouml;bner base computations according to Eder and
  Perry (F5, Arri, GGV) and adapted <code>jas.py</code> in JAS for the
  required methods.  More JRuby examples. Small improvements and
@@ -497,7 +511,7 @@
 <dt>2010, December, 28</dt> 
 <dd> 
  Cleanup of package structure so that all cyclic dependencies have
- been removed, see <a href="images/PackageOverview.png">diagram</a>.
+ been removed, see <a href="../images/PackageOverview.png">diagram</a>.
  Split factory parsing parts from <code>GenPolynomialTokenizer</code>
  to <code>RingFactoryTokenizer</code>. Some artificial code was
  required to use solvable polynomials as ring elements since solvable
@@ -2449,7 +2463,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Sun Apr 19 12:49:08 CEST 2015
+Last modified: Thu Apr 30 22:33:26 CEST 2015
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
