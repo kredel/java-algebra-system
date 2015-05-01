@@ -105,7 +105,7 @@ public class CMFieldElementUtil {
      * @param v array of ring elements
      * @return array of CMFieldElement objects
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public static <C extends RingElem<C>> CMFieldElement<C>[] toCMFieldElement(C[] v) {
         if (v == null) {
             return null;
@@ -125,7 +125,7 @@ public class CMFieldElementUtil {
      * @param v array of ring elements
      * @return array of CMFieldElement objects
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public static <C extends RingElem<C>> CMFieldElement<C>[] toCMFieldElementRE(RingElem<C>[] v) {
         if (v == null) {
             return null;
@@ -161,7 +161,7 @@ public class CMFieldElementUtil {
      * @param v list of ring elements
      * @return array of CMFieldElement objects
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public static <C extends RingElem<C>> CMFieldElement<C>[] toCMFieldElement(List<C> v) {
         if (v == null) {
             return null;
@@ -196,7 +196,7 @@ public class CMFieldElementUtil {
      * @param v matrix of ring elements
      * @return matrix of CMFieldElement objects
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public static <C extends RingElem<C>> CMFieldElement<C>[][] toCMFieldElement(C[][] v) {
         if (v == null) {
             return null;
@@ -216,7 +216,7 @@ public class CMFieldElementUtil {
      * @param v matrix of ring elements
      * @return matrix of CMFieldElement objects
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public static <C extends RingElem<C>> CMFieldElement<C>[][] toCMFieldElementRE(RingElem<C>[][] v) {
         if (v == null) {
             return null;
@@ -252,7 +252,7 @@ public class CMFieldElementUtil {
      * @param v list of lists of ring elements
      * @return array of CMFieldElement objects
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public static <C extends RingElem<C>> CMFieldElement<C>[][] toCMFieldElementFromMatrix(
                     List<ArrayList<C>> v) {
         if (v == null) {

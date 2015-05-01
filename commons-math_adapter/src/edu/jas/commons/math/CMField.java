@@ -44,6 +44,7 @@ public class CMField<C extends RingElem<C>> implements Field<CMFieldElement<C>> 
     /**
      * get runtime class
      */
+    @SuppressWarnings("cast")
     @Override
     public Class<CMFieldElement<C>> getRuntimeClass() {
         return (Class<CMFieldElement<C>>) (Class) CMFieldElement.class; //getClass();

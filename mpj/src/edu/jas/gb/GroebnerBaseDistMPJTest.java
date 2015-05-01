@@ -219,6 +219,7 @@ public class GroebnerBaseDistMPJTest extends TestCase {
     /**
      * Test Trinks7 GBase.
      */
+    @SuppressWarnings("cast")
     public void testTrinks7GBase() {
         List<GenPolynomial<BigRational>> Fl;
         long t = 0;

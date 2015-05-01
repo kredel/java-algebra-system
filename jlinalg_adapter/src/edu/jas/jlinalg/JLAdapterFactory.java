@@ -154,7 +154,7 @@ public class JLAdapterFactory<C extends RingElem<C>> implements IRingElementFact
     }
 
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     @Override
     public JLAdapter<C>[] getArray(int size) {
         JLAdapter<C>[] arr = (JLAdapter<C>[]) new JLAdapter[size];
@@ -165,7 +165,7 @@ public class JLAdapterFactory<C extends RingElem<C>> implements IRingElementFact
     }
 
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     @Override
     public JLAdapter<C>[][] getArray(int rows, int columns) {
         JLAdapter<C>[][] arr = (JLAdapter<C>[][]) new JLAdapter[rows][columns];
@@ -237,12 +237,12 @@ public class JLAdapterFactory<C extends RingElem<C>> implements IRingElementFact
     }
 
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     @Override
     public Vector<JLAdapter<C>> convert(Vector<? extends IRingElement<?>> from) {
-        if (true) {
-            throw new RuntimeException("not implemented");
-        }
+        //if (true) {
+        //    throw new RuntimeException("not implemented");
+        //}
         JLAdapter<C>[] to = (JLAdapter<C>[]) new JLAdapter[from.length()];
         for (int row = 0; row < from.length(); row++) {
             to[row] = this.get(from.getEntry(row));
@@ -251,12 +251,12 @@ public class JLAdapterFactory<C extends RingElem<C>> implements IRingElementFact
     }
 
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     @Override
     public Matrix<JLAdapter<C>> convert(Matrix<? extends IRingElement<?>> from) {
-        if (true) {
-            throw new RuntimeException("not implemented");
-        }
+        //if (true) {
+        //    throw new RuntimeException("not implemented");
+        //}
         JLAdapter<C>[][] to = (JLAdapter<C>[][]) new JLAdapter[from.getRows()][from.getCols()];
         for (int row = 0; row < from.getRows(); row++) {
             for (int col = 0; col < from.getCols(); col++) {

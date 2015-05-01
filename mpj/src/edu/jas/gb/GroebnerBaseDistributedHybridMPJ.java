@@ -1,5 +1,6 @@
 /*
- * $Id$
+ * $Id: GroebnerBaseDistributedHybridMPJ.java 4952 2014-10-12 19:41:46Z axelclk
+ * $
  */
 
 package edu.jas.gb;
@@ -18,9 +19,9 @@ import org.apache.log4j.Logger;
 
 import edu.jas.kern.MPJEngine;
 import edu.jas.poly.ExpVector;
-import edu.jas.poly.PolyUtil;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.PolyUtil;
 import edu.jas.structure.RingElem;
 import edu.jas.util.DistHashTableMPJ;
 import edu.jas.util.MPJChannel;
@@ -242,14 +243,14 @@ public class GroebnerBaseDistributedHybridMPJ<C extends RingElem<C>> extends Gro
         if (G.size() <= 1) {
             //return G; 
         }
-        if ( G.isEmpty() ) {
+        if (G.isEmpty()) {
             throw new IllegalArgumentException("empty F / zero ideal not allowed");
         }
         GenPolynomialRing<C> ring = G.get(0).ring;
-        if ( ! ring.coFac.isField() ) {
+        if (!ring.coFac.isField()) {
             throw new IllegalArgumentException("coefficients not from a field");
         }
-        PairList<C> pairlist = strategy.create( modv, ring ); 
+        PairList<C> pairlist = strategy.create(modv, ring);
         pairlist.put(G);
 
         /*
@@ -387,6 +388,7 @@ public class GroebnerBaseDistributedHybridMPJ<C extends RingElem<C>> extends Gro
      * @param Fp a Groebner base.
      * @return a reduced Groebner base of Fp.
      */
+    @SuppressWarnings("cast")
     @Override
     public List<GenPolynomial<C>> minimalGB(List<GenPolynomial<C>> Fp) {
         GenPolynomial<C> a;
@@ -597,9 +599,9 @@ class HybridReducerServerMPJ<C extends RingElem<C>> implements Runnable {
                 }
                 try {
                     sleeps++;
-                    //if (sleeps % 10 == 0) {
-                    logger.info("waiting for reducers, remaining = " + finner.getJobs());
-                    //}
+                    if (sleeps % 3 == 0) {
+                        logger.info("waiting for reducers, remaining = " + finner.getJobs());
+                    }
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
                     goon = false;
@@ -628,6 +630,7 @@ class HybridReducerServerMPJ<C extends RingElem<C>> implements Runnable {
             try {
                 red++;
                 pairChannel.send(pairTag, msg);
+                @SuppressWarnings("unused")
                 int a = active.getAndIncrement();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -760,6 +763,7 @@ class HybridReducerReceiverMPJ<C extends RingElem<C>> extends Thread {
             Object rh = null;
             try {
                 rh = pairChannel.receive(resultTag);
+                @SuppressWarnings("unused")
                 int i = active.getAndDecrement();
                 //} catch (InterruptedException e) {
                 //goon = false;

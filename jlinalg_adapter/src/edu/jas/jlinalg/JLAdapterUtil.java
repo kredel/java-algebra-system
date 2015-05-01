@@ -102,7 +102,7 @@ public class JLAdapterUtil {
      * @param v array of ring elements
      * @return array of JLAdapter objects
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public static <C extends RingElem<C>> JLAdapter<C>[] toJLAdapter(C[] v) {
         if (v == null) {
             return null;
@@ -121,7 +121,7 @@ public class JLAdapterUtil {
      * @param v array of ring elements
      * @return array of JLAdapter objects
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public static <C extends RingElem<C>> JLAdapter<C>[] toJLAdapterRE(RingElem<C>[] v) {
         if (v == null) {
             return null;
@@ -155,7 +155,7 @@ public class JLAdapterUtil {
      * @param v list of ring elements
      * @return array of JLAdapter objects
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public static <C extends RingElem<C>> JLAdapter<C>[] toJLAdapter(List<C> v) {
         if (v == null) {
             return null;
@@ -189,7 +189,7 @@ public class JLAdapterUtil {
      * @param v matrix of ring elements
      * @return matrix of JLAdapter objects
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public static <C extends RingElem<C>> JLAdapter<C>[][] toJLAdapter(C[][] v) {
         if (v == null) {
             return null;
@@ -208,7 +208,7 @@ public class JLAdapterUtil {
      * @param v matrix of ring elements
      * @return matrix of JLAdapter objects
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public static <C extends RingElem<C>> JLAdapter<C>[][] toJLAdapterRE(RingElem<C>[][] v) {
         if (v == null) {
             return null;
@@ -242,7 +242,7 @@ public class JLAdapterUtil {
      * @param v list of lists of ring elements
      * @return array of JLAdapter objects
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public static <C extends RingElem<C>> JLAdapter<C>[][] toJLAdapterFromList(List<ArrayList<C>> v) {
         if (v == null) {
             return null;
