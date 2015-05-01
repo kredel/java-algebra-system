@@ -286,7 +286,6 @@ public class PseudoReductionSeq<C extends RingElem<C>> extends ReductionAbstract
                 R.doPutToMap(e, a);
                 S.doRemoveFromMap(e, a);
                 // System.out.println(" S = " + S);
-                //throw new RuntimeException("Syzygy no GB");
             } else {
                 e = e.subtract(htl[i]);
                 //logger.info("red div = " + e);

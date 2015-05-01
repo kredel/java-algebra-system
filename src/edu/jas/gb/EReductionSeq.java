@@ -297,7 +297,6 @@ public class EReductionSeq<C extends RingElem<C>> extends DReductionSeq<C> imple
                 R = R.sum( a, e );
                 S = S.subtract( a, e ); 
                 // System.out.println(" S = " + S);
-                //throw new RuntimeException("Syzygy no GB");
             } else { 
                 e =  e.subtract( htl[i] );
                 //logger.info("red div = " + e);

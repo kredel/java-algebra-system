@@ -192,7 +192,6 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 R = R.sum(a, e);
                 S = S.subtract(a, e);
                 // System.out.println(" S = " + S);
-                //throw new RuntimeException("Syzygy no GB");
             } else {
                 Word[] elr = e.divideWord(htl[i]);
                 e = elr[0];

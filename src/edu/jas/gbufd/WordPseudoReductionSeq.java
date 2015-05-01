@@ -193,7 +193,6 @@ public class WordPseudoReductionSeq<C extends RingElem<C>> extends WordReduction
                 R.doPutToMap(e, a);
                 S.doRemoveFromMap(e, a);
                 // System.out.println(" S = " + S);
-                //throw new RuntimeException("Syzygy no GB");
             } else {
                 Word[] elr = e.divideWord(htl[i]);
                 e = elr[0];

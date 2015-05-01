@@ -184,7 +184,6 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 R.doPutToMap(e, a);
                 S.doRemoveFromMap(e, a);
                 // System.out.println(" S = " + S);
-                //throw new RuntimeException("Syzygy no GB");
             } else {
                 e = e.subtract(htl[i]);
                 //logger.info("red div = " + e);

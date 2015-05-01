@@ -454,7 +454,6 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
                 R = R.sum( a, e );
                 S = S.subtract( a, e ); 
                 // System.out.println(" S = " + S);
-                //throw new RuntimeException("Syzygy no GB");
             } else { 
                 e =  e.subtract( htl[i] );
                 //logger.info("red div = " + e);
