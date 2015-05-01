@@ -29,7 +29,7 @@ PYPATH=$(LIBPATH)/jython.jar
 # --- syncing ----------
 DRY=--dry-run
 DELETE=
-RSYNC=rsync -e ssh -avuz $(DRY) $(DELETE) --exclude=*~ --include=svn_change.log --include=jdepend-report.txt --exclude=*.log* --exclude=*.out* --exclude=*.txt* --exclude=.svn --exclude=build/ --exclude=target/ --exclude=reports/ --exclude=.gradle/
+RSYNC=rsync -e ssh -avuz $(DRY) $(DELETE) --exclude=*~ --include=doc/svn_change.log --include=jdepend-report.txt --exclude=*.log* --exclude=*.out* --exclude=*.txt* --exclude=.svn --exclude=build/ --exclude=target/ --exclude=reports/ --exclude=.gradle/
 ####--exclude=./test
 ####--exclude=*.ps --exclude=*.pdf --exclude=spin*
 ####--exclude=*/.jxta/
@@ -425,14 +425,15 @@ SVNDATE=svnlook date $(SVNREPO)/jas
 # jul 2011 SVNSRT=3688
 # dec 2011 SVNSRT=3838
 # jul 2012 SVNSRT=4008
-# aug 2013
-SVNSRT=4588
+# aug 2013 SVNSRT=4588
+# jan 2014
+SVNSRT=4742
 
 export:
 	rm -rf ~/jas-versions/$(VERSION)
 	svn export --quiet file:///$(SVNREPO)/jas/trunk ~/jas-versions/$(VERSION)
 	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) `$(SVNREV)` doc/download.html
-	svn log -v -r HEAD:$(SVNSRT) file:///$(SVNREPO)/jas/trunk src trc examples jython mpj mpi jlinalg_adapter commons-math_adapter > ~/jas-versions/$(VERSION)/svn_change.log
+	svn log -v -r HEAD:$(SVNSRT) file:///$(SVNREPO)/jas/trunk src trc examples jython mpj mpi jlinalg_adapter commons-math_adapter > ~/jas-versions/$(VERSION)/doc/svn_change.log
 	cd ~/jas-versions/; jar -cfM $(VERSION).`$(SVNREV)`-src.zip $(VERSION)/
 	cd ~/jas-versions/$(VERSION)/; ant compile > ant_compile.out
 	cd ~/jas-versions/$(VERSION)/; jar -cfm ../$(VERSION).`$(SVNREV)`-bin.jar GBManifest.MF edu/ COPYING* log4j.properties

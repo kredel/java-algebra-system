@@ -84,6 +84,7 @@
   >
      <src path="${src}" />
      <src path="${testsrc}" />
+     <!--compilerarg value="-Xlint:unchecked" /-->
   </javac>
 </target>
 
@@ -96,9 +97,9 @@
   >
      <!--
      <compilerarg value="-Xlint:unchecked" />
-     -->
      <compilerarg value="-Xlint:-unchecked" />
      <compilerarg value="-Xlint:deprecation" />
+     -->
      <src path="${src}" />
      <src path="${testsrc}" />
   </javac>
@@ -227,11 +228,11 @@
          showoutput="yes"
          haltonfailure="no" >
      <jvmarg value="-server"/>
+     <!--
      <jvmarg value="-Xmx2900M"/>
      <jvmarg value="-Xms2900M"/>
      <jvmarg value="-verbose:gc"/>
      <jvmarg value="-ea"/>
-     <!--
      -->
      <classpath path="${cp}" />
      <formatter type="plain" /> <!-- plain, xml, brief -->
