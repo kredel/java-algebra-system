@@ -190,7 +190,7 @@ public class GroebnerBaseDistributedMPI<C extends RingElem<C>> extends GroebnerB
         GenPolynomial<C> p;
         PairList<C> pairlist = null;
         boolean oneInGB = false;
-        int l = F.size();
+        //int l = F.size();
         int unused = 0;
         ListIterator<GenPolynomial<C>> it = F.listIterator();
         while (it.hasNext()) {
@@ -219,7 +219,7 @@ public class GroebnerBaseDistributedMPI<C extends RingElem<C>> extends GroebnerB
                     unused = pairlist.put(p);
                 }
             } else {
-                l--;
+                //l--;
             }
         }
         //if (l <= 1) {
@@ -301,6 +301,7 @@ public class GroebnerBaseDistributedMPI<C extends RingElem<C>> extends GroebnerB
      * @param Fp a Groebner base.
      * @return a reduced Groebner base of Fp.
      */
+    @SuppressWarnings("cast")
     @Override
     public List<GenPolynomial<C>> minimalGB(List<GenPolynomial<C>> Fp) {
         GenPolynomial<C> a;

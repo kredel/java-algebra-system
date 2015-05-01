@@ -13,6 +13,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import edu.jas.arith.BigRational;
+import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
 import edu.jas.gb.GroebnerBase;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -21,13 +24,10 @@ import edu.jas.poly.Monomial;
 import edu.jas.poly.OrderedPolynomialList;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.PolynomialList;
-import edu.jas.arith.BigRational;
-import edu.jas.arith.ModInteger;
-import edu.jas.arith.ModIntegerRing;
 
 
 /**
- * Groebner base FGLM examples. 
+ * Groebner base FGLM examples.
  * @author Jan Suess.
  */
 
@@ -607,7 +607,7 @@ public class GroebnerBaseFGLMExamples {
     //================================================================================================= 
     //Internal methods
     //=================================================================================================
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public String all(String order, String polynomials) {
         GroebnerBaseFGLM<BigRational> IdealObjectFGLM;
         BigRational coeff = new BigRational();
@@ -686,7 +686,7 @@ public class GroebnerBaseFGLMExamples {
     }
 
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public String fglm(String order, String polynomials) {
         GroebnerBaseFGLM<BigRational> IdealObjectGrad;
         //GroebnerBaseAbstract<BigRational> IdealObjectLex;
@@ -749,7 +749,7 @@ public class GroebnerBaseFGLMExamples {
     }
 
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public String grad(String order, String polynomials) {
         BigRational coeff = new BigRational();
         GroebnerBase<BigRational> gb = GBFactory.getImplementation(coeff);
@@ -798,7 +798,7 @@ public class GroebnerBaseFGLMExamples {
     }
 
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public String lex(String order, String polynomials) {
         //GroebnerBaseAbstract<BigRational> IdealObjectLex;
         BigRational coeff = new BigRational();
@@ -841,7 +841,7 @@ public class GroebnerBaseFGLMExamples {
     }
 
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public String modAll(String order, String polynomials, Integer m) {
         GroebnerBaseFGLM<ModInteger> IdealObjectFGLM;
         //GroebnerBaseAbstract<ModInteger> IdealObjectLex;
@@ -918,7 +918,7 @@ public class GroebnerBaseFGLMExamples {
     }
 
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public String modGrad(String order, String polynomials, Integer m) {
         //GroebnerBaseFGLM<ModInteger> IdealObjectFGLM;
         ModIntegerRing ring = new ModIntegerRing(m);
@@ -961,7 +961,7 @@ public class GroebnerBaseFGLMExamples {
     }
 
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public String modfglm(String order, String polynomials, Integer m) {
         GroebnerBaseFGLM<ModInteger> IdealObjectFGLM;
         //GroebnerBaseAbstract<ModInteger> IdealObjectLex;

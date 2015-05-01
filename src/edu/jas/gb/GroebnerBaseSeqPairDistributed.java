@@ -183,7 +183,8 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
         List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
         CriticalPairList<C> pairlist = null;
         boolean oneInGB = false;
-        int l = F.size();
+        //int l = F.size();
+        @SuppressWarnings("unused")
         int unused;
         ListIterator<GenPolynomial<C>> it = F.listIterator();
         while (it.hasNext()) {
@@ -209,7 +210,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
                     unused = pairlist.put(p);
                 }
             } else {
-                l--;
+                //l--;
             }
         }
         //if (l <= 1) {
@@ -305,6 +306,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
      * @param Fp a Groebner base.
      * @return a reduced Groebner base of Fp.
      */
+    @SuppressWarnings("cast")
     @Override
     public List<GenPolynomial<C>> minimalGB(List<GenPolynomial<C>> Fp) {
         GenPolynomial<C> a;

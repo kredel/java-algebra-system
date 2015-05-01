@@ -219,6 +219,7 @@ public class GroebnerBaseDistMPITest extends TestCase {
     /**
      * Test Trinks7 GBase.
      */
+    @SuppressWarnings("cast")
     public void testTrinks7GBase() throws MPIException {
         List<GenPolynomial<BigRational>> Fl;
         long t = 0;

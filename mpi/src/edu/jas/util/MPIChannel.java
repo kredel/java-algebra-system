@@ -20,8 +20,8 @@ import edu.jas.kern.MPIEngine;
 
 
 /**
- * MPIChannel provides a communication channel for Java objects using MPI or TCP/IP 
- * to a given rank.
+ * MPIChannel provides a communication channel for Java objects using MPI or
+ * TCP/IP to a given rank.
  * @author Heinz Kredel
  */
 public final class MPIChannel {
@@ -122,7 +122,7 @@ public final class MPIChannel {
                     }
                     cf.terminate();
                 } else {
-                    cf = new ChannelFactory(port-1); // in case of localhost
+                    cf = new ChannelFactory(port - 1); // in case of localhost
                     soc = new TaggedSocketChannel[1];
                     SocketChannel sc = cf.getChannel(MPIEngine.hostNames.get(0), port);
                     soc[0] = new TaggedSocketChannel(sc);
@@ -217,28 +217,27 @@ public final class MPIChannel {
             } catch (InterruptedException e) {
                 throw new IOException(e);
             }
-        } else {
-            Object[] va = new Object[1];
-            Status stat = null;
-            //synchronized (MPJEngine.class) {
-            stat = engine.Recv(va, 0, va.length, MPI.OBJECT, partnerRank, t);
-            //}
-            if (stat == null) {
-                throw new IOException("received null Status");
-            }
-            int cnt = stat.Get_count(MPI.OBJECT);
-            if (cnt == 0) {
-                throw new IOException("no object received");
-            }
-            if (cnt > 1) {
-                logger.warn("too many objects received, ignored " + (cnt - 1));
-            }
-            // int pr = stat.source;
-            // if (pr != partnerRank) {
-            //     logger.warn("received out of order message from " + pr);
-            // }
-            return va[0];
         }
+        Object[] va = new Object[1];
+        Status stat = null;
+        //synchronized (MPJEngine.class) {
+        stat = engine.Recv(va, 0, va.length, MPI.OBJECT, partnerRank, t);
+        //}
+        if (stat == null) {
+            throw new IOException("received null Status");
+        }
+        int cnt = stat.Get_count(MPI.OBJECT);
+        if (cnt == 0) {
+            throw new IOException("no object received");
+        }
+        if (cnt > 1) {
+            logger.warn("too many objects received, ignored " + (cnt - 1));
+        }
+        // int pr = stat.source;
+        // if (pr != partnerRank) {
+        //     logger.warn("received out of order message from " + pr);
+        // }
+        return va[0];
     }
 
 

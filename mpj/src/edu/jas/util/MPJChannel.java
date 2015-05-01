@@ -218,28 +218,27 @@ public final class MPJChannel {
             } catch (InterruptedException e) {
                 throw new IOException(e);
             }
-        } else {
-            Object[] va = new Object[1];
-            Status stat = null;
-            //synchronized (MPJEngine.class) {
-            stat = engine.Recv(va, 0, va.length, MPI.OBJECT, partnerRank, t);
-            //}
-            if (stat == null) {
-                throw new IOException("received null Status");
-            }
-            int cnt = stat.Get_count(MPI.OBJECT);
-            if (cnt == 0) {
-                throw new IOException("no object received");
-            }
-            if (cnt > 1) {
-                logger.warn("too many objects received, ignored " + (cnt - 1));
-            }
-            // int pr = stat.source;
-            // if (pr != partnerRank) {
-            //     logger.warn("received out of order message from " + pr);
-            // }
-            return va[0];
         }
+        Object[] va = new Object[1];
+        Status stat = null;
+        //synchronized (MPJEngine.class) {
+        stat = engine.Recv(va, 0, va.length, MPI.OBJECT, partnerRank, t);
+        //}
+        if (stat == null) {
+            throw new IOException("received null Status");
+        }
+        int cnt = stat.Get_count(MPI.OBJECT);
+        if (cnt == 0) {
+            throw new IOException("no object received");
+        }
+        if (cnt > 1) {
+            logger.warn("too many objects received, ignored " + (cnt - 1));
+        }
+        // int pr = stat.source;
+        // if (pr != partnerRank) {
+        //     logger.warn("received out of order message from " + pr);
+        // }
+        return va[0];
     }
 
 

@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.concurrent.Semaphore;
 
 import org.apache.log4j.Logger;
 
@@ -170,7 +169,8 @@ public class GroebnerBaseDistributed<C extends RingElem<C>> extends GroebnerBase
         List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
         PairList<C> pairlist = null;
         boolean oneInGB = false;
-        int l = F.size();
+        //int l = F.size();
+        @SuppressWarnings("unused")
         int unused;
         ListIterator<GenPolynomial<C>> it = F.listIterator();
         while (it.hasNext()) {
@@ -200,7 +200,7 @@ public class GroebnerBaseDistributed<C extends RingElem<C>> extends GroebnerBase
                     unused = pairlist.put(p);
                 }
             } else {
-                l--;
+                //l--;
             }
         }
         //if (l <= 1) {
@@ -295,6 +295,7 @@ public class GroebnerBaseDistributed<C extends RingElem<C>> extends GroebnerBase
      * @param Fp a Groebner base.
      * @return a reduced Groebner base of Fp.
      */
+    @SuppressWarnings("cast")
     @Override
     public List<GenPolynomial<C>> minimalGB(List<GenPolynomial<C>> Fp) {
         GenPolynomial<C> a;
@@ -674,8 +675,8 @@ class ReducerClient<C extends RingElem<C>> implements Runnable {
                 if (pp instanceof GBTransportMessPairIndex) {
                     pix = ((GBTransportMessPairIndex) pp).i;
                     pjx = ((GBTransportMessPairIndex) pp).j;
-                    pi = (GenPolynomial<C>) theList.getWait(pix);
-                    pj = (GenPolynomial<C>) theList.getWait(pjx);
+                    pi = theList.getWait(pix);
+                    pj = theList.getWait(pjx);
                     //logger.info("pix = " + pix + ", pjx = " +pjx);
                 }
 
@@ -718,5 +719,3 @@ class ReducerClient<C extends RingElem<C>> implements Runnable {
         pairChannel.close();
     }
 }
-
-

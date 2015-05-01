@@ -36,6 +36,7 @@ import edu.jas.util.ThreadPool;
  * @deprecated use GroebnerBaseDistributedHybridEC
  */
 
+@Deprecated
 public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends GroebnerBaseAbstract<C> {
 
 
@@ -231,7 +232,8 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
         List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
         PairList<C> pairlist = null;
         boolean oneInGB = false;
-        int l = F.size();
+        //nt l = F.size();
+        @SuppressWarnings("unused")
         int unused;
         ListIterator<GenPolynomial<C>> it = F.listIterator();
         while (it.hasNext()) {
@@ -261,11 +263,11 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
                     unused = pairlist.put(p);
                 }
             } else {
-                l--;
+                //l--;
             }
         }
         //if (l <= 1) {
-            //return G; must signal termination to others
+        //return G; must signal termination to others
         //}
         logger.info("pairlist " + pairlist);
 
@@ -386,6 +388,7 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
      * @param Fp a Groebner base.
      * @return a reduced Groebner base of Fp.
      */
+    @SuppressWarnings("cast")
     @Override
     public List<GenPolynomial<C>> minimalGB(List<GenPolynomial<C>> Fp) {
         GenPolynomial<C> a;
@@ -607,9 +610,9 @@ class HybridReducerServer<C extends RingElem<C>> implements Runnable {
                 }
                 try {
                     sleeps++;
-                    //if (sleeps % 10 == 0) {
-                    logger.info("waiting for reducers, remaining = " + finner.getJobs());
-                    //}
+                    if (sleeps % 3 == 0) {
+                        logger.info("waiting for reducers, remaining = " + finner.getJobs());
+                    }
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
                     goon = false;

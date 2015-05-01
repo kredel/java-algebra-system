@@ -252,7 +252,7 @@ public class GroebnerBaseDistributedHybridMPI<C extends RingElem<C>> extends Gro
         List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
         PairList<C> pairlist = null;
         boolean oneInGB = false;
-        int l = F.size();
+        //int l = F.size();
         int unused = 0;
         ListIterator<GenPolynomial<C>> it = F.listIterator();
         while (it.hasNext()) {
@@ -282,7 +282,7 @@ public class GroebnerBaseDistributedHybridMPI<C extends RingElem<C>> extends Gro
                     unused = pairlist.put(p);
                 }
             } else {
-                l--;
+                //l--;
             }
         }
         //if (l <= 1) {
@@ -381,6 +381,7 @@ public class GroebnerBaseDistributedHybridMPI<C extends RingElem<C>> extends Gro
      * @param Fp a Groebner base.
      * @return a reduced Groebner base of Fp.
      */
+    @SuppressWarnings("cast")
     @Override
     public List<GenPolynomial<C>> minimalGB(List<GenPolynomial<C>> Fp) {
         GenPolynomial<C> a;
@@ -597,9 +598,9 @@ class HybridReducerServerMPI<C extends RingElem<C>> implements Runnable {
                 }
                 try {
                     sleeps++;
-                    //if (sleeps % 10 == 0) {
-                    logger.info("waiting for reducers, remaining = " + finner.getJobs());
-                    //}
+                    if (sleeps % 3 == 0) {
+                        logger.info("waiting for reducers, remaining = " + finner.getJobs());
+                    }
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
                     goon = false;
@@ -628,6 +629,7 @@ class HybridReducerServerMPI<C extends RingElem<C>> implements Runnable {
             try {
                 red++;
                 pairChannel.send(pairTag, msg);
+                @SuppressWarnings("unused")
                 int a = active.getAndIncrement();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -766,6 +768,7 @@ class HybridReducerReceiverMPI<C extends RingElem<C>> extends Thread {
             Object rh = null;
             try {
                 rh = pairChannel.receive(resultTag);
+                @SuppressWarnings("unused")
                 int i = active.getAndDecrement();
                 //} catch (InterruptedException e) {
                 //goon = false;
