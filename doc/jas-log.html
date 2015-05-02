@@ -25,21 +25,24 @@
 <dt>2015, May </dt> <!-- 2.5.52xx -->
 <dd> 
 
- New experimental solvable polynomials with non-commutative word
- polynomials as coefficients. Adjustments for solvable left
- multiplication of word polynomial coefficients and corresponding
- changes for Gr&ouml;bner bases, if existing.
+ New experimental classes for solvable polynomials with
+ non-commutative word polynomials as coefficients. Adjustments for
+ solvable left multiplication with word polynomial coefficients and
+ corresponding changes for Gr&ouml;bner bases (might not be computable
+ in all cases).
 
- More methods <code>valueOf</code> in polynomial rings to construct
- polynomials from coefficients and exponents or words. Check for
- missing Ore conditions in solvable reduction algorithms. Use Ore
- condition in solvable pseudo reduction algorithms for solvable
- polynomial coefficients. New class <code>GreatestCommonDivisorFake</code>
- returning always 1 for gcds.
+ More <code>valueOf</code> methods in polynomial ring classes to
+ construct polynomials from coefficients and exponents or words. Check
+ for missing Ore condition usage in solvable reduction algorithms. Use
+ Ore condition in solvable pseudo reduction algorithms for solvable
+ polynomial coefficients. There is a new class
+ <code>GreatestCommonDivisorFake</code> in which <code>gcd</code>
+ methods always return 1.
 
  Bugfix in two-sided Gr&ouml;bner bases right coefficient multipliers.
- Fix in polynomial parser to accept some ASCIIMath expressions.
- Small improvements and refactoring of the HTML documentation.
+ Fixed the polynomial parser to accept some more
+ <code>ASCIIMath</code> expressions.  Small improvements and
+ refactoring of the HTML documentation.
 
 </dd>
 
@@ -2463,7 +2466,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Thu Apr 30 22:33:26 CEST 2015
+Last modified: Fri May  1 12:08:34 CEST 2015
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
