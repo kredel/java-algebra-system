@@ -18,7 +18,7 @@
     </p>
 </li>
 <li><p>The JAS classes jar-file 
-    <a href="@VERSION@.@SVNREV@-bin.jar">@VERSION@.@SVNREV@-bin.jar</a>
+    <a href="../@VERSION@.@SVNREV@-bin.jar">@VERSION@.@SVNREV@-bin.jar</a>
     can be used the same way as any other Java archive during 
     compilation and execution of your Java programs. 
     It is compiled using Java 7 from OpenJDK (IcedTea7).
@@ -26,12 +26,12 @@
     to allow usage in Android projects.
     <br />
     The source code is in 
-    <a href="@VERSION@.@SVNREV@-src.zip">@VERSION@.@SVNREV@-src.zip</a> 
+    <a href="../@VERSION@.@SVNREV@-src.zip">@VERSION@.@SVNREV@-src.zip</a> 
     current version should compile on Java 1.6 and 1.7 (aka Java 6 and 7).  
     (right click on the link and chose "save link as")
     <br />
     The Javadoc API documentation is in 
-    <a href="@VERSION@.@SVNREV@-doc.zip">@VERSION@.@SVNREV@-doc.zip</a> 
+    <a href="../@VERSION@.@SVNREV@-doc.zip">@VERSION@.@SVNREV@-doc.zip</a> 
     for current version.
     </p>
 </li>
@@ -43,22 +43,22 @@
 </li>
 <li><p>Required libraries: 
     <br />
-    <a href="../lib/log4j.jar">lib/log4j.jar</a> (from Apache Log4j),
+    <a href="../../lib/log4j.jar">lib/log4j.jar</a> (from Apache Log4j),
     <br />
-    <a href="../lib/junit.jar">lib/junit.jar</a> (from Junit),
+    <a href="../../lib/junit.jar">lib/junit.jar</a> (from Junit),
     <br />
     In case you have the first two ones, just ensure they are in the 
     correct location (e.g. <code>../lib/</code>) or they are in the class path.
     </p>
     <p>
     The libraries can be downloaded from the above links or 
-    with the Ivy ``resolve" target of ant, when installing the JAS source code. 
+    with the Ivy "resolve" target of ant, when installing the JAS source code. 
     </p>
     <p>
     In case you can not use Apache log4j for some reason, there is an 
-    adaptor package <a href="mylog.jar">mylog.jar</a> 
+    adaptor package <a href="../mylog.jar">mylog.jar</a> 
     which delegates all logging calls to native Java logging.
-    For Android there is the adaptor package <a href="droidlog.jar">droidlog.jar</a> 
+    For Android there is the adaptor package <a href="../droidlog.jar">droidlog.jar</a> 
     which delegates all logging calls to native Android logging.
     </p>
 </li>
@@ -76,50 +76,50 @@
     <li>A Debian package <a href="http://packages.debian.org/de/sid/libjas-java" target="deb">libjas-java</a>, 
         <br />
         an inofficial Debian package which can be used with MathLibre
-        <a href="@VERSION@.@SVNREV@-all.deb" target="deb">@VERSION@.@SVNREV@-all.deb</a>,
+        <a href="../@VERSION@.@SVNREV@-all.deb" target="deb">@VERSION@.@SVNREV@-all.deb</a>,
         <br />
         and an Ubuntu package 
         <a href="http://packages.ubuntu.com/search?keywords=libjas-java" target="deb">libjas-java</a>
         are also avalilable.
     </li>
-    <li><a href="jas-mpj.jar">jas-mpj.jar</a> <br /> This JAR contains
+    <li><a href="../jas-mpj.jar">jas-mpj.jar</a> <br /> This JAR contains
         implementations of distributed Gr&ouml;bner bases using the 
         MPJ middle-ware (MPI Java). It requires an MPJ implementation such as 
         <a href="http://mpj-express.org/" target="mpj" >MPJ Express</a> or 
         <a href="http://fastmpj.com/" target="mpj" >FastMPJ</a>. 
         <br />
-        The Javadocs can be found <a href="mpj/index.html" target="api">here</a>.
+        The Javadocs can be found <a href="../mpj/index.html" target="api">here</a>.
     </li>
-    <li><a href="jas-mpi.jar">jas-mpi.jar</a> <br /> This JAR contains
+    <li><a href="../jas-mpi.jar">jas-mpi.jar</a> <br /> This JAR contains
         implementations of distributed Gr&ouml;bner bases using the 
         Open-MPI middle-ware (with Java support). It requires an MPI implementation 
         such as <a href="http://www.open-mpi.org/" target="mpi" >Open-MPI</a>.
         <br />
         The Javadocs can be found <a href="mpi/index.html" target="api">here</a>.
     </li>
-    <li><a href="jas-meditor.jar">jas-meditor.jar</a> 
+    <li><a href="../jas-meditor.jar">jas-meditor.jar</a> 
         <br />
         This JAR contains the interface for JAS as an meditor engine,
         see <a href="http://jscl-meditor.sourceforge.net/" target="rela">jscl-meditor</a>.
         <br />
         Sample script to call meditor with the JAS engine 
-        <a href="meditor/meditor">meditor</a>. 
+        <a href="../meditor/meditor">meditor</a>. 
     </li>
-    <li><a href="jlinalg_adapter.jar">jlinalg_adapter.jar</a> 
+    <li><a href="../jlinalg_adapter.jar">jlinalg_adapter.jar</a> 
         <br />
         This JAR contains an adapter for JAS to the linear algebra library
         <a href="http://jlinalg.sourceforge.net/" target="rela">JLinAlg</a> version 0.6. 
         <br />
-        The Javadocs can be found <a href="jlinalg_adapter/index.html" target="api">here</a>.
+        The Javadocs can be found <a href="../jlinalg_adapter/index.html" target="api">here</a>.
     </li>
-    <li><a href="commons-math_adapter.jar">commons-math_adapter.jar</a> 
+    <li><a href="../commons-math_adapter.jar">commons-math_adapter.jar</a> 
         <br />
         This JAR contains an adapter for JAS to the Apache Commons Math 2.0 
         linear algebra library
         <a href="http://commons.apache.org/math/" target="rela">Commons-Math</a> 
         version 2.0. 
     </li>
-    <li><a href="jas-jython.jar">jas-jython.jar</a> 
+    <li><a href="../jas-jython.jar">jas-jython.jar</a> 
         <br />
         This JAR contains a scripting interface to use the 
         <a href="http://www.jython.org/" target="rela">jython</a> 
@@ -243,7 +243,7 @@ java  -classpath log4j.jar:junit.jar:jas.jar:.      edu.jas.application.Examples
     <a href="jruby/index.html" target="jruby">Rdoc of jas.rb</a>.
     </p>
 </li>
-<li><p><a href="README" target="main" >README</a> and licencing: 
+<li><p><a href="../README" target="main" >README</a> and licencing: 
     <a href="COPYING.jas" target="gpl" >COPYING.jas</a> (GPL)
     or 
     <a href="COPYING.lgpl.jas" target="gpl" >COPYING.lgpl.jas</a> (LGPL)
@@ -346,7 +346,7 @@ public class mytests {
 
 <ul>
 <!--li><p>Set up your <code>.jythonrc</code> file, e.g. see the sample code in
-    <a href="sample.jythonrc" target="py">sample.jythonrc</a>.
+    <a href="../sample.jythonrc" target="py">sample.jythonrc</a>.
     </p>
 </li-->
 <li><p>Be sure you have downloaded the above libraries 
@@ -355,7 +355,7 @@ public class mytests {
     </p>
 </li>
 <li><p>The main file to interface to the JAS library is  
-    <a href="examples/jas.py" target="py">jas.py</a>.
+    <a href="../examples/jas.py" target="py">jas.py</a>.
     It must be imported by other Python files.
     HTML documents of the interface can be found 
     <a href="jython/index.html" target="jython">here</a>.
@@ -370,7 +370,7 @@ public class mytests {
     </p>
     <pre>jython -J-cp "../lib/log4j.jar:../lib/junit.jar:." examples/trinks.py</pre>
     <p>The 
-    <a href="examples/trinks.py" target="py">examples/trinks.py</a>
+    <a href="../examples/trinks.py" target="py">examples/trinks.py</a>
     contains an Groebner base example named after its proposer Mr. Trinks.
     The file runs a sequential, a parallel and a distributed version
     of the Groebner base algorithms.
@@ -393,7 +393,7 @@ public class mytests {
     </p>
 </li>
 <li><p>The main file to interface to the JAS library is  
-    <a href="examples/jas.rb" target="rb">jas.rb</a>.
+    <a href="../examples/jas.rb" target="rb">jas.rb</a>.
     It must be required by other Ruby files.
     HTML documents of the interface can be found 
     <a href="jruby/index.html" target="jruby">here</a>.
@@ -403,7 +403,7 @@ public class mytests {
     </p>
     <pre>jruby -J-cp "../lib/log4j.jar:../lib/junit.jar:." examples/trinks.rb</pre>
     <p>The 
-    <a href="examples/trinks.rb" target="rb">examples/trinks.rb</a>
+    <a href="../examples/trinks.rb" target="rb">examples/trinks.rb</a>
     contains an Groebner base example named after its proposer Mr. Trinks.
     The file runs a sequential, a parallel and a distributed version
     of the Groebner base algorithms.
@@ -442,13 +442,13 @@ public class mytests {
 <li><p>The main Ruboto screen with the "trinks.rb" example and its output looks as follows.
        Also the arbitrary precision numbers arithmetic works on Android.
     </p>
-    <p><a href="images/device-2012-11-18-jas-trinks.png" ><img src="images/device-2012-11-18-jas-trinks-thumb.png" alt="screen shot" /></a> &nbsp;
-       <a href="images/device-2012-11-18-jas-trinks-out.png" ><img src="images/device-2012-11-18-jas-trinks-out-thumb.png" alt="screen shot"/></a> &nbsp;
-       <a href="images/device-2012-11-18-jas-trinks-out-big.png" ><img src="images/device-2012-11-18-jas-trinks-out-big-thumb.png" alt="screen shot"/></a>
+    <p><a href="../images/device-2012-11-18-jas-trinks.png" ><img src="../images/device-2012-11-18-jas-trinks-thumb.png" alt="screen shot" /></a> &nbsp;
+       <a href="../images/device-2012-11-18-jas-trinks-out.png" ><img src="../images/device-2012-11-18-jas-trinks-out-thumb.png" alt="screen shot"/></a> &nbsp;
+       <a href="../images/device-2012-11-18-jas-trinks-out-big.png" ><img src="../images/device-2012-11-18-jas-trinks-out-big-thumb.png" alt="screen shot"/></a>
     </p>
     <p>The list of examples can be accessed via the "scripts" button. 
     </p>
-    <p><a href="images/device-2012-11-18-jas-examples.png" ><img src="images/device-2012-11-18-jas-examples-thumb.png" alt="screen shot"/></a> 
+    <p><a href="../images/device-2012-11-18-jas-examples.png" ><img src="../images/device-2012-11-18-jas-examples-thumb.png" alt="screen shot"/></a> 
     </p>
 </li>
 <li><p>For further discussion of the JAS scripting interface 
