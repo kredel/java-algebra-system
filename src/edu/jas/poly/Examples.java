@@ -14,6 +14,7 @@ import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
+import edu.jas.kern.Scripting;
 
 
 /**
@@ -557,6 +558,8 @@ public class Examples {
         BigRational cfraction = new BigRational(1);
         String[] vars = new String[] { "x" };
 
+        //Scripting.setPrecision(5);
+
         GenPolynomialRing<BigRational> pfac 
             = new GenPolynomialRing<BigRational>(cfraction, 1, to, vars);
         GenPolynomial<BigRational> FF0 = pfac.parse("19(6)/10");
@@ -570,6 +573,14 @@ public class Examples {
         FF0 = pfac.parse("19+6/10");
         System.out.println("FF0 = " + FF0);
         FF0 = pfac.parse("(x).2");
+        System.out.println("FF0 = " + FF0);
+        FF0 = pfac.parse("4.0/9.0");
+        System.out.println("FF0 = " + FF0);
+        FF0 = pfac.parse("4/9.0");
+        System.out.println("FF0 = " + FF0);
+        FF0 = pfac.parse("4.0/9");
+        System.out.println("FF0 = " + FF0);
+        FF0 = pfac.parse("-4.0/9");
         System.out.println("FF0 = " + FF0);
     }
 }
