@@ -26,154 +26,6 @@ compute clusters (using MPJ a Java Message Passing Interface (MPI) or OpenMPI).
 </p>
 
 <p>
-The library contains at the moment of the following 
-<a name="package">packages</a>:
-</p>
-<dl>
-<dt>edu.jas.structure:</dt>
-<dd>
-  contains interfaces for the most general algebraic structures like
-  <code>RingElem</code> and <code>RingFactory</code>.
-</dd>
-<dt>edu.jas.arith:</dt>
-<dd>
-  contains classes for arithmetic in the basic coefficient rings like
-  <code>BigRational</code>, <code>BigInteger</code>,
-  <code>ModInteger</code>, <code>BigDecimal</code> or
-  <code>BigComplex</code>.
-</dd>
-<dt>edu.jas.poly:</dt>
-<dd>
-  contains classes for commutative polynomial, solvable polynomial and
-  free non-commutative polynomial arithmetic like
-  <code>GenPolynomial</code>, <code>GenSolvablePolynomial</code>,
-  <code>GenWordPolynomial</code> and others such as
-  <code>AlgebraicNumber</code> and a polynomial parser
-  <code>GenPolynomialTokenizer</code>.
-</dd>
-<dt>edu.jas.vector:</dt>
-<dd>
-  contains classes for vectors and lists of polynomials and solvable
-  polynomials like <code>GenVector</code> or <code>GenMatrix</code>.
-</dd>
-<dt>edu.jas.gb:</dt>
-<dd>
-  contains classes for polynomial and solvable polynomial reduction,
-  Gr&ouml;bner bases over fields and ideal arithmetic as well as
-  thread parallel and distributed versions of Buchbergers algorithm
-  like <code>ReductionSeq</code>, <code>GroebnerBaseAbstract</code>,
-  <code>GroebnerBaseSeq</code>, <code>GroebnerBaseParallel</code> and
-  <code>GroebnerBaseDistributedHybridEC</code>.  There are also Gr&ouml;bner
-  bases in polynomial rings over principal ideal domains and Euclidean
-  domains, so called D- and E-Gr&ouml;bner bases,
-  e.g. <code>EGroebnerBaseSeq</code>. New are Gr&ouml;bner bases in
-  free non-commutative polynomial rings over (skew) fields,
-  see <code>WordGroebnerBaseSeq</code>.
-</dd>
-<dt>edu.jas.gbmod:</dt>
-<dd>
-  contains classes for module Gr&ouml;bner bases and syzygies over
-  polynomials and solvable polynomials like
-  <code>ModGroebnerBase</code> or <code>SolvableSyzygy</code>.
-</dd>
-<dt>edu.jas.application:</dt>
-<dd>
-  contains classes with applications of Gr&ouml;bner bases such as ideal
-  intersections and ideal quotients implemented in <code>Ideal</code>
-  or <code>SolvableIdeal</code>. Comprehensive Gr&ouml;bner bases for
-  polynomial rings over parameter rings are contained in class
-  <code>ComprehensiveGroebnerBaseSeq</code>.  Latest additions are
-  zero and arbitrary dimensional radical-, irreducible-, prime- and
-  primary-decomposition implemented in class <code>Ideal</code>.
-</dd>
-<dt>edu.jas.ufd:</dt>
-<dd>
-  contains classes for unique factorization domains.  Like the
-  interface <code>GreatestCommonDivisor</code>, the abstract class
-  <code>GreatestCommonDivisorAbstract</code> and various
-  implementations, e.g. polynomial remainder sequences and modular
-  algorithms.  The package now contains factorization algorithms for
-  univariate polynomials over several coefficient rings: modulo primes
-  in class <code>FactorModular</code>, over integers in class
-  <code>FactorInteger</code>, over rational numbers in class
-  <code>FactorRational</code> and over algebraic numbers in class
-  <code>FactorAlgebraic&lt;C&gt;</code>.
-</dd>
-<dt>edu.jas.gbufd:</dt>
-<dd>
-  contains classes for Gr&ouml;bner base computation using classes
-  from the <em>edu.jas.ufd</em> package for polynomial
-  coefficients. The main classes deal with pseudo reduction
-  <code>PseudoReduction</code>, <code>PseudoReductionSeq</code> and
-  greatest common divisors computation on coefficients
-  <code>GroebnerBasePseudoSeq</code>. Multiplicative sets of
-  polynomials with several simplifications, e.g. maintaining co-prime
-  factors or co-prime and squarefree factors, are contained in classes
-  <code>MultiplicativeSet</code>, <code>MultiplicativeSetCoPrime</code> 
-  or <code>MultiplicativeSetSquarefree</code>.  Also contained are
-  Gr&ouml;bner bases for polynomial rings over regular rings (direct
-  products of fields or integral domains) in
-  <code>RGroebnerBaseSeq</code> and <code>RGroebnerBasePseudoSeq</code>.
-</dd>
-<dt>edu.jas.root:</dt>
-<dd>
-  contains classes for real root computations.  Like the
-  interface <code>RealRoots</code>, the abstract class
-  <code>RealRootsAbstract</code> and at the moment of a single 
-  implementation based on Sturm sequences <code>RealRootsSturm</code>.
-  The package further contains an implementation for real algebraic numbers 
-  <code>RealAlgebraicNumber</code> with a corresponding factory
-  <code>RealAlgebraicRing</code>.
-  For complex root isolation there are <code>ComplexRoots</code> interface,
-  <code>ComplexRootsAbstract</code> and <code>ComplexRootsSturm</code> classes.
-  The implementation provides an exact infallible method which follows
-  the numeric method of Wilf.  It uses Sturm sequences following the
-  Routh-Hurwitz Method to count the number of complex roots within a
-  rectangle in the complex plane.
-  There is also an implementation for complex algebraic numbers 
-  <code>ComplexAlgebraicNumber</code> with a corresponding factory
-  <code>ComplexAlgebraicRing</code>.
-</dd>
-<dt>edu.jas.ufdroot:</dt>
-<dd>
-  contains classes for factorization in structures used in root
-  computation, for example <code>FactorRealAlgebraic</code>.
-</dd>
-<dt>edu.jas.ps:</dt>
-<dd>
-  contains univariate and multivariate power series arithmetic
-  in classes <code>UnivPowerSeries</code> and <code>MultiVarPowerSeries</code>.
-  There is an initial implementation of Mora's tangent cone reduction algorithm 
-  in class <code>ReductionSeq</code> and a standard bases computation in 
-  <code>StandardBaseSeq</code> with method <code>STD()</code>.
-</dd>
-<dt>edu.jas.integrate:</dt>
-<dd>
-  contains methods for the elementary integration of univariate rational functions.
-  The main class is <code>ElementaryIntegration</code> with method 
-  <code>integrate()</code>. 
-</dd>
-<dt>edu.jas.util:</dt>
-<dd>
-  contains further utilities for parallel and distributed computations
-  like <code>ThreadPool</code>, <code>DistThreadPool</code> or
-  <code>DistHashTable</code>. Part of this package has become obsolete
-  with JDK 1.5.
-</dd>
-<dt>edu.jas.fd:</dt>
-<dd>
-  contains classes for solvable polynomials rings as (non-unique)
-  factorization domains. There are methods for polynomial pseudo
-  remainder computation over Ore domains in class <code>FDUtil</code>.
-  Further, methods for common divisors are included, but not yet
-  finished.
-  <!-- Methods provided with interface
-  <code>GreatestCommonDivisor</code> are e.g. greatest common divisors
-  <code>gcd()</code>, primitive part <code>primitivePart()</code>.-->
-</dd>
-</dl>
-
-<p>
 This page contains documentation and the implementation for the new version 
 which is designed using type parameters and requires at least Java 6 (JDK 1.6).
 It will also compile on Java 7 (JDK 1.7).
@@ -189,6 +41,11 @@ Older versions (no more supported) can be found here:
 
 
 <h2><a name="docu">Documentation</a></h2>
+
+<p>
+The software packages of the JAS library are summarized in the  
+<a name="package" href="doc/packages.html" >packages</a> page.
+</p>
 
 <p>
 For informations on how to get started with JAS see the <a href="doc/guide.html" >users guide</a>.
@@ -364,7 +221,7 @@ The following are examples can be executed with
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Mon May 25 23:32:24 CEST 2015
+Last modified: Thu Jun  4 23:52:36 CEST 2015
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
