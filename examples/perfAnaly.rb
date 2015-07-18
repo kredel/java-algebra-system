@@ -8,7 +8,7 @@ require "examples/jas"
 # performance analysis of multi-core clusters
 
 #startLog();
-
+Scripting.setPrecision(3);
 
 # first ring with variables q,p,r,v,x,b,l1
 
@@ -38,17 +38,21 @@ puts "x/q = " + str(x/q);
 s = sa(x/q)
 puts "s = " + str(s);
 
-# q\, p\, l_c \cdot 
+# alt: q\, p\, l_c \cdot 
 # \frac{s(\frac{x}{q})}{1 + \frac{q\, p}{\beta(p)} \cdot \frac{s(\frac{x}{q})}{v\, r\, \frac{x}{q}}}
-#wrong: lcl = q * p * l1 * ( s / ( s + (q*q*(p/b)) * ( 1 / (v*r*x)) ));
+
+#l_{cl}(q,p) & \le & 
+# q\, p\, l_c \cdot 
+# \frac{s(\frac{x}{q})}{1 + \frac{q^2\, p}{\beta(q,p)} \cdot \frac{s(\frac{x}{q})}{v\, r\, x}}
+
 lcl = q * p * l1 * ( s / ( 1 + (q*q*(p/b)) * ( s / (v*r*x)) ));
-puts "lcl = " + str(lcl);
+puts "lcl   = " + str(lcl);
 
 etacl = lcl / (q*p*l1);
 puts "etacl = " + str(etacl);
 
 Scl = lcl / (l1);
-puts "Scl = " + str(Scl);
+puts "Scl   = " + str(Scl);
 puts
 
 
@@ -66,7 +70,11 @@ puts
 w = 8
 c = 2*w
 b = 1
+#b = 1/p
+#b = 1/q
+#b = p/q
 #b = p
+#b = 1/(p*q)
 
 if false
   puts "scalar-prod:" 
@@ -74,7 +82,7 @@ if false
   hashop = 2*n - 1
   hashx  = p*w
 end
-if false
+if true
   puts "mat-mult:" 
   b = p
   hashb  = 2*n**2*w
@@ -93,14 +101,19 @@ if false
   hashop = n*ln
   hashx  = (n/p)*lp*c 
 end
-if true
+if false
   puts "2-dim FFT:" 
   hashb  = n**2*c
   hashop = 2*n**2*ln
-  hashx  = (n*ln)*lp*c 
-#  hashx  = (n)*lp*c 
+#  hashx  = (n*ln)*lp*c 
 #  hashx  = (n/p)*lp*c 
-#  hashx  = (n**2/p)*lp*c 
+  hashx  = (n**2/p)*lp*c 
+end
+if false
+  puts "2-dim FFTW:" 
+  hashb  = n**2*c
+  hashop = 2*n**2*ln
+  hashx  = n*lp*c 
 end
 puts "w   = " + str(w);
 puts "b   = " + str(b);
@@ -111,21 +124,33 @@ puts
 
 a = hashop / hashb
 r = hashb / hashx
-puts "a  = " + str(a);
-puts "r  = " + str(r);
+puts "a   = " + str(a);
+puts "r   = " + str(r);
 puts
 
-if true
+if false
   puts "bwGRiD:" 
-  l1  = 8
-  bm  = 3
-  bcl = 3/2
+  l1  = 8.5
+  bm  = 6 
+  bcl = 1.4 #* (140/2)/4
+end
+if true
+  puts "bwUniCluster:" 
+  l1  = 15.4
+  bm  = 77
+  bcl = 5.4 #* (128/2)
 end
 if false
-  puts "bw*Cluster:" 
-  l1  = 18
-  bm  = 6
-  bcl = 3
+  puts "bwForHLR1:" 
+  l1  = 19.1
+  bm  = 95 
+  bcl = 5.4 
+end
+if false
+  puts "bwForCluster:" 
+  l1  = 33
+  bm  = 81
+  bcl = 3  #* 128/2
 end
 puts "l1  = " + str(l1);
 puts "bm  = " + str(bm);
@@ -133,30 +158,28 @@ puts "bcl = " + str(bcl);
 puts
 
 #as = lm / bcl
-as = l1 / bm
-v  = bcl / bm
-puts "as = " + str(as);
-puts "v  = " + str(v);
+as = one * l1 / bm
+v  = one * bcl / bm
+puts "as  = " + str(as);
+puts "v   = " + str(v);
 puts
 
 x = a / as
-puts "x = " + str(x);
+puts "a/as = " + str(x);
 
 rvxq = r * v * x / q;
 puts "rvxq = " + str(rvxq);
 puts
 
-#wrong: lcl = q * p * r * v * x**2 * b * l1 / ( r * v * x**2 * b + q**2 * p * x + q**3 * p )
-#lcl = q * p * r * v * x * b * l1 / ( r * v * x * b + q * r * v * b + q**2 * p )
 
-etacl =              r * v * x * b / ( r * v * x * b + q * r * v * b + q**2 * p )
-#etacl =              r * v * x * b / ( r * v * x * b + q**2 * p )
-puts "etacl = " + str(etacl);
+etacl =     r * v * x * b / ( r * v * x * b + q * r * v * b + q**2 * p )
+#etacl =    r * v * x * b / ( r * v * x * b + q * r * v     + q**2 * p )
+#etacl =    r * v * x * b / ( r * v * x * b                 + q**2 * p )
+puts "etacl   = " + str(etacl);
 puts
-speedcl =    q * p * r * v * x * b / ( r * v * x * b + q * r * v * b + q**2 * p )
+speedcl =   q * p * etacl
 puts "speedcl = " + str(speedcl);
 puts
-
 
 #puts
 terminate();

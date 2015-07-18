@@ -8,7 +8,7 @@ require "examples/jas"
 # trinks 7 example
 
 r = PolyRing.new( QQ(), "B,S,T,Z,P,W", PolyRing.lex); # or PolyRing.grad
-puts "Ring: " + str(r);
+puts "PolyRing: " + str(r);
 puts;
 
 ps = """
@@ -22,10 +22,7 @@ ps = """
  ( B**2 + 33/50 B + 2673/10000 )
 ) 
 """;
-#puts "ps: " + ps;
-#puts;
 
-#f = SimIdeal.new( r, ps );
 f = r.ideal( ps );
 puts "Ideal: " + str(f);
 puts;
