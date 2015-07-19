@@ -76,7 +76,7 @@
   <!--echoproperties /-->
 </target>
 
-<target name="recompile" depends="distclean" >
+<target name="recompile" depends="distclean" description="compile after distclean">
   <javac destdir="${build}"
          debug="on" debuglevel="lines,source"
          classpath="${cp}" 
@@ -88,7 +88,7 @@
   </javac>
 </target>
 
-<target name="compile" depends="vorher" >
+<target name="compile" depends="vorher" description="compilation of changed sources">
   <javac destdir="${build}" 
          debug="on" debuglevel="lines,source"
          classpath="${cp}"
@@ -150,7 +150,7 @@
   </javac>
 </target>
 
-<target name="doc" >
+<target name="doc" description="generate javadoc">
   <javadoc destdir="${doc}" 
            classpath="${doccp}" 
            overview="doc/overview.html" 
@@ -194,7 +194,7 @@
          fork="yes" />
 </target>
 
-<target name="run" depends="compile" >
+<target name="run" depends="compile" description="run -Dclass=c.l.a.s.s -Dargs=a-r-g-s">
   <java  classname="${class}" 
          classpath="${cp}" 
          fork="yes" >
@@ -344,14 +344,14 @@
   </jar>
 </target>
 
-<target name="clean" >
+<target name="clean" description="remove backup files">
   <delete verbose="true" >
     <fileset dir="${src}" defaultexcludes="no" includes="**/*~"  />
     <fileset dir="${testsrc}" defaultexcludes="no" includes="**/*~"  />
   </delete>
 </target>
 
-<target name="distclean" depends="clean" >
+<target name="distclean" depends="clean" description="remove all class files">
   <delete verbose="true" >
     <fileset dir="${src}" includes="**/*.class"  />
     <fileset dir="${testsrc}" includes="**/*.class"  />
