@@ -189,7 +189,7 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
         GenSolvablePolynomial<GenPolynomial<C>> R = Ap.ring.getZERO().copy();
         GenSolvablePolynomial<GenPolynomial<C>> Q = null;
         GenSolvablePolynomial<GenPolynomial<C>> S = Ap.copy();
-        GenSolvablePolynomial<GenPolynomial<C>> Sp = null;
+        //GenSolvablePolynomial<GenPolynomial<C>> Sp = null;
         while (S.length() > 0) {
             m = S.leadingMonomial();
             e = m.getKey();
@@ -553,7 +553,6 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
      * @param Pp recursive polynomial list.
      * @return nf(Ap) with respect to Pp. <b>Note: </b> not implemented;
      */
-
     @SuppressWarnings("unused")
     public GenSolvablePolynomial<GenPolynomial<C>> rightNormalformRecursive(
                     List<GenSolvablePolynomial<GenPolynomial<C>>> Pp,

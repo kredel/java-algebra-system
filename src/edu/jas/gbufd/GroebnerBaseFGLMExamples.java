@@ -276,7 +276,7 @@ public class GroebnerBaseFGLMExamples {
                         + "(a*b*c + b*c*d + a*b*e + a*d*e + c*d*e),"
                         + "(b*c*d + a*b*c*e + a*b*d*e + a*c*d*e + b*c*d*e)," + "(a*b*c*d*e -1)" + ") ";
 
-        String orderINV = "(a,b,c,d,e)";
+        //String orderINV = "(a,b,c,d,e)";
         String orderL = "(e,d,c,b,a)";
 
         //Tests
@@ -310,14 +310,13 @@ public class GroebnerBaseFGLMExamples {
                         + "(a*b*c*d*e*f - 1)" + ") ";
 
         String orderINV = "(a,b,c,d,e,f)";
-        String orderL = "(f,e,d,c,b,a)";
+        //String orderL = "(f,e,d,c,b,a)";
 
-        //Tests
-        /*      
-          String erg2 = modAll(orderINV, polynomials, 1831);
-          System.out.println(modAll);
-          System.out.println(erg2);
-                
+        //Tests      
+        String erg2 = modAll(orderINV, polynomials, 1831);
+        System.out.println(modAll);
+        System.out.println(erg2);
+        /*                
           String ergOnlyG_1 = modGrad(orderINV, polynomials, 1831);
           System.out.println(modGrad);
           System.out.println(ergOnlyG_1);
@@ -340,7 +339,7 @@ public class GroebnerBaseFGLMExamples {
                         + "(7*w^2 + 5*w*x + 3*w*y - 5*w*z - 5*w + 2*x^2 + 9*x*y - 7*x*z + 4*x -4*y^2 - 5*y*z + 6*y - 4*z^2 - 9*z + 2)"
                         + ") ";
 
-        String orderINV = "(w,x,y,z)";
+        //String orderINV = "(w,x,y,z)";
         String orderL = "(z,y,x,w)";
 
         //Tests
@@ -406,7 +405,7 @@ public class GroebnerBaseFGLMExamples {
                         + "(2*g*e + f^2 + 2*d*a + d + 2*c*b)," + "(2*g*f + 2*e*a + e + 2*d*b + c^2),"
                         + "(g^2 + 2*f*a + f + 2*e*b + 2*d*c)," + "(2*g*a + g + 2*f*b + 2*e*c + d^2)" + ") ";
 
-        String orderINV = "(a,b,c,d,e,f,g)";
+        //String orderINV = "(a,b,c,d,e,f,g)";
         String orderL = "(g,f,e,d,c,b,a)";
 
         //Tests
@@ -449,7 +448,7 @@ public class GroebnerBaseFGLMExamples {
                         + "(v*w^4 + 2*x*y^2*z^2 - 1/25)," + "(v*w^3 + 2*x*y*z^2 + x*y^2*z - 1/15),"
                         + "(v*w^4 + x*y*z^3 + x*y^3*z -1/21)" + ") ";
 
-        String orderINV = "(a,b,c,u,v,w,x,y,z)";
+        //String orderINV = "(a,b,c,u,v,w,x,y,z)";
         String orderL = "(z,y,x,w,v,u,c,b,a)";
 
         //Tests

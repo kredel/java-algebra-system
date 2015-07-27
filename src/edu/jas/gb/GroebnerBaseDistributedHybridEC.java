@@ -689,9 +689,9 @@ class HybridReducerServerEC<C extends RingElem<C>> implements Runnable {
                 }
                 try {
                     sleeps++;
-                    //if (sleeps % 10 == 0) {
-                    logger.info("waiting for reducers, remaining = " + finner);
-                    //}
+                    if (sleeps % 3 == 0) {
+                        logger.info("waiting for reducers, remaining = " + finner);
+                    }
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
                     goon = false;

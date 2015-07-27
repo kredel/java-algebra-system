@@ -382,8 +382,8 @@ public class PolyGBUtil {
             p = (GenSolvablePolynomial<C>) r.subtract(q); // (1-t)*p
             c.add(p);
         }
-        SolvableGroebnerBaseAbstract<C> sbb = new SolvableGroebnerBaseSeq<C>();
-        //GBFactory.<C> getImplementation(tfac.coFac);
+        SolvableGroebnerBaseAbstract<C> sbb = SGBFactory.<C> getImplementation(tfac.coFac);
+        //new SolvableGroebnerBaseSeq<C>();
         logger.warn("intersect computing GB");
         List<GenSolvablePolynomial<C>> g = sbb.leftGB(c);
         //List<GenSolvablePolynomial<C>> g = sbb.twosidedGB(c);
