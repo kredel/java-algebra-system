@@ -15,8 +15,9 @@ import edu.jas.structure.RingFactory;
  * Module Groebner Bases sequential algorithm. Implements Groebner bases and GB
  * test.
  * @author Heinz Kredel
+ * @deprecated use respective methods from GroebnerBaseParallel 
  */
-
+@Deprecated
 public class ModGroebnerBasePar<C extends GcdRingElem<C>> extends ModGroebnerBaseSeq<C> {
 
 

@@ -20,8 +20,9 @@ import edu.jas.structure.RingFactory;
  * Groebner bases and GB test.
  * @param <C> coefficient type
  * @author Heinz Kredel
+ * @deprecated use respective methods from SolvableGroebnerBaseSeq
  */
-
+@Deprecated
 public class ModSolvableGroebnerBaseSeq<C extends GcdRingElem<C>> extends ModSolvableGroebnerBaseAbstract<C> {
 
 

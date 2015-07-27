@@ -15,8 +15,9 @@ import edu.jas.structure.RingElem;
 /**
  * Module Groebner Bases interface. Defines Groebner bases and GB test.
  * @author Heinz Kredel
+ * @deprecated use respective methods from GroebnerBase 
  */
-
+@Deprecated
 public interface ModGroebnerBase<C extends RingElem<C>> {
 
 

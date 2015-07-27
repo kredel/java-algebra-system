@@ -23,8 +23,9 @@ import edu.jas.structure.RingElem;
  * Groebner bases and GB test.
  * @param <C> coefficient type
  * @author Heinz Kredel
+ * @deprecated use respective methods from SolvableGroebnerBaseAbstract
  */
-
+@Deprecated
 public abstract class ModSolvableGroebnerBaseAbstract<C extends RingElem<C>> implements
                 ModSolvableGroebnerBase<C> {
 
