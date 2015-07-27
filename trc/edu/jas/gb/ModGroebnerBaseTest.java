@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.gbmod;
+package edu.jas.gb;
 
 
 import java.util.ArrayList;
@@ -87,7 +87,7 @@ public class ModGroebnerBaseTest extends TestCase {
     ModuleList<BigRational> M, N;
 
 
-    ModGroebnerBaseAbstract<BigRational> mbb;
+    GroebnerBaseAbstract<BigRational> mbb;
 
 
     int rl = 3; //4; //3; 
@@ -113,7 +113,7 @@ public class ModGroebnerBaseTest extends TestCase {
         coeff = new BigRational();
         tord = new TermOrder();
         fac = new GenPolynomialRing<BigRational>(coeff, rl, tord);
-        mbb = new ModGroebnerBaseSeq<BigRational>(coeff);
+        mbb = new GroebnerBaseSeq<BigRational>(); //coeff);
         a = b = c = d = e = null;
 
         do {
@@ -195,7 +195,7 @@ public class ModGroebnerBaseTest extends TestCase {
      * Test parallel GBase.
      */
     public void testParallelModGB() {
-        mbb = new ModGroebnerBasePar<BigRational>(coeff);
+        mbb = new GroebnerBaseParallel<BigRational>(); //coeff);
 
         L = new ArrayList<List<GenPolynomial<BigRational>>>();
 

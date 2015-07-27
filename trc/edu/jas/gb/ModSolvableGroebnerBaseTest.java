@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.gbmod;
+package edu.jas.gb;
 
 
 // import edu.jas.poly.GroebnerBase;
@@ -104,7 +104,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
     ModuleList<BigRational> M, N;
 
 
-    ModSolvableGroebnerBaseAbstract<BigRational> msbb;
+    SolvableGroebnerBaseAbstract<BigRational> msbb;
 
 
     int rl = 3; //4; //3; 
@@ -128,9 +128,9 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
         tord = new TermOrder();
         pfac = new GenSolvablePolynomialRing<BigRational>(cfac, rl, tord);
         if (Math.random() > 0.5) {
-            msbb = new ModSolvableGroebnerBaseSeq<BigRational>(cfac);
+            msbb = new SolvableGroebnerBaseSeq<BigRational>(); //cfac);
         } else {
-            msbb = new ModSolvableGroebnerBasePar<BigRational>(cfac);
+            msbb = new SolvableGroebnerBaseParallel<BigRational>(); //cfac);
         }
         logger.info("test with " + msbb.getClass().getSimpleName());
 
