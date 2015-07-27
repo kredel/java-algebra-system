@@ -22,8 +22,8 @@ import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigRational;
 import edu.jas.gb.SolvableGroebnerBaseAbstract;
-import edu.jas.gbmod.ModSolvableGroebnerBase;
-import edu.jas.gbmod.ModSolvableGroebnerBaseSeq;
+import edu.jas.gb.SolvableGroebnerBase;
+import edu.jas.gb.SolvableGroebnerBaseSeq;
 import edu.jas.gbufd.SGBFactory;
 import edu.jas.gbufd.SolvableSyzygyAbstract;
 import edu.jas.gbufd.SolvableSyzygySeq;
@@ -120,7 +120,7 @@ public class SolvableSyzygyTest extends TestCase {
     SolvableGroebnerBaseAbstract<BigRational> sbb;
 
 
-    ModSolvableGroebnerBase<BigRational> msbb;
+    SolvableGroebnerBase<BigRational> msbb;
 
 
     SolvableSyzygyAbstract<BigRational> ssz;
@@ -169,7 +169,7 @@ public class SolvableSyzygyTest extends TestCase {
         one = fac.getONE();
         zero = fac.getZERO();
         sbb = SGBFactory.getImplementation(cfac);
-        msbb = new ModSolvableGroebnerBaseSeq<BigRational>(cfac);
+        msbb = new SolvableGroebnerBaseSeq<BigRational>(); //cfac);
         ssz = new SolvableSyzygySeq<BigRational>(cfac);
     }
 

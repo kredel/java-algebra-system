@@ -21,7 +21,7 @@ import edu.jas.structure.GcdRingElem;
 
 
 /**
- * Package gbmod utilities.
+ * Package gb and gbufd utilities.
  * @author Heinz Kredel
  */
 

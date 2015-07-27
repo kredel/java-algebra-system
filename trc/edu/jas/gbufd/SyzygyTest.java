@@ -19,8 +19,7 @@ import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigRational;
 import edu.jas.gb.GroebnerBase;
-import edu.jas.gbmod.ModGroebnerBase;
-import edu.jas.gbmod.ModGroebnerBaseSeq;
+import edu.jas.gb.GroebnerBaseSeq;
 import edu.jas.gbufd.GBFactory;
 import edu.jas.gbufd.Syzygy;
 import edu.jas.gbufd.SyzygySeq;
@@ -80,7 +79,7 @@ public class SyzygyTest extends TestCase {
     GroebnerBase<BigRational> bb;
 
 
-    ModGroebnerBase<BigRational> mbb;
+    GroebnerBase<BigRational> mbb;
 
 
     Syzygy<BigRational> sz;
@@ -141,7 +140,7 @@ public class SyzygyTest extends TestCase {
         fac = new GenPolynomialRing<BigRational>(coeff, rl, tord);
 
         bb = GBFactory.getImplementation(coeff);
-        mbb = new ModGroebnerBaseSeq<BigRational>(coeff);
+        mbb = new GroebnerBaseSeq<BigRational>(); //coeff);
         sz = new SyzygySeq<BigRational>(coeff);
 
         a = b = c = d = e = null;
