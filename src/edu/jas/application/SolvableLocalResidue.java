@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.gbufd.PolyGBUtil;
+import edu.jas.gbmod.PolyModUtil;
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -154,7 +154,7 @@ public class SolvableLocalResidue<C extends GcdRingElem<C>> implements GcdRingEl
         }
         // must reduce to lowest terms
         // not perfect, TODO
-        GenSolvablePolynomial<C>[] gcd = PolyGBUtil.<C> syzGcdCofactors(r.ring, n, d);
+        GenSolvablePolynomial<C>[] gcd = PolyModUtil.<C> syzGcdCofactors(r.ring, n, d);
         if (!gcd[0].isONE()) {
             logger.info("constructor: gcd = " + Arrays.toString(gcd)); // + ", " + n + ", " +d);
             n = gcd[1];
