@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.gbmod;
+package edu.jas.gbufd;
 
 
 import java.util.ArrayList;
@@ -12,7 +12,6 @@ import org.apache.log4j.Logger;
 
 import edu.jas.gb.SolvableGroebnerBaseAbstract;
 import edu.jas.gb.SolvableGroebnerBaseSeq;
-import edu.jas.gbufd.PolyGBUtil;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenSolvablePolynomial;

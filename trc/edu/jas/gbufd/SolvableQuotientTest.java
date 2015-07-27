@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.gbmod;
+package edu.jas.gbufd;
 
 
 import junit.framework.Test;
@@ -12,6 +12,8 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigRational;
+import edu.jas.gbufd.SolvableQuotient;
+import edu.jas.gbufd.SolvableQuotientRing;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.GenSolvablePolynomialRing;

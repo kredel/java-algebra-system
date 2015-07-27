@@ -11,8 +11,6 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import edu.jas.gb.SolvableReductionAbstract;
-import edu.jas.gbmod.SolvableSyzygyAbstract;
-import edu.jas.gbmod.SolvableSyzygySeq;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;

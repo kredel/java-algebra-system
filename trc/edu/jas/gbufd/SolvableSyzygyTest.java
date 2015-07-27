@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.gbmod;
+package edu.jas.gbufd;
 
 
 import java.io.IOException;
@@ -18,9 +18,15 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 // import org.apache.log4j.Logger;
 
+
+
 import edu.jas.arith.BigRational;
 import edu.jas.gb.SolvableGroebnerBaseAbstract;
+import edu.jas.gbmod.ModSolvableGroebnerBase;
+import edu.jas.gbmod.ModSolvableGroebnerBaseSeq;
 import edu.jas.gbufd.SGBFactory;
+import edu.jas.gbufd.SolvableSyzygyAbstract;
+import edu.jas.gbufd.SolvableSyzygySeq;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;

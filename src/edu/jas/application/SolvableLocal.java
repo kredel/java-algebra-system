@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.gbmod.PolyModUtil;
+import edu.jas.gbufd.PolyModUtil;
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;

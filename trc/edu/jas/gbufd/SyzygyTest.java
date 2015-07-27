@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.gbmod;
+package edu.jas.gbufd;
 
 
 import java.io.IOException;
@@ -19,7 +19,11 @@ import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigRational;
 import edu.jas.gb.GroebnerBase;
+import edu.jas.gbmod.ModGroebnerBase;
+import edu.jas.gbmod.ModGroebnerBaseSeq;
 import edu.jas.gbufd.GBFactory;
+import edu.jas.gbufd.Syzygy;
+import edu.jas.gbufd.SyzygySeq;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;

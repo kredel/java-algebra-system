@@ -11,8 +11,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.gbmod.SolvableSyzygyAbstract;
-import edu.jas.gbmod.SolvableSyzygySeq;
+import edu.jas.gbufd.SolvableSyzygyAbstract;
+import edu.jas.gbufd.SolvableSyzygySeq;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;

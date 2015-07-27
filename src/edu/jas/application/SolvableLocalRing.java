@@ -13,9 +13,9 @@ import java.util.Random;
 import org.apache.log4j.Logger;
 
 import edu.jas.gb.SolvableGroebnerBaseAbstract;
-import edu.jas.gbmod.SolvableSyzygyAbstract;
-import edu.jas.gbmod.SolvableSyzygySeq;
 import edu.jas.gbufd.SGBFactory;
+import edu.jas.gbufd.SolvableSyzygyAbstract;
+import edu.jas.gbufd.SolvableSyzygySeq;
 import edu.jas.kern.StringUtil;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;

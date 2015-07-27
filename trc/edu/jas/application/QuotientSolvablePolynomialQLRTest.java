@@ -15,8 +15,8 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigRational;
-import edu.jas.gbmod.SolvableQuotient;
-import edu.jas.gbmod.SolvableQuotientRing;
+import edu.jas.gbufd.SolvableQuotient;
+import edu.jas.gbufd.SolvableQuotientRing;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;

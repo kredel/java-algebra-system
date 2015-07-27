@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.gbmod;
+package edu.jas.gbufd;
 
 
 import java.util.List;
@@ -14,6 +14,10 @@ import junit.framework.TestSuite;
 import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigRational;
+import edu.jas.gbufd.QuotSolvablePolynomial;
+import edu.jas.gbufd.QuotSolvablePolynomialRing;
+import edu.jas.gbufd.SolvableQuotient;
+import edu.jas.gbufd.SolvableQuotientRing;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
