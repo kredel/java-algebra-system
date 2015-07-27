@@ -54,10 +54,10 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
     protected SolvableGroebnerBase<C> sbb;
 
 
-    /**
+    /*
      * Module Groebner basis engine.
+    //protected ModSolvableGroebnerBase<C> msbb;
      */
-    protected ModSolvableGroebnerBase<C> msbb;
 
 
     /**
@@ -66,7 +66,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
      */
     public SolvableSyzygySeq(RingFactory<C> cf) {
         sbb = SGBFactory.getImplementation(cf);
-        msbb = new ModSolvableGroebnerBaseSeq<C>(cf);
+        //msbb = new ModSolvableGroebnerBaseSeq<C>(cf);
     }
 
 
@@ -81,7 +81,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
         ModuleList<C> GM;
         ModuleList<C> Z;
         while (true) {
-            GM = msbb.leftGB(MM);
+            GM = sbb.leftGB(MM);
             Z = leftZeroRelations(GM);
             R.add(new SolvResPart<C>(MM, GM, Z));
             if (Z == null || Z.list == null || Z.list.size() == 0) {
@@ -127,7 +127,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
         ModuleList<C> GM = null;
         ModuleList<C> Z;
         while (true) {
-            //GM = msbb.leftGB(MM);
+            //GM = sbb.leftGB(MM);
             Z = leftZeroRelationsArbitrary(MM);
             R.add(new SolvResPart<C>(MM, GM, Z));
             if (Z == null || Z.list == null || Z.list.size() == 0) {
@@ -391,7 +391,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
         if (Gz.size() < 0) { // always false
             //System.out.println("Gz = " + Gz);
             ModuleList<C> M = new ModuleList<C>(pfac, Gz);
-            ModuleList<C> GM = msbb.leftGB(M);
+            ModuleList<C> GM = sbb.leftGB(M);
             //System.out.println("GM = " + GM);
             Gz = GM.castToSolvableList();
         }

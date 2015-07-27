@@ -43,10 +43,10 @@ public class SyzygySeq<C extends GcdRingElem<C>> extends SyzygyAbstract<C> {
     protected GroebnerBaseAbstract<C> bb;
 
 
-    /**
+    /*
      * Module Groebner base engine.
+    //protected ModGroebnerBaseAbstract<C> mbb;
      */
-    protected ModGroebnerBaseAbstract<C> mbb;
 
 
     /**
@@ -56,7 +56,7 @@ public class SyzygySeq<C extends GcdRingElem<C>> extends SyzygyAbstract<C> {
     public SyzygySeq(RingFactory<C> cf) {
         super();
         bb = GBFactory.getImplementation(cf);
-        mbb = new ModGroebnerBaseSeq<C>(cf);
+        //mbb = new ModGroebnerBaseSeq<C>(cf);
     }
 
 
@@ -73,7 +73,7 @@ public class SyzygySeq<C extends GcdRingElem<C>> extends SyzygyAbstract<C> {
         //ModGroebnerBase<C> mbb = new ModGroebnerBaseSeq<C>(M.ring.coFac);
         //assert cf == M.ring.coFac;
         while (true) {
-            GM = mbb.GB(MM);
+            GM = bb.GB(MM);
             Z = zeroRelations(GM);
             R.add(new ResPart<C>(MM, GM, Z));
             if (Z == null || Z.list == null || Z.list.size() == 0) {
@@ -146,7 +146,7 @@ public class SyzygySeq<C extends GcdRingElem<C>> extends SyzygyAbstract<C> {
         ModuleList<C> GM = null;
         ModuleList<C> Z;
         while (true) {
-            //GM = mbb.GB(MM);
+            //GM = bb.GB(MM);
             Z = zeroRelationsArbitrary(MM);
             R.add(new ResPart<C>(MM, GM, Z));
             if (Z == null || Z.list == null || Z.list.size() == 0) {
