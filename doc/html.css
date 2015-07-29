@@ -15,6 +15,7 @@ pre  { background-color: silver;
 
 code { font-family: Courier, monospace; 
        white-space: pre;
+       font-size: larger;
        /* background:  silver; */
      } 
 
