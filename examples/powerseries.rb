@@ -10,6 +10,7 @@ require "examples/jas"
 # rational number examples
 #
 
+#psr = SeriesRing.new("", nil, nil, QQ(), "y");
 psr = SeriesRing.new("Q(y)");
 puts "psr: " + str(psr);
 puts;
