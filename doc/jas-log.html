@@ -22,15 +22,27 @@
 
 <dl>
 
-<dt>2015, May </dt> <!-- 2.5.52xx -->
+<dt>2015, August </dt> <!-- 2.5.5xxx6 -->
 <dd> 
 
+ Refactoring of the intefaces and classes in package
+ <code>edu.jas.gbmod</code> to the packages <code>edu.jas.gb</code>
+ and <code>edu.jas.gbufd</code> to cut the package dependency cycles.
+ Changes to the organization and contents of the Web pages.  
+
+ <b>Note:</b> The next release will use Java 8 features and drop Java 7
+ support, moreover many deprecated methods and classes will be
+ removed.
+
+</dd>
+
+<dt>2015, May </dt> <!-- 2.5.5246 -->
+<dd> 
  New experimental classes for solvable polynomials with
  non-commutative word polynomials as coefficients. Adjustments for
  solvable left multiplication with word polynomial coefficients and
  corresponding changes for Gr&ouml;bner bases (might not be computable
  in all cases).
-
  More <code>valueOf</code> methods in polynomial ring classes to
  construct polynomials from coefficients and exponents or words. Check
  for missing Ore condition usage in solvable reduction algorithms. Use
@@ -38,14 +50,11 @@
  polynomial coefficients. There is a new class
  <code>GreatestCommonDivisorFake</code> in which <code>gcd</code>
  methods always return 1.
-
  Bugfix in two-sided Gr&ouml;bner bases right coefficient multipliers.
  Fixed the polynomial parser to accept some more
  <code>ASCIIMath</code> expressions.  Small improvements and
  refactoring of the HTML documentation.
-
 </dd>
-
 
 <dt>2015, April </dt> <!-- 2.5.5178 -->
 <dd> 
@@ -2466,7 +2475,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Fri May  1 12:08:34 CEST 2015
+Last modified: Thu Jul 30 11:58:57 CEST 2015
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
