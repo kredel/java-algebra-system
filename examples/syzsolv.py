@@ -32,7 +32,7 @@ f = r.ideal( ps );
 print "SolvIdeal: " + str(f);
 print;
 
-from edu.jas.gbmod import SolvableSyzygySeq;
+from edu.jas.gbufd import SolvableSyzygySeq;
 
 R = SolvableSyzygySeq(r.ring.coFac).resolution( f.pset );
 

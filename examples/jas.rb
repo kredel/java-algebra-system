@@ -4404,7 +4404,8 @@ Compute a left Groebner base.
 =end
     def leftGB()
         t = System.currentTimeMillis();
-        gg = SolvableGroebnerBaseSeq.new(@modu.ring.coFac).leftGB(@mset);
+        #gg = SolvableGroebnerBaseSeq.new(@modu.ring.coFac).leftGB(@mset);
+        gg = SolvableGroebnerBaseSeq.new().leftGB(@mset);
         t = System.currentTimeMillis() - t;
         puts "executed left module GB in #{t} ms\n"; 
         return SolvableSubModule.new(@modu,"",gg.list);
@@ -4415,7 +4416,8 @@ Test if this is a left Groebner base.
 =end
     def isLeftGB()
         t = System.currentTimeMillis();
-        b = SolvableGroebnerBaseSeq.new(@modu.ring.coFac).isLeftGB(@mset);
+        #b = SolvableGroebnerBaseSeq.new(@modu.ring.coFac).isLeftGB(@mset);
+        b = SolvableGroebnerBaseSeq.new().isLeftGB(@mset);
         t = System.currentTimeMillis() - t;
         puts "module isLeftGB executed in #{t} ms\n"; 
         return b;
@@ -4426,7 +4428,8 @@ Compute a two-sided Groebner base.
 =end
     def twosidedGB()
         t = System.currentTimeMillis();
-        gg = SolvableGroebnerBaseSeq.new(@modu.ring.coFac).twosidedGB(@mset);
+        #gg = SolvableGroebnerBaseSeq.new(@modu.ring.coFac).twosidedGB(@mset);
+        gg = SolvableGroebnerBaseSeq.new().twosidedGB(@mset);
         t = System.currentTimeMillis() - t;
         puts "executed twosided module GB in #{t} ms\n"; 
         return SolvableSubModule.new(@modu,"",gg.list);
@@ -4437,7 +4440,8 @@ Test if this is a two-sided Groebner base.
 =end
     def isTwosidedGB()
         t = System.currentTimeMillis();
-        b = SolvableGroebnerBaseSeq.new(@modu.ring.coFac).isTwosidedGB(@mset);
+        #b = SolvableGroebnerBaseSeq.new(@modu.ring.coFac).isTwosidedGB(@mset);
+        b = SolvableGroebnerBaseSeq.new().isTwosidedGB(@mset);
         t = System.currentTimeMillis() - t;
         puts "module isTwosidedGB executed in #{t} ms\n"; 
         return b;
@@ -4448,7 +4452,8 @@ Compute a right Groebner base.
 =end
     def rightGB()
         t = System.currentTimeMillis();
-        gg = SolvableGroebnerBaseSeq.new(@modu.ring.coFac).rightGB(@mset);
+        #gg = SolvableGroebnerBaseSeq.new(@modu.ring.coFac).rightGB(@mset);
+        gg = SolvableGroebnerBaseSeq.new().rightGB(@mset);
         t = System.currentTimeMillis() - t;
         puts "executed right module GB in #{t} ms\n"; 
         return SolvableSubModule.new(@modu,"",gg.list);
@@ -4459,7 +4464,8 @@ Test if this is a right Groebner base.
 =end
     def isRightGB()
         t = System.currentTimeMillis();
-        b = SolvableGroebnerBaseSeq.new(@modu.ring.coFac).isRightGB(@mset);
+        #b = SolvableGroebnerBaseSeq.new(@modu.ring.coFac).isRightGB(@mset);
+        b = SolvableGroebnerBaseSeq.new().isRightGB(@mset);
         t = System.currentTimeMillis() - t;
         puts "module isRightGB executed in #{t} ms\n"; 
         return b;

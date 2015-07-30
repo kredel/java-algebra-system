@@ -51,8 +51,8 @@ rg = f.GB();
 print "seq Output:", rg;
 print;
 
-from edu.jas.gbmod  import SyzygySeq;
-from edu.jas.gbmod  import ModGroebnerBaseSeq;
+from edu.jas.gbufd  import SyzygySeq;
+from edu.jas.gb     import GroebnerBaseSeq;
 from edu.jas.poly   import ModuleList;
 
 s = SyzygySeq(r.ring.coFac).zeroRelations( rg.list );
@@ -76,7 +76,8 @@ for i in range(1,len(r.ring.vars)+1):
    print "\n %s. resolution" % i;
 
    sl = zg;
-   mg = ModGroebnerBaseSeq(r.ring.coFac).GB(sl);
+   #mg = ModGroebnerBaseSeq(r.ring.coFac).GB(sl);
+   mg = GroebnerBaseSeq().GB(sl);
    print "Mod GB: ", mg;
    print;
 
@@ -84,7 +85,8 @@ for i in range(1,len(r.ring.vars)+1):
    print "syzygies of Mod GB: ", zg;
    print;
 
-   if ModGroebnerBaseSeq(r.ring.coFac).isGB( mg ):
+   #if ModGroebnerBaseSeq(r.ring.coFac).isGB( mg ):
+   if GroebnerBaseSeq().isGB( mg ):
        print "is GB";
    else:
        print "is not GB";

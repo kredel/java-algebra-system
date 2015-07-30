@@ -55,8 +55,8 @@ puts;
 #startLog();
 
 java_import "edu.jas.poly.ModuleList";
-java_import "edu.jas.gbmod.SyzygySeq";
-java_import "edu.jas.gbmod.ModGroebnerBaseSeq";
+java_import "edu.jas.gbufd.SyzygySeq";
+java_import "edu.jas.gb.GroebnerBaseSeq";
 
 s = SyzygySeq.new(r.ring.coFac).zeroRelations( rg.list );
 sl = ModuleList.new(rg.pset.ring,s);
@@ -80,7 +80,8 @@ for i in 1..(r.ring.nvar)
    puts "\n #{i}. resolution";
 
    sl = zg;
-   mg = ModGroebnerBaseSeq.new(r.ring.coFac).GB(sl);
+   #mg = ModGroebnerBaseSeq.new(r.ring.coFac).GB(sl);
+   mg = GroebnerBaseSeq.new().GB(sl);
    puts "Mod GB: " + str(mg);
    puts;
 
@@ -88,7 +89,8 @@ for i in 1..(r.ring.nvar)
    puts "syzygies of Mod GB: " + str(zg);
    puts;
 
-   if ModGroebnerBaseSeq.new(r.ring.coFac).isGB( mg )
+   #if ModGroebnerBaseSeq.new(r.ring.coFac).isGB( mg )
+   if GroebnerBaseSeq.new().isGB( mg )
        puts "is GB";
    else
        puts "is not GB";

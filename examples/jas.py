@@ -1838,7 +1838,8 @@ class SolvableSubModule:
         '''Compute a left Groebner base.
         '''
         t = System.currentTimeMillis();
-        G = SolvableGroebnerBaseSeq(self.module.ring.coFac).leftGB(self.mset);
+        #G = SolvableGroebnerBaseSeq(self.module.ring.coFac).leftGB(self.mset);
+        G = SolvableGroebnerBaseSeq().leftGB(self.mset);
         t = System.currentTimeMillis() - t;
         print "executed left module GB in %s ms" % t; 
         return SolvableSubModule(self.module,"",G.list);
@@ -1847,7 +1848,8 @@ class SolvableSubModule:
         '''Test if this is a left Groebner base.
         '''
         t = System.currentTimeMillis();
-        b = SolvableGroebnerBaseSeq(self.module.ring.coFac).isLeftGB(self.mset);
+        #b = SolvableGroebnerBaseSeq(self.module.ring.coFac).isLeftGB(self.mset);
+        b = SolvableGroebnerBaseSeq().isLeftGB(self.mset);
         t = System.currentTimeMillis() - t;
         print "module isLeftGB executed in %s ms" % t; 
         return b;
@@ -1856,7 +1858,8 @@ class SolvableSubModule:
         '''Compute a two-sided Groebner base.
         '''
         t = System.currentTimeMillis();
-        G = SolvableGroebnerBaseSeq(self.module.ring.coFac).twosidedGB(self.mset);
+        #G = SolvableGroebnerBaseSeq(self.module.ring.coFac).twosidedGB(self.mset);
+        G = SolvableGroebnerBaseSeq().twosidedGB(self.mset);
         t = System.currentTimeMillis() - t;
         print "executed twosided module GB in %s ms" % t; 
         return SolvableSubModule(self.module,"",G.list);
@@ -1865,7 +1868,8 @@ class SolvableSubModule:
         '''Test if this is a two-sided Groebner base.
         '''
         t = System.currentTimeMillis();
-        b = SolvableGroebnerBaseSeq(self.module.ring.coFac).isTwosidedGB(self.mset);
+        #b = SolvableGroebnerBaseSeq(self.module.ring.coFac).isTwosidedGB(self.mset);
+        b = SolvableGroebnerBaseSeq().isTwosidedGB(self.mset);
         t = System.currentTimeMillis() - t;
         print "module isTwosidedGB executed in %s ms" % t; 
         return b;
@@ -1874,7 +1878,8 @@ class SolvableSubModule:
         '''Compute a right Groebner base.
         '''
         t = System.currentTimeMillis();
-        G = SolvableGroebnerBaseSeq(self.module.ring.coFac).rightGB(self.mset);
+        #G = SolvableGroebnerBaseSeq(self.module.ring.coFac).rightGB(self.mset);
+        G = SolvableGroebnerBaseSeq().rightGB(self.mset);
         t = System.currentTimeMillis() - t;
         print "executed right module GB in %s ms" % t; 
         return SolvableSubModule(self.module,"",G.list);
@@ -1883,7 +1888,8 @@ class SolvableSubModule:
         '''Test if this is a right Groebner base.
         '''
         t = System.currentTimeMillis();
-        b = SolvableGroebnerBaseSeq(self.module.ring.coFac).isRightGB(self.mset);
+        #b = SolvableGroebnerBaseSeq(self.module.ring.coFac).isRightGB(self.mset);
+        b = SolvableGroebnerBaseSeq().isRightGB(self.mset);
         t = System.currentTimeMillis() - t;
         print "module isRightGB executed in %s ms" % t; 
         return b;

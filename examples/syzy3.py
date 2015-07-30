@@ -24,7 +24,7 @@ f = r.ideal( ps );
 print "Ideal: " + str(f);
 print;
 
-from edu.jas.gbmod  import SyzygySeq;
+from edu.jas.gbufd  import SyzygySeq;
 
 R = SyzygySeq(r.ring.coFac).resolution( f.pset );
 

@@ -6,7 +6,7 @@
 from jas import SolvableRing
 
 from edu.jas.poly   import ModuleList;
-from edu.jas.gbmod  import SolvableSyzygySeq;
+from edu.jas.gbufd  import SolvableSyzygySeq;
 
 # WA_32 example
 

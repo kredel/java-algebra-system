@@ -32,7 +32,7 @@ f = r.ideal( ps );
 puts "SolvIdeal: " + str(f);
 puts;
 
-java_import "edu.jas.gbmod.SolvableSyzygySeq";
+java_import "edu.jas.gbufd.SolvableSyzygySeq";
 
 #startLog();
 
