@@ -83,9 +83,9 @@ print;
 #sys.exit();
 
 from edu.jas.poly   import ModuleList;
-from edu.jas.gbmod  import SolvableSyzygySeq;
-from edu.jas.gbmod  import ModSolvableGroebnerBaseSeq;
-from edu.jas.gbmod  import ModSolvableGroebnerBasePar;
+from edu.jas.gbufd  import SolvableSyzygySeq;
+from edu.jas.gb     import SolvableGroebnerBaseSeq;
+from edu.jas.gb     import SolvableGroebnerBaseParallel;
 from edu.jas.poly   import TermOrderOptimization;
 from edu.jas.poly   import GenSolvablePolynomialRing;
 from edu.jas.ufd    import PolyUfdUtil;
@@ -128,7 +128,8 @@ t = System.currentTimeMillis();
 #imr = ModSolvableGroebnerBaseSeq(isr.ring.coFac).rightGB(isr);
 #imr = ModSolvableGroebnerBaseSeq(isr.ring.coFac).leftGB(isr);
 #imr = ModSolvableGroebnerBaseSeq(isr.ring.coFac).twosidedGB(isr);
-mr = ModSolvableGroebnerBaseSeq(sr.ring.coFac).rightGB(sr);
+#mr = ModSolvableGroebnerBaseSeq(sr.ring.coFac).rightGB(sr);
+mr = SolvableGroebnerBaseSeq().rightGB(sr);
 #mr = ModSolvableGroebnerBaseSeq(sr.ring.coFac).leftGB(sr);
 #mr = ModSolvableGroebnerBaseSeq(sr.ring.coFac).twosidedGB(sr);
 #mr = ModSolvableGroebnerBasePar(sr.ring.coFac).rightGB(sr);
@@ -145,7 +146,8 @@ print;
 #print
 
 t = System.currentTimeMillis();
-mz = ModSolvableGroebnerBaseSeq(sr.ring.coFac).isRightGB(mr);
+#mz = ModSolvableGroebnerBaseSeq(sr.ring.coFac).isRightGB(mr);
+mz = SolvableGroebnerBaseSeq().isRightGB(mr);
 t = System.currentTimeMillis() - t;
 print "executed in %s ms" % t; 
 

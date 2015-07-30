@@ -60,7 +60,7 @@ print "seq twosided GB Output:", ftg;
 print;
 
 
-from edu.jas.gbmod  import SolvableSyzygySeq;
+from edu.jas.gbufd  import SolvableSyzygySeq;
 #from edu.jas.gbmod  import ModSolvableGroebnerBase;
 
 s = SolvableSyzygySeq(r.ring.coFac).leftZeroRelations( ftg.mset );
