@@ -117,6 +117,7 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>> implements
     /**
      * Create from numerator.
      */
+    @SuppressWarnings("unchecked")
     public SolvableLocalResidue<C> create(GenPolynomial<C> n) {
         return new SolvableLocalResidue<C>(this, (GenSolvablePolynomial<C>) n);
     }
@@ -125,6 +126,7 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>> implements
     /**
      * Create from numerator, denominator pair.
      */
+    @SuppressWarnings("unchecked")
     public SolvableLocalResidue<C> create(GenPolynomial<C> n, GenPolynomial<C> d) {
         return new SolvableLocalResidue<C>(this, (GenSolvablePolynomial<C>) n, (GenSolvablePolynomial<C>) d);
     }

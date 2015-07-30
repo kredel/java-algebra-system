@@ -96,7 +96,7 @@ public class GroebnerBaseFGLMExamples {
     String modAll = "Zahlbereich | Ordnung    | Elements G | Elements L | Deg G | Deg L | Time G | Time FGLM | Time L";
 
 
-    String modGrad = "Zahlbereich | Ordnung      | Elements G | Deg G | Time G";
+    //String modGrad = "Zahlbereich | Ordnung      | Elements G | Deg G | Time G";
 
 
     String modfglm = "Zahlbereich | Ordnung      | Elements G | Elements L | Deg G | Deg L | Time G | Time FGLM";

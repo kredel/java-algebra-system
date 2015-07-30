@@ -118,6 +118,7 @@ public class SolvableResidueRing<C extends GcdRingElem<C>>
     /**
      * Create from numerator.
      */
+    @SuppressWarnings("unchecked")
     public SolvableResidue<C> create(GenPolynomial<C> n) {
         return new SolvableResidue<C>(this, (GenSolvablePolynomial<C>) n);
     }
@@ -126,6 +127,7 @@ public class SolvableResidueRing<C extends GcdRingElem<C>>
     /**
      * Create from numerator, denominator pair.
      */
+    @SuppressWarnings("unchecked")
     public SolvableResidue<C> create(GenPolynomial<C> n, GenPolynomial<C> d) {
         if (d != null && !d.isONE()) {
             throw new UnsupportedOperationException("d must be 1, but d = " + d);

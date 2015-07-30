@@ -115,6 +115,7 @@ public class SolvableLocalRing<C extends GcdRingElem<C>> implements RingFactory<
     /**
      * Create from numerator.
      */
+    @SuppressWarnings("unchecked")
     public SolvableLocal<C> create(GenPolynomial<C> n) {
         return new SolvableLocal<C>(this, (GenSolvablePolynomial<C>) n);
     }
@@ -123,6 +124,7 @@ public class SolvableLocalRing<C extends GcdRingElem<C>> implements RingFactory<
     /**
      * Create from numerator, denominator pair.
      */
+    @SuppressWarnings("unchecked")
     public SolvableLocal<C> create(GenPolynomial<C> n, GenPolynomial<C> d) {
         return new SolvableLocal<C>(this, (GenSolvablePolynomial<C>) n, (GenSolvablePolynomial<C>) d);
     }

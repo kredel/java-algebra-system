@@ -121,8 +121,11 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
         //List<GenPolynomial<C>> a = PolynomialList.<C> castToList(A);
         //List<GenPolynomial<C>> n = cbb.normalizeZeroOnes(a);
         //List<GenSolvablePolynomial<C>> N = PolynomialList.<C> castToSolvableList(n);
+        if (A == null) {
+            return A;
+        }
         List<GenSolvablePolynomial<C>> N = new ArrayList<GenSolvablePolynomial<C>>(A.size());
-        if (A == null || A.isEmpty()) {
+        if (A.isEmpty()) {
             return N;
         }
         for (GenSolvablePolynomial<C> p : A) {

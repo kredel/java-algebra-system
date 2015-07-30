@@ -1052,12 +1052,12 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         GenSolvablePolynomial<C>[] ret = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[2];
         ret[0] = null;
         ret[1] = null;
-        if (S == null || S.isZERO()) {
+        if (S.isZERO()) {
             ret[0] = P;
             ret[1] = P.ring.getONE();
             return ret;
         }
-        if (P == null || P.isZERO()) {
+        if (P.isZERO()) {
             ret[0] = S;
             ret[1] = S.ring.getZERO();
             return ret;

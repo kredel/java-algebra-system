@@ -125,8 +125,11 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
      * @return list of polynomials with zeros removed and ones/units reduced.
      */
     public List<GenPolynomial<C>> normalizeZerosOnes(List<GenPolynomial<C>> A) {
+        if (A == null) {
+            return A;
+        }
         List<GenPolynomial<C>> N = new ArrayList<GenPolynomial<C>>(A.size());
-        if (A == null || A.isEmpty()) {
+        if (A.isEmpty()) {
             return N;
         }
         for (GenPolynomial<C> p : A) {

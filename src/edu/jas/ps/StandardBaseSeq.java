@@ -62,8 +62,11 @@ public class StandardBaseSeq<C extends RingElem<C>>
      * @return list of power series with zeros removed and ones/units reduced.
      */
     public List<MultiVarPowerSeries<C>> normalizeZerosOnes(List<MultiVarPowerSeries<C>> A) {
+        if (A == null) {
+            return A;
+        }
         List<MultiVarPowerSeries<C>> N = new ArrayList<MultiVarPowerSeries<C>>(A.size());
-        if (A == null || A.isEmpty()) {
+        if (A.isEmpty()) {
             return N;
         }
         for (MultiVarPowerSeries<C> p : A) {
