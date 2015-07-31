@@ -962,12 +962,16 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
         if (this.isZERO()) {
             return false;
         }
+        if(h.isUnit()) {
+            return true;
+        }
+        /* TODO together wit inverse
         List<GenWordPolynomial<C>> F = new ArrayList<GenWordPolynomial<C>>(1 + list.size());
         F.add(h);
         F.addAll(getList());
         List<GenWordPolynomial<C>> G = bb.GB(F);
         if (debug) {
-            logger.debug("isUnit GB = " + G);
+            logger.info("isUnit GB = " + G);
         }
         for (GenWordPolynomial<C> p : G) {
             if (p == null) {
@@ -977,6 +981,7 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
                 return true;
             }
         }
+        */
         return false;
     }
 

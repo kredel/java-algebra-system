@@ -179,6 +179,7 @@ public class WordResidue<C extends GcdRingElem<C>>
         }
         // not jet known
         boolean u = ring.ideal.isUnit(val);
+        //System.out.println("WordResidue.isUnit " + val);
         if (u) {
             isunit = 1; // seems to be wrong for solvable polynomial rings
         } else {
