@@ -1963,6 +1963,8 @@ java_import "edu.jas.application.ResidueSolvablePolynomial";
 java_import "edu.jas.application.ResidueSolvablePolynomialRing";
 java_import "edu.jas.application.LocalSolvablePolynomial";
 java_import "edu.jas.application.LocalSolvablePolynomialRing";
+java_import "edu.jas.application.ResidueSolvableWordPolynomial";
+java_import "edu.jas.application.ResidueSolvableWordPolynomialRing";
 
 
 =begin rdoc
@@ -3568,13 +3570,13 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
            coeffTable = ring.coeffTable;
         elsif resWord
            puts "ResWordSolvablePolynomialRing: " + cfs;
-           ring = GenSolvablePolynomialRing.new(cf,nv,to,names);
+           #ring = GenSolvablePolynomialRing.new(cf,nv,to,names);
            #ring = RecSolvableWordPolynomialRing.new(cf,nv,to,names);
            #ring = QLRSolvablePolynomialRing.new(cf,nv,to,names);
+           ring = ResidueSolvableWordPolynomialRing.new(cf,nv,to,names);
            puts "ring = #{ring.toScript()}";
            table = ring.table;
-           #coeffTable = ring.polCoeff.coeffTable;
-           #coeffTable = ring.coeffTable;
+           coeffTable = ring.polCoeff.coeffTable;
         elsif resSolv
            puts "ResidueSolvablePolynomialRing: " + cfs;
            #ring = ResidueSolvablePolynomialRing.new(cf,nv,to,names);
@@ -3617,7 +3619,9 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
                   coeffTable.update( ll[i], ll[i+1], ll[i+2] );
                elsif resWord
                   #puts "rw coeff type " + str(ll[i].class);
-                  ##coeffTable.update( ll[i], ll[i+1], ll[i+2] );
+                  coeffTable.update( ring.toPolyCoefficients(ll[i]),
+                                     ring.toPolyCoefficients(ll[i+1]), 
+                                     ring.toPolyCoefficients(ll[i+2]) );
                elsif resSolv
                   #puts "ri coeff type " + str(ll[i].class);
                   coeffTable.update( ring.toPolyCoefficients(ll[i]),
@@ -3805,12 +3809,18 @@ Compute a two-sided Groebner base.
            gg = SolvableGroebnerBasePseudoRecSeq.new(cofac).twosidedGB(ff);
            kind = "pseudorec"
         else 
-           if cofac.isField() or not cofac.isCommutative()
-              gg = SolvableGroebnerBaseSeq.new().twosidedGB(ff);
-              kind = "field|nocom"
-           else
+           #puts "two-sided: " + cofac.to_s
+           if cofac.is_a? WordResidue  #Ring
               gg = SolvableGroebnerBasePseudoSeq.new(cofac).twosidedGB(ff);
               kind = "pseudo"
+           else 
+              if cofac.isField() or not cofac.isCommutative()
+                 gg = SolvableGroebnerBaseSeq.new().twosidedGB(ff);
+                 kind = "field|nocom"
+              else
+                 gg = SolvableGroebnerBasePseudoSeq.new(cofac).twosidedGB(ff);
+                 kind = "pseudo"
+              end
            end
         end
         t = System.currentTimeMillis() - t;
