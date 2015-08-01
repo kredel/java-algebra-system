@@ -74,12 +74,13 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
             }
         }
         l = j;
-        ExpVector e;
-        C a;
+        ExpVector e, f;
+        C a, b;
         boolean mt = false;
         GenSolvablePolynomial<C> R = Ap.ring.getZERO().copy();
         GenSolvablePolynomial<C> Q = null;
         GenSolvablePolynomial<C> S = Ap.copy();
+        GenSolvablePolynomial<C> Sp;
         while (S.length() > 0) {
             m = S.leadingMonomial();
             e = m.getKey();
@@ -100,20 +101,35 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
                 S.doRemoveFromMap(e, a);
                 // System.out.println(" S = " + S);
             } else {
+                f = e;
                 e = e.subtract(htl[i]);
                 //logger.debug("red div = " + e);
                 Q = p[i].multiplyLeft(e);
+                b = a;
                 a = a.divide(Q.leadingBaseCoefficient());
-                //Q = Q.multiplyLeft(a);
-                //S = (GenSolvablePolynomial<C>) S.subtract(Q);
-                ExpVector g1 = S.leadingExpVector();
-                S = S.subtractMultiple(a, Q);
-                //S = S.subtractMultiple(a, e, p[i]);
-                ExpVector g2 = S.leadingExpVector();
-                if (g1.equals(g2)) {
-                    throw new RuntimeException("g1.equals(g2): " + g1 + ", a = " + a + ", lc(S) = "
-                                    + S.leadingBaseCoefficient());
+                if (a.isZERO()) {
+                    logger.info("irred: b = " + b + ", f = " + f);
+                    R.doPutToMap(f, b);
+                    S.doRemoveFromMap(f, b);
+                } else {
+		    //Q = Q.multiplyLeft(a);
+		    //S = (GenSolvablePolynomial<C>) S.subtract(Q);
+		    ExpVector g1 = S.leadingExpVector();
+		    Sp = S;
+		    S = S.subtractMultiple(a, Q);
+		    //S = S.subtractMultiple(a, e, p[i]);
+		    ExpVector g2 = S.leadingExpVector();
+		    if (g1.equals(g2)) {
+			logger.info("g1.equals(g2): Pp       = " + Pp);
+			logger.info("g1.equals(g2): Ap       = " + Ap);
+			logger.info("g1.equals(g2): p[i]     = " + p[i]);
+			logger.info("g1.equals(g2): Q        = " + Q);
+			logger.info("g1.equals(g2): R        = " + R);
+			logger.info("g1.equals(g2): Sp       = " + Sp);
+			logger.info("g1.equals(g2): S        = " + S);
+			throw new RuntimeException("g1.equals(g2): " + g1 + ", a = " + a  + ", b = " + b);
                 }
+		}
             }
         }
         return R;
