@@ -92,6 +92,7 @@ public class WordResidueTest extends TestCase {
         String[] vars = new String[] { "w", "x", "y", "z" };
         mfac = new GenWordPolynomialRing<BigRational>(new BigRational(1), vars);
         //System.out.println("mfac = " + mfac.toScript());
+        //GenWordPolynomial<BigRational> p1 = mfac.parse("w - x^2");
         do {
             F = new ArrayList<GenWordPolynomial<BigRational>>(il);
             for (int i = 0; i < il; i++) {
@@ -101,6 +102,7 @@ public class WordResidueTest extends TestCase {
                 }
                 F.add(mo);
             }
+            //F.add(p1);
             id = new WordIdeal<BigRational>(mfac, F);
             id.doGB();
         } while (id.isONE());

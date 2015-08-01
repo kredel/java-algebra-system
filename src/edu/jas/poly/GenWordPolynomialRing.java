@@ -542,7 +542,7 @@ public final class GenWordPolynomialRing<C extends RingElem<C>> implements RingF
      */
     @SuppressWarnings("unchecked")
     public GenWordPolynomial<C> parse(Reader r) {
-        if (alphabet.length() <= 2) { // todo, hack for commuative like cases
+        if (alphabet.length() <= 4) { // todo, hack for commuative like cases
             GenPolynomialRing<C> cr = new GenPolynomialRing<C>(coFac, alphabet.getVars() );
             GenPolynomialTokenizer pt = new GenPolynomialTokenizer(cr, r);
             GenPolynomial<C> p = null;

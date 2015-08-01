@@ -11,27 +11,19 @@ import java.util.SortedMap;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.structure.RingElem;
-import edu.jas.structure.GcdRingElem;
-
-import edu.jas.poly.Word;
-import edu.jas.poly.WordFactory;
 import edu.jas.poly.ExpVector;
-import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
-import edu.jas.poly.GenWordPolynomial;
-import edu.jas.poly.TableRelation;
-import edu.jas.poly.RelationTable;
-import edu.jas.poly.TermOrder;
 import edu.jas.poly.RecSolvableWordPolynomial;
+import edu.jas.poly.TableRelation;
+import edu.jas.structure.GcdRingElem;
 
 
 /**
- * ResidueSolvableWordPolynomial solvable polynomials with WordResidue coefficients implementing
- * RingElem. n-variate ordered solvable polynomials over non-commutative word
- * residue coefficients. Objects of this class are intended to be immutable.
- * The implementation is based on TreeMap respectively SortedMap from exponents
- * to coefficients by extension of GenPolynomial.
+ * ResidueSolvableWordPolynomial solvable polynomials with WordResidue
+ * coefficients implementing RingElem. n-variate ordered solvable polynomials
+ * over non-commutative word residue coefficients. Objects of this class are
+ * intended to be immutable. The implementation is based on TreeMap respectively
+ * SortedMap from exponents to coefficients by extension of GenPolynomial.
  * @param <C> base coefficient type
  * @author Heinz Kredel
  */
@@ -302,8 +294,8 @@ public class ResidueSolvableWordPolynomial<C extends GcdRingElem<C>> extends
 
 
     /**
-     * ResidueSolvableWordPolynomial left and right multiplication. Product with two
-     * polynomials.
+     * ResidueSolvableWordPolynomial left and right multiplication. Product with
+     * two polynomials.
      * @param S ResidueSolvableWordPolynomial.
      * @param T ResidueSolvableWordPolynomial.
      * @return S*this*T.
@@ -325,19 +317,19 @@ public class ResidueSolvableWordPolynomial<C extends GcdRingElem<C>> extends
 
 
     /**
-     * ResidueSolvableWordPolynomial multiplication. Product with coefficient ring
-     * element.
+     * ResidueSolvableWordPolynomial multiplication. Product with coefficient
+     * ring element.
      * @param b coefficient polynomial.
      * @return this*b, where * is coefficient multiplication.
      */
-    @Override 
+    @Override
     //public GenSolvablePolynomial<WordResidue<C>> multiply(WordResidue<C> b) {
     public ResidueSolvableWordPolynomial<C> multiply(WordResidue<C> b) {
         ResidueSolvableWordPolynomial<C> Cp = ring.getZERO().copy();
         if (b == null || b.isZERO()) {
             return Cp;
         }
-        Cp = ring.valueOf(b); 
+        Cp = ring.valueOf(b);
         return multiply(Cp);
     }
 
@@ -358,8 +350,8 @@ public class ResidueSolvableWordPolynomial<C extends GcdRingElem<C>> extends
         if (c == null || c.isZERO()) {
             return Cp;
         }
-        ResidueSolvableWordPolynomial<C> Cb = ring.valueOf(b); 
-        ResidueSolvableWordPolynomial<C> Cc = ring.valueOf(c); 
+        ResidueSolvableWordPolynomial<C> Cb = ring.valueOf(b);
+        ResidueSolvableWordPolynomial<C> Cc = ring.valueOf(c);
         return Cb.multiply(this).multiply(Cc);
     }
 
@@ -375,7 +367,8 @@ public class ResidueSolvableWordPolynomial<C extends GcdRingElem<C>> extends
 
 
     /**
-     * ResidueSolvableWordPolynomial multiplication. Product with exponent vector.
+     * ResidueSolvableWordPolynomial multiplication. Product with exponent
+     * vector.
      * @param e exponent.
      * @return this * x<sup>e</sup>, where * denotes solvable multiplication.
      */
@@ -411,8 +404,8 @@ public class ResidueSolvableWordPolynomial<C extends GcdRingElem<C>> extends
 
 
     /**
-     * ResidueSolvableWordPolynomial multiplication. Product with ring element and
-     * exponent vector.
+     * ResidueSolvableWordPolynomial multiplication. Product with ring element
+     * and exponent vector.
      * @param b coefficient polynomial.
      * @param e exponent.
      * @return this * b x<sup>e</sup>, where * denotes solvable multiplication.
@@ -422,7 +415,7 @@ public class ResidueSolvableWordPolynomial<C extends GcdRingElem<C>> extends
         if (b == null || b.isZERO()) {
             return ring.getZERO();
         }
-        ResidueSolvableWordPolynomial<C> Cp = ring.valueOf(b, e); 
+        ResidueSolvableWordPolynomial<C> Cp = ring.valueOf(b, e);
         return multiply(Cp);
     }
 
@@ -446,15 +439,15 @@ public class ResidueSolvableWordPolynomial<C extends GcdRingElem<C>> extends
         if (c == null || c.isZERO()) {
             return ring.getZERO();
         }
-        ResidueSolvableWordPolynomial<C> Cp = ring.valueOf(b, e); 
-        ResidueSolvableWordPolynomial<C> Dp = ring.valueOf(c, f); 
+        ResidueSolvableWordPolynomial<C> Cp = ring.valueOf(b, e);
+        ResidueSolvableWordPolynomial<C> Dp = ring.valueOf(c, f);
         return multiply(Cp, Dp);
     }
 
 
     /**
-     * ResidueSolvableWordPolynomial multiplication. Left product with ring element
-     * and exponent vector.
+     * ResidueSolvableWordPolynomial multiplication. Left product with ring
+     * element and exponent vector.
      * @param b coefficient polynomial.
      * @param e exponent.
      * @return b x<sup>e</sup> * this, where * denotes solvable multiplication.
@@ -464,7 +457,7 @@ public class ResidueSolvableWordPolynomial<C extends GcdRingElem<C>> extends
         if (b == null || b.isZERO()) {
             return ring.getZERO();
         }
-        ResidueSolvableWordPolynomial<C> Cp = ring.valueOf(b, e); 
+        ResidueSolvableWordPolynomial<C> Cp = ring.valueOf(b, e);
         return Cp.multiply(this);
     }
 
@@ -480,14 +473,14 @@ public class ResidueSolvableWordPolynomial<C extends GcdRingElem<C>> extends
         if (e == null || e.isZERO()) {
             return this;
         }
-        ResidueSolvableWordPolynomial<C> Cp = ring.valueOf(e); 
+        ResidueSolvableWordPolynomial<C> Cp = ring.valueOf(e);
         return Cp.multiply(this);
     }
 
 
     /**
-     * ResidueSolvableWordPolynomial multiplication. Left product with coefficient
-     * ring element.
+     * ResidueSolvableWordPolynomial multiplication. Left product with
+     * coefficient ring element.
      * @param b coefficient polynomial.
      * @return b*this, where * is coefficient multiplication.
      */
@@ -513,7 +506,8 @@ public class ResidueSolvableWordPolynomial<C extends GcdRingElem<C>> extends
 
 
     /**
-     * ResidueSolvableWordPolynomial multiplication. Left product with 'monomial'.
+     * ResidueSolvableWordPolynomial multiplication. Left product with
+     * 'monomial'.
      * @param m 'monomial'.
      * @return m * this, where * denotes solvable multiplication.
      */

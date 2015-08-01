@@ -1,5 +1,6 @@
 /*
- * $Id$
+ * $Id: ResidueSolvableWordPolynomialRing.java 5284 2015-08-01 11:21:04Z kredel
+ * $
  */
 
 package edu.jas.application;
@@ -18,36 +19,31 @@ import org.apache.log4j.Logger;
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.kern.Scripting;
-import edu.jas.structure.RingElem;
-import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingFactory;
-
-import edu.jas.poly.Word;
-import edu.jas.poly.WordFactory;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenSolvablePolynomial;
-import edu.jas.poly.GenWordPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.GenSolvablePolynomialRing;
-import edu.jas.poly.GenWordPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
-import edu.jas.poly.TableRelation;
-import edu.jas.poly.RelationTable;
-import edu.jas.poly.TermOrder;
+import edu.jas.poly.GenSolvablePolynomial;
+import edu.jas.poly.GenSolvablePolynomialRing;
+import edu.jas.poly.GenWordPolynomial;
 import edu.jas.poly.RecSolvableWordPolynomial;
 import edu.jas.poly.RecSolvableWordPolynomialRing;
+import edu.jas.poly.RelationTable;
+import edu.jas.poly.TermOrder;
+import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
 
 
 /**
- * ResidueSolvableWordPolynomialRing solvable polynomial with word residue coefficients factory.
- * It implements RingFactory and extends GenSolvablePolynomialRing factory.
- * Factory for n-variate ordered solvable polynomials over non-commutative word
- * residue coefficients. The non-commutative multiplication relations are
- * maintained in a relation table and the non-commutative multiplication
- * relations between the coefficients and the main variables are maintained in a
- * coefficient relation table. Almost immutable object, except variable names
- * and relation table contents.
+ * ResidueSolvableWordPolynomialRing solvable polynomial with word residue
+ * coefficients factory. It implements RingFactory and extends
+ * GenSolvablePolynomialRing factory. Factory for n-variate ordered solvable
+ * polynomials over non-commutative word residue coefficients. The
+ * non-commutative multiplication relations are maintained in a relation table
+ * and the non-commutative multiplication relations between the coefficients and
+ * the main variables are maintained in a coefficient relation table. Almost
+ * immutable object, except variable names and relation table contents.
  * @param <C> base coefficient type.
  * @author Heinz Kredel
  */
@@ -181,8 +177,8 @@ public class ResidueSolvableWordPolynomialRing<C extends GcdRingElem<C>> extends
      * @param v names for the variables.
      * @param rt solvable multiplication relations.
      */
-    public ResidueSolvableWordPolynomialRing(RingFactory<WordResidue<C>> cf, int n, TermOrder t,
-                    String[] v, RelationTable<WordResidue<C>> rt) {
+    public ResidueSolvableWordPolynomialRing(RingFactory<WordResidue<C>> cf, int n, TermOrder t, String[] v,
+                    RelationTable<WordResidue<C>> rt) {
         super(cf, n, t, v, rt);
         //if (rt == null) { // handled in super }
         WordResidueRing<C> cfring = (WordResidueRing<C>) cf; // == coFac
@@ -209,7 +205,8 @@ public class ResidueSolvableWordPolynomialRing<C extends GcdRingElem<C>> extends
      * @param cf factory for coefficients of type C.
      * @param o other solvable polynomial ring.
      */
-    public ResidueSolvableWordPolynomialRing(RingFactory<WordResidue<C>> cf, ResidueSolvableWordPolynomialRing o) {
+    public ResidueSolvableWordPolynomialRing(RingFactory<WordResidue<C>> cf,
+                    ResidueSolvableWordPolynomialRing o) {
         this(cf, o.nvar, o.tord, o.getVars(), null);
     }
 
@@ -420,8 +417,8 @@ public class ResidueSolvableWordPolynomialRing<C extends GcdRingElem<C>> extends
 
 
     /**
-     * Get a ResidueSolvableWordPolynomial&lt;C&gt; element from a coeffcient and an
-     * ExpVector.
+     * Get a ResidueSolvableWordPolynomial&lt;C&gt; element from a coeffcient
+     * and an ExpVector.
      * @param a coefficient.
      * @param e exponent vector.
      * @return a ResidueSolvableWordPolynomial&lt;C&gt;.
@@ -433,8 +430,8 @@ public class ResidueSolvableWordPolynomialRing<C extends GcdRingElem<C>> extends
 
 
     /**
-     * Get a (constant) ResidueSolvableWordPolynomial&lt;C&gt; element from a long
-     * value.
+     * Get a (constant) ResidueSolvableWordPolynomial&lt;C&gt; element from a
+     * long value.
      * @param a long.
      * @return a ResidueSolvableWordPolynomial&lt;C&gt;.
      */
@@ -679,9 +676,9 @@ public class ResidueSolvableWordPolynomialRing<C extends GcdRingElem<C>> extends
     @Override
     public ResidueSolvableWordPolynomialRing<C> extend(int i) {
         GenSolvablePolynomialRing<WordResidue<C>> pfac = super.extend(i);
-        ResidueSolvableWordPolynomialRing<C> spfac = new ResidueSolvableWordPolynomialRing<C>(pfac.coFac, pfac.nvar,
-                        pfac.tord, pfac.getVars(), pfac.table);
-        //spfac.table.extend(this.table); // pfac.table // done in super
+        ResidueSolvableWordPolynomialRing<C> spfac = new ResidueSolvableWordPolynomialRing<C>(pfac.coFac,
+                        pfac.nvar, pfac.tord, pfac.getVars());
+        spfac.table.extend(this.table); // pfac.table // done in super
         spfac.polCoeff.coeffTable.extend(this.polCoeff.coeffTable);
         return spfac;
     }
@@ -697,9 +694,9 @@ public class ResidueSolvableWordPolynomialRing<C extends GcdRingElem<C>> extends
     @Override
     public ResidueSolvableWordPolynomialRing<C> extend(String[] vs) {
         GenSolvablePolynomialRing<WordResidue<C>> pfac = super.extend(vs);
-        ResidueSolvableWordPolynomialRing<C> spfac = new ResidueSolvableWordPolynomialRing<C>(pfac.coFac, pfac.nvar,
-                       pfac.tord, pfac.getVars(), pfac.table);
-        //spfac.table.extend(this.table); // pfac.table // done in super
+        ResidueSolvableWordPolynomialRing<C> spfac = new ResidueSolvableWordPolynomialRing<C>(pfac.coFac,
+                        pfac.nvar, pfac.tord, pfac.getVars());
+        spfac.table.extend(this.table); // pfac.table 
         spfac.polCoeff.coeffTable.extend(this.polCoeff.coeffTable);
         return spfac;
     }
@@ -714,8 +711,8 @@ public class ResidueSolvableWordPolynomialRing<C extends GcdRingElem<C>> extends
     @Override
     public ResidueSolvableWordPolynomialRing<C> contract(int i) {
         GenPolynomialRing<WordResidue<C>> pfac = super.contract(i);
-        ResidueSolvableWordPolynomialRing<C> spfac = new ResidueSolvableWordPolynomialRing<C>(pfac.coFac, pfac.nvar,
-	               pfac.tord, pfac.getVars()); //, pfac.table);
+        ResidueSolvableWordPolynomialRing<C> spfac = new ResidueSolvableWordPolynomialRing<C>(pfac.coFac,
+                        pfac.nvar, pfac.tord, pfac.getVars()); 
         spfac.table.contract(this.table);
         spfac.polCoeff.coeffTable.contract(this.polCoeff.coeffTable);
         return spfac;
@@ -740,8 +737,8 @@ public class ResidueSolvableWordPolynomialRing<C extends GcdRingElem<C>> extends
     @Override
     public ResidueSolvableWordPolynomialRing<C> reverse(boolean partial) {
         GenPolynomialRing<WordResidue<C>> pfac = super.reverse(partial);
-        ResidueSolvableWordPolynomialRing<C> spfac = new ResidueSolvableWordPolynomialRing<C>(pfac.coFac, pfac.nvar,
-	               pfac.tord, pfac.getVars()); //, pfac.table);
+        ResidueSolvableWordPolynomialRing<C> spfac = new ResidueSolvableWordPolynomialRing<C>(pfac.coFac,
+                        pfac.nvar, pfac.tord, pfac.getVars()); //, pfac.table);
         spfac.partial = partial;
         spfac.table.reverse(this.table);
         spfac.polCoeff.coeffTable.reverse(this.polCoeff.coeffTable);
@@ -791,7 +788,7 @@ public class ResidueSolvableWordPolynomialRing<C extends GcdRingElem<C>> extends
         WordResidueRing<C> qfac = (WordResidueRing<C>) cfac;
         for (Map.Entry<ExpVector, GenWordPolynomial<C>> y : A.getMap().entrySet()) {
             ExpVector e = y.getKey();
-            GenWordPolynomial<C> a = (GenWordPolynomial<C>) y.getValue();
+            GenWordPolynomial<C> a = y.getValue();
             WordResidue<C> p = new WordResidue<C>(qfac, a); // can be zero
             if (!p.isZERO()) {
                 //B = B.sum( p, e ); // inefficient
