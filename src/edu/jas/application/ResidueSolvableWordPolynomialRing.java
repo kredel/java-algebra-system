@@ -678,7 +678,7 @@ public class ResidueSolvableWordPolynomialRing<C extends GcdRingElem<C>> extends
         GenSolvablePolynomialRing<WordResidue<C>> pfac = super.extend(i);
         ResidueSolvableWordPolynomialRing<C> spfac = new ResidueSolvableWordPolynomialRing<C>(pfac.coFac,
                         pfac.nvar, pfac.tord, pfac.getVars());
-        spfac.table.extend(this.table); // pfac.table // done in super
+        spfac.table.extend(this.table); 
         spfac.polCoeff.coeffTable.extend(this.polCoeff.coeffTable);
         return spfac;
     }
@@ -696,7 +696,7 @@ public class ResidueSolvableWordPolynomialRing<C extends GcdRingElem<C>> extends
         GenSolvablePolynomialRing<WordResidue<C>> pfac = super.extend(vs);
         ResidueSolvableWordPolynomialRing<C> spfac = new ResidueSolvableWordPolynomialRing<C>(pfac.coFac,
                         pfac.nvar, pfac.tord, pfac.getVars());
-        spfac.table.extend(this.table); // pfac.table 
+        spfac.table.extend(this.table); 
         spfac.polCoeff.coeffTable.extend(this.polCoeff.coeffTable);
         return spfac;
     }
