@@ -1,5 +1,6 @@
 /*
- * $Id$
+ * $Id: ResidueSolvableWordPolynomialTest.java 5288 2015-08-01 17:22:12Z kredel
+ * $
  */
 
 package edu.jas.application;
@@ -140,7 +141,7 @@ public class ResidueSolvableWordPolynomialTest extends TestCase {
         }
         //System.out.println("prel = " + prel);
         ring.polCoeff.table.addSolvRelations(prel);
-        System.out.println("ring = " + ring.toScript());
+        //System.out.println("ring = " + ring.toScript());
         a = b = c = d = e = null;
     }
 
@@ -196,7 +197,7 @@ public class ResidueSolvableWordPolynomialTest extends TestCase {
             assertTrue(" not isZERO( a" + i + " )", !a.isZERO());
             assertTrue(" not isONE( a" + i + " )", !a.isONE());
 
-            RecSolvableWordPolynomial<BigRational> b = ring.toPolyCoefficients(a);      
+            RecSolvableWordPolynomial<BigRational> b = ring.toPolyCoefficients(a);
             c = ring.fromPolyCoefficients(b);
             assertEquals("res(poly(a)) == a", a, c);
         }
@@ -296,7 +297,7 @@ public class ResidueSolvableWordPolynomialTest extends TestCase {
         d = (ResidueSolvableWordPolynomial<BigRational>) a.monic();
         //System.out.println("d = " + d);
         assertTrue("a.monic(): " + d, d.leadingBaseCoefficient().isONE()
-		   || d.leadingBaseCoefficient().abs().equals(a.leadingBaseCoefficient().abs()) );
+                        || d.leadingBaseCoefficient().abs().equals(a.leadingBaseCoefficient().abs()));
     }
 
 
