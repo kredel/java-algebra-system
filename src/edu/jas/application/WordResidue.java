@@ -362,12 +362,13 @@ public class WordResidue<C extends GcdRingElem<C>>
         }
         List<GenWordPolynomial<C>> L = new ArrayList<GenWordPolynomial<C>>(1);
         L.add(ring.ring.getZERO());
-        List<GenWordPolynomial<C>> R = new ArrayList<GenWordPolynomial<C>>(1);
-        R.add(ring.ring.getZERO());
+        //List<GenWordPolynomial<C>> R = new ArrayList<GenWordPolynomial<C>>(1);
+        //R.add(ring.ring.getZERO());
         List<GenWordPolynomial<C>> V = new ArrayList<GenWordPolynomial<C>>(1);
         V.add(S.val);
         @SuppressWarnings("unused")
-        GenWordPolynomial<C> x = ring.bb.red.normalform(L, R, V, val);
+        GenWordPolynomial<C> x = ring.bb.red.leftNormalform(L, V, val);
+        //GenWordPolynomial<C> x = ring.bb.red.normalform(L, R, V, val);
         GenWordPolynomial<C> y = L.get(0);
         //GenWordPolynomial<C> z = R.get(0);
         //System.out.println("WordResidue val = " + val + ", div = " + S.val + ", leftquotient = " + y

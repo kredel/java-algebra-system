@@ -114,6 +114,18 @@ public interface WordReduction<C extends RingElem<C>> extends Serializable {
 
 
     /**
+     * Normalform with left recording.
+     * @param lrow left recording matrix, is modified.
+     * @param Pp a polynomial list for reduction.
+     * @param Ap a polynomial.
+     * @return nf(Pp,Ap), the left normal form of Ap wrt. Pp.
+     */
+    @SuppressWarnings("unchecked")
+    public GenWordPolynomial<C> leftNormalform(List<GenWordPolynomial<C>> lrow, 
+                                    List<GenWordPolynomial<C>> Pp, GenWordPolynomial<C> Ap);
+
+
+    /**
      * Irreducible set.
      * @param Pp polynomial list.
      * @return a list P of polynomials which are in normalform wrt. P and with
