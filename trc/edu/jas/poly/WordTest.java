@@ -208,11 +208,11 @@ public class WordTest extends TestCase {
         assertTrue("multiple: ", c.multipleOf(a));
         assertTrue("multiple: ", c.multipleOf(b));
 
-        d = c.divide(a);
+        d = c.divideRight(a);
         //System.out.println("d = " + d);
         assertEquals("d = b", d, b);
 
-        d = c.divide(b);
+        d = c.divideLeft(b);
         //System.out.println("d = " + d);
         assertEquals("d = a", d, a);
 
@@ -226,13 +226,22 @@ public class WordTest extends TestCase {
         //System.out.println("c = " + c);
 
         assertTrue("divides: ", d.divides(c));
-        Word[] ret = c.divideWord(d);
+        Word[] ret = c.divideWord(d,false);
         //System.out.println("ret = " + ret[0] + ", " + ret[1]);
 
         assertEquals("prefix(c/d) = a", a, ret[0]);
         assertEquals("suffix(c/d) = b", b, ret[1]);
 
         Word e = ret[0].multiply(d).multiply(ret[1]);
+        assertEquals("prefix(c/d) d suffix(c/d) = e", e, c);
+
+        ret = c.divideWord(d,true);
+        //System.out.println("ret = " + ret[0] + ", " + ret[1]);
+
+        assertEquals("prefix(c/d) = a", a, ret[0]);
+        assertEquals("suffix(c/d) = b", b, ret[1]);
+
+        e = ret[0].multiply(d).multiply(ret[1]);
         assertEquals("prefix(c/d) d suffix(c/d) = e", e, c);
     }
 
