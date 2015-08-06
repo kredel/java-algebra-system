@@ -426,7 +426,11 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                         G.add(q);
                         return G; // since no threads are activated
                     }
-                    G.add(q);
+                    if (!G.contains(q)) { // why?
+                       G.add(q);
+                    } else {
+                       logger.info("right multipy contained: q = " + q);
+                    } 
                 }
             }
         }
