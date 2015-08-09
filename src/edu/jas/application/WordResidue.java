@@ -12,6 +12,7 @@ import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.GenWordPolynomial;
 import edu.jas.poly.Word;
 import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.NoncomRingElem;
 import edu.jas.structure.NotInvertibleException;
 import edu.jas.structure.QuotPair;
 import edu.jas.structure.QuotPairFactory;
@@ -25,7 +26,8 @@ import edu.jas.structure.ValueFactory;
  * @author Heinz Kredel
  */
 public class WordResidue<C extends GcdRingElem<C>> 
-       implements GcdRingElem<WordResidue<C>>, QuotPair<GenWordPolynomial<C>>, Value<GenWordPolynomial<C>> {
+       implements GcdRingElem<WordResidue<C>>, NoncomRingElem<WordResidue<C>>, 
+                  QuotPair<GenWordPolynomial<C>>, Value<GenWordPolynomial<C>> {
 
 
     /**
@@ -362,17 +364,14 @@ public class WordResidue<C extends GcdRingElem<C>>
         }
         List<GenWordPolynomial<C>> L = new ArrayList<GenWordPolynomial<C>>(1);
         L.add(ring.ring.getZERO());
-        //List<GenWordPolynomial<C>> R = new ArrayList<GenWordPolynomial<C>>(1);
-        //R.add(ring.ring.getZERO());
         List<GenWordPolynomial<C>> V = new ArrayList<GenWordPolynomial<C>>(1);
         V.add(S.val);
         @SuppressWarnings("unused")
         GenWordPolynomial<C> x = ring.bb.red.leftNormalform(L, V, val);
-        //GenWordPolynomial<C> x = ring.bb.red.normalform(L, R, V, val);
         GenWordPolynomial<C> y = L.get(0);
-        //GenWordPolynomial<C> z = R.get(0);
         //System.out.println("WordResidue val = " + val + ", div = " + S.val + ", leftquotient = " + y
-        //                + ", rightquotient = " + z + ", remainder = " + x);
+        //                + ", rightquotient = " + z 
+        //                  + ", remainder = " + x);
         return new WordResidue<C>(ring, y);
     }
 
@@ -402,6 +401,39 @@ public class WordResidue<C extends GcdRingElem<C>>
 
 
     /**
+     * WordResidue right division.
+     * @param S WordResidue.
+     * @return right, with S * right = this
+     */
+    public WordResidue<C> rightDivide(WordResidue<C> S) {
+        if (ring.isField()) {
+            return multiply(S.inverse());
+        }
+        try {
+            return multiply(S.inverse());
+        } catch (NotInvertibleException ignored) {
+            System.out.println("catch: " + ignored);
+            //ignored.printStackTrace();
+            // ignored
+        } catch (UnsupportedOperationException ignored) {
+            //System.out.println("catch: " + ignored);
+            //ignored.printStackTrace();
+            // ignored
+        }
+        List<GenWordPolynomial<C>> R = new ArrayList<GenWordPolynomial<C>>(1);
+        R.add(ring.ring.getZERO());
+        List<GenWordPolynomial<C>> V = new ArrayList<GenWordPolynomial<C>>(1);
+        V.add(S.val);
+        @SuppressWarnings("unused")
+        GenWordPolynomial<C> x = ring.bb.red.rightNormalform(R, V, val);
+        GenWordPolynomial<C> y = R.get(0);
+        System.out.println("WordResidue val = " + val + ", div = " + S.val + ", rightquotient = " + y
+                          + ", remainder = " + x);
+        return new WordResidue<C>(ring, y);
+    }
+
+
+    /**
      * WordResidue inverse.
      * @see edu.jas.structure.RingElem#inverse()
      * @return S with S = 1/this if defined.
@@ -424,12 +456,31 @@ public class WordResidue<C extends GcdRingElem<C>>
     /**
      * WordResidue remainder.
      * @param S WordResidue.
-     * @return this - (this/S)*S.
+     * @return this - (this/S) * S.
      */
     public WordResidue<C> remainder(WordResidue<C> S) {
         List<GenWordPolynomial<C>> V = new ArrayList<GenWordPolynomial<C>>(1);
         V.add(S.val);
-        GenWordPolynomial<C> x = ring.bb.red.normalform(V, val);
+        GenWordPolynomial<C> x = ring.bb.red.leftNormalform(V, val);
+        //System.out.println("WordResidue val = " + val + ", div = " + S.val 
+        //                + ", rightquotient = " + z 
+        //                + ", remainder = " + x);
+        return new WordResidue<C>(ring, x);
+    }
+
+
+    /**
+     * WordResidue right remainder.
+     * @param S WordResidue.
+     * @return r = this - S * (S/right), where S * right = this.
+     */
+    public WordResidue<C> rightRemainder(WordResidue<C> S) {
+        List<GenWordPolynomial<C>> V = new ArrayList<GenWordPolynomial<C>>(1);
+        V.add(S.val);
+        GenWordPolynomial<C> x = ring.bb.red.rightNormalform(V, val);
+        System.out.println("WordResidue val = " + val + ", div = " + S.val 
+                           //  + ", rightquotient = " + z 
+                           + ", remainder = " + x);
         return new WordResidue<C>(ring, x);
     }
 
