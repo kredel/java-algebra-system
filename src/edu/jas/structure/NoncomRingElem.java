@@ -30,5 +30,19 @@ public interface NoncomRingElem<C extends NoncomRingElem<C>> extends RingElem<C>
     public C rightRemainder(C a);
 
 
+    /**
+     * Two-sided division.
+     * @param a element.
+     * @return [left,right], with left * a * right = this
+     */
+    public C[] twosidedDivide(C a);
+
+
+    /**
+     * Two-sided remainder.
+     * @param a element.
+     * @return r = this - (a/left) * a * (a/right), where left * a * right = this.
+     */
+    public C twosidedRemainder(C a);
 
 }
