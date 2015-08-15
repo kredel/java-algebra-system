@@ -168,7 +168,7 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
             }
         }
         l = j;
-        Word e;
+        Word e, g;
         C a;
         boolean mt = false;
         GenWordPolynomial<C> zero = Ap.ring.getZERO();
@@ -195,6 +195,7 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 // System.out.println(" S = " + S);
             } else {
                 Word[] elr = e.divideWord(htl[i]);
+                g = e;
                 e = elr[0];
                 Word f = elr[1];
                 if (debug) {
@@ -204,6 +205,10 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 a = a.divide(c);
                 Q = p[i].multiply(a, e, cone, f);
                 S = S.subtract(Q);
+                //logger.info("redRec: S = " + S + ", R = " + R);
+                if (g.equals(S.leadingWord()) ) {
+                    throw new RuntimeException("HT(S) not descending");
+                }
                 // left row
                 fac = lrow.get(i);
                 if (fac == null) {
@@ -211,6 +216,7 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 } else {
                     fac = fac.sum(a, e);  // cone or a ?
                 }
+                //logger.info("redRec: left = " + fac);
                 lrow.set(i, fac);
                 // right row
                 fac = rrow.get(i);
@@ -219,6 +225,7 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 } else {
                     fac = fac.sum(cone, f);  // a or cone ?
                 }
+                //logger.info("redRec: right = " + fac);
                 rrow.set(i, fac);
             }
         }

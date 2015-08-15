@@ -19,6 +19,7 @@ import edu.jas.arith.BigRational;
 import edu.jas.poly.GenWordPolynomial;
 import edu.jas.poly.GenWordPolynomialRing;
 import edu.jas.structure.NotInvertibleException;
+import edu.jas.structure.NotDivisibleException;
 
 
 /**
@@ -68,7 +69,7 @@ public class WordResidueTest extends TestCase {
     List<GenWordPolynomial<BigRational>> F;
 
 
-    WordResidue<BigRational> a, b, c, d, e;
+    WordResidue<BigRational> a, b, c, d, e, f;
 
 
     int rl = 4;
@@ -93,6 +94,8 @@ public class WordResidueTest extends TestCase {
         mfac = new GenWordPolynomialRing<BigRational>(new BigRational(1), vars);
         //System.out.println("mfac = " + mfac.toScript());
         //GenWordPolynomial<BigRational> p1 = mfac.parse("w - x^2");
+        //GenWordPolynomial<BigRational> p1 = mfac.parse("x + 49/12");
+        //GenWordPolynomial<BigRational> p2 = mfac.parse("y - 5 * w - 65/28");
         do {
             F = new ArrayList<GenWordPolynomial<BigRational>>(il);
             for (int i = 0; i < il; i++) {
@@ -102,7 +105,7 @@ public class WordResidueTest extends TestCase {
                 }
                 F.add(mo);
             }
-            //F.add(p1);
+            //F.add(p1); F.add(p2);
             id = new WordIdeal<BigRational>(mfac, F);
             id.doGB();
         } while (id.isONE());
@@ -264,4 +267,82 @@ public class WordResidueTest extends TestCase {
         }
     }
 
+
+    /**
+     * Test division.
+     */
+    public void testDivision() {
+        List<WordResidue<BigRational>> g = fac.generators();
+        //System.out.println("g = " + g);
+        //a = fac.random(kl,ll,el,q);
+        a = g.get(1);
+        if (a.isZERO()) {
+            a = fac.getONE(); 
+        }
+        assertTrue("not isZERO( a )", !a.isZERO());
+
+        b = fac.random(kl, ll, el+2).monic();
+        if (b.isZERO()||b.isONE()) {
+            b = g.get(g.size()-1);
+            //b = fac.getONE();
+        }
+        assertTrue("not isZERO( b )", !b.isZERO());
+        //a = fac.parse("w");
+        //b = fac.parse("w w + 79/360 z + 13/28 w");
+
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+
+        // left division
+        c = a.multiply(b);
+        //System.out.println("c = " + c);
+        try {
+            d = c.divide(b);
+            //System.out.println("d = " + d);
+            e = c.remainder(b);
+            //System.out.println("e = " + e);
+
+            f = d.multiply(b).sum(e);
+            //System.out.println("f = " + f);
+            assertEquals("c == f: ", c, f);
+        } catch (NotDivisibleException ex) {
+            // pass
+            System.out.println("ex = " + ex);
+        }
+
+        // right division
+        c = b.multiply(a);
+        //System.out.println("c = " + c);
+        try {
+            d = c.rightDivide(b);
+            //System.out.println("d = " + d);
+            e = c.rightRemainder(b);
+            //System.out.println("e = " + e);
+
+            f = b.multiply(d).sum(e);
+            //System.out.println("f = " + f);
+            assertEquals("c == f: ", c, f);
+        } catch (NotDivisibleException ex) {
+            // pass
+            System.out.println("ex = " + ex);
+        }
+
+        // two-sided division
+        c = a.multiply(b.multiply(a));
+        //System.out.println("c = " + c);
+        try {
+            WordResidue<BigRational>[] dd = c.twosidedDivide(b);
+            //System.out.println("dd = " + dd[0] + " // " + dd[1]);
+            e = c.twosidedRemainder(b);
+            //System.out.println("e = " + e);
+
+            f = dd[0].multiply(b).multiply(dd[1]).sum(e);
+            //System.out.println("f = " + f);
+            //System.out.println("c-f = " + c.subtract(f));
+            assertEquals("c == f: ", c, f);
+        } catch (NotDivisibleException ex) {
+            // pass
+            System.out.println("ex = " + ex);
+        }
+    }
 }
