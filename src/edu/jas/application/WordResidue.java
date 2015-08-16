@@ -370,13 +370,8 @@ public class WordResidue<C extends GcdRingElem<C>>
         @SuppressWarnings("unused")
         GenWordPolynomial<C> x = ring.bb.red.leftNormalform(L, V, val);
         GenWordPolynomial<C> y = L.get(0);
-        //System.out.println("WordResidue val = " + val + ", div = " + S.val + ", leftquotient = " + y
-        //                + ", rightquotient = " + z 
-        //                  + ", remainder = " + x);
         GenWordPolynomial<C> t = y.multiply(S.val).sum(x);
         if (!val.equals(t)) {
-            //V = ring.bb.GB(V);
-            //System.out.println("V = " + V);
             throw new NotDivisibleException("TODO val != t: val = " + val + ", t = " + t);
         } 
         return new WordResidue<C>(ring, y);
@@ -398,15 +393,9 @@ public class WordResidue<C extends GcdRingElem<C>>
         GenWordPolynomial<C> x = ring.bb.red.normalform(L, R, V, val);
         GenWordPolynomial<C> y = L.get(0);
         GenWordPolynomial<C> z = R.get(0);
-        //System.out.println("WordResidue val = " + val + ", div = " + S.val + ", leftquotient = " + y
-        //                + ", rightquotient = " + z + ", remainder = " + x);
-        //System.out.println("WordResidue val-left*div*right = " + val.subtract(y.multiply(S.val).multiply(z)) );
-        GenWordPolynomial<C> t = y.multiply(S.val).multiply(z).sum(x);
-        if (!val.equals(t)) {
-            //V = ring.bb.GB(V);
-            //System.out.println("V = " + V);
-            throw new NotDivisibleException("TODO val != t: val = " + val + ", t = " + t);
-        } 
+        if (!ring.bb.red.isReductionNF(L,R,V,val,x)) {
+            throw new NotDivisibleException("TODO val != x: val = " + val + ", S.val = " + S.val);
+        }
         WordResidue<C>[] ret = new WordResidue[2];
         ret[0] = new WordResidue<C>(ring, y);
         ret[1] = new WordResidue<C>(ring, z);
@@ -441,12 +430,8 @@ public class WordResidue<C extends GcdRingElem<C>>
         @SuppressWarnings("unused")
         GenWordPolynomial<C> x = ring.bb.red.rightNormalform(R, V, val);
         GenWordPolynomial<C> y = R.get(0);
-        //System.out.println("WordResidue val = " + val + ", div = " + S.val + ", rightquotient = " + y
-        //                  + ", remainder = " + x);
         GenWordPolynomial<C> t = S.val.multiply(y).sum(x);
         if (!val.equals(t)) {
-            //V = ring.bb.GB(V);
-            //System.out.println("V = " + V);
             throw new NotDivisibleException("TODO val != t: val = " + val + ", t = " + t);
         } 
         return new WordResidue<C>(ring, y);
@@ -482,9 +467,6 @@ public class WordResidue<C extends GcdRingElem<C>>
         List<GenWordPolynomial<C>> V = new ArrayList<GenWordPolynomial<C>>(1);
         V.add(S.val);
         GenWordPolynomial<C> x = ring.bb.red.leftNormalform(V, val);
-        //System.out.println("WordResidue val = " + val + ", div = " + S.val 
-        //                + ", rightquotient = " + z 
-        //                + ", remainder = " + x);
         return new WordResidue<C>(ring, x);
     }
 
@@ -498,9 +480,6 @@ public class WordResidue<C extends GcdRingElem<C>>
         List<GenWordPolynomial<C>> V = new ArrayList<GenWordPolynomial<C>>(1);
         V.add(S.val);
         GenWordPolynomial<C> x = ring.bb.red.rightNormalform(V, val);
-        //System.out.println("WordResidue val = " + val + ", div = " + S.val 
-                           //  + ", rightquotient = " + z 
-        //                   + ", remainder = " + x);
         return new WordResidue<C>(ring, x);
     }
 
@@ -511,17 +490,9 @@ public class WordResidue<C extends GcdRingElem<C>>
      * @return r = this - left*S*right.
      */
     public WordResidue<C> twosidedRemainder(WordResidue<C> S) {
-        List<GenWordPolynomial<C>> L = new ArrayList<GenWordPolynomial<C>>(1);
-        L.add(ring.ring.getZERO());
-        List<GenWordPolynomial<C>> R = new ArrayList<GenWordPolynomial<C>>(1);
-        R.add(ring.ring.getZERO());
         List<GenWordPolynomial<C>> V = new ArrayList<GenWordPolynomial<C>>(1);
         V.add(S.val);
-        GenWordPolynomial<C> x = ring.bb.red.normalform(L, R, V, val);
-        GenWordPolynomial<C> y = L.get(0);
-        GenWordPolynomial<C> z = R.get(0);
-        //System.out.println("WordResidue val = " + val + ", div = " + S.val + ", leftquotient = " + y
-        //                + ", rightquotient = " + z + ", remainder = " + x);
+        GenWordPolynomial<C> x = ring.bb.red.normalform(V, val);
         WordResidue<C> ret = new WordResidue<C>(ring, x);
         return ret; 
     }

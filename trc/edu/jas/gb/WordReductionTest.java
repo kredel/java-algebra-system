@@ -265,6 +265,31 @@ public class WordReductionTest extends TestCase {
         //System.out.println("lrow = " + lrow);
         //System.out.println("rrow = " + rrow);
         assertTrue("is Reduction ", red.isReductionNF(lrow, rrow, L, d, e));
+
+        wfac = new WordFactory("l d");
+        fac = new GenWordPolynomialRing<BigRational>(cfac, wfac);
+        //a = fac.parse("3 l l + 2 d");
+        //b = fac.parse("1");
+        a = fac.parse("81 l l l l l l - 36 l l l + 4");
+        b = fac.parse("9 l l l - 2");
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+
+        L = new ArrayList<GenWordPolynomial<BigRational>>();
+        L.add(b);
+        //System.out.println("L = " + L);
+        lrow = new ArrayList<GenWordPolynomial<BigRational>>(L.size());
+        rrow = new ArrayList<GenWordPolynomial<BigRational>>(L.size());
+        e = fac.getZERO();
+        for (int m = 0; m < L.size(); m++) {
+            lrow.add(e);
+            rrow.add(e);
+        }
+        e = red.normalform(lrow, rrow, L, a);
+        //System.out.println("e = " + e);
+        //System.out.println("lrow = " + lrow);
+        //System.out.println("rrow = " + rrow);
+        assertTrue("is Reduction ", red.isReductionNF(lrow, rrow, L, a, e));
     }
 
 
