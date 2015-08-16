@@ -387,4 +387,15 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>> implement
     }
 
 
+    /**
+     * Two-sided Normalform.
+     * @param Ap solvable polynomial.
+     * @param Pp solvable polynomial list.
+     * @return two-sided-nf(Ap) with respect to Pp.
+     */
+    public GenSolvablePolynomial<C> normalform(List<GenSolvablePolynomial<C>> Pp,
+                    GenSolvablePolynomial<C> Ap) {
+	throw new UnsupportedOperationException("two-sided normalform not implemented");
+    }
+
 }
