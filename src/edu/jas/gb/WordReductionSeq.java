@@ -219,7 +219,7 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 }
                 C c = lbc[i];
                 b = a.divide(c);
-                if (e.isONE()) {
+                if (e.isONE()) { // TODO
                     lc = cone;
                     rc = b;
                 } else {
@@ -239,6 +239,9 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 fac = lrow.get(i);
                 boolean doset = true;
                 if (!lc.isONE() || !e.isONE()) {
+                    if (!fac.coefficient(e).isZERO()) {
+                        logger.warn("e exists in polynomial: " + fac + ", e = " + e);
+                    }
                     fac = fac.sum(lc, e);
                     doset = false;
                 }
@@ -247,6 +250,9 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 // right row
                 fac = rrow.get(i);
                 if (!rc.isONE() || !f.isONE() || doset) {
+                    if (!fac.coefficient(f).isZERO()) {
+                        logger.warn("f exists in polynomial: " + fac + ", f = " + f);
+                    }
                     fac = fac.sum(rc, f);
                 }
                 //logger.info("redRec: right = " + fac + ", rc = " + rc + ", f = " + f);
