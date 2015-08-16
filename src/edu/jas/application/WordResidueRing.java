@@ -19,10 +19,8 @@ import edu.jas.gb.WordGroebnerBaseSeq;
 import edu.jas.poly.GenWordPolynomial;
 import edu.jas.poly.GenWordPolynomialRing;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingFactory;
-import edu.jas.structure.QuotPair;
 import edu.jas.structure.QuotPairFactory;
-import edu.jas.structure.Value;
+import edu.jas.structure.RingFactory;
 import edu.jas.structure.ValueFactory;
 
 
@@ -31,10 +29,9 @@ import edu.jas.structure.ValueFactory;
  * interface. Objects of this class are immutable.
  * @author Heinz Kredel
  */
-public class WordResidueRing<C extends GcdRingElem<C>> 
-       implements RingFactory<WordResidue<C>>, 
-               QuotPairFactory<GenWordPolynomial<C>, WordResidue<C>>,
-               ValueFactory<GenWordPolynomial<C>, WordResidue<C>> {
+public class WordResidueRing<C extends GcdRingElem<C>> implements RingFactory<WordResidue<C>>,
+                QuotPairFactory<GenWordPolynomial<C>, WordResidue<C>>,
+                ValueFactory<GenWordPolynomial<C>, WordResidue<C>> {
 
 
     private static final Logger logger = Logger.getLogger(WordResidueRing.class);

@@ -5,8 +5,8 @@
 package edu.jas.gb;
 
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -23,7 +23,7 @@ import edu.jas.structure.RingElem;
  */
 
 public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
-    extends WordReductionAbstract<C> {
+                extends WordReductionAbstract<C> {
 
 
     private static final Logger logger = Logger.getLogger(WordReductionSeq.class);
@@ -46,7 +46,7 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
      * @return nf(Ap) with respect to Pp.
      */
     @SuppressWarnings("unchecked")
-        public GenWordPolynomial<C> normalform(List<GenWordPolynomial<C>> Pp, GenWordPolynomial<C> Ap) {
+    public GenWordPolynomial<C> normalform(List<GenWordPolynomial<C>> Pp, GenWordPolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
             return Ap;
         }
@@ -118,7 +118,7 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 a = a.divide(lbc[i]);
                 Q = p[i].multiply(a, e, cone, f);
                 S = S.subtract(Q);
-                if (!S.isZERO() && g.equals(S.leadingWord()) ) {
+                if (!S.isZERO() && g.equals(S.leadingWord())) {
                     throw new RuntimeException("HT(S) not descending");
                 }
             }
@@ -136,8 +136,8 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
      * @return nf(Pp,Ap), the normal form of Ap wrt. Pp.
      */
     @SuppressWarnings("unchecked")
-        public GenWordPolynomial<C> normalform(List<GenWordPolynomial<C>> lrow, List<GenWordPolynomial<C>> rrow,
-                                               List<GenWordPolynomial<C>> Pp, GenWordPolynomial<C> Ap) {
+    public GenWordPolynomial<C> normalform(List<GenWordPolynomial<C>> lrow, List<GenWordPolynomial<C>> rrow,
+                    List<GenWordPolynomial<C>> Pp, GenWordPolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
             return Ap;
         }
@@ -183,11 +183,11 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
         for (i = 0; i < lrow.size(); i++) {
             GenWordPolynomial<C> w = lrow.get(i);
             if (w == null) {
-                lrow.set(i,zero);
+                lrow.set(i, zero);
             }
             w = rrow.get(i);
             if (w == null) {
-                rrow.set(i,zero);
+                rrow.set(i, zero);
             }
         }
 
@@ -229,10 +229,10 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 Q = p[i].multiply(lc, e, rc, f);
                 S = S.subtract(Q);
                 //logger.info("redRec: S = " + S + ", R = " + R + ", Q = " + Q);
-                if (!S.isZERO() && g.equals(S.leadingWord()) ) {
+                if (!S.isZERO() && g.equals(S.leadingWord())) {
                     System.out.println("divideWord: e = " + e + ", f = " + f);
                     System.out.println("R = " + R);
-                    System.out.println("Q = " + Q + ", a = " + a  + ", b = " + b + ", c = " + c);
+                    System.out.println("Q = " + Q + ", a = " + a + ", b = " + b + ", c = " + c);
                     throw new RuntimeException("HT(S) not descending, S = " + S);
                 }
                 // left row
@@ -240,14 +240,14 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 boolean doset = true;
                 if (!lc.isONE() || !e.isONE()) {
                     fac = fac.sum(lc, e);
-                    doset = false;  
+                    doset = false;
                 }
                 //logger.info("redRec: left = " + fac + ", lc = " + lc + ", e = " + e);
                 lrow.set(i, fac);
                 // right row
                 fac = rrow.get(i);
                 if (!rc.isONE() || !f.isONE() || doset) {
-                    fac = fac.sum(rc, f); 
+                    fac = fac.sum(rc, f);
                 }
                 //logger.info("redRec: right = " + fac + ", rc = " + rc + ", f = " + f);
                 rrow.set(i, fac);
@@ -258,10 +258,10 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
             GenWordPolynomial<C> lw = lrow.get(i);
             GenWordPolynomial<C> rw = rrow.get(i);
             if (!lw.isZERO() && rw.isZERO()) {
-                rrow.set(i,one);
+                rrow.set(i, one);
             }
             if (lw.isZERO() && !rw.isZERO()) {
-                lrow.set(i,one);
+                lrow.set(i, one);
             }
         }
         return R;
@@ -282,7 +282,7 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
             return Ap;
         }
         List<GenWordPolynomial<C>> lrow = new ArrayList<GenWordPolynomial<C>>(Pp.size());
-        for (int i = 0; i < Pp.size(); i++ ) {
+        for (int i = 0; i < Pp.size(); i++) {
             lrow.add(Ap.ring.getZERO());
         }
         GenWordPolynomial<C> r = leftNormalform(lrow, Pp, Ap);
@@ -298,8 +298,8 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
      * @return nf(Pp,Ap), the left normal form of Ap wrt. Pp.
      */
     @SuppressWarnings("unchecked")
-        public GenWordPolynomial<C> leftNormalform(List<GenWordPolynomial<C>> lrow, 
-                                                   List<GenWordPolynomial<C>> Pp, GenWordPolynomial<C> Ap) {
+    public GenWordPolynomial<C> leftNormalform(List<GenWordPolynomial<C>> lrow,
+                    List<GenWordPolynomial<C>> Pp, GenWordPolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
             return Ap;
         }
@@ -367,7 +367,7 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 if (false) {
                     logger.info("redRec divideWord: e = " + e + ", f = " + f);
                 }
-                if (f.isONE()) { 
+                if (f.isONE()) {
                     C c = lbc[i];
                     //System.out.println("a = " + a + ", c = " + c);
                     a = a.divide(c);
@@ -407,7 +407,7 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
             return Ap;
         }
         List<GenWordPolynomial<C>> lrow = new ArrayList<GenWordPolynomial<C>>(Pp.size());
-        for (int i = 0; i < Pp.size(); i++ ) {
+        for (int i = 0; i < Pp.size(); i++) {
             lrow.add(Ap.ring.getZERO());
         }
         GenWordPolynomial<C> r = rightNormalform(lrow, Pp, Ap);
@@ -423,8 +423,8 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
      * @return nf(Pp,Ap), the right normal form of Ap wrt. Pp.
      */
     @SuppressWarnings("unchecked")
-        public GenWordPolynomial<C> rightNormalform(List<GenWordPolynomial<C>> rrow, 
-                                                    List<GenWordPolynomial<C>> Pp, GenWordPolynomial<C> Ap) {
+    public GenWordPolynomial<C> rightNormalform(List<GenWordPolynomial<C>> rrow,
+                    List<GenWordPolynomial<C>> Pp, GenWordPolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
             return Ap;
         }
@@ -492,7 +492,7 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 if (false) {
                     logger.info("redRec divideWord: e = " + e + ", f = " + f);
                 }
-                if (e.isONE()) { 
+                if (e.isONE()) {
                     C c = lbc[i];
                     //System.out.println("a = " + a + ", c = " + c);
                     a = a.divide(c);

@@ -156,6 +156,9 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
         this.testGB = (gb ? true : false); // ??
         this.bb = bb;
         this.red = red;
+        if (debug) {
+            logger.info("constructed: " + this);
+        }
     }
 
 
@@ -962,7 +965,7 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
         if (this.isZERO()) {
             return false;
         }
-        if(h.isUnit()) {
+        if (h.isUnit()) {
             return true;
         }
         /* TODO together wit inverse

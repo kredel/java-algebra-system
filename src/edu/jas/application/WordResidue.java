@@ -13,12 +13,10 @@ import edu.jas.poly.GenWordPolynomial;
 import edu.jas.poly.Word;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.NoncomRingElem;
-import edu.jas.structure.NotInvertibleException;
 import edu.jas.structure.NotDivisibleException;
+import edu.jas.structure.NotInvertibleException;
 import edu.jas.structure.QuotPair;
-import edu.jas.structure.QuotPairFactory;
 import edu.jas.structure.Value;
-import edu.jas.structure.ValueFactory;
 
 
 /**
@@ -26,9 +24,8 @@ import edu.jas.structure.ValueFactory;
  * interface. Objects of this class are immutable.
  * @author Heinz Kredel
  */
-public class WordResidue<C extends GcdRingElem<C>> 
-       implements GcdRingElem<WordResidue<C>>, NoncomRingElem<WordResidue<C>>, 
-                  QuotPair<GenWordPolynomial<C>>, Value<GenWordPolynomial<C>> {
+public class WordResidue<C extends GcdRingElem<C>> implements GcdRingElem<WordResidue<C>>,
+                NoncomRingElem<WordResidue<C>>, QuotPair<GenWordPolynomial<C>>, Value<GenWordPolynomial<C>> {
 
 
     /**
@@ -367,13 +364,13 @@ public class WordResidue<C extends GcdRingElem<C>>
         L.add(ring.ring.getZERO());
         List<GenWordPolynomial<C>> V = new ArrayList<GenWordPolynomial<C>>(1);
         V.add(S.val);
-        @SuppressWarnings("unused")
+        //@SuppressWarnings("unused")
         GenWordPolynomial<C> x = ring.bb.red.leftNormalform(L, V, val);
         GenWordPolynomial<C> y = L.get(0);
         GenWordPolynomial<C> t = y.multiply(S.val).sum(x);
         if (!val.equals(t)) {
             throw new NotDivisibleException("TODO val != t: val = " + val + ", t = " + t);
-        } 
+        }
         return new WordResidue<C>(ring, y);
     }
 
@@ -393,7 +390,7 @@ public class WordResidue<C extends GcdRingElem<C>>
         GenWordPolynomial<C> x = ring.bb.red.normalform(L, R, V, val);
         GenWordPolynomial<C> y = L.get(0);
         GenWordPolynomial<C> z = R.get(0);
-        if (!ring.bb.red.isReductionNF(L,R,V,val,x)) {
+        if (!ring.bb.red.isReductionNF(L, R, V, val, x)) {
             throw new NotDivisibleException("TODO val != x: val = " + val + ", S.val = " + S.val);
         }
         WordResidue<C>[] ret = new WordResidue[2];
@@ -427,13 +424,13 @@ public class WordResidue<C extends GcdRingElem<C>>
         R.add(ring.ring.getZERO());
         List<GenWordPolynomial<C>> V = new ArrayList<GenWordPolynomial<C>>(1);
         V.add(S.val);
-        @SuppressWarnings("unused")
+        //@SuppressWarnings("unused")
         GenWordPolynomial<C> x = ring.bb.red.rightNormalform(R, V, val);
         GenWordPolynomial<C> y = R.get(0);
         GenWordPolynomial<C> t = S.val.multiply(y).sum(x);
         if (!val.equals(t)) {
             throw new NotDivisibleException("TODO val != t: val = " + val + ", t = " + t);
-        } 
+        }
         return new WordResidue<C>(ring, y);
     }
 
@@ -494,7 +491,7 @@ public class WordResidue<C extends GcdRingElem<C>>
         V.add(S.val);
         GenWordPolynomial<C> x = ring.bb.red.normalform(V, val);
         WordResidue<C> ret = new WordResidue<C>(ring, x);
-        return ret; 
+        return ret;
     }
 
 

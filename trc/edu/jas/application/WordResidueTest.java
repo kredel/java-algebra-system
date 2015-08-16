@@ -18,8 +18,8 @@ import org.apache.log4j.BasicConfigurator;
 import edu.jas.arith.BigRational;
 import edu.jas.poly.GenWordPolynomial;
 import edu.jas.poly.GenWordPolynomialRing;
-import edu.jas.structure.NotInvertibleException;
 import edu.jas.structure.NotDivisibleException;
+import edu.jas.structure.NotInvertibleException;
 
 
 /**
@@ -277,13 +277,13 @@ public class WordResidueTest extends TestCase {
         //a = fac.random(kl,ll,el,q);
         a = g.get(1);
         if (a.isZERO()) {
-            a = fac.getONE(); 
+            a = fac.getONE();
         }
         assertTrue("not isZERO( a )", !a.isZERO());
 
-        b = fac.random(kl, ll, el+2).monic();
-        if (b.isZERO()||b.isONE()) {
-            b = g.get(g.size()-1);
+        b = fac.random(kl, ll, el + 2).monic();
+        if (b.isZERO() || b.isONE()) {
+            b = g.get(g.size() - 1);
             //b = fac.getONE();
         }
         assertTrue("not isZERO( b )", !b.isZERO());
