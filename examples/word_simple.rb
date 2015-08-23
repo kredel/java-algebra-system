@@ -60,10 +60,10 @@ puts "p = " + str(p);
 puts;
 
 pp = p**5;
-puts "pp = " + str(pp.to_s.length);
-puts "p == pp: " + str(p == pp);
-puts "pp == pp: " + str(pp == pp);
-puts "pp-pp == 0: " + str(pp-pp == 0);
+puts "#pp    =        " + str(pp.to_s.length);
+puts "p     == pp:    " + str(p == pp);
+puts "pp    == pp:    " + str(pp == pp);
+puts "(pp-pp).isZERO: " + str((pp-pp).isZERO());
 puts;
 
 #exit(0);

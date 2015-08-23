@@ -151,7 +151,7 @@ public class WordGroebnerBaseSeq<C extends RingElem<C>> extends WordGroebnerBase
         }
         //logger.info("#sequential list = " + G.size());
         G = minimalGB(G);
-        logger.info("" + pairlist);
+        logger.info("end   " + pairlist);
         //Collections.sort(G);
         //Collections.reverse(G);
         return G;
