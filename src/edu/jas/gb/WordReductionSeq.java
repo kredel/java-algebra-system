@@ -240,7 +240,9 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 boolean doset = true;
                 if (!lc.isONE() || !e.isONE()) {
                     if (!fac.coefficient(e).isZERO()) {
-                        logger.warn("e exists in polynomial: " + fac + ", e = " + e);
+                        logger.warn("e exists in polynomial: " + fac + ", e = " + e + ", lc = " + lc);
+                        logger.warn("f = " + f + ", rc = " + rc);
+                        logger.warn("S = " + S + ", R = " + R);
                     }
                     fac = fac.sum(lc, e);
                     doset = false;
@@ -251,7 +253,9 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 fac = rrow.get(i);
                 if (!rc.isONE() || !f.isONE() || doset) {
                     if (!fac.coefficient(f).isZERO()) {
-                        logger.warn("f exists in polynomial: " + fac + ", f = " + f);
+                        logger.warn("f exists in polynomial: " + fac + ", f = " + f + ", rc = " + rc);
+                        logger.warn("e = " + e + ", lc = " + lc);
+                        logger.warn("S = " + S + ", R = " + R);
                     }
                     fac = fac.sum(rc, f);
                 }
