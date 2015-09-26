@@ -693,9 +693,9 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
             r = r.negate();
         }
         int scale = rnd.nextInt(e);
-        if (rnd.nextBoolean()) {
-            scale = -scale;
-        }
+        //if (rnd.nextBoolean()) { // not according to param spec
+        //    scale = -scale;
+        //}
         java.math.BigDecimal d = new java.math.BigDecimal(r, scale, context);
         return new BigDecimal(d, context);
     }
