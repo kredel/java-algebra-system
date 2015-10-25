@@ -84,7 +84,7 @@ public class PowerSetTest extends TestCase {
                 System.out.println("subs = " + subs);
             }
             if (subs != null) {
-                assertTrue("size(subs) >= 0 ", subs.size() >= 0);
+                //assertTrue("size(subs) >= 0 ", subs.size() >= 0);
                 i++;
             }
         }

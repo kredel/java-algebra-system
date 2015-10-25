@@ -884,7 +884,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         GenPolynomial<C> p = null;
         int t = 0;
         while (lazyCoeffs.homCheck.get(t)) {
-            p = lazyCoeffs.coeffCache.get(t);
+            p = lazyCoeffs.coeffCache.get((long)t);
             if (p == null || p.isZERO()) { // ??
                 t++;
                 continue;

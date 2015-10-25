@@ -402,7 +402,7 @@ public class RealAlgebraicTest extends TestCase {
         List<Interval<RealAlgebraicNumber<BigRational>>> R = rrr.realRoots(ar);
         System.out.println("R = " + R);
 
-        assertTrue("#roots >= 0 ", R.size() >= 0);
+        //assertTrue("#roots >= 0 ", R.size() >= 0 );
 
         BigRational eps = Power.positivePower(new BigRational(1L, 10L), BigDecimal.DEFAULT_PRECISION);
         //BigRational eps = Power.positivePower(new BigRational(1L,10L),10);

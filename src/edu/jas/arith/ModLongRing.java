@@ -131,7 +131,7 @@ public final class ModLongRing implements ModularRingFactory<ModLong>, Iterable<
      * @param m String.
      */
     public ModLongRing(String m) {
-        this(new Long(m.trim()));
+        this(Long.valueOf(m.trim()));
     }
 
 
@@ -142,7 +142,7 @@ public final class ModLongRing implements ModularRingFactory<ModLong>, Iterable<
      * @param isField indicator if m is prime.
      */
     public ModLongRing(String m, boolean isField) {
-        this(new Long(m.trim()), isField);
+        this(Long.valueOf(m.trim()), isField);
     }
 
 

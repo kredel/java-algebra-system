@@ -72,7 +72,7 @@ public final class ModLong implements GcdRingElem<ModLong>, Modular {
      * @param s String.
      */
     public ModLong(ModLongRing m, String s) {
-        this(m, new Long(s.trim()));
+        this(m, Long.valueOf(s.trim()));
     }
 
 

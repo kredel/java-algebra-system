@@ -117,7 +117,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
     /**
      * Count for number of polynomial creations.
      */
-    public static int creations = 0;
+    static int creations = 0;
 
 
     /**

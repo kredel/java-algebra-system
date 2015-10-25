@@ -387,6 +387,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
         F.add(a);
         F.add(b);
         List<List<GenSolvablePolynomial<C>>> Gz = leftZeroRelationsArbitrary(F);
+        /*
         if (Gz.size() < 0) { // always false
             //System.out.println("Gz = " + Gz);
             ModuleList<C> M = new ModuleList<C>(pfac, Gz);
@@ -394,6 +395,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
             //System.out.println("GM = " + GM);
             Gz = GM.castToSolvableList();
         }
+        */
         List<GenSolvablePolynomial<C>> G1 = null;
         GenSolvablePolynomial<C> g1 = null;
         for (List<GenSolvablePolynomial<C>> Gi : Gz) {

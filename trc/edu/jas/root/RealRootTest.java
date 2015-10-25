@@ -189,7 +189,8 @@ public class RealRootTest extends TestCase {
 
         List<Interval<BigRational>> R = rr.realRoots(a);
         //System.out.println("R = " + R);
-        assertTrue("#roots >= 0 ", R.size() >= 0);
+        //assertTrue("#roots >= 0 ", R.size() >= 0);
+        assertTrue("#roots >= 0 ", R != null);
     }
 
 
