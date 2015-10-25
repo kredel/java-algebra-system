@@ -135,15 +135,15 @@ public class RootFactory {
         ComplexRing<C> cfac = (ComplexRing<C>) pfac.coFac;
         SquarefreeAbstract<Complex<C>> engine = SquarefreeFactory.<Complex<C>> getImplementation(cfac);
         Map<GenPolynomial<Complex<C>>, Long> F = engine.squarefreeFactors(f.monic());
-        Set<GenPolynomial<Complex<C>>> S = F.keySet();
-        //System.out.println("S = " + S);
+        //System.out.println("S = " + F.keySet());
         List<Complex<RealAlgebraicNumber<C>>> list = new ArrayList<Complex<RealAlgebraicNumber<C>>>();
-        for (GenPolynomial<Complex<C>> sp : S) {
+        for (Map.Entry<GenPolynomial<Complex<C>>,Long> me : F.entrySet()) {
+            GenPolynomial<Complex<C>> sp = me.getKey();
             if (sp.isConstant() || sp.isZERO()) {
                 continue;
             }
             List<Complex<RealAlgebraicNumber<C>>> ls = RootFactory.<C> complexAlgebraicNumbersSquarefree(sp);
-            long m = F.get(sp);
+            long m = me.getValue();
             for (long i = 0L; i < m; i++) {
                 list.addAll(ls);
             }

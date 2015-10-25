@@ -208,7 +208,7 @@ public class RootUtilTest extends TestCase {
 
         lrn = RootFactory.<BigRational> realAlgebraicNumbersField(a);
         //System.out.println("lrn = " + lrn);
-        assertTrue("#roots >= 0 ", lrn.size() >= 0);
+        assertTrue("#roots >= 0 ", lrn != null);
         for (RealAlgebraicNumber<BigRational> ra : lrn) {
             //System.out.println("ra = " + ra.toScript() + " in " + ra.toScriptFactory());
             assertTrue("f(r) == 0: " + ra, RootFactory.<BigRational> isRoot(a,ra));
