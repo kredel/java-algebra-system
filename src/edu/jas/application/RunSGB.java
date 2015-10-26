@@ -207,7 +207,7 @@ public class RunSGB {
         if (plusextra) {
             //sbb = new SolvableGroebnerBaseSeqPlusextra();
             //System.out.println("SolvableGroebnerBaseSeqPlusextra not implemented using SolvableGroebnerBaseSeq");
-            sbb = new SolvableGroebnerBaseSeq();
+            sbb = new SolvableGroebnerBaseSeq(sred);
         } else {
             sbb = new SolvableGroebnerBaseSeq();
         }

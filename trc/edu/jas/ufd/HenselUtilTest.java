@@ -1028,11 +1028,11 @@ public class HenselUtilTest extends TestCase {
             //System.out.println("dp  = " + dp);
             //System.out.println("cp  = " + cp);
 
-            List<GenPolynomial<ModInteger>> A = new ArrayList<GenPolynomial<ModInteger>>();
+            //List<GenPolynomial<ModInteger>> A = new ArrayList<GenPolynomial<ModInteger>>();
             List<GenPolynomial<ModInteger>> As; // = new ArrayList<GenPolynomial<ModInteger>>();
-            A.add(ap);
-            A.add(bp);
-            A.add(dp);
+            //A.add(ap);
+            //A.add(bp);
+            //A.add(dp);
             //A.add(mfac.parse("(x - 4)"));
             //A.add(mfac.parse("(x - 5)"));
             //System.out.println("A  = " + A);
@@ -1418,10 +1418,10 @@ public class HenselUtilTest extends TestCase {
             //System.out.println("cp  = " + cp);
 
             List<GenPolynomial<ModInteger>> A = new ArrayList<GenPolynomial<ModInteger>>();
-            List<GenPolynomial<BigInteger>> Ai = new ArrayList<GenPolynomial<BigInteger>>();
-            Ai.add(a);
-            Ai.add(b);
-            Ai.add(d);
+            //List<GenPolynomial<BigInteger>> Ai = new ArrayList<GenPolynomial<BigInteger>>();
+            //Ai.add(a);
+            //Ai.add(b);
+            //Ai.add(d);
             A.add(ap);
             A.add(bp);
             A.add(dp);

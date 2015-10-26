@@ -67,7 +67,7 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
         }
         int l = P.length;
         ExpVector[] htl = new ExpVector[l];
-        C[] lbc = (C[]) new GcdRingElem[l];
+        //C[] lbc = (C[]) new GcdRingElem[l];
         GenSolvablePolynomial<C>[] p = new GenSolvablePolynomial[l];
         int i;
         int j = 0;
@@ -80,7 +80,7 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
             if (m != null) {
                 p[j] = p[i];
                 htl[j] = m.getKey();
-                lbc[j] = m.getValue();
+                //lbc[j] = m.getValue();
                 j++;
             }
         }
@@ -155,7 +155,7 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
         }
         int l = P.length;
         ExpVector[] htl = new ExpVector[l];
-        GenPolynomial<C>[] lbc = (GenPolynomial<C>[]) new GenPolynomial[l];
+        //GenPolynomial<C>[] lbc = (GenPolynomial<C>[]) new GenPolynomial[l];
         GenSolvablePolynomial<GenPolynomial<C>>[] p = new GenSolvablePolynomial[l];
         int i;
         int j = 0;
@@ -168,7 +168,7 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
             if (m != null) {
                 p[j] = p[i];
                 htl[j] = m.getKey();
-                lbc[j] = m.getValue();
+                //lbc[j] = m.getValue();
                 j++;
             }
         }
@@ -275,7 +275,7 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
         }
         int l = P.length;
         ExpVector[] htl = new ExpVector[l];
-        C[] lbc = (C[]) new GcdRingElem[l];
+        //C[] lbc = (C[]) new GcdRingElem[l];
         GenSolvablePolynomial<C>[] p = new GenSolvablePolynomial[l];
         Map.Entry<ExpVector, C> m;
         int j = 0;
@@ -286,7 +286,7 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
             if (m != null) {
                 p[j] = p[i];
                 htl[j] = m.getKey();
-                lbc[j] = m.getValue();
+                //lbc[j] = m.getValue();
                 j++;
             }
         }
@@ -381,7 +381,7 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
         }
         int l = P.length;
         ExpVector[] htl = new ExpVector[l];
-        C[] lbc = (C[]) new GcdRingElem[l]; // want C[] 
+        //C[] lbc = (C[]) new GcdRingElem[l]; 
         GenSolvablePolynomial<C>[] p = new GenSolvablePolynomial[l];
         int i;
         int j = 0;
@@ -394,7 +394,7 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
             if (m != null) {
                 p[j] = p[i];
                 htl[j] = m.getKey();
-                lbc[j] = m.getValue();
+                //lbc[j] = m.getValue();
                 j++;
             }
         }
@@ -474,7 +474,7 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
         }
         int l = P.length;
         ExpVector[] htl = new ExpVector[l];
-        C[] lbc = (C[]) new GcdRingElem[l];
+        //C[] lbc = (C[]) new GcdRingElem[l];
         GenSolvablePolynomial<C>[] p = new GenSolvablePolynomial[l];
         int i;
         int j = 0;
@@ -487,7 +487,7 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
             if (m != null) {
                 p[j] = p[i];
                 htl[j] = m.getKey();
-                lbc[j] = m.getValue();
+                //lbc[j] = m.getValue();
                 j++;
             }
         }

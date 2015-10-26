@@ -57,7 +57,7 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
         int l = P.length;
         int i;
         ExpVector[] htl = new ExpVector[l];
-        C[] lbc = (C[]) new RingElem[l];
+        //C[] lbc = (C[]) new RingElem[l];
         GenSolvablePolynomial<C>[] p = new GenSolvablePolynomial[l];
         int j = 0;
         for (i = 0; i < l; i++) {
@@ -69,7 +69,7 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
             if (m != null) {
                 p[j] = p[i];
                 htl[j] = m.getKey();
-                lbc[j] = m.getValue();
+                //lbc[j] = m.getValue();
                 j++;
             }
         }
@@ -152,7 +152,7 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
         }
         int l = P.length;
         ExpVector[] htl = new ExpVector[l];
-        C[] lbc = (C[]) new RingElem[l];
+        //C[] lbc = (C[]) new RingElem[l];
         GenSolvablePolynomial<C>[] p = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[l];
         Map.Entry<ExpVector, C> m;
         int j = 0;
@@ -163,7 +163,7 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
             if (m != null) {
                 p[j] = p[i];
                 htl[j] = m.getKey();
-                lbc[j] = m.getValue();
+                //lbc[j] = m.getValue();
                 j++;
             }
         }
@@ -250,7 +250,7 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
         }
         int i;
         ExpVector[] htl = new ExpVector[l];
-        C[] lbc = (C[]) new RingElem[l];
+        //C[] lbc = (C[]) new RingElem[l];
         GenSolvablePolynomial<C>[] p = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[l];
         int j = 0;
         for (i = 0; i < l; i++) {
@@ -259,7 +259,7 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
             if (m != null) {
                 p[j] = p[i];
                 htl[j] = m.getKey();
-                lbc[j] = m.getValue();
+                //lbc[j] = m.getValue();
                 j++;
             }
         }
@@ -335,7 +335,7 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
             }
         }
         ExpVector[] htl = new ExpVector[l];
-        Object[] lbc = new Object[l]; // want <C>
+        //C[] lbc = (C[]) new RingElem[l];
         GenSolvablePolynomial<C>[] p = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[l];
         Map.Entry<ExpVector, C> m;
         int j = 0;
@@ -346,7 +346,7 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
             if (m != null) {
                 p[j] = p[i];
                 htl[j] = m.getKey();
-                lbc[j] = m.getValue();
+                //lbc[j] = m.getValue();
                 j++;
             }
         }

@@ -1361,11 +1361,13 @@ public class IdealTest extends TestCase {
                 Ld.add(dpc);
             }
             d += ds;
+            assertTrue("#L == #Ld: ", L.size() == Ld.size());
             @SuppressWarnings("unused")
             List<List<Complex<BigDecimal>>> droot = Ic.decimalApproximation();
             //for (List<Complex<BigDecimal>> dr : droot) {
             //System.out.println("dr = " + dr); // TODO
             //}
+            assertTrue("#droot == ds: ", droot.size() == ds);
         }
         logger.info("#roots = " + s + ", #vr-dim = " + d);
         assertTrue("#roots(" + s + ") == degree(" + d + "): ", s == d);
@@ -1951,6 +1953,7 @@ public class IdealTest extends TestCase {
         for (PrimaryComponent<BigRational> ru : qdec) {
             dec.add(ru.primary);
         }
+        assertTrue("#qdec == #dec: ", qdec.size() == dec.size());
         assertTrue("I eq cup G_i ", I.isPrimaryDecomposition(qdec));
     }
 

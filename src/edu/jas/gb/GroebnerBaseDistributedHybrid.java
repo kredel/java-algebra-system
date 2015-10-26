@@ -267,7 +267,7 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
             }
         }
         //if (l <= 1) {
-        //return G; must signal termination to others
+        //    return G; must signal termination to others
         //}
         logger.info("pairlist " + pairlist);
 
@@ -280,6 +280,9 @@ public class GroebnerBaseDistributedHybrid<C extends RingElem<C>> extends Groebn
                         "localhost", DL_PORT);
         theList.init();
         List<GenPolynomial<C>> al = pairlist.getList();
+        if (G.size() != al.size()) {
+            logger.info("G != al: " + G + " != " + al);
+        }
         for (int i = 0; i < al.size(); i++) {
             // no wait required
             GenPolynomial<C> nn = theList.put(Integer.valueOf(i), al.get(i));

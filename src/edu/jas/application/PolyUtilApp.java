@@ -368,14 +368,14 @@ public class PolyUtilApp<C extends RingElem<C>> {
      */
     public static <C extends GcdRingElem<C>> String productSliceToString(
                     Map<Ideal<C>, PolynomialList<GenPolynomial<C>>> L) {
-        Set<GenPolynomial<GenPolynomial<C>>> sl = new TreeSet<GenPolynomial<GenPolynomial<C>>>();
+        //Set<GenPolynomial<GenPolynomial<C>>> sl = new TreeSet<GenPolynomial<GenPolynomial<C>>>();
         PolynomialList<GenPolynomial<C>> pl = null;
         StringBuffer sb = new StringBuffer(); //"\nproductSlice ----------------- begin");
         for (Map.Entry<Ideal<C>, PolynomialList<GenPolynomial<C>>> en : L.entrySet()) {
             sb.append("\n\ncondition == 0:\n");
             sb.append(en.getKey().list.toScript());
             pl = en.getValue(); //L.get(id);
-            sl.addAll(pl.list);
+            //sl.addAll(pl.list);
             sb.append("\ncorresponding ideal:\n");
             sb.append(pl.toScript());
         }

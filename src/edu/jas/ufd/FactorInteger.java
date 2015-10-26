@@ -1254,12 +1254,12 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         } catch (NoLiftingException nle) {
             //System.out.println("exception : " + nle);
             //nle.printStackTrace();
-            mlift = new ArrayList<GenPolynomial<MOD>>();
+            //mlift = new ArrayList<GenPolynomial<MOD>>();
             throw new RuntimeException(nle);
         } catch (ArithmeticException aex) {
             //System.out.println("exception : " + aex);
             //aex.printStackTrace();
-            mlift = new ArrayList<GenPolynomial<MOD>>();
+            //mlift = new ArrayList<GenPolynomial<MOD>>();
             throw aex;
         }
         if (mlift.size() <= 1) { // irreducible mod I, p^k, can this happen?
@@ -1344,10 +1344,10 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
      */
     boolean testSeparate(List<BigInteger> A, BigInteger b) {
         int i = 0;
-        List<BigInteger> gei = new ArrayList<BigInteger>(A.size());
+        //List<BigInteger> gei = new ArrayList<BigInteger>(A.size());
         for (BigInteger c : A) {
             BigInteger g = c.gcd(b).abs();
-            gei.add(g);
+            //gei.add(g);
             if (!g.isONE()) {
                 i++;
             }
