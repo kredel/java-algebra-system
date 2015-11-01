@@ -319,7 +319,7 @@ public final class Word implements MonoidElem<Word> {
     /**
      * Word divide with prefix and suffix.
      * @param V other word.
-     * @param t true, for first index, false for last index.
+     * @param first is true for first index, false for last index.
      * @return [left,right] with left * V * right = this.
      */
     public Word[] divideWord(Word V, boolean first) {
