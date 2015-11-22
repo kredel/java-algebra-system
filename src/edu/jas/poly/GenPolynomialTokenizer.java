@@ -1043,6 +1043,8 @@ public class GenPolynomialTokenizer {
                     evord = TermOrder.IGRLEX;
                 } else if (tok.sval.equalsIgnoreCase("GRLEX")) {
                     evord = TermOrder.GRLEX;
+                } else if (tok.sval.equalsIgnoreCase("REVITDG")) {
+                    evord = TermOrder.REVITDG;
                 } else if (tok.sval.equalsIgnoreCase("W")) {
                     long[][] w = nextWeightArray();
                     //int s = nextSplitIndex(); // no more
