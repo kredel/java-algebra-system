@@ -12,7 +12,7 @@ from edu.jas.gbufd  import SolvableSyzygySeq;
 
 rs = """
 # solvable polynomials, Weyl algebra A_3,2:
-Rat(a,b,e1,e2,e3) G3|
+Rat(a,b,e1,e2,e3) G
 RelationTable
 (
  ( e3 ), ( e1 ), ( e1 e3 - e1 ),
