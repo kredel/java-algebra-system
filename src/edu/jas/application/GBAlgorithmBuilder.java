@@ -15,6 +15,7 @@ import edu.jas.gb.GBOptimized;
 import edu.jas.gb.GBProxy;
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.GroebnerBaseParallel;
+import edu.jas.gb.GroebnerBaseSeqIter;
 import edu.jas.gb.OrderedMinPairlist;
 import edu.jas.gb.OrderedPairlist;
 import edu.jas.gb.OrderedSyzPairlist;
@@ -57,6 +58,8 @@ import edu.jas.ufd.QuotientRing;
  *        compute a Gr&ouml;bner base with respect to a graded term order and
  *        then constructing a Gr&ouml;bner base wrt. a lexicographical term
  *        order,</li>
+ *        <li><code>iterated()</code> for using the iterative GB algorithm to 
+ *        compute a Gr&ouml;bner base adding one polynomial after another,</li>
  *        <li><code>parallel()</code> additionaly compute a Gr&ouml;bner base
  *        over a field or integral domain in parallel,</li>
  *        <li><code>euclideanDomain()</code> for computing a e-Gr&ouml;bner
@@ -396,6 +399,29 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
             return new GBAlgorithmBuilder<C>(ring, bb);
         }
         logger.warn("no FGLM algorithm implemented for " + ring);
+        return this;
+    }
+
+
+    /**
+     * Request iterated GB algorithm.
+     * @return GBAlgorithmBuilder object.
+     */
+    @SuppressWarnings("unchecked")
+    public GBAlgorithmBuilder<C> iterated() {
+        if (ring.coFac.isField()) {
+            GroebnerBaseAbstract<C> bb;
+            if (strategy == null) {
+                bb = new GroebnerBaseSeqIter<C>();
+            } else {
+                bb = new GroebnerBaseSeqIter<C>(strategy); 
+            }
+            if (algo != null) {
+                logger.warn("algo " + algo + " ignored for " + bb);
+            }
+            return new GBAlgorithmBuilder<C>(ring, bb);
+        }
+        logger.warn("no iterated GB algorithm implemented for " + ring);
         return this;
     }
 
