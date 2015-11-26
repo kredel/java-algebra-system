@@ -1392,26 +1392,26 @@ public final class TermOrder implements Serializable {
 
 
     /**
-     * String representation of weight vector.
+     * String representation of weight matrix.
      * @see java.lang.Object#toString()
      */
     public String weightToString() {
         StringBuffer erg = new StringBuffer();
         if (weight != null) {
-            erg.append("weight(");
+            erg.append("(");
             for (int j = 0; j < weight.length; j++) {
+                if (j > 0) {
+                    erg.append(",");
+                }
                 long[] wj = weight[j];
                 erg.append("(");
                 for (int i = 0; i < wj.length; i++) {
-                    erg.append("" + wj[wj.length - i - 1]);
-                    if (i < wj.length - 1) {
+                    if (i > 0) {
                         erg.append(",");
                     }
+                    erg.append("" + wj[i]);
                 }
                 erg.append(")");
-                if (j < weight.length - 1) {
-                    erg.append(",");
-                }
             }
             erg.append(")");
         }
@@ -1427,27 +1427,15 @@ public final class TermOrder implements Serializable {
     public String toString() {
         StringBuffer erg = new StringBuffer();
         if (weight != null) {
-            erg.append("W(");
-            for (int j = 0; j < weight.length; j++) {
-                long[] wj = weight[j];
-                erg.append("(");
-                for (int i = 0; i < wj.length; i++) {
-                    erg.append("" + wj[wj.length - i - 1]);
-                    if (i < wj.length - 1) {
-                        erg.append(",");
-                    }
-                }
-                erg.append(")");
-                if (j < weight.length - 1) {
-                    erg.append(",");
-                }
-            }
-            erg.append(")");
+            erg.append("TermOrder( ");
+            erg.append(weightToString());
             if (evend1 == evend2) {
+                erg.append(" )");
                 return erg.toString();
             }
             erg.append("[" + evbeg1 + "," + evend1 + "]");
             erg.append("[" + evbeg2 + "," + evend2 + "]");
+            erg.append(" )");
             return erg.toString();
         }
         switch (evord) {
