@@ -1393,7 +1393,7 @@ public final class TermOrder implements Serializable {
 
     /**
      * String representation of weight matrix.
-     * @see java.lang.Object#toString()
+     * @return string representation of weight matrix.
      */
     public String weightToString() {
         StringBuffer erg = new StringBuffer();
@@ -1409,7 +1409,7 @@ public final class TermOrder implements Serializable {
                     if (i > 0) {
                         erg.append(",");
                     }
-                    erg.append("" + wj[i]);
+                    erg.append(String.valueOf( wj[wj.length - 1 - i] ) );
                 }
                 erg.append(")");
             }
@@ -1420,14 +1420,66 @@ public final class TermOrder implements Serializable {
 
 
     /**
+     * Script representation of weight matrix.
+     * @return script representation of weight matrix.
+     */
+    public String weightToScript() {
+        // cases Python and Ruby
+        StringBuffer erg = new StringBuffer();
+        if (weight != null) {
+            erg.append("[");
+            for (int j = 0; j < weight.length; j++) {
+                if (j > 0) {
+                    erg.append(",");
+                }
+                long[] wj = weight[j];
+                erg.append("[");
+                for (int i = 0; i < wj.length; i++) {
+                    if (i > 0) {
+                        erg.append(",");
+                    }
+                    erg.append(String.valueOf( wj[wj.length - 1 - i] ) );
+                }
+                erg.append("]");
+            }
+            erg.append("]");
+        }
+        return erg.toString();
+    }
+
+
+    /**
+     * String representation of TermOrder.
+     * @return script representation of TermOrder.
+     */
+    public String toScript() {
+        // cases Python and Ruby
+        if (weight != null) {
+            StringBuffer erg = new StringBuffer();
+            //erg.append("TermOrder( ");
+            erg.append(weightToScript());
+            if (evend1 == evend2) {
+                //erg.append(" )");
+                return erg.toString();
+            } 
+            erg.append("[" + evbeg1 + "," + evend1 + "]");
+            erg.append("[" + evbeg2 + "," + evend2 + "]");
+            //erg.append(" )");
+            return erg.toString();
+        }
+        return toStringPlain();
+    }
+
+
+    /**
      * String representation of TermOrder.
      * @see java.lang.Object#toString()
      */
     @Override
     public String toString() {
-        StringBuffer erg = new StringBuffer();
         if (weight != null) {
-            erg.append("TermOrder( ");
+            StringBuffer erg = new StringBuffer();
+            erg.append("W( ");
             erg.append(weightToString());
             if (evend1 == evend2) {
                 erg.append(" )");
@@ -1436,6 +1488,18 @@ public final class TermOrder implements Serializable {
             erg.append("[" + evbeg1 + "," + evend1 + "]");
             erg.append("[" + evbeg2 + "," + evend2 + "]");
             erg.append(" )");
+            return erg.toString();
+        }
+        return toStringPlain();
+    }
+
+
+    /**
+     * String representation of TermOrder without prefix and weight matrix.
+     */
+    public String toStringPlain() {
+        StringBuffer erg = new StringBuffer();
+        if (weight != null) {
             return erg.toString();
         }
         switch (evord) {
@@ -1760,6 +1824,29 @@ public final class TermOrder implements Serializable {
             tord = new TermOrder(w);
         }
         return tord;
+    }
+
+
+    /**
+     * Weight TermOrder with reversed weight vectors.
+     * @param w weight matrix
+     * @returns TermOrder with reversed weight vectors
+     */
+    public static TermOrder reverseWeight(long[][] w) {
+        if (w == null) {
+            logger.warn("empty weight matrix ignored");
+            return new TermOrder();
+        }
+        long[][] wr = new long[ w.length ][];
+        for (int j = 0; j < w.length; j++) {
+            long[] wj = w[j];
+            long[] wrj = new long[ wj.length ];
+            for (int i = 0; i < wj.length; i++) {
+                 wrj[i] = wj[ wj.length - 1 - i ];
+            }
+            wr[j] = wrj;
+        }
+        return new TermOrder(wr);
     }
 
 }

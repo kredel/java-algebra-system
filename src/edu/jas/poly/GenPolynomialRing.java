@@ -350,7 +350,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
             s.append(coFac.toScript().trim());
         }
         s.append(",\"" + varsToString() + "\"");
-        String to = tord.toString();
+        String to = tord.toScript();
         if (tord.getEvord() == TermOrder.INVLEX) {
             to = "PolyRing.lex";
         }
