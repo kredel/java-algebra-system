@@ -97,7 +97,7 @@ def inject_gens(env)
     end
     puts "globally defined generators: " + env.generators.keys().join(", ");  
     if redef.size > 0
-       puts "warn: redefined generators: " + redef.join(", ");  
+       puts "WARN: redefined generators: " + redef.join(", ");  
     end
  end
 
@@ -1496,7 +1496,7 @@ ring JAS ring object.
         @sqf = Ring.getEngineSqf(@ring);
         @factor = Ring.getEngineFactor(@ring);
         variable_generators()
-        if self.class.auto_inject 
+        if self.class.auto_inject or self.class.superclass.auto_inject # sic!
            inject_variables();
         end
     end
@@ -3675,7 +3675,7 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
         #puts "SolvPolyRing to super()";
         super("",@ring) 
         # puts "ai = " +  self.class.auto_inject.to_s
-        if self.class.auto_inject
+        if self.class.auto_inject or self.class.superclass.auto_inject
            inject_variables();
         end
     end

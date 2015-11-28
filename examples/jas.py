@@ -114,6 +114,7 @@ def inject_variable(name, value):
     assert type(name) is str
     import sys
     depth = 0
+    redef = None
     while True:
         G = sys._getframe(depth).f_globals
         #print "G = `%s` " % G;
@@ -140,8 +141,10 @@ def inject_variable(name, value):
         print "error at G no global environment found for `%s` = `%s` " % (name, value);
         return
     if name in G:
-        print "redefining global variable `%s` from `%s` " % (name, G[name]);
+       redef = name;
+       #print "redefining global variable `%s` from `%s` " % (name, G[name]);
     G[name] = value
+    return redef
 
 def inject_generators(gens):
     '''Inject generators as variables into the main global namespace
@@ -151,12 +154,17 @@ def inject_generators(gens):
     '''
     for v in gens:
         #print "vars = " + str(v);
+        redef = [];
         s = str(v);
         if s.find("/") < 0 and s.find("(") < 0 and s.find(",") < 0 and s.find("{") < 0 and s.find("[") < 0 and s.find("|") < 0:
            if s[0:1] == "1":
               s = "one" + s[1:]
               #print "var = " + s;
-           inject_variable(s,v)
+           rd = inject_variable(s,v)
+           if rd != None:
+              redef.append(rd);
+        if redef != []:
+           print "WARN: redefined variables " + ", ".join(redef);
 
 def nameFromValue(v):
     '''Get a meaningful name from a value.
@@ -283,6 +291,7 @@ class Ring:
         '''Define instance variables for generators.
         '''
         vns = []
+        redef = []
         #print "dict: " + str(self.__dict__)
         for v in self.gens(): #ring.generators():
             #vr = RingElem(v);
@@ -299,10 +308,14 @@ class Ring:
             except:
                 self.__dict__[vs] = v;
             if auto_inject:
-                inject_variable(vs,v)
+                rd = inject_variable(vs,v)
                 vns.append(vs)
+                if rd != None:
+                   redef.append(rd);
         if auto_inject:
             print "globally defined variables: " + ", ".join(vns)
+            if redef != []:
+               print "WARN: redefined global variables: " + ", ".join(redef);
         #print "dict: " + str(self.__dict__)
 
     def __str__(self):
