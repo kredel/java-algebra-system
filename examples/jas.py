@@ -34,7 +34,7 @@ from edu.jas.ps          import UnivPowerSeries, UnivPowerSeriesRing,\
                                 StandardBaseSeq
 from edu.jas.gb          import EReductionSeq, DGroebnerBaseSeq, EGroebnerBaseSeq,\
                                 GroebnerBaseDistributedEC, GroebnerBaseDistributedHybridEC,\
-                                GroebnerBaseSeq, GroebnerBaseSeqPairSeq,\
+                                GroebnerBaseSeq, GroebnerBaseSeqIter, GroebnerBaseSeqPairSeq,\
                                 OrderedPairlist, OrderedSyzPairlist, ReductionSeq,\
                                 GroebnerBaseParallel, GroebnerBaseSeqPairParallel,\
                                 SolvableGroebnerBaseParallel, SolvableGroebnerBaseSeq,\
@@ -76,6 +76,7 @@ from edu                 import jas
 
 from org.python.core     import PyInstance, PyList, PyTuple,\
                                 PyInteger, PyLong, PyFloat, PyString
+# not suitable PySequence
 
 # set output to Python scripting
 Scripting.setLang(Scripting.Lang.Python);
@@ -528,7 +529,7 @@ class Ideal:
         kind = "";
         t = System.currentTimeMillis();
         if cofac.isField():
-            G = GroebnerBaseSeq(ReductionSeq(),OrderedSyzPairlist()).GB(F);
+            G = GroebnerBaseSeqIter(ReductionSeq(),OrderedSyzPairlist()).GB(F);
             #G = GroebnerBaseSeq().GB(F);
             kind = "field"
         else:
@@ -3845,8 +3846,10 @@ class PolyRing(Ring):
         to = PolyRing.grad;
         if isinstance(order,TermOrder):
             to = order;
+        if isinstance(order,PyList) or isinstance(order,PyTuple):
+            print "order = " + str(order);
+            to = TermOrder.reverseWeight(order);
         tring = GenPolynomialRing(cf,nv,to,names);
-        #want: super(Ring,self).__init__(ring=tring)
         self.ring = tring;
         Ring.__init__(self,ring=tring)
 

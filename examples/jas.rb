@@ -65,6 +65,7 @@ def inject_gens(env)
        env.generators = {};
     end
     #puts "existing generators: " + env.generators.keys().join(", ");  
+    redef = []
     for i in self.gens()
        begin 
           ivs = nameFromValue(i);
@@ -74,7 +75,8 @@ def inject_gens(env)
           #puts "string2: #{ivs} = " + ivs.class.to_s;
           #puts "string3: #{ivs} = " + (env.instance_eval( "#{ivs};" ));
           if env.generators[ ivs ] != nil
-             puts "redefining global variable #{ivs}";
+             #puts "redefining global variable #{ivs}";
+             redef << ivs;
           end
           env.generators[ ivs ] = i;
           env.instance_eval( "def #{ivs}; @generators[ '#{ivs}' ]; end" )
@@ -93,7 +95,10 @@ def inject_gens(env)
           puts "error: #{ivs} = " + i.to_s + ", e = " + e.to_s;
        end
     end
- puts "globally defined generators: " + env.generators.keys().join(", ");  
+    puts "globally defined generators: " + env.generators.keys().join(", ");  
+    if redef.size > 0
+       puts "warn: redefined generators: " + redef.join(", ");  
+    end
  end
 
 =begin rdoc
@@ -1451,6 +1456,17 @@ class Ring
     attr_reader :ring, :engine, :sqf, :factor
     #:pset,
 
+    @auto_inject = true
+    @auto_lowervar = false
+
+    class << self  # means add to class
+       # inject variables into environment
+       attr_accessor :auto_inject
+       # avoid capital letter variables
+       attr_accessor :auto_lowervar
+    end
+
+
 =begin rdoc
 Ring constructor.
 
@@ -1480,6 +1496,9 @@ ring JAS ring object.
         @sqf = Ring.getEngineSqf(@ring);
         @factor = Ring.getEngineFactor(@ring);
         variable_generators()
+        if self.class.auto_inject 
+           inject_variables();
+        end
     end
 
 =begin rdoc
@@ -1817,16 +1836,9 @@ class PolyRing < Ring
     @lex = TermOrder.new(TermOrder::INVLEX)
     @grad = TermOrder.new(TermOrder::IGRLEX)
 
-    @auto_inject = true
-    @auto_lowervar = false
-
     class << self  # means add to class
        # the Java term orderings
        attr_reader :lex, :grad
-       # inject variables into environment
-       attr_accessor :auto_inject
-       # avoid capital letter variables
-       attr_accessor :auto_lowervar
     end
 
 
@@ -1860,13 +1872,13 @@ order = term order.
         if order.is_a? TermOrder
             to = order;
         end
+        if order.is_a? Array
+            to = TermOrder.reverseWeight(order);
+        end
         tring = GenPolynomialRing.new(cf,nv,to,names);
         #want: super(Ring,self).initialize(ring=tring)
         @ring = tring;
         super("",@ring) 
-        if self.class.auto_inject 
-           inject_variables();
-        end
     end
 
 =begin rdoc
@@ -2421,6 +2433,7 @@ java_import "edu.jas.gb.GroebnerBaseDistributedHybridEC";
 #java_import "edu.jas.gb.GBDist";
 java_import "edu.jas.gb.GroebnerBaseParallel";
 java_import "edu.jas.gb.GroebnerBaseSeq";
+java_import "edu.jas.gb.GroebnerBaseSeqIter";
 java_import "edu.jas.gb.GroebnerBaseSeqPairSeq";
 java_import "edu.jas.gb.ReductionSeq";
 java_import "edu.jas.gb.OrderedPairlist";
@@ -2551,7 +2564,8 @@ Compute a Groebner base.
         if cofac.isField()
             #gg = GroebnerBaseSeq.new().GB(ff);
             #gg = GroebnerBaseSeq.new(ReductionSeq.new(),OrderedPairlist.new()).GB(ff);
-            gg = GroebnerBaseSeq.new(ReductionSeq.new(),OrderedSyzPairlist.new()).GB(ff);
+            #gg = GroebnerBaseSeq.new(ReductionSeq.new(),OrderedSyzPairlist.new()).GB(ff);
+            gg = GroebnerBaseSeqIter.new(ReductionSeq.new(),OrderedSyzPairlist.new()).GB(ff);
             kind = "field"
         else
             if cofac.is_a? GenPolynomialRing and cofac.isCommutative()
