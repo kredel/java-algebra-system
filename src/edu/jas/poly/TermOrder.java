@@ -20,11 +20,12 @@ import org.apache.log4j.Logger;
  * href="http://doi.acm.org/10.1145/43882.43887">Kredel,
  * "Admissible term orderings used in computer algebra systems"</a> and <a
  * href="http://doi.acm.org/10.1145/70936.70941">Sit,
- * "Some comments on term-ordering in Gr&oumlbner basis computations"</a>.
+ * "Some comments on term-ordering in Gr&ouml;bner basis computations"</a>.
  * <b>Note: </b> the naming is not quite easy to understand: in case of doubt
  * use the term orders with "I" in the name, like IGRLEX (the default) or
- * INVLEX. Not all algorithms may work with all term orders, so watch your step.
- * This class does not jet implement orders by linear forms over Q[t]. Objects
+ * INVLEX. Not all algorithms may work with all term orders since not all 
+ * are well-founded, so watch your step.
+ * This class does not implement orders by linear forms over Q[t]. Objects
  * of this class are immutable.
  * 
  * @author Heinz Kredel
@@ -32,6 +33,14 @@ import org.apache.log4j.Logger;
 
 public final class TermOrder implements Serializable {
 
+
+    private static final Logger logger = Logger.getLogger(TermOrder.class);
+
+
+    private final boolean debug = logger.isDebugEnabled();
+
+
+    // TermOrder index values
 
     public static final int LEX = 1;
 
@@ -55,12 +64,15 @@ public final class TermOrder implements Serializable {
 
 
     public static final int REVITDG = 8;
-
+ 
 
     public final static int DEFAULT_EVORD = IGRLEX;
 
 
     //public final static int DEFAULT_EVORD = INVLEX;
+
+
+    // instance variables
 
     private final int evord;
 
@@ -79,12 +91,6 @@ public final class TermOrder implements Serializable {
 
 
     private final int evend2;
-
-
-    private static final Logger logger = Logger.getLogger(TermOrder.class);
-
-
-    private final boolean debug = logger.isDebugEnabled();
 
 
     /**
