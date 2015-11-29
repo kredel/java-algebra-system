@@ -1847,7 +1847,7 @@ Ring constructor.
 
 coeff = factory for coefficients,
 vars = string with variable names,
-order = term order.
+order = term order or weight matrix.
 =end
     def initialize(coeff,vars,order=PolyRing.grad)
         if coeff == nil

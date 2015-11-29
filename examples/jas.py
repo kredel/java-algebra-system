@@ -3841,7 +3841,7 @@ class PolyRing(Ring):
 
         coeff = factory for coefficients,
         vars = string with variable names,
-        order = term order.
+        order = term order or weight matrix.
         '''
         if coeff == None:
             raise ValueError, "No coefficient given."

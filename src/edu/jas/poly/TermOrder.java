@@ -1830,7 +1830,7 @@ public final class TermOrder implements Serializable {
     /**
      * Weight TermOrder with reversed weight vectors.
      * @param w weight matrix
-     * @returns TermOrder with reversed weight vectors
+     * @return TermOrder with reversed weight vectors
      */
     public static TermOrder reverseWeight(long[][] w) {
         if (w == null) {
