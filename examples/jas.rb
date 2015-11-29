@@ -1876,7 +1876,6 @@ order = term order.
             to = TermOrder.reverseWeight(order);
         end
         tring = GenPolynomialRing.new(cf,nv,to,names);
-        #want: super(Ring,self).initialize(ring=tring)
         @ring = tring;
         super("",@ring) 
     end
@@ -2564,8 +2563,8 @@ Compute a Groebner base.
         if cofac.isField()
             #gg = GroebnerBaseSeq.new().GB(ff);
             #gg = GroebnerBaseSeq.new(ReductionSeq.new(),OrderedPairlist.new()).GB(ff);
-            #gg = GroebnerBaseSeq.new(ReductionSeq.new(),OrderedSyzPairlist.new()).GB(ff);
-            gg = GroebnerBaseSeqIter.new(ReductionSeq.new(),OrderedSyzPairlist.new()).GB(ff);
+            gg = GroebnerBaseSeq.new(ReductionSeq.new(),OrderedSyzPairlist.new()).GB(ff);
+            #gg = GroebnerBaseSeqIter.new(ReductionSeq.new(),OrderedSyzPairlist.new()).GB(ff);
             kind = "field"
         else
             if cofac.is_a? GenPolynomialRing and cofac.isCommutative()
