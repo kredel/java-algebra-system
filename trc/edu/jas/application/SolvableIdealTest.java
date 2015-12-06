@@ -88,7 +88,7 @@ public class SolvableIdealTest extends TestCase {
     int rl = 4; // even for Weyl relations
 
 
-    int kl = 3; //10
+    int kl = 2; //10
 
 
     int ll = 3; //7
@@ -97,7 +97,7 @@ public class SolvableIdealTest extends TestCase {
     int el = 3;
 
 
-    float q = 0.2f; //0.4f
+    float q = 0.15f; //0.4f
 
 
     @Override

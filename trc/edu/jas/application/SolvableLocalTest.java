@@ -77,7 +77,7 @@ public class SolvableLocalTest extends TestCase {
     int rl = 4;
 
 
-    int kl = 3;
+    int kl = 2;
 
 
     int ll = 3; //6;
@@ -86,7 +86,7 @@ public class SolvableLocalTest extends TestCase {
     int el = 2;
 
 
-    float q = 0.2f;
+    float q = 0.15f;
 
 
     int il = (rl == 1 ? 1 : 2);

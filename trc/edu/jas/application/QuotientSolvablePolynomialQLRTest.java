@@ -79,7 +79,7 @@ public class QuotientSolvablePolynomialQLRTest extends TestCase {
     int el = 3;
 
 
-    float q = 0.17f;
+    float q = 0.15f;
 
 
     String[] cvars = new String[] { "a", "b" };

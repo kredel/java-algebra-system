@@ -80,13 +80,13 @@ public class AlgebraicNumberTest extends TestCase {
     int kl = 10;
 
 
-    int ll = 10;
+    int ll = 7;
 
 
     int el = ll;
 
 
-    float q = 0.5f;
+    float q = 0.4f;
 
 
     @Override

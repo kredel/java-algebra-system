@@ -99,10 +99,10 @@ public class FDUtilTest extends TestCase {
     int rl = 4;
 
 
-    int kl = 3;
+    int kl = 2;
 
 
-    int ll = 4;
+    int ll = 3;
 
 
     int el = 3;
@@ -146,10 +146,10 @@ public class FDUtilTest extends TestCase {
         rdfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), dfac);
         //System.out.println("\ndfac  = " + dfac);
 
-        a = dfac.random(kl, 2 * ll, el + 17, q);
+        a = dfac.random(kl, 2 * ll, el + 15, q);
         //a = dfac.parse(" 3 x^5 + 44 ");
         //b = a;
-        b = dfac.random(kl, 2 * ll, el + 3, q);
+        b = dfac.random(kl, 2 * ll, el + 2, q);
         //a = a.multiply(b);
         //a = a.sum(b);
         if (b.isZERO()) {
@@ -343,9 +343,9 @@ public class FDUtilTest extends TestCase {
         boolean t;
 
         // q = q;
-        kl = 3;
-        ll = 5;
-        el = 6;
+        kl = 2;
+        ll = 4;
+        el = 5;
 
         arr = rrfac.random(kl, ll, el + 1, q);
         //arr = rrfac.parse("z^5 - ( 1260/551 y^2 - 143/35 y - 33/100  ) z - ( 1/3 y^2 + 419/299 y - 19/56  )");
@@ -404,9 +404,9 @@ public class FDUtilTest extends TestCase {
         //System.out.println("rrfac  = " + rrfac.toScript());
 
         // q = q;
-        kl = 5;
-        ll = 5;
-        el = 7;
+        kl = 3;
+        ll = 4;
+        el = 5;
 
         arr = rrfac.random(kl, ll, el, q);
         //System.out.println("FDQR: arr  = " + arr);

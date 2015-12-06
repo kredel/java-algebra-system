@@ -63,8 +63,8 @@ public class SolvableResidueTest extends TestCase {
     SolvableResidue< BigRational > a, b, c, d, e;
 
     int rl = 4; 
-    int kl = 3;
-    int ll = 4;
+    int kl = 2;
+    int ll = 3;
     int el = 2;
     float q = 0.2f;
     int il = ( rl == 1 ? 1 : 2 ); 
