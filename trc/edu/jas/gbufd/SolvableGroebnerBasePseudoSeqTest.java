@@ -94,16 +94,16 @@ public class SolvableGroebnerBasePseudoSeqTest extends TestCase {
     int rl = 4; //4; //3; 
 
 
-    int kl = 3;
+    int kl = 2;
 
 
-    int ll = 4;
+    int ll = 3;
 
 
     int el = 3;
 
 
-    float q = 0.25f; //0.4f
+    float q = 0.2f; //0.4f
 
 
     @Override

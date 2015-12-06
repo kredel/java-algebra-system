@@ -59,19 +59,7 @@ public class AlgebraicNumberTest extends TestCase {
     GenPolynomialRing<BigRational> mfac;
 
 
-    AlgebraicNumber<BigRational> a;
-
-
-    AlgebraicNumber<BigRational> b;
-
-
-    AlgebraicNumber<BigRational> c;
-
-
-    AlgebraicNumber<BigRational> d;
-
-
-    AlgebraicNumber<BigRational> e;
+    AlgebraicNumber<BigRational> a, b, c, d, e;
 
 
     int rl = 1;
@@ -228,7 +216,7 @@ public class AlgebraicNumberTest extends TestCase {
         assertEquals("a*1/a = 1", fac.getONE(), d);
 
         try {
-            a = fac.getZERO().inverse();
+            d = fac.getZERO().inverse();
             fail("0 invertible");
         } catch (NotInvertibleException expected) {
             // ok
@@ -240,7 +228,7 @@ public class AlgebraicNumberTest extends TestCase {
         //System.out.println("cp = " + cp);
         fac = new AlgebraicNumberRing<BigRational>(cp);
         a = new AlgebraicNumber<BigRational>(fac, a.val.monic());
-        assertFalse("a !unit mod m*a: " + a, a.isUnit());
+        assertFalse("a !unit mod m*a: " + a, a.isUnit() && !a.isONE());
 
         try {
             b = a.inverse();
