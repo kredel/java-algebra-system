@@ -19,6 +19,10 @@ import org.apache.log4j.Logger;
 import edu.jas.gb.ExtendedGB;
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.Reduction;
+import edu.jas.gb.ReductionSeq;
+import edu.jas.gb.OrderedSyzPairlist;
+import edu.jas.gb.GroebnerBaseSeq;
+import edu.jas.gb.GroebnerBaseSeqIter;
 import edu.jas.gbufd.GBFactory;
 import edu.jas.gbufd.GroebnerBasePartial;
 import edu.jas.gbufd.PolyGBUtil;
@@ -172,7 +176,8 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
      * @param gb true if list is known to be a Groebner Base, else false
      */
     public Ideal(PolynomialList<C> list, boolean gb) {
-        //this(list, gb, new GroebnerBaseSeqPairSeq<C>(), new ReductionSeq<C>());
+        //this(list, gb, new GroebnerBaseSeqIter<C>(new OrderedSyzPairlist<C>()), new ReductionSeq<C>() );
+        //this(list, gb, new GroebnerBaseSeq<C>(new OrderedSyzPairlist<C>()), new ReductionSeq<C>() );
         this(list, gb, GBFactory.getImplementation(list.ring.coFac));
     }
 
@@ -184,7 +189,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
      * @param topt true if term order is optimized, else false
      */
     public Ideal(PolynomialList<C> list, boolean gb, boolean topt) {
-        //this(list, gb, topt, new GroebnerBaseSeqPairSeq<C>(), new ReductionSeq<C>());
+        //this(list, gb, topt, new GroebnerBaseSeqIter<C>(new OrderedSyzPairlist<C>()), new ReductionSeq<C>());
         this(list, gb, topt, GBFactory.getImplementation(list.ring.coFac));
     }
 
@@ -761,7 +766,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         //System.out.println("rname = " + Arrays.toString(rname));
         PolynomialList<C> Pl = null;
         if (rname.length == 0) {
-            if (Arrays.equals(aname, ename)) {
+            if (Arrays.deepEquals(aname, ename)) {
                 return this;
             }
             Pl = bbp.partialGB(getList(), ename); // normal GB
@@ -2639,7 +2644,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         String[] dvars = dfac.getVars();
         //System.out.println("ovars = " + Arrays.toString(ovars));
         //System.out.println("dvars = " + Arrays.toString(dvars));
-        if (Arrays.equals(ovars, dvars)) { // nothing to do
+        if (Arrays.deepEquals(ovars, dvars)) { // nothing to do
             return Cont;
         }
         List<Integer> perm = GroebnerBasePartial.getPermutation(dvars, ovars);
