@@ -542,7 +542,8 @@ class Ideal:
         kind = "";
         t = System.currentTimeMillis();
         if cofac.isField():
-            G = GroebnerBaseSeqIter(ReductionSeq(),OrderedSyzPairlist()).GB(F);
+            G = GroebnerBaseSeq(ReductionSeq(),OrderedSyzPairlist()).GB(F);
+            #G = GroebnerBaseSeqIter(ReductionSeq(),OrderedSyzPairlist()).GB(F);
             #G = GroebnerBaseSeq().GB(F);
             kind = "field"
         else:
