@@ -81,13 +81,13 @@ public class TermOrderByNameTest extends TestCase {
 
         assertEquals("x = y", x, y);
 
-        t = TermOrderByName.INVLEX;
+        t = TermOrderByName.Lexicographic;
         x = "INVLEX";
         boolean z = t.toString().startsWith(x);
         assertTrue("INVLEX(.)", z);
 
-        s = TermOrderByName.IGRLEX;
-        t = TermOrderByName.IGRLEX;
+        s = TermOrderByName.DegreeLexicographic;
+        t = TermOrderByName.DegreeLexicographic;
         assertEquals("t = s", t, s);
     }
 
@@ -100,8 +100,8 @@ public class TermOrderByNameTest extends TestCase {
         int sp = 5;
 
         ExpVector ev = ExpVectorLong.create(r);
-        s = TermOrderByName.blockOrder(TermOrderByName.IGRLEX, TermOrderByName.IGRLEX, ev, sp);
-        t = TermOrderByName.blockOrder(TermOrderByName.IGRLEX, TermOrderByName.IGRLEX, ev, sp);
+        s = TermOrderByName.blockOrder(TermOrderByName.DegreeLexicographic, TermOrderByName.DegreeLexicographic, ev, sp);
+        t = TermOrderByName.blockOrder(TermOrderByName.DegreeLexicographic, TermOrderByName.DegreeLexicographic, ev, sp);
         assertEquals("t = s", t, s);
 
         String x = t.toString();
@@ -109,8 +109,8 @@ public class TermOrderByNameTest extends TestCase {
         assertEquals("x = y", x, y);
         //System.out.println("s = " + s);
 
-        s = TermOrderByName.blockOrder(TermOrderByName.IGRLEX, TermOrderByName.INVLEX, ev, sp);
-        t = TermOrderByName.blockOrder(TermOrderByName.IGRLEX, TermOrderByName.INVLEX, ev, sp);
+        s = TermOrderByName.blockOrder(TermOrderByName.DegreeLexicographic, TermOrderByName.Lexicographic, ev, sp);
+        t = TermOrderByName.blockOrder(TermOrderByName.DegreeLexicographic, TermOrderByName.Lexicographic, ev, sp);
         assertEquals("t = s", t, s);
         //System.out.println("s = " + s);
     }
@@ -230,7 +230,7 @@ public class TermOrderByNameTest extends TestCase {
         b = ExpVector.EVRAND(5, 10, q);
         c = a.sum(b);
 
-        t = TermOrderByName.IGRLEX;
+        t = TermOrderByName.DegreeLexicographic;
 
         int x = t.getAscendComparator().compare(c, a);
         int y = t.getAscendComparator().compare(c, b);
@@ -265,7 +265,7 @@ public class TermOrderByNameTest extends TestCase {
         b = ExpVector.EVRAND(r, 10, q);
         c = a.sum(b);
 
-        t = TermOrderByName.blockOrder(TermOrderByName.IGRLEX, TermOrderByName.INVLEX, c, sp);
+        t = TermOrderByName.blockOrder(TermOrderByName.DegreeLexicographic, TermOrderByName.Lexicographic, c, sp);
 
         int x = t.getAscendComparator().compare(c, a);
         int y = t.getAscendComparator().compare(c, b);
@@ -357,7 +357,7 @@ public class TermOrderByNameTest extends TestCase {
         b = ExpVector.EVRAND(5, 10, q);
         c = a.sum(b);
 
-        t = TermOrderByName.IGRLEX;
+        t = TermOrderByName.DegreeLexicographic;
 
         int x = t.getDescendComparator().compare(c, a);
         int y = t.getDescendComparator().compare(c, b);
@@ -391,7 +391,7 @@ public class TermOrderByNameTest extends TestCase {
         b = ExpVector.EVRAND(r, 10, q);
         c = a.sum(b);
 
-        t = TermOrderByName.blockOrder(TermOrderByName.IGRLEX, TermOrderByName.INVLEX, c, sp);
+        t = TermOrderByName.blockOrder(TermOrderByName.DegreeLexicographic, TermOrderByName.Lexicographic, c, sp);
 
         int x = t.getDescendComparator().compare(c, a);
         int y = t.getDescendComparator().compare(c, b);
