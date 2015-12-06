@@ -49,22 +49,10 @@ public class TermOrderTest extends TestCase {
     }
 
 
-    ExpVector a;
+    ExpVector a, b, c, d;
 
 
-    ExpVector b;
-
-
-    ExpVector c;
-
-
-    ExpVector d;
-
-
-    TermOrder t;
-
-
-    TermOrder s;
+    TermOrder t, s;
 
 
     @Override
@@ -85,7 +73,6 @@ public class TermOrderTest extends TestCase {
      * Test constructor and toString.
      */
     public void testConstructor() {
-
         s = new TermOrder();
         t = new TermOrder();
         assertEquals("t = s", t, s);
@@ -110,7 +97,6 @@ public class TermOrderTest extends TestCase {
      * Test constructor, split TO.
      */
     public void testConstructorSplit() {
-
         int r = 10;
         int sp = 5;
         s = new TermOrder(TermOrder.IGRLEX, TermOrder.IGRLEX, r, sp);
@@ -173,11 +159,9 @@ public class TermOrderTest extends TestCase {
 
         a = ExpVector.EVRAND(5, 10, q);
         b = ExpVector.EVRAND(5, 10, q);
-
         c = a.sum(b);
 
         long[][] w = new long[][] { new long[] { 1l, 1l, 1l, 1l, 1l } };
-
         t = new TermOrder(w);
 
         int x = ExpVector.EVIWLC(w, c, a);
@@ -208,11 +192,9 @@ public class TermOrderTest extends TestCase {
 
         a = ExpVector.EVRAND(5, 10, q);
         b = ExpVector.EVRAND(5, 10, q);
-
         c = a.sum(b);
 
         long[][] w = new long[][] { new long[] { 1l, 1l, 1l, 1l, 1l }, new long[] { 1l, 1l, 1l, 1l, 1l } };
-
         t = new TermOrder(w);
 
         int x = ExpVector.EVIWLC(w, c, a);
@@ -363,7 +345,6 @@ public class TermOrderTest extends TestCase {
 
         a = ExpVector.EVRAND(5, 10, q);
         b = ExpVector.EVRAND(5, 10, q);
-
         c = a.sum(b);
 
         t = new TermOrder();
@@ -393,7 +374,6 @@ public class TermOrderTest extends TestCase {
      */
     public void testAscendComparatorSplit() {
         float q = (float) 0.9;
-
         int r = 10;
         int sp = 5;
 
@@ -492,7 +472,6 @@ public class TermOrderTest extends TestCase {
 
         a = ExpVector.EVRAND(5, 10, q);
         b = ExpVector.EVRAND(5, 10, q);
-
         c = a.sum(b);
 
         t = new TermOrder();
@@ -522,7 +501,6 @@ public class TermOrderTest extends TestCase {
      */
     public void testDescendComparatorSplit() {
         float q = (float) 0.9;
-
         int r = 10;
         int sp = 5;
 
@@ -554,9 +532,9 @@ public class TermOrderTest extends TestCase {
      */
     public void testDescendComparatorWeightSplit() {
         float q = (float) 0.9;
-
         int r = 8;
         //int sp = 5;
+
         //long [][] w  = new long [][] { new long[] { 1l, 2l, 3l, 4l, 5l, 1l, 2l, 3l } };
         long[][] w2 = new long[][] { new long[] { 1l, 2l, 3l, 4l, 5l, 0l, 0l, 0l },
                 new long[] { 0l, 0l, 0l, 0l, 0l, 1l, 2l, 3l } };
@@ -623,7 +601,6 @@ public class TermOrderTest extends TestCase {
         b = ExpVector.EVRAND(5, 10, q);
 
         int wrong = 99;
-        //int x = 0;
 
         try {
             t = new TermOrder(wrong);
@@ -639,7 +616,6 @@ public class TermOrderTest extends TestCase {
      */
     public void testExceptionSplit() {
         float q = (float) 0.9;
-
         int r = 10;
         int sp = 5;
 
@@ -647,7 +623,6 @@ public class TermOrderTest extends TestCase {
         b = ExpVector.EVRAND(r, 10, q);
 
         int wrong = 99;
-        //int x = 0;
 
         try {
             t = new TermOrder(wrong, wrong, r, sp);
@@ -687,7 +662,6 @@ public class TermOrderTest extends TestCase {
      */
     public void testCompareExceptionSplit() {
         float q = (float) 0.9;
-
         int r = 10;
         int sp = 5;
 
@@ -714,7 +688,6 @@ public class TermOrderTest extends TestCase {
      */
     public void testCompareExceptionWeigth() {
         float q = (float) 0.9;
-
         int r = 10;
         //int sp = 5;
 

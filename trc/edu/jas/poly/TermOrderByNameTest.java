@@ -47,22 +47,10 @@ public class TermOrderByNameTest extends TestCase {
     }
 
 
-    ExpVector a;
+    ExpVector a, b, c, d;
 
 
-    ExpVector b;
-
-
-    ExpVector c;
-
-
-    ExpVector d;
-
-
-    TermOrder t;
-
-
-    TermOrder s;
+    TermOrder t, s;
 
 
     @Override
@@ -108,10 +96,10 @@ public class TermOrderByNameTest extends TestCase {
      * Test constructor, split TO.
      */
     public void testConstructorSplit() {
-
         int r = 10;
-        ExpVector ev = ExpVectorLong.create(r);
         int sp = 5;
+
+        ExpVector ev = ExpVectorLong.create(r);
         s = TermOrderByName.blockOrder(TermOrderByName.IGRLEX, TermOrderByName.IGRLEX, ev, sp);
         t = TermOrderByName.blockOrder(TermOrderByName.IGRLEX, TermOrderByName.IGRLEX, ev, sp);
         assertEquals("t = s", t, s);
@@ -133,7 +121,6 @@ public class TermOrderByNameTest extends TestCase {
      */
     public void testConstructorWeight() {
         long[][] w = new long[][] { new long[] { 1l, 1l, 1l, 1l, 1l } };
-
         s = TermOrderByName.weightOrder(w);
         t = TermOrderByName.weightOrder(w);
         //System.out.println("s = " + s);
@@ -175,11 +162,9 @@ public class TermOrderByNameTest extends TestCase {
 
         a = ExpVector.EVRAND(5, 10, q);
         b = ExpVector.EVRAND(5, 10, q);
-
         c = a.sum(b);
 
         long[][] w = new long[][] { new long[] { 1l, 1l, 1l, 1l, 1l } };
-
         t = TermOrderByName.weightOrder(w);
 
         int x = ExpVector.EVIWLC(w, c, a);
@@ -210,11 +195,9 @@ public class TermOrderByNameTest extends TestCase {
 
         a = ExpVector.EVRAND(5, 10, q);
         b = ExpVector.EVRAND(5, 10, q);
-
         c = a.sum(b);
 
         long[][] w = new long[][] { new long[] { 1l, 1l, 1l, 1l, 1l }, new long[] { 1l, 1l, 1l, 1l, 1l } };
-
         t = TermOrderByName.weightOrder(w);
 
         int x = ExpVector.EVIWLC(w, c, a);
@@ -245,7 +228,6 @@ public class TermOrderByNameTest extends TestCase {
 
         a = ExpVector.EVRAND(5, 10, q);
         b = ExpVector.EVRAND(5, 10, q);
-
         c = a.sum(b);
 
         t = TermOrderByName.IGRLEX;
@@ -307,17 +289,16 @@ public class TermOrderByNameTest extends TestCase {
      */
     public void testAscendComparatorWeightSplit() {
         float q = (float) 0.9;
-
         int r = 8;
         //int sp = 5;
-        //long [][] w  = new long [][] { new long[] { 1l, 2l, 3l, 4l, 5l, 1l, 2l, 3l } };
-        long[][] w2 = new long[][] { new long[] { 1l, 2l, 3l, 4l, 5l, 0l, 0l, 0l },
-                new long[] { 0l, 0l, 0l, 0l, 0l, 1l, 2l, 3l } };
 
         a = ExpVector.EVRAND(r, 10, q);
         b = ExpVector.EVRAND(r, 10, q);
         c = a.sum(b);
 
+        //long [][] w  = new long [][] { new long[] { 1l, 2l, 3l, 4l, 5l, 1l, 2l, 3l } };
+        long[][] w2 = new long[][] { new long[] { 1l, 2l, 3l, 4l, 5l, 0l, 0l, 0l },
+                                     new long[] { 0l, 0l, 0l, 0l, 0l, 1l, 2l, 3l } };
         // t = new TermOrder(w,sp);
         t = TermOrderByName.weightOrder(w2);
         TermOrder t2 = TermOrderByName.weightOrder(w2);
@@ -403,7 +384,6 @@ public class TermOrderByNameTest extends TestCase {
      */
     public void testDescendComparatorSplit() {
         float q = (float) 0.9;
-
         int r = 10;
         int sp = 5;
 
@@ -437,14 +417,14 @@ public class TermOrderByNameTest extends TestCase {
         float q = (float) 0.9;
         int r = 8;
         //int sp = 5;
-        //long [][] w  = new long [][] { new long[] { 1l, 2l, 3l, 4l, 5l, 1l, 2l, 3l } };
-        long[][] w2 = new long[][] { new long[] { 1l, 2l, 3l, 4l, 5l, 0l, 0l, 0l },
-                                     new long[] { 0l, 0l, 0l, 0l, 0l, 1l, 2l, 3l } };
 
         a = ExpVector.EVRAND(r, 10, q);
         b = ExpVector.EVRAND(r, 10, q);
         c = a.sum(b);
 
+        //long [][] w  = new long [][] { new long[] { 1l, 2l, 3l, 4l, 5l, 1l, 2l, 3l } };
+        long[][] w2 = new long[][] { new long[] { 1l, 2l, 3l, 4l, 5l, 0l, 0l, 0l },
+                                     new long[] { 0l, 0l, 0l, 0l, 0l, 1l, 2l, 3l } };
         //t = new TermOrder(w,sp);
         t = TermOrderByName.weightOrder(w2);
         TermOrder t2 = TermOrderByName.weightOrder(w2);

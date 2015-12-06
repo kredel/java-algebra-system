@@ -401,7 +401,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
             return false;
         }
         // same variables required ?
-        if (!Arrays.equals(vars, oring.vars)) {
+        if (!Arrays.deepEquals(vars, oring.vars)) {
             return false;
         }
         return true;
