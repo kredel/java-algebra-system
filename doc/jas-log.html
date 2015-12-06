@@ -22,17 +22,27 @@
 
 <dl>
 
-<dt>2015, November </dt> <!-- 2.5.5xxx -->
+<dt>2015, December </dt> <!-- 2.5.5xxx -->
 <dd> 
 
+ New iterative Gr&ouml;bner base algorithm in class
+ <code>GreoebnerBaseSeqIter</code>. Term orders with weight matrix are
+ now usable from jython and jruby via the <code>PolyRing</code>
+ constructors. More names for defined and implemented term orders in
+ class <code>TermOrderByName</code>. 
+
+ Small improvements and bug fixes.
+
+</dd>
+
+<dt>2015, November </dt> <!-- 2.5.5318 -->
+<dd> 
  Extensions to experimental classes for solvable polynomials with
  non-commutative word polynomials and non-commutative residue classes
  as coefficients. 
-
  Fixed bugs spotted by new findbugs version. Small improvements and
  bug fixes. The distributed byte code is now Java 8. But no Java 8
  features have been used and the sources still compile with Java 7.
-
 </dd>
 
 <dt>2015, July </dt> <!-- 2.5.5281 -->
@@ -2485,7 +2495,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Sun Nov  1 22:11:07 CET 2015
+Last modified: Sun Dec  6 15:40:48 CET 2015
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
