@@ -5,8 +5,6 @@
 package edu.jas.poly;
 
 
-// import edu.jas.poly.TermOrder;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -15,11 +13,11 @@ import org.apache.log4j.BasicConfigurator;
 
 
 /**
- * TermOrder tests with JUnit. Tests also ExpVector comparisons.
+ * TermOrderByName tests with JUnit. Tests different names for TermOrders.
  * @author Heinz Kredel
  */
 
-public class TermOrderTest extends TestCase {
+public class TermOrderByNameTest extends TestCase {
 
 
     /**
@@ -32,10 +30,10 @@ public class TermOrderTest extends TestCase {
 
 
     /**
-     * Constructs a <CODE>TermOrderTest</CODE> object.
+     * Constructs a <CODE>TermOrderByNameTest</CODE> object.
      * @param name String.
      */
-    public TermOrderTest(String name) {
+    public TermOrderByNameTest(String name) {
         super(name);
     }
 
@@ -44,7 +42,7 @@ public class TermOrderTest extends TestCase {
      * suite.
      */
     public static Test suite() {
-        TestSuite suite = new TestSuite(TermOrderTest.class);
+        TestSuite suite = new TestSuite(TermOrderByNameTest.class);
         return suite;
     }
 
@@ -86,8 +84,8 @@ public class TermOrderTest extends TestCase {
      */
     public void testConstructor() {
 
-        s = new TermOrder();
-        t = new TermOrder();
+        s = TermOrderByName.DEFAULT;
+        t = TermOrderByName.DEFAULT;
         assertEquals("t = s", t, s);
 
         String x = t.toString();
@@ -95,26 +93,27 @@ public class TermOrderTest extends TestCase {
 
         assertEquals("x = y", x, y);
 
-        t = new TermOrder(TermOrder.INVLEX);
+        t = TermOrderByName.INVLEX;
         x = "INVLEX";
         boolean z = t.toString().startsWith(x);
         assertTrue("INVLEX(.)", z);
 
-        s = new TermOrder(TermOrder.IGRLEX);
-        t = new TermOrder(TermOrder.IGRLEX);
+        s = TermOrderByName.IGRLEX;
+        t = TermOrderByName.IGRLEX;
         assertEquals("t = s", t, s);
     }
 
 
-    /**
+    /*
      * Test constructor, split TO.
      */
     public void testConstructorSplit() {
 
         int r = 10;
+        ExpVector ev = ExpVectorLong.create(r);
         int sp = 5;
-        s = new TermOrder(TermOrder.IGRLEX, TermOrder.IGRLEX, r, sp);
-        t = new TermOrder(TermOrder.IGRLEX, TermOrder.IGRLEX, r, sp);
+        s = TermOrderByName.blockOrder(TermOrderByName.IGRLEX, TermOrderByName.IGRLEX, ev, sp);
+        t = TermOrderByName.blockOrder(TermOrderByName.IGRLEX, TermOrderByName.IGRLEX, ev, sp);
         assertEquals("t = s", t, s);
 
         String x = t.toString();
@@ -122,8 +121,8 @@ public class TermOrderTest extends TestCase {
         assertEquals("x = y", x, y);
         //System.out.println("s = " + s);
 
-        s = new TermOrder(TermOrder.IGRLEX, TermOrder.INVLEX, r, sp);
-        t = new TermOrder(TermOrder.IGRLEX, TermOrder.INVLEX, r, sp);
+        s = TermOrderByName.blockOrder(TermOrderByName.IGRLEX, TermOrderByName.INVLEX, ev, sp);
+        t = TermOrderByName.blockOrder(TermOrderByName.IGRLEX, TermOrderByName.INVLEX, ev, sp);
         assertEquals("t = s", t, s);
         //System.out.println("s = " + s);
     }
@@ -135,15 +134,18 @@ public class TermOrderTest extends TestCase {
     public void testConstructorWeight() {
         long[][] w = new long[][] { new long[] { 1l, 1l, 1l, 1l, 1l } };
 
-        s = new TermOrder(w);
-        t = new TermOrder(w);
+        s = TermOrderByName.weightOrder(w);
+        t = TermOrderByName.weightOrder(w);
+        //System.out.println("s = " + s);
+        //System.out.println("t = " + t);
         assertEquals("t = s", t, s);
 
         String x = t.toString();
         String y = s.toString();
 
+        //System.out.println("x = " + x);
+        //System.out.println("y = " + y);
         assertEquals("x = y", x, y);
-        //System.out.println("s = " + s);
 
         //int r = 5;
         //int sp = 3;
@@ -178,7 +180,7 @@ public class TermOrderTest extends TestCase {
 
         long[][] w = new long[][] { new long[] { 1l, 1l, 1l, 1l, 1l } };
 
-        t = new TermOrder(w);
+        t = TermOrderByName.weightOrder(w);
 
         int x = ExpVector.EVIWLC(w, c, a);
         int y = ExpVector.EVIWLC(w, c, b);
@@ -213,7 +215,7 @@ public class TermOrderTest extends TestCase {
 
         long[][] w = new long[][] { new long[] { 1l, 1l, 1l, 1l, 1l }, new long[] { 1l, 1l, 1l, 1l, 1l } };
 
-        t = new TermOrder(w);
+        t = TermOrderByName.weightOrder(w);
 
         int x = ExpVector.EVIWLC(w, c, a);
         int y = ExpVector.EVIWLC(w, c, b);
@@ -236,126 +238,6 @@ public class TermOrderTest extends TestCase {
 
 
     /**
-     * Test compare weight split.
-     */
-    public void testCompareWeightSplit() {
-        float q = (float) 0.9;
-        int r = 8;
-        int sp = 4;
-
-        a = ExpVector.EVRAND(r, 10, q);
-        b = ExpVector.EVRAND(r, 10, q);
-        c = a.sum(b);
-
-        long[][] w = new long[][] { new long[] { 1l, 1l, 1l, 1l, 1l, 1l, 1l, 1l } };
-
-        //t = new TermOrder(w,sp);
-
-        int x;
-        int y;
-        x = ExpVector.EVIWLC(w, c, a);
-        y = ExpVector.EVIWLC(w, c, b);
-        assertEquals("x = 1", 1, x);
-        assertEquals("y = 1", 1, y);
-
-        x = ExpVector.EVIWLC(w, c, a, 0, sp);
-        y = ExpVector.EVIWLC(w, c, b, 0, sp);
-        assertEquals("x = 1", 1, x);
-        assertEquals("y = 1", 1, y);
-
-        x = ExpVector.EVIWLC(w, c, a, sp, r);
-        y = ExpVector.EVIWLC(w, c, b, sp, r);
-        assertEquals("x = 1", 1, x);
-        assertEquals("y = 1", 1, y);
-
-
-        x = ExpVector.EVIWLC(w, a, c);
-        y = ExpVector.EVIWLC(w, b, c);
-        assertEquals("x = -1", -1, x);
-        assertEquals("y = -1", -1, y);
-
-        x = ExpVector.EVIWLC(w, a, c, 0, sp);
-        y = ExpVector.EVIWLC(w, b, c, 0, sp);
-        assertEquals("x = -1", -1, x);
-        assertEquals("y = -1", -1, y);
-
-        x = ExpVector.EVIWLC(w, a, c, sp, r);
-        y = ExpVector.EVIWLC(w, b, c, sp, r);
-        assertEquals("x = -1", -1, x);
-        assertEquals("y = -1", -1, y);
-
-
-        x = ExpVector.EVIWLC(w, a, a);
-        y = ExpVector.EVIWLC(w, b, b);
-        assertEquals("x = 0", 0, x);
-        assertEquals("y = 0", 0, y);
-
-        x = ExpVector.EVIWLC(w, a, a, 0, sp);
-        y = ExpVector.EVIWLC(w, b, b, 0, sp);
-        assertEquals("x = 0", 0, x);
-        assertEquals("y = 0", 0, y);
-
-        x = ExpVector.EVIWLC(w, a, a, sp, r);
-        y = ExpVector.EVIWLC(w, b, b, sp, r);
-        assertEquals("x = 0", 0, x);
-        assertEquals("y = 0", 0, y);
-
-
-        long[][] w2 = new long[][] { new long[] { 1l, 1l, 1l, 1l, 0l, 0l, 0l, 0l },
-                new long[] { 0l, 0l, 0l, 0l, 1l, 1l, 1l, 1l } };
-
-        //t = new TermOrder(w2);
-
-        x = ExpVector.EVIWLC(w2, c, a);
-        y = ExpVector.EVIWLC(w2, c, b);
-        assertEquals("x = 1", 1, x);
-        assertEquals("y = 1", 1, y);
-
-        x = ExpVector.EVIWLC(w2, c, a, 0, sp);
-        y = ExpVector.EVIWLC(w2, c, b, 0, sp);
-        assertEquals("x = 1", 1, x);
-        assertEquals("y = 1", 1, y);
-
-        x = ExpVector.EVIWLC(w2, c, a, sp, r);
-        y = ExpVector.EVIWLC(w2, c, b, sp, r);
-        assertEquals("x = 1", 1, x);
-        assertEquals("y = 1", 1, y);
-
-
-        x = ExpVector.EVIWLC(w2, a, c);
-        y = ExpVector.EVIWLC(w2, b, c);
-        assertEquals("x = -1", -1, x);
-        assertEquals("y = -1", -1, y);
-
-        x = ExpVector.EVIWLC(w2, a, c, 0, sp);
-        y = ExpVector.EVIWLC(w2, b, c, 0, sp);
-        assertEquals("x = -1", -1, x);
-        assertEquals("y = -1", -1, y);
-
-        x = ExpVector.EVIWLC(w2, a, c, sp, r);
-        y = ExpVector.EVIWLC(w2, b, c, sp, r);
-        assertEquals("x = -1", -1, x);
-        assertEquals("y = -1", -1, y);
-
-
-        x = ExpVector.EVIWLC(w2, a, a);
-        y = ExpVector.EVIWLC(w2, b, b);
-        assertEquals("x = 0", 0, x);
-        assertEquals("y = 0", 0, y);
-
-        x = ExpVector.EVIWLC(w2, a, a, 0, sp);
-        y = ExpVector.EVIWLC(w2, b, b, 0, sp);
-        assertEquals("x = 0", 0, x);
-        assertEquals("y = 0", 0, y);
-
-        x = ExpVector.EVIWLC(w2, a, a, sp, r);
-        y = ExpVector.EVIWLC(w2, b, b, sp, r);
-        assertEquals("x = 0", 0, x);
-        assertEquals("y = 0", 0, y);
-    }
-
-
-    /**
      * Test ascend comparators.
      */
     public void testAscendComparator() {
@@ -366,7 +248,7 @@ public class TermOrderTest extends TestCase {
 
         c = a.sum(b);
 
-        t = new TermOrder();
+        t = TermOrderByName.IGRLEX;
 
         int x = t.getAscendComparator().compare(c, a);
         int y = t.getAscendComparator().compare(c, b);
@@ -401,7 +283,7 @@ public class TermOrderTest extends TestCase {
         b = ExpVector.EVRAND(r, 10, q);
         c = a.sum(b);
 
-        t = new TermOrder(TermOrder.IGRLEX, TermOrder.INVLEX, r, sp);
+        t = TermOrderByName.blockOrder(TermOrderByName.IGRLEX, TermOrderByName.INVLEX, c, sp);
 
         int x = t.getAscendComparator().compare(c, a);
         int y = t.getAscendComparator().compare(c, b);
@@ -437,9 +319,9 @@ public class TermOrderTest extends TestCase {
         c = a.sum(b);
 
         // t = new TermOrder(w,sp);
-        t = new TermOrder(w2);
-        TermOrder t2 = new TermOrder(w2);
-        // now t equals t2
+        t = TermOrderByName.weightOrder(w2);
+        TermOrder t2 = TermOrderByName.weightOrder(w2);
+        assertEquals("t = t2", t, t2);
 
         int x = t.getAscendComparator().compare(c, a);
         int y = t.getAscendComparator().compare(c, b);
@@ -492,10 +374,9 @@ public class TermOrderTest extends TestCase {
 
         a = ExpVector.EVRAND(5, 10, q);
         b = ExpVector.EVRAND(5, 10, q);
-
         c = a.sum(b);
 
-        t = new TermOrder();
+        t = TermOrderByName.IGRLEX;
 
         int x = t.getDescendComparator().compare(c, a);
         int y = t.getDescendComparator().compare(c, b);
@@ -530,7 +411,7 @@ public class TermOrderTest extends TestCase {
         b = ExpVector.EVRAND(r, 10, q);
         c = a.sum(b);
 
-        t = new TermOrder(TermOrder.IGRLEX, TermOrder.INVLEX, r, sp);
+        t = TermOrderByName.blockOrder(TermOrderByName.IGRLEX, TermOrderByName.INVLEX, c, sp);
 
         int x = t.getDescendComparator().compare(c, a);
         int y = t.getDescendComparator().compare(c, b);
@@ -554,21 +435,20 @@ public class TermOrderTest extends TestCase {
      */
     public void testDescendComparatorWeightSplit() {
         float q = (float) 0.9;
-
         int r = 8;
         //int sp = 5;
         //long [][] w  = new long [][] { new long[] { 1l, 2l, 3l, 4l, 5l, 1l, 2l, 3l } };
         long[][] w2 = new long[][] { new long[] { 1l, 2l, 3l, 4l, 5l, 0l, 0l, 0l },
-                new long[] { 0l, 0l, 0l, 0l, 0l, 1l, 2l, 3l } };
+                                     new long[] { 0l, 0l, 0l, 0l, 0l, 1l, 2l, 3l } };
 
         a = ExpVector.EVRAND(r, 10, q);
         b = ExpVector.EVRAND(r, 10, q);
         c = a.sum(b);
 
         //t = new TermOrder(w,sp);
-        t = new TermOrder(w2);
-        TermOrder t2 = new TermOrder(w2);
-        // now t equals t2
+        t = TermOrderByName.weightOrder(w2);
+        TermOrder t2 = TermOrderByName.weightOrder(w2);
+        assertEquals("t = t2", t, t2);
 
         int x = t.getDescendComparator().compare(c, a);
         int y = t.getDescendComparator().compare(c, b);
@@ -614,91 +494,22 @@ public class TermOrderTest extends TestCase {
 
 
     /**
-     * Test exception.
-     */
-    public void testException() {
-        float q = (float) 0.9;
-
-        a = ExpVector.EVRAND(5, 10, q);
-        b = ExpVector.EVRAND(5, 10, q);
-
-        int wrong = 99;
-        //int x = 0;
-
-        try {
-            t = new TermOrder(wrong);
-        } catch (IllegalArgumentException e) {
-            return;
-        }
-        fail("IllegalArgumentException");
-    }
-
-
-    /**
-     * Test exception split.
-     */
-    public void testExceptionSplit() {
-        float q = (float) 0.9;
-
-        int r = 10;
-        int sp = 5;
-
-        a = ExpVector.EVRAND(r, 10, q);
-        b = ExpVector.EVRAND(r, 10, q);
-
-        int wrong = 99;
-        //int x = 0;
-
-        try {
-            t = new TermOrder(wrong, wrong, r, sp);
-        } catch (IllegalArgumentException e) {
-            return;
-        }
-        fail("IllegalArgumentException");
-    }
-
-
-    /**
-     * Test compare exception.
-     */
-    public void testCompareException() {
-        float q = (float) 0.9;
-
-        a = ExpVector.EVRAND(5, 10, q);
-        b = ExpVector.EVRAND(5, 10, q);
-
-        int notimpl = TermOrder.REVITDG + 2;
-        int x = 0;
-
-        try {
-            t = new TermOrder(notimpl);
-            x = t.getDescendComparator().compare(a, b);
-            fail("IllegalArgumentException " + x);
-        } catch (IllegalArgumentException e) {
-            //return;
-        } catch (NullPointerException e) {
-            //return;
-        }
-    }
-
-
-    /**
      * Test compare exception split.
      */
     public void testCompareExceptionSplit() {
         float q = (float) 0.9;
-
         int r = 10;
         int sp = 5;
 
         a = ExpVector.EVRAND(r, 10, q);
         b = ExpVector.EVRAND(r, 10, q);
+        c = ExpVector.EVRAND(2, 10, q);
 
-        int notimpl = TermOrder.REVITDG + 2;
+        TermOrder t2 = TermOrderByName.REVITDG;
         int x = 0;
 
         try {
-            t = new TermOrder(notimpl, notimpl, r, sp);
+            t = TermOrderByName.blockOrder(t2, t2, c, sp);
             x = t.getDescendComparator().compare(a, b);
             fail("IllegalArgumentException " + x);
         } catch (IllegalArgumentException e) {
@@ -714,22 +525,22 @@ public class TermOrderTest extends TestCase {
      */
     public void testCompareExceptionWeigth() {
         float q = (float) 0.9;
-
         int r = 10;
-        //int sp = 5;
 
         a = ExpVector.EVRAND(r, 10, q);
-        b = ExpVector.EVRAND(r, 10, q);
+        b = ExpVector.EVRAND(2, 10, q);
 
         int x = 0;
 
         try {
-            t = new TermOrder((long[][]) null);
+            t = TermOrderByName.weightOrder((long[][]) null);
             x = t.getDescendComparator().compare(a, b);
             fail("IllegalArgumentException " + x);
         } catch (IllegalArgumentException e) {
             //return;
         } catch (NullPointerException e) {
+            //return;
+        } catch (ArrayIndexOutOfBoundsException e) {
             //return;
         }
     }

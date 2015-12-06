@@ -319,14 +319,14 @@ public final class TermOrder implements Serializable {
     }
 
 
-    /**
+    /*
      * Constructor for default split order.
      * @param r max number of exponents to compare.
      * @param split index.
-     */
     public TermOrder(int r, int split) {
         this(DEFAULT_EVORD, DEFAULT_EVORD, r, split);
     }
+     */
 
 
     /**
@@ -350,9 +350,10 @@ public final class TermOrder implements Serializable {
         evend1 = split; // excluded
         evbeg2 = split;
         evend2 = r;
-        if (evbeg2 > evend2) {
+        if (evbeg2 < 0 || evbeg2 > evend2) {
             throw new IllegalArgumentException("invalid term order split, r = " + r + ", split = " + split);
         }
+        //System.out.println("evbeg2 " + evbeg2 + ", evend2 " + evend2);
         switch (evord) { // horder = new EVhorder();
         case TermOrder.LEX: {
             switch (evord2) {
@@ -1370,7 +1371,7 @@ public final class TermOrder implements Serializable {
         if (!t) {
             return t;
         }
-        if (!Arrays.equals(weight, b.weight)) {
+        if (!Arrays.deepEquals(weight, b.weight)) {
             return false;
         }
         return true;
@@ -1840,7 +1841,7 @@ public final class TermOrder implements Serializable {
      */
     public static TermOrder reverseWeight(long[][] w) {
         if (w == null) {
-            logger.warn("empty weight matrix ignored");
+            logger.warn("null weight matrix ignored");
             return new TermOrder();
         }
         long[][] wr = new long[ w.length ][];

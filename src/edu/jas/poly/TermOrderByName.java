@@ -23,7 +23,6 @@ import java.io.Serializable;
  * 
  * @author Heinz Kredel
  */
-// no weight aray and block orders.
 
 public final class TermOrderByName implements Serializable {
 
@@ -88,12 +87,12 @@ public final class TermOrderByName implements Serializable {
     // Block TermOrders 
 
     public final static TermOrder blockOrder(TermOrder t1, ExpVector e, int s) {
-        return new TermOrder(t1.getEvord(), t1.getEvord(), e.length(), s);
+        return new TermOrder(t1.getEvord(), t1.getEvord(), e.length(), e.length()-s);
     }
 
 
     public final static TermOrder blockOrder(TermOrder t1, TermOrder t2, ExpVector e, int s) {
-        return new TermOrder(t1.getEvord(), t2.getEvord(), e.length(), s);
+        return new TermOrder(t2.getEvord(), t1.getEvord(), e.length(), e.length()-s);
     }
 
 
