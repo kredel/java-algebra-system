@@ -3836,7 +3836,7 @@ class PolyRing(Ring):
 
     '''
 
-    def __init__(self,coeff,vars,order=TermOrder(TermOrder.IGRLEX)):
+    def __init__(self,coeff,vars,order=PolyRing.grad):
         '''Ring constructor.
 
         coeff = factory for coefficients,
@@ -3860,7 +3860,7 @@ class PolyRing(Ring):
         if isinstance(order,TermOrder):
             to = order;
         if isinstance(order,PyList) or isinstance(order,PyTuple):
-            print "order = " + str(order);
+            #print "order = " + str(order);
             to = TermOrder.reverseWeight(order);
         tring = GenPolynomialRing(cf,nv,to,names);
         self.ring = tring;
