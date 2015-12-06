@@ -23,8 +23,8 @@ from edu.jas.poly        import GenPolynomial, GenPolynomialRing, Monomial,\
                                 ExpVector,\
                                 Word, WordFactory,\
                                 GenPolynomialTokenizer, OrderedPolynomialList, PolyUtil,\
-                                TermOrderOptimization, TermOrder, PolynomialList,\
-                                AlgebraicNumber, AlgebraicNumberRing,\
+                                TermOrderOptimization, TermOrder, TermOrderByName,\
+                                PolynomialList, AlgebraicNumber, AlgebraicNumberRing,\
                                 OrderedModuleList, ModuleList,\
                                 Complex, ComplexRing
 from edu.jas.ps          import UnivPowerSeries, UnivPowerSeriesRing,\
@@ -3836,7 +3836,7 @@ class PolyRing(Ring):
 
     '''
 
-    def __init__(self,coeff,vars,order=PolyRing.grad):
+    def __init__(self,coeff,vars,order=TermOrderByName.IGRLEX):
         '''Ring constructor.
 
         coeff = factory for coefficients,
@@ -3856,7 +3856,7 @@ class PolyRing(Ring):
         if isinstance(vars,PyString):
             names = GenPolynomialTokenizer.variableList(vars);
         nv = len(names);
-        to = PolyRing.grad;
+        to = TermOrderByName.IGRLEX;
         if isinstance(order,TermOrder):
             to = order;
         if isinstance(order,PyList) or isinstance(order,PyTuple):
@@ -3871,9 +3871,9 @@ class PolyRing(Ring):
         '''
         return self.ring.toScript();
 
-    lex = TermOrder(TermOrder.INVLEX)
+    lex = TermOrderByName.INVLEX
 
-    grad = TermOrder(TermOrder.IGRLEX)
+    grad = TermOrderByName.IGRLEX
 
 
 class SolvPolyRing(SolvableRing):
@@ -3883,7 +3883,7 @@ class SolvPolyRing(SolvableRing):
     Then returns a Ring.
     '''
 
-    def __init__(self,coeff,vars,order=PolyRing.grad,rel=[]):
+    def __init__(self,coeff,vars,order=TermOrderByName.IGRLEX,rel=[]):
         '''Ring constructor.
 
         coeff = factory for coefficients,
@@ -3906,7 +3906,7 @@ class SolvPolyRing(SolvableRing):
             names = GenPolynomialTokenizer.variableList(vars);
         nv = len(names);
         #to = PolyRing.lex;
-        to = PolyRing.grad;
+        to = TermOrderByName.IGRLEX;
         if isinstance(order,TermOrder):
             to = order;
         L = [];
