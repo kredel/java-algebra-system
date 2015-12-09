@@ -2569,10 +2569,10 @@ Compute a Groebner base.
         else
             if cofac.is_a? GenPolynomialRing and cofac.isCommutative()
                 gg = GroebnerBasePseudoRecSeq.new(cofac).GB(ff);
-                kind = "pseudo"
+                kind = "pseudoRec"
             else
                 gg = GroebnerBasePseudoSeq.new(cofac).GB(ff);
-                kind = "pseudoRec"
+                kind = "pseudo"
             end
         end
         t = System.currentTimeMillis() - t;
@@ -3770,7 +3770,7 @@ Compute a left Groebner base.
         t = System.currentTimeMillis();
         if cofac.is_a? GenPolynomialRing #and cofac.isCommutative()
            gg = SolvableGroebnerBasePseudoRecSeq.new(cofac).leftGB(ff);
-           kind = "pseudorec"
+           kind = "pseudoRec"
         else 
            if cofac.isField() or not cofac.isCommutative()
               gg = SolvableGroebnerBaseSeq.new().leftGB(ff);
@@ -3795,7 +3795,7 @@ Test if this is a left Groebner base.
         t = System.currentTimeMillis();
         if cofac.is_a? GenPolynomialRing #and cofac.isCommutative()
            b = SolvableGroebnerBasePseudoRecSeq.new(cofac).isLeftGB(ff);
-           kind = "pseudorec"
+           kind = "pseudoRec"
         else 
            if cofac.isField() or not cofac.isCommutative()
               b = SolvableGroebnerBaseSeq.new().isLeftGB(ff);
@@ -3820,7 +3820,7 @@ Compute a two-sided Groebner base.
         t = System.currentTimeMillis();
         if cofac.is_a? GenPolynomialRing #and cofac.isCommutative()
            gg = SolvableGroebnerBasePseudoRecSeq.new(cofac).twosidedGB(ff);
-           kind = "pseudorec"
+           kind = "pseudoRec"
         else 
            #puts "two-sided: " + cofac.to_s
            if cofac.is_a? WordResidue  #Ring
@@ -3851,7 +3851,7 @@ Test if this is a two-sided Groebner base.
         t = System.currentTimeMillis();
         if cofac.is_a? GenPolynomialRing #and cofac.isCommutative()
            b = SolvableGroebnerBasePseudoRecSeq.new(cofac).isTwosidedGB(ff);
-           kind = "pseudorec"
+           kind = "pseudoRec"
         else
            if cofac.isField() or not cofac.isCommutative()
               b = SolvableGroebnerBaseSeq.new().isTwosidedGB(ff);
@@ -3876,7 +3876,7 @@ Compute a right Groebner base.
         t = System.currentTimeMillis();
         if cofac.is_a? GenPolynomialRing #and cofac.isCommutative()
            gg = SolvableGroebnerBasePseudoRecSeq.new(cofac).rightGB(ff);
-           kind = "pseudorec"
+           kind = "pseudoRec"
         else
            if cofac.isField() or not cofac.isCommutative()
               gg = SolvableGroebnerBaseSeq.new().rightGB(ff);
@@ -3901,7 +3901,7 @@ Test if this is a right Groebner base.
         t = System.currentTimeMillis();
         if cofac.is_a? GenPolynomialRing #and cofac.isCommutative()
            b = SolvableGroebnerBasePseudoRecSeq.new(cofac).isRightGB(ff);
-           kind = "pseudorec"
+           kind = "pseudoRec"
         else
            if cofac.isField() or not cofac.isCommutative()
               b = SolvableGroebnerBaseSeq.new().isRightGB(ff);
@@ -5555,7 +5555,7 @@ Compute a two-sided Groebner base.
                ff = @ideal.list;
                fg = WordGroebnerBasePseudoRecSeq.new(cofac).GB(ff);
                @ideal = WordIdeal.new(ring.ring, fg);
-               kind = "pseudorec"
+               kind = "pseudoRec"
             else
                ff = @ideal.list;
                fg = WordGroebnerBasePseudoSeq.new(cofac).GB(ff);
@@ -5589,7 +5589,7 @@ Test if this is a two-sided Groebner base.
             if cofac.is_a? GenPolynomialRing
                ff = @ideal.list;
                b = WordGroebnerBasePseudoRecSeq.new(cofac).isGB(ff);
-               kind = "pseudorec"
+               kind = "pseudoRec"
             else
                ff = @ideal.list;
                b = WordGroebnerBasePseudoSeq.new(cofac).isGB(ff);
