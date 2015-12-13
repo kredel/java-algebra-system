@@ -25,6 +25,9 @@ import java.io.Serializable;
  * Variables in printed JAS polynomial <b>(low, ..., medium, ..., high)</b>
  * Variables in other CAS polynomial <b>(high, ..., medium, ..., low)</b>
  * with <b>low</b> &lt; <b>medium</b> &lt; <b>high</b>.
+ * Example: for variables x<sub>1</sub>, ..., x<sub>r</sub> it is assumed in JAS that 
+ *             x<sub>1</sub> &lt; ...  &lt; x<sub>r</sub> in other CAS it means
+ *             x<sub>1</sub> &gt; ...  &gt; x<sub>r</sub>.
  *
  * @author Heinz Kredel
  */
@@ -133,7 +136,7 @@ public final class TermOrderByName {
 
     /**
      * Construct elimination block TermOrder.
-     * Variables {x_1, ..., x_{s-1}} &lt; {x_s, ..., x_r}
+     * Variables {x<sub>1</sub>, ..., x<sub>s-1</sub>} &lt; {x<sub>s</sub>, ..., x<sub>r</sub>}
      * 
      * @param t1 term order for both blocks
      * @param e exponent vector of desired length, r = length(e)
@@ -147,7 +150,7 @@ public final class TermOrderByName {
 
     /**
      * Construct elimination block TermOrder.
-     * Variables {x_1, ..., x_{s-1}} &lt; {x_s, ..., x_r}
+     * Variables {x<sub>1</sub>, ..., x<sub>s-1</sub>} &lt; {x<sub>s</sub>, ..., x<sub>r</sub>}     
      *
      * @param t1 term order for lower valiables
      * @param t2 term order for higher variables
