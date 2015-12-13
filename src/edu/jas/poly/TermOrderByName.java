@@ -29,7 +29,7 @@ import java.io.Serializable;
  * @author Heinz Kredel
  */
 
-public final class TermOrderByName implements Serializable {
+public final class TermOrderByName {
 
 
     //private static final Logger logger = Logger.getLogger(TermOrderByName.class);
@@ -92,63 +92,71 @@ public final class TermOrderByName implements Serializable {
     /**
      * TermOrder name Lexicographic of other CAS.
      */
-    public final static TermOrder Lexicographic = INVLEX;
+    public final static TermOrder Lexicographic = REVILEX; //INVLEX;
 
 
     /**
      * TermOrder name NegativeLexicographic of other CAS.
      */
-    public final static TermOrder NegativeLexicographic = LEX;
+    public final static TermOrder NegativeLexicographic = REVLEX; // LEX
+
+
+    /**
+     * TermOrder name ReverseLexicographic of other CAS.
+     */
+    public final static TermOrder ReverseLexicographic = INVLEX; // REVILEX
 
 
     /**
      * TermOrder name DegreeLexicographic of other CAS.
      */
-    public final static TermOrder DegreeLexicographic = IGRLEX;
+    public final static TermOrder DegreeLexicographic = REVITDG; //IGRLEX;
 
 
     /**
      * TermOrder name NegativeDegreeLexicographic of other CAS.
      */
-    public final static TermOrder NegativeDegreeLexicographic = GRLEX;
+    public final static TermOrder NegativeDegreeLexicographic = REVTDEG; //GRLEX;
 
 
     /**
      * TermOrder name DegreeReverseLexicographic of other CAS.
      */
-    public final static TermOrder DegreeReverseLexicographic = REVITDG;
+    public final static TermOrder DegreeReverseLexicographic = IGRLEX; //REVITDG;
 
 
     /**
      * TermOrder name NegativeDegreeReverseLexicographic of other CAS.
      */
-    public final static TermOrder NegativeDegreeReverseLexicographic = REVTDEG;
+    public final static TermOrder NegativeDegreeReverseLexicographic = GRLEX; //REVTDEG;
 
 
     /**
-     * Construct block TermOrder.
+     * Construct elimination block TermOrder.
+     * Variables {x_1, ..., x_{s-1}} &lt; {x_s, ..., x_r}
      * 
      * @param t1 term order for both blocks
-     * @param e exponent vector of desired length
+     * @param e exponent vector of desired length, r = length(e)
      * @param s split index
      * @return constructed term order
      */
     public final static TermOrder blockOrder(TermOrder t1, ExpVector e, int s) {
-        return new TermOrder(t1.getEvord(), t1.getEvord(), e.length(), e.length() - s);
+        return new TermOrder(t1.getEvord(), t1.getEvord(), e.length(), s);
     }
 
 
     /**
-     * Construct block TermOrder.
+     * Construct elimination block TermOrder.
+     * Variables {x_1, ..., x_{s-1}} &lt; {x_s, ..., x_r}
      *
      * @param t1 term order for lower valiables
      * @param t2 term order for higher variables
-     * @param e exponent vector of desired length
+     * @param e exponent vector of desired length, r = length(e)
      * @param s split index
      * @return constructed term order
      */
     public final static TermOrder blockOrder(TermOrder t1, TermOrder t2, ExpVector e, int s) {
-        return new TermOrder(t2.getEvord(), t1.getEvord(), e.length(), e.length() - s);
+        return new TermOrder(t1.getEvord(), t2.getEvord(), e.length(), s);
     }
 
 
