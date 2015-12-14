@@ -139,12 +139,39 @@ public final class TermOrderByName {
      * Variables {x<sub>1</sub>, ..., x<sub>s-1</sub>} &lt; {x<sub>s</sub>, ..., x<sub>r</sub>}
      * 
      * @param t1 term order for both blocks
+     * @param s split index
+     * @return constructed term order
+     */
+    public final static TermOrder blockOrder(TermOrder t1, int s) {
+        return t1.blockOrder(s);
+    }
+
+
+    /**
+     * Construct elimination block TermOrder.
+     * Variables {x<sub>1</sub>, ..., x<sub>s-1</sub>} &lt; {x<sub>s</sub>, ..., x<sub>r</sub>}
+     * 
+     * @param t1 term order for both blocks
      * @param e exponent vector of desired length, r = length(e)
      * @param s split index
      * @return constructed term order
      */
     public final static TermOrder blockOrder(TermOrder t1, ExpVector e, int s) {
-        return new TermOrder(t1.getEvord(), t1.getEvord(), e.length(), s);
+        return t1.blockOrder(s, e.length());
+    }
+
+
+    /**
+     * Construct elimination block TermOrder.
+     * Variables {x<sub>1</sub>, ..., x<sub>s-1</sub>} &lt; {x<sub>s</sub>, ..., x<sub>r</sub>}     
+     *
+     * @param t1 term order for lower valiables
+     * @param t2 term order for higher variables
+     * @param s split index
+     * @return constructed term order
+     */
+    public final static TermOrder blockOrder(TermOrder t1, TermOrder t2, int s) {
+        return new TermOrder(t1.getEvord(), t2.getEvord(), Integer.MAX_VALUE, s);
     }
 
 

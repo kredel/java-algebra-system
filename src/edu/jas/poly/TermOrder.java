@@ -319,16 +319,6 @@ public final class TermOrder implements Serializable {
     }
 
 
-    /*
-     * Constructor for default split order.
-     * @param r max number of exponents to compare.
-     * @param split index.
-    public TermOrder(int r, int split) {
-        this(DEFAULT_EVORD, DEFAULT_EVORD, r, split);
-    }
-     */
-
-
     /**
      * Constructor for given split order.
      * @param ev1 requested term order indicator for first block.
@@ -1287,6 +1277,37 @@ public final class TermOrder implements Serializable {
                 return ExpVector.EVIGLC(e1, e2);
             }
         };
+    }
+
+
+    /*
+     * Constructor for default split order.
+     * @param r max number of exponents to compare.
+     * @param split index.
+    public TermOrder(int r, int split) {
+        this(DEFAULT_EVORD, DEFAULT_EVORD, r, split);
+    }
+     */
+
+
+    /**
+     * Create block term order at split index.
+     * @param s split index.
+     * @return block TermOrder with split index.
+     */
+    public TermOrder blockOrder(int s) {
+        return new TermOrder(evord, evord, Integer.MAX_VALUE, s);
+    }
+
+
+    /**
+     * Create block term order at split index.
+     * @param s split index.
+     * @param len length of ExpVectors to compare
+     * @return block TermOrder with split index.
+     */
+    public TermOrder blockOrder(int s, int len) {
+        return new TermOrder(evord, evord, len, s);
     }
 
 
