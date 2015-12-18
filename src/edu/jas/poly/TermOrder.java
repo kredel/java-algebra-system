@@ -12,6 +12,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import edu.jas.kern.Scripting;
+
 
 /**
  * Term order class for ordered polynomials. Implements the most used term
@@ -1296,7 +1298,7 @@ public final class TermOrder implements Serializable {
      * @return block TermOrder with split index.
      */
     public TermOrder blockOrder(int s) {
-        return new TermOrder(evord, evord, Integer.MAX_VALUE, s);
+        return blockOrder(s, Integer.MAX_VALUE);
     }
 
 
@@ -1308,6 +1310,29 @@ public final class TermOrder implements Serializable {
      */
     public TermOrder blockOrder(int s, int len) {
         return new TermOrder(evord, evord, len, s);
+    }
+
+
+    /**
+     * Create block term order at split index.
+     * @param s split index.
+     * @param t second term order.
+     * @return block TermOrder with split index.
+     */
+    public TermOrder blockOrder(int s, TermOrder t) {
+        return blockOrder(s, t, Integer.MAX_VALUE);
+    }
+
+
+    /**
+     * Create block term order at split index.
+     * @param s split index.
+     * @param t second term order.
+     * @param len length of ExpVectors to compare
+     * @return block TermOrder with split index.
+     */
+    public TermOrder blockOrder(int s, TermOrder t, int len) {
+        return new TermOrder(evord, t.evord, len, s);
     }
 
 
@@ -1495,7 +1520,7 @@ public final class TermOrder implements Serializable {
             //erg.append(" )");
             return erg.toString();
         }
-        return toStringPlain();
+        return toScriptPlain();
     }
 
 
@@ -1593,6 +1618,102 @@ public final class TermOrder implements Serializable {
             break;
         }
         erg.append("[" + evbeg2 + "," + evend2 + "]");
+        return erg.toString();
+    }
+
+
+    /**
+     * Script representation of TermOrder without prefix and weight matrix.
+     */
+    public String toScriptPlain() {
+        StringBuffer erg = new StringBuffer();
+        if (weight != null) {
+            return toScript();
+        }
+        switch (Scripting.getLang()) {
+        case Ruby:
+            erg.append("TermOrderByName::");
+            break;
+        case Python:
+        default:
+            erg.append("TermOrderByName.");
+        }
+        switch (evord) {
+        case LEX:
+            erg.append("LEX");
+            break;
+        case INVLEX:
+            erg.append("INVLEX");
+            break;
+        case GRLEX:
+            erg.append("GRLEX");
+            break;
+        case IGRLEX:
+            erg.append("IGRLEX");
+            break;
+        case REVLEX:
+            erg.append("REVLEX");
+            break;
+        case REVILEX:
+            erg.append("REVILEX");
+            break;
+        case REVTDEG:
+            erg.append("REVTDEG");
+            break;
+        case REVITDG:
+            erg.append("REVITDG");
+            break;
+        default:
+            erg.append("invalid(" + evord + ")");
+            break;
+        }
+        if (evord2 <= 0) {
+            return erg.toString();
+        }
+        if (evord == evord2) {
+            erg.append(".blockOrder(" + evend1 + ")");
+            return erg.toString();
+        }
+        erg.append(".blockOrder(");
+        erg.append(evbeg2 + ",");
+        switch (Scripting.getLang()) {
+        case Ruby:
+            erg.append("TermOrderByName::");
+            break;
+        case Python:
+        default:
+            erg.append("TermOrderByName.");
+        }
+        switch (evord2) {
+        case LEX:
+            erg.append("LEX");
+            break;
+        case INVLEX:
+            erg.append("INVLEX");
+            break;
+        case GRLEX:
+            erg.append("GRLEX");
+            break;
+        case IGRLEX:
+            erg.append("IGRLEX");
+            break;
+        case REVLEX:
+            erg.append("REVLEX");
+            break;
+        case REVILEX:
+            erg.append("REVILEX");
+            break;
+        case REVTDEG:
+            erg.append("REVTDEG");
+            break;
+        case REVITDG:
+            erg.append("REVITDG");
+            break;
+        default:
+            erg.append("invalid(" + evord2 + ")");
+            break;
+        }
+        erg.append(")");
         return erg.toString();
     }
 
