@@ -741,7 +741,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
             }
         }
         if (i >= vars.length) {
-            throw new IllegalArgumentException("variable not defined in polynomial ring");
+            throw new IllegalArgumentException("variable '" + x + "' not defined in polynomial ring");
         }
         return univariate(0, nvar - i - 1, e);
     }

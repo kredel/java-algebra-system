@@ -95,43 +95,49 @@ public final class TermOrderByName {
     /**
      * TermOrder name Lexicographic of other CAS.
      */
-    public final static TermOrder Lexicographic = REVILEX; //INVLEX;
+    public final static TermOrder Lexicographic = REVILEX; 
 
 
     /**
      * TermOrder name NegativeLexicographic of other CAS.
      */
-    public final static TermOrder NegativeLexicographic = REVLEX; // LEX
-
-
-    /**
-     * TermOrder name ReverseLexicographic of other CAS.
-     */
-    public final static TermOrder ReverseLexicographic = INVLEX; // REVILEX
+    public final static TermOrder NegativeLexicographic = REVLEX; 
 
 
     /**
      * TermOrder name DegreeLexicographic of other CAS.
      */
-    public final static TermOrder DegreeLexicographic = REVITDG; //IGRLEX;
+    public final static TermOrder DegreeLexicographic = REVITDG; 
 
 
     /**
      * TermOrder name NegativeDegreeLexicographic of other CAS.
      */
-    public final static TermOrder NegativeDegreeLexicographic = REVTDEG; //GRLEX;
+    public final static TermOrder NegativeDegreeLexicographic = REVTDEG; 
+
+
+    /**
+     * TermOrder name ReverseLexicographic of other CAS.
+     */
+    public final static TermOrder ReverseLexicographic = INVLEX; 
 
 
     /**
      * TermOrder name DegreeReverseLexicographic of other CAS.
      */
-    public final static TermOrder DegreeReverseLexicographic = IGRLEX; //REVITDG;
+    public final static TermOrder DegreeReverseLexicographic = IGRLEX; 
+
+
+    /**
+     * TermOrder name NegativeReverseLexicographic of other CAS.
+     */
+    public final static TermOrder NegativeReverseLexicographic = LEX; 
 
 
     /**
      * TermOrder name NegativeDegreeReverseLexicographic of other CAS.
      */
-    public final static TermOrder NegativeDegreeReverseLexicographic = GRLEX; //REVTDEG;
+    public final static TermOrder NegativeDegreeReverseLexicographic = GRLEX; 
 
 
     /**

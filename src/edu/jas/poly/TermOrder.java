@@ -1638,35 +1638,7 @@ public final class TermOrder implements Serializable {
         default:
             erg.append("TermOrderByName.");
         }
-        switch (evord) {
-        case LEX:
-            erg.append("LEX");
-            break;
-        case INVLEX:
-            erg.append("INVLEX");
-            break;
-        case GRLEX:
-            erg.append("GRLEX");
-            break;
-        case IGRLEX:
-            erg.append("IGRLEX");
-            break;
-        case REVLEX:
-            erg.append("REVLEX");
-            break;
-        case REVILEX:
-            erg.append("REVILEX");
-            break;
-        case REVTDEG:
-            erg.append("REVTDEG");
-            break;
-        case REVITDG:
-            erg.append("REVITDG");
-            break;
-        default:
-            erg.append("invalid(" + evord + ")");
-            break;
-        }
+        erg.append(toScriptOrder(evord));
         if (evord2 <= 0) {
             return erg.toString();
         }
@@ -1675,7 +1647,7 @@ public final class TermOrder implements Serializable {
             return erg.toString();
         }
         erg.append(".blockOrder(");
-        erg.append(evbeg2 + ",");
+        erg.append(evend1 + ",");
         switch (Scripting.getLang()) {
         case Ruby:
             erg.append("TermOrderByName::");
@@ -1684,37 +1656,61 @@ public final class TermOrder implements Serializable {
         default:
             erg.append("TermOrderByName.");
         }
-        switch (evord2) {
-        case LEX:
-            erg.append("LEX");
-            break;
-        case INVLEX:
-            erg.append("INVLEX");
-            break;
-        case GRLEX:
-            erg.append("GRLEX");
-            break;
-        case IGRLEX:
-            erg.append("IGRLEX");
-            break;
-        case REVLEX:
-            erg.append("REVLEX");
-            break;
-        case REVILEX:
-            erg.append("REVILEX");
-            break;
-        case REVTDEG:
-            erg.append("REVTDEG");
-            break;
-        case REVITDG:
-            erg.append("REVITDG");
-            break;
-        default:
-            erg.append("invalid(" + evord2 + ")");
-            break;
-        }
+        erg.append(toScriptOrder(evord2));
         erg.append(")");
         return erg.toString();
+    }
+
+
+    /**
+     * Script representation of TermOrder name.
+     */
+    public String toScriptOrder(int ev) {
+        switch(Scripting.getCAS()) {
+        case Math:
+            switch (ev) {
+            case LEX:
+                return "NegativeReverseLexicographic";
+            case INVLEX:
+                return "ReverseLexicographic";
+            case GRLEX:
+                return "NegativeDegreeReverseLexicographic";
+            case IGRLEX:
+                return "DegreeReverseLexicographic";
+            case REVLEX:
+                return "NegativeLexicographic";
+            case REVILEX:
+                return "Lexicographic";
+            case REVTDEG:
+                return "NegativeDegreeLexicographic";
+            case REVITDG:
+                return "DegreeLexicographic";
+            default:
+                return "invalid(" + ev + ")";
+            }
+        case JAS:
+        default:
+            switch (ev) {
+            case LEX:
+                return "LEX";
+            case INVLEX:
+                return "INVLEX";
+            case GRLEX:
+                return "GRLEX";
+            case IGRLEX:
+                return "IGRLEX";
+            case REVLEX:
+                return "REVLEX";
+            case REVILEX:
+                return "REVILEX";
+            case REVTDEG:
+                return "REVTDEG";
+            case REVITDG:
+                return "REVITDG";
+            default:
+                return "invalid(" + ev + ")";
+            }
+        }
     }
 
 
