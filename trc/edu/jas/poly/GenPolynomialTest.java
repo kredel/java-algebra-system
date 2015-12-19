@@ -388,6 +388,63 @@ public class GenPolynomialTest extends TestCase {
 
 
     /**
+     * Test univariate.
+     */
+    public void testUnivariate() {
+        BigInteger rf = new BigInteger();
+        // System.out.println("rf = " + rf);
+
+        // polynomials over integral numbers
+        GenPolynomialRing<BigInteger> pf = new GenPolynomialRing<BigInteger>(rf, rl);
+        //System.out.println("pf = " + pf);
+
+        GenPolynomial<BigInteger> a, b, c, d;
+
+        // x**1
+        a = pf.univariate(pf.nvar-1);
+        //System.out.println("a = " + a);
+        assertTrue("deg(a) = 1: ", a.degree() == 1);
+        assertEquals("xi == xi: ", pf.vars[0], a.toString());
+
+        b = pf.univariate(pf.vars[0]);
+        //System.out.println("b = " + b);
+        assertTrue("deg(b) = 1: ", b.degree() == 1);
+        assertEquals("xi == xi: ", pf.vars[0], b.toString());
+
+        c = pf.univariate(0);
+        //System.out.println("c = " + c);
+        assertTrue("deg(c) = 1: ", c.degree() == 1);
+        assertEquals("xi == xi: ", pf.vars[pf.nvar-1], c.toString());
+
+        d = pf.univariate(pf.vars[pf.nvar-1]);
+        //System.out.println("d = " + d);
+        assertTrue("deg(c) = 1: ", c.degree() == 1);
+        assertEquals("xi == xi: ", pf.vars[pf.nvar-1], d.toString());
+
+        // x**7
+        a = pf.univariate(pf.nvar-1, 7);
+        //System.out.println("a = " + a);
+        assertTrue("deg(a) = 7: ", a.degree() == 7);
+        assertEquals("xi == xi: ", pf.vars[0]+"^7", a.toString());
+
+        b = pf.univariate(pf.vars[0], 7);
+        //System.out.println("b = " + b);
+        assertTrue("deg(b) = 7: ", b.degree() == 7);
+        assertEquals("xi == xi: ", pf.vars[0]+"^7", b.toString());
+
+        c = pf.univariate(0, 7);
+        //System.out.println("c = " + c);
+        assertTrue("deg(c) = 7: ", c.degree() == 7);
+        assertEquals("xi == xi: ", pf.vars[pf.nvar-1]+"^7", c.toString());
+
+        d = pf.univariate(pf.vars[pf.nvar-1], 7);
+        //System.out.println("d = " + d);
+        assertTrue("deg(c) = 7: ", c.degree() == 7);
+        assertEquals("xi == xi: ", pf.vars[pf.nvar-1]+"^7", d.toString());
+    }
+
+
+    /**
      * Test iterators.
      */
     public void testIterators() {
