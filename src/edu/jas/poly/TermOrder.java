@@ -1688,6 +1688,48 @@ public final class TermOrder implements Serializable {
             default:
                 return "invalid(" + ev + ")";
             }
+        case Sage:
+            switch (ev) {
+            case LEX:
+                return "negrevlex";
+            case INVLEX:
+                return "invlex";
+            case GRLEX:
+                return "negdegrevlex";
+            case IGRLEX:
+                return "degrevlex";
+            case REVLEX:
+                return "neglex";
+            case REVILEX:
+                return "lex";
+            case REVTDEG:
+                return "negdeglex";
+            case REVITDG:
+                return "deglex";
+            default:
+                return "invalid(" + ev + ")";
+            }
+        case Singular:
+            switch (ev) {
+                //case LEX: // missing
+                //return "negrevlex";
+            case INVLEX:
+                return "rp";
+            case GRLEX:
+                return "ds";
+            case IGRLEX:
+                return "dp";
+            case REVLEX:
+                return "ls";
+            case REVILEX:
+                return "lp";
+            case REVTDEG:
+                return "Ds";
+            case REVITDG:
+                return "Dp";
+            default:
+                return "invalid(" + ev + ")";
+            }
         case JAS:
         default:
             switch (ev) {
@@ -1711,6 +1753,7 @@ public final class TermOrder implements Serializable {
                 return "invalid(" + ev + ")";
             }
         }
+        //return "invalid(" + ev + ")";
     }
 
 

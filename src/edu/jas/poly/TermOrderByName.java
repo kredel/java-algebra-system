@@ -92,52 +92,156 @@ public final class TermOrderByName {
     public final static TermOrder DEFAULT = new TermOrder(TermOrder.DEFAULT_EVORD);
 
 
+
+    // Math like term orders:
+
     /**
-     * TermOrder name Lexicographic of other CAS.
+     * TermOrder name Lexicographic of Math like CAS.
      */
     public final static TermOrder Lexicographic = REVILEX; 
 
 
     /**
-     * TermOrder name NegativeLexicographic of other CAS.
+     * TermOrder name NegativeLexicographic of Math like CAS.
      */
     public final static TermOrder NegativeLexicographic = REVLEX; 
 
 
     /**
-     * TermOrder name DegreeLexicographic of other CAS.
+     * TermOrder name DegreeLexicographic of Math like CAS.
      */
     public final static TermOrder DegreeLexicographic = REVITDG; 
 
 
     /**
-     * TermOrder name NegativeDegreeLexicographic of other CAS.
+     * TermOrder name NegativeDegreeLexicographic of Math like CAS.
      */
     public final static TermOrder NegativeDegreeLexicographic = REVTDEG; 
 
 
     /**
-     * TermOrder name ReverseLexicographic of other CAS.
+     * TermOrder name ReverseLexicographic of Math like CAS.
      */
     public final static TermOrder ReverseLexicographic = INVLEX; 
 
 
     /**
-     * TermOrder name DegreeReverseLexicographic of other CAS.
+     * TermOrder name DegreeReverseLexicographic of Math like CAS.
      */
     public final static TermOrder DegreeReverseLexicographic = IGRLEX; 
 
 
     /**
-     * TermOrder name NegativeReverseLexicographic of other CAS.
+     * TermOrder name NegativeReverseLexicographic of Math like CAS.
      */
     public final static TermOrder NegativeReverseLexicographic = LEX; 
 
 
     /**
-     * TermOrder name NegativeDegreeReverseLexicographic of other CAS.
+     * TermOrder name NegativeDegreeReverseLexicographic of Math like CAS.
      */
     public final static TermOrder NegativeDegreeReverseLexicographic = GRLEX; 
+
+
+
+    // Sage term orders:
+
+    /**
+     * TermOrder name lex of Sage.
+     */
+    public final static TermOrder lex = Lexicographic; // = REVILEX; 
+
+
+    /**
+     * TermOrder name degrevlex of Sage.
+     */
+    public final static TermOrder degrevlex = DegreeReverseLexicographic; // = IGRLEX; 
+
+
+    /**
+     * TermOrder name deglex of Sage.
+     */
+    public final static TermOrder deglex = DegreeLexicographic; // = REVITDG; 
+
+
+    /**
+     * TermOrder name invlex of Sage.
+     */
+    public final static TermOrder invlex = INVLEX; //ReverseLexicographic  
+
+
+    /**
+     * TermOrder name neglex of Sage.
+     */
+    public final static TermOrder neglex = NegativeLexicographic; // = REVLEX; 
+
+
+    /**
+     * TermOrder name negdegrevlex of Sage.
+     */
+    public final static TermOrder negdegrevlex = NegativeDegreeReverseLexicographic; // = GRLEX;
+
+
+    /**
+     * TermOrder name negdeglex of Sage.
+     */
+    public final static TermOrder negdeglex = NegativeDegreeLexicographic; // = REVTDEG; 
+
+
+    /**
+     * TermOrder name negrevlex of Sage.
+     */
+    public final static TermOrder negrevlex = NegativeReverseLexicographic; // = LEX; 
+
+
+
+
+    // Singular term orders:
+
+    /**
+     * TermOrder name lp of Singular.
+     */
+    public final static TermOrder lp = lex; // = REVILEX; 
+
+
+    /**
+     * TermOrder name dp of Singular.
+     */
+    public final static TermOrder dp = degrevlex; // = IGRLEX; 
+
+
+    /**
+     * TermOrder name Dp of Singular.
+     */
+    public final static TermOrder Dp = deglex; // = REVITDG; 
+
+
+    /**
+     * TermOrder name rp of Singular.
+     */
+    public final static TermOrder rp = invlex; // = INVLEX;  
+
+
+    /**
+     * TermOrder name ls of Singular.
+     */
+    public final static TermOrder ls = neglex; // = REVLEX; 
+
+
+    /**
+     * TermOrder name ds of Singular.
+     */
+    public final static TermOrder ds = negdegrevlex; // = GRLEX;
+
+
+    /**
+     * TermOrder name ds of Singular.
+     */
+    public final static TermOrder Ds = negdeglex; // = REVTDEG; 
+
+
+    // missing: public final static TermOrder negrevlex; // = LEX; 
+
 
 
     /**

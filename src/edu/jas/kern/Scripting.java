@@ -22,7 +22,7 @@ public class Scripting {
 
 
     public static enum CAS {
-        JAS, Math, Sage
+        JAS, Math, Sage, Singular
     };
 
 
