@@ -82,9 +82,10 @@ public class TermOrderByNameTest extends TestCase {
         assertEquals("x = y", x, y);
 
         t = TermOrderByName.Lexicographic;
-        x = "INVLEX";
-        boolean z = t.toString().startsWith(x);
-        assertTrue("INVLEX(.)", z);
+        x = "REVILEX";
+        y = t.toString();
+        boolean z = y.startsWith(x);
+        assertTrue("REVILEX(.): " + y, z);
 
         s = TermOrderByName.DegreeLexicographic;
         t = TermOrderByName.DegreeLexicographic;
