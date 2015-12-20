@@ -32,7 +32,7 @@ import java.io.Serializable;
  * @author Heinz Kredel
  */
 
-public final class TermOrderByName {
+public class TermOrderByName {
 
 
     //private static final Logger logger = Logger.getLogger(TermOrderByName.class);
@@ -195,7 +195,6 @@ public final class TermOrderByName {
 
 
 
-
     // Singular term orders:
 
     /**
@@ -235,7 +234,7 @@ public final class TermOrderByName {
 
 
     /**
-     * TermOrder name ds of Singular.
+     * TermOrder name Ds of Singular.
      */
     public final static TermOrder Ds = negdeglex; // = REVTDEG; 
 

@@ -1555,68 +1555,12 @@ public final class TermOrder implements Serializable {
         if (weight != null) {
             return erg.toString();
         }
-        switch (evord) {
-        case LEX:
-            erg.append("LEX");
-            break;
-        case INVLEX:
-            erg.append("INVLEX");
-            break;
-        case GRLEX:
-            erg.append("GRLEX");
-            break;
-        case IGRLEX:
-            erg.append("IGRLEX");
-            break;
-        case REVLEX:
-            erg.append("REVLEX");
-            break;
-        case REVILEX:
-            erg.append("REVILEX");
-            break;
-        case REVTDEG:
-            erg.append("REVTDEG");
-            break;
-        case REVITDG:
-            erg.append("REVITDG");
-            break;
-        default:
-            erg.append("invalid(" + evord + ")");
-            break;
-        }
+        erg.append(toScriptOrder(evord)); // JAS only
         if (evord2 <= 0) {
             return erg.toString();
         }
         erg.append("[" + evbeg1 + "," + evend1 + "]");
-        switch (evord2) {
-        case LEX:
-            erg.append("LEX");
-            break;
-        case INVLEX:
-            erg.append("INVLEX");
-            break;
-        case GRLEX:
-            erg.append("GRLEX");
-            break;
-        case IGRLEX:
-            erg.append("IGRLEX");
-            break;
-        case REVLEX:
-            erg.append("REVLEX");
-            break;
-        case REVILEX:
-            erg.append("REVILEX");
-            break;
-        case REVTDEG:
-            erg.append("REVTDEG");
-            break;
-        case REVITDG:
-            erg.append("REVITDG");
-            break;
-        default:
-            erg.append("invalid(" + evord2 + ")");
-            break;
-        }
+        erg.append(toScriptOrder(evord2)); // JAS only
         erg.append("[" + evbeg2 + "," + evend2 + "]");
         return erg.toString();
     }
@@ -1630,13 +1574,14 @@ public final class TermOrder implements Serializable {
         if (weight != null) {
             return toScript();
         }
+        erg.append("Order");
         switch (Scripting.getLang()) {
         case Ruby:
-            erg.append("TermOrderByName::");
+            erg.append("::");
             break;
         case Python:
         default:
-            erg.append("TermOrderByName.");
+            erg.append(".");
         }
         erg.append(toScriptOrder(evord));
         if (evord2 <= 0) {
@@ -1648,13 +1593,14 @@ public final class TermOrder implements Serializable {
         }
         erg.append(".blockOrder(");
         erg.append(evend1 + ",");
+        erg.append("Order");
         switch (Scripting.getLang()) {
         case Ruby:
-            erg.append("TermOrderByName::");
+            erg.append("::");
             break;
         case Python:
         default:
-            erg.append("TermOrderByName.");
+            erg.append(".");
         }
         erg.append(toScriptOrder(evord2));
         erg.append(")");
@@ -1663,7 +1609,7 @@ public final class TermOrder implements Serializable {
 
 
     /**
-     * Script representation of TermOrder name.
+     * Script and String representation of TermOrder name.
      */
     public String toScriptOrder(int ev) {
         switch(Scripting.getCAS()) {
