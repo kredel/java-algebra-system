@@ -1432,6 +1432,7 @@ java_import "edu.jas.poly.QLRSolvablePolynomial";
 java_import "edu.jas.poly.QLRSolvablePolynomialRing";
 java_import "edu.jas.poly.GenPolynomialTokenizer";
 java_import "edu.jas.poly.TermOrder";
+java_import "edu.jas.poly.TermOrderByName";
 java_import "edu.jas.poly.OrderedPolynomialList";
 java_import "edu.jas.poly.PolyUtil";
 java_import "edu.jas.poly.TermOrderOptimization";
@@ -1825,6 +1826,15 @@ end
 
 
 =begin rdoc
+Collection of JAS and other CAS term order names.
+
+Defines names for TermOrders.
+=end
+class Order < TermOrderByName
+end
+
+
+=begin rdoc
 Represents a JAS polynomial ring: GenPolynomialRing.
 
 Provides more convenient constructor. 
@@ -1833,8 +1843,8 @@ Then returns a Ring.
 class PolyRing < Ring
 
     # class instance variables != class variables
-    @lex = TermOrder.new(TermOrder::INVLEX)
-    @grad = TermOrder.new(TermOrder::IGRLEX)
+    @lex = Order::INVLEX
+    @grad = Order::IGRLEX
 
     class << self  # means add to class
        # the Java term orderings
@@ -2491,6 +2501,7 @@ SimIdeal constructor.
         else
            @list = rbarray2arraylist(list,rec=1);
         end
+        #@list = PolyUtil.monic(@list);
         @pset = OrderedPolynomialList.new(@ring.ring,@list);
         #@ideal = Ideal.new(@pset);
         @roots = nil;

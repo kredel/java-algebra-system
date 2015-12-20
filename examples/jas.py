@@ -3816,6 +3816,14 @@ class RingElem:
 #----------------
 
 
+class Order(TermOrderByName):
+    '''Collection of JAS and other CAS term order names.
+
+    Defines names for TermOrders.
+    '''
+    # empty
+
+
 class PolyRing(Ring):
     '''Represents a JAS polynomial ring: GenPolynomialRing.
 
@@ -3837,7 +3845,7 @@ class PolyRing(Ring):
 
     '''
 
-    def __init__(self,coeff,vars,order=TermOrderByName.IGRLEX):
+    def __init__(self,coeff,vars,order=Order.IGRLEX):
         '''Ring constructor.
 
         coeff = factory for coefficients,
@@ -3857,7 +3865,7 @@ class PolyRing(Ring):
         if isinstance(vars,PyString):
             names = GenPolynomialTokenizer.variableList(vars);
         nv = len(names);
-        to = TermOrderByName.IGRLEX;
+        to = Order.IGRLEX;
         if isinstance(order,TermOrder):
             to = order;
         if isinstance(order,PyList) or isinstance(order,PyTuple):
@@ -3872,9 +3880,9 @@ class PolyRing(Ring):
         '''
         return self.ring.toScript();
 
-    lex = TermOrderByName.INVLEX
+    lex = Order.INVLEX
 
-    grad = TermOrderByName.IGRLEX
+    grad = Order.IGRLEX
 
 
 class SolvPolyRing(SolvableRing):
@@ -3884,7 +3892,7 @@ class SolvPolyRing(SolvableRing):
     Then returns a Ring.
     '''
 
-    def __init__(self,coeff,vars,order=TermOrderByName.IGRLEX,rel=[]):
+    def __init__(self,coeff,vars,order=Order.IGRLEX,rel=[]):
         '''Ring constructor.
 
         coeff = factory for coefficients,
@@ -3907,7 +3915,7 @@ class SolvPolyRing(SolvableRing):
             names = GenPolynomialTokenizer.variableList(vars);
         nv = len(names);
         #to = PolyRing.lex;
-        to = TermOrderByName.IGRLEX;
+        to = Order.IGRLEX;
         if isinstance(order,TermOrder):
             to = order;
         L = [];
