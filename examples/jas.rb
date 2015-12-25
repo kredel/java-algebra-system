@@ -1829,7 +1829,7 @@ end
 Collection of JAS and other CAS term order names.
 
 Defines names for term orders.
-See <a href="../../api/edu/jas/poly/TermOrderByName.html" target="api">TermOrderByName</a>.
+See {TermOrderByName}[../../api/edu/jas/poly/TermOrderByName.html].
 =end
 class Order < TermOrderByName
 end
