@@ -3820,6 +3820,7 @@ class Order(TermOrderByName):
     '''Collection of JAS and other CAS term order names.
 
     Defines names for TermOrders.
+    See <a href="../api/edu/jas/poly/TermOrderByName.html" target="api">TermOrderByName</a>.
     '''
     # empty
 

@@ -1828,7 +1828,8 @@ end
 =begin rdoc
 Collection of JAS and other CAS term order names.
 
-Defines names for TermOrders.
+Defines names for term orders.
+See <a href="../../api/edu/jas/poly/TermOrderByName.html" target="api">TermOrderByName</a>.
 =end
 class Order < TermOrderByName
 end
@@ -1859,7 +1860,7 @@ coeff = factory for coefficients,
 vars = string with variable names,
 order = term order or weight matrix.
 =end
-    def initialize(coeff,vars,order=PolyRing.grad)
+    def initialize(coeff,vars,order=Order::IGRLEX)
         if coeff == nil
             raise ArgumentError, "No coefficient given."
         end
@@ -1878,7 +1879,7 @@ order = term order or weight matrix.
            names = GenPolynomialTokenizer.variableList(vars);
         end
         nv = names.size;
-        to = self.class.grad;
+        to = Order::IGRLEX; #self.class.grad;
         if order.is_a? TermOrder
             to = order;
         end
