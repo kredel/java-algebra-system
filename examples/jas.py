@@ -3820,7 +3820,7 @@ class Order(TermOrderByName):
     '''Collection of JAS and other CAS term order names.
 
     Defines names for TermOrders.
-    See U{TermOrderByName<../api/edu/jas/poly/TermOrderByName.html}.
+    See U{TermOrderByName<http://krum.rz.uni-mannheim.de/jas/doc/api/edu/jas/poly/TermOrderByName.html>}.
     '''
     # empty
 
