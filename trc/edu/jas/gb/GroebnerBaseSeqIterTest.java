@@ -25,7 +25,7 @@ import edu.jas.poly.PolynomialList;
 
 
 /**
- * Groebner base sequential tests with JUnit.
+ * Groebner base sequential iterative GB tests with JUnit.
  * @author Heinz Kredel.
  */
 
