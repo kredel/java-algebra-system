@@ -16,16 +16,16 @@ import org.apache.log4j.Logger;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.PolyUtil;
 import edu.jas.poly.OrderedPolynomialList;
+import edu.jas.poly.PolyUtil;
 import edu.jas.structure.RingElem;
 import edu.jas.util.Terminator;
 import edu.jas.util.ThreadPool;
 
 
 /**
- * Groebner Base parallel iterative algortihm. Implements a shared
- * memory parallel version of Groebner bases.
+ * Groebner Base parallel iterative algortihm. Implements a shared memory
+ * parallel version of Groebner bases.
  * @param <C> coefficient type
  * @author Heinz Kredel
  * 
@@ -37,6 +37,7 @@ public class GroebnerBaseParIter<C extends RingElem<C>> extends GroebnerBaseAbst
 
 
     private static final Logger logger = Logger.getLogger(GroebnerBaseParIter.class);
+
 
     private final boolean debug = logger.isDebugEnabled();
 

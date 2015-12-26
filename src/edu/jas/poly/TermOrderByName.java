@@ -5,7 +5,6 @@
 package edu.jas.poly;
 
 
-import java.io.Serializable;
 
 
 // import org.apache.log4j.Logger;
@@ -20,15 +19,14 @@ import java.io.Serializable;
  * "Some comments on term-ordering in Gr&ouml;bner basis computations"</a>. Not
  * all algorithms may work with all term orders since not all are well-founded,
  * so watch your step.
- *
- * <b>Note:</b>
- * Variables in printed JAS polynomial <b>(low, ..., medium, ..., high)</b>
- * Variables in other CAS polynomial <b>(high, ..., medium, ..., low)</b>
- * with <b>low</b> &lt; <b>medium</b> &lt; <b>high</b>.
- * Example: for variables x<sub>1</sub>, ..., x<sub>r</sub> it is assumed in JAS that 
- *             x<sub>1</sub> &lt; ...  &lt; x<sub>r</sub> in other CAS it means
- *             x<sub>1</sub> &gt; ...  &gt; x<sub>r</sub>.
- *
+ * 
+ * <b>Note:</b> Variables in printed JAS polynomial <b>(low, ..., medium, ...,
+ * high)</b> Variables in other CAS polynomial <b>(high, ..., medium, ...,
+ * low)</b> with <b>low</b> &lt; <b>medium</b> &lt; <b>high</b>. Example: for
+ * variables x<sub>1</sub>, ..., x<sub>r</sub> it is assumed in JAS that
+ * x<sub>1</sub> &lt; ... &lt; x<sub>r</sub> in other CAS it means x<sub>1</sub>
+ * &gt; ... &gt; x<sub>r</sub>.
+ * 
  * @author Heinz Kredel
  */
 
@@ -92,56 +90,54 @@ public class TermOrderByName {
     public final static TermOrder DEFAULT = new TermOrder(TermOrder.DEFAULT_EVORD);
 
 
-
     // Math like term orders:
 
     /**
      * TermOrder name Lexicographic of Math like CAS.
      */
-    public final static TermOrder Lexicographic = REVILEX; 
+    public final static TermOrder Lexicographic = REVILEX;
 
 
     /**
      * TermOrder name NegativeLexicographic of Math like CAS.
      */
-    public final static TermOrder NegativeLexicographic = REVLEX; 
+    public final static TermOrder NegativeLexicographic = REVLEX;
 
 
     /**
      * TermOrder name DegreeLexicographic of Math like CAS.
      */
-    public final static TermOrder DegreeLexicographic = REVITDG; 
+    public final static TermOrder DegreeLexicographic = REVITDG;
 
 
     /**
      * TermOrder name NegativeDegreeLexicographic of Math like CAS.
      */
-    public final static TermOrder NegativeDegreeLexicographic = REVTDEG; 
+    public final static TermOrder NegativeDegreeLexicographic = REVTDEG;
 
 
     /**
      * TermOrder name ReverseLexicographic of Math like CAS.
      */
-    public final static TermOrder ReverseLexicographic = INVLEX; 
+    public final static TermOrder ReverseLexicographic = INVLEX;
 
 
     /**
      * TermOrder name DegreeReverseLexicographic of Math like CAS.
      */
-    public final static TermOrder DegreeReverseLexicographic = IGRLEX; 
+    public final static TermOrder DegreeReverseLexicographic = IGRLEX;
 
 
     /**
      * TermOrder name NegativeReverseLexicographic of Math like CAS.
      */
-    public final static TermOrder NegativeReverseLexicographic = LEX; 
+    public final static TermOrder NegativeReverseLexicographic = LEX;
 
 
     /**
      * TermOrder name NegativeDegreeReverseLexicographic of Math like CAS.
      */
-    public final static TermOrder NegativeDegreeReverseLexicographic = GRLEX; 
-
+    public final static TermOrder NegativeDegreeReverseLexicographic = GRLEX;
 
 
     // Sage term orders:
@@ -194,7 +190,6 @@ public class TermOrderByName {
     public final static TermOrder negrevlex = NegativeReverseLexicographic; // = LEX; 
 
 
-
     // Singular term orders:
 
     /**
@@ -242,10 +237,9 @@ public class TermOrderByName {
     // missing: public final static TermOrder negrevlex; // = LEX; 
 
 
-
     /**
-     * Construct elimination block TermOrder.
-     * Variables {x<sub>1</sub>, ..., x<sub>s-1</sub>} &lt; {x<sub>s</sub>, ..., x<sub>r</sub>}
+     * Construct elimination block TermOrder. Variables {x<sub>1</sub>, ...,
+     * x<sub>s-1</sub>} &lt; {x<sub>s</sub>, ..., x<sub>r</sub>}
      * 
      * @param t1 term order for both blocks
      * @param s split index
@@ -257,8 +251,8 @@ public class TermOrderByName {
 
 
     /**
-     * Construct elimination block TermOrder.
-     * Variables {x<sub>1</sub>, ..., x<sub>s-1</sub>} &lt; {x<sub>s</sub>, ..., x<sub>r</sub>}
+     * Construct elimination block TermOrder. Variables {x<sub>1</sub>, ...,
+     * x<sub>s-1</sub>} &lt; {x<sub>s</sub>, ..., x<sub>r</sub>}
      * 
      * @param t1 term order for both blocks
      * @param e exponent vector of desired length, r = length(e)
@@ -271,9 +265,9 @@ public class TermOrderByName {
 
 
     /**
-     * Construct elimination block TermOrder.
-     * Variables {x<sub>1</sub>, ..., x<sub>s-1</sub>} &lt; {x<sub>s</sub>, ..., x<sub>r</sub>}     
-     *
+     * Construct elimination block TermOrder. Variables {x<sub>1</sub>, ...,
+     * x<sub>s-1</sub>} &lt; {x<sub>s</sub>, ..., x<sub>r</sub>}
+     * 
      * @param t1 term order for lower valiables
      * @param t2 term order for higher variables
      * @param s split index
@@ -285,9 +279,9 @@ public class TermOrderByName {
 
 
     /**
-     * Construct elimination block TermOrder.
-     * Variables {x<sub>1</sub>, ..., x<sub>s-1</sub>} &lt; {x<sub>s</sub>, ..., x<sub>r</sub>}     
-     *
+     * Construct elimination block TermOrder. Variables {x<sub>1</sub>, ...,
+     * x<sub>s-1</sub>} &lt; {x<sub>s</sub>, ..., x<sub>r</sub>}
+     * 
      * @param t1 term order for lower valiables
      * @param t2 term order for higher variables
      * @param e exponent vector of desired length, r = length(e)
@@ -301,7 +295,7 @@ public class TermOrderByName {
 
     /**
      * Construct weight TermOrder.
-     *
+     * 
      * @param v weight vector
      * @return constructed term order
      */
@@ -311,7 +305,7 @@ public class TermOrderByName {
 
 
     /**
-     *
+     * 
      * Construct weight TermOrder.
      * @param w weight matrix
      * @return constructed term order

@@ -25,10 +25,9 @@ import edu.jas.kern.Scripting;
  * "Some comments on term-ordering in Gr&ouml;bner basis computations"</a>.
  * <b>Note: </b> the naming is not quite easy to understand: in case of doubt
  * use the term orders with "I" in the name, like IGRLEX (the default) or
- * INVLEX. Not all algorithms may work with all term orders since not all 
- * are well-founded, so watch your step.
- * This class does not implement orders by linear forms over Q[t]. Objects
- * of this class are immutable.
+ * INVLEX. Not all algorithms may work with all term orders since not all are
+ * well-founded, so watch your step. This class does not implement orders by
+ * linear forms over Q[t]. Objects of this class are immutable.
  * 
  * @author Heinz Kredel
  */
@@ -66,7 +65,7 @@ public final class TermOrder implements Serializable {
 
 
     public static final int REVITDG = 8;
- 
+
 
     public final static int DEFAULT_EVORD = IGRLEX;
 
@@ -1462,7 +1461,7 @@ public final class TermOrder implements Serializable {
                     if (i > 0) {
                         erg.append(",");
                     }
-                    erg.append(String.valueOf( wj[wj.length - 1 - i] ) );
+                    erg.append(String.valueOf(wj[wj.length - 1 - i]));
                 }
                 erg.append(")");
             }
@@ -1491,7 +1490,7 @@ public final class TermOrder implements Serializable {
                     if (i > 0) {
                         erg.append(",");
                     }
-                    erg.append(String.valueOf( wj[wj.length - 1 - i] ) );
+                    erg.append(String.valueOf(wj[wj.length - 1 - i]));
                 }
                 erg.append("]");
             }
@@ -1514,7 +1513,7 @@ public final class TermOrder implements Serializable {
             if (evend1 == evend2) {
                 //erg.append(" )");
                 return erg.toString();
-            } 
+            }
             erg.append("[" + evbeg1 + "," + evend1 + "]");
             erg.append("[" + evbeg2 + "," + evend2 + "]");
             //erg.append(" )");
@@ -1612,7 +1611,7 @@ public final class TermOrder implements Serializable {
      * Script and String representation of TermOrder name.
      */
     public String toScriptOrder(int ev) {
-        switch(Scripting.getCAS()) {
+        switch (Scripting.getCAS()) {
         case Math:
             switch (ev) {
             case LEX:
@@ -1657,8 +1656,8 @@ public final class TermOrder implements Serializable {
             }
         case Singular:
             switch (ev) {
-                //case LEX: // missing
-                //return "negrevlex";
+            //case LEX: // missing
+            //return "negrevlex";
             case INVLEX:
                 return "rp";
             case GRLEX:
@@ -1971,12 +1970,12 @@ public final class TermOrder implements Serializable {
             logger.warn("null weight matrix ignored");
             return new TermOrder();
         }
-        long[][] wr = new long[ w.length ][];
+        long[][] wr = new long[w.length][];
         for (int j = 0; j < w.length; j++) {
             long[] wj = w[j];
-            long[] wrj = new long[ wj.length ];
+            long[] wrj = new long[wj.length];
             for (int i = 0; i < wj.length; i++) {
-                 wrj[i] = wj[ wj.length - 1 - i ];
+                wrj[i] = wj[wj.length - 1 - i];
             }
             wr[j] = wrj;
         }
