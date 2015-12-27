@@ -2022,6 +2022,9 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         boolean iOK = false;
         boolean jOK = false;
         for (GenPolynomial<C> p : getList()) {
+            if (p.isZERO()) {
+                continue;
+            }
             ExpVector e = p.leadingExpVector();
             int[] dov = e.dependencyOnVariables();
             //System.out.println("dov = " + Arrays.toString(dov));
@@ -2059,6 +2062,9 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         int i = -1;
         int j = -1;
         for (GenPolynomial<C> p : getList()) {
+            if (p.isZERO()) {
+                continue;
+            }
             ExpVector e = p.leadingExpVector();
             int[] dov = e.dependencyOnVariables();
             //System.out.println("dov_head = " + Arrays.toString(dov));
@@ -2073,6 +2079,9 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             }
             int n = dov[0];
             GenPolynomial<C> q = p.reductum();
+            if (q.isZERO()) {
+                continue;
+            }
             e = q.degreeVector();
             dov = e.dependencyOnVariables();
             //System.out.println("dov_red  = " + Arrays.toString(dov));
@@ -2128,6 +2137,9 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         int j = -1;
         // search multiple univariate polynomials with degree &gt;= 2
         for (GenPolynomial<C> p : getList()) {
+            if (p.isZERO()) {
+                continue;
+            }
             ExpVector e = p.degreeVector();
             int[] dov = e.dependencyOnVariables();
             long t = e.totalDeg(); // lt(p) would be enough
@@ -2154,6 +2166,9 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         if (i < 0 || j < 0) {
             // search polynomials with univariate head term and degree &gt;= 2
             for (GenPolynomial<C> p : getList()) {
+                if (p.isZERO()) {
+                    continue;
+                }
                 ExpVector e = p.leadingExpVector();
                 long t = e.totalDeg();
                 if (t >= 2) {
