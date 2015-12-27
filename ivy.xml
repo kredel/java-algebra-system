@@ -13,7 +13,7 @@
     <dependency org="log4j" name="log4j" rev="1.2.17" conf="runtime-&gt;default">
       <artifact name="log4j" type="jar" ext="jar"/>
     </dependency>
-    <dependency org="junit" name="junit" rev="3.8" conf="runtime-&gt;default">
+    <dependency org="junit" name="junit" rev="4.12" conf="runtime-&gt;default">
       <artifact name="junit" type="jar" ext="jar"/>
     </dependency>
   </dependencies>
