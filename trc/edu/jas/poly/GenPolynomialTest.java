@@ -60,7 +60,7 @@ public class GenPolynomialTest extends TestCase {
     int rl = 6;
 
 
-    int kl = 10;
+    int kl = 5;
 
 
     int ll = 7;
@@ -384,6 +384,56 @@ public class GenPolynomialTest extends TestCase {
         GenPolynomial<BigRational> ts = th.deHomogenize(pf);
         //System.out.println("ts = " + ts);
         assertEquals("ts = t ", ts, t);
+    }
+
+
+    /**
+     * Test weight homogeneous.
+     */
+    public void testWeightHomogeneous() {
+        // rational numbers
+        BigRational rf = new BigRational();
+        // System.out.println("rf = " + rf);
+
+        // weight term order
+        long[] weight = new long[] { 2, 3, 4, 5 }; 
+        TermOrder to = TermOrderByName.weightOrder(weight);
+        // System.out.println("to = " + to);
+
+        // polynomials over rational numbers
+        GenPolynomialRing<BigRational> pf = new GenPolynomialRing<BigRational>(rf, 4, to);
+        // System.out.println("pf = " + pf.toScript());
+
+        // test 1
+        GenPolynomial<BigRational> p = pf.getONE();
+        // System.out.println("p = " + p);
+        assertTrue("1 is weight homogeneous " + p, p.isWeightHomogeneous());
+
+        // test 0
+        p = pf.getZERO();
+        // System.out.println("p = " + p);
+        assertTrue("0 is weight homogeneous " + p, p.isWeightHomogeneous());
+
+        // test random
+        p = pf.random(kl, 3 * ll, el, q);
+        // System.out.println("p = " + p);
+        assertFalse("rnd is weight homogeneous " + p, p.isWeightHomogeneous());
+
+        GenPolynomial<BigRational> pl = p.leadingWeightPolynomial();
+        // System.out.println("pl = " + pl);
+        assertTrue("lw(rnd) is weight homogeneous " + pl, pl.isWeightHomogeneous());
+
+        GenPolynomial<BigRational> r = pf.random(kl, 3 * ll, el, q);
+        // System.out.println("r = " + r);
+        assertFalse("rnd is weight homogeneous " + r, r.isWeightHomogeneous());
+
+        GenPolynomial<BigRational> rl = r.leadingWeightPolynomial();
+        // System.out.println("rl = " + rl);
+        assertTrue("lw(rnd) is weight homogeneous " + rl, rl.isWeightHomogeneous());
+
+        GenPolynomial<BigRational> t = pl.multiply(rl);
+        // System.out.println("t = " + t);
+        assertTrue("lw(rnd)*lw(rnd) is weight homogeneous " + t, t.isWeightHomogeneous());
     }
 
 

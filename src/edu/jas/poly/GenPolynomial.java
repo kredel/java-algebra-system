@@ -695,7 +695,7 @@ Iterable<Monomial<C>> {
      */
     public long degree(int i) {
         if (val.size() == 0) {
-            return 0; // 0 or -1 ?;
+            return -1L; // 0 or -1 ?;
         }
         int j;
         if (i >= 0) {
@@ -720,7 +720,7 @@ Iterable<Monomial<C>> {
      */
     public long degree() {
         if (val.size() == 0) {
-            return 0; // 0 or -1 ?;
+            return -1L; // 0 or -1 ?;
         }
         long deg = 0;
         for (ExpVector e : val.keySet()) {
@@ -739,7 +739,7 @@ Iterable<Monomial<C>> {
      */
     public long totalDegree() {
         if (val.size() == 0) {
-            return 0; // 0 or -1 ?;
+            return -1L; // 0 or -1 ?;
         }
         long deg = 0;
         for (ExpVector e : val.keySet()) {
@@ -749,6 +749,80 @@ Iterable<Monomial<C>> {
             }
         }
         return deg;
+    }
+
+
+    /**
+     * Weight degree.
+     * @return weight degree in all variables.
+     */
+    public long weightDegree() {
+        long[][] w = ring.tord.getWeight();
+        if (w == null || w.length == 0) {
+            return totalDegree(); // assume weight 1 
+        }
+        if (val.size() == 0) {
+            return -1L; // 0 or -1 ?;
+        }
+        long deg = 0;
+        for (ExpVector e : val.keySet()) {
+            long d = e.weightDeg(w);
+            if (d > deg) {
+                deg = d;
+            }
+        }
+        return deg;
+    }
+
+
+    /**
+     * Leading weight polynomial.
+     * @return polynomial with terms of maximal weight degree.
+     */
+    public GenPolynomial<C> leadingWeightPolynomial() {
+        if (val.size() == 0) {
+            return ring.getZERO();
+        }
+        long[][] w = ring.tord.getWeight();
+        long maxw;
+        if (w == null || w.length == 0) {
+            maxw = totalDegree(); // assume weights = 1
+        } else {
+            maxw = weightDegree();
+        }
+        GenPolynomial<C> wp = new GenPolynomial<C>(ring);
+        for (Map.Entry<ExpVector,C> m : val.entrySet()) {
+            ExpVector e = m.getKey();
+            long d = e.weightDeg(w);
+            if (d >= maxw) {
+                wp.val.put(e, m.getValue());
+            }
+        }
+        return wp;
+    }
+
+
+    /**
+     * Is GenPolynomial&lt;C&gt; homogeneous with respect to a weight.
+     * @return true, if this is weight homogeneous, else false.
+     */
+    public boolean isWeightHomogeneous() {
+        if (val.size() <= 1) {
+            return true;
+        }
+        long[][] w = ring.tord.getWeight();
+        if (w == null || w.length == 0) {
+            return isHomogeneous(); // assume weights = 1
+        }
+        long deg = -1;
+        for (ExpVector e : val.keySet()) {
+            if (deg < 0) {
+                deg = e.weightDeg(w);
+            } else if (deg != e.weightDeg(w)) {
+                return false;
+            }
+        }
+        return true;
     }
 
 
