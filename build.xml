@@ -25,9 +25,10 @@
   <property name="libs"      value="${basedir}/../lib" />
   <!--property name="log4j"     value="${libs}/log4j.jar" /-->
   <!--property name="log4j"     value="${libs}/mylog.jar" /-->
-  <!--property name="junit"     value="${libs}/junit.jar" /-->
+  <property name="junit"     value="${libs}/junit-4.12.jar" />
+  <property name="ham"       value="${libs}/hamcrest-core-1.3.jar" />
   <property name="log4j"     value="${libs}/log4j-1.2.17.jar" />
-  <property name="junit"     value="${libs}/junit-3.8.jar" />
+  <!--property name="junit"     value="${libs}/junit-3.8.jar" /-->
   <property name="jomp"      value="${libs}/jomp1.0b.jar" />
   <property name="jython"    value="${libs}/jython.jar" />
   <property name="meditor"   value="${libs}/meditor.jar" />
@@ -38,9 +39,9 @@
   <property name="l4j.exact" value="true" />
 
   <!--property name="cp"       value="${log4j}:${junit}:${tnj}:." /-->
-  <property name="cp"       value="${log4j}:${junit}:." />
+  <property name="cp"       value="${log4j}:${junit}:${ham}:." />
   <!--property name="doccp"    value="${log4j}:${junit}:${tnj}" /-->
-  <property name="doccp"    value="${log4j}:${junit}" />
+  <property name="doccp"    value="${log4j}:${junit}:${ham}" />
   <property name="version"  value="0.1" />
 
 <!--
@@ -226,6 +227,7 @@
   <junit printsummary="yes" 
          fork="yes" 
          showoutput="yes"
+         timeout="20000"
          haltonfailure="no" >
      <jvmarg value="-server"/>
      <!--
