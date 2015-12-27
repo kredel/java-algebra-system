@@ -18,7 +18,8 @@ JDK=/usr/java/latest/bin
 #JASPATH=$(HOME)/jas
 SVNREPO=/home/SUBVERSION
 LIBPATH=$(HOME)/java/lib
-JUNITPATH=$(LIBPATH)/junit.jar
+JUNITPATH=$(LIBPATH)/junit-4.12.jar
+HAMPATH=$(LIBPATH)/hamcrest-core-1.3.jar
 LOG4JPATH=$(LIBPATH)/log4j.jar
 #LOG4JPATH=$(LIBPATH)/mylog.jar
 JOMPPATH=$(LIBPATH)/jomp1.0b.jar
@@ -75,7 +76,7 @@ DOCOPTS=-public -protected -package -author -version
 
 #MYCLASSPATH = .:$(DEFS):$(JUNITPATH):$(JOMPPATH)
 #MYCLASSPATH = $(LOG4JPATH):.:$(DEFS):$(JUNITPATH):$(JOMPPATH):$(PYPATH)
-MYCLASSPATH = $(LOG4JPATH):.:$(JUNITPATH):$(JOMPPATH):$(PYPATH)
+MYCLASSPATH = $(LOG4JPATH):.:$(JUNITPATH):$(HAMPATH):$(JOMPPATH):$(PYPATH)
 #:$(TNJPATH)
 
 #JAVA_MEM=-Xms1500M -Xmx2900M
@@ -290,7 +291,7 @@ FILES=$(wildcard src/edu/jas/structure/*.java src/edu/jas/arith/*.java src/edu/j
 
 TESTFILES=$(wildcard trc/edu/jas/structure/*.java trc/edu/jas/arith/*.java trc/edu/jas/poly/*.java trc/edu/jas/ps/*.java trc/edu/jas/gb/*.java trc/edu/jas/application/*.java trc/edu/jas/vector/*.java trc/edu/jas/gbmod/*.java trc/edu/jas/gbufd/*.java trc/edu/jas/util/*.java trc/edu/jas/ufd/*.java trc/edu/jas/fd/*.java trc/edu/jas/kern/*.java trc/edu/jas/root/*.java trc/edu/jas/integrate/*.java)
 
-LIBS=$(JUNITPATH) $(LOG4JPATH) $(JOMPPATH) $(TNJPATH)
+LIBS=$(JUNITPATH) $(HAMPATH) $(LOG4JPATH) $(JOMPPATH) $(TNJPATH)
 
 CLASSES=edu/jas/structure/ edu/jas/arith/ edu/jas/poly/ edu/jas/ps/ edu/jas/gb/ edu/jas/gbufd edu/jas/application/ edu/jas/vector/ edu/jas/gbmod/ edu/jas/util/ edu/jas/ufd/ edu/jas/fd/ edu/jas/kern/ edu/jas/root/ edu/jas/integrate/
 
@@ -306,7 +307,7 @@ doc: $(FILES) $(TESTFILES)
 	$(DOC) $(DOCOPTS) -d doc/api $(FILES) $(TESTFILES)
 
 epydoc: examples/jas.py
-	epydoc -o doc/jython -n "Python to JAS" -u ../../index.html examples/jas.py
+	epydoc -o doc/jython -n "Python to JAS" -u ../../index.html `find examples -name "*.py"|grep -v versuch`
 
 rdoc: examples/jas.rb
 	jrdoc -o doc/jruby -U -N -t "Ruby to JAS" examples/jas.rb
@@ -473,7 +474,7 @@ git-export:
 
 git-deploy:
 	$(RSYNC) -e 'ssh -p 2222' --delete-after ~/jas-versions/jas-git/jas.git/ krum:htdocs/jas.git
-	cd ~/jas-versions/jas-git/jas; git push -v $(DRY) google >> ~/jas-versions/$(VERSION)/git_push.out
+	#cd ~/jas-versions/jas-git/jas; git push -v $(DRY) google >> ~/jas-versions/$(VERSION)/git_push.out
 	cd ~/jas-versions/jas-git/jas; git push -v $(DRY) github >> ~/jas-versions/$(VERSION)/git_push.out
 
 jas-bin.jar:
