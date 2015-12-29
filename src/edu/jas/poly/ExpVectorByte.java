@@ -160,7 +160,7 @@ public final class ExpVectorByte extends ExpVector
      * @return val as long.
      */
     @Override
-    /*package*/long[] getVal() {
+    public long[] getVal() {
         long v[] = new long[val.length];
         for (int i = 0; i < val.length; i++) {
             v[i] = val[i];

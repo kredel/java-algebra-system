@@ -122,8 +122,11 @@ public final class ExpVectorLong extends ExpVector
      * @return val.
      */
     @Override
-    /*package*/long[] getVal() {
-        return val;
+    public long[] getVal() {
+        long[] w = new long[val.length];
+        System.arraycopy(val, 0, w, 0, val.length);
+        return w;
+        //return val;
     }
 
 

@@ -202,7 +202,7 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
      * Get the exponent vector.
      * @return val.
      */
-    /*package*/abstract long[] getVal();
+    public abstract long[] getVal();
 
 
     /**
