@@ -10,6 +10,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.List;
+import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
@@ -601,8 +603,9 @@ Iterable<Monomial<C>> {
      * @return first map entry.
      */
     public Map.Entry<ExpVector, C> leadingMonomial() {
-        if (val.isEmpty())
+        if (val.isEmpty()) {
             return null;
+        }
         Iterator<Map.Entry<ExpVector, C>> ai = val.entrySet().iterator();
         return ai.next();
     }
@@ -831,14 +834,36 @@ Iterable<Monomial<C>> {
      * @return maximal degree vector of all variables.
      */
     public ExpVector degreeVector() {
-        ExpVector deg = ring.evzero;
         if (val.isEmpty()) {
             return null; //deg;
         }
+        ExpVector deg = ring.evzero;
         for (ExpVector e : val.keySet()) {
             deg = deg.lcm(e);
         }
         return deg;
+    }
+
+
+    /**
+     * Delta of exponent vectors.
+     * @return list of u-v, where u = lt() and v != u in this.
+     */
+    public List<ExpVector> deltaExpVectors() {
+        List<ExpVector> de = new ArrayList<ExpVector>(val.size());
+        if (val.isEmpty()) {
+            return de; 
+        }
+        ExpVector u = null;
+        for (ExpVector e : val.keySet()) {
+            if ( u == null ) {
+                u = e;
+            } else {
+                ExpVector v = u.subtract(e);
+                de.add(v);
+            }
+        }
+        return de;
     }
 
 

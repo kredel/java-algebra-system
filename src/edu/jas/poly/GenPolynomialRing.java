@@ -679,6 +679,23 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
 
 
     /**
+     * Copy polynomial list.
+     * @param L polynomial list
+     * @return a copy of L in this ring.
+     */
+    public List<GenPolynomial<C>> copy(List<GenPolynomial<C>> L) {
+        if (L == null) {
+            return L;
+        }
+        List<GenPolynomial<C>> R = new ArrayList<GenPolynomial<C>>(L.size());
+        for ( GenPolynomial<C> a : L ) {
+	    R.add( copy(a) );
+        }
+        return R;
+    }
+
+
+    /**
      * Parse a polynomial with the use of GenPolynomialTokenizer.
      * @param s String.
      * @return GenPolynomial from s.
