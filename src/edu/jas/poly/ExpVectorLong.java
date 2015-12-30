@@ -33,7 +33,7 @@ public final class ExpVectorLong extends ExpVector
      * @param n length of exponent vector.
      */
     public ExpVectorLong(int n) {
-        this(new long[n]);
+        this(new long[n], true);
     }
 
 
@@ -44,21 +44,36 @@ public final class ExpVectorLong extends ExpVector
      * @param e exponent to be set.
      */
     public ExpVectorLong(int n, int i, long e) {
-        this(new long[n]);
+        this(new long[n], true);
         val[i] = e;
     }
 
 
     /**
      * Constructor for ExpVector. Sets val.
-     * @param v internal representation array.
+     * @param v representation array.
      */
     public ExpVectorLong(long[] v) {
+        this(v, false);
+    }
+
+
+    /**
+     * Internal constructor for ExpVector. Sets val.
+     * @param v internal representation array.
+     * @param alloc, true if internal representation array is newly
+     * allocated, else false.
+     */
+    protected ExpVectorLong(long[] v, boolean alloc) {
         super();
         if (v == null) {
             throw new IllegalArgumentException("null val not allowed");
         }
-        val = Arrays.copyOf(v, v.length); // > Java-5
+        if (alloc) {
+            val = v;
+        } else {
+            val = Arrays.copyOf(v, v.length); // > Java-5
+        }
     }
 
 
@@ -68,7 +83,18 @@ public final class ExpVectorLong extends ExpVector
      * @param s String representation.
      */
     public ExpVectorLong(String s) throws NumberFormatException {
-        super();
+        this(parse(s).val, true);
+    }
+
+
+    /**
+     * parser for ExpVector. Converts a String representation to an
+     * ExpVector. Accepted format = (1,2,3,4,5,6,7).
+     * @param s String representation.
+     * @return paresed ExpVector
+     */
+    public static ExpVectorLong parse(String s) throws NumberFormatException {
+        long[] v = null;
         // first format = (1,2,3,4,5,6,7)
         List<Long> exps = new ArrayList<Long>();
         s = s.trim();
@@ -91,17 +117,12 @@ public final class ExpVectorLong extends ExpVector
                 exps.add(Long.valueOf(a));
             }
             int length = exps.size();
-            val = new long[length];
+            v = new long[length];
             for (int j = 0; j < length; j++) {
-                val[j] = exps.get(j).longValue();
+                v[j] = exps.get(j).longValue();
             }
-        } else {
-            // not implemented
-            val = null;
-            // length = -1;
-            //Vector names = new Vector();
-            //vars = s;
         }
+        return new ExpVectorLong(v,true);
     }
 
 
@@ -113,7 +134,7 @@ public final class ExpVectorLong extends ExpVector
     public ExpVectorLong copy() {
         long[] w = new long[val.length];
         System.arraycopy(val, 0, w, 0, val.length);
-        return new ExpVectorLong(w);
+        return new ExpVectorLong(w, true);
     }
 
 
@@ -182,7 +203,7 @@ public final class ExpVectorLong extends ExpVector
             throw new IllegalArgumentException("i " + i + " <= j " + j + " invalid");
         }
         w[j] = e;
-        return new ExpVectorLong(w);
+        return new ExpVectorLong(w, true);
     }
 
 
@@ -202,7 +223,7 @@ public final class ExpVectorLong extends ExpVector
             throw new IllegalArgumentException("i " + i + " <= j " + j + " invalid");
         }
         w[val.length + j] = e;
-        return new ExpVectorLong(w);
+        return new ExpVectorLong(w, true);
     }
 
 
@@ -220,7 +241,7 @@ public final class ExpVectorLong extends ExpVector
         }
         long[] w = new long[len];
         System.arraycopy(val, i, w, 0, len);
-        return new ExpVectorLong(w);
+        return new ExpVectorLong(w, true);
     }
 
 
@@ -234,7 +255,7 @@ public final class ExpVectorLong extends ExpVector
         for (int i = 0; i < val.length; i++) {
             w[i] = val[val.length - 1 - i];
         }
-        return new ExpVectorLong(w);
+        return new ExpVectorLong(w, true);
     }
 
 
@@ -260,7 +281,7 @@ public final class ExpVectorLong extends ExpVector
         }
         //System.out.println("val = " + Arrays.toString(val));
         //System.out.println("w   = " + Arrays.toString(w));
-        return new ExpVectorLong(w);
+        return new ExpVectorLong(w, true);
     }
 
 
@@ -282,7 +303,7 @@ public final class ExpVectorLong extends ExpVector
         for (int i = j; i < val.length; i++) {
             w[i] = val[i];
         }
-        return new ExpVectorLong(w);
+        return new ExpVectorLong(w, true);
     }
 
 
@@ -303,7 +324,7 @@ public final class ExpVectorLong extends ExpVector
         long[] w = new long[val.length + Vl.val.length];
         System.arraycopy(val, 0, w, 0, val.length);
         System.arraycopy(Vl.val, 0, w, val.length, Vl.val.length);
-        return new ExpVectorLong(w);
+        return new ExpVectorLong(w, true);
     }
 
 
@@ -319,7 +340,7 @@ public final class ExpVectorLong extends ExpVector
         for (Integer i : P) {
             w[j++] = val[i];
         }
-        return new ExpVectorLong(w);
+        return new ExpVectorLong(w, true);
     }
 
 
@@ -374,8 +395,7 @@ public final class ExpVectorLong extends ExpVector
                 w[i] = -u[i];
             }
         }
-        return new ExpVectorLong(w);
-        //return EVABS(this);
+        return new ExpVectorLong(w, true);
     }
 
 
@@ -390,8 +410,7 @@ public final class ExpVectorLong extends ExpVector
         for (int i = 0; i < u.length; i++) {
             w[i] = -u[i];
         }
-        return new ExpVectorLong(w);
-        // return EVNEG(this);
+        return new ExpVectorLong(w, true);
     }
 
 
@@ -408,8 +427,7 @@ public final class ExpVectorLong extends ExpVector
         for (int i = 0; i < u.length; i++) {
             w[i] = u[i] + v[i];
         }
-        return new ExpVectorLong(w);
-        // return EVSUM(this, V);
+        return new ExpVectorLong(w, true);
     }
 
 
@@ -426,8 +444,7 @@ public final class ExpVectorLong extends ExpVector
         for (int i = 0; i < u.length; i++) {
             w[i] = u[i] - v[i];
         }
-        return new ExpVectorLong(w);
-        //return EVDIF(this, V);
+        return new ExpVectorLong(w, true);
     }
 
 
@@ -443,7 +460,6 @@ public final class ExpVectorLong extends ExpVector
         //long e = 
         V.setVal(i, d);
         return V;
-        //return EVSU(this, i, d);
     }
 
 
@@ -465,7 +481,6 @@ public final class ExpVectorLong extends ExpVector
             }
         }
         return t;
-        //return EVSIGN(this);
     }
 
 
@@ -481,7 +496,6 @@ public final class ExpVectorLong extends ExpVector
             t += u[i];
         }
         return t;
-        //return EVTDEG(this);
     }
 
 
@@ -499,7 +513,6 @@ public final class ExpVectorLong extends ExpVector
             }
         }
         return t;
-        //return EVMDEG(this);
     }
 
 
@@ -522,7 +535,6 @@ public final class ExpVectorLong extends ExpVector
             }
         }
         return t;
-        //return EVWDEG( w, this );
     }
 
 
@@ -539,8 +551,7 @@ public final class ExpVectorLong extends ExpVector
         for (int i = 0; i < u.length; i++) {
             w[i] = (u[i] >= v[i] ? u[i] : v[i]);
         }
-        return new ExpVectorLong(w);
-        //return EVLCM(this, V);
+        return new ExpVectorLong(w, true);
     }
 
 
@@ -557,8 +568,7 @@ public final class ExpVectorLong extends ExpVector
         for (int i = 0; i < u.length; i++) {
             w[i] = (u[i] <= v[i] ? u[i] : v[i]);
         }
-        return new ExpVectorLong(w);
-        //return EVGCD(this, V);
+        return new ExpVectorLong(w, true);
     }
 
 
@@ -600,14 +610,12 @@ public final class ExpVectorLong extends ExpVector
     public boolean multipleOf(ExpVector V) {
         long[] u = val;
         long[] v = ((ExpVectorLong) V).val;
-        boolean t = true;
         for (int i = 0; i < u.length; i++) {
             if (u[i] < v[i]) {
                 return false;
             }
         }
-        return t;
-        //return EVMT(this, V);
+        return true;
     }
 
 
@@ -639,7 +647,6 @@ public final class ExpVectorLong extends ExpVector
                 return -1;
         }
         return t;
-        //return EVILCP(this, V);
     }
 
 
@@ -668,7 +675,6 @@ public final class ExpVectorLong extends ExpVector
                 return -1;
         }
         return t;
-        //return EVILCP(this, V, begin, end);
     }
 
 
@@ -710,7 +716,6 @@ public final class ExpVectorLong extends ExpVector
             }
         }
         return t;
-        //return EVIGLC(this, V);
     }
 
 
@@ -760,7 +765,6 @@ public final class ExpVectorLong extends ExpVector
             }
         }
         return t;
-        //return EVIGLC(this, V, begin, end);
     }
 
 
@@ -781,7 +785,6 @@ public final class ExpVectorLong extends ExpVector
                 return -1;
         }
         return t;
-        //return EVRILCP(this, V);
     }
 
 
@@ -810,7 +813,6 @@ public final class ExpVectorLong extends ExpVector
                 return -1;
         }
         return t;
-        //return EVRILCP(this, V, begin, end);
     }
 
 
@@ -852,7 +854,6 @@ public final class ExpVectorLong extends ExpVector
             }
         }
         return t;
-        //return EVRIGLC(this, V);
     }
 
 
@@ -902,7 +903,6 @@ public final class ExpVectorLong extends ExpVector
             }
         }
         return t;
-        //return EVRIGLC(this, V, begin, end);
     }
 
 
@@ -946,7 +946,6 @@ public final class ExpVectorLong extends ExpVector
             }
         }
         return t;
-        //return EVIWLC(w, this, V);
     }
 
 
@@ -998,7 +997,6 @@ public final class ExpVectorLong extends ExpVector
             }
         }
         return t;
-        //return EVIWLC(w, this, V, begin, end);
     }
 
 }
