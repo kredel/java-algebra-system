@@ -61,7 +61,7 @@ public final class ExpVectorLong extends ExpVector
     /**
      * Internal constructor for ExpVector. Sets val.
      * @param v internal representation array.
-     * @param alloc, true if internal representation array is newly
+     * @param alloc true if internal representation array is newly
      * allocated, else false.
      */
     protected ExpVectorLong(long[] v, boolean alloc) {
