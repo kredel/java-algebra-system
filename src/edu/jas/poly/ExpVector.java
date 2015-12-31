@@ -894,6 +894,13 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
 
 
     /**
+     * ExpVector dependent variables.
+     * @return number of indices where val has positive exponents.
+     */
+    public abstract int dependentVariables();
+
+
+    /**
      * ExpVector dependency on variables.
      * @return array of indices where val has positive exponents.
      */

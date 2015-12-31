@@ -611,18 +611,28 @@ public final class ExpVectorByte extends ExpVector
 
 
     /**
+     * ExpVector dependent variables.
+     * @return number of indices where val has positive exponents.
+     */
+    public int dependentVariables() {
+        int l = 0;
+        for (int i = 0; i < val.length; i++) {
+            if (val[i] > 0) {
+                l++;
+            }
+        }
+        return l;
+    }
+
+
+    /**
      * ExpVector dependency on variables.
      * @return array of indices where val has positive exponents.
      */
     @Override
     public int[] dependencyOnVariables() {
         byte[] u = val;
-        int l = 0;
-        for (int i = 0; i < u.length; i++) {
-            if (u[i] > 0) {
-                l++;
-            }
-        }
+        int l = dependentVariables();
         int[] dep = new int[l];
         if (l == 0) {
             return dep;
