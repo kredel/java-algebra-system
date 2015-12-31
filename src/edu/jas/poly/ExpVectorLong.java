@@ -1007,7 +1007,7 @@ public final class ExpVectorLong extends ExpVector
 	 * @param n 
 	 *            length of exponent vector.
 	 */
-	public final ExpVectorLong valueOf(int n) {
+	public static ExpVectorLong valueOf(int n) {
 		return new ExpVectorLong(n);
 	}
 }
