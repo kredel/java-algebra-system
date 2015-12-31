@@ -22,17 +22,30 @@
 
 <dl>
 
-<dt>2015, December </dt> <!-- 2.5.5xxx -->
+<dt>2016, January </dt> <!-- 2.5.5xxx -->
 <dd> 
 
+ New parallel iterative Gr&ouml;bner base algorithm in class
+ <code>GreoebnerBaseParIter</code>. Names for Sage, Singular and
+ Mathematica term orders defined in class
+ <code>TermOrderByName</code>. Better separation of ExpVector from
+ TermOrder. Missing polynomial methods <code>weightDegree()</code>
+ and <code>leadingWeightPolynomial()</code> added.
+
+ Switched to Junit 4.12 and use the timeout option on long running
+ tests.  Small improvements, changes and bug fixes.
+
+</dd>
+
+
+<dt>2015, December </dt> <!-- 2.5.5345 -->
+<dd> 
  New iterative Gr&ouml;bner base algorithm in class
  <code>GreoebnerBaseSeqIter</code>. Term orders with weight matrix are
  now usable from jython and jruby via the <code>PolyRing</code>
  constructors. More names for defined and implemented term orders in
  class <code>TermOrderByName</code>. 
-
  Improved unit tests and further small changes and bug fixes.
-
 </dd>
 
 <dt>2015, November </dt> <!-- 2.5.5318 -->
@@ -2495,7 +2508,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Sun Dec  6 15:42:44 CET 2015
+Last modified: Thu Dec 31 18:47:26 CET 2015
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
