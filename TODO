@@ -16,6 +16,8 @@ issues to consider:
 
 - implement signature based GB computation
 
+- implement Groebner Walk GB computation
+
 - make hashCode to reuse computed value --> not immutable
 
 - use further util.concurrent algorithms where possible, e.g. in DHT
@@ -24,19 +26,17 @@ issues to consider:
 
 - test caching results of gcd computation
 
-- refactor BigDecimal to RingElem and RingFactory, make precision variable
-
 - refactor from BasicLinAlg to GenMatrix and GenVector 
 
 - implement univariate power series composition and power
 
 - add method bitLength() to Element
 
-- make final variables public (?)
-
 - define quotientRemainder in RingElem interface (?)
 
 - remove unnecessary @see since JavaDoc 7 
+
+- refactor Power with Java 8 features, use lambdas and default implementations
 
 - make use of gcd in pseudo reduction, needs other coefficient type
 
@@ -44,17 +44,21 @@ issues to consider:
 
 - implement Boolean with RingElem interface (?)
 
+- make final variables public (?)
+
 - check solvable polynomials with integral domain coefficients
 
 - refactor method names for groovy operator overloading, make examples for usage
-
-- check usage SDP (Socked Direct Protokol) with Java 7 and InfiniBand
 
 - algebraic number theory
 
 - algebraic topology
 
 - group theory, permutation groups
+
+- use Maven/Gradle/Buildr configuration management, Ivy done
+
+- completely switch from svn to git
 
 
 
@@ -76,6 +80,8 @@ partially resolved and completed issues:
 
 - implement other term orders for multivariate power series
 
+- refactor BigDecimal to RingElem and RingFactory, precision is now variable via context
+
 - check the 693 exceptions (including 473 runtime exceptions) that are thrown, 
   reduce number of runtime exceptions
 
@@ -93,7 +99,7 @@ partially resolved and completed issues:
   add divide, subtract, abs, remainder to Power, 
   name e.g RingElemAbstract
   clean structure of compareTo, signum and equals
-  - is not possible
+  - is not possible -> but in Java 8 with default implentations
 
 - define power(n) in RingElem (not done) and implement in edu.jas.structure.Power 
   and classes, done
@@ -196,6 +202,8 @@ resolved and completed issues:
 - split RingFactory to ElemFactory, done
 
 - split AlgebraicNumber to AlgebraicNumberRing factory, done
+
+- obsolete: check usage SDP (Socked Direct Protokol) with Java 7 and InfiniBand
 
 
 $Id$
