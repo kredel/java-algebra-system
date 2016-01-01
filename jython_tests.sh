@@ -1,18 +1,12 @@
 #!/bin/sh
-# run most py files
+# run some py files
 
-echo jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/armbruster.py
-time jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/armbruster.py
+echo jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/all_rings.py
+time jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/all_rings.py
 echo jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/intprog.py
 time jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/intprog.py
 echo jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/intprog2.py
 time jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/intprog2.py
-echo jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/intprog3.py
-time jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/intprog3.py
-echo jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/intprog4.py
-time jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/intprog4.py
-echo jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/intprog4a.py
-time jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/intprog4a.py
 echo jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/katsura.py
 time jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/katsura.py
 echo jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/preimage.py
@@ -29,10 +23,6 @@ echo jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/syz
 time jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/syz.py
 echo jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/syzsolv.py
 time jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/syzsolv.py
-echo jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/syzy2.py
-time jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/syzy2.py
-echo jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/syzy3.py
-time jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/syzy3.py
 echo jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/trinks.py
 time jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/trinks.py
 echo jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/mark.py
@@ -41,12 +31,6 @@ echo jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/u_2
 time jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/u_2_wa_1.py
 echo jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/u_sl_2.py
 time jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/u_sl_2.py
-echo jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/u_sl_2_e.py
-time jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/u_sl_2_e.py
-echo jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/u_sl_2_f.py
-time jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/u_sl_2_f.py
-echo jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/u_sl_2_wa_1.py
-time jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/u_sl_2_wa_1.py
 echo jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/u_sl_3.py
 time jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/u_sl_3.py
 echo jython -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/u_sl_3_prod.py

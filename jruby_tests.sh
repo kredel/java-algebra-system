@@ -1,5 +1,5 @@
 #!/bin/sh
-# run most rb files
+# run some rb files
 
 echo jruby -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/all_rings.rb
 time jruby -J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc examples/all_rings.rb
