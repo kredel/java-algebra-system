@@ -2,11 +2,11 @@
 JAS: Java Algebra System
 ========================
 
-Version 2.5, May 2015
+Version 2.5, 2016
 
 by Heinz Kredel, University of Mannheim, kredel at rz.uni-mannheim.de
 
-Copyright (c) 2005-2015 by Heinz Kredel.
+Copyright (c) 2000-2016 by Heinz Kredel.
 
 Programms released under GPL or LGPL, see COPYING.jas or COPYING.lgpl.jas.
 
@@ -16,7 +16,7 @@ Web home-page: http://krum.rz.uni-mannheim.de/jas/
 Requirements
 ------------
 
-A Java JDK 1.7.
+A Java JDK 1.8.
 
 Documentation see index.html.
 
@@ -67,10 +67,10 @@ There is a GIT repository for the scource code, which can be cloned with
 The version is specified by a two digit major.minor number
 and a subversion revision number. For example in
 
-jas-2.2.2088-bin.jar
+jas-2.5.5380-bin.jar
 
-"2.2"  is the JAS version number and
-"2088" is the subversion revision number
+"2.5"  is the JAS version number and
+"5380" is the subversion revision number
 
 The jas-*-bin.jar and jas-*-doc.jar can be generated from jas-*-src.jar.
 The fastest way to get a complete JAS install, is 
@@ -82,6 +82,7 @@ The fastest way to get a complete JAS install, is
 
 If you have a working ant, the last two steps can be replaced by
 
+> ant resolve
 > ant compile
 > ant doc
 
