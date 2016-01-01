@@ -1640,22 +1640,6 @@ Iterable<Monomial<C>> {
 
 
     /**
-     * GenPolynomial division with remainder. Fails, if exact division by
-     * leading base coefficient is not possible. Meaningful only for univariate
-     * polynomials over fields, but works in any case.
-     * @param S nonzero GenPolynomial with invertible leading coefficient.
-     * @return [ quotient , remainder ] with this = quotient * S + remainder and
-     *         deg(remainder) &lt; deg(S) or remiander = 0.
-     * @see edu.jas.poly.PolyUtil#baseSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial)
-     * @deprecated use quotientRemainder()
-     */
-    @Deprecated
-    public GenPolynomial<C>[] divideAndRemainder(GenPolynomial<C> S) {
-        return quotientRemainder(S);
-    }
-
-
-    /**
      * GenPolynomial division. Fails, if exact division by leading base
      * coefficient is not possible. Meaningful only for univariate polynomials
      * over fields, but works in any case.
