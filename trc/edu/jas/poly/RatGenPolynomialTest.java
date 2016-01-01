@@ -261,7 +261,7 @@ public class RatGenPolynomialTest extends TestCase {
      //System.out.println("g = " + g);
 
      GenPolynomial<BigRational>[] qr;
-     qr = b.divideAndRemainder(a);
+     qr = b.quotientRemainder(a);
      c = qr[0];
      d = qr[1];
      //System.out.println("q = " + c);
@@ -269,7 +269,7 @@ public class RatGenPolynomialTest extends TestCase {
      e = c.multiply(a).sum(d);
      assertEquals("b = q a + r", b, e );
 
-     qr = a.divideAndRemainder(b);
+     qr = a.quotientRemainder(b);
      c = qr[0];
      d = qr[1];
      //System.out.println("q = " + c);
