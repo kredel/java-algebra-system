@@ -34,6 +34,7 @@ import edu.jas.util.ThreadPool;
  * if new polynomials appear.
  * @param <C> coefficient type
  * @author Heinz Kredel
+ * @deprecated no direct alternative, use GroebnerBaseDistributedEC
  */
 @Deprecated
 public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends GroebnerBaseAbstract<C> {
