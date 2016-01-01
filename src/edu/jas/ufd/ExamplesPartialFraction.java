@@ -56,7 +56,7 @@ public class ExamplesPartialFraction {
 
         FactorRational engine = (FactorRational) FactorFactory.getImplementation(cfac);
 
-        PartialFraction<BigRational> F = engine.baseAlgebraicPartialFractionIrreducible(N, D);
+        PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N, D);
         System.out.println("\nintegral " + F);
     }
 

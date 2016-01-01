@@ -262,7 +262,7 @@ public class HenselMultUtilTest extends TestCase {
                 //System.out.println("\nliftMultiHensel:");
                 //System.out.println("lift   = " + lift);
                 //System.out.println("A      = " + A);
-                boolean t = HenselMultUtil.<ModInteger> isHenselLift(c, cp, Ae, k, lift);
+                boolean t = HenselMultUtil.<ModInteger> isHenselLift(c, cp, Ae, lift);
                 assertTrue("isHenselLift: ", t);
             } catch (ArithmeticException e) {
                 // ok, can happen
@@ -377,7 +377,7 @@ public class HenselMultUtilTest extends TestCase {
                 //System.out.println("\nliftMultiHensel:");
                 //System.out.println("lift   = " + lift);
                 //System.out.println("A      = " + A);
-                boolean t = HenselMultUtil.<ModInteger> isHenselLift(c, cp, Ae, k, lift);
+                boolean t = HenselMultUtil.<ModInteger> isHenselLift(c, cp, Ae, lift);
                 assertTrue("isHenselLift: ", t);
             } catch (ArithmeticException e) {
                 // ok, can happen
@@ -524,7 +524,7 @@ public class HenselMultUtilTest extends TestCase {
                 //System.out.println("\nliftMultiHensel:");
                 //System.out.println("lift   = " + lift);
                 //System.out.println("A      = " + A);
-                boolean t = HenselMultUtil.<ModInteger> isHenselLift(c, cp, Ae, k, lift);
+                boolean t = HenselMultUtil.<ModInteger> isHenselLift(c, cp, Ae, lift);
                 assertTrue("isHenselLift: ", t);
             } catch (ArithmeticException e) {
                 // ok, can happen
@@ -663,7 +663,7 @@ public class HenselMultUtilTest extends TestCase {
                 //System.out.println("\nliftMultiHensel:");
                 //System.out.println("lift   = " + lift);
                 //System.out.println("A      = " + A);
-                boolean t = HenselMultUtil.<ModInteger> isHenselLift(c, cp, Ae, k, lift);
+                boolean t = HenselMultUtil.<ModInteger> isHenselLift(c, cp, Ae, lift);
                 assertTrue("isHenselLift: ", t);
             } catch (ArithmeticException e) {
                 // ok, can happen
@@ -785,7 +785,7 @@ public class HenselMultUtilTest extends TestCase {
                 //System.out.println("\nliftMultiHensel:");
                 //System.out.println("lift   = " + lift);
                 //System.out.println("A      = " + A);
-                boolean t = HenselMultUtil.<ModLong> isHenselLift(c, cp, Ap, k, lift);
+                boolean t = HenselMultUtil.<ModLong> isHenselLift(c, cp, Ap, lift);
                 assertTrue("isHenselLift: ", t);
             } catch (ArithmeticException e) {
                 // ok, can happen
@@ -937,7 +937,7 @@ public class HenselMultUtilTest extends TestCase {
                 //System.out.println("\nliftMultiHensel:");
                 //System.out.println("lift   = " + lift);
                 //System.out.println("A      = " + A);
-                boolean t = HenselMultUtil.<ModLong> isHenselLift(c, cp, Ap, k, lift);
+                boolean t = HenselMultUtil.<ModLong> isHenselLift(c, cp, Ap, lift);
                 assertTrue("isHenselLift: ", t);
             } catch (ArithmeticException e) {
                 // ok, can happen
@@ -1084,7 +1084,7 @@ public class HenselMultUtilTest extends TestCase {
                 //System.out.println("\nliftMultiHensel:");
                 //System.out.println("lift   = " + lift);
                 //System.out.println("A      = " + A);
-                boolean t = HenselMultUtil.<ModLong> isHenselLift(c, cp, Ap, k, lift);
+                boolean t = HenselMultUtil.<ModLong> isHenselLift(c, cp, Ap, lift);
                 assertTrue("isHenselLift: ", t);
             } catch (ArithmeticException e) {
                 // ok, can happen

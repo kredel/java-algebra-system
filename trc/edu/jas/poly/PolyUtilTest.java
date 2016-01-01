@@ -805,7 +805,7 @@ public class PolyUtilTest extends TestCase {
         a = fac.getZERO();
         //System.out.println("a  = " + a);
 
-        ae = PolyUtil.<BigInteger> evaluateAll(cfac, dfac, a, Ev);
+        ae = PolyUtil.<BigInteger> evaluateAll(cfac, a, Ev);
         //System.out.println("ae   = " + ae);
 
         assertTrue("isZERO( ae )", ae.isZERO());
@@ -813,7 +813,7 @@ public class PolyUtilTest extends TestCase {
         a = fac.getONE();
         //System.out.println("a  = " + a);
 
-        ae = PolyUtil.<BigInteger> evaluateAll(cfac, dfac, a, Ev);
+        ae = PolyUtil.<BigInteger> evaluateAll(cfac, a, Ev);
         //System.out.println("ae   = " + ae);
 
         assertTrue("isONE( ae )", ae.isONE());
@@ -828,9 +828,9 @@ public class PolyUtilTest extends TestCase {
         c = b.sum(a);
         //System.out.println("c  = " + c);
 
-        ae = PolyUtil.<BigInteger> evaluateAll(cfac, dfac, a, Ev);
-        be = PolyUtil.<BigInteger> evaluateAll(cfac, dfac, b, Ev);
-        ce = PolyUtil.<BigInteger> evaluateAll(cfac, dfac, c, Ev);
+        ae = PolyUtil.<BigInteger> evaluateAll(cfac, a, Ev);
+        be = PolyUtil.<BigInteger> evaluateAll(cfac, b, Ev);
+        ce = PolyUtil.<BigInteger> evaluateAll(cfac, c, Ev);
         //System.out.println("ae   = " + ae);
         //System.out.println("be   = " + be);
         //System.out.println("ce   = " + ce);
@@ -843,7 +843,7 @@ public class PolyUtilTest extends TestCase {
         c = b.multiply(a);
         //System.out.println("c  = " + c);
 
-        ce = PolyUtil.<BigInteger> evaluateAll(cfac, dfac, c, Ev);
+        ce = PolyUtil.<BigInteger> evaluateAll(cfac, c, Ev);
         //System.out.println("ae   = " + ae);
         //System.out.println("be   = " + be);
         //System.out.println("ce   = " + ce);

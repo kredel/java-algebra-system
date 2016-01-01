@@ -1089,7 +1089,7 @@ public class IdealTest extends TestCase {
             //System.out.println("dpc = " + dpc);
             for (List<Complex<BigDecimal>> r : roots) {
                 //System.out.println("r = " + r);
-                Complex<BigDecimal> ev = PolyUtil.<Complex<BigDecimal>> evaluateAll(dcc, dcfac, dpc, r);
+                Complex<BigDecimal> ev = PolyUtil.<Complex<BigDecimal>> evaluateAll(dcc, dpc, r);
                 if (ev.norm().getRe().compareTo(e) > 0) {
                     //System.out.println("ev = " + ev);
                     fail("ev > eps : " + ev + " > " + e);
@@ -1154,7 +1154,7 @@ public class IdealTest extends TestCase {
             //System.out.println("dp = " + dp);
             for (List<BigDecimal> r : roots) {
                 //System.out.println("r = " + r);
-                BigDecimal ev = PolyUtil.<BigDecimal> evaluateAll(dc, dfac, dp, r);
+                BigDecimal ev = PolyUtil.<BigDecimal> evaluateAll(dc, dp, r);
                 if (ev.abs().compareTo(e) > 0) {
                     //System.out.println("ev = " + ev);
                     fail("ev > e : " + ev + " > " + e + ", eps = " + new BigDecimal(eps));
