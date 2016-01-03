@@ -567,7 +567,28 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
      * @return a GenPolynomial&lt;C&gt;.
      */
     public GenPolynomial<C> valueOf(ExpVector e) {
+        if (e == null) {
+            return getZERO();
+        }
         return new GenPolynomial<C>(this, coFac.getONE(), e);
+    }
+
+
+    /**
+     * Get a GenPolynomial&lt;C&gt; element from a list of exponent vectors.
+     * @param E list of exponent vector.
+     * @return a GenPolynomial&lt;C&gt;.
+     */
+    public List<GenPolynomial<C>> valueOf(Iterable<ExpVector> E) {
+        if (E == null) {
+            return null;
+        }
+        List<GenPolynomial<C>> P = new ArrayList<GenPolynomial<C>>(); //E.size());
+        for ( ExpVector e : E ) {
+	    GenPolynomial<C> p = valueOf(e);
+            P.add(p);
+        }
+        return P;
     }
 
 
