@@ -965,6 +965,28 @@ public final class ExpVectorByte extends ExpVector
 
 
     /**
+     * ExpVector inverse total degree lexicographical compareTo.
+     * @param V
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
+     */
+    @Override
+    public int invTdegCompareTo(ExpVector V) {
+        throw new UnsupportedOperationException("not implemented for byte ExpVector");
+    }
+
+
+    /**
+     * ExpVector reverse lexicographical inverse total degree compareTo.
+     * @param V
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
+     */
+    @Override
+    public int revLexInvTdegCompareTo(ExpVector V) {
+        throw new UnsupportedOperationException("not implemented for byte ExpVector");
+    }
+
+
+    /**
      * ExpVector inverse weighted lexicographical compareTo.
      * @param w weight array.
      * @param V

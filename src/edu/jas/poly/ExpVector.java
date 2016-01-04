@@ -1123,6 +1123,44 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
 
 
     /**
+     * Inverse total degree lexicographical compare.
+     * @param U
+     * @param V
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
+     */
+    public static int EVITDEGLC(ExpVector U, ExpVector V) {
+        return U.invTdegCompareTo(V);
+    }
+
+
+    /**
+     * ExpVector inverse total degree lexicographical compareTo.
+     * @param V
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
+     */
+    public abstract int invTdegCompareTo(ExpVector V);
+
+
+    /**
+     * Reverse lexicographical inverse total degree compare.
+     * @param U
+     * @param V
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
+     */
+    public static int EVRLITDEGC(ExpVector U, ExpVector V) {
+        return U.revLexInvTdegCompareTo(V);
+    }
+
+
+    /**
+     * ExpVector reverse lexicographical inverse total degree compareTo.
+     * @param V
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
+     */
+    public abstract int revLexInvTdegCompareTo(ExpVector V);
+
+
+    /**
      * Inverse weighted lexicographical compare.
      * @param w weight array.
      * @param U
