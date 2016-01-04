@@ -1,0 +1,90 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" (C) Copyright 2016 Heinz Kredel <kredel@rz.uni-mannheim.de>,
+.\" $Id: $
+.\"
+.\" First parameter, NAME, should be all caps
+.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
+.\" other parameters are allowed: see man(7), man(1)
+.TH JAS 1 "January  4, 2016"
+.\" Please adjust this date whenever revising the manpage.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.SH NAME
+jas \- program to interactively use the Java Algebra System (JAS) from Jython or JRuby. 
+.SH SYNOPSIS
+.B jas
+.RI [ -py | -jy | -rb | -jr ] [ -d ] [ -v ] [ -h | --help ] [ -- ] " files" ...
+.br
+.SH DESCRIPTION
+This manual page documents briefly the
+.B jas
+command.
+.PP
+.\" TeX users may be more comfortable with the \fB<whatever>\fP and
+.\" \fI<whatever>\fP escape sequences to invode bold face and italics,
+.\" respectively.
+\fBjas\fP is a program that runs an interpreter to access the JAS library.
+The interface to JAS provides Sage like scripting constructions to define 
+polynomial rings, construct polynomials and use various operations from 
+commutative, solvable and non-commutative algebra on these objects.
+
+The Java Algebra System (\fBJAS\fP) is an object oriented, type safe and
+multi-threaded approach to computer algebra. JAS provides a well
+designed software library using generic types for algebraic
+computations implemented in the Java programming language using the
+JVM runtime infrastructure. The library can be used as any other Java
+software package or it can be used interactively or interpreted
+through a jython (Java Python) or jruby (Java Ruby) front end, there
+is also an Android App based on Ruboto (jruby for Android). The focus
+of JAS is at the moment on commutative, solvable and non-commutative
+polynomials, power series, Groebner bases, factorization, real and
+complex roots and applications. By the use of Java as implementation
+language JAS is 64-bit and multi-core CPU ready and can make use of
+mutiple CPUs where available. JAS can run on a wide variety of devices
+ranging from Android to compute clusters (using MPJ a Java Message
+Passing Interface (MPI) or OpenMPI).
+
+This programm \fBjas\fP will determine the JRuby or Jython environment 
+and then call the requested script interpreter with all 
+JAS related environment information (jar files, Java options etc).
+.SH OPTIONS
+These programs follow the usual GNU command line syntax, with long
+options starting with two dashes (`-').
+A summary of options is included below.
+.TP
+.B \-rb, \-jr
+Use Ruby scripting with JRruby (this is the default).
+.TP
+.B \-py, \-jy 
+Use Python scripting with Jython.
+.TP
+.B \-h, \-\-help
+Show summary of options.
+.TP
+.B \-v
+Verbose option for scripting language.
+.TP
+.B \-d
+Debug this script.
+.TP
+.B \-\-
+Pass remaining arguments through to Jython or JRuby.
+.SH SEE ALSO
+.BR jython (1),
+.BR jruby (1),
+.BR Sage (1).
+
+The \fBjas\fP program uses the JAS Jython and JRuby interface 
+which are fully documented at the 
+.br
+URL 
+.IR http://krum.rz.uni-mannheim.de/jas
