@@ -5,8 +5,6 @@
 package edu.jas.poly;
 
 
-
-
 // import org.apache.log4j.Logger;
 
 
@@ -337,30 +335,30 @@ public class TermOrderByName {
         switch (to) {
         case TermOrder.INVLEX:
         default:
-	    for (int i = 0; i < n; i++ ) {
-		w[i] = new long[n];
-		long[] wi = w[i];
-		for( int j = 0; j < n; j++ ) { 
-		    if ((n-1-i) == j) {
-			wi[j] = 1L;
-		    } else {
-			wi[j] = 0L;
-		    }
-		}
-	    }
+            for (int i = 0; i < n; i++) {
+                w[i] = new long[n];
+                long[] wi = w[i];
+                for (int j = 0; j < n; j++) {
+                    if ((n - 1 - i) == j) {
+                        wi[j] = 1L;
+                    } else {
+                        wi[j] = 0L;
+                    }
+                }
+            }
             break;
         case TermOrder.REVILEX:
-	    for (int i = 0; i < n; i++ ) {
-		w[i] = new long[n];
-		long[] wi = w[i];
-		for( int j = 0; j < n; j++ ) { 
-		    if (i == j) {
-			wi[j] = 1L;
-		    } else {
-			wi[j] = 0L;
-		    }
-		}
-	    }
+            for (int i = 0; i < n; i++) {
+                w[i] = new long[n];
+                long[] wi = w[i];
+                for (int j = 0; j < n; j++) {
+                    if (i == j) {
+                        wi[j] = 1L;
+                    } else {
+                        wi[j] = 0L;
+                    }
+                }
+            }
             break;
         }
         return w;

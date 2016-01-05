@@ -362,10 +362,10 @@ public final class TermOrder implements Serializable {
      * @param split index.
      */
     public TermOrder(int ev1, int ev2, int r, int split) {
-        if (ev1 < MIN_EVORD || MAX_EVORD-2 < ev1) {
+        if (ev1 < MIN_EVORD || MAX_EVORD - 2 < ev1) {
             throw new IllegalArgumentException("invalid split term order 1: " + ev1);
         }
-        if (ev2 < MIN_EVORD || MAX_EVORD-2 < ev2) {
+        if (ev2 < MIN_EVORD || MAX_EVORD - 2 < ev2) {
             throw new IllegalArgumentException("invalid split term order 2: " + ev2);
         }
         this.evord = ev1;
