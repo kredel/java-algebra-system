@@ -642,7 +642,7 @@ public class TermOrderTest extends TestCase {
         a = ExpVector.EVRAND(5, 10, q);
         b = ExpVector.EVRAND(5, 10, q);
 
-        int notimpl = TermOrder.REVITDG + 2;
+        int notimpl = TermOrder.MAX_EVORD + 2;
         int x = 0;
 
         try {
