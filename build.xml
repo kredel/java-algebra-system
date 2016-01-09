@@ -69,7 +69,8 @@
 <target name="usage" >
   <echo message="ant compile"  />
   <echo message="ant run -Dclass=&lt;class&gt; -Dargs='command-line arguments'"  />
-  <echo message="ant &lt;target&gt;"  />
+  <echo message="ant resolve # use ivy to retrieve dependency jars"  />
+  <echo message="ant &lt;other-target&gt;"  />
   <echo message="basedir = ${basedir}"  />
   <echo message="libs = ${libs}"  />
   <echo message="java -version = ${ant.java.version}"  />
@@ -162,9 +163,6 @@
            private="true" 
            linksource="true" 
 -->
-     <!--tag name="typeparam" description="Type parameter: " scope="all" /-->
-     <!--tag name="param" /-->
-     <!--tag name="return" /-->
      <!--tag name="unused"    description="Not used"         scope="all" /-->
      <!--tag name="todo"      description="To do"            scope="all" /-->
      <!--tag name="fix"       description="Fix me"           scope="all" /-->
@@ -331,19 +329,13 @@
      <fileset dir="." includes="build.xml Makefile log4j.properties"  />
   </jar>
 </target>
-<!--
-     <fileset dir="edu/jas" />
--->
 
-<target name="jar07" depends="vorher" >
-  <jar jarfile="/tmp/jas-ant-${DSTAMP}.jar"  >
-     <fileset dir="." includes="**/*.java" excludes="**/ufd/**" />
-     <fileset dir="." includes="**/*.html"  />
-     <fileset dir="." includes="*.py"  />
-     <fileset dir="." includes="examples/*.py"  />
-     <fileset dir="." includes="**/*.jas"  />
-     <fileset dir="." includes="build.xml Makefile log4j.properties"  />
-     <fileset dir="edu/jas" excludes="**/ufd/**" />
+<target name="bin-jar" depends="vorher" >
+  <jar jarfile="jas-bin-${DSTAMP}.jar"
+       manifest="GBManifest.MF"
+  >
+    <fileset dir="." includes="**/*.class" />
+    <fileset dir="." includes="log4j.properties log4j2.properties"  />
   </jar>
 </target>
 
