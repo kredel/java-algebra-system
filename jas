@@ -60,9 +60,25 @@ else
 fi
 
 #
-# setup required libs: JAVA_LIBS="log4j.jar:junit.jar:jas.jar:examples"
+# setup required libs: JAVA_LIBS="log4j*.jar:junit*.jar:jas.jar:examples"
 #
-if [ -f "../lib/log4j.jar" ] ; then
+if [ -f "../lib/log4j-core-2.5.jar" ] ; then
+   JAVA_LIBS="$JAVA_LIBS:../lib/log4j-core-2.5.jar"
+   JAVA_LIBS="$JAVA_LIBS:../lib/log4j-api-2.5.jar"
+   JAVA_LIBS="$JAVA_LIBS:../lib/log4j-1.2-api-2.5.jar"
+elif [ -f "lib/log4j-core-2.5.jar" ] ; then
+   JAVA_LIBS="$JAVA_LIBS:lib/log4j-core-2.5.jar"
+   JAVA_LIBS="$JAVA_LIBS:lib/log4j-api-2.5.jar"
+   JAVA_LIBS="$JAVA_LIBS:lib/log4j-1.2-api-2.5.jar"
+elif [ -f "$JAS_HOME/../lib/log4j-core-2.5.jar" ] ; then
+   JAVA_LIBS="$JAVA_LIBS:$JAS_HOME/../lib/log4j-core-2.5.jar"
+   JAVA_LIBS="$JAVA_LIBS:$JAS_HOME/../lib/log4j-api-2.5.jar"
+   JAVA_LIBS="$JAVA_LIBS:$JAS_HOME/../lib/log4j-1.2-api-2.5.jar"
+elif [ -f `ls /usr/share/java/log4j-core*.jar|tail -1` ] ; then
+   JAVA_LIBS="$JAVA_LIBS:`ls /usr/share/java/log4j-core-.jar|tail -1`"
+   JAVA_LIBS="$JAVA_LIBS:`ls /usr/share/java/log4j-api-.jar|tail -1`"
+   JAVA_LIBS="$JAVA_LIBS:`ls /usr/share/java/log4j-1.2-api-.jar|tail -1`"
+elif [ -f "../lib/log4j.jar" ] ; then
    JAVA_LIBS="$JAVA_LIBS:../lib/log4j.jar"
 elif [ -f "lib/log4j.jar" ] ; then
    JAVA_LIBS="$JAVA_LIBS:lib/log4j.jar"
@@ -78,7 +94,19 @@ else
    exit 0
 fi
 #
-if [ -f "../lib/junit.jar" ] ; then
+if [ -f "../lib/junit-4.12.jar" ] ; then
+   JAVA_LIBS="$JAVA_LIBS:../lib/junit-4.12.jar"
+   JAVA_LIBS="$JAVA_LIBS:../lib/hamcrest-core-1.3.jar"
+elif [ -f "lib/junit-4.12.jar" ] ; then
+   JAVA_LIBS="$JAVA_LIBS:lib/junit-4.12.jar"
+   JAVA_LIBS="$JAVA_LIBS:lib/hamcrest-core-1.3.jar"
+elif [ -f "$JAS_HOME/../lib/junit-4.12.jar" ] ; then
+   JAVA_LIBS="$JAVA_LIBS:$JAS_HOME/../lib/junit-4.12.jar"
+   JAVA_LIBS="$JAVA_LIBS:$JAS_HOME/../lib/hamcrest-core-1.3.jar"
+elif [ -f `ls /usr/share/java/junit-4.12*.jar|tail -1` ] ; then
+   JAVA_LIBS=$JAVA_LIBS:`ls /usr/share/java/junit-4.12*.jar|tail -1`
+   JAVA_LIBS=$JAVA_LIBS:`ls /usr/share/java/hamcrest-core-*.jar|tail -1`
+elif [ -f "../lib/junit.jar" ] ; then
    JAVA_LIBS="$JAVA_LIBS:../lib/junit.jar"
 elif [ -f "lib/junit.jar" ] ; then
    JAVA_LIBS="$JAVA_LIBS:lib/junit.jar"
