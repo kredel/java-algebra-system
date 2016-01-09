@@ -18,9 +18,10 @@ JDK=/usr/java/latest/bin
 #JASPATH=$(HOME)/jas
 SVNREPO=/home/SUBVERSION
 LIBPATH=$(HOME)/java/lib
-JUNITPATH=$(LIBPATH)/junit-4.12.jar
-HAMPATH=$(LIBPATH)/hamcrest-core-1.3.jar
-LOG4JPATH=$(LIBPATH)/log4j.jar
+#JUNITPATH=$(LIBPATH)/junit.jar
+JUNITPATH=$(LIBPATH)/junit-4.12.jar:$(LIBPATH)/hamcrest-core-1.3.jar
+#LOG4JPATH=$(LIBPATH)/log4j.jar
+LOG4JPATH=$(LIBPATH)/log4j-core-2.5.jar:$(LIBPATH)/log4j-api-2.5.jar:$(LIBPATH)/log4j-1.2-api-2.5.jar
 #LOG4JPATH=$(LIBPATH)/mylog.jar
 JOMPPATH=$(LIBPATH)/jomp1.0b.jar
 TNJPATH=$(LIBPATH)/tnj.jar
@@ -34,8 +35,8 @@ RSYNC=rsync -e ssh -avuz $(DRY) $(DELETE) --exclude=*~ --include=doc/svn_change.
 ####--exclude=./test
 ####--exclude=*.ps --exclude=*.pdf --exclude=spin*
 ####--exclude=*/.jxta/
-PART=jas.j16
-VERSION=jas-2.5
+PART=jas.j17
+VERSION=jas-2.6
 #BRANCH=2.3
 SVNVERSION=`grep committed-rev .svn/entries |head -1|awk -F = '{ print $2 }'|sed 's/"//g'`
 
@@ -76,14 +77,14 @@ DOCOPTS=-public -protected -package -author -version
 
 #MYCLASSPATH = .:$(DEFS):$(JUNITPATH):$(JOMPPATH)
 #MYCLASSPATH = $(LOG4JPATH):.:$(DEFS):$(JUNITPATH):$(JOMPPATH):$(PYPATH)
-MYCLASSPATH = $(LOG4JPATH):.:$(JUNITPATH):$(HAMPATH):$(JOMPPATH):$(PYPATH)
+MYCLASSPATH = $(LOG4JPATH):.:$(JUNITPATH):$(JOMPPATH):$(PYPATH)
 #:$(TNJPATH)
 
 #JAVA_MEM=-Xms1500M -Xmx2900M
 JAVA_MEM=-Xms350M -Xmx800M
 
-#SOPTS="-J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc -J-Xms1500M -J-Xmx2900M"
-SOPTS="-J-cp ../lib/log4j.jar:../lib/junit.jar:. -J-verbose:gc -J-Xms350M -J-Xmx800M"
+#SOPTS="-J-cp ../lib/log4j-core-2.5.jar:../lib/log4j-api-2.5.jar:../lib/log4j-1.2-api-2.5.jar:../lib/junit.jar-4.12.jar:../lib/hamcrest-core-1.3.jar:. -J-verbose:gc -J-Xms1500M -J-Xmx2900M"
+SOPTS="-J-cp ../lib/log4j-core-2.5.jar:../lib/log4j-api-2.5.jar:../lib/log4j-1.2-api-2.5.jar:../lib/junit.jar-4.12.jar:../lib/hamcrest-core-1.3.jar:. -J-verbose:gc -J-Xms350M -J-Xmx800M"
 
 
 JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d . -Xlint:unchecked
@@ -291,7 +292,7 @@ FILES=$(wildcard src/edu/jas/structure/*.java src/edu/jas/arith/*.java src/edu/j
 
 TESTFILES=$(wildcard trc/edu/jas/structure/*.java trc/edu/jas/arith/*.java trc/edu/jas/poly/*.java trc/edu/jas/ps/*.java trc/edu/jas/gb/*.java trc/edu/jas/application/*.java trc/edu/jas/vector/*.java trc/edu/jas/gbmod/*.java trc/edu/jas/gbufd/*.java trc/edu/jas/util/*.java trc/edu/jas/ufd/*.java trc/edu/jas/fd/*.java trc/edu/jas/kern/*.java trc/edu/jas/root/*.java trc/edu/jas/integrate/*.java)
 
-LIBS=$(JUNITPATH) $(HAMPATH) $(LOG4JPATH) $(JOMPPATH) $(TNJPATH)
+LIBS=$(subst :,, $(JUNITPATH)) $(subst :,, $(LOG4JPATH)) $(JOMPPATH) $(TNJPATH)
 
 CLASSES=edu/jas/structure/ edu/jas/arith/ edu/jas/poly/ edu/jas/ps/ edu/jas/gb/ edu/jas/gbufd edu/jas/application/ edu/jas/vector/ edu/jas/gbmod/ edu/jas/util/ edu/jas/ufd/ edu/jas/fd/ edu/jas/kern/ edu/jas/root/ edu/jas/integrate/
 
@@ -369,7 +370,7 @@ clean:
 testp:
 	find examples -name "*.py"|grep -v jas.py |grep -v sdexam.py |grep -v plot|grep -v versuch|sort|xargs -L 1 echo "time jython $(SOPTS)" | awk '{ printf "echo %s\n", $$0; printf "%s\n", $$0 }' > ./all_jython.sh
 	time bash all_jython.sh 2>&1 | tee tjy.out
-	-grep File tjy.out
+	-egrep '(Error|File)' tjy.out
 
 testr:
 	find examples -name "*.rb"|grep -v jas.rb |grep -v versuch|sort|xargs -L 1 echo "time jruby $(SOPTS)" | awk '{ printf "echo %s\n", $$0; printf "%s\n", $$0 }' > ./all_jruby.sh
@@ -437,7 +438,7 @@ export:
 	svn log -v -r HEAD:$(SVNSRT) file:///$(SVNREPO)/jas/trunk src trc examples jython mpj mpi jlinalg_adapter commons-math_adapter > ~/jas-versions/$(VERSION)/doc/svn_change.log
 	cd ~/jas-versions/; jar -cfM $(VERSION).`$(SVNREV)`-src.zip $(VERSION)/
 	cd ~/jas-versions/$(VERSION)/; ant compile > ant_compile.out
-	cd ~/jas-versions/$(VERSION)/; jar -cfm ../$(VERSION).`$(SVNREV)`-bin.jar GBManifest.MF edu/ COPYING* log4j.properties
+	cd ~/jas-versions/$(VERSION)/; jar -cfm ../$(VERSION).`$(SVNREV)`-bin.jar GBManifest.MF edu/ COPYING* log4j.properties log4j2.properties
 	cd ~/jas-versions/$(VERSION)/; jar -uf ../$(VERSION).`$(SVNREV)`-bin.jar -C ~/jas-versions/$(VERSION)/examples jas.rb -C ~/jas-versions/$(VERSION)/examples jas.py
 	jar -uf ~/jas-versions/$(VERSION).`$(SVNREV)`-bin.jar -C ~/jas/NOTES COPYING.APACHE-2.0 -C ~/jas/NOTES COPYING.apache.jas
 	cd ~/jas-versions/$(VERSION)/; ant doc > ant_doc.out
