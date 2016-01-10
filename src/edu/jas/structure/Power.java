@@ -89,6 +89,10 @@ public class Power<C extends RingElem<C>> {
         if (n.compareTo(java.math.BigInteger.ONE) == 0) {
             return b;
         }
+        if (n.bitLength() <= 63) {
+            long l = n.longValue();
+            return positivePower(a, l);
+        }
         C p = a;
         java.math.BigInteger i = n.subtract(java.math.BigInteger.ONE);
         do {
@@ -264,6 +268,10 @@ public class Power<C extends RingElem<C>> {
         }
         if (n.compareTo(java.math.BigInteger.ONE) == 0) {
             return b;
+        }
+        if (n.bitLength() <= 63) {
+            long l = n.longValue();
+            return modPower(fac, a, l, m);
         }
         C p = fac.getONE();
         java.math.BigInteger i = n;
