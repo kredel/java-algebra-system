@@ -103,9 +103,9 @@ elif [ -f "lib/junit-4.12.jar" ] ; then
 elif [ -f "$JAS_HOME/../lib/junit-4.12.jar" ] ; then
    JAVA_LIBS="$JAVA_LIBS:$JAS_HOME/../lib/junit-4.12.jar"
    JAVA_LIBS="$JAVA_LIBS:$JAS_HOME/../lib/hamcrest-core-1.3.jar"
-elif [ -f `ls /usr/share/java/junit-4.12*.jar|tail -1` ] ; then
-   JAVA_LIBS=$JAVA_LIBS:`ls /usr/share/java/junit-4.12*.jar|tail -1`
-   JAVA_LIBS=$JAVA_LIBS:`ls /usr/share/java/hamcrest-core-*.jar|tail -1`
+elif [ -f `ls /usr/share/java/junit4*.jar|tail -1` ] ; then
+   JAVA_LIBS=$JAVA_LIBS:`ls /usr/share/java/junit4*.jar|tail -1`
+   JAVA_LIBS=$JAVA_LIBS:`ls /usr/share/java/hamcrest-core*.jar|tail -1`
 elif [ -f "../lib/junit.jar" ] ; then
    JAVA_LIBS="$JAVA_LIBS:../lib/junit.jar"
 elif [ -f "lib/junit.jar" ] ; then
