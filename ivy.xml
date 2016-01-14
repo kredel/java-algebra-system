@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ivy-module version="2.0" xmlns:m="http://ant.apache.org/ivy/maven">
-  <info organisation="JavaAlgebraSystem" module="jas" revision="2.6.*" status="integration" />
+<ivy-module version="2.0" xmlns:m="http://ant.apache.org/ivy/maven" 
+                          xmlns:e="http://ant.apache.org/ivy/extra">
+  <info organisation="JavaAlgebraSystem" 
+        module="jas" revision="2.6.*" 
+        status="integration" >
+    <description>
+       Java Algebra System (JAS)
+    </description>
+  </info>
   <configurations>
     <conf name="default" visibility="public" extends="runtime"/>
     <conf name="runtime" visibility="public"/>
+    <!--conf name="test" visibility="public" description="" extends="runtime"/>
+    <conf name="sources" visibility="public" description=""/>
+    <conf name="docs" visibility="public" description=""/-->
   </configurations>
   <publications>
     <artifact name="jas" type="jar" ext="jar" conf="runtime"/>
-    <artifact name="jas" type="zip" ext="zip" m:classifier="source"/>
+    <!--artifact name="jas-src" type="zip" ext="zip" conf="sources" m:classifier="source"/>
+    <artifact name="jas-doc" type="zip" ext="zip" conf="docs" e:classifier="javadoc"/-->
   </publications>
   <dependencies>
     <!--dependency org="log4j" name="log4j" rev="1.2.17" conf="runtime-&gt;default">
