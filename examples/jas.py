@@ -86,6 +86,8 @@ def startLog():
     '''
     BasicConfigurator.configure();
 
+print "Java Algebra System (JAS) version 2.6"
+
 def terminate():
     '''Terminate the running thread pools.
     '''

@@ -46,6 +46,8 @@ def terminate()
     ComputerThreads.terminate();
 end
 
+puts "Java Algebra System (JAS) version 2.6"
+
 =begin rdoc
 Turn off automatic parallel threads usage.
 =end
