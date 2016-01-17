@@ -754,7 +754,7 @@ puts "pY   = " + str(pY);
 puts "px   = " + str(px);
 puts "py   = " + str(py);
 #rel = ( py, px, px * py - 1 , pz, py, py * pz - 1 );
-rel = [ py, px, pi * px * py, pX, pY, pi * pY * pX ];
+rel = [ py, px, pi * px * py, pY, pX, pi * pY * pX ];
 print "rel  = ", rel.map { |z| z.to_s + ", " }, "\n";
 #print "rel  = ", rel.to_s, "\n";
 
@@ -788,15 +788,15 @@ xsm = SolvableSubModule.new(SolvPolyRing.new(CC(),"X, Y, x, y",PolyRing.lex,rel=
 puts "xsm: " + str(xsm);
 puts;
 
-## mlg = ssm.leftGB();
-## puts "mlg: " + str(mlg);
-## puts;
+mlg = ssm.leftGB();
+puts "mlg: " + str(mlg);
+puts;
 
-## mtg = ssm.twosidedGB();
-## puts "mtg: " + str(mtg);
-## puts;
+mtg = ssm.twosidedGB();
+puts "mtg: " + str(mtg);
+puts;
 
-puts "------------------------------------";
+#puts "------------------------------------";
 
 #puts "globals() = " + str(globals());
 

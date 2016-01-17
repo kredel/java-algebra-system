@@ -760,7 +760,7 @@ print "pY   = " + str(pY);
 print "px   = " + str(px);
 print "py   = " + str(py);
 #rel = ( py, px, px * py - 1 , pz, py, py * pz - 1 );
-rel = [ py, px, pi * px * py, pX, pY, pi * pY * pX ];
+rel = [ py, px, pi * px * py, pY, pX, pi * pY * pX ];
 print "rel  = " + str([ str(x) for x in rel ]);
 
 sr = SolvPolyRing(CC(),"X,Y,x,y",PolyRing.lex,rel);
@@ -791,15 +791,15 @@ xsm = SolvableSubModule(SolvPolyRing(CC(),"X, Y, x, y",PolyRing.lex,rel=[y, x, (
 print "xsm: " + str(xsm);
 print;
 
-## mlg = ssm.leftGB();
-## print "mlg: " + str(mlg);
-## print;
+mlg = ssm.leftGB();
+print "mlg: " + str(mlg);
+print;
 
-## mtg = ssm.twosidedGB();
-## print "mtg: " + str(mtg);
-## print;
+mtg = ssm.twosidedGB();
+print "mtg: " + str(mtg);
+print;
 
-print "------------------------------------";
+#print "------------------------------------";
 
 #print "globals() = " + str(globals());
 
