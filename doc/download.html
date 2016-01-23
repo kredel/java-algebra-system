@@ -43,17 +43,20 @@
 </li>
 <li><p>Required libraries: 
     <br />
-    <a href="../../lib/log4j.jar">lib/log4j.jar</a> (from Apache Log4j),
+    <!--a href="../../lib/log4j.jar">lib/log4j.jar  log4j-api </a> (from Apache Log4j version 2), -->
+    <a href="../../lib/log4j-api.jar">lib/log4j-api.jar</a>, 
+    <a href="../../lib/log4j-core.jar">lib/log4j-core.jar</a>, 
+    <a href="../../lib/log4j-1.2-api.jar">lib/log4j-1.2-api.jar</a> (from Apache Log4j version 2.5),
     <br />
-    <a href="../../lib/junit-4.12.jar">lib/junit-4.12.jar</a>
+    <a href="../../lib/junit-4.12.jar">lib/junit-4.12.jar</a>,
     <a href="../../lib/hamcrest-core-1.3.jar">lib/hamcrest-core-1.3.jar</a>
     (from Junit),
     <br />
-    In case you have the first three ones, just ensure they are in the 
+    In case you already have these jars, just ensure they are in the 
     correct location (e.g. <code>../lib/</code>) or in the class path.
     </p>
     <p>
-    The libraries can be downloaded from the above links or 
+    The jar libraries can be downloaded from the above links or 
     with the Ivy "resolve" target of ant, when installing the JAS source code. 
     </p>
     <p>
@@ -149,15 +152,20 @@ javac -classpath log4j.jar:junit.jar:jas.jar:. -d . src/edu/jas/application/Exam
 
 java  -classpath log4j.jar:junit.jar:jas.jar:.      edu.jas.application.Examples
 </pre>
+
+   <p>Make sure that you use the actual jars as described above, for example
+   <code>log4j-api.jar:log4j-core.jar:log4j-1.2-api.jar:junit-4.12.jar:hamcrest-core-1.3.jar</code>
+   </p>
+
 </li>
 <li><p>If you want to develop with JAS, then extract the 
      jar-file in a new directory
      <code>jar -xvf jas-[version]-src.jar</code>
     </p>
 </li>
-<li><p>JAS is currently developed for Java 7 (OpenJDK 1.7).
-    It compiles also under Java 6 (OpenJDK 1.6) 
-    and under Java 8 (OpenJDK 1.8). 
+<li><p>JAS is currently developed for Java 8 (OpenJDK 1.8).
+    It compiles also under Java 7 (OpenJDK 1.7) 
+    and may still compile under Java 6 (OpenJDK 1.6). 
     It will <b>no more</b> compile under Java 5 or older versions. 
     </p>
 </li>
@@ -178,7 +186,7 @@ java  -classpath log4j.jar:junit.jar:jas.jar:.      edu.jas.application.Examples
 </li>
 <li><p>Most useful Ant targets:
     <br />
-    <code>ant resolve</code> fetch the required libraries (log4j, junit) with Ivy,
+    <code>ant resolve</code> fetch the required libraries (log4j2, junit) with Ivy,
     <br />
     <code>ant compile</code> changed Java files are compiled,
     <br />
@@ -264,7 +272,7 @@ Eclipse integrated development environment.
 <ol>
 <li>Download the JAS source jar and unpack to some directory 
 </li>
-<li>Download the Log4j and the Junit jar files
+<li>Download the Log4j2 and the Junit jar files
 </li>
 <li>Start eclipse
 </li>
@@ -285,7 +293,7 @@ Eclipse integrated development environment.
 <ol>
 <li>Download the JAS binary jar file
 </li>
-<li>Download the Log4j and the Junit jar files
+<li>Download the Log4j2 and the Junit jar files
 </li>
 <li>Start eclipse
 </li>
@@ -352,8 +360,9 @@ public class mytests {
     </p>
 </li-->
 <li><p>Be sure you have downloaded the above libraries 
-    log4j.jar, junit.jar and jas*-bin.jar. 
-    JAS-2.5 is using and has been tested with Jython 2.5.2. 
+    <code>log4j-api.jar, log4j-core.jar, log4j-1.2-api.jar, junit-4.12.jar, hamcrest-core-1.3.jar</code>,
+    and <code>jas*-bin.jar</code>. 
+    JAS-2.6 is using and has been tested with Jython 2.7.0. 
     </p>
 </li>
 <li><p>The main file to interface to the JAS library is  
@@ -370,7 +379,9 @@ public class mytests {
 </li-->
 <li><p>Start using JAS, e.g.
     </p>
-    <pre>jython -J-cp "../lib/log4j.jar:../lib/junit.jar:." examples/trinks.py</pre>
+    <pre>
+ jython -J-cp log4j-api.jar:log4j-core.jar:log4j-1.2-api.jar:junit-4.12.jar:hamcrest-core-1.3.jar:. examples/trinks.py
+    </pre>
     <p>The 
     <a href="../examples/trinks.py" target="py">examples/trinks.py</a>
     contains an Groebner base example named after its proposer Mr. Trinks.
@@ -390,8 +401,9 @@ public class mytests {
 
 <ul>
 <li><p>Be sure you have downloaded the above libraries 
-    log4j.jar, junit.jar and jas*-bin.jar.
-    JAS-2.5 is using and has been tested with JRuby 1.7.3 (Ruby 1.8.7 &amp; 1.9.2 compatible) 
+    <code>log4j-api.jar, log4j-core.jar, log4j-1.2-api.jar, junit-4.12.jar, hamcrest-core-1.3.jar</code>,
+    and <code>jas*-bin.jar</code>. 
+    JAS-2.6 is using and has been tested with JRuby 1.7.23 (Ruby 1.9.3 compatible) 
     </p>
 </li>
 <li><p>The main file to interface to the JAS library is  
@@ -403,7 +415,9 @@ public class mytests {
 </li>
 <li><p>Start using JAS, e.g.
     </p>
-    <pre>jruby -J-cp "../lib/log4j.jar:../lib/junit.jar:." examples/trinks.rb</pre>
+    <pre>
+ jruby -J-cp log4j-api.jar:log4j-core.jar:log4j-1.2-api.jar:junit-4.12.jar:hamcrest-core-1.3.jar:. examples/trinks.rb
+    </pre>
     <p>The 
     <a href="../examples/trinks.rb" target="rb">examples/trinks.rb</a>
     contains an Groebner base example named after its proposer Mr. Trinks.
@@ -467,19 +481,11 @@ public class mytests {
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Sun Dec 27 12:54:59 CET 2015
+Last modified: Sat Jan 23 19:26:01 CET 2016
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
 $Id$
-<li><p>
-
-    </p>
-</li>
-<li><p>
-
-    </p>
-</li>
 </p-->
   </body>
 </html>
