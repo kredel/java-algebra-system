@@ -162,10 +162,12 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
      * @return true, if CS is a Comprehensive-Groebner system, else false.
      */
     // @Override
-    @SuppressWarnings("unused")
     public boolean isGBsys(int modv, List<ColoredSystem<C>> CS) {
         if (CS == null || CS.size() == 0) {
             return true;
+        }
+        if (modv != 0) {
+            throw new IllegalArgumentException("modv !0 not supported.");
         }
         ColorPolynomial<C> p, q, h, hp;
         for (ColoredSystem<C> cs : CS) {
@@ -236,6 +238,9 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
     public boolean isGBsubst(int modv, List<GenPolynomial<GenPolynomial<C>>> F) {
         if (F == null || F.isEmpty()) {
             return true;
+        }
+        if (modv != 0) {
+            throw new IllegalArgumentException("modv !0 not supported.");
         }
         GenPolynomial<GenPolynomial<C>> f = F.get(0); // assert non Zero
         GenPolynomialRing<GenPolynomial<C>> cf = f.ring;

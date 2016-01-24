@@ -1362,7 +1362,6 @@ public class IdealTest extends TestCase {
             }
             d += ds;
             assertTrue("#L == #Ld: ", L.size() == Ld.size());
-            @SuppressWarnings("unused")
             List<List<Complex<BigDecimal>>> droot = Ic.decimalApproximation();
             //for (List<Complex<BigDecimal>> dr : droot) {
             //System.out.println("dr = " + dr); // TODO

@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 
 import edu.jas.gb.SolvableExtendedGB;
 import edu.jas.gb.SolvableGroebnerBaseAbstract;
-import edu.jas.gb.SolvableGroebnerBaseSeq;
 import edu.jas.gb.SolvableReduction;
 import edu.jas.gb.SolvableReductionSeq;
 import edu.jas.gbufd.PolyGBUtil;
@@ -46,7 +45,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
      * Side variant of ideal.
      */
     public static enum Side {
-	left, right, twosided
+        left, right, twosided
     }
 
 
@@ -262,7 +261,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
      */
     public SolvableIdeal(PolynomialList<C> list, boolean gb, boolean topt,
                     SolvableGroebnerBaseAbstract<C> bb, SolvableReduction<C> red) {
-        this(list, gb, topt, bb, bb.sred, Side.left );
+        this(list, gb, topt, bb, red, Side.left);
     }
 
 
@@ -276,7 +275,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
      * @param s side variant of ideal or Groebner Base
      */
     public SolvableIdeal(PolynomialList<C> list, boolean gb, boolean topt,
-                         SolvableGroebnerBaseAbstract<C> bb, SolvableReduction<C> red, Side s) {
+                    SolvableGroebnerBaseAbstract<C> bb, SolvableReduction<C> red, Side s) {
         if (list == null || list.list == null) {
             throw new IllegalArgumentException("list and list.list may not be null");
         }
@@ -286,7 +285,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         this.testGB = (gb ? true : false); // ??
         this.bb = bb;
         this.red = red;
-        if (s == null) { 
+        if (s == null) {
             s = Side.left; // default
         }
         this.sided = s;
