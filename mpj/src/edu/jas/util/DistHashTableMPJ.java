@@ -38,7 +38,7 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
     private static final Logger logger = Logger.getLogger(DistHashTableMPJ.class);
 
 
-    private static boolean debug = logger.isDebugEnabled();
+    private static final boolean debug = logger.isDebugEnabled();
 
 
     /*
@@ -484,7 +484,7 @@ class DHTMPJListener<K, V> extends Thread {
     private static final Logger logger = Logger.getLogger(DHTMPJListener.class);
 
 
-    private static boolean debug = logger.isDebugEnabled();
+    private static final boolean debug = logger.isDebugEnabled();
 
 
     private final Comm engine;

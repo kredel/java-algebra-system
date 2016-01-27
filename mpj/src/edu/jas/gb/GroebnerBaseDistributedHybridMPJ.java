@@ -41,7 +41,7 @@ import edu.jas.util.ThreadPool;
 public class GroebnerBaseDistributedHybridMPJ<C extends RingElem<C>> extends GroebnerBaseAbstract<C> {
 
 
-    public static final Logger logger = Logger.getLogger(GroebnerBaseDistributedHybridMPJ.class);
+    private static final Logger logger = Logger.getLogger(GroebnerBaseDistributedHybridMPJ.class);
 
 
     public final boolean debug = logger.isDebugEnabled();
@@ -476,7 +476,7 @@ public class GroebnerBaseDistributedHybridMPJ<C extends RingElem<C>> extends Gro
 class HybridReducerServerMPJ<C extends RingElem<C>> implements Runnable {
 
 
-    public static final Logger logger = Logger.getLogger(HybridReducerServerMPJ.class);
+    private static final Logger logger = Logger.getLogger(HybridReducerServerMPJ.class);
 
 
     public final boolean debug = logger.isDebugEnabled();
@@ -678,7 +678,7 @@ class HybridReducerServerMPJ<C extends RingElem<C>> implements Runnable {
 class HybridReducerReceiverMPJ<C extends RingElem<C>> extends Thread {
 
 
-    public static final Logger logger = Logger.getLogger(HybridReducerReceiverMPJ.class);
+    private static final Logger logger = Logger.getLogger(HybridReducerReceiverMPJ.class);
 
 
     public final boolean debug = logger.isDebugEnabled();

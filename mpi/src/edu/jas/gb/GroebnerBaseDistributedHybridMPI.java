@@ -39,7 +39,7 @@ import edu.jas.util.ThreadPool;
 public class GroebnerBaseDistributedHybridMPI<C extends RingElem<C>> extends GroebnerBaseAbstract<C> {
 
 
-    public static final Logger logger = Logger.getLogger(GroebnerBaseDistributedHybridMPI.class);
+    private static final Logger logger = Logger.getLogger(GroebnerBaseDistributedHybridMPI.class);
 
 
     public final boolean debug = logger.isDebugEnabled();
@@ -469,7 +469,7 @@ public class GroebnerBaseDistributedHybridMPI<C extends RingElem<C>> extends Gro
 class HybridReducerServerMPI<C extends RingElem<C>> implements Runnable {
 
 
-    public static final Logger logger = Logger.getLogger(HybridReducerServerMPI.class);
+    private static final Logger logger = Logger.getLogger(HybridReducerServerMPI.class);
 
 
     public final boolean debug = logger.isDebugEnabled();
@@ -683,7 +683,7 @@ class HybridReducerServerMPI<C extends RingElem<C>> implements Runnable {
 class HybridReducerReceiverMPI<C extends RingElem<C>> extends Thread {
 
 
-    public static final Logger logger = Logger.getLogger(HybridReducerReceiverMPI.class);
+    private static final Logger logger = Logger.getLogger(HybridReducerReceiverMPI.class);
 
 
     public final boolean debug = logger.isDebugEnabled();

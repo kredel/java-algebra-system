@@ -32,7 +32,7 @@ public class GBSigBased<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C
     private static final Logger logger = Logger.getLogger(GBSigBased.class);
 
 
-    private final boolean debug = logger.isDebugEnabled(); //logger.isInfoEnabled();
+    private static final boolean debug = logger.isDebugEnabled(); //logger.isInfoEnabled();
 
 
     /**
