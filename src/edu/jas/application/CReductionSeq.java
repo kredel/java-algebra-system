@@ -37,7 +37,7 @@ public class CReductionSeq<C extends GcdRingElem<C>> implements Serializable
     private static final Logger logger = Logger.getLogger(CReductionSeq.class);
 
 
-    //private final boolean debug = logger.isDebugEnabled();
+    //private static final boolean debug = logger.isDebugEnabled();
 
 
     private final boolean info = logger.isInfoEnabled();

@@ -38,7 +38,7 @@ public final class TermOrder implements Serializable {
     private static final Logger logger = Logger.getLogger(TermOrder.class);
 
 
-    private final boolean debug = logger.isDebugEnabled();
+    private static final boolean debug = logger.isDebugEnabled();
 
 
     // TermOrder index values

@@ -63,7 +63,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
     private static final Logger logger = Logger.getLogger(Ideal.class);
 
 
-    private final boolean debug = logger.isDebugEnabled();
+    private static final boolean debug = logger.isDebugEnabled();
 
 
     /**

@@ -41,7 +41,7 @@ public class ResidueSolvablePolynomial<C extends GcdRingElem<C>> extends
     private static final Logger logger = Logger.getLogger(ResidueSolvablePolynomial.class);
 
 
-    private final boolean debug = logger.isDebugEnabled();
+    private static final boolean debug = logger.isDebugEnabled();
 
 
     /**

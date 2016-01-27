@@ -38,7 +38,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
     private static final Logger logger = Logger.getLogger(SolvableIdeal.class);
 
 
-    private final boolean debug = logger.isDebugEnabled();
+    private static final boolean debug = logger.isDebugEnabled();
 
 
     /**

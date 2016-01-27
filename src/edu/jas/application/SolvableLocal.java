@@ -30,7 +30,7 @@ public class SolvableLocal<C extends GcdRingElem<C>> implements GcdRingElem<Solv
     private static final Logger logger = Logger.getLogger(SolvableLocal.class);
 
 
-    private final boolean debug = logger.isDebugEnabled();
+    private static final boolean debug = logger.isDebugEnabled();
 
 
     /**

@@ -38,7 +38,7 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
     private static final Logger logger = Logger.getLogger(WordIdeal.class);
 
 
-    private final boolean debug = logger.isDebugEnabled();
+    private static final boolean debug = logger.isDebugEnabled();
 
 
     /**

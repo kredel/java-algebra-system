@@ -54,7 +54,7 @@ Iterable<Monomial<C>> {
     private static final Logger logger = Logger.getLogger(GenPolynomial.class);
 
 
-    private final boolean debug = logger.isDebugEnabled();
+    private static final boolean debug = logger.isDebugEnabled();
 
 
     // protected GenPolynomial() { ring = null; val = null; } // don't use

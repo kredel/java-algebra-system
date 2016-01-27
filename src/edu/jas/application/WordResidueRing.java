@@ -37,7 +37,7 @@ public class WordResidueRing<C extends GcdRingElem<C>> implements RingFactory<Wo
     private static final Logger logger = Logger.getLogger(WordResidueRing.class);
 
 
-    //private boolean debug = logger.isDebugEnabled();
+    //private static final boolean debug = logger.isDebugEnabled();
 
 
     /**

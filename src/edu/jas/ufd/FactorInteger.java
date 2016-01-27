@@ -49,7 +49,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
     private static final Logger logger = Logger.getLogger(FactorInteger.class);
 
 
-    private final boolean debug = logger.isDebugEnabled();
+    private static final boolean debug = logger.isDebugEnabled();
 
 
     /**

@@ -32,7 +32,7 @@ public class PseudoReductionSeq<C extends RingElem<C>> extends ReductionAbstract
     private static final Logger logger = Logger.getLogger(PseudoReductionSeq.class);
 
 
-    private final boolean debug = logger.isDebugEnabled();
+    private static final boolean debug = logger.isDebugEnabled();
 
 
     /**

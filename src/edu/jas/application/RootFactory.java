@@ -37,7 +37,7 @@ public class RootFactory {
     private static final Logger logger = Logger.getLogger(RootFactory.class);
 
 
-    private static boolean debug = logger.isDebugEnabled();
+    private static final boolean debug = logger.isDebugEnabled();
 
 
     /**

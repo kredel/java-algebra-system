@@ -44,7 +44,7 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>> implements
     private static final Logger logger = Logger.getLogger(SolvableLocalResidueRing.class);
 
 
-    private final boolean debug = logger.isDebugEnabled();
+    private static final boolean debug = logger.isDebugEnabled();
 
 
     /**

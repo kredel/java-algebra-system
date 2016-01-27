@@ -20,7 +20,7 @@ public class Power<C extends RingElem<C>> {
     private static final Logger logger = Logger.getLogger(Power.class);
 
 
-    private static boolean debug = logger.isDebugEnabled();
+    private static final boolean debug = logger.isDebugEnabled();
 
 
     private final RingFactory<C> fac;

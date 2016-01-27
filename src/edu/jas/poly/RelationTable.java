@@ -57,7 +57,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
     private static final Logger logger = Logger.getLogger(RelationTable.class);
 
 
-    private final boolean debug = logger.isDebugEnabled();
+    private static final boolean debug = logger.isDebugEnabled();
 
 
     /**

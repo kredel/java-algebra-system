@@ -54,7 +54,7 @@ public class RingFactoryTokenizer {
     private static final Logger logger = Logger.getLogger(RingFactoryTokenizer.class);
 
 
-    private final boolean debug = logger.isDebugEnabled();
+    private static final boolean debug = logger.isDebugEnabled();
 
 
     private String[] vars;

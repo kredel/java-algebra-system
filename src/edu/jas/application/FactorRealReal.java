@@ -43,7 +43,7 @@ public class FactorRealReal<C extends GcdRingElem<C> & Rational> extends
     private static final Logger logger = Logger.getLogger(FactorRealReal.class);
 
 
-    private final boolean debug = logger.isInfoEnabled();
+    private static final boolean debug = logger.isInfoEnabled();
 
 
     /**

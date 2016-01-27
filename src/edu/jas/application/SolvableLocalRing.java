@@ -45,7 +45,7 @@ public class SolvableLocalRing<C extends GcdRingElem<C>> implements RingFactory<
     private static final Logger logger = Logger.getLogger(SolvableLocalRing.class);
 
 
-    private final boolean debug = logger.isDebugEnabled();
+    private static final boolean debug = logger.isDebugEnabled();
 
 
     /**

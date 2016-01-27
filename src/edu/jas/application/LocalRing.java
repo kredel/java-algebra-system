@@ -34,7 +34,7 @@ public class LocalRing<C extends GcdRingElem<C>>
     private static final Logger logger = Logger.getLogger(LocalRing.class);
 
 
-    //private boolean debug = logger.isDebugEnabled();
+    //private static final boolean debug = logger.isDebugEnabled();
 
 
     /**

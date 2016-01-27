@@ -42,7 +42,7 @@ public class FactorAlgebraicPrim<C extends GcdRingElem<C>> extends FactorAbsolut
     private static final Logger logger = Logger.getLogger(FactorAlgebraicPrim.class);
 
 
-    //private final boolean debug = logger.isInfoEnabled();
+    //private static final boolean debug = logger.isInfoEnabled();
 
 
     /**
