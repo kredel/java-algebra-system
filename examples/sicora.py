@@ -5,29 +5,27 @@
 
 import sys;
 
-from jas import Ring, Ideal
+from jas import PolyRing, ZZ, Order, Ideal
 from jas import startLog, terminate
 
 # sicora, e-gb example
 
-r = Ring( "Z(t) L" );
+r = PolyRing( ZZ(), "t", Order.INVLEX );
 print "Ring: " + str(r);
 print;
 
-ps = """
-( 
- ( 2 t + 1 ),
- ( t**2 + 1 )
-)
-""";
+f1 = 2 * t + 1;
+f2 = t**2 + 1;
 
-f = r.ideal( ps );
-print "Ideal: " + str(f);
+F = r.ideal( "", [f1,f2] );
+print "Ideal: " + str(F);
 print;
 
-#startLog();
-
-g = f.eGB();
-print "seq e-GB:", g;
-print "is e-GB:", g.iseGB();
+E = F.eGB();
+print "seq e-GB:", E;
+print "is e-GB:", E.iseGB();
 print;
+
+f = t**3;
+n = E.eReduction(f);
+print "e-Reduction = " + str(n);
