@@ -605,6 +605,16 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
 
 
     /**
+     * Get a GenPolynomial&lt;C&gt; element from a monomial.
+     * @param m monomial.
+     * @return a GenPolynomial&lt;C&gt;.
+     */
+    public GenPolynomial<C> valueOf(Monomial<C> m) {
+        return new GenPolynomial<C>(this, m.c, m.e);
+    }
+
+
+    /**
      * Get a (constant) GenPolynomial&lt;C&gt; element from a long value.
      * @param a long.
      * @return a GenPolynomial&lt;C&gt;.
