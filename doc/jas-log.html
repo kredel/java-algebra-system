@@ -18,25 +18,50 @@
 <dd> 
 </dd>
 <code></code>
+ Integer programming using GBs.
+ Groebner Walk implementation.
+ <code></code>
 -->
 
 <dl>
 
-<dt>2016, January </dt> <!-- 2.5.5xxx -->
+<dt>2016, February </dt> <!-- 2.6.5xxx --> 
+
 <dd> 
 
+ This is release 2.6 of JAS. We have switched to latest versions of
+ used packages, for example to Apache Log4j version 2.5, JRuby version
+ 1.7.23 and Jython version 2.7.0. Junit 4.12 is already used since the
+ last JAS version. At the moment all old versions of these packages
+ will still work, but this may change in the next JAS versions.  From
+ then on we will eventually make use of Java 8 features.
+
+ We removed some long time deprecated classes <code>GBDist</code>,
+ <code>GBDistHybrid</code>, <code>GroebnerBaseDistributed</code>,
+ <code>GroebnerBaseDistributedHybrid</code>, the method
+ <code>divideAndRemainder(</code> of several classes and some other
+ unused methods. Code cleanup and unified logger usage. 
+
+ Tests and some fixes for compatibility of term orders with Sage,
+ Singular and Mathematica. Several small bug fixes and
+ improvements. Print JAS version in jython and jruby modules.
+ Iterative Gr&ouml;bner base algorithms selectable in   
+ <code>GBAlgorithmBuilder</code>. Class <code>Monomial</code>
+ improved.
+
+</dd>
+
+<dt>2016, January </dt> <!-- 2.5.5380 -->
+<dd> 
  New parallel iterative Gr&ouml;bner base algorithm in class
  <code>GreoebnerBaseParIter</code>. Names for Sage, Singular and
  Mathematica term orders defined in class
  <code>TermOrderByName</code>. Better separation of ExpVector from
  TermOrder. Missing polynomial methods <code>weightDegree()</code>
  and <code>leadingWeightPolynomial()</code> added.
-
  Switched to Junit 4.12 and use the timeout option on long running
  tests.  Small improvements, changes and bug fixes.
-
 </dd>
-
 
 <dt>2015, December </dt> <!-- 2.5.5345 -->
 <dd> 
@@ -2508,7 +2533,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Thu Dec 31 18:47:26 CET 2015
+Last modified: Sat Jan 30 17:25:48 CET 2016
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
