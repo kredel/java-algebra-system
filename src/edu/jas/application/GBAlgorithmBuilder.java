@@ -16,6 +16,7 @@ import edu.jas.gb.GBProxy;
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.GroebnerBaseParallel;
 import edu.jas.gb.GroebnerBaseSeqIter;
+import edu.jas.gb.GroebnerBaseParIter;
 import edu.jas.gb.OrderedMinPairlist;
 import edu.jas.gb.OrderedPairlist;
 import edu.jas.gb.OrderedSyzPairlist;
@@ -334,7 +335,12 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
         if (algo == null) {
             algo = GBFactory.<C> getImplementation(ring.coFac, strategy);
         }
-        if (((RingFactory) ring.coFac) instanceof BigRational) {
+        if (algo instanceof GroebnerBaseSeqIter) { // iterative requested
+            GroebnerBaseAbstract<C> bb;
+            bb = (GroebnerBaseAbstract) new GroebnerBaseParIter<C>(threads, strategy);
+            GroebnerBaseAbstract<C> pbb = new GBProxy<C>(algo, bb);
+            return new GBAlgorithmBuilder<C>(ring, pbb);
+        } else if (((RingFactory) ring.coFac) instanceof BigRational) {
             GroebnerBaseAbstract<C> bb;
             if (algo instanceof GroebnerBaseRational) { // fraction free requested
                 PairList<BigInteger> pli;
@@ -411,11 +417,8 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
     public GBAlgorithmBuilder<C> iterated() {
         if (ring.coFac.isField()) {
             GroebnerBaseAbstract<C> bb;
-            if (strategy == null) {
-                bb = new GroebnerBaseSeqIter<C>();
-            } else {
-                bb = new GroebnerBaseSeqIter<C>(strategy); 
-            }
+            bb = new GroebnerBaseSeqIter<C>(strategy); 
+            // if (algo instanceof GBProxy) ... assemble parallel todo
             if (algo != null) {
                 logger.warn("algo " + algo + " ignored for " + bb);
             }
