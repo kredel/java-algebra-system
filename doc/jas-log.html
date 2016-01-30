@@ -34,12 +34,15 @@
  1.7.23 and Jython version 2.7.0. Junit 4.12 is already used since the
  last JAS version. At the moment all old versions of these packages
  will still work, but this may change in the next JAS versions.  From
- then on we will eventually make use of Java 8 features.
+ then on we will eventually also make use of Java 8 features.
+
+ The old version will be kept here: 
+ <a href="http://krum.rz.uni-mannheim.de/jas-2.5/" target="new">JAS 2.5</a>.
 
  We removed some long time deprecated classes <code>GBDist</code>,
  <code>GBDistHybrid</code>, <code>GroebnerBaseDistributed</code>,
  <code>GroebnerBaseDistributedHybrid</code>, the method
- <code>divideAndRemainder(</code> of several classes and some other
+ <code>divideAndRemainder</code> of several classes and some other
  unused methods. Code cleanup and unified logger usage. 
 
  Tests and some fixes for compatibility of term orders with Sage,
@@ -48,6 +51,7 @@
  Iterative Gr&ouml;bner base algorithms selectable in   
  <code>GBAlgorithmBuilder</code>. Class <code>Monomial</code>
  improved.
+
 
 </dd>
 
@@ -2533,7 +2537,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Sat Jan 30 17:25:48 CET 2016
+Last modified: Sat Jan 30 18:07:42 CET 2016
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
