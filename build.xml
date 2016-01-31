@@ -44,6 +44,9 @@
   <property name="doccp"    value="${log4j}:${junit}" />
   <property name="version"  value="0.1" />
 
+  <property name="dist.dir"  value="target" />
+  <property name="ivy-publish.overwrite"  value="true" />
+
 <!--
   <taskdef name="lint4j" classname="com.jutils.lint4j.ant.Lint4jAntTask">
     <classpath>
@@ -359,12 +362,24 @@
   <ivy:retrieve />
 </target>
 
-<!--target name="publish" description="publish artifacts with ivy">
+<target name="publish" description="publish artifacts with ivy">
+  <echo message="publish is not working"  />
   <ivy:resolve />
-  <ivy:publish resolver="local">
-   <ivy:artifacts pattern="build/repo/ivy/JavaAlgebraSystem/jas/2.5.5076/wrong" />
+  <ivy:publish 
+       forcedeliver="${ivy-publish.forcedeliver}"
+       overwrite="${ivy-publish.overwrite}" 
+       resolver="local">
+    <artifacts pattern="[artifact]-[revision].[ext]"/>
   </ivy:publish>
-</target-->
+  <!--ivy:publish 
+       forcedeliver="${ivy-publish.forcedeliver}"
+       overwrite="${ivy-publish.overwrite}" 
+       resolver="local">
+    <artifacts pattern="[artifact]-[revision]-src.[ext]"/>
+  </ivy:publish-->
+</target>
+
+<!--artifacts pattern="${ivy-publish.artifacts.pattern}"/-->
 
 <target name="untabify" depends="vorher" >
   <fixcrlf srcdir="${src}"
