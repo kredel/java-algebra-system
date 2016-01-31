@@ -1,0 +1,175 @@
+/*
+ * This build file was generated and modified
+ * by 'kredel' 
+ *
+ * $Id: $
+ */
+
+
+apply plugin: 'java'
+apply plugin: 'ivy-publish'
+apply plugin: 'maven-publish'
+//apply plugin: 'build-dashboard'
+
+repositories {
+  flatDir {
+      dirs "/home/kredel/java/lib"
+  }
+  mavenCentral()
+}
+
+//final LOG4J = "log4j:log4j:1.2.17@jar"
+//final JUNIT = "junit:junit:3.8@jar"
+final LOG4Ja = "org.apache.logging.log4j:log4j-api:2.5@jar"
+final LOG4Jc = "org.apache.logging.log4j:log4j-core:2.5@jar"
+final LOG4J1 = "org.apache.logging.log4j:log4j-1.2-api:2.5@jar"
+final JUNIT = "junit:junit:4.12@jar"
+//println LOG4J
+//println JUNIT
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+        //output.classesDir = file('build/classes') 
+    }
+    test {
+        java {
+            srcDir 'trc'
+        }
+        //output.classesDir = file('build/classes') 
+    }
+}
+
+dependencies {
+   compile LOG4Ja, LOG4Jc, LOG4J1, JUNIT
+   //testCompile JUNIT
+   //test LOG4J, JUNIT
+   //publish javadoc
+}
+
+version = "2.6." + "svnlook youngest /home/SUBVERSION/jas".execute().text.trim()
+//println "version = " + version
+
+description = "Java Algebra System (JAS), version " + version
+
+javadoc {
+   title "Java Algebra System (JAS)"
+}
+
+test {
+   //useJUnit()
+
+   ignoreFailures = true
+   forkEvery = 1
+   //reports.html.enabled = true
+   //scanForTestClasses = false
+   //testLogging.showStandardStreams = false
+   //jvmArgs '-disableassertions'
+   //jvmArgs '-XX:MaxPermSize=256m'
+
+   beforeSuite { descriptor ->   
+       if ((""+descriptor).indexOf("class")>=0) 
+           println("Running class suite: " + descriptor)
+   }
+
+   //beforeTest { descriptor ->
+   //  println("Running test: " + descriptor)
+   //}
+   //println "test classpath = " + compileTestJava.classpath.getAsPath()
+   //println "classpath      = " + classpath.getAsPath()
+   //println "test classes   = " + relativePath(testClassesDir)
+   //println "test results   = " + relativePath(testResultsDir)
+   //println "test report    = " + relativePath(testReportDir)
+
+   //include 'edu/jas/arith/**'      // ok
+   //include '**/poly/*Test.class'   // ok
+   //include '**/arith/*Test.class'  // ok
+   //include '**/*Test.class'
+   include 'edu/*/*/*Test.class'   // ok
+   //filter { // not ok
+   //  includeTestsMatching "*Test"
+   //}
+}
+
+
+task sourceZip(type: Zip) {
+        baseName "jas-src"
+        from sourceSets.main.java, sourceSets.test.java
+        classifier "source"
+}
+
+task docZip(type: Zip) {
+        baseName "jas-doc"
+        from javadoc.destinationDir
+        classifier "javadoc"
+}
+
+task classesJar(type: Jar) {
+        baseName "jas-bin"
+        from sourceSets.main.output, sourceSets.test.output
+        classifier "classes"
+}
+
+group = 'JavaAlgebraSystem'
+publishing {
+  publications {
+     final version = project.version
+     ivyClasses(IvyPublication) {
+        from components.java
+        artifact classesJar 
+     }
+     ivySource(IvyPublication) {
+        from components.java
+        artifact sourceZip
+     }
+     ivyDoc(IvyPublication) {
+        from components.java
+        artifact docZip
+     }
+     mavenClasses(MavenPublication) {
+        from components.java
+        artifact classesJar
+     }
+     mavenSource(MavenPublication) {
+        from components.java
+        artifact sourceZip
+     }
+     mavenDoc(MavenPublication) {
+        from components.java
+        artifact docZip
+     }
+  }
+  repositories {
+     ivy {
+        url "$buildDir/repo/ivy"
+     }
+     maven {
+        url "$buildDir/repo/maven"
+     }
+  }
+}
+
+
+task show << {
+    println compileJava.classpath.getAsPath()
+    println relativePath(compileJava.destinationDir)
+    println relativePath(compileTestJava.destinationDir)
+    println relativePath(processResources.destinationDir)
+    sourceSets.all {
+       println name
+    }
+}
+
+task listJars << {
+    configurations.testCompile.each { File file -> println file.name }
+}
+
+
+// ------- old -------------------
+
+//ant.importBuild 'build.xml'
+//ant.taskdef(name: 'junit', 
+//            classname: 'org.apache.tools.ant.taskdefs.optional.junit.JUnitTask', 
+//            classpath: '/usr/share/ant/lib/ant-junit.jar')
