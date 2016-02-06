@@ -100,6 +100,16 @@ public class GroebnerBaseFGLM<C extends GcdRingElem<C>> extends GroebnerBaseAbst
 
 
     /**
+     * Get the String representation with GB engine.
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "GroebnerBaseFGLM( " + sgb.toString() + " )";
+    }
+
+
+    /**
      * Groebner base using FGLM algorithm.
      * @param modv module variable number.
      * @param F polynomial list.

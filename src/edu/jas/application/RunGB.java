@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
@@ -40,8 +42,15 @@ import edu.jas.util.ExecutableServer;
 
 /**
  * Simple setup to run a GB example. <br />
- * Usage: RunGB [seq(+)|par(+)|dist(+)|disthyb|cli] &lt;file&gt;
- * #procs/#threadsPerNode [machinefile]
+ * Usage: RunGB [seq(+)|par(+)|build=string|disthyb|cli] &lt;file&gt;
+ * #procs/#threadsPerNode [machinefile] &lt;check&gt; &lt;nolog&gt;
+ * <br />
+ * Build string can be any combination of method calls from GBAlgorithmBuilder.
+ * Method polynomialRing() is called based on declaration from "file". 
+ * Method build() is called automatically. For example 
+ * <br />
+ * build=syzygyPairlist.iterated.graded.parallel(3)
+ * @see edu.jas.application.GBAlgorithmBuilder
  * @author Heinz Kredel
  */
 public class RunGB {
@@ -61,13 +70,13 @@ public class RunGB {
 
     /**
      * main method to be called from commandline <br />
-     * Usage: RunGB [seq|par(+)|dist(+)|disthyb(+)|cli] &lt;file&gt;
-     * #procs/#threadsPerNode [machinefile] &lt;check&gt; &lt;log&gt;
+     * Usage: RunGB [seq|par(+)|build=string|disthyb(+)|cli] &lt;file&gt;
+     * #procs/#threadsPerNode [machinefile] &lt;check&gt; &lt;nolog&gt;
      */
     @SuppressWarnings("unchecked")
     public static void main(String[] args) {
 
-        String[] allkinds = new String[] { "seq", "seq+", "par", "par+", "dist", "dist+", "disthyb",
+        String[] allkinds = new String[] { "seq", "seq+", "par", "par+", "build=", "disthyb",
                 "disthyb+", "cli" }; // must be last
 
         String usage = "Usage: RunGB [ " + join(allkinds, " | ") + "[port] ] " + "<file> "
@@ -211,6 +220,15 @@ public class RunGB {
         }
         System.out.println("input S =\n" + S);
 
+        GroebnerBaseAbstract gb = null;
+        if (kind.startsWith("build")) {
+            gb = getGBalgo(args, kind, S.ring);
+            if (gb == null) {
+                System.out.println(usage);
+                return;
+            }
+        }
+
         if (doLog) {
             BasicConfigurator.configure();
         }
@@ -221,14 +239,17 @@ public class RunGB {
             runParallel(S, threads, plusextra);
         } else if (kind.startsWith("disthyb")) {
             runMasterHyb(S, threads, threadsPerNode, mfile, port, plusextra);
-        } else if (kind.startsWith("dist")) {
-            runMaster(S, threads, mfile, port, plusextra);
+        //} else if (kind.startsWith("dist")) {
+            //runMaster(S, threads, mfile, port, plusextra);
+        } else if (kind.startsWith("build")) {
+            runGB(S, gb);
         }
         ComputerThreads.terminate();
         //System.exit(0);
     }
 
 
+    // no more used
     @SuppressWarnings("unchecked")
     static void runMaster(PolynomialList S, int threads, String mfile, int port, boolean plusextra) {
         List L = S.list;
@@ -408,6 +429,30 @@ public class RunGB {
 
 
     @SuppressWarnings("unchecked")
+    static void runGB(PolynomialList S, GroebnerBaseAbstract bb) {
+        List L = S.list;
+        List G;
+        long t;
+        if (bb == null) { // should not happen
+            bb = GBFactory.getImplementation(S.ring.coFac);
+        }
+        String bbs = bb.toString().replaceAll(" ", "");
+        System.out.println("\nGroebner base build=" + bbs + " ...");
+        t = System.currentTimeMillis();
+        G = bb.GB(L);
+        t = System.currentTimeMillis() - t;
+        S = new PolynomialList(S.ring, G);
+        System.out.println("G =\n" + S);
+        System.out.println("G.size() = " + G.size());
+        System.out.print("build=" + bbs + ", ");
+        System.out.println("time = " + t + " milliseconds");
+        checkGB(S);
+        bb.terminate();
+        System.out.println("");
+    }
+
+
+    @SuppressWarnings("unchecked")
     static void checkGB(PolynomialList S) {
         if (!doCheck) {
             return;
@@ -422,7 +467,7 @@ public class RunGB {
 
     static int indexOf(String[] args, String s) {
         for (int i = 0; i < args.length; i++) {
-            if (s.equals(args[i])) {
+            if (s.startsWith(args[i])) {
                 return i;
             }
         }
@@ -479,5 +524,74 @@ public class RunGB {
         }
         return problem;
     }
+
+
+    static GroebnerBaseAbstract getGBalgo(String[] args, String bstr, GenPolynomialRing ring) {
+        GroebnerBaseAbstract gb = null;
+        int i = bstr.indexOf("=");
+        if (i < 0) {
+            System.out.println("args(build): " + Arrays.toString(args));
+            return gb;
+        }
+        i += 1;
+        String tb = bstr.substring(i);
+        //System.out.println("build=" + tb);
+        GBAlgorithmBuilder ab = GBAlgorithmBuilder.polynomialRing(ring);
+        //System.out.println("ab = " + ab);
+        while (!tb.isEmpty()) {
+            int ii = tb.indexOf(".");
+            String mth;
+            if (ii >= 0) {
+                mth = tb.substring(0,ii);
+                tb = tb.substring(ii+1);
+            } else {
+                mth = tb;
+                tb = "";
+            }
+            if (mth.startsWith("build")) {
+                continue;
+            }
+            String parm = "";
+            int jj = mth.indexOf("()");
+            if (jj >= 0) {
+                mth = mth.substring(0,jj);
+            } else {
+                jj = mth.indexOf("(");
+                if (jj >= 0) {
+                    parm = mth.substring(jj+1);
+                    mth = mth.substring(0,jj);
+                    jj = parm.indexOf(")");
+                    parm = parm.substring(0,jj);
+                }
+            }
+            //System.out.println("mth = " + mth + ", parm = " + parm);
+            try {
+                Method method; 
+                if (parm.isEmpty()) {
+                    method = ab.getClass().getMethod(mth, null);
+                    ab = (GBAlgorithmBuilder) method.invoke(ab, null);
+                } else {
+                    int tparm = Integer.parseInt(parm);
+                    method = ab.getClass().getMethod(mth, int.class);
+                    ab = (GBAlgorithmBuilder) method.invoke(ab, tparm);
+                }
+            } catch (NoSuchMethodException e) {
+                System.out.println("args(build,method): " + Arrays.toString(args));
+                return gb;
+            } catch (IllegalAccessException e) {
+                System.out.println("args(build,access): " + Arrays.toString(args));
+                return gb;
+            } catch (InvocationTargetException e) {
+                System.out.println("args(build,invocation): " + Arrays.toString(args));
+                return gb;
+            } catch (NumberFormatException e) {
+                System.out.println("args(build,number): " + Arrays.toString(args));
+                return gb;
+            }
+        }
+        gb = ab.build();
+        //System.out.println("gb = " + gb);
+        return gb;
+    }   
 
 }
