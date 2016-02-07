@@ -2,7 +2,7 @@
 JAS: Java Algebra System
 ========================
 
-Version 2.5, 2016
+Version 2.6, 2016
 
 by Heinz Kredel, University of Mannheim, kredel at rz.uni-mannheim.de
 
@@ -20,24 +20,49 @@ A Java JDK 1.8.
 
 Documentation see index.html.
 
-Required libraries are log4j.jar (from Apache Log4j, or mylog.jar, droidlog.jar) 
-and junit.jar (from Junit for tests in trc) 
+Required libraries are log4j-core-2.5.jar, log4j-api-2.5.jar, log4j-1.2-api-2.5.jar 
+(from Apache Log4j2, or mylog.jar, droidlog.jar) 
+and junit-4.12.jar, hamcrest-core-1.3.jar (from Junit for tests in trc) 
 
 
 Usage
 -----
 
-javac -cp {other_jar_files}:jas-<version>-bin.jar:.  <your sample code>
+> java  -cp {other_jar_files}:jas-<version>-bin.jar:. <sample class>
 
-java  -cp {other_jar_files}:jas-<version>-bin.jar:.  <your sample class>
-
-or
-
-jython examples/<some input file> 
+for example
+> java -cp ../lib/log4j-core-2.5.jar:../lib/log4j-api-2.5.jar:../lib/log4j-1.2-api-2.5.jar:jas-2.6.5428-bin.jar edu.jas.application.RunGB seq examples/trinks7.jas
 
 or
 
-jruby examples/<some input file> 
+> jruby examples/<some input file>.rb
+
+or
+
+> jas examples/<some input file>.rb 
+
+for example
+> ./jas examples/all_rings.rb
+
+or
+
+> jython examples/<some input file>.py 
+
+or
+
+> jas -py examples/<some input file>.py
+
+
+The shell script "jas" figures out the Java, jruby, jython and JAS 
+environment and runs the respective scripting interpreter. See 
+>  man -l doc/jas.1
+for more information. 
+
+Compilation of your own Java files using the JAS library can be done 
+with the "javac" command.
+
+> javac -cp {other_jar_files}:jas-<version>-bin.jar:. <your sample code>
+
 
 
 Versions and jar files
@@ -49,7 +74,8 @@ jas-<version>-bin.jar:    the Java class files
 jas-<version>-src.zip:    the java source code
 jas-<version>-doc.zip:    the Java doc, epydoc, jrdoc and more info files
 
-optional jar files:
+
+optional jar files which require further installed packages:
 
 jas-meditor.jar:          the interface to meditor
 jas-jython.jar:           an interface for Java scripting
@@ -59,9 +85,18 @@ droidlog.jar:             a substitute for log4j to use Android logging
 jlinalg_adapter.jar:      an adaptor to parts of JLinAlg
 commons-math_adapter.jar: an adaptor to parts of Apache commons.math
 
-There is a GIT repository for the scource code, which can be cloned with
 
-  git clone http://krum.rz.uni-mannheim.de/jas.git  jas
+pre packaged JAS versions:
+
+jas-<version>-all.deb       a Debian (wheezy) package usable in MathLibre
+ruboto-irb-jas-release.apk  an Android App based on Ruboto
+
+
+There are GIT repositories for the scource code, which can be cloned with
+
+> git clone http://krum.rz.uni-mannheim.de/jas.git jas
+or
+> git clone https://github.com/kredel/java-algebra-system.git jas
 
 
 The version is specified by a two digit major.minor number
@@ -80,13 +115,13 @@ The fastest way to get a complete JAS install, is
 > jar -xf jas-<version>-bin.jar
 > jar -xf jas-<version>-doc.zip
 
-If you have a working ant, the last two steps can be replaced by
+If you have a working Ant with Ivy, the last two steps can be replaced by
 
 > ant resolve
 > ant compile
 > ant doc
 
-provided you have setup build.xml and the required libraries.
+provided you have setup build.xml, ivy.xml for the required libraries.
 
 
 Directory structure
