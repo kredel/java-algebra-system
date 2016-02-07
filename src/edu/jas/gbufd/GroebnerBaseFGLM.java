@@ -105,7 +105,11 @@ public class GroebnerBaseFGLM<C extends GcdRingElem<C>> extends GroebnerBaseAbst
      */
     @Override
     public String toString() {
-        return "GroebnerBaseFGLM( " + sgb.toString() + " )";
+        if (sgb == null) {
+            return "GroebnerBaseFGLM()";
+        } else {
+            return "GroebnerBaseFGLM( " + sgb.toString() + " )";
+        }
     }
 
 

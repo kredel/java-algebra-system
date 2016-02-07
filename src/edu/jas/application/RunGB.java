@@ -442,6 +442,7 @@ public class RunGB {
         G = bb.GB(L);
         t = System.currentTimeMillis() - t;
         S = new PolynomialList(S.ring, G);
+        bbs = bb.toString().replaceAll(" ", "");
         System.out.println("G =\n" + S);
         System.out.println("G.size() = " + G.size());
         System.out.print("build=" + bbs + ", ");
