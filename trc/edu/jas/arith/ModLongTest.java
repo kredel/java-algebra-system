@@ -119,10 +119,10 @@ public class ModLongTest extends TestCase {
         //System.out.println("c = " + c);
         //System.out.println("len(c) = " + c.bitLength());
 
-        assertEquals("len(0) = 1",   1L, a.bitLength());
-        assertEquals("len(1) = 2",   2, b.bitLength());
-        assertEquals("len(-1) = len(mod)",  BigInteger.bitLength(zm.modul), b.negate().bitLength());
-        assertTrue("len(random) >= 1",   1 <= c.bitLength());
+        assertEquals("len(0) = 1", 1L, a.bitLength());
+        assertEquals("len(1) = 2", 2, b.bitLength());
+        assertEquals("len(-1) = len(mod)", BigInteger.bitLength(zm.modul), b.negate().bitLength());
+        assertTrue("len(random) >= 1", 1 <= c.bitLength());
     }
 
 

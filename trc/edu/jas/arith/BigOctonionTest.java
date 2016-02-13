@@ -5,8 +5,6 @@
 package edu.jas.arith;
 
 
-// import edu.jas.arith.BigRational;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -97,14 +95,14 @@ public class BigOctonionTest extends TestCase {
         //System.out.println("c = " + c); //.toScript());
         //System.out.println("len(c) = " + c.bitLength());
 
-        assertEquals("len(0) = 24",   24, a.bitLength());
-        assertEquals("len(1) = 25",   25, b.bitLength());
-        assertEquals("len(-1) = 25",  25, b.negate().bitLength());
-        assertTrue("len(random) >= 24",   24 <= c.bitLength());
+        assertEquals("len(0) = 24", 24, a.bitLength());
+        assertEquals("len(1) = 25", 25, b.bitLength());
+        assertEquals("len(-1) = 25", 25, b.negate().bitLength());
+        assertTrue("len(random) >= 24", 24 <= c.bitLength());
 
         d = BigOctonion.I;
-        assertEquals("len(i) = 25",   25, d.bitLength());
-        assertEquals("len(-i) = 25",  25, d.negate().bitLength());
+        assertEquals("len(i) = 25", 25, d.bitLength());
+        assertEquals("len(-i) = 25", 25, d.negate().bitLength());
     }
 
 

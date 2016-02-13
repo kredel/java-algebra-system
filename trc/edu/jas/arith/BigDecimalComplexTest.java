@@ -5,8 +5,6 @@
 package edu.jas.arith;
 
 
-// import edu.jas.arith.BigRational;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -97,12 +95,12 @@ public class BigDecimalComplexTest extends TestCase {
         //System.out.println("c = " + c);
         //System.out.println("len(c) = " + c.bitLength());
 
-        assertEquals("len(0) = 4",   4, a.bitLength());
-        assertEquals("len(1) = 5",   5, b.bitLength());
-        assertEquals("len(-1) = 5",  5, b.negate().bitLength());
-        assertEquals("len(i) = 5",   5, d.bitLength());
-        assertEquals("len(-i) = 5",  5, d.negate().bitLength());
-        assertTrue("len(random) >= 4",   4 <= c.bitLength());
+        assertEquals("len(0) = 4", 4, a.bitLength());
+        assertEquals("len(1) = 5", 5, b.bitLength());
+        assertEquals("len(-1) = 5", 5, b.negate().bitLength());
+        assertEquals("len(i) = 5", 5, d.bitLength());
+        assertEquals("len(-i) = 5", 5, d.negate().bitLength());
+        assertTrue("len(random) >= 4", 4 <= c.bitLength());
     }
 
 

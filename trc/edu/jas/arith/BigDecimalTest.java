@@ -12,9 +12,6 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 
-// import edu.jas.arith.BigDecimal;
-
-
 /**
  * BigDecimal tests with JUnit.
  * @author Heinz Kredel.
@@ -103,20 +100,20 @@ public class BigDecimalTest extends TestCase {
     public void testBitLength() {
         a = BigDecimal.ZERO;
         b = BigDecimal.ONE;
-        c = b.random(300,100);
+        c = b.random(300, 100);
         //System.out.println("c = " + c);
         //System.out.println("unscale(c) = " + c.val.unscaledValue());
         //System.out.println("scale(c) = " + c.val.scale());
         //System.out.println("len(c) = " + c.bitLength());
 
-        assertEquals("len(0) = 1",   1, a.bitLength());
-        assertEquals("len(1) = 2",   2, b.bitLength());
-        assertEquals("len(-1) = 2",  2, b.negate().bitLength());
-        assertTrue("len(random) >= 1",   1 <= c.bitLength());
+        assertEquals("len(0) = 1", 2, a.bitLength());
+        assertEquals("len(1) = 3", 3, b.bitLength());
+        assertEquals("len(-1) = 3", 3, b.negate().bitLength());
+        assertTrue("len(random) >= 2", 2 <= c.bitLength());
     }
 
 
-    /** 
+    /**
      * Test constructor and toString.
      */
     public void testConstructor() {

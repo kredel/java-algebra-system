@@ -120,10 +120,10 @@ public class ModIntegerTest extends TestCase {
         //System.out.println("c = " + c);
         //System.out.println("len(c) = " + c.bitLength());
 
-        assertEquals("len(0) = 1",   1, a.bitLength());
-        assertEquals("len(1) = 2",   2, b.bitLength());
-        assertEquals("len(-1) = len(mod)",  zm.modul.bitLength()+1, b.negate().bitLength());
-        assertTrue("len(random) >= 1",   1 <= c.bitLength());
+        assertEquals("len(0) = 1", 1, a.bitLength());
+        assertEquals("len(1) = 2", 2, b.bitLength());
+        assertEquals("len(-1) = len(mod)", zm.modul.bitLength() + 1, b.negate().bitLength());
+        assertTrue("len(random) >= 1", 1 <= c.bitLength());
     }
 
 

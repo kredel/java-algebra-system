@@ -5,8 +5,6 @@
 package edu.jas.arith;
 
 
-// import edu.jas.arith.BigRational;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -96,14 +94,14 @@ public class BigComplexTest extends TestCase {
         d = BigComplex.I;
         e = BigComplex.CDIF(d, d);
 
-        assertEquals("len(0) = 6",   6, a.bitLength());
-        assertEquals("len(1) = 7",   7, b.bitLength());
-        assertEquals("len(-1) = 7",  7, b.negate().bitLength()); 
-        assertEquals("len(i) = 7",   7, d.bitLength());
-        assertEquals("len(-i) = 7",  7, d.negate().bitLength());
+        assertEquals("len(0) = 6", 6, a.bitLength());
+        assertEquals("len(1) = 7", 7, b.bitLength());
+        assertEquals("len(-1) = 7", 7, b.negate().bitLength());
+        assertEquals("len(i) = 7", 7, d.bitLength());
+        assertEquals("len(-i) = 7", 7, d.negate().bitLength());
 
         e = BigComplex.CDIF(b, d);
-        assertEquals("len(1-i) = 8",  8, e.bitLength());
+        assertEquals("len(1-i) = 8", 8, e.bitLength());
     }
 
 

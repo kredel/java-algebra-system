@@ -5,8 +5,6 @@
 package edu.jas.arith;
 
 
-// import edu.jas.arith.BigRational;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -109,22 +107,22 @@ public class BigQuaternionTest extends TestCase {
         //System.out.println("c = " + c);
         //System.out.println("len(c) = " + c.bitLength());
 
-        assertEquals("len(0) = 12",   12, a.bitLength());
-        assertEquals("len(1) = 13",   13, b.bitLength());
-        assertEquals("len(-1) = 13",  13, b.negate().bitLength());
-        assertTrue("len(random) >= 12",   12 <= c.bitLength());
+        assertEquals("len(0) = 12", 12, a.bitLength());
+        assertEquals("len(1) = 13", 13, b.bitLength());
+        assertEquals("len(-1) = 13", 13, b.negate().bitLength());
+        assertTrue("len(random) >= 12", 12 <= c.bitLength());
 
         d = BigQuaternion.I;
-        assertEquals("len(i) = 13",   13, d.bitLength());
-        assertEquals("len(-i) = 13",  13, d.negate().bitLength());
+        assertEquals("len(i) = 13", 13, d.bitLength());
+        assertEquals("len(-i) = 13", 13, d.negate().bitLength());
 
         d = BigQuaternion.J;
-        assertEquals("len(j) = 13",   13, d.bitLength());
-        assertEquals("len(-j) = 13",  13, d.negate().bitLength());
+        assertEquals("len(j) = 13", 13, d.bitLength());
+        assertEquals("len(-j) = 13", 13, d.negate().bitLength());
 
         d = BigQuaternion.K;
-        assertEquals("len(k) = 13",   13, d.bitLength());
-        assertEquals("len(-k) = 13",  13, d.negate().bitLength());
+        assertEquals("len(k) = 13", 13, d.bitLength());
+        assertEquals("len(-k) = 13", 13, d.negate().bitLength());
     }
 
 

@@ -79,13 +79,13 @@ public class BigRationalTest extends TestCase {
      * Test bitLength.
      */
     public void testBitLength() {
-        a = BigRational.ZERO; 
+        a = BigRational.ZERO;
         b = BigRational.ONE;
         c = BigRational.RNDIF(b, b);
         d = BigRational.RNRAND(500);
 
-        assertEquals("len(0) = 3",  3, a.bitLength());
-        assertEquals("len(1) = 4",  4, b.bitLength());
+        assertEquals("len(0) = 3", 3, a.bitLength());
+        assertEquals("len(1) = 4", 4, b.bitLength());
         assertEquals("len(-1) = 4", 4, b.negate().bitLength());
         assertTrue("len(rnd) >= 1", 1 <= d.bitLength());
     }
