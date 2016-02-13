@@ -75,6 +75,22 @@ public class BigIntegerTest extends TestCase {
 
 
     /**
+     * Test bitLength.
+     */ 
+    public void testBitLength() {
+        a = BigInteger.ZERO;
+        b = BigInteger.ONE;
+        c = BigInteger.IDIF(b,b);
+        d = BigInteger.IRAND( 500 );
+
+        assertEquals("len(0) = 1",  1, a.bitLength());
+        assertEquals("len(1) = 2",  2, b.bitLength());
+        assertEquals("len(-1) = 2", 2, b.negate().bitLength());
+        assertTrue("len(random) >= 1", 1 <= d.bitLength());
+    }
+
+
+    /**
      * Test constructor and toString.
      */
     public void testConstructor() {

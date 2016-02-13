@@ -72,14 +72,37 @@ public class BigDecimalComplexTest extends TestCase {
         a = BigDecimalComplex.ZERO;
         b = BigDecimalComplex.ONE;
         c = b.subtract(b);
+        d = BigDecimalComplex.I;
+        e = BigDecimalComplex.CDIF(d, d);
 
         assertEquals("1-1 == 0", c, a);
         assertTrue("1-1 == 0", c.isZERO());
         assertTrue("1 == 1", b.isONE());
+        assertTrue("i == i", d.isIMAG());
+        assertTrue("i-i == 0", e.isZERO());
 
         c = a.subtract(a);
-
         assertEquals("0-0 == 0", c, a);
+    }
+
+
+    /**
+     * Test bitLength.
+     */
+    public void testBitLength() {
+        a = BigDecimalComplex.ZERO;
+        b = BigDecimalComplex.ONE;
+        c = b.random(300);
+        d = BigDecimalComplex.I;
+        //System.out.println("c = " + c);
+        //System.out.println("len(c) = " + c.bitLength());
+
+        assertEquals("len(0) = 4",   4, a.bitLength());
+        assertEquals("len(1) = 5",   5, b.bitLength());
+        assertEquals("len(-1) = 5",  5, b.negate().bitLength());
+        assertEquals("len(i) = 5",   5, d.bitLength());
+        assertEquals("len(-i) = 5",  5, d.negate().bitLength());
+        assertTrue("len(random) >= 4",   4 <= c.bitLength());
     }
 
 

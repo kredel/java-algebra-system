@@ -48,28 +48,10 @@ public class ModIntegerTest extends TestCase {
     }
 
 
-    ModIntegerRing zm;
+    ModIntegerRing zm, z1, z2;
 
 
-    ModIntegerRing z1;
-
-
-    ModIntegerRing z2;
-
-
-    ModInteger a;
-
-
-    ModInteger b;
-
-
-    ModInteger c;
-
-
-    ModInteger d;
-
-
-    ModInteger e;
+    ModInteger a, b, c, d, e;
 
 
     @Override
@@ -124,7 +106,24 @@ public class ModIntegerTest extends TestCase {
         assertEquals("1-1 = 0", c, a);
         assertTrue("1-1 = 0", c.isZERO());
         assertTrue("1 = 1", b.isONE());
+    }
 
+
+    /**
+     * Test bitLength.
+     */
+    public void testBitLength() {
+        zm = new ModIntegerRing(163);
+        a = zm.getZERO();
+        b = zm.getONE();
+        c = zm.random(30);
+        //System.out.println("c = " + c);
+        //System.out.println("len(c) = " + c.bitLength());
+
+        assertEquals("len(0) = 1",   1, a.bitLength());
+        assertEquals("len(1) = 2",   2, b.bitLength());
+        assertEquals("len(-1) = len(mod)",  zm.modul.bitLength()+1, b.negate().bitLength());
+        assertTrue("len(random) >= 1",   1 <= c.bitLength());
     }
 
 

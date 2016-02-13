@@ -74,16 +74,36 @@ public class BigComplexTest extends TestCase {
         a = BigComplex.ZERO;
         b = BigComplex.ONE;
         c = BigComplex.CDIF(b, b);
+        d = BigComplex.I;
+        e = BigComplex.CDIF(d, d);
 
         assertEquals("1-1 = 0", c, a);
         assertTrue("1-1 = 0", c.isZERO());
         assertTrue("1 = 1", b.isONE());
+        assertEquals("1-1 = 0", c, a);
+        assertTrue("i = i", d.isIMAG());
+        assertTrue("i-i = 0", e.isZERO());
+    }
 
+
+    /**
+     * Test bitLength.
+     */
+    public void testBitLength() {
         a = BigComplex.ZERO;
         b = BigComplex.ONE;
         c = BigComplex.CDIF(b, b);
+        d = BigComplex.I;
+        e = BigComplex.CDIF(d, d);
 
-        assertEquals("1-1 = 0", c, a);
+        assertEquals("len(0) = 6",   6, a.bitLength());
+        assertEquals("len(1) = 7",   7, b.bitLength());
+        assertEquals("len(-1) = 7",  7, b.negate().bitLength()); 
+        assertEquals("len(i) = 7",   7, d.bitLength());
+        assertEquals("len(-i) = 7",  7, d.negate().bitLength());
+
+        e = BigComplex.CDIF(b, d);
+        assertEquals("len(1-i) = 8",  8, e.bitLength());
     }
 
 

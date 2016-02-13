@@ -48,28 +48,10 @@ public class ModLongTest extends TestCase {
     }
 
 
-    ModLongRing zm;
+    ModLongRing zm, z1, z2;
 
 
-    ModLongRing z1;
-
-
-    ModLongRing z2;
-
-
-    ModLong a;
-
-
-    ModLong b;
-
-
-    ModLong c;
-
-
-    ModLong d;
-
-
-    ModLong e;
+    ModLong a, b, c, d, e;
 
 
     @Override
@@ -112,7 +94,6 @@ public class ModLongTest extends TestCase {
 
     /**
      * Test static initialization and constants.
-     * 
      */
     public void testConstants() {
         zm = new ModLongRing(5);
@@ -124,13 +105,29 @@ public class ModLongTest extends TestCase {
         assertEquals("1-1 = 0", c, a);
         assertTrue("1-1 = 0", c.isZERO());
         assertTrue("1 = 1", b.isONE());
+    }
 
+
+    /**
+     * Test bitLength.
+     */
+    public void testBitLength() {
+        zm = new ModLongRing(163);
+        a = zm.getZERO();
+        b = zm.getONE();
+        c = zm.random(30);
+        //System.out.println("c = " + c);
+        //System.out.println("len(c) = " + c.bitLength());
+
+        assertEquals("len(0) = 1",   1L, a.bitLength());
+        assertEquals("len(1) = 2",   2, b.bitLength());
+        assertEquals("len(-1) = len(mod)",  BigInteger.bitLength(zm.modul), b.negate().bitLength());
+        assertTrue("len(random) >= 1",   1 <= c.bitLength());
     }
 
 
     /**
      * Test constructor and toString.
-     * 
      */
     public void testConstructor() {
         zm = new ModLongRing("5");
@@ -182,7 +179,6 @@ public class ModLongTest extends TestCase {
 
     /**
      * Test random modular integers.
-     * 
      */
     public void testRandom() {
         zm = new ModLongRing(19);
@@ -223,7 +219,6 @@ public class ModLongTest extends TestCase {
 
     /**
      * Test multiplication.
-     * 
      */
     public void testMultiplication() {
         zm = new ModLongRing(5);
@@ -278,13 +273,11 @@ public class ModLongTest extends TestCase {
             //e.printStackTrace();
             fail("wrong exception " + e);
         }
-
     }
 
 
     /**
      * Test chinese remainder.
-     * 
      */
     public void testChineseRemainder() {
         zm = new ModLongRing(19 * 13);
@@ -304,7 +297,6 @@ public class ModLongTest extends TestCase {
         //System.out.println("e = " + e);
 
         assertEquals("cra(a mod 19,a mod 13) = a", a, e);
-
 
         java.math.BigInteger p1 = getPrime2();
         java.math.BigInteger p2 = new java.math.BigInteger("19"); //getPrime1();
@@ -338,7 +330,6 @@ public class ModLongTest extends TestCase {
 
     /**
      * Test timing ModLong to ModInteger.
-     * 
      */
     public void testTiming() {
         zm = new ModLongRing(getPrime1());

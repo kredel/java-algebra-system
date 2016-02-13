@@ -45,19 +45,7 @@ public class BigRationalTest extends TestCase {
     }
 
 
-    BigRational a;
-
-
-    BigRational b;
-
-
-    BigRational c;
-
-
-    BigRational d;
-
-
-    BigRational e;
+    BigRational a, b, c, d, e;
 
 
     @Override
@@ -83,12 +71,23 @@ public class BigRationalTest extends TestCase {
         assertEquals("1-1 = 0", c, a);
         assertTrue("1-1 = 0", c.isZERO());
         assertTrue("1 = 1", b.isONE());
+        assertEquals("1-1 = 0", c, a);
+    }
 
-        a = BigRational.ZERO;
+
+    /**
+     * Test bitLength.
+     */
+    public void testBitLength() {
+        a = BigRational.ZERO; 
         b = BigRational.ONE;
         c = BigRational.RNDIF(b, b);
+        d = BigRational.RNRAND(500);
 
-        assertEquals("1-1 = 0", c, a);
+        assertEquals("len(0) = 3",  3, a.bitLength());
+        assertEquals("len(1) = 4",  4, b.bitLength());
+        assertEquals("len(-1) = 4", 4, b.negate().bitLength());
+        assertTrue("len(rnd) >= 1", 1 <= d.bitLength());
     }
 
 

@@ -48,19 +48,7 @@ public class BigOctonionTest extends TestCase {
     }
 
 
-    BigOctonion a;
-
-
-    BigOctonion b;
-
-
-    BigOctonion c;
-
-
-    BigOctonion d;
-
-
-    BigOctonion e;
+    BigOctonion a, b, c, d, e;
 
 
     BigOctonion fac;
@@ -82,7 +70,6 @@ public class BigOctonionTest extends TestCase {
 
     /**
      * Test static initialization and constants.
-     * 
      */
     public void testConstants() {
         a = BigOctonion.ZERO;
@@ -101,8 +88,28 @@ public class BigOctonionTest extends TestCase {
 
 
     /**
+     * Test bitLength.
+     */
+    public void testBitLength() {
+        a = BigOctonion.ZERO;
+        b = BigOctonion.ONE;
+        c = b.random(10);
+        //System.out.println("c = " + c); //.toScript());
+        //System.out.println("len(c) = " + c.bitLength());
+
+        assertEquals("len(0) = 24",   24, a.bitLength());
+        assertEquals("len(1) = 25",   25, b.bitLength());
+        assertEquals("len(-1) = 25",  25, b.negate().bitLength());
+        assertTrue("len(random) >= 24",   24 <= c.bitLength());
+
+        d = BigOctonion.I;
+        assertEquals("len(i) = 25",   25, d.bitLength());
+        assertEquals("len(-i) = 25",  25, d.negate().bitLength());
+    }
+
+
+    /**
      * Test constructor and toString.
-     * 
      */
     public void testConstructor() {
         a = new BigOctonion("6/8");
@@ -137,7 +144,6 @@ public class BigOctonionTest extends TestCase {
 
     /**
      * Test random rationals.
-     * 
      */
     public void testRandom() {
         a = fac.random(100);
@@ -153,7 +159,6 @@ public class BigOctonionTest extends TestCase {
 
     /**
      * Test addition.
-     * 
      */
     public void testAddition() {
         a = fac.random(50);
@@ -174,7 +179,6 @@ public class BigOctonionTest extends TestCase {
 
     /**
      * Test multiplication.
-     * 
      */
     public void testMultiplication() {
         a = fac.random(30);
@@ -210,7 +214,6 @@ public class BigOctonionTest extends TestCase {
 
     /**
      * Test multiplication axioms.
-     * 
      */
     public void testMultiplicationAxioms() {
         a = fac.random(20);
@@ -231,7 +234,6 @@ public class BigOctonionTest extends TestCase {
 
     /**
      * Test distributive law.
-     * 
      */
     public void testDistributive() {
         a = fac.random(20);
