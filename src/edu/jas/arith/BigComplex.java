@@ -816,10 +816,10 @@ public final class BigComplex implements StarRingElem<BigComplex>, GcdRingElem<B
 
 
     /**
-     * Returns the number of bits in the representation of this
-     * BigComplex, including a sign bit. It is equivalent 
-     * to {@code re.bitLength() + im.bitLength()}.)
-     * @return number of bits in the representation of this BigComplex, 
+     * Returns the number of bits in the representation of this BigComplex,
+     * including a sign bit. It is equivalent to
+     * {@code re.bitLength() + im.bitLength()}.)
+     * @return number of bits in the representation of this BigComplex,
      *         including a sign bit.
      */
     public long bitLength() {

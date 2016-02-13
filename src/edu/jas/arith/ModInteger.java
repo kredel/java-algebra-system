@@ -652,18 +652,18 @@ public final class ModInteger implements GcdRingElem<ModInteger>, Modular {
 
 
     /**
-     * Returns the number of bits in the representation of this
-     * ModInteger, including a sign bit. For positive
-     * ModIntegers, this is equivalent to {@code val.bitLength()}.)
-     * @return number of bits in the representation of this ModInteger, 
+     * Returns the number of bits in the representation of this ModInteger,
+     * including a sign bit. For positive ModIntegers, this is equivalent to
+     * {@code val.bitLength()}.)
+     * @return number of bits in the representation of this ModInteger,
      *         including a sign bit.
      */
     public long bitLength() {
         long n = val.bitLength();
         if (val.signum() < 0) {
-            n++; 
+            n++;
         }
-        n++; 
+        n++;
         return n;
     }
 

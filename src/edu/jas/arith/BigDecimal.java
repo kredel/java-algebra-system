@@ -472,8 +472,8 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
     /**
      * Compare to relative BigDecimal b. Experimental, is hacked.
      * @param b BigDecimal.
-     * @return 0 if abs(this-b)/max(this,b) &lt; epsilon, 1 if this &gt; b, -1 if this &lt;
-     *         b.
+     * @return 0 if abs(this-b)/max(this,b) &lt; epsilon, 1 if this &gt; b, -1
+     *         if this &lt; b.
      */
     public int compareToRelative(BigDecimal b) {
         //if (EXACT_EQUAL) {
@@ -730,14 +730,14 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
 
 
     /**
-     * Returns the number of bits in the representation of this
-     * BigDecimal, including a sign bit. For positive
-     * BigDecimal, this is equivalent to {@code val.unscaledValue().bitLength()}.)
-     * @return number of bits in the representation of this BigDecimal, 
+     * Returns the number of bits in the representation of this BigDecimal,
+     * including a sign bit. For positive BigDecimal, this is equivalent to
+     * {@code val.unscaledValue().bitLength()}.)
+     * @return number of bits in the representation of this BigDecimal,
      *         including a sign bit.
      */
     public long bitLength() {
-        long  n = val.unscaledValue().bitLength();
+        long n = val.unscaledValue().bitLength();
         if (val.signum() < 0) {
             n++;
         }

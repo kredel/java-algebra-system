@@ -834,10 +834,10 @@ public final class BigOctonion implements StarRingElem<BigOctonion>, GcdRingElem
 
 
     /**
-     * Returns the number of bits in the representation of this
-     * BigOctonion, including a sign bit. It is equivalent 
-     * to {@code or.bitLength() + oi.bitLength()}.)
-     * @return number of bits in the representation of this BigOctonion, 
+     * Returns the number of bits in the representation of this BigOctonion,
+     * including a sign bit. It is equivalent to
+     * {@code or.bitLength() + oi.bitLength()}.)
+     * @return number of bits in the representation of this BigOctonion,
      *         including a sign bit.
      */
     public long bitLength() {
