@@ -997,4 +997,16 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
         return ret;
     }
 
+
+    /**
+     * Returns the number of bits in the representation of this
+     * BigQuaternion, including a sign bit. It is equivalent 
+     * to {@code re.bitLength()+im.bitLength()+jm.bitLength()+km.bitLength()}.)
+     * @return number of bits in the representation of this BigQuaternion, 
+     *         including a sign bit.
+     */
+    public long bitLength() {
+        return re.bitLength() + im.bitLength() + jm.bitLength() + km.bitLength();
+    }
+
 }

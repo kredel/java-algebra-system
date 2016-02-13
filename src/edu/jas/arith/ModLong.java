@@ -576,4 +576,15 @@ public final class ModLong implements GcdRingElem<ModLong>, Modular {
         return b;
     }
 
+
+    /**
+     * Returns the number of bits in the representation of this
+     * ModLong, including a sign bit. 
+     * @return number of bits in the representation of this ModLong, 
+     *         including a sign bit.
+     */
+    public long bitLength() { 
+        return BigInteger.bitLength(val);
+    }
+
 }

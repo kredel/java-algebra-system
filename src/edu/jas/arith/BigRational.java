@@ -1156,6 +1156,26 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
     }
 
 
+    /**
+     * Returns the number of bits in the representation of this
+     * BigRational, including a sign bit. For positive
+     * BigRational, this is equivalent to {@code num.bitLength()+den.bitLength()}.)
+     * @return number of bits in the representation of this BigRational, 
+     *         including a sign bit.
+     */
+    public long bitLength() {
+        long  n = num.bitLength();
+        if (num.signum() < 0) {
+            n++; 
+        }
+        n++;
+        n += den.bitLength();
+        // den.signum() > 0
+        n++; 
+        return n;
+    }
+
+
     private boolean nonNegative = true;
 
 

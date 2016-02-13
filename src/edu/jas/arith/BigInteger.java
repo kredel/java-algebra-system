@@ -739,6 +739,36 @@ public final class BigInteger implements GcdRingElem<BigInteger>, RingFactory<Bi
     }
 
 
+    /**
+     * Returns the number of bits in the representation of this
+     * BigInteger, including a sign bit. For positive
+     * BigIntegers, this is equivalent to {@code (ceil(log2(this+1))+1)}.)
+     * @return number of bits in the representation of this BigInteger, 
+     *         including a sign bit.
+     */
+    public long bitLength() {
+        long n = val.bitLength();
+        //System.out.println("sign(val) = " + val.signum());
+        if (val.signum() < 0) {
+            n++;
+        } 
+        return ++n;
+    }
+
+
+    /**
+     * Returns the number of bits in the representation of a
+     * Long, including a sign bit. 
+     * @param v value.
+     * @return number of bits in the representation of a Long, 
+     *         including a sign bit.
+     */
+    public static long bitLength(long v) { // compare BigInteger.bitLengthForInt
+        long n = 64 - Long.numberOfLeadingZeros(v);
+        return ++n;
+    }
+
+
     private boolean nonNegative = true;
 
 

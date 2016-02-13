@@ -728,4 +728,22 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
         return parse(StringUtil.nextString(r));
     }
 
+
+    /**
+     * Returns the number of bits in the representation of this
+     * BigDecimal, including a sign bit. For positive
+     * BigDecimal, this is equivalent to {@code val.unscaledValue().bitLength()}.)
+     * @return number of bits in the representation of this BigDecimal, 
+     *         including a sign bit.
+     */
+    public long bitLength() {
+        long  n = val.unscaledValue().bitLength();
+        if (val.signum() < 0) {
+            n++;
+        }
+        n++;
+        n += BigInteger.bitLength(val.scale());
+        return n;
+    }
+
 }
