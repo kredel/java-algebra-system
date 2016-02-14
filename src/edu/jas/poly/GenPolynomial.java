@@ -5,15 +5,15 @@
 package edu.jas.poly;
 
 
-import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.List;
-import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
@@ -817,7 +817,7 @@ Iterable<Monomial<C>> {
             maxw = weightDegree();
         }
         GenPolynomial<C> wp = new GenPolynomial<C>(ring);
-        for (Map.Entry<ExpVector,C> m : val.entrySet()) {
+        for (Map.Entry<ExpVector, C> m : val.entrySet()) {
             ExpVector e = m.getKey();
             long d = e.weightDeg(w);
             if (d >= maxw) {
@@ -875,11 +875,11 @@ Iterable<Monomial<C>> {
     public List<ExpVector> deltaExpVectors() {
         List<ExpVector> de = new ArrayList<ExpVector>(val.size());
         if (val.isEmpty()) {
-            return de; 
+            return de;
         }
         ExpVector u = null;
         for (ExpVector e : val.keySet()) {
-            if ( u == null ) {
+            if (u == null) {
                 u = e;
             } else {
                 ExpVector v = u.subtract(e);
@@ -2209,7 +2209,7 @@ Iterable<Monomial<C>> {
                 //n += m.c.bitLength(); // TODO add bitLength to Element
                 try { // hack
                     Method method = m.c.getClass().getMethod("bitLength", null);
-                    n += (long) method.invoke(m.c, null);
+                    n += (Long) method.invoke(m.c, null);
                 } catch (NoSuchMethodException e) {
                     logger.error("Exception, class: " + m.c.getClass());
                     throw new RuntimeException(e);

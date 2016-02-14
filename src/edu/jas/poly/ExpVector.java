@@ -34,8 +34,7 @@ import edu.jas.structure.RingFactory;
  * @author Heinz Kredel
  */
 
-public abstract class ExpVector implements AbelianGroupElem<ExpVector>
-/*Cloneable, Serializable*/{
+public abstract class ExpVector implements AbelianGroupElem<ExpVector> {
 
 
     /**
@@ -276,8 +275,8 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
 
 
     /**
-     * Reverse lower j variables. Used e.g. in opposite
-     * rings. Reverses the first j-1 variables, the rest is unchanged.
+     * Reverse lower j variables. Used e.g. in opposite rings. Reverses the
+     * first j-1 variables, the rest is unchanged.
      * @param j index of first variable reversed.
      * @return reversed exponent vector.
      */
@@ -549,8 +548,8 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
 
     /**
      * Returns the number of bits in the representation of this exponent vector.
-     * @return number of bits in the representation of this ExpVector,
-     *         including sign bits.
+     * @return number of bits in the representation of this ExpVector, including
+     *         sign bits.
      */
     public long bitLength() {
         if (blen < 0L) {

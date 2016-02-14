@@ -396,7 +396,7 @@ public class GenPolynomialTest extends TestCase {
         // System.out.println("rf = " + rf);
 
         // weight term order
-        long[] weight = new long[] { 2, 3, 4, 5 }; 
+        long[] weight = new long[] { 2, 3, 4, 5 };
         TermOrder to = TermOrderByName.weightOrder(weight);
         // System.out.println("to = " + to);
 
@@ -451,7 +451,7 @@ public class GenPolynomialTest extends TestCase {
         GenPolynomial<BigInteger> a, b, c, d;
 
         // x**1
-        a = pf.univariate(pf.nvar-1);
+        a = pf.univariate(pf.nvar - 1);
         //System.out.println("a = " + a);
         assertTrue("deg(a) = 1: ", a.degree() == 1);
         assertEquals("xi == xi: ", pf.vars[0], a.toString());
@@ -464,33 +464,33 @@ public class GenPolynomialTest extends TestCase {
         c = pf.univariate(0);
         //System.out.println("c = " + c);
         assertTrue("deg(c) = 1: ", c.degree() == 1);
-        assertEquals("xi == xi: ", pf.vars[pf.nvar-1], c.toString());
+        assertEquals("xi == xi: ", pf.vars[pf.nvar - 1], c.toString());
 
-        d = pf.univariate(pf.vars[pf.nvar-1]);
+        d = pf.univariate(pf.vars[pf.nvar - 1]);
         //System.out.println("d = " + d);
         assertTrue("deg(c) = 1: ", c.degree() == 1);
-        assertEquals("xi == xi: ", pf.vars[pf.nvar-1], d.toString());
+        assertEquals("xi == xi: ", pf.vars[pf.nvar - 1], d.toString());
 
         // x**7
-        a = pf.univariate(pf.nvar-1, 7);
+        a = pf.univariate(pf.nvar - 1, 7);
         //System.out.println("a = " + a);
         assertTrue("deg(a) = 7: ", a.degree() == 7);
-        assertEquals("xi == xi: ", pf.vars[0]+"^7", a.toString());
+        assertEquals("xi == xi: ", pf.vars[0] + "^7", a.toString());
 
         b = pf.univariate(pf.vars[0], 7);
         //System.out.println("b = " + b);
         assertTrue("deg(b) = 7: ", b.degree() == 7);
-        assertEquals("xi == xi: ", pf.vars[0]+"^7", b.toString());
+        assertEquals("xi == xi: ", pf.vars[0] + "^7", b.toString());
 
         c = pf.univariate(0, 7);
         //System.out.println("c = " + c);
         assertTrue("deg(c) = 7: ", c.degree() == 7);
-        assertEquals("xi == xi: ", pf.vars[pf.nvar-1]+"^7", c.toString());
+        assertEquals("xi == xi: ", pf.vars[pf.nvar - 1] + "^7", c.toString());
 
-        d = pf.univariate(pf.vars[pf.nvar-1], 7);
+        d = pf.univariate(pf.vars[pf.nvar - 1], 7);
         //System.out.println("d = " + d);
         assertTrue("deg(c) = 7: ", c.degree() == 7);
-        assertEquals("xi == xi: ", pf.vars[pf.nvar-1]+"^7", d.toString());
+        assertEquals("xi == xi: ", pf.vars[pf.nvar - 1] + "^7", d.toString());
     }
 
 
@@ -565,6 +565,7 @@ public class GenPolynomialTest extends TestCase {
         assertEquals("p == q ", p.negate(), q);
     }
 
+
     /**
      * Test bitLength.
      */
@@ -601,7 +602,8 @@ public class GenPolynomialTest extends TestCase {
         //System.out.println("blen(a)+blen(b) = " + (a.bitLength()+b.bitLength()));
         //System.out.println("blen(c) = " + c.bitLength());
         assertTrue("blen(random) >= 0", 0 <= c.bitLength());
-        assertTrue("blen(random)+blen(random) >= blen(random+random)", a.bitLength()+b.bitLength() >= c.bitLength());
+        assertTrue("blen(random)+blen(random) >= blen(random+random)",
+                        a.bitLength() + b.bitLength() >= c.bitLength());
     }
 
 }
