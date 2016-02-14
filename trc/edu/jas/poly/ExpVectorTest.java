@@ -49,12 +49,9 @@ public class ExpVectorTest extends TestCase {
         return suite;
     }
 
-    //private final static int bitlen = 100;
 
-    ExpVector a;
-    ExpVector b;
-    ExpVector c;
-    ExpVector d;
+    ExpVector a, b, c, d;
+
 
     protected void setUp() {
         a = b = c = d = null;
@@ -67,7 +64,6 @@ public class ExpVectorTest extends TestCase {
 
     /**
      * Test constructor and toString.
-     * 
      */
     public void testConstructor() {
         a = ExpVector.create( 0 );
@@ -92,11 +88,27 @@ public class ExpVectorTest extends TestCase {
 
 
     /**
+     * Test bitLength.
+     */
+    public void testBitLength() {
+        a = ExpVector.create( 0 );
+        assertEquals("blen(0) = 0", 0, a.bitLength());
+
+        b = ExpVector.create( 10 );
+        assertEquals("blen(0) = 10", 10, b.bitLength());
+
+        c = ExpVector.random(10, 20, 0.5f);
+        //System.out.println("c = " + c);
+        //System.out.println("blen(c) = " + c.bitLength());
+        assertTrue("blen(random) >= 0", 0 <= c.bitLength());
+    }
+
+
+    /**
      * Test random integer.
-     * 
      */
     public void testRandom() {
-        float q = (float) 0.2;
+        float q = (float) 0.3;
 
         a = ExpVector.EVRAND(5,10,q);
         String s = a.toString();
@@ -115,7 +127,6 @@ public class ExpVectorTest extends TestCase {
 
     /**
      * Test addition.
-     * 
      */
     public void testAddition() {
         float q = (float) 0.2;
@@ -143,7 +154,6 @@ public class ExpVectorTest extends TestCase {
 
     /**
      * Test lcm.
-     * 
      */
     public void testLcm() {
         float q = (float) 0.2;
@@ -166,7 +176,6 @@ public class ExpVectorTest extends TestCase {
 
     /**
      * Test tdeg.
-     * 
      */
     public void testTdeg() {
         a = ExpVector.create( 100 );
@@ -199,7 +208,6 @@ public class ExpVectorTest extends TestCase {
 
     /**
      * Test weighted.
-     * 
      */
     public void testWeightdeg() {
         a = ExpVector.create( 100 );
@@ -299,7 +307,6 @@ public class ExpVectorTest extends TestCase {
 
     /**
      * Test dependency on variables.
-     * 
      */
     public void testDependency() {
         int[] exp;
@@ -339,7 +346,6 @@ public class ExpVectorTest extends TestCase {
 
     /**
      * Test random exp vector 2.
-     * 
      */
     public void testRandom2() {
         float q = (float) 0.2;
@@ -357,7 +363,6 @@ public class ExpVectorTest extends TestCase {
 
     /**
      * Test addition.
-     * 
      */
     public void testAddition2() {
         float q = (float) 0.2;
@@ -385,7 +390,6 @@ public class ExpVectorTest extends TestCase {
 
     /**
      * Test lcm.
-     * 
      */
     public void testLcm2() {
         float q = (float) 0.2;
@@ -408,7 +412,6 @@ public class ExpVectorTest extends TestCase {
 
     /**
      * Test tdeg.
-     * 
      */
     public void testTdeg2() {
         a = ExpVector.create( 100 );
@@ -441,7 +444,6 @@ public class ExpVectorTest extends TestCase {
 
     /**
      * Test weighted.
-     * 
      */
     public void testWeightdeg2() {
         a = ExpVector.create( 100 );
@@ -541,7 +543,6 @@ public class ExpVectorTest extends TestCase {
 
     /**
      * Test dependency on variables.
-     * 
      */
     public void testDependency2() {
         int[] exp;
@@ -581,7 +582,6 @@ public class ExpVectorTest extends TestCase {
 
     /**
      * Test evaluation.
-     * 
      */
     public void testEvaluation() {
         float q = (float) 0.2;
