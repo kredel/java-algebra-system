@@ -565,6 +565,45 @@ public class GenPolynomialTest extends TestCase {
         assertEquals("p == q ", p.negate(), q);
     }
 
+    /**
+     * Test bitLength.
+     */
+    public void testBitLength() {
+        // integers
+        BigInteger rf = new BigInteger();
+        // System.out.println("rf = " + rf);
+
+        // polynomials over integral numbers
+        GenPolynomialRing<BigInteger> pf = new GenPolynomialRing<BigInteger>(rf, 5);
+        // System.out.println("pf = " + pf);
+
+        GenPolynomial<BigInteger> a, b, c;
+        a = pf.getZERO();
+        assertEquals("blen(0) = 0", 0, a.bitLength());
+
+        a = pf.getONE();
+        assertEquals("blen(1) = 7", 7, a.bitLength());
+
+        // random polynomials
+        a = pf.random(kl, 2 * ll, el, q);
+        //System.out.println("a = " + a);
+        //System.out.println("blen(a) = " + a.bitLength());
+        assertTrue("blen(random) >= 0", 0 <= a.bitLength());
+
+        b = pf.random(kl, 2 * ll, el, q);
+        //System.out.println("b = " + b);
+        //System.out.println("blen(b) = " + b.bitLength());
+        assertTrue("blen(random) >= 0", 0 <= b.bitLength());
+
+        //c = a.multiply(b);
+        c = a.sum(b);
+        //System.out.println("c = " + c);
+        //System.out.println("blen(a)+blen(b) = " + (a.bitLength()+b.bitLength()));
+        //System.out.println("blen(c) = " + c.bitLength());
+        assertTrue("blen(random) >= 0", 0 <= c.bitLength());
+        assertTrue("blen(random)+blen(random) >= blen(random+random)", a.bitLength()+b.bitLength() >= c.bitLength());
+    }
+
 }
 
 

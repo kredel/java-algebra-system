@@ -550,7 +550,7 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector>
     /**
      * Returns the number of bits in the representation of this exponent vector.
      * @return number of bits in the representation of this ExpVector,
-     *         including a sign bits.
+     *         including sign bits.
      */
     public long bitLength() {
         if (blen < 0L) {

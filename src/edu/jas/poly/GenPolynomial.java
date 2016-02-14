@@ -5,6 +5,8 @@
 package edu.jas.poly;
 
 
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
@@ -49,6 +51,18 @@ Iterable<Monomial<C>> {
      * The data structure for polynomials.
      */
     protected final SortedMap<ExpVector, C> val; // do not change to TreeMap
+
+
+    /**
+     * Stored hash code.
+     */
+    transient protected int hash = -1;
+
+
+    /**
+     * Stored bitLength.
+     */
+    transient protected long blen = -1;
 
 
     private static final Logger logger = Logger.getLogger(GenPolynomial.class);
@@ -186,6 +200,8 @@ Iterable<Monomial<C>> {
             if (a != null) {
                 logger.error("map entry exists " + e + " to " + a + " new " + c);
             }
+            hash = -1;
+            blen = -1;
         }
         if (!c.isZERO()) {
             val.put(e, c);
@@ -204,6 +220,8 @@ Iterable<Monomial<C>> {
     public void doRemoveFromMap(ExpVector e, C c) {
         C b = val.remove(e);
         if (debug) {
+            hash = -1;
+            blen = -1;
             if (c == null) { // ignore b
                 return;
             }
@@ -229,6 +247,8 @@ Iterable<Monomial<C>> {
                 if (a != null) {
                     logger.error("map entry exists " + e + " to " + a + " new " + me.getValue());
                 }
+                hash = -1;
+                blen = -1;
             }
             C c = me.getValue();
             if (!c.isZERO()) {
@@ -521,9 +541,12 @@ Iterable<Monomial<C>> {
      */
     @Override
     public int hashCode() {
-        int h;
-        h = (ring.hashCode() << 27);
-        h += val.hashCode();
+        int h = hash;
+        if (h < 0) {
+            h = (ring.hashCode() << 27);
+            h += val.hashCode();
+            hash = h;
+        }
         return h;
     }
 
@@ -2170,6 +2193,38 @@ Iterable<Monomial<C>> {
             }
         }
         return n;
+    }
+
+
+    /**
+     * Returns the number of bits in the representation of this polynomial.
+     * @return number of bits in the representation of this polynomial,
+     *         including sign bits.
+     */
+    public long bitLength() {
+        if (blen < 0L) {
+            long n = 0L;
+            for (Monomial<C> m : this) {
+                n += m.e.bitLength();
+                //n += m.c.bitLength(); // TODO add bitLength to Element
+                try { // hack
+                    Method method = m.c.getClass().getMethod("bitLength", null);
+                    n += (long) method.invoke(m.c, null);
+                } catch (NoSuchMethodException e) {
+                    logger.error("Exception, class: " + m.c.getClass());
+                    throw new RuntimeException(e);
+                } catch (IllegalAccessException e) {
+                    logger.error("Exception, class: " + m.c.getClass());
+                    throw new RuntimeException(e);
+                } catch (InvocationTargetException e) {
+                    logger.error("Exception, class: " + m.c.getClass());
+                    throw new RuntimeException(e);
+                }
+            }
+            blen = n;
+            //System.out.println("bitLength(poly) = " + blen);
+        }
+        return blen;
     }
 
 }
