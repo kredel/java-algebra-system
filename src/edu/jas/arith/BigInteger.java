@@ -255,7 +255,7 @@ public final class BigInteger implements GcdRingElem<BigInteger>, RingFactory<Bi
      * @see edu.jas.structure.RingElem#isZERO()
      */
     public boolean isZERO() {
-        return val.equals(java.math.BigInteger.ZERO);
+        return val.signum() == 0; //equals(java.math.BigInteger.ZERO);
     }
 
 

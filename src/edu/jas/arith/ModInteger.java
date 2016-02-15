@@ -155,7 +155,7 @@ public final class ModInteger implements GcdRingElem<ModInteger>, Modular {
      * @see edu.jas.structure.RingElem#isZERO()
      */
     public boolean isZERO() {
-        return val.equals(java.math.BigInteger.ZERO);
+        return val.signum() == 0;
     }
 
 

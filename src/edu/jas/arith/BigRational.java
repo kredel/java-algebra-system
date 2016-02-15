@@ -489,7 +489,7 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
      * @see edu.jas.structure.RingElem#isZERO()
      */
     public boolean isZERO() {
-        return num.equals(BigInteger.ZERO);
+        return num.signum() == 0; //equals(BigInteger.ZERO);
     }
 
 
