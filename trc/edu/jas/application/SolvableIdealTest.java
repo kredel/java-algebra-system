@@ -24,6 +24,7 @@ import edu.jas.poly.PolynomialList;
 import edu.jas.poly.RelationGenerator;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.WeylRelations;
+import edu.jas.poly.WeylRelationsIterated;
 import edu.jas.util.KsubSet;
 
 
@@ -768,7 +769,12 @@ public class SolvableIdealTest extends TestCase {
      * Test elimination SolvableIdeals.
      */
     public void testElimSolvableIdeal() {
-        String[] vars = fac.getVars();
+        BigRational coeff = new BigRational(17, 1);
+        String[] vars = new String[] { "w", "x", "y", "z" };
+        fac = new GenSolvablePolynomialRing<BigRational>(coeff, rl, to, vars);
+        RelationGenerator<BigRational> wli = new WeylRelationsIterated<BigRational>();
+        wli.generate(fac);
+        //String[] vars = fac.getVars();
         //System.out.println("vars = " + Arrays.toString(vars));
         //System.out.println("fac = " + fac);
 
@@ -779,20 +785,16 @@ public class SolvableIdealTest extends TestCase {
         b = fac.univariate(1, 2L); //fac.random(kl, ll, el, q );
         c = fac.univariate(0, 1L); //fac.random(kl, ll, el, q );
 
-        if (a.isZERO() || b.isZERO() || c.isZERO()) {
-            return;
-        }
-
         L.add(a);
-        L.add(b);
+        //L.add(b);
         L.add(c);
 
         I = new SolvableIdeal<BigRational>(fac, L);
         I.doGB();
+        //System.out.println("I = " + I);
         assertTrue("not isZERO( I )", !I.isZERO());
         assertTrue("not isONE( I )", !I.isONE());
         assertTrue("isGB( I )", I.isGB());
-        //System.out.println("I = " + I);
 
         List<String> sv = new ArrayList<String>(vars.length);
         for (int i = 0; i < vars.length; i++) {
@@ -812,7 +814,8 @@ public class SolvableIdealTest extends TestCase {
                 }
                 GenSolvablePolynomialRing<BigRational> efac;
                 efac = new GenSolvablePolynomialRing<BigRational>(fac.coFac, evars.length, fac.tord, evars);
-                RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
+                //RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
+                RelationGenerator<BigRational> wl = new WeylRelationsIterated<BigRational>();
                 wl.generate(efac);
                 //System.out.println("efac = " + efac);
 
@@ -821,7 +824,7 @@ public class SolvableIdealTest extends TestCase {
                 assertTrue("isGB( J )", J.isGB());
                 assertTrue("size( J ) <=  |ev|", J.getList().size() <= ev.size());
                 //System.out.println("J = " + J);
-                break; // non-com
+                break; // non-com TODO
             }
         }
     }
