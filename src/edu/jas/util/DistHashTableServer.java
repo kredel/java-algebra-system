@@ -211,7 +211,7 @@ public class DistHashTableServer<K> extends Thread {
                             }
                             //System.out.print(".");
                             br.interrupt();
-                            br.join(100);
+                            br.join(50);
                         }
                         if (logger.isDebugEnabled()) {
                             logger.info("server+ " + br + " terminated");
@@ -245,8 +245,8 @@ public class DistHashTableServer<K> extends Thread {
                 mythread.interrupt();
                 mythread.join(100);
             }
-            if (logger.isDebugEnabled()) {
-                logger.debug("server terminated " + mythread);
+            if (logger.isWarnEnabled()) {
+                logger.warn("server terminated " + mythread);
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -339,7 +339,7 @@ class DHTBroadcaster<K> extends Thread /*implements Runnable*/{
      * broadcast.
      * @param o DHTTransport element to broadcast.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public void broadcast(DHTTransport o) {
         if (logger.isDebugEnabled()) {
             logger.debug("broadcast = " + o);
@@ -460,8 +460,8 @@ class DHTBroadcaster<K> extends Thread /*implements Runnable*/{
                 e.printStackTrace();
             }
         }
-        if (logger.isDebugEnabled()) {
-            logger.info("terminated+ " + this);
+        if (logger.isWarnEnabled()) {
+            logger.warn("ending " + this);
         }
         synchronized (bcaster) {
             bcaster.remove(this);
