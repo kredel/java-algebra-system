@@ -62,22 +62,22 @@ fi
 #
 # setup required libs: JAVA_LIBS="log4j*.jar:junit*.jar:jas.jar:examples"
 #
-if [ -f "../lib/log4j-core-2.5.jar" ] ; then
-   JAVA_LIBS="$JAVA_LIBS:../lib/log4j-1.2-api-2.5.jar"
-   JAVA_LIBS="$JAVA_LIBS:../lib/log4j-core-2.5.jar"
-   JAVA_LIBS="$JAVA_LIBS:../lib/log4j-api-2.5.jar"
-elif [ -f "lib/log4j-core-2.5.jar" ] ; then
-   JAVA_LIBS="$JAVA_LIBS:lib/log4j-1.2-api-2.5.jar"
-   JAVA_LIBS="$JAVA_LIBS:lib/log4j-core-2.5.jar"
-   JAVA_LIBS="$JAVA_LIBS:lib/log4j-api-2.5.jar"
-elif [ -f "$JAS_HOME/../lib/log4j-core-2.5.jar" ] ; then
-   JAVA_LIBS="$JAVA_LIBS:$JAS_HOME/../lib/log4j-1.2-api-2.5.jar"
-   JAVA_LIBS="$JAVA_LIBS:$JAS_HOME/../lib/log4j-core-2.5.jar"
-   JAVA_LIBS="$JAVA_LIBS:$JAS_HOME/../lib/log4j-api-2.5.jar"
-elif [ -f /usr/share/java/log4j-core-2.5.jar ] ; then
-   JAVA_LIBS="$JAVA_LIBS:`ls /usr/share/java/log4j-1.2-api-2.5.jar|tail -1`"
-   JAVA_LIBS="$JAVA_LIBS:`ls /usr/share/java/log4j-core-2.5.jar|tail -1`"
-   JAVA_LIBS="$JAVA_LIBS:`ls /usr/share/java/log4j-api-2.5.jar|tail -1`"
+if [ -f "../lib/log4j-core.jar" ] ; then
+   JAVA_LIBS="$JAVA_LIBS:../lib/log4j-1.2-api.jar"
+   JAVA_LIBS="$JAVA_LIBS:../lib/log4j-core.jar"
+   JAVA_LIBS="$JAVA_LIBS:../lib/log4j-api.jar"
+elif [ -f "lib/log4j-core.jar" ] ; then
+   JAVA_LIBS="$JAVA_LIBS:lib/log4j-1.2-api.jar"
+   JAVA_LIBS="$JAVA_LIBS:lib/log4j-core.jar"
+   JAVA_LIBS="$JAVA_LIBS:lib/log4j-api.jar"
+elif [ -f "$JAS_HOME/../lib/log4j-core.jar" ] ; then
+   JAVA_LIBS="$JAVA_LIBS:$JAS_HOME/../lib/log4j-1.2-api.jar"
+   JAVA_LIBS="$JAVA_LIBS:$JAS_HOME/../lib/log4j-core.jar"
+   JAVA_LIBS="$JAVA_LIBS:$JAS_HOME/../lib/log4j-api.jar"
+elif [ -f /usr/share/java/log4j-core.jar ] ; then
+   JAVA_LIBS="$JAVA_LIBS:`ls /usr/share/java/log4j-1.2-api.jar|tail -1`"
+   JAVA_LIBS="$JAVA_LIBS:`ls /usr/share/java/log4j-core.jar|tail -1`"
+   JAVA_LIBS="$JAVA_LIBS:`ls /usr/share/java/log4j-api.jar|tail -1`"
 elif [ -f "../lib/log4j.jar" ] ; then
    JAVA_LIBS="$JAVA_LIBS:../lib/log4j.jar"
 elif [ -f "lib/log4j.jar" ] ; then
