@@ -538,7 +538,7 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector> {
         if (hash < 0) {
             int h = 0;
             for (int i = 0; i < length(); i++) {
-                h = h << 4 + getVal(i);
+                h = (h << 4) + (int)getVal(i);
             }
             hash = h;
         }
