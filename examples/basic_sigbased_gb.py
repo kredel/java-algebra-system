@@ -17,6 +17,7 @@ class sigbased_gb:
     # incremental basis computation
     # F is a container of generators of an ideal
     F.sort(key=lambda x: -x.lm().degree()) # JAS
+    #F.sort(key=lambda x: -x.lm().totalDeg()) # JAS
     #print "JAS F = " + str([ str(g) for g in F]); 
     G = list()
     for f in F:

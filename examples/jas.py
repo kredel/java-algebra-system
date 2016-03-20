@@ -3690,6 +3690,7 @@ class RingElem:
         '''
         try:
             ev = self.elem.degree();
+            #ev = self.elem.totalDegree();
         except:
             return None;
         return ev;
