@@ -458,6 +458,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
             G.add(a); // adds as last
             i++;
         }
+        Collections.reverse(G); // undo reverse
         return G;
     }
 
