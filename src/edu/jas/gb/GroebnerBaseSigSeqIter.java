@@ -130,7 +130,7 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
             if (p.equals(gs)) {
                 continue;
             }
-            pairlist.add( new SigPair<C>(gs,p,Gs) );
+            pairlist.add( newPair(gs,p,Gs) );
         }
         //PairList<C> pairlist = strategy.create(modv, ring);
         //pairlist.setList(G);
@@ -170,14 +170,8 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
                     continue;
                 }
                 //logger.info("pair.sigma = " + pair.sigma);
-                pi = pair.pi;
-                pj = pair.pj;
-                if ( /*false &&*/debug) {
-                    logger.debug("pi    = " + pi);
-                    logger.debug("pj    = " + pj);
-                }
-
-                S = SPolynomial(pi, pj);
+                //S = SPolynomial(pair.pi, pair.pj);
+                S = SPolynomial(pair);
                 if (S.isZERO()) {
                     //pair.setZero();
                     continue;
@@ -187,7 +181,7 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
                 }
  
                 SigPoly<C> Ss = new SigPoly<C>(pair.sigma, S);
-                SigPoly<C> Hs = sred.sigNormalform(F, Gs, Ss);
+                SigPoly<C> Hs = sigNormalform(F, Gs, Ss);
                 H = Hs.poly;
                 sigma = Hs.sigma;
                 if (debug) {
@@ -218,7 +212,7 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
                     continue;
                 }
                 if (debug) {
-                    logger.info("Hs = " + Hs.poly);
+                    logger.info("Hs = " + Hs);
                 }
                 if (H.length() > 0) {
                     //l++;
@@ -246,11 +240,11 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
                         }
                         SigPair<C> pp;
                         if ( mult[0].multiply(se).compareTo(mult[1].multiply(te)) > 0 ) {
-                            pp = new SigPair<C>(sigma.multiply(mult[0]),Hs,p,Gs);
+                            pp = newPair(sigma.multiply(mult[0]),Hs,p,Gs);
                         } else {
-                            pp = new SigPair<C>(tau.multiply(mult[1]),p,Hs,Gs);
+                            pp = newPair(tau.multiply(mult[1]),p,Hs,Gs);
                         }
-                        //pp = new SigPair<C>(Hs,p,Gs);
+                        //pp = newPair(Hs,p,Gs);
                         //System.out.println("new pair: pp.sigma = " + pp.sigma + ", xx.sigma = " + (new SigPair<C>(Hs,p,Gs)).sigma + ", compareTo " + (mult[0].multiply(se).compareTo(mult[1].multiply(te))));
                         if (pp.sigma.totalDegree() == mdeg) {
                             Sl.add( pp );
@@ -270,15 +264,13 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
     }
 
 
-
     /**
      * S-Polynomial.
-     * @param A polynomial.
-     * @param B polynomial.
-     * @return spol(A,B) the S-polynomial of A and B.
+     * @param p pair.
+     * @return spol(A,B) the S-polynomial of the pair (A,B).
      */
-    public GenPolynomial<C> SPolynomial(SigPoly<C> A, SigPoly<C> B) {
-        return sred.SPolynomial(A, B);
+    public GenPolynomial<C> SPolynomial(SigPair<C> P) {
+        return sred.SPolynomial(P.pi, P.pj);
     }
 
 
@@ -293,11 +285,34 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
     }
 
 
+    public SigPair<C> newPair(SigPoly<C> A, SigPoly<C> B, List<SigPoly<C>> G) {
+        ExpVector e = A.poly.leadingExpVector().lcm(B.poly.leadingExpVector()).subtract(A.poly.leadingExpVector());
+	return new SigPair<C>(e,A,B,G);
+    }
+
+
+    public SigPair<C> newPair(GenPolynomial<C> s, SigPoly<C> A, SigPoly<C> B, List<SigPoly<C>> G) {
+	return new SigPair<C>(s,A,B,G);
+    }
+
+
+    /**
+     * Top normalform.
+     * @param A polynomial.
+     * @param F polynomial list.
+     * @param G polynomial list.
+     * @return nf(A) with respect to F and G.
+     */
+    public SigPoly<C> sigNormalform(List<GenPolynomial<C>> F, List<SigPoly<C>> G, SigPoly<C> A) {
+        return sred.sigNormalform(F, G, A);
+    }
+
+
     List<SigPair<C>> pruneP(List<SigPair<C>> P, List<ExpVector> syz) {
         return P;
     }
 
-    List<SigPair<C>> pruneS(List<SigPair<C>> S, List<ExpVector> syz, Object done, List<SigPoly<C>> G) {
+    List<SigPair<C>> pruneS(List<SigPair<C>> S, List<ExpVector> syz, List<SigPoly<C>> done, List<SigPoly<C>> G) {
         return S;
     }
 

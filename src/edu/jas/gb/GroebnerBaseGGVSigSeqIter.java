@@ -80,9 +80,10 @@ public class GroebnerBaseGGVSigSeqIter<C extends RingElem<C>> extends GroebnerBa
                     break;
                 }
             }
-            if (! div) {
-                res.add(p);
+            if (div) {
+                continue;
             }
+            res.add(p);
         }
         return res;
     }
@@ -106,7 +107,7 @@ public class GroebnerBaseGGVSigSeqIter<C extends RingElem<C>> extends GroebnerBa
             }
             div = false;
             for (SigPair<C> q : S) {
-                if (p.sigma.leadingExpVector().equals(q.sigma.leadingExpVector())) {
+                if (f.equals(q.sigma.leadingExpVector())) {
                     if (p.pi.poly.compareTo(q.pi.poly) < 0) {
                         div = true;
                         break;
@@ -118,7 +119,7 @@ public class GroebnerBaseGGVSigSeqIter<C extends RingElem<C>> extends GroebnerBa
             }
             div = false;
             for (SigPair<C> q : res) {
-                if (p.sigma.leadingExpVector().equals(q.sigma.leadingExpVector())) {
+                if (f.equals(q.sigma.leadingExpVector())) {
                     div = true;
                     break;
                 }
@@ -143,7 +144,7 @@ public class GroebnerBaseGGVSigSeqIter<C extends RingElem<C>> extends GroebnerBa
     }
 
     void updateSyz(List<ExpVector> syz, SigPoly<C> r) {
-        if (!r.poly.isZERO() && !r.sigma.isZERO()) {
+        if (r.poly.isZERO() && !r.sigma.isZERO()) {
             syz.add( r.sigma.leadingExpVector() );
         }
         return;

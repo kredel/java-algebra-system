@@ -95,7 +95,10 @@ public class GroebnerBaseSigSeqIterTest extends TestCase {
         fac = new GenPolynomialRing<BigRational>(coeff, rl);
         a = b = c = d = e = null;
         //bb = new GroebnerBaseSigSeqIter<BigRational>();
-        bb = new GroebnerBaseGGVSigSeqIter<BigRational>();
+        //bb = new GroebnerBaseGGVSigSeqIter<BigRational>();
+        //bb = new GroebnerBaseArrisSigSeqIter<BigRational>();
+        bb = new GroebnerBaseF5zSigSeqIter<BigRational>();
+        //bb = new GroebnerBaseSeqIter<BigRational>();
     }
 
 

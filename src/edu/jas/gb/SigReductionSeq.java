@@ -278,10 +278,73 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
             }
         }
         C ac = a.leadingBaseCoefficient();
-        if ( !a.isONE() ) {
+        if ( !ac.isONE() ) {
             ac = ac.inverse();
             a = a.multiply(ac);
             sigma = sigma.multiply(ac);
+        }
+        return new SigPoly<C>(sigma, a);
+    }    
+
+
+    /**
+     * Top semi-complete normalform.
+     * @param A polynomial.
+     * @param F polynomial list.
+     * @param G polynomial list.
+     * @return nf(A) with respect to F and G.
+     */
+    public SigPoly<C> sigSemiNormalform(List<GenPolynomial<C>> F, List<SigPoly<C>> G, SigPoly<C> A) {
+        if (F.isEmpty() && G.isEmpty()) {
+            return A;
+        }
+        if (A.poly.isZERO()) {
+            return A;
+        }
+        List<GenPolynomial<C>> ff = F; //polys(F);
+        GenPolynomial<C> a = A.poly;
+        GenPolynomial<C> sigma = A.sigma;
+        GenPolynomialRing<C> ring = a.ring;
+        boolean reduced = true;
+        while (!a.isZERO() && reduced) {
+            reduced = false;
+            a = red.normalform(ff,a);
+            if (a.isZERO()) {
+                continue;
+            }
+            ExpVector e = a.leadingExpVector();
+            for (SigPoly<C> p : G) {
+                if (p.poly.isZERO()) {
+                    continue;
+                }
+                ExpVector f = p.poly.leadingExpVector();
+                boolean mt = e.multipleOf(f);
+                if (mt) {
+                    ExpVector g = e.subtract(f); 
+                    C sc = a.leadingBaseCoefficient().divide(p.poly.leadingBaseCoefficient());
+                    GenPolynomial<C> sigup = p.sigma.multiply(sc, g);
+
+                    //wrong: boolean sigeq = (sigup.compareTo(sigma) < 0);
+                    boolean sigeq = (sigup.leadingExpVector().compareTo(sigma.leadingExpVector()) < 0);
+                    if (sigeq) {
+                        //logger.info("reduced: sigup = " + sigup + ", sigma = " + sigma);
+                        reduced = true;
+                        a = a.subtractMultiple(sc, g, p.poly);
+                        if (a.isZERO()) {
+                            break;
+                        }
+                        e = a.leadingExpVector();
+                    } else {
+                        //logger.info("not reduced: sigup = " + sigup + ", sigma = " + sigma);
+                        //logger.info("not reduced: a = " + a + ", p = " + p.poly);
+                    }
+                }
+            }
+        }
+        C ac = a.leadingBaseCoefficient();
+        if ( !ac.isONE() ) {
+            ac = ac.inverse();
+            a = a.multiply(ac);
         }
         return new SigPoly<C>(sigma, a);
     }    

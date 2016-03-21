@@ -25,80 +25,9 @@ public class SigPair<C extends RingElem<C> > //extends AbstractSigPair<C>
     public final GenPolynomial<C> sigma;
     public final SigPoly<C> pi;
     public final SigPoly<C> pj;
-    public final int i;
-    public final int j;
+    //public final int i;
+    //public final int j;
     public final List<SigPoly<C>> Gs;
-
-
-    /**
-     * SigPair constructor.
-     * @param a polynomial i.
-     * @param b polynomial j.
-     * @param i first index.
-     * @param j second index.
-     */
-    public SigPair(SigPoly<C> a, SigPoly<C> b, 
-                int i, int j) {
-        this(a,b,i,j,null);
-    }
-
-
-    /**
-     * SigPair constructor.
-     * @param a polynomial i.
-     * @param b polynomial j.
-     * @param i first index.
-     * @param j second index.
-     * @param Gs list.
-     */
-    public SigPair(SigPoly<C> a, SigPoly<C> b, 
-                List<SigPoly<C>> Gs) {
-        this(a.poly.leadingExpVector().lcm(b.poly.leadingExpVector()).subtract(a.poly.leadingExpVector()),a,b,Gs);
-    }
-
-
-    /**
-     * SigPair constructor.
-     * @param a polynomial i.
-     * @param b polynomial j.
-     */
-    public SigPair(SigPoly<C> a, SigPoly<C> b, 
-                int i, int j, List<SigPoly<C>> Gs) {
-        this(a.poly.leadingExpVector().lcm(b.poly.leadingExpVector()).subtract(a.poly.leadingExpVector()),a,b,i,j,Gs);
-    }
-
-
-    /**
-     * SigPair constructor.
-     * @param signature of pair.
-     * @param a polynomial i.
-     * @param b polynomial j.
-     * @param i first index.
-     * @param j second index.
-     */
-    public SigPair(ExpVector lcm, SigPoly<C> a, SigPoly<C> b, 
-		   int i, int j, List<SigPoly<C>> Gs) {
-        this(a.poly.ring.valueOf(lcm),a,b,i,j,Gs);
-    }
-
-
-    /**
-     * SigPair constructor.
-     * @param signature of pair.
-     * @param a polynomial i.
-     * @param b polynomial j.
-     * @param i first index.
-     * @param j second index.
-     */
-    public SigPair(GenPolynomial<C> sig, SigPoly<C> a, SigPoly<C> b, 
-		   int i, int j, List<SigPoly<C>> Gs) {
-        this.sigma = sig;
-        pi = a;
-        pj = b;
-        this.i = i;        
-        this.j = j;
-        this.Gs = Gs;
-    }
 
 
     /**
@@ -124,8 +53,6 @@ public class SigPair<C extends RingElem<C> > //extends AbstractSigPair<C>
         this.sigma = sig;
         pi = a;
         pj = b;
-        this.i = -1;        
-        this.j = -1;
         this.Gs = Gs;
     }
 
@@ -180,7 +107,7 @@ public class SigPair<C extends RingElem<C> > //extends AbstractSigPair<C>
      */
     @Override
     public int hashCode() {
-        return (i << 16) + j;
+        return (pi.hashCode() << 16) + pj.hashCode();
     }
 
 }
