@@ -266,6 +266,17 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
 
     /**
      * S-Polynomial.
+     * @param A monic polynomial.
+     * @param B monic polynomial.
+     * @return spol(A,B) the S-polynomial of the A and B.
+     */
+    public GenPolynomial<C> SPolynomial(SigPoly<C> A, SigPoly<C> B) {
+        return sred.SPolynomial(A, B);
+    }
+
+
+    /**
+     * S-Polynomial.
      * @param p pair.
      * @return spol(A,B) the S-polynomial of the pair (A,B).
      */
