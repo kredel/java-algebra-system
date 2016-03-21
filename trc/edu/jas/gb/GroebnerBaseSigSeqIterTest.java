@@ -62,13 +62,13 @@ public class GroebnerBaseSigSeqIterTest extends TestCase {
     GenPolynomialRing<BigRational> fac;
 
 
-    List<GenPolynomial<BigRational>> L, G;
+    List<GenPolynomial<BigRational>> L, G, Gp;
 
 
     PolynomialList<BigRational> F;
 
 
-    GroebnerBaseAbstract<BigRational> bb;
+    GroebnerBaseAbstract<BigRational> bb, bbsig, bbggv, bbarris, bbf5z;
 
 
     GenPolynomial<BigRational> a, b, c, d, e;
@@ -94,11 +94,11 @@ public class GroebnerBaseSigSeqIterTest extends TestCase {
         BigRational coeff = new BigRational(9);
         fac = new GenPolynomialRing<BigRational>(coeff, rl);
         a = b = c = d = e = null;
-        //bb = new GroebnerBaseSigSeqIter<BigRational>();
-        //bb = new GroebnerBaseGGVSigSeqIter<BigRational>();
-        //bb = new GroebnerBaseArrisSigSeqIter<BigRational>();
-        bb = new GroebnerBaseF5zSigSeqIter<BigRational>();
-        //bb = new GroebnerBaseSeqIter<BigRational>();
+        bb      = new GroebnerBaseSeqIter<BigRational>();
+        bbsig   = new GroebnerBaseSigSeqIter<BigRational>();
+        bbggv   = new GroebnerBaseGGVSigSeqIter<BigRational>();
+        bbarris = new GroebnerBaseArrisSigSeqIter<BigRational>();
+        bbf5z   = new GroebnerBaseF5zSigSeqIter<BigRational>();
     }
 
 
@@ -188,11 +188,51 @@ public class GroebnerBaseSigSeqIterTest extends TestCase {
         }
         System.out.println("F = " + F);
 
-        long t = System.currentTimeMillis();
         G = bb.GB(F.list);
-        t = System.currentTimeMillis() - t;
+        long t1 = System.currentTimeMillis();
+        G = bb.GB(F.list);
+        t1 = System.currentTimeMillis() - t1;
+        assertTrue("isGB( GB(Trinks7) )", bb.isGB(G));
+        assertEquals("#GB(Trinks7) == 6", 6, G.size());
+
+        long t2 = System.currentTimeMillis();
+        Gp = G; //bbsig.GB(F.list);
+        t2 = System.currentTimeMillis() - t2;
+        assertTrue("isGB( GB(Trinks7) )", bb.isGB(Gp));
+        assertEquals("#GB(Trinks7) == 6", 6, Gp.size());
+        assertEquals("GB == GBp", G, Gp);
+
+        Gp = bbf5z.GB(F.list);
+        long t5 = System.currentTimeMillis();
+        Gp = bbf5z.GB(F.list);
+        t5 = System.currentTimeMillis() - t5;
+        assertTrue("isGB( GB(Trinks7) )", bb.isGB(Gp));
+        assertEquals("#GB(Trinks7) == 6", 6, Gp.size());
+        assertEquals("GB == GBp", G, Gp);
+
+        Gp = bbarris.GB(F.list);
+        long t4 = System.currentTimeMillis();
+        Gp = bbarris.GB(F.list);
+        t4 = System.currentTimeMillis() - t4;
+        assertTrue("isGB( GB(Trinks7) )", bb.isGB(Gp));
+        assertEquals("#GB(Trinks7) == 6", 6, Gp.size());
+        assertEquals("GB == GBp", G, Gp);
+
+        Gp = bbggv.GB(F.list);
+        long t3 = System.currentTimeMillis();
+        Gp = bbggv.GB(F.list);
+        t3 = System.currentTimeMillis() - t3;
+        assertTrue("isGB( GB(Trinks7) )", bb.isGB(Gp));
+        assertEquals("#GB(Trinks7) == 6", 6, Gp.size());
+        assertEquals("GB == GBp", G, Gp);
+
         System.out.println("G = " + G);
-        System.out.println("executed in " + t + " milliseconds");
+        System.out.println("iter  executed in " + t1 + " milliseconds");
+        //System.out.println("sig   executed in " + t2 + " milliseconds");
+        System.out.println("ggv   executed in " + t3 + " milliseconds");
+        System.out.println("arris executed in " + t4 + " milliseconds");
+        System.out.println("f5z   executed in " + t5 + " milliseconds");
+
         assertTrue("isGB( GB(Trinks7) )", bb.isGB(G));
         assertEquals("#GB(Trinks7) == 6", 6, G.size());
         //PolynomialList<BigRational> trinks = new PolynomialList<BigRational>(F.ring,G);

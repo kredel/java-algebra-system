@@ -227,7 +227,7 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
                         } else {
                             pp = newPair(tau.multiply(mult[1]),p,Hs,Gs);
                         }
-                        if (pp.sigma.degree() == mdeg) {
+                        if (pp.sigma.totalDegree() == mdeg) {
                             Sl.add( pp );
                         } else {
                             pairlist.add( pp );

@@ -358,8 +358,8 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
     public long minimalSigDegree(List<SigPair<C>> F) {
         long deg = Long.MAX_VALUE;
         for (SigPair<C> p : F) {
-            //long d = p.sigma.totalDegree();
-            long d = p.sigma.degree();
+            long d = p.sigma.totalDegree();
+            //long d = p.sigma.degree();
             if (d < deg) { 
                 deg = d;
             }
@@ -373,7 +373,7 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
         List<SigPair<C>> ff = new ArrayList<SigPair<C>>();
         List<SigPair<C>> pp = new ArrayList<SigPair<C>>();
         for (SigPair<C> p : F) {
-            if (p.sigma.degree() == mdeg) { 
+            if (p.sigma.totalDegree() == mdeg) { 
                 ff.add(p);
             } else {
                 pp.add(p);
