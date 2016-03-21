@@ -251,28 +251,23 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
                     if (sp == null) {
                         sp = ring.evzero;
                     }
-                    //logger.info("sp, se        = " + sp + ", " + se);
                     //logger.info("sigup, sigma  = " + sigup + ", " + sigma);
                     boolean sigeq = (sigup.compareTo(sigma) < 0)
                         || ( (sp.compareTo(se) == 0
                               && (sigup.leadingBaseCoefficient().compareTo(sigma.leadingBaseCoefficient()) != 0) ));
                     //logger.info("sigup < sigma = " + sigup.compareTo(sigma));
-                    //logger.info("sp  < se  = " + sp.invGradCompareTo(se));
-                    //logger.info("spc < sec = " + sigup.leadingBaseCoefficient().compareTo(sigma.leadingBaseCoefficient()));
                     if (sigeq) {
                         reduced = true;
                         a = a.subtractMultiple(sc, g, p.poly);
                         if (sp.invGradCompareTo(se) == 0) {
                             sigma = sigma.subtract(sigup);
                         }
-                        //logger.info("sigma, a = " + sigma + ", a = " + a + ", sigup = " + sigup);
                         if (a.isZERO()) {
                             break;
                         }
                         e = a.leadingExpVector();
                     } else {
                         //logger.info("not reduced: a = " + a + ", p = " + p.poly);
-                        //logger.info("not reduced: sigma = " + sigma + ", sigup = " + sigup);
                     }
                 }
             }
@@ -335,7 +330,6 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
                         }
                         e = a.leadingExpVector();
                     } else {
-                        //logger.info("not reduced: sigup = " + sigup + ", sigma = " + sigma);
                         //logger.info("not reduced: a = " + a + ", p = " + p.poly);
                     }
                 }
@@ -364,7 +358,8 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
     public long minimalSigDegree(List<SigPair<C>> F) {
         long deg = Long.MAX_VALUE;
         for (SigPair<C> p : F) {
-            long d = p.sigma.totalDegree();
+            //long d = p.sigma.totalDegree();
+            long d = p.sigma.degree();
             if (d < deg) { 
                 deg = d;
             }
@@ -378,7 +373,7 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
         List<SigPair<C>> ff = new ArrayList<SigPair<C>>();
         List<SigPair<C>> pp = new ArrayList<SigPair<C>>();
         for (SigPair<C> p : F) {
-            if (p.sigma.totalDegree() == mdeg) { 
+            if (p.sigma.degree() == mdeg) { 
                 ff.add(p);
             } else {
                 pp.add(p);
