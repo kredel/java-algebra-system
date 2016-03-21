@@ -145,7 +145,7 @@ class sigbased_gb:
             S.sort(key=lambda x:x[0]); s = S.pop(0)
             sigma,r = self.sigsafe_reduction(self.spoly(s,G),s[0],G,F,Syz)
             if (r != 0) and (not self.sig_redundant(sigma,r,G)): 
-              #print "new polynomial", (sigma,r.lm())
+              #print "new polynomial", str(sigma), ", ", str(r)
               for (tau,g) in G:
                 if (g != 0):
                   rmul,gmul = self.spoly_multipliers(r,g)
@@ -277,7 +277,7 @@ class coeff_free_sigbased_gb(sigbased_gb):
           if g[1] != 0 and R.monomial_divides(g[1].lm(),r.lm()):
             u = self.R.monomial_quotient(r.lt(),g[1].lt(),coeff=True)
             sig_ug = u*g[0]
-            if sig_ug.lm() < r_sigma:
+            if sig_ug.lm() < r_sigma.lm(): # type error: sig_ug.lm() < r_sigma 
               reduced = True
               r -= u*g[1]
     # ensure that r is monic
