@@ -21,8 +21,7 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Polynomial SigReduction class. Implements common S-Polynomial,
- * normalform.
+ * Polynomial SigReduction class. Implements common S-Polynomial, normalform.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
@@ -73,7 +72,7 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
         ExpVector g = e.lcm(f);
         ExpVector e1 = g.subtract(e);
         ExpVector f1 = g.subtract(f);
-        ExpVector[] F = new ExpVector[]{ e1, f1 };
+        ExpVector[] F = new ExpVector[] { e1, f1 };
         return F;
     }
 
@@ -103,11 +102,11 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
      * @return polynomials [e,f] such that spol(A,B) = e*a - f*B.
      */
     public GenPolynomial<C>[] SPolynomialFactors(SigPoly<C> A, SigPoly<C> B) {
-        ExpVector[] ev = SPolynomialExpVectorFactors(A,B);
+        ExpVector[] ev = SPolynomialExpVectorFactors(A, B);
         GenPolynomial<C> e1 = A.poly.ring.valueOf(ev[0]);
         GenPolynomial<C> f1 = A.poly.ring.valueOf(ev[1]);
         @SuppressWarnings("unchecked")
-        GenPolynomial<C>[] F = new GenPolynomial[]{ e1, f1 };
+        GenPolynomial<C>[] F = new GenPolynomial[] { e1, f1 };
         return F;
     }
 
@@ -144,7 +143,7 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
                 ExpVector f = p.poly.leadingExpVector();
                 mt = e.multipleOf(f);
                 if (mt) {
-                     return false;
+                    return false;
                 }
             }
             for (SigPoly<C> p : G) {
@@ -154,13 +153,14 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
                 ExpVector f = p.poly.leadingExpVector();
                 mt = e.multipleOf(f);
                 if (mt) {
-                    ExpVector g = e.subtract(f); 
+                    ExpVector g = e.subtract(f);
                     GenPolynomial<C> sigma = p.sigma.multiply(g);
-                    if (sigma.leadingExpVector().compareTo(A.sigma.leadingExpVector()) < 0 ) {
+                    if (sigma.leadingExpVector().compareTo(A.sigma.leadingExpVector()) < 0) {
                         return false;
                     }
                     if (sigma.leadingExpVector().compareTo(A.sigma.leadingExpVector()) == 0
-                        && sigma.leadingBaseCoefficient().compareTo(A.sigma.leadingBaseCoefficient()) != 0   ) {
+                                    && sigma.leadingBaseCoefficient().compareTo(
+                                                    A.sigma.leadingBaseCoefficient()) != 0) {
                         return false;
                     }
                 }
@@ -168,7 +168,6 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
         }
         return true;
     }
-
 
 
     /**
@@ -195,10 +194,10 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
             }
             boolean mt = e.multipleOf(f);
             if (mt) {
-                ExpVector g = e.subtract(f); 
+                ExpVector g = e.subtract(f);
                 ExpVector h = p.poly.leadingExpVector();
                 h = h.sum(g);
-                if (h.compareTo(A.poly.leadingExpVector()) == 0 ) {
+                if (h.compareTo(A.poly.leadingExpVector()) == 0) {
                     return true;
                 }
             }
@@ -228,7 +227,7 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
         boolean reduced = true;
         while (!a.isZERO() && reduced) {
             reduced = false;
-            a = red.normalform(ff,a);
+            a = red.normalform(ff, a);
             if (a.isZERO()) {
                 continue;
             }
@@ -240,7 +239,7 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
                 ExpVector f = p.poly.leadingExpVector();
                 boolean mt = e.multipleOf(f);
                 if (mt) {
-                    ExpVector g = e.subtract(f); 
+                    ExpVector g = e.subtract(f);
                     C sc = a.leadingBaseCoefficient().divide(p.poly.leadingBaseCoefficient());
                     GenPolynomial<C> sigup = p.sigma.multiply(sc, g);
                     ExpVector se = sigma.leadingExpVector();
@@ -253,8 +252,8 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
                     }
                     //logger.info("sigup, sigma  = " + sigup + ", " + sigma);
                     boolean sigeq = (sigup.compareTo(sigma) < 0)
-                        || ( (sp.compareTo(se) == 0
-                              && (sigup.leadingBaseCoefficient().compareTo(sigma.leadingBaseCoefficient()) != 0) ));
+                                    || ((sp.compareTo(se) == 0 && (sigup.leadingBaseCoefficient().compareTo(
+                                                    sigma.leadingBaseCoefficient()) != 0)));
                     //logger.info("sigup < sigma = " + sigup.compareTo(sigma));
                     if (sigeq) {
                         reduced = true;
@@ -273,13 +272,13 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
             }
         }
         C ac = a.leadingBaseCoefficient();
-        if ( !ac.isONE() ) {
+        if (!ac.isONE()) {
             ac = ac.inverse();
             a = a.multiply(ac);
             sigma = sigma.multiply(ac);
         }
         return new SigPoly<C>(sigma, a);
-    }    
+    }
 
 
     /**
@@ -299,11 +298,11 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
         List<GenPolynomial<C>> ff = F; //polys(F);
         GenPolynomial<C> a = A.poly;
         GenPolynomial<C> sigma = A.sigma;
-        GenPolynomialRing<C> ring = a.ring;
+        //GenPolynomialRing<C> ring = a.ring;
         boolean reduced = true;
         while (!a.isZERO() && reduced) {
             reduced = false;
-            a = red.normalform(ff,a);
+            a = red.normalform(ff, a);
             if (a.isZERO()) {
                 continue;
             }
@@ -315,7 +314,7 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
                 ExpVector f = p.poly.leadingExpVector();
                 boolean mt = e.multipleOf(f);
                 if (mt) {
-                    ExpVector g = e.subtract(f); 
+                    ExpVector g = e.subtract(f);
                     C sc = a.leadingBaseCoefficient().divide(p.poly.leadingBaseCoefficient());
                     GenPolynomial<C> sigup = p.sigma.multiply(sc, g);
 
@@ -336,18 +335,18 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
             }
         }
         C ac = a.leadingBaseCoefficient();
-        if ( !ac.isONE() ) {
+        if (!ac.isONE()) {
             ac = ac.inverse();
             a = a.multiply(ac);
         }
         return new SigPoly<C>(sigma, a);
-    }    
+    }
 
 
     public List<GenPolynomial<C>> polys(List<SigPoly<C>> F) {
         List<GenPolynomial<C>> ff = new ArrayList<GenPolynomial<C>>();
         for (SigPoly<C> p : F) {
-            if (!p.poly.isZERO()) { 
+            if (!p.poly.isZERO()) {
                 ff.add(p.poly);
             }
         }
@@ -360,7 +359,7 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
         for (SigPair<C> p : F) {
             long d = p.sigma.totalDegree();
             //long d = p.sigma.degree();
-            if (d < deg) { 
+            if (d < deg) {
                 deg = d;
             }
         }
@@ -373,14 +372,14 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
         List<SigPair<C>> ff = new ArrayList<SigPair<C>>();
         List<SigPair<C>> pp = new ArrayList<SigPair<C>>();
         for (SigPair<C> p : F) {
-            if (p.sigma.totalDegree() == mdeg) { 
+            if (p.sigma.totalDegree() == mdeg) {
                 ff.add(p);
             } else {
                 pp.add(p);
             }
         }
         @SuppressWarnings("unchecked")
-	List<SigPair<C>>[] P = new List[2];
+        List<SigPair<C>>[] P = new List[2];
         P[0] = ff;
         P[1] = pp;
         return P;
@@ -394,5 +393,4 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
         List<SigPair<C>> ff = F.stream().sorted(sigcmp).collect(Collectors.toList());
         return ff;
     }
-
 }

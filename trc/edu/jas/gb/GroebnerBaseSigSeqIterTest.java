@@ -25,7 +25,7 @@ import edu.jas.poly.PolynomialList;
 
 
 /**
- * Groebner base sequential iterative GB tests with JUnit.
+ * Groebner base signature based sequential iterative GB tests with JUnit.
  * @author Heinz Kredel.
  */
 
@@ -94,11 +94,11 @@ public class GroebnerBaseSigSeqIterTest extends TestCase {
         BigRational coeff = new BigRational(9);
         fac = new GenPolynomialRing<BigRational>(coeff, rl);
         a = b = c = d = e = null;
-        bb      = new GroebnerBaseSeqIter<BigRational>();
-        bbsig   = new GroebnerBaseSigSeqIter<BigRational>();
-        bbggv   = new GroebnerBaseGGVSigSeqIter<BigRational>();
+        bb = new GroebnerBaseSeqIter<BigRational>();
+        bbsig = new GroebnerBaseSigSeqIter<BigRational>();
+        bbggv = new GroebnerBaseGGVSigSeqIter<BigRational>();
         bbarris = new GroebnerBaseArrisSigSeqIter<BigRational>();
-        bbf5z   = new GroebnerBaseF5zSigSeqIter<BigRational>();
+        bbf5z = new GroebnerBaseF5zSigSeqIter<BigRational>();
     }
 
 
@@ -162,17 +162,14 @@ public class GroebnerBaseSigSeqIterTest extends TestCase {
     /**
      * Test Trinks7 GBase.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public void testTrinks7GBase() {
-        String exam = "(B,S,T,Z,P,W) L " + "( " 
+        String exam = "(B,S,T,Z,P,W) L " + "( "
                         + "( P W + 2 T Z - 11 B**3 ), "
-	    //+ "( B**2 + 33/50 B + 2673/10000 ) " 
-                        + "( 45 P + 35 S - 165 B - 36 ), "
-                        + "( 35 P + 40 Z + 25 T - 27 S ), " 
-                        + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
-                        + "( - 9 W + 15 T P + 20 S Z ), " 
-                        + "( 99 W - 11 B S + 3 B**2 ), " 
-                        + ") ";
+                        //+ "( B**2 + 33/50 B + 2673/10000 ) " 
+                        + "( 45 P + 35 S - 165 B - 36 ), " + "( 35 P + 40 Z + 25 T - 27 S ), "
+                        + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), " + "( - 9 W + 15 T P + 20 S Z ), "
+                        + "( 99 W - 11 B S + 3 B**2 ), " + ") ";
         @SuppressWarnings("unused")
         String exam2 = "(x,y,z) L " + "( " + "( z y**2 + 2 x + 1/2 )" + "( z x**2 - y**2 - 1/2 x )"
                         + "( -z + y**2 x + 4 x**2 + 1/4 )" + " )";

@@ -4,26 +4,22 @@
 
 package edu.jas.gb;
 
-import java.util.List;
 
-import edu.jas.structure.RingElem;
 import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.ModuleList;
-import edu.jas.poly.PolynomialList;
-
+import edu.jas.structure.RingElem;
 
 
 /**
  * Container for a polynomial and its signature.
- * Immutable objects.
  * @param <C> coefficient type
  * @param sigma a polynomial signature.
- * @param pol a polynomial.
+ * @param poly a polynomial.
  */
 public class SigPoly<C extends RingElem<C>> {
 
+
     public final GenPolynomial<C> sigma;
+
 
     public final GenPolynomial<C> poly;
 
@@ -33,8 +29,7 @@ public class SigPoly<C extends RingElem<C>> {
      * @param s a polynomial signature.
      * @param p a polynomial.
      */
-    public SigPoly( GenPolynomial<C> s,
-                    GenPolynomial<C> p) {
+    public SigPoly(GenPolynomial<C> s, GenPolynomial<C> p) {
         this.sigma = s;
         this.poly = p;
     }
@@ -44,7 +39,7 @@ public class SigPoly<C extends RingElem<C>> {
      * getter for sigma
      */
     GenPolynomial<C> getSigma() {
-        return sigma; 
+        return sigma;
     }
 
 
@@ -52,17 +47,18 @@ public class SigPoly<C extends RingElem<C>> {
      * getter for polynomial
      */
     GenPolynomial<C> getPoly() {
-        return poly; 
+        return poly;
     }
 
 
-    /** Get the String representation.
+    /**
+     * Get the String representation.
      * @see java.lang.Object#toString()
      */
     @Override
     public String toString() {
         StringBuffer s = new StringBuffer("sigma(");
-        s.append(sigma.toString() + ") :: ");
+        s.append(sigma.toString() + "):: ");
         s.append(poly.toString());
         return s.toString();
     }

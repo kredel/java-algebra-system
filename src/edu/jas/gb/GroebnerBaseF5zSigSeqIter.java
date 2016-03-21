@@ -7,21 +7,17 @@ package edu.jas.gb;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.OrderedPolynomialList;
-import edu.jas.poly.PolyUtil;
 import edu.jas.structure.RingElem;
 
 
 /**
- * Groebner Base signatur based sequential iterative
- * algorithm. Implements Groebner bases and GB test.
+ * Groebner Base F5z signature based sequential iterative algorithm. Implements
+ * Groebner bases.
  * @param <C> coefficient type
  * @author Heinz Kredel
  * 
@@ -35,7 +31,7 @@ public class GroebnerBaseF5zSigSeqIter<C extends RingElem<C>> extends GroebnerBa
     private static final Logger logger = Logger.getLogger(GroebnerBaseF5zSigSeqIter.class);
 
 
-    private static final boolean debug = logger.isDebugEnabled();
+    //private static final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -62,11 +58,13 @@ public class GroebnerBaseF5zSigSeqIter<C extends RingElem<C>> extends GroebnerBa
      * @param G polynomial list.
      * @return nf(A) with respect to F and G.
      */
+    @Override
     public SigPoly<C> sigNormalform(List<GenPolynomial<C>> F, List<SigPoly<C>> G, SigPoly<C> A) {
         return sred.sigSemiNormalform(F, G, A);
     }
 
 
+    @Override
     List<SigPair<C>> pruneP(List<SigPair<C>> P, List<ExpVector> syz) {
         List<SigPair<C>> res = new ArrayList<SigPair<C>>(P.size());
         for (SigPair<C> p : P) {
@@ -89,6 +87,8 @@ public class GroebnerBaseF5zSigSeqIter<C extends RingElem<C>> extends GroebnerBa
         return res;
     }
 
+
+    @Override
     List<SigPair<C>> pruneS(List<SigPair<C>> S, List<ExpVector> syz, List<SigPoly<C>> done, List<SigPoly<C>> G) {
         List<SigPair<C>> res = new ArrayList<SigPair<C>>(S.size());
         for (SigPair<C> p : S) {
@@ -128,25 +128,30 @@ public class GroebnerBaseF5zSigSeqIter<C extends RingElem<C>> extends GroebnerBa
                 continue;
             }
             res.add(p);
+            logger.debug("added p = " + p.sigma);
         }
         return res;
     }
 
+
+    @Override
     List<ExpVector> initializeSyz(List<GenPolynomial<C>> F, List<SigPoly<C>> G) {
         List<ExpVector> P = new ArrayList<ExpVector>();
         for (GenPolynomial<C> p : F) {
-	    if (p.isZERO()) {
+            if (p.isZERO()) {
                 continue;
             }
-            P.add( p.leadingExpVector() );
+            P.add(p.leadingExpVector());
         }
         return P;
     }
 
+
+    @Override
     void updateSyz(List<ExpVector> syz, SigPoly<C> r) {
         if (r.poly.isZERO() && !r.sigma.isZERO()) {
-	    logger.info("update_syz, sigma = " + r.sigma);   
-            syz.add( r.sigma.leadingExpVector() );
+            logger.info("update_syz, sigma = " + r.sigma);
+            syz.add(r.sigma.leadingExpVector());
         }
         return;
     }
