@@ -304,7 +304,7 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
 
     /**
      * Pair with signature.
-     * @param a signature for pair.
+     * @param s signature for pair.
      * @param A polynomial with signature.
      * @param B polynomial with signature.
      * @param G polynomial ith signature list.

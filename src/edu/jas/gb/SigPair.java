@@ -39,8 +39,8 @@ public class SigPair<C extends RingElem<C>> //extends AbstractSigPair<C>
      * @param a polynomial i.
      * @param b polynomial j.
      */
-    public SigPair(ExpVector s, SigPoly<C> a, SigPoly<C> b, List<SigPoly<C>> Gs) {
-        this(a.poly.ring.valueOf(s), a, b, Gs);
+    public SigPair(ExpVector sig, SigPoly<C> a, SigPoly<C> b, List<SigPoly<C>> Gs) {
+        this(a.poly.ring.valueOf(sig), a, b, Gs);
     }
 
 
