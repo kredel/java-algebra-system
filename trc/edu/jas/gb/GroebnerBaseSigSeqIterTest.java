@@ -68,7 +68,7 @@ public class GroebnerBaseSigSeqIterTest extends TestCase {
     PolynomialList<BigRational> F;
 
 
-    GroebnerBaseAbstract<BigRational> bb, bbsig, bbggv, bbarris, bbf5z;
+    GroebnerBaseAbstract<BigRational> bb, bbsig, bbggv, bbarri, bbf5z;
 
 
     GenPolynomial<BigRational> a, b, c, d, e;
@@ -97,7 +97,7 @@ public class GroebnerBaseSigSeqIterTest extends TestCase {
         bb = new GroebnerBaseSeqIter<BigRational>();
         bbsig = new GroebnerBaseSigSeqIter<BigRational>();
         bbggv = new GroebnerBaseGGVSigSeqIter<BigRational>();
-        bbarris = new GroebnerBaseArrisSigSeqIter<BigRational>();
+        bbarri = new GroebnerBaseArriSigSeqIter<BigRational>();
         bbf5z = new GroebnerBaseF5zSigSeqIter<BigRational>();
     }
 
@@ -166,7 +166,7 @@ public class GroebnerBaseSigSeqIterTest extends TestCase {
     public void testTrinks7GBase() {
         String exam = "(B,S,T,Z,P,W) L " + "( "
                         + "( P W + 2 T Z - 11 B**3 ), "
-                        //+ "( B**2 + 33/50 B + 2673/10000 ) " 
+                        + "( B**2 + 33/50 B + 2673/10000 ) " 
                         + "( 45 P + 35 S - 165 B - 36 ), " + "( 35 P + 40 Z + 25 T - 27 S ), "
                         + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), " + "( - 9 W + 15 T P + 20 S Z ), "
                         + "( 99 W - 11 B S + 3 B**2 ), " + ") ";
@@ -207,9 +207,9 @@ public class GroebnerBaseSigSeqIterTest extends TestCase {
         assertEquals("#GB(Trinks7) == 6", 6, Gp.size());
         assertEquals("GB == GBp", G, Gp);
 
-        Gp = bbarris.GB(F.list);
+        Gp = bbarri.GB(F.list);
         long t4 = System.currentTimeMillis();
-        Gp = bbarris.GB(F.list);
+        Gp = bbarri.GB(F.list);
         t4 = System.currentTimeMillis() - t4;
         assertTrue("isGB( GB(Trinks7) )", bb.isGB(Gp));
         assertEquals("#GB(Trinks7) == 6", 6, Gp.size());
