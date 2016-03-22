@@ -35,18 +35,18 @@ public class SigPair<C extends RingElem<C>> //extends AbstractSigPair<C>
 
     /**
      * SigPair constructor.
-     * @param signature of pair.
+     * @param sig signature of pair.
      * @param a polynomial i.
      * @param b polynomial j.
      */
-    public SigPair(ExpVector lcm, SigPoly<C> a, SigPoly<C> b, List<SigPoly<C>> Gs) {
-        this(a.poly.ring.valueOf(lcm), a, b, Gs);
+    public SigPair(ExpVector s, SigPoly<C> a, SigPoly<C> b, List<SigPoly<C>> Gs) {
+        this(a.poly.ring.valueOf(s), a, b, Gs);
     }
 
 
     /**
      * SigPair constructor.
-     * @param signature of pair.
+     * @param sig signature of pair.
      * @param a polynomial i.
      * @param b polynomial j.
      */

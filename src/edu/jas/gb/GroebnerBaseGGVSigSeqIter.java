@@ -63,6 +63,12 @@ public class GroebnerBaseGGVSigSeqIter<C extends RingElem<C>> extends GroebnerBa
     }
 
 
+    /**
+     * Prune total pair list P.
+     * @param P pair list.
+     * @param syz list of exponent vectors representing syzygies.
+     * @return updated pair list.
+     */
     @Override
     List<SigPair<C>> pruneP(List<SigPair<C>> P, List<ExpVector> syz) {
         List<SigPair<C>> res = new ArrayList<SigPair<C>>(P.size());
@@ -87,6 +93,14 @@ public class GroebnerBaseGGVSigSeqIter<C extends RingElem<C>> extends GroebnerBa
     }
 
 
+    /**
+     * Prune pair list of degree d.
+     * @param S pair list.
+     * @param syz list of exponent vectors representing syzygies.
+     * @param done list of treated polynomials.
+     * @param G polynomial with signature list.
+     * @return updated pair list.
+     */
     @Override
     List<SigPair<C>> pruneS(List<SigPair<C>> S, List<ExpVector> syz, List<SigPoly<C>> done, List<SigPoly<C>> G) {
         List<SigPair<C>> res = new ArrayList<SigPair<C>>(S.size());
@@ -134,6 +148,12 @@ public class GroebnerBaseGGVSigSeqIter<C extends RingElem<C>> extends GroebnerBa
     }
 
 
+    /**
+     * Initializes syzygy list.
+     * @param F polynomial list.
+     * @param G polynomial with signature list.
+     * @return list of exponent vectors representing syzygies.
+     */
     @Override
     List<ExpVector> initializeSyz(List<GenPolynomial<C>> F, List<SigPoly<C>> G) {
         List<ExpVector> P = new ArrayList<ExpVector>();
@@ -147,6 +167,12 @@ public class GroebnerBaseGGVSigSeqIter<C extends RingElem<C>> extends GroebnerBa
     }
 
 
+    /**
+     * Update syzygy list.
+     * @param syz list of exponent vectors representing syzygies.
+     * @param r polynomial.
+     * <b>Note:</b> szy is modified to represent updated list of exponent vectors.
+     */
     @Override
     void updateSyz(List<ExpVector> syz, SigPoly<C> r) {
         if (r.poly.isZERO() && !r.sigma.isZERO()) {

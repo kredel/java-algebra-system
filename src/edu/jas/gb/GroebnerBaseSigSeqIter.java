@@ -269,7 +269,7 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
 
     /**
      * S-Polynomial.
-     * @param p pair.
+     * @param P pair.
      * @return spol(A,B) the S-polynomial of the pair (A,B).
      */
     public GenPolynomial<C> SPolynomial(SigPair<C> P) {
@@ -288,6 +288,13 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
     }
 
 
+    /**
+     * Pair with signature.
+     * @param A polynomial with signature.
+     * @param B polynomial with signature.
+     * @param G polynomial ith signature list.
+     * @return signature pair according to algorithm.
+     */
     public SigPair<C> newPair(SigPoly<C> A, SigPoly<C> B, List<SigPoly<C>> G) {
         ExpVector e = A.poly.leadingExpVector().lcm(B.poly.leadingExpVector())
                         .subtract(A.poly.leadingExpVector());
@@ -295,6 +302,14 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
     }
 
 
+    /**
+     * Pair with signature.
+     * @param a signature for pair.
+     * @param A polynomial with signature.
+     * @param B polynomial with signature.
+     * @param G polynomial ith signature list.
+     * @return signature pair according to algorithm.
+     */
     public SigPair<C> newPair(GenPolynomial<C> s, SigPoly<C> A, SigPoly<C> B, List<SigPoly<C>> G) {
         return new SigPair<C>(s, A, B, G);
     }
@@ -312,22 +327,48 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
     }
 
 
+    /**
+     * Prune total pair list P.
+     * @param P pair list.
+     * @param syz list of exponent vectors representing syzygies.
+     * @return updated pair list.
+     */
     List<SigPair<C>> pruneP(List<SigPair<C>> P, List<ExpVector> syz) {
         return P;
     }
 
 
+    /**
+     * Prune pair list of degree d.
+     * @param S pair list.
+     * @param syz list of exponent vectors representing syzygies.
+     * @param done list of treated polynomials.
+     * @param G polynomial with signature list.
+     * @return updated pair list.
+     */
     List<SigPair<C>> pruneS(List<SigPair<C>> S, List<ExpVector> syz, List<SigPoly<C>> done, List<SigPoly<C>> G) {
         return S;
     }
 
 
+    /**
+     * Initializes syzygy list.
+     * @param F polynomial list.
+     * @param G polynomial with signature list.
+     * @return list of exponent vectors representing syzygies.
+     */
     List<ExpVector> initializeSyz(List<GenPolynomial<C>> F, List<SigPoly<C>> G) {
         List<ExpVector> P = new ArrayList<ExpVector>();
         return P;
     }
 
 
+    /**
+     * Update syzygy list.
+     * @param syz list of exponent vectors representing syzygies.
+     * @param r polynomial.
+     * <b>Note:</b> szy is modified to represent updated list of exponent vectors.
+     */
     void updateSyz(List<ExpVector> syz, SigPoly<C> r) {
         return;
     }
