@@ -23,6 +23,10 @@ import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.GroebnerBaseParallel;
 import edu.jas.gb.GroebnerBaseSeq;
 import edu.jas.gb.GroebnerBaseSeqIter;
+import edu.jas.gb.GroebnerBaseSigSeqIter;
+import edu.jas.gb.GroebnerBaseF5zSigSeqIter;
+import edu.jas.gb.GroebnerBaseGGVSigSeqIter;
+import edu.jas.gb.GroebnerBaseArriSigSeqIter;
 import edu.jas.gb.GroebnerBaseParIter;
 import edu.jas.gbufd.GBFactory;
 import edu.jas.gbufd.GroebnerBaseFGLM;
@@ -404,6 +408,47 @@ public class GBAlgorithmBuilderTest extends TestCase {
         GBProxy<BigRational> bbp = (GBProxy<BigRational>) bb;
         assertTrue("instance of " + bbp.e1, bbp.e1 instanceof GroebnerBaseSeqIter);
         assertTrue("instance of " + bbp.e2, bbp.e2 instanceof GroebnerBaseParIter);
+    }
+
+
+    /**
+     * Test construction for BigRational and signature based GBs.
+     */
+    public void testConstructionRationalSignatureBased() {
+        BigRational bf = new BigRational(1);
+        String[] vars = new String[] { "a", "b", "c" };
+        GenPolynomialRing<BigRational> pf = new GenPolynomialRing<BigRational>(bf, vars);
+
+        GBAlgorithmBuilder<BigRational> ab = GBAlgorithmBuilder.<BigRational> polynomialRing(pf);
+        //System.out.println("ab = " + ab);
+
+        ab = ab.F5();
+        //System.out.println("ab = " + ab);
+
+        GroebnerBaseAbstract<BigRational> bb = ab.build();
+        //System.out.println("bb = " + bb);
+        assertTrue("instance of " + bb, bb instanceof GroebnerBaseSigSeqIter);
+        assertTrue("instance of " + bb, bb instanceof GroebnerBaseF5zSigSeqIter);
+
+
+        ab = GBAlgorithmBuilder.<BigRational> polynomialRing(pf);
+        ab = ab.GGV();
+        //System.out.println("ab = " + ab);
+
+        bb = ab.build();
+        //System.out.println("bb = " + bb);
+        assertTrue("instance of " + bb, bb instanceof GroebnerBaseSigSeqIter);
+        assertTrue("instance of " + bb, bb instanceof GroebnerBaseGGVSigSeqIter);
+
+
+        ab = GBAlgorithmBuilder.<BigRational> polynomialRing(pf);
+        ab = ab.Arri();
+        //System.out.println("ab = " + ab);
+
+        bb = ab.build();
+        //System.out.println("bb = " + bb);
+        assertTrue("instance of " + bb, bb instanceof GroebnerBaseSigSeqIter);
+        assertTrue("instance of " + bb, bb instanceof GroebnerBaseArriSigSeqIter);
     }
 
 }

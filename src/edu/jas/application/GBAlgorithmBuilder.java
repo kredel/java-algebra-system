@@ -16,6 +16,9 @@ import edu.jas.gb.GBProxy;
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.GroebnerBaseParallel;
 import edu.jas.gb.GroebnerBaseSeqIter;
+import edu.jas.gb.GroebnerBaseF5zSigSeqIter;
+import edu.jas.gb.GroebnerBaseGGVSigSeqIter;
+import edu.jas.gb.GroebnerBaseArriSigSeqIter;
 import edu.jas.gb.GroebnerBaseParIter;
 import edu.jas.gb.OrderedMinPairlist;
 import edu.jas.gb.OrderedPairlist;
@@ -60,6 +63,9 @@ import edu.jas.ufd.QuotientRing;
  *        then constructing a Gr&ouml;bner base wrt. a lexicographical term
  *        order,</li>
  *        <li><code>iterated()</code> for using the iterative GB algorithm to 
+ *        compute a Gr&ouml;bner base adding one polynomial after another,</li>
+ *        <li><code>F5()</code>, <code>GGV()</code> and <code>Arri()</code> for using 
+ *        the respective iterative signature based GB algorithm (over field coefficients) to 
  *        compute a Gr&ouml;bner base adding one polynomial after another,</li>
  *        <li><code>parallel()</code> additionaly compute a Gr&ouml;bner base
  *        over a field or integral domain in parallel,</li>
@@ -251,7 +257,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
      * coefficients denominators are cleared and pseudo reduction is used.
      * @return GBAlgorithmBuilder object.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings({"cast", "unchecked"})
     public GBAlgorithmBuilder<C> fractionFree() {
         if (algo != null) {
             logger.warn("selected algorithm ignored: " + algo + ", use fractionFree before");
@@ -290,7 +296,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
      * @param a algorithm from GBFactory.Algo.
      * @return GBAlgorithmBuilder object.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings({"cast", "unchecked"})
     public GBAlgorithmBuilder<C> domainAlgorithm(GBFactory.Algo a) {
         if (((Object) ring.coFac) instanceof BigInteger) {
             BigInteger cf = (BigInteger) (Object) ring.coFac;
@@ -326,7 +332,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
      * @param threads number of threads requested.
      * @return GBAlgorithmBuilder object.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings({"cast", "unchecked"})
     public GBAlgorithmBuilder<C> parallel(int threads) {
         if (ComputerThreads.NO_THREADS) {
             logger.warn("parallel algorithms disabled");
@@ -425,6 +431,75 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
             return new GBAlgorithmBuilder<C>(ring, bb);
         }
         logger.warn("no iterated GB algorithm implemented for " + ring);
+        return this;
+    }
+
+
+    /**
+     * Request iterated F5 signature based GB algorithm.
+     * @return GBAlgorithmBuilder object.
+     */
+    @SuppressWarnings("unchecked")
+    public GBAlgorithmBuilder<C> F5() {
+        if (ring.coFac.isField()) {
+            GroebnerBaseAbstract<C> bb;
+            bb = new GroebnerBaseF5zSigSeqIter<C>(); 
+            // if (algo instanceof GBProxy) ... assemble parallel todo
+            if (algo != null) {
+                logger.warn("algo " + algo + " ignored for " + bb);
+            }
+            if (strategy != null) {
+                logger.warn("strategy " + strategy + " ignored for " + bb);
+            }
+            return new GBAlgorithmBuilder<C>(ring, bb);
+        }
+        logger.warn("no iterated F5 GB algorithm implemented for " + ring);
+        return this;
+    }
+
+
+    /**
+     * Request iterated GGV signature based GB algorithm.
+     * @return GBAlgorithmBuilder object.
+     */
+    @SuppressWarnings("unchecked")
+    public GBAlgorithmBuilder<C> GGV() {
+        if (ring.coFac.isField()) {
+            GroebnerBaseAbstract<C> bb;
+            bb = new GroebnerBaseGGVSigSeqIter<C>(); 
+            // if (algo instanceof GBProxy) ... assemble parallel todo
+            if (algo != null) {
+                logger.warn("algo " + algo + " ignored for " + bb);
+            }
+            if (strategy != null) {
+                logger.warn("strategy " + strategy + " ignored for " + bb);
+            }
+            return new GBAlgorithmBuilder<C>(ring, bb);
+        }
+        logger.warn("no iterated GGV GB algorithm implemented for " + ring);
+        return this;
+    }
+
+
+    /**
+     * Request iterated Arri signature based GB algorithm.
+     * @return GBAlgorithmBuilder object.
+     */
+    @SuppressWarnings("unchecked")
+    public GBAlgorithmBuilder<C> Arri() {
+        if (ring.coFac.isField()) {
+            GroebnerBaseAbstract<C> bb;
+            bb = new GroebnerBaseArriSigSeqIter<C>(); 
+            // if (algo instanceof GBProxy) ... assemble parallel todo
+            if (algo != null) {
+                logger.warn("algo " + algo + " ignored for " + bb);
+            }
+            if (strategy != null) {
+                logger.warn("strategy " + strategy + " ignored for " + bb);
+            }
+            return new GBAlgorithmBuilder<C>(ring, bb);
+        }
+        logger.warn("no iterated Arri GB algorithm implemented for " + ring);
         return this;
     }
 
