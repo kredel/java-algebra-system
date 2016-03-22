@@ -25,10 +25,10 @@ import edu.jas.structure.RingElem;
  * @see edu.jas.gbufd.GBFactory
  */
 
-public class GroebnerBaseArrisSigSeqIter<C extends RingElem<C>> extends GroebnerBaseSigSeqIter<C> {
+public class GroebnerBaseArriSigSeqIter<C extends RingElem<C>> extends GroebnerBaseSigSeqIter<C> {
 
 
-    private static final Logger logger = Logger.getLogger(GroebnerBaseArrisSigSeqIter.class);
+    private static final Logger logger = Logger.getLogger(GroebnerBaseArriSigSeqIter.class);
 
 
     //private static final boolean debug = logger.isDebugEnabled();
@@ -37,7 +37,7 @@ public class GroebnerBaseArrisSigSeqIter<C extends RingElem<C>> extends Groebner
     /**
      * Constructor.
      */
-    public GroebnerBaseArrisSigSeqIter() {
+    public GroebnerBaseArriSigSeqIter() {
         this(new SigReductionSeq<C>());
     }
 
@@ -46,7 +46,7 @@ public class GroebnerBaseArrisSigSeqIter<C extends RingElem<C>> extends Groebner
      * Constructor.
      * @param red Reduction engine
      */
-    public GroebnerBaseArrisSigSeqIter(SigReductionSeq<C> red) {
+    public GroebnerBaseArriSigSeqIter(SigReductionSeq<C> red) {
         super(red);
     }
 
