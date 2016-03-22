@@ -25,17 +25,36 @@
 
 <dl>
 
-<dt>2016, February </dt> <!-- 2.6.5xxx --> 
-
+<dt>2016, April </dt> <!-- 2.6.5xxx --> 
 <dd> 
 
+ New signature based Gr&ouml;bner base algorithms, F5, GGV and Arri,
+ after the paper <em>"Signature-based Algorithms to Compute
+ Gr&ouml;bner bases"</em> by Eder and Perry, ISSAC 2011. The classes
+ are <code>GroebnerBaseF5SigSeqIter</code>,
+ <code>GroebnerBaseGGVSigSeqIter</code>,
+ <code>GroebnerBaseArriSigSeqIter</code> and are selectable via
+ <code>GBAlgorithmBuilder</code> methods <code>F5()</code>,
+ <code>GGV()</code> and <code>Arri()</code>.  Some of the new methods
+ use Java 8 constructions.
+
+ <code>GBAlgorithmBuilder</code> expressions can be used in
+ <code>RunGB</code> using the parameter
+ <code>build=string</code>. Started with new methods
+ <code>bitLength()</code> for coefficient arithmetic classes and
+ polynomials.  Some bug fixes and small improvements.
+
+</dd> 
+
+
+<dt>2016, February </dt> <!-- 2.6.5428 --> 
+<dd> 
  This is release 2.6 of JAS. We have switched to latest versions of
  used packages, for example to Apache Log4j version 2.5, JRuby version
  1.7.23 and Jython version 2.7.0. Junit 4.12 is already used since the
  last JAS version. At the moment all old versions of these packages
  will still work, but this may change in the next JAS versions.  From
  then on we will eventually also make use of Java 8 features.
-
  The old version will be kept here: 
  <a href="http://krum.rz.uni-mannheim.de/jas-2.5/" target="new">JAS 2.5</a>.
  <br />
@@ -44,14 +63,12 @@
  <code>GroebnerBaseDistributedHybrid</code>, the method
  <code>divideAndRemainder</code> of several classes and some other
  unused methods. Code cleanup and unified logger declaration. 
-
  New class <code>IntegerProgram</code> to solve integer optimization
- poroblems via Gr&ouml;bner bases.  Tests and some fixes for
+ problems via Gr&ouml;bner bases.  Tests and some fixes for
  compatibility of term orders with Sage, Singular and
  Mathematica. Several small bug fixes and improvements. Print JAS
  version in jython and jruby modules.  Iterative Gr&ouml;bner base
  algorithms selectable in <code>GBAlgorithmBuilder</code>.
-
 </dd>
 
 <dt>2016, January </dt> <!-- 2.5.5380 -->
@@ -2536,7 +2553,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Wed Feb  3 23:22:44 CET 2016
+Last modified: Tue Mar 22 09:58:50 CET 2016
 <!-- hhmts end -->
 </p>
 <!--p align="right" >

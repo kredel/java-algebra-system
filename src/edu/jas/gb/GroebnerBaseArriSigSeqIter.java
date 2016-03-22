@@ -57,7 +57,7 @@ public class GroebnerBaseArriSigSeqIter<C extends RingElem<C>> extends GroebnerB
      * @return spol(A,B) the S-polynomial of the pair (A,B).
      */
     @Override
-    public GenPolynomial<C> SPolynomial(SigPair<C> P) {
+    GenPolynomial<C> SPolynomial(SigPair<C> P) {
         return P.pi.poly;
     }
 
@@ -70,7 +70,7 @@ public class GroebnerBaseArriSigSeqIter<C extends RingElem<C>> extends GroebnerB
      * @return signature pair according to algorithm.
      */
     @Override
-    public SigPair<C> newPair(SigPoly<C> A, SigPoly<C> B, List<SigPoly<C>> G) {
+    SigPair<C> newPair(SigPoly<C> A, SigPoly<C> B, List<SigPoly<C>> G) {
         ExpVector e = A.poly.leadingExpVector().lcm(B.poly.leadingExpVector())
                         .subtract(A.poly.leadingExpVector());
         GenPolynomial<C> sp = SPolynomial(A, B);
@@ -88,7 +88,7 @@ public class GroebnerBaseArriSigSeqIter<C extends RingElem<C>> extends GroebnerB
      * @return signature pair according to algorithm.
      */
     @Override
-    public SigPair<C> newPair(GenPolynomial<C> s, SigPoly<C> A, SigPoly<C> B, List<SigPoly<C>> G) {
+    SigPair<C> newPair(GenPolynomial<C> s, SigPoly<C> A, SigPoly<C> B, List<SigPoly<C>> G) {
         GenPolynomial<C> sp = SPolynomial(A, B);
         return new SigPair<C>(s, new SigPoly<C>(s, sp), B, G);
     }
@@ -102,7 +102,7 @@ public class GroebnerBaseArriSigSeqIter<C extends RingElem<C>> extends GroebnerB
      * @return nf(A) with respect to F and G.
      */
     @Override
-    public SigPoly<C> sigNormalform(List<GenPolynomial<C>> F, List<SigPoly<C>> G, SigPoly<C> A) {
+    SigPoly<C> sigNormalform(List<GenPolynomial<C>> F, List<SigPoly<C>> G, SigPoly<C> A) {
         return sred.sigSemiNormalform(F, G, A);
     }
 

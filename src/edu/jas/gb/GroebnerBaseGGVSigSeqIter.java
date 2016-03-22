@@ -58,7 +58,7 @@ public class GroebnerBaseGGVSigSeqIter<C extends RingElem<C>> extends GroebnerBa
      * @return spol(A,B) the S-polynomial of A and B.
      */
     @Override
-    public GenPolynomial<C> SPolynomial(SigPoly<C> A, SigPoly<C> B) {
+    GenPolynomial<C> SPolynomial(SigPoly<C> A, SigPoly<C> B) {
         return sred.SPolynomialHalf(A, B);
     }
 

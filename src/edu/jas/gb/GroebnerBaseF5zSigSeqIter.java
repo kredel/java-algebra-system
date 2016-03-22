@@ -59,7 +59,7 @@ public class GroebnerBaseF5zSigSeqIter<C extends RingElem<C>> extends GroebnerBa
      * @return nf(A) with respect to F and G.
      */
     @Override
-    public SigPoly<C> sigNormalform(List<GenPolynomial<C>> F, List<SigPoly<C>> G, SigPoly<C> A) {
+    SigPoly<C> sigNormalform(List<GenPolynomial<C>> F, List<SigPoly<C>> G, SigPoly<C> A) {
         return sred.sigSemiNormalform(F, G, A);
     }
 

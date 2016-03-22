@@ -19,16 +19,15 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Groebner Base signature based sequential iterative algorithm. Implements
- * Groebner bases.
+ * Groebner Base signature based sequential iterative
+ * algorithm. Implements Groebner bases after the paper
+ * "Signature-based Algorithms to Compute Gröbner Bases" by Christian
+ * Eder and John Perry, ISSAC 2011. Compare the jython+JAS code in
+ * examples/basic_sigbased_gb.py. Originally the Python+Sage code is
+ * from http://www.math.usm.edu/perry/Research/basic_sigbased_gb.py
+ *
  * @param <C> coefficient type
  * @author Heinz Kredel
- * 
- *         After the paper "Signature-based Algorithms to Compute Gröbner Bases"
- *         by Christian Eder and John Perry, ISSAC 2011. Compare the jython+JAS
- *         code in examples/basic_sigbased_gb.py. Originally the Python+Sage
- *         code is from
- *         http://www.math.usm.edu/perry/Research/basic_sigbased_gb.py
  * 
  * @see edu.jas.application.GBAlgorithmBuilder
  * @see edu.jas.gbufd.GBFactory
@@ -262,7 +261,7 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
      * @param B monic polynomial.
      * @return spol(A,B) the S-polynomial of the A and B.
      */
-    public GenPolynomial<C> SPolynomial(SigPoly<C> A, SigPoly<C> B) {
+    GenPolynomial<C> SPolynomial(SigPoly<C> A, SigPoly<C> B) {
         return sred.SPolynomial(A, B);
     }
 
@@ -272,7 +271,7 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
      * @param P pair.
      * @return spol(A,B) the S-polynomial of the pair (A,B).
      */
-    public GenPolynomial<C> SPolynomial(SigPair<C> P) {
+    GenPolynomial<C> SPolynomial(SigPair<C> P) {
         return sred.SPolynomial(P.pi, P.pj);
     }
 
@@ -283,7 +282,7 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
      * @param B monic polynomial.
      * @return polynomials [e,f] such that spol(A,B) = e*a - f*B.
      */
-    public GenPolynomial<C>[] SPolynomialFactors(SigPoly<C> A, SigPoly<C> B) {
+    GenPolynomial<C>[] SPolynomialFactors(SigPoly<C> A, SigPoly<C> B) {
         return sred.SPolynomialFactors(A, B);
     }
 
@@ -295,7 +294,7 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
      * @param G polynomial ith signature list.
      * @return signature pair according to algorithm.
      */
-    public SigPair<C> newPair(SigPoly<C> A, SigPoly<C> B, List<SigPoly<C>> G) {
+    SigPair<C> newPair(SigPoly<C> A, SigPoly<C> B, List<SigPoly<C>> G) {
         ExpVector e = A.poly.leadingExpVector().lcm(B.poly.leadingExpVector())
                         .subtract(A.poly.leadingExpVector());
         return new SigPair<C>(e, A, B, G);
@@ -310,7 +309,7 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
      * @param G polynomial ith signature list.
      * @return signature pair according to algorithm.
      */
-    public SigPair<C> newPair(GenPolynomial<C> s, SigPoly<C> A, SigPoly<C> B, List<SigPoly<C>> G) {
+    SigPair<C> newPair(GenPolynomial<C> s, SigPoly<C> A, SigPoly<C> B, List<SigPoly<C>> G) {
         return new SigPair<C>(s, A, B, G);
     }
 
@@ -322,7 +321,7 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
      * @param G polynomial list.
      * @return nf(A) with respect to F and G.
      */
-    public SigPoly<C> sigNormalform(List<GenPolynomial<C>> F, List<SigPoly<C>> G, SigPoly<C> A) {
+    SigPoly<C> sigNormalform(List<GenPolynomial<C>> F, List<SigPoly<C>> G, SigPoly<C> A) {
         return sred.sigNormalform(F, G, A);
     }
 
