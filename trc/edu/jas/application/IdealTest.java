@@ -6,6 +6,7 @@ package edu.jas.application;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import junit.framework.Test;
@@ -1396,10 +1397,6 @@ public class IdealTest extends TestCase {
         b = fac.parse("( y^3 - x )");
         c = fac.parse("( z^2 - x^2 )");
 
-        if (a.isZERO() || b.isZERO() || c.isZERO()) {
-            return;
-        }
-
         L.add(a);
         L.add(b);
         L.add(c);
@@ -1410,10 +1407,10 @@ public class IdealTest extends TestCase {
         //System.out.println("I = " + I);
 
         int[] np = I.normalPositionIndex2Vars();
-        //System.out.println("np = " + np);
+        //System.out.println("np = " + Arrays.toString(np));
         if (np == null) {
             np = I.normalPositionIndexUnivars();
-            //System.out.println("np = " + np);
+            //System.out.println("np = " + Arrays.toString(np));
         }
         if (np == null) {
             return;
@@ -1428,7 +1425,7 @@ public class IdealTest extends TestCase {
         assertTrue("is normal position ", t);
 
         np = Ip.ideal.normalPositionIndex2Vars();
-        //System.out.println("np = " + np);
+        //System.out.println("np = " + Arrays.toString(np));
         if (np == null) {
             np = Ip.ideal.normalPositionIndexUnivars();
             //System.out.println("np = " + Arrays.toString(np));
@@ -1438,8 +1435,8 @@ public class IdealTest extends TestCase {
         }
         i = np[0];
         j = np[1];
-        assertTrue("i == 0: " + i, i == 0);
-        assertTrue("j == 2: " + j, j == 2); // fixed, was 3
+        assertTrue("i == 0: " + Arrays.toString(np), i == 0);
+        assertTrue("j == 2: " + Arrays.toString(np), j == 3); // fixed, was 3, again to 3
     }
 
 
