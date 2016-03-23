@@ -21,6 +21,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.PolynomialList;
+import edu.jas.poly.OrderedPolynomialList;
 import edu.jas.poly.ModuleList;
 import edu.jas.poly.TermOrder;
 import edu.jas.structure.RingElem;
@@ -805,6 +806,9 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
         if (G == null || G.size() == 0) {
             throw new IllegalArgumentException("G may not be null or empty");
         }
+        //logger.info("G in  = " + G);
+        //Collections.reverse(G); // test
+        G = OrderedPolynomialList.<C> sort(G); // better performance
         List<Long> ud = univariateDegrees(G);
         if (ud.size() <= i) {
             //logger.info("univ pol, ud = " + ud);
@@ -857,7 +861,9 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
             P = P.sum(Pp);
             X = pfac.univariate(i, ll);
             XP = red.normalform(G, X);
-            //System.out.println("XP = " + XP);
+            if (debug) {
+                logger.info("XP = " + XP);
+            }
             GenPolynomial<GenPolynomial<C>> XPp = PolyUtil.<C> toRecursive(rfac, XP);
             GenPolynomial<GenPolynomial<C>> XPs = XPp.sum(P);
             ls = new ArrayList<GenPolynomial<C>>(XPs.getMap().values());
