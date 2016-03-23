@@ -183,7 +183,7 @@ public class GroebnerBaseSigSeqIterTest extends TestCase {
         } catch (IOException e) {
             fail("" + e);
         }
-        System.out.println("F = " + F);
+        //System.out.println("F = " + F);
 
         G = bb.GB(F.list);
         long t1 = System.currentTimeMillis();
@@ -223,12 +223,14 @@ public class GroebnerBaseSigSeqIterTest extends TestCase {
         assertEquals("#GB(Trinks7) == 6", 6, Gp.size());
         assertEquals("GB == GBp", G, Gp);
 
-        System.out.println("G = " + G);
+        //System.out.println("G = " + G);
         System.out.println("iter  executed in " + t1 + " milliseconds");
         //System.out.println("sig   executed in " + t2 + " milliseconds");
         System.out.println("ggv   executed in " + t3 + " milliseconds");
         System.out.println("arris executed in " + t4 + " milliseconds");
         System.out.println("f5z   executed in " + t5 + " milliseconds");
+        long t = t1 + t2 + t3 + t4 + t5;
+        assertTrue("times >= 0: " + t, t >= 0 ); //findbugs and compiler
 
         assertTrue("isGB( GB(Trinks7) )", bb.isGB(G));
         assertEquals("#GB(Trinks7) == 6", 6, G.size());
