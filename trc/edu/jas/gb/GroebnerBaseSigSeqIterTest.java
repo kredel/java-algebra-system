@@ -22,6 +22,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
+import edu.jas.poly.TermOrderByName;
 
 
 /**
@@ -77,10 +78,10 @@ public class GroebnerBaseSigSeqIterTest extends TestCase {
     int rl = 4; //4; //3; 
 
 
-    int kl = 7; // 10
+    int kl = 3; // 10
 
 
-    int ll = 7;
+    int ll = 5;
 
 
     int el = 3; // 4
@@ -92,7 +93,8 @@ public class GroebnerBaseSigSeqIterTest extends TestCase {
     @Override
     protected void setUp() {
         BigRational coeff = new BigRational(9);
-        fac = new GenPolynomialRing<BigRational>(coeff, rl);
+        String[] vars = new String[]{ "u", "x", "y", "z"  };
+        fac = new GenPolynomialRing<BigRational>(coeff, vars, TermOrderByName.IGRLEX);
         a = b = c = d = e = null;
         bb = new GroebnerBaseSeqIter<BigRational>();
         bbsig = new GroebnerBaseSigSeqIter<BigRational>();
@@ -113,49 +115,46 @@ public class GroebnerBaseSigSeqIterTest extends TestCase {
     /**
      * Test sequential GBase.
      */
-    public void xtestSequentialGBase() {
+    public void testSequentialGBase() {
         L = new ArrayList<GenPolynomial<BigRational>>();
 
         a = fac.random(kl, ll, el, q);
         b = fac.random(kl, ll, el, q);
-        c = fac.random(kl, ll, el, q);
+        c = fac.univariate(0); //fac.random(kl, ll, el, q);
         d = fac.random(kl, ll, el, q);
         e = d; //fac.random(kl, ll, el, q );
+  
+        //a = fac.parse("z");  // TODO
+        //b = fac.parse("y^2 - 5/4 x^2 - 1");
+        //c = fac.parse("u^2 * x + 14 y + 80");
+        //d = fac.parse("x^4 + 4/5 x^2 - 12/25 u * x - 183/175");
+        //e = fac.parse("x^3 * y + 40/7 x^3 + 4/5 x * y - 12/25 u * y + 183/2450 u^2 + 32/7 x - 96/35 u");
 
-        if (a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO()) {
-            return;
-        }
+        bb = bbf5z;
+        //bb = bbggv;
+        //bb = bbarri;
 
-        assertTrue("not isZERO( a )", !a.isZERO());
         L.add(a);
-
         L = bb.GB(L);
-        assertTrue("isGB( { a } )", bb.isGB(L));
+        assertTrue("isGB( { a } ): " + L, bb.isGB(L));
 
-        assertTrue("not isZERO( b )", !b.isZERO());
         L.add(b);
         //System.out.println("L = " + L.size() );
-
         L = bb.GB(L);
-        assertTrue("isGB( { a, b } )", bb.isGB(L));
+        assertTrue("isGB( { a, b } ): " + L, bb.isGB(L));
 
-        assertTrue("not isZERO( c )", !c.isZERO());
         L.add(c);
-
         L = bb.GB(L);
-        assertTrue("isGB( { a, b, c } )", bb.isGB(L));
+        assertTrue("isGB( { a, b, c } ): " + L, bb.isGB(L));
 
-        assertTrue("not isZERO( d )", !d.isZERO());
         L.add(d);
-
         L = bb.GB(L);
-        assertTrue("isGB( { a, b, c, d } )", bb.isGB(L));
+        assertTrue("isGB( { a, b, c, d } ): " + L, bb.isGB(L));
 
-        assertTrue("not isZERO( e )", !e.isZERO());
         L.add(e);
-
         L = bb.GB(L);
-        assertTrue("isGB( { a, b, c, d, e } )", bb.isGB(L));
+        assertTrue("isGB( { a, b, c, d, e } ): " + L, bb.isGB(L));
+        //System.out.println("L = " + L);
     }
 
 
@@ -166,7 +165,7 @@ public class GroebnerBaseSigSeqIterTest extends TestCase {
     public void testTrinks7GBase() {
         String exam = "(B,S,T,Z,P,W) L " + "( "
                         + "( P W + 2 T Z - 11 B**3 ), "
-                        + "( B**2 + 33/50 B + 2673/10000 ) " 
+               //+ "( B**2 + 33/50 B + 2673/10000 ) " 
                         + "( 45 P + 35 S - 165 B - 36 ), " + "( 35 P + 40 Z + 25 T - 27 S ), "
                         + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), " + "( - 9 W + 15 T P + 20 S Z ), "
                         + "( 99 W - 11 B S + 3 B**2 ), " + ") ";

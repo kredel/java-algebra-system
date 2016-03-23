@@ -185,6 +185,9 @@ public class GroebnerBaseArriSigSeqIter<C extends RingElem<C>> extends GroebnerB
                     ExpVector g = f.subtract(e);
                     ExpVector f1 = g.sum(q.poly.leadingExpVector());
                     ExpVector e1 = p.pi.poly.leadingExpVector();
+                    if (e1 == null) {
+                        continue;
+                    }
                     if (f1.compareTo(e1) < 0) {
                         div = true;
                         break;
