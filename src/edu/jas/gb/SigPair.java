@@ -67,6 +67,14 @@ public class SigPair<C extends RingElem<C>> //extends AbstractSigPair<C>
 
 
     /**
+     * getter for sigma.degree
+     */
+    long getSigmaDegree() {
+        return sigma.degree();
+    }
+
+
+    /**
      * toString.
      */
     @Override
