@@ -189,7 +189,7 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
                 continue;
             }
             ExpVector f = p.sigma.leadingExpVector();
-            if (f == null) {
+            if (f == null) { // does not happen
                 f = p.poly.ring.evzero;
             }
             boolean mt = e.multipleOf(f);
@@ -198,6 +198,44 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
                 ExpVector h = p.poly.leadingExpVector();
                 h = h.sum(g);
                 if (h.compareTo(A.poly.leadingExpVector()) == 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * Is sigma redundant, alternative algorithm.
+     * @param A polynomial.
+     * @param G polynomial list.
+     * @return true if A is sigma redundant per alternative algorithm with respect to G.
+     */
+    public boolean isSigRedundantAlt(List<SigPoly<C>> G, SigPoly<C> A) {
+        if (G.isEmpty()) {
+            return false;
+        }
+        ExpVector e = A.sigma.leadingExpVector();
+        if (e == null) {
+            e = A.poly.ring.evzero;
+        }
+        for (SigPoly<C> p : G) {
+            if (p.sigma.isZERO()) {
+                continue;
+            }
+            ExpVector f = p.sigma.leadingExpVector();
+            if (f == null) { // does not happen
+                f = p.poly.ring.evzero;
+            }
+            boolean mt = e.multipleOf(f);
+            if (mt) {
+                if (p.poly.isZERO()) {
+                    continue;
+                }
+                ExpVector h = p.poly.leadingExpVector();
+                ExpVector g = A.poly.leadingExpVector();
+                if (g.multipleOf(h)) {
                     return true;
                 }
             }
@@ -298,6 +336,11 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
         List<GenPolynomial<C>> ff = F; //polys(F);
         GenPolynomial<C> a = A.poly;
         GenPolynomial<C> sigma = A.sigma;
+        ExpVector esig = sigma.leadingExpVector();
+        if (esig == null) {
+            logger.info("esig = null");
+            //esig = a.ring.evzero;
+        }
         //GenPolynomialRing<C> ring = a.ring;
         boolean reduced = true;
         while (!a.isZERO() && reduced) {
@@ -317,9 +360,14 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
                     ExpVector g = e.subtract(f);
                     C sc = a.leadingBaseCoefficient().divide(p.poly.leadingBaseCoefficient());
                     GenPolynomial<C> sigup = p.sigma.multiply(sc, g);
+                    ExpVector eup = sigup.leadingExpVector();
+                    if (eup == null) {
+                        logger.info("eup = null");
+                        //eup = a.ring.evzero;
+                    }
 
                     //wrong: boolean sigeq = (sigup.compareTo(sigma) < 0);
-                    boolean sigeq = (sigup.leadingExpVector().compareTo(sigma.leadingExpVector()) < 0);
+                    boolean sigeq = (eup.compareTo(esig) < 0);
                     if (sigeq) {
                         //logger.info("reduced: sigup = " + sigup + ", sigma = " + sigma);
                         reduced = true;
@@ -354,11 +402,20 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
     }
 
 
+    public List<GenPolynomial<C>> sigmas(List<SigPair<C>> F) {
+        List<GenPolynomial<C>> ff = new ArrayList<GenPolynomial<C>>();
+        for (SigPair<C> p : F) {
+             ff.add(p.sigma);
+        }
+        return ff;
+    }
+
+
     public long minimalSigDegree(List<SigPair<C>> F) {
         long deg = Long.MAX_VALUE;
         for (SigPair<C> p : F) {
-            long d = p.sigma.totalDegree();
-            //long d = p.sigma.degree();
+            //long d = p.sigma.totalDegree();
+            long d = p.sigma.degree();
             if (d < deg) {
                 deg = d;
             }
@@ -372,7 +429,8 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
         List<SigPair<C>> ff = new ArrayList<SigPair<C>>();
         List<SigPair<C>> pp = new ArrayList<SigPair<C>>();
         for (SigPair<C> p : F) {
-            if (p.sigma.totalDegree() == mdeg) {
+            //if (p.sigma.totalDegree() == mdeg) {
+            if (p.sigma.degree() == mdeg) {
                 ff.add(p);
             } else {
                 pp.add(p);
@@ -389,7 +447,8 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
     public List<SigPair<C>> sortSigma(List<SigPair<C>> F) {
         //GenPolynomialRing<C> ring = F.get(0).poly.ring;
         //final Comparator<GenPolynomial<C>> cmp = ring.getComparator();
-        Comparator<SigPair<C>> sigcmp = Comparator.comparing(SigPair::getSigma);
+        //Comparator<SigPair<C>> sigcmp = Comparator.comparing(SigPair::getSigma);
+        Comparator<SigPair<C>> sigcmp = Comparator.comparingLong(SigPair::getSigmaDegree);
         List<SigPair<C>> ff = F.stream().sorted(sigcmp).collect(Collectors.toList());
         return ff;
     }
