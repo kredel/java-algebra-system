@@ -391,6 +391,11 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
     }
 
 
+    /**
+     * Select polynomials.
+     * @param F list of signature polynomials.
+     * @return the polynomials in F.
+     */
     public List<GenPolynomial<C>> polys(List<SigPoly<C>> F) {
         List<GenPolynomial<C>> ff = new ArrayList<GenPolynomial<C>>();
         for (SigPoly<C> p : F) {
@@ -402,6 +407,11 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
     }
 
 
+    /**
+     * Select signatures.
+     * @param F list of signature polynomials.
+     * @return the signatures in F.
+     */
     public List<GenPolynomial<C>> sigmas(List<SigPair<C>> F) {
         List<GenPolynomial<C>> ff = new ArrayList<GenPolynomial<C>>();
         for (SigPair<C> p : F) {
@@ -411,6 +421,11 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
     }
 
 
+    /**
+     * Minimal degree of signatures.
+     * @param F list of signature polynomials.
+     * @return the minimal degree of the signatures in F.
+     */
     public long minimalSigDegree(List<SigPair<C>> F) {
         long deg = Long.MAX_VALUE;
         for (SigPair<C> p : F) {
@@ -424,6 +439,13 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
     }
 
 
+    /**
+     * Select signature polynomials of minimal degree and non minimal degree.
+     * @param F list of signature polynomials.
+     * @return [m,p] where m is the list of signature polynomials of F
+     * of minimal degree and p contains the rest of the signature
+     * polynomials with non minimal degree.
+     */
     public List<SigPair<C>>[] minDegSubset(List<SigPair<C>> F) {
         long mdeg = minimalSigDegree(F);
         List<SigPair<C>> ff = new ArrayList<SigPair<C>>();
@@ -444,10 +466,13 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
     }
 
 
+    /**
+     * Sort signature polynomials according to the degree its signatures.
+     * @param F list of signature polynomials.
+     * @return list of signature polynomials sorted by degree of sigma.
+     */
     public List<SigPair<C>> sortSigma(List<SigPair<C>> F) {
-        //GenPolynomialRing<C> ring = F.get(0).poly.ring;
-        //final Comparator<GenPolynomial<C>> cmp = ring.getComparator();
-        //Comparator<SigPair<C>> sigcmp = Comparator.comparing(SigPair::getSigma);
+        //Comparator<SigPair<C>> sigcmp = Comparator.comparing(SigPair::getSigma::degree);
         Comparator<SigPair<C>> sigcmp = Comparator.comparingLong(SigPair::getSigmaDegree);
         List<SigPair<C>> ff = F.stream().sorted(sigcmp).collect(Collectors.toList());
         return ff;
