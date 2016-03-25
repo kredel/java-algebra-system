@@ -6,7 +6,9 @@ package edu.jas.gb;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Collections;
 
 import org.apache.log4j.Logger;
 
@@ -79,13 +81,18 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
             return G;
         }
         // sort, no reverse
-        G = OrderedPolynomialList.<C> sort(G);
+        //  G = OrderedPolynomialList.<C> sort(G);
+        G = OrderedPolynomialList.<C> sortDegree(G);
         //no: Collections.reverse(G);
         logger.info("G-sort = " + G);
         List<GenPolynomial<C>> Gp = new ArrayList<GenPolynomial<C>>();
         for (GenPolynomial<C> p : G) {
             if (debug) {
                 logger.info("p = " + p);
+            }
+            GenPolynomial<C> pp = red.normalform(Gp,p);
+            if (pp.isZERO()) {
+                continue;
             }
             Gp = GB(modv, Gp, p);
             if (Gp.size() > 0) {
@@ -127,12 +134,15 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
         if (modv != 0) {
             throw new UnsupportedOperationException("motv != 0 not implemented");
         }
+        // add signatures
         List<SigPoly<C>> Gs = new ArrayList<SigPoly<C>>();
         for (GenPolynomial<C> p : F) {
             Gs.add(new SigPoly<C>(ring.getZERO(), p));
         }
         SigPoly<C> gs = new SigPoly<C>(ring.getONE(), g);
         Gs.add(gs);
+        //logger.info("Gs = " + Gs);
+        // construct critical pair list
         List<SigPair<C>> pairlist = new ArrayList<SigPair<C>>();
         for (SigPoly<C> p : Gs) {
             if (p.equals(gs)) {
@@ -160,6 +170,7 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
             logger.info("treating " + Sl.size() + " signatures of degree " + mdeg);
             //logger.info("Sl(" + mdeg + ") = " + Sl);
             while (!Sl.isEmpty()) {
+                //logger.info("Sl_full = " + sred.sigmas(Sl));
                 Sl = pruneS(Sl, syz, done, Gs);
                 if (Sl.isEmpty()) {
                     continue;
@@ -170,7 +181,7 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
                 if (pair == null) {
                     continue;
                 }
-                //logger.info("pair.sigma = " + pair.sigma);
+                //logger.info("pair.full = " + pair);
                 S = SPolynomial(pair);
                 SigPoly<C> Ss = new SigPoly<C>(pair.sigma, S);
                 if (S.isZERO()) {
@@ -186,7 +197,7 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
                 H = Hs.poly;
                 sigma = Hs.sigma;
                 if (debug) {
-                    logger.info("Hs = " + Hs); //.leadingExpVector() );
+                    logger.info("new polynomial = " + Hs); //.leadingExpVector() );
                 }
                 if (H.isZERO()) {
                     updateSyz(syz, Hs);
@@ -208,7 +219,7 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
                     continue;
                 }
                 if (debug) {
-                    logger.info("Hs = " + Hs);
+                    logger.info("new polynomial = " + Hs);
                 }
                 if (H.length() > 0) {
                     for (SigPoly<C> p : Gs) {
@@ -220,27 +231,23 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
                         //System.out.print("sigma = " + sigma + ", tau = " + tau);
                         //System.out.println(", mult  = " + Arrays.toString(mult));
                         ExpVector se = sigma.leadingExpVector();
-                        if (se == null) {
-                            se = ring.evzero;
-                        }
                         ExpVector te = tau.leadingExpVector();
-                        if (te == null) {
-                            te = ring.evzero;
-                        }
                         if (mult[0].multiply(se).equals(mult[1].multiply(te))) {
-                            logger.debug("skip by sigma");
+                            //logger.info("skip by sigma");
                             continue;
                         }
                         SigPair<C> pp;
+                        //boolean xy = mult[0].multiply(se).compareTo(mult[1].multiply(te)) > 0;
                         if (mult[0].multiply(se).compareTo(mult[1].multiply(te)) > 0) {
                             pp = newPair(sigma.multiply(mult[0]), Hs, p, Gs);
                         } else {
                             pp = newPair(tau.multiply(mult[1]), p, Hs, Gs);
                         }
-                        if (pp.sigma.totalDegree() == mdeg) {
-                            Sl.add(pp);
+                        //System.out.println("new_pair " + pp.sigma + ", xy = " + xy + ", sigma = " + sigma + ", tau = " + tau + ", mult  = " + Arrays.toString(mult) + ", m0*se = " + mult[0].multiply(se) + ", m1*te = " + mult[1].multiply(te) );
+                        if (pp.sigma.degree() == mdeg) { // mdeg is sigma.degree()
+                            Sl.add(pp); // do not check contains
                         } else {
-                            pairlist.add(pp);
+                            pairlist.add(pp); // do not check contains
                         }
                     }
                     Gs.add(Hs);
@@ -248,8 +255,13 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
                 }
             }
         }
-        logger.info("#sequential list = " + Gs.size());
-        G = minimalGB(sred.polys(Gs));
+        logger.info("#sequential list before reduction = " + Gs.size());
+        List<GenPolynomial<C>> Gp = sred.polys(Gs);
+        //logger.info("G_full = " + Gp);
+        G = minimalGB(Gp);
+        //G = red.irreducibleSet(Gp);
+        //G = OrderedPolynomialList.<C> sortDegree(G);
+        //logger.info("G_reduced = " + G);
         logger.info("end " + pairlist);
         return G;
     }
