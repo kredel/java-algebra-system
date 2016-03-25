@@ -22,8 +22,8 @@ import edu.jas.arith.BigRational;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
-import edu.jas.poly.PolynomialList;
 import edu.jas.poly.OrderedPolynomialList;
+import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrderByName;
 
 
@@ -95,7 +95,7 @@ public class GroebnerBaseSigSeqIterTest extends TestCase {
     @Override
     protected void setUp() {
         BigRational coeff = new BigRational(9);
-        String[] vars = new String[]{ "u", "x", "y", "z"  };
+        String[] vars = new String[] { "u", "x", "y", "z" };
         fac = new GenPolynomialRing<BigRational>(coeff, vars, TermOrderByName.IGRLEX);
         a = b = c = d = e = null;
         bb = new GroebnerBaseSeqIter<BigRational>();
@@ -124,15 +124,18 @@ public class GroebnerBaseSigSeqIterTest extends TestCase {
         b = fac.parse("x^3 * y + 40/7 x^3 + 4/5 x * y - 12/25 u * y + 183/2450 u^2 + 32/7 x - 96/35 u");
         c = fac.parse("u^2 * x + 14 y + 80");
         d = fac.parse("y^2 - 5/4 x^2 - 1");
-        e = fac.parse("z");  
+        e = fac.parse("z");
 
         int x = (new Random()).nextInt(4);
-        switch(x) {
-        case 0: bb = bbf5z;
+        switch (x) {
+        case 0:
+            bb = bbf5z;
             break;
-        case 1: bb = bbggv;
+        case 1:
+            bb = bbggv;
             break;
-        case 2: bb = bbarri;
+        case 2:
+            bb = bbarri;
             break;
         default:
             break;
@@ -149,7 +152,7 @@ public class GroebnerBaseSigSeqIterTest extends TestCase {
     }
 
 
-  /**
+    /**
      * Test random sequential GBase.
      */
     public void testRandomSequentialGBase() {
@@ -160,14 +163,17 @@ public class GroebnerBaseSigSeqIterTest extends TestCase {
         c = fac.univariate(0); //fac.random(kl, ll, el, q);
         d = fac.random(kl, ll, el, q);
         e = d; //fac.random(kl, ll, el, q );
-  
+
         int x = (new Random()).nextInt(4);
-        switch(x) {
-        case 0: bb = bbf5z;
+        switch (x) {
+        case 0:
+            bb = bbf5z;
             break;
-        case 1: bb = bbggv;
+        case 1:
+            bb = bbggv;
             break;
-        case 2: bb = bbarri;
+        case 2:
+            bb = bbarri;
             break;
         default:
             break;
@@ -204,7 +210,7 @@ public class GroebnerBaseSigSeqIterTest extends TestCase {
     public void testTrinks7GBase() {
         String exam = "(B,S,T,Z,P,W) L " + "( "
                         + "( P W + 2 T Z - 11 B**3 ), "
-               //+ "( B**2 + 33/50 B + 2673/10000 ) " 
+                        //+ "( B**2 + 33/50 B + 2673/10000 ) " 
                         + "( 45 P + 35 S - 165 B - 36 ), " + "( 35 P + 40 Z + 25 T - 27 S ), "
                         + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), " + "( - 9 W + 15 T P + 20 S Z ), "
                         + "( 99 W - 11 B S + 3 B**2 ), " + ") ";
@@ -226,7 +232,7 @@ public class GroebnerBaseSigSeqIterTest extends TestCase {
         t1 = System.currentTimeMillis() - t1;
         assertTrue("isGB( GB(Trinks7) )", bb.isGB(G));
         assertEquals("#GB(Trinks7) == 6", 6, G.size());
-        G  = OrderedPolynomialList.<BigRational> sort(G);
+        G = OrderedPolynomialList.<BigRational> sort(G);
 
         long t2 = System.currentTimeMillis();
         Gp = G; //bbsig.GB(F.list);
@@ -270,7 +276,7 @@ public class GroebnerBaseSigSeqIterTest extends TestCase {
         System.out.println("arris executed in " + t4 + " milliseconds");
         System.out.println("f5z   executed in " + t5 + " milliseconds");
         long t = t1 + t2 + t3 + t4 + t5;
-        assertTrue("times >= 0: " + t, t >= 0 ); //findbugs and compiler
+        assertTrue("times >= 0: " + t, t >= 0); //findbugs and compiler
 
         assertTrue("isGB( GB(Trinks7) )", bb.isGB(G));
         assertEquals("#GB(Trinks7) == 6", 6, G.size());

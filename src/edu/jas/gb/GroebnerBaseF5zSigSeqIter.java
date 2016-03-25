@@ -68,8 +68,8 @@ public class GroebnerBaseF5zSigSeqIter<C extends RingElem<C>> extends GroebnerBa
      * Prune total pair list P.
      * @param P pair list.
      * @param syz list of exponent vectors representing syzygies.
-     * @return updated pair list.
-     * <b>Note:<b> stores polynomials not only indices.
+     * @return updated pair list. <b>Note:<b> stores polynomials not only
+     *         indices.
      */
     @Override
     List<SigPair<C>> pruneP(List<SigPair<C>> P, List<ExpVector> syz) {
@@ -121,10 +121,10 @@ public class GroebnerBaseF5zSigSeqIter<C extends RingElem<C>> extends GroebnerBa
             if (div) {
                 continue;
             }
-            if (p.pi.sigma.isZERO()){
+            if (p.pi.sigma.isZERO()) {
                 logger.info("pruneS, p.pi.sigma = 0");
                 res.add(p);
-                continue;                
+                continue;
             }
             ExpVector fi = p.pi.poly.leadingExpVector();
             ExpVector fj = p.pj.poly.leadingExpVector();
@@ -176,8 +176,8 @@ public class GroebnerBaseF5zSigSeqIter<C extends RingElem<C>> extends GroebnerBa
     /**
      * Update syzygy list.
      * @param syz list of exponent vectors representing syzygies.
-     * @param r polynomial.
-     * <b>Note:</b> szy is modified to represent updated list of exponent vectors.
+     * @param r polynomial. <b>Note:</b> szy is modified to represent updated
+     *            list of exponent vectors.
      */
     @Override
     void updateSyz(List<ExpVector> syz, SigPoly<C> r) {

@@ -6,9 +6,7 @@ package edu.jas.gb;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Collections;
 
 import org.apache.log4j.Logger;
 
@@ -21,13 +19,13 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Groebner Base signature based sequential iterative
- * algorithm. Implements Groebner bases after the paper
- * "Signature-based Algorithms to Compute Gröbner Bases" by Christian
- * Eder and John Perry, ISSAC 2011. Compare the jython+JAS code in
- * examples/basic_sigbased_gb.py. Originally the Python+Sage code is
- * from http://www.math.usm.edu/perry/Research/basic_sigbased_gb.py
- *
+ * Groebner Base signature based sequential iterative algorithm. Implements
+ * Groebner bases after the paper
+ * "Signature-based Algorithms to Compute Gröbner Bases" by Christian Eder and
+ * John Perry, ISSAC 2011. Compare the jython+JAS code in
+ * examples/basic_sigbased_gb.py. Originally the Python+Sage code is from
+ * http://www.math.usm.edu/perry/Research/basic_sigbased_gb.py
+ * 
  * @param <C> coefficient type
  * @author Heinz Kredel
  * 
@@ -90,7 +88,7 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
             if (debug) {
                 logger.info("p = " + p);
             }
-            GenPolynomial<C> pp = red.normalform(Gp,p);
+            GenPolynomial<C> pp = red.normalform(Gp, p);
             if (pp.isZERO()) {
                 continue;
             }
@@ -377,8 +375,8 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
     /**
      * Update syzygy list.
      * @param syz list of exponent vectors representing syzygies.
-     * @param r polynomial.
-     * <b>Note:</b> szy is modified to represent updated list of exponent vectors.
+     * @param r polynomial. <b>Note:</b> szy is modified to represent updated
+     *            list of exponent vectors.
      */
     void updateSyz(List<ExpVector> syz, SigPoly<C> r) {
         return;

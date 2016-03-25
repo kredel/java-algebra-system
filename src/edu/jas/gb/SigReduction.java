@@ -13,7 +13,8 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Polynomial SigReduction interface. Defines S-Polynomial, normalform.
+ * Polynomial SigReduction interface. Defines S-Polynomial, normalform with
+ * respect to signatures.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */

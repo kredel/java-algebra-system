@@ -21,7 +21,8 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Polynomial SigReduction class. Implements common S-Polynomial, normalform.
+ * Polynomial SigReduction class. Implements common S-Polynomial, normalform
+ * with respect to signatures.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
@@ -210,7 +211,8 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
      * Is sigma redundant, alternative algorithm.
      * @param A polynomial.
      * @param G polynomial list.
-     * @return true if A is sigma redundant per alternative algorithm with respect to G.
+     * @return true if A is sigma redundant per alternative algorithm with
+     *         respect to G.
      */
     public boolean isSigRedundantAlt(List<SigPoly<C>> G, SigPoly<C> A) {
         if (G.isEmpty()) {
@@ -415,7 +417,7 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
     public List<GenPolynomial<C>> sigmas(List<SigPair<C>> F) {
         List<GenPolynomial<C>> ff = new ArrayList<GenPolynomial<C>>();
         for (SigPair<C> p : F) {
-             ff.add(p.sigma);
+            ff.add(p.sigma);
         }
         return ff;
     }
@@ -442,9 +444,9 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
     /**
      * Select signature polynomials of minimal degree and non minimal degree.
      * @param F list of signature polynomials.
-     * @return [m,p] where m is the list of signature polynomials of F
-     * of minimal degree and p contains the rest of the signature
-     * polynomials with non minimal degree.
+     * @return [m,p] where m is the list of signature polynomials of F of
+     *         minimal degree and p contains the rest of the signature
+     *         polynomials with non minimal degree.
      */
     public List<SigPair<C>>[] minDegSubset(List<SigPair<C>> F) {
         long mdeg = minimalSigDegree(F);

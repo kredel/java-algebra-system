@@ -226,8 +226,8 @@ public class GroebnerBaseArriSigSeqIter<C extends RingElem<C>> extends GroebnerB
     /**
      * Update syzygy list.
      * @param syz list of exponent vectors representing syzygies.
-     * @param r polynomial.
-     * <b>Note:</b> szy is modified to represent updated list of exponent vectors.
+     * @param r polynomial. <b>Note:</b> szy is modified to represent updated
+     *            list of exponent vectors.
      */
     @Override
     void updateSyz(List<ExpVector> syz, SigPoly<C> r) {
