@@ -21,6 +21,9 @@ class sigbased_gb:
     #print "JAS F = " + str([ str(g) for g in F]); 
     G = list()
     for f in F:
+      ff = f.reduce(G);
+      if (ff == 0):
+          continue;
       G = self.incremental_basis(G,f)
       Gnew = [g[1] for g in G]
       R = f.parent()
