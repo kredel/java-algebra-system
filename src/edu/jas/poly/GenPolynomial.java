@@ -1519,6 +1519,9 @@ Iterable<Monomial<C>> {
         if (this.isZERO()) {
             return this;
         }
+        if (e == null) { // exp vector of zero polynomial
+            return ring.getZERO();
+        }
         if (this instanceof GenSolvablePolynomial) {
             //throw new RuntimeException("wrong method dispatch in JRE ");
             logger.debug("warn: wrong method dispatch in JRE multiply(s,e) - trying to fix");
@@ -1546,7 +1549,10 @@ Iterable<Monomial<C>> {
      * @return this * x<sup>e</sup>.
      */
     public GenPolynomial<C> multiply(ExpVector e) {
-        // assert e != null. This is never allowed.
+        if (e == null) { // exp vector of zero polynomial
+            return ring.getZERO();
+        }
+        // assert e != null. This is seldom allowed.
         if (this.isZERO()) {
             return this;
         }
