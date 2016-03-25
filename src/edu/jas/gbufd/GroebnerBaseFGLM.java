@@ -107,9 +107,8 @@ public class GroebnerBaseFGLM<C extends GcdRingElem<C>> extends GroebnerBaseAbst
     public String toString() {
         if (sgb == null) {
             return "GroebnerBaseFGLM()";
-        } else {
-            return "GroebnerBaseFGLM( " + sgb.toString() + " )";
         }
+        return "GroebnerBaseFGLM( " + sgb.toString() + " )";
     }
 
 
@@ -416,8 +415,9 @@ public class GroebnerBaseFGLM<C extends GcdRingElem<C>> extends GroebnerBaseAbst
     /**
      * Cleanup and terminate ThreadPool.
      */
+    @Override
     public void terminate() {
-        if ( sgb == null ) {
+        if (sgb == null) {
             return;
         }
         sgb.terminate();
@@ -427,8 +427,9 @@ public class GroebnerBaseFGLM<C extends GcdRingElem<C>> extends GroebnerBaseAbst
     /**
      * Cancel ThreadPool.
      */
+    @Override
     public int cancel() {
-        if ( sgb == null ) {
+        if (sgb == null) {
             return 0;
         }
         return sgb.cancel();

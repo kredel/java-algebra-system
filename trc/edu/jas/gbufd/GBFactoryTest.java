@@ -5,12 +5,6 @@
 package edu.jas.gbufd;
 
 
-// import java.util.Map;
-
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigComplex;
@@ -31,6 +25,12 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
 import edu.jas.structure.RingFactory;
+
+// import java.util.Map;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -266,7 +266,7 @@ public class GBFactoryTest extends TestCase {
     /**
      * Test get Product implementation.
      */
-    @SuppressWarnings({ "cast", "unchecked" })
+    @SuppressWarnings({ "unchecked" })
     public void testProduct() {
         ModIntegerRing mi = new ModIntegerRing(19, true);
         ProductRing<ModInteger> fac;
