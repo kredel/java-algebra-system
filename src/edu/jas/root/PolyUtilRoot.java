@@ -233,7 +233,7 @@ class CoeffToRecReAlg<C extends GcdRingElem<C> & Rational>
     final int depth;
 
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public CoeffToRecReAlg(int depth, RealAlgebraicRing<C> fac) {
         if (fac == null) {
             throw new IllegalArgumentException("fac must not be null");
