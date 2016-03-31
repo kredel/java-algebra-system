@@ -328,7 +328,7 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
                     if (Cps.isConstant()) {
                         Ds = new LocalSolvablePolynomial<C>(ring, Cps.leadingBaseCoefficient(), g); // symmetric!
                     } else {
-                        Ds = shift(Cps, f); // symmetric
+                        Ds = Cps.shift(f); // symmetric
                     }
                 } else { // eventually unsymmetric
                     if (debug)
@@ -649,20 +649,19 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
     /**
      * LocalSolvablePolynomial multiplication. Left product with coefficient
      * ring element.
-     * @param B solvable polynomial.
      * @param f exponent vector.
      * @return B*f, where * is commutative multiplication.
      */
-    protected LocalSolvablePolynomial<C> shift(LocalSolvablePolynomial<C> B, ExpVector f) {
+    protected LocalSolvablePolynomial<C> shift(ExpVector f) {
         LocalSolvablePolynomial<C> C = ring.getZERO().copy();
-        if (B == null || B.isZERO()) {
+        if (this.isZERO()) {
             return C;
         }
         if (f == null || f.isZERO()) {
-            return B;
+            return this;
         }
         Map<ExpVector, SolvableLocal<C>> Cm = C.val;
-        Map<ExpVector, SolvableLocal<C>> Bm = B.val;
+        Map<ExpVector, SolvableLocal<C>> Bm = this.val;
         for (Map.Entry<ExpVector, SolvableLocal<C>> y : Bm.entrySet()) {
             ExpVector e = y.getKey();
             SolvableLocal<C> a = y.getValue();

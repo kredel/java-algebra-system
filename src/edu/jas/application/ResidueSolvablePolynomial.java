@@ -224,7 +224,7 @@ public class ResidueSolvablePolynomial<C extends GcdRingElem<C>> extends
                     if (Cps.isConstant()) {
                         Ds = new ResidueSolvablePolynomial<C>(ring, Cps.leadingBaseCoefficient(), g); // symmetric!
                     } else {
-                        Ds = shift(Cps, f); // symmetric
+                        Ds = Cps.shift(f); // symmetric
                     }
                 } else { // eventually unsymmetric
                     if (debug)
@@ -531,20 +531,19 @@ public class ResidueSolvablePolynomial<C extends GcdRingElem<C>> extends
 
     /**
      * ResidueSolvablePolynomial multiplication with exponent vector.
-     * @param B solvable polynomial.
      * @param f exponent vector.
      * @return B*f, where * is commutative multiplication.
      */
-    protected ResidueSolvablePolynomial<C> shift(ResidueSolvablePolynomial<C> B, ExpVector f) {
+    protected ResidueSolvablePolynomial<C> shift(ExpVector f) {
         ResidueSolvablePolynomial<C> C = ring.getZERO().copy();
-        if (B == null || B.isZERO()) {
+        if (this.isZERO()) {
             return C;
         }
         if (f == null || f.isZERO()) {
-            return B;
+            return this;
         }
         Map<ExpVector, SolvableResidue<C>> Cm = C.val;
-        Map<ExpVector, SolvableResidue<C>> Bm = B.val;
+        Map<ExpVector, SolvableResidue<C>> Bm = this.val;
         for (Map.Entry<ExpVector, SolvableResidue<C>> y : Bm.entrySet()) {
             ExpVector e = y.getKey();
             SolvableResidue<C> a = y.getValue();

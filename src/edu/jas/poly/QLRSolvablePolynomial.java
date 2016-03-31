@@ -260,7 +260,7 @@ public class QLRSolvablePolynomial<C extends GcdRingElem<C> & QuotPair<GenPolyno
                         ExpVector g = e.sum(f);
                         Ds = new QLRSolvablePolynomial<C, D>(ring, Cps.leadingBaseCoefficient(), g); // symmetric!
                     } else {
-                        Ds = shift(Cps, f); // symmetric
+                        Ds = Cps.shift(f); // symmetric
                     }
                 } else { // eventually unsymmetric
                     if (debug)
@@ -580,20 +580,19 @@ public class QLRSolvablePolynomial<C extends GcdRingElem<C> & QuotPair<GenPolyno
 
     /**
      * QLRSolvablePolynomial multiplication with exponent vector. 
-     * @param B solvable polynomial.
      * @param f exponent vector.
      * @return B*f, where * is commutative multiplication.
      */
-    protected QLRSolvablePolynomial<C, D> shift(QLRSolvablePolynomial<C, D> B, ExpVector f) {
+    protected QLRSolvablePolynomial<C, D> shift(ExpVector f) {
         QLRSolvablePolynomial<C, D> C = ring.getZERO().copy();
-        if (B == null || B.isZERO()) {
+        if (this.isZERO()) {
             return C;
         }
         if (f == null || f.isZERO()) {
-            return B;
+            return this;
         }
         Map<ExpVector, C> Cm = C.val;
-        Map<ExpVector, C> Bm = B.val;
+        Map<ExpVector, C> Bm = this.val;
         for (Map.Entry<ExpVector, C> y : Bm.entrySet()) {
             ExpVector e = y.getKey();
             C a = y.getValue();

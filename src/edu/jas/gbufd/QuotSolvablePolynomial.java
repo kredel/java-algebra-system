@@ -254,7 +254,7 @@ public class QuotSolvablePolynomial<C extends GcdRingElem<C>> extends
                     if (Cps.isConstant()) {
                         Ds = new QuotSolvablePolynomial<C>(ring, Cps.leadingBaseCoefficient(), g); // symmetric!
                     } else {
-                        Ds = shift(Cps, f); // symmetric
+                        Ds = Cps.shift(f); // symmetric
                     }
                 } else { // eventually unsymmetric
                     if (debug)
@@ -574,20 +574,19 @@ public class QuotSolvablePolynomial<C extends GcdRingElem<C>> extends
     /**
      * QuotSolvablePolynomial multiplication. Left product with coefficient ring
      * element.
-     * @param B solvable polynomial.
      * @param f exponent vector.
      * @return B*f, where * is commutative multiplication.
      */
-    protected QuotSolvablePolynomial<C> shift(QuotSolvablePolynomial<C> B, ExpVector f) {
+    protected QuotSolvablePolynomial<C> shift(ExpVector f) {
         QuotSolvablePolynomial<C> C = ring.getZERO().copy();
-        if (B == null || B.isZERO()) {
+        if (this.isZERO()) {
             return C;
         }
         if (f == null || f.isZERO()) {
-            return B;
+            return this;
         }
         Map<ExpVector, SolvableQuotient<C>> Cm = C.val;
-        Map<ExpVector, SolvableQuotient<C>> Bm = B.val;
+        Map<ExpVector, SolvableQuotient<C>> Bm = this.val;
         for (Map.Entry<ExpVector, SolvableQuotient<C>> y : Bm.entrySet()) {
             ExpVector e = y.getKey();
             SolvableQuotient<C> a = y.getValue();

@@ -216,7 +216,7 @@ public class ResidueSolvableWordPolynomial<C extends GcdRingElem<C>> extends
                     if (Cps.isConstant()) {
                         Ds = new ResidueSolvableWordPolynomial<C>(ring, Cps.leadingBaseCoefficient(), g); // symmetric!
                     } else {
-                        Ds = shift(Cps, f); // symmetric
+                        Ds = Cps.shift(f); // symmetric
                     }
                 } else { // eventually unsymmetric
                     if (debug)
@@ -537,20 +537,19 @@ public class ResidueSolvableWordPolynomial<C extends GcdRingElem<C>> extends
     /**
      * ResidueSolvableWordPolynomial multiplication. Commutative product with
      * exponent vector.
-     * @param B solvable polynomial.
      * @param f exponent vector.
      * @return B*f, where * is commutative multiplication.
      */
-    protected ResidueSolvableWordPolynomial<C> shift(ResidueSolvableWordPolynomial<C> B, ExpVector f) {
+    protected ResidueSolvableWordPolynomial<C> shift(ExpVector f) {
         ResidueSolvableWordPolynomial<C> C = ring.getZERO().copy();
-        if (B == null || B.isZERO()) {
+        if (this.isZERO()) {
             return C;
         }
         if (f == null || f.isZERO()) {
-            return B;
+            return this;
         }
         Map<ExpVector, WordResidue<C>> Cm = C.val;
-        Map<ExpVector, WordResidue<C>> Bm = B.val;
+        Map<ExpVector, WordResidue<C>> Bm = this.val;
         for (Map.Entry<ExpVector, WordResidue<C>> y : Bm.entrySet()) {
             ExpVector e = y.getKey();
             WordResidue<C> a = y.getValue();
