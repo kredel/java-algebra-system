@@ -138,6 +138,18 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
      * Constructor.
      * @param ring solvable polynomial ring
      * @param F list of solvable polynomials
+     * @param s side variant of ideal or Groebner Base
+     */
+    public SolvableIdeal(GenSolvablePolynomialRing<C> ring, List<GenSolvablePolynomial<C>> F, 
+                         Side s) {
+        this(new PolynomialList<C>(ring, F), false, false, s);
+    }
+
+
+    /**
+     * Constructor.
+     * @param ring solvable polynomial ring
+     * @param F list of solvable polynomials
      * @param gb true if F is known to be a Groebner Base, else false
      * @param s side variant of ideal or Groebner Base
      */
@@ -473,17 +485,23 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
             throw new IllegalArgumentException("wrong usage for left sided GB: " + sided);
         }
         List<GenSolvablePolynomial<C>> G = getList();
-        logger.info("leftGB computing = " + G);
-        G = bb.leftGB(G);
+        if (sided == Side.left) {
+            logger.info("leftGB computing = " + G);
+            G = bb.leftGB(G);
+        }
+        if (sided == Side.twosided) {
+            logger.info("twosidedGB computing = " + G);
+            G = bb.twosidedGB(G);
+        }
         //if (isTopt) {
         //    List<Integer> perm = ((OptimizedPolynomialList<C>) list).perm;
         //    list = new OptimizedPolynomialList<C>(perm, getRing(), G);
         //} else {
-        list = new PolynomialList<C>(getRing(), G);
         //}
+        list = new PolynomialList<C>(getRing(), G);
         isGB = true;
         testGB = true;
-        sided = Side.left;
+        //sided = Side.left;
         return;
     }
 

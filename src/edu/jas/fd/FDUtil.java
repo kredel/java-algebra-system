@@ -230,6 +230,71 @@ public class FDUtil {
 
 
     /**
+     * GenSolvablePolynomial sparse pseudo quotient and remainder for univariate
+     * polynomials or exact division.
+     * @param <C> coefficient type.
+     * @param P GenSolvablePolynomial.
+     * @param S nonzero GenSolvablePolynomial.
+     * @return [ quotient, remainder ] with P ldcf(S)<sup>m'</sup> = S * quotient 
+     *         S + remainder. m' &le; deg(P)-deg(S)
+     * @see edu.jas.poly.GenPolynomial#divide(edu.jas.poly.GenPolynomial).
+     */
+    @SuppressWarnings("unchecked")
+    public static <C extends GcdRingElem<C>> GenSolvablePolynomial<C>[] rightBasePseudoQuotientRemainder(
+                    GenSolvablePolynomial<C> P, GenSolvablePolynomial<C> S) {
+        if (S == null || S.isZERO()) {
+            throw new ArithmeticException(P.toString() + " division by zero " + S);
+        }
+        //if (S.ring.nvar != 1) { // ok if exact division
+        //    throw new RuntimeException("univariate polynomials only");
+        //}
+        GenSolvablePolynomial<C>[] ret = new GenSolvablePolynomial[2];
+        ret[0] = null;
+        ret[1] = null;
+        if (P.isZERO() || S.isONE()) {
+            ret[0] = P;
+            ret[1] = S.ring.getZERO();
+            return ret;
+        }
+        if (P instanceof RecSolvablePolynomial) {
+            RecSolvablePolynomial<C> Pr = (RecSolvablePolynomial) P;
+            if (!Pr.ring.coeffTable.isEmpty()) {
+                throw new UnsupportedOperationException(
+                                "RecSolvablePolynomial with twisted coeffs not supported");
+            }
+        }
+        GreatestCommonDivisorAbstract<C> fd = new GreatestCommonDivisorSimple<C>(P.ring.coFac);
+        ExpVector e = S.leadingExpVector();
+        GenSolvablePolynomial<C> h;
+        GenSolvablePolynomial<C> r = P;
+        GenSolvablePolynomial<C> q = S.ring.getZERO().copy();
+        while (!r.isZERO()) {
+            ExpVector f = r.leadingExpVector();
+            if (f.multipleOf(e)) {
+                C a = r.leadingBaseCoefficient();
+                f = f.subtract(e);
+                h = S.multiply(f); // coeff a
+                C c = h.leadingBaseCoefficient();
+                // need ga, gc: a ga = c gc
+                C[] oc = fd.rightOreCond(a, c);
+                C ga = oc[0];
+                C gc = oc[1];
+                r = r.multiply(ga); // coeff a ga, exp f
+                h = h.multiply(gc); // coeff c gc, exp f
+                q = q.multiply(ga); // c
+                q = (GenSolvablePolynomial<C>) q.sum(gc, f); // a
+                r = (GenSolvablePolynomial<C>) r.subtract(h);
+            } else {
+                break;
+            }
+        }
+        ret[0] = q;
+        ret[1] = r;
+        return ret;
+    }
+
+
+    /**
      * GenSolvablePolynomial sparse pseudo remainder for recursive solvable
      * polynomials.
      * @param <C> coefficient type.
@@ -1202,6 +1267,84 @@ public class FDUtil {
             list.add(quotientFromIntegralCoefficients(fac, p));
         }
         return list;
+    }
+
+
+    /**
+     * Left greatest common divisor and cofactors.
+     * @param r solvable polynomial ring.
+     * @param n first solvable polynomial.
+     * @param d second solvable polynomial.
+     * @return [ g=leftGcd(n,d), n/g, d/g ]
+     */
+    @SuppressWarnings("cast")
+    public static <C extends GcdRingElem<C>> GenSolvablePolynomial<C>[] leftGcdCofactors(
+                    GenSolvablePolynomialRing<C> r, GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d) {
+        GenSolvablePolynomial<C>[] res = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[3];
+        //GreatestCommonDivisorAbstract<C> engine = new GreatestCommonDivisorSimple<C>(r.coFac);
+        GreatestCommonDivisorAbstract<C> engine = new GreatestCommonDivisorPrimitive<C>(r.coFac);
+        logger.warn("leftGCD_in: " + n + ", " + d);
+        res[0] = engine.leftGcd(n, d);
+        res[1] = n;
+        res[2] = d;
+        if (res[0].isONE()) {
+            return res;
+        }
+        logger.warn("leftGCD_out: " + res[0]);
+        GenSolvablePolynomial<C>[] nqr;
+        nqr = FDUtil.<C> rightBasePseudoQuotientRemainder(n, res[0]);
+        if (!nqr[1].isZERO()) {
+            res[0] = r.getONE();
+            return res;
+        }
+        GenSolvablePolynomial<C>[] dqr;
+        dqr = FDUtil.<C> rightBasePseudoQuotientRemainder(d, res[0]);
+        if (!dqr[1].isZERO()) {
+            res[0] = r.getONE();
+            return res;
+        }
+        res[1] = nqr[0];
+        res[2] = dqr[0];
+        return res;
+    }
+
+
+    /**
+     * Right greatest common divisor and cofactors.
+     * @param r solvable polynomial ring.
+     * @param n first solvable polynomial.
+     * @param d second solvable polynomial.
+     * @return [ g=rightGcd(n,d), n/g, d/g ]
+     */
+    @SuppressWarnings("cast")
+    public static <C extends GcdRingElem<C>> GenSolvablePolynomial<C>[] rightGcdCofactors(
+                    GenSolvablePolynomialRing<C> r, GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d) {
+        GenSolvablePolynomial<C>[] res = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[3];
+        //GreatestCommonDivisorAbstract<C> engine = new GreatestCommonDivisorSimple<C>(r.coFac);
+        GreatestCommonDivisorAbstract<C> engine = new GreatestCommonDivisorPrimitive<C>(r.coFac);
+        logger.warn("rightGCD_in: " + n + ", " + d);
+        res[0] = engine.rightGcd(n, d);
+        res[1] = n;
+        res[2] = d;
+        if (res[0].isONE()) {
+            return res;
+        }
+        logger.warn("rightGCD_out: " + res[0]);
+        GenSolvablePolynomial<C>[] nqr;
+        nqr = FDUtil.<C> leftBasePseudoQuotientRemainder(n, res[0]);
+        if (!nqr[1].isZERO()) {
+            res[0] = r.getONE();
+            return res;
+        }
+        GenSolvablePolynomial<C>[] dqr;
+        dqr = FDUtil.<C> leftBasePseudoQuotientRemainder(d, res[0]);
+        if (!dqr[1].isZERO()) {
+            res[0] = r.getONE();
+            return res;
+        }
+        res[1] = nqr[0];
+        res[2] = dqr[0];
+        return res;
     }
 
 }
