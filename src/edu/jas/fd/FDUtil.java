@@ -41,6 +41,9 @@ public class FDUtil {
     private static final boolean debug = logger.isDebugEnabled();
 
 
+    private static final boolean info = logger.isInfoEnabled();
+
+
     /**
      * GenSolvablePolynomial sparse pseudo remainder for univariate polynomials.
      * @param <C> coefficient type.
@@ -1283,14 +1286,18 @@ public class FDUtil {
         GenSolvablePolynomial<C>[] res = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[3];
         //GreatestCommonDivisorAbstract<C> engine = new GreatestCommonDivisorSimple<C>(r.coFac);
         GreatestCommonDivisorAbstract<C> engine = new GreatestCommonDivisorPrimitive<C>(r.coFac);
-        logger.warn("leftGCD_in: " + n + ", " + d);
+        if (info) {
+           logger.info("leftGCD_in: " + n + ", " + d);
+        }
         res[0] = engine.leftGcd(n, d);
         res[1] = n;
         res[2] = d;
         if (res[0].isONE()) {
             return res;
         }
-        logger.warn("leftGCD_out: " + res[0]);
+        if (info) {
+            logger.info("leftGCD_out: " + res[0]);
+        }
         GenSolvablePolynomial<C>[] nqr;
         nqr = FDUtil.<C> rightBasePseudoQuotientRemainder(n, res[0]);
         if (!nqr[1].isZERO()) {
@@ -1322,14 +1329,18 @@ public class FDUtil {
         GenSolvablePolynomial<C>[] res = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[3];
         //GreatestCommonDivisorAbstract<C> engine = new GreatestCommonDivisorSimple<C>(r.coFac);
         GreatestCommonDivisorAbstract<C> engine = new GreatestCommonDivisorPrimitive<C>(r.coFac);
-        logger.warn("rightGCD_in: " + n + ", " + d);
+        if (info) {
+            logger.info("rightGCD_in: " + n + ", " + d);
+        }
         res[0] = engine.rightGcd(n, d);
         res[1] = n;
         res[2] = d;
         if (res[0].isONE()) {
             return res;
         }
-        logger.warn("rightGCD_out: " + res[0]);
+        if (info) {
+            logger.info("rightGCD_out: " + res[0]);
+        }
         GenSolvablePolynomial<C>[] nqr;
         nqr = FDUtil.<C> leftBasePseudoQuotientRemainder(n, res[0]);
         if (!nqr[1].isZERO()) {

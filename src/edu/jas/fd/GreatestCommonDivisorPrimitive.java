@@ -378,6 +378,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends
         }
         r = rs;
         GenSolvablePolynomial<C> b = leftRecursiveContent(q);
+        //qs = FDUtil.<C> recursiveDivideRightPolynomial(q, b);
         qs = FDUtil.<C> recursiveDivide(q, b);
         if (debug) {
             logger.info("RI-recCont b = " + b + ", q = " + q);
@@ -386,7 +387,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends
                 System.out.println("RI-recGcd, q         = " + q);
                 System.out.println("RI-recGcd, cont(q)   = " + b);
                 System.out.println("RI-recGcd, pp(q)     = " + qs);
-                System.out.println("RI-recGcd, pp(q)c(q) = " + qs.multiplyLeft(b));
+                System.out.println("RI-recGcd, c(q)pp(q) = " + qs.multiplyLeft(b));
                 throw new RuntimeException("RI-recGcd, pp: not divisible");
             }
         }
