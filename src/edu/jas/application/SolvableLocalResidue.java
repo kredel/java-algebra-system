@@ -161,14 +161,12 @@ public class SolvableLocalResidue<C extends GcdRingElem<C>> implements GcdRingEl
             logger.info("constructor: gcd = " + Arrays.toString(gcd)); // + ", " + n + ", " +d);
             n = gcd[1];
             d = gcd[2];
-            // d not in ideal --> gcd not in ideal 
         }
         gcd = FDUtil.<C> rightGcdCofactors(r.ring, n, d);
         if (!gcd[0].isONE()) {
             logger.info("constructor: gcd = " + Arrays.toString(gcd)); // + ", " + n + ", " +d);
             n = gcd[1];
             d = gcd[2];
-            // d not in ideal --> gcd not in ideal 
         }
         // not perfect, TODO 
         GenSolvablePolynomial<C>[] simp = ring.engine.leftSimplifier(n, d);

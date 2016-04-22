@@ -9,6 +9,7 @@ import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 
+import edu.jas.fd.FDUtil;
 import edu.jas.gbufd.PolyModUtil;
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.ExpVector;
@@ -149,15 +150,18 @@ public class SolvableLocal<C extends GcdRingElem<C>> implements GcdRingElem<Solv
         }
         // must reduce to lowest terms
         // not perfect, TODO
-        GenSolvablePolynomial<C>[] gcd = PolyModUtil.<C> syzGcdCofactors(r.ring, n, d);
+        //GenSolvablePolynomial<C>[] gcd = PolyModUtil.<C> syzGcdCofactors(r.ring, n, d);
+        GenSolvablePolynomial<C>[] gcd = FDUtil.<C> leftGcdCofactors(r.ring, n, d);
         if (!gcd[0].isONE()) {
             logger.info("constructor: gcd = " + Arrays.toString(gcd)); // + ", " + n + ", " +d);
             n = gcd[1];
             d = gcd[2];
-            // d not in ideal --> gcd not in ideal 
-            //p = ring.ideal.normalform( gcd );
-            //if ( p == null || p.isZERO() ) { // todo: find nonzero factor
-            //}
+        }
+        gcd = FDUtil.<C> rightGcdCofactors(r.ring, n, d);
+        if (!gcd[0].isONE()) {
+            logger.info("constructor: gcd = " + Arrays.toString(gcd)); // + ", " + n + ", " +d);
+            n = gcd[1];
+            d = gcd[2];
         }
         // not perfect, TODO 
         GenSolvablePolynomial<C>[] simp = ring.engine.leftSimplifier(n, d);
