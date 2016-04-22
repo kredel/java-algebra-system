@@ -7,6 +7,7 @@ package edu.jas.application;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -21,7 +22,12 @@ import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.RelationGenerator;
 import edu.jas.poly.TermOrder;
+import edu.jas.poly.TermOrderByName;
 import edu.jas.poly.WeylRelations;
+import edu.jas.fd.GreatestCommonDivisorAbstract;
+import edu.jas.fd.GreatestCommonDivisorSimple;
+import edu.jas.fd.GreatestCommonDivisorPrimitive;
+import edu.jas.fd.FDUtil;
 
 
 /**
@@ -94,7 +100,7 @@ public class SolvableLocalResidueTest extends TestCase {
     @Override
     protected void setUp() {
         a = b = c = d = e = null;
-        TermOrder to = new TermOrder(TermOrder.INVLEX);
+        TermOrder to = TermOrderByName.INVLEX;
         String[] vars = new String[] { "w", "x", "y", "z" };
         mfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), rl, to, vars);
         RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
@@ -143,6 +149,55 @@ public class SolvableLocalResidueTest extends TestCase {
         //F.add( p );
         SolvableIdeal<BigRational> id = new SolvableIdeal<BigRational>(mfac, F);
         id.doGB();
+        return id;
+    }
+
+
+    protected SolvableIdeal<BigRational> genIdealB() {
+        GenSolvablePolynomial<BigRational> p;
+        List<GenSolvablePolynomial<BigRational>> rel;
+        rel = new ArrayList<GenSolvablePolynomial<BigRational>>(il);
+        List<GenSolvablePolynomial<BigRational>> F;
+        F = new ArrayList<GenSolvablePolynomial<BigRational>>(il);
+
+        String[] vars = new String[] { "x", "y", "z", "t" };
+        mfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), TermOrderByName.INVLEX, vars);
+
+        // add relations
+        //z, y,  y * z + x,
+        p = mfac.parse("z");
+        rel.add(p);
+        p = mfac.parse("y");
+        rel.add(p);
+        p = mfac.parse("y * z + x");
+        rel.add(p);
+
+        //t, y,  y * t + y,
+        p = mfac.parse("t");
+        rel.add(p);
+        p = mfac.parse("y");
+        rel.add(p);
+        p = mfac.parse("y * t + y");
+        rel.add(p);
+
+        //t, z,  z * t - z
+        p = mfac.parse("t");
+        rel.add(p);
+        p = mfac.parse("z");
+        rel.add(p);
+        p = mfac.parse("z * t - z");
+        rel.add(p);
+
+        mfac.addSolvRelations(rel);
+        //System.out.println("mfac = " + mfac.toScript());
+
+        // construct ideal from polynomial t^2 + z^2 + y^2 + x^2 + 1
+        p = mfac.parse("t^2 + z^2 + y^2 + x^2 + 1");
+        F.add(p);
+        SolvableIdeal<BigRational> id;
+        id = new SolvableIdeal<BigRational>(mfac, F, SolvableIdeal.Side.twosided);
+        id.doGB();
+        //System.out.println("ideal = " + id.toScript());
         return id;
     }
 
@@ -370,6 +425,104 @@ public class SolvableLocalResidueTest extends TestCase {
         b = efac.parse(p);
         //System.out.println("b = " + b);
         assertEquals("parse(a.toSting()) = a", a, b);
+    }
+
+
+    /**
+     * Test example ideal.
+     */
+    public void testExamIdeal() {
+        id = genIdealB();
+        //System.out.println("id = " + id);
+        assert !id.isONE() : "id = " + id;
+        efac = new SolvableLocalResidueRing<BigRational>(id);
+        //System.out.println("efac = " + efac.toScript());
+
+        SolvableLocalResidue<BigRational> a, b, c, d, e, f;
+        GenSolvablePolynomial<BigRational> p, q, r, s;
+
+        p = mfac.parse("t + x + y + 1");
+        a = new SolvableLocalResidue<BigRational>(efac, p);
+        //System.out.println("a = " + a.toScript());
+
+        p = mfac.parse("z**2+x+1");
+        b = new SolvableLocalResidue<BigRational>(efac, p);
+        //System.out.println("b = " + b.toScript());
+
+        c = a.inverse();
+        //System.out.println("c = " + c.toScript());
+        d = b.inverse();
+        //System.out.println("d = " + d.toScript());
+
+        d = c.multiply(a);
+        //System.out.println("d = " + d.toScript());
+        e = d.inverse();
+        //System.out.println("e = " + e.toScript());
+
+        e = b.multiply(c);
+        //System.out.println("e = " + e.toScript());
+        f = c.multiply(b);
+        //System.out.println("f = " + f.toScript());
+
+        d = a.multiply(f);
+        //System.out.println("d = " + d.toScript());
+
+        d = e.multiply(a); // b * 1/a * a == b
+        //System.out.println("d = " + d.toScript());
+        //System.out.println("b == d: " + b.equals(d));
+        assertEquals("b.equals(d): ", b, d);
+        //System.out.println("#b: " + (b.num.length()+b.den.length()));
+        //System.out.println("#d: " + (d.num.length()+d.den.length()));
+
+        GreatestCommonDivisorAbstract<BigRational> engine = new GreatestCommonDivisorSimple<BigRational>(new BigRational());
+        p = engine.leftGcd(d.num,d.den);
+        //System.out.println("p = " + p.toScript());
+
+        GenSolvablePolynomial<BigRational>[] qr;
+        qr = FDUtil.<BigRational> leftBasePseudoQuotientRemainder(d.num, p);
+        //System.out.println("q_n = " + qr[0].toScript());
+        //System.out.println("r_n = " + qr[1].toScript());
+
+        q = qr[0].multiply(p);
+        r = p.multiply(qr[0]);
+        //System.out.println("q_n*p = " + q.toScript());
+        //System.out.println("p*q_n = " + r.toScript());
+        //System.out.println("q_n*p == d.num: " + q.equals(d.num));
+        //System.out.println("p*q_n == d.num: " + r.equals(d.num));
+        s = (GenSolvablePolynomial<BigRational>)r.sum(qr[1]);
+        //System.out.println("p*q_n+r_n = " + s.toScript());
+        //System.out.println("p*q_n+r_n == d.num: " + s.equals(d.num));
+        assertEquals("p*q_n+r_n == d.num: ", s, d.num);
+        s = (GenSolvablePolynomial<BigRational>)q.sum(qr[1]);
+        //System.out.println("p*q_n+r_n = " + s.toScript());
+        //System.out.println("q_n*p+r_n == d.num: " + s.equals(d.num));
+
+        //qr = FDUtil.<BigRational> leftBasePseudoQuotientRemainder(d.den, p);
+        //System.out.println("q_d = " + qr[0].toScript());
+        //System.out.println("r_d = " + qr[1].toScript());
+
+        // right division
+        qr = FDUtil.<BigRational> rightBasePseudoQuotientRemainder(d.num, p);
+        //System.out.println("q_rn = " + qr[0].toScript());
+        //System.out.println("r_rn = " + qr[1].toScript());
+        r = qr[0];
+
+        qr = FDUtil.<BigRational> rightBasePseudoQuotientRemainder(d.den, p);
+        //System.out.println("q_rn = " + qr[0].toScript());
+        //System.out.println("r_rn = " + qr[1].toScript());
+        q = qr[0];
+
+        e = new SolvableLocalResidue<BigRational>(efac, r, q);
+        //System.out.println("b = " + b.toScript());
+        //System.out.println("e = " + e.toScript());
+        //System.out.println("b == e: " + b.equals(e));
+        assertEquals("b == e: ", b, e);
+
+        //qr = FDUtil.<BigRational> leftGcdCofactors(id.getRing(), d.num, d.den);
+        //System.out.println("left qr = " + Arrays.toString(qr));
+
+        //qr = FDUtil.<BigRational> rightGcdCofactors(id.getRing(), d.num, d.den);
+        //System.out.println("right qr = " + Arrays.toString(qr));
     }
 
 }

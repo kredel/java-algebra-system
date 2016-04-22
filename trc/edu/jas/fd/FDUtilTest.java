@@ -72,9 +72,6 @@ public class FDUtilTest extends TestCase {
     GenSolvablePolynomialRing<BigRational> rdfac;
 
 
-    //GenSolvablePolynomialRing<BigRational> cfac;
-
-
     GenSolvablePolynomialRing<GenPolynomial<BigInteger>> rfac;
 
 
@@ -82,9 +79,6 @@ public class FDUtilTest extends TestCase {
 
 
     RecSolvablePolynomialRing<BigRational> rrfacTemp;
-
-
-    //BigRational ai, bi, ci, di, ei;
 
 
     GenSolvablePolynomial<BigInteger> a, b, c, d, e, f;
@@ -114,24 +108,20 @@ public class FDUtilTest extends TestCase {
     @Override
     protected void setUp() {
         a = b = c = d = e = null;
-        //ai = bi = ci = di = ei = null;
         ar = br = cr = dr = er = null;
         String[] vars = new String[] { "a", "b", "c", "d" };
         dfac = new GenSolvablePolynomialRing<BigInteger>(new BigInteger(1), rl, to, vars);
         RelationGenerator<BigInteger> wl = new WeylRelationsIterated<BigInteger>();
         dfac.addRelations(wl);
         rfac = dfac.recursive(1);
-        //cfac = (GenSolvablePolynomialRing<BigInteger>) rfac.coFac;
     }
 
 
     @Override
     protected void tearDown() {
         a = b = c = d = e = null;
-        //ai = bi = ci = di = ei = null;
         ar = br = cr = dr = er = null;
         dfac = null;
-        //cfac = null;
         rfac = null;
     }
 
@@ -161,29 +151,25 @@ public class FDUtilTest extends TestCase {
         GenPolynomial<BigInteger>[] QR = PolyUtil.<BigInteger> basePseudoQuotientRemainder(a, b);
         c = (GenSolvablePolynomial<BigInteger>) QR[0];
         d = (GenSolvablePolynomial<BigInteger>) QR[1];
-        //System.out.println("q   = " + c);
-        //System.out.println("r   = " + d);
+        //System.out.println("c   = " + c);
+        //System.out.println("d   = " + d);
 
         GenSolvablePolynomial<BigInteger> n = (GenSolvablePolynomial<BigInteger>) c.multiply(b).sum(d);
-        //System.out.println("n   = " + n); // + ", " + n.monic());
-        //System.out.println("a   = " + a); // + ", " + a.monic());
-        assertTrue("nonsense", !n.isZERO());
-
+        //System.out.println("c*b+d = n: " + n); // + ", " + n.monic());
+        //System.out.println("a     =    " + a); // + ", " + a.monic());
         boolean t = PolyUtil.<BigInteger> isBasePseudoQuotientRemainder(a, b, c, d);
         assertTrue("lc^n a = q b + r: " + d, t);
 
         GenSolvablePolynomial<BigInteger>[] QRs = FDUtil.<BigInteger> leftBasePseudoQuotientRemainder(a, b);
         e = QRs[0];
         f = QRs[1];
-        //System.out.println("");
-        //System.out.println("q   = " + e);
-        //System.out.println("r   = " + f);
+        //System.out.println("e   = " + e);
+        //System.out.println("f   = " + f);
 
         GenSolvablePolynomial<BigInteger> m = (GenSolvablePolynomial<BigInteger>) e.multiply(b).sum(f);
         //System.out.println("n   = " + n); // + ", " + m.monic());
         //System.out.println("m   = " + m); // + ", " + m.monic());
         //System.out.println("a   = " + a); // + ", " + a.monic());
-        assertTrue("nonsense", !m.isZERO());
 
         t = PolyUtil.<BigInteger> isBasePseudoQuotientRemainder(a, b, e, f);
         assertTrue("ore(lc^n) a = q b + r: " + f, t);
@@ -217,7 +203,7 @@ public class FDUtilTest extends TestCase {
 
         assertEquals("cp == qp: ", qp.monic(), cp.monic());
         assertEquals("dp == rp: ", rp.monic(), dp.monic());
-        // System.out.println("dp = qp: " + qp.monic().equals(dp.monic()) );
+        //System.out.println("dp = qp: " + qp.monic().equals(dp.monic()) );
         assertEquals("ep == qp: ", ep.monic(), cp.monic());
         assertEquals("fp == rp: ", fp.monic(), dp.monic());
     }
