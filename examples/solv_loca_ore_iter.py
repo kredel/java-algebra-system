@@ -6,7 +6,7 @@
 from java.lang import System
 
 from jas import SolvableRing, SolvPolyRing, PolyRing, RingElem
-from jas import QQ, startLog, SLC
+from jas import QQ, startLog, SLC, terminate
 
 # Ore extension solvable polynomial example, Gomez-Torrecillas, 2003
 
@@ -190,3 +190,5 @@ print;
 s = RingElem(llu.list[0]);
 print "s     = " + str(s);
 print;
+
+terminate();

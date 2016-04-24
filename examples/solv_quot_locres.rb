@@ -136,3 +136,4 @@ f5 = RingElem.new(rgll.list[0]);
 puts "f5    = " + str(f5)
 #puts "f3-f5 = " + str(f3-f5)
 
+terminate();

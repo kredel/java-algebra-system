@@ -6,7 +6,7 @@
 from java.lang import System
 
 from jas import SolvableRing, SolvPolyRing, PolyRing
-from jas import QQ, startLog, SRC, SRF
+from jas import QQ, startLog, SRC, SRF, terminate
 
 # Ore extension solvable polynomial example, Gomez-Torrecillas, 2003
 
@@ -137,5 +137,5 @@ print;
 sce = scai + scbi;
 print "SolvableQuotient: " + str(sce);
 
+terminate();
 #exit(0);
-

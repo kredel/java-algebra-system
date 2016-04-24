@@ -15,7 +15,8 @@ zrel = [z, y,  y * z + x ];
 puts "zrel: = [" + zrel.join(", ") { |r| r.to_s } + "]";
 puts;
 
-pz = SolvPolyRing.new(QQ(), "x,y,z", PolyRing.lex, zrel);
+#pz = SolvPolyRing.new(QQ(), "x,y,z", PolyRing.lex, zrel);
+pz = SolvPolyRing.new(QQ(), "x,y,z", PolyRing.grad, zrel);
 puts "SolvPolyRing: pz = " + str(pz);
 puts;
 
@@ -112,12 +113,15 @@ puts "SolvableIdeal: ii = " + str(ii);
 puts;
 
 #exit(0);
-#startLog();
+startLog();
 
 rgl = ii.leftGB();
 puts "seq left GB: rg1 = " + str(rgl);
 puts "isLeftGB: rg1 = " + str(rgl.isLeftGB());
 puts;
+
+#terminate();
+#exit(0);
 
 #p = RingElem.new(rgl.list.get(0));
 p = RingElem.new(rgl.list[0]);
@@ -258,3 +262,4 @@ e = f3.evaluate( y-z**2 );
 puts "e     = " + str(e); 
 puts;
 
+terminate();

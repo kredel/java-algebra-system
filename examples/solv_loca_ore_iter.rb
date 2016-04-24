@@ -212,3 +212,5 @@ puts;
 #puts "ql = " + ql.toScript();
 #puts "qg = " + qg.toScript();
 #puts;
+
+terminate();
