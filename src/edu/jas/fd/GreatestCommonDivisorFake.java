@@ -15,10 +15,9 @@ import edu.jas.structure.RingFactory;
 
 
 /**
- * (Non-unique) factorization domain greatest common divisor common algorithms
- * with monic polynomial remainder sequence. If C is a field, then the monic PRS
- * (on coefficients) is computed otherwise no simplifications in the reduction
- * are made.
+ * (Non-unique) factorization domain greatest common divisor common
+ * algorithms with monic polynomial remainder sequence. Fake
+ * implementation always returns 1 for any gcds.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
@@ -46,7 +45,7 @@ public class GreatestCommonDivisorFake<C extends GcdRingElem<C>> extends Greates
      * pseudoRemainder for remainder.
      * @param P univariate GenSolvablePolynomial.
      * @param S univariate GenSolvablePolynomial.
-     * @return gcd(P,S) with P = P'*gcd(P,S) and S = S'*gcd(P,S).
+     * @return 1 = gcd(P,S) with P = P'*gcd(P,S) and S = S'*gcd(P,S).
      */
     @Override
     public GenSolvablePolynomial<C> leftBaseGcd(GenSolvablePolynomial<C> P, GenSolvablePolynomial<C> S) {
@@ -68,7 +67,7 @@ public class GreatestCommonDivisorFake<C extends GcdRingElem<C>> extends Greates
      * pseudoRemainder for remainder.
      * @param P univariate GenSolvablePolynomial.
      * @param S univariate GenSolvablePolynomial.
-     * @return gcd(P,S) with P = gcd(P,S)*P' and S = gcd(P,S)*S'.
+     * @return 1 = gcd(P,S) with P = gcd(P,S)*P' and S = gcd(P,S)*S'.
      */
     @Override
     public GenSolvablePolynomial<C> rightBaseGcd(GenSolvablePolynomial<C> P, GenSolvablePolynomial<C> S) {
@@ -90,7 +89,7 @@ public class GreatestCommonDivisorFake<C extends GcdRingElem<C>> extends Greates
      * Uses pseudoRemainder for remainder.
      * @param P univariate recursive GenSolvablePolynomial.
      * @param S univariate recursive GenSolvablePolynomial.
-     * @return gcd(P,S) with P = P'*gcd(P,S)*p and S = S'*gcd(P,S)*s, where
+     * @return 1 = gcd(P,S) with P = P'*gcd(P,S)*p and S = S'*gcd(P,S)*s, where
      *         deg_main(p) = deg_main(s) == 0.
      */
     @Override
@@ -114,7 +113,7 @@ public class GreatestCommonDivisorFake<C extends GcdRingElem<C>> extends Greates
      * Uses pseudoRemainder for remainder.
      * @param P univariate recursive GenSolvablePolynomial.
      * @param S univariate recursive GenSolvablePolynomial.
-     * @return gcd(P,S) with P = p*gcd(P,S)*P' and S = s*gcd(P,S)*S', where
+     * @return 1 = gcd(P,S) with P = p*gcd(P,S)*P' and S = s*gcd(P,S)*S', where
      *         deg_main(p) = deg_main(s) == 0.
      */
     @Override
