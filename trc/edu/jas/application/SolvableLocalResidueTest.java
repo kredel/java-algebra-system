@@ -429,7 +429,7 @@ public class SolvableLocalResidueTest extends TestCase {
 
 
     /**
-     * Test example ideal.
+     * Test example ideal for ICMS-2016.
      */
     public void testExamIdeal() {
         id = genIdealB();
@@ -479,38 +479,18 @@ public class SolvableLocalResidueTest extends TestCase {
         //System.out.println("p = " + p.toScript());
 
         GenSolvablePolynomial<BigRational>[] qr;
-        qr = FDUtil.<BigRational> leftBasePseudoQuotientRemainder(d.num, p);
-        //System.out.println("q_n = " + qr[0].toScript());
-        //System.out.println("r_n = " + qr[1].toScript());
-
-        q = qr[0].multiply(p);
-        r = p.multiply(qr[0]);
-        //System.out.println("q_n*p = " + q.toScript());
-        //System.out.println("p*q_n = " + r.toScript());
-        //System.out.println("q_n*p == d.num: " + q.equals(d.num));
-        //System.out.println("p*q_n == d.num: " + r.equals(d.num));
-        s = (GenSolvablePolynomial<BigRational>)r.sum(qr[1]);
-        //System.out.println("p*q_n+r_n = " + s.toScript());
-        //System.out.println("p*q_n+r_n == d.num: " + s.equals(d.num));
-        assertEquals("p*q_n+r_n == d.num: ", s, d.num);
-        s = (GenSolvablePolynomial<BigRational>)q.sum(qr[1]);
-        //System.out.println("p*q_n+r_n = " + s.toScript());
-        //System.out.println("q_n*p+r_n == d.num: " + s.equals(d.num));
-
-        //qr = FDUtil.<BigRational> leftBasePseudoQuotientRemainder(d.den, p);
-        //System.out.println("q_d = " + qr[0].toScript());
-        //System.out.println("r_d = " + qr[1].toScript());
-
         // right division
         qr = FDUtil.<BigRational> rightBasePseudoQuotientRemainder(d.num, p);
         //System.out.println("q_rn = " + qr[0].toScript());
         //System.out.println("r_rn = " + qr[1].toScript());
         r = qr[0];
+        assertTrue("rem == 0: ", qr[1].isZERO());
 
         qr = FDUtil.<BigRational> rightBasePseudoQuotientRemainder(d.den, p);
         //System.out.println("q_rn = " + qr[0].toScript());
         //System.out.println("r_rn = " + qr[1].toScript());
         q = qr[0];
+        assertTrue("rem == 0: ", qr[1].isZERO());
 
         e = new SolvableLocalResidue<BigRational>(efac, r, q);
         //System.out.println("b = " + b.toScript());
