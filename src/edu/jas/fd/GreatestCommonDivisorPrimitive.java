@@ -252,6 +252,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends
                 System.out.println("recGcd, cont(r)   = " + a);
                 System.out.println("recGcd, pp(r)     = " + rs);
                 System.out.println("recGcd, pp(r)c(r) = " + rs.multiply(a));
+                System.out.println("recGcd, c(r)pp(r) = " + rs.multiplyLeft(a));
                 throw new RuntimeException("recGcd, pp: not divisible");
             }
         }
@@ -266,6 +267,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends
                 System.out.println("recGcd, cont(q)   = " + b);
                 System.out.println("recGcd, pp(q)     = " + qs);
                 System.out.println("recGcd, pp(q)c(q) = " + qs.multiply(b));
+                System.out.println("recGcd, c(q)pp(q) = " + qs.multiplyLeft(b));
                 throw new RuntimeException("recGcd, pp: not divisible");
             }
         }
@@ -372,7 +374,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends
                 System.out.println("RI-recGcd, r         = " + r);
                 System.out.println("RI-recGcd, cont(r)   = " + a);
                 System.out.println("RI-recGcd, pp(r)     = " + rs);
-                System.out.println("RI-recGcd, pp(r)c(r) = " + rs.multiplyLeft(a));
+                System.out.println("RI-recGcd, c(r)pp(r) = " + rs.multiplyLeft(a));
                 throw new RuntimeException("RI-recGcd, pp: not divisible");
             }
         }

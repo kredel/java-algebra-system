@@ -101,7 +101,7 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
             return S;
         }
         // parallel case
-        GenSolvablePolynomial<C> g = null;
+        GenSolvablePolynomial<C> g = P.ring.getONE();
         //Callable<GenSolvablePolynomial<C>> c0;
         //Callable<GenSolvablePolynomial<C>> c1;
         List<Callable<GenSolvablePolynomial<C>>> cs = new ArrayList<Callable<GenSolvablePolynomial<C>>>(2);
@@ -194,7 +194,7 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
             return S;
         }
         // parallel case
-        GenSolvablePolynomial<GenPolynomial<C>> g = null;
+        GenSolvablePolynomial<GenPolynomial<C>> g = P.ring.getONE();
         //Callable<GenSolvablePolynomial<GenPolynomial<C>>> c0;
         //Callable<GenSolvablePolynomial<GenPolynomial<C>>> c1;
         List<Callable<GenSolvablePolynomial<GenPolynomial<C>>>> cs = new ArrayList<Callable<GenSolvablePolynomial<GenPolynomial<C>>>>(
@@ -285,7 +285,7 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
             return S;
         }
         // parallel case
-        GenSolvablePolynomial<C> g = null;
+        GenSolvablePolynomial<C> g = P.ring.getONE();
         //Callable<GenSolvablePolynomial<C>> c0;
         //Callable<GenSolvablePolynomial<C>> c1;
         List<Callable<GenSolvablePolynomial<C>>> cs = new ArrayList<Callable<GenSolvablePolynomial<C>>>(2);
@@ -377,7 +377,7 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
             return S;
         }
         // parallel case
-        GenSolvablePolynomial<C> g = null;
+        GenSolvablePolynomial<C> g = P.ring.getONE();
         //Callable<GenSolvablePolynomial<C>> c0;
         //Callable<GenSolvablePolynomial<C>> c1;
         List<Callable<GenSolvablePolynomial<C>>> cs = new ArrayList<Callable<GenSolvablePolynomial<C>>>(2);
@@ -470,7 +470,7 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
             return S;
         }
         // parallel case
-        GenSolvablePolynomial<GenPolynomial<C>> g = null;
+        GenSolvablePolynomial<GenPolynomial<C>> g = P.ring.getONE();
         //Callable<GenSolvablePolynomial<GenPolynomial<C>>> c0;
         //Callable<GenSolvablePolynomial<GenPolynomial<C>>> c1;
         List<Callable<GenSolvablePolynomial<GenPolynomial<C>>>> cs = new ArrayList<Callable<GenSolvablePolynomial<GenPolynomial<C>>>>(
@@ -561,7 +561,7 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
             return S;
         }
         // parallel case
-        GenSolvablePolynomial<C> g = null;
+        GenSolvablePolynomial<C> g = P.ring.getONE();
         //Callable<GenSolvablePolynomial<C>> c0;
         //Callable<GenSolvablePolynomial<C>> c1;
         List<Callable<GenSolvablePolynomial<C>>> cs = new ArrayList<Callable<GenSolvablePolynomial<C>>>(2);
