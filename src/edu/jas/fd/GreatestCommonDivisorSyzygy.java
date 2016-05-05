@@ -82,9 +82,6 @@ public class GreatestCommonDivisorSyzygy<C extends GcdRingElem<C>> extends Great
         if (P == null || P.isZERO()) {
             return S;
         }
-        if (P.ring.nvar > 1) {
-            throw new IllegalArgumentException(this.getClass().getName() + " no univariate polynomial");
-        }
         if (P.isConstant()) {
             return P.ring.getONE();
         }
@@ -121,9 +118,6 @@ public class GreatestCommonDivisorSyzygy<C extends GcdRingElem<C>> extends Great
         }
         if (P == null || P.isZERO()) {
             return S;
-        }
-        if (P.ring.nvar > 1) {
-            throw new IllegalArgumentException(this.getClass().getName() + " no univariate polynomial");
         }
         if (P.isConstant()) {
             return P.ring.getONE();
