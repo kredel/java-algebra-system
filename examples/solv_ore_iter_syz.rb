@@ -135,4 +135,4 @@ syr = ii.rightSyzygy().rightGB();
 puts "right syzygy: " + str(syr);
 puts;
 
-#terminate();
+terminate();

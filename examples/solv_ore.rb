@@ -157,6 +157,6 @@ puts "SolvableQuotient: sx-sy = " + sx.subtract(sy).toScript();
 puts "SolvableQuotient: isRF  = " + str(scf.elem.isRightFraction(sr));
 puts;
 
-#terminate();
+terminate();
 #exit(0);
 

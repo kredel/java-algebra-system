@@ -6,7 +6,7 @@
 from java.lang import System
 
 from jas import SolvableRing, SolvPolyRing, PolyRing, SRF 
-from jas import QQ, startLog, SolvableModule, SolvableSubModule
+from jas import QQ, startLog, SolvableModule, SolvableSubModule, terminate
 
 # Ore extension solvable polynomial example, modules
 
@@ -124,4 +124,4 @@ print;
 
 
 #startLog();
-#terminate();
+terminate();

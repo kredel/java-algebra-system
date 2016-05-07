@@ -136,4 +136,4 @@ syr = ii.rightSyzygy().rightGB();
 print "right syzygy: " + str(syr);
 print;
 
-#terminate();
+terminate();

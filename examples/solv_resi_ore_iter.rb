@@ -160,4 +160,4 @@ puts "seq twosided GB: rgt = " + str(rgt);
 puts "isTwosidedGB: rgt = " + str(rgt.isTwosidedGB());
 puts;
 
-#terminate();
+terminate();

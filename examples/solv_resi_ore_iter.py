@@ -6,7 +6,7 @@
 from java.lang import System
 
 from jas import SolvableRing, SolvPolyRing, PolyRing, RingElem
-from jas import QQ, startLog, SRC, SRF
+from jas import QQ, startLog, SRC, SRF, terminate
 
 # Ore extension solvable polynomial example, Gomez-Torrecillas, 2003
 
@@ -161,4 +161,4 @@ print "seq twosided GB: " + str(rgt);
 print "isTwosidedGB: " + str(rgt.isTwosidedGB());
 print;
 
-#terminate();
+terminate();

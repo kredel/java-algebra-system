@@ -112,4 +112,4 @@ rgi = rgl.intersect(rgt);
 puts "leftGB intersect twosidedGB: " + str(rgi);
 puts;
 
-#terminate();
+terminate();

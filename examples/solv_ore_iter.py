@@ -6,7 +6,7 @@
 from java.lang import System
 
 from jas import SolvableRing, SolvPolyRing, PolyRing
-from jas import QQ, startLog, SRC, SRF
+from jas import QQ, startLog, SRC, SRF, terminate
 
 # Ore extension solvable polynomial example, Gomez-Torrecillas, 2003
 
@@ -105,4 +105,4 @@ rgi = rgl.intersect(rgt);
 print "leftGB intersect twosidedGB:" + str(rgi);
 print;
 
-#terminate();
+terminate();

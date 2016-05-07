@@ -164,3 +164,5 @@ puts;
 puts "SolvableLocalResidueRing: " + str(rf.ring.toScript) + ", assoz: " + str(rf.ring::ring.isAssociative);
 puts "gens = " + rf.ring.generators().map { |r| r.toScript.to_s }.join(", ");
 puts;
+
+terminate();
