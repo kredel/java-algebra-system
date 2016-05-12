@@ -12,7 +12,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.gbufd.PolyModUtil;
 import edu.jas.gbufd.SolvableQuotient;
 import edu.jas.gbufd.SolvableQuotientRing;
 import edu.jas.poly.ExpVector;
@@ -29,7 +28,8 @@ import edu.jas.structure.RingFactory;
 
 
 /**
- * Factorization domain utilities, for example recursive pseudo remainder.
+ * Solvable polynomials factorization domain utilities, for example recursive
+ * pseudo remainder.
  * @author Heinz Kredel
  */
 
@@ -241,8 +241,8 @@ public class FDUtil {
      * @param <C> coefficient type.
      * @param P GenSolvablePolynomial.
      * @param S nonzero GenSolvablePolynomial.
-     * @return [ quotient, remainder ] with P ldcf(S)<sup>m'</sup> = S * quotient 
-     *         S + remainder. m' &le; deg(P)-deg(S)
+     * @return [ quotient, remainder ] with P ldcf(S)<sup>m'</sup> = S *
+     *         quotient S + remainder. m' &le; deg(P)-deg(S)
      * @see edu.jas.poly.GenPolynomial#divide(edu.jas.poly.GenPolynomial).
      */
     @SuppressWarnings("unchecked")
@@ -1004,7 +1004,7 @@ public class FDUtil {
      * @return R = sum( X<sup>i</sup> b<sub>i</sub> ), with P =
      *         sum(a<sub>i</sub> X<sup>i</sup> ) and eval(sum(X<sup>i</sup>
      *         b<sub>i</sub>)) == sum(a<sub>i</sub> X<sup>i</sup>)
-
+    
     public static <C extends RingElem<C>> GenSolvablePolynomial<GenPolynomial<C>> rightRecursivePolynomial(
                     GenSolvablePolynomial<GenPolynomial<C>> P) {
         if (P == null || P.isZERO()) {
@@ -1048,7 +1048,7 @@ public class FDUtil {
      * @return P as evaluated polynomial R. R = sum( X<sup>i</sup> b<sub>i</sub>
      *         ), P = sum(a<sub>i</sub> X<sup>i</sup> ) = eval(sum(X<sup>i</sup>
      *         b<sub>i</sub>))
-
+    
     public static <C extends RingElem<C>> GenSolvablePolynomial<GenPolynomial<C>> evalAsRightRecursivePolynomial(
                     GenSolvablePolynomial<GenPolynomial<C>> R) {
         if (R == null || R.isZERO()) {
@@ -1079,6 +1079,7 @@ public class FDUtil {
         return q;
     }
     */
+
 
     /*
      * Test RecSolvablePolynomial right coefficients polynomial. <b>Note:</b> R
@@ -1237,8 +1238,8 @@ public class FDUtil {
 
     /**
      * Solvable rational function from integral solvable polynomial
-     * coefficients. Represent as polynomial with type SolvableQuotient<C>
-     * coefficients.
+     * coefficients. Represent as polynomial with type SolvableQuotient
+     * <C> coefficients.
      * @param fac result polynomial factory.
      * @param A polynomial with integral solvable polynomial coefficients to be
      *            converted.
@@ -1269,8 +1270,8 @@ public class FDUtil {
 
     /**
      * Solvable rational function from integral solvable polynomial
-     * coefficients. Represent as polynomial with type SolvableQuotient<C>
-     * coefficients.
+     * coefficients. Represent as polynomial with type SolvableQuotient
+     * <C> coefficients.
      * @param fac result polynomial factory.
      * @param L list of polynomials with integral solvable polynomial
      *            coefficients to be converted.
@@ -1298,7 +1299,7 @@ public class FDUtil {
      * @param d second solvable polynomial.
      * @return [ g=leftGcd(n,d), n/g, d/g ]
      */
-    @SuppressWarnings({"cast","unchecked"})
+    @SuppressWarnings({ "cast", "unchecked" })
     public static <C extends GcdRingElem<C>> GenSolvablePolynomial<C>[] leftGcdCofactors(
                     GenSolvablePolynomialRing<C> r, GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d) {
         //GreatestCommonDivisorAbstract<C> e1 = new GreatestCommonDivisorSimple<C>(r.coFac);
@@ -1307,7 +1308,7 @@ public class FDUtil {
         GreatestCommonDivisorAbstract<C> e2 = new GreatestCommonDivisorSyzygy<C>(r.coFac);
         GreatestCommonDivisorAbstract<C> engine = new SGCDParallelProxy<C>(r.coFac, e1, e2);
         if (info) {
-           logger.info("leftGCD_in: " + n + ", " + d);
+            logger.info("leftGCD_in: " + n + ", " + d);
         }
         GenSolvablePolynomial<C>[] res = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[3];
         res[0] = engine.leftGcd(n, d);
@@ -1345,7 +1346,7 @@ public class FDUtil {
      * @param d second solvable polynomial.
      * @return [ g=rightGcd(n,d), n/g, d/g ]
      */
-    @SuppressWarnings({"cast","unchecked"})
+    @SuppressWarnings({ "cast", "unchecked" })
     public static <C extends GcdRingElem<C>> GenSolvablePolynomial<C>[] rightGcdCofactors(
                     GenSolvablePolynomialRing<C> r, GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d) {
         //GreatestCommonDivisorAbstract<C> e1 = new GreatestCommonDivisorSimple<C>(r.coFac);

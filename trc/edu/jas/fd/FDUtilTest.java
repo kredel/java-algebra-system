@@ -7,10 +7,6 @@ package edu.jas.fd;
 
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigInteger;
@@ -27,6 +23,10 @@ import edu.jas.poly.RecSolvablePolynomialRing;
 import edu.jas.poly.RelationGenerator;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.WeylRelationsIterated;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -154,7 +154,7 @@ public class FDUtilTest extends TestCase {
         //System.out.println("c   = " + c);
         //System.out.println("d   = " + d);
 
-        GenSolvablePolynomial<BigInteger> n = (GenSolvablePolynomial<BigInteger>) c.multiply(b).sum(d);
+        //GenSolvablePolynomial<BigInteger> n = (GenSolvablePolynomial<BigInteger>) c.multiply(b).sum(d);
         //System.out.println("c*b+d = n: " + n); // + ", " + n.monic());
         //System.out.println("a     =    " + a); // + ", " + a.monic());
         boolean t = PolyUtil.<BigInteger> isBasePseudoQuotientRemainder(a, b, c, d);
@@ -166,7 +166,7 @@ public class FDUtilTest extends TestCase {
         //System.out.println("e   = " + e);
         //System.out.println("f   = " + f);
 
-        GenSolvablePolynomial<BigInteger> m = (GenSolvablePolynomial<BigInteger>) e.multiply(b).sum(f);
+        //GenSolvablePolynomial<BigInteger> m = (GenSolvablePolynomial<BigInteger>) e.multiply(b).sum(f);
         //System.out.println("n   = " + n); // + ", " + m.monic());
         //System.out.println("m   = " + m); // + ", " + m.monic());
         //System.out.println("a   = " + a); // + ", " + a.monic());
@@ -266,7 +266,8 @@ public class FDUtilTest extends TestCase {
         //System.out.println("FDQR: ore(lc^n) a == q b + r: " + t);
         assertTrue("ore(lc^n) a = q b + r: " + crr, t); // ?? 
 
-        GenSolvablePolynomial<SolvableQuotient<BigRational>> ap, bp, cp, dp, qp, rp, rhs, apm, bpm, cpm, dpm, qpm, rpm, rhsm;
+        GenSolvablePolynomial<SolvableQuotient<BigRational>> ap, bp, cp, dp, qp, rp, rhs, apm, bpm, cpm, dpm,
+                        qpm, rpm, rhsm;
         ap = FDUtil.<BigRational> quotientFromIntegralCoefficients(rqfac, arr);
         bp = FDUtil.<BigRational> quotientFromIntegralCoefficients(rqfac, brr);
         cp = FDUtil.<BigRational> quotientFromIntegralCoefficients(rqfac, crr);
