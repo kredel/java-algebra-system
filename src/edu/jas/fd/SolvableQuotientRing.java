@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.gbufd;
+package edu.jas.fd;
 
 
 import java.io.Reader;
@@ -12,6 +12,8 @@ import java.util.Random;
 
 import org.apache.log4j.Logger;
 
+import edu.jas.gbufd.SolvableSyzygyAbstract;
+import edu.jas.gbufd.SolvableSyzygySeq;
 import edu.jas.kern.StringUtil;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;

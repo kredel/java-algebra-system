@@ -2,14 +2,13 @@
  * $Id$
  */
 
-package edu.jas.gbufd;
+package edu.jas.fd;
 
 
 import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.fd.FDUtil;
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
