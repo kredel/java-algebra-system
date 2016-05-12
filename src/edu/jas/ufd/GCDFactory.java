@@ -45,8 +45,8 @@ import edu.jas.structure.RingFactory;
  * c = engine.gcd(a, b);
  * </pre>
  * 
- *        For example, if the coefficient type is BigInteger, the usage looks
- *        like
+ *        For example, if the coefficient type is
+ *        <code>BigInteger</code>, the usage looks like
  * 
  *        <pre>
  * BigInteger cofac = new BigInteger();
@@ -55,11 +55,13 @@ import edu.jas.structure.RingFactory;
  * or engine = GCDFactory.getProxy(cofac);
  * c = engine.gcd(a, b);
  * </pre>
+ *
+ * <b>Todo:</b> Base decision also on degree vectors and number of
+ * variables of polynomials. Incorporate also number of CPUs / threads
+ * available (done with <code>GCDProxy</code>).
  * 
  * @see edu.jas.ufd.GreatestCommonDivisor#gcd(edu.jas.poly.GenPolynomial P,
- *      edu.jas.poly.GenPolynomial S) <b>Todo:</b> Base decision also on degree
- *      vectors and number of variables of polynomials. Incorporate also number
- *      of CPUs / threads available (done with GCDProxy).
+ *      edu.jas.poly.GenPolynomial S)
  */
 
 public class GCDFactory {

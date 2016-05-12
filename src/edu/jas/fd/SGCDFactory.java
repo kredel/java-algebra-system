@@ -31,7 +31,7 @@ import edu.jas.structure.RingFactory;
  *        returns an object of a class which implements the
  *        <code>GreatestCommonDivisor</code> interface. <code>getProxy()</code>
  *        returns a proxy object of a class which implements the
- *        <code>GreatestCommonDivisor</code>r interface. The proxy will run two
+ *        <code>GreatestCommonDivisor</code> interface. The proxy will run two
  *        implementations in parallel, return the first computed result and
  *        cancel the second running task. On systems with one CPU the computing
  *        time will be two times the time of the fastest algorithm
@@ -42,24 +42,22 @@ import edu.jas.structure.RingFactory;
  * GreatestCommonDivisor&lt;CT&gt; engine;
  * engine = SGCDFactory.&lt;CT&gt; getImplementation(cofac);
  * or engine = SGCDFactory.&lt;CT&gt; getProxy(cofac);
- * c = engine.gcd(a, b);
+ * c = engine.leftGcd(a, b);
  * </pre>
  * 
- *        For example, if the coefficient type is BigInteger, the usage looks
- *        like
+ *        For example, if the coefficient type is
+ *        <code>BigInteger</code>, the usage looks like
  * 
  *        <pre>
  * BigInteger cofac = new BigInteger();
  * GreatestCommonDivisor&lt;BigInteger&gt; engine;
  * engine = SGCDFactory.getImplementation(cofac);
  * or engine = SGCDFactory.getProxy(cofac);
- * c = engine.gcd(a, b);
+ * c = engine.leftGcd(a, b);
  * </pre>
  * 
- * @see edu.jas.ufd.GreatestCommonDivisor#gcd(edu.jas.poly.GenPolynomial P,
- *      edu.jas.poly.GenPolynomial S) <b>Todo:</b> Base decision also on degree
- *      vectors and number of variables of polynomials. Incorporate also number
- *      of CPUs / threads available (done with SGCDParallelProxy).
+ * @see edu.jas.fd.GreatestCommonDivisor#leftGcd(edu.jas.poly.GenSolvablePolynomial P,
+ *      edu.jas.poly.GenSolvablePolynomial S) 
  */
 
 public class SGCDFactory {

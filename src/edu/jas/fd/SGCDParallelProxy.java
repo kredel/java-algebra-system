@@ -23,9 +23,10 @@ import edu.jas.structure.RingFactory;
 
 
 /**
- * Solvable greatest common divisor parallel proxy.  
- * Executes methods from two implementations in parallel and 
- * returns the result from the fastest run.
+ * Solvable greatest common divisor parallel proxy.  Executes methods
+ * from two implementations in parallel and returns the result from
+ * the fastest run.  Uses timeout on <code>invokeAny()</code> and
+ * return fake common divisor <it>1</it> in case of timeout.
  * @author Heinz Kredel
  */
 

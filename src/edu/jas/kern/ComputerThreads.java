@@ -61,7 +61,7 @@ public class ComputerThreads {
      * Timeout for timed execution. 
      * @see edu.jas.fd.SGCDParallelProxy
      */
-    static long timeout = 1L; //-1L;
+    static long timeout = 10L; //-1L;
 
 
     /**
