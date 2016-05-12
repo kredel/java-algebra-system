@@ -1979,10 +1979,10 @@ end
 
 java_import "edu.jas.ufd.Quotient";
 java_import "edu.jas.ufd.QuotientRing";
-java_import "edu.jas.gbufd.SolvableQuotient";
-java_import "edu.jas.gbufd.SolvableQuotientRing";
-java_import "edu.jas.gbufd.QuotSolvablePolynomial";
-java_import "edu.jas.gbufd.QuotSolvablePolynomialRing";
+java_import "edu.jas.fd.SolvableQuotient";
+java_import "edu.jas.fd.SolvableQuotientRing";
+java_import "edu.jas.fd.QuotSolvablePolynomial";
+java_import "edu.jas.fd.QuotSolvablePolynomialRing";
 java_import "edu.jas.application.ResidueSolvablePolynomial";
 java_import "edu.jas.application.ResidueSolvablePolynomialRing";
 java_import "edu.jas.application.LocalSolvablePolynomial";

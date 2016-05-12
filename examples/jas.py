@@ -46,8 +46,6 @@ from edu.jas.gbufd       import GroebnerBasePseudoRecSeq, GroebnerBasePseudoSeq,
                                 SolvableGroebnerBasePseudoRecSeq, WordGroebnerBasePseudoRecSeq,\
                                 RGroebnerBasePseudoSeq, RGroebnerBaseSeq, RReductionSeq,\
                                 CharacteristicSetWu,\
-                                SolvableQuotient, SolvableQuotientRing,\
-                                QuotSolvablePolynomial, QuotSolvablePolynomialRing,\
                                 SolvableSyzygySeq, SyzygySeq
 #from edu.jas.gbmod       import ModGroebnerBaseSeq, ModSolvableGroebnerBaseSeq
 from edu.jas.vector      import GenVector, GenVectorModul,\
@@ -65,6 +63,8 @@ from edu.jas.application import PolyUtilApp, RingFactoryTokenizer,\
 from edu.jas.kern        import ComputerThreads, StringUtil, Scripting
 from edu.jas.ufd         import GreatestCommonDivisor, PolyUfdUtil, GCDFactory,\
                                 FactorFactory, SquarefreeFactory, Quotient, QuotientRing
+from edu.jas.fd          import SolvableQuotient, SolvableQuotientRing,\
+                                QuotSolvablePolynomial, QuotSolvablePolynomialRing
 from edu.jas.root        import RealRootsSturm, Interval, RealAlgebraicNumber, RealAlgebraicRing,\
                                 ComplexRootsSturm, Rectangle, RootFactory
 from edu.jas.integrate   import ElementaryIntegration
