@@ -7,10 +7,6 @@ package edu.jas.fd;
 
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigRational;
@@ -19,10 +15,13 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.RecSolvablePolynomial;
-import edu.jas.poly.RelationTable;
+import edu.jas.poly.RelationGenerator;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.WeylRelations;
-import edu.jas.poly.RelationGenerator;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -314,8 +313,8 @@ public class QuotSolvablePolynomialTest extends TestCase {
      * Test solvable coefficient ring.
      */
     public void testSolvableCoeffs() {
-        GenSolvablePolynomialRing<BigRational> csring = new GenSolvablePolynomialRing<BigRational>(cfac,
-                        tord, cvars);
+        GenSolvablePolynomialRing<BigRational> csring = new GenSolvablePolynomialRing<BigRational>(cfac, tord,
+                        cvars);
         //RelationGenerator<BigRational> wlc = new WeylRelations<BigRational>(csring); 
         //no: wlc.generate(csring);
         //assertTrue("# relations == 1", csring.table.size() == 1);
