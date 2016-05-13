@@ -25,9 +25,28 @@
 
 <dl>
 
-<dt>2016, March </dt> <!-- 2.6.5xxx --> 
+<dt>2016, May </dt> <!-- 2.6.5xxx --> 
 <dd> 
 
+ Improvements in package <code>edu.jas.fd</code>. New class
+ <code>SGCDFactory</code> with methods <code>getImplementation()</code>
+ and <code>getProxy()</code> to obtian suitable common divisor
+ implementations based on the coefficient ring of the polynomials.
+ New class <code>SGCDParallelProxy</code> to run two common divisor
+ implementations in parallel and take the result of the first finished
+ one (compare to <code>GCDProxy</code>).
+
+ The solvable left and right common divisor algorithms are now used in
+ <code>SolvableLocalResidue</code>, <code>SolvableLocal</code> and
+ <code>SolvableQuotient</code> to reduce the fractions to lower terms.
+ Refactoring some classes to <code>edu.jas.fd</code> package.
+ Bug fixes and small improvements.
+
+</dd>
+
+
+<dt>2016, March </dt> <!-- 2.6.5480 --> 
+<dd> 
  New signature-based Gr&ouml;bner base algorithms, F5, GGV and Arri,
  after the paper <em>"Signature-based Algorithms to Compute
  Gr&ouml;bner bases"</em> by Eder and Perry, ISSAC 2011. The classes
@@ -37,16 +56,13 @@
  <code>GBAlgorithmBuilder</code> methods <code>F5()</code>,
  <code>GGV()</code> and <code>Arri()</code>.  Some of the new methods
  use Java 8 constructions.
-
  <code>GBAlgorithmBuilder</code> expressions can be used in
  <code>RunGB</code> using the parameter
  <code>build=string</code>. Started with new methods
  <code>bitLength()</code> for coefficient arithmetic classes and
  polynomials.  Some bug fixes and small improvements. Debian package
  improved.
-
 </dd> 
-
 
 <dt>2016, February </dt> <!-- 2.6.5428 --> 
 <dd> 
@@ -2554,7 +2570,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Mon Mar 28 19:49:24 CEST 2016
+Last modified: Fri May 13 19:42:03 CEST 2016
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
