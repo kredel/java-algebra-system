@@ -35,7 +35,7 @@ RSYNC=rsync -e ssh -avuz $(DRY) $(DELETE) --exclude=*~ --include=doc/svn_change.
 ####--exclude=./test
 ####--exclude=*.ps --exclude=*.pdf --exclude=spin*
 ####--exclude=*/.jxta/
-PART=jas.j17
+PART=jas.j18
 VERSION=jas-2.6
 #BRANCH=2.3
 SVNVERSION=`grep committed-rev .svn/entries |head -1|awk -F = '{ print $2 }'|sed 's/"//g'`
@@ -442,7 +442,7 @@ export:
 	cd ~/jas-versions/$(VERSION)/; jar -uf ../$(VERSION).`$(SVNREV)`-bin.jar -C ~/jas-versions/$(VERSION)/examples jas.rb -C ~/jas-versions/$(VERSION)/examples jas.py
 	jar -uf ~/jas-versions/$(VERSION).`$(SVNREV)`-bin.jar -C ~/jas/NOTES COPYING.APACHE-2.0 -C ~/jas/NOTES COPYING.apache.jas
 	cd ~/jas-versions/$(VERSION)/; ant doc > ant_doc.out
-	cd ~/jas-versions/$(VERSION)/; epydoc -v -o doc/jython -n "Python to JAS" -u ../../index.html examples/jas.py examples/sdjas.py > epydoc.out
+	cd ~/jas-versions/$(VERSION)/; epydoc -v -o doc/jython -n "Python to JAS" -u ../../index.html examples/jas.py examples/basic_sigbased_gb.py examples/sdjas.py > epydoc.out
 	cd ~/jas-versions/$(VERSION)/; jrdoc -o doc/jruby -U -N -t "Ruby to JAS" examples/jas.rb examples/sdjas.rb > rdoc.out 2>&1
 	cd ~/jas-versions/$(VERSION)/; ant test > ant_test.out
 	cd ~/jas-versions/$(VERSION)/; sh ./jython_tests.sh >jython_tests.out 2>&1
@@ -500,6 +500,8 @@ young:
 subst:
 	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) `$(SVNREV)` doc/download.html
 
+logs:
+	svn log -v -r HEAD:$(SVNSRT) file:///$(SVNREPO)/jas/trunk src trc examples jython mpj mpi jlinalg_adapter commons-math_adapter > doc/svn_change.log
 
 # lines of code and number of classes
 loc: young
