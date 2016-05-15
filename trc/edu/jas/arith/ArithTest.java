@@ -760,9 +760,9 @@ public class ArithTest extends TestCase {
         assertTrue("a^3 * a^-3 = 1", c.isONE());
 
         //Java 8:
-        //d = a.power(-3);
-        //c = b.multiply(d);
-        //assertTrue("a^3 * a^-3 = 1", c.isONE());
+        d = a.power(-3);
+        c = b.multiply(d);
+        assertTrue("a^3 * a^-3 = 1", c.isONE());
     }
 
 
@@ -810,18 +810,18 @@ public class ArithTest extends TestCase {
         assertEquals("a^p = a mod p", c, d);
 
         //Java 8:
-        //a = BigInteger.ZERO.random(100);
-        //d = a.power(1);
-        //c = a;
-        //assertEquals("a^1 == a", c, d);
+        a = BigInteger.ZERO.random(100);
+        d = a.power(1);
+        c = a;
+        assertEquals("a^1 == a", c, d);
 
-        //d = a.power(0);
-        //c = BigInteger.ONE;
-        //assertEquals("a^0 == 1", c, d);
+        d = a.power(0);
+        c = BigInteger.ONE;
+        assertEquals("a^0 == 1", c, d);
  
-        //d = a.power(3);
-        //c = a.multiply(a).multiply(a);
-        //assertEquals("a^3 == a*a*a", c, d);
+        d = a.power(3);
+        c = a.multiply(a).multiply(a);
+        assertEquals("a^3 == a*a*a", c, d);
     }
 
 
@@ -923,7 +923,7 @@ public class ArithTest extends TestCase {
         BigDecimal a, b, d, e;
         a = BigDecimal.ONE;
 
-        b = a.random(7).abs();
+        b = a.random(17).abs();
         //System.out.println("\nb          = " + b);
         //System.out.println("ulp(b)     = " + b.val.ulp());
         for (int n = 1; n < 8; n++) {
