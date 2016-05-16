@@ -69,9 +69,6 @@ public class GCDPrimitiveTest extends TestCase {
     TermOrder to = new TermOrder(TermOrder.INVLEX);
 
 
-    //TermOrder to = new TermOrder(TermOrder.IGRLEX);
-
-
     GenSolvablePolynomialRing<BigRational> dfac;
 
 
@@ -128,7 +125,7 @@ public class GCDPrimitiveTest extends TestCase {
     /**
      * Test base gcd primitive.
      */
-    public void xtestBaseGcdPrimitive() {
+    public void testBaseGcdPrimitive() {
         String[] uvars = new String[] { "x" };
         dfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), 1, to, uvars);
 
@@ -174,7 +171,7 @@ public class GCDPrimitiveTest extends TestCase {
      * Test univariate recursive gcd primitive.
      */
     @SuppressWarnings("cast")
-    public void xtestRecursiveGCDPrimitive() {
+    public void testRecursiveGCDPrimitive() {
         //String[] vars = new String[] { "a", "b", "c", "d" };
         String[] vars = new String[] { "a", "b" };
         dfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), to, vars);
@@ -312,16 +309,16 @@ public class GCDPrimitiveTest extends TestCase {
      * Test arbitrary recursive gcd primitive.
      */
     @SuppressWarnings("cast")
-    public void xtestArbitraryRecursiveGCDPrimitive() {
+    public void testArbitraryRecursiveGCDPrimitive() {
         String[] cvars = new String[] { "a", "b" };
         String[] vars = new String[] { "c" };
         dfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), to, cvars);
         RelationGenerator<BigRational> wl = new WeylRelationsIterated<BigRational>();
         dfac.addRelations(wl);
-        System.out.println("dfac = " + dfac.toScript());
+        //System.out.println("dfac = " + dfac.toScript());
         rfac = new RecSolvablePolynomialRing<BigRational>(dfac, to, vars);
         //rfac = (RecSolvablePolynomialRing<BigRational>) dfac.recursive(1);
-        System.out.println("rfac = " + rfac.toScript());
+        //System.out.println("rfac = " + rfac.toScript());
 
         //kl = 3; ll = 2;
         el = 2;
@@ -340,18 +337,18 @@ public class GCDPrimitiveTest extends TestCase {
             cr = rfac.getONE();
         }
 
-        System.out.println("ar = " + ar);
-        System.out.println("br = " + br);
-        System.out.println("cr = " + cr);
+        //System.out.println("ar = " + ar);
+        //System.out.println("br = " + br);
+        //System.out.println("cr = " + cr);
 
         ar = ar.multiply(cr);
         br = br.multiply(cr);
-        System.out.println("ar = " + ar);
-        System.out.println("br = " + br);
+        //System.out.println("ar = " + ar);
+        //System.out.println("br = " + br);
 
         dr = fd.leftRecursiveGcd(ar, br);
-        System.out.println("cr = " + cr);
-        System.out.println("dr = " + dr);
+        //System.out.println("cr = " + cr);
+        //System.out.println("dr = " + dr);
 
         er = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveSparsePseudoRemainder(dr, cr);
         //System.out.println("er = " + er);
@@ -377,10 +374,10 @@ public class GCDPrimitiveTest extends TestCase {
         List<GenPolynomial<GenPolynomial<BigRational>>> rlc = PolynomialList
                         .<GenPolynomial<BigRational>> castToList(rl);
         rqfac.polCoeff.coeffTable.addRelations(rlc);
-        System.out.println("rrfac  = " + rrfac.toScript());
-        System.out.println("rcfac  = " + rcfac.toScript());
-        System.out.println("qfac   = " + qfac.toScript());
-        System.out.println("rqfac  = " + rqfac.toScript());
+        //System.out.println("rrfac  = " + rrfac.toScript());
+        //System.out.println("rcfac  = " + rcfac.toScript());
+        //System.out.println("qfac   = " + qfac.toScript());
+        //System.out.println("rqfac  = " + rqfac.toScript());
 
         GenSolvablePolynomial<SolvableQuotient<BigRational>> ap, bp, cp, dp, gp, ep, apm, bpm, cpm, dpm, gpm;
         ap = FDUtil.<BigRational> quotientFromIntegralCoefficients(rqfac, ar);
@@ -391,21 +388,21 @@ public class GCDPrimitiveTest extends TestCase {
         bpm = bp.monic();
         cpm = cp.monic();
         dpm = dp.monic();
-        System.out.println("ap  = " + ap);
-        System.out.println("apm = " + apm);
-        System.out.println("bp  = " + bp);
-        System.out.println("bpm = " + bpm);
-        System.out.println("cp  = " + cp);
-        System.out.println("cpm = " + cpm);
-        System.out.println("dp  = " + dp);
-        System.out.println("dpm = " + dpm);
+        //System.out.println("ap  = " + ap);
+        //System.out.println("apm = " + apm);
+        //System.out.println("bp  = " + bp);
+        //System.out.println("bpm = " + bpm);
+        //System.out.println("cp  = " + cp);
+        //System.out.println("cpm = " + cpm);
+        //System.out.println("dp  = " + dp);
+        //System.out.println("dpm = " + dpm);
 
         GreatestCommonDivisorAbstract<SolvableQuotient<BigRational>> fdq = new GreatestCommonDivisorPrimitive<SolvableQuotient<BigRational>>(
                         qfac);
         gp = fdq.leftBaseGcd(ap, bp);
         gpm = gp.monic();
-        System.out.println("gp  = " + gp);
-        System.out.println("gpm = " + gpm);
+        //System.out.println("gp  = " + gp);
+        //System.out.println("gpm = " + gpm);
 
         ep = FDUtil.<SolvableQuotient<BigRational>> leftBaseSparsePseudoRemainder(gp, dp);
         //System.out.println("ep  = " + ep);
