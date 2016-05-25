@@ -56,19 +56,7 @@ public class QuatGenSolvablePolynomialTest extends TestCase {
     GenSolvablePolynomialRing<BigQuaternion> fac;
 
 
-    GenSolvablePolynomial<BigQuaternion> a;
-
-
-    GenSolvablePolynomial<BigQuaternion> b;
-
-
-    GenSolvablePolynomial<BigQuaternion> c;
-
-
-    GenSolvablePolynomial<BigQuaternion> d;
-
-
-    GenSolvablePolynomial<BigQuaternion> e;
+    GenSolvablePolynomial<BigQuaternion> a, b, c, d, e, f;
 
 
     int rl = 6;
@@ -183,11 +171,13 @@ public class QuatGenSolvablePolynomialTest extends TestCase {
      */
     @SuppressWarnings("cast")
     public void testMultiplication() {
-        a = fac.random(kl, ll, el, q); //fac.random(ll);
-        assertTrue("not isZERO( a )", !a.isZERO());
+        do {
+            a = fac.random(kl, ll, el, q); //fac.random(ll);
+        } while (a.isZERO());
 
-        b = fac.random(kl, ll, el, q); //fac.random(ll);
-        assertTrue("not isZERO( b )", !b.isZERO());
+        do {
+            b = fac.random(kl, ll, el, q); //fac.random(ll);
+        } while (b.isZERO());
 
         c = (GenSolvablePolynomial<BigQuaternion>) b.multiply(a);
         d = (GenSolvablePolynomial<BigQuaternion>) a.multiply(b);
@@ -242,17 +232,15 @@ public class QuatGenSolvablePolynomialTest extends TestCase {
         e = b.multiply(a, c);
         assertEquals("a b c = b.multiply(a,c)", d, e);
 
-        BigQuaternion qa = cfac.random(kl);
-        BigQuaternion qb = cfac.random(kl);
-        BigQuaternion qc = qa.multiply(qb);
-        BigQuaternion qd = qb.multiply(qa);
+        BigQuaternion qa, qb, qc, qd;
+
         // search non commuting qa, qb
-        while (qc.equals(qd)) {
+        do {
             qa = cfac.random(kl);
             qb = cfac.random(kl);
             qc = qa.multiply(qb);
             qd = qb.multiply(qa);
-        }
+        } while (qc.equals(qd));
         //System.out.println("qa = " + qa);
         //System.out.println("qb = " + qb);
         //System.out.println("qc = " + qc);
@@ -265,7 +253,7 @@ public class QuatGenSolvablePolynomialTest extends TestCase {
         //System.out.println("d = " + d);
         //System.out.println("e = " + e);
         assertTrue("a.multiply(qa,qb) != a.multiply(qb,qq)",
-                        d.equals(e) || d.leadingExpVector().equals(e.leadingExpVector()));
+                        !d.equals(e) || d.leadingExpVector().equals(e.leadingExpVector()));
 
         // commuting variables
         ExpVector ea = fac.univariate(1).leadingExpVector();
@@ -287,4 +275,63 @@ public class QuatGenSolvablePolynomialTest extends TestCase {
                         || d.leadingExpVector().equals(e.leadingExpVector()));
     }
 
+
+    /**
+     * Test division of polynomials.
+     */
+    public void testDivide() {
+        assertFalse("isCommutative()", fac.isCommutative());
+        assertTrue("isAssociative()", fac.isAssociative());
+
+        do {
+            a = fac.random(kl, ll, el, q);
+        } while(a.isZERO());
+        //System.out.println("a = " + a);
+
+        do {
+            b = fac.random(kl, ll, el, q);
+        } while(b.isZERO());
+        //System.out.println("b = " + b);
+
+        // non commutative
+        c = b.multiply(a);
+        d = a.multiply(b);
+        //System.out.println("c = " + c);
+        //System.out.println("d = " + d);
+        assertTrue("not isZERO( c )", !c.isZERO());
+        assertTrue("not isZERO( d )", !d.isZERO());
+
+        e = (GenSolvablePolynomial<BigQuaternion>) d.subtract(c);
+        assertTrue("a*b != b*a", !c.equals(d) || c.leadingExpVector().equals(d.leadingExpVector()));
+
+        // divide 
+        e = c.divide(a);
+        //System.out.println("e = " + e);
+        f = c.rightDivide(b);
+        //System.out.println("f = " + f);
+        assertEquals("b == b*a/a: " + e, e, b);
+        assertEquals("a == b*a/b: " + e, f, a);
+
+        e = d.rightDivide(a);
+        //System.out.println("e = " + e);
+        f = d.divide(b);
+        //System.out.println("f = " + f);
+        assertEquals("b == a*b/a: " + e, e, b);
+        assertEquals("a == a*b/b: " + e, f, a);
+    }
+
+
+    /**
+     * Test distributive law.
+     */
+    public void testDistributive() {
+        a = fac.random(kl, ll, el, q);
+        b = fac.random(kl, ll, el, q);
+        c = fac.random(kl, ll, el, q);
+
+        d = a.multiply((GenSolvablePolynomial<BigQuaternion>) b.sum(c));
+        e = (GenSolvablePolynomial<BigQuaternion>) a.multiply(b).sum(a.multiply(c));
+
+        assertEquals("a(b+c) = ab+ac", d, e);
+    }
 }

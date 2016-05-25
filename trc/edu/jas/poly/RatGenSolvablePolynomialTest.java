@@ -48,28 +48,7 @@ public class RatGenSolvablePolynomialTest extends TestCase {
     }
 
 
-    GenSolvablePolynomial<BigRational> a;
-
-
-    GenSolvablePolynomial<BigRational> b;
-
-
-    GenSolvablePolynomial<BigRational> c;
-
-
-    GenSolvablePolynomial<BigRational> d;
-
-
-    GenSolvablePolynomial<BigRational> e;
-
-
-    GenSolvablePolynomial<BigRational> f;
-
-
-    GenSolvablePolynomial<BigRational> x1;
-
-
-    GenSolvablePolynomial<BigRational> x2;
+    GenSolvablePolynomial<BigRational> a, b, c, d, e, f, x1, x2;
 
 
     int rl = 5;
@@ -315,6 +294,58 @@ public class RatGenSolvablePolynomialTest extends TestCase {
 
         assertEquals("a(bc) = (ab)c", d, e);
         assertTrue("a(bc) = (ab)c", d.equals(e));
+    }
+
+
+    /**
+     * Test division of polynomials.
+     */
+    public void testDivide() {
+        int rloc = 4;
+        ring = new GenSolvablePolynomialRing<BigRational>(cfac, rloc);
+
+        RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
+        wl.generate(ring);
+        //System.out.println("ring = " + ring.toScript());
+
+        assertFalse("isCommutative()", ring.isCommutative());
+        assertTrue("isAssociative()", ring.isAssociative());
+
+        do {
+            a = ring.random(kl, ll, el, q);
+        } while(a.isZERO());
+        //System.out.println("a = " + a);
+
+        do {
+            b = ring.random(kl, ll, el, q);
+        } while(b.isZERO());
+        //System.out.println("b = " + b);
+
+        // non commutative
+        c = b.multiply(a);
+        d = a.multiply(b);
+        //System.out.println("c = " + c);
+        //System.out.println("d = " + d);
+        assertTrue("not isZERO( c )", !c.isZERO());
+        assertTrue("not isZERO( d )", !d.isZERO());
+
+        e = (GenSolvablePolynomial<BigRational>) d.subtract(c);
+        assertTrue("a*b != b*a", !c.equals(d) || c.leadingExpVector().equals(d.leadingExpVector()));
+
+        // divide 
+        e = c.divide(a);
+        //System.out.println("e = " + e);
+        f = c.rightDivide(b);
+        //System.out.println("f = " + f);
+        assertEquals("b == b*a/a: " + e, e, b);
+        assertEquals("a == b*a/b: " + e, f, a);
+
+        e = d.rightDivide(a);
+        //System.out.println("e = " + e);
+        f = d.divide(b);
+        //System.out.println("f = " + f);
+        assertEquals("b == a*b/a: " + e, e, b);
+        assertEquals("a == a*b/b: " + e, f, a);
     }
 
 
