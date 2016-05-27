@@ -223,6 +223,7 @@ public class RecSolvablePolynomialTest extends TestCase {
     /**
      * Test multiplication.
      */
+    @SuppressWarnings("unchecked")
     public void testMultiplication() {
         //System.out.println("ring = " + ring);
         a = ring.random(kl, ll, el, q);
