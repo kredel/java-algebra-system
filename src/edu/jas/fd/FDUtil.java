@@ -1075,11 +1075,11 @@ public class FDUtil {
                 throw new RuntimeException("something is wrong: c is zero, a = " + a + ", s = " + s);
             }
             //r = onep.multiply(c, f, s, zero); // right: (c f) * 1 * (s zero)
-            r = onep.multiply(s, f, c, zero); // right: (c f) * 1 * (s zero)
+            r = onep.multiply(s.multiply(c), f); //, c, zero); // 
             if (!a.equals(r.leadingBaseCoefficient())) {
                 System.out.println("recRightDivide: lc(r) = " + r.leadingBaseCoefficient() + ", a = " + a);
                 System.out.println("recRightDivide: s*c   = " + s.multiply(c) + ", s = " + s + ", c = " + c);
-                throw new RuntimeException("something is wrong: s*c != a");
+                throw new RuntimeException("something is wrong: s*c != a: " + rfac.toScript());
             }
             p = (RecSolvablePolynomial<C>) p.subtract(r);
             if (!p.isZERO() && f.compareTo(p.leadingExpVector()) == 0) {

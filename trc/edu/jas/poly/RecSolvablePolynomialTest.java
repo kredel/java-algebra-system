@@ -58,7 +58,7 @@ public class RecSolvablePolynomialTest extends TestCase {
     int rl = 4;
 
 
-    int kl = 5;
+    int kl = 3;
 
 
     int ll = 4;
@@ -67,7 +67,7 @@ public class RecSolvablePolynomialTest extends TestCase {
     int el = 3;
 
 
-    float q = 0.3f;
+    float q = 0.25f;
 
 
     String[] cvars = new String[] { "a", "b" };
@@ -88,7 +88,7 @@ public class RecSolvablePolynomialTest extends TestCase {
     GenSolvablePolynomialRing<GenPolynomial<BigRational>> sring;
 
 
-    GenPolynomialRing<BigRational> cring;
+    GenSolvablePolynomialRing<BigRational> cring;
 
 
     TermOrder tord = new TermOrder(TermOrder.INVLEX);
@@ -97,7 +97,7 @@ public class RecSolvablePolynomialTest extends TestCase {
     @Override
     protected void setUp() {
         cfac = new BigRational(1);
-        cring = new GenPolynomialRing<BigRational>(cfac, tord, cvars);
+        cring = new GenSolvablePolynomialRing<BigRational>(cfac, tord, cvars);
         //sring = new GenSolvablePolynomialRing<GenPolynomial<BigRational>>(cring,rl,tord);
         ring = new RecSolvablePolynomialRing<BigRational>(cring, tord, vars);
         RelationGenerator<GenPolynomial<BigRational>> wl = new WeylRelations<GenPolynomial<BigRational>>();
@@ -273,7 +273,7 @@ public class RecSolvablePolynomialTest extends TestCase {
         assertTrue("# relations == 2", ring.table.size() == 2);
 
         ring = new RecSolvablePolynomialRing<BigRational>(cring, ring);
-        table = ring.table;
+        //table = ring.table;
         //System.out.println("table = " + table.toString(vars));
         //System.out.println("ring = " + ring);
 
