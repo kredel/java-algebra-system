@@ -223,7 +223,6 @@ public class RecSolvablePolynomialTest extends TestCase {
     /**
      * Test multiplication.
      */
-    @SuppressWarnings("unchecked")
     public void testMultiplication() {
         //System.out.println("ring = " + ring);
         a = ring.random(kl, ll, el, q);
@@ -439,6 +438,7 @@ public class RecSolvablePolynomialTest extends TestCase {
     /**
      * Test distribute and recursion for Weyl relations.
      */
+    @SuppressWarnings("unchecked")
     public void testDistRecWeyl() {
         GenSolvablePolynomialRing<BigRational> csring = new GenSolvablePolynomialRing<BigRational>(cfac,
                         tord, cvars);

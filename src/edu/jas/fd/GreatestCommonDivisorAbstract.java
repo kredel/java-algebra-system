@@ -1182,11 +1182,13 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
         if (a.equals(b)) { // required because of rationals gcd
             oc[0] = rf.getONE();
             oc[1] = rf.getONE();
+            logger.info("Ore multiple: " + Arrays.toString(oc));
             return oc;
         }
         if (a.equals(b.negate())) { // required because of rationals gcd
             oc[0] = rf.getONE();
             oc[1] = rf.getONE().negate();
+            logger.info("Ore multiple: " + Arrays.toString(oc));
             return oc;
         }
         if (rf.isCommutative()) {
@@ -1197,12 +1199,21 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
             if (gcd.isONE()) {
                 oc[0] = b;
                 oc[1] = a;
+                if (oc[0].compareTo(rf.getZERO()) < 0 && oc[1].compareTo(rf.getZERO()) < 0) {
+                    oc[0] = oc[0].negate();
+                    oc[1] = oc[1].negate();
+                }
+                logger.info("Ore multiple: " + Arrays.toString(oc));
                 return oc;
             }
             C p = a.multiply(b);
-            C lcm = p.divide(gcd);
+            C lcm = p.divide(gcd).abs();
             oc[0] = lcm.divide(a);
             oc[1] = lcm.divide(b);
+            if (oc[0].compareTo(rf.getZERO()) < 0 && oc[1].compareTo(rf.getZERO()) < 0) {
+                oc[0] = oc[0].negate();
+                oc[1] = oc[1].negate();
+            }
             logger.info("Ore multiple: lcm=" + lcm + ", gcd=" + gcd + ", " + Arrays.toString(oc));
             return oc;
         }
@@ -1300,12 +1311,20 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
             if (gcd.isONE()) {
                 oc[0] = b;
                 oc[1] = a;
+                if (oc[0].compareTo(rf.getZERO()) < 0 && oc[1].compareTo(rf.getZERO()) < 0) {
+                    oc[0] = oc[0].negate();
+                    oc[1] = oc[1].negate();
+                }
                 return oc;
             }
             C p = a.multiply(b);
-            C lcm = p.divide(gcd);
+            C lcm = p.divide(gcd).abs();
             oc[0] = lcm.divide(a);
             oc[1] = lcm.divide(b);
+            if (oc[0].compareTo(rf.getZERO()) < 0 && oc[1].compareTo(rf.getZERO()) < 0) {
+                oc[0] = oc[0].negate();
+                oc[1] = oc[1].negate();
+            }
             logger.info("Ore multiple: " + lcm + ", " + Arrays.toString(oc));
             return oc;
         }
