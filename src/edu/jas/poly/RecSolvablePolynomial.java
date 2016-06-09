@@ -682,7 +682,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
      * @param b coefficient.
      * @return B*b, where * is commutative multiplication with respect to main variables.
      */
-     public RecSolvablePolynomial<C> shift(GenPolynomial<C> b) {
+     public RecSolvablePolynomial<C> multiplyRightComm(GenPolynomial<C> b) {
         RecSolvablePolynomial<C> C = ring.getZERO().copy();
         if (this.isZERO()) {
             return C;

@@ -331,13 +331,13 @@ public class FDUtilTest extends TestCase {
         System.out.println("brr  = " + brr);
 
         abrr = arr.multiply(brr);
-        System.out.println("abrr  = " + abrr);
+        //System.out.println("abrr  = " + abrr);
 
-        // left division
+        // exact left division
         drr = FDUtil.<BigRational> recursivePseudoQuotient(abrr, brr);
         crr = FDUtil.<BigRational> recursiveSparsePseudoRemainder(abrr, brr);
-        System.out.println("drr  = " + drr);
-        System.out.println("crr  = " + crr);
+        //System.out.println("drr  = " + drr);
+        //System.out.println("crr  = " + crr);
 
         QR = FDUtil.<BigRational> recursivePseudoQuotientRemainder(abrr, brr);
         assertEquals("drr == QR[0]: ", drr, QR[0]);
@@ -349,26 +349,38 @@ public class FDUtilTest extends TestCase {
         assertTrue("ore(lc^n) a = q b + r: " + crr, t); // ?? 
 
         barr = brr.multiply(arr);
-        System.out.println("barr  = " + barr);
+        //System.out.println("barr  = " + barr);
 
-        // right division, todo, is wrong 
-        //drr = FDUtil.<BigRational> recursiveRightPseudoQuotient(arr, brr);
-        //crr = FDUtil.<BigRational> recursiveRightSparsePseudoRemainder(arr, brr);
+        // exact right division
         QR = FDUtil.<BigRational> recursiveRightPseudoQuotientRemainder(barr, brr);
         drr = QR[0];
         crr = QR[1];
-        System.out.println("drr  = " + drr);
-        System.out.println("crr  = " + crr);
+        //System.out.println("drr  = " + drr);
+        //System.out.println("crr  = " + crr);
         //assertEquals("drr == QR[0]: ", drr, QR[0]);
         //assertEquals("crr == QR[1]: ", crr, QR[1]);
 
         t = FDUtil.<BigRational> isRecursiveRightPseudoQuotientRemainder(barr, brr, drr, crr);
-        //System.out.println("FDQR: a ore(lc^n) == b q + r: " + t);
-        if (t) {
-           assertTrue("a ore(lc^n) = q b + r: " + crr, t); // ?? 
-        } else {
-           System.out.println("FDQR: a ore(lc^n) == q b + r: " + t);
-        }
+        //System.out.println("FDQR: a ore(lc^n) == q b + r: " + t);
+        assertTrue("a ore(lc^n) = q b + r: " + crr, t); // ?? 
+
+        // left division
+        QR = FDUtil.<BigRational> recursivePseudoQuotientRemainder(arr, brr);
+        drr = QR[0];
+        crr = QR[1];
+        t = FDUtil.<BigRational> isRecursivePseudoQuotientRemainder(arr, brr, drr, crr);
+        //System.out.println("drr  = " + drr);
+        //System.out.println("crr  = " + crr);
+        assertTrue("ore(lc^n) a = b q + r: " + crr, t); // ?? 
+
+        // right division
+        QR = FDUtil.<BigRational> recursiveRightPseudoQuotientRemainder(arr, brr);
+        drr = QR[0];
+        crr = QR[1];
+        t = FDUtil.<BigRational> isRecursiveRightPseudoQuotientRemainder(arr, brr, drr, crr);
+        System.out.println("drr  = " + drr);
+        System.out.println("crr  = " + crr);
+        assertTrue("ore(lc^n) a = q p + r: " + crr, t); // ?? 
     }
 
 
