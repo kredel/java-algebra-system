@@ -654,7 +654,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
      * @param f exponent vector.
      * @return B*f, where * is commutative multiplication.
      */
-    protected RecSolvablePolynomial<C> shift(ExpVector f) {
+    public RecSolvablePolynomial<C> shift(ExpVector f) {
         RecSolvablePolynomial<C> C = ring.getZERO().copy();
         if (this.isZERO()) {
             return C;
@@ -670,6 +670,34 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
             ExpVector d = e.sum(f);
             if (!a.isZERO()) {
                 Cm.put(d, a);
+            }
+        }
+        return C;
+    }
+
+
+    /**
+     * RecSolvablePolynomial multiplication. Commutative product with 
+     * coefficient.
+     * @param b coefficient.
+     * @return B*b, where * is commutative multiplication with respect to main variables.
+     */
+     public RecSolvablePolynomial<C> shift(GenPolynomial<C> b) {
+        RecSolvablePolynomial<C> C = ring.getZERO().copy();
+        if (this.isZERO()) {
+            return C;
+        }
+        if (b == null || b.isZERO()) {
+            return this;
+        }
+        Map<ExpVector, GenPolynomial<C>> Cm = C.val;
+        Map<ExpVector, GenPolynomial<C>> Bm = this.val;
+        for (Map.Entry<ExpVector, GenPolynomial<C>> y : Bm.entrySet()) {
+            ExpVector e = y.getKey();
+            GenPolynomial<C> a = y.getValue();
+            a = a.multiply(b);
+            if (!a.isZERO()) {
+                Cm.put(e, a);
             }
         }
         return C;
