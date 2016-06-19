@@ -287,7 +287,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends
         while (!r.isZERO()) {
             x = FDUtil.<C> recursiveSparsePseudoRemainder(q, r);
             q = r;
-            r = leftRecursivePrimitivePart(x);
+            r = rightRecursivePrimitivePart(x);
             if (field) {
                 r = PolyUtil.<C> monic(r);
             }
@@ -408,7 +408,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends
         while (!r.isZERO()) {
             x = FDUtil.<C> recursiveRightSparsePseudoRemainder(q, r);
             q = r;
-            r = rightRecursivePrimitivePart(x);
+            r = leftRecursivePrimitivePart(x);
             if (field) {
                 r = PolyUtil.<C> monic(r);
             }

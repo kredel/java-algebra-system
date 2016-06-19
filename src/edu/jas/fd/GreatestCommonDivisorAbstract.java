@@ -273,8 +273,8 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
             if (d == null) {
                 d = cs;
             } else {
-                d = leftGcd(d, cs); // go to recursion
-                //d = rightGcd(d, cs); // go to recursion
+                ///d = leftGcd(d, cs); // go to recursion
+                d = rightGcd(d, cs); // go to recursion
                 logger.info("RI-recCont: cs = " + cs + ", d = " + d);
             }
             if (d.isONE()) {
