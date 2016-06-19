@@ -939,8 +939,8 @@ public class FDUtil {
                 throw new RuntimeException("something is wrong: c is zero, a = " + a + ", s = " + s);
             }
             //r = onep.multiply(c, f, s, zero); // right: (c f) * 1 * (s zero)
-            ///r = onep.multiplyLeft(c.multiply(s), f); // right: (c*s f) * one
-            r = onep.multiplyLeft(s.multiply(c), f); // left: (s*c f) * one
+            r = onep.multiplyLeft(c.multiply(s), f); // right: (c*s f) * one
+            //r = onep.multiplyLeft(s.multiply(c), f); // left: (s*c f) * one
             if (!a.equals(r.leadingBaseCoefficient())) {
                 System.out.println("recRightDivide: a     = " + a);
                 C ac = a.leadingBaseCoefficient();
@@ -948,8 +948,8 @@ public class FDUtil {
                 C cc = rc.inverse().multiply(ac);
                 System.out.println("recRightDivide: cc    = " + cc);
                 c = c.multiply(cc);
-                //r = onep.multiplyLeft(c.multiply(s), f); // right: (c f) * 1 * (s zero)
-                r = onep.multiplyLeft(s.multiply(c), f); // left: (s*c f) * 1
+                r = onep.multiplyLeft(c.multiply(s), f); // right: (c f) * 1 * (s zero)
+                //r = onep.multiplyLeft(s.multiply(c), f); // left: (s*c f) * 1
                 System.out.println("recRightDivide: lc(r) = " + r.leadingBaseCoefficient());
             }
             p = (RecSolvablePolynomial<C>) p.subtract(r);

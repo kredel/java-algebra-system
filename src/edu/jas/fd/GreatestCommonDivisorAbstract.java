@@ -148,7 +148,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
         if (d.isONE()) {
             return P;
         }
-        GenSolvablePolynomial<C> pp = (GenSolvablePolynomial<C>) P.divide(d);
+        GenSolvablePolynomial<C> pp = (GenSolvablePolynomial<C>) P.divide(d); // rightDivide TODO
         if (debug) {
             GenSolvablePolynomial<C> p = pp.multiply(d);
             if (!p.equals(P)) {
@@ -175,7 +175,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
         if (d.isONE()) {
             return P;
         }
-        GenSolvablePolynomial<C> pp = (GenSolvablePolynomial<C>) P.divide(d); // TODO
+        GenSolvablePolynomial<C> pp = (GenSolvablePolynomial<C>) P.divide(d); // leftDivide TODO
         if (debug) {
             GenSolvablePolynomial<C> p = pp.multiplyLeft(d);
             if (!p.equals(P)) {
@@ -579,7 +579,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
         }
         GenSolvablePolynomialRing<C> pfac = P.ring;
         if (pfac.nvar <= 1) {
-            return leftBasePrimitivePart(P);
+            return rightBasePrimitivePart(P);
         }
         GenSolvablePolynomialRing<GenPolynomial<C>> rfac = /*(RecSolvablePolynomialRing<C>)*/pfac
                         .recursive(1);
