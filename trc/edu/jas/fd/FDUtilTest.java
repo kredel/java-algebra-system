@@ -136,7 +136,7 @@ public class FDUtilTest extends TestCase {
     /**
      * Test base pseudo division.
      */
-    public void xtestBasePseudoDivisionExact() {
+    public void testBasePseudoDivisionExact() {
         //System.out.println("dfac  = " + dfac.toScript());
 
         do {
@@ -184,7 +184,7 @@ public class FDUtilTest extends TestCase {
     /**
      * Test base pseudo division.
      */
-    public void xtestBasePseudoDivision() {
+    public void testBasePseudoDivision() {
         String[] names = new String[] { "x" };
         dfac = new GenSolvablePolynomialRing<BigInteger>(new BigInteger(1), to, names);
         GenSolvablePolynomialRing<BigRational> rdfac;
@@ -261,7 +261,7 @@ public class FDUtilTest extends TestCase {
      * Test recursive pseudo division.
      * @see edu.jas.ufd.PolyUfdUtilTest#testRecursivePseudoDivisionSparse
      */
-    public void xtestRecursivePseudoDivision() {
+    public void testRecursivePseudoDivision() {
         //String[] cnames = new String[] { "x" };
         //String[] mnames = new String[] { "t" };
         String[] names = new String[] { "t", "x", "y", "z" };
@@ -310,7 +310,7 @@ public class FDUtilTest extends TestCase {
         rdfac.addRelations(wl);
         rrfac = rdfac.recursive(1);
         //System.out.println("\nrdfac  = " + rdfac.toScript());
-        System.out.println("rrfac  = " + rrfac.toScript());
+        //System.out.println("rrfac  = " + rrfac.toScript());
         GenSolvablePolynomial<GenPolynomial<BigRational>>[] QR;
         boolean t;
 
@@ -323,12 +323,12 @@ public class FDUtilTest extends TestCase {
         //arr = rrfac.parse("z^5 - ( 1260/551 y^2 - 143/35 y - 33/100  ) z - ( 1/3 y^2 + 419/299 y - 19/56  )");
         // b * q + r:
         //arr = rrfac.parse("z^5 + z^2 - 1");
-        System.out.println("arr  = " + arr);
+        //System.out.println("arr  = " + arr);
 
         brr = rrfac.random(kl, ll, el, q);
         //brr = rrfac.parse("z^3 - ( 377/140 y^2 + 211/232 y + 1213967/85560  )");
         //brr = rrfac.parse("( y ) z^3 - ( 1 ) z + ( 2 )");
-        System.out.println("brr  = " + brr);
+        //System.out.println("brr  = " + brr);
 
         abrr = arr.multiply(brr);
         //System.out.println("abrr  = " + abrr);
@@ -378,8 +378,8 @@ public class FDUtilTest extends TestCase {
         drr = QR[0];
         crr = QR[1];
         t = FDUtil.<BigRational> isRecursiveRightPseudoQuotientRemainder(arr, brr, drr, crr);
-        System.out.println("drr  = " + drr);
-        System.out.println("crr  = " + crr);
+        //System.out.println("drr  = " + drr);
+        //System.out.println("crr  = " + crr);
         assertTrue("ore(lc^n) a = q p + r: " + crr, t); // ?? 
     }
 
@@ -387,7 +387,7 @@ public class FDUtilTest extends TestCase {
     /**
      * Test recursive right coefficient polynomial.
      */
-    public void xtestRightRecursivePolynomial() {
+    public void testRightRecursivePolynomial() {
         //String[] names = new String[] { "t", "x", "y", "z" };
         String[] names = new String[] { "y", "z" };
         rdfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), to, names);
@@ -403,10 +403,10 @@ public class FDUtilTest extends TestCase {
         el = 5;
 
         arr = rrfac.random(kl, ll, el, q);
-        System.out.println("FDQR: arr  = " + arr);
+        //System.out.println("FDQR: arr  = " + arr);
 
         brr = arr.rightRecursivePolynomial();
-        System.out.println("FDQR: brr  = " + brr);
+        //System.out.println("FDQR: brr  = " + brr);
 
         //System.out.println("FDQR: arr == brr: " + arr.equals(brr));
         //assertFalse("arr != brr: ", arr.equals(brr) && false); // mostly unequal
@@ -416,11 +416,11 @@ public class FDUtilTest extends TestCase {
 
         GenSolvablePolynomial<BigRational> c = (GenSolvablePolynomial<BigRational>) 
             rrfac.random(kl, ll, el, q).leadingBaseCoefficient();
-        System.out.println("FDQR: c  = " + c);
+        //System.out.println("FDQR: c  = " + c);
 
         //drr = FDUtil.<BigRational> multiplyRightRecursivePolynomial(brr,c);
         drr = brr.multiply(c);
-        System.out.println("FDQR: drr  = " + drr);
+        //System.out.println("FDQR: drr  = " + drr);
 
         //no: err = FDUtil.<BigRational> recursiveRightPseudoQuotientRemainder(drr,c)[0];
         err = FDUtil.<BigRational> recursiveDivideRightEval(drr,c); // this is correct
@@ -432,10 +432,10 @@ public class FDUtilTest extends TestCase {
 
 
         drr = brr.multiplyLeft(c);
-        System.out.println("FDQR: drr  = " + drr);
+        //System.out.println("FDQR: drr  = " + drr);
 
         err = FDUtil.<BigRational> recursiveLeftDivide(drr,c);
-        System.out.println("FDQR: err  = " + err);
+        //System.out.println("FDQR: err  = " + err);
         assertEquals("brr == err: " + err, brr, err);
     }
 
@@ -443,7 +443,7 @@ public class FDUtilTest extends TestCase {
     /*
      * Test exact division of recursive polynomials.
      */
-    public void xtestRecursiveDivide() {
+    public void testRecursiveDivide() {
         rdfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), dfac);
         RelationGenerator<BigRational> wl = new WeylRelationsIterated<BigRational>();
         rdfac.addRelations(wl);

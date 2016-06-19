@@ -647,7 +647,7 @@ public class FDUtil {
      * @param <C> coefficient type.
      * @param P recursive GenSolvablePolynomial.
      * @param s GenSolvablePolynomial.
-     * @return this/s.
+     * @return P/s.
      */
     @SuppressWarnings("unchecked")
     public static <C extends GcdRingElem<C>> GenSolvablePolynomial<GenPolynomial<C>> recursiveDivideRightEval(
@@ -934,20 +934,22 @@ public class FDUtil {
             ExpVector f = p.leadingExpVector();
             GenSolvablePolynomial<C> a = (GenSolvablePolynomial<C>) p.leadingBaseCoefficient();
             GenSolvablePolynomial<C> c = (GenSolvablePolynomial<C>) a.divide(s);
+            //GenSolvablePolynomial<C> c = (GenSolvablePolynomial<C>) a.rightDivide(s);
             if (c.isZERO()) {
                 throw new RuntimeException("something is wrong: c is zero, a = " + a + ", s = " + s);
             }
             //r = onep.multiply(c, f, s, zero); // right: (c f) * 1 * (s zero)
-            r = onep.multiplyLeft(c.multiply(s), f); // right: (c*s f) * one
-            //System.out.println("recRightDivide: lc(r) = " + r.leadingBaseCoefficient());
-            //System.out.println("recRightDivide: a     = " + a);
+            ///r = onep.multiplyLeft(c.multiply(s), f); // right: (c*s f) * one
+            r = onep.multiplyLeft(s.multiply(c), f); // left: (s*c f) * one
             if (!a.equals(r.leadingBaseCoefficient())) {
+                System.out.println("recRightDivide: a     = " + a);
                 C ac = a.leadingBaseCoefficient();
                 C rc = r.leadingBaseCoefficient().leadingBaseCoefficient();
                 C cc = rc.inverse().multiply(ac);
-                System.out.println("recRightDivide: cc   = " + cc);
+                System.out.println("recRightDivide: cc    = " + cc);
                 c = c.multiply(cc);
-                r = onep.multiplyLeft(c.multiply(s), f); // right: (c f) * 1 * (s zero)
+                //r = onep.multiplyLeft(c.multiply(s), f); // right: (c f) * 1 * (s zero)
+                r = onep.multiplyLeft(s.multiply(c), f); // left: (s*c f) * 1
                 System.out.println("recRightDivide: lc(r) = " + r.leadingBaseCoefficient());
             }
             p = (RecSolvablePolynomial<C>) p.subtract(r);
@@ -955,6 +957,7 @@ public class FDUtil {
                 System.out.println("recRightDivide: c     = " + c);
                 System.out.println("recRightDivide: lt(p) = " + p.leadingExpVector() + ", f = " + f);
                 System.out.println("recRightDivide: a/s   = " + a.divide(s));
+                System.out.println("recRightDivide: a\\s   = " + a.rightDivide(s));
                 System.out.println("recRightDivide: s*c   = " + s.multiply(c));
                 System.out.println("recRightDivide: c*s   = " + c.multiply(s));
                 throw new RuntimeException("something is wrong: degree not descending");
