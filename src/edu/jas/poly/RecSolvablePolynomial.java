@@ -738,8 +738,8 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
             //System.out.println("a,f = " + a + ", " + f); // + ", h.ring = " + h.ring.toScript());
             //System.out.println("f*a = " + r); // + ", r.ring = " + r.ring.toScript());
             p = (RecSolvablePolynomial<C>) p.subtract(r);
-            //R = (RecSolvablePolynomial<C>) R.sum(a, f);
-            R.doPutToMap(f, a);
+            R = (RecSolvablePolynomial<C>) R.sum(a, f);
+            //R.doPutToMap(f, a);
         }
         return R;
     }

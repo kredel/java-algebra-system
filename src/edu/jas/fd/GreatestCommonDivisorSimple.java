@@ -112,7 +112,8 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
             //System.out.println("baseGCD: q = " + q);
             //System.out.println("baseGCD: r = " + r);
         }
-        q = leftBasePrimitivePart(q);
+        ///q = leftBasePrimitivePart(q);
+        q = rightBasePrimitivePart(q);
         return (GenSolvablePolynomial<C>) (q.multiply(c)).abs();
     }
 
@@ -188,7 +189,8 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
             //System.out.println("baseGCD: q = " + q);
             //System.out.println("baseGCD: r = " + r);
         }
-        q = rightBasePrimitivePart(q);
+        ///q = rightBasePrimitivePart(q);
+        q = leftBasePrimitivePart(q);
         return (GenSolvablePolynomial<C>) (q.multiplyLeft(c)).abs();
     }
 

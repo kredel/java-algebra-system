@@ -874,7 +874,8 @@ public class FDUtil {
                 throw new RuntimeException("something is wrong: c is zero, a = " + a + ", s = " + s);
             }
             //r = onep.multiply(c, f, s, zero); // right: (c f) * 1 * (s zero)
-            r = onep.multiply(c.multiply(s), f); //, c, zero); // 
+            ///r = onep.multiply(c.multiply(s), f); //, c, zero); // 
+            r = onep.multiply(s.multiply(c), f); //, c, zero); // 
             if (!a.equals(r.leadingBaseCoefficient())) {
                 System.out.println("recRightDivide: a   = " + a + ", lc(r) = " + r.leadingBaseCoefficient());
                 System.out.println("recRightDivide: c*s = " + c.multiply(s) + ", s = " + s + ", c = " + c);
@@ -927,43 +928,47 @@ public class FDUtil {
         RecSolvablePolynomial<C> onep = rfac.getONE();
         ExpVector zero = rfac.evzero;
         RecSolvablePolynomial<C> q = rfac.getZERO();
-        RecSolvablePolynomial<C> r;
-        RecSolvablePolynomial<C> p = (RecSolvablePolynomial<C>) P;
-        //System.out.println("recRightDivide: p = " + p + ", s = " + s);
+        RecSolvablePolynomial<C> r, Pp;
+        //RecSolvablePolynomial<C> p = (RecSolvablePolynomial<C>) P;
+        RecSolvablePolynomial<C> p = (RecSolvablePolynomial<C>) P.rightRecursivePolynomial();
+        Pp = p;
         while (!p.isZERO()) {
             ExpVector f = p.leadingExpVector();
             GenSolvablePolynomial<C> a = (GenSolvablePolynomial<C>) p.leadingBaseCoefficient();
             GenSolvablePolynomial<C> c = (GenSolvablePolynomial<C>) a.divide(s);
-            //GenSolvablePolynomial<C> c = (GenSolvablePolynomial<C>) a.rightDivide(s);
+            ///GenSolvablePolynomial<C> c = (GenSolvablePolynomial<C>) a.rightDivide(s);
             if (c.isZERO()) {
                 throw new RuntimeException("something is wrong: c is zero, a = " + a + ", s = " + s);
             }
             //r = onep.multiply(c, f, s, zero); // right: (c f) * 1 * (s zero)
             r = onep.multiplyLeft(c.multiply(s), f); // right: (c*s f) * one
-            //r = onep.multiplyLeft(s.multiply(c), f); // left: (s*c f) * one
+            ///r = onep.multiplyLeft(s.multiply(c), f); // left: (s*c f) * one
             if (!a.equals(r.leadingBaseCoefficient())) {
-                System.out.println("recRightDivide: a     = " + a);
+                System.out.println("recRightDivide: a        = " + a);
                 C ac = a.leadingBaseCoefficient();
                 C rc = r.leadingBaseCoefficient().leadingBaseCoefficient();
                 C cc = rc.inverse().multiply(ac);
-                System.out.println("recRightDivide: cc    = " + cc);
+                System.out.println("recRightDivide: cc       = " + cc);
                 c = c.multiply(cc);
                 r = onep.multiplyLeft(c.multiply(s), f); // right: (c f) * 1 * (s zero)
-                //r = onep.multiplyLeft(s.multiply(c), f); // left: (s*c f) * 1
-                System.out.println("recRightDivide: lc(r) = " + r.leadingBaseCoefficient());
+                ///r = onep.multiplyLeft(s.multiply(c), f); // left: (s*c f) * 1
+                System.out.println("recRightDivide: lc(r)    = " + r.leadingBaseCoefficient());
             }
             p = (RecSolvablePolynomial<C>) p.subtract(r);
             if (!p.isZERO() && f.compareTo(p.leadingExpVector()) == 0) {
-                System.out.println("recRightDivide: c     = " + c);
-                System.out.println("recRightDivide: lt(p) = " + p.leadingExpVector() + ", f = " + f);
-                System.out.println("recRightDivide: a/s   = " + a.divide(s));
-                System.out.println("recRightDivide: a\\s   = " + a.rightDivide(s));
-                System.out.println("recRightDivide: s*c   = " + s.multiply(c));
-                System.out.println("recRightDivide: c*s   = " + c.multiply(s));
+                System.out.println("recRightDivide: P        = " + P + ", s = " + s);
+                System.out.println("recRightDivide: right(P) = " + Pp);
+                System.out.println("recRightDivide: c        = " + c);
+                System.out.println("recRightDivide: lt(p)    = " + p.leadingExpVector() + ", f = " + f);
+                System.out.println("recRightDivide: a/s      = " + a.divide(s));
+                System.out.println("recRightDivide: a\\s      = " + a.rightDivide(s));
+                System.out.println("recRightDivide: s*c      = " + s.multiply(c));
+                System.out.println("recRightDivide: c*s      = " + c.multiply(s));
                 throw new RuntimeException("something is wrong: degree not descending");
             }
             q = (RecSolvablePolynomial<C>) q.sum(c, f);
         }
+        q = (RecSolvablePolynomial<C>) q.evalAsRightRecursivePolynomial();
         return q;
     }
 

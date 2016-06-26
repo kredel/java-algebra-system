@@ -240,7 +240,8 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
             if (d == null) {
                 d = c;
             } else {
-                d = leftGcd(d, c); // go to recursion
+                ///d = leftGcd(d, c); // go to recursion
+                d = rightGcd(d, c); // go to recursion
             }
             if (d.isONE()) {
                 return d;
@@ -265,7 +266,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
         if (P.leadingBaseCoefficient().isONE()) {
             return (GenSolvablePolynomial<C>) P.ring.getONECoefficient();
         }
-        GenSolvablePolynomial<C> d = null, cs = null;
+        GenSolvablePolynomial<C> d = null, cs = null, x;
         GenSolvablePolynomial<GenPolynomial<C>> Pr = P.rightRecursivePolynomial();
         logger.info("RI-recCont: P = " + P + ", right(P) = " + Pr);
         for (GenPolynomial<C> c : Pr.getMap().values()) {
@@ -273,9 +274,10 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
             if (d == null) {
                 d = cs;
             } else {
-                ///d = leftGcd(d, cs); // go to recursion
-                d = rightGcd(d, cs); // go to recursion
-                logger.info("RI-recCont: cs = " + cs + ", d = " + d);
+                x = d;
+                d = leftGcd(d, cs); // go to recursion, P = P'*gcd(P,S)
+                ///d = rightGcd(d, cs); // go to recursion,  P = gcd(P,S)*P'
+                logger.info("RI-recCont: d = " + x + ", cs = " + cs + ", d = " + d);
             }
             if (d.isONE()) {
                 return d;
@@ -340,8 +342,8 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
             if (d == null) {
                 d = cs;
             } else {
-                //d = rightGcd(d, cs); // go to recursion
-                d = leftGcd(d, cs); // go to recursion
+                d = rightGcd(d, cs); // go to recursion
+                ///d = leftGcd(d, cs); // go to recursion
                 logger.info("recCont: cs = " + cs + ", d = " + d);
             }
             if (d.isONE()) {
