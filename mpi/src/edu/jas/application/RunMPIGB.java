@@ -41,7 +41,7 @@ import edu.jas.util.ExecutableServer;
 
 
 /**
- * Simple setup to run a GB example in MPI environment. <br />
+ * Simple setup to run a GB example in MPI environment. <br>
  * Usage: RunGB [seq(+)|par(+)|dist(1)(+)|disthyb|cli] &lt;file&gt;
  * #procs/#threadsPerNode [machinefile]
  * @author Heinz Kredel
@@ -63,7 +63,7 @@ public class RunMPIGB {
 
 
     /**
-     * main method to be called from commandline <br />
+     * main method to be called from commandline <br>
      * Usage: RunMPIGB [seq|par(+)|dist(+)|disthyb|cli] &lt;file&gt;
      * #procs/#threadsPerNode [machinefile]
      */

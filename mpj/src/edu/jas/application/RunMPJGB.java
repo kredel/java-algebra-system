@@ -39,7 +39,7 @@ import edu.jas.util.ExecutableServer;
 
 
 /**
- * Simple setup to run a GB example in MPJ environment. <br />
+ * Simple setup to run a GB example in MPJ environment. <br>
  * Usage: RunGB [seq(+)|par(+)|dist(1)(+)|disthyb|cli] &lt;file&gt;
  * #procs/#threadsPerNode [machinefile]
  * @author Heinz Kredel
@@ -61,7 +61,7 @@ public class RunMPJGB {
 
 
     /**
-     * main method to be called from commandline <br />
+     * main method to be called from commandline <br>
      * Usage: RunMPJGB [seq|par(+)|dist(1)(+)|disthyb|cli] &lt;file&gt;
      * #procs/#threadsPerNode [machinefile]
      */

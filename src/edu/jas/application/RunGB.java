@@ -41,14 +41,14 @@ import edu.jas.util.ExecutableServer;
 
 
 /**
- * Simple setup to run a GB example. <br />
+ * Simple setup to run a GB example. <br>
  * Usage: RunGB [seq(+)|par(+)|build=string|disthyb|cli] &lt;file&gt;
  * #procs/#threadsPerNode [machinefile] &lt;check&gt; &lt;nolog&gt;
- * <br />
+ * <br>
  * Build string can be any combination of method calls from GBAlgorithmBuilder.
  * Method polynomialRing() is called based on declaration from "file". 
  * Method build() is called automatically. For example 
- * <br />
+ * <br>
  * build=syzygyPairlist.iterated.graded.parallel(3)
  * @see edu.jas.application.GBAlgorithmBuilder
  * @author Heinz Kredel
@@ -69,7 +69,7 @@ public class RunGB {
 
 
     /**
-     * main method to be called from commandline <br />
+     * main method to be called from commandline <br>
      * Usage: RunGB [seq|par(+)|build=string|disthyb(+)|cli] &lt;file&gt;
      * #procs/#threadsPerNode [machinefile] &lt;check&gt; &lt;nolog&gt;
      */

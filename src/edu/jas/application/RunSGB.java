@@ -36,7 +36,7 @@ import edu.jas.util.CatReader;
 
 
 /**
- * Simple setup to run a solvable GB example. <br /> Usage: RunSGB
+ * Simple setup to run a solvable GB example. <br> Usage: RunSGB
  * [seq|par|par+] [irr|left|right|two] &lt;file&gt; #procs
  * @author Heinz Kredel
  */
@@ -55,7 +55,7 @@ public class RunSGB {
 
 
     /**
-     * main method to be called from commandline <br /> Usage: RunSGB
+     * main method to be called from commandline <br> Usage: RunSGB
      * [seq|seq+|par|par+] [irr|left|right|two] &lt;file&gt; #procs
      */
     @SuppressWarnings("unchecked")
