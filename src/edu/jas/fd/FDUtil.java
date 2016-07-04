@@ -656,13 +656,14 @@ public class FDUtil {
             return P;
         }
         GenSolvablePolynomial<GenPolynomial<C>> Pr = P.rightRecursivePolynomial();
-        GenSolvablePolynomial<GenPolynomial<C>> Qr = FDUtil.<C> recursiveLeftDivide(Pr, s); // Left
+        GenSolvablePolynomial<GenPolynomial<C>> Qr = FDUtil.<C> recursiveLeftDivide(Pr, s); // Left/Right
         GenSolvablePolynomial<GenPolynomial<C>> Q = Qr.evalAsRightRecursivePolynomial();
         if (debug) {
             if (!Qr.multiplyLeft(s).equals(Pr)) {
                 System.out.println("rDivREval: Pr   = " + Pr + ", P = " + P);
                 System.out.println("rDivREval: Qr   = " + Qr + ", Q = " + Q);
                 System.out.println("rDivREval: s*Qr = " + Qr.multiplyLeft(s) + ", s = " + s);
+                System.out.println("rDivREval: Qr*s = " + Qr.multiply(s));
                 //System.out.println("rDivREval: P.ring == Q.ring: " + P.ring.equals(Q.ring) );
                 throw new RuntimeException("rDivREval: s*Qr != Pr");
             }
@@ -670,6 +671,7 @@ public class FDUtil {
                 System.out.println("rDivREval: P   = " + P + ", right(P) = " + Pr);
                 System.out.println("rDivREval: Q   = " + Q + ", right(Q) = " + Qr);
                 System.out.println("rDivREval: Q*s = " + Q.multiply(s) + ", s = " + s);
+                System.out.println("rDivREval: s*Q = " + Q.multiplyLeft(s));
                 //System.out.println("rDivREval: P.ring == Q.ring: " + P.ring.equals(Q.ring) );
                 throw new RuntimeException("rDivREval: Q*s != P");
             }

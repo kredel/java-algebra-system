@@ -248,7 +248,7 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
             q = (GenSolvablePolynomial<GenPolynomial<C>>) q.abs();
         }
         GenSolvablePolynomial<C> a = rightRecursiveContent(r);
-        //rs = FDUtil.<C> recursiveDivideRightEval(r, a);  
+        ///rs = FDUtil.<C> recursiveDivideRightEval(r, a);  
         rs = FDUtil.<C> recursiveLeftDivide(r, a); 
         //rs = FDUtil.<C> recursiveRightDivide(r, a);
         if (debug) {
@@ -267,7 +267,7 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
         }
         r = rs;
         GenSolvablePolynomial<C> b = rightRecursiveContent(q);
-        //qs = FDUtil.<C> recursiveDivideRightEval(q, b);  
+        ///qs = FDUtil.<C> recursiveDivideRightEval(q, b);  
         qs = FDUtil.<C> recursiveLeftDivide(q, b); 
         //qs = FDUtil.<C> recursiveRightDivide(q, b);
         if (debug) {
