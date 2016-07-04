@@ -20,7 +20,7 @@ PPN=3
 MPI_CMD=mpirun -np $(NP) -bynode -display-map -verbose java -cp $(CLASSPATH):jas-mpi.jar
 
 #DOCOPTS=-package
-DOCOPTS=-package -author -version -linksource -overview overview.html
+DOCOPTS=-package -author -version -linksource -Xdoclint:none -overview overview.html
 DOCCLASSES=$(CLASSPATH)
 DOC=javadoc -classpath $(DOCCLASSES)
 

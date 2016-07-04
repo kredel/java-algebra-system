@@ -14,7 +14,7 @@ CLASSPATH=$(LIBPATH)/log4j.jar:$(LIBPATH)/junit.jar:$(CMJAR):$(JASPATH)
 #$(LIBPATH)/jas.jar
 
 #DOCOPTS=-package
-DOCOPTS=-package -author -version -linksource -overview overview.html
+DOCOPTS=-package -author -version -linksource -Xdoclint:none -overview overview.html
 DOCCLASSES=$(CLASSPATH)
 DOC=javadoc -classpath $(DOCCLASSES)
 
