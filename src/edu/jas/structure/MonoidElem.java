@@ -78,7 +78,7 @@ public interface MonoidElem<C extends MonoidElem<C>> extends Element<C> {
     @SuppressWarnings("unchecked")
     default public C power(long n) {
         //System.out.println("this = " + this + ", n = " + n);
-        return Power.<C>power((MonoidFactory<C>)factory(),(C)this,n);
+        return Power.<C>power((MonoidFactory<C>)factory(), (C)this, n);
     }
 
 }

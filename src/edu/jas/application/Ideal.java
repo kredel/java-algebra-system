@@ -3175,7 +3175,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             return dec;
         }
         if (s > 1) {
-            fx = Power.<GenPolynomial<C>> positivePower(fx, s);
+            fx = fx.power(s); //Power.<GenPolynomial<C>> positivePower(fx, s);
         }
         if (debug) {
             logger.info("exponent fx = " + s + ", fx^s = " + fx);
