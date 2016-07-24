@@ -723,8 +723,8 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
 
 
     /**
-     * Right Groebner base using pairlist class. Overides rightGB() via opposite
-     * ring.
+     * Right Groebner base via right reduction using pairlist
+     * class. Overides rightGB() via opposite ring.
      * @param modv number of module variables.
      * @param F solvable polynomial list.
      * @return rightGB(F) a right Groebner base of F.
