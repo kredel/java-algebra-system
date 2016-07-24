@@ -303,16 +303,12 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>> extends Solvabl
         if (!ring.coFac.isField() && ring.coFac.isCommutative()) {
             throw new IllegalArgumentException("coefficients not from a field");
         }
-        PairList<C> pairlist = strategy.create(modv, ring);
-        pairlist.put(PolynomialList.castToList(G));
-        logger.info("start " + pairlist);
-
         // add also coefficient generators
         List<GenSolvablePolynomial<C>> X;
         X = PolynomialList.castToSolvableList(ring.generators(modv)); 
         logger.info("right multipliers = " + X);
         List<GenSolvablePolynomial<C>> F = new ArrayList<GenSolvablePolynomial<C>>(G.size() * (1 + X.size()));
-        F.addAll(G); // pairlist added before
+        F.addAll(G); 
         GenSolvablePolynomial<C> p, x, q;
         for (int i = 0; i < F.size(); i++) { // F changes
             p = F.get(i);
@@ -331,7 +327,6 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>> extends Solvabl
                         return G;
                     } 
                     F.add(q);
-                    pairlist.put(q);
                 }
             }
         }
@@ -340,6 +335,10 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>> extends Solvabl
         if (G.size() <= 1) { // 1 okay here
             return G;
         }
+        PairList<C> pairlist = strategy.create(modv, ring);
+        pairlist.put(PolynomialList.castToList(G));
+        logger.info("start " + pairlist);
+
         Terminator fin = new Terminator(threads);
         TwosidedSolvableReducer<C> R;
         for (int i = 0; i < threads; i++) {

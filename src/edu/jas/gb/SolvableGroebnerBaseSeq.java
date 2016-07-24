@@ -434,13 +434,12 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 }
             }
         }
-        //System.out.println("G generated = " + G);
-        PairList<C> pairlist = strategy.create(modv, ring);
-        pairlist.put(PolynomialList.castToList(G));
-
         if (G.size() <= 1) { // 1 ok
             return G; // since no threads are activated
         }
+        //System.out.println("G generated = " + G);
+        PairList<C> pairlist = strategy.create(modv, ring);
+        pairlist.put(PolynomialList.castToList(G));
         logger.info("twosided start " + pairlist);
 
         Pair<C> pair;
