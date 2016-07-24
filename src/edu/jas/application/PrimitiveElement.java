@@ -85,12 +85,12 @@ public class PrimitiveElement<C extends GcdRingElem<C>> implements Serializable 
 
 
     /**
-     * String representation of the ideal.
+     * String representation of the primitive element.
      * @see java.lang.Object#toString()
      */
     @Override
     public String toString() {
-        StringBuffer s = new StringBuffer("[");
+        StringBuffer s = new StringBuffer("PrimitiveElement[");
         s.append(primitiveElem.toString());
         s.append(", " + A.toString());
         s.append(", " + B.toString());
@@ -111,7 +111,7 @@ public class PrimitiveElement<C extends GcdRingElem<C>> implements Serializable 
      */
     public String toScript() {
         // Python case
-        StringBuffer s = new StringBuffer("(");
+        StringBuffer s = new StringBuffer("PrimitiveElement(");
         s.append(primitiveElem.toScript());
         s.append(", " + A.toScript());
         s.append(", " + B.toScript());
