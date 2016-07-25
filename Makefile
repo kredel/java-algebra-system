@@ -37,6 +37,7 @@ RSYNC=rsync -e ssh -avuz $(DRY) $(DELETE) --exclude=*~ --include=doc/svn_change.
 ####--exclude=*/.jxta/
 PART=jas.j18
 VERSION=jas-2.6
+DEBVERSION=jas-java_2.6
 #BRANCH=2.3
 SVNVERSION=`grep committed-rev .svn/entries |head -1|awk -F = '{ print $2 }'|sed 's/"//g'`
 
@@ -428,13 +429,14 @@ SVNDATE=svnlook date $(SVNREPO)/jas
 # dec 2011 SVNSRT=3838
 # jul 2012 SVNSRT=4008
 # aug 2013 SVNSRT=4588
-# jan 2014
-SVNSRT=4742
+# jan 2014 SVNSRT=4742
+# jan 2015
+SVNSRT=5055
 
 export:
 	rm -rf ~/jas-versions/$(VERSION)
 	svn export --quiet file:///$(SVNREPO)/jas/trunk ~/jas-versions/$(VERSION)
-	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) `$(SVNREV)` doc/download.html
+	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) `$(SVNREV)` doc/download.html $(DEBVERSION)
 	svn log -v -r HEAD:$(SVNSRT) file:///$(SVNREPO)/jas/trunk src trc examples jython mpj mpi jlinalg_adapter commons-math_adapter > ~/jas-versions/$(VERSION)/doc/svn_change.log
 	cd ~/jas-versions/; jar -cfM $(VERSION).`$(SVNREV)`-src.zip $(VERSION)/
 	cd ~/jas-versions/$(VERSION)/; ant compile > ant_compile.out
@@ -498,7 +500,7 @@ young:
 	echo youngest revision `svnlook youngest $(SVNREPO)/jas`
 
 subst:
-	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) `$(SVNREV)` doc/download.html
+	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) `$(SVNREV)` doc/download.html $(DEBVERSION)
 
 logs:
 	svn log -v -r HEAD:$(SVNSRT) file:///$(SVNREPO)/jas/trunk src trc examples jython mpj mpi jlinalg_adapter commons-math_adapter > doc/svn_change.log
