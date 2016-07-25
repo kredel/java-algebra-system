@@ -20,8 +20,9 @@ import junit.framework.TestSuite;
 /**
  * Basic list processing tests with JUnit.
  * @author Heinz Kredel.
+ * @deprecated will be removed
  */
-
+@Deprecated
 public class LISTTest extends TestCase {
 
 /**

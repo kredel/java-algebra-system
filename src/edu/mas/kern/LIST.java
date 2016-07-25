@@ -14,8 +14,9 @@ import java.util.List;
 /**
  * MAS and SAC2/Aldes LIST emulation and adaptor class.
  * @author Heinz Kredel
+ * @deprecated will be removed
  */
-
+@Deprecated
 public class LIST<C> {
 
 
