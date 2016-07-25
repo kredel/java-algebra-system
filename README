@@ -88,7 +88,7 @@ commons-math_adapter.jar: an adaptor to parts of Apache commons.math
 
 pre packaged JAS versions:
 
-jas-<version>-all.deb       a Debian (wheezy) package usable in MathLibre
+jas-java_<version>-all.deb  a Debian (wheezy) package usable in MathLibre
 ruboto-irb-jas-release.apk  an Android App based on Ruboto
 
 
