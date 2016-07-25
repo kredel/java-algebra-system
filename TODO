@@ -14,8 +14,6 @@ issues to consider:
 
 - implement involutive bases computation
 
-- implement signature based GB computation
-
 - implement Groebner Walk GB computation
 
 - make hashCode to reuse computed value --> not immutable
@@ -30,13 +28,9 @@ issues to consider:
 
 - implement univariate power series composition and power
 
-- add method bitLength() to Element
-
 - define quotientRemainder in RingElem interface (?)
 
 - remove unnecessary @see since JavaDoc 7 
-
-- refactor Power with Java 8 features, use lambdas and default implementations
 
 - make use of gcd in pseudo reduction, needs other coefficient type
 
@@ -118,6 +112,13 @@ partially resolved and completed issues:
 
 - add assertions to check for number of polynomial variables and term order,
   nvar in GenPolynomial and GenSolvablePolynomial done
+
+- implement signature based GB computation
+
+- add method bitLength() to Element
+
+- refactor Power with Java 8 features, use lambdas and default implementations
+
 
 
 
