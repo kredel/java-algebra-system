@@ -12,7 +12,8 @@ LIBPATH=$(HOME)/java/lib
 JYTHONPATH=$(LIBPATH)/jython.jar
 JRUBYPATH=$(LIBPATH)/jruby.jar:$(HOME)/java/jruby-1.5.6/lib/ruby/1.8
 
-CLASSPATH=$(LIBPATH)/log4j.jar:$(LIBPATH)/junit.jar:$(JASPATH):$(LIBPATH)/jas.jar
+LOG4JPATH=$(LIBPATH)/log4j-core-2.5.jar:$(LIBPATH)/log4j-api-2.5.jar:$(LIBPATH)/log4j-1.2-api-2.5.jar
+CLASSPATH=$(LOG4JPATH):$(LIBPATH)/junit.jar:$(JASPATH):$(LIBPATH)/jas.jar
 
 BOOTCLASSPATH6="/usr/lib64/jvm/java-1.6.0/jre/lib/rt.jar"
 
