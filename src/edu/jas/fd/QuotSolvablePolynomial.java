@@ -24,8 +24,9 @@ import edu.jas.structure.GcdRingElem;
  * coefficients. Objects of this class are intended to be immutable. The
  * implementation is based on TreeMap respectively SortedMap from exponents to
  * coefficients by extension of GenPolynomial.
+ * Will be deprecated use QLRSolvablePolynomial.
  * @param <C> coefficient type
- * @author Heinz Kredel will be deprecated use QLRSolvablePolynomial
+ * @author Heinz Kredel
  */
 
 public class QuotSolvablePolynomial<C extends GcdRingElem<C>> extends

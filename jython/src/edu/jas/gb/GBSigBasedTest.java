@@ -39,6 +39,7 @@ public class GBSigBasedTest extends TestCase {
 
     /**
      * main
+     @param args not used
      */
     public static void main(String[] args) {
         BasicConfigurator.configure();
