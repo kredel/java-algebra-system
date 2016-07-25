@@ -181,8 +181,8 @@ public class WordReductionTest extends TestCase {
         //System.out.println("c = " + c);
         e = red.normalform(L, c);
         //System.out.println("e = " + e);
-        assertTrue("isNF( e )", red.isNormalform(L, e));
-        assertTrue("e == 0", e.isZERO());
+        assertTrue("isNF(" + e + "): " + c, red.isNormalform(L, e));
+        assertTrue("e == 0: " + e, e.isZERO());
     }
 
 
