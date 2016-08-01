@@ -151,6 +151,15 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational> implements
 
 
     /**
+     * Is RealAlgebraicNumber a root of unity.
+     * @return true if |this**i| == 1, for some 0 &lt; i &le; deg(modul), else false.
+     */
+    public boolean isRootOfUnity() {
+        return number.isRootOfUnity();
+    }
+
+
+    /**
      * Get the String representation as RingElem.
      * @see java.lang.Object#toString()
      */
