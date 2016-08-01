@@ -6,6 +6,7 @@ package edu.jas.root;
 
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.Map;
@@ -252,13 +253,13 @@ public class RootFactory {
            boolean isRealRoot(GenPolynomial<C> f, ComplexAlgebraicNumber<C> c, RealAlgebraicNumber<C> r) {
         boolean t = isRoot(f, c) && isRoot(f, r);
         if (!t) {
-	    return t;
+            return t;
         }
         Rectangle<C> rc = c.ring.root;
         Interval<C> ivci = new Interval<C>(rc.getSW().getIm(), rc.getNE().getIm());
         t = ivci.contains( f.ring.coFac.getZERO() );
         if (!t) {
-	    return t;
+            return t;
         }
         System.out.println("imag == null");
         Interval<C> ivc = new Interval<C>(rc.getSW().getRe(), rc.getNE().getRe());
@@ -271,7 +272,7 @@ public class RootFactory {
         // full containement
         t = ivc.contains(ivr) || ivr.contains(ivc);
         if (t) {
-	    return t;
+            return t;
         }
         System.out.println("with overlap");
         // overlap, refine to smaller interval
@@ -301,7 +302,7 @@ public class RootFactory {
         try {
              z = ceng.complexRootCount(rec, p);
         } catch (InvalidBoundaryException e) {
-	    System.out.println("should not happen, rec = " + rec + ", p = " + p);
+            System.out.println("should not happen, rec = " + rec + ", p = " + p);
             e.printStackTrace();
             z = 0;
         }
@@ -309,45 +310,6 @@ public class RootFactory {
             return false;
         }
         return true;
-    }
-
-
-    /**
-     * Filter real roots from complex roots.
-     * @param f univariate polynomial.
-     * @param c list of complex algebraic numbers.
-     * @param r list of real algebraic numbers.
-     * @return c minus the real roots from r;
-     */
-    public static <C extends GcdRingElem<C> & Rational> 
-           List<ComplexAlgebraicNumber<C>> filterOutRealRoots(GenPolynomial<C> f, List<ComplexAlgebraicNumber<C>> c, List<RealAlgebraicNumber<C>> r) {
-        if (c.isEmpty()) {
-            return c;
-        }
-        if (r.isEmpty()) {
-            return c;
-        }
-	List<ComplexAlgebraicNumber<C>> cmr = new ArrayList<ComplexAlgebraicNumber<C>>();
-        if (c.size() == r.size() /*&& r.size() == f.degree()*/ ) {
-            return cmr;
-        }
-        for (ComplexAlgebraicNumber<C> cn : c) {
-	    boolean real = false;
-            RealAlgebraicNumber<C> rm = null;
-            for (RealAlgebraicNumber<C> rn : r) {
-                if (isRealRoot(f, cn, rn)) {
-                    real = true; 
-                    rm = rn;
-                    break; // remove from r
-                }
-            }
-            if (rm == null) {
-                cmr.add(cn);
-            } else {
-                //r = r.remove(rm);
-            }
-        }
-        return cmr;
     }
 
 
@@ -455,6 +417,61 @@ public class RootFactory {
         GenPolynomialRing<Complex<C>> fac = new GenPolynomialRing<Complex<C>>(cr,f.ring);
         GenPolynomial<Complex<C>> fc = PolyUtil.<C>complexFromAny(fac,f); 
         return complexAlgebraicNumbersComplex(fc,eps);
+    }
+
+
+    /**
+     * Filter real roots from complex roots.
+     * @param f univariate polynomial.
+     * @param c list of complex algebraic numbers.
+     * @param r list of real algebraic numbers.
+     * @return c minus the real roots from r
+     */
+    public static <C extends GcdRingElem<C> & Rational> 
+           List<ComplexAlgebraicNumber<C>> filterOutRealRoots(GenPolynomial<C> f, List<ComplexAlgebraicNumber<C>> c, List<RealAlgebraicNumber<C>> r) {
+        if (c.isEmpty()) {
+            return c;
+        }
+        if (r.isEmpty()) {
+            return c;
+        }
+        List<ComplexAlgebraicNumber<C>> cmr = new ArrayList<ComplexAlgebraicNumber<C>>();
+        if (c.size() == r.size() /*&& r.size() == f.degree()*/ ) {
+            return cmr;
+        }
+        List<RealAlgebraicNumber<C>> rl = new LinkedList<RealAlgebraicNumber<C>>(r);
+        for (ComplexAlgebraicNumber<C> cn : c) {
+            RealAlgebraicNumber<C> rm = null; // ~boolean
+            for (RealAlgebraicNumber<C> rn : rl) {
+                if (isRealRoot(f, cn, rn)) {
+                    rm = rn;
+                    break; // remove from r
+                }
+            }
+            if (rm == null) {
+                cmr.add(cn);
+            } else {
+                rl.remove(rm);
+            }
+        }
+        return cmr;
+    }
+
+
+    /**
+     * Roots as real and complex algebraic numbers.
+     * @param f univariate polynomial.
+     * @return a list of different real algebraic numbers.
+     */
+    public static <C extends GcdRingElem<C> & Rational> 
+           AlgebraicRoots<C> algebraicRoots(GenPolynomial<C> f) {
+        
+        List<RealAlgebraicNumber<C>> rl = realAlgebraicNumbers(f);
+        List<ComplexAlgebraicNumber<C>> cl = complexAlgebraicNumbers(f);
+        cl = filterOutRealRoots(f, cl, rl);
+
+        AlgebraicRoots<C> ar = new AlgebraicRoots<C>(f, rl, cl);
+        return ar;
     }
 
 }
