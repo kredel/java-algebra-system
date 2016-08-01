@@ -313,6 +313,45 @@ public class RootFactory {
 
 
     /**
+     * Filter real roots from complex roots.
+     * @param f univariate polynomial.
+     * @param c list of complex algebraic numbers.
+     * @param r list of real algebraic numbers.
+     * @return c minus the real roots from r;
+     */
+    public static <C extends GcdRingElem<C> & Rational> 
+           List<ComplexAlgebraicNumber<C>> filterOutRealRoots(GenPolynomial<C> f, List<ComplexAlgebraicNumber<C>> c, List<RealAlgebraicNumber<C>> r) {
+        if (c.isEmpty()) {
+            return c;
+        }
+        if (r.isEmpty()) {
+            return c;
+        }
+	List<ComplexAlgebraicNumber<C>> cmr = new ArrayList<ComplexAlgebraicNumber<C>>();
+        if (c.size() == r.size() /*&& r.size() == f.degree()*/ ) {
+            return cmr;
+        }
+        for (ComplexAlgebraicNumber<C> cn : c) {
+	    boolean real = false;
+            RealAlgebraicNumber<C> rm = null;
+            for (RealAlgebraicNumber<C> rn : r) {
+                if (isRealRoot(f, cn, rn)) {
+                    real = true; 
+                    rm = rn;
+                    break; // remove from r
+                }
+            }
+            if (rm == null) {
+                cmr.add(cn);
+            } else {
+                //r = r.remove(rm);
+            }
+        }
+        return cmr;
+    }
+
+
+    /**
      * Complex algebraic numbers.
      * @param f univariate polynomial.
      * @return a list of different complex algebraic numbers.
