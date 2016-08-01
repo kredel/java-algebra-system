@@ -155,7 +155,7 @@ public class AlgebraicNumber<C extends RingElem<C>> implements GcdRingElem<Algeb
         long d = ring.modul.degree();
         AlgebraicNumber<C> t = ring.getONE(); 
         for (long i = 1; i <= d; i++) {
-	    t = t.multiply(this);
+            t = t.multiply(this);
             if (t.abs().isONE()) {
                 //System.out.println("isRootOfUnity for i = " + i);
                 return true;
