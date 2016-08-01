@@ -61,6 +61,7 @@ public class Interval<C extends RingElem<C> & Rational > implements Serializable
     @Override
     public String toString() {
         return "[" + left + ", " + right + "]";
+        //return "[" + left.getRational().getDecimal() + ", " + right.getRational().getDecimal() + "]";
     }
 
 

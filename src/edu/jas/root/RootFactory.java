@@ -242,6 +242,77 @@ public class RootFactory {
 
 
     /**
+     * Is complex algebraic number a real root of a polynomial.
+     * @param f univariate polynomial.
+     * @param c complex algebraic number.
+     * @param r real algebraic number.
+     * @return true, if f(c) == 0 and c == r, else false;
+     */
+    public static <C extends GcdRingElem<C> & Rational> 
+           boolean isRealRoot(GenPolynomial<C> f, ComplexAlgebraicNumber<C> c, RealAlgebraicNumber<C> r) {
+        boolean t = isRoot(f, c) && isRoot(f, r);
+        if (!t) {
+	    return t;
+        }
+        Rectangle<C> rc = c.ring.root;
+        Interval<C> ivci = new Interval<C>(rc.getSW().getIm(), rc.getNE().getIm());
+        t = ivci.contains( f.ring.coFac.getZERO() );
+        if (!t) {
+	    return t;
+        }
+        System.out.println("imag == null");
+        Interval<C> ivc = new Interval<C>(rc.getSW().getRe(), rc.getNE().getRe());
+        Interval<C> ivr = r.ring.root;
+        // disjoint intervals
+        if (ivc.right.compareTo(ivr.left) < 0 || ivr.right.compareTo(ivc.left) < 0) {
+            return false;
+        }
+        System.out.println("not disjoint");
+        // full containement
+        t = ivc.contains(ivr) || ivr.contains(ivc);
+        if (t) {
+	    return t;
+        }
+        System.out.println("with overlap");
+        // overlap, refine to smaller interval
+        C left = ivc.left;
+        if (left.compareTo(ivr.left) > 0) { 
+            left = ivr.left;
+        }
+        C right = ivc.right;
+        if (right.compareTo(ivr.right) < 0) { 
+            right = ivr.right;
+        }
+        Interval<C> ref = new Interval<C>(left,right);
+        System.out.println("refined interval " + ref);
+        RealRoots<C> reng = r.ring.engine; //new RealRootsSturm<C>(); 
+        long z = reng.realRootCount(ref, f);
+        if (z != 1) {
+            return false;
+        }
+        ComplexRing<C> cr = rc.getSW().ring; 
+        Complex<C> sw = new Complex<C>(cr, left, rc.getSW().getIm());
+        Complex<C> ne = new Complex<C>(cr, right, rc.getNE().getIm());
+        Rectangle<C> rec = new Rectangle<C>(sw, ne);
+        System.out.println("refined rectangle " + rec);
+        ComplexRoots<C> ceng = c.ring.engine; //new ComplexRootsSturm<C>(); 
+        GenPolynomialRing<Complex<C>> fac = new GenPolynomialRing<Complex<C>>(cr, f.ring);
+        GenPolynomial<Complex<C>> p = PolyUtil.<C>complexFromAny(fac, f); 
+        try {
+             z = ceng.complexRootCount(rec, p);
+        } catch (InvalidBoundaryException e) {
+	    System.out.println("should not happen, rec = " + rec + ", p = " + p);
+            e.printStackTrace();
+            z = 0;
+        }
+        if (z != 1) {
+            return false;
+        }
+        return true;
+    }
+
+
+    /**
      * Complex algebraic numbers.
      * @param f univariate polynomial.
      * @return a list of different complex algebraic numbers.
