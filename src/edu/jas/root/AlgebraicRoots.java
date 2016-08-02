@@ -10,6 +10,7 @@ import java.io.Serializable;
 
 import edu.jas.arith.Rational;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.structure.GcdRingElem;
 
 
@@ -112,4 +113,13 @@ public class AlgebraicRoots<C extends GcdRingElem<C> & Rational > implements Ser
         return (161 * p.hashCode() + 37 ) * real.hashCode() + complex.hashCode();
     }
 
+
+    /**
+     * Algebraic number ring.
+     * @return algebraic ring of roots.
+     */
+    public AlgebraicNumberRing<C> getAlgebraicRing() {
+        AlgebraicNumberRing<C> anr = new AlgebraicNumberRing<C>(p);
+        return anr; 
+    }
 }

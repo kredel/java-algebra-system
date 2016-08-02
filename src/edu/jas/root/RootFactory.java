@@ -18,6 +18,7 @@ import edu.jas.poly.ComplexRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.ufd.FactorAbstract;
 import edu.jas.ufd.FactorFactory;
@@ -261,7 +262,7 @@ public class RootFactory {
         if (!t) {
             return t;
         }
-        System.out.println("imag == null");
+        System.out.println("imag = 0");
         Interval<C> ivc = new Interval<C>(rc.getSW().getRe(), rc.getNE().getRe());
         Interval<C> ivr = r.ring.root;
         // disjoint intervals
@@ -292,8 +293,10 @@ public class RootFactory {
             return false;
         }
         ComplexRing<C> cr = rc.getSW().ring; 
-        Complex<C> sw = new Complex<C>(cr, left, rc.getSW().getIm());
-        Complex<C> ne = new Complex<C>(cr, right, rc.getNE().getIm());
+        //Complex<C> sw = new Complex<C>(cr, left, rc.getSW().getIm());
+        //Complex<C> ne = new Complex<C>(cr, right, rc.getNE().getIm());
+        Complex<C> sw = new Complex<C>(cr, left, cr.ring.getZERO());
+        Complex<C> ne = new Complex<C>(cr, right, cr.ring.getZERO());
         Rectangle<C> rec = new Rectangle<C>(sw, ne);
         System.out.println("refined rectangle " + rec);
         ComplexRoots<C> ceng = c.ring.engine; //new ComplexRootsSturm<C>(); 
@@ -461,7 +464,7 @@ public class RootFactory {
     /**
      * Roots as real and complex algebraic numbers.
      * @param f univariate polynomial.
-     * @return a list of different real algebraic numbers.
+     * @return container of real and complex algebraic numbers.
      */
     public static <C extends GcdRingElem<C> & Rational> 
            AlgebraicRoots<C> algebraicRoots(GenPolynomial<C> f) {
@@ -472,6 +475,31 @@ public class RootFactory {
 
         AlgebraicRoots<C> ar = new AlgebraicRoots<C>(f, rl, cl);
         return ar;
+    }
+
+
+    /**
+     * Roots of unity of real and complex algebraic numbers.
+     * @param container of real and complex algebraic numbers.
+     * @return container of real and complex algebraic numbers 
+     *         which are roots of unity.
+     */
+    public static <C extends GcdRingElem<C> & Rational> 
+           AlgebraicRoots<C> rootsOfUnity(AlgebraicRoots<C> ar) {
+        List<RealAlgebraicNumber<C>> rl = new ArrayList<RealAlgebraicNumber<C>>(); 
+        for (RealAlgebraicNumber<C> r : ar.real) {
+	    if (r.isRootOfUnity()) {
+                rl.add(r);
+            }
+        }
+        List<ComplexAlgebraicNumber<C>> cl = new ArrayList<ComplexAlgebraicNumber<C>>();
+        for (ComplexAlgebraicNumber<C> c : ar.complex) {
+	    if (c.isRootOfUnity()) {
+                cl.add(c);
+            }
+        }
+        AlgebraicRoots<C> ur = new AlgebraicRoots<C>(ar.p, rl, cl);
+        return ur;
     }
 
 }
