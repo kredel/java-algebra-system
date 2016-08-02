@@ -17,10 +17,12 @@ import edu.jas.poly.Complex;
 import edu.jas.poly.ComplexRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
 import edu.jas.root.Interval;
 import edu.jas.root.RealRootTuple;
+import edu.jas.root.AlgebraicRoots;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.ufd.SquarefreeAbstract;
@@ -261,4 +263,32 @@ public class RootFactory {
      }
     */
 
+    /**
+     * Root reduce of real and complex algebraic numbers.
+     * @param a container of real and complex algebraic numbers.
+     * @param b container of real and complex algebraic numbers.
+     * @return container of real and complex algebraic numbers 
+     *         of the primitive element of a and b.
+     */
+    public static <C extends GcdRingElem<C> & Rational> 
+           AlgebraicRoots<C> rootReduce(AlgebraicRoots<C> a, AlgebraicRoots<C> b) {
+        return rootReduce(a.p, b.p);
+    }
+
+
+    /**
+     * Root reduce of real and complex algebraic numbers.
+     * @param a polynomial.
+     * @param b polynomial.
+     * @return container of real and complex algebraic numbers 
+     *         of the primitive element of a and b.
+     */
+    public static <C extends GcdRingElem<C> & Rational> 
+           AlgebraicRoots<C> rootReduce(GenPolynomial<C> a, GenPolynomial<C> b) {
+        AlgebraicNumberRing<C> anr = new AlgebraicNumberRing<C>(a);
+        AlgebraicNumberRing<C> bnr = new AlgebraicNumberRing<C>(b);
+        PrimitiveElement<C> pe = PolyUtilApp.<C>primitiveElement(anr, bnr);
+        AlgebraicRoots<C> ar = edu.jas.root.RootFactory.<C>algebraicRoots(pe.primitiveElem.modul);
+        return ar;
+    }
 }
