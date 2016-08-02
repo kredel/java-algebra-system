@@ -70,8 +70,36 @@ public class AlgebraicRoots<C extends GcdRingElem<C> & Rational > implements Ser
      */
     public String toScript() {
         // Python case
-        return "[" + p.toScript() + ", real=" + real + ", complex=" + complex + "]";
-        // todo real and complex toScript
+        StringBuffer sb = new StringBuffer("[");
+        sb.append(p.toScript());
+        if (! real.isEmpty()) {
+            sb.append(", real=[");
+            boolean first = true;
+            for (RealAlgebraicNumber<C> r : real) {
+                if (first) {
+                    first = false;
+                } else {
+                    sb.append(", ");
+                }
+                sb.append(r.toScript());
+            }
+            sb.append("]");
+        }
+        if (! complex.isEmpty()) {
+            sb.append(", complex=[");
+            boolean first = true;
+            for (ComplexAlgebraicNumber<C> c : complex) {
+                if (first) {
+                    first = false;
+                } else {
+                    sb.append(", ");
+                }
+                sb.append(c.toScript());
+            }
+            sb.append("]");
+        }
+        sb.append("]");
+        return sb.toString();
     }
 
 
