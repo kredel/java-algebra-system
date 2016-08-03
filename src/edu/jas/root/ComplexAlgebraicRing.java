@@ -82,10 +82,10 @@ public class ComplexAlgebraicRing<C extends GcdRingElem<C> & Rational>
         if (m.ring.characteristic().signum() > 0) {
             throw new IllegalArgumentException("characteristic not zero");
         }
-        BigRational e = new BigRational(10L); //m.ring.coFac.fromInteger(10L).getRe();
-        e = e.inverse();
-        e = e.power(PRECISION); //Power.positivePower(e, PRECISION);
-        eps = e;
+        //BigRational e = new BigRational(10L); //m.ring.coFac.fromInteger(10L).getRe();
+        //e = e.inverse();
+        //e = e.power( - PRECISION); //Power.positivePower(e, PRECISION);
+        eps = BigRational.ONE; // initially
     }
 
 
@@ -103,10 +103,10 @@ public class ComplexAlgebraicRing<C extends GcdRingElem<C> & Rational>
         if (m.ring.characteristic().signum() > 0) {
             throw new IllegalArgumentException("characteristic not zero");
         }
-        BigRational e = new BigRational(10L); //m.ring.coFac.fromInteger(10L).getRe();
-        e = e.inverse();
-        e = e.power(PRECISION); //Power.positivePower(e, PRECISION);
-        eps = e;
+        //BigRational e = new BigRational(10L); //m.ring.coFac.fromInteger(10L).getRe();
+        //e = e.inverse();
+        //e = e.power( - PRECISION); //Power.positivePower(e, PRECISION);
+        eps = BigRational.ONE; // initially
     }
 
 
@@ -164,7 +164,9 @@ public class ComplexAlgebraicRing<C extends GcdRingElem<C> & Rational>
     public synchronized void setEps(BigRational e) {
         if (eps.compareTo(e) > 0) {
             try {
+                // System.out.println("root = " + root);
                 root = engine.complexRootRefinement(root, algebraic.modul, e);
+                // System.out.println("root = " + root);
             } catch (InvalidBoundaryException e1) {
                 //e1.printStackTrace();
                 logger.warn("new eps not set: " + e);

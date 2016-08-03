@@ -76,11 +76,10 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
         if (m.ring.characteristic().signum() > 0) {
             throw new RuntimeException("characteristic not zero");
         }
-        BigRational e = new BigRational(10L); //m.ring.coFac.fromInteger(10L);
-        e = e.inverse();
-        //C x = Power.positivePower(e, BigDecimal.DEFAULT_PRECISION);
-        e = Power.positivePower(e, PRECISION); // better not too much for speed
-        eps = e;
+        //BigRational e = new BigRational(10L); //m.ring.coFac.fromInteger(10L);
+        //e = e.inverse();
+        //e = e.power( - PRECISION); // better not too much for speed
+        eps = BigRational.ONE; // initially
     }
 
 
@@ -98,10 +97,10 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
         if (m.ring.characteristic().signum() > 0) {
             throw new RuntimeException("characteristic not zero");
         }
-        BigRational e = new BigRational(10L); //m.ring.coFac.fromInteger(10L);
-        e = e.inverse();
-        e = Power.positivePower(e, PRECISION); //BigDecimal.DEFAULT_PRECISION);
-        eps = e;
+        //BigRational e = new BigRational(10L); //m.ring.coFac.fromInteger(10L);
+        //e = e.inverse();
+        //e = e.power( - PRECISION); //BigDecimal.DEFAULT_PRECISION);
+        eps = BigRational.ONE; // initially
     }
 
 
@@ -150,7 +149,9 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
      */
     public synchronized void setEps(BigRational e) {
         if (eps.compareTo(e) > 0) {
+            //System.out.println("root = " + root);
             root = engine.refineInterval(root, algebraic.modul, e);
+            //System.out.println("root = " + root);
         }
         this.eps = e; //algebraic.ring.coFac.parse(e.toString());
     }

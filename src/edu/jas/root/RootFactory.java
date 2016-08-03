@@ -504,15 +504,21 @@ public class RootFactory {
     /**
      * Root refinement of real and complex algebraic numbers.
      * @param a container of real and complex algebraic numbers.
-     * @param eps desired precision.
-     * @return container of real and complex algebraic numbers 
-     *         approximated to the desired precision.
+     * @param eps desired precision for root intervals and rectangles.
      */
     public static <C extends GcdRingElem<C> & Rational> 
-           AlgebraicRoots<C> rootRefine(AlgebraicRoots<C> a, BigRational eps) {
-
-        AlgebraicRoots<C> ar = null; //new AlgebraicRoots<C>(f, rl, cl);
-        return ar;
+           void rootRefine(AlgebraicRoots<C> a, BigRational eps) {
+        for (RealAlgebraicNumber<C> r : a.real) {
+            //System.out.println("r.ring = " + r.ring);
+	    r.ring.setEps(eps); // will call refinement
+            //System.out.println("r.ring = " + r.ring);
+        }
+        for (ComplexAlgebraicNumber<C> c : a.complex) {
+            //System.out.println("c.ring = " + c.ring);
+	    c.ring.setEps(eps); // will call refinement
+            //System.out.println("c.ring = " + c.ring);
+        }
+        return; // a or void?
     }
 
 }

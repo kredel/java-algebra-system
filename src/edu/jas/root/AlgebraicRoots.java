@@ -104,6 +104,45 @@ public class AlgebraicRoots<C extends GcdRingElem<C> & Rational > implements Ser
 
 
     /**
+     * Get a scripting compatible string representation.
+     * @return script compatible representation for this Interval.
+     */
+    public String toDecimalScript() {
+        // Python case
+        StringBuffer sb = new StringBuffer("[");
+        sb.append(p.toScript());
+        if (! real.isEmpty()) {
+            sb.append(", real=[");
+            boolean first = true;
+            for (RealAlgebraicNumber<C> r : real) {
+                if (first) {
+                    first = false;
+                } else {
+                    sb.append(", ");
+                }
+                sb.append(r.ring.root.toDecimal());
+            }
+            sb.append("]");
+        }
+        if (! complex.isEmpty()) {
+            sb.append(", complex=[");
+            boolean first = true;
+            for (ComplexAlgebraicNumber<C> c : complex) {
+                if (first) {
+                    first = false;
+                } else {
+                    sb.append(", ");
+                }
+                sb.append(c.ring.root.getDecimalCenter());
+            }
+            sb.append("]");
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
+
+    /**
      * Copy this.
      * @return a copy of this.
      */
