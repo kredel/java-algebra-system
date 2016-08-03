@@ -468,11 +468,9 @@ public class RootFactory {
      */
     public static <C extends GcdRingElem<C> & Rational> 
            AlgebraicRoots<C> algebraicRoots(GenPolynomial<C> f) {
-        
         List<RealAlgebraicNumber<C>> rl = realAlgebraicNumbers(f);
         List<ComplexAlgebraicNumber<C>> cl = complexAlgebraicNumbers(f);
         cl = filterOutRealRoots(f, cl, rl);
-
         AlgebraicRoots<C> ar = new AlgebraicRoots<C>(f, rl, cl);
         return ar;
     }
@@ -500,6 +498,21 @@ public class RootFactory {
         }
         AlgebraicRoots<C> ur = new AlgebraicRoots<C>(ar.p, rl, cl);
         return ur;
+    }
+
+
+    /**
+     * Root refinement of real and complex algebraic numbers.
+     * @param a container of real and complex algebraic numbers.
+     * @param eps desired precision.
+     * @return container of real and complex algebraic numbers 
+     *         approximated to the desired precision.
+     */
+    public static <C extends GcdRingElem<C> & Rational> 
+           AlgebraicRoots<C> rootRefine(AlgebraicRoots<C> a, BigRational eps) {
+
+        AlgebraicRoots<C> ar = null; //new AlgebraicRoots<C>(f, rl, cl);
+        return ar;
     }
 
 }

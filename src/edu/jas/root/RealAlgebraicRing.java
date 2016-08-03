@@ -28,8 +28,8 @@ import edu.jas.structure.RingFactory;
  */
 
 public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
-/*extends AlgebraicNumberRing<C>*/
-implements RingFactory<RealAlgebraicNumber<C>> {
+                /*extends AlgebraicNumberRing<C>*/
+                implements RingFactory<RealAlgebraicNumber<C>> {
 
 
     /**
@@ -54,7 +54,7 @@ implements RingFactory<RealAlgebraicNumber<C>> {
     /**
      * Precision of the isolating interval for a real root.
      */
-    protected C eps;
+    protected BigRational eps;
 
 
     /**
@@ -76,7 +76,7 @@ implements RingFactory<RealAlgebraicNumber<C>> {
         if (m.ring.characteristic().signum() > 0) {
             throw new RuntimeException("characteristic not zero");
         }
-        C e = m.ring.coFac.fromInteger(10L);
+        BigRational e = new BigRational(10L); //m.ring.coFac.fromInteger(10L);
         e = e.inverse();
         //C x = Power.positivePower(e, BigDecimal.DEFAULT_PRECISION);
         e = Power.positivePower(e, PRECISION); // better not too much for speed
@@ -98,18 +98,11 @@ implements RingFactory<RealAlgebraicNumber<C>> {
         if (m.ring.characteristic().signum() > 0) {
             throw new RuntimeException("characteristic not zero");
         }
-        C e = m.ring.coFac.fromInteger(10L);
+        BigRational e = new BigRational(10L); //m.ring.coFac.fromInteger(10L);
         e = e.inverse();
         e = Power.positivePower(e, PRECISION); //BigDecimal.DEFAULT_PRECISION);
         eps = e;
     }
-
-
-    /**
-     * Get the module part.
-     * @return modul. public GenPolynomial<C> getModul() { return
-     *         algebraic.modul; }
-     */
 
 
     /**
@@ -128,7 +121,7 @@ implements RingFactory<RealAlgebraicNumber<C>> {
      * @param v interval.
      */
     public synchronized void setRoot(Interval<C> v) {
-        // assert v is contained in root
+        assert root.contains(v) : "root contains v";
         this.root = v;
     }
 
@@ -137,7 +130,7 @@ implements RingFactory<RealAlgebraicNumber<C>> {
      * Get the epsilon.
      * @return eps.
      */
-    public synchronized C getEps() {
+    public synchronized BigRational getEps() {
         return this.eps;
     }
 
@@ -147,7 +140,7 @@ implements RingFactory<RealAlgebraicNumber<C>> {
      * @param e epsilon.
      */
     public synchronized void setEps(C e) {
-        this.eps = e;
+        setEps(e.getRational());
     }
 
 
@@ -156,7 +149,10 @@ implements RingFactory<RealAlgebraicNumber<C>> {
      * @param e epsilon.
      */
     public synchronized void setEps(BigRational e) {
-        this.eps = algebraic.ring.coFac.parse(e.toString());
+        if (eps.compareTo(e) > 0) {
+            root = engine.refineInterval(root, algebraic.modul, e);
+        }
+        this.eps = e; //algebraic.ring.coFac.parse(e.toString());
     }
 
 

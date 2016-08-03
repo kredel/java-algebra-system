@@ -8,10 +8,6 @@ package edu.jas.root;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigDecimal;
@@ -20,6 +16,10 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.NotInvertibleException;
 import edu.jas.structure.Power;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -360,8 +360,10 @@ public class RealAlgebraicTest extends TestCase {
         BigRational eps = Power.positivePower(new BigRational(1L, 10L), 8);
         BigDecimal epsd = new BigDecimal(eps);
 
-        assertTrue("mag(a*b) = mag(a)*mag(b): " + dd + ", " + dd1, dd.subtract(dd1).abs().compareTo(epsd) <= 0);
-        assertTrue("mag(a+b) = mag(a)+mag(b): " + ed + ", " + ed1, ed.subtract(ed1).abs().compareTo(epsd) <= 0);
+        assertTrue("mag(a*b) = mag(a)*mag(b): " + dd + ", " + dd1,
+                        dd.subtract(dd1).abs().compareTo(epsd) <= 0);
+        assertTrue("mag(a+b) = mag(a)+mag(b): " + ed + ", " + ed1,
+                        ed.subtract(ed1).abs().compareTo(epsd) <= 0);
 
 
         d = a.divide(b);
@@ -407,10 +409,7 @@ public class RealAlgebraicTest extends TestCase {
         BigRational eps = Power.positivePower(new BigRational(1L, 10L), BigDecimal.DEFAULT_PRECISION);
         //BigRational eps = Power.positivePower(new BigRational(1L,10L),10);
 
-        epsr = dfac.coFac.getONE().multiply(eps);
-        //System.out.println("epsr = " + epsr);
-
-        R = rrr.refineIntervals(R, ar, epsr);
+        R = rrr.refineIntervals(R, ar, eps);
         //System.out.println("R = " + R);
         for (Interval<RealAlgebraicNumber<BigRational>> v : R) {
             BigDecimal dd = v.toDecimal(); //.sum(eps1);
@@ -439,7 +438,7 @@ public class RealAlgebraicTest extends TestCase {
         er = dfac.univariate(0);
 
         List<Interval<RealAlgebraicNumber<BigRational>>> Rn = new ArrayList<Interval<RealAlgebraicNumber<BigRational>>>(
-                N);
+                        N);
         ar = dr;
         for (int i = 0; i < N; i++) {
             cr = dfac.fromInteger(i).multiply(alpha); // i * alpha
@@ -457,12 +456,8 @@ public class RealAlgebraicTest extends TestCase {
         BigRational eps = Power.positivePower(new BigRational(1L, 10L), BigDecimal.DEFAULT_PRECISION);
         //BigRational eps = Power.positivePower(new BigRational(1L,10L),10);
         //System.out.println("eps = " + eps);
-        //BigDecimal eps1 = new BigDecimal(eps);
-        //System.out.println("eps1 = " + eps1);
-        RealAlgebraicNumber<BigRational> epsr = dfac.coFac.getONE().multiply(eps);
-        //System.out.println("epsr = " + epsr);
 
-        R = rrr.refineIntervals(R, ar, epsr);
+        R = rrr.refineIntervals(R, ar, eps);
         //System.out.println("R = " + R);
         int i = 0;
         for (Interval<RealAlgebraicNumber<BigRational>> v : R) {
