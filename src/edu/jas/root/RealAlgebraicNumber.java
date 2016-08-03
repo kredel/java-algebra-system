@@ -22,8 +22,8 @@ import edu.jas.structure.NotInvertibleException;
  */
 
 public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
-/*extends AlgebraicNumber<C>*/
-implements GcdRingElem<RealAlgebraicNumber<C>>, Rational {
+                /*extends AlgebraicNumber<C>*/
+                implements GcdRingElem<RealAlgebraicNumber<C>>, Rational {
 
 
     /**
@@ -134,7 +134,8 @@ implements GcdRingElem<RealAlgebraicNumber<C>>, Rational {
 
     /**
      * Is RealAlgebraicNumber a root of unity.
-     * @return true if |this**i| == 1, for some 0 &lt; i &le; deg(modul), else false.
+     * @return true if |this**i| == 1, for some 0 &lt; i &le; deg(modul), else
+     *         false.
      */
     public boolean isRootOfUnity() {
         return number.isRootOfUnity();

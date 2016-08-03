@@ -394,7 +394,7 @@ public class RealAlgebraicTest extends TestCase {
         dfac = new GenPolynomialRing<RealAlgebraicNumber<BigRational>>(fac, 1);
 
         GenPolynomial<RealAlgebraicNumber<BigRational>> ar;
-        RealAlgebraicNumber<BigRational> epsr;
+        //RealAlgebraicNumber<BigRational> epsr;
 
         ar = dfac.random(3, 5, 7, q);
         System.out.println("ar = " + ar);

@@ -221,7 +221,8 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
      * @param A univariate complex polynomial.
      * @return winding number of A arround rect.
      */
-    public long windingNumber(Rectangle<C> rect, GenPolynomial<Complex<C>> A) throws InvalidBoundaryException {
+    public long windingNumber(Rectangle<C> rect, GenPolynomial<Complex<C>> A)
+                    throws InvalidBoundaryException {
         Boundary<C> bound = new Boundary<C>(rect, A); // throws InvalidBoundaryException
         ComplexRing<C> cr = (ComplexRing<C>) A.ring.coFac;
         RingFactory<C> cf = cr.ring;

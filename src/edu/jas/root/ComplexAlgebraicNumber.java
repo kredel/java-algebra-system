@@ -24,8 +24,8 @@ import edu.jas.structure.NotInvertibleException;
  */
 
 public class ComplexAlgebraicNumber<C extends GcdRingElem<C> & Rational>
-/*extends AlgebraicNumber<C>*/
-implements GcdRingElem<ComplexAlgebraicNumber<C>> {
+                /*extends AlgebraicNumber<C>*/
+                implements GcdRingElem<ComplexAlgebraicNumber<C>> {
 
 
     /**
@@ -126,7 +126,8 @@ implements GcdRingElem<ComplexAlgebraicNumber<C>> {
 
     /**
      * Is ComplexAlgebraicNumber a root of unity.
-     * @return true if |this**i| == 1, for some 0 &lt; i &le; deg(modul), else false.
+     * @return true if |this**i| == 1, for some 0 &lt; i &le; deg(modul), else
+     *         false.
      */
     public boolean isRootOfUnity() {
         return number.isRootOfUnity();

@@ -6,16 +6,13 @@ package edu.jas.root;
 
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.Rational;
-import edu.jas.structure.ElemFactory;
-import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingFactory;
 
 
 /**
@@ -37,7 +34,7 @@ public class RealRootTuple<C extends GcdRingElem<C> & Rational> implements Seria
      * @param t list of roots.
      */
     public RealRootTuple(List<RealAlgebraicNumber<C>> t) {
-        if ( t == null ) {
+        if (t == null) {
             throw new IllegalArgumentException("null tuple not allowed");
         }
         tuple = t;
@@ -63,7 +60,7 @@ public class RealRootTuple<C extends GcdRingElem<C> & Rational> implements Seria
         StringBuffer sb = new StringBuffer("[");
         boolean first = true;
         for (RealAlgebraicNumber<C> r : tuple) {
-            if ( first ) {
+            if (first) {
                 first = false;
             } else {
                 sb.append(",");
@@ -167,7 +164,7 @@ public class RealRootTuple<C extends GcdRingElem<C> & Rational> implements Seria
      */
     public List<BigRational> getRational() {
         List<BigRational> center = new ArrayList<BigRational>(tuple.size());
-        for ( RealAlgebraicNumber<C> rr : tuple ) {
+        for (RealAlgebraicNumber<C> rr : tuple) {
             BigRational r = rr.getRational();
             center.add(r);
         }
@@ -181,7 +178,7 @@ public class RealRootTuple<C extends GcdRingElem<C> & Rational> implements Seria
      */
     public List<BigDecimal> decimalMagnitude() {
         List<BigDecimal> center = new ArrayList<BigDecimal>(tuple.size());
-        for ( RealAlgebraicNumber<C> rr : tuple ) {
+        for (RealAlgebraicNumber<C> rr : tuple) {
             BigDecimal r = rr.decimalMagnitude();
             center.add(r);
         }
@@ -195,10 +192,10 @@ public class RealRootTuple<C extends GcdRingElem<C> & Rational> implements Seria
      */
     public BigRational rationalLength() {
         BigRational len = new BigRational();
-        for ( RealAlgebraicNumber<C> rr : tuple ) {
+        for (RealAlgebraicNumber<C> rr : tuple) {
             BigRational r = rr.ring.root.rationalLength();
             int s = len.compareTo(r);
-            if ( s < 0 ) {
+            if (s < 0) {
                 len = r;
             }
         }
@@ -212,9 +209,9 @@ public class RealRootTuple<C extends GcdRingElem<C> & Rational> implements Seria
      */
     public int signum() {
         int s = 0;
-        for ( RealAlgebraicNumber<C> rr : tuple ) {
+        for (RealAlgebraicNumber<C> rr : tuple) {
             int rs = rr.signum();
-            if ( rs != 0 ) {
+            if (rs != 0) {
                 s = rs;
             }
         }

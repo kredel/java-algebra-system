@@ -5,21 +5,22 @@
 package edu.jas.root;
 
 
-import java.util.List;
 import java.io.Serializable;
+import java.util.List;
 
 import edu.jas.arith.Rational;
-import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.AlgebraicNumberRing;
+import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.GcdRingElem;
 
 
 /**
- * Container for the real and complex algebraic roots of a univariate polynomial.
+ * Container for the real and complex algebraic roots of a univariate
+ * polynomial.
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
-public class AlgebraicRoots<C extends GcdRingElem<C> & Rational > implements Serializable { 
+public class AlgebraicRoots<C extends GcdRingElem<C> & Rational> implements Serializable {
 
 
     /**
@@ -46,8 +47,8 @@ public class AlgebraicRoots<C extends GcdRingElem<C> & Rational > implements Ser
      * @param r list of real algebraic roots
      * @param c list of complex algebraic roots
      */
-    public AlgebraicRoots(GenPolynomial<C> p, 
-                          List<RealAlgebraicNumber<C>> r, List<ComplexAlgebraicNumber<C>> c) {
+    public AlgebraicRoots(GenPolynomial<C> p, List<RealAlgebraicNumber<C>> r,
+                    List<ComplexAlgebraicNumber<C>> c) {
         this.p = p;
         this.real = r;
         this.complex = c;
@@ -72,7 +73,7 @@ public class AlgebraicRoots<C extends GcdRingElem<C> & Rational > implements Ser
         // Python case
         StringBuffer sb = new StringBuffer("[");
         sb.append(p.toScript());
-        if (! real.isEmpty()) {
+        if (!real.isEmpty()) {
             sb.append(", real=[");
             boolean first = true;
             for (RealAlgebraicNumber<C> r : real) {
@@ -85,7 +86,7 @@ public class AlgebraicRoots<C extends GcdRingElem<C> & Rational > implements Ser
             }
             sb.append("]");
         }
-        if (! complex.isEmpty()) {
+        if (!complex.isEmpty()) {
             sb.append(", complex=[");
             boolean first = true;
             for (ComplexAlgebraicNumber<C> c : complex) {
@@ -111,7 +112,7 @@ public class AlgebraicRoots<C extends GcdRingElem<C> & Rational > implements Ser
         // Python case
         StringBuffer sb = new StringBuffer("[");
         sb.append(p.toScript());
-        if (! real.isEmpty()) {
+        if (!real.isEmpty()) {
             sb.append(", real=[");
             boolean first = true;
             for (RealAlgebraicNumber<C> r : real) {
@@ -124,7 +125,7 @@ public class AlgebraicRoots<C extends GcdRingElem<C> & Rational > implements Ser
             }
             sb.append("]");
         }
-        if (! complex.isEmpty()) {
+        if (!complex.isEmpty()) {
             sb.append(", complex=[");
             boolean first = true;
             for (ComplexAlgebraicNumber<C> c : complex) {
@@ -177,7 +178,7 @@ public class AlgebraicRoots<C extends GcdRingElem<C> & Rational > implements Ser
      */
     @Override
     public int hashCode() {
-        return (161 * p.hashCode() + 37 ) * real.hashCode() + complex.hashCode();
+        return (161 * p.hashCode() + 37) * real.hashCode() + complex.hashCode();
     }
 
 
@@ -187,6 +188,6 @@ public class AlgebraicRoots<C extends GcdRingElem<C> & Rational > implements Ser
      */
     public AlgebraicNumberRing<C> getAlgebraicRing() {
         AlgebraicNumberRing<C> anr = new AlgebraicNumberRing<C>(p);
-        return anr; 
+        return anr;
     }
 }

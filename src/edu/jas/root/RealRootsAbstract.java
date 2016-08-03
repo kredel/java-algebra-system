@@ -514,9 +514,9 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
             if (d.subtract(dx).abs().compareTo(e) <= 0) {
                 return dx;
             }
-            while (dx.compareTo(left) < 0 || dx.compareTo(right) > 0) { 
-                   // dx < left: dx - left < 0
-                   // dx > right: dx - right > 0
+            while (dx.compareTo(left) < 0 || dx.compareTo(right) > 0) {
+                // dx < left: dx - left < 0
+                // dx > right: dx - right > 0
                 //System.out.println("trying to leave interval");
                 if (i++ > MITER) { // dx > right: dx - right > 0
                     throw new NoConvergenceException("no convergence after " + i + " steps");

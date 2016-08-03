@@ -120,8 +120,8 @@ public class RealRootsSturm<C extends RingElem<C> & Rational> extends RealRootsA
         if (f.isZERO()) {
             C z = f.leadingBaseCoefficient();
             if (!iv.contains(z)) {
-                throw new IllegalArgumentException("root not in interval: f = " + f + ", iv = " + iv
-                                + ", z = " + z);
+                throw new IllegalArgumentException(
+                                "root not in interval: f = " + f + ", iv = " + iv + ", z = " + z);
             }
             Interval<C> iv1 = new Interval<C>(z);
             R.add(iv1);

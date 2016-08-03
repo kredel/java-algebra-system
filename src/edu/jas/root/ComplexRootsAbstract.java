@@ -480,9 +480,9 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
             //             }
             // check interval bounds
             while (dx.getRe().compareTo(ll.getRe()) < 0 || dx.getIm().compareTo(ll.getIm()) < 0
-                   || dx.getRe().compareTo(ur.getRe()) > 0 || dx.getIm().compareTo(ur.getIm()) > 0) { 
-                   // dx < ll: dx - ll < 0
-                   // dx > ur: dx - ur > 0
+                            || dx.getRe().compareTo(ur.getRe()) > 0 || dx.getIm().compareTo(ur.getIm()) > 0) {
+                // dx < ll: dx - ll < 0
+                // dx > ur: dx - ur > 0
                 if (i++ > MITER) { // dx > right: dx - right > 0
                     throw new NoConvergenceException("no convergence after " + i + " steps");
                 }

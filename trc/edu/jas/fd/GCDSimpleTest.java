@@ -11,10 +11,9 @@ import java.util.List;
 import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigRational;
-import edu.jas.kern.ComputerThreads;
 import edu.jas.gb.SolvableGroebnerBaseAbstract;
 import edu.jas.gb.SolvableGroebnerBaseSeq;
-import edu.jas.gb.SolvableGroebnerBaseParallel;
+import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
@@ -421,7 +420,7 @@ public class GCDSimpleTest extends TestCase {
         //System.out.println("ar = " + ar);
         //System.out.println("br = " + br);
 
-        dr = fd.leftRecursiveGcd(ar, br); 
+        dr = fd.leftRecursiveGcd(ar, br);
         //System.out.println("cr = " + cr);
         //System.out.println("dr = " + dr);
 
@@ -448,15 +447,18 @@ public class GCDSimpleTest extends TestCase {
         //System.out.println("cr = " + cr);
         //System.out.println("dr = " + dr);
 
-        er = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveRightSparsePseudoRemainder(dr, cr);
+        er = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveRightSparsePseudoRemainder(dr,
+                        cr);
         //System.out.println("er = " + er);
         assertTrue("c | gcd(ca,cb) " + er, er.isZERO());
 
-        er = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveRightSparsePseudoRemainder(ar, dr);
+        er = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveRightSparsePseudoRemainder(ar,
+                        dr);
         //System.out.println("er = " + er);
         assertTrue("gcd(ca,cb) | ca " + er, er.isZERO());
 
-        er = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveRightSparsePseudoRemainder(br, dr);
+        er = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveRightSparsePseudoRemainder(br,
+                        dr);
         //System.out.println("er = " + er);
         assertTrue("gcd(ca,cb) | cb " + er, er.isZERO());
     }
