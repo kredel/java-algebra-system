@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.jas.arith.BigRational;
+import edu.jas.arith.BigDecimal;
 import edu.jas.arith.Rational;
 import edu.jas.poly.Complex;
 import edu.jas.poly.ComplexRing;
@@ -514,6 +515,36 @@ public class RootFactory {
             c.ring.refineRoot(eps); 
         }
         return; // a or void?
+    }
+
+
+    /**
+     * Roots as real and complex decimal numbers.
+     * @param f univariate polynomial.
+     * @param eps desired precision.
+     * @return container of real and complex decimal numbers.
+     */
+    public static <C extends GcdRingElem<C> & Rational> DecimalRoots decimalRoots(GenPolynomial<C> f, BigRational eps) {
+        RealRootsAbstract<C> rengine = new RealRootsSturm<C>();
+        List<BigDecimal> rl = rengine.approximateRoots(f, eps);
+
+        if (f.ring.coFac instanceof Complex) {
+            throw new IllegalArgumentException("f already has Complex coefficients " + f.ring);
+        }
+        if (f.ring.coFac instanceof ComplexAlgebraicRing) {
+            throw new UnsupportedOperationException(
+                            "unsupported ComplexAlgebraicRing coefficients " + f.ring);
+        }
+        ComplexRing<C> cr = new ComplexRing<C>(f.ring.coFac);
+        GenPolynomialRing<Complex<C>> fac = new GenPolynomialRing<Complex<C>>(cr, f.ring);
+        GenPolynomial<Complex<C>> fc = PolyUtil.<C> complexFromAny(fac, f);
+
+        ComplexRootsAbstract<C> cengine = new ComplexRootsSturm<C>(cr);
+        List<Complex<BigDecimal>> cl = cengine.approximateRoots(fc, eps);
+
+        //cl = filterOutRealRoots(f, cl, rl);
+        DecimalRoots<C> ar = new DecimalRoots<C>(f, rl, cl);
+        return ar;
     }
 
 }

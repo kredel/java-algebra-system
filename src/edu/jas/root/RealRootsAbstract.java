@@ -467,7 +467,7 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
      * @return a decimal approximation d such that |d-v| &lt; eps, for f(v) = 0,
      *         v real.
      */
-    public BigDecimal approximateRoot(Interval<C> iv, GenPolynomial<C> f, C eps)
+    public BigDecimal approximateRoot(Interval<C> iv, GenPolynomial<C> f, BigRational eps)
                     throws NoConvergenceException {
         if (iv == null) {
             throw new IllegalArgumentException("null interval not allowed");
@@ -476,7 +476,7 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
         if (f == null || f.isZERO() || f.isConstant() || eps == null) {
             return d;
         }
-        if (iv.length().compareTo(eps) < 0) {
+        if (iv.rationalLength().compareTo(eps) < 0) {
             return d;
         }
         BigDecimal left = new BigDecimal(iv.left.getRational());
@@ -555,7 +555,7 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
      * @return a list of decimal approximations d such that |d-v| &lt; eps for
      *         all real v with f(v) = 0.
      */
-    public List<BigDecimal> approximateRoots(GenPolynomial<C> f, C eps) {
+    public List<BigDecimal> approximateRoots(GenPolynomial<C> f, BigRational eps) {
         List<Interval<C>> iv = realRoots(f);
         List<BigDecimal> roots = new ArrayList<BigDecimal>(iv.size());
         for (Interval<C> i : iv) {
@@ -657,7 +657,7 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
      * @return true if each x in R is a decimal approximation of a real v with
      *         f(v) = 0 with |d-v| &lt; eps, else false.
      */
-    public boolean isApproximateRoot(List<BigDecimal> R, GenPolynomial<C> f, C eps) {
+    public boolean isApproximateRoot(List<BigDecimal> R, GenPolynomial<C> f, BigRational eps) {
         if (R == null) {
             throw new IllegalArgumentException("null root not allowed");
         }

@@ -403,7 +403,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
      * @return a decimal approximation d such that |d-v| &lt; eps, for f(v) = 0,
      *         v in rt.
      */
-    public Complex<BigDecimal> approximateRoot(Rectangle<C> rt, GenPolynomial<Complex<C>> f, C eps)
+    public Complex<BigDecimal> approximateRoot(Rectangle<C> rt, GenPolynomial<Complex<C>> f, BigRational eps)
                     throws NoConvergenceException {
         if (rt == null) {
             throw new IllegalArgumentException("null interval not allowed");
@@ -413,7 +413,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
         if (f == null || f.isZERO() || f.isConstant() || eps == null) {
             return d;
         }
-        if (rt.length().compareTo(eps) < 0) {
+        if (rt.rationalLength().compareTo(eps) < 0) {
             return d;
         }
         ComplexRing<BigDecimal> cr = d.ring;
@@ -563,7 +563,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
      * @return list of complex decimal root approximations to desired precision.
      */
     @SuppressWarnings("cast")
-    public List<Complex<BigDecimal>> approximateRoots(GenPolynomial<Complex<C>> a, C eps) {
+    public List<Complex<BigDecimal>> approximateRoots(GenPolynomial<Complex<C>> a, BigRational eps) {
         ComplexRing<C> cr = (ComplexRing<C>) a.ring.coFac;
         SortedMap<GenPolynomial<Complex<C>>, Long> sa = engine.squarefreeFactors(a);
         List<Complex<BigDecimal>> roots = new ArrayList<Complex<BigDecimal>>();
