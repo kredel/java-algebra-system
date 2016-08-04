@@ -99,38 +99,28 @@ public class RealRootTuple<C extends GcdRingElem<C> & Rational> implements Seria
      }
 
 
-    /*
-     * Random point of recatangle.
-     * @return a random point contained in this rectangle.
-     public Complex<C> randomPoint() {
-     Complex<C> sw = getSW();
-     Complex<C> se = getSE();
-     Complex<C> nw = getNW();
-     Complex<C> r = sw.factory().random(13);
-     C dr = se.getRe().subtract(sw.getRe()); // >= 0
-     C di = nw.getIm().subtract(sw.getIm()); // >= 0
-     C rr = r.getRe().abs();
-     C ri = r.getIm().abs();
-     C one = ((RingFactory<C>)dr.factory()).getONE();
-     if ( !rr.isZERO() ) {
-     if ( rr.compareTo(one) > 0 ) {
-     rr = rr.inverse();
-     }
-     }
-     if ( !ri.isZERO() ) {
-     if ( ri.compareTo(one) > 0 ) {
-     ri = ri.inverse();
-     }
-     }
-     // 0 <= rr, ri <= 1
-     rr = rr.multiply(dr);
-     ri = ri.multiply(di);
-     Complex<C> rp = new Complex<C>(sw.factory(),rr,ri);
-     //System.out.println("rp = " + rp);
-     rp = sw.sum(rp);
-     return rp;
-     }
-    */
+    /**
+     * Random point of real root tuple.
+     * @return a random point contained in this real root tuple.
+     */
+    public RealRootTuple<C> randomPoint() {
+        List<RealAlgebraicNumber<C>> tp = new ArrayList<RealAlgebraicNumber<C>>(tuple.size());
+        for (RealAlgebraicNumber<C> r : tuple) {
+            C p1 = r.ring.root.randomPoint();
+            C p2 = r.ring.root.randomPoint();
+            if (p1.compareTo(p2) > 0) { // get p1 < p2
+                C pt = p1;
+                p1 = p2;
+                p2 = pt;
+            }
+            Interval<C> iv = new Interval<C>(p1, p2);
+            RealAlgebraicRing<C> rr = r.ring.copy();
+            rr.setRoot(iv);
+            RealAlgebraicNumber<C> rn = rr.copy(r);
+            tp.add(rn);
+        }
+        return new RealRootTuple<C>(tp);
+    }
 
 
     /**

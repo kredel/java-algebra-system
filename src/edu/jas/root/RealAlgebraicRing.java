@@ -192,6 +192,18 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
 
 
     /**
+     * Copy this RealAlgebraicRing.
+     * @return a copy of this.
+     */
+    public RealAlgebraicRing<C> copy() {
+        if (algebraic.isField()) {
+            return new RealAlgebraicRing<C>(algebraic.modul, root, algebraic.isField());
+        } 
+        return new RealAlgebraicRing<C>(algebraic.modul, root);
+    }
+
+
+    /**
      * Get the zero element.
      * @return 0 as RealAlgebraicNumber.
      */
