@@ -103,23 +103,25 @@ public class RealRootTuple<C extends GcdRingElem<C> & Rational> implements Seria
      * Random point of real root tuple.
      * @return a random point contained in this real root tuple.
      */
-    public RealRootTuple<C> randomPoint() {
-        List<RealAlgebraicNumber<C>> tp = new ArrayList<RealAlgebraicNumber<C>>(tuple.size());
+    public List<C> randomPoint() {
+        List<C> tp = new ArrayList<C>(tuple.size());
         for (RealAlgebraicNumber<C> r : tuple) {
-            C p1 = r.ring.root.randomPoint();
-            C p2 = r.ring.root.randomPoint();
-            if (p1.compareTo(p2) > 0) { // get p1 < p2
-                C pt = p1;
-                p1 = p2;
-                p2 = pt;
-            }
-            Interval<C> iv = new Interval<C>(p1, p2);
-            RealAlgebraicRing<C> rr = r.ring.copy();
-            rr.setRoot(iv);
-            RealAlgebraicNumber<C> rn = rr.copy(r);
-            tp.add(rn);
+            C rp = r.ring.root.randomPoint();
+            tp.add(rp);
         }
-        return new RealRootTuple<C>(tp);
+        return tp;
+    }
+
+
+    /**
+     * Refine root isolating intervals.
+     * @param eps desired interval length.
+     */
+    public void refineRoot(BigRational eps) {
+        for (RealAlgebraicNumber<C> r : tuple) {
+            r.ring.refineRoot(eps);
+        }
+        return;
     }
 
 

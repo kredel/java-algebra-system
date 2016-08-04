@@ -95,9 +95,9 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational> implements
         if (algebraic.characteristic().signum() > 0) {
             throw new IllegalArgumentException("characteristic not zero");
         }
-        //C e = m.ideal.list.ring.coFac.fromInteger(10L);
-        //e = e.inverse();
-        //e = e.power(PRECISION); //Power.positivePower(e, PRECISION);
+        if (root.tuple.size() != 2) {
+            throw new IllegalArgumentException("wrong tuple size: " + root.tuple.size());
+        }
         eps = BigRational.ONE;
         edu.jas.root.RealAlgebraicRing<C> rfac1 = root.tuple.get(0).factory();
         edu.jas.root.RealAlgebraicRing<C> rfac2 = root.tuple.get(1).factory();
@@ -192,8 +192,6 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational> implements
      */
     public synchronized void setEps(BigRational e) {
         this.eps = e;
-        //edu.jas.root.RealAlgebraicRing<C> r = (edu.jas.root.RealAlgebraicRing<C>) realRing.algebraic.ring.coFac;
-        //this.eps = r.algebraic.ring.coFac.parse(e.toString());
     }
 
 
@@ -202,9 +200,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational> implements
      * @param e epsilon.
      */
     public synchronized void refineRoot(BigRational e) {
-        //root = engine.refineInterval(root, algebraic.modul, e);
-        //this.eps = e;
-        throw new UnsupportedOperationException("refineRoot not yet implemented");
+        root.refineRoot(eps);
     }
 
 
