@@ -69,7 +69,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational> implements
     /**
      * Epsilon of the isolating rectangle for a complex root.
      */
-    protected C eps;
+    protected BigRational eps;
 
 
     /**
@@ -95,10 +95,10 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational> implements
         if (algebraic.characteristic().signum() > 0) {
             throw new IllegalArgumentException("characteristic not zero");
         }
-        C e = m.ideal.list.ring.coFac.fromInteger(10L);
-        e = e.inverse();
-        e = e.power(PRECISION); //Power.positivePower(e, PRECISION);
-        eps = e;
+        //C e = m.ideal.list.ring.coFac.fromInteger(10L);
+        //e = e.inverse();
+        //e = e.power(PRECISION); //Power.positivePower(e, PRECISION);
+        eps = BigRational.ONE;
         edu.jas.root.RealAlgebraicRing<C> rfac1 = root.tuple.get(0).factory();
         edu.jas.root.RealAlgebraicRing<C> rfac2 = root.tuple.get(1).factory();
         GenPolynomial<C> p0 = PolyUtil.<C> selectWithVariable(univs.ideal.list.list, 0);
@@ -154,7 +154,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational> implements
      * @param v rectangle.
      */
     public synchronized void setRoot(RealRootTuple<C> v) {
-        // assert v is contained in root
+        assert root.contains(v) : "root contains v";
         this.root = v;
     }
 
@@ -172,7 +172,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational> implements
      * Get epsilon.
      * @return epsilon.
      */
-    public synchronized C getEps() {
+    public synchronized BigRational getEps() {
         return this.eps;
     }
 
@@ -182,7 +182,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational> implements
      * @param e epsilon.
      */
     public synchronized void setEps(C e) {
-        this.eps = e;
+        setEps(e.getRational());
     }
 
 
@@ -191,8 +191,20 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational> implements
      * @param e epsilon.
      */
     public synchronized void setEps(BigRational e) {
-        edu.jas.root.RealAlgebraicRing<C> r = (edu.jas.root.RealAlgebraicRing<C>) realRing.algebraic.ring.coFac;
-        this.eps = r.algebraic.ring.coFac.parse(e.toString());
+        this.eps = e;
+        //edu.jas.root.RealAlgebraicRing<C> r = (edu.jas.root.RealAlgebraicRing<C>) realRing.algebraic.ring.coFac;
+        //this.eps = r.algebraic.ring.coFac.parse(e.toString());
+    }
+
+
+    /**
+     * Refine root.
+     * @param e epsilon.
+     */
+    public synchronized void refineRoot(BigRational e) {
+        //root = engine.refineInterval(root, algebraic.modul, e);
+        //this.eps = e;
+        throw new UnsupportedOperationException("refineRoot not yet implemented");
     }
 
 
@@ -347,7 +359,6 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational> implements
      */
     @Override
     @SuppressWarnings("unchecked")
-    // not jet working
     public boolean equals(Object b) {
         if (!(b instanceof RealAlgebraicRing)) {
             return false;

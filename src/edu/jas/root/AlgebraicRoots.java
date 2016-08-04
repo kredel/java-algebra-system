@@ -121,7 +121,7 @@ public class AlgebraicRoots<C extends GcdRingElem<C> & Rational> implements Seri
                 } else {
                     sb.append(", ");
                 }
-                sb.append(r.ring.root.toDecimal());
+                sb.append(r.ring.root.toDecimal().toScript());
             }
             sb.append("]");
         }
@@ -134,7 +134,7 @@ public class AlgebraicRoots<C extends GcdRingElem<C> & Rational> implements Seri
                 } else {
                     sb.append(", ");
                 }
-                sb.append(c.ring.root.getDecimalCenter());
+                sb.append(c.ring.root.getDecimalCenter().toScript());
             }
             sb.append("]");
         }

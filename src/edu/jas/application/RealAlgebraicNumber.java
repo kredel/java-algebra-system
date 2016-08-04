@@ -410,11 +410,6 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational> implements
      * @return signum(this).
      */
     public int signum() {
-        //         if ( number == null ) { // no synchronization required
-        //             GenPolynomial<C> p = number.val;
-        //             number = ring.realRing.parse(p.toString()); // todo: convert
-        //             //System.out.println("number = " + number);
-        //      }
         return number.signum();
     }
 
@@ -424,11 +419,6 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational> implements
      * @return |this| as rational number.
      */
     public BigRational magnitude() {
-        //         if ( number == null ) { // no synchronization required
-        //             GenPolynomial<C> p = number.val;
-        //             number = ring.realRing.parse(p.toString()); // todo: convert
-        //             //System.out.println("number = " + number);
-        //      }
         return number.magnitude();
     }
 

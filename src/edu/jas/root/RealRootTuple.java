@@ -71,19 +71,32 @@ public class RealRootTuple<C extends GcdRingElem<C> & Rational> implements Seria
     }
 
 
-    /*
+    /**
      * Contains a point.
-     * @param c point.
-     * @return true if c is contained in this rectangle, else false.
-     public boolean contains(Complex<C> c) {
-     Complex<C> ll = getSW();
-     Complex<C> ur = getSW();
-     return c.getRe().compareTo(ll.getRe()) < 0 ||
-     c.getIm().compareTo(ll.getIm()) < 0 || 
-     c.getRe().compareTo(ur.getRe()) > 0 || 
-     c.getIm().compareTo(ur.getIm()) > 0;
+     * @param c real root tuple representing a point.
+     * @return true if c is contained in this root tuple, else false.
+     */
+     public boolean contains(RealRootTuple<C> c) {
+         return contains(tuple);
      }
-    */
+
+
+    /**
+     * Contains a point.
+     * @param c list of real algebraic numbers representing a point.
+     * @return true if c is contained in this root tuple, else false.
+     */
+     public boolean contains(List<RealAlgebraicNumber<C>> c) {
+         int i = 0;
+         for (RealAlgebraicNumber<C> r : tuple) {
+             RealAlgebraicNumber<C> cn = c.get(i++);
+             boolean t = r.ring.root.contains(cn.ring.root);
+             if (!t) {
+                 return false;
+             }
+         }
+         return true;
+     }
 
 
     /*

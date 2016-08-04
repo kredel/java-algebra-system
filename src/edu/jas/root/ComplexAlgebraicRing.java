@@ -110,13 +110,6 @@ public class ComplexAlgebraicRing<C extends GcdRingElem<C> & Rational>
     }
 
 
-    /*
-     * Get the module part.
-     * @return modul. public GenPolynomial<C> getModul() { return
-     *         algebraic.modul; }
-     */
-
-
     /**
      * Set a refined rectangle for the complex root. <b>Note: </b> rectangle may
      * shrink eventually.
@@ -159,21 +152,25 @@ public class ComplexAlgebraicRing<C extends GcdRingElem<C> & Rational>
     /**
      * Set a new epsilon.
      * @param e epsilon.
-     * @throws InvalidBoundaryException
      */
     public synchronized void setEps(BigRational e) {
-        if (eps.compareTo(e) > 0) {
-            try {
-                // System.out.println("root = " + root);
-                root = engine.complexRootRefinement(root, algebraic.modul, e);
-                // System.out.println("root = " + root);
-            } catch (InvalidBoundaryException e1) {
-                //e1.printStackTrace();
-                logger.warn("new eps not set: " + e);
-                return; // ignore new eps
-            }
-        }
         this.eps = e; //algebraic.ring.coFac.parse(e.toString()).getRe();
+    }
+
+
+    /**
+     * Refine root.
+     * @param e epsilon.
+     */
+    public synchronized void refineRoot(BigRational e) {
+        try {
+            root = engine.complexRootRefinement(root, algebraic.modul, e);
+        } catch (InvalidBoundaryException e1) {
+           logger.warn("new eps not set: " + e);
+           //e1.printStackTrace();
+           return; // ignore new eps
+        }
+        this.eps = e; 
     }
 
 

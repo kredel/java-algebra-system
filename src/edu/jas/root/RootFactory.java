@@ -508,14 +508,10 @@ public class RootFactory {
     public static <C extends GcdRingElem<C> & Rational> void rootRefine(AlgebraicRoots<C> a,
                     BigRational eps) {
         for (RealAlgebraicNumber<C> r : a.real) {
-            //System.out.println("r.ring = " + r.ring);
-            r.ring.setEps(eps); // will call refinement
-            //System.out.println("r.ring = " + r.ring);
+            r.ring.refineRoot(eps); 
         }
         for (ComplexAlgebraicNumber<C> c : a.complex) {
-            //System.out.println("c.ring = " + c.ring);
-            c.ring.setEps(eps); // will call refinement
-            //System.out.println("c.ring = " + c.ring);
+            c.ring.refineRoot(eps); 
         }
         return; // a or void?
     }

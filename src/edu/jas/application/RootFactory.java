@@ -79,27 +79,20 @@ public class RootFactory {
             return t;
         }
         // test approximation, not working
-        RealAlgebraicRing<C> rring = (RealAlgebraicRing<C>) cr.ring;
-        RealRootTuple<C> rroot = rring.getRoot();
-        List<edu.jas.root.RealAlgebraicNumber<C>> rlist = rroot.tuple;
-        //System.out.println("rlist = " + rlist);
-        Interval<C> vr = rlist.get(0).ring.getRoot();
-        Interval<C> vi = rlist.get(1).ring.getRoot();
-        ComplexRing<C> ccfac = new ComplexRing<C>((RingFactory<C>) vr.left.factory());
-        Complex<C> sw = new Complex<C>(ccfac, vr.left, vi.left);
-        Complex<C> ne = new Complex<C>(ccfac, vr.right, vi.right);
-        Complex<C> epsw = PolyUtil.<Complex<C>> evaluateMain(ccfac, f, sw);
-        Complex<C> epne = PolyUtil.<Complex<C>> evaluateMain(ccfac, f, ne);
-        int rootre = (epsw.getRe().signum() * epne.getRe().signum());
-        int rootim = (epsw.getIm().signum() * epne.getIm().signum());
-        t = (rootre <= 0 && rootim <= 0);
-        //logger.info("p(root): p = " + f + ", r = " + r.getRe() + " i " + r.getIm());
-        //logger.info("r = " + new BigDecimal(r.getRe().magnitude()) + " i " + new BigDecimal(r.getIm().magnitude()));
-        //logger.info("vr = " + vr + ", vi = " + vi);
-        //logger.info("sw   = " + sw   + ", ne   = " + ne);
-        //logger.info("root(re) = " + rootre + ", root(im) = " + rootim);
-        //logger.info("epsw   = " + new BigDecimal(epsw.getRe().getRational()) + " i " + new BigDecimal(epsw.getIm().getRational()));
-        //logger.info("epne   = " + new BigDecimal(epne.getRe().getRational()) + " i " + new BigDecimal(epne.getIm().getRational()));
+        //RealAlgebraicRing<C> rring = (RealAlgebraicRing<C>) cr.ring;
+        //RealRootTuple<C> rroot = rring.getRoot();
+        //List<edu.jas.root.RealAlgebraicNumber<C>> rlist = rroot.tuple;
+        ////System.out.println("rlist = " + rlist);
+        //Interval<C> vr = rlist.get(0).ring.getRoot();
+        //Interval<C> vi = rlist.get(1).ring.getRoot();
+        //ComplexRing<C> ccfac = new ComplexRing<C>((RingFactory<C>) vr.left.factory());
+        //Complex<C> sw = new Complex<C>(ccfac, vr.left, vi.left);
+        //Complex<C> ne = new Complex<C>(ccfac, vr.right, vi.right);
+        //Complex<C> epsw = PolyUtil.<Complex<C>> evaluateMain(ccfac, f, sw);
+        //Complex<C> epne = PolyUtil.<Complex<C>> evaluateMain(ccfac, f, ne);
+        //int rootre = (epsw.getRe().signum() * epne.getRe().signum());
+        //int rootim = (epsw.getIm().signum() * epne.getIm().signum());
+        //t = (rootre <= 0 && rootim <= 0);
         return true;
     }
 
@@ -197,7 +190,6 @@ public class RootFactory {
         li.add(im);
         Ideal<C> id = new Ideal<C>(rfac, li);
         //System.out.println("id = " + id);
-
         List<IdealWithUniv<C>> idul = id.zeroDimRootDecomposition();
 
         IdealWithRealAlgebraicRoots<C> idr;
@@ -262,6 +254,7 @@ public class RootFactory {
      List<ComplexAlgebraicNumber<C>> complexAlgebraicNumbersComplex(GenPolynomial<Complex<C>> f, BigRational eps) {
      }
     */
+
 
     /**
      * Root reduce of real and complex algebraic numbers.

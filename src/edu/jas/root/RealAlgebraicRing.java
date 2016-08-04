@@ -147,12 +147,17 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
      * @param e epsilon.
      */
     public synchronized void setEps(BigRational e) {
-        if (eps.compareTo(e) > 0) {
-            //System.out.println("root = " + root);
-            root = engine.refineInterval(root, algebraic.modul, e);
-            //System.out.println("root = " + root);
-        }
         this.eps = e; //algebraic.ring.coFac.parse(e.toString());
+    }
+
+
+    /**
+     * Refine root.
+     * @param e epsilon.
+     */
+    public synchronized void refineRoot(BigRational e) {
+        root = engine.refineInterval(root, algebraic.modul, e);
+        this.eps = e; 
     }
 
 
