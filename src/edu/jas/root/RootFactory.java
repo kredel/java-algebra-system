@@ -262,21 +262,21 @@ public class RootFactory {
         if (!t) {
             return t;
         }
-        System.out.println("imag = 0");
+        //System.out.println("imag = 0");
         Interval<C> ivc = new Interval<C>(rc.getSW().getRe(), rc.getNE().getRe());
         Interval<C> ivr = r.ring.root;
         // disjoint intervals
         if (ivc.right.compareTo(ivr.left) < 0 || ivr.right.compareTo(ivc.left) < 0) {
-            System.out.println("disjoint: ivc = " + ivc + ", ivr = " + ivr);
+            //System.out.println("disjoint: ivc = " + ivc + ", ivr = " + ivr);
             return false;
         }
-        System.out.println("not disjoint");
+        //System.out.println("not disjoint");
         // full containement
         t = ivc.contains(ivr) || ivr.contains(ivc);
         if (t) {
             return t;
         }
-        System.out.println("with overlap");
+        //System.out.println("with overlap");
         // overlap, refine to smaller interval
         C left = ivc.left;
         if (left.compareTo(ivr.left) > 0) {
@@ -287,7 +287,7 @@ public class RootFactory {
             right = ivr.right;
         }
         Interval<C> ref = new Interval<C>(left, right);
-        System.out.println("refined interval " + ref);
+        //System.out.println("refined interval " + ref);
         RealRoots<C> reng = r.ring.engine; //new RealRootsSturm<C>(); 
         long z = reng.realRootCount(ref, f);
         if (z != 1) {
@@ -299,7 +299,7 @@ public class RootFactory {
         //Complex<C> sw = new Complex<C>(cr, left, cr.ring.getZERO());
         //Complex<C> ne = new Complex<C>(cr, right, cr.ring.getZERO());
         Rectangle<C> rec = new Rectangle<C>(sw, ne);
-        System.out.println("refined rectangle " + rec);
+        //System.out.println("refined rectangle " + rec);
         ComplexRoots<C> ceng = c.ring.engine; //new ComplexRootsSturm<C>(); 
         GenPolynomialRing<Complex<C>> fac = new GenPolynomialRing<Complex<C>>(cr, f.ring);
         GenPolynomial<Complex<C>> p = PolyUtil.<C> complexFromAny(fac, f);
@@ -310,11 +310,31 @@ public class RootFactory {
             e.printStackTrace();
             z = 0;
         }
-        System.out.println("complexRootCount: " + z);
+        //System.out.println("complexRootCount: " + z);
         if (z != 1) {
             return false;
         }
         return true;
+    }
+
+
+    /**
+     * Is complex decimal number a real root of a polynomial.
+     * @param f univariate polynomial.
+     * @param c complex decimal number.
+     * @param r real decimal number.
+     * @param eps desired precision.
+     * @return true, if f(c) == 0 and c == r, else false;
+     */
+    public static <C extends GcdRingElem<C> & Rational> boolean isRealRoot(GenPolynomial<C> f,
+		  Complex<BigDecimal> c, BigDecimal r, BigRational eps) {
+        BigDecimal e = new BigDecimal(eps);
+        if (c.getIm().abs().compareTo(e) <= 0) {
+            if (c.getRe().subtract(r).abs().compareTo(e) <= 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -451,7 +471,47 @@ public class RootFactory {
             RealAlgebraicNumber<C> rm = null; // ~boolean
             for (RealAlgebraicNumber<C> rn : rl) {
                 if (isRealRoot(f, cn, rn)) {
-                    System.out.println("filterOutRealRoots, cn = " + cn + ", rn = " + rn);
+                    //System.out.println("filterOutRealRoots, cn = " + cn + ", rn = " + rn);
+                    rm = rn;
+                    break; // remove from r
+                }
+            }
+            if (rm == null) {
+                cmr.add(cn);
+            } else {
+                rl.remove(rm);
+            }
+        }
+        return cmr;
+    }
+
+
+    /**
+     * Filter real roots from complex roots.
+     * @param f univariate polynomial.
+     * @param c list of complex decimal numbers.
+     * @param r list of real decimal numbers.
+     * @param eps desired precision.
+     * @return c minus the real roots from r
+     */
+    public static <C extends GcdRingElem<C> & Rational> List<Complex<BigDecimal>> filterOutRealRoots(
+		  GenPolynomial<C> f, List<Complex<BigDecimal>> c, List<BigDecimal> r, BigRational eps) {
+        if (c.isEmpty()) {
+            return c;
+        }
+        if (r.isEmpty()) {
+            return c;
+        }
+        List<Complex<BigDecimal>> cmr = new ArrayList<Complex<BigDecimal>>();
+        if (c.size() == r.size() /*&& r.size() == f.degree()*/ ) {
+            return cmr;
+        }
+        List<BigDecimal> rl = new LinkedList<BigDecimal>(r);
+        for (Complex<BigDecimal> cn : c) {
+            BigDecimal rm = null; // ~boolean
+            for (BigDecimal rn : rl) {
+                if (isRealRoot(f, cn, rn, eps)) {
+                    //System.out.println("filterOutRealRoots, cn = " + cn + ", rn = " + rn);
                     rm = rn;
                     break; // remove from r
                 }
@@ -545,7 +605,7 @@ public class RootFactory {
         ComplexRootsAbstract<C> cengine = new ComplexRootsSturm<C>(cr);
         List<Complex<BigDecimal>> cl = cengine.approximateRoots(fc, eps);
 
-        //cl = filterOutRealRoots(f, cl, rl);
+        cl = filterOutRealRoots(f, cl, rl, eps);
         DecimalRoots<C> ar = new DecimalRoots<C>(f, rl, cl);
         return ar;
     }
