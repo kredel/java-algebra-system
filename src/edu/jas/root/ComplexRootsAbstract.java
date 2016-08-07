@@ -166,7 +166,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
      * @param a univariate complex polynomial.
      * @return list of complex roots.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings({"cast","unchecked"})
     public List<Rectangle<C>> complexRoots(GenPolynomial<Complex<C>> a) {
         List<Rectangle<C>> roots = new ArrayList<Rectangle<C>>();
         if (a.isConstant() || a.isZERO()) {
@@ -211,7 +211,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
      * @param len rational length for refinement.
      * @return refined complex root.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings({"cast","unchecked"})
     public Rectangle<C> complexRootRefinement(Rectangle<C> rect, GenPolynomial<Complex<C>> a, BigRational len)
                     throws InvalidBoundaryException {
         ComplexRing<C> cr = (ComplexRing<C>) a.ring.coFac;
@@ -324,7 +324,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
      * @param len rational length for refinement.
      * @return list of complex roots to desired precision.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings({"cast","unchecked"})
     public List<Rectangle<C>> complexRoots(GenPolynomial<Complex<C>> a, BigRational len) {
         ComplexRing<C> cr = (ComplexRing<C>) a.ring.coFac;
         SortedMap<GenPolynomial<Complex<C>>, Long> sa = engine.squarefreeFactors(a);
@@ -562,7 +562,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
      * @param eps length for refinement.
      * @return list of complex decimal root approximations to desired precision.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings({"cast","unchecked"})
     public List<Complex<BigDecimal>> approximateRoots(GenPolynomial<Complex<C>> a, BigRational eps) {
         ComplexRing<C> cr = (ComplexRing<C>) a.ring.coFac;
         SortedMap<GenPolynomial<Complex<C>>, Long> sa = engine.squarefreeFactors(a);

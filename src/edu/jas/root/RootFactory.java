@@ -267,6 +267,7 @@ public class RootFactory {
         Interval<C> ivr = r.ring.root;
         // disjoint intervals
         if (ivc.right.compareTo(ivr.left) < 0 || ivr.right.compareTo(ivc.left) < 0) {
+            System.out.println("disjoint: ivc = " + ivc + ", ivr = " + ivr);
             return false;
         }
         System.out.println("not disjoint");
@@ -293,10 +294,10 @@ public class RootFactory {
             return false;
         }
         ComplexRing<C> cr = rc.getSW().ring;
-        //Complex<C> sw = new Complex<C>(cr, left, rc.getSW().getIm());
-        //Complex<C> ne = new Complex<C>(cr, right, rc.getNE().getIm());
-        Complex<C> sw = new Complex<C>(cr, left, cr.ring.getZERO());
-        Complex<C> ne = new Complex<C>(cr, right, cr.ring.getZERO());
+        Complex<C> sw = new Complex<C>(cr, left, rc.getSW().getIm());
+        Complex<C> ne = new Complex<C>(cr, right, rc.getNE().getIm());
+        //Complex<C> sw = new Complex<C>(cr, left, cr.ring.getZERO());
+        //Complex<C> ne = new Complex<C>(cr, right, cr.ring.getZERO());
         Rectangle<C> rec = new Rectangle<C>(sw, ne);
         System.out.println("refined rectangle " + rec);
         ComplexRoots<C> ceng = c.ring.engine; //new ComplexRootsSturm<C>(); 
@@ -309,6 +310,7 @@ public class RootFactory {
             e.printStackTrace();
             z = 0;
         }
+        System.out.println("complexRootCount: " + z);
         if (z != 1) {
             return false;
         }
@@ -449,6 +451,7 @@ public class RootFactory {
             RealAlgebraicNumber<C> rm = null; // ~boolean
             for (RealAlgebraicNumber<C> rn : rl) {
                 if (isRealRoot(f, cn, rn)) {
+                    System.out.println("filterOutRealRoots, cn = " + cn + ", rn = " + rn);
                     rm = rn;
                     break; // remove from r
                 }
