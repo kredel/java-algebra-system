@@ -11,6 +11,7 @@ import java.util.List;
 import edu.jas.arith.Rational;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.Complex;
 import edu.jas.structure.GcdRingElem;
 
 
@@ -36,6 +37,12 @@ public class AlgebraicRoots<C extends GcdRingElem<C> & Rational> implements Seri
 
 
     /**
+     * univariate polynomial with complex coefficients.
+     */
+    public final GenPolynomial<Complex<C>> cp;
+
+
+    /**
      * complex algebraic roots.
      */
     public final List<ComplexAlgebraicNumber<C>> complex;
@@ -44,12 +51,14 @@ public class AlgebraicRoots<C extends GcdRingElem<C> & Rational> implements Seri
     /**
      * Constructor.
      * @param p univariate polynomial
+     * @param cp univariate polynomial with compelx coefficients
      * @param r list of real algebraic roots
      * @param c list of complex algebraic roots
      */
-    public AlgebraicRoots(GenPolynomial<C> p, List<RealAlgebraicNumber<C>> r,
+    public AlgebraicRoots(GenPolynomial<C> p, GenPolynomial<Complex<C>> cp, List<RealAlgebraicNumber<C>> r,
                     List<ComplexAlgebraicNumber<C>> c) {
         this.p = p;
+        this.cp = cp;
         this.real = r;
         this.complex = c;
     }
@@ -61,7 +70,7 @@ public class AlgebraicRoots<C extends GcdRingElem<C> & Rational> implements Seri
      */
     @Override
     public String toString() {
-        return "[" + p + ", real=" + real + ", complex=" + complex + "]";
+        return "[" + p + ", " + cp + ", real=" + real + ", complex=" + complex + "]";
     }
 
 
@@ -73,6 +82,8 @@ public class AlgebraicRoots<C extends GcdRingElem<C> & Rational> implements Seri
         // Python case
         StringBuffer sb = new StringBuffer("[");
         sb.append(p.toScript());
+        sb.append(", ");
+        sb.append(cp.toScript());
         if (!real.isEmpty()) {
             sb.append(", real=[");
             boolean first = true;
@@ -112,6 +123,8 @@ public class AlgebraicRoots<C extends GcdRingElem<C> & Rational> implements Seri
         // Python case
         StringBuffer sb = new StringBuffer("[");
         sb.append(p.toScript());
+        sb.append(", ");
+        sb.append(cp.toScript());
         if (!real.isEmpty()) {
             sb.append(", real=[");
             boolean first = true;
@@ -148,7 +161,7 @@ public class AlgebraicRoots<C extends GcdRingElem<C> & Rational> implements Seri
      * @return a copy of this.
      */
     public AlgebraicRoots<C> copy() {
-        return new AlgebraicRoots<C>(p, real, complex);
+        return new AlgebraicRoots<C>(p, cp, real, complex);
     }
 
 
@@ -168,6 +181,7 @@ public class AlgebraicRoots<C extends GcdRingElem<C> & Rational> implements Seri
         } catch (ClassCastException e) {
             return false;
         }
+        // && cp.equals(a.cp)
         return p.equals(a.p) && real.equals(a.real) && complex.equals(a.complex);
     }
 

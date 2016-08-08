@@ -37,6 +37,12 @@ public class DecimalRoots<C extends GcdRingElem<C> & Rational> implements Serial
 
 
     /**
+     * univariate polynomial with complex coefficients.
+     */
+    public final GenPolynomial<Complex<C>> cp;
+
+
+    /**
      * complex decimal roots.
      */
     public final List<Complex<BigDecimal>> complex;
@@ -45,12 +51,14 @@ public class DecimalRoots<C extends GcdRingElem<C> & Rational> implements Serial
     /**
      * Constructor.
      * @param p univariate polynomial
+     * @param cp univariate complex polynomial
      * @param r list of real decimal roots
      * @param c list of complex decimal roots
      */
-    public DecimalRoots(GenPolynomial<C> p, List<BigDecimal> r,
+    public DecimalRoots(GenPolynomial<C> p,  GenPolynomial<Complex<C>> cp, List<BigDecimal> r,
                         List<Complex<BigDecimal>> c) {
         this.p = p;
+        this.cp = cp;
         this.real = r;
         this.complex = c;
     }
@@ -105,51 +113,12 @@ public class DecimalRoots<C extends GcdRingElem<C> & Rational> implements Serial
     }
 
 
-    /*
-     * Get a scripting compatible string representation.
-     * @return script compatible representation for this Interval.
-    public String toDecimalScript() {
-        // Python case
-        StringBuffer sb = new StringBuffer("[");
-        sb.append(p.toScript());
-        if (!real.isEmpty()) {
-            sb.append(", real=[");
-            boolean first = true;
-            for (RealAlgebraicNumber<C> r : real) {
-                if (first) {
-                    first = false;
-                } else {
-                    sb.append(", ");
-                }
-                sb.append(r.ring.root.toDecimal().toScript());
-            }
-            sb.append("]");
-        }
-        if (!complex.isEmpty()) {
-            sb.append(", complex=[");
-            boolean first = true;
-            for (ComplexAlgebraicNumber<C> c : complex) {
-                if (first) {
-                    first = false;
-                } else {
-                    sb.append(", ");
-                }
-                sb.append(c.ring.root.getDecimalCenter().toScript());
-            }
-            sb.append("]");
-        }
-        sb.append("]");
-        return sb.toString();
-    }
-     */
-
-
     /**
      * Copy this.
      * @return a copy of this.
      */
     public DecimalRoots<C> copy() {
-        return new DecimalRoots<C>(p, real, complex);
+        return new DecimalRoots<C>(p, cp, real, complex);
     }
 
 

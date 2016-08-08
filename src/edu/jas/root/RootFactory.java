@@ -534,8 +534,12 @@ public class RootFactory {
     public static <C extends GcdRingElem<C> & Rational> AlgebraicRoots<C> algebraicRoots(GenPolynomial<C> f) {
         List<RealAlgebraicNumber<C>> rl = realAlgebraicNumbers(f);
         List<ComplexAlgebraicNumber<C>> cl = complexAlgebraicNumbers(f);
+        GenPolynomial<Complex<C>> cf = null;
+        if (!cl.isEmpty()) {
+	    cf = cl.get(0).ring.algebraic.modul;
+        }
         cl = filterOutRealRoots(f, cl, rl);
-        AlgebraicRoots<C> ar = new AlgebraicRoots<C>(f, rl, cl);
+        AlgebraicRoots<C> ar = new AlgebraicRoots<C>(f, cf, rl, cl);
         return ar;
     }
 
@@ -559,7 +563,7 @@ public class RootFactory {
                 cl.add(c);
             }
         }
-        AlgebraicRoots<C> ur = new AlgebraicRoots<C>(ar.p, rl, cl);
+        AlgebraicRoots<C> ur = new AlgebraicRoots<C>(ar.p, ar.cp, rl, cl);
         return ur;
     }
 
@@ -587,7 +591,7 @@ public class RootFactory {
      * @param eps desired precision.
      * @return container of real and complex decimal numbers.
      */
-    public static <C extends GcdRingElem<C> & Rational> DecimalRoots decimalRoots(GenPolynomial<C> f, BigRational eps) {
+    public static <C extends GcdRingElem<C> & Rational> DecimalRoots<C> decimalRoots(GenPolynomial<C> f, BigRational eps) {
         RealRootsAbstract<C> rengine = new RealRootsSturm<C>();
         List<BigDecimal> rl = rengine.approximateRoots(f, eps);
 
@@ -606,8 +610,41 @@ public class RootFactory {
         List<Complex<BigDecimal>> cl = cengine.approximateRoots(fc, eps);
 
         cl = filterOutRealRoots(f, cl, rl, eps);
-        DecimalRoots<C> ar = new DecimalRoots<C>(f, rl, cl);
+        DecimalRoots<C> ar = new DecimalRoots<C>(f, fc, rl, cl);
         return ar;
+    }
+
+    /**
+     * Roots as real and complex decimal numbers.
+     * @param ar container for real and complex algebraic roots.
+     * @param eps desired precision.
+     * @return container of real and complex decimal numbers.
+     */
+    public static <C extends GcdRingElem<C> & Rational> DecimalRoots<C> decimalRoots(AlgebraicRoots<C> ar, BigRational eps) {
+        //no: rootRefine(ar, eps);
+
+        RealRootsAbstract<C> rengine = new RealRootsSturm<C>();
+        List<BigDecimal> rl = new ArrayList<BigDecimal>(ar.real.size());
+        for (RealAlgebraicNumber<C> r : ar.real) {
+            try {
+                 BigDecimal d = rengine.approximateRoot(r.ring.root, ar.p, eps);
+                 rl.add(d);
+            } catch (NoConvergenceException e) {
+		 System.out.println("should not happen: " + e);
+            }
+        }
+        ComplexRootsAbstract<C> cengine = new ComplexRootsSturm<C>(ar.cp.ring.coFac);
+        List<Complex<BigDecimal>> cl = new ArrayList<Complex<BigDecimal>>(ar.complex.size());
+        for (ComplexAlgebraicNumber<C> c : ar.complex) {
+            try {
+                 Complex<BigDecimal> d = cengine.approximateRoot(c.ring.root, ar.cp, eps);
+                 cl.add(d);
+            } catch (NoConvergenceException e) {
+		 System.out.println("should not happen: " + e);
+            }
+        }
+        DecimalRoots<C> dr = new DecimalRoots<C>(ar.p, ar.cp, rl, cl);
+        return dr;
     }
 
 }
