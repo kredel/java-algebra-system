@@ -622,7 +622,6 @@ public class RootFactory {
      */
     public static <C extends GcdRingElem<C> & Rational> DecimalRoots<C> decimalRoots(AlgebraicRoots<C> ar, BigRational eps) {
         //no: rootRefine(ar, eps);
-
         RealRootsAbstract<C> rengine = new RealRootsSturm<C>();
         List<BigDecimal> rl = new ArrayList<BigDecimal>(ar.real.size());
         for (RealAlgebraicNumber<C> r : ar.real) {

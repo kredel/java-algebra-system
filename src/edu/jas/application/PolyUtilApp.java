@@ -1544,12 +1544,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
     /**
      * Convert to RealAlgebraicNumber coefficients. Represent as polynomial with
      * RealAlgebraicNumber<C> coefficients from package
-     * 
-     * <pre>
-     * edu.jas.root
-     * </pre>
-     * 
-     * .
+     * <code>edu.jas.root.</code>
      * @param afac result polynomial factory.
      * @param A polynomial with RealAlgebraicNumber&lt;C&gt; coefficients to be
      *            converted.

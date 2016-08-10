@@ -70,7 +70,7 @@ public class AlgebraicRoots<C extends GcdRingElem<C> & Rational> implements Seri
      */
     @Override
     public String toString() {
-        return "[" + p + ", " + cp + ", real=" + real + ", complex=" + complex + "]";
+        return "[" + p + ", real=" + real + ", complex=" + complex + "]";
     }
 
 
@@ -82,8 +82,8 @@ public class AlgebraicRoots<C extends GcdRingElem<C> & Rational> implements Seri
         // Python case
         StringBuffer sb = new StringBuffer("[");
         sb.append(p.toScript());
-        sb.append(", ");
-        sb.append(cp.toScript());
+        //sb.append(", ");
+        //sb.append(cp.toScript());
         if (!real.isEmpty()) {
             sb.append(", real=[");
             boolean first = true;
@@ -123,8 +123,8 @@ public class AlgebraicRoots<C extends GcdRingElem<C> & Rational> implements Seri
         // Python case
         StringBuffer sb = new StringBuffer("[");
         sb.append(p.toScript());
-        sb.append(", ");
-        sb.append(cp.toScript());
+        //sb.append(", ");
+        //sb.append(cp.toScript());
         if (!real.isEmpty()) {
             sb.append(", real=[");
             boolean first = true;
