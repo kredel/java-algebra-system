@@ -1,0 +1,151 @@
+/*
+ * $Id$
+ */
+
+package edu.jas.application;
+
+
+import java.io.Serializable;
+import java.util.List;
+
+import edu.jas.arith.Rational;
+import edu.jas.poly.AlgebraicNumberRing;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.Complex;
+import edu.jas.root.AlgebraicRoots;
+import edu.jas.root.RealAlgebraicNumber;
+import edu.jas.root.ComplexAlgebraicNumber;
+import edu.jas.structure.GcdRingElem;
+
+
+/**
+ * Container for the real and complex algebraic roots of a univariate
+ * polynomial together with primitive element.
+ * @param <C> coefficient type.
+ * @author Heinz Kredel
+ */
+public class AlgebraicRootsPrimElem<C extends GcdRingElem<C> & Rational> 
+             extends AlgebraicRoots<C> implements Serializable {
+
+
+    /**
+     * Primitive Element algebraic roots.
+     */
+    public final PrimitiveElement<C> pelem;
+
+
+    /**
+     * Constructor not for use.
+     */
+    protected AlgebraicRootsPrimElem() {
+        throw new IllegalArgumentException("do not use this constructor");
+    }
+
+
+    /**
+     * Constructor.
+     * @param p univariate polynomial
+     * @param cp univariate polynomial with compelx coefficients
+     * @param r list of real algebraic roots
+     * @param c list of complex algebraic roots
+     * @param pe primitive element
+     */
+    public AlgebraicRootsPrimElem(GenPolynomial<C> p, GenPolynomial<Complex<C>> cp, 
+                    List<RealAlgebraicNumber<C>> r,
+		    List<ComplexAlgebraicNumber<C>> c,
+                    PrimitiveElement<C> pe) {
+        super(p, cp, r, c);
+        this.pelem = pe;
+    }
+
+
+    /**
+     * Constructor.
+     * @param ar algebraic roots container
+     * @param pe primitive element
+     */
+    public AlgebraicRootsPrimElem(AlgebraicRoots<C> ar, PrimitiveElement<C> pe) {
+        this(ar.p, ar.cp, ar.real, ar.complex, pe); 
+    }
+
+
+    /**
+     * String representation of AlgebraicRootsPrimElem.
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return super.toString();
+        //return "[" + p + ", real=" + real + ", complex=" + complex + ", " + pelem + "]";
+    }
+
+
+    /**
+     * Get a scripting compatible string representation.
+     * @return script compatible representation for this Interval.
+     */
+    public String toScript() {
+        // Python case
+        return super.toScript();
+    }
+
+
+    /**
+     * Get a scripting compatible string representation.
+     * @return script compatible representation for this Interval.
+     */
+    public String toDecimalScript() {
+        // Python case
+        return super.toDecimalScript();
+    }
+
+
+    /**
+     * Copy this.
+     * @return a copy of this.
+     */
+    public AlgebraicRootsPrimElem<C> copy() {
+        return new AlgebraicRootsPrimElem<C>(p, cp, real, complex, pelem);
+    }
+
+
+    /**
+     * Comparison with any other object.
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public boolean equals(Object b) {
+        if (!(b instanceof AlgebraicRootsPrimElem)) {
+            return false;
+        }
+        AlgebraicRootsPrimElem<C> a = null;
+        try {
+            a = (AlgebraicRootsPrimElem<C>) b;
+        } catch (ClassCastException e) {
+            return false;
+        }
+        // && cp.equals(a.cp)
+        return super.equals(a);
+    }
+
+
+    /**
+     * Hash code for this AlgebraicRootsPrimElem.
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode(); //(161 * p.hashCode() + 37) * real.hashCode() + complex.hashCode();
+    }
+
+
+    /**
+     * Algebraic number ring.
+     * @return algebraic ring of roots.
+     */
+    public AlgebraicNumberRing<C> getAlgebraicRing() {
+        AlgebraicNumberRing<C> anr = new AlgebraicNumberRing<C>(p);
+        return anr;
+    }
+}

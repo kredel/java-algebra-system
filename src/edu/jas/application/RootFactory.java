@@ -265,7 +265,7 @@ public class RootFactory {
      */
     public static <C extends GcdRingElem<C> & Rational> 
            AlgebraicRoots<C> rootReduce(AlgebraicRoots<C> a, AlgebraicRoots<C> b) {
-        return rootReduce(a.p, b.p);
+        return rootReduce(a.getAlgebraicRing(), b.getAlgebraicRing());
     }
 
 
@@ -280,8 +280,21 @@ public class RootFactory {
            AlgebraicRoots<C> rootReduce(GenPolynomial<C> a, GenPolynomial<C> b) {
         AlgebraicNumberRing<C> anr = new AlgebraicNumberRing<C>(a);
         AlgebraicNumberRing<C> bnr = new AlgebraicNumberRing<C>(b);
-        PrimitiveElement<C> pe = PolyUtilApp.<C>primitiveElement(anr, bnr);
+        return rootReduce(anr, bnr);
+    }
+
+
+    /**
+     * Root reduce of real and complex algebraic numbers.
+     * @param a algebraic number ring.
+     * @param b algebraic number ring.
+     * @return container of real and complex algebraic numbers 
+     *         of the primitive element of a and b.
+     */
+    public static <C extends GcdRingElem<C> & Rational> 
+           AlgebraicRoots<C> rootReduce(AlgebraicNumberRing<C> a, AlgebraicNumberRing<C> b) {
+        PrimitiveElement<C> pe = PolyUtilApp.<C>primitiveElement(a, b);
         AlgebraicRoots<C> ar = edu.jas.root.RootFactory.<C>algebraicRoots(pe.primitiveElem.modul);
-        return ar;
+        return new AlgebraicRootsPrimElem<C>(ar, pe);
     }
 }

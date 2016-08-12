@@ -25,27 +25,35 @@ public class AlgebraicRoots<C extends GcdRingElem<C> & Rational> implements Seri
 
 
     /**
-     * univariate polynomial.
+     * Univariate polynomial.
      */
     public final GenPolynomial<C> p;
 
 
     /**
-     * real algebraic roots.
+     * Real algebraic roots.
      */
     public final List<RealAlgebraicNumber<C>> real;
 
 
     /**
-     * univariate polynomial with complex coefficients.
+     * Univariate polynomial with complex coefficients equivalent to p.
      */
     public final GenPolynomial<Complex<C>> cp;
 
 
     /**
-     * complex algebraic roots.
+     * Complex algebraic roots.
      */
     public final List<ComplexAlgebraicNumber<C>> complex;
+
+
+    /**
+     * Constructor not for use.
+     */
+    protected AlgebraicRoots() {
+        throw new IllegalArgumentException("do not use this constructor");
+    }
 
 
     /**

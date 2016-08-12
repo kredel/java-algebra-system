@@ -22,7 +22,7 @@ public class PrimitiveElement<C extends GcdRingElem<C>> implements Serializable 
     /**
      * The primitive element.
      */
-    public final  AlgebraicNumberRing<C> primitiveElem;
+    public final AlgebraicNumberRing<C> primitiveElem;
 
 
     /**
@@ -38,15 +38,15 @@ public class PrimitiveElement<C extends GcdRingElem<C>> implements Serializable 
 
 
     /**
-     * The first algebraic ring.
+     * The first original algebraic ring.
      */
-    public final  AlgebraicNumberRing<C> Aring;
+    public final AlgebraicNumberRing<C> Aring;
 
 
     /**
-     * The second algebraic ring.
+     * The second original algebraic ring.
      */
-    public final  AlgebraicNumberRing<C> Bring;
+    public final AlgebraicNumberRing<C> Bring;
 
 
     /**
