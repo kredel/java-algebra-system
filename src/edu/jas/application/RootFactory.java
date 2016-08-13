@@ -18,6 +18,7 @@ import edu.jas.poly.ComplexRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.AlgebraicNumberRing;
+import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
 import edu.jas.root.Interval;
@@ -264,7 +265,7 @@ public class RootFactory {
      *         of the primitive element of a and b.
      */
     public static <C extends GcdRingElem<C> & Rational> 
-           AlgebraicRoots<C> rootReduce(AlgebraicRoots<C> a, AlgebraicRoots<C> b) {
+           AlgebraicRootsPrimElem<C> rootReduce(AlgebraicRoots<C> a, AlgebraicRoots<C> b) {
         return rootReduce(a.getAlgebraicRing(), b.getAlgebraicRing());
     }
 
@@ -277,7 +278,7 @@ public class RootFactory {
      *         of the primitive element of a and b.
      */
     public static <C extends GcdRingElem<C> & Rational> 
-           AlgebraicRoots<C> rootReduce(GenPolynomial<C> a, GenPolynomial<C> b) {
+           AlgebraicRootsPrimElem<C> rootReduce(GenPolynomial<C> a, GenPolynomial<C> b) {
         AlgebraicNumberRing<C> anr = new AlgebraicNumberRing<C>(a);
         AlgebraicNumberRing<C> bnr = new AlgebraicNumberRing<C>(b);
         return rootReduce(anr, bnr);
@@ -292,9 +293,48 @@ public class RootFactory {
      *         of the primitive element of a and b.
      */
     public static <C extends GcdRingElem<C> & Rational> 
-           AlgebraicRoots<C> rootReduce(AlgebraicNumberRing<C> a, AlgebraicNumberRing<C> b) {
+           AlgebraicRootsPrimElem<C> rootReduce(AlgebraicNumberRing<C> a, AlgebraicNumberRing<C> b) {
         PrimitiveElement<C> pe = PolyUtilApp.<C>primitiveElement(a, b);
         AlgebraicRoots<C> ar = edu.jas.root.RootFactory.<C>algebraicRoots(pe.primitiveElem.modul);
         return new AlgebraicRootsPrimElem<C>(ar, pe);
     }
+
+
+    /**
+     * Roots of unity of real and complex algebraic numbers.
+     * @param container of real and complex algebraic numbers with primitive element.
+     * @return container of real and complex algebraic numbers which are roots
+     *         of unity.
+     */
+    public static <C extends GcdRingElem<C> & Rational> 
+           AlgebraicRootsPrimElem<C> rootsOfUnity(AlgebraicRootsPrimElem<C> ar) {
+        AlgebraicRoots<C> ur = edu.jas.root.RootFactory.rootsOfUnity(ar);
+        if (ar.pelem == null) {
+            return new AlgebraicRootsPrimElem<C>(ur, ar.pelem);
+        }
+        List<AlgebraicNumber<C>> al = new ArrayList<AlgebraicNumber<C>>();
+        long d = ar.pelem.primitiveElem.modul.degree();
+        AlgebraicNumber<C> c = ar.pelem.A;
+        AlgebraicNumber<C> m = c.ring.getONE();
+        for (long i = 1; i <= d; i++) {
+            m = m.multiply(c);
+            if (m.isRootOfUnity()) {
+                if (!al.contains(m)) {
+                    al.add(m);
+                }
+            }
+        }
+        c = ar.pelem.B;
+        m = c.ring.getONE();
+        for (long i = 1; i <= d; i++) {
+            m = m.multiply(c);
+            if (m.isRootOfUnity()) {
+                if (!al.contains(m)) {
+                    al.add(m);
+                }
+            }
+        }
+        return new AlgebraicRootsPrimElem<C>(ur, ar.pelem, al);
+    }
+
 }
