@@ -301,8 +301,7 @@ public class RootFactory {
         Rectangle<C> rec = new Rectangle<C>(sw, ne);
         //System.out.println("refined rectangle " + rec);
         ComplexRoots<C> ceng = c.ring.engine; //new ComplexRootsSturm<C>(); 
-        GenPolynomialRing<Complex<C>> fac = new GenPolynomialRing<Complex<C>>(cr, f.ring);
-        GenPolynomial<Complex<C>> p = PolyUtil.<C> complexFromAny(fac, f);
+        GenPolynomial<Complex<C>> p = PolyUtilRoot.<C> complexFromAny(f);
         try {
             z = ceng.complexRootCount(rec, p);
         } catch (InvalidBoundaryException e) {
@@ -411,16 +410,7 @@ public class RootFactory {
      */
     public static <C extends GcdRingElem<C> & Rational> List<ComplexAlgebraicNumber<C>> complexAlgebraicNumbers(
                     GenPolynomial<C> f) {
-        if (f.ring.coFac instanceof Complex) {
-            throw new IllegalArgumentException("f already has Complex coefficients " + f.ring);
-        }
-        if (f.ring.coFac instanceof ComplexAlgebraicRing) {
-            throw new UnsupportedOperationException(
-                            "unsupported ComplexAlgebraicRing coefficients " + f.ring);
-        }
-        ComplexRing<C> cr = new ComplexRing<C>(f.ring.coFac);
-        GenPolynomialRing<Complex<C>> fac = new GenPolynomialRing<Complex<C>>(cr, f.ring);
-        GenPolynomial<Complex<C>> fc = PolyUtil.<C> complexFromAny(fac, f);
+        GenPolynomial<Complex<C>> fc = PolyUtilRoot.<C> complexFromAny(f);
         return complexAlgebraicNumbersComplex(fc);
     }
 
@@ -433,16 +423,7 @@ public class RootFactory {
      */
     public static <C extends GcdRingElem<C> & Rational> List<ComplexAlgebraicNumber<C>> complexAlgebraicNumbers(
                     GenPolynomial<C> f, BigRational eps) {
-        if (f.ring.coFac instanceof Complex) {
-            throw new IllegalArgumentException("f already has Complex coefficients " + f.ring);
-        }
-        if (f.ring.coFac instanceof ComplexAlgebraicRing) {
-            throw new UnsupportedOperationException(
-                            "unsupported ComplexAlgebraicRing coefficients " + f.ring);
-        }
-        ComplexRing<C> cr = new ComplexRing<C>(f.ring.coFac);
-        GenPolynomialRing<Complex<C>> fac = new GenPolynomialRing<Complex<C>>(cr, f.ring);
-        GenPolynomial<Complex<C>> fc = PolyUtil.<C> complexFromAny(fac, f);
+        GenPolynomial<Complex<C>> fc = PolyUtilRoot.<C>complexFromAny(f);
         return complexAlgebraicNumbersComplex(fc, eps);
     }
 
@@ -595,18 +576,8 @@ public class RootFactory {
         RealRootsAbstract<C> rengine = new RealRootsSturm<C>();
         List<BigDecimal> rl = rengine.approximateRoots(f, eps);
 
-        if (f.ring.coFac instanceof Complex) {
-            throw new IllegalArgumentException("f already has Complex coefficients " + f.ring);
-        }
-        if (f.ring.coFac instanceof ComplexAlgebraicRing) {
-            throw new UnsupportedOperationException(
-                            "unsupported ComplexAlgebraicRing coefficients " + f.ring);
-        }
-        ComplexRing<C> cr = new ComplexRing<C>(f.ring.coFac);
-        GenPolynomialRing<Complex<C>> fac = new GenPolynomialRing<Complex<C>>(cr, f.ring);
-        GenPolynomial<Complex<C>> fc = PolyUtil.<C> complexFromAny(fac, f);
-
-        ComplexRootsAbstract<C> cengine = new ComplexRootsSturm<C>(cr);
+        GenPolynomial<Complex<C>> fc = PolyUtilRoot.<C> complexFromAny(f);
+        ComplexRootsAbstract<C> cengine = new ComplexRootsSturm<C>(fc.ring.coFac);
         List<Complex<BigDecimal>> cl = cengine.approximateRoots(fc, eps);
 
         cl = filterOutRealRoots(f, cl, rl, eps);

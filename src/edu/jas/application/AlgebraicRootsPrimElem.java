@@ -96,10 +96,9 @@ public class AlgebraicRootsPrimElem<C extends GcdRingElem<C> & Rational>
     @Override
     public String toString() {
         if (runit == null) {
-           return super.toString();
-        } else {
-            return super.toString() + ", " + runit.toString();
+            return super.toString();
         }
+        return super.toString() + ", " + runit.toString();
         //return "[" + p + ", real=" + real + ", complex=" + complex + ", " + pelem + "]";
     }
 
@@ -111,17 +110,20 @@ public class AlgebraicRootsPrimElem<C extends GcdRingElem<C> & Rational>
     public String toScript() {
         // any case
         StringBuffer sb = new StringBuffer(super.toScript());
-        boolean first = true;
-        if (runit != null) {
-            for (AlgebraicNumber<C> a : runit) {
-            if (first) {
-                first = false;
-            } else {
-                sb.append(", ");
-            }
-            sb.append(a.toScript());
-            }
+        if (runit == null) {
+            return sb.toString();
         }
+        sb.append(" [");
+        boolean first = true;
+        for (AlgebraicNumber<C> a : runit) {
+             if (first) {
+                 first = false;
+             } else {
+                 sb.append(", ");
+             }
+             sb.append(a.toScript());
+        }
+        sb.append("] ");
         return sb.toString();
     }
 

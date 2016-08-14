@@ -84,7 +84,7 @@ public class AlgebraicRoots<C extends GcdRingElem<C> & Rational> implements Seri
 
     /**
      * Get a scripting compatible string representation.
-     * @return script compatible representation for this Interval.
+     * @return script compatible representation for this roots.
      */
     public String toScript() {
         // Python case
@@ -124,8 +124,8 @@ public class AlgebraicRoots<C extends GcdRingElem<C> & Rational> implements Seri
 
 
     /**
-     * Get a scripting compatible string representation.
-     * @return script compatible representation for this Interval.
+     * Get a decimal number scripting compatible string representation.
+     * @return decimal number script compatible representation for this roots.
      */
     public String toDecimalScript() {
         // Python case
