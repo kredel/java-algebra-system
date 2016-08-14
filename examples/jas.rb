@@ -1178,6 +1178,103 @@ Compute complex roots of univariate polynomial.
     end
 
 =begin rdoc
+Compute algebraic roots, i.e. real and complex algebraic roots of univariate polynomial.
+=end
+    def algebraicRoots(eps=nil)
+        a = @elem;
+        if eps.is_a? RingElem
+            eps = eps.elem;
+        end
+        begin
+            if eps == nil
+                ar = RootFactory.algebraicRoots( a );
+            else
+                ar = RootFactory.algebraicRoots( a, eps );
+            end
+            #no: ar = ar.map{ |y| RingElem.new(y) };
+            return RingElem.new(ar); #??
+        rescue Exception => e
+            puts "error " + str(e)
+            return nil
+        end
+    end
+
+=begin rdoc
+Compute algebraic roots refinement.
+=end
+    def rootRefine(eps=nil)
+        r = @elem;
+        if eps.is_a? RingElem
+            eps = eps.elem;
+        end
+        begin
+            RootFactory.rootRefine( r, eps );
+            #no: ar = ar.map{ |y| RingElem.new(y) };
+            return RingElem.new(r); # ??
+        rescue Exception => e
+            puts "error " + str(e)
+            return nil
+        end
+    end
+
+=begin rdoc
+Compute decimal approximation of real and complex roots.
+=end
+    def decimalRoots(eps=nil)
+        a = @elem;
+        if eps.is_a? RingElem
+            eps = eps.elem;
+        end
+        if a.is_a? Java::EduJasRoot::AlgebraicRoots
+            a = a.p;
+        end
+        begin
+            d = RootFactory.decimalRoots( a, eps );
+            return RingElem.new(d); # ??
+        rescue Exception => e
+            puts "error " + str(e)
+            return nil
+        end
+    end
+
+=begin rdoc
+Roots of unity of real and complex algebraic numbers.
+=end
+    def rootsOfUnity()
+        a = @elem;
+        begin
+            if a.is_a? Java::EduJasApplication::AlgebraicRootsPrimElem
+               d = Java::EduJasApplication::RootFactory.rootsOfUnity( a );
+            else
+               d = RootFactory.rootsOfUnity( a );
+            end
+            return RingElem.new(d); # ??
+        rescue Exception => e
+            puts "error " + str(e)
+            return nil
+        end
+    end
+
+=begin rdoc
+Root reduce of real and complex algebraic numbers.
+=end
+    def rootReduce(other)
+        a = @elem;
+        b = other;
+        if b.is_a? RingElem
+            b = b.elem;
+        end
+        begin
+            d = Java::EduJasApplication::RootFactory.rootReduce( a, b );
+            return RingElem.new(d); # ??
+        rescue Exception => e
+            puts "error " + str(e)
+            return nil
+        end
+    end
+
+
+=begin rdoc
 Get the coefficients of a polynomial.
 =end
     def coefficients()
