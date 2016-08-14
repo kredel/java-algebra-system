@@ -858,10 +858,10 @@ public class PolyUtilApp<C extends RingElem<C>> {
         GenPolynomialRing<Complex<D>> facc = new GenPolynomialRing<Complex<D>>(ccfac, p0.ring);
         GenPolynomial<Complex<D>> p0c = PolyUtil.<D> complexFromAny(facc, p0);
         List<Complex<edu.jas.application.RealAlgebraicNumber<D>>> cra;
-        cra = edu.jas.application.RootFactory.<D> complexAlgebraicNumbersSquarefree(p0c);
+        cra = edu.jas.application.RootFactoryApp.<D> complexAlgebraicNumbersSquarefree(p0c);
         logger.info("#roots(p0c) = " + cra.size());
         if (debug) {
-            boolean t = edu.jas.application.RootFactory.<D> isRoot(p0c, cra);
+            boolean t = edu.jas.application.RootFactoryApp.<D> isRoot(p0c, cra);
             if (!t) {
                 throw new RuntimeException("no roots of " + p0c);
             }
@@ -897,10 +897,10 @@ public class PolyUtilApp<C extends RingElem<C>> {
                 throw new RuntimeException(
                                 "wrong number of variables " + Arrays.toString(depi) + " for " + pip);
             }
-            cra = edu.jas.application.RootFactory.<D> complexAlgebraicNumbersSquarefree(pic);
+            cra = edu.jas.application.RootFactoryApp.<D> complexAlgebraicNumbersSquarefree(pic);
             logger.info("#roots(pic) = " + cra.size());
             if (debug) {
-                boolean t = edu.jas.application.RootFactory.<D> isRoot(pic, cra);
+                boolean t = edu.jas.application.RootFactoryApp.<D> isRoot(pic, cra);
                 if (!t) {
                     throw new RuntimeException("no roots of " + pic);
                 }
@@ -1082,7 +1082,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
         GenPolynomialRing<Complex<D>> facc = new GenPolynomialRing<Complex<D>>(ccfac, p0.ring);
         GenPolynomial<Complex<D>> p0c = PolyUtil.<D> complexFromAny(facc, p0);
         List<Complex<edu.jas.application.RealAlgebraicNumber<D>>> cra;
-        cra = edu.jas.application.RootFactory.<D> complexAlgebraicNumbersSquarefree(p0c);
+        cra = edu.jas.application.RootFactoryApp.<D> complexAlgebraicNumbersSquarefree(p0c);
         logger.info("#roots(p0c) = " + cra.size());
         for (Complex<edu.jas.application.RealAlgebraicNumber<D>> cr : cra) {
             List<Complex<edu.jas.application.RealAlgebraicNumber<D>>> cl;
@@ -1115,7 +1115,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
                 throw new RuntimeException(
                                 "wrong number of variables " + Arrays.toString(depi) + " for " + pip);
             }
-            cra = edu.jas.application.RootFactory.<D> complexAlgebraicNumbersSquarefree(pic);
+            cra = edu.jas.application.RootFactoryApp.<D> complexAlgebraicNumbersSquarefree(pic);
             logger.info("#roots(pic) = " + cra.size());
             if (depi.length == 1) {
                 // all combinations are roots of the ideal I

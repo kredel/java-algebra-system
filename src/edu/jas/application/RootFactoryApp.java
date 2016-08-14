@@ -34,10 +34,10 @@ import edu.jas.ufd.SquarefreeFactory;
  * Roots factory.
  * @author Heinz Kredel
  */
-public class RootFactory {
+public class RootFactoryApp {
 
 
-    private static final Logger logger = Logger.getLogger(RootFactory.class);
+    private static final Logger logger = Logger.getLogger(RootFactoryApp.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();
@@ -138,7 +138,7 @@ public class RootFactory {
             if (sp.isConstant() || sp.isZERO()) {
                 continue;
             }
-            List<Complex<RealAlgebraicNumber<C>>> ls = RootFactory.<C> complexAlgebraicNumbersSquarefree(sp);
+            List<Complex<RealAlgebraicNumber<C>>> ls = RootFactoryApp.<C> complexAlgebraicNumbersSquarefree(sp);
             long m = me.getValue();
             for (long i = 0L; i < m; i++) {
                 list.addAll(ls);
