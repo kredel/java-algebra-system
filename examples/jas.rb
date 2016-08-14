@@ -1257,6 +1257,7 @@ Roots of unity of real and complex algebraic numbers.
 
 =begin rdoc
 Root reduce of real and complex algebraic numbers.
+Compute an extension field with a primitive element.
 =end
     def rootReduce(other)
         a = @elem;
@@ -1910,6 +1911,57 @@ Compute complex roots of univariate polynomial.
             a = RingElem.new(a);
         end
         return a.complexRoots(eps);
+    end
+
+=begin rdoc
+Compute algebraic real and complex roots of univariate polynomial.
+=end
+    def algebraicRoots(a,eps=nil)
+        if not a.is_a? RingElem
+            a = RingElem.new(a);
+        end
+        return a.algebraicRoots(eps);
+    end
+
+=begin rdoc
+Compute algebraic real and complex roots refinement.
+=end
+    def rootRefine(a,eps=nil)
+        if not a.is_a? RingElem
+            a = RingElem.new(a);
+        end
+        return a.rootRefine(eps);
+    end
+
+=begin rdoc
+Compute deximal approximation of algebraic real and complex roots.
+=end
+    def decimalRoots(a,eps=nil)
+        if not a.is_a? RingElem
+            a = RingElem.new(a);
+        end
+        return a.decimalRoots(eps);
+    end
+
+=begin rdoc
+Roots of unity of real and complex algebraic numbers.
+=end
+    def rootsOfUnity(a)
+        if not a.is_a? RingElem
+            a = RingElem.new(a);
+        end
+        return a.rootsOfUnity();
+    end
+
+=begin rdoc
+Root reduce of real and complex algebraic numbers.
+Compute an extension field with a primitive element.
+=end
+    def rootReduce(a, b)
+        if not a.is_a? RingElem
+            a = RingElem.new(a);
+        end
+        return a.rootReduce(b);
     end
 
 =begin rdoc

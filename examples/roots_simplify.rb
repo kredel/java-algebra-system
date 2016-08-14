@@ -7,7 +7,7 @@ require "examples/jas"
 
 # roots simplification
 
-startLog();
+#startLog();
 
 r = PolyRing.new(QQ(),"I",PolyRing.lex);
 puts "r     = " + str(r);
@@ -18,14 +18,10 @@ puts "a     = " + str(a);
 eps = QQ(1,10) ** (BigDecimal::DEFAULT_PRECISION); #-3
 #eps = QQ(1,10) ** 7;
 #eps = nil;
-puts "eps = " + str(eps);
+puts "eps   = " + str(eps);
 
-puts 
-puts "with intermediate primitive element" 
-puts 
 ip = (a**2 + 1);   # I
 iq = AN( ip, true);
-
 puts "iq    = " + str(iq.factory());
 puts
 
@@ -41,9 +37,9 @@ puts "decimal roots: idroot          = " + str(idroot);
 puts
 
 
-r = PolyRing.new(QQ(),"w_3_2",PolyRing.lex);
-puts "r     = " + str(r);
-e,a = r.gens();
+r2 = PolyRing.new(QQ(),"w_3_2",PolyRing.lex);
+puts "r2    = " + str(r2);
+e,a = r2.gens();
 puts "e     = " + str(e);
 puts "a     = " + str(a);
 w3p = (a**3 - 2);  # root{3}(2)
@@ -62,8 +58,12 @@ puts "decimal roots: w3droot          = " + str(w3droot);
 puts
 
 
+puts "with intermediate primitive element" 
+puts 
+
 #rootred = Java::EduJasApplication::RootFactory.rootReduce(iroot.elem, w3root.elem);
 rootred = iroot.rootReduce(w3root);
+#rootred = r.rootReduce(iroot,w3root);
 puts "algebraic roots: rootred       = " + str(rootred);
 puts "unity algebraic roots: rootred = " + str(rootred.rootsOfUnity());
 # somewhat slow:
@@ -76,15 +76,11 @@ decroot = rootred.decimalRoots(eps);
 puts "decimal roots: decroot         = " + str(decroot);
 puts
 
-#puts "primitive element: primElem    = " + str(rootred.elem.pelem.primitiveElem.toScript());
-puts "primitive element: A           = " + str(rootred.elem.pelem.A.toScript());
-puts "primitive element: B           = " + str(rootred.elem.pelem.B.toScript());
-puts "primitive element: Aring       = " + str(rootred.elem.pelem.Aring.toScript());
-puts "primitive element: Bring       = " + str(rootred.elem.pelem.Bring.toScript());
-puts
-
-urootred = rootred.rootsOfUnity();
-puts "urootred: " + str(urootred)
-puts
+##puts "primitive element: primElem    = " + str(rootred.elem.pelem.primitiveElem.toScript());
+#puts "primitive element: A           = " + str(rootred.elem.pelem.A.toScript());
+#puts "primitive element: B           = " + str(rootred.elem.pelem.B.toScript());
+#puts "primitive element: Aring       = " + str(rootred.elem.pelem.Aring.toScript());
+#puts "primitive element: Bring       = " + str(rootred.elem.pelem.Bring.toScript());
+#puts
 
 terminate();
