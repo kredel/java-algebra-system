@@ -70,7 +70,7 @@ print
 rootred = iroot.rootReduce(w3root);
 #rootred = r.rootReduce(iroot,w3root);
 print "algebraic roots: rootred       = " + str(rootred);
-#print "unity algebraic roots: rootred = " + str(rootred.rootsOfUnity());
+print "unity algebraic roots: rootred = " + str(rootred.rootsOfUnity());
 # somewhat slow:
 #rootred.rootRefine(eps);
 #print "algebraic roots refined: rootred = " + str(rootred.toDecimalScript());

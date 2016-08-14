@@ -1242,9 +1242,9 @@ Roots of unity of real and complex algebraic numbers.
 =end
     def rootsOfUnity()
         a = @elem;
-        begin
-            if a.is_a? Java::EduJasApplication::AlgebraicRootsPrimElem
-               d = Java::EduJasApplication::RootFactory.rootsOfUnity( a );
+        begin #Java::EduJasApplication::
+            if a.is_a? AlgebraicRootsPrimElem
+               d = RootFactoryApp.rootsOfUnity( a );
             else
                d = RootFactory.rootsOfUnity( a );
             end
@@ -1265,8 +1265,8 @@ Compute an extension field with a primitive element.
         if b.is_a? RingElem
             b = b.elem;
         end
-        begin
-            d = Java::EduJasApplication::RootFactory.rootReduce( a, b );
+        begin #Java::EduJasApplication::
+            d = RootFactoryApp.rootReduce( a, b );
             return RingElem.new(d); # ??
         rescue Exception => e
             puts "error " + str(e)
@@ -2094,6 +2094,9 @@ java_import "edu.jas.root.RealAlgebraicRing";
 java_import "edu.jas.root.ComplexRootsSturm";
 java_import "edu.jas.root.Rectangle";
 java_import "edu.jas.root.RootFactory";
+
+java_import "edu.jas.application.AlgebraicRootsPrimElem";
+java_import "edu.jas.application.RootFactoryApp";
 
 
 =begin rdoc
