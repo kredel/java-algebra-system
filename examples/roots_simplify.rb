@@ -21,7 +21,7 @@ eps = QQ(1,10) ** (BigDecimal::DEFAULT_PRECISION); #-3
 puts "eps   = " + str(eps);
 
 ip = (a**2 + 1);   # I
-iq = AN( ip, true);
+iq = AN( ip, 0, true);
 puts "iq    = " + str(iq.factory());
 puts
 
@@ -43,14 +43,14 @@ e,a = r2.gens();
 puts "e     = " + str(e);
 puts "a     = " + str(a);
 w3p = (a**3 - 2);  # root{3}(2)
-w3q = AN( w3p, true);
+w3q = AN( w3p, 0, true);
 puts "w3q   = " + str(w3q.factory());
 puts
 
 #w3root = RootFactory.algebraicRoots(w3p.elem);
 w3root = w3p.algebraicRoots();
-puts "algebraic roots: w3root        = " + str(w3root);
-puts "unity algebraic roots: w3root  = " + str(w3root.rootsOfUnity());
+puts "algebraic roots: w3root         = " + str(w3root);
+puts "unity algebraic roots: w3root   = " + str(w3root.rootsOfUnity());
 w3root = w3root.rootRefine(eps);
 puts "algebraic roots refined: w3root = " + str(w3root.elem.toDecimalScript());
 w3droot = w3p.decimalRoots(eps);

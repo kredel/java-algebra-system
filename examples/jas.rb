@@ -1218,7 +1218,7 @@ Compute algebraic roots refinement.
     end
 
 =begin rdoc
-Compute decimal approximation of real and complex roots.
+Compute decimal approximation of real and complex roots of univariate polynomial.
 =end
     def decimalRoots(eps=nil)
         a = @elem;

@@ -59,6 +59,7 @@ from edu.jas.application import PolyUtilApp, RingFactoryTokenizer,\
                                 ResidueSolvablePolynomial, ResidueSolvablePolynomialRing,\
                                 LocalSolvablePolynomial, LocalSolvablePolynomialRing,\
                                 WordIdeal, WordResidue, WordResidueRing,\
+                                AlgebraicRootsPrimElem, RootFactoryApp,\
                                 ComprehensiveGroebnerBaseSeq, ExtensionFieldBuilder
 from edu.jas.kern        import ComputerThreads, StringUtil, Scripting
 from edu.jas.ufd         import GreatestCommonDivisor, PolyUfdUtil, GCDFactory,\
@@ -2609,7 +2610,7 @@ def AN(m,z=0,field=False,pr=None):
         m = m.elem;
     if isinstance(z,RingElem):
         z = z.elem;
-#    if z != 0 and ( z == True or z == False ): # not working
+#    if (z == True or z == False): # not working
 #        field = z;
 #        z = 0;
     #print "m.getClass() = " + str(m.getClass().getName());
@@ -3626,6 +3627,82 @@ class RingElem:
 #                R = ComplexRootsSturm(a.ring.coFac).complexRoots( a, eps );
 #                R = ComplexRootsSturm(a.ring.coFac).approximateRoots( a, eps );
             return R;
+        except Exception, e:
+            print "error " + str(e)
+            return None
+
+    def algebraicRoots(self,eps=None):
+        '''Compute algebraic roots, i.e. the real and complex roots of univariate polynomial.
+        '''
+        a = self.elem;
+        if isinstance(eps,RingElem):
+            eps = eps.elem;
+        try:
+            if eps == None:
+                R = RootFactory.algebraicRoots(a);
+            else:
+                R = RootFactory.algebraicRoots(a, eps);
+            #R = [ RingElem(r) for r in R ];
+            return RingElem(R);
+        except Exception, e:
+            print "error " + str(e)
+            return None
+
+    def rootRefine(self,eps=None):
+        '''Compute algebraic roots refeinement.
+        '''
+        a = self.elem;
+        if isinstance(eps,RingElem):
+            eps = eps.elem;
+        try:
+            RootFactory.rootRefine(a, eps);
+            #R = [ RingElem(r) for r in R ];
+            return RingElem(a);
+        except Exception, e:
+            print "error " + str(e)
+            return None
+
+    def decimalRoots(self,eps=None):
+        '''Compute decimal approximation of real and complex roots of univariate polynomial.
+        '''
+        a = self.elem;
+        if isinstance(eps,RingElem):
+            eps = eps.elem;
+        try:
+            R = RootFactory.decimalRoots(a, eps);
+            #R = [ RingElem(r) for r in R ];
+            return RingElem(R);
+        except Exception, e:
+            print "error " + str(e)
+            return None
+
+    def rootsOfUnity(self):
+        '''Roots of unity of real and complex algebraic numbers.
+        '''
+        a = self.elem;
+        try:
+            if isinstance(a,AlgebraicRootsPrimElem):
+                R = RootFactoryApp.rootsOfUnity(a);
+            else:
+                R = RootFactory.rootsOfUnity(a);
+            #R = [ RingElem(r) for r in R ];
+            return RingElem(R);
+        except Exception, e:
+            print "error " + str(e)
+            return None
+
+    def rootReduce(self, other):
+        '''Root reduce of real and complex algebraic numbers.
+           Compute an extension field with a primitive element.
+        '''
+        a = self.elem;
+        b = other;
+        if isinstance(b,RingElem):
+            b = b.elem;
+        try:
+            R = RootFactoryApp.rootReduce(a, b);
+            #R = [ RingElem(r) for r in R ];
+            return RingElem(R);
         except Exception, e:
             print "error " + str(e)
             return None
