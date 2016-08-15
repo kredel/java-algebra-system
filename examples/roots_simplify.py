@@ -18,8 +18,8 @@ print "Ring: " + str(r);
 #print;
 
 #automatic: [one,I] = r.gens();
-print "one = ", one;
-print "I   = ", I;
+print "one   = ", one;
+print "I     = ", I;
 
 eps = QQ(1,10) ** (BigDecimal.DEFAULT_PRECISION); #-3
 #eps = QQ(1,10) ** 7;

@@ -488,6 +488,42 @@ class Ring:
             a = RingElem(a);
         return a.complexRoots(eps);
 
+    def algebraicRoots(self,a,eps=None):
+        '''Algebraic real and Compute complex roots of univariate polynomial.
+        '''
+        if not isinstance(a,RingElem):
+            a = RingElem(a);
+        return a.algebraicRoots(eps);
+
+    def rootRefine(self,a,eps=None):
+        '''Compute algebraic roots refinement.
+        '''
+        if not isinstance(a,RingElem):
+            a = RingElem(a);
+        return a.rootRefine(eps);
+
+    def decimalRoots(self,a,eps=None):
+        '''Compute decimal approximation of real and complex roots of univariate polynomial.
+        '''
+        if not isinstance(a,RingElem):
+            a = RingElem(a);
+        return a.decimalRoots(eps);
+
+    def rootsOfUnity(self,a):
+        '''Roots of unity of real and complex algebraic numbers.
+        '''
+        if not isinstance(a,RingElem):
+            a = RingElem(a);
+        return a.rootsOfUnity();
+
+    def rootReduce(self,a, b):
+        '''Root reduce of real and complex algebraic numbers.
+           Compute an extension field with a primitive element.
+        '''
+        if not isinstance(a,RingElem):
+            a = RingElem(a);
+        return a.rootReduce(b);
+
     def integrate(self,a):
         '''Integrate rational function or power series.
         '''
@@ -3649,7 +3685,7 @@ class RingElem:
             return None
 
     def rootRefine(self,eps=None):
-        '''Compute algebraic roots refeinement.
+        '''Compute algebraic roots refinement.
         '''
         a = self.elem;
         if isinstance(eps,RingElem):

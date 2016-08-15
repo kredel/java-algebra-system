@@ -97,9 +97,9 @@ def inject_gens(env)
           puts "error: #{ivs} = " + i.to_s + ", e = " + e.to_s;
        end
     end
-    puts "globally defined generators: " + env.generators.keys().join(", ");  
+    puts "globally defined variables: " + env.generators.keys().join(", ");  
     if redef.size > 0
-       puts "WARN: redefined generators: " + redef.join(", ");  
+       puts "WARN: redefined variables: " + redef.join(", ");  
     end
  end
 
@@ -1684,7 +1684,7 @@ Define instance variables for generators.
              #pass
           end
        end
-    puts "locally defined generators: " + @generators.keys().join(", ");  
+    #puts "locally defined generators: " + @generators.keys().join(", ");  
     end
 
 =begin rdoc
