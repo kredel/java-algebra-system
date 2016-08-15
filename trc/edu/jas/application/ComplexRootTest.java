@@ -138,13 +138,13 @@ public class ComplexRootTest extends TestCase {
         //System.out.println("a = " + a);
 
         List<Complex<RealAlgebraicNumber<BigRational>>> roots;
-        roots = RootFactory.<BigRational> complexAlgebraicNumbersComplex(a);
+        roots = RootFactoryApp.<BigRational> complexAlgebraicNumbersComplex(a);
         //System.out.println("a = " + a);
         //System.out.println("roots = " + roots);
         assertTrue("#roots == deg(a) ", roots.size() == a.degree(0));
         for (Complex<RealAlgebraicNumber<BigRational>> root : roots) {
             //System.out.println("root = " + root.getRe().decimalMagnitude() + " + " + root.getIm().decimalMagnitude() + " i");
-            assertTrue("f(r) == 0: " + root, RootFactory.<BigRational> isRoot(a, root));
+            assertTrue("f(r) == 0: " + root, RootFactoryApp.<BigRational> isRoot(a, root));
         }
     }
 
@@ -163,14 +163,14 @@ public class ComplexRootTest extends TestCase {
         a = sqf.squarefreePart(a);
         //System.out.println("a = " + a);
         List<Complex<RealAlgebraicNumber<BigRational>>> roots;
-        roots = RootFactory.<BigRational> complexAlgebraicNumbersComplex(a);
+        roots = RootFactoryApp.<BigRational> complexAlgebraicNumbersComplex(a);
         //System.out.println("a = " + a);
         //System.out.println("roots = " + roots);
         assertTrue("#roots == deg(a): " + (roots.size() - a.degree(0)) + ", a = " + a,
                         roots.size() == a.degree(0));
         for (Complex<RealAlgebraicNumber<BigRational>> root : roots) {
             //System.out.println("root = " + root.getRe().decimalMagnitude() + " + " + root.getIm().decimalMagnitude() + " i");
-            assertTrue("f(r) == 0: " + root, RootFactory.<BigRational> isRoot(a, root));
+            assertTrue("f(r) == 0: " + root, RootFactoryApp.<BigRational> isRoot(a, root));
         }
     }
 
@@ -181,7 +181,7 @@ public class ComplexRootTest extends TestCase {
     public void testPolynomialComplexRoots() {
         a = dfac.parse("z^3 - 2");
         //System.out.println("a = " + a);
-        List<Complex<RealAlgebraicNumber<BigRational>>> roots = RootFactory
+        List<Complex<RealAlgebraicNumber<BigRational>>> roots = RootFactoryApp
                         .<BigRational> complexAlgebraicNumbersComplex(a);
         //System.out.println("a = " + a);
         //System.out.println("roots = " + roots);
@@ -191,7 +191,7 @@ public class ComplexRootTest extends TestCase {
             RealAlgebraicRing<BigRational> rfac = car.getRe().ring;
             rfac.setField(true); // ?? to check
             assertTrue("isField(rfac) ", rfac.isField());
-            assertTrue("f(r) == 0: " + car, RootFactory.<BigRational> isRoot(a, car));
+            assertTrue("f(r) == 0: " + car, RootFactoryApp.<BigRational> isRoot(a, car));
         }
         Complex<RealAlgebraicNumber<BigRational>> root = roots.get(2); // 0,1,2)
         //System.out.println("a = " + a);
@@ -243,7 +243,7 @@ public class ComplexRootTest extends TestCase {
 
         // new version with recursion: with real factorization
         long t1 = System.currentTimeMillis();
-        List<Complex<RealAlgebraicNumber<RealAlgebraicNumber<BigRational>>>> croots = RootFactory
+        List<Complex<RealAlgebraicNumber<RealAlgebraicNumber<BigRational>>>> croots = RootFactoryApp
                         .<RealAlgebraicNumber<BigRational>> complexAlgebraicNumbersComplex(cpol);
         t1 = System.currentTimeMillis() - t1;
         assertTrue("nonsense " + t1, t1 >= 0L);
@@ -265,7 +265,7 @@ public class ComplexRootTest extends TestCase {
             //System.out.println("croot = " + croot.getRe().decimalMagnitude() + " + "
             //                              + croot.getIm().decimalMagnitude() + " i");
             assertTrue("f(r) == 0: " + croot,
-                            RootFactory.<RealAlgebraicNumber<BigRational>> isRoot(cpol, croot));
+                            RootFactoryApp.<RealAlgebraicNumber<BigRational>> isRoot(cpol, croot));
         }
         assertTrue("#croots == deg(cpol) " + croots.size() + " != " + cpol.degree(0),
                         croots.size() == cpol.degree(0));

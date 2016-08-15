@@ -109,7 +109,7 @@ public class FactorRealRealTest extends TestCase {
         GenPolynomial<Complex<BigRational>> ap = dfac.parse("z^3 - i2");
 
         List<Complex<RealAlgebraicNumber<BigRational>>> roots
-            = RootFactory.<BigRational> complexAlgebraicNumbersComplex(ap); 
+            = RootFactoryApp.<BigRational> complexAlgebraicNumbersComplex(ap); 
         //System.out.println("ap = " + ap);
         //System.out.println("roots = " + roots);
         assertTrue("#roots == deg(ap) ", roots.size() == ap.degree(0));
