@@ -24,15 +24,34 @@
 
 <dl>
 
-<dt>2016, July </dt> <!-- 2.6.5xxx --> 
+<dt>2016, August </dt> <!-- 2.6.5xxx --> 
 <dd> 
 
- Mostly improvements and bug fixes in package <code>edu.jas.fd</code>.
- Use (Java 8) method <code>power()</code> from <code>MonoidElem</code>
- where possible.  Further bug fixes and small improvements.
+  Improved methods to handle real and complex algebraic roots of
+  univariate polynomials based on <code>RootFactory</code> methods.
+  <!-- <code>realAlgebraicNumbers()</code> and
+  <code>compelxAlgebraicNumbers()</code> --> New methods in class
+  <code>RootFactory</code> to compute both the real and complex
+  algebraic roots with <code>algebraicRoots()</code>, method
+  <code>rootsOfUnity()</code> to filter roots of unity, and methods
+  <code>rootRefine()</code> and <code>decimalRoots()</code> to compute
+  approximations of real and complex roots. The method
+  <code>rootReduce()</code> in <code>RootFactoryApp</code> helps to
+  construct common field extensions via primitive element
+  computations.  The algorithms are also accessible via the scripting
+  interfaces under the same names.
+
+  Dockerfile to construct a standalone JAS scripting application.
 
 </dd>
 
+
+<dt>2016, July </dt> <!-- 2.6.5555 --> 
+<dd> 
+ Mostly improvements and bug fixes in package <code>edu.jas.fd</code>.
+ Use (Java 8) method <code>power()</code> from <code>MonoidElem</code>
+ where possible.  Further bug fixes and small improvements.
+</dd>
 
 <dt>2016, May </dt> <!-- 2.6.5508 --> 
 <dd> 
@@ -2575,7 +2594,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Mon Jul 25 09:46:54 CEST 2016
+Last modified: Mon Aug 15 22:28:40 CEST 2016
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
