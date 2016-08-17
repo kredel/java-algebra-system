@@ -13,6 +13,7 @@ import java.util.Random;
 import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigRational;
+import edu.jas.arith.BigDecimal;
 import edu.jas.arith.Rational;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
@@ -60,7 +61,7 @@ public class ComplexAlgebraicRing<C extends GcdRingElem<C> & Rational>
     /**
      * Precision of the isolating rectangle for a complex root.
      */
-    public static final int PRECISION = 9; //BigDecimal.DEFAULT_PRECISION;
+    public static final int PRECISION = BigDecimal.DEFAULT_PRECISION;
 
 
     /**
@@ -82,10 +83,9 @@ public class ComplexAlgebraicRing<C extends GcdRingElem<C> & Rational>
         if (m.ring.characteristic().signum() > 0) {
             throw new IllegalArgumentException("characteristic not zero");
         }
-        //BigRational e = new BigRational(10L); //m.ring.coFac.fromInteger(10L).getRe();
-        //e = e.inverse();
-        //e = e.power( - PRECISION); //Power.positivePower(e, PRECISION);
-        eps = BigRational.ONE; // initially
+        BigRational e = new BigRational(10L); //m.ring.coFac.fromInteger(10L).getRe();
+        e = e.power( - PRECISION/2 ); //Power.positivePower(e, PRECISION);
+        eps = e; //BigRational.ONE; // initially
     }
 
 
@@ -97,16 +97,8 @@ public class ComplexAlgebraicRing<C extends GcdRingElem<C> & Rational>
      * @param isField indicator if m is prime.
      */
     public ComplexAlgebraicRing(GenPolynomial<Complex<C>> m, Rectangle<C> root, boolean isField) {
-        algebraic = new AlgebraicNumberRing<Complex<C>>(m, isField);
-        this.root = root;
-        engine = new ComplexRootsSturm<C>(m.ring.coFac);
-        if (m.ring.characteristic().signum() > 0) {
-            throw new IllegalArgumentException("characteristic not zero");
-        }
-        //BigRational e = new BigRational(10L); //m.ring.coFac.fromInteger(10L).getRe();
-        //e = e.inverse();
-        //e = e.power( - PRECISION); //Power.positivePower(e, PRECISION);
-        eps = BigRational.ONE; // initially
+        this(m, root);
+        setField(isField);
     }
 
 
@@ -160,15 +152,23 @@ public class ComplexAlgebraicRing<C extends GcdRingElem<C> & Rational>
 
     /**
      * Refine root.
+     */
+    public synchronized void refineRoot() {
+	    refineRoot(eps);
+    }
+
+
+    /**
+     * Refine root.
      * @param e epsilon.
      */
     public synchronized void refineRoot(BigRational e) {
         try {
             root = engine.complexRootRefinement(root, algebraic.modul, e);
         } catch (InvalidBoundaryException e1) {
-           logger.warn("new eps not set: " + e);
-           //e1.printStackTrace();
-           return; // ignore new eps
+            logger.warn("new eps not set: " + e);
+            //e1.printStackTrace();
+            return; // ignore new eps
         }
         this.eps = e; 
     }
@@ -271,6 +271,15 @@ public class ComplexAlgebraicRing<C extends GcdRingElem<C> & Rational>
      */
     public boolean isField() {
         return algebraic.isField();
+    }
+
+
+    /**
+     * Assert that this ring is a field.
+     * @param isField true if this ring is a field, else false.
+     */
+    public void setField(boolean isField) {
+        algebraic.setField(isField);
     }
 
 

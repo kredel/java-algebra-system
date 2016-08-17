@@ -725,6 +725,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal common zeros.
      */
+    @SuppressWarnings("unchecked")
     public void testIdealCommonZeros() {
 
         Ideal<BigRational> I;
@@ -764,6 +765,7 @@ public class IdealTest extends TestCase {
     /**
      * Test Ideal dimension.
      */
+    @SuppressWarnings("unchecked")
     public void testIdealDimension() {
 
         Ideal<BigRational> I;
@@ -1137,9 +1139,8 @@ public class IdealTest extends TestCase {
         assertTrue("isGB( I )", I.isGB());
         //System.out.println("I = " + I);
 
-        BigRational eps = new BigRational(1, 1000000);
-        eps = eps.multiply(eps);
-        eps = eps.multiply(eps); //.multiply(eps);
+        BigRational eps = new BigRational(1, 10);
+        eps = eps.power( BigDecimal.DEFAULT_PRECISION/2 );
         BigDecimal e = new BigDecimal(eps.getRational());
         e = e.abs(); //.multiply(e);
         eps = eps.multiply(new BigRational(1, 100));
@@ -1252,9 +1253,8 @@ public class IdealTest extends TestCase {
         //System.out.println("zd = " + zd);
         assertTrue("is decomposition ", I.isZeroDimDecomposition(zd));
 
-        BigRational eps = new BigRational(1, 1000000);
-        eps = eps.multiply(eps);
-        eps = eps.multiply(eps); //.multiply(eps);
+        BigRational eps = new BigRational(1, 10);
+        eps = eps.power( BigDecimal.DEFAULT_PRECISION/2 );
         BigDecimal e = new BigDecimal(eps.getRational());
         e = e.abs(); //.multiply(e);
         eps = eps.multiply(new BigRational(1, 10));
@@ -1275,7 +1275,7 @@ public class IdealTest extends TestCase {
                 //System.out.println("dp = " + dp);
                 Ld.add(dp);
             }
-            boolean t = PolyUtilApp.isRealRoots(Ld, Ir.rroots, e);
+            boolean t = PolyUtilApp.<BigRational>isRealRoots(Ld, Ir.rroots, e);
             assertTrue("isRealRoots ", t); // this example only
         }
     }
