@@ -58,6 +58,7 @@ public class GBSigBasedTest extends TestCase {
 
     /**
      * suite.
+     * @return test suite.
      */
     public static Test suite() {
         TestSuite suite = new TestSuite(GBSigBasedTest.class);
