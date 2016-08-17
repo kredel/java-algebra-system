@@ -302,7 +302,7 @@ public class RootFactoryApp {
 
     /**
      * Roots of unity of real and complex algebraic numbers.
-     * @param container of real and complex algebraic numbers with primitive element.
+     * @param ar container of real and complex algebraic numbers with primitive element.
      * @return container of real and complex algebraic numbers which are roots
      *         of unity.
      */

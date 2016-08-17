@@ -527,7 +527,7 @@ public class RootFactory {
 
     /**
      * Roots of unity of real and complex algebraic numbers.
-     * @param container of real and complex algebraic numbers.
+     * @param ar container of real and complex algebraic numbers.
      * @return container of real and complex algebraic numbers which are roots
      *         of unity.
      */

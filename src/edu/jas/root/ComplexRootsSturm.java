@@ -413,7 +413,6 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
      * Not used.
      * @param rect root isolating rectangle for f which contains exactly one
      *            root.
-     * @param S sturm sequence for f and I.
      * @return a new rectangle r such that re(r) &lt; 0 or (re)r &gt; 0 and
      *         im(r) &lt; 0 or (im)r &gt; 0.
      */
