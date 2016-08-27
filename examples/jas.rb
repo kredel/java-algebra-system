@@ -89,6 +89,10 @@ def inject_gens(env)
                 first = first.downcase
                 ivl = first + ivs.slice(1,ivs.length);
                 puts "warning: '" + str(ivs) + "' additionaly renamed to '" + str(ivl) + "' to avoid constant semantics"
+                if env.generators[ ivl ] != nil
+                   #puts "redefining global variable #{ivl}";
+                   redef << ivl;
+                end
                 env.instance_eval( "def #{ivl}; @generators[ '#{ivs}' ]; end" )
              end
           end
@@ -3840,9 +3844,10 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
         #puts "SolvPolyRing to super()";
         super("",@ring) 
         # puts "ai = " +  self.class.auto_inject.to_s
-        if self.class.auto_inject or self.class.superclass.auto_inject
-           inject_variables();
-        end
+        # done in super()
+        #if self.class.auto_inject or self.class.superclass.auto_inject
+        #   inject_variables();
+        #end
     end
 
 =begin rdoc
