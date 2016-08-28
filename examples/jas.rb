@@ -3724,12 +3724,12 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
                constSolv = true;
             end
 	}
-        puts "constSolv = #{constSolv}"
+        #puts "constSolv = #{constSolv}"
         cfs = cf.toScript();
         if cfs[0] == "0"
            cfs = cf.toScriptFactory();
         end
-        puts "cf = #{cfs}"
+        #puts "cf = #{cfs}"
         recSolv = cf.is_a? GenPolynomialRing
         recSolvWord = cf.is_a? GenWordPolynomialRing
         resWord = cf.is_a? WordResidueRing
@@ -3827,7 +3827,7 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
                                      ring.toPolyCoefficients(ll[i+2]) );
                 end
             else # no coeff relation
-                puts "ll[i], ll[i+1], ll[i+2]: " + str(ll[i]) + ", " + str(ll[i+1]) + ", " + str(ll[i+2]);
+                #puts "ll[i], ll[i+1], ll[i+2]: " + str(ll[i]) + ", " + str(ll[i+1]) + ", " + str(ll[i+2]);
                 #puts "poly type " + str(ll[i].class);
                 table.update( ll[i], ll[i+1], ll[i+2] );
                 if locresSolv or locSolv or quotSolv or resSolv or resWord
@@ -3844,7 +3844,7 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
         #puts "SolvPolyRing to super()";
         super("",@ring) 
         # puts "ai = " +  self.class.auto_inject.to_s
-        # done in super()
+        # done in super():
         #if self.class.auto_inject or self.class.superclass.auto_inject
         #   inject_variables();
         #end
