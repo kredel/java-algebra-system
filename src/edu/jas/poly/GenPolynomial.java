@@ -814,13 +814,8 @@ public class GenPolynomial<C extends RingElem<C>>
             return ring.getZERO();
         }
         long[][] w = ring.tord.getWeight();
-        long maxw;
-        if (w == null || w.length == 0) {
-            maxw = totalDegree(); // assume weights = 1
-        } else {
-            maxw = weightDegree();
-        }
-        GenPolynomial<C> wp = new GenPolynomial<C>(ring);
+        long maxw = weightDegree();
+        GenPolynomial<C> wp = ring.getZERO().copy(); //new GenPolynomial<C>(ring);
         for (Map.Entry<ExpVector, C> m : val.entrySet()) {
             ExpVector e = m.getKey();
             long d = e.weightDeg(w);
@@ -829,6 +824,67 @@ public class GenPolynomial<C extends RingElem<C>>
             }
         }
         return wp;
+    }
+
+
+    /**
+     * Leading facet normal polynomial.
+     * @param uv exponent vector of facet normal.
+     * @return polynomial with terms of facet normal.
+     */
+    public GenPolynomial<C> leadingFacetPolynomial(ExpVector uv) {
+        if (val.isEmpty()) {
+            return ring.getZERO();
+        }
+        ExpVector u = null;
+        GenPolynomial<C> fp = ring.getZERO().copy(); //new GenPolynomial<C>(ring);
+        for (Map.Entry<ExpVector, C> m : val.entrySet()) {
+            ExpVector e = m.getKey();
+            if (u == null) {
+                u = e;
+                fp.val.put(e, m.getValue());
+            } else {
+                ExpVector v = u.subtract(e);
+                if (v.compareTo(uv) == 0) {
+                    fp.val.put(e, m.getValue());
+                } else { // check for v parallel to uv
+                    long ab = scalarProduct(v,uv);
+                    long a = scalarProduct(v,v);
+                    long b = scalarProduct(uv,uv);
+                    if (ab*ab == a*b) { // cos == 1
+                        fp.val.put(e, m.getValue());
+                        System.out.println("ab = " + ab + ", a = " + a + ", b = " + b);               
+                    }
+                }
+            }
+        }
+        return fp;
+    }
+
+
+    /**
+     * Scalar product.
+     * @param a long vector
+     * @param b long vector
+     * @return scalar product of a and b.
+     */
+    public long scalarProduct(long[] a, long[] b) {
+        long s = 0L;
+        for (int i = 0; i < a.length; i++) {
+             s += a[i] * b[i];
+        }
+        return s;
+    }
+
+
+    /**
+     * Scalar product.
+     * @param a ExpVector
+     * @param b ExpVector
+     * @return scalar product of a and b.
+     */
+    public long scalarProduct(ExpVector a, ExpVector b) {
+        return scalarProduct(a.getVal(), b.getVal());
     }
 
 
@@ -889,6 +945,27 @@ public class GenPolynomial<C extends RingElem<C>>
                 ExpVector v = u.subtract(e);
                 de.add(v);
             }
+        }
+        return de;
+    }
+
+
+    /**
+     * Delta of exponent vectors.
+     * @param u marked ExpVector in this.expVectors
+     * @return list of u-v, where v != u in this.expVectors.
+     */
+    public List<ExpVector> deltaExpVectors(ExpVector u) {
+        List<ExpVector> de = new ArrayList<ExpVector>(val.size());
+        if (val.isEmpty()) {
+            return de;
+        }
+        for (ExpVector e : val.keySet()) {
+            ExpVector v = u.subtract(e);
+            if (v.isZERO()) {
+                continue;
+            }
+            de.add(v);
         }
         return de;
     }
@@ -992,6 +1069,17 @@ public class GenPolynomial<C extends RingElem<C>>
             nv.put(e, a);
         }
         return n;
+    }
+
+
+    /**
+     * GenPolynomial addition. This method is not very efficient, since this is
+     * copied.
+     * @param m monomial.
+     * @return this + m.
+     */
+    public GenPolynomial<C> sum(Monomial<C> m) {
+        return sum(m.coefficient(), m.exponent());
     }
 
 
@@ -1137,6 +1225,17 @@ public class GenPolynomial<C extends RingElem<C>>
             nv.put(e, a.negate());
         }
         return n;
+    }
+
+
+    /**
+     * GenPolynomial subtraction. This method is not very efficient, since this is
+     * copied.
+     * @param m monomial.
+     * @return this - m.
+     */
+    public GenPolynomial<C> subtract(Monomial<C> m) {
+        return subtract(m.coefficient(), m.exponent());
     }
 
 

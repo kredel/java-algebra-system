@@ -531,6 +531,31 @@ public class PolynomialList<C extends RingElem<C>> implements Comparable<Polynom
 
 
     /**
+     * Union of the delta of exponent vectors of all polynomials.
+     * @param mark list of marked expvectors of polynomials.
+     * @return list of u-v, where u in mark and v != u in p.expVectors in list.
+     */
+    public SortedSet<ExpVector> deltaExpVectors(List<ExpVector> mark) {
+        SortedSet<ExpVector> de = new TreeSet<ExpVector>(ring.tord.getAscendComparator());
+        if (list.isEmpty()) {
+            return de; 
+        }
+        if (mark.isEmpty()) {
+            return deltaExpVectors(); 
+        }
+        int len = mark.size();
+        int i = 0;
+        for (GenPolynomial<C> p : list) {
+            ExpVector u = mark.get(i);
+            List<ExpVector> pe = p.deltaExpVectors(u);
+            de.addAll(pe);
+            i++;
+        }
+        return de;
+    }
+
+
+    /**
      * Leading weight polynomials.
      * @return list of polynomials with terms of maximal weight degree.
      */
