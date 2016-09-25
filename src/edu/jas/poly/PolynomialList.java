@@ -520,7 +520,7 @@ public class PolynomialList<C extends RingElem<C>> implements Comparable<Polynom
     public SortedSet<ExpVector> deltaExpVectors() {
         SortedSet<ExpVector> de = new TreeSet<ExpVector>(ring.tord.getAscendComparator());
         if (list.isEmpty()) {
-            return de; 
+            return de;
         }
         for (GenPolynomial<C> p : list) {
             List<ExpVector> pe = p.deltaExpVectors();
@@ -532,24 +532,25 @@ public class PolynomialList<C extends RingElem<C>> implements Comparable<Polynom
 
     /**
      * Union of the delta of exponent vectors of all polynomials.
-     * @param mark list of marked expvectors of polynomials.
+     * @param mark list of marked exp vectors of polynomials.
      * @return list of u-v, where u in mark and v != u in p.expVectors in list.
      */
     public SortedSet<ExpVector> deltaExpVectors(List<ExpVector> mark) {
         SortedSet<ExpVector> de = new TreeSet<ExpVector>(ring.tord.getAscendComparator());
         if (list.isEmpty()) {
-            return de; 
+            return de;
         }
         if (mark.isEmpty()) {
-            return deltaExpVectors(); 
+            return deltaExpVectors();
         }
-        int len = mark.size();
+        if (list.size() != mark.size()) {
+            throw new IllegalArgumentException("#list != #mark");
+        }
         int i = 0;
         for (GenPolynomial<C> p : list) {
             ExpVector u = mark.get(i);
             List<ExpVector> pe = p.deltaExpVectors(u);
             de.addAll(pe);
-            i++;
         }
         return de;
     }
@@ -562,7 +563,7 @@ public class PolynomialList<C extends RingElem<C>> implements Comparable<Polynom
     public List<GenPolynomial<C>> leadingWeightPolynomials() {
         List<GenPolynomial<C>> lw = new ArrayList<GenPolynomial<C>>(list.size());
         if (list.isEmpty()) {
-            return lw; 
+            return lw;
         }
         for (GenPolynomial<C> p : list) {
             GenPolynomial<C> pw = p.leadingWeightPolynomial();

@@ -848,12 +848,12 @@ public class GenPolynomial<C extends RingElem<C>>
                 if (v.compareTo(uv) == 0) {
                     fp.val.put(e, m.getValue());
                 } else { // check for v parallel to uv
-                    long ab = scalarProduct(v,uv);
-                    long a = scalarProduct(v,v);
-                    long b = scalarProduct(uv,uv);
-                    if (ab*ab == a*b) { // cos == 1
+                    long ab = scalarProduct(v, uv);
+                    long a = scalarProduct(v, v);
+                    long b = scalarProduct(uv, uv);
+                    if (ab * ab == a * b) { // cos == 1
                         fp.val.put(e, m.getValue());
-                        System.out.println("ab = " + ab + ", a = " + a + ", b = " + b);               
+                        System.out.println("ab = " + ab + ", a = " + a + ", b = " + b);
                     }
                 }
             }
@@ -871,7 +871,7 @@ public class GenPolynomial<C extends RingElem<C>>
     public long scalarProduct(long[] a, long[] b) {
         long s = 0L;
         for (int i = 0; i < a.length; i++) {
-             s += a[i] * b[i];
+            s += a[i] * b[i];
         }
         return s;
     }
@@ -1229,8 +1229,8 @@ public class GenPolynomial<C extends RingElem<C>>
 
 
     /**
-     * GenPolynomial subtraction. This method is not very efficient, since this is
-     * copied.
+     * GenPolynomial subtraction. This method is not very efficient, since this
+     * is copied.
      * @param m monomial.
      * @return this - m.
      */
