@@ -10,9 +10,9 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.poly.Monomial;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.Monomial;
 import edu.jas.structure.RingElem;
 
 
@@ -124,9 +124,11 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
      * @param Ap polynomial.
      * @return nf(Ap) with respect to Mp+Pp.
      */
+    @Override
     @SuppressWarnings("unchecked")
-	public GenPolynomial<C> normalformMarked(List<Monomial<C>> Mp, List<GenPolynomial<C>> Pp, GenPolynomial<C> Ap) {
-        if ( (Mp == null && Pp == null) || (Mp.isEmpty() && Pp.isEmpty()) ) {
+    public GenPolynomial<C> normalformMarked(List<Monomial<C>> Mp, List<GenPolynomial<C>> Pp,
+                    GenPolynomial<C> Ap) {
+        if ((Mp == null && Pp == null) || (Mp.isEmpty() && Pp.isEmpty())) {
             return Ap;
         }
         if (Ap == null || Ap.isZERO()) {
@@ -153,7 +155,7 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
             }
         }
         ExpVector[] htl = new ExpVector[l];
-        RingElem[] lbc = new RingElem[l]; 
+        RingElem[] lbc = new RingElem[l];
         GenPolynomial<C>[] p = new GenPolynomial[l];
         int i;
         int j = 0;
@@ -171,9 +173,6 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
         C a, b;
         boolean mt = false;
         GenPolynomial<C> R = Ap.ring.getZERO().copy();
-
-        //GenPolynomial<C> T = null;
-        //GenPolynomial<C> Q = null;
         GenPolynomial<C> S = Ap.copy();
         while (S.length() > 0) {
             m = S.leadingMonomial();
@@ -186,7 +185,7 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
             }
             if (!mt) {
                 logger.debug("irred");
-                R.doAddTo( a, e ); // needed, or sum
+                R.doAddTo(a, e); // needed, or sum
                 //R.doPutToMap(e, a); // not here
                 //S = S.subtract( a, e ); 
                 S.doRemoveFromMap(e, a);
