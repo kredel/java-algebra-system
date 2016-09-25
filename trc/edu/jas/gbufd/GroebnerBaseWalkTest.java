@@ -8,12 +8,7 @@ package edu.jas.gbufd;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.Collections;
 import java.util.List;
-
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
 
@@ -22,6 +17,10 @@ import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -88,6 +87,7 @@ public class GroebnerBaseWalkTest extends TestCase {
 
     @Override
     protected void tearDown() {
+        bb.terminate();
         bbw.terminate();
         bb = null;
         bbw = null;
@@ -133,16 +133,14 @@ public class GroebnerBaseWalkTest extends TestCase {
 
 
     /**
-     * Test Trinks GBase. 
+     * Test Trinks GBase.
      */
     @SuppressWarnings({ "unchecked", "cast" })
     public void xtestTrinksGBase() {
         String exam = "(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
                         + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
                         + "( - 9 W + 15 T P + 20 S Z ), " + "( P W + 2 T Z - 11 B**3 ), "
-                        + "( 99 W - 11 B S + 3 B**2 ) " 
-	                + ", ( 10000 B**2 + 6600 B + 2673 )"
-                        + ") ";
+                        + "( 99 W - 11 B S + 3 B**2 ) " + ", ( 10000 B**2 + 6600 B + 2673 )" + ") ";
 
         Reader source = new StringReader(exam);
         GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);

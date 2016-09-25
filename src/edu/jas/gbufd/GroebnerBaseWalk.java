@@ -14,10 +14,10 @@ import org.apache.log4j.Logger;
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.ReductionAbstract;
 import edu.jas.gb.ReductionSeq;
-import edu.jas.poly.Monomial;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.Monomial;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
@@ -29,8 +29,8 @@ import edu.jas.structure.RingFactory;
 /**
  * Groebner Base sequential Groebner Walk algorithm. Implements Groebner base
  * computation via Groebner Walk algorithm. See "The generic Groebner walk" by
- * Fukuda, Jensen, Lauritzen, Thomas, 2005. <b>Note:</b> experimental, not yet
- * usable.
+ * Fukuda, Jensen, Lauritzen, Thomas, 2005. <b>Note:</b> experimental,
+ * eventually not yet usable.
  * @param <C> coefficient type
  * @author Heinz Kredel
  * 
@@ -43,7 +43,7 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
     private static final Logger logger = Logger.getLogger(GroebnerBaseWalk.class);
 
 
-    private static final boolean debug = true; // logger.isDebugEnabled();
+    private static final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -75,7 +75,7 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
      * Groebner base using Groebner Walk algorithm.
      * @param modv module variable number.
      * @param F polynomial list.
-     * @return GB(F) a inv lex term order Groebner base of F.
+     * @return GB(F) a INVLEX term order Groebner base of F.
      */
     public List<GenPolynomial<C>> GB(int modv, List<GenPolynomial<C>> F) {
         List<GenPolynomial<C>> G = normalizeZerosOnes(F);
@@ -93,7 +93,7 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
             G.add(p);
             return G;
         }
-        // convert to graded term order
+        // compute in graded term order
         //TermOrder grord = new TermOrder(TermOrder.REVITDG);
         TermOrder grord = new TermOrder(TermOrder.IGRLEX);
         GenPolynomialRing<C> gfac = new GenPolynomialRing<C>(pfac, grord);
@@ -119,14 +119,14 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
         if (z == 0) {
             logger.info("ideal zero dimensional, can use also FGLM algorithm");
         }
-        // compute lex Groebner base via Groebner Walk
+        // compute INVLEX Groebner base via Groebner Walk
         G = walkGroebnerToLex(modv, Gp);
         return G;
     }
 
 
     /**
-     * Converts Groebner bases w.r.t. total degree termorder into Groebner base
+     * Converts Groebner bases w.r.t. total degree term order to Groebner base
      * w.r.t to inverse lexicographical term order.
      * @param modv module variable number.
      * @param Gl Groebner base with respect to graded term order.
@@ -136,15 +136,14 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
         if (Gl == null || Gl.size() == 0) {
             throw new IllegalArgumentException("G may not be null or empty");
         }
-        //Polynomial ring of input Groebnerbasis G
+        //Polynomial ring of input Groebner basis Gl
         GenPolynomialRing<C> ring = Gl.get(0).ring;
         if (debug) {
             logger.info("ring = " + ring.toScript());
         }
-
+        //Polynomial ring of newGB with INVLEX order
         //TermOrder lexi = new TermOrder(TermOrder.REVILEX);
         TermOrder lexi = new TermOrder(TermOrder.INVLEX);
-        //Polynomial ring of newGB with lexi order
         GenPolynomialRing<C> ufac = new GenPolynomialRing<C>(ring, lexi);
         if (debug) {
             logger.info("ufac = " + ufac.toScript());
@@ -152,15 +151,15 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
         logger.info("ev1 = " + ring.tord + ", ev2 = " + ufac.tord);
         List<GenPolynomial<C>> Giter = Gl;
         List<ExpVector> marks = new ArrayList<ExpVector>();
-        for ( GenPolynomial<C> p : Giter ) {
+        for (GenPolynomial<C> p : Giter) {
             marks.add(p.leadingExpVector());
         }
         List<Monomial<C>> M = new ArrayList<Monomial<C>>();
-        for ( GenPolynomial<C> p : Giter ) {
-            M.add( new Monomial<C>( p.leadingMonomial() ) );
+        for (GenPolynomial<C> p : Giter) {
+            M.add(new Monomial<C>(p.leadingMonomial()));
         }
         List<Monomial<C>> Mp = new ArrayList<Monomial<C>>(M);
- 
+
         long[][] il = TermOrderByName.weightForOrder(TermOrder.INVLEX, ring.nvar);
         ExpVector w = null;
         boolean done = false;
@@ -177,8 +176,9 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
             long d = 0; // = Long.MIN_VALUE;
             for (ExpVector e : delta) {
                 if (ev1.compare(ring.evzero, e) <= 0 || ev2.compare(e, ring.evzero) <= 0) {
-                    logger.info("skip e  = " + e + ", e <_1 0: " + ev1.compare(ring.evzero, e)
-                                                 + ", 0 <_2 e: " + ev2.compare(e, ring.evzero) );
+                    logger.info("skip e  = " + e);
+                    //logger.info("skip e  = " + e + ", e <_1 0: " + ev1.compare(ring.evzero, e) + ", 0 <_2 e: "
+                    //                + ev2.compare(e, ring.evzero));
                     continue;
                 }
                 for (long[] tau : il) {
@@ -209,36 +209,33 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
                 break; // continue ?
             }
             w = v;
+            // determine facet polynomials for w
             //logger.info("w_new = " + w); // + ", " + ring.valueOf(w));
             List<GenPolynomial<C>> iG = new ArrayList<GenPolynomial<C>>();
             for (GenPolynomial<C> f : Giter) {
                 GenPolynomial<C> ing = f.leadingFacetPolynomial(w);
                 logger.info("f = " + f + ", ing_g = " + ing);
                 iG.add(ing);
-            }            
-
-            //TermOrder omega = new TermOrder(TermOrder.INVLEX);
-            //GenPolynomialRing<C> ofac = new GenPolynomialRing<C>(ring, omega);
-            //logger.info("lex poly ring = " + ufac.toScript());
-            List<GenPolynomial<C>> inOmega = ufac.copy(iG); //iG;
+            }
+            List<GenPolynomial<C>> inOmega = ufac.copy(iG);
             logger.info("inOmega = " + inOmega);
 
-            // lex GB of inOmega
-            List<GenPolynomial<C>> inOF = inOmega; 
+            // INVLEX GB of inOmega
+            List<GenPolynomial<C>> inOF = inOmega;
             List<GenPolynomial<C>> inOG = sgb.GB(modv, inOF);
             logger.info("GB(inOmega) = " + inOG);
             // remark polynomials 
             marks.clear();
             M.clear();
             for (GenPolynomial<C> p : inOG) {
-                 marks.add(p.leadingExpVector());
-                 M.add( new Monomial<C>( p.leadingMonomial() ) );
+                marks.add(p.leadingExpVector());
+                M.add(new Monomial<C>(p.leadingMonomial()));
             }
             logger.info("marks(GB(inOmega)) = " + marks);
             // lift and reduce
             List<GenPolynomial<C>> minG = liftReductas(M, Mp, Giter, inOG);
             logger.info("minimal lift inOG  = " + minG);
-            List<GenPolynomial<C>> G = minG; 
+            List<GenPolynomial<C>> G = minG;
             if (G.size() == 1) {
                 GenPolynomial<C> p = ufac.copy(G.get(0)); // change term order
                 G.clear();
@@ -249,7 +246,6 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
             Giter = G;
             Mp.clear();
             Mp.addAll(M);
-            //ring = Giter.get(0).ring;
         }
         return Giter;
     }
@@ -288,7 +284,7 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
      * @param A polynomial list of leading omega polynomials to lift.
      * @return lift(A) a Groebner base wrt M of ideal(G).
      */
-    public List<GenPolynomial<C>> liftReductas(List<Monomial<C>> M, List<Monomial<C>> Mp, 
+    public List<GenPolynomial<C>> liftReductas(List<Monomial<C>> M, List<Monomial<C>> Mp,
                     List<GenPolynomial<C>> G, List<GenPolynomial<C>> A) {
         if (G == null || M == null || Mp == null || G.isEmpty()) {
             throw new IllegalArgumentException("null or empty lists not allowed");
@@ -296,7 +292,7 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
         if (A == null || A.isEmpty()) {
             return A;
         }
-        if (G.size() != Mp.size() || A.size() != M.size()) { 
+        if (G.size() != Mp.size() || A.size() != M.size()) {
             throw new IllegalArgumentException("equal sized lists required");
         }
         GenPolynomial<C> pol = G.get(0);
@@ -326,9 +322,9 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
         }
         //logger.info("red(omega) = " + red);
         // combine f - f^P in tring
-        GenPolynomialRing<C> tring = A.get(0).ring; 
-        if (false&&debug) {
-            logger.info("tring = " + tring.toScript());
+        GenPolynomialRing<C> tring = A.get(0).ring;
+        if (debug) {
+            logger.info("tring = " + tring.toScript() + ", M = " + M);
         }
         List<GenPolynomial<C>> nb = new ArrayList<GenPolynomial<C>>(red.size());
         for (i = 0; i < A.size(); i++) {
@@ -346,24 +342,24 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
         while (i < len) {
             GenPolynomial<C> a = nb.remove(0);
             Monomial<C> m = M.remove(0); // in step with element from nb
-            if (false&&debug) {
-                System.out.println("doing " + a + ", lt = " + a.leadingExpVector());
+            if (debug) {
+                logger.debug("doing " + a + ", lt = " + a.leadingExpVector());
             }
             //a = sgb.red.normalform(nb, a);
             a = sred.normalformMarked(M, nb, a);
-            if (false&&debug) {
-                System.out.println("done, m = " + m + ", lt = " + a.leadingExpVector());
+            if (debug) {
+                logger.debug("done, m = " + m + ", lt = " + a.leadingExpVector());
             }
             nb.add(a); // adds as last
             M.add(m);
             i++;
         }
         // remove mark after minimal
-        for(i = 0; i < len; i++) {
+        for (i = 0; i < len; i++) {
             GenPolynomial<C> a = nb.get(i);
-            Monomial<C> m = M.get(i); 
+            Monomial<C> m = M.get(i);
             a.doAddTo(m.coefficient(), m.exponent()); // re-add marked term
-            nb.set(i,a);        
+            nb.set(i, a);
         }
         //Collections.reverse(nb); // undo reverse
         return nb;
