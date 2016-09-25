@@ -551,6 +551,7 @@ public class PolynomialList<C extends RingElem<C>> implements Comparable<Polynom
             ExpVector u = mark.get(i);
             List<ExpVector> pe = p.deltaExpVectors(u);
             de.addAll(pe);
+            i++;
         }
         return de;
     }
