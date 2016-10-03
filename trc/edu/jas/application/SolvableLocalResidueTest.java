@@ -7,15 +7,13 @@ package edu.jas.application;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Arrays;
-
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigRational;
+import edu.jas.fd.FDUtil;
+import edu.jas.fd.GreatestCommonDivisorAbstract;
+import edu.jas.fd.GreatestCommonDivisorSimple;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.GenSolvablePolynomial;
@@ -24,10 +22,10 @@ import edu.jas.poly.RelationGenerator;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.TermOrderByName;
 import edu.jas.poly.WeylRelations;
-import edu.jas.fd.GreatestCommonDivisorAbstract;
-import edu.jas.fd.GreatestCommonDivisorSimple;
-import edu.jas.fd.GreatestCommonDivisorPrimitive;
-import edu.jas.fd.FDUtil;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -440,7 +438,7 @@ public class SolvableLocalResidueTest extends TestCase {
         //System.out.println("efac = " + efac.toScript());
 
         SolvableLocalResidue<BigRational> a, b, c, d, e, f;
-        GenSolvablePolynomial<BigRational> p, q, r, s;
+        GenSolvablePolynomial<BigRational> p, q, r;
 
         p = mfac.parse("t + x + y + 1");
         a = new SolvableLocalResidue<BigRational>(efac, p);
@@ -475,8 +473,9 @@ public class SolvableLocalResidueTest extends TestCase {
         //System.out.println("#b: " + (b.num.length()+b.den.length()));
         //System.out.println("#d: " + (d.num.length()+d.den.length()));
 
-        GreatestCommonDivisorAbstract<BigRational> engine = new GreatestCommonDivisorSimple<BigRational>(new BigRational());
-        p = engine.leftGcd(d.num,d.den);
+        GreatestCommonDivisorAbstract<BigRational> engine = new GreatestCommonDivisorSimple<BigRational>(
+                        new BigRational());
+        p = engine.leftGcd(d.num, d.den);
         //System.out.println("p = " + p.toScript());
 
         GenSolvablePolynomial<BigRational>[] qr;

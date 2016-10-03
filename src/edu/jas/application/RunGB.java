@@ -12,8 +12,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
-import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
@@ -43,12 +43,10 @@ import edu.jas.util.ExecutableServer;
 /**
  * Simple setup to run a GB example. <br>
  * Usage: RunGB [seq(+)|par(+)|build=string|disthyb|cli] &lt;file&gt;
- * #procs/#threadsPerNode [machinefile] &lt;check&gt; &lt;nolog&gt;
- * <br>
+ * #procs/#threadsPerNode [machinefile] &lt;check&gt; &lt;nolog&gt; <br>
  * Build string can be any combination of method calls from GBAlgorithmBuilder.
- * Method polynomialRing() is called based on declaration from "file". 
- * Method build() is called automatically. For example 
- * <br>
+ * Method polynomialRing() is called based on declaration from "file". Method
+ * build() is called automatically. For example <br>
  * build=syzygyPairlist.iterated.graded.parallel(3)
  * @see edu.jas.application.GBAlgorithmBuilder
  * @author Heinz Kredel
@@ -76,8 +74,8 @@ public class RunGB {
     @SuppressWarnings("unchecked")
     public static void main(String[] args) {
 
-        String[] allkinds = new String[] { "seq", "seq+", "par", "par+", "build=", "disthyb",
-                "disthyb+", "cli" }; // must be last
+        String[] allkinds = new String[] { "seq", "seq+", "par", "par+", "build=", "disthyb", "disthyb+",
+                "cli" }; // must be last
 
         String usage = "Usage: RunGB [ " + join(allkinds, " | ") + "[port] ] " + "<file> "
                         + "#procs/#threadsPerNode " + "[machinefile] " + "[check] [nolog]";
@@ -239,7 +237,7 @@ public class RunGB {
             runParallel(S, threads, plusextra);
         } else if (kind.startsWith("disthyb")) {
             runMasterHyb(S, threads, threadsPerNode, mfile, port, plusextra);
-        //} else if (kind.startsWith("dist")) {
+            //} else if (kind.startsWith("dist")) {
             //runMaster(S, threads, mfile, port, plusextra);
         } else if (kind.startsWith("build")) {
             runGB(S, gb);
@@ -334,8 +332,8 @@ public class RunGB {
         } else {
             System.out.print("d ");
         }
-        System.out.println("= " + threads + ", ppn = " + threadsPerNode + ", time = " + t1
-                        + " milliseconds, " + (t - t1) + " start-up " + ", total = " + t);
+        System.out.println("= " + threads + ", ppn = " + threadsPerNode + ", time = " + t1 + " milliseconds, "
+                        + (t - t1) + " start-up " + ", total = " + t);
         checkGB(S);
         System.out.println("");
     }
@@ -506,8 +504,8 @@ public class RunGB {
             JarFile jf = new JarFile(examples);
             JarEntry je = jf.getJarEntry(filename);
             if (je == null) {
-                if (jf != null ) {
-                   jf.close();
+                if (jf != null) {
+                    jf.close();
                 }
                 fnf.printStackTrace();
                 return problem;
@@ -543,8 +541,8 @@ public class RunGB {
             int ii = tb.indexOf(".");
             String mth;
             if (ii >= 0) {
-                mth = tb.substring(0,ii);
-                tb = tb.substring(ii+1);
+                mth = tb.substring(0, ii);
+                tb = tb.substring(ii + 1);
             } else {
                 mth = tb;
                 tb = "";
@@ -555,22 +553,22 @@ public class RunGB {
             String parm = "";
             int jj = mth.indexOf("()");
             if (jj >= 0) {
-                mth = mth.substring(0,jj);
+                mth = mth.substring(0, jj);
             } else {
                 jj = mth.indexOf("(");
                 if (jj >= 0) {
-                    parm = mth.substring(jj+1);
-                    mth = mth.substring(0,jj);
+                    parm = mth.substring(jj + 1);
+                    mth = mth.substring(0, jj);
                     jj = parm.indexOf(")");
-                    parm = parm.substring(0,jj);
+                    parm = parm.substring(0, jj);
                 }
             }
             //System.out.println("mth = " + mth + ", parm = " + parm);
             try {
-                Method method; 
+                Method method;
                 if (parm.isEmpty()) {
-                    method = ab.getClass().getMethod(mth, null);
-                    ab = (GBAlgorithmBuilder) method.invoke(ab, null);
+                    method = ab.getClass().getMethod(mth, (Class<?>[]) null);
+                    ab = (GBAlgorithmBuilder) method.invoke(ab, (Object[]) null);
                 } else {
                     int tparm = Integer.parseInt(parm);
                     method = ab.getClass().getMethod(mth, int.class);
@@ -593,6 +591,6 @@ public class RunGB {
         gb = ab.build();
         //System.out.println("gb = " + gb);
         return gb;
-    }   
+    }
 
 }

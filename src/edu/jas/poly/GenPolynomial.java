@@ -220,7 +220,7 @@ public class GenPolynomial<C extends RingElem<C>>
      */
     public void doRemoveFromMap(ExpVector e, C c) {
         C b = val.remove(e);
-        if (true||debug) {
+        if (true) { //||debug
             hash = -1;
             blen = -1;
             if (c == null) { // ignore b
@@ -839,7 +839,7 @@ public class GenPolynomial<C extends RingElem<C>>
             return ring.getZERO();
         }
         long[] normal = uv.getVal();
-        GenPolynomial<C> fp = ring.getZERO().copy(); 
+        GenPolynomial<C> fp = ring.getZERO().copy();
         for (Map.Entry<ExpVector, C> m : val.entrySet()) {
             ExpVector e = m.getKey();
             if (u.equals(e)) {
@@ -849,12 +849,13 @@ public class GenPolynomial<C extends RingElem<C>>
                 if (v.compareTo(uv) == 0) { // || v.negate().compareTo(uv) == 0
                     fp.val.put(e, m.getValue());
                 } else { // check for v parallel to uv
-                    long ab = v.weightDeg(normal);     //scalarProduct(v, uv);
-                    long a  = v.weightDeg(v.getVal()); //scalarProduct(v, v);
-                    long b  = uv.weightDeg(normal);    //scalarProduct(uv, uv);
+                    long ab = v.weightDeg(normal); //scalarProduct(v, uv);
+                    long a = v.weightDeg(v.getVal()); //scalarProduct(v, v);
+                    long b = uv.weightDeg(normal); //scalarProduct(uv, uv);
                     if (ab * ab == a * b) { // cos == 1
                         fp.val.put(e, m.getValue());
-                        logger.info("ab = " + ab + ", a = " + a + ", b = " + b + ", u = " + u + ", e = " + e + ", v = " + v);
+                        logger.info("ab = " + ab + ", a = " + a + ", b = " + b + ", u = " + u + ", e = " + e
+                                        + ", v = " + v);
                     }
                 }
             }
