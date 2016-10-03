@@ -273,6 +273,10 @@ public class GCDSimpleTest extends TestCase {
         //System.out.println("cpm = " + cpm);
         //System.out.println("dp  = " + dp);
         //System.out.println("dpm = " + dpm);
+        assertTrue("", apm.leadingBaseCoefficient().isONE());
+        assertTrue("", bpm.leadingBaseCoefficient().isONE());
+        assertTrue("", cpm.leadingBaseCoefficient().isONE());
+        assertTrue("", dpm.leadingBaseCoefficient().isONE());
 
         GreatestCommonDivisorAbstract<SolvableQuotient<BigRational>> fdq = new GreatestCommonDivisorSimple<SolvableQuotient<BigRational>>(
                         qfac);
@@ -280,6 +284,7 @@ public class GCDSimpleTest extends TestCase {
         gpm = gp.monic();
         //System.out.println("gp  = " + gp);
         //System.out.println("gpm = " + gpm);
+        assertTrue("", gpm.leadingBaseCoefficient().isONE());
 
         ep = FDUtil.<SolvableQuotient<BigRational>> leftBaseSparsePseudoRemainder(gp, dp);
         //System.out.println("ep  = " + ep);
@@ -534,6 +539,7 @@ public class GCDSimpleTest extends TestCase {
         //System.out.println("gb = " + Llgb);
         //System.out.println("c  = " + c);
         //System.out.println("d  = " + d);
+        assertTrue("d in leftGB", sbb.sred.leftNormalform(Llgb, d).isZERO());
 
         e = FDUtil.<BigRational> leftBaseSparsePseudoRemainder(d, c);
         //System.out.println("e = " + e);

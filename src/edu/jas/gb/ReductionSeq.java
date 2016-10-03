@@ -202,8 +202,9 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 //S.doAddTo(a.negate(), e);
                 S = S.subtractMultiple(b, f, p[i]);
                 if (e.equals(S.leadingExpVector())) {
-                    throw new RuntimeException("something is wrong: ht not descending e = " + e + ", S = " + S);
-		}
+                    throw new RuntimeException(
+                                    "something is wrong: ht not descending e = " + e + ", S = " + S);
+                }
             }
             //System.out.println("NF R = " + R + ", S = " + S);
         }

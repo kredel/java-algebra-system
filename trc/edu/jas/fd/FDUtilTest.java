@@ -5,8 +5,6 @@
 package edu.jas.fd;
 
 
-import java.util.List;
-
 import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigInteger;
@@ -16,7 +14,6 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolyUtil;
-import edu.jas.poly.PolynomialList;
 import edu.jas.poly.RecSolvablePolynomial;
 import edu.jas.poly.RecSolvablePolynomialRing;
 import edu.jas.poly.RelationGenerator;
@@ -140,14 +137,14 @@ public class FDUtilTest extends TestCase {
         //System.out.println("dfac  = " + dfac.toScript());
 
         do {
-            a = dfac.random(kl, ll+1, el, q);
-        } while(a.isZERO());
+            a = dfac.random(kl, ll + 1, el, q);
+        } while (a.isZERO());
         //a = dfac.parse(" 3 x^5 + 44 ");
         //System.out.println("a = " + a);
 
         do {
-            b = dfac.random(kl, ll+1, el, q);
-        } while(b.isZERO());
+            b = dfac.random(kl, ll + 1, el, q);
+        } while (b.isZERO());
         //a = a.sum(b);
         //b = dfac.parse(" 2 x^2 + 40 ");
         //System.out.println("b = " + b);
@@ -163,19 +160,19 @@ public class FDUtilTest extends TestCase {
         assertTrue("a*b != b*a", !c.equals(d) || c.leadingExpVector().equals(d.leadingExpVector()));
 
         // divide 
-        e = FDUtil.<BigInteger> leftBasePseudoQuotient(c,a);
+        e = FDUtil.<BigInteger> leftBasePseudoQuotient(c, a);
         //System.out.println("e = " + e);
         assertEquals("b == b*a/a: ", b, e);
 
-        f = FDUtil.<BigInteger> rightBasePseudoQuotient(c,b);
+        f = FDUtil.<BigInteger> rightBasePseudoQuotient(c, b);
         //System.out.println("f = " + f);
         assertEquals("a == b*a/b: ", a, f);
 
-        e = FDUtil.<BigInteger> rightBasePseudoQuotient(d,a);
+        e = FDUtil.<BigInteger> rightBasePseudoQuotient(d, a);
         //System.out.println("e = " + e);
         assertEquals("b == a*b/a: ", b, e);
 
-        f = FDUtil.<BigInteger> leftBasePseudoQuotient(d,b);
+        f = FDUtil.<BigInteger> leftBasePseudoQuotient(d, b);
         //System.out.println("f = " + f);
         assertEquals("a == a*b/b: ", a, f);
     }
@@ -184,6 +181,7 @@ public class FDUtilTest extends TestCase {
     /**
      * Test base pseudo division.
      */
+    @SuppressWarnings({ "cast" })
     public void testBasePseudoDivision() {
         String[] names = new String[] { "x" };
         dfac = new GenSolvablePolynomialRing<BigInteger>(new BigInteger(1), to, names);
@@ -192,14 +190,14 @@ public class FDUtilTest extends TestCase {
         //System.out.println("dfac  = " + dfac.toScript());
 
         do {
-            a = dfac.random(kl, ll*2, el+1, q);
-        } while(a.isZERO());
+            a = dfac.random(kl, ll * 2, el + 1, q);
+        } while (a.isZERO());
         //a = dfac.parse(" 3 x^5 + 44 ");
         //System.out.println("a = " + a);
 
         do {
-            b = dfac.random(kl, ll*2, el+1, q);
-        } while(b.isZERO());
+            b = dfac.random(kl, ll * 2, el + 1, q);
+        } while (b.isZERO());
         //a = a.sum(b);
         //b = dfac.parse(" 2 x^2 + 40 ");
         //System.out.println("b = " + b);
@@ -414,8 +412,8 @@ public class FDUtilTest extends TestCase {
         boolean t = arr.isRightRecursivePolynomial(brr);
         assertTrue("arr == eval(brr): ", t);
 
-        GenSolvablePolynomial<BigRational> c = (GenSolvablePolynomial<BigRational>) 
-            rrfac.random(kl, ll, el, q).leadingBaseCoefficient();
+        GenSolvablePolynomial<BigRational> c = (GenSolvablePolynomial<BigRational>) rrfac
+                        .random(kl, ll, el, q).leadingBaseCoefficient();
         //System.out.println("FDQR: c  = " + c);
 
         //drr = FDUtil.<BigRational> multiplyRightRecursivePolynomial(brr,c);
@@ -423,7 +421,7 @@ public class FDUtilTest extends TestCase {
         //System.out.println("FDQR: drr  = " + drr);
 
         //no: err = FDUtil.<BigRational> recursiveRightPseudoQuotientRemainder(drr,c)[0];
-        err = FDUtil.<BigRational> recursiveDivideRightEval(drr,c); // this is correct
+        err = FDUtil.<BigRational> recursiveDivideRightEval(drr, c); // this is correct
         assertEquals("arr == err: " + err, brr, err);
 
         //no: err = FDUtil.<BigRational> recursiveRightDivide(drr,c);
@@ -434,7 +432,7 @@ public class FDUtilTest extends TestCase {
         drr = brr.multiplyLeft(c);
         //System.out.println("FDQR: drr  = " + drr);
 
-        err = FDUtil.<BigRational> recursiveLeftDivide(drr,c);
+        err = FDUtil.<BigRational> recursiveLeftDivide(drr, c);
         //System.out.println("FDQR: err  = " + err);
         assertEquals("brr == err: " + err, brr, err);
     }
@@ -443,6 +441,7 @@ public class FDUtilTest extends TestCase {
     /*
      * Test exact division of recursive polynomials.
      */
+    @SuppressWarnings({ "cast" })
     public void testRecursiveDivide() {
         rdfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), dfac);
         RelationGenerator<BigRational> wl = new WeylRelationsIterated<BigRational>();
@@ -456,12 +455,12 @@ public class FDUtilTest extends TestCase {
 
         do {
             as = rsfac.random(kl, ll, el, q);
-        } while(as.isZERO());
+        } while (as.isZERO());
         //System.out.println("as = " + as);
 
         do {
             bs = rsfac.random(kl, ll, el, q);
-        } while(bs.isZERO());
+        } while (bs.isZERO());
         //System.out.println("bs = " + bs);
 
         // non commutative
@@ -476,83 +475,83 @@ public class FDUtilTest extends TestCase {
         assertTrue("as*bs != bs*as", !cs.equals(ds) || cs.leadingExpVector().equals(ds.leadingExpVector()));
 
         // divide 
-        es = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursivePseudoQuotient(cs,as);
+        es = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursivePseudoQuotient(cs, as);
         //System.out.println("es = " + es);
         final int max = 4;
         int i = 0;
         do {
-            x1 = (RecSolvablePolynomial<BigRational>) bs.multiplyLeft( as.leadingBaseCoefficient().power(i) );
+            x1 = (RecSolvablePolynomial<BigRational>) bs.multiplyLeft(as.leadingBaseCoefficient().power(i));
             //System.out.println("lc(a)^"+i+"*b = " + x1);
-            if (es.equals(x1)) {  
+            if (es.equals(x1)) {
                 assertEquals("b == b*a/a: ", es, x1);
-                break;  
+                break;
             }
-            if (es.leadingBaseCoefficient().equals(x1.leadingBaseCoefficient())) {  
+            if (es.leadingBaseCoefficient().equals(x1.leadingBaseCoefficient())) {
                 // assertEquals("b == b*a/a: ", e, x1);
                 System.out.println("fail: b == b*a/a: lc(e)==lc(x1)");
-                if (es.abs().equals(bs.abs())) {  
+                if (es.abs().equals(bs.abs())) {
                     System.out.println("success via pseudo: b == b*a/a: ");
                 }
-                break;  
+                break;
             }
-        } while (i++ < max); 
+        } while (i++ < max);
 
-        fs = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveRightPseudoQuotient(cs,bs);
+        fs = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveRightPseudoQuotient(cs, bs);
         //System.out.println("fs = " + fs);
         i = 0;
         do {
-            x1 = (RecSolvablePolynomial<BigRational>) as.multiply( bs.leadingBaseCoefficient().power(i) );
+            x1 = (RecSolvablePolynomial<BigRational>) as.multiply(bs.leadingBaseCoefficient().power(i));
             //System.out.println("a*lc(b)^"+i+" = " + x1);
-            if (fs.equals(x1)) {  
+            if (fs.equals(x1)) {
                 assertEquals("a == b*a/b: ", fs, x1);
-                break;  
+                break;
             }
-            if (fs.leadingBaseCoefficient().equals(x1.leadingBaseCoefficient())) {  
+            if (fs.leadingBaseCoefficient().equals(x1.leadingBaseCoefficient())) {
                 System.out.println("fail: a == b*a/b: lc(f)==lc(x1)");
-                if (fs.abs().equals(as.abs())) {  
+                if (fs.abs().equals(as.abs())) {
                     System.out.println("success via pseudo: a == b*a/b: ");
                 }
-                break;  
+                break;
             }
-        } while (i++ < max); 
+        } while (i++ < max);
 
-        es = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveRightPseudoQuotient(ds,as);
+        es = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveRightPseudoQuotient(ds, as);
         //System.out.println("es = " + es);
         i = 0;
         do {
-            x1 = (RecSolvablePolynomial<BigRational>) bs.multiply( as.leadingBaseCoefficient().power(i) );
+            x1 = (RecSolvablePolynomial<BigRational>) bs.multiply(as.leadingBaseCoefficient().power(i));
             //System.out.println("b*lc(a)^"+i+" = " + x1);
-            if (es.equals(x1)) {  
+            if (es.equals(x1)) {
                 assertEquals("b == a*b/a: ", es, x1);
-                break;  
+                break;
             }
-            if (es.leadingBaseCoefficient().equals(x1.leadingBaseCoefficient())) {  
+            if (es.leadingBaseCoefficient().equals(x1.leadingBaseCoefficient())) {
                 System.out.println("fail: b == a*b/a: lc(e) == lc(x1)");
-                if (es.abs().equals(bs.abs())) {  
+                if (es.abs().equals(bs.abs())) {
                     //System.out.println("success via pseudo: b == a*b/a: ");
                 }
-                break;  
+                break;
             }
-        } while (i++ < max); 
+        } while (i++ < max);
 
-        fs = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursivePseudoQuotient(ds,bs);
+        fs = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursivePseudoQuotient(ds, bs);
         //System.out.println("fs = " + fs);
         i = 0;
         do {
-            x1 = (RecSolvablePolynomial<BigRational>) as.multiplyLeft( bs.leadingBaseCoefficient().power(i) );
+            x1 = (RecSolvablePolynomial<BigRational>) as.multiplyLeft(bs.leadingBaseCoefficient().power(i));
             //System.out.println("lc(b)^"+i+"*a = " + x1);
-            if (fs.equals(x1)) {  
+            if (fs.equals(x1)) {
                 assertEquals("a == a*b/b: ", fs, x1);
-                break;  
+                break;
             }
-            if (fs.leadingBaseCoefficient().equals(x1.leadingBaseCoefficient())) {  
+            if (fs.leadingBaseCoefficient().equals(x1.leadingBaseCoefficient())) {
                 System.out.println("fail: a == a*b/b: lc(f)==lc(x1)");
-                if (fs.abs().equals(as.abs())) {  
+                if (fs.abs().equals(as.abs())) {
                     System.out.println("success via pseudo: a == a*b/b: ");
                 }
-                break;  
+                break;
             }
-        } while (i++ < max); 
+        } while (i++ < max);
     }
 
 }

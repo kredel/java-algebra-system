@@ -11,10 +11,6 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigRational;
@@ -30,6 +26,10 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -117,7 +117,7 @@ public class GroebnerBaseFGLMTest extends TestCase {
     /**
      * Test example GBase.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public void testExamGBase() {
         GroebnerBase<BigRational> bbs = new GroebnerBaseSeq<BigRational>(new ReductionSeq<BigRational>(),
                         new OrderedSyzPairlist<BigRational>());
@@ -137,7 +137,7 @@ public class GroebnerBaseFGLMTest extends TestCase {
 
         G = bb.GB(F.list);
         PolynomialList<BigRational> P = new PolynomialList<BigRational>(F.ring, G);
-        System.out.println("G = " + P);
+        //System.out.println("G = " + P);
         assertTrue("isGB( GB(P) )", bb.isGB(G));
         assertEquals("#GB(P) == 3", 3, G.size());
 
@@ -153,7 +153,7 @@ public class GroebnerBaseFGLMTest extends TestCase {
     /**
      * Test Trinks7 GBase.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public void testTrinks7GBase() {
         GroebnerBase<BigRational> bbs = new GroebnerBaseSeq<BigRational>(new ReductionSeq<BigRational>(),
                         new OrderedSyzPairlist<BigRational>());
@@ -190,7 +190,7 @@ public class GroebnerBaseFGLMTest extends TestCase {
     /**
      * Test Trinks6 GBase.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public void testTrinks6GBase() {
         GroebnerBase<BigRational> bbs = new GroebnerBaseSeq<BigRational>(new ReductionSeq<BigRational>(),
                         new OrderedSyzPairlist<BigRational>());
@@ -228,7 +228,7 @@ public class GroebnerBaseFGLMTest extends TestCase {
     /**
      * Test Trinks7 GBase over Q(sqrt(2)).
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public void testTrinks7GBaseSqrt() {
         GroebnerBase<AlgebraicNumber<BigRational>> bbs = new GroebnerBaseSeq<AlgebraicNumber<BigRational>>(
                         new ReductionSeq<AlgebraicNumber<BigRational>>(),
@@ -286,7 +286,7 @@ public class GroebnerBaseFGLMTest extends TestCase {
     /**
      * Test Trinks7 GBase over Q(i).
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public void testTrinks7GBaseCompl() {
         GroebnerBase<Complex<BigRational>> bbs = new GroebnerBaseSeq<Complex<BigRational>>(
                         new ReductionSeq<Complex<BigRational>>(),

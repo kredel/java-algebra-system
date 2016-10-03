@@ -128,14 +128,14 @@ public class GroebnerBaseWalkTest extends TestCase {
         assertEquals("#GB(FJLT) == 2", 2, Gp.size());
         //assertEquals("#GB(FJLT) == 3", 3, Gp.size());
         //Collections.reverse(G); // now in minimal
-        assertEquals("G == Gp: ", G, Gp);
+        assertEquals("G == Gp: ", seq, fjlt);
     }
 
 
     /**
      * Test example GBase.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public void testFGLMGBase() { //(z,y,x)
         String exam = "(x,y,z) L " + "( " + "( z y**2 + 2 x + 1/2 )" + "( z x**2 - y**2 - 1/2 x )"
                         + "( -z + y**2 x + 4 x**2 + 1/4 )" + " )";
@@ -174,7 +174,7 @@ public class GroebnerBaseWalkTest extends TestCase {
         String exam = "(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
                         + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
                         + "( - 9 W + 15 T P + 20 S Z ), " + "( P W + 2 T Z - 11 B**3 ), "
-	    + "( 99 W - 11 B S + 3 B**2 ) " /*+ ", ( 10000 B**2 + 6600 B + 2673 )"*/ + ") ";
+                        + "( 99 W - 11 B S + 3 B**2 ) " /*+ ", ( 10000 B**2 + 6600 B + 2673 )"*/ + ") ";
 
         Reader source = new StringReader(exam);
         GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
@@ -200,7 +200,7 @@ public class GroebnerBaseWalkTest extends TestCase {
         assertTrue("isMinimalGB( GB(Trinks) )", bb.isMinimalGB(Gp));
         //assertEquals("#GB(Trinks) == 6", 6, Gp.size());
         //Collections.reverse(G); // now in minimal
-        assertEquals("G == Gp: ", G, Gp); // ideal.equals
+        assertEquals("G == Gp: ", seq, tri); // ideal.equals
     }
 
 }

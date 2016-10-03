@@ -7,7 +7,6 @@ package edu.jas.gbufd;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Arrays;
 import java.util.SortedSet;
 
 import org.apache.log4j.Logger;
@@ -16,7 +15,6 @@ import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.ReductionAbstract;
 import edu.jas.gb.ReductionSeq;
 import edu.jas.poly.ExpVector;
-import edu.jas.poly.ExpVectorLong;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.Monomial;
@@ -31,8 +29,7 @@ import edu.jas.structure.RingFactory;
 /**
  * Groebner Base sequential Groebner Walk algorithm. Implements Groebner base
  * computation via Groebner Walk algorithm. See "The generic Groebner walk" by
- * Fukuda, Jensen, Lauritzen, Thomas, 2005. <b>Note:</b> experimental,
- * eventually not yet usable.
+ * Fukuda, Jensen, Lauritzen, Thomas, 2005.
  * @param <C> coefficient type
  * @author Heinz Kredel
  * 
@@ -225,7 +222,7 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
             int i = 0;
             for (GenPolynomial<C> f : Giter) {
                 ExpVector h = marks.get(i++);
-                GenPolynomial<C> ing = f.leadingFacetPolynomial(h,w);
+                GenPolynomial<C> ing = f.leadingFacetPolynomial(h, w);
                 logger.info("ing_g = [" + ing + "], f = " + f.leadingExpVector());
                 iG.add(ing);
             }
@@ -322,7 +319,7 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
             Gp.add(s);
         }
         if (debug) {
-           logger.info("lifter GB: Gp  = " + Gp + ", Mp = " + Mp);
+            logger.info("lifter GB: Gp  = " + Gp + ", Mp = " + Mp);
         }
         List<GenPolynomial<C>> Ap = oring.copy(A);
         //logger.info("to lift Ap = " + Ap);
@@ -349,7 +346,7 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
             nb.add(s);
         }
         if (debug) {
-           logger.info("lifted-M, nb = " + nb);
+            logger.info("lifted-M, nb = " + nb);
         }
         // minimal GB with preserved marks
         //Collections.reverse(nb); // important for lex GB
