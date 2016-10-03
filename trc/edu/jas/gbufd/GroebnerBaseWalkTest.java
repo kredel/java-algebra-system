@@ -98,7 +98,7 @@ public class GroebnerBaseWalkTest extends TestCase {
      * Test FJLT GBase. Example from the FJLT paper.
      */
     @SuppressWarnings({ "unchecked", "cast" })
-    public void xtestFJLTGBase() { // (y,x)
+    public void testFJLTGBase() { // (y,x)
         String exam = "(y,x) L " // REVILEX REVITDG
                         + "( (x**2 - y**3), (x**3 - y**2 - x) )";
 
@@ -115,14 +115,14 @@ public class GroebnerBaseWalkTest extends TestCase {
 
         G = bb.GB(F.list);
         PolynomialList<BigRational> seq = new PolynomialList<BigRational>(F.ring, G);
-        System.out.println("seq G = " + seq);
+        //System.out.println("seq G = " + seq);
         assertTrue("isGB( GB(FJLT) )", bb.isGB(G));
         assertTrue("isMinimalGB( GB(FJLT) )", bb.isMinimalGB(G));
         assertEquals("#GB(FJLT) == 2", 2, G.size());
         //assertEquals("#GB(FJLT) == 3", 3, G.size());
         Gp = bbw.GB(F.list);
         PolynomialList<BigRational> fjlt = new PolynomialList<BigRational>(F.ring, Gp);
-        System.out.println("walk G = " + fjlt);
+        //System.out.println("walk G = " + fjlt);
         assertTrue("isGB( GB(FJLT) )", bb.isGB(Gp));
         assertTrue("isMinimalGB( GB(FJLT) )", bb.isMinimalGB(Gp));
         assertEquals("#GB(FJLT) == 2", 2, Gp.size());
@@ -153,16 +153,15 @@ public class GroebnerBaseWalkTest extends TestCase {
 
         G = bb.GB(F.list);
         PolynomialList<BigRational> P = new PolynomialList<BigRational>(F.ring, G);
-        System.out.println("G = " + P);
+        //System.out.println("G = " + P);
         assertTrue("isGB( GB(P) )", bb.isGB(G));
         assertEquals("#GB(P) == 3", 3, G.size());
 
         Gp = bbw.GB(F.list);
         PolynomialList<BigRational> P2 = new PolynomialList<BigRational>(F.ring, Gp);
-        System.out.println("G = " + P2);
+        //System.out.println("G = " + P2);
         assertTrue("isGB( GB(P2) )", bb.isGB(Gp));
         assertEquals("#GB(P2) == 3", 3, Gp.size());
-
         assertEquals("GB == FGLM", P, P2);
     }
 
@@ -171,7 +170,7 @@ public class GroebnerBaseWalkTest extends TestCase {
      * Test Trinks GBase.
      */
     @SuppressWarnings({ "unchecked", "cast" })
-    public void xtestTrinksGBase() {
+    public void testTrinksGBase() {
         String exam = "(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
                         + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
                         + "( - 9 W + 15 T P + 20 S Z ), " + "( P W + 2 T Z - 11 B**3 ), "
@@ -186,22 +185,22 @@ public class GroebnerBaseWalkTest extends TestCase {
         } catch (IOException e) {
             fail("" + e);
         }
-        System.out.println("F = " + F);
+        //System.out.println("F = " + F);
 
         G = bb.GB(F.list);
         PolynomialList<BigRational> seq = new PolynomialList<BigRational>(F.ring, G);
-        System.out.println("seq G = " + seq);
+        //System.out.println("seq G = " + seq);
         assertTrue("isGB( GB(Trinks) )", bb.isGB(G));
         assertTrue("isMinimalGB( GB(Trinks) )", bb.isMinimalGB(G));
         assertEquals("#GB(Trinks) == 6", 6, G.size());
         Gp = bbw.GB(F.list);
         PolynomialList<BigRational> tri = new PolynomialList<BigRational>(F.ring, Gp);
-        System.out.println("walk G = " + tri);
+        //System.out.println("walk G = " + tri);
         assertTrue("isGB( GB(Trinks) )", bb.isGB(Gp));
         assertTrue("isMinimalGB( GB(Trinks) )", bb.isMinimalGB(Gp));
         //assertEquals("#GB(Trinks) == 6", 6, Gp.size());
         //Collections.reverse(G); // now in minimal
-        //assertEquals("G == Gp: ", G, Gp); // ideal.equals
+        assertEquals("G == Gp: ", G, Gp); // ideal.equals
     }
 
 }

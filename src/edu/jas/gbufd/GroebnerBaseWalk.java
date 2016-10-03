@@ -166,8 +166,6 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
         il = TermOrder.reverseWeight(il).getWeight(); // because of weightDeg usage
         ExpVector w = null;
         boolean done = false;
-        //ExpVector inerr1 = new ExpVectorLong( new long[]{-1,4} );
-        //ExpVector inerr2 = new ExpVectorLong( new long[]{0,3} );
         while (!done) {
             // determine V and w
             PolynomialList<C> Pl = new PolynomialList<C>(ring, Giter);
@@ -185,9 +183,7 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
                 //if (ev1.compare(ring.evzero, e) <= 0 || ev2.compare(ring.evzero, e) >= 0) {
                 if (ev1.compare(ring.evzero, e) >= 0 || ev2.compare(ring.evzero, e) <= 0) {
                     logger.info("skip e = " + e);
-                    //if (! (v != null && e.equals(inerr2) && v.equals(inerr1)) ) { 
-                        continue;
-		    //}
+                    continue;
                 }
                 int s = 0;
                 long d2 = 0;
@@ -199,7 +195,7 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
                     continue;
                 }
                 for (long[] tau : il) {
-                    logger.info("current tau = " + Arrays.toString(tau));
+                    //logger.info("current tau = " + Arrays.toString(tau));
                     //compare
                     d = v.weightDeg(tau);
                     d2 = e.weightDeg(tau);
@@ -215,7 +211,7 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
                         break;
                     }
                 }
-                logger.info("step s  = " + s + ", d = " + d + ", d2 = " + d2 + ", e = " + e + ", v = " + v + ", et = " + et + ", vt = " + vt);
+                //logger.info("step s  = " + s + ", d = " + d + ", d2 = " + d2 + ", e = " + e + ", v = " + v + ", et = " + et + ", vt = " + vt);
             }
             logger.info("minimal v = " + v);
             if (v == null) {
@@ -230,7 +226,7 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
             for (GenPolynomial<C> f : Giter) {
                 ExpVector h = marks.get(i++);
                 GenPolynomial<C> ing = f.leadingFacetPolynomial(h,w);
-                logger.info("ing_g = [" + ing + "], f = " + f);
+                logger.info("ing_g = [" + ing + "], f = " + f.leadingExpVector());
                 iG.add(ing);
             }
             List<GenPolynomial<C>> inOmega = ufac.copy(iG);
@@ -246,10 +242,12 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
                 marks.add(p.leadingExpVector());
                 M.add(new Monomial<C>(p.leadingMonomial()));
             }
-            logger.info("marks(GB(inOmega)) = " + marks);
+            logger.info("marks(newGB()) = " + marks);
             // lift and reduce
             List<GenPolynomial<C>> G = liftReductas(M, Mp, Giter, inOG);
-            logger.info("minimal lift inOG  = " + G);
+            if (debug) {
+                logger.info("minimal lift inOG  = " + G);
+            }
             if (G.size() == 1) {
                 GenPolynomial<C> p = ufac.copy(G.get(0)); // change term order
                 G.clear();
@@ -323,7 +321,9 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
             GenPolynomial<C> s = G.get(i).subtract(Mp.get(i));
             Gp.add(s);
         }
-        logger.info("lifter GB: Gp  = " + Gp + ", Mp = " + Mp);
+        if (debug) {
+           logger.info("lifter GB: Gp  = " + Gp + ", Mp = " + Mp);
+        }
         List<GenPolynomial<C>> Ap = oring.copy(A);
         //logger.info("to lift Ap = " + Ap);
         //List<GenPolynomial<C>> red = sgb.red.normalform(G, Ap);
@@ -348,7 +348,9 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
             s = s.subtract(M.get(i)); // remove head term
             nb.add(s);
         }
-        logger.info("lifted-M, nb = " + nb);
+        if (debug) {
+           logger.info("lifted-M, nb = " + nb);
+        }
         // minimal GB with preserved marks
         //Collections.reverse(nb); // important for lex GB
         len = nb.size();
