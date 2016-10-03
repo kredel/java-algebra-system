@@ -226,8 +226,10 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
             // determine facet polynomials for w
             //logger.info("w_new = " + w); // + ", " + ring.valueOf(w));
             List<GenPolynomial<C>> iG = new ArrayList<GenPolynomial<C>>();
+            int i = 0;
             for (GenPolynomial<C> f : Giter) {
-                GenPolynomial<C> ing = f.leadingFacetPolynomial(w);
+                ExpVector h = marks.get(i++);
+                GenPolynomial<C> ing = f.leadingFacetPolynomial(h,w);
                 logger.info("ing_g = [" + ing + "], f = " + f);
                 iG.add(ing);
             }
@@ -246,9 +248,8 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
             }
             logger.info("marks(GB(inOmega)) = " + marks);
             // lift and reduce
-            List<GenPolynomial<C>> minG = liftReductas(M, Mp, Giter, inOG);
-            logger.info("minimal lift inOG  = " + minG);
-            List<GenPolynomial<C>> G = minG;
+            List<GenPolynomial<C>> G = liftReductas(M, Mp, Giter, inOG);
+            logger.info("minimal lift inOG  = " + G);
             if (G.size() == 1) {
                 GenPolynomial<C> p = ufac.copy(G.get(0)); // change term order
                 G.clear();

@@ -830,20 +830,19 @@ public class GenPolynomial<C extends RingElem<C>>
 
     /**
      * Leading facet normal polynomial.
+     * @param u leading exponent vector.
      * @param uv exponent vector of facet normal.
      * @return polynomial with terms of facet normal.
      */
-    public GenPolynomial<C> leadingFacetPolynomial(ExpVector uv) {
+    public GenPolynomial<C> leadingFacetPolynomial(ExpVector u, ExpVector uv) {
         if (val.isEmpty()) {
             return ring.getZERO();
         }
-        ExpVector u = null;
         long[] normal = uv.getVal();
         GenPolynomial<C> fp = ring.getZERO().copy(); 
         for (Map.Entry<ExpVector, C> m : val.entrySet()) {
             ExpVector e = m.getKey();
-            if (u == null) {
-                u = e;
+            if (u.equals(e)) {
                 fp.val.put(e, m.getValue());
             } else {
                 ExpVector v = u.subtract(e);
