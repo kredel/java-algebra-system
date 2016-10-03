@@ -70,31 +70,16 @@ public class GroebnerBaseFGLMTest extends TestCase {
     GenPolynomialRing<BigRational> fac;
 
 
-    List<GenPolynomial<BigRational>> L;
-
-
     PolynomialList<BigRational> F;
 
 
-    List<GenPolynomial<BigRational>> G, Gs;
+    List<GenPolynomial<BigRational>> L, G, Gs;
 
 
     GroebnerBase<BigRational> bb;
 
 
-    GenPolynomial<BigRational> a;
-
-
-    GenPolynomial<BigRational> b;
-
-
-    GenPolynomial<BigRational> c;
-
-
-    GenPolynomial<BigRational> d;
-
-
-    GenPolynomial<BigRational> e;
+    GenPolynomial<BigRational> a, b, c, d, e;
 
 
     int rl = 4; //4; //3; 
@@ -130,9 +115,45 @@ public class GroebnerBaseFGLMTest extends TestCase {
 
 
     /**
+     * Test example GBase.
+     */
+    @SuppressWarnings("unchecked")
+    public void testExamGBase() {
+        GroebnerBase<BigRational> bbs = new GroebnerBaseSeq<BigRational>(new ReductionSeq<BigRational>(),
+                        new OrderedSyzPairlist<BigRational>());
+        String exam = "(x,y,z) L " + "( " + "( z y**2 + 2 x + 1/2 )" + "( z x**2 - y**2 - 1/2 x )"
+                        + "( -z + y**2 x + 4 x**2 + 1/4 )" + " )";
+
+        Reader source = new StringReader(exam);
+        GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
+        try {
+            F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
+        } catch (ClassCastException e) {
+            fail("" + e);
+        } catch (IOException e) {
+            fail("" + e);
+        }
+        //System.out.println("F = " + F);
+
+        G = bb.GB(F.list);
+        PolynomialList<BigRational> P = new PolynomialList<BigRational>(F.ring, G);
+        System.out.println("G = " + P);
+        assertTrue("isGB( GB(P) )", bb.isGB(G));
+        assertEquals("#GB(P) == 3", 3, G.size());
+
+        Gs = bbs.GB(F.list);
+        PolynomialList<BigRational> P2 = new PolynomialList<BigRational>(F.ring, Gs);
+        assertTrue("isGB( GB(P2) )", bb.isGB(Gs));
+        assertEquals("#GB(P2) == 3", 3, Gs.size());
+
+        assertEquals("GB == FGLM", P, P2);
+    }
+
+
+    /**
      * Test Trinks7 GBase.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public void testTrinks7GBase() {
         GroebnerBase<BigRational> bbs = new GroebnerBaseSeq<BigRational>(new ReductionSeq<BigRational>(),
                         new OrderedSyzPairlist<BigRational>());
@@ -140,10 +161,6 @@ public class GroebnerBaseFGLMTest extends TestCase {
                         + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
                         + "( - 9 W + 15 T P + 20 S Z ), " + "( P W + 2 T Z - 11 B**3 ), "
                         + "( 99 W - 11 B S + 3 B**2 ), " + "( B**2 + 33/50 B + 2673/10000 ) " + ") ";
-        @SuppressWarnings("unused")
-        String exam2 = "(x,y,z) L " + "( " + "( z y**2 + 2 x + 1/2 )" + "( z x**2 - y**2 - 1/2 x )"
-                        + "( -z + y**2 x + 4 x**2 + 1/4 )" + " )";
-
         Reader source = new StringReader(exam);
         GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
         try {
@@ -173,7 +190,7 @@ public class GroebnerBaseFGLMTest extends TestCase {
     /**
      * Test Trinks6 GBase.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public void testTrinks6GBase() {
         GroebnerBase<BigRational> bbs = new GroebnerBaseSeq<BigRational>(new ReductionSeq<BigRational>(),
                         new OrderedSyzPairlist<BigRational>());
@@ -211,7 +228,7 @@ public class GroebnerBaseFGLMTest extends TestCase {
     /**
      * Test Trinks7 GBase over Q(sqrt(2)).
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public void testTrinks7GBaseSqrt() {
         GroebnerBase<AlgebraicNumber<BigRational>> bbs = new GroebnerBaseSeq<AlgebraicNumber<BigRational>>(
                         new ReductionSeq<AlgebraicNumber<BigRational>>(),
@@ -269,7 +286,7 @@ public class GroebnerBaseFGLMTest extends TestCase {
     /**
      * Test Trinks7 GBase over Q(i).
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public void testTrinks7GBaseCompl() {
         GroebnerBase<Complex<BigRational>> bbs = new GroebnerBaseSeq<Complex<BigRational>>(
                         new ReductionSeq<Complex<BigRational>>(),

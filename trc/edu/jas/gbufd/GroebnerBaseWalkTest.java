@@ -98,7 +98,7 @@ public class GroebnerBaseWalkTest extends TestCase {
      * Test FJLT GBase. Example from the FJLT paper.
      */
     @SuppressWarnings({ "unchecked", "cast" })
-    public void testFJLTGBase() {
+    public void xtestFJLTGBase() { // (y,x)
         String exam = "(y,x) L " // REVILEX REVITDG
                         + "( (x**2 - y**3), (x**3 - y**2 - x) )";
 
@@ -133,6 +133,41 @@ public class GroebnerBaseWalkTest extends TestCase {
 
 
     /**
+     * Test example GBase.
+     */
+    @SuppressWarnings("unchecked")
+    public void testFGLMGBase() { //(z,y,x)
+        String exam = "(x,y,z) L " + "( " + "( z y**2 + 2 x + 1/2 )" + "( z x**2 - y**2 - 1/2 x )"
+                        + "( -z + y**2 x + 4 x**2 + 1/4 )" + " )";
+
+        Reader source = new StringReader(exam);
+        GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
+        try {
+            F = (PolynomialList<BigRational>) parser.nextPolynomialSet();
+        } catch (ClassCastException e) {
+            fail("" + e);
+        } catch (IOException e) {
+            fail("" + e);
+        }
+        //System.out.println("F = " + F);
+
+        G = bb.GB(F.list);
+        PolynomialList<BigRational> P = new PolynomialList<BigRational>(F.ring, G);
+        System.out.println("G = " + P);
+        assertTrue("isGB( GB(P) )", bb.isGB(G));
+        assertEquals("#GB(P) == 3", 3, G.size());
+
+        Gp = bbw.GB(F.list);
+        PolynomialList<BigRational> P2 = new PolynomialList<BigRational>(F.ring, Gp);
+        System.out.println("G = " + P2);
+        assertTrue("isGB( GB(P2) )", bb.isGB(Gp));
+        assertEquals("#GB(P2) == 3", 3, Gp.size());
+
+        assertEquals("GB == FGLM", P, P2);
+    }
+
+
+    /**
      * Test Trinks GBase.
      */
     @SuppressWarnings({ "unchecked", "cast" })
@@ -140,7 +175,7 @@ public class GroebnerBaseWalkTest extends TestCase {
         String exam = "(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
                         + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
                         + "( - 9 W + 15 T P + 20 S Z ), " + "( P W + 2 T Z - 11 B**3 ), "
-                        + "( 99 W - 11 B S + 3 B**2 ) " + ", ( 10000 B**2 + 6600 B + 2673 )" + ") ";
+	    + "( 99 W - 11 B S + 3 B**2 ) " /*+ ", ( 10000 B**2 + 6600 B + 2673 )"*/ + ") ";
 
         Reader source = new StringReader(exam);
         GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
