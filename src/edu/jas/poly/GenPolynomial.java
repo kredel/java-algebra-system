@@ -838,7 +838,8 @@ public class GenPolynomial<C extends RingElem<C>>
             return ring.getZERO();
         }
         ExpVector u = null;
-        GenPolynomial<C> fp = ring.getZERO().copy(); //new GenPolynomial<C>(ring);
+        long[] normal = uv.getVal();
+        GenPolynomial<C> fp = ring.getZERO().copy(); 
         for (Map.Entry<ExpVector, C> m : val.entrySet()) {
             ExpVector e = m.getKey();
             if (u == null) {
@@ -846,46 +847,20 @@ public class GenPolynomial<C extends RingElem<C>>
                 fp.val.put(e, m.getValue());
             } else {
                 ExpVector v = u.subtract(e);
-                if (v.compareTo(uv) == 0) {
+                if (v.compareTo(uv) == 0) { // || v.negate().compareTo(uv) == 0
                     fp.val.put(e, m.getValue());
                 } else { // check for v parallel to uv
-                    long ab = scalarProduct(v, uv);
-                    long a = scalarProduct(v, v);
-                    long b = scalarProduct(uv, uv);
+                    long ab = v.weightDeg(normal);     //scalarProduct(v, uv);
+                    long a  = v.weightDeg(v.getVal()); //scalarProduct(v, v);
+                    long b  = uv.weightDeg(normal);    //scalarProduct(uv, uv);
                     if (ab * ab == a * b) { // cos == 1
                         fp.val.put(e, m.getValue());
-                        System.out.println("ab = " + ab + ", a = " + a + ", b = " + b);
+                        logger.info("ab = " + ab + ", a = " + a + ", b = " + b + ", u = " + u + ", e = " + e + ", v = " + v);
                     }
                 }
             }
         }
         return fp;
-    }
-
-
-    /**
-     * Scalar product.
-     * @param a long vector
-     * @param b long vector
-     * @return scalar product of a and b.
-     */
-    public long scalarProduct(long[] a, long[] b) {
-        long s = 0L;
-        for (int i = 0; i < a.length; i++) {
-            s += a[i] * b[i];
-        }
-        return s;
-    }
-
-
-    /**
-     * Scalar product.
-     * @param a ExpVector
-     * @param b ExpVector
-     * @return scalar product of a and b.
-     */
-    public long scalarProduct(ExpVector a, ExpVector b) {
-        return scalarProduct(a.getVal(), b.getVal());
     }
 
 
