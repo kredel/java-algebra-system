@@ -7,6 +7,7 @@ package edu.jas.gbufd;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 import java.util.SortedSet;
 
 import org.apache.log4j.Logger;
@@ -15,6 +16,7 @@ import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.ReductionAbstract;
 import edu.jas.gb.ReductionSeq;
 import edu.jas.poly.ExpVector;
+import edu.jas.poly.ExpVectorLong;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.Monomial;
@@ -142,8 +144,8 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
             logger.info("ring = " + ring.toScript());
         }
         //Polynomial ring of newGB with INVLEX order
-        //TermOrder lexi = new TermOrder(TermOrder.REVILEX);
         TermOrder lexi = new TermOrder(TermOrder.INVLEX);
+        //TermOrder lexi = new TermOrder(TermOrder.REVILEX);
         GenPolynomialRing<C> ufac = new GenPolynomialRing<C>(ring, lexi);
         if (debug) {
             logger.info("ufac = " + ufac.toScript());
@@ -161,8 +163,11 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
         List<Monomial<C>> Mp = new ArrayList<Monomial<C>>(M);
 
         long[][] il = TermOrderByName.weightForOrder(TermOrder.INVLEX, ring.nvar);
+        il = TermOrder.reverseWeight(il).getWeight(); // because of weightDeg usage
         ExpVector w = null;
         boolean done = false;
+        //ExpVector inerr1 = new ExpVectorLong( new long[]{-1,4} );
+        //ExpVector inerr2 = new ExpVectorLong( new long[]{0,3} );
         while (!done) {
             // determine V and w
             PolynomialList<C> Pl = new PolynomialList<C>(ring, Giter);
@@ -170,43 +175,52 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
             logger.info("marks = " + marks);
             logger.info("delta(marks) = " + delta);
             logger.info("w_old = " + w);
-            TermOrder.EVComparator ev1 = ring.tord.getDescendComparator();
-            TermOrder.EVComparator ev2 = ufac.tord.getDescendComparator();
+            //TermOrder.EVComparator ev1 = ring.tord.getDescendComparator();
+            //TermOrder.EVComparator ev2 = ufac.tord.getDescendComparator();
+            TermOrder.EVComparator ev1 = ring.tord.getAscendComparator();
+            TermOrder.EVComparator ev2 = ufac.tord.getAscendComparator();
             ExpVector v = null;
             long d = 0; // = Long.MIN_VALUE;
             for (ExpVector e : delta) {
-                if (ev1.compare(ring.evzero, e) <= 0 || ev2.compare(e, ring.evzero) <= 0) {
-                    logger.info("skip e  = " + e);
-                    //logger.info("skip e  = " + e + ", e <_1 0: " + ev1.compare(ring.evzero, e) + ", 0 <_2 e: "
-                    //                + ev2.compare(e, ring.evzero));
+                //if (ev1.compare(ring.evzero, e) <= 0 || ev2.compare(ring.evzero, e) >= 0) {
+                if (ev1.compare(ring.evzero, e) >= 0 || ev2.compare(ring.evzero, e) <= 0) {
+                    logger.info("skip e = " + e);
+                    //if (! (v != null && e.equals(inerr2) && v.equals(inerr1)) ) { 
+                        continue;
+		    //}
+                }
+                int s = 0;
+                long d2 = 0;
+                ExpVector vt = null;
+                ExpVector et = null;
+                if (v == null) {
+                    v = e;
+                    logger.info("init v = " + v);
                     continue;
                 }
                 for (long[] tau : il) {
-                    if (v == null) {
+                    logger.info("current tau = " + Arrays.toString(tau));
+                    //compare
+                    d = v.weightDeg(tau);
+                    d2 = e.weightDeg(tau);
+                    vt = v.scalarMultiply(d2);
+                    et = e.scalarMultiply(d);
+                    s = ev1.compare(et, vt);
+                    if (s == 0) {
+                        continue; // next tau
+                    } else if (s > 0) { // <, (> by example)
                         v = e;
-                        d = e.weightDeg(tau);
-                    } else { //compare
-                        long d2 = e.weightDeg(tau);
-                        ExpVector vt = v.scalarMultiply(d2);
-                        ExpVector et = e.scalarMultiply(d);
-                        int s = ev1.compare(et, vt);
-                        if (s == 0) {
-                            continue; // next tau
-                        } else if (s < 0) {
-                            v = e;
-                            d = d2;
-                            break;
-                        } else {
-                            break;
-                        }
+                        break;
+                    } else {
+                        break;
                     }
                 }
-                logger.info("step d  = " + d + ", v = " + v);
+                logger.info("step s  = " + s + ", d = " + d + ", d2 = " + d2 + ", e = " + e + ", v = " + v + ", et = " + et + ", vt = " + vt);
             }
-            logger.info("minimal d  = " + d + ", v = " + v);
+            logger.info("minimal v = " + v);
             if (v == null) {
                 done = true;
-                break; // continue ?
+                break; // finished
             }
             w = v;
             // determine facet polynomials for w
@@ -214,15 +228,14 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
             List<GenPolynomial<C>> iG = new ArrayList<GenPolynomial<C>>();
             for (GenPolynomial<C> f : Giter) {
                 GenPolynomial<C> ing = f.leadingFacetPolynomial(w);
-                logger.info("f = " + f + ", ing_g = " + ing);
+                logger.info("ing_g = [" + ing + "], f = " + f);
                 iG.add(ing);
             }
             List<GenPolynomial<C>> inOmega = ufac.copy(iG);
             logger.info("inOmega = " + inOmega);
 
             // INVLEX GB of inOmega
-            List<GenPolynomial<C>> inOF = inOmega;
-            List<GenPolynomial<C>> inOG = sgb.GB(modv, inOF);
+            List<GenPolynomial<C>> inOG = sgb.GB(modv, inOmega);
             logger.info("GB(inOmega) = " + inOG);
             // remark polynomials 
             marks.clear();
@@ -343,12 +356,12 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
             GenPolynomial<C> a = nb.remove(0);
             Monomial<C> m = M.remove(0); // in step with element from nb
             if (debug) {
-                logger.debug("doing " + a + ", lt = " + a.leadingExpVector());
+                logger.info("doing " + a + ", lt = " + m);
             }
             //a = sgb.red.normalform(nb, a);
             a = sred.normalformMarked(M, nb, a);
             if (debug) {
-                logger.debug("done, m = " + m + ", lt = " + a.leadingExpVector());
+                logger.info("done, a = " + a + ", lt = " + a.leadingExpVector());
             }
             nb.add(a); // adds as last
             M.add(m);

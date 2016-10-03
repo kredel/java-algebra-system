@@ -178,6 +178,7 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
             m = S.leadingMonomial();
             e = m.getKey();
             a = m.getValue();
+            //System.out.println("NF a = " + a + ", e = " + e);
             for (i = 0; i < l; i++) {
                 mt = e.multipleOf(htl[i]);
                 if (mt)
@@ -191,13 +192,18 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 S.doRemoveFromMap(e, a);
                 // System.out.println(" S = " + S);
             } else {
+                //System.out.println("i = "+i+", htl[i] = " + htl[i] + ", lbc[i] = " + lbc[i]  + ", p[i] = " + p[i]);
                 f = e.subtract(htl[i]);
                 b = a.divide((C) lbc[i]);
                 //logger.info("red div: e = " + e + ", a = " + a + ", f = " + f + ", b = " + b);
                 //Q = p[i].multiply( a, e );
                 //S = S.subtract( Q );
                 S.doRemoveFromMap(e, a);
+                //S.doAddTo(a.negate(), e);
                 S = S.subtractMultiple(b, f, p[i]);
+                if (e.equals(S.leadingExpVector())) {
+                    throw new RuntimeException("something is wrong: ht not descending e = " + e + ", S = " + S);
+		}
             }
             //System.out.println("NF R = " + R + ", S = " + S);
         }

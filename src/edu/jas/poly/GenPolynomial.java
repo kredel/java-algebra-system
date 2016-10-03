@@ -220,7 +220,7 @@ public class GenPolynomial<C extends RingElem<C>>
      */
     public void doRemoveFromMap(ExpVector e, C c) {
         C b = val.remove(e);
-        if (debug) {
+        if (true||debug) {
             hash = -1;
             blen = -1;
             if (c == null) { // ignore b
@@ -228,6 +228,7 @@ public class GenPolynomial<C extends RingElem<C>>
             }
             if (!c.equals(b)) {
                 logger.error("map entry wrong " + e + " to " + c + " old " + b);
+                throw new RuntimeException("c != b");
             }
         }
     }
