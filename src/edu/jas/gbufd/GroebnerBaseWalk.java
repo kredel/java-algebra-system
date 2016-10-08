@@ -53,6 +53,15 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
 
     /**
      * Constructor.
+     */
+    public GroebnerBaseWalk() {
+        super();
+        sgb = null;
+    }
+
+
+    /**
+     * Constructor.
      * @param coFac coefficient ring of polynomial ring.
      */
     public GroebnerBaseWalk(RingFactory<C> coFac) {
@@ -69,6 +78,18 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
         sgb = gb;
     }
 
+
+    /**
+     * Get the String representation with GB engine.
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        if (sgb == null) {
+            return "GroebnerBaseWalk()";
+        }
+        return "GroebnerBaseWalk( " + sgb.toString() + " )";
+    }
 
     /**
      * Groebner base using Groebner Walk algorithm.
@@ -102,6 +123,9 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
         List<GenPolynomial<C>> Fp = gfac.copy(F);
 
         // compute graded term order Groebner base
+        if (sgb == null) {
+            sgb = GBFactory.<C> getImplementation(pfac.coFac, strategy);
+        }
         List<GenPolynomial<C>> Gp = sgb.GB(modv, Fp);
         logger.info("graded GB = " + Gp);
         if (grord.equals(pfac.tord)) {
@@ -168,7 +192,7 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
             PolynomialList<C> Pl = new PolynomialList<C>(ring, Giter);
             SortedSet<ExpVector> delta = Pl.deltaExpVectors(marks);
             logger.info("marks = " + marks);
-            logger.info("delta(marks) = " + delta);
+            //logger.info("delta(marks) = " + delta);
             logger.info("w_old = " + w);
             //TermOrder.EVComparator ev1 = ring.tord.getDescendComparator();
             //TermOrder.EVComparator ev2 = ufac.tord.getDescendComparator();
@@ -179,7 +203,7 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
             for (ExpVector e : delta) {
                 //if (ev1.compare(ring.evzero, e) <= 0 || ev2.compare(ring.evzero, e) >= 0) {
                 if (ev1.compare(ring.evzero, e) >= 0 || ev2.compare(ring.evzero, e) <= 0) {
-                    logger.info("skip e = " + e);
+                    //logger.info("skip e = " + e);
                     continue;
                 }
                 int s = 0;
@@ -239,7 +263,7 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
                 marks.add(p.leadingExpVector());
                 M.add(new Monomial<C>(p.leadingMonomial()));
             }
-            logger.info("marks(newGB()) = " + marks);
+            //logger.info("marks(newGB()) = " + marks);
             // lift and reduce
             List<GenPolynomial<C>> G = liftReductas(M, Mp, Giter, inOG);
             if (debug) {
@@ -323,8 +347,7 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
         }
         List<GenPolynomial<C>> Ap = oring.copy(A);
         //logger.info("to lift Ap = " + Ap);
-        //List<GenPolynomial<C>> red = sgb.red.normalform(G, Ap);
-        ReductionAbstract<C> sred = new ReductionSeq<C>();
+        ReductionAbstract<C> sred = (ReductionAbstract<C>) sgb.red; //new ReductionSeq<C>();
         List<GenPolynomial<C>> red = new ArrayList<GenPolynomial<C>>();
         len = Ap.size();
         for (i = 0; i < len; i++) {
@@ -342,7 +365,9 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
             GenPolynomial<C> x = tring.copy(A.get(i)); // Ap?
             GenPolynomial<C> r = tring.copy(red.get(i));
             GenPolynomial<C> s = x.subtract(r);
-            s = s.subtract(M.get(i)); // remove head term
+            Monomial<C> m = M.get(i);
+            s.doAddTo(m.coefficient().negate(), m.exponent()); // remove marked term
+            //s = s.subtract(M.get(i)); // remove head term
             nb.add(s);
         }
         if (debug) {
