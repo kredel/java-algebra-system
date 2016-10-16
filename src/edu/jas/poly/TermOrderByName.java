@@ -5,7 +5,7 @@
 package edu.jas.poly;
 
 
-// import org.apache.log4j.Logger;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -31,7 +31,7 @@ package edu.jas.poly;
 public class TermOrderByName {
 
 
-    //private static final Logger logger = Logger.getLogger(TermOrderByName.class);
+    private static final Logger logger = Logger.getLogger(TermOrderByName.class);
 
 
     /**
@@ -326,15 +326,29 @@ public class TermOrderByName {
 
 
     /**
-     * 
-     * Construct weight for INVLEX.
+     * Construct weight for term order.
+     * @param to term order
+     * @param n exponent vector size 
      * @return weight matrix
      */
-    public final static long[][] weightForOrder(int to, int n) {
+    public final static long[][] weightForOrder(TermOrder to, int n) {
+        if (to.isSplit()) {
+            return weightForSplitOrder(to.getEvord(), to.getEvord2(), n, to.getSplit());
+        }
+        return weightForOrder(to.getEvord(), n);
+    }
+
+
+    /**
+     * Construct weight for term order.
+     * @param to term order indicator
+     * @param n exponent vector size 
+     * @return weight matrix
+     */
+    /*public*/ final static long[][] weightForOrder(int to, int n) {
         long[][] w = new long[n][];
         switch (to) {
         case TermOrder.INVLEX:
-        default:
             for (int i = 0; i < n; i++) {
                 w[i] = new long[n];
                 long[] wi = w[i];
@@ -360,6 +374,73 @@ public class TermOrderByName {
                 }
             }
             break;
+        default:
+            throw new UnsupportedOperationException("case " + to + " not implemented for weightForOrder");
+        }
+        return w;
+    }
+
+
+    /**
+     * Construct weight for split term order.
+     * @param to1 first term order indicator
+     * @param to2 second term order indicator
+     * @param n exponent vector size 
+     * @param s slpit index 
+     * @return weight matrix
+     */
+    /*public*/ final static long[][] weightForSplitOrder(int to, int to2, int n, int s) {
+        long[][] w = new long[2+n][];
+        boolean done = true;
+        switch (to) {
+        case TermOrder.IGRLEX:
+            w[0] = new long[n];
+            long[] wi = w[0];
+            int j;
+            for (j = 0; j < s; j++) {
+                 wi[j] = 1L;
+            }
+            for (; j < n; j++) {
+                 wi[j] = 0L;
+            }
+            break;
+        default:
+            done = false;
+            // compiler/run time error:
+            //throw new UnsupportedOperationException("case " + to + "/" + to2 + " not implemented for weightForOrder");
+            break;
+        }
+        switch (to2) {
+        case TermOrder.IGRLEX:
+            w[1] = new long[n];
+            long[] wi = w[1];
+            int j;
+            for (j = 0; j < s; j++) {
+                 wi[j] = 0L;
+            }
+            for (; j < n; j++) {
+                 wi[j] = 1L;
+            }
+            break;
+        default:
+            done = false;
+            break;
+        }
+        if (! done) {
+            //System.out.println("weightForSplitOrder case " + to + "/" + to2);
+            throw new UnsupportedOperationException("case " + to + "/" + to2 + " not implemented for weightForOrder");
+        }
+        // break ties by lex term order
+        for (int i = 0; i < n; i++) {
+             w[2+i] = new long[n];
+             long[] wi = w[2+i];
+             for (int j = 0; j < n; j++) {
+                  if ((n - 1 - i) == j) {
+                      wi[j] = 1L;
+                  } else {
+                      wi[j] = 0L;
+                  }
+             }
         }
         return w;
     }
