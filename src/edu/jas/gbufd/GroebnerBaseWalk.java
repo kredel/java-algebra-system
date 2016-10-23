@@ -186,7 +186,8 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
 
         //long[][] il = TermOrderByName.weightForOrder(TermOrder.INVLEX, ring.nvar);
         long[][] il = TermOrderByName.weightForOrder(ufac.tord, ring.nvar);
-        TermOrder word = TermOrder.reverseWeight(il);
+        //TermOrder word = TermOrder.reverseWeight(il);
+        TermOrder word = new TermOrder(il);
         logger.info("weight order: " + word);
         il = word.getWeight(); // because of weightDeg usage
         ExpVector w = null;
@@ -197,46 +198,7 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
             SortedSet<ExpVector> delta = Pl.deltaExpVectors(marks);
             //logger.info("delta(marks) = " + delta);
             logger.info("w_old = " + w);
-            ExpVector v = facetNormal(ring.tord, ufac.tord, delta, ring.evzero, il); //null;
-            /*
-            TermOrder.EVComparator ev1 = ring.tord.getAscendComparator();
-            TermOrder.EVComparator ev2 = ufac.tord.getAscendComparator();
-            long d = 0; // = Long.MIN_VALUE;
-            for (ExpVector e : delta) {
-                if (ev1.compare(ring.evzero, e) >= 0 || ev2.compare(ring.evzero, e) <= 0) {
-                    //logger.info("skip e = " + e);
-                    continue;
-                }
-                int s = 0;
-                long d2 = 0;
-                ExpVector vt = null;
-                ExpVector et = null;
-                if (v == null) {
-                    v = e;
-                    logger.info("init v = " + v);
-                    continue;
-                }
-                for (long[] tau : il) {
-                    //logger.info("current tau = " + Arrays.toString(tau));
-                    //compare
-                    d = v.weightDeg(tau);
-                    d2 = e.weightDeg(tau);
-                    vt = v.scalarMultiply(d2);
-                    et = e.scalarMultiply(d);
-                    s = ev1.compare(et, vt);
-                    if (s == 0) {
-                        continue; // next tau
-                    } else if (s > 0) { // <, (> by example)
-                        v = e;
-                        break;
-                    } else {
-                        break;
-                    }
-                }
-                //logger.info("step s  = " + s + ", d = " + d + ", d2 = " + d2 + ", e = " + e); 
-                //   + ", v = " + v + ", et = " + et + ", vt = " + vt);
-            }
-            */
+            ExpVector v = facetNormal(ring.tord, ufac.tord, delta, ring.evzero, il);
             logger.info("minimal v = " + v);
             if (v == null) {
                 done = true;
@@ -292,17 +254,17 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
      * @param t1 old term order.
      * @param t2 new term order.
      * @param delta exponent vectors deltas.
-     * @param nn zero exponent vector.
+     * @param zero exponent vector.
      * @param il weight representation of t2.
      * @return new facet normal v or null if no new facet normal exists.
      */
-    public ExpVector facetNormal(TermOrder t1, TermOrder t2, Set<ExpVector> delta, ExpVector nn, long[][] il) {
+    public ExpVector facetNormal(TermOrder t1, TermOrder t2, Set<ExpVector> delta, ExpVector zero, long[][] il) {
         TermOrder.EVComparator ev1 = t1.getAscendComparator();
         TermOrder.EVComparator ev2 = t2.getAscendComparator();
         ExpVector v = null;
         long d = 0; // = Long.MIN_VALUE;
         for (ExpVector e : delta) {
-            if (ev1.compare(nn, e) >= 0 || ev2.compare(nn, e) <= 0) { //ring.evzero
+            if (ev1.compare(zero, e) >= 0 || ev2.compare(zero, e) <= 0) { //ring.evzero
                 //logger.info("skip e = " + e);
                 continue;
             }

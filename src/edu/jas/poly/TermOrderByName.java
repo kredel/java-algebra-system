@@ -354,7 +354,7 @@ public class TermOrderByName {
                 w[i] = new long[n];
                 long[] wi = w[i];
                 for (int j = 0; j < n; j++) {
-                    if ((n - 1 - i) == j) {
+                    if (i == j) { //n - 1 -
                         wi[j] = 1L;
                     } else {
                         wi[j] = 0L;
@@ -367,7 +367,7 @@ public class TermOrderByName {
                 w[i] = new long[n];
                 long[] wi = w[i];
                 for (int j = 0; j < n; j++) {
-                    if (i == j) {
+                    if ((n - 1 - i) == j) {
                         wi[j] = 1L;
                     } else {
                         wi[j] = 0L;
@@ -484,7 +484,7 @@ public class TermOrderByName {
              w[k+i] = new long[n];
              long[] wi = w[k+i];
              for (int j = 0; j < n; j++) {
-                  if ((n - 1 - i) == j) {
+		 if ((i) == j) { //n - 1 - 
                       wi[j] = 1L;
                   } else {
                       wi[j] = 0L;
