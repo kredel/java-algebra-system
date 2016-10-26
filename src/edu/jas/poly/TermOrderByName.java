@@ -478,8 +478,8 @@ public class TermOrderByName {
             //System.out.println("weightForSplitOrder case " + to + "/" + to2);
             throw new UnsupportedOperationException("case " + to + "/" + to2 + " not implemented for weightForOrder");
         }
-        System.out.println("weight: " + Arrays.toString(w));
-        // break ties by lex term order
+        //System.out.println("weight: " + Arrays.toString(w));
+        // break ties by inv lex term order
         for (int i = 0; i < n; i++) {
              w[k+i] = new long[n];
              long[] wi = w[k+i];

@@ -184,12 +184,12 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
         logger.info("marks = " + marks);
         List<Monomial<C>> Mp = new ArrayList<Monomial<C>>(M);
 
-        //long[][] il = TermOrderByName.weightForOrder(TermOrder.INVLEX, ring.nvar);
-        long[][] il = TermOrderByName.weightForOrder(ufac.tord, ring.nvar);
-        //TermOrder word = TermOrder.reverseWeight(il);
-        TermOrder word = new TermOrder(il);
+        //long[][] ufweight = TermOrderByName.weightForOrder(TermOrder.INVLEX, ring.nvar);
+        long[][] ufweight = TermOrderByName.weightForOrder(ufac.tord, ring.nvar);
+        //TermOrder word = TermOrder.reverseWeight(ufweight);
+        TermOrder word = new TermOrder(ufweight);
         logger.info("weight order: " + word);
-        il = word.getWeight(); // because of weightDeg usage
+        ufweight = word.getWeight(); // because of weightDeg usage
         ExpVector w = null;
         boolean done = false;
         while (!done) {
@@ -198,7 +198,7 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
             SortedSet<ExpVector> delta = Pl.deltaExpVectors(marks);
             //logger.info("delta(marks) = " + delta);
             logger.info("w_old = " + w);
-            ExpVector v = facetNormal(ring.tord, ufac.tord, delta, ring.evzero, il);
+            ExpVector v = facetNormal(ring.tord, ufac.tord, delta, ring.evzero, ufweight); 
             logger.info("minimal v = " + v);
             if (v == null) {
                 done = true;
@@ -218,7 +218,7 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
             logger.info("inOmega = " + inOmega);
             logger.info("inOmega.ring: " + inOmega.get(0).ring.toScript());
 
-            // INVLEX GB of inOmega
+            // INVLEX / target term order GB of inOmega
             List<GenPolynomial<C>> inOG = sgb.GB(modv, inOmega);
             logger.info("GB(inOmega) = " + inOG);
             // remark polynomials 
@@ -255,10 +255,10 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
      * @param t2 new term order.
      * @param delta exponent vectors deltas.
      * @param zero exponent vector.
-     * @param il weight representation of t2.
+     * @param t2weight weight representation of t2.
      * @return new facet normal v or null if no new facet normal exists.
      */
-    public ExpVector facetNormal(TermOrder t1, TermOrder t2, Set<ExpVector> delta, ExpVector zero, long[][] il) {
+    public ExpVector facetNormal(TermOrder t1, TermOrder t2, Set<ExpVector> delta, ExpVector zero, long[][] t2weight) {
         TermOrder.EVComparator ev1 = t1.getAscendComparator();
         TermOrder.EVComparator ev2 = t2.getAscendComparator();
         ExpVector v = null;
@@ -277,7 +277,7 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
                 logger.info("init v = " + v);
                 continue;
             }
-            for (long[] tau : il) {
+            for (long[] tau : t2weight) {
                 //logger.info("current tau = " + Arrays.toString(tau));
                 //compare
                 d = v.weightDeg(tau);
@@ -398,7 +398,6 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
         }
         // minimal GB with preserved marks
         //Collections.reverse(nb); // important for lex GB
-        GenPolynomial<C> b;
         len = nb.size();
         i = 0;
         while (i < len) {
@@ -407,7 +406,6 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
             if (debug) {
                 logger.info("doing " + a + ", lt = " + tring.toScript(m.exponent()));
             }
-            //b = a; // save
             //a = sgb.red.normalform(nb, a);
             a = sred.normalformMarked(M, nb, a);
             if (debug) {
