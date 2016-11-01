@@ -33,6 +33,10 @@ import edu.jas.structure.RingFactory;
  * Groebner Base sequential Groebner Walk algorithm. Implements Groebner base
  * computation via Groebner Walk algorithm. See "The generic Groebner walk" by
  * Fukuda, Jensen, Lauritzen, Thomas, 2005.
+ *
+ * The start term order t1 can be set by a constructor. The target
+ * term order t2 is taken from the input polynomials term order.
+ *
  * @param <C> coefficient type
  * @author Heinz Kredel
  * 
@@ -51,7 +55,14 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
     /**
      * The backing GB algorithm implementation.
      */
-    private GroebnerBaseAbstract<C> sgb;
+    protected GroebnerBaseAbstract<C> sgb;
+
+
+    /**
+     * The start term order t1.
+     */
+    //protected TermOrder startTO = TermOrderByName.IGRLEX.blockOrder(2); 
+    protected TermOrder startTO = TermOrderByName.IGRLEX;
 
 
     /**
@@ -74,11 +85,32 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
 
     /**
      * Constructor.
+     * @param coFac coefficient ring of polynomial ring.
+     * @param t1 start term order.
+     */
+    public GroebnerBaseWalk(RingFactory<C> coFac, TermOrder t1) {
+        this(GBFactory.<C> getImplementation(coFac), t1);
+    }
+
+
+    /**
+     * Constructor.
      * @param gb backing GB algorithm.
      */
     public GroebnerBaseWalk(GroebnerBaseAbstract<C> gb) {
         super(gb.red, gb.strategy);
         sgb = gb;
+    }
+
+
+    /**
+     * Constructor.
+     * @param gb backing GB algorithm.
+     * @param t1 start term order.
+     */
+    public GroebnerBaseWalk(GroebnerBaseAbstract<C> gb, TermOrder t1) {
+        this(gb);
+        startTO = t1;
     }
 
 
@@ -89,16 +121,17 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
     @Override
     public String toString() {
         if (sgb == null) {
-            return "GroebnerBaseWalk()";
+            return "GroebnerBaseWalk(" + startTO.toScript() + ")";
         }
-        return "GroebnerBaseWalk( " + sgb.toString() + " )";
+        return "GroebnerBaseWalk( " + sgb.toString() + ", " + startTO.toScript() + " )";
     }
+
 
     /**
      * Groebner base using Groebner Walk algorithm.
      * @param modv module variable number.
-     * @param F polynomial list.
-     * @return GB(F) a INVLEX/F term order Groebner base of F.
+     * @param F polynomial list in target term order.
+     * @return GB(F) a INVLEX / target term order Groebner base of F.
      */
     public List<GenPolynomial<C>> GB(int modv, List<GenPolynomial<C>> F) {
         List<GenPolynomial<C>> G = normalizeZerosOnes(F);
@@ -116,9 +149,8 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
             G.add(p);
             return G;
         }
-        // compute in graded term order
-        //TermOrder grord = new TermOrder(TermOrder.REVITDG);
-        TermOrder grord = new TermOrder(TermOrder.IGRLEX);
+        // compute in graded / start term order
+        TermOrder grord = startTO; //new TermOrder(TermOrder.IGRLEX);
         GenPolynomialRing<C> gfac = new GenPolynomialRing<C>(pfac, grord);
         if (debug) {
             logger.info("gfac = " + gfac.toScript());
@@ -126,12 +158,12 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
         List<GenPolynomial<C>> Fp = gfac.copy(F);
         logger.info("Term order: graded = " + grord + ", target = " + pfac.tord);
 
-        // compute graded term order Groebner base
+        // compute graded / start term order Groebner base
         if (sgb == null) {
             sgb = GBFactory.<C> getImplementation(pfac.coFac, strategy);
         }
         List<GenPolynomial<C>> Gp = sgb.GB(modv, Fp);
-        logger.info("graded GB = " + Gp);
+        logger.info("graded / start GB = " + Gp);
         if (grord.equals(pfac.tord)) {
             return Gp;
         }
@@ -146,21 +178,22 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
         if (z == 0) {
             logger.info("ideal zero dimensional, can use also FGLM algorithm");
         }
-        // compute INVLEX Groebner base via Groebner Walk
-        G = walkGroebnerToLex(modv, Gp, pfac);
+        // compute target term order Groebner base via Groebner Walk
+        G = walkGroebnerToTarget(modv, Gp, pfac);
         return G;
     }
 
 
     /**
-     * Converts Groebner bases w.r.t. total degree term order to Groebner base
-     * w.r.t to inverse lexicographical term order.
+     * Converts Groebner bases w.r.t. total degree / start term order to Groebner base
+     * w.r.t to inverse lexicographical / target term order.
      * @param modv module variable number.
-     * @param Gl Groebner base with respect to graded term order.
+     * @param Gl Groebner base with respect to graded / start term order.
      * @param ufac target polynomial ring and term order.
      * @return Groebner base w.r.t inverse lexicographical / target term order
      */
-    public List<GenPolynomial<C>> walkGroebnerToLex(int modv, List<GenPolynomial<C>> Gl, GenPolynomialRing<C> ufac) {
+    public List<GenPolynomial<C>> walkGroebnerToTarget(int modv, List<GenPolynomial<C>> Gl, 
+                                                       GenPolynomialRing<C> ufac) {
         if (Gl == null || Gl.size() == 0) {
             throw new IllegalArgumentException("G may not be null or empty");
         }
@@ -170,11 +203,10 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
             logger.info("ring = " + ring.toScript());
         }
         //Polynomial ring of newGB with INVLEX / target term order
-        //TermOrder lexi = new TermOrder(TermOrder.REVILEX);
         TermOrder lexi = ufac.tord; //new TermOrder(TermOrder.INVLEX);
-        logger.info("ev1 = " + ring.tord + ", ev2 = " + ufac.tord);
+        logger.info("G walk from ev1 = " + ring.tord.toScript() + " to ev2 = " + ufac.tord.toScript());
         List<GenPolynomial<C>> Giter = Gl;
-        // initial marks
+        // determine initial marks
         List<ExpVector> marks = new ArrayList<ExpVector>(); 
         List<Monomial<C>> M = new ArrayList<Monomial<C>>();
         for (GenPolynomial<C> p : Giter) {
@@ -183,13 +215,14 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
         }
         logger.info("marks = " + marks);
         List<Monomial<C>> Mp = new ArrayList<Monomial<C>>(M);
-
-        //long[][] ufweight = TermOrderByName.weightForOrder(TermOrder.INVLEX, ring.nvar);
+        // weight matrix for target term order
         long[][] ufweight = TermOrderByName.weightForOrder(ufac.tord, ring.nvar);
         //TermOrder word = TermOrder.reverseWeight(ufweight);
         TermOrder word = new TermOrder(ufweight);
         logger.info("weight order: " + word);
         ufweight = word.getWeight(); // because of weightDeg usage
+
+        // loop throught term orders
         ExpVector w = null;
         boolean done = false;
         while (!done) {
@@ -258,7 +291,8 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
      * @param t2weight weight representation of t2.
      * @return new facet normal v or null if no new facet normal exists.
      */
-    public ExpVector facetNormal(TermOrder t1, TermOrder t2, Set<ExpVector> delta, ExpVector zero, long[][] t2weight) {
+    public ExpVector facetNormal(TermOrder t1, TermOrder t2, Set<ExpVector> delta, 
+                                 ExpVector zero, long[][] t2weight) {
         TermOrder.EVComparator ev1 = t1.getAscendComparator();
         TermOrder.EVComparator ev2 = t2.getAscendComparator();
         ExpVector v = null;
