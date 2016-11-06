@@ -347,12 +347,43 @@ public class TermOrderByName {
      * @return weight matrix
      */
     /*public*/ final static long[][] weightForOrder(int to, int n) {
-        long[][] w = new long[n][];
+        int k = 0;
+        switch (to) {
+        case TermOrder.IGRLEX:
+            k = n+1;
+            break;
+        case TermOrder.REVILEX:
+            // no break
+        case TermOrder.INVLEX:
+            k = n;
+            break;
+        default:
+        }
+        long[][] w = new long[k][];
+        long[] wi;
         switch (to) {
         case TermOrder.INVLEX:
             for (int i = 0; i < n; i++) {
                 w[i] = new long[n];
-                long[] wi = w[i];
+                wi = w[i];
+                for (int j = 0; j < n; j++) {
+                    if (i == j) { //n - 1 -
+                        wi[j] = 1L;
+                    } else {
+                        wi[j] = 0L;
+                    }
+                }
+            }
+            break;
+        case TermOrder.IGRLEX:
+            w[0] = new long[n];
+            wi = w[0];
+            for (int j = 0; j < n; j++) {
+                 wi[j] = 1L;
+            }
+            for (int i = 0; i < n; i++) {
+                w[i+1] = new long[n];
+                wi = w[i+1];
                 for (int j = 0; j < n; j++) {
                     if (i == j) { //n - 1 -
                         wi[j] = 1L;
@@ -365,7 +396,7 @@ public class TermOrderByName {
         case TermOrder.REVILEX:
             for (int i = 0; i < n; i++) {
                 w[i] = new long[n];
-                long[] wi = w[i];
+                wi = w[i];
                 for (int j = 0; j < n; j++) {
                     if ((n - 1 - i) == j) {
                         wi[j] = 1L;

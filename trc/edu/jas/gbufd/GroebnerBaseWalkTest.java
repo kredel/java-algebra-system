@@ -215,7 +215,7 @@ public class GroebnerBaseWalkTest extends TestCase {
      * Test Trinks GBase with different t1 and t2.
      */
     @SuppressWarnings({ "unchecked", "cast" })
-    public void testTrinksGBaseT1T2() {
+    public void testTrinksGBaseT1T2() { // t2 = G|4| = IGRLEX.blockOrder(4)
         String exam = "(B,S,T,Z,P,W) G|4| " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
                         + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
                         + "( - 9 W + 15 T P + 20 S Z ), " + "( P W + 2 T Z - 11 B**3 ), "
@@ -230,14 +230,16 @@ public class GroebnerBaseWalkTest extends TestCase {
         } catch (IOException e) {
             fail("" + e);
         }
-        System.out.println("F = " + F);
+        //System.out.println("F = " + F);
         // set t1, t2 = TermOrderNyName.IGRLEX.blockOrder(4)
         bbw = new GroebnerBaseWalk<BigRational>(bb, TermOrderByName.IGRLEX.blockOrder(2));
-        System.out.println("bbw = " + bbw);
+        // Test wrong way from INVLEX to IGRLEX.
+        //bbw = new GroebnerBaseWalk<BigRational>(bb, TermOrderByName.INVLEX);
+        //System.out.println("bbw = " + bbw);
 
         Gp = bbw.GB(F.list);
         PolynomialList<BigRational> tri = new PolynomialList<BigRational>(F.ring, Gp);
-        System.out.println("walk G = " + tri);
+        //System.out.println("walk G = " + tri);
         assertTrue("isGB( GB(Trinks) )", bb.isGB(Gp));
         assertTrue("isMinimalGB( GB(Trinks) )", bb.isMinimalGB(Gp));
         //assertEquals("#GB(Trinks) == 6", 6, Gp.size());
