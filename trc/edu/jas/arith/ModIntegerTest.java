@@ -6,6 +6,9 @@ package edu.jas.arith;
 
 
 import java.io.StringReader;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.SortedMap;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -94,7 +97,6 @@ public class ModIntegerTest extends TestCase {
 
     /**
      * Test static initialization and constants.
-     * 
      */
     public void testConstants() {
         zm = new ModIntegerRing(5);
@@ -129,7 +131,6 @@ public class ModIntegerTest extends TestCase {
 
     /**
      * Test constructor and toString.
-     * 
      */
     public void testConstructor() {
         zm = new ModIntegerRing("5");
@@ -181,7 +182,6 @@ public class ModIntegerTest extends TestCase {
 
     /**
      * Test random modular integers.
-     * 
      */
     public void testRandom() {
         zm = new ModIntegerRing(19);
@@ -198,7 +198,6 @@ public class ModIntegerTest extends TestCase {
 
     /**
      * Test addition.
-     * 
      */
     public void testAddition() {
         zm = new ModIntegerRing(19);
@@ -222,7 +221,6 @@ public class ModIntegerTest extends TestCase {
 
     /**
      * Test multiplication.
-     * 
      */
     public void testMultiplication() {
         zm = new ModIntegerRing(5);
@@ -282,7 +280,6 @@ public class ModIntegerTest extends TestCase {
 
     /**
      * Test chinese remainder.
-     * 
      */
     public void testChineseRemainder() {
         zm = new ModIntegerRing(19 * 13);
@@ -335,8 +332,47 @@ public class ModIntegerTest extends TestCase {
 
 
     /**
+     * Test chinese remainder of lists.
+     */
+    public void testChineseRemainderLists() {
+        ModLongRing zm = new ModLongRing(19 * 13);
+        ModLongRing z1 = new ModLongRing(19);
+        ModLongRing z2 = new ModLongRing(13);
+
+        List<ModLong> L1 = new ArrayList<ModLong>();
+        List<ModLong> L2 = new ArrayList<ModLong>();
+        List<ModLong> L;
+
+        for (int i = 0; i < 7; i++) {
+             ModLong a = zm.random(9);
+             //System.out.println("a = " + a);
+             ModLong b = new ModLong(z1, a.getVal());
+             //System.out.println("b = " + b);
+             ModLong c = new ModLong(z2, a.getVal());
+             //System.out.println("c = " + c);
+             L1.add(b);
+             L2.add(c);
+        }
+        System.out.println("L1 = " + L1);
+        System.out.println("L2 = " + L2);
+
+        L = ModLongRing.chineseRemainder(z1.getONE(), z2.getONE(), L1, L2);
+        System.out.println("L = " + L);
+        assertEquals("19 * 13) = a.modul: ", zm, L.get(0).ring);
+
+        for (ModLong d : L ) {
+	    ModLong b = new ModLong(z1, d.getVal());
+            //System.out.println("b = " + b);
+            ModLong c = new ModLong(z2, d.getVal());
+            //System.out.println("c = " + c);
+            assertTrue("cra(a mod 19, a mod 13) = a: ", L1.contains(b));
+            assertTrue("cra(a mod 19, a mod 13) = a: ", L2.contains(c));
+        }
+    }
+
+
+    /**
      * Test prime list.
-     * 
      */
     public void testPrime() {
         PrimeList primes = new PrimeList();
@@ -364,7 +400,6 @@ public class ModIntegerTest extends TestCase {
 
     /**
      * Test Mersenne prime list.
-     * 
      */
     public void testMersennePrime() {
         PrimeList primes = new PrimeList(PrimeList.Range.mersenne);
@@ -403,6 +438,25 @@ public class ModIntegerTest extends TestCase {
         }
         ModInteger end = new ModInteger(zm, m - 1);
         assertTrue("j == m-1 ", j.equals(end));
+    }
+
+
+    /**
+     * Test small prime list.
+     */
+    public void testSmallPrime() {
+        List<Integer> sp = PrimeList.smallPrimes(1,500);
+        System.out.println("sp = " + sp);
+        SortedMap<Integer, Integer> ff;
+        ff = PrimeList.IFACT(2*3*5*7*2*9*10*19*811);
+        System.out.println("ff = " + ff); 
+        ff = PrimeList.IFACT(991*997*811 + 1);
+        System.out.println("ff = " + ff);
+
+        //getLongPrime(15, 135)
+        ff = PrimeList.IFACT( (new BigInteger(2)).power(29).subtract(BigInteger.valueOf(133)).getVal().intValue() );
+        //ff = PrimeList.IFACT( (new BigInteger(2)).power(59).subtract(BigInteger.valueOf(55)).getVal().intValue() );
+        System.out.println("ff = " + ff);
     }
 
 }
