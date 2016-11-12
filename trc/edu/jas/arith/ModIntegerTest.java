@@ -374,60 +374,6 @@ public class ModIntegerTest extends TestCase {
 
 
     /**
-     * Test prime list.
-     */
-    public void testPrime() {
-        PrimeList primes = new PrimeList();
-        //System.out.println("primes = " + primes);
-
-        //assertTrue("all primes ", primes.checkPrimes() );
-
-        int i = 0;
-        //System.out.println("primes = ");
-        for (java.math.BigInteger p : primes) {
-            assertFalse("p != null", p == null);
-            //System.out.print("" + p);
-            if (i++ > 50) {
-                break;
-            }
-            //System.out.print(", ");
-        }
-        //System.out.println();
-
-        //System.out.println("primes = " + primes);
-
-        assertTrue("all primes ", primes.checkPrimes());
-    }
-
-
-    /**
-     * Test Mersenne prime list.
-     */
-    public void testMersennePrime() {
-        PrimeList primes = new PrimeList(PrimeList.Range.mersenne);
-        //System.out.println("primes = " + primes);
-
-        //assertTrue("all primes ", primes.checkPrimes() );
-
-        int i = 1;
-        //System.out.println("primes = ");
-        for (java.math.BigInteger p : primes) {
-            assertFalse("p != null", p == null);
-            //System.out.println(i + " = " + p);
-            if (i++ > 23) {
-                break;
-            }
-            //System.out.print(", ");
-        }
-        //System.out.println();
-
-        //System.out.println("primes = " + primes);
-
-        assertTrue("all primes ", primes.checkPrimes(15));
-    }
-
-
-    /**
      * Test iterator.
      */
     public void testIterator() {
@@ -440,26 +386,6 @@ public class ModIntegerTest extends TestCase {
         }
         ModInteger end = new ModInteger(zm, m - 1);
         assertTrue("j == m-1 ", j.equals(end));
-    }
-
-
-    /**
-     * Test small prime list.
-     */
-    public void testSmallPrime() {
-        List<Integer> sp = PrimeInteger.smallPrimes(1, 500);
-        System.out.println("sp = " + sp);
-        SortedMap<Integer, Integer> ff;
-        ff = PrimeInteger.IFACT(2 * 3 * 5 * 7 * 2 * 9 * 10 * 19 * 811);
-        System.out.println("ff = " + ff);
-        ff = PrimeInteger.IFACT(991 * 997 * 811 + 1);
-        System.out.println("ff = " + ff);
-
-        //getLongPrime(15, 135)
-        ff = PrimeInteger.IFACT(
-                        (new BigInteger(2)).power(29).subtract(BigInteger.valueOf(133)).getVal().intValue());
-        //ff = PrimeList.IFACT( (new BigInteger(2)).power(59).subtract(BigInteger.valueOf(55)).getVal().intValue() );
-        System.out.println("ff = " + ff);
     }
 
 }
