@@ -6,15 +6,15 @@ package edu.jas.arith;
 
 
 import java.io.StringReader;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+
+import edu.jas.kern.PrettyPrint;
+import edu.jas.structure.NotInvertibleException;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import edu.jas.kern.PrettyPrint;
-import edu.jas.structure.NotInvertibleException;
 
 
 /**
@@ -343,14 +343,14 @@ public class ModLongTest extends TestCase {
         List<ModLong> L;
 
         for (int i = 0; i < 7; i++) {
-             a = zm.random(9);
-             //System.out.println("a = " + a);
-             b = new ModLong(z1, a.getVal());
-             //System.out.println("b = " + b);
-             c = new ModLong(z2, a.getVal());
-             //System.out.println("c = " + c);
-             L1.add(b);
-             L2.add(c);
+            a = zm.random(9);
+            //System.out.println("a = " + a);
+            b = new ModLong(z1, a.getVal());
+            //System.out.println("b = " + b);
+            c = new ModLong(z2, a.getVal());
+            //System.out.println("c = " + c);
+            L1.add(b);
+            L2.add(c);
         }
         //System.out.println("L1 = " + L1);
         //System.out.println("L2 = " + L2);
@@ -359,8 +359,8 @@ public class ModLongTest extends TestCase {
         //System.out.println("L = " + L);
         assertEquals("19 * 13) = a.modul: ", zm, L.get(0).ring);
 
-        for (ModLong d : L ) {
-	    b = new ModLong(z1, d.getVal());
+        for (ModLong d : L) {
+            b = new ModLong(z1, d.getVal());
             //System.out.println("b = " + b);
             c = new ModLong(z2, d.getVal());
             //System.out.println("c = " + c);

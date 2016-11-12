@@ -6,16 +6,16 @@ package edu.jas.arith;
 
 
 import java.io.StringReader;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.SortedMap;
+
+import edu.jas.kern.PrettyPrint;
+import edu.jas.structure.NotInvertibleException;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import edu.jas.kern.PrettyPrint;
-import edu.jas.structure.NotInvertibleException;
 
 
 /**
@@ -346,14 +346,14 @@ public class ModIntegerTest extends TestCase {
         List<ModInteger> L;
 
         for (int i = 0; i < 5; i++) {
-             a = zm.random(17);
-             //System.out.println("a = " + a);
-             b = new ModInteger(z1, a.getVal());
-             //System.out.println("b = " + b);
-             c = new ModInteger(z2, a.getVal());
-             //System.out.println("c = " + c);
-             L1.add(b);
-             L2.add(c);
+            a = zm.random(17);
+            //System.out.println("a = " + a);
+            b = new ModInteger(z1, a.getVal());
+            //System.out.println("b = " + b);
+            c = new ModInteger(z2, a.getVal());
+            //System.out.println("c = " + c);
+            L1.add(b);
+            L2.add(c);
         }
         //System.out.println("L1 = " + L1);
         //System.out.println("L2 = " + L2);
@@ -362,8 +362,8 @@ public class ModIntegerTest extends TestCase {
         //System.out.println("L = " + L);
         assertEquals("p1 * p2) = a.modul: ", zm, L.get(0).ring);
 
-        for (ModInteger d : L ) {
-	    b = new ModInteger(z1, d.getVal());
+        for (ModInteger d : L) {
+            b = new ModInteger(z1, d.getVal());
             //System.out.println("b = " + b);
             c = new ModInteger(z2, d.getVal());
             //System.out.println("c = " + c);
@@ -447,16 +447,17 @@ public class ModIntegerTest extends TestCase {
      * Test small prime list.
      */
     public void testSmallPrime() {
-        List<Integer> sp = PrimeInteger.smallPrimes(1,500);
+        List<Integer> sp = PrimeInteger.smallPrimes(1, 500);
         System.out.println("sp = " + sp);
         SortedMap<Integer, Integer> ff;
-        ff = PrimeInteger.IFACT(2*3*5*7*2*9*10*19*811);
-        System.out.println("ff = " + ff); 
-        ff = PrimeInteger.IFACT(991*997*811 + 1);
+        ff = PrimeInteger.IFACT(2 * 3 * 5 * 7 * 2 * 9 * 10 * 19 * 811);
+        System.out.println("ff = " + ff);
+        ff = PrimeInteger.IFACT(991 * 997 * 811 + 1);
         System.out.println("ff = " + ff);
 
         //getLongPrime(15, 135)
-        ff = PrimeInteger.IFACT( (new BigInteger(2)).power(29).subtract(BigInteger.valueOf(133)).getVal().intValue() );
+        ff = PrimeInteger.IFACT(
+                        (new BigInteger(2)).power(29).subtract(BigInteger.valueOf(133)).getVal().intValue());
         //ff = PrimeList.IFACT( (new BigInteger(2)).power(59).subtract(BigInteger.valueOf(55)).getVal().intValue() );
         System.out.println("ff = " + ff);
     }

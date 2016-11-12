@@ -5,22 +5,14 @@
 package edu.jas.arith;
 
 
-// import java.util.Random;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Collections;
-import java.util.BitSet;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.TreeMap;
-import java.util.SortedMap;
 
 
 /**
  * List of big primes. Provides an Iterator for generating prime numbers.
- * Similar to ALDES/SAC2 SACPOL.PRIME list. 
+ * Similar to ALDES/SAC2 SACPOL.PRIME list.
  * 
  * @author Heinz Kredel See Knuth vol 2,page 390, for list of known primes. See
  *         also ALDES/SAC2 SACPOL.PRIME
@@ -375,7 +367,7 @@ public final class PrimeList implements Iterable<java.math.BigInteger> {
             val.add(p);
             last = p;
         } else {
-            p = get(i-1);
+            p = get(i - 1);
             p = last.nextProbablePrime();
             val.add(p);
             last = p;
