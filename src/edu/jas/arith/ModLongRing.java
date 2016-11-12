@@ -422,11 +422,11 @@ public final class ModLongRing implements ModularRingFactory<ModLong>, Iterable<
      * @return S, with S mod c.modul == c and S mod a.modul == a.
      */
     public ModLong chineseRemainder(ModLong c, ModLong ci, ModLong a) {
-        if (true) { // debug
-            if (c.ring.modul < a.ring.modul) {
-                System.out.println("ModLong error " + c.ring + ", " + a.ring);
-            }
-        }
+        //if (true) { 
+        //    if (c.ring.modul < a.ring.modul) {
+        //        System.out.println("ModLong error " + c.ring + ", " + a.ring);
+        //    }
+        //}
         ModLong b = a.ring.fromInteger(c.val); // c mod a.modul
         ModLong d = a.subtract(b); // a-c mod a.modul
         if (d.isZERO()) {
@@ -462,7 +462,7 @@ public final class ModLongRing implements ModularRingFactory<ModLong>, Iterable<
         List<ModLong> L = new ArrayList<ModLong>();
         for (ModLong a : L1) {
 	    for (ModLong b : L2) {
-		ModLong c = m.chineseRemainder(a, mi1, b);
+                ModLong c = m.chineseRemainder(a, mi1, b);
                 L.add(c);
             }
         }

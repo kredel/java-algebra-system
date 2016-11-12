@@ -300,7 +300,6 @@ public class ModIntegerTest extends TestCase {
 
         assertEquals("cra(a mod 19,a mod 13) = a", a, e);
 
-
         java.math.BigInteger p1 = getPrime1();
         java.math.BigInteger p2 = getPrime2();
         java.math.BigInteger p1p2 = p1.multiply(p2);
@@ -335,38 +334,41 @@ public class ModIntegerTest extends TestCase {
      * Test chinese remainder of lists.
      */
     public void testChineseRemainderLists() {
-        ModLongRing zm = new ModLongRing(19 * 13);
-        ModLongRing z1 = new ModLongRing(19);
-        ModLongRing z2 = new ModLongRing(13);
+        java.math.BigInteger p1 = getPrime1();
+        java.math.BigInteger p2 = getPrime2();
+        java.math.BigInteger p1p2 = p1.multiply(p2);
+        zm = new ModIntegerRing(p1p2);
+        z1 = new ModIntegerRing(p1);
+        z2 = new ModIntegerRing(p2);
 
-        List<ModLong> L1 = new ArrayList<ModLong>();
-        List<ModLong> L2 = new ArrayList<ModLong>();
-        List<ModLong> L;
+        List<ModInteger> L1 = new ArrayList<ModInteger>();
+        List<ModInteger> L2 = new ArrayList<ModInteger>();
+        List<ModInteger> L;
 
-        for (int i = 0; i < 7; i++) {
-             ModLong a = zm.random(9);
+        for (int i = 0; i < 5; i++) {
+             a = zm.random(17);
              //System.out.println("a = " + a);
-             ModLong b = new ModLong(z1, a.getVal());
+             b = new ModInteger(z1, a.getVal());
              //System.out.println("b = " + b);
-             ModLong c = new ModLong(z2, a.getVal());
+             c = new ModInteger(z2, a.getVal());
              //System.out.println("c = " + c);
              L1.add(b);
              L2.add(c);
         }
-        System.out.println("L1 = " + L1);
-        System.out.println("L2 = " + L2);
+        //System.out.println("L1 = " + L1);
+        //System.out.println("L2 = " + L2);
 
-        L = ModLongRing.chineseRemainder(z1.getONE(), z2.getONE(), L1, L2);
-        System.out.println("L = " + L);
-        assertEquals("19 * 13) = a.modul: ", zm, L.get(0).ring);
+        L = ModIntegerRing.chineseRemainder(z1.getONE(), z2.getONE(), L1, L2);
+        //System.out.println("L = " + L);
+        assertEquals("p1 * p2) = a.modul: ", zm, L.get(0).ring);
 
-        for (ModLong d : L ) {
-	    ModLong b = new ModLong(z1, d.getVal());
+        for (ModInteger d : L ) {
+	    b = new ModInteger(z1, d.getVal());
             //System.out.println("b = " + b);
-            ModLong c = new ModLong(z2, d.getVal());
+            c = new ModInteger(z2, d.getVal());
             //System.out.println("c = " + c);
-            assertTrue("cra(a mod 19, a mod 13) = a: ", L1.contains(b));
-            assertTrue("cra(a mod 19, a mod 13) = a: ", L2.contains(c));
+            assertTrue("cra(a mod p1, a mod p2) = a: ", L1.contains(b));
+            assertTrue("cra(a mod p1, a mod p2) = a: ", L2.contains(c));
         }
     }
 
