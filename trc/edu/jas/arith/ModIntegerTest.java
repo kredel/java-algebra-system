@@ -19,7 +19,7 @@ import junit.framework.TestSuite;
 
 
 /**
- * ModInteger and PrimeList tests with JUnit.
+ * ModInteger tests with JUnit.
  * @author Heinz Kredel.
  */
 

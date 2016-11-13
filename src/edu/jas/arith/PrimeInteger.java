@@ -15,14 +15,20 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.apache.log4j.Logger;
+
 
 /**
  * Integer prime factorization. Code from ALDES/SAC2 and MAS module SACPRIM.
  * 
- * @author See ALDES/SAC2 or MAS code in SACPRIM
+ * @see ALDES/SAC2 or MAS code in SACPRIM
+ * @author Heinz Kredel
  */
 
 public final class PrimeInteger {
+
+
+     private static final Logger logger = Logger.getLogger(PrimeInteger.class);
 
 
     /**
@@ -39,6 +45,12 @@ public final class PrimeInteger {
 
 
     /**
+     * List of units of Z mod 210.
+     */
+    final public static List<Long> UZ210 = getUZ210(); 
+
+
+    /**
      * Medium prime divisor range.
      */
     final static long IMPDS_MIN = 2000; 
@@ -49,26 +61,29 @@ public final class PrimeInteger {
      * Digit prime generator. K and m are positive beta-integers. L is the list
      * (p(1),...,p(r)) of all prime numbers p such that m le p lt m+2*K, with
      * p(1) lt p(2) lt ... lt p(r).
-     * @param mp,kp Integers.
+     * @param m start integer
+     * @param K number of integers
+     * @return the list L of prime numbers p with p &lt; m + 2*K.
+     * @see SACPRIM.DPGEN
      */
-    public static List<Long> smallPrimes(long mp, int kp) {
+    public static List<Long> smallPrimes(long m, int K) {
         int k;
-        long m, ms;
-        ms = mp;
+        long ms;
+        ms = m;
         if (ms <= 1) {
             ms = 1;
         }
         m = ms;
         if (m % 2 == 0) {
             m++;
-            kp--;
+            K--;
         }
         //if (kp % 2 == 0) { 
         //    k = kp/2; 
         //} else { 
         //    k = (kp+1)/2; 
         //}
-        k = kp;
+        k = K;
 
         /* init */
         long h = 2 * (k - 1);
@@ -170,8 +185,13 @@ public final class PrimeInteger {
      * primes (q(1),q(2),...,q(h)), h non-negative, q(1) le q(2) le ... lt q(h),
      * such that n is equal to m times the product of the q(i) and m is not
      * divisible by any prime in SMPRM. Either m=1 or m gt 1,000,000.
+     * &gt;br /&lt;
+     * In JAS F is a map and m=1 or m &gt; 4.000.000 and m is contined in F with value 0.
+     * @param n integer to factor.
+     * @return a map F of pairs of prime numbers and multiplicities (p,e) with p**e divides n and e maximal.
+     * @see SACPRIM.ISPD
      */
-    public static SortedMap<Long, Integer> ISPD(long NL) {
+    public static SortedMap<Long, Integer> ISPD(long n) {
         SortedMap<Long, Integer> F = new TreeMap<Long, Integer>();
         List<Long> LP;
         long QL = 0;
@@ -179,7 +199,7 @@ public final class PrimeInteger {
         long RL = 0;
         boolean TL;
 
-        long ML = NL;
+        long ML = n;
         LP = SMPRM; //smallPrimes(2, 500); //SMPRM;
         TL = false;
         int i = 0;
@@ -220,9 +240,11 @@ public final class PrimeInteger {
     /**
      * Integer primality test. n is a positive integer. 
      * r is true, if n is prime, else false.
+     * @param n integer to test.
+     * @return true if n is prime, else false.
      */
-    public static boolean isPrime(long NL) {
-        SortedMap<Long, Integer> F = IFACT(NL);
+    public static boolean isPrime(long n) {
+        SortedMap<Long, Integer> F = IFACT(n);
         return (F.size() == 1) && F.values().contains(1);
     }
 
@@ -230,6 +252,9 @@ public final class PrimeInteger {
     /**
      * Test prime factorization. n is a positive integer. 
      * r is true, if n = product_i(pi**ei) and each pi is prime, else false.
+     * @param n integer to test.
+     * @param a map F of pairs of prime numbers (p,e) with p**e divides n.
+     * @return true if n = product_i(pi**ei) and each pi is prime, else false.
      */
     public static boolean isPrimeFactorization(long NL, SortedMap<Long, Integer> F) {
         long f = 1L;
@@ -249,8 +274,11 @@ public final class PrimeInteger {
     /**
      * Test factorization. n is a positive integer. 
      * r is true, if n = product_i(pi**ei), else false.
+     * @param n integer to test.
+     * @param a map F of pairs of numbers (p,e) with p**e divides n.
+     * @return true if n = product_i(pi**ei), else false.
      */
-    public static boolean isFactorization(long NL, SortedMap<Long, Integer> F) {
+    public static boolean isFactorization(long n, SortedMap<Long, Integer> F) {
         long f = 1L;
         for (Map.Entry<Long, Integer> m : F.entrySet()) {
 	    long p = m.getKey();
@@ -258,7 +286,7 @@ public final class PrimeInteger {
             long pe = java.math.BigInteger.valueOf(p).pow(e).longValue();
             f *= pe;
         }
-        return NL == f;
+        return n == f;
     }
 
 
@@ -266,16 +294,21 @@ public final class PrimeInteger {
      * Integer factorization. n is a positive integer. F is a list (q(1),
      * q(2),...,q(h)) of the prime factors of n, q(1) le q(2) le ... le q(h),
      * with n equal to the product of the q(i).
+     * &gt;br /&lt;
+     * In JAS F is a map.
+     * @param n integer to factor.
+     * @param a map F of pairs of numbers (p,e) with p**e divides n.
+     * @see SACPRIM.IFACT
      */
-    public static SortedMap<Long, Integer> IFACT(long NL) {
-        if (NL > BETA) {
+    public static SortedMap<Long, Integer> IFACT(long n) {
+        if (n > BETA) {
             throw new UnsupportedOperationException("IFACT only for longs less than BETA: " + BETA);
         }
         long ML, PL, AL, BL, CL, MLP, RL, SL;
         SortedMap<Long, Integer> F = new TreeMap<Long, Integer>();
         SortedMap<Long, Integer> FP = null;
         // search small prime factors
-        F = ISPD(NL); // , F, ML
+        F = ISPD(n); // , F, ML
         ML = 0L; // nonsense
         for (Long m : F.keySet()) {
 	    if (F.get(m) == 0) {
@@ -302,7 +335,7 @@ public final class PrimeInteger {
                 FP = IFACT(MLP);
                 SL = ISPT(ML, MLP, FP);
                 if (SL == 1) {
-                    System.out.println("ISPT: FP = " + FP);
+                    logger.info("ISPT: FP = " + FP);
                     Integer e = F.get(ML);
                     if (e == null) {
                         e = 1;
@@ -320,7 +353,7 @@ public final class PrimeInteger {
             if (AL > BL) {
                 PL = 1L;
             } else {
-                System.out.println("IMPDS: AL = " + AL + ", BL = " + BL);
+                logger.info("IMPDS: a = " + AL + ", b = " + BL);
                 PL = IMPDS(ML, AL, BL); //, PL, ML );
                 //System.out.println("PL = " + PL);
                 if (PL != 1L) {
@@ -341,7 +374,7 @@ public final class PrimeInteger {
         AL = BL;
         BL = CL;
         //ILPDS( ML, AL, BL, PL, ML );
-        System.out.println("ILPDS: AL = " + AL + ", BL = " + BL + ", ML = " + ML);
+        logger.info("ILPDS: a = " + AL + ", b = " + BL + ", m = " + ML);
         PL = ILPDS(ML, AL, BL);
         if (PL != 1L) {
             Integer e = F.get(PL);
@@ -372,13 +405,18 @@ public final class PrimeInteger {
      * such that a le b le n and n has no positive divisors less than a. If n
      * has a prime divisor in the closed interval from a to b then p is the
      * least such prime and q=n/p. Otherwise p=1 and q=n.
+     * @param n integer to factor.
+     * @param a lower bound.
+     * @param b upper bound.
+     * @return p a prime factor of n, with a &le; p &le; b &lt; n.
+     * @see SACPRIM.IMPDS
      */
-    public static long IMPDS(long NL, long AL, long BL) {
-        List<Long> LP, UZ210;
+    public static long IMPDS(long n, long a, long b) {
+        List<Long> LP;
         long R, J1Y, RL1, RL2, RL, PL;
 
-        RL = AL % 210;
-        UZ210 = getUZ210();
+        RL = a % 210;
+        //UZ210 = getUZ210();
         LP = UZ210;
         long ll = LP.size();
         int i = 0;
@@ -387,17 +425,17 @@ public final class PrimeInteger {
         }
         RL1 = LP.get(i); //MASSTOR.FIRSTi( LP );
         //J1Y = (RL1 - RL);
-        PL = AL + (RL1 - RL); //SACI.ISUM( AL, J1Y );
+        PL = a + (RL1 - RL); //SACI.ISUM( AL, J1Y );
         //System.out.println("PL = " + PL + ", BL = " + BL);
-        while (PL <= BL) {
-            R = NL % PL; //SACI.IQR( NL, PL, QL, R );
+        while (PL <= b) {
+            R = n % PL; //SACI.IQR( NL, PL, QL, R );
             if (R == 0) {
                 return PL;
             }
             i++; //LP = MASSTOR.RED( LP );
             if (i >= ll) { //LP == MASSTOR.SIL )
                 LP = UZ210;
-                RL2 = (RL1 - 210);
+                RL2 = (RL1 - 210L);
                 i = 0;
             } else {
                 RL2 = RL1;
@@ -406,7 +444,7 @@ public final class PrimeInteger {
             J1Y = (RL1 - RL2);
             PL = PL + J1Y; //SACI.ISUM( PL, J1Y );
         }
-        PL = 1; //SACI.IONE;
+        PL = 1L; //SACI.IONE;
         //QL = NL;
         return PL;
     }
@@ -420,8 +458,13 @@ public final class PrimeInteger {
      * If the existence of such a root is discovered then m is prime and s=1. If
      * it is discovered that no such root exists then m is not a prime and s=-1.
      * Otherwise the primality of m remains uncertain and s=0.
+     * @param m integer to test.
+     * @param mp integer m-1.
+     * @param a map F of pairs (p,e), with a prime p, multiplicity e and with p**e divides mp.
+     * @return s = -1 (not prime), 0 (unknown) or 1 (prime).
+     * @see SACPRIM.ISPT
      */
-    public static int ISPT(long ML, long MLP, SortedMap<Long, Integer> F) {
+    public static int ISPT(long m, long mp, SortedMap<Long, Integer> F) {
         long AL, BL, QL, QL1, MLPP, PL1, PL;
         int SL;
         //List<Long> SMPRM = smallPrimes(2, 500); //SMPRM;
@@ -434,7 +477,7 @@ public final class PrimeInteger {
         while (true) {
             do {
                 if (i == FP.size()) { //FP == MASSTOR.SIL
-                    System.out.println("SL=1: ML = " + ML);
+                    logger.info("SL=1: m = " + m);
                     SL = 1;
                     return SL;
                 }
@@ -446,7 +489,7 @@ public final class PrimeInteger {
             int j = 0;
             do {
                 if (j == PP.size()) {
-                    System.out.println("SL=0: ML = " + ML);
+                    logger.info("SL=0: m = " + m);
                     SL = 0;
                     return SL;
                 }
@@ -455,17 +498,17 @@ public final class PrimeInteger {
                 if (PL > PL1) {
                     PL1 = PL;
                     //AL = SACM.MIEXP( ML, PL, MLP );
-                    AL = (long) (new ModLong(new ModLongRing(ML), PL)).power(MLP).getVal(); //(PL**MLP) mod ML; 
+                    AL = (long) (new ModLong(new ModLongRing(m), PL)).power(mp).getVal(); //(PL**MLP) mod ML; 
                     if (AL != 1) {
-                        System.out.println("SL=-1: ML = " + ML);
+                        logger.info("SL=-1: m = " + m);
                         SL = (-1);
                         return SL;
                     }
                 }
-                MLPP = MLP / QL; //SACI.IQ( MLP, QL );
+                MLPP = mp / QL; //SACI.IQ( MLP, QL );
                 //BL = SACM.MIEXP( ML, PL, MLPP );
-                BL = (long) (new ModLong(new ModLongRing(ML), PL)).power(MLPP).getVal(); //(PL**MLPP) mod ML; 
-            } while (BL == 1);
+                BL = (long) (new ModLong(new ModLongRing(m), PL)).power(MLPP).getVal(); //(PL**MLPP) mod ML; 
+            } while (BL == 1L);
         }
     }
 
@@ -476,33 +519,38 @@ public final class PrimeInteger {
      * of the integer n, with a le p le b. If such a p is found then np=n/p,
      * otherwise p=1 and np=n. A modular version of fermats method is used, and
      * the search goes from a to b.
+     * @param n integer to factor.
+     * @param a lower bound.
+     * @param b upper bound.
+     * @return p a prime factor of n, with a &le; p &le; b &lt; n.
+     * @see SACPRIM.ILPDS
      */
-    public static long ILPDS(long NL, long AL, long BL) { // return PL, NLP ignored
-        if (NL > BETA) {
+    public static long ILPDS(long n, long a, long b) { // return PL, NLP ignored
+        if (n > BETA) {
             throw new UnsupportedOperationException("ILPDS only for longs less than BETA: " + BETA);
         }
-        long RL, J2Y, XL1, XL2, QL, XL, YL, YLP;
         List<ModLong> L = null;
         List<ModLong> LP;
         long RL1, RL2, J1Y, r, PL, TL;
+        long RL, J2Y, XL1, XL2, QL, XL, YL, YLP;
         long ML = 0L;
         long SL = 0L;
         //SACI.IQR( NL, BL, QL, RL );
-        QL = NL / BL;
-        RL = NL % BL;
-        XL1 = BL + QL;
+        QL = n / b;
+        RL = n % b;
+        XL1 = b + QL;
         //SACI.IDQR( XL1, 2, XL1, _SL );
         SL = XL1 % 2L;
         XL1 = XL1 / 2L; // after SL
         if ((RL != 0) || (SL != 0)) {
             XL1 = XL1 + 1L;
         }
-        QL = NL / AL;
-        XL2 = AL + QL;
+        QL = n / a;
+        XL2 = a + QL;
         XL2 = XL2 / 2L;
-        L = FRESL(NL); //FRESL( NL, ML, L ); // ML not returned
+        L = FRESL(n); //FRESL( NL, ML, L ); // ML not returned
         if (L.isEmpty()) {
-            return NL;
+            return n;
         }
         ML = L.get(0).ring.getModul().longValue(); // sic
         // check is okay: sort: L = SACSET.LBIBMS( L ); revert: L = MASSTOR.INV( L );
@@ -528,7 +576,7 @@ public final class PrimeInteger {
         TL = 0L;
         while (XL >= XL1) {
             J2Y = XL * XL;
-            YLP = J2Y - NL;
+            YLP = J2Y - n;
             //System.out.println("YLP = " + YLP + ", J2Y = " + J2Y);
             YL = Roots.sqrtInt(new BigInteger(YLP)).getVal().longValue(); // SACI.ISQRT( YLP, YL, TL );
             //System.out.println("YL = sqrt(YLP) = " + YL);
@@ -562,17 +610,21 @@ public final class PrimeInteger {
      * Fermat residue list, single modulus. m is a positive beta-integer. a
      * belongs to Z(m). L is a list of the distinct b in Z(m) such that b**2-a
      * is a square in Z(m).
+     * @param m integer to factor.
+     * @param a element of Z mod m.
+     * @return Lp a list of Fermat residues for modul m.
+     * @see SACPRIM.FRLSM
      */
-    public static List<ModLong> FRLSM(long ML, long AL) {
+    public static List<ModLong> FRLSM(long m, long a) {
         List<ModLong> Lp;
         SortedSet<ModLong> L;
         List<ModLong> S, SP;
         int MLP;
         ModLong SL, SLP, SLPP;
 
-        ModLongRing ring = new ModLongRing(ML);
-        ModLong a = ring.fromInteger(AL);
-        MLP = (int) (ML / 2L);
+        ModLongRing ring = new ModLongRing(m);
+        ModLong am = ring.fromInteger(a);
+        MLP = (int) (m / 2L);
         S = new ArrayList<ModLong>();
         for (int i = 0; i <= MLP; i++) {
             SL = ring.fromInteger(i);
@@ -584,7 +636,7 @@ public final class PrimeInteger {
         for (int i = MLP; i >= 0; i -= 1) {
             SL = SP.get(i); //MASSTOR.FIRSTi( SP );
             // IL -= 1: SP = MASSTOR.RED( SP );
-            SLP = SL.subtract(a); //SACM.MDDIF( ML, SL, AL );
+            SLP = SL.subtract(am); //SACM.MDDIF( ML, SL, AL );
             int j = S.indexOf(SLP); //SACLIST.LSRCH( SLP, S );
             if (j >= 0) { // != 0
                 SLP = ring.fromInteger(i);
@@ -605,8 +657,11 @@ public final class PrimeInteger {
      * than 17. m is a positive beta-integer and L is an ordered list of the
      * elements of Z(m) such that if x**2-n is a square then x is congruent to a
      * (modulo m) for some a in L.
+     * @param n integer to factor.
+     * @return Lp a list of Fermat residues for different modules.
+     * @see SACPRIM.FRESL
      */
-    public static List<ModLong> FRESL(long NL) {
+    public static List<ModLong> FRESL(long n) {
         List<ModLong> L, L1;
         List<Long> H, M;
         long AL1, AL2, AL3, AL4, BL1, HL, J1Y, J2Y, KL, KL1, ML1, ML;
@@ -614,7 +669,7 @@ public final class PrimeInteger {
 
         // modulus 2**5.
         BL1 = 0L;
-        AL1 = NL % 32L; //SACI.IDREM( NL, 32 );
+        AL1 = n % 32L; //SACI.IDREM( NL, 32 );
         AL2 = AL1 % 16L; //MASELEM.MASREM( AL1, 16 );
         AL3 = AL2 % 8L; //MASELEM.MASREM( AL2, 8 );
         AL4 = AL3 % 4L; //MASELEM.MASREM( AL3, 4 );
@@ -668,7 +723,7 @@ public final class PrimeInteger {
         KL = L.size(); 
 
         // modulus 3**3.
-        AL1 = NL % 27L; //SACI.IDREM( NL, 27 );
+        AL1 = n % 27L; //SACI.IDREM( NL, 27 );
         AL2 = AL1 % 3L; //MASELEM.MASREM( AL1, 3 );
         if (AL2 == 2L) {
             ML1 = 3L;
@@ -691,7 +746,7 @@ public final class PrimeInteger {
         //System.out.println("FRESL: L = " + L + ", ring = " + ring.toScript());
 
         // modulus 5**2.
-        AL1 = NL % 25L; //SACI.IDREM( NL, 25 );
+        AL1 = n % 25L; //SACI.IDREM( NL, 25 );
         AL2 = AL1 % 5L; //MASELEM.MASREM( AL1, 5 );
         if ((AL2 == 2L) || (AL2 == 3L)) {
             ML1 = 5L;
@@ -739,7 +794,7 @@ public final class PrimeInteger {
                 return L;
             }
             ring2 = new ModLongRing(ML1);
-            AL1 = NL % ML1; //SACI.IDREM( NL, ML1 );
+            AL1 = n % ML1; //SACI.IDREM( NL, ML1 );
             L1 = FRLSM(ML1, AL1);
             KL1 = L1.size(); //MASSTOR.LENGTH( L1 );
             //L = SACM.MDLCRA( ML, ML1, L, L1 );
@@ -761,6 +816,8 @@ public final class PrimeInteger {
 
     /**
      * Compute units of Z sub 210.
+     * @return list of units of Z sub 210.
+     * @see SACPRIM.UZ210
      */
     public static List<Long> getUZ210() {
         List<Long> UZ = new ArrayList<Long>();

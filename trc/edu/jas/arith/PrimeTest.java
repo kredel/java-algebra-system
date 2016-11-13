@@ -19,7 +19,7 @@ import junit.framework.TestSuite;
 
 
 /**
- * ModInteger and PrimeList tests with JUnit.
+ * PrimeInteger and PrimeList tests with JUnit.
  * @author Heinz Kredel.
  */
 
@@ -196,8 +196,7 @@ public class PrimeTest extends TestCase {
         SortedMap<Long, Integer> ff;
 
         ff = PrimeInteger.IFACT(2 * 3 * 5 * 7 * 2 * 9 * 10 * 19 * 811);
-        //ff = PrimeInteger.IFACT(4639);
-        System.out.println("ff = " + ff);
+        //System.out.println("ff = " + ff);
         assertEquals("factors: ", ff.size(), 6 );
         for (Long p : ff.keySet()) {
 	    java.math.BigInteger P = new java.math.BigInteger(p.toString());
@@ -205,7 +204,7 @@ public class PrimeTest extends TestCase {
         }
 
         ff = PrimeInteger.IFACT(991 * 997 * 811 + 1);
-        System.out.println("ff = " + ff);
+        //System.out.println("ff = " + ff);
         assertEquals("factors: ", ff.size(), 3 );
         for (Long p : ff.keySet()) {
 	    java.math.BigInteger P = new java.math.BigInteger(p.toString());
@@ -213,7 +212,7 @@ public class PrimeTest extends TestCase {
         }
 
         ff = PrimeInteger.IFACT( PrimeList.getLongPrime(15, 135).longValue());
-        System.out.println("ff = " + ff);
+        //System.out.println("ff = " + ff);
         assertEquals("factors: ", ff.size(), 1 );
         for (Long p : ff.keySet()) {
 	    java.math.BigInteger P = new java.math.BigInteger(p.toString());
@@ -225,7 +224,7 @@ public class PrimeTest extends TestCase {
         //ff = PrimeInteger.IFACT( PrimeList.getLongPrime(59, 55).longValue() );
         ff = PrimeInteger.IFACT( PrimeList.getLongPrime(59, 0).longValue() );
         //System.out.println("m = " + PrimeList.getLongPrime(59, 0).longValue());
-        System.out.println("ff = " + ff);
+        //System.out.println("ff = " + ff);
         assertEquals("factors: ", ff.size(), 1 );
         for (Long p : ff.keySet()) {
 	    java.math.BigInteger P = new java.math.BigInteger(p.toString());
@@ -241,16 +240,16 @@ public class PrimeTest extends TestCase {
     public void testRandom() {
         SortedMap<Long, Integer> ff;
         BigInteger rnd = BigInteger.ONE;
-        System.out.println("beta = " + PrimeInteger.BETA);
+        //System.out.println("beta = " + PrimeInteger.BETA);
 
         for (int i = 0; i < 5; i++) {
             BigInteger M = rnd.random(60).abs();
             //System.out.println("M = " + M);
             long m = Math.abs(M.getVal().longValue());
-            System.out.println("M = " + M + ", m = " + m);
+            //System.out.println("M = " + M + ", m = " + m);
             if (m < PrimeInteger.BETA) {
                ff = PrimeInteger.IFACT(m);
-               System.out.println("ff = " + ff);
+               //System.out.println("ff = " + ff);
                assertTrue("isFactorization: " + m + ", ff = " + ff, PrimeInteger.isFactorization(m, ff));
             }
 	}
@@ -263,19 +262,19 @@ public class PrimeTest extends TestCase {
     public void testRandom3() {
         SortedMap<Long, Integer> ff;
         BigInteger rnd = BigInteger.ONE;
-        System.out.println("beta = " + PrimeInteger.BETA);
-        System.out.println("beta**-2 = " + Roots.sqrtInt(new BigInteger(PrimeInteger.BETA)));
-        System.out.println("beta**-3 = " + Roots.root(new BigInteger(PrimeInteger.BETA), 3));
+        //System.out.println("beta = " + PrimeInteger.BETA);
+        //System.out.println("beta**-2 = " + Roots.sqrtInt(new BigInteger(PrimeInteger.BETA)));
+        //System.out.println("beta**-3 = " + Roots.root(new BigInteger(PrimeInteger.BETA), 3));
 
         for (int i = 0; i < 5; i++) {
             BigInteger M = rnd.random(20).abs();
             M = M.power(3);
             //System.out.println("M = " + M);
             long m = Math.abs(M.getVal().longValue());
-            System.out.println("M = " + M + ", m = " + m);
+            //System.out.println("M = " + M + ", m = " + m);
             if (m < PrimeInteger.BETA) {
                ff = PrimeInteger.IFACT(m);
-               System.out.println("ff = " + ff);
+               //System.out.println("ff = " + ff);
                assertTrue("isFactorization: " + m + ", ff = " + ff, PrimeInteger.isPrimeFactorization(m, ff));
             }
 	}
