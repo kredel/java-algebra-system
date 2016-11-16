@@ -14,6 +14,7 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.security.SecureRandom;
 
 import org.apache.log4j.Logger;
 
@@ -32,8 +33,8 @@ public final class PrimeInteger {
 
 
     /**
-     * Maximal long, which can be factored by IFACT.
-     * Nothing to do with SAC2.BETA.
+     * Maximal long, which can be factored by IFACT(long).
+     * Has nothing to do with SAC2.BETA.
      */
     final public static long BETA = PrimeList.getLongPrime(61, 1).longValue();
 
@@ -63,7 +64,7 @@ public final class PrimeInteger {
      * p(1) lt p(2) lt ... lt p(r).
      * @param m start integer
      * @param K number of integers
-     * @return the list L of prime numbers p with p &lt; m + 2*K.
+     * @return the list L of prime numbers p with m &le; p &lt; m + 2*K.
      * @see SACPRIM.DPGEN
      */
     public static List<Long> smallPrimes(long m, int K) {
@@ -188,11 +189,13 @@ public final class PrimeInteger {
      * &gt;br /&lt;
      * In JAS F is a map and m=1 or m &gt; 4.000.000 and m is contined in F with value 0.
      * @param n integer to factor.
-     * @return a map F of pairs of prime numbers and multiplicities (p,e) with p**e divides n and e maximal.
+     * @param a map F of pairs of prime numbers and multiplicities (p,e).
+     * a map F of pairs of prime numbers and multiplicities (p,e) with p**e divides n and e maximal.
+     * @return n/F a factor of n not divisible by any prime number in SMPRM.
      * @see SACPRIM.ISPD
      */
-    public static SortedMap<Long, Integer> ISPD(long n) {
-        SortedMap<Long, Integer> F = new TreeMap<Long, Integer>();
+    public static long smallPrimeDivisors(long n, SortedMap<Long, Integer> F) {
+        //SortedMap<Long, Integer> F = new TreeMap<Long, Integer>();
         List<Long> LP;
         long QL = 0;
         long PL;
@@ -222,7 +225,7 @@ public final class PrimeInteger {
             TL = (QL <= PL);
         } while (!(TL || (i >= LP.size())));
         //System.out.println("TL = " + TL + ", ML = " + ML + ", PL = " + PL + ", QL = " + QL);
-        if (TL && (ML != 1)) {
+        if (TL && (ML != 1L)) {
             Integer e = F.get(ML);
             if (e == null) {
                 e = 1;
@@ -232,8 +235,8 @@ public final class PrimeInteger {
             F.put(ML, e);
             ML = 1;
         }
-        F.put(ML, 0); // hack
-        return F;
+        //F.put(ML, 0); // hack
+        return ML;
     }
 
 
@@ -244,7 +247,7 @@ public final class PrimeInteger {
      * @return true if n is prime, else false.
      */
     public static boolean isPrime(long n) {
-        SortedMap<Long, Integer> F = IFACT(n);
+        SortedMap<Long, Integer> F = factors(n);
         return (F.size() == 1) && F.values().contains(1);
     }
 
@@ -300,30 +303,30 @@ public final class PrimeInteger {
      * @param a map F of pairs of numbers (p,e) with p**e divides n.
      * @see SACPRIM.IFACT
      */
-    public static SortedMap<Long, Integer> IFACT(long n) {
+    public static SortedMap<Long, Integer> factors(long n) {
         if (n > BETA) {
-            throw new UnsupportedOperationException("IFACT only for longs less than BETA: " + BETA);
+            throw new UnsupportedOperationException("factors(long) only for longs less than BETA: " + BETA);
         }
         long ML, PL, AL, BL, CL, MLP, RL, SL;
         SortedMap<Long, Integer> F = new TreeMap<Long, Integer>();
         SortedMap<Long, Integer> FP = null;
         // search small prime factors
-        F = ISPD(n); // , F, ML
-        ML = 0L; // nonsense
-        for (Long m : F.keySet()) {
-	    if (F.get(m) == 0) {
-                //System.out.println("m = " + m);
-                ML = m;
-                break;
-            }
-        }
+        ML = smallPrimeDivisors(n, F); // , F, ML
+        //ML = 0L; // nonsense
+        //for (Long m : F.keySet()) {
+	//    if (F.get(m) == 0) {
+        //        //System.out.println("m = " + m);
+        //        ML = m;
+        //        break;
+        //    }
+        //}
         if (ML == 1L) {
-            F.remove(ML); // hack
+            //F.remove(ML); // hack
             return F;
         }
-        if (ML != 0L) {
-            F.remove(ML); // hack
-        }
+        //if (ML != 0L) {
+        //    F.remove(ML); // hack
+        //}
         //System.out.println("F = " + F);
         // search medium prime factors
         AL = IMPDS_MIN;
@@ -332,10 +335,10 @@ public final class PrimeInteger {
             RL = (long) (new ModLong(new ModLongRing(ML), 3)).power(MLP).getVal(); //(3**MLP) mod ML; 
             //SACM.MIEXP( ML, 3, MLP );
             if (RL == 1L) {
-                FP = IFACT(MLP);
-                SL = ISPT(ML, MLP, FP);
+                FP = factors(MLP);
+                SL = primalityTestSelfridge(ML, MLP, FP);
                 if (SL == 1) {
-                    logger.info("ISPT: FP = " + FP);
+                    logger.info("primalityTestSelfridge: FP = " + FP);
                     Integer e = F.get(ML);
                     if (e == null) {
                         e = 1;
@@ -353,8 +356,8 @@ public final class PrimeInteger {
             if (AL > BL) {
                 PL = 1L;
             } else {
-                logger.info("IMPDS: a = " + AL + ", b = " + BL);
-                PL = IMPDS(ML, AL, BL); //, PL, ML );
+                logger.info("mediumPrimeDivisorSearch: a = " + AL + ", b = " + BL);
+                PL = mediumPrimeDivisorSearch(ML, AL, BL); //, PL, ML );
                 //System.out.println("PL = " + PL);
                 if (PL != 1L) {
                     AL = PL;
@@ -374,8 +377,8 @@ public final class PrimeInteger {
         AL = BL;
         BL = CL;
         //ILPDS( ML, AL, BL, PL, ML );
-        logger.info("ILPDS: a = " + AL + ", b = " + BL + ", m = " + ML);
-        PL = ILPDS(ML, AL, BL);
+        logger.info("largePrimeDivisorSearch: a = " + AL + ", b = " + BL + ", m = " + ML);
+        PL = largePrimeDivisorSearch(ML, AL, BL);
         if (PL != 1L) {
             Integer e = F.get(PL);
             if (e == null) {
@@ -411,7 +414,7 @@ public final class PrimeInteger {
      * @return p a prime factor of n, with a &le; p &le; b &lt; n.
      * @see SACPRIM.IMPDS
      */
-    public static long IMPDS(long n, long a, long b) {
+    public static long mediumPrimeDivisorSearch(long n, long a, long b) {
         List<Long> LP;
         long R, J1Y, RL1, RL2, RL, PL;
 
@@ -464,7 +467,7 @@ public final class PrimeInteger {
      * @return s = -1 (not prime), 0 (unknown) or 1 (prime).
      * @see SACPRIM.ISPT
      */
-    public static int ISPT(long m, long mp, SortedMap<Long, Integer> F) {
+    public static int primalityTestSelfridge(long m, long mp, SortedMap<Long, Integer> F) {
         long AL, BL, QL, QL1, MLPP, PL1, PL;
         int SL;
         //List<Long> SMPRM = smallPrimes(2, 500); //SMPRM;
@@ -525,9 +528,9 @@ public final class PrimeInteger {
      * @return p a prime factor of n, with a &le; p &le; b &lt; n.
      * @see SACPRIM.ILPDS
      */
-    public static long ILPDS(long n, long a, long b) { // return PL, NLP ignored
+    public static long largePrimeDivisorSearch(long n, long a, long b) { // return PL, NLP ignored
         if (n > BETA) {
-            throw new UnsupportedOperationException("ILPDS only for longs less than BETA: " + BETA);
+            throw new UnsupportedOperationException("largePrimeDivisorSearch only for longs less than BETA: " + BETA);
         }
         List<ModLong> L = null;
         List<ModLong> LP;
