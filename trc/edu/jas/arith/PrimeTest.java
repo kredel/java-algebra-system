@@ -89,10 +89,10 @@ public class PrimeTest extends TestCase {
      * Test small prime list.
      */
     public void testSmallPrime() {
-        List<Long> sp = PrimeInteger.smallPrimes(1, 500);
+        List<Long> sp = PrimeInteger.SMPRM; //smallPrimes(1, 500);
         //System.out.println("sp = " + sp);
         for (Long p : sp) {
-	    java.math.BigInteger P = new java.math.BigInteger(p.toString());
+            java.math.BigInteger P = new java.math.BigInteger(p.toString());
             assertTrue("isPrime: " + p, P.isProbablePrime(16) );
         }
         PrimeList primes = new PrimeList(PrimeList.Range.small);
@@ -195,39 +195,39 @@ public class PrimeTest extends TestCase {
     public void testFactorInteger() {
         SortedMap<Long, Integer> ff;
 
-        ff = PrimeInteger.IFACT(2 * 3 * 5 * 7 * 2 * 9 * 10 * 19 * 811);
+        ff = PrimeInteger.factors(2 * 3 * 5 * 7 * 2 * 9 * 10 * 19 * 811);
         //System.out.println("ff = " + ff);
         assertEquals("factors: ", ff.size(), 6 );
         for (Long p : ff.keySet()) {
-	    java.math.BigInteger P = new java.math.BigInteger(p.toString());
+            java.math.BigInteger P = new java.math.BigInteger(p.toString());
             assertTrue("isPrime: " + p, P.isProbablePrime(16) );
         }
 
-        ff = PrimeInteger.IFACT(991 * 997 * 811 + 1);
+        ff = PrimeInteger.factors(991 * 997 * 811 + 1);
         //System.out.println("ff = " + ff);
         assertEquals("factors: ", ff.size(), 3 );
         for (Long p : ff.keySet()) {
-	    java.math.BigInteger P = new java.math.BigInteger(p.toString());
+            java.math.BigInteger P = new java.math.BigInteger(p.toString());
             assertTrue("isPrime: " + p, P.isProbablePrime(16) );
         }
 
-        ff = PrimeInteger.IFACT( PrimeList.getLongPrime(15, 135).longValue());
+        ff = PrimeInteger.factors( PrimeList.getLongPrime(15, 135).longValue());
         //System.out.println("ff = " + ff);
         assertEquals("factors: ", ff.size(), 1 );
         for (Long p : ff.keySet()) {
-	    java.math.BigInteger P = new java.math.BigInteger(p.toString());
+            java.math.BigInteger P = new java.math.BigInteger(p.toString());
             assertTrue("isPrime: " + p, P.isProbablePrime(16) );
         }
 
-        //ff = PrimeInteger.IFACT( PrimeList.getLongPrime(61, 1).longValue() );
-        //ff = PrimeInteger.IFACT( PrimeList.getLongPrime(60, 93).longValue() );
-        //ff = PrimeInteger.IFACT( PrimeList.getLongPrime(59, 55).longValue() );
-        ff = PrimeInteger.IFACT( PrimeList.getLongPrime(59, 0).longValue() );
+        //ff = PrimeInteger.factors( PrimeList.getLongPrime(61, 1).longValue() );
+        //ff = PrimeInteger.factors( PrimeList.getLongPrime(60, 93).longValue() );
+        //ff = PrimeInteger.factors( PrimeList.getLongPrime(59, 55).longValue() );
+        ff = PrimeInteger.factors( PrimeList.getLongPrime(59, 0).longValue() );
         //System.out.println("m = " + PrimeList.getLongPrime(59, 0).longValue());
         //System.out.println("ff = " + ff);
         assertEquals("factors: ", ff.size(), 1 );
         for (Long p : ff.keySet()) {
-	    java.math.BigInteger P = new java.math.BigInteger(p.toString());
+            java.math.BigInteger P = new java.math.BigInteger(p.toString());
             assertTrue("isPrime: " + p, P.isProbablePrime(16) );
         }
         //System.out.println("SMPRM = " + PrimeInteger.SMPRM);
@@ -238,21 +238,28 @@ public class PrimeTest extends TestCase {
      * Test random integers.
      */
     public void testRandom() {
-        SortedMap<Long, Integer> ff;
+        SortedMap<Long, Integer> ff, ffp;
         BigInteger rnd = BigInteger.ONE;
         //System.out.println("beta = " + PrimeInteger.BETA);
 
         for (int i = 0; i < 5; i++) {
-            BigInteger M = rnd.random(60).abs();
+            BigInteger M = rnd.random(56).abs();
             //System.out.println("M = " + M);
             long m = Math.abs(M.getVal().longValue());
             //System.out.println("M = " + M + ", m = " + m);
             if (m < PrimeInteger.BETA) {
-               ff = PrimeInteger.IFACT(m);
-               //System.out.println("ff = " + ff);
-               assertTrue("isFactorization: " + m + ", ff = " + ff, PrimeInteger.isFactorization(m, ff));
+                long t = System.currentTimeMillis();
+                ff = PrimeInteger.factors(m);
+                t = System.currentTimeMillis() - t;
+                System.out.println("ff = " + ff);
+                assertTrue("isFactorization: " + m + ", ff = " + ff, PrimeInteger.isFactorization(m, ff));
+                long s = System.currentTimeMillis();
+                ffp = PrimeInteger.factorsPollard(m);
+                s = System.currentTimeMillis() - s;
+                System.out.println("time: t = " + t + ", s = " + s);
+                assertEquals("isFactorization: " + m, ff, ffp);
             }
-	}
+        }
     }
 
 
@@ -265,7 +272,7 @@ public class PrimeTest extends TestCase {
         //System.out.println("beta = " + PrimeInteger.BETA);
         //System.out.println("beta**-2 = " + Roots.sqrtInt(new BigInteger(PrimeInteger.BETA)));
         //System.out.println("beta**-3 = " + Roots.root(new BigInteger(PrimeInteger.BETA), 3));
-
+ 
         for (int i = 0; i < 5; i++) {
             BigInteger M = rnd.random(20).abs();
             M = M.power(3);
@@ -273,11 +280,11 @@ public class PrimeTest extends TestCase {
             long m = Math.abs(M.getVal().longValue());
             //System.out.println("M = " + M + ", m = " + m);
             if (m < PrimeInteger.BETA) {
-               ff = PrimeInteger.IFACT(m);
+               ff = PrimeInteger.factors(m);
                //System.out.println("ff = " + ff);
                assertTrue("isFactorization: " + m + ", ff = " + ff, PrimeInteger.isPrimeFactorization(m, ff));
             }
-	}
+        }
     }
 
 }

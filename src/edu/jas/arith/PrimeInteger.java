@@ -15,6 +15,7 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.security.SecureRandom;
+import java.util.Random;
 
 import org.apache.log4j.Logger;
 
@@ -40,22 +41,26 @@ public final class PrimeInteger {
 
 
     /**
+     * Medium prime divisor range.
+     */
+    //final static long IMPDS_MIN = 1000;  // SAC2/Aldes 
+    //final static long IMPDS_MAX = 5000;  // "
+    //final static long IMPDS_MIN = 2000;  
+    //final static long IMPDS_MAX = 10000; 
+    final static long IMPDS_MIN =  10000; 
+    final static long IMPDS_MAX = 128000; 
+
+
+    /**
      * List of small prime numbers.
      */
-    final public static List<Long> SMPRM = smallPrimes(2, 1000); 
+    final public static List<Long> SMPRM = smallPrimes(2, (int) (IMPDS_MIN >> 1)); 
 
 
     /**
      * List of units of Z mod 210.
      */
     final public static List<Long> UZ210 = getUZ210(); 
-
-
-    /**
-     * Medium prime divisor range.
-     */
-    final static long IMPDS_MIN = 2000; 
-    final static long IMPDS_MAX = 10000; 
 
 
     /**
@@ -177,6 +182,7 @@ public final class PrimeInteger {
             }
             pl += 2;
         }
+        //System.out.println("SMPRM = " + po);
         return po;
     }
 
@@ -262,7 +268,7 @@ public final class PrimeInteger {
     public static boolean isPrimeFactorization(long NL, SortedMap<Long, Integer> F) {
         long f = 1L;
         for (Map.Entry<Long, Integer> m : F.entrySet()) {
-	    long p = m.getKey();
+            long p = m.getKey();
             if (!isPrime(p)) {
                 return false;
             }
@@ -284,7 +290,7 @@ public final class PrimeInteger {
     public static boolean isFactorization(long n, SortedMap<Long, Integer> F) {
         long f = 1L;
         for (Map.Entry<Long, Integer> m : F.entrySet()) {
-	    long p = m.getKey();
+            long p = m.getKey();
             int e = m.getValue();
             long pe = java.math.BigInteger.valueOf(p).pow(e).longValue();
             f *= pe;
@@ -312,21 +318,9 @@ public final class PrimeInteger {
         SortedMap<Long, Integer> FP = null;
         // search small prime factors
         ML = smallPrimeDivisors(n, F); // , F, ML
-        //ML = 0L; // nonsense
-        //for (Long m : F.keySet()) {
-	//    if (F.get(m) == 0) {
-        //        //System.out.println("m = " + m);
-        //        ML = m;
-        //        break;
-        //    }
-        //}
         if (ML == 1L) {
-            //F.remove(ML); // hack
             return F;
         }
-        //if (ML != 0L) {
-        //    F.remove(ML); // hack
-        //}
         //System.out.println("F = " + F);
         // search medium prime factors
         AL = IMPDS_MIN;
@@ -374,6 +368,7 @@ public final class PrimeInteger {
         } while (PL != 1L);
         // fixme: the ILPDS should also be in the while loop, was already wrong in SAC2/Aldes and MAS
         // seems to be okay for integers smaller than beta
+        // search large prime factors
         AL = BL;
         BL = CL;
         //ILPDS( ML, AL, BL, PL, ML );
@@ -399,6 +394,80 @@ public final class PrimeInteger {
             }
             F.put(ML, e);
         }
+        return F;
+    }
+
+
+    /**
+     * Integer factorization, Pollard rho algorithm. n is a positive integer. F is a list (q(1),
+     * q(2),...,q(h)) of the prime factors of n, q(1) le q(2) le ... le q(h),
+     * with n equal to the product of the q(i).
+     * &gt;br /&lt;
+     * In JAS F is a map.
+     * @param n integer to factor.
+     * @param a map F of pairs of numbers (p,e) with p**e divides n and p probable prime.
+     * @see SACPRIM.IFACT
+     */
+    public static SortedMap<Long, Integer> factorsPollard(long n) {
+        if (n > BETA) {
+            throw new UnsupportedOperationException("factors(long) only for longs less than BETA: " + BETA);
+        }
+        long ML, PL, AL, BL, CL, MLP, RL, SL;
+        SortedMap<Long, Integer> F = new TreeMap<Long, Integer>();
+        SortedMap<Long, Integer> FP;
+        // search small prime factors
+        ML = smallPrimeDivisors(n, F); // , F, ML
+        if (ML == 1L) {
+            return F;
+        }
+        //System.out.println("F = " + F);
+        // search medium prime factors
+        AL = IMPDS_MIN;
+        do {
+            MLP = ML - 1;
+            RL = (long) (new ModLong(new ModLongRing(ML), 3)).power(MLP).getVal(); //(3**MLP) mod ML; 
+            //SACM.MIEXP( ML, 3, MLP );
+            if (RL == 1L) {
+                FP = factors(MLP);
+                SL = primalityTestSelfridge(ML, MLP, FP);
+                if (SL == 1) {
+                    logger.info("primalityTestSelfridge: FP = " + FP);
+                    Integer e = F.get(ML);
+                    if (e == null) {
+                        e = 1;
+                    } else {
+                        e++;
+                    }
+                    F.put(ML, e); // = MASSTOR.COMP( ML, F );
+                    //tocheck: F = MASSTOR.INV( F );
+                    return F;
+                }
+            }
+            CL = Roots.sqrtInt(new BigInteger(ML)).getVal().longValue(); //SACI.ISQRT( ML, CL, TL );
+            //System.out.println("CL = " + CL + ", ML = " + ML + ", CL^2 = " + (CL*CL));
+            BL = Math.max(IMPDS_MAX, CL / 3L);
+            if (AL > BL) {
+                PL = 1L;
+            } else {
+                logger.info("mediumPrimeDivisorSearch: a = " + AL + ", b = " + BL);
+                PL = mediumPrimeDivisorSearch(ML, AL, BL); //, PL, ML );
+                //System.out.println("PL = " + PL);
+                if (PL != 1L) {
+                    AL = PL;
+                    Integer e = F.get(PL);
+                    if (e == null) {
+                        e = 1;
+                    } else {
+                        e++;
+                    }
+                    F.put(PL, e); //F = MASSTOR.COMP( PL, F );
+                    ML = ML / PL;
+                }
+            }
+        } while (PL != 1L);
+        // search large prime factors
+        logger.info("largePrimeDivisorSearch: m = " + ML);
+        factorsPollardRho(ML, F); // , F, ML
         return F;
     }
 
@@ -551,7 +620,7 @@ public final class PrimeInteger {
         QL = n / a;
         XL2 = a + QL;
         XL2 = XL2 / 2L;
-        L = FRESL(n); //FRESL( NL, ML, L ); // ML not returned
+        L = residueListFermat(n); //FRESL( NL, ML, L ); // ML not returned
         if (L.isEmpty()) {
             return n;
         }
@@ -618,7 +687,7 @@ public final class PrimeInteger {
      * @return Lp a list of Fermat residues for modul m.
      * @see SACPRIM.FRLSM
      */
-    public static List<ModLong> FRLSM(long m, long a) {
+    public static List<ModLong> residueListFermatSingle(long m, long a) {
         List<ModLong> Lp;
         SortedSet<ModLong> L;
         List<ModLong> S, SP;
@@ -664,7 +733,7 @@ public final class PrimeInteger {
      * @return Lp a list of Fermat residues for different modules.
      * @see SACPRIM.FRESL
      */
-    public static List<ModLong> FRESL(long n) {
+    public static List<ModLong> residueListFermat(long n) {
         List<ModLong> L, L1;
         List<Long> H, M;
         long AL1, AL2, AL3, AL4, BL1, HL, J1Y, J2Y, KL, KL1, ML1, ML;
@@ -738,7 +807,7 @@ public final class PrimeInteger {
             ML1 = 27L;
             ring2 = new ModLongRing(ML1);
             KL1 = 4L;
-            L1 = FRLSM(ML1, AL1);
+            L1 = residueListFermatSingle(ML1, AL1);
             // ring2 == L1.get(0).ring
         }
         //L = SACM.MDLCRA( ML, ML1, L, L1 );
@@ -764,7 +833,7 @@ public final class PrimeInteger {
         } else {
             ML1 = 25L;
             ring2 = new ModLongRing(ML1);
-            L1 = FRLSM(ML1, AL1);
+            L1 = residueListFermatSingle(ML1, AL1);
             KL1 = 7L;
         }
         if (ML1 >= BETA / ML) {
@@ -798,7 +867,7 @@ public final class PrimeInteger {
             }
             ring2 = new ModLongRing(ML1);
             AL1 = n % ML1; //SACI.IDREM( NL, ML1 );
-            L1 = FRLSM(ML1, AL1);
+            L1 = residueListFermatSingle(ML1, AL1);
             KL1 = L1.size(); //MASSTOR.LENGTH( L1 );
             //L = SACM.MDLCRA( ML, ML1, L, L1 );
             L = ModLongRing.chineseRemainder(ring.getONE(), ring2.getONE(), L, L1);
@@ -832,6 +901,151 @@ public final class PrimeInteger {
             }
         }
         return UZ;
+    }
+
+
+    /**
+     * Integer factorization using Pollards rho algorithm. n is a positive integer. F is a list (q(1),
+     * q(2),...,q(h)) of the prime factors of n, q(1) le q(2) le ... le q(h),
+     * with n equal to the product of the q(i).
+     * &gt;br /&lt;
+     * In JAS F is a map.
+     * @param n integer to factor.
+     * @param a map F of pairs of numbers (p,e) with p**e divides n and p is probable prime.
+     */
+    public static void factorsPollardRho(java.math.BigInteger n, SortedMap<java.math.BigInteger, Integer> F) {
+        java.math.BigInteger factor;
+        java.math.BigInteger temp = n;
+        int iterationCounter = 0;
+        Integer count;
+        while (!temp.isProbablePrime(32)) {
+            factor = rho(temp);
+            if (factor.equals(temp)) {
+                if (iterationCounter++ > 4) {
+                    break;
+                }
+            } else {
+                iterationCounter = 1;
+            }
+            count = F.get(factor);
+            if (count == null) {
+                F.put(factor, 1);
+            } else {
+                F.put(factor, count + 1);
+            }
+            temp = temp.divide(factor);
+        }
+        count = F.get(temp);
+        if (count == null) {
+            F.put(temp, 1);
+        } else {
+            F.put(temp, count + 1);
+        }
+    }
+
+
+    /**
+     * Random number generator.
+     */
+    //final static SecureRandom random = new SecureRandom();
+    final static Random random = new Random();
+
+
+    /**
+     * Search cycle with Pollards rho algorithm x**2 + c mod n. 
+     * n is a positive integer.
+     * &gt;br /&lt;
+     * @param n integer test.
+     * @return x-y with gcd(x-y, n) = 1.
+     */
+    static java.math.BigInteger rho(java.math.BigInteger n) {
+        java.math.BigInteger divisor;
+        java.math.BigInteger c = new java.math.BigInteger(n.bitLength(), random);
+        java.math.BigInteger x = new java.math.BigInteger(n.bitLength(), random);
+        java.math.BigInteger xx = x;
+
+        do {
+            x = x.multiply(x).mod(n).add(c).mod(n);
+            xx = xx.multiply(xx).mod(n).add(c).mod(n);
+            xx = xx.multiply(xx).mod(n).add(c).mod(n);
+            divisor = x.subtract(xx).gcd(n);
+        } while (divisor.equals(java.math.BigInteger.ONE));
+
+        return divisor;
+    }
+
+
+    /**
+     * Integer factorization using Pollards rho algorithm. n is a positive integer. F is a list (q(1),
+     * q(2),...,q(h)) of the prime factors of n, q(1) le q(2) le ... le q(h),
+     * with n equal to the product of the q(i).
+     * &gt;br /&lt;
+     * In JAS F is a map.
+     * @param n integer to factor.
+     * @param a map F of pairs of numbers (p,e) with p**e divides n and p is probable prime.
+     */
+    public static void factorsPollardRho(long n, SortedMap<Long, Integer> F) {
+        long factor;
+        long temp = n;
+        int iterationCounter = 0;
+        Integer count;
+        while (! new java.math.BigInteger(""+temp).isProbablePrime(32) ) {
+            factor = rho(temp);
+            if (factor == temp) {
+                if (iterationCounter++ > 4) {
+                    break;
+                }
+            } else {
+                iterationCounter = 1;
+            }
+            count = F.get(factor);
+            if (count == null) {
+                F.put(factor, 1);
+            } else {
+                F.put(factor, count + 1);
+            }
+            temp = temp / factor;
+        }
+        count = F.get(temp);
+        if (count == null) {
+            F.put(temp, 1);
+        } else {
+            F.put(temp, count + 1);
+        }
+        //System.out.println("random = " + random.getAlgorithm());
+    }
+
+
+    /**
+     * Search cycle with Pollards rho algorithm x**2 + c mod n. 
+     * n is a positive integer.
+     * &gt;br /&lt;
+     * @param n integer test.
+     * @return x-y with gcd(x-y, n) = 1.
+     */
+    static long rho(long n) {
+        long divisor;
+        int bl = java.math.BigInteger.valueOf(n).bitLength();
+        long c = new java.math.BigInteger(bl, random).longValue(); // .abs()
+        long x = new java.math.BigInteger(bl, random).longValue(); // .abs()
+        ModLongRing ring = new ModLongRing(n);
+        ModLong cm = new ModLong(ring,c);
+        ModLong xm = new ModLong(ring,x);
+        ModLong xxm = xm;
+
+        do {
+            xm = xm.multiply(xm).sum(cm);
+            xxm = xxm.multiply(xxm).sum(cm);
+            xxm = xxm.multiply(xxm).sum(cm);
+            divisor = gcd( xm.getVal() - xxm.getVal(), n);
+        } while (divisor == 1L);
+
+        return divisor;
+    }
+
+
+    static long gcd(long a, long b) {
+        return BigInteger.valueOf(a).gcd(BigInteger.valueOf(b)).getVal().longValue();
     }
 
 }
