@@ -5,19 +5,16 @@
 package edu.jas.ufd;
 
 
+import edu.jas.arith.BigInteger;
+import edu.jas.kern.ComputerThreads;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.PolyUtil;
+import edu.jas.poly.TermOrder;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import edu.jas.arith.BigInteger;
-import edu.jas.arith.BigRational;
-
-import edu.jas.kern.ComputerThreads;
-
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.TermOrder;
-import edu.jas.poly.PolyUtil;
 
 
 /**
@@ -69,49 +66,13 @@ public class PolyUfdUtilTest extends TestCase {
     GenPolynomialRing<GenPolynomial<BigInteger>> rfac;
 
 
-    BigInteger ai;
+    BigInteger ai, bi, ci, di, ei;
 
 
-    BigInteger bi;
+    GenPolynomial<BigInteger> a, b, c, d, e;
 
 
-    BigInteger ci;
-
-
-    BigInteger di;
-
-
-    BigInteger ei;
-
-
-    GenPolynomial<BigInteger> a;
-
-
-    GenPolynomial<BigInteger> b;
-
-
-    GenPolynomial<BigInteger> c;
-
-
-    GenPolynomial<BigInteger> d;
-
-
-    GenPolynomial<BigInteger> e;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> ar;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> br;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> cr;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> dr;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> er;
+    GenPolynomial<GenPolynomial<BigInteger>> ar, br, cr, dr, er;
 
 
     int rl = 5;
@@ -203,20 +164,21 @@ public class PolyUfdUtilTest extends TestCase {
     public void testRecursivePseudoDivisionDense() {
         String[] cnames = new String[] { "x" };
         String[] mnames = new String[] { "t" };
-        dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),to,cnames);
+        dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), to, cnames);
         //GenPolynomialRing<BigRational> rdfac = new GenPolynomialRing<BigRational>(new BigRational(1),dfac);
         rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(dfac, to, mnames);
         QuotientRing<BigInteger> qfac = new QuotientRing<BigInteger>(dfac);
-        GenPolynomialRing<Quotient<BigInteger>> rqfac = new GenPolynomialRing<Quotient<BigInteger>>(qfac,rfac);
+        GenPolynomialRing<Quotient<BigInteger>> rqfac = new GenPolynomialRing<Quotient<BigInteger>>(qfac,
+                        rfac);
         //System.out.println("\ndfac  = " + dfac);
         //System.out.println("rdfac = " + rdfac);
         //System.out.println("rfac  = " + rfac);
         //System.out.println("qfac  = " + qfac);
         //System.out.println("rqfac = " + rqfac);
 
-        ar = rfac.random(kl, 2*ll, el+4, q);
+        ar = rfac.random(kl, 2 * ll, el + 4, q);
         //ar = rfac.parse(" ( -2 x^4 + 8 x^3 - 5 x^2 - x + 6  ) t^3 + ( 2 x - 8  ) t^2 - ( 13 x^4 - 13 x^3 + x^2 + 2 x - 13  ) ");
-        br = rfac.random(kl, 2*ll, el+2, q);
+        br = rfac.random(kl, 2 * ll, el + 2, q);
         //ar = ar.multiply(br);
         //br = rfac.parse(" ( 13 ) t^3 + ( 3 x^2 - 6  ) t - ( 13 x^4 - 8 x^3 + 10 x^2 + 22 x + 21  ) ");
         //System.out.println("ar   = " + ar);
@@ -231,10 +193,14 @@ public class PolyUfdUtilTest extends TestCase {
         //System.out.println("assertTrue lc^n a = q b + r: " + t);
         //assertTrue("lc^n a = q b + r: " + cr, t); // ?? not always true
 
-        GenPolynomial<Quotient<BigInteger>> ap = PolyUfdUtil.<BigInteger> quotientFromIntegralCoefficients(rqfac,ar);
-        GenPolynomial<Quotient<BigInteger>> bp = PolyUfdUtil.<BigInteger> quotientFromIntegralCoefficients(rqfac,br);
-        GenPolynomial<Quotient<BigInteger>> cp = PolyUfdUtil.<BigInteger> quotientFromIntegralCoefficients(rqfac,cr);
-        GenPolynomial<Quotient<BigInteger>> dp = PolyUfdUtil.<BigInteger> quotientFromIntegralCoefficients(rqfac,dr);
+        GenPolynomial<Quotient<BigInteger>> ap = PolyUfdUtil
+                        .<BigInteger> quotientFromIntegralCoefficients(rqfac, ar);
+        GenPolynomial<Quotient<BigInteger>> bp = PolyUfdUtil
+                        .<BigInteger> quotientFromIntegralCoefficients(rqfac, br);
+        GenPolynomial<Quotient<BigInteger>> cp = PolyUfdUtil
+                        .<BigInteger> quotientFromIntegralCoefficients(rqfac, cr);
+        GenPolynomial<Quotient<BigInteger>> dp = PolyUfdUtil
+                        .<BigInteger> quotientFromIntegralCoefficients(rqfac, dr);
         //System.out.println("ap  = " + ap);
         //System.out.println("bp  = " + bp);
         //System.out.println("cp  = " + cp);
@@ -251,9 +217,9 @@ public class PolyUfdUtilTest extends TestCase {
 
         assertEquals("ap = qp bp + rp: ", ap, rhs);
 
-        assertEquals("cp = rp: ", rp.monic(), cp.monic() );
+        assertEquals("cp = rp: ", rp.monic(), cp.monic());
         //System.out.println("dp = qp: " + qp.monic().equals(dp.monic()) );
-        assertEquals("dp = qp: ", qp.monic(), dp.monic() ); // ??
+        assertEquals("dp = qp: ", qp.monic(), dp.monic()); // ??
     }
 
 
@@ -263,20 +229,21 @@ public class PolyUfdUtilTest extends TestCase {
     public void testRecursivePseudoDivisionSparse() {
         String[] cnames = new String[] { "x" };
         String[] mnames = new String[] { "t" };
-        dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),to,cnames);
+        dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), to, cnames);
         //GenPolynomialRing<BigRational> rdfac = new GenPolynomialRing<BigRational>(new BigRational(1),dfac);
         rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(dfac, to, mnames);
         QuotientRing<BigInteger> qfac = new QuotientRing<BigInteger>(dfac);
-        GenPolynomialRing<Quotient<BigInteger>> rqfac = new GenPolynomialRing<Quotient<BigInteger>>(qfac,rfac);
+        GenPolynomialRing<Quotient<BigInteger>> rqfac = new GenPolynomialRing<Quotient<BigInteger>>(qfac,
+                        rfac);
         //System.out.println("\ndfac  = " + dfac);
         //System.out.println("rdfac = " + rdfac);
         //System.out.println("rfac  = " + rfac);
         //System.out.println("qfac  = " + qfac);
         //System.out.println("rqfac = " + rqfac);
 
-        ar = rfac.random(kl, 2*ll, el+4, q);
+        ar = rfac.random(kl, 2 * ll, el + 4, q);
         //ar = rfac.parse(" ( -2 x^4 + 8 x^3 - 5 x^2 - x + 6  ) t^3 + ( 2 x - 8  ) t^2 - ( 13 x^4 - 13 x^3 + x^2 + 2 x - 13  ) ");
-        br = rfac.random(kl, 2*ll, el+2, q);
+        br = rfac.random(kl, 2 * ll, el + 2, q);
         //ar = ar.multiply(br);
         //br = rfac.parse(" ( 13 ) t^3 + ( 3 x^2 - 6  ) t - ( 13 x^4 - 8 x^3 + 10 x^2 + 22 x + 21  ) ");
         //System.out.println("ar   = " + ar);
@@ -291,10 +258,14 @@ public class PolyUfdUtilTest extends TestCase {
         //System.out.println("assertTrue lc^n a = q b + r: " + t);
         //assertTrue("lc^n a = q b + r: " + cr, t); // ?? not always true
 
-        GenPolynomial<Quotient<BigInteger>> ap = PolyUfdUtil.<BigInteger> quotientFromIntegralCoefficients(rqfac,ar);
-        GenPolynomial<Quotient<BigInteger>> bp = PolyUfdUtil.<BigInteger> quotientFromIntegralCoefficients(rqfac,br);
-        GenPolynomial<Quotient<BigInteger>> cp = PolyUfdUtil.<BigInteger> quotientFromIntegralCoefficients(rqfac,cr);
-        GenPolynomial<Quotient<BigInteger>> dp = PolyUfdUtil.<BigInteger> quotientFromIntegralCoefficients(rqfac,dr);
+        GenPolynomial<Quotient<BigInteger>> ap = PolyUfdUtil
+                        .<BigInteger> quotientFromIntegralCoefficients(rqfac, ar);
+        GenPolynomial<Quotient<BigInteger>> bp = PolyUfdUtil
+                        .<BigInteger> quotientFromIntegralCoefficients(rqfac, br);
+        GenPolynomial<Quotient<BigInteger>> cp = PolyUfdUtil
+                        .<BigInteger> quotientFromIntegralCoefficients(rqfac, cr);
+        GenPolynomial<Quotient<BigInteger>> dp = PolyUfdUtil
+                        .<BigInteger> quotientFromIntegralCoefficients(rqfac, dr);
         //System.out.println("ap  = " + ap);
         //System.out.println("bp  = " + bp);
         //System.out.println("cp  = " + cp);
@@ -311,9 +282,9 @@ public class PolyUfdUtilTest extends TestCase {
 
         assertEquals("ap = qp bp + rp: ", ap, rhs);
 
-        assertEquals("cp = rp: ", rp.monic(), cp.monic() );
+        assertEquals("cp = rp: ", rp.monic(), cp.monic());
         //System.out.println("dp = qp: " + qp.monic().equals(dp.monic()) );
-        assertEquals("dp = qp: ", qp.monic(), dp.monic() ); // ??
+        assertEquals("dp = qp: ", qp.monic(), dp.monic()); // ??
     }
 
 }
