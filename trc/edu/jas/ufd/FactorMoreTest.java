@@ -5,13 +5,10 @@
 package edu.jas.ufd;
 
 
+import java.util.List;
 import java.util.SortedMap;
 
 import org.apache.log4j.BasicConfigurator;
-
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
@@ -21,6 +18,10 @@ import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -106,7 +107,7 @@ public class FactorMoreTest extends TestCase {
 
         String[] vars = new String[] { "x" };
         GenPolynomialRing<GenPolynomial<BigRational>> pqfac = new GenPolynomialRing<GenPolynomial<BigRational>>(
-                pfac, 1, to, vars);
+                        pfac, 1, to, vars);
         GenPolynomial<GenPolynomial<BigRational>> x = pqfac.univariate(0);
         GenPolynomial<GenPolynomial<BigRational>> x2 = pqfac.univariate(0, 2);
 
@@ -173,7 +174,7 @@ public class FactorMoreTest extends TestCase {
 
         String[] vars = new String[] { "x" };
         GenPolynomialRing<GenPolynomial<BigInteger>> pqfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(
-                pfac, 1, to, vars);
+                        pfac, 1, to, vars);
         GenPolynomial<GenPolynomial<BigInteger>> x = pqfac.univariate(0);
         GenPolynomial<GenPolynomial<BigInteger>> x2 = pqfac.univariate(0, 2);
 
@@ -242,8 +243,8 @@ public class FactorMoreTest extends TestCase {
         FactorQuotient<BigRational> fac = new FactorQuotient<BigRational>(qfac);
 
         String[] vars = new String[] { "x" };
-        GenPolynomialRing<Quotient<BigRational>> pqfac = new GenPolynomialRing<Quotient<BigRational>>(qfac,
-                1, to, vars);
+        GenPolynomialRing<Quotient<BigRational>> pqfac = new GenPolynomialRing<Quotient<BigRational>>(qfac, 1,
+                        to, vars);
         GenPolynomial<Quotient<BigRational>> x = pqfac.univariate(0);
         GenPolynomial<Quotient<BigRational>> x2 = pqfac.univariate(0, 2);
 
@@ -311,7 +312,7 @@ public class FactorMoreTest extends TestCase {
 
         String[] vars = new String[] { "x" };
         GenPolynomialRing<Quotient<ModInteger>> pqfac = new GenPolynomialRing<Quotient<ModInteger>>(qfac, 1,
-                to, vars);
+                        to, vars);
         GenPolynomial<Quotient<ModInteger>> x = pqfac.univariate(0);
         GenPolynomial<Quotient<ModInteger>> x2 = pqfac.univariate(0, 2);
 
@@ -360,6 +361,73 @@ public class FactorMoreTest extends TestCase {
             assertTrue("prod(factor(a)) = a", tt);
         }
         ComputerThreads.terminate();
+    }
+
+
+    /**
+     * Test cyclotomic polynomial factorization.
+     */
+    public void testCyclotomicPolynomialFactorization() {
+        TermOrder to = new TermOrder(TermOrder.INVLEX);
+        BigInteger cfac = new BigInteger(1);
+        String[] qvars = new String[] { "x" };
+        GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, 1, to, qvars);
+        System.out.println("pfac = " + pfac.toScript());
+
+        GenPolynomial<BigInteger> r = pfac.univariate(0, 2).subtract(pfac.getONE());
+        System.out.println("r = " + r);
+
+        GenPolynomial<BigInteger> q = r.inflate(3);
+        System.out.println("q = " + q);
+
+        GenPolynomial<BigInteger> h;
+        h = CycloUtil.cyclotomicPolynomial(pfac, 100L);
+        System.out.println("h = " + h);
+
+        h = CycloUtil.cyclotomicPolynomial(pfac, 258L);
+        System.out.println("h = " + h);
+
+        List<GenPolynomial<BigInteger>> H;
+        H = CycloUtil.cyclotomicDecompose(pfac, 100L);
+        System.out.println("H = " + H);
+
+        H = CycloUtil.cyclotomicDecompose(pfac, 258L);
+        System.out.println("H = " + H);
+        System.out.println("");
+
+
+        FactorAbstract<BigInteger> fac = new FactorInteger();
+        //Map<GenPolynomial<BigInteger>, Long> F;
+
+        h = pfac.univariate(0, 20).subtract(pfac.getONE());
+        System.out.println("hc = " + h);
+        H = CycloUtil.cyclotomicFactors(h);
+        System.out.println("H = " + H);
+        System.out.println("factors = " + fac.factors(h));
+        System.out.println("H = " + H);
+        System.out.println("");
+
+        h = pfac.univariate(0, 20).sum(pfac.getONE());
+        System.out.println("hc = " + h);
+        H = CycloUtil.cyclotomicFactors(h);
+        System.out.println("H = " + H);
+        System.out.println("factors = " + fac.factors(h));
+        System.out.println("H = " + H);
+
+        for (long n = 1L; n < 1L; n++) {
+            h = CycloUtil.cyclotomicPolynomial(pfac, n);
+            //F = fac.factors(h);
+            //System.out.println("factors = " + F.size());
+            System.out.println("h(" + n + ") = " + h);
+        }
+
+        //h = pfac.univariate(0,2).subtract(pfac.getONE());
+        h = pfac.univariate(0, 2).sum(pfac.getONE());
+        h = pfac.parse("x**16 + x**14 - x**10 - x**8 - x**6 + x**2 + 1"); // yes
+        //h = pfac.parse("x**16 + x**14 - x**10 + x**8 - x**6 + x**2 + 1");  // no
+        System.out.println("hc = " + h);
+        System.out.println("is Cyclotomic(hc) = " + CycloUtil.isCyclotomicPolynomial(h));
+
     }
 
 }
