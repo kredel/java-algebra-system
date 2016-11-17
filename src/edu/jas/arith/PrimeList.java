@@ -14,9 +14,9 @@ import java.util.List;
  * List of big primes. Provides an Iterator for generating prime numbers.
  * Similar to ALDES/SAC2 SACPOL.PRIME list.
  * 
- * @author Heinz Kredel 
- * @see Knuth vol 2,page 390, for list of known primes. See
- *      also ALDES/SAC2 SACPOL.PRIME
+ * @author Heinz Kredel
+ * @see Knuth vol 2,page 390, for list of known primes. See also ALDES/SAC2
+ *      SACPOL.PRIME
  */
 
 public final class PrimeList implements Iterable<java.math.BigInteger> {
