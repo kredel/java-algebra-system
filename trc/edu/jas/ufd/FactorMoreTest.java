@@ -421,9 +421,9 @@ public class FactorMoreTest extends TestCase {
             System.out.println("h(" + n + ") = " + h);
         }
 
-        //h = pfac.univariate(0,2).subtract(pfac.getONE());
+        h = pfac.univariate(0,258).subtract(pfac.getONE());
         h = pfac.univariate(0, 2).sum(pfac.getONE());
-        h = pfac.parse("x**16 + x**14 - x**10 - x**8 - x**6 + x**2 + 1"); // yes
+        //h = pfac.parse("x**16 + x**14 - x**10 - x**8 - x**6 + x**2 + 1"); // yes
         //h = pfac.parse("x**16 + x**14 - x**10 + x**8 - x**6 + x**2 + 1");  // no
         System.out.println("hc = " + h);
         System.out.println("is Cyclotomic(hc) = " + CycloUtil.isCyclotomicPolynomial(h));

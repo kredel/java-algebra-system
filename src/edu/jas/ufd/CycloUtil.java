@@ -141,6 +141,7 @@ public class CycloUtil {
         if (p.length() != 2) { // other coefficients must be zero
             return H;
         }
+        // only case: x**n +/- 1
         //F = _dup_cyclotomic_decompose(n, K)
         //if not K.is_one(tc_f):
         //   return F
@@ -182,6 +183,9 @@ public class CycloUtil {
         if (!lc.isONE() || (!tc.isONE() && !tc.negate().isONE())) {
             //System.out.println("!lc.isONE() || (!tc.isONE() && !tc.negate().isONE())");
             return false;
+        }
+        if (p.length() == 2) { // other coefficients must be zero
+            return true;
         }
         // ignore: if not irreducible:
         GenPolynomialRing<BigInteger> ring = p.ring;
