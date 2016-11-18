@@ -78,10 +78,6 @@ public class CycloUtil {
         GenPolynomialRing<BigInteger> pfac = ring;
         if (pfac == null) {
             throw new IllegalArgumentException("ring must be non null");
-            //TermOrder to = new TermOrder(TermOrder.INVLEX);
-            //BigInteger cfac = new BigInteger(1);
-            //String[] qvars = new String[] { "x" };
-            //pfac = new GenPolynomialRing<BigInteger>(cfac, 1, to, qvars);
         }
         GenPolynomial<BigInteger> q = pfac.univariate(0).subtract(pfac.getONE());
         //System.out.println("q = " + q);
@@ -101,7 +97,7 @@ public class CycloUtil {
                 GenPolynomial<BigInteger> g = h.inflate(p).divide(h);
                 Q.add(g);
             }
-            System.out.println("Q = " + Q);
+            //System.out.println("Q = " + Q);
             H.addAll(Q);
             //for i in xrange(1, k):
             //    Q = [ dup_inflate(q, p, K) for q in Q ]
@@ -112,7 +108,7 @@ public class CycloUtil {
                     GenPolynomial<BigInteger> g = h.inflate(p);
                     P.add(g);
                 }
-                System.out.println("P = " + P);
+                //System.out.println("P = " + P);
                 Q = P;
                 H.addAll(P);
             }
@@ -206,19 +202,16 @@ public class CycloUtil {
                 h.doPutToMap(e2, m.c);
             }
         }
-        //h = h.abs();
-        System.out.println("g = " + g);
-        System.out.println("h = " + h);
         //g = dup_sqr(dup_strip(g), K)
         //h = dup_sqr(dup_strip(h), K)
         g = g.multiply(g);
         h = h.multiply(h);
-        System.out.println("g = " + g);
-        System.out.println("h = " + h);
+        //System.out.println("g = " + g);
+        //System.out.println("h = " + h);
         //F = dup_sub(g, dup_lshift(h, 1, K), K)
         ExpVector on = ExpVector.create(1, 0, 1L);
         f = g.subtract(h.multiply(on)).abs();
-        System.out.println("f = " + f + ", f==p: " + f.equals(p));
+        //System.out.println("f = " + f + ", f==p: " + f.equals(p));
         //if F == f: return True 
         if (f.equals(p)) {
             return true;
@@ -237,7 +230,7 @@ public class CycloUtil {
             }
         }
         g = g.abs();
-        System.out.println("g = " + g + ", f==g: " + f.equals(g));
+        //System.out.println("g = " + g + ", f==g: " + f.equals(g));
         if (f.equals(g) && isCyclotomicPolynomial(g)) {
             return true;
         }
@@ -246,7 +239,7 @@ public class CycloUtil {
         engine = SquarefreeFactory.getImplementation(lc);
         GenPolynomial<BigInteger> G;
         G = engine.squarefreePart(f);
-        System.out.println("G = " + G + ", G^2==f: " + G.multiply(G).equals(f));
+        //System.out.println("G = " + G + ", G^2==f: " + G.multiply(G).equals(f));
         //if dup_sqr(G, K) == F and dup_cyclotomic_p(G, K):
         //   return True
         if (G.multiply(G).equals(f) && isCyclotomicPolynomial(G)) {

@@ -149,7 +149,7 @@ public class PrimeTest extends TestCase {
         int i = primes.size() - 1;
         //System.out.println("primes = ");
         for (java.math.BigInteger p : primes) {
-            System.out.println(i + " = " + p + ", ");
+            //System.out.println(i + " = " + p + ", ");
             long pl = p.longValue();
             if (pl < PrimeInteger.BETA) {
                 assertTrue("p.isPrime: ", PrimeInteger.isPrime(pl));

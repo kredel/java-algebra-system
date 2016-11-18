@@ -94,7 +94,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
      */
     public boolean isIrreducible(GenPolynomial<BigInteger> P) {
         if (P.ring.nvar == 1) {
-	    if (isIrreducibleEisenstein(P)) {
+            if (isIrreducibleEisenstein(P)) {
                 return true;
             } // else unknown
         }
@@ -127,7 +127,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         BigInteger tc = P.trailingBaseCoefficient().abs();
         SortedMap<Long, Integer> fac = PrimeInteger.factors(lcont);
         for (Long p : fac.keySet()) {
-	    BigInteger pi = BigInteger.valueOf(p);
+            BigInteger pi = BigInteger.valueOf(p);
             if (!lc.remainder(pi).isZERO() && !tc.remainder(pi.power(2)).isZERO() ) {
                 logger.info("isIrreducibleEisenstein: fac = " + fac + ", lc = " + lc + ", tc = " + tc);
                 return true;
@@ -179,7 +179,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             logger.info("cyclotomicFactors: #factors = " + factors.size());
             return normalizeFactorization(factors);
         }
-	//}
+        //}
         // compute norm
         BigInteger an = P.maxNorm();
         BigInteger ac = P.leadingBaseCoefficient();

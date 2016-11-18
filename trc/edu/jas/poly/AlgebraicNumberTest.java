@@ -232,7 +232,9 @@ public class AlgebraicNumberTest extends TestCase {
 
         try {
             b = a.inverse();
-            fail("invertible " + a);
+            if (!a.isONE()) {
+                fail("invertible " + a);
+            }
         } catch (AlgebraicNotInvertibleException expected) {
             //ok
             //expected.printStackTrace();
