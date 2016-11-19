@@ -257,6 +257,10 @@ public final class PrimeInteger {
      * @return true if n is prime, else false.
      */
     public static boolean isPrime(long n) {
+        java.math.BigInteger N = java.math.BigInteger.valueOf(n);
+        if (N.isProbablePrime(N.bitLength())) {
+            return true;
+        }
         SortedMap<Long, Integer> F = factors(n);
         return (F.size() == 1) && F.values().contains(1);
     }
@@ -338,7 +342,7 @@ public final class PrimeInteger {
                     Integer e = F.get(ML);
                     if (e == null) {
                         e = 1;
-                    } else {
+                    } else { // will not happen
                         e++;
                     }
                     F.put(ML, e); // = MASSTOR.COMP( ML, F );
@@ -368,24 +372,38 @@ public final class PrimeInteger {
                 }
             }
         } while (PL != 1L);
-        // fixme: the ILPDS should also be in the while loop, was already wrong in SAC2/Aldes and MAS
+        // fixed: the ILPDS should also be in the while loop, was already wrong in SAC2/Aldes and MAS
         // seems to be okay for integers smaller than beta
-        // search large prime factors
+        java.math.BigInteger N = java.math.BigInteger.valueOf(ML);
+        if (N.isProbablePrime(N.bitLength())) {
+            F.put(ML, 1);
+            return F;
+        }
         AL = BL;
         BL = CL;
-        //ILPDS( ML, AL, BL, PL, ML );
         logger.info("largePrimeDivisorSearch: a = " + AL + ", b = " + BL + ", m = " + ML);
-        PL = largePrimeDivisorSearch(ML, AL, BL);
-        if (PL != 1L) {
-            Integer e = F.get(PL);
-            if (e == null) {
-                e = 1;
-            } else {
-                e++;
+        // search large prime factors
+        do {
+            //ILPDS( ML, AL, BL, PL, ML );
+            PL = largePrimeDivisorSearch(ML, AL, BL);
+            if (PL != 1L) {
+                Integer e = F.get(PL);
+                if (e == null) {
+                    e = 1;
+                } else {
+                    e++;
+                }
+                F.put(PL, e);
+                ML = ML / PL;
+                AL = PL;
+                CL = Roots.sqrtInt(BigInteger.valueOf(ML)).getVal().longValue(); //SACI.ISQRT( ML, CL, TL );
+                //System.out.println("CL = " + CL + ", ML = " + ML + ", CL^2 = " + (CL*CL));
+                BL = Math.min(BL, CL);
+                if (AL > BL) {
+                    PL = 1L;
+                }
             }
-            F.put(PL, e);
-            ML = ML / PL;
-        }
+        } while (PL != 1L);
         //System.out.println("PL = " + PL + ", ML = " + ML);
         if (ML != 1L) {
             Integer e = F.get(ML);
@@ -414,62 +432,8 @@ public final class PrimeInteger {
         if (n > BETA) {
             throw new UnsupportedOperationException("factors(long) only for longs less than BETA: " + BETA);
         }
-        long ML, PL, AL, BL, CL, MLP, RL, SL;
         SortedMap<Long, Integer> F = new TreeMap<Long, Integer>();
-        SortedMap<Long, Integer> FP;
-        // search small prime factors
-        ML = smallPrimeDivisors(n, F); // , F, ML
-        if (ML == 1L) {
-            return F;
-        }
-        //System.out.println("F = " + F);
-        // search medium prime factors
-        AL = IMPDS_MIN;
-        do {
-            MLP = ML - 1;
-            RL = (new ModLong(new ModLongRing(ML), 3)).power(MLP).getVal(); //(3**MLP) mod ML; 
-            //SACM.MIEXP( ML, 3, MLP );
-            if (RL == 1L) {
-                FP = factors(MLP);
-                SL = primalityTestSelfridge(ML, MLP, FP);
-                if (SL == 1) {
-                    logger.info("primalityTestSelfridge: FP = " + FP);
-                    Integer e = F.get(ML);
-                    if (e == null) {
-                        e = 1;
-                    } else {
-                        e++;
-                    }
-                    F.put(ML, e); // = MASSTOR.COMP( ML, F );
-                    //tocheck: F = MASSTOR.INV( F );
-                    return F;
-                }
-            }
-            CL = Roots.sqrtInt(new BigInteger(ML)).getVal().longValue(); //SACI.ISQRT( ML, CL, TL );
-            //System.out.println("CL = " + CL + ", ML = " + ML + ", CL^2 = " + (CL*CL));
-            BL = Math.max(IMPDS_MAX, CL / 3L);
-            if (AL > BL) {
-                PL = 1L;
-            } else {
-                logger.info("mediumPrimeDivisorSearch: a = " + AL + ", b = " + BL);
-                PL = mediumPrimeDivisorSearch(ML, AL, BL); //, PL, ML );
-                //System.out.println("PL = " + PL);
-                if (PL != 1L) {
-                    AL = PL;
-                    Integer e = F.get(PL);
-                    if (e == null) {
-                        e = 1;
-                    } else {
-                        e++;
-                    }
-                    F.put(PL, e); //F = MASSTOR.COMP( PL, F );
-                    ML = ML / PL;
-                }
-            }
-        } while (PL != 1L);
-        // search large prime factors
-        logger.info("largePrimeDivisorSearch: m = " + ML);
-        factorsPollardRho(ML, F); // , F, ML
+        factorsPollardRho(n, F); 
         return F;
     }
 
@@ -654,7 +618,7 @@ public final class PrimeInteger {
             J2Y = XL * XL;
             YLP = J2Y - n;
             //System.out.println("YLP = " + YLP + ", J2Y = " + J2Y);
-            YL = Roots.sqrtInt(new BigInteger(YLP)).getVal().longValue(); // SACI.ISQRT( YLP, YL, TL );
+            YL = Roots.sqrtInt(BigInteger.valueOf(YLP)).getVal().longValue(); // SACI.ISQRT( YLP, YL, TL );
             //System.out.println("YL = sqrt(YLP) = " + YL);
             TL = YLP - YL * YL;
             if (TL == 0L) {
@@ -992,7 +956,7 @@ public final class PrimeInteger {
         long temp = n;
         int iterationCounter = 0;
         Integer count;
-        while (!new java.math.BigInteger("" + temp).isProbablePrime(32)) {
+        while (!java.math.BigInteger.valueOf(temp).isProbablePrime(32)) {
             factor = rho(temp);
             if (factor == temp) {
                 if (iterationCounter++ > 4) {
