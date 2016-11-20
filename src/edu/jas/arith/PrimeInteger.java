@@ -22,9 +22,9 @@ import org.apache.log4j.Logger;
 /**
  * Integer prime factorization. Code from ALDES/SAC2 and MAS module SACPRIM.
  * 
- * @see ALDES/SAC2 or MAS code in SACPRIM
- * @see symja org/matheclipse/core/expression/Primality.java for Pollard
- *      algorithm
+ * See ALDES/SAC2 or MAS code in SACPRIM.
+ * See Symja <code>org/matheclipse/core/expression/Primality.java</code> for Pollard
+ *      algorithm.
  * @author Heinz Kredel
  */
 
@@ -70,10 +70,10 @@ public final class PrimeInteger {
      * Digit prime generator. K and m are positive beta-integers. L is the list
      * (p(1),...,p(r)) of all prime numbers p such that m le p lt m+2*K, with
      * p(1) lt p(2) lt ... lt p(r).
+     * See also SACPRIM.DPGEN.
      * @param m start integer
      * @param K number of integers
      * @return the list L of prime numbers p with m &le; p &lt; m + 2*K.
-     * @see SACPRIM.DPGEN
      */
     public static List<Long> smallPrimes(long m, int K) {
         int k;
@@ -194,15 +194,15 @@ public final class PrimeInteger {
      * Integer small prime divisors. n is a positive integer. F is a list of
      * primes (q(1),q(2),...,q(h)), h non-negative, q(1) le q(2) le ... lt q(h),
      * such that n is equal to m times the product of the q(i) and m is not
-     * divisible by any prime in SMPRM. Either m=1 or m gt 1,000,000. &gt;br
-     * /&lt; In JAS F is a map and m=1 or m &gt; 4.000.000 and m is contined in
+     * divisible by any prime in SMPRM. Either m=1 or m gt 1,000,000. &lt;br
+     * /&gt; In JAS F is a map and m=1 or m &gt; 4.000.000 and m is contined in
      * F with value 0.
+     * See also SACPRIM.ISPD.
      * @param n integer to factor.
-     * @param a map F of pairs of prime numbers and multiplicities (p,e). a map
+     * @param F a map of pairs of prime numbers and multiplicities (p,e). a map
      *            F of pairs of prime numbers and multiplicities (p,e) with p**e
      *            divides n and e maximal.
      * @return n/F a factor of n not divisible by any prime number in SMPRM.
-     * @see SACPRIM.ISPD
      */
     public static long smallPrimeDivisors(long n, SortedMap<Long, Integer> F) {
         //SortedMap<Long, Integer> F = new TreeMap<Long, Integer>();
@@ -270,10 +270,10 @@ public final class PrimeInteger {
      * Test prime factorization. n is a positive integer. r is true, if n =
      * product_i(pi**ei) and each pi is prime, else false.
      * @param n integer to test.
-     * @param a map F of pairs of prime numbers (p,e) with p**e divides n.
+     * @param F a map of pairs of prime numbers (p,e) with p**e divides n.
      * @return true if n = product_i(pi**ei) and each pi is prime, else false.
      */
-    public static boolean isPrimeFactorization(long NL, SortedMap<Long, Integer> F) {
+    public static boolean isPrimeFactorization(long n, SortedMap<Long, Integer> F) {
         long f = 1L;
         for (Map.Entry<Long, Integer> m : F.entrySet()) {
             long p = m.getKey();
@@ -284,7 +284,7 @@ public final class PrimeInteger {
             long pe = java.math.BigInteger.valueOf(p).pow(e).longValue();
             f *= pe;
         }
-        return NL == f;
+        return n == f;
     }
 
 
@@ -292,7 +292,7 @@ public final class PrimeInteger {
      * Test factorization. n is a positive integer. r is true, if n =
      * product_i(pi**ei), else false.
      * @param n integer to test.
-     * @param a map F of pairs of numbers (p,e) with p**e divides n.
+     * @param F a map of pairs of numbers (p,e) with p**e divides n.
      * @return true if n = product_i(pi**ei), else false.
      */
     public static boolean isFactorization(long n, SortedMap<Long, Integer> F) {
@@ -310,10 +310,10 @@ public final class PrimeInteger {
     /**
      * Integer factorization. n is a positive integer. F is a list (q(1),
      * q(2),...,q(h)) of the prime factors of n, q(1) le q(2) le ... le q(h),
-     * with n equal to the product of the q(i). &gt;br /&lt; In JAS F is a map.
+     * with n equal to the product of the q(i). &lt;br /&gt; In JAS F is a map.
+     * See also SACPRIM.IFACT.
      * @param n integer to factor.
-     * @param a map F of pairs of numbers (p,e) with p**e divides n.
-     * @see SACPRIM.IFACT
+     * @return a map of pairs of numbers (p,e) with p**e divides n.
      */
     public static SortedMap<Long, Integer> factors(long n) {
         if (n > BETA) {
@@ -421,12 +421,12 @@ public final class PrimeInteger {
     /**
      * Integer factorization, Pollard rho algorithm. n is a positive integer. F
      * is a list (q(1), q(2),...,q(h)) of the prime factors of n, q(1) le q(2)
-     * le ... le q(h), with n equal to the product of the q(i). &gt;br /&lt; In
+     * le ... le q(h), with n equal to the product of the q(i). &lt;br /&gt; In
      * JAS F is a map.
+     * See also SACPRIM.IFACT.
      * @param n integer to factor.
-     * @param a map F of pairs of numbers (p,e) with p**e divides n and p
+     * @return a map F of pairs of numbers (p,e) with p**e divides n and p
      *            probable prime.
-     * @see SACPRIM.IFACT
      */
     public static SortedMap<Long, Integer> factorsPollard(long n) {
         if (n > BETA) {
@@ -443,11 +443,11 @@ public final class PrimeInteger {
      * such that a le b le n and n has no positive divisors less than a. If n
      * has a prime divisor in the closed interval from a to b then p is the
      * least such prime and q=n/p. Otherwise p=1 and q=n.
+     * See also SACPRIM.IMPDS.
      * @param n integer to factor.
      * @param a lower bound.
      * @param b upper bound.
      * @return p a prime factor of n, with a &le; p &le; b &lt; n.
-     * @see SACPRIM.IMPDS
      */
     public static long mediumPrimeDivisorSearch(long n, long a, long b) {
         List<Long> LP;
@@ -496,12 +496,12 @@ public final class PrimeInteger {
      * If the existence of such a root is discovered then m is prime and s=1. If
      * it is discovered that no such root exists then m is not a prime and s=-1.
      * Otherwise the primality of m remains uncertain and s=0.
+     * See also SACPRIM.ISPT.
      * @param m integer to test.
      * @param mp integer m-1.
-     * @param a map F of pairs (p,e), with a prime p, multiplicity e and with
+     * @param F a map of pairs (p,e), with a prime p, multiplicity e and with
      *            p**e divides mp.
      * @return s = -1 (not prime), 0 (unknown) or 1 (prime).
-     * @see SACPRIM.ISPT
      */
     public static int primalityTestSelfridge(long m, long mp, SortedMap<Long, Integer> F) {
         long AL, BL, QL, QL1, MLPP, PL1, PL;
@@ -558,11 +558,11 @@ public final class PrimeInteger {
      * of the integer n, with a le p le b. If such a p is found then np=n/p,
      * otherwise p=1 and np=n. A modular version of fermats method is used, and
      * the search goes from a to b.
+     * See also SACPRIM.ILPDS.
      * @param n integer to factor.
      * @param a lower bound.
      * @param b upper bound.
      * @return p a prime factor of n, with a &le; p &le; b &lt; n.
-     * @see SACPRIM.ILPDS
      */
     public static long largePrimeDivisorSearch(long n, long a, long b) { // return PL, NLP ignored
         if (n > BETA) {
@@ -650,10 +650,10 @@ public final class PrimeInteger {
      * Fermat residue list, single modulus. m is a positive beta-integer. a
      * belongs to Z(m). L is a list of the distinct b in Z(m) such that b**2-a
      * is a square in Z(m).
+     * See also SACPRIM.FRLSM.
      * @param m integer to factor.
      * @param a element of Z mod m.
      * @return Lp a list of Fermat residues for modul m.
-     * @see SACPRIM.FRLSM
      */
     public static List<ModLong> residueListFermatSingle(long m, long a) {
         List<ModLong> Lp;
@@ -697,9 +697,9 @@ public final class PrimeInteger {
      * than 17. m is a positive beta-integer and L is an ordered list of the
      * elements of Z(m) such that if x**2-n is a square then x is congruent to a
      * (modulo m) for some a in L.
+     * See also SACPRIM.FRESL.
      * @param n integer to factor.
      * @return Lp a list of Fermat residues for different modules.
-     * @see SACPRIM.FRESL
      */
     public static List<ModLong> residueListFermat(long n) {
         List<ModLong> L, L1;
@@ -856,8 +856,8 @@ public final class PrimeInteger {
 
     /**
      * Compute units of Z sub 210.
+     * See also SACPRIM.UZ210.
      * @return list of units of Z sub 210.
-     * @see SACPRIM.UZ210
      */
     public static List<Long> getUZ210() {
         List<Long> UZ = new ArrayList<Long>();
@@ -876,10 +876,10 @@ public final class PrimeInteger {
      * Integer factorization using Pollards rho algorithm. n is a positive
      * integer. F is a list (q(1), q(2),...,q(h)) of the prime factors of n,
      * q(1) le q(2) le ... le q(h), with n equal to the product of the q(i).
-     * &gt;br /&lt; In JAS F is a map.
+     * &lt;br /&gt; In JAS F is a map.
      * @param n integer to factor.
-     * @param a map F of pairs of numbers (p,e) with p**e divides n and p is
-     *            probable prime.
+     * @param F a map of pairs of numbers (p,e) with p**e divides n and p is
+     *            probable prime, F is modified.
      */
     public static void factorsPollardRho(java.math.BigInteger n, SortedMap<java.math.BigInteger, Integer> F) {
         java.math.BigInteger factor;
@@ -921,7 +921,7 @@ public final class PrimeInteger {
 
     /**
      * Search cycle with Pollards rho algorithm x**2 + c mod n. n is a positive
-     * integer. &gt;br /&lt;
+     * integer. &lt;br /&gt;
      * @param n integer test.
      * @return x-y with gcd(x-y, n) = 1.
      */
@@ -930,14 +930,12 @@ public final class PrimeInteger {
         java.math.BigInteger c = new java.math.BigInteger(n.bitLength(), random);
         java.math.BigInteger x = new java.math.BigInteger(n.bitLength(), random);
         java.math.BigInteger xx = x;
-
         do {
             x = x.multiply(x).mod(n).add(c).mod(n);
             xx = xx.multiply(xx).mod(n).add(c).mod(n);
             xx = xx.multiply(xx).mod(n).add(c).mod(n);
             divisor = x.subtract(xx).gcd(n);
         } while (divisor.equals(java.math.BigInteger.ONE));
-
         return divisor;
     }
 
@@ -946,10 +944,10 @@ public final class PrimeInteger {
      * Integer factorization using Pollards rho algorithm. n is a positive
      * integer. F is a list (q(1), q(2),...,q(h)) of the prime factors of n,
      * q(1) le q(2) le ... le q(h), with n equal to the product of the q(i).
-     * &gt;br /&lt; In JAS F is a map.
+     * &lt;br /&gt; In JAS F is a map.
      * @param n integer to factor.
-     * @param a map F of pairs of numbers (p,e) with p**e divides n and p is
-     *            probable prime.
+     * @param F a map of pairs of numbers (p,e) with p**e divides n and p is
+     *            probable prime, F is modified.
      */
     public static void factorsPollardRho(long n, SortedMap<Long, Integer> F) {
         long factor;
@@ -985,9 +983,9 @@ public final class PrimeInteger {
 
     /**
      * Search cycle with Pollards rho algorithm x**2 + c mod n. n is a positive
-     * integer. &gt;br /&lt;
+     * integer. c is a random constant.
      * @param n integer test.
-     * @return x-y with gcd(x-y, n) = 1.
+     * @return x-y with gcd(x-y, n) == 1.
      */
     static long rho(long n) {
         long divisor;
@@ -998,14 +996,12 @@ public final class PrimeInteger {
         ModLong cm = new ModLong(ring, c);
         ModLong xm = new ModLong(ring, x);
         ModLong xxm = xm;
-
         do {
             xm = xm.multiply(xm).sum(cm);
             xxm = xxm.multiply(xxm).sum(cm);
             xxm = xxm.multiply(xxm).sum(cm);
             divisor = gcd(xm.getVal() - xxm.getVal(), n);
         } while (divisor == 1L);
-
         return divisor;
     }
 
