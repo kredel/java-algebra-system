@@ -194,14 +194,12 @@ public final class PrimeInteger {
      * Integer small prime divisors. n is a positive integer. F is a list of
      * primes (q(1),q(2),...,q(h)), h non-negative, q(1) le q(2) le ... lt q(h),
      * such that n is equal to m times the product of the q(i) and m is not
-     * divisible by any prime in SMPRM. Either m=1 or m gt 1,000,000. &lt;br
-     * /&gt; In JAS F is a map and m=1 or m &gt; 4.000.000 and m is contined in
-     * F with value 0.
+     * divisible by any prime in SMPRM. Either m=1 or m gt 1,000,000. 
+     * <br /> In JAS F is a map and m=1 or m &gt; 4.000.000.
      * See also SACPRIM.ISPD.
      * @param n integer to factor.
-     * @param F a map of pairs of prime numbers and multiplicities (p,e). a map
-     *            F of pairs of prime numbers and multiplicities (p,e) with p**e
-     *            divides n and e maximal.
+     * @param F a map of pairs of prime numbers and multiplicities (p,e) with p**e
+     *            divides n and e maximal, F is modified.
      * @return n/F a factor of n not divisible by any prime number in SMPRM.
      */
     public static long smallPrimeDivisors(long n, SortedMap<Long, Integer> F) {
@@ -556,7 +554,7 @@ public final class PrimeInteger {
      * Integer large prime divisor search. n is a positive integer with no prime
      * divisors less than 17. 1 le a le b le n. A search is made for a divisor p
      * of the integer n, with a le p le b. If such a p is found then np=n/p,
-     * otherwise p=1 and np=n. A modular version of fermats method is used, and
+     * otherwise p=1 and np=n. A modular version of Fermats method is used, and
      * the search goes from a to b.
      * See also SACPRIM.ILPDS.
      * @param n integer to factor.
