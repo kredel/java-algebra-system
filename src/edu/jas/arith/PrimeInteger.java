@@ -310,7 +310,7 @@ public final class PrimeInteger {
     /**
      * Integer factorization. n is a positive integer. F is a list (q(1),
      * q(2),...,q(h)) of the prime factors of n, q(1) le q(2) le ... le q(h),
-     * with n equal to the product of the q(i). &lt;br /&gt; In JAS F is a map.
+     * with n equal to the product of the q(i). <br /> In JAS F is a map.
      * See also SACPRIM.IFACT.
      * @param n integer to factor.
      * @return a map of pairs of numbers (p,e) with p**e divides n.
@@ -421,7 +421,7 @@ public final class PrimeInteger {
     /**
      * Integer factorization, Pollard rho algorithm. n is a positive integer. F
      * is a list (q(1), q(2),...,q(h)) of the prime factors of n, q(1) le q(2)
-     * le ... le q(h), with n equal to the product of the q(i). &lt;br /&gt; In
+     * le ... le q(h), with n equal to the product of the q(i). <br /> In
      * JAS F is a map.
      * See also SACPRIM.IFACT.
      * @param n integer to factor.
@@ -499,8 +499,8 @@ public final class PrimeInteger {
      * See also SACPRIM.ISPT.
      * @param m integer to test.
      * @param mp integer m-1.
-     * @param F a map of pairs (p,e), with a prime p, multiplicity e and with
-     *            p**e divides mp.
+     * @param F a map of pairs (p,e), with primes p, multiplicity e and with
+     *            p**e divides mp and e maximal.
      * @return s = -1 (not prime), 0 (unknown) or 1 (prime).
      */
     public static int primalityTestSelfridge(long m, long mp, SortedMap<Long, Integer> F) {
@@ -876,7 +876,7 @@ public final class PrimeInteger {
      * Integer factorization using Pollards rho algorithm. n is a positive
      * integer. F is a list (q(1), q(2),...,q(h)) of the prime factors of n,
      * q(1) le q(2) le ... le q(h), with n equal to the product of the q(i).
-     * &lt;br /&gt; In JAS F is a map.
+     * <br /> In JAS F is a map.
      * @param n integer to factor.
      * @param F a map of pairs of numbers (p,e) with p**e divides n and p is
      *            probable prime, F is modified.
@@ -921,7 +921,7 @@ public final class PrimeInteger {
 
     /**
      * Search cycle with Pollards rho algorithm x**2 + c mod n. n is a positive
-     * integer. &lt;br /&gt;
+     * integer. <br />
      * @param n integer test.
      * @return x-y with gcd(x-y, n) = 1.
      */
@@ -944,7 +944,7 @@ public final class PrimeInteger {
      * Integer factorization using Pollards rho algorithm. n is a positive
      * integer. F is a list (q(1), q(2),...,q(h)) of the prime factors of n,
      * q(1) le q(2) le ... le q(h), with n equal to the product of the q(i).
-     * &lt;br /&gt; In JAS F is a map.
+     * <br /> In JAS F is a map.
      * @param n integer to factor.
      * @param F a map of pairs of numbers (p,e) with p**e divides n and p is
      *            probable prime, F is modified.
