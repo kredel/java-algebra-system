@@ -14,7 +14,7 @@
 </p>
 
 <!--
-<dt>2015, 1,  </dt>
+<dt>2017, 1,  </dt>
 <dd> 
 </dd>
 <code></code>
@@ -23,17 +23,29 @@
 
 <dl>
 
-<dt>2016, October </dt> <!-- 2.6.5xxx --> 
+<dt>2016, November </dt> <!-- 2.6.5xxx -->
 <dd> 
 
- New Gr&ouml;bner walk algorithm in class
- <code>GroebnerBaseWalk</code>. Extensions to existing code for marked
- polynomials used in Gr&ouml;bner walk.
+ New class with integer factorization, partly from previous SAC2/Aldes
+ and MAS codes, mixed with probable prime test from
+ <code>java.math</code>. Main method is <code>factors()</code> in
+ class <code>PrimeInteger</code>. 
 
- Bug fixes and small improvements, more use of Java 8 features.
+ Cyclotomic polynomial construction and decomposition, similar to
+ Sympy. Improvements in Gr&ouml;bner walk implementation to make
+ source and target term order selectable. Small improvements and bug
+ fixes.
 
 </dd>
 
+
+<dt>2016, October </dt> <!-- 2.6.5616 --> 
+<dd> 
+ New Gr&ouml;bner walk algorithm in class
+ <code>GroebnerBaseWalk</code>. Extensions to existing code for marked
+ polynomials used in Gr&ouml;bner walk.
+ Bug fixes and small improvements, more use of Java 8 features.
+</dd>
 
 <dt>2016, August </dt> <!-- 2.6.5591 --> 
 <dd> 
@@ -2601,7 +2613,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Sun Oct  9 23:07:39 CEST 2016
+Last modified: Sun Nov 20 17:01:34 CET 2016
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
