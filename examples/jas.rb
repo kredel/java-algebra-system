@@ -2624,6 +2624,8 @@ java_import "edu.jas.gbufd.PseudoReductionSeq";
 java_import "edu.jas.gbufd.RGroebnerBaseSeq";
 java_import "edu.jas.gbufd.RReductionSeq";
 java_import "edu.jas.gbufd.CharacteristicSetWu";
+java_import "edu.jas.gbufd.GroebnerBaseFGLM";
+java_import "edu.jas.gbufd.GroebnerBaseWalk";
 
 java_import "edu.jas.ufd.GreatestCommonDivisor";
 java_import "edu.jas.ufd.PolyUfdUtil";

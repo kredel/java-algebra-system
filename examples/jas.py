@@ -45,6 +45,7 @@ from edu.jas.gbufd       import GroebnerBasePseudoRecSeq, GroebnerBasePseudoSeq,
                                 WordGroebnerBasePseudoSeq, WordPseudoReductionSeq,\
                                 SolvableGroebnerBasePseudoRecSeq, WordGroebnerBasePseudoRecSeq,\
                                 RGroebnerBasePseudoSeq, RGroebnerBaseSeq, RReductionSeq,\
+                                GroebnerBaseFGLM, GroebnerBaseWalk,\
                                 CharacteristicSetWu,\
                                 SolvableSyzygySeq, SyzygySeq
 #from edu.jas.gbmod       import ModGroebnerBaseSeq, ModSolvableGroebnerBaseSeq
