@@ -155,10 +155,16 @@ public class GroebnerBaseFGLM<C extends GcdRingElem<C>> extends GroebnerBaseAbst
         if (Gp.size() == 0) {
             return Gp;
         }
-        if (Gp.size() == 1) {
+        if (Gp.size() == 1) { // also dimension -1
             GenPolynomial<C> p = pfac.copy(Gp.get(0)); // change term order
             G.add(p);
             return G;
+        }
+        // check dimension zero
+        int z = commonZeroTest(Gp);
+        if (z > 0) {
+            logger.error("use Groebner Walk algorithm");
+            throw new IllegalArgumentException("ideal(G) not zero dimensional, dim =  " + z);
         }
         // compute invlex Groebner base via FGLM
         G = convGroebnerToLex(Gp);
@@ -174,11 +180,6 @@ public class GroebnerBaseFGLM<C extends GcdRingElem<C>> extends GroebnerBaseAbst
     public List<GenPolynomial<C>> convGroebnerToLex(List<GenPolynomial<C>> groebnerBasis) {
         if (groebnerBasis == null || groebnerBasis.size() == 0) {
             throw new IllegalArgumentException("G may not be null or empty");
-        }
-        int z = commonZeroTest(groebnerBasis);
-        if (z != 0) {
-            logger.error("use Groebner Walk algorithm");
-            throw new IllegalArgumentException("ideal(G) not zero dimensional, dim =  " + z);
         }
         //Polynomial ring of input Groebnerbasis G
         GenPolynomialRing<C> ring = groebnerBasis.get(0).ring;
@@ -213,7 +214,7 @@ public class GroebnerBaseFGLM<C extends GcdRingElem<C>> extends GroebnerBaseAbst
         GenPolynomial<GenPolynomial<C>> q = rfac.getZERO().sum(cpfac.univariate(0));
 
         //Main while loop
-        z = -1;
+        int z = -1;
         t = lMinterm(H, t);
         while (t != null) {
             //System.out.println("t = " + t);
