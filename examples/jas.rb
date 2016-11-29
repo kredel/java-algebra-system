@@ -120,12 +120,19 @@ def nameFromValue(i)
     ivs = ivs.gsub(",","");
     ivs = ivs.gsub("(","");
     ivs = ivs.gsub(")","");
+    ivs = ivs.gsub("+","");
+    #ivs = ivs.gsub("*","");
     ivs = ivs.gsub("/","div");
     #ivs = ivs.gsub("|","div");
     ivs = ivs.gsub("{","");
     ivs = ivs.gsub("}","");
     ivs = ivs.gsub("[","");
     ivs = ivs.gsub("]","");
+    i = ivs.index("BigO");
+    if i #and i > 0
+       ivs = ivs[0,i];
+       #puts "BigO index = #{i}";
+    end
     if ivs == "1"
        ivs = "one"
     end
@@ -2041,8 +2048,8 @@ order = term order or weight matrix.
         if order.is_a? Array
             to = TermOrder.reverseWeight(order);
         end
-        tring = GenPolynomialRing.new(cf,nv,to,names);
-        @ring = tring;
+        @ring = GenPolynomialRing.new(cf,nv,to,names);
+        #@ring = tring;
         super("",@ring) 
     end
 
@@ -4984,9 +4991,13 @@ Ring constructor.
             if cofac.is_a? RingElem
                 cofac = cofac.elem;
             end
+            if names.is_a? String
+               names = GenPolynomialTokenizer.variableList(names);
+            end
             if truncate == nil
                 @ring = MultiVarPowerSeriesRing.new(cofac,names);
             else
+                nv = names.size;
                 @ring = MultiVarPowerSeriesRing.new(cofac,names.size,truncate,names);
             end
         else
