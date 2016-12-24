@@ -232,6 +232,33 @@ public class PrimeTest extends TestCase {
 
 
     /**
+     * Test factorize large integer.
+     */
+    public void testFactorLargeInteger() {
+        SortedMap<java.math.BigInteger, Integer> ff;
+ 
+        long n = 2 * 3 * 5 * 7 * 2 * 9 * 10 * 19 * 811;
+        java.math.BigInteger N = java.math.BigInteger.valueOf(n);
+        ff = PrimeInteger.factors(N);
+        //System.out.println("ff = " + ff);
+        assertEquals("factors: ", ff.size(), 6);
+        for (java.math.BigInteger p : ff.keySet()) {
+            assertTrue("isPrime: " + p, p.isProbablePrime(16));
+        }
+
+        //N = N.multiply( PrimeList.getLongPrime(59, 55) );
+        N = N.multiply( PrimeList.getLongPrime(59, 19) );
+        N = N.multiply( PrimeList.getLongPrime(61, 1) );
+        //System.out.println("N = " + N);
+        ff = PrimeInteger.factors(N); // was not correct
+        //System.out.println("ff = " + ff);
+        for (java.math.BigInteger p : ff.keySet()) {
+            assertTrue("isPrime: " + p, p.isProbablePrime(32));
+        }
+    }
+
+
+    /**
      * Test random integers.
      */
     public void testRandom() {

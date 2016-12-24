@@ -249,6 +249,64 @@ public final class PrimeInteger {
 
 
     /**
+     * Integer small prime divisors. n is a positive integer. F is a list of
+     * primes (q(1),q(2),...,q(h)), h non-negative, q(1) le q(2) le ... lt q(h),
+     * such that n is equal to m times the product of the q(i) and m is not
+     * divisible by any prime in SMPRM. Either m=1 or m gt 1,000,000. 
+     * <br /> In JAS F is a map and m=1 or m &gt; 4.000.000.
+     * See also SACPRIM.ISPD.
+     * @param n integer to factor.
+     * @param F a map of pairs of prime numbers and multiplicities (p,e) with p**e
+     *            divides n and e maximal, F is modified.
+     * @return n/F a factor of n not divisible by any prime number in SMPRM.
+     */
+    public static java.math.BigInteger smallPrimeDivisors(java.math.BigInteger n, SortedMap<java.math.BigInteger, Integer> F) {
+        List<Long> LP;
+        java.math.BigInteger QL = java.math.BigInteger.ZERO;
+        java.math.BigInteger PL;
+        java.math.BigInteger RL = java.math.BigInteger.ZERO;
+        boolean TL;
+
+        java.math.BigInteger ML = n;
+        LP = SMPRM; //smallPrimes(2, 500); //SMPRM;
+        TL = false;
+        int i = 0;
+        do {
+            PL = java.math.BigInteger.valueOf( LP.get(i) );
+            java.math.BigInteger[] xx = ML.divideAndRemainder(PL);
+            QL = xx[0]; //ML.divide(PL);
+            RL = xx[1]; //ML.remainder(PL);
+            if (RL.equals(java.math.BigInteger.ZERO)) {
+                Integer e = F.get(PL);
+                if (e == null) {
+                    e = 1;
+                } else {
+                    e++;
+                }
+                F.put(PL, e);
+                ML = QL;
+            } else {
+                i++;
+            }
+            TL = (QL.compareTo(PL) <= 0);
+        } while (!(TL || (i >= LP.size())));
+        //System.out.println("TL = " + TL + ", ML = " + ML + ", PL = " + PL + ", QL = " + QL);
+        if (TL && (!ML.equals(java.math.BigInteger.ONE))) {
+            Integer e = F.get(ML);
+            if (e == null) {
+                e = 1;
+            } else {
+                e++;
+            }
+            F.put(ML, e);
+            ML = java.math.BigInteger.ONE;
+        }
+        //F.put(ML, 0); // hack
+        return ML;
+    }
+
+
+    /**
      * Integer primality test. n is a positive integer. r is true, if n is
      * prime, else false.
      * @param n integer to test.
@@ -854,6 +912,35 @@ public final class PrimeInteger {
             }
         }
         return UZ;
+    }
+
+
+    /**
+     * Integer factorization. n is a positive integer. F is a list (q(1),
+     * q(2),...,q(h)) of the prime factors of n, q(1) le q(2) le ... le q(h),
+     * with n equal to the product of the q(i). <br /> In JAS F is a map.
+     * See also SACPRIM.IFACT, uses Pollards rho method.
+     * @param n integer to factor.
+     * @return a map of pairs of numbers (p,e) with p**e divides n.
+     */
+    public static SortedMap<java.math.BigInteger, Integer> factors(java.math.BigInteger n) {
+        java.math.BigInteger b = java.math.BigInteger.valueOf(BETA);
+        SortedMap<java.math.BigInteger, Integer> F = new TreeMap<java.math.BigInteger, Integer>();
+        if (n.compareTo(b) > 0) {
+            n = smallPrimeDivisors(n, F);
+            if (n.compareTo(b) > 0) {
+                logger.info("run factorsPollardRho on n = " + n);
+                factorsPollardRho(n, F); 
+                return F;
+            }
+        }
+        long s = n.longValue();
+        SortedMap<Long, Integer> ff = factors(s); // useless 2nd smallPrimeDiv search
+        for (Map.Entry<Long, Integer> m : ff.entrySet()) {
+	    java.math.BigInteger mm = java.math.BigInteger.valueOf(m.getKey());
+            F.put(mm, m.getValue());            
+        }
+        return F;
     }
 
 
