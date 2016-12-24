@@ -370,6 +370,9 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
      * @return script compatible representation for the ExpVector.
      */
     public String toScript(ExpVector e) {
+        if (e == null) {
+	    return "null";
+        }
         if (vars != null) {
             return e.toScript(vars);
         }
