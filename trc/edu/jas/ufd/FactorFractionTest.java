@@ -108,7 +108,11 @@ public class FactorFractionTest extends TestCase {
 
         SortedMap<Quotient<BigRational>, Long> sm = engine.factors(c);
         //System.out.println("factors(c) = " + sm);
-        assertTrue("#facs >= 1", sm.size() >= 1);
+        if (c.isZERO()) {
+           assertTrue("#facs == 0", sm.size() == 0);
+        } else {
+           assertTrue("#facs >= 1", sm.size() >= 1);
+        }
 
         for (Quotient<BigRational> q : sm.keySet()) {
 	     assertTrue("irred(q): " + q, engine.isIrreducible(q));
