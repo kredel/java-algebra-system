@@ -5,6 +5,7 @@
 package edu.jas.poly;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -316,13 +317,36 @@ public class TermOrderByName {
 
 
     /**
-     * 
      * Construct weight TermOrder.
+     * 
      * @param w weight matrix
      * @return constructed term order
      */
     public final static TermOrder weightOrder(long[][] w) {
         return TermOrder.reverseWeight(w);
+    }
+
+
+    /**
+     * Construct weight TermOrder.
+     * 
+     * @param wa weight matrix as List
+     * @return constructed term order
+     */
+    public final static TermOrder weightOrder(List<List<Long>> wa) {
+        int n = wa.size();
+        long[][] w = new long[n][];
+        for (int i = 0; i < n; i++) {
+            List<Long> row = wa.get(i);
+            int m = row.size();
+            long[] wi = new long[m];
+            for (int j = 0; j < m; j++) {
+                wi[j] = row.get(j); 
+            }
+            w[i] = wi;
+        }
+        //return TermOrder.reverseWeight(w);
+        return weightOrder(w);
     }
 
 

@@ -281,7 +281,7 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
             if (debug || (iter % iterPrint == 0)) {
                 logger.info("lift(" + iter + ") inOG, new GB: " + G);
             }
-            if (G.size() == 1) {
+            if (G.size() == 1) { // will not happen
                 GenPolynomial<C> p = ufac.copy(G.get(0)); // change term order
                 G.clear();
                 G.add(p);
