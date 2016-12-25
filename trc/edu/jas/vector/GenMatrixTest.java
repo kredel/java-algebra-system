@@ -60,10 +60,10 @@ public class GenMatrixTest extends TestCase {
     float q = 0.5f;
 
 
-    int rows = 3;
+    int rows = 3+2;
 
 
-    int cols = 3;
+    int cols = 3+2;
 
 
     @Override
@@ -119,6 +119,18 @@ public class GenMatrixTest extends TestCase {
         }
         b = mfac.fromList(ml);
         assertEquals("a == fromList(a.matrix)", a, b);
+
+        GenMatrix<BigRational> e = mfac.generate( (i,j) -> cfac.getZERO() );
+        //System.out.println("e = " + e);
+        assertTrue("e == 0: ", e.isZERO());
+
+        e = mfac.generate( (i,j) -> i == j ? cfac.getONE() : cfac.getZERO() );
+        //System.out.println("e = " + e);
+        assertTrue("e == 1: ", e.isONE());
+
+        e = mfac.generate( (i,j) -> i == j+1 ? cfac.getONE() : cfac.getZERO() );
+        //System.out.println("e = " + e);
+        assertTrue("e**"+mfac.cols+" == 0: ", e.power(mfac.cols).isZERO());
     }
 
 
