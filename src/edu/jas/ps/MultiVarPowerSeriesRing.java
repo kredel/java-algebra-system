@@ -12,6 +12,7 @@ import java.util.BitSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.ExpVector;
@@ -714,6 +715,25 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
                 } else {
                     c = coFac.getZERO();
                 }
+                return c;
+            }
+        });
+    }
+
+
+    /**
+     * Generate a power series via lambda expression.
+     * @param gener lambda expression.
+     * @return a generated power series.
+     */
+    public MultiVarPowerSeries<C> generate(final Function<ExpVector,C> gener) {
+        return new MultiVarPowerSeries<C>(this, new MultiVarCoefficients<C>(this) {
+
+
+            @Override
+            public C generate(ExpVector i) {
+                // cached coefficients returned by get
+                C c = gener.apply(i);
                 return c;
             }
         });

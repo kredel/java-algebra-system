@@ -47,24 +47,13 @@ public class UnivPowerSeriesTest extends TestCase {
     }
 
 
-    //private final static int bitlen = 100;
+    BigRational cfac;
+
 
     UnivPowerSeriesRing<BigRational> fac;
 
 
-    UnivPowerSeries<BigRational> a;
-
-
-    UnivPowerSeries<BigRational> b;
-
-
-    UnivPowerSeries<BigRational> c;
-
-
-    UnivPowerSeries<BigRational> d;
-
-
-    UnivPowerSeries<BigRational> e;
+    UnivPowerSeries<BigRational> a, b, c, d, e;
 
 
     int kl = 10;
@@ -76,7 +65,8 @@ public class UnivPowerSeriesTest extends TestCase {
     @Override
     protected void setUp() {
         a = b = c = d = e = null;
-        fac = new UnivPowerSeriesRing<BigRational>(new BigRational(1));
+        cfac = new BigRational(1);
+        fac = new UnivPowerSeriesRing<BigRational>(cfac);
     }
 
 
@@ -84,6 +74,7 @@ public class UnivPowerSeriesTest extends TestCase {
     protected void tearDown() {
         a = b = c = d = e = null;
         fac = null;
+        cfac = null;
     }
 
 
@@ -95,10 +86,16 @@ public class UnivPowerSeriesTest extends TestCase {
         c = fac.getONE();
         assertTrue("isZERO( c )", !c.isZERO());
         assertTrue("isONE( c )", c.isONE());
+        //System.out.println("c = " + c);
 
         d = fac.getZERO();
         assertTrue("isZERO( d )", d.isZERO());
         assertTrue("isONE( d )", !d.isONE());
+
+        e = fac.generate( (i) -> i == 0 ? cfac.getONE() : cfac.getZERO() );
+        //System.out.println("e = " + e);
+        assertTrue("isZERO( e )", !e.isZERO());
+        assertTrue("isONE( e )", e.isONE());
     }
 
 

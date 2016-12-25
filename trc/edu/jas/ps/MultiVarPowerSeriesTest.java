@@ -52,25 +52,13 @@ public class MultiVarPowerSeriesTest extends TestCase {
     }
 
 
+    BigRational cfac;
+
+
     MultiVarPowerSeriesRing<BigRational> fac;
 
 
-    MultiVarPowerSeries<BigRational> a;
-
-
-    MultiVarPowerSeries<BigRational> b;
-
-
-    MultiVarPowerSeries<BigRational> c;
-
-
-    MultiVarPowerSeries<BigRational> d;
-
-
-    MultiVarPowerSeries<BigRational> e;
-
-
-    MultiVarPowerSeries<BigRational> f;
+    MultiVarPowerSeries<BigRational> a, b, c, d, e, f;
 
 
     int rl = 2;
@@ -86,7 +74,8 @@ public class MultiVarPowerSeriesTest extends TestCase {
     protected void setUp() {
         a = b = c = d = e = null;
         String[] vars = new String[] { "x", "y" };
-        fac = new MultiVarPowerSeriesRing<BigRational>(new BigRational(1), rl, vars);
+        cfac = new BigRational(1);
+        fac = new MultiVarPowerSeriesRing<BigRational>(cfac, rl, vars);
         //System.out.println("fac = " + fac);
         //System.out.println("fac = " + fac.toScript());
     }
@@ -101,7 +90,6 @@ public class MultiVarPowerSeriesTest extends TestCase {
 
     /**
      * Test MultiVarCoefficients.
-     * 
      */
     public void testCoefficients() {
         BigRational cf = new BigRational(0);
@@ -163,7 +151,6 @@ public class MultiVarPowerSeriesTest extends TestCase {
 
     /**
      * Test constructor and generators.
-     * 
      */
     public void testConstruction() {
         //System.out.println("fac = " + fac);
@@ -196,6 +183,10 @@ public class MultiVarPowerSeriesTest extends TestCase {
         b = fac.fromInteger(java.math.BigInteger.ONE);
         assertEquals("1 == fromInteger(1) ", b, c);
 
+        e = fac.generate( (i) -> i.isZERO() ? cfac.getONE() : cfac.getZERO() );
+        //System.out.println("e = " + e);
+        assertTrue("isZERO( e )", !e.isZERO());
+        assertTrue("isONE( e )", e.isONE());
     }
 
 
@@ -214,7 +205,6 @@ public class MultiVarPowerSeriesTest extends TestCase {
 
     /**
      * Test MultiVarCoefficients in power series.
-     * 
      */
     public void testCoefficientsInPS() {
 
@@ -268,7 +258,6 @@ public class MultiVarPowerSeriesTest extends TestCase {
 
     /**
      * Test addition.
-     * 
      */
     public void testAddition() {
         a = fac.random(kl);
@@ -296,7 +285,6 @@ public class MultiVarPowerSeriesTest extends TestCase {
 
     /**
      * Test multiplication.
-     * 
      */
     public void testMultiplication() {
         a = fac.random(kl);
@@ -348,7 +336,6 @@ public class MultiVarPowerSeriesTest extends TestCase {
 
     /**
      * Test distributive law.
-     * 
      */
     public void testDistributive() {
         a = fac.random(kl, q);
@@ -364,7 +351,6 @@ public class MultiVarPowerSeriesTest extends TestCase {
 
     /**
      * Test inverse.
-     * 
      */
     public void testInverse() {
         a = fac.getONE();
@@ -398,7 +384,6 @@ public class MultiVarPowerSeriesTest extends TestCase {
 
     /**
      * Test fix point constructions.
-     * 
      */
     public void testFixpoints() {
         int r = 0;
@@ -429,7 +414,6 @@ public class MultiVarPowerSeriesTest extends TestCase {
 
     /**
      * Test reductum.
-     * 
      */
     public void testReductum() {
         a = fac.random(kl);
@@ -488,7 +472,6 @@ public class MultiVarPowerSeriesTest extends TestCase {
 
     /**
      * Test polynomial constructions.
-     * 
      */
     public void testPolynomial() {
         GenPolynomialRing<BigRational> pr = fac.polyRing();
@@ -512,7 +495,6 @@ public class MultiVarPowerSeriesTest extends TestCase {
 
     /**
      * Test gcd.
-     * 
      */
     public void testGcd() {
         a = fac.random(kl);
@@ -538,7 +520,6 @@ public class MultiVarPowerSeriesTest extends TestCase {
 
     /**
      * Test Taylor series.
-     * 
      */
     public void testTaylor() {
         BigRational ar = new BigRational(5);
@@ -596,7 +577,6 @@ public class MultiVarPowerSeriesTest extends TestCase {
 
     /**
      * Test evaluation.
-     * 
      */
     public void testEvaluation() {
         a = fac.random(kl, q);
