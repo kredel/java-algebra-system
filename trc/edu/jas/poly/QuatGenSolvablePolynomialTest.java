@@ -68,7 +68,7 @@ public class QuatGenSolvablePolynomialTest extends TestCase {
     int ll = 7;
 
 
-    int el = 5;
+    int el = 3;
 
 
     float q = 0.33f;
@@ -118,7 +118,7 @@ public class QuatGenSolvablePolynomialTest extends TestCase {
 
         List<GenPolynomial<BigQuaternion>> gens = fac.generators();
         //System.out.println("gens = " + gens);
-        assertTrue("#gens = 4+6 ", gens.size() == 10);
+        assertTrue("#gens = 4+rl ", gens.size() == (4+rl));
     }
 
 
@@ -129,6 +129,9 @@ public class QuatGenSolvablePolynomialTest extends TestCase {
         for (int i = 0; i < 3; i++) {
             //a = fac.random(ll);
             a = fac.random(kl, ll + i, el + (5 - i), q);
+            if (a.isZERO()) {
+                continue;
+            }
             assertTrue("length( a" + i + " ) <> 0", a.length() >= 0);
             assertTrue(" not isZERO( a" + i + " )", !a.isZERO());
             assertTrue(" not isONE( a" + i + " )", !a.isONE());
@@ -189,11 +192,10 @@ public class QuatGenSolvablePolynomialTest extends TestCase {
         //System.out.println("d = " + d);
         e = (GenSolvablePolynomial<BigQuaternion>) d.subtract(c);
         assertTrue("!isZERO( a*b-b*a ) " + e, !e.isZERO());
-
-        assertTrue("a*b = b*a", !c.equals(d));
+        //assertTrue("a*b = b*a", !c.equals(d));
         //assertEquals("a*b = b*a",c,d);
 
-        c = fac.random(kl, ll, el, q); //fac.random(ll);
+        c = fac.random(kl, ll, el, q);
         //System.out.println("c = " + c);
         d = (GenSolvablePolynomial<BigQuaternion>) a.multiply(b.multiply(c));
         e = (GenSolvablePolynomial<BigQuaternion>) (a.multiply(b)).multiply(c);
@@ -202,7 +204,7 @@ public class QuatGenSolvablePolynomialTest extends TestCase {
         //System.out.println("d-e = " + d.subtract(c) );
 
         assertEquals("a(bc) = (ab)c", d, e);
-        assertTrue("a(bc) = (ab)c", d.equals(e));
+        //assertTrue("a(bc) = (ab)c", d.equals(e));
 
         BigQuaternion x = a.leadingBaseCoefficient().inverse();
         c = (GenSolvablePolynomial<BigQuaternion>) a.monic();

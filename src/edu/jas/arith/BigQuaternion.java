@@ -829,8 +829,8 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
      */
     public BigQuaternion inverse() {
         BigRational a = norm().re.inverse();
-        return new BigQuaternion(re.multiply(a), im.multiply(a.negate()), jm.multiply(a.negate()),
-                        km.multiply(a.negate()));
+        return new BigQuaternion(re.multiply(a), im.negate().multiply(a), jm.negate().multiply(a),
+                        km.negate().multiply(a));
     }
 
 

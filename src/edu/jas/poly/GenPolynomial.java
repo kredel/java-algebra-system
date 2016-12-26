@@ -1533,10 +1533,7 @@ public class GenPolynomial<C extends RingElem<C>>
      * @return this*s.
      */
     public GenPolynomial<C> multiply(C s) {
-        if (s == null) {
-            return ring.getZERO();
-        }
-        if (s.isZERO()) {
+        if (s == null||s.isZERO()) {
             return ring.getZERO();
         }
         if (this.isZERO()) {
@@ -1550,12 +1547,45 @@ public class GenPolynomial<C extends RingElem<C>>
         }
         GenPolynomial<C> p = ring.getZERO().copy();
         SortedMap<ExpVector, C> pv = p.val;
-        for (Map.Entry<ExpVector, C> m1 : val.entrySet()) {
-            C c1 = m1.getValue();
-            ExpVector e1 = m1.getKey();
-            C c = c1.multiply(s); // check non zero if not domain
+        for (Map.Entry<ExpVector, C> m : val.entrySet()) {
+            C a = m.getValue();
+            ExpVector e = m.getKey();
+            C c = a.multiply(s); // check non zero if not domain
             if (!c.isZERO()) {
-                pv.put(e1, c); // or m1.setValue( c )
+                pv.put(e, c); // or m1.setValue( c )
+            }
+        }
+        return p;
+    }
+
+
+    /**
+     * GenPolynomial left multiplication. Left product with coefficient
+     * ring element.
+     * @param s coefficient.
+     * @return s*this.
+     */
+    public GenPolynomial<C> multiplyLeft(C s) {
+        if (s == null||s.isZERO()) {
+            return ring.getZERO();
+        }
+        if (this.isZERO()) {
+            return this;
+        }
+        if (this instanceof GenSolvablePolynomial) {
+            //throw new RuntimeException("wrong method dispatch in JRE ");
+            logger.debug("warn: wrong method dispatch in JRE multiply(s) - trying to fix");
+            GenSolvablePolynomial<C> T = (GenSolvablePolynomial<C>) this;
+            return T.multiplyLeft(s);
+        }
+        GenPolynomial<C> p = ring.getZERO().copy();
+        SortedMap<ExpVector, C> pv = p.val;
+        for (Map.Entry<ExpVector, C> m : val.entrySet()) {
+            C a = m.getValue();
+            ExpVector e = m.getKey();
+            C c = s.multiply(a);
+            if (!c.isZERO()) {
+                pv.put(e, c); 
             }
         }
         return p;
@@ -1577,7 +1607,7 @@ public class GenPolynomial<C extends RingElem<C>>
             return this;
         }
         C lm = lc.inverse();
-        return multiply(lm);
+        return multiplyLeft(lm);
     }
 
 

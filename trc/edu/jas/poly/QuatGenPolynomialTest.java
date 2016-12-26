@@ -17,181 +17,227 @@ import edu.jas.arith.BigQuaternion;
 
 public class QuatGenPolynomialTest extends TestCase {
 
-/**
- * main
- */
-   public static void main (String[] args) {
-          junit.textui.TestRunner.run( suite() );
-   }
+    /**
+     * main
+     */
+    public static void main (String[] args) {
+        junit.textui.TestRunner.run( suite() );
+    }
 
-/**
- * Constructs a <CODE>QuatGenPolynomialTest</CODE> object.
- * @param name String.
- */
-   public QuatGenPolynomialTest(String name) {
-          super(name);
-   }
+    /**
+     * Constructs a <CODE>QuatGenPolynomialTest</CODE> object.
+     * @param name String.
+     */
+    public QuatGenPolynomialTest(String name) {
+        super(name);
+    }
 
-/**
- */ 
- public static Test suite() {
-     TestSuite suite= new TestSuite(QuatGenPolynomialTest.class);
-     return suite;
-   }
+    /**
+     */ 
+    public static Test suite() {
+        TestSuite suite= new TestSuite(QuatGenPolynomialTest.class);
+        return suite;
+    }
 
-   //private final static int bitlen = 100;
+    //private final static int bitlen = 100;
 
-   GenPolynomialRing<BigQuaternion> fac;
+    BigQuaternion cfac;
 
-   GenPolynomial<BigQuaternion> a;
-   GenPolynomial<BigQuaternion> b;
-   GenPolynomial<BigQuaternion> c;
-   GenPolynomial<BigQuaternion> d;
-   GenPolynomial<BigQuaternion> e;
+    GenPolynomialRing<BigQuaternion> fac;
 
-   int rl = 7; 
-   int kl = 10;
-   int ll = 10;
-   int el = 5;
-   float q = 0.5f;
+    GenPolynomial<BigQuaternion> a, b, c, d, e;
 
-   protected void setUp() {
-       a = b = c = d = e = null;
-       fac = new GenPolynomialRing<BigQuaternion>(new BigQuaternion(1),rl);
-   }
+    int rl = 4; 
 
-   protected void tearDown() {
-       a = b = c = d = e = null;
-       fac = null;
-   }
+    int kl = 3;
 
+    int ll = 7;
 
-/**
- * Test constructor and toString.
- * 
- */
- public void testConstruction() {
-     c = fac.getONE();
-     assertTrue("length( c ) = 1", c.length() == 1);
-     assertTrue("isZERO( c )", !c.isZERO() );
-     assertTrue("isONE( c )", c.isONE() );
+    int el = 3;
 
-     d = fac.getZERO();
-     assertTrue("length( d ) = 0", d.length() == 0);
-     assertTrue("isZERO( d )", d.isZERO() );
-     assertTrue("isONE( d )", !d.isONE() );
- }
+    float q = 0.4f;
+
+    protected void setUp() {
+        a = b = c = d = e = null;
+        cfac = new BigQuaternion(1);
+        fac = new GenPolynomialRing<BigQuaternion>(cfac,rl);
+    }
+
+    protected void tearDown() {
+        a = b = c = d = e = null;
+        cfac = null;
+        fac = null;
+    }
 
 
-/**
- * Test random polynomial.
- * 
- */
- public void testRandom() {
-     for (int i = 0; i < 7; i++) {
-         a = fac.random(ll);
-             // fac.random(rl+i, kl*(i+1), ll+2*i, el+i, q );
-         assertTrue("length( a"+i+" ) <> 0", a.length() >= 0);
-         assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
-         assertTrue(" not isONE( a"+i+" )", !a.isONE() );
-     }
- }
+    /**
+     * Test constructor and toString.
+     */
+    public void testConstruction() {
+        c = fac.getONE();
+        assertTrue("length( c ) = 1", c.length() == 1);
+        assertTrue("isZERO( c )", !c.isZERO() );
+        assertTrue("isONE( c )", c.isONE() );
+
+        d = fac.getZERO();
+        assertTrue("length( d ) = 0", d.length() == 0);
+        assertTrue("isZERO( d )", d.isZERO() );
+        assertTrue("isONE( d )", !d.isONE() );
+    }
 
 
-/**
- * Test addition.
- * 
- */
- public void testAddition() {
-
-     a = fac.random(ll);
-     b = fac.random(ll);
-
-     c = a.sum(b);
-     d = c.subtract(b);
-     assertEquals("a+b-b = a",a,d);
-
-     c = fac.random(ll);
-
-     ExpVector u = ExpVector.EVRAND(rl,el,q);
-     BigQuaternion x = BigQuaternion.QRAND(kl);
-
-     b = new GenPolynomial<BigQuaternion>(fac,x, u);
-     c = a.sum(b);
-     d = a.sum(x,u);
-     assertEquals("a+p(x,u) = a+(x,u)",c,d);
-
-     c = a.subtract(b);
-     d = a.subtract(x,u);
-     assertEquals("a-p(x,u) = a-(x,u)",c,d);
-
-     a = new GenPolynomial<BigQuaternion>(fac);
-     b = new GenPolynomial<BigQuaternion>(fac,x, u);
-     c = b.sum(a);
-     d = a.sum(x,u);
-     assertEquals("a+p(x,u) = a+(x,u)",c,d);
-
-     c = a.subtract(b);
-     d = a.subtract(x,u);
-     assertEquals("a-p(x,u) = a-(x,u)",c,d);
- }
+    /**
+     * Test random polynomial.
+     */
+    public void testRandom() {
+        for (int i = 0; i < 7; i++) {
+            a = fac.random(kl,ll,el,q);
+            // fac.random(rl+i, kl*(i+1), ll+2*i, el+i, q );
+            if (a.isZERO()) {
+                continue;
+            }
+            assertTrue("length( a"+i+" ) <> 0", a.length() >= 0);
+            assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
+            assertTrue(" not isONE( a"+i+" )", !a.isONE() );
+        }
+    }
 
 
-/**
- * Test object multiplication.
- * 
- */
+    /**
+     * Test addition.
+     */
+    public void testAddition() {
+        a = fac.random(kl,ll,el,q);
+        b = fac.random(kl,ll,el,q);
 
- public void testMultiplication() {
+        c = a.sum(b);
+        d = c.subtract(b);
+        assertEquals("a+b-b = a",a,d);
 
-     a = fac.random(ll);
-     assertTrue("not isZERO( a )", !a.isZERO() );
+        c = fac.random(kl,ll,el,q);
 
-     b = fac.random(ll);
-     assertTrue("not isZERO( b )", !b.isZERO() );
+        ExpVector u = ExpVector.EVRAND(rl,el,q);
+        BigQuaternion x = BigQuaternion.QRAND(kl);
 
-     c = b.multiply(a);
-     d = a.multiply(b);
-     assertTrue("not isZERO( c )", !c.isZERO() );
-     assertTrue("not isZERO( d )", !d.isZERO() );
+        b = new GenPolynomial<BigQuaternion>(fac,x, u);
+        c = a.sum(b);
+        d = a.sum(x,u);
+        assertEquals("a+p(x,u) = a+(x,u)",c,d);
 
-     //System.out.println("a = " + a);
-     //System.out.println("b = " + b);
-     e = d.subtract(c);
-     assertTrue("!isZERO( a*b-b*a ) " + e, !e.isZERO() );
+        c = a.subtract(b);
+        d = a.subtract(x,u);
+        assertEquals("a-p(x,u) = a-(x,u)",c,d);
 
-     assertTrue("a*b = b*a", !c.equals(d) );
-     //assertEquals("a*b = b*a",c,d);
+        a = new GenPolynomial<BigQuaternion>(fac);
+        b = new GenPolynomial<BigQuaternion>(fac,x, u);
+        c = b.sum(a);
+        d = a.sum(x,u);
+        assertEquals("a+p(x,u) = a+(x,u)",c,d);
 
-     c = fac.random(ll);
-     //System.out.println("c = " + c);
-     d = a.multiply( b.multiply(c) );
-     e = (a.multiply(b)).multiply(c);
+        c = a.subtract(b);
+        d = a.subtract(x,u);
+        assertEquals("a-p(x,u) = a-(x,u)",c,d);
+    }
 
-     //System.out.println("d = " + d);
-     //System.out.println("e = " + e);
 
-     //System.out.println("d-e = " + d.subtract(c) );
+    /**
+     * Test object multiplication.
+     */
+    public void testMultiplication() {
+        do {
+            a = fac.random(kl, ll, el, q); 
+        } while (a.isZERO());
 
-     assertEquals("a(bc) = (ab)c",d,e);
-     assertTrue("a(bc) = (ab)c", d.equals(e) );
+        do {
+            b = fac.random(kl, ll, el, q); 
+        } while (b.isZERO());
 
-     BigQuaternion x = a.leadingBaseCoefficient().inverse();
-     c = a.monic();
-     d = a.multiply(x);
-     assertEquals("a.monic() = a(1/ldcf(a))",c,d);
+        c = b.multiply(a);
+        d = a.multiply(b);
+        assertTrue("not isZERO( c )", !c.isZERO() );
+        assertTrue("not isZERO( d )", !d.isZERO() );
 
-     BigQuaternion y = b.leadingBaseCoefficient().inverse();
-     c = b.monic();
-     d = b.multiply(y);
-     assertEquals("b.monic() = b(1/ldcf(b))",c,d);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+        e = d.subtract(c);
+        assertTrue("!isZERO( a*b-b*a ) " + e, !e.isZERO() );
 
-     e = new GenPolynomial<BigQuaternion>(fac,y);
-     d = b.multiply(e);
-     assertEquals("b.monic() = b(1/ldcf(b))",c,d);
+        assertTrue("a*b = b*a", !c.equals(d) );
+        //assertEquals("a*b = b*a",c,d);
 
-     //d = e.multiply(b);
-     //assertEquals("b.monic() = (1/ldcf(b) (0))*b",c,d);
- }
+        c = fac.random(kl,ll,el,q);
+        //System.out.println("c = " + c);
+        d = a.multiply( b.multiply(c) );
+        e = (a.multiply(b)).multiply(c);
+
+        //System.out.println("d = " + d);
+        //System.out.println("e = " + e);
+        //System.out.println("d-e = " + d.subtract(c) );
+
+        assertEquals("a(bc) = (ab)c",d,e);
+        //assertTrue("a(bc) = (ab)c", d.equals(e) );
+
+        BigQuaternion x = a.leadingBaseCoefficient().inverse();
+        c = a.monic();
+        d = a.multiplyLeft(x);
+        assertEquals("a.monic() = (1/ldcf(a))a",c,d);
+
+        BigQuaternion y = b.leadingBaseCoefficient().inverse();
+        c = b.monic();
+        //System.out.println("c = " + c);
+        d = b.multiplyLeft(y);
+        //System.out.println("d = " + d);
+        assertEquals("b.monic() = (1/ldcf(b))b",c,d);
+
+        e = new GenPolynomial<BigQuaternion>(fac,y);
+        d = e.multiply(b);
+        assertEquals("b.monic() = (1/ldcf(b))b",c,d);
+
+        //d = b.multiplyLeft(y);
+        d = b.multiply(y);
+        //System.out.println("d = " + d);
+        //wrong: assertEquals("b.monic() = (1/ldcf(b))b",c,d);
+        assertTrue("is monic: b(1/ldcf(b))", d.leadingBaseCoefficient().isONE());
+    }
+
+
+    /**
+     * Test coefficient multiplication.
+     */
+    public void testCoeffMultiplication() {
+        a = fac.random(kl,ll,el,q);
+        //System.out.println("a = " + a);
+
+        c = a.monic();
+        //System.out.println("c = " + c);
+
+        BigQuaternion qa = cfac.random(5);
+        //System.out.println("qa = " + qa);
+        BigQuaternion qb = qa.inverse();
+        //System.out.println("qb = " + qb);
+        BigQuaternion qc = qa.multiply(qb);
+        //System.out.println("qc = " + qc);
+        BigQuaternion qd = qb.multiply(qa);
+        //System.out.println("qc = " + qc);
+        assertEquals("qa*(1/qa) == (1/qa)*qa ", qc, qd);
+
+        b = c.multiply(qa).multiply(qb);
+        //System.out.println("b = " + b);
+
+        d = c.multiplyLeft(qa).multiplyLeft(qb);
+        //System.out.println("d = " + d);
+        assertEquals("c*qa*qb = qb*qa*c",b,d);
+        //e = b.subtract(d);
+        //System.out.println("e = " + e);
+
+        b = c.multiply(qa).multiplyLeft(qb);
+        //System.out.println("b = " + b);
+
+        d = c.multiplyLeft(qb).multiply(qa);
+        //System.out.println("d = " + d);
+        e = b.subtract(d);
+        //System.out.println("e = " + e);
+        assertEquals("qb*(c*qa) == (qb*c)*qa",b,d);
+    }
 
 }

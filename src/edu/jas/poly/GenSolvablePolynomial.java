@@ -506,7 +506,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
      * @param b coefficient.
      * @return b*this, where * is coefficient multiplication.
      */
-    // new method, @NoOverride
+    @Override
     public GenSolvablePolynomial<C> multiplyLeft(C b) {
         GenSolvablePolynomial<C> Cp = ring.getZERO();
         if (b == null || b.isZERO()) {
