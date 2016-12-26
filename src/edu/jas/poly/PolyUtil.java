@@ -589,7 +589,7 @@ public class PolyUtil {
         C lm = lc.inverse();
         GenPolynomial<C> L = p.ring.coFac.getONE();
         L = L.multiply(lm);
-        return p.multiply(L);
+        return p.multiplyLeft(L);
     }
 
 
