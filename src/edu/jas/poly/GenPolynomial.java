@@ -25,15 +25,20 @@ import edu.jas.structure.UnaryFunctor;
 
 
 /**
- * GenPolynomial generic polynomials implementing RingElem. n-variate ordered
- * polynomials over C. Objects of this class are intended to be immutable. The
- * implementation is based on TreeMap respectively SortedMap from exponents to
- * coefficients. Only the coefficients are modeled with generic types, the
- * exponents are fixed to ExpVector with long entries (this will eventually be
- * changed in the future). C can also be a non integral domain, e.g. a
- * ModInteger, i.e. it may contain zero divisors, since multiply() does now
- * check for zeros. <b>Note:</b> multiply() now checks for wrong method dispatch
- * for GenSolvablePolynomial.
+ * GenPolynomial generic polynomials implementing RingElem. n-variate
+ * ordered polynomials over coefficients C. The variables commute with each other
+ * and with the coefficients. For non-commutative coefficients some
+ * care is taken to respect the multiplication order.
+ *
+ * Objects of this class are intended to be immutable.  The
+ * implementation is based on TreeMap respectively SortedMap from
+ * exponents to coefficients. Only the coefficients are modeled with
+ * generic types, the exponents are fixed to ExpVector with long
+ * entries (this will eventually be changed in the future). C can also
+ * be a non integral domain, e.g. a ModInteger, i.e. it may contain
+ * zero divisors, since multiply() does check for zeros. <b>Note:</b>
+ * multiply() now checks for wrong method dispatch for
+ * GenSolvablePolynomial.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
