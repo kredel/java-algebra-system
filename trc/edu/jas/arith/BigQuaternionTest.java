@@ -49,7 +49,7 @@ public class BigQuaternionTest extends TestCase {
     }
 
 
-    BigQuaternion a, b, c, d, e;
+    BigQuaternion a, b, c, d, e, f;
 
 
     BigQuaternion fac;
@@ -148,7 +148,7 @@ public class BigQuaternionTest extends TestCase {
      * Test random rationals.
      */
     public void testRandom() {
-        a = fac.random(500);
+        a = fac.random(50);
         b = new BigQuaternion(a.getRe(), a.getIm(), a.getJm(), a.getKm());
         c = b.subtract(a);
 
@@ -163,7 +163,7 @@ public class BigQuaternionTest extends TestCase {
      * Test addition.
      */
     public void testAddition() {
-        a = fac.random(100);
+        a = fac.random(10);
         b = a.sum(a);
         c = b.subtract(a);
         assertEquals("a+a-a = a", c, a);
@@ -183,7 +183,7 @@ public class BigQuaternionTest extends TestCase {
      * Test multiplication.
      */
     public void testMultiplication() {
-        a = fac.random(100);
+        a = fac.random(10);
         b = a.multiply(a);
         c = b.divide(a);
         assertEquals("a*a/a = a", c, a);
@@ -194,10 +194,12 @@ public class BigQuaternionTest extends TestCase {
         d = a.divide(BigQuaternion.ONE);
         assertEquals("a/1 = a", d, a);
 
-        a = fac.random(100);
+        a = fac.random(10);
         b = a.inverse();
         c = a.multiply(b);
         assertTrue("a*1/a = 1", c.isONE());
+        c = b.multiply(a);
+        assertTrue("1/a*a = 1", c.isONE());
 
         b = a.abs();
         c = b.inverse();
@@ -208,6 +210,16 @@ public class BigQuaternionTest extends TestCase {
         c = a.conjugate();
         d = a.multiply(c);
         assertEquals("abs(a)^2 = a a^", b, d);
+
+        b = fac.random(10);
+        c = a.inverse();
+        d = c.multiply(b);
+        e = a.multiply(d);
+        assertEquals("a*(1/a)*b = b", b, e);
+
+        d = b.multiply(c);
+        e = d.multiply(a);
+        assertEquals("b*(1/a)*a = b", b, e);
     }
 
 
@@ -215,14 +227,14 @@ public class BigQuaternionTest extends TestCase {
      * Test multiplication axioms.
      */
     public void testMultiplicationAxioms() {
-        a = fac.random(100);
-        b = fac.random(100);
+        a = fac.random(10);
+        b = fac.random(10);
 
         c = a.multiply(b);
         d = b.multiply(a);
         assertTrue("a*b != b*a", !c.equals(d));
 
-        c = fac.random(100);
+        c = fac.random(10);
 
         d = a.multiply(b.multiply(c));
         e = a.multiply(b).multiply(c);
@@ -240,7 +252,6 @@ public class BigQuaternionTest extends TestCase {
 
         d = a.multiply(b.sum(c));
         e = a.multiply(b).sum(a.multiply(c));
-
         assertEquals("a(b+c) = ab+ac", d, e);
     }
 
@@ -286,23 +297,78 @@ public class BigQuaternionTest extends TestCase {
         System.out.println("norm(b) = " + d);
         assertTrue("d is entier", d.isEntier());
 
+        // quotient and remainder
         System.out.println("a = " + a.toScript());
         System.out.println("b = " + b.toScript());
         BigQuaternion[] qr = a.leftQuotientAndRemainder(b);
         c = qr[0];
         d = qr[1];
-        System.out.println("c = " + c.toScript());
+        System.out.println("q = " + c.toScript());
         System.out.println("d = " + d.toScript());
         assertTrue("c is entier", c.isEntier());
         assertTrue("d is entier", d.isEntier());
-
         System.out.println("norm(b) = " + b.norm());
         System.out.println("norm(r) = " + d.norm());
 
+        qr = a.rightQuotientAndRemainder(b);
+        c = qr[0];
+        d = qr[1];
+        System.out.println("q = " + c.toScript());
+        System.out.println("d = " + d.toScript());
+        assertTrue("c is entier", c.isEntier());
+        assertTrue("d is entier", d.isEntier());
+        System.out.println("norm(b) = " + b.norm());
+        System.out.println("norm(r) = " + d.norm());
+
+        // gcds
         BigQuaternion g = a.leftGcd(b);
         System.out.println("g = " + g.toScript());
         System.out.println("norm(g) = " + g.norm());
         assertTrue("g is entier", g.isEntier());
+
+        BigQuaternion h = a.rightGcd(b);
+        System.out.println("h = " + h.toScript());
+        System.out.println("norm(h) = " + h.norm());
+        assertTrue("h is entier", h.isEntier());
+
+        c = g.inverse();
+        e = a.multiply(c);
+        f = c.multiply(a);
+        System.out.println("e = " + e.toScript());
+        System.out.println("f = " + f.toScript());
+        e = e.multiply(g);
+        f = g.multiply(f);
+        assertEquals("e == f", f, e);
+        assertEquals("a == e", a, e);
+
+        e = b.multiply(c);
+        f = c.multiply(b);
+        System.out.println("e = " + e.toScript());
+        System.out.println("f = " + f.toScript());
+        e = e.multiply(g);
+        f = g.multiply(f);
+        assertEquals("e == f", f, e);
+        assertEquals("b == e", b, e);
+
+        d = h.inverse();
+        e = d.multiply(a);
+        f = a.multiply(d);
+        System.out.println("e = " + e.toScript());
+        System.out.println("f = " + f.toScript());
+        e = h.multiply(e);
+        f = f.multiply(h);
+        assertEquals("e == f", f, e);
+        assertEquals("a == e", a, e);
+        d = h.inverse();
+
+        e = d.multiply(b);
+        f = b.multiply(d);
+        System.out.println("e = " + e.toScript());
+        System.out.println("f = " + f.toScript());
+        e = h.multiply(e);
+        f = f.multiply(h);
+        assertEquals("e == f", f, e);
+        assertEquals("b == e", b, e);
     }
 
 }

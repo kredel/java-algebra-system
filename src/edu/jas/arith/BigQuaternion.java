@@ -858,7 +858,7 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
     /**
      * Quaternion number inverse.
      * @param A is a non-zero quaternion number.
-     * @return S with S * A = 1.
+     * @return S with S * A = A * S = 1.
      */
     public static BigQuaternion QINV(BigQuaternion A) {
         if (A == null)
@@ -869,7 +869,7 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
 
     /**
      * BigQuaternion inverse.
-     * @return S with S * this = 1.
+     * @return S with S * this = this * S = 1.
      * @see edu.jas.structure.RingElem#inverse()
      */
     public BigQuaternion inverse() {
@@ -906,12 +906,32 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
 
 
     /**
-     * BigQuaternion divide.
+     * BigQuaternion right divide.
      * @param b BigQuaternion.
-     * @return this/b.
+     * @return this * b**(-1).
      */
     public BigQuaternion divide(BigQuaternion b) {
+        return rightDivide(b);
+    }
+
+
+    /**
+     * BigQuaternion right divide.
+     * @param b BigQuaternion.
+     * @return this * b**(-1).
+     */
+    public BigQuaternion rightDivide(BigQuaternion b) {
         return this.multiply(b.inverse());
+    }
+
+
+    /**
+     * BigQuaternion left divide.
+     * @param b BigQuaternion.
+     * @return b**(-1) * this.
+     */
+    public BigQuaternion leftDivide(BigQuaternion b) {
+        return b.inverse().multiply(this);
     }
 
 
@@ -929,7 +949,7 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
     /**
      * Quotient and remainder by division of this by S.
      * @param S a quaternion number
-     * @return [this/S, this - (this/S)*S].
+     * @return [this*S**(-1), this - (this*S**(-1))*S].
      */
     public BigQuaternion[] quotientRemainder(BigQuaternion S) {
         return new BigQuaternion[] { divide(S), ZERO };
@@ -1194,6 +1214,29 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
 
 
     /**
+     * Integral quotient and remainder by right division of this by S.
+     * This must be also an integral (Hurwitz) quaternion number.
+     * @param b an integral (Hurwitz) quaternion number
+     * @return [round(b**(-1)) this, this - b * (round(b**(-1)) this)].
+     */
+    public BigQuaternion[] rightQuotientAndRemainder(BigQuaternion b) {
+        if (!this.isEntier() || !b.isEntier()) {
+            throw new IllegalArgumentException("entier elements required");
+        }
+        BigQuaternion bi = b.inverse();
+        BigQuaternion m = this.multiply(bi); // right divide
+        //System.out.println("m = " + m.toScript());
+        BigQuaternion mh = m.roundToHurwitzian();
+        //System.out.println("mh = " + mh.toScript());
+        BigQuaternion n = this.subtract( mh.multiply(b) );
+        BigQuaternion[] ret = new BigQuaternion[2];
+        ret[0] = mh;
+        ret[1] = n;
+        return ret;
+    }
+
+
+    /**
      * Integer quaternion number left greatest common divisor.
      * @param S integer BigQuaternion.
      * @return leftGcd(this,S).
@@ -1210,6 +1253,31 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
         r = S;
         while (!r.isZERO()) {
             BigQuaternion u = q.leftQuotientAndRemainder(r)[1];
+            //System.out.println("u = " + u.toScript());
+            q = r;
+            r = u;
+	}
+        return q;
+    }
+
+
+    /**
+     * Integer quaternion number right greatest common divisor.
+     * @param S integer BigQuaternion.
+     * @return rightGcd(this,S).
+     */
+    public BigQuaternion rightGcd(BigQuaternion S) {
+        if (S == null || S.isZERO()) {
+            return this;
+        }
+        if (this.isZERO()) {
+            return S;
+        }
+        BigQuaternion q, r;
+        q = this;
+        r = S;
+        while (!r.isZERO()) {
+            BigQuaternion u = q.rightQuotientAndRemainder(r)[1];
             //System.out.println("u = " + u.toScript());
             q = r;
             r = u;
