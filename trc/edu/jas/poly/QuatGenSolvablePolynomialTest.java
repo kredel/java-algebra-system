@@ -336,4 +336,45 @@ public class QuatGenSolvablePolynomialTest extends TestCase {
 
         assertEquals("a(b+c) = ab+ac", d, e);
     }
+
+
+    /**
+     * Test coefficient multiplication.
+     */
+    public void testCoeffMultiplication() {
+        a = fac.random(kl,ll,el,q);
+        //System.out.println("a = " + a);
+
+        c = a.monic();
+        //System.out.println("c = " + c);
+
+        BigQuaternion qa = cfac.random(5);
+        //System.out.println("qa = " + qa);
+        BigQuaternion qb = qa.inverse();
+        //System.out.println("qb = " + qb);
+        BigQuaternion qc = qa.multiply(qb);
+        //System.out.println("qc = " + qc);
+        BigQuaternion qd = qb.multiply(qa);
+        //System.out.println("qc = " + qc);
+        assertEquals("qa*(1/qa) == (1/qa)*qa ", qc, qd);
+
+        b = c.multiply(qa).multiply(qb);
+        //System.out.println("b = " + b);
+
+        d = c.multiplyLeft(qa).multiplyLeft(qb);
+        //System.out.println("d = " + d);
+        assertEquals("c*qa*qb = qb*qa*c",b,d);
+        //e = (GenSolvablePolynomial<BigQuaternion>)b.subtract(d);
+        //System.out.println("e = " + e);
+
+        b = c.multiply(qa).multiplyLeft(qb);
+        //System.out.println("b = " + b);
+
+        d = c.multiplyLeft(qb).multiply(qa);
+        //System.out.println("d = " + d);
+        //e = (GenSolvablePolynomial<BigQuaternion>)b.subtract(d);
+        //System.out.println("e = " + e);
+        assertEquals("qb*(c*qa) == (qb*c)*qa",b,d);
+    }
+
 }
