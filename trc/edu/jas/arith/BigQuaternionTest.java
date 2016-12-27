@@ -4,6 +4,9 @@
 
 package edu.jas.arith;
 
+import java.util.List;
+import java.util.ArrayList;
+
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -46,19 +49,7 @@ public class BigQuaternionTest extends TestCase {
     }
 
 
-    BigQuaternion a;
-
-
-    BigQuaternion b;
-
-
-    BigQuaternion c;
-
-
-    BigQuaternion d;
-
-
-    BigQuaternion e;
+    BigQuaternion a, b, c, d, e;
 
 
     BigQuaternion fac;
@@ -80,7 +71,6 @@ public class BigQuaternionTest extends TestCase {
 
     /**
      * Test static initialization and constants.
-     * 
      */
     public void testConstants() {
         a = BigQuaternion.ZERO;
@@ -128,7 +118,6 @@ public class BigQuaternionTest extends TestCase {
 
     /**
      * Test constructor and toString.
-     * 
      */
     public void testConstructor() {
         a = new BigQuaternion("6/8");
@@ -157,7 +146,6 @@ public class BigQuaternionTest extends TestCase {
 
     /**
      * Test random rationals.
-     * 
      */
     public void testRandom() {
         a = fac.random(500);
@@ -173,7 +161,6 @@ public class BigQuaternionTest extends TestCase {
 
     /**
      * Test addition.
-     * 
      */
     public void testAddition() {
         a = fac.random(100);
@@ -194,7 +181,6 @@ public class BigQuaternionTest extends TestCase {
 
     /**
      * Test multiplication.
-     * 
      */
     public void testMultiplication() {
         a = fac.random(100);
@@ -227,7 +213,6 @@ public class BigQuaternionTest extends TestCase {
 
     /**
      * Test multiplication axioms.
-     * 
      */
     public void testMultiplicationAxioms() {
         a = fac.random(100);
@@ -247,7 +232,6 @@ public class BigQuaternionTest extends TestCase {
 
     /**
      * Test distributive law.
-     * 
      */
     public void testDistributive() {
         a = fac.random(20);
@@ -260,5 +244,65 @@ public class BigQuaternionTest extends TestCase {
         assertEquals("a(b+c) = ab+ac", d, e);
     }
 
+
+    /**
+     * Test entier elements.
+     */
+    public void testEntier() {
+        a = fac.getONE();
+        b = fac.getZERO();
+        assertTrue("1 is entier", a.isEntier());
+        assertTrue("0 is entier", b.isEntier());
+
+        a = new BigQuaternion("3 i 4 j 5 k 2");
+        assertTrue("a is entier", a.isEntier());
+        System.out.println("a = " + a);
+
+        b = new BigQuaternion("-3/2 i -5/2 j -1/2 k -7/2");
+        assertTrue("b is entier", b.isEntier());
+        System.out.println("b = " + b);
+
+        c = a.multiply(a);
+        System.out.println("c = " + c); 
+        assertTrue("c is entier", c.isEntier());
+
+        c = b.multiply(b);
+        System.out.println("c = " + c);
+        assertTrue("c is entier", c.isEntier());
+
+        c = a.multiply(b);
+        System.out.println("c = " + c);
+        assertTrue("c is entier", c.isEntier());
+
+        c = b.multiply(a);
+        System.out.println("c = " + c);
+        assertTrue("c is entier", c.isEntier());
+
+        d = a.norm();
+        System.out.println("norm(a) = " + d);
+        assertTrue("d is entier", d.isEntier());
+
+        d = b.norm();
+        System.out.println("norm(b) = " + d);
+        assertTrue("d is entier", d.isEntier());
+
+        System.out.println("a = " + a.toScript());
+        System.out.println("b = " + b.toScript());
+        BigQuaternion[] qr = a.leftQuotientAndRemainder(b);
+        c = qr[0];
+        d = qr[1];
+        System.out.println("c = " + c.toScript());
+        System.out.println("d = " + d.toScript());
+        assertTrue("c is entier", c.isEntier());
+        assertTrue("d is entier", d.isEntier());
+
+        System.out.println("norm(b) = " + b.norm());
+        System.out.println("norm(r) = " + d.norm());
+
+        BigQuaternion g = a.leftGcd(b);
+        System.out.println("g = " + g.toScript());
+        System.out.println("norm(g) = " + g.norm());
+        assertTrue("g is entier", g.isEntier());
+    }
 
 }
