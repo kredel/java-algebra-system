@@ -51,6 +51,12 @@ public final class BigInteger implements GcdRingElem<BigInteger>, RingFactory<Bi
 
 
     /**
+     * The constant 2.
+     */
+    public final static BigInteger TWO = new BigInteger(2);
+
+
+    /**
      * Constructor for BigInteger from math.BigInteger.
      * @param a java.math.BigInteger.
      */
