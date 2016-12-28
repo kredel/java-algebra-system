@@ -6,6 +6,7 @@ package edu.jas.arith;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.SortedMap;
 
 
 import junit.framework.Test;
@@ -383,6 +384,27 @@ public class BigQuaternionTest extends TestCase {
         f = f.multiply(h);
         assertEquals("b == gcd * (gcd**(-1)*b): ", b, e);
         assertEquals("b == (b*gcd**(-1)) * gcd: ", b, f);
+
+        a = fac.random(20).roundToLipschitzian();
+        //a = fac.random(20).roundToHurwitzian();
+        //System.out.println("a = " + a.toScript());
+        b = a.norm();
+        //System.out.println("b = " + b.toScript());
+        java.math.BigInteger pp = b.re.floor();
+        //System.out.println("pp = " + pp);
+        long pl = pp.longValue();
+
+        SortedMap<Long,Integer> P = PrimeInteger.factors(pl);
+        //System.out.println("P = " + P);
+        for (Long p : P.keySet()) {
+	    c = new BigQuaternion(new BigRational(p));
+            //System.out.println("c = " + c);
+            d = a.leftGcd(c);
+            //System.out.println("d = " + d.toScript());
+            e = d.norm();
+            //System.out.println("e = " + e);
+            assertTrue("norm(gcd) == c: " + c + " : " + e, c.equals(e)||c.equals(e.power(2))||c.power(2).equals(e) );
+        }
     }
 
 }
