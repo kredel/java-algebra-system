@@ -267,108 +267,125 @@ public class BigQuaternionTest extends TestCase {
 
         a = new BigQuaternion("3 i 4 j 5 k 2");
         assertTrue("a is entier", a.isEntier());
-        System.out.println("a = " + a);
+        //System.out.println("a = " + a);
 
         b = new BigQuaternion("-3/2 i -5/2 j -1/2 k -7/2");
         assertTrue("b is entier", b.isEntier());
-        System.out.println("b = " + b);
+        //System.out.println("b = " + b);
 
         c = a.multiply(a);
-        System.out.println("c = " + c); 
+        //System.out.println("c = " + c); 
         assertTrue("c is entier", c.isEntier());
 
         c = b.multiply(b);
-        System.out.println("c = " + c);
+        //System.out.println("c = " + c);
         assertTrue("c is entier", c.isEntier());
 
         c = a.multiply(b);
-        System.out.println("c = " + c);
+        //System.out.println("c = " + c);
         assertTrue("c is entier", c.isEntier());
 
         c = b.multiply(a);
-        System.out.println("c = " + c);
+        //System.out.println("c = " + c);
         assertTrue("c is entier", c.isEntier());
 
         d = a.norm();
-        System.out.println("norm(a) = " + d);
+        //System.out.println("norm(a) = " + d);
         assertTrue("d is entier", d.isEntier());
 
         d = b.norm();
-        System.out.println("norm(b) = " + d);
+        //System.out.println("norm(b) = " + d);
         assertTrue("d is entier", d.isEntier());
 
         // quotient and remainder
-        System.out.println("a = " + a.toScript());
-        System.out.println("b = " + b.toScript());
+        //System.out.println("a = " + a.toScript());
+        //System.out.println("b = " + b.toScript());
         BigQuaternion[] qr = a.leftQuotientAndRemainder(b);
         c = qr[0];
         d = qr[1];
-        System.out.println("q = " + c.toScript());
-        System.out.println("d = " + d.toScript());
+        //System.out.println("q = " + c.toScript());
+        //System.out.println("d = " + d.toScript());
         assertTrue("c is entier", c.isEntier());
         assertTrue("d is entier", d.isEntier());
-        System.out.println("norm(b) = " + b.norm());
-        System.out.println("norm(r) = " + d.norm());
+        //System.out.println("norm(b) = " + b.norm());
+        //System.out.println("norm(r) = " + d.norm());
+        assertEquals("a == b * q + r: ", a, b.multiply(c).sum(d));
+        assertTrue("norm(r) < norm(b): ", d.norm().re.compareTo(b.norm().re) < 0);
 
         qr = a.rightQuotientAndRemainder(b);
         c = qr[0];
         d = qr[1];
-        System.out.println("q = " + c.toScript());
-        System.out.println("d = " + d.toScript());
+        //System.out.println("q = " + c.toScript());
+        //System.out.println("d = " + d.toScript());
         assertTrue("c is entier", c.isEntier());
         assertTrue("d is entier", d.isEntier());
-        System.out.println("norm(b) = " + b.norm());
-        System.out.println("norm(r) = " + d.norm());
+        //System.out.println("norm(b) = " + b.norm());
+        //System.out.println("norm(r) = " + d.norm());
+        assertEquals("a == q * b + r: ", a, c.multiply(b).sum(d));
+        assertTrue("norm(r) < norm(b): ", d.norm().re.compareTo(b.norm().re) < 0);
+
 
         // gcds
         BigQuaternion g = a.leftGcd(b);
-        System.out.println("g = " + g.toScript());
-        System.out.println("norm(g) = " + g.norm());
+        //System.out.println("g = " + g.toScript());
+        //System.out.println("norm(g) = " + g.norm());
         assertTrue("g is entier", g.isEntier());
+        BigQuaternion r = a.leftQuotientAndRemainder(g)[1];
+        //System.out.println("r = " + r.toScript());
+        assertTrue("r == 0: ", r.isZERO());
+        r = b.leftQuotientAndRemainder(g)[1];
+        //System.out.println("r = " + r.toScript());
+        assertTrue("r == 0: ", r.isZERO());
 
         BigQuaternion h = a.rightGcd(b);
-        System.out.println("h = " + h.toScript());
-        System.out.println("norm(h) = " + h.norm());
+        //System.out.println("h = " + h.toScript());
+        //System.out.println("norm(h) = " + h.norm());
         assertTrue("h is entier", h.isEntier());
+        r = a.rightQuotientAndRemainder(h)[1];
+        //System.out.println("r = " + r.toScript());
+        assertTrue("r == 0: ", r.isZERO());
+        r = b.rightQuotientAndRemainder(h)[1];
+        //System.out.println("r = " + r.toScript());
+        assertTrue("r == 0: ", r.isZERO());
 
         c = g.inverse();
         e = a.multiply(c);
         f = c.multiply(a);
-        System.out.println("e = " + e.toScript());
-        System.out.println("f = " + f.toScript());
+        //System.out.println("e = " + e.toScript());
+        //System.out.println("f = " + f.toScript());
         e = e.multiply(g);
         f = g.multiply(f);
-        assertEquals("e == f", f, e);
-        assertEquals("a == e", a, e);
+        assertEquals("a == (a*gcd**(-1)) * gcd: ", a, e);
+        assertEquals("a == gcd * (gcd**(-1)*a): ", a, f);
 
         e = b.multiply(c);
         f = c.multiply(b);
-        System.out.println("e = " + e.toScript());
-        System.out.println("f = " + f.toScript());
+        //System.out.println("e = " + e.toScript());
+        //System.out.println("f = " + f.toScript());
         e = e.multiply(g);
         f = g.multiply(f);
-        assertEquals("e == f", f, e);
-        assertEquals("b == e", b, e);
+        assertEquals("b == (b*gcd**(-1)) * gcd: ", b, e);
+        assertEquals("b == gcd * (gcd**(-1)*a): ", b, f);
+
 
         d = h.inverse();
         e = d.multiply(a);
         f = a.multiply(d);
-        System.out.println("e = " + e.toScript());
-        System.out.println("f = " + f.toScript());
+        //System.out.println("e = " + e.toScript());
+        //System.out.println("f = " + f.toScript());
         e = h.multiply(e);
         f = f.multiply(h);
-        assertEquals("e == f", f, e);
-        assertEquals("a == e", a, e);
-        d = h.inverse();
+        assertEquals("a == gcd * (gcd**(-1)*a): ", a, e);
+        assertEquals("a == (a*gcd**(-1)) * gcd: ", a, f);
 
         e = d.multiply(b);
         f = b.multiply(d);
-        System.out.println("e = " + e.toScript());
-        System.out.println("f = " + f.toScript());
+        //System.out.println("e = " + e.toScript());
+        //System.out.println("f = " + f.toScript());
         e = h.multiply(e);
         f = f.multiply(h);
-        assertEquals("e == f", f, e);
-        assertEquals("b == e", b, e);
+        assertEquals("b == gcd * (gcd**(-1)*b): ", b, e);
+        assertEquals("b == (b*gcd**(-1)) * gcd: ", b, f);
     }
 
 }
