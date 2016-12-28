@@ -36,8 +36,6 @@ public class BigOctonionTest extends TestCase {
 
 
     /**
- */
-    /**
      * @return suite.
      */
     public static Test suite() {
@@ -144,7 +142,7 @@ public class BigOctonionTest extends TestCase {
      * Test random rationals.
      */
     public void testRandom() {
-        a = fac.random(100);
+        a = fac.random(10);
 
         b = new BigOctonion(a.getR(), a.getI());
         c = b.subtract(a);
@@ -159,7 +157,7 @@ public class BigOctonionTest extends TestCase {
      * Test addition.
      */
     public void testAddition() {
-        a = fac.random(50);
+        a = fac.random(10);
         b = a.sum(a);
         c = b.subtract(a);
 
@@ -179,7 +177,7 @@ public class BigOctonionTest extends TestCase {
      * Test multiplication.
      */
     public void testMultiplication() {
-        a = fac.random(30);
+        a = fac.random(10);
         //System.out.println("a = " + a);
 
         b = a.multiply(a);
@@ -202,11 +200,29 @@ public class BigOctonionTest extends TestCase {
         d = b.multiply(c);
         assertTrue("abs(a)*1/abs(a) = 1", d.isONE());
 
-        a = fac.random(3);
+        a = fac.random(30);
         b = a.abs();
         c = a.conjugate();
         d = a.multiply(c);
         assertEquals("abs(a)^2 = a a^", b, d);
+
+        b = fac.random(10);
+        c = a.inverse();
+        d = c.multiply(b);
+        e = a.multiply(d);
+        assertEquals("a*(1/a)*b = b", b, e);
+
+        d = b.multiply(c);
+        e = d.multiply(a);
+        assertEquals("b*(1/a)*a = b", b, e);
+
+        c = a.rightDivide(b);
+        d = c.multiply(b);
+        assertEquals("a*(1/b)*b = a", a, d);
+
+        c = a.leftDivide(b);
+        d = b.multiply(c);
+        assertEquals("b*(1/b)*a = a", a, d);
     }
 
 
@@ -219,7 +235,6 @@ public class BigOctonionTest extends TestCase {
 
         c = a.multiply(b);
         d = b.multiply(a);
-
         assertTrue("a*b != b*a", !c.equals(d));
 
         c = fac.random(20);

@@ -39,8 +39,6 @@ public class BigQuaternionTest extends TestCase {
 
 
     /**
- */
-    /**
      * @return suite.
      */
     public static Test suite() {
@@ -175,7 +173,6 @@ public class BigQuaternionTest extends TestCase {
         assertEquals("a-0 = a", d, a);
         d = a.subtract(a);
         assertEquals("a-a = 0", d, BigQuaternion.ZERO);
-
     }
 
 
