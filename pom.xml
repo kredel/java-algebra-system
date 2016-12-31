@@ -8,7 +8,7 @@
   <name>Java Algebra System (JAS)</name>
   <groupId>edu.jas</groupId>
   <artifactId>jas</artifactId>
-  <version>2.6.5673</version>
+  <version>@SVNREV@</version>
   <packaging>jar</packaging>
   <description> The Java Algebra System (JAS) is an object oriented,
   type safe and multi-threaded approach to computer algebra. JAS
