@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+         >
+  <modelVersion>4.0.0</modelVersion>
+
+  <name>Java Algebra System (JAS)</name>
+  <groupId>edu.jas</groupId>
+  <artifactId>jas</artifactId>
+  <version>2.6.5673</version>
+  <packaging>jar</packaging>
+  <description> The Java Algebra System (JAS) is an object oriented,
+  type safe and multi-threaded approach to computer algebra. JAS
+  provides a well designed software library using generic types for
+  algebraic computations implemented in the Java programming language
+  using the JVM runtime infrastructure. The library can be used as any
+  other Java software package or it can be used interactively or
+  interpreted through a jython (Java Python) or jruby (Java Ruby)
+  front end, there is also an Android App based on Ruboto (jruby for
+  Android). The focus of JAS is at the moment on commutative, solvable
+  and non-commutative polynomials, power series, Groebner bases,
+  factorization, real and complex roots and applications. By the use
+  of Java as implementation language JAS is 64-bit and multi-core CPU
+  ready and can make use of mutiple CPUs where available. JAS can run
+  on a wide variety of devices ranging from Android to compute
+  clusters (using MPJ a Java Message Passing Interface (MPI) or
+  OpenMPI).
+  </description>
+  <url>http://krum.rz.uni-mannheim.de/jas</url>
+  <!--url>https://github.com/kredel/java-algebra-system</url-->
+
+  <licenses>
+    <license>
+      <name>GNU GENERAL PUBLIC LICENSE Version 2, June 1991</name>
+      <url>http://www.gnu.org/licenses/old-licenses/gpl-2.0</url>
+    </license>
+    <license>
+      <name>GNU LESSER GENERAL PUBLIC LICENSE Version 2.1, February 1999</name>
+      <url>http://www.gnu.org/licenses/old-licenses/lgpl-2.1</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Heinz Kredel</name>
+      <email>kredel@rz.uni-mannheim.de</email>
+      <organization>University Mannheim</organization>
+      <organizationUrl>http://www.uni-mannheim.de/rum/</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>                 
+    <connection>scm:git:https://github.com/kredel/java-algebra-system.git</connection>
+    <developerConnection>scm:git:ssh://github.com/kredel/java-algebra-system.git</developerConnection>
+    <url>https://github.com/kredel/java-algebra-system/tree/master</url>
+  </scm>
+
+  <dependencies>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>2.5</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+</project>
