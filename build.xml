@@ -2,11 +2,11 @@
 
 <!-- $Id$ -->
 
-
 <project name="jas" default="usage" basedir="." 
                     xmlns:jacoco="antlib:org.jacoco.ant"
                     xmlns:ivy="antlib:org.apache.ivy.ant"
->
+         >
+  <!-- xmlns:artifact="antlib:org.apache.maven.artifact.ant" -->
 
   <property name="src"       value="src" />
   <property name="testsrc"   value="trc" />
@@ -20,7 +20,6 @@
   <property name="doc"       value="doc/api" />
   <property name="texdoc"    value="doc/tex" />
   <property name="test"      value="test" />
-  <property name="jar"       value="jas.jar" />
 
   <property name="libs"      value="${basedir}/../lib" />
   <!--property name="log4j"     value="${libs}/log4j.jar" /-->
@@ -39,13 +38,16 @@
   <property name="l4j.exact" value="true" />
 
   <!--property name="cp"       value="${log4j}:${junit}:${tnj}:." /-->
-  <property name="cp"       value="${log4j}:${junit}:." />
+  <property name="cp"        value="${log4j}:${junit}:." />
   <!--property name="doccp"    value="${log4j}:${junit}:${tnj}" /-->
-  <property name="doccp"    value="${log4j}:${junit}" />
-  <property name="version"  value="0.1" />
+  <property name="doccp"     value="${log4j}:${junit}" />
 
   <property name="dist.dir"  value="target" />
   <property name="ivy-publish.overwrite"  value="true" />
+
+  <property name="dist"      value="../jas-versions/jas-2.6" />
+  <property name="artifactId" value="jas" />
+  <!--property name="version"  value="2.6.${SVNREV}" /--> <!-- set in vorher-->
 
 <!--
   <taskdef name="lint4j" classname="com.jutils.lint4j.ant.Lint4jAntTask">
@@ -67,6 +69,11 @@
   <mkdir dir="edu/jas"  />
   <mkdir dir="${test}"  />
   <mkdir dir="doc"  />
+  <exec executable="svnlook" outputproperty="svnrev" >
+   <arg line="youngest /home/SUBVERSION/jas"/>
+  </exec>
+  <property name="version" value="2.6.${svnrev}" />
+  <!--echo message="artifact version = ${artifactId}-${version}"  /-->
 </target>
 
 <target name="usage" >
@@ -81,7 +88,7 @@
   <!--echoproperties /-->
 </target>
 
-<target name="recompile" depends="distclean" description="compile after distclean">
+<target name="recompile" depends="vorher,distclean" description="compile after distclean">
   <javac destdir="${build}"
          debug="on" debuglevel="lines,source"
          classpath="${cp}" 
@@ -100,8 +107,8 @@
          listfiles="true"
          includeantruntime="false"
   >
-     <!--
      <compilerarg value="-Xlint:unchecked" />
+     <!--
      <compilerarg value="-Xlint:-unchecked" />
      <compilerarg value="-Xlint:deprecation" />
      -->
@@ -113,7 +120,7 @@
 -->
 </target>
 
-<target name="recomp5" depends="distclean" >
+<target name="recomp5" depends="vorher,distclean" >
   <javac destdir="${build}"
          debug="on" debuglevel="lines,source"
          classpath="${cp}" 
@@ -127,7 +134,7 @@
   </javac>
 </target>
 
-<target name="recomp6" depends="distclean" >
+<target name="recomp6" depends="vorher,distclean" >
   <javac destdir="${build}"
          debug="on" debuglevel="lines,source"
          classpath="${cp}" 
@@ -141,7 +148,7 @@
   </javac>
 </target>
 
-<target name="recomp7" depends="distclean" >
+<target name="recomp7" depends="vorher,distclean" >
   <javac destdir="${build}"
          debug="on" debuglevel="lines,source"
          classpath="${cp}" 
@@ -155,7 +162,7 @@
   </javac>
 </target>
 
-<target name="doc" description="generate javadoc">
+<target name="doc" depends="vorher" description="generate javadoc">
   <javadoc destdir="${doc}" 
            classpath="${doccp}" 
            overview="doc/overview.html" 
@@ -232,11 +239,11 @@
          showoutput="yes"
          timeout="20000"
          haltonfailure="no" >
-     <jvmarg value="-server"/>
      <!--
+     <jvmarg value="-server"/>
+     <jvmarg value="-verbose:gc"/>
      <jvmarg value="-Xmx2900M"/>
      <jvmarg value="-Xms2900M"/>
-     <jvmarg value="-verbose:gc"/>
      <jvmarg value="-ea"/>
      -->
      <classpath path="${cp}" />
@@ -282,7 +289,7 @@
 
 <target name="lint" depends="vorher" >
   <lint4j sourcepath="${src}" 
-          classpath="${cp}:${jar}"
+          classpath="${cp}"
           packages="edu.jas.*" 
           level="${l4j.level}" 
           exact="${l4j.exact}" >
@@ -340,6 +347,52 @@
   >
     <fileset dir="." includes="**/*.class" />
     <fileset dir="." includes="log4j.properties log4j2.properties"  />
+  </jar>
+</target>
+
+<target name="packmvn" depends="vorher,compile">
+  <!-- define artifacts' name, which follows the convention of Maven -->
+  <property name="pom-xml"     value="${artifactId}-${version}.pom" />
+  <property name="bin-jar"     value="${artifactId}-${version}.jar" />
+  <property name="javadoc-jar" value="${artifactId}-${version}-javadoc.jar" />
+  <property name="sources-jar" value="${artifactId}-${version}-sources.jar" />
+  <!-- copy/rename the bytecode jar -->
+  <replace file="${dist}/pom.xml" token="@SVNREV@" value="${version}" />
+  <copy file="${dist}/pom.xml"                          tofile="${dist}/${pom-xml}" />
+  <copy file="${dist}/${artifactId}-${version}-bin.jar" tofile="${dist}/${bin-jar}" />
+  <copy file="${dist}/${artifactId}-${version}-doc.zip" tofile="${dist}/${javadoc-jar}" />
+  <copy file="${dist}/${artifactId}-${version}-src.zip" tofile="${dist}/${sources-jar}" />
+  <!-- sign the the pom and jars -->
+  <delete verbose="true" >
+     <fileset dir="${dist}" includes="*.asc"  />
+  </delete>
+  <exec executable="gpg" >
+     <arg value="-u C5283F53"/>
+     <arg value="-ab"/>
+     <arg value="${dist}/${pom-xml}"/>
+  </exec>
+  <exec executable="gpg" >
+     <arg value="-u C5283F53"/>
+     <arg value="-ab"/>
+     <arg value="${dist}/${bin-jar}"/>
+  </exec>
+  <exec executable="gpg" >
+     <arg value="-u C5283F53"/>
+     <arg value="-ab"/>
+     <arg value="${dist}/${javadoc-jar}"/>
+  </exec>
+  <exec executable="gpg" >
+     <arg value="-u C5283F53"/>
+     <arg value="-ab"/>
+     <arg value="${dist}/${sources-jar}"/>
+  </exec>
+  <!-- create bundle for upload -->
+  <jar jarfile="${dist}/${artifactId}-${version}-bundle.jar"  >
+     <fileset dir="${dist}" includes="${pom-xml}"  />
+     <fileset dir="${dist}" includes="${bin-jar}"  />
+     <fileset dir="${dist}" includes="${javadoc-jar}"  />
+     <fileset dir="${dist}" includes="${sources-jar}"  />
+     <fileset dir="${dist}" includes="*.asc"  />
   </jar>
 </target>
 
