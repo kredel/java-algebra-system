@@ -40,8 +40,8 @@ import edu.jas.ufd.QuotientRing;
 
 /**
  * Examples for application usage.
- * @author Christoph Zengler.
- * @author Heinz Kredel.
+ * @author Christoph Zengler
+ * @author Heinz Kredel
  */
 
 public class Examples {

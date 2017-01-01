@@ -401,8 +401,6 @@ public class TaggedSocketChannel extends Thread {
 
 /**
  * TaggedMessage container.
- * @author kredel
- * 
  */
 class TaggedMessage implements Serializable {
 

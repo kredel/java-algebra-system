@@ -28,7 +28,7 @@ import edu.jas.poly.PolynomialList;
 
 /**
  * Groebner base FGLM examples.
- * @author Jan Suess.
+ * @author Jan Suess
  */
 
 public class GroebnerBaseFGLMExamples {

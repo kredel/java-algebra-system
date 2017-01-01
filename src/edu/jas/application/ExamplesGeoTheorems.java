@@ -25,9 +25,9 @@ import edu.jas.poly.PolynomialList;
 
 /**
  * ExamplesGeoTheorems for Groebner base usage.
- * @author GeoGebra developers.
+ * @author GeoGebra developers
  * @author Kovács Zoltán
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 public class ExamplesGeoTheorems {
 

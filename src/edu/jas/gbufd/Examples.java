@@ -26,8 +26,8 @@ import edu.jas.poly.TermOrder;
 
 /**
  * Examples for Groebner base usage.
- * @author Christoph Zengler.
- * @author Heinz Kredel.
+ * @author Christoph Zengler
+ * @author Heinz Kredel
  */
 public class Examples {
 

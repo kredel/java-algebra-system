@@ -36,13 +36,8 @@ import edu.jas.util.KsubSet;
 /**
  * Integer coefficients factorization algorithms. This class implements
  * factorization methods for polynomials over integers.
- * @author Heinz Kredel
- */
-
-/**
- * @author kredel
- * 
  * @param <MOD>
+ * @author Heinz Kredel
  */
 public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends FactorAbstract<BigInteger> {
 
