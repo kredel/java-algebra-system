@@ -2,11 +2,11 @@
 JAS: Java Algebra System
 ========================
 
-Version 2.6, 2016
+Version 2.6, 2017
 
 by Heinz Kredel, University of Mannheim, kredel at rz.uni-mannheim.de
 
-Copyright (c) 2000-2016 by Heinz Kredel.
+Copyright (c) 2000-2017 by Heinz Kredel.
 
 Programms released under GPL or LGPL, see COPYING.jas or COPYING.lgpl.jas.
 
@@ -97,6 +97,13 @@ There are GIT repositories for the scource code, which can be cloned with
 > git clone http://krum.rz.uni-mannheim.de/jas.git jas
 or
 > git clone https://github.com/kredel/java-algebra-system.git jas
+
+
+There is a Maven compatible repository for bytecode, source and javadocs at
+
+  https://oss.sonatype.org/
+
+groupId: edu.jas, artifactId: jas, version (for example): 2.6.5675
 
 
 The version is specified by a two digit major.minor number
