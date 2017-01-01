@@ -160,7 +160,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
         if (names == null) {
             vars = null;
         } else {
-            vars = Arrays.copyOf(names,names.length); // > Java-5
+            vars = Arrays.copyOf(names, names.length); // > Java-5
         }
         if (vars == null) {
             if (PrettyPrint.isTrue()) {
@@ -240,7 +240,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
      * @return names.
      */
     public String[] getVars() {
-        return Arrays.copyOf(vars,vars.length); // > Java-5
+        return Arrays.copyOf(vars, vars.length); // > Java-5
     }
 
 
@@ -726,7 +726,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
      * @param gener lambda expression.
      * @return a generated power series.
      */
-    public MultiVarPowerSeries<C> generate(final Function<ExpVector,C> gener) {
+    public MultiVarPowerSeries<C> generate(final Function<ExpVector, C> gener) {
         return new MultiVarPowerSeries<C>(this, new MultiVarCoefficients<C>(this) {
 
 

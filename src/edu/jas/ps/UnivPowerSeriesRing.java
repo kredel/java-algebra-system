@@ -533,7 +533,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
 
 
     /**
-     * Generate a power series via lambda expression. 
+     * Generate a power series via lambda expression.
      * @param gener lambda expression.
      * @return a generated power series.
      */
