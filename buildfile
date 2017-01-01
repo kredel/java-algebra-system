@@ -12,7 +12,7 @@ require 'buildr/groovy'
 VERSION_NUMBER = "2.6." + `svnlook youngest /home/SUBVERSION/jas`.to_s.chomp
 # Group identifier for your projects
 GROUP = "JavaAlgebraSystem"
-COPYRIGHT = "Copyright (c) 2005-2016 by Heinz Kredel"
+COPYRIGHT = "Copyright (c) 2005-2017 by Heinz Kredel"
 
 # Specify Maven 2.0 remote repositories here, like this:
 #repositories.remote << "http://repo1.maven.org/maven2"
@@ -74,7 +74,7 @@ define "jas", :layout=>jas_layout do
      path.include( _('../lib/junit.jar'), :as => "lib/junit.jar")
      #meta_inf << file('DISCLAIMER') << file('NOTICE')
   end
-  package(:zip, :classifier=>'docs').tap do |path|
+  package(:zip, :classifier=>'javadoc').tap do |path|
      path.include( _('target/doc'), :as=> "doc" )
      path.include _('*.html')
      path.include _('*.css')

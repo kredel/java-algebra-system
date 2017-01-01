@@ -455,7 +455,7 @@ public class GCDFakeTest extends TestCase {
         er = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveRightSparsePseudoRemainder(dr,
                         cr);
         //System.out.println("er = " + er);
-        assertTrue("c | gcd(ca,cb) " + er, er.isZERO());
+        assertTrue("c | gcd(ca,cb) " + er, er.isZERO() || dr.isONE());
 
         er = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveRightSparsePseudoRemainder(ar,
                         dr);
