@@ -25,8 +25,8 @@ import edu.jas.structure.RingFactory;
  * @see java.math.BigInteger
  */
 
-public final class BigInteger implements GcdRingElem<BigInteger>, RingFactory<BigInteger>,
-                Iterable<BigInteger>, Rational {
+public final class BigInteger
+                implements GcdRingElem<BigInteger>, RingFactory<BigInteger>, Iterable<BigInteger>, Rational {
 
 
     /**

@@ -19,7 +19,6 @@ import java.util.Set;
 import edu.jas.kern.Scripting;
 import edu.jas.kern.StringUtil;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.Power;
 import edu.jas.structure.RingFactory;
 
 
@@ -61,7 +60,7 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
     /**
      * The Constant 1/2.
      */
-    public final static BigRational HALF = new BigRational(1,2);
+    public final static BigRational HALF = new BigRational(1, 2);
 
 
     private final static Random random = new Random();
@@ -1192,8 +1191,8 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
         BigInteger[] qr = num.divideAndRemainder(den);
         //System.out.println("ceil: " + this + ", q = " + qr[0] + ", r = " +qr[1]);
         BigInteger q = qr[0];
-        if(qr[1].signum() > 0) {
-           q = q.add(BigInteger.ONE);
+        if (qr[1].signum() > 0) {
+            q = q.add(BigInteger.ONE);
         }
         return q;
     }
@@ -1210,8 +1209,8 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
         BigInteger[] qr = num.divideAndRemainder(den);
         //System.out.println("floor: " + this + ", q = " + qr[0] + ", r = " +qr[1]);
         BigInteger q = qr[0];
-        if(qr[1].signum() < 0) {
-           q = q.subtract(BigInteger.ONE);
+        if (qr[1].signum() < 0) {
+            q = q.subtract(BigInteger.ONE);
         }
         return q;
     }

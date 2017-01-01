@@ -6,7 +6,7 @@ package edu.jas.arith;
 
 
 import java.io.Reader;
-//import java.math.BigInteger;
+// import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -22,9 +22,9 @@ import edu.jas.structure.StarRingElem;
 /**
  * BigQuaternion class based on BigRational implementing the RingElem interface
  * and with the familiar MAS static method names. Objects of this class are
- * immutable.
- * The integer methods are implemented after https://de.wikipedia.org/wiki/Hurwitzquaternion
- * see also https://en.wikipedia.org/wiki/Hurwitz_quaternion
+ * immutable. The integer quaternion methods are implemented after
+ * https://de.wikipedia.org/wiki/Hurwitzquaternion see also
+ * https://en.wikipedia.org/wiki/Hurwitz_quaternion
  * @author Heinz Kredel
  */
 
@@ -58,7 +58,7 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
 
     /**
      * List of all 24 integral units.
-     */ 
+     */
     public static List<BigQuaternion> entierUnits = null; //later: unitsOfHurwitzian();
 
 
@@ -342,7 +342,8 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
      * @return a BigQuaternion.
      */
     public BigQuaternion fromInteger(long[] a) {
-        return new BigQuaternion(new BigRational(a[0]), new BigRational(a[1]), new BigRational(a[2]), new BigRational(a[3]));
+        return new BigQuaternion(new BigRational(a[0]), new BigRational(a[1]), new BigRational(a[2]),
+                        new BigRational(a[3]));
     }
 
 
@@ -574,14 +575,15 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
 
     /**
      * Is BigQuaternion entier element.
-     * @return If this is an integer Hurwitz element then true is returned, else false.
+     * @return If this is an integer Hurwitz element then true is returned, else
+     *         false.
      */
     public boolean isEntier() {
         if (re.isEntier() && im.isEntier() && jm.isEntier() && km.isEntier()) {
             return true;
         }
         java.math.BigInteger TWO = BigInteger.TWO.val;
-        return re.den.equals(TWO) && im.den.equals(TWO) && jm.den.equals(TWO) && km.den.equals(TWO); 
+        return re.den.equals(TWO) && im.den.equals(TWO) && jm.den.equals(TWO) && km.den.equals(TWO);
     }
 
 
@@ -822,7 +824,7 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
         BigRational i = im.multiply(b);
         BigRational j = jm.multiply(b);
         BigRational k = km.multiply(b);
-        return new BigQuaternion(r,i,j,k);
+        return new BigQuaternion(r, i, j, k);
     }
 
 
@@ -1080,7 +1082,7 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
         BigRational i = new BigRational(im.ceil());
         BigRational j = new BigRational(jm.ceil());
         BigRational k = new BigRational(km.ceil());
-        return new BigQuaternion(r,i,j,k);
+        return new BigQuaternion(r, i, j, k);
     }
 
 
@@ -1093,13 +1095,13 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
         BigRational i = new BigRational(im.floor());
         BigRational j = new BigRational(jm.floor());
         BigRational k = new BigRational(km.floor());
-        return new BigQuaternion(r,i,j,k);
+        return new BigQuaternion(r, i, j, k);
     }
 
 
     /**
-     * BigQuaternion round to next Lipschitz integer.
-     * BigQuaternion with all integer components.
+     * BigQuaternion round to next Lipschitz integer. BigQuaternion with all
+     * integer components.
      * @return Lipschitz integer of this.
      */
     public BigQuaternion roundToLipschitzian() {
@@ -1108,13 +1110,13 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
         BigRational i = new BigRational(im.sum(half).floor());
         BigRational j = new BigRational(jm.sum(half).floor());
         BigRational k = new BigRational(km.sum(half).floor());
-        return new BigQuaternion(r,i,j,k);
+        return new BigQuaternion(r, i, j, k);
     }
 
 
     /**
-     * BigQuaternion round to next Hurwitz integer.
-     * BigQuaternion with all integer or all 1/2 times integer components.
+     * BigQuaternion round to next Hurwitz integer. BigQuaternion with all
+     * integer or all 1/2 times integer components.
      * @return Hurwitz integer of this.
      */
     public BigQuaternion roundToHurwitzian() {
@@ -1142,8 +1144,8 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
 
 
     /**
-     * BigQuaternion units of the Hurwitzian integers.
-     * BigQuaternion units with all integer or all 1/2 times integer components.
+     * BigQuaternion units of the Hurwitzian integers. BigQuaternion units with
+     * all integer or all 1/2 times integer components.
      * @return list of all 24 units.
      */
     public static List<BigQuaternion> unitsOfHurwitzian() {
@@ -1155,27 +1157,13 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
         List<BigQuaternion> units = BigQuaternion.ONE.generators();
         List<BigQuaternion> u = new ArrayList<BigQuaternion>(units);
         for (BigQuaternion ue : u) {
-	    units.add(ue.negate());
+            units.add(ue.negate());
         }
         // Hurwitz integer units
-        long[][] comb = new long[][] {
-	    {1, 1,  1, 1},
-	    {-1,1,  1, 1},
-	    {1, -1, 1, 1}, 
-	    {-1,-1, 1, 1}, 
-	    {1, 1, -1, 1},
-	    {-1,1, -1, 1},
-	    {1, -1,-1, 1}, 
-	    {-1,-1,-1, 1}, 
-	    {1, 1,  1,-1},
-	    {-1,1,  1,-1},
-	    {1, -1, 1,-1}, 
-	    {-1,-1, 1,-1}, 
-	    {1, 1, -1,-1},
-	    {-1,1, -1,-1},
-	    {1, -1,-1,-1}, 
-	    {-1,-1,-1,-1} 
-        };
+        long[][] comb = new long[][] { { 1, 1, 1, 1 }, { -1, 1, 1, 1 }, { 1, -1, 1, 1 }, { -1, -1, 1, 1 },
+                { 1, 1, -1, 1 }, { -1, 1, -1, 1 }, { 1, -1, -1, 1 }, { -1, -1, -1, 1 }, { 1, 1, 1, -1 },
+                { -1, 1, 1, -1 }, { 1, -1, 1, -1 }, { -1, -1, 1, -1 }, { 1, 1, -1, -1 }, { -1, 1, -1, -1 },
+                { 1, -1, -1, -1 }, { -1, -1, -1, -1 } };
         for (long[] row : comb) {
             BigQuaternion ue = BigQuaternion.ONE.fromInteger(row);
             ue = ue.multiply(half);
@@ -1183,7 +1171,7 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
         }
         //System.out.println("units = " + units);
         //for (BigQuaternion ue : units) {
-	    //System.out.println("unit = " + ue + ", norm = " + ue.norm());
+        //System.out.println("unit = " + ue + ", norm = " + ue.norm());
         //}
         entierUnits = units;
         return units;
@@ -1191,8 +1179,8 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
 
 
     /**
-     * Integral quotient and remainder by left division of this by S.
-     * This must be also an integral (Hurwitz) quaternion number.
+     * Integral quotient and remainder by left division of this by S. This must
+     * be also an integral (Hurwitz) quaternion number.
      * @param b an integral (Hurwitz) quaternion number
      * @return [round(b**(-1)) this, this - b * (round(b**(-1)) this)].
      */
@@ -1205,7 +1193,7 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
         //System.out.println("m = " + m.toScript());
         BigQuaternion mh = m.roundToHurwitzian();
         //System.out.println("mh = " + mh.toScript());
-        BigQuaternion n = this.subtract( b.multiply(mh) );
+        BigQuaternion n = this.subtract(b.multiply(mh));
         BigQuaternion[] ret = new BigQuaternion[2];
         ret[0] = mh;
         ret[1] = n;
@@ -1214,8 +1202,8 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
 
 
     /**
-     * Integral quotient and remainder by right division of this by S.
-     * This must be also an integral (Hurwitz) quaternion number.
+     * Integral quotient and remainder by right division of this by S. This must
+     * be also an integral (Hurwitz) quaternion number.
      * @param b an integral (Hurwitz) quaternion number
      * @return [round(b**(-1)) this, this - b * (round(b**(-1)) this)].
      */
@@ -1228,7 +1216,7 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
         //System.out.println("m = " + m.toScript());
         BigQuaternion mh = m.roundToHurwitzian();
         //System.out.println("mh = " + mh.toScript());
-        BigQuaternion n = this.subtract( mh.multiply(b) );
+        BigQuaternion n = this.subtract(mh.multiply(b));
         BigQuaternion[] ret = new BigQuaternion[2];
         ret[0] = mh;
         ret[1] = n;
@@ -1256,7 +1244,7 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
             //System.out.println("u = " + u.toScript());
             q = r;
             r = u;
-	}
+        }
         return q;
     }
 
@@ -1281,7 +1269,7 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
             //System.out.println("u = " + u.toScript());
             q = r;
             r = u;
-	}
+        }
         return q;
     }
 

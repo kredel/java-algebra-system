@@ -26,8 +26,8 @@ import edu.jas.structure.StarRingElem;
  * @author Heinz Kredel
  */
 
-public final class BigOctonion implements StarRingElem<BigOctonion>, GcdRingElem<BigOctonion>,
-                RingFactory<BigOctonion> {
+public final class BigOctonion
+                implements StarRingElem<BigOctonion>, GcdRingElem<BigOctonion>, RingFactory<BigOctonion> {
 
 
     /**
@@ -704,7 +704,7 @@ public final class BigOctonion implements StarRingElem<BigOctonion>, GcdRingElem
      * @return this * b**(-1).
      */
     public BigOctonion divide(BigOctonion b) {
-        return rightDivide(b); 
+        return rightDivide(b);
     }
 
 
