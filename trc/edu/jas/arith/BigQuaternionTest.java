@@ -4,10 +4,8 @@
 
 package edu.jas.arith;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.SortedMap;
 
+import java.util.SortedMap;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -394,16 +392,17 @@ public class BigQuaternionTest extends TestCase {
         //System.out.println("pp = " + pp);
         long pl = pp.longValue();
 
-        SortedMap<Long,Integer> P = PrimeInteger.factors(pl);
+        SortedMap<Long, Integer> P = PrimeInteger.factors(pl);
         //System.out.println("P = " + P);
         for (Long p : P.keySet()) {
-	    c = new BigQuaternion(new BigRational(p));
+            c = new BigQuaternion(new BigRational(p));
             //System.out.println("c = " + c);
             d = a.leftGcd(c);
             //System.out.println("d = " + d.toScript());
             e = d.norm();
             //System.out.println("e = " + e);
-            assertTrue("norm(gcd) == c: " + c + " : " + e, c.equals(e)||c.equals(e.power(2))||c.power(2).equals(e) );
+            assertTrue("norm(gcd) == c: " + c + " : " + e,
+                            c.equals(e) || c.equals(e.power(2)) || c.power(2).equals(e));
         }
     }
 

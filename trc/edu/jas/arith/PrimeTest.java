@@ -236,7 +236,7 @@ public class PrimeTest extends TestCase {
      */
     public void testFactorLargeInteger() {
         SortedMap<java.math.BigInteger, Integer> ff;
- 
+
         long n = 2 * 3 * 5 * 7 * 2 * 9 * 10 * 19 * 811;
         java.math.BigInteger N = java.math.BigInteger.valueOf(n);
         ff = PrimeInteger.factors(N);
@@ -247,8 +247,8 @@ public class PrimeTest extends TestCase {
         }
 
         //N = N.multiply( PrimeList.getLongPrime(59, 55) );
-        N = N.multiply( PrimeList.getLongPrime(59, 19) );
-        N = N.multiply( PrimeList.getLongPrime(61, 1) );
+        N = N.multiply(PrimeList.getLongPrime(59, 19));
+        N = N.multiply(PrimeList.getLongPrime(61, 1));
         //System.out.println("N = " + N);
         ff = PrimeInteger.factors(N); // was not correct
         //System.out.println("ff = " + ff);
@@ -274,7 +274,8 @@ public class PrimeTest extends TestCase {
             if (m < PrimeInteger.BETA) {
                 ff = PrimeInteger.factors(m);
                 //System.out.println("ff = " + ff);
-                assertTrue("isFactorization: " + m + ", ff = " + ff, PrimeInteger.isPrimeFactorization(m, ff));
+                assertTrue("isFactorization: " + m + ", ff = " + ff,
+                                PrimeInteger.isPrimeFactorization(m, ff));
             }
         }
     }
@@ -295,7 +296,8 @@ public class PrimeTest extends TestCase {
             if (m < PrimeInteger.BETA) {
                 ff = PrimeInteger.factors(m);
                 //System.out.println("ff = " + ff);
-                assertTrue("isFactorization: " + m + ", ff = " + ff, PrimeInteger.isPrimeFactorization(m, ff));
+                assertTrue("isFactorization: " + m + ", ff = " + ff,
+                                PrimeInteger.isPrimeFactorization(m, ff));
                 for (Integer e : ff.values()) {
                     assertTrue("e >= 3: " + e + ", ff = " + ff, e >= 3);
                 }

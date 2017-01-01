@@ -9,14 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import edu.jas.arith.BigRational;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -183,7 +183,7 @@ public class MultiVarPowerSeriesTest extends TestCase {
         b = fac.fromInteger(java.math.BigInteger.ONE);
         assertEquals("1 == fromInteger(1) ", b, c);
 
-        e = fac.generate( (i) -> i.isZERO() ? cfac.getONE() : cfac.getZERO() );
+        e = fac.generate((i) -> i.isZERO() ? cfac.getONE() : cfac.getZERO());
         //System.out.println("e = " + e);
         assertTrue("isZERO( e )", !e.isZERO());
         assertTrue("isONE( e )", e.isONE());
@@ -583,8 +583,8 @@ public class MultiVarPowerSeriesTest extends TestCase {
         b = fac.random(kl, q);
         BigRational fv = new BigRational(0);
         List<BigRational> v = new ArrayList<BigRational>(rl);
-        for ( int i = 0; i < rl; i++ ) {
-            v.add( fv.random(kl) );
+        for (int i = 0; i < rl; i++) {
+            v.add(fv.random(kl));
         }
 
         BigRational av = a.evaluate(v);
@@ -611,12 +611,16 @@ public class MultiVarPowerSeriesTest extends TestCase {
 
 class Zeros extends MultiVarCoefficients<BigRational> {
 
+
     public Zeros(MultiVarPowerSeriesRing<BigRational> pf) {
         super(pf);
     }
+
+
     public Zeros(GenPolynomialRing<BigRational> pf) {
         super(pf);
     }
+
 
     @Override
     public BigRational generate(ExpVector i) {
@@ -628,12 +632,16 @@ class Zeros extends MultiVarCoefficients<BigRational> {
 
 class Ones extends MultiVarCoefficients<BigRational> {
 
+
     public Ones(MultiVarPowerSeriesRing<BigRational> pf) {
         super(pf);
     }
+
+
     public Ones(GenPolynomialRing<BigRational> pf) {
         super(pf);
     }
+
 
     @Override
     public BigRational generate(ExpVector i) {
@@ -645,12 +653,16 @@ class Ones extends MultiVarCoefficients<BigRational> {
 
 class Vars extends MultiVarCoefficients<BigRational> {
 
+
     public Vars(MultiVarPowerSeriesRing<BigRational> pf) {
         super(pf);
     }
+
+
     public Vars(GenPolynomialRing<BigRational> pf) {
         super(pf);
     }
+
 
     @Override
     public BigRational generate(ExpVector i) {

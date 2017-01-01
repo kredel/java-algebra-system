@@ -5,13 +5,13 @@
 package edu.jas.ps;
 
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import edu.jas.arith.BigRational;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -92,7 +92,7 @@ public class UnivPowerSeriesTest extends TestCase {
         assertTrue("isZERO( d )", d.isZERO());
         assertTrue("isONE( d )", !d.isONE());
 
-        e = fac.generate( (i) -> i == 0 ? cfac.getONE() : cfac.getZERO() );
+        e = fac.generate((i) -> i == 0 ? cfac.getONE() : cfac.getZERO());
         //System.out.println("e = " + e);
         assertTrue("isZERO( e )", !e.isZERO());
         assertTrue("isONE( e )", e.isONE());
