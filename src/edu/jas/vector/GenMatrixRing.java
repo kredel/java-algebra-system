@@ -102,7 +102,7 @@ public class GenMatrixRing<C extends RingElem<C>> implements AlgebraFactory<GenM
         }
         ArrayList<ArrayList<C>> m = new ArrayList<ArrayList<C>>(rows);
         for (int i = 0; i < rows; i++) {
-            m.add( new ArrayList<C>(z) ); // z.clone();
+            m.add(new ArrayList<C>(z)); // z.clone();
         }
         ZERO = new GenMatrix<C>(this, m);
         m = new ArrayList<ArrayList<C>>(rows);
@@ -116,8 +116,8 @@ public class GenMatrixRing<C extends RingElem<C>> implements AlgebraFactory<GenM
             }
         }
         ONE = new GenMatrix<C>(this, m);
-        logger.info(rows + " x " + cols + " with blocksize " + blocksize + " matrix ring over " + coFac.toScript()
-                        + " constructed");
+        logger.info(rows + " x " + cols + " with blocksize " + blocksize + " matrix ring over "
+                        + coFac.toScript() + " constructed");
     }
 
 
@@ -494,7 +494,7 @@ public class GenMatrixRing<C extends RingElem<C>> implements AlgebraFactory<GenM
      * Copy matrix.
      * @param c matrix to copy.
      * @return copy of the matrix
-     * */
+     */
     public GenMatrix<C> copy(GenMatrix<C> c) {
         if (c == null) {
             return c;
@@ -513,7 +513,7 @@ public class GenMatrixRing<C extends RingElem<C>> implements AlgebraFactory<GenM
         for (int i = 0; i < rows; i++) {
             ArrayList<C> v = new ArrayList<C>(cols);
             for (int j = 0; j < cols; j++) {
-                C e = gener.apply(i,j);
+                C e = gener.apply(i, j);
                 v.add(e);
             }
             m.add(v);
