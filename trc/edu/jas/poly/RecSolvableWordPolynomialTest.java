@@ -18,7 +18,7 @@ import edu.jas.arith.BigRational;
 
 /**
  * BigRational coefficients RecSolvableWordPolynomial tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class RecSolvableWordPolynomialTest extends TestCase {

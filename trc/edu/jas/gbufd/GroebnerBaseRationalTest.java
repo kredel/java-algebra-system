@@ -29,7 +29,7 @@ import edu.jas.poly.PolynomialList;
 
 /**
  * Groebner base sequential rational fraction free tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GroebnerBaseRationalTest extends TestCase {

@@ -21,7 +21,7 @@ import junit.framework.TestSuite;
 
 /**
  * Multivariate power series tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class MultiVarPowerSeriesTest extends TestCase {

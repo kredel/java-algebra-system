@@ -15,7 +15,7 @@ import edu.jas.arith.ModIntegerRing;
 
 /**
  * Galois field coefficients GenPolynomial tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GFGenPolynomialTest extends TestCase {

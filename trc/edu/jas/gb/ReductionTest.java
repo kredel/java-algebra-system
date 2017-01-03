@@ -28,7 +28,7 @@ import edu.jas.poly.PolynomialList;
 
 /**
  * Reduction tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class ReductionTest extends TestCase {

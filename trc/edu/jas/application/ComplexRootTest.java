@@ -28,7 +28,7 @@ import edu.jas.ufd.SquarefreeFactory;
 
 /**
  * RootUtil tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class ComplexRootTest extends TestCase {

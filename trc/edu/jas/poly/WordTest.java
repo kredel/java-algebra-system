@@ -20,7 +20,7 @@ import org.apache.log4j.BasicConfigurator;
 /**
  * Word and WordFactory tests with JUnit. Tests construction and arithmetic
  * operations.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class WordTest extends TestCase {

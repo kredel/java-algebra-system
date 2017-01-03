@@ -22,7 +22,7 @@ import edu.jas.poly.TermOrder;
 
 /**
  * Factor complex via algebraic tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class FactorComplexTest extends TestCase {

@@ -18,7 +18,7 @@ import edu.jas.arith.BigRational;
 
 /**
  * RelationTable tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class RelationTableTest extends TestCase {

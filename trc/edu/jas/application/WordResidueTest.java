@@ -24,7 +24,7 @@ import edu.jas.structure.NotInvertibleException;
 
 /**
  * WordResidue tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class WordResidueTest extends TestCase {

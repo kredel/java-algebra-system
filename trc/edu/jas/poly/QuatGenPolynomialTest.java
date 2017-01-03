@@ -12,7 +12,7 @@ import edu.jas.arith.BigQuaternion;
 
 /**
  * BigQuaternion coefficients GenPolynomial tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class QuatGenPolynomialTest extends TestCase {

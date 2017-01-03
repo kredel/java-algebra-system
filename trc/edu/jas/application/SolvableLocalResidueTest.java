@@ -30,7 +30,7 @@ import junit.framework.TestSuite;
 
 /**
  * SolvableLocalResidue over BigRational GenSolvablePolynomial tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 public class SolvableLocalResidueTest extends TestCase {
 

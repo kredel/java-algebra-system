@@ -27,7 +27,7 @@ import edu.jas.util.ListUtil;
 
 /**
  * Solvable Reduction tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class SolvablePseudoReductionTest extends TestCase {

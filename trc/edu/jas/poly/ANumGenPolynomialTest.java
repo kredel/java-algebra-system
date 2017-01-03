@@ -14,7 +14,7 @@ import edu.jas.arith.BigRational;
 
 /**
  * AlgebraicNumber coefficients GenPolynomial tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class ANumGenPolynomialTest extends TestCase {

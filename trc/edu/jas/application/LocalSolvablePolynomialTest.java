@@ -28,7 +28,7 @@ import edu.jas.poly.RelationGenerator;
 
 /**
  * BigRational coefficients LocalSolvablePolynomial tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class LocalSolvablePolynomialTest extends TestCase {

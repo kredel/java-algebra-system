@@ -39,7 +39,7 @@ import edu.jas.poly.GenPolynomialRing;
 
 /**
  * GBAlgorithmBuilder tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GBAlgorithmBuilderTest extends TestCase {

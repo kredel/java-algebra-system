@@ -20,7 +20,7 @@ import edu.jas.poly.TermOrder;
 
 /**
  * Factor fractions (of polynomial quotients) tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class FactorFractionTest extends TestCase {

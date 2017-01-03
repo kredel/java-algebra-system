@@ -20,7 +20,7 @@ import edu.jas.arith.BigRational;
 
 /**
  * SolvableModuleList tests using JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class SolvableModuleListTest extends TestCase {

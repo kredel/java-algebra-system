@@ -30,7 +30,7 @@ import edu.jas.ufd.FactorAbstract;
 
 /**
  * Factor real algebraic tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class FactorRealRealTest extends TestCase {

@@ -26,7 +26,7 @@ import edu.jas.poly.TermOrder;
 
 /**
  * Quotient BigInteger coefficient GenPolynomial tests with JUnit. 
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class QuotIntPolynomialTest extends TestCase {

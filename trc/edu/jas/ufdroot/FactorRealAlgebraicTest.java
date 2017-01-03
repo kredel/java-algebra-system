@@ -29,7 +29,7 @@ import edu.jas.ufdroot.FactorRealAlgebraic;
 
 /**
  * Factor real algebraic tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class FactorRealAlgebraicTest extends TestCase {

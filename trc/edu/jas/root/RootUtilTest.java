@@ -27,7 +27,7 @@ import edu.jas.structure.Power;
 
 /**
  * RootUtil tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class RootUtilTest extends TestCase {

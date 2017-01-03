@@ -20,7 +20,7 @@ import edu.jas.structure.RingFactory;
 
 /**
  * Product test with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class ProductTest extends TestCase {

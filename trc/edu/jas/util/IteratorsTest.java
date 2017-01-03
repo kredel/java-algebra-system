@@ -20,7 +20,7 @@ import edu.jas.arith.BigInteger;
 
 /**
  * Iterator tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class IteratorsTest extends TestCase {

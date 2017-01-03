@@ -25,7 +25,7 @@ import edu.jas.kern.ComputerThreads;
 
 /**
  * Quotient over BigRational GenPolynomial tests with JUnit. 
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class ElementaryIntegrationTest extends TestCase {

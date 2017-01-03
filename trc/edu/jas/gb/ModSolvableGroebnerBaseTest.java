@@ -31,7 +31,7 @@ import edu.jas.poly.WeylRelations;
 
 /**
  * ModSolvableGroebnerBase sequential and parallel tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class ModSolvableGroebnerBaseTest extends TestCase {

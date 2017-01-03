@@ -18,7 +18,7 @@ import edu.jas.arith.BigQuaternion;
 
 /**
  * BigQuaternion coefficients GenSolvablePolynomial tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class QuatGenSolvablePolynomialTest extends TestCase {

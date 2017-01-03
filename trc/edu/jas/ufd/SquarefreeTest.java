@@ -25,7 +25,7 @@ import edu.jas.structure.RingFactory;
 
 /**
  * Squarefree Factory tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class SquarefreeTest extends TestCase {

@@ -27,7 +27,7 @@ import edu.jas.poly.TermOrder;
 
 /**
  * ModGroebnerBase sequential and parallel tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class ModGroebnerBaseTest extends TestCase {

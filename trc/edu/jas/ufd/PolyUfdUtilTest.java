@@ -19,7 +19,7 @@ import junit.framework.TestSuite;
 
 /**
  * PolyUfdUtil tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class PolyUfdUtilTest extends TestCase {

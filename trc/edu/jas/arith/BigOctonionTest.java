@@ -12,7 +12,7 @@ import junit.framework.TestSuite;
 
 /**
  * BigOctonion tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class BigOctonionTest extends TestCase {

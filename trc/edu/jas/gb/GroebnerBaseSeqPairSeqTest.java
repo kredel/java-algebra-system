@@ -27,7 +27,7 @@ import edu.jas.poly.PolynomialList;
 
 /**
  * Groebner base sequential, sequential pair list, tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GroebnerBaseSeqPairSeqTest extends TestCase {

@@ -20,7 +20,7 @@ import edu.jas.poly.TermOrder;
 
 /**
  * Factor quotient tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class FactorQuotientTest extends TestCase {

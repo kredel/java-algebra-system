@@ -35,7 +35,7 @@ import edu.jas.structure.RingFactory;
 
 /**
  * Solvable Groebner base factory tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class SGBFactoryTest extends TestCase {

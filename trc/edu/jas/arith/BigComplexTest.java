@@ -12,7 +12,7 @@ import junit.framework.TestSuite;
 
 /**
  * BigComplex tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class BigComplexTest extends TestCase {

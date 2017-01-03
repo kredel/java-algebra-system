@@ -25,7 +25,7 @@ import edu.jas.poly.TermOrder;
 
 /**
  * GCD Primitive PRS algorithm tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GCDPrimitiveTest extends TestCase {

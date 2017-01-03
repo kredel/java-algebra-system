@@ -29,7 +29,7 @@ import edu.jas.poly.PolynomialList;
 
 /**
  * Groebner base parallel, syzygy pair list, tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GroebnerBaseParSyzPairTest extends TestCase {

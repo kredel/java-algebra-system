@@ -27,7 +27,7 @@ import edu.jas.poly.TermOrder;
 
 /**
  * GreatestCommonDivisor factory tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GCDFactoryTest extends TestCase {

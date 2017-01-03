@@ -26,7 +26,7 @@ import edu.jas.structure.NotInvertibleException;
 
 /**
  * SolvableResidue tests with JUnit. 
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class SolvableResidueTest extends TestCase {

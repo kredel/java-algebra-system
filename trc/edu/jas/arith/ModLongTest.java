@@ -19,7 +19,7 @@ import junit.framework.TestSuite;
 
 /**
  * ModLong tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class ModLongTest extends TestCase {

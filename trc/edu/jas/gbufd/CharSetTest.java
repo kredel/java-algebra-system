@@ -23,7 +23,7 @@ import edu.jas.poly.TermOrder;
 
 /**
  * Chararacteristic set tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 public class CharSetTest extends TestCase {
 

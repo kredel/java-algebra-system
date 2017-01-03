@@ -24,7 +24,7 @@ import junit.framework.TestSuite;
 
 /**
  * RealAlgebraicNumber Test using JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class RealAlgebraicTest extends TestCase {

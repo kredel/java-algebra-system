@@ -21,7 +21,7 @@ import edu.jas.structure.NotInvertibleException;
 
 /**
  * ComplexAlgebraicNumber Test using JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class ComplexAlgebraicTest extends TestCase {

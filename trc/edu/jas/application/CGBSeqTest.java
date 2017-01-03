@@ -27,7 +27,7 @@ import edu.jas.poly.PolynomialList;
 
 /**
  * Comprehenssive Groebner base sequential tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class CGBSeqTest extends TestCase {

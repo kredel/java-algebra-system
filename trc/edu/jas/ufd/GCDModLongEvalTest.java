@@ -24,7 +24,7 @@ import edu.jas.poly.TermOrder;
 
 /**
  * GCD Modular Evaluation algorithm tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GCDModLongEvalTest extends TestCase {

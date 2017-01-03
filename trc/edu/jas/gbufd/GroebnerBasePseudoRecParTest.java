@@ -36,7 +36,7 @@ import edu.jas.ufd.QuotientRing;
 
 /**
  * Groebner base recursive pseudo reduction sequential tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GroebnerBasePseudoRecParTest extends TestCase {

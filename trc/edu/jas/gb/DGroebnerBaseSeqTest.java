@@ -29,7 +29,7 @@ import edu.jas.poly.PolynomialList;
 
 /**
  * DGroebner base sequential tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class DGroebnerBaseSeqTest extends TestCase {

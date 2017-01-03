@@ -25,7 +25,7 @@ import edu.jas.structure.RingElem;
  * GenSolvablePolynomial Test using JUnit.
  * <b>Note:</b> not optimal since GenSolvablePolynomial does not 
  * implement RingElem&lt;GenSolvablePolynomial&gt;
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GenSolvablePolynomialTest extends TestCase {

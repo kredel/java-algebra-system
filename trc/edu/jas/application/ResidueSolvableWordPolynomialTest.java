@@ -31,7 +31,7 @@ import edu.jas.poly.WeylRelations;
 
 /**
  * BigRational coefficients ResidueSolvableWordPolynomial tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class ResidueSolvableWordPolynomialTest extends TestCase {

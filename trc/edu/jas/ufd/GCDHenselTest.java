@@ -24,7 +24,7 @@ import edu.jas.poly.TermOrder;
 
 /**
  * GCD Hensel algorithm tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GCDHenselTest extends TestCase {

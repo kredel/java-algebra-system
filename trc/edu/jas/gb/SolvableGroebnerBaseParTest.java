@@ -26,7 +26,7 @@ import edu.jas.poly.RelationGenerator;
 
 /**
  * SolvableGroebnerBase parallel tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class SolvableGroebnerBaseParTest extends TestCase {

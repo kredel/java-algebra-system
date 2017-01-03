@@ -34,7 +34,7 @@ import junit.framework.TestSuite;
 
 /**
  * Ideal tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 public class IdealTest extends TestCase {
 

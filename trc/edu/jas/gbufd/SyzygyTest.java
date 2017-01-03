@@ -33,7 +33,7 @@ import edu.jas.poly.TermOrder;
 
 /**
  * Syzygy tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class SyzygyTest extends TestCase {

@@ -22,7 +22,7 @@ import junit.framework.TestSuite;
 
 /**
  * SolvableQuotient over BigRational GenSolvablePolynomial tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class SolvableQuotientTest extends TestCase {

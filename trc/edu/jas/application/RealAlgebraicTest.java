@@ -29,7 +29,7 @@ import edu.jas.structure.Power;
 
 /**
  * RealAlgebraicNumber Test using JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class RealAlgebraicTest extends TestCase {

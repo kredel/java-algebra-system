@@ -24,7 +24,7 @@ import edu.jas.arith.BigInteger;
 
 /**
  * Residue test with JUnit. 
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class ResidueTest extends TestCase {

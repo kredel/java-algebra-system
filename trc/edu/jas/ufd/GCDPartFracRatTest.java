@@ -24,7 +24,7 @@ import edu.jas.poly.TermOrder;
 
 /**
  * GCD partial fraction with rational coefficients algorithm tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GCDPartFracRatTest extends TestCase {

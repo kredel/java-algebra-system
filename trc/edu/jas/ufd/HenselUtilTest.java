@@ -28,7 +28,7 @@ import edu.jas.poly.TermOrder;
 
 /**
  * HenselUtil tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class HenselUtilTest extends TestCase {

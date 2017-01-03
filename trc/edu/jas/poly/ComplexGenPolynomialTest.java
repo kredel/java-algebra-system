@@ -15,7 +15,7 @@ import edu.jas.arith.BigComplex;
 
 /**
  * Complex coefficients GenPolynomial tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class ComplexGenPolynomialTest extends TestCase {

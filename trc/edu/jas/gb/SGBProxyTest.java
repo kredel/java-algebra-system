@@ -28,7 +28,7 @@ import edu.jas.poly.WeylRelations;
 
 /**
  * SolvableGroebnerBase proxy of sequential and parallel tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class SGBProxyTest extends TestCase {

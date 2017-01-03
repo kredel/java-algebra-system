@@ -20,7 +20,7 @@ import edu.jas.arith.BigRational;
 
 /**
  * BigRational coefficients RecSolvablePolynomial tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class RecSolvablePolynomialTest extends TestCase {

@@ -18,7 +18,7 @@ import org.apache.log4j.BasicConfigurator;
  * SocketChannel tests with JUnit.
  * Refactored for java.util.concurrent.
  * @author Akitoshi Yoshida
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class SocketChannelTest extends TestCase {

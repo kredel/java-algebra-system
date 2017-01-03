@@ -24,7 +24,7 @@ import edu.jas.structure.Power;
 
 /**
  * Squarefree factorization tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class SquarefreeModTest extends TestCase {

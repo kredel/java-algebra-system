@@ -26,7 +26,7 @@ import edu.jas.poly.PolynomialList;
 
 /**
  * GroebnerBase parallel iterative GB tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GroebnerBaseParIterTest extends TestCase {

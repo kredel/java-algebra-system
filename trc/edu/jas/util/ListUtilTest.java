@@ -19,7 +19,7 @@ import edu.jas.structure.UnaryFunctor;
 
 /**
  * ListUtil tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 public class ListUtilTest extends TestCase {
 

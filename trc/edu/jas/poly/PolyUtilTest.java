@@ -28,7 +28,7 @@ import edu.jas.ufd.QuotientRing;
 
 /**
  * PolyUtil tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class PolyUtilTest extends TestCase {

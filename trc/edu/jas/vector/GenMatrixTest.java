@@ -17,7 +17,7 @@ import edu.jas.arith.BigRational;
 
 /**
  * GenMatrix tests with JUnit
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GenMatrixTest extends TestCase {

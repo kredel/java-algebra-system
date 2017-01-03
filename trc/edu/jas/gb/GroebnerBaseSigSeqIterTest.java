@@ -29,7 +29,7 @@ import edu.jas.poly.TermOrderByName;
 
 /**
  * Groebner base signature based sequential iterative GB tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GroebnerBaseSigSeqIterTest extends TestCase {

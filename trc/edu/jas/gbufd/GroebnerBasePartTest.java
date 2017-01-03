@@ -32,7 +32,7 @@ import edu.jas.util.KsubSet;
 
 /**
  * Partial Groebner base sequential tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GroebnerBasePartTest extends TestCase {

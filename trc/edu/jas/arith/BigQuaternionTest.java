@@ -14,7 +14,7 @@ import junit.framework.TestSuite;
 
 /**
  * BigQuaternion tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class BigQuaternionTest extends TestCase {

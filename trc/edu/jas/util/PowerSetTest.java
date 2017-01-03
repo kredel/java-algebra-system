@@ -18,7 +18,7 @@ import edu.jas.arith.Combinatoric;
 
 /**
  * PowerSet tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class PowerSetTest extends TestCase {

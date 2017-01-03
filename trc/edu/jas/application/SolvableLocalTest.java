@@ -26,7 +26,7 @@ import edu.jas.poly.WeylRelations;
 
 /**
  * SolvableLocal over BigRational GenSolvablePolynomial tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class SolvableLocalTest extends TestCase {

@@ -24,7 +24,7 @@ import edu.jas.poly.TermOrder;
 
 /**
  * PolyUtilApp tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class PolyUtilAppTest extends TestCase {

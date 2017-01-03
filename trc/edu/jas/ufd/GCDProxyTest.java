@@ -29,7 +29,7 @@ import edu.jas.poly.TermOrder;
 
 /**
  * GreatestCommonDivisor proxy tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GCDProxyTest extends TestCase {

@@ -30,7 +30,7 @@ import junit.framework.TestSuite;
 
 /**
  * Solvable GreatestCommonDivisor factory tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class SGCDFactoryTest extends TestCase {

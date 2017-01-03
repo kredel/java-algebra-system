@@ -24,7 +24,7 @@ import edu.jas.poly.TermOrder;
 
 /**
  * GCD Subresultant PRS algorithm tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GCDSubresTest extends TestCase {

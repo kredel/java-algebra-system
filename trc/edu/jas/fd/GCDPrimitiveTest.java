@@ -30,7 +30,7 @@ import junit.framework.TestSuite;
 /**
  * GCD Primitive PRS algorithm tests with JUnit. <b>Note:</b> not in sync with
  * implementation.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GCDPrimitiveTest extends TestCase {

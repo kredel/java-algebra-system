@@ -25,7 +25,7 @@ import edu.jas.poly.RelationGenerator;
 
 /**
  * Solvable Groebner base sequential tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class SolvableGroebnerBaseSeqTest extends TestCase {

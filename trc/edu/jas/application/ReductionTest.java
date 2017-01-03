@@ -29,7 +29,7 @@ import edu.jas.structure.RingFactory;
 
 /**
  * Reduction tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class ReductionTest extends TestCase {

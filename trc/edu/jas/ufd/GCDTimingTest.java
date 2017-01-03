@@ -19,7 +19,7 @@ import edu.jas.poly.TermOrder;
 
 /**
  * GreatestCommonDivisor timing tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GCDTimingTest extends TestCase {

@@ -12,7 +12,7 @@ import edu.jas.arith.BigRational;
 
 /**
  * BigRational coefficients GenPolynomial coefficients GenPolynomial tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class RatPolyGenPolynomialTest extends TestCase {

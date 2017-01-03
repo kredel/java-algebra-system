@@ -30,7 +30,7 @@ import edu.jas.ufd.GreatestCommonDivisorSubres;
 
 /**
  * PolyGBUtil tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 public class PolyGBUtilTest extends TestCase {
 

@@ -25,7 +25,7 @@ import edu.jas.poly.GenPolynomialRing;
 
 /**
  * Residue tests with JUnit. 
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class ResidueTest extends TestCase {

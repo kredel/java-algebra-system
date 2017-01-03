@@ -27,7 +27,7 @@ import edu.jas.structure.RingFactory;
 /**
  * Factor tests with JUnit.
  * @see edu.jas.application.FactorTest
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class FactorTest extends TestCase {

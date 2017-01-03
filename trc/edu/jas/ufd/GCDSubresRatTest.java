@@ -22,7 +22,7 @@ import edu.jas.poly.TermOrder;
 
 /**
  * GCD Subres with rational coefficients algorithm tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GCDSubresRatTest extends TestCase {

@@ -29,7 +29,7 @@ import edu.jas.poly.PolynomialList;
 
 /**
  * GroebnerBase parallel tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GroebnerBaseParTest extends TestCase {

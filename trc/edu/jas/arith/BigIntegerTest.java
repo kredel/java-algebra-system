@@ -14,7 +14,7 @@ import junit.framework.TestSuite;
 
 /**
  * BigInteger tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class BigIntegerTest extends TestCase {

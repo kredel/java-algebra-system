@@ -25,7 +25,7 @@ import edu.jas.poly.WordFactory;
 
 /**
  * Word reduction tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class WordPseudoReductionTest extends TestCase {

@@ -31,7 +31,7 @@ import edu.jas.poly.WeylRelations;
 
 /**
  * Solvable Groebner base pseudo sequential tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class SolvableGroebnerBasePseudoRecSeqTest extends TestCase {

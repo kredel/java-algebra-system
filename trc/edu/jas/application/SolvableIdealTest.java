@@ -30,7 +30,7 @@ import edu.jas.util.KsubSet;
 
 /**
  * SolvableIdeal tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 public class SolvableIdealTest extends TestCase {
 

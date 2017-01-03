@@ -14,7 +14,7 @@ import edu.jas.structure.Power;
 
 /**
  * Basic arithmetic tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class ArithTest extends TestCase {

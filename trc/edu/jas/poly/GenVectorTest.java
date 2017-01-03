@@ -18,7 +18,7 @@ import edu.jas.vector.GenVectorModul;
 
 /**
  * GenVector tests with JUnit
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GenVectorTest extends TestCase {

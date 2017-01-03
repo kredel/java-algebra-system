@@ -15,7 +15,7 @@ import org.apache.log4j.BasicConfigurator;
 
 /**
  * TaggedSocketChannel tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class TaggedSocketChannelTest extends TestCase {

@@ -23,7 +23,7 @@ import edu.jas.structure.Power;
 
 /**
  * RealRoot tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class RealRootTest extends TestCase {

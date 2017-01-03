@@ -20,7 +20,7 @@ import junit.framework.TestSuite;
 
 /**
  * ModInteger tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class ModIntegerTest extends TestCase {

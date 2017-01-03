@@ -34,7 +34,7 @@ import junit.framework.TestSuite;
 
 /**
  * Groebner base via FGLM tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GroebnerBaseFGLMTest extends TestCase {

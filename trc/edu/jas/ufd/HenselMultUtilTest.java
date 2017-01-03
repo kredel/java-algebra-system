@@ -31,7 +31,7 @@ import edu.jas.poly.TermOrder;
  * HenselMultUtil tests with JUnit. Two seperate classes because of package
  * dependency.
  * @see edu.jas.application.HenselMultUtilTest
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class HenselMultUtilTest extends TestCase {

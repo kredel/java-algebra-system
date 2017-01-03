@@ -40,7 +40,7 @@ import edu.jas.poly.WeylRelations;
 
 /**
  * SolvableSyzygy tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class SolvableSyzygyTest extends TestCase {

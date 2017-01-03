@@ -22,7 +22,7 @@ import edu.jas.vector.GenMatrixRing;
 
 /**
  * GenMatrix tests with JUnit
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GenMatrixTest extends TestCase {

@@ -35,7 +35,7 @@ import edu.jas.structure.RingFactory;
 
 /**
  * R-Groebner base sequential tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class RGroebnerBaseSeqTest extends TestCase {

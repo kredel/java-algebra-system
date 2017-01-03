@@ -24,7 +24,7 @@ import edu.jas.poly.TermOrder;
 
 /**
  * Factor algebraic tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class FactorAlgebraicPrimTest extends TestCase {

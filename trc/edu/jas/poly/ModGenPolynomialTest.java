@@ -16,7 +16,7 @@ import edu.jas.arith.ModIntegerRing;
 
 /**
  * ModInteger coefficients GenPolynomial tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class ModGenPolynomialTest extends TestCase {

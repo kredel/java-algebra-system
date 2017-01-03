@@ -21,7 +21,7 @@ import edu.jas.structure.RingElem;
 
 /**
  * GenWordPolynomial tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GenWordPolynomialTest extends TestCase {

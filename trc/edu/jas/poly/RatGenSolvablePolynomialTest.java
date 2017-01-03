@@ -16,7 +16,7 @@ import edu.jas.arith.BigRational;
 
 /**
  * BigRational coefficients GenSolvablePolynomial tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class RatGenSolvablePolynomialTest extends TestCase {

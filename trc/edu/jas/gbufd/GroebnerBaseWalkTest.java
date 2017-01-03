@@ -26,7 +26,7 @@ import junit.framework.TestSuite;
 
 /**
  * Groebner base Groebner Walk tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GroebnerBaseWalkTest extends TestCase {

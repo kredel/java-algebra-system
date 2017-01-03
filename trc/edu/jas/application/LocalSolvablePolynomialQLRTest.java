@@ -31,7 +31,7 @@ import edu.jas.poly.WeylRelations;
 /**
  * BigRational coefficients LocalSolvablePolynomial QLR representation tests
  * with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class LocalSolvablePolynomialQLRTest extends TestCase {

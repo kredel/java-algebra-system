@@ -25,7 +25,7 @@ import edu.jas.poly.WeylRelations;
 
 /**
  * Solvable Reduction tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class SolvableReductionTest extends TestCase {

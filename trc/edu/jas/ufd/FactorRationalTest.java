@@ -21,7 +21,7 @@ import edu.jas.poly.TermOrder;
 
 /**
  * Factor rational tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class FactorRationalTest extends TestCase {

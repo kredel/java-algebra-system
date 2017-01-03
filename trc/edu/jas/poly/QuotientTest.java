@@ -22,7 +22,7 @@ import edu.jas.arith.BigInteger;
 
 /**
  * Quotient tests with JUnit. 
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class QuotientTest extends TestCase {

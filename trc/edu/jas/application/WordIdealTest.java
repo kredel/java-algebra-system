@@ -26,7 +26,7 @@ import edu.jas.poly.TermOrder;
 
 /**
  * WordIdeal tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 public class WordIdealTest extends TestCase {
 

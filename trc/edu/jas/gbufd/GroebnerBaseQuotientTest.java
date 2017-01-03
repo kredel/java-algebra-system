@@ -27,7 +27,7 @@ import edu.jas.ufd.QuotientRing;
 
 /**
  * Groebner base sequential quotient fraction free tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GroebnerBaseQuotientTest extends TestCase {

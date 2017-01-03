@@ -16,7 +16,7 @@ import junit.framework.TestSuite;
 
 /**
  * Univariate power series tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class UnivPowerSeriesTest extends TestCase {

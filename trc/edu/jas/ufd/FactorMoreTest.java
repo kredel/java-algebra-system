@@ -26,7 +26,7 @@ import junit.framework.TestSuite;
 
 /**
  * Factor tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class FactorMoreTest extends TestCase {

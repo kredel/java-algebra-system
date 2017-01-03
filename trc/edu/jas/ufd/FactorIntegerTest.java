@@ -25,7 +25,7 @@ import edu.jas.poly.TermOrder;
 
 /**
  * Factor tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class FactorIntegerTest extends TestCase {

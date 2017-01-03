@@ -27,7 +27,7 @@ import edu.jas.poly.PolynomialList;
 
 /**
  * Groebner base pseudo reduction parallel tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GroebnerBasePseudoParTest extends TestCase {

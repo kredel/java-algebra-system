@@ -28,7 +28,7 @@ import edu.jas.poly.WordFactory;
 
 /**
  * Groebner base sequential tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class WordGroebnerBaseSeqTest extends TestCase {

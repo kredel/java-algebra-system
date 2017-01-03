@@ -34,7 +34,7 @@ import edu.jas.ufd.NoLiftingException;
  * HenselMultUtil tests with JUnit. Two seperate classes because of package
  * dependency.
  * @see edu.jas.ufd.HenselMultUtilTest
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class HenselMultUtilTest extends TestCase {

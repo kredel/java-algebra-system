@@ -19,7 +19,7 @@ import edu.jas.structure.NotInvertibleException;
 
 /**
  * AlgebraicNumber Test using JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class AlgebraicNumberTest extends TestCase {

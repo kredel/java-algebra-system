@@ -31,7 +31,7 @@ import edu.jas.poly.PolynomialList;
 
 /**
  * Groebner base pseudo reduction sequential tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GroebnerBasePseudoSeqTest extends TestCase {

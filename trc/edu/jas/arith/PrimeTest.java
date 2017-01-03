@@ -15,7 +15,7 @@ import junit.framework.TestSuite;
 
 /**
  * PrimeInteger and PrimeList tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class PrimeTest extends TestCase {

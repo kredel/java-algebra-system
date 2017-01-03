@@ -19,7 +19,7 @@ import edu.jas.poly.GenPolynomial;
 
 /**
  * Galois field tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 public class GaloisFieldTest extends TestCase {
 

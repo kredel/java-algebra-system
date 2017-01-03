@@ -26,7 +26,7 @@ import junit.framework.TestSuite;
 
 /**
  * BigRational coefficients QuotSolvablePolynomial tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class QuotSolvablePolynomialTest extends TestCase {

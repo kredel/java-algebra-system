@@ -14,7 +14,7 @@ import junit.framework.TestSuite;
 
 /**
  * BigRational tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class BigRationalTest extends TestCase {

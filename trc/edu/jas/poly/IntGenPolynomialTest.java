@@ -15,7 +15,7 @@ import edu.jas.arith.BigInteger;
 
 /**
  * BigInteger coefficients GenPolynomial tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class IntGenPolynomialTest extends TestCase {

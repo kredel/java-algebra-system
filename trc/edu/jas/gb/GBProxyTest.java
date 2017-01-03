@@ -28,7 +28,7 @@ import edu.jas.poly.PolynomialList;
 
 /**
  * Groebner base proxy of sequential and parallel tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class GBProxyTest extends TestCase {

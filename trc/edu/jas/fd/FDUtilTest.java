@@ -27,7 +27,7 @@ import junit.framework.TestSuite;
 
 /**
  * FDUtil tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class FDUtilTest extends TestCase {

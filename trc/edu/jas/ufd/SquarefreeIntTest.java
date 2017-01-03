@@ -22,7 +22,7 @@ import edu.jas.poly.TermOrder;
 
 /**
  * Squarefree factorization tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class SquarefreeIntTest extends TestCase {

@@ -32,7 +32,7 @@ import edu.jas.ufd.QuotientRing;
 
 /**
  * ExtensionFieldBuilder tests with JUnit.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class ExtensionFieldBuilderTest extends TestCase {

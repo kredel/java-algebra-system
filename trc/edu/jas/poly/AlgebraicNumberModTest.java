@@ -25,7 +25,7 @@ import edu.jas.poly.AlgebraicNumberRing;
 
 /**
  * AlgebraicNumber modular Test using JUnit. 
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class AlgebraicNumberModTest extends TestCase {

@@ -35,7 +35,7 @@ import edu.jas.ufd.FactorInteger;
 /**
  * Factor tests with JUnit.
  * @see edu.jas.ufd.FactorTest
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class FactorTest extends TestCase {

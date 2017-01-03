@@ -21,7 +21,7 @@ import edu.jas.arith.BigInteger;
 /**
  * ExpVector tests with JUnit. Tests arithmetic operations, for comparison tests
  * see TermOrderTest.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class ExpVectorTest extends TestCase {

@@ -24,7 +24,7 @@ import edu.jas.arith.BigInteger;
 
 /**
  * Complex test with JUnit. 
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class ComplexTest extends TestCase {
