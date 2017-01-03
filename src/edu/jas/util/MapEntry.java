@@ -11,7 +11,7 @@ import java.util.Map;
  * MapEntry helper class implements Map.Entry.
  * Required until JDK 1.6 becomes every where available.
  * @see java.util.AbstractMap.SimpleImmutableEntry in JDK 1.6.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class MapEntry<K,V> implements Map.Entry<K,V> {

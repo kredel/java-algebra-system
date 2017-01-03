@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
 /**
  * TaggedSocketChannel provides a communication channel with message tags for
  * Java objects using TCP/IP sockets.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 public class TaggedSocketChannel extends Thread {
 

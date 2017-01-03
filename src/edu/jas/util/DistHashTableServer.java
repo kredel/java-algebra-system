@@ -18,8 +18,9 @@ import org.apache.log4j.Logger;
 
 /**
  * Server for the distributed version of a list.
- * @author Heinz Kredel TODO: redistribute list for late coming clients, removal
- *         of elements.
+ * TODO: redistribute list for late coming clients, removal
+ *       of elements.
+ * @author Heinz Kredel
  */
 
 public class DistHashTableServer<K> extends Thread {
