@@ -13,7 +13,7 @@ import edu.jas.structure.RingElem;
 /**
  * Serializable subclass to hold pairs of colored polynomials.
  * @param <C> coefficient type
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 public class CPair<C extends RingElem<C>> implements Serializable, Comparable<CPair<C>> {
 

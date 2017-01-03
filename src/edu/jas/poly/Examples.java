@@ -19,7 +19,7 @@ import edu.jas.kern.Scripting;
 
 /**
  * Examples for polynomials usage.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class Examples {

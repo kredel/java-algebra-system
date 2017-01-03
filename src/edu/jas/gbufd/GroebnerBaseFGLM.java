@@ -283,7 +283,7 @@ public class GroebnerBaseFGLM<C extends GcdRingElem<C>> extends GroebnerBaseAbst
      * @param G Groebner basis
      * @return Term that specifies condition (D) or null (Condition (D) in
      *         "A computational approach to commutative algebra", Becker,
-     *         Weispfenning, Kredel, 1993, p. 427)
+     *         Weispfenning, Kredel 1993, p. 427)
      */
     public GenPolynomial<C> lMinterm(List<GenPolynomial<C>> G, GenPolynomial<C> t) {
         //not ok: if ( G == null || G.size() == 0 ) ...

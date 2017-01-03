@@ -25,7 +25,7 @@ import edu.jas.structure.RingElem;
  * Solvable Groebner bases sequential algorithms. Implements common left, right
  * and twosided Groebner bases and left, right and twosided GB tests.
  * @param <C> coefficient type
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroebnerBaseAbstract<C> {

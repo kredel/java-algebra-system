@@ -15,7 +15,7 @@ import edu.jas.structure.RingElem;
 /**
  * Serializable subclass to hold pairs of polynomials.
  * @param <C> coefficient type
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 public class SigPair<C extends RingElem<C>> //extends AbstractSigPair<C>
                 implements Comparable<SigPair<C>> {

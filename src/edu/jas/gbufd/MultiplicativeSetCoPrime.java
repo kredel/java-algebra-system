@@ -21,7 +21,7 @@ import edu.jas.ufd.GreatestCommonDivisorAbstract;
  * Multiplicative set of co-prime polynomials. a, b in M implies a*b in M, 1 in
  * M.
  * @param <C> coefficient type
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 public class MultiplicativeSetCoPrime<C extends GcdRingElem<C>> extends MultiplicativeSet<C> {
 

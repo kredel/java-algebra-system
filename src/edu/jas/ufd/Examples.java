@@ -26,7 +26,7 @@ import edu.jas.vector.GenMatrixRing;
 
 /**
  * Examples for ufd and elementaty integration usage.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class Examples {

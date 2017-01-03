@@ -12,7 +12,7 @@ import edu.jas.arith.BigInteger;
 
 /**
  * Examples for basic linear algebra.
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public class Examples {

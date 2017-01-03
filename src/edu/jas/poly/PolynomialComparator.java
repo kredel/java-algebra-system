@@ -14,7 +14,7 @@ import edu.jas.structure.RingElem;
 /**
  * Comparator for polynomials.
  * @param <C> coefficient type
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 public class PolynomialComparator<C extends RingElem<C>> implements Serializable,
                 Comparator<GenPolynomial<C>> {

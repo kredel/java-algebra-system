@@ -15,7 +15,7 @@ import edu.jas.poly.GenPolynomial;
 /**
  * Serializable abstract subclass to hold pairs of polynomials.
  * @param <C> coefficient type
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 public abstract class AbstractPair<C extends RingElem<C> > 
                       implements Serializable {

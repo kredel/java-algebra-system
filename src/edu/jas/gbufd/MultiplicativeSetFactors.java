@@ -22,7 +22,7 @@ import edu.jas.ufd.FactorFactory;
  * Multiplicative set of irreducible polynomials. a, b in M implies a*b in M, 1
  * in M.
  * @param <C> coefficient type
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 public class MultiplicativeSetFactors<C extends GcdRingElem<C>> extends MultiplicativeSet<C> {
 

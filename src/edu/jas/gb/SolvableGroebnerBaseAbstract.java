@@ -30,7 +30,7 @@ import edu.jas.vector.BasicLinAlg;
  * Solvable Groebner Bases abstract class. Implements common left, right and
  * twosided Groebner bases and left, right and twosided GB tests.
  * @param <C> coefficient type
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 
 public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implements SolvableGroebnerBase<C> {

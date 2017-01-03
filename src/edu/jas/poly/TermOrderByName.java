@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 /**
  * Term order names for ordered polynomials. Defines names for the most used
  * term orders: graded and lexicographical orders. For the definitions see for
- * example the articles <a href="http://doi.acm.org/10.1145/43882.43887">Kredel,
+ * example the articles <a href="http://doi.acm.org/10.1145/43882.43887">Kredel
  * "Admissible term orderings used in computer algebra systems"</a> and <a
  * href="http://doi.acm.org/10.1145/70936.70941">Sit,
  * "Some comments on term-ordering in Gr&ouml;bner basis computations"</a>. Not

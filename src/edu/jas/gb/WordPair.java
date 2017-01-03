@@ -12,7 +12,7 @@ import edu.jas.structure.RingElem;
 /**
  * Serializable subclass to hold pairs of word polynomials.
  * @param <C> coefficient type
- * @author Heinz Kredel.
+ * @author Heinz Kredel
  */
 public class WordPair<C extends RingElem<C>> implements Comparable<WordPair> {
 
