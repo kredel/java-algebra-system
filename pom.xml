@@ -50,6 +50,24 @@
     </developer>
   </developers>
 
+  <contributors>
+    <contributor>
+      <name>Axel Kramer</name>
+    </contributor>
+    <contributor>
+      <name>Raphael Jolly</name>
+    </contributor>
+    <contributor>
+      <name>Jan Suess</name>
+    </contributor>
+    <contributor>
+      <name>Maximilian Nohr</name>
+    </contributor>
+    <contributor>
+      <name>Akitoshi Yoshida</name>
+    </contributor>
+  </contributors>
+
   <scm>                 
     <connection>scm:git:https://github.com/kredel/java-algebra-system.git</connection>
     <developerConnection>scm:git:ssh://github.com/kredel/java-algebra-system.git</developerConnection>
