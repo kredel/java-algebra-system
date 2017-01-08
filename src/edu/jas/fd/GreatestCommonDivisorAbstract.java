@@ -47,6 +47,12 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
     final SolvableSyzygyAbstract<C> syz;
 
 
+    /**
+     * Coefficient ring.
+     */
+    final RingFactory<C> coFac;
+
+
     /*
      * Engine for commutative gcd computation.
      */
@@ -58,6 +64,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
      * @param cf coefficient ring.
      */
     public GreatestCommonDivisorAbstract(RingFactory<C> cf) {
+        coFac = cf;
         syz = new SolvableSyzygySeq<C>(cf);
         //cgcd = GCDFactory.<C> getImplementation(pfac.coFac);
     }
@@ -1182,7 +1189,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
             oc[1] = (C) ocp[1];
             return oc;
         }
-        RingFactory<C> rf = (RingFactory<C>) a.factory();
+        RingFactory<C> rf = coFac; // not usable: (RingFactory<C>) a.factory();
         if (a.equals(b)) { // required because of rationals gcd
             oc[0] = rf.getONE();
             oc[1] = rf.getONE();
@@ -1222,20 +1229,20 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
             return oc;
         }
         // now non-commutative
+        if (rf.isField()) { 
+            logger.info("left Ore condition on coefficients, skew field " + rf + " case: " + a + ", " + b);
+            //C gcd = a.gcd(b); // always one 
+            //C lcm = rf.getONE();
+            oc[0] = a.inverse(); //lcm.divide(a);
+            oc[1] = b.inverse(); //lcm.divide(b);
+            logger.info("Ore multiple: " + Arrays.toString(oc));
+            return oc;
+        }
         if (rf instanceof StarRingElem) {
             logger.info("left Ore condition on coefficients, StarRing case: " + a + ", " + b);
             C bs = (C) ((StarRingElem) b).conjugate();
             oc[0] = bs.multiply(b); // bar(b) b a = s a 
             oc[1] = a.multiply(bs); // a bar(b) b = a s
-            logger.info("Ore multiple: " + Arrays.toString(oc));
-            return oc;
-        }
-        if (rf.isField()) { 
-            logger.info("left Ore condition on coefficients, skew field case: " + a + ", " + b);
-            //C gcd = a.gcd(b); // always one 
-            //C lcm = rf.getONE();
-            oc[0] = a.inverse(); //lcm.divide(a);
-            oc[1] = b.inverse(); //lcm.divide(b);
             logger.info("Ore multiple: " + Arrays.toString(oc));
             return oc;
         }
@@ -1307,7 +1314,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
             oc[1] = (C) ocp[1];
             return oc;
         }
-        RingFactory<C> rf = (RingFactory<C>) a.factory();
+        RingFactory<C> rf = coFac; // not usable: (RingFactory<C>) a.factory();
         if (a.equals(b)) { // required because of rationals gcd
             oc[0] = rf.getONE();
             oc[1] = rf.getONE();
@@ -1342,20 +1349,20 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
             return oc;
         }
         // now non-commutative
+        if (rf.isField()) {
+            logger.info("right Ore condition on coefficients, skew field " + rf + " case: " + a + ", " + b);
+            //C gcd = a.gcd(b); // always one 
+            //C lcm = rf.getONE();
+            oc[0] = a.inverse(); //lcm.divide(a);
+            oc[1] = b.inverse(); //lcm.divide(b);
+            logger.info("Ore multiple: " + Arrays.toString(oc));
+            return oc;
+        }
         if (rf instanceof StarRingElem) {
             logger.info("right Ore condition on coefficients, StarRing case: " + a + ", " + b);
             C bs = (C) ((StarRingElem) b).conjugate();
             oc[0] = b.multiply(bs); // a b bar(b) = a s
             oc[1] = bs.multiply(a); // b bar(b) a = s a 
-            logger.info("Ore multiple: " + Arrays.toString(oc));
-            return oc;
-        }
-        if (rf.isField()) {
-            logger.info("right Ore condition on coefficients, skew field case: " + a + ", " + b);
-            //C gcd = a.gcd(b); // always one 
-            //C lcm = rf.getONE();
-            oc[0] = a.inverse(); //lcm.divide(a);
-            oc[1] = b.inverse(); //lcm.divide(b);
             logger.info("Ore multiple: " + Arrays.toString(oc));
             return oc;
         }

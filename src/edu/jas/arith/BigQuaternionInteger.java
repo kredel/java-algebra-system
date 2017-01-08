@@ -219,7 +219,7 @@ public final class BigQuaternionInteger extends BigQuaternion
 
     /**
      * Query if this ring is a field.
-     * @return true.
+     * @return false.
      */
     public boolean isField() {
         return false;
@@ -617,14 +617,15 @@ public final class BigQuaternionInteger extends BigQuaternion
         if (this.isZERO()) {
             return S;
         }
-        BigQuaternionInteger q, r;
-        q = copy(this);
-        r = copy(S);
+        BigQuaternionInteger q;
+        BigQuaternion r;
+        q = this;
+        r = S;
         while (!r.isZERO()) {
             BigQuaternion u = q.leftQuotientAndRemainder(r)[1];
             //System.out.println("u = " + u.toScript());
-            q = r;
-            r = copy(u);
+            q = copy(r);
+            r = u;
         }
         return q;
     }
@@ -643,14 +644,15 @@ public final class BigQuaternionInteger extends BigQuaternion
         if (this.isZERO()) {
             return S;
         }
-        BigQuaternionInteger q, r;
-        q = copy(this);
-        r = copy(S);
+        BigQuaternionInteger q;
+        BigQuaternion r;
+        q = this;
+        r = S;
         while (!r.isZERO()) {
             BigQuaternion u = q.rightQuotientAndRemainder(r)[1];
             //System.out.println("u = " + u.toScript());
-            q = r;
-            r = copy(u);
+            q = copy(r);
+            r = u;
         }
         return q;
     }
