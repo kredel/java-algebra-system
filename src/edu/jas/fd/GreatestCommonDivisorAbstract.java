@@ -20,6 +20,7 @@ import edu.jas.poly.PolyUtil;
 import edu.jas.poly.RecSolvablePolynomial;
 import edu.jas.poly.RecSolvablePolynomialRing;
 import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.StarRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.ufd.GCDFactory;
 
@@ -89,7 +90,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
             if (d == null) {
                 d = c;
             } else {
-                d = d.gcd(c);
+                d = d.leftGcd(c);
             }
             if (d.isONE()) {
                 return d;
@@ -119,7 +120,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
             if (d == null) {
                 d = c;
             } else {
-                d = d.gcd(c); // TODO does not exist
+                d = d.rightGcd(c); // DONE does now exist
             }
             if (d.isONE()) {
                 return d;
@@ -1220,7 +1221,16 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
             logger.info("Ore multiple: lcm=" + lcm + ", gcd=" + gcd + ", " + Arrays.toString(oc));
             return oc;
         }
-        if (rf.isField()) { // non-commutative
+        // now non-commutative
+        if (rf instanceof StarRingElem) {
+            logger.info("left Ore condition on coefficients, StarRing case: " + a + ", " + b);
+            C bs = (C) ((StarRingElem) b).conjugate();
+            oc[0] = bs.multiply(b); // bar(b) b a = s a 
+            oc[1] = a.multiply(bs); // a bar(b) b = a s
+            logger.info("Ore multiple: " + Arrays.toString(oc));
+            return oc;
+        }
+        if (rf.isField()) { 
             logger.info("left Ore condition on coefficients, skew field case: " + a + ", " + b);
             //C gcd = a.gcd(b); // always one 
             //C lcm = rf.getONE();
@@ -1331,8 +1341,17 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
             logger.info("Ore multiple: " + lcm + ", " + Arrays.toString(oc));
             return oc;
         }
-        if (rf.isField()) { // non-commutative
-            logger.info("right Ore condition on coefficients, field case: " + a + ", " + b);
+        // now non-commutative
+        if (rf instanceof StarRingElem) {
+            logger.info("right Ore condition on coefficients, StarRing case: " + a + ", " + b);
+            C bs = (C) ((StarRingElem) b).conjugate();
+            oc[0] = b.multiply(bs); // a b bar(b) = a s
+            oc[1] = bs.multiply(a); // b bar(b) a = s a 
+            logger.info("Ore multiple: " + Arrays.toString(oc));
+            return oc;
+        }
+        if (rf.isField()) {
+            logger.info("right Ore condition on coefficients, skew field case: " + a + ", " + b);
             //C gcd = a.gcd(b); // always one 
             //C lcm = rf.getONE();
             oc[0] = a.inverse(); //lcm.divide(a);
