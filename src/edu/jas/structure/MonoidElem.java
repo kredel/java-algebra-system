@@ -62,6 +62,76 @@ public interface MonoidElem<C extends MonoidElem<C>> extends Element<C> {
 
 
     /**
+     * Right division.
+     * Returns commutative divide if not overwritten.
+     * @param a element.
+     * @return right, with a * right = this
+     */
+    default public C rightDivide(C a) {
+	return divide(a);
+    }
+
+
+    /**
+     * Left division.
+     * Returns commutative divide if not overwritten.
+     * @param a element.
+     * @return left, with left * a = this
+     */
+    default public C leftDivide(C a) {
+	return divide(a);
+    }
+
+
+    /**
+     * Right remainder.
+     * Returns commutative remainder if not overwritten.
+     * @param a element.
+     * @return r = this - a * (1/right), where a * right = this.
+     */
+    default public C rightRemainder(C a) {
+	return remainder(a);
+    }
+
+
+    /**
+     * Left remainder.
+     * Returns commutative remainder if not overwritten.
+     * @param a element.
+     * @return r = this - (1/left) * a, where left * a = this.
+     */
+    default public C leftRemainder(C a) {
+	return remainder(a);
+    }
+
+
+    /**
+     * Two-sided division.
+     * Returns commutative divide if not overwritten.
+     * @param a element.
+     * @return [left,right], with left * a * right = this
+     */
+    @SuppressWarnings("unchecked")
+    default public C[] twosidedDivide(C a) {
+        C[] ret = (C[]) new MonoidElem[2];
+        ret[0] = divide(a);
+        ret[1] = ((MonoidFactory<C>)factory()).getONE();
+	return ret;
+    }
+
+
+    /**
+     * Two-sided remainder.
+     * Returns commutative remainder if not overwritten.
+     * @param a element.
+     * @return r = this - (a/left) * a * (a/right), where left * a * right = this.
+     */
+    default public C twosidedRemainder(C a){
+	return remainder(a);
+    }
+
+
+    /**
      * Inverse of this. Some implementing classes will throw
      * NotInvertibleException if the element is not invertible.
      * @return x with this * x = 1, if it exists.

@@ -1302,7 +1302,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
         if (a instanceof GenSolvablePolynomial && b instanceof GenSolvablePolynomial) {
             GenSolvablePolynomial ap = (GenSolvablePolynomial) a;
             GenSolvablePolynomial bp = (GenSolvablePolynomial) b;
-            GenSolvablePolynomial[] ocp = rightOreCond(ap, bp);
+            GenSolvablePolynomial[] ocp = rightOreCond(ap, bp); 
             oc[0] = (C) ocp[0];
             oc[1] = (C) ocp[1];
             return oc;
