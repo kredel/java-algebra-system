@@ -18,6 +18,7 @@ import edu.jas.poly.RecSolvablePolynomial;
 import edu.jas.poly.RelationGenerator;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.WeylRelations;
+import edu.jas.kern.ComputerThreads;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -38,6 +39,7 @@ public class QuotSolvablePolynomialTest extends TestCase {
     public static void main(String[] args) {
         BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
+        ComputerThreads.terminate();
     }
 
 

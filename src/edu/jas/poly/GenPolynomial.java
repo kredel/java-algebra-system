@@ -1705,7 +1705,7 @@ public class GenPolynomial<C extends RingElem<C>>
      * GenPolynomial division. Division by coefficient ring element. Fails, if
      * exact division is not possible.
      * @param s coefficient.
-     * @return this/s.
+     * @return s**(-1) * this.
      */
     public GenPolynomial<C> divide(C s) {
         if (s == null || s.isZERO()) {
@@ -1724,6 +1724,43 @@ public class GenPolynomial<C extends RingElem<C>>
             C c = c1.divide(s);
             if (debug) {
                 C x = c1.remainder(s);
+                if (!x.isZERO()) {
+                    logger.info("divide x = " + x);
+                    throw new ArithmeticException("no exact division: " + c1 + "/" + s);
+                }
+            }
+            if (c.isZERO()) {
+                throw new ArithmeticException("no exact division: " + c1 + "/" + s + ", in " + this);
+            }
+            pv.put(e, c); // or m1.setValue( c )
+        }
+        return p;
+    }
+
+
+    /**
+     * GenPolynomial right division. Right division by coefficient ring element. Fails, if
+     * exact division is not possible.
+     * @param s coefficient.
+     * @return this * s**(-1).
+     */
+    public GenPolynomial<C> rightDivideCoeff(C s) {
+        if (s == null || s.isZERO()) {
+            throw new ArithmeticException("division by zero");
+        }
+        if (this.isZERO()) {
+            return this;
+        }
+        //C t = s.inverse();
+        //return multiply(t);
+        GenPolynomial<C> p = ring.getZERO().copy();
+        SortedMap<ExpVector, C> pv = p.val;
+        for (Map.Entry<ExpVector, C> m : val.entrySet()) {
+            ExpVector e = m.getKey();
+            C c1 = m.getValue();
+            C c = c1.rightDivide(s);
+            if (debug) {
+                C x = c1.rightRemainder(s);
                 if (!x.isZERO()) {
                     logger.info("divide x = " + x);
                     throw new ArithmeticException("no exact division: " + c1 + "/" + s);

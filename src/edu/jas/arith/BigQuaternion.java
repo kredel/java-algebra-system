@@ -62,6 +62,12 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
     public static List<BigQuaternion> entierUnits = null; //later: unitsOfHurwitzian();
 
 
+    /**
+     * Flag to signal that random elements should be entier.
+     */
+    protected boolean entierRandoms = true;
+
+
     private final static Random random = new Random();
 
 
@@ -876,6 +882,9 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
      */
     public BigQuaternion inverse() {
         BigRational a = norm().re.inverse();
+        //if (a.denominator().compareTo(new java.math.BigInteger("2")) > 0) {
+        //    logger.warn("using inverse: a = " + a);
+        //}
         return new BigQuaternion(re.multiply(a), im.negate().multiply(a), jm.negate().multiply(a),
                         km.negate().multiply(a));
     }
@@ -922,7 +931,9 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
      * @param b BigQuaternion.
      * @return this * b**(-1).
      */
+    @Override
     public BigQuaternion rightDivide(BigQuaternion b) {
+        //return rightQuotientAndRemainder(b)[0];
         return this.multiply(b.inverse());
     }
 
@@ -932,6 +943,7 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
      * @param b BigQuaternion.
      * @return b**(-1) * this.
      */
+    @Override
     public BigQuaternion leftDivide(BigQuaternion b) {
         return b.inverse().multiply(this);
     }
@@ -983,7 +995,11 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
         BigRational i = BigRational.ONE.random(n, rnd);
         BigRational j = BigRational.ONE.random(n, rnd);
         BigRational k = BigRational.ONE.random(n, rnd);
-        return new BigQuaternion(r, i, j, k);
+        BigQuaternion q = new BigQuaternion(r, i, j, k);
+        if (entierRandoms) {
+            q = q.roundToHurwitzian();
+        }
+        return q;
     }
 
 
@@ -1032,6 +1048,7 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
             return S;
         }
         return ONE;
+        //return rightGcd(S);
     }
 
 
@@ -1225,10 +1242,33 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
 
 
     /**
+     * Left remainder.
+     * @param a element.
+     * @return r = this - (a/left) * a, where left * a = this.
+     */
+    @Override
+    public BigQuaternion leftRemainder(BigQuaternion a) {
+	return leftQuotientAndRemainder(a)[1];
+    }
+
+
+    /**
+     * Right remainder.
+     * @param a element.
+     * @return r = this - a * (a/right), where a * right = this.
+     */
+    @Override
+    public BigQuaternion rightRemainder(BigQuaternion a) {
+	return rightQuotientAndRemainder(a)[1];
+    }
+
+
+    /**
      * Integer quaternion number left greatest common divisor.
      * @param S integer BigQuaternion.
      * @return leftGcd(this,S).
      */
+    @Override
     public BigQuaternion leftGcd(BigQuaternion S) {
         if (S == null || S.isZERO()) {
             return this;
@@ -1254,6 +1294,7 @@ public final class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRing
      * @param S integer BigQuaternion.
      * @return rightGcd(this,S).
      */
+    @Override
     public BigQuaternion rightGcd(BigQuaternion S) {
         if (S == null || S.isZERO()) {
             return this;
