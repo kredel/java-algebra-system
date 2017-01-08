@@ -53,12 +53,15 @@ public interface MonoidElem<C extends MonoidElem<C>> extends Element<C> {
     public C remainder(C S);
 
 
-    /* for a later release:
+    /**
      * Quotient and remainder by division of this by S.
      * @param S
      * @return [this/S, this - (this/S)*S].
      */
-    //public C[] quotientRemainder(C S);
+    @SuppressWarnings("unchecked")
+    default public C[] quotientRemainder(C S) {
+        return (C[]) new MonoidElem[] { divide(S), remainder(S) }; 
+    }
 
 
     /**
