@@ -1238,7 +1238,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
             logger.info("Ore multiple: " + Arrays.toString(oc));
             return oc;
         }
-        if (rf instanceof StarRingElem) {
+        if (b instanceof StarRingElem) {
             logger.info("left Ore condition on coefficients, StarRing case: " + a + ", " + b);
             C bs = (C) ((StarRingElem) b).conjugate();
             oc[0] = bs.multiply(b); // bar(b) b a = s a 
@@ -1358,7 +1358,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
             logger.info("Ore multiple: " + Arrays.toString(oc));
             return oc;
         }
-        if (rf instanceof StarRingElem) {
+        if (b instanceof StarRingElem) {
             logger.info("right Ore condition on coefficients, StarRing case: " + a + ", " + b);
             C bs = (C) ((StarRingElem) b).conjugate();
             oc[0] = b.multiply(bs); // a b bar(b) = a s
