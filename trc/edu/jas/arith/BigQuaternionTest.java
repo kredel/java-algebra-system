@@ -49,13 +49,13 @@ public class BigQuaternionTest extends TestCase {
     BigQuaternion a, b, c, d, e, f;
 
 
-    BigQuaternion fac;
+    BigQuaternionRing fac;
 
 
     @Override
     protected void setUp() {
         a = b = c = d = e = null;
-        fac = new BigQuaternion();
+        fac = new BigQuaternionRing();
     }
 
 
@@ -70,15 +70,15 @@ public class BigQuaternionTest extends TestCase {
      * Test static initialization and constants.
      */
     public void testConstants() {
-        a = BigQuaternion.ZERO;
-        b = BigQuaternion.ONE;
+        a = fac.getZERO();
+        b = fac.getONE();
         c = b.subtract(b);
         assertEquals("1-1 = 0", c, a);
         assertTrue("1-1 = 0", c.isZERO());
         assertTrue("1 = 1", b.isONE());
 
-        a = BigQuaternion.ZERO;
-        b = BigQuaternion.ONE;
+        a = fac.ZERO;
+        b = fac.ONE;
         c = b.subtract(b);
         assertEquals("1-1 = 0", c, a);
     }
@@ -88,9 +88,9 @@ public class BigQuaternionTest extends TestCase {
      * Test bitLength.
      */
     public void testBitLength() {
-        a = BigQuaternion.ZERO;
-        b = BigQuaternion.ONE;
-        c = b.random(100);
+        a = fac.ZERO;
+        b = fac.ONE;
+        c = fac.random(100);
         //System.out.println("c = " + c);
         //System.out.println("len(c) = " + c.bitLength());
 
@@ -99,15 +99,15 @@ public class BigQuaternionTest extends TestCase {
         assertEquals("len(-1) = 13", 13, b.negate().bitLength());
         assertTrue("len(random) >= 12", 12 <= c.bitLength());
 
-        d = BigQuaternion.I;
+        d = fac.I;
         assertEquals("len(i) = 13", 13, d.bitLength());
         assertEquals("len(-i) = 13", 13, d.negate().bitLength());
 
-        d = BigQuaternion.J;
+        d = fac.J;
         assertEquals("len(j) = 13", 13, d.bitLength());
         assertEquals("len(-j) = 13", 13, d.negate().bitLength());
 
-        d = BigQuaternion.K;
+        d = fac.K;
         assertEquals("len(k) = 13", 13, d.bitLength());
         assertEquals("len(-k) = 13", 13, d.negate().bitLength());
     }
@@ -117,27 +117,27 @@ public class BigQuaternionTest extends TestCase {
      * Test constructor and toString.
      */
     public void testConstructor() {
-        a = new BigQuaternion("6/8");
-        b = new BigQuaternion("3/4");
+        a = new BigQuaternion(fac, "6/8");
+        b = new BigQuaternion(fac, "3/4");
 
         assertEquals("6/8 = 3/4", a, b);
 
-        a = new BigQuaternion("3/4 i 4/5 j 1/5 k 2/5");
-        b = new BigQuaternion("-3/4 i -4/5 j -1/5 k -2/5");
+        a = new BigQuaternion(fac, "3/4 i 4/5 j 1/5 k 2/5");
+        b = new BigQuaternion(fac, "-3/4 i -4/5 j -1/5 k -2/5");
         assertEquals("3/4 + i 4/5 + j 1/5 + k 2/5", a, b.negate());
 
         String s = "6/1111111111111111111111111111111111111111111";
-        a = new BigQuaternion(s);
+        a = new BigQuaternion(fac, s);
         String t = a.toString();
 
         assertEquals("stringConstr = toString", s, t);
 
-        a = new BigQuaternion(1);
-        b = new BigQuaternion(-1);
+        a = new BigQuaternion(fac, 1);
+        b = new BigQuaternion(fac, -1);
         c = b.sum(a);
 
         assertTrue("1 = 1", a.isONE());
-        assertEquals("1+(-1) = 0", c, BigQuaternion.ZERO);
+        assertEquals("1+(-1) = 0", c, fac.ZERO);
     }
 
 
@@ -146,12 +146,12 @@ public class BigQuaternionTest extends TestCase {
      */
     public void testRandom() {
         a = fac.random(50);
-        b = new BigQuaternion(a.getRe(), a.getIm(), a.getJm(), a.getKm());
+        b = new BigQuaternion(fac, a.getRe(), a.getIm(), a.getJm(), a.getKm());
         c = b.subtract(a);
 
-        assertEquals("a-b = 0", BigQuaternion.ZERO, c);
+        assertEquals("a-b = 0", fac.ZERO, c);
 
-        d = new BigQuaternion(b.getRe(), b.getIm(), b.getJm(), b.getKm());
+        d = new BigQuaternion(fac, b.getRe(), b.getIm(), b.getJm(), b.getKm());
         assertEquals("sign(a-a) = 0", 0, b.compareTo(d));
     }
 
@@ -166,12 +166,12 @@ public class BigQuaternionTest extends TestCase {
         assertEquals("a+a-a = a", c, a);
         assertEquals("a+a-a = a", 0, c.compareTo(a));
 
-        d = a.sum(BigQuaternion.ZERO);
+        d = a.sum(fac.ZERO);
         assertEquals("a+0 = a", d, a);
-        d = a.subtract(BigQuaternion.ZERO);
+        d = a.subtract(fac.ZERO);
         assertEquals("a-0 = a", d, a);
         d = a.subtract(a);
-        assertEquals("a-a = 0", d, BigQuaternion.ZERO);
+        assertEquals("a-a = 0", d, fac.ZERO);
     }
 
 
@@ -185,9 +185,9 @@ public class BigQuaternionTest extends TestCase {
         assertEquals("a*a/a = a", c, a);
         assertEquals("a*a/a = a", 0, c.compareTo(a));
 
-        d = a.multiply(BigQuaternion.ONE);
+        d = a.multiply(fac.ONE);
         assertEquals("a*1 = a", d, a);
-        d = a.divide(BigQuaternion.ONE);
+        d = a.divide(fac.ONE);
         assertEquals("a/1 = a", d, a);
 
         a = fac.random(10);
@@ -256,16 +256,17 @@ public class BigQuaternionTest extends TestCase {
      * Test entier elements.
      */
     public void testEntier() {
+        fac = new BigQuaternionRing(true);
         a = fac.getONE();
         b = fac.getZERO();
         assertTrue("1 is entier", a.isEntier());
         assertTrue("0 is entier", b.isEntier());
 
-        a = new BigQuaternion("3 i 4 j 5 k 2");
+        a = new BigQuaternion(fac, "3 i 4 j 5 k 2");
         assertTrue("a is entier", a.isEntier());
         //System.out.println("a = " + a);
 
-        b = new BigQuaternion("-3/2 i -5/2 j -1/2 k -7/2");
+        b = new BigQuaternion(fac, "-3/2 i -5/2 j -1/2 k -7/2");
         assertTrue("b is entier", b.isEntier());
         //System.out.println("b = " + b);
 
@@ -293,10 +294,13 @@ public class BigQuaternionTest extends TestCase {
         //System.out.println("norm(b) = " + d);
         assertTrue("d is entier", d.isEntier());
 
+        BigQuaternionInteger ai, bi, ci;
+        ai = new BigQuaternionInteger(fac, a);
+        bi = new BigQuaternionInteger(fac, b);
         // quotient and remainder
-        //System.out.println("a = " + a.toScript());
-        //System.out.println("b = " + b.toScript());
-        BigQuaternion[] qr = a.leftQuotientAndRemainder(b);
+        //System.out.println("ai = " + ai.toScript());
+        //System.out.println("bi = " + bi.toScript());
+        BigQuaternion[] qr = ai.leftQuotientAndRemainder(bi);
         c = qr[0];
         d = qr[1];
         //System.out.println("q = " + c.toScript());
@@ -308,7 +312,7 @@ public class BigQuaternionTest extends TestCase {
         assertEquals("a == b * q + r: ", a, b.multiply(c).sum(d));
         assertTrue("norm(r) < norm(b): ", d.norm().re.compareTo(b.norm().re) < 0);
 
-        qr = a.rightQuotientAndRemainder(b);
+        qr = ai.rightQuotientAndRemainder(bi);
         c = qr[0];
         d = qr[1];
         //System.out.println("q = " + c.toScript());
@@ -322,25 +326,25 @@ public class BigQuaternionTest extends TestCase {
 
 
         // gcds
-        BigQuaternion g = a.leftGcd(b);
+        BigQuaternion g = ai.leftGcd(bi);
         //System.out.println("g = " + g.toScript());
         //System.out.println("norm(g) = " + g.norm());
         assertTrue("g is entier", g.isEntier());
-        BigQuaternion r = a.leftQuotientAndRemainder(g)[1];
+        BigQuaternion r = ai.leftQuotientAndRemainder(g)[1];
         //System.out.println("r = " + r.toScript());
         assertTrue("r == 0: ", r.isZERO());
-        r = b.leftQuotientAndRemainder(g)[1];
+        r = bi.leftQuotientAndRemainder(g)[1];
         //System.out.println("r = " + r.toScript());
-        assertTrue("r == 0: ", r.isZERO());
+        assertTrue("r == 0: " + r, r.isZERO());
 
-        BigQuaternion h = a.rightGcd(b);
+        BigQuaternion h = ai.rightGcd(bi);
         //System.out.println("h = " + h.toScript());
         //System.out.println("norm(h) = " + h.norm());
         assertTrue("h is entier", h.isEntier());
-        r = a.rightQuotientAndRemainder(h)[1];
+        r = ai.rightQuotientAndRemainder(h)[1];
         //System.out.println("r = " + r.toScript());
         assertTrue("r == 0: ", r.isZERO());
-        r = b.rightQuotientAndRemainder(h)[1];
+        r = bi.rightQuotientAndRemainder(h)[1];
         //System.out.println("r = " + r.toScript());
         assertTrue("r == 0: ", r.isZERO());
 
@@ -395,7 +399,7 @@ public class BigQuaternionTest extends TestCase {
         SortedMap<Long, Integer> P = PrimeInteger.factors(pl);
         //System.out.println("P = " + P);
         for (Long p : P.keySet()) {
-            c = new BigQuaternion(new BigRational(p));
+            c = new BigQuaternion(fac, new BigRational(p));
             //System.out.println("c = " + c);
             d = a.leftGcd(c);
             //System.out.println("d = " + d.toScript());

@@ -29,7 +29,7 @@ import edu.jas.structure.StarRingElem;
  */
 
 public /*final*/ class BigQuaternion 
-       implements StarRingElem<BigQuaternion>, GcdRingElem<BigQuaternion>, RingFactory<BigQuaternion> {
+       implements StarRingElem<BigQuaternion>, GcdRingElem<BigQuaternion> {
 
 
     /**
@@ -56,6 +56,12 @@ public /*final*/ class BigQuaternion
     public final BigRational km; // k imaginary part
 
 
+    /**
+     * Corresponding BigQuaternion ring.
+     */
+    public final BigQuaternionRing ring; 
+
+
     protected final static Random random = new Random();
 
 
@@ -67,12 +73,14 @@ public /*final*/ class BigQuaternion
 
     /**
      * Constructor for a BigQuaternion from BigRationals.
+     * @param fac BigQuaternionRing.
      * @param r BigRational.
      * @param i BigRational.
      * @param j BigRational.
      * @param k BigRational.
      */
-    public BigQuaternion(BigRational r, BigRational i, BigRational j, BigRational k) {
+    public BigQuaternion(BigQuaternionRing fac, BigRational r, BigRational i, BigRational j, BigRational k) {
+        ring = fac;
         re = r;
         im = i;
         jm = j;
@@ -82,57 +90,63 @@ public /*final*/ class BigQuaternion
 
     /**
      * Constructor for a BigQuaternion from BigRationals.
+     * @param fac BigQuaternionRing.
      * @param r BigRational.
      * @param i BigRational.
      * @param j BigRational.
      */
-    public BigQuaternion(BigRational r, BigRational i, BigRational j) {
-        this(r, i, j, BigRational.ZERO);
+    public BigQuaternion(BigQuaternionRing fac, BigRational r, BigRational i, BigRational j) {
+        this(fac, r, i, j, BigRational.ZERO);
     }
 
 
     /**
      * Constructor for a BigQuaternion from BigRationals.
+     * @param fac BigQuaternionRing.
      * @param r BigRational.
      * @param i BigRational.
      */
-    public BigQuaternion(BigRational r, BigRational i) {
-        this(r, i, BigRational.ZERO);
+    public BigQuaternion(BigQuaternionRing fac, BigRational r, BigRational i) {
+        this(fac, r, i, BigRational.ZERO);
     }
 
 
     /**
      * Constructor for a BigQuaternion from BigRationals.
+     * @param fac BigQuaternionRing.
      * @param r BigRational.
      */
-    public BigQuaternion(BigRational r) {
-        this(r, BigRational.ZERO);
+    public BigQuaternion(BigQuaternionRing fac, BigRational r) {
+        this(fac, r, BigRational.ZERO);
     }
 
 
     /**
      * Constructor for a BigQuaternion from BigComplex.
+     * @param fac BigQuaternionRing.
      * @param r BigComplex.
      */
-    public BigQuaternion(BigComplex r) {
-        this(r.re, r.im);
+    public BigQuaternion(BigQuaternionRing fac, BigComplex r) {
+        this(fac, r.re, r.im);
     }
 
 
     /**
      * Constructor for a BigQuaternion from long.
+     * @param fac BigQuaternionRing.
      * @param r long.
      */
-    public BigQuaternion(long r) {
-        this(new BigRational(r), BigRational.ZERO);
+    public BigQuaternion(BigQuaternionRing fac, long r) {
+        this(fac, new BigRational(r), BigRational.ZERO);
     }
 
 
     /**
      * Constructor for a BigQuaternion with no arguments.
+     * @param fac BigQuaternionRing.
      */
-    public BigQuaternion() {
-        this(BigRational.ZERO);
+    public BigQuaternion(BigQuaternionRing fac) {
+        this(fac, BigRational.ZERO);
     }
 
 
@@ -140,10 +154,12 @@ public /*final*/ class BigQuaternion
      * The BigQuaternion string constructor accepts the following formats: empty
      * string, "rational", or "rat i rat j rat k rat" with no blanks around i, j
      * or k if used as polynoial coefficient.
+     * @param fac BigQuaternionRing.
      * @param s String.
      * @throws NumberFormatException
      */
-    public BigQuaternion(String s) throws NumberFormatException {
+    public BigQuaternion(BigQuaternionRing fac, String s) throws NumberFormatException {
+        ring = fac;
         if (s == null || s.length() == 0) {
             re = BigRational.ZERO;
             im = BigRational.ZERO;
@@ -206,33 +222,8 @@ public /*final*/ class BigQuaternion
      * @return factory for this Element.
      * @see edu.jas.structure.Element#factory()
      */
-    public BigQuaternion factory() {
-        return this;
-    }
-
-
-    /**
-     * Get a list of the generating elements.
-     * @return list of generators for the algebraic structure.
-     * @see edu.jas.structure.ElemFactory#generators()
-     */
-    public List<BigQuaternion> generators() {
-        List<BigQuaternion> g = new ArrayList<BigQuaternion>(4);
-        g.add(getONE());
-        g.add(I);
-        g.add(J);
-        g.add(K);
-        return g;
-    }
-
-
-    /**
-     * Is this structure finite or infinite.
-     * @return true if this structure is finite, else false.
-     * @see edu.jas.structure.ElemFactory#isFinite()
-     */
-    public boolean isFinite() {
-        return false;
+    public BigQuaternionRing factory() {
+        return ring;
     }
 
 
@@ -242,135 +233,8 @@ public /*final*/ class BigQuaternion
      */
     @Override
     public BigQuaternion copy() {
-        return new BigQuaternion(re, im, jm, km);
+        return new BigQuaternion(ring, re, im, jm, km);
     }
-
-
-    /**
-     * Copy BigQuaternion element c.
-     * @param c BigQuaternion.
-     * @return a copy of c.
-     */
-    public BigQuaternion copy(BigQuaternion c) {
-        return new BigQuaternion(c.re, c.im, c.jm, c.km);
-    }
-
-
-    /**
-     * Get the zero element.
-     * @return 0 as BigQuaternion.
-     */
-    public BigQuaternion getZERO() {
-        return ZERO;
-    }
-
-
-    /**
-     * Get the one element.
-     * @return q as BigQuaternion.
-     */
-    public BigQuaternion getONE() {
-        return ONE;
-    }
-
-
-    /**
-     * Query if this ring is commutative.
-     * @return false.
-     */
-    public boolean isCommutative() {
-        return false;
-    }
-
-
-    /**
-     * Query if this ring is associative.
-     * @return true.
-     */
-    public boolean isAssociative() {
-        return true;
-    }
-
-
-    /**
-     * Query if this ring is a field.
-     * @return true.
-     */
-    public boolean isField() {
-        return true;
-    }
-
-
-    /**
-     * Characteristic of this ring.
-     * @return characteristic of this ring.
-     */
-    public java.math.BigInteger characteristic() {
-        return java.math.BigInteger.ZERO;
-    }
-
-
-    /**
-     * Get a BigQuaternion element from a BigInteger.
-     * @param a BigInteger.
-     * @return a BigQuaternion.
-     */
-    public BigQuaternion fromInteger(java.math.BigInteger a) {
-        return new BigQuaternion(new BigRational(a));
-    }
-
-
-    /**
-     * Get a BigQuaternion element from a long.
-     * @param a long.
-     * @return a BigQuaternion.
-     */
-    public BigQuaternion fromInteger(long a) {
-        return new BigQuaternion(new BigRational(a));
-    }
-
-
-    /**
-     * Get a BigQuaternion element from a long vector.
-     * @param a long vector.
-     * @return a BigQuaternion.
-     */
-    public BigQuaternion fromInteger(long[] a) {
-        return new BigQuaternion(new BigRational(a[0]), new BigRational(a[1]), new BigRational(a[2]),
-                        new BigRational(a[3]));
-    }
-
-
-    /**
-     * The constant 0.
-     */
-    public static final BigQuaternion ZERO = new BigQuaternion();
-
-
-    /**
-     * The constant 1.
-     */
-    public static final BigQuaternion ONE = new BigQuaternion(BigRational.ONE);
-
-
-    /**
-     * The constant i.
-     */
-    public static final BigQuaternion I = new BigQuaternion(BigRational.ZERO, BigRational.ONE);
-
-
-    /**
-     * The constant j.
-     */
-    public static final BigQuaternion J = new BigQuaternion(BigRational.ZERO, BigRational.ZERO,
-                    BigRational.ONE);
-
-
-    /**
-     * The constant k.
-     */
-    public static final BigQuaternion K = new BigQuaternion(BigRational.ZERO, BigRational.ZERO,
-                    BigRational.ZERO, BigRational.ONE);
 
 
     /**
@@ -500,7 +364,7 @@ public /*final*/ class BigQuaternion
     @Override
     public String toScriptFactory() {
         // Python case
-        return "Quat()";
+        return ring.toScript();
     }
 
 
@@ -587,9 +451,11 @@ public /*final*/ class BigQuaternion
      */
     @Override
     public boolean equals(Object b) {
-        if (!(b instanceof BigQuaternion))
+        if (!(b instanceof BigQuaternion)) {
             return false;
+        }
         BigQuaternion B = (BigQuaternion) b;
+        // ring == B.ring ?
         return re.equals(B.re) && im.equals(B.im) && jm.equals(B.jm) && km.equals(B.km);
     }
 
@@ -665,7 +531,7 @@ public /*final*/ class BigQuaternion
      * @return this+B.
      */
     public BigQuaternion sum(BigQuaternion B) {
-        return new BigQuaternion(re.sum(B.re), im.sum(B.im), jm.sum(B.jm), km.sum(B.km));
+        return new BigQuaternion(ring, re.sum(B.re), im.sum(B.im), jm.sum(B.jm), km.sum(B.km));
     }
 
 
@@ -701,7 +567,7 @@ public /*final*/ class BigQuaternion
      * @return this-B.
      */
     public BigQuaternion subtract(BigQuaternion B) {
-        return new BigQuaternion(re.subtract(B.re), im.subtract(B.im), jm.subtract(B.jm), km.subtract(B.km));
+        return new BigQuaternion(ring, re.subtract(B.re), im.subtract(B.im), jm.subtract(B.jm), km.subtract(B.km));
     }
 
 
@@ -723,7 +589,7 @@ public /*final*/ class BigQuaternion
      * @see edu.jas.structure.RingElem#negate()
      */
     public BigQuaternion negate() {
-        return new BigQuaternion(re.negate(), im.negate(), jm.negate(), km.negate());
+        return new BigQuaternion(ring, re.negate(), im.negate(), jm.negate(), km.negate());
     }
 
 
@@ -747,7 +613,7 @@ public /*final*/ class BigQuaternion
      * @return conjugate(this).
      */
     public BigQuaternion conjugate() {
-        return new BigQuaternion(re, im.negate(), jm.negate(), km.negate());
+        return new BigQuaternion(ring, re, im.negate(), jm.negate(), km.negate());
     }
 
 
@@ -762,7 +628,7 @@ public /*final*/ class BigQuaternion
         v = v.sum(im.multiply(im));
         v = v.sum(jm.multiply(jm));
         v = v.sum(km.multiply(km));
-        return new BigQuaternion(v);
+        return new BigQuaternion(ring, v);
     }
 
 
@@ -818,7 +684,7 @@ public /*final*/ class BigQuaternion
         BigRational i = im.multiply(b);
         BigRational j = jm.multiply(b);
         BigRational k = km.multiply(b);
-        return new BigQuaternion(r, i, j, k);
+        return new BigQuaternion(ring, r, i, j, k);
     }
 
 
@@ -847,7 +713,7 @@ public /*final*/ class BigQuaternion
         k = k.subtract(jm.multiply(B.im));
         k = k.sum(km.multiply(B.re));
 
-        return new BigQuaternion(r, i, j, k);
+        return new BigQuaternion(ring, r, i, j, k);
     }
 
 
@@ -870,8 +736,8 @@ public /*final*/ class BigQuaternion
      */
     public BigQuaternion inverse() {
         BigRational a = norm().re.inverse();
-        return new BigQuaternion(re.multiply(a), im.negate().multiply(a), jm.negate().multiply(a),
-                        km.negate().multiply(a));
+        return new BigQuaternion(ring, re.multiply(a), im.negate().multiply(a), 
+                        jm.negate().multiply(a), km.negate().multiply(a));
     }
 
 
@@ -884,7 +750,7 @@ public /*final*/ class BigQuaternion
         if (S.isZERO()) {
             throw new ArithmeticException("division by zero");
         }
-        return ZERO;
+        return ring.getZERO();
     }
 
 
@@ -940,7 +806,7 @@ public /*final*/ class BigQuaternion
      */
     public BigQuaternion divide(BigRational b) {
         BigRational bi = b.inverse();
-        return new BigQuaternion(re.multiply(bi), im.multiply(bi), jm.multiply(bi), km.multiply(bi));
+        return new BigQuaternion(ring, re.multiply(bi), im.multiply(bi), jm.multiply(bi), km.multiply(bi));
     }
 
 
@@ -950,69 +816,7 @@ public /*final*/ class BigQuaternion
      * @return [this*S**(-1), this - (this*S**(-1))*S].
      */
     public BigQuaternion[] quotientRemainder(BigQuaternion S) {
-        return new BigQuaternion[] { divide(S), ZERO };
-    }
-
-
-    /**
-     * BigQuaternion random. Random rational numbers A, B, C and D are generated
-     * using random(n). Then R is the quaternion number with real part A and
-     * imaginary parts B, C and D.
-     * @param n such that 0 &le; A, B, C, D &le; (2<sup>n</sup>-1).
-     * @return R, a random BigQuaternion.
-     */
-    public BigQuaternion random(int n) {
-        return random(n, random);
-    }
-
-
-    /**
-     * BigQuaternion random. Random rational numbers A, B, C and D are generated
-     * using RNRAND(n). Then R is the quaternion number with real part A and
-     * imaginary parts B, C and D.
-     * @param n such that 0 &le; A, B, C, D &le; (2<sup>n</sup>-1).
-     * @param rnd is a source for random bits.
-     * @return R, a random BigQuaternion.
-     */
-    public BigQuaternion random(int n, Random rnd) {
-        BigRational r = BigRational.ONE.random(n, rnd);
-        BigRational i = BigRational.ONE.random(n, rnd);
-        BigRational j = BigRational.ONE.random(n, rnd);
-        BigRational k = BigRational.ONE.random(n, rnd);
-        BigQuaternion q = new BigQuaternion(r, i, j, k);
-        return q;
-    }
-
-
-    /**
-     * Quaternion number, random. Random rational numbers A, B, C and D are
-     * generated using RNRAND(n). Then R is the quaternion number with real part
-     * A and imaginary parts B, C and D.
-     * @param n such that 0 &le; A, B, C, D &le; (2<sup>n</sup>-1).
-     * @return R, a random BigQuaternion.
-     */
-    public static BigQuaternion QRAND(int n) {
-        return ONE.random(n, random);
-    }
-
-
-    /**
-     * Parse quaternion number from String.
-     * @param s String.
-     * @return BigQuaternion from s.
-     */
-    public BigQuaternion parse(String s) {
-        return new BigQuaternion(s);
-    }
-
-
-    /**
-     * Parse quaternion number from Reader.
-     * @param r Reader.
-     * @return next BigQuaternion from r.
-     */
-    public BigQuaternion parse(Reader r) {
-        return parse(StringUtil.nextString(r));
+        return new BigQuaternion[] { divide(S), ring.getZERO() };
     }
 
 
@@ -1028,7 +832,7 @@ public /*final*/ class BigQuaternion
         if (this.isZERO()) {
             return S;
         }
-        return ONE;
+        return ring.getONE();
     }
 
 
@@ -1050,8 +854,8 @@ public /*final*/ class BigQuaternion
             ret[0] = S;
             return ret;
         }
-        BigQuaternion half = new BigQuaternion(new BigRational(1, 2));
-        ret[0] = ONE;
+        BigQuaternion half = new BigQuaternion(ring, new BigRational(1, 2));
+        ret[0] = ring.getONE();
         ret[1] = this.inverse().multiply(half);
         ret[2] = S.inverse().multiply(half);
         return ret;
@@ -1079,7 +883,7 @@ public /*final*/ class BigQuaternion
         BigRational i = new BigRational(im.ceil());
         BigRational j = new BigRational(jm.ceil());
         BigRational k = new BigRational(km.ceil());
-        return new BigQuaternion(r, i, j, k);
+        return new BigQuaternion(ring, r, i, j, k);
     }
 
 
@@ -1092,7 +896,7 @@ public /*final*/ class BigQuaternion
         BigRational i = new BigRational(im.floor());
         BigRational j = new BigRational(jm.floor());
         BigRational k = new BigRational(km.floor());
-        return new BigQuaternion(r, i, j, k);
+        return new BigQuaternion(ring, r, i, j, k);
     }
 
 
@@ -1101,13 +905,42 @@ public /*final*/ class BigQuaternion
      * integer components.
      * @return Lipschitz integer of this.
      */
-    public BigQuaternion roundToLipschitzian() {
+    public BigQuaternionInteger roundToLipschitzian() {
         BigRational half = BigRational.HALF;
         BigRational r = new BigRational(re.sum(half).floor());
         BigRational i = new BigRational(im.sum(half).floor());
         BigRational j = new BigRational(jm.sum(half).floor());
         BigRational k = new BigRational(km.sum(half).floor());
-        return new BigQuaternion(r, i, j, k);
+        return new BigQuaternionInteger(ring, r, i, j, k);
+    }
+
+
+    /**
+     * BigQuaternion round to next Hurwitz integer. BigQuaternion with all
+     * integer or all 1/2 times integer components.
+     * @return Hurwitz integer near this.
+     */
+    public BigQuaternionInteger roundToHurwitzian() {
+        BigQuaternionInteger g = this.roundToLipschitzian();
+        BigQuaternion d = ring.getZERO();
+        BigRational half = BigRational.HALF;
+        BigQuaternion s = this.subtract(g).norm();
+        //System.out.println("s = " + s.toScript());
+        if (s.re.compareTo(half) <= 0) {
+            //System.out.println("s <= 1/2");
+            return g;
+        }
+        List<BigQuaternion> units = ring.unitsOfHurwitzian();
+        for (BigQuaternion ue : units) {
+            BigQuaternion t = this.subtract(g).sum(ue).norm();
+            if (t.re.compareTo(s.re) < 0) {
+                s = t;
+                d = ue;
+            }
+        }
+        //System.out.println("s = " + s.toScript());
+        g = new BigQuaternionInteger(ring, g.sum(d));
+        return g;
     }
 
 }
