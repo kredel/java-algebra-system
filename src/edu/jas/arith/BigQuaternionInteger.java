@@ -315,6 +315,7 @@ public final class BigQuaternionInteger extends BigQuaternion
      * @return [round(b**(-1)) this, this - b * (round(b**(-1)) this)].
      */
     public BigQuaternion[] leftQuotientAndRemainder(BigQuaternion b) {
+        //System.out.println("left QR = " + this + ", " + b);
         if (!this.isEntier() || !b.isEntier()) {
             throw new IllegalArgumentException("entier elements required");
         }
@@ -338,6 +339,7 @@ public final class BigQuaternionInteger extends BigQuaternion
      * @return [round(b**(-1)) this, this - b * (round(b**(-1)) this)].
      */
     public BigQuaternion[] rightQuotientAndRemainder(BigQuaternion b) {
+        //System.out.println("right QR = " + this + ", " + b);
         if (!this.isEntier() || !b.isEntier()) {
             throw new IllegalArgumentException("entier elements required");
         }

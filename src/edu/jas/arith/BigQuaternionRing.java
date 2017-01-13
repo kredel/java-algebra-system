@@ -222,7 +222,7 @@ public final class BigQuaternionRing implements RingFactory<BigQuaternion> {
      */
     @Override
     public String toString() {
-        String s = "BigQuaternionRing";
+        String s = "BigQuaternionRing("+integral+")";
         return s;
     }
 
@@ -236,6 +236,8 @@ public final class BigQuaternionRing implements RingFactory<BigQuaternion> {
     public String toScript() {
         // Python case
         StringBuffer s = new StringBuffer("BigQuaternionRing");
+        s.append(integral);
+        s.append(")");
         return s.toString();
     }
 

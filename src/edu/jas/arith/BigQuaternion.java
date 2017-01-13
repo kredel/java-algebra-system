@@ -784,6 +784,12 @@ public /*final*/ class BigQuaternion
      */
     @Override
     public BigQuaternion rightDivide(BigQuaternion b) {
+        if (ring.integral) {
+            System.out.println("*** entier right divide("+this+", "+b+"): "+ring+" ***");
+            BigQuaternionInteger c = new BigQuaternionInteger(ring,this);
+            BigQuaternionInteger d = new BigQuaternionInteger(ring,b);
+            return c.rightDivide(d);
+        }
         return this.multiply(b.inverse());
     }
 
@@ -795,6 +801,12 @@ public /*final*/ class BigQuaternion
      */
     @Override
     public BigQuaternion leftDivide(BigQuaternion b) {
+        if (ring.integral) {
+            System.out.println("*** entier left divide("+this+", "+b+"): "+ring+" ***");
+            BigQuaternionInteger c = new BigQuaternionInteger(ring,this);
+            BigQuaternionInteger d = new BigQuaternionInteger(ring,b);
+            return c.leftDivide(d);
+        }
         return b.inverse().multiply(this);
     }
 
@@ -826,11 +838,49 @@ public /*final*/ class BigQuaternion
      * @return gcd(this,S).
      */
     public BigQuaternion gcd(BigQuaternion S) {
+        return leftGcd(S);
+    }
+
+
+    /**
+     * Quaternion number greatest common divisor.
+     * @param S BigQuaternion.
+     * @return leftCcd(this,S).
+     */
+    public BigQuaternion leftGcd(BigQuaternion S) {
         if (S == null || S.isZERO()) {
             return this;
         }
         if (this.isZERO()) {
             return S;
+        }
+        if (ring.integral) {
+            System.out.println("*** entier left gcd("+this+", "+S+"): "+ring+" ***");
+            BigQuaternionInteger a = new BigQuaternionInteger(ring,this);
+            BigQuaternionInteger b = new BigQuaternionInteger(ring,S);
+            return a.leftGcd(b);
+        }
+        return ring.getONE();
+    }
+
+
+    /**
+     * Quaternion number greatest common divisor.
+     * @param S BigQuaternion.
+     * @return rightCcd(this,S).
+     */
+    public BigQuaternion rightGcd(BigQuaternion S) {
+        if (S == null || S.isZERO()) {
+            return this;
+        }
+        if (this.isZERO()) {
+            return S;
+        }
+        if (ring.integral) {
+            System.out.println("*** entier right gcd("+this+", "+S+"): "+ring+" ***");
+            BigQuaternionInteger a = new BigQuaternionInteger(ring,this);
+            BigQuaternionInteger b = new BigQuaternionInteger(ring,S);
+            return a.rightGcd(b);
         }
         return ring.getONE();
     }
@@ -926,19 +976,18 @@ public /*final*/ class BigQuaternion
         BigRational half = BigRational.HALF;
         BigQuaternion s = this.subtract(g).norm();
         //System.out.println("s = " + s.toScript());
-        if (s.re.compareTo(half) <= 0) {
-            //System.out.println("s <= 1/2");
-            return g;
-        }
+        //if (s.re.compareTo(half) < 0) { // wrong
         List<BigQuaternion> units = ring.unitsOfHurwitzian();
+        BigQuaternion t = null;
         for (BigQuaternion ue : units) {
-            BigQuaternion t = this.subtract(g).sum(ue).norm();
+            //t = this.subtract(g).sum(ue).norm(); // bug
+            t = this.subtract(g.sum(ue)).norm();
             if (t.re.compareTo(s.re) < 0) {
                 s = t;
                 d = ue;
             }
         }
-        //System.out.println("s = " + s.toScript());
+        //System.out.println("ring = " + ring);
         g = new BigQuaternionInteger(ring, g.sum(d));
         return g;
     }
