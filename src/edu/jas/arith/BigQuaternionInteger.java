@@ -336,7 +336,7 @@ public final class BigQuaternionInteger extends BigQuaternion
      * Integral quotient and remainder by right division of this by S. This must
      * be also an integral (Hurwitz) quaternion number.
      * @param b an integral (Hurwitz) quaternion number
-     * @return [round(b**(-1)) this, this - b * (round(b**(-1)) this)].
+     * @return [this round(b**(-1)), this - this (round(b**(-1)) b)].
      */
     public BigQuaternion[] rightQuotientAndRemainder(BigQuaternion b) {
         //System.out.println("right QR = " + this + ", " + b);

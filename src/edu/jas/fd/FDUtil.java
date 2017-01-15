@@ -187,7 +187,7 @@ public class FDUtil {
      * @param P GenSolvablePolynomial.
      * @param S nonzero GenSolvablePolynomial.
      * @return [ quotient, remainder ] with P ore(ldcf(S)<sup>m'</sup>) = S *
-     *         quotient S + remainder. m' &le; deg(P)-deg(S)
+     *         quotient + remainder. m' &le; deg(P)-deg(S)
      * @see edu.jas.poly.GenPolynomial#divide(edu.jas.poly.GenPolynomial).
      */
     @SuppressWarnings("unchecked")
