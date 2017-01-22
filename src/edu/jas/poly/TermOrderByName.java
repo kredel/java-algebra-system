@@ -4,7 +4,7 @@
 
 package edu.jas.poly;
 
-import java.util.Arrays;
+
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -14,8 +14,8 @@ import org.apache.log4j.Logger;
  * Term order names for ordered polynomials. Defines names for the most used
  * term orders: graded and lexicographical orders. For the definitions see for
  * example the articles <a href="http://doi.acm.org/10.1145/43882.43887">Kredel
- * "Admissible term orderings used in computer algebra systems"</a> and <a
- * href="http://doi.acm.org/10.1145/70936.70941">Sit,
+ * "Admissible term orderings used in computer algebra systems"</a> and
+ * <a href="http://doi.acm.org/10.1145/70936.70941">Sit,
  * "Some comments on term-ordering in Gr&ouml;bner basis computations"</a>. Not
  * all algorithms may work with all term orders since not all are well-founded,
  * so watch your step.
@@ -23,8 +23,8 @@ import org.apache.log4j.Logger;
  * <b>Note:</b> Variables in printed JAS polynomial <b>(low, ..., medium, ...,
  * high)</b> Variables in other CAS polynomial <b>(high, ..., medium, ...,
  * low)</b> with <b>low</b> &lt; <b>medium</b> &lt; <b>high</b>. Example: for
- * variables x<sub>1</sub>, ..., x<sub>r</sub> it is assumed in JAS that
- * x<sub>1</sub> &lt; ... &lt; x<sub>r</sub> in other CAS it means x<sub>1</sub>
+ * variables x<sub>1</sub>, ..., x<sub>r</sub> it is assumed in JAS that x
+ * <sub>1</sub> &lt; ... &lt; x<sub>r</sub> in other CAS it means x<sub>1</sub>
  * &gt; ... &gt; x<sub>r</sub>.
  * 
  * @author Heinz Kredel
@@ -250,8 +250,8 @@ public class TermOrderByName {
 
 
     /**
-     * Construct elimination block TermOrder. Variables {x<sub>1</sub>, ...,
-     * x<sub>s-1</sub>} &lt; {x<sub>s</sub>, ..., x<sub>r</sub>}
+     * Construct elimination block TermOrder. Variables {x<sub>1</sub>, ..., x
+     * <sub>s-1</sub>} &lt; {x<sub>s</sub>, ..., x<sub>r</sub>}
      * 
      * @param t1 term order for both blocks
      * @param s split index
@@ -263,8 +263,8 @@ public class TermOrderByName {
 
 
     /**
-     * Construct elimination block TermOrder. Variables {x<sub>1</sub>, ...,
-     * x<sub>s-1</sub>} &lt; {x<sub>s</sub>, ..., x<sub>r</sub>}
+     * Construct elimination block TermOrder. Variables {x<sub>1</sub>, ..., x
+     * <sub>s-1</sub>} &lt; {x<sub>s</sub>, ..., x<sub>r</sub>}
      * 
      * @param t1 term order for both blocks
      * @param e exponent vector of desired length, r = length(e)
@@ -277,8 +277,8 @@ public class TermOrderByName {
 
 
     /**
-     * Construct elimination block TermOrder. Variables {x<sub>1</sub>, ...,
-     * x<sub>s-1</sub>} &lt; {x<sub>s</sub>, ..., x<sub>r</sub>}
+     * Construct elimination block TermOrder. Variables {x<sub>1</sub>, ..., x
+     * <sub>s-1</sub>} &lt; {x<sub>s</sub>, ..., x<sub>r</sub>}
      * 
      * @param t1 term order for lower valiables
      * @param t2 term order for higher variables
@@ -291,8 +291,8 @@ public class TermOrderByName {
 
 
     /**
-     * Construct elimination block TermOrder. Variables {x<sub>1</sub>, ...,
-     * x<sub>s-1</sub>} &lt; {x<sub>s</sub>, ..., x<sub>r</sub>}
+     * Construct elimination block TermOrder. Variables {x<sub>1</sub>, ..., x
+     * <sub>s-1</sub>} &lt; {x<sub>s</sub>, ..., x<sub>r</sub>}
      * 
      * @param t1 term order for lower valiables
      * @param t2 term order for higher variables
@@ -341,7 +341,7 @@ public class TermOrderByName {
             int m = row.size();
             long[] wi = new long[m];
             for (int j = 0; j < m; j++) {
-                wi[j] = row.get(j); 
+                wi[j] = row.get(j);
             }
             w[i] = wi;
         }
@@ -353,7 +353,7 @@ public class TermOrderByName {
     /**
      * Construct weight for term order.
      * @param to term order
-     * @param n exponent vector size 
+     * @param n exponent vector size
      * @return weight matrix
      */
     public final static long[][] weightForOrder(TermOrder to, int n) {
@@ -367,14 +367,14 @@ public class TermOrderByName {
     /**
      * Construct weight for term order.
      * @param to term order indicator
-     * @param n exponent vector size 
+     * @param n exponent vector size
      * @return weight matrix
      */
     /*public*/ final static long[][] weightForOrder(int to, int n) {
         int k = 0;
         switch (to) {
         case TermOrder.IGRLEX:
-            k = n+1;
+            k = n + 1;
             break;
         case TermOrder.REVILEX:
             // no break
@@ -383,6 +383,7 @@ public class TermOrderByName {
             break;
         default:
         }
+        logger.info("to = " + to + ", k = " + k);
         long[][] w = new long[k][];
         long[] wi;
         switch (to) {
@@ -403,11 +404,11 @@ public class TermOrderByName {
             w[0] = new long[n];
             wi = w[0];
             for (int j = 0; j < n; j++) {
-                 wi[j] = 1L;
+                wi[j] = 1L;
             }
             for (int i = 0; i < n; i++) {
-                w[i+1] = new long[n];
-                wi = w[i+1];
+                w[i + 1] = new long[n];
+                wi = w[i + 1];
                 for (int j = 0; j < n; j++) {
                     if (i == j) { //n - 1 -
                         wi[j] = 1L;
@@ -441,8 +442,8 @@ public class TermOrderByName {
      * Construct weight for split term order.
      * @param to1 first term order indicator
      * @param to2 second term order indicator
-     * @param n exponent vector size 
-     * @param s slpit index 
+     * @param n exponent vector size
+     * @param s slpit index
      * @return weight matrix
      */
     /*public*/ final static long[][] weightForSplitOrder(int to, int to2, int n, int s) {
@@ -462,12 +463,13 @@ public class TermOrderByName {
             k += 1;
             break;
         case TermOrder.INVLEX:
-            k += n-s;
+            k += n - s;
             break;
         default:
         }
+        logger.info("to = " + to + ", k = " + k);
         //System.out.println("to = " + to + ", k = " + k);
-        long[][] w = new long[k+n][];
+        long[][] w = new long[k + n][];
         boolean done = true;
         switch (to) {
         case TermOrder.IGRLEX:
@@ -475,10 +477,10 @@ public class TermOrderByName {
             long[] wi = w[0];
             int j;
             for (j = 0; j < s; j++) {
-                 wi[j] = 1L;
+                wi[j] = 1L;
             }
             for (; j < n; j++) {
-                 wi[j] = 0L;
+                wi[j] = 0L;
             }
             break;
         case TermOrder.INVLEX:
@@ -502,20 +504,20 @@ public class TermOrderByName {
         }
         switch (to2) {
         case TermOrder.IGRLEX:
-            w[k-1] = new long[n];
-            long[] wi = w[k-1];
+            w[k - 1] = new long[n];
+            long[] wi = w[k - 1];
             int j;
             for (j = 0; j < s; j++) {
-                 wi[j] = 0L;
+                wi[j] = 0L;
             }
             for (; j < n; j++) {
-                 wi[j] = 1L;
+                wi[j] = 1L;
             }
             break;
         case TermOrder.INVLEX:
             for (int i = 0; i < s; i++) {
-                w[s+i] = new long[n];
-                wi = w[s+i]; // long[]
+                w[s + i] = new long[n];
+                wi = w[s + i]; // long[]
                 for (j = 0; j < n; j++) {
                     if ((n - 1 - i) == (s + j)) {
                         wi[j] = 1L;
@@ -529,22 +531,23 @@ public class TermOrderByName {
             done = false;
             break;
         }
-        if (! done) {
+        if (!done) {
             //System.out.println("weightForSplitOrder case " + to + "/" + to2);
-            throw new UnsupportedOperationException("case " + to + "/" + to2 + " not implemented for weightForOrder");
+            throw new UnsupportedOperationException(
+                            "case " + to + "/" + to2 + " not implemented for weightForOrder");
         }
         //System.out.println("weight: " + Arrays.toString(w));
         // break ties by inv lex term order
         for (int i = 0; i < n; i++) {
-             w[k+i] = new long[n];
-             long[] wi = w[k+i];
-             for (int j = 0; j < n; j++) {
-		 if ((i) == j) { //n - 1 - 
-                      wi[j] = 1L;
-                  } else {
-                      wi[j] = 0L;
-                  }
-             }
+            w[k + i] = new long[n];
+            long[] wi = w[k + i];
+            for (int j = 0; j < n; j++) {
+                if ((i) == j) { //n - 1 - 
+                    wi[j] = 1L;
+                } else {
+                    wi[j] = 0L;
+                }
+            }
         }
         return w;
     }
