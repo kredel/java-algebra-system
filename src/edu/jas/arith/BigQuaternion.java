@@ -177,12 +177,14 @@ public /*final*/ class BigQuaternion
             return;
         }
 
+        //System.out.println("init: s = " + s);
+        s = s.replaceAll("~","-"); // when used with GenPolynomialTokenizer
         int i = s.indexOf("i");
         String sr = "";
         if (i > 0) {
             sr = s.substring(0, i);
         } else if (i < 0) {
-            throw new NumberFormatException("BigQuaternion missing i");
+            throw new NumberFormatException("BigQuaternion missing i: " + s);
         }
         String si = "";
         if (i < s.length()) {
@@ -192,7 +194,7 @@ public /*final*/ class BigQuaternion
         if (j > 0) {
             si = s.substring(0, j);
         } else if (j < 0) {
-            throw new NumberFormatException("BigQuaternion missing j");
+            throw new NumberFormatException("BigQuaternion missing j: " + s);
         }
         String sj = "";
         if (j < s.length()) {
@@ -202,7 +204,7 @@ public /*final*/ class BigQuaternion
         if (k > 0) {
             sj = s.substring(0, k);
         } else if (k < 0) {
-            throw new NumberFormatException("BigQuaternion missing k");
+            throw new NumberFormatException("BigQuaternion missing k: " + s);
         }
         String sk = "";
         if (k < s.length()) {
@@ -279,7 +281,7 @@ public /*final*/ class BigQuaternion
      */
     @Override
     public String toString() {
-        String s = "" + re;
+        StringBuffer sb = new StringBuffer(re.toString());
         int i = im.compareTo(BigRational.ZERO);
         int j = jm.compareTo(BigRational.ZERO);
         int k = km.compareTo(BigRational.ZERO);
@@ -288,11 +290,14 @@ public /*final*/ class BigQuaternion
             logger.debug("compareTo " + jm + " ? 0 = " + j);
             logger.debug("compareTo " + km + " ? 0 = " + k);
         }
-        if (i == 0 && j == 0 && k == 0)
-            return s;
-        s += "i" + im;
-        s += "j" + jm;
-        s += "k" + km;
+        if (i == 0 && j == 0 && k == 0) {
+            return sb.toString();
+        }
+        sb.append("i" + im);
+        sb.append("j" + jm);
+        sb.append("k" + km);
+        String s = sb.toString();
+        //s = s.replaceAll("-","~"); 
         return s;
     }
 

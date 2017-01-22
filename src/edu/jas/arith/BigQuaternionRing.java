@@ -235,7 +235,7 @@ public final class BigQuaternionRing implements RingFactory<BigQuaternion> {
     @Override
     public String toScript() {
         // Python case
-        StringBuffer s = new StringBuffer("BigQuaternionRing");
+        StringBuffer s = new StringBuffer("BigQuaternionRing(");
         s.append(integral);
         s.append(")");
         return s.toString();

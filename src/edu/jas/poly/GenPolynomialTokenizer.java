@@ -25,6 +25,7 @@ import edu.jas.arith.BigComplex;
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigQuaternion;
+import edu.jas.arith.BigQuaternionRing;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
@@ -163,6 +164,7 @@ public class GenPolynomialTokenizer {
         tok.wordChars('_', '_'); // for subscripts x_i
         tok.wordChars('/', '/'); // wg. rational numbers
         tok.wordChars('.', '.'); // wg. floats
+        tok.wordChars('~', '~'); // wg. floats
         tok.wordChars(128 + 32, 255);
         tok.whitespaceChars(0, ' ');
         tok.commentChar('#');
@@ -388,7 +390,7 @@ public class GenPolynomialTokenizer {
                     break;
                 // read coefficient
                 first = tok.sval.charAt(0);
-                if (digit(first)||first == '/'||first == '.') {
+                if (digit(first)||first == '/'||first == '.'||first == '~') {
                     //System.out.println("coeff 0 = " + tok.sval );
                     StringBuffer df = new StringBuffer();
                     df.append(tok.sval);
@@ -718,7 +720,8 @@ public class GenPolynomialTokenizer {
                 coeff = new BigComplex(0);
                 ct = coeffType.BigC;
             } else if (tok.sval.equalsIgnoreCase("Quat")) {
-                coeff = new BigQuaternion(0);
+                logger.warn("parse of quaternion coefficients may fail for negative components (use ~ for -)");
+                coeff = new BigQuaternionRing();
                 ct = coeffType.BigQ;
             } else if (tok.sval.equalsIgnoreCase("Mod")) {
                 tt = tok.nextToken();
