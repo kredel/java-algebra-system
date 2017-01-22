@@ -50,7 +50,7 @@ heinz:
 	$(RSYNC) ./                heinz@heinz2:$(PART)
 
 krum:
-	$(RSYNC) -e 'ssh -p 2222' ./                krum:java/$(PART)
+	$(RSYNC) -e 'ssh' ./       krum:java/$(PART)
 
 pub:
 	$(RSYNC) --exclude=*ufd* --exclude=DTD --exclude=lisa* --exclude=*xml ./ krum:htdocs/$(PART)
@@ -437,6 +437,7 @@ export:
 	rm -rf ~/jas-versions/$(VERSION)
 	svn export --quiet file:///$(SVNREPO)/jas/trunk ~/jas-versions/$(VERSION)
 	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) `$(SVNREV)` doc/download.html $(DEBVERSION)
+	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) `$(SVNREV)` doc/Dockerfile $(DEBVERSION)
 	svn log -v -r HEAD:$(SVNSRT) file:///$(SVNREPO)/jas/trunk src trc examples jython mpj mpi jlinalg_adapter commons-math_adapter > ~/jas-versions/$(VERSION)/doc/svn_change.log
 	cd ~/jas-versions/; jar -cfM $(VERSION).`$(SVNREV)`-src.zip $(VERSION)/
 	cd ~/jas-versions/$(VERSION)/; ant compile > ant_compile.out
@@ -468,15 +469,17 @@ export:
 	cd ~/jas-versions/$(VERSION)/; chmod -v +r *.jar *.zip >chmod.out 2>&1
 
 deploy:
-	$(RSYNC) -e 'ssh -p 2222' --delete-after --exclude=DTD --exclude=*xml ~/jas-versions/$(VERSION)/ krum:htdocs/$(VERSION)
+	$(RSYNC) -e 'ssh' --delete-after --exclude=DTD --exclude=*xml ~/jas-versions/$(VERSION)/ krum:htdocs/$(VERSION)
 
+m2-deploy:
+	$(RSYNC) -e 'ssh' ~/jas-versions/tmp/$(subst jas-,,$(VERSION)).`$(SVNREV)`/ krum:htdocs/maven-repository/java-algebra-system/$(subst -,/,$(VERSION)).`$(SVNREV)`
 
 git-export:
 	cd ~/jas-versions/jas-git/jas; git svn rebase > ~/jas-versions/$(VERSION)/git_svn.out
 	cd ~/jas-versions/jas-git/jas; git push -v deploy > ~/jas-versions/$(VERSION)/git_push.out
 
 git-deploy:
-	$(RSYNC) -e 'ssh -p 2222' --delete-after ~/jas-versions/jas-git/jas.git/ krum:htdocs/jas.git
+	$(RSYNC) -e 'ssh' --delete-after ~/jas-versions/jas-git/jas.git/ krum:htdocs/jas.git
 	#cd ~/jas-versions/jas-git/jas; git push -v $(DRY) google >> ~/jas-versions/$(VERSION)/git_push.out
 	cd ~/jas-versions/jas-git/jas; git push -v $(DRY) github >> ~/jas-versions/$(VERSION)/git_push.out
 
