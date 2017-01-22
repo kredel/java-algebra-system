@@ -90,13 +90,18 @@ public class GCDcoFactors<C extends GcdRingElem<C>> implements Serializable {
     public boolean isGCD() {
         GenSolvablePolynomial<C> a = left.multiply(coA).multiply(right);
         //GenSolvablePolynomial<C> a = left.multiply(right).multiply(coA); // left right coA
-        if (! a.equals(polyA)) {
+        GreatestCommonDivisorAbstract<C> 
+	    fd = new GreatestCommonDivisorLR<C>(polyA.ring.coFac);
+
+        a = fd.leftBasePrimitivePart(a);
+        if (! a.abs().equals(fd.leftBasePrimitivePart(polyA).abs())) {
             System.out.println("a = " + a + ",\nA != " + polyA);
             return false;
         }
         GenSolvablePolynomial<C> b = left.multiply(coB).multiply(right);
         //GenSolvablePolynomial<C> b = left.multiply(right).multiply(coB);
-        if (! b.equals(polyB)) {
+        b = fd.leftBasePrimitivePart(b);
+        if (! b.abs().equals(fd.leftBasePrimitivePart(polyB).abs())) {
             System.out.println("b = " + b + ",\nB != " + polyB);
             return false;
         }
