@@ -156,9 +156,10 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
         if (d.isONE()) {
             return P;
         }
-        GenSolvablePolynomial<C> pp = (GenSolvablePolynomial<C>) P.divide(d); // rightDivide TODO
+        //GenSolvablePolynomial<C> pp = (GenSolvablePolynomial<C>) P.rightDivideCoeff(d); // rightDivide TODO/done
+        GenSolvablePolynomial<C> pp = (GenSolvablePolynomial<C>) P.leftDivideCoeff(d); // rightDivide TODO/done
         if (debug) {
-            GenSolvablePolynomial<C> p = pp.multiply(d);
+            GenSolvablePolynomial<C> p = pp.multiplyLeft(d);
             if (!p.equals(P)) {
                 throw new ArithmeticException("pp(p)*cont(p) != p: ");
             }
@@ -183,7 +184,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
         if (d.isONE()) {
             return P;
         }
-        GenSolvablePolynomial<C> pp = (GenSolvablePolynomial<C>) P.divide(d); // leftDivide TODO
+        GenSolvablePolynomial<C> pp = (GenSolvablePolynomial<C>) P.leftDivideCoeff(d); // leftDivide TODO/done
         if (debug) {
             GenSolvablePolynomial<C> p = pp.multiplyLeft(d);
             if (!p.equals(P)) {

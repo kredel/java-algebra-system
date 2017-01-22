@@ -74,25 +74,25 @@ public class GreatestCommonDivisorLR<C extends GcdRingElem<C>> extends GreatestC
             C r1 = contP.leftDivide(contPS);
             boolean t = contPS.multiply(r1).equals(contP);
             if (! t) {
-                System.out.println("r1: " + r1 + " * " + contPS + " != " + contP + ", r1*cP=" + r1.multiply(contPS));
+                System.out.println("r1: " + r1 + " * " + contPS + " != " + contP + ", r1*cP=" + contPS.multiply(r1));
             }
             C r2 = contS.leftDivide(contPS);
             t = contPS.multiply(r2).equals(contS);
             if (! t) {
-                System.out.println("r2: " + r2 + " * " + contPS + " != " + contS + ", r2*cS=" + r2.multiply(contPS));
+                System.out.println("r2: " + r2 + " * " + contPS + " != " + contS + ", r2*cS=" + contPS.multiply(r2));
             }
             System.out.println("leftGcd(contP,contS) = " + contPS);
         }
-        GenSolvablePolynomial<C> p = (GenSolvablePolynomial<C>) P.leftDivideCoeff(contPS);
-        GenSolvablePolynomial<C> s = (GenSolvablePolynomial<C>) S.leftDivideCoeff(contPS);
+        GenSolvablePolynomial<C> p = (GenSolvablePolynomial<C>) P.leftDivideCoeff(contP);
+        GenSolvablePolynomial<C> s = (GenSolvablePolynomial<C>) S.leftDivideCoeff(contS);
         if (debug) {
-            boolean t = p.multiplyLeft(contPS).equals(P);
+            boolean t = p.multiplyLeft(contP).equals(P);
             if (! t) {
-                System.out.println("p: " + p + " * " + contPS + " != " + P + ", p*cP=" + p.multiply(contPS));
+                System.out.println("p: " + p + " * " + contP + " != " + P + ", p*cP=" + p.multiplyLeft(contP));
             }
-            t = s.multiplyLeft(contPS).equals(S); 
+            t = s.multiplyLeft(contS).equals(S); 
             if (! t) {
-                System.out.println("s: " + s + " * " + contPS + " != " + S + ", s*cS=" + s.multiply(contPS));
+                System.out.println("s: " + s + " * " + contS + " != " + S + ", s*cS=" + s.multiplyLeft(contS));
             }
         }
         // compute on main variable
@@ -121,27 +121,33 @@ public class GreatestCommonDivisorLR<C extends GcdRingElem<C>> extends GreatestC
             //System.out.println("baseGCD: q = " + q + ", r = " + r);
         }
         q = (GenSolvablePolynomial<C>) q.abs();
-        //q = leftBasePrimitivePart(q);
-        System.out.println("baseGCD: q = " + q + ", r = " + r);
+        q = leftBasePrimitivePart(q);
         //q = rightBasePrimitivePart(q);
-        GenSolvablePolynomial<C> p1 = (GenSolvablePolynomial<C>) p.leftDivide(q);
-        GenSolvablePolynomial<C> s1 = (GenSolvablePolynomial<C>) s.leftDivide(q);
-        //GenSolvablePolynomial<C> p1 = FDUtil.<C> leftBasePseudoQuotient(p, q); // TODO
-        //GenSolvablePolynomial<C> s1 = FDUtil.<C> leftBasePseudoQuotient(s, q); // TODO 
+        System.out.println("baseGCD: q = " + q + ", r = " + r);
+        //GenSolvablePolynomial<C> p1 = (GenSolvablePolynomial<C>) p.leftDivide(q);
+        //GenSolvablePolynomial<C> s1 = (GenSolvablePolynomial<C>) s.leftDivide(q);
+        p = (GenSolvablePolynomial<C>) P.leftDivideCoeff(contPS); // not contP here
+        s = (GenSolvablePolynomial<C>) S.leftDivideCoeff(contPS); // not contS here
+        GenSolvablePolynomial<C> p1 = FDUtil.<C> leftBasePseudoQuotient(p, q); // TODO
+        GenSolvablePolynomial<C> s1 = FDUtil.<C> leftBasePseudoQuotient(s, q); // TODO 
+        //System.out.println("p1 = " + p1 + ", s1 = " + s1);
+        //p1 = leftBasePrimitivePart(p1);
+        //s1 = leftBasePrimitivePart(s1);
+        //System.out.println("pp(p1) = " + p1 + ", pp(s1) = " + s1);
         if (debug) {
             boolean t = p1.multiply(q).equals(p);
             if (! t) {
-                System.out.println("p1: " + q + " * " + p1 + " != " + p);
+                System.out.println("p1: " + p1 + " * " + q + " != " + p);
             }
             t = s1.multiply(q).equals(s);
             if (! t) {
-                System.out.println("s1: " + q + " * " + s1 + " != " + s);
+                System.out.println("s1: " + s1 + " * " + q + " != " + s);
             }
-            t = p1.multiply(q).multiplyLeft(contPS).equals(P); // contPS q p1 == P
+            t = p.multiplyLeft(contPS).equals(P); // contPS q p1 == P
             if (! t) {
                 System.out.println("p1P: " + contPS + " * " + p + " != " + P);
             }
-            t = s1.multiply(q).multiplyLeft(contPS).equals(S);
+            t = s.multiplyLeft(contPS).equals(S);
             if (! t) {
                 System.out.println("s1S: " + contPS + " * " + s + " != " + S);
             }

@@ -231,7 +231,7 @@ public class FDUtil {
                 C ga = oc[0];
                 C gc = oc[1];
                 r = r.multiply(ga); // coeff a ga, exp f
-                h = h.multiply(gc); // coeff c gc, exp f
+                h = h.multiply(gc); // coeff c gc, exp f wanted but is exp f * coeff c gc, okay for base
                 q = q.multiply(ga); // c
                 q = (GenSolvablePolynomial<C>) q.sum(gc, f); // a
                 r = (GenSolvablePolynomial<C>) r.subtract(h);
