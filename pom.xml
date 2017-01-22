@@ -6,7 +6,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <name>Java Algebra System (JAS)</name>
-  <groupId>edu.jas</groupId>
+  <groupId>java-algebra-system</groupId>
   <artifactId>jas</artifactId>
   <version>@SVNREV@</version>
   <packaging>jar</packaging>
@@ -88,5 +88,12 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <repositories>
+    <repository>
+      <id>jas-repository</id>
+      <url>http://krum.rz.uni-mannheim.de/maven-repository</url>
+    </repository>
+  </repositories>
 
 </project>
