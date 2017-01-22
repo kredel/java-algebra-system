@@ -1,0 +1,11 @@
+<!-- use also krum/maven-repository -->
+<ivysettings>
+  <!--settings defaultResolver="jas-repository" /-->
+  <resolvers>
+    <ibiblio name="jas-repository" m2compatible="true" usepoms="false" 
+             root="http://krum.rz.uni-mannheim.de/maven-repository" />
+    <chain name="chain">
+      <ibiblio name="securedcentral" m2compatible="true" root="https://repo1.maven.org/maven2" />
+    </chain>
+  </resolvers>
+</ivysettings>

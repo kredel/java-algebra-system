@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ivy-module version="2.0" xmlns:m="http://ant.apache.org/ivy/maven" 
                           xmlns:e="http://ant.apache.org/ivy/extra">
-  <info organisation="JavaAlgebraSystem" 
+  <info organisation="java-algebra-system" 
         module="jas" revision="2.6.*" 
         status="integration" >
     <description>
