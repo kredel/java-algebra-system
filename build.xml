@@ -46,6 +46,7 @@
   <property name="ivy-publish.overwrite"  value="true" />
 
   <property name="dist"      value="../jas-versions/jas-2.6" />
+  <property name="tmpdist"   value="../jas-versions/tmp" />
   <property name="artifactId" value="jas" />
   <!--property name="version"  value="2.6.${SVNREV}" /--> <!-- set in vorher-->
 
@@ -69,6 +70,7 @@
   <mkdir dir="edu/jas"  />
   <mkdir dir="${test}"  />
   <mkdir dir="doc"  />
+  <mkdir dir="${tmpdist}"  />
   <exec executable="svnlook" outputproperty="svnrev" >
    <arg line="youngest /home/SUBVERSION/jas"/>
   </exec>
@@ -198,7 +200,7 @@
 </target>
 
 
-<target name="time" depends="vorher" >
+<target name="timing" depends="vorher" >
   <java  classname="edu.jas.poly.PolynomialTimings" 
          classpath="${cp}" 
          fork="yes" />
@@ -357,43 +359,46 @@
   <property name="javadoc-jar" value="${artifactId}-${version}-javadoc.jar" />
   <property name="sources-jar" value="${artifactId}-${version}-sources.jar" />
   <!-- copy/rename the bytecode jar -->
+  <property name="m2dist"      value="${tmpdist}/${version}" />
+  <mkdir dir="${m2dist}" />
   <replace file="${dist}/pom.xml" token="@SVNREV@" value="${version}" />
-  <copy file="${dist}/pom.xml"                          tofile="${dist}/${pom-xml}" />
-  <copy file="${dist}/${artifactId}-${version}-bin.jar" tofile="${dist}/${bin-jar}" />
-  <copy file="${dist}/${artifactId}-${version}-doc.zip" tofile="${dist}/${javadoc-jar}" />
-  <copy file="${dist}/${artifactId}-${version}-src.zip" tofile="${dist}/${sources-jar}" />
+  <copy file="${dist}/pom.xml"                          tofile="${m2dist}/${pom-xml}" />
+  <copy file="${dist}/${artifactId}-${version}-bin.jar" tofile="${m2dist}/${bin-jar}" />
+  <copy file="${dist}/${artifactId}-${version}-doc.zip" tofile="${m2dist}/${javadoc-jar}" />
+  <copy file="${dist}/${artifactId}-${version}-src.zip" tofile="${m2dist}/${sources-jar}" />
   <!-- sign the the pom and jars -->
   <delete verbose="true" >
-     <fileset dir="${dist}" includes="*.asc"  />
+     <fileset dir="${m2dist}"  includes="*.asc"  />
+     <fileset dir="${tmpdist}" includes="*bundle.jar"  />
   </delete>
   <exec executable="gpg" >
      <arg value="-u C5283F53"/>
      <arg value="-ab"/>
-     <arg value="${dist}/${pom-xml}"/>
+     <arg value="${m2dist}/${pom-xml}"/>
   </exec>
   <exec executable="gpg" >
      <arg value="-u C5283F53"/>
      <arg value="-ab"/>
-     <arg value="${dist}/${bin-jar}"/>
+     <arg value="${m2dist}/${bin-jar}"/>
   </exec>
   <exec executable="gpg" >
      <arg value="-u C5283F53"/>
      <arg value="-ab"/>
-     <arg value="${dist}/${javadoc-jar}"/>
+     <arg value="${m2dist}/${javadoc-jar}"/>
   </exec>
   <exec executable="gpg" >
      <arg value="-u C5283F53"/>
      <arg value="-ab"/>
-     <arg value="${dist}/${sources-jar}"/>
+     <arg value="${m2dist}/${sources-jar}"/>
   </exec>
-  <!-- create bundle for upload -->
-  <jar jarfile="${dist}/${artifactId}-${version}-bundle.jar"  >
-     <fileset dir="${dist}" includes="${pom-xml}"  />
-     <fileset dir="${dist}" includes="${bin-jar}"  />
-     <fileset dir="${dist}" includes="${javadoc-jar}"  />
-     <fileset dir="${dist}" includes="${sources-jar}"  />
-     <fileset dir="${dist}" includes="*.asc"  />
-  </jar>
+  <!-- create bundle for upload, no more -->
+  <!--jar jarfile="${tmpdist}/${artifactId}-${version}-bundle.jar"  >
+     <fileset dir="${m2dist}" includes="${pom-xml}"  />
+     <fileset dir="${m2dist}" includes="${bin-jar}"  />
+     <fileset dir="${m2dist}" includes="${javadoc-jar}"  />
+     <fileset dir="${m2dist}" includes="${sources-jar}"  />
+     <fileset dir="${m2dist}" includes="*.asc"  />
+  </jar-->
 </target>
 
 <target name="clean" description="remove backup files">
@@ -413,6 +418,7 @@
 
 <target name="resolve" description="retrieve dependencies with ivy">
   <property name="ivy.lib.dir" value="${libs}"/>
+  <!--ivy:cleancache /-->
   <ivy:retrieve />
 </target>
 
