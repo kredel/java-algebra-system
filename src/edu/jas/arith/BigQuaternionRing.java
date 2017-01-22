@@ -14,13 +14,12 @@ import java.util.Random;
 import org.apache.log4j.Logger;
 
 import edu.jas.kern.StringUtil;
-import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
-import edu.jas.structure.StarRingElem;
 
 
 /**
- * BigQuaternion ring class based on BigRational implementing the RingElem interface.
+ * BigQuaternion ring class based on BigRational implementing the RingElem
+ * interface.
  * @author Heinz Kredel
  */
 
@@ -45,7 +44,7 @@ public final class BigQuaternionRing implements RingFactory<BigQuaternion> {
     private static final Logger logger = Logger.getLogger(BigQuaternionRing.class);
 
 
-    private static final boolean debug = logger.isDebugEnabled();
+    //private static final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -61,6 +60,7 @@ public final class BigQuaternionRing implements RingFactory<BigQuaternion> {
      */
     public BigQuaternionRing(boolean i) {
         integral = i;
+        logger.info("integral = " + integral);
     }
 
 
@@ -140,7 +140,7 @@ public final class BigQuaternionRing implements RingFactory<BigQuaternion> {
      * @return true.
      */
     public boolean isField() {
-        return ! integral;
+        return !integral;
     }
 
 
@@ -222,7 +222,7 @@ public final class BigQuaternionRing implements RingFactory<BigQuaternion> {
      */
     @Override
     public String toString() {
-        String s = "BigQuaternionRing("+integral+")";
+        String s = "BigQuaternionRing(" + integral + ")";
         return s;
     }
 
@@ -330,7 +330,7 @@ public final class BigQuaternionRing implements RingFactory<BigQuaternion> {
         BigQuaternion q = new BigQuaternion(this, r, i, j, k);
         if (integral) {
             q = q.roundToHurwitzian();
-	}
+        }
         return q;
     }
 

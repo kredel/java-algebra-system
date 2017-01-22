@@ -5,11 +5,11 @@
 package edu.jas.arith;
 
 
+import edu.jas.structure.Power;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import edu.jas.structure.Power;
 
 
 /**
@@ -283,9 +283,10 @@ public class ArithTest extends TestCase {
      * Test static initialization and constants for BigQuaternion.
      */
     public void testQuaternionConstants() {
+        BigQuaternionRing fac = new BigQuaternionRing();
         BigQuaternion a, b, c, d;
-        a = BigQuaternion.ZERO;
-        b = BigQuaternion.ONE;
+        a = fac.ZERO;
+        b = fac.ONE;
         c = b.subtract(b);
 
         assertTrue("0.isZERO()", a.isZERO());
@@ -391,10 +392,11 @@ public class ArithTest extends TestCase {
      * Test string constructor and toString for BigQuaternion.
      */
     public void testQuaternionConstructor() {
+        BigQuaternionRing fac = new BigQuaternionRing();
         BigQuaternion a, b, c, d;
-        a = new BigQuaternion(1);
-        b = new BigQuaternion(-1);
-        c = new BigQuaternion(0);
+        a = new BigQuaternion(fac, 1);
+        b = new BigQuaternion(fac, -1);
+        c = new BigQuaternion(fac, 0);
 
         d = a.sum(b);
         assertTrue("'1'.isONE()", a.isONE());
@@ -407,18 +409,18 @@ public class ArithTest extends TestCase {
         d = b.multiply(b);
         assertTrue("(-1)*(-1) = 1", d.isONE());
 
-        a = new BigQuaternion(3);
-        b = new BigQuaternion("3");
+        a = new BigQuaternion(fac, 3);
+        b = new BigQuaternion(fac, "3");
         assertEquals("3 = '3'", a, b);
 
-        a = new BigQuaternion(-5);
-        b = new BigQuaternion("-5");
+        a = new BigQuaternion(fac, -5);
+        b = new BigQuaternion(fac, "-5");
         assertEquals("-5 = '-5'", a, b);
 
         //          0         1         2         3         4 
         //          0123456789012345678901234567890123456789012345
         String s = "1111111111111111111111111111111111111111111111";
-        a = new BigQuaternion(s);
+        a = new BigQuaternion(fac, s);
         String t = a.toString();
         assertEquals("stringConstr = toString", s, t);
     }
@@ -461,9 +463,10 @@ public class ArithTest extends TestCase {
      * Test random and compares Quaternion.
      */
     public void testQuaternionRandom() {
+        BigQuaternionRing fac = new BigQuaternionRing();
         BigQuaternion a, b, c;
-        a = BigQuaternion.ZERO.random(500);
-        b = new BigQuaternion("" + a);
+        a = fac.random(500);
+        b = new BigQuaternion(fac, a.toString());
         c = b.subtract(a);
 
         assertTrue("a-'a' = 0", c.isZERO());
@@ -557,12 +560,13 @@ public class ArithTest extends TestCase {
      * Test addition for Quaternion.
      */
     public void testQuaternionAddition() {
+        BigQuaternionRing fac = new BigQuaternionRing();
         BigQuaternion a, b, c, d, e;
         // neutral element
-        a = BigQuaternion.ZERO.random(500);
-        d = a.sum(BigQuaternion.ZERO);
+        a = fac.random(500);
+        d = a.sum(fac.ZERO);
         assertEquals("a+0 = a", d, a);
-        d = a.subtract(BigQuaternion.ZERO);
+        d = a.subtract(fac.ZERO);
         assertEquals("a-0 = a", d, a);
 
         // inverse operations
@@ -574,7 +578,7 @@ public class ArithTest extends TestCase {
         assertEquals("(a-a)+a = a", c, a);
 
         // comutativity
-        b = BigQuaternion.ZERO.random(500);
+        b = fac.random(500);
         c = a.sum(b);
         d = b.sum(a);
         assertEquals("a+b = b+a", c, d);
@@ -585,7 +589,7 @@ public class ArithTest extends TestCase {
         assertEquals("a-b = a+(-b)", c, d);
 
         // associativity
-        c = BigQuaternion.ZERO.random(500);
+        c = fac.random(500);
         d = a.sum(b.sum(c));
         e = a.sum(b).sum(c);
         assertEquals("a+(b+c) = (a+b)+c", d, e);
@@ -679,12 +683,13 @@ public class ArithTest extends TestCase {
      * Test multiplication for Quaternion.
      */
     public void testQuaternionMultiplication() {
+        BigQuaternionRing fac = new BigQuaternionRing();
         BigQuaternion a, b, c, d, e;
         // neutral element
-        a = BigQuaternion.ZERO.random(500);
-        d = a.multiply(BigQuaternion.ONE);
+        a = fac.random(500);
+        d = a.multiply(fac.ONE);
         assertEquals("a*1 = a", d, a);
-        d = a.divide(BigQuaternion.ONE);
+        d = a.divide(fac.ONE);
         assertEquals("a/1 = a", d, a);
 
         // inverse operations
@@ -696,7 +701,7 @@ public class ArithTest extends TestCase {
         assertEquals("(a/a)*a = a", c, a);
 
         // inverse
-        b = BigQuaternion.ZERO.random(500);
+        b = fac.random(500);
         c = b.multiply(a);
         d = c.divide(b);
         e = c.multiply(b.inverse());
@@ -704,24 +709,24 @@ public class ArithTest extends TestCase {
         assertEquals("a/b = a*(1/b)", d, e);
 
         // associativity
-        c = BigQuaternion.ZERO.random(500);
+        c = fac.random(500);
         d = a.multiply(b.multiply(c));
         e = a.multiply(b).multiply(c);
         assertEquals("a*(b*c) = (a*b)*c", d, e);
 
         // non comutativity
-        a = BigQuaternion.I;
-        b = BigQuaternion.J;
+        a = fac.I;
+        b = fac.J;
         c = a.multiply(b);
         d = b.multiply(a);
         assertEquals("I*J = -J*I", c, d.negate());
-        a = BigQuaternion.I;
-        b = BigQuaternion.K;
+        a = fac.I;
+        b = fac.K;
         c = a.multiply(b);
         d = b.multiply(a);
         assertEquals("I*K = -K*I", c, d.negate());
-        a = BigQuaternion.J;
-        b = BigQuaternion.K;
+        a = fac.J;
+        b = fac.K;
         c = a.multiply(b);
         d = b.multiply(a);
         assertEquals("J*K = -K*J", c, d.negate());
@@ -818,7 +823,7 @@ public class ArithTest extends TestCase {
         d = a.power(0);
         c = BigInteger.ONE;
         assertEquals("a^0 == 1", c, d);
- 
+
         d = a.power(3);
         c = a.multiply(a).multiply(a);
         assertEquals("a^3 == a*a*a", c, d);
@@ -935,7 +940,7 @@ public class ArithTest extends TestCase {
                 assertTrue("root^" + n + " == b: " + e, b.compareTo(e) == 0);
             } else {
                 //System.out.println("b   = " + b + ", root(b," + n +") = " + d);
-                System.out.print("b   = " + b + ", "); 
+                System.out.print("b   = " + b + ", ");
                 System.out.println("d^" + n + " = " + e + ", b-e = " + b.subtract(e).abs());
                 //System.out.println("b~e = " + b.compareToAbsolute(e) + ", (b-e)/e = " + b.compareToRelative(e));
             }
@@ -1022,7 +1027,7 @@ public class ArithTest extends TestCase {
         c = Roots.sqrt(b);
         d = c.multiply(c);
         if (b.compareTo(d) != 0) {
-           System.out.println("b = " + b + ", c = " + c + ", d = " + d);
+            System.out.println("b = " + b + ", c = " + c + ", d = " + d);
         }
         assertTrue("sqrt(b)*sqrt(b) == b: b-d = " + b.subtract(d), b.compareTo(d) == 0);
     }

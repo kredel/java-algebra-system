@@ -50,10 +50,14 @@ public class BigOctonionTest extends TestCase {
     BigOctonion fac;
 
 
+    BigQuaternionRing cfac;
+
+
     @Override
     protected void setUp() {
         a = b = c = d = e = null;
-        fac = new BigOctonion();
+        cfac = new BigQuaternionRing();
+        fac = new BigOctonion(cfac);
     }
 
 
@@ -68,16 +72,16 @@ public class BigOctonionTest extends TestCase {
      * Test static initialization and constants.
      */
     public void testConstants() {
-        a = BigOctonion.ZERO;
-        b = BigOctonion.ONE;
+        a = fac.ZERO;
+        b = fac.ONE;
         c = b.subtract(b);
 
         assertEquals("1-1 = 0", c, a);
         assertTrue("1-1 = 0", c.isZERO());
         assertTrue("1 = 1", b.isONE());
 
-        a = BigOctonion.ZERO;
-        b = BigOctonion.ONE;
+        a = fac.ZERO;
+        b = fac.ONE;
         c = b.subtract(b);
         assertEquals("1-1 = 0", c, a);
     }
@@ -87,8 +91,8 @@ public class BigOctonionTest extends TestCase {
      * Test bitLength.
      */
     public void testBitLength() {
-        a = BigOctonion.ZERO;
-        b = BigOctonion.ONE;
+        a = fac.ZERO;
+        b = fac.ONE;
         c = b.random(10);
         //System.out.println("c = " + c); //.toScript());
         //System.out.println("len(c) = " + c.bitLength());
@@ -98,7 +102,7 @@ public class BigOctonionTest extends TestCase {
         assertEquals("len(-1) = 25", 25, b.negate().bitLength());
         assertTrue("len(random) >= 24", 24 <= c.bitLength());
 
-        d = BigOctonion.I;
+        d = fac.I;
         assertEquals("len(i) = 25", 25, d.bitLength());
         assertEquals("len(-i) = 25", 25, d.negate().bitLength());
     }
@@ -108,33 +112,33 @@ public class BigOctonionTest extends TestCase {
      * Test constructor and toString.
      */
     public void testConstructor() {
-        a = new BigOctonion("6/8");
-        b = new BigOctonion("3/4");
+        a = new BigOctonion(cfac, "6/8");
+        b = new BigOctonion(cfac, "3/4");
         assertEquals("6/8 = 3/4", a, b);
 
-        a = new BigOctonion("3/4 i 4/5 j 1/5 k 2/5");
-        b = new BigOctonion("-3/4 i -4/5 j -1/5 k -2/5");
+        a = new BigOctonion(cfac, "3/4 i 4/5 j 1/5 k 2/5");
+        b = new BigOctonion(cfac, "-3/4 i -4/5 j -1/5 k -2/5");
         assertEquals("3/4 + i 4/5 + j 1/5 + k 2/5", a, b.negate());
 
         String s = "6/1111111111111111111111111111111111111111111";
-        a = new BigOctonion(s);
+        a = new BigOctonion(cfac, s);
         String t = a.toString();
         assertEquals("stringConstr = toString", s, t);
 
         String sr = "3/4 i 4/5 j 1/5 k 2/5";
         String si = "-3/4 i -4/5 j -1/5 k -2/5";
         s = sr + " o " + si;
-        a = new BigOctonion(s);
-        BigQuaternion qr = new BigQuaternion(sr);
-        BigQuaternion qi = new BigQuaternion(si);
+        a = new BigOctonion(cfac, s);
+        BigQuaternion qr = new BigQuaternion(cfac, sr);
+        BigQuaternion qi = new BigQuaternion(cfac, si);
         b = new BigOctonion(qr, qi);
         assertEquals("s = " + s, a, b);
 
-        a = new BigOctonion(1);
-        b = new BigOctonion(-1);
+        a = new BigOctonion(cfac, 1);
+        b = new BigOctonion(cfac, -1);
         c = b.sum(a);
         assertTrue("1 = 1", a.isONE());
-        assertEquals("1+(-1) = 0", c, BigOctonion.ZERO);
+        assertEquals("1+(-1) = 0", c, fac.ZERO);
     }
 
 
@@ -146,7 +150,7 @@ public class BigOctonionTest extends TestCase {
 
         b = new BigOctonion(a.getR(), a.getI());
         c = b.subtract(a);
-        assertEquals("a-b = 0", BigOctonion.ZERO, c);
+        assertEquals("a-b = 0", fac.ZERO, c);
 
         d = new BigOctonion(b.getR(), b.getI());
         assertEquals("sign(a-a) = 0", 0, b.compareTo(d));
@@ -164,12 +168,12 @@ public class BigOctonionTest extends TestCase {
         assertEquals("a+a-a = a", c, a);
         assertEquals("a+a-a = a", 0, c.compareTo(a));
 
-        d = a.sum(BigOctonion.ZERO);
+        d = a.sum(fac.ZERO);
         assertEquals("a+0 = a", d, a);
-        d = a.subtract(BigOctonion.ZERO);
+        d = a.subtract(fac.ZERO);
         assertEquals("a-0 = a", d, a);
         d = a.subtract(a);
-        assertEquals("a-a = 0", d, BigOctonion.ZERO);
+        assertEquals("a-a = 0", d, fac.ZERO);
     }
 
 
@@ -185,9 +189,9 @@ public class BigOctonionTest extends TestCase {
         assertEquals("a*a/a = a", c, a);
         assertEquals("a*a/a = a", 0, c.compareTo(a));
 
-        d = a.multiply(BigOctonion.ONE);
+        d = a.multiply(fac.ONE);
         assertEquals("a*1 = a", d, a);
-        d = a.divide(BigOctonion.ONE);
+        d = a.divide(fac.ONE);
         assertEquals("a/1 = a", d, a);
 
         a = fac.random(30);

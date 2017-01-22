@@ -59,6 +59,11 @@ public final class BigOctonion
     public BigOctonion(BigQuaternion r, BigQuaternion i) {
         this.or = r;
         this.oi = i;
+        if (ZERO == null) {
+            ZERO = new BigOctonion(r.ring);
+            ONE = new BigOctonion(r.ring.ONE);
+            I = new BigOctonion(r.ring.ZERO, i.ring.ONE);
+        }
     }
 
 
@@ -67,42 +72,46 @@ public final class BigOctonion
      * @param r BigQuaternion.
      */
     public BigOctonion(BigQuaternion r) {
-        this(r, BigQuaternion.ZERO);
+        this(r, r.ring.ZERO);
     }
 
 
     /**
      * Constructor for a BigOctonion from BigComplex.
+     * @param fac BigQuaternionRing.
      * @param r BigComplex.
      */
-    public BigOctonion(BigComplex r) {
-        this(new BigQuaternion(r));
+    public BigOctonion(BigQuaternionRing fac, BigComplex r) {
+        this(new BigQuaternion(fac, r));
     }
 
 
     /**
      * Constructor for a BigOctonion from BigRational.
+     * @param fac BigQuaternionRing.
      * @param r BigRational.
      */
-    public BigOctonion(BigRational r) {
-        this(new BigQuaternion(r));
+    public BigOctonion(BigQuaternionRing fac, BigRational r) {
+        this(new BigQuaternion(fac, r));
     }
 
 
     /**
      * Constructor for a BigOctonion from long.
+     * @param fac BigQuaternionRing.
      * @param r long.
      */
-    public BigOctonion(long r) {
-        this(new BigQuaternion(r));
+    public BigOctonion(BigQuaternionRing fac, long r) {
+        this(new BigQuaternion(fac, r));
     }
 
 
     /**
      * Constructor for a BigOctonion with no arguments.
+     * @param fac BigQuaternionRing.
      */
-    public BigOctonion() {
-        this(BigQuaternion.ZERO);
+    public BigOctonion(BigQuaternionRing fac) {
+        this(fac.ZERO);
     }
 
 
@@ -110,10 +119,11 @@ public final class BigOctonion
      * The BigOctonion string constructor accepts the following formats: empty
      * string, "quaternion", or "quat o quat" with no blanks around o if used as
      * polynoial coefficient.
+     * @param fac BigQuaternionRing.
      * @param s String.
      * @throws NumberFormatException
      */
-    public BigOctonion(String s) throws NumberFormatException {
+    public BigOctonion(BigQuaternionRing fac, String s) throws NumberFormatException {
         if (s == null || s.length() == 0) {
             or = ZERO.or;
             oi = ZERO.oi;
@@ -122,14 +132,14 @@ public final class BigOctonion
         s = s.trim();
         int o = s.indexOf("o");
         if (o == -1) {
-            or = new BigQuaternion(s);
+            or = new BigQuaternion(fac, s);
             oi = ZERO.oi;
             return;
         }
         String sr = s.substring(0, o - 1);
         String so = s.substring(o + 1, s.length());
-        or = new BigQuaternion(sr.trim());
-        oi = new BigQuaternion(so.trim());
+        or = new BigQuaternion(fac, sr.trim());
+        oi = new BigQuaternion(fac, so.trim());
     }
 
 
@@ -149,11 +159,11 @@ public final class BigOctonion
      * @see edu.jas.structure.ElemFactory#generators()
      */
     public List<BigOctonion> generators() {
-        List<BigQuaternion> qg = or.generators();
+        List<BigQuaternion> qg = or.ring.generators();
         List<BigOctonion> g = new ArrayList<BigOctonion>(qg.size() * 2);
         for (BigQuaternion q : qg) {
             g.add(new BigOctonion(q));
-            g.add(new BigOctonion(BigQuaternion.ZERO, q));
+            g.add(new BigOctonion(or.ring.ZERO, q));
         }
         return g;
     }
@@ -186,7 +196,7 @@ public final class BigOctonion
      */
     public BigOctonion copy(BigOctonion c) {
         if (c == null) {
-            return new BigOctonion();
+            throw new IllegalArgumentException("copy of null not allowed");
         }
         return new BigOctonion(c.or, c.oi);
     }
@@ -252,7 +262,7 @@ public final class BigOctonion
      * @return a BigOctonion.
      */
     public BigOctonion fromInteger(BigInteger a) {
-        return new BigOctonion(ONE.or.fromInteger(a));
+        return new BigOctonion(or.ring.fromInteger(a));
     }
 
 
@@ -262,26 +272,26 @@ public final class BigOctonion
      * @return a BigOctonion.
      */
     public BigOctonion fromInteger(long a) {
-        return new BigOctonion(ONE.or.fromInteger(a));
+        return new BigOctonion(or.ring.fromInteger(a));
     }
 
 
     /**
      * The constant 0.
      */
-    public static final BigOctonion ZERO = new BigOctonion();
+    public BigOctonion ZERO; // = new BigOctonion(or.ring);
 
 
     /**
      * The constant 1.
      */
-    public static final BigOctonion ONE = new BigOctonion(BigQuaternion.ONE);
+    public BigOctonion ONE; // = new BigOctonion(or.ring.ONE);
 
 
     /**
      * The constant i.
      */
-    public static final BigOctonion I = new BigOctonion(BigQuaternion.ZERO, BigQuaternion.ONE);
+    public BigOctonion I; // = new BigOctonion(or.ring.ZERO, oi.ring.ONE);
 
 
     /**
@@ -308,13 +318,14 @@ public final class BigOctonion
      */
     @Override
     public String toString() {
-        String s = "" + or;
-        int i = oi.compareTo(BigQuaternion.ZERO);
+        String s = or.toString();
+        boolean i = oi.isZERO();
         if (debug) {
             logger.debug("compareTo " + i + " ? 0 = " + oi);
         }
-        if (i == 0)
+        if (i) {
             return s;
+        }
         s += "o" + oi;
         return s;
     }
@@ -770,23 +781,22 @@ public final class BigOctonion
      * @return R, a random BigOctonion.
      */
     public BigOctonion random(int n, Random rnd) {
-        BigQuaternion rr = BigQuaternion.ONE.random(n, rnd);
-        BigQuaternion ir = BigQuaternion.ONE.random(n, rnd);
+        BigQuaternion rr = or.ring.random(n, rnd);
+        BigQuaternion ir = oi.ring.random(n, rnd);
         return new BigOctonion(rr, ir);
     }
 
 
-    /**
+    /*
      * Octonion number, random. Random rational numbers A, B, C and D are
      * generated using RNRAND(n). Then R is the quaternion number with real part
      * A and imaginary parts B, C and D.
      * @param n such that 0 &le; A, B, C, D &le; (2<sup>n</sup>-1).
      * @return R, a random BigOctonion.
-     */
     public static BigOctonion ORAND(int n) {
-        return ONE.random(n, random);
+        return random(n, random);
     }
-
+    */
 
     /**
      * Parse quaternion number from String.
@@ -794,7 +804,7 @@ public final class BigOctonion
      * @return BigOctonion from s.
      */
     public BigOctonion parse(String s) {
-        return new BigOctonion(s);
+        return new BigOctonion(or.ring, s);
     }
 
 
@@ -842,7 +852,7 @@ public final class BigOctonion
             ret[0] = S;
             return ret;
         }
-        BigOctonion half = new BigOctonion(new BigRational(1, 2));
+        BigOctonion half = new BigOctonion(or.ring, new BigRational(1, 2));
         ret[0] = ONE;
         ret[1] = this.inverse().multiply(half);
         ret[2] = S.inverse().multiply(half);

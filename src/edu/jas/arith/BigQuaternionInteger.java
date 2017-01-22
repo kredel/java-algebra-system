@@ -5,38 +5,27 @@
 package edu.jas.arith;
 
 
-import java.io.Reader;
-// import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import org.apache.log4j.Logger;
-
-import edu.jas.kern.StringUtil;
-import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingFactory;
-import edu.jas.structure.StarRingElem;
 
 
 /**
- * Integer BigQuaternion class based on BigRational implementing the RingElem interface
- * and with the familiar MAS static method names. Objects of this class are
- * immutable. The integer quaternion methods are implemented after
+ * Integer BigQuaternion class based on BigRational implementing the RingElem
+ * interface and with the familiar MAS static method names. Objects of this
+ * class are immutable. The integer quaternion methods are implemented after
  * https://de.wikipedia.org/wiki/Hurwitzquaternion see also
  * https://en.wikipedia.org/wiki/Hurwitz_quaternion
  * @author Heinz Kredel
  */
 
-public final class BigQuaternionInteger extends BigQuaternion 
-       // implements StarRingElem<BigQuaternion>, GcdRingElem<BigQuaternion> 
-  {
+public final class BigQuaternionInteger extends BigQuaternion
+// implements StarRingElem<BigQuaternion>, GcdRingElem<BigQuaternion> 
+{
 
 
     private static final Logger logger = Logger.getLogger(BigQuaternionInteger.class);
 
 
-    private static final boolean debug = logger.isDebugEnabled();
+    //private static final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -47,8 +36,9 @@ public final class BigQuaternionInteger extends BigQuaternion
      * @param j BigRational.
      * @param k BigRational.
      */
-    public BigQuaternionInteger(BigQuaternionRing fac, BigRational r, BigRational i, BigRational j, BigRational k) {
-        super(fac, r,i,j,k);
+    public BigQuaternionInteger(BigQuaternionRing fac, BigRational r, BigRational i, BigRational j,
+                    BigRational k) {
+        super(fac, r, i, j, k);
     }
 
 
@@ -142,6 +132,7 @@ public final class BigQuaternionInteger extends BigQuaternion
      * @return factory for this Element.
      * @see edu.jas.structure.Element#factory()
      */
+    @Override
     public BigQuaternionRing factory() {
         return ring;
     }
@@ -182,8 +173,10 @@ public final class BigQuaternionInteger extends BigQuaternion
      * @return S with S * this = this * S = 1.
      * @see edu.jas.structure.RingElem#inverse()
      */
+    @Override
     public BigQuaternion inverse() {
         if (!isUnit()) {
+            logger.info("ring = " + ring);
             throw new ArithmeticException("not invertible: " + this);
         }
         return super.inverse();
@@ -195,6 +188,7 @@ public final class BigQuaternionInteger extends BigQuaternion
      * @param S BigQuaternion.
      * @return this - this * b**(-1).
      */
+    @Override
     public BigQuaternion remainder(BigQuaternion S) {
         return rightRemainder(S);
     }
@@ -218,6 +212,7 @@ public final class BigQuaternionInteger extends BigQuaternion
      * @param b BigQuaternion.
      * @return this * b**(-1).
      */
+    @Override
     public BigQuaternion divide(BigQuaternion b) {
         return rightDivide(b);
     }
@@ -250,6 +245,7 @@ public final class BigQuaternionInteger extends BigQuaternion
      * @param b BigRational.
      * @return this/b.
      */
+    @Override
     public BigQuaternion divide(BigRational b) {
         BigQuaternion d = super.divide(b);
         if (!d.isEntier()) {
@@ -264,6 +260,7 @@ public final class BigQuaternionInteger extends BigQuaternion
      * @param S a quaternion number
      * @return [this*S**(-1), this - (this*S**(-1))*S].
      */
+    @Override
     public BigQuaternion[] quotientRemainder(BigQuaternion S) {
         return new BigQuaternion[] { divide(S), remainder(S) };
     }
@@ -274,6 +271,7 @@ public final class BigQuaternionInteger extends BigQuaternion
      * @param S BigQuaternion.
      * @return gcd(this,S).
      */
+    @Override
     public BigQuaternion gcd(BigQuaternion S) {
         return rightGcd(S);
     }
@@ -284,6 +282,7 @@ public final class BigQuaternionInteger extends BigQuaternion
      * @param S BigQuaternion.
      * @return [ gcd(this,S), a, b ] with a*this + b*S = gcd(this,S).
      */
+    @Override
     public BigQuaternion[] egcd(BigQuaternion S) {
         if (true) {
             throw new UnsupportedOperationException("not implemented: egcd");
@@ -363,7 +362,7 @@ public final class BigQuaternionInteger extends BigQuaternion
      */
     @Override
     public BigQuaternion leftRemainder(BigQuaternion a) {
-	return leftQuotientAndRemainder(a)[1];
+        return leftQuotientAndRemainder(a)[1];
     }
 
 
@@ -374,7 +373,7 @@ public final class BigQuaternionInteger extends BigQuaternion
      */
     @Override
     public BigQuaternion rightRemainder(BigQuaternion a) {
-	return rightQuotientAndRemainder(a)[1];
+        return rightQuotientAndRemainder(a)[1];
     }
 
 

@@ -5,17 +5,12 @@
 package edu.jas.arith;
 
 
-import java.io.Reader;
-// import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import org.apache.log4j.Logger;
 
-import edu.jas.kern.StringUtil;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingFactory;
 import edu.jas.structure.StarRingElem;
 
 
@@ -28,8 +23,7 @@ import edu.jas.structure.StarRingElem;
  * @author Heinz Kredel
  */
 
-public /*final*/ class BigQuaternion 
-       implements StarRingElem<BigQuaternion>, GcdRingElem<BigQuaternion> {
+public /*final*/ class BigQuaternion implements StarRingElem<BigQuaternion>, GcdRingElem<BigQuaternion> {
 
 
     /**
@@ -59,7 +53,7 @@ public /*final*/ class BigQuaternion
     /**
      * Corresponding BigQuaternion ring.
      */
-    public final BigQuaternionRing ring; 
+    public final BigQuaternionRing ring;
 
 
     protected final static Random random = new Random();
@@ -178,7 +172,7 @@ public /*final*/ class BigQuaternion
         }
 
         //System.out.println("init: s = " + s);
-        s = s.replaceAll("~","-"); // when used with GenPolynomialTokenizer
+        s = s.replaceAll("~", "-"); // when used with GenPolynomialTokenizer
         int i = s.indexOf("i");
         String sr = "";
         if (i > 0) {
@@ -572,7 +566,8 @@ public /*final*/ class BigQuaternion
      * @return this-B.
      */
     public BigQuaternion subtract(BigQuaternion B) {
-        return new BigQuaternion(ring, re.subtract(B.re), im.subtract(B.im), jm.subtract(B.jm), km.subtract(B.km));
+        return new BigQuaternion(ring, re.subtract(B.re), im.subtract(B.im), jm.subtract(B.jm),
+                        km.subtract(B.km));
     }
 
 
@@ -741,8 +736,8 @@ public /*final*/ class BigQuaternion
      */
     public BigQuaternion inverse() {
         BigRational a = norm().re.inverse();
-        return new BigQuaternion(ring, re.multiply(a), im.negate().multiply(a), 
-                        jm.negate().multiply(a), km.negate().multiply(a));
+        return new BigQuaternion(ring, re.multiply(a), im.negate().multiply(a), jm.negate().multiply(a),
+                        km.negate().multiply(a));
     }
 
 
@@ -754,6 +749,13 @@ public /*final*/ class BigQuaternion
     public BigQuaternion remainder(BigQuaternion S) {
         if (S.isZERO()) {
             throw new ArithmeticException("division by zero");
+        }
+        if (ring.integral) {
+            System.out.println(
+                   "*** entier right remainder(" + this + ", " + S + "): " + ring + " ***");
+            BigQuaternionInteger c = new BigQuaternionInteger(ring, this);
+            BigQuaternionInteger d = new BigQuaternionInteger(ring, S);
+            return c.rightRemainder(d);
         }
         return ring.getZERO();
     }
@@ -790,9 +792,9 @@ public /*final*/ class BigQuaternion
     @Override
     public BigQuaternion rightDivide(BigQuaternion b) {
         if (ring.integral) {
-            System.out.println("*** entier right divide("+this+", "+b+"): "+ring+" ***");
-            BigQuaternionInteger c = new BigQuaternionInteger(ring,this);
-            BigQuaternionInteger d = new BigQuaternionInteger(ring,b);
+            System.out.println("*** entier right divide(" + this + ", " + b + "): " + ring + " ***");
+            BigQuaternionInteger c = new BigQuaternionInteger(ring, this);
+            BigQuaternionInteger d = new BigQuaternionInteger(ring, b);
             return c.rightDivide(d);
         }
         return this.multiply(b.inverse());
@@ -807,9 +809,9 @@ public /*final*/ class BigQuaternion
     @Override
     public BigQuaternion leftDivide(BigQuaternion b) {
         if (ring.integral) {
-            System.out.println("*** entier left divide("+this+", "+b+"): "+ring+" ***");
-            BigQuaternionInteger c = new BigQuaternionInteger(ring,this);
-            BigQuaternionInteger d = new BigQuaternionInteger(ring,b);
+            System.out.println("*** entier left divide(" + this + ", " + b + "): " + ring + " ***");
+            BigQuaternionInteger c = new BigQuaternionInteger(ring, this);
+            BigQuaternionInteger d = new BigQuaternionInteger(ring, b);
             return c.leftDivide(d);
         }
         return b.inverse().multiply(this);
@@ -833,6 +835,13 @@ public /*final*/ class BigQuaternion
      * @return [this*S**(-1), this - (this*S**(-1))*S].
      */
     public BigQuaternion[] quotientRemainder(BigQuaternion S) {
+        if (ring.integral) {
+            System.out.println(
+                   "*** entier left quotient remainder(" + this + ", " + S + "): " + ring + " ***");
+            BigQuaternionInteger c = new BigQuaternionInteger(ring, this);
+            BigQuaternionInteger d = new BigQuaternionInteger(ring, S);
+            return c.rightQuotientAndRemainder(d);
+        }
         return new BigQuaternion[] { divide(S), ring.getZERO() };
     }
 
@@ -860,9 +869,9 @@ public /*final*/ class BigQuaternion
             return S;
         }
         if (ring.integral) {
-            System.out.println("*** entier left gcd("+this+", "+S+"): "+ring+" ***");
-            BigQuaternionInteger a = new BigQuaternionInteger(ring,this);
-            BigQuaternionInteger b = new BigQuaternionInteger(ring,S);
+            System.out.println("*** entier left gcd(" + this + ", " + S + "): " + ring + " ***");
+            BigQuaternionInteger a = new BigQuaternionInteger(ring, this);
+            BigQuaternionInteger b = new BigQuaternionInteger(ring, S);
             return a.leftGcd(b);
         }
         return ring.getONE();
@@ -882,9 +891,9 @@ public /*final*/ class BigQuaternion
             return S;
         }
         if (ring.integral) {
-            System.out.println("*** entier right gcd("+this+", "+S+"): "+ring+" ***");
-            BigQuaternionInteger a = new BigQuaternionInteger(ring,this);
-            BigQuaternionInteger b = new BigQuaternionInteger(ring,S);
+            System.out.println("*** entier right gcd(" + this + ", " + S + "): " + ring + " ***");
+            BigQuaternionInteger a = new BigQuaternionInteger(ring, this);
+            BigQuaternionInteger b = new BigQuaternionInteger(ring, S);
             return a.rightGcd(b);
         }
         return ring.getONE();
@@ -978,7 +987,7 @@ public /*final*/ class BigQuaternion
     public BigQuaternionInteger roundToHurwitzian() {
         BigQuaternionInteger g = this.roundToLipschitzian();
         BigQuaternion d = ring.getZERO();
-        BigRational half = BigRational.HALF;
+        //BigRational half = BigRational.HALF;
         BigQuaternion s = this.subtract(g).norm();
         //System.out.println("s = " + s.toScript());
         //if (s.re.compareTo(half) < 0) { // wrong
