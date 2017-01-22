@@ -23,6 +23,7 @@ import edu.jas.arith.BigComplex;
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigQuaternion;
+import edu.jas.arith.BigQuaternionRing;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
@@ -34,9 +35,9 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
+import edu.jas.poly.InvalidExpressionException;
 import edu.jas.poly.RelationTable;
 import edu.jas.poly.TermOrder;
-import edu.jas.poly.InvalidExpressionException;
 import edu.jas.structure.RingFactory;
 import edu.jas.ufd.Quotient;
 import edu.jas.ufd.QuotientRing;
@@ -167,6 +168,7 @@ public class RingFactoryTokenizer {
         tok.wordChars('_', '_'); // for subscripts x_i
         tok.wordChars('/', '/'); // wg. rational numbers
         tok.wordChars('.', '.'); // wg. floats
+        tok.wordChars('~', '~'); // wg. quaternions // unused in this class
         tok.wordChars(128 + 32, 255);
         tok.whitespaceChars(0, ' ');
         tok.commentChar('#');
@@ -286,9 +288,13 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * Parsing method for variable list. Syntax: 
-     * <pre>(a, b c, de)</pre> gives 
-     * <code>[ "a", "b", "c", "de" ]</code>
+     * Parsing method for variable list. Syntax:
+     * 
+     * <pre>
+     * (a, b c, de)
+     * </pre>
+     * 
+     * gives <code>[ "a", "b", "c", "de" ]</code>
      * @return the next variable list.
      * @throws IOException
      */
@@ -324,11 +330,14 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * Parsing method for coefficient ring. Syntax: 
-     * <pre>Rat | Q | Int | Z | Mod modul | Complex | C | D | Quat |
- AN[ (var) ( poly ) | AN[ modul (var) ( poly ) ] | 
- RatFunc (var_list) | ModFunc modul (var_list) | IntFunc (var_list)
-</pre>
+     * Parsing method for coefficient ring. Syntax:
+     * 
+     * <pre>
+     * Rat | Q | Int | Z | Mod modul | Complex | C | D | Quat |
+    AN[ (var) ( poly ) | AN[ modul (var) ( poly ) ] | 
+    RatFunc (var_list) | ModFunc modul (var_list) | IntFunc (var_list)
+     * </pre>
+     * 
      * @return the next coefficient factory.
      * @throws IOException
      */
@@ -361,7 +370,8 @@ public class RingFactoryTokenizer {
                 coeff = new BigComplex(0);
                 ct = coeffType.BigC;
             } else if (tok.sval.equalsIgnoreCase("Quat")) {
-                coeff = new BigQuaternion(0);
+                logger.warn("parse of quaternion coefficients may fail for negative components (use ~ for -)");
+                coeff = new BigQuaternionRing();
                 ct = coeffType.BigQ;
             } else if (tok.sval.equalsIgnoreCase("Mod")) {
                 tt = tok.nextToken();
@@ -510,8 +520,12 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * Parsing method for weight list. Syntax: 
-     * <pre>(w1, w2, w3, ..., wn)</pre>
+     * Parsing method for weight list. Syntax:
+     * 
+     * <pre>
+     * (w1, w2, w3, ..., wn)
+     * </pre>
+     * 
      * @return the next weight list.
      * @throws IOException
      */
@@ -553,8 +567,12 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * Parsing method for weight array. Syntax: 
-     * <pre>( (w11, ...,w1n), ..., (wm1, ..., wmn) )</pre>
+     * Parsing method for weight array. Syntax:
+     * 
+     * <pre>
+     * ( (w11, ...,w1n), ..., (wm1, ..., wmn) )
+     * </pre>
+     * 
      * @return the next weight array.
      * @throws IOException
      */
@@ -604,7 +622,12 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * Parsing method for split index. Syntax: <pre>|i|</pre>
+     * Parsing method for split index. Syntax:
+     * 
+     * <pre>
+     * |i|
+     * </pre>
+     * 
      * @return the next split index.
      * @throws IOException
      */
@@ -621,7 +644,7 @@ public class RingFactoryTokenizer {
             tt = tok.nextToken();
             if (tt == StreamTokenizer.TT_EOF) {
                 return e;
-            } 
+            }
             if (tok.sval != null) {
                 first = tok.sval.charAt(0);
                 if (digit(first)) {
@@ -673,8 +696,12 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * Parsing method for term order name. Syntax: 
-     * <pre>L | IL | LEX | G | IG | GRLEX | W(weights) | '|'split index'|'</pre>
+     * Parsing method for term order name. Syntax:
+     * 
+     * <pre>
+     * L | IL | LEX | G | IG | GRLEX | W(weights) | '|'split index'|'
+     * </pre>
+     * 
      * @return the next term order.
      * @throws IOException
      */
@@ -721,10 +748,14 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * Parsing method for solvable polynomial relation table. Syntax: 
-     * <pre>( p_1, p_2, p_3, ..., p_{n+1}, p_{n+2}, p_{n+3} )</pre>
-     * semantics: <code>p_{n+1} * p_{n+2} = p_{n+3}</code>. The next
-     * relation table is stored into the solvable polynomial factory.
+     * Parsing method for solvable polynomial relation table. Syntax:
+     * 
+     * <pre>
+     * ( p_1, p_2, p_3, ..., p_{n+1}, p_{n+2}, p_{n+3} )
+     * </pre>
+     * 
+     * semantics: <code>p_{n+1} * p_{n+2} = p_{n+3}</code>. The next relation
+     * table is stored into the solvable polynomial factory.
      * @throws IOException
      */
     @SuppressWarnings("unchecked")
@@ -774,8 +805,12 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * Parsing method for polynomial ring. Syntax: 
-     * <pre>coeffRing varList termOrderName polyList</pre>
+     * Parsing method for polynomial ring. Syntax:
+     * 
+     * <pre>
+     * coeffRing varList termOrderName polyList
+     * </pre>
+     * 
      * @return the next polynomial ring.
      * @throws IOException
      */
@@ -805,8 +840,12 @@ public class RingFactoryTokenizer {
 
 
     /**
-     * Parsing method for solvable polynomial ring. Syntax: 
-     * <pre>varList termOrderName relationTable polyList</pre>
+     * Parsing method for solvable polynomial ring. Syntax:
+     * 
+     * <pre>
+     * varList termOrderName relationTable polyList
+     * </pre>
+     * 
      * @return the next solvable polynomial ring.
      * @throws IOException
      */
@@ -867,9 +906,19 @@ public class RingFactoryTokenizer {
 
     /**
      * Parse variable list from String.
-     * @param s String. Syntax: 
-     * <pre>(n1,...,nk)</pre> or <pre>(n1 ... nk)</pre>
-     * parenthesis are optional.
+     * @param s String. Syntax:
+     * 
+     *            <pre>
+     * (n1,...,nk)
+     *            </pre>
+     * 
+     *            or
+     * 
+     *            <pre>
+     * (n1 ... nk)
+     *            </pre>
+     * 
+     *            parenthesis are optional.
      * @return array of variable names found in s.
      */
     public static String[] variableList(String s) {
