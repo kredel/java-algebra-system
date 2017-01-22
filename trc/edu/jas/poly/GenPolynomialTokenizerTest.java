@@ -11,21 +11,22 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigComplex;
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigQuaternion;
+import edu.jas.arith.BigQuaternionRing;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModLong;
 import edu.jas.arith.ModLongRing;
 import edu.jas.structure.RingFactory;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -349,7 +350,7 @@ public class GenPolynomialTokenizerTest extends TestCase {
         assertTrue("f != null", f.list != null);
         assertTrue("length( f ) = 4", f.list.size() == 4);
 
-        BigQuaternion fac = new BigQuaternion(0);
+        BigQuaternionRing fac = new BigQuaternionRing();
         TermOrder tord = new TermOrder(TermOrder.INVLEX);
         String[] vars = new String[] { "x", "y", "z" };
         int nvar = vars.length;
@@ -437,8 +438,8 @@ public class GenPolynomialTokenizerTest extends TestCase {
     @SuppressWarnings("cast")
     public void testSolvableModInteger() {
         String exam = "Mod 19 (x,y,z) L " + "RelationTable " + "( " + " ( z ), ( y ), ( y z - 1 ) " + ") "
-                        + "( " + "( 1 ), " + "( 0 ), " + "( 3 2 - 6 + 19 ), "
-                        + "( 1 x + x^3 + 3 y z - x^3 ) " + " )";
+                        + "( " + "( 1 ), " + "( 0 ), " + "( 3 2 - 6 + 19 ), " + "( 1 x + x^3 + 3 y z - x^3 ) "
+                        + " )";
         source = new StringReader(exam);
         parser = new GenPolynomialTokenizer(source);
         PolynomialList<ModInteger> f = null;

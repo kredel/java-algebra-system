@@ -7,13 +7,14 @@ package edu.jas.poly;
 
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigQuaternion;
+import edu.jas.arith.BigQuaternionRing;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -50,7 +51,7 @@ public class QuatGenSolvablePolynomialTest extends TestCase {
     }
 
 
-    BigQuaternion cfac;
+    BigQuaternionRing cfac;
 
 
     GenSolvablePolynomialRing<BigQuaternion> fac;
@@ -77,7 +78,7 @@ public class QuatGenSolvablePolynomialTest extends TestCase {
     @Override
     protected void setUp() {
         a = b = c = d = e = null;
-        cfac = new BigQuaternion(1);
+        cfac = new BigQuaternionRing();
         fac = new GenSolvablePolynomialRing<BigQuaternion>(cfac, rl);
         RelationGenerator<BigQuaternion> rel = new WeylRelations<BigQuaternion>();
         rel.generate(fac);
@@ -118,7 +119,7 @@ public class QuatGenSolvablePolynomialTest extends TestCase {
 
         List<GenPolynomial<BigQuaternion>> gens = fac.generators();
         //System.out.println("gens = " + gens);
-        assertTrue("#gens = 4+rl ", gens.size() == (4+rl));
+        assertTrue("#gens = 4+rl ", gens.size() == (4 + rl));
     }
 
 
@@ -153,7 +154,7 @@ public class QuatGenSolvablePolynomialTest extends TestCase {
         c = fac.random(kl, ll, el, q); //fac.random(ll);
 
         ExpVector u = ExpVector.EVRAND(rl, el, q);
-        BigQuaternion x = BigQuaternion.QRAND(kl);
+        BigQuaternion x = cfac.random(kl);
 
         b = new GenSolvablePolynomial<BigQuaternion>(fac, x, u);
         c = (GenSolvablePolynomial<BigQuaternion>) a.sum(b);
@@ -273,8 +274,8 @@ public class QuatGenSolvablePolynomialTest extends TestCase {
         e = a.multiply(qb, eb, qa, ea);
         //System.out.println("d = " + d);
         //System.out.println("e = " + e);
-        assertTrue("a.multiply(qa,ea,qb,eb) != a.multiply(qb,eb,qa,ea)", d.equals(e)
-                        || d.leadingExpVector().equals(e.leadingExpVector()));
+        assertTrue("a.multiply(qa,ea,qb,eb) != a.multiply(qb,eb,qa,ea)",
+                        d.equals(e) || d.leadingExpVector().equals(e.leadingExpVector()));
     }
 
 
@@ -287,12 +288,12 @@ public class QuatGenSolvablePolynomialTest extends TestCase {
 
         do {
             a = fac.random(kl, ll, el, q);
-        } while(a.isZERO());
+        } while (a.isZERO());
         //System.out.println("a = " + a);
 
         do {
             b = fac.random(kl, ll, el, q);
-        } while(b.isZERO());
+        } while (b.isZERO());
         //System.out.println("b = " + b);
 
         // non commutative
@@ -342,7 +343,7 @@ public class QuatGenSolvablePolynomialTest extends TestCase {
      * Test coefficient multiplication.
      */
     public void testCoeffMultiplication() {
-        a = fac.random(kl,ll,el,q);
+        a = fac.random(kl, ll, el, q);
         //System.out.println("a = " + a);
 
         c = a.monic();
@@ -363,7 +364,7 @@ public class QuatGenSolvablePolynomialTest extends TestCase {
 
         d = c.multiplyLeft(qa).multiplyLeft(qb);
         //System.out.println("d = " + d);
-        assertEquals("c*qa*qb = qb*qa*c",b,d);
+        assertEquals("c*qa*qb = qb*qa*c", b, d);
         //e = (GenSolvablePolynomial<BigQuaternion>)b.subtract(d);
         //System.out.println("e = " + e);
 
@@ -374,7 +375,7 @@ public class QuatGenSolvablePolynomialTest extends TestCase {
         //System.out.println("d = " + d);
         //e = (GenSolvablePolynomial<BigQuaternion>)b.subtract(d);
         //System.out.println("e = " + e);
-        assertEquals("qb*(c*qa) == (qb*c)*qa",b,d);
+        assertEquals("qb*(c*qa) == (qb*c)*qa", b, d);
     }
 
 }
