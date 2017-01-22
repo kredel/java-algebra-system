@@ -138,10 +138,12 @@ public class GreatestCommonDivisorLR<C extends GcdRingElem<C>> extends GreatestC
             boolean t = p1.multiply(q).equals(p);
             if (! t) {
                 System.out.println("p1: " + p1 + " * " + q + " != " + p);
+                System.out.println("pp(p1*q): " + leftBasePrimitivePart(p1.multiply(q)).abs() + " != " + leftBasePrimitivePart(p).abs());
             }
             t = s1.multiply(q).equals(s);
             if (! t) {
                 System.out.println("s1: " + s1 + " * " + q + " != " + s);
+                System.out.println("pp(s1*q): " + leftBasePrimitivePart(s1.multiply(q)).abs() + " != " + leftBasePrimitivePart(s).abs());
             }
             t = p.multiplyLeft(contPS).equals(P); // contPS q p1 == P
             if (! t) {

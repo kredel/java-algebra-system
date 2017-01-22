@@ -28,6 +28,7 @@ import edu.jas.poly.RelationGenerator;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.TermOrderByName;
 import edu.jas.poly.WeylRelationsIterated;
+import edu.jas.structure.GcdRingElem;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -87,7 +88,7 @@ public class GCDLeftRightTest extends TestCase {
     RecSolvablePolynomialRing<BigQuaternion> rfac;
 
 
-    GenSolvablePolynomial<BigQuaternion> a, b, c, d, e, f, g, h;
+    GenSolvablePolynomial<BigQuaternion> a, b, c, d, e, f, g, h, r, s;
 
 
     GenSolvablePolynomial<GenPolynomial<BigQuaternion>> ar, br, cr, dr, er;
@@ -259,6 +260,11 @@ public class GCDLeftRightTest extends TestCase {
             //a = fd.basePrimitivePart(a);
             //b = fd.basePrimitivePart(b);
             //c = (GenSolvablePolynomial<BigQuaternion>) fd.basePrimitivePart(c).abs();
+            // replace - by ~ in coefficents for polynomial tokenizer
+            //a = dfac.parse("( 3/2i1/2j1/2k~1/2 ) x^3 - ( 1i~1j0k~2 ) x + ( 11/2i15/2j1/2k~1/2 )");
+            //b = dfac.parse("( ~1i2j3k1 ) x^4 + ( 0i1j~2k0 ) x^2 + ( 1/2i~3/2j1/2k3/2 )");
+            //c = dfac.parse("( 1/2i1/2j~1/2k1/2 ) x^4 + ( 1i~1j0k0 ) x^3 + 1i1j0k1 x");
+
             System.out.println("a  = " + a);
             System.out.println("b  = " + b);
             System.out.println("cc = " + cc);
@@ -288,6 +294,100 @@ public class GCDLeftRightTest extends TestCase {
             e = fds.rightBaseGcd(a,b);
             System.out.println("d = " + d);
             System.out.println("e = " + e);
+        }
+    }
+
+
+    /**
+     * Test base integer quotient remainder.
+     */
+    public void xtestBaseQR() {
+        String[] uvars = new String[] { "x" };
+        cfac = new BigQuaternionRing(true);
+        dfac = new GenSolvablePolynomialRing<BigQuaternion>(cfac, 1, to, uvars);
+        fd = new GreatestCommonDivisorLR<BigQuaternion>(cfac);
+        GreatestCommonDivisorAbstract<BigQuaternion> fds = new GreatestCommonDivisorSimple<BigQuaternion>(cfac);
+        BigQuaternion cc;
+        for (int i = 0; i < 1; i++) {
+            a = dfac.random(kl * (i + 2), ll + 1, el + 2, q);
+            b = dfac.random(kl * (i + 1), ll + 1, el + 2, q);
+            c = dfac.random(kl * (i + 1), ll + 1, el + 1, q);
+            //c = dfac.getONE(); 
+            c = c.multiply(dfac.univariate(0));
+            c = (GenSolvablePolynomial<BigQuaternion>) c.abs();
+            if (c.isZERO()) {
+                // skip for this turn
+                continue;
+            }
+            System.out.println("a  = " + a);
+            System.out.println("b  = " + b);
+            System.out.println("c  = " + c);
+
+            a = a.multiply(c);
+            b = b.multiply(c);
+            System.out.println("a  = " + a);
+            System.out.println("b  = " + b);
+
+            GenSolvablePolynomial<BigQuaternion>[] aqr, bqr;
+
+            aqr = FDUtil.<BigQuaternion> leftBasePseudoQuotientRemainder(a, c);
+            bqr = FDUtil.<BigQuaternion> leftBasePseudoQuotientRemainder(b, c);
+            d = aqr[0];
+            e = bqr[0];
+
+            System.out.println("d  = " + d + ", rem = " + aqr[1]);
+            System.out.println("e  = " + e + ", rem = " + bqr[1]);
+            assertTrue("a rem == 0: ", aqr[1].isZERO());
+            assertTrue("b rem == 0: ", bqr[1].isZERO());
+
+            boolean t;
+            f = d.multiply(c);
+            System.out.println("f  = " + f);
+            System.out.println("a  = " + a);
+            t = f.equals(a);
+            System.out.println("d*c == a: " + t);
+
+            BigQuaternion qa, qb, oa, ob;
+            qa = a.leadingBaseCoefficient();
+            qb = f.leadingBaseCoefficient();
+            GcdRingElem<BigQuaternion>[] oc = fd.leftOreCond(qa,qb);
+            oa = (BigQuaternion)oc[0];
+            ob = (BigQuaternion)oc[1];
+
+            a = a.multiplyLeft(oa);
+            f = f.multiplyLeft(ob);
+            System.out.println("f  = " + f);
+            System.out.println("a  = " + a);
+            t = f.equals(a);
+            System.out.println("d*c == a: " + t);
+            assertTrue("d*c == a: ", t);
+
+
+            g = e.multiply(c);
+            System.out.println("g  = " + g);
+            System.out.println("b  = " + b);
+            t = g.equals(b);
+            System.out.println("e*c == b: " + t);
+
+            r = (GenSolvablePolynomial<BigQuaternion>)fds.leftBasePrimitivePart(b).abs();
+            s = (GenSolvablePolynomial<BigQuaternion>)fds.leftBasePrimitivePart(g).abs();
+            System.out.println("pp(b)  = " + r);
+            System.out.println("pp(g)  = " + s);
+            assertEquals("pp(b) == pp(g): ", r, s);
+
+            qa = b.leadingBaseCoefficient();
+            qb = g.leadingBaseCoefficient();
+            oc = fd.leftOreCond(qa,qb);
+            oa = (BigQuaternion)oc[0];
+            ob = (BigQuaternion)oc[1];
+
+            b = b.multiplyLeft(oa);
+            g = g.multiplyLeft(ob);
+            System.out.println("g  = " + g);
+            System.out.println("b  = " + b);
+            t = g.equals(b);
+            System.out.println("e*c == b: " + t);
+            assertTrue("e*c == b: ", t);
         }
     }
 }
