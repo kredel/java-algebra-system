@@ -102,6 +102,9 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
         if (P.isZERO()) {
             return P.ring.getZEROCoefficient();
         }
+        if (P.ring.coFac.isField()) { // so to make monic
+            return P.leadingBaseCoefficient();
+        }
         C d = null;
         for (C c : P.getMap().values()) {
             if (d == null) {
@@ -131,6 +134,9 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
         }
         if (P.isZERO()) {
             return P.ring.getZEROCoefficient();
+        }
+        if (P.ring.coFac.isField()) { // so to make monic
+            return P.leadingBaseCoefficient(); // todo check move to right
         }
         C d = null;
         for (C c : P.getMap().values()) {
