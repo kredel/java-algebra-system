@@ -16,6 +16,8 @@ import edu.jas.arith.BigQuaternionRing;
 import edu.jas.arith.BigQuaternionInteger;
 import edu.jas.gb.SolvableGroebnerBaseAbstract;
 import edu.jas.gb.SolvableGroebnerBaseSeq;
+import edu.jas.gbufd.SolvableSyzygyAbstract;
+import edu.jas.gbufd.SolvableSyzygySeq;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
@@ -94,6 +96,9 @@ public class GCDLeftRightTest extends TestCase {
     GenSolvablePolynomial<GenPolynomial<BigQuaternion>> ar, br, cr, dr, er;
 
 
+    SolvableSyzygyAbstract<BigQuaternion> syz;
+
+
     int rl = 4;
 
 
@@ -115,7 +120,9 @@ public class GCDLeftRightTest extends TestCase {
         ar = br = cr = dr = er = null;
         String[] vars = new String[] { "a", "b", "c", "d" };
         cfac = new BigQuaternionRing();
-        fd = new GreatestCommonDivisorLR<BigQuaternion>(cfac);
+        syz = new SolvableSyzygySeq<BigQuaternion>(cfac);
+        //System.out.println("syz = " + syz);
+        fd = new GreatestCommonDivisorLR<BigQuaternion>(cfac, syz);
         //fd = new GreatestCommonDivisorFake<BigQuaternion>(cfac);
         dfac = new GenSolvablePolynomialRing<BigQuaternion>(cfac, rl, to, vars);
         RelationGenerator<BigQuaternion> wl = new WeylRelationsIterated<BigQuaternion>();
@@ -133,6 +140,7 @@ public class GCDLeftRightTest extends TestCase {
         cfac = null;
         dfac = null;
         rfac = null;
+        syz = null;
     }
 
 
@@ -240,8 +248,10 @@ public class GCDLeftRightTest extends TestCase {
     public void testBaseIntegerGcdRight() {
         String[] uvars = new String[] { "x" };
         cfac = new BigQuaternionRing(true);
+        syz = new SolvableSyzygySeq<BigQuaternion>(cfac);
+        //System.out.println("syz = " + syz);
         dfac = new GenSolvablePolynomialRing<BigQuaternion>(cfac, 1, to, uvars);
-        fd = new GreatestCommonDivisorLR<BigQuaternion>(cfac);
+        fd = new GreatestCommonDivisorLR<BigQuaternion>(cfac, syz);
         BigQuaternion cc;
         for (int i = 0; i < 1; i++) {
             a = dfac.random(kl * (i + 2), ll + 1, el + 2, q);
@@ -250,10 +260,10 @@ public class GCDLeftRightTest extends TestCase {
             //c = dfac.getONE(); 
             c = c.multiply(dfac.univariate(0));
             c = (GenSolvablePolynomial<BigQuaternion>) c.abs();
-            //cc = cfac.random(kl);
-            cc = cfac.getONE(); 
+            cc = cfac.random(kl);
+            //cc = cfac.getONE(); 
             //c = c.multiplyLeft(cc);
-            if (c.isZERO()) {
+            if (c.isZERO()||cc.isZERO()) {
                 // skip for this turn
                 continue;
             }
@@ -280,7 +290,7 @@ public class GCDLeftRightTest extends TestCase {
             System.out.println("cont = " + cont);
             //System.out.println("cont.isGCD() = " + cont.isGCD());
             System.out.println("r = " + cont.right + ", l=" + cont.left);
-            System.out.println("c = " + c); //.monic());
+            System.out.println("c = " + c + ", cc = " + cc); 
             assertTrue("cont.isGCD() ", cont.isGCD());
 
             if (true) {
@@ -304,8 +314,10 @@ public class GCDLeftRightTest extends TestCase {
     public void xtestBaseQR() {
         String[] uvars = new String[] { "x" };
         cfac = new BigQuaternionRing(true);
+        syz = new SolvableSyzygySeq<BigQuaternion>(cfac);
+        //System.out.println("syz = " + syz);
         dfac = new GenSolvablePolynomialRing<BigQuaternion>(cfac, 1, to, uvars);
-        fd = new GreatestCommonDivisorLR<BigQuaternion>(cfac);
+        fd = new GreatestCommonDivisorLR<BigQuaternion>(cfac, syz);
         GreatestCommonDivisorAbstract<BigQuaternion> fds = new GreatestCommonDivisorSimple<BigQuaternion>(cfac);
         BigQuaternion cc;
         for (int i = 0; i < 1; i++) {
