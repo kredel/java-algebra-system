@@ -98,8 +98,11 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends Sol
         cofac = rf;
         if (!cofac.isCommutative()) {
             logger.warn("right reduction not correct for " + cofac.toScript());
-            engine = new GreatestCommonDivisorFake<C>();
+            engine = new GreatestCommonDivisorFake<C>(); // only for Ore conditions
             // TODO check that also coeffTable is empty for recursive solvable poly ring
+            //System.out.println("stack trace = "); 
+            //Exception e = new RuntimeException("get stack trace");
+            //e.printStackTrace();
         } else {
             //engine = GCDFactory.<C> getImplementation(rf);
             engine = GCDFactory.<C> getProxy(rf);

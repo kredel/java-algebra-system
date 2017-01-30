@@ -455,7 +455,7 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
      * Right normalform.
      * @param Ap polynomial.
      * @param Pp polynomial list.
-     * @return nf(Ap) with respect to Pp. <b>Note: </b> not implemented;
+     * @return nf(Ap) with respect to Pp. 
      */
     @SuppressWarnings({ "unchecked" })
     public GenSolvablePolynomial<C> rightNormalform(List<GenSolvablePolynomial<C>> Pp,
