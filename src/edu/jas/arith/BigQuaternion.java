@@ -426,6 +426,9 @@ public /*final*/ class BigQuaternion implements StarRingElem<BigQuaternion>, Gcd
      * @see edu.jas.structure.RingElem#isUnit()
      */
     public boolean isUnit() {
+        //if (ring.integral) { not meaningful to test
+        //    System.out.println("*** entier isUnit case not implemented ***");
+        //}
         return !isZERO();
     }
 
@@ -698,6 +701,7 @@ public /*final*/ class BigQuaternion implements StarRingElem<BigQuaternion>, Gcd
         r = r.subtract(im.multiply(B.im));
         r = r.subtract(jm.multiply(B.jm));
         r = r.subtract(km.multiply(B.km));
+
         BigRational i = re.multiply(B.im);
         i = i.sum(im.multiply(B.re));
         i = i.sum(jm.multiply(B.km));
@@ -751,8 +755,8 @@ public /*final*/ class BigQuaternion implements StarRingElem<BigQuaternion>, Gcd
             throw new ArithmeticException("division by zero");
         }
         if (ring.integral) {
-            System.out.println(
-                   "*** entier right remainder(" + this + ", " + S + "): " + ring + " ***");
+            //System.out.println(
+            //       "*** entier right remainder(" + this + ", " + S + "): " + ring + " ***");
             BigQuaternionInteger c = new BigQuaternionInteger(ring, this);
             BigQuaternionInteger d = new BigQuaternionInteger(ring, S);
             return c.rightRemainder(d);
@@ -792,7 +796,7 @@ public /*final*/ class BigQuaternion implements StarRingElem<BigQuaternion>, Gcd
     @Override
     public BigQuaternion rightDivide(BigQuaternion b) {
         if (ring.integral) {
-            System.out.println("*** entier right divide(" + this + ", " + b + "): " + ring + " ***");
+            //System.out.println("*** entier right divide(" + this + ", " + b + "): " + ring + " ***");
             BigQuaternionInteger c = new BigQuaternionInteger(ring, this);
             BigQuaternionInteger d = new BigQuaternionInteger(ring, b);
             return c.rightDivide(d);
@@ -809,7 +813,7 @@ public /*final*/ class BigQuaternion implements StarRingElem<BigQuaternion>, Gcd
     @Override
     public BigQuaternion leftDivide(BigQuaternion b) {
         if (ring.integral) {
-            System.out.println("*** entier left divide(" + this + ", " + b + "): " + ring + " ***");
+            //System.out.println("*** entier left divide(" + this + ", " + b + "): " + ring + " ***");
             BigQuaternionInteger c = new BigQuaternionInteger(ring, this);
             BigQuaternionInteger d = new BigQuaternionInteger(ring, b);
             return c.leftDivide(d);
@@ -836,8 +840,8 @@ public /*final*/ class BigQuaternion implements StarRingElem<BigQuaternion>, Gcd
      */
     public BigQuaternion[] quotientRemainder(BigQuaternion S) {
         if (ring.integral) {
-            System.out.println(
-                   "*** entier left quotient remainder(" + this + ", " + S + "): " + ring + " ***");
+            //System.out.println(
+            //     "*** entier left quotient remainder(" + this + ", " + S + "): " + ring + " ***");
             BigQuaternionInteger c = new BigQuaternionInteger(ring, this);
             BigQuaternionInteger d = new BigQuaternionInteger(ring, S);
             return c.rightQuotientAndRemainder(d);
@@ -869,7 +873,7 @@ public /*final*/ class BigQuaternion implements StarRingElem<BigQuaternion>, Gcd
             return S;
         }
         if (ring.integral) {
-            System.out.println("*** entier left gcd(" + this + ", " + S + "): " + ring + " ***");
+            //System.out.println("*** entier left gcd(" + this + ", " + S + "): " + ring + " ***");
             BigQuaternionInteger a = new BigQuaternionInteger(ring, this);
             BigQuaternionInteger b = new BigQuaternionInteger(ring, S);
             return a.leftGcd(b);
@@ -891,7 +895,7 @@ public /*final*/ class BigQuaternion implements StarRingElem<BigQuaternion>, Gcd
             return S;
         }
         if (ring.integral) {
-            System.out.println("*** entier right gcd(" + this + ", " + S + "): " + ring + " ***");
+            //System.out.println("*** entier right gcd(" + this + ", " + S + "): " + ring + " ***");
             BigQuaternionInteger a = new BigQuaternionInteger(ring, this);
             BigQuaternionInteger b = new BigQuaternionInteger(ring, S);
             return a.rightGcd(b);
@@ -906,6 +910,9 @@ public /*final*/ class BigQuaternion implements StarRingElem<BigQuaternion>, Gcd
      * @return [ gcd(this,S), a, b ] with a*this + b*S = gcd(this,S).
      */
     public BigQuaternion[] egcd(BigQuaternion S) {
+        if (ring.integral) {
+            System.out.println("*** entier egcd case not implemented ***");
+        }
         BigQuaternion[] ret = new BigQuaternion[3];
         ret[0] = null;
         ret[1] = null;
@@ -985,6 +992,10 @@ public /*final*/ class BigQuaternion implements StarRingElem<BigQuaternion>, Gcd
      * @return Hurwitz integer near this.
      */
     public BigQuaternionInteger roundToHurwitzian() {
+        if (isEntier()) {
+            //System.out.println("*** short cut to round ***");
+            return new BigQuaternionInteger(ring, this);
+        }
         BigQuaternionInteger g = this.roundToLipschitzian();
         BigQuaternion d = ring.getZERO();
         //BigRational half = BigRational.HALF;
