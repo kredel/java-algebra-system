@@ -145,9 +145,9 @@ public class GCDLeftRightTest extends TestCase {
 
 
     /**
-     * Test base rational gcd right.
+     * Test base field gcd right.
      */
-    public void xtestBaseGcdRight() {
+    public void testBaseGcdRight() {
         String[] uvars = new String[] { "x" };
         dfac = new GenSolvablePolynomialRing<BigQuaternion>(cfac, 1, to, uvars);
         BigQuaternion cc;
@@ -158,8 +158,8 @@ public class GCDLeftRightTest extends TestCase {
             //c = dfac.getONE(); 
             c = c.multiply(dfac.univariate(0));
             cc = cfac.random(kl);
-            c = c.multiplyLeft(cc);
-            if (c.isZERO()) {
+            //c = c.multiplyLeft(cc);
+            if (c.isZERO()||cc.isZERO()) {
                 // skip for this turn
                 continue;
             }
@@ -171,8 +171,8 @@ public class GCDLeftRightTest extends TestCase {
             System.out.println("cc = " + cc);
             System.out.println("c  = " + c);
 
-            a = a.multiply(c);
-            b = b.multiply(c);
+            a = a.multiply(c).multiplyLeft(cc);
+            b = b.multiply(c).multiplyLeft(cc);
             System.out.println("a  = " + a);
             System.out.println("b  = " + b);
 
@@ -194,9 +194,9 @@ public class GCDLeftRightTest extends TestCase {
 
 
     /**
-     * Test base gcd left.
+     * Test base field gcd left.
      */
-    public void xtestBaseGcdLeft() {
+    public void testBaseGcdLeft() {
         String[] uvars = new String[] { "x" };
         dfac = new GenSolvablePolynomialRing<BigQuaternion>(cfac, 1, to, uvars);
         BigQuaternion cc;
@@ -292,18 +292,6 @@ public class GCDLeftRightTest extends TestCase {
             System.out.println("r = " + cont.right + ", l=" + cont.left);
             System.out.println("c = " + c + ", cc = " + cc); 
             assertTrue("cont.isGCD() ", cont.isGCD());
-
-            if (true) {
-                return;
-            }
-            GreatestCommonDivisorAbstract<BigQuaternion> fds = new GreatestCommonDivisorSimple<BigQuaternion>(cfac);
-
-            d = fds.leftBaseGcd(a,b);
-            System.out.println("d = " + d);
-            System.out.println("c = " + c);
-            e = fds.rightBaseGcd(a,b);
-            System.out.println("d = " + d);
-            System.out.println("e = " + e);
         }
     }
 
@@ -311,7 +299,7 @@ public class GCDLeftRightTest extends TestCase {
     /**
      * Test base integer quotient remainder.
      */
-    public void xtestBaseQR() {
+    public void testBaseQR() {
         String[] uvars = new String[] { "x" };
         cfac = new BigQuaternionRing(true);
         syz = new SolvableSyzygySeq<BigQuaternion>(cfac);
