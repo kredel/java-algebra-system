@@ -64,8 +64,18 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
      * @param cf coefficient ring.
      */
     public GreatestCommonDivisorAbstract(RingFactory<C> cf) {
+        this(cf, new SolvableSyzygySeq<C>(cf)); 
+    }
+
+
+    /**
+     * Constructor.
+     * @param cf coefficient ring.
+     * @param s algorithm for SolvableSyzygy computation.
+     */
+    public GreatestCommonDivisorAbstract(RingFactory<C> cf, SolvableSyzygyAbstract<C> s) {
         coFac = cf;
-        syz = new SolvableSyzygySeq<C>(cf);
+        syz = s;
         //cgcd = GCDFactory.<C> getImplementation(pfac.coFac);
     }
 

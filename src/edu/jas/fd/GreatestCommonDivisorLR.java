@@ -12,6 +12,7 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolyUtil;
+import edu.jas.gbufd.SolvableSyzygyAbstract;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 
@@ -43,6 +44,16 @@ public class GreatestCommonDivisorLR<C extends GcdRingElem<C>> extends GreatestC
 
 
     /**
+     * Constructor.
+     * @param cf coefficient ring.
+     * @param s algorithm for SolvableSyzygy computation.
+     */
+    public GreatestCommonDivisorLR(RingFactory<C> cf, SolvableSyzygyAbstract<C> s) {
+        super(cf,s);
+    }
+
+
+    /**
      * Univariate GenSolvablePolynomial greatest common divisor. Uses
      * pseudoRemainder for remainder.
      * @param P univariate GenSolvablePolynomial.
@@ -59,7 +70,7 @@ public class GreatestCommonDivisorLR<C extends GcdRingElem<C>> extends GreatestC
         }
         GCDcoFactors<C> ret;
         if (P.isZERO()|| S.isZERO()) {
-            ret = new GCDcoFactors<C>(P, S, P, S, ring.getONE(), ring.getONE() );
+            ret = new GCDcoFactors<C>(this, P, S, P, S, ring.getONE(), ring.getONE() );
             return ret;
         }
         // compute on coefficients
@@ -97,11 +108,11 @@ public class GreatestCommonDivisorLR<C extends GcdRingElem<C>> extends GreatestC
         }
         // compute on main variable
         if (p.isONE()) {
-            ret = new GCDcoFactors<C>(P, S, p, s, ring.valueOf(contPS), ring.getONE() );
+            ret = new GCDcoFactors<C>(this, P, S, p, s, ring.valueOf(contPS), ring.getONE() );
             return ret;
         }
         if (s.isONE()) {
-            ret = new GCDcoFactors<C>(P, S, p, s, ring.valueOf(contPS), ring.getONE() );
+            ret = new GCDcoFactors<C>(this, P, S, p, s, ring.valueOf(contPS), ring.getONE() );
             return ret;
         }
         boolean field = ring.coFac.isField();
@@ -120,8 +131,14 @@ public class GreatestCommonDivisorLR<C extends GcdRingElem<C>> extends GreatestC
             }
             //System.out.println("baseGCD: q = " + q + ", r = " + r);
         }
-        q = (GenSolvablePolynomial<C>) q.abs();
         q = leftBasePrimitivePart(q);
+        q = (GenSolvablePolynomial<C>) q.abs();
+	// not meaningful:
+          // adjust signum of contPS
+          //C qc = leftBaseContent(q);
+          //q = (GenSolvablePolynomial<C>) q.leftDivideCoeff(qc); 
+          //contPS = qc.multiply(contPS);
+          //System.out.println("leftGcd()*qc = " + contPS);
         //q = rightBasePrimitivePart(q);
         System.out.println("baseGCD: q = " + q + ", r = " + r);
         //GenSolvablePolynomial<C> p1 = (GenSolvablePolynomial<C>) p.leftDivide(q);
@@ -137,13 +154,41 @@ public class GreatestCommonDivisorLR<C extends GcdRingElem<C>> extends GreatestC
         if (debug) {
             boolean t = p1.multiply(q).equals(p);
             if (! t) {
-                System.out.println("p1: " + p1 + " * " + q + " != " + p);
-                System.out.println("pp(p1*q): " + leftBasePrimitivePart(p1.multiply(q)).abs() + " != " + leftBasePrimitivePart(p).abs());
+                GenSolvablePolynomial<C> p1q = (GenSolvablePolynomial<C>) leftBasePrimitivePart(p1.multiply(q)).abs();
+                GenSolvablePolynomial<C> pp = (GenSolvablePolynomial<C>) leftBasePrimitivePart(p).abs();
+                if (! p1q.equals(pp)) {
+                    System.out.println("p1: " + p1 + " * " + q + " != " + p);
+                    System.out.println("pp(p1*q): " + p1q + " != " + pp);
+                }
+                p1q = p1.multiply(q);
+                pp = p;
+                C c1 = p1q.leadingBaseCoefficient();
+                C c2 = pp.leadingBaseCoefficient();
+                C[] oc = leftOreCond(c1,c2);
+                p1q = p1q.multiplyLeft(oc[0]);
+                pp = pp.multiplyLeft(oc[1]);
+                if (! p1q.equals(pp)) {
+                    System.out.println("p1q: " + p1q + " != " + pp);
+                }
             }
             t = s1.multiply(q).equals(s);
             if (! t) {
-                System.out.println("s1: " + s1 + " * " + q + " != " + s);
-                System.out.println("pp(s1*q): " + leftBasePrimitivePart(s1.multiply(q)).abs() + " != " + leftBasePrimitivePart(s).abs());
+                GenSolvablePolynomial<C> s1q = (GenSolvablePolynomial<C>) leftBasePrimitivePart(s1.multiply(q)).abs();
+                GenSolvablePolynomial<C> sp = (GenSolvablePolynomial<C>) leftBasePrimitivePart(s).abs();
+                if (! s1q.equals(sp)) {
+                    System.out.println("s1: " + s1 + " * " + q + " != " + s);
+                    System.out.println("pp(s1*q): " + s1q + " != " + sp);
+                }
+                s1q = s1.multiply(q);
+                sp = s;
+                C c1 = s1q.leadingBaseCoefficient();
+                C c2 = sp.leadingBaseCoefficient();
+                C[] oc = leftOreCond(c1,c2);
+                s1q = s1q.multiplyLeft(oc[0]);
+                sp = sp.multiplyLeft(oc[1]);
+                if (! s1q.equals(sp)) {
+                    System.out.println("s1q: " + s1q + " != " + sp);
+                }
             }
             t = p.multiplyLeft(contPS).equals(P); // contPS q p1 == P
             if (! t) {
@@ -155,7 +200,7 @@ public class GreatestCommonDivisorLR<C extends GcdRingElem<C>> extends GreatestC
             }
             System.out.println("isField: " + field);
         }
-        ret = new GCDcoFactors<C>(P, S, p1, s1, ring.valueOf(contPS), q );
+        ret = new GCDcoFactors<C>(this, P, S, p1, s1, ring.valueOf(contPS), q );
         return ret;
     }
 
