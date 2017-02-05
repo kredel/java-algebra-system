@@ -12,7 +12,7 @@ from org.apache.log4j    import BasicConfigurator;
 from edu.jas.structure   import RingElem, RingFactory, Power
 from edu.jas.arith       import BigInteger, BigRational, BigComplex, BigDecimal,\
                                 ModInteger, ModIntegerRing, ModLong, ModLongRing,\
-                                BigQuaternion, BigOctonion,\
+                                BigQuaternion, BigQuaternionRing, BigOctonion,\
                                 Product, ProductRing, PrimeList
 from edu.jas.poly        import GenPolynomial, GenPolynomialRing, Monomial,\
                                 GenSolvablePolynomial, GenSolvablePolynomialRing,\
@@ -2610,17 +2610,19 @@ def Quat(re=BigRational(),im=BigRational(),jm=BigRational(),km=BigRational()):
         jm = jm.elem;
     if isinstance(km,RingElem):
         km = km.elem;
-    c = BigQuaternion(re,im,jm,km);
+    cf = BigQuaternionRing();
+    c = BigQuaternion(cf, re,im,jm,km);
     return RingElem(c);
 
 
-def Oct(ro=BigQuaternion(),io=BigQuaternion()):
+def Oct(ro=0,io=0):
     '''Create JAS BigOctonion as ring element.
     '''
+    cf = BigQuaternionRing();
     if ro == 0:
-        ro = BigQuaternion();
+        ro = BigQuaternion(cf);
     if io == 0:
-        io = BigQuaternion();
+        io = BigQuaternion(cf);
     if isinstance(ro,PyTuple) or isinstance(ro,PyList):
         if isinstance(ro[0],PyTuple) or isinstance(ro[0],PyList):
             if len(ro) > 1:
