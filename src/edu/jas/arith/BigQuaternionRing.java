@@ -252,7 +252,7 @@ public final class BigQuaternionRing implements RingFactory<BigQuaternion> {
             return false;
         }
         BigQuaternionRing B = (BigQuaternionRing) b;
-        return this == B;
+        return this.integral == B.integral;
     }
 
 

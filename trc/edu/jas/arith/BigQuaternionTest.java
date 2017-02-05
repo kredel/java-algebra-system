@@ -77,8 +77,8 @@ public class BigQuaternionTest extends TestCase {
         assertTrue("1-1 = 0", c.isZERO());
         assertTrue("1 = 1", b.isONE());
 
-        a = fac.ZERO;
-        b = fac.ONE;
+        a = fac.getZERO();
+        b = fac.getONE();
         c = b.subtract(b);
         assertEquals("1-1 = 0", c, a);
     }
@@ -88,8 +88,8 @@ public class BigQuaternionTest extends TestCase {
      * Test bitLength.
      */
     public void testBitLength() {
-        a = fac.ZERO;
-        b = fac.ONE;
+        a = fac.getZERO();
+        b = fac.getONE();
         c = fac.random(100);
         //System.out.println("c = " + c);
         //System.out.println("len(c) = " + c.bitLength());
@@ -137,7 +137,7 @@ public class BigQuaternionTest extends TestCase {
         c = b.sum(a);
 
         assertTrue("1 = 1", a.isONE());
-        assertEquals("1+(-1) = 0", c, fac.ZERO);
+        assertEquals("1+(-1) = 0", c, fac.getZERO());
     }
 
 
@@ -149,7 +149,7 @@ public class BigQuaternionTest extends TestCase {
         b = new BigQuaternion(fac, a.getRe(), a.getIm(), a.getJm(), a.getKm());
         c = b.subtract(a);
 
-        assertEquals("a-b = 0", fac.ZERO, c);
+        assertEquals("a-b = 0", fac.getZERO(), c);
 
         d = new BigQuaternion(fac, b.getRe(), b.getIm(), b.getJm(), b.getKm());
         assertEquals("sign(a-a) = 0", 0, b.compareTo(d));
@@ -166,12 +166,12 @@ public class BigQuaternionTest extends TestCase {
         assertEquals("a+a-a = a", c, a);
         assertEquals("a+a-a = a", 0, c.compareTo(a));
 
-        d = a.sum(fac.ZERO);
+        d = a.sum(fac.getZERO());
         assertEquals("a+0 = a", d, a);
-        d = a.subtract(fac.ZERO);
+        d = a.subtract(fac.getZERO());
         assertEquals("a-0 = a", d, a);
         d = a.subtract(a);
-        assertEquals("a-a = 0", d, fac.ZERO);
+        assertEquals("a-a = 0", d, fac.getZERO());
     }
 
 
@@ -185,9 +185,9 @@ public class BigQuaternionTest extends TestCase {
         assertEquals("a*a/a = a", c, a);
         assertEquals("a*a/a = a", 0, c.compareTo(a));
 
-        d = a.multiply(fac.ONE);
+        d = a.multiply(fac.getONE());
         assertEquals("a*1 = a", d, a);
-        d = a.divide(fac.ONE);
+        d = a.divide(fac.getONE());
         assertEquals("a/1 = a", d, a);
 
         a = fac.random(10);

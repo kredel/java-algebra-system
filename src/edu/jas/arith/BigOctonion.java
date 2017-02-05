@@ -212,6 +212,7 @@ public final class BigOctonion
     public BigOctonion getZERO() {
         if (ZERO == null) {
             ZERO = new BigOctonion(or.ring.ZERO, or.ring.ZERO);
+            I = new BigOctonion(or.ring.ZERO, or.ring.ONE);
         }
         return ZERO;
     }
