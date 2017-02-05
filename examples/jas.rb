@@ -96,7 +96,7 @@ def inject_gens(env)
                 env.instance_eval( "def #{ivl}; @generators[ '#{ivs}' ]; end" )
              end
           end
-       rescue Exception => e 
+       rescue => e 
           #puts "error: #{ivs} = " + i.to_s + ", class = " + i.class.to_s;
           puts "error: #{ivs} = " + i.to_s + ", e = " + e.to_s;
        end
@@ -171,6 +171,8 @@ java_import "edu.jas.arith.ModLongRing";
 java_import "edu.jas.arith.BigDecimal";
 java_import "edu.jas.arith.BigComplex";
 java_import "edu.jas.arith.BigQuaternion";
+java_import "edu.jas.arith.BigQuaternionRing";
+java_import "edu.jas.arith.BigQuaternionInteger";
 java_import "edu.jas.arith.BigOctonion";
 java_import "edu.jas.arith.Product";
 java_import "edu.jas.arith.ProductRing";
@@ -440,7 +442,8 @@ def Quat(re=BigRational.new(),im=BigRational.new(),jm=BigRational.new(),km=BigRa
     if km.is_a? RingElem
         km = km.elem;
     end
-    c = BigQuaternion.new(re,im,jm,km);
+    cf = BigQuaternionRing.new();
+    c = BigQuaternion.new(cf, re,im,jm,km);
     return RingElem.new(c);
 end
 
@@ -448,12 +451,13 @@ end
 =begin rdoc
 Create JAS BigOctonion as ring element.
 =end
-def Oct(ro=BigQuaternion.new(),io=BigQuaternion.new())
+def Oct(ro=0,io=0)
+    cf = BigQuaternionRing.new();
     if ro == 0
-        ro = BigQuaternion.new();
+        ro = BigQuaternion.new(cf);
     end
     if io == 0
-        io = BigQuaternion.new();
+        io = BigQuaternion.new(cf);
     end
     if ro.is_a? Array 
         if ro[0].is_a? Array 
@@ -627,13 +631,15 @@ Coerce type a to type b or type b to type a.
         #puts "b type(#{b}) = #{b.class}\n";
         begin
             if not a.isPolynomial() and b.isPolynomial()
+               #puts "b = " + str(b.isPolynomial());
                s = b.coerceElem(a);
                o = b;
             else
                s = a;
                o = a.coerceElem(b);
             end
-        rescue
+        rescue => e
+               #puts "e #{e.message}, a = #{a}";
             s = a;
             o = a.coerceElem(b);
         end
@@ -664,6 +670,7 @@ Coerce other to self
         end
         if other.is_a? RingElem
             if isPolynomial() and not other.isPolynomial()
+                #puts "other parse(#{@ring})\n";
                 o = @ring.parse( other.elem.toString() ); # not toScript()
                 return RingElem.new( o );
             end
@@ -943,7 +950,7 @@ Evaluate at a for power series or polynomial.
                   e = PolyUtil.evaluateAll(@ring.coFac, @elem, x);
                end
             end
-        rescue Exception => e
+        rescue => e
             raise RuntimeError, e.to_s; 
             e = 0;            
         end
@@ -1112,7 +1119,7 @@ rational number coefficients.
 ##                 i = e.get(a);
 ##                 ll[ RingElem.new( a ) ] = i;
                return ll;
-           rescue Exception => e
+           rescue => e
                raise RuntimeError, "error factorsAbsolute " + @ring.to_s;
            end
         else
@@ -1140,7 +1147,7 @@ Compute real roots of univariate polynomial.
             end
             rr = rr.map{ |e| RingElem.new(e) };
             return rr;
-        rescue Exception => e
+        rescue => e
             puts "error " + str(e)
             return nil
         end
@@ -1158,7 +1165,7 @@ Compute complex roots of univariate polynomial.
         begin
             x = a.ring.coFac.getONE().getRe();
             cmplx = true;
-        rescue Exception => e
+        rescue => e
             #pass;
         end
         begin
@@ -1182,7 +1189,7 @@ Compute complex roots of univariate polynomial.
             end
             rr = rr.map{ |y| RingElem.new(y) };
             return rr;
-        rescue Exception => e
+        rescue => e
             puts "error " + str(e)
             return nil
         end
@@ -1204,7 +1211,7 @@ Compute algebraic roots, i.e. real and complex algebraic roots of univariate pol
             end
             #no: ar = ar.map{ |y| RingElem.new(y) };
             return RingElem.new(ar); #??
-        rescue Exception => e
+        rescue => e
             puts "error " + str(e)
             return nil
         end
@@ -1222,7 +1229,7 @@ Compute algebraic roots refinement.
             RootFactory.rootRefine( r, eps );
             #no: ar = ar.map{ |y| RingElem.new(y) };
             return RingElem.new(r); # ??
-        rescue Exception => e
+        rescue => e
             puts "error " + str(e)
             return nil
         end
@@ -1242,7 +1249,7 @@ Compute decimal approximation of real and complex roots of univariate polynomial
         begin
             d = RootFactory.decimalRoots( a, eps );
             return RingElem.new(d); # ??
-        rescue Exception => e
+        rescue => e
             puts "error " + str(e)
             return nil
         end
@@ -1260,7 +1267,7 @@ Roots of unity of real and complex algebraic numbers.
                d = RootFactory.rootsOfUnity( a );
             end
             return RingElem.new(d); # ??
-        rescue Exception => e
+        rescue => e
             puts "error " + str(e)
             return nil
         end
@@ -1279,7 +1286,7 @@ Compute an extension field with a primitive element.
         begin #Java::EduJasApplication::
             d = RootFactoryApp.rootReduce( a, b );
             return RingElem.new(d); # ??
-        rescue Exception => e
+        rescue => e
             puts "error " + str(e)
             return nil
         end
@@ -1627,7 +1634,7 @@ r is the given polynomial ring.
         end
         begin
            i = GCDFactory.getProxy(r.coFac);
-        rescue Exception => e
+        rescue => e
            i = nil
         end
         return i;
@@ -1647,7 +1654,7 @@ r is the given polynomial ring.
         end
         begin 
            i = SquarefreeFactory.getImplementation(r.coFac);
-        rescue Exception => e
+        rescue => e
            i = nil
         end
         return i;
@@ -1667,7 +1674,7 @@ r is the given polynomial ring.
         end
         begin 
            i = FactorFactory.getImplementation(r.coFac);
-        rescue Exception => e
+        rescue => e
            i = nil
         end
         return i;
@@ -1690,7 +1697,7 @@ Define instance variables for generators.
                 @generators[ ivs ] = i;
                 self.instance_eval( "def #{ivs}; @generators[ '#{ivs}' ]; end" )
              end
-          rescue Exception => e
+          rescue => e
              puts "ring error: #{ivs} = " + i.to_s + ", e = " + str(e);
              #pass
           end
@@ -1708,7 +1715,7 @@ Inject variables for generators in top level environment.
            env = eval "self", bin;
            #puts "env = " + str(env)
            inject_gens(env)
-        rescue Exception => e
+        rescue => e
            puts "error: 'irb/frame' not found, e = " + str(e);
         end
     end
@@ -1795,7 +1802,7 @@ Create an element from a string or an object.
               if @ring == poly.ring 
                  return RingElem.new(poly);
               end
-           rescue Exception => e
+           rescue => e
               # pass
            end
            poly = str(poly);
@@ -1874,7 +1881,7 @@ rational number and algebriac number coefficients.
                 ll[ RingElem.new( a ) ] = i;
             end
             return ll;
-        rescue Exception => e
+        rescue => e
             puts "error " + str(e)
             return nil
         end
@@ -1898,7 +1905,7 @@ rational number coefficients.
 ##                 i = e.get(a);
 ##                 ll[ RingElem.new( a ) ] = i;
             return ll;
-        rescue Exception => e
+        rescue => e
             puts "error in factorsAbsolute " + str(e)
             return nil
         end
@@ -3651,7 +3658,7 @@ Create an element from a string or object.
               if @ring == poly.ring 
                  return RingElem.new(poly);
               end
-           rescue Exception => e
+           rescue => e
               # pass
            end
            poly = str(poly);
@@ -4355,7 +4362,7 @@ Create an element from a string.
               if @ring == mods.ring 
                  return RingElem.new(mods);
               end
-           rescue Exception => e
+           rescue => e
               # pass
            end
            mods = str(mods);
@@ -4550,7 +4557,7 @@ Create an element from a string.
               if @ring == mods.ring 
                  return RingElem.new(mods);
               end
-           rescue Exception => e
+           rescue => e
               # pass
            end
            mods = str(mods);
@@ -5613,7 +5620,7 @@ Create an element from a string or object.
               if @ring == poly.ring 
                  return RingElem.new(poly);
               end
-           rescue Exception => e
+           rescue => e
               # pass
            end
            poly = str(poly);
