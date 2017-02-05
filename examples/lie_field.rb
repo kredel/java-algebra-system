@@ -88,3 +88,5 @@ puts "SolvableQuotient: " + str(scb);
 puts "SolvableQuotient: " + str(sca == scb);
 puts "SolvableQuotient: " + str(sca - scb);
 puts;
+
+terminate();
