@@ -172,8 +172,12 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
         if (d.isONE()) {
             return P;
         }
+        if (P.ring.coFac.isField()) { // make monic
+            return P.multiplyLeft( d.inverse() ); // avoid the divisions
+            //return P.multiply( d.inverse() ); // avoid the divisions
+        }
         //GenSolvablePolynomial<C> pp = (GenSolvablePolynomial<C>) P.rightDivideCoeff(d); // rightDivide TODO/done
-        GenSolvablePolynomial<C> pp = (GenSolvablePolynomial<C>) P.leftDivideCoeff(d); // rightDivide TODO/done
+        GenSolvablePolynomial<C> pp = (GenSolvablePolynomial<C>) P.leftDivideCoeff(d); // TODO
         if (debug) {
             GenSolvablePolynomial<C> p = pp.multiplyLeft(d);
             if (!p.equals(P)) {
@@ -199,6 +203,9 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
         C d = rightBaseContent(P);
         if (d.isONE()) {
             return P;
+        }
+        if (P.ring.coFac.isField()) { // make monic
+            return P.multiplyLeft( d.inverse() ); // avoid the divisions
         }
         GenSolvablePolynomial<C> pp = (GenSolvablePolynomial<C>) P.leftDivideCoeff(d); // leftDivide TODO/done
         if (debug) {
