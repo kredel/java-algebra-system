@@ -57,13 +57,16 @@ public final class BigOctonion
      * @param i BigQuaternion.
      */
     public BigOctonion(BigQuaternion r, BigQuaternion i) {
+        if (i == null) {
+            throw new IllegalArgumentException("null i not allowed");
+        }
         this.or = r;
         this.oi = i;
-        if (ZERO == null) {
-            ZERO = new BigOctonion(r.ring);
-            ONE = new BigOctonion(r.ring.ONE);
-            I = new BigOctonion(r.ring.ZERO, i.ring.ONE);
-        }
+        //if (ZERO == null) {
+            //ZERO = new BigOctonion(r.ring.ZERO, i.ring.ZERO);
+            //ONE = new BigOctonion(r.ring.ONE, i.ring.ZERO);
+            //I = new BigOctonion(r.ring.ZERO, i.ring.ONE);
+        //}
     }
 
 
@@ -111,7 +114,7 @@ public final class BigOctonion
      * @param fac BigQuaternionRing.
      */
     public BigOctonion(BigQuaternionRing fac) {
-        this(fac.ZERO);
+        this(new BigQuaternion(fac));
     }
 
 
@@ -125,15 +128,15 @@ public final class BigOctonion
      */
     public BigOctonion(BigQuaternionRing fac, String s) throws NumberFormatException {
         if (s == null || s.length() == 0) {
-            or = ZERO.or;
-            oi = ZERO.oi;
+            or = getZERO().or;
+            oi = getZERO().oi;
             return;
         }
         s = s.trim();
         int o = s.indexOf("o");
         if (o == -1) {
             or = new BigQuaternion(fac, s);
-            oi = ZERO.oi;
+            oi = getZERO().oi;
             return;
         }
         String sr = s.substring(0, o - 1);
@@ -207,6 +210,9 @@ public final class BigOctonion
      * @return 0 as BigOctonion.
      */
     public BigOctonion getZERO() {
+        if (ZERO == null) {
+            ZERO = new BigOctonion(or.ring.ZERO, or.ring.ZERO);
+        }
         return ZERO;
     }
 
@@ -216,6 +222,9 @@ public final class BigOctonion
      * @return q as BigOctonion.
      */
     public BigOctonion getONE() {
+        if (ONE == null) {
+            ONE = new BigOctonion(or.ring.ONE, or.ring.ZERO);
+        }
         return ONE;
     }
 

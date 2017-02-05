@@ -26,6 +26,7 @@ import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigQuaternion;
 import edu.jas.arith.BigQuaternionRing;
+import edu.jas.arith.BigOctonion;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
@@ -75,7 +76,7 @@ public class GenPolynomialTokenizer {
 
 
     private static enum coeffType {
-        BigRat, BigInt, ModInt, BigC, BigQ, BigD, ANrat, ANmod, IntFunc
+        BigRat, BigInt, ModInt, BigC, BigQ, BigO, BigD, ANrat, ANmod, IntFunc
     };
 
 
@@ -86,7 +87,7 @@ public class GenPolynomialTokenizer {
 
 
     private static enum polyType {
-        PolBigRat, PolBigInt, PolModInt, PolBigC, PolBigD, PolBigQ, PolANrat, PolANmod, PolIntFunc
+        PolBigRat, PolBigInt, PolModInt, PolBigC, PolBigD, PolBigQ, PolBigO, PolANrat, PolANmod, PolIntFunc
     };
 
 
@@ -205,6 +206,10 @@ public class GenPolynomialTokenizer {
             pfac = new GenPolynomialRing<BigQuaternion>(fac, nvars, tord, vars);
             parsedPoly = polyType.PolBigQ;
             break;
+        case BigO:
+            pfac = new GenPolynomialRing<BigOctonion>(fac, nvars, tord, vars);
+            parsedPoly = polyType.PolBigO;
+            break;
         case BigD:
             pfac = new GenPolynomialRing<BigDecimal>(fac, nvars, tord, vars);
             parsedPoly = polyType.PolBigD;
@@ -250,6 +255,10 @@ public class GenPolynomialTokenizer {
         case BigQ:
             spfac = new GenSolvablePolynomialRing<BigQuaternion>(fac, nvars, tord, vars);
             parsedPoly = polyType.PolBigQ;
+            break;
+        case BigO:
+            spfac = new GenSolvablePolynomialRing<BigOctonion>(fac, nvars, tord, vars);
+            parsedPoly = polyType.PolBigO;
             break;
         case BigD:
             spfac = new GenSolvablePolynomialRing<BigDecimal>(fac, nvars, tord, vars);
@@ -443,8 +452,11 @@ public class GenPolynomialTokenizer {
                         tok.pushBack();
                     }
                     try {
+                        //System.out.println("df = " + df + ", fac = " + fac.getClass());
                         r = (RingElem) fac.parse(df.toString());
+                        //System.out.println("r = " + r);
                     } catch (NumberFormatException re) {
+                        //System.out.println("re = " + re);
                         throw new InvalidExpressionException("not a number " + df, re);
                     }
                     if (debug)
@@ -739,6 +751,10 @@ public class GenPolynomialTokenizer {
                 logger.warn("parse of quaternion coefficients may fail for negative components (use ~ for -)");
                 coeff = new BigQuaternionRing();
                 ct = coeffType.BigQ;
+            } else if (tok.sval.equalsIgnoreCase("Oct")) {
+                logger.warn("parse of octonion coefficients may fail for negative components (use ~ for -)");
+                coeff = new BigOctonion(new BigQuaternionRing());
+                ct = coeffType.BigO;
             } else if (tok.sval.equalsIgnoreCase("Mod")) {
                 tt = tok.nextToken();
                 boolean openb = false;

@@ -161,6 +161,7 @@ public /*final*/ class BigQuaternion implements StarRingElem<BigQuaternion>, Gcd
             km = BigRational.ZERO;
             return;
         }
+        //System.out.println("init: s = " + s);
         s = s.trim();
         int r = s.indexOf("i") + s.indexOf("j") + s.indexOf("k");
         if (r == -3) {
@@ -171,7 +172,6 @@ public /*final*/ class BigQuaternion implements StarRingElem<BigQuaternion>, Gcd
             return;
         }
 
-        //System.out.println("init: s = " + s);
         s = s.replaceAll("~", "-"); // when used with GenPolynomialTokenizer
         int i = s.indexOf("i");
         String sr = "";
