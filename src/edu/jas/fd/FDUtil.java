@@ -702,7 +702,7 @@ public class FDUtil {
         }
         GenSolvablePolynomialRing<GenPolynomial<C>> rfac = (GenSolvablePolynomialRing<GenPolynomial<C>>) P.ring;
         GenSolvablePolynomial<GenPolynomial<C>> onep = rfac.getONE();
-        ExpVector zero = rfac.evzero;
+        //ExpVector zero = rfac.evzero;
         GenSolvablePolynomial<GenPolynomial<C>> q = rfac.getZERO();
         GenSolvablePolynomial<GenPolynomial<C>> r;
         GenSolvablePolynomial<GenPolynomial<C>> p = P; //.ring.getZERO().copy();
@@ -861,7 +861,7 @@ public class FDUtil {
             //return FDUtil.<C> recursiveDivide(P,s);
         }
         RecSolvablePolynomial<C> onep = rfac.getONE();
-        ExpVector zero = rfac.evzero;
+        //ExpVector zero = rfac.evzero;
         RecSolvablePolynomial<C> q = rfac.getZERO();
         RecSolvablePolynomial<C> r;
         RecSolvablePolynomial<C> p = (RecSolvablePolynomial<C>) P;
@@ -908,7 +908,7 @@ public class FDUtil {
      * @param s GenSolvablePolynomial.
      * @return P/s.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public static <C extends GcdRingElem<C>> GenSolvablePolynomial<GenPolynomial<C>> recursiveLeftDivide(
                     GenSolvablePolynomial<GenPolynomial<C>> P, GenSolvablePolynomial<C> s) {
         if (s == null || s.isZERO()) {
@@ -928,7 +928,7 @@ public class FDUtil {
             //return FDUtil.<C> recursiveDivide(P,s);
         }
         RecSolvablePolynomial<C> onep = rfac.getONE();
-        ExpVector zero = rfac.evzero;
+        //ExpVector zero = rfac.evzero;
         RecSolvablePolynomial<C> q = rfac.getZERO();
         RecSolvablePolynomial<C> r, Pp;
         //RecSolvablePolynomial<C> p = (RecSolvablePolynomial<C>) P;
@@ -985,7 +985,7 @@ public class FDUtil {
      *            converted.
      * @return polynomial with integral solvable polynomial coefficients.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public static <C extends GcdRingElem<C>> GenSolvablePolynomial<GenPolynomial<C>> integralFromQuotientCoefficients(
                     GenSolvablePolynomialRing<GenPolynomial<C>> fac,
                     GenSolvablePolynomial<SolvableQuotient<C>> A) {
@@ -1171,9 +1171,9 @@ public class FDUtil {
     public static <C extends GcdRingElem<C>> GenSolvablePolynomial<C>[] rightGcdCofactors(
                     GenSolvablePolynomialRing<C> r, GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d) {
         //GreatestCommonDivisorAbstract<C> e1 = new GreatestCommonDivisorSimple<C>(r.coFac);
-        GreatestCommonDivisorAbstract<C> e1 = new GreatestCommonDivisorPrimitive<C>(r.coFac);
+        //GreatestCommonDivisorAbstract<C> e1 = new GreatestCommonDivisorPrimitive<C>(r.coFac);
         GreatestCommonDivisorAbstract<C> engine = new GreatestCommonDivisorFake<C>(r.coFac);
-        GreatestCommonDivisorAbstract<C> e2 = new GreatestCommonDivisorSyzygy<C>(r.coFac);
+        //GreatestCommonDivisorAbstract<C> e2 = new GreatestCommonDivisorSyzygy<C>(r.coFac);
         //GreatestCommonDivisorAbstract<C> engine = new SGCDParallelProxy<C>(r.coFac, e1, e2);
         if (info) {
             logger.info("rightGCD_in: " + n + ", " + d);

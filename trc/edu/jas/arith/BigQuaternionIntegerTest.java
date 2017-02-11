@@ -334,7 +334,7 @@ public class BigQuaternionIntegerTest extends TestCase {
         //System.out.println("norm(b) = " + d);
         assertTrue("d is entier", d.isEntier());
 
-        BigQuaternionInteger ai, bi, ci;
+        BigQuaternionInteger ai, bi;
         ai = new BigQuaternionInteger(fac, a);
         bi = new BigQuaternionInteger(fac, b);
         // quotient and remainder
@@ -372,7 +372,7 @@ public class BigQuaternionIntegerTest extends TestCase {
     public void testGcdEntier() {
         a = fac.random(10);
         b = fac.random(10);
-        BigQuaternionInteger ai, bi, ci;
+        BigQuaternionInteger ai, bi;
         ai = new BigQuaternionInteger(fac, a);
         bi = new BigQuaternionInteger(fac, b);
 

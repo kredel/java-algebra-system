@@ -202,7 +202,7 @@ public class GroebnerBaseWalkTest extends TestCase {
         PolynomialList<BigRational> tri = new PolynomialList<BigRational>(F.ring, Gp);
         //System.out.println("walk G = " + tri);
         //System.out.println("lex = " + t + ", walk = " + w + " in milliseconds");
-        assertTrue("findbugs ", t+w >= 0L);
+        assertTrue("findbugs ", t + w >= 0L);
         assertTrue("isGB( GB(Trinks) )", bb.isGB(Gp));
         assertTrue("isMinimalGB( GB(Trinks) )", bb.isMinimalGB(Gp));
         //assertEquals("#GB(Trinks) == 6", 6, Gp.size());
@@ -219,7 +219,7 @@ public class GroebnerBaseWalkTest extends TestCase {
         String exam = "(B,S,T,Z,P,W) G|4| " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
                         + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
                         + "( - 9 W + 15 T P + 20 S Z ), " + "( P W + 2 T Z - 11 B**3 ), "
-	    + "( 99 W - 11 B S + 3 B**2 ) " /*+ ", ( 10000 B**2 + 6600 B + 2673 )"*/ + ") ";
+                        + "( 99 W - 11 B S + 3 B**2 ) " /*+ ", ( 10000 B**2 + 6600 B + 2673 )"*/ + ") ";
 
         Reader source = new StringReader(exam);
         GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
@@ -238,7 +238,7 @@ public class GroebnerBaseWalkTest extends TestCase {
         //System.out.println("bbw = " + bbw);
 
         Gp = bbw.GB(F.list);
-        PolynomialList<BigRational> tri = new PolynomialList<BigRational>(F.ring, Gp);
+        //PolynomialList<BigRational> tri = new PolynomialList<BigRational>(F.ring, Gp);
         //System.out.println("walk G = " + tri);
         assertTrue("isGB( GB(Trinks) )", bb.isGB(Gp));
         assertTrue("isMinimalGB( GB(Trinks) )", bb.isMinimalGB(Gp));
@@ -253,12 +253,12 @@ public class GroebnerBaseWalkTest extends TestCase {
     @SuppressWarnings({ "unchecked", "cast" })
     public void testFGLMissacGBase() { // 
         String exam = "Mod 32003 (w,z,y,x) L " // Mod 9223372036854775783 536870909 32003 (z,y,x,w)
-                        + "( "  
+                        + "( "
                         + " (8*w^2 + 5*w*x - 4*w*y + 2*w*z + 3*w + 5*x^2 + 2*x*y - 7*x*z - 7*x + 7*y^2 -8*y*z - 7*y + 7*z^2 - 8*z + 8),"
                         + "(3*w^2 - 5*w*x - 3*w*y - 6*w*z + 9*w + 4*x^2 + 2*x*y - 2*x*z + 7*x + 9*y^2 + 6*y*z + 5*y + 7*z^2 + 7*z + 5),"
                         + "(-2*w^2 + 9*w*x + 9*w*y - 7*w*z - 4*w + 8*x^2 + 9*x*y - 3*x*z + 8*x + 6*y^2 - 7*y*z + 4*y - 6*z^2 + 8*z + 2),"
                         + "(7*w^2 + 5*w*x + 3*w*y - 5*w*z - 5*w + 2*x^2 + 9*x*y - 7*x*z + 4*x -4*y^2 - 5*y*z + 6*y - 4*z^2 - 9*z + 2)"
-                        +" )";
+                        + " )";
 
         Reader source = new StringReader(exam);
         GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
@@ -275,7 +275,7 @@ public class GroebnerBaseWalkTest extends TestCase {
         long t = System.currentTimeMillis();
         G = bb.GB(F.list);
         t = System.currentTimeMillis() - t;
-        PolynomialList<BigRational> seq = new PolynomialList<BigRational>(F.ring, G);
+        //PolynomialList<BigRational> seq = new PolynomialList<BigRational>(F.ring, G);
         //System.out.println("seq G = " + seq);
         assertTrue("isGB( GB() )", bb.isGB(G));
         assertTrue("isMinimalGB( GB() )", bb.isMinimalGB(G));
@@ -284,10 +284,10 @@ public class GroebnerBaseWalkTest extends TestCase {
         long w = System.currentTimeMillis();
         Gp = bbw.GB(F.list);
         w = System.currentTimeMillis() - w;
-        PolynomialList<BigRational> fjlt = new PolynomialList<BigRational>(F.ring, Gp);
+        //PolynomialList<BigRational> fjlt = new PolynomialList<BigRational>(F.ring, Gp);
         //System.out.println("walk G = " + fjlt);
         //System.out.println("lex = " + t + ", walk = " + w + " in milliseconds");
-        assertTrue("findbugs ", t+w >= 0L);
+        assertTrue("findbugs ", t + w >= 0L);
         assertTrue("isGB( GB() )", bb.isGB(Gp));
         assertTrue("isMinimalGB( GB() )", bb.isMinimalGB(Gp));
         //assertEquals("#GB(FJLT) == 2", 2, Gp.size());

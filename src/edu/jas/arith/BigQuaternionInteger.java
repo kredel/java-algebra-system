@@ -284,26 +284,26 @@ public final class BigQuaternionInteger extends BigQuaternion
      */
     @Override
     public BigQuaternion[] egcd(BigQuaternion S) {
-        if (true) {
-            throw new UnsupportedOperationException("not implemented: egcd");
-        }
+        throw new UnsupportedOperationException("not implemented: egcd");
+        /*
         BigQuaternion[] ret = new BigQuaternion[3];
         ret[0] = null;
         ret[1] = null;
         ret[2] = null;
         if (S == null || S.isZERO()) {
-            ret[0] = this;
-            return ret;
+           ret[0] = this;
+           return ret;
         }
         if (this.isZERO()) {
-            ret[0] = S;
-            return ret;
+           ret[0] = S;
+           return ret;
         }
         BigQuaternion half = new BigQuaternion(ring, new BigRational(1, 2));
         ret[0] = ring.getONE();
         ret[1] = this.inverse().multiply(half);
         ret[2] = S.inverse().multiply(half);
         return ret;
+        */
     }
 
 

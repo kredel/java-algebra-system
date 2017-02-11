@@ -379,6 +379,7 @@ public class FactorMoreTest extends TestCase {
 
         GenPolynomial<BigInteger> q = r.inflate(3);
         //System.out.println("q = " + q);
+        assertTrue("q != 0: ", !q.isZERO());
 
         GenPolynomial<BigInteger> h;
         h = CycloUtil.cyclotomicPolynomial(pfac, 100L);
@@ -392,14 +393,18 @@ public class FactorMoreTest extends TestCase {
         List<GenPolynomial<BigInteger>> H;
         H = CycloUtil.cyclotomicDecompose(pfac, 100L);
         //System.out.println("H = " + H);
-        assertTrue("isCyclotomicPolynomial: " + h, CycloUtil.isCyclotomicPolynomial(h));
+        for (GenPolynomial<BigInteger> hp : H) {
+            assertTrue("isCyclotomicPolynomial: " + hp, CycloUtil.isCyclotomicPolynomial(hp));
+        }
 
         H = CycloUtil.cyclotomicDecompose(pfac, 258L);
         //System.out.println("H = " + H);
         //System.out.println("");
+        for (GenPolynomial<BigInteger> hp : H) {
+            assertTrue("isCyclotomicPolynomial: " + hp, CycloUtil.isCyclotomicPolynomial(hp));
+        }
 
-
-        FactorAbstract<BigInteger> fac = new FactorInteger();
+        //FactorAbstract<BigInteger> fac = new FactorInteger();
         //Map<GenPolynomial<BigInteger>, Long> F;
 
         h = pfac.univariate(0, 20).subtract(pfac.getONE());
@@ -429,7 +434,7 @@ public class FactorMoreTest extends TestCase {
             assertTrue("isCyclotomicPolynomial: " + h, CycloUtil.isCyclotomicPolynomial(h));
         }
 
-        h = pfac.univariate(0,258).subtract(pfac.getONE());
+        h = pfac.univariate(0, 258).subtract(pfac.getONE());
         //h = pfac.univariate(0, 2).sum(pfac.getONE());
         //h = pfac.parse("x**16 + x**14 - x**10 - x**8 - x**6 + x**2 + 1"); // yes
         //h = pfac.parse("x**16 + x**14 - x**10 + x**8 - x**6 + x**2 + 1");  // no

@@ -6,20 +6,14 @@ package edu.jas.fd;
 
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
-import edu.jas.poly.AlgebraicNumber;
-import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenSolvablePolynomial;
-import edu.jas.poly.GenSolvablePolynomialRing;
-import edu.jas.poly.PolynomialList;
 import edu.jas.structure.GcdRingElem;
 
 
 /**
- * Container for the co-factors of left-right GCD computation.
- * Invariant is left * coA * right = polyA and left * coB * right = polyB.
+ * Container for the co-factors of left-right GCD computation. Invariant is left
+ * * coA * right = polyA and left * coB * right = polyB.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
@@ -79,7 +73,9 @@ public class GCDcoFactors<C extends GcdRingElem<C>> implements Serializable {
      * @param l polynomial left GCD.
      * @param r polynomial right GCD.
      */
-    public GCDcoFactors(GreatestCommonDivisorAbstract<C> g, GenSolvablePolynomial<C> a, GenSolvablePolynomial<C> b, GenSolvablePolynomial<C> ca, GenSolvablePolynomial<C> cb, GenSolvablePolynomial<C> l, GenSolvablePolynomial<C> r) {
+    public GCDcoFactors(GreatestCommonDivisorAbstract<C> g, GenSolvablePolynomial<C> a,
+                    GenSolvablePolynomial<C> b, GenSolvablePolynomial<C> ca, GenSolvablePolynomial<C> cb,
+                    GenSolvablePolynomial<C> l, GenSolvablePolynomial<C> r) {
         fd = g;
         polyA = a;
         polyB = b;
@@ -92,13 +88,13 @@ public class GCDcoFactors<C extends GcdRingElem<C>> implements Serializable {
 
     /**
      * Test if the invariants of this are fulfilled.
-     * @return true if x * (left * coA * right) = y * (polyA), for x,
-     * y with x * lc(left * coA * right) == y * lc(polyA) and x *
-     * (left * coB * right) == y * (polyB), for x, y with x * lc(left
-     * * coB * right) == y * lc(polyB).
+     * @return true if x * (left * coA * right) = y * (polyA), for x, y with x *
+     *         lc(left * coA * right) == y * lc(polyA) and x * (left * coB *
+     *         right) == y * (polyB), for x, y with x * lc(left * coB * right)
+     *         == y * lc(polyB).
      */
     public boolean isGCD() {
-        GenSolvablePolynomial<C> a, b, ap, bp; 
+        GenSolvablePolynomial<C> a, ap, bp;
         //C l = left.leadingBaseCoefficient();
         //C c1 = fd.leftBaseContent((GenSolvablePolynomial<C>)a.abs());
         //C c2 = fd.leftBaseContent((GenSolvablePolynomial<C>)polyA.abs());
@@ -128,33 +124,33 @@ public class GCDcoFactors<C extends GcdRingElem<C>> implements Serializable {
         a = left.multiply(coA).multiply(right);
         C c1 = a.leadingBaseCoefficient();
         C c2 = polyA.leadingBaseCoefficient();
-        C[] oc = fd.leftOreCond(c1,c2);
+        C[] oc = fd.leftOreCond(c1, c2);
         ap = a.multiplyLeft(oc[0]);
         bp = polyA.multiplyLeft(oc[1]);
-        if (! ap.equals(bp)) {
+        if (!ap.equals(bp)) {
             //System.out.println("a: ap_l = " + ap + ", bp = " + bp);
-            oc = fd.rightOreCond(c1,c2);
+            oc = fd.rightOreCond(c1, c2);
             ap = a.multiply(oc[0]);
             bp = polyA.multiply(oc[1]);
-            if (! ap.equals(bp)) {
-               System.out.println("a: ap_r = " + ap + ", bp = " + bp);
-               return false;
+            if (!ap.equals(bp)) {
+                System.out.println("a: ap_r = " + ap + ", bp = " + bp);
+                return false;
             }
         }
         a = left.multiply(coB).multiply(right);
         c1 = a.leadingBaseCoefficient();
         c2 = polyB.leadingBaseCoefficient();
-        oc = fd.leftOreCond(c1,c2);
+        oc = fd.leftOreCond(c1, c2);
         ap = a.multiplyLeft(oc[0]);
         bp = polyB.multiplyLeft(oc[1]);
-        if (! ap.equals(bp)) {
+        if (!ap.equals(bp)) {
             //System.out.println("b: ap_l = " + ap + ", bp = " + bp);
-            oc = fd.rightOreCond(c1,c2);
+            oc = fd.rightOreCond(c1, c2);
             ap = a.multiply(oc[0]);
             bp = polyB.multiply(oc[1]);
-            if (! ap.equals(bp)) {
-               System.out.println("b: ap_r = " + ap + ", bp = " + bp);
-               return false;
+            if (!ap.equals(bp)) {
+                System.out.println("b: ap_r = " + ap + ", bp = " + bp);
+                return false;
             }
         }
         return true;
