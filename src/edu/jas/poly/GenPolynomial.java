@@ -5,6 +5,7 @@
 package edu.jas.poly;
 
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -2453,4 +2454,14 @@ public class GenPolynomial<C extends RingElem<C>>
         return blen;
     }
 
+    //private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+    //    out.defaultWriteObject();
+    //}
+
+
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        blen = -1;
+        hash = -1;
+    }
 }

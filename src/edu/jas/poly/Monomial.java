@@ -135,6 +135,32 @@ public final class Monomial<C extends RingElem<C>> implements Element<Monomial<C
 
 
     /**
+     * Comparison with any other object.
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object B) {
+        if (!(B instanceof Monomial)) {
+            return false;
+        }
+        Monomial<C> b = (Monomial<C>) B;
+        return (compareTo(b) == 0);
+    }
+
+
+    /**
+     * hashCode. 
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        int h = e.hashCode();
+        h = (h << 4) + c.hashCode();
+        return h;
+    }
+
+
+    /**
      * Monomial comparison.
      * @param S Monomial.
      * @return SIGN(this-S).
