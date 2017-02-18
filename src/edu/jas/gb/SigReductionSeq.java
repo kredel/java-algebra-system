@@ -366,6 +366,7 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
                     if (eup == null) {
                         logger.info("eup = null");
                         //eup = a.ring.evzero;
+                        throw new IllegalArgumentException("eup == null: " + sigup);
                     }
 
                     //wrong: boolean sigeq = (sigup.compareTo(sigma) < 0);

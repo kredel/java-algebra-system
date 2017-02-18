@@ -128,7 +128,10 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
     @SuppressWarnings("unchecked")
     public GenPolynomial<C> normalformMarked(List<Monomial<C>> Mp, List<GenPolynomial<C>> Pp,
                     GenPolynomial<C> Ap) {
-        if ((Mp == null && Pp == null) || (Mp.isEmpty() && Pp.isEmpty())) {
+        if (Pp == null || Pp.isEmpty()) {
+            return Ap;
+        }
+        if (Mp == null || Mp.isEmpty()) {
             return Ap;
         }
         if (Ap == null || Ap.isZERO()) {
