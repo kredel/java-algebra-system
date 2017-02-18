@@ -78,8 +78,8 @@
 <br/>
 </p>
 <h2>Metrics</h2>
-<p>105553 lines of code analyzed,
-	in 961 classes, 
+<p>112639 lines of code analyzed,
+	in 1007 classes, 
 	in 16 packages.</p>
 <table width="500" cellpadding="5" cellspacing="2">
 <tr class="tableheader">
@@ -94,18 +94,18 @@
 </tr>
 <tr class="tablerow1">
 <td>Medium Priority Warnings</td>
-<td align="right">37</td>
-<td align="right">0.35</td>
+<td align="right">41</td>
+<td align="right">0.36</td>
 </tr>
 <tr class="$totalClass">
 <td>
 <b>Total Warnings</b>
 </td>
 <td align="right">
-<b>38</b>
+<b>42</b>
 </td>
 <td align="right">
-<b>0.36</b>
+<b>0.37</b>
 </td>
 </tr>
 </table>
@@ -120,9 +120,6 @@
 <ul>
 <li>
 <a href="#Warnings_BAD_PRACTICE">Bad practice Warnings</a>
-</li>
-<li>
-<a href="#Warnings_CORRECTNESS">Correctness Warnings</a>
 </li>
 <li>
 <a href="#Warnings_MALICIOUS_CODE">Malicious code vulnerability Warnings</a>
@@ -144,32 +141,26 @@
 <td>
 <a href="#Warnings_BAD_PRACTICE">Bad practice Warnings</a>
 </td>
-<td align="right">20</td>
+<td align="right">22</td>
 </tr>
 <tr class="tablerow1">
-<td>
-<a href="#Warnings_CORRECTNESS">Correctness Warnings</a>
-</td>
-<td align="right">1</td>
-</tr>
-<tr class="tablerow0">
 <td>
 <a href="#Warnings_MALICIOUS_CODE">Malicious code vulnerability Warnings</a>
 </td>
 <td align="right">1</td>
 </tr>
-<tr class="tablerow1">
+<tr class="tablerow0">
 <td>
 <a href="#Warnings_STYLE">Dodgy code Warnings</a>
 </td>
-<td align="right">16</td>
+<td align="right">19</td>
 </tr>
-<tr class="tablerow0">
+<tr class="tablerow1">
 <td>
 <b>Total</b>
 </td>
 <td align="right">
-<b>38</b>
+<b>42</b>
 </td>
 </tr>
 </table>
@@ -194,80 +185,108 @@
 <td>
 <p id="N65548" style="display: none;">
 <a href="#NM_SAME_SIMPLE_NAME_AS_SUPERCLASS">Bug type NM_SAME_SIMPLE_NAME_AS_SUPERCLASS (click for details)</a>
-<br/>In class edu.jas.application.FactorFactory<br/>In class edu.jas.ufd.FactorFactory<br/>At FactorFactory.java:[lines 65-209]</p>
+<br/>In class edu.jas.application.FactorFactory<br/>In class edu.jas.ufd.FactorFactory<br/>At FactorFactory.java:[lines 65-211]</p>
 </td>
 </tr>
-<tr class="tablerow0" onclick="toggleRow('N65658');">
+<tr class="tablerow0" onclick="toggleRow('N65595');">
+<td>
+<span class="priority-2">Nm</span>
+</td>
+<td>The method name edu.jas.application.GBAlgorithmBuilder.Arri() doesn't start with a lower case letter</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N65595" style="display: none;">
+<a href="#NM_METHOD_NAMING_CONVENTION">Bug type NM_METHOD_NAMING_CONVENTION (click for details)</a>
+<br/>In class edu.jas.application.GBAlgorithmBuilder<br/>In method edu.jas.application.GBAlgorithmBuilder.Arri()<br/>At GBAlgorithmBuilder.java:[lines 522-535]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N65711');">
 <td>
 <span class="priority-2">OS</span>
 </td>
 <td>edu.jas.application.RunGB.getReader(String) may fail to close stream</td>
 </tr>
-<tr class="detailrow0">
+<tr class="detailrow1">
 <td/>
 <td>
-<p id="N65658" style="display: none;">
+<p id="N65711" style="display: none;">
 <a href="#OS_OPEN_STREAM">Bug type OS_OPEN_STREAM (click for details)</a>
-<br/>In class edu.jas.application.RunGB<br/>In method edu.jas.application.RunGB.getReader(String)<br/>Need to close java.util.zip.ZipFile <br/>At RunGB.java:[line 460]</p>
+<br/>In class edu.jas.application.RunGB<br/>In method edu.jas.application.RunGB.getReader(String)<br/>Need to close java.util.zip.ZipFile <br/>At RunGB.java:[line 504]</p>
 </td>
 </tr>
-<tr class="tablerow1" onclick="toggleRow('N67044');">
+<tr class="tablerow0" onclick="toggleRow('N67458');">
 <td>
 <span class="priority-2">RV</span>
 </td>
 <td>edu.jas.poly.PolynomialComparator.compare(GenPolynomial, GenPolynomial) negates the return value of edu.jas.poly.GenPolynomial.compareTo(GenPolynomial)</td>
 </tr>
-<tr class="detailrow1">
+<tr class="detailrow0">
 <td/>
 <td>
-<p id="N67044" style="display: none;">
+<p id="N67458" style="display: none;">
 <a href="#RV_NEGATING_RESULT_OF_COMPARETO">Bug type RV_NEGATING_RESULT_OF_COMPARETO (click for details)</a>
 <br/>In class edu.jas.poly.PolynomialComparator<br/>In method edu.jas.poly.PolynomialComparator.compare(GenPolynomial, GenPolynomial)<br/>Called method edu.jas.poly.GenPolynomial.compareTo(GenPolynomial)<br/>Return value of edu.jas.poly.GenPolynomial.compareTo(GenPolynomial) of type int<br/>At PolynomialComparator.java:[line 51]</p>
 </td>
 </tr>
-<tr class="tablerow0" onclick="toggleRow('N67370');">
+<tr class="tablerow1" onclick="toggleRow('N67784');">
 <td>
 <span class="priority-2">RV</span>
 </td>
-<td>edu.jas.poly.TermOrder$69.compare(ExpVector, ExpVector) negates the return value of edu.jas.poly.TermOrder$EVComparator.compare(ExpVector, ExpVector)</td>
-</tr>
-<tr class="detailrow0">
-<td/>
-<td>
-<p id="N67370" style="display: none;">
-<a href="#RV_NEGATING_RESULT_OF_COMPARETO">Bug type RV_NEGATING_RESULT_OF_COMPARETO (click for details)</a>
-<br/>In class edu.jas.poly.TermOrder$69<br/>In method edu.jas.poly.TermOrder$69.compare(ExpVector, ExpVector)<br/>Called method edu.jas.poly.TermOrder$EVComparator.compare(ExpVector, ExpVector)<br/>Return value of edu.jas.poly.TermOrder$EVComparator.compare(ExpVector, ExpVector) of type int<br/>At TermOrder.java:[line 1270]</p>
-</td>
-</tr>
-<tr class="tablerow1" onclick="toggleRow('N67448');">
-<td>
-<span class="priority-2">RV</span>
-</td>
-<td>edu.jas.poly.TermOrder$9.compare(ExpVector, ExpVector) negates the return value of edu.jas.poly.TermOrder$EVComparator.compare(ExpVector, ExpVector)</td>
+<td>edu.jas.poly.TermOrder$11.compare(ExpVector, ExpVector) negates the return value of edu.jas.poly.TermOrder$EVComparator.compare(ExpVector, ExpVector)</td>
 </tr>
 <tr class="detailrow1">
 <td/>
 <td>
-<p id="N67448" style="display: none;">
+<p id="N67784" style="display: none;">
 <a href="#RV_NEGATING_RESULT_OF_COMPARETO">Bug type RV_NEGATING_RESULT_OF_COMPARETO (click for details)</a>
-<br/>In class edu.jas.poly.TermOrder$9<br/>In method edu.jas.poly.TermOrder$9.compare(ExpVector, ExpVector)<br/>Called method edu.jas.poly.TermOrder$EVComparator.compare(ExpVector, ExpVector)<br/>Return value of edu.jas.poly.TermOrder$EVComparator.compare(ExpVector, ExpVector) of type int<br/>At TermOrder.java:[line 250]</p>
+<br/>In class edu.jas.poly.TermOrder$11<br/>In method edu.jas.poly.TermOrder$11.compare(ExpVector, ExpVector)<br/>Called method edu.jas.poly.TermOrder$EVComparator.compare(ExpVector, ExpVector)<br/>Return value of edu.jas.poly.TermOrder$EVComparator.compare(ExpVector, ExpVector) of type int<br/>At TermOrder.java:[line 291]</p>
 </td>
 </tr>
-<tr class="tablerow0" onclick="toggleRow('N67526');">
+<tr class="tablerow0" onclick="toggleRow('N67862');">
+<td>
+<span class="priority-2">RV</span>
+</td>
+<td>edu.jas.poly.TermOrder$71.compare(ExpVector, ExpVector) negates the return value of edu.jas.poly.TermOrder$EVComparator.compare(ExpVector, ExpVector)</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N67862" style="display: none;">
+<a href="#RV_NEGATING_RESULT_OF_COMPARETO">Bug type RV_NEGATING_RESULT_OF_COMPARETO (click for details)</a>
+<br/>In class edu.jas.poly.TermOrder$71<br/>In method edu.jas.poly.TermOrder$71.compare(ExpVector, ExpVector)<br/>Called method edu.jas.poly.TermOrder$EVComparator.compare(ExpVector, ExpVector)<br/>Return value of edu.jas.poly.TermOrder$EVComparator.compare(ExpVector, ExpVector) of type int<br/>At TermOrder.java:[line 1315]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N67940');">
 <td>
 <span class="priority-2">RV</span>
 </td>
 <td>edu.jas.poly.Word.gradInvlexCompareTo(Word) negates the return value of edu.jas.poly.Word.compareTo(Word)</td>
 </tr>
-<tr class="detailrow0">
+<tr class="detailrow1">
 <td/>
 <td>
-<p id="N67526" style="display: none;">
+<p id="N67940" style="display: none;">
 <a href="#RV_NEGATING_RESULT_OF_COMPARETO">Bug type RV_NEGATING_RESULT_OF_COMPARETO (click for details)</a>
 <br/>In class edu.jas.poly.Word<br/>In method edu.jas.poly.Word.gradInvlexCompareTo(Word)<br/>Called method edu.jas.poly.Word.compareTo(Word)<br/>Return value of edu.jas.poly.Word.compareTo(Word) of type int<br/>At Word.java:[line 545]</p>
 </td>
 </tr>
-<tr class="tablerow1" onclick="toggleRow('N66246');">
+<tr class="tablerow0" onclick="toggleRow('N66556');">
+<td>
+<span class="priority-2">SnVI</span>
+</td>
+<td>edu.jas.fd.SGCDParallelProxy is Serializable; consider declaring a serialVersionUID</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N66556" style="display: none;">
+<a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
+<br/>In class edu.jas.fd.SGCDParallelProxy<br/>At SGCDParallelProxy.java:[lines 33-645]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N66765');">
 <td>
 <span class="priority-2">SnVI</span>
 </td>
@@ -276,54 +295,26 @@
 <tr class="detailrow1">
 <td/>
 <td>
-<p id="N66246" style="display: none;">
+<p id="N66765" style="display: none;">
 <a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
 <br/>In class edu.jas.gb.GBProxy<br/>At GBProxy.java:[lines 27-164]</p>
 </td>
 </tr>
-<tr class="tablerow0" onclick="toggleRow('N66281');">
-<td>
-<span class="priority-2">SnVI</span>
-</td>
-<td>edu.jas.gb.GroebnerBaseDistributed is Serializable; consider declaring a serialVersionUID</td>
-</tr>
-<tr class="detailrow0">
-<td/>
-<td>
-<p id="N66281" style="display: none;">
-<a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
-<br/>In class edu.jas.gb.GroebnerBaseDistributed<br/>At GroebnerBaseDistributed.java:[lines 40-372]</p>
-</td>
-</tr>
-<tr class="tablerow1" onclick="toggleRow('N66316');">
+<tr class="tablerow0" onclick="toggleRow('N66800');">
 <td>
 <span class="priority-2">SnVI</span>
 </td>
 <td>edu.jas.gb.GroebnerBaseDistributedEC is Serializable; consider declaring a serialVersionUID</td>
 </tr>
-<tr class="detailrow1">
+<tr class="detailrow0">
 <td/>
 <td>
-<p id="N66316" style="display: none;">
+<p id="N66800" style="display: none;">
 <a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
 <br/>In class edu.jas.gb.GroebnerBaseDistributedEC<br/>At GroebnerBaseDistributedEC.java:[lines 43-469]</p>
 </td>
 </tr>
-<tr class="tablerow0" onclick="toggleRow('N66351');">
-<td>
-<span class="priority-2">SnVI</span>
-</td>
-<td>edu.jas.gb.GroebnerBaseDistributedHybrid is Serializable; consider declaring a serialVersionUID</td>
-</tr>
-<tr class="detailrow0">
-<td/>
-<td>
-<p id="N66351" style="display: none;">
-<a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
-<br/>In class edu.jas.gb.GroebnerBaseDistributedHybrid<br/>At GroebnerBaseDistributedHybrid.java:[lines 43-468]</p>
-</td>
-</tr>
-<tr class="tablerow1" onclick="toggleRow('N66386');">
+<tr class="tablerow1" onclick="toggleRow('N66835');">
 <td>
 <span class="priority-2">SnVI</span>
 </td>
@@ -332,12 +323,12 @@
 <tr class="detailrow1">
 <td/>
 <td>
-<p id="N66386" style="display: none;">
+<p id="N66835" style="display: none;">
 <a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
 <br/>In class edu.jas.gb.GroebnerBaseDistributedHybridEC<br/>At GroebnerBaseDistributedHybridEC.java:[lines 45-545]</p>
 </td>
 </tr>
-<tr class="tablerow0" onclick="toggleRow('N66421');">
+<tr class="tablerow0" onclick="toggleRow('N66905');">
 <td>
 <span class="priority-2">SnVI</span>
 </td>
@@ -346,110 +337,138 @@
 <tr class="detailrow0">
 <td/>
 <td>
-<p id="N66421" style="display: none;">
+<p id="N66905" style="display: none;">
 <a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
-<br/>In class edu.jas.gb.GroebnerBaseParallel<br/>At GroebnerBaseParallel.java:[lines 38-314]</p>
+<br/>In class edu.jas.gb.GroebnerBaseParallel<br/>At GroebnerBaseParallel.java:[lines 38-280]</p>
 </td>
 </tr>
-<tr class="tablerow1" onclick="toggleRow('N66456');">
+<tr class="tablerow1" onclick="toggleRow('N66870');">
+<td>
+<span class="priority-2">SnVI</span>
+</td>
+<td>edu.jas.gb.GroebnerBaseParIter is Serializable; consider declaring a serialVersionUID</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N66870" style="display: none;">
+<a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
+<br/>In class edu.jas.gb.GroebnerBaseParIter<br/>At GroebnerBaseParIter.java:[lines 39-330]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N66940');">
 <td>
 <span class="priority-2">SnVI</span>
 </td>
 <td>edu.jas.gb.GroebnerBaseSeqPairDistributed is Serializable; consider declaring a serialVersionUID</td>
 </tr>
-<tr class="detailrow1">
+<tr class="detailrow0">
 <td/>
 <td>
-<p id="N66456" style="display: none;">
+<p id="N66940" style="display: none;">
 <a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
-<br/>In class edu.jas.gb.GroebnerBaseSeqPairDistributed<br/>At GroebnerBaseSeqPairDistributed.java:[lines 42-383]</p>
+<br/>In class edu.jas.gb.GroebnerBaseSeqPairDistributed<br/>At GroebnerBaseSeqPairDistributed.java:[lines 43-384]</p>
 </td>
 </tr>
-<tr class="tablerow0" onclick="toggleRow('N66491');">
+<tr class="tablerow1" onclick="toggleRow('N67044');">
 <td>
 <span class="priority-2">SnVI</span>
 </td>
 <td>edu.jas.gb.GroebnerBaseSeqPairParallel is Serializable; consider declaring a serialVersionUID</td>
 </tr>
-<tr class="detailrow0">
+<tr class="detailrow1">
 <td/>
 <td>
-<p id="N66491" style="display: none;">
+<p id="N67044" style="display: none;">
 <a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
 <br/>In class edu.jas.gb.GroebnerBaseSeqPairParallel<br/>At GroebnerBaseSeqPairParallel.java:[lines 35-266]</p>
 </td>
 </tr>
-<tr class="tablerow1" onclick="toggleRow('N66526');">
+<tr class="tablerow0" onclick="toggleRow('N67079');">
 <td>
 <span class="priority-2">SnVI</span>
 </td>
 <td>edu.jas.gb.SGBProxy is Serializable; consider declaring a serialVersionUID</td>
 </tr>
-<tr class="detailrow1">
+<tr class="detailrow0">
 <td/>
 <td>
-<p id="N66526" style="display: none;">
+<p id="N67079" style="display: none;">
 <a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
 <br/>In class edu.jas.gb.SGBProxy<br/>At SGBProxy.java:[lines 27-313]</p>
 </td>
 </tr>
-<tr class="tablerow0" onclick="toggleRow('N66561');">
+<tr class="tablerow1" onclick="toggleRow('N67114');">
 <td>
 <span class="priority-2">SnVI</span>
 </td>
 <td>edu.jas.gb.SolvableGroebnerBaseParallel is Serializable; consider declaring a serialVersionUID</td>
 </tr>
-<tr class="detailrow0">
+<tr class="detailrow1">
 <td/>
 <td>
-<p id="N66561" style="display: none;">
+<p id="N67114" style="display: none;">
 <a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
-<br/>In class edu.jas.gb.SolvableGroebnerBaseParallel<br/>At SolvableGroebnerBaseParallel.java:[lines 34-381]</p>
+<br/>In class edu.jas.gb.SolvableGroebnerBaseParallel<br/>At SolvableGroebnerBaseParallel.java:[lines 35-353]</p>
 </td>
 </tr>
-<tr class="tablerow1" onclick="toggleRow('N66596');">
+<tr class="tablerow0" onclick="toggleRow('N67149');">
 <td>
 <span class="priority-2">SnVI</span>
 </td>
 <td>edu.jas.gb.SolvableGroebnerBaseSeqPairParallel is Serializable; consider declaring a serialVersionUID</td>
 </tr>
-<tr class="detailrow1">
+<tr class="detailrow0">
 <td/>
 <td>
-<p id="N66596" style="display: none;">
+<p id="N67149" style="display: none;">
 <a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
 <br/>In class edu.jas.gb.SolvableGroebnerBaseSeqPairParallel<br/>At SolvableGroebnerBaseSeqPairParallel.java:[lines 38-345]</p>
 </td>
 </tr>
-<tr class="tablerow0" onclick="toggleRow('N66631');">
+<tr class="tablerow1" onclick="toggleRow('N67184');">
 <td>
 <span class="priority-2">SnVI</span>
 </td>
 <td>edu.jas.gbufd.GroebnerBasePseudoParallel is Serializable; consider declaring a serialVersionUID</td>
 </tr>
-<tr class="detailrow0">
+<tr class="detailrow1">
 <td/>
 <td>
-<p id="N66631" style="display: none;">
+<p id="N67184" style="display: none;">
 <a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
-<br/>In class edu.jas.gbufd.GroebnerBasePseudoParallel<br/>At GroebnerBasePseudoParallel.java:[lines 44-322]</p>
+<br/>In class edu.jas.gbufd.GroebnerBasePseudoParallel<br/>At GroebnerBasePseudoParallel.java:[lines 44-323]</p>
 </td>
 </tr>
-<tr class="tablerow1" onclick="toggleRow('N66666');">
+<tr class="tablerow0" onclick="toggleRow('N67219');">
 <td>
 <span class="priority-2">SnVI</span>
 </td>
 <td>edu.jas.gbufd.GroebnerBasePseudoRecParallel is Serializable; consider declaring a serialVersionUID</td>
 </tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N67219" style="display: none;">
+<a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
+<br/>In class edu.jas.gbufd.GroebnerBasePseudoRecParallel<br/>At GroebnerBasePseudoRecParallel.java:[lines 45-394]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N67306');">
+<td>
+<span class="priority-2">SnVI</span>
+</td>
+<td>edu.jas.poly.GenPolynomial is Serializable; consider declaring a serialVersionUID</td>
+</tr>
 <tr class="detailrow1">
 <td/>
 <td>
-<p id="N66666" style="display: none;">
+<p id="N67306" style="display: none;">
 <a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
-<br/>In class edu.jas.gbufd.GroebnerBasePseudoRecParallel<br/>At GroebnerBasePseudoRecParallel.java:[lines 45-393]</p>
+<br/>In class edu.jas.poly.GenPolynomial<br/>At GenPolynomial.java:[lines 46-2466]</p>
 </td>
 </tr>
-<tr class="tablerow0" onclick="toggleRow('N67688');">
+<tr class="tablerow0" onclick="toggleRow('N68026');">
 <td>
 <span class="priority-2">SnVI</span>
 </td>
@@ -458,32 +477,9 @@
 <tr class="detailrow0">
 <td/>
 <td>
-<p id="N67688" style="display: none;">
+<p id="N68026" style="display: none;">
 <a href="#SE_NO_SERIALVERSIONID">Bug type SE_NO_SERIALVERSIONID (click for details)</a>
 <br/>In class edu.jas.ufd.GCDProxy<br/>At GCDProxy.java:[lines 29-582]</p>
-</td>
-</tr>
-</table>
-<h2>
-<a name="Warnings_CORRECTNESS">Correctness Warnings</a>
-</h2>
-<table class="warningtable" width="100%" cellspacing="0">
-<tr class="tableheader">
-<th align="left">Code</th>
-<th align="left">Warning</th>
-</tr>
-<tr class="tablerow1" onclick="toggleRow('N67612');">
-<td>
-<span class="priority-2">SA</span>
-</td>
-<td>Self comparison of edu.jas.ps.UnivPowerSeries.equals(Object) with itself edu.jas.ps.Examples.example11()</td>
-</tr>
-<tr class="detailrow1">
-<td/>
-<td>
-<p id="N67612" style="display: none;">
-<a href="#SA_LOCAL_SELF_COMPARISON">Bug type SA_LOCAL_SELF_COMPARISON (click for details)</a>
-<br/>In class edu.jas.ps.Examples<br/>In method edu.jas.ps.Examples.example11()<br/>Called method edu.jas.ps.UnivPowerSeries.equals(Object)<br/>Local variable stored in JVM register 0<br/>At Examples.java:[line 277]</p>
 </td>
 </tr>
 </table>
@@ -495,7 +491,7 @@
 <th align="left">Code</th>
 <th align="left">Warning</th>
 </tr>
-<tr class="tablerow1" onclick="toggleRow('N66875');">
+<tr class="tablerow1" onclick="toggleRow('N67254');">
 <td>
 <span class="priority-2">MS</span>
 </td>
@@ -504,9 +500,9 @@
 <tr class="detailrow1">
 <td/>
 <td>
-<p id="N66875" style="display: none;">
+<p id="N67254" style="display: none;">
 <a href="#MS_CANNOT_BE_FINAL">Bug type MS_CANNOT_BE_FINAL (click for details)</a>
-<br/>In class edu.jas.kern.ComputerThreads<br/>Field edu.jas.kern.ComputerThreads.NO_THREADS<br/>At ComputerThreads.java:[line 40]</p>
+<br/>In class edu.jas.kern.ComputerThreads<br/>Field edu.jas.kern.ComputerThreads.NO_THREADS<br/>At ComputerThreads.java:[line 41]</p>
 </td>
 </tr>
 </table>
@@ -518,7 +514,7 @@
 <th align="left">Code</th>
 <th align="left">Warning</th>
 </tr>
-<tr class="tablerow1" onclick="toggleRow('N65724');">
+<tr class="tablerow1" onclick="toggleRow('N65777');">
 <td>
 <span class="priority-2">BC</span>
 </td>
@@ -527,12 +523,12 @@
 <tr class="detailrow1">
 <td/>
 <td>
-<p id="N65724" style="display: none;">
+<p id="N65777" style="display: none;">
 <a href="#BC_UNCONFIRMED_CAST">Bug type BC_UNCONFIRMED_CAST (click for details)</a>
 <br/>In class edu.jas.application.SolvableLocalResidueRing<br/>In method edu.jas.application.SolvableLocalResidueRing.create(GenPolynomial)<br/>Actual type edu.jas.poly.GenPolynomial&lt;C&gt;<br/>Expected edu.jas.poly.GenSolvablePolynomial<br/>Value loaded from ?<br/>At SolvableLocalResidueRing.java:[line 122]</p>
 </td>
 </tr>
-<tr class="tablerow0" onclick="toggleRow('N65811');">
+<tr class="tablerow0" onclick="toggleRow('N65864');">
 <td>
 <span class="priority-2">BC</span>
 </td>
@@ -541,12 +537,12 @@
 <tr class="detailrow0">
 <td/>
 <td>
-<p id="N65811" style="display: none;">
+<p id="N65864" style="display: none;">
 <a href="#BC_UNCONFIRMED_CAST">Bug type BC_UNCONFIRMED_CAST (click for details)</a>
 <br/>In class edu.jas.application.SolvableLocalResidueRing<br/>In method edu.jas.application.SolvableLocalResidueRing.create(GenPolynomial, GenPolynomial)<br/>Actual type edu.jas.poly.GenPolynomial&lt;C&gt;<br/>Expected edu.jas.poly.GenSolvablePolynomial<br/>Value loaded from ?<br/>At SolvableLocalResidueRing.java:[line 131]</p>
 </td>
 </tr>
-<tr class="tablerow1" onclick="toggleRow('N65898');">
+<tr class="tablerow1" onclick="toggleRow('N65951');">
 <td>
 <span class="priority-2">BC</span>
 </td>
@@ -555,12 +551,12 @@
 <tr class="detailrow1">
 <td/>
 <td>
-<p id="N65898" style="display: none;">
+<p id="N65951" style="display: none;">
 <a href="#BC_UNCONFIRMED_CAST">Bug type BC_UNCONFIRMED_CAST (click for details)</a>
 <br/>In class edu.jas.application.SolvableLocalRing<br/>In method edu.jas.application.SolvableLocalRing.create(GenPolynomial)<br/>Actual type edu.jas.poly.GenPolynomial&lt;C&gt;<br/>Expected edu.jas.poly.GenSolvablePolynomial<br/>Value loaded from ?<br/>At SolvableLocalRing.java:[line 120]</p>
 </td>
 </tr>
-<tr class="tablerow0" onclick="toggleRow('N65985');">
+<tr class="tablerow0" onclick="toggleRow('N66038');">
 <td>
 <span class="priority-2">BC</span>
 </td>
@@ -569,12 +565,12 @@
 <tr class="detailrow0">
 <td/>
 <td>
-<p id="N65985" style="display: none;">
+<p id="N66038" style="display: none;">
 <a href="#BC_UNCONFIRMED_CAST">Bug type BC_UNCONFIRMED_CAST (click for details)</a>
 <br/>In class edu.jas.application.SolvableLocalRing<br/>In method edu.jas.application.SolvableLocalRing.create(GenPolynomial, GenPolynomial)<br/>Actual type edu.jas.poly.GenPolynomial&lt;C&gt;<br/>Expected edu.jas.poly.GenSolvablePolynomial<br/>Value loaded from ?<br/>At SolvableLocalRing.java:[line 129]</p>
 </td>
 </tr>
-<tr class="tablerow1" onclick="toggleRow('N66072');">
+<tr class="tablerow1" onclick="toggleRow('N66125');">
 <td>
 <span class="priority-2">BC</span>
 </td>
@@ -583,12 +579,12 @@
 <tr class="detailrow1">
 <td/>
 <td>
-<p id="N66072" style="display: none;">
+<p id="N66125" style="display: none;">
 <a href="#BC_UNCONFIRMED_CAST">Bug type BC_UNCONFIRMED_CAST (click for details)</a>
 <br/>In class edu.jas.application.SolvableResidueRing<br/>In method edu.jas.application.SolvableResidueRing.create(GenPolynomial)<br/>Actual type edu.jas.poly.GenPolynomial&lt;C&gt;<br/>Expected edu.jas.poly.GenSolvablePolynomial<br/>Value loaded from ?<br/>At SolvableResidueRing.java:[line 123]</p>
 </td>
 </tr>
-<tr class="tablerow0" onclick="toggleRow('N66159');">
+<tr class="tablerow0" onclick="toggleRow('N66212');">
 <td>
 <span class="priority-2">BC</span>
 </td>
@@ -597,40 +593,40 @@
 <tr class="detailrow0">
 <td/>
 <td>
-<p id="N66159" style="display: none;">
+<p id="N66212" style="display: none;">
 <a href="#BC_UNCONFIRMED_CAST">Bug type BC_UNCONFIRMED_CAST (click for details)</a>
 <br/>In class edu.jas.application.SolvableResidueRing<br/>In method edu.jas.application.SolvableResidueRing.create(GenPolynomial, GenPolynomial)<br/>Actual type edu.jas.poly.GenPolynomial&lt;C&gt;<br/>Expected edu.jas.poly.GenSolvablePolynomial<br/>Value loaded from ?<br/>At SolvableResidueRing.java:[line 135]</p>
 </td>
 </tr>
-<tr class="tablerow1" onclick="toggleRow('N66701');">
+<tr class="tablerow1" onclick="toggleRow('N66591');">
 <td>
 <span class="priority-2">BC</span>
 </td>
-<td>Unchecked/unconfirmed cast from edu.jas.poly.GenPolynomial&lt;C&gt; to edu.jas.poly.GenSolvablePolynomial in edu.jas.gbufd.SolvableQuotientRing.create(GenPolynomial)</td>
+<td>Unchecked/unconfirmed cast from edu.jas.poly.GenPolynomial&lt;C&gt; to edu.jas.poly.GenSolvablePolynomial in edu.jas.fd.SolvableQuotientRing.create(GenPolynomial)</td>
 </tr>
 <tr class="detailrow1">
 <td/>
 <td>
-<p id="N66701" style="display: none;">
+<p id="N66591" style="display: none;">
 <a href="#BC_UNCONFIRMED_CAST">Bug type BC_UNCONFIRMED_CAST (click for details)</a>
-<br/>In class edu.jas.gbufd.SolvableQuotientRing<br/>In method edu.jas.gbufd.SolvableQuotientRing.create(GenPolynomial)<br/>Actual type edu.jas.poly.GenPolynomial&lt;C&gt;<br/>Expected edu.jas.poly.GenSolvablePolynomial<br/>Value loaded from ?<br/>At SolvableQuotientRing.java:[line 77]</p>
+<br/>In class edu.jas.fd.SolvableQuotientRing<br/>In method edu.jas.fd.SolvableQuotientRing.create(GenPolynomial)<br/>Actual type edu.jas.poly.GenPolynomial&lt;C&gt;<br/>Expected edu.jas.poly.GenSolvablePolynomial<br/>Value loaded from ?<br/>At SolvableQuotientRing.java:[line 79]</p>
 </td>
 </tr>
-<tr class="tablerow0" onclick="toggleRow('N66788');">
+<tr class="tablerow0" onclick="toggleRow('N66678');">
 <td>
 <span class="priority-2">BC</span>
 </td>
-<td>Unchecked/unconfirmed cast from edu.jas.poly.GenPolynomial&lt;C&gt; to edu.jas.poly.GenSolvablePolynomial in edu.jas.gbufd.SolvableQuotientRing.create(GenPolynomial, GenPolynomial)</td>
+<td>Unchecked/unconfirmed cast from edu.jas.poly.GenPolynomial&lt;C&gt; to edu.jas.poly.GenSolvablePolynomial in edu.jas.fd.SolvableQuotientRing.create(GenPolynomial, GenPolynomial)</td>
 </tr>
 <tr class="detailrow0">
 <td/>
 <td>
-<p id="N66788" style="display: none;">
+<p id="N66678" style="display: none;">
 <a href="#BC_UNCONFIRMED_CAST">Bug type BC_UNCONFIRMED_CAST (click for details)</a>
-<br/>In class edu.jas.gbufd.SolvableQuotientRing<br/>In method edu.jas.gbufd.SolvableQuotientRing.create(GenPolynomial, GenPolynomial)<br/>Actual type edu.jas.poly.GenPolynomial&lt;C&gt;<br/>Expected edu.jas.poly.GenSolvablePolynomial<br/>Value loaded from ?<br/>At SolvableQuotientRing.java:[line 86]</p>
+<br/>In class edu.jas.fd.SolvableQuotientRing<br/>In method edu.jas.fd.SolvableQuotientRing.create(GenPolynomial, GenPolynomial)<br/>Actual type edu.jas.poly.GenPolynomial&lt;C&gt;<br/>Expected edu.jas.poly.GenSolvablePolynomial<br/>Value loaded from ?<br/>At SolvableQuotientRing.java:[line 88]</p>
 </td>
 </tr>
-<tr class="tablerow1" onclick="toggleRow('N67130');">
+<tr class="tablerow1" onclick="toggleRow('N67544');">
 <td>
 <span class="priority-2">BC</span>
 </td>
@@ -639,12 +635,12 @@
 <tr class="detailrow1">
 <td/>
 <td>
-<p id="N67130" style="display: none;">
+<p id="N67544" style="display: none;">
 <a href="#BC_VACUOUS_INSTANCEOF">Bug type BC_VACUOUS_INSTANCEOF (click for details)</a>
-<br/>In class edu.jas.poly.RecSolvablePolynomial<br/>In method edu.jas.poly.RecSolvablePolynomial.evalAsRightRecursivePolynomial()<br/>Actual type edu.jas.poly.RecSolvablePolynomial<br/>Expected edu.jas.poly.RecSolvablePolynomial<br/>At RecSolvablePolynomial.java:[line 743]</p>
+<br/>In class edu.jas.poly.RecSolvablePolynomial<br/>In method edu.jas.poly.RecSolvablePolynomial.evalAsRightRecursivePolynomial()<br/>Actual type edu.jas.poly.RecSolvablePolynomial<br/>Expected edu.jas.poly.RecSolvablePolynomial<br/>At RecSolvablePolynomial.java:[line 763]</p>
 </td>
 </tr>
-<tr class="tablerow0" onclick="toggleRow('N67210');">
+<tr class="tablerow0" onclick="toggleRow('N67624');">
 <td>
 <span class="priority-2">BC</span>
 </td>
@@ -653,12 +649,12 @@
 <tr class="detailrow0">
 <td/>
 <td>
-<p id="N67210" style="display: none;">
+<p id="N67624" style="display: none;">
 <a href="#BC_VACUOUS_INSTANCEOF">Bug type BC_VACUOUS_INSTANCEOF (click for details)</a>
-<br/>In class edu.jas.poly.RecSolvablePolynomial<br/>In method edu.jas.poly.RecSolvablePolynomial.isRightRecursivePolynomial(GenSolvablePolynomial)<br/>Actual type edu.jas.poly.RecSolvablePolynomial<br/>Expected edu.jas.poly.RecSolvablePolynomial<br/>At RecSolvablePolynomial.java:[line 788]</p>
+<br/>In class edu.jas.poly.RecSolvablePolynomial<br/>In method edu.jas.poly.RecSolvablePolynomial.isRightRecursivePolynomial(GenSolvablePolynomial)<br/>Actual type edu.jas.poly.RecSolvablePolynomial<br/>Expected edu.jas.poly.RecSolvablePolynomial<br/>At RecSolvablePolynomial.java:[line 805]</p>
 </td>
 </tr>
-<tr class="tablerow1" onclick="toggleRow('N67290');">
+<tr class="tablerow1" onclick="toggleRow('N67704');">
 <td>
 <span class="priority-2">BC</span>
 </td>
@@ -667,12 +663,12 @@
 <tr class="detailrow1">
 <td/>
 <td>
-<p id="N67290" style="display: none;">
+<p id="N67704" style="display: none;">
 <a href="#BC_VACUOUS_INSTANCEOF">Bug type BC_VACUOUS_INSTANCEOF (click for details)</a>
-<br/>In class edu.jas.poly.RecSolvablePolynomial<br/>In method edu.jas.poly.RecSolvablePolynomial.rightRecursivePolynomial()<br/>Actual type edu.jas.poly.RecSolvablePolynomial<br/>Expected edu.jas.poly.RecSolvablePolynomial<br/>At RecSolvablePolynomial.java:[line 700]</p>
+<br/>In class edu.jas.poly.RecSolvablePolynomial<br/>In method edu.jas.poly.RecSolvablePolynomial.rightRecursivePolynomial()<br/>Actual type edu.jas.poly.RecSolvablePolynomial<br/>Expected edu.jas.poly.RecSolvablePolynomial<br/>At RecSolvablePolynomial.java:[line 722]</p>
 </td>
 </tr>
-<tr class="tablerow0" onclick="toggleRow('N65595');">
+<tr class="tablerow0" onclick="toggleRow('N65648');">
 <td>
 <span class="priority-2">DB</span>
 </td>
@@ -681,12 +677,12 @@
 <tr class="detailrow0">
 <td/>
 <td>
-<p id="N65595" style="display: none;">
+<p id="N65648" style="display: none;">
 <a href="#DB_DUPLICATE_BRANCHES">Bug type DB_DUPLICATE_BRANCHES (click for details)</a>
-<br/>In class edu.jas.application.RingFactoryTokenizer<br/>In method edu.jas.application.RingFactoryTokenizer.nextCoefficientRing()<br/>At RingFactoryTokenizer.java:[line 461]<br/>At RingFactoryTokenizer.java:[line 463]</p>
+<br/>In class edu.jas.application.RingFactoryTokenizer<br/>In method edu.jas.application.RingFactoryTokenizer.nextCoefficientRing()<br/>At RingFactoryTokenizer.java:[line 471]<br/>At RingFactoryTokenizer.java:[line 473]</p>
 </td>
 </tr>
-<tr class="tablerow1" onclick="toggleRow('N66927');">
+<tr class="tablerow1" onclick="toggleRow('N67341');">
 <td>
 <span class="priority-2">DB</span>
 </td>
@@ -695,26 +691,54 @@
 <tr class="detailrow1">
 <td/>
 <td>
-<p id="N66927" style="display: none;">
+<p id="N67341" style="display: none;">
 <a href="#DB_DUPLICATE_BRANCHES">Bug type DB_DUPLICATE_BRANCHES (click for details)</a>
-<br/>In class edu.jas.poly.GenPolynomialTokenizer<br/>In method edu.jas.poly.GenPolynomialTokenizer.nextCoefficientRing()<br/>At GenPolynomialTokenizer.java:[line 794]<br/>At GenPolynomialTokenizer.java:[line 796]</p>
+<br/>In class edu.jas.poly.GenPolynomialTokenizer<br/>In method edu.jas.poly.GenPolynomialTokenizer.nextCoefficientRing()<br/>At GenPolynomialTokenizer.java:[line 829]<br/>At GenPolynomialTokenizer.java:[line 831]</p>
 </td>
 </tr>
-<tr class="tablerow0" onclick="toggleRow('N67723');">
+<tr class="tablerow0" onclick="toggleRow('N66299');">
 <td>
 <span class="priority-2">DLS</span>
 </td>
-<td>Dead store to $L10 in edu.jas.ufd.GreatestCommonDivisorHensel.recursiveUnivariateGcd(GenPolynomial, GenPolynomial)</td>
+<td>Dead store to $L22 in edu.jas.arith.PrimeInteger.factors(long)</td>
 </tr>
 <tr class="detailrow0">
 <td/>
 <td>
-<p id="N67723" style="display: none;">
+<p id="N66299" style="display: none;">
 <a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
-<br/>In class edu.jas.ufd.GreatestCommonDivisorHensel<br/>In method edu.jas.ufd.GreatestCommonDivisorHensel.recursiveUnivariateGcd(GenPolynomial, GenPolynomial)<br/>Local variable stored in JVM register 10<br/>At GreatestCommonDivisorHensel.java:[line 330]<br/>Another occurrence at GreatestCommonDivisorHensel.java:[line 331]</p>
+<br/>In class edu.jas.arith.PrimeInteger<br/>In method edu.jas.arith.PrimeInteger.factors(long)<br/>Local variable stored in JVM register 22<br/>At PrimeInteger.java:[line 469]</p>
 </td>
 </tr>
-<tr class="tablerow1" onclick="toggleRow('N66990');">
+<tr class="tablerow1" onclick="toggleRow('N66366');">
+<td>
+<span class="priority-2">DLS</span>
+</td>
+<td>Dead store to $L16 in edu.jas.arith.PrimeInteger.smallPrimeDivisors(long, SortedMap)</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N66366" style="display: none;">
+<a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
+<br/>In class edu.jas.arith.PrimeInteger<br/>In method edu.jas.arith.PrimeInteger.smallPrimeDivisors(long, SortedMap)<br/>Local variable stored in JVM register 16<br/>At PrimeInteger.java:[line 243]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N66436');">
+<td>
+<span class="priority-2">DLS</span>
+</td>
+<td>Dead store to $L3 in edu.jas.arith.PrimeInteger.smallPrimeDivisors(BigInteger, SortedMap)</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N66436" style="display: none;">
+<a href="#DLS_DEAD_LOCAL_STORE">Bug type DLS_DEAD_LOCAL_STORE (click for details)</a>
+<br/>In class edu.jas.arith.PrimeInteger<br/>In method edu.jas.arith.PrimeInteger.smallPrimeDivisors(BigInteger, SortedMap)<br/>Local variable stored in JVM register 3<br/>At PrimeInteger.java:[line 301]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N67404');">
 <td>
 <span class="priority-2">SF</span>
 </td>
@@ -723,23 +747,37 @@
 <tr class="detailrow1">
 <td/>
 <td>
-<p id="N66990" style="display: none;">
+<p id="N67404" style="display: none;">
 <a href="#SF_SWITCH_FALLTHROUGH">Bug type SF_SWITCH_FALLTHROUGH (click for details)</a>
-<br/>In class edu.jas.poly.GenPolynomialTokenizer<br/>In method edu.jas.poly.GenPolynomialTokenizer.nextPolynomial()<br/>At GenPolynomialTokenizer.java:[lines 318-321]</p>
+<br/>In class edu.jas.poly.GenPolynomialTokenizer<br/>In method edu.jas.poly.GenPolynomialTokenizer.nextPolynomial()<br/>At GenPolynomialTokenizer.java:[lines 330-333]</p>
 </td>
 </tr>
-<tr class="tablerow0" onclick="toggleRow('N67801');">
+<tr class="tablerow0" onclick="toggleRow('N66975');">
 <td>
 <span class="priority-2">UC</span>
 </td>
-<td>Useless object stored in variable var$7 of method edu.jas.ufd.GreatestCommonDivisorHensel.invertPoly(ModularRingFactory, GenPolynomial, List)</td>
+<td>Useless object stored in variable var$7 of method edu.jas.gb.GroebnerBaseSeqPairDistributed.GB(int, List)</td>
 </tr>
 <tr class="detailrow0">
 <td/>
 <td>
-<p id="N67801" style="display: none;">
+<p id="N66975" style="display: none;">
 <a href="#UC_USELESS_OBJECT">Bug type UC_USELESS_OBJECT (click for details)</a>
-<br/>In class edu.jas.ufd.GreatestCommonDivisorHensel<br/>In method edu.jas.ufd.GreatestCommonDivisorHensel.invertPoly(ModularRingFactory, GenPolynomial, List)<br/>Value var$7<br/>Type java.util.ArrayList<br/>At GreatestCommonDivisorHensel.java:[line 722]</p>
+<br/>In class edu.jas.gb.GroebnerBaseSeqPairDistributed<br/>In method edu.jas.gb.GroebnerBaseSeqPairDistributed.GB(int, List)<br/>Value var$7<br/>Type java.util.ArrayList<br/>At GroebnerBaseSeqPairDistributed.java:[line 184]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N66503');">
+<td>
+<span class="priority-2">UCF</span>
+</td>
+<td>Useless control flow in edu.jas.fd.GCDLeftRightTest.testBaseQR()</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N66503" style="display: none;">
+<a href="#UCF_USELESS_CONTROL_FLOW">Bug type UCF_USELESS_CONTROL_FLOW (click for details)</a>
+<br/>In class edu.jas.fd.GCDLeftRightTest<br/>In method edu.jas.fd.GCDLeftRightTest.testBaseQR()<br/>At GCDLeftRightTest.java:[line 593]</p>
 </td>
 </tr>
 </table>
@@ -821,6 +859,15 @@ opportunities to accidentally define methods that do not override methods in the
 
     
 <h2>
+<a name="NM_METHOD_NAMING_CONVENTION">NM_METHOD_NAMING_CONVENTION: Method names should start with a lower case letter</a>
+</h2>
+
+  <p>
+Methods should be verbs, in mixed case with the first letter lowercase, with the first letter of each internal word capitalized.
+</p>
+
+    
+<h2>
 <a name="OS_OPEN_STREAM">OS_OPEN_STREAM: Method may fail to close stream</a>
 </h2>
 
@@ -842,15 +889,6 @@ This is a questionable or bad programming practice, since if the return
 value is Integer.MIN_VALUE, negating the return value won't
 negate the sign of the result. You can achieve the same intended result
 by reversing the order of the operands rather than by negating the results.
-</p>
-
-    
-<h2>
-<a name="SA_LOCAL_SELF_COMPARISON">SA_LOCAL_SELF_COMPARISON: Self comparison of value with itself</a>
-</h2>
-
-<p> This method compares a local variable with itself, and may indicate a typo or
-a logic error.  Make sure that you are comparing the right things.
 </p>
 
     
@@ -891,6 +929,22 @@ Either there is a mistake and object was intended to be used or it can be remove
 <p>- This object used to implicitly throw some obscure exception.</p>
 <p>- This object used as a stub to generalize the code.</p>
 <p>- This object used to hold strong references to weak/soft-referenced objects.</p>
+
+    
+<h2>
+<a name="UCF_USELESS_CONTROL_FLOW">UCF_USELESS_CONTROL_FLOW: Useless control flow</a>
+</h2>
+
+<p> This method contains a useless control flow statement, where
+control flow continues onto the same place regardless of whether or not
+the branch is taken. For example,
+this is caused by having an empty statement
+block for an <code>if</code> statement:</p>
+<pre>
+    if (argv.length == 0) {
+    // TODO: handle this case
+    }
+</pre>
 
     </body>
 </html>
