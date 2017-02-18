@@ -325,7 +325,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
      * @see java.lang.Object#toString()
      */
     @Override
-    public String toString() {
+    public synchronized String toString() {
         return "RealAlgebraicRing[ " + realRing.toString() + " in " + root + " | isField="
                         + realRing.isField() + ", algebraic.ideal=" + algebraic.ideal.toString() + " ]";
     }
@@ -337,7 +337,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
      * @see edu.jas.structure.ElemFactory#toScript()
      */
     @Override
-    public String toScript() {
+    public synchronized String toScript() {
         // Python case
         return "RealRecN( " + realRing.toScript() + ", " + root.toScript()
         //+ ", " + realRing.isField() 
@@ -352,7 +352,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
      */
     @Override
     @SuppressWarnings("unchecked")
-    public boolean equals(Object b) {
+    public synchronized boolean equals(Object b) {
         if (!(b instanceof RealAlgebraicRing)) {
             return false;
         }
@@ -364,7 +364,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
         if (a == null) {
             return false;
         }
-        return realRing.equals(a.realRing) && root.equals(a.root);
+        return realRing.equals(a.realRing) && root.equals(a.getRoot());
     }
 
 
@@ -373,7 +373,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
      * @see java.lang.Object#hashCode()
      */
     @Override
-    public int hashCode() {
+    public synchronized int hashCode() {
         return 37 * realRing.hashCode() + root.hashCode();
     }
 

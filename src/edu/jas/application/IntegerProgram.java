@@ -122,7 +122,7 @@ public class IntegerProgram implements java.io.Serializable {
                 z[i - 1] = "z" + i;
             }
             for (int i = 0; i < n; i++) {
-                String h = "";
+                StringBuffer h = new StringBuffer("");
                 long min = 0;
                 for (int j = 0; j < m; j++) {
                     if (A[j][i] < min) {
@@ -131,19 +131,19 @@ public class IntegerProgram implements java.io.Serializable {
                 }
                 if (min < 0) {
                     long e = -min;
-                    h += "t^" + e + " * ";
+                    h.append("t^" + e + " * ");
                     for (int j = 0; j < m; j++) {
                         Aa[j][i] = A[j][i] + e;
-                        h += z[j] + "^" + Aa[j][i] + " * ";
+                        h.append(z[j] + "^" + Aa[j][i] + " * ");
                     }
                 } else {
                     for (int j = 0; j < m; j++) {
                         if (A[j][i] != 0) {
-                            h += z[j] + "^" + A[j][i] + " * ";
+                            h.append(z[j] + "^" + A[j][i] + " * ");
                         }
                     }
                 }
-                f[i] = h.substring(0, h.length() - 3);
+                f[i] = h.substring(0, h.length() - 3).toString();
             }
             setDeg();
             setTO();
@@ -178,13 +178,13 @@ public class IntegerProgram implements java.io.Serializable {
                 z[i - 1] = "z" + i;
             }
             for (int i = 0; i < n; i++) {
-                String h = "";
+                StringBuffer h = new StringBuffer("");
                 for (int j = 0; j < m; j++) {
                     if (A[j][i] != 0) {
-                        h += z[j] + "^" + A[j][i] + " * ";
+                        h.append(z[j] + "^" + A[j][i] + " * ");
                     }
                 }
-                f[i] = h.substring(0, h.length() - 3);
+                f[i] = h.substring(0, h.length() - 3).toString();
             }
             setDeg();
             setTO();
@@ -249,9 +249,9 @@ public class IntegerProgram implements java.io.Serializable {
      *         if no solution exists
      */
     public long[] solve(long[][] A, long[] B, long[] C) {
-        this.A = A;
-        this.B = B;
-        this.C = C;
+        this.A = Arrays.copyOf(A, A.length);
+        this.B = Arrays.copyOf(B, B.length);
+        this.C = Arrays.copyOf(C, C.length);
         this.n = A[0].length;
         this.m = A.length;
         D = new long[n];
@@ -276,7 +276,7 @@ public class IntegerProgram implements java.io.Serializable {
             return returnMe;
         }
         long[] l;
-        this.B = B;
+        this.B = Arrays.copyOf(B, B.length);
         if (DEBUG) {
             logger.debug("GB=" + GB);
         }
