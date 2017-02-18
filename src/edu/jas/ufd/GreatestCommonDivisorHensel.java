@@ -327,8 +327,8 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
         //System.out.println("rgcd c = " + c);
         r = PolyUtil.<BigInteger> recursiveDivide(r, a);
         q = PolyUtil.<BigInteger> recursiveDivide(q, b);
-        a = PolyUtil.<BigInteger> basePseudoDivide(a, c); // unused ?
-        b = PolyUtil.<BigInteger> basePseudoDivide(b, c); // unused ?
+        //a = PolyUtil.<BigInteger> basePseudoDivide(a, c); // unused ?
+        //b = PolyUtil.<BigInteger> basePseudoDivide(b, c); // unused ?
         if (r.isONE()) {
             return r.multiply(c);
         }
@@ -706,6 +706,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
     }
 
 
+    /* move to Ideal ?
     GenPolynomial<BigInteger> invertPoly(ModularRingFactory<MOD> mfac, GenPolynomial<BigInteger> li,
                     List<BigInteger> V) {
         if (li == null || li.isZERO()) {
@@ -736,5 +737,6 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
         GenPolynomial<BigInteger> inv = PolyUtil.integerFromModularCoefficients(pfac, mi);
         return inv;
     }
+    */
 
 }

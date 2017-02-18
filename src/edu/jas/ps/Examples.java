@@ -274,7 +274,7 @@ public class Examples {
         System.out.println("integers < 2*integers  = " + integers.compareTo(int2));
         System.out.println("2*integers > integers  = " + int2.compareTo(integers));
         System.out.println("2*integers == integers = " + int2.equals(integers));
-        System.out.println("integers == integers   = " + integers.equals(integers));
+        System.out.println("integers == integers   = " + integers.equals(integers.copy()));
         System.out.println("integers.hashCode()    = " + integers.hashCode());
     }
 
