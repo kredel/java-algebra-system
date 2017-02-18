@@ -29,7 +29,7 @@ public final class BigQuaternionRing implements RingFactory<BigQuaternion> {
     /**
      * List of all 24 integral units.
      */
-    public static List<BigQuaternion> entierUnits = null; //later: unitsOfHurwitzian();
+    static List<BigQuaternion> entierUnits = null; //later: unitsOfHurwitzian();
 
 
     /**

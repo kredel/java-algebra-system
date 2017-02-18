@@ -125,6 +125,8 @@ public final class PrimeInteger {
                 d = 5;
                 c = 2;
                 break;
+             default: 
+                throw new RuntimeException("this should not happen");
             }
             if (d > (m2 / d)) {
                 break;
@@ -777,22 +779,20 @@ public final class PrimeInteger {
             } else {
                 ML = 16L;
                 switch ((short) (AL1 / 8L)) {
-                case (short) 0: {
+                case (short) 0: 
                     BL1 = 3L;
                     break;
-                }
-                case (short) 1: {
+                case (short) 1: 
                     BL1 = 7L;
                     break;
-                }
-                case (short) 2: {
+                case (short) 2: 
                     BL1 = 5L;
                     break;
-                }
-                case (short) 3: {
+                case (short) 3: 
                     BL1 = 1L;
                     break;
-                }
+                default: 
+                    throw new RuntimeException("this should not happen");
                 }
             }
         }
