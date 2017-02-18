@@ -31,6 +31,7 @@ import edu.jas.structure.RingFactory;
  */
 public class SolvableQuotientRing<C extends GcdRingElem<C>> implements RingFactory<SolvableQuotient<C>>,
                 QuotPairFactory<GenPolynomial<C>, SolvableQuotient<C>> {
+    // should be QuotPairFactory<GenSolvablePolynomial<C>
 
 
     private static final Logger logger = Logger.getLogger(SolvableQuotientRing.class);
