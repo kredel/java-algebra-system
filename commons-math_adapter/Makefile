@@ -26,7 +26,7 @@ FILES=$(wildcard src/edu/jas/commons/*/*.java)
 CLASSES=$(subst src,classes,$(subst java,class,$(FILES)))
 #echo $(CLASSES)
 
-all: clean commons-math_adapter.jar
+all: clean commons-math_adapter-bin.jar
 
 $(CLASSES): $(FILES) Makefile
 	-mkdir classes
@@ -34,24 +34,26 @@ $(CLASSES): $(FILES) Makefile
 
 #compile: $(HOME)/java/lib/commons-math_adapter.jar
 
-commons-math_adapter.jar: $(CLASSES) 
+commons-math_adapter-bin.jar: $(CLASSES) 
 	-mkdir classes/META-INF
 	cp -a manifest.mf classes/META-INF/MANIFEST.MF
-	jar cfM commons-math_adapter.jar -C classes .
-	#jar uf  commons-math_adapter.jar -C src .
-	cp -f commons-math_adapter.jar $(LIBPATH)
-	cp -f commons-math_adapter.jar ..
+	jar cfM commons-math_adapter-bin.jar -C classes .
+	cp -f commons-math_adapter-bin.jar $(LIBPATH)
+	cp -f commons-math_adapter-bin.jar ..
+	jar cf commons-math_adapter-scr.jar -C src .
 
 tests:	
-	java -cp $(CLASSPATH):commons-math_adapter.jar -Xms500M -Xmx600M -verbose:gc edu.jas.commons.math.CMFieldElementTest
-	java -cp $(CLASSPATH):commons-math_adapter.jar -Xms500M -Xmx600M -verbose:gc edu.jas.commons.math.MatrixExamples
+	java -cp $(CLASSPATH):commons-math_adapter-bin.jar -Xms500M -Xmx600M -verbose:gc edu.jas.commons.math.CMFieldElementTest
+	java -cp $(CLASSPATH):commons-math_adapter-bin.jar -Xms500M -Xmx600M -verbose:gc edu.jas.commons.math.MatrixExamples
 
 clean:
 	-rm -rf classes
 	find . -name "*~" -follow -print -exec rm {} \;
-	-rm -f $(HOME)/java/lib/commons-math_adapter.jar
+	-rm -f $(HOME)/java/lib/commons-math_adapter*.jar
+	-rm -f commons-math_adapter*.jar
 
 doc: $(FILES)
 	$(DOC) $(DOCOPTS) -d ../doc/commons-math_adapter $(FILES)
+	jar cf commons-math_adapter-doc.jar -C ../doc/commons-math_adapter .
 
 #JARS=$(LIB)/junit.jar:$(LIB)/log4j.jar:$(LIB)/commons-math-2.1.jar:$(JAS):$(LIB)/jas.jar
