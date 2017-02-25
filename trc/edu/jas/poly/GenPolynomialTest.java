@@ -365,7 +365,7 @@ public class GenPolynomialTest extends TestCase {
 
         GenPolynomial<BigRational> s = pf.random(kl, ll, el, q);
         //System.out.println("s = " + s);
-        assertFalse("rnd is homogeneous " + s, s.isHomogeneous());
+        assertFalse("rnd is homogeneous " + s, s.isHomogeneous() && !s.isConstant());
 
         GenPolynomial<BigRational> sh = s.homogenize(pfh);
         //System.out.println("sh = " + sh);
