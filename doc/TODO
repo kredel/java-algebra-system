@@ -14,11 +14,7 @@ issues to consider:
 
 - implement involutive bases computation
 
-- implement Groebner Walk GB computation
-
-- make hashCode to reuse computed value --> not immutable
-
-- use further util.concurrent algorithms where possible, e.g. in DHT
+- implement univariate power series composition and power
 
 - make polynomial chinese remainder generic (?)
 
@@ -26,13 +22,17 @@ issues to consider:
 
 - refactor from BasicLinAlg to GenMatrix and GenVector 
 
-- implement univariate power series composition and power
+- check solvable polynomials with integral domain coefficients
 
-- define quotientRemainder in RingElem interface (?)
+- algebraic number theory
+
+- algebraic topology
+
+- group theory, permutation groups
+
+- use further util.concurrent algorithms where possible, e.g. in DHT
 
 - remove unnecessary @see since JavaDoc 7 
-
-- make use of gcd in pseudo reduction, needs other coefficient type
 
 - implement matrices to vector
 
@@ -40,15 +40,7 @@ issues to consider:
 
 - make final variables public (?)
 
-- check solvable polynomials with integral domain coefficients
-
 - refactor method names for groovy operator overloading, make examples for usage
-
-- algebraic number theory
-
-- algebraic topology
-
-- group theory, permutation groups
 
 - use Maven/Gradle/Buildr configuration management, Ivy done
 
@@ -58,21 +50,31 @@ issues to consider:
 
 partially resolved and completed issues:
 
-- provide all Jython examples also for JRuby
+- rework parallel GB algorithms
+
+- implement FGLM GB algorithm
+
+- implement Groebner Walk GB computation
+
+- implement other term orders for multivariate power series
 
 - implement multivariate Hensel lifting for multivariate polynomial factorization
 
 - implement 0-dim ideal complex root selection
 
+- implement squarefree decomposition over fields of characteristic p
+
+- implement absolute polynomial factorization
+
+- implement univaiate and multivariate polynomial factorization
+
+- implement signature based GB computation
+
+- provide all Jython examples also for JRuby
+
 - refactor package structure to reduce circular dependences
 
 - implement parallel proxys for GB computation
-
-- rework parallel GB algorithms
-
-- implement FGLM GB algorithm
-
-- implement other term orders for multivariate power series
 
 - refactor BigDecimal to RingElem and RingFactory, precision is now variable via context
 
@@ -83,22 +85,19 @@ partially resolved and completed issues:
 
 - check and fix Findbugs warnings
 
-- implement squarefree decomposition over fields of characteristic p
-
-- implement absolute polynomial factorization
-
-- implement univaiate and multivariate polynomial factorization
-
 - let arith implementations extend Power as abstract class
   add divide, subtract, abs, remainder to Power, 
   name e.g RingElemAbstract
   clean structure of compareTo, signum and equals
   - is not possible -> but in Java 8 with default implentations
 
+- make use of gcd in pseudo reduction, needs other coefficient type
+
 - define power(n) in RingElem (not done) and implement in edu.jas.structure.Power 
   and classes, done
 
 - add product category to applications
+
 - implement direct products of ring elements
 
 - define FieldElem and Field factory interfaces and use them for GB coefficients
@@ -113,7 +112,9 @@ partially resolved and completed issues:
 - add assertions to check for number of polynomial variables and term order,
   nvar in GenPolynomial and GenSolvablePolynomial done
 
-- implement signature based GB computation
+- define quotientRemainder in RingElem interface (?)
+
+- make hashCode to reuse computed value --> not immutable
 
 - add method bitLength() to Element
 
@@ -124,8 +125,6 @@ partially resolved and completed issues:
 
 resolved and completed issues:
 
-- refactor unit tests to a different source code tree to avoid circular dependencys
-
 - implement AlgebraicNumber primitive element computation, done
 
 - implement prime and primary ideal decomposition for non-zero-dimensional ideals, done
@@ -135,16 +134,6 @@ resolved and completed issues:
 - implement multivariate power series, done
 
 - implement univariate power series, done
-
-- develop modifiable polynomial constructor or put method and iterators
-
-- rework junit tests to stop failing in case of zero polynomials
-
-- using git to publish the repository, done
-
-- rename divideAndRemainder to quotientRemainder
-
-- refactor the Quotient class to edu.jas.ufd package, done
 
 - implement d- and e-reductions and d-/e-Groebner bases, done
 
@@ -157,20 +146,36 @@ resolved and completed issues:
 
 - implement complex roots, done
 
-- implement ModLong for faster modular arithmetic, done
-
 - implement construction of univariate polynomials in zero-dimensional ideals
   done
-
-- implement a global variable name generator in edu.jas.kern
-  and use it in extend() and contract()
-  done in GenPolynomialRing
 
 - implement RealAlgebraicNumber and RealAlgebraicNumberRing, done
 
 - implement real roots with Sturm sequence, done
 
+- implement multivariate polynomial greatest common divisors, done
+
+- add methods to GenPolynomialRing to construct x_i polynomials, done
+
 - refactor univPoly in solvable implementations, done
+
+- develop modifiable polynomial constructor or put method and iterators
+
+- refactor unit tests to a different source code tree to avoid circular dependencys
+
+- rework junit tests to stop failing in case of zero polynomials
+
+- using git to publish the repository, done
+
+- rename divideAndRemainder to quotientRemainder
+
+- refactor the Quotient class to edu.jas.ufd package, done
+
+- implement ModLong for faster modular arithmetic, done
+
+- implement a global variable name generator in edu.jas.kern
+  and use it in extend() and contract()
+  done in GenPolynomialRing
 
 - add missing comments in edu.jas.Algebra*, done
 
@@ -193,10 +198,6 @@ resolved and completed issues:
 
 - replace thread-and-network-programming algorithms with 
   util.concurrent, done
-
-- implement multivariate polynomial greatest common divisors, done
-
-- add methods to GenPolynomialRing to construct x_i polynomials, done
 
 - add version information in jas jar-file names, done
 
