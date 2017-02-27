@@ -30,6 +30,7 @@ import edu.jas.gb.GroebnerBaseArriSigSeqIter;
 import edu.jas.gb.GroebnerBaseParIter;
 import edu.jas.gbufd.GBFactory;
 import edu.jas.gbufd.GroebnerBaseFGLM;
+import edu.jas.gbufd.GroebnerBaseWalk;
 import edu.jas.gbufd.GroebnerBasePseudoSeq;
 import edu.jas.gbufd.GroebnerBaseRational;
 import edu.jas.kern.ComputerThreads;
@@ -122,6 +123,26 @@ public class GBAlgorithmBuilderTest extends TestCase {
         GroebnerBaseAbstract<BigRational> bb = ab.build();
         //System.out.println("bb = " + bb);
         assertTrue("instance of " + bb, bb instanceof GroebnerBaseFGLM);
+    }
+
+
+    /**
+     * Test construction for BigRational and Groebner walk.
+     */
+    public void testConstructionRationalWalk() {
+        BigRational bf = new BigRational(1);
+        String[] vars = new String[] { "a", "b", "c" };
+        GenPolynomialRing<BigRational> pf = new GenPolynomialRing<BigRational>(bf, vars);
+
+        GBAlgorithmBuilder<BigRational> ab = GBAlgorithmBuilder.<BigRational> polynomialRing(pf);
+        //System.out.println("ab = " + ab);
+
+        ab = ab.walk();
+        //System.out.println("ab = " + ab);
+
+        GroebnerBaseAbstract<BigRational> bb = ab.build();
+        //System.out.println("bb = " + bb);
+        assertTrue("instance of " + bb, bb instanceof GroebnerBaseWalk);
     }
 
 
