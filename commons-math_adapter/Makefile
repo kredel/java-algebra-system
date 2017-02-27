@@ -40,7 +40,7 @@ commons-math_adapter-bin.jar: $(CLASSES)
 	jar cfM commons-math_adapter-bin.jar -C classes .
 	cp -f commons-math_adapter-bin.jar $(LIBPATH)
 	cp -f commons-math_adapter-bin.jar ..
-	jar cf commons-math_adapter-scr.jar -C src .
+	jar cf commons-math_adapter-src.jar -C src .
 
 tests:	
 	java -cp $(CLASSPATH):commons-math_adapter-bin.jar -Xms500M -Xmx600M -verbose:gc edu.jas.commons.math.CMFieldElementTest
