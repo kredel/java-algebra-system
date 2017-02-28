@@ -20,6 +20,7 @@ import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.Product;
 import edu.jas.arith.ProductRing;
+import edu.jas.gb.Cyclic;
 import edu.jas.gb.GroebnerBase;
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gbufd.GBFactory;
@@ -72,53 +73,22 @@ public class Examples {
      */
     public static void example1() {
         int n = 4;
-
-        BigInteger fac = new BigInteger();
-        GenPolynomialRing<BigInteger> ring = new GenPolynomialRing<BigInteger>(fac, n); //,var);
-        System.out.println("ring = " + ring + "\n");
-
-        List<GenPolynomial<BigInteger>> cp = new ArrayList<GenPolynomial<BigInteger>>(n);
-        for (int i = 1; i <= n; i++) {
-            GenPolynomial<BigInteger> p = cyclicPoly(ring, n, i);
-            cp.add(p);
-            System.out.println("p[" + i + "] = " + p);
-            System.out.println();
-        }
+        Cyclic cy = new Cyclic(n);
+        System.out.println("ring = " + cy.ring);
+        List<GenPolynomial<BigInteger>> cp = cy.cyclicPolys();
         System.out.println("cp = " + cp + "\n");
 
         List<GenPolynomial<BigInteger>> gb;
         //GroebnerBase<BigInteger> sgb = new GroebnerBaseSeq<BigInteger>();
-        GroebnerBase<BigInteger> sgb = GBFactory.getImplementation(fac);
+        GroebnerBase<BigInteger> sgb = GBFactory.getImplementation(cy.ring.coFac);
         gb = sgb.GB(cp);
         System.out.println("gb = " + gb);
-
-    }
-
-
-    static GenPolynomial<BigInteger> cyclicPoly(GenPolynomialRing<BigInteger> ring, int n, int i) {
-
-        List<? extends GenPolynomial<BigInteger>> X = /*(List<GenPolynomial<BigInteger>>)*/ring
-                        .univariateList();
-
-        GenPolynomial<BigInteger> p = ring.getZERO();
-        for (int j = 1; j <= n; j++) {
-            GenPolynomial<BigInteger> pi = ring.getONE();
-            for (int k = j; k < j + i; k++) {
-                pi = pi.multiply(X.get(k % n));
-            }
-            p = p.sum(pi);
-            if (i == n) {
-                p = p.subtract(ring.getONE());
-                break;
-            }
-        }
-        return p;
     }
 
 
     /**
      * example2. abtract types:
-     * List<GenPolynomial<Product<Residue<BigRational>>>>.
+     * List&lt;GenPolynomial&lt;Product&lt;Residue&lt;BigRational&gt;&gt;&gt;&gt;.
      */
     public static void example2() {
         List<GenPolynomial<Product<Residue<BigRational>>>> L = null;
@@ -183,7 +153,7 @@ public class Examples {
 
 
     /**
-     * example3. abtract types: GB of List<GenPolynomial<Residue<BigRational>>>.
+     * example3. abtract types: GB of List&lt;GenPolynomial&lt;Residue&lt;BigRational&gt;&gt;&gt;.
      */
     public static void example3() {
         List<GenPolynomial<Residue<BigRational>>> L = null;
@@ -244,7 +214,7 @@ public class Examples {
 
     /**
      * example4. abtract types: comprehensive GB of
-     * List<GenPolynomial<GenPolynomial<BigRational>>>.
+     * List&lt;GenPolynomial&lt;GenPolynomial&lt;BigRational&gt;&gt;&gt;.
      */
     public static void example4() {
         int kl = 2;
@@ -258,9 +228,7 @@ public class Examples {
 
         ComprehensiveGroebnerBaseSeq<BigRational> bb;
 
-        GenPolynomial<GenPolynomial<BigRational>> a;
-        GenPolynomial<GenPolynomial<BigRational>> b;
-        GenPolynomial<GenPolynomial<BigRational>> c;
+        GenPolynomial<GenPolynomial<BigRational>> a, b, c;
 
         BigRational coeff = new BigRational(kl);
         String[] cv = { "a", "b" };
@@ -301,7 +269,7 @@ public class Examples {
 
     /**
      * example5. comprehensive GB of
-     * List<GenPolynomial<GenPolynomial<BigRational>>> and GB for regular ring.
+     * List&lt;GenPolynomial&lt;GenPolynomial&lt;BigRational&gt;&gt;&gt; and GB for regular ring.
      */
     public static void example5() {
         int kl = 2;
@@ -579,8 +547,8 @@ public class Examples {
 
     /**
      * example10. abtract types: GB of
-     * List<GenPolynomial<AlgebraicNumber<Quotient
-     * <AlgebraicNumber<BigRational>>>>>.
+     * List&lt;GenPolynomial&lt;AlgebraicNumber&lt;Quotient
+     * &lt;AlgebraicNumber&lt;BigRational&gt;&gt;&gt;&gt;&gt;.
      */
     public static void example10() {
         Scripting.setLang(Scripting.Lang.Ruby);
@@ -668,7 +636,7 @@ public class Examples {
 
 
     /**
-     * example11. abtract types: GB of List<GenPolynomial<BigRational>>>.
+     * example11. abtract types: GB of List&lt;GenPolynomial&lt;BigRational&gt;&gt;&gt;.
      */
     public static void example11() {
         Scripting.setLang(Scripting.Lang.Ruby);
@@ -717,7 +685,7 @@ public class Examples {
 
     /**
      * example12. abtract types: GB of
-     * List<GenPolynomial<Quotient<BigRational>>>>.
+     * List&lt;GenPolynomial&lt;Quotient&lt;BigRational&gt;&gt;&gt;&gt;.
      */
     public static void example12() {
         Scripting.setLang(Scripting.Lang.Ruby);
