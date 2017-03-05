@@ -776,7 +776,7 @@ Compare two ring elements.
 =begin rdoc
 Test if two ring elements are equal.
 =end
-    def ===(other)
+    def ==(other)
         if not other.is_a? RingElem
            return false;
         end
@@ -1730,7 +1730,7 @@ Create a string representation.
 =begin rdoc
 Test if two rings are equal.
 =end
-    def ===(other)
+    def ==(other)
         if not other.is_a? Ring
            return false;
         end
@@ -2705,7 +2705,7 @@ Compare two ideals.
 =begin rdoc
 Test if two ideals are equal.
 =end
-    def ===(other)
+    def ==(other)
         if not other.is_a? SimIdeal
            return false;
         end
@@ -3920,7 +3920,7 @@ Compare two ideals.
 =begin rdoc
 Test if two ideals are equal.
 =end
-    def ===(other)
+    def ==(other)
         if not other.is_a? SolvIdeal
            return false;
         end
@@ -5804,7 +5804,7 @@ Compare two ideals.
 =begin rdoc
 Test if two ideals are equal.
 =end
-    def ===(other)
+    def ==(other)
         if not other.is_a? WordPolyIdeal
            return false;
         end
