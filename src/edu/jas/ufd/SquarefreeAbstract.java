@@ -234,8 +234,8 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
             if (fi.signum() < 0) {
                 //System.out.println("e0 = " + e0 + ", f0 = " + f0);
                 //System.out.println("ei = " + ei + ", fi = " + fi);
-                fi = fi.negate();
-                if (ei % 2 != 0) { // && e0 % 2 != 0
+                if (ei % 2 != 0 && e0 % 2 != 0) { // bug
+                    fi = fi.negate();
                     f0 = f0.negate();
                 }
             }
