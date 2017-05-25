@@ -276,12 +276,13 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>> extends SquarefreeAbs
                     break;
                 }
                 Tp = PolyUtil.<C> recursiveDeriviative(T0);
+                //System.out.println("iTp = " + Tp);
                 T = engine.recursiveUnivariateGcd(T0, Tp);
+                //System.out.println("iT = " + T);
                 T = engine.baseRecursivePrimitivePart(T);
+                //System.out.println("iT = " + T);
                 V = PolyUtil.<C> recursivePseudoDivide(T0, T);
                 //System.out.println("iT0 = " + T0);
-                //System.out.println("iTp = " + Tp);
-                //System.out.println("iT = " + T);
                 //System.out.println("iV = " + V);
                 k = 0L;
                 init = false;
@@ -302,6 +303,9 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>> extends SquarefreeAbs
             //was: if ( z.degree(0) > 0 ) {
             if (!z.isONE() && !z.isZERO()) {
                 z = engine.baseRecursivePrimitivePart(z);
+                if (logger.isInfoEnabled()) {
+                    logger.info("z = " + z + ", k = " + k);
+                }
                 sfactors.put(z, k);
             }
         }
@@ -326,9 +330,7 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>> extends SquarefreeAbs
         if (pfac.nvar <= 1) {
             return baseSquarefreePart(P);
         }
-        GenPolynomialRing<C> cfac = pfac.contract(1);
-        GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(cfac, 1);
-
+        GenPolynomialRing<GenPolynomial<C>> rfac = pfac.recursive(1);
         GenPolynomial<GenPolynomial<C>> Pr = PolyUtil.<C> recursive(rfac, P);
         GenPolynomial<C> Pc = engine.recursiveContent(Pr);
         Pr = PolyUtil.<C> coefficientPseudoDivide(Pr, Pc);
@@ -363,8 +365,7 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>> extends SquarefreeAbs
             sfactors.put(P, 1L);
             return sfactors;
         }
-        GenPolynomialRing<C> cfac = pfac.contract(1);
-        GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(cfac, 1);
+        GenPolynomialRing<GenPolynomial<C>> rfac = pfac.recursive(1);
 
         GenPolynomial<GenPolynomial<C>> Pr = PolyUtil.<C> recursive(rfac, P);
         SortedMap<GenPolynomial<GenPolynomial<C>>, Long> PP = recursiveUnivariateSquarefreeFactors(Pr);

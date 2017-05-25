@@ -296,9 +296,7 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>> ext
         GenPolynomialRing<AlgebraicNumber<C>> pfac = P.ring;
         if (pfac.nvar > 1) {
             // go to recursion
-            GenPolynomialRing<AlgebraicNumber<C>> cfac = pfac.contract(1);
-            GenPolynomialRing<GenPolynomial<AlgebraicNumber<C>>> rfac = new GenPolynomialRing<GenPolynomial<AlgebraicNumber<C>>>(
-                            cfac, 1);
+            GenPolynomialRing<GenPolynomial<AlgebraicNumber<C>>> rfac = pfac.recursive(1);
             GenPolynomial<GenPolynomial<AlgebraicNumber<C>>> Pr = PolyUtil.<AlgebraicNumber<C>> recursive(
                             rfac, P);
             GenPolynomial<GenPolynomial<AlgebraicNumber<C>>> Prc = recursiveUnivariateRootCharacteristic(Pr);

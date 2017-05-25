@@ -199,9 +199,7 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>> extends Squa
         GenPolynomialRing<Quotient<C>> pfac = P.ring;
         if (pfac.nvar > 1) {
             // go to recursion
-            GenPolynomialRing<Quotient<C>> cfac = pfac.contract(1);
-            GenPolynomialRing<GenPolynomial<Quotient<C>>> rfac = new GenPolynomialRing<GenPolynomial<Quotient<C>>>(
-                            cfac, 1);
+            GenPolynomialRing<GenPolynomial<Quotient<C>>> rfac = pfac.recursive(1);
             GenPolynomial<GenPolynomial<Quotient<C>>> Pr = PolyUtil.<Quotient<C>> recursive(rfac, P);
             GenPolynomial<GenPolynomial<Quotient<C>>> Prc = recursiveUnivariateRootCharacteristic(Pr);
             if (Prc == null) {

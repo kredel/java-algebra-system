@@ -157,6 +157,7 @@ public class GCDFactory {
             ufd = new GreatestCommonDivisorModular<ModLong>(); // dummy type
         } else {
             ufd = new GreatestCommonDivisorSubres<BigInteger>();
+            //ufd = new GreatestCommonDivisorPrimitive<BigInteger>();
         }
         return ufd;
     }
