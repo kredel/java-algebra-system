@@ -11,6 +11,7 @@ import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
+import edu.jas.poly.ExpVector;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
@@ -352,6 +353,19 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
                 sfactors.put(cr, rk);
             }
         }
+        // divide by trailing term
+        ExpVector et = P.trailingExpVector();
+        if (!et.isZERO()) {
+            GenPolynomial<GenPolynomial<C>> tr = pfac.valueOf(et);
+            if (logger.isInfoEnabled()) {
+               logger.info("trailing term = " + tr);
+            }
+            P = PolyUtil.<C> recursivePseudoDivide(P, tr);
+            long ep = et.getVal(0); // univariate
+            et = et.subst(0,1);
+            tr = pfac.valueOf(et);
+            sfactors.put(tr, ep);
+	}
 
         // factors of recursive polynomial
         GenPolynomial<GenPolynomial<C>> T0 = P;
