@@ -36,8 +36,8 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
      * Modular gcd algorithm to use.
      */
     protected final GreatestCommonDivisorAbstract<MOD> mufd 
-       = new GreatestCommonDivisorSimple<MOD>();
-    // = new GreatestCommonDivisorPrimitive<MOD>();
+    // = new GreatestCommonDivisorSimple<MOD>();
+       = new GreatestCommonDivisorPrimitive<MOD>();
     // not okay: = new GreatestCommonDivisorSubres<MOD>();
 
 

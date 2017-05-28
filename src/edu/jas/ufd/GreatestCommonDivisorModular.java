@@ -19,6 +19,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.RingFactory;
 import edu.jas.structure.Power;
 
 
@@ -95,7 +96,18 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
     @Override
     public GenPolynomial<GenPolynomial<BigInteger>> recursiveUnivariateGcd(
                     GenPolynomial<GenPolynomial<BigInteger>> P, GenPolynomial<GenPolynomial<BigInteger>> S) {
-        return iufd.recursiveUnivariateGcd(P, S);
+        //return iufd.recursiveUnivariateGcd(P, S); // bad performance
+        // distributed polynomials gcd
+        GenPolynomialRing<GenPolynomial<BigInteger>> rfac = P.ring;
+        RingFactory<GenPolynomial<BigInteger>> rrfac = rfac.coFac;
+        GenPolynomialRing<BigInteger> cfac = (GenPolynomialRing<BigInteger>) rrfac;
+        GenPolynomialRing<BigInteger> dfac = cfac.extend(rfac.nvar);
+        GenPolynomial<BigInteger> Pd = PolyUtil.<BigInteger> distribute(dfac, P);
+        GenPolynomial<BigInteger> Sd = PolyUtil.<BigInteger> distribute(dfac, S);
+        GenPolynomial<BigInteger> Dd = gcd(Pd, Sd);
+        // convert to recursive
+        GenPolynomial<GenPolynomial<BigInteger>> C = PolyUtil.<BigInteger> recursive(rfac, Dd);
+        return C;
     }
 
 
