@@ -7,6 +7,9 @@ package edu.jas.ufd;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -163,6 +166,53 @@ public class FactorRational extends FactorAbsolute<BigRational> {
             logger.info("rfacts = " + rfacts);
         }
         factors.addAll(rfacts);
+        return factors;
+    }
+
+
+    /**
+     * GenPolynomial factorization of a polynomial.
+     * @param P GenPolynomial.
+     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k}
+     *         p_i**e_i and p_i irreducible.
+     */
+    @Override
+    public SortedMap<GenPolynomial<BigRational>, Long> factors(GenPolynomial<BigRational> P) {
+        if (P == null) {
+            throw new IllegalArgumentException(this.getClass().getName() + " P == null");
+        }
+        GenPolynomialRing<BigRational> pfac = P.ring;
+        SortedMap<GenPolynomial<BigRational>, Long> factors = new TreeMap<GenPolynomial<BigRational>, Long>(pfac.getComparator());
+        if (P.isZERO()) {
+            return factors;
+        }
+        if (P.isONE()) {
+            factors.put(P, 1L);
+            return factors;
+        }
+        if (pfac.nvar == 1) {
+            return baseFactors(P);
+        }
+        GenPolynomial<BigRational> Pr = P;
+        BigInteger bi = BigInteger.ONE;
+        GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(bi, pfac);
+        GenPolynomial<BigInteger> Pi = PolyUtil.integerFromRationalCoefficients(ifac, Pr);
+        if (debug) {
+            logger.info("Pi = " + Pi);
+        }
+        SortedMap<GenPolynomial<BigInteger>, Long> ifacts = iengine.factors(Pi);
+        if (logger.isInfoEnabled()) {
+            logger.info("ifacts = " + ifacts);
+        }
+        for (Map.Entry<GenPolynomial<BigInteger>, Long> me : ifacts.entrySet()) {
+            GenPolynomial<BigInteger> g = me.getKey();
+            if (g.isONE()) { // skip 1
+                continue;
+            }
+            Long d = me.getValue(); // facs.get(g);
+            GenPolynomial<BigRational> rp = PolyUtil.fromIntegerCoefficients(pfac, g);
+            factors.put(rp, d);
+        }
         return factors;
     }
 
