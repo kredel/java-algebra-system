@@ -196,6 +196,9 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
             long delta = q.degree(0) - r.degree(0);
             //System.out.println("rgcd delta = " + delta);
             x = PolyUtil.<C> recursiveDensePseudoRemainder(q, r);
+            if (logger.isInfoEnabled()) {
+                logger.info("recursiveDensePseudoRemainder.bits = " + x.bitLength());
+            }
             q = r;
             if (!x.isZERO()) {
                 z = g.multiply(h.power(delta)); //power(P.ring.coFac, h, delta));

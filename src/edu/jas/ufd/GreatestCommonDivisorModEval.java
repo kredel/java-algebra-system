@@ -14,6 +14,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.RingFactory;
 
 
 /**
@@ -63,7 +64,18 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
     @Override
     public GenPolynomial<GenPolynomial<MOD>> recursiveUnivariateGcd(
             GenPolynomial<GenPolynomial<MOD>> P, GenPolynomial<GenPolynomial<MOD>> S) {
-        return mufd.recursiveUnivariateGcd(P, S);
+        //return mufd.recursiveUnivariateGcd(P, S);
+        // distributed polynomials gcd
+        GenPolynomialRing<GenPolynomial<MOD>> rfac = P.ring;
+        RingFactory<GenPolynomial<MOD>> rrfac = rfac.coFac;
+        GenPolynomialRing<MOD> cfac = (GenPolynomialRing<MOD>) rrfac;
+        GenPolynomialRing<MOD> dfac = cfac.extend(rfac.nvar);
+        GenPolynomial<MOD> Pd = PolyUtil.<MOD> distribute(dfac, P);
+        GenPolynomial<MOD> Sd = PolyUtil.<MOD> distribute(dfac, S);
+        GenPolynomial<MOD> Dd = gcd(Pd, Sd);
+        // convert to recursive
+        GenPolynomial<GenPolynomial<MOD>> C = PolyUtil.<MOD> recursive(rfac, Dd);
+        return C;
     }
 
 
@@ -161,7 +173,7 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
 
         // initialize element and degree vector
         ExpVector wdegv = rdegv.subst(0, rdegv.getVal(0) + 1);
-        // +1 seems to be a hack for the unlucky prime test
+        // +1 seems to be a hack for the unlucky evaluation point test
         MOD inc = cofac.getONE();
         long i = 0;
         long en = cofac.getIntegerModul().longValue() - 1; // just a stopper
@@ -216,10 +228,10 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
                 logger.debug("q             = " + q + ", c = " + c);
                 return q;
             }
-            // test for unlucky prime
+            // test for unlucky evaluation point
             ExpVector mdegv = cm.degreeVector();
             if (wdegv.equals(mdegv)) { // TL = 0
-                // prime ok, next round
+                // evaluation point ok, next round
                 if (M != null) {
                     if (M.degree(0) > G) {
                         logger.info("deg(M) > G: " + M.degree(0) + " > " + G);
@@ -230,14 +242,14 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
                 boolean ok = false;
                 if (wdegv.multipleOf(mdegv)) { // TL = 2
                     M = null; // init chinese remainder
-                    ok = true; // prime ok
+                    ok = true; // evaluation point ok
                 }
                 if (mdegv.multipleOf(wdegv)) { // TL = 1
-                    continue; // skip this prime
+                    continue; // skip this evaluation point
                 }
                 if (!ok) {
                     M = null; // discard chinese remainder and previous work
-                    continue; // prime not ok
+                    continue; // evaluation point not ok
                 }
             }
             // prepare interpolation algorithm
