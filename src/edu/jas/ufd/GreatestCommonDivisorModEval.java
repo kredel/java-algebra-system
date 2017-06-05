@@ -37,9 +37,9 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
      * Modular gcd algorithm to use.
      */
     protected final GreatestCommonDivisorAbstract<MOD> mufd 
-    // = new GreatestCommonDivisorSimple<MOD>();
-       = new GreatestCommonDivisorPrimitive<MOD>();
-    // not okay: = new GreatestCommonDivisorSubres<MOD>();
+       = new GreatestCommonDivisorSimple<MOD>();
+    // not okay = new GreatestCommonDivisorPrimitive<MOD>();
+    // not okay = new GreatestCommonDivisorSubres<MOD>();
 
 
     /**
@@ -329,7 +329,7 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
         GenPolynomialRing<MOD> fac = P.ring;
         // recusion base case for univariate polynomials
         if (fac.nvar <= 1) {
-            GenPolynomial<MOD> T = mufd.baseResultant(P, S);
+            GenPolynomial<MOD> T = baseResultant(P, S);
             return T;
         }
         long e = P.degree(fac.nvar-1);
