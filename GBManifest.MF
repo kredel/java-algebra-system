@@ -4,4 +4,4 @@ Main-Class: edu.jas.application.RunGB
 Implementation-Vendor: JAS
 Implementation-Title: Java Algebra System
 Implementation-Version: 2.6
-Implementation-Vendor-Id: edu.jas
+Implementation-Vendor-Id: java-algebra-system
