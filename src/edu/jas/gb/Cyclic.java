@@ -102,12 +102,26 @@ public class Cyclic {
      * Compute list of polynomials.
      * @return Cyclic problem as list of polynomials.
      */
+    public String polyList() {
+        return cyclicPolys(ring).toString().replace("[","(").replace("]",")");
+    }
+
+
+    /**
+     * Compute list of polynomials.
+     * @return Cyclic problem as list of polynomials.
+     */
     public List<GenPolynomial<BigInteger>> cyclicPolys() {
         return cyclicPolys(ring);
     }
 
 
-    List<GenPolynomial<BigInteger>> cyclicPolys(GenPolynomialRing<BigInteger> ring) {
+    /**
+     * Compute list of polynomials.
+     * @param ring polynomial ring.
+     * @return Cyclic problem as list of polynomials.
+     */
+   List<GenPolynomial<BigInteger>> cyclicPolys(GenPolynomialRing<BigInteger> ring) {
         int n = ring.nvar;
         List<GenPolynomial<BigInteger>> cp = new ArrayList<GenPolynomial<BigInteger>>(n);
         for (int i = 1; i <= n; i++) {
