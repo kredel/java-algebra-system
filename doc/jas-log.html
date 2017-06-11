@@ -23,21 +23,31 @@
 
 <dl>
 
-<dt>2017, February </dt> <!-- 2.6.5xxx -->
+<dt>2017, June </dt> <!-- 2.6.5xxx -->
 <dd> 
 
+ This release improved performance of polynomial factoring methods,
+ over integers and rational numbers. The affected classes are
+ <code>FactorRational</code>,
+ <code>GreatestCommonDivisorModular</code> and
+ <code>GreatestCommonDivisorModEval</code>.
+
+ Several Findbugs issues have been fixed, for example, insufficient
+ synchronization. Other bug fixes and small improvements.
+
+</dd>
+
+<dt>2017, February </dt> <!-- 2.6.5733 -->
+<dd> 
  This release adds left and right methods in <code>MonoidElem</code>
  with commutative default implementations.  The Ore condition for
  <code>StarRingElem</code> classes can be computed. Quaternion classes
  are refactored for separate <code>Ring</code> and integral quaternion
  classes.  Bug fixes and small improvements.
-
  There is now a Maven compatible repository with JAS at 
  <a href="http://krum.rz.uni-mannheim.de/maven-repository/" target="new"
          >http://krum.rz.uni-mannheim.de/maven-repository/</a>.
-
 </dd>
-
 
 <dt>2017, January </dt> <!-- 2.6.5690 -->
 <dd> 
@@ -2637,7 +2647,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Sat Feb 11 12:40:32 CET 2017
+Last modified: Sun Jun 11 23:29:51 CEST 2017
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
