@@ -1,9 +1,10 @@
 #Cyclic equations for N = 5:
-(a,b,c,d,e) G 
+Mod 32003 
+(x0,x1,x2,x3,x4) G 
 (
-a + b + c + d + e,
-a*b + b*c + c*d + d*e + e*a,
-a*b*c + b*c*d + c*d*e + d*e*a + e*a*b,
-a*b*c*d + b*c*d*e + c*d*e*a + d*e*a*b + e*a*b*c,
-a*b*c*d*e - 1
+ ( x4 + x3 + x2 + x1 + x0 ), 
+ ( x3 * x4 + x0 * x4 + x2 * x3 + x1 * x2 + x0 * x1 ), 
+ ( x2 * x3 * x4 + x0 * x3 * x4 + x0 * x1 * x4 + x1 * x2 * x3 + x0 * x1 * x2 ), 
+ ( x1 * x2 * x3 * x4 + x0 * x2 * x3 * x4 + x0 * x1 * x3 * x4 + x0 * x1 * x2 * x4 + x0 * x1 * x2 * x3 ),
+ ( x0 * x1 * x2 * x3 * x4 - 1 )
 )
