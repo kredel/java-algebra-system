@@ -192,9 +192,10 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
      */
     @Override
     public List<GenPolynomial<C>> factorsSquarefree(GenPolynomial<C> P) {
-        if (logger.isInfoEnabled()) {
-            logger.info(StringUtil.selectStackTrace("edu\\.jas.*"));
-        }
+        logger.warn("no multivariate factorization for " + P.ring.toScript() + ": falling back to Kronecker algorithm");
+        //if (logger.isInfoEnabled()) {
+        //    logger.info(StringUtil.selectStackTrace("edu\\.jas.*"));
+        //}
         return factorsSquarefreeKronecker(P);
         //return factorsSquarefreeOptimize(P);
     }
