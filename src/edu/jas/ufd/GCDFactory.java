@@ -271,7 +271,7 @@ public class GCDFactory {
                             new GreatestCommonDivisorModEval<ModLong>());
         } else if (ofac instanceof BigRational) {
             ufd = new GCDProxy<BigRational>(new GreatestCommonDivisorSubres<BigRational>(),
-                            new GreatestCommonDivisorSimple<BigRational>());
+                            new GreatestCommonDivisorPrimitive<BigRational>()); //Simple
         } else {
             if (fac.isField()) {
                 ufd = new GCDProxy<C>(new GreatestCommonDivisorSimple<C>(),
