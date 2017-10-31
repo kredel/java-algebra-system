@@ -6,11 +6,18 @@ package edu.jas.ufd;
 
 
 import edu.jas.arith.BigInteger;
+import edu.jas.arith.BigRational;
+import edu.jas.arith.ModLong;
+import edu.jas.arith.ModLongRing;
+import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
 import edu.jas.kern.ComputerThreads;
+import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
+import edu.jas.poly.TermOrderByName;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -52,9 +59,7 @@ public class PolyUfdUtilTest extends TestCase {
     }
 
 
-    //private final static int bitlen = 100;
-
-    TermOrder to = new TermOrder(TermOrder.INVLEX);
+    TermOrder to = TermOrderByName.INVLEX;
 
 
     GenPolynomialRing<BigInteger> dfac;
@@ -139,7 +144,6 @@ public class PolyUfdUtilTest extends TestCase {
      * Test Kronecker substitution.
      */
     public void testKroneckerSubstitution() {
-
         for (int i = 0; i < 10; i++) {
             a = dfac.random(kl, ll * 2, el * 5, q);
             long d = a.degree() + 1L;
@@ -155,6 +159,38 @@ public class PolyUfdUtilTest extends TestCase {
             //System.out.println("e        = " + e);
             assertTrue("back(subst(a)) = a", e.isZERO());
         }
+    }
+
+
+    /**
+     * Test algebraic number field.
+     */
+    public void testAlgebraicNumberField() {
+        int deg = 11;
+        // characteristic non zero, small
+        ModLongRing gfp = new ModLongRing(32003);
+        //System.out.println("gfp = " + gfp.toScript());
+        AlgebraicNumberRing<ModLong> gfpq = PolyUfdUtil.<ModLong> algebriacNumberField(gfp, deg);
+        //System.out.println("gfpq = " + gfpq.toScript());
+        assertTrue("gfpq.isField: ", gfpq.isField());
+
+        // characteristic non zero, large
+        ModIntegerRing gfP = new ModIntegerRing(getPrime1());
+        //System.out.println("gfP = " + gfP.toScript());
+        AlgebraicNumberRing<ModInteger> gfPq = PolyUfdUtil.<ModInteger> algebriacNumberField(gfP, deg);
+        //System.out.println("gfPq = " + gfPq.toScript());
+        assertTrue("gfPq.isField: ", gfPq.isField());
+
+        // characteristic zero
+        BigRational q = BigRational.ONE;
+        //System.out.println("q = " + q.toScriptFactory());
+        AlgebraicNumberRing<BigRational> gfqq = PolyUfdUtil.<BigRational> algebriacNumberField(q, deg);
+        //System.out.println("gfqq = " + gfqq.toScript());
+        assertTrue("gfqq.isField: ", gfqq.isField());
+
+        //PolyUfdUtil.<BigRational> ensureFieldProperty(gfqq);
+        //System.out.println("gfqq = " + gfqq);
+        //assertTrue("gfqq.isField: ", gfqq.isField());
     }
 
 

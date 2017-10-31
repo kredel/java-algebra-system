@@ -20,6 +20,7 @@ import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
+import edu.jas.poly.TermOrderByName;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
@@ -437,6 +438,44 @@ public class PolyUfdUtil {
         } else {
             afac.setField(false);
         }
+    }
+
+
+    /**
+     * Construct an algebraic number field of degree d. Constructs an
+     * irreducible polynomial of degree d as modulus of the algebraic number ring.
+     * @return algebraic number field.
+     */
+    public static <C extends GcdRingElem<C>> 
+      AlgebraicNumberRing<C> algebriacNumberField(RingFactory<C> cfac, int degree) {
+        if (!cfac.isField()) {
+            throw new IllegalArgumentException("coefficient ring must be a field " + cfac);
+        }
+        GenPolynomialRing<C> ring = new GenPolynomialRing<C>(cfac, 1, TermOrderByName.INVLEX);
+        Factorization<C> eng = FactorFactory.<C> getImplementation(ring);
+        GenPolynomial<C> mod = ring.getZERO();
+        int k = cfac.characteristic().bitLength(); // log
+        if (k < 3) {
+            k = 7;
+        }
+        int l = degree/2 + 2;
+        int d = degree + 1;
+        float q = 0.55f;
+        for (;;) {
+            mod = ring.random(k, l, d, q).monic();
+            if (mod.degree() != degree) {
+                mod  = mod.sum(ring.univariate(0, degree));
+            }
+            if (mod.trailingBaseCoefficient().isZERO()) {
+                mod  = mod.sum(ring.getONE());
+            }
+            //System.out.println("algebriacNumberField: mod = " + mod + ", k = " + k);
+            if (eng.isIrreducible(mod)) {
+                break;
+            }
+        }
+        AlgebraicNumberRing<C> afac = new AlgebraicNumberRing<C>(mod, true);
+        return afac;
     }
 
 
