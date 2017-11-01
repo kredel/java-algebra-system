@@ -442,12 +442,13 @@ public class PolyUfdUtil {
 
 
     /**
-     * Construct an algebraic number field of degree d. Constructs an
-     * irreducible polynomial of degree d as modulus of the algebraic number ring.
-     * @return algebraic number field.
+     * Construct a random irreducible univariate polynomial of degree d.
+     * @param cfac coefficient ring.
+     * @param degree of random polynomial.
+     * @return irreducible univariate polynomial.
      */
     public static <C extends GcdRingElem<C>> 
-      AlgebraicNumberRing<C> algebriacNumberField(RingFactory<C> cfac, int degree) {
+      GenPolynomial<C> randomIrreduciblePolynomial(RingFactory<C> cfac, int degree) {
         if (!cfac.isField()) {
             throw new IllegalArgumentException("coefficient ring must be a field " + cfac);
         }
@@ -474,6 +475,20 @@ public class PolyUfdUtil {
                 break;
             }
         }
+        return mod;
+    }
+
+
+    /**
+     * Construct an algebraic number field of degree d. Uses a random
+     * irreducible polynomial of degree d as modulus of the algebraic number ring.
+     * @param cfac coefficient ring.
+     * @param degree of random polynomial.
+     * @return algebraic number field.
+     */
+    public static <C extends GcdRingElem<C>> 
+      AlgebraicNumberRing<C> algebriacNumberField(RingFactory<C> cfac, int degree) {
+        GenPolynomial<C> mod = randomIrreduciblePolynomial(cfac, degree);
         AlgebraicNumberRing<C> afac = new AlgebraicNumberRing<C>(mod, true);
         return afac;
     }
