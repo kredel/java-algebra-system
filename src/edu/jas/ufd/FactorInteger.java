@@ -192,7 +192,10 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         ModularRingFactory<MOD> cofac = null;
         GenPolynomial<MOD> am = null;
         GenPolynomialRing<MOD> mfac = null;
-        final int TT = 5; // 7
+        int TT = 5; // 7
+        if (degi > 100) {
+            TT += 2;
+        }
         List<GenPolynomial<MOD>>[] modfac = new List[TT];
         List<GenPolynomial<BigInteger>>[] intfac = new List[TT];
         BigInteger[] plist = new BigInteger[TT];
@@ -234,7 +237,6 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 nf = cofac.fromInteger(ac.getVal());
                 if (nf.isZERO()) {
                     logger.info("unlucky prime (nf) = " + p);
-                    //System.out.println("unlucky prime (nf) = " + p);
                     continue;
                 }
                 // initialize polynomial factory and map polynomial
@@ -242,20 +244,17 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 am = PolyUtil.<MOD> fromIntegerCoefficients(mfac, P);
                 if (!am.degreeVector().equals(degv)) { // allways true
                     logger.info("unlucky prime (deg) = " + p);
-                    //System.out.println("unlucky prime (deg) = " + p);
-                    continue;
+                     continue;
                 }
                 GenPolynomial<MOD> ap = PolyUtil.<MOD> baseDeriviative(am);
                 if (ap.isZERO()) {
                     logger.info("unlucky prime (a')= " + p);
-                    //System.out.println("unlucky prime (a')= " + p);
-                    continue;
+                     continue;
                 }
                 GenPolynomial<MOD> g = mengine.baseGcd(am, ap);
                 if (g.isONE()) {
                     logger.info("**lucky prime = " + p);
-                    //System.out.println("**lucky prime = " + p);
-                    break;
+                     break;
                 }
             }
             // now am is squarefree mod p, make monic and factor mod p
@@ -336,7 +335,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             if (debug) {
                 logger.info("lifting shortest from " + mlist);
             }
-            if (true && P.leadingBaseCoefficient().isONE()) {
+            if (P.leadingBaseCoefficient().isONE()) {
                 long t = System.currentTimeMillis();
                 try {
                     mlist = PolyUtil.<MOD> monic(mlist);
@@ -374,7 +373,6 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         for (int k = 0; k < TT; k++) {
             int s = intfac[k].size();
             logger.info("int s = " + s);
-            //System.out.println("int s = " + s);
             if (s > max) {
                 max = s;
                 ilist = intfac[k];
@@ -674,12 +672,10 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         }
         if (!u.isONE() && !u.equals(P)) {
             logger.info("rest u = " + u);
-            //System.out.println("rest u = " + u);
             factors.add(u);
         }
         if (factors.size() == 0) {
             logger.info("irred u = " + PP);
-            //System.out.println("irred u = " + u);
             factors.add(PP);
         }
         return normalizeFactorization(factors);
