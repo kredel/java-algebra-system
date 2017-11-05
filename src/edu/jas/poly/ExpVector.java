@@ -12,7 +12,6 @@ import java.util.Random;
 import edu.jas.arith.BigInteger;
 import edu.jas.structure.AbelianGroupElem;
 import edu.jas.structure.AbelianGroupFactory;
-import edu.jas.structure.Power;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 
@@ -505,7 +504,7 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector> {
             if (ai.isZERO()) {
                 return ai;
             }
-            C pi = ai.power(ei); //Power.<C> positivePower(ai, ei);
+            C pi = ai.power(ei);
             c = c.multiply(pi);
         }
         return c;
@@ -538,7 +537,7 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector> {
         if (hash < 0) {
             int h = 0;
             for (int i = 0; i < length(); i++) {
-                h = (h << 4) + (int)getVal(i);
+                h = (h << 4) + (int) getVal(i);
             }
             hash = h;
         }

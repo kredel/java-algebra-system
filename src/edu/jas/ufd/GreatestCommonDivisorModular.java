@@ -20,7 +20,6 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
-import edu.jas.structure.Power;
 
 
 /**
@@ -29,8 +28,8 @@ import edu.jas.structure.Power;
  * @author Heinz Kredel
  */
 
-public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular> extends
-                GreatestCommonDivisorAbstract<BigInteger> {
+public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular>
+                extends GreatestCommonDivisorAbstract<BigInteger> {
 
 
     private static final Logger logger = Logger.getLogger(GreatestCommonDivisorModular.class);
@@ -419,8 +418,8 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
         // compute norms
         BigInteger an = r.maxNorm();
         BigInteger bn = q.maxNorm();
-        an = an.power(f); //Power.<BigInteger> power(fac.coFac, an, f);
-        bn = bn.power(e); //Power.<BigInteger> power(fac.coFac, bn, e);
+        an = an.power(f);
+        bn = bn.power(e);
         BigInteger cn = Combinatoric.factorial(e + f);
         BigInteger n = cn.multiply(an).multiply(bn);
 

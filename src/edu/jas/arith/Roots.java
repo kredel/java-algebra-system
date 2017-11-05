@@ -5,10 +5,7 @@
 package edu.jas.arith;
 
 
-// import java.util.Random;
 import java.math.MathContext;
-
-import edu.jas.structure.Power;
 
 
 /**
@@ -159,7 +156,7 @@ public class Roots {
         if (A == null || A.isZERO() || A.isONE()) {
             return A;
         }
-        if ( A.signum() < 0 ) {
+        if (A.signum() < 0) {
             throw new ArithmeticException("root of negative not defined: " + A);
         }
         // for small A use root of inverse
@@ -173,9 +170,9 @@ public class Roots {
         // ensure enough precision
         MathContext mc = A.context;
         BigDecimal eps = new BigDecimal("0.1"); //e-13"); // TODO
-        int p = Math.max(mc.getPrecision(),java.math.MathContext.DECIMAL64.getPrecision());
+        int p = Math.max(mc.getPrecision(), java.math.MathContext.DECIMAL64.getPrecision());
         //java.math.MathContext.UNLIMITED.getPrecision() == 0
-        eps = eps.power(p/2); //Power.positivePower(eps,p/2);
+        eps = eps.power(p / 2); //Power.positivePower(eps,p/2);
         // newton iteration
         BigDecimal Ap = new BigDecimal(A.val, mc);
         BigDecimal ninv = new BigDecimal(0.5, mc);
@@ -219,7 +216,7 @@ public class Roots {
         if (A == null || A.isZERO() || A.isONE()) {
             return A;
         }
-        if ( A.signum() < 0 ) {
+        if (A.signum() < 0) {
             throw new ArithmeticException("root of negative not defined: " + A);
         }
         // for small A use root of inverse
@@ -232,9 +229,9 @@ public class Roots {
         // ensure enough precision
         MathContext mc = A.context;
         BigDecimal eps = new BigDecimal("0.1"); //e-10"); // TODO
-        int p = Math.max(mc.getPrecision(),java.math.MathContext.DECIMAL64.getPrecision());
+        int p = Math.max(mc.getPrecision(), java.math.MathContext.DECIMAL64.getPrecision());
         //java.math.MathContext.UNLIMITED.getPrecision() == 0
-        eps = eps.power((p*2)/3); //Power.positivePower(eps,(p*2)/3);
+        eps = eps.power((p * 2) / 3); //Power.positivePower(eps,(p*2)/3);
         // newton iteration
         BigDecimal Ap = A;
         BigDecimal N = new BigDecimal(n, mc);
@@ -245,7 +242,7 @@ public class Roots {
         BigDecimal d;
         int i = 0;
         while (true) {
-            P = R.power(n-1); //Power.positivePower(R, n - 1);
+            P = R.power(n - 1); //Power.positivePower(R, n - 1);
             R1 = Ap.divide(P.multiply(N));
             R1 = R.multiply(nsub).sum(R1);
             d = R.subtract(R1).abs();

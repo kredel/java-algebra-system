@@ -18,8 +18,8 @@ import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.ModLongRing;
 import edu.jas.arith.Modular;
 import edu.jas.arith.ModularRingFactory;
-import edu.jas.arith.PrimeList;
 import edu.jas.arith.PrimeInteger;
+import edu.jas.arith.PrimeList;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -87,6 +87,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
      * @param P GenPolynomial.
      * @return true if P is irreducible, else false.
      */
+    @Override
     public boolean isIrreducible(GenPolynomial<BigInteger> P) {
         if (P.ring.nvar == 1) {
             if (isIrreducibleEisenstein(P)) {
@@ -105,13 +106,13 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
     public boolean isIrreducibleEisenstein(GenPolynomial<BigInteger> P) {
         if (P.ring.nvar != 1) {
             throw new IllegalArgumentException("only for univariate polynomials");
-        }        
+        }
         if (P.degree(0) <= 1L) { // linear or constant is irreducible
             return true;
         }
         BigInteger rcont = engine.baseContent(P.reductum());
-        if (rcont.isZERO()||rcont.isONE()) { // case x**n
-            return false;  
+        if (rcont.isZERO() || rcont.isONE()) { // case x**n
+            return false;
         }
         // todo test
         if (rcont.compareTo(BigInteger.valueOf(PrimeInteger.BETA)) >= 0) { // integer too big
@@ -123,7 +124,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         SortedMap<Long, Integer> fac = PrimeInteger.factors(lcont);
         for (Long p : fac.keySet()) {
             BigInteger pi = BigInteger.valueOf(p);
-            if (!lc.remainder(pi).isZERO() && !tc.remainder(pi.power(2)).isZERO() ) {
+            if (!lc.remainder(pi).isZERO() && !tc.remainder(pi.power(2)).isZERO()) {
                 logger.info("isIrreducibleEisenstein: fac = " + fac + ", lc = " + lc + ", tc = " + tc);
                 return true;
             }
@@ -153,7 +154,8 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         }
         GenPolynomialRing<BigInteger> pfac = P.ring;
         if (pfac.nvar > 1) {
-            throw new IllegalArgumentException(this.getClass().getName() + " only for univariate polynomials");
+            throw new IllegalArgumentException(
+                            this.getClass().getName() + " only for univariate polynomials");
         }
         if (!engine.baseContent(P).isONE()) {
             throw new IllegalArgumentException(this.getClass().getName() + " P not primitive");
@@ -244,17 +246,17 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 am = PolyUtil.<MOD> fromIntegerCoefficients(mfac, P);
                 if (!am.degreeVector().equals(degv)) { // allways true
                     logger.info("unlucky prime (deg) = " + p);
-                     continue;
+                    continue;
                 }
                 GenPolynomial<MOD> ap = PolyUtil.<MOD> baseDeriviative(am);
                 if (ap.isZERO()) {
                     logger.info("unlucky prime (a')= " + p);
-                     continue;
+                    continue;
                 }
                 GenPolynomial<MOD> g = mengine.baseGcd(am, ap);
                 if (g.isONE()) {
                     logger.info("**lucky prime = " + p);
-                     break;
+                    break;
                 }
             }
             // now am is squarefree mod p, make monic and factor mod p
@@ -847,8 +849,8 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             if (Math.abs(evStart) > 371L) {
                 logger.warn("no lucky evaluation point for: P = " + P + ", lprr = " + lprr + ", lfacs = "
                                 + lfacs);
-                throw new RuntimeException("no lucky evaluation point found after " + Math.abs(evStart)
-                                + " iterations");
+                throw new RuntimeException(
+                                "no lucky evaluation point found after " + Math.abs(evStart) + " iterations");
             }
             if (Math.abs(evStart) % 100L <= 3L) {
                 ran = ran * (Math.PI - 2.14);
@@ -1268,7 +1270,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         long k = Power.logarithm(cofac.getIntegerModul(), mn) + 1L;
         //System.out.println("mn = " + mn + ", k = " +k);
 
-        BigInteger q = cofac.getIntegerModul().power(k); //Power.positivePower(cofac.getIntegerModul(), k);
+        BigInteger q = cofac.getIntegerModul().power(k);
         ModularRingFactory<MOD> muqfac;
         if (ModLongRing.MAX_LONG.compareTo(q.getVal()) > 0) {
             muqfac = (ModularRingFactory) new ModLongRing(q.getVal());

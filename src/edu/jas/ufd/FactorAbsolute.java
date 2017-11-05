@@ -19,7 +19,6 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.Power;
 import edu.jas.structure.RingFactory;
 
 
@@ -451,8 +450,8 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
             GreatestCommonDivisorAbstract<AlgebraicNumber<AlgebraicNumber<C>>> aaengine = GCDFactory
                             .getImplementation(faf.afac);
 
-            List<GenPolynomial<AlgebraicNumber<AlgebraicNumber<C>>>> anumers = aaengine.basePartialFraction(
-                            Aaa, fafact);
+            List<GenPolynomial<AlgebraicNumber<AlgebraicNumber<C>>>> anumers = aaengine
+                            .basePartialFraction(Aaa, fafact);
             System.out.println("algeb part frac = " + anumers);
             GenPolynomial<AlgebraicNumber<AlgebraicNumber<C>>> A0a = anumers.remove(0);
             if (!A0a.isZERO()) {
@@ -702,8 +701,8 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
                         P.ring.nvar, P.ring.tord, P.ring.getVars());
         //System.out.println("pafac = " + pafac);
         // convert to K(alpha)
-        GenPolynomial<AlgebraicNumber<C>> Pa = PolyUtil
-                        .<C> convertToRecAlgebraicCoefficients(depth, pafac, P);
+        GenPolynomial<AlgebraicNumber<C>> Pa = PolyUtil.<C> convertToRecAlgebraicCoefficients(depth, pafac,
+                        P);
         //System.out.println("Pa = " + Pa);
         // factor over K(alpha)
         FactorAbstract<AlgebraicNumber<C>> engine = FactorFactory.<C> getImplementation(afac);
@@ -822,8 +821,8 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
         GenPolynomial<C> t = P.ring.getONE();
         for (Map.Entry<GenPolynomial<C>, Long> me : facs.factors.entrySet()) {
             GenPolynomial<C> f = me.getKey();
-            long e = me.getValue(); //facs.factors.get(f);
-            GenPolynomial<C> g = f.power(e); //Power.<GenPolynomial<C>> positivePower(f, e);
+            long e = me.getValue();
+            GenPolynomial<C> g = f.power(e);
             t = t.multiply(g);
         }
         if (P.equals(t) || P.equals(t.negate())) {
@@ -837,8 +836,8 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
             if (!isAbsoluteFactorization(fs)) {
                 return false;
             }
-            long e = me.getValue(); // facs.afactors.get(fs);
-            GenPolynomial<C> g = fs.poly.power(e); //Power.<GenPolynomial<C>> positivePower(fs.poly, e);
+            long e = me.getValue();
+            GenPolynomial<C> g = fs.poly.power(e);
             t = t.multiply(g);
         }
         boolean b = P.equals(t) || P.equals(t.negate());

@@ -610,7 +610,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
             //System.out.println("mn = " + mn);
             //System.out.println("k = " + k);
 
-            BigInteger qp = Power.positivePower(cofac.getIntegerModul(), k); // == p
+            BigInteger qp = cofac.getIntegerModul().power(k);
             ModularRingFactory<MOD> muqfac;
             if (ModLongRing.MAX_LONG.compareTo(qp.getVal()) > 0) {
                 muqfac = (ModularRingFactory) new ModLongRing(qp.getVal(), true); // nearly a field

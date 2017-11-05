@@ -19,10 +19,6 @@ import org.apache.log4j.Logger;
 import edu.jas.gb.ExtendedGB;
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.Reduction;
-import edu.jas.gb.ReductionSeq;
-import edu.jas.gb.OrderedSyzPairlist;
-import edu.jas.gb.GroebnerBaseSeq;
-import edu.jas.gb.GroebnerBaseSeqIter;
 import edu.jas.gbufd.GBFactory;
 import edu.jas.gbufd.GroebnerBasePartial;
 import edu.jas.gbufd.PolyGBUtil;
@@ -40,7 +36,6 @@ import edu.jas.poly.TermOrder;
 import edu.jas.poly.TermOrderOptimization;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.NotInvertibleException;
-import edu.jas.structure.Power;
 import edu.jas.structure.RingFactory;
 import edu.jas.ufd.FactorAbstract;
 import edu.jas.ufd.GCDFactory;
@@ -1575,7 +1570,8 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
                 //System.out.println("id = " + id + ", i = " + i);
                 GenPolynomial<C> u = id.ideal.constructUnivariate(i);
                 SortedMap<GenPolynomial<C>, Long> facs = engine.baseSquarefreeFactors(u);
-                if (facs == null || facs.size() == 0 || (facs.size() == 1 && facs.get(facs.firstKey()) == 1L)) {
+                if (facs == null || facs.size() == 0
+                                || (facs.size() == 1 && facs.get(facs.firstKey()) == 1L)) {
                     List<GenPolynomial<C>> iup = new ArrayList<GenPolynomial<C>>();
                     iup.addAll(id.upolys);
                     iup.add(u);
@@ -2052,8 +2048,8 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
     /**
      * Normal position index, separate for polynomials with more than 2
-     * variables. See also <a
-     * href="http://krum.rz.uni-mannheim.de/mas/src/masring/DIPDEC0.mi.html"
+     * variables. See also
+     * <a href="http://krum.rz.uni-mannheim.de/mas/src/masring/DIPDEC0.mi.html"
      * >mas.masring.DIPDEC0#DIGISR</a>
      * @return (i,j) for non-normal variables
      */
@@ -2484,8 +2480,8 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
     /**
      * Ideal extension.
      * @param vars list of variables for a polynomial ring for extension
-     * @return ideal G, with coefficients in
-     *         QuotientRing(GenPolynomialRing<C>(vars))
+     * @return ideal G, with coefficients in QuotientRing(GenPolynomialRing
+     *         <C>(vars))
      */
     public IdealWithUniv<Quotient<C>> extension(String... vars) {
         GenPolynomialRing<C> fac = getRing();
@@ -2526,8 +2522,8 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             logger.info("partialGB = " + pgb);
         }
 
-        GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(efac,
-                        rvars.length, fac.tord, rvars);
+        GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(efac, rvars.length,
+                        fac.tord, rvars);
         List<GenPolynomial<C>> plist = pgb.list;
         List<GenPolynomial<GenPolynomial<C>>> rpgb = PolyUtil.<C> recursive(rfac, plist);
         //System.out.println("rfac = " + rfac);
@@ -2599,8 +2595,8 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         // convert other polynomials
         List<GenPolynomial<C>> opols = new ArrayList<GenPolynomial<C>>();
         if (eid.others != null && eid.others.size() > 0) {
-            List<GenPolynomial<GenPolynomial<C>>> orpol = PolyUfdUtil.<C> integralFromQuotientCoefficients(
-                            rfac, eid.others);
+            List<GenPolynomial<GenPolynomial<C>>> orpol = PolyUfdUtil
+                            .<C> integralFromQuotientCoefficients(rfac, eid.others);
             List<GenPolynomial<C>> opol = PolyUtil.<C> distribute(dfac, orpol);
             opols.addAll(opol);
         }
@@ -2610,8 +2606,8 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         for (GenPolynomial<Quotient<C>> p : eid.upolys) {
             GenPolynomial<Quotient<C>> pm = p.extendUnivariate(eideal.getRing(), i++);
             //System.out.println("pm = " + pm + ", p = " + p);
-            GenPolynomial<GenPolynomial<C>> urpol = PolyUfdUtil
-                            .<C> integralFromQuotientCoefficients(rfac, pm);
+            GenPolynomial<GenPolynomial<C>> urpol = PolyUfdUtil.<C> integralFromQuotientCoefficients(rfac,
+                            pm);
             GenPolynomial<C> upol = PolyUtil.<C> distribute(dfac, urpol);
             upols.add(upol);
             //System.out.println("upol = " + upol);
@@ -3175,7 +3171,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
             return dec;
         }
         if (s > 1) {
-            fx = fx.power(s); //Power.<GenPolynomial<C>> positivePower(fx, s);
+            fx = fx.power(s);
         }
         if (debug) {
             logger.info("exponent fx = " + s + ", fx^s = " + fx);

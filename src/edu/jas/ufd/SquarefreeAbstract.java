@@ -15,7 +15,6 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.Power;
 import edu.jas.structure.RingFactory;
 
 
@@ -100,9 +99,9 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
         }
         boolean f = Ps.equals(S);
         //if (!f) {
-            //System.out.println("\nisSquarefree: " + f);
-            //System.out.println("S  = " + S);
-            //System.out.println("P  = " + P);
+        //System.out.println("\nisSquarefree: " + f);
+        //System.out.println("S  = " + S);
+        //System.out.println("P  = " + P);
         //}
         return f;
     }
@@ -308,7 +307,7 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
             GenPolynomial<C> f = me.getKey();
             Long E = me.getValue(); // F.get(f);
             long e = E.longValue();
-            GenPolynomial<C> g = f.power(e); //Power.<GenPolynomial<C>> positivePower(f, e);
+            GenPolynomial<C> g = f.power(e);
             t = t.multiply(g);
         }
         boolean f = P.equals(t) || P.equals(t.negate());
@@ -352,7 +351,7 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
             GenPolynomial<GenPolynomial<C>> f = me.getKey();
             Long E = me.getValue(); // F.get(f);
             long e = E.longValue();
-            GenPolynomial<GenPolynomial<C>> g = f.power(e); //Power.<GenPolynomial<GenPolynomial<C>>> positivePower(f, e);
+            GenPolynomial<GenPolynomial<C>> g = f.power(e);
             t = t.multiply(g);
         }
         boolean f = P.equals(t) || P.equals(t.negate());
@@ -481,7 +480,7 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
         for (Map.Entry<GenPolynomial<C>, Long> me : D.entrySet()) {
             GenPolynomial<C> d = me.getKey();
             long e = me.getValue(); //D.get(d);
-            GenPolynomial<C> f = d.power(e); //Power.<GenPolynomial<C>> positivePower(d, e);
+            GenPolynomial<C> f = d.power(e);
             Dp.add(f);
         }
         List<GenPolynomial<C>> F = engine.basePartialFraction(A, Dp);
@@ -527,7 +526,7 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
         for (Map.Entry<GenPolynomial<C>, Long> me : D.entrySet()) {
             GenPolynomial<C> d = me.getKey();
             long e = me.getValue(); // D.get(d);
-            GenPolynomial<C> f = d.power(e); //Power.<GenPolynomial<C>> positivePower(d, e);
+            GenPolynomial<C> f = d.power(e);
             Dp.add(f);
         }
         List<GenPolynomial<C>> fi = F.get(0);
@@ -636,7 +635,7 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
                     factors.put(cr, rk);
                 }
             }
-
+    
         return factors;
     }
     */

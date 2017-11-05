@@ -22,7 +22,6 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.Monomial;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.Power;
 import edu.jas.structure.RingFactory;
 
 
@@ -232,8 +231,8 @@ public class HenselUtil {
         try {
             GenPolynomial<MOD>[] gst = A.egcd(B);
             if (!gst[0].isONE()) {
-                throw new NoLiftingException("A and B not coprime, gcd = " + gst[0] + ", A = " + A + ", B = "
-                                + B);
+                throw new NoLiftingException(
+                                "A and B not coprime, gcd = " + gst[0] + ", A = " + A + ", B = " + B);
             }
             GenPolynomial<MOD> s = gst[1];
             GenPolynomial<MOD> t = gst[2];
@@ -501,8 +500,8 @@ public class HenselUtil {
         try {
             GenPolynomial<MOD>[] gst = A.egcd(B);
             if (!gst[0].isONE()) {
-                throw new NoLiftingException("A and B not coprime, gcd = " + gst[0] + ", A = " + A + ", B = "
-                                + B);
+                throw new NoLiftingException(
+                                "A and B not coprime, gcd = " + gst[0] + ", A = " + A + ", B = " + B);
             }
             GenPolynomial<MOD> s = gst[1];
             GenPolynomial<MOD> t = gst[2];
@@ -543,8 +542,8 @@ public class HenselUtil {
         try {
             GenPolynomial<MOD>[] gst = A.egcd(B);
             if (!gst[0].isONE()) {
-                throw new NoLiftingException("A and B not coprime, gcd = " + gst[0] + ", A = " + A + ", B = "
-                                + B);
+                throw new NoLiftingException(
+                                "A and B not coprime, gcd = " + gst[0] + ", A = " + A + ", B = " + B);
             }
             GenPolynomial<MOD> s = gst[1];
             GenPolynomial<MOD> t = gst[2];
@@ -973,8 +972,8 @@ public class HenselUtil {
      * @return true if C = A * B mod p**e, else false.
      */
     public static//<MOD extends GcdRingElem<MOD> & Modular>
-    boolean isHenselLift(GenPolynomial<BigInteger> C, BigInteger M, BigInteger p,
-                    GenPolynomial<BigInteger> A, GenPolynomial<BigInteger> B) {
+    boolean isHenselLift(GenPolynomial<BigInteger> C, BigInteger M, BigInteger p, GenPolynomial<BigInteger> A,
+                    GenPolynomial<BigInteger> B) {
         List<GenPolynomial<BigInteger>> G = new ArrayList<GenPolynomial<BigInteger>>(2);
         G.add(A);
         G.add(B);
@@ -1023,8 +1022,8 @@ public class HenselUtil {
         try {
             gst = A.egcd(B);
             if (!gst[0].isONE()) {
-                throw new NoLiftingException("A and B not coprime, gcd = " + gst[0] + ", A = " + A + ", B = "
-                                + B);
+                throw new NoLiftingException(
+                                "A and B not coprime, gcd = " + gst[0] + ", A = " + A + ", B = " + B);
             }
         } catch (ArithmeticException e) {
             throw new NoLiftingException("coefficient error " + e);
@@ -1085,7 +1084,7 @@ public class HenselUtil {
             //System.out.println("Si = " + Si);
             //System.out.println("Ti = " + Ti);
             modul = modul.multiply(p);
-            //System.out.println("modul = " + modul + ", " + p + "^" + k + ", p^k = " + Power.power(new BigInteger(),p,k));
+            //System.out.println("modul = " + modul + ", " + p + "^" + k + ", p^k = " + p.power(k));
         }
         //System.out.println("Si = " + Si + ", Ti = " + Ti);
         // setup ring mod p^i
@@ -1201,8 +1200,8 @@ public class HenselUtil {
                     GenPolynomial<MOD> A, GenPolynomial<MOD> B, GenPolynomial<MOD> C, long k)
                     throws NoLiftingException {
         if (A == null || A.isZERO() || B == null || B.isZERO()) {
-            throw new IllegalArgumentException("A and B must be nonzero, A = " + A + ", B = " + B + ", C = "
-                            + C);
+            throw new IllegalArgumentException(
+                            "A and B must be nonzero, A = " + A + ", B = " + B + ", C = " + C);
         }
         List<GenPolynomial<MOD>> sol = new ArrayList<GenPolynomial<MOD>>();
         GenPolynomialRing<MOD> fac = C.ring;
@@ -1445,7 +1444,8 @@ public class HenselUtil {
      * @return true if A*S1 + B*S2 = C, else false.
      */
     public static <MOD extends GcdRingElem<MOD> & Modular> boolean isDiophantLift(GenPolynomial<MOD> A,
-                    GenPolynomial<MOD> B, GenPolynomial<MOD> S1, GenPolynomial<MOD> S2, GenPolynomial<MOD> C) {
+                    GenPolynomial<MOD> B, GenPolynomial<MOD> S1, GenPolynomial<MOD> S2,
+                    GenPolynomial<MOD> C) {
         GenPolynomialRing<MOD> fac = C.ring;
         GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(), fac);
         GenPolynomial<MOD> a = PolyUtil.<MOD> fromIntegerCoefficients(fac,
@@ -1667,7 +1667,7 @@ public class HenselUtil {
             }
         }
         // setup ring mod p^k
-        modul = p.power(k); //Power.positivePower(p, k);
+        modul = p.power(k);
         if (ModLongRing.MAX_LONG.compareTo(modul.getVal()) > 0) {
             mcfac = (ModularRingFactory) new ModLongRing(modul.getVal());
         } else {
@@ -1854,7 +1854,7 @@ public class HenselUtil {
         Fi = Fii;
 
         // setup ring mod p^k
-        modul = p.power(k); //Power.positivePower(p, k);
+        modul = p.power(k);
         if (ModLongRing.MAX_LONG.compareTo(modul.getVal()) > 0) {
             mcfac = (ModularRingFactory) new ModLongRing(modul.getVal());
         } else {

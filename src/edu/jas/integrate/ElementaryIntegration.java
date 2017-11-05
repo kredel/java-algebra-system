@@ -17,7 +17,6 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.Power;
 import edu.jas.structure.RingFactory;
 import edu.jas.ufd.FactorAbstract;
 import edu.jas.ufd.FactorFactory;

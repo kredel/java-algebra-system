@@ -97,9 +97,9 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>> extends Square
                 return r;
             }
             BigInteger p = new BigInteger(aCoFac.characteristic());
-            BigInteger q = p.power(d-1); //Power.<BigInteger> positivePower(p, d - 1);
+            BigInteger q = p.power(d - 1);
             //System.out.println("p**(d-1) = " + q);
-            r = Power.<C> positivePower(r, q.getVal()); // r.power(q.getVal());
+            r = Power.<C> positivePower(r, q.getVal()); // r = r.power(q.getVal());
             //System.out.println("r**q = " + r);
             return r;
         }
