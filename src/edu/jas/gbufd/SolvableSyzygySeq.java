@@ -509,7 +509,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
         if (a.totalDegree() > 3 || b.totalDegree() > 3) { // how avoid too long running GBs ?
             //if (a.totalDegree() + b.totalDegree() > 6) { 
             // && a.length() < 10 && b.length() < 10
-            logger.warn("skipping simplifier GB computation: degs = " + a.totalDegree() + ", " + b.totalDegree());
+            logger.info("skipping simplifier GB computation: degs = " + a.totalDegree() + ", " + b.totalDegree());
             oc = new GenSolvablePolynomial[] { a, b };
             return oc;
         }

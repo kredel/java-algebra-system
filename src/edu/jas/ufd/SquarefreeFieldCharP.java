@@ -92,7 +92,6 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
                 //rengine = (SquarefreeAbstract) SquarefreeFactory.getImplementation(qCoFac.ring);
             } else {
                 qCoFac = null;
-                //rengine = null; //(SquarefreeAbstract) SquarefreeFactory.getImplementation(oFac);
             }
         }
     }
@@ -122,7 +121,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
         if (pfac.nvar > 1) {
             throw new IllegalArgumentException(this.getClass().getName() + " only for univariate polynomials");
         }
-        // just for the moment:
+        // TODO, just for the moment:
         GenPolynomial<C> s = pfac.getONE();
         SortedMap<GenPolynomial<C>, Long> factors = baseSquarefreeFactors(P);
         logger.info("sqfPart,factors = " + factors);
@@ -253,15 +252,6 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
                 sfactors.put(z, (e * k));
             }
         }
-        //      look, a stupid error:
-        //         if ( !ldbcf.isONE() ) {
-        //             GenPolynomial<C> f1 = sfactors.firstKey();
-        //             long e1 = sfactors.remove(f1);
-        //             System.out.println("gcda sqf c = " + c);
-        //             f1 = f1.multiply(c);
-        //             //System.out.println("gcda sqf f1e = " + f1);
-        //             sfactors.put(f1,e1);
-        //         }
         logger.info("exit char root: T0 = " + T0 + ", T = " + T);
         return sfactors;
     }
@@ -283,7 +273,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
             throw new IllegalArgumentException(this.getClass().getName()
                             + " only for multivariate polynomials");
         }
-        // just for the moment:
+        // TODO, just for the moment:
         GenPolynomial<GenPolynomial<C>> s = pfac.getONE();
 
         SortedMap<GenPolynomial<GenPolynomial<C>>, Long> factors = recursiveUnivariateSquarefreeFactors(P);
@@ -454,7 +444,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
         if (pfac.nvar <= 1) {
             return baseSquarefreePart(P);
         }
-        // just for the moment:
+        // TODO, just for the moment:
         GenPolynomial<C> s = pfac.getONE();
         SortedMap<GenPolynomial<C>, Long> factors = squarefreeFactors(P);
         if (logger.isInfoEnabled()) {
@@ -538,7 +528,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
                     AlgebraicNumber<C> c = me.getKey();
                     if (!c.isONE()) {
                         C cr = (C) (Object) c;
-                        Long rk = me.getValue(); // rfactors.get(c);
+                        Long rk = me.getValue(); 
                         factors.put(cr, rk);
                     }
                 }
@@ -553,7 +543,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
                 Quotient<C> c = me.getKey();
                 if (!c.isONE()) {
                     C cr = (C) (Object) c;
-                    Long rk = me.getValue(); //rfactors.get(c);
+                    Long rk = me.getValue(); 
                     factors.put(cr, rk);
                 }
             }
@@ -609,11 +599,11 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
         long p = P.ring.characteristic().longValue();
         for (Map.Entry<GenPolynomial<C>, Long> me : F.entrySet()) {
             GenPolynomial<C> f = me.getKey();
-            Long E = me.getValue(); //F.get(f);
+            Long E = me.getValue(); 
             long e = E.longValue();
-            GenPolynomial<C> g = f.power(e); //Power.<GenPolynomial<C>> positivePower(f, e);
+            GenPolynomial<C> g = f.power(e); 
             if (!f.isConstant()) {
-                g = g.power(p); //Power.<GenPolynomial<C>> positivePower(g, p);
+                g = g.power(p); 
             }
             t = t.multiply(g);
         }
@@ -654,11 +644,11 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
         long p = P.ring.characteristic().longValue();
         for (Map.Entry<GenPolynomial<GenPolynomial<C>>, Long> me : F.entrySet()) {
             GenPolynomial<GenPolynomial<C>> f = me.getKey();
-            Long E = me.getValue(); //F.get(f);
+            Long E = me.getValue(); 
             long e = E.longValue();
-            GenPolynomial<GenPolynomial<C>> g = f.power(e); //Power.<GenPolynomial<GenPolynomial<C>>> positivePower(f, e);
+            GenPolynomial<GenPolynomial<C>> g = f.power(e); 
             if (!f.isConstant()) {
-                g = g.power(p); //Power.<GenPolynomial<GenPolynomial<C>>> positivePower(g, p);
+                g = g.power(p); 
             }
             t = t.multiply(g);
         }
@@ -695,7 +685,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
             return true;
         }
         long p = P.ring.characteristic().longValue();
-        GenPolynomial<GenPolynomial<C>> t = r.power(p); //Power.<GenPolynomial<GenPolynomial<C>>> positivePower(r, p);
+        GenPolynomial<GenPolynomial<C>> t = r.power(p); 
 
         boolean f = P.equals(t) || P.equals(t.negate());
         if (!f) {

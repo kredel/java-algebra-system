@@ -502,7 +502,6 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
     public boolean isIntegral(LogIntegral<C> rl) {
         QuotientRing<C> qr = new QuotientRing<C>(rl.den.ring);
         Quotient<C> r = new Quotient<C>(qr, rl.num, rl.den);
-
         Quotient<C> i = qr.getZERO();
         int j = 0;
         for (GenPolynomial<C> d : rl.cdenom) {
@@ -521,7 +520,6 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
         GenPolynomial<AlgebraicNumber<C>> aqn = PolyUtil.<C> convertToAlgebraicCoefficients(aqr.ring, r.num);
         GenPolynomial<AlgebraicNumber<C>> aqd = PolyUtil.<C> convertToAlgebraicCoefficients(aqr.ring, r.den);
         Quotient<AlgebraicNumber<C>> ar = new Quotient<AlgebraicNumber<C>>(aqr, aqn, aqd);
-
         j = 0;
         for (GenPolynomial<AlgebraicNumber<C>> d : rl.adenom) {
             GenPolynomial<AlgebraicNumber<C>> dp = PolyUtil.<AlgebraicNumber<C>> baseDeriviative(d);

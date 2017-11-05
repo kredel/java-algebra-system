@@ -461,8 +461,8 @@ class DHTBroadcaster<K> extends Thread /*implements Runnable*/ {
                 e.printStackTrace();
             }
         }
-        if (logger.isWarnEnabled()) {
-            logger.warn("ending " + this);
+        if (logger.isInfoEnabled()) {
+            logger.info("ending " + this);
         }
         synchronized (bcaster) {
             bcaster.remove(this);

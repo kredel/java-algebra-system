@@ -92,7 +92,7 @@ public class GreatestCommonDivisorSyzygy<C extends GcdRingElem<C>> extends Great
         A.add(P);
         A.add(S);
         SolvableGroebnerBaseAbstract<C> sbb = new SolvableGroebnerBaseSeq<C>();
-        logger.warn("left syzGcd computing GB: " + A);
+        logger.info("left syzGcd computing GB: " + A);
         List<GenSolvablePolynomial<C>> G = sbb.rightGB(A); //not: leftGB, not: sbb.twosidedGB(A);
         if (debug) {
             logger.info("G = " + G);
@@ -100,7 +100,7 @@ public class GreatestCommonDivisorSyzygy<C extends GcdRingElem<C>> extends Great
         if (G.size() == 1) {
             return G.get(0);
         }
-        logger.warn("gcd not determined, set to 1: " + G); // + ", A = " + A);
+        logger.info("gcd not determined, set to 1: " + G); // + ", A = " + A);
         return P.ring.getONE();
     }
 
@@ -129,7 +129,7 @@ public class GreatestCommonDivisorSyzygy<C extends GcdRingElem<C>> extends Great
         A.add(P);
         A.add(S);
         SolvableGroebnerBaseAbstract<C> sbb = new SolvableGroebnerBaseSeq<C>();
-        logger.warn("left syzGcd computing GB: " + A);
+        logger.info("left syzGcd computing GB: " + A);
         List<GenSolvablePolynomial<C>> G = sbb.leftGB(A); //not: sbb.twosidedGB(A);
         if (debug) {
             logger.info("G = " + G);
@@ -137,7 +137,7 @@ public class GreatestCommonDivisorSyzygy<C extends GcdRingElem<C>> extends Great
         if (G.size() == 1) {
             return G.get(0);
         }
-        logger.warn("gcd not determined, set to 1: " + G); // + ", A = " + A);
+        logger.info("gcd not determined, set to 1: " + G); // + ", A = " + A);
         return P.ring.getONE();
     }
 
@@ -172,7 +172,7 @@ public class GreatestCommonDivisorSyzygy<C extends GcdRingElem<C>> extends Great
         A.add(P);
         A.add(S);
         SolvableGroebnerBaseAbstract<GenPolynomial<C>> sbb = new SolvableGroebnerBaseSeq<GenPolynomial<C>>();
-        logger.warn("left syzGcd computing GB: " + A);
+        logger.info("left syzGcd computing GB: " + A);
         // will not work, not field
         List<GenSolvablePolynomial<GenPolynomial<C>>> G = sbb.rightGB(A); //not: leftGB, not: sbb.twosidedGB(A);
         if (debug) {
@@ -181,7 +181,7 @@ public class GreatestCommonDivisorSyzygy<C extends GcdRingElem<C>> extends Great
         if (G.size() == 1) {
             return G.get(0);
         }
-        logger.warn("gcd not determined, set to 1: " + G); // + ", A = " + A);
+        logger.info("gcd not determined, set to 1: " + G); // + ", A = " + A);
         return P.ring.getONE();
     }
 
@@ -216,7 +216,7 @@ public class GreatestCommonDivisorSyzygy<C extends GcdRingElem<C>> extends Great
         A.add(P);
         A.add(S);
         SolvableGroebnerBaseAbstract<GenPolynomial<C>> sbb = new SolvableGroebnerBaseSeq<GenPolynomial<C>>();
-        logger.warn("right syzGcd computing GB: " + A);
+        logger.info("right syzGcd computing GB: " + A);
         // will not work, not field
         List<GenSolvablePolynomial<GenPolynomial<C>>> G = sbb.leftGB(A); //not: sbb.twosidedGB(A);
         if (debug) {
@@ -225,7 +225,7 @@ public class GreatestCommonDivisorSyzygy<C extends GcdRingElem<C>> extends Great
         if (G.size() == 1) {
             return G.get(0);
         }
-        logger.warn("gcd not determined, set to 1: " + G); // + ", A = " + A);
+        logger.info("gcd not determined, set to 1: " + G); // + ", A = " + A);
         return P.ring.getONE();
     }
 

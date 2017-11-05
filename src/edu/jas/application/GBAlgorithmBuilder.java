@@ -308,7 +308,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
     @SuppressWarnings({"cast", "unchecked"})
     public GBAlgorithmBuilder<C> domainAlgorithm(GBFactory.Algo a) {
         if (strategy != null) {
-            logger.warn("strategie " + strategy + " ignored");
+            logger.warn("strategy " + strategy + " ignored for algorithm " + a);
         }
         if (((Object) ring.coFac) instanceof BigInteger) {
             BigInteger cf = (BigInteger) (Object) ring.coFac;
@@ -458,7 +458,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
             bb = new GroebnerBaseSeqIter<C>(strategy); 
             // if (algo instanceof GBProxy) ... assemble parallel todo
             if (algo != null) {
-                logger.warn("algo " + algo + " ignored for " + bb);
+                logger.warn("algorithm " + algo + " ignored for " + bb);
             }
             return new GBAlgorithmBuilder<C>(ring, bb, strategy);
         }
@@ -478,7 +478,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
             bb = new GroebnerBaseF5zSigSeqIter<C>(); 
             // if (algo instanceof GBProxy) ... assemble parallel todo
             if (algo != null) {
-                logger.warn("algo " + algo + " ignored for " + bb);
+                logger.warn("algorithm " + algo + " ignored for " + bb);
             }
             if (strategy != null) {
                 logger.warn("strategy " + strategy + " ignored for " + bb);
@@ -501,7 +501,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
             bb = new GroebnerBaseGGVSigSeqIter<C>(); 
             // if (algo instanceof GBProxy) ... assemble parallel todo
             if (algo != null) {
-                logger.warn("algo " + algo + " ignored for " + bb);
+                logger.warn("algorithm " + algo + " ignored for " + bb);
             }
             if (strategy != null) {
                 logger.warn("strategy " + strategy + " ignored for " + bb);
@@ -524,7 +524,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
             bb = new GroebnerBaseArriSigSeqIter<C>(); 
             // if (algo instanceof GBProxy) ... assemble parallel todo
             if (algo != null) {
-                logger.warn("algo " + algo + " ignored for " + bb);
+                logger.warn("algorithm " + algo + " ignored for " + bb);
             }
             if (strategy != null) {
                 logger.warn("strategy " + strategy + " ignored for " + bb);
