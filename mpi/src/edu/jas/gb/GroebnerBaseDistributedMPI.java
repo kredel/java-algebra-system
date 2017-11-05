@@ -12,9 +12,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.Semaphore;
 
-import mpi.Comm;
-import mpi.MPIException;
-
 import org.apache.log4j.Logger;
 
 import edu.jas.kern.MPIEngine;
@@ -25,6 +22,9 @@ import edu.jas.util.DistHashTableMPI;
 import edu.jas.util.MPIChannel;
 import edu.jas.util.Terminator;
 import edu.jas.util.ThreadPool;
+
+import mpi.Comm;
+import mpi.MPIException;
 
 
 /**
@@ -122,8 +122,8 @@ public class GroebnerBaseDistributedMPI<C extends RingElem<C>> extends GroebnerB
             throw new IllegalArgumentException("Minimal 2 MPI processes required, not " + size);
         }
         if (threads != size || pool.getNumber() != size) {
-            throw new IllegalArgumentException("threads != size: " + threads + " != " + size + ", #pool "
-                            + pool.getNumber());
+            throw new IllegalArgumentException(
+                            "threads != size: " + threads + " != " + size + ", #pool " + pool.getNumber());
         }
         this.threads = threads;
         this.pool = pool;
@@ -184,8 +184,8 @@ public class GroebnerBaseDistributedMPI<C extends RingElem<C>> extends GroebnerB
      * @param F polynomial list.
      * @return GB(F) a Groebner base of F or null, if a IOException occurs.
      */
-    public List<GenPolynomial<C>> GBmaster(int modv, List<GenPolynomial<C>> F) throws MPIException,
-                    IOException {
+    public List<GenPolynomial<C>> GBmaster(int modv, List<GenPolynomial<C>> F)
+                    throws MPIException, IOException {
         List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
         GenPolynomial<C> p;
         PairList<C> pairlist = null;
@@ -743,9 +743,8 @@ class MPIReducerClient<C extends RingElem<C>> implements Runnable {
                     pi = theList.getWait(pix);
                     pj = theList.getWait(pjx);
                     ps = theList.getWait(psx);
-                    //logger.info("pix = " + pix + ", pjx = " +pjx + ", psx = " +psx);
+                    //logger.info("pix = " + pix + ", pjx = " + pjx + ", psx = " + psx);
                 }
-
                 if (pi != null && pj != null) {
                     S = red.SPolynomial(pi, pj);
                     //System.out.println("S   = " + S);
@@ -766,6 +765,8 @@ class MPIReducerClient<C extends RingElem<C>> implements Runnable {
                             }
                         }
                     }
+                } else {
+                    logger.info("pi = " + pi + ", pj = " + pj + ", ps = " + ps);
                 }
             }
 

@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.Semaphore;
 
-import mpi.Comm;
-
 import org.apache.log4j.Logger;
 
 import edu.jas.kern.MPJEngine;
@@ -26,6 +24,8 @@ import edu.jas.util.DistHashTableMPJ;
 import edu.jas.util.MPJChannel;
 import edu.jas.util.Terminator;
 import edu.jas.util.ThreadPool;
+
+import mpi.Comm;
 
 
 /**
@@ -118,8 +118,8 @@ public class GroebnerBaseDistributedMPJ<C extends RingElem<C>> extends GroebnerB
             throw new IllegalArgumentException("Minimal 2 MPJ processes required, not " + size);
         }
         if (threads != size || pool.getNumber() != size) {
-            throw new IllegalArgumentException("threads != size: " + threads + " != " + size + ", #pool "
-                            + pool.getNumber());
+            throw new IllegalArgumentException(
+                            "threads != size: " + threads + " != " + size + ", #pool " + pool.getNumber());
         }
         this.threads = threads;
         this.pool = pool;
@@ -720,7 +720,6 @@ class MPJReducerClient<C extends RingElem<C>> implements Runnable {
                     pi = theList.getWait(pix);
                     pj = theList.getWait(pjx);
                     ps = theList.getWait(psx);
-                    //logger.info("pix = " + pix + ", pjx = " +pjx + ", psx = " +psx);
                 }
 
                 if (pi != null && pj != null) {
@@ -743,6 +742,8 @@ class MPJReducerClient<C extends RingElem<C>> implements Runnable {
                             }
                         }
                     }
+                } else {
+                    logger.info("pi = " + pi + ", pj = " + pj + ", ps = " + ps);
                 }
             }
 
