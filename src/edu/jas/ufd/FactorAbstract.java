@@ -194,6 +194,9 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
     public List<GenPolynomial<C>> factorsSquarefree(GenPolynomial<C> P) {
         if (P != null && P.ring.nvar > 1) {
            logger.warn("no multivariate factorization for " + P.ring.toScript() + ": falling back to Kronecker algorithm");
+           //if (P.ring.characteristic().signum() == 0) {
+           //    throw new IllegalArgumentException(this.getClass().getName() + " P.ring.characteristic().signum() == 0");
+           //}
         }
         //if (logger.isInfoEnabled()) {
         //    logger.info(StringUtil.selectStackTrace("edu\\.jas.*"));
@@ -515,7 +518,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             return factors;
         }
         C c;
-        if (pfac.coFac.isField()) { // pfac.characteristic().signum() > 0
+        if (pfac.coFac.isField()) { 
             c = P.leadingBaseCoefficient();
         } else {
             c = engine.baseContent(P);
@@ -531,7 +534,28 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             P = P.divide(c); // make base primitive or base monic
         }
         if (logger.isInfoEnabled()) {
-            logger.info("squarefree mfacs P = " + P);
+            logger.info("base primitive part P = " + P);
+        }
+        GenPolynomial<C>[] cpp = engine.contentPrimitivePart(P);
+        GenPolynomial<C> pc = cpp[0];
+        if (!pc.isONE()) {
+            SortedMap<GenPolynomial<C>, Long> rec = factors(pc); 
+            for (Map.Entry<GenPolynomial<C>, Long> me : rec.entrySet()) {
+                GenPolynomial<C> g = me.getKey();
+                Long d = me.getValue();
+                GenPolynomial<C> pn = g.extend(pfac,0,0L);
+                factors.put(pn,d);
+            }
+            if (logger.isInfoEnabled()) {
+                logger.info("content factors = " + factors);
+            }
+        }
+        P = cpp[1];
+        if (logger.isInfoEnabled()) {
+            logger.info("primitive part P = " + P);
+        }
+        if (P.isONE()) {
+            return factors;
         }
         SortedMap<GenPolynomial<C>, Long> facs = sengine.squarefreeFactors(P);
         if (facs == null || facs.size() == 0) {

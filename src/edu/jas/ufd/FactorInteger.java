@@ -739,7 +739,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             }
         }
         if (facs == null) {
-            logger.info("factorsSquarefreeHensel not applicable or failed, reverting to Kronecker for: " + P);
+            logger.warn("factorsSquarefreeHensel not applicable or failed, reverting to Kronecker for: " + P);
             facs = super.factorsSquarefree(P);
         }
         List<GenPolynomial<BigInteger>> iopt = TermOrderOptimization.<BigInteger> permutation(iperm, pfac,
