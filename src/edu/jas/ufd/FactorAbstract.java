@@ -539,7 +539,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         GenPolynomial<C>[] cpp = engine.contentPrimitivePart(P);
         GenPolynomial<C> pc = cpp[0];
         if (!pc.isONE()) {
-            SortedMap<GenPolynomial<C>, Long> rec = factors(pc); 
+            SortedMap<GenPolynomial<C>, Long> rec = factors(pc); // recursion
             for (Map.Entry<GenPolynomial<C>, Long> me : rec.entrySet()) {
                 GenPolynomial<C> g = me.getKey();
                 Long d = me.getValue();

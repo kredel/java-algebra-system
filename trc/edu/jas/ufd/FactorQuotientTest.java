@@ -114,6 +114,8 @@ public class FactorQuotientTest extends TestCase {
 
         GenPolynomial<Quotient<BigRational>> a = pfac.random(kl, ll, el, q); // will be irreducible most times
         //System.out.println("a      = " + a);
+        a = a.multiply(a.sum(pfac.getONE()));
+        //System.out.println("a      = " + a);
 
         FactorAbstract<Quotient<BigRational>> engine = FactorFactory.getImplementation(efac);
         //System.out.println("engine = " + engine);

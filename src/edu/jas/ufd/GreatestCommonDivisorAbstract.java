@@ -306,9 +306,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
                             + " use baseContent for univariate polynomials");
 
         }
-        GenPolynomialRing<C> cfac = pfac.contract(1);
-        GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(cfac, 1);
-
+        GenPolynomialRing<GenPolynomial<C>> rfac = pfac.recursive(1);
         GenPolynomial<GenPolynomial<C>> Pr = PolyUtil.<C> recursive(rfac, P);
         GenPolynomial<C> D = recursiveContent(Pr);
         return D;
@@ -321,24 +319,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
      * @return pp(P).
      */
     public GenPolynomial<C> primitivePart(GenPolynomial<C> P) {
-        if (P == null) {
-            throw new IllegalArgumentException(this.getClass().getName() + " P != null");
-        }
-        if (P.isZERO()) {
-            return P;
-        }
-        GenPolynomialRing<C> pfac = P.ring;
-        if (pfac.nvar <= 1) {
-            return basePrimitivePart(P);
-        }
-        GenPolynomialRing<C> cfac = pfac.contract(1);
-        GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(cfac, 1);
-
-        GenPolynomial<GenPolynomial<C>> Pr = PolyUtil.<C> recursive(rfac, P);
-        GenPolynomial<GenPolynomial<C>> PP = recursivePrimitivePart(Pr);
-
-        GenPolynomial<C> D = PolyUtil.<C> distribute(pfac, PP);
-        return D;
+        return contentPrimitivePart(P)[1];
     }
 
 
@@ -438,6 +419,8 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             GenPolynomial<C> T = baseGcd(P, S);
             return T;
         }
+        GenPolynomialRing<GenPolynomial<C>> rfac = pfac.recursive(1);
+        /*
         GenPolynomialRing<C> cfac = pfac.contract(1);
         GenPolynomialRing<GenPolynomial<C>> rfac;
         if (pfac.getVars() != null && pfac.getVars().length > 0) {
@@ -446,6 +429,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         } else {
             rfac = new GenPolynomialRing<GenPolynomial<C>>(cfac, 1);
         }
+        */
         GenPolynomial<GenPolynomial<C>> Pr = PolyUtil.<C> recursive(rfac, P);
         GenPolynomial<GenPolynomial<C>> Sr = PolyUtil.<C> recursive(rfac, S);
         GenPolynomial<GenPolynomial<C>> Dr = recursiveUnivariateGcd(Pr, Sr);
@@ -571,9 +555,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         if (pfac.nvar <= 1) {
             return baseResultant(P, S);
         }
-        GenPolynomialRing<C> cfac = pfac.contract(1);
-        GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(cfac, 1);
-
+        GenPolynomialRing<GenPolynomial<C>> rfac = pfac.recursive(1);
         GenPolynomial<GenPolynomial<C>> Pr = PolyUtil.<C> recursive(rfac, P);
         GenPolynomial<GenPolynomial<C>> Sr = PolyUtil.<C> recursive(rfac, S);
 
