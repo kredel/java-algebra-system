@@ -697,15 +697,18 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         if (pfac.nvar <= 1) {
             return baseFactorsSquarefree(P);
         }
-        List<GenPolynomial<BigInteger>> topt = new ArrayList<GenPolynomial<BigInteger>>(1);
-        topt.add(P);
-        OptimizedPolynomialList<BigInteger> opt = TermOrderOptimization.<BigInteger> optimizeTermOrder(pfac,
-                        topt);
-        P = opt.list.get(0);
-        logger.info("optimized polynomial: " + P);
-        List<Integer> iperm = TermOrderOptimization.inversePermutation(opt.perm);
-        logger.info("optimize perm: " + opt.perm + ", de-optimize perm: " + iperm);
-
+        OptimizedPolynomialList<BigInteger> opt = null;
+        List<Integer> iperm = null;
+        final boolean USE_OPT = true;
+        if (USE_OPT) {
+            List<GenPolynomial<BigInteger>> topt = new ArrayList<GenPolynomial<BigInteger>>(1);
+            topt.add(P);
+            opt = TermOrderOptimization.<BigInteger> optimizeTermOrder(pfac,topt);
+            P = opt.list.get(0);
+            logger.info("optimized polynomial: " + P);
+            iperm = TermOrderOptimization.inversePermutation(opt.perm);
+            logger.warn("optimized ring: " + opt.ring + ", original ring: " + pfac);
+        }
         ExpVector degv = P.degreeVector();
         int[] donv = degv.dependencyOnVariables();
         List<GenPolynomial<BigInteger>> facs = null;
@@ -714,7 +717,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 logger.info("try factorsSquarefreeHensel: " + P);
                 facs = factorsSquarefreeHensel(P);
             } catch (Exception e) {
-                logger.warn("exception " + e);
+                logger.info("exception " + e);
                 //e.printStackTrace();
             }
         } else { // not all variables appear, remove unused variables, hack for Hensel, TODO check
@@ -734,7 +737,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 //System.out.println("fs = " + fs);
                 facs = fs;
             } catch (Exception e) {
-                logger.warn("exception " + e);
+                logger.info("exception " + e);
                 //e.printStackTrace();
             }
         }
@@ -742,10 +745,11 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             logger.warn("factorsSquarefreeHensel not applicable or failed, reverting to Kronecker for: " + P);
             facs = super.factorsSquarefree(P);
         }
-        List<GenPolynomial<BigInteger>> iopt = TermOrderOptimization.<BigInteger> permutation(iperm, pfac,
-                        facs);
-        logger.info("de-optimized polynomials: " + iopt);
-        facs = normalizeFactorization(iopt);
+        if (USE_OPT) {
+            facs = TermOrderOptimization.<BigInteger> permutation(iperm, pfac, facs);
+            logger.info("de-optimized polynomials: " + facs);
+        }
+        facs = normalizeFactorization(facs);
         return facs;
     }
 
@@ -847,10 +851,10 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         boolean notLucky = true;
         while (notLucky) { // for Wang's test
             if (Math.abs(evStart) > 371L) {
-                logger.warn("no lucky evaluation point for: P = " + P + ", lprr = " + lprr + ", lfacs = "
+                logger.warn("no evaluation point for: P = " + P + ", lprr = " + lprr + ", lfacs = "
                                 + lfacs);
                 throw new RuntimeException(
-                                "no lucky evaluation point found after " + Math.abs(evStart) + " iterations");
+                                "no evaluation point found after " + Math.abs(evStart) + " iterations");
             }
             if (Math.abs(evStart) % 100L <= 3L) {
                 ran = ran * (Math.PI - 2.14);
@@ -894,6 +898,8 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                             //if ( isNearlySquarefree(pep) ) {
                             //System.out.println("squarefeee(pep)"); // + pep);
                             doIt = false; //break;
+                        } else {
+                            logger.info("pep not squarefree ");
                         }
                     }
                     if (vi > 0L) {
@@ -910,7 +916,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 }
                 //}
                 int jj = (int) Math.round(ran + 0.52 * Math.random()); // j, random increment
-                //jj = 1; // ...4 test   
+                //jj = 0; // ...4 test   
                 //System.out.println("minimal jj = " + jj + ", vi " + vi);
                 if (vi > 0L) {
                     Evs.set(j, vi + jj); // record last tested value plus increment
