@@ -37,9 +37,7 @@
   <property name="l4j.level" value="3" />
   <property name="l4j.exact" value="true" />
 
-  <!--property name="cp"       value="${log4j}:${junit}:${tnj}:." /-->
   <property name="cp"        value="${log4j}:${junit}:." />
-  <!--property name="doccp"    value="${log4j}:${junit}:${tnj}" /-->
   <property name="doccp"     value="${log4j}:${junit}" />
 
   <property name="dist.dir"  value="target" />
@@ -71,9 +69,9 @@
   <mkdir dir="${test}"  />
   <mkdir dir="doc"  />
   <mkdir dir="${tmpdist}"  />
-  <exec executable="svnlook" outputproperty="svnrev" >
+  <!--exec executable="svnlook" outputproperty="svnrev" >
    <arg line="youngest /home/SUBVERSION/jas"/>
-  </exec>
+  </exec-->
   <property name="version" value="2.6.${svnrev}" />
   <!--echo message="artifact version = ${artifactId}-${version}"  /-->
 </target>
@@ -117,9 +115,6 @@
      <src path="${src}" />
      <src path="${testsrc}" />
   </javac>
-<!--     listfiles="true"
-         includes="**/*.java" 
--->
 </target>
 
 <target name="recomp5" depends="vorher,distclean" >
