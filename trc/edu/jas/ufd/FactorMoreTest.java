@@ -148,7 +148,7 @@ public class FactorMoreTest extends TestCase {
                 for (Long e : sm.values()) {
                     sf += e;
                 }
-                assertTrue("#facs < " + facs, sf >= facs);
+                assertTrue("#facs < " + facs + ", sm = " + sm + ", c*b: " + c + " * " + b, sf >= facs);
             }
 
             boolean tt = fac.isRecursiveFactorization(a, sm);
@@ -217,7 +217,7 @@ public class FactorMoreTest extends TestCase {
                 for (Long e : sm.values()) {
                     sf += e;
                 }
-                assertTrue("#facs < " + facs + ", sm = " + sm, sf >= facs);
+                assertTrue("#facs < " + facs + ", sm = " + sm + ", c*b: " + c + " * " + b, sf >= facs);
             }
 
             boolean tt = fac.isRecursiveFactorization(a, sm);
@@ -285,7 +285,7 @@ public class FactorMoreTest extends TestCase {
                 for (Long e : sm.values()) {
                     sf += e;
                 }
-                assertTrue("#facs < " + facs, sf >= facs);
+                assertTrue("#facs < " + facs + ", sm = " + sm + ", c*b: " + c + " * " + b, sf >= facs);
             }
 
             boolean tt = fac.isFactorization(a, sm);
@@ -353,7 +353,7 @@ public class FactorMoreTest extends TestCase {
                 for (Long e : sm.values()) {
                     sf += e;
                 }
-                assertTrue("#facs < " + facs, sf >= facs);
+                assertTrue("#facs < " + facs + ", sm = " + sm + ", c*b: " + c + " * " + b, sf >= facs);
             }
 
             boolean tt = fac.isFactorization(a, sm);

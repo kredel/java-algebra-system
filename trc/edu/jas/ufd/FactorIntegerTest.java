@@ -435,7 +435,8 @@ public class FactorIntegerTest extends TestCase {
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
 
-        List<GenPolynomial<BigInteger>> sm = fac.factorsSquarefreeHensel(a);
+        //List<GenPolynomial<BigInteger>> sm = fac.factorsSquarefreeHensel(a);
+        List<GenPolynomial<BigInteger>> sm = fac.factorsSquarefree(a);
         //System.out.println("sm = " + sm);
         boolean t = fac.isFactorization(a, sm);
         //System.out.println("t        = " + t);
@@ -464,7 +465,8 @@ public class FactorIntegerTest extends TestCase {
         //System.out.println("b = " + b);
         //System.out.println("c = " + c);
 
-        List<GenPolynomial<BigInteger>> sm = fac.factorsSquarefreeHensel(a);
+        //List<GenPolynomial<BigInteger>> sm = fac.factorsSquarefreeHensel(a);
+        List<GenPolynomial<BigInteger>> sm = fac.factorsSquarefree(a);
         //System.out.println("sm = " + sm);
         boolean t = fac.isFactorization(a, sm);
         //System.out.println("t        = " + t);
@@ -494,7 +496,8 @@ public class FactorIntegerTest extends TestCase {
         //System.out.println("b = " + b);
         //System.out.println("c = " + c);
 
-        List<GenPolynomial<BigInteger>> sm = fac.factorsSquarefreeHensel(a);
+        //List<GenPolynomial<BigInteger>> sm = fac.factorsSquarefreeHensel(a);
+        List<GenPolynomial<BigInteger>> sm = fac.factorsSquarefree(a);
         //System.out.println("sm = " + sm);
         boolean t = fac.isFactorization(a, sm);
         //System.out.println("t        = " + t);
@@ -529,7 +532,8 @@ public class FactorIntegerTest extends TestCase {
         //System.out.println("e = " + e);
 
         //List<GenPolynomial<BigInteger>> sm = fac.factorsRadical(a); // will check squarefree 
-        List<GenPolynomial<BigInteger>> sm = fac.factorsSquarefreeHensel(a);
+        //List<GenPolynomial<BigInteger>> sm = fac.factorsSquarefreeHensel(a);
+        List<GenPolynomial<BigInteger>> sm = fac.factorsSquarefree(a);
         //System.out.println("sm = " + sm);
         boolean t = fac.isFactorization(a, sm);
         //System.out.println("t        = " + t);
@@ -560,7 +564,8 @@ public class FactorIntegerTest extends TestCase {
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
 
-        List<GenPolynomial<BigInteger>> sm = fac.factorsSquarefreeHensel(a);
+        //List<GenPolynomial<BigInteger>> sm = fac.factorsSquarefreeHensel(a);
+        List<GenPolynomial<BigInteger>> sm = fac.factorsSquarefree(a);
         //System.out.println("sm = " + sm);
         boolean t = fac.isFactorization(a, sm);
         //System.out.println("t        = " + t);
@@ -597,7 +602,8 @@ public class FactorIntegerTest extends TestCase {
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
 
-        List<GenPolynomial<BigInteger>> sm = fac.factorsSquarefreeHensel(a);
+        //List<GenPolynomial<BigInteger>> sm = fac.factorsSquarefreeHensel(a);
+        List<GenPolynomial<BigInteger>> sm = fac.factorsSquarefree(a);
         //System.out.println("sm = " + sm);
         boolean t = fac.isFactorization(a, sm);
         //System.out.println("t        = " + t);
