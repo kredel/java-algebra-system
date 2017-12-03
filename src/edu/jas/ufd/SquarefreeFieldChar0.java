@@ -114,8 +114,9 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
         d = d.monic();
         //System.out.println("d = " + d);
         GenPolynomial<C> g = engine.baseGcd(pp, d);
-        g = g.monic();
-        return g.isONE();
+        //g = g.monic();
+        //return g.isONE();
+        return g.degree(0) == 0;
     }
 
 
@@ -190,15 +191,6 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
                 sfactors.put(z, k);
             }
         }
-        //      look, a stupid error:
-        //         if ( pfac.coFac.isField() && !ldbcf.isONE() ) {
-        //             GenPolynomial<C> f1 = sfactors.firstKey();
-        //             long e1 = sfactors.remove(f1);
-        //             System.out.println("gcda sqf c = " + c);
-        //             f1 = f1.multiply(c);
-        //             //System.out.println("gcda sqf f1e = " + f1);
-        //             sfactors.put(f1,e1);
-        //         }
         return normalizeFactorization(sfactors);
     }
 
@@ -258,27 +250,9 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
         GenPolynomialRing<GenPolynomial<C>> pfac = P.ring;
         if (pfac.nvar > 1) {
             throw new IllegalArgumentException(this.getClass().getName()
-                            + " only for multivariate polynomials");
+                            + " only for univariate recursive polynomials");
         }
-        // squarefree content
         GenPolynomial<GenPolynomial<C>> pp = P;
-        GenPolynomial<C> Pc = engine.recursiveContent(P);
-        if (logger.isInfoEnabled()) {
-            logger.info("recursiveContent = " + Pc);
-        }
-        if (!isSquarefree(Pc)) {
-            return false;
-        }
-        Pc = Pc.monic();
-        if (!Pc.isONE()) {
-            pp = PolyUtil.<C> coefficientPseudoDivide(pp, Pc);
-            //System.out.println("pp,sqp = " + pp);
-        }
-        if (pp.leadingExpVector().getVal(0) <= 1) {
-            //System.out.println("pp = " + pp);
-            //System.out.println("Pc = " + Pc);
-            return true;
-        }
         GenPolynomial<GenPolynomial<C>> d = PolyUtil.<C> recursiveDeriviative(pp);
         //System.out.println("d = " + d);
         GenPolynomial<GenPolynomial<C>> g = engine.recursiveUnivariateGcd(pp, d);
@@ -286,8 +260,9 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
             logger.info("gcd = " + g);
         }
         //System.out.println("g,rec = " + g);
-        g = PolyUtil.<C> monic(g);
-        return g.isONE();
+        //g = PolyUtil.<C> monic(g);
+        //return g.isONE();
+        return g.degree(0) == 0;
     }
 
 
