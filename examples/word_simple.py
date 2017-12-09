@@ -63,7 +63,7 @@ print "p = " + str(p);
 print;
 
 pp = p**5;
-print "pp = " + str(len(pp));
+print "#pp = " + str(len(pp));
 print "p == pp: " + str(p == pp);
 print "pp == pp: " + str(pp == pp);
 print "pp-pp == 0: " + str(pp-pp == 0);

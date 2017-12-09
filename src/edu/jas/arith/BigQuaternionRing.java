@@ -14,6 +14,7 @@ import java.util.Random;
 import org.apache.log4j.Logger;
 
 import edu.jas.kern.StringUtil;
+import edu.jas.kern.Scripting;
 import edu.jas.structure.RingFactory;
 
 
@@ -234,9 +235,15 @@ public final class BigQuaternionRing implements RingFactory<BigQuaternion> {
      */
     @Override
     public String toScript() {
-        // Python case
         StringBuffer s = new StringBuffer("BigQuaternionRing(");
-        s.append(integral);
+        switch (Scripting.getLang()) {
+        case Ruby:
+            s.append((integral ? ",true" : ",false"));
+            break;
+        case Python:
+        default:
+            s.append((integral ? ",True" : ",False"));
+        }
         s.append(")");
         return s.toString();
     }
