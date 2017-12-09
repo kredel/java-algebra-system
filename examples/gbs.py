@@ -66,7 +66,7 @@ N = rg.lift(p);
 print "p = %s, N = %s " % (p,[ str(a) for a in N ]);
 print;
 
-pp = sum([ ci * RingElem(ni) for ci, ni in zip( N, rg.list ) ])
+pp = sum([ ci * RingElem(ni) for ci, ni in zip( N, rg.pset.list ) ])
 print "N * rg == p:", pp == p
 
 #terminate();
