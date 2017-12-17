@@ -79,34 +79,10 @@ public class HenselMultUtilTest extends TestCase {
     GenPolynomialRing<GenPolynomial<BigInteger>> rfac;
 
 
-    BigInteger ai;
+    BigInteger ai, bi, ci, di, ei;
 
 
-    BigInteger bi;
-
-
-    BigInteger ci;
-
-
-    BigInteger di;
-
-
-    BigInteger ei;
-
-
-    GenPolynomial<BigInteger> a;
-
-
-    GenPolynomial<BigInteger> b;
-
-
-    GenPolynomial<BigInteger> c;
-
-
-    GenPolynomial<BigInteger> d;
-
-
-    GenPolynomial<BigInteger> e;
+    GenPolynomial<BigInteger> a, b, c, d, e;
 
 
     int rl = 2;
@@ -446,7 +422,7 @@ public class HenselMultUtilTest extends TestCase {
                 for (GenPolynomial<ModInteger> sp : lift) {
                     Residue<ModInteger> apr = new Residue<ModInteger>(Yr, sp);
                     if (apr.isZERO()) {
-                        System.out.println("apr == 0");
+                        System.out.println("apr == 0: " + sp);
                         //return;
                     }
                     Spr.add(apr);

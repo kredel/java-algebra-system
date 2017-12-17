@@ -1128,7 +1128,7 @@ public class HenselUtil {
      */
     public static <MOD extends GcdRingElem<MOD> & Modular> List<GenPolynomial<MOD>> liftExtendedEuclidean(
                     List<GenPolynomial<MOD>> A, long k) throws NoLiftingException {
-        if (A == null || A.size() == 0) {
+        if (A == null || A.size() <= 1) {
             throw new IllegalArgumentException("A must be non null and non empty");
         }
         GenPolynomialRing<MOD> fac = A.get(0).ring;
