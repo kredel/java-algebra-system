@@ -26,17 +26,25 @@
 <dt>2017, June </dt> <!-- 2.6.5xxx -->
 <dd> 
 
- This release improved performance of polynomial factoring methods,
+ This release fixed missing factorization of polynomial content, and
+ added generation of random irreducible polynomials.
+
+ Checked that JAS compiles and runs with Java 9. Small bug fixes and
+ improvements.
+</dd>
+
+
+<dt>2017, June </dt> <!-- 2.6.5765 -->
+<dd> 
+ This release improved performance of polynomial factoring methods
  over integers and rational numbers. The affected classes are
  <code>FactorRational</code>,
  <code>GreatestCommonDivisorModular</code> and
  <code>GreatestCommonDivisorModEval</code>.  Thanks to Stanislav
  Poslavsky from the <a href="http://redberry.cc/">Redberry</a> project
  for pointing out these issues.
-
  Several Findbugs issues have been fixed, for example, insufficient
  synchronization. Other bug fixes and small improvements.
-
 </dd>
 
 <dt>2017, February </dt> <!-- 2.6.5733 -->
@@ -2649,7 +2657,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Sun Jun 11 23:50:44 CEST 2017
+Last modified: Sun Dec 24 19:02:10 CET 2017
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
