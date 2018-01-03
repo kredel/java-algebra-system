@@ -16,7 +16,8 @@ import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.structure.RingElem;
-import edu.jas.vector.BasicLinAlg;
+import edu.jas.vector.GenVector;
+import edu.jas.vector.GenVectorModul;
 
 
 /**
@@ -107,17 +108,18 @@ public class TermOrderOptimization {
         if (L == null) {
             throw new IllegalArgumentException("list must be non null");
         }
-        BasicLinAlg<GenPolynomial<BigInteger>> blas = new BasicLinAlg<GenPolynomial<BigInteger>>();
-        List<GenPolynomial<BigInteger>> dem = null;
+        GenVectorModul<GenPolynomial<BigInteger>> vmblas = null;
+        GenVector<GenPolynomial<BigInteger>> vdem = null;
         for (GenPolynomial<C> p : L) {
             List<GenPolynomial<BigInteger>> dm = degreeMatrix(p);
-            if (dem == null) {
-                dem = dm;
+            if (vdem == null) {
+                vmblas = new GenVectorModul<GenPolynomial<BigInteger>>(dm.get(0).ring, dm.size());
+                vdem = new GenVector<GenPolynomial<BigInteger>>(vmblas, dm);
             } else {
-                dem = blas.vectorAdd(dem, dm);
+                vdem = vdem.sum(new GenVector<GenPolynomial<BigInteger>>(vmblas, dm));
             }
         }
-        return dem;
+        return vdem.val;
     }
 
 
@@ -131,17 +133,18 @@ public class TermOrderOptimization {
         if (L == null) {
             throw new IllegalArgumentException("list must not be null");
         }
-        BasicLinAlg<GenPolynomial<BigInteger>> blas = new BasicLinAlg<GenPolynomial<BigInteger>>();
-        List<GenPolynomial<BigInteger>> dem = null;
+        GenVectorModul<GenPolynomial<BigInteger>> vmblas = null;
+        GenVector<GenPolynomial<BigInteger>> vdem = null;
         for (GenPolynomial<GenPolynomial<C>> p : L) {
             List<GenPolynomial<BigInteger>> dm = degreeMatrixOfCoefficients(p);
-            if (dem == null) {
-                dem = dm;
+            if (vdem == null) {
+                vmblas = new GenVectorModul<GenPolynomial<BigInteger>>(dm.get(0).ring, dm.size());
+                vdem = new GenVector<GenPolynomial<BigInteger>>(vmblas, dm);
             } else {
-                dem = blas.vectorAdd(dem, dm);
+                vdem = vdem.sum(new GenVector<GenPolynomial<BigInteger>>(vmblas, dm));
             }
         }
-        return dem;
+        return vdem.val;
     }
 
 
