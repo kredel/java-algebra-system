@@ -348,6 +348,7 @@ public class RunGB {
         } catch (InterruptedException e) {
             // ignored
         }
+        System.out.println("runClient() done: " + es);
     }
 
 

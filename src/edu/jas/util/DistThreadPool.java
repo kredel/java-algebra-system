@@ -223,6 +223,7 @@ public class DistThreadPool /*extends ThreadPool*/{
      */
     public void terminate(boolean shutDown) {
         if (shutDown) {
+            logger.info("shutdown = " + this);
             ShutdownRequest sdr = new ShutdownRequest();
             for (int i = 0; i < workers.length; i++) {
                 addJob(sdr);
@@ -243,9 +244,11 @@ public class DistThreadPool /*extends ThreadPool*/{
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
+            ec.close();
         } else {
             terminate();
         }
+        logger.info("terminated = " + this);
     }
 
 
@@ -253,6 +256,7 @@ public class DistThreadPool /*extends ThreadPool*/{
      * Terminates the threads.
      */
     public void terminate() {
+        logger.info("terminate = " + this);
         while (hasJobs()) {
             try {
                 Thread.sleep(100);
@@ -271,6 +275,7 @@ public class DistThreadPool /*extends ThreadPool*/{
             }
         }
         ec.close();
+        logger.info("terminated = " + this);
     }
 
 

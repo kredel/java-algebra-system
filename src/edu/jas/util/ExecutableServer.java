@@ -146,11 +146,11 @@ public class ExecutableServer extends Thread {
         mythread = Thread.currentThread();
         while (goon) {
             if (debug) {
-                logger.info("execute server " + this + " go on");
+                logger.info("server " + this + " go on");
             }
             try {
                 channel = cf.getChannel();
-                logger.debug("execute channel = " + channel);
+                logger.info("channel = " + channel);
                 if (mythread.isInterrupted()) {
                     goon = false;
                     logger.debug("execute server " + this + " interrupted");
@@ -175,7 +175,7 @@ public class ExecutableServer extends Thread {
             }
         }
         if (debug) {
-            logger.info("execute server " + this + " terminated");
+            logger.info("server " + this + " terminated");
         }
     }
 
@@ -185,7 +185,7 @@ public class ExecutableServer extends Thread {
      */
     public void terminate() {
         goon = false;
-        logger.debug("terminating ExecutableServer");
+        logger.info("terminating ExecutableServer");
         if (cf != null)
             cf.terminate();
         if (servers != null) {
@@ -208,7 +208,7 @@ public class ExecutableServer extends Thread {
             }
             servers = null;
         }
-        logger.debug("Executors terminated");
+        logger.info("Executors terminated");
         if (mythread == null)
             return;
         try {
@@ -222,7 +222,7 @@ public class ExecutableServer extends Thread {
             Thread.currentThread().interrupt();
         }
         mythread = null;
-        logger.debug("ExecuteServer terminated");
+        logger.info("terminated");
     }
 
 
@@ -331,8 +331,8 @@ class Executor extends Thread /*implements Runnable*/{
                 logger.info("finally " + this);
             }
         }
-        logger.info("executor terminated " + this);
         channel.close();
+        logger.info("terminated " + this);
     }
 
 }

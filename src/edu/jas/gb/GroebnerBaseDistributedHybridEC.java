@@ -268,7 +268,7 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
     public void terminate(boolean shutDown) {
         pool.terminate();
         dtp.terminate(shutDown);
-        logger.debug("dhts.terminate()");
+        logger.info("dhts.terminate()");
         dhts.terminate();
     }
 

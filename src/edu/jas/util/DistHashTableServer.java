@@ -187,7 +187,7 @@ public class DistHashTableServer<K> extends Thread {
      */
     public void terminate() {
         goon = false;
-        logger.debug("terminating");
+        logger.info("terminating");
         if (cf != null) {
             cf.terminate();
         }
@@ -253,7 +253,7 @@ public class DistHashTableServer<K> extends Thread {
             Thread.currentThread().interrupt();
         }
         mythread = null;
-        logger.debug("terminated");
+        logger.info("terminated");
     }
 
 
