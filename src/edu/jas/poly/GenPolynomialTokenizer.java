@@ -314,8 +314,7 @@ public class GenPolynomialTokenizer {
         ExpVector e;
         int ix;
         long ie;
-        //boolean done = false;
-        while (true) { //!done
+        while (true) { 
             // next input. determine next action
             tt = tok.nextToken();
             //System.out.println("while tt = " + tok);
@@ -492,7 +491,6 @@ public class GenPolynomialTokenizer {
                             logger.info("coeff " + r);
                         //if (r.isONE() || r.isZERO()) {
                         //logger.error("Unknown varibable " + tok.sval);
-                        //done = true;
                         //break;
                         //throw new InvalidExpressionException("recursively unknown variable " + tok.sval);
                         //}
@@ -532,8 +530,6 @@ public class GenPolynomialTokenizer {
 
             default: //skip 
             }
-            //if (done)
-            //    break; // unknown variable
             if (tt == StreamTokenizer.TT_EOF)
                 break;
             // complete polynomial

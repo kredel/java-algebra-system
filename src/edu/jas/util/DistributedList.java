@@ -28,9 +28,13 @@ public class DistributedList /* implements List not jet */ {
 
     private static final Logger logger = Logger.getLogger(DistributedList.class);
 
+
     protected final SortedMap<Counter,Object> theList;
+
     protected final ChannelFactory cf;
+
     protected SocketChannel channel = null;
+
     protected Listener listener = null;
 
 
@@ -196,8 +200,10 @@ public class DistributedList /* implements List not jet */ {
 class Listener extends Thread {
 
     private SocketChannel channel;
+
     private SortedMap<Counter,Object> theList;
-    private boolean goon;
+
+    private volatile boolean goon;
 
 
     Listener(SocketChannel s, SortedMap<Counter,Object> list) {

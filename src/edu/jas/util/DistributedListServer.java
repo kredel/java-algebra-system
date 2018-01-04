@@ -30,14 +30,20 @@ public class DistributedListServer extends Thread {
     private static final Logger logger = Logger.getLogger(DistributedListServer.class);
 
     public final static int DEFAULT_PORT = ChannelFactory.DEFAULT_PORT + 99;
+
+
     protected final ChannelFactory cf;
 
     protected List<Broadcaster> servers;
 
-    private boolean goon = true;
-    private Thread mythread = null;
+
+    private volatile boolean goon = true;
+
+    private volatile Thread mythread = null;
+
 
     private Counter listElem = null;
+
     protected final SortedMap<Counter,Object> theList;
 
 

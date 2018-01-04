@@ -32,7 +32,7 @@ public class Terminator {
     private final Semaphore fin;
 
 
-    private /*volatile*/ boolean done;
+    private boolean done; // volatile not required since synchronized  
 
 
     /**

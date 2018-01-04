@@ -61,7 +61,7 @@ public class ExecutableServer extends Thread {
     private volatile boolean goon = true;
 
 
-    private Thread mythread = null;
+    private volatile Thread mythread = null;
 
 
     /**

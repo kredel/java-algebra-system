@@ -38,10 +38,10 @@ public class DistHashTableServer<K> extends Thread {
     protected List<DHTBroadcaster<K>> servers;
 
 
-    private boolean goon = true;
+    private volatile boolean goon = true;
 
 
-    private Thread mythread = null;
+    private volatile Thread mythread = null;
 
 
     protected final SortedMap<K, DHTTransport> theList;
