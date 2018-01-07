@@ -20,10 +20,6 @@ issues to consider:
 
 - test caching results of gcd computation
 
-- refactor from BasicLinAlg to GenMatrix and GenVector 
-
-- check solvable polynomials with integral domain coefficients
-
 - algebraic number theory
 
 - algebraic topology
@@ -35,6 +31,10 @@ issues to consider:
 - remove unnecessary @see since JavaDoc 7 
 
 - implement matrices to vector
+
+- refactor from BasicLinAlg to GenMatrix and GenVector 
+
+- check solvable polynomials with integral domain coefficients
 
 - implement Boolean with RingElem interface (?)
 
