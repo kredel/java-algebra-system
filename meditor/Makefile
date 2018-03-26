@@ -8,7 +8,7 @@
 #JASPATH=$(HOME)/jas
 JASPATH=..
 LIBPATH=$(HOME)/java/lib
-MEDITORPATH=$(HOME)/java/meditor3.1
+MEDITORPATH=$(HOME)/java/meditor3.0
 
 CLASSPATH=$(LIBPATH)/jython.jar:$(MEDITORPATH)/meditor.jar
 
