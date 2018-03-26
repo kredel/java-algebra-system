@@ -33,6 +33,7 @@ public class MatrixExamples {
     }
 
 
+    @SuppressWarnings({"unchecked","cast"})
     public static void example1() {
         BigRational r1, r2, r3, r4, r5, r6, z;
         r1 = new BigRational(1, 10);
@@ -104,6 +105,7 @@ public class MatrixExamples {
     }
 
 
+    @SuppressWarnings({"unchecked","cast"})
     public static void example2() {
         BigRational r1, r2, r3, r4, r5, r6, z;
         r1 = new BigRational(1, 10);
@@ -173,6 +175,7 @@ public class MatrixExamples {
     }
 
 
+    @SuppressWarnings({"unchecked","cast"})
     public static void example3() {
         BigRational r1, r2, r3, r4, r5, r6, fac;
         r1 = new BigRational(1, 10);
