@@ -4,12 +4,12 @@
 # $Id$
 
 LIBPATH=~/java/lib
-MEDITORPATH=~/java/meditor3.0
-JASPATH=.
+MEDITORPATH=~/java/meditor3.1
+JASPATH=..
 
 UTILS=$LIBPATH/jython.jar:$LIBPATH/log4j.jar
 
-JAS=$JASPATH/jas.jar:$JASPATH/jas-meditor.jar
+JAS=$JASPATH/jas.jar:jas-meditor.jar
 
 if [[ ! -f "jas.py" ]]; then
   jar xf $JASPATH/jas-meditor.jar jas.py
@@ -17,7 +17,7 @@ fi
 
 MEDITOR=$MEDITORPATH/meditor.jar:$MEDITORPATH/lib/jscl.jar
 
-CLASSPATH=$UTILS:$JAS:$MEDITOR:.
+CLASSPATH=$UTILS:$JAS:$MEDITOR:.:..
 
 mkdir -p test
 #####-Dpython.home=$JASPATH/examples 
