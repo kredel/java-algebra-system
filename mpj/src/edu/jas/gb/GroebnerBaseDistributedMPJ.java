@@ -306,7 +306,7 @@ public class GroebnerBaseDistributedMPJ<C extends RingElem<C>> extends GroebnerB
      * @param Fp a Groebner base.
      * @return a reduced Groebner base of Fp.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     @Override
     public List<GenPolynomial<C>> minimalGB(List<GenPolynomial<C>> Fp) {
         GenPolynomial<C> a;
@@ -456,6 +456,7 @@ class MPJReducerServer<C extends RingElem<C>> implements Runnable {
     /**
      * Main method.
      */
+    @SuppressWarnings("unchecked")
     public void run() {
         logger.debug("reducer server running: "); // + this);
         // try {
@@ -651,6 +652,7 @@ class MPJReducerClient<C extends RingElem<C>> implements Runnable {
     /**
      * Main run method.
      */
+    @SuppressWarnings("unchecked")
     public void run() {
         logger.debug("reducer client running");
         Pair<C> pair = null;
@@ -793,6 +795,7 @@ class MiMPJReducerServer<C extends RingElem<C>> implements Runnable {
      * @param G polynomial list.
      * @param p polynomial.
      */
+    @SuppressWarnings("unchecked")
     MiMPJReducerServer(List<GenPolynomial<C>> G, GenPolynomial<C> p) {
         this.G = G;
         H = p;

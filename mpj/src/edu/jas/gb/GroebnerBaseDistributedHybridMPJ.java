@@ -388,7 +388,7 @@ public class GroebnerBaseDistributedHybridMPJ<C extends RingElem<C>> extends Gro
      * @param Fp a Groebner base.
      * @return a reduced Groebner base of Fp.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     @Override
     public List<GenPolynomial<C>> minimalGB(List<GenPolynomial<C>> Fp) {
         GenPolynomial<C> a;
@@ -535,6 +535,7 @@ class HybridReducerServerMPJ<C extends RingElem<C>> implements Runnable {
      * @see java.lang.Runnable#run()
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void run() {
         //logger.info("reducer server running with " + engine);
         // try {
@@ -748,6 +749,7 @@ class HybridReducerReceiverMPJ<C extends RingElem<C>> extends Thread {
      * @see java.lang.Thread#run()
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void run() {
         //Pair<C> pair = null;
         GenPolynomial<C> H = null;
@@ -922,6 +924,7 @@ class HybridReducerClientMPJ<C extends RingElem<C>> implements Runnable {
      * @see java.lang.Runnable#run()
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void run() {
         if (debug) {
             logger.info("pairChannel   = " + pairChannel + " reducer client running");
