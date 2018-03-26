@@ -67,7 +67,7 @@ public class RunMPIGB {
      * Usage: RunMPIGB [seq|par(+)|dist(+)|disthyb|cli] &lt;file&gt;
      * #procs/#threadsPerNode [machinefile]
      */
-
+    @SuppressWarnings("unchecked")
     public static void main(String[] args) throws IOException, MPIException {
 
         MPIEngine.setCommandLine(args); //args = MPI.Init(args);
