@@ -136,6 +136,7 @@ public class GBSigBased<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C
      * @return GB(F) a Groebner base of F.
      */
     @Override
+    @SuppressWarnings("unchecked")
     public List<GenPolynomial<C>> GB(int modv, List<GenPolynomial<C>> F) {
         if (F == null || F.isEmpty()) {
             return F;
