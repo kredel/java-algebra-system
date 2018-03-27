@@ -103,6 +103,8 @@ def noThreads():
     print "nt = ", ComputerThreads.NO_THREADS;
 
 auto_inject = True
+'''Define variables automatically in the global namespace.
+'''
 
 def inject_variable(name, value):
     '''Inject a variable into the main global namespace
@@ -4001,8 +4003,12 @@ class PolyRing(Ring):
         return self.ring.toScript();
 
     lex = Order.INVLEX
+    '''Abreviation for INVLEX.
+    '''
 
     grad = Order.IGRLEX
+    '''Abreviation for IGRLEX.
+    '''
 
 
 class SolvPolyRing(SolvableRing):

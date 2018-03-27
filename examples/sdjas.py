@@ -1,3 +1,9 @@
+'''
+Access to the database of ideals as provided by the
+SymbolicData Project (http://symbolicdata.org).
+
+Adapted from the Symbolicdata and Sage code
+'''
 #
 # $Id$
 #
@@ -149,6 +155,9 @@ class SPARQL:
     was not really needed.
     """
     def __init__(self, sd, query, output = 'json'):
+        """
+        Execute the query and store the results.
+        """
         self._sd = sd;
         self._query = query;
         self._data = {
