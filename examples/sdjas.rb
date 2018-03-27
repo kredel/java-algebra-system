@@ -92,6 +92,7 @@ end
 =end
 class SymbolicData
 
+      # The variables from the sd.ini file
       attr_reader :_parser, :url, :sqpath, :sd, :sdhost
 
 =begin rdoc
@@ -175,8 +176,12 @@ end
 =end
 class SPARQL
 
+    # The json representation of the query result
     attr_reader :json
 
+=begin rdoc
+    Perform the SPARQL query.
+=end
     def initialize(sd, query, output = 'json')
         @_sd = sd;
         @_query = query;
@@ -235,6 +240,7 @@ end
 =end
 class SD_Ideal
 
+    # the ideal basis
     attr_reader :basis
 
 =begin rdoc
@@ -354,7 +360,7 @@ class SD_Ideal
 
 
 =begin rdoc
-        Return the ideal as a Jas objects.
+        Return the ideal as a Jas object.
 =end
     def get_ideal()
         #return ideal(@sageBasis)
@@ -413,6 +419,7 @@ class SD_Ideal
     end
 
 =begin rdoc
+        Construct the ideal as a Jas object.
 =end
     def __constructJasObject()
         #require "jas"
