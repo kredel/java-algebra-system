@@ -68,18 +68,24 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
 
 
     /**
+     * Flag for irreducible input to integrateLogPart.
+     */
+    public boolean irredLogPart = true;
+
+
+    /**
      * Constructor.
      */
     public ElementaryIntegration(RingFactory<C> br) {
         ufd = GCDFactory.<C> getProxy(br);
         sqf = SquarefreeFactory.<C> getImplementation(br);
         irr = /*(FactorAbsolute<C>)*/FactorFactory.<C> getImplementation(br);
+        irredLogPart = true;
     }
 
 
     /**
      * Integration of a rational function.
-     * 
      * @param r rational function
      * @return Integral container, such that integrate(r) = sum_i(g_i) + sum_j(
      *         an_j log(hd_j) )
@@ -92,7 +98,6 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
 
     /**
      * Integration of a rational function.
-     * 
      * @param a numerator
      * @param d denominator
      * @return Integral container, such that integrate(a/d) = sum_i(gn_i/gd_i) +
@@ -147,7 +152,7 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
         for (int i = 0; i < log.size(); i++) {
             GenPolynomial<C> ln = log.get(i++);
             GenPolynomial<C> ld = log.get(i);
-            LogIntegral<C> pf = integrateLogPart(ln, ld);
+            LogIntegral<C> pf = integrateLogPartPrepare(ln, ld);
             logi.add(pf);
         }
         if (debug) {
@@ -159,7 +164,6 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
 
     /**
      * Integration of the rational part, Hermite reduction step.
-     * 
      * @param a numerator
      * @param d denominator, gcd(a,d) == 1
      * @return [ [ gn_i, gd_i ], [ h0, hn_j, hd_j ] ] such that integrate(a/d) =
@@ -209,7 +213,7 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
                 GenPolynomial<C>[] BC = ufd.baseGcdDiophant(DV_dx, v, Aik);
                 GenPolynomial<C> b = BC[0];
                 GenPolynomial<C> c = BC[1];
-                GenPolynomial<C> vj = v.power(j); //Power.<GenPolynomial<C>> positivePower(v, j);
+                GenPolynomial<C> vj = v.power(j);
                 G.add(b); // B
                 G.add(vj); // v^j
                 Ak = fac.fromInteger(-j).multiply(c).subtract(PolyUtil.<C> baseDeriviative(b));
@@ -232,12 +236,15 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
 
     /**
      * Univariate GenPolynomial integration of the logaritmic part,
-     * Rothstein-Trager algorithm.
+     * eventual preparation for irreducible factorization of P.
      * @param A univariate GenPolynomial, deg(A) < deg(P).
      * @param P univariate squarefree GenPolynomial, gcd(A,P) == 1.
      * @return logarithmic part container.
      */
-    public LogIntegral<C> integrateLogPart(GenPolynomial<C> A, GenPolynomial<C> P) {
+    public LogIntegral<C> integrateLogPartPrepare(GenPolynomial<C> A, GenPolynomial<C> P) {
+        if (! irredLogPart) {
+            return integrateLogPart(A, P);
+        }
         if (P == null || P.isZERO()) {
             throw new IllegalArgumentException(" P == null or P == 0");
         }
@@ -282,7 +289,7 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
                 cdenom.add(pi);
                 continue;
             }
-            LogIntegral<C> pf = integrateLogPartIrreducible(ai, pi);
+            LogIntegral<C> pf = integrateLogPart(ai, pi);
             cfactors.addAll(pf.cfactors);
             cdenom.addAll(pf.cdenom);
             afactors.addAll(pf.afactors);
@@ -299,7 +306,7 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
      * @param P univariate irreducible GenPolynomial. // gcd(A,P) == 1 automatic
      * @return logarithmic part container.
      */
-    public LogIntegral<C> integrateLogPartIrreducible(GenPolynomial<C> A, GenPolynomial<C> P) {
+    public LogIntegral<C> integrateLogPart(GenPolynomial<C> A, GenPolynomial<C> P) {
         if (P == null || P.isZERO()) {
             throw new IllegalArgumentException("P == null or P == 0");
         }
@@ -436,7 +443,6 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
 
     /**
      * Derivation of a univariate rational function.
-     * 
      * @param r rational function
      * @return dr/dx
      */
@@ -459,7 +465,6 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
 
     /**
      * Test of integration of a rational function.
-     * 
      * @param ri integral
      * @return true, if ri is an integral, else false.
      */
@@ -494,7 +499,6 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
 
     /**
      * Test of integration of the logarithmic part of a rational function.
-     * 
      * @param rl logarithmic part of an integral
      * @return true, if rl is an integral, else false.
      */
