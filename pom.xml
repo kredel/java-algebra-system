@@ -6,7 +6,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <name>Java Algebra System (JAS)</name>
-  <groupId>java-algebra-system</groupId>
+  <groupId>de.uni-mannheim.rz.krum</groupId>
   <artifactId>jas</artifactId>
   <version>@SVNREV@</version>
   <packaging>jar</packaging>
@@ -90,6 +90,10 @@
   </dependencies>
 
   <repositories>
+    <repository>
+      <id>maven-central</id>
+      <url>https://oss.sonatype.org/content/groups/public</url>
+    </repository>
     <repository>
       <id>jas-repository</id>
       <url>http://krum.rz.uni-mannheim.de/maven-repository</url>
