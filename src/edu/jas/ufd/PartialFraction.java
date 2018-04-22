@@ -6,12 +6,12 @@ package edu.jas.ufd;
 
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -19,8 +19,8 @@ import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.structure.GcdRingElem;
 import edu.jas.poly.PolyUtil;
+import edu.jas.structure.GcdRingElem;
 
 
 /**
@@ -85,7 +85,7 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
      *            coefficients. n/d = sum( a_i ( der(d_i) / d_i ) )
      */
     public PartialFraction(GenPolynomial<C> n, GenPolynomial<C> d, List<C> cf, List<GenPolynomial<C>> cd,
-            List<AlgebraicNumber<C>> af, List<GenPolynomial<AlgebraicNumber<C>>> ad) {
+                    List<AlgebraicNumber<C>> af, List<GenPolynomial<AlgebraicNumber<C>>> ad) {
         num = n;
         den = d;
         cfactors = cf;
@@ -116,7 +116,7 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
             }
             sb.append("(" + cp.toString() + ")");
             GenPolynomial<C> p = cdenom.get(i);
-            GenPolynomial<C> der = PolyUtil.<C>baseDeriviative(p);
+            GenPolynomial<C> der = PolyUtil.<C> baseDeriviative(p);
             sb.append("(" + der.toString() + ") / (" + p.toString() + ")");
         }
         if (!first && afactors.size() > 0) {
@@ -139,7 +139,7 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
                 //sb.append("sum_("+ar+") ");
             }
             sb.append("(" + ap.toString() + ")*");
-            GenPolynomial<AlgebraicNumber<C>> der = PolyUtil.<AlgebraicNumber<C>>baseDeriviative(p);
+            GenPolynomial<AlgebraicNumber<C>> der = PolyUtil.<AlgebraicNumber<C>> baseDeriviative(p);
             sb.append("(" + der.toString() + ") / (" + p.toString() + ")");
             //sb.append(" ## over " + ap.factory() + "\n");
         }
@@ -321,8 +321,7 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
 
 
     /**
-     * Test if correct partial fraction.
-     * num/den = sum( a_i ( der(d_i) / d_i ) )
+     * Test if correct partial fraction. num/den = sum( a_i ( der(d_i) / d_i ) )
      */
     @SuppressWarnings("unchecked")
     public boolean isPartialFraction() {
@@ -334,11 +333,11 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
         int i = 0;
         for (C c : cfactors) {
             GenPolynomial<C> cp = cdenom.get(i++);
-            GenPolynomial<C> der = PolyUtil.<C>baseDeriviative(cp);
+            GenPolynomial<C> der = PolyUtil.<C> baseDeriviative(cp);
             // plus c * der(cp) / cp
             GenPolynomial<C> cder = der.multiply(c);
             Quotient<C> qq = new Quotient<C>(qfac, cder, cp);
-            qs = qs.sum( qq );
+            qs = qs.sum(qq);
         }
         //System.out.println("qs = " + qs);
         if (afactors.isEmpty()) {
@@ -354,8 +353,7 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
             fields.add(ap.ring);
         }
         //System.out.println("fields = " + fields);
-        Map<AlgebraicNumberRing<C>, List<AlgebraicNumber<C>>> facs 
-            = new HashMap<AlgebraicNumberRing<C>, List<AlgebraicNumber<C>>>();
+        Map<AlgebraicNumberRing<C>, List<AlgebraicNumber<C>>> facs = new HashMap<AlgebraicNumberRing<C>, List<AlgebraicNumber<C>>>();
         for (AlgebraicNumber<C> ap : afactors) {
             List<AlgebraicNumber<C>> cf = facs.get(ap.ring);
             if (cf == null) {
@@ -365,8 +363,7 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
             facs.put(ap.ring, cf);
         }
         //System.out.println("facs = " + facs);
-        Map<AlgebraicNumberRing<C>, List<GenPolynomial<AlgebraicNumber<C>>>> pfacs 
-            = new HashMap<AlgebraicNumberRing<C>, List<GenPolynomial<AlgebraicNumber<C>>>>();
+        Map<AlgebraicNumberRing<C>, List<GenPolynomial<AlgebraicNumber<C>>>> pfacs = new HashMap<AlgebraicNumberRing<C>, List<GenPolynomial<AlgebraicNumber<C>>>>();
         for (GenPolynomial<AlgebraicNumber<C>> ap : adenom) {
             AlgebraicNumberRing<C> ar = (AlgebraicNumberRing<C>) ap.ring.coFac;
             List<GenPolynomial<AlgebraicNumber<C>>> cf = pfacs.get(ar);
@@ -381,23 +378,23 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
         // check algebraic parts 
         boolean sumMissing = false;
         for (AlgebraicNumberRing<C> ar : fields) {
-            if (ar.modul.degree(0) > 2 ) { //&& p.degree(0) < ar.modul.degree(0) ?
+            if (ar.modul.degree(0) > 2) { //&& p.degree(0) < ar.modul.degree(0) ?
                 sumMissing = true;
             }
             List<AlgebraicNumber<C>> cf = facs.get(ar);
             List<GenPolynomial<AlgebraicNumber<C>>> cfp = pfacs.get(ar);
-            GenPolynomialRing<AlgebraicNumber<C>> apfac = (GenPolynomialRing<AlgebraicNumber<C>>) cfp.get(0).ring;
+            GenPolynomialRing<AlgebraicNumber<C>> apfac = cfp.get(0).ring;
             QuotientRing<AlgebraicNumber<C>> aqfac = new QuotientRing<AlgebraicNumber<C>>(apfac);
             Quotient<AlgebraicNumber<C>> aq = aqfac.getZERO();
             i = 0;
             for (AlgebraicNumber<C> c : cf) {
                 GenPolynomial<AlgebraicNumber<C>> cp = cfp.get(i++);
-                GenPolynomial<AlgebraicNumber<C>> der = PolyUtil.<AlgebraicNumber<C>>baseDeriviative(cp);
+                GenPolynomial<AlgebraicNumber<C>> der = PolyUtil.<AlgebraicNumber<C>> baseDeriviative(cp);
                 // plus c * der(cp) / cp
                 GenPolynomial<AlgebraicNumber<C>> cder = der.multiply(c);
                 Quotient<AlgebraicNumber<C>> qq = new Quotient<AlgebraicNumber<C>>(aqfac, cder, cp);
                 //System.out.println("qq = " + qq);
-                aq = aq.sum( qq );
+                aq = aq.sum(qq);
             }
             //System.out.println("aq = " + aq);
             GenPolynomialRing<C> cfac = ar.ring;
@@ -430,11 +427,11 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
 
             Quotient<C> qq = new Quotient<C>(qfac, pnum, pden);
             //System.out.println("qq = " + qq);
-            qs = qs.sum( qq );
+            qs = qs.sum(qq);
         }
         boolean cmp = q.compareTo(qs) == 0;
         if (!cmp) {
-           System.out.println("q != qs: " + q + " != " + qs);
+            System.out.println("q != qs: " + q + " != " + qs);
         }
         return cmp || sumMissing;
     }

@@ -413,6 +413,7 @@ public class HenselMultUtil {
      * @param L = [g_0,...,g_{n-1}] list of lifted modular polynomials.
      * @return true if C = prod_{0,...,n-1} g_i mod p^k, else false.
      */
+    @SuppressWarnings("unused")
     public static <MOD extends GcdRingElem<MOD> & Modular> boolean isHenselLift(GenPolynomial<BigInteger> C,
                     GenPolynomial<MOD> Cp, List<GenPolynomial<MOD>> F, List<GenPolynomial<MOD>> L) {
         boolean t = true;

@@ -5,10 +5,6 @@
 package edu.jas.ufd;
 
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
@@ -22,6 +18,10 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
 import edu.jas.structure.RingFactory;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -186,11 +186,11 @@ public class FactorTest extends TestCase {
 
         prfac = new GenPolynomialRing<BigRational>(br, 2);
         GenPolynomialRing<GenPolynomial<BigRational>> rrfac = new GenPolynomialRing<GenPolynomial<BigRational>>(
-                prfac, 1);
+                        prfac, 1);
         Factorization<BigRational> ufdrr = FactorFactory.getImplementation((RingFactory) rrfac);
         //System.out.println("ufdrr = " + ufdrr);
         assertTrue("ufd != GenPolynomial<GenPolynomialBigRational>> " + ufdrr,
-                ufdrr instanceof FactorRational);
+                        ufdrr instanceof FactorRational);
     }
 
 
@@ -245,7 +245,7 @@ public class FactorTest extends TestCase {
         Factorization<BigRational> ufdrr = FactorFactory.<BigRational> getImplementation(prfac);
         //System.out.println("ufdrr = " + ufdrr);
         assertTrue("ufd != GenPolynomial<GenPolynomialBigRational>> " + ufdrr,
-                ufdrr instanceof FactorRational);
+                        ufdrr instanceof FactorRational);
     }
 
 
@@ -261,18 +261,18 @@ public class FactorTest extends TestCase {
         GenPolynomial<BigRational> agen = pfac.univariate(0, 4);
         agen = agen.sum(pfac.fromInteger(4)); // x^4 + 4
 
-                // GenPolynomial<BigRational> x6 = pfac.univariate(0, 6);
-                // GenPolynomial<BigRational> x4 = pfac.univariate(0, 4);
-                // GenPolynomial<BigRational> x2 = pfac.univariate(0, 2);
-                // // x^6 - 5 x^4 + 5 x^2 + 4
-                // agen = x6.subtract(x4.multiply(pfac.fromInteger(5))); 
-                // agen = agen.sum(x2.multiply(pfac.fromInteger(5))); 
-                // agen = agen.sum(pfac.fromInteger(4)); 
+        // GenPolynomial<BigRational> x6 = pfac.univariate(0, 6);
+        // GenPolynomial<BigRational> x4 = pfac.univariate(0, 4);
+        // GenPolynomial<BigRational> x2 = pfac.univariate(0, 2);
+        // // x^6 - 5 x^4 + 5 x^2 + 4
+        // agen = x6.subtract(x4.multiply(pfac.fromInteger(5))); 
+        // agen = agen.sum(x2.multiply(pfac.fromInteger(5))); 
+        // agen = agen.sum(pfac.fromInteger(4)); 
 
-                // GenPolynomial<BigRational> x3 = pfac.univariate(0, 3);
-                // GenPolynomial<BigRational> x = pfac.univariate(0);
-                // // x^3 + x
-                // agen = x3.sum(x); 
+        // GenPolynomial<BigRational> x3 = pfac.univariate(0, 3);
+        // GenPolynomial<BigRational> x = pfac.univariate(0);
+        // // x^3 + x
+        // agen = x3.sum(x); 
 
         // GenPolynomial<BigRational> x2 = pfac.univariate(0, 2);
         // // x^2 - 2
@@ -281,8 +281,8 @@ public class FactorTest extends TestCase {
         GenPolynomial<BigRational> N = pfac.getONE();
         FactorRational engine = new FactorRational();
         PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N, agen);
-        System.out.println("\npartial fraction: " + F);
-        assertTrue("is partial fraction: " + F, F.isPartialFraction()); 
+        //System.out.println("\npartial fraction: " + F);
+        assertTrue("is partial fraction: " + F, F.isPartialFraction());
     }
 
 }
