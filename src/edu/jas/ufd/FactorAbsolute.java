@@ -306,7 +306,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
 
     /**
      * Univariate GenPolynomial algebraic partial fraction decomposition,
-     * Absolute factorization or Rothstein-Trager algorithm.
+     * Absolute factorization for Rothstein-Trager algorithm.
      * @param A univariate GenPolynomial, deg(A) < deg(P).
      * @param P univariate squarefree GenPolynomial, gcd(A,P) == 1.
      * @return partial fraction container.

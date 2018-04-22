@@ -7,11 +7,20 @@ package edu.jas.ufd;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.HashMap;
+
+import org.apache.log4j.Logger;
 
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.GcdRingElem;
+import edu.jas.poly.PolyUtil;
 
 
 /**
@@ -22,6 +31,9 @@ import edu.jas.structure.GcdRingElem;
  */
 
 public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
+
+
+    private static final Logger logger = Logger.getLogger(PartialFraction.class);
 
 
     /**
@@ -104,7 +116,8 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
             }
             sb.append("(" + cp.toString() + ")");
             GenPolynomial<C> p = cdenom.get(i);
-            sb.append(" log( " + p.toString() + ")");
+            GenPolynomial<C> der = PolyUtil.<C>baseDeriviative(p);
+            sb.append("(" + der.toString() + ") / (" + p.toString() + ")");
         }
         if (!first && afactors.size() > 0) {
             sb.append(" + ");
@@ -118,7 +131,6 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
             }
             AlgebraicNumber<C> ap = afactors.get(i);
             AlgebraicNumberRing<C> ar = ap.factory();
-            //sb.append(" ## over " + ap.factory() + "\n");
             GenPolynomial<AlgebraicNumber<C>> p = adenom.get(i);
             if (p.degree(0) < ar.modul.degree(0) && ar.modul.degree(0) > 2) {
                 sb.append("sum_(" + ar.getGenerator() + " in ");
@@ -126,8 +138,10 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
             } else {
                 //sb.append("sum_("+ar+") ");
             }
-            sb.append("(" + ap.toString() + ")");
-            sb.append(" log( " + p.toString() + ")");
+            sb.append("(" + ap.toString() + ")*");
+            GenPolynomial<AlgebraicNumber<C>> der = PolyUtil.<AlgebraicNumber<C>>baseDeriviative(p);
+            sb.append("(" + der.toString() + ") / (" + p.toString() + ")");
+            //sb.append(" ## over " + ap.factory() + "\n");
         }
         return sb.toString();
     }
@@ -303,6 +317,126 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
         }
         t = adenom.equals(a.adenom);
         return t;
+    }
+
+
+    /**
+     * Test if correct partial fraction.
+     * num/den = sum( a_i ( der(d_i) / d_i ) )
+     */
+    @SuppressWarnings("unchecked")
+    public boolean isPartialFraction() {
+        QuotientRing<C> qfac = new QuotientRing<C>(num.ring);
+        // num / den
+        Quotient<C> q = new Quotient<C>(qfac, num, den);
+        //System.out.println("q = " + q);
+        Quotient<C> qs = qfac.getZERO();
+        int i = 0;
+        for (C c : cfactors) {
+            GenPolynomial<C> cp = cdenom.get(i++);
+            GenPolynomial<C> der = PolyUtil.<C>baseDeriviative(cp);
+            // plus c * der(cp) / cp
+            GenPolynomial<C> cder = der.multiply(c);
+            Quotient<C> qq = new Quotient<C>(qfac, cder, cp);
+            qs = qs.sum( qq );
+        }
+        //System.out.println("qs = " + qs);
+        if (afactors.isEmpty()) {
+            return q.compareTo(qs) == 0;
+        }
+
+        // sort by extension field
+        Set<AlgebraicNumberRing<C>> fields = new HashSet<AlgebraicNumberRing<C>>();
+        for (AlgebraicNumber<C> ap : afactors) {
+            if (ap.ring.depth() > 1) {
+                logger.warn("extension field depth to high"); // todo
+            }
+            fields.add(ap.ring);
+        }
+        //System.out.println("fields = " + fields);
+        Map<AlgebraicNumberRing<C>, List<AlgebraicNumber<C>>> facs 
+            = new HashMap<AlgebraicNumberRing<C>, List<AlgebraicNumber<C>>>();
+        for (AlgebraicNumber<C> ap : afactors) {
+            List<AlgebraicNumber<C>> cf = facs.get(ap.ring);
+            if (cf == null) {
+                cf = new ArrayList<AlgebraicNumber<C>>();
+            }
+            cf.add(ap);
+            facs.put(ap.ring, cf);
+        }
+        //System.out.println("facs = " + facs);
+        Map<AlgebraicNumberRing<C>, List<GenPolynomial<AlgebraicNumber<C>>>> pfacs 
+            = new HashMap<AlgebraicNumberRing<C>, List<GenPolynomial<AlgebraicNumber<C>>>>();
+        for (GenPolynomial<AlgebraicNumber<C>> ap : adenom) {
+            AlgebraicNumberRing<C> ar = (AlgebraicNumberRing<C>) ap.ring.coFac;
+            List<GenPolynomial<AlgebraicNumber<C>>> cf = pfacs.get(ar);
+            if (cf == null) {
+                cf = new ArrayList<GenPolynomial<AlgebraicNumber<C>>>();
+            }
+            cf.add(ap);
+            pfacs.put(ar, cf);
+        }
+        //System.out.println("pfacs = " + pfacs);
+
+        // check algebraic parts 
+        boolean sumMissing = false;
+        for (AlgebraicNumberRing<C> ar : fields) {
+            if (ar.modul.degree(0) > 2 ) { //&& p.degree(0) < ar.modul.degree(0) ?
+                sumMissing = true;
+            }
+            List<AlgebraicNumber<C>> cf = facs.get(ar);
+            List<GenPolynomial<AlgebraicNumber<C>>> cfp = pfacs.get(ar);
+            GenPolynomialRing<AlgebraicNumber<C>> apfac = (GenPolynomialRing<AlgebraicNumber<C>>) cfp.get(0).ring;
+            QuotientRing<AlgebraicNumber<C>> aqfac = new QuotientRing<AlgebraicNumber<C>>(apfac);
+            Quotient<AlgebraicNumber<C>> aq = aqfac.getZERO();
+            i = 0;
+            for (AlgebraicNumber<C> c : cf) {
+                GenPolynomial<AlgebraicNumber<C>> cp = cfp.get(i++);
+                GenPolynomial<AlgebraicNumber<C>> der = PolyUtil.<AlgebraicNumber<C>>baseDeriviative(cp);
+                // plus c * der(cp) / cp
+                GenPolynomial<AlgebraicNumber<C>> cder = der.multiply(c);
+                Quotient<AlgebraicNumber<C>> qq = new Quotient<AlgebraicNumber<C>>(aqfac, cder, cp);
+                //System.out.println("qq = " + qq);
+                aq = aq.sum( qq );
+            }
+            //System.out.println("aq = " + aq);
+            GenPolynomialRing<C> cfac = ar.ring;
+            GenPolynomialRing<GenPolynomial<C>> prfac = new GenPolynomialRing<GenPolynomial<C>>(cfac, apfac);
+            GenPolynomial<GenPolynomial<C>> pqnum = PolyUtil.<C> fromAlgebraicCoefficients(prfac, aq.num);
+            GenPolynomial<GenPolynomial<C>> pqden = PolyUtil.<C> fromAlgebraicCoefficients(prfac, aq.den);
+            //System.out.println("pq = (" + pqnum + ") / (" + pqden + ")");
+
+            C one = cfac.coFac.getONE(); // varaible should no more occur in coefficient
+            GenPolynomialRing<C> pfac = new GenPolynomialRing<C>(cfac.coFac, prfac);
+            GenPolynomial<C> pnum = PolyUtil.<C> evaluateFirstRec(cfac, pfac, pqnum, one);
+            GenPolynomial<C> pden = PolyUtil.<C> evaluateFirstRec(cfac, pfac, pqden, one);
+            //System.out.println("p = (" + pnum + ") / (" + pden + ")");
+
+            // iterate if multiple field extensions
+            while (cfac.coFac instanceof AlgebraicNumberRing) {
+                //System.out.println("cfac.coFac = " + cfac.coFac.toScript());
+                AlgebraicNumberRing<C> ar2 = (AlgebraicNumberRing<C>) cfac.coFac;
+                cfac = ar2.ring;
+                prfac = new GenPolynomialRing<GenPolynomial<C>>(cfac, apfac);
+                GenPolynomial<AlgebraicNumber<C>> prnum = (GenPolynomial<AlgebraicNumber<C>>) pnum;
+                GenPolynomial<AlgebraicNumber<C>> prden = (GenPolynomial<AlgebraicNumber<C>>) pden;
+                pqnum = PolyUtil.<C> fromAlgebraicCoefficients(prfac, prnum);
+                pqden = PolyUtil.<C> fromAlgebraicCoefficients(prfac, prden);
+                one = cfac.coFac.getONE(); // varaible should no more occur in coefficient
+                pfac = new GenPolynomialRing<C>(cfac.coFac, prfac);
+                pnum = PolyUtil.<C> evaluateFirstRec(cfac, pfac, pqnum, one);
+                pden = PolyUtil.<C> evaluateFirstRec(cfac, pfac, pqden, one);
+            }
+
+            Quotient<C> qq = new Quotient<C>(qfac, pnum, pden);
+            //System.out.println("qq = " + qq);
+            qs = qs.sum( qq );
+        }
+        boolean cmp = q.compareTo(qs) == 0;
+        if (!cmp) {
+           System.out.println("q != qs: " + q + " != " + qs);
+        }
+        return cmp || sumMissing;
     }
 
 }

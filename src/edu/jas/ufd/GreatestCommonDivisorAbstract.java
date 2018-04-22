@@ -1075,12 +1075,6 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
             throw new IllegalArgumentException("null A, P, F or e = 0 not allowed");
         }
         GenPolynomial<C> A0 = basePartialFractionValue(P, e, F);
-        //         A.ring.getZERO();
-        //         for ( GenPolynomial<C> Fi : F ) {
-        //             A0 = A0.multiply(P);
-        //             A0 = A0.sum(Fi);
-        //             //System.out.println("A0 = " + A0);
-        //         }
         boolean t = A.equals(A0);
         if (!t) {
             System.out.println("not isPartFrac = " + A0);
@@ -1105,7 +1099,6 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>> im
         for (GenPolynomial<C> Fi : F) {
             A0 = A0.multiply(P);
             A0 = A0.sum(Fi);
-            //System.out.println("A0 = " + A0);
         }
         return A0;
     }
