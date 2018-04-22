@@ -281,7 +281,7 @@ public class FactorTest extends TestCase {
         GenPolynomial<BigRational> N = pfac.getONE();
         FactorRational engine = new FactorRational();
         PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N, agen);
-        //System.out.println("\npartial fraction: " + F);
+        //System.out.println("\npartial fraction: " + F.toScript());
         assertTrue("is partial fraction: " + F, F.isPartialFraction());
     }
 

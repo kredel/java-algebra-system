@@ -148,67 +148,6 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
 
 
     /**
-     * Get the String representation.
-     * @see java.lang.Object#toString()
-     */
-    //@Override
-    public String toStringX() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("(" + num.toString() + ")");
-        sb.append(" / ");
-        sb.append("(" + den.toString() + ")");
-        sb.append(" =\n");
-        boolean first = true;
-        for (C cp : cfactors) {
-            if (first) {
-                first = false;
-            } else {
-                sb.append(", ");
-            }
-            sb.append(cp.toString());
-        }
-        if (!first) {
-            sb.append(" linear denominators: ");
-        }
-        first = true;
-        for (GenPolynomial<C> cp : cdenom) {
-            if (first) {
-                first = false;
-            } else {
-                sb.append(", ");
-            }
-            sb.append(cp.toString());
-        }
-        if (!first) {
-            sb.append("; ");
-        }
-        first = true;
-        for (AlgebraicNumber<C> ap : afactors) {
-            if (first) {
-                first = false;
-            } else {
-                //sb.append(", ");
-            }
-            sb.append(ap.toString());
-            sb.append(" ## over " + ap.factory() + "\n");
-        }
-        if (!first) {
-            sb.append(" denominators: ");
-        }
-        first = true;
-        for (GenPolynomial<AlgebraicNumber<C>> ap : adenom) {
-            if (first) {
-                first = false;
-            } else {
-                sb.append(", ");
-            }
-            sb.append(ap.toString());
-        }
-        return sb.toString();
-    }
-
-
-    /**
      * Get a scripting compatible string representation.
      * @return script compatible representation for this container.
      * @see edu.jas.structure.ElemFactory#toScript()
@@ -216,54 +155,46 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
     public String toScript() {
         // Python case
         StringBuffer sb = new StringBuffer();
-
         sb.append(num.toScript());
         sb.append(" / ");
         sb.append(den.toScript());
         sb.append(" = ");
         boolean first = true;
+        int i = 0;
         for (C cp : cfactors) {
             if (first) {
                 first = false;
             } else {
-                sb.append(", ");
+                sb.append(" + ");
             }
-            sb.append(cp.toScript());
+            sb.append(cp.toScript() + "*");
+            GenPolynomial<C> p = cdenom.get(i);
+            GenPolynomial<C> der = PolyUtil.<C> baseDeriviative(p);
+            sb.append(der.toScript() + " / " + p.toScript());
         }
         if (!first) {
-            sb.append(" linear denominators: ");
+            sb.append(" + ");
         }
         first = true;
-        for (GenPolynomial<C> cp : cdenom) {
-            if (first) {
-                first = false;
-            } else {
-                sb.append(", ");
-            }
-            sb.append(cp.toScript());
-        }
-        if (!first) {
-            sb.append(", ");
-        }
-        first = true;
+        i = 0;
         for (AlgebraicNumber<C> ap : afactors) {
             if (first) {
                 first = false;
             } else {
-                //sb.append(", ");
+                sb.append(" + ");
             }
-            sb.append(ap.toScript());
-            sb.append(" ## over " + ap.toScriptFactory() + "\n");
-        }
-        sb.append(" denominators: ");
-        first = true;
-        for (GenPolynomial<AlgebraicNumber<C>> ap : adenom) {
-            if (first) {
-                first = false;
+            AlgebraicNumberRing<C> ar = ap.factory();
+            GenPolynomial<AlgebraicNumber<C>> p = adenom.get(i);
+            if (p.degree(0) < ar.modul.degree(0) && ar.modul.degree(0) > 2) {
+                sb.append("sum_(" + ar.getGenerator().toScript() + " in ");
+                sb.append("rootOf(" + ar.modul.toScript() + ") ) ");
             } else {
-                sb.append(", ");
+                //sb.append("sum_("+ar+") ");
             }
-            sb.append(ap.toScript());
+            sb.append("(" + ap.toScript() + ")*");
+            GenPolynomial<AlgebraicNumber<C>> der = PolyUtil.<AlgebraicNumber<C>> baseDeriviative(p);
+            sb.append(der.toScript() + " / " + p.toScript());
+            //sb.append(" ## over " + ap.toScriptFactory() + "\n");
         }
         return sb.toString();
     }
