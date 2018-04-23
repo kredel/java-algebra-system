@@ -40,7 +40,7 @@ public class ExamplesPartialFraction {
 
 
     /**
-     * example11. Rothstein-Trager algorithm.
+     * example11.
      */
     public static void example11() {
         System.out.println("\n\nexample 11");
@@ -57,12 +57,12 @@ public class ExamplesPartialFraction {
         FactorRational engine = (FactorRational) FactorFactory.getImplementation(cfac);
 
         PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N, D);
-        System.out.println("\nintegral " + F);
+        System.out.println("\npartial fraction " + F);
     }
 
 
     /**
-     * example12. Rothstein-Trager algorithm.
+     * example12. 
      */
     public static void example12() {
         System.out.println("\n\nexample 12");
@@ -79,12 +79,12 @@ public class ExamplesPartialFraction {
         FactorRational engine = (FactorRational) FactorFactory.getImplementation(cfac);
 
         PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N, D);
-        System.out.println("\nintegral " + F);
+        System.out.println("\npartial fraction " + F);
     }
 
 
     /**
-     * example13. Rothstein-Trager algorithm.
+     * example13. 
      */
     public static void example13() {
         System.out.println("\n\nexample 13");
@@ -101,12 +101,12 @@ public class ExamplesPartialFraction {
         FactorRational engine = (FactorRational) FactorFactory.getImplementation(cfac);
 
         PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N, D);
-        System.out.println("\nintegral " + F);
+        System.out.println("\npartial fraction " + F);
     }
 
 
     /**
-     * example14. Rothstein-Trager algorithm.
+     * example14. 
      */
     public static void example14() {
         System.out.println("\n\nexample 14");
@@ -123,12 +123,12 @@ public class ExamplesPartialFraction {
         FactorRational engine = (FactorRational) FactorFactory.getImplementation(cfac);
 
         PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N, D);
-        System.out.println("\nintegral " + F);
+        System.out.println("\npartial fraction " + F);
     }
 
 
     /**
-     * example15. Rothstein-Trager algorithm.
+     * example15.
      */
     public static void example15() {
         System.out.println("\n\nexample 15");
@@ -145,12 +145,12 @@ public class ExamplesPartialFraction {
         FactorRational engine = (FactorRational) FactorFactory.getImplementation(cfac);
 
         PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N, D);
-        System.out.println("\nintegral " + F);
+        System.out.println("\npartial fraction " + F);
     }
 
 
     /**
-     * example16. Rothstein-Trager algorithm.
+     * example16.
      */
     public static void example16() {
         System.out.println("\n\nexample 16");
@@ -167,7 +167,7 @@ public class ExamplesPartialFraction {
         FactorRational engine = (FactorRational) FactorFactory.getImplementation(cfac);
 
         PartialFraction<BigRational> F = engine.baseAlgebraicPartialFraction(N, D);
-        System.out.println("\nintegral " + F);
+        System.out.println("\npartial fraction " + F);
     }
 
 
@@ -189,7 +189,7 @@ public class ExamplesPartialFraction {
         FactorRational engine = (FactorRational) FactorFactory.getImplementation(cfac);
 
         PartialFraction<BigRational> F = engine.baseAlgebraicPartialFractionIrreducibleAbsolute(N, D);
-        System.out.println("\nintegral " + F);
+        System.out.println("\npartial fraction " + F);
     }
 
 }
