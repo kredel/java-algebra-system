@@ -9,7 +9,8 @@
 JASPATH=..
 LIBPATH=$(HOME)/java/lib
 
-JYTHONPATH=$(LIBPATH)/jython.jar
+JYTHONPATH=$(HOME)/java/jython2.7.0/jython.jar
+#:$(LIBPATH)/jython.jar
 JRUBYPATH=$(LIBPATH)/jruby.jar:$(HOME)/java/jruby-1.5.6/lib/ruby/1.8
 
 LOG4JPATH=$(LIBPATH)/log4j-core-2.5.jar:$(LIBPATH)/log4j-api-2.5.jar:$(LIBPATH)/log4j-1.2-api-2.5.jar
@@ -54,8 +55,10 @@ clean:
 	find . -name "*~" -follow -print -exec rm {} \;
 
 tests: jas-jython.jar
-	#java -client -cp $(JYTHONPATH):$(JRUBYPATH):$(CLASSPATH):jas-jython.jar edu.jas.kern.ScriptingExample
 	java -client -cp $(JYTHONPATH):$(JRUBYPATH):$(CLASSPATH):jas-jython.jar edu.jas.gb.GBSigBasedTest
+
+exam: jas-jython.jar
+	java -client -cp $(JYTHONPATH):$(JRUBYPATH):$(CLASSPATH):jas-jython.jar edu.jas.kern.ScriptingExample
 
 doc: $(FILES)
 	$(DOC) $(DOCOPTS) -d ../doc/jas-jython $(FILES)

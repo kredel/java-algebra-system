@@ -29,6 +29,9 @@ public class ScriptingExample {
             jas = scriptManager.getEngineByExtension("py");
         }
         if (jas == null) {
+            jas = new PyScriptEngine();
+        }
+        if (jas == null) {
             System.out.println("No JAS engine found");
             return;
         }

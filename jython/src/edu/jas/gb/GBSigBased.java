@@ -71,7 +71,10 @@ public class GBSigBased<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C
      */
     public GBSigBased(GBAlgo a) {
         algo = a;
-        engine = new ScriptEngineManager().getEngineByExtension("py");
+        ScriptEngineManager manager = new ScriptEngineManager();
+        //System.out.println("manager = " + manager);
+        //System.out.println("factories = " + manager.getEngineFactories());
+        engine = manager.getEngineByExtension("py");
         if (engine == null) {
             logger.error("no script engine found");
             throw new RuntimeException("no script engine found");
