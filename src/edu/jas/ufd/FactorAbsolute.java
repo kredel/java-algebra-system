@@ -408,7 +408,6 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
         // non linear case
         Factors<C> afacs = factorsAbsoluteIrreducible(P);
         //System.out.println("linear algebraic factors = " + afacs);
-
         //System.out.println("afactors      = " + afacs.afactors);
         //System.out.println("arfactors     = " + afacs.arfactors);
         //System.out.println("arfactors pol = " + afacs.arfactors.get(0).poly);
@@ -417,15 +416,11 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
         List<GenPolynomial<AlgebraicNumber<C>>> fact = afacs.getFactors();
         //System.out.println("factors       = " + fact);
         GenPolynomial<AlgebraicNumber<C>> Pa = afacs.apoly;
-
         GenPolynomial<AlgebraicNumber<C>> Aa = PolyUtil.<C> convertToRecAlgebraicCoefficients(1, Pa.ring, A);
 
-
         GreatestCommonDivisorAbstract<AlgebraicNumber<C>> aengine = GCDFactory.getProxy(afacs.afac);
-
         //System.out.println("denom         = " + Pa);
         //System.out.println("numer         = " + Aa);
-
         List<GenPolynomial<AlgebraicNumber<C>>> numers = aengine.basePartialFraction(Aa, fact);
         //System.out.println("part frac     = " + numers);
         GenPolynomial<AlgebraicNumber<C>> A0 = numers.remove(0);
@@ -467,7 +462,6 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
                 }
                 GenPolynomial<AlgebraicNumber<C>> ana1 = (GenPolynomial<AlgebraicNumber<C>>) (GenPolynomial) ana;
                 GenPolynomial<AlgebraicNumber<C>> faa1 = (GenPolynomial<AlgebraicNumber<C>>) (GenPolynomial) faa;
-
 
                 afactors.add(ana1.leadingBaseCoefficient());
                 adenom.add(faa1);

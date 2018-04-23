@@ -25,7 +25,7 @@ import edu.jas.structure.GcdRingElem;
 
 /**
  * Container for the partial fraction decomposition of a squarefree denominator.
- * num/den = sum( a_i ( der(d_i) / d_i ) )
+ * num/den = sum( a_i / d_i )
  * @author Heinz Kredel
  * @param <C> coefficient type
  */
@@ -81,8 +81,8 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
      * @param cf list of elements a_i.
      * @param cd list of linear factors d_i of d.
      * @param af list of algebraic elements a_i.
-     * @param ad list of irreducible factors d_i of d with algebraic
-     *            coefficients. n/d = sum( a_i ( der(d_i) / d_i ) )
+     * @param ad list of linear (irreducible) factors d_i of d with algebraic
+     *            coefficients. n/d = sum( a_i / d_i )
      */
     public PartialFraction(GenPolynomial<C> n, GenPolynomial<C> d, List<C> cf, List<GenPolynomial<C>> cd,
                     List<AlgebraicNumber<C>> af, List<GenPolynomial<AlgebraicNumber<C>>> ad) {
@@ -92,6 +92,16 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
         cdenom = cd;
         afactors = af;
         adenom = ad;
+        for (GenPolynomial<C> p : cdenom) {
+	    if (p.degree(0) > 1) {
+                throw new IllegalArgumentException("polynomial not linear, p = " + p);
+            }
+        }
+        for (GenPolynomial<AlgebraicNumber<C>> a : adenom) {
+	    if (a.degree(0) > 1) {
+                throw new IllegalArgumentException("polynomial not linear, a = " + a);
+            }
+        }
     }
 
 
@@ -116,8 +126,7 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
             }
             sb.append("(" + cp.toString() + ")");
             GenPolynomial<C> p = cdenom.get(i);
-            GenPolynomial<C> der = PolyUtil.<C> baseDeriviative(p);
-            sb.append("(" + der.toString() + ") / (" + p.toString() + ")");
+            sb.append(" / (" + p.toString() + ")");
         }
         if (!first && afactors.size() > 0) {
             sb.append(" + ");
@@ -138,9 +147,8 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
             } else {
                 //sb.append("sum_("+ar+") ");
             }
-            sb.append("(" + ap.toString() + ")*");
-            GenPolynomial<AlgebraicNumber<C>> der = PolyUtil.<AlgebraicNumber<C>> baseDeriviative(p);
-            sb.append("(" + der.toString() + ") / (" + p.toString() + ")");
+            sb.append("(" + ap.toString() + ")");
+            sb.append(" / (" + p.toString() + ")");
             //sb.append(" ## over " + ap.factory() + "\n");
         }
         return sb.toString();
@@ -167,10 +175,9 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
             } else {
                 sb.append(" + ");
             }
-            sb.append(cp.toScript() + "*");
+            sb.append(cp.toScript());
             GenPolynomial<C> p = cdenom.get(i);
-            GenPolynomial<C> der = PolyUtil.<C> baseDeriviative(p);
-            sb.append(der.toScript() + " / " + p.toScript());
+            sb.append(" / " + p.toScript());
         }
         if (!first) {
             sb.append(" + ");
@@ -191,9 +198,8 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
             } else {
                 //sb.append("sum_("+ar+") ");
             }
-            sb.append("(" + ap.toScript() + ")*");
-            GenPolynomial<AlgebraicNumber<C>> der = PolyUtil.<AlgebraicNumber<C>> baseDeriviative(p);
-            sb.append(der.toScript() + " / " + p.toScript());
+            sb.append(ap.toScript());
+            sb.append(" / " + p.toScript());
             //sb.append(" ## over " + ap.toScriptFactory() + "\n");
         }
         return sb.toString();
@@ -252,7 +258,7 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
 
 
     /**
-     * Test if correct partial fraction. num/den = sum( a_i ( der(d_i) / d_i ) )
+     * Test if correct partial fraction. num/den = sum( a_i / d_i )
      */
     @SuppressWarnings("unchecked")
     public boolean isPartialFraction() {
@@ -264,10 +270,9 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
         int i = 0;
         for (C c : cfactors) {
             GenPolynomial<C> cp = cdenom.get(i++);
-            GenPolynomial<C> der = PolyUtil.<C> baseDeriviative(cp);
-            // plus c * der(cp) / cp
-            GenPolynomial<C> cder = der.multiply(c);
-            Quotient<C> qq = new Quotient<C>(qfac, cder, cp);
+            // plus c / cp
+            GenPolynomial<C> cd = num.ring.getONE().multiply(c);
+            Quotient<C> qq = new Quotient<C>(qfac, cd, cp);
             qs = qs.sum(qq);
         }
         //System.out.println("qs = " + qs);
@@ -320,10 +325,9 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
             i = 0;
             for (AlgebraicNumber<C> c : cf) {
                 GenPolynomial<AlgebraicNumber<C>> cp = cfp.get(i++);
-                GenPolynomial<AlgebraicNumber<C>> der = PolyUtil.<AlgebraicNumber<C>> baseDeriviative(cp);
-                // plus c * der(cp) / cp
-                GenPolynomial<AlgebraicNumber<C>> cder = der.multiply(c);
-                Quotient<AlgebraicNumber<C>> qq = new Quotient<AlgebraicNumber<C>>(aqfac, cder, cp);
+                // plus c / cp
+                GenPolynomial<AlgebraicNumber<C>> cd = apfac.getONE().multiply(c);
+                Quotient<AlgebraicNumber<C>> qq = new Quotient<AlgebraicNumber<C>>(aqfac, cd, cp);
                 //System.out.println("qq = " + qq);
                 aq = aq.sum(qq);
             }
