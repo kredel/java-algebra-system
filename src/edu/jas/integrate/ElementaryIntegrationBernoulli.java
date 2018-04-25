@@ -7,35 +7,22 @@ package edu.jas.integrate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.SortedMap;
 
 import org.apache.log4j.Logger;
 
 import edu.jas.poly.AlgebraicNumber;
-import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.PolyUtil;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
-import edu.jas.ufd.FactorAbstract;
 import edu.jas.ufd.FactorAbsolute;
-import edu.jas.ufd.FactorFactory;
-import edu.jas.ufd.GCDFactory;
 import edu.jas.ufd.PartialFraction;
-import edu.jas.ufd.GreatestCommonDivisorAbstract;
-import edu.jas.ufd.GreatestCommonDivisorSubres;
-import edu.jas.ufd.PolyUfdUtil;
-import edu.jas.ufd.Quotient;
-import edu.jas.ufd.QuotientRing;
-import edu.jas.ufd.SquarefreeAbstract;
-import edu.jas.ufd.SquarefreeFactory;
 
 
 /**
- * Methods related to the Bernoulli algorithm for elementary
- * integration.  The denomiantor is factored into linear factors over
- * iterated algebraic extensions over the rational numbers.
+ * Methods related to the Bernoulli algorithm for elementary integration. The
+ * denominator is factored into linear factors over iterated algebraic
+ * extensions over the rational numbers.
  * 
  * @author Heinz Kredel
  * @param <C> coefficient type
@@ -47,7 +34,7 @@ public class ElementaryIntegrationBernoulli<C extends GcdRingElem<C>> extends El
     private static final Logger logger = Logger.getLogger(ElementaryIntegrationBernoulli.class);
 
 
-    private static final boolean debug = logger.isDebugEnabled();
+    //private static final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -55,18 +42,21 @@ public class ElementaryIntegrationBernoulli<C extends GcdRingElem<C>> extends El
      */
     public ElementaryIntegrationBernoulli(RingFactory<C> br) {
         super(br);
-        if ( ! (irr instanceof FactorAbsolute)) {
-            throw new IllegalArgumentException("no absolute factorization available for coefficient ring " + br);
+        if (!(irr instanceof FactorAbsolute)) {
+            logger.error("no absolute factorization available for coefficient ring " + br);
+            throw new IllegalArgumentException(
+                            "no absolute factorization available for coefficient ring " + br);
         }
         irredLogPart = true; // force to true?
     }
 
 
     /**
-     * Univariate GenPolynomial integration of the logaritmic part,
-     * Bernoulli linear factorization algorithm.
+     * Univariate GenPolynomial integration of the logarithmic part, Bernoulli
+     * linear factorization algorithm.
      * @param A univariate GenPolynomial, deg(A) < deg(P).
-     * @param P univariate squarefree or irreducible GenPolynomial. // gcd(A,P) == 1 automatic
+     * @param P univariate squarefree or irreducible GenPolynomial. // gcd(A,P)
+     *            == 1 automatic
      * @return logarithmic part container.
      */
     @Override
@@ -91,7 +81,7 @@ public class ElementaryIntegrationBernoulli<C extends GcdRingElem<C>> extends El
             return new LogIntegral<C>(A, P, cfactors, cdenom, afactors, adenom);
         }
         // complete factorization to linear factors
-        PartialFraction<C> F = ((FactorAbsolute<C>)irr).baseAlgebraicPartialFraction(A, P);
+        PartialFraction<C> F = ((FactorAbsolute<C>) irr).baseAlgebraicPartialFraction(A, P);
         System.out.println("\npartial fraction " + F);
 
         return new LogIntegral<C>(A, P, F.cfactors, F.cdenom, F.afactors, F.adenom);

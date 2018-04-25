@@ -1,42 +1,40 @@
 /*
- * $Id$
+ * $Id: ElementaryIntegrationAbsoluteTest.java 5812 2018-04-25 21:28:02Z kredel
+ * $
  */
 
 package edu.jas.integrate;
 
 
+import edu.jas.arith.BigRational;
+import edu.jas.kern.ComputerThreads;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.TermOrder;
+import edu.jas.ufd.Quotient;
+import edu.jas.ufd.QuotientRing;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.log4j.BasicConfigurator;
-//import org.apache.log4j.Logger;
-
-import edu.jas.arith.BigRational;
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.TermOrder;
-import edu.jas.poly.PolyUtil;
-import edu.jas.ufd.Quotient;
-import edu.jas.ufd.QuotientRing;
-
-import edu.jas.kern.ComputerThreads;
-
 
 /**
- * Elementary integration Bernoulli algorithm with linear factors with JUnit. 
+ * Elementary integration Bernoulli algorithm with linear factors with JUnit.
  * @author Heinz Kredel
  */
 
 public class ElementaryIntegrationAbsoluteTest extends TestCase {
 
+
     /**
      * main.
      */
-    public static void main (String[] args) {
-        //BasicConfigurator.configure();
-        junit.textui.TestRunner.run( suite() );
+    public static void main(String[] args) {
+        //BasicConfigurator.configure(); 
+        junit.textui.TestRunner.run(suite());
     }
+
 
     /**
      * Constructs a <CODE>ElementaryIntegrationAbsoluteTest</CODE> object.
@@ -46,29 +44,43 @@ public class ElementaryIntegrationAbsoluteTest extends TestCase {
         super(name);
     }
 
+
     /**
      * suite.
-     */ 
+     */
     public static Test suite() {
-        TestSuite suite= new TestSuite(ElementaryIntegrationAbsoluteTest.class);
+        TestSuite suite = new TestSuite(ElementaryIntegrationAbsoluteTest.class);
         return suite;
     }
 
+
     TermOrder tord;
+
+
     QuotientRing<BigRational> qfac;
+
+
     GenPolynomialRing<BigRational> pfac;
+
+
     ElementaryIntegration<BigRational> integrator;
+
+
     QuotIntegral<BigRational> rint;
 
+
+    @Override
     protected void setUp() {
-        tord = new TermOrder( TermOrder.INVLEX );
+        tord = new TermOrder(TermOrder.INVLEX);
         BigRational br = new BigRational(1);
-        String[] vars = new String[]{ "x" };
-        pfac = new GenPolynomialRing<BigRational>( br, 1, tord, vars );
+        String[] vars = new String[] { "x" };
+        pfac = new GenPolynomialRing<BigRational>(br, 1, tord, vars);
         qfac = new QuotientRing<BigRational>(pfac);
         integrator = new ElementaryIntegrationBernoulli<BigRational>(br);
     }
 
+
+    @Override
     protected void tearDown() {
         ComputerThreads.terminate();
     }
