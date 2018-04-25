@@ -250,9 +250,9 @@ public class FactorTest extends TestCase {
 
 
     /**
-     * Test rational absolute factorization, Rothstein-Trager step.
+     * Test rational absolute factorization, for elementary integration.
      */
-    public void testBaseRationalAbsoluteFactorizationRoT() {
+    public void testBaseRationalAbsoluteFactorization() {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
         //String[] alpha = new String[] { "alpha" };
