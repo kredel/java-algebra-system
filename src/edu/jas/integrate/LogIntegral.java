@@ -134,67 +134,6 @@ public class LogIntegral<C extends GcdRingElem<C>> implements Serializable {
 
 
     /**
-     * Get the String representation.
-     * @see java.lang.Object#toString()
-     */
-    //@Override
-    public String toStringX() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("(" + num.toString() + ")");
-        sb.append(" / ");
-        sb.append("(" + den.toString() + ")");
-        sb.append(" =\n");
-        boolean first = true;
-        for (C cp : cfactors) {
-            if (first) {
-                first = false;
-            } else {
-                sb.append(", ");
-            }
-            sb.append(cp.toString());
-        }
-        if (!first) {
-            sb.append(" linear denominators: ");
-        }
-        first = true;
-        for (GenPolynomial<C> cp : cdenom) {
-            if (first) {
-                first = false;
-            } else {
-                sb.append(", ");
-            }
-            sb.append(cp.toString());
-        }
-        if (!first) {
-            sb.append("; ");
-        }
-        first = true;
-        for (AlgebraicNumber<C> ap : afactors) {
-            if (first) {
-                first = false;
-            } else {
-                //sb.append(", ");
-            }
-            sb.append(ap.toString());
-            sb.append(" ## over " + ap.factory() + "\n");
-        }
-        if (!first) {
-            sb.append(" denominators: ");
-        }
-        first = true;
-        for (GenPolynomial<AlgebraicNumber<C>> ap : adenom) {
-            if (first) {
-                first = false;
-            } else {
-                sb.append(", ");
-            }
-            sb.append(ap.toString());
-        }
-        return sb.toString();
-    }
-
-
-    /**
      * Get a scripting compatible string representation.
      * @return script compatible representation for this container.
      * @see edu.jas.structure.ElemFactory#toScript()
