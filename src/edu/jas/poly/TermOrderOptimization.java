@@ -5,6 +5,7 @@
 package edu.jas.poly;
 
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -267,19 +268,20 @@ public class TermOrderOptimization {
     }
 
 
-    /*
+    /**
      * Permutation of an array. Compiles, but does not work, requires JDK 1.6 to
      * work.
      * @param a array.
      * @param P permutation.
      * @return P(a).
+     */
     @SuppressWarnings({ "unchecked", "cast" })
     public static <T> T[] arrayPermutation(List<Integer> P, T[] a) {
         if (a == null || a.length <= 1) {
             return a;
         }
-        T[] b = (T[]) new Object[a.length]; // jdk 1.5 
-        //T[] b = Arrays.<T>copyOf( a, a.length ); // jdk 1.6, works
+        //T[] b = (T[]) new Object[a.length]; // jdk 1.5 
+        T[] b = Arrays.<T> copyOf( a, a.length ); // jdk 1.6, works
         int j = 0;
         for (Integer i : P) {
             b[j] = a[(int) i];
@@ -287,7 +289,6 @@ public class TermOrderOptimization {
         }
         return b;
     }
-     */
 
 
     /**
@@ -331,6 +332,28 @@ public class TermOrderOptimization {
         List<GenPolynomial<C>> K = new ArrayList<GenPolynomial<C>>(L.size());
         for (GenPolynomial<C> a : L) {
             GenPolynomial<C> b = permutation(P, R, a);
+            K.add(b);
+        }
+        return K;
+    }
+
+
+    /**
+     * Permutation of solvable polynomial exponent vectors.
+     * @param L list of solvable polynomials.
+     * @param R solvable polynomial ring.
+     * @param P permutation, must be compatible with the commutator relations.
+     * @return P(L).
+     */
+    public static <C extends RingElem<C>> List<GenSolvablePolynomial<C>> permutation(List<Integer> P,
+                    GenSolvablePolynomialRing<C> R, List<GenSolvablePolynomial<C>> L) {
+        if (L == null || L.size() == 0) {
+            return L;
+        }
+        List<GenSolvablePolynomial<C>> K = new ArrayList<GenSolvablePolynomial<C>>(L.size());
+        for (GenSolvablePolynomial<C> a : L) {
+            GenSolvablePolynomial<C> b;
+            b = (GenSolvablePolynomial<C>) permutation(P, (GenPolynomialRing<C>) R, (GenPolynomial<C>) a);
             K.add(b);
         }
         return K;

@@ -2660,7 +2660,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         }
         List<Integer> perm = GroebnerBasePartial.getPermutation(dvars, ovars);
         //System.out.println("perm  = " + perm);
-        GenPolynomialRing<C> pfac = TermOrderOptimization.<C> permutation(perm, cont.getRing());
+        GenPolynomialRing<C> pfac = cont.getRing().permutation(perm);
         if (logger.isInfoEnabled()) {
             logger.info("pfac = " + pfac);
         }

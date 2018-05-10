@@ -391,7 +391,7 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseA
         // compute permutation (in reverse sorting)
         List<Integer> perm = partialPermutation(vars, pvars);
 
-        GenPolynomialRing<C> pfac = TermOrderOptimization.<C> permutation(perm, fac);
+        GenPolynomialRing<C> pfac = fac.permutation(perm);
         if (logger.isInfoEnabled()) {
             logger.info("pfac = " + pfac);
         }
@@ -448,7 +448,7 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseA
         //System.out.println("pGB, perm   = " + perm);
         //System.out.println("pGB, perm,1 = " + getPermutation(vars, xvars));
 
-        GenPolynomialRing<C> pfac = TermOrderOptimization.<C> permutation(perm, fac);
+        GenPolynomialRing<C> pfac = fac.permutation(perm);
         if (logger.isInfoEnabled()) {
             logger.info("pfac = " + pfac);
         }
@@ -515,7 +515,7 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseA
         List<Integer> perm = partialPermutation(vars, evars, pvars);
         //System.out.println("perm = " + perm);
 
-        GenPolynomialRing<C> pfac = TermOrderOptimization.<C> permutation(perm, fac);
+        GenPolynomialRing<C> pfac = fac.permutation(perm);
         if (logger.isInfoEnabled()) {
             logger.info("pfac = " + pfac);
         }

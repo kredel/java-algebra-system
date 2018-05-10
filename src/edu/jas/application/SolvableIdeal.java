@@ -841,14 +841,22 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
 
     /**
      * Intersection. Generators for the intersection of a ideal with a
-     * polynomial ring. The polynomial ring of this ideal must be a contraction
-     * of R and the TermOrder must be an elimination order.
+     * polynomial ring. The polynomial ring R must be a contraction
+     * of this ideal and the TermOrder must be an elimination order.
      * @param R solvable polynomial ring
      * @return ideal(this \cap R)
      */
     public SolvableIdeal<C> intersect(GenSolvablePolynomialRing<C> R) {
         if (R == null) {
             throw new IllegalArgumentException("R may not be null");
+        }
+        String[] rvars = R.getVars();
+        String[] tvars = getRing().getVars();
+        for (int i = 0; i < rvars.length; i++) {
+            if (rvars[i] != tvars[i]) {
+                throw new IllegalArgumentException("no contraction: " + R.toScript() 
+                                                 + " of " + getRing().toScript());
+            }
         }
         List<GenSolvablePolynomial<C>> H = PolyUtil.<C> intersect(R, getList());
         return new SolvableIdeal<C>(R, H, isGB, sided);

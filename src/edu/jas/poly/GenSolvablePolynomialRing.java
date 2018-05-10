@@ -767,7 +767,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
 
     /**
      * Permutation of polynomial ring variables.
-     * @param P permutation.
+     * @param P permutation, must be compatible with the commutator relations.
      * @return P(this).
      */
     @Override
