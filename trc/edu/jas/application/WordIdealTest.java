@@ -149,10 +149,6 @@ public class WordIdealTest extends TestCase {
         I = new WordIdeal<BigRational>(fac, L, false);
         assertTrue("isGB( I )", I.isGB());
 
-        //if (!true) { 
-        //    return;
-        //}
-
         //assertTrue("not isZERO( b )", !b.isZERO());
         L.add(b);
         //System.out.println("L = " + L.size() );
@@ -250,46 +246,28 @@ public class WordIdealTest extends TestCase {
         //System.out.println("H = " + H);
         G = K.sum(H);
         //System.out.println("G = " + G);
-        //assertTrue("not isZERO( K )", !K.isZERO());
         assertTrue("isGB( K )", K.isGB());
         assertTrue("isGB( H )", H.isGB());
         assertTrue("isGB( G )", G.isGB());
-        //non-com assertTrue("I contains(K)", I.contains(K));
+        //non-com 
+        assertTrue("I contains(K)", I.contains(K));
         assertTrue("J contains(K)", J.contains(K));
 
-        //if (true) { // TODO
-        //    return;
-        //}
-
-        /*
-        H = I.intersect(J);
-        assertTrue("not isZERO( H )", !H.isZERO());
-        assertTrue("isGB( H )", H.isGB());
-        assertTrue("I contains(H)", I.contains(H));
-        assertTrue("J contains(H)", J.contains(H));
-        //non-com assertTrue("H contains(K)", H.contains(K));
-        */
-
-        /*
         L = new ArrayList<GenWordPolynomial<BigRational>>();
         L.add(a);
-        L.add(c);
-        L = bb.GB(L);
+        //L.add(c);
+        L = bb.GB(L); // may be infinite
 
         I = new WordIdeal<BigRational>(fac, L, true);
-        //assertTrue("not isZERO( I )", !I.isZERO());
-        //assertTrue("not isONE( I )", !I.isONE() );
+        //System.out.println("I = " + I);
         assertTrue("isGB( I )", I.isGB());
 
-        K = I.product(J);
-        //System.out.println("I = " + I);
         //System.out.println("J = " + J);
+        K = I.product(J);
         //System.out.println("K = " + K);
-        //assertTrue("not isZERO( K )", !K.isZERO());
         assertTrue("isGB( K )", K.isGB());
-        //non-com assertTrue("I contains(K)", I.contains(K));
+        assertTrue("I contains(K)", I.contains(K));
         assertTrue("J contains(K)", J.contains(K));
-        */
     }
 
 
