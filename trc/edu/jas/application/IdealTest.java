@@ -1286,7 +1286,6 @@ public class IdealTest extends TestCase {
      */
     public void testIdealComplexRoot() {
         String[] vars;
-
         BigRational coeff = new BigRational(1, 1);
         to = new TermOrder(TermOrder.INVLEX);
         //vars = new String[] { "x", "y" };
@@ -1308,6 +1307,7 @@ public class IdealTest extends TestCase {
         //b = fac.parse("( y^2 + x )");
         //b = fac.parse("( y^2 + 4 )");
         c = fac.parse("( z^2 - x y )");
+        //c = fac.parse("( z^2 - 5 )");
 
         if (a.isZERO() || b.isZERO()) {
             return;
@@ -1363,11 +1363,11 @@ public class IdealTest extends TestCase {
             }
             d += ds;
             assertTrue("#L == #Ld: ", L.size() == Ld.size());
-            List<List<Complex<BigDecimal>>> droot = Ic.decimalApproximation();
-            //for (List<Complex<BigDecimal>> dr : droot) {
-            //System.out.println("dr = " + dr); // TODO
-            //}
-            assertTrue("#droot == ds: ", droot.size() == ds);
+            //List<List<Complex<BigDecimal>>> droot = Ic.decimalApproximation();
+            Ic.doDecimalApproximation();
+            //System.out.println("Ic = " + Ic.isDecimalApproximation());
+            assertTrue("is decimal approximation ", Ic.isDecimalApproximation());
+            assertTrue("#droot == ds: ", Ic.droots.size() == ds);
         }
         logger.info("#roots = " + s + ", #vr-dim = " + d);
         assertTrue("#roots(" + s + ") == degree(" + d + "): ", s == d);
@@ -1617,12 +1617,12 @@ public class IdealTest extends TestCase {
         assertTrue("is contained in intersection ", I.isZeroDimDecomposition(iul));
 
         for (IdealWithRealAlgebraicRoots<BigRational> iu : iur) {
+            //@SuppressWarnings("unused")
+            //List<List<BigDecimal>> rd = iu.decimalApproximation();
+            iu.doDecimalApproximation(); // side effect compute decimal approx
             //System.out.println("iu = " + iu);
-            //System.out.println("");
-            @SuppressWarnings("unused")
-            List<List<BigDecimal>> rd = iu.decimalApproximation(); // TODO
-            //System.out.println("iu = " + iu);
-            //System.out.println("");
+            //System.out.println("isDecimalApproximation: = " + iu.isDecimalApproximation());
+            assertTrue("is decimal approximation ", iu.isDecimalApproximation());
         }
     }
 
