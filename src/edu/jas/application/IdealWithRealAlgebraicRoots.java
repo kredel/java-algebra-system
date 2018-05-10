@@ -12,6 +12,8 @@ import java.util.List;
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.Rational;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.PolyUtil;
 import edu.jas.root.RealAlgebraicNumber;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingElem;
@@ -151,6 +153,74 @@ public class IdealWithRealAlgebraicRoots<D extends GcdRingElem<D> & Rational>
             System.out.println("unused is empty");
         }
         return;
+    }
+
+
+    /**
+     * Is decimal approximation of the real roots.
+     * @return true, if the decimal real roots approximate the real roots.
+     */
+    public synchronized boolean isDecimalApproximation() {
+        doDecimalApproximation();
+        if (droots == null || droots.size() == 0) {
+            return true;
+        }
+        if (upolys == null || upolys.size() == 0) {
+            return true;
+        }
+        BigDecimal dr = droots.get(0).get(0);
+        BigDecimal c = new BigDecimal("0.15").power(dr.DEFAULT_PRECISION/2);
+        //System.out.println("eps: c = " + c);
+        List<GenPolynomial<BigDecimal>> upds = new ArrayList<GenPolynomial<BigDecimal>>(upolys.size());
+        for (GenPolynomial<D> up : upolys) {
+            GenPolynomialRing<D> pfac = up.ring;
+            GenPolynomialRing<BigDecimal> dpfac = new GenPolynomialRing<BigDecimal>(dr,pfac);
+            GenPolynomial<BigDecimal> upd = PolyUtil.<D> decimalFromRational(dpfac, up);
+            //System.out.println("upd = " + upd);
+            upds.add(upd);
+        }
+        for (List<BigDecimal> rr : droots) {
+            int i = 0;
+            for (GenPolynomial<BigDecimal> upd : upds) {
+                BigDecimal d = rr.get(i++);
+                BigDecimal z = PolyUtil.<BigDecimal> evaluateMain(dr, upd, d);
+                z = z.abs();
+                //System.out.println("z = " + z + ", d = " + d);
+                if (z.compareTo(c) >= 0) {
+                    //System.out.println("no root: z = " + z);
+                    BigDecimal cc = new BigDecimal("0.1").power(dr.DEFAULT_PRECISION/3);
+                    if (z.compareTo(cc) >= 0) {
+                        System.out.println("no root: z = " + z + ", cc = " + cc);
+                        return false;
+                    }
+                }
+            }
+        }
+        GenPolynomialRing<D> pfac = ideal.list.ring;
+        GenPolynomialRing<BigDecimal> dpfac = new GenPolynomialRing<BigDecimal>(dr,pfac);
+        List<GenPolynomial<D>> ips = ideal.list.list;
+        //List<GenPolynomial<BigDecimal>> ipds = new ArrayList<GenPolynomial<BigDecimal>>(ips.size());
+        c = new BigDecimal("0.15").power(dr.DEFAULT_PRECISION/2 - 1);
+        for (GenPolynomial<D> ip : ips) {
+            GenPolynomial<BigDecimal> ipd = PolyUtil.<D> decimalFromRational(dpfac, ip);
+            //System.out.println("ipd = " + ipd);
+            //ipds.add(ipd);
+            for (List<BigDecimal> rr : droots) {
+                BigDecimal z = PolyUtil.<BigDecimal> evaluateAll(dr, ipd, rr);
+                z = z.abs();
+                //System.out.println("z = " + z + ", rr = " + rr);
+                if (z.compareTo(c) >= 0) {
+                    //System.out.println("no root: z = " + z + ", c = " + c);
+                    BigDecimal cc = new BigDecimal("0.1").power(dr.DEFAULT_PRECISION/3);
+                    if (z.compareTo(cc) >= 0) {
+                        System.out.println("no root: z = " + z + ", cc = " + cc);
+                        System.out.println("ipd = " + ipd + ", rr = " + rr);
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
 }
