@@ -7,6 +7,7 @@ package edu.jas.application;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -18,11 +19,13 @@ import edu.jas.arith.BigRational;
 import edu.jas.gb.SolvableGroebnerBase;
 import edu.jas.gb.SolvableGroebnerBaseSeq;
 import edu.jas.kern.ComputerThreads;
+import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.RelationGenerator;
 import edu.jas.poly.TermOrder;
+import edu.jas.poly.TermOrderOptimization;
 import edu.jas.poly.WeylRelations;
 import edu.jas.poly.WeylRelationsIterated;
 import edu.jas.util.KsubSet;
@@ -104,7 +107,7 @@ public class SolvableIdealTest extends TestCase {
     @Override
     protected void setUp() {
         BigRational coeff = new BigRational(17, 1);
-        to = new TermOrder( /*TermOrder.INVLEX*/);
+        to = new TermOrder( TermOrder.INVLEX );
         String[] vars = new String[] { "w", "x", "y", "z" };
         fac = new GenSolvablePolynomialRing<BigRational>(coeff, rl, to, vars);
         RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
@@ -778,7 +781,7 @@ public class SolvableIdealTest extends TestCase {
         //System.out.println("vars = " + Arrays.toString(vars));
         //System.out.println("fac = " + fac);
 
-        SolvableIdeal<BigRational> I, J;
+        SolvableIdeal<BigRational> I, J, K;
         L = new ArrayList<GenSolvablePolynomial<BigRational>>();
         //non-com
         a = fac.univariate(0, 3L); //fac.random(kl, ll, el, q );
@@ -791,9 +794,9 @@ public class SolvableIdealTest extends TestCase {
 
         I = new SolvableIdeal<BigRational>(fac, L);
         I.doGB();
-        //System.out.println("I = " + I);
+        //System.out.println("I = " + I.toScript());
         assertTrue("not isZERO( I )", !I.isZERO());
-        assertTrue("not isONE( I )", !I.isONE());
+        //assertTrue("not isONE( I )", !I.isONE());
         assertTrue("isGB( I )", I.isGB());
 
         List<String> sv = new ArrayList<String>(vars.length);
@@ -806,8 +809,42 @@ public class SolvableIdealTest extends TestCase {
             KsubSet<String> ps = new KsubSet<String>(sv, i);
             //System.out.println("========================== ps : " + i);
             for (List<String> ev : ps) {
+                int si = Collections.indexOfSubList(sv, ev);
+                if (si < 0 || si % 2 != 0) { // substring and iterated Weyl algebra
+                    continue;
+                }
                 //System.out.println("ev = " + ev);
-
+                List<String> svr = new ArrayList<String>(vars.length);
+                K = null;
+                if (si != 0) { // and substring on even index
+                    svr.addAll(ev);
+                    for (String e : sv) {
+                        if (svr.contains(e)) {
+                            continue;
+                        } else {
+                            svr.add(e);
+                        }
+                    }
+                    //System.out.println("svr = " + svr);
+                    String[] rvars = new String[svr.size()];
+                    for (int j = 0; j < svr.size(); j++) {
+                        rvars[j] = svr.get(j);
+                    }
+                    List<Integer> P = new ArrayList<Integer>(sv.size());
+                    for (int j = 0; j < rvars.length; j++) {
+                        int k = sv.indexOf( rvars[j] );
+                        P.add(k);
+                    }
+                    //System.out.println("P = " + P);
+                    GenSolvablePolynomialRing<BigRational> rfac;
+                    rfac = (GenSolvablePolynomialRing<BigRational>) fac.permutation(P);
+                    //System.out.println("rfac = " + rfac.toScript());
+                    List<GenSolvablePolynomial<BigRational>> id 
+                       = TermOrderOptimization.<BigRational> permutation(P, rfac, I.list.castToSolvableList());
+                    K = new SolvableIdeal<BigRational>(rfac, id);
+                    //System.out.println("K = " + K.toScript());
+                    //continue;
+                }
                 String[] evars = new String[ev.size()];
                 for (int j = 0; j < ev.size(); j++) {
                     evars[j] = ev.get(j);
@@ -817,14 +854,16 @@ public class SolvableIdealTest extends TestCase {
                 //RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
                 RelationGenerator<BigRational> wl = new WeylRelationsIterated<BigRational>();
                 wl.generate(efac);
-                //System.out.println("efac = " + efac);
+                //System.out.println("efac = " + efac.toScript());
 
-                J = I.eliminate(efac);
-                //System.out.println("J = " + J);
+                if ( K == null) {
+                    J = I.eliminate(efac);
+                } else {
+                    J = K.eliminate(efac);
+                }
+                //System.out.println("J = " + J.toScript());
                 assertTrue("isGB( J )", J.isGB());
                 assertTrue("size( J ) <=  |ev|", J.getList().size() <= ev.size());
-                //System.out.println("J = " + J);
-                break; // non-com TODO
             }
         }
     }
