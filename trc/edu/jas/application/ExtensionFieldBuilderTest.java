@@ -309,7 +309,7 @@ public class ExtensionFieldBuilderTest extends TestCase {
         //System.out.println("cf = " + cf.toScript());
         RingFactory fac = ExtensionFieldBuilder.baseField(cf)
                         .complexAlgebraicExtension("w2", "w2^2 + 2", "[-1i0,1i2]")
-                        //.complexAlgebraicExtension("q3", "q3^3 + { w2 }","[-1i0,1i2]") // not possible, TODO
+                        //.complexAlgebraicExtension("q3", "q3^3 + { w2 }","[-1i0,1i2]") // not possible
                         .build();
         //System.out.println("fac = " + fac.toScript());
 

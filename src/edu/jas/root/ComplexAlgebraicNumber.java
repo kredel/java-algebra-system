@@ -420,6 +420,7 @@ public class ComplexAlgebraicNumber<C extends GcdRingElem<C> & Rational>
      * @return signum(this).
      */
     public int signum() {
+        ring.ensureEngine();
         try {
             Rectangle<C> v = ring.engine.invariantRectangle(ring.root, ring.algebraic.modul, number.val);
             ring.setRoot(v);
@@ -437,6 +438,7 @@ public class ComplexAlgebraicNumber<C extends GcdRingElem<C> & Rational>
      * @return |this| as complex rational number.
      */
     public Complex<BigRational> magnitude() {
+        ring.ensureEngine();
         try {
             Rectangle<C> v = ring.engine.invariantMagnitudeRectangle(ring.root, ring.algebraic.modul,
                             number.val, ring.getEps());

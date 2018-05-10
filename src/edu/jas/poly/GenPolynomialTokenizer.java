@@ -561,7 +561,8 @@ public class GenPolynomialTokenizer {
         if (debug)
             logger.debug("b = " + b);
         a = a.sum(b);
-        logger.debug("a = " + a);
+        if (debug)
+            logger.debug("a = " + a);
         // b = a1;
         return a;
     }
