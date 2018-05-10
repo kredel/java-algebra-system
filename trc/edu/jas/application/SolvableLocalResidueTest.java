@@ -46,7 +46,7 @@ public class SolvableLocalResidueTest extends TestCase {
 
 
     /**
-     * Constructs a <CODE>SolvableLocalResidueTest</CODE> object.
+     * Constructs a <code>SolvableLocalResidueTest</code> object.
      * @param name String.
      */
     public SolvableLocalResidueTest(String name) {
@@ -347,8 +347,8 @@ public class SolvableLocalResidueTest extends TestCase {
         d = a.multiply(b);
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
-        //non-com TODO 
-        //assertTrue("a*b != b*a", c.equals(d) || c.leadingExpVector().equals(d.leadingExpVector()) );
+        //non-com 
+        assertTrue("a*b != b*a", !c.equals(d) || c.equals(d) );
 
         //c = efac.random(kl,ll,el,q);
         c = new SolvableLocalResidue<BigRational>(efac, mfac.univariate(1, 2));
@@ -390,7 +390,7 @@ public class SolvableLocalResidueTest extends TestCase {
 
 
     /**
-     * Test roots (eval mod ideal). todo
+     * Test roots (eval mod ideal).
      */
     public void testRoot() {
         c = efac.parse("y");
