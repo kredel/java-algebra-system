@@ -5,7 +5,6 @@
 package edu.jas.application;
 
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,18 +15,16 @@ import edu.jas.poly.ComplexRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
-//import edu.jas.root.RealAlgebraicNumber;
+// import edu.jas.root.RealAlgebraicNumber;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingElem;
 
 
 /**
- * Container for Ideals together with univariate polynomials and complex algebraic
- * roots.
+ * Container for Ideals together with univariate polynomials and complex
+ * algebraic roots.
  * @author Heinz Kredel
  */
-public class IdealWithComplexAlgebraicRoots<D extends GcdRingElem<D> & Rational>
-        extends IdealWithUniv<D> {
+public class IdealWithComplexAlgebraicRoots<D extends GcdRingElem<D> & Rational> extends IdealWithUniv<D> {
 
 
     /**
@@ -57,7 +54,7 @@ public class IdealWithComplexAlgebraicRoots<D extends GcdRingElem<D> & Rational>
      * @param cr the list of complex algebraic roots
      */
     public IdealWithComplexAlgebraicRoots(Ideal<D> id, List<GenPolynomial<D>> up,
-            List<List<Complex<RealAlgebraicNumber<D>>>> cr) {
+                    List<List<Complex<RealAlgebraicNumber<D>>>> cr) {
         super(id, up);
         can = cr;
     }
@@ -68,7 +65,8 @@ public class IdealWithComplexAlgebraicRoots<D extends GcdRingElem<D> & Rational>
      * @param iu the ideal with univariate polynomials
      * @param cr the list of real algebraic roots
      */
-    public IdealWithComplexAlgebraicRoots(IdealWithUniv<D> iu, List<List<Complex<RealAlgebraicNumber<D>>>> cr) {
+    public IdealWithComplexAlgebraicRoots(IdealWithUniv<D> iu,
+                    List<List<Complex<RealAlgebraicNumber<D>>>> cr) {
         super(iu.ideal, iu.upolys);
         can = cr;
     }
@@ -139,7 +137,7 @@ public class IdealWithComplexAlgebraicRoots<D extends GcdRingElem<D> & Rational>
             for (Complex<RealAlgebraicNumber<D>> rr : rri) {
                 BigDecimal dr = new BigDecimal(rr.getRe().magnitude());
                 BigDecimal di = new BigDecimal(rr.getIm().magnitude());
-                Complex<BigDecimal> d = new Complex<BigDecimal>(cfac,dr,di);
+                Complex<BigDecimal> d = new Complex<BigDecimal>(cfac, dr, di);
                 r.add(d);
             }
             rroots.add(r);
@@ -154,7 +152,7 @@ public class IdealWithComplexAlgebraicRoots<D extends GcdRingElem<D> & Rational>
      */
     public void doDecimalApproximation() {
         List<List<Complex<BigDecimal>>> unused = decimalApproximation();
-        if ( unused.isEmpty() ) { // use for findbugs
+        if (unused.isEmpty()) { // use for findbugs
             System.out.println("unused is empty");
         }
         return;
@@ -175,18 +173,22 @@ public class IdealWithComplexAlgebraicRoots<D extends GcdRingElem<D> & Rational>
         }
         Complex<BigDecimal> dd = droots.get(0).get(0);
         ComplexRing<BigDecimal> dr = dd.ring;
-        Complex<BigDecimal> c = new Complex<BigDecimal>(dr, new BigDecimal("0.15").power(dd.getRe().DEFAULT_PRECISION/2));
+        Complex<BigDecimal> c = new Complex<BigDecimal>(dr,
+                        new BigDecimal("0.15").power(BigDecimal.DEFAULT_PRECISION / 2));
         c = c.norm();
         //System.out.println("eps: c = " + c);
-        Complex<BigDecimal> cc = new Complex<BigDecimal>(dr, new BigDecimal("0.1").power(dd.getRe().DEFAULT_PRECISION/3));
+        Complex<BigDecimal> cc = new Complex<BigDecimal>(dr,
+                        new BigDecimal("0.1").power(BigDecimal.DEFAULT_PRECISION / 3));
         cc = cc.norm();
 
         ComplexRing<D> cr = new ComplexRing<D>(ideal.list.ring.coFac);
-        List<GenPolynomial<Complex<BigDecimal>>> upds = new ArrayList<GenPolynomial<Complex<BigDecimal>>>(upolys.size());
+        List<GenPolynomial<Complex<BigDecimal>>> upds = new ArrayList<GenPolynomial<Complex<BigDecimal>>>(
+                        upolys.size());
         for (GenPolynomial<D> up : upolys) {
             GenPolynomialRing<D> pfac = up.ring;
             GenPolynomialRing<Complex<D>> cpfac = new GenPolynomialRing<Complex<D>>(cr, pfac);
-            GenPolynomialRing<Complex<BigDecimal>> dpfac = new GenPolynomialRing<Complex<BigDecimal>>(dr, cpfac);
+            GenPolynomialRing<Complex<BigDecimal>> dpfac = new GenPolynomialRing<Complex<BigDecimal>>(dr,
+                            cpfac);
             GenPolynomial<Complex<D>> upc = PolyUtil.<D> complexFromAny(cpfac, up);
             GenPolynomial<Complex<BigDecimal>> upd = PolyUtil.<D> complexDecimalFromRational(dpfac, upc);
             //System.out.println("upd = " + upd);
@@ -212,10 +214,10 @@ public class IdealWithComplexAlgebraicRoots<D extends GcdRingElem<D> & Rational>
 
         GenPolynomialRing<D> pfac = ideal.list.ring;
         cr = new ComplexRing<D>(pfac.coFac);
-        GenPolynomialRing<Complex<D>> cpfac = new GenPolynomialRing<Complex<D>>(cr,pfac);
-        GenPolynomialRing<Complex<BigDecimal>> dpfac = new GenPolynomialRing<Complex<BigDecimal>>(dr,cpfac);
+        GenPolynomialRing<Complex<D>> cpfac = new GenPolynomialRing<Complex<D>>(cr, pfac);
+        GenPolynomialRing<Complex<BigDecimal>> dpfac = new GenPolynomialRing<Complex<BigDecimal>>(dr, cpfac);
         List<GenPolynomial<D>> ips = ideal.list.list;
-        c = new Complex<BigDecimal>(dr, new BigDecimal("0.15").power(dd.getRe().DEFAULT_PRECISION/2 - 1));
+        c = new Complex<BigDecimal>(dr, new BigDecimal("0.15").power(BigDecimal.DEFAULT_PRECISION / 2 - 1));
         for (GenPolynomial<D> ip : ips) {
             GenPolynomial<Complex<D>> ipc = PolyUtil.<D> complexFromAny(cpfac, ip);
             GenPolynomial<Complex<BigDecimal>> ipd = PolyUtil.<D> complexDecimalFromRational(dpfac, ipc);
