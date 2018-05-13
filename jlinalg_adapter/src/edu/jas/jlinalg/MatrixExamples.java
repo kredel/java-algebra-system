@@ -33,7 +33,7 @@ public class MatrixExamples {
     }
 
 
-    @SuppressWarnings({"unchecked","cast"})
+    @SuppressWarnings({ "unchecked" })
     public static void example1() {
         BigRational r1, r2, r3, r4, r5, r6, z;
         r1 = new BigRational(1, 10);
@@ -53,8 +53,8 @@ public class MatrixExamples {
         r6a = new JLAdapter<BigRational>(r6);
         za = new JLAdapter<BigRational>(z);
 
-        Matrix<JLAdapter<BigRational>> a = new Matrix<JLAdapter<BigRational>>(new JLAdapter[][] {
-                { r1a, r2a, r3a }, { r4a, r5a, r6a } });
+        Matrix<JLAdapter<BigRational>> a = new Matrix<JLAdapter<BigRational>>(
+                        new JLAdapter[][] { { r1a, r2a, r3a }, { r4a, r5a, r6a } });
 
         System.out.println("system = " + a);
 
@@ -69,8 +69,8 @@ public class MatrixExamples {
         System.out.println("rhs = " + bz);
         System.out.println("nullSolutionSpace = " + LinSysSolver.solutionSpace(a, bz));
 
-        Matrix<JLAdapter<BigRational>> m = new Matrix<JLAdapter<BigRational>>(new JLAdapter[][] {
-                { r1a, r2a, r3a }, { r4a, r5a, r6a }, { r2a, r1a, r3a } });
+        Matrix<JLAdapter<BigRational>> m = new Matrix<JLAdapter<BigRational>>(
+                        new JLAdapter[][] { { r1a, r2a, r3a }, { r4a, r5a, r6a }, { r2a, r1a, r3a } });
         System.out.println("matrix = " + m);
 
         m = m.multiply(m);
@@ -105,7 +105,7 @@ public class MatrixExamples {
     }
 
 
-    @SuppressWarnings({"unchecked","cast"})
+    @SuppressWarnings({ "unchecked" })
     public static void example2() {
         BigRational r1, r2, r3, r4, r5, r6, z;
         r1 = new BigRational(1, 10);
@@ -118,9 +118,8 @@ public class MatrixExamples {
 
         JLAdapter<BigRational> d, t;
 
-        Matrix<JLAdapter<BigRational>> a = new Matrix<JLAdapter<BigRational>>(
-                        JLAdapterUtil.<BigRational> toJLAdapter(new BigRational[][] { { r1, r2, r3 },
-                                { r4, r5, r6 } }));
+        Matrix<JLAdapter<BigRational>> a = new Matrix<JLAdapter<BigRational>>(JLAdapterUtil
+                        .<BigRational> toJLAdapter(new BigRational[][] { { r1, r2, r3 }, { r4, r5, r6 } }));
         System.out.println("system = " + a);
 
         Vector<JLAdapter<BigRational>> b = new Vector<JLAdapter<BigRational>>(
@@ -175,7 +174,7 @@ public class MatrixExamples {
     }
 
 
-    @SuppressWarnings({"unchecked","cast"})
+    @SuppressWarnings({ "unchecked" })
     public static void example3() {
         BigRational r1, r2, r3, r4, r5, r6, fac;
         r1 = new BigRational(1, 10);

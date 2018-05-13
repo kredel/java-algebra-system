@@ -9,14 +9,14 @@ package edu.jas.util;
 import java.io.IOException;
 import java.util.Arrays;
 
+import org.apache.log4j.Logger;
+
+import edu.jas.kern.MPJEngine;
+
 import mpi.Comm;
 import mpi.MPI;
 import mpi.MPIException;
 import mpi.Status;
-
-import org.apache.log4j.Logger;
-
-import edu.jas.kern.MPJEngine;
 
 
 /**
@@ -63,7 +63,7 @@ public final class MPJChannel {
      * true: use TCP/IP socket layer, false: use MPI transport layer.
      * Can be set to false for "niodev" with FastMPJ.
      */
-    static final boolean useTCP = false;
+    static boolean useTCP = false;
 
 
     /*

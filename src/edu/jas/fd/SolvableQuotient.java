@@ -23,8 +23,8 @@ import edu.jas.structure.QuotPair;
  * immutable.
  * @author Heinz Kredel
  */
-public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<SolvableQuotient<C>>,
-                QuotPair<GenPolynomial<C>> {
+public class SolvableQuotient<C extends GcdRingElem<C>>
+                implements GcdRingElem<SolvableQuotient<C>>, QuotPair<GenPolynomial<C>> {
     // should be QuotPair<GenSolvablePolynomial<C>
 
 
@@ -79,7 +79,8 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
      * @param n numerator polynomial.
      * @param d denominator polynomial.
      */
-    public SolvableQuotient(SolvableQuotientRing<C> r, GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d) {
+    public SolvableQuotient(SolvableQuotientRing<C> r, GenSolvablePolynomial<C> n,
+                    GenSolvablePolynomial<C> d) {
         this(r, n, d, false);
     }
 
@@ -316,8 +317,8 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
         // }
         GenSolvablePolynomial<C>[] oc = ring.engine.leftOreCond(den, b.den);
         if (debug) {
-            System.out.println("oc[0] den =<>= oc[1] b.den: (" + oc[0] + ") (" + den + ") = (" + oc[1]
-                            + ") (" + b.den + ")");
+            System.out.println("oc[0] den =<>= oc[1] b.den: (" + oc[0] + ") (" + den + ") = (" + oc[1] + ") ("
+                            + b.den + ")");
         }
         r = oc[0].multiply(num);
         s = oc[1].multiply(b.num);
@@ -366,8 +367,8 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
      * SolvableQuotient right fraction. <b>Note:</b> It is not possible to
      * distinguish right from left fractions in the current implementation. So
      * it is not possible to compute with right fractions.
-     * @return SolvableQuotient(a,b), where den<sup>-1</sup> num = a
-     *         b<sup>-1</sup>
+     * @return SolvableQuotient(a,b), where den<sup>-1</sup> num = a b
+     *         <sup>-1</sup>
      */
     public SolvableQuotient<C> rightFraction() {
         if (isZERO() || isONE()) {
@@ -693,6 +694,7 @@ public class SolvableQuotient<C extends GcdRingElem<C>> implements GcdRingElem<S
      */
     @SuppressWarnings("unchecked")
     public SolvableQuotient<C>[] egcd(SolvableQuotient<C> b) {
+        @SuppressWarnings("cast")
         SolvableQuotient<C>[] ret = (SolvableQuotient<C>[]) new SolvableQuotient[3];
         ret[0] = null;
         ret[1] = null;

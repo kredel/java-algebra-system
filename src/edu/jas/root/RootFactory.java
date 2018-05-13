@@ -328,9 +328,9 @@ public class RootFactory {
     public static <C extends GcdRingElem<C> & Rational> boolean isRealRoot(GenPolynomial<C> f,
                     Complex<BigDecimal> c, BigDecimal r, BigRational eps) {
         BigDecimal e = new BigDecimal(eps);
-        if (c.getIm().abs().compareTo(e) <= 0) {
-            if (c.getRe().subtract(r).abs().compareTo(e) <= 0) {
-                return true;
+        if (c.getIm().abs().compareTo(e) > 0) {
+            if (c.getRe().subtract(r).abs().compareTo(e) > 0) {
+                return false;
             }
         }
         GenPolynomialRing<Complex<C>> cfac = new GenPolynomialRing<Complex<C>>(
