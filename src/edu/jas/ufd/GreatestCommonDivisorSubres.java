@@ -30,39 +30,6 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
 
 
     /**
-     * GenPolynomial pseudo remainder. For univariate polynomials.
-     * @param P GenPolynomial.
-     * @param S nonzero GenPolynomial.
-     * @return remainder with ldcf(S)<sup>m</sup> P = quotient * S + remainder.
-     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
-     * @deprecated Use
-     *             {@link edu.jas.poly.PolyUtil#baseDensePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial)}
-     *             instead
-     */
-    @Deprecated
-    public GenPolynomial<C> basePseudoRemainder(GenPolynomial<C> P, GenPolynomial<C> S) {
-        return PolyUtil.<C> baseDensePseudoRemainder(P, S);
-    }
-
-
-    /**
-     * GenPolynomial pseudo remainder. For recursive polynomials.
-     * @param P recursive GenPolynomial.
-     * @param S nonzero recursive GenPolynomial.
-     * @return remainder with ldcf(S)<sup>m</sup> P = quotient * S + remainder.
-     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
-     * @deprecated Use
-     *             {@link edu.jas.poly.PolyUtil#recursiveDensePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial)}
-     *             instead
-     */
-    @Deprecated
-    public GenPolynomial<GenPolynomial<C>> recursivePseudoRemainder(GenPolynomial<GenPolynomial<C>> P,
-                    GenPolynomial<GenPolynomial<C>> S) {
-        return PolyUtil.<C> recursiveDensePseudoRemainder(P, S);
-    }
-
-
-    /**
      * Univariate GenPolynomial greatest comon divisor. Uses pseudoRemainder for
      * remainder.
      * @param P univariate GenPolynomial.

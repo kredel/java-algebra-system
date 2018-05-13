@@ -851,25 +851,6 @@ public class PolyUtil {
      * @return remainder with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
      *         m' &le; deg(P)-deg(S)
      * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
-     * @deprecated Use
-     *             {@link #baseSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial)}
-     *             instead
-     */
-    @Deprecated
-    public static <C extends RingElem<C>> GenPolynomial<C> basePseudoRemainder(GenPolynomial<C> P,
-                    GenPolynomial<C> S) {
-        return baseSparsePseudoRemainder(P, S);
-    }
-
-
-    /**
-     * GenPolynomial sparse pseudo remainder. For univariate polynomials.
-     * @param <C> coefficient type.
-     * @param P GenPolynomial.
-     * @param S nonzero GenPolynomial.
-     * @return remainder with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
-     *         m' &le; deg(P)-deg(S)
-     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
      */
     public static <C extends RingElem<C>> GenPolynomial<C> baseSparsePseudoRemainder(GenPolynomial<C> P,
                     GenPolynomial<C> S) {
@@ -1288,24 +1269,6 @@ public class PolyUtil {
             }
         }
         return p;
-    }
-
-
-    /**
-     * GenPolynomial sparse pseudo remainder. For recursive polynomials.
-     * @param <C> coefficient type.
-     * @param P recursive GenPolynomial.
-     * @param S nonzero recursive GenPolynomial.
-     * @return remainder with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
-     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
-     * @deprecated Use
-     *             {@link #recursiveSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial)}
-     *             instead
-     */
-    @Deprecated
-    public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<C>> recursivePseudoRemainder(
-                    GenPolynomial<GenPolynomial<C>> P, GenPolynomial<GenPolynomial<C>> S) {
-        return recursiveSparsePseudoRemainder(P, S);
     }
 
 
