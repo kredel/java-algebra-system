@@ -329,9 +329,10 @@ public class RootFactory {
                     Complex<BigDecimal> c, BigDecimal r, BigRational eps) {
         BigDecimal e = new BigDecimal(eps);
         if (c.getIm().abs().compareTo(e) > 0) {
-            if (c.getRe().subtract(r).abs().compareTo(e) > 0) {
-                return false;
-            }
+            return false;
+        }
+        if (c.getRe().subtract(r).abs().compareTo(e) > 0) {
+            return false;
         }
         GenPolynomialRing<Complex<C>> cfac = new GenPolynomialRing<Complex<C>>(
                         new ComplexRing<C>(f.ring.coFac), f.ring);
