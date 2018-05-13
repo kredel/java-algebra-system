@@ -23,7 +23,7 @@ import edu.jas.structure.RingElem;
  */
 
 public class StandardBaseSeq<C extends RingElem<C>>
-/*todo: extends StandardBaseAbstract<C>*/{
+/* extends StandardBaseAbstract<C> */{
 
 
     private static final Logger logger = Logger.getLogger(StandardBaseSeq.class);
@@ -160,39 +160,6 @@ public class StandardBaseSeq<C extends RingElem<C>>
         }
         OrderedPairlist<C> pairlist = new OrderedPairlist<C>(modv, ring); //strategy.create( modv, ring ); 
         pairlist.put(G);
-
-        /*
-        MultiVarPowerSeries<C> p = null;
-        List<MultiVarPowerSeries<C>> G = new ArrayList<MultiVarPowerSeries<C>>();
-        OrderedPairlist<C> pairlist = null;
-        int l = F.size();
-        ListIterator<MultiVarPowerSeries<C>> it = F.listIterator();
-        while (it.hasNext()) {
-            p = it.next();
-            if (!p.isZERO()) {
-                //p = p.monic();
-                if (p.isUnit()) {
-                    G.clear();
-                    G.add(p);
-                    return G; // since no threads are activated
-                }
-                G.add(p);
-                if (pairlist == null) {
-                    pairlist = new OrderedPairlist<C>(modv, p.ring);
-                    if (!p.ring.coFac.isField()) {
-                        throw new IllegalArgumentException("coefficients not from a field");
-                    }
-                }
-                // putOne not required
-                pairlist.put(p);
-            } else {
-                l--;
-            }
-        }
-        if (l <= 1) {
-            return G; // since no threads are activated
-        }
-        */
         logger.info("start " + pairlist);
 
         Pair<C> pair;

@@ -482,10 +482,10 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
 
     /**
      * Query if this ring is a field.
-     * @return false.
+     * @return true if this ring is a field, else false.
      */
     public boolean isField() {
-        return false;
+        return (nvar == 0) && coFac.isField(); //false;
     }
 
 

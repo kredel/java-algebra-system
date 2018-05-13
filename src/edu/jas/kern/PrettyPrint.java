@@ -13,7 +13,7 @@ package edu.jas.kern;
 public class PrettyPrint {
 
 
-    private static volatile boolean toDo = true;
+    private static volatile boolean doPretty = true;
 
 
     protected PrettyPrint() {
@@ -25,7 +25,7 @@ public class PrettyPrint {
      * @return true, if to use pretty printing, else false.
      */
     public static boolean isTrue() {
-        return toDo;
+        return doPretty;
     }
 
 
@@ -33,7 +33,7 @@ public class PrettyPrint {
      * setPretty. Set use pretty printing to true.
      */
     public static void setPretty() {
-        toDo = true;
+        doPretty = true;
     }
 
 
@@ -41,7 +41,7 @@ public class PrettyPrint {
      * setInternal. Set use pretty printing to false.
      */
     public static void setInternal() {
-        toDo = false;
+        doPretty = false;
     }
 
 }
