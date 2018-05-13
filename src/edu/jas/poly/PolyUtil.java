@@ -104,9 +104,6 @@ public class PolyUtil {
                 C b = x.getValue();
                 ExpVector g = e.combine(f);
                 assert (Cm.get(g) == null);
-                //if ( Cm.get(g) != null ) { // todo assert, done
-                //   throw new RuntimeException("PolyUtil debug error");
-                //}
                 Cm.put(g, b);
             }
         }
@@ -1777,7 +1774,7 @@ public class PolyUtil {
         if (A == null || A.isZERO()) {
             return cfac.getZERO();
         }
-        if (A.ring.nvar != 1) { // todo assert
+        if (A.ring.nvar != 1) { 
             throw new IllegalArgumentException("evaluateMain no univariate polynomial");
         }
         if (a == null || a.isZERO()) {
@@ -1856,7 +1853,7 @@ public class PolyUtil {
         if (A == null || A.isZERO()) {
             return cfac.getZERO();
         }
-        if (A.ring.nvar != 1) { // todo assert
+        if (A.ring.nvar != 1) { 
             throw new IllegalArgumentException("evaluateMain no univariate polynomial");
         }
         if (a == null || a.isZERO()) {
@@ -1921,7 +1918,7 @@ public class PolyUtil {
     public static <C extends RingElem<C>> GenPolynomial<C> evaluate(GenPolynomialRing<C> cfac,
                     GenPolynomialRing<GenPolynomial<C>> rfac, GenPolynomialRing<GenPolynomial<C>> nfac,
                     GenPolynomialRing<C> dfac, GenPolynomial<C> A, C a) {
-        if (rfac.nvar != 1) { // todo assert
+        if (rfac.nvar != 1) {
             throw new IllegalArgumentException("evaluate coefficient ring not univariate");
         }
         if (A == null || A.isZERO()) {

@@ -3,7 +3,7 @@
  */
 
 package edu.jas.poly;
-// todo: move to edu.jas.poly
+
 
 import java.io.IOException;
 import java.io.Reader;

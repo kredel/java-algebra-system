@@ -5,9 +5,6 @@
 package edu.jas.poly;
 
 
-// todo: move to edu.jas.poly
-
-
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
