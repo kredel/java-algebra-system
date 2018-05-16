@@ -321,8 +321,7 @@ public final class WordFactory implements MonoidFactory<Word> {
     public List<Word> generators() {
         int len = alphabet.length();
         List<Word> gens = new ArrayList<Word>(len);
-        //gens.add(ONE); not a word generator
-        // todo
+        // ONE is not a word generator
         for (int i = 0; i < len; i++) {
             Word w = new Word(this, String.valueOf(alphabet.charAt(i)), false);
             gens.add(w);
@@ -432,7 +431,7 @@ public final class WordFactory implements MonoidFactory<Word> {
             throw new IllegalArgumentException("word '" + st + "' contains letters not from: " + alphabet
                             + " or from " + concat(translation));
         }
-        // todo
+        // now only alphabet or translation chars are contained in st
         return new Word(this, st, true);
     }
 

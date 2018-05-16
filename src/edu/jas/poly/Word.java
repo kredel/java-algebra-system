@@ -282,7 +282,7 @@ public final class Word implements MonoidElem<Word> {
      */
     public Word divideLeft(Word V) {
         Word[] ret = divideWord(V,false);
-        // TODO: fail if both non zero?
+        // fail if right is non zero
         if (!ret[1].isONE()) {
             throw new IllegalArgumentException("not simple left dividable: left = " + ret[0] + ", right = "
                             + ret[1] + ", use divideWord");
@@ -298,7 +298,7 @@ public final class Word implements MonoidElem<Word> {
      */
     public Word divideRight(Word V) {
         Word[] ret = divideWord(V,true);
-        // TODO: fail if both non zero?
+        // fail if left is non zero
         if (!ret[0].isONE()) {
             throw new IllegalArgumentException("not simple right dividable: left = " + ret[0] + ", right = "
                             + ret[1] + ", use divideWord");
