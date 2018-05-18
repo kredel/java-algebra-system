@@ -7,6 +7,7 @@ package edu.jas.gb;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 import org.apache.log4j.Logger;
 
@@ -85,7 +86,7 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
         logger.info("G-sort = " + G);
         List<GenPolynomial<C>> Gp = new ArrayList<GenPolynomial<C>>();
         for (GenPolynomial<C> p : G) {
-            if (debug) {
+            if (logger.isInfoEnabled()) {
                 logger.info("p = " + p);
             }
             GenPolynomial<C> pp = red.normalform(Gp, p);
@@ -142,13 +143,14 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
         //logger.info("Gs = " + Gs);
         // construct critical pair list
         List<SigPair<C>> pairlist = new ArrayList<SigPair<C>>();
-        for (SigPoly<C> p : Gs) {
-            if (p.equals(gs)) {
+        for (SigPoly<C> p : Gs) { // F via continue
+            if (p.poly.equals(g)) {
                 continue;
             }
             pairlist.add(newPair(gs, p, Gs));
         }
-        logger.info("start " + pairlist.size());
+        //logger.info("start " + pairlist.size());
+        logger.info("start " + Gs);
 
         List<ExpVector> syz = initializeSyz(F, Gs);
         List<SigPoly<C>> done = new ArrayList<SigPoly<C>>();
@@ -179,7 +181,7 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
                 if (pair == null) {
                     continue;
                 }
-                //logger.info("pair.full = " + pair);
+                //logger.info("sigma = " + pair.sigma);
                 S = SPolynomial(pair);
                 SigPoly<C> Ss = new SigPoly<C>(pair.sigma, S);
                 if (S.isZERO()) {
@@ -216,8 +218,9 @@ public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseA
                 if (sred.isSigRedundant(Gs, Hs)) {
                     continue;
                 }
-                if (debug) {
-                    logger.info("new polynomial = " + Hs);
+                if (logger.isInfoEnabled()) {
+                    //logger.info("sigma::h = " + sigma + " :: " + ring.toScript(H.leadingExpVector()));
+                    logger.info("sigma::h = " + sigma + " :: " + H.leadingExpVector());
                 }
                 if (H.length() > 0) {
                     for (SigPoly<C> p : Gs) {
