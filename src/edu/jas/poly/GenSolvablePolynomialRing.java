@@ -580,7 +580,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
      * @return List(X_1,...,X_n) a list of univariate polynomials.
      */
     @Override
-    public List<GenSolvablePolynomial<C>> univariateList() {
+    public List<? extends GenSolvablePolynomial<C>> univariateList() {
         //return castToSolvableList( super.univariateList() );
         return univariateList(0, 1L);
     }
@@ -592,7 +592,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
      * @return List(X_1,...,X_n) a list of univariate polynomials.
      */
     @Override
-    public List<GenSolvablePolynomial<C>> univariateList(int modv) {
+    public List<? extends GenSolvablePolynomial<C>> univariateList(int modv) {
         return univariateList(modv, 1L);
     }
 
@@ -605,7 +605,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
      * @return List(X_1^e,...,X_n^e) a list of univariate polynomials.
      */
     @Override
-    public List<GenSolvablePolynomial<C>> univariateList(int modv, long e) {
+    public List<? extends GenSolvablePolynomial<C>> univariateList(int modv, long e) {
         List<GenSolvablePolynomial<C>> pols = new ArrayList<GenSolvablePolynomial<C>>(nvar);
         int nm = nvar - modv;
         for (int i = 0; i < nm; i++) {

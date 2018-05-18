@@ -196,6 +196,7 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      * @param v names for the variables.
      * @param rt solvable multiplication relations.
      */
+    @SuppressWarnings("unchecked")
     public QLRSolvablePolynomialRing(RingFactory<C> cf, int n, TermOrder t, String[] v,
                     RelationTable<C> rt) {
         super(cf, n, t, v, rt);
@@ -612,11 +613,9 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      * Generate list of univariate polynomials in all variables.
      * @return List(X_1,...,X_n) a list of univariate polynomials.
      */
-    //todo Override
-    @SuppressWarnings("unchecked")
-    public List<QLRSolvablePolynomial<C,D>> recUnivariateList() {
-        //return castToSolvableList( super.univariateList() );
-        return (List<QLRSolvablePolynomial<C,D>>) (Object) univariateList(0, 1L);
+    @Override
+    public List<QLRSolvablePolynomial<C,D>> univariateList() {
+        return univariateList(0, 1L);
     }
 
 
@@ -625,10 +624,9 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      * @param modv number of module variables.
      * @return List(X_1,...,X_n) a list of univariate polynomials.
      */
-    //todo Override
-    @SuppressWarnings("unchecked")
-    public List<QLRSolvablePolynomial<C,D>> recUnivariateList(int modv) {
-        return (List<QLRSolvablePolynomial<C,D>>) (Object) univariateList(modv, 1L);
+    @Override
+    public List<QLRSolvablePolynomial<C,D>> univariateList(int modv) {
+        return univariateList(modv, 1L);
     }
 
 
@@ -639,8 +637,8 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      * @param e the exponent of the variables.
      * @return List(X_1^e,...,X_n^e) a list of univariate polynomials.
      */
-    //todo Override
-    public List<QLRSolvablePolynomial<C,D>> recUnivariateList(int modv, long e) {
+    @Override
+    public List<QLRSolvablePolynomial<C,D>> univariateList(int modv, long e) {
         List<QLRSolvablePolynomial<C,D>> pols = new ArrayList<QLRSolvablePolynomial<C,D>>(nvar);
         int nm = nvar - modv;
         for (int i = 0; i < nm; i++) {
@@ -649,30 +647,6 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
         }
         return pols;
     }
-
-
-    /*
-     * Generate list of univariate polynomials in all variables with given exponent.
-     * @param modv number of module variables.
-     * @param e the exponent of the variables.
-     * @return List(X_1^e,...,X_n^e) a list of univariate polynomials.
-     @Override
-     public List<QLRSolvablePolynomial<C,D>> univariateList(int modv, long e) {
-     List<GenPolynomial<C>> pol = super.univariateList(modv,e);
-     UnaryFunctor<GenPolynomial<C>,QLRSolvablePolynomial<C,D>> fc 
-     = new UnaryFunctor<GenPolynomial<C>,QLRSolvablePolynomial<C,D>>() {
-     public QLRSolvablePolynomial<C,D> eval(GenPolynomial<C> p) {
-     if ( ! (p instanceof QLRSolvablePolynomial) ) {
-     throw new RuntimeException("no solvable polynomial "+p);
-     }
-     return (QLRSolvablePolynomial<C,D>) p;
-     }
-     };
-     List<QLRSolvablePolynomial<C,D>> pols 
-     = ListUtil.<GenPolynomial<C>,QLRSolvablePolynomial<C,D>>map(this,pol,fc);
-     return pols;
-     }
-    */
 
 
     /**

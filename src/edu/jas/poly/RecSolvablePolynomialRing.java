@@ -563,11 +563,10 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
      * Generate list of univariate polynomials in all variables.
      * @return List(X_1,...,X_n) a list of univariate polynomials.
      */
-    //todo Override
-    @SuppressWarnings("unchecked")
-    public List<RecSolvablePolynomial<C>> recUnivariateList() {
+    @Override
+    public List<RecSolvablePolynomial<C>> univariateList() {
         //return castToSolvableList( super.univariateList() );
-        return (List<RecSolvablePolynomial<C>>) (Object) univariateList(0, 1L);
+        return univariateList(0, 1L);
     }
 
 
@@ -576,10 +575,9 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
      * @param modv number of module variables.
      * @return List(X_1,...,X_n) a list of univariate polynomials.
      */
-    //todo Override
-    @SuppressWarnings("unchecked")
-    public List<RecSolvablePolynomial<C>> recUnivariateList(int modv) {
-        return (List<RecSolvablePolynomial<C>>) (Object) univariateList(modv, 1L);
+    @Override
+    public List<RecSolvablePolynomial<C>> univariateList(int modv) {
+        return univariateList(modv, 1L);
     }
 
 
@@ -590,8 +588,8 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
      * @param e the exponent of the variables.
      * @return List(X_1^e,...,X_n^e) a list of univariate polynomials.
      */
-    //todo Override
-    public List<RecSolvablePolynomial<C>> recUnivariateList(int modv, long e) {
+    @Override
+    public List<RecSolvablePolynomial<C>> univariateList(int modv, long e) {
         List<RecSolvablePolynomial<C>> pols = new ArrayList<RecSolvablePolynomial<C>>(nvar);
         int nm = nvar - modv;
         for (int i = 0; i < nm; i++) {
@@ -600,30 +598,6 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
         }
         return pols;
     }
-
-
-    /*
-     * Generate list of univariate polynomials in all variables with given exponent.
-     * @param modv number of module variables.
-     * @param e the exponent of the variables.
-     * @return List(X_1^e,...,X_n^e) a list of univariate polynomials.
-     @Override
-     public List<RecSolvablePolynomial<C>> univariateList(int modv, long e) {
-     List<GenPolynomial<C>> pol = super.univariateList(modv,e);
-     UnaryFunctor<GenPolynomial<C>,RecSolvablePolynomial<C>> fc 
-     = new UnaryFunctor<GenPolynomial<C>,RecSolvablePolynomial<C>>() {
-     public RecSolvablePolynomial<C> eval(GenPolynomial<C> p) {
-     if ( ! (p instanceof RecSolvablePolynomial) ) {
-     throw new RuntimeException("no solvable polynomial "+p);
-     }
-     return (RecSolvablePolynomial<C>) p;
-     }
-     };
-     List<RecSolvablePolynomial<C>> pols 
-     = ListUtil.<GenPolynomial<C>,RecSolvablePolynomial<C>>map(this,pol,fc);
-     return pols;
-     }
-    */
 
 
     /**

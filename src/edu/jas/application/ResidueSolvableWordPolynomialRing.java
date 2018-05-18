@@ -598,11 +598,10 @@ public class ResidueSolvableWordPolynomialRing<C extends GcdRingElem<C>> extends
      * Generate list of univariate polynomials in all variables.
      * @return List(X_1,...,X_n) a list of univariate polynomials.
      */
-    //todo Override
-    @SuppressWarnings("unchecked")
-    public List<ResidueSolvableWordPolynomial<C>> recUnivariateList() {
-        //return castToSolvableList( super.univariateList() );
-        return (List<ResidueSolvableWordPolynomial<C>>) (Object) univariateList(0, 1L);
+    //todo 
+    @Override
+    public List<ResidueSolvableWordPolynomial<C>> univariateList() {
+        return univariateList(0, 1L);
     }
 
 
@@ -611,10 +610,10 @@ public class ResidueSolvableWordPolynomialRing<C extends GcdRingElem<C>> extends
      * @param modv number of module variables.
      * @return List(X_1,...,X_n) a list of univariate polynomials.
      */
-    //todo Override
-    @SuppressWarnings("unchecked")
-    public List<ResidueSolvableWordPolynomial<C>> recUnivariateList(int modv) {
-        return (List<ResidueSolvableWordPolynomial<C>>) (Object) univariateList(modv, 1L);
+    //todo 
+    @Override
+    public List<ResidueSolvableWordPolynomial<C>> univariateList(int modv) {
+        return univariateList(modv, 1L);
     }
 
 
@@ -625,8 +624,9 @@ public class ResidueSolvableWordPolynomialRing<C extends GcdRingElem<C>> extends
      * @param e the exponent of the variables.
      * @return List(X_1^e,...,X_n^e) a list of univariate polynomials.
      */
-    //todo Override
-    public List<ResidueSolvableWordPolynomial<C>> recUnivariateList(int modv, long e) {
+    //todo 
+    @Override
+    public List<ResidueSolvableWordPolynomial<C>> univariateList(int modv, long e) {
         List<ResidueSolvableWordPolynomial<C>> pols = new ArrayList<ResidueSolvableWordPolynomial<C>>(nvar);
         int nm = nvar - modv;
         for (int i = 0; i < nm; i++) {
@@ -635,30 +635,6 @@ public class ResidueSolvableWordPolynomialRing<C extends GcdRingElem<C>> extends
         }
         return pols;
     }
-
-
-    /*
-     * Generate list of univariate polynomials in all variables with given exponent.
-     * @param modv number of module variables.
-     * @param e the exponent of the variables.
-     * @return List(X_1^e,...,X_n^e) a list of univariate polynomials.
-     @Override
-     public List<ResidueSolvableWordPolynomial<C>> univariateList(int modv, long e) {
-        List<GenPolynomial<C>> pol = super.univariateList(modv,e);
-        UnaryFunctor<GenPolynomial<C>,ResidueSolvableWordPolynomial<C>> fc 
-          = new UnaryFunctor<GenPolynomial<C>,ResidueSolvableWordPolynomial<C>>() {
-               public ResidueSolvableWordPolynomial<C> eval(GenPolynomial<C> p) {
-                  if ( ! (p instanceof ResidueSolvableWordPolynomial) ) {
-                      throw new RuntimeException("no solvable polynomial "+p);
-                  }
-                  return (ResidueSolvableWordPolynomial<C>) p;
-               }
-            };
-        List<ResidueSolvableWordPolynomial<C>> pols 
-           = ListUtil.<GenPolynomial<C>,ResidueSolvableWordPolynomial<C>>map(this,pol,fc);
-        return pols;
-     }
-     */
 
 
     /**
