@@ -1374,7 +1374,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         }
         for (Long d : univariateDegrees()) {
             if (d > 1L) {
-                // todo: test if irreducible
+                // todo: test if univariate irreducible and no multiple polynomials
                 return false;
             }
         }

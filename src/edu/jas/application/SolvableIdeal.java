@@ -688,7 +688,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         c.addAll(B.getList());
         SolvableIdeal<C> I = new SolvableIdeal<C>(getRing(), c, false, sided);
         if (isGB && B.isGB) {
-            I.doGB(); // TODO twosided, right
+            I.doGB(); // left, twosided, right handled in doGB
         }
         return I;
     }
@@ -1450,7 +1450,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         }
         for (Long d : univariateDegrees()) {
             if (d > 1L) {
-                // todo: test if irreducible
+                // todo: test if univariate irreducible and no multiple polynomials
                 return false;
             }
         }

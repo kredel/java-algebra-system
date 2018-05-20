@@ -340,7 +340,7 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>> extends
         if (polCoeff.coeffTable.size() == 0) {
             return super.isCommutative();
         }
-        // todo: check structure of relations
+        // check structure of relations?
         return false;
     }
 

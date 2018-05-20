@@ -84,7 +84,7 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational> implements
                     edu.jas.root.RealAlgebraicNumber<edu.jas.root.RealAlgebraicNumber<C>> a) {
         number = a;
         ring = r;
-        //number = ring.realRing.parse(number.val.toString()); // todo: convert
+        //number = ring.realRing.parse(number.val.toString()); // convert?
         //System.out.println("number = " + number);
     }
 
@@ -211,7 +211,7 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational> implements
         if (s != 0) {
             return s;
         }
-        s = number.compareTo(b.number); // TODO
+        s = number.compareTo(b.number);
         //System.out.println("s_real = " + s);
         return s;
     }

@@ -890,7 +890,7 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
             return h.inverse();
         }
         throw new UnsupportedOperationException("inverse of " + h);
-        /*
+        /* TODO together with isUnit
         doGB();
         List<GenWordPolynomial<C>> F = new ArrayList<GenWordPolynomial<C>>(1 + list.list.size());
         F.add(h);
@@ -934,20 +934,6 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
             lbc = lbc.inverse();
             g = g.multiply(lbc);
         }
-        if (debug) {
-            //logger.info("inv G = " + G);
-            //logger.info("inv G2F = " + x.G2F);
-            //logger.info("inv row "+i+" = " + row);
-            //logger.info("inv h = " + h);
-            //logger.info("inv g = " + g);
-            //logger.info("inv f = " + f);
-            f = g.multiply(h);
-            k = red.leftNormalform(getList(), f);
-            logger.debug("inv k = " + k);
-            if (!k.isUnit()) {
-                throw new NotInvertibleException(" k = " + k);
-            }
-        }
         return g;
         */
     }
@@ -968,7 +954,8 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
         if (h.isUnit()) {
             return true;
         }
-        /* TODO together wit inverse
+        /* TODO together with inverse
+        // test this + (h) == 1
         List<GenWordPolynomial<C>> F = new ArrayList<GenWordPolynomial<C>>(1 + list.size());
         F.add(h);
         F.addAll(getList());
@@ -1017,7 +1004,7 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
         }
         for (Long d : univariateDegrees()) {
             if (d > 1L) {
-                // todo: test if irreducible
+                // todo: test if univariate irreducible and no multiple polynomials
                 return false;
             }
         }

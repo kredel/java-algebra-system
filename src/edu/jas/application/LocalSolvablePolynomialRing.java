@@ -354,7 +354,7 @@ public class LocalSolvablePolynomialRing<C extends GcdRingElem<C>> extends
         if (polCoeff.coeffTable.size() == 0) {
             return super.isCommutative();
         }
-        // todo: check structure of relations
+        // check structure of relations?
         return false;
     }
 
@@ -386,7 +386,7 @@ public class LocalSolvablePolynomialRing<C extends GcdRingElem<C>> extends
                         //e.printStackTrace();
                         continue;
                     }
-                    if (!p.equals(q)) {
+                    if (p.compareTo(q) != 0) {
                         if (logger.isInfoEnabled()) {
                             logger.info("Xk = " + Xk + ", Xj = " + Xj + ", Xi = " + Xi);
                             logger.info("p = ( Xk * Xj ) * Xi = " + p);

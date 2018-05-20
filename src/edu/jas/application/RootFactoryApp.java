@@ -79,21 +79,7 @@ public class RootFactoryApp {
             logger.info("f(r) = " + a + ", f = " + f + ", r  = " + r);
             return t;
         }
-        // test approximation, not working
-        //RealAlgebraicRing<C> rring = (RealAlgebraicRing<C>) cr.ring;
-        //RealRootTuple<C> rroot = rring.getRoot();
-        //List<edu.jas.root.RealAlgebraicNumber<C>> rlist = rroot.tuple;
-        ////System.out.println("rlist = " + rlist);
-        //Interval<C> vr = rlist.get(0).ring.getRoot();
-        //Interval<C> vi = rlist.get(1).ring.getRoot();
-        //ComplexRing<C> ccfac = new ComplexRing<C>((RingFactory<C>) vr.left.factory());
-        //Complex<C> sw = new Complex<C>(ccfac, vr.left, vi.left);
-        //Complex<C> ne = new Complex<C>(ccfac, vr.right, vi.right);
-        //Complex<C> epsw = PolyUtil.<Complex<C>> evaluateMain(ccfac, f, sw);
-        //Complex<C> epne = PolyUtil.<Complex<C>> evaluateMain(ccfac, f, ne);
-        //int rootre = (epsw.getRe().signum() * epne.getRe().signum());
-        //int rootim = (epsw.getIm().signum() * epne.getIm().signum());
-        //t = (rootre <= 0 && rootim <= 0);
+        // test approximation? not working
         return true;
     }
 
@@ -212,33 +198,7 @@ public class RootFactoryApp {
                 ComplexRing<RealAlgebraicNumber<C>> cring = new ComplexRing<RealAlgebraicNumber<C>>(car);
                 Complex<RealAlgebraicNumber<C>> crn = new Complex<RealAlgebraicNumber<C>>(cring, rre, rim);
                 //System.out.println("crn = " + crn + " in " + crn.ring);
-
-                //boolean it;
-                //int count = 0;
-                //do { // refine intervals if necessary, not meaningful
-                //    Interval<C> vr = crr.get(0).ring.getRoot();
-                //    Interval<C> vi = crr.get(1).ring.getRoot();
-                //    ComplexRing<C> ccfac = new ComplexRing<C>((RingFactory<C>) vr.left.factory());
-                //    Complex<C> sw = new Complex<C>(ccfac, vr.left, vi.left);
-                //    Complex<C> ne = new Complex<C>(ccfac, vr.right, vi.right);
-                //    Complex<C> epsw = PolyUtil.<Complex<C>> evaluateMain(ccfac, f, sw);
-                //    Complex<C> epne = PolyUtil.<Complex<C>> evaluateMain(ccfac, f, ne);
-                //    int rootre = (epsw.getRe().signum() * epne.getRe().signum());
-                //    int rootim = (epsw.getIm().signum() * epne.getIm().signum());
-                //    it = true || (rootre <= 0 && rootim <= 0); // TODO
-                //    if (!it) {
-                //        logger.info("refine intervals: vr = " + vr + ", vi = " + vi); // + ", crn = " + crn.ring);
-                //        crn.getRe().ring.realRing.halfInterval();
-                //        //System.out.println("crn.re = " + crn.getRe().ring.realRing);
-                //        crn.getIm().ring.realRing.halfInterval();
-                //        //System.out.println("crn.im = " + crn.getIm().ring.realRing);
-                //        if (count++ > 2) {
-                //            //throw new RuntimeException("no roots of " + f);
-                //            logger.info("break in root refinement of " + crn + " in " + crn.ring);
-                //            it = true;
-                //        }
-                //    }
-                //} while (!it);
+                // refine intervals if necessary, not meaningful
                 list.add(crn);
             }
         }
@@ -246,14 +206,8 @@ public class RootFactoryApp {
     }
 
 
-    /* todo
-     * Complex algebraic numbers.
-     * @param f univariate polynomial.
-     * @param eps rational precision.
-     * @return a list of different complex algebraic numbers.
-     public static <C extends GcdRingElem<C> & Rational> 
-     List<ComplexAlgebraicNumber<C>> complexAlgebraicNumbersComplex(GenPolynomial<Complex<C>> f, BigRational eps) {
-     }
+    /* approximation ?
+    List<ComplexAlgebraicNumber<C>> complexAlgebraicNumbersComplex(GenPolynomial<Complex<C>> f, BigRational eps)
     */
 
 

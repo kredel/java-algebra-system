@@ -154,7 +154,7 @@ public class SolvableLocalResidue<C extends GcdRingElem<C>> implements GcdRingEl
             return;
         }
         // must reduce to lowest terms
-        // not perfect, TODO
+        // not perfect, TODO improve
         //GenSolvablePolynomial<C>[] gcd = PolyModUtil.<C> syzGcdCofactors(r.ring, n, d);
         GenSolvablePolynomial<C>[] gcd = FDUtil.<C> leftGcdCofactors(r.ring, n, d);
         if (!gcd[0].isONE()) {
@@ -168,7 +168,7 @@ public class SolvableLocalResidue<C extends GcdRingElem<C>> implements GcdRingEl
             n = gcd[1];
             d = gcd[2];
         }
-        // not perfect, TODO 
+        // not perfect, TODO improve
         GenSolvablePolynomial<C>[] simp = ring.engine.leftSimplifier(n, d);
         logger.info("simp: " + Arrays.toString(simp) + ", " + n + ", " + d);
         num = simp[0];
@@ -628,7 +628,7 @@ public class SolvableLocalResidue<C extends GcdRingElem<C>> implements GcdRingEl
      * @param b other element.
      * @return [ gcd(this,b), c1, c2 ] with c1*this + c2*b = gcd(this,b).
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public SolvableLocalResidue<C>[] egcd(SolvableLocalResidue<C> b) {
         SolvableLocalResidue<C>[] ret = (SolvableLocalResidue<C>[]) new SolvableLocalResidue[3];
         ret[0] = null;

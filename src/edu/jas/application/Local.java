@@ -148,7 +148,7 @@ public class Local<C extends GcdRingElem<C>>
         } else {
             // d not in ideal --> gcd not in ideal 
             //p = ring.ideal.normalform( gcd );
-            //if ( p == null || p.isZERO() ) { // todo: find nonzero factor
+            //if ( p == null || p.isZERO() ) { // find nonzero factor
             //   num = n;
             //   den = d;
             //} else {

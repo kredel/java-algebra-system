@@ -369,7 +369,7 @@ public class WordResidue<C extends GcdRingElem<C>> implements GcdRingElem<WordRe
         GenWordPolynomial<C> y = L.get(0);
         GenWordPolynomial<C> t = y.multiply(S.val).sum(x);
         if (!val.equals(t)) {
-            throw new NotDivisibleException("TODO val != t: val = " + val + ", t = " + t);
+            throw new NotDivisibleException("val != t: val = " + val + ", t = " + t);
         }
         return new WordResidue<C>(ring, y);
     }
@@ -391,7 +391,7 @@ public class WordResidue<C extends GcdRingElem<C>> implements GcdRingElem<WordRe
         GenWordPolynomial<C> y = L.get(0);
         GenWordPolynomial<C> z = R.get(0);
         if (!ring.bb.red.isReductionNF(L, R, V, val, x)) {
-            throw new NotDivisibleException("TODO val != x: val = " + val + ", S.val = " + S.val);
+            throw new NotDivisibleException("val != x: val = " + val + ", S.val = " + S.val);
         }
         WordResidue<C>[] ret = new WordResidue[2];
         ret[0] = new WordResidue<C>(ring, y);
@@ -429,7 +429,7 @@ public class WordResidue<C extends GcdRingElem<C>> implements GcdRingElem<WordRe
         GenWordPolynomial<C> y = R.get(0);
         GenWordPolynomial<C> t = S.val.multiply(y).sum(x);
         if (!val.equals(t)) {
-            throw new NotDivisibleException("TODO val != t: val = " + val + ", t = " + t);
+            throw new NotDivisibleException("val != t: val = " + val + ", t = " + t);
         }
         return new WordResidue<C>(ring, y);
     }

@@ -194,7 +194,7 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
         if (s != 0) {
             return s;
         }
-        s = this.subtract(b).signum(); // TODO
+        s = this.subtract(b).signum(); // avoid subtract if possible
         //System.out.println("s_real = " + s);
         return s;
     }

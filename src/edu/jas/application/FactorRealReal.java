@@ -35,7 +35,8 @@ public class FactorRealReal<C extends GcdRingElem<C> & Rational>
                 extends FactorAbstract<RealAlgebraicNumber<C>> {
 
 
-    // TODO: is absolute possible? and what does it mean?
+    // TODO: check if is absolute possible? and what does it mean? 
+    // absolute not possible since factorization over reals leads to factors of degree 2
     //FactorAbsolute<AlgebraicNumber<C>>
     //FactorAbstract<AlgebraicNumber<C>>
 
