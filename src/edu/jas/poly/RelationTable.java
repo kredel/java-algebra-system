@@ -194,7 +194,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
             GenPolynomial<C> p1 = me.getValue();
             ExpVectorPair ep = me.getKey();
             GenPolynomial<C> p2 = m2.get(ep);
-            if (p1.compareTo(p2) != 0) { // not working: !p1.equals(p2)) { // TODO
+            if (p1.compareTo(p2) != 0) { // not working: !p1.equals(p2)
                 logger.info("ep = " + ep + ", p1 = " + p1 + ", p2 = " + p2);
                 //logger.info("p1.compareTo(p2) = " + p1.compareTo(p2));
                 //logger.info("p1.equals(p2) = " + p1.equals(p2));
@@ -417,7 +417,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         }
         // test equal HTs for left and right side
         if (!coeffTable) { // old case
-            if (e.totalDeg() == 1 && f.totalDeg() == 1) { // higher or mixed degrees TODO
+            if (e.totalDeg() == 1 && f.totalDeg() == 1) { // higher or mixed degrees todo
                 int[] de = e.dependencyOnVariables();
                 int[] df = f.dependencyOnVariables();
                 logger.debug("update e ? f " + de[0] + " " + df[0]);
@@ -866,7 +866,6 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         if (tab.table.isEmpty()) {
             return;
         }
-        // assert this.size() == 0
         if (!table.isEmpty()) {
             logger.error("reverse table not empty");
         }
@@ -901,13 +900,14 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                     } else {
                         fx = f.reverse(k);
                     }
+                    // todo check relevant vars
                     //int[] ed = ex.dependencyOnVariables(); // = e
                     //if (ed.length == 0 || ed[0] >= k) { // k >= 0
-                    //    change = false; todo
+                    //    change = false; 
                     //}
                     //int[] fd = fx.dependencyOnVariables(); // = f
                     //if (fd.length == 0 || fd[0] >= k) { // k >= 0
-                    //    change = false; todo
+                    //    change = false; 
                     //}
                 } else {
                     ex = e.reverse();
@@ -941,9 +941,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
     @SuppressWarnings({ "unchecked", "cast" })
     public List<GenSolvablePolynomial<C>> relationList() {
         List<GenSolvablePolynomial<C>> rels = new ArrayList<GenSolvablePolynomial<C>>();
-        //C one = ring.getONECoefficient();
         for (Map.Entry<List<Integer>, List> me : table.entrySet()) {
-            //List<Integer> k = me.getKey();
             List v = me.getValue();
             for (Iterator jt = v.iterator(); jt.hasNext();) {
                 ExpVectorPair ep = (ExpVectorPair) jt.next();
@@ -951,7 +949,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                 GenSolvablePolynomial<C> pe = ring.valueOf(e);
                 ExpVector f = ep.getSecond();
                 GenSolvablePolynomial<C> pf = null;
-                if (coeffTable) { // todo
+                if (coeffTable) { 
                     C cf = null;
                     if (ring.coFac instanceof GenPolynomialRing) {
                         GenPolynomial<C> cpf;
@@ -962,7 +960,6 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                         cpf = ((GenWordPolynomialRing<C>) (Object) ring.coFac).valueOf(f);
                         cf = (C) (Object) cpf; // down cast
                     }
-                    //pf = new GenSolvablePolynomial<C>(ring, cf);
                     pf = ring.valueOf(cf);
                 } else {
                     pf = ring.valueOf(f);
@@ -983,7 +980,6 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
      *            <b>Note:</b> Only because of type erasure, aequivalent to
      *            addRelations().
      */
-    //@SuppressWarnings("unchecked")
     public void addSolvRelations(List<GenSolvablePolynomial<C>> rel) {
         PolynomialList<C> Prel = new PolynomialList<C>(ring, rel);
         addRelations(Prel.getList());
@@ -1012,7 +1008,10 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                 throw new IllegalArgumentException("poly part missing");
             }
             GenPolynomial<C> P = relit.next();
-            if (coeffTable && F.isConstant()) { // todo
+            if (coeffTable) { 
+                if (!F.isConstant()) { 
+                    throw new IllegalArgumentException("F  not constant for coeffTable: " + F);
+                }
                 if (ring.coFac instanceof GenPolynomialRing) {
                     f = ((GenPolynomial<C>) (Object) F.leadingBaseCoefficient()).leadingExpVector();
                 } else if (ring.coFac instanceof GenWordPolynomialRing) {
