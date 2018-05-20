@@ -598,7 +598,6 @@ public class ResidueSolvableWordPolynomialRing<C extends GcdRingElem<C>> extends
      * Generate list of univariate polynomials in all variables.
      * @return List(X_1,...,X_n) a list of univariate polynomials.
      */
-    //todo 
     @Override
     public List<ResidueSolvableWordPolynomial<C>> univariateList() {
         return univariateList(0, 1L);
@@ -610,7 +609,6 @@ public class ResidueSolvableWordPolynomialRing<C extends GcdRingElem<C>> extends
      * @param modv number of module variables.
      * @return List(X_1,...,X_n) a list of univariate polynomials.
      */
-    //todo 
     @Override
     public List<ResidueSolvableWordPolynomial<C>> univariateList(int modv) {
         return univariateList(modv, 1L);
@@ -624,7 +622,6 @@ public class ResidueSolvableWordPolynomialRing<C extends GcdRingElem<C>> extends
      * @param e the exponent of the variables.
      * @return List(X_1^e,...,X_n^e) a list of univariate polynomials.
      */
-    //todo 
     @Override
     public List<ResidueSolvableWordPolynomial<C>> univariateList(int modv, long e) {
         List<ResidueSolvableWordPolynomial<C>> pols = new ArrayList<ResidueSolvableWordPolynomial<C>>(nvar);
