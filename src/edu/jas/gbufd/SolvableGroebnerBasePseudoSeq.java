@@ -124,7 +124,7 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends Sol
             return G;
         }
         GenSolvablePolynomialRing<C> ring = G.get(0).ring;
-        if (ring.coFac.isField()) { // TODO remove
+        if (ring.coFac.isField()) { // remove ?
             throw new IllegalArgumentException("coefficients from a field");
         }
         PairList<C> pairlist = strategy.create(modv, ring);
@@ -252,7 +252,7 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends Sol
         }
         //System.out.println("G = " + G);
         GenSolvablePolynomialRing<C> ring = G.get(0).ring; // assert != null
-        if (ring.coFac.isField()) { // TODO remove
+        if (ring.coFac.isField()) { // remove ?
             throw new IllegalArgumentException("coefficients from a field");
         }
         // add also coefficient generators
@@ -364,7 +364,7 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends Sol
     //@SuppressWarnings("unchecked")
     @Override
     public SolvableExtendedGB<C> extLeftGB(int modv, List<GenSolvablePolynomial<C>> F) {
-        throw new UnsupportedOperationException("TODO"); // TODO
+        throw new UnsupportedOperationException(); // TODO
     }
 
 }

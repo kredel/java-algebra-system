@@ -319,7 +319,6 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>> extends RGroeb
      * Minimal ordered Groebner basis. 
      * @param Gp a Groebner base. 
      * @return a reduced Groebner base of Gp. 
-     * TODO: use primitivePart
      */
     List<GenPolynomial<C>> minimalGBtesting(List<GenPolynomial<C>> Gp) {
         if (Gp == null || Gp.size() <= 1) {
@@ -391,8 +390,9 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>> extends RGroeb
             b = a;
             // System.out.println("minGB doing " + el + ", a = " + a);
             a = red.normalform(G, a);
-            // not bc:
+            // use primitivePart
             a = engine.basePrimitivePart(a); // not a.monic() since no field
+            // not bc:
             if (red.isBooleanClosed(a)) {
                 List<GenPolynomial<C>> ff;
                 ff = new ArrayList<GenPolynomial<C>>(G);
@@ -416,6 +416,7 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>> extends RGroeb
                 // G.addAll( bcH );
                 G.add(b); // do not reduce
                 for (GenPolynomial<C> h : bcH) {
+                    // use primitivePart
                     h = engine.basePrimitivePart(h);
                     h = h.abs(); // monic() not ok, since no field
                     // G.add( h );

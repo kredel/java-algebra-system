@@ -460,7 +460,6 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
     @SuppressWarnings({ "unchecked" })
     public GenSolvablePolynomial<C> rightNormalform(List<GenSolvablePolynomial<C>> Pp,
                     GenSolvablePolynomial<C> Ap) {
-        //throw new UnsupportedOperationException();
         if (Pp == null || Pp.isEmpty()) {
             return Ap;
         }

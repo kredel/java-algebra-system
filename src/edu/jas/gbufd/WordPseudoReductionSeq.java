@@ -47,7 +47,7 @@ public class WordPseudoReductionSeq<C extends RingElem<C>> extends WordReduction
      * @param Pp polynomial list.
      * @return nf(Ap) with respect to Pp.
      */
-    //@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     public GenWordPolynomial<C> normalform(List<GenWordPolynomial<C>> Pp, GenWordPolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
             return Ap;
@@ -134,7 +134,7 @@ public class WordPseudoReductionSeq<C extends RingElem<C>> extends WordReduction
      * @param Ap a polynomial.
      * @return nf(Pp,Ap), the normal form of Ap wrt. Pp.
      */
-    //@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     public GenWordPolynomial<C> normalform(List<GenWordPolynomial<C>> lrow, List<GenWordPolynomial<C>> rrow,
                     List<GenWordPolynomial<C>> Pp, GenWordPolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
@@ -250,7 +250,7 @@ public class WordPseudoReductionSeq<C extends RingElem<C>> extends WordReduction
      * @param Pp polynomial list.
      * @return nf(Ap) with respect to Pp.
      */
-    //@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     public GenWordPolynomial<GenPolynomial<C>> normalformRecursive(
                     List<GenWordPolynomial<GenPolynomial<C>>> Pp, GenWordPolynomial<GenPolynomial<C>> Ap) {
         if (Pp == null || Pp.isEmpty()) {
@@ -325,7 +325,7 @@ public class WordPseudoReductionSeq<C extends RingElem<C>> extends WordReduction
                     Q = p[i].multiply(a, fl, cone, fr);
                 }
                 Sp = S.subtract(Q);
-                if (e.equals(Sp.leadingWord())) { // TODO: avoid not possible in general
+                if (e.equals(Sp.leadingWord())) { // TODO: avoid, not possible in general
                     //logger.info("redRec: e = " + e + ", hti = " + htl[i] + ", fl = " + fl + ", fr = " + fr);
                     //logger.info("redRec: S = " + S + ", Sp = " + Sp + ", a = " + a + ", b = " + b + ", c = " + c);
                     //throw new RuntimeException("degree not descending");

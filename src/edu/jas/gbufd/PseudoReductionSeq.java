@@ -106,12 +106,12 @@ public class PseudoReductionSeq<C extends RingElem<C>> extends ReductionAbstract
             } else {
                 f = e.subtract(htl[i]);
                 //logger.info("red div = " + e);
-                @SuppressWarnings("cast")
+                @SuppressWarnings("unchecked")
                 C c = (C) lbc[i];
                 if (a.remainder(c).isZERO()) { //c.isUnit() ) {
                     b = a.divide(c);
                     GenPolynomial<C> Sp = S.subtractMultiple(b, f, p[i]);
-                    if (e.equals(Sp.leadingExpVector())) { // TODO: avoid
+                    if (e.equals(Sp.leadingExpVector())) { // TODO: avoid if possible
                         logger.info("degree not descending: S = " + S + ", Sp = " + Sp);
                         R = R.multiply(c);
                         //S = S.multiply(c);
@@ -137,7 +137,7 @@ public class PseudoReductionSeq<C extends RingElem<C>> extends ReductionAbstract
      * @param Pp recursive polynomial list.
      * @return nf(Ap) with respect to Pp.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public GenPolynomial<GenPolynomial<C>> normalformRecursive(List<GenPolynomial<GenPolynomial<C>>> Pp,
                     GenPolynomial<GenPolynomial<C>> Ap) {
         if (Pp == null || Pp.isEmpty()) {
@@ -208,7 +208,7 @@ public class PseudoReductionSeq<C extends RingElem<C>> extends ReductionAbstract
                     //a = a.divide(c);
                     b = PolyUtil.<C> basePseudoDivide(a, c);
                     GenPolynomial<GenPolynomial<C>> Sp = S.subtractMultiple(b, f, p[i]);
-                    if (e.equals(Sp.leadingExpVector())) { // TODO: avoid
+                    if (e.equals(Sp.leadingExpVector())) { // TODO: avoid if possible
                         //throw new RuntimeException("degree not descending");
                         logger.info("degree not descending: S = " + S + ", Sp = " + Sp);
                         R = R.multiply(c);
