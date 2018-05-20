@@ -171,7 +171,7 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
         ExpVector e;
         C a;
         boolean mt = false;
-        GenSolvablePolynomial<C> zero = Ap.ring.getZERO();
+        //GenSolvablePolynomial<C> zero = Ap.ring.getZERO();
         GenSolvablePolynomial<C> R = Ap.ring.getZERO().copy();
 
         GenSolvablePolynomial<C> fac = null;
@@ -211,9 +211,11 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
                 }
                 fac = row.get(i);
                 if (fac == null) {
-                    fac = (GenSolvablePolynomial<C>) zero.sum(a, e);
-                } else { // doAddTo ?? TODO
-                    fac = (GenSolvablePolynomial<C>) fac.sum(a, e);
+                    //fac = (GenSolvablePolynomial<C>) zero.sum(a, e);
+                    fac = Ap.ring.valueOf(a, e);
+                } else { 
+                    //fac = (GenSolvablePolynomial<C>) fac.sum(a, e);
+                    fac.doAddTo(a, e);
                 }
                 row.set(i, fac);
             }
@@ -394,9 +396,11 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
                 }
                 fac = row.get(i);
                 if (fac == null) {
-                    fac = (GenSolvablePolynomial<C>) zero.sum(a, e);
-                } else { // doAddTo ??
-                    fac = (GenSolvablePolynomial<C>) fac.sum(a, e);
+                    //fac = (GenSolvablePolynomial<C>) zero.sum(a, e);
+                    fac = Ap.ring.valueOf(a, e);
+                } else { 
+                    //fac = (GenSolvablePolynomial<C>) fac.sum(a, e);
+                    fac.doAddTo(a, e);
                 }
                 row.set(i, fac);
             }
