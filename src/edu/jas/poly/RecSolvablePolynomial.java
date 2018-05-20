@@ -404,7 +404,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
      * @param b coefficient polynomial.
      * @return this*b, where * is coefficient multiplication.
      */
-    //todo @Override, @NoOverride
+    // cannot @Override
     //public RecSolvablePolynomial<C> multiply(GenPolynomial<C> b) {
     //public GenSolvablePolynomial<GenPolynomial<C>> multiply(GenPolynomial<C> b) {
     public RecSolvablePolynomial<C> recMultiply(GenPolynomial<C> b) {
