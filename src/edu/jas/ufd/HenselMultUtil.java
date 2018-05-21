@@ -1015,7 +1015,7 @@ public class HenselMultUtil {
         if (gi0.isONE()) {
             U1 = HenselUtil.<MOD> liftHenselMonic(Ci, F, k);
         } else {
-            U1 = HenselUtil.<MOD> liftHensel(Ci, F, k, gi0); // GI0 TODO ??
+            U1 = HenselUtil.<MOD> liftHensel(Ci, F, k, gi0); // gi0 TODO ??
         }
         logger.info("univariate lift: Ci = " + Ci + ", F = " + F + ", U1 = " + U1);
         //System.out.println("U1.fac = " + U1.get(0).ring);

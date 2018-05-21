@@ -2902,7 +2902,7 @@ class RatToInt implements UnaryFunctor<BigRational, BigInteger> {
 
 
 /**
- *  * Conversion of BigRational to BigInteger. result = (num/gcd)*(lcm/denom).  
+ * Conversion of BigRational to BigInteger. result = (num/gcd)*(lcm/denom).
  */
 class RatToIntFactor implements UnaryFunctor<BigRational, BigInteger> {
 

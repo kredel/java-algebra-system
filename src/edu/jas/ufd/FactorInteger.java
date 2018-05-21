@@ -72,7 +72,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
      * Constructor.
      * @param cfac coefficient ring factory.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public FactorInteger(RingFactory<BigInteger> cfac) {
         super(cfac);
         ModularRingFactory<MOD> mcofac = (ModularRingFactory<MOD>) (Object) new ModLongRing(13, true); // hack
@@ -441,7 +441,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             throw new IllegalArgumentException("C must be nonzero and F must be nonempty");
         }
         GenPolynomialRing<BigInteger> pfac = C.ring;
-        if (pfac.nvar != 1) { // todo assert
+        if (pfac.nvar != 1) { // assert ?
             throw new IllegalArgumentException("polynomial ring not univariate");
         }
         List<GenPolynomial<BigInteger>> factors = new ArrayList<GenPolynomial<BigInteger>>(F.size());
@@ -570,7 +570,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             throw new IllegalArgumentException("C must be nonzero and F must be nonempty");
         }
         GenPolynomialRing<BigInteger> pfac = C.ring;
-        if (pfac.nvar != 1) { // todo assert
+        if (pfac.nvar != 1) { // assert ?
             throw new IllegalArgumentException("polynomial ring not univariate");
         }
         List<GenPolynomial<BigInteger>> factors = new ArrayList<GenPolynomial<BigInteger>>(F.size());
@@ -712,7 +712,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         ExpVector degv = P.degreeVector();
         int[] donv = degv.dependencyOnVariables();
         List<GenPolynomial<BigInteger>> facs = null;
-        if (degv.length() == donv.length) { // all variables appear, hack for Hensel, TODO check
+        if (degv.length() == donv.length) { // all variables appear, hack for Hensel, check
             try {
                 logger.info("try factorsSquarefreeHensel: " + P);
                 facs = factorsSquarefreeHensel(P);
@@ -720,7 +720,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 logger.info("exception " + e);
                 //e.printStackTrace();
             }
-        } else { // not all variables appear, remove unused variables, hack for Hensel, TODO check
+        } else { // not all variables appear, remove unused variables, hack for Hensel, check
             GenPolynomial<BigInteger> pu = PolyUtil.<BigInteger> removeUnusedUpperVariables(P);
             GenPolynomial<BigInteger> pl = PolyUtil.<BigInteger> removeUnusedLowerVariables(pu); // not useful
             try {
