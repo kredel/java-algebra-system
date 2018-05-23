@@ -279,6 +279,24 @@ public class PolyUtil {
 
 
     /**
+     * BigInteger from BigRational coefficients. Represent as polynomial with
+     * BigInteger coefficients by multiplication with the gcd of the numerators
+     * and the lcm of the denominators of the BigRational coefficients. <br />
+     * @param fac result polynomial factory.
+     * @param gcd of rational coefficient numerators.
+     * @param lcm of rational coefficient denominators.
+     * @param A polynomial with BigRational coefficients to be converted.
+     * @return polynomial with BigInteger coefficients.
+     */
+    public static GenPolynomial<BigInteger> integerFromRationalCoefficients(GenPolynomialRing<BigInteger> fac,
+                                                   java.math.BigInteger gcd, java.math.BigInteger lcm,
+                                                   GenPolynomial<BigRational> A) {
+        GenPolynomial<BigInteger> Ai = PolyUtil.<BigRational, BigInteger> map(fac, A, new RatToIntFactor(gcd, lcm));
+        return Ai;
+    }
+
+
+    /**
      * BigInteger from BigRational coefficients. Represent as list of
      * polynomials with BigInteger coefficients by multiplication with the lcm
      * of the numerators of the BigRational coefficients of each polynomial.

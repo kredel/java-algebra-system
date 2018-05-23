@@ -233,13 +233,45 @@ public class PolyUfdUtil {
         if (A == null || A.isZERO()) {
             return B;
         }
+        java.math.BigInteger gcd = null;
+        java.math.BigInteger lcm = null;
+        int sLCM = 0;
+        int sGCD = 0;
+        // lcm of all denominators
+        for (GenPolynomial<BigRational> av : A.getMap().values()) {
+            for (BigRational y : av.getMap().values()) {
+                java.math.BigInteger numerator = y.numerator();
+                java.math.BigInteger denominator = y.denominator();
+                // lcm = lcm(lcm,x)
+                if (lcm == null) {
+                    lcm = denominator;
+                    sLCM = denominator.signum();
+                } else {
+                    java.math.BigInteger d = lcm.gcd(denominator);
+                    lcm = lcm.multiply(denominator.divide(d));
+                }
+                // gcd = gcd(gcd,x)
+                if (gcd == null) {
+                    gcd = numerator;
+                    sGCD = numerator.signum();
+                } else {
+                    gcd = gcd.gcd(numerator);
+                }
+            }
+        }
+        if (sLCM < 0) {
+            lcm = lcm.negate();
+        }
+        if (sGCD < 0) {
+            gcd = gcd.negate();
+        }
         RingFactory<GenPolynomial<BigInteger>> cfac = fac.coFac;
         GenPolynomialRing<BigInteger> rfac = (GenPolynomialRing<BigInteger>) cfac;
         for (Map.Entry<ExpVector, GenPolynomial<BigRational>> y : A.getMap().entrySet()) {
             ExpVector e = y.getKey();
             GenPolynomial<BigRational> a = y.getValue();
-            // TODO: check/fix common denominator
-            GenPolynomial<BigInteger> p = PolyUtil.integerFromRationalCoefficients(rfac, a);
+            // common denominator over all coefficients
+            GenPolynomial<BigInteger> p = PolyUtil.integerFromRationalCoefficients(rfac, gcd, lcm, a);
             if (!p.isZERO()) {
                 //B = B.sum( p, e ); // inefficient
                 B.doPutToMap(e, p);

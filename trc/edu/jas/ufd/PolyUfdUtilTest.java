@@ -80,6 +80,15 @@ public class PolyUfdUtilTest extends TestCase {
     GenPolynomial<GenPolynomial<BigInteger>> ar, br, cr, dr, er;
 
 
+    GenPolynomialRing<BigRational> crfac;
+
+
+    GenPolynomialRing<GenPolynomial<BigRational>> rrfac;
+
+ 
+    GenPolynomial<GenPolynomial<BigRational>> arr, brr, crr, drr, err, frr;
+
+
     int rl = 5;
 
 
@@ -321,6 +330,38 @@ public class PolyUfdUtilTest extends TestCase {
         assertEquals("cp = rp: ", rp.monic(), cp.monic());
         //System.out.println("dp = qp: " + qp.monic().equals(dp.monic()) );
         assertEquals("dp = qp: ", qp.monic(), dp.monic()); // ??
+    }
+
+
+    /**
+     * Test integer from rational coefficients, recursive.
+     */
+    public void testRecursiveIntegerFromRationalCoefficients() {
+        crfac = new GenPolynomialRing<BigRational>(new BigRational(1), cfac);
+        rrfac = new GenPolynomialRing<GenPolynomial<BigRational>>(crfac, rfac);
+        //System.out.println("\ncfac  = " + cfac);
+        //System.out.println("crfac = " + crfac);
+        //System.out.println("rfac  = " + rfac);
+        //System.out.println("rrfac  = " + rrfac);
+
+        // BigRational
+        arr = rrfac.random(kl*2, 2 * ll, el + 4, q);
+        //System.out.println("arr   = " + arr);
+
+        // BigInteger
+        ar = PolyUfdUtil.integerFromRationalCoefficients(rfac, arr);
+        //System.out.println("ar   = " + ar);
+
+        crr = PolyUtil.<BigRational> monic(arr);
+        //System.out.println("crr   = " + crr);
+
+        // BigRational
+        err = PolyUfdUtil.<BigRational> fromIntegerCoefficients(rrfac, ar);
+        //System.out.println("err   = " + err);
+        err = PolyUtil.<BigRational> monic(err);
+        //System.out.println("err   = " + err);
+
+        assertEquals("crr != err: ", crr, err);
     }
 
 }
