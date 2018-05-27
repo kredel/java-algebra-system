@@ -258,6 +258,7 @@ public class PolyUfdUtil {
                     gcd = gcd.gcd(numerator);
                 }
             }
+            //System.out.println("gcd = " + gcd + ", lcm = " + lcm);
         }
         if (sLCM < 0) {
             lcm = lcm.negate();
@@ -265,6 +266,7 @@ public class PolyUfdUtil {
         if (sGCD < 0) {
             gcd = gcd.negate();
         }
+        //System.out.println("gcd** = " + gcd + ", lcm = " + lcm);
         RingFactory<GenPolynomial<BigInteger>> cfac = fac.coFac;
         GenPolynomialRing<BigInteger> rfac = (GenPolynomialRing<BigInteger>) cfac;
         for (Map.Entry<ExpVector, GenPolynomial<BigRational>> y : A.getMap().entrySet()) {

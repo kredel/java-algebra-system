@@ -345,7 +345,8 @@ public class PolyUfdUtilTest extends TestCase {
         //System.out.println("rrfac  = " + rrfac);
 
         // BigRational
-        arr = rrfac.random(kl*2, 2 * ll, el + 4, q);
+        arr = rrfac.random(kl*kl, 2 * ll, el + 4, q);
+        arr = arr.sum(arr).multiply(arr); //rrfac.fromInteger(11));
         //System.out.println("arr   = " + arr);
 
         // BigInteger

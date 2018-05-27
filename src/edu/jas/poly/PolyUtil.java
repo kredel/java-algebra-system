@@ -271,6 +271,7 @@ public class PolyUtil {
         if (sGCD < 0) {
             gcd = gcd.negate();
         }
+        //System.out.println("gcd* = " + gcd + ", lcm = " + lcm);
         result[0] = gcd;
         result[1] = lcm;
         result[2] = PolyUtil.<BigRational, BigInteger> map(fac, A, new RatToIntFactor(gcd, lcm));
@@ -291,6 +292,7 @@ public class PolyUtil {
     public static GenPolynomial<BigInteger> integerFromRationalCoefficients(GenPolynomialRing<BigInteger> fac,
                                                    java.math.BigInteger gcd, java.math.BigInteger lcm,
                                                    GenPolynomial<BigRational> A) {
+        //System.out.println("gcd = " + gcd + ", lcm = " + lcm);
         GenPolynomial<BigInteger> Ai = PolyUtil.<BigRational, BigInteger> map(fac, A, new RatToIntFactor(gcd, lcm));
         return Ai;
     }
