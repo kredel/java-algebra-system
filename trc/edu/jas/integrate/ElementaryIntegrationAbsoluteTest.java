@@ -114,7 +114,7 @@ public class ElementaryIntegrationAbsoluteTest extends TestCase {
         Quotient<BigRational> Q = new Quotient<BigRational>(qfac, N, agen);
 
         rint = integrator.integrate(Q);
-        System.out.println("\nquot integral: " + rint.toString());
+        //System.out.println("\nquot integral: " + rint.toString());
         assertTrue("isIntegral ", integrator.isIntegral(rint));
     }
 

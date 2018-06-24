@@ -146,9 +146,8 @@ public class ElementaryIntegrationCzichowski<C extends GcdRingElem<C>> extends E
 
             // Primitive Part of GB i+1
             GenPolynomial<GenPolynomial<C>> ppS = ufd.baseRecursivePrimitivePart(gbList.get(counter));
-            System.out.println("pp(S) = " + ppS);
+            // System.out.println("pp(S) = " + ppS);
             counter++;
-
 
             // vars = new String[] { "z_" + Math.abs(r.hashCode() % 1000) };
             vars = pfac.newVars("z_");

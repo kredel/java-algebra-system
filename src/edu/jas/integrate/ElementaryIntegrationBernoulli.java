@@ -82,7 +82,7 @@ public class ElementaryIntegrationBernoulli<C extends GcdRingElem<C>> extends El
         }
         // complete factorization to linear factors
         PartialFraction<C> F = ((FactorAbsolute<C>) irr).baseAlgebraicPartialFraction(A, P);
-        System.out.println("\npartial fraction " + F);
+        //System.out.println("\npartial fraction " + F);
 
         return new LogIntegral<C>(A, P, F.cfactors, F.cdenom, F.afactors, F.adenom);
     }
