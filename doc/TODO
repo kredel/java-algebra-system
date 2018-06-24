@@ -16,6 +16,8 @@ issues to consider:
 
 - implement univariate power series composition and power
 
+- implement Word ideal intersection, if possible
+
 - make polynomial chinese remainder generic (?)
 
 - test caching results of gcd computation
