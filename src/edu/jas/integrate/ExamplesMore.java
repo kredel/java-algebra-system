@@ -39,11 +39,7 @@ public class ExamplesMore {
 
     /**
      * Example for integrating a rational function using Rothstein-Trager
-     * algorithm
-     *
-     * @param r rational function
-     * @return Integral container, such that integrate(r) = sum_i(g_i) + sum_j(
-     *         an_j log(hd_j) )
+     * algorithm.
      */
     public static void exampleRothstein() {
         BigRational br = new BigRational(0);
@@ -78,11 +74,7 @@ public class ExamplesMore {
 
 
     /**
-     * Example for integrating a rational function using Lazard algorithm
-     *
-     * @param r rational function
-     * @return Integral container, such that integrate(r) = sum_i(g_i) + sum_j(
-     *         an_j log(hd_j) )
+     * Example for integrating a rational function using Lazard algorithm.
      */
     public static void exampleLazard() {
         BigRational br = new BigRational(0);
@@ -113,17 +105,12 @@ public class ExamplesMore {
 
         boolean testAnswer = eIntegratorLaz.isIntegral(ret);
         System.out.println(testAnswer);
-
         // System.out.println("-----");
     }
 
 
     /**
-     * Example for integrating a rational function using Czichowski algorithm
-     *
-     * @param r rational function
-     * @return Integral container, such that integrate(r) = sum_i(g_i) + sum_j(
-     *         an_j log(hd_j) )
+     * Example for integrating a rational function using Czichowski algorithm.
      */
     public static void exampleCzichwoski() {
         BigRational br = new BigRational(0);
@@ -159,11 +146,7 @@ public class ExamplesMore {
 
 
     /**
-     * Example for integrating a rational function using Bernoulli algorithm
-     *
-     * @param r rational function
-     * @return Integral container, such that integrate(r) = sum_i(g_i) + sum_j(
-     *         an_j log(hd_j) )
+     * Example for integrating a rational function using Bernoulli algorithm.
      */
     public static void exampleBernoulli() {
         BigRational br = new BigRational(0);
