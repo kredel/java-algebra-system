@@ -573,6 +573,23 @@ public final class ExpVectorShort extends ExpVector
 
 
     /**
+     * ExpVector minimal degree.
+     * @return minimal exponent.
+     */
+    @Override
+    public long minDeg() {
+        long t = Short.MAX_VALUE;
+        short[] u = val;
+        for (int i = 0; i < u.length; i++) {
+            if (u[i] < t) {
+                t = u[i];
+            }
+        }
+        return t;
+    }
+
+
+    /**
      * ExpVector weighted degree.
      * @param w weights.
      * @return weighted sum of all exponents.

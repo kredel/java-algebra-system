@@ -771,6 +771,26 @@ public class GenPolynomial<C extends RingElem<C>>
 
 
     /**
+     * Minimal degree.
+     * @return minimal degree in any variables.
+     * @author Youssef Elbarbary
+     */
+    public long degreeMin() {
+        if (val.isEmpty()) {
+            return -1L; // 0 or -1 ?;
+        }
+        long deg = Long.MAX_VALUE;
+        for (ExpVector e : val.keySet()) {
+            long d = e.minDeg();
+            if (d < deg) {
+                deg = d;
+            }
+        }
+        return deg;
+    }
+
+
+    /**
      * Total degree.
      * @return total degree in any variables.
      */

@@ -4,6 +4,8 @@
 
 package edu.jas.ufd;
 
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -18,6 +20,7 @@ import edu.jas.structure.RingFactory;
  * Greatest common divisor algorithms with subresultant polynomial remainder
  * sequence.
  * @author Heinz Kredel
+ * @author Youssef Elbarbary
  */
 
 public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbstract<C> {
@@ -377,6 +380,107 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
 
 
     /**
+     * Univariate GenPolynomial recursive Subresultant coefficients. Uses pseudoRemainder for
+     * remainder.
+     * @param P univariate recursive GenPolynomial.
+     * @param S univariate recursive GenPolynomial.
+     * @return subResCoeff(P,S).
+     * @author Youssef Elbarbary
+     */
+    public List<GenPolynomial<GenPolynomial<C>>> recursiveUnivariateSubResultantCoefficients(
+                                                   GenPolynomial<GenPolynomial<C>> P, GenPolynomial<GenPolynomial<C>> S) {
+        List<GenPolynomial<GenPolynomial<C>>> myList = new ArrayList<GenPolynomial<GenPolynomial<C>>>();
+        if (S == null || S.isZERO()) {
+            myList.add(S);
+            return myList;
+        }
+        if (P == null || P.isZERO()) {
+            myList.add(P);
+            return myList;
+        }
+        if (P.ring.nvar > 1) {
+            throw new IllegalArgumentException(this.getClass().getName() + " no univariate polynomial");
+        }
+        long e = P.degree(0);
+        long f = S.degree(0);
+        GenPolynomial<GenPolynomial<C>> q;
+        GenPolynomial<GenPolynomial<C>> r;
+        if (f > e) {
+            r = P;
+            q = S;
+            long g = f;
+            f = e;
+            e = g;
+        } else {
+            q = P;
+            r = S;
+        }
+        r = r.abs();
+        q = q.abs();
+        GenPolynomial<C> a = recursiveContent(r);
+        GenPolynomial<C> b = recursiveContent(q);
+        r = PolyUtil.<C>recursiveDivide(r, a);
+        q = PolyUtil.<C>recursiveDivide(q, b);
+        RingFactory<GenPolynomial<C>> cofac = P.ring.coFac;
+        GenPolynomial<C> g = cofac.getONE();
+        GenPolynomial<C> h = cofac.getONE();
+        GenPolynomial<GenPolynomial<C>> x;
+        GenPolynomial<C> t;
+        if (f == 0 && e == 0 && g.ring.nvar > 0) {
+            // if coeffs are multivariate (and non constant)
+            // otherwise it would be 1
+            t = resultant(a, b);
+            x = P.ring.getONE().multiply(t);
+            myList.add(x);
+            return myList;
+        }
+        t = a.power(e); // power(cofac, a, e);
+        t = t.multiply(b.power(f)); // power(cofac, b, f));
+        long s = 1;
+        GenPolynomial<C> z;
+        myList.add(P); // adding R0
+        myList.add(S); // adding R1
+        while (r.degree(0) > 0) {
+            long delta = q.degree(0) - r.degree(0);
+            if ((q.degree(0) % 2 != 0) && (r.degree(0) % 2 != 0)) {
+                s = -s;
+            }
+            x = PolyUtil.<C>recursiveDensePseudoRemainder(q, r);
+            q = r;
+            if (x.degree(0) >= 0) { // fixed: this was changed from > to >=
+                z = g.multiply(h.power(delta)); // power(P.ring.coFac, h, delta));
+                r = PolyUtil.<C>recursiveDivide(x, z);
+                myList.add(r);
+                g = q.leadingBaseCoefficient();
+                z = g.power(delta); // power(cofac, g, delta);
+                h = PolyUtil.<C>basePseudoDivide(z, h.power(delta - 1)); // power(cofac, h, delta - 1));
+            } else {
+                r = x;
+                myList.add(r);
+            }
+        }
+        z = r.leadingBaseCoefficient().power(q.degree(0)); // power(cofac, r.leadingBaseCoefficient(), q.degree(0));
+        h = PolyUtil.<C>basePseudoDivide(z, h.power(q.degree() - 1)); // power(cofac, h, q.degree(0) - 1));
+        z = h.multiply(t);
+        if (s < 0) {
+            z = z.negate();
+        }
+        x = P.ring.getONE().multiply(z);
+        myList.add(x);
+        // Printing the Subresultant List
+        //System.out.println("Liste von den SubResultanten(A - tD'):");
+        //for (int i = 0; i < myList.size(); i++) { // just for printing the list
+        //    System.out.println(myList.get(i));
+        //}
+        if (logger.isInfoEnabled()) {
+            System.out.println("subResCoeffs: " + myList);
+            //logger.info("subResCoeffs: " + myList);
+        }
+        return myList;
+    }
+
+
+    /**
      * GenPolynomial base coefficient discriminant.
      * @param P GenPolynomial.
      * @return discriminant(P).
@@ -405,28 +509,5 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
         }
         return disc;
     }
-
-
-    /*
-     * Coefficient power.
-     * @param A coefficient
-     * @param i exponent.
-     * @return A^i.
-     
-    C power(RingFactory<C> fac, C A, long i) {
-        return A.power(i); //Power.<C> power(fac, A, i);
-    }
-    */
-
-    /*
-     * Polynomial power.
-     * @param A polynomial.
-     * @param i exponent.
-     * @return A^i.
-     
-    GenPolynomial<C> power(RingFactory<GenPolynomial<C>> fac, GenPolynomial<C> A, long i) {
-        return A.power(i); //Power.<GenPolynomial<C>> power(fac, A, i);
-    }
-    */
 
 }

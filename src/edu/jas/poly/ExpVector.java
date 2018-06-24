@@ -857,6 +857,23 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector> {
 
 
     /**
+     * ExpVector minimal degree.
+     * @param U
+     * @return minimal exponent.
+     */
+    public static long EVMINDEG(ExpVector U) {
+        return U.minDeg();
+    }
+
+
+    /**
+     * ExpVector minimal degree.
+     * @return minimal exponent.
+     */
+    public abstract long minDeg();
+
+
+    /**
      * ExpVector weighted degree.
      * @param w weights.
      * @param U

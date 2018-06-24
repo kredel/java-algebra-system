@@ -533,6 +533,23 @@ public final class ExpVectorLong extends ExpVector
 
 
     /**
+     * ExpVector minimal degree.
+     * @return minimal exponent.
+     */
+    @Override
+    public long minDeg() {
+        long t = Long.MAX_VALUE;
+        long[] u = val;
+        for (int i = 0; i < u.length; i++) {
+            if (u[i] < t) {
+                t = u[i];
+            }
+        }
+        return t;
+    }
+
+
+    /**
      * ExpVector weighted degree.
      * @param w weights.
      * @return weighted sum of all exponents.

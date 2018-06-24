@@ -169,7 +169,7 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
      * @return [ [ gn_i, gd_i ], [ h0, hn_j, hd_j ] ] such that integrate(a/d) =
      *         sum_i(gn_i/gd_i) + integrate(h0) + sum_j( integrate(hn_j/hd_j) )
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public List<GenPolynomial<C>>[] integrateHermite(GenPolynomial<C> a, GenPolynomial<C> d) {
         if (d == null || d.isZERO()) {
             throw new IllegalArgumentException("d == null or d == 0");
@@ -421,20 +421,13 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
                 //System.out.println("warning constant gcd ignored");
                 continue;
             }
+            // If a is equal to zero
+            if(a.isZERO()) {
+            	continue;
+            }
             afactors.add(a);
             adenom.add(Ga);
             // special quadratic case
-            if (P.degree(0) == 2 && Ga.degree(0) == 1) {
-                GenPolynomial<AlgebraicNumber<C>>[] qra = PolyUtil
-                                .<AlgebraicNumber<C>> basePseudoQuotientRemainder(Pa, Ga);
-                GenPolynomial<AlgebraicNumber<C>> Qa = qra[0];
-                if (!qra[1].isZERO()) {
-                    throw new ArithmeticException("remainder not zero");
-                }
-                //System.out.println("Qa = " + Qa);
-                afactors.add(a.negate());
-                adenom.add(Qa);
-            }
             // todo: eventually implement special cases deg = 3, 4
         }
         return new LogIntegral<C>(A, P, cfactors, cdenom, afactors, adenom);
