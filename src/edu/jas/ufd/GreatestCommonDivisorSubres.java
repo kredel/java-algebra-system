@@ -4,6 +4,7 @@
 
 package edu.jas.ufd;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -380,15 +381,15 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
 
 
     /**
-     * Univariate GenPolynomial recursive Subresultant coefficients. Uses pseudoRemainder for
-     * remainder.
+     * Univariate GenPolynomial recursive Subresultant list. Uses
+     * pseudoRemainder for remainder.
      * @param P univariate recursive GenPolynomial.
      * @param S univariate recursive GenPolynomial.
-     * @return subResCoeff(P,S).
+     * @return subResList(P,S).
      * @author Youssef Elbarbary
      */
-    public List<GenPolynomial<GenPolynomial<C>>> recursiveUnivariateSubResultantCoefficients(
-                                                   GenPolynomial<GenPolynomial<C>> P, GenPolynomial<GenPolynomial<C>> S) {
+    public List<GenPolynomial<GenPolynomial<C>>> recursiveUnivariateSubResultantList(
+                    GenPolynomial<GenPolynomial<C>> P, GenPolynomial<GenPolynomial<C>> S) {
         List<GenPolynomial<GenPolynomial<C>>> myList = new ArrayList<GenPolynomial<GenPolynomial<C>>>();
         if (S == null || S.isZERO()) {
             myList.add(S);
@@ -419,8 +420,8 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
         q = q.abs();
         GenPolynomial<C> a = recursiveContent(r);
         GenPolynomial<C> b = recursiveContent(q);
-        r = PolyUtil.<C>recursiveDivide(r, a);
-        q = PolyUtil.<C>recursiveDivide(q, b);
+        r = PolyUtil.<C> recursiveDivide(r, a);
+        q = PolyUtil.<C> recursiveDivide(q, b);
         RingFactory<GenPolynomial<C>> cofac = P.ring.coFac;
         GenPolynomial<C> g = cofac.getONE();
         GenPolynomial<C> h = cofac.getONE();
@@ -445,22 +446,22 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
             if ((q.degree(0) % 2 != 0) && (r.degree(0) % 2 != 0)) {
                 s = -s;
             }
-            x = PolyUtil.<C>recursiveDensePseudoRemainder(q, r);
+            x = PolyUtil.<C> recursiveDensePseudoRemainder(q, r);
             q = r;
             if (x.degree(0) >= 0) { // fixed: this was changed from > to >=
                 z = g.multiply(h.power(delta)); // power(P.ring.coFac, h, delta));
-                r = PolyUtil.<C>recursiveDivide(x, z);
+                r = PolyUtil.<C> recursiveDivide(x, z);
                 myList.add(r);
                 g = q.leadingBaseCoefficient();
                 z = g.power(delta); // power(cofac, g, delta);
-                h = PolyUtil.<C>basePseudoDivide(z, h.power(delta - 1)); // power(cofac, h, delta - 1));
+                h = PolyUtil.<C> basePseudoDivide(z, h.power(delta - 1)); // power(cofac, h, delta - 1));
             } else {
                 r = x;
                 myList.add(r);
             }
         }
         z = r.leadingBaseCoefficient().power(q.degree(0)); // power(cofac, r.leadingBaseCoefficient(), q.degree(0));
-        h = PolyUtil.<C>basePseudoDivide(z, h.power(q.degree() - 1)); // power(cofac, h, q.degree(0) - 1));
+        h = PolyUtil.<C> basePseudoDivide(z, h.power(q.degree() - 1)); // power(cofac, h, q.degree(0) - 1));
         z = h.multiply(t);
         if (s < 0) {
             z = z.negate();

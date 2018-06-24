@@ -169,7 +169,7 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
      * @return [ [ gn_i, gd_i ], [ h0, hn_j, hd_j ] ] such that integrate(a/d) =
      *         sum_i(gn_i/gd_i) + integrate(h0) + sum_j( integrate(hn_j/hd_j) )
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public List<GenPolynomial<C>>[] integrateHermite(GenPolynomial<C> a, GenPolynomial<C> d) {
         if (d == null || d.isZERO()) {
             throw new IllegalArgumentException("d == null or d == 0");
@@ -235,14 +235,14 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
 
 
     /**
-     * Univariate GenPolynomial integration of the logaritmic part,
-     * eventual preparation for irreducible factorization of P.
+     * Univariate GenPolynomial integration of the logaritmic part, eventual
+     * preparation for irreducible factorization of P.
      * @param A univariate GenPolynomial, deg(A) < deg(P).
      * @param P univariate squarefree GenPolynomial, gcd(A,P) == 1.
      * @return logarithmic part container.
      */
     public LogIntegral<C> integrateLogPartPrepare(GenPolynomial<C> A, GenPolynomial<C> P) {
-        if (! irredLogPart) {
+        if (!irredLogPart) {
             return integrateLogPart(A, P);
         }
         if (P == null || P.isZERO()) {
@@ -303,7 +303,8 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
      * Univariate GenPolynomial integration of the logaritmic part,
      * Rothstein-Trager algorithm.
      * @param A univariate GenPolynomial, deg(A) < deg(P).
-     * @param P univariate squarefree or irreducible GenPolynomial. // gcd(A,P) == 1 automatic
+     * @param P univariate squarefree or irreducible GenPolynomial. // gcd(A,P)
+     *            == 1 automatic
      * @return logarithmic part container.
      */
     public LogIntegral<C> integrateLogPart(GenPolynomial<C> A, GenPolynomial<C> P) {
@@ -422,8 +423,8 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
                 continue;
             }
             // If a is equal to zero
-            if(a.isZERO()) {
-            	continue;
+            if (a.isZERO()) {
+                continue;
             }
             afactors.add(a);
             adenom.add(Ga);
