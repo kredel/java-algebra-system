@@ -31,7 +31,6 @@ import junit.framework.TestSuite;
 public class GroebnerBaseWalkTest extends TestCase {
 
 
-    //private static final Logger logger = Logger.getLogger(GroebnerBaseWalkTest.class);
 
 
     /**

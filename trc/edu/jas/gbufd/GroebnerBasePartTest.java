@@ -37,7 +37,6 @@ import edu.jas.util.KsubSet;
 public class GroebnerBasePartTest extends TestCase {
 
 
-    //private static final Logger logger = Logger.getLogger(GroebnerBasePartTest.class);
 
     /**
      * main

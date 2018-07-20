@@ -41,7 +41,6 @@ import edu.jas.ufd.QuotientRing;
 public class WordGroebnerBasePseudoRecSeqTest extends TestCase {
 
 
-    //private static final Logger logger = Logger.getLogger(WordGroebnerBasePseudoRecSeqTest.class);
 
     /**
      * main

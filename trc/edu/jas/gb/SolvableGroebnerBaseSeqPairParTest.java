@@ -29,7 +29,6 @@ import edu.jas.poly.RelationGenerator;
 
 public class SolvableGroebnerBaseSeqPairParTest extends TestCase {
 
-    //private static final Logger logger = Logger.getLogger(SolvableGroebnerBaseSeqPairParTest.class);
 
 /**
  * main.

@@ -33,7 +33,6 @@ import edu.jas.poly.PolynomialList;
 public class CGBSeqTest extends TestCase {
 
 
-    //private static final Logger logger = Logger.getLogger(CGBSeqTest.class);
 
     /**
      * main

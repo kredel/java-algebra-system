@@ -31,7 +31,6 @@ import edu.jas.ufd.QuotientRing;
 public class GroebnerBaseQuotientTest extends TestCase {
 
 
-    //private static final Logger logger = Logger.getLogger(GroebnerBaseQuotientTest.class);
 
 
     /**

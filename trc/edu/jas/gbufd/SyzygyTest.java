@@ -38,7 +38,6 @@ import edu.jas.poly.TermOrder;
 public class SyzygyTest extends TestCase {
 
 
-    //private static final Logger logger = Logger.getLogger(SyzygyTest.class);
 
     /**
      * main.

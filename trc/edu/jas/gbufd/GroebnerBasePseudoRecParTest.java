@@ -40,7 +40,6 @@ import edu.jas.ufd.QuotientRing;
 public class GroebnerBasePseudoRecParTest extends TestCase {
 
 
-    //private static final Logger logger = Logger.getLogger(GroebnerBasePseudoRecParTest.class);
 
     /**
      * main

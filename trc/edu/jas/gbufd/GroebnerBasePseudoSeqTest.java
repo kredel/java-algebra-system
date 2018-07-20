@@ -35,7 +35,6 @@ import edu.jas.poly.PolynomialList;
 public class GroebnerBasePseudoSeqTest extends TestCase {
 
 
-    //private static final Logger logger = Logger.getLogger(GroebnerBasePseudoSeqTest.class);
 
     /**
      * main

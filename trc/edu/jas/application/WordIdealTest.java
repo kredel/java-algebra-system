@@ -31,7 +31,6 @@ import edu.jas.poly.TermOrder;
 public class WordIdealTest extends TestCase {
 
 
-    //private static final Logger logger = Logger.getLogger(WordIdealTest.class);
 
 
     /**

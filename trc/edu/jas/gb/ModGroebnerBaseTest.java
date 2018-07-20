@@ -31,7 +31,6 @@ import edu.jas.poly.TermOrder;
 public class ModGroebnerBaseTest extends TestCase {
 
 
-    //private static final Logger logger = Logger.getLogger(ModGroebnerBaseTest.class);
 
     /**
      * main.

@@ -34,7 +34,6 @@ import edu.jas.structure.RingElem;
 public class GroebnerBaseSeqPairDistTest extends TestCase {
 
 
-    //private static final Logger logger = Logger.getLogger(GroebnerBaseSeqPairDistTest.class);
 
     /**
      * main

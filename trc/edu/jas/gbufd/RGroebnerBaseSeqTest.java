@@ -40,7 +40,6 @@ import edu.jas.structure.RingFactory;
 public class RGroebnerBaseSeqTest extends TestCase {
 
 
-    //private static final Logger logger = Logger.getLogger(RGroebnerBaseSeqTest.class);
 
     /**
      * main

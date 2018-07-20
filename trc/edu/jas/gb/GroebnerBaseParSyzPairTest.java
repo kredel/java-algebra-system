@@ -33,7 +33,6 @@ import edu.jas.poly.PolynomialList;
 public class GroebnerBaseParSyzPairTest extends TestCase {
 
 
-    //private static final Logger logger = Logger.getLogger(GroebnerBaseParSyzPairTest.class);
 
     /**
      * main

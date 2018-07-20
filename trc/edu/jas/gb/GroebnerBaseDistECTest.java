@@ -35,7 +35,6 @@ import edu.jas.util.ExecutableServer;
 public class GroebnerBaseDistECTest extends TestCase {
 
 
-    //private static final Logger logger = Logger.getLogger(GroebnerBaseDistECTest.class);
 
     /**
      * main

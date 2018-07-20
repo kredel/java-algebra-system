@@ -27,7 +27,6 @@ import edu.jas.poly.TermOrder;
 public class MultiplicativeSetTest extends TestCase {
 
 
-    //private static final Logger logger = Logger.getLogger(MultiplicativeSetTest.class);
 
     /**
      * main

@@ -34,7 +34,6 @@ import edu.jas.poly.PolynomialList;
 public class EGroebnerBaseSeqTest extends TestCase {
 
 
-    //private static final Logger logger = Logger.getLogger(EGroebnerBaseSeqTest.class);
 
     /**
      * main

@@ -32,7 +32,6 @@ import edu.jas.poly.WeylRelations;
 public class SGBProxyTest extends TestCase {
 
 
-    //private static final Logger logger = Logger.getLogger(SGBProxyTest.class);
 
     /**
      * main.

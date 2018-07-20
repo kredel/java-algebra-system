@@ -37,7 +37,6 @@ public class RGroebnerBasePseudoSeqTest extends TestCase {
 
 
     // private static final Logger logger =
-    // Logger.getLogger(RGroebnerBasePseudoSeqTest.class);
 
     /**
      * main

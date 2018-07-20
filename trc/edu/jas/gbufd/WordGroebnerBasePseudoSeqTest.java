@@ -33,7 +33,6 @@ import edu.jas.poly.WordFactory;
 public class WordGroebnerBasePseudoSeqTest extends TestCase {
 
 
-    //private static final Logger logger = Logger.getLogger(WordGroebnerBasePseudoSeqTest.class);
 
 
     /**

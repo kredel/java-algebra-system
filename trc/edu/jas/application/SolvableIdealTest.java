@@ -37,7 +37,6 @@ import junit.framework.TestSuite;
 public class SolvableIdealTest extends TestCase {
 
 
-    //private static final Logger logger = Logger.getLogger(SolvableIdealTest.class);
 
 
     /**

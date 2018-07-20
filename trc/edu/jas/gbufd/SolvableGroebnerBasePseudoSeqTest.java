@@ -34,7 +34,6 @@ import edu.jas.poly.WeylRelations;
 public class SolvableGroebnerBasePseudoSeqTest extends TestCase {
 
 
-    //private static final Logger logger = Logger.getLogger(SolvableGroebnerBasePseudoSeqTest.class);
 
 
     /**
