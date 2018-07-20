@@ -1637,7 +1637,7 @@ r is the given polynomial ring.
         rescue => e
            i = nil
         end
-        puts "engine: #{i}";
+        #puts "engine: #{i}";
         return i;
     end
 
@@ -1658,7 +1658,7 @@ r is the given polynomial ring.
         rescue => e
            i = nil
         end
-        puts "engine: #{i}";
+        #puts "engine: #{i}";
         return i;
     end
 
@@ -1679,7 +1679,7 @@ r is the given polynomial ring.
         rescue => e
            i = nil
         end
-        puts "engine: #{i}";
+        #puts "engine: #{i}";
         return i;
     end
 
