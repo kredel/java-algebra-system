@@ -37,10 +37,16 @@
 </li>
 <li><p>A JAS Maven compatible repository is at
     <a href="http://krum.rz.uni-mannheim.de/maven-repository/" target="new"
-            >http://krum.rz.uni-mannheim.de/maven-repository/</a>.
-    groupId: <code>java-algebra-system</code>, artifactId: <code>jas</code>, 
+            >http://krum.rz.uni-mannheim.de/maven-repository/</a> and at
+    <a href="http://central.maven.org/maven2/" target="new"
+            >http://central.maven.org/maven2/</a>. <br />
+    groupId: <code>de.uni-mannheim.rz.krum</code>, artifactId: <code>jas</code>, 
     version (for example): <code>2.6.@SVNREV@</code>.
     </p>
+    <!-- 
+      http://krum.rz.uni-mannheim.de/maven-repository/de/uni-mannheim/rz/krum/jas/
+      http://central.maven.org/maven2/de/uni-mannheim/rz/krum/jas/
+      -->
 </li>
 <li><p>The JAS Git repository is available with
     </p>
@@ -60,11 +66,12 @@
     (from Junit 4),
     <br />
     In case you already have these jars, just ensure they are in the 
-    correct location (e.g. <code>../lib/</code>) or in the class path.
+    correct location (e.g. <code>../lib/</code>) or in the class path or accessible via Maven.
     </p>
     <p>
     The jar libraries can be downloaded from the above links or 
-    with the Ivy "resolve" target of ant, when installing the JAS source code. 
+    with the Ivy "resolve" target of ant, or the Maven dependencies, 
+    when installing the JAS source code. 
     </p>
 </li>
 <li><p>Optional libraries and files: 
@@ -517,7 +524,7 @@ public class mytests {
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Thu Aug 10 22:00:02 CEST 2017
+Last modified: Wed Jul 11 23:28:35 CEST 2018
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
