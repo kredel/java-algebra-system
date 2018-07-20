@@ -853,7 +853,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         String[] rvars = R.getVars();
         String[] tvars = getRing().getVars();
         for (int i = 0; i < rvars.length; i++) {
-            if (rvars[i] != tvars[i]) {
+            if (!rvars[i].equals(tvars[i])) {
                 throw new IllegalArgumentException("no contraction: " + R.toScript() 
                                                  + " of " + getRing().toScript());
             }
