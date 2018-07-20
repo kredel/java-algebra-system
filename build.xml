@@ -24,6 +24,7 @@
   <property name="libs"      value="${basedir}/../lib" />
   <!--property name="log4j"     value="${libs}/log4j.jar" /-->
   <!--property name="log4j"     value="${libs}/mylog.jar" /-->
+  <!--property name="log4j"     value="${libs}/nolog.jar" /-->
   <!--property name="log4j"     value="${libs}/log4j-1.2.17.jar" /-->
   <property name="log4j"     value="${libs}/log4j-core-2.5.jar:${libs}/log4j-api-2.5.jar:${libs}/log4j-1.2-api-2.5.jar" />
   <!--property name="junit"     value="${libs}/junit-3.8.jar" /-->
@@ -280,6 +281,7 @@
   <java classname="edu.jas.ufd.Examples" classpath="${cp}" fork="yes" args="1" />
   <java classname="edu.jas.ufd.ExamplesPartialFraction" classpath="${cp}" fork="yes" args="1" />
   <java classname="edu.jas.integrate.Examples" classpath="${cp}" fork="yes" args="1" />
+  <java classname="edu.jas.integrate.ExamplesMore" classpath="${cp}" fork="yes" args="1" />
   <java classname="edu.jas.application.Examples" classpath="${cp}" fork="yes" args="1" />
   <java classname="edu.jas.application.ExamplesGeoTheorems" classpath="${cp}" fork="yes" args="1" />
 </target>
@@ -386,14 +388,14 @@
      <arg value="-ab"/>
      <arg value="${m2dist}/${sources-jar}"/>
   </exec>
-  <!-- create bundle for upload, no more -->
-  <!--jar jarfile="${tmpdist}/${artifactId}-${version}-bundle.jar"  >
+  <!-- create bundle for upload, again -->
+  <jar jarfile="${tmpdist}/${artifactId}-${version}-bundle.jar"  >
      <fileset dir="${m2dist}" includes="${pom-xml}"  />
      <fileset dir="${m2dist}" includes="${bin-jar}"  />
      <fileset dir="${m2dist}" includes="${javadoc-jar}"  />
      <fileset dir="${m2dist}" includes="${sources-jar}"  />
      <fileset dir="${m2dist}" includes="*.asc"  />
-  </jar-->
+  </jar>
 </target>
 
 <target name="clean" description="remove backup files">
