@@ -10,7 +10,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.OrderedPolynomialList;
@@ -29,7 +30,7 @@ import edu.jas.structure.GcdRingElem;
 public class GroebnerSystem<C extends GcdRingElem<C>> {
 
 
-    private static final Logger logger = Logger.getLogger(GroebnerSystem.class);
+    private static final Logger logger = LogManager.getLogger(GroebnerSystem.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

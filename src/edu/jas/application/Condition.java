@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.gbufd.MultiplicativeSet;
 import edu.jas.gbufd.MultiplicativeSetSquarefree;
@@ -30,7 +31,7 @@ import edu.jas.structure.GcdRingElem;
 public class Condition<C extends GcdRingElem<C>> implements Serializable {
 
 
-    private static final Logger logger = Logger.getLogger(Condition.class);
+    private static final Logger logger = LogManager.getLogger(Condition.class);
 
 
     //private static final boolean debug = logger.isDebugEnabled();

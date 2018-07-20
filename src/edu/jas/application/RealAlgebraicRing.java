@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigRational;
 import edu.jas.arith.Rational;
@@ -73,7 +74,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
     public final int PRECISION = 9; //BigDecimal.DEFAULT_PRECISION;
 
 
-    private static final Logger logger = Logger.getLogger(RealAlgebraicRing.class);
+    private static final Logger logger = LogManager.getLogger(RealAlgebraicRing.class);
 
 
     /**

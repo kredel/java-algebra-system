@@ -12,7 +12,8 @@ import java.util.Random;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.gb.SolvableGroebnerBaseAbstract;
 import edu.jas.gb.SolvableGroebnerBaseSeq;
@@ -38,7 +39,7 @@ public class SolvableResidueRing<C extends GcdRingElem<C>>
                ValueFactory<GenPolynomial<C>, SolvableResidue<C>> {
 
 
-    private static final Logger logger = Logger.getLogger(SolvableResidueRing.class);
+    private static final Logger logger = LogManager.getLogger(SolvableResidueRing.class);
 
 
     //private static final boolean debug = logger.isDebugEnabled();

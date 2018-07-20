@@ -8,7 +8,8 @@ package edu.jas.application;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
@@ -39,7 +40,7 @@ public class FactorAlgebraicPrim<C extends GcdRingElem<C>> extends FactorAbsolut
     //FactorAbstract<AlgebraicNumber<C>>
 
 
-    private static final Logger logger = Logger.getLogger(FactorAlgebraicPrim.class);
+    private static final Logger logger = LogManager.getLogger(FactorAlgebraicPrim.class);
 
 
     //private static final boolean debug = logger.isInfoEnabled();

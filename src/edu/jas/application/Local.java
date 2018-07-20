@@ -5,7 +5,8 @@
 package edu.jas.application;
 
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.ExpVector;
@@ -25,7 +26,7 @@ public class Local<C extends GcdRingElem<C>>
        implements RingElem<Local<C>>, QuotPair<GenPolynomial<C>> {
 
 
-    private static final Logger logger = Logger.getLogger(Local.class);
+    private static final Logger logger = LogManager.getLogger(Local.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

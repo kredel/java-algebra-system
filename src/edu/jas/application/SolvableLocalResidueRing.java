@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.gb.SolvableGroebnerBaseAbstract;
 import edu.jas.gbufd.SGBFactory;
@@ -41,7 +42,7 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>> implements
     // because of different constructor semantics.
 
 
-    private static final Logger logger = Logger.getLogger(SolvableLocalResidueRing.class);
+    private static final Logger logger = LogManager.getLogger(SolvableLocalResidueRing.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

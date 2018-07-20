@@ -12,7 +12,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -34,7 +35,7 @@ public class CReductionSeq<C extends GcdRingElem<C>> implements Serializable
 /* implements CReduction<C> */{
 
 
-    private static final Logger logger = Logger.getLogger(CReductionSeq.class);
+    private static final Logger logger = LogManager.getLogger(CReductionSeq.class);
 
 
     //private static final boolean debug = logger.isDebugEnabled();

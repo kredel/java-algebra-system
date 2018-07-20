@@ -7,7 +7,8 @@ package edu.jas.application;
 
 import java.util.Arrays;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.fd.FDUtil;
 import edu.jas.gbufd.PolyModUtil;
@@ -28,7 +29,7 @@ public class SolvableLocal<C extends GcdRingElem<C>> implements GcdRingElem<Solv
                 QuotPair<GenPolynomial<C>> {
 
 
-    private static final Logger logger = Logger.getLogger(SolvableLocal.class);
+    private static final Logger logger = LogManager.getLogger(SolvableLocal.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

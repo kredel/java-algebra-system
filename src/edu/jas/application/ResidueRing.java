@@ -12,7 +12,8 @@ import java.util.Random;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -30,7 +31,7 @@ import edu.jas.ufd.GreatestCommonDivisor;
 public class ResidueRing<C extends GcdRingElem<C>> implements RingFactory<Residue<C>> {
 
 
-    private static final Logger logger = Logger.getLogger(ResidueRing.class);
+    private static final Logger logger = LogManager.getLogger(ResidueRing.class);
 
 
     //private static final boolean debug = logger.isDebugEnabled(); 

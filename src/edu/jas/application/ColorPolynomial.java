@@ -12,7 +12,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -31,7 +32,7 @@ public class ColorPolynomial<C extends RingElem<C>> implements Serializable
     /* implements RingElem< ColorPolynomial<C> > */ {
 
 
-    private static final Logger logger = Logger.getLogger(ColorPolynomial.class);
+    private static final Logger logger = LogManager.getLogger(ColorPolynomial.class);
 
 
     /**

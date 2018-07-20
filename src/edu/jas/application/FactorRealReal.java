@@ -8,7 +8,8 @@ package edu.jas.application;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.Rational;
 import edu.jas.poly.GenPolynomial;
@@ -41,7 +42,7 @@ public class FactorRealReal<C extends GcdRingElem<C> & Rational>
     //FactorAbstract<AlgebraicNumber<C>>
 
 
-    private static final Logger logger = Logger.getLogger(FactorRealReal.class);
+    private static final Logger logger = LogManager.getLogger(FactorRealReal.class);
 
 
     private static final boolean debug = logger.isInfoEnabled();

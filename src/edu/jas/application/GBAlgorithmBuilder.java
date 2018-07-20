@@ -7,7 +7,8 @@ package edu.jas.application;
 
 import java.io.Serializable;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
@@ -110,7 +111,7 @@ import edu.jas.ufd.QuotientRing;
 public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializable {
 
 
-    private static final Logger logger = Logger.getLogger(GBAlgorithmBuilder.class);
+    private static final Logger logger = LogManager.getLogger(GBAlgorithmBuilder.class);
 
 
     /**

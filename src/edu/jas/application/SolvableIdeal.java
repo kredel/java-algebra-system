@@ -9,7 +9,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.gb.SolvableExtendedGB;
 import edu.jas.gb.SolvableGroebnerBaseAbstract;
@@ -35,7 +36,7 @@ import edu.jas.structure.NotInvertibleException;
 public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<SolvableIdeal<C>>, Serializable {
 
 
-    private static final Logger logger = Logger.getLogger(SolvableIdeal.class);
+    private static final Logger logger = LogManager.getLogger(SolvableIdeal.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

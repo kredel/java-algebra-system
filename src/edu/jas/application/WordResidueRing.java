@@ -12,7 +12,8 @@ import java.util.Random;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.gb.WordGroebnerBaseAbstract;
 import edu.jas.gb.WordGroebnerBaseSeq;
@@ -34,7 +35,7 @@ public class WordResidueRing<C extends GcdRingElem<C>> implements RingFactory<Wo
                 ValueFactory<GenWordPolynomial<C>, WordResidue<C>> {
 
 
-    private static final Logger logger = Logger.getLogger(WordResidueRing.class);
+    private static final Logger logger = LogManager.getLogger(WordResidueRing.class);
 
 
     //private static final boolean debug = logger.isDebugEnabled();

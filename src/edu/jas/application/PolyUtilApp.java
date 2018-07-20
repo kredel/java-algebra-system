@@ -12,7 +12,8 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
@@ -57,7 +58,7 @@ import edu.jas.util.ListUtil;
 public class PolyUtilApp<C extends RingElem<C>> {
 
 
-    private static final Logger logger = Logger.getLogger(PolyUtilApp.class);
+    private static final Logger logger = LogManager.getLogger(PolyUtilApp.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

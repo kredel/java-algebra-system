@@ -14,7 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.kern.Scripting;
@@ -75,7 +76,7 @@ public class LocalSolvablePolynomialRing<C extends GcdRingElem<C>> extends
     public final LocalSolvablePolynomial<C> ONE;
 
 
-    private static final Logger logger = Logger.getLogger(LocalSolvablePolynomialRing.class);
+    private static final Logger logger = LogManager.getLogger(LocalSolvablePolynomialRing.class);
 
 
     //private static final boolean debug = logger.isDebugEnabled();

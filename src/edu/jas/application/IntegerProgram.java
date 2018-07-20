@@ -10,7 +10,8 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.Arrays;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigInteger;
 import edu.jas.poly.ExpVector;
@@ -31,7 +32,7 @@ import edu.jas.poly.TermOrder;
 public class IntegerProgram implements java.io.Serializable {
 
 
-    private static final Logger logger = Logger.getLogger(IntegerProgram.class);
+    private static final Logger logger = LogManager.getLogger(IntegerProgram.class);
 
 
     private static boolean DEBUG = logger.isDebugEnabled(); //false;

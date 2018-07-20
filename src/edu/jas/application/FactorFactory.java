@@ -5,7 +5,8 @@
 package edu.jas.application;
 
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.Rational;
 import edu.jas.poly.AlgebraicNumber;
@@ -62,7 +63,7 @@ import edu.jas.ufdroot.FactorRealAlgebraic;
 public class FactorFactory extends edu.jas.ufd.FactorFactory {
 
 
-    private static final Logger logger = Logger.getLogger(FactorFactory.class);
+    private static final Logger logger = LogManager.getLogger(FactorFactory.class);
 
 
     /**

@@ -17,7 +17,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigComplex;
 import edu.jas.arith.BigDecimal;
@@ -52,7 +53,7 @@ import edu.jas.ufd.QuotientRing;
 public class RingFactoryTokenizer {
 
 
-    private static final Logger logger = Logger.getLogger(RingFactoryTokenizer.class);
+    private static final Logger logger = LogManager.getLogger(RingFactoryTokenizer.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

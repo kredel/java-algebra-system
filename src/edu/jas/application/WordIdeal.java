@@ -13,7 +13,8 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.gb.WordGroebnerBaseAbstract;
 import edu.jas.gb.WordGroebnerBaseSeq;
@@ -35,7 +36,7 @@ import edu.jas.structure.NotInvertibleException;
 public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal<C>>, Serializable {
 
 
-    private static final Logger logger = Logger.getLogger(WordIdeal.class);
+    private static final Logger logger = LogManager.getLogger(WordIdeal.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

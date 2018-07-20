@@ -14,7 +14,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.gb.ExtendedGB;
 import edu.jas.gb.GroebnerBaseAbstract;
@@ -55,7 +56,7 @@ import edu.jas.ufd.SquarefreeFactory;
 public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Serializable {
 
 
-    private static final Logger logger = Logger.getLogger(Ideal.class);
+    private static final Logger logger = LogManager.getLogger(Ideal.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();
