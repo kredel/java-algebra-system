@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.BasicConfigurator;
+
 
 import edu.jas.arith.BigRational;
 import edu.jas.gb.SolvableGroebnerBase;
@@ -44,7 +44,7 @@ public class SolvableIdealTest extends TestCase {
      * main
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
+        
         junit.textui.TestRunner.run(suite());
     }
 
@@ -664,7 +664,7 @@ public class SolvableIdealTest extends TestCase {
     /**
      * Test SolvableIdeal common zeros.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public void testSolvableIdealCommonZeros() {
         SolvableIdeal<BigRational> I;
         L = new ArrayList<GenSolvablePolynomial<BigRational>>();
@@ -703,7 +703,7 @@ public class SolvableIdealTest extends TestCase {
     /**
      * Test SolvableIdeal dimension.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public void testSolvableIdealDimension() {
         SolvableIdeal<BigRational> I;
         L = new ArrayList<GenSolvablePolynomial<BigRational>>();

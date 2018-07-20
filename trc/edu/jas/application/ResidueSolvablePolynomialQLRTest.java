@@ -13,7 +13,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.log4j.BasicConfigurator;
+
 
 import edu.jas.arith.BigRational;
 import edu.jas.poly.ExpVector;
@@ -43,7 +43,7 @@ public class ResidueSolvablePolynomialQLRTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
+        
         junit.textui.TestRunner.run(suite());
     }
 
@@ -201,6 +201,7 @@ public class ResidueSolvablePolynomialQLRTest extends TestCase {
     /**
      * Test addition.
      */
+    @SuppressWarnings("unchecked")
     public void testAddition() {
         a = ring.random(kl, ll, el, q);
         c = (QLRSolvablePolynomial<SolvableResidue<BigRational>, BigRational>) a.subtract(a);
@@ -258,6 +259,7 @@ public class ResidueSolvablePolynomialQLRTest extends TestCase {
     /**
      * Test multiplication.
      */
+    @SuppressWarnings("unchecked")
     public void testMultiplication() {
         //System.out.println("ring = " + ring);
         a = ring.random(kl, ll, el, q);
@@ -293,6 +295,7 @@ public class ResidueSolvablePolynomialQLRTest extends TestCase {
     /**
      * Test partially commutative ring.
      */
+    @SuppressWarnings("unchecked")
     public void testPartCommutative() {
         //System.out.println("table = " + table.toString(vars));
         //System.out.println("table = " + table.toScript());
@@ -327,6 +330,7 @@ public class ResidueSolvablePolynomialQLRTest extends TestCase {
     /**
      * Test distributive law.
      */
+    @SuppressWarnings("unchecked")
     public void testDistributive() {
         a = ring.random(kl, ll, el, q);
         b = ring.random(kl, ll, el, q);
@@ -342,6 +346,7 @@ public class ResidueSolvablePolynomialQLRTest extends TestCase {
     /**
      * Test solvable coefficient ring.
      */
+    @SuppressWarnings("unchecked")
     public void testSolvableCoeffsRelations() {
         assertTrue("# relations == 2", ring.table.size() == 2);
         assertFalse("isCommutative()", ring.isCommutative());
@@ -403,6 +408,7 @@ public class ResidueSolvablePolynomialQLRTest extends TestCase {
     /**
      * Test extension and contraction for Weyl relations.
      */
+    @SuppressWarnings("unchecked")
     public void testExtendContractWeyl() {
         QLRSolvablePolynomial<SolvableResidue<BigRational>, BigRational> r1 = ring.parse("x");
         GenSolvablePolynomial<BigRational> r2 = sring.parse("a");
@@ -437,6 +443,7 @@ public class ResidueSolvablePolynomialQLRTest extends TestCase {
     /**
      * Test reversion for Weyl relations.
      */
+    @SuppressWarnings("unchecked")
     public void testReverseWeyl() {
         QLRSolvablePolynomial<SolvableResidue<BigRational>, BigRational> r1 = ring.parse("x");
         GenSolvablePolynomial<BigRational> r2 = sring.parse("a");
@@ -466,6 +473,7 @@ public class ResidueSolvablePolynomialQLRTest extends TestCase {
     /**
      * Test recursive for Weyl relations.
      */
+    @SuppressWarnings("unchecked")
     public void testRecursiveWeyl() {
         GenSolvablePolynomialRing<GenPolynomial<SolvableResidue<BigRational>>> rsring = ring.recursive(2); // 1,2,3
         //System.out.println("rsring = " + rsring.toScript());

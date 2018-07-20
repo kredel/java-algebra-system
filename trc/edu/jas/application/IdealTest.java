@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.log4j.BasicConfigurator;
+
 import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigDecimal;
@@ -46,7 +46,7 @@ public class IdealTest extends TestCase {
      * main
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
+        
         junit.textui.TestRunner.run(suite());
     }
 

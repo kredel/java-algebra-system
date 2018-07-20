@@ -11,7 +11,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.log4j.BasicConfigurator;
+
 
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModLongRing;
@@ -42,7 +42,7 @@ public class ExtensionFieldBuilderTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
+        
         junit.textui.TestRunner.run(suite());
     }
 
