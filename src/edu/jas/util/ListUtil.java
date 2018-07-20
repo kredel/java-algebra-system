@@ -21,7 +21,7 @@ import edu.jas.structure.UnaryFunctor;
 public class ListUtil {
 
 
-    //private static final Logger logger = Logger.getLogger(ListUtil.class);
+    //private static final Logger logger = LogManager.getLogger(ListUtil.class);
 
 
     // private static final boolean debug = logger.isDebugEnabled(); 

@@ -5,7 +5,8 @@
 package edu.jas.util;
 
 
-// import org.apache.log4j.Logger;
+// import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 
 /**
@@ -16,7 +17,7 @@ package edu.jas.util;
 public class ArrayUtil {
 
 
-    //private static final Logger logger = Logger.getLogger(ArrayUtil.class);
+    //private static final Logger logger = LogManager.getLogger(ArrayUtil.class);
     // private static final boolean debug = logger.isDebugEnabled();
 
 

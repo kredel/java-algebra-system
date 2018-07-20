@@ -19,7 +19,8 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigComplex;
 import edu.jas.arith.BigDecimal;
@@ -48,7 +49,7 @@ import edu.jas.structure.RingFactory;
 public class GenPolynomialTokenizer {
 
 
-    private static final Logger logger = Logger.getLogger(GenPolynomialTokenizer.class);
+    private static final Logger logger = LogManager.getLogger(GenPolynomialTokenizer.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

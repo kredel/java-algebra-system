@@ -11,7 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.Scripting;
 import edu.jas.structure.RingElem;
@@ -48,7 +49,7 @@ public class AlgebraicNumberRing<C extends RingElem<C>> implements RingFactory<A
     protected int isField = -1; // initially unknown
 
 
-    private static final Logger logger = Logger.getLogger(AlgebraicNumberRing.class);
+    private static final Logger logger = LogManager.getLogger(AlgebraicNumberRing.class);
 
 
     //  private static final boolean debug = logger.isDebugEnabled();
@@ -543,7 +544,7 @@ class AlgebraicNumberIterator<C extends RingElem<C>> implements Iterator<Algebra
     final AlgebraicNumberRing<C> aring;
 
 
-    private static final Logger logger = Logger.getLogger(AlgebraicNumberIterator.class);
+    private static final Logger logger = LogManager.getLogger(AlgebraicNumberIterator.class);
 
 
     //  private static final boolean debug = logger.isDebugEnabled();

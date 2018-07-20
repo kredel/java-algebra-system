@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
@@ -24,7 +25,7 @@ import edu.jas.structure.RingFactory;
 public class ResidueRing<C extends RingElem<C>> implements RingFactory<Residue<C>> {
 
 
-    private static final Logger logger = Logger.getLogger(ResidueRing.class);
+    private static final Logger logger = LogManager.getLogger(ResidueRing.class);
 
 
     //private static final boolean debug = logger.isDebugEnabled();

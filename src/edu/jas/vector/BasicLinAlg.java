@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.structure.RingElem;
 
@@ -26,7 +27,7 @@ import edu.jas.structure.RingElem;
 public class BasicLinAlg<C extends RingElem<C>> implements Serializable {
 
 
-    private static final Logger logger = Logger.getLogger(BasicLinAlg.class);
+    private static final Logger logger = LogManager.getLogger(BasicLinAlg.class);
 
 
     //private static final boolean debug = logger.isDebugEnabled();

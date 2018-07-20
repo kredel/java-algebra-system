@@ -12,7 +12,8 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.Scripting;
 import edu.jas.structure.RingElem;
@@ -39,7 +40,7 @@ public class PolynomialList<C extends RingElem<C>> implements Comparable<Polynom
     public final List<GenPolynomial<C>> list;
 
 
-    private static final Logger logger = Logger.getLogger(PolynomialList.class);
+    private static final Logger logger = LogManager.getLogger(PolynomialList.class);
 
 
     /**

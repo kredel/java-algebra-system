@@ -8,7 +8,8 @@ package edu.jas.vector;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.structure.ModulElem;
@@ -24,7 +25,7 @@ import edu.jas.structure.RingElem;
 public class GenVector<C extends RingElem<C>> implements ModulElem<GenVector<C>, C> {
 
 
-    private static final Logger logger = Logger.getLogger(GenVector.class);
+    private static final Logger logger = LogManager.getLogger(GenVector.class);
 
 
     public final GenVectorModul<C> modul;

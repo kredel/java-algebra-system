@@ -14,7 +14,8 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 
 // import edu.unima.ky.parallel.ChannelFactory;
@@ -29,7 +30,7 @@ import org.apache.log4j.Logger;
 public class ExecutableChannels {
 
 
-    private static final Logger logger = Logger.getLogger(ExecutableChannels.class);
+    private static final Logger logger = LogManager.getLogger(ExecutableChannels.class);
 
 
     /**

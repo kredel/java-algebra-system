@@ -16,7 +16,8 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 //import java.util.concurrent.ConcurrentSkipListMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 
 /**
@@ -28,7 +29,7 @@ import org.apache.log4j.Logger;
 public class DistHashTable<K, V> extends AbstractMap<K, V> /* implements Map<K,V> */{
 
 
-    private static final Logger logger = Logger.getLogger(DistHashTable.class);
+    private static final Logger logger = LogManager.getLogger(DistHashTable.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();
@@ -400,7 +401,7 @@ public class DistHashTable<K, V> extends AbstractMap<K, V> /* implements Map<K,V
 class DHTListener<K, V> extends Thread {
 
 
-    private static final Logger logger = Logger.getLogger(DHTListener.class);
+    private static final Logger logger = LogManager.getLogger(DHTListener.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

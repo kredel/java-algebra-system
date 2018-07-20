@@ -14,7 +14,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 
 /**
@@ -25,7 +26,7 @@ import org.apache.log4j.Logger;
 public class TaggedSocketChannel extends Thread {
 
 
-    private static final Logger logger = Logger.getLogger(TaggedSocketChannel.class);
+    private static final Logger logger = LogManager.getLogger(TaggedSocketChannel.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

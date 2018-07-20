@@ -14,7 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.kern.Scripting;
@@ -75,7 +76,7 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>> extends
     public final QuotSolvablePolynomial<C> ONE;
 
 
-    private static final Logger logger = Logger.getLogger(QuotSolvablePolynomialRing.class);
+    private static final Logger logger = LogManager.getLogger(QuotSolvablePolynomialRing.class);
 
 
     //private static final boolean debug = logger.isDebugEnabled();

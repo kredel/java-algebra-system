@@ -10,7 +10,8 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.structure.NotInvertibleException;
 import edu.jas.structure.RegularRingElem;
@@ -26,7 +27,7 @@ import edu.jas.structure.RingFactory;
 public class Product<C extends RingElem<C>> implements RegularRingElem<Product<C>> {
 
 
-    private static final Logger logger = Logger.getLogger(Product.class);
+    private static final Logger logger = LogManager.getLogger(Product.class);
 
 
     //private static final boolean debug = logger.isDebugEnabled();

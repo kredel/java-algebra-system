@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.SortedMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
@@ -36,7 +37,7 @@ import edu.jas.ufd.PolyUfdUtil;
 public class ElementaryIntegrationLazard<C extends GcdRingElem<C>> extends ElementaryIntegration<C> {
 
 
-    private static final Logger logger = Logger.getLogger(ElementaryIntegrationLazard.class);
+    private static final Logger logger = LogManager.getLogger(ElementaryIntegrationLazard.class);
 
 
     /**

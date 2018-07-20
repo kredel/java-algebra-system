@@ -13,7 +13,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.BiFunction;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.StringUtil;
 import edu.jas.structure.AlgebraFactory;
@@ -30,7 +31,7 @@ import edu.jas.structure.RingFactory;
 public class GenMatrixRing<C extends RingElem<C>> implements AlgebraFactory<GenMatrix<C>, C> {
 
 
-    private static final Logger logger = Logger.getLogger(GenMatrixRing.class);
+    private static final Logger logger = LogManager.getLogger(GenMatrixRing.class);
 
 
     public final RingFactory<C> coFac;

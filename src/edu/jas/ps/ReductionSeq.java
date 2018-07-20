@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -28,7 +29,7 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
 /* extends ReductionAbstract<C> */{
 
 
-    private static final Logger logger = Logger.getLogger(ReductionSeq.class);
+    private static final Logger logger = LogManager.getLogger(ReductionSeq.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

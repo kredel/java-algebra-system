@@ -7,7 +7,8 @@ package edu.jas.gbmod;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.ModuleList;
@@ -24,7 +25,7 @@ import edu.jas.structure.GcdRingElem;
 public abstract class ModGroebnerBaseAbstract<C extends GcdRingElem<C>> implements ModGroebnerBase<C> {
 
 
-    private static final Logger logger = Logger.getLogger(ModGroebnerBaseAbstract.class);
+    private static final Logger logger = LogManager.getLogger(ModGroebnerBaseAbstract.class);
 
 
     /**

@@ -13,7 +13,8 @@ import java.util.Random;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
@@ -27,7 +28,7 @@ import edu.jas.structure.RingFactory;
 public class ProductRing<C extends RingElem<C>> implements RingFactory<Product<C>> {
 
 
-    private static final Logger logger = Logger.getLogger(ProductRing.class);
+    private static final Logger logger = LogManager.getLogger(ProductRing.class);
 
 
     //private static final boolean debug = logger.isDebugEnabled();

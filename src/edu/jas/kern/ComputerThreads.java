@@ -12,7 +12,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 
 /**
@@ -27,7 +28,7 @@ import org.apache.log4j.Logger;
 public class ComputerThreads {
 
 
-    private static final Logger logger = Logger.getLogger(ComputerThreads.class);
+    private static final Logger logger = LogManager.getLogger(ComputerThreads.class);
 
 
     // private static final boolean debug = logger.isInfoEnabled(); //logger.isInfoEnabled();

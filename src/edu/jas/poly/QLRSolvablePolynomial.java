@@ -9,7 +9,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.QuotPair;
@@ -31,7 +32,7 @@ public class QLRSolvablePolynomial<C extends GcdRingElem<C> & QuotPair<GenPolyno
                 extends GenSolvablePolynomial<C> {
 
 
-    private static final Logger logger = Logger.getLogger(QLRSolvablePolynomial.class);
+    private static final Logger logger = LogManager.getLogger(QLRSolvablePolynomial.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

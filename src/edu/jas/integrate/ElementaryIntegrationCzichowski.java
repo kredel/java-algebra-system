@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gbufd.GBFactory;
@@ -35,7 +36,7 @@ import edu.jas.ufd.PolyUfdUtil;
 public class ElementaryIntegrationCzichowski<C extends GcdRingElem<C>> extends ElementaryIntegration<C> {
 
 
-    private static final Logger logger = Logger.getLogger(ElementaryIntegrationCzichowski.class);
+    private static final Logger logger = LogManager.getLogger(ElementaryIntegrationCzichowski.class);
 
 
     /**

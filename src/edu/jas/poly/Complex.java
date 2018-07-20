@@ -5,7 +5,8 @@
 package edu.jas.poly;
 
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigComplex;
 import edu.jas.arith.BigDecimal;
@@ -25,7 +26,7 @@ import edu.jas.structure.StarRingElem;
 public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>, GcdRingElem<Complex<C>> {
 
 
-    private static final Logger logger = Logger.getLogger(Complex.class);
+    private static final Logger logger = LogManager.getLogger(Complex.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

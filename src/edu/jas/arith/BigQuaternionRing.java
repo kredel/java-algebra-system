@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.StringUtil;
 import edu.jas.kern.Scripting;
@@ -42,7 +43,7 @@ public final class BigQuaternionRing implements RingFactory<BigQuaternion> {
     protected final static Random random = new Random();
 
 
-    private static final Logger logger = Logger.getLogger(BigQuaternionRing.class);
+    private static final Logger logger = LogManager.getLogger(BigQuaternionRing.class);
 
 
     //private static final boolean debug = logger.isDebugEnabled();

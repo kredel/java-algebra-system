@@ -7,7 +7,8 @@ package edu.jas.fd;
 
 import java.util.Arrays;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.ExpVector;
@@ -28,7 +29,7 @@ public class SolvableQuotient<C extends GcdRingElem<C>>
     // should be QuotPair<GenSolvablePolynomial<C>
 
 
-    private static final Logger logger = Logger.getLogger(SolvableQuotient.class);
+    private static final Logger logger = LogManager.getLogger(SolvableQuotient.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

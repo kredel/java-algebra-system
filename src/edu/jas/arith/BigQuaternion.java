@@ -8,7 +8,8 @@ package edu.jas.arith;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.StarRingElem;
@@ -59,7 +60,7 @@ public /*final*/ class BigQuaternion implements StarRingElem<BigQuaternion>, Gcd
     protected final static Random random = new Random();
 
 
-    private static final Logger logger = Logger.getLogger(BigQuaternion.class);
+    private static final Logger logger = LogManager.getLogger(BigQuaternion.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

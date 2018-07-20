@@ -13,7 +13,8 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigInteger;
 import edu.jas.structure.RingElem;
@@ -29,7 +30,7 @@ import edu.jas.vector.GenVectorModul;
 public class TermOrderOptimization {
 
 
-    private static final Logger logger = Logger.getLogger(TermOrderOptimization.class);
+    private static final Logger logger = LogManager.getLogger(TermOrderOptimization.class);
 
 
     //private static final boolean debug = logger.isDebugEnabled();

@@ -24,7 +24,7 @@ import edu.jas.structure.RingFactory;
 public class ModGroebnerBaseSeq<C extends GcdRingElem<C>> extends ModGroebnerBaseAbstract<C> {
 
 
-    //private static final Logger logger = Logger.getLogger(ModGroebnerBaseSeq.class);
+    //private static final Logger logger = LogManager.getLogger(ModGroebnerBaseSeq.class);
 
 
     /**

@@ -7,7 +7,8 @@ package edu.jas.structure;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 
 /**
@@ -17,7 +18,7 @@ import org.apache.log4j.Logger;
 public class Power<C extends RingElem<C>> {
 
 
-    private static final Logger logger = Logger.getLogger(Power.class);
+    private static final Logger logger = LogManager.getLogger(Power.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

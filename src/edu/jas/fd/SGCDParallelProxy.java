@@ -12,7 +12,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeoutException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.ComputerThreads;
 import edu.jas.kern.PreemptingException;
@@ -33,7 +34,7 @@ import edu.jas.structure.RingFactory;
 public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbstract<C> {
 
 
-    private static final Logger logger = Logger.getLogger(SGCDParallelProxy.class);
+    private static final Logger logger = LogManager.getLogger(SGCDParallelProxy.class);
 
 
     private static final boolean debug = logger.isDebugEnabled(); //logger.isInfoEnabled();

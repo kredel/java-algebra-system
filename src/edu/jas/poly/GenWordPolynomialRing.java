@@ -15,7 +15,8 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.PreemptStatus;
 import edu.jas.kern.Scripting;
@@ -79,7 +80,7 @@ public final class GenWordPolynomialRing<C extends RingElem<C>> implements RingF
     /**
      * Log4j logger object.
      */
-    private static final Logger logger = Logger.getLogger(GenWordPolynomialRing.class);
+    private static final Logger logger = LogManager.getLogger(GenWordPolynomialRing.class);
 
 
     /**

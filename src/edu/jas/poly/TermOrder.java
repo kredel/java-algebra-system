@@ -10,7 +10,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.Scripting;
 
@@ -35,7 +36,7 @@ import edu.jas.kern.Scripting;
 public final class TermOrder implements Serializable {
 
 
-    private static final Logger logger = Logger.getLogger(TermOrder.class);
+    private static final Logger logger = LogManager.getLogger(TermOrder.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

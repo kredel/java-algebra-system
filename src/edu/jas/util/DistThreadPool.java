@@ -9,7 +9,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 
 /**
@@ -75,7 +76,7 @@ public class DistThreadPool /*extends ThreadPool*/{
     protected StrategyEnumeration strategy = StrategyEnumeration.LIFO;
 
 
-    private static final Logger logger = Logger.getLogger(DistThreadPool.class);
+    private static final Logger logger = LogManager.getLogger(DistThreadPool.class);
 
 
     private static final boolean debug = true; //logger.isDebugEnabled();
@@ -398,7 +399,7 @@ class DistPoolThread extends Thread {
     final int myId;
 
 
-    private static final Logger logger = Logger.getLogger(DistPoolThread.class);
+    private static final Logger logger = LogManager.getLogger(DistPoolThread.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

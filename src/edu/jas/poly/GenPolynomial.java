@@ -16,7 +16,8 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.PreemptingException;
 import edu.jas.kern.PrettyPrint;
@@ -72,7 +73,7 @@ public class GenPolynomial<C extends RingElem<C>>
     transient protected long blen = -1;
 
 
-    private static final Logger logger = Logger.getLogger(GenPolynomial.class);
+    private static final Logger logger = LogManager.getLogger(GenPolynomial.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

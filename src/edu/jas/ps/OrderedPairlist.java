@@ -13,7 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.structure.RingElem;
@@ -61,7 +62,7 @@ public class OrderedPairlist<C extends RingElem<C>> {
     protected final int moduleVars;
 
 
-    private static final Logger logger = Logger.getLogger(OrderedPairlist.class);
+    private static final Logger logger = LogManager.getLogger(OrderedPairlist.class);
 
 
     /**

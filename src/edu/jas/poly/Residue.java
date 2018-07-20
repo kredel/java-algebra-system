@@ -5,7 +5,8 @@
 package edu.jas.poly;
 
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.NotInvertibleException;
@@ -20,7 +21,7 @@ import edu.jas.structure.RingElem;
 public class Residue<C extends RingElem<C>> implements RingElem<Residue<C>> {
 
 
-    private static final Logger logger = Logger.getLogger(Residue.class);
+    private static final Logger logger = LogManager.getLogger(Residue.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

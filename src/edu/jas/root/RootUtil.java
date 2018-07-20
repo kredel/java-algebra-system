@@ -7,7 +7,8 @@ package edu.jas.root;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.Rational;
 import edu.jas.poly.Complex;
@@ -22,7 +23,7 @@ import edu.jas.structure.RingFactory;
 public class RootUtil {
 
 
-    private static final Logger logger = Logger.getLogger(RootUtil.class);
+    private static final Logger logger = LogManager.getLogger(RootUtil.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

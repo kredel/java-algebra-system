@@ -16,7 +16,8 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 
 /**
@@ -31,7 +32,7 @@ import org.apache.log4j.Logger;
 public final class PrimeInteger {
 
 
-    private static final Logger logger = Logger.getLogger(PrimeInteger.class);
+    private static final Logger logger = LogManager.getLogger(PrimeInteger.class);
 
 
     /**

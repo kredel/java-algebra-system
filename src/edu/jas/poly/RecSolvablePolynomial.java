@@ -9,7 +9,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.structure.RingElem;
 
@@ -33,7 +34,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
     public final RecSolvablePolynomialRing<C> ring;
 
 
-    private static final Logger logger = Logger.getLogger(RecSolvablePolynomial.class);
+    private static final Logger logger = LogManager.getLogger(RecSolvablePolynomial.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

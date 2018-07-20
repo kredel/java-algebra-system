@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 // import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.QuotPairFactory;
@@ -27,7 +28,7 @@ public class QuotientRing<C extends RingElem<C>> implements RingFactory<Quotient
                 QuotPairFactory<C, Quotient<C>> {
 
 
-    private static final Logger logger = Logger.getLogger(QuotientRing.class);
+    private static final Logger logger = LogManager.getLogger(QuotientRing.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

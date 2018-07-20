@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 //import edu.unima.ky.parallel.ChannelFactory;
 //import edu.unima.ky.parallel.SocketChannel;
@@ -26,7 +27,7 @@ import org.apache.log4j.Logger;
 
 public class DistributedList /* implements List not jet */ {
 
-    private static final Logger logger = Logger.getLogger(DistributedList.class);
+    private static final Logger logger = LogManager.getLogger(DistributedList.class);
 
 
     protected final SortedMap<Counter,Object> theList;

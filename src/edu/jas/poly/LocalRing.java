@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.structure.QuotPairFactory;
 import edu.jas.structure.RingElem;
@@ -25,7 +26,7 @@ import edu.jas.structure.RingFactory;
 public class LocalRing<C extends RingElem<C>> implements RingFactory<Local<C>>, QuotPairFactory<C, Local<C>> {
 
 
-    private static final Logger logger = Logger.getLogger(LocalRing.class);
+    private static final Logger logger = LogManager.getLogger(LocalRing.class);
 
 
     //private static final boolean debug = logger.isDebugEnabled();

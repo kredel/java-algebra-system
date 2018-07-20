@@ -14,7 +14,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.StringUtil;
 import edu.jas.structure.MonoidFactory;
@@ -61,7 +62,7 @@ public final class WordFactory implements MonoidFactory<Word> {
     /**
      * Log4j logger object.
      */
-    private static final Logger logger = Logger.getLogger(WordFactory.class);
+    private static final Logger logger = LogManager.getLogger(WordFactory.class);
 
 
     /**

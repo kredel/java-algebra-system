@@ -10,7 +10,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 
 /**
@@ -21,7 +22,7 @@ import org.apache.log4j.Logger;
 public class ExecutableServer extends Thread {
 
 
-    private static final Logger logger = Logger.getLogger(ExecutableServer.class);
+    private static final Logger logger = LogManager.getLogger(ExecutableServer.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();
@@ -244,7 +245,7 @@ public class ExecutableServer extends Thread {
 class Executor extends Thread /*implements Runnable*/{
 
 
-    private static final Logger logger = Logger.getLogger(Executor.class);
+    private static final Logger logger = LogManager.getLogger(Executor.class);
 
     private static final boolean debug = logger.isDebugEnabled();
 

@@ -9,7 +9,8 @@ import java.io.IOException;
 import java.io.Reader;
 
 
-// import org.apache.log4j.Logger;
+// import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 
 /**
@@ -21,7 +22,7 @@ import java.io.Reader;
 public class CatReader extends Reader {
 
 
-    // private static final Logger logger = Logger.getLogger(CatReader.class);
+    // private static final Logger logger = LogManager.getLogger(CatReader.class);
     // private static final boolean debug = logger.isDebugEnabled();
 
 

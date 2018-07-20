@@ -7,7 +7,8 @@ package edu.jas.util;
 
 import java.util.concurrent.Semaphore;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 
 //import edu.unima.ky.parallel.Semaphore;
@@ -20,7 +21,7 @@ import org.apache.log4j.Logger;
 public class Terminator {
 
 
-    private static final Logger logger = Logger.getLogger(Terminator.class);
+    private static final Logger logger = LogManager.getLogger(Terminator.class);
 
 
     private final int workers;

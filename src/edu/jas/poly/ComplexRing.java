@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.StringUtil;
 import edu.jas.structure.RingElem;
@@ -31,7 +32,7 @@ public class ComplexRing<C extends RingElem<C>> implements RingFactory<Complex<C
 
 
     @SuppressWarnings("unused")
-    private static final Logger logger = Logger.getLogger(ComplexRing.class);
+    private static final Logger logger = LogManager.getLogger(ComplexRing.class);
 
 
     /**

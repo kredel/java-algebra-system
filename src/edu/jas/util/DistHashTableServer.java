@@ -13,7 +13,8 @@ import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 
 /**
@@ -26,7 +27,7 @@ import org.apache.log4j.Logger;
 public class DistHashTableServer<K> extends Thread {
 
 
-    private static final Logger logger = Logger.getLogger(DistHashTableServer.class);
+    private static final Logger logger = LogManager.getLogger(DistHashTableServer.class);
 
 
     public final static int DEFAULT_PORT = 9009; //ChannelFactory.DEFAULT_PORT + 99;
@@ -287,7 +288,7 @@ public class DistHashTableServer<K> extends Thread {
 class DHTBroadcaster<K> extends Thread /*implements Runnable*/ {
 
 
-    private static final Logger logger = Logger.getLogger(DHTBroadcaster.class);
+    private static final Logger logger = LogManager.getLogger(DHTBroadcaster.class);
 
 
     private final SocketChannel channel;

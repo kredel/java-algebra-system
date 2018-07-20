@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.kern.PreemptStatus;
@@ -115,7 +116,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
     /**
      * Log4j logger object.
      */
-    private static final Logger logger = Logger.getLogger(GenPolynomialRing.class);
+    private static final Logger logger = LogManager.getLogger(GenPolynomialRing.class);
 
 
     /**

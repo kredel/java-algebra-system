@@ -8,7 +8,8 @@ package edu.jas.gbmod;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
@@ -30,7 +31,7 @@ public abstract class ModSolvableGroebnerBaseAbstract<C extends RingElem<C>> imp
                 ModSolvableGroebnerBase<C> {
 
 
-    private static final Logger logger = Logger.getLogger(ModSolvableGroebnerBaseAbstract.class);
+    private static final Logger logger = LogManager.getLogger(ModSolvableGroebnerBaseAbstract.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

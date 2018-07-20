@@ -15,7 +15,8 @@ import java.net.BindException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue; //import java.util.concurrent.ArrayBlockingQueue;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 
 /**
@@ -31,7 +32,7 @@ import org.apache.log4j.Logger;
 public class ChannelFactory extends Thread {
 
 
-    private static final Logger logger = Logger.getLogger(ChannelFactory.class);
+    private static final Logger logger = LogManager.getLogger(ChannelFactory.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

@@ -11,7 +11,8 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigComplex;
 import edu.jas.arith.BigDecimal;
@@ -41,7 +42,7 @@ import edu.jas.util.ListUtil;
 public class PolyUtil {
 
 
-    private static final Logger logger = Logger.getLogger(PolyUtil.class);
+    private static final Logger logger = LogManager.getLogger(PolyUtil.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

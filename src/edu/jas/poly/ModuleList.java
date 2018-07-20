@@ -9,7 +9,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.Scripting;
 import edu.jas.structure.RingElem;
@@ -50,7 +51,7 @@ public class ModuleList<C extends RingElem<C>> implements Serializable {
     public final int cols; // -1 is undefined
 
 
-    private static final Logger logger = Logger.getLogger(ModuleList.class);
+    private static final Logger logger = LogManager.getLogger(ModuleList.class);
 
 
     /**

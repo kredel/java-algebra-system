@@ -11,7 +11,8 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.PreemptingException;
 import edu.jas.structure.NotInvertibleException;
@@ -46,7 +47,7 @@ public final class GenWordPolynomial<C extends RingElem<C>> implements RingElem<
     final SortedMap<Word, C> val; // do not change to TreeMap
 
 
-    private static final Logger logger = Logger.getLogger(GenWordPolynomial.class);
+    private static final Logger logger = LogManager.getLogger(GenWordPolynomial.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

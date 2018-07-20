@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.StringUtil;
 import edu.jas.structure.ModulFactory;
@@ -29,7 +30,7 @@ import edu.jas.structure.RingFactory;
 public class GenVectorModul<C extends RingElem<C>> implements ModulFactory<GenVector<C>, C> {
 
 
-    private static final Logger logger = Logger.getLogger(GenVectorModul.class);
+    private static final Logger logger = LogManager.getLogger(GenVectorModul.class);
 
 
     public final RingFactory<C> coFac;

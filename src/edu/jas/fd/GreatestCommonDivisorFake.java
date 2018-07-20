@@ -5,7 +5,8 @@
 package edu.jas.fd;
 
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
@@ -24,7 +25,7 @@ import edu.jas.structure.RingFactory;
 public class GreatestCommonDivisorFake<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbstract<C> {
 
 
-    private static final Logger logger = Logger.getLogger(GreatestCommonDivisorFake.class);
+    private static final Logger logger = LogManager.getLogger(GreatestCommonDivisorFake.class);
 
 
     //private static final boolean debug = true; //logger.isDebugEnabled();

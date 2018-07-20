@@ -5,7 +5,8 @@
 package edu.jas.gbmod;
 
 
-// import org.apache.log4j.Logger;
+// import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 import edu.jas.gb.SolvableGroebnerBaseAbstract;
 import edu.jas.gbufd.SGBFactory;
 import edu.jas.structure.GcdRingElem;
@@ -23,7 +24,7 @@ import edu.jas.structure.RingFactory;
 public class ModSolvableGroebnerBasePar<C extends GcdRingElem<C>> extends ModSolvableGroebnerBaseSeq<C> {
 
 
-    //private static final Logger logger = Logger.getLogger(ModSolvableGroebnerBasePar.class);
+    //private static final Logger logger = LogManager.getLogger(ModSolvableGroebnerBasePar.class);
 
 
     //private static final boolean debug = logger.isDebugEnabled();

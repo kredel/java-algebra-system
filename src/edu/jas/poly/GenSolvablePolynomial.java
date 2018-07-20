@@ -9,7 +9,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.structure.NotInvertibleException;
 import edu.jas.structure.RingElem;
@@ -32,7 +33,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
     //not possible: implements RingElem< GenSolvablePolynomial<C> > {
 
 
-    private static final Logger logger = Logger.getLogger(GenSolvablePolynomial.class);
+    private static final Logger logger = LogManager.getLogger(GenSolvablePolynomial.class);
 
 
     private static final boolean debug = false; //logger.isDebugEnabled();

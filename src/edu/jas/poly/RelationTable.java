@@ -14,7 +14,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.structure.RingElem;
@@ -54,7 +55,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
     public final boolean coeffTable;
 
 
-    private static final Logger logger = Logger.getLogger(RelationTable.class);
+    private static final Logger logger = LogManager.getLogger(RelationTable.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

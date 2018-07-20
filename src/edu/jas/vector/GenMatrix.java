@@ -8,7 +8,8 @@ package edu.jas.vector;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.structure.AlgebraElem;
@@ -24,7 +25,7 @@ import edu.jas.structure.RingElem;
 public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C>, C> {
 
 
-    private static final Logger logger = Logger.getLogger(GenMatrix.class);
+    private static final Logger logger = LogManager.getLogger(GenMatrix.class);
 
 
     public final GenMatrixRing<C> ring;

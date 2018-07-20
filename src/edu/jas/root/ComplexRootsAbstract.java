@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
@@ -35,7 +36,7 @@ import edu.jas.ufd.SquarefreeFactory;
 public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> implements ComplexRoots<C> {
 
 
-    private static final Logger logger = Logger.getLogger(ComplexRootsAbstract.class);
+    private static final Logger logger = LogManager.getLogger(ComplexRootsAbstract.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

@@ -8,7 +8,8 @@ package edu.jas.util;
 
 import java.util.LinkedList;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.PreemptingException;
 
@@ -64,7 +65,7 @@ public class ThreadPool {
     protected StrategyEnumeration strategy = StrategyEnumeration.LIFO;
 
 
-    private static final Logger logger = Logger.getLogger(ThreadPool.class);
+    private static final Logger logger = LogManager.getLogger(ThreadPool.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();
@@ -328,7 +329,7 @@ class PoolThread extends Thread {
     ThreadPool pool;
 
 
-    private static final Logger logger = Logger.getLogger(PoolThread.class);
+    private static final Logger logger = LogManager.getLogger(PoolThread.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

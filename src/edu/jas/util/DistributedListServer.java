@@ -14,7 +14,8 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 //import edu.unima.ky.parallel.ChannelFactory;
 //import edu.unima.ky.parallel.SocketChannel;
@@ -27,7 +28,7 @@ import org.apache.log4j.Logger;
  */
 public class DistributedListServer extends Thread {
 
-    private static final Logger logger = Logger.getLogger(DistributedListServer.class);
+    private static final Logger logger = LogManager.getLogger(DistributedListServer.class);
 
     public final static int DEFAULT_PORT = ChannelFactory.DEFAULT_PORT + 99;
 
@@ -318,7 +319,7 @@ class Counter implements Serializable, Comparable<Counter> {
 
 class Broadcaster extends Thread /*implements Runnable*/ {
 
-    private static final Logger logger = Logger.getLogger(Broadcaster.class);
+    private static final Logger logger = LogManager.getLogger(Broadcaster.class);
     private final SocketChannel channel;
     private final List bcaster;
     private Counter listElem;

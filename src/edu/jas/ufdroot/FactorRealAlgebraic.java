@@ -8,7 +8,8 @@ package edu.jas.ufdroot;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.Rational;
 import edu.jas.poly.AlgebraicNumber;
@@ -45,7 +46,7 @@ public class FactorRealAlgebraic<C extends GcdRingElem<C> & Rational> extends
     //FactorAbstract<AlgebraicNumber<C>>
 
 
-    private static final Logger logger = Logger.getLogger(FactorRealAlgebraic.class);
+    private static final Logger logger = LogManager.getLogger(FactorRealAlgebraic.class);
 
 
     //private static final boolean debug = logger.isInfoEnabled();

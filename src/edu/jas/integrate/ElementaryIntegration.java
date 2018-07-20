@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
@@ -43,7 +44,7 @@ import edu.jas.ufd.SquarefreeFactory;
 public class ElementaryIntegration<C extends GcdRingElem<C>> {
 
 
-    private static final Logger logger = Logger.getLogger(ElementaryIntegration.class);
+    private static final Logger logger = LogManager.getLogger(ElementaryIntegration.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

@@ -8,7 +8,8 @@ package edu.jas.root;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigInteger;
@@ -30,7 +31,7 @@ import edu.jas.structure.UnaryFunctor;
 public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implements RealRoots<C> {
 
 
-    private static final Logger logger = Logger.getLogger(RealRootsAbstract.class);
+    private static final Logger logger = LogManager.getLogger(RealRootsAbstract.class);
 
 
     //private static final boolean debug = logger.isDebugEnabled();

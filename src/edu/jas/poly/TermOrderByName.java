@@ -7,7 +7,8 @@ package edu.jas.poly;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 
 /**
@@ -33,7 +34,7 @@ import org.apache.log4j.Logger;
 public class TermOrderByName {
 
 
-    private static final Logger logger = Logger.getLogger(TermOrderByName.class);
+    private static final Logger logger = LogManager.getLogger(TermOrderByName.class);
 
 
     /**
