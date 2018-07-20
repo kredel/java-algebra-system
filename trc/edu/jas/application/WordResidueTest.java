@@ -13,7 +13,6 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 
-// import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigRational;
 import edu.jas.poly.GenWordPolynomial;

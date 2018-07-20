@@ -156,7 +156,7 @@ public class GroebnerBaseSeqTest extends TestCase {
     /**
      * Test Trinks7 GBase.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public void testTrinks7GBase() {
         String exam = "(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
                         + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
@@ -252,7 +252,7 @@ public class GroebnerBaseSeqTest extends TestCase {
     /**
      * Test Trinks7 GBase.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public void testTrinks7ExtendedGBase() {
         String exam = "(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
                         + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
@@ -283,7 +283,7 @@ public class GroebnerBaseSeqTest extends TestCase {
     /**
      * Test Trinks7 GBase, syz pair list.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public void testTrinks7GBaseSyz() {
         GroebnerBase<BigRational> bbs;
         bbs = new GroebnerBaseSeq<BigRational>(new ReductionSeq<BigRational>(),
@@ -323,7 +323,7 @@ public class GroebnerBaseSeqTest extends TestCase {
     /**
      * Test Trinks7 GBase, min pair list.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public void testTrinks7GBaseMin() {
         bb = new GroebnerBaseSeq<BigRational>(new ReductionSeq<BigRational>(),
                         new OrderedMinPairlist<BigRational>());
