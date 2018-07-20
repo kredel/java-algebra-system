@@ -13,7 +13,8 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.TimeStatus;
 import edu.jas.kern.StringUtil;
@@ -42,7 +43,7 @@ import edu.jas.util.KsubSet;
 public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factorization<C> {
 
 
-    private static final Logger logger = Logger.getLogger(FactorAbstract.class);
+    private static final Logger logger = LogManager.getLogger(FactorAbstract.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

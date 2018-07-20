@@ -9,7 +9,8 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
@@ -29,7 +30,7 @@ import edu.jas.structure.RingFactory;
 public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends SquarefreeAbstract<C> {
 
 
-    private static final Logger logger = Logger.getLogger(SquarefreeFieldCharP.class);
+    private static final Logger logger = LogManager.getLogger(SquarefreeFieldCharP.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

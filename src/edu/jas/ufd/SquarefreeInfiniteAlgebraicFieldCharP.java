@@ -12,7 +12,8 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.GroebnerBaseSeq;
@@ -40,7 +41,7 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>>
                 extends SquarefreeFieldCharP<AlgebraicNumber<C>> {
 
 
-    private static final Logger logger = Logger.getLogger(SquarefreeInfiniteAlgebraicFieldCharP.class);
+    private static final Logger logger = LogManager.getLogger(SquarefreeInfiniteAlgebraicFieldCharP.class);
 
 
     //private static final boolean debug = logger.isDebugEnabled();

@@ -13,7 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
@@ -33,7 +34,7 @@ import edu.jas.structure.GcdRingElem;
 public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
 
 
-    private static final Logger logger = Logger.getLogger(PartialFraction.class);
+    private static final Logger logger = LogManager.getLogger(PartialFraction.class);
 
 
     /**

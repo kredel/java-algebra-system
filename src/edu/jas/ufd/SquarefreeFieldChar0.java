@@ -9,7 +9,8 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -27,7 +28,7 @@ import edu.jas.structure.RingFactory;
 public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAbstract<C> {
 
 
-    private static final Logger logger = Logger.getLogger(SquarefreeFieldChar0.class);
+    private static final Logger logger = LogManager.getLogger(SquarefreeFieldChar0.class);
 
 
     //private static final boolean debug = logger.isDebugEnabled();

@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.PrimeInteger;
@@ -29,7 +30,7 @@ import edu.jas.structure.Power;
 public class CycloUtil {
 
 
-    private static final Logger logger = Logger.getLogger(CycloUtil.class);
+    private static final Logger logger = LogManager.getLogger(CycloUtil.class);
 
 
     //private static final boolean debug = logger.isDebugEnabled();

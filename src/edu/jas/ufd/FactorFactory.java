@@ -5,7 +5,8 @@
 package edu.jas.ufd;
 
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
@@ -56,7 +57,7 @@ import edu.jas.structure.RingFactory;
 public class FactorFactory {
 
 
-    private static final Logger logger = Logger.getLogger(FactorFactory.class);
+    private static final Logger logger = LogManager.getLogger(FactorFactory.class);
 
 
     /**

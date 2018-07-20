@@ -13,7 +13,8 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModLongRing;
@@ -36,7 +37,7 @@ import edu.jas.structure.RingFactory;
 public class FactorModular<MOD extends GcdRingElem<MOD> & Modular> extends FactorAbsolute<MOD> {
 
 
-    private static final Logger logger = Logger.getLogger(FactorModular.class);
+    private static final Logger logger = LogManager.getLogger(FactorModular.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

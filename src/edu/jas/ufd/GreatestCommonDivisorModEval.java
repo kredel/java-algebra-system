@@ -5,7 +5,8 @@
 package edu.jas.ufd;
 
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.Modular;
 import edu.jas.arith.ModularRingFactory;
@@ -27,7 +28,7 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
         extends GreatestCommonDivisorAbstract<MOD> {
 
 
-    private static final Logger logger = Logger.getLogger(GreatestCommonDivisorModEval.class);
+    private static final Logger logger = LogManager.getLogger(GreatestCommonDivisorModEval.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

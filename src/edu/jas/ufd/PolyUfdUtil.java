@@ -10,7 +10,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
@@ -37,7 +38,7 @@ import edu.jas.util.ListUtil;
 public class PolyUfdUtil {
 
 
-    private static final Logger logger = Logger.getLogger(PolyUfdUtil.class);
+    private static final Logger logger = LogManager.getLogger(PolyUfdUtil.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

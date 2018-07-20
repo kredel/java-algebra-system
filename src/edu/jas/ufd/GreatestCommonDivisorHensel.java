@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModIntegerRing;
@@ -40,7 +41,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
                 extends GreatestCommonDivisorAbstract<BigInteger> {
 
 
-    private static final Logger logger = Logger.getLogger(GreatestCommonDivisorHensel.class);
+    private static final Logger logger = LogManager.getLogger(GreatestCommonDivisorHensel.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

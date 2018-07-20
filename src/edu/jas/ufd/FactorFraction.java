@@ -11,7 +11,8 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -33,7 +34,7 @@ public class FactorFraction<C extends GcdRingElem<C>,
                                       D extends GcdRingElem<D> & QuotPair<GenPolynomial<C>> > {
 
 
-    private static final Logger logger = Logger.getLogger(FactorFraction.class);
+    private static final Logger logger = LogManager.getLogger(FactorFraction.class);
 
 
     /**

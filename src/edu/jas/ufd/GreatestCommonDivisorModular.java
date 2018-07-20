@@ -5,7 +5,8 @@
 package edu.jas.ufd;
 
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.Combinatoric;
@@ -32,7 +33,7 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
                 extends GreatestCommonDivisorAbstract<BigInteger> {
 
 
-    private static final Logger logger = Logger.getLogger(GreatestCommonDivisorModular.class);
+    private static final Logger logger = LogManager.getLogger(GreatestCommonDivisorModular.class);
 
 
     private static final boolean debug = logger.isDebugEnabled(); //logger.isInfoEnabled();

@@ -5,7 +5,8 @@
 package edu.jas.ufd;
 
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.GenPolynomial;
@@ -22,7 +23,7 @@ public class Quotient<C extends GcdRingElem<C>> implements GcdRingElem<Quotient<
                 QuotPair<GenPolynomial<C>> {
 
 
-    private static final Logger logger = Logger.getLogger(Quotient.class);
+    private static final Logger logger = LogManager.getLogger(Quotient.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

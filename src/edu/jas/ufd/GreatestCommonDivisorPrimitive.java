@@ -5,7 +5,8 @@
 package edu.jas.ufd;
 
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.PolyUtil;
@@ -22,7 +23,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>> extends
         GreatestCommonDivisorAbstract<C> {
 
 
-    private static final Logger logger = Logger.getLogger(GreatestCommonDivisorPrimitive.class);
+    private static final Logger logger = LogManager.getLogger(GreatestCommonDivisorPrimitive.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

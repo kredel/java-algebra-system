@@ -11,7 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.SortedMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModIntegerRing;
@@ -42,7 +43,7 @@ import edu.jas.util.KsubSet;
 public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends FactorAbstract<BigInteger> {
 
 
-    private static final Logger logger = Logger.getLogger(FactorInteger.class);
+    private static final Logger logger = LogManager.getLogger(FactorInteger.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();
