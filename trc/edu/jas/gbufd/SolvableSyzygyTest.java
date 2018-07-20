@@ -377,7 +377,7 @@ public class SolvableSyzygyTest extends TestCase {
     /**
      * Test sequential arbitrary base Syzygy, ex CLO 2, p 214 ff.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public void testSequentialArbitrarySyzygyCLO() {
         PolynomialList<BigRational> F = null;
 
@@ -402,7 +402,7 @@ public class SolvableSyzygyTest extends TestCase {
     /**
      * Test sequential arbitrary base Syzygy, ex WA_32.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public void testSequentialArbitrarySyzygyWA32() {
         PolynomialList<BigRational> F = null;
 

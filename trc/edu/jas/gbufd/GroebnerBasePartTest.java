@@ -136,7 +136,7 @@ public class GroebnerBasePartTest extends TestCase {
      * Test partial recursive Trinks7 GBase.
      * 
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public void testTrinks7GBasePartRec() {
         String exam = "(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
                         + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
@@ -173,7 +173,7 @@ public class GroebnerBasePartTest extends TestCase {
      * Test partial Trinks7 GBase.
      * 
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public void testTrinks7GBasePart() {
         String exam = "(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
                         + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
@@ -262,7 +262,7 @@ public class GroebnerBasePartTest extends TestCase {
      * Test elim partial Trinks7 GBase.
      * 
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public void testTrinks7GBaseElimPart() {
         String exam = "(B,S,T,Z,P,W) G " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
                         + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
@@ -295,7 +295,7 @@ public class GroebnerBasePartTest extends TestCase {
      * Test partial GBase.
      * 
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public void testGBasePart() {
         String exam = "(a,b,c,d,e,f) G " + "( " + "( a ), " + "( b^2 ), " + "( c^3 ), " + "( d^4 ), "
                         + "( e^5 ), " + "( f^6 ) " + ") ";
@@ -326,7 +326,7 @@ public class GroebnerBasePartTest extends TestCase {
      * Test permutation generation.
      * 
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public void testPermGen() {
         String[] vars = new String[] { "a", "b", "c", "d", "e", "f" };
         //System.out.println("vars  = " + Arrays.toString(vars));
