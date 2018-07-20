@@ -161,7 +161,7 @@ public class FactorFactory extends edu.jas.ufd.FactorFactory {
      * @param fac RingFactory&lt;C&gt;.
      * @return factorization algorithm implementation.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public static <C extends GcdRingElem<C>> FactorAbstract<C> getImplementation(RingFactory<C> fac) {
         logger.info("app factor factory = " + fac.getClass().getName());
         //System.out.println("fac_o = " + fac.getClass().getName());

@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.Semaphore;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -35,7 +36,7 @@ import edu.jas.util.ThreadPool;
 public class GroebnerBaseParallel<C extends RingElem<C>> extends GroebnerBaseAbstract<C> {
 
 
-    private static final Logger logger = Logger.getLogger(GroebnerBaseParallel.class);
+    private static final Logger logger = LogManager.getLogger(GroebnerBaseParallel.class);
 
 
     /**
@@ -301,7 +302,7 @@ class Reducer<C extends RingElem<C>> implements Runnable {
     private final ReductionPar<C> red;
 
 
-    private static final Logger logger = Logger.getLogger(Reducer.class);
+    private static final Logger logger = LogManager.getLogger(Reducer.class);
 
 
     Reducer(Terminator fin, List<GenPolynomial<C>> G, PairList<C> L) {
@@ -448,7 +449,7 @@ class MiReducer<C extends RingElem<C>> implements Runnable {
     private final Semaphore done = new Semaphore(0);
 
 
-    private static final Logger logger = Logger.getLogger(MiReducer.class);
+    private static final Logger logger = LogManager.getLogger(MiReducer.class);
 
 
     MiReducer(List<GenPolynomial<C>> G, GenPolynomial<C> p) {

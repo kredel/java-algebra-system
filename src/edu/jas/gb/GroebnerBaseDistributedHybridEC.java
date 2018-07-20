@@ -12,7 +12,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -42,7 +43,7 @@ import edu.jas.util.ThreadPool;
 public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends GroebnerBaseAbstract<C> {
 
 
-    private static final Logger logger = Logger.getLogger(GroebnerBaseDistributedHybridEC.class);
+    private static final Logger logger = LogManager.getLogger(GroebnerBaseDistributedHybridEC.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();
@@ -555,7 +556,7 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
 class HybridReducerServerEC<C extends RingElem<C>> implements Runnable {
 
 
-    private static final Logger logger = Logger.getLogger(HybridReducerServerEC.class);
+    private static final Logger logger = LogManager.getLogger(HybridReducerServerEC.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();
@@ -776,7 +777,7 @@ class HybridReducerServerEC<C extends RingElem<C>> implements Runnable {
 class HybridReducerReceiverEC<C extends RingElem<C>> extends Thread {
 
 
-    private static final Logger logger = Logger.getLogger(HybridReducerReceiverEC.class);
+    private static final Logger logger = LogManager.getLogger(HybridReducerReceiverEC.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();
@@ -960,7 +961,7 @@ class HybridReducerReceiverEC<C extends RingElem<C>> extends Thread {
 class HybridReducerClientEC<C extends RingElem<C>> implements Runnable {
 
 
-    private static final Logger logger = Logger.getLogger(HybridReducerClientEC.class);
+    private static final Logger logger = LogManager.getLogger(HybridReducerClientEC.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

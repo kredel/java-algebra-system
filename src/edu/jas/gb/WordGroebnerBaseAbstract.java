@@ -13,7 +13,8 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.GenWordPolynomial;
 import edu.jas.poly.GenWordPolynomialRing;
@@ -31,7 +32,7 @@ import edu.jas.structure.RingElem;
 public abstract class WordGroebnerBaseAbstract<C extends RingElem<C>> implements WordGroebnerBase<C> {
 
 
-    private static final Logger logger = Logger.getLogger(WordGroebnerBaseAbstract.class);
+    private static final Logger logger = LogManager.getLogger(WordGroebnerBaseAbstract.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

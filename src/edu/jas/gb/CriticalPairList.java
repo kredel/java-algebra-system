@@ -12,7 +12,8 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -36,7 +37,7 @@ public class CriticalPairList<C extends RingElem<C>> extends OrderedPairlist<C> 
 
     protected int recordCount;
 
-    private static final Logger logger = Logger.getLogger(CriticalPairList.class);
+    private static final Logger logger = LogManager.getLogger(CriticalPairList.class);
 
 
     /**

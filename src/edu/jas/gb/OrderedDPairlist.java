@@ -7,7 +7,8 @@ package edu.jas.gb;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -23,7 +24,7 @@ import edu.jas.structure.RingElem;
 public class OrderedDPairlist<C extends RingElem<C> > 
     extends OrderedPairlist<C> {
 
-    private static final Logger logger = Logger.getLogger(OrderedDPairlist.class);
+    private static final Logger logger = LogManager.getLogger(OrderedDPairlist.class);
 
     protected final DReduction<C> dreduction;
 

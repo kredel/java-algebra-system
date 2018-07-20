@@ -8,7 +8,8 @@ package edu.jas.gb;
 import java.util.List;
 import java.util.Map;
 
-// import org.apache.log4j.Logger;
+// import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.structure.RingElem;
@@ -24,7 +25,7 @@ import edu.jas.structure.RingElem;
 public class SolvableReductionPar<C extends RingElem<C>> extends SolvableReductionAbstract<C> {
 
 
-    //private static final Logger logger = Logger.getLogger(SolvableReductionPar.class);
+    //private static final Logger logger = LogManager.getLogger(SolvableReductionPar.class);
 
 
     /**

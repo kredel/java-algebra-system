@@ -12,7 +12,8 @@ import java.util.Comparator;
 import java.util.stream.Collectors;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -30,7 +31,7 @@ import edu.jas.structure.RingElem;
 public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
 
 
-    private static final Logger logger = Logger.getLogger(SigReductionSeq.class);
+    private static final Logger logger = LogManager.getLogger(SigReductionSeq.class);
 
 
     //private static final boolean debug = logger.isDebugEnabled();

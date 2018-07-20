@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.Semaphore;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenSolvablePolynomial;
@@ -35,7 +36,7 @@ public class SolvableGroebnerBaseSeqPairParallel<C extends RingElem<C>> extends
                 SolvableGroebnerBaseAbstract<C> {
 
 
-    private static final Logger logger = Logger.getLogger(SolvableGroebnerBaseSeqPairParallel.class);
+    private static final Logger logger = LogManager.getLogger(SolvableGroebnerBaseSeqPairParallel.class);
 
 
     //private static final boolean debug = logger.isDebugEnabled();
@@ -367,7 +368,7 @@ class LeftSolvableReducerSeqPair<C extends RingElem<C>> implements Runnable {
     private final SolvableReductionPar<C> sred;
 
 
-    private static final Logger logger = Logger.getLogger(LeftSolvableReducerSeqPair.class);
+    private static final Logger logger = LogManager.getLogger(LeftSolvableReducerSeqPair.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();
@@ -492,7 +493,7 @@ class TwosidedSolvableReducerSeqPair<C extends RingElem<C>> implements Runnable 
     private final SolvableReductionPar<C> sred;
 
 
-    private static final Logger logger = Logger.getLogger(TwosidedSolvableReducerSeqPair.class);
+    private static final Logger logger = LogManager.getLogger(TwosidedSolvableReducerSeqPair.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();
@@ -637,7 +638,7 @@ class SolvableMiReducerSeqPair<C extends RingElem<C>> implements Runnable {
     private final Semaphore done = new Semaphore(0);
 
 
-    private static final Logger logger = Logger.getLogger(SolvableMiReducerSeqPair.class);
+    private static final Logger logger = LogManager.getLogger(SolvableMiReducerSeqPair.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

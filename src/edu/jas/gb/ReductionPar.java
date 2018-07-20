@@ -22,7 +22,7 @@ import edu.jas.structure.RingElem;
 public class ReductionPar<C extends RingElem<C>> extends ReductionAbstract<C> {
 
 
-    //private static final Logger logger = Logger.getLogger(ReductionPar.class);
+    //private static final Logger logger = LogManager.getLogger(ReductionPar.class);
 
 
     /**

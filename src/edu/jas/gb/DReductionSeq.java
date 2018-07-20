@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -26,7 +27,7 @@ import edu.jas.structure.RingElem;
 public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> implements DReduction<C> {
 
 
-    private static final Logger logger = Logger.getLogger(DReductionSeq.class);
+    private static final Logger logger = LogManager.getLogger(DReductionSeq.class);
 
 
     //private static final boolean debug = logger.isDebugEnabled();
@@ -140,7 +141,7 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
      * @param Pp polynomial list.
      * @return d-nf(Ap) with respect to Pp.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public GenPolynomial<C> normalform(List<GenPolynomial<C>> Pp, GenPolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
             return Ap;

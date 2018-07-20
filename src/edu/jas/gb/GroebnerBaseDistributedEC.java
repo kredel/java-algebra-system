@@ -12,7 +12,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.Semaphore;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -40,7 +41,7 @@ import edu.jas.util.ThreadPool;
 public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBaseAbstract<C> {
 
 
-    private static final Logger logger = Logger.getLogger(GroebnerBaseDistributedEC.class);
+    private static final Logger logger = LogManager.getLogger(GroebnerBaseDistributedEC.class);
 
 
     /**
@@ -496,7 +497,7 @@ class ReducerServerEC<C extends RingElem<C>> implements Runnable {
     private final PairList<C> pairlist;
 
 
-    private static final Logger logger = Logger.getLogger(ReducerServerEC.class);
+    private static final Logger logger = LogManager.getLogger(ReducerServerEC.class);
 
 
     ReducerServerEC(Terminator fin, ChannelFactory cf, DistHashTable<Integer, GenPolynomial<C>> dl,
@@ -693,7 +694,7 @@ class ReducerClientEC<C extends RingElem<C>> implements Runnable {
     private final ReductionPar<C> red;
 
 
-    private static final Logger logger = Logger.getLogger(ReducerClientEC.class);
+    private static final Logger logger = LogManager.getLogger(ReducerClientEC.class);
 
 
     ReducerClientEC(SocketChannel pc, DistHashTable<Integer, GenPolynomial<C>> dl) {
@@ -840,7 +841,7 @@ class MiReducerServerEC<C extends RingElem<C>> implements Runnable {
     private final Reduction<C> red;
 
 
-    private static final Logger logger = Logger.getLogger(MiReducerServerEC.class);
+    private static final Logger logger = LogManager.getLogger(MiReducerServerEC.class);
 
 
     MiReducerServerEC(List<GenPolynomial<C>> G, GenPolynomial<C> p) {
@@ -896,7 +897,7 @@ class MiReducerClientEC<C extends RingElem<C>> implements Runnable {
     private final Semaphore done = new Semaphore(0);
 
 
-    private static final Logger logger = Logger.getLogger(MiReducerClientEC.class);
+    private static final Logger logger = LogManager.getLogger(MiReducerClientEC.class);
 
 
     MiReducerClientEC(List<GenPolynomial<C>> G, GenPolynomial<C> p) {

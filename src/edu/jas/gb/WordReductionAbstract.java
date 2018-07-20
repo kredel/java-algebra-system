@@ -10,7 +10,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.GenWordPolynomial;
 import edu.jas.poly.Overlap;
@@ -29,7 +30,7 @@ import edu.jas.structure.RingElem;
 public abstract class WordReductionAbstract<C extends RingElem<C>> implements WordReduction<C> {
 
 
-    private static final Logger logger = Logger.getLogger(WordReductionAbstract.class);
+    private static final Logger logger = LogManager.getLogger(WordReductionAbstract.class);
 
 
     //private static final boolean debug = logger.isDebugEnabled();

@@ -11,7 +11,8 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -29,7 +30,7 @@ import edu.jas.structure.RingElem;
 
 public class OrderedMinPairlist<C extends RingElem<C> > extends OrderedPairlist<C> {
 
-    private static final Logger logger = Logger.getLogger(OrderedMinPairlist.class);
+    private static final Logger logger = LogManager.getLogger(OrderedMinPairlist.class);
 
 
     /**

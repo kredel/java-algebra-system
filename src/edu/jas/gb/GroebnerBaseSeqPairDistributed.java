@@ -13,7 +13,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.Semaphore;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -40,7 +41,7 @@ import edu.jas.util.ThreadPool;
 public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends GroebnerBaseAbstract<C> {
 
 
-    private static final Logger logger = Logger.getLogger(GroebnerBaseSeqPairDistributed.class);
+    private static final Logger logger = LogManager.getLogger(GroebnerBaseSeqPairDistributed.class);
 
 
     /**
@@ -411,7 +412,7 @@ class ReducerServerSeqPair<C extends RingElem<C>> implements Runnable {
     private final CriticalPairList<C> pairlist;
 
 
-    private static final Logger logger = Logger.getLogger(ReducerServerSeqPair.class);
+    private static final Logger logger = LogManager.getLogger(ReducerServerSeqPair.class);
 
 
     ReducerServerSeqPair(Terminator fin, ChannelFactory cf, DistHashTable<Integer, GenPolynomial<C>> dl,
@@ -795,7 +796,7 @@ class ReducerClientSeqPair<C extends RingElem<C>> implements Runnable {
     private final ReductionPar<C> red;
 
 
-    private static final Logger logger = Logger.getLogger(ReducerClientSeqPair.class);
+    private static final Logger logger = LogManager.getLogger(ReducerClientSeqPair.class);
 
 
     ReducerClientSeqPair(SocketChannel pc, DistHashTable<Integer, GenPolynomial<C>> dl) {
@@ -961,7 +962,7 @@ class MiReducerServerSeqPair<C extends RingElem<C>> implements Runnable {
     private final Reduction<C> red;
 
 
-    private static final Logger logger = Logger.getLogger(MiReducerServerSeqPair.class);
+    private static final Logger logger = LogManager.getLogger(MiReducerServerSeqPair.class);
 
 
     MiReducerServerSeqPair(List<GenPolynomial<C>> G, GenPolynomial<C> p) {
@@ -1017,7 +1018,7 @@ class MiReducerClientSeqPair<C extends RingElem<C>> implements Runnable {
     private final Semaphore done = new Semaphore(0);
 
 
-    private static final Logger logger = Logger.getLogger(MiReducerClientSeqPair.class);
+    private static final Logger logger = LogManager.getLogger(MiReducerClientSeqPair.class);
 
 
     MiReducerClientSeqPair(List<GenPolynomial<C>> G, GenPolynomial<C> p) {

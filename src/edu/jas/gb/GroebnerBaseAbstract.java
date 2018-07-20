@@ -14,7 +14,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -42,7 +43,7 @@ import edu.jas.vector.BasicLinAlg;
 public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements GroebnerBase<C> {
 
 
-    private static final Logger logger = Logger.getLogger(GroebnerBaseAbstract.class);
+    private static final Logger logger = LogManager.getLogger(GroebnerBaseAbstract.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

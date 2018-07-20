@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.GenWordPolynomial;
 import edu.jas.poly.Word;
@@ -26,7 +27,7 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 extends WordReductionAbstract<C> {
 
 
-    private static final Logger logger = Logger.getLogger(WordReductionSeq.class);
+    private static final Logger logger = LogManager.getLogger(WordReductionSeq.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

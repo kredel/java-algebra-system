@@ -11,7 +11,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.ComputerThreads;
 import edu.jas.kern.PreemptingException;
@@ -27,7 +28,7 @@ import edu.jas.structure.GcdRingElem;
 public class SGBProxy<C extends GcdRingElem<C>> extends SolvableGroebnerBaseAbstract<C> {
 
 
-    private static final Logger logger = Logger.getLogger(SGBProxy.class);
+    private static final Logger logger = LogManager.getLogger(SGBProxy.class);
 
 
     private static final boolean debug = logger.isDebugEnabled(); //logger.isInfoEnabled();

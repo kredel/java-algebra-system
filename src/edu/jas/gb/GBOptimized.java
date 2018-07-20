@@ -7,7 +7,8 @@ package edu.jas.gb;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -24,7 +25,7 @@ import edu.jas.structure.GcdRingElem;
 public class GBOptimized<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C> {
 
 
-    private static final Logger logger = Logger.getLogger(GBOptimized.class);
+    private static final Logger logger = LogManager.getLogger(GBOptimized.class);
 
 
     private static final boolean debug = logger.isDebugEnabled(); //logger.isInfoEnabled();

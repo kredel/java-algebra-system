@@ -19,7 +19,7 @@ import edu.jas.structure.RingElem;
 public class EGroebnerBaseSeq<C extends RingElem<C>> extends DGroebnerBaseSeq<C> {
 
 
-    //private static final Logger logger = Logger.getLogger(EGroebnerBaseSeq.class);
+    //private static final Logger logger = LogManager.getLogger(EGroebnerBaseSeq.class);
     //private static final boolean debug = logger.isDebugEnabled();
 
 

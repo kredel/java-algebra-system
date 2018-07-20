@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -40,7 +41,7 @@ import edu.jas.structure.RingElem;
 public class GroebnerBaseSigSeqIter<C extends RingElem<C>> extends GroebnerBaseAbstract<C> {
 
 
-    private static final Logger logger = Logger.getLogger(GroebnerBaseSigSeqIter.class);
+    private static final Logger logger = LogManager.getLogger(GroebnerBaseSigSeqIter.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

@@ -104,7 +104,7 @@ public class IntegerProgram implements java.io.Serializable {
     /*
      * Setup the Ideal corresponding to the Integer Program. 
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     private void createIdeal() {
         Aa = A.clone();
         negVars = negVarTest();

@@ -14,7 +14,8 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.GenWordPolynomial;
 import edu.jas.poly.GenWordPolynomialRing;
@@ -55,7 +56,7 @@ public class OrderedWordPairlist<C extends RingElem<C>> implements WordPairList<
     protected int remCount;
 
 
-    private static final Logger logger = Logger.getLogger(OrderedWordPairlist.class);
+    private static final Logger logger = LogManager.getLogger(OrderedWordPairlist.class);
 
 
     /**
