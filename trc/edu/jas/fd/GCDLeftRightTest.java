@@ -5,7 +5,6 @@
 package edu.jas.fd;
 
 
-import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigQuaternion;
 import edu.jas.arith.BigQuaternionRing;
@@ -40,7 +39,6 @@ public class GCDLeftRightTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
         ComputerThreads.terminate();
     }

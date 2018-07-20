@@ -15,7 +15,6 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
@@ -41,7 +40,6 @@ public class EGroebnerBaseSeqTest extends TestCase {
      * main
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 
@@ -180,7 +178,7 @@ public class EGroebnerBaseSeqTest extends TestCase {
      * Test Trinks7 GBase over Z.
      * 
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public void xtestTrinks7GBaseZ() { // needs 20 sec
         String exam = "Z(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
                         + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
@@ -210,7 +208,7 @@ public class EGroebnerBaseSeqTest extends TestCase {
      * Test Trinks7 GBase over Z(B).
      * 
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public void xtestTrinks7GBaseZ_B() {
         String exam = "IntFunc{ B } (S,T,Z,P,W) G " + "( " + "( { 45 } P + { 35 } S - { 165 B } - { 36 } ), "
                         + "( { 35 } P + { 40 } Z + { 25 } T - { 27 } S ), "

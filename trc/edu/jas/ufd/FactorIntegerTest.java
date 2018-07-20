@@ -12,7 +12,6 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
@@ -35,7 +34,6 @@ public class FactorIntegerTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 
@@ -221,7 +219,6 @@ public class FactorIntegerTest extends TestCase {
      * Test integer factorization irreducible polynomial.
      */
     public void testIntegerFactorizationIrred() {
-        //BasicConfigurator.configure();
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigInteger cfac = new BigInteger(4);
         //BigInteger one = cfac.getONE();

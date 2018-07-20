@@ -17,7 +17,6 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.log4j.BasicConfigurator; // import org.apache.log4j.Logger;
 
 import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
@@ -42,7 +41,6 @@ public class GroebnerBaseDistECTest extends TestCase {
      * main
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
         //ComputerThreads.terminate();
     }
@@ -278,7 +276,7 @@ public class GroebnerBaseDistECTest extends TestCase {
     /**
      * Test Trinks7 GBase.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public void testTrinks7GBase() {
         List<GenPolynomial<BigRational>> Gs, Gp = null;
         String exam = "(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "

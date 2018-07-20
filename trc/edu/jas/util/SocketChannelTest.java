@@ -12,7 +12,6 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 
-import org.apache.log4j.BasicConfigurator;
 
 /**
  * SocketChannel tests with JUnit.
@@ -24,7 +23,6 @@ import org.apache.log4j.BasicConfigurator;
 public class SocketChannelTest extends TestCase {
 
    public static void main (String[] args) {
-       BasicConfigurator.configure();
        junit.textui.TestRunner.run( suite() );
    }
 

@@ -5,7 +5,6 @@
 package edu.jas.fd;
 
 
-import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
@@ -32,7 +31,6 @@ public class SolvableQuotientTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 

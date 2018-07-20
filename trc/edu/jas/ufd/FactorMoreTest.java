@@ -8,7 +8,6 @@ package edu.jas.ufd;
 import java.util.List;
 import java.util.SortedMap;
 
-import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
@@ -36,7 +35,6 @@ public class FactorMoreTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 

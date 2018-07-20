@@ -8,7 +8,6 @@ package edu.jas.root;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.BasicConfigurator;
 
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
@@ -34,7 +33,6 @@ public class RealAlgebraicTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 
