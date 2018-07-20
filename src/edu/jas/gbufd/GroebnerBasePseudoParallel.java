@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.Semaphore;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.OrderedPairlist;
@@ -41,7 +42,7 @@ import edu.jas.util.ThreadPool;
 public class GroebnerBasePseudoParallel<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C> {
 
 
-    private static final Logger logger = Logger.getLogger(GroebnerBasePseudoParallel.class);
+    private static final Logger logger = LogManager.getLogger(GroebnerBasePseudoParallel.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();
@@ -302,7 +303,7 @@ class PseudoReducer<C extends GcdRingElem<C>> implements Runnable {
     private final GreatestCommonDivisorAbstract<C> engine;
 
 
-    private static final Logger logger = Logger.getLogger(PseudoReducer.class);
+    private static final Logger logger = LogManager.getLogger(PseudoReducer.class);
 
 
     PseudoReducer(Terminator fin, List<GenPolynomial<C>> G, PairList<C> L,
@@ -445,7 +446,7 @@ class PseudoMiReducer<C extends GcdRingElem<C>> implements Runnable {
     private final GreatestCommonDivisorAbstract<C> engine;
 
 
-    private static final Logger logger = Logger.getLogger(PseudoMiReducer.class);
+    private static final Logger logger = LogManager.getLogger(PseudoMiReducer.class);
 
 
     PseudoMiReducer(List<GenPolynomial<C>> G, GenPolynomial<C> p, GreatestCommonDivisorAbstract<C> engine) {

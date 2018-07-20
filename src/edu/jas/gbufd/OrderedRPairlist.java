@@ -7,7 +7,8 @@ package edu.jas.gbufd;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.gb.OrderedPairlist;
 import edu.jas.gb.Pair;
@@ -25,7 +26,7 @@ import edu.jas.structure.RegularRingElem;
 public class OrderedRPairlist<C extends RegularRingElem<C> > 
     extends OrderedPairlist<C> {
 
-    private static final Logger logger = Logger.getLogger(OrderedRPairlist.class);
+    private static final Logger logger = LogManager.getLogger(OrderedRPairlist.class);
 
     protected final RReduction<C> rreduction;
 

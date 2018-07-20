@@ -8,7 +8,8 @@ package edu.jas.gbufd;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.gb.SolvableGroebnerBaseAbstract;
 import edu.jas.gb.SolvableGroebnerBaseSeq;
@@ -28,7 +29,7 @@ import edu.jas.structure.GcdRingElem;
 public class PolyModUtil {
 
 
-    private static final Logger logger = Logger.getLogger(PolyModUtil.class);
+    private static final Logger logger = LogManager.getLogger(PolyModUtil.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

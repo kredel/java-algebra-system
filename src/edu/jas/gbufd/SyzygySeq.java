@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.gb.ExtendedGB;
 import edu.jas.gb.GroebnerBaseAbstract;
@@ -30,7 +31,7 @@ import edu.jas.structure.RingFactory;
 public class SyzygySeq<C extends GcdRingElem<C>> extends SyzygyAbstract<C> {
 
 
-    private static final Logger logger = Logger.getLogger(SyzygySeq.class);
+    private static final Logger logger = LogManager.getLogger(SyzygySeq.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

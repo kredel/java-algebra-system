@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.gb.ReductionAbstract;
 import edu.jas.poly.ExpVector;
@@ -29,7 +30,7 @@ public class RReductionSeq<C extends RegularRingElem<C>> extends ReductionAbstra
                 RReduction<C> {
 
 
-    private static final Logger logger = Logger.getLogger(RReductionSeq.class);
+    private static final Logger logger = LogManager.getLogger(RReductionSeq.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

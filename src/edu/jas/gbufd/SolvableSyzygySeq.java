@@ -10,7 +10,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.gb.SolvableExtendedGB;
 import edu.jas.gb.SolvableGroebnerBase;
@@ -33,7 +34,7 @@ import edu.jas.structure.RingFactory;
 public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyAbstract<C> {
 
 
-    private static final Logger logger = Logger.getLogger(SolvableSyzygySeq.class);
+    private static final Logger logger = LogManager.getLogger(SolvableSyzygySeq.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

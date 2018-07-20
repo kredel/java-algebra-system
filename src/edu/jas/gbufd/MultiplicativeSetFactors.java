@@ -8,7 +8,8 @@ package edu.jas.gbufd;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -27,7 +28,7 @@ import edu.jas.ufd.FactorFactory;
 public class MultiplicativeSetFactors<C extends GcdRingElem<C>> extends MultiplicativeSet<C> {
 
 
-    private static final Logger logger = Logger.getLogger(MultiplicativeSetFactors.class);
+    private static final Logger logger = LogManager.getLogger(MultiplicativeSetFactors.class);
 
 
     //private static final boolean debug = logger.isDebugEnabled();

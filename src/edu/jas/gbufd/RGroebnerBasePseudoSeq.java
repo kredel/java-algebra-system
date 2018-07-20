@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.gb.Pair;
 import edu.jas.poly.ExpVector;
@@ -32,7 +33,7 @@ import edu.jas.ufd.GreatestCommonDivisorAbstract;
 public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>> extends RGroebnerBaseSeq<C> {
 
 
-    private static final Logger logger = Logger.getLogger(RGroebnerBasePseudoSeq.class);
+    private static final Logger logger = LogManager.getLogger(RGroebnerBasePseudoSeq.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

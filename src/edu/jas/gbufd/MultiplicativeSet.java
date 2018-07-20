@@ -9,7 +9,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -24,7 +25,7 @@ import edu.jas.structure.GcdRingElem;
 public class MultiplicativeSet<C extends GcdRingElem<C>> implements Serializable {
 
 
-    private static final Logger logger = Logger.getLogger(MultiplicativeSet.class);
+    private static final Logger logger = LogManager.getLogger(MultiplicativeSet.class);
 
 
     //private static final boolean debug = logger.isDebugEnabled();

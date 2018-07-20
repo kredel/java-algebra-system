@@ -8,7 +8,8 @@ package edu.jas.gbufd;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.PairList;
@@ -31,7 +32,7 @@ import edu.jas.ufd.QuotientRing;
 public class GroebnerBaseQuotient<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<Quotient<C>> {
 
 
-    private static final Logger logger = Logger.getLogger(GroebnerBaseQuotient.class);
+    private static final Logger logger = LogManager.getLogger(GroebnerBaseQuotient.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

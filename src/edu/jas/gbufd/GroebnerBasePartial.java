@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.GroebnerBaseSeq;
@@ -35,7 +36,7 @@ import edu.jas.structure.RingFactory;
 public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C> {
 
 
-    private static final Logger logger = Logger.getLogger(GroebnerBasePartial.class);
+    private static final Logger logger = LogManager.getLogger(GroebnerBasePartial.class);
 
 
     //private static final boolean debug = logger.isDebugEnabled();

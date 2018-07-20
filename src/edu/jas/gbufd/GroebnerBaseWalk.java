@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.ReductionAbstract;
@@ -43,7 +44,7 @@ import edu.jas.structure.RingFactory;
 public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C> {
 
 
-    private static final Logger logger = Logger.getLogger(GroebnerBaseWalk.class);
+    private static final Logger logger = LogManager.getLogger(GroebnerBaseWalk.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

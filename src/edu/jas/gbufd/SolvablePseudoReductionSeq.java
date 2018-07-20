@@ -8,7 +8,8 @@ package edu.jas.gbufd;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.gb.SolvableReductionAbstract;
 import edu.jas.poly.ExpVector;
@@ -32,7 +33,7 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
                 implements SolvablePseudoReduction<C> {
 
 
-    private static final Logger logger = Logger.getLogger(SolvablePseudoReductionSeq.class);
+    private static final Logger logger = LogManager.getLogger(SolvablePseudoReductionSeq.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

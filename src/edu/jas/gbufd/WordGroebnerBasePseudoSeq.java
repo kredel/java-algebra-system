@@ -8,7 +8,8 @@ package edu.jas.gbufd;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.gb.OrderedWordPairlist;
 import edu.jas.gb.WordGroebnerBaseAbstract;
@@ -31,7 +32,7 @@ import edu.jas.structure.RingFactory;
 public class WordGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends WordGroebnerBaseAbstract<C> {
 
 
-    private static final Logger logger = Logger.getLogger(WordGroebnerBasePseudoSeq.class);
+    private static final Logger logger = LogManager.getLogger(WordGroebnerBasePseudoSeq.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

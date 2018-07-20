@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.OrderedPairlist;
@@ -40,7 +41,7 @@ public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
                 GroebnerBaseAbstract<GenPolynomial<C>> {
 
 
-    private static final Logger logger = Logger.getLogger(GroebnerBasePseudoRecSeq.class);
+    private static final Logger logger = LogManager.getLogger(GroebnerBasePseudoRecSeq.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

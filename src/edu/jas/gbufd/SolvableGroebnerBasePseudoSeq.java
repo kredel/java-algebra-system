@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.gb.OrderedPairlist;
 import edu.jas.gb.Pair;
@@ -41,7 +42,7 @@ import edu.jas.ufd.GreatestCommonDivisorFake;
 public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends SolvableGroebnerBaseAbstract<C> {
 
 
-    private static final Logger logger = Logger.getLogger(SolvableGroebnerBasePseudoSeq.class);
+    private static final Logger logger = LogManager.getLogger(SolvableGroebnerBasePseudoSeq.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

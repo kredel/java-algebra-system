@@ -5,7 +5,8 @@
 package edu.jas.gbufd;
 
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
@@ -75,7 +76,7 @@ import edu.jas.ufd.QuotientRing;
 public class SGBFactory {
 
 
-    private static final Logger logger = Logger.getLogger(SGBFactory.class);
+    private static final Logger logger = LogManager.getLogger(SGBFactory.class);
 
 
     private static boolean debug = logger.isDebugEnabled();
