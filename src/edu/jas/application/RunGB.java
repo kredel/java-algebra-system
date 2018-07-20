@@ -20,8 +20,6 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import org.apache.log4j.BasicConfigurator;
-
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.GroebnerBaseDistributedEC;
 import edu.jas.gb.GroebnerBaseDistributedHybridEC;
@@ -43,7 +41,7 @@ import edu.jas.util.ExecutableServer;
 /**
  * Simple setup to run a GB example. <br>
  * Usage: RunGB [seq(+)|par(+)|build=string|disthyb|cli] &lt;file&gt;
- * #procs/#threadsPerNode [machinefile] &lt;check&gt; &lt;nolog&gt; <br>
+ * #procs/#threadsPerNode [machinefile] &lt;check&gt; <br>
  * Build string can be any combination of method calls from GBAlgorithmBuilder.
  * Method polynomialRing() is called based on declaration from "file". Method
  * build() is called automatically. For example <br>
@@ -61,15 +59,9 @@ public class RunGB {
 
 
     /**
-     * Enable logging.
-     */
-    static boolean doLog = true;
-
-
-    /**
      * main method to be called from commandline <br>
      * Usage: RunGB [seq|par(+)|build=string|disthyb(+)|cli] &lt;file&gt;
-     * #procs/#threadsPerNode [machinefile] &lt;check&gt; &lt;nolog&gt;
+     * #procs/#threadsPerNode [machinefile] &lt;check&gt; 
      */
     @SuppressWarnings("unchecked")
     public static void main(String[] args) {
@@ -78,7 +70,7 @@ public class RunGB {
                 "cli" }; // must be last
 
         String usage = "Usage: RunGB [ " + join(allkinds, " | ") + "[port] ] " + "<file> "
-                        + "#procs/#threadsPerNode " + "[machinefile] " + "[check] [nolog]";
+                        + "#procs/#threadsPerNode " + "[machinefile] " + "[check] ";
 
         if (args.length < 1) {
             System.out.println("args: " + Arrays.toString(args));
@@ -141,10 +133,6 @@ public class RunGB {
         int j = indexOf(args, "check");
         if (j >= 0) {
             doCheck = true;
-        }
-        j = indexOf(args, "nolog");
-        if (j >= 0) {
-            doLog = false;
         }
 
         int threads = 0;
@@ -225,10 +213,6 @@ public class RunGB {
                 System.out.println(usage);
                 return;
             }
-        }
-
-        if (doLog) {
-            BasicConfigurator.configure();
         }
 
         if (kind.startsWith("seq")) {
@@ -525,7 +509,8 @@ public class RunGB {
         return problem;
     }
 
-
+    
+    @SuppressWarnings("unchecked")
     static GroebnerBaseAbstract getGBalgo(String[] args, String bstr, GenPolynomialRing ring) {
         GroebnerBaseAbstract gb = null;
         int i = bstr.indexOf("=");

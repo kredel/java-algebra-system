@@ -8,8 +8,6 @@ package edu.jas.application;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.BasicConfigurator;
-
 import edu.jas.arith.BigRational;
 import edu.jas.gb.GBOptimized;
 import edu.jas.gb.GBProxy;
@@ -36,7 +34,6 @@ public class ExamplesGeoTheorems {
      * main.
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
         example10();
         example11();
         example12();

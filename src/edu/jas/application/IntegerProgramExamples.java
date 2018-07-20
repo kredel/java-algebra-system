@@ -8,9 +8,6 @@ package edu.jas.application;
 import java.util.Arrays;
 
 
-import org.apache.log4j.BasicConfigurator;
-
-
 /**
  * Examples for Integer Programming.
  * @author Maximilian Nohr
@@ -23,7 +20,6 @@ public class IntegerProgramExamples {
      * @param args
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
         example1();
         example2();
         example3();

@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.BasicConfigurator;
 
 
 /**
@@ -97,8 +96,6 @@ public class ExecutableServer extends Thread {
      * @param args args[0] is port
      */
     public static void main(String[] args) throws InterruptedException {
-        BasicConfigurator.configure();
-
         int port = DEFAULT_PORT;
         if (args.length < 1) {
             System.out.println("Usage: ExecutableServer <port>");

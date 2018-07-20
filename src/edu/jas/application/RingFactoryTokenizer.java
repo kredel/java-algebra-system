@@ -148,7 +148,6 @@ public class RingFactoryTokenizer {
      */
     @SuppressWarnings("unchecked")
     public RingFactoryTokenizer(Reader r) {
-        //BasicConfigurator.configure();
         vars = null;
         tord = new TermOrder();
         nvars = 1;

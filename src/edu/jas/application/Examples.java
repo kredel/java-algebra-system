@@ -11,8 +11,6 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.BasicConfigurator;
-
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
@@ -52,7 +50,6 @@ public class Examples {
      * main.
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
         if (args.length > 0) {
             example1();
             example2();
@@ -332,7 +329,7 @@ public class Examples {
     /**
      * Example GBase and real root.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public static void example6() {
         BigRational coeff = new BigRational();
         GroebnerBase<BigRational> gb = GBFactory.getImplementation(coeff);

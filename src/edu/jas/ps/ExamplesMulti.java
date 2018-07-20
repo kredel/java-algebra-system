@@ -8,8 +8,6 @@ package edu.jas.ps;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.BasicConfigurator;
-
 import edu.jas.arith.BigRational;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -24,7 +22,6 @@ public class ExamplesMulti {
 
 
     public static void main(String[] args) {
-        BasicConfigurator.configure();
         if ( args.length > 0 ) {
             example1();
             example2();

@@ -144,7 +144,6 @@ public class GenPolynomialTokenizer {
      */
     @SuppressWarnings("unchecked")
     public GenPolynomialTokenizer(Reader r) {
-        //BasicConfigurator.configure();
         vars = null;
         tord = new TermOrder();
         nvars = 1;

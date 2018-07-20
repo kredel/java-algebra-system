@@ -11,8 +11,6 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.BasicConfigurator;
-
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
@@ -36,7 +34,6 @@ public class Examples {
      * main.
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
         //example1();
         //example2();
         //example3();
@@ -122,7 +119,7 @@ public class Examples {
      * Example GBase.
      * 
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     static public void exampleGB1() {
         BigRational coeff = new BigRational();
         GroebnerBase<BigRational> gb = GBFactory.getImplementation(coeff);
@@ -154,7 +151,7 @@ public class Examples {
      * Example GBase.
      * 
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     static public void exampleGB() {
         BigRational coeff = new BigRational();
         GroebnerBase<BigRational> gb = GBFactory.getImplementation(coeff);
@@ -186,7 +183,7 @@ public class Examples {
      * Example Trinks GBase.
      * 
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     static public void exampleGBTrinks() {
         BigRational coeff = new BigRational();
         GroebnerBase<BigRational> bb = GBFactory.getImplementation(coeff);

@@ -38,7 +38,6 @@ public class GroebnerBaseFGLMExamples {
      * main
      */
     public static void main(String[] args) {
-        //BasicConfigurator.configure();
         //junit.textui.TestRunner.run(suite());
         GroebnerBaseFGLMExamples ex = new GroebnerBaseFGLMExamples();
         ex.testC5();

@@ -31,7 +31,6 @@ public class ExamplesPartialFraction {
         example12();
         example13();
         example14();
-        // BasicConfigurator.configure();
         example15();
         example16();
         example17();

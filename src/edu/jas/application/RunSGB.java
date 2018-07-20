@@ -17,8 +17,6 @@ import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Arrays;
 
-import org.apache.log4j.BasicConfigurator;
-
 import edu.jas.gb.SolvableGroebnerBase;
 import edu.jas.gb.SolvableGroebnerBaseAbstract;
 import edu.jas.gb.SolvableGroebnerBaseParallel;
@@ -49,12 +47,6 @@ public class RunSGB {
 
 
     /**
-     * Enable logging.
-     */
-    static boolean doLog = true;
-
-
-    /**
      * main method to be called from commandline <br> Usage: RunSGB
      * [seq|seq+|par|par+] [irr|left|right|two] &lt;file&gt; #procs
      */
@@ -78,7 +70,7 @@ public class RunSGB {
                         + "#threads " 
                         //+ "#procs/#threadsPerNode " 
                         //+ "[machinefile] ";
-                        + "[check] [nolog]";
+                        + "[check] ";
 
         if (args.length < 3) {
             System.out.println("args: " + Arrays.toString(args));
@@ -145,10 +137,6 @@ public class RunSGB {
         if (j >= 0) {
             doCheck = true;
         }
-        j = indexOf(args, "nolog");
-        if (j >= 0) {
-            doLog = false;
-        }
 
         Reader problem = RunGB.getReader(filename);
         if (problem == null) {
@@ -178,10 +166,6 @@ public class RunSGB {
             return;
         }
         System.out.println("S =\n" + S);
-
-        if (doLog) {
-            BasicConfigurator.configure();
-        }
 
         if (kind.startsWith("seq")) {
             runSequential(S, action, plusextra);

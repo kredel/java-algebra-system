@@ -8,8 +8,6 @@ package edu.jas.poly;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.BasicConfigurator;
-
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
@@ -29,7 +27,6 @@ public class Examples {
      * main.
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
         //example0();
         /*
           example1();

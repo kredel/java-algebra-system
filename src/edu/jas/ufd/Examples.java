@@ -9,8 +9,6 @@ import java.util.SortedMap;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.BasicConfigurator;
-
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
@@ -36,13 +34,10 @@ public class Examples {
      * main.
      */
     public static void main(String[] args) {
-        //BasicConfigurator.configure();
         //// no go: example6();
-        //BasicConfigurator.configure();
         //example9();
         example1();
         example2();
-        BasicConfigurator.configure();
         example10();
         ComputerThreads.terminate();
     }
