@@ -10,7 +10,8 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 //import edu.unima.ky.parallel.ChannelFactory;
 //import edu.unima.ky.parallel.SocketChannel;
@@ -161,7 +162,7 @@ public class ExecutableServerTest extends TestCase {
 
 class Executable implements RemoteExecutable {
 
-    private static final Logger logger = Logger.getLogger(Executable.class);
+    private static final Logger logger = LogManager.getLogger(Executable.class);
 
     private String param = null;
 

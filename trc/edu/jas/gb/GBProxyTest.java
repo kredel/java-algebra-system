@@ -15,7 +15,8 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
@@ -33,7 +34,7 @@ import edu.jas.poly.PolynomialList;
 public class GBProxyTest extends TestCase {
 
 
-    private static final Logger logger = Logger.getLogger(GBProxyTest.class);
+    private static final Logger logger = LogManager.getLogger(GBProxyTest.class);
 
 
     /**

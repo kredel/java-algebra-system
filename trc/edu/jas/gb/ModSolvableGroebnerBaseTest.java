@@ -14,7 +14,8 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
@@ -36,7 +37,7 @@ import edu.jas.poly.WeylRelations;
 public class ModSolvableGroebnerBaseTest extends TestCase {
 
 
-    private static final Logger logger = Logger.getLogger(ModSolvableGroebnerBaseTest.class);
+    private static final Logger logger = LogManager.getLogger(ModSolvableGroebnerBaseTest.class);
 
 
     /**

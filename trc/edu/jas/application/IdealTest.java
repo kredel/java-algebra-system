@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
@@ -39,7 +39,7 @@ import junit.framework.TestSuite;
 public class IdealTest extends TestCase {
 
 
-    private static final Logger logger = Logger.getLogger(IdealTest.class);
+    private static final Logger logger = LogManager.getLogger(IdealTest.class);
 
 
     /**

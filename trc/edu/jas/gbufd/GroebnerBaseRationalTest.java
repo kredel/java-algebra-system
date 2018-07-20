@@ -15,7 +15,8 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigRational;
 import edu.jas.gb.GroebnerBaseAbstract;
@@ -34,7 +35,7 @@ import edu.jas.poly.PolynomialList;
 public class GroebnerBaseRationalTest extends TestCase {
 
 
-    private static final Logger logger = Logger.getLogger(GroebnerBaseRationalTest.class);
+    private static final Logger logger = LogManager.getLogger(GroebnerBaseRationalTest.class);
 
 
     /**
