@@ -20,9 +20,10 @@ SVNREPO=/home/SUBVERSION
 LIBPATH=$(HOME)/java/lib
 #JUNITPATH=$(LIBPATH)/junit.jar
 JUNITPATH=$(LIBPATH)/junit-4.12.jar:$(LIBPATH)/hamcrest-core-1.3.jar
-#LOG4JPATH=$(LIBPATH)/log4j.jar
+#LOG4JPATH=$(LIBPATH)/log4j-1.2.17.jar
 LOG4JPATH=$(LIBPATH)/log4j-core-2.5.jar:$(LIBPATH)/log4j-api-2.5.jar:$(LIBPATH)/log4j-1.2-api-2.5.jar
 #LOG4JPATH=$(LIBPATH)/mylog.jar
+#LOG4JPATH=$(LIBPATH)/nolog.jar
 JOMPPATH=$(LIBPATH)/jomp1.0b.jar
 TNJPATH=$(LIBPATH)/tnj.jar
 LINTPATH=$(LIBPATH)/lint4j.jar
@@ -84,12 +85,11 @@ MYCLASSPATH = $(LOG4JPATH):.:$(JUNITPATH):$(JOMPPATH):$(PYPATH)
 #JAVA_MEM=-Xms1500M -Xmx2900M
 JAVA_MEM=-Xms350M -Xmx800M
 
-#SOPTS="-J-cp ../lib/log4j-core-2.5.jar:../lib/log4j-api-2.5.jar:../lib/log4j-1.2-api-2.5.jar:../lib/junit.jar-4.12.jar:../lib/hamcrest-core-1.3.jar:. -J-verbose:gc -J-Xms1500M -J-Xmx2900M"
-SOPTS="-J-cp ../lib/log4j-core-2.5.jar:../lib/log4j-api-2.5.jar:../lib/log4j-1.2-api-2.5.jar:../lib/junit.jar-4.12.jar:../lib/hamcrest-core-1.3.jar:. -J-verbose:gc -J-Xms350M -J-Xmx800M"
+SOPTS="-J-cp ../lib/log4j-core-2.5.jar:../lib/log4j-api-2.5.jar:../lib/log4j-1.2-api-2.5.jar:../lib/junit.jar-4.12.jar:../lib/hamcrest-core-1.3.jar:. -J-verbose:gc -J-Xms500M -J-Xmx900M"
 
 
 JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d . -Xlint:unchecked
-#-Xlint:unchecked
+# -verbose:class 
 #-Djava.util.logging.config.file=logging.properties 
 #JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -verbose:gc 
 JAVA=$(JDK)/java -classpath $(MYCLASSPATH) -server $(JAVA_MEM) -XX:+AggressiveHeap -XX:+UseParallelGC -XX:ParallelGCThreads=2 -verbose:gc 
@@ -309,10 +309,12 @@ doc: $(FILES) $(TESTFILES)
 	$(DOC) $(DOCOPTS) -d doc/api $(FILES) $(TESTFILES)
 
 epydoc: examples/jas.py
-	epydoc -o doc/jython -n "Python to JAS" -u ../../index.html `find examples -name "*.py"|grep -v versuch`
+#	epydoc -o doc/jython -n "Python to JAS" -u ../../index.html `find examples -name "*.py"|grep -v versuch`
+#       --exclude-parse=java.lang --exclude-parse=com.xhaus.jyson 
+	epydoc --check -o doc/jython -n "Python to JAS" -u ../../index.html examples/jas.py examples/basic_sigbased_gb.py examples/sdjas.py
 
 rdoc: examples/jas.rb
-	jrdoc -o doc/jruby -U -N -t "Ruby to JAS" examples/jas.rb
+	jrdoc -o doc/jruby -C -U -N -t "Ruby to JAS" examples/jas.rb examples/sdjas.rb
 
 texdoc: $(FILES) $(TESTFILES)
 	mkdir -p doc/tex
@@ -329,8 +331,8 @@ jas-all.jar: $(ALLJAR)
 	cp jas.jar $(LIBPATH)/
 	mv jas.jar /tmp/jas-`date +%Y%j`.jar
 
-jas.tgz: $(FILES) $(TESTFILES) *.html doc/*.html TODO
-	tar -cvzf jas.tgz $(FILES) $(TESTFILES) *.html doc/*.html TODO
+jas.tgz: $(FILES) $(TESTFILES) *.html doc/*.html doc/TODO README
+	tar -cvzf jas.tgz $(FILES) $(TESTFILES) *.html doc/*.html doc/TODO README
 	cp jas.tgz /tmp/jas-`date +%Y%j`.tgz
 
 #	cp jas.jar ...../jas-`date +%Y%j`.jar
@@ -371,12 +373,12 @@ clean:
 testp:
 	find examples -name "*.py"|grep -v jas.py |grep -v sdexam.py |grep -v plot|grep -v versuch|sort|xargs -L 1 echo "time jython $(SOPTS)" | awk '{ printf "echo %s\n", $$0; printf "%s\n", $$0 }' > ./all_jython.sh
 	time bash all_jython.sh 2>&1 | tee tjy.out
-	-egrep '(Error|File)' tjy.out
+	-egrep '(Error|File|Exception)' tjy.out
 
 testr:
 	find examples -name "*.rb"|grep -v jas.rb |grep -v versuch|sort|xargs -L 1 echo "time jruby $(SOPTS)" | awk '{ printf "echo %s\n", $$0; printf "%s\n", $$0 }' > ./all_jruby.sh
 	time bash all_jruby.sh 2>&1 | tee tjr.out
-	-egrep -i '(error|__file__)' tjr.out
+	-egrep -i '(error|__file__|exception)' tjr.out
 
 tests:
 	ant test 2>&1 | tee t.out
@@ -386,15 +388,15 @@ tests:
 	make edu.jas.application.RunGB cl="par  examples/trinks6.jas 4" | tee -a tr.out
 	make edu.jas.application.RunGB cl="par+ examples/trinks6.jas 4" | tee -a tr.out
 	cd jython; make tests | tee jsr.out
-	cd mpj; make tests | tee mpj.out
+	#cd mpj; make tests | tee mpj.out
 	#cd mpi; make tests | tee mpi.out
 	cd jlinalg_adapter; make tests | tee ja.out
 	cd commons-math_adapter; make tests | tee ja.out
 	echo "--------------------"
 	-grep FAIL t.out
 	-grep Exception e.out | grep -v GCDProxy | grep -v GBProxy
-	-grep File tjy.out
-	-egrep -i '(error|__file__)' tjr.out
+	-egrep '(Error|File|Exception)' tjy.out
+	-egrep -i '(error|__file__|exception)' tjr.out
 	-grep -i error jython/jsr.out
 	-grep -i error mpj/mpj.out
 	#-grep -i error mpi/mpi.out
@@ -461,6 +463,8 @@ export:
 	cp ~/java/lib/mylog.jar ~/jas-versions/$(VERSION)/
 	cd ~/jas-versions/log4j_droid_adapter; make > ~/jas-versions/$(VERSION)/make_droidlog.out
 	cp ~/java/lib/droidlog.jar ~/jas-versions/$(VERSION)/
+	cd ~/jas-versions/log4j_null_adapter; make > ~/jas-versions/$(VERSION)/make_nolog.out
+	cp ~/java/lib/nolog.jar ~/jas-versions/$(VERSION)/
 	cd ~/jas-versions/$(VERSION)/jlinalg_adapter; make all doc > ~/jas-versions/$(VERSION)/make_jlinalg.out
 	cd ~/jas-versions/$(VERSION)/commons-math_adapter; make all doc > ~/jas-versions/$(VERSION)/make_commons-math.out
 	cd ~/jas-versions/$(VERSION)/; jar -cfM ../$(VERSION).`$(SVNREV)`-doc.zip doc/ images/ *.html doc/*.html *.css doc/*.css
@@ -472,7 +476,8 @@ deploy:
 	$(RSYNC) -e 'ssh' --delete-after --exclude=DTD --exclude=*xml ~/jas-versions/$(VERSION)/ krum:htdocs/$(VERSION)
 
 m2-deploy:
-	$(RSYNC) -e 'ssh' ~/jas-versions/tmp/$(subst jas-,,$(VERSION)).`$(SVNREV)`/ krum:htdocs/maven-repository/java-algebra-system/$(subst -,/,$(VERSION)).`$(SVNREV)`
+	$(RSYNC) -e 'ssh' ~/jas-versions/tmp/$(subst jas-,,$(VERSION)).`$(SVNREV)`/ krum:htdocs/maven-repository/de/uni-mannheim/rz/krum/$(subst -,/,$(VERSION)).`$(SVNREV)`
+#	$(RSYNC) -e 'ssh' ~/jas-versions/tmp/$(subst jas-,,$(VERSION)).`$(SVNREV)`/ https://oss.sonatype.org/content/groups/public/de/uni-mannheim/rz/krum/$(subst -,/,$(VERSION)).`$(SVNREV)`
 
 git-export:
 	cd ~/jas-versions/jas-git/jas; git svn rebase > ~/jas-versions/$(VERSION)/git_svn.out
