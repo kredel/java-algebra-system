@@ -301,7 +301,9 @@ class Executor extends Thread /*implements Runnable*/{
                             re.run();
                         } catch(Exception e) {
                             logger.info("Exception on re.run()" + e);
-                            e.printStackTrace();
+                            if (logger.isInfoEnabled()) {
+                                e.printStackTrace();
+			    }
                         } finally {
                             logger.info("finally re.run() " + re);
                         }

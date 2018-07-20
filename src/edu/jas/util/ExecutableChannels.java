@@ -279,7 +279,9 @@ public class ExecutableChannels {
                     try {
                         channels[i].send(ExecutableServer.STOP);
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        if (logger.isDebugEnabled()) {
+                            e.printStackTrace();
+                        }
                     } finally {
                         channels[i].close();
                     }
