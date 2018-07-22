@@ -219,7 +219,7 @@ public final class Word implements MonoidElem<Word> {
         Word b = (Word) B;
         // mono == b.mono ??
         int t = this.compareTo(b);
-        //System.out.println("equals: this = " + this + " B = " + B + " t = " + t);
+        //System.out.println("equals: this = " + this.val + " b = " + b.val + " t = " + t);
         return (0 == t);
     }
 
@@ -406,9 +406,19 @@ public final class Word implements MonoidElem<Word> {
      * @return sorted map of letters and the number of its occurences.
      */
     public SortedMap<String, Integer> dependencyOnVariables() {
+        return histogram(val);
+    }
+
+
+    /**
+     * String dependency on letters.
+     * @param v string.
+     * @return sorted map of letters and the number of its occurences.
+     */
+    public static SortedMap<String, Integer> histogram(String v) {
         SortedMap<String, Integer> map = new TreeMap<String, Integer>();
-        for (int i = 0; i < val.length(); i++) {
-            String s = String.valueOf(val.charAt(i));
+        for (int i = 0; i < v.length(); i++) {
+            String s = String.valueOf(v.charAt(i));
             Integer n = map.get(s);
             if (n == null) {
                 n = 0;
@@ -495,19 +505,17 @@ public final class Word implements MonoidElem<Word> {
 
 
     /**
-     * Word compareTo. Uses
-     * 
-     * <pre>
-     * String.compareTo
-     * </pre>
-     * 
-     * .
+     * Word compareTo. Uses <code>String.compareTo</code>.
      * @param V other word.
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
     @Override
     public int compareTo(Word V) {
-        return this.val.compareTo(V.val);
+        if (mono == V.mono) {
+            return val.compareTo(V.val);
+        }
+        //System.out.println("compareTo: mono " + mono + ", V = " + V.mono);
+        return toString().compareTo(V.toString());
     }
 
 

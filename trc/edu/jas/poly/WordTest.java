@@ -50,20 +50,9 @@ public class WordTest extends TestCase {
     }
 
 
-    //private final static int bitlen = 100;
+    Word a, b, c, d;
 
-    Word a;
-
-
-    Word b;
-
-
-    Word c;
-
-
-    Word d;
-
-
+    
     @Override
     protected void setUp() {
         a = b = c = d = null;
@@ -425,4 +414,41 @@ public class WordTest extends TestCase {
         assertTrue("deg(prod(ef)) == deg(w): " + lw + ", " + le, lw == le );
     }
 
+
+    /**
+     * Test subfactory and contraction.
+     */
+    public void testContraction() {
+        WordFactory wf = new WordFactory("abcdefg");
+        WordFactory wfs = new WordFactory("acdfg");
+        // test if contraction is possible
+        assertTrue("wf.isSubFactory(wfs): " + wf + ", " + wfs, wf.isSubFactory(wfs) );
+        assertTrue("wf.isSubFactory(wf): " + wf + ", " + wf, wf.isSubFactory(wf) );
+        assertFalse("wf.isSubFactory(wfs): " + wf + ", " + wfs, wfs.isSubFactory(wf) );
+
+        wf = new WordFactory(new String[] { "alpha", "x", "y", "z" });
+        //System.out.println("wf = " + wf);
+        wfs = new WordFactory(new String[] { "x", "y", "z" });
+        //System.out.println("wfs = " + wfs);
+        // test if contraction is possible
+        assertTrue("wf.isSubFactory(wfs): " + wf + ", " + wfs, wf.isSubFactory(wfs) );
+        assertFalse("wf.isSubFactory(wfs): " + wf + ", " + wfs, wfs.isSubFactory(wf) );
+
+        Word w1 = wf.parse("alpha alpha");
+        Word w2 = wf.parse("y z x x y z");
+        //System.out.println("w1 = " + w1);
+        //System.out.println("w2 = " + w2);
+
+        // contract words
+        Word wc1 = wf.contract(w1);
+        //System.out.println("wc1 = " + wc1);
+        assertEquals("wf.contract(w1): " + w1 + ", " + wf, w1, wc1);
+        Word wc2 = wfs.contract(w2);
+        //System.out.println("wc2 = " + wc2);
+        assertEquals("wfs.contract(w2): " + w2 + ", " + wfs, w2, wc2);
+        Word wc3 = wfs.contract(w1);
+        //System.out.println("wc3 = " + wc3);
+        assertTrue("wfs.contract(w3): " + wc3 + ", " + wfs, (wc3 == null));
+    }
+    
 }

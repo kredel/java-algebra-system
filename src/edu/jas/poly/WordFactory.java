@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+//import java.util.Set;
 import java.util.Random;
 
 import org.apache.logging.log4j.Logger;
@@ -119,8 +121,18 @@ public final class WordFactory implements MonoidFactory<Word> {
         if (s == null) {
             throw new IllegalArgumentException("null string not allowed");
         }
-        alphabet = cleanSpace(s);
+        String alp = cleanSpace(s);
         translation = null;
+        Map<String, Integer> hist = Word.histogram(alp);
+        if (hist.size() != alp.length()) {
+            logger.warn("multiple characters in String: " + hist);
+            //Set<String> k = hist.keySet();
+            String[] ka = hist.keySet().toArray(new String[hist.size()]);
+            alphabet = concat(ka);
+        } else {
+            alphabet = alp;
+        }
+        //System.out.println("hist = " + hist);
         ONE = new Word(this, "", false);
     }
 
@@ -448,6 +460,50 @@ public final class WordFactory implements MonoidFactory<Word> {
 
 
     /**
+     * Test if the alphabet of w is a subalphabet of this.
+     * @param w other word factory to test.
+     * @return true, if w is a subalphabet of this, else false.
+     */
+    public boolean isSubFactory(WordFactory w) {
+        if (w == null) {
+            throw new IllegalArgumentException("w may not be null");
+        }
+        String s = w.toString().replace(",", " ");
+        Word c = null;
+        try {
+            c = parse(s);
+        } catch (IllegalArgumentException ignored) {
+            // ignore
+        }
+        //System.out.println("c: " + c + ", s = " + s);
+        if (c != null) {
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
+     * Contract word to this word factory.
+     * <code>this.isSubFactory(w.mono)</code> must be true, otherwise null is returned.
+     * @param w other word to contract.
+     * @return w with this factory, or null if not contractable.
+     */
+    public Word contract(Word w) {
+        if (w == null) {
+            throw new IllegalArgumentException("w may not be null");
+        }
+        Word c = null;
+        try {
+            c = parse(w.toString());
+        } catch (IllegalArgumentException ignored) {
+            // ignore
+        }
+        return c;
+    }
+
+    
+    /**
      * Get the descending order comparator. Sorts the highest terms first.
      * @return horder.
      */
@@ -526,11 +582,6 @@ public final class WordFactory implements MonoidFactory<Word> {
             return s.toString();
         }
         for (int i = 0; i < v.length; i++) {
-            //String a = v[i];
-            //if ( a.length() != 1 ) {
-            //    //logger.error("v[i] not single letter "+ a);
-            //    a  = a.substring(0,1);
-            //}
             s.append(v[i]);
         }
         return s.toString();
