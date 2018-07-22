@@ -391,6 +391,17 @@ public final class WordFactory implements MonoidFactory<Word> {
 
 
     /**
+     * Get the element from an other word.
+     * @param w other word.
+     * @return w in this word factory.
+     */
+    public Word valueOf(Word w) {
+        String s = w.toString();
+        return parse(s);
+    }
+
+    
+    /**
      * IndexOf for letter in alphabet.
      * @param s letter character.
      * @return index of s in the alphabet, or -1 if s is not contained in the alphabet.

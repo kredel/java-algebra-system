@@ -416,6 +416,29 @@ public final class GenWordPolynomialRing<C extends RingElem<C>> implements RingF
     }
 
 
+   /**
+     * Get a GenWordPolynomial&lt;C&gt; element from a GenWordPolynomial&lt;C&gt;.
+     * @param a GenWordPolynomial.
+     * @return a GenWordPolynomial&lt;C&gt;.
+     */
+    public GenWordPolynomial<C> valueOf(GenWordPolynomial<C> a) {
+        if (a.isZERO()) {
+            return getZERO();
+        }
+        if (a.isONE()) {
+            return getONE();
+        }
+        GenWordPolynomial<C> p = this.getZERO().copy();
+        for (Map.Entry<Word, C> m : a.val.entrySet()) {
+            C c = m.getValue();
+            Word e = m.getKey();
+            Word w = alphabet.valueOf(e);
+            p.doPutToMap(w, c);
+        }
+        return p;
+    }
+
+
     /**
      * Get a list of GenWordPolynomial&lt;C&gt; element from a list of
      * GenPolynomial&lt;C&gt;.

@@ -641,4 +641,47 @@ public class GenWordPolynomialTest extends TestCase {
         assertTrue("#gens == 2+3+4+6", gens.size() == 15);
     }
 
+    
+    /**
+     * Test contraction.
+     */
+    public void testContraction() {
+        // integers
+        BigInteger rf = new BigInteger();
+        //System.out.println("rf = " + rf);
+
+        // non-commuting vars: abcdef
+        WordFactory wf = new WordFactory("abcdef");
+        //System.out.println("wf = " + wf);
+        WordFactory wfs = new WordFactory("abc");
+        //System.out.println("wf = " + wf);
+
+        // polynomials over integers
+        GenWordPolynomialRing<BigInteger> pf = new GenWordPolynomialRing<BigInteger>(rf, wf);
+        //System.out.println("pf = " + pf);
+        GenWordPolynomialRing<BigInteger> pfs = new GenWordPolynomialRing<BigInteger>(rf, wfs);
+        //System.out.println("pfs = " + pfs);
+
+        GenWordPolynomial<BigInteger> a = pf.random(5).abs();
+        //System.out.println("a = " + a);
+        GenWordPolynomial<BigInteger> as = pfs.random(5).abs();
+        //System.out.println("as = " + as);
+        GenWordPolynomial<BigInteger> asf = pf.valueOf(as);
+        //System.out.println("asf = " + asf);
+        GenWordPolynomial<BigInteger> asfc = asf.contract(pfs);
+        //System.out.println("asfc = " + asfc);
+        assertEquals("as == contract(extend(as)): ", as, asfc);
+
+        // mostly not contractable
+        GenWordPolynomial<BigInteger> ac = a.contract(pfs);
+        //System.out.println("ac = " + ac);
+        assertTrue("contract(a) == 0: " + ac, ac.isZERO() || pf.valueOf(ac).equals(a)); 
+
+        // 1 always contractable
+        a = pf.getONE();
+        ac = a.contract(pfs);
+        //System.out.println("ac = " + ac);
+        assertTrue("contract(1) == 1: ", ac.isONE());
+    }
+
 }

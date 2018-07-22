@@ -1564,4 +1564,46 @@ public final class GenWordPolynomial<C extends RingElem<C>> implements RingElem<
         return n;
     }
 
+
+    /**
+     * GenWordPolynomial contraction.
+     * @param fac GenWordPolynomialRing.
+     * @return this contracted to fac ring, if this in fac ring, null else.
+     */
+    public GenWordPolynomial<C> contract(GenWordPolynomialRing<C> fac) {
+        if (fac == null) {
+            throw new IllegalArgumentException("fac ring may not be null");
+        }
+        GenWordPolynomial<C> S = fac.getZERO();
+        if (this.isZERO()) {
+            return S;
+        }
+        WordFactory wfac = fac.alphabet;
+        //eventually: assert (ring.alphabet.isSubFactory(fac.alphabet));
+        S = S.copy();
+        SortedMap<Word, C> sv = S.val;
+        SortedMap<Word, C> nv = this.val;
+        for (Map.Entry<Word, C> me : nv.entrySet()) {
+            Word e = me.getKey();
+            Word ec = wfac.contract(e);
+            if (ec == null) { // not contractable
+                return fac.getZERO(); // or null?
+            }
+            C y = me.getValue();
+            // sv.put(ec, y);
+            C x = sv.get(ec);
+            if (x != null) {
+                x = x.sum(y);
+                if (!x.isZERO()) {
+                    sv.put(ec, x);
+                } else {
+                    sv.remove(ec);
+                }
+                throw new RuntimeException("x != null: should not happen " + x);
+            }
+            sv.put(ec, y);
+        }
+        return S;
+    }
+
 }
