@@ -10,7 +10,8 @@ JASPATH=..
 LIBPATH=$(HOME)/java/lib
 JLINALG=$(LIBPATH)/jlinalg-api_0.6.jar
 
-CLASSPATH=$(LIBPATH)/log4j.jar:$(LIBPATH)/junit.jar:$(JLINALG):$(JASPATH)
+CLASSPATH=$(LIBPATH)/log4j-api-2.5.jar:$(LIBPATH)/log4j-core-2.5.jar:$(LIBPATH)/junit.jar:$(JLINALG):$(JASPATH)
+#CLASSPATH=$(LIBPATH)/log4j.jar:$(LIBPATH)/junit.jar:$(JLINALG):$(JASPATH)
 #$(LIBPATH)/jas.jar
 
 #DOCOPTS=-package
