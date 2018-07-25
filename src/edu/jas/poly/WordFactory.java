@@ -266,6 +266,24 @@ public final class WordFactory implements MonoidFactory<Word> {
 
 
     /**
+     * Extend variables. Extend number of variables by length(vn). 
+     * @param vn names for extended variables.
+     * @return extended word ring factory.
+     */
+    public WordFactory extend(String[] vn) {
+        String[] vars = new String[length() + vn.length];
+        int i = 0;
+        for (String v : getVars()) {
+            vars[i++] = v;
+	}
+        for (String v : vn) {
+            vars[i++] = v;
+	}
+        return new WordFactory(vars);
+    }
+
+    
+    /**
      * Get the string representation.
      * @see java.lang.Object#toString()
      */

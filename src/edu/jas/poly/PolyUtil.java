@@ -2621,6 +2621,39 @@ public class PolyUtil {
     }
 
 
+   /**
+     * Intersection. Intersection of a list of word polynomials with a
+     * word polynomial ring. The polynomial ring must be a contraction
+     * of the polynomial ring of the list of polynomials,
+     * @param R word polynomial ring
+     * @param F list of word polynomials
+     * @return R \cap F
+     */
+    public static <C extends RingElem<C>> List<GenWordPolynomial<C>> intersect(GenWordPolynomialRing<C> R,
+                    List<GenWordPolynomial<C>> F) {
+        if (F == null || F.isEmpty()) {
+            return F;
+        }
+        GenWordPolynomialRing<C> pfac = F.get(0).ring;
+        // eventually: pfac.alphabet.isSubFactory(R.alphabet)
+        List<GenWordPolynomial<C>> H = new ArrayList<GenWordPolynomial<C>>(F.size());
+        for (GenWordPolynomial<C> p : F) {
+	    if (p == null || p.isZERO()) {
+		continue;
+	    }
+            GenWordPolynomial<C> m = p.contract(R);
+            if (logger.isDebugEnabled()) {
+                logger.debug("intersect contract m = " + m);
+            }
+            if (! m.isZERO()) {
+                H.add(m);
+            }
+        }
+        // throw new RuntimeException("contract(pfac) != R");
+        return H;
+    }
+
+    
     /**
      * Remove all upper variables which do not occur in polynomial.
      * @param p polynomial.

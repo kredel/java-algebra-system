@@ -202,6 +202,30 @@ public final class GenWordPolynomialRing<C extends RingElem<C>> implements RingF
 
 
     /**
+     * Extend variables. Used e.g. in module embedding. Extend number of
+     * variables by i.
+     * @param i number of variables to extend.
+     * @return extended word polynomial ring factory.
+     */
+    public GenWordPolynomialRing<C> extend(int i) {
+        // add module variable names
+        String[] v = GenPolynomialRing.newVars("t", i);
+        return extend(v);
+    }
+
+
+    /**
+     * Extend variables. Extend number of variables by length(vn). 
+     * @param vn names for extended variables.
+     * @return extended polynomial ring factory.
+     */
+    public GenWordPolynomialRing<C> extend(String[] vn) {
+        WordFactory wfe = alphabet.extend(vn);
+        return new GenWordPolynomialRing<C>(coFac, wfe);
+    }
+
+
+    /**
      * Comparison with any other object.
      * @see java.lang.Object#equals(java.lang.Object)
      */
