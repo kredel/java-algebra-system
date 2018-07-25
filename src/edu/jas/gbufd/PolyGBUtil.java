@@ -16,11 +16,16 @@ import edu.jas.gb.SolvableGroebnerBaseAbstract;
 import edu.jas.gb.SolvableGroebnerBaseSeq;
 import edu.jas.gb.SolvableReductionAbstract;
 import edu.jas.gb.SolvableReductionSeq;
+import edu.jas.gb.WordGroebnerBaseAbstract;
+import edu.jas.gb.WordGroebnerBaseSeq;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
+import edu.jas.poly.WordFactory;
+import edu.jas.poly.GenWordPolynomial;
+import edu.jas.poly.GenWordPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingElem;
@@ -396,6 +401,59 @@ public class PolyGBUtil {
     }
 
 
+    /**
+     * Intersection. Generators for the intersection of word ideals.
+     * @param pfac word polynomial ring
+     * @param A list of word polynomials
+     * @param B list of word polynomials
+     * @return generators for (A \cap B) if it exists
+     */
+    public static <C extends GcdRingElem<C>> List<GenWordPolynomial<C>> intersect(GenWordPolynomialRing<C> pfac,
+                    List<GenWordPolynomial<C>> A, List<GenWordPolynomial<C>> B) {
+        if (A == null || A.isEmpty()) { // (0)
+            return B;
+        }
+        if (B == null || B.isEmpty()) { // (0)
+            return A;
+        }
+        int s = A.size() + B.size();
+        List<GenWordPolynomial<C>> L = new ArrayList<GenWordPolynomial<C>>(s);
+        GenWordPolynomialRing<C> tfac = pfac.extend(1);
+        List<GenWordPolynomial<C>> gens = tfac.univariateList();
+        //System.out.println("gens = " + gens);
+        GenWordPolynomial<C> t = gens.get(gens.size()-1);
+        //System.out.println("t = " + t);
+        // make t commute with other variables
+        for (GenWordPolynomial<C> p : gens) {
+            if (t == p) {
+                continue;
+            }
+            GenWordPolynomial<C> c = t.multiply(p).subtract(p.multiply(t)); // t p - p t
+            L.add(c);
+        }       
+        for (GenWordPolynomial<C> p : A) {
+            p = tfac.valueOf(p).multiply(t); // t p
+            L.add(p);
+        }
+        for (GenWordPolynomial<C> p : B) {
+            GenWordPolynomial<C> q = tfac.valueOf(p).multiply(t); 
+            GenWordPolynomial<C> r = tfac.valueOf(p);
+            p = r.subtract(q); // (1-t) p
+            L.add(p);
+        }
+        //System.out.println("L = " + L);
+        WordGroebnerBaseAbstract<C> bb = new WordGroebnerBaseSeq<C>();
+        logger.warn("intersect computing GB");
+        List<GenWordPolynomial<C>> G = bb.GB(L);
+        //System.out.println("G = " + G);
+        if (debug) {
+            logger.debug("intersect GB = " + G);
+        }
+        List<GenWordPolynomial<C>> I = PolyUtil.<C> intersect(pfac, G);
+        return I;
+    }
+
+    
     /**
      * Solvable quotient and remainder via reduction.
      * @param n first solvable polynomial.

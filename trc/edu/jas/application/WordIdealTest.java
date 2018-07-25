@@ -273,7 +273,6 @@ public class WordIdealTest extends TestCase {
     /**
      * Test WordIdeal common zeros.
      */
-    @SuppressWarnings("cast")
     public void testWordIdealCommonZeros() {
         WordIdeal<BigRational> I, J;
         L = new ArrayList<GenWordPolynomial<BigRational>>();
@@ -313,4 +312,80 @@ public class WordIdealTest extends TestCase {
         assertEquals("commonZeroTest( I )", I.commonZeroTest(), 1);
     }
 
+    
+    /**
+     * Test WordIdeal contraction.
+     */
+    public void testContraction() {
+        BigRational coeff = new BigRational(17, 1);
+        String[] vs = new String[] { "beta", "x", "y", "z" };
+        GenWordPolynomialRing<BigRational> fac2 = new GenWordPolynomialRing<BigRational>(coeff, vs);
+
+        WordIdeal<BigRational> I, J, K;
+        L = new ArrayList<GenWordPolynomial<BigRational>>();
+        a = fac2.getZERO();
+        L.add(a);
+        //b = fac2.getONE();
+        //L.add(b);
+
+        b = fac2.random(3).abs();
+        b = fac2.valueOf(b);
+        L.add(b);
+        
+        c = fac.random(4).abs();
+        c = fac2.valueOf(c);
+        L.add(c);
+        
+        I = new WordIdeal<BigRational>(fac2, L, false);
+        //System.out.println("I = " + I);
+        I.doGB();
+        //System.out.println("I = " + I);
+
+        // now intersect with word polynomial ring
+        J = I.intersect(fac);
+        //System.out.println("J = " + J);
+
+        List<GenWordPolynomial<BigRational>> ex = new ArrayList<GenWordPolynomial<BigRational>>();
+        for (GenWordPolynomial<BigRational> p : J.getList()) {
+            GenWordPolynomial<BigRational> pe = fac2.valueOf(p);
+            ex.add(pe);
+        }
+        K = new WordIdeal<BigRational>(fac2, ex);
+        //System.out.println("K = " + K);
+
+        assertTrue("intersect ", I.contains(K));
+    }
+
+
+    /**
+     * Test WordIdeal intersection.
+     */
+    public void testIntersection() {
+        WordIdeal<BigRational> I, J, K;
+
+        // first ideal
+        L = new ArrayList<GenWordPolynomial<BigRational>>();
+        b = fac.random(3).abs();
+        L.add(b);
+        c = fac.random(4).abs();
+        L.add(c);
+        
+        I = new WordIdeal<BigRational>(fac, L, false);
+        System.out.println("I = " + I);
+
+        // second ideal
+        L.clear();
+        a = fac.random(3).abs();
+        L.add(a);
+        
+        J = new WordIdeal<BigRational>(fac, L, false);
+        System.out.println("J = " + J);
+
+        // now intersect with word ideal
+        K = I.intersect(J);
+        System.out.println("I cap J = K = " + K);
+        assertTrue("intersect ", I.contains(K));
+        assertTrue("intersect ", J.contains(K));
+    }
+  
 }

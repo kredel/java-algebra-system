@@ -6,6 +6,7 @@ package edu.jas.poly;
 
 
 import java.util.List;
+import java.util.ArrayList;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -662,11 +663,16 @@ public class GenWordPolynomialTest extends TestCase {
         GenWordPolynomialRing<BigInteger> pfs = new GenWordPolynomialRing<BigInteger>(rf, wfs);
         //System.out.println("pfs = " + pfs);
 
+        List<GenWordPolynomial<BigInteger>> H = new ArrayList<GenWordPolynomial<BigInteger>>();
+
         GenWordPolynomial<BigInteger> a = pf.random(5).abs();
         //System.out.println("a = " + a);
         GenWordPolynomial<BigInteger> as = pfs.random(5).abs();
         //System.out.println("as = " + as);
         GenWordPolynomial<BigInteger> asf = pf.valueOf(as);
+        H.add(asf);
+        H.add(asf.multiply(pfs.random(5).abs()));
+        H.add(pfs.random(5).abs());
         //System.out.println("asf = " + asf);
         GenWordPolynomial<BigInteger> asfc = asf.contract(pfs);
         //System.out.println("asfc = " + asfc);
@@ -674,14 +680,22 @@ public class GenWordPolynomialTest extends TestCase {
 
         // mostly not contractable
         GenWordPolynomial<BigInteger> ac = a.contract(pfs);
+        H.add(a);
         //System.out.println("ac = " + ac);
         assertTrue("contract(a) == 0: " + ac, ac.isZERO() || pf.valueOf(ac).equals(a)); 
 
         // 1 always contractable
         a = pf.getONE();
+        H.add(a);
         ac = a.contract(pfs);
         //System.out.println("ac = " + ac);
         assertTrue("contract(1) == 1: ", ac.isONE());
+
+        // now contract lists of word polynomials
+        //System.out.println("H = " + H);
+        List<GenWordPolynomial<BigInteger>> M = PolyUtil.<BigInteger> intersect(pfs,H);
+        //System.out.println("M = " + M);
+
     }
 
 }
