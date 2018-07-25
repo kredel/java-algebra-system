@@ -15,7 +15,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import mpi.Comm;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import edu.jas.kern.MPJEngine;
 import edu.jas.poly.ExpVector;
@@ -41,7 +42,7 @@ import edu.jas.util.ThreadPool;
 public class GroebnerBaseDistributedHybridMPJ<C extends RingElem<C>> extends GroebnerBaseAbstract<C> {
 
 
-    private static final Logger logger = Logger.getLogger(GroebnerBaseDistributedHybridMPJ.class);
+    private static final Logger logger = LogManager.getLogger(GroebnerBaseDistributedHybridMPJ.class);
 
 
     public final boolean debug = logger.isDebugEnabled();
@@ -476,7 +477,7 @@ public class GroebnerBaseDistributedHybridMPJ<C extends RingElem<C>> extends Gro
 class HybridReducerServerMPJ<C extends RingElem<C>> implements Runnable {
 
 
-    private static final Logger logger = Logger.getLogger(HybridReducerServerMPJ.class);
+    private static final Logger logger = LogManager.getLogger(HybridReducerServerMPJ.class);
 
 
     public final boolean debug = logger.isDebugEnabled();
@@ -679,7 +680,7 @@ class HybridReducerServerMPJ<C extends RingElem<C>> implements Runnable {
 class HybridReducerReceiverMPJ<C extends RingElem<C>> extends Thread {
 
 
-    private static final Logger logger = Logger.getLogger(HybridReducerReceiverMPJ.class);
+    private static final Logger logger = LogManager.getLogger(HybridReducerReceiverMPJ.class);
 
 
     public final boolean debug = logger.isDebugEnabled();
@@ -863,7 +864,7 @@ class HybridReducerReceiverMPJ<C extends RingElem<C>> extends Thread {
 class HybridReducerClientMPJ<C extends RingElem<C>> implements Runnable {
 
 
-    private static final Logger logger = Logger.getLogger(HybridReducerClientMPJ.class);
+    private static final Logger logger = LogManager.getLogger(HybridReducerClientMPJ.class);
 
 
     public final boolean debug = logger.isDebugEnabled();

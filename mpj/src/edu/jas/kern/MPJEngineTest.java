@@ -13,8 +13,6 @@ import junit.framework.TestSuite;
 import mpi.MPI;
 import mpi.Status;
 
-import org.apache.log4j.BasicConfigurator;
-
 
 /**
  * MPJEngine tests with JUnit.
@@ -29,7 +27,6 @@ public class MPJEngineTest extends TestCase {
      */
     public static void main(String[] args) {
         cmdline = args;
-        BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
         MPJEngine.terminate();
     }

@@ -20,7 +20,8 @@ import mpi.MPI;
 import mpi.MPIException;
 import mpi.Status;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import edu.jas.kern.MPJEngine;
 
@@ -35,7 +36,7 @@ import edu.jas.kern.MPJEngine;
 public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
 
 
-    private static final Logger logger = Logger.getLogger(DistHashTableMPJ.class);
+    private static final Logger logger = LogManager.getLogger(DistHashTableMPJ.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();
@@ -481,7 +482,7 @@ public class DistHashTableMPJ<K, V> extends AbstractMap<K, V> {
 class DHTMPJListener<K, V> extends Thread {
 
 
-    private static final Logger logger = Logger.getLogger(DHTMPJListener.class);
+    private static final Logger logger = LogManager.getLogger(DHTMPJListener.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

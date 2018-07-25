@@ -16,8 +16,6 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import mpi.Comm;
 
-import org.apache.log4j.BasicConfigurator;
-
 import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.kern.MPJEngine;
@@ -45,7 +43,6 @@ public class GroebnerBaseDistHybridMPJTest extends TestCase {
      * main
      */
     public static void main(String[] args) throws IOException {
-        BasicConfigurator.configure();
         engine = MPJEngine.getCommunicator(args);
         junit.textui.TestRunner.run(suite());
         engine.Barrier();

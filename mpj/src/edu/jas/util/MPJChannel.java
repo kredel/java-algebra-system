@@ -9,7 +9,8 @@ package edu.jas.util;
 import java.io.IOException;
 import java.util.Arrays;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import edu.jas.kern.MPJEngine;
 
@@ -28,7 +29,7 @@ import mpi.Status;
 public final class MPJChannel {
 
 
-    private static final Logger logger = Logger.getLogger(MPJChannel.class);
+    private static final Logger logger = LogManager.getLogger(MPJChannel.class);
 
 
     public static final int CHANTAG = MPJEngine.TAG + 2;

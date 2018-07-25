@@ -13,8 +13,6 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import mpi.Comm;
 
-import org.apache.log4j.BasicConfigurator;
-
 import edu.jas.kern.MPJEngine;
 
 
@@ -33,7 +31,6 @@ public class DistHashTableMPJTest extends TestCase {
      */
     public static void main(String[] args) throws IOException {
         //long t = System.currentTimeMillis();
-        BasicConfigurator.configure();
         engine = MPJEngine.getCommunicator(args);
         junit.textui.TestRunner.run(suite());
         engine.Barrier();

@@ -16,8 +16,6 @@ import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.log4j.BasicConfigurator;
-
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.GroebnerBaseDistributedEC;
 import edu.jas.gb.GroebnerBaseDistributedHybridEC;
@@ -53,13 +51,7 @@ public class RunMPJGB {
      */
     static boolean doCheck = false;
 
-
-    /**
-     * Enable logging.
-     */
-    static boolean doLog = true;
-
-
+    
     /**
      * main method to be called from commandline <br>
      * Usage: RunMPJGB [seq|par(+)|dist(1)(+)|disthyb|cli] &lt;file&gt;
@@ -84,7 +76,7 @@ public class RunMPJGB {
                         + "<file> " 
                         + "#procs/#threadsPerNode " 
                         + "[machinefile] " 
-                        + "[check] [nolog]";
+                        + "[check]";
 
         if (args.length < 1) {
             System.out.println("args: " + Arrays.toString(args));
@@ -148,10 +140,6 @@ public class RunMPJGB {
         if (j >= 0) {
             doCheck = true;
             RunGB.doCheck = true;
-        }
-        j = RunGB.indexOf(args, "nolog");
-        if (j >= 0) {
-            doLog = false;
         }
 
         int threads = 0;
@@ -224,10 +212,6 @@ public class RunMPJGB {
             return;
         }
         System.out.println("S =\n" + S);
-
-        if (doLog) {
-            BasicConfigurator.configure();
-        }
 
         if (kind.startsWith("seq")) {
             RunGB.runSequential(S, plusextra);
