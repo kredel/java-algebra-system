@@ -74,7 +74,7 @@ MFILE=machines
 #EFILE=$(JASPATH)/examples/ideal_zero.jas
 EFILE=$(JASPATH)/examples/trinks6.jas
 
-tests: jas-mpj.jar
+fmpjtests: jas-mpj.jar
 	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -np $(NP) -machinefile $(MFILE) -class edu.jas.application.RunMPJGB disthybmpj $(EFILE) $(NP)/$(PPN) $(MFILE)
 #	$(FMPJ_CMD) -np $(NP) -machinefile $(MFILE) -class edu.jas.application.RunMPJGB disthybmpj $(EFILE) $(NP)/$(PPN) $(MFILE)
 
@@ -93,7 +93,7 @@ gbhybtest: jas-mpj.jar
 	FMPJ_HOME=$(FMPJ_HOME) $(FMPJ_CMD) -np $(NP) -machinefile $(MFILE) -class edu.jas.gb.GroebnerBaseDistHybridMPJTest 
 
 
-mpjetest: jas-mpj.jar 
+tests: jas-mpj.jar 
 	#export PATH=$(PATH):$(MPJE_BIN); export MPJ_HOME=$(MPJE_HOME); 
 	$(MPJE_BIN)/mpjboot machines
 	$(MPJE_BIN)/$(MPJE_CMD) -np $(NP) edu.jas.application.RunMPJGB disthybmpj $(EFILE) $(NP)/$(PPN) $(MFILE) nolog nocheck
