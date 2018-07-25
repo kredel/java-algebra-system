@@ -70,9 +70,9 @@
   <mkdir dir="${test}"  />
   <mkdir dir="doc"  />
   <mkdir dir="${tmpdist}"  />
-  <!--exec executable="svnlook" outputproperty="svnrev" >
+  <exec executable="svnlook" outputproperty="svnrev" >
    <arg line="youngest /home/SUBVERSION/jas"/>
-  </exec-->
+  </exec>
   <property name="version" value="2.6.${svnrev}" />
   <!--echo message="artifact version = ${artifactId}-${version}"  /-->
 </target>
@@ -207,26 +207,33 @@
          classpath="${cp}" 
          fork="yes" >
     <arg line="${args}"/>
-    <!--
     <jvmarg value="-server"/>
     <jvmarg value="-verbose:gc"/>
     <jvmarg value="-Xmx2900M"/>
     <jvmarg value="-Xms2900M"/>
+    <!--
+    <jvmarg value="-verbose:class"/>
     <jvmarg value="-Dorg.apache.logging.log4j.simplelog.StatusLogger.level=DEBUG"/>
     -->
   </java>
 </target>
 
-<target name="testsingle"
+<target name="junit"
         if="name" 
         depends="vorher" >
   <junit printsummary="yes" 
          fork="no" 
          showoutput="yes"
+         timeout="100"
          haltonfailure="no" >
+     <jvmarg value="-server"/>
+     <jvmarg value="-verbose:gc"/>
+     <jvmarg value="-Xmx2900M"/>
+     <jvmarg value="-Xms2900M"/>
+     <jvmarg value="-ea"/>
      <classpath path="${cp}" />
      <test name="edu.jas.${name}" 
-           outfile="${name}.lst" />
+           outfile="${test}/${name}.lst" />
   </junit>
 </target>
 
@@ -237,12 +244,12 @@
          showoutput="yes"
          timeout="20000"
          haltonfailure="no" >
-     <!--
      <jvmarg value="-server"/>
      <jvmarg value="-verbose:gc"/>
      <jvmarg value="-Xmx2900M"/>
      <jvmarg value="-Xms2900M"/>
      <jvmarg value="-ea"/>
+     <!--
      -->
      <classpath path="${cp}" />
      <formatter type="plain" /> <!-- plain, xml, brief -->

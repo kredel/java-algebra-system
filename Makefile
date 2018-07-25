@@ -21,7 +21,7 @@ LIBPATH=$(HOME)/java/lib
 #JUNITPATH=$(LIBPATH)/junit.jar
 JUNITPATH=$(LIBPATH)/junit-4.12.jar:$(LIBPATH)/hamcrest-core-1.3.jar
 #LOG4JPATH=$(LIBPATH)/log4j-1.2.17.jar
-LOG4JPATH=$(LIBPATH)/log4j-core-2.5.jar:$(LIBPATH)/log4j-api-2.5.jar:$(LIBPATH)/log4j-1.2-api-2.5.jar
+LOG4JPATH=$(LIBPATH)/log4j-1.2-api-2.5.jar:$(LIBPATH)/log4j-core-2.5.jar:$(LIBPATH)/log4j-api-2.5.jar
 #LOG4JPATH=$(LIBPATH)/mylog.jar
 #LOG4JPATH=$(LIBPATH)/nolog.jar
 JOMPPATH=$(LIBPATH)/jomp1.0b.jar
@@ -82,10 +82,10 @@ DOCOPTS=-public -protected -package -author -version
 MYCLASSPATH = $(LOG4JPATH):.:$(JUNITPATH):$(JOMPPATH):$(PYPATH)
 #:$(TNJPATH)
 
-#JAVA_MEM=-Xms1500M -Xmx2900M
-JAVA_MEM=-Xms350M -Xmx800M
+JAVA_MEM=-Xms1500M -Xmx2900M
+#JAVA_MEM=-Xms500M -Xmx900M
 
-SOPTS="-J-cp ../lib/log4j-core-2.5.jar:../lib/log4j-api-2.5.jar:../lib/log4j-1.2-api-2.5.jar:../lib/junit.jar-4.12.jar:../lib/hamcrest-core-1.3.jar:. -J-verbose:gc -J-Xms500M -J-Xmx900M"
+SOPTS="-J-cp ../lib/log4j-core-2.5.jar:../lib/log4j-api-2.5.jar:../lib/log4j-1.2-api-2.5.jar:../lib/junit.jar-4.12.jar:../lib/hamcrest-core-1.3.jar:. -J-verbose:gc -J-Xms1500M -J-Xmx2900M"
 
 
 JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d . -Xlint:unchecked
@@ -388,7 +388,7 @@ tests:
 	make edu.jas.application.RunGB cl="par  examples/trinks6.jas 4" | tee -a tr.out
 	make edu.jas.application.RunGB cl="par+ examples/trinks6.jas 4" | tee -a tr.out
 	cd jython; make tests | tee jsr.out
-	#cd mpj; make tests | tee mpj.out
+	cd mpj; make tests | tee mpj.out
 	#cd mpi; make tests | tee mpi.out
 	cd jlinalg_adapter; make tests | tee ja.out
 	cd commons-math_adapter; make tests | tee ja.out
