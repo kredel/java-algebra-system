@@ -56,10 +56,11 @@
 </li>
 <li><p>Required libraries: 
     <br />
-    <!--a href="../../lib/log4j.jar">lib/log4j.jar  log4j-api </a> (from Apache Log4j version 2), -->
+    <!--a href="../../lib/log4j.jar">lib/log4j.jar  log4j-api </a> (from Apache Log4j version 1.2), -->
     <a href="../../lib/log4j-api.jar">lib/log4j-api.jar</a>, 
-    <a href="../../lib/log4j-core.jar">lib/log4j-core.jar</a>, 
-    <a href="../../lib/log4j-1.2-api.jar">lib/log4j-1.2-api.jar</a> (from Apache Log4j version 2.5),
+    <a href="../../lib/log4j-core.jar">lib/log4j-core.jar</a> 
+    <!--a href="../../lib/log4j-1.2-api.jar">lib/log4j-1.2-api.jar</a--> 
+       (from Apache Log4j version 2.5),
     <br />
     <a href="../../lib/junit-4.12.jar">lib/junit-4.12.jar</a>,
     <a href="../../lib/hamcrest-core-1.3.jar">lib/hamcrest-core-1.3.jar</a>
@@ -158,13 +159,13 @@
      For example
     </p>
 <pre>
-javac -classpath log4j.jar:junit.jar:jas.jar:. -d . src/edu/jas/application/Examples.java
+javac -classpath log4j-api-2.5.jar:log4j-core-2.5.jar:junit.jar:jas.jar:. -d . src/edu/jas/application/Examples.java
 
-java  -classpath log4j.jar:junit.jar:jas.jar:.      edu.jas.application.Examples
+java  -classpath log4j-api-2.5.jar:log4j-core-2.5.jar:junit.jar:jas.jar:.      edu.jas.application.Examples
 </pre>
 
    <p>Make sure that you use the actual jars as described above, for example
-   <code>log4j-api.jar:log4j-core.jar:log4j-1.2-api.jar:junit-4.12.jar:hamcrest-core-1.3.jar</code>
+   <code>log4j-api-2.5.jar:log4j-core-2.5.jar:junit-4.12.jar:hamcrest-core-1.3.jar</code>
    </p>
 
 </li>
@@ -175,7 +176,7 @@ java  -classpath log4j.jar:junit.jar:jas.jar:.      edu.jas.application.Examples
 </li>
 <li><p>JAS is currently developed for Java 8 (OpenJDK 1.8).
     It may eventually not compile under Java 7 (OpenJDK 1.7). 
-    It will <b>no more</b> compile under and Java 6 (OpenJDK 1.6)
+    It will <b>no more</b> compile under Java 6 (OpenJDK 1.6)
     or older versions. 
     </p>
 </li>
@@ -293,14 +294,14 @@ java  -classpath log4j.jar:junit.jar:jas.jar:.      edu.jas.application.Examples
     <code>BasicConfigurator.configure()</code> is no more supported. 
     </p>
 </li>
-<li><p>In case you can not use Apache log4j for some reason, there is an 
+<!--li><p>In case you can not use Apache log4j for some reason, there is an 
     adaptor package <a href="../mylog.jar">mylog.jar</a> 
     which delegates all logging calls to native Java logging.
     </p>
     <p>For Android there is the adaptor package <a href="../droidlog.jar">droidlog.jar</a> 
     which delegates all logging calls to native Android logging.
     </p>
-</li>
+</li-->
 </ul>
 
 
@@ -403,7 +404,7 @@ public class mytests {
     </p>
 </li-->
 <li><p>Be sure you have downloaded the above libraries 
-    <code>log4j-api.jar, log4j-core.jar, log4j-1.2-api.jar, junit-4.12.jar, hamcrest-core-1.3.jar</code>,
+    <code>log4j-api.jar, log4j-core.jar, junit-4.12.jar, hamcrest-core-1.3.jar</code>,
     and <code>jas*-bin.jar</code>. 
     JAS-@VERSION@ is using and has been tested with Jython 2.7.0. 
     </p>
@@ -423,7 +424,7 @@ public class mytests {
 <li><p>Start using JAS, e.g.
     </p>
     <pre>
- jython -J-cp log4j-api.jar:log4j-core.jar:log4j-1.2-api.jar:junit-4.12.jar:hamcrest-core-1.3.jar:. examples/trinks.py
+ jython -J-cp log4j-api.jar:log4j-core.jar:junit-4.12.jar:hamcrest-core-1.3.jar:. examples/trinks.py
     </pre>
     <p>The 
     <a href="../examples/trinks.py" target="py">examples/trinks.py</a>
@@ -444,7 +445,7 @@ public class mytests {
 
 <ul>
 <li><p>Be sure you have downloaded the above libraries 
-    <code>log4j-api.jar, log4j-core.jar, log4j-1.2-api.jar, junit-4.12.jar, hamcrest-core-1.3.jar</code>,
+    <code>log4j-api.jar, log4j-core.jar, junit-4.12.jar, hamcrest-core-1.3.jar</code>,
     and <code>jas*-bin.jar</code>. 
     JAS-@VERSION@ is using and has been tested with JRuby 1.7.23 (Ruby 1.9.3 compatible) 
     </p>
@@ -459,7 +460,7 @@ public class mytests {
 <li><p>Start using JAS, e.g.
     </p>
     <pre>
- jruby -J-cp log4j-api.jar:log4j-core.jar:log4j-1.2-api.jar:junit-4.12.jar:hamcrest-core-1.3.jar:. examples/trinks.rb
+ jruby -J-cp log4j-api.jar:log4j-core.jar:junit-4.12.jar:hamcrest-core-1.3.jar:. examples/trinks.rb
     </pre>
     <p>The 
     <a href="../examples/trinks.rb" target="rb">examples/trinks.rb</a>
@@ -524,7 +525,7 @@ public class mytests {
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Wed Jul 11 23:28:35 CEST 2018
+Last modified: Wed Jul 25 16:27:38 CEST 2018
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
