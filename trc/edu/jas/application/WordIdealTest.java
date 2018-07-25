@@ -371,7 +371,7 @@ public class WordIdealTest extends TestCase {
         L.add(c);
         
         I = new WordIdeal<BigRational>(fac, L, false);
-        System.out.println("I = " + I);
+        //System.out.println("I = " + I);
 
         // second ideal
         L.clear();
@@ -379,7 +379,7 @@ public class WordIdealTest extends TestCase {
         L.add(a);
         
         J = new WordIdeal<BigRational>(fac, L, false);
-        System.out.println("J = " + J);
+        //System.out.println("J = " + J);
 
         // now intersect with word ideal
         K = I.intersect(J);
