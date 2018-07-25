@@ -14,7 +14,8 @@ import mpi.MPI;
 import mpi.MPIException;
 import mpi.Status;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import edu.jas.kern.MPIEngine;
 
@@ -27,7 +28,7 @@ import edu.jas.kern.MPIEngine;
 public final class MPIChannel {
 
 
-    private static final Logger logger = Logger.getLogger(MPIChannel.class);
+    private static final Logger logger = LogManager.getLogger(MPIChannel.class);
 
 
     public static final int CHANTAG = MPIEngine.TAG + 2;

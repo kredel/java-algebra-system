@@ -17,8 +17,6 @@ import junit.framework.TestSuite;
 import mpi.Comm;
 import mpi.MPIException;
 
-import org.apache.log4j.BasicConfigurator;
-
 import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.kern.MPIEngine;
@@ -46,7 +44,6 @@ public class GroebnerBaseDistMPITest extends TestCase {
      * main
      */
     public static void main(String[] args) throws IOException, MPIException {
-        BasicConfigurator.configure();
         engine = MPIEngine.getCommunicator(args);
         junit.textui.TestRunner.run(suite());
         MPIEngine.terminate();

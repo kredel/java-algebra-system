@@ -15,8 +15,6 @@ import mpi.MPI;
 import mpi.MPIException;
 import mpi.Status;
 
-import org.apache.log4j.BasicConfigurator;
-
 
 /**
  * MPIEngine tests with JUnit.
@@ -31,7 +29,6 @@ public class MPIEngineTest extends TestCase {
      */
     public static void main(String[] args) {
         cmdline = args;
-        BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
         MPIEngine.terminate();
     }

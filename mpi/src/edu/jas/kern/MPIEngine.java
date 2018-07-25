@@ -15,7 +15,8 @@ import mpi.MPI;
 import mpi.MPIException;
 import mpi.Status;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 
 /**
@@ -30,7 +31,7 @@ import org.apache.log4j.Logger;
 public final class MPIEngine {
 
 
-    private static final Logger logger = Logger.getLogger(MPIEngine.class);
+    private static final Logger logger = LogManager.getLogger(MPIEngine.class);
 
 
     private static final boolean debug = logger.isDebugEnabled();

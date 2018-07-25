@@ -14,8 +14,6 @@ import junit.framework.TestSuite;
 import mpi.Comm;
 import mpi.MPIException;
 
-import org.apache.log4j.BasicConfigurator;
-
 import edu.jas.kern.MPIEngine;
 
 
@@ -34,7 +32,6 @@ public class DistHashTableMPITest extends TestCase {
      */
     public static void main(String[] args) throws IOException, MPIException {
         //long t = System.currentTimeMillis();
-        BasicConfigurator.configure();
         engine = MPIEngine.getCommunicator(args);
         junit.textui.TestRunner.run(suite());
         MPIEngine.terminate();

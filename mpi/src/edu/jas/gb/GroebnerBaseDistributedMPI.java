@@ -12,7 +12,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.Semaphore;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import edu.jas.kern.MPIEngine;
 import edu.jas.poly.ExpVector;
@@ -38,7 +39,7 @@ import mpi.MPIException;
 public class GroebnerBaseDistributedMPI<C extends RingElem<C>> extends GroebnerBaseAbstract<C> {
 
 
-    private static final Logger logger = Logger.getLogger(GroebnerBaseDistributedMPI.class);
+    private static final Logger logger = LogManager.getLogger(GroebnerBaseDistributedMPI.class);
 
 
     /**
@@ -425,7 +426,7 @@ class MPIReducerServer<C extends RingElem<C>> implements Runnable {
     private final PairList<C> pairlist;
 
 
-    private static final Logger logger = Logger.getLogger(MPIReducerServer.class);
+    private static final Logger logger = LogManager.getLogger(MPIReducerServer.class);
 
 
     /**
@@ -647,7 +648,7 @@ class MPIReducerClient<C extends RingElem<C>> implements Runnable {
     private final ReductionPar<C> red;
 
 
-    private static final Logger logger = Logger.getLogger(MPIReducerClient.class);
+    private static final Logger logger = LogManager.getLogger(MPIReducerClient.class);
 
 
     /**
@@ -813,7 +814,7 @@ class MiMPIReducerServer<C extends RingElem<C>> implements Runnable {
     private final Reduction<C> red;
 
 
-    private static final Logger logger = Logger.getLogger(MiMPIReducerServer.class);
+    private static final Logger logger = LogManager.getLogger(MiMPIReducerServer.class);
 
 
     /**

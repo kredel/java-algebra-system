@@ -15,7 +15,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import mpi.Comm;
 import mpi.MPIException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import edu.jas.kern.MPIEngine;
 import edu.jas.poly.ExpVector;
@@ -39,7 +40,7 @@ import edu.jas.util.ThreadPool;
 public class GroebnerBaseDistributedHybridMPI<C extends RingElem<C>> extends GroebnerBaseAbstract<C> {
 
 
-    private static final Logger logger = Logger.getLogger(GroebnerBaseDistributedHybridMPI.class);
+    private static final Logger logger = LogManager.getLogger(GroebnerBaseDistributedHybridMPI.class);
 
 
     public final boolean debug = logger.isDebugEnabled();
@@ -469,7 +470,7 @@ public class GroebnerBaseDistributedHybridMPI<C extends RingElem<C>> extends Gro
 class HybridReducerServerMPI<C extends RingElem<C>> implements Runnable {
 
 
-    private static final Logger logger = Logger.getLogger(HybridReducerServerMPI.class);
+    private static final Logger logger = LogManager.getLogger(HybridReducerServerMPI.class);
 
 
     public final boolean debug = logger.isDebugEnabled();
@@ -684,7 +685,7 @@ class HybridReducerServerMPI<C extends RingElem<C>> implements Runnable {
 class HybridReducerReceiverMPI<C extends RingElem<C>> extends Thread {
 
 
-    private static final Logger logger = Logger.getLogger(HybridReducerReceiverMPI.class);
+    private static final Logger logger = LogManager.getLogger(HybridReducerReceiverMPI.class);
 
 
     public final boolean debug = logger.isDebugEnabled();
@@ -877,7 +878,7 @@ class HybridReducerReceiverMPI<C extends RingElem<C>> extends Thread {
 class HybridReducerClientMPI<C extends RingElem<C>> implements Runnable {
 
 
-    private static final Logger logger = Logger.getLogger(HybridReducerClientMPI.class);
+    private static final Logger logger = LogManager.getLogger(HybridReducerClientMPI.class);
 
 
     public final boolean debug = logger.isDebugEnabled();

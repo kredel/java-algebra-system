@@ -18,8 +18,6 @@ import java.util.List;
 
 import mpi.MPIException;
 
-import org.apache.log4j.BasicConfigurator;
-
 import edu.jas.gb.GroebnerBaseAbstract;
 import edu.jas.gb.GroebnerBaseDistributedEC;
 import edu.jas.gb.GroebnerBaseDistributedHybridEC;
@@ -57,12 +55,6 @@ public class RunMPIGB {
 
 
     /**
-     * Enable logging.
-     */
-    static boolean doLog = true;
-
-
-    /**
      * main method to be called from commandline <br>
      * Usage: RunMPIGB [seq|par(+)|dist(+)|disthyb|cli] &lt;file&gt;
      * #procs/#threadsPerNode [machinefile]
@@ -86,7 +78,7 @@ public class RunMPIGB {
                         + "<file> " 
                         + "#procs/#threadsPerNode " 
                         + "[machinefile] " 
-                        + "[check] [nolog]";
+                        + "[check]";
 
         if (args.length < 1) {
             System.out.println("args: " + Arrays.toString(args));
@@ -150,10 +142,6 @@ public class RunMPIGB {
         if (j >= 0) {
             doCheck = true;
             RunGB.doCheck = true;
-        }
-        j = RunGB.indexOf(args, "nolog");
-        if (j >= 0) {
-            doLog = false;
         }
 
         int threads = 0;
@@ -226,10 +214,6 @@ public class RunMPIGB {
             return;
         }
         System.out.println("S =\n" + S);
-
-        if (doLog) {
-            BasicConfigurator.configure();
-        }
 
         if (kind.startsWith("seq")) {
             RunGB.runSequential(S, plusextra);
