@@ -455,7 +455,7 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
         GenSolvablePolynomialRing<GenPolynomial<C>> ring = Fp.get(0).ring; // assert != null
         //List<GenSolvablePolynomial<C>> X = generateUnivar( modv, Fp );
         List<GenSolvablePolynomial<GenPolynomial<C>>> X, Y;
-        X = PolynomialList.castToSolvableList(ring.generators()); // todo use modv?
+        X = PolynomialList.castToSolvableList(ring.generators()); // modv used below
         Y = new ArrayList<GenSolvablePolynomial<GenPolynomial<C>>>();
         for (GenSolvablePolynomial<GenPolynomial<C>> x : X) {
              if (x.isConstant()) {
