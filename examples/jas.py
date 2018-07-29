@@ -7,8 +7,6 @@ from java.lang           import System
 from java.io             import StringReader
 from java.util           import ArrayList, List, Collections
 
-from org.apache.log4j    import BasicConfigurator;
-
 from edu.jas.structure   import RingElem, RingFactory, Power
 from edu.jas.arith       import BigInteger, BigRational, BigComplex, BigDecimal,\
                                 ModInteger, ModIntegerRing, ModLong, ModLongRing,\
@@ -86,7 +84,7 @@ Scripting.setLang(Scripting.Lang.Python);
 def startLog():
     '''Configure the log4j system and start logging.
     '''
-    BasicConfigurator.configure();
+    print "BasicConfigurator from log4j version 1 is no more supported, please use log4j2 configuration";
 
 print "Java Algebra System (JAS) version 2.6"
 

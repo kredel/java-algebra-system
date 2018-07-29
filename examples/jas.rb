@@ -17,15 +17,13 @@ java_import "java.io.StringReader"
 java_import "java.util.ArrayList"
 java_import "java.util.Collections"
 
-#require "../lib/log4j.jar"
-java_import "org.apache.log4j.BasicConfigurator";
-java_import "org.apache.log4j.Logger";
+#java_import "org.apache.logging.log4j.Logger";
 
 =begin rdoc
 Configure the log4j system and start logging.
 =end
 def startLog()
-    BasicConfigurator.configure();
+    puts "BasicConfigurator from log4j version 1 is no more supported, please use log4j2 configuration";
 end
 
 #startLog();
