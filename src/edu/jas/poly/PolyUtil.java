@@ -2635,7 +2635,7 @@ public class PolyUtil {
             return F;
         }
         GenWordPolynomialRing<C> pfac = F.get(0).ring;
-        // eventually: pfac.alphabet.isSubFactory(R.alphabet)
+        assert pfac.alphabet.isSubFactory(R.alphabet) : "pfac=" + pfac.alphabet + ", R=" +R.alphabet;
         List<GenWordPolynomial<C>> H = new ArrayList<GenWordPolynomial<C>>(F.size());
         for (GenWordPolynomial<C> p : F) {
 	    if (p == null || p.isZERO()) {

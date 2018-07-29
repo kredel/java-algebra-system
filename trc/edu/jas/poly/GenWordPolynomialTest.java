@@ -671,7 +671,7 @@ public class GenWordPolynomialTest extends TestCase {
         //System.out.println("as = " + as);
         GenWordPolynomial<BigInteger> asf = pf.valueOf(as);
         H.add(asf);
-        H.add(asf.multiply(pfs.random(5).abs()));
+        H.add(asf.multiply(pf.valueOf(pfs.random(5).abs())));
         H.add(pfs.random(5).abs());
         //System.out.println("asf = " + asf);
         GenWordPolynomial<BigInteger> asfc = asf.contract(pfs);
@@ -695,7 +695,12 @@ public class GenWordPolynomialTest extends TestCase {
         //System.out.println("H = " + H);
         List<GenWordPolynomial<BigInteger>> M = PolyUtil.<BigInteger> intersect(pfs,H);
         //System.out.println("M = " + M);
-
+        int i = 0;
+        for (GenWordPolynomial<BigInteger> h : H) {
+            if (!h.contract(pfs).isZERO()) {
+		assertEquals("extend(contract(h)) == h: " + h, h, pf.valueOf(M.get(i++)) ); 
+	    }
+	}
     }
 
 }
