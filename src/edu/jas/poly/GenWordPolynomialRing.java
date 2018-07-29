@@ -593,7 +593,7 @@ public final class GenWordPolynomialRing<C extends RingElem<C>> implements RingF
         if (alphabet.length() <= 4) { // todo, hack for commuative like cases
             GenPolynomialRing<C> cr = new GenPolynomialRing<C>(coFac, alphabet.getVars() );
             GenPolynomialTokenizer pt = new GenPolynomialTokenizer(cr, r);
-            GenPolynomial<C> p = null;
+            GenPolynomial<C> p = cr.getZERO();
             try {
                   p = pt.nextPolynomial();
             } catch (IOException e) {

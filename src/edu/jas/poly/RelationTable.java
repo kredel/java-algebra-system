@@ -804,7 +804,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
             List val = (List) tab.table.get(key);
             //System.out.println("key = " + key + ", val = " + val);
             for (Iterator jt = val.iterator(); jt.hasNext();) {
-                ExpVectorPair ep = (ExpVectorPair) jt.next();
+                ExpVectorPair ep = (ExpVectorPair) jt.next(); // ?? concurrent mod exception 
                 ExpVector e = ep.getFirst();
                 ExpVector f = ep.getSecond();
                 GenSolvablePolynomial<C> p = (GenSolvablePolynomial<C>) jt.next();

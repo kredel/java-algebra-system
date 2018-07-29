@@ -898,7 +898,7 @@ public final class GenWordPolynomial<C extends RingElem<C>> implements RingElem<
         if (this.isZERO()) {
             return this;
         }
-        assert (ring.alphabet == S.ring.alphabet);
+        assert (ring.alphabet == S.ring.alphabet) : " " + ring + " != " + S.ring ;
         GenWordPolynomial<C> p = ring.getZERO().copy();
         SortedMap<Word, C> pv = p.val;
         for (Map.Entry<Word, C> m1 : val.entrySet()) {
