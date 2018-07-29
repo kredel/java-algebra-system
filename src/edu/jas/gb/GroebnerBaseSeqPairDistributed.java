@@ -182,7 +182,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
         logger.debug("dist-list server running");
 
         GenPolynomial<C> p;
-        List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
+        //List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
         CriticalPairList<C> pairlist = null;
         boolean oneInGB = false;
         //int l = F.size();
@@ -195,13 +195,13 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
                 p = p.monic();
                 if (p.isONE()) {
                     oneInGB = true;
-                    G.clear();
-                    G.add(p);
+                    //G.clear();
+                    //G.add(p);
                     //return G; must signal termination to others
                 }
-                if (!oneInGB) {
-                    G.add(p);
-                }
+                //if (!oneInGB) {
+                //    //G.add(p);
+                //}
                 if (pairlist == null) {
                     pairlist = new CriticalPairList<C>(modv, p.ring);
                 }
@@ -227,12 +227,12 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
         DistHashTable<Integer, GenPolynomial<C>> theList = new DistHashTable<Integer, GenPolynomial<C>>(
                         "localhost", DL_PORT);
         theList.init();
-        List<GenPolynomial<C>> al = pairlist.getList();
-        for (int i = 0; i < al.size(); i++) {
+        List<GenPolynomial<C>> G = pairlist.getList();
+        for (int i = 0; i < G.size(); i++) {
             // no wait required
-            GenPolynomial<C> nn = theList.put(Integer.valueOf(i), al.get(i));
+            GenPolynomial<C> nn = theList.put(Integer.valueOf(i), G.get(i));
             if (nn != null) {
-                logger.info("double polynomials " + i + ", nn = " + nn + ", al(i) = " + al.get(i));
+                logger.info("double polynomials " + i + ", nn = " + nn + ", G(i) = " + G.get(i));
             }
         }
 

@@ -1367,7 +1367,7 @@ public class IdealTest extends TestCase {
             Ic.doDecimalApproximation();
             //System.out.println("Ic = " + Ic.isDecimalApproximation());
             assertTrue("is decimal approximation ", Ic.isDecimalApproximation());
-            assertTrue("#droot == ds: ", Ic.droots.size() == ds);
+            assertTrue("#droot == ds: ", Ic.decimalApproximation().size() == ds);
         }
         logger.info("#roots = " + s + ", #vr-dim = " + d);
         assertTrue("#roots(" + s + ") == degree(" + d + "): ", s == d);

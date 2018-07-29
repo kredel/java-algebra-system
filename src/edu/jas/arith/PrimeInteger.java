@@ -241,7 +241,7 @@ public final class PrimeInteger {
             if (e == null) {
                 e = 1;
             } else {
-                e++;
+                e = e + 1;
             }
             F.put(ML, e);
             ML = 1;
@@ -299,7 +299,7 @@ public final class PrimeInteger {
             if (e == null) {
                 e = 1;
             } else {
-                e++;
+                e = e + 1;
             }
             F.put(ML, e);
             ML = java.math.BigInteger.ONE;
@@ -401,7 +401,7 @@ public final class PrimeInteger {
                     if (e == null) {
                         e = 1;
                     } else { // will not happen
-                        e++;
+                        e = e + 1;
                     }
                     F.put(ML, e); 
                     return F;
@@ -422,7 +422,7 @@ public final class PrimeInteger {
                     if (e == null) {
                         e = 1;
                     } else {
-                        e++;
+                        e = e + 1;
                     }
                     F.put(PL, e); 
                     ML = ML / PL;
@@ -467,7 +467,7 @@ public final class PrimeInteger {
             if (e == null) {
                 e = 1;
             } else {
-                e++;
+                e = e + 1;
             }
             F.put(ML, e);
         }
