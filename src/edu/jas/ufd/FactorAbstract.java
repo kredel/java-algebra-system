@@ -248,8 +248,8 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         // kr might not be squarefree so complete factor univariate
         SortedMap<GenPolynomial<C>, Long> slist = baseFactors(kr);
         if (debug && !isFactorization(kr, slist)) {
-            System.out.println("kr    = " + kr);
-            System.out.println("slist = " + slist);
+            logger.warn("kr    = " + kr);
+            logger.warn("slist = " + slist);
             throw new ArithmeticException("no factorization");
         }
         for (Map.Entry<GenPolynomial<C>, Long> me : slist.entrySet()) {
@@ -290,7 +290,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
                 GenPolynomial<C> trial = PolyUfdUtil.<C> backSubstituteKronecker(pfac, utrial, d);
                 ti++;
                 if (ti % 2000 == 0) {
-                    System.out.print("ti(" + ti + ") ");
+                    logger.warn("ti(" + ti + ") ");
                     TimeStatus.checkTime(ti + " % 2000 == 0");
                 }
                 if (!evl.multipleOf(trial.leadingExpVector())) {
@@ -304,11 +304,11 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
                 }
                 trial = trial.monic();
                 if (ti % 15000 == 0) {
-                    System.out.println("\ndl   = " + dl + ", deg(u) = " + deg);
-                    System.out.println("ulist = " + ulist);
-                    System.out.println("kr    = " + kr);
-                    System.out.println("u     = " + u);
-                    System.out.println("trial = " + trial);
+                    logger.warn("\ndl   = " + dl + ", deg(u) = " + deg);
+                    logger.warn("ulist = " + ulist);
+                    logger.warn("kr    = " + kr);
+                    logger.warn("u     = " + u);
+                    logger.warn("trial = " + trial);
                 }
                 GenPolynomial<C> rem = PolyUtil.<C> baseSparsePseudoRemainder(u, trial);
                 //System.out.println(" rem = " + rem);
