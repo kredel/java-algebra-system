@@ -1221,10 +1221,10 @@ public class PolyUtil {
             if (!c.isZERO()) {
                 pv.put(e1, c); // or m1.setValue( c )
             } else {
-                System.out.println("rDiv, P  = " + P);
-                System.out.println("rDiv, c1 = " + c1);
-                System.out.println("rDiv, s  = " + s);
-                System.out.println("rDiv, c  = " + c);
+                logger.warn("rDiv, P  = " + P);
+                logger.warn("rDiv, c1 = " + c1);
+                logger.warn("rDiv, s  = " + s);
+                logger.warn("rDiv, c  = " + c);
                 throw new RuntimeException("something is wrong");
             }
         }
@@ -1260,10 +1260,10 @@ public class PolyUtil {
             if (!c.isZERO()) {
                 pv.put(e1, c); // or m1.setValue( c )
             } else {
-                System.out.println("rDiv, P  = " + P);
-                System.out.println("rDiv, c1 = " + c1);
-                System.out.println("rDiv, s  = " + s);
-                System.out.println("rDiv, c  = " + c);
+                logger.warn("rDiv, P  = " + P);
+                logger.warn("rDiv, c1 = " + c1);
+                logger.warn("rDiv, s  = " + s);
+                logger.warn("rDiv, c  = " + c);
                 throw new RuntimeException("something is wrong");
             }
         }
@@ -1299,9 +1299,9 @@ public class PolyUtil {
             if (!c.isZERO()) {
                 pv.put(e1, c); // or m1.setValue( c )
             } else {
-                System.out.println("pu, c1 = " + c1);
-                System.out.println("pu, s  = " + s);
-                System.out.println("pu, c  = " + c);
+                logger.warn("pu, c1 = " + c1);
+                logger.warn("pu, s  = " + s);
+                logger.warn("pu, c  = " + c);
                 throw new RuntimeException("something is wrong");
             }
         }
@@ -1550,7 +1550,7 @@ public class PolyUtil {
                 }
             }
             if (c.isZERO()) {
-                System.out.println(" no exact division: " + c1 + "/" + s);
+                logger.warn(" no exact division: " + c1 + "/" + s);
                 //throw new ArithmeticException(" no exact division: " + c1 + "/" + s);
             } else {
                 pv.put(e, c); // or m1.setValue( c )
@@ -1590,7 +1590,7 @@ public class PolyUtil {
                 }
             }
             if (c.isZERO()) {
-                System.out.println(" no exact division: " + c1 + "/" + s);
+                logger.warn(" no exact division: " + c1 + "/" + s);
                 //throw new ArithmeticException(" no exact division: " + c1 + "/" + s);
             } else {
                 pv.put(e, c); // or m1.setValue( c )
@@ -2682,8 +2682,7 @@ public class PolyUtil {
         GenPolynomialRing<C> facr = fac.contract(n);
         Map<ExpVector, GenPolynomial<C>> mpr = p.contract(facr);
         if (mpr.size() != 1) {
-            System.out.println(
-                            "upper ex, l = " + l + ", r = " + r + ", p = " + p + ", fac = " + fac.toScript());
+            logger.warn("upper ex, l = " + l + ", r = " + r + ", p = " + p + ", fac = " + fac.toScript());
             throw new RuntimeException("this should not happen " + mpr);
         }
         GenPolynomial<C> pr = mpr.values().iterator().next();
@@ -2723,8 +2722,7 @@ public class PolyUtil {
         GenPolynomialRing<GenPolynomial<C>> rfac = fac.recursive(n);
         GenPolynomial<GenPolynomial<C>> mpr = recursive(rfac, p);
         if (mpr.length() != p.length()) {
-            System.out.println(
-                            "lower ex, l = " + l + ", r = " + r + ", p = " + p + ", fac = " + fac.toScript());
+            logger.warn("lower ex, l = " + l + ", r = " + r + ", p = " + p + ", fac = " + fac.toScript());
             throw new RuntimeException("this should not happen " + mpr);
         }
         RingFactory<C> cf = fac.coFac;
