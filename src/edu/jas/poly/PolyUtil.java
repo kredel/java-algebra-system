@@ -1546,12 +1546,12 @@ public class PolyUtil {
                 GenPolynomial<C> x = c1.remainder(s);
                 if (!x.isZERO()) {
                     logger.info("divide x = " + x);
-                    throw new ArithmeticException(" no exact division: " + c1 + "/" + s);
+                    throw new ArithmeticException("no exact division: " + c1 + "/" + s);
                 }
             }
             if (c.isZERO()) {
-                logger.warn(" no exact division: " + c1 + "/" + s);
-                //throw new ArithmeticException(" no exact division: " + c1 + "/" + s);
+                //logger.warn("no exact division: " + c1 + "/" + s);
+                throw new ArithmeticException("no exact division: " + c1 + "/" + s);
             } else {
                 pv.put(e, c); // or m1.setValue( c )
             }
@@ -1586,12 +1586,12 @@ public class PolyUtil {
                 C x = c1.remainder(s);
                 if (!x.isZERO()) {
                     logger.info("divide x = " + x);
-                    throw new ArithmeticException(" no exact division: " + c1 + "/" + s);
+                    throw new ArithmeticException("no exact division: " + c1 + "/" + s);
                 }
             }
             if (c.isZERO()) {
-                logger.warn(" no exact division: " + c1 + "/" + s);
-                //throw new ArithmeticException(" no exact division: " + c1 + "/" + s);
+                //logger.warn("no exact division: " + c1 + "/" + s);
+                throw new ArithmeticException("no exact division: " + c1 + "/" + s);
             } else {
                 pv.put(e, c); // or m1.setValue( c )
             }
