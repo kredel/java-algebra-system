@@ -83,8 +83,10 @@ Scripting.setLang(Scripting.Lang.Python);
 
 def startLog():
     '''Configure the log4j system and start logging.
+
+    BasicConfigurator from log4j version 1 is no more supported, please use log4j2 configuration.
     '''
-    print "BasicConfigurator from log4j version 1 is no more supported, please use log4j2 configuration";
+    #print "BasicConfigurator from log4j version 1 is no more supported, please use log4j2 configuration";
 
 print "Java Algebra System (JAS) version 2.6"
 

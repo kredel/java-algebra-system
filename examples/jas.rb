@@ -21,9 +21,11 @@ java_import "java.util.Collections"
 
 =begin rdoc
 Configure the log4j system and start logging.
+
+BasicConfigurator from log4j version 1 is no more supported, please use log4j2 configuration.
 =end
 def startLog()
-    puts "BasicConfigurator from log4j version 1 is no more supported, please use log4j2 configuration";
+    #puts "BasicConfigurator from log4j version 1 is no more supported, please use log4j2 configuration";
 end
 
 #startLog();
