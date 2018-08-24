@@ -487,7 +487,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
         C a;
         // add random coeffs and exponents
         for (int i = 0; i < l; i++) {
-            e = ExpVector.EVRAND(nvar, d, q, rnd);
+            e = ExpVector.random(nvar, d, q, rnd);
             a = coFac.random(k, rnd);
             r = (GenSolvablePolynomial<C>) r.sum(a, e);
             // somewhat inefficient but clean

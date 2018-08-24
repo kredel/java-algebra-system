@@ -22,7 +22,7 @@ public final class ExpVectorInteger extends ExpVector
 
 
     /**
-     * The data structure is an array of longs.
+     * The data structure is an array of int.
      */
     /*package*/final int[] val;
 

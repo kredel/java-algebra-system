@@ -696,7 +696,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
         C a;
         // add l random coeffs and exponents
         for (int i = 0; i < l; i++) {
-            e = ExpVector.EVRAND(nvar, d, q, rnd);
+            e = ExpVector.random(nvar, d, q, rnd);
             a = coFac.random(k, rnd);
             r = r.sum(a, e); // somewhat inefficient but clean
             //System.out.println("e = " + e + " a = " + a);
@@ -1061,7 +1061,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
      * Distributive representation as polynomial with all main variables.
      * @return distributive polynomial ring factory.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public GenPolynomialRing<C> distribute() {
         if (!(coFac instanceof GenPolynomialRing)) {
             return this;

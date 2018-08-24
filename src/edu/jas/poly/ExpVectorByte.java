@@ -22,7 +22,7 @@ public final class ExpVectorByte extends ExpVector
 
 
     /**
-     * The data structure is an array of longs.
+     * The data structure is an array of byte.
      */
     /*package*/final byte[] val;
 

@@ -22,7 +22,7 @@ public final class ExpVectorShort extends ExpVector
 
 
     /**
-     * The data structure is an array of longs.
+     * The data structure is an array of short.
      */
     /*package*/final short[] val;
 
