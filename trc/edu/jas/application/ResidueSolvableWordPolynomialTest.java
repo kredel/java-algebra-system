@@ -231,7 +231,7 @@ public class ResidueSolvableWordPolynomialTest extends TestCase {
         //System.out.println("d = " + d);
         //System.out.println("e = " + e);
 
-        ExpVector u = ExpVector.EVRAND(rl, el, q);
+        ExpVector u = ExpVector.random(rl, el, q);
         WordResidue<BigRational> x = rring.random(kl);
         //System.out.println("x = " + x);
         //System.out.println("u = " + u);

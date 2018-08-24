@@ -156,7 +156,7 @@ public class RatGenSolvablePolynomialTest extends TestCase {
         assertEquals("a+(b+c) = (a+b)+c", d, e);
         assertTrue("a+(b+c) = (a+b)+c", d.equals(e));
 
-        ExpVector u = ExpVector.EVRAND(rl, el, q);
+        ExpVector u = ExpVector.random(rl, el, q);
         BigRational x = cfac.random(kl);
 
         b = ring.getONE().multiply(x, u);

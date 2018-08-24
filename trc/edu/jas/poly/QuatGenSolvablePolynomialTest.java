@@ -151,7 +151,7 @@ public class QuatGenSolvablePolynomialTest extends TestCase {
 
         c = fac.random(kl, ll, el, q); //fac.random(ll);
 
-        ExpVector u = ExpVector.EVRAND(rl, el, q);
+        ExpVector u = ExpVector.random(rl, el, q);
         BigQuaternion x = cfac.random(kl);
 
         b = new GenSolvablePolynomial<BigQuaternion>(fac, x, u);

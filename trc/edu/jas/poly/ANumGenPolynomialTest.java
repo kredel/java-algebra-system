@@ -159,7 +159,7 @@ public class ANumGenPolynomialTest extends TestCase {
 
         c = fac.random(ll);
 
-        ExpVector u = ExpVector.EVRAND(rl, el, q);
+        ExpVector u = ExpVector.random(rl, el, q);
         AlgebraicNumber<BigRational> x = cfac.random(kl);
 
         b = new GenPolynomial<AlgebraicNumber<BigRational>>(fac, x, u);

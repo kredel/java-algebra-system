@@ -111,7 +111,7 @@ public class IntGenPolynomialTest extends TestCase {
 
      c = fac.random(kl,ll,el,q);
 
-     ExpVector u = ExpVector.EVRAND(rl,el,q);
+     ExpVector u = ExpVector.random(rl,el,q);
      BigInteger x = BigInteger.IRAND(kl);
 
      b = new GenPolynomial<BigInteger>(fac,x, u);
@@ -196,7 +196,7 @@ public class IntGenPolynomialTest extends TestCase {
  public void testBLAS1() {
      a = fac.random(kl,ll,el,q);
      b = fac.random(kl,ll,el,q);
-     ExpVector ev = ExpVector.EVRAND(rl,el,q);
+     ExpVector ev = ExpVector.random(rl,el,q);
      BigInteger lc = BigInteger.IRAND(kl);
 
      d = a.subtractMultiple(lc,b);
@@ -207,7 +207,7 @@ public class IntGenPolynomialTest extends TestCase {
      e = a.subtract( b.multiply(lc,ev) );
      assertEquals("a - (lc ev) b == a - ((lc ev) b)",d,e);
 
-     ExpVector fv = ExpVector.EVRAND(rl,el,q);
+     ExpVector fv = ExpVector.random(rl,el,q);
      BigInteger tc = BigInteger.IRAND(kl);
 
      d = a.scaleSubtractMultiple(tc,lc,ev,b);

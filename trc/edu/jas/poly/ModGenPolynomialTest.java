@@ -119,7 +119,7 @@ public class ModGenPolynomialTest extends TestCase {
 
      c = fac.random(ll);
 
-     ExpVector u = ExpVector.EVRAND(rl,el,q);
+     ExpVector u = ExpVector.random(rl,el,q);
      ModInteger x = c.leadingBaseCoefficient().ring.random(kl);
 
      b = new GenPolynomial<ModInteger>(fac,x, u);

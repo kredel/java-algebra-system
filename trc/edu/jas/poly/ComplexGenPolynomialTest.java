@@ -117,7 +117,7 @@ public class ComplexGenPolynomialTest extends TestCase {
 
      c = fac.random(ll);
 
-     ExpVector u = ExpVector.EVRAND(rl,el,q);
+     ExpVector u = ExpVector.random(rl,el,q);
      BigComplex x = BigComplex.CRAND(kl);
 
      b = new GenPolynomial<BigComplex>(fac,x, u);

@@ -155,8 +155,8 @@ public class TermOrderTest extends TestCase {
     public void testCompareWeight() {
         float q = (float) 0.9;
 
-        a = ExpVector.EVRAND(5, 10, q);
-        b = ExpVector.EVRAND(5, 10, q);
+        a = ExpVector.random(5, 10, q);
+        b = ExpVector.random(5, 10, q);
         c = a.sum(b);
 
         long[][] w = new long[][] { new long[] { 1l, 1l, 1l, 1l, 1l } };
@@ -188,8 +188,8 @@ public class TermOrderTest extends TestCase {
     public void testCompareWeight2() {
         float q = (float) 0.9;
 
-        a = ExpVector.EVRAND(5, 10, q);
-        b = ExpVector.EVRAND(5, 10, q);
+        a = ExpVector.random(5, 10, q);
+        b = ExpVector.random(5, 10, q);
         c = a.sum(b);
 
         long[][] w = new long[][] { new long[] { 1l, 1l, 1l, 1l, 1l }, new long[] { 1l, 1l, 1l, 1l, 1l } };
@@ -223,8 +223,8 @@ public class TermOrderTest extends TestCase {
         int r = 8;
         int sp = 4;
 
-        a = ExpVector.EVRAND(r, 10, q);
-        b = ExpVector.EVRAND(r, 10, q);
+        a = ExpVector.random(r, 10, q);
+        b = ExpVector.random(r, 10, q);
         c = a.sum(b);
 
         long[][] w = new long[][] { new long[] { 1l, 1l, 1l, 1l, 1l, 1l, 1l, 1l } };
@@ -341,8 +341,8 @@ public class TermOrderTest extends TestCase {
     public void testAscendComparator() {
         float q = (float) 0.9;
 
-        a = ExpVector.EVRAND(5, 10, q);
-        b = ExpVector.EVRAND(5, 10, q);
+        a = ExpVector.random(5, 10, q);
+        b = ExpVector.random(5, 10, q);
         c = a.sum(b);
 
         t = new TermOrder();
@@ -375,8 +375,8 @@ public class TermOrderTest extends TestCase {
         int r = 10;
         int sp = 5;
 
-        a = ExpVector.EVRAND(r, 10, q);
-        b = ExpVector.EVRAND(r, 10, q);
+        a = ExpVector.random(r, 10, q);
+        b = ExpVector.random(r, 10, q);
         c = a.sum(b);
 
         t = new TermOrder(TermOrder.IGRLEX, TermOrder.INVLEX, r, sp);
@@ -410,8 +410,8 @@ public class TermOrderTest extends TestCase {
         long[][] w2 = new long[][] { new long[] { 1l, 2l, 3l, 4l, 5l, 0l, 0l, 0l },
                 new long[] { 0l, 0l, 0l, 0l, 0l, 1l, 2l, 3l } };
 
-        a = ExpVector.EVRAND(r, 10, q);
-        b = ExpVector.EVRAND(r, 10, q);
+        a = ExpVector.random(r, 10, q);
+        b = ExpVector.random(r, 10, q);
         c = a.sum(b);
 
         // t = new TermOrder(w,sp);
@@ -468,8 +468,8 @@ public class TermOrderTest extends TestCase {
     public void testDescendComparator() {
         float q = (float) 0.9;
 
-        a = ExpVector.EVRAND(5, 10, q);
-        b = ExpVector.EVRAND(5, 10, q);
+        a = ExpVector.random(5, 10, q);
+        b = ExpVector.random(5, 10, q);
         c = a.sum(b);
 
         t = new TermOrder();
@@ -502,8 +502,8 @@ public class TermOrderTest extends TestCase {
         int r = 10;
         int sp = 5;
 
-        a = ExpVector.EVRAND(r, 10, q);
-        b = ExpVector.EVRAND(r, 10, q);
+        a = ExpVector.random(r, 10, q);
+        b = ExpVector.random(r, 10, q);
         c = a.sum(b);
 
         t = new TermOrder(TermOrder.IGRLEX, TermOrder.INVLEX, r, sp);
@@ -537,8 +537,8 @@ public class TermOrderTest extends TestCase {
         long[][] w2 = new long[][] { new long[] { 1l, 2l, 3l, 4l, 5l, 0l, 0l, 0l },
                 new long[] { 0l, 0l, 0l, 0l, 0l, 1l, 2l, 3l } };
 
-        a = ExpVector.EVRAND(r, 10, q);
-        b = ExpVector.EVRAND(r, 10, q);
+        a = ExpVector.random(r, 10, q);
+        b = ExpVector.random(r, 10, q);
         c = a.sum(b);
 
         //t = new TermOrder(w,sp);
@@ -595,8 +595,8 @@ public class TermOrderTest extends TestCase {
     public void testException() {
         float q = (float) 0.9;
 
-        a = ExpVector.EVRAND(5, 10, q);
-        b = ExpVector.EVRAND(5, 10, q);
+        a = ExpVector.random(5, 10, q);
+        b = ExpVector.random(5, 10, q);
 
         int wrong = 99;
 
@@ -617,8 +617,8 @@ public class TermOrderTest extends TestCase {
         int r = 10;
         int sp = 5;
 
-        a = ExpVector.EVRAND(r, 10, q);
-        b = ExpVector.EVRAND(r, 10, q);
+        a = ExpVector.random(r, 10, q);
+        b = ExpVector.random(r, 10, q);
 
         int wrong = 99;
 
@@ -637,8 +637,8 @@ public class TermOrderTest extends TestCase {
     public void testCompareException() {
         float q = (float) 0.9;
 
-        a = ExpVector.EVRAND(5, 10, q);
-        b = ExpVector.EVRAND(5, 10, q);
+        a = ExpVector.random(5, 10, q);
+        b = ExpVector.random(5, 10, q);
 
         int notimpl = TermOrder.MAX_EVORD + 2;
         int x = 0;
@@ -663,8 +663,8 @@ public class TermOrderTest extends TestCase {
         int r = 10;
         int sp = 5;
 
-        a = ExpVector.EVRAND(r, 10, q);
-        b = ExpVector.EVRAND(r, 10, q);
+        a = ExpVector.random(r, 10, q);
+        b = ExpVector.random(r, 10, q);
 
         int notimpl = TermOrder.REVITDG + 2;
         int x = 0;
@@ -689,8 +689,8 @@ public class TermOrderTest extends TestCase {
         int r = 10;
         //int sp = 5;
 
-        a = ExpVector.EVRAND(r, 10, q);
-        b = ExpVector.EVRAND(r, 10, q);
+        a = ExpVector.random(r, 10, q);
+        b = ExpVector.random(r, 10, q);
 
         int x = 0;
 

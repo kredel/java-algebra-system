@@ -115,7 +115,7 @@ public class RatPolyGenPolynomialTest extends TestCase {
 
      c = fac.random(ll);
 
-     ExpVector u = ExpVector.EVRAND(rl,el,q);
+     ExpVector u = ExpVector.random(rl,el,q);
      GenPolynomial<BigRational> x = cf.random(kl);
 
      b = new GenPolynomial<GenPolynomial<BigRational>>(fac,x, u);

@@ -163,8 +163,8 @@ public class TermOrderByNameTest extends TestCase {
     public void testCompareWeight() {
         float q = (float) 0.9;
 
-        a = ExpVector.EVRAND(5, 10, q);
-        b = ExpVector.EVRAND(5, 10, q);
+        a = ExpVector.random(5, 10, q);
+        b = ExpVector.random(5, 10, q);
         c = a.sum(b);
 
         long[][] w = new long[][] { new long[] { 1l, 1l, 1l, 1l, 1l } };
@@ -196,8 +196,8 @@ public class TermOrderByNameTest extends TestCase {
     public void testCompareWeight2() {
         float q = (float) 0.9;
 
-        a = ExpVector.EVRAND(5, 10, q);
-        b = ExpVector.EVRAND(5, 10, q);
+        a = ExpVector.random(5, 10, q);
+        b = ExpVector.random(5, 10, q);
         c = a.sum(b);
 
         long[][] w = new long[][] { new long[] { 1l, 1l, 1l, 1l, 1l }, new long[] { 1l, 1l, 1l, 1l, 1l } };
@@ -229,8 +229,8 @@ public class TermOrderByNameTest extends TestCase {
     public void testAscendComparator() {
         float q = (float) 0.9;
 
-        a = ExpVector.EVRAND(5, 10, q);
-        b = ExpVector.EVRAND(5, 10, q);
+        a = ExpVector.random(5, 10, q);
+        b = ExpVector.random(5, 10, q);
         c = a.sum(b);
 
         t = TermOrderByName.DegreeLexicographic;
@@ -264,8 +264,8 @@ public class TermOrderByNameTest extends TestCase {
         int r = 10;
         int sp = 5;
 
-        a = ExpVector.EVRAND(r, 10, q);
-        b = ExpVector.EVRAND(r, 10, q);
+        a = ExpVector.random(r, 10, q);
+        b = ExpVector.random(r, 10, q);
         c = a.sum(b);
 
         t = TermOrderByName.blockOrder(TermOrderByName.DegreeLexicographic, TermOrderByName.Lexicographic, c,
@@ -296,8 +296,8 @@ public class TermOrderByNameTest extends TestCase {
         int r = 8;
         //int sp = 5;
 
-        a = ExpVector.EVRAND(r, 10, q);
-        b = ExpVector.EVRAND(r, 10, q);
+        a = ExpVector.random(r, 10, q);
+        b = ExpVector.random(r, 10, q);
         c = a.sum(b);
 
         //long [][] w  = new long [][] { new long[] { 1l, 2l, 3l, 4l, 5l, 1l, 2l, 3l } };
@@ -357,8 +357,8 @@ public class TermOrderByNameTest extends TestCase {
     public void testDescendComparator() {
         float q = (float) 0.9;
 
-        a = ExpVector.EVRAND(5, 10, q);
-        b = ExpVector.EVRAND(5, 10, q);
+        a = ExpVector.random(5, 10, q);
+        b = ExpVector.random(5, 10, q);
         c = a.sum(b);
 
         t = TermOrderByName.DegreeLexicographic;
@@ -391,8 +391,8 @@ public class TermOrderByNameTest extends TestCase {
         int r = 10;
         int sp = 5;
 
-        a = ExpVector.EVRAND(r, 10, q);
-        b = ExpVector.EVRAND(r, 10, q);
+        a = ExpVector.random(r, 10, q);
+        b = ExpVector.random(r, 10, q);
         c = a.sum(b);
 
         t = TermOrderByName.blockOrder(TermOrderByName.DegreeLexicographic, TermOrderByName.Lexicographic, c,
@@ -423,8 +423,8 @@ public class TermOrderByNameTest extends TestCase {
         int r = 8;
         //int sp = 5;
 
-        a = ExpVector.EVRAND(r, 10, q);
-        b = ExpVector.EVRAND(r, 10, q);
+        a = ExpVector.random(r, 10, q);
+        b = ExpVector.random(r, 10, q);
         c = a.sum(b);
 
         //long [][] w  = new long [][] { new long[] { 1l, 2l, 3l, 4l, 5l, 1l, 2l, 3l } };
@@ -486,9 +486,9 @@ public class TermOrderByNameTest extends TestCase {
         int r = 10;
         int sp = 5;
 
-        a = ExpVector.EVRAND(r, 10, q);
-        b = ExpVector.EVRAND(r, 10, q);
-        c = ExpVector.EVRAND(2, 10, q);
+        a = ExpVector.random(r, 10, q);
+        b = ExpVector.random(r, 10, q);
+        c = ExpVector.random(2, 10, q);
 
         TermOrder t2 = TermOrderByName.REVITDG;
         int x = 0;
@@ -512,8 +512,8 @@ public class TermOrderByNameTest extends TestCase {
         float q = (float) 0.9;
         int r = 10;
 
-        a = ExpVector.EVRAND(r, 10, q);
-        b = ExpVector.EVRAND(2, 10, q);
+        a = ExpVector.random(r, 10, q);
+        b = ExpVector.random(2, 10, q);
 
         int x = 0;
 

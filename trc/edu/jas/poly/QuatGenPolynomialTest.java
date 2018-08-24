@@ -134,7 +134,7 @@ public class QuatGenPolynomialTest extends TestCase {
 
         c = fac.random(kl, ll, el, q);
 
-        ExpVector u = ExpVector.EVRAND(rl, el, q);
+        ExpVector u = ExpVector.random(rl, el, q);
         BigQuaternion x = cfac.random(kl);
 
         b = new GenPolynomial<BigQuaternion>(fac, x, u);

@@ -170,7 +170,7 @@ public class GFGenPolynomialTest extends TestCase {
 
         c = fac.random(ll);
 
-        ExpVector u = ExpVector.EVRAND(rl, el, q);
+        ExpVector u = ExpVector.random(rl, el, q);
         AlgebraicNumber<ModInteger> x = cfac.random(kl);
 
         b = new GenPolynomial<AlgebraicNumber<ModInteger>>(fac, x, u);

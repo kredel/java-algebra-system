@@ -112,7 +112,7 @@ public class RatGenPolynomialTest extends TestCase {
 
      c = fac.random(ll);
 
-     ExpVector u = ExpVector.EVRAND(rl,el,q);
+     ExpVector u = ExpVector.random(rl,el,q);
      BigRational x = BigRational.RNRAND(kl);
 
      b = new GenPolynomial<BigRational>(fac,x, u);
@@ -199,7 +199,7 @@ public class RatGenPolynomialTest extends TestCase {
      a = fac.random(kl,ll,el,q);
      b = fac.random(kl,ll,el,q);
      c = fac.random(kl,3,el*el,q);
-     ExpVector ev = ExpVector.EVRAND(rl,el,q);
+     ExpVector ev = ExpVector.random(rl,el,q);
      BigRational lc = BigRational.RNRAND(kl);
 
      d = a.subtractMultiple(lc,b);
@@ -210,7 +210,7 @@ public class RatGenPolynomialTest extends TestCase {
      e = a.subtract( b.multiply(lc,ev) );
      assertEquals("a - (lc ev) b == a - ((lc ev) b)",d,e);
 
-     ExpVector fv = ExpVector.EVRAND(rl,el,q);
+     ExpVector fv = ExpVector.random(rl,el,q);
      BigRational tc = BigRational.RNRAND(kl);
 
      d = a.scaleSubtractMultiple(tc,lc,ev,b);

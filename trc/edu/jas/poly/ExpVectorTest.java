@@ -114,7 +114,7 @@ public class ExpVectorTest extends TestCase {
     public void testRandom() {
         float q = (float) 0.3;
 
-        a = ExpVector.EVRAND(5, 10, q);
+        a = ExpVector.random(5, 10, q);
         String s = a.toString();
         if (s.indexOf(":") >= 0) {
             s = s.substring(0, s.indexOf(":"));
@@ -135,7 +135,7 @@ public class ExpVectorTest extends TestCase {
     public void testAddition() {
         float q = (float) 0.2;
 
-        a = ExpVector.EVRAND(5, 10, q);
+        a = ExpVector.random(5, 10, q);
 
         b = ExpVector.EVSUM(a, a);
         c = ExpVector.EVDIF(b, a);
@@ -147,8 +147,8 @@ public class ExpVectorTest extends TestCase {
         t = ExpVector.EVMT(b, a);
         assertTrue("a | a+a", t);
 
-        a = ExpVector.EVRAND(5, 10, q);
-        b = ExpVector.EVRAND(5, 10, q);
+        a = ExpVector.random(5, 10, q);
+        b = ExpVector.random(5, 10, q);
 
         c = ExpVector.EVSUM(a, b);
         d = ExpVector.EVSUM(b, a);
@@ -162,8 +162,8 @@ public class ExpVectorTest extends TestCase {
     public void testLcm() {
         float q = (float) 0.2;
 
-        a = ExpVector.EVRAND(5, 10, q);
-        b = ExpVector.EVRAND(5, 10, q);
+        a = ExpVector.random(5, 10, q);
+        b = ExpVector.random(5, 10, q);
         c = ExpVector.EVLCM(a, b);
         d = ExpVector.EVLCM(b, a);
 
@@ -188,8 +188,8 @@ public class ExpVectorTest extends TestCase {
 
         float q = (float) 0.2;
 
-        a = ExpVector.EVRAND(5, 10, q);
-        b = ExpVector.EVRAND(5, 10, q);
+        a = ExpVector.random(5, 10, q);
+        b = ExpVector.random(5, 10, q);
 
         assertTrue("tdeg(a) >= 0", ExpVector.EVTDEG(a) >= 0);
         assertTrue("tdeg(b) >= 0", ExpVector.EVTDEG(b) >= 0);
@@ -214,8 +214,8 @@ public class ExpVectorTest extends TestCase {
 
         float q = (float) 0.2;
 
-        a = ExpVector.EVRAND(5, 10, q);
-        b = ExpVector.EVRAND(5, 10, q);
+        a = ExpVector.random(5, 10, q);
+        b = ExpVector.random(5, 10, q);
         long[][] w = new long[][] { new long[] { 1l, 1l, 1l, 1l, 1l } };
 
         assertTrue("tdeg(a) >= 0", ExpVector.EVTDEG(a) >= 0);
@@ -324,7 +324,7 @@ public class ExpVectorTest extends TestCase {
     public void testRandom2() {
         float q = (float) 0.2;
 
-        a = ExpVector.EVRAND(5, 10, q);
+        a = ExpVector.random(5, 10, q);
         b = ExpVector.create("" + a);
 
         assertEquals("a == b", true, a.equals(b));
@@ -341,7 +341,7 @@ public class ExpVectorTest extends TestCase {
     public void testAddition2() {
         float q = (float) 0.2;
 
-        a = ExpVector.EVRAND(5, 10, q);
+        a = ExpVector.random(5, 10, q);
 
         b = a.sum(a);
         c = b.subtract(a);
@@ -353,8 +353,8 @@ public class ExpVectorTest extends TestCase {
         t = b.multipleOf(a);
         assertTrue("a | a+a", t);
 
-        a = ExpVector.EVRAND(5, 10, q);
-        b = ExpVector.EVRAND(5, 10, q);
+        a = ExpVector.random(5, 10, q);
+        b = ExpVector.random(5, 10, q);
 
         c = a.sum(b);
         d = b.sum(a);
@@ -368,8 +368,8 @@ public class ExpVectorTest extends TestCase {
     public void testLcm2() {
         float q = (float) 0.2;
 
-        a = ExpVector.EVRAND(5, 10, q);
-        b = ExpVector.EVRAND(5, 10, q);
+        a = ExpVector.random(5, 10, q);
+        b = ExpVector.random(5, 10, q);
         c = a.lcm(b);
         d = b.lcm(a);
 
@@ -394,8 +394,8 @@ public class ExpVectorTest extends TestCase {
 
         float q = (float) 0.2;
 
-        a = ExpVector.EVRAND(5, 10, q);
-        b = ExpVector.EVRAND(5, 10, q);
+        a = ExpVector.random(5, 10, q);
+        b = ExpVector.random(5, 10, q);
 
         assertTrue("tdeg(a) >= 0", ExpVector.EVTDEG(a) >= 0);
         assertTrue("tdeg(b) >= 0", ExpVector.EVTDEG(b) >= 0);
@@ -420,8 +420,8 @@ public class ExpVectorTest extends TestCase {
 
         float q = (float) 0.2;
 
-        a = ExpVector.EVRAND(5, 10, q);
-        b = ExpVector.EVRAND(5, 10, q);
+        a = ExpVector.random(5, 10, q);
+        b = ExpVector.random(5, 10, q);
         long[][] w = new long[][] { new long[] { 1l, 1l, 1l, 1l, 1l } };
 
         assertTrue("tdeg(a) >= 0", ExpVector.EVTDEG(a) >= 0);
@@ -531,8 +531,8 @@ public class ExpVectorTest extends TestCase {
         float q = (float) 0.2;
         int rl = 5;
 
-        a = ExpVector.EVRAND(rl, 10, q);
-        b = ExpVector.EVRAND(rl, 10, q);
+        a = ExpVector.random(rl, 10, q);
+        b = ExpVector.random(rl, 10, q);
         BigInteger fv = new BigInteger(0);
         List<BigInteger> v = new ArrayList<BigInteger>(a.length());
         for (int i = 0; i < a.length(); i++) {
