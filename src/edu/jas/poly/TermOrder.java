@@ -171,7 +171,7 @@ public final class TermOrder implements Serializable {
 
                 @Override
                 public int compare(ExpVector e1, ExpVector e2) {
-                    return ExpVector.EVILCP(e1, e2);
+                    return e1.invLexCompareTo(e2);
                 }
             };
             break;
@@ -182,7 +182,7 @@ public final class TermOrder implements Serializable {
 
                 @Override
                 public int compare(ExpVector e1, ExpVector e2) {
-                    return -ExpVector.EVILCP(e1, e2);
+                    return -e1.invLexCompareTo(e2);
                 }
             };
             break;
@@ -193,7 +193,7 @@ public final class TermOrder implements Serializable {
 
                 @Override
                 public int compare(ExpVector e1, ExpVector e2) {
-                    return ExpVector.EVIGLC(e1, e2);
+                    return e1.invGradCompareTo(e2);
                 }
             };
             break;
@@ -204,7 +204,7 @@ public final class TermOrder implements Serializable {
 
                 @Override
                 public int compare(ExpVector e1, ExpVector e2) {
-                    return -ExpVector.EVIGLC(e1, e2);
+                    return -e1.invGradCompareTo(e2);
                 }
             };
             break;
@@ -215,7 +215,7 @@ public final class TermOrder implements Serializable {
 
                 @Override
                 public int compare(ExpVector e1, ExpVector e2) {
-                    return ExpVector.EVRILCP(e1, e2);
+                    return e1.revInvLexCompareTo(e2);
                 }
             };
             break;
@@ -226,7 +226,7 @@ public final class TermOrder implements Serializable {
 
                 @Override
                 public int compare(ExpVector e1, ExpVector e2) {
-                    return -ExpVector.EVRILCP(e1, e2);
+                    return -e1.revInvLexCompareTo(e2);
                 }
             };
             break;
@@ -237,7 +237,7 @@ public final class TermOrder implements Serializable {
 
                 @Override
                 public int compare(ExpVector e1, ExpVector e2) {
-                    return ExpVector.EVRIGLC(e1, e2);
+                    return e1.revInvGradCompareTo(e2);
                 }
             };
             break;
@@ -248,7 +248,7 @@ public final class TermOrder implements Serializable {
 
                 @Override
                 public int compare(ExpVector e1, ExpVector e2) {
-                    return -ExpVector.EVRIGLC(e1, e2);
+                    return -e1.revInvGradCompareTo(e2);
                 }
             };
             break;
@@ -259,7 +259,7 @@ public final class TermOrder implements Serializable {
 
                 @Override
                 public int compare(ExpVector e1, ExpVector e2) {
-                    return -ExpVector.EVITDEGLC(e1, e2); // okay +/-
+                    return -e1.invTdegCompareTo(e2); // okay +/-
                 }
             };
             break;
@@ -270,7 +270,7 @@ public final class TermOrder implements Serializable {
 
                 @Override
                 public int compare(ExpVector e1, ExpVector e2) {
-                    return ExpVector.EVRLITDEGC(e1, e2); // okay +/-
+                    return e1.revLexInvTdegCompareTo(e2); // okay +/-
                 }
             };
             break;
@@ -299,7 +299,7 @@ public final class TermOrder implements Serializable {
 
             @Override
             public int compare(ExpVector e1, ExpVector e2) {
-                return ExpVector.EVIGLC(e1, e2);
+                return e1.invGradCompareTo(e2);
             }
         };
     }
@@ -335,7 +335,7 @@ public final class TermOrder implements Serializable {
 
             @Override
             public int compare(ExpVector e1, ExpVector e2) {
-                return -ExpVector.EVIWLC(weight, e1, e2);
+                return -e1.invWeightCompareTo(weight, e2);
             }
         };
 
@@ -345,7 +345,7 @@ public final class TermOrder implements Serializable {
 
             @Override
             public int compare(ExpVector e1, ExpVector e2) {
-                return +ExpVector.EVIWLC(weight, e1, e2);
+                return +e1.invWeightCompareTo(weight, e2);
                 // return - horder.compare( e1, e2 );
             }
         };
@@ -402,11 +402,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = ExpVector.EVILCP(e1, e2, evbeg1, evend1);
+                        int t = e1.invLexCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return ExpVector.EVILCP(e1, e2, evbeg2, evend2);
+                        return e1.invLexCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -417,11 +417,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = ExpVector.EVILCP(e1, e2, evbeg1, evend1);
+                        int t = e1.invLexCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return -ExpVector.EVILCP(e1, e2, evbeg2, evend2);
+                        return -e1.invLexCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -432,11 +432,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = ExpVector.EVILCP(e1, e2, evbeg1, evend1);
+                        int t = e1.invLexCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return ExpVector.EVIGLC(e1, e2, evbeg2, evend2);
+                        return e1.invGradCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -447,11 +447,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = ExpVector.EVILCP(e1, e2, evbeg1, evend1);
+                        int t = e1.invLexCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return -ExpVector.EVIGLC(e1, e2, evbeg2, evend2);
+                        return -e1.invGradCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -470,11 +470,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVILCP(e1, e2, evbeg1, evend1);
+                        int t = -e1.invLexCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return ExpVector.EVILCP(e1, e2, evbeg2, evend2);
+                        return e1.invLexCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -485,11 +485,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVILCP(e1, e2, evbeg1, evend1);
+                        int t = -e1.invLexCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return -ExpVector.EVILCP(e1, e2, evbeg2, evend2);
+                        return -e1.invLexCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -500,11 +500,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVILCP(e1, e2, evbeg1, evend1);
+                        int t = -e1.invLexCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return ExpVector.EVIGLC(e1, e2, evbeg2, evend2);
+                        return e1.invGradCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -515,11 +515,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVILCP(e1, e2, evbeg1, evend1);
+                        int t = -e1.invLexCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return -ExpVector.EVIGLC(e1, e2, evbeg2, evend2);
+                        return -e1.invGradCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -530,11 +530,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVILCP(e1, e2, evbeg1, evend1);
+                        int t = -e1.invLexCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return ExpVector.EVRILCP(e1, e2, evbeg2, evend2);
+                        return e1.revInvLexCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -545,11 +545,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVILCP(e1, e2, evbeg1, evend1);
+                        int t = -e1.invLexCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return -ExpVector.EVRILCP(e1, e2, evbeg2, evend2);
+                        return -e1.revInvLexCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -560,11 +560,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVILCP(e1, e2, evbeg1, evend1);
+                        int t = -e1.invLexCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return ExpVector.EVRIGLC(e1, e2, evbeg2, evend2);
+                        return e1.revInvGradCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -575,11 +575,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVILCP(e1, e2, evbeg1, evend1);
+                        int t = -e1.invLexCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return -ExpVector.EVRIGLC(e1, e2, evbeg2, evend2);
+                        return -e1.revInvGradCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -598,11 +598,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = ExpVector.EVIGLC(e1, e2, evbeg1, evend1);
+                        int t = e1.invGradCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return ExpVector.EVILCP(e1, e2, evbeg2, evend2);
+                        return e1.invLexCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -613,11 +613,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = ExpVector.EVIGLC(e1, e2, evbeg1, evend1);
+                        int t = e1.invGradCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return -ExpVector.EVILCP(e1, e2, evbeg2, evend2);
+                        return -e1.invLexCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -628,11 +628,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = ExpVector.EVIGLC(e1, e2, evbeg1, evend1);
+                        int t = e1.invGradCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return ExpVector.EVIGLC(e1, e2, evbeg2, evend2);
+                        return e1.invGradCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -643,11 +643,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = ExpVector.EVIGLC(e1, e2, evbeg1, evend1);
+                        int t = e1.invGradCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return -ExpVector.EVIGLC(e1, e2, evbeg2, evend2);
+                        return -e1.invGradCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -666,11 +666,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVIGLC(e1, e2, evbeg1, evend1);
+                        int t = -e1.invGradCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return ExpVector.EVILCP(e1, e2, evbeg2, evend2);
+                        return e1.invLexCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -681,11 +681,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVIGLC(e1, e2, evbeg1, evend1);
+                        int t = -e1.invGradCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return -ExpVector.EVILCP(e1, e2, evbeg2, evend2);
+                        return -e1.invLexCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -696,11 +696,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVIGLC(e1, e2, evbeg1, evend1);
+                        int t = -e1.invGradCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return ExpVector.EVIGLC(e1, e2, evbeg2, evend2);
+                        return e1.invGradCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -711,11 +711,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVIGLC(e1, e2, evbeg1, evend1);
+                        int t = -e1.invGradCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return -ExpVector.EVIGLC(e1, e2, evbeg2, evend2);
+                        return -e1.invGradCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -726,11 +726,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVIGLC(e1, e2, evbeg1, evend1);
+                        int t = -e1.invGradCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return ExpVector.EVRILCP(e1, e2, evbeg2, evend2);
+                        return e1.revInvLexCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -741,11 +741,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVIGLC(e1, e2, evbeg1, evend1);
+                        int t = -e1.invGradCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return -ExpVector.EVRILCP(e1, e2, evbeg2, evend2);
+                        return -e1.revInvLexCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -756,11 +756,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVIGLC(e1, e2, evbeg1, evend1);
+                        int t = -e1.invGradCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return ExpVector.EVRIGLC(e1, e2, evbeg2, evend2);
+                        return e1.revInvGradCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -771,11 +771,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVIGLC(e1, e2, evbeg1, evend1);
+                        int t = -e1.invGradCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return -ExpVector.EVRIGLC(e1, e2, evbeg2, evend2);
+                        return -e1.revInvGradCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -795,11 +795,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = ExpVector.EVRILCP(e1, e2, evbeg1, evend1);
+                        int t = e1.revInvLexCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return ExpVector.EVILCP(e1, e2, evbeg2, evend2);
+                        return e1.invLexCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -810,11 +810,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = ExpVector.EVRILCP(e1, e2, evbeg1, evend1);
+                        int t = e1.revInvLexCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return -ExpVector.EVILCP(e1, e2, evbeg2, evend2);
+                        return -e1.invLexCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -825,11 +825,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = ExpVector.EVRILCP(e1, e2, evbeg1, evend1);
+                        int t = e1.revInvLexCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return ExpVector.EVIGLC(e1, e2, evbeg2, evend2);
+                        return e1.invGradCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -840,11 +840,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = ExpVector.EVRILCP(e1, e2, evbeg1, evend1);
+                        int t = e1.revInvLexCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return -ExpVector.EVIGLC(e1, e2, evbeg2, evend2);
+                        return -e1.invGradCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -855,11 +855,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = ExpVector.EVRILCP(e1, e2, evbeg1, evend1);
+                        int t = e1.revInvLexCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return ExpVector.EVRILCP(e1, e2, evbeg2, evend2);
+                        return e1.revInvLexCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -870,11 +870,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = ExpVector.EVRILCP(e1, e2, evbeg1, evend1);
+                        int t = e1.revInvLexCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return -ExpVector.EVRILCP(e1, e2, evbeg2, evend2);
+                        return -e1.revInvLexCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -885,11 +885,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = ExpVector.EVRILCP(e1, e2, evbeg1, evend1);
+                        int t = e1.revInvLexCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return ExpVector.EVRIGLC(e1, e2, evbeg2, evend2);
+                        return e1.revInvGradCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -900,11 +900,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = ExpVector.EVRILCP(e1, e2, evbeg1, evend1);
+                        int t = e1.revInvLexCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return -ExpVector.EVRIGLC(e1, e2, evbeg2, evend2);
+                        return -e1.revInvGradCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -923,11 +923,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVRILCP(e1, e2, evbeg1, evend1);
+                        int t = -e1.revInvLexCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return ExpVector.EVILCP(e1, e2, evbeg2, evend2);
+                        return e1.invLexCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -938,11 +938,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVRILCP(e1, e2, evbeg1, evend1);
+                        int t = -e1.revInvLexCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return -ExpVector.EVILCP(e1, e2, evbeg2, evend2);
+                        return -e1.invLexCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -953,11 +953,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVRILCP(e1, e2, evbeg1, evend1);
+                        int t = -e1.revInvLexCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return ExpVector.EVRIGLC(e1, e2, evbeg2, evend2);
+                        return e1.revInvGradCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -968,11 +968,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVRILCP(e1, e2, evbeg1, evend1);
+                        int t = -e1.revInvLexCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return -ExpVector.EVIGLC(e1, e2, evbeg2, evend2);
+                        return -e1.invGradCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -983,11 +983,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVRILCP(e1, e2, evbeg1, evend1);
+                        int t = -e1.revInvLexCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return ExpVector.EVRILCP(e1, e2, evbeg2, evend2);
+                        return e1.revInvLexCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -998,11 +998,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVRILCP(e1, e2, evbeg1, evend1);
+                        int t = -e1.revInvLexCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return -ExpVector.EVRILCP(e1, e2, evbeg2, evend2);
+                        return -e1.revInvLexCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -1013,11 +1013,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVRILCP(e1, e2, evbeg1, evend1);
+                        int t = -e1.revInvLexCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return ExpVector.EVRIGLC(e1, e2, evbeg2, evend2);
+                        return e1.revInvGradCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -1028,11 +1028,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVRILCP(e1, e2, evbeg1, evend1);
+                        int t = -e1.revInvLexCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return -ExpVector.EVRIGLC(e1, e2, evbeg2, evend2);
+                        return -e1.revInvGradCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -1051,11 +1051,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = ExpVector.EVRIGLC(e1, e2, evbeg1, evend1);
+                        int t = e1.revInvGradCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return ExpVector.EVILCP(e1, e2, evbeg2, evend2);
+                        return e1.invLexCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -1066,11 +1066,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = ExpVector.EVRIGLC(e1, e2, evbeg1, evend1);
+                        int t = e1.revInvGradCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return -ExpVector.EVILCP(e1, e2, evbeg2, evend2);
+                        return -e1.invLexCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -1081,11 +1081,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = ExpVector.EVRIGLC(e1, e2, evbeg1, evend1);
+                        int t = e1.revInvGradCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return ExpVector.EVIGLC(e1, e2, evbeg2, evend2);
+                        return e1.invGradCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -1096,11 +1096,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = ExpVector.EVRIGLC(e1, e2, evbeg1, evend1);
+                        int t = e1.revInvGradCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return -ExpVector.EVIGLC(e1, e2, evbeg2, evend2);
+                        return -e1.invGradCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -1111,11 +1111,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = ExpVector.EVRIGLC(e1, e2, evbeg1, evend1);
+                        int t = e1.revInvGradCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return ExpVector.EVRILCP(e1, e2, evbeg2, evend2);
+                        return e1.revInvLexCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -1126,11 +1126,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = ExpVector.EVRIGLC(e1, e2, evbeg1, evend1);
+                        int t = e1.revInvGradCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return -ExpVector.EVRILCP(e1, e2, evbeg2, evend2);
+                        return -e1.revInvLexCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -1141,11 +1141,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = ExpVector.EVRIGLC(e1, e2, evbeg1, evend1);
+                        int t = e1.revInvGradCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return ExpVector.EVRIGLC(e1, e2, evbeg2, evend2);
+                        return e1.revInvGradCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -1156,11 +1156,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = ExpVector.EVRIGLC(e1, e2, evbeg1, evend1);
+                        int t = e1.revInvGradCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return -ExpVector.EVRIGLC(e1, e2, evbeg2, evend2);
+                        return -e1.revInvGradCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -1179,11 +1179,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVRIGLC(e1, e2, evbeg1, evend1);
+                        int t = -e1.revInvGradCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return ExpVector.EVILCP(e1, e2, evbeg2, evend2);
+                        return e1.invLexCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -1194,11 +1194,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVRIGLC(e1, e2, evbeg1, evend1);
+                        int t = -e1.revInvGradCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return -ExpVector.EVILCP(e1, e2, evbeg2, evend2);
+                        return -e1.invLexCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -1209,11 +1209,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVRIGLC(e1, e2, evbeg1, evend1);
+                        int t = -e1.revInvGradCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return ExpVector.EVIGLC(e1, e2, evbeg2, evend2);
+                        return e1.invGradCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -1224,11 +1224,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVRIGLC(e1, e2, evbeg1, evend1);
+                        int t = -e1.revInvGradCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return -ExpVector.EVIGLC(e1, e2, evbeg2, evend2);
+                        return -e1.invGradCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -1239,11 +1239,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVRIGLC(e1, e2, evbeg1, evend1);
+                        int t = -e1.revInvGradCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return ExpVector.EVRILCP(e1, e2, evbeg2, evend2);
+                        return e1.revInvLexCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -1254,11 +1254,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVRIGLC(e1, e2, evbeg1, evend1);
+                        int t = -e1.revInvGradCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return -ExpVector.EVRILCP(e1, e2, evbeg2, evend2);
+                        return -e1.revInvLexCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -1269,11 +1269,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVRIGLC(e1, e2, evbeg1, evend1);
+                        int t = -e1.revInvGradCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return ExpVector.EVRIGLC(e1, e2, evbeg2, evend2);
+                        return e1.revInvGradCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -1284,11 +1284,11 @@ public final class TermOrder implements Serializable {
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -ExpVector.EVRIGLC(e1, e2, evbeg1, evend1);
+                        int t = -e1.revInvGradCompareTo(e2, evbeg1, evend1);
                         if (t != 0) {
                             return t;
                         }
-                        return -ExpVector.EVRIGLC(e1, e2, evbeg2, evend2);
+                        return -e1.revInvGradCompareTo(e2, evbeg2, evend2);
                     }
                 };
                 break;
@@ -1323,7 +1323,7 @@ public final class TermOrder implements Serializable {
 
             @Override
             public int compare(ExpVector e1, ExpVector e2) {
-                return ExpVector.EVIGLC(e1, e2);
+                return e1.invGradCompareTo(e2);
             }
         };
     }
