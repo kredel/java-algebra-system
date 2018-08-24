@@ -15,8 +15,8 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.jas.arith.BigRational;
 // import edu.jas.kern.ComputerThreads;
@@ -34,7 +34,7 @@ import edu.jas.poly.PolynomialList;
 public class GBSigBasedTest extends TestCase {
 
 
-    private static final Logger logger = Logger.getLogger(GBSigBasedTest.class);
+    private static final Logger logger = LogManager.getLogger(GBSigBasedTest.class);
 
 
     /**
@@ -42,7 +42,6 @@ public class GBSigBasedTest extends TestCase {
      @param args not used
      */
     public static void main(String[] args) {
-        BasicConfigurator.configure();
         junit.textui.TestRunner.run(suite());
     }
 

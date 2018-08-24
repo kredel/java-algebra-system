@@ -13,8 +13,9 @@ JYTHONPATH=$(HOME)/java/jython2.7.0/jython.jar
 #:$(LIBPATH)/jython.jar
 JRUBYPATH=$(LIBPATH)/jruby.jar:$(HOME)/java/jruby-1.5.6/lib/ruby/1.8
 
-LOG4JPATH=$(LIBPATH)/log4j-core-2.5.jar:$(LIBPATH)/log4j-api-2.5.jar:$(LIBPATH)/log4j-1.2-api-2.5.jar
-CLASSPATH=$(LOG4JPATH):$(LIBPATH)/junit.jar:$(JASPATH):$(LIBPATH)/jas.jar
+LOG4JPATH=$(LIBPATH)/log4j-core-2.5.jar:$(LIBPATH)/log4j-api-2.5.jar
+#:$(LIBPATH)/log4j-1.2-api-2.5.jar
+CLASSPATH=$(LOG4JPATH):$(LIBPATH)/junit-4.12.jar:$(JASPATH):$(LIBPATH)/jas.jar
 
 BOOTCLASSPATH6="/usr/lib64/jvm/java-1.6.0/jre/lib/rt.jar"
 
@@ -45,7 +46,7 @@ jas-jython.jar: $(CLASSES) $(JASPATH)/examples/jas.py services/javax.script.Scri
 	-cp -a $(JASPATH)/examples/jas.py $(JASPATH)/examples/*.class $(JASPATH)/examples/basic_sigbased_gb.py classes
 	#-cp -a $(JASPATH)/examples/jas.pyc classes
 	-cp -a $(JASPATH)/examples/jas.rb classes
-	-cp -a $(JASPATH)/log4j.properties classes
+	-cp -a $(JASPATH)/log4j2.properties classes
 	jar cfM jas-jython.jar -C classes .
 	cp -f jas-jython.jar $(LIBPATH)
 	cp -f jas-jython.jar ..

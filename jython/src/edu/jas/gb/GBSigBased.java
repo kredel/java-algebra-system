@@ -12,7 +12,8 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.GcdRingElem;
@@ -29,7 +30,7 @@ import edu.jas.structure.GcdRingElem;
 public class GBSigBased<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C> {
 
 
-    private static final Logger logger = Logger.getLogger(GBSigBased.class);
+    private static final Logger logger = LogManager.getLogger(GBSigBased.class);
 
 
     private static final boolean debug = logger.isDebugEnabled(); //logger.isInfoEnabled();
