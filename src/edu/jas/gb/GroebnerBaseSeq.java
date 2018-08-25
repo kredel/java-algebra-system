@@ -89,39 +89,6 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
         }
         PairList<C> pairlist = strategy.create( modv, ring ); 
         pairlist.put(G);
-
-        /*
-          GenPolynomial<C> p;
-          List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
-          PairList<C> pairlist = null; 
-          int l = F.size();
-          ListIterator<GenPolynomial<C>> it = F.listIterator();
-          while ( it.hasNext() ) { 
-          p = it.next();
-          if ( p.length() > 0 ) {
-          p = p.monic();
-          if ( p.isONE() ) {
-          G.clear(); G.add( p );
-          return G; // since no threads are activated
-          }
-          G.add( p );
-          if ( pairlist == null ) {
-          //pairlist = new OrderedPairlist<C>( modv, p.ring );
-          pairlist = strategy.create( modv, p.ring );
-          if ( ! p.ring.coFac.isField() ) {
-          throw new IllegalArgumentException("coefficients not from a field");
-          }
-          }
-          // putOne not required
-          pairlist.put( p );
-          } else { 
-          l--;
-          }
-          }
-          if ( l <= 1 ) {
-          return G; // since no threads are activated
-          }
-        */
         logger.info("start " + pairlist); 
 
         Pair<C> pair;

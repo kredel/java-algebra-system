@@ -307,7 +307,18 @@ public class ModuleList<C extends RingElem<C>> implements Serializable {
      * @return polynomial list corresponding to this.
      */
     public PolynomialList<C> getPolynomialList() {
-        GenPolynomialRing<C> pfac = ring.extend(cols);
+	return getPolynomialList(false);
+    }
+
+    
+    /**
+     * Get PolynomialList. Embed module in a polynomial ring.
+     * @see edu.jas.poly.PolynomialList
+     * @param top true for TOP term order, false for POT term order.
+     * @return polynomial list corresponding to this.
+     */
+    public PolynomialList<C> getPolynomialList(boolean top) {
+        GenPolynomialRing<C> pfac = ring.extend(cols, top);
         logger.debug("extended ring = " + pfac);
         //System.out.println("extended ring = " + pfac);
 

@@ -132,6 +132,14 @@ public final class TermOrder implements Serializable {
 
 
     /**
+     * Termorders for modules: TOP or POT. 
+     * POT: position over term (default)
+     * TOP: term over position (new)
+     */
+    public final boolean TOP;
+
+    
+    /**
      * Comparator for ExpVectors.
      */
     public static abstract class EVComparator implements Comparator<ExpVector>, Serializable {
@@ -164,6 +172,7 @@ public final class TermOrder implements Serializable {
         evend1 = Integer.MAX_VALUE;
         evbeg2 = evend1;
         evend2 = evend1;
+        TOP = false;
         switch (evord) { // horder = new EVhorder();
         case TermOrder.LEX: {
             horder = new EVComparator() {
@@ -329,7 +338,8 @@ public final class TermOrder implements Serializable {
         evend1 = weight[0].length;
         evbeg2 = evend1;
         evend2 = evend1;
-
+        TOP = false;
+        
         horder = new EVComparator() {
 
 
@@ -376,6 +386,19 @@ public final class TermOrder implements Serializable {
      * @param split index.
      */
     public TermOrder(int ev1, int ev2, int r, int split) {
+        this(ev1, ev2, r, split, false);
+    }
+    
+        
+    /**
+     * Constructor for given split order.
+     * @param ev1 requested term order indicator for first block.
+     * @param ev2 requested term order indicator for second block.
+     * @param r max number of exponents to compare.
+     * @param split index.
+     * @param top module termorder, if true, default false.
+     */
+    public TermOrder(int ev1, int ev2, int r, int split, boolean top) {
         if (ev1 < MIN_EVORD || MAX_EVORD - 2 < ev1) {
             throw new IllegalArgumentException("invalid split term order 1: " + ev1);
         }
@@ -393,6 +416,9 @@ public final class TermOrder implements Serializable {
             throw new IllegalArgumentException("invalid term order split, r = " + r + ", split = " + split);
         }
         //System.out.println("evbeg2 " + evbeg2 + ", evend2 " + evend2);
+        TOP = top;
+        logger.info("module TermOrder is " + (TOP ? "TOP" : "POT") + ", split = " + split
+                    + ", evord = " + toScriptOrder(evord) + ", evord2 = " + toScriptOrder(evord2)) ;
         switch (evord) { // horder = new EVhorder();
         case TermOrder.LEX: {
             switch (evord2) {
@@ -676,16 +702,29 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.INVLEX: {
-                horder = new EVComparator() {
+                if (!TOP) {
+                    horder = new EVComparator() { // POT
 
+                            @Override
+                            public int compare(ExpVector e1, ExpVector e2) {
+                                int t = -e1.invGradCompareTo(e2, evbeg1, evend1);
+                                if (t != 0) {
+                                    return t;
+                                }
+                                return -e1.invLexCompareTo(e2, evbeg2, evend2);
+                            }
+                        };
+                    break;
+                }
+                horder = new EVComparator() { // TOP
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -e1.invGradCompareTo(e2, evbeg1, evend1);
+                        int t = -e1.invLexCompareTo(e2, evbeg2, evend2);
                         if (t != 0) {
                             return t;
                         }
-                        return -e1.invLexCompareTo(e2, evbeg2, evend2);
+                        return -e1.invGradCompareTo(e2, evbeg1, evend1);
                     }
                 };
                 break;
@@ -706,16 +745,29 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.IGRLEX: {
-                horder = new EVComparator() {
+                if (!TOP) {
+                    horder = new EVComparator() { // POT
 
+                            @Override
+                            public int compare(ExpVector e1, ExpVector e2) {
+                                int t = -e1.invGradCompareTo(e2, evbeg1, evend1);
+                                if (t != 0) {
+                                    return t;
+                                }
+                                return -e1.invGradCompareTo(e2, evbeg2, evend2);
+                            }
+                        };
+                    break;
+                }
+                horder = new EVComparator() { // TOP
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -e1.invGradCompareTo(e2, evbeg1, evend1);
+                        int t = -e1.invGradCompareTo(e2, evbeg2, evend2);
                         if (t != 0) {
                             return t;
                         }
-                        return -e1.invGradCompareTo(e2, evbeg2, evend2);
+                        return -e1.invGradCompareTo(e2, evbeg1, evend1);
                     }
                 };
                 break;
@@ -1766,12 +1818,25 @@ public final class TermOrder implements Serializable {
 
     /**
      * Extend variables. Used e.g. in module embedding. Extend TermOrder by k
-     * elements. <b>Note:</b> todo distinguish TOP and POT orders.
+     * elements. <b>Note:</b> Use POT module term order.
      * @param r current number of variables.
      * @param k number of variables to extend.
      * @return extended TermOrder.
      */
     public TermOrder extend(int r, int k) {
+        return extend(r, k, false);
+    }
+
+
+    /**
+     * Extend variables. Used e.g. in module embedding. Extend TermOrder by k
+     * elements. <b>Note:</b> Now TOP and POT orders are distinguished.
+     * @param r current number of variables.
+     * @param k number of variables to extend.
+     * @param top true for TOP term order, false for POT term order.
+     * @return extended TermOrder.
+     */
+    public TermOrder extend(int r, int k, boolean top) {
         if (weight != null) {
             long[][] w = new long[weight.length][];
             for (int i = 0; i < weight.length; i++) {
@@ -1798,12 +1863,13 @@ public final class TermOrder implements Serializable {
             if (debug) {
                 throw new IllegalArgumentException("TermOrder is already extended: " + this);
             }
-            return new TermOrder(evord, evord2, r + k, evend1 + k);
+            return new TermOrder(evord, evord2, r + k, evend1 + k, top);
         }
         //System.out.println("evord         = " + evord);
         //System.out.println("DEFAULT_EVORD = " + DEFAULT_EVORD);
         //System.out.println("tord          = " + this);
-        return new TermOrder(DEFAULT_EVORD/*evord*/, evord, r + k, k); // don't change to evord, cause REVITDG
+        return new TermOrder(DEFAULT_EVORD/*evord*/, evord, r + k, k, top); // todo param
+               // don't change to evord, cause REVITDG
     }
 
 

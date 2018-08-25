@@ -948,9 +948,21 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
      * @return extended polynomial ring factory.
      */
     public GenPolynomialRing<C> extend(int i) {
+	return extend(i, false);
+    }
+
+    
+    /**
+     * Extend variables. Used e.g. in module embedding. Extend number of
+     * variables by i.
+     * @param i number of variables to extend.
+     * @param top true for TOP term order, false for POT term order.
+     * @return extended polynomial ring factory.
+     */
+    public GenPolynomialRing<C> extend(int i, boolean top) {
         // add module variable names
         String[] v = newVars("e", i);
-        return extend(v);
+        return extend(v, top);
     }
 
 
@@ -961,6 +973,18 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
      * @return extended polynomial ring factory.
      */
     public GenPolynomialRing<C> extend(String[] vn) {
+	return extend(vn, false);
+    }
+
+    
+    /**
+     * Extend variables. Used e.g. in module embedding. Extend number of
+     * variables by length(vn).
+     * @param vn names for extended variables.
+     * @param top true for TOP term order, false for POT term order.
+     * @return extended polynomial ring factory.
+     */
+    public GenPolynomialRing<C> extend(String[] vn, boolean top) {
         if (vn == null || vars == null) {
             throw new IllegalArgumentException("vn and vars may not be null");
         }
@@ -972,8 +996,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
         for (int k = 0; k < vn.length; k++) {
             v[vars.length + k] = vn[k];
         }
-
-        TermOrder to = tord.extend(nvar, i);
+        TermOrder to = tord.extend(nvar, i, top);
         GenPolynomialRing<C> pfac = new GenPolynomialRing<C>(coFac, nvar + i, to, v);
         return pfac;
     }

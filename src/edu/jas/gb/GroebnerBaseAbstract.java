@@ -337,13 +337,24 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
      * @return true, if M is a Groebner base, else false.
      */
     public boolean isGB(ModuleList<C> M) {
+        return isGB(M,false);
+    }
+
+    
+    /**
+     * isGB.
+     * @param M a module basis.
+     * @param top true for TOP term order, false for POT term order.
+     * @return true, if M is a Groebner base, else false.
+     */
+    public boolean isGB(ModuleList<C> M, boolean top) {
         if (M == null || M.list == null) {
             return true;
         }
         if (M.rows == 0 || M.cols == 0) {
             return true;
         }
-        PolynomialList<C> F = M.getPolynomialList();
+        PolynomialList<C> F = M.getPolynomialList(top);
         int modv = M.cols; // > 0  
         return isGB(modv, F.list);
     }
@@ -355,6 +366,17 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
      * @return GB(M), a Groebner base of M.
      */
     public ModuleList<C> GB(ModuleList<C> M) {
+        return GB(M,false);
+    }
+
+    
+    /**
+     * GB.
+     * @param M a module basis.
+     * @param top true for TOP term order, false for POT term order.
+     * @return GB(M), a Groebner base of M wrt. TOP or POT.
+     */
+    public ModuleList<C> GB(ModuleList<C> M, boolean top) {
         ModuleList<C> N = M;
         if (M == null || M.list == null) {
             return N;
@@ -362,8 +384,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
         if (M.rows == 0 || M.cols == 0) {
             return N;
         }
-
-        PolynomialList<C> F = M.getPolynomialList();
+        PolynomialList<C> F = M.getPolynomialList(top);
         int modv = M.cols;
         List<GenPolynomial<C>> G = GB(modv, F.list);
         F = new PolynomialList<C>(F.ring, G);

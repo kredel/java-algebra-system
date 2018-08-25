@@ -12,8 +12,6 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-
-// import edu.jas.structure.RingElem;
 import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
@@ -21,6 +19,7 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.ModuleList;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
+import edu.jas.poly.TermOrderByName;
 
 
 /**
@@ -29,7 +28,6 @@ import edu.jas.poly.TermOrder;
  */
 
 public class ModGroebnerBaseTest extends TestCase {
-
 
 
     /**
@@ -80,7 +78,7 @@ public class ModGroebnerBaseTest extends TestCase {
     List<GenPolynomial<BigRational>> V;
 
 
-    ModuleList<BigRational> M, N;
+    ModuleList<BigRational> M, N, K;
 
 
     GroebnerBaseAbstract<BigRational> mbb;
@@ -107,7 +105,7 @@ public class ModGroebnerBaseTest extends TestCase {
     @Override
     protected void setUp() {
         coeff = new BigRational();
-        tord = new TermOrder();
+        tord = TermOrderByName.DEFAULT; // INVLEX
         fac = new GenPolynomialRing<BigRational>(coeff, rl, tord);
         mbb = new GroebnerBaseSeq<BigRational>(); //coeff);
         a = b = c = d = e = null;
@@ -135,9 +133,8 @@ public class ModGroebnerBaseTest extends TestCase {
     /**
      * Test sequential GBase.
      */
-    public void testSequentialModGB() {
+    public void xtestSequentialModGB() {
         L = new ArrayList<List<GenPolynomial<BigRational>>>();
-
         V = new ArrayList<GenPolynomial<BigRational>>();
         V.add(a);
         V.add(fac.getZERO());
@@ -190,7 +187,7 @@ public class ModGroebnerBaseTest extends TestCase {
     /**
      * Test parallel GBase.
      */
-    public void testParallelModGB() {
+    public void xtestParallelModGB() {
         mbb = new GroebnerBaseParallel<BigRational>(); //coeff);
 
         L = new ArrayList<List<GenPolynomial<BigRational>>>();
@@ -241,6 +238,48 @@ public class ModGroebnerBaseTest extends TestCase {
         N = mbb.GB(M);
         assertTrue("isGB( { (a,b,c,d) } )", mbb.isGB(N));
         //System.out.println("N = " + N );
+    }
+
+    
+    /**
+     * Test sequential GBase with TOP and POT term order.
+     */
+    public void testSequentialModTOPGB() {
+        System.out.println("a = " + a);
+        System.out.println("b = " + b);
+
+        L = new ArrayList<List<GenPolynomial<BigRational>>>();
+        V = new ArrayList<GenPolynomial<BigRational>>();
+        V.add(a);
+        V.add(fac.getZERO());
+        V.add(fac.getONE());
+        L.add(V);
+        M = new ModuleList<BigRational>(fac, L);
+        assertTrue("isGB( { (a,0,1) } )", mbb.isGB(M));
+
+        N = mbb.GB(M);
+        assertTrue("is( { (a,0,1) } )", mbb.isGB(N));
+
+        K = mbb.GB(M, true);
+        assertTrue("is( { (a,0,1) } )", mbb.isGB(K, true));
+	assertEquals("N == K", N, K);
+
+        V = new ArrayList<GenPolynomial<BigRational>>();
+        V.add(b);
+        V.add(fac.getONE());
+        V.add(fac.getZERO());
+        L.add(V);
+        M = new ModuleList<BigRational>(fac, L);
+        System.out.println("M = " + M);
+
+        N = mbb.GB(M);
+        assertTrue("isGB( { (a,0,1),(b,1,0) } )", mbb.isGB(N));
+        System.out.println("N = " + N);
+
+        K = mbb.GB(M,true);
+        assertTrue("is( { (a,0,1) } )", mbb.isGB(K, true));
+        System.out.println("K = " + K);
+        //todo	assertEquals("N == K", N, K);
     }
 
 }
