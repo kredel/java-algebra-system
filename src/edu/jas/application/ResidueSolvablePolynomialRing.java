@@ -608,7 +608,20 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>> extends
      */
     @Override
     public ResidueSolvablePolynomialRing<C> extend(int i) {
-        GenPolynomialRing<SolvableResidue<C>> pfac = super.extend(i);
+        return extend(i, false);
+    }
+
+    
+    /**
+     * Extend variables. Used e.g. in module embedding. Extend number of
+     * variables by i.
+     * @param i number of variables to extend.
+     * @param top true for TOP term order, false for POT term order.
+     * @return extended solvable polynomial ring factory.
+     */
+    @Override
+    public ResidueSolvablePolynomialRing<C> extend(int i, boolean top) {
+        GenPolynomialRing<SolvableResidue<C>> pfac = super.extend(i, top);
         ResidueSolvablePolynomialRing<C> spfac = new ResidueSolvablePolynomialRing<C>(pfac.coFac, pfac.nvar,
                         pfac.tord, pfac.getVars());
         spfac.table.extend(this.table);
@@ -620,12 +633,25 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>> extends
     /**
      * Extend variables. Used e.g. in module embedding. Extend number of
      * variables by i.
-     * @param vs names for extended variables.
+     * @param vn names for extended variables.
      * @return extended solvable polynomial ring factory.
      */
     @Override
-    public ResidueSolvablePolynomialRing<C> extend(String[] vs) {
-        GenPolynomialRing<SolvableResidue<C>> pfac = super.extend(vs);
+    public ResidueSolvablePolynomialRing<C> extend(String[] vn) {
+        return extend(vn, false);
+    }
+
+    
+    /**
+     * Extend variables. Used e.g. in module embedding. Extend number of
+     * variables by i.
+     * @param vn names for extended variables.
+     * @param top true for TOP term order, false for POT term order.
+     * @return extended solvable polynomial ring factory.
+     */
+    @Override
+    public ResidueSolvablePolynomialRing<C> extend(String[] vn, boolean top) {
+        GenPolynomialRing<SolvableResidue<C>> pfac = super.extend(vn, top);
         ResidueSolvablePolynomialRing<C> spfac = new ResidueSolvablePolynomialRing<C>(pfac.coFac, pfac.nvar,
                         pfac.tord, pfac.getVars());
         spfac.table.extend(this.table);
@@ -633,7 +659,7 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>> extends
         return spfac;
     }
 
-
+    
     /**
      * Contract variables. Used e.g. in module embedding. Contract number of
      * variables by i.

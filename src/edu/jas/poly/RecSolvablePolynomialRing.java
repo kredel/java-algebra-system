@@ -609,7 +609,20 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
      */
     @Override
     public RecSolvablePolynomialRing<C> extend(int i) {
-        GenSolvablePolynomialRing<GenPolynomial<C>> pfac = super.extend(i);
+        return extend(i,false);
+    }
+
+
+    /**
+     * Extend variables. Used e.g. in module embedding. Extend number of
+     * variables by i.
+     * @param i number of variables to extend.
+     * @param top true for TOP term order, false for POT term order.
+     * @return extended solvable polynomial ring factory.
+     */
+    @Override
+    public RecSolvablePolynomialRing<C> extend(int i, boolean top) {
+        GenSolvablePolynomialRing<GenPolynomial<C>> pfac = super.extend(i, top);
         RecSolvablePolynomialRing<C> spfac = new RecSolvablePolynomialRing<C>(pfac.coFac, pfac.nvar,
                         pfac.tord, pfac.vars, pfac.table);
         //spfac.table.extend(this.table); // pfac.table
@@ -627,10 +640,24 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
      */
     @Override
     public RecSolvablePolynomialRing<C> extend(String[] vs) {
-        GenSolvablePolynomialRing<GenPolynomial<C>> pfac = super.extend(vs);
+        return extend(vs, false);
+    }
+
+    
+    /**
+     * Extend variables. Used e.g. in module embedding. Extend number of
+     * variables by length(vn). New variables commute with the exiting
+     * variables.
+     * @param vs names for extended variables.
+     * @param top true for TOP term order, false for POT term order.
+     * @return extended polynomial ring factory.
+     */
+    @Override
+    public RecSolvablePolynomialRing<C> extend(String[] vs, boolean top) {
+        GenSolvablePolynomialRing<GenPolynomial<C>> pfac = super.extend(vs, top);
         RecSolvablePolynomialRing<C> spfac = new RecSolvablePolynomialRing<C>(pfac.coFac, pfac.nvar,
                         pfac.tord, pfac.vars, pfac.table);
-        //spfac.table.extend(this.table); // pfac.table??
+        //spfac.table.extend(this.table); // is in pfac.table
         spfac.coeffTable.extend(this.coeffTable);
         return spfac;
     }

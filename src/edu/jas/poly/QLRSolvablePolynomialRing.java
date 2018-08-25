@@ -658,7 +658,20 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      */
     @Override
     public QLRSolvablePolynomialRing<C,D> extend(int i) {
-        GenPolynomialRing<C> pfac = super.extend(i);
+        return extend(i,false);
+    }
+
+    
+    /**
+     * Extend variables. Used e.g. in module embedding. Extend number of
+     * variables by i.
+     * @param i number of variables to extend.
+     * @param top true for TOP term order, false for POT term order.
+     * @return extended solvable polynomial ring factory.
+     */
+    @Override
+    public QLRSolvablePolynomialRing<C,D> extend(int i, boolean top) {
+        GenPolynomialRing<C> pfac = super.extend(i, top);
         QLRSolvablePolynomialRing<C,D> spfac = new QLRSolvablePolynomialRing<C,D>(pfac.coFac, pfac.nvar,
                         pfac.tord, pfac.getVars());
         spfac.table.extend(this.table);
@@ -666,7 +679,39 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
         return spfac;
     }
 
+    
+    /**
+     * Extend variables. Used e.g. in module embedding. Extend number of
+     * variables by length(vn). New variables commute with the exiting
+     * variables.
+     * @param vn names for extended variables.
+     * @return extended polynomial ring factory.
+     */
+    @Override
+    public QLRSolvablePolynomialRing<C,D> extend(String[] vn) {
+        return extend(vn, false);
+    }
 
+    
+    /**
+     * Extend variables. Used e.g. in module embedding. Extend number of
+     * variables by length(vn). New variables commute with the exiting
+     * variables.
+     * @param vn names for extended variables.
+     * @param top true for TOP term order, false for POT term order.
+     * @return extended polynomial ring factory.
+     */
+    @Override
+    public QLRSolvablePolynomialRing<C,D> extend(String[] vn, boolean top) {
+        GenPolynomialRing<C> pfac = super.extend(vn, top);
+        QLRSolvablePolynomialRing<C,D> spfac = new QLRSolvablePolynomialRing<C,D>(pfac.coFac, pfac.nvar,
+                        pfac.tord, pfac.vars);
+        spfac.table.extend(this.table);
+        spfac.polCoeff.coeffTable.extend(this.polCoeff.coeffTable);
+        return spfac;
+    }
+    
+    
     /**
      * Contract variables. Used e.g. in module embedding. Contract number of
      * variables by i.

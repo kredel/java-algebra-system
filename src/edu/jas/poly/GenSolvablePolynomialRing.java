@@ -625,7 +625,20 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
      */
     @Override
     public GenSolvablePolynomialRing<C> extend(int i) {
-        GenPolynomialRing<C> pfac = super.extend(i);
+        return extend(i,false);
+    }
+
+    
+    /**
+     * Extend variables. Used e.g. in module embedding. Extend number of
+     * variables by i. New variables commute with the exiting variables.
+     * @param i number of variables to extend.
+     * @param top true for TOP term order, false for POT term order.
+     * @return extended solvable polynomial ring factory.
+     */
+    @Override
+    public GenSolvablePolynomialRing<C> extend(int i, boolean top) {
+        GenPolynomialRing<C> pfac = super.extend(i, top);
         GenSolvablePolynomialRing<C> spfac = new GenSolvablePolynomialRing<C>(pfac.coFac, pfac.nvar,
                         pfac.tord, pfac.vars);
         spfac.table.extend(this.table);
@@ -642,7 +655,21 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
      */
     @Override
     public GenSolvablePolynomialRing<C> extend(String[] vn) {
-        GenPolynomialRing<C> pfac = super.extend(vn);
+        return extend(vn, false);
+    }
+
+    
+    /**
+     * Extend variables. Used e.g. in module embedding. Extend number of
+     * variables by length(vn). New variables commute with the exiting
+     * variables.
+     * @param vn names for extended variables.
+     * @param top true for TOP term order, false for POT term order.
+     * @return extended polynomial ring factory.
+     */
+    @Override
+    public GenSolvablePolynomialRing<C> extend(String[] vn, boolean top) {
+        GenPolynomialRing<C> pfac = super.extend(vn, top);
         GenSolvablePolynomialRing<C> spfac = new GenSolvablePolynomialRing<C>(pfac.coFac, pfac.nvar,
                         pfac.tord, pfac.vars);
         //GenSolvablePolynomialRing<C> spfac = new GenSolvablePolynomialRing<C>(pfac.coFac, pfac);
