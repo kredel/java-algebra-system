@@ -643,7 +643,20 @@ public class ResidueSolvableWordPolynomialRing<C extends GcdRingElem<C>> extends
      */
     @Override
     public ResidueSolvableWordPolynomialRing<C> extend(int i) {
-        GenSolvablePolynomialRing<WordResidue<C>> pfac = super.extend(i);
+        return extend(i, false);
+    }
+
+    
+    /**
+     * Extend variables. Used e.g. in module embedding. Extend number of
+     * variables by i.
+     * @param i number of variables to extend.
+     * @param top true for TOP term order, false for POT term order.
+     * @return extended solvable polynomial ring factory.
+     */
+    @Override
+    public ResidueSolvableWordPolynomialRing<C> extend(int i, boolean top) {
+        GenSolvablePolynomialRing<WordResidue<C>> pfac = super.extend(i, top);
         ResidueSolvableWordPolynomialRing<C> spfac = new ResidueSolvableWordPolynomialRing<C>(pfac.coFac,
                         pfac.nvar, pfac.tord, pfac.getVars());
         spfac.table.extend(this.table); 
@@ -661,7 +674,21 @@ public class ResidueSolvableWordPolynomialRing<C extends GcdRingElem<C>> extends
      */
     @Override
     public ResidueSolvableWordPolynomialRing<C> extend(String[] vs) {
-        GenSolvablePolynomialRing<WordResidue<C>> pfac = super.extend(vs);
+        return extend(vs, false);
+    }
+
+    
+    /**
+     * Extend variables. Used e.g. in module embedding. Extend number of
+     * variables by length(vn). New variables commute with the exiting
+     * variables.
+     * @param vs names for extended variables.
+     * @param top true for TOP term order, false for POT term order.
+     * @return extended polynomial ring factory.
+     */
+    @Override
+    public ResidueSolvableWordPolynomialRing<C> extend(String[] vs, boolean top) {
+        GenSolvablePolynomialRing<WordResidue<C>> pfac = super.extend(vs, top);
         ResidueSolvableWordPolynomialRing<C> spfac = new ResidueSolvableWordPolynomialRing<C>(pfac.coFac,
                         pfac.nvar, pfac.tord, pfac.getVars());
         spfac.table.extend(this.table); 
