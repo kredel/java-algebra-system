@@ -661,6 +661,17 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
      * @return true, if M is a left Groebner base, else false.
      */
     public boolean isLeftGB(ModuleList<C> M) {
+        return isLeftGB(M,false);
+    }
+
+
+    /**
+     * Module left Groebner base test.
+     * @param M a module basis.
+     * @param top true for TOP term order, false for POT term order.
+     * @return true, if M is a left Groebner base, else false.
+     */
+    public boolean isLeftGB(ModuleList<C> M, boolean top) {
         if (M == null || M.list == null) {
             return true;
         }
@@ -668,7 +679,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
             return true;
         }
         int modv = M.cols; // > 0  
-        PolynomialList<C> F = M.getPolynomialList();
+        PolynomialList<C> F = M.getPolynomialList(top);
         return isLeftGB(modv, F.castToSolvableList());
     }
 
@@ -678,8 +689,19 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
      * @param M a module basis.
      * @return leftGB(M) a left Groebner base for M.
      */
-    @SuppressWarnings("unchecked")
     public ModuleList<C> leftGB(ModuleList<C> M) {
+        return leftGB(M,false);
+    }
+
+
+    /**
+     * Left Groebner base using pairlist class.
+     * @param M a module basis.
+     * @param top true for TOP term order, false for POT term order.
+     * @return leftGB(M) a left Groebner base for M.
+     */
+    @SuppressWarnings("unchecked")
+    public ModuleList<C> leftGB(ModuleList<C> M, boolean top) {
         ModuleList<C> N = M;
         if (M == null || M.list == null) {
             return N;
@@ -687,7 +709,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
         if (M.rows == 0 || M.cols == 0) {
             return N;
         }
-        PolynomialList<C> F = M.getPolynomialList();
+        PolynomialList<C> F = M.getPolynomialList(top);
         if (debug) {
             logger.info("F left +++++++++++++++++++ \n" + F);
         }
@@ -709,13 +731,24 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
      * @return true, if M is a twosided Groebner base, else false.
      */
     public boolean isTwosidedGB(ModuleList<C> M) {
+        return isTwosidedGB(M,false);
+    }
+
+
+    /**
+     * Module twosided Groebner base test.
+     * @param M a module basis.
+     * @param top true for TOP term order, false for POT term order.
+     * @return true, if M is a twosided Groebner base, else false.
+     */
+    public boolean isTwosidedGB(ModuleList<C> M, boolean top) {
         if (M == null || M.list == null) {
             return true;
         }
         if (M.rows == 0 || M.cols == 0) {
             return true;
         }
-        PolynomialList<C> F = M.getPolynomialList();
+        PolynomialList<C> F = M.getPolynomialList(top);
         int modv = M.cols; // > 0  
         return isTwosidedGB(modv, F.castToSolvableList());
     }
@@ -724,10 +757,21 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
     /**
      * Twosided Groebner base using pairlist class.
      * @param M a module basis.
+     * @return twosidedGB(M) a twosided Groebner base for M.
+     */
+    public ModuleList<C> twosidedGB(ModuleList<C> M) {
+        return twosidedGB(M,false);
+    }
+
+
+    /**
+     * Twosided Groebner base using pairlist class.
+     * @param M a module basis.
+     * @param top true for TOP term order, false for POT term order.
      * @return tsGB(M) a twosided Groebner base for M.
      */
     @SuppressWarnings("unchecked")
-    public ModuleList<C> twosidedGB(ModuleList<C> M) {
+    public ModuleList<C> twosidedGB(ModuleList<C> M, boolean top) {
         ModuleList<C> N = M;
         if (M == null || M.list == null) {
             return N;
@@ -735,7 +779,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
         if (M.rows == 0 || M.cols == 0) {
             return N;
         }
-        PolynomialList<C> F = M.getPolynomialList();
+        PolynomialList<C> F = M.getPolynomialList(top);
         GenSolvablePolynomialRing<C> sring = (GenSolvablePolynomialRing<C>) F.ring;
         int modv = M.cols;
         List<GenSolvablePolynomial<C>> G = twosidedGB(modv, F.castToSolvableList());
@@ -751,14 +795,28 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
      * @return true, if M is a right Groebner base, else false.
      */
     public boolean isRightGB(ModuleList<C> M) {
+        return isRightGB(M,false);
+    }
+
+
+    /**
+     * Module right Groebner base test.
+     * @param M a module basis.
+     * @param top true for TOP term order, false for POT term order.
+     * @return true, if M is a right Groebner base, else false.
+     */
+    public boolean isRightGB(ModuleList<C> M, boolean top) {
         if (M == null || M.list == null) {
             return true;
         }
         if (M.rows == 0 || M.cols == 0) {
             return true;
         }
+        if (top) {
+            logger.warn("computation of rightGB with TOP not possible");
+        }
         int modv = M.cols; // > 0  
-        PolynomialList<C> F = M.getPolynomialList();
+        PolynomialList<C> F = M.getPolynomialList(top);
         //System.out.println("F test = " + F);
         return isRightGB(modv, F.castToSolvableList());
     }
@@ -770,7 +828,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
      * @return rightGB(M) a right Groebner base for M.
      */
     @SuppressWarnings("unchecked")
-    public ModuleList<C> rightGB(ModuleList<C> M) {
+    public ModuleList<C> rightGB(ModuleList<C> M) { // boolean top
         ModuleList<C> N = M;
         if (M == null || M.list == null) {
             return N;
@@ -803,7 +861,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
         if (debug) {
             logger.info("rM -------------------- \n" + rM);
         }
-        ModuleList<C> rMg = leftGB(rM);
+        ModuleList<C> rMg = leftGB(rM); // top ?
         if (debug) {
             logger.info("rMg -------------------- \n" + rMg);
             logger.info("isLeftGB(rMg) ---------- " + isLeftGB(rMg));
