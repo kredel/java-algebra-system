@@ -506,16 +506,29 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.INVLEX: {
-                horder = new EVComparator() {
+                if (!TOP) { 
+		    horder = new EVComparator() { // POT
 
+			    @Override
+			    public int compare(ExpVector e1, ExpVector e2) {
+				int t = -e1.invLexCompareTo(e2, evbeg1, evend1);
+				if (t != 0) {
+				    return t;
+				}
+				return -e1.invLexCompareTo(e2, evbeg2, evend2);
+			    }
+			};
+		    break;
+		}
+                horder = new EVComparator() { // TOP
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -e1.invLexCompareTo(e2, evbeg1, evend1);
+                        int t = -e1.invLexCompareTo(e2, evbeg2, evend2);
                         if (t != 0) {
                             return t;
                         }
-                        return -e1.invLexCompareTo(e2, evbeg2, evend2);
+                        return -e1.invLexCompareTo(e2, evbeg1, evend1);
                     }
                 };
                 break;
@@ -536,16 +549,29 @@ public final class TermOrder implements Serializable {
                 break;
             }
             case TermOrder.IGRLEX: {
-                horder = new EVComparator() {
+                if (!TOP) { 
+		    horder = new EVComparator() { // POT
 
+			    @Override
+			    public int compare(ExpVector e1, ExpVector e2) {
+				int t = -e1.invLexCompareTo(e2, evbeg1, evend1);
+				if (t != 0) {
+				    return t;
+				}
+				return -e1.invGradCompareTo(e2, evbeg2, evend2);
+			    }
+			};
+		    break;
+		}
+                horder = new EVComparator() { // TOP
 
                     @Override
                     public int compare(ExpVector e1, ExpVector e2) {
-                        int t = -e1.invLexCompareTo(e2, evbeg1, evend1);
+                        int t = -e1.invGradCompareTo(e2, evbeg2, evend2);
                         if (t != 0) {
                             return t;
                         }
-                        return -e1.invGradCompareTo(e2, evbeg2, evend2);
+                        return -e1.invLexCompareTo(e2, evbeg1, evend1);
                     }
                 };
                 break;
