@@ -15,7 +15,10 @@ import org.apache.logging.log4j.LogManager;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.Monomial;
+import edu.jas.poly.ModuleList;
+import edu.jas.poly.PolynomialList;
 import edu.jas.structure.RingElem;
 
 
@@ -262,6 +265,49 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
     }
 
 
+    /**
+     * Module normalform set.
+     * @param Ap module list.
+     * @param Pp module list.
+     * @return list of nf(a) with respect to Pp for all a in Ap.
+     */
+    public ModuleList<C> normalform(ModuleList<C> Pp, ModuleList<C> Ap) {
+	return normalform(Pp, Ap, false);
+    }
+
+    
+    /**
+     * Module normalform set.
+     * @param Ap module list.
+     * @param Pp module list.
+     * @param top true for TOP term order, false for POT term order.
+     * @return list of nf(a) with respect to Pp for all a in Ap.
+     */
+    public ModuleList<C> normalform(ModuleList<C> Pp, ModuleList<C> Ap, boolean top) {
+        if (Pp == null || Pp.isEmpty()) {
+            return Ap;
+        }
+        if (Ap == null || Ap.isEmpty()) {
+            return Ap;
+        }
+        int modv = Pp.cols;
+        GenPolynomialRing<C> pfac = Pp.ring.extend(modv, top);
+        logger.debug("extended ring = " + pfac);
+        //System.out.println("extended ring = " + pfac);
+        PolynomialList<C> P = Pp.getPolynomialList(pfac);
+        PolynomialList<C> A = Ap.getPolynomialList(pfac);
+	
+        ArrayList<GenPolynomial<C>> red = new ArrayList<GenPolynomial<C>>();
+        for (GenPolynomial<C> a : A.list) {
+            a = normalform(P.list, a);
+            red.add(a);
+        }
+        PolynomialList<C> Fr = new PolynomialList<C>(P.ring, red);
+        ModuleList<C> Nr = Fr.getModuleList(modv);
+        return Nr;
+    }
+
+    
     /**
      * Is top reducible.
      * @param A polynomial.

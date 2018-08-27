@@ -78,10 +78,13 @@ public class ModGroebnerBaseTest extends TestCase {
     List<GenPolynomial<BigRational>> V;
 
 
-    ModuleList<BigRational> M, N, K;
+    ModuleList<BigRational> M, N, K, I;
 
 
     GroebnerBaseAbstract<BigRational> mbb;
+
+
+    ReductionAbstract<BigRational> red;
 
 
     int rl = 3; //4; //3; 
@@ -108,6 +111,7 @@ public class ModGroebnerBaseTest extends TestCase {
         tord = TermOrderByName.DEFAULT; // INVLEX
         fac = new GenPolynomialRing<BigRational>(coeff, rl, tord);
         mbb = new GroebnerBaseSeq<BigRational>(); //coeff);
+        red = new ReductionSeq<BigRational>();
         a = b = c = d = e = null;
 
         do {
@@ -124,6 +128,7 @@ public class ModGroebnerBaseTest extends TestCase {
     protected void tearDown() {
         mbb.terminate();
         mbb = null;
+	red = null;
         a = b = c = d = e = null;
         fac = null;
         tord = null;
@@ -133,7 +138,7 @@ public class ModGroebnerBaseTest extends TestCase {
     /**
      * Test sequential GBase.
      */
-    public void xtestSequentialModGB() {
+    public void testSequentialModGB() {
         L = new ArrayList<List<GenPolynomial<BigRational>>>();
         V = new ArrayList<GenPolynomial<BigRational>>();
         V.add(a);
@@ -187,7 +192,7 @@ public class ModGroebnerBaseTest extends TestCase {
     /**
      * Test parallel GBase.
      */
-    public void xtestParallelModGB() {
+    public void testParallelModGB() {
         mbb = new GroebnerBaseParallel<BigRational>(); //coeff);
 
         L = new ArrayList<List<GenPolynomial<BigRational>>>();
@@ -279,7 +284,14 @@ public class ModGroebnerBaseTest extends TestCase {
         K = mbb.GB(M,true);
         assertTrue("is( { (a,0,1) } )", mbb.isGB(K, true));
         //System.out.println("K = " + K);
-        //todo  assertEquals("N == K", N, K);
+
+	I = red.normalform(K, N, true);
+        //System.out.println("I = " + I);
+        assertTrue("K.nf(N) == (0)", I.isZERO());
+    
+    	I = red.normalform(N, K);
+        //System.out.println("I = " + I);
+        assertTrue("N.nf(K) == (0)", I.isZERO());
     }
 
 }

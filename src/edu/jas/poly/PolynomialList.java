@@ -142,6 +142,18 @@ public class PolynomialList<C extends RingElem<C>> implements Comparable<Polynom
 
 
     /**
+     * Test if list is empty.
+     * @return true if this is empty, alse false.
+     */
+    public boolean isEmpty() {
+        if (list == null) {
+            return true;
+        }
+        return list.isEmpty();
+    }
+
+
+    /**
      * String representation of the polynomial list.
      * @see java.lang.Object#toString()
      */

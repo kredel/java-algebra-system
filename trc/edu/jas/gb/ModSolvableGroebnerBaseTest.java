@@ -154,7 +154,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
     /**
      * Test sequential left GBase.
      */
-    public void xtestSequentialLeftModSolvableGB() {
+    public void testSequentialLeftModSolvableGB() {
         L = new ArrayList<List<GenSolvablePolynomial<BigRational>>>();
 
         V = new ArrayList<GenSolvablePolynomial<BigRational>>();
@@ -214,7 +214,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
     /**
      * Test sequential left Weyl GBase.
      */
-    public void xtestSequentialLeftModSolvableWeylGB() {
+    public void testSequentialLeftModSolvableWeylGB() {
         int rloc = 4;
         pfac = new GenSolvablePolynomialRing<BigRational>(cfac, rloc, tord);
         //System.out.println("pfac = " + pfac);
@@ -299,7 +299,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
     /**
      * Test sequential twosided GBase.
      */
-    public void xtestSequentialTSModSolvableGB() {
+    public void testSequentialTSModSolvableGB() {
         L = new ArrayList<List<GenSolvablePolynomial<BigRational>>>();
 
         V = new ArrayList<GenSolvablePolynomial<BigRational>>();
@@ -354,7 +354,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
     /**
      * Test sequential twosided Weyl GBase.
      */
-    public void xtestSequentialTSModSolvableWeylGB() {
+    public void testSequentialTSModSolvableWeylGB() {
         int rloc = 4;
         pfac = new GenSolvablePolynomialRing<BigRational>(cfac, rloc, tord);
         //System.out.println("pfac = " + pfac);
@@ -440,7 +440,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
     /**
      * Test sequential right GBase.
      */
-    public void xtestSequentialRightModSolvableGB() {
+    public void testSequentialRightModSolvableGB() {
         L = new ArrayList<List<GenSolvablePolynomial<BigRational>>>();
 
         V = new ArrayList<GenSolvablePolynomial<BigRational>>();
@@ -500,7 +500,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
     /**
      * Test sequential right Weyl GBase.
      */
-    public void xtestSequentialRightModSolvableWeylGB() {
+    public void testSequentialRightModSolvableWeylGB() {
         int rloc = 4;
         pfac = new GenSolvablePolynomialRing<BigRational>(cfac, rloc, tord);
         //System.out.println("pfac = " + pfac);
