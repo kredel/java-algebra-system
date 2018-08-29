@@ -384,10 +384,10 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
     /**
      * Univariate GenPolynomial recursive Subresultant list. Uses
      * pseudoRemainder for remainder.
+     * <b>Author:</b> Youssef Elbarbary
      * @param P univariate recursive GenPolynomial.
      * @param S univariate recursive GenPolynomial.
      * @return subResList(P,S).
-     * @author Youssef Elbarbary
      */
     public List<GenPolynomial<GenPolynomial<C>>> recursiveUnivariateSubResultantList(
                     GenPolynomial<GenPolynomial<C>> P, GenPolynomial<GenPolynomial<C>> S) {

@@ -773,8 +773,8 @@ public class GenPolynomial<C extends RingElem<C>>
 
     /**
      * Minimal degree.
+     * <b>Author:</b> Youssef Elbarbary
      * @return minimal degree in any variables.
-     * @author Youssef Elbarbary
      */
     public long degreeMin() {
         if (val.isEmpty()) {
