@@ -95,10 +95,13 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
     PolynomialList<BigRational> F, G;
 
 
-    ModuleList<BigRational> M, N, K;
+    ModuleList<BigRational> M, N, K, I;
 
 
     SolvableGroebnerBaseAbstract<BigRational> sbb;
+
+
+    SolvableReductionAbstract<BigRational> sred;
 
 
     int rl = 3; //4; //3; 
@@ -126,6 +129,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
         } else {
             sbb = new SolvableGroebnerBaseParallel<BigRational>(); //cfac);
         }
+        sred = new SolvableReductionSeq<BigRational>();
         logger.info("test with " + sbb.getClass().getSimpleName());
 
         a = b = c = d = e = null;
@@ -148,6 +152,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
         zero = null;
         sbb.terminate();
         sbb = null;
+        sred = null;
     }
 
 
@@ -604,7 +609,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
 
         K = sbb.leftGB(M, true);
         assertTrue("is( { (a,0,1) } )", sbb.isLeftGB(K, true));
-	assertEquals("N == K", N, K);
+        assertEquals("N == K", N, K);
 
         V = new ArrayList<GenSolvablePolynomial<BigRational>>();
         V.add(b);
@@ -621,7 +626,14 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
         K = sbb.leftGB(M,true);
         assertTrue("is( { (a,0,1) } )", sbb.isLeftGB(K, true));
         //System.out.println("K = " + K);
-        //todo	assertEquals("N == K", N, K);
+
+        I = sred.leftNormalform(N, K);
+        //System.out.println("I = " + I);
+        assertTrue("N.lnf(K) == (0)", I.isZERO());
+
+        I = sred.leftNormalform(K, N, true);
+        //System.out.println("I = " + I);
+        assertTrue("K.lnf(N) == (0)", I.isZERO());
     }
 
     
@@ -646,7 +658,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
 
         K = sbb.twosidedGB(M, true);
         assertTrue("is( { (a,0,1) } )", sbb.isTwosidedGB(K, true));
-	assertEquals("N == K", N, K);
+        assertEquals("N == K", N, K);
 
         V = new ArrayList<GenSolvablePolynomial<BigRational>>();
         V.add(b);
@@ -654,7 +666,7 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
         V.add(pfac.getZERO());
         L.add(V);
         M = new ModuleList<BigRational>(pfac, L);
-        //System.out.println("M = " + M);
+        //System.out.println("M = " + M.toScript());
 
         N = sbb.twosidedGB(M);
         assertTrue("isGB( { (a,0,1),(b,1,0) } )", sbb.isTwosidedGB(N));
@@ -663,7 +675,14 @@ public class ModSolvableGroebnerBaseTest extends TestCase {
         K = sbb.twosidedGB(M,true);
         assertTrue("is( { (a,0,1) } )", sbb.isTwosidedGB(K, true));
         //System.out.println("K = " + K);
-        //todo	assertEquals("N == K", N, K);
+
+        I = sred.leftNormalform(N, K);
+        //System.out.println("I = " + I);
+        assertTrue("N.lnf(K) == (0)", I.isZERO());
+
+        I = sred.leftNormalform(K, N, true);
+        //System.out.println("I = " + I);
+        assertTrue("K.lnf(N) == (0)", I.isZERO());
     }
 
     

@@ -272,7 +272,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
      * @return list of nf(a) with respect to Pp for all a in Ap.
      */
     public ModuleList<C> normalform(ModuleList<C> Pp, ModuleList<C> Ap) {
-	return normalform(Pp, Ap, false);
+        return normalform(Pp, Ap, false);
     }
 
     
@@ -296,12 +296,8 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
         //System.out.println("extended ring = " + pfac);
         PolynomialList<C> P = Pp.getPolynomialList(pfac);
         PolynomialList<C> A = Ap.getPolynomialList(pfac);
-	
-        ArrayList<GenPolynomial<C>> red = new ArrayList<GenPolynomial<C>>();
-        for (GenPolynomial<C> a : A.list) {
-            a = normalform(P.list, a);
-            red.add(a);
-        }
+
+        List<GenPolynomial<C>> red = normalform(P.list, A.list);
         PolynomialList<C> Fr = new PolynomialList<C>(P.ring, red);
         ModuleList<C> Nr = Fr.getModuleList(modv);
         return Nr;
