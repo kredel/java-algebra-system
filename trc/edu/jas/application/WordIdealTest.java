@@ -383,7 +383,7 @@ public class WordIdealTest extends TestCase {
 
         // now intersect with word ideal
         K = I.intersect(J);
-        System.out.println("I cap J = K = " + K);
+        //System.out.println("I cap J = K = " + K);
         assertTrue("intersect ", I.contains(K));
         assertTrue("intersect ", J.contains(K));
     }

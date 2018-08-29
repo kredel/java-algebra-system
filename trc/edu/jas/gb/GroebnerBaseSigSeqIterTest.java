@@ -268,11 +268,11 @@ public class GroebnerBaseSigSeqIterTest extends TestCase {
         assertEquals("GB == GBp", G, Gp);
 
         //System.out.println("G = " + G);
-        System.out.println("iter  executed in " + t1 + " milliseconds");
-        //System.out.println("sig   executed in " + t2 + " milliseconds");
-        System.out.println("ggv   executed in " + t3 + " milliseconds");
-        System.out.println("arris executed in " + t4 + " milliseconds");
-        System.out.println("f5z   executed in " + t5 + " milliseconds");
+        //System.out.println("iter  executed in " + t1 + " milliseconds");
+        ////System.out.println("sig   executed in " + t2 + " milliseconds");
+        //System.out.println("ggv   executed in " + t3 + " milliseconds");
+        //System.out.println("arris executed in " + t4 + " milliseconds");
+        //System.out.println("f5z   executed in " + t5 + " milliseconds");
         long t = t1 + t2 + t3 + t4 + t5;
         assertTrue("times >= 0: " + t, t >= 0); //findbugs and compiler
 
