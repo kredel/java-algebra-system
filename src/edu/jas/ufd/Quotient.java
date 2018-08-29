@@ -453,6 +453,7 @@ public class Quotient<C extends GcdRingElem<C>> implements GcdRingElem<Quotient<
      * @param S a Quotient
      * @return [this/S, this - (this/S)*S].
      */
+    @SuppressWarnings("unchecked")
     public Quotient<C>[] quotientRemainder(Quotient<C> S) {
         return new Quotient[] { divide(S), remainder(S) };
     }
@@ -610,7 +611,7 @@ public class Quotient<C extends GcdRingElem<C>> implements GcdRingElem<Quotient<
      * @param b other element.
      * @return [ gcd(this,b), c1, c2 ] with c1*this + c2*b = gcd(this,b).
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public Quotient<C>[] egcd(Quotient<C> b) {
         Quotient<C>[] ret = (Quotient<C>[]) new Quotient[3];
         ret[0] = null;

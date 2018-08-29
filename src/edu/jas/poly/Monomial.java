@@ -139,6 +139,7 @@ public final class Monomial<C extends RingElem<C>> implements Element<Monomial<C
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
+    @SuppressWarnings("unchecked")
     public boolean equals(Object B) {
         if (!(B instanceof Monomial)) {
             return false;

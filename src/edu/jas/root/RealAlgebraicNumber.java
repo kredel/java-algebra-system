@@ -391,6 +391,7 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
      * @param S a RealAlgebraicNumber
      * @return [this/S, this - (this/S)*S].
      */
+    @SuppressWarnings("unchecked")
     public RealAlgebraicNumber<C>[] quotientRemainder(RealAlgebraicNumber<C> S) {
         return new RealAlgebraicNumber[] { divide(S), remainder(S) };
     }

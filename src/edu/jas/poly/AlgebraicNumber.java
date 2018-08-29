@@ -375,6 +375,7 @@ public class AlgebraicNumber<C extends RingElem<C>> implements GcdRingElem<Algeb
      * @param S a AlgebraicNumber
      * @return [this/S, this - (this/S)*S].
      */
+    @SuppressWarnings("unchecked")
     public AlgebraicNumber<C>[] quotientRemainder(AlgebraicNumber<C> S) {
         return new AlgebraicNumber[] { divide(S), remainder(S) };
     }
