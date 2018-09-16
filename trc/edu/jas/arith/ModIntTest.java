@@ -18,11 +18,11 @@ import junit.framework.TestSuite;
 
 
 /**
- * ModLong tests with JUnit.
+ * ModInt tests with JUnit.
  * @author Heinz Kredel
  */
 
-public class ModLongTest extends TestCase {
+public class ModIntTest extends TestCase {
 
 
     /**
@@ -34,10 +34,10 @@ public class ModLongTest extends TestCase {
 
 
     /**
-     * Constructs a <CODE>ModLongTest</CODE> object.
+     * Constructs a <CODE>ModIntTest</CODE> object.
      * @param name String
      */
-    public ModLongTest(String name) {
+    public ModIntTest(String name) {
         super(name);
     }
 
@@ -45,15 +45,15 @@ public class ModLongTest extends TestCase {
     /**
      */
     public static Test suite() {
-        TestSuite suite = new TestSuite(ModLongTest.class);
+        TestSuite suite = new TestSuite(ModIntTest.class);
         return suite;
     }
 
 
-    ModLongRing zm, z1, z2;
+    ModIntRing zm, z1, z2;
 
 
-    ModLong a, b, c, d, e;
+    ModInt a, b, c, d, e;
 
 
     @Override
@@ -71,29 +71,6 @@ public class ModLongTest extends TestCase {
 
 
     protected static java.math.BigInteger getPrime1() {
-        long prime = 2; //2^60-93; // 2^30-35; //19; knuth (2,390)
-        for (int i = 1; i < 30; i++) {
-            prime *= 2;
-        }
-        //prime -= 93;
-        prime -= 35;
-        //System.out.println("p1 = " + prime);
-        return new java.math.BigInteger("" + prime);
-    }
-
-
-    protected static java.math.BigInteger getPrime2() {
-        long prime = 2; //2^60-93; // 2^30-35; //19; knuth (2,390)
-        for (int i = 1; i < 60; i++) {
-            prime *= 2;
-        }
-        prime -= 93;
-        //System.out.println("p2 = " + prime);
-        return new java.math.BigInteger("" + prime);
-    }
-
-
-    protected static java.math.BigInteger getPrime3() {
         int prime = 2; //2^15-135; //2^60-93; // 2^30-35; //19; knuth (2,390)
         for (int i = 1; i < 15; i++) {
             prime *= 2;
@@ -103,20 +80,31 @@ public class ModLongTest extends TestCase {
         return new java.math.BigInteger("" + prime);
     }
 
-    
-    protected static java.math.BigInteger getPrime4() {
+
+    protected static java.math.BigInteger getPrime2() {
+        int prime = 2; //2^60-93; // 2^30-35; //19; knuth (2,390)
+        for (int i = 1; i < 30; i++) {
+            prime *= 2;
+        }
+        prime -= 35;
+        //System.out.println("p2 = " + prime);
+        return new java.math.BigInteger("" + prime);
+    }
+
+
+    protected static java.math.BigInteger getPrime3() {
         int prime = 37;
         //System.out.println("p2 = " + prime);
         return new java.math.BigInteger("" + prime);
     }
 
-    
+
     /**
      * Test static initialization and constants.
      */
     public void testConstants() {
-        zm = new ModLongRing(5);
-        d = new ModLong(zm, 11);
+        zm = new ModIntRing(5);
+        d = new ModInt(zm, 11);
         a = zm.getZERO();
         b = zm.getONE();
         c = b.subtract(b);
@@ -131,7 +119,7 @@ public class ModLongTest extends TestCase {
      * Test bitLength.
      */
     public void testBitLength() {
-        zm = new ModLongRing(163);
+        zm = new ModIntRing(163);
         a = zm.getZERO();
         b = zm.getONE();
         c = zm.random(30);
@@ -149,21 +137,28 @@ public class ModLongTest extends TestCase {
      * Test constructor and toString.
      */
     public void testConstructor() {
-        zm = new ModLongRing("5");
-        a = new ModLong(zm, "64");
-        b = new ModLong(zm, "34");
+        zm = new ModIntRing("5");
+        a = new ModInt(zm, "64");
+        b = new ModInt(zm, "34");
 
         assertEquals("64(5) = 34(5)", a, b);
 
-        zm = new ModLongRing("7");
-        a = new ModLong(zm, "-4");
-        b = new ModLong(zm, "3");
+        zm = new ModIntRing("7");
+        a = new ModInt(zm, "-4");
+        b = new ModInt(zm, "3");
 
         assertEquals("-4(7) = 3(7)", a, b);
 
         String s = "61111111111111111";
-        zm = new ModLongRing("10");
-        a = new ModLong(zm, s);
+        zm = new ModIntRing("10");
+	try {
+            a = new ModInt(zm, s);
+	    fail("s to large");
+	} catch (NumberFormatException e) {
+	    // pass
+	}
+        s = "611111111";
+        a = new ModInt(zm, s);
         String t = a.toString();
 
         if (PrettyPrint.isTrue()) {
@@ -174,18 +169,18 @@ public class ModLongTest extends TestCase {
             assertEquals("stringConstr = toString", st, t);
         }
 
-        zm = new ModLongRing(7);
-        a = new ModLong(zm, 1);
-        b = new ModLong(zm, -1);
+        zm = new ModIntRing(7);
+        a = new ModInt(zm, 1);
+        b = new ModInt(zm, -1);
         c = b.sum(a);
 
         assertTrue("1 = 1", a.isONE());
         assertTrue("1 = 1", b.isUnit());
         assertEquals("1+(-1) = 0", c, zm.getZERO());
 
-        zm = new ModLongRing(5);
-        a = new ModLong(zm, 3);
-        b = new ModLong(zm, 0);
+        zm = new ModIntRing(5);
+        a = new ModInt(zm, 3);
+        b = new ModInt(zm, 0);
         c = zm.parse(" 13 ");
         assertEquals("3(5) = 3(5)", a, c);
 
@@ -200,14 +195,14 @@ public class ModLongTest extends TestCase {
      * Test random modular integers.
      */
     public void testRandom() {
-        zm = new ModLongRing(19);
+        zm = new ModIntRing(19);
         a = zm.random(500);
         b = a.copy();
         c = b.subtract(a);
 
         assertEquals("a-b = 0", c, zm.getZERO());
 
-        d = new ModLong(new ModLongRing(b.getModul()), b.getVal());
+        d = new ModInt(new ModIntRing(b.getModul()), b.getVal());
         assertEquals("sign(a-a) = 0", 0, b.compareTo(d));
     }
 
@@ -217,7 +212,7 @@ public class ModLongTest extends TestCase {
      * 
      */
     public void testAddition() {
-        zm = new ModLongRing(19);
+        zm = new ModIntRing(19);
 
         a = zm.random(100);
         b = a.sum(a);
@@ -240,8 +235,8 @@ public class ModLongTest extends TestCase {
      * Test multiplication.
      */
     public void testMultiplication() {
-        zm = new ModLongRing(5);
-        d = new ModLong(zm, 11);
+        zm = new ModIntRing(5);
+        d = new ModInt(zm, 11);
 
         a = zm.random(100);
         if (a.isZERO()) {
@@ -274,8 +269,8 @@ public class ModLongTest extends TestCase {
             //ok
         }
 
-        zm = new ModLongRing(5 * 3);
-        a = new ModLong(zm, 5);
+        zm = new ModIntRing(5 * 3);
+        a = new ModInt(zm, 5);
         assertFalse("5 !unit mod 15", a.isUnit());
 
         try {
@@ -299,16 +294,16 @@ public class ModLongTest extends TestCase {
      * Test chinese remainder.
      */
     public void testChineseRemainder() {
-        zm = new ModLongRing(19 * 13);
+        zm = new ModIntRing(19 * 13);
         a = zm.random(9);
         //System.out.println("a = " + a);
-        z1 = new ModLongRing(19);
-        b = new ModLong(z1, a.getVal());
+        z1 = new ModIntRing(19);
+        b = new ModInt(z1, a.getVal());
         //System.out.println("b = " + b);
-        z2 = new ModLongRing(13);
-        c = new ModLong(z2, a.getVal());
+        z2 = new ModIntRing(13);
+        c = new ModInt(z2, a.getVal());
         //System.out.println("c = " + c);
-        d = new ModLong(z2, 19);
+        d = new ModInt(z2, 19);
         d = d.inverse();
         //System.out.println("d = " + d);
 
@@ -319,7 +314,7 @@ public class ModLongTest extends TestCase {
 
         java.math.BigInteger p1 = getPrime2();
 	try {
-	    z1 = new ModLongRing(p1);
+	    z1 = new ModIntRing(p1);
 	    fail("p1 too large");
 	} catch (IllegalArgumentException e) {
             //pass
@@ -331,18 +326,18 @@ public class ModLongTest extends TestCase {
         //System.out.println("prime p1 ? = " + p1.isProbablePrime(66));
         //System.out.println("prime p2 ? = " + p2.isProbablePrime(33));
         //System.out.println("prime p1p1 ? = " + p1p2.isProbablePrime(3));
-        zm = new ModLongRing(p1p2);
-        z1 = new ModLongRing(p1);
-        z2 = new ModLongRing(p2);
+        zm = new ModIntRing(p1p2);
+        z1 = new ModIntRing(p1);
+        z2 = new ModIntRing(p2);
 
         for (int i = 0; i < 5; i++) {
             a = zm.random((59 + 29) / 2); //60+30 );
             //System.out.println("a = " + a);
-            b = new ModLong(z1, a.getVal());
+            b = new ModInt(z1, a.getVal());
             //System.out.println("b = " + b);
-            c = new ModLong(z2, a.getVal());
+            c = new ModInt(z2, a.getVal());
             //System.out.println("c = " + c);
-            ModLong di = new ModLong(z2, p1);
+            ModInt di = new ModInt(z2, p1);
             d = di.inverse();
             //System.out.println("d = " + d);
 
@@ -358,20 +353,20 @@ public class ModLongTest extends TestCase {
      * Test chinese remainder of lists.
      */
     public void testChineseRemainderLists() {
-        zm = new ModLongRing(19 * 13);
-        z1 = new ModLongRing(19);
-        z2 = new ModLongRing(13);
+        zm = new ModIntRing(19 * 13);
+        z1 = new ModIntRing(19);
+        z2 = new ModIntRing(13);
 
-        List<ModLong> L1 = new ArrayList<ModLong>();
-        List<ModLong> L2 = new ArrayList<ModLong>();
-        List<ModLong> L;
+        List<ModInt> L1 = new ArrayList<ModInt>();
+        List<ModInt> L2 = new ArrayList<ModInt>();
+        List<ModInt> L;
 
         for (int i = 0; i < 7; i++) {
             a = zm.random(9);
             //System.out.println("a = " + a);
-            b = new ModLong(z1, a.getVal());
+            b = new ModInt(z1, a.getVal());
             //System.out.println("b = " + b);
-            c = new ModLong(z2, a.getVal());
+            c = new ModInt(z2, a.getVal());
             //System.out.println("c = " + c);
             L1.add(b);
             L2.add(c);
@@ -379,14 +374,14 @@ public class ModLongTest extends TestCase {
         //System.out.println("L1 = " + L1);
         //System.out.println("L2 = " + L2);
 
-        L = ModLongRing.chineseRemainder(z1.getONE(), z2.getONE(), L1, L2);
+        L = ModIntRing.chineseRemainder(z1.getONE(), z2.getONE(), L1, L2);
         //System.out.println("L = " + L);
         assertEquals("19 * 13) = a.modul: ", zm, L.get(0).ring);
 
-        for (ModLong d : L) {
-            b = new ModLong(z1, d.getVal());
+        for (ModInt d : L) {
+            b = new ModInt(z1, d.getVal());
             //System.out.println("b = " + b);
-            c = new ModLong(z2, d.getVal());
+            c = new ModInt(z2, d.getVal());
             //System.out.println("c = " + c);
             assertTrue("cra(a mod 19, a mod 13) = a: ", L1.contains(b));
             assertTrue("cra(a mod 19, a mod 13) = a: ", L2.contains(c));
@@ -395,10 +390,10 @@ public class ModLongTest extends TestCase {
 
 
     /**
-     * Test timing ModLong to ModInteger.
+     * Test timing ModInt to ModInteger.
      */
     public void testTiming() {
-        zm = new ModLongRing(getPrime1());
+        zm = new ModIntRing(getPrime1());
         a = zm.random(9);
         //System.out.println("a = " + a);
         b = zm.random(9);
@@ -442,13 +437,13 @@ public class ModLongTest extends TestCase {
      */
     public void testIterator() {
         int m = 5 * 2;
-        zm = new ModLongRing(m);
-        ModLong j = null;
-        for (ModLong i : zm) {
+        zm = new ModIntRing(m);
+        ModInt j = null;
+        for (ModInt i : zm) {
             //System.out.println("i = " + i);
             j = i;
         }
-        ModLong end = new ModLong(zm, m - 1);
+        ModInt end = new ModInt(zm, m - 1);
         assertTrue("j == m-1 ", j.equals(end));
     }
 

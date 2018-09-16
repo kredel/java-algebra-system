@@ -21,6 +21,8 @@ import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModLong;
 import edu.jas.arith.ModLongRing;
+import edu.jas.arith.ModInt;
+import edu.jas.arith.ModIntRing;
 import edu.jas.structure.RingFactory;
 
 import junit.framework.Test;
@@ -209,12 +211,18 @@ public class GenPolynomialTokenizerTest extends TestCase {
         assertTrue("f != null", f.list != null);
         assertTrue("length( f ) = 4", f.list.size() == 4);
 
-        ModLongRing fac = new ModLongRing(19);
+        ModIntRing fac = new ModIntRing(19);
         TermOrder tord = new TermOrder(TermOrder.INVLEX);
         String[] vars = new String[] { "x", "y", "z" };
         int nvar = vars.length;
-        pfac = new GenPolynomialRing<ModLong>(fac, nvar, tord, vars);
+        pfac = new GenPolynomialRing<ModInt>(fac, nvar, tord, vars);
+        //System.out.println("pfac   = " + pfac);
+        //System.out.println("f.ring = " + f.ring);
         assertEquals("pfac == f.ring", pfac, f.ring);
+
+        ModLongRing lfac = new ModLongRing(19);
+        assertFalse("fac != lfac", fac.equals(lfac));
+        assertFalse("lfac != f.ring.coFac", lfac.equals(f.ring.coFac));
 
         GenPolynomial<ModInteger> a = f.list.get(0);
         //System.out.println("a = " + a);
@@ -453,11 +461,11 @@ public class GenPolynomialTokenizerTest extends TestCase {
         assertTrue("f != null", f.list != null);
         assertTrue("length( f ) = 4", f.list.size() == 4);
 
-        ModLongRing fac = new ModLongRing(19);
+        ModIntRing fac = new ModIntRing(19);
         TermOrder tord = new TermOrder(TermOrder.INVLEX);
         String[] vars = new String[] { "x", "y", "z" };
         int nvar = vars.length;
-        spfac = new GenSolvablePolynomialRing<ModLong>(fac, nvar, tord, vars);
+        spfac = new GenSolvablePolynomialRing<ModInt>(fac, nvar, tord, vars);
         List<GenSolvablePolynomial<ModLong>> rel = new ArrayList<GenSolvablePolynomial<ModLong>>(3);
         rel.add(spfac.parse("z"));
         rel.add(spfac.parse("y"));
