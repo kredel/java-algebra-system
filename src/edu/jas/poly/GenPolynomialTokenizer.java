@@ -32,6 +32,7 @@ import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.ModLongRing;
+import edu.jas.arith.ModIntRing;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 
@@ -764,7 +765,11 @@ public class GenPolynomialTokenizer {
                         BigInteger mo = new BigInteger(tok.sval);
                         BigInteger lm = new BigInteger(ModLongRing.MAX_LONG); //wrong: Long.MAX_VALUE);
                         if (mo.compareTo(lm) < 0) {
-                            coeff = new ModLongRing(mo.getVal());
+			    if (mo.compareTo(new BigInteger(ModIntRing.MAX_INT)) < 0) {
+                                coeff = new ModIntRing(mo.getVal());
+			    } else {
+                                coeff = new ModLongRing(mo.getVal());
+			    }
                         } else {
                             coeff = new ModIntegerRing(mo.getVal());
                         }

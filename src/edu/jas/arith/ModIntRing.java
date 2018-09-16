@@ -15,17 +15,17 @@ import edu.jas.kern.StringUtil;
 
 
 /**
- * ModLongRing factory with RingFactory interface. Effectively immutable.
+ * ModIntRing factory with RingFactory interface. Effectively immutable.
  * @author Heinz Kredel
  */
 
-public final class ModLongRing implements ModularRingFactory<ModLong>, Iterable<ModLong> {
+public final class ModIntRing implements ModularRingFactory<ModInt>, Iterable<ModInt> {
 
 
     /**
      * Module part of the factory data structure.
      */
-    public final long modul;
+    public final int modul;
 
 
     /**
@@ -49,100 +49,100 @@ public final class ModLongRing implements ModularRingFactory<ModLong>, Iterable<
     /**
      * maximal representable integer.
      */
-    public final static java.math.BigInteger MAX_LONG = new java.math.BigInteger(
-                    String.valueOf(Integer.MAX_VALUE)); // not larger!
+    public final static java.math.BigInteger MAX_INT = new java.math.BigInteger(
+                    String.valueOf(Short.MAX_VALUE)); // not larger!
 
 
     /**
-     * The constructor creates a ModLongRing object from a long integer as
+     * The constructor creates a ModIntRing object from a int integer as
      * module part.
-     * @param m long integer.
+     * @param m int integer.
      */
-    public ModLongRing(long m) {
+    public ModIntRing(int m) {
         modul = m;
     }
 
 
     /**
-     * The constructor creates a ModLongRing object from a long integer as
+     * The constructor creates a ModIntRing object from a int integer as
      * module part.
-     * @param m long integer.
+     * @param m int integer.
      * @param isField indicator if m is prime.
      */
-    public ModLongRing(long m, boolean isField) {
+    public ModIntRing(int m, boolean isField) {
         modul = m;
         this.isField = (isField ? 1 : 0);
     }
 
 
     /**
-     * The constructor creates a ModLongRing object from a Long integer as
+     * The constructor creates a ModIntRing object from a Int integer as
      * module part.
-     * @param m Long integer.
+     * @param m Int integer.
      */
-    public ModLongRing(Long m) {
-        this(m.longValue());
+    public ModIntRing(Integer m) {
+        this(m.intValue());
     }
 
 
     /**
-     * The constructor creates a ModLongRing object from a Long integer as
+     * The constructor creates a ModIntRing object from a Int integer as
      * module part.
-     * @param m Long integer.
+     * @param m Int integer.
      * @param isField indicator if m is prime.
      */
-    public ModLongRing(Long m, boolean isField) {
-        this(m.longValue(), isField);
+    public ModIntRing(Integer m, boolean isField) {
+        this(m.intValue(), isField);
     }
 
 
     /**
-     * The constructor creates a ModLongRing object from a BigInteger converted
-     * to long as module part.
+     * The constructor creates a ModIntRing object from a BigInteger converted
+     * to int as module part.
      * @param m java.math.BigInteger.
      */
-    public ModLongRing(java.math.BigInteger m) {
-        this(m.longValue());
-        if (MAX_LONG.compareTo(m) < 0) { // m > max
-            //System.out.println("modul to large for long " + m + ",max=" + MAX_LONG);
-            throw new IllegalArgumentException("modul to large for long " + m + ", max=" + MAX_LONG);
+    public ModIntRing(java.math.BigInteger m) {
+        this(m.intValue());
+        if (MAX_INT.compareTo(m) < 0) { // m > max
+            //System.out.println("modul to large for int " + m + ",max=" + MAX_INT);
+            throw new IllegalArgumentException("modul to large for int " + m + ", max=" + MAX_INT);
         }
     }
 
 
     /**
-     * The constructor creates a ModLongRing object from a BigInteger converted
-     * to long as module part.
+     * The constructor creates a ModIntRing object from a BigInteger converted
+     * to int as module part.
      * @param m java.math.BigInteger.
      * @param isField indicator if m is prime.
      */
-    public ModLongRing(java.math.BigInteger m, boolean isField) {
-        this(m.longValue(), isField);
-        if (MAX_LONG.compareTo(m) < 0) { // m > max
-            //System.out.println("modul to large for long " + m + ",max=" + MAX_LONG);
-            throw new IllegalArgumentException("modul to large for long " + m + ", max=" + MAX_LONG);
+    public ModIntRing(java.math.BigInteger m, boolean isField) {
+        this(m.intValue(), isField);
+        if (MAX_INT.compareTo(m) < 0) { // m > max
+            //System.out.println("modul to large for int " + m + ",max=" + MAX_INT);
+            throw new IllegalArgumentException("modul to large for int " + m + ", max=" + MAX_INT);
         }
     }
 
 
     /**
-     * The constructor creates a ModLongRing object from a String object as
+     * The constructor creates a ModIntRing object from a String object as
      * module part.
      * @param m String.
      */
-    public ModLongRing(String m) {
-        this(Long.valueOf(m.trim()));
+    public ModIntRing(String m) {
+        this(Integer.valueOf(m.trim()));
     }
 
 
     /**
-     * The constructor creates a ModLongRing object from a String object as
+     * The constructor creates a ModIntRing object from a String object as
      * module part.
      * @param m String.
      * @param isField indicator if m is prime.
      */
-    public ModLongRing(String m, boolean isField) {
-        this(Long.valueOf(m.trim()), isField);
+    public ModIntRing(String m, boolean isField) {
+        this(Integer.valueOf(m.trim()), isField);
     }
 
 
@@ -151,15 +151,15 @@ public final class ModLongRing implements ModularRingFactory<ModLong>, Iterable<
      * @return modul.
      */
     public java.math.BigInteger getModul() {
-        return new java.math.BigInteger(Long.toString(modul));
+        return new java.math.BigInteger(Integer.toString(modul));
     }
 
 
     /**
-     * Get the module part as long.
+     * Get the module part as int.
      * @return modul.
      */
-    public long getLongModul() {
+    public int getIntModul() {
         return modul;
     }
 
@@ -174,60 +174,60 @@ public final class ModLongRing implements ModularRingFactory<ModLong>, Iterable<
 
 
     /**
-     * Create ModLong element c.
+     * Create ModInt element c.
      * @param c
-     * @return a ModLong of c.
+     * @return a ModInt of c.
      */
-    public ModLong create(java.math.BigInteger c) {
-        return new ModLong(this, c);
+    public ModInt create(java.math.BigInteger c) {
+        return new ModInt(this, c);
     }
 
 
     /**
-     * Create ModLong element c.
+     * Create ModInt element c.
      * @param c
-     * @return a ModLong of c.
+     * @return a ModInt of c.
      */
-    public ModLong create(long c) {
-        return new ModLong(this, c);
+    public ModInt create(int c) {
+        return new ModInt(this, c);
     }
 
 
     /**
-     * Create ModLong element c.
+     * Create ModInt element c.
      * @param c
-     * @return a ModLong of c.
+     * @return a ModInt of c.
      */
-    public ModLong create(String c) {
+    public ModInt create(String c) {
         return parse(c);
     }
 
 
     /**
-     * Copy ModLong element c.
+     * Copy ModInt element c.
      * @param c
      * @return a copy of c.
      */
-    public ModLong copy(ModLong c) {
-        return new ModLong(this, c.val);
+    public ModInt copy(ModInt c) {
+        return new ModInt(this, c.val);
     }
 
 
     /**
      * Get the zero element.
-     * @return 0 as ModLong.
+     * @return 0 as ModInt.
      */
-    public ModLong getZERO() {
-        return new ModLong(this, 0L);
+    public ModInt getZERO() {
+        return new ModInt(this, 0);
     }
 
 
     /**
      * Get the one element.
-     * @return 1 as ModLong.
+     * @return 1 as ModInt.
      */
-    public ModLong getONE() {
-        return new ModLong(this, 1L);
+    public ModInt getONE() {
+        return new ModInt(this, 1);
     }
 
 
@@ -236,8 +236,8 @@ public final class ModLongRing implements ModularRingFactory<ModLong>, Iterable<
      * @return list of generators for the algebraic structure.
      * @see edu.jas.structure.ElemFactory#generators()
      */
-    public List<ModLong> generators() {
-        List<ModLong> g = new ArrayList<ModLong>(1);
+    public List<ModInt> generators() {
+        List<ModInt> g = new ArrayList<ModInt>(1);
         g.add(getONE());
         return g;
     }
@@ -283,7 +283,7 @@ public final class ModLongRing implements ModularRingFactory<ModLong>, Iterable<
             return false;
         }
         //System.out.println("isProbablePrime " + modul + " = " + modul.isProbablePrime(certainty));
-        java.math.BigInteger m = new java.math.BigInteger(Long.toString(modul));
+        java.math.BigInteger m = new java.math.BigInteger(Integer.toString(modul));
         if (m.isProbablePrime(m.bitLength())) {
             isField = 1;
             return true;
@@ -298,27 +298,37 @@ public final class ModLongRing implements ModularRingFactory<ModLong>, Iterable<
      * @return characteristic of this ring.
      */
     public java.math.BigInteger characteristic() {
-        return new java.math.BigInteger(Long.toString(modul));
+        return new java.math.BigInteger(Integer.toString(modul));
     }
 
 
     /**
-     * Get a ModLong element from a BigInteger value.
+     * Get a ModInt element from a BigInteger value.
      * @param a BigInteger.
-     * @return a ModLong.
+     * @return a ModInt.
      */
-    public ModLong fromInteger(java.math.BigInteger a) {
-        return new ModLong(this, a);
+    public ModInt fromInteger(java.math.BigInteger a) {
+        return new ModInt(this, a);
     }
 
 
     /**
-     * Get a ModLong element from a long value.
-     * @param a long.
-     * @return a ModLong.
+     * Get a ModInt element from a int value.
+     * @param a int.
+     * @return a ModInt.
      */
-    public ModLong fromInteger(long a) {
-        return new ModLong(this, a);
+    public ModInt fromInteger(int a) {
+        return new ModInt(this, a);
+    }
+
+
+    /**
+     * Get a ModInt element from a long value.
+     * @param a lon.
+     * @return a ModInt.
+     */
+    public ModInt fromInteger(long a) {
+        return new ModInt(this, a);
     }
 
 
@@ -328,7 +338,7 @@ public final class ModLongRing implements ModularRingFactory<ModLong>, Iterable<
      */
     @Override
     public String toString() {
-        return " mod(" + modul + ")"; //",max="  + MAX_LONG + ")";
+        return " mod(" + modul + ")"; //",max="  + MAX_INT + ")";
     }
 
 
@@ -341,9 +351,9 @@ public final class ModLongRing implements ModularRingFactory<ModLong>, Iterable<
     public String toScript() {
         // Python and Ruby case
         if (isField()) {
-            return "GFL(" + modul + ")";
+            return "GFI(" + modul + ")";
         }
-        return "ZML(" + modul + ")";
+        return "ZMI(" + modul + ")";
     }
 
 
@@ -353,16 +363,16 @@ public final class ModLongRing implements ModularRingFactory<ModLong>, Iterable<
      */
     @Override
     public boolean equals(Object b) {
-        if (!(b instanceof ModLongRing)) {
+        if (!(b instanceof ModIntRing)) {
             return false;
         }
-        ModLongRing m = (ModLongRing) b;
+        ModIntRing m = (ModIntRing) b;
         return (modul == m.modul);
     }
 
 
     /**
-     * Hash code for this ModLongRing.
+     * Hash code for this ModIntRing.
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -372,72 +382,72 @@ public final class ModLongRing implements ModularRingFactory<ModLong>, Iterable<
 
 
     /**
-     * ModLong random.
+     * ModInt random.
      * @param n such that 0 &le; v &le; (2<sup>n</sup>-1).
      * @return a random integer mod modul.
      */
-    public ModLong random(int n) {
+    public ModInt random(int n) {
         return random(n, random);
     }
 
 
     /**
-     * ModLong random.
+     * ModInt random.
      * @param n such that 0 &le; v &le; (2<sup>n</sup>-1).
      * @param rnd is a source for random bits.
      * @return a random integer mod modul.
      */
-    public ModLong random(int n, Random rnd) {
+    public ModInt random(int n, Random rnd) {
         java.math.BigInteger v = new java.math.BigInteger(n, rnd);
-        return new ModLong(this, v); // rnd.nextLong() not ok
+        return new ModInt(this, v); // rnd.nextInt() not ok
     }
 
 
     /**
-     * Parse ModLong from String.
+     * Parse ModInt from String.
      * @param s String.
-     * @return ModLong from s.
+     * @return ModInt from s.
      */
-    public ModLong parse(String s) {
-        return new ModLong(this, s);
+    public ModInt parse(String s) {
+        return new ModInt(this, s);
     }
 
 
     /**
-     * Parse ModLong from Reader.
+     * Parse ModInt from Reader.
      * @param r Reader.
-     * @return next ModLong from r.
+     * @return next ModInt from r.
      */
-    public ModLong parse(Reader r) {
+    public ModInt parse(Reader r) {
         return parse(StringUtil.nextString(r));
     }
 
 
     /**
-     * ModLong chinese remainder algorithm. This is a factory method. Assert
+     * ModInt chinese remainder algorithm. This is a factory method. Assert
      * c.modul >= a.modul and c.modul * a.modul = this.modul.
-     * @param c ModLong.
+     * @param c ModInt.
      * @param ci inverse of c.modul in ring of a.
-     * @param a other ModLong.
+     * @param a other ModInt.
      * @return S, with S mod c.modul == c and S mod a.modul == a.
      */
-    public ModLong chineseRemainder(ModLong c, ModLong ci, ModLong a) {
+    public ModInt chineseRemainder(ModInt c, ModInt ci, ModInt a) {
         //if (true) { 
         //    if (c.ring.modul < a.ring.modul) {
-        //        System.out.println("ModLong error " + c.ring + ", " + a.ring);
+        //        System.out.println("ModInt error " + c.ring + ", " + a.ring);
         //    }
         //}
-        ModLong b = a.ring.fromInteger(c.val); // c mod a.modul
-        ModLong d = a.subtract(b); // a-c mod a.modul
+        ModInt b = a.ring.fromInteger(c.val); // c mod a.modul
+        ModInt d = a.subtract(b); // a-c mod a.modul
         if (d.isZERO()) {
-            return new ModLong(this, c.val);
+            return new ModInt(this, c.val);
         }
         b = d.multiply(ci); // b = (a-c)*ci mod a.modul
         // (c.modul*b)+c mod this.modul = c mod c.modul = 
         // (c.modul*ci*(a-c)+c) mod a.modul = a mod a.modul
-        long s = c.ring.modul * b.val;
+        int s = c.ring.modul * b.val;
         s = s + c.val;
-        return new ModLong(this, s);
+        return new ModInt(this, s);
     }
 
 
@@ -449,20 +459,20 @@ public final class ModLongRing implements ModularRingFactory<ModLong>, Iterable<
      * congruent to a1 modulo m1 and a is congruent to a2 modulo m2
      * with a1 in L1 and a2 in L2.  This is a factory method. Assert
      * c.modul >= a.modul and c.modul * a.modul = this.modul.
-     * @param m1 ModLong.
-     * @param m2 other ModLong.
+     * @param m1 ModInt.
+     * @param m2 other ModInt.
      * @return L list of congruences.
      */
-    public static List<ModLong> chineseRemainder(ModLong m1, ModLong m2, List<ModLong> L1, List<ModLong> L2) {
-        long mm = m1.ring.modul * m2.ring.modul;
-        ModLongRing m = new ModLongRing(mm);
-        ModLong m21 = m2.ring.fromInteger(m1.ring.modul);
-        ModLong mi1 = m21.inverse(); 
+    public static List<ModInt> chineseRemainder(ModInt m1, ModInt m2, List<ModInt> L1, List<ModInt> L2) {
+        int mm = m1.ring.modul * m2.ring.modul;
+        ModIntRing m = new ModIntRing(mm);
+        ModInt m21 = m2.ring.fromInteger(m1.ring.modul);
+        ModInt mi1 = m21.inverse(); 
 
-        List<ModLong> L = new ArrayList<ModLong>();
-        for (ModLong a : L1) {
-	    for (ModLong b : L2) {
-                ModLong c = m.chineseRemainder(a, mi1, b);
+        List<ModInt> L = new ArrayList<ModInt>();
+        for (ModInt a : L1) {
+	    for (ModInt b : L2) {
+                ModInt c = m.chineseRemainder(a, mi1, b);
                 L.add(c);
             }
         }
@@ -471,11 +481,11 @@ public final class ModLongRing implements ModularRingFactory<ModLong>, Iterable<
 
 
     /**
-     * Get a ModLong iterator.
+     * Get a ModInt iterator.
      * @return a iterator over all modular integers in this ring.
      */
-    public Iterator<ModLong> iterator() {
-        return new ModLongIterator(this);
+    public Iterator<ModInt> iterator() {
+        return new ModIntIterator(this);
     }
 
 }
@@ -485,24 +495,24 @@ public final class ModLongRing implements ModularRingFactory<ModLong>, Iterable<
  * Modular integer iterator.
  * @author Heinz Kredel
  */
-class ModLongIterator implements Iterator<ModLong> {
+class ModIntIterator implements Iterator<ModInt> {
 
 
     /**
      * data structure.
      */
-    long curr;
+    int curr;
 
 
-    final ModLongRing ring;
+    final ModIntRing ring;
 
 
     /**
-     * ModLong iterator constructor.
+     * ModInt iterator constructor.
      * @param fac modular integer factory;
      */
-    public ModLongIterator(ModLongRing fac) {
-        curr = 0L;
+    public ModIntIterator(ModIntRing fac) {
+        curr = 0;
         ring = fac;
     }
 
@@ -520,8 +530,8 @@ class ModLongIterator implements Iterator<ModLong> {
      * Get next integer.
      * @return next integer.
      */
-    public synchronized ModLong next() {
-        ModLong i = new ModLong(ring, curr);
+    public synchronized ModInt next() {
+        ModInt i = new ModInt(ring, curr);
         curr++;
         return i;
     }
