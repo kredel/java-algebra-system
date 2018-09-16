@@ -168,6 +168,8 @@ java_import "edu.jas.arith.ModInteger";
 java_import "edu.jas.arith.ModIntegerRing";
 java_import "edu.jas.arith.ModLong";
 java_import "edu.jas.arith.ModLongRing";
+java_import "edu.jas.arith.ModInt";
+java_import "edu.jas.arith.ModIntRing";
 java_import "edu.jas.arith.BigDecimal";
 java_import "edu.jas.arith.BigComplex";
 java_import "edu.jas.arith.BigQuaternion";
@@ -211,12 +213,21 @@ def ZM(m,z=0,field=false)
         z = 0;
     end
     if m < ModLongRing::MAX_LONG 
-       if field
+      if m < ModIntRing::MAX_INT
+        if field
+          mf = ModIntRing.new(m,field);
+        else
+          mf = ModIntRing.new(m);
+        end
+        r = ModInt.new(mf,z);
+      else
+        if field
           mf = ModLongRing.new(m,field);
-       else
+        else
           mf = ModLongRing.new(m);
-       end
-       r = ModLong.new(mf,z);
+        end
+        r = ModLong.new(mf,z);
+      end
     else
        if field
           mf = ModIntegerRing.new(m,field);

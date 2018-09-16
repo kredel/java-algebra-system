@@ -24,6 +24,7 @@ puts;
 rn = QQ(6/4);
 puts "rn:   " + str(rn);
 puts "rn^2: " + str(rn*rn);
+puts "1/rn: " + str(1/rn);
 puts;
 
 
@@ -38,6 +39,14 @@ puts;
 
 c = CC( 2,rn );
 puts "c:   " + str(c);
+puts "1/c: " + str(1/c);
+puts;
+
+zm = ZM(19,11);
+puts "zm:   " + str(zm);
+puts "zm^2: " + str(zm*zm);
+puts "1/zm: " + str(1/zm);
+#puts "zm.ring: " + str(zm.ring.toScript());
 puts;
 
 

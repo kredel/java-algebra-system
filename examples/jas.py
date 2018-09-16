@@ -9,7 +9,7 @@ from java.util           import ArrayList, List, Collections
 
 from edu.jas.structure   import RingElem, RingFactory, Power
 from edu.jas.arith       import BigInteger, BigRational, BigComplex, BigDecimal,\
-                                ModInteger, ModIntegerRing, ModLong, ModLongRing,\
+                                ModInteger, ModIntegerRing, ModLong, ModLongRing, ModInt, ModIntRing,\
                                 BigQuaternion, BigQuaternionRing, BigOctonion,\
                                 Product, ProductRing, PrimeList
 from edu.jas.poly        import GenPolynomial, GenPolynomialRing, Monomial,\
@@ -2431,15 +2431,22 @@ def ZM(m,z=0,field=False):
         m = m.elem;
     if isinstance(z,RingElem):
         z = z.elem;
-#    if z != 0 and ( z == False ): # never true
-#        field = z;
-#        z = 0;
+    if z != 0 and ( z == False or z == True ): # never true
+        field = z;
+        z = 0;
     if m < ModLongRing.MAX_LONG:
-       if field:
-          mf = ModLongRing(m,field);
+       if m < ModIntRing.MAX_INT:
+           if field:
+              mf = ModIntRing(m,field);
+           else:
+              mf = ModIntRing(m);
+           r = ModInt(mf,z);
        else:
-          mf = ModLongRing(m);
-       r = ModLong(mf,z);
+           if field:
+              mf = ModLongRing(m,field);
+           else:
+              mf = ModLongRing(m);
+           r = ModLong(mf,z);
     else:
        if field:
           mf = ModIntegerRing(m,field);
@@ -2455,6 +2462,12 @@ def ZML(m,z=0,field=False):
     return ZM(m,z,field);
 
 
+def ZMI(m,z=0,field=False):
+    '''Create JAS ModInt as ring element.
+    '''
+    return ZM(m,z,field);
+
+
 def GF(m,z=0):
     '''Create JAS ModInteger as field element.
     '''
@@ -2466,6 +2479,12 @@ def GFL(m,z=0):
     '''Create JAS ModLong as field element.
     '''
     #print "m = %s" % m
+    return ZM(m,z,True);
+
+
+def GFI(m,z=0):
+    '''Create JAS ModInt as field element.
+    '''
     return ZM(m,z,True);
 
 

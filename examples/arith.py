@@ -9,6 +9,7 @@ from jas import PolyRing
 from jas import ZZ
 from jas import QQ
 from jas import CC
+from jas import ZM
 from jas import RF
 from jas import startLog
 from jas import terminate
@@ -31,6 +32,7 @@ print;
 rn = QQ((6,4));
 print "rn:", rn;
 print "rn^2:", rn*rn;
+print "1/rn: " + str(1/rn);
 print;
 
 c = CC();
@@ -43,7 +45,15 @@ print "c^5:", c**5 + c.one();
 print;
 
 c = CC( (2,),rn );
-print "c:", c;
+print "c:   ", c;
+print "1/c: " + str(1/c);
+print;
+
+zm = ZM(19,11);
+print "zm:   " + str(zm);
+print "zm^2: " + str(zm*zm);
+print "1/zm: " + str(1/zm);
+#print "zm.ring: " + str(zm.ring.toScript());
 print;
 
 
