@@ -14,6 +14,8 @@ import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.ModLong;
 import edu.jas.arith.ModLongRing;
+import edu.jas.arith.ModInt;
+import edu.jas.arith.ModIntRing;
 import edu.jas.arith.Product;
 import edu.jas.arith.ProductRing;
 import edu.jas.gb.DGroebnerBaseSeq;
@@ -131,6 +133,33 @@ public class GBFactory {
         return bba;
     }
 
+
+    /**
+     * Determine suitable implementation of GB algorithms, case ModInt.
+     * @param fac ModIntRing.
+     * @return GB algorithm implementation.
+     */
+    public static GroebnerBaseAbstract<ModInt> getImplementation(ModIntRing fac) {
+        return getImplementation(fac, new OrderedPairlist<ModInt>());
+    }
+
+
+    /**
+     * Determine suitable implementation of GB algorithms, case ModInt.
+     * @param fac ModIntRing.
+     * @param pl pair selection strategy
+     * @return GB algorithm implementation.
+     */
+    public static GroebnerBaseAbstract<ModInt> getImplementation(ModIntRing fac, PairList<ModInt> pl) {
+        GroebnerBaseAbstract<ModInt> bba;
+        if (fac.isField()) {
+            bba = new GroebnerBaseSeq<ModInt>(pl);
+        } else {
+            bba = new GroebnerBasePseudoSeq<ModInt>(fac, pl);
+        }
+        return bba;
+    }
+    
 
     /**
      * Determine suitable implementation of GB algorithms, case ModInteger.

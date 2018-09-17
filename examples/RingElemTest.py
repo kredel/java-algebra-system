@@ -6,7 +6,7 @@
 from java.lang import System
 from java.lang import Integer
 
-from jas import PolyRing, Order, ZZ, QQ, ZM, GF, GFL, ZML
+from jas import PolyRing, Order, ZZ, QQ, ZM, GF
 from jas import terminate, startLog
 
 import unittest
@@ -44,8 +44,8 @@ class RingElemTest (unittest.TestCase):
         #end
 
     def testRingZM(self):
-        r = PolyRing( GFL(17), "(t,x)", Order.INVLEX );
-        self.assertEqual(str(r),'PolyRing(GFL(17),"t,x",Order.INVLEX)');
+        r = PolyRing( GF(17), "(t,x)", Order.INVLEX );
+        self.assertEqual(str(r),'PolyRing(GFI(17),"t,x",Order.INVLEX)');
         [one,x,t] = r.gens();
         self.assertTrue(one.isONE());
         self.assertTrue(len(x)==1);
