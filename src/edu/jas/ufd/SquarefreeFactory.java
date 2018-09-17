@@ -12,6 +12,8 @@ import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
+import edu.jas.arith.ModInt;
+import edu.jas.arith.ModIntRing;
 import edu.jas.arith.ModLong;
 import edu.jas.arith.ModLongRing;
 import edu.jas.poly.AlgebraicNumber;
@@ -72,6 +74,7 @@ public class SquarefreeFactory {
      * @return squarefree factorization algorithm implementation.
      */
     public static SquarefreeAbstract<ModInteger> getImplementation(ModIntegerRing fac) {
+        // fac.isField() checked in constructor
         return new SquarefreeFiniteFieldCharP<ModInteger>(fac);
     }
 
@@ -83,7 +86,20 @@ public class SquarefreeFactory {
      * @return squarefree factorization algorithm implementation.
      */
     public static SquarefreeAbstract<ModLong> getImplementation(ModLongRing fac) {
+        // fac.isField() checked in constructor
         return new SquarefreeFiniteFieldCharP<ModLong>(fac);
+    }
+
+
+    /**
+     * Determine suitable implementation of factorization algorithm, case
+     * ModInt.
+     * @param fac ModIntRing.
+     * @return squarefree factorization algorithm implementation.
+     */
+    public static SquarefreeAbstract<ModInt> getImplementation(ModIntRing fac) {
+        // fac.isField() checked in constructor
+        return new SquarefreeFiniteFieldCharP<ModInt>(fac);
     }
 
 
@@ -219,6 +235,8 @@ public class SquarefreeFactory {
         } else if (ofac instanceof ModIntegerRing) {
             ufd = new SquarefreeFiniteFieldCharP<C>(fac);
         } else if (ofac instanceof ModLongRing) {
+            ufd = new SquarefreeFiniteFieldCharP<C>(fac);
+        } else if (ofac instanceof ModIntRing) {
             ufd = new SquarefreeFiniteFieldCharP<C>(fac);
         } else if (ofac instanceof AlgebraicNumberRing) {
             afac = (AlgebraicNumberRing) ofac;

@@ -14,6 +14,8 @@ import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.ModLong;
 import edu.jas.arith.ModLongRing;
+import edu.jas.arith.ModInt;
+import edu.jas.arith.ModIntRing;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.Complex;
@@ -86,6 +88,17 @@ public class FactorFactory {
      */
     public static FactorAbstract<ModLong> getImplementation(ModLongRing fac) {
         return new FactorModular<ModLong>(fac);
+    }
+
+
+    /**
+     * Determine suitable implementation of factorization algorithm, case
+     * ModInteger.
+     * @param fac ModIntegerRing.
+     * @return factorization algorithm implementation.
+     */
+    public static FactorAbstract<ModInt> getImplementation(ModIntRing fac) {
+        return new FactorModular<ModInt>(fac);
     }
 
 
@@ -192,6 +205,8 @@ public class FactorFactory {
         } else if (ofac instanceof ModIntegerRing) {
             ufd = new FactorModular(fac);
         } else if (ofac instanceof ModLongRing) {
+            ufd = new FactorModular(fac);
+        } else if (ofac instanceof ModIntRing) {
             ufd = new FactorModular(fac);
         } else if (ofac instanceof ComplexRing) {
             cfac = (ComplexRing<C>) ofac;
