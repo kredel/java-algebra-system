@@ -61,7 +61,7 @@ public class RunGB {
     /**
      * main method to be called from commandline <br>
      * Usage: RunGB [seq|par(+)|build=string|disthyb(+)|cli] &lt;file&gt;
-     * #procs/#threadsPerNode [machinefile] &lt;check&gt; 
+     * #procs/#threadsPerNode [machinefile] &lt;check&gt;
      */
     @SuppressWarnings("unchecked")
     public static void main(String[] args) {
@@ -194,6 +194,7 @@ public class RunGB {
             e.printStackTrace();
             return;
         }
+        System.out.println("pfac: " + pfac.toScript());
         Reader polyreader = new CatReader(new StringReader("("), problem); // ( has gone
         //Reader polyreader = problem; 
         GenPolynomialTokenizer tok = new GenPolynomialTokenizer(pfac, polyreader);
@@ -509,7 +510,7 @@ public class RunGB {
         return problem;
     }
 
-    
+
     @SuppressWarnings("unchecked")
     static GroebnerBaseAbstract getGBalgo(String[] args, String bstr, GenPolynomialRing ring) {
         GroebnerBaseAbstract gb = null;
