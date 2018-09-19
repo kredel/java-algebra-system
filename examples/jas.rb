@@ -247,6 +247,13 @@ def ZML(m,z=0,field=false)
 end
 
 =begin rdoc
+Create JAS ModInt as ring element.
+=end
+def ZMI(m,z=0,field=false)
+    return ZM(m,z,field);
+end
+
+=begin rdoc
 Create JAS ModInteger as field element.
 =end
 def GF(m,z=0)
@@ -257,6 +264,13 @@ end
 Create JAS ModLong as field element.
 =end
 def GFL(m,z=0)
+    return ZM(m,z,true);
+end
+
+=begin rdoc
+Create JAS ModInt as field element.
+=end
+def GFI(m,z=0)
     return ZM(m,z,true);
 end
 
