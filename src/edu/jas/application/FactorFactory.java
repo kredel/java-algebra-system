@@ -5,8 +5,8 @@
 package edu.jas.application;
 
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.Rational;
 import edu.jas.poly.AlgebraicNumber;

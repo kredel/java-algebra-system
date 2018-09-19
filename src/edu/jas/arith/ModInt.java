@@ -42,8 +42,8 @@ public final class ModInt implements GcdRingElem<ModInt>, Modular {
 
 
     /**
-     * The constructor creates a ModInt object from a ModIntRing and a int
-     * value part.
+     * The constructor creates a ModInt object from a ModIntRing and a int value
+     * part.
      * @param m ModIntRing.
      * @param a int.
      */
@@ -54,7 +54,7 @@ public final class ModInt implements GcdRingElem<ModInt>, Modular {
     }
 
 
-   /**
+    /**
      * The constructor creates a ModInt object from a ModIntRing and a long
      * value part.
      * @param m ModIntRing.
@@ -62,14 +62,14 @@ public final class ModInt implements GcdRingElem<ModInt>, Modular {
      */
     public ModInt(ModIntRing m, long a) {
         ring = m;
-        int v = ((int)a) % ring.modul;
+        int v = ((int) a) % ring.modul;
         val = (v >= 0 ? v : v + ring.modul);
     }
 
 
     /**
-     * The constructor creates a ModInt object from a ModIntRing and a Int
-     * value part.
+     * The constructor creates a ModInt object from a ModIntRing and a Int value
+     * part.
      * @param m ModIntRing.
      * @param a Int.
      */
@@ -77,7 +77,7 @@ public final class ModInt implements GcdRingElem<ModInt>, Modular {
         this(m, a.intValue());
     }
 
-    
+
     /**
      * The constructor creates a ModInt object from a ModIntRing and a Long
      * value part.
@@ -291,7 +291,7 @@ public final class ModInt implements GcdRingElem<ModInt>, Modular {
      */
     @Override
     public int hashCode() {
-        return (int) val;
+        return val;
     }
 
 
@@ -365,7 +365,7 @@ public final class ModInt implements GcdRingElem<ModInt>, Modular {
      * @throws NotInvertibleException if the element is not invertible.
      * @return S with S=1/this if defined.
      */
-    public ModInt inverse() /*throws NotInvertibleException*/{
+    public ModInt inverse() /*throws NotInvertibleException*/ {
         try {
             return new ModInt(ring, modInverse(val, ring.modul));
         } catch (ArithmeticException e) {
@@ -608,7 +608,7 @@ public final class ModInt implements GcdRingElem<ModInt>, Modular {
      *         sign bit.
      */
     public int bitLength() {
-        return (int)BigInteger.bitLength(val);
+        return (int) BigInteger.bitLength(val);
     }
 
 }

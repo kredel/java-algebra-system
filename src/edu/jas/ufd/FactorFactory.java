@@ -5,17 +5,17 @@
 package edu.jas.ufd;
 
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
+import edu.jas.arith.ModInt;
+import edu.jas.arith.ModIntRing;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.ModLong;
 import edu.jas.arith.ModLongRing;
-import edu.jas.arith.ModInt;
-import edu.jas.arith.ModIntRing;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.Complex;
@@ -188,7 +188,7 @@ public class FactorFactory {
      * @param fac RingFactory&lt;C&gt;.
      * @return factorization algorithm implementation.
      */
-    @SuppressWarnings({ "unchecked", "cast" })
+    @SuppressWarnings("unchecked")
     public static <C extends GcdRingElem<C>> FactorAbstract<C> getImplementation(RingFactory<C> fac) {
         logger.info("factor factory = " + fac.getClass().getName());
         //System.out.println("fac_o_ufd = " + fac.getClass().getName());

@@ -5,15 +5,15 @@
 package edu.jas.ufd;
 
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
-import edu.jas.arith.ModInteger;
-import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.ModInt;
 import edu.jas.arith.ModIntRing;
+import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.ModLong;
 import edu.jas.arith.ModLongRing;
 import edu.jas.poly.AlgebraicNumber;
@@ -36,20 +36,20 @@ import edu.jas.structure.RingFactory;
  *        <code>Squarefree</code> interface.
  * 
  *        <pre>
- * Squarefree&lt;CT&gt; engine;
- * engine = SquarefreeFactory.&lt;CT&gt; getImplementation(cofac);
- * c = engine.squarefreeFactors(a);
- * </pre>
+ *        Squarefree&lt;CT&gt; engine;
+ *        engine = SquarefreeFactory.&lt;CT&gt; getImplementation(cofac);
+ *        c = engine.squarefreeFactors(a);
+ *        </pre>
  * 
  *        For example, if the coefficient type is BigInteger, the usage looks
  *        like
  * 
  *        <pre>
- * BigInteger cofac = new BigInteger();
- * Squarefree&lt;BigInteger&gt; engine;
- * engine = SquarefreeFactory.getImplementation(cofac);
- * Sm = engine.sqaurefreeFactors(poly);
- * </pre>
+ *        BigInteger cofac = new BigInteger();
+ *        Squarefree&lt;BigInteger&gt; engine;
+ *        engine = SquarefreeFactory.getImplementation(cofac);
+ *        Sm = engine.sqaurefreeFactors(poly);
+ *        </pre>
  * 
  * @see edu.jas.ufd.Squarefree#squarefreeFactors(edu.jas.poly.GenPolynomial P)
  */
@@ -171,7 +171,8 @@ public class SquarefreeFactory {
      * @param <C> coefficient type, e.g. BigRational, ModInteger.
      * @return squarefree factorization algorithm implementation.
      */
-    public static <C extends GcdRingElem<C>> SquarefreeAbstract<C> getImplementation(GenPolynomialRing<C> fac) {
+    public static <C extends GcdRingElem<C>> SquarefreeAbstract<C> getImplementation(
+                    GenPolynomialRing<C> fac) {
         return getImplementationPoly(fac);
     }
 
@@ -223,7 +224,7 @@ public class SquarefreeFactory {
     public static <C extends GcdRingElem<C>> SquarefreeAbstract<C> getImplementation(RingFactory<C> fac) {
         //logger.info("fac = " + fac.getClass().getName());
         //System.out.println("fac_o = " + fac.getClass().getName());
-        SquarefreeAbstract/*raw type<C>*/ufd = null;
+        SquarefreeAbstract/*raw type<C>*/ ufd = null;
         AlgebraicNumberRing afac = null;
         QuotientRing qfac = null;
         GenPolynomialRing pfac = null;
@@ -263,8 +264,8 @@ public class SquarefreeFactory {
         } else if (fac.characteristic().signum() == 0) {
             ufd = new SquarefreeRingChar0<C>(fac);
         } else {
-            throw new IllegalArgumentException("no squarefree factorization implementation for "
-                            + fac.getClass().getName());
+            throw new IllegalArgumentException(
+                            "no squarefree factorization implementation for " + fac.getClass().getName());
         }
         logger.debug("ufd = " + ufd);
         return (SquarefreeAbstract<C>) ufd;

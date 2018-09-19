@@ -5,17 +5,17 @@
 package edu.jas.ufd;
 
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
+import edu.jas.arith.ModInt;
+import edu.jas.arith.ModIntRing;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.ModLong;
 import edu.jas.arith.ModLongRing;
-import edu.jas.arith.ModInt;
-import edu.jas.arith.ModIntRing;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
@@ -42,26 +42,26 @@ import edu.jas.structure.RingFactory;
  *        will be the time of the fastest algorithm implmentation.
  * 
  *        <pre>
- * GreatestCommonDivisor&lt;CT&gt; engine;
- * engine = GCDFactory.&lt;CT&gt; getImplementation(cofac);
- * or engine = GCDFactory.&lt;CT&gt; getProxy(cofac);
- * c = engine.gcd(a, b);
- * </pre>
+ *        GreatestCommonDivisor&lt;CT&gt; engine;
+ *        engine = GCDFactory.&lt;CT&gt; getImplementation(cofac);
+ *        or engine = GCDFactory.&lt;CT&gt; getProxy(cofac);
+ *        c = engine.gcd(a, b);
+ *        </pre>
  * 
- *        For example, if the coefficient type is
- *        <code>BigInteger</code>, the usage looks like
+ *        For example, if the coefficient type is <code>BigInteger</code>, the
+ *        usage looks like
  * 
  *        <pre>
- * BigInteger cofac = new BigInteger();
- * GreatestCommonDivisor&lt;BigInteger&gt; engine;
- * engine = GCDFactory.getImplementation(cofac);
- * or engine = GCDFactory.getProxy(cofac);
- * c = engine.gcd(a, b);
- * </pre>
+ *        BigInteger cofac = new BigInteger();
+ *        GreatestCommonDivisor&lt;BigInteger&gt; engine;
+ *        engine = GCDFactory.getImplementation(cofac);
+ *        or engine = GCDFactory.getProxy(cofac);
+ *        c = engine.gcd(a, b);
+ *        </pre>
  *
- * <b>Todo:</b> Base decision also on degree vectors and number of
- * variables of polynomials. Incorporate also number of CPUs / threads
- * available (done with <code>GCDProxy</code>).
+ *        <b>Todo:</b> Base decision also on degree vectors and number of
+ *        variables of polynomials. Incorporate also number of CPUs / threads
+ *        available (done with <code>GCDProxy</code>).
  * 
  * @see edu.jas.ufd.GreatestCommonDivisor#gcd(edu.jas.poly.GenPolynomial P,
  *      edu.jas.poly.GenPolynomial S)
@@ -255,7 +255,7 @@ public class GCDFactory {
     @SuppressWarnings("unchecked")
     public static <C extends GcdRingElem<C>> GreatestCommonDivisorAbstract<C> getImplementation(
                     RingFactory<C> fac) {
-        GreatestCommonDivisorAbstract/*raw type<C>*/ufd;
+        GreatestCommonDivisorAbstract/*raw type<C>*/ ufd;
         logger.debug("fac = " + fac.getClass().getName());
         Object ofac = fac;
         if (ofac instanceof BigInteger) {
@@ -297,20 +297,20 @@ public class GCDFactory {
         if (ComputerThreads.NO_THREADS) { // hack for Google app engine
             return GCDFactory.<C> getImplementation(fac);
         }
-        GreatestCommonDivisorAbstract/*raw type<C>*/ufd;
+        GreatestCommonDivisorAbstract/*raw type<C>*/ ufd;
         logger.debug("fac = " + fac.getClass().getName());
         Object ofac = fac;
         if (ofac instanceof BigInteger) {
             ufd = new GCDProxy<BigInteger>(new GreatestCommonDivisorSubres<BigInteger>(),
                             new GreatestCommonDivisorModular<ModInteger>());
         } else if (ofac instanceof ModIntegerRing) {
-            ufd = new GCDProxy<ModInteger>(new GreatestCommonDivisorSimple<ModInteger>(), // Subres
+            ufd = new GCDProxy<ModInteger>(new GreatestCommonDivisorSimple<ModInteger>(), // or Subres
                             new GreatestCommonDivisorModEval<ModInteger>());
         } else if (ofac instanceof ModLongRing) {
-            ufd = new GCDProxy<ModLong>(new GreatestCommonDivisorSimple<ModLong>(), // Subres
+            ufd = new GCDProxy<ModLong>(new GreatestCommonDivisorSimple<ModLong>(), // or Subres
                             new GreatestCommonDivisorModEval<ModLong>());
         } else if (ofac instanceof ModIntRing) {
-            ufd = new GCDProxy<ModInt>(new GreatestCommonDivisorSimple<ModInt>(), // Subres
+            ufd = new GCDProxy<ModInt>(new GreatestCommonDivisorSimple<ModInt>(), // or Subres
                             new GreatestCommonDivisorModEval<ModInt>());
         } else if (ofac instanceof BigRational) {
             ufd = new GCDProxy<BigRational>(new GreatestCommonDivisorSubres<BigRational>(),

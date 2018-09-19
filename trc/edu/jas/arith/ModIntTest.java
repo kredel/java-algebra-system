@@ -151,12 +151,12 @@ public class ModIntTest extends TestCase {
 
         String s = "61111111111111111";
         zm = new ModIntRing("10");
-	try {
+        try {
             a = new ModInt(zm, s);
-	    fail("s to large");
-	} catch (NumberFormatException e) {
-	    // pass
-	}
+            fail("s to large");
+        } catch (NumberFormatException e) {
+            // pass
+        }
         s = "611111111";
         a = new ModInt(zm, s);
         String t = a.toString();
@@ -313,14 +313,14 @@ public class ModIntTest extends TestCase {
         assertEquals("cra(a mod 19,a mod 13) = a", a, e);
 
         java.math.BigInteger p1 = getPrime2();
-	try {
-	    z1 = new ModIntRing(p1);
-	    fail("p1 too large");
-	} catch (IllegalArgumentException e) {
+        try {
+            z1 = new ModIntRing(p1);
+            fail("p1 too large");
+        } catch (IllegalArgumentException e) {
             //pass
-	}
+        }
         p1 = getPrime3();
-        java.math.BigInteger p2 = new java.math.BigInteger("19"); 
+        java.math.BigInteger p2 = new java.math.BigInteger("19");
         java.math.BigInteger p1p2 = p1.multiply(p2);
         //System.out.println("p1p2 = " + p1p2);
         //System.out.println("prime p1 ? = " + p1.isProbablePrime(66));

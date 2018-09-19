@@ -54,8 +54,8 @@ public final class ModIntRing implements ModularRingFactory<ModInt>, Iterable<Mo
 
 
     /**
-     * The constructor creates a ModIntRing object from a int integer as
-     * module part.
+     * The constructor creates a ModIntRing object from a int integer as module
+     * part.
      * @param m int integer.
      */
     public ModIntRing(int m) {
@@ -64,8 +64,8 @@ public final class ModIntRing implements ModularRingFactory<ModInt>, Iterable<Mo
 
 
     /**
-     * The constructor creates a ModIntRing object from a int integer as
-     * module part.
+     * The constructor creates a ModIntRing object from a int integer as module
+     * part.
      * @param m int integer.
      * @param isField indicator if m is prime.
      */
@@ -76,8 +76,8 @@ public final class ModIntRing implements ModularRingFactory<ModInt>, Iterable<Mo
 
 
     /**
-     * The constructor creates a ModIntRing object from a Int integer as
-     * module part.
+     * The constructor creates a ModIntRing object from a Int integer as module
+     * part.
      * @param m Int integer.
      */
     public ModIntRing(Integer m) {
@@ -86,8 +86,8 @@ public final class ModIntRing implements ModularRingFactory<ModInt>, Iterable<Mo
 
 
     /**
-     * The constructor creates a ModIntRing object from a Int integer as
-     * module part.
+     * The constructor creates a ModIntRing object from a Int integer as module
+     * part.
      * @param m Int integer.
      * @param isField indicator if m is prime.
      */
@@ -377,7 +377,7 @@ public final class ModIntRing implements ModularRingFactory<ModInt>, Iterable<Mo
      */
     @Override
     public int hashCode() {
-        return (int) modul;
+        return modul;
     }
 
 
@@ -452,12 +452,11 @@ public final class ModIntRing implements ModularRingFactory<ModInt>, Iterable<Mo
 
 
     /**
-     * Modular digit list chinese remainder algorithm.  m1 and m2 are
-     * positive beta-integers, with GCD(m1,m2)=1 and m=m1*m2 less than
-     * beta.  L1 and L2 are lists of elements of Z(m1) and Z(m2)
-     * respectively.  L is a list of all a in Z(m) such that a is
-     * congruent to a1 modulo m1 and a is congruent to a2 modulo m2
-     * with a1 in L1 and a2 in L2.  This is a factory method. Assert
+     * Modular digit list chinese remainder algorithm. m1 and m2 are positive
+     * beta-integers, with GCD(m1,m2)=1 and m=m1*m2 less than beta. L1 and L2
+     * are lists of elements of Z(m1) and Z(m2) respectively. L is a list of all
+     * a in Z(m) such that a is congruent to a1 modulo m1 and a is congruent to
+     * a2 modulo m2 with a1 in L1 and a2 in L2. This is a factory method. Assert
      * c.modul >= a.modul and c.modul * a.modul = this.modul.
      * @param m1 ModInt.
      * @param m2 other ModInt.
@@ -467,11 +466,11 @@ public final class ModIntRing implements ModularRingFactory<ModInt>, Iterable<Mo
         int mm = m1.ring.modul * m2.ring.modul;
         ModIntRing m = new ModIntRing(mm);
         ModInt m21 = m2.ring.fromInteger(m1.ring.modul);
-        ModInt mi1 = m21.inverse(); 
+        ModInt mi1 = m21.inverse();
 
         List<ModInt> L = new ArrayList<ModInt>();
         for (ModInt a : L1) {
-	    for (ModInt b : L2) {
+            for (ModInt b : L2) {
                 ModInt c = m.chineseRemainder(a, mi1, b);
                 L.add(c);
             }

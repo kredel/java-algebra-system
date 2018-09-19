@@ -442,12 +442,11 @@ public final class ModLongRing implements ModularRingFactory<ModLong>, Iterable<
 
 
     /**
-     * Modular digit list chinese remainder algorithm.  m1 and m2 are
-     * positive beta-integers, with GCD(m1,m2)=1 and m=m1*m2 less than
-     * beta.  L1 and L2 are lists of elements of Z(m1) and Z(m2)
-     * respectively.  L is a list of all a in Z(m) such that a is
-     * congruent to a1 modulo m1 and a is congruent to a2 modulo m2
-     * with a1 in L1 and a2 in L2.  This is a factory method. Assert
+     * Modular digit list chinese remainder algorithm. m1 and m2 are positive
+     * beta-integers, with GCD(m1,m2)=1 and m=m1*m2 less than beta. L1 and L2
+     * are lists of elements of Z(m1) and Z(m2) respectively. L is a list of all
+     * a in Z(m) such that a is congruent to a1 modulo m1 and a is congruent to
+     * a2 modulo m2 with a1 in L1 and a2 in L2. This is a factory method. Assert
      * c.modul >= a.modul and c.modul * a.modul = this.modul.
      * @param m1 ModLong.
      * @param m2 other ModLong.
@@ -457,11 +456,11 @@ public final class ModLongRing implements ModularRingFactory<ModLong>, Iterable<
         long mm = m1.ring.modul * m2.ring.modul;
         ModLongRing m = new ModLongRing(mm);
         ModLong m21 = m2.ring.fromInteger(m1.ring.modul);
-        ModLong mi1 = m21.inverse(); 
+        ModLong mi1 = m21.inverse();
 
         List<ModLong> L = new ArrayList<ModLong>();
         for (ModLong a : L1) {
-	    for (ModLong b : L2) {
+            for (ModLong b : L2) {
                 ModLong c = m.chineseRemainder(a, mi1, b);
                 L.add(c);
             }
