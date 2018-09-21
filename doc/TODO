@@ -16,11 +16,9 @@ issues to consider:
 
 - implement univariate power series composition and power
 
-- implement Word ideal intersection, if possible
-
 - make polynomial chinese remainder generic (?)
 
-- test caching results of gcd computation
+- check / test caching results of gcd computation
 
 - algebraic number theory
 
@@ -36,11 +34,7 @@ issues to consider:
 
 - refactor from BasicLinAlg to GenMatrix and GenVector 
 
-- check solvable polynomials with integral domain coefficients
-
 - implement Boolean with RingElem interface (?)
-
-- make final variables public (?)
 
 - refactor method names for groovy operator overloading, make examples for usage
 
@@ -48,15 +42,21 @@ issues to consider:
 
 - completely switch from svn to git
 
+- remove @usage doc tag
+
 
 
 partially resolved and completed issues:
 
 - rework parallel GB algorithms
 
-- implement FGLM GB algorithm
+- rework distributed parallel GB algorithms
 
-- implement Groebner Walk GB computation
+- parallel modular algorithms
+
+- check solvable polynomials with integral domain coefficients
+
+- implement quaternion integers for non-commutative coefficients
 
 - implement other term orders for multivariate power series
 
@@ -64,17 +64,17 @@ partially resolved and completed issues:
 
 - implement 0-dim ideal complex root selection
 
-- implement squarefree decomposition over fields of characteristic p
-
 - implement absolute polynomial factorization
 
 - implement univaiate and multivariate polynomial factorization
 
-- implement signature based GB computation
+- implement signature based GB computation, only iterative done
+
+- implement Word ideal intersection, if possible
 
 - provide all Jython examples also for JRuby
 
-- refactor package structure to reduce circular dependences
+- provide a Sage Python like interface in Jython
 
 - implement parallel proxys for GB computation
 
@@ -112,22 +112,35 @@ partially resolved and completed issues:
   in GCD ModEval only univariate cases are used, so term order is not a problem
 
 - add assertions to check for number of polynomial variables and term order,
-  nvar in GenPolynomial and GenSolvablePolynomial done
+  nvar in GenPolynomial and GenSolvablePolynomial, done
 
 - define quotientRemainder in RingElem interface (?)
+
+- make final variables public (?)
 
 - make hashCode to reuse computed value --> not immutable
 
 - add method bitLength() to Element
-
-- refactor Power with Java 8 features, use lambdas and default implementations
 
 
 
 
 resolved and completed issues:
 
+- implement TOP term orders for module Gröbner bases, done for some combinations
+
+- implement FGLM GB algorithm, done
+
+- implement Groebner Walk GB computation, done
+
+- implement squarefree decomposition over fields of characteristic p
+
 - implement AlgebraicNumber primitive element computation, done
+
+- design factories for (solvable) Gröbner bases, GCD computation,
+  squarefree decomposition, factorization, extension fields
+
+- check inseparable field extension, done
 
 - implement prime and primary ideal decomposition for non-zero-dimensional ideals, done
 
@@ -143,6 +156,8 @@ resolved and completed issues:
 
 - implement comprehensive GB, done
 
+- refactor package structure to reduce circular dependences, done
+
 - implement term order optimization from MAS, also for coefficients 
   and solvable polynomials, done
 
@@ -157,6 +172,10 @@ resolved and completed issues:
 
 - implement multivariate polynomial greatest common divisors, done
 
+- design and implement free non-commuative polynomials GenWordPolynomial, done
+
+- implement Mora's standard base algorithm for GenWordPolynomial
+
 - add methods to GenPolynomialRing to construct x_i polynomials, done
 
 - refactor univPoly in solvable implementations, done
@@ -164,6 +183,8 @@ resolved and completed issues:
 - develop modifiable polynomial constructor or put method and iterators
 
 - refactor unit tests to a different source code tree to avoid circular dependencys
+
+- provide scripting interfaces for JAS, done
 
 - rework junit tests to stop failing in case of zero polynomials
 
@@ -182,6 +203,8 @@ resolved and completed issues:
 - add missing comments in edu.jas.Algebra*, done
 
 - let inverse() throw a runtime exception, done; throw a checked exception (?, no)
+
+- refactor Power with Java 8 features, use lambdas and default implementations, done
 
 - split ModInteger to ModIntegerRing factory, done
 
