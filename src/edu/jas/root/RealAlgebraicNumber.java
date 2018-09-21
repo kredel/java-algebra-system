@@ -109,6 +109,7 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
      */
     public boolean isZERO() {
         return number.isZERO();
+        //return magnitude().isZERO();
     }
 
 

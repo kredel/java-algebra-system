@@ -11,6 +11,7 @@ import java.util.List;
 
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
+import edu.jas.poly.PolyUtil;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.NotInvertibleException;
@@ -55,27 +56,13 @@ public class RealAlgebraicTest extends TestCase {
     }
 
 
-    //private final static int bitlen = 100;
-
     RealAlgebraicRing<BigRational> fac;
 
 
     GenPolynomialRing<BigRational> mfac;
 
 
-    RealAlgebraicNumber<BigRational> a;
-
-
-    RealAlgebraicNumber<BigRational> b;
-
-
-    RealAlgebraicNumber<BigRational> c;
-
-
-    RealAlgebraicNumber<BigRational> d;
-
-
-    RealAlgebraicNumber<BigRational> e;
+    RealAlgebraicNumber<BigRational> a, b, c, d, e;
 
 
     RealAlgebraicNumber<BigRational> alpha;
@@ -142,7 +129,6 @@ public class RealAlgebraicTest extends TestCase {
 
     /**
      * Test random polynomial.
-     * 
      */
     public void testRandom() {
         for (int i = 0; i < 7; i++) {
@@ -161,7 +147,6 @@ public class RealAlgebraicTest extends TestCase {
 
     /**
      * Test addition.
-     * 
      */
     public void testAddition() {
         a = fac.random(ll);
@@ -192,8 +177,7 @@ public class RealAlgebraicTest extends TestCase {
 
 
     /**
-     * Test object multiplication.
-     * 
+     * Test multiplication.
      */
     public void testMultiplication() {
         a = fac.random(ll);
@@ -232,7 +216,6 @@ public class RealAlgebraicTest extends TestCase {
         d = fac.getONE().multiply(a);
         assertEquals("a*1 = 1*a", c, d);
 
-
         c = a.inverse();
         d = c.multiply(a);
         //System.out.println("a = " + a);
@@ -242,16 +225,15 @@ public class RealAlgebraicTest extends TestCase {
 
         try {
             a = fac.getZERO().inverse();
+            fail("0 invertible");
         } catch (NotInvertibleException expected) {
-            return;
+            // pass
         }
-        fail("0 invertible");
     }
 
 
     /**
      * Test distributive law.
-     * 
      */
     public void testDistributive() {
         a = fac.random(ll);
@@ -267,7 +249,6 @@ public class RealAlgebraicTest extends TestCase {
 
     /**
      * Test sign of real algebraic numbers.
-     * 
      */
     public void testSignum() {
         a = fac.random(ll);
@@ -295,7 +276,6 @@ public class RealAlgebraicTest extends TestCase {
 
     /**
      * Test compareTo of real algebraic numbers.
-     * 
      */
     public void testCompare() {
         a = fac.random(ll).abs();
@@ -326,7 +306,6 @@ public class RealAlgebraicTest extends TestCase {
 
     /**
      * Test arithmetic of magnitude of real algebraic numbers.
-     * 
      */
     public void testMagnitude() {
         a = fac.random(ll);
@@ -358,10 +337,14 @@ public class RealAlgebraicTest extends TestCase {
         BigRational eps = Power.positivePower(new BigRational(1L, 10L), 8);
         BigDecimal epsd = new BigDecimal(eps);
 
+        BigDecimal rel = dd.abs().sum(dd1.abs());
+        BigDecimal err = dd.subtract(dd1).abs().divide(rel);
+        //System.out.println("rel = " + rel);
+        //System.out.println("|dd-dd1|/rel = " + err + ", eps = " + epsd);
         assertTrue("mag(a*b) = mag(a)*mag(b): " + dd + ", " + dd1,
-                        dd.subtract(dd1).abs().compareTo(epsd) <= 0);
-        assertTrue("mag(a+b) = mag(a)+mag(b): " + ed + ", " + ed1,
-                        ed.subtract(ed1).abs().compareTo(epsd) <= 0);
+                   err.compareTo(epsd) <= 0);
+        assertTrue("mag(a+b) = mag(a)+mag(b): " + ed + ", " + ed1, 
+                   ed.subtract(ed1).abs().compareTo(epsd) <= 0); 
 
 
         d = a.divide(b);
@@ -386,33 +369,42 @@ public class RealAlgebraicTest extends TestCase {
     /**
      * Test real root isolation. Tests nothing.
      */
-    public void notestRealRootIsolation() {
+    public void testRealRootIsolation() {
         System.out.println();
         GenPolynomialRing<RealAlgebraicNumber<BigRational>> dfac;
         dfac = new GenPolynomialRing<RealAlgebraicNumber<BigRational>>(fac, 1);
 
         GenPolynomial<RealAlgebraicNumber<BigRational>> ar;
-        //RealAlgebraicNumber<BigRational> epsr;
-
         ar = dfac.random(3, 5, 7, q);
-        System.out.println("ar = " + ar);
-
+        //System.out.println("ar = " + ar);
+        if (ar.degree() % 2 == 0) { // ensure existence of a root
+	    ar = ar.multiply(dfac.univariate(0));
+        }
+        //System.out.println("ar = " + ar);
+	
         RealRoots<RealAlgebraicNumber<BigRational>> rrr = new RealRootsSturm<RealAlgebraicNumber<BigRational>>();
-
         List<Interval<RealAlgebraicNumber<BigRational>>> R = rrr.realRoots(ar);
-        System.out.println("R = " + R);
-
-        //assertTrue("#roots >= 0 ", R.size() >= 0 );
+        //System.out.println("R = " + R);
+        assertTrue("#roots >= 0 ", R.size() > 0 );
 
         BigRational eps = Power.positivePower(new BigRational(1L, 10L), BigDecimal.DEFAULT_PRECISION);
-        //BigRational eps = Power.positivePower(new BigRational(1L,10L),10);
+        BigDecimal epsd = new BigDecimal(Power.positivePower(new BigRational(1L,10L), 14 - ar.degree())); // less
+        //System.out.println("eps = " + epsd);
 
         R = rrr.refineIntervals(R, ar, eps);
         //System.out.println("R = " + R);
         for (Interval<RealAlgebraicNumber<BigRational>> v : R) {
-            BigDecimal dd = v.toDecimal(); //.sum(eps1);
-            System.out.println("v = " + dd);
-            // assertTrue("|dd - di| < eps ", dd.compareTo(di) == 0);
+            RealAlgebraicNumber<BigRational> m = v.middle();
+            //System.out.println("m = " + m);
+            RealAlgebraicNumber<BigRational> n;
+            n = PolyUtil.<RealAlgebraicNumber<BigRational>> evaluateMain(fac, ar, m);
+            //System.out.println("n = " + n);
+            BigRational nr = n.magnitude(); 
+            //System.out.println("nr = " + nr);
+            BigDecimal nd = new BigDecimal(nr); 
+            //System.out.println("nd = " + nd);
+            assertTrue("|nd| < eps: " + nd + " " + epsd, nd.abs().compareTo(epsd) <= 0);
+            //no: assertTrue("n == 0: " + n, n.isZERO());
         }
     }
 
@@ -420,7 +412,6 @@ public class RealAlgebraicTest extends TestCase {
     /**
      * Test real root isolation for Wilkinson like polynomials.
      * product_{i=1..n}( x - i * alpha )
-     * 
      */
     public void testRealRootIsolationWilkinson() {
         //System.out.println();
@@ -435,7 +426,8 @@ public class RealAlgebraicTest extends TestCase {
         dr = dfac.getONE();
         er = dfac.univariate(0);
 
-        List<Interval<RealAlgebraicNumber<BigRational>>> Rn = new ArrayList<Interval<RealAlgebraicNumber<BigRational>>>(
+        List<Interval<RealAlgebraicNumber<BigRational>>> Rn;
+	  Rn = new ArrayList<Interval<RealAlgebraicNumber<BigRational>>>(
                         N);
         ar = dr;
         for (int i = 0; i < N; i++) {
