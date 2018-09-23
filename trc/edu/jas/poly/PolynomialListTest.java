@@ -49,11 +49,7 @@ public class PolynomialListTest extends TestCase {
     PolynomialList<BigRational> m;
     PolynomialList<BigRational> p;
 
-    GenPolynomial<BigRational> a;
-    GenPolynomial<BigRational> b;
-    GenPolynomial<BigRational> c;
-    GenPolynomial<BigRational> d;
-    GenPolynomial<BigRational> e;
+    GenPolynomial<BigRational> a, b, c, d, e;
 
     int rl = 4; 
     int kl = 4;
@@ -98,7 +94,7 @@ public class PolynomialListTest extends TestCase {
     public void testPolynomialList() {
         List<GenPolynomial<BigRational>> l = new ArrayList<GenPolynomial<BigRational>>();
         for (int i = 0; i < 7; i++) {
-            a = fac.random(ll+i); // rl, el, q );
+            a = fac.random(ll+i); 
             assertTrue("length( a"+i+" ) <> 0", a.length() >= 0);
             assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
             assertTrue(" not isONE( a"+i+" )", !a.isONE() );
@@ -118,7 +114,7 @@ public class PolynomialListTest extends TestCase {
     public void testOrderedPolynomialList() {
         List<GenPolynomial<BigRational>> l = new ArrayList<GenPolynomial<BigRational>>();
         for (int i = 0; i < 7; i++) {
-            a = fac.random(ll+i); // rl, el, q );
+            a = fac.random(ll+i); 
             assertTrue("length( a"+i+" ) <> 0", a.length() >= 0);
             assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
             assertTrue(" not isONE( a"+i+" )", !a.isONE() );
@@ -143,7 +139,7 @@ public class PolynomialListTest extends TestCase {
     public void testHomogeneousPolynomialList() {
         List<GenPolynomial<BigRational>> l = new ArrayList<GenPolynomial<BigRational>>();
         for (int i = 0; i < 7; i++) {
-            a = fac.random(ll+i); // rl, el, q );
+            a = fac.random(ll+i); 
             assertTrue("length( a"+i+" ) <> 0", a.length() >= 0);
             assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
             assertTrue(" not isONE( a"+i+" )", !a.isONE() );

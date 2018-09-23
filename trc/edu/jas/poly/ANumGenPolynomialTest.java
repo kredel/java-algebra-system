@@ -46,27 +46,13 @@ public class ANumGenPolynomialTest extends TestCase {
     }
 
 
-    //private final static int bitlen = 100;
-
     GenPolynomialRing<AlgebraicNumber<BigRational>> fac;
 
 
     AlgebraicNumberRing<BigRational> cfac;
 
 
-    GenPolynomial<AlgebraicNumber<BigRational>> a;
-
-
-    GenPolynomial<AlgebraicNumber<BigRational>> b;
-
-
-    GenPolynomial<AlgebraicNumber<BigRational>> c;
-
-
-    GenPolynomial<AlgebraicNumber<BigRational>> d;
-
-
-    GenPolynomial<AlgebraicNumber<BigRational>> e;
+    GenPolynomial<AlgebraicNumber<BigRational>> a, b, c, d, e;
 
 
     int rl = 3;
@@ -110,7 +96,6 @@ public class ANumGenPolynomialTest extends TestCase {
 
     /**
      * Test constructor //and toString
-     * 
      */
     public void testConstruction() {
         c = fac.getONE();
@@ -129,14 +114,13 @@ public class ANumGenPolynomialTest extends TestCase {
 
     /**
      * Test random polynomial.
-     * 
      */
     public void testRandom() {
         for (int i = 0; i < 7; i++) {
             a = fac.random(ll + i);
             //System.out.println("a = " + a);
 
-            // fac.random(rl+i, kl*(i+1), ll+2*i, el+i, q );
+            //fac.random(kl*(i+1), ll+2*i, el+i, q );
             assertTrue("length( a" + i + " ) <> 0", a.length() >= 0);
             assertTrue(" not isZERO( a" + i + " )", !a.isZERO());
             assertTrue(" not isONE( a" + i + " )", !a.isONE());
@@ -146,10 +130,8 @@ public class ANumGenPolynomialTest extends TestCase {
 
     /**
      * Test addition.
-     * 
      */
     public void testAddition() {
-
         a = fac.random(ll);
         b = fac.random(ll);
 
@@ -199,11 +181,8 @@ public class ANumGenPolynomialTest extends TestCase {
 
     /**
      * Test object multiplication.
-     * 
      */
-
     public void testMultiplication() {
-
         a = fac.random(ll);
         assertTrue("not isZERO( a )", !a.isZERO());
 
@@ -268,7 +247,6 @@ public class ANumGenPolynomialTest extends TestCase {
 
     /**
      * Test distributive law.
-     * 
      */
     public void testDistributive() {
         a = fac.random(ll);
@@ -284,11 +262,8 @@ public class ANumGenPolynomialTest extends TestCase {
 
     /**
      * Test object quotient and remainder.
-     * 
      */
-
     public void testQuotRem1() {
-
         fac = new GenPolynomialRing<AlgebraicNumber<BigRational>>(cfac, 1);
 
         a = fac.random(2); //.monic();

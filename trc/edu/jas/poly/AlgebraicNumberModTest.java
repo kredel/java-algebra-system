@@ -60,11 +60,7 @@ public class AlgebraicNumberModTest extends TestCase {
     AlgebraicNumberRing<ModInteger> fac;
     GenPolynomialRing<ModInteger> mfac;
 
-    AlgebraicNumber< ModInteger > a;
-    AlgebraicNumber< ModInteger > b;
-    AlgebraicNumber< ModInteger > c;
-    AlgebraicNumber< ModInteger > d;
-    AlgebraicNumber< ModInteger > e;
+    AlgebraicNumber< ModInteger > a, b, c, d, e;
 
     int rl = 1; 
     int kl = 10;
@@ -92,6 +88,7 @@ public class AlgebraicNumberModTest extends TestCase {
         //System.out.println("p = " + p + ", qp = " + qp);
     }
 
+
     protected void tearDown() {
         a = b = c = d = e = null;
         fac = null;
@@ -100,7 +97,6 @@ public class AlgebraicNumberModTest extends TestCase {
 
     /**
      * Test constructor and toString.
-     * 
      */
     public void testConstruction() {
         c = fac.getONE();
@@ -121,7 +117,6 @@ public class AlgebraicNumberModTest extends TestCase {
 
     /**
      * Test random polynomial.
-     * 
      */
     public void testRandom() {
         for (int i = 0; i < 7; i++) {
@@ -130,7 +125,7 @@ public class AlgebraicNumberModTest extends TestCase {
             if ( a.isZERO() || a.isONE() ) {
                 continue;
             }
-            // fac.random(rl+i, kl*(i+1), ll+2*i, el+i, q );
+            //fac.random(kl*(i+1), ll+2*i, el+i, q );
             assertTrue("length( a"+i+" ) <> 0", a.getVal().length() >= 0);
             assertTrue(" not isZERO( a"+i+" )", !a.isZERO() );
             assertTrue(" not isONE( a"+i+" )", !a.isONE() );
@@ -140,7 +135,6 @@ public class AlgebraicNumberModTest extends TestCase {
 
     /**
      * Test addition.
-     * 
      */
     public void testAddition() {
         a = fac.random(ll);
@@ -172,7 +166,6 @@ public class AlgebraicNumberModTest extends TestCase {
 
     /**
      * Test object multiplication.
-     * 
      */
     public void testMultiplication() {
         a = fac.random(ll);
@@ -232,7 +225,6 @@ public class AlgebraicNumberModTest extends TestCase {
 
     /**
      * Test distributive law.
-     * 
      */
     public void testDistributive() {
         a = fac.random( ll );
@@ -248,7 +240,6 @@ public class AlgebraicNumberModTest extends TestCase {
 
     /**
      * Test object potentiation.
-     * 
      */
     public void testCharPower() {
         //System.out.println("fac = " + fac);
@@ -271,7 +262,6 @@ public class AlgebraicNumberModTest extends TestCase {
 
     /**
      * Test enumerator.
-     * 
      */
     public void testEnumerator() {
         long s = 1L;

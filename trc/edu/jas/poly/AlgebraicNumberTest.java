@@ -129,7 +129,7 @@ public class AlgebraicNumberTest extends TestCase {
             if (a.isZERO() || a.isONE()) {
                 continue;
             }
-            // fac.random(rl+i, kl*(i+1), ll+2*i, el+i, q );
+            //fac.random(kl*(i+1), ll+2*i, el+i, q );
             assertTrue("length( a" + i + " ) <> 0", a.getVal().length() >= 0);
             assertTrue(" not isZERO( a" + i + " )", !a.isZERO());
             assertTrue(" not isONE( a" + i + " )", !a.isONE());

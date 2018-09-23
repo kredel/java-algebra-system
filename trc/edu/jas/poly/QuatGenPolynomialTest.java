@@ -110,7 +110,7 @@ public class QuatGenPolynomialTest extends TestCase {
     public void testRandom() {
         for (int i = 0; i < 7; i++) {
             a = fac.random(kl, ll, el, q);
-            // fac.random(rl+i, kl*(i+1), ll+2*i, el+i, q );
+            // fac.random(kl*(i+1), ll+2*i, el+i, q );
             if (a.isZERO()) {
                 continue;
             }

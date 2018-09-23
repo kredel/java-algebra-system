@@ -39,7 +39,6 @@ public class RealAlgebraicTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        
         junit.textui.TestRunner.run(suite());
     }
 
@@ -70,19 +69,7 @@ public class RealAlgebraicTest extends TestCase {
     GenPolynomialRing<BigRational> mfac;
 
 
-    RealAlgebraicNumber<BigRational> a;
-
-
-    RealAlgebraicNumber<BigRational> b;
-
-
-    RealAlgebraicNumber<BigRational> c;
-
-
-    RealAlgebraicNumber<BigRational> d;
-
-
-    RealAlgebraicNumber<BigRational> e;
+    RealAlgebraicNumber<BigRational> a, b, c, d, e;
 
 
     int rl = 1;
@@ -188,7 +175,7 @@ public class RealAlgebraicTest extends TestCase {
             if (a.isZERO() || a.isONE()) {
                 continue;
             }
-            // fac.random(rl+i, kl*(i+1), ll+2*i, el+i, q );
+            // fac.random(kl*(i+1), ll+2*i, el+i, q );
             //assertTrue("length( a" + i + " ) <> 0", a.number.getVal().length() >= 0);
             assertTrue(" not isZERO( a" + i + " )", !a.isZERO());
             assertTrue(" not isONE( a" + i + " )", !a.isONE());

@@ -47,27 +47,13 @@ public class GFGenPolynomialTest extends TestCase {
     }
 
 
-    //private final static int bitlen = 100;
-
     GenPolynomialRing<AlgebraicNumber<ModInteger>> fac;
 
 
     AlgebraicNumberRing<ModInteger> cfac;
 
 
-    GenPolynomial<AlgebraicNumber<ModInteger>> a;
-
-
-    GenPolynomial<AlgebraicNumber<ModInteger>> b;
-
-
-    GenPolynomial<AlgebraicNumber<ModInteger>> c;
-
-
-    GenPolynomial<AlgebraicNumber<ModInteger>> d;
-
-
-    GenPolynomial<AlgebraicNumber<ModInteger>> e;
+    GenPolynomial<AlgebraicNumber<ModInteger>> a, b, c, d, e;
 
 
     int rl = 7;
@@ -121,7 +107,6 @@ public class GFGenPolynomialTest extends TestCase {
 
     /**
      * Test constructor and toString.
-     * 
      */
     public void testConstruction() {
         c = fac.getONE();
@@ -140,14 +125,13 @@ public class GFGenPolynomialTest extends TestCase {
 
     /**
      * Test random polynomial.
-     * 
      */
     public void testRandom() {
         for (int i = 0; i < 7; i++) {
             a = fac.random(ll + i);
             //System.out.println("a = " + a);
 
-            // fac.random(rl+i, kl*(i+1), ll+2*i, el+i, q );
+            // fac.random(kl*(i+1), ll+2*i, el+i, q );
             assertTrue("length( a" + i + " ) <> 0", a.length() >= 0);
             assertTrue(" not isZERO( a" + i + " )", !a.isZERO());
             assertTrue(" not isONE( a" + i + " )", !a.isONE());
@@ -157,10 +141,8 @@ public class GFGenPolynomialTest extends TestCase {
 
     /**
      * Test addition.
-     * 
      */
     public void testAddition() {
-
         a = fac.random(ll);
         b = fac.random(ll);
 
@@ -210,11 +192,8 @@ public class GFGenPolynomialTest extends TestCase {
 
     /**
      * Test object multiplication.
-     * 
      */
-
     public void testMultiplication() {
-
         a = fac.random(ll);
         assertTrue("not isZERO( a )", !a.isZERO());
 
@@ -279,7 +258,6 @@ public class GFGenPolynomialTest extends TestCase {
 
     /**
      * Test distributive law.
-     * 
      */
     public void testDistributive() {
         a = fac.random(ll);
@@ -295,11 +273,8 @@ public class GFGenPolynomialTest extends TestCase {
 
     /**
      * Test object quotient and remainder.
-     * 
      */
-
     public void testQuotRem1() {
-
         fac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(cfac, 1);
 
         a = fac.random(ll).monic();

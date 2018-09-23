@@ -52,27 +52,13 @@ public class ComplexAlgebraicTest extends TestCase {
     }
 
 
-    //private final static int bitlen = 100;
-
     ComplexAlgebraicRing<BigRational> fac;
 
 
     GenPolynomialRing<Complex<BigRational>> mfac;
 
 
-    ComplexAlgebraicNumber<BigRational> a;
-
-
-    ComplexAlgebraicNumber<BigRational> b;
-
-
-    ComplexAlgebraicNumber<BigRational> c;
-
-
-    ComplexAlgebraicNumber<BigRational> d;
-
-
-    ComplexAlgebraicNumber<BigRational> e;
+    ComplexAlgebraicNumber<BigRational> a, b, c, d, e;
 
 
     ComplexAlgebraicNumber<BigRational> alpha;
@@ -128,7 +114,6 @@ public class ComplexAlgebraicTest extends TestCase {
 
     /**
      * Test constructor and toString.
-     * 
      */
     public void testConstruction() {
         c = fac.getONE();
@@ -149,7 +134,6 @@ public class ComplexAlgebraicTest extends TestCase {
 
     /**
      * Test random polynomial.
-     * 
      */
     public void testRandom() {
         for (int i = 0; i < 7; i++) {
@@ -158,7 +142,7 @@ public class ComplexAlgebraicTest extends TestCase {
             if (a.isZERO() || a.isONE()) {
                 continue;
             }
-            // fac.random(rl+i, kl*(i+1), ll+2*i, el+i, q );
+            // fac.random(kl*(i+1), ll+2*i, el+i, q );
             assertTrue("length( a" + i + " ) <> 0", a.number.getVal().length() >= 0);
             assertTrue(" not isZERO( a" + i + " )", !a.isZERO());
             assertTrue(" not isONE( a" + i + " )", !a.isONE());
@@ -168,7 +152,6 @@ public class ComplexAlgebraicTest extends TestCase {
 
     /**
      * Test addition.
-     * 
      */
     public void testAddition() {
         a = fac.random(ll);
@@ -200,7 +183,6 @@ public class ComplexAlgebraicTest extends TestCase {
 
     /**
      * Test object multiplication.
-     * 
      */
     public void testMultiplication() {
         a = fac.random(ll);
@@ -258,7 +240,6 @@ public class ComplexAlgebraicTest extends TestCase {
 
     /**
      * Test distributive law.
-     * 
      */
     public void testDistributive() {
         a = fac.random(ll);
@@ -274,7 +255,6 @@ public class ComplexAlgebraicTest extends TestCase {
 
     /**
      * Test compareTo of complex algebraic numbers.
-     * 
      */
     public void testCompare() {
         a = fac.random(ll).abs();
