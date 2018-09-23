@@ -843,7 +843,7 @@ public class GenPolynomial<C extends RingElem<C>>
         }
         long[][] w = ring.tord.getWeight();
         long maxw = weightDegree();
-        GenPolynomial<C> wp = ring.getZERO().copy(); //new GenPolynomial<C>(ring);
+        GenPolynomial<C> wp = ring.getZERO().copy();
         for (Map.Entry<ExpVector, C> m : val.entrySet()) {
             ExpVector e = m.getKey();
             long d = e.weightDeg(w);
@@ -1011,22 +1011,22 @@ public class GenPolynomial<C extends RingElem<C>>
      */
     //public <T extends GenPolynomial<C>> T sum(T /*GenPolynomial<C>*/ S) {
     public GenPolynomial<C> sum(GenPolynomial<C> S) {
-        if (S == null) {
-            return this;
-        }
-        if (S.isZERO()) {
+        if (S == null || S.isZERO()) {
             return this;
         }
         if (this.isZERO()) {
             return S;
         }
+        if (this.length() < (3*S.length())/5) {
+            return S.sum(this); // performance
+        }
         assert (ring.nvar == S.ring.nvar);
-        GenPolynomial<C> n = this.copy(); //new GenPolynomial<C>(ring, val); 
+        GenPolynomial<C> n = this.copy();
         SortedMap<ExpVector, C> nv = n.val;
         SortedMap<ExpVector, C> sv = S.val;
         for (Map.Entry<ExpVector, C> me : sv.entrySet()) {
             ExpVector e = me.getKey();
-            C y = me.getValue(); //sv.get(e); // assert y != null
+            C y = me.getValue(); // assert y != null
             C x = nv.get(e);
             if (x != null) {
                 x = x.sum(y);
@@ -1057,7 +1057,7 @@ public class GenPolynomial<C extends RingElem<C>>
         if (a.isZERO()) {
             return this;
         }
-        GenPolynomial<C> n = this.copy(); //new GenPolynomial<C>(ring, val); 
+        GenPolynomial<C> n = this.copy();
         SortedMap<ExpVector, C> nv = n.val;
         //if ( nv.size() == 0 ) { nv.put(e,a); return n; }
         C x = nv.get(e);
@@ -1114,7 +1114,7 @@ public class GenPolynomial<C extends RingElem<C>>
         SortedMap<ExpVector, C> sv = S.val;
         for (Map.Entry<ExpVector, C> me : sv.entrySet()) {
             ExpVector e = me.getKey();
-            C y = me.getValue(); //sv.get(e); // assert y != null
+            C y = me.getValue(); // assert y != null
             C x = nv.get(e);
             if (x != null) {
                 x = x.sum(y);
@@ -1181,12 +1181,12 @@ public class GenPolynomial<C extends RingElem<C>>
             return S.negate();
         }
         assert (ring.nvar == S.ring.nvar);
-        GenPolynomial<C> n = this.copy(); //new GenPolynomial<C>(ring, val); 
+        GenPolynomial<C> n = this.copy(); 
         SortedMap<ExpVector, C> nv = n.val;
         SortedMap<ExpVector, C> sv = S.val;
         for (Map.Entry<ExpVector, C> me : sv.entrySet()) {
             ExpVector e = me.getKey();
-            C y = me.getValue(); //sv.get(e); // assert y != null
+            C y = me.getValue(); // assert y != null
             C x = nv.get(e);
             if (x != null) {
                 x = x.subtract(y);
@@ -1479,7 +1479,6 @@ public class GenPolynomial<C extends RingElem<C>>
      */
     public GenPolynomial<C> negate() {
         GenPolynomial<C> n = ring.getZERO().copy();
-        //new GenPolynomial<C>(ring, ring.getZERO().val);
         SortedMap<ExpVector, C> v = n.val;
         for (Map.Entry<ExpVector, C> m : val.entrySet()) {
             C x = m.getValue(); // != null, 0
