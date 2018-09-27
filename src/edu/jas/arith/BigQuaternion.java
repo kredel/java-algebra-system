@@ -639,13 +639,13 @@ public /*final*/ class BigQuaternion implements StarRingElem<BigQuaternion>, Gcd
     /**
      * Quaternion number absolute value.
      * @see edu.jas.structure.RingElem#abs()
-     * @return |this|^2. Note: The square root is not jet implemented.
+     * @return |this|. 
      */
     public BigQuaternion abs() {
         BigQuaternion n = norm();
-        logger.error("abs() square root missing");
-        // n = n.sqrt();
-        return n;
+        BigRational r = Roots.sqrt(n.re);
+        //logger.error("abs() square root missing");
+        return new BigQuaternion(ring, r);
     }
 
 

@@ -287,4 +287,25 @@ public class Roots {
         return new BigDecimalComplex(a.im.abs().divide(v.multiply(t)), u);
     }
 
+
+    /**
+     * Square root. R is the square root approximation of A.
+     * Convert to BigDecimal and compute square root.
+     * @param A big rational.
+     * @return the square root approximation of A.
+     */
+    public static BigRational sqrt(BigRational A) {
+        if (A == null || A.isZERO() || A.isONE()) {
+            return A;
+        }
+        if (A.signum() < 0) {
+            throw new ArithmeticException("root of negative not defined: " + A);
+        }
+        BigDecimal ad = new BigDecimal(A);
+        BigDecimal s = sqrt(ad);
+        //System.out.println("s = " + s);
+        BigRational S = new BigRational(s.toString());
+        return S;
+    }
+
 }

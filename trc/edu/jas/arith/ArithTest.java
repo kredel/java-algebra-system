@@ -46,14 +46,6 @@ public class ArithTest extends TestCase {
     }
 
 
-    /*
-    RingElem a;
-    RingElem b;
-    RingElem c;
-    RingElem d;
-    RingElem e;
-    */
-
     @Override
     protected void setUp() {
         //a = b = c = d = e = null;
@@ -927,9 +919,11 @@ public class ArithTest extends TestCase {
     public void testRootDecimal() {
         BigDecimal a, b, d, e;
         a = BigDecimal.ONE;
-
+        BigRational eps = new BigRational(1,10).power(BigDecimal.DEFAULT_PRECISION-2);
+        BigDecimal epsd = new BigDecimal(eps);
+        
         b = a.random(17).abs();
-        //System.out.println("\nb          = " + b);
+        //System.out.println("\nb         = " + b);
         //System.out.println("ulp(b)     = " + b.val.ulp());
         for (int n = 1; n < 8; n++) {
             d = Roots.root(b, n);
@@ -938,12 +932,10 @@ public class ArithTest extends TestCase {
             //System.out.println("root^"+n+"    = " + e);
             if (b.compareTo(e) == 0) {
                 assertTrue("root^" + n + " == b: " + e, b.compareTo(e) == 0);
-            } else {
-                //System.out.println("b   = " + b + ", root(b," + n +") = " + d);
-                System.out.print("b   = " + b + ", ");
-                System.out.println("d^" + n + " = " + e + ", b-e = " + b.subtract(e).abs());
-                //System.out.println("b~e = " + b.compareToAbsolute(e) + ", (b-e)/e = " + b.compareToRelative(e));
+                continue;
             }
+            BigDecimal r = b.subtract(e).abs().divide(b.abs().sum(e.abs()));
+            assertTrue("root(a,n)**n == a: " + r, r.compareTo(epsd) <= 0);
         }
     }
 
@@ -1030,6 +1022,158 @@ public class ArithTest extends TestCase {
             System.out.println("b = " + b + ", c = " + c + ", d = " + d);
         }
         assertTrue("sqrt(b)*sqrt(b) == b: b-d = " + b.subtract(d), b.compareTo(d) == 0);
+    }
+
+
+    /**
+     * Test root rational.
+     */
+    public void test2RootRational() {
+        BigRational a, b, c, d;
+        a = BigRational.ZERO;
+        b = Roots.sqrt(a);
+        assertTrue("sqrt(0) == 0: " + b, b.isZERO());
+
+        a = BigRational.ONE;
+        b = Roots.sqrt(a);
+        assertTrue("sqrt(1) == 1: " + b, b.isONE());
+
+        a = BigRational.ONE.negate();
+        try {
+            b = Roots.sqrt(a);
+            fail("sqrt(-1) illegal: " + b);
+        } catch (ArithmeticException e) {
+            // pass
+        }
+
+        a = new BigRational("4");
+        b = Roots.sqrt(a);
+        c = b.multiply(b);
+        assertTrue("sqrt(4)*sqrt(4) == 4: " + a.subtract(c), a.compareTo(c) == 0);
+        BigRational eps = new BigRational(1,10).power(BigDecimal.DEFAULT_PRECISION-1);
+        //System.out.println("eps = " + eps + ", epsd = " + new BigDecimal(eps));
+        
+        a = new BigRational("0.5");
+        b = Roots.sqrt(a);
+        c = b.multiply(b);
+        //System.out.println("a = " + a + ", sqrt(a) = " + b + ", b^2 = " + c);
+        d = a.subtract(c).abs().divide(a.abs().sum(c.abs()));
+        //System.out.println("d = " + d + ", dd = " + new BigDecimal(d));
+        assertTrue("sqrt(0.5)*sqrt(0.5) == 0.5: " + c, d.compareTo(eps) <= 0);
+
+        a = a.random(5).abs();
+        b = Roots.sqrt(a);
+        c = b.multiply(b);
+        //System.out.println("a = " + a + ", sqrt(a) = " + b + ", b^2 = " + c);
+        d = a.subtract(c).abs().divide(a.abs().sum(c.abs()));
+        //System.out.println("d = " + d + ", dd = " + new BigDecimal(d));
+        assertTrue("sqrt(0.5)*sqrt(0.5) == 0.5: " + c, d.compareTo(eps) <= 0);
+    }
+
+    
+    /**
+     * Test root/norm complex.
+     */
+    public void test2NormComplex() {
+        BigComplex a, b, c, d;
+        a = BigComplex.ZERO;
+        b = a.abs();
+        assertTrue("abs(0) == 0: " + b, b.isZERO());
+
+        a = BigComplex.ONE;
+        b = a.abs();
+        assertTrue("abs(1) == 1: " + b, b.isONE());
+
+        a = BigComplex.ONE.negate();
+        b = a.abs();
+        assertTrue("abs(-1): " + b, b.isONE());
+
+        BigRational eps = new BigRational(1,10).power(BigDecimal.DEFAULT_PRECISION-1);
+        //System.out.println("eps = " + eps); // + ", epsd = " + new BigDecimal(eps));
+
+        BigRational r, s, t;
+        a = a.random(5);
+        b = a.abs();
+        //System.out.println("a = " + a + ", b = " + b);
+        r = b.multiply(b).re;
+        s = a.multiply(a.conjugate()).re;
+        //System.out.println("r = " + r + ", s = " + s);
+        t = r.subtract(s).abs().divide(r.abs().sum(s.abs()));
+        //System.out.println("t = " + t + ", eps = " + eps);
+
+        assertTrue("sqrt(x)*sqrt(x): " + b, t.compareTo(eps) <= 0);
+    }
+
+
+    /**
+     * Test root/norm quaternion.
+     */
+    public void test2NormQuaternion() {
+        BigQuaternion a, b, c, d;
+        BigQuaternionRing fac = new BigQuaternionRing();
+        a = fac.ZERO;
+        b = a.abs();
+        assertTrue("abs(0) == 0: " + b, b.isZERO());
+
+        a = fac.ONE;
+        b = a.abs();
+        assertTrue("abs(1) == 1: " + b, b.isONE());
+
+        a = fac.ONE.negate();
+        b = a.abs();
+        assertTrue("abs(-1): " + b, b.isONE());
+
+        BigRational eps = new BigRational(1,10).power(BigDecimal.DEFAULT_PRECISION-1);
+        //System.out.println("eps = " + eps); // + ", epsd = " + new BigDecimal(eps));
+
+        BigRational r, s, t;
+        a = fac.random(5);
+        b = a.abs();
+        //System.out.println("\na = " + a + ", b = " + b);
+        r = b.multiply(b).re;
+        s = a.multiply(a.conjugate()).re;
+        //System.out.println("r = " + r + ", s = " + s);
+        t = r.subtract(s).abs().divide(r.abs().sum(s.abs()));
+        //System.out.println("t = " + t + ", eps = " + eps);
+
+        assertTrue("sqrt(x)*sqrt(x): " + b, t.compareTo(eps) <= 0);
+    }
+
+
+    /**
+     * Test root/norm octonion.
+     */
+    public void test2NormOctonion() {
+        BigOctonion a, b, c, d;
+        BigQuaternionRing fac = new BigQuaternionRing();
+        BigOctonion ofac = new BigOctonion(fac);
+            
+        a = ofac.getZERO();
+        b = a.abs();
+        assertTrue("abs(0) == 0: " + b, b.isZERO());
+
+        a = ofac.getONE();
+        b = a.abs();
+        assertTrue("abs(1) == 1: " + b, b.isONE());
+
+        a = ofac.getONE().negate();
+        b = a.abs();
+        assertTrue("abs(-1): " + b, b.isONE());
+
+        BigRational eps = new BigRational(1,10).power(BigDecimal.DEFAULT_PRECISION-1);
+        //System.out.println("eps = " + eps); // + ", epsd = " + new BigDecimal(eps));
+
+        BigRational r, s, t;
+        a = ofac.random(5);
+        b = a.abs();
+        //System.out.println("\na = " + a + ", b = " + b);
+        r = b.multiply(b).or.re;
+        s = a.multiply(a.conjugate()).or.re;
+        //System.out.println("r = " + r + ", s = " + s);
+        t = r.subtract(s).abs().divide(r.abs().sum(s.abs()));
+        //System.out.println("t = " + t + ", eps = " + eps);
+
+        assertTrue("sqrt(x)*sqrt(x): " + b, t.compareTo(eps) <= 0);
     }
 
 }

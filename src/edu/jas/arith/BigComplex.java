@@ -27,7 +27,7 @@ import edu.jas.structure.StarRingElem;
  * @author Heinz Kredel
  */
 public final class BigComplex implements StarRingElem<BigComplex>, GcdRingElem<BigComplex>,
-                RingFactory<BigComplex> {
+                                         RingFactory<BigComplex> {
 
 
     /**
@@ -597,13 +597,13 @@ public final class BigComplex implements StarRingElem<BigComplex>, GcdRingElem<B
     /**
      * Complex number absolute value.
      * @see edu.jas.structure.RingElem#abs()
-     * @return |this|^2. Note: The square root is not jet implemented.
+     * @return |this|. 
      */
     public BigComplex abs() {
         BigComplex n = norm();
-        logger.error("abs() square root missing");
-        // n = n.sqrt();
-        return n;
+        BigRational r = Roots.sqrt(n.re);
+        //logger.error("abs() square root missing " + r);
+        return new BigComplex(r);
     }
 
 
@@ -643,7 +643,7 @@ public final class BigComplex implements StarRingElem<BigComplex>, GcdRingElem<B
      */
     public BigComplex multiply(BigComplex B) {
         return new BigComplex(re.multiply(B.re).subtract(im.multiply(B.im)), re.multiply(B.im).sum(
-                        im.multiply(B.re)));
+                                                                                                   im.multiply(B.re)));
     }
 
 

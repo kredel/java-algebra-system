@@ -616,13 +616,13 @@ public final class BigOctonion
     /**
      * Octonion number absolute value.
      * @see edu.jas.structure.RingElem#abs()
-     * @return |this|^2. <b>Note:</b> The square root is not jet implemented.
+     * @return |this|. 
      */
     public BigOctonion abs() {
         BigOctonion n = norm();
-        logger.error("abs() square root missing");
-        // n = n.sqrt();
-        return n;
+        BigRational r = Roots.sqrt(n.or.re);
+        //logger.error("abs() square root missing");
+        return new BigOctonion( new BigQuaternion(n.or.ring, r) );
     }
 
 
