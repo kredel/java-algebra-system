@@ -981,7 +981,7 @@ public class ArithTest extends TestCase {
      * Test root complex decimal.
      */
     public void testRootDecimalComplex() {
-        BigDecimalComplex a, b, c, d;
+        BigDecimalComplex a, b, c, d, e;
         a = BigDecimalComplex.ZERO;
         b = Roots.sqrt(a);
         assertTrue("sqrt(0) == 0: " + b, b.isZERO());
@@ -1016,12 +1016,22 @@ public class ArithTest extends TestCase {
         assertTrue("sqrt(b)*sqrt(b) == b: " + c + ", b = " + b, b.compareTo(d) == 0);
 
         b = a.random(5);
-        c = Roots.sqrt(b);
-        d = c.multiply(c);
-        if (b.compareTo(d) != 0) {
-            System.out.println("b = " + b + ", c = " + c + ", d = " + d);
-        }
-        assertTrue("sqrt(b)*sqrt(b) == b: b-d = " + b.subtract(d), b.compareTo(d) == 0);
+        c = b.norm();
+        d = b.multiply(b.conjugate());
+        assertTrue("norm(b) == b*b^: b-d = " + c.subtract(d), c.compareTo(d) == 0);
+
+        BigRational eps = new BigRational(1,10).power(BigDecimal.DEFAULT_PRECISION-1);
+        //System.out.println("eps = " + eps + ", epsd = " + new BigDecimal(eps));
+        BigDecimal epsd = new BigDecimal(eps);
+        BigDecimal dd;
+	
+        //System.out.println("b = " + b + ", c = " + c);
+        //c = b.norm();
+        d = b.abs();
+        e = d.multiply(d);
+        dd = e.re.subtract(c.re).abs().divide(e.re.abs().sum(c.re.abs()));
+        //System.out.println("dd = " + dd + ", d = " + d + ", e = " + e);
+        assertTrue("abs()*abs() == norm(): " + dd, dd.compareTo(epsd) <= 0);
     }
 
 
@@ -1100,8 +1110,7 @@ public class ArithTest extends TestCase {
         //System.out.println("r = " + r + ", s = " + s);
         t = r.subtract(s).abs().divide(r.abs().sum(s.abs()));
         //System.out.println("t = " + t + ", eps = " + eps);
-
-        assertTrue("sqrt(x)*sqrt(x): " + b, t.compareTo(eps) <= 0);
+        assertTrue("abs()*abs() == norm(): " + b, t.compareTo(eps) <= 0);
     }
 
 

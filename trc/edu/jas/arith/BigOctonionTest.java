@@ -205,10 +205,18 @@ public class BigOctonionTest extends TestCase {
         assertTrue("abs(a)*1/abs(a) = 1", d.isONE());
 
         a = fac.random(30);
-        b = a.abs();
-        c = a.conjugate();
-        d = a.multiply(c);
-        assertEquals("abs(a)^2 = a a^", b, d);
+        b = a.norm(); //abs();
+        //c = b.multiply(b);
+        d = a.multiply(a.conjugate());
+        assertEquals("norm(a) == a a^", b, d);
+
+        c = a.abs();
+        d = c.multiply(c);
+        //assertEquals("norm() == abs()*abs(): ", b, d);
+        BigRational dd = d.or.re.subtract(b.or.re).abs().divide(d.or.re.abs().sum(b.or.re.abs()));
+        //System.out.println("dd = " + dd + ", d = " + d + ", b = " + b);
+        BigRational eps = new BigRational(1,10).power(BigDecimal.DEFAULT_PRECISION-1);
+        assertTrue("abs()*abs() == norm(): " + dd, dd.compareTo(eps) <= 0);
 
         b = fac.random(10);
         c = a.inverse();

@@ -235,12 +235,15 @@ public class BigQuaternionIntegerTest extends TestCase {
         //assertTrue("isEntier(c)", c.isEntier());
 
         //b = a.abs();
+        //c = a.norm();
+        //assertEquals("abs() == norm(): " + b, b, c); // wrong
+	
         //c = b.inverse(); // not entier
         //d = b.multiply(c);
         //assertTrue("abs(a)*1/abs(a) = 1", d.isONE());
         //assertTrue("isEntier(a)", a.isEntier());
 
-        b = a.abs();
+        b = a.norm();
         c = a.conjugate();
         d = a.multiply(c);
         assertTrue("isEntier(a)", a.isEntier());

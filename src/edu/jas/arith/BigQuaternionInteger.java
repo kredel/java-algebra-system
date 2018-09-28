@@ -158,6 +158,19 @@ public final class BigQuaternionInteger extends BigQuaternion
 
 
     /**
+     * Quaternion number absolute value.
+     * @see edu.jas.structure.RingElem#abs()
+     * @return |this|**2. Note: returns the norm(this).
+     */
+    public BigQuaternion abs() {
+        BigQuaternion n = norm();
+        //BigRational r = Roots.sqrt(n.re);
+        logger.error("abs() square root missing");
+        return n;
+    }
+
+    
+    /**
      * Quaternion number inverse.
      * @param A is a non-zero quaternion number.
      * @return S with S * A = A * S = 1.
