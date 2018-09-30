@@ -234,6 +234,7 @@ public class ModIntTest extends TestCase {
     /**
      * Test multiplication.
      */
+    @SuppressWarnings("unchecked")
     public void testMultiplication() {
         zm = new ModIntRing(5);
         d = new ModInt(zm, 11);

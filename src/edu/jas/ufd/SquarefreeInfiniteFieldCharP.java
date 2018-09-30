@@ -46,7 +46,7 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>>
     /**
      * Constructor.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public SquarefreeInfiniteFieldCharP(RingFactory<Quotient<C>> fac) {
         super(fac);
         // isFinite() predicate now present

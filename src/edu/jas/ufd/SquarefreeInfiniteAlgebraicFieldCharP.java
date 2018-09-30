@@ -119,7 +119,7 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>>
      * @return [p -&gt; k] if exists k with e=charactristic(P)*k and P = p**e,
      *         else null.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public SortedMap<AlgebraicNumber<C>, Long> rootCharacteristic(AlgebraicNumber<C> P) {
         if (P == null) {
             throw new IllegalArgumentException(this.getClass().getName() + " P == null");

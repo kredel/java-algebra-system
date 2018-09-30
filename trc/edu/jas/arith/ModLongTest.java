@@ -239,6 +239,7 @@ public class ModLongTest extends TestCase {
     /**
      * Test multiplication.
      */
+    @SuppressWarnings("unchecked")
     public void testMultiplication() {
         zm = new ModLongRing(5);
         d = new ModLong(zm, 11);

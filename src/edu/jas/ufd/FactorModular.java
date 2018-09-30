@@ -46,7 +46,7 @@ public class FactorModular<MOD extends GcdRingElem<MOD> & Modular> extends Facto
     /**
      * No argument constructor, do not use.
      */
-    @SuppressWarnings({ "cast", "unused" })
+    @SuppressWarnings({ "unchecked", "unused" })
     private FactorModular() {
         this((RingFactory<MOD>) (Object) new ModLongRing(13, true)); // hack, 13 unimportant
     }

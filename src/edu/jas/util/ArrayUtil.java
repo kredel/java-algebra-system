@@ -28,6 +28,7 @@ public class ArrayUtil {
      * @return copy of original.
      */
     public static <T> T[] copyOf(T[] original, int newLength) {
+        @SuppressWarnings("unchecked")
         T[] copy = (T[]) new Object[newLength];
         System.arraycopy(original, 0, copy, 0, Math.min(original.length, newLength));
         return copy;
