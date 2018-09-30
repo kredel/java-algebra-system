@@ -308,7 +308,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
      * @param Fp a Groebner base.
      * @return a reduced Groebner base of Fp.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     @Override
     public List<GenPolynomial<C>> minimalGB(List<GenPolynomial<C>> Fp) {
         GenPolynomial<C> a;
@@ -425,6 +425,7 @@ class ReducerServerSeqPair<C extends RingElem<C>> implements Runnable {
     }
 
 
+    @SuppressWarnings("unchecked")
     public void run() {
         logger.debug("reducer server running");
         try {
@@ -806,6 +807,7 @@ class ReducerClientSeqPair<C extends RingElem<C>> implements Runnable {
     }
 
 
+    @SuppressWarnings("unchecked")
     public void run() {
         if (logger.isDebugEnabled()) {
             logger.debug("pairChannel = " + pairChannel + "reducer client running");

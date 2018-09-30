@@ -522,7 +522,7 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
         }
         Collections.reverse(G); // important for lex GB
 
-        @SuppressWarnings("cast")
+        @SuppressWarnings("unchecked")
         MiReducerServer<C>[] mirs = (MiReducerServer<C>[]) new MiReducerServer[G.size()];
         int i = 0;
         F = new ArrayList<GenPolynomial<C>>(G.size());
@@ -898,6 +898,7 @@ class HybridReducerReceiverEC<C extends RingElem<C>> extends Thread {
             } else if (rh instanceof GBTransportMessPoly) {
                 // update pair list
                 red++;
+                @SuppressWarnings("unchecked")
                 GBTransportMessPoly<C> mpi = (GBTransportMessPoly<C>) rh;
                 H = mpi.pol;
                 //senderId = mpi.threadId;
@@ -1090,6 +1091,7 @@ class HybridReducerClientEC<C extends RingElem<C>> implements Runnable {
             if (pp instanceof GBTransportMessPair || pp instanceof GBTransportMessPairIndex) {
                 pi = pj = ps = null;
                 if (pp instanceof GBTransportMessPair) { // obsolet, for tests
+                    @SuppressWarnings("unchecked")
                     GBTransportMessPair<C> tmp = (GBTransportMessPair<C>) pp;
                     pair = tmp.pair;
                     if (pair != null) {

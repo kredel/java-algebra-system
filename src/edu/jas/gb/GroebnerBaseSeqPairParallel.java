@@ -243,7 +243,7 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>> extends Groebner
         }
         Collections.reverse(G); // important for lex GB
 
-        @SuppressWarnings("cast")
+        @SuppressWarnings("unchecked")
         MiReducerSeqPair<C>[] mirs = (MiReducerSeqPair<C>[]) new MiReducerSeqPair[G.size()];
         int i = 0;
         F = new ArrayList<GenPolynomial<C>>(G.size());

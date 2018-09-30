@@ -232,7 +232,7 @@ public class SolvableGroebnerBaseSeqPairParallel<C extends RingElem<C>> extends
             return G;
         }
 
-        @SuppressWarnings("cast")
+        @SuppressWarnings("unchecked")
         SolvableMiReducerSeqPair<C>[] mirs = (SolvableMiReducerSeqPair<C>[]) new SolvableMiReducerSeqPair[G
                         .size()];
         int i = 0;

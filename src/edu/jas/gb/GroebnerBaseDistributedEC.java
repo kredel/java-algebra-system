@@ -446,7 +446,7 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
         }
         Collections.reverse(G); // important for lex GB
 
-        @SuppressWarnings("cast")
+        @SuppressWarnings("unchecked")
         MiReducerServerEC<C>[] mirs = (MiReducerServerEC<C>[]) new MiReducerServerEC[G.size()];
         int i = 0;
         F = new ArrayList<GenPolynomial<C>>(G.size());
@@ -510,6 +510,7 @@ class ReducerServerEC<C extends RingElem<C>> implements Runnable {
     }
 
 
+    @SuppressWarnings("unchecked")
     public void run() {
         logger.info("reducer server running with " + cf);
         try {
@@ -758,6 +759,7 @@ class ReducerClientEC<C extends RingElem<C>> implements Runnable {
             if (pp instanceof GBTransportMessPair || pp instanceof GBTransportMessPairIndex) {
                 pi = pj = ps = null;
                 if (pp instanceof GBTransportMessPair) { // obsolete, for tests
+                    @SuppressWarnings("unchecked")
                     GBTransportMessPair<C> tmp = (GBTransportMessPair<C>) pp;
                     pair = tmp.pair;
                     if (pair != null) {
