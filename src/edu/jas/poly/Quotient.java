@@ -388,6 +388,7 @@ public class Quotient<C extends RingElem<C>> implements RingElem<Quotient<C>>, Q
      * @param S a Quotient
      * @return [this/S, this - (this/S)*S].
      */
+    @SuppressWarnings("unchecked")
     public Quotient<C>[] quotientRemainder(Quotient<C> S) {
         return new Quotient[] { divide(S), remainder(S) };
     }
@@ -455,7 +456,7 @@ public class Quotient<C extends RingElem<C>> implements RingElem<Quotient<C>>, Q
      * @return [ gcd(this,b), c1, c2 ] with c1*this + c2*b = gcd(this,b).
      */
     public Quotient<C>[] egcd(Quotient<C> b) {
-        @SuppressWarnings("cast")
+        @SuppressWarnings("unchecked")
         Quotient<C>[] ret = (Quotient<C>[]) new Quotient[3];
         ret[0] = null;
         ret[1] = null;

@@ -1295,6 +1295,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
      * @param S a MultiVarPowerSeries
      * @return [this/S, this - (this/S)*S].
      */
+    @SuppressWarnings("unchecked")
     public MultiVarPowerSeries<C>[] quotientRemainder(MultiVarPowerSeries<C> S) {
         return new MultiVarPowerSeries[] { divide(S), remainder(S) };
     }

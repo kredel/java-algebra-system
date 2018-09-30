@@ -139,6 +139,7 @@ public class QLRSolvablePolynomial<C extends GcdRingElem<C> & QuotPair<GenPolyno
      * @return this*Bp, where * denotes solvable multiplication.
      */
     // not @Override
+    @SuppressWarnings("unchecked")
     public QLRSolvablePolynomial<C, D> multiply(QLRSolvablePolynomial<C, D> Bp) {
         if (Bp == null || Bp.isZERO()) {
             return ring.getZERO();

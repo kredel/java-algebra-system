@@ -355,9 +355,9 @@ public class RealAlgebraicTest extends TestCase {
         //System.out.println("magnitude(a*a)            = " + rb);
         BigDecimal rr = r.multiply(r);
         //System.out.println("magnitude(a)*magnitude(a) = " + rr);
-        BigDecimal eps = Power.positivePower(new BigDecimal(0.1), 9); //BigDecimal.DEFAULT_PRECISION);
+        BigDecimal eps = Power.positivePower(new BigDecimal(0.1), BigDecimal.DEFAULT_PRECISION - 8);
         //System.out.println("eps                       = " + eps);
-        BigDecimal err = rr.subtract(rb).divide(rr).abs();
+        BigDecimal err = rr.subtract(rb).abs().divide(rr.abs().sum(rb.abs()));
         //System.out.println("err                       = " + err);
         assertTrue("magnitude(a)*magnitude(a) == magnitude(a*a): " + err + " <= " + eps,
                         err.compareTo(eps) <= 0);

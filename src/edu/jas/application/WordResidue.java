@@ -380,6 +380,7 @@ public class WordResidue<C extends GcdRingElem<C>> implements GcdRingElem<WordRe
      * @param S WordResidue.
      * @return [left, right] with left*S*right + remainder = this.
      */
+    @SuppressWarnings("unchecked")
     public WordResidue<C>[] twosidedDivide(WordResidue<C> S) {
         List<GenWordPolynomial<C>> L = new ArrayList<GenWordPolynomial<C>>(1);
         L.add(ring.ring.getZERO());

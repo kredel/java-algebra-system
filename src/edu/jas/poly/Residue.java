@@ -365,6 +365,7 @@ public class Residue<C extends RingElem<C>> implements RingElem<Residue<C>> {
      * @param S a Residue
      * @return [this/S, this - (this/S)*S].
      */
+    @SuppressWarnings("unchecked")
     public Residue<C>[] quotientRemainder(Residue<C> S) {
         return new Residue[] { divide(S), remainder(S) };
     }

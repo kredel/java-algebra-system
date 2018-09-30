@@ -171,7 +171,7 @@ public class AlgebraicNumberTest extends TestCase {
     /**
      * Test object multiplication.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public void testMultiplication() {
         a = fac.random(ll);
         assertTrue("not isZERO( a )", !a.isZERO());

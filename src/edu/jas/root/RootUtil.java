@@ -104,6 +104,7 @@ public class RootUtil {
      * @param s String, syntax: [south-west, north-east] or [mid].
      * @return Interval from s.
      */
+    @SuppressWarnings("unchecked")
     public static <C extends RingElem<C> & Rational> Rectangle<C> parseRectangle(RingFactory<Complex<C>> fac,
                     String s) {
         int r = s.length();

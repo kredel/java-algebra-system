@@ -64,7 +64,7 @@ public class Boundary<C extends RingElem<C> & Rational> implements Serializable 
      * @param r rectangle of of corners.
      * @param p non constant polynomial.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public Boundary(Rectangle<C> r, GenPolynomial<Complex<C>> p) throws InvalidBoundaryException {
         if (p.isConstant() || p.isZERO()) {
             throw new InvalidBoundaryException("p is constant or 0 " + p);

@@ -173,7 +173,7 @@ public class GroebnerBasePseudoRecSeqTest extends TestCase {
     /**
      * Test Hawes2 GBase.
      */
-    //@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     public void testHawes2GBase() {
         String exam = "IntFunc(a, c, b) (y2, y1, z1, z2, x) G" + "("
                         + "( x + 2 y1 z1 + { 3 a } y1^2 + 5 y1^4 + { 2 c } y1 ),"
