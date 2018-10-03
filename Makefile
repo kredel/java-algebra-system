@@ -21,7 +21,7 @@ LIBPATH=$(HOME)/java/lib
 #JUNITPATH=$(LIBPATH)/junit.jar
 JUNITPATH=$(LIBPATH)/junit-4.12.jar:$(LIBPATH)/hamcrest-core-1.3.jar
 #LOG4JPATH=$(LIBPATH)/log4j-1.2.17.jar
-#LOG4JPATH=$(LIBPATH)/log4j-1.2-api-2.5.jar:$(LIBPATH)/log4j-core-2.5.jar:$(LIBPATH)/log4j-api-2.5.jar
+#LOG4JPATH=$(LIBPATH)/log4j-core-2.5.jar:$(LIBPATH)/log4j-api-2.5.jar:$(LIBPATH)/log4j-1.2-api-2.5.jar
 LOG4JPATH=$(LIBPATH)/log4j-core-2.5.jar:$(LIBPATH)/log4j-api-2.5.jar
 #LOG4JPATH=$(LIBPATH)/mylog.jar
 #LOG4JPATH=$(LIBPATH)/nolog.jar
@@ -86,8 +86,7 @@ MYCLASSPATH = $(LOG4JPATH):.:$(JUNITPATH):$(JOMPPATH):$(PYPATH)
 #JAVA_MEM=-Xms1500M -Xmx2900M
 JAVA_MEM=-Xms500M -Xmx900M
 
-SOPTS="-J-cp ../lib/log4j-core-2.5.jar:../lib/log4j-api-2.5.jar:../lib/junit.jar-4.12.jar:../lib/hamcrest-core-1.3.jar:. -J-verbose:gc"
-#"-J-Xms1500M -J-Xmx2900M"
+SOPTS="-J-cp ../lib/log4j-core-2.5.jar:../lib/log4j-api-2.5.jar:../lib/junit.jar-4.12.jar:../lib/hamcrest-core-1.3.jar:. -J-verbose:gc -J-Xms500M -J-Xmx900M"
 
 
 JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d . -Xlint:unchecked
@@ -326,7 +325,7 @@ texdoc: $(FILES) $(TESTFILES)
 	sed -i -f doc/totex.sed doc/tex/allclasses.tex
 	cd doc; pdflatex jas_texgen.tex
 
-ALLJAR=$(FILES) $(TESTFILES) $(DOCU) Makefile build.xml log4j.properties $(PYS)
+ALLJAR=$(FILES) $(TESTFILES) $(DOCU) Makefile build.xml log4j2.properties $(PYS)
 
 jas-all.jar: $(ALLJAR)
 	$(JDK)/jar -cvf jas.jar $(ALLJAR) edu/ 
@@ -342,9 +341,9 @@ jas.tgz: $(FILES) $(TESTFILES) *.html doc/*.html doc/TODO README
 #	$(JDK)/jar -cvfm jas-run.jar GBManifest.MF $(TOJAR)
 
 
-TOJAR=$(FILES) $(TESTFILES) $(CLASSES) Makefile build.xml log4j.properties $(EXAMPY) examples/machines.test $(wildcard COPYING*)
+TOJAR=$(FILES) $(TESTFILES) $(CLASSES) Makefile build.xml log4j2.properties $(EXAMPY) examples/machines.test $(wildcard COPYING*)
 
-jas.jar: $(FILES) $(TESTFILES) Makefile build.xml log4j.properties $(EXAMPY)
+jas.jar: $(FILES) $(TESTFILES) Makefile build.xml log4j2.properties $(EXAMPY)
 	$(JDK)/jar -cf jas.jar $(TOJAR)
 	cp jas.jar $(LIBPATH)/
 #	$(JDK)/jar -cf jas.jar $(filter-out %/ufd/, $(filter-out src/edu/jas/ufd/%.java, $(TOJAR)))
@@ -445,7 +444,7 @@ export:
 	svn log -v -r HEAD:$(SVNSRT) file:///$(SVNREPO)/jas/trunk src trc examples jython mpj mpi jlinalg_adapter commons-math_adapter > ~/jas-versions/$(VERSION)/doc/svn_change.log
 	cd ~/jas-versions/; jar -cfM $(VERSION).`$(SVNREV)`-src.zip $(VERSION)/
 	cd ~/jas-versions/$(VERSION)/; ant compile > ant_compile.out
-	cd ~/jas-versions/$(VERSION)/; jar -cfm ../$(VERSION).`$(SVNREV)`-bin.jar GBManifest.MF edu/ COPYING* log4j.properties log4j2.properties
+	cd ~/jas-versions/$(VERSION)/; jar -cfm ../$(VERSION).`$(SVNREV)`-bin.jar GBManifest.MF edu/ COPYING* log4j2.properties
 	cd ~/jas-versions/$(VERSION)/; jar -uf ../$(VERSION).`$(SVNREV)`-bin.jar -C ~/jas-versions/$(VERSION)/examples jas.rb -C ~/jas-versions/$(VERSION)/examples jas.py
 	jar -uf ~/jas-versions/$(VERSION).`$(SVNREV)`-bin.jar -C ~/jas/NOTES COPYING.APACHE-2.0 -C ~/jas/NOTES COPYING.apache.jas
 	cd ~/jas-versions/$(VERSION)/; ant doc > ant_doc.out
@@ -491,13 +490,13 @@ git-deploy:
 	cd ~/jas-versions/jas-git/jas; git push -v $(DRY) github >> ~/jas-versions/$(VERSION)/git_push.out
 
 jas-bin.jar:
-	jar -cfm $(VERSION).`$(SVNREV)`-bin.jar GBManifest.MF edu/ COPYING* log4j.properties
+	jar -cfm $(VERSION).`$(SVNREV)`-bin.jar GBManifest.MF edu/ COPYING* log4j2.properties
 	jar -uf  $(VERSION).`$(SVNREV)`-bin.jar -C examples jas.rb -C examples jas.py
 
 #jar -ufm ../$(VERSION)-gbb-bin.jar ~/java/lib/log4j.dir/META-INF/MANIFEST.MF -C ~/java	/lib/log4j.dir/ org/ 
 #echo "EXAMJAS" $(EXAMJAS)
 mkbench:
-	jar -cfm $(VERSION)-gbb-bin.jar GBManifest.MF edu/ COPYING* log4j.properties
+	jar -cfm $(VERSION)-gbb-bin.jar GBManifest.MF edu/ COPYING* log4j2.properties
 	#jar -ufe $(VERSION)-gbb-bin.jar edu.jas.application.RunMPJGB -C mpj/classes/ edu/
 	jar -uf $(VERSION)-gbb-bin.jar -C mpj/classes/ edu/
 	jar -uf $(VERSION)-gbb-bin.jar -C ~/java/lib/log4j.dir/ org/ 
