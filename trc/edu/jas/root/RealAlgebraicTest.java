@@ -367,10 +367,10 @@ public class RealAlgebraicTest extends TestCase {
 
 
     /**
-     * Test real root isolation. Tests nothing.
+     * Test real root isolation. 
      */
     public void testRealRootIsolation() {
-        System.out.println();
+        //System.out.println();
         GenPolynomialRing<RealAlgebraicNumber<BigRational>> dfac;
         dfac = new GenPolynomialRing<RealAlgebraicNumber<BigRational>>(fac, 1);
 
@@ -378,10 +378,10 @@ public class RealAlgebraicTest extends TestCase {
         ar = dfac.random(3, 5, 7, q);
         //System.out.println("ar = " + ar);
         if (ar.degree() % 2 == 0) { // ensure existence of a root
-	    ar = ar.multiply(dfac.univariate(0));
+            ar = ar.multiply(dfac.univariate(0));
         }
         //System.out.println("ar = " + ar);
-	
+        
         RealRoots<RealAlgebraicNumber<BigRational>> rrr = new RealRootsSturm<RealAlgebraicNumber<BigRational>>();
         List<Interval<RealAlgebraicNumber<BigRational>>> R = rrr.realRoots(ar);
         //System.out.println("R = " + R);
@@ -427,7 +427,7 @@ public class RealAlgebraicTest extends TestCase {
         er = dfac.univariate(0);
 
         List<Interval<RealAlgebraicNumber<BigRational>>> Rn;
-	  Rn = new ArrayList<Interval<RealAlgebraicNumber<BigRational>>>(
+          Rn = new ArrayList<Interval<RealAlgebraicNumber<BigRational>>>(
                         N);
         ar = dr;
         for (int i = 0; i < N; i++) {
