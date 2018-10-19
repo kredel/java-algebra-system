@@ -213,7 +213,7 @@ public class BigQuaternionTest extends TestCase {
         //System.out.println("dd = " + dd + ", d = " + d + ", e = " + e);
         BigRational eps = new BigRational(1,10).power(BigDecimal.DEFAULT_PRECISION-1);
         assertTrue("abs()*abs() == norm(): " + dd, dd.compareTo(eps) <= 0);
-	
+        
         b = fac.random(10);
         c = a.inverse();
         d = c.multiply(b);

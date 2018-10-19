@@ -332,7 +332,7 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
             et = et.subst(0,1);
             tr = pfac.valueOf(et);
             sfactors.put(tr, ep);
-	}
+        }
 
         // factors of recursive polynomial
         GenPolynomial<GenPolynomial<C>> T0 = P;

@@ -155,7 +155,7 @@ public class ComplexAlgebraicRing<C extends GcdRingElem<C> & Rational>
      * Refine root.
      */
     public synchronized void refineRoot() {
-	    refineRoot(eps);
+            refineRoot(eps);
     }
 
 

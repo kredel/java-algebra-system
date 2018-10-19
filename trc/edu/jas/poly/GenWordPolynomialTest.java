@@ -698,9 +698,9 @@ public class GenWordPolynomialTest extends TestCase {
         int i = 0;
         for (GenWordPolynomial<BigInteger> h : H) {
             if (!h.contract(pfs).isZERO()) {
-		assertEquals("extend(contract(h)) == h: " + h, h, pf.valueOf(M.get(i++)) ); 
-	    }
-	}
+                assertEquals("extend(contract(h)) == h: " + h, h, pf.valueOf(M.get(i++)) ); 
+            }
+        }
     }
 
 }

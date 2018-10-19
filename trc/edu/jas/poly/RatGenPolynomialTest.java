@@ -325,7 +325,7 @@ public class RatGenPolynomialTest extends TestCase {
     public void testAdditionSpeed() {
         int ll = 100;
         long t = 1000;
-	boolean print = false;
+        boolean print = false;
         int jit = 1;
         for (int j = 1; j < 5; j++) {
             for (int i = 1; i < 5; i++) {
@@ -341,13 +341,13 @@ public class RatGenPolynomialTest extends TestCase {
                     d = b.sum(a);
                     t2 = System.nanoTime() - t2;
                     assertTrue("d != 0", !d.isZERO() );
-		    if (print) {
+                    if (print) {
                         System.out.print("#a = " + a.length() + ", #b = " + b.length() );
                         System.out.println(",\t t1 = " + (t1/t) + ", t2 = " + (t2/t) );
-		    }
+                    }
                     //assertTrue("t2 <= t1", ((t1/t) >= (t2/t)) );
                 }
-		if (print) System.out.println();
+                if (print) System.out.println();
                 assertEquals("c == d", c, d );
             }
             ll = 3 * ll;

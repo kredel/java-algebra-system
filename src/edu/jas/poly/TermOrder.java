@@ -507,19 +507,19 @@ public final class TermOrder implements Serializable {
             }
             case TermOrder.INVLEX: {
                 if (!TOP) { 
-		    horder = new EVComparator() { // POT
+                    horder = new EVComparator() { // POT
 
-			    @Override
-			    public int compare(ExpVector e1, ExpVector e2) {
-				int t = -e1.invLexCompareTo(e2, evbeg1, evend1);
-				if (t != 0) {
-				    return t;
-				}
-				return -e1.invLexCompareTo(e2, evbeg2, evend2);
-			    }
-			};
-		    break;
-		}
+                            @Override
+                            public int compare(ExpVector e1, ExpVector e2) {
+                                int t = -e1.invLexCompareTo(e2, evbeg1, evend1);
+                                if (t != 0) {
+                                    return t;
+                                }
+                                return -e1.invLexCompareTo(e2, evbeg2, evend2);
+                            }
+                        };
+                    break;
+                }
                 horder = new EVComparator() { // TOP
 
                     @Override
@@ -550,19 +550,19 @@ public final class TermOrder implements Serializable {
             }
             case TermOrder.IGRLEX: {
                 if (!TOP) { 
-		    horder = new EVComparator() { // POT
+                    horder = new EVComparator() { // POT
 
-			    @Override
-			    public int compare(ExpVector e1, ExpVector e2) {
-				int t = -e1.invLexCompareTo(e2, evbeg1, evend1);
-				if (t != 0) {
-				    return t;
-				}
-				return -e1.invGradCompareTo(e2, evbeg2, evend2);
-			    }
-			};
-		    break;
-		}
+                            @Override
+                            public int compare(ExpVector e1, ExpVector e2) {
+                                int t = -e1.invLexCompareTo(e2, evbeg1, evend1);
+                                if (t != 0) {
+                                    return t;
+                                }
+                                return -e1.invGradCompareTo(e2, evbeg2, evend2);
+                            }
+                        };
+                    break;
+                }
                 horder = new EVComparator() { // TOP
 
                     @Override

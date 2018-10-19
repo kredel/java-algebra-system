@@ -114,7 +114,7 @@ public class FactorFractionTest extends TestCase {
         }
 
         for (Quotient<BigRational> q : sm.keySet()) {
-	     assertTrue("irred(q): " + q, engine.isIrreducible(q));
+             assertTrue("irred(q): " + q, engine.isIrreducible(q));
         }
         boolean t = engine.isFactorization(c, sm);
         //System.out.println("t        = " + t);

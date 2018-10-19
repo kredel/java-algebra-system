@@ -413,8 +413,8 @@ public final class ModIntegerRing implements ModularRingFactory<ModInteger>, Ite
 
         List<ModInteger> L = new ArrayList<ModInteger>();
         for (ModInteger a : L1) {
-	    for (ModInteger b : L2) {
-		ModInteger c = m.chineseRemainder(a, mi1, b);
+            for (ModInteger b : L2) {
+                ModInteger c = m.chineseRemainder(a, mi1, b);
                 L.add(c);
             }
         }

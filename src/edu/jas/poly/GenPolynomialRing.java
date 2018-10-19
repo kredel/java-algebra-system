@@ -376,7 +376,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
      */
     public String toScript(ExpVector e) {
         if (e == null) {
-	    return "null";
+            return "null";
         }
         if (vars != null) {
             return e.toScript(vars);
@@ -948,7 +948,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
      * @return extended polynomial ring factory.
      */
     public GenPolynomialRing<C> extend(int i) {
-	return extend(i, false);
+        return extend(i, false);
     }
 
     
@@ -973,7 +973,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
      * @return extended polynomial ring factory.
      */
     public GenPolynomialRing<C> extend(String[] vn) {
-	return extend(vn, false);
+        return extend(vn, false);
     }
 
     

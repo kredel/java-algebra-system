@@ -128,7 +128,7 @@ public class ModGroebnerBaseTest extends TestCase {
     protected void tearDown() {
         mbb.terminate();
         mbb = null;
-	red = null;
+        red = null;
         a = b = c = d = e = null;
         fac = null;
         tord = null;
@@ -285,11 +285,11 @@ public class ModGroebnerBaseTest extends TestCase {
         assertTrue("is( { (a,0,1) } )", mbb.isGB(K, true));
         //System.out.println("K = " + K);
 
-	I = red.normalform(K, N, true);
+        I = red.normalform(K, N, true);
         //System.out.println("I = " + I);
         assertTrue("K.nf(N) == (0)", I.isZERO());
     
-    	I = red.normalform(N, K);
+        I = red.normalform(N, K);
         //System.out.println("I = " + I);
         assertTrue("N.nf(K) == (0)", I.isZERO());
     }

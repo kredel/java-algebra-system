@@ -275,10 +275,10 @@ public final class WordFactory implements MonoidFactory<Word> {
         int i = 0;
         for (String v : getVars()) {
             vars[i++] = v;
-	}
+        }
         for (String v : vn) {
             vars[i++] = v;
-	}
+        }
         return new WordFactory(vars);
     }
 

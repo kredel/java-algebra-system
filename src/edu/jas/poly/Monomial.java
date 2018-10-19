@@ -105,7 +105,9 @@ public final class Monomial<C extends RingElem<C>> implements Element<Monomial<C
         StringBuffer sb = new StringBuffer();
         if (!c.isONE()) {
             sb.append(c.toScript());
-            sb.append(" * ");
+            if (e.signum() != 0) {
+                sb.append(" * ");
+            }
         }
         sb.append(e.toScript());
         return sb.toString();

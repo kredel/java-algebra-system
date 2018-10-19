@@ -71,7 +71,7 @@ public interface MonoidElem<C extends MonoidElem<C>> extends Element<C> {
      * @return right, with a * right = this
      */
     default public C rightDivide(C a) {
-	return divide(a);
+        return divide(a);
     }
 
 
@@ -82,7 +82,7 @@ public interface MonoidElem<C extends MonoidElem<C>> extends Element<C> {
      * @return left, with left * a = this
      */
     default public C leftDivide(C a) {
-	return divide(a);
+        return divide(a);
     }
 
 
@@ -93,7 +93,7 @@ public interface MonoidElem<C extends MonoidElem<C>> extends Element<C> {
      * @return r = this - a * (1/right), where a * right = this.
      */
     default public C rightRemainder(C a) {
-	return remainder(a);
+        return remainder(a);
     }
 
 
@@ -104,7 +104,7 @@ public interface MonoidElem<C extends MonoidElem<C>> extends Element<C> {
      * @return r = this - (1/left) * a, where left * a = this.
      */
     default public C leftRemainder(C a) {
-	return remainder(a);
+        return remainder(a);
     }
 
 
@@ -119,7 +119,7 @@ public interface MonoidElem<C extends MonoidElem<C>> extends Element<C> {
         C[] ret = (C[]) new MonoidElem[2];
         ret[0] = divide(a);
         ret[1] = ((MonoidFactory<C>)factory()).getONE();
-	return ret;
+        return ret;
     }
 
 
@@ -130,7 +130,7 @@ public interface MonoidElem<C extends MonoidElem<C>> extends Element<C> {
      * @return r = this - (a/left) * a * (a/right), where left * a * right = this.
      */
     default public C twosidedRemainder(C a){
-	return remainder(a);
+        return remainder(a);
     }
 
 

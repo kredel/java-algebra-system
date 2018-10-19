@@ -319,12 +319,12 @@ public class ModLongTest extends TestCase {
         assertEquals("cra(a mod 19,a mod 13) = a", a, e);
 
         java.math.BigInteger p1 = getPrime2();
-	try {
-	    z1 = new ModLongRing(p1);
-	    fail("p1 too large");
-	} catch (IllegalArgumentException e) {
+        try {
+            z1 = new ModLongRing(p1);
+            fail("p1 too large");
+        } catch (IllegalArgumentException e) {
             //pass
-	}
+        }
         p1 = getPrime3();
         java.math.BigInteger p2 = new java.math.BigInteger("19"); 
         java.math.BigInteger p1p2 = p1.multiply(p2);

@@ -156,11 +156,11 @@ public class ModuleList<C extends RingElem<C>> implements Serializable {
      */
     public boolean isEmpty() {
         if (list == null) {
-	    return true;
-	}
+            return true;
+        }
         if (rows <= 0) {
-	    return true;
-	}
+            return true;
+        }
         return false;
     }
 
@@ -171,18 +171,18 @@ public class ModuleList<C extends RingElem<C>> implements Serializable {
      */
     public boolean isZERO() {
         if (list == null) {
-	    return true;
-	}
+            return true;
+        }
         if (rows <= 0) {
-	    return true;
-	}
+            return true;
+        }
         for (List<GenPolynomial<C>> row : list) {
             for (GenPolynomial<C> oa : row) {
-		if (!oa.isZERO()) {
-		    return false;
-		}
-	    }
-	}	
+                if (!oa.isZERO()) {
+                    return false;
+                }
+            }
+        }       
         return true;
     }
 
@@ -344,7 +344,7 @@ public class ModuleList<C extends RingElem<C>> implements Serializable {
      * @return polynomial list corresponding to this.
      */
     public PolynomialList<C> getPolynomialList() {
-	return getPolynomialList(false);
+        return getPolynomialList(false);
     }
 
     

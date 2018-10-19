@@ -938,7 +938,7 @@ public final class PrimeInteger {
         long s = n.longValue();
         SortedMap<Long, Integer> ff = factors(s); // useless 2nd smallPrimeDiv search
         for (Map.Entry<Long, Integer> m : ff.entrySet()) {
-	    java.math.BigInteger mm = java.math.BigInteger.valueOf(m.getKey());
+            java.math.BigInteger mm = java.math.BigInteger.valueOf(m.getKey());
             F.put(mm, m.getValue());            
         }
         return F;

@@ -1024,7 +1024,7 @@ public class ArithTest extends TestCase {
         //System.out.println("eps = " + eps + ", epsd = " + new BigDecimal(eps));
         BigDecimal epsd = new BigDecimal(eps);
         BigDecimal dd;
-	
+        
         //System.out.println("b = " + b + ", c = " + c);
         //c = b.norm();
         d = b.abs();

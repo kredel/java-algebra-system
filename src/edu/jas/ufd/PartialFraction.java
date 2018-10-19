@@ -94,12 +94,12 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
         afactors = af;
         adenom = ad;
         for (GenPolynomial<C> p : cdenom) {
-	    if (p.degree(0) > 1) {
+            if (p.degree(0) > 1) {
                 throw new IllegalArgumentException("polynomial not linear, p = " + p);
             }
         }
         for (GenPolynomial<AlgebraicNumber<C>> a : adenom) {
-	    if (a.degree(0) > 1) {
+            if (a.degree(0) > 1) {
                 throw new IllegalArgumentException("polynomial not linear, a = " + a);
             }
         }

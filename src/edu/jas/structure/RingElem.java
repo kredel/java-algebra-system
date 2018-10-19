@@ -38,7 +38,7 @@ public interface RingElem<C extends RingElem<C>> extends AbelianGroupElem<C>, Mo
      * @return leftGcd(this,b).
      */
     default public C leftGcd(C b) {
-	return gcd(b);
+        return gcd(b);
     }
 
 
@@ -49,7 +49,7 @@ public interface RingElem<C extends RingElem<C>> extends AbelianGroupElem<C>, Mo
      * @return rightGcd(this,b).
      */
     default public C rightGcd(C b) {
-	return gcd(b);
+        return gcd(b);
     }
 
 }
