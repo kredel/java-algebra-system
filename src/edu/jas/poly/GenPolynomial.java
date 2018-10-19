@@ -11,6 +11,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Spliterator;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
@@ -24,6 +25,7 @@ import edu.jas.kern.PrettyPrint;
 import edu.jas.structure.NotInvertibleException;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.UnaryFunctor;
+import edu.jas.util.MapEntry;
 
 
 /**
@@ -638,8 +640,10 @@ public class GenPolynomial<C extends RingElem<C>>
         if (val.isEmpty()) {
             return null;
         }
-        Iterator<Map.Entry<ExpVector, C>> ai = val.entrySet().iterator();
-        return ai.next();
+        //Iterator<Map.Entry<ExpVector, C>> ai = val.entrySet().iterator();
+        //return ai.next();
+	ExpVector e = val.firstKey();
+	return new MapEntry<ExpVector, C>(e, val.get(e));
     }
 
 
@@ -2421,6 +2425,15 @@ public class GenPolynomial<C extends RingElem<C>>
      */
     public Iterator<Monomial<C>> iterator() {
         return new PolyIterator<C>(val);
+    }
+
+
+    /**
+     * Spliterator over monomials.
+     * @return a PolySpliterator.
+     */
+    public Spliterator<Monomial<C>> spliterator() {
+        return new PolySpliterator<C>(val);
     }
 
 

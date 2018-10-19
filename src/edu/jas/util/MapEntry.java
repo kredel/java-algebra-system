@@ -14,7 +14,7 @@ import java.util.Map;
  * @author Heinz Kredel
  */
 
-public class MapEntry<K,V> implements Map.Entry<K,V> {
+public final class MapEntry<K,V> implements Map.Entry<K,V> {
 
 
     final K key;

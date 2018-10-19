@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.Spliterator;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -19,6 +21,7 @@ import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.UnaryFunctor;
+import edu.jas.util.ListUtil;
 
 
 /**
@@ -131,7 +134,7 @@ public class GenPolynomialTest extends TestCase {
 
         // polynomials over (polynomials over rational numbers)
         GenPolynomialRing<GenPolynomial<BigRational>> ppf = new GenPolynomialRing<GenPolynomial<BigRational>>(
-                        pf, 3);
+                                                                                                              pf, 3);
         // System.out.println("ppf = " + ppf);
 
         GenPolynomial<GenPolynomial<BigRational>> pp = ppf.getONE();
@@ -142,7 +145,7 @@ public class GenPolynomialTest extends TestCase {
         // System.out.println("pp = " + pp);
 
         RingElem<GenPolynomial<GenPolynomial<BigRational>>> ppe = new GenPolynomial<GenPolynomial<BigRational>>(
-                        ppf);
+                                                                                                                ppf);
         // System.out.println("ppe = " + ppe);
         // System.out.println("pp.equals(ppe) = " + pp.equals(ppe) );
         // System.out.println("pp.equals(pp) = " + pp.equals(pp) );
@@ -160,7 +163,7 @@ public class GenPolynomialTest extends TestCase {
 
         // polynomials over (polynomials over (polynomials over rational numbers))
         GenPolynomialRing<GenPolynomial<GenPolynomial<BigRational>>> pppf = new GenPolynomialRing<GenPolynomial<GenPolynomial<BigRational>>>(
-                        ppf, 4);
+                                                                                                                                             ppf, 4);
         // System.out.println("pppf = " + pppf);
 
         GenPolynomial<GenPolynomial<GenPolynomial<BigRational>>> ppp = pppf.getONE();
@@ -171,7 +174,7 @@ public class GenPolynomialTest extends TestCase {
         // System.out.println("ppp = " + ppp);
 
         RingElem<GenPolynomial<GenPolynomial<GenPolynomial<BigRational>>>> pppe = new GenPolynomial<GenPolynomial<GenPolynomial<BigRational>>>(
-                        pppf);
+                                                                                                                                               pppf);
         // System.out.println("pppe = " + pppe);
         // System.out.println("ppp.equals(pppe) = " + ppp.equals(pppe) );
         // System.out.println("ppp.equals(ppp) = " + ppp.equals(ppp) );
@@ -534,6 +537,51 @@ public class GenPolynomialTest extends TestCase {
 
 
     /**
+     * Test spliterators.
+     */
+    public void testSpliterators() {
+        // integers
+        BigInteger rf = new BigInteger();
+        BigInteger num = rf.fromInteger(1);
+        // polynomials over integral numbers
+        GenPolynomialRing<BigInteger> pf = new GenPolynomialRing<BigInteger>(rf, rl);
+        //System.out.println("pf = " + pf.toScript());
+        // random polynomial
+        GenPolynomial<BigInteger> p = pf.random(kl, 22 * ll, el, q);
+        //System.out.println("p = " + p.length());
+        List<BigInteger> coeffs = new ArrayList<BigInteger>();
+
+        // create spliterator and run on it
+        PolySpliterator<BigInteger> psplit = new PolySpliterator<BigInteger>(p.val);
+        //System.out.println("ps = " + psplit);
+        //psplit.forEachRemaining( m -> System.out.print(m.c.toScript() + ", "));
+        //System.out.println("\n");
+        psplit.forEachRemaining( m -> coeffs.add(m.c.multiply(num)) );
+        assertTrue("#coeffs == size: ", p.val.size() == coeffs.size());
+        coeffs.clear();
+        
+        // create spliterator and split it
+        //psplit = new PolySpliterator<BigInteger>(p.val);
+        Spliterator<Monomial<BigInteger>> split = p.spliterator(); 
+        //System.out.println("ps = " + split);
+        //PolySpliterator<BigInteger> rest = split.trySplit();
+        Spliterator<Monomial<BigInteger>> rest = split.trySplit(); 
+        //System.out.println("rest = " + rest);
+        //System.out.println("ps = " + split);
+
+        //System.out.println("rest = " + rest);
+        //rest.forEachRemaining( m -> System.out.print(m.c.toScript() + ", "));
+        rest.forEachRemaining( m -> coeffs.add(m.c.multiply(num)) );
+        //System.out.println("\nps = " + split);
+        //split.forEachRemaining( m -> System.out.print(m.c.toScript() + ", "));
+        split.forEachRemaining( m -> coeffs.add(m.c.multiply(num)) );
+        assertTrue("#coeffs == size: ", p.val.size() == coeffs.size());
+
+        assertTrue("coeffs == p.coefficients: ", ListUtil.<BigInteger>equals(coeffs,p.val.values()));
+    }
+
+
+    /**
      * Test coefficient map function.
      */
     public void testMap() {
@@ -601,7 +649,7 @@ public class GenPolynomialTest extends TestCase {
         //System.out.println("blen(c) = " + c.bitLength());
         assertTrue("blen(random) >= 0", 0 <= c.bitLength());
         assertTrue("blen(random)+blen(random) >= blen(random+random)",
-                        a.bitLength() + b.bitLength() >= c.bitLength());
+                   a.bitLength() + b.bitLength() >= c.bitLength());
     }
 
 }
