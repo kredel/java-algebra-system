@@ -9,6 +9,7 @@ import java.util.SortedMap;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.Consumer;
 
 import edu.jas.structure.RingElem;
@@ -43,6 +44,7 @@ public class PolySpliterator<C extends RingElem<C> >
      * @param m SortedMap of a polynomial.
      */
     public PolySpliterator( SortedMap<ExpVector,C> m ) {
+        //this(Spliterators.spliterator(m.entrySet(), Spliterator.NONNULL), m);
         this(m.entrySet().spliterator(), m);
     }
 

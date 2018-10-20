@@ -554,6 +554,7 @@ public class GenPolynomialTest extends TestCase {
         // create spliterator and run on it
         PolySpliterator<BigInteger> psplit = new PolySpliterator<BigInteger>(p.val);
         //System.out.println("ps = " + psplit);
+        //System.out.println("ps = "); printCharacteristic(psplit);
         //psplit.forEachRemaining( m -> System.out.print(m.c.toScript() + ", "));
         //System.out.println("\n");
         psplit.forEachRemaining( m -> coeffs.add(m.c.multiply(num)) );
@@ -566,8 +567,8 @@ public class GenPolynomialTest extends TestCase {
         //System.out.println("ps = " + split);
         //PolySpliterator<BigInteger> rest = split.trySplit();
         Spliterator<Monomial<BigInteger>> rest = split.trySplit(); 
-        //System.out.println("rest = " + rest);
-        //System.out.println("ps = " + split);
+        //System.out.println("rest = "); printCharacteristic(rest);
+        //System.out.println("ps = "); printCharacteristic(split);
 
         //System.out.println("rest = " + rest);
         //rest.forEachRemaining( m -> System.out.print(m.c.toScript() + ", "));
@@ -580,6 +581,13 @@ public class GenPolynomialTest extends TestCase {
         assertTrue("coeffs == p.coefficients: ", ListUtil.<BigInteger>equals(coeffs,p.val.values()));
     }
 
+    void printCharacteristic(Spliterator sp) {
+	for (int c = 0x0; c < 0x4000; c++) {
+	    if (sp.hasCharacteristics(c)) {
+		System.out.println(String.format("char: %3x", c));
+	    }
+	}
+    }
 
     /**
      * Test coefficient map function.
