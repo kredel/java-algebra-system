@@ -650,12 +650,12 @@ public class GenPolynomialTest extends TestCase {
         System.out.println("q = " + q.length() + ", old time = " + tm);
 
         long ts = System.nanoTime();
-        q = p.map(me -> new MapEntry<ExpVector,ModInteger>(me.getKey(), me.getValue().multiply(num)), false);
+        q = p.mapOnStream(me -> new MapEntry<ExpVector,ModInteger>(me.getKey(), me.getValue().multiply(num)), false);
         ts = System.nanoTime() - ts;
         System.out.println("q = " + q.length() + ", seq time = " + ts);
 
         long tp = System.nanoTime();
-        q = p.map(me -> new MapEntry<ExpVector,ModInteger>(me.getKey(), me.getValue().multiply(num)), true);
+        q = p.mapOnStream(me -> new MapEntry<ExpVector,ModInteger>(me.getKey(), me.getValue().multiply(num)), true);
         tp = System.nanoTime() - tp;
         System.out.println("q = " + q.length() + ", par time = " + tp);
 

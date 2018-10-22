@@ -2509,21 +2509,21 @@ public class GenPolynomial<C extends RingElem<C>>
 
 
     /**
-     * Map a function to the stream entries.
+     * Map a function to the polynomial stream entries.
      * @param f evaluation functor.
      * @return new polynomial with f(this.entries).
      */
-    public GenPolynomial<C> mapStream(final Function<? super Map.Entry<ExpVector,C>, ? extends Map.Entry<ExpVector,C>> f) {
-        return map(f, false);
+    public GenPolynomial<C> mapOnStream(final Function<? super Map.Entry<ExpVector,C>, ? extends Map.Entry<ExpVector,C>> f) {
+        return mapOnStream(f, false);
     }
 
     
     /**
-     * Map a function to the stream entries.
+     * Map a function to the polynomial stream entries.
      * @param f evaluation functor.
      * @return new polynomial with f(this.entries).
      */
-    public GenPolynomial<C> map(final Function<? super Map.Entry<ExpVector,C>, ? extends Map.Entry<ExpVector,C>> f, boolean parallel) {
+    public GenPolynomial<C> mapOnStream(final Function<? super Map.Entry<ExpVector,C>, ? extends Map.Entry<ExpVector,C>> f, boolean parallel) {
         Stream<Map.Entry<ExpVector,C>> st;
         if (parallel) {
             st = val.entrySet().parallelStream();
