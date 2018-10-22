@@ -10,18 +10,24 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.SortedMap;
 import java.util.Spliterator;
+import java.util.stream.Stream;
+import java.util.stream.Collectors;
+import java.util.concurrent.ForkJoinPool;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-
 import edu.jas.arith.BigInteger;
+import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.BigRational;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.UnaryFunctor;
 import edu.jas.util.ListUtil;
+import edu.jas.util.MapEntry;
 
 
 /**
@@ -581,14 +587,16 @@ public class GenPolynomialTest extends TestCase {
         assertTrue("coeffs == p.coefficients: ", ListUtil.<BigInteger>equals(coeffs,p.val.values()));
     }
 
+
     void printCharacteristic(Spliterator sp) {
-	for (int c = 0x0; c < 0x4000; c++) {
-	    if (sp.hasCharacteristics(c)) {
-		System.out.println(String.format("char: %3x", c));
-	    }
-	}
+        for (int c = 0x0; c < 0x4000; c++) {
+            if (sp.hasCharacteristics(c)) {
+                System.out.println(String.format("char: %3x", c));
+            }
+        }
     }
 
+    
     /**
      * Test coefficient map function.
      */
@@ -612,14 +620,56 @@ public class GenPolynomialTest extends TestCase {
 
         // test times 0
         q = p.map(new Multiply<BigInteger>(rf.getZERO()));
-        assertTrue("q == 0 ", q.isZERO());
+        assertTrue("q == 0: " + q, q.isZERO());
 
         // test times -1
         q = p.map(new Multiply<BigInteger>(rf.getONE().negate()));
         assertEquals("p == q ", p.negate(), q);
     }
 
+    
+    /**
+     * Test streams.
+     */
+    public void testStreams() {
+        // modular integers
+        ModIntegerRing rf = new ModIntegerRing(32003);
+        ModInteger num = rf.fromInteger(-1);
+        // polynomials over integral numbers
+        GenPolynomialRing<ModInteger> pf = new GenPolynomialRing<ModInteger>(rf, rl);
+        //System.out.println("pf = " + pf.toScript());
+        // random polynomial
+        GenPolynomial<ModInteger> p = pf.random(kl, 222 * ll, 2+el, q);
+        System.out.println("p = " + p.length());
+        GenPolynomial<ModInteger> q;
 
+        // map multiply to coefficients
+        long tm = System.nanoTime();
+        q = p.map(c -> c.multiply(num));
+        tm = System.nanoTime() - tm;
+        System.out.println("q = " + q.length() + ", old time = " + tm);
+
+        long ts = System.nanoTime();
+        q = p.map(me -> new MapEntry<ExpVector,ModInteger>(me.getKey(), me.getValue().multiply(num)), false);
+        ts = System.nanoTime() - ts;
+        System.out.println("q = " + q.length() + ", seq time = " + ts);
+
+        long tp = System.nanoTime();
+        q = p.map(me -> new MapEntry<ExpVector,ModInteger>(me.getKey(), me.getValue().multiply(num)), true);
+        tp = System.nanoTime() - tp;
+        System.out.println("q = " + q.length() + ", par time = " + tp);
+
+        long tn = System.nanoTime();
+        q = p.negate();
+        tn = System.nanoTime() - tn;
+        System.out.println("q = " + q.length() + ", neg time = " + tn);
+
+        //System.out.println("p+q = " + p.sum(q));
+        assertTrue("p+q == 0 ", p.sum(q).isZERO());
+        //System.out.println("ForkJoinPool: " + ForkJoinPool.commonPool());
+    }
+
+    
     /**
      * Test bitLength.
      */
