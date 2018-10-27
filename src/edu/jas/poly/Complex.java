@@ -385,7 +385,7 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
      * @return ||this||.
      */
     public Complex<C> norm() {
-        // this.conjugate().multiply(this);
+        // this.multiply(this.conjugate());
         C v = re.multiply(re);
         v = v.sum(im.multiply(im));
         return new Complex<C>(ring, v);

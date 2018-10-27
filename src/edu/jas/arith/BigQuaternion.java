@@ -627,7 +627,7 @@ public /*final*/ class BigQuaternion implements StarRingElem<BigQuaternion>, Gcd
      * @return ||this||.
      */
     public BigQuaternion norm() {
-        // this.conjugate().multiply(this);
+        // this.multiply(this.conjugate());
         BigRational v = re.multiply(re);
         v = v.sum(im.multiply(im));
         v = v.sum(jm.multiply(jm));

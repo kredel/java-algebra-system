@@ -587,7 +587,7 @@ public final class BigComplex implements StarRingElem<BigComplex>, GcdRingElem<B
      * @return ||this||.
      */
     public BigComplex norm() {
-        // this.conjugate().multiply(this);
+        // this.multiply(this.conjugate());
         BigRational v = re.multiply(re);
         v = v.sum(im.multiply(im));
         return new BigComplex(v);

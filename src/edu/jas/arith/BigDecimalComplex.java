@@ -598,7 +598,7 @@ public final class BigDecimalComplex implements StarRingElem<BigDecimalComplex>,
      * @return ||this||.
      */
     public BigDecimalComplex norm() {
-        // this.conjugate().multiply(this);
+        // this.multiply(this.conjugate());
         BigDecimal v = re.multiply(re);
         if (!im.isZERO()) {
             v = v.sum(im.multiply(im));

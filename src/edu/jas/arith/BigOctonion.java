@@ -606,7 +606,7 @@ public final class BigOctonion
      * @return ||this||.
      */
     public BigOctonion norm() {
-        // this.conjugate().multiply(this);
+        // this.multiply(this.conjugate());
         BigQuaternion v = or.norm();
         v = v.sum(oi.norm());
         return new BigOctonion(v);
