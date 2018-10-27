@@ -640,32 +640,46 @@ public class GenPolynomialTest extends TestCase {
         //System.out.println("pf = " + pf.toScript());
         // random polynomial
         GenPolynomial<ModInteger> p = pf.random(kl, 222 * ll, 2+el, q);
-        System.out.println("p = " + p.length());
+        //System.out.println("p = " + p.length());
         GenPolynomial<ModInteger> q;
+
+        // negate coefficients 
+        long tn = System.nanoTime();
+        q = p.negate();
+        tn = System.nanoTime() - tn;
+        //System.out.println("q = " + q.length() + ", neg time = " + tn);
+        assertTrue("time >= 0 ", tn >= 0);
+        //System.out.println("p+q = " + p.sum(q));
+        assertTrue("p+q == 0 ", p.sum(q).isZERO());
 
         // map multiply to coefficients
         long tm = System.nanoTime();
         q = p.map(c -> c.multiply(num));
         tm = System.nanoTime() - tm;
-        System.out.println("q = " + q.length() + ", old time = " + tm);
+        //System.out.println("q = " + q.length() + ", old time = " + tm);
+        assertTrue("time >= 0 ", tm >= 0);
+        //System.out.println("p+q = " + p.sum(q));
+        assertTrue("p+q == 0 ", p.sum(q).isZERO());
 
+        // map multiply to coefficients stream
         long ts = System.nanoTime();
         q = p.mapOnStream(me -> new MapEntry<ExpVector,ModInteger>(me.getKey(), me.getValue().multiply(num)), false);
         ts = System.nanoTime() - ts;
-        System.out.println("q = " + q.length() + ", seq time = " + ts);
+        //System.out.println("q = " + q.length() + ", seq time = " + ts);
+        assertTrue("time >= 0 ", ts >= 0);
+        //System.out.println("p+q = " + p.sum(q));
+        assertTrue("p+q == 0 ", p.sum(q).isZERO());
 
+        // map multiply to coefficients parallel stream
         long tp = System.nanoTime();
         q = p.mapOnStream(me -> new MapEntry<ExpVector,ModInteger>(me.getKey(), me.getValue().multiply(num)), true);
         tp = System.nanoTime() - tp;
-        System.out.println("q = " + q.length() + ", par time = " + tp);
-
-        long tn = System.nanoTime();
-        q = p.negate();
-        tn = System.nanoTime() - tn;
-        System.out.println("q = " + q.length() + ", neg time = " + tn);
-
+        //System.out.println("q = " + q.length() + ", par time = " + tp);
+        assertTrue("time >= 0 ", tp >= 0);
         //System.out.println("p+q = " + p.sum(q));
         assertTrue("p+q == 0 ", p.sum(q).isZERO());
+        System.out.println("map time: neg, old, seq, par, = " + tn + ", " + tm + ", " + ts + ", " + tp);
+
         //System.out.println("ForkJoinPool: " + ForkJoinPool.commonPool());
     }
 
