@@ -10,6 +10,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager; 
@@ -18,7 +21,6 @@ import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.RingElem;
 import edu.jas.util.Terminator;
-import edu.jas.util.ThreadPool;
 
 
 /**
@@ -45,7 +47,7 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>> extends Groebner
     /**
      * Pool of threads to use.
      */
-    protected transient final ThreadPool pool;
+    protected transient final ExecutorService pool;
 
 
     /**
@@ -61,16 +63,16 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>> extends Groebner
      * @param threads number of threads to use.
      */
     public GroebnerBaseSeqPairParallel(int threads) {
-        this(threads, new ThreadPool(threads));
+        this(threads, Executors.newFixedThreadPool(threads));
     }
 
 
     /**
      * Constructor.
      * @param threads number of threads to use.
-     * @param pool ThreadPool to use.
+     * @param pool ExecutorService to use.
      */
-    public GroebnerBaseSeqPairParallel(int threads, ThreadPool pool) {
+    public GroebnerBaseSeqPairParallel(int threads, ExecutorService pool) {
         this(threads, pool, new ReductionPar<C>());
     }
 
@@ -81,17 +83,17 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>> extends Groebner
      * @param red parallelism aware reduction engine
      */
     public GroebnerBaseSeqPairParallel(int threads, Reduction<C> red) {
-        this(threads, new ThreadPool(threads), red);
+        this(threads, Executors.newFixedThreadPool(threads), red);
     }
 
 
     /**
      * Constructor.
      * @param threads number of threads to use.
-     * @param pool ThreadPool to use.
+     * @param pool ExecutorService to use.
      * @param red parallelism aware reduction engine
      */
-    public GroebnerBaseSeqPairParallel(int threads, ThreadPool pool, Reduction<C> red) {
+    public GroebnerBaseSeqPairParallel(int threads, ExecutorService pool, Reduction<C> red) {
         super(red);
         if (!(red instanceof ReductionPar)) {
             logger.warn("parallel GB should use parallel aware reduction");
@@ -105,26 +107,28 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>> extends Groebner
 
 
     /**
-     * Cleanup and terminate ThreadPool.
+     * Cleanup and terminate ExecutorService.
      */
     @Override
     public void terminate() {
         if (pool == null) {
             return;
         }
-        pool.terminate();
+        pool.shutdown();
+        logger.info(pool.toString());
     }
 
 
     /**
-     * Cancel ThreadPool.
+     * Cancel ExecutorService.
      */
     @Override
     public int cancel() {
         if (pool == null) {
             return 0;
         }
-        int s = pool.cancel();
+        int s = pool.shutdownNow().size();
+        logger.info(pool.toString());
         return s;
     }
 
@@ -172,7 +176,7 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>> extends Groebner
         ReducerSeqPair<C> R;
         for (int i = 0; i < threads; i++) {
             R = new ReducerSeqPair<C>(fin, G, pairlist);
-            pool.addJob(R);
+            pool.execute(R);
         }
         fin.waitDone();
         if (Thread.currentThread().isInterrupted()) {
@@ -254,7 +258,7 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>> extends Groebner
             R.addAll(G);
             R.addAll(F);
             mirs[i] = new MiReducerSeqPair<C>(R, a);
-            pool.addJob(mirs[i]);
+            pool.execute(mirs[i]);
             i++;
             F.add(a);
         }

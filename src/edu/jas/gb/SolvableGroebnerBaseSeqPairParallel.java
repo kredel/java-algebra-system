@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager; 
@@ -20,7 +23,6 @@ import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolynomialList;
 import edu.jas.structure.RingElem;
 import edu.jas.util.Terminator;
-import edu.jas.util.ThreadPool;
 
 
 /**
@@ -51,7 +53,7 @@ public class SolvableGroebnerBaseSeqPairParallel<C extends RingElem<C>> extends
     /**
      * Pool of threads to use.
      */
-    protected transient final ThreadPool pool;
+    protected transient final ExecutorService pool;
 
 
     /**
@@ -67,16 +69,16 @@ public class SolvableGroebnerBaseSeqPairParallel<C extends RingElem<C>> extends
      * @param threads number of threads to use.
      */
     public SolvableGroebnerBaseSeqPairParallel(int threads) {
-        this(threads, new ThreadPool(threads));
+        this(threads, Executors.newFixedThreadPool(threads));
     }
 
 
     /**
      * Constructor.
      * @param threads number of threads to use.
-     * @param pool ThreadPool to use.
+     * @param pool ExecutorService to use.
      */
-    public SolvableGroebnerBaseSeqPairParallel(int threads, ThreadPool pool) {
+    public SolvableGroebnerBaseSeqPairParallel(int threads, ExecutorService pool) {
         this(threads, pool, new SolvableReductionPar<C>());
     }
 
@@ -87,17 +89,17 @@ public class SolvableGroebnerBaseSeqPairParallel<C extends RingElem<C>> extends
      * @param red parallelism aware reduction engine
      */
     public SolvableGroebnerBaseSeqPairParallel(int threads, SolvableReduction<C> red) {
-        this(threads, new ThreadPool(threads), red);
+        this(threads, Executors.newFixedThreadPool(threads), red);
     }
 
 
     /**
      * Constructor.
      * @param threads number of threads to use.
-     * @param pool ThreadPool to use.
+     * @param pool ExecutorService to use.
      * @param sred parallelism aware reduction engine
      */
-    public SolvableGroebnerBaseSeqPairParallel(int threads, ThreadPool pool, SolvableReduction<C> sred) {
+    public SolvableGroebnerBaseSeqPairParallel(int threads, ExecutorService pool, SolvableReduction<C> sred) {
         super(sred);
         if (!(sred instanceof SolvableReductionPar)) {
             logger.warn("parallel GB should use parallel aware reduction");
@@ -111,14 +113,29 @@ public class SolvableGroebnerBaseSeqPairParallel<C extends RingElem<C>> extends
 
 
     /**
-     * Cleanup and terminate ThreadPool.
+     * Cleanup and terminate ExecutorService.
      */
     @Override
     public void terminate() {
         if (pool == null) {
             return;
         }
-        pool.terminate();
+        pool.shutdown();
+        logger.error(pool.toString());
+    }
+
+
+    /**
+     * Cancel ExecutorService.
+     */
+    @Override
+    public int cancel() {
+        if (pool == null) {
+            return 0;
+        }
+        int s = pool.shutdownNow().size();
+        logger.info(pool.toString());
+        return s;
     }
 
 
@@ -165,7 +182,7 @@ public class SolvableGroebnerBaseSeqPairParallel<C extends RingElem<C>> extends
         LeftSolvableReducerSeqPair<C> R;
         for (int i = 0; i < threads; i++) {
             R = new LeftSolvableReducerSeqPair<C>(fin, G, pairlist);
-            pool.addJob(R);
+            pool.execute(R);
         }
         fin.waitDone();
         logger.debug("#parallel list = " + G.size());
@@ -244,7 +261,7 @@ public class SolvableGroebnerBaseSeqPairParallel<C extends RingElem<C>> extends
             R.addAll(G);
             R.addAll(F);
             mirs[i] = new SolvableMiReducerSeqPair<C>(R, a);
-            pool.addJob(mirs[i]);
+            pool.execute(mirs[i]);
             i++;
             F.add(a);
         }
@@ -336,7 +353,7 @@ public class SolvableGroebnerBaseSeqPairParallel<C extends RingElem<C>> extends
         TwosidedSolvableReducerSeqPair<C> R;
         for (int i = 0; i < threads; i++) {
             R = new TwosidedSolvableReducerSeqPair<C>(fin, X, G, pairlist);
-            pool.addJob(R);
+            pool.execute(R);
         }
         fin.waitDone();
         logger.debug("#parallel list = " + G.size());
