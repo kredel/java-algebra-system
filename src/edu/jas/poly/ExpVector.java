@@ -517,7 +517,7 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector> {
      */
     @Override
     public boolean equals(Object B) {
-        if (!(B instanceof ExpVector)) {
+        if (!(B instanceof ExpVector) || B == null) {
             return false;
         }
         ExpVector b = (ExpVector) B;

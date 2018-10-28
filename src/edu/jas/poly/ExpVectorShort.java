@@ -373,7 +373,7 @@ public final class ExpVectorShort extends ExpVector
      */
     @Override
     public boolean equals(Object B) {
-        if (!(B instanceof ExpVectorShort)) {
+        if (!(B instanceof ExpVectorShort) || B == null) {
             return false;
         }
         ExpVectorShort b = (ExpVectorShort) B;
