@@ -12,15 +12,16 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import edu.jas.arith.BigRational;
+import edu.jas.arith.BigDecimal;
 import edu.jas.arith.Roots;
 
 
 /**
- * BigRational coefficients GenPolynomial tests with JUnit.
+ * BigDecimal coefficients GenPolynomial tests with JUnit.
  * @author Heinz Kredel
  */
 
-public class RatGenPolynomialTest extends TestCase {
+public class DecGenPolynomialTest extends TestCase {
 
     /**
      * main.
@@ -33,20 +34,20 @@ public class RatGenPolynomialTest extends TestCase {
      * Constructs a <CODE>RatGenPolynomialTest</CODE> object.
      * @param name String.
      */
-    public RatGenPolynomialTest(String name) {
+    public DecGenPolynomialTest(String name) {
         super(name);
     }
 
     /**
      */ 
     public static Test suite() {
-        TestSuite suite= new TestSuite(RatGenPolynomialTest.class);
+        TestSuite suite= new TestSuite(DecGenPolynomialTest.class);
         return suite;
     }
 
-    GenPolynomialRing<BigRational> fac;
+    GenPolynomialRing<BigDecimal> fac;
 
-    GenPolynomial<BigRational> a, b, c, d, e;
+    GenPolynomial<BigDecimal> a, b, c, d, e;
 
     int rl = 7; 
     int kl = 10;
@@ -56,7 +57,7 @@ public class RatGenPolynomialTest extends TestCase {
 
     protected void setUp() {
         a = b = c = d = e = null;
-        fac = new GenPolynomialRing<BigRational>(new BigRational(1),rl);
+        fac = new GenPolynomialRing<BigDecimal>(new BigDecimal(1),rl);
     }
 
     protected void tearDown() {
@@ -111,9 +112,9 @@ public class RatGenPolynomialTest extends TestCase {
         c = fac.random(ll);
 
         ExpVector u = ExpVector.random(rl,el,q);
-        BigRational x = BigRational.RNRAND(kl);
+        BigDecimal x = fac.coFac.random(kl);
 
-        b = new GenPolynomial<BigRational>(fac,x, u);
+        b = new GenPolynomial<BigDecimal>(fac,x, u);
         c = a.sum(b);
         d = a.sum(x,u);
         assertEquals("a+p(x,u) = a+(x,u)",c,d);
@@ -122,8 +123,8 @@ public class RatGenPolynomialTest extends TestCase {
         d = a.subtract(x,u);
         assertEquals("a-p(x,u) = a-(x,u)",c,d);
 
-        a = new GenPolynomial<BigRational>(fac);
-        b = new GenPolynomial<BigRational>(fac,x, u);
+        a = new GenPolynomial<BigDecimal>(fac);
+        b = new GenPolynomial<BigDecimal>(fac,x, u);
         c = b.sum(a);
         d = a.sum(x,u);
         assertEquals("a+p(x,u) = a+(x,u)",c,d);
@@ -170,17 +171,17 @@ public class RatGenPolynomialTest extends TestCase {
         assertEquals("a(bc) = (ab)c",d,e);
         assertTrue("a(bc) = (ab)c", d.equals(e) );
 
-        BigRational x = a.leadingBaseCoefficient().inverse();
+        BigDecimal x = a.leadingBaseCoefficient().inverse();
         c = a.monic();
         d = a.multiply(x);
         assertEquals("a.monic() = a(1/ldcf(a))",c,d);
 
-        BigRational y = b.leadingBaseCoefficient().inverse();
+        BigDecimal y = b.leadingBaseCoefficient().inverse();
         c = b.monic();
         d = b.multiply(y);
         assertEquals("b.monic() = b(1/ldcf(b))",c,d);
 
-        e = new GenPolynomial<BigRational>(fac,y);
+        e = new GenPolynomial<BigDecimal>(fac,y);
         d = b.multiply(e);
         assertEquals("b.monic() = b(1/ldcf(b))",c,d);
 
@@ -197,7 +198,7 @@ public class RatGenPolynomialTest extends TestCase {
         b = fac.random(kl,ll,el,q);
         c = fac.random(kl,3,el*el,q);
         ExpVector ev = ExpVector.random(rl,el,q);
-        BigRational lc = BigRational.RNRAND(kl);
+        BigDecimal lc = fac.coFac.random(kl);
 
         d = a.subtractMultiple(lc,b);
         e = a.subtract( b.multiply(lc) );
@@ -208,7 +209,7 @@ public class RatGenPolynomialTest extends TestCase {
         assertEquals("a - (lc ev) b == a - ((lc ev) b)",d,e);
 
         ExpVector fv = ExpVector.random(rl,el,q);
-        BigRational tc = BigRational.RNRAND(kl);
+        BigDecimal tc = fac.coFac.random(kl);
 
         d = a.scaleSubtractMultiple(tc,lc,ev,b);
         e = a.multiply(tc).subtract( b.multiply(lc,ev) );
@@ -235,88 +236,10 @@ public class RatGenPolynomialTest extends TestCase {
     }
 
 
-    /**
+    /*
      * Test object quotient and remainder.
+     * Not meaningful.
      */
-    public void testQuotRem() {
-        fac = new GenPolynomialRing<BigRational>(new BigRational(1),1);
-
-        a = fac.random(ll).monic();
-        assertTrue("not isZERO( a )", !a.isZERO() );
-
-        b = fac.random(ll).monic();
-        assertTrue("not isZERO( b )", !b.isZERO() );
-
-        GenPolynomial<BigRational> h = a;
-        GenPolynomial<BigRational> g = fac.random(ll).monic();
-        assertTrue("not isZERO( g )", !g.isZERO() );
-        a = a.multiply(g);
-        b = b.multiply(g);
-        //System.out.println("a = " + a);
-        //System.out.println("b = " + b);
-        //System.out.println("g = " + g);
-
-        GenPolynomial<BigRational>[] qr;
-        qr = b.quotientRemainder(a);
-        c = qr[0];
-        d = qr[1];
-        //System.out.println("q = " + c);
-        //System.out.println("r = " + d);
-        e = c.multiply(a).sum(d);
-        assertEquals("b = q a + r", b, e );
-
-        qr = a.quotientRemainder(b);
-        c = qr[0];
-        d = qr[1];
-        //System.out.println("q = " + c);
-        //System.out.println("r = " + d);
-        e = c.multiply(b).sum(d);
-        assertEquals("a = q b + r", a, e );
-
-
-        // gcd tests -------------------------------
-        c = a.gcd(b);
-        //System.out.println("gcd = " + c);
-        assertTrue("a mod gcd(a,b) = 0", a.remainder(c).isZERO() );
-        assertTrue("b mod gcd(a,b) = 0", b.remainder(c).isZERO() );
-        assertEquals("g = gcd(a,b)", c, g );
-
-
-        GenPolynomial<BigRational>[] gst;
-        gst = a.egcd(b);
-        //System.out.println("egcd = " + gst[0]);
-        //System.out.println(", s = " + gst[1] + ", t = " + gst[2]);
-        c = gst[0];
-        d = gst[1];
-        e = gst[2];
-        assertEquals("g = gcd(a,b)", c, g );
-
-        GenPolynomial<BigRational> x;
-        x = a.multiply(d).sum( b.multiply(e) ).monic(); 
-        //System.out.println("x = " + x);
-        assertEquals("gcd(a,b) = a s + b t", c, x );
-
-
-        gst = a.hegcd(b);
-        //System.out.println("hegcd = " + gst[0]);
-        //System.out.println("s = " + gst[1]);
-        c = gst[0];
-        d = gst[1];
-        assertEquals("g = gcd(a,b)", c, g );
-
-        x = a.multiply(d).remainder(b).monic(); 
-        //System.out.println("x = " + x);
-        assertEquals("gcd(a,b) = a s mod b", c, x );
-
-        //System.out.println("g = " + g);
-        //System.out.println("h = " + h);
-        c = h.modInverse(g);
-        //System.out.println("c = " + c);
-        x = c.multiply(h).remainder( g ).monic(); 
-        //System.out.println("x = " + x);
-        assertTrue("h invertible mod g", x.isONE() );
-    }
-
 
     /**
      * Test addition speed.
@@ -358,24 +281,20 @@ public class RatGenPolynomialTest extends TestCase {
      * Test absolute norm.
      */
     public void testAbsNorm() {
-        BigRational r;
+        BigDecimal r;
         a = fac.getONE().negate();
         //System.out.println("a = " + a);
 
-        r = PolyUtil.<BigRational> absNorm(a);
+        r = PolyUtil.<BigDecimal> absNorm(a);
         //System.out.println("r = " + r);
         assertTrue("isONE( absNorm(-1) )", r.isONE() );
 
         a = fac.random(kl*2, ll+2, el, q );
         //System.out.println("a = " + a);
 
-        r = PolyUtil.<BigRational> absNorm(a);
+        r = PolyUtil.<BigDecimal> absNorm(a);
         //System.out.println("r = " + r);
         assertTrue(" not isZERO( absNorm(a) )", !r.isZERO() || a.isZERO() );
-        // is now in absNorm
-        //ar = Roots.sqrt( r ); 
-        //System.out.println("ar = " + ar);
-        //assertTrue(" not isZERO( sqrt(abs(a)) )", !ar.isZERO() || a.isZERO() );
     }
 
 }

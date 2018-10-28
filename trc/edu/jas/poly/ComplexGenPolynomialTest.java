@@ -10,7 +10,7 @@ import junit.framework.TestSuite;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.arith.BigComplex;
-//import edu.jas.structure.RingElem;
+import edu.jas.arith.Roots;
 
 
 /**
@@ -183,6 +183,27 @@ public class ComplexGenPolynomialTest extends TestCase {
 
         d = e.multiply(b);
         assertEquals("b.monic() = (1/ldcf(b) (0))*b",c,d);
+    }
+
+    
+    /**
+     * Test absolute norm.
+     */
+    public void testAbsNorm() {
+        BigComplex r;
+        a = fac.getONE().negate();
+        //System.out.println("a = " + a);
+
+        r = PolyUtil.<BigComplex> absNorm(a);
+        //System.out.println("r = " + r);
+        assertTrue("isONE( absNorm(-1) )", r.isONE() );
+
+        a = fac.random(kl*2, ll+2, el, q );
+        //System.out.println("a = " + a);
+
+        r = PolyUtil.<BigComplex> absNorm(a);
+        //System.out.println("r = " + r);
+        assertTrue(" not isZERO( absNorm(a) )", !r.isZERO() || a.isZERO() );
     }
 
 }
