@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager; 
@@ -20,7 +23,6 @@ import edu.jas.poly.PolynomialList;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.RingElem;
 import edu.jas.util.Terminator;
-import edu.jas.util.ThreadPool;
 
 
 /**
@@ -48,7 +50,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>> extends Solvabl
     /**
      * Pool of threads to use.
      */
-    protected transient final ThreadPool pool;
+    protected transient final ExecutorService pool;
 
 
     /**
@@ -64,16 +66,16 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>> extends Solvabl
      * @param threads number of threads to use.
      */
     public SolvableGroebnerBaseParallel(int threads) {
-        this(threads, new ThreadPool(threads));
+        this(threads, Executors.newFixedThreadPool(threads));
     }
 
 
     /**
      * Constructor.
      * @param threads number of threads to use.
-     * @param pool ThreadPool to use.
+     * @param pool ExecutorService to use.
      */
-    public SolvableGroebnerBaseParallel(int threads, ThreadPool pool) {
+    public SolvableGroebnerBaseParallel(int threads, ExecutorService pool) {
         this(threads, pool, new SolvableReductionPar<C>());
     }
 
@@ -84,7 +86,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>> extends Solvabl
      * @param sred parallelism aware reduction engine
      */
     public SolvableGroebnerBaseParallel(int threads, SolvableReduction<C> sred) {
-        this(threads, new ThreadPool(threads), sred);
+        this(threads, Executors.newFixedThreadPool(threads), sred);
     }
 
 
@@ -94,7 +96,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>> extends Solvabl
      * @param pl pair selection strategy
      */
     public SolvableGroebnerBaseParallel(int threads, PairList<C> pl) {
-        this(threads, new ThreadPool(threads), new SolvableReductionPar<C>(), pl);
+        this(threads, Executors.newFixedThreadPool(threads), new SolvableReductionPar<C>(), pl);
     }
 
 
@@ -105,17 +107,17 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>> extends Solvabl
      * @param pl pair selection strategy
      */
     public SolvableGroebnerBaseParallel(int threads, SolvableReduction<C> sred, PairList<C> pl) {
-        this(threads, new ThreadPool(threads), sred, pl);
+        this(threads, Executors.newFixedThreadPool(threads), sred, pl);
     }
 
 
     /**
      * Constructor.
      * @param threads number of threads to use.
-     * @param pool ThreadPool to use.
+     * @param pool ExecutorService to use.
      * @param sred parallelism aware reduction engine
      */
-    public SolvableGroebnerBaseParallel(int threads, ThreadPool pool, SolvableReduction<C> sred) {
+    public SolvableGroebnerBaseParallel(int threads, ExecutorService pool, SolvableReduction<C> sred) {
         this(threads, pool, sred, new OrderedPairlist<C>());
     }
 
@@ -123,11 +125,11 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>> extends Solvabl
     /**
      * Constructor.
      * @param threads number of threads to use.
-     * @param pool ThreadPool to use.
+     * @param pool ExecutorService to use.
      * @param sred parallelism aware reduction engine
      * @param pl pair selection strategy
      */
-    public SolvableGroebnerBaseParallel(int threads, ThreadPool pool, SolvableReduction<C> sred,
+    public SolvableGroebnerBaseParallel(int threads, ExecutorService pool, SolvableReduction<C> sred,
                     PairList<C> pl) {
         super(sred, pl);
         if (!(sred instanceof SolvableReductionPar)) {
@@ -142,14 +144,29 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>> extends Solvabl
 
 
     /**
-     * Cleanup and terminate ThreadPool.
+     * Cleanup and terminate ExecutorService.
      */
     @Override
     public void terminate() {
         if (pool == null) {
             return;
         }
-        pool.terminate();
+        pool.shutdown();
+        logger.info(pool.toString());
+    }
+
+
+    /**
+     * Cancel ExecutorService.
+     */
+    @Override
+    public int cancel() {
+        if (pool == null) {
+            return 0;
+        }
+        int s = pool.shutdownNow().size();
+        logger.info(pool.toString());
+        return s;
     }
 
 
@@ -178,7 +195,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>> extends Solvabl
         LeftSolvableReducer<C> R;
         for (int i = 0; i < threads; i++) {
             R = new LeftSolvableReducer<C>(fin, G, pairlist);
-            pool.addJob(R);
+            pool.execute(R);
         }
         fin.waitDone();
         logger.debug("#parallel list = " + G.size());
@@ -256,7 +273,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>> extends Solvabl
             R.addAll(G);
             R.addAll(F);
             mirs[i] = new SolvableMiReducer<C>(R, a);
-            pool.addJob(mirs[i]);
+            pool.execute(mirs[i]);
             i++;
             F.add(a);
         }
@@ -344,7 +361,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>> extends Solvabl
         TwosidedSolvableReducer<C> R;
         for (int i = 0; i < threads; i++) {
             R = new TwosidedSolvableReducer<C>(fin, modv, X, G, pairlist);
-            pool.addJob(R);
+            pool.execute(R);
         }
         fin.waitDone();
         logger.debug("#parallel list = " + G.size());
