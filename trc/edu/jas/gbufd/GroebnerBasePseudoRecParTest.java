@@ -285,8 +285,9 @@ public class GroebnerBasePseudoRecParTest extends TestCase {
         assertEquals("quotRatGB == quotIntGB", Gqi, Kqi);
         assertTrue("nonsense ", i >= 0L);
 
-        System.out.println("time: ratGB = " + s + ", intGB = " + t + ", quotRatGB = " + q + ", quotIntGB = "
-                        + i);
+        assertTrue("positive times ", s >= 0L && t >= 0L && q >= 0L && i >= 0L);
+        //System.out.println("time: ratGB = " + s + ", intGB = " + t + ", quotRatGB = " + q + ", quotIntGB = "
+        //                + i);
     }
 
 }
