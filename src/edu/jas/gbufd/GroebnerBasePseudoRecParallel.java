@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager; 
@@ -25,7 +28,6 @@ import edu.jas.structure.RingFactory;
 import edu.jas.ufd.GCDFactory;
 import edu.jas.ufd.GreatestCommonDivisorAbstract;
 import edu.jas.util.Terminator;
-import edu.jas.util.ThreadPool;
 
 
 /**
@@ -58,7 +60,7 @@ public class GroebnerBasePseudoRecParallel<C extends GcdRingElem<C>> extends
     /**
      * Pool of threads to use.
      */
-    protected transient final ThreadPool pool;
+    protected transient final ExecutorService pool;
 
 
     /**
@@ -98,7 +100,7 @@ public class GroebnerBasePseudoRecParallel<C extends GcdRingElem<C>> extends
      * @param rf coefficient ring factory.
      */
     public GroebnerBasePseudoRecParallel(int threads, RingFactory<GenPolynomial<C>> rf) {
-        this(threads, rf, new PseudoReductionPar<GenPolynomial<C>>(), new ThreadPool(threads),
+        this(threads, rf, new PseudoReductionPar<GenPolynomial<C>>(), Executors.newFixedThreadPool(threads),
                         new OrderedPairlist<GenPolynomial<C>>(new GenPolynomialRing<GenPolynomial<C>>(rf, 1))); // 1=hack
     }
 
@@ -112,7 +114,7 @@ public class GroebnerBasePseudoRecParallel<C extends GcdRingElem<C>> extends
      */
     public GroebnerBasePseudoRecParallel(int threads, RingFactory<GenPolynomial<C>> rf,
                     PseudoReduction<GenPolynomial<C>> red) {
-        this(threads, rf, red, new ThreadPool(threads));
+        this(threads, rf, red, Executors.newFixedThreadPool(threads));
     }
 
 
@@ -122,10 +124,10 @@ public class GroebnerBasePseudoRecParallel<C extends GcdRingElem<C>> extends
      * @param rf coefficient ring factory. <b>Note:</b> red must be an instance
      *            of PseudoReductionPar.
      * @param red pseudo reduction engine.
-     * @param pool ThreadPool to use.
+     * @param pool ExecutorService to use.
      */
     public GroebnerBasePseudoRecParallel(int threads, RingFactory<GenPolynomial<C>> rf,
-                    PseudoReduction<GenPolynomial<C>> red, ThreadPool pool) {
+                    PseudoReduction<GenPolynomial<C>> red, ExecutorService pool) {
         this(threads, rf, red, pool, new OrderedPairlist<GenPolynomial<C>>(
                         new GenPolynomialRing<GenPolynomial<C>>(rf, 1))); // 1=hack
     }
@@ -140,7 +142,7 @@ public class GroebnerBasePseudoRecParallel<C extends GcdRingElem<C>> extends
      */
     public GroebnerBasePseudoRecParallel(int threads, RingFactory<GenPolynomial<C>> rf,
                     PairList<GenPolynomial<C>> pl) {
-        this(threads, rf, new PseudoReductionPar<GenPolynomial<C>>(), new ThreadPool(threads), pl);
+        this(threads, rf, new PseudoReductionPar<GenPolynomial<C>>(), Executors.newFixedThreadPool(threads), pl);
     }
 
 
@@ -150,12 +152,12 @@ public class GroebnerBasePseudoRecParallel<C extends GcdRingElem<C>> extends
      * @param rf coefficient ring factory. <b>Note:</b> red must be an instance
      *            of PseudoReductionPar.
      * @param red pseudo reduction engine.
-     * @param pool ThreadPool to use.
+     * @param pool ExecutorService to use.
      * @param pl pair selection strategy
      */
     @SuppressWarnings("unchecked")
     public GroebnerBasePseudoRecParallel(int threads, RingFactory<GenPolynomial<C>> rf,
-                    PseudoReduction<GenPolynomial<C>> red, ThreadPool pool, PairList<GenPolynomial<C>> pl) {
+                    PseudoReduction<GenPolynomial<C>> red, ExecutorService pool, PairList<GenPolynomial<C>> pl) {
         super(red, pl);
         if (!(red instanceof PseudoReductionPar)) {
             logger.warn("parallel GB should use parallel aware reduction");
@@ -177,26 +179,28 @@ public class GroebnerBasePseudoRecParallel<C extends GcdRingElem<C>> extends
 
 
     /**
-     * Cleanup and terminate ThreadPool.
+     * Cleanup and terminate ExecutorService.
      */
     @Override
     public void terminate() {
         if (pool == null) {
             return;
         }
-        pool.terminate();
+        pool.shutdown();
+        logger.info(pool.toString());
     }
 
 
     /**
-     * Cancel ThreadPool.
+     * Cancel ExecutorService.
      */
     @Override
     public int cancel() {
         if (pool == null) {
             return 0;
         }
-        int s = pool.cancel();
+        int s = pool.shutdownNow().size();
+        logger.info(pool.toString());
         return s;
     }
 
@@ -225,7 +229,7 @@ public class GroebnerBasePseudoRecParallel<C extends GcdRingElem<C>> extends
         PseudoReducerRec<C> R;
         for (int i = 0; i < threads; i++) {
             R = new PseudoReducerRec<C>(fin, G, pairlist, engine);
-            pool.addJob(R);
+            pool.execute(R);
         }
         fin.waitDone();
         if (Thread.currentThread().isInterrupted()) {
@@ -290,7 +294,7 @@ public class GroebnerBasePseudoRecParallel<C extends GcdRingElem<C>> extends
             R.addAll(F);
             // System.out.println("doing " + a.length());
             mirs[i] = new PseudoMiReducerRec<C>(R, a, engine);
-            pool.addJob(mirs[i]);
+            pool.execute(mirs[i]);
             i++;
             F.add(a);
         }
