@@ -10,6 +10,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager; 
@@ -20,7 +23,6 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.RingElem;
 import edu.jas.util.Terminator;
-import edu.jas.util.ThreadPool;
 
 
 /**
@@ -48,7 +50,7 @@ public class GroebnerBaseParallel<C extends RingElem<C>> extends GroebnerBaseAbs
     /**
      * Pool of threads to use.
      */
-    protected transient final ThreadPool pool;
+    protected transient final ExecutorService pool;
 
 
     /**
@@ -64,7 +66,7 @@ public class GroebnerBaseParallel<C extends RingElem<C>> extends GroebnerBaseAbs
      * @param threads number of threads to use.
      */
     public GroebnerBaseParallel(int threads) {
-        this(threads, new ThreadPool(threads));
+        this(threads, Executors.newFixedThreadPool(threads));
     }
 
 
@@ -74,7 +76,7 @@ public class GroebnerBaseParallel<C extends RingElem<C>> extends GroebnerBaseAbs
      * @param red parallelism aware reduction engine
      */
     public GroebnerBaseParallel(int threads, Reduction<C> red) {
-        this(threads, new ThreadPool(threads), red);
+        this(threads, Executors.newFixedThreadPool(threads), red);
     }
 
 
@@ -84,7 +86,7 @@ public class GroebnerBaseParallel<C extends RingElem<C>> extends GroebnerBaseAbs
      * @param pl pair selection strategy
      */
     public GroebnerBaseParallel(int threads, PairList<C> pl) {
-        this(threads, new ThreadPool(threads), new ReductionPar<C>(), pl);
+        this(threads, Executors.newFixedThreadPool(threads), new ReductionPar<C>(), pl);
     }
 
 
@@ -93,7 +95,7 @@ public class GroebnerBaseParallel<C extends RingElem<C>> extends GroebnerBaseAbs
      * @param threads number of threads to use.
      * @param pool ThreadPool to use.
      */
-    public GroebnerBaseParallel(int threads, ThreadPool pool) {
+    public GroebnerBaseParallel(int threads, ExecutorService pool) {
         this(threads, pool, new ReductionPar<C>());
     }
 
@@ -103,7 +105,7 @@ public class GroebnerBaseParallel<C extends RingElem<C>> extends GroebnerBaseAbs
      * @param pool ThreadPool to use.
      * @param red Reduction engine
      */
-    public GroebnerBaseParallel(int threads, ThreadPool pool, Reduction<C> red) {
+    public GroebnerBaseParallel(int threads, ExecutorService pool, Reduction<C> red) {
         this(threads, pool, red, new OrderedPairlist<C>());
     }
 
@@ -114,18 +116,18 @@ public class GroebnerBaseParallel<C extends RingElem<C>> extends GroebnerBaseAbs
      * @param pl pair selection strategy
      */
     public GroebnerBaseParallel(int threads, Reduction<C> red, PairList<C> pl) {
-        this(threads, new ThreadPool(threads), red, pl);
+        this(threads, Executors.newFixedThreadPool(threads), red, pl);
     }
 
 
     /**
      * Constructor.
      * @param threads number of threads to use.
-     * @param pool ThreadPool to use.
+     * @param pool ExecutorService to use.
      * @param red parallelism aware reduction engine
      * @param pl pair selection strategy
      */
-    public GroebnerBaseParallel(int threads, ThreadPool pool, Reduction<C> red, PairList<C> pl) {
+    public GroebnerBaseParallel(int threads, ExecutorService pool, Reduction<C> red, PairList<C> pl) {
         super(red, pl);
         if (!(red instanceof ReductionPar)) {
             logger.warn("parallel GB should use parallel aware reduction");
@@ -135,30 +137,36 @@ public class GroebnerBaseParallel<C extends RingElem<C>> extends GroebnerBaseAbs
         }
         this.threads = threads;
         this.pool = pool;
+        int s = ((ThreadPoolExecutor)pool).getCorePoolSize();
+        if (threads != s) {
+            logger.warn("#threads(" + threads + ") and number of pool threads(" + s + ") differ:");
+        }
     }
 
 
     /**
-     * Cleanup and terminate ThreadPool.
+     * Cleanup and terminate ExecutorService.
      */
     @Override
     public void terminate() {
         if (pool == null) {
             return;
         }
-        pool.terminate();
+        pool.shutdown();
+        logger.info(pool.toString());
     }
 
 
     /**
-     * Cancel ThreadPool.
+     * Cancel ExecutorService.
      */
     @Override
     public int cancel() {
         if (pool == null) {
             return 0;
         }
-        int s = pool.cancel();
+        int s = pool.shutdownNow().size();
+        logger.info(pool.toString());
         return s;
     }
 
@@ -186,7 +194,7 @@ public class GroebnerBaseParallel<C extends RingElem<C>> extends GroebnerBaseAbs
         Terminator fin = new Terminator(threads);
         for (int i = 0; i < threads; i++) {
             Reducer<C> R = new Reducer<C>(fin, G, pairlist);
-            pool.addJob(R);
+            pool.execute(R);
         }
         fin.waitDone();
         if (Thread.currentThread().isInterrupted()) {
@@ -268,7 +276,7 @@ public class GroebnerBaseParallel<C extends RingElem<C>> extends GroebnerBaseAbs
             R.addAll(F);
             // System.out.println("doing " + a.length());
             mirs[i] = new MiReducer<C>(R, a);
-            pool.addJob(mirs[i]);
+            pool.execute(mirs[i]);
             i++;
             F.add(a);
         }
