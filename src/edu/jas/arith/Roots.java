@@ -269,6 +269,10 @@ public class Roots {
         if (a.isZERO() || a.isONE()) {
             return a;
         }
+        if (a.im.isZERO() && a.re.signum() > 0) {
+            BigDecimal v = Roots.sqrt(a.re);
+            return new BigDecimalComplex(v);
+        }
         BigDecimal r = a.re.abs().sum(a.abs().re);
         BigDecimal t = new BigDecimal(2);
         BigDecimal ti = new BigDecimal("0.5");
@@ -305,6 +309,24 @@ public class Roots {
         BigDecimal s = sqrt(ad);
         //System.out.println("s = " + s);
         BigRational S = new BigRational(s.toString());
+        return S;
+    }
+
+
+    /**
+     * Square root. R is the square root approximation of A.
+     * Convert to BigDecimalComplex and compute square root.
+     * @param A big complex rational.
+     * @return the square root approximation of A.
+     */
+    public static BigComplex sqrt(BigComplex A) {
+        if (A == null || A.isZERO() || A.isONE()) {
+            return A;
+        }
+        BigDecimalComplex ad = new BigDecimalComplex(A);
+        BigDecimalComplex s = sqrt(ad);
+        //System.out.println("s = " + s);
+        BigComplex S = new BigComplex(s.toString());
         return S;
     }
 

@@ -121,7 +121,18 @@ public final class BigDecimalComplex implements StarRingElem<BigDecimalComplex>,
         im = new BigDecimal(si.trim());
     }
 
+    
+    /**
+     * The constructor creates a BigDecimalComplex object from a BigComplex
+     * object.
+     * @param a rational BigComplex.
+     * @return decimal complex
+     */
+    public BigDecimalComplex(BigComplex a) {
+        this(new BigDecimal(a.re), new BigDecimal(a.im));
+    }
 
+    
     /**
      * Get the corresponding element factory.
      * @return factory for this Element.

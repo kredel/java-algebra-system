@@ -16,6 +16,7 @@ import org.apache.logging.log4j.LogManager;
 
 import edu.jas.arith.BigComplex;
 import edu.jas.arith.BigDecimal;
+import edu.jas.arith.BigDecimalComplex;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
@@ -25,9 +26,11 @@ import edu.jas.arith.ModularRingFactory;
 import edu.jas.arith.Product;
 import edu.jas.arith.ProductRing;
 import edu.jas.arith.Rational;
+import edu.jas.arith.Roots;
 import edu.jas.structure.Element;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingElem;
+import edu.jas.structure.StarRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.structure.UnaryFunctor;
 import edu.jas.util.ListUtil;
@@ -1782,6 +1785,53 @@ public class PolyUtil {
     }
 
 
+    /**
+     * Absoulte norm. Square root of the sum of the squared coefficients.
+     * @param a GenPolynomial
+     * @return sqrt( sum<sub>i</sub> |c<sub>i</sub>|<sup>2</sup> ).
+     */
+    @SuppressWarnings("unchecked")
+    public static <C extends RingElem<C>> C absNorm(GenPolynomial<C> p) {
+        if (p == null) {
+            return null;
+        }
+        C a = p.ring.getZEROCoefficient();
+        if (a instanceof StarRingElem) {
+            //System.out.println("StarRingElem case");
+            for (C c : p.val.values()) {
+                @SuppressWarnings("unchecked")
+                C n = (C)((StarRingElem)c).norm();
+                a = a.sum(n);
+            }
+        } else {
+            for (C c : p.val.values()) {
+                C n = c.multiply(c);
+                a = a.sum(n);
+            }
+        }
+	// compute square root if possible
+	if (a instanceof BigRational) {
+	    BigRational b = (BigRational) a;
+	    a = (C) Roots.sqrt(b);
+	} else if (a instanceof BigComplex) {
+	    BigComplex b = (BigComplex) a;
+	    a = (C) Roots.sqrt(b);
+	} else if (a instanceof BigInteger) {
+	    BigInteger b = (BigInteger) a;
+	    a = (C) Roots.sqrt(b);
+	} else if (a instanceof BigDecimal) {
+	    BigDecimal b = (BigDecimal) a;
+	    a = (C) Roots.sqrt(b);
+	} else if (a instanceof BigDecimalComplex) {
+	    BigDecimalComplex b = (BigDecimalComplex) a;
+	    a = (C) Roots.sqrt(b);
+	} else {
+	    logger.error("no square root implemented for " + a.toScriptFactory());
+	}
+        return a;
+    }
+
+    
     /**
      * Evaluate at main variable.
      * @param <C> coefficient type.

@@ -1896,11 +1896,12 @@ public class GenPolynomial<C extends RingElem<C>>
             ExpVector f = r.leadingExpVector();
             if (f.multipleOf(e)) {
                 C a = r.leadingBaseCoefficient();
-                f = f.subtract(e);
+                ExpVector g = f.subtract(e);
                 a = a.multiply(ci);
-                q = q.sum(a, f);
-                h = S.multiply(a, f);
+                q = q.sum(a, g);
+                h = S.multiply(a, g);
                 r = r.subtract(h);
+                assert (!f.equals(r.leadingExpVector())) : "leadingExpVector not descending: " + f;
             } else {
                 break;
             }
@@ -1964,11 +1965,12 @@ public class GenPolynomial<C extends RingElem<C>>
             ExpVector f = r.leadingExpVector();
             if (f.multipleOf(e)) {
                 C a = r.leadingBaseCoefficient();
-                f = f.subtract(e);
+                ExpVector g = f.subtract(e);
                 //logger.info("red div = " + e);
                 a = a.multiply(ci);
-                h = S.multiply(a, f);
+                h = S.multiply(a, g);
                 r = r.subtract(h);
+                assert (!f.equals(r.leadingExpVector())) : "leadingExpVector not descending: " + f;
             } else {
                 break;
             }
