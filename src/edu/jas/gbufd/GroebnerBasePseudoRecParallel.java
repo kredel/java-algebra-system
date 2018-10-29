@@ -12,6 +12,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager; 
@@ -187,6 +188,14 @@ public class GroebnerBasePseudoRecParallel<C extends GcdRingElem<C>> extends
             return;
         }
         pool.shutdown();
+        try {
+            while (!pool.isTerminated()) {
+                //logger.info("await");
+                boolean rest = pool.awaitTermination(1000L, TimeUnit.MILLISECONDS);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         logger.info(pool.toString());
     }
 
