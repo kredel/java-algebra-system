@@ -11,6 +11,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager; 
@@ -27,7 +30,6 @@ import edu.jas.util.DistThreadPool;
 import edu.jas.util.RemoteExecutable;
 import edu.jas.util.SocketChannel;
 import edu.jas.util.Terminator;
-import edu.jas.util.ThreadPool;
 
 
 /**
@@ -60,7 +62,7 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
      * Pool of threads to use. <b>Note:</b> No ComputerThreads for one node
      * tests
      */
-    protected transient final ThreadPool pool;
+    protected transient final ExecutorService pool;
 
 
     /**
@@ -114,7 +116,7 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
      * @param threads number of threads to use.
      */
     public GroebnerBaseDistributedEC(String mfile, int threads) {
-        this(mfile, threads, new ThreadPool(threads), DEFAULT_PORT);
+        this(mfile, threads, Executors.newFixedThreadPool(threads), DEFAULT_PORT);
     }
 
 
@@ -125,7 +127,7 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
      * @param port server port to use.
      */
     public GroebnerBaseDistributedEC(String mfile, int threads, int port) {
-        this(mfile, threads, new ThreadPool(threads), port);
+        this(mfile, threads, Executors.newFixedThreadPool(threads), port);
     }
 
 
@@ -133,10 +135,10 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
      * Constructor.
      * @param mfile name of the machine file.
      * @param threads number of threads to use.
-     * @param pool ThreadPool to use.
+     * @param pool ExecutorService to use.
      * @param port server port to use.
      */
-    public GroebnerBaseDistributedEC(String mfile, int threads, ThreadPool pool, int port) {
+    public GroebnerBaseDistributedEC(String mfile, int threads, ExecutorService pool, int port) {
         this(mfile, threads, pool, new OrderedPairlist<C>(), port);
     }
 
@@ -149,7 +151,7 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
      * @param port server port to use.
      */
     public GroebnerBaseDistributedEC(String mfile, int threads, PairList<C> pl, int port) {
-        this(mfile, threads, new ThreadPool(threads), pl, port);
+        this(mfile, threads, Executors.newFixedThreadPool(threads), pl, port);
     }
 
 
@@ -157,11 +159,11 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
      * Constructor.
      * @param mfile name of the machine file.
      * @param threads number of threads to use.
-     * @param pool ThreadPool to use.
+     * @param pool ExecutorService to use.
      * @param pl pair selection strategy
      * @param port server port to use.
      */
-    public GroebnerBaseDistributedEC(String mfile, int threads, ThreadPool pool, PairList<C> pl, int port) {
+    public GroebnerBaseDistributedEC(String mfile, int threads, ExecutorService pool, PairList<C> pl, int port) {
         super(new ReductionPar<C>(), pl);
         this.threads = threads;
         if (mfile == null || mfile.length() == 0) {
@@ -173,7 +175,7 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
             threads = 1;
         }
         if (pool == null) {
-            pool = new ThreadPool(threads);
+            pool = Executors.newFixedThreadPool(threads);
         }
         this.pool = pool;
         this.port = port;
@@ -188,7 +190,7 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
 
 
     /**
-     * Cleanup and terminate ThreadPool.
+     * Cleanup and terminate ExecutorService.
      */
     @Override
     public void terminate() {
@@ -202,7 +204,8 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
      *            requested, false, if remote executable servers stay alive.
      */
     public void terminate(boolean shutDown) {
-        pool.terminate();
+        pool.shutdown();
+        logger.info(pool.toString());
         dtp.terminate(shutDown);
         logger.info("dhts.terminate()");
         dhts.terminate();
@@ -325,7 +328,7 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
         ReducerServerEC<C> R;
         for (int i = 0; i < threads; i++) {
             R = new ReducerServerEC<C>(fin, cf, theList, pairlist);
-            pool.addJob(R);
+            pool.execute(R);
         }
         logger.debug("main loop waiting");
         fin.waitDone();
@@ -457,7 +460,7 @@ public class GroebnerBaseDistributedEC<C extends RingElem<C>> extends GroebnerBa
             R.addAll(G);
             R.addAll(F);
             mirs[i] = new MiReducerServerEC<C>(R, a);
-            pool.addJob(mirs[i]);
+            pool.execute(mirs[i]);
             i++;
             F.add(a);
         }
