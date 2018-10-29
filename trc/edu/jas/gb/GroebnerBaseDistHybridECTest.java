@@ -93,19 +93,7 @@ public class GroebnerBaseDistHybridECTest extends TestCase {
     GroebnerBaseAbstract<BigRational> bbdists;
 
 
-    GenPolynomial<BigRational> a;
-
-
-    GenPolynomial<BigRational> b;
-
-
-    GenPolynomial<BigRational> c;
-
-
-    GenPolynomial<BigRational> d;
-
-
-    GenPolynomial<BigRational> e;
+    GenPolynomial<BigRational> a, b, c, d, e;
 
 
     int rl = 3; //4; //3; 

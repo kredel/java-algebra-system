@@ -84,7 +84,7 @@ public class Terminator {
             if (done) {
                 idler = workers;
             } else {
-                throw new RuntimeException("idler > workers");
+                throw new RuntimeException("idler > workers: " + idler + " > " + workers);
             }
         }
     }

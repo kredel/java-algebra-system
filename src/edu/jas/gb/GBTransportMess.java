@@ -176,7 +176,7 @@ final class GBTransportMessPairIndex extends GBTransportMess {
      */
     @Override
     public String toString() {
-        return super.toString() + "( " + i + "," + j + "," + s + ")";
+        return super.toString() + "(" + i + "," + j + "," + s + ")";
     }
 
 }
