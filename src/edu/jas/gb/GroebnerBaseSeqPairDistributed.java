@@ -12,6 +12,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager; 
@@ -24,7 +28,6 @@ import edu.jas.util.DistHashTable;
 import edu.jas.util.DistHashTableServer;
 import edu.jas.util.SocketChannel;
 import edu.jas.util.Terminator;
-import edu.jas.util.ThreadPool;
 
 
 /**
@@ -59,7 +62,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
     /**
      * Pool of threads to use.
      */
-    protected transient final ThreadPool pool;
+    protected transient final ExecutorService pool;
 
 
     /**
@@ -87,7 +90,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
      * @param threads number of threads to use.
      */
     public GroebnerBaseSeqPairDistributed(int threads) {
-        this(threads, new ThreadPool(threads), DEFAULT_PORT);
+        this(threads, Executors.newFixedThreadPool(threads), DEFAULT_PORT);
     }
 
 
@@ -97,7 +100,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
      * @param red parallelism aware reduction engine
      */
     public GroebnerBaseSeqPairDistributed(int threads, Reduction<C> red) {
-        this(threads, new ThreadPool(threads), DEFAULT_PORT, red);
+        this(threads, Executors.newFixedThreadPool(threads), DEFAULT_PORT, red);
     }
 
 
@@ -108,7 +111,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
      * @param red parallelism aware reduction engine
      */
     public GroebnerBaseSeqPairDistributed(int threads, int port, Reduction<C> red) {
-        this(threads, new ThreadPool(threads), port, red);
+        this(threads, Executors.newFixedThreadPool(threads), port, red);
     }
 
 
@@ -118,17 +121,17 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
      * @param port server port to use.
      */
     public GroebnerBaseSeqPairDistributed(int threads, int port) {
-        this(threads, new ThreadPool(threads), port);
+        this(threads, Executors.newFixedThreadPool(threads), port);
     }
 
 
     /**
      * Constructor.
      * @param threads number of threads to use.
-     * @param pool ThreadPool to use.
+     * @param pool ExecutorService to use.
      * @param port server port to use.
      */
-    public GroebnerBaseSeqPairDistributed(int threads, ThreadPool pool, int port) {
+    public GroebnerBaseSeqPairDistributed(int threads, ExecutorService pool, int port) {
         this(threads, pool, port, new ReductionPar<C>());
     }
 
@@ -136,11 +139,11 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
     /**
      * Constructor.
      * @param threads number of threads to use.
-     * @param pool ThreadPool to use.
+     * @param pool ExecutorService to use.
      * @param port server port to use.
      * @param red parallelism aware reduction engine
      */
-    public GroebnerBaseSeqPairDistributed(int threads, ThreadPool pool, int port, Reduction<C> red) {
+    public GroebnerBaseSeqPairDistributed(int threads, ExecutorService pool, int port, Reduction<C> red) {
         super(red);
         if (!(red instanceof ReductionPar)) {
             logger.warn("parallel GB should use parallel aware reduction");
@@ -155,14 +158,22 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
 
 
     /**
-     * Cleanup and terminate ThreadPool.
+     * Cleanup and terminate ExecutorService.
      */
     @Override
     public void terminate() {
         if (pool == null) {
             return;
         }
-        pool.terminate();
+        pool.shutdown();
+        try {
+            while (!pool.isTerminated()) {
+                //logger.info("await");
+                boolean rest = pool.awaitTermination(1000L, TimeUnit.MILLISECONDS);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -240,7 +251,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
         ReducerServerSeqPair<C> R;
         for (int i = 0; i < threads; i++) {
             R = new ReducerServerSeqPair<C>(fin, cf, theList, pairlist);
-            pool.addJob(R);
+            pool.execute(R);
         }
         logger.debug("main loop waiting");
         fin.waitDone();
@@ -372,7 +383,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
             R.addAll(G);
             R.addAll(F);
             mirs[i] = new MiReducerServerSeqPair<C>(R, a);
-            pool.addJob(mirs[i]);
+            pool.execute(mirs[i]);
             i++;
             F.add(a);
         }
