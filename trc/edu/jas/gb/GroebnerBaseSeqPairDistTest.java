@@ -85,21 +85,9 @@ public class GroebnerBaseSeqPairDistTest extends TestCase {
     GroebnerBaseSeqPairDistributed<BigRational> bbdist;
 
 
-    GenPolynomial<BigRational> a;
+    GenPolynomial<BigRational> a, b, c, d, e;
 
-
-    GenPolynomial<BigRational> b;
-
-
-    GenPolynomial<BigRational> c;
-
-
-    GenPolynomial<BigRational> d;
-
-
-    GenPolynomial<BigRational> e;
-
-
+    
     int rl = 3; //4; //3; 
 
 
@@ -140,9 +128,7 @@ public class GroebnerBaseSeqPairDistTest extends TestCase {
 
     /**
      * Helper method to start threads with distributed clients.
-     * 
      */
-
     Thread[] startThreads() {
         Thread[] clients = new Thread[threads];
         for (int t = 0; t < threads; t++) {
@@ -155,9 +141,7 @@ public class GroebnerBaseSeqPairDistTest extends TestCase {
 
     /**
      * Helper method to stop threads with distributed clients.
-     * 
      */
-
     void stopThreads(Thread[] clients) {
         for (int t = 0; t < threads; t++) {
             try {
@@ -170,12 +154,9 @@ public class GroebnerBaseSeqPairDistTest extends TestCase {
 
     /**
      * Test distributed GBase.
-     * 
      */
     public void testSeqPairDistributedGBase() {
-
         Thread[] clients;
-
         L = new ArrayList<GenPolynomial<BigRational>>();
 
         a = fac.random(kl, ll, el, q);
@@ -233,12 +214,9 @@ public class GroebnerBaseSeqPairDistTest extends TestCase {
 
     /**
      * Test compare sequential with distributed GBase.
-     * 
      */
     public void testSequentialSeqPairDistributedGBase() {
-
         Thread[] clients;
-
         List<GenPolynomial<BigRational>> Gs, Gp = null;
 
         L = new ArrayList<GenPolynomial<BigRational>>();
@@ -305,7 +283,6 @@ public class GroebnerBaseSeqPairDistTest extends TestCase {
 
     /**
      * Test Trinks7 GBase.
-     * 
      */
     @SuppressWarnings("unchecked")
     public void testTrinks7GBase() {
@@ -340,7 +317,6 @@ public class GroebnerBaseSeqPairDistTest extends TestCase {
 /**
  * Unit Test client to be executed by test threads.
  */
-
 class JunitSeqPairClient<C extends RingElem<C>> implements Runnable {
 
 
