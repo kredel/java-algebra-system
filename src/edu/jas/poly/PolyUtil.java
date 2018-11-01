@@ -1787,7 +1787,7 @@ public class PolyUtil {
 
     /**
      * Absoulte norm. Square root of the sum of the squared coefficients.
-     * @param a GenPolynomial
+     * @param p GenPolynomial
      * @return sqrt( sum<sub>i</sub> |c<sub>i</sub>|<sup>2</sup> ).
      */
     @SuppressWarnings("unchecked")
@@ -1809,25 +1809,26 @@ public class PolyUtil {
                 a = a.sum(n);
             }
         }
-	// compute square root if possible
-	if (a instanceof BigRational) {
-	    BigRational b = (BigRational) a;
-	    a = (C) Roots.sqrt(b);
-	} else if (a instanceof BigComplex) {
-	    BigComplex b = (BigComplex) a;
-	    a = (C) Roots.sqrt(b);
-	} else if (a instanceof BigInteger) {
-	    BigInteger b = (BigInteger) a;
-	    a = (C) Roots.sqrt(b);
-	} else if (a instanceof BigDecimal) {
-	    BigDecimal b = (BigDecimal) a;
-	    a = (C) Roots.sqrt(b);
-	} else if (a instanceof BigDecimalComplex) {
-	    BigDecimalComplex b = (BigDecimalComplex) a;
-	    a = (C) Roots.sqrt(b);
-	} else {
-	    logger.error("no square root implemented for " + a.toScriptFactory());
-	}
+        // compute square root if possible
+        // todo refactor for sqrt in RingElem (?)
+        if (a instanceof BigRational) {
+            BigRational b = (BigRational) a;
+            a = (C) Roots.sqrt(b);
+        } else if (a instanceof BigComplex) {
+            BigComplex b = (BigComplex) a;
+            a = (C) Roots.sqrt(b);
+        } else if (a instanceof BigInteger) {
+            BigInteger b = (BigInteger) a;
+            a = (C) Roots.sqrt(b);
+        } else if (a instanceof BigDecimal) {
+            BigDecimal b = (BigDecimal) a;
+            a = (C) Roots.sqrt(b);
+        } else if (a instanceof BigDecimalComplex) {
+            BigDecimalComplex b = (BigDecimalComplex) a;
+            a = (C) Roots.sqrt(b);
+        } else {
+            logger.error("no square root implemented for " + a.toScriptFactory());
+        }
         return a;
     }
 

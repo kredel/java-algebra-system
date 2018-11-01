@@ -243,7 +243,7 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
         if (pool == null) {
             pool = Executors.newFixedThreadPool(threads);
             logger.error("pool must not be null: " + pool);
-	    //throw new IllegalArgumentException("pool must not be null");
+            //throw new IllegalArgumentException("pool must not be null");
         }
         this.pool = pool;
         this.port = port;
