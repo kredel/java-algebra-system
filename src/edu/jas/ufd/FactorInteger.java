@@ -705,10 +705,12 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             List<GenPolynomial<BigInteger>> topt = new ArrayList<GenPolynomial<BigInteger>>(1);
             topt.add(P);
             opt = TermOrderOptimization.<BigInteger> optimizeTermOrder(pfac,topt);
-            P = opt.list.get(0);
-            logger.info("optimized polynomial: " + P);
-            iperm = TermOrderOptimization.inversePermutation(opt.perm);
-            logger.warn("optimized ring: " + opt.ring + ", original ring: " + pfac);
+            if (!TermOrderOptimization.isIdentityPermutation(opt.perm)) {
+                iperm = TermOrderOptimization.inversePermutation(opt.perm);
+                P = opt.list.get(0);
+                logger.info("optimized polynomial: " + P);
+                logger.warn("optimized ring: " + opt.ring + ", original ring: " + pfac);
+	    }
         }
         ExpVector degv = P.degreeVector();
         int[] donv = degv.dependencyOnVariables();
@@ -746,9 +748,9 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             logger.warn("factorsSquarefreeHensel not applicable or failed, reverting to Kronecker for: " + P);
             facs = super.factorsSquarefree(P);
         }
-        if (USE_OPT) {
+        if (USE_OPT && iperm != null) {
             facs = TermOrderOptimization.<BigInteger> permutation(iperm, pfac, facs);
-            logger.info("de-optimized polynomials: " + facs);
+            logger.warn("de-optimized polynomials: " + facs);
         }
         facs = normalizeFactorization(facs);
         return facs;
@@ -1153,6 +1155,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                         notLucky = true;
                     }
                 }
+		//logger.warn("V = " + V + ", pe = " + pe + ", cei = " + cei + ", lf = " + lf + ", ln = " + ln);
             } // end determine leading coefficients for factors
 
             if (!notLucky) {
@@ -1172,6 +1175,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     notLucky = true;
                 }
             }
+	    //logger.warn("tParts = " + tParts);
         } // end notLucky loop
 
         // search TrialParts with shortest factorization of univariate polynomial

@@ -20,6 +20,7 @@ import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
+import edu.jas.poly.TermOrderByName;
 
 
 /**
@@ -662,17 +663,46 @@ public class FactorIntegerTest extends TestCase {
         //a = pfac.parse(" ( 2 t * x^2 - 5 x^2 + 8 t * x - 5 x + 6 t ) ");
         //a = pfac.parse(" ( 7 t * x^3 + 7 x^3 + 7 t * x^2 + 7 x^2 + 8 x + 8 ) ");
         //a = pfac.parse(" ( 4 t * x^3 + 6 x^3 + 4 t * x^2 + 9 x^2 + 2 x - 1 ) ");
-        a = pfac.parse(" ( 2 t * x^2 - 7 x^2 + 2 t * x - 11 x - 4 ) "); // example to parts of Wangs condition: [2 , x, x + 1 ]
+        //a = pfac.parse(" ( 2 t * x^2 - 7 x^2 + 2 t * x - 11 x - 4 ) "); // example to parts of Wangs condition: [2 , x, x + 1 ]
         a = pfac.parse(" ( 3 x^4 - ( 7 t + 2  ) x^2 + ( 4 t^2 + 2 t ) ) "); // was not applicable or failed for t < x
 
         //System.out.println("a = " + a);
 
         SortedMap<GenPolynomial<BigInteger>, Long> sm = fac.factors(a);
-        //System.out.println("sm = " + sm);
+        //System.out.println("sm = " + sm + ", a = " + a + ", pfac = " + pfac.toScript());
         boolean t = fac.isFactorization(a, sm);
         //System.out.println("t        = " + t);
         assertTrue("prod(factor(a)) = a", t);
         assertTrue("#facs < 2, sm = " + sm, sm.size() >= 2);
+    }
+
+
+    /**
+     * Test integer factorization. Example (a+b*x) (c+d*x).
+     */
+    public void testIntegerFactorizationProd() {
+        //TermOrder to = TermOrderByName.GRLEX; //not working
+        TermOrder to = TermOrderByName.INVLEX;
+        BigInteger cfac = new BigInteger(1);
+        String[] vars = new String[] { "a", "b", "c", "d", "x" };
+        GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, vars.length, to, vars);
+        //FactorInteger<ModInteger> fac = new FactorInteger<ModInteger>();
+        FactorAbstract<BigInteger> fac = FactorFactory.getImplementation(cfac);
+        //System.out.println("fac = " + fac);
+        assertTrue("fac :: FactorInteger: " + fac, fac instanceof FactorInteger);
+
+        GenPolynomial<BigInteger> a, b, c;
+        a = pfac.parse("a+b*x");
+        b = pfac.parse("c+d*x");
+        c = a.multiply(b);
+        //System.out.println("c = " + c);
+        
+        SortedMap<GenPolynomial<BigInteger>, Long> sm = fac.factors(c);
+        //System.out.println("sm = " + sm);
+        boolean t = fac.isFactorization(c, sm);
+        //System.out.println("t        = " + t);
+        assertTrue("prod(factor(a)) = a", t);
+        assertTrue("#facs < 2, sm: " + sm, sm.size() >= 2);
     }
 
 }

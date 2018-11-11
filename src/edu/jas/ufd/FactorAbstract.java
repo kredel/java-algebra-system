@@ -24,6 +24,7 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.OptimizedPolynomialList;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrderOptimization;
+import edu.jas.poly.TermOrderByName;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.util.KsubSet;
@@ -194,9 +195,9 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
     @Override
     public List<GenPolynomial<C>> factorsSquarefree(GenPolynomial<C> P) {
         if (P != null && P.ring.nvar > 1) {
-           logger.warn("no multivariate factorization for " + P.ring.toScript() + ": falling back to Kronecker algorithm");
+           logger.warn("no multivariate factorization for " + P.toScript() + ": falling back to Kronecker algorithm in " + P.ring.toScript());
            //if (P.ring.characteristic().signum() == 0) {
-           //    throw new IllegalArgumentException(this.getClass().getName() + " P.ring.characteristic().signum() == 0");
+           //    throw new IllegalArgumentException("P.ring.characteristic().signum() == 0");
            //}
         }
         //if (logger.isInfoEnabled()) {
@@ -518,6 +519,9 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             factors.put(P, 1L);
             return factors;
         }
+	if (!pfac.tord.equals(TermOrderByName.INVLEX)) {
+	    logger.warn("wrong term order " + pfac.tord + ", factorization may not be correct, better use " + TermOrderByName.INVLEX);
+	}
         C c;
         if (pfac.coFac.isField()) { 
             c = P.leadingBaseCoefficient();
