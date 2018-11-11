@@ -522,7 +522,7 @@ public class PolyUfdUtil {
      * @return algebraic number field.
      */
     public static <C extends GcdRingElem<C>> 
-      AlgebraicNumberRing<C> algebriacNumberField(RingFactory<C> cfac, int degree) {
+      AlgebraicNumberRing<C> algebraicNumberField(RingFactory<C> cfac, int degree) {
         GenPolynomial<C> mod = randomIrreduciblePolynomial(cfac, degree);
         AlgebraicNumberRing<C> afac = new AlgebraicNumberRing<C>(mod, true);
         return afac;

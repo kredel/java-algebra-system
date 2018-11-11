@@ -177,22 +177,22 @@ public class PolyUfdUtilTest extends TestCase {
         int deg = 11;
         // characteristic non zero, small
         ModLongRing gfp = new ModLongRing(32003);
-        //System.out.println("gfp = " + gfp.toScript());
-        AlgebraicNumberRing<ModLong> gfpq = PolyUfdUtil.<ModLong> algebriacNumberField(gfp, deg);
-        //System.out.println("gfpq = " + gfpq.toScript());
+        System.out.println("gfp = " + gfp.toScript());
+        AlgebraicNumberRing<ModLong> gfpq = PolyUfdUtil.<ModLong> algebraicNumberField(gfp, deg);
+        System.out.println("gfpq = " + gfpq.toScript());
         assertTrue("gfpq.isField: ", gfpq.isField());
 
         // characteristic non zero, large
         ModIntegerRing gfP = new ModIntegerRing(getPrime1());
-        //System.out.println("gfP = " + gfP.toScript());
-        AlgebraicNumberRing<ModInteger> gfPq = PolyUfdUtil.<ModInteger> algebriacNumberField(gfP, deg);
-        //System.out.println("gfPq = " + gfPq.toScript());
+        System.out.println("gfP = " + gfP.toScript());
+        AlgebraicNumberRing<ModInteger> gfPq = PolyUfdUtil.<ModInteger> algebraicNumberField(gfP, deg);
+        System.out.println("gfPq = " + gfPq.toScript());
         assertTrue("gfPq.isField: ", gfPq.isField());
 
         // characteristic zero
         BigRational q = BigRational.ONE;
         //System.out.println("q = " + q.toScriptFactory());
-        AlgebraicNumberRing<BigRational> gfqq = PolyUfdUtil.<BigRational> algebriacNumberField(q, deg);
+        AlgebraicNumberRing<BigRational> gfqq = PolyUfdUtil.<BigRational> algebraicNumberField(q, deg);
         //System.out.println("gfqq = " + gfqq.toScript());
         assertTrue("gfqq.isField: ", gfqq.isField());
 
