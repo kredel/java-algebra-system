@@ -11,7 +11,7 @@ from edu.jas.structure   import RingElem, RingFactory, Power
 from edu.jas.arith       import BigInteger, BigRational, BigComplex, BigDecimal,\
                                 ModInteger, ModIntegerRing, ModLong, ModLongRing, ModInt, ModIntRing,\
                                 BigQuaternion, BigQuaternionRing, BigOctonion,\
-                                Product, ProductRing, PrimeList
+                                Product, ProductRing, PrimeList, PrimeInteger
 from edu.jas.poly        import GenPolynomial, GenPolynomialRing, Monomial,\
                                 GenSolvablePolynomial, GenSolvablePolynomialRing,\
                                 RecSolvablePolynomial, RecSolvablePolynomialRing,\
@@ -2683,6 +2683,39 @@ def AN(m,z=0,field=False,pr=None):
         else:
             mf = AlgebraicNumberRing(m);
     #print "mf = " + mf.toString();
+    if z == 0:
+        r = AlgebraicNumber(mf);
+    else:
+        r = AlgebraicNumber(mf,z);
+    return RingElem(r);
+
+
+_finiteFields = {};
+
+def FF(p,n,z=0):
+    '''Create JAS Field element as ring element. 
+       FF has p<sup>n</sup> elements.
+    '''
+    if isinstance(p,RingElem):
+        p = p.elem;
+    if isinstance(n,RingElem):
+        n = n.elem;
+    if isinstance(z,RingElem):
+        z = z.elem;
+    if (p == 0): 
+        raise "p ==";
+    if (n == 0): 
+        raise "n ==";
+    field = True;
+    if not PrimeInteger.isPrime(p):
+      field = False;
+      raise ValueError, str(p) + " not prime.";
+    mf = _finiteFields.get( (p,n) );
+    if mf == None:
+       cf = GF(p).ring;
+       mf = PolyUfdUtil.algebraicNumberField(cf,n);
+       _finiteFields[ (p,n) ] = mf;
+    #print "mf = " + mf.toScript();
     if z == 0:
         r = AlgebraicNumber(mf);
     else:

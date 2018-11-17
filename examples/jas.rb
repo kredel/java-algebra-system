@@ -2133,6 +2133,52 @@ def AN(m,z=0,field=false,pr=nil)
 end
 
 
+java_import "edu.jas.arith.PrimeInteger";
+java_import "edu.jas.ufd.PolyUfdUtil";
+
+$finiteFields = Hash.new;
+
+=begin rdoc
+Create JAS Finite Field element as ring element. 
+FF has p<sup>n</sup> elements.
+=end
+def FF(p,n,z=0)
+    if p.is_a? RingElem
+        p = p.elem;
+    end
+    if n.is_a? RingElem
+        n = n.elem;
+    end
+    if z.is_a? RingElem
+        z = z.elem;
+    end
+    if p == 0
+      raise ArgumentError, "No finite ring."
+    end
+    if n == 0
+      raise ArgumentError, "No finite ring."
+    end
+    field = true;
+    if !PrimeInteger.isPrime(p)
+      field = false;
+      #raise ArgumentError, "{p} not prime."
+    end
+    mf = $finiteFields[ [p,n] ];
+    if mf == nil 
+       cf = GF(p).ring;
+       mf = PolyUfdUtil.algebraicNumberField(cf,n);
+       $finiteFields[ [p,n] ] = mf;
+       #puts "mf = " + mf.toScript();
+    end
+    if z == 0
+        r = AlgebraicNumber.new(mf);
+    else
+        r = AlgebraicNumber.new(mf,z);
+    end
+    return RingElem.new(r);
+end
+
+
 java_import "edu.jas.root.RealRootsSturm";
 java_import "edu.jas.root.Interval";
 java_import "edu.jas.root.RealAlgebraicNumber";
@@ -2670,7 +2716,6 @@ java_import "edu.jas.gbufd.GroebnerBaseFGLM";
 java_import "edu.jas.gbufd.GroebnerBaseWalk";
 
 java_import "edu.jas.ufd.GreatestCommonDivisor";
-java_import "edu.jas.ufd.PolyUfdUtil";
 java_import "edu.jas.ufd.GCDFactory";
 java_import "edu.jas.ufd.FactorFactory";
 java_import "edu.jas.ufd.SquarefreeFactory";

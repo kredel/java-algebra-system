@@ -295,6 +295,22 @@ puts "Qs2x  = " + str(Qs2x.factory());
 puts;
 
 
+puts "------- FF(17,5) ---------";
+r = FF(17,5);
+puts "ring = " + str(r.ring.toScript());
+puts "r    = " + str(r);
+e,a = r.gens();
+puts "e    = " + str(e);
+puts "a    = " + str(a);
+s = a**5 - 2**5;
+puts "s    = " + str(s);
+i = 1/ s;
+puts "1/s  = " + str(i);
+t = i*s;
+puts "i*s  = " + str(t);
+puts;
+
+
 puts "------- RealN(alpha**2 - 2,(1,2) ---------";
 r = PolyRing.new(QQ(),"alpha",PolyRing.lex);
 puts "r = " + str(r);
