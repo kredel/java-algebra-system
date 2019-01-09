@@ -557,13 +557,13 @@ Convert to float.
 =end
     def to_f()
         e = @elem;
-        if e.getClass().getSimpleName() == "BigInteger"
+        if e.is_a? BigInteger
             e = BigRational(e);
         end
-        if e.getClass().getSimpleName() == "BigRational"
+        if e.is_a? BigRational
             e = BigDecimal(e);
         end
-        if e.getClass().getSimpleName() == "BigDecimal"
+        if e.is_a? BigDecimal
             e = e.toString();
         end
         e = e.to_f();
@@ -679,14 +679,14 @@ Coerce other to self
     def coerceElem(other)
         #puts "self  type(#{self}) = #{self.class}\n";
         #puts "other type(#{other}) = #{other.class}\n";
-        if @elem.getClass().getSimpleName() == "GenVector"
+        if @elem.is_a? GenVector
             if other.is_a? Array 
                 o = rbarray2arraylist(other,@elem.factory().coFac,rec=1);
                 o = GenVector.new(@elem.factory(),o);
                 return RingElem.new( o );
                 end
         end
-        if @elem.getClass().getSimpleName() == "GenMatrix"
+        if @elem.is_a? GenMatrix
             if other.is_a? Array 
                 o = rbarray2arraylist(other,@elem.factory().coFac,rec=2);
                 o = GenMatrix.new(@elem.factory(),o);
@@ -713,16 +713,16 @@ Coerce other to self
            if isPolynomial()
                 o = @ring.parse( o.toString() ); # not toScript();
                 #o = o.elem;
-           elsif @elem.getClass().getSimpleName() == "BigComplex"
+           elsif @elem.is_a? BigComplex
                 o = CC( o );
                 o = o.elem;
-           elsif @elem.getClass().getSimpleName() == "BigQuaternion"
+           elsif @elem.is_a? BigQuaternion
                 o = Quat( o );
                 o = o.elem;
-           elsif @elem.getClass().getSimpleName() == "BigOctonion"
+           elsif @elem.is_a? BigOctonion
                 o = Oct( Quat(o) );
                 o = o.elem;
-           elsif @elem.getClass().getSimpleName() == "Product"
+           elsif @elem.is_a? Product
                 o = RR(@ring, @elem.multiply(o) ); # valueOf
                 #puts "o = #{o}";
                 o = o.elem;
@@ -754,7 +754,7 @@ Coerce other to self
             o = o.divide( @elem.factory().fromInteger( other.denominator ) );
         elsif other.is_a? Float # ?? what to do ??
                 o = @elem.factory().parse( other.to_s );
-                if @elem.getClass().getSimpleName() == "Product"
+                if @elem.is_a? Product
                     o = RR(@ring, @elem.idempotent().multiply(o) ); # valueOf
                     o = o.elem;
                 end
@@ -886,10 +886,16 @@ Power of this to other.
         else
             if other.is_a? RingElem
                 n = other.elem;
-                if n.getClass().getSimpleName() == "BigRational"
+                if n.is_a? BigRational
+                  #puts "#{n.numerator()} / #{n.denominator()}, other.elem = #{n}"
+                  #todo (x**n.n)/(x**(-n.d))
+                  if n.numerator().is_a? BigInteger
                     n = n.numerator().intValue() / n.denominator().intValue();
+                  else
+                    n = n.numerator() / n.denominator();
+                  end
                 end
-                if n.getClass().getSimpleName() == "BigInteger" 
+                if n.is_a? BigInteger 
                     n = n.intValue();
                 end
             end
@@ -1082,10 +1088,10 @@ Compute squarefree factors of polynomial.
               raise NotImplementedError, "squarefreeFactors not implemented for " + @ring.to_s;
            end
            cf = @ring.coFac;
-           if cf.getClass().getSimpleName() == "GenPolynomialRing"
-               e = sqf.recursiveSquarefreeFactors( a );
+           if cf.is_a? GenPolynomialRing
+             e = sqf.recursiveSquarefreeFactors( a );
            else
-               e = sqf.squarefreeFactors( a );
+             e = sqf.squarefreeFactors( a );
            end
            ll = {};
            for k in e.keySet()
@@ -1110,7 +1116,7 @@ rational number and algebriac number coefficients.
               raise NotImplementedError, "factors not implemented for " + @ring.to_s;
            end
            cf = @ring.coFac;
-           if cf.getClass().getSimpleName() == "GenPolynomialRing"
+           if cf.is_a? GenPolynomialRing
                e = factor.recursiveFactors( a );
            else
                e = factor.factors( a );
@@ -1464,7 +1470,7 @@ Compatibility method for Sage/Singular.
             b = b.elem;
         end
         if coeff == false
-            if a.getClass().getSimpleName() == "GenPolynomial"
+            if a.is_a? GenPolynomial
                 return RingElem.new( a.divide(b) );
             else
                 return RingElem.new( GenPolynomial.new(@ring, a.subtract(b)) );
@@ -1487,10 +1493,10 @@ Compatibility method for Sage/Singular.
         if a.is_a? RingElem
             a = a.elem;
         end
-        if a.getClass().getSimpleName() == "GenPolynomial"
+        if a.is_a? GenPolynomial
             a = a.leadingExpVector();
         end
-        if a.getClass().getSimpleName() != "ExpVectorLong"
+        if not a.is_a? ExpVector
             raise ArgumentError, "No ExpVector given " + str(a) + ", " + str(b)
         end
         if b == nil
@@ -1499,10 +1505,10 @@ Compatibility method for Sage/Singular.
         if b.is_a? RingElem
             b = b.elem;
         end
-        if b.getClass().getSimpleName() == "GenPolynomial"
+        if b.is_a? GenPolynomial
             b = b.leadingExpVector();
         end
-        if b.getClass().getSimpleName() != "ExpVectorLong"
+        if not b.is_a? ExpVector
             raise ArgumentError, "No ExpVector given " + str(a) + ", " + str(b)
         end
         return a.divides(b);
@@ -1654,7 +1660,7 @@ r is the given polynomial ring.
         if r.is_a? RingElem
             r = r.elem;
         end
-        if r.getClass().getSimpleName() != "GenPolynomialRing"
+        if not r.is_a? GenPolynomialRing
            return nil;
         end
         begin
@@ -1675,7 +1681,7 @@ r is the given polynomial ring.
         if r.is_a? RingElem
             r = r.elem;
         end
-        if r.getClass().getSimpleName() != "GenPolynomialRing"
+        if not r.is_a? GenPolynomialRing
            return nil;
         end
         begin 
@@ -1696,7 +1702,7 @@ r is the given polynomial ring.
         if r.is_a? RingElem
             r = r.elem;
         end
-        if r.getClass().getSimpleName() != "GenPolynomialRing"
+        if not r.is_a? GenPolynomialRing
            return nil;
         end
         begin 
@@ -1872,7 +1878,7 @@ Compute squarefree factors of polynomial.
             a = a.elem;
         end
         cf = @ring.coFac;
-        if cf.getClass().getSimpleName() == "GenPolynomialRing"
+        if cf.is_a? GenPolynomialRing
             e = @sqf.recursiveSquarefreeFactors( a );
         else
             e = @sqf.squarefreeFactors( a );
@@ -1898,7 +1904,7 @@ rational number and algebriac number coefficients.
         end
         begin
             cf = @ring.coFac;
-            if cf.getClass().getSimpleName() == "GenPolynomialRing"
+            if cf.is_a? GenPolynomialRing
                 e = @factor.recursiveFactors( a );
             else
                 e = @factor.factors( a );
@@ -2114,7 +2120,7 @@ def AN(m,z=0,field=false,pr=nil)
     end
     #puts "m.getClass() = " + str(m.getClass().getName());
     #puts "field = " + str(field);
-    if m.getClass().getSimpleName() == "AlgebraicNumber"
+    if m.is_a? AlgebraicNumber
         mf = AlgebraicNumberRing.new(m.factory().modul,m.factory().isField());
     else
         if field
@@ -2152,6 +2158,10 @@ def FF(p,n,z=0)
     if z.is_a? RingElem
         z = z.elem;
     end
+    if z.is_a? AlgebraicNumber
+        z = z.val;
+        #puts "z = " + z.ring.toScript();
+    end
     if p == 0
       raise ArgumentError, "No finite ring."
     end
@@ -2174,6 +2184,7 @@ def FF(p,n,z=0)
         r = AlgebraicNumber.new(mf);
     else
         r = AlgebraicNumber.new(mf,z);
+        #puts "r = " + r.toScript();
     end
     return RingElem.new(r);
 end
@@ -2207,7 +2218,7 @@ def RealN(m,i,r=0)
         i = Interval.new(il,ir);
     end
     #puts "m.getClass() = " + m.getClass().getName().to_s;
-    if m.getClass().getSimpleName() == "RealAlgebraicNumber"
+    if m.is_a? RealAlgebraicNumber
         mf = RealAlgebraicRing.new(m.factory().algebraic.modul,i);
     else
         mf = RealAlgebraicRing.new(m,i);
@@ -2351,7 +2362,7 @@ def RC(ideal,r=0)
         #ideal.doGB();
     end
     #puts "ideal.getList().get(0).ring.ideal = #{ideal.getList().get(0).ring.ideal}\n";
-    if ideal.getList().get(0).ring.getClass().getSimpleName() == "ResidueRing"
+    if ideal.getList().get(0).ring.is_a? ResidueRing
         rc = ResidueRing.new( ideal.getList().get(0).ring.ideal );
     else
         rc = ResidueRing.new(ideal);
@@ -2380,7 +2391,7 @@ def LC(ideal,d=0,n=1)
         #ideal.doGB();
     end
     #puts "ideal.getList().get(0).ring.ideal = #{ideal.getList().get(0).ring.ideal}\n";
-    if ideal.getList().get(0).ring.getClass().getSimpleName() == "LocalRing"
+    if ideal.getList().get(0).ring.is_a? LocalRing
         lc = LocalRing.new( ideal.getList().get(0).ring.ideal );
     else
         lc = LocalRing.new(ideal);
@@ -2427,7 +2438,7 @@ def SRC(ideal,r=0)
         #ideal.doGB();
     end
     #puts "ideal.getList().get(0).ring.ideal = #{ideal.getList().get(0).ring.ideal}\n";
-    if ideal.getList().get(0).ring.getClass().getSimpleName() == "SolvableResidueRing"
+    if ideal.getList().get(0).ring.is_a? SolvableResidueRing
         rc = SolvableResidueRing.new( ideal.getList().get(0).ring.ideal );
     else
         rc = SolvableResidueRing.new(ideal);
@@ -2456,7 +2467,7 @@ def SLC(ideal,d=0,n=1)
         #ideal.doGB();
     end
     #puts "ideal.getList().get(0).ring.ideal = #{ideal.getList().get(0).ring.ideal}\n";
-    if ideal.getList().get(0).ring.getClass().getSimpleName() == "SolvableLocalRing"
+    if ideal.getList().get(0).ring.is_a? SolvableLocalRing
         lc = SolvableLocalRing.new( ideal.getList().get(0).ring.ideal );
     else
         lc = SolvableLocalRing.new(ideal);
@@ -2506,7 +2517,7 @@ def SLR(ideal,d=0,n=1)
        isfield = true;
        n = 1;
     end
-    if cfr.getClass().getSimpleName() == "SolvableLocalResidueRing"
+    if cfr.is_a? SolvableLocalResidueRing
         lc = SolvableLocalResidueRing.new( cfr.ideal );
     else
         lc = SolvableLocalResidueRing.new(ideal);
@@ -2574,7 +2585,7 @@ def RR(flist,n=1,r=0)
     end
     begin
         #puts "r.class() = #{r.class}\n";
-        if r.getClass().getSimpleName() == "Product"
+        if r.is_a? Product
             #puts "r.val = #{r.val}\n";
             r = r.val;
         end
@@ -2615,8 +2626,8 @@ def rbarray2arraylist(list,fac=nil,rec=1)
                end
            end
            begin
-               n = e.getClass().getSimpleName();
-               if n == "ArrayList"
+               #n = e.getClass().getSimpleName();
+               if e.is_a? ArrayList
                    t = false;
                end
            rescue
@@ -4219,11 +4230,11 @@ Compute the univariate polynomials in each variable of this twosided ideal.
 Convert to polynomials with SolvableQuotient coefficients.
 =end
     def toQuotientCoefficients()
-        if @pset.ring.coFac.getClass().getSimpleName() == "SolvableResidueRing"
+        if @pset.ring.coFac.is_a? SolvableResidueRing
            cf = @pset.ring.coFac.ring;
-        elsif @pset.ring.coFac.getClass().getSimpleName() == "GenSolvablePolynomialRing"
+        elsif @pset.ring.coFac.is_a? GenSolvablePolynomialRing
            cf = @pset.ring.coFac;
-        #elsif @pset.ring.coFac.getClass().getSimpleName() == "GenPolynomialRing"
+        #elsif @pset.ring.coFac.is_a? GenPolynomialRing
         #   cf = @pset.ring.coFac;
         #   puts "cf = " + cf.toScript();
         else
@@ -4542,7 +4553,7 @@ Test if this is a syzygy of the polynomials in g.
               s = g.mset;
               l = @mset;
            else
-              raise "unknown type %s" % g.getClass().getName();
+              raise "unknown type #{g.getClass().getName()}";
            end
         end
         #puts "l = #{l}"; 
@@ -5916,7 +5927,7 @@ def WRC(ideal,r=0)
         raise ArgumentError, "No word ideal given."
     end
     #puts "ideal.getList().get(0).ring.ideal = #{ideal.getList().get(0).ring.ideal}\n";
-    if ideal.getList().get(0).ring.getClass().getSimpleName() == "WordResidueRing"
+    if ideal.getList().get(0).ring.is_a? WordResidueRing
         rc = WordResidueRing.new( ideal.getList().get(0).ring.ideal );
     else
         rc = WordResidueRing.new(ideal);

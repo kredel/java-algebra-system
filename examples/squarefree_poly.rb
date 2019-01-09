@@ -39,7 +39,8 @@ puts "f = " + str(f);
 puts;
 
 t = System.currentTimeMillis();
-F = r.squarefreeFactors(f);
+#F = r.squarefreeFactors(f);
+F = f.squarefreeFactors();
 t = System.currentTimeMillis() - t;
 puts "factors:";
 for g in F.keys()
