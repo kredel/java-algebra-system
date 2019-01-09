@@ -519,9 +519,9 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             factors.put(P, 1L);
             return factors;
         }
-	if (!pfac.tord.equals(TermOrderByName.INVLEX)) {
-	    logger.warn("wrong term order " + pfac.tord + ", factorization may not be correct, better use " + TermOrderByName.INVLEX);
-	}
+        if (!pfac.tord.equals(TermOrderByName.INVLEX)) {
+            logger.warn("wrong term order " + pfac.tord + ", factorization may not be correct, better use " + TermOrderByName.INVLEX);
+        }
         C c;
         if (pfac.coFac.isField()) { 
             c = P.leadingBaseCoefficient();

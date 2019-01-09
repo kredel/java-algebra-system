@@ -710,7 +710,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 P = opt.list.get(0);
                 logger.info("optimized polynomial: " + P);
                 logger.warn("optimized ring: " + opt.ring + ", original ring: " + pfac);
-	    }
+            }
         }
         ExpVector degv = P.degreeVector();
         int[] donv = degv.dependencyOnVariables();
@@ -1155,7 +1155,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                         notLucky = true;
                     }
                 }
-		//logger.warn("V = " + V + ", pe = " + pe + ", cei = " + cei + ", lf = " + lf + ", ln = " + ln);
+                //logger.warn("V = " + V + ", pe = " + pe + ", cei = " + cei + ", lf = " + lf + ", ln = " + ln);
             } // end determine leading coefficients for factors
 
             if (!notLucky) {
@@ -1175,7 +1175,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     notLucky = true;
                 }
             }
-	    //logger.warn("tParts = " + tParts);
+            //logger.warn("tParts = " + tParts);
         } // end notLucky loop
 
         // search TrialParts with shortest factorization of univariate polynomial
