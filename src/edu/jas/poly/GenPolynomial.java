@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
 import java.util.function.Function;
@@ -415,6 +417,7 @@ public class GenPolynomial<C extends RingElem<C>>
         if (v == null) {
             v = GenPolynomialRing.newVars("x", ring.nvar);
         }
+        Pattern klammern = Pattern.compile("\\s*\\(.+\\)\\s*");
         boolean first = true;
         for (Map.Entry<ExpVector, C> m : val.entrySet()) {
             C c = m.getValue();
@@ -430,7 +433,8 @@ public class GenPolynomial<C extends RingElem<C>>
             }
             ExpVector e = m.getKey();
             String cs = c.toScript();
-            boolean parenthesis = (cs.indexOf("-") >= 0 || cs.indexOf("+") >= 0);
+            boolean parenthesis = (cs.indexOf("-") >= 0 || cs.indexOf("+") >= 0)
+                                  && !klammern.matcher(cs).matches();
             if (!c.isONE() || e.isZERO()) {
                 if (parenthesis) {
                     s.append("( ");
