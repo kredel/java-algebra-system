@@ -10,7 +10,6 @@ module JAS
 
 require "java"
 require "rational"
-require "mathn"
 
 java_import "java.lang.System"
 java_import "java.io.StringReader"
@@ -1595,6 +1594,12 @@ java_import "edu.jas.poly.Complex";
 java_import "edu.jas.poly.ComplexRing";
 java_import "edu.jas.application.RingFactoryTokenizer";
 
+java_import "edu.jas.ufd.GreatestCommonDivisor";
+java_import "edu.jas.ufd.GCDFactory";
+java_import "edu.jas.application.FactorFactory";
+java_import "edu.jas.ufd.SquarefreeFactory";
+java_import "edu.jas.integrate.ElementaryIntegration";
+
 
 =begin rdoc
 Represents a JAS polynomial ring: GenPolynomialRing.
@@ -1668,7 +1673,7 @@ r is the given polynomial ring.
         rescue => e
            i = nil
         end
-        #puts "engine: #{i}";
+        #puts "gcd engine: #{i}";
         return i;
     end
 
@@ -1689,7 +1694,7 @@ r is the given polynomial ring.
         rescue => e
            i = nil
         end
-        #puts "engine: #{i}";
+        #puts "sqf engine: #{i}";
         return i;
     end
 
@@ -1710,7 +1715,7 @@ r is the given polynomial ring.
         rescue => e
            i = nil
         end
-        #puts "engine: #{i}";
+        #puts "factor engine: #{i}";
         return i;
     end
 
@@ -2726,15 +2731,7 @@ java_import "edu.jas.gbufd.CharacteristicSetWu";
 java_import "edu.jas.gbufd.GroebnerBaseFGLM";
 java_import "edu.jas.gbufd.GroebnerBaseWalk";
 
-java_import "edu.jas.ufd.GreatestCommonDivisor";
-java_import "edu.jas.ufd.GCDFactory";
-java_import "edu.jas.ufd.FactorFactory";
-java_import "edu.jas.ufd.SquarefreeFactory";
-java_import "edu.jas.integrate.ElementaryIntegration";
-
-#java_import "edu.jas.gbmod.ModGroebnerBaseSeq";
 java_import "edu.jas.gbufd.SyzygySeq";
-#java_import "edu.jas.gbmod.ModSolvableGroebnerBaseSeq";
 java_import "edu.jas.gbufd.SolvableSyzygySeq";
 
 
