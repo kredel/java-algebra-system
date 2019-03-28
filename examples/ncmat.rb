@@ -4,6 +4,7 @@
 #
 
 require "examples/jas"
+require "matrix"
 
 # matrix and polynomial examples: 
 # conditions for (non) commuting matrices
