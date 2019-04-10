@@ -1861,12 +1861,12 @@ public class PolyUtil {
             ExpVector e = me.getKey();
             el2 = e.getVal(0);
             if (B == null /*el1 < 0*/) { // first turn
-                B = me.getValue(); //val.get(e);
+                B = me.getValue(); 
             } else {
                 for (long i = el2; i < el1; i++) {
                     B = B.multiply(a);
                 }
-                B = B.sum(me.getValue()); //val.get(e));
+                B = B.sum(me.getValue()); 
             }
             el1 = el2;
         }
@@ -1940,12 +1940,12 @@ public class PolyUtil {
             ExpVector e = me.getKey();
             el2 = e.getVal(0);
             if (B == null /*el1 < 0*/) { // first turn
-                B = me.getValue(); // val.get(e);
+                B = me.getValue();
             } else {
                 for (long i = el2; i < el1; i++) {
                     B = B.multiply(a);
                 }
-                B = B.sum(me.getValue()); //val.get(e));
+                B = B.sum(me.getValue());
             }
             el1 = el2;
         }
@@ -2159,12 +2159,12 @@ public class PolyUtil {
             ExpVector e = me.getKey();
             el2 = e.getVal(0);
             if (s == null /*el1 < 0*/) { // first turn
-                s = fac.getZERO().sum(me.getValue()); //val.get(e));
+                s = fac.getZERO().sum(me.getValue()); 
             } else {
                 for (long i = el2; i < el1; i++) {
                     s = s.multiply(t);
                 }
-                s = s.sum(me.getValue()); //val.get(e));
+                s = s.sum(me.getValue()); 
             }
             el1 = el2;
         }
@@ -2176,6 +2176,33 @@ public class PolyUtil {
     }
 
 
+    /**
+     * Substitute univariate polynomial with multivariate coefficients.
+     * @param f univariate polynomial with multivariate coefficients.
+     * @param t polynomial for substitution.
+     * @return polynomial f(x <- t).
+     */
+    public static <C extends RingElem<C>> GenPolynomial<C> substituteUnivariateMult(GenPolynomial<C> f,
+                    GenPolynomial<C> t) {
+        if (f == null || t == null) {
+            return null;
+        }
+        GenPolynomialRing<C> fac = f.ring;
+        if (fac.nvar == 1) {
+            return substituteUnivariate(f,t);
+        }
+        GenPolynomialRing<GenPolynomial<C>> rfac = fac.recursive(1);
+        GenPolynomial<GenPolynomial<C>> fr = PolyUtil.<C>recursive(rfac, f);
+        GenPolynomial<GenPolynomial<C>> tr = PolyUtil.<C>recursive(rfac, t);
+        //System.out.println("fr = " + fr);
+        //System.out.println("tr = " + tr);
+        GenPolynomial<GenPolynomial<C>> sr = PolyUtil.<GenPolynomial<C>>substituteUnivariate(fr,tr);
+        //System.out.println("sr = " + sr);
+        GenPolynomial<C> s = PolyUtil.<C>distribute(fac, sr);
+	return s;
+    }
+
+	
     /**
      * Taylor series for polynomial.
      * @param f univariate polynomial.

@@ -1351,10 +1351,33 @@ public class PolyUtilTest extends TestCase {
 
 
     /**
+     * Test multivariate substitution.
+     */
+    public void testMultivarSubstitution() {
+        dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 2, to);
+        // subs = x - 7
+        GenPolynomial<BigInteger> s = dfac.univariate(0).subtract(dfac.fromInteger(7));
+        GenPolynomial<BigInteger> s1 = dfac.univariate(0).sum(dfac.fromInteger(7));
+        //System.out.println("s = " + s);
+        //System.out.println("s1 = " + s1);
+
+        for (int i = 0; i < 5; i++) {
+            a = dfac.random(kl, ll, el, q);
+            //System.out.println("a = " + a);
+            b = PolyUtil.<BigInteger> substituteUnivariateMult(a, s);
+            c = PolyUtil.<BigInteger> substituteUnivariateMult(b, s1);
+            //System.out.println("b = " + b);
+            //System.out.println("c = " + c);
+            //System.out.println("a == c " + a.equals(c));
+            assertEquals("a == c ", a, c);
+        }
+    }
+
+
+    /**
      * Test switch variables.
      */
     public void testSwitchVariables() {
-
         BigRational cfac = new BigRational(1);
         GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, rl, to);
         GenPolynomialRing<GenPolynomial<BigRational>> rfac 
