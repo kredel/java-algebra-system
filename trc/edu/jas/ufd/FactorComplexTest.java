@@ -18,13 +18,13 @@ import edu.jas.poly.ComplexRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
+import edu.jas.poly.TermOrderByName;
 
 
 /**
  * Factor complex via algebraic tests with JUnit.
  * @author Heinz Kredel
  */
-
 public class FactorComplexTest extends TestCase {
 
 
@@ -80,24 +80,21 @@ public class FactorComplexTest extends TestCase {
 
 
     /**
-     * Test dummy for Junit.
-     * 
+     * Test dummy for empty test cases Junit.
      */
-    public void testDummy() {
+    public void xtestDummy() {
     }
 
 
     /**
      * Test complex via algebraic factorization.
-     * 
      */
     public void testComplexFactorization() {
-
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational rfac = new BigRational(1);
         ComplexRing<BigRational> cfac = new ComplexRing<BigRational>(rfac);
         GenPolynomialRing<Complex<BigRational>> cpfac = new GenPolynomialRing<Complex<BigRational>>(cfac, 1,
-                        to);
+                                                                                                    to);
         //System.out.println("cfac  = " + cfac);
         //System.out.println("cpfac = " + cpfac);
 
@@ -142,15 +139,13 @@ public class FactorComplexTest extends TestCase {
 
     /**
      * Test complex absolute via algebraic factorization.
-     * 
      */
     public void testComplexAbsoluteFactorization() {
-
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational rfac = new BigRational(1);
         ComplexRing<BigRational> cfac = new ComplexRing<BigRational>(rfac);
         GenPolynomialRing<Complex<BigRational>> cpfac = new GenPolynomialRing<Complex<BigRational>>(cfac, 1,
-                        to);
+                                                                                                    to);
         //System.out.println("cfac  = " + cfac);
         //System.out.println("cpfac = " + cpfac);
 
@@ -191,15 +186,13 @@ public class FactorComplexTest extends TestCase {
 
     /**
      * Test bivariate complex via algebraic factorization.
-     * 
      */
     public void testBivariateComplexFactorization() {
-
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational rfac = new BigRational(1);
         ComplexRing<BigRational> cfac = new ComplexRing<BigRational>(rfac);
         GenPolynomialRing<Complex<BigRational>> cpfac = new GenPolynomialRing<Complex<BigRational>>(cfac, 2,
-                        to);
+                                                                                                    to);
         //System.out.println("cfac  = " + cfac);
         //System.out.println("cpfac = " + cpfac);
 
@@ -238,6 +231,39 @@ public class FactorComplexTest extends TestCase {
             //System.out.println("t        = " + t);
             assertTrue("prod(factor(a)) = a", t);
         }
+    }
+
+
+    /**
+     * Test bivariate complex factorization.
+     * Example from issue 10: https://github.com/kredel/java-algebra-system/issues/10
+     */
+    public void testComplexFactor() {
+        final int variableSize=2;
+        ComplexRing<BigRational> cfac = new ComplexRing<BigRational>(BigRational.ZERO);
+        GenPolynomialRing<Complex<BigRational>> cpfac = new GenPolynomialRing<Complex<BigRational>>(cfac, variableSize, TermOrderByName.INVLEX);
+        GenPolynomial<Complex<BigRational>> a = cpfac.parse("x1^2 + x0^2") ; 
+        // GenPolynomial<Complex<BigRational>> a = cpfac.parse("x1^4 + x0^4") ; 
+        // GenPolynomial<Complex<BigRational>> a = cpfac.parse("x1^8 + x0^8") ; 
+        // GenPolynomial<Complex<BigRational>> a = cpfac.parse("x1^12 - x0^12") ; 
+        FactorComplex<BigRational> factorAbstract = new FactorComplex<BigRational>(cfac);
+        System.out.println("factorAbstract = " + factorAbstract);
+        System.out.println("factorFac      = " + FactorFactory.getImplementation(cfac));
+        SortedMap<GenPolynomial<Complex<BigRational>>, Long> map = factorAbstract.factors(a);
+
+        for (SortedMap.Entry<GenPolynomial<Complex<BigRational>>, Long> entry : map.entrySet()) {
+            if (entry.getKey().isONE() && entry.getValue().equals(1L)) {
+                continue;
+            }
+            System.out.print(" ( " + entry.getKey().toScript() + " )");
+            if (!entry.getValue().equals(1L)) {
+                System.out.print(" ^ " + entry.getValue());
+            }
+            System.out.println();
+        }
+        boolean t = factorAbstract.isFactorization(a, map);
+        //System.out.println("t        = " + t);
+        assertTrue("prod(factor(a)) = a", t);
     }
 
 }
