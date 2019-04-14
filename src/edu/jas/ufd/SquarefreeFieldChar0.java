@@ -210,12 +210,12 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
         GenPolynomialRing<GenPolynomial<C>> pfac = P.ring;
         if (pfac.nvar > 1) {
             throw new IllegalArgumentException(this.getClass().getName()
-                            + " only for multivariate polynomials");
+                            + " only for univariate recursive polynomials");
         }
         // squarefree content
         GenPolynomial<GenPolynomial<C>> pp = P;
         GenPolynomial<C> Pc = engine.recursiveContent(P);
-        Pc = Pc.monic();
+        //?? Pc = Pc.monic();
         if (!Pc.isONE()) {
             pp = PolyUtil.<C> coefficientPseudoDivide(pp, Pc);
             //System.out.println("pp,sqp = " + pp);
@@ -232,9 +232,9 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
         //System.out.println("d = " + d);
         GenPolynomial<GenPolynomial<C>> g = engine.recursiveUnivariateGcd(pp, d);
         //System.out.println("g,rec = " + g);
-        g = PolyUtil.<C> monic(g);
+        //??g = PolyUtil.<C> monic(g);
         GenPolynomial<GenPolynomial<C>> q = PolyUtil.<C> recursivePseudoDivide(pp, g);
-        q = PolyUtil.<C> monic(q);
+        //?? q = PolyUtil.<C> monic(q);
         return q.multiply(Pc);
     }
 

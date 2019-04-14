@@ -280,13 +280,14 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
         }
         GenPolynomial<GenPolynomial<C>> s = pfac.getONE();
         SortedMap<GenPolynomial<GenPolynomial<C>>, Long> factors = recursiveUnivariateSquarefreeFactors(P);
-        //if (logger.isWarnEnabled()) {
-        //    logger.warn("sqfPart, better use sqfFactors, factors = " + factors);
-        //}
+        if (logger.isWarnEnabled()) {
+            logger.info("sqfPart, better use sqfFactors, factors = " + factors);
+        }
         for (GenPolynomial<GenPolynomial<C>> sp : factors.keySet()) {
             s = s.multiply(sp);
         }
-        return PolyUtil.<C> monic(s);
+        s = PolyUtil.<C> monic(s);
+        return s;
     }
 
 
@@ -450,9 +451,9 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
         }
         GenPolynomial<C> s = pfac.getONE();
         SortedMap<GenPolynomial<C>, Long> factors = squarefreeFactors(P);
-        //if (logger.isWarnEnabled()) {
-        //    logger.warn("sqfPart, better use sqfFactors, factors = " + factors);
-        //}
+        if (logger.isWarnEnabled()) {
+            logger.info("sqfPart, better use sqfFactors, factors = " + factors);
+        }
         for (GenPolynomial<C> sp : factors.keySet()) {
             if (sp.isConstant()) {
                 continue;
