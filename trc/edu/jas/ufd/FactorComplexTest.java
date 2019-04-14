@@ -241,25 +241,26 @@ public class FactorComplexTest extends TestCase {
     public void testComplexFactor() {
         final int variableSize=2;
         ComplexRing<BigRational> cfac = new ComplexRing<BigRational>(BigRational.ZERO);
-        GenPolynomialRing<Complex<BigRational>> cpfac = new GenPolynomialRing<Complex<BigRational>>(cfac, variableSize, TermOrderByName.INVLEX);
-        GenPolynomial<Complex<BigRational>> a = cpfac.parse("x1^2 + x0^2") ; 
+        GenPolynomialRing<Complex<BigRational>> cpfac = new GenPolynomialRing<Complex<BigRational>>(cfac, new String[] {"x1", "x0" }, TermOrderByName.INVLEX);
+        // GenPolynomial<Complex<BigRational>> a = cpfac.parse("x1^2 + x0^2") ; 
         // GenPolynomial<Complex<BigRational>> a = cpfac.parse("x1^4 + x0^4") ; 
         // GenPolynomial<Complex<BigRational>> a = cpfac.parse("x1^8 + x0^8") ; 
-        // GenPolynomial<Complex<BigRational>> a = cpfac.parse("x1^12 - x0^12") ; 
+        GenPolynomial<Complex<BigRational>> a = cpfac.parse("x1^12 - x0^12") ; 
         FactorComplex<BigRational> factorAbstract = new FactorComplex<BigRational>(cfac);
-        System.out.println("factorAbstract = " + factorAbstract);
-        System.out.println("factorFac      = " + FactorFactory.getImplementation(cfac));
+        //System.out.println("factorAbstract = " + factorAbstract);
+        //System.out.println("factorFac      = " + FactorFactory.getImplementation(cfac));
         SortedMap<GenPolynomial<Complex<BigRational>>, Long> map = factorAbstract.factors(a);
 
         for (SortedMap.Entry<GenPolynomial<Complex<BigRational>>, Long> entry : map.entrySet()) {
             if (entry.getKey().isONE() && entry.getValue().equals(1L)) {
                 continue;
             }
-            System.out.print(" ( " + entry.getKey().toScript() + " )");
-            if (!entry.getValue().equals(1L)) {
-                System.out.print(" ^ " + entry.getValue());
-            }
-            System.out.println();
+	    assertTrue("degree <= 2 ", entry.getKey().degree() <= 2);
+            // System.out.print(" ( " + entry.getKey().toScript() + " )");
+            // if (!entry.getValue().equals(1L)) {
+            //     System.out.print(" ^ " + entry.getValue());
+            // }
+            // System.out.println();
         }
         boolean t = factorAbstract.isFactorization(a, map);
         //System.out.println("t        = " + t);
