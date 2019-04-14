@@ -264,13 +264,13 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
         }
         // if Res is now squarefree, else must take radical factorization
         List<GenPolynomial<C>> nfacs;
-        if (!sqf) {
-            System.out.println("\nnot squarefree???"); 
+        //if (!sqf) {
+            //System.out.println("\nnot squarefree???"); 
             //System.out.println("\nres = " + res); 
             //System.out.println("sqf(" + ks + ") = " + res.degree());
             //res = factorCoeff.squarefreePart(res); // better use obtained factors
             //res = factorCoeff.baseFactors(res).lastKey();
-        }
+        //}
         //res = res.monic();
         if (logger.isInfoEnabled()) {
             logger.info("res = " + res);
