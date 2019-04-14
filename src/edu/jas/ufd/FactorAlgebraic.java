@@ -190,19 +190,133 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
             if (!pni.isONE()) {
                 factors.add(pni);
                 Pp = Pp.divide(pni);
-                //             } else {
-                //                 GenPolynomial<AlgebraicNumber<C>> qni = Pp.divide(Ni);
-                //                 GenPolynomial<AlgebraicNumber<C>> rni = Pp.remainder(Ni);
-                //                 System.out.println("div qni = " + qni);
-                //                 System.out.println("div rni = " + rni);
-                //                 continue;
-                //                 //throw new RuntimeException("gcd(Ni,Pp) == 1");
             }
         }
         if (!Pp.isZERO() && !Pp.isONE()) { // irreducible rest
             factors.add(Pp);
         }
         //System.out.println("afactors = " + factors);
+        return factors;
+    }
+
+
+    /**
+     * GenPolynomial factorization of a squarefree polynomial.
+     * @param P squarefree and primitive! (respectively monic) GenPolynomial&lt;AlgebraicNumber&lt;C&gt;&gt;.
+     * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
+     */
+    @Override
+    public List<GenPolynomial<AlgebraicNumber<C>>> factorsSquarefree(GenPolynomial<AlgebraicNumber<C>> P) {
+        if (P == null) {
+            throw new IllegalArgumentException(this.getClass().getName() + " P == null");
+        }
+        List<GenPolynomial<AlgebraicNumber<C>>> factors = new ArrayList<GenPolynomial<AlgebraicNumber<C>>>();
+        if (P.isZERO()) {
+            return factors;
+        }
+        if (P.isONE()) {
+            factors.add(P);
+            return factors;
+        }
+        GenPolynomialRing<AlgebraicNumber<C>> pfac = P.ring; // Q(alpha)[x1,...,xn]
+        if (pfac.nvar <= 1) {
+            throw new IllegalArgumentException("only for multivariate polynomials");
+        }
+        AlgebraicNumberRing<C> afac = (AlgebraicNumberRing<C>) pfac.coFac;
+        AlgebraicNumber<C> ldcf = P.leadingBaseCoefficient();
+        if (!ldcf.isONE()) {
+            P = P.monic();
+            factors.add(pfac.getONE().multiply(ldcf));
+        }
+        if (P.degreeVector().totalDeg() <= 1L) {
+            factors.add(P);
+            return factors;
+        }
+        //System.out.println("\nP = " + P);
+
+        // search squarefree norm
+        long k = 0L;
+        long ks = k;
+        GenPolynomial<C> res = null;
+        boolean sqf = false;
+        //int[] klist = new int[]{ 0, 1, 2, 3, -1, -2, -3 , 5, -5, 7, -7, 101, -101, 1001, -1001 };
+        //int[] klist = new int[]{ 0, 1, 2, 3, -1, -2, -3 , 5, -5, 7, -7, 23, -23, 167, -167 };
+        //int[] klist = new int[] { 0, -1, -2, 1, 2, -3, 3 };
+        int[] klist = new int[] { 0, -1, -2, 1, 2 };
+        int ki = 0;
+        while (!sqf) {
+            // k = 0,1,2,-1,-2
+            if (ki >= klist.length) {
+                System.out.println("sqf("+ks+") = " + res.degree() + ", sqf = " + sqf);
+                break;
+            }
+            k = klist[ki];
+            ki++;
+            // compute norm with x -> ( y - k x )
+            ks = k;
+            res = PolyUfdUtil.<C> norm(P, ks);
+            //System.out.println("res = " + res);
+            if (res.isZERO() || res.isConstant()) {
+                continue;
+            }
+            sqf = factorCoeff.isSquarefree(res);
+            //System.out.println("resfact = " + factorCoeff.factors(res) + "\n");
+        }
+        // if Res is now squarefree, else must take radical factorization
+        List<GenPolynomial<C>> nfacs;
+        if (!sqf) {
+            System.out.println("\nnot squarefree???"); 
+            //System.out.println("\nres = " + res); 
+            //System.out.println("sqf(" + ks + ") = " + res.degree());
+            //res = factorCoeff.squarefreePart(res); // better use obtained factors
+            //res = factorCoeff.baseFactors(res).lastKey();
+        }
+        //res = res.monic();
+        if (logger.isInfoEnabled()) {
+            logger.info("res = " + res);
+            //System.out.println("\nres = " + res); 
+        }
+        nfacs = factorCoeff.factorsRadical(res);
+        //System.out.println("\nnfacs = " + nfacs); // Q[X]
+        if (logger.isInfoEnabled()) {
+            logger.info("res facs = " + nfacs); // Q[X]
+        }
+        if (nfacs.size() == 1) {
+            factors.add(P);
+            return factors;
+        }
+	
+        // compute gcds of factors with polynomial in Q(alpha)[X]
+        GenPolynomial<AlgebraicNumber<C>> Pp = P;
+        //System.out.println("Pp = " + Pp);
+        GenPolynomial<AlgebraicNumber<C>> Ni;
+        for (GenPolynomial<C> nfi : nfacs) {
+            //System.out.println("nfi = " + nfi);
+            Ni = PolyUfdUtil.<C> substituteConvertToAlgebraicCoefficients(pfac, nfi, ks);
+            if (logger.isInfoEnabled()) {
+                logger.info("Ni = " + Ni);
+                //System.out.println("Pp = " + Pp);
+            }
+            //System.out.println("Ni = " + Ni);
+            // compute gcds of factors with polynomial
+            GenPolynomial<AlgebraicNumber<C>> pni = engine.gcd(Ni, Pp);
+            if (!pni.leadingBaseCoefficient().isONE()) {
+                //System.out.println("gcd(Ni,Pp) not monic " + pni);
+                pni = pni.monic();
+            }
+            if (logger.isInfoEnabled()) {
+                logger.info("gcd(Ni,Pp) = " + pni);
+            }
+            //System.out.println("gcd(Ni,Pp) = " + pni);
+            if (!pni.isONE()) {
+                factors.add(pni);
+                Pp = Pp.divide(pni);
+            }
+        }
+        if (!Pp.isZERO() && !Pp.isONE()) { // irreducible rest
+            factors.add(Pp);
+        }
+        //factors.add(P);
         return factors;
     }
 

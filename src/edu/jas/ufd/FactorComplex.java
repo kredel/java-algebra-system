@@ -142,4 +142,53 @@ public class FactorComplex<C extends GcdRingElem<C>> extends FactorAbsolute<Comp
         return factors;
     }
 
+
+    /**
+     * GenPolynomial factorization of a squarefree polynomial.
+     * @param P squarefree GenPolynomial&lt;AlgebraicNumber&lt;C&gt;&gt;.
+     * @return [p_1,...,p_k] with P = prod_{i=1, ..., k} p_i.
+     */
+    @Override
+    public List<GenPolynomial<Complex<C>>> factorsSquarefree(GenPolynomial<Complex<C>> P) {
+        if (P == null) {
+            throw new IllegalArgumentException(this.getClass().getName() + " P == null");
+        }
+        List<GenPolynomial<Complex<C>>> factors = new ArrayList<GenPolynomial<Complex<C>>>();
+        if (P.isZERO()) {
+            return factors;
+        }
+        if (P.isONE()) {
+            factors.add(P);
+            return factors;
+        }
+        GenPolynomialRing<Complex<C>> pfac = P.ring; // CC[x]
+        if (pfac.nvar <= 1) {
+            throw new IllegalArgumentException("only for multivariate polynomials");
+        }
+        ComplexRing<C> cfac = (ComplexRing<C>) pfac.coFac;
+        if (!afac.ring.coFac.equals(cfac.ring)) {
+            throw new IllegalArgumentException("coefficient rings do not match");
+        }
+        Complex<C> ldcf = P.leadingBaseCoefficient();
+        if (!ldcf.isONE()) {
+            P = P.monic();
+            factors.add(pfac.getONE().multiply(ldcf));
+        }
+        //System.out.println("\nP = " + P);
+        GenPolynomialRing<AlgebraicNumber<C>> pafac = new GenPolynomialRing<AlgebraicNumber<C>>(afac, pfac);
+        GenPolynomial<AlgebraicNumber<C>> A = PolyUtil.<C> algebraicFromComplex(pafac, P);
+        //System.out.println("A = " + A);
+        List<GenPolynomial<AlgebraicNumber<C>>> afactors = factorAlgeb.factorsSquarefree(A);
+        if (debug) {
+            // System.out.println("complex afactors = " + afactors);
+            logger.info("complex afactors = " + afactors);
+        }
+        for (GenPolynomial<AlgebraicNumber<C>> pa : afactors) {
+            GenPolynomial<Complex<C>> pc = PolyUtil.<C> complexFromAlgebraic(pfac, pa);
+            factors.add(pc);
+        }
+        //System.out.println("cfactors = " + factors);
+        return factors;
+    }
+
 }

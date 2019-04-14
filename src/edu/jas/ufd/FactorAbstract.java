@@ -240,7 +240,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             //System.out.println("subs(P,d=" + d + ") = " + kr);
         }
         if (kr.degree(0) > 100) {
-            logger.warn("Kronecker substitution has to high degree");
+            logger.warn("Kronecker substitution has to high degree " + kr.degree(0));
             TimeStatus.checkTime("degree > 100");
         }
 
