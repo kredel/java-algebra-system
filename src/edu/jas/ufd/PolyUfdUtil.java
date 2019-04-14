@@ -355,13 +355,24 @@ public class PolyUfdUtil {
         AlgebraicNumber<C> alpha = afac.getGenerator();
         AlgebraicNumber<C> ka = afac.fromInteger(k);
         GenPolynomial<AlgebraicNumber<C>> s = x.subtract(ka.multiply(alpha)); // x - k alpha
+        //System.out.println("x - k alpha = " + s);
+        //System.out.println("s.ring = " + s.ring.toScript());
         if (debug) {
             logger.info("x - k alpha: " + s);
         }
         // substitute, convert and switch
-        GenPolynomial<AlgebraicNumber<C>> B = PolyUtil.<AlgebraicNumber<C>> substituteMain(A, s);
+        //System.out.println("Asubs = " + A);
+        GenPolynomial<AlgebraicNumber<C>> B;
+        if (s.ring.nvar <= 1) {
+            B = PolyUtil.<AlgebraicNumber<C>> substituteMain(A, s);
+        } else {
+            B = PolyUtil.<AlgebraicNumber<C>> substituteUnivariateMult(A, s);
+        }
+        //System.out.println("Bsubs = " + B);
         GenPolynomial<GenPolynomial<C>> Pc = PolyUtil.<C> fromAlgebraicCoefficients(rfac, B); // Q[alpha][x]
+        //System.out.println("Pc[a,x] = " + Pc);
         Pc = PolyUtil.<C> switchVariables(Pc); // Q[x][alpha]
+        //System.out.println("Pc[x,a] = " + Pc);
         return Pc;
     }
 
@@ -392,14 +403,20 @@ public class PolyUfdUtil {
         AlgebraicNumber<C> ka = afac.fromInteger(k);
         GenPolynomial<AlgebraicNumber<C>> s = x.sum(ka.multiply(alpha)); // x + k alpha
         // substitute
-        GenPolynomial<AlgebraicNumber<C>> N = PolyUtil.<AlgebraicNumber<C>> substituteMain(B, s);
+        //System.out.println("s.ring = " + s.ring.toScript());
+        GenPolynomial<AlgebraicNumber<C>> N;
+        if (s.ring.nvar <= 1) {
+            N = PolyUtil.<AlgebraicNumber<C>> substituteMain(B, s);
+        } else {
+            N = PolyUtil.<AlgebraicNumber<C>> substituteUnivariateMult(B, s);
+        }
         return N;
     }
 
 
     /**
      * Norm of a polynomial with AlgebraicNumber coefficients.
-     * @param A polynomial from GenPolynomial&lt;AlgebraicNumber&lt;C&gt;&gt;.
+     * @param A uni or multivariate polynomial from GenPolynomial&lt;AlgebraicNumber&lt;C&gt;&gt;.
      * @param k for (y - k x) substitution.
      * @return norm(A) = res_x(A(x,y),m(x)) in GenPolynomialRing&lt;C&gt;.
      */
@@ -408,9 +425,9 @@ public class PolyUfdUtil {
             return null;
         }
         GenPolynomialRing<AlgebraicNumber<C>> pfac = A.ring; // Q(alpha)[x]
-        if (pfac.nvar > 1) {
-            throw new IllegalArgumentException("only for univariate polynomials");
-        }
+        //if (pfac.nvar > 1) {
+        //    throw new IllegalArgumentException("only for univariate polynomials");
+        //}
         AlgebraicNumberRing<C> afac = (AlgebraicNumberRing<C>) pfac.coFac;
         GenPolynomial<C> agen = afac.modul;
         GenPolynomialRing<C> cfac = afac.ring;
@@ -422,16 +439,16 @@ public class PolyUfdUtil {
             A = A.monic();
         }
         GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(cfac, pfac);
+        //System.out.println("rfac = " + rfac.toScript());
 
         // transform minimal polynomial to bi-variate polynomial
         GenPolynomial<GenPolynomial<C>> Ac = PolyUfdUtil.<C> introduceLowerVariable(rfac, agen);
-        //System.out.println("Ac = " + Ac.toScript());
 
         // transform to bi-variate polynomial, 
         // switching varaible sequence from Q[alpha][x] to Q[X][alpha]
         GenPolynomial<GenPolynomial<C>> Pc = PolyUfdUtil.<C> substituteFromAlgebraicCoefficients(rfac, A, k);
         Pc = PolyUtil.<C> monic(Pc);
-        //System.out.println("Pc = " + Pc.toScript());
+        //System.out.println("Pc = " + Pc.toScript() + " :: " + Pc.ring.toScript());
 
         GreatestCommonDivisorSubres<C> engine = new GreatestCommonDivisorSubres<C>( /*cfac.coFac*/);
         // = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getImplementation( cfac.coFac );

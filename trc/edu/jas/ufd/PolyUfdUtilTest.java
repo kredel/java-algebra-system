@@ -4,6 +4,7 @@
 
 package edu.jas.ufd;
 
+import java.util.SortedMap;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
@@ -12,6 +13,7 @@ import edu.jas.arith.ModLongRing;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.kern.ComputerThreads;
+import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -177,16 +179,16 @@ public class PolyUfdUtilTest extends TestCase {
         int deg = 11;
         // characteristic non zero, small
         ModLongRing gfp = new ModLongRing(32003);
-        System.out.println("gfp = " + gfp.toScript());
+        //System.out.println("gfp = " + gfp.toScript());
         AlgebraicNumberRing<ModLong> gfpq = PolyUfdUtil.<ModLong> algebraicNumberField(gfp, deg);
-        System.out.println("gfpq = " + gfpq.toScript());
+        //System.out.println("gfpq = " + gfpq.toScript());
         assertTrue("gfpq.isField: ", gfpq.isField());
 
         // characteristic non zero, large
         ModIntegerRing gfP = new ModIntegerRing(getPrime1());
-        System.out.println("gfP = " + gfP.toScript());
+        //System.out.println("gfP = " + gfP.toScript());
         AlgebraicNumberRing<ModInteger> gfPq = PolyUfdUtil.<ModInteger> algebraicNumberField(gfP, deg);
-        System.out.println("gfPq = " + gfPq.toScript());
+        //System.out.println("gfPq = " + gfPq.toScript());
         assertTrue("gfPq.isField: ", gfPq.isField());
 
         // characteristic zero
@@ -213,7 +215,7 @@ public class PolyUfdUtilTest extends TestCase {
         rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(dfac, to, mnames);
         QuotientRing<BigInteger> qfac = new QuotientRing<BigInteger>(dfac);
         GenPolynomialRing<Quotient<BigInteger>> rqfac = new GenPolynomialRing<Quotient<BigInteger>>(qfac,
-                        rfac);
+                                                                                                    rfac);
         //System.out.println("\ndfac  = " + dfac);
         //System.out.println("rdfac = " + rdfac);
         //System.out.println("rfac  = " + rfac);
@@ -238,13 +240,13 @@ public class PolyUfdUtilTest extends TestCase {
         //assertTrue("lc^n a = q b + r: " + cr, t); // ?? not always true
 
         GenPolynomial<Quotient<BigInteger>> ap = PolyUfdUtil
-                        .<BigInteger> quotientFromIntegralCoefficients(rqfac, ar);
+            .<BigInteger> quotientFromIntegralCoefficients(rqfac, ar);
         GenPolynomial<Quotient<BigInteger>> bp = PolyUfdUtil
-                        .<BigInteger> quotientFromIntegralCoefficients(rqfac, br);
+            .<BigInteger> quotientFromIntegralCoefficients(rqfac, br);
         GenPolynomial<Quotient<BigInteger>> cp = PolyUfdUtil
-                        .<BigInteger> quotientFromIntegralCoefficients(rqfac, cr);
+            .<BigInteger> quotientFromIntegralCoefficients(rqfac, cr);
         GenPolynomial<Quotient<BigInteger>> dp = PolyUfdUtil
-                        .<BigInteger> quotientFromIntegralCoefficients(rqfac, dr);
+            .<BigInteger> quotientFromIntegralCoefficients(rqfac, dr);
         //System.out.println("ap  = " + ap);
         //System.out.println("bp  = " + bp);
         //System.out.println("cp  = " + cp);
@@ -278,7 +280,7 @@ public class PolyUfdUtilTest extends TestCase {
         rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(dfac, to, mnames);
         QuotientRing<BigInteger> qfac = new QuotientRing<BigInteger>(dfac);
         GenPolynomialRing<Quotient<BigInteger>> rqfac = new GenPolynomialRing<Quotient<BigInteger>>(qfac,
-                        rfac);
+                                                                                                    rfac);
         //System.out.println("\ndfac  = " + dfac);
         //System.out.println("rdfac = " + rdfac);
         //System.out.println("rfac  = " + rfac);
@@ -303,13 +305,13 @@ public class PolyUfdUtilTest extends TestCase {
         //assertTrue("lc^n a = q b + r: " + cr, t); // ?? not always true
 
         GenPolynomial<Quotient<BigInteger>> ap = PolyUfdUtil
-                        .<BigInteger> quotientFromIntegralCoefficients(rqfac, ar);
+            .<BigInteger> quotientFromIntegralCoefficients(rqfac, ar);
         GenPolynomial<Quotient<BigInteger>> bp = PolyUfdUtil
-                        .<BigInteger> quotientFromIntegralCoefficients(rqfac, br);
+            .<BigInteger> quotientFromIntegralCoefficients(rqfac, br);
         GenPolynomial<Quotient<BigInteger>> cp = PolyUfdUtil
-                        .<BigInteger> quotientFromIntegralCoefficients(rqfac, cr);
+            .<BigInteger> quotientFromIntegralCoefficients(rqfac, cr);
         GenPolynomial<Quotient<BigInteger>> dp = PolyUfdUtil
-                        .<BigInteger> quotientFromIntegralCoefficients(rqfac, dr);
+            .<BigInteger> quotientFromIntegralCoefficients(rqfac, dr);
         //System.out.println("ap  = " + ap);
         //System.out.println("bp  = " + bp);
         //System.out.println("cp  = " + cp);
@@ -362,6 +364,131 @@ public class PolyUfdUtilTest extends TestCase {
         //System.out.println("err   = " + err);
 
         assertEquals("crr != err: ", crr, err);
+    }
+
+
+    /**
+     * Test norm over algebraic number field.
+     */
+    public void testNormAlgebraicNumberField() {
+        int deg = 5;
+        // characteristic zero
+        BigRational q = BigRational.ONE;
+        //System.out.println("q = " + q.toScriptFactory());
+        AlgebraicNumberRing<BigRational> gfqq = PolyUfdUtil.<BigRational> algebraicNumberField(q, deg);
+        //System.out.println("gfqq = " + gfqq.toScript());
+        assertTrue("gfqq.isField: ", gfqq.isField());
+
+        GenPolynomialRing<AlgebraicNumber<BigRational>> pafac;
+        pafac = new GenPolynomialRing<AlgebraicNumber<BigRational>>(gfqq, new String[] { "x" }, TermOrderByName.INVLEX);
+        //System.out.println("pafac = " + pafac.toScript());
+
+        GenPolynomial<AlgebraicNumber<BigRational>> P, Q, R;
+        P = pafac.random(2,4,3,0.4f).monic();
+        Q = pafac.random(2,4,3,0.4f).monic();
+        R = P.multiply(Q);
+        //System.out.println("P = " + P);
+        //System.out.println("Q = " + Q);
+        //System.out.println("R = " + R);
+
+        GenPolynomial<BigRational> nP, nQ, nR, nPQ, rem, gcd;
+        nP = PolyUfdUtil.<BigRational> norm(P);
+        nQ = PolyUfdUtil.<BigRational> norm(Q);
+        nR = PolyUfdUtil.<BigRational> norm(R);
+        nPQ = nP.multiply(nQ);
+        //System.out.println("normP  = " + nP);
+        //System.out.println("normQ  = " + nQ);
+        //System.out.println("normR  = " + nR);
+        //System.out.println("normPQ = " + nPQ);
+
+        //System.out.println("normP*normQ = norm(P*Q): " + nPQ.equals(nR) + "\n");
+        if (nPQ.equals(nR)) {
+            assertEquals("normP*normQ == norm(P*Q)", nPQ, nR);
+            return;
+        }
+        rem = nR.remainder(nPQ);
+        //System.out.println("norm(P*Q) mod normP*normQ == 0: " + rem.isZERO());
+        if (rem.isZERO()) {
+            assertTrue("norm(P*Q) mod normP*normQ == 0", rem.isZERO());
+            return;
+        }
+
+        GreatestCommonDivisorAbstract<BigRational> gcdr = GCDFactory.<BigRational>getImplementation(q);
+        gcd = gcdr.gcd(nPQ,nR);
+        //System.out.println("gcd(norm(P*Q), normP*normQ) != 1: " + (!gcd.isONE()));
+        if (!gcd.isONE()) {
+            assertFalse("gcd(norm(P*Q), normP*normQ) != 1", gcd.isONE());
+            return;
+        }
+        // unreachable:        
+        FactorAbstract<BigRational> facr = FactorFactory.<BigRational>getImplementation(q);
+        SortedMap<GenPolynomial<BigRational>,Long> fnPQ = facr.factors(nPQ);
+        System.out.println("fnPQ = " + fnPQ);
+        SortedMap<GenPolynomial<BigRational>,Long> fnR = facr.factors(nR);
+        System.out.println("fnR = " + fnR);
+    }
+
+    
+    /**
+     * Test multivariate norm over algebraic number field.
+     */
+    public void testMultiNormAlgebraicNumberField() {
+        int deg = 5;
+        // characteristic zero
+        BigRational q = BigRational.ONE;
+        //System.out.println("q = " + q.toScriptFactory());
+        AlgebraicNumberRing<BigRational> gfqq = PolyUfdUtil.<BigRational> algebraicNumberField(q, deg);
+        //System.out.println("gfqq = " + gfqq.toScript());
+        assertTrue("gfqq.isField: ", gfqq.isField());
+
+        GenPolynomialRing<AlgebraicNumber<BigRational>> pafac;
+        pafac = new GenPolynomialRing<AlgebraicNumber<BigRational>>(gfqq, new String[] { "x", "y" }, TermOrderByName.INVLEX);
+        //System.out.println("pafac = " + pafac.toScript());
+
+        GenPolynomial<AlgebraicNumber<BigRational>> P, Q, R;
+        P = pafac.random(2,4,2,0.2f).monic();
+        Q = pafac.random(2,4,2,0.2f).monic();
+        R = P.multiply(Q);
+        //System.out.println("P = " + P);
+        //System.out.println("Q = " + Q);
+        //System.out.println("R = " + R);
+
+        GenPolynomial<BigRational> nP, nQ, nR, nPQ, rem, gcd;
+        nP = PolyUfdUtil.<BigRational> norm(P);
+        nQ = PolyUfdUtil.<BigRational> norm(Q);
+        nR = PolyUfdUtil.<BigRational> norm(R);
+        nPQ = nP.multiply(nQ);
+        //System.out.println("normP  = " + nP);
+        //System.out.println("normQ  = " + nQ);
+        //System.out.println("normR  = " + nR);
+        //System.out.println("normPQ = " + nPQ);
+
+        //System.out.println("normP*normQ == norm(P*Q): " + nPQ.equals(nR) + "\n");
+        if (nPQ.equals(nR)) {
+            assertEquals("normP*normQ == norm(P*Q)", nPQ, nR);
+            return;
+        }
+
+        rem = nR.remainder(nPQ);
+        //System.out.println("norm(P*Q) mod normP*normQ == 0: " + rem.isZERO());
+        if (rem.isZERO()) {
+            assertTrue("norm(P*Q) mod normP*normQ == 0", rem.isZERO());
+            return;
+        }
+
+        GreatestCommonDivisorAbstract<BigRational> gcdr = GCDFactory.<BigRational>getImplementation(q);
+        gcd = gcdr.gcd(nPQ,nR);
+        //System.out.println("gcd(norm(P*Q), normP*normQ) != 1: " + (!gcd.isONE()));
+        if (!gcd.isONE()) {
+            assertFalse("gcd(norm(P*Q), normP*normQ) != 1", gcd.isONE());
+            return;
+        }
+        // unreachable:        
+        FactorAbstract<BigRational> facr = FactorFactory.<BigRational>getImplementation(q);
+        SortedMap<GenPolynomial<BigRational>,Long> fnPQ = facr.factors(nPQ);
+        System.out.println("fnPQ = " + fnPQ);
+        SortedMap<GenPolynomial<BigRational>,Long> fnR = facr.factors(nR);
+        System.out.println("fnR = " + fnR);
     }
 
 }
