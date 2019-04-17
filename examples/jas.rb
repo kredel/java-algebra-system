@@ -9,7 +9,8 @@ module JAS
   module_function
 
 require "java"
-require "rational"
+require "mathn"
+#require "rational"
 
 java_import "java.lang.System"
 java_import "java.io.StringReader"

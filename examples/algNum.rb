@@ -122,6 +122,7 @@ puts "g     = " + str(g);
 puts
 
 f = ( ( ( ( 3/82 * alpha**4 - 12/41 * alpha**3 - 13/82 * alpha**2 - 19/82 * alpha - 15/82 ) * beta + ( 3/82 * alpha**4 - 12/41 * alpha**3 - 13/82 * alpha**2 - 19/82 * alpha - 15/82 ) ) * gamma - ( ( 21/82 * alpha**4 - 45/82 * alpha**3 - 25/41 * alpha**2 - 51/82 * alpha - 32/41 ) * beta - ( 45/82 * alpha**4 + 25/41 * alpha**3 + 51/82 * alpha**2 + 43/82 * alpha + 21/82 ) ) ) * delta - ( ( 39/82 * alpha**4 + 8/41 * alpha**3 - 5/82 * alpha**2 - 1/82 * alpha - 31/82 ) * beta * gamma + ( 11/82 * alpha**4 - 3/41 * alpha**3 + 7/82 * alpha**2 - 15/82 * alpha + 27/82 ) ) );
+
 puts "f     = " + str(f);
 e = 1 / f;
 puts "e     = " + str(e);
@@ -129,13 +130,4 @@ g = e * f;
 puts "g     = " + str(g);
 puts
 
-
-puts
-
 terminate();
-
-__END__
-s
-to_skip = <<TOSKIP
-
-TOSKIP
