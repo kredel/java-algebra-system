@@ -199,6 +199,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
            //if (P.ring.characteristic().signum() == 0) {
            //    throw new IllegalArgumentException("P.ring.characteristic().signum() == 0");
            //}
+           //throw new RuntimeException("get stack trace");
         }
         //if (logger.isInfoEnabled()) {
         //    logger.info(StringUtil.selectStackTrace("edu\\.jas.*"));

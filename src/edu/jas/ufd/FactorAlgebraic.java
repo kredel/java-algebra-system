@@ -275,6 +275,7 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
         if (logger.isInfoEnabled()) {
             logger.info("res = " + res);
             //System.out.println("\nres = " + res); 
+            logger.info("factorCoeff = " + factorCoeff);
         }
         nfacs = factorCoeff.factorsRadical(res);
         //System.out.println("\nnfacs = " + nfacs); // Q[X]

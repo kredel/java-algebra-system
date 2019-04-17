@@ -377,11 +377,11 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
                     break;
                 }
                 Tp = PolyUtil.<C> recursiveDeriviative(T0);
+                //System.out.println("iT0 = " + T0);
+                //System.out.println("iTp = " + Tp);
                 T = engine.recursiveUnivariateGcd(T0, Tp);
                 T = PolyUtil.<C> monic(T);
                 V = PolyUtil.<C> recursivePseudoDivide(T0, T);
-                //System.out.println("iT0 = " + T0);
-                //System.out.println("iTp = " + Tp);
                 //System.out.println("iT = " + T);
                 //System.out.println("iV = " + V);
                 k = 0L;
