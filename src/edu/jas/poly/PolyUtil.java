@@ -911,14 +911,14 @@ public class PolyUtil {
             ExpVector f = r.leadingExpVector();
             if (f.multipleOf(e)) {
                 C a = r.leadingBaseCoefficient();
-                f = f.subtract(e);
+                ExpVector fe = f.subtract(e);
                 C x = a.remainder(c);
                 if (x.isZERO()) {
                     C y = a.divide(c);
-                    h = S.multiply(y, f); // coeff a
+                    h = S.multiply(y, fe); // coeff a
                 } else {
                     r = r.multiply(c); // coeff ac
-                    h = S.multiply(a, f); // coeff ac
+                    h = S.multiply(a, fe); // coeff ac
                 }
                 r = r.subtract(h);
             } else {

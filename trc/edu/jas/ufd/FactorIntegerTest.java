@@ -700,7 +700,34 @@ public class FactorIntegerTest extends TestCase {
         SortedMap<GenPolynomial<BigInteger>, Long> sm = fac.factors(c);
         //System.out.println("sm = " + sm);
         boolean t = fac.isFactorization(c, sm);
-        //System.out.println("t        = " + t);
+        assertTrue("prod(factor(a)) = a", t);
+        assertTrue("#facs < 2, sm: " + sm, sm.size() >= 2);
+    }
+
+    
+    /**
+     * Test integer factorization. Example (e x + d) (c d x + a e).
+     */
+    public void testIntegerFactorizationLoop() {
+        TermOrder to = TermOrderByName.IGRLEX; 
+        //TermOrder to = TermOrderByName.GRLEX; // infinite loop, wrong termorder
+        //TermOrder to = TermOrderByName.INVLEX;
+        BigInteger cfac = BigInteger.ONE;
+        String[] vars = new String[] { "a", "c", "d", "e", "x" };
+        GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, vars.length, to, vars);
+        FactorAbstract<BigInteger> fac = FactorFactory.getImplementation(cfac);
+        //System.out.println("fac = " + fac);
+        assertTrue("fac :: FactorInteger: " + fac, fac instanceof FactorInteger);
+
+        GenPolynomial<BigInteger> a, b, c;
+        a = pfac.parse("e * x + d");
+        b = pfac.parse("c * d * x + a * e");
+        c = a.multiply(b);
+        //System.out.println("c = " + c);
+        
+        SortedMap<GenPolynomial<BigInteger>, Long> sm = fac.factors(c);
+        //System.out.println("sm = " + sm);
+        boolean t = fac.isFactorization(c, sm);
         assertTrue("prod(factor(a)) = a", t);
         assertTrue("#facs < 2, sm: " + sm, sm.size() >= 2);
     }
