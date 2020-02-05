@@ -417,8 +417,10 @@ public final class TermOrder implements Serializable {
         }
         //System.out.println("evbeg2 " + evbeg2 + ", evend2 " + evend2);
         TOP = top;
-        logger.info("module TermOrder is " + (TOP ? "TOP" : "POT") + ", split = " + split
-                    + ", evord = " + toScriptOrder(evord) + ", evord2 = " + toScriptOrder(evord2)) ;
+        if (debug) {
+            logger.info("module TermOrder is " + (TOP ? "TOP" : "POT") + ", split = " + split
+                        + ", evord = " + toScriptOrder(evord) + ", evord2 = " + toScriptOrder(evord2));
+        }
         switch (evord) { // horder = new EVhorder();
         case TermOrder.LEX: {
             switch (evord2) {
