@@ -694,43 +694,44 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
      */
     @Override
     public List<GenPolynomial<BigInteger>> factorsSquarefree(GenPolynomial<BigInteger> P) {
-        GenPolynomialRing<BigInteger> pfac = P.ring;
+        GenPolynomial<BigInteger> Pp = P;
+        GenPolynomialRing<BigInteger> pfac = Pp.ring;
         if (pfac.nvar <= 1) {
-            return baseFactorsSquarefree(P);
+            return baseFactorsSquarefree(Pp);
         }
         OptimizedPolynomialList<BigInteger> opt = null;
         List<Integer> iperm = null;
         final boolean USE_OPT = true;
         if (USE_OPT) {
             List<GenPolynomial<BigInteger>> topt = new ArrayList<GenPolynomial<BigInteger>>(1);
-            topt.add(P);
+            topt.add(Pp);
             opt = TermOrderOptimization.<BigInteger> optimizeTermOrder(pfac,topt);
             if (!TermOrderOptimization.isIdentityPermutation(opt.perm)) {
                 iperm = TermOrderOptimization.inversePermutation(opt.perm);
-                P = opt.list.get(0);
-                logger.info("optimized polynomial: " + P);
+                Pp = opt.list.get(0);
+                logger.info("optimized polynomial: " + Pp);
                 logger.warn("optimized ring: " + opt.ring + ", original ring: " + pfac);
             }
         }
-        ExpVector degv = P.degreeVector();
+        ExpVector degv = Pp.degreeVector();
         int[] donv = degv.dependencyOnVariables();
         List<GenPolynomial<BigInteger>> facs = null;
         if (degv.length() == donv.length) { // all variables appear, hack for Hensel, check
             try {
-                logger.info("try factorsSquarefreeHensel: " + P);
-                facs = factorsSquarefreeHensel(P);
+                logger.info("try factorsSquarefreeHensel: " + Pp);
+                facs = factorsSquarefreeHensel(Pp);
             } catch (Exception e) {
                 logger.info("exception " + e);
                 //e.printStackTrace();
             }
         } else { // not all variables appear, remove unused variables, hack for Hensel, check
-            GenPolynomial<BigInteger> pu = PolyUtil.<BigInteger> removeUnusedUpperVariables(P);
-            GenPolynomial<BigInteger> pl = PolyUtil.<BigInteger> removeUnusedLowerVariables(pu); // not useful
+            GenPolynomial<BigInteger> pu = PolyUtil.<BigInteger> removeUnusedUpperVariables(Pp);
+            //GenPolynomial<BigInteger> pl = PolyUtil.<BigInteger> removeUnusedLowerVariables(pu); // not useful
             try {
-                logger.info("try factorsSquarefreeHensel: " + pl);
+                logger.info("try factorsSquarefreeHensel: " + pu);
                 facs = factorsSquarefreeHensel(pu);
                 List<GenPolynomial<BigInteger>> fs = new ArrayList<GenPolynomial<BigInteger>>(facs.size());
-                GenPolynomialRing<BigInteger> pf = P.ring;
+                GenPolynomialRing<BigInteger> pf = Pp.ring;
                 GenPolynomialRing<BigInteger> pfu = pu.ring;
                 for (GenPolynomial<BigInteger> p : facs) {
                     GenPolynomial<BigInteger> pel = p.extendLower(pfu, 0, 0L);
@@ -745,8 +746,8 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             }
         }
         if (facs == null) {
-            logger.warn("factorsSquarefreeHensel not applicable or failed, reverting to Kronecker for: " + P);
-            facs = super.factorsSquarefree(P);
+            logger.warn("factorsSquarefreeHensel not applicable or failed, reverting to Kronecker for: " + Pp);
+            facs = super.factorsSquarefree(Pp);
         }
         if (USE_OPT && iperm != null) {
             facs = TermOrderOptimization.<BigInteger> permutation(iperm, pfac, facs);
@@ -844,8 +845,10 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         long evStart = 0L; //3L * 5L;
         List<Long> Evs = new ArrayList<Long>(pfac.nvar + 1); // Evs(0), Evs(1) unused
         for (int j = 0; j <= pfac.nvar; j++) {
-            Evs.add(evStart);
+            Evs.add(evStart++); // bug
         }
+	//no: Collections.reverse(Evs);
+        evStart = Evs.get(0);
         final int trials = 4;
         int countSeparate = 0;
         final int COUNT_MAX = 50;
@@ -920,7 +923,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 //}
                 int jj = (int) Math.round(ran + 0.52 * Math.random()); // j, random increment
                 //jj = 0; // ...4 test   
-                //System.out.println("minimal jj = " + jj + ", vi " + vi);
+                //System.out.print("minimal jj = " + jj + ", vi_a " + vi);
                 if (vi > 0L) {
                     Evs.set(j, vi + jj); // record last tested value plus increment
                     evStart = vi + jj;
@@ -928,6 +931,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     Evs.set(j, vi - jj); // record last tested value minus increment
                     evStart = vi - jj;
                 }
+                //System.out.println(", j = " + j + ", vi_b " + Vi);
                 //evStart = vi+1L;
                 V.add(Vi);
                 pe = pep;
