@@ -39,6 +39,7 @@ public class Examples {
         example1();
         example2();
         example10();
+        example11();
         ComputerThreads.terminate();
     }
 
@@ -102,7 +103,7 @@ public class Examples {
         // Silly demo one first. 
         //  ab+ac+db+dc   ->  (a+d)(b+c)
         GenPolynomial<BigInteger> tmp=( vars.get(0).multiply(vars.get(1)) ).sum( vars.get(0).multiply(vars.get(2)) )
-        .sum( vars.get(3).multiply(vars.get(1)) ).sum( vars.get(3).multiply(vars.get(2)) );
+            .sum( vars.get(3).multiply(vars.get(1)) ).sum( vars.get(3).multiply(vars.get(2)) );
         
         //alternative: tmp = ring.parse("a b + a c + d b + d c");
         System.out.println("tmp = " +tmp); 
@@ -222,6 +223,34 @@ public class Examples {
         SortedMap<GenPolynomial<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>>, Long> F = engine
             .factors(f);
         System.out.println("factors(f) = " + F);
+    }
+
+
+    /**
+     * example11. factorization in Z[a,c,d,e,x].
+     */
+    public static void example11() {
+        System.out.println("\n\nexample 11");
+        for (int i = 0; i < 10; i++) { //100000
+            String[] vars = new String[] { "a", "c", "d", "e", "x" };
+            GenPolynomialRing<edu.jas.arith.BigInteger> fac;
+            fac = new GenPolynomialRing<edu.jas.arith.BigInteger>(edu.jas.arith.BigInteger.ZERO, vars.length,
+                                                                  new TermOrder(TermOrder.INVLEX), vars);
+
+            GenPolynomial<edu.jas.arith.BigInteger> poly = fac.parse("a*d*e + c*d^2*x + a*e^2*x + c*d*e*x^2");
+            //System.out.println("Run " + i + ": " + poly.toString());
+            FactorAbstract<edu.jas.arith.BigInteger> factorAbstract = FactorFactory
+                .getImplementation(edu.jas.arith.BigInteger.ZERO);
+            long ts = System.currentTimeMillis();
+            SortedMap<GenPolynomial<edu.jas.arith.BigInteger>, Long> map = factorAbstract.factors(poly);
+            ts = System.currentTimeMillis() - ts;
+            //System.out.println("Run Factors " + ts + "ms: " + map.toString());
+            boolean t = factorAbstract.isFactorization(poly, map);
+            if (!t) {
+                System.out.println("Run " + i + ": " + poly.toString());
+                System.out.println("Run not Factors " + ts + "ms: " + map.toString());
+            }	    
+        }
     }
 
 }
