@@ -2,11 +2,11 @@
 JAS: Java Algebra System
 ========================
 
-Version 2.6, 2019
+Version 2.6, 2020
 
 by Heinz Kredel, University of Mannheim, kredel at rz.uni-mannheim.de
 
-Copyright (c) 2000-2019 by Heinz Kredel.
+Copyright (c) 2000-2020 by Heinz Kredel.
 
 Programms released under GPL or LGPL, see COPYING.jas or COPYING.lgpl.jas.
 
@@ -146,8 +146,8 @@ Directory structure
 +jlinalg_adaper some adapter classes to JLinAlg
 +commons-math_adaper some adapter classes to Apache Commons Math3
 +src       source code
-+test      junit test output and log4j output
 +trc       junit test sources
++test      junit test output and log4j output
 
 ../lib     directory for required libraries, not included
 
