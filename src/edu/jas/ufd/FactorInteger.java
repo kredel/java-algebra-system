@@ -732,10 +732,10 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 facs = factorsSquarefreeHensel(pu);
                 List<GenPolynomial<BigInteger>> fs = new ArrayList<GenPolynomial<BigInteger>>(facs.size());
                 GenPolynomialRing<BigInteger> pf = Pp.ring;
-                GenPolynomialRing<BigInteger> pfu = pu.ring;
+                //GenPolynomialRing<BigInteger> pfu = pu.ring;
                 for (GenPolynomial<BigInteger> p : facs) {
-                    GenPolynomial<BigInteger> pel = p.extendLower(pfu, 0, 0L);
-                    GenPolynomial<BigInteger> pe = pel.extend(pf, 0, 0L);
+                    //GenPolynomial<BigInteger> pel = p.extendLower(pfu, 0, 0L);
+                    GenPolynomial<BigInteger> pe = p.extend(pf, 0, 0L);
                     fs.add(pe);
                 }
                 //System.out.println("fs = " + fs);
