@@ -6,14 +6,13 @@ package edu.jas.gb;
 
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Comparator;
-import java.util.stream.Collectors;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -161,8 +160,8 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
                         return false;
                     }
                     if (sigma.leadingExpVector().compareTo(A.sigma.leadingExpVector()) == 0
-                                    && sigma.leadingBaseCoefficient().compareTo(
-                                                    A.sigma.leadingBaseCoefficient()) != 0) {
+                                    && sigma.leadingBaseCoefficient()
+                                                    .compareTo(A.sigma.leadingBaseCoefficient()) != 0) {
                         return false;
                     }
                 }
@@ -293,8 +292,8 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
                     }
                     //logger.info("sigup, sigma  = " + sigup + ", " + sigma);
                     boolean sigeq = (sigup.compareTo(sigma) < 0)
-                                    || ((sp.compareTo(se) == 0 && (sigup.leadingBaseCoefficient().compareTo(
-                                                    sigma.leadingBaseCoefficient()) != 0)));
+                                    || ((sp.compareTo(se) == 0 && (sigup.leadingBaseCoefficient()
+                                                    .compareTo(sigma.leadingBaseCoefficient()) != 0)));
                     //logger.info("sigup < sigma = " + sigup.compareTo(sigma));
                     if (sigeq) {
                         reduced = true;

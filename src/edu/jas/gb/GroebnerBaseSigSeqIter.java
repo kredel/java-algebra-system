@@ -7,10 +7,9 @@ package edu.jas.gb;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Collections;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -22,11 +21,10 @@ import edu.jas.structure.RingElem;
 
 /**
  * Groebner Base signature based sequential iterative algorithm. Implements
- * Groebner bases after the paper
- * "Signature-based Algorithms to Compute Gröbner Bases" by Christian Eder and
- * John Perry, ISSAC 2011. Compare the jython+JAS code in
- * examples/basic_sigbased_gb.py. Originally the Python+Sage code is from
- * http://www.math.usm.edu/perry/Research/basic_sigbased_gb.py
+ * Groebner bases after the paper "Signature-based Algorithms to Compute Gröbner
+ * Bases" by Christian Eder and John Perry, ISSAC 2011. Compare the jython+JAS
+ * code in examples/basic_sigbased_gb.py. Originally the Python+Sage code is
+ * from http://www.math.usm.edu/perry/Research/basic_sigbased_gb.py
  * 
  * @param <C> coefficient type
  * @author Heinz Kredel

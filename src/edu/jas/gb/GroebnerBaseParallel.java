@@ -9,14 +9,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -138,7 +138,7 @@ public class GroebnerBaseParallel<C extends RingElem<C>> extends GroebnerBaseAbs
         }
         this.threads = threads;
         this.pool = pool;
-        int s = ((ThreadPoolExecutor)pool).getCorePoolSize();
+        int s = ((ThreadPoolExecutor) pool).getCorePoolSize();
         if (threads != s) {
             logger.warn("#threads(" + threads + ") and number of pool threads(" + s + ") differ:");
         }

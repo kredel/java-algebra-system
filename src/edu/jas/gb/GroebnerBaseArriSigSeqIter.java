@@ -8,8 +8,8 @@ package edu.jas.gb;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -147,7 +147,8 @@ public class GroebnerBaseArriSigSeqIter<C extends RingElem<C>> extends GroebnerB
      * @return updated pair list.
      */
     @Override
-    List<SigPair<C>> pruneS(List<SigPair<C>> S, List<ExpVector> syz, List<SigPoly<C>> done, List<SigPoly<C>> G) {
+    List<SigPair<C>> pruneS(List<SigPair<C>> S, List<ExpVector> syz, List<SigPoly<C>> done,
+                    List<SigPoly<C>> G) {
         List<SigPair<C>> res = new ArrayList<SigPair<C>>(S.size());
         for (SigPair<C> p : S) {
             ExpVector f = p.sigma.leadingExpVector();
