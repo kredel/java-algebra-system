@@ -6,7 +6,7 @@ package edu.jas.kern;
 
 
 /**
- * PreemptStatus, defines global status for preemtive interruption handling.
+ * PreemptStatus, defines global status for preemptive interruption handling.
  * @author Heinz Kredel
  */
 

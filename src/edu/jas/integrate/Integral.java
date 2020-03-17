@@ -86,7 +86,7 @@ public class Integral<C extends GcdRingElem<C>> implements Serializable {
      * @param log list of logarithmic part. n/d =
      */
     public Integral(GenPolynomial<C> n, GenPolynomial<C> d, GenPolynomial<C> p, List<GenPolynomial<C>> rat,
-            List<LogIntegral<C>> log) {
+                    List<LogIntegral<C>> log) {
         num = n;
         den = d;
         pol = p;
@@ -173,11 +173,8 @@ public class Integral<C extends GcdRingElem<C>> implements Serializable {
         if (b == null) {
             return false;
         }
-        return num.equals(b.num) && 
-               den.equals(b.den) && 
-               pol.equals(b.pol) && 
-               rational.equals(b.rational) && 
-               logarithm.equals(b.logarithm);
+        return num.equals(b.num) && den.equals(b.den) && pol.equals(b.pol) && rational.equals(b.rational)
+                        && logarithm.equals(b.logarithm);
     }
 
 }

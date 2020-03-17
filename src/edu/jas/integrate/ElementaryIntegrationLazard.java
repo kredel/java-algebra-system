@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.SortedMap;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
@@ -116,8 +116,7 @@ public class ElementaryIntegrationLazard<C extends GcdRingElem<C>> extends Eleme
         GreatestCommonDivisorAbstract<AlgebraicNumber<C>> aengine = null;
 
         // Subresultant von A - t P'
-        List<GenPolynomial<GenPolynomial<C>>> RcList = engine.recursiveUnivariateSubResultantList(Pc,
-                        At); // returning
+        List<GenPolynomial<GenPolynomial<C>>> RcList = engine.recursiveUnivariateSubResultantList(Pc, At); // returning
         GenPolynomial<GenPolynomial<C>> Rc = RcList.get(RcList.size() - 1); // just getting R
         //System.out.println("R = " + Rc);
 
@@ -126,7 +125,7 @@ public class ElementaryIntegrationLazard<C extends GcdRingElem<C>> extends Eleme
         if (logger.isInfoEnabled()) {
             logger.info("SquareFree(R) = " + resSquareFree);
         }
-            
+
         // First Loop
         SortedMap<GenPolynomial<C>, Long> sfactors = null;
         GenPolynomial<AlgebraicNumber<C>> Sa = null;

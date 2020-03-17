@@ -12,8 +12,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 
 /**
@@ -59,14 +59,14 @@ public class ComputerThreads {
 
 
     /**
-     * Timeout for timed execution. 
+     * Timeout for timed execution.
      * @see edu.jas.fd.SGCDParallelProxy
      */
     static long timeout = 10L; //-1L;
 
 
     /**
-     * TimeUnit for timed execution. 
+     * TimeUnit for timed execution.
      * @see edu.jas.fd.SGCDParallelProxy
      */
     static TimeUnit timeunit = TimeUnit.SECONDS;

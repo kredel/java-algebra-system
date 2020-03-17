@@ -73,7 +73,7 @@ public class LogIntegral<C extends GcdRingElem<C>> implements Serializable {
      *            coefficients. n/d = sum( a_i ( der(d_i) / d_i ) )
      */
     public LogIntegral(GenPolynomial<C> n, GenPolynomial<C> d, List<C> cf, List<GenPolynomial<C>> cd,
-            List<AlgebraicNumber<C>> af, List<GenPolynomial<AlgebraicNumber<C>>> ad) {
+                    List<AlgebraicNumber<C>> af, List<GenPolynomial<AlgebraicNumber<C>>> ad) {
         num = n;
         den = d;
         cfactors = cf;
