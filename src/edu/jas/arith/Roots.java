@@ -169,10 +169,10 @@ public class Roots {
         }
         // ensure enough precision
         MathContext mc = A.context;
-        BigDecimal eps = new BigDecimal("0.1"); //e-13"); // TODO
+        BigDecimal eps = new BigDecimal("0.1");
         int p = Math.max(mc.getPrecision(), java.math.MathContext.DECIMAL64.getPrecision());
         //java.math.MathContext.UNLIMITED.getPrecision() == 0
-        eps = eps.power(p / 2); //Power.positivePower(eps,p/2);
+        eps = eps.power(p / 2);
         // newton iteration
         BigDecimal Ap = new BigDecimal(A.val, mc);
         BigDecimal ninv = new BigDecimal(0.5, mc);
@@ -228,10 +228,10 @@ public class Roots {
         }
         // ensure enough precision
         MathContext mc = A.context;
-        BigDecimal eps = new BigDecimal("0.1"); //e-10"); // TODO
+        BigDecimal eps = new BigDecimal("0.1");
         int p = Math.max(mc.getPrecision(), java.math.MathContext.DECIMAL64.getPrecision());
         //java.math.MathContext.UNLIMITED.getPrecision() == 0
-        eps = eps.power((p * 2) / 3); //Power.positivePower(eps,(p*2)/3);
+        eps = eps.power((p * 2) / 3);
         // newton iteration
         BigDecimal Ap = A;
         BigDecimal N = new BigDecimal(n, mc);

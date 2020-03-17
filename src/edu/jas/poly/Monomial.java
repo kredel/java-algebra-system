@@ -10,6 +10,7 @@ import java.util.SortedMap;
 import java.util.Iterator;
 
 import edu.jas.structure.RingElem;
+//import edu.jas.structure.RingFactory;
 import edu.jas.structure.Element;
 import edu.jas.structure.ElemFactory;
 
@@ -133,6 +134,7 @@ public final class Monomial<C extends RingElem<C>> implements Element<Monomial<C
      */
     public ElemFactory<Monomial<C>> factory() {
         return null; // TODO
+        //return new GenPolynomialRing<C>((RingFactory<C>)c.factory(), e.length());
     }
 
 
