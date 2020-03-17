@@ -11,8 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.SortedMap;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModIntegerRing;
@@ -705,7 +705,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         if (USE_OPT) {
             List<GenPolynomial<BigInteger>> topt = new ArrayList<GenPolynomial<BigInteger>>(1);
             topt.add(Pp);
-            opt = TermOrderOptimization.<BigInteger> optimizeTermOrder(pfac,topt);
+            opt = TermOrderOptimization.<BigInteger> optimizeTermOrder(pfac, topt);
             if (!TermOrderOptimization.isIdentityPermutation(opt.perm)) {
                 iperm = TermOrderOptimization.inversePermutation(opt.perm);
                 Pp = opt.list.get(0);
@@ -746,7 +746,8 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             }
         }
         if (facs == null) {
-            logger.warn("factorsSquarefreeHensel not applicable or failed, reverting to Kronecker for: " + Pp);
+            logger.warn("factorsSquarefreeHensel not applicable or failed, reverting to Kronecker for: "
+                            + Pp);
             facs = super.factorsSquarefree(Pp);
         }
         if (USE_OPT && iperm != null) {
@@ -847,7 +848,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         for (int j = 0; j <= pfac.nvar; j++) {
             Evs.add(evStart++); // bug
         }
-	//no: Collections.reverse(Evs);
+        //no: Collections.reverse(Evs);
         evStart = Evs.get(0);
         final int trials = 4;
         int countSeparate = 0;
@@ -857,8 +858,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         boolean notLucky = true;
         while (notLucky) { // for Wang's test
             if (Math.abs(evStart) > 371L) {
-                logger.warn("no evaluation point for: P = " + P + ", lprr = " + lprr + ", lfacs = "
-                                + lfacs);
+                logger.warn("no evaluation point for: P = " + P + ", lprr = " + lprr + ", lfacs = " + lfacs);
                 throw new RuntimeException(
                                 "no evaluation point found after " + Math.abs(evStart) + " iterations");
             }

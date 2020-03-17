@@ -11,8 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.Scripting;
 import edu.jas.structure.RingElem;
@@ -27,8 +27,8 @@ import edu.jas.util.CartesianProductInfinite;
  * @author Heinz Kredel
  */
 
-public class AlgebraicNumberRing<C extends RingElem<C>> implements RingFactory<AlgebraicNumber<C>>,
-                Iterable<AlgebraicNumber<C>> {
+public class AlgebraicNumberRing<C extends RingElem<C>>
+                implements RingFactory<AlgebraicNumber<C>>, Iterable<AlgebraicNumber<C>> {
 
 
     /**
@@ -303,8 +303,8 @@ public class AlgebraicNumberRing<C extends RingElem<C>> implements RingFactory<A
      */
     @Override
     public String toString() {
-        return "AlgebraicNumberRing[ " + modul.toString() + " | isField=" + isField + " :: "
-                        + ring.toString() + " ]";
+        return "AlgebraicNumberRing[ " + modul.toString() + " | isField=" + isField + " :: " + ring.toString()
+                        + " ]";
     }
 
 

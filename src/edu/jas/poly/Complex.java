@@ -5,8 +5,8 @@
 package edu.jas.poly;
 
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigComplex;
 import edu.jas.arith.BigDecimal;
@@ -415,8 +415,8 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
      * @return this*B.
      */
     public Complex<C> multiply(Complex<C> B) {
-        return new Complex<C>(ring, re.multiply(B.re).subtract(im.multiply(B.im)), re.multiply(B.im).sum(
-                        im.multiply(B.re)));
+        return new Complex<C>(ring, re.multiply(B.re).subtract(im.multiply(B.im)),
+                        re.multiply(B.im).sum(im.multiply(B.re)));
     }
 
 

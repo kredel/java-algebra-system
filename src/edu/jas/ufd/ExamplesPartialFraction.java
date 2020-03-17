@@ -61,7 +61,7 @@ public class ExamplesPartialFraction {
 
 
     /**
-     * example12. 
+     * example12.
      */
     public static void example12() {
         System.out.println("\n\nexample 12");
@@ -83,7 +83,7 @@ public class ExamplesPartialFraction {
 
 
     /**
-     * example13. 
+     * example13.
      */
     public static void example13() {
         System.out.println("\n\nexample 13");
@@ -105,7 +105,7 @@ public class ExamplesPartialFraction {
 
 
     /**
-     * example14. 
+     * example14.
      */
     public static void example14() {
         System.out.println("\n\nexample 14");

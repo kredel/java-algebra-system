@@ -5,9 +5,9 @@
 package edu.jas.ufd;
 
 
-import java.util.SortedMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedMap;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
@@ -35,7 +35,7 @@ public class Examples {
      */
     public static void main(String[] args) {
         //// no go: example6();
-        //example9();
+        //example9(); 
         example1();
         example2();
         example10();
@@ -45,7 +45,7 @@ public class Examples {
 
 
     /**
-     * example1 with GenMatrix. 
+     * example1 with GenMatrix.
      */
     public static void example1() {
         System.out.println("\n\n example 1");
@@ -59,58 +59,60 @@ public class Examples {
         cfac = new BigInteger();
         System.out.println("cfac = " + cfac);
 
-        String[] vc = new String[] {"a", "b"};
-        fac = new GenPolynomialRing<BigInteger>(cfac,vc);
+        String[] vc = new String[] { "a", "b" };
+        fac = new GenPolynomialRing<BigInteger>(cfac, vc);
         System.out.println(" fac = " + fac.toScript());
 
-        efac = new QuotientRing<BigInteger>( fac );
+        efac = new QuotientRing<BigInteger>(fac);
         System.out.println("efac = " + efac.toScript());
 
-        String[] v = new String[] {"x", "y", "z" };
-        qfac = new GenPolynomialRing<Quotient<BigInteger>>( efac, 3, v );
+        String[] v = new String[] { "x", "y", "z" };
+        qfac = new GenPolynomialRing<Quotient<BigInteger>>(efac, 3, v);
         System.out.println("qfac = " + qfac.toScript());
 
-        mfac = new GenMatrixRing<GenPolynomial<Quotient<BigInteger>>>( qfac, 3, 3 );
+        mfac = new GenMatrixRing<GenPolynomial<Quotient<BigInteger>>>(qfac, 3, 3);
         System.out.println("mfac = " + mfac.toScript());
 
         GenPolynomial<Quotient<BigInteger>> p;
-        p = qfac.random(3,4,2,0.3f);
+        p = qfac.random(3, 4, 2, 0.3f);
         System.out.println("\np = " + p);
 
         GenMatrix<GenPolynomial<Quotient<BigInteger>>> m;
-        m = mfac.random(3,0.4f);
+        m = mfac.random(3, 0.4f);
         System.out.println("\nm = " + m.toScript());
     }
 
 
     /**
-     * example2 with GenPolynomial. 
+     * example2 with GenPolynomial.
      */
     public static void example2() {
         System.out.println("\n\n example 2");
 
         BigInteger fac = new BigInteger();
-        String[] var = new String[]{ "a", "b", "c", "d"};
+        String[] var = new String[] { "a", "b", "c", "d" };
         int numvars = var.length;
         //not needed: TermOrder tord = new TermOrder(TermOrder.INVLEX);
-        GenPolynomialRing<BigInteger> ring = new GenPolynomialRing<BigInteger>(fac,var);
-        List<GenPolynomial<BigInteger>> vars=new ArrayList<GenPolynomial<BigInteger>>();
-        
+        GenPolynomialRing<BigInteger> ring = new GenPolynomialRing<BigInteger>(fac, var);
+        List<GenPolynomial<BigInteger>> vars = new ArrayList<GenPolynomial<BigInteger>>();
+
         // Build up the polynomial from vars.
-        for(int i=0; i<numvars; i++) vars.add(ring.univariate(i));
+        for (int i = 0; i < numvars; i++)
+            vars.add(ring.univariate(i));
         System.out.println("vars = " + vars);
-        
+
         // Silly demo one first. 
         //  ab+ac+db+dc   ->  (a+d)(b+c)
-        GenPolynomial<BigInteger> tmp=( vars.get(0).multiply(vars.get(1)) ).sum( vars.get(0).multiply(vars.get(2)) )
-            .sum( vars.get(3).multiply(vars.get(1)) ).sum( vars.get(3).multiply(vars.get(2)) );
-        
+        GenPolynomial<BigInteger> tmp = (vars.get(0).multiply(vars.get(1)))
+                        .sum(vars.get(0).multiply(vars.get(2))).sum(vars.get(3).multiply(vars.get(1)))
+                        .sum(vars.get(3).multiply(vars.get(2)));
+
         //alternative: tmp = ring.parse("a b + a c + d b + d c");
-        System.out.println("tmp = " +tmp); 
-        
+        System.out.println("tmp = " + tmp);
+
         Factorization<BigInteger> engine = FactorFactory.getImplementation(fac);
-        SortedMap<GenPolynomial<BigInteger>,Long> factors = engine.factors(tmp);
-        
+        SortedMap<GenPolynomial<BigInteger>, Long> factors = engine.factors(tmp);
+
         System.out.println("factors = " + factors);
     }
 
@@ -187,28 +189,28 @@ public class Examples {
 
         String[] var_x = new String[] { "x" };
         GenPolynomialRing<AlgebraicNumber<BigRational>> apfac = new GenPolynomialRing<AlgebraicNumber<BigRational>>(
-                                                                                                                    a2fac, 1, to, var_x);
+                        a2fac, 1, to, var_x);
         System.out.println("apfac  = " + apfac.toScript());
 
         QuotientRing<AlgebraicNumber<BigRational>> qfac = new QuotientRing<AlgebraicNumber<BigRational>>(
-                                                                                                         apfac);
+                        apfac);
         System.out.println("qfac   = " + qfac.toScript());
 
         String[] var_wx = new String[] { "wx" };
         GenPolynomialRing<Quotient<AlgebraicNumber<BigRational>>> pqfac = new GenPolynomialRing<Quotient<AlgebraicNumber<BigRational>>>(
-                                                                                                                                        qfac, 1, to, var_wx);
+                        qfac, 1, to, var_wx);
         System.out.println("pqfac  = " + pqfac.toScript());
 
         GenPolynomial<Quotient<AlgebraicNumber<BigRational>>> wx = pqfac.parse(" wx^2 - { x } ");
         System.out.println("wx     = " + wx);
 
         AlgebraicNumberRing<Quotient<AlgebraicNumber<BigRational>>> axfac = new AlgebraicNumberRing<Quotient<AlgebraicNumber<BigRational>>>(
-                                                                                                                                            wx, true);
+                        wx, true);
         System.out.println("axfac  = " + axfac.toScript());
 
         String[] var_y = new String[] { "y" };
         GenPolynomialRing<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>> apqfac = new GenPolynomialRing<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>>(
-                                                                                                                                                                           axfac, 1, to, var_y);
+                        axfac, 1, to, var_y);
         System.out.println("apqfac = " + apqfac.toScript());
 
         //  ( y^2 - x ) * ( y^2 - 2 ), need {} for recursive coefficients
@@ -217,11 +219,11 @@ public class Examples {
         System.out.println("f      = " + f);
 
         FactorAbstract<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>> engine = FactorFactory
-            .getImplementation(axfac);
+                        .getImplementation(axfac);
         System.out.println("engine = " + engine);
 
         SortedMap<GenPolynomial<AlgebraicNumber<Quotient<AlgebraicNumber<BigRational>>>>, Long> F = engine
-            .factors(f);
+                        .factors(f);
         System.out.println("factors(f) = " + F);
     }
 
@@ -235,12 +237,12 @@ public class Examples {
             String[] vars = new String[] { "a", "c", "d", "e", "x" };
             GenPolynomialRing<edu.jas.arith.BigInteger> fac;
             fac = new GenPolynomialRing<edu.jas.arith.BigInteger>(edu.jas.arith.BigInteger.ZERO, vars.length,
-                                                                  new TermOrder(TermOrder.INVLEX), vars);
+                            new TermOrder(TermOrder.INVLEX), vars);
 
             GenPolynomial<edu.jas.arith.BigInteger> poly = fac.parse("a*d*e + c*d^2*x + a*e^2*x + c*d*e*x^2");
             //System.out.println("Run " + i + ": " + poly.toString());
             FactorAbstract<edu.jas.arith.BigInteger> factorAbstract = FactorFactory
-                .getImplementation(edu.jas.arith.BigInteger.ZERO);
+                            .getImplementation(edu.jas.arith.BigInteger.ZERO);
             long ts = System.currentTimeMillis();
             SortedMap<GenPolynomial<edu.jas.arith.BigInteger>, Long> map = factorAbstract.factors(poly);
             ts = System.currentTimeMillis() - ts;
@@ -249,7 +251,7 @@ public class Examples {
             if (!t) {
                 System.out.println("Run " + i + ": " + poly.toString());
                 System.out.println("Run not Factors " + ts + "ms: " + map.toString());
-            }	    
+            }
         }
     }
 

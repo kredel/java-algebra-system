@@ -7,12 +7,12 @@ package edu.jas.ufd;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
@@ -71,7 +71,8 @@ public class FactorRational extends FactorAbsolute<BigRational> {
         }
         GenPolynomialRing<BigRational> pfac = P.ring;
         if (pfac.nvar > 1) {
-            throw new IllegalArgumentException(this.getClass().getName() + " only for univariate polynomials");
+            throw new IllegalArgumentException(
+                            this.getClass().getName() + " only for univariate polynomials");
         }
         GenPolynomial<BigRational> Pr = P;
         BigRational ldcf = P.leadingBaseCoefficient();
@@ -183,7 +184,8 @@ public class FactorRational extends FactorAbsolute<BigRational> {
             throw new IllegalArgumentException(this.getClass().getName() + " P == null");
         }
         GenPolynomialRing<BigRational> pfac = P.ring;
-        SortedMap<GenPolynomial<BigRational>, Long> factors = new TreeMap<GenPolynomial<BigRational>, Long>(pfac.getComparator());
+        SortedMap<GenPolynomial<BigRational>, Long> factors = new TreeMap<GenPolynomial<BigRational>, Long>(
+                        pfac.getComparator());
         if (P.isZERO()) {
             return factors;
         }

@@ -10,8 +10,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
@@ -30,8 +30,8 @@ import edu.jas.util.ListUtil;
 
 
 /**
- * Polynomial ufd utilities. For example conversion between different representations
- * and Kronecker substitution.
+ * Polynomial ufd utilities. For example conversion between different
+ * representations and Kronecker substitution.
  * @author Heinz Kredel
  */
 
@@ -202,7 +202,8 @@ public class PolyUfdUtil {
      *         coefficients.
      */
     public static <C extends RingElem<C>> List<GenPolynomial<GenPolynomial<C>>> fromIntegerCoefficients(
-                    GenPolynomialRing<GenPolynomial<C>> fac, List<GenPolynomial<GenPolynomial<BigInteger>>> L) {
+                    GenPolynomialRing<GenPolynomial<C>> fac,
+                    List<GenPolynomial<GenPolynomial<BigInteger>>> L) {
         List<GenPolynomial<GenPolynomial<C>>> K = null;
         if (L == null) {
             return K;
@@ -218,18 +219,21 @@ public class PolyUfdUtil {
         return K;
     }
 
+
     //------------------------------
 
     /**
-     * BigInteger from BigRational coefficients. Represent as polynomial with type
-     * GenPolynomial&lt;BigInteger&gt; coefficients.
+     * BigInteger from BigRational coefficients. Represent as polynomial with
+     * type GenPolynomial&lt;BigInteger&gt; coefficients.
      * @param fac result polynomial factory.
      * @param A polynomial with GenPolynomial&lt;BigRational&gt; coefficients to
      *            be converted.
-     * @return polynomial with type GenPolynomial&lt;BigInteger&gt; coefficients.
+     * @return polynomial with type GenPolynomial&lt;BigInteger&gt;
+     *         coefficients.
      */
     public static GenPolynomial<GenPolynomial<BigInteger>> integerFromRationalCoefficients(
-                    GenPolynomialRing<GenPolynomial<BigInteger>> fac, GenPolynomial<GenPolynomial<BigRational>> A) {
+                    GenPolynomialRing<GenPolynomial<BigInteger>> fac,
+                    GenPolynomial<GenPolynomial<BigRational>> A) {
         GenPolynomial<GenPolynomial<BigInteger>> B = fac.getZERO().copy();
         if (A == null || A.isZERO()) {
             return B;
@@ -285,16 +289,17 @@ public class PolyUfdUtil {
 
 
     /**
-     * BigInteger from BigRational coefficients. Represent as polynomial with type
-     * GenPolynomial&lt;BigInteger&gt; coefficients.
+     * BigInteger from BigRational coefficients. Represent as polynomial with
+     * type GenPolynomial&lt;BigInteger&gt; coefficients.
      * @param fac result polynomial factory.
      * @param L polynomial list with GenPolynomial&lt;BigRational&gt;
      *            coefficients to be converted.
-     * @return polynomial list with polynomials with type GenPolynomial&lt;BigInteger&gt;
-     *         coefficients.
+     * @return polynomial list with polynomials with type
+     *         GenPolynomial&lt;BigInteger&gt; coefficients.
      */
     public static List<GenPolynomial<GenPolynomial<BigInteger>>> integerFromRationalCoefficients(
-                      GenPolynomialRing<GenPolynomial<BigInteger>> fac, List<GenPolynomial<GenPolynomial<BigRational>>> L) {
+                    GenPolynomialRing<GenPolynomial<BigInteger>> fac,
+                    List<GenPolynomial<GenPolynomial<BigRational>>> L) {
         List<GenPolynomial<GenPolynomial<BigInteger>>> K = null;
         if (L == null) {
             return K;
@@ -416,11 +421,13 @@ public class PolyUfdUtil {
 
     /**
      * Norm of a polynomial with AlgebraicNumber coefficients.
-     * @param A uni or multivariate polynomial from GenPolynomial&lt;AlgebraicNumber&lt;C&gt;&gt;.
+     * @param A uni or multivariate polynomial from
+     *            GenPolynomial&lt;AlgebraicNumber&lt;C&gt;&gt;.
      * @param k for (y - k x) substitution.
      * @return norm(A) = res_x(A(x,y),m(x)) in GenPolynomialRing&lt;C&gt;.
      */
-    public static <C extends GcdRingElem<C>> GenPolynomial<C> norm(GenPolynomial<AlgebraicNumber<C>> A, long k) {
+    public static <C extends GcdRingElem<C>> GenPolynomial<C> norm(GenPolynomial<AlgebraicNumber<C>> A,
+                    long k) {
         if (A == null) {
             return null;
         }
@@ -499,8 +506,8 @@ public class PolyUfdUtil {
      * @param degree of random polynomial.
      * @return irreducible univariate polynomial.
      */
-    public static <C extends GcdRingElem<C>> 
-      GenPolynomial<C> randomIrreduciblePolynomial(RingFactory<C> cfac, int degree) {
+    public static <C extends GcdRingElem<C>> GenPolynomial<C> randomIrreduciblePolynomial(RingFactory<C> cfac,
+                    int degree) {
         if (!cfac.isField()) {
             throw new IllegalArgumentException("coefficient ring must be a field " + cfac);
         }
@@ -511,16 +518,16 @@ public class PolyUfdUtil {
         if (k < 3) {
             k = 7;
         }
-        int l = degree/2 + 2;
+        int l = degree / 2 + 2;
         int d = degree + 1;
         float q = 0.55f;
         for (;;) {
             mod = ring.random(k, l, d, q).monic();
             if (mod.degree() != degree) {
-                mod  = mod.sum(ring.univariate(0, degree));
+                mod = mod.sum(ring.univariate(0, degree));
             }
             if (mod.trailingBaseCoefficient().isZERO()) {
-                mod  = mod.sum(ring.getONE());
+                mod = mod.sum(ring.getONE());
             }
             //System.out.println("algebriacNumberField: mod = " + mod + ", k = " + k);
             if (eng.isIrreducible(mod)) {
@@ -533,13 +540,14 @@ public class PolyUfdUtil {
 
     /**
      * Construct an algebraic number field of degree d. Uses a random
-     * irreducible polynomial of degree d as modulus of the algebraic number ring.
+     * irreducible polynomial of degree d as modulus of the algebraic number
+     * ring.
      * @param cfac coefficient ring.
      * @param degree of random polynomial.
      * @return algebraic number field.
      */
-    public static <C extends GcdRingElem<C>> 
-      AlgebraicNumberRing<C> algebraicNumberField(RingFactory<C> cfac, int degree) {
+    public static <C extends GcdRingElem<C>> AlgebraicNumberRing<C> algebraicNumberField(RingFactory<C> cfac,
+                    int degree) {
         GenPolynomial<C> mod = randomIrreduciblePolynomial(cfac, degree);
         AlgebraicNumberRing<C> afac = new AlgebraicNumberRing<C>(mod, true);
         return afac;
@@ -567,7 +575,8 @@ public class PolyUfdUtil {
      * @param A polynomial to be converted.
      * @return a univariate polynomial.
      */
-    public static <C extends GcdRingElem<C>> GenPolynomial<C> substituteKronecker(GenPolynomial<C> A, long d) {
+    public static <C extends GcdRingElem<C>> GenPolynomial<C> substituteKronecker(GenPolynomial<C> A,
+                    long d) {
         if (A == null) {
             return A;
         }
@@ -595,7 +604,7 @@ public class PolyUfdUtil {
 
 
     /**
-     * Kronecker substitution. Substitute x_i by x**d**(i-1) to construct 
+     * Kronecker substitution. Substitute x_i by x**d**(i-1) to construct
      * univariate polynomials.
      * @param A list of polynomials to be converted.
      * @return a list of univariate polynomials.
@@ -646,7 +655,7 @@ public class PolyUfdUtil {
 
 
     /**
-     * Kronecker back substitution. Substitute x**d**(i-1) to x_i to construct 
+     * Kronecker back substitution. Substitute x**d**(i-1) to x_i to construct
      * multivariate polynomials.
      * @param A list of polynomials to be converted.
      * @param fac result polynomial factory.
@@ -686,8 +695,8 @@ class SubstKronecker<C extends GcdRingElem<C>> implements UnaryFunctor<GenPolyno
 /**
  * Kronecker back substitutuion functor.
  */
-class BackSubstKronecker<C extends GcdRingElem<C>> implements
-                UnaryFunctor<GenPolynomial<C>, GenPolynomial<C>> {
+class BackSubstKronecker<C extends GcdRingElem<C>>
+                implements UnaryFunctor<GenPolynomial<C>, GenPolynomial<C>> {
 
 
     final long d;

@@ -5,8 +5,8 @@
 package edu.jas.ufd;
 
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.GenPolynomial;
@@ -19,8 +19,8 @@ import edu.jas.structure.QuotPair;
  * interface. Objects of this class are immutable.
  * @author Heinz Kredel
  */
-public class Quotient<C extends GcdRingElem<C>> implements GcdRingElem<Quotient<C>>,
-                QuotPair<GenPolynomial<C>> {
+public class Quotient<C extends GcdRingElem<C>>
+                implements GcdRingElem<Quotient<C>>, QuotPair<GenPolynomial<C>> {
 
 
     private static final Logger logger = LogManager.getLogger(Quotient.class);

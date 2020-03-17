@@ -5,48 +5,45 @@
 
 package edu.jas.poly;
 
+
 import java.util.Map;
-import java.util.SortedMap;
-import java.util.Iterator;
 
-import edu.jas.structure.RingElem;
-//import edu.jas.structure.RingFactory;
-import edu.jas.structure.Element;
 import edu.jas.structure.ElemFactory;
-
-import edu.jas.poly.ExpVector;
+// import edu.jas.structure.RingFactory;
+import edu.jas.structure.Element;
+import edu.jas.structure.RingElem;
 
 
 /**
- * Monomial class. 
- * Represents pairs of exponent vectors and coefficients.
+ * Monomial class. Represents pairs of exponent vectors and coefficients.
  * Adaptor for Map.Entry.
  * @author Heinz Kredel
  */
 public final class Monomial<C extends RingElem<C>> implements Element<Monomial<C>> {
 
-    /** 
+
+    /**
      * Exponent of monomial.
      */
     public final ExpVector e;
 
 
-    /** 
+    /**
      * Coefficient of monomial.
      */
     public final C c;
 
 
-    /** 
+    /**
      * Constructor of monomial.
      * @param me a MapEntry.
      */
-    public Monomial(Map.Entry<ExpVector,C> me){
-        this( me.getKey(), me.getValue() );
+    public Monomial(Map.Entry<ExpVector, C> me) {
+        this(me.getKey(), me.getValue());
     }
 
 
-    /** 
+    /**
      * Constructor of monomial.
      * @param e exponent.
      * @param c coefficient.
@@ -57,7 +54,7 @@ public final class Monomial<C extends RingElem<C>> implements Element<Monomial<C
     }
 
 
-    /** 
+    /**
      * Getter for exponent.
      * @return exponent.
      */
@@ -66,7 +63,7 @@ public final class Monomial<C extends RingElem<C>> implements Element<Monomial<C
     }
 
 
-    /** 
+    /**
      * Getter for coefficient.
      * @return coefficient.
      */
@@ -80,7 +77,7 @@ public final class Monomial<C extends RingElem<C>> implements Element<Monomial<C
      * @return Creates and returns a copy of this Element.
      */
     public Monomial<C> copy() {
-        return new Monomial<C>(e,c);
+        return new Monomial<C>(e, c);
     }
 
 
@@ -154,7 +151,7 @@ public final class Monomial<C extends RingElem<C>> implements Element<Monomial<C
 
 
     /**
-     * hashCode. 
+     * hashCode.
      * @see java.lang.Object#hashCode()
      */
     @Override
