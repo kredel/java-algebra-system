@@ -29,12 +29,12 @@ f3 = ( q * p - 1 ) * q;
 f4 = q * q * p;
 f5 = f2 - f1;
 f6 = f3 - f4;
-puts "f1 = " +str(f1);
-puts "f2 = " +str(f2);
-puts "f3 = " +str(f3);
-puts "f4 = " +str(f4);
-puts "f5 = " +str(f5);
-puts "f6 = " +str(f6);
+puts "f1 = " + str(f1);
+puts "f2 = " + str(f2);
+puts "f3 = " + str(f3);
+puts "f4 = " + str(f4);
+puts "f5 = " + str(f5);
+puts "f6 = " + str(f6);
 puts
 
 ff = [ f1, f2, f3, f4 ];
