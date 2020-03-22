@@ -170,7 +170,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
             if (vars.length != nvar) {
                 throw new IllegalArgumentException("incompatible variable size " + vars.length + ", " + nvar);
             }
-            GenPolynomialRing.addVars(vars);
+            // GenPolynomialRing.addVars(vars);
         }
         EVZERO = ExpVector.create(nvar);
         ONE = new MultiVarPowerSeries<C>(this, new MultiVarCoefficients<C>(this) {

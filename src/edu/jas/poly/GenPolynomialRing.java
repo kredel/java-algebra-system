@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager; 
@@ -78,10 +79,9 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
 
 
     /**
-     * The names of all known variables.
+     * Counter to distinguish new variables.
      */
-    private static Set<String> knownVars = new HashSet<String>();
-
+    private static AtomicLong varCounter = new AtomicLong(0L);
 
     /**
      * The constant polynomial 0 for this ring.
@@ -225,7 +225,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
             if (vars.length != nvar) {
                 throw new IllegalArgumentException("incompatible variable size " + vars.length + ", " + nvar);
             }
-            addVars(vars);
+            // addVars(vars);
         }
     }
 
@@ -275,7 +275,6 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
             String scf = coFac.getClass().getSimpleName();
             if (coFac instanceof AlgebraicNumberRing) {
                 AlgebraicNumberRing an = (AlgebraicNumberRing) coFac;
-                //String[] v = an.ring.vars;
                 res = "AN[ (" + an.ring.varsToString() + ") (" + an.toString() + ") ]";
             }
             if (coFac instanceof GenPolynomialRing) {
@@ -304,7 +303,6 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
             res += "( " + varsToString() + " ) " + tord.toString() + " ";
         } else {
             res = this.getClass().getSimpleName() + "[ " + coFac.toString() + " ";
-            //  + coFac.getClass().getSimpleName();
             if (coFac instanceof AlgebraicNumberRing) {
                 AlgebraicNumberRing an = (AlgebraicNumberRing) coFac;
                 res = "AN[ (" + an.ring.varsToString() + ") (" + an.modul + ") ]";
@@ -356,12 +354,6 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
         }
         s.append(",\"" + varsToString() + "\"");
         String to = tord.toScript();
-        //if (tord.getEvord() == TermOrder.INVLEX) {
-        //    to = "PolyRing.lex";
-        //}
-        //if (tord.getEvord() == TermOrder.IGRLEX) {
-        //    to = "PolyRing.grad";
-        //}
         s.append("," + to);
         s.append(")");
         return s.toString();
@@ -1173,21 +1165,10 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
      * @return new variable names.
      */
     public static String[] newVars(String prefix, int n) {
-        String[] vars = new String[n];
-        synchronized (knownVars) {
-            int m = knownVars.size();
-            String name = prefix + m;
-            for (int i = 0; i < n; i++) {
-                while (knownVars.contains(name)) {
-                    m++;
-                    name = prefix + m;
-                }
-                vars[i] = name;
-                //System.out.println("new variable: " + name);
-                knownVars.add(name);
-                m++;
-                name = prefix + m;
-            }
+        String[] vars = new String[n]; 
+        for (int i = 0; i < n; i++) {
+            long m = varCounter.incrementAndGet();
+            vars[i] = prefix + m;
         }
         return vars;
     }
@@ -1222,20 +1203,20 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
     }
 
 
-    /**
+    /*
      * Add variable names.
      * @param vars variable names to be recorded.
-     */
     public static void addVars(String[] vars) {
         if (vars == null) {
             return;
         }
-        synchronized (knownVars) {
-            for (int i = 0; i < vars.length; i++) {
-                knownVars.add(vars[i]); // eventualy names 'overwritten'
-            }
-        }
+        // synchronized (knownVars) {
+        //   for (int i = 0; i < vars.length; i++) {
+        //      knownVars.add(vars[i]); // eventualy names 'overwritten'
+        //   }
+        // }
     }
+     */
 
 
     /**
