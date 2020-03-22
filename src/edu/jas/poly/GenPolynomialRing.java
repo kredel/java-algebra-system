@@ -1167,7 +1167,7 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
     public static String[] newVars(String prefix, int n) {
         String[] vars = new String[n]; 
         for (int i = 0; i < n; i++) {
-            long m = varCounter.incrementAndGet();
+            long m = varCounter.getAndIncrement();
             vars[i] = prefix + m;
         }
         return vars;
