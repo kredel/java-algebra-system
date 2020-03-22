@@ -2690,7 +2690,8 @@ def AN(m,z=0,field=False,pr=None):
     return RingElem(r);
 
 
-_finiteFields = {};
+_finiteFields = {}; '''List of already constructed FiniteFields.'''
+
 
 def FF(p,n,z=0):
     '''Create JAS Field element as ring element. 
