@@ -1890,7 +1890,7 @@ public class PolyUtil {
         if (A == null || A.isZERO()) {
             return cfac.getZERO();
         }
-        GenPolynomialRing<GenPolynomial<C>> rfac = new GenPolynomialRing<GenPolynomial<C>>(cfac, 1);
+        GenPolynomialRing<GenPolynomial<C>> rfac = A.ring.recursive(1);
         if (rfac.nvar + cfac.nvar != A.ring.nvar) {
             throw new IllegalArgumentException("evaluateMain number of variabes mismatch");
         }
@@ -2102,8 +2102,8 @@ public class PolyUtil {
         GenPolynomial<C> Ap = A;
         for (int k = 0; k < dfac.nvar - 1; k++) {
             C ap = a.get(k);
-            GenPolynomialRing<C> c1fac = new GenPolynomialRing<C>(cfac, 1);
-            GenPolynomialRing<C> cnfac = new GenPolynomialRing<C>(cfac, dfac.nvar - 1 - k);
+            GenPolynomialRing<C> c1fac = new GenPolynomialRing<C>(cfac, 1); // no vars
+            GenPolynomialRing<C> cnfac = new GenPolynomialRing<C>(cfac, dfac.nvar - 1 - k); // no vars
             GenPolynomial<C> Bp = evaluateFirst(c1fac, cnfac, Ap, ap);
             if (Bp.isZERO()) {
                 return b;

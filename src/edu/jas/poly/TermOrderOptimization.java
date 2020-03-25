@@ -49,7 +49,7 @@ public class TermOrderOptimization {
         }
 
         BigInteger cfac = new BigInteger();
-        GenPolynomialRing<BigInteger> ufac = new GenPolynomialRing<BigInteger>(cfac, 1);
+        GenPolynomialRing<BigInteger> ufac = new GenPolynomialRing<BigInteger>(cfac, new String[] {"dm"} );
 
         int nvar = A.numberOfVariables();
         dem = new ArrayList<GenPolynomial<BigInteger>>(nvar);

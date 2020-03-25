@@ -88,8 +88,9 @@ public class Examples {
 
         BigRational cfac = new BigRational();
         System.out.println("cfac = " + cfac);
+        String[] vars = new String[] { "x1", "x2", "x3", "x4", "x5", "x6", "x7" };
         GenPolynomialRing<BigRational> fac;
-        fac = new GenPolynomialRing<BigRational>(cfac, 7);
+        fac = new GenPolynomialRing<BigRational>(cfac, 7, vars);
         //System.out.println("fac = " + fac);
         System.out.println("fac = " + fac);
 
@@ -107,12 +108,14 @@ public class Examples {
 
         BigRational cfac = new BigRational();
         System.out.println("cfac = " + cfac);
+        String[] cvars = new String[] { "x1", "x2", "x3", "x4", "x5", "x6", "x7" };
         GenPolynomialRing<BigRational> fac;
-        fac = new GenPolynomialRing<BigRational>(cfac, 7);
+        fac = new GenPolynomialRing<BigRational>(cfac, 7, cvars);
         System.out.println("fac = " + fac);
 
+        String[] vars = new String[] { "y1", "y2", "y3" };
         GenPolynomialRing<GenPolynomial<BigRational>> gfac;
-        gfac = new GenPolynomialRing<GenPolynomial<BigRational>>(fac, 3);
+        gfac = new GenPolynomialRing<GenPolynomial<BigRational>>(fac, 3, vars);
         System.out.println("gfac = " + gfac);
 
         GenPolynomial<GenPolynomial<BigRational>> a = gfac.random(10);
@@ -129,8 +132,9 @@ public class Examples {
         BigRational cfac = new BigRational();
         System.out.println("cfac = " + cfac);
 
+        String[] vars = new String[] { "alpha" };
         GenPolynomialRing<BigRational> mfac;
-        mfac = new GenPolynomialRing<BigRational>(cfac, 1);
+        mfac = new GenPolynomialRing<BigRational>(cfac, 1, vars);
         System.out.println("mfac = " + mfac);
 
         GenPolynomial<BigRational> modul = mfac.random(8).monic();
@@ -167,8 +171,9 @@ public class Examples {
         ModIntegerRing cfac = new ModIntegerRing(prime);
         System.out.println("cfac = " + cfac);
 
+        String[] vars = new String[] { "alpha" };
         GenPolynomialRing<ModInteger> mfac;
-        mfac = new GenPolynomialRing<ModInteger>(cfac, 1);
+        mfac = new GenPolynomialRing<ModInteger>(cfac, 1, vars);
         System.out.println("mfac = " + mfac);
 
         GenPolynomial<ModInteger> modul = mfac.random(8).monic();
@@ -528,17 +533,17 @@ public class Examples {
         System.out.println("t1.isAssignableFrom(t2) = " + t1.getClass().isAssignableFrom(t2.getClass()));
         System.out.println("t2.isAssignableFrom(t1) = " + t2.getClass().isAssignableFrom(t1.getClass()));
 
-        GenPolynomialRing<BigInteger> t3 = new GenPolynomialRing<BigInteger>(t2, 3);
+        String[] vars = new String[] { "x1", "x2", "x3" };
+        GenPolynomialRing<BigInteger> t3 = new GenPolynomialRing<BigInteger>(t2, 3, vars);
         System.out.println("t3 = " + t3);
 
-        GenSolvablePolynomialRing<BigInteger> t4 = new GenSolvablePolynomialRing<BigInteger>(t2, 3);
+        GenSolvablePolynomialRing<BigInteger> t4 = new GenSolvablePolynomialRing<BigInteger>(t2, vars);
         System.out.println("t4 = " + t4);
 
         System.out.println("t3.isAssignableFrom(t4) = " + t3.getClass().isAssignableFrom(t4.getClass()));
         System.out.println("t4.isAssignableFrom(t3) = " + t4.getClass().isAssignableFrom(t3.getClass()));
 
-
-        GenPolynomialRing<BigRational> t5 = new GenPolynomialRing<BigRational>(t1, 3);
+        GenPolynomialRing<BigRational> t5 = new GenPolynomialRing<BigRational>(t1, 3, vars);
         System.out.println("t5 = " + t5);
 
         System.out.println("t3.isAssignableFrom(t5) = " + t3.getClass().isAssignableFrom(t5.getClass()));
