@@ -134,9 +134,6 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
         GenPolynomialRing<GenPolynomial<MOD>> rfac = fac.recursive(fac.nvar - 1);
         GenPolynomialRing<MOD> mfac = new GenPolynomialRing<MOD>(cofac, rfac);
         GenPolynomialRing<MOD> ufac = (GenPolynomialRing<MOD>) rfac.coFac;
-        //GenPolynomialRing<MOD> mfac = new GenPolynomialRing<MOD>(cofac, fac.nvar - 1, fac.tord);
-        //GenPolynomialRing<MOD> ufac = new GenPolynomialRing<MOD>(cofac, 1, fac.tord);
-        //GenPolynomialRing<GenPolynomial<MOD>> rfac = new GenPolynomialRing<GenPolynomial<MOD>>(ufac, fac.nvar - 1, fac.tord);
         // convert polynomials
         GenPolynomial<GenPolynomial<MOD>> qr;
         GenPolynomial<GenPolynomial<MOD>> rr;

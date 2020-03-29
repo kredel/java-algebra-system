@@ -96,7 +96,6 @@ public class HenselMultUtil {
             throw new IllegalArgumentException("qfac != ckfac: " + su.get(0).ring + " != " + ckfac);
         }
         GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(), pkfac);
-        //GenPolynomialRing<BigInteger> cifac = new GenPolynomialRing<BigInteger>(new BigInteger(), ckfac);
         //System.out.println("ifac = " + ifac.toScript());
         String[] mn = new String[] { pkfac.getVars()[pkfac.nvar - 1] };
         GenPolynomialRing<GenPolynomial<MOD>> qrfac = new GenPolynomialRing<GenPolynomial<MOD>>(ckfac, 1, mn);
@@ -275,7 +274,6 @@ public class HenselMultUtil {
             throw new IllegalArgumentException("qfac != ckfac: " + su.get(0).ring + " != " + ckfac);
         }
         GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(), pkfac);
-        //GenPolynomialRing<BigInteger> cifac = new GenPolynomialRing<BigInteger>(new BigInteger(), ckfac);
         //System.out.println("ifac = " + ifac.toScript());
         String[] mn = new String[] { pkfac.getVars()[pkfac.nvar - 1] };
         GenPolynomialRing<GenPolynomial<MOD>> qrfac = new GenPolynomialRing<GenPolynomial<MOD>>(ckfac, 1, mn);

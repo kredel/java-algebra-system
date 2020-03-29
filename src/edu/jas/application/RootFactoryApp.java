@@ -150,7 +150,7 @@ public class RootFactoryApp {
         }
         ComplexRing<C> cfac = (ComplexRing<C>) pfac.coFac;
         TermOrder to = new TermOrder(TermOrder.INVLEX);
-        GenPolynomialRing<Complex<C>> tfac = new GenPolynomialRing<Complex<C>>(cfac, 2, to); //,vars); //tord?
+        GenPolynomialRing<Complex<C>> tfac = new GenPolynomialRing<Complex<C>>(cfac, 2, to); //,new vars); //tord?
         //System.out.println("tfac = " + tfac);
         GenPolynomial<Complex<C>> t = tfac.univariate(1, 1L).sum(
                         tfac.univariate(0, 1L).multiply(cfac.getIMAG()));

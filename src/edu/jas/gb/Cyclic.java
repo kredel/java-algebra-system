@@ -100,7 +100,7 @@ public class Cyclic {
 
     /**
      * Compute list of polynomials.
-     * @return Cyclic problem as list of polynomials.
+     * @return Cyclic problem as string of list of polynomials.
      */
     public String polyList() {
         return cyclicPolys(ring).toString().replace("[","(").replace("]",")");

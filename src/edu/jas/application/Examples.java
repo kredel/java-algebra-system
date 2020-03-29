@@ -92,8 +92,9 @@ public class Examples {
         L = new ArrayList<GenPolynomial<Product<Residue<BigRational>>>>();
 
         BigRational bfac = new BigRational(1);
+        String[] cvars = new String[] { "x", "y", "z" };
         GenPolynomialRing<BigRational> pfac = null;
-        pfac = new GenPolynomialRing<BigRational>(bfac, 3);
+        pfac = new GenPolynomialRing<BigRational>(bfac, cvars);
 
         List<GenPolynomial<BigRational>> F = null;
         F = new ArrayList<GenPolynomial<BigRational>>();
@@ -121,7 +122,7 @@ public class Examples {
 
         String[] vars = new String[] { "a", "b" };
         GenPolynomialRing<Product<Residue<BigRational>>> fac;
-        fac = new GenPolynomialRing<Product<Residue<BigRational>>>(pr, 2, vars);
+        fac = new GenPolynomialRing<Product<Residue<BigRational>>>(pr, vars);
 
         GenPolynomial<Product<Residue<BigRational>>> pp;
         for (int i = 0; i < 1; i++) {
@@ -157,8 +158,9 @@ public class Examples {
         L = new ArrayList<GenPolynomial<Residue<BigRational>>>();
 
         BigRational bfac = new BigRational(1);
+        String[] cvars = new String[] { "x", "y", "z" };
         GenPolynomialRing<BigRational> pfac = null;
-        pfac = new GenPolynomialRing<BigRational>(bfac, 2);
+        pfac = new GenPolynomialRing<BigRational>(bfac, cvars);
 
         List<GenPolynomial<BigRational>> F = null;
         F = new ArrayList<GenPolynomial<BigRational>>();
@@ -184,7 +186,7 @@ public class Examples {
 
         String[] vars = new String[] { "a", "b" };
         GenPolynomialRing<Residue<BigRational>> fac;
-        fac = new GenPolynomialRing<Residue<BigRational>>(rr, 2, vars);
+        fac = new GenPolynomialRing<Residue<BigRational>>(rr, vars);
 
         GenPolynomial<Residue<BigRational>> pp;
         for (int i = 0; i < 2; i++) {
@@ -229,9 +231,9 @@ public class Examples {
 
         BigRational coeff = new BigRational(kl);
         String[] cv = { "a", "b" };
-        cfac = new GenPolynomialRing<BigRational>(coeff, 2, cv);
+        cfac = new GenPolynomialRing<BigRational>(coeff, cv);
         String[] v = { "x", "y" };
-        fac = new GenPolynomialRing<GenPolynomial<BigRational>>(cfac, 2, v);
+        fac = new GenPolynomialRing<GenPolynomial<BigRational>>(cfac, v);
         bb = new ComprehensiveGroebnerBaseSeq<BigRational>(coeff);
 
         L = new ArrayList<GenPolynomial<GenPolynomial<BigRational>>>();
@@ -286,9 +288,9 @@ public class Examples {
 
         BigRational coeff = new BigRational(kl);
         String[] cv = { "a", "b" };
-        cfac = new GenPolynomialRing<BigRational>(coeff, 2, cv);
+        cfac = new GenPolynomialRing<BigRational>(coeff, cv);
         String[] v = { "x", "y" };
-        fac = new GenPolynomialRing<GenPolynomial<BigRational>>(cfac, 2, v);
+        fac = new GenPolynomialRing<GenPolynomial<BigRational>>(cfac, v);
         bb = new ComprehensiveGroebnerBaseSeq<BigRational>(coeff);
 
         L = new ArrayList<GenPolynomial<GenPolynomial<BigRational>>>();
