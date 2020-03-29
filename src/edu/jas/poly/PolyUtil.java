@@ -2199,10 +2199,10 @@ public class PolyUtil {
         GenPolynomial<GenPolynomial<C>> sr = PolyUtil.<GenPolynomial<C>>substituteUnivariate(fr,tr);
         //System.out.println("sr = " + sr);
         GenPolynomial<C> s = PolyUtil.<C>distribute(fac, sr);
-	return s;
+        return s;
     }
 
-	
+        
     /**
      * Taylor series for polynomial.
      * @param f univariate polynomial.
