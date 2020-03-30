@@ -87,16 +87,7 @@ partially resolved and completed issues:
 
 - check and fix Findbugs warnings
 
-- let arith implementations extend Power as abstract class
-  add divide, subtract, abs, remainder to Power, 
-  name e.g RingElemAbstract
-  clean structure of compareTo, signum and equals
-  - is not possible -> but in Java 8 with default implentations
-
 - make use of gcd in pseudo reduction, needs other coefficient type
-
-- define power(n) in RingElem (not done) and implement in edu.jas.structure.Power 
-  and classes, done
 
 - add product category to applications
 
@@ -114,7 +105,7 @@ partially resolved and completed issues:
 - add assertions to check for number of polynomial variables and term order,
   nvar in GenPolynomial and GenSolvablePolynomial, done
 
-- define quotientRemainder in RingElem interface (?)
+- define quotientRemainder in MonoidElem interface with default implementation, done
 
 - make final variables public (?)
 
@@ -182,7 +173,7 @@ resolved and completed issues:
 
 - develop modifiable polynomial constructor or put method and iterators
 
-- refactor unit tests to a different source code tree to avoid circular dependencys
+- refactor unit tests to a different source code tree to avoid circular dependencies
 
 - provide scripting interfaces for JAS, done
 
@@ -198,13 +189,23 @@ resolved and completed issues:
 
 - implement a global variable name generator in edu.jas.kern
   and use it in extend() and contract()
-  done in GenPolynomialRing
+  done in GenPolynomialRing, 
+  undone in 2020 to avoid memory waste
 
 - add missing comments in edu.jas.Algebra*, done
 
 - let inverse() throw a runtime exception, done; throw a checked exception (?, no)
 
 - refactor Power with Java 8 features, use lambdas and default implementations, done
+
+- let arith implementations extend Power as abstract class
+  add divide, subtract, abs, remainder to Power, 
+  name e.g RingElemAbstract
+  clean structure of compareTo, signum and equals
+  - is not possible -> but in Java 8 with default implentations, see next
+
+- define power(n) in MonoidElem with default implementation in
+  edu.jas.structure.Power class, done
 
 - split ModInteger to ModIntegerRing factory, done
 
