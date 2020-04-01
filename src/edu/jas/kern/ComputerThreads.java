@@ -18,11 +18,12 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * ComputerThreads, provides global thread / executor service.
+ * <p>
+ * <b>Usage:</b> To obtain a reference to the thread pool use
+ * <code>ComputerThreads.getPool()</code>. Once a pool has been created it must
+ * be shutdown with <code>ComputerThreads.terminate()</code> to exit JAS.
+ * </p>
  * @author Heinz Kredel
- * @usage To obtain a reference to the thread pool use
- *        <code>ComputerThreads.getPool()</code>. Once a pool has been created
- *        it must be shutdown to exit JAS with
- *        <code>ComputerThreads.terminate()</code>.
  */
 
 public class ComputerThreads {

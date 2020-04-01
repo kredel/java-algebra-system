@@ -11,8 +11,8 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigComplex;
 import edu.jas.arith.BigDecimal;
@@ -30,8 +30,8 @@ import edu.jas.arith.Roots;
 import edu.jas.structure.Element;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingElem;
-import edu.jas.structure.StarRingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.StarRingElem;
 import edu.jas.structure.UnaryFunctor;
 import edu.jas.util.ListUtil;
 
@@ -294,10 +294,10 @@ public class PolyUtil {
      * @return polynomial with BigInteger coefficients.
      */
     public static GenPolynomial<BigInteger> integerFromRationalCoefficients(GenPolynomialRing<BigInteger> fac,
-                                                   java.math.BigInteger gcd, java.math.BigInteger lcm,
-                                                   GenPolynomial<BigRational> A) {
+                    java.math.BigInteger gcd, java.math.BigInteger lcm, GenPolynomial<BigRational> A) {
         //System.out.println("gcd = " + gcd + ", lcm = " + lcm);
-        GenPolynomial<BigInteger> Ai = PolyUtil.<BigRational, BigInteger> map(fac, A, new RatToIntFactor(gcd, lcm));
+        GenPolynomial<BigInteger> Ai = PolyUtil.<BigRational, BigInteger> map(fac, A,
+                        new RatToIntFactor(gcd, lcm));
         return Ai;
     }
 
@@ -1555,9 +1555,8 @@ public class PolyUtil {
             if (c.isZERO()) {
                 //logger.warn("no exact division: " + c1 + "/" + s);
                 throw new ArithmeticException("no exact division: " + c1 + "/" + s);
-            } else {
-                pv.put(e, c); // or m1.setValue( c )
             }
+            pv.put(e, c); // or m1.setValue( c )
         }
         return p;
     }
@@ -1595,9 +1594,8 @@ public class PolyUtil {
             if (c.isZERO()) {
                 //logger.warn("no exact division: " + c1 + "/" + s);
                 throw new ArithmeticException("no exact division: " + c1 + "/" + s);
-            } else {
-                pv.put(e, c); // or m1.setValue( c )
             }
+            pv.put(e, c); // or m1.setValue( c )
         }
         return p;
     }
@@ -1800,7 +1798,7 @@ public class PolyUtil {
             //System.out.println("StarRingElem case");
             for (C c : p.val.values()) {
                 @SuppressWarnings("unchecked")
-                C n = (C)((StarRingElem)c).norm();
+                C n = (C) ((StarRingElem) c).norm();
                 a = a.sum(n);
             }
         } else {
@@ -1832,7 +1830,7 @@ public class PolyUtil {
         return a;
     }
 
-    
+
     /**
      * Evaluate at main variable.
      * @param <C> coefficient type.
@@ -1846,7 +1844,7 @@ public class PolyUtil {
         if (A == null || A.isZERO()) {
             return cfac.getZERO();
         }
-        if (A.ring.nvar != 1) { 
+        if (A.ring.nvar != 1) {
             throw new IllegalArgumentException("evaluateMain no univariate polynomial");
         }
         if (a == null || a.isZERO()) {
@@ -1861,12 +1859,12 @@ public class PolyUtil {
             ExpVector e = me.getKey();
             el2 = e.getVal(0);
             if (B == null /*el1 < 0*/) { // first turn
-                B = me.getValue(); 
+                B = me.getValue();
             } else {
                 for (long i = el2; i < el1; i++) {
                     B = B.multiply(a);
                 }
-                B = B.sum(me.getValue()); 
+                B = B.sum(me.getValue());
             }
             el1 = el2;
         }
@@ -1925,7 +1923,7 @@ public class PolyUtil {
         if (A == null || A.isZERO()) {
             return cfac.getZERO();
         }
-        if (A.ring.nvar != 1) { 
+        if (A.ring.nvar != 1) {
             throw new IllegalArgumentException("evaluateMain no univariate polynomial");
         }
         if (a == null || a.isZERO()) {
@@ -2047,9 +2045,10 @@ public class PolyUtil {
 
 
     /**
-     * Evaluate at first (lowest) variable.
-     * @param <C> coefficient type. Could also be called evaluateFirst(), but
-     *            type erasure of A parameter does not allow same name.
+     * Evaluate at first (lowest) variable. Could also be called
+     * <code>evaluateFirst()</code>, but type erasure of parameter
+     * <code>A</code> does not allow the same name.
+     * @param <C> coefficient type.
      * @param cfac coefficient polynomial ring in first variable C[x_1] factory.
      * @param dfac polynomial ring in n-1 variables. C[x_2, ..., x_n] factory.
      * @param A recursive polynomial to be evaluated.
@@ -2159,12 +2158,12 @@ public class PolyUtil {
             ExpVector e = me.getKey();
             el2 = e.getVal(0);
             if (s == null /*el1 < 0*/) { // first turn
-                s = fac.getZERO().sum(me.getValue()); 
+                s = fac.getZERO().sum(me.getValue());
             } else {
                 for (long i = el2; i < el1; i++) {
                     s = s.multiply(t);
                 }
-                s = s.sum(me.getValue()); 
+                s = s.sum(me.getValue());
             }
             el1 = el2;
         }
@@ -2189,20 +2188,20 @@ public class PolyUtil {
         }
         GenPolynomialRing<C> fac = f.ring;
         if (fac.nvar == 1) {
-            return substituteUnivariate(f,t);
+            return substituteUnivariate(f, t);
         }
         GenPolynomialRing<GenPolynomial<C>> rfac = fac.recursive(1);
-        GenPolynomial<GenPolynomial<C>> fr = PolyUtil.<C>recursive(rfac, f);
-        GenPolynomial<GenPolynomial<C>> tr = PolyUtil.<C>recursive(rfac, t);
+        GenPolynomial<GenPolynomial<C>> fr = PolyUtil.<C> recursive(rfac, f);
+        GenPolynomial<GenPolynomial<C>> tr = PolyUtil.<C> recursive(rfac, t);
         //System.out.println("fr = " + fr);
         //System.out.println("tr = " + tr);
-        GenPolynomial<GenPolynomial<C>> sr = PolyUtil.<GenPolynomial<C>>substituteUnivariate(fr,tr);
+        GenPolynomial<GenPolynomial<C>> sr = PolyUtil.<GenPolynomial<C>> substituteUnivariate(fr, tr);
         //System.out.println("sr = " + sr);
-        GenPolynomial<C> s = PolyUtil.<C>distribute(fac, sr);
+        GenPolynomial<C> s = PolyUtil.<C> distribute(fac, sr);
         return s;
     }
 
-        
+
     /**
      * Taylor series for polynomial.
      * @param f univariate polynomial.
@@ -2699,10 +2698,10 @@ public class PolyUtil {
     }
 
 
-   /**
-     * Intersection. Intersection of a list of word polynomials with a
-     * word polynomial ring. The polynomial ring must be a contraction
-     * of the polynomial ring of the list of polynomials,
+    /**
+     * Intersection. Intersection of a list of word polynomials with a word
+     * polynomial ring. The polynomial ring must be a contraction of the
+     * polynomial ring of the list of polynomials,
      * @param R word polynomial ring
      * @param F list of word polynomials
      * @return R \cap F
@@ -2713,7 +2712,7 @@ public class PolyUtil {
             return F;
         }
         GenWordPolynomialRing<C> pfac = F.get(0).ring;
-        assert pfac.alphabet.isSubFactory(R.alphabet) : "pfac=" + pfac.alphabet + ", R=" +R.alphabet;
+        assert pfac.alphabet.isSubFactory(R.alphabet) : "pfac=" + pfac.alphabet + ", R=" + R.alphabet;
         List<GenWordPolynomial<C>> H = new ArrayList<GenWordPolynomial<C>>(F.size());
         for (GenWordPolynomial<C> p : F) {
             if (p == null || p.isZERO()) {
@@ -2723,7 +2722,7 @@ public class PolyUtil {
             if (logger.isDebugEnabled()) {
                 logger.debug("intersect contract m = " + m);
             }
-            if (! m.isZERO()) {
+            if (!m.isZERO()) {
                 H.add(m);
             }
         }
@@ -2731,7 +2730,7 @@ public class PolyUtil {
         return H;
     }
 
-    
+
     /**
      * Remove all upper variables which do not occur in polynomial.
      * @param p polynomial.
@@ -3162,8 +3161,8 @@ class FromIntegerPoly<D extends RingElem<D>>
 
 
 /**
- * Conversion from GenPolynomial<BigRational> to GenPolynomial
- * <BigInteger> functor.
+ * Conversion from GenPolynomial<BigRational> to GenPolynomial <BigInteger>
+ * functor.
  */
 class RatToIntPoly implements UnaryFunctor<GenPolynomial<BigRational>, GenPolynomial<BigInteger>> {
 

@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.kern.Scripting;
@@ -42,14 +42,13 @@ import edu.jas.structure.RingFactory;
  * a relation table and the non-commutative multiplication relations between the
  * coefficients and the main variables are maintained in a coefficient relation
  * table. Almost immutable object, except variable names and relation table
- * contents.
- * @param <C> coefficient type.
+ * contents. Will be deprecated use <code>QLRSolvablePolynomialRing</code>
+ * @param <C> coefficient type
  * @author Heinz Kredel
- * will be deprecated use QLRSolvablePolynomialRing
  */
 
-public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>> extends
-                GenSolvablePolynomialRing<SolvableQuotient<C>> {
+public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>>
+                extends GenSolvablePolynomialRing<SolvableQuotient<C>> {
 
 
     /*
@@ -613,10 +612,10 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>> extends
      */
     @Override
     public QuotSolvablePolynomialRing<C> extend(int i) {
-        return extend(i,false);
+        return extend(i, false);
     }
 
-    
+
     /**
      * Extend variables. Used e.g. in module embedding. Extend number of
      * variables by i.
@@ -634,7 +633,7 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>> extends
         return spfac;
     }
 
-    
+
     /**
      * Extend variables. Used e.g. in module embedding. Extend number of
      * variables by i.
@@ -646,7 +645,7 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>> extends
         return extend(vn, false);
     }
 
-    
+
     /**
      * Extend variables. Used e.g. in module embedding. Extend number of
      * variables by i.
@@ -664,7 +663,7 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>> extends
         return spfac;
     }
 
-    
+
     /**
      * Contract variables. Used e.g. in module embedding. Contract number of
      * variables by i.

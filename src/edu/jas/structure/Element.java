@@ -10,11 +10,13 @@ import java.io.Serializable;
 
 /**
  * Element interface. Basic functionality of elements, e.g. compareTo, equals,
- * clone. 
- * <b>Note:</b> extension of <code>Cloneable</code> removed in
- * 2012-08-18, <code>clone()</code> is renamed to <code>copy()</code>.
- * @param <C> element type. See the discussion in 
- * <a href="http://www.artima.com/intv/bloch13.html">Bloch on Cloning</a>.
+ * clone.
+ * <p>
+ * <b>Note:</b> extension of <code>Cloneable</code> removed in 2012-08-18,
+ * <code>clone()</code> is renamed to <code>copy()</code>. See also the
+ * discussion in <a href="http://www.artima.com/intv/bloch13.html">Bloch on
+ * Cloning</a>.
+ * @param <C> element type.
  * @author Heinz Kredel
  */
 

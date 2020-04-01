@@ -30,31 +30,31 @@ import edu.jas.ufdroot.FactorRealAlgebraic;
 /**
  * Factorization algorithms factory. Select appropriate factorization engine
  * based on the coefficient types.
+ * <p>
+ * <b>Usage:</b> To create objects that implement the <code>Factorization</code>
+ * interface use the <code>FactorFactory</code>. It will select an appropriate
+ * implementation based on the types of polynomial coefficients C. To obtain an
+ * implementation use <code>getImplementation()</code>, it returns an object of
+ * a class which extends the <code>FactorAbstract</code> class which implements
+ * the <code>Factorization</code> interface.
+ * 
+ * <pre>
+ * Factorization&lt;CT&gt; engine;
+ * engine = FactorFactory.&lt;CT&gt; getImplementation(cofac);
+ * c = engine.factors(a);
+ * </pre>
+ * <p>
+ * For example, if the coefficient type is BigInteger, the usage looks like
+ * 
+ * <pre>
+ * BigInteger cofac = new BigInteger();
+ * Factorization&lt;BigInteger&gt; engine;
+ * engine = FactorFactory.getImplementation(cofac);
+ * Sm = engine.factors(poly);
+ * </pre>
+ * 
  * @author Heinz Kredel
- * @usage To create objects that implement the <code>Factorization</code>
- *        interface use the <code>FactorFactory</code>. It will select an
- *        appropriate implementation based on the types of polynomial
- *        coefficients C. To obtain an implementation use
- *        <code>getImplementation()</code>, it returns an object of a class
- *        which extends the <code>FactorAbstract</code> class which implements
- *        the <code>Factorization</code> interface.
- * 
- *        <pre>
- *        Factorization&lt;CT&gt; engine;
- *        engine = FactorFactory.&lt;CT&gt; getImplementation(cofac);
- *        c = engine.factors(a);
- *        </pre>
- * 
- *        For example, if the coefficient type is BigInteger, the usage looks
- *        like
- * 
- *        <pre>
- *        BigInteger cofac = new BigInteger();
- *        Factorization&lt;BigInteger&gt; engine;
- *        engine = FactorFactory.getImplementation(cofac);
- *        Sm = engine.factors(poly);
- *        </pre>
- * 
+ *
  * @see edu.jas.ufd.Factorization#factors(edu.jas.poly.GenPolynomial P)
  * @see edu.jas.ufd.FactorFactory#getImplementation(edu.jas.structure.RingFactory
  *      P)

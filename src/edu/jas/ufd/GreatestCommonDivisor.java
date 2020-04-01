@@ -5,8 +5,8 @@
 package edu.jas.ufd;
 
 
-import java.util.List;
 import java.io.Serializable;
+import java.util.List;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.GcdRingElem;
@@ -14,19 +14,22 @@ import edu.jas.structure.GcdRingElem;
 
 /**
  * Greatest common divisor algorithm interface.
- * @param <C> coefficient type
- * @author Heinz Kredel
- * @usage To create classes that implement this interface use the
- *        GreatestCommonDivisorFactory. It will select an appropriate
- *        implementation based on the types of polynomial coefficients CT.
+ * <p>
+ * <b>Usage:</b> To create classes that implement this interface use the
+ * GreatestCommonDivisorFactory. It will select an appropriate implementation
+ * based on the types of polynomial coefficients CT.
+ * <p>
  * 
  * <pre>
+ * 
  * GreatestCommonDivisor&lt;CT&gt; engine = GCDFactory.&lt;CT&gt; getImplementation(cofac);
  * c = engine.gcd(a, b);
  * </pre>
  * 
- * For example, if the coefficient type is BigInteger, the usage looks
- *        like
+ * <p>
+ * For example, if the coefficient type is BigInteger, the usage looks like
+ * 
+ * <p>
  * 
  * <pre>
  * BigInteger cofac = new BigInteger();
@@ -34,6 +37,7 @@ import edu.jas.structure.GcdRingElem;
  * c = engine.gcd(a, b);
  * </pre>
  * 
+ * @author Heinz Kredel
  * @see edu.jas.ufd.GCDFactory#getImplementation
  */
 
@@ -75,12 +79,13 @@ public interface GreatestCommonDivisor<C extends GcdRingElem<C>> extends Seriali
 
 
     /**
-     * GenPolynomial resultant.
-     * The input polynomials are considered as univariate polynomials in the main variable. 
+     * GenPolynomial resultant. The input polynomials are considered as
+     * univariate polynomials in the main variable.
      * @param P GenPolynomial.
      * @param S GenPolynomial.
      * @return res(P,S).
-     * @throws UnsupportedOperationException if there is no implementation in the sub-class.
+     * @throws UnsupportedOperationException if there is no implementation in
+     *             the sub-class.
      */
     public GenPolynomial<C> resultant(GenPolynomial<C> P, GenPolynomial<C> S);
 

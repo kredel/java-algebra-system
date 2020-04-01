@@ -5,8 +5,8 @@
 package edu.jas.fd;
 
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
@@ -22,41 +22,42 @@ import edu.jas.structure.RingFactory;
 /**
  * Solvable greatest common divisor algorithms factory. Select appropriate SGCD
  * engine based on the coefficient types.
+ * <p>
+ * <b>Usage:</b> To create objects that implement the
+ * <code>GreatestCommonDivisor</code> interface use the
+ * <code>SGCDFactory</code>. It will select an appropriate implementation based
+ * on the types of polynomial coefficients C. There are two methods to obtain an
+ * implementation: <code>getProxy()</code> and <code>getImplementation()</code>.
+ * <code>getImplementation()</code> returns an object of a class which
+ * implements the <code>GreatestCommonDivisor</code> interface.
+ * <code>getProxy()</code> returns a proxy object of a class which implements
+ * the <code>GreatestCommonDivisor</code> interface. The proxy will run two
+ * implementations in parallel, return the first computed result and cancel the
+ * second running task. On systems with one CPU the computing time will be two
+ * times the time of the fastest algorithm implementation. On systems with more
+ * than two CPUs the computing time will be the time of the fastest algorithm
+ * implementation.
+ * 
+ * <pre>
+ * GreatestCommonDivisor&lt;CT&gt; engine;
+ * engine = SGCDFactory.&lt;CT&gt; getImplementation(cofac);
+ * or engine = SGCDFactory.&lt;CT&gt; getProxy(cofac);
+ * c = engine.leftGcd(a, b);
+ * </pre>
+ * <p>
+ * For example, if the coefficient type is <code>BigInteger</code>, the usage
+ * looks like
+ * 
+ * <pre>
+ * BigInteger cofac = new BigInteger();
+ * GreatestCommonDivisor&lt;BigInteger&gt; engine;
+ * engine = SGCDFactory.getImplementation(cofac);
+ * or engine = SGCDFactory.getProxy(cofac);
+ * c = engine.leftGcd(a, b);
+ * </pre>
+ * 
  * @author Heinz Kredel
- * @usage To create objects that implement the
- *        <code>GreatestCommonDivisor</code> interface use the
- *        <code>GCDFactory</code>. It will select an appropriate implementation
- *        based on the types of polynomial coefficients C. There are two methods
- *        to obtain an implementation: <code>getProxy()</code> and
- *        <code>getImplementation()</code>. <code>getImplementation()</code>
- *        returns an object of a class which implements the
- *        <code>GreatestCommonDivisor</code> interface. <code>getProxy()</code>
- *        returns a proxy object of a class which implements the
- *        <code>GreatestCommonDivisor</code> interface. The proxy will run two
- *        implementations in parallel, return the first computed result and
- *        cancel the second running task. On systems with one CPU the computing
- *        time will be two times the time of the fastest algorithm
- *        implementation. On systems with more than two CPUs the computing time
- *        will be the time of the fastest algorithm implementation.
- * 
- *        <pre>
- *        GreatestCommonDivisor&lt;CT&gt; engine;
- *        engine = SGCDFactory.&lt;CT&gt; getImplementation(cofac);
- *        or engine = SGCDFactory.&lt;CT&gt; getProxy(cofac);
- *        c = engine.leftGcd(a, b);
- *        </pre>
- * 
- *        For example, if the coefficient type is <code>BigInteger</code>, the
- *        usage looks like
- * 
- *        <pre>
- *        BigInteger cofac = new BigInteger();
- *        GreatestCommonDivisor&lt;BigInteger&gt; engine;
- *        engine = SGCDFactory.getImplementation(cofac);
- *        or engine = SGCDFactory.getProxy(cofac);
- *        c = engine.leftGcd(a, b);
- *        </pre>
- * 
+ *
  * @see edu.jas.fd.GreatestCommonDivisor#leftGcd(edu.jas.poly.GenSolvablePolynomial
  *      P, edu.jas.poly.GenSolvablePolynomial S)
  */

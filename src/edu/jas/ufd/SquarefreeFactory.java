@@ -26,31 +26,30 @@ import edu.jas.structure.RingFactory;
 /**
  * Squarefree factorization algorithms factory. Select appropriate squarefree
  * factorization engine based on the coefficient types.
+ * <p>
+ * <b>Usage:</b> To create objects that implement the <code>Squarefree</code>
+ * interface use the <code>SquarefreeFactory</code>. It will select an
+ * appropriate implementation based on the types of polynomial coefficients C.
+ * To obtain an implementation use <code>getImplementation()</code>, it returns
+ * an object of a class which extends the <code>SquarefreeAbstract</code> class
+ * which implements the <code>Squarefree</code> interface.
+ * 
+ * <pre>
+ * Squarefree&lt;CT&gt; engine;
+ * engine = SquarefreeFactory.&lt;CT&gt; getImplementation(cofac);
+ * c = engine.squarefreeFactors(a);
+ * </pre>
+ * 
+ * For example, if the coefficient type is BigInteger, the usage looks like
+ * 
+ * <pre>
+ * BigInteger cofac = new BigInteger();
+ * Squarefree&lt;BigInteger&gt; engine;
+ * engine = SquarefreeFactory.getImplementation(cofac);
+ * Sm = engine.sqaurefreeFactors(poly);
+ * </pre>
+ * 
  * @author Heinz Kredel
- * @usage To create objects that implement the <code>Squarefree</code> interface
- *        use the <code>SquarefreeFactory</code>. It will select an appropriate
- *        implementation based on the types of polynomial coefficients C. To
- *        obtain an implementation use <code>getImplementation()</code>, it
- *        returns an object of a class which extends the
- *        <code>SquarefreeAbstract</code> class which implements the
- *        <code>Squarefree</code> interface.
- * 
- *        <pre>
- *        Squarefree&lt;CT&gt; engine;
- *        engine = SquarefreeFactory.&lt;CT&gt; getImplementation(cofac);
- *        c = engine.squarefreeFactors(a);
- *        </pre>
- * 
- *        For example, if the coefficient type is BigInteger, the usage looks
- *        like
- * 
- *        <pre>
- *        BigInteger cofac = new BigInteger();
- *        Squarefree&lt;BigInteger&gt; engine;
- *        engine = SquarefreeFactory.getImplementation(cofac);
- *        Sm = engine.sqaurefreeFactors(poly);
- *        </pre>
- * 
  * @see edu.jas.ufd.Squarefree#squarefreeFactors(edu.jas.poly.GenPolynomial P)
  */
 
@@ -184,7 +183,7 @@ public class SquarefreeFactory {
      * @param <C> coefficient type, e.g. BigRational, ModInteger.
      * @return squarefree factorization algorithm implementation.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     protected static <C extends GcdRingElem<C>> SquarefreeAbstract<C> getImplementationPoly(
                     GenPolynomialRing<C> fac) {
         if (fac.characteristic().signum() == 0) {
@@ -220,7 +219,7 @@ public class SquarefreeFactory {
      * @param fac RingFactory&lt;C&gt;.
      * @return squarefree factorization algorithm implementation.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public static <C extends GcdRingElem<C>> SquarefreeAbstract<C> getImplementation(RingFactory<C> fac) {
         //logger.info("fac = " + fac.getClass().getName());
         //System.out.println("fac_o = " + fac.getClass().getName());

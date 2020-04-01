@@ -5,8 +5,8 @@
 package edu.jas.gbufd;
 
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
@@ -40,34 +40,32 @@ import edu.jas.ufd.QuotientRing;
 /**
  * Solvable Groebner bases algorithms factory. Select appropriate Solvable
  * Groebner bases engine based on the coefficient types.
- * @author Heinz Kredel
- * @usage To create objects that implement the <code>SolvableGroebnerBase</code>
- *        interface use the <code>SGBFactory</code>. It will select an
- *        appropriate implementation based on the types of polynomial
- *        coefficients C. The method to obtain an implementation is
- *        <code>getImplementation()</code>. It returns an object of a class
- *        which implements the <code>SolvableGroebnerBase</code> interface, more
- *        precisely an object of abstract class
- *        <code>SolvableGroebnerBaseAbstract</code>.
+ * <p>
+ * <b>Usage:</b> To create objects that implement the
+ * <code>SolvableGroebnerBase</code> interface use the <code>SGBFactory</code>.
+ * It will select an appropriate implementation based on the types of polynomial
+ * coefficients C. The method to obtain an implementation is
+ * <code>getImplementation()</code>. It returns an object of a class which
+ * implements the <code>SolvableGroebnerBase</code> interface, more precisely an
+ * object of abstract class <code>SolvableGroebnerBaseAbstract</code>.
  * 
- *        <pre>
- * 
+ * <pre>
  * SolvableGroebnerBase&lt;CT&gt; engine;
  * engine = SGBFactory.&lt;CT&gt; getImplementation(cofac);
  * c = engine.GB(A);
  * </pre>
+ * <p>
+ * For example, if the coefficient type is BigInteger, the usage looks like
  * 
- *        For example, if the coefficient type is BigInteger, the usage looks
- *        like
- * 
- *        <pre>
- * 
+ * <pre>
  * BigInteger cofac = new BigInteger();
  * SolvableGroebnerBase&lt;BigInteger&gt; engine;
  * engine = SGBFactory.getImplementation(cofac);
  * c = engine.GB(A);
  * </pre>
  * 
+ * @author Heinz Kredel
+ *
  * @see edu.jas.gb.GroebnerBase
  * @see edu.jas.gb.SolvableGroebnerBase
  * @see edu.jas.application.GBAlgorithmBuilder
@@ -172,7 +170,8 @@ public class SGBFactory {
      * @param a algorithm, a = igb, egb, dgb.
      * @return GB algorithm implementation.
      */
-    public static SolvableGroebnerBaseAbstract<BigInteger> getImplementation(BigInteger fac, GBFactory.Algo a) {
+    public static SolvableGroebnerBaseAbstract<BigInteger> getImplementation(BigInteger fac,
+                    GBFactory.Algo a) {
         return getImplementation(fac, a, new OrderedPairlist<BigInteger>());
     }
 
@@ -196,8 +195,8 @@ public class SGBFactory {
      * @param pl pair selection strategy
      * @return GB algorithm implementation.
      */
-    public static SolvableGroebnerBaseAbstract<BigInteger> getImplementation(BigInteger fac,
-                    GBFactory.Algo a, PairList<BigInteger> pl) {
+    public static SolvableGroebnerBaseAbstract<BigInteger> getImplementation(BigInteger fac, GBFactory.Algo a,
+                    PairList<BigInteger> pl) {
         SolvableGroebnerBaseAbstract<BigInteger> bba;
         switch (a) {
         case igb:
@@ -275,8 +274,8 @@ public class SGBFactory {
             //bba = new SolvableGroebnerBaseRational<BigRational>(pli); // pl not possible
             //break;
         default:
-            throw new IllegalArgumentException("algorithm not available for " + fac.toScriptFactory()
-                            + ", Algo = " + a);
+            throw new IllegalArgumentException(
+                            "algorithm not available for " + fac.toScriptFactory() + ", Algo = " + a);
         }
         return bba;
     }
@@ -471,7 +470,7 @@ public class SGBFactory {
     public static <C extends GcdRingElem<C>> // interface RingElem not sufficient 
     SolvableGroebnerBaseAbstract<C> getImplementation(RingFactory<C> fac, PairList<C> pl) {
         if (debug) {
-           logger.debug("fac = " + fac.getClass().getName()); // + ", fac = " + fac.toScript());
+            logger.debug("fac = " + fac.getClass().getName()); // + ", fac = " + fac.toScript());
         }
         if (fac.isField()) {
             return new SolvableGroebnerBaseSeq<C>(pl);

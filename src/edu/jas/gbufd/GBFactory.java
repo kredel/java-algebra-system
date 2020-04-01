@@ -42,34 +42,32 @@ import edu.jas.ufd.QuotientRing;
 /**
  * Groebner bases algorithms factory. Select appropriate Groebner bases engine
  * based on the coefficient types.
+ * <p>
+ * <b>Usage:</b> To create objects that implement the <code>GroebnerBase</code>
+ * interface use the <code>GBFactory</code>. It will select an appropriate
+ * implementation based on the types of polynomial coefficients C. The method to
+ * obtain an implementation is <code>getImplementation()</code>.
+ * <code>getImplementation()</code> returns an object of a class which
+ * implements the <code>GroebnerBase</code> interface, more precisely an object
+ * of abstract class <code>GroebnerBaseAbstract</code>.
+ * 
+ * <pre>
+ * GroebnerBase&lt;CT&gt; engine;
+ * engine = GBFactory.&lt;CT&gt; getImplementation(cofac);
+ * c = engine.GB(A);
+ * </pre>
+ * <p>
+ * For example, if the coefficient type is BigInteger, the usage looks like
+ * 
+ * <pre>
+ * BigInteger cofac = new BigInteger();
+ * GroebnerBase&lt;BigInteger&gt; engine;
+ * engine = GBFactory.getImplementation(cofac);
+ * c = engine.GB(A);
+ * </pre>
+ * 
  * @author Heinz Kredel
- * @usage To create objects that implement the <code>GroebnerBase</code>
- *        interface use the <code>GBFactory</code>. It will select an
- *        appropriate implementation based on the types of polynomial
- *        coefficients C. The method to obtain an implementation is
- *        <code>getImplementation()</code>. <code>getImplementation()</code>
- *        returns an object of a class which implements the
- *        <code>GroebnerBase</code> interface, more precisely an object of
- *        abstract class <code>GroebnerBaseAbstract</code>.
- * 
- *        <pre>
- * 
- *        GroebnerBase&lt;CT&gt; engine;
- *        engine = GBFactory.&lt;CT&gt; getImplementation(cofac);
- *        c = engine.GB(A);
- *        </pre>
- * 
- *        For example, if the coefficient type is BigInteger, the usage looks
- *        like
- * 
- *        <pre>
- * 
- *        BigInteger cofac = new BigInteger();
- *        GroebnerBase&lt;BigInteger&gt; engine;
- *        engine = GBFactory.getImplementation(cofac);
- *        c = engine.GB(A);
- *        </pre>
- * 
+ *
  * @see edu.jas.gb.GroebnerBase
  * @see edu.jas.application.GBAlgorithmBuilder
  */

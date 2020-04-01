@@ -15,15 +15,14 @@ import edu.jas.structure.GcdRingElem;
 
 /**
  * Squarefree decomposition interface.
- * @param <C> coefficient type
- * @author Heinz Kredel
- * @usage To create objects that implement the <code>Squarefree</code>
- *        interface use the <code>SquarefreeFactory</code>. It will select an
- *        appropriate implementation based on the types of polynomial
- *        coefficients C. To obtain an implementation use
- *        <code>getImplementation()</code>, it returns an object of a class
- *        which extends the <code>SquarefreeAbstract</code> class which
- *        implements the <code>Squarefree</code> interface.
+ * <p>
+ * <b>Usage:</b> To create objects that implement the <code>Squarefree</code>
+ * interface use the <code>SquarefreeFactory</code>. It will select an
+ * appropriate implementation based on the types of polynomial coefficients C.
+ * To obtain an implementation use <code>getImplementation()</code>, it returns
+ * an object of a class which extends the <code>SquarefreeAbstract</code> class
+ * which implements the <code>Squarefree</code> interface.
+ * <p>
  * 
  * <pre>
  * Squarefree&lt;CT&gt; engine;
@@ -31,7 +30,10 @@ import edu.jas.structure.GcdRingElem;
  * c = engine.squarefreeFactors(a);
  * </pre>
  * 
+ * <p>
  * For example, if the coefficient type is BigInteger, the usage looks like
+ * 
+ * <p>
  * 
  * <pre>
  * BigInteger cofac = new BigInteger();
@@ -40,6 +42,7 @@ import edu.jas.structure.GcdRingElem;
  * Sm = engine.sqaurefreeFactors(poly);
  * </pre>
  * 
+ * @author Heinz Kredel
  * @see edu.jas.ufd.SquarefreeFactory#getImplementation
  */
 
@@ -121,8 +124,8 @@ public interface Squarefree<C extends GcdRingElem<C>> extends Serializable {
     /**
      * Test if list of GenPolynomials is squarefree and co-prime.
      * @param B list of GenPolynomials.
-     * @return true, if for all b != c in B gcd(b,c) = 1 and 
-     *          each b in B is squarefree, else false. 
+     * @return true, if for all b != c in B gcd(b,c) = 1 and each b in B is
+     *         squarefree, else false.
      */
     public boolean isCoPrimeSquarefree(List<GenPolynomial<C>> B);
 

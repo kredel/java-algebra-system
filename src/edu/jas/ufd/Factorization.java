@@ -15,22 +15,22 @@ import edu.jas.structure.GcdRingElem;
 
 /**
  * Factorization algorithms interface.
- * @usage To create objects that implement the <code>Factorization</code>
- *        interface use the <code>FactorFactory</code>. It will select an
- *        appropriate implementation based on the types of polynomial
- *        coefficients C. To obtain an implementation use
- *        <code>getImplementation()</code>, it returns an object of a class
- *        which extends the <code>FactorAbstract</code> class which implements
- *        the <code>Factorization</code> interface.
+ * <p>
+ * <b>Usage:</b> To create objects that implement the <code>Factorization</code>
+ * interface use the <code>FactorFactory</code>. It will select an appropriate
+ * implementation based on the types of polynomial coefficients C. To obtain an
+ * implementation use <code>getImplementation()</code>, it returns an object of
+ * a class which extends the <code>FactorAbstract</code> class which implements
+ * the <code>Factorization</code> interface.
+ * <p>
  * 
  * <pre>
  * Factorization&lt;CT&gt; engine;
  * engine = FactorFactory.&lt;CT&gt; getImplementation(cofac);
  * c = engine.factors(a);
  * </pre>
- * 
- * For example, if the coefficient type is BigInteger, the usage looks
- *        like
+ * <p>
+ * For example, if the coefficient type is BigInteger, the usage looks like
  * 
  * <pre>
  * BigInteger cofac = new BigInteger();
@@ -39,9 +39,8 @@ import edu.jas.structure.GcdRingElem;
  * Sm = engine.factors(poly);
  * </pre>
  * 
- * @see edu.jas.ufd.FactorFactory#getImplementation
  * @author Heinz Kredel
- * @param <C> coefficient type
+ * @see edu.jas.ufd.FactorFactory#getImplementation
  */
 
 public interface Factorization<C extends GcdRingElem<C>> extends Serializable {
@@ -82,7 +81,8 @@ public interface Factorization<C extends GcdRingElem<C>> extends Serializable {
     /**
      * GenPolynomial factorization.
      * @param P GenPolynomial.
-     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k} p_i**e_i.
+     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k}
+     *         p_i**e_i.
      */
     public SortedMap<GenPolynomial<C>, Long> factors(GenPolynomial<C> P);
 
@@ -90,7 +90,8 @@ public interface Factorization<C extends GcdRingElem<C>> extends Serializable {
     /**
      * GenPolynomial factorization ignoring multiplicities.
      * @param P GenPolynomial.
-     * @return [p_1, ..., p_k] with P = prod_{i=1,...,k} p_i**{e_i} for some e_i.
+     * @return [p_1, ..., p_k] with P = prod_{i=1,...,k} p_i**{e_i} for some
+     *         e_i.
      */
     public List<GenPolynomial<C>> factorsRadical(GenPolynomial<C> P);
 
@@ -106,8 +107,8 @@ public interface Factorization<C extends GcdRingElem<C>> extends Serializable {
     /**
      * GenPolynomial squarefree factorization.
      * @param P GenPolynomial.
-     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k} p_i^{e_i}
-     *         and p_i squarefree.
+     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k}
+     *         p_i^{e_i} and p_i squarefree.
      */
     public SortedMap<GenPolynomial<C>, Long> squarefreeFactors(GenPolynomial<C> P);
 
