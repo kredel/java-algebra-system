@@ -8,13 +8,13 @@ package edu.jas.poly;
 import java.util.HashSet;
 import java.util.Set;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import edu.jas.arith.BigRational;
 // import edu.jas.structure.RingElem;
 import edu.jas.structure.NotInvertibleException;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -164,14 +164,14 @@ public class AlgebraicNumberTest extends TestCase {
 
         c = fac.getZERO().sum(a);
         d = fac.getZERO().subtract(a.negate());
-        assertEquals("0+a = 0+(-a)", c, d);
+        assertEquals("0+a = 0-(-a)", c, d);
     }
 
 
     /**
      * Test object multiplication.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "cast" })
     public void testMultiplication() {
         a = fac.random(ll);
         assertTrue("not isZERO( a )", !a.isZERO());

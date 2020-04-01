@@ -7,10 +7,6 @@ package edu.jas.ufd;
 
 import java.util.SortedMap;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.Complex;
@@ -19,6 +15,10 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.TermOrderByName;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -94,7 +94,7 @@ public class FactorComplexTest extends TestCase {
         BigRational rfac = new BigRational(1);
         ComplexRing<BigRational> cfac = new ComplexRing<BigRational>(rfac);
         GenPolynomialRing<Complex<BigRational>> cpfac = new GenPolynomialRing<Complex<BigRational>>(cfac, 1,
-                                                                                                    to);
+                        to);
         //System.out.println("cfac  = " + cfac);
         //System.out.println("cpfac = " + cpfac);
 
@@ -145,7 +145,7 @@ public class FactorComplexTest extends TestCase {
         BigRational rfac = new BigRational(1);
         ComplexRing<BigRational> cfac = new ComplexRing<BigRational>(rfac);
         GenPolynomialRing<Complex<BigRational>> cpfac = new GenPolynomialRing<Complex<BigRational>>(cfac, 1,
-                                                                                                    to);
+                        to);
         //System.out.println("cfac  = " + cfac);
         //System.out.println("cpfac = " + cpfac);
 
@@ -192,7 +192,7 @@ public class FactorComplexTest extends TestCase {
         BigRational rfac = new BigRational(1);
         ComplexRing<BigRational> cfac = new ComplexRing<BigRational>(rfac);
         GenPolynomialRing<Complex<BigRational>> cpfac = new GenPolynomialRing<Complex<BigRational>>(cfac, 2,
-                                                                                                    to);
+                        to);
         //System.out.println("cfac  = " + cfac);
         //System.out.println("cpfac = " + cpfac);
 
@@ -235,17 +235,17 @@ public class FactorComplexTest extends TestCase {
 
 
     /**
-     * Test bivariate complex factorization.
-     * Example from issue 10: https://github.com/kredel/java-algebra-system/issues/10
+     * Test bivariate complex factorization. Example from issue 10:
+     * https://github.com/kredel/java-algebra-system/issues/10
      */
     public void testComplexFactor() {
-        final int variableSize=2;
         ComplexRing<BigRational> cfac = new ComplexRing<BigRational>(BigRational.ZERO);
-        GenPolynomialRing<Complex<BigRational>> cpfac = new GenPolynomialRing<Complex<BigRational>>(cfac, new String[] {"x1", "x0" }, TermOrderByName.INVLEX);
+        GenPolynomialRing<Complex<BigRational>> cpfac = new GenPolynomialRing<Complex<BigRational>>(cfac,
+                        new String[] { "x1", "x0" }, TermOrderByName.INVLEX);
         // GenPolynomial<Complex<BigRational>> a = cpfac.parse("x1^2 + x0^2") ; 
         // GenPolynomial<Complex<BigRational>> a = cpfac.parse("x1^4 + x0^4") ; 
         // GenPolynomial<Complex<BigRational>> a = cpfac.parse("x1^8 + x0^8") ; 
-        GenPolynomial<Complex<BigRational>> a = cpfac.parse("x1^12 - x0^12") ; 
+        GenPolynomial<Complex<BigRational>> a = cpfac.parse("x1^12 - x0^12");
         FactorComplex<BigRational> factorAbstract = new FactorComplex<BigRational>(cfac);
         //System.out.println("factorAbstract = " + factorAbstract);
         //System.out.println("factorFac      = " + FactorFactory.getImplementation(cfac));
@@ -255,7 +255,7 @@ public class FactorComplexTest extends TestCase {
             if (entry.getKey().isONE() && entry.getValue().equals(1L)) {
                 continue;
             }
-	    assertTrue("degree <= 2 ", entry.getKey().degree() <= 2);
+            assertTrue("degree <= 2 ", entry.getKey().degree() <= 2);
             // System.out.print(" ( " + entry.getKey().toScript() + " )");
             // if (!entry.getValue().equals(1L)) {
             //     System.out.print(" ^ " + entry.getValue());

@@ -5,11 +5,11 @@
 package edu.jas.poly;
 
 
+import edu.jas.arith.BigRational;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import edu.jas.arith.BigRational;
 
 
 /**
@@ -175,7 +175,7 @@ public class ANumGenPolynomialTest extends TestCase {
 
         c = fac.getZERO().sum(a);
         d = fac.getZERO().subtract(a.negate());
-        assertEquals("0+a = 0+(-a)", c, d);
+        assertEquals("0+a = 0-(-a)", c, d);
     }
 
 
