@@ -17,6 +17,8 @@ import edu.jas.util.RemoteExecutable;
 /**
  * Setup to run a distributed GB example.
  * @author Heinz Kredel
+ * @see edu.jas.application.RunGB
+ * @see edu.jas.application.RunSGB
  * TODO: to deprecate
  */
 

@@ -14,8 +14,8 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -25,7 +25,7 @@ import edu.jas.structure.RingElem;
 
 /**
  * Pair list management. The original Buchberger algorithm with criterions
- * following Winkler in SAC-1, Kredelin ALDES/SAC-2, Kredel in MAS. Implemented
+ * following Winkler in SAC-1, Kredel in ALDES/SAC-2, Kredel in MAS. Implemented
  * using GenPolynomial, TreeMap and BitSet.
  * @author Heinz Kredel
  */

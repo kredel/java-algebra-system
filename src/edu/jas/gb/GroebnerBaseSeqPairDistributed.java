@@ -38,7 +38,9 @@ import edu.jas.util.Terminator;
  * if new polynomials appear.
  * @param <C> coefficient type
  * @author Heinz Kredel
- * @deprecated no direct alternative, use GroebnerBaseDistributedEC
+ * @deprecated no direct alternative 
+ * @see edu.jas.gb.GroebnerBaseDistributedEC
+ * @see edu.jas.gb.GroebnerBaseDistributedHybridEC
  */
 @Deprecated
 public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends GroebnerBaseAbstract<C> {
