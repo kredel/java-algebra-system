@@ -10,8 +10,8 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.structure.NotInvertibleException;
 import edu.jas.structure.RegularRingElem;
@@ -219,7 +219,7 @@ public class Product<C extends RingElem<C>> implements RegularRingElem<Product<C
         // Python case
         StringBuffer s = new StringBuffer("( ");
         boolean first = true;
-        for (Map.Entry<Integer,C> me : val.entrySet()) {
+        for (Map.Entry<Integer, C> me : val.entrySet()) {
             Integer i = me.getKey();
             C v = me.getValue();
             if (first) {
@@ -346,7 +346,7 @@ public class Product<C extends RingElem<C>> implements RegularRingElem<Product<C
      */
     public Product<C> abs() {
         SortedMap<Integer, C> elem = new TreeMap<Integer, C>();
-        for (Map.Entry<Integer,C> e : val.entrySet()) {
+        for (Map.Entry<Integer, C> e : val.entrySet()) {
             Integer i = e.getKey();
             C v = e.getValue().abs();
             elem.put(i, v);
@@ -395,7 +395,7 @@ public class Product<C extends RingElem<C>> implements RegularRingElem<Product<C
      */
     public Product<C> negate() {
         SortedMap<Integer, C> elem = new TreeMap<Integer, C>();
-        for (Map.Entry<Integer,C> me : val.entrySet()) {
+        for (Map.Entry<Integer, C> me : val.entrySet()) {
             Integer i = me.getKey();
             C v = me.getValue().negate();
             elem.put(i, v);
@@ -439,7 +439,7 @@ public class Product<C extends RingElem<C>> implements RegularRingElem<Product<C
         }
         int isu = 0;
         SortedMap<Integer, C> elem = new TreeMap<Integer, C>();
-        for (Map.Entry<Integer,C> me : val.entrySet()) {
+        for (Map.Entry<Integer, C> me : val.entrySet()) {
             Integer i = me.getKey();
             C x = me.getValue(); // is non zero
             try {
@@ -616,7 +616,7 @@ public class Product<C extends RingElem<C>> implements RegularRingElem<Product<C
         }
         SortedMap<Integer, C> elem = new TreeMap<Integer, C>();
         SortedMap<Integer, C> sel = S.val;
-        for (Map.Entry<Integer,C> me : val.entrySet()) {
+        for (Map.Entry<Integer, C> me : val.entrySet()) {
             Integer i = me.getKey();
             C y = sel.get(i);
             if (y != null) {
@@ -655,7 +655,7 @@ public class Product<C extends RingElem<C>> implements RegularRingElem<Product<C
         }
         SortedMap<Integer, C> elem = new TreeMap<Integer, C>();
         SortedMap<Integer, C> sel = S.val;
-        for (Map.Entry<Integer,C> me : val.entrySet()) {
+        for (Map.Entry<Integer, C> me : val.entrySet()) {
             Integer i = me.getKey();
             C y = sel.get(i);
             if (y != null) {
@@ -698,7 +698,7 @@ public class Product<C extends RingElem<C>> implements RegularRingElem<Product<C
         }
         SortedMap<Integer, C> elem = new TreeMap<Integer, C>();
         SortedMap<Integer, C> sel = S.val;
-        for (Map.Entry<Integer,C> me : val.entrySet()) {
+        for (Map.Entry<Integer, C> me : val.entrySet()) {
             Integer i = me.getKey();
             C y = sel.get(i);
             if (y != null) {
@@ -720,7 +720,7 @@ public class Product<C extends RingElem<C>> implements RegularRingElem<Product<C
      */
     public Product<C> multiply(C c) {
         SortedMap<Integer, C> elem = new TreeMap<Integer, C>();
-        for (Map.Entry<Integer,C> me : val.entrySet()) {
+        for (Map.Entry<Integer, C> me : val.entrySet()) {
             Integer i = me.getKey();
             C v = me.getValue().multiply(c);
             if (v != null && !v.isZERO()) {
@@ -771,7 +771,7 @@ public class Product<C extends RingElem<C>> implements RegularRingElem<Product<C
      */
     @SuppressWarnings("unchecked")
     public Product<C>[] egcd(Product<C> S) {
-        Product<C>[] ret = (Product<C>[]) new Product[3];
+        Product<C>[] ret = new Product[3];
         ret[0] = null;
         ret[1] = null;
         ret[2] = null;

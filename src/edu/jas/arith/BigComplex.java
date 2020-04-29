@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.StringUtil;
 import edu.jas.structure.GcdRingElem;
@@ -26,8 +26,8 @@ import edu.jas.structure.StarRingElem;
  * static methods are also provided.
  * @author Heinz Kredel
  */
-public final class BigComplex implements StarRingElem<BigComplex>, GcdRingElem<BigComplex>,
-                                         RingFactory<BigComplex> {
+public final class BigComplex
+                implements StarRingElem<BigComplex>, GcdRingElem<BigComplex>, RingFactory<BigComplex> {
 
 
     /**
@@ -597,12 +597,12 @@ public final class BigComplex implements StarRingElem<BigComplex>, GcdRingElem<B
     /**
      * Complex number absolute value.
      * @see edu.jas.structure.RingElem#abs()
-     * @return |this|. 
+     * @return |this|.
      */
     public BigComplex abs() {
         BigComplex n = norm();
         BigRational r = Roots.sqrt(n.re);
-        //logger.error("abs() square root missing " + r);
+        logger.debug("abs() square root approximaton {}", r);
         return new BigComplex(r);
     }
 
@@ -642,8 +642,8 @@ public final class BigComplex implements StarRingElem<BigComplex>, GcdRingElem<B
      * @return this*B.
      */
     public BigComplex multiply(BigComplex B) {
-        return new BigComplex(re.multiply(B.re).subtract(im.multiply(B.im)), re.multiply(B.im).sum(
-                                                                                                   im.multiply(B.re)));
+        return new BigComplex(re.multiply(B.re).subtract(im.multiply(B.im)),
+                        re.multiply(B.im).sum(im.multiply(B.re)));
     }
 
 

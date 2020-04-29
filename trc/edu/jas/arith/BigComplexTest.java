@@ -66,7 +66,6 @@ public class BigComplexTest extends TestCase {
 
     /**
      * Test static initialization and constants.
-     * 
      */
     public void testConstants() {
         a = BigComplex.ZERO;
@@ -107,7 +106,6 @@ public class BigComplexTest extends TestCase {
 
     /**
      * Test constructor and toString.
-     * 
      */
     public void testConstructor() {
         a = new BigComplex("6/8");
@@ -137,7 +135,6 @@ public class BigComplexTest extends TestCase {
 
     /**
      * Test random rationals.
-     * 
      */
     public void testRandom() {
         a = BigComplex.CRAND(500);
@@ -153,7 +150,6 @@ public class BigComplexTest extends TestCase {
 
     /**
      * Test addition.
-     * 
      */
     public void testAddition() {
         a = BigComplex.CRAND(100);
@@ -179,7 +175,6 @@ public class BigComplexTest extends TestCase {
 
     /**
      * Test multiplication.
-     * 
      */
     public void testMultiplication() {
         a = BigComplex.CRAND(100);
@@ -209,11 +204,9 @@ public class BigComplexTest extends TestCase {
 
     /**
      * Test distributive law.
-     * 
      */
     public void testDistributive() {
         BigComplex fac = new BigComplex();
-
         a = fac.random(500);
         b = fac.random(500);
         c = fac.random(500);
@@ -222,6 +215,30 @@ public class BigComplexTest extends TestCase {
         e = a.multiply(b).sum(a.multiply(c));
 
         assertEquals("a(b+c) = ab+ac", d, e);
+    }
+
+
+    /**
+     * Test power and abs.
+     */
+    public void testOther() {
+        BigComplex fac = new BigComplex();
+        a = fac.random(100);
+        b = a.multiply(a);
+        c = a.power(2);
+
+        assertEquals("a*a == a**2", b, c);
+
+        d = b.abs();
+        c = b.norm();
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+        //System.out.println("c = " + c);
+        //System.out.println("d = " + d);
+        BigDecimal dd = new BigDecimal(d.re);
+        BigDecimal cd = new BigDecimal(c.re);
+        int t = dd.power(2).compareToRelative(cd);
+        assertTrue("abs(a)**2 ~= norm(a): ", t == 0);
     }
 
 }
