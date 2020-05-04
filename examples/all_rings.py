@@ -483,6 +483,37 @@ print "l7 = " + str(l7);
 print;
 
 
+print "------- PolyRing( RF(PolyRing(ZZ(),\"a,b,c\",PolyRing.lex)), \"x,y,z\") ---------";
+r = PolyRing(ZZ(),"a,b,c",PolyRing.lex);
+print "r = " + str(r);
+rf = RF(r);
+print "rf = " + str(rf.factory());
+pf = PolyRing(rf, "x,y,z"); 
+print "pf = " + str(pf);
+[one,a,b,c,x,y,z] = pf.gens();
+print "one   = " + str(one);
+print "a     = " + str(a);
+print "b     = " + str(b);
+print "c     = " + str(c);
+print "x     = " + str(x);
+print "y     = " + str(y);
+print "z     = " + str(z);
+q1 = a / b + x;
+print "q1 = " + str(q1);
+q2 = ( -2 * c**2 + 4 * b**2 + 4 * a**2 - 7 ) * y**2 - x / c;
+print "q2 = " + str(q2);
+q3 = ( -7 * b + 4 * a + 12 ) + z;
+print "q3 = " + str(q3);
+q4 = q2 / q3;
+print "q4 = " + str(q4);
+q5 = ( 2 * c**2 - 4 * b**2 - 4 * a**2 + 7 + x * z ) / (7 * b - 4 * a - 12 ) + y**2;
+print "q5 = " + str(q5);
+print "q5.factory() = " + str(q5.factory());
+q6 = q5.monic();
+print "q6 = " + str(q6);
+print;
+
+
 print "------- RR( [QQ(),ZM(19),DD()] ) ---------";
 r = RR( [QQ(),ZM(19),DD()] );
 print "r = " + str(r);

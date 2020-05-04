@@ -488,6 +488,37 @@ puts "l7 = " + str(l7);
 puts;
 
 
+puts "------- PolyRing( RF(PolyRing(ZZ(),\"a,b,c\",PolyRing.lex)), \"x,y,z\") ---------";
+r = PolyRing.new(ZZ(),"a,b,c",PolyRing.lex);
+puts "r = " + str(r);
+rf = RF(r);
+puts "rf = " + str(rf.factory());
+pf = PolyRing.new(rf, "x,y,z"); 
+puts "pf = " + str(pf);
+one,a,b,c,x,y,z = pf.gens();
+puts "one   = " + str(one);
+puts "a     = " + str(a);
+puts "b     = " + str(b);
+puts "c     = " + str(c);
+puts "x     = " + str(x);
+puts "y     = " + str(y);
+puts "z     = " + str(z);
+q1 = a / b + x;
+puts "q1 = " + str(q1);
+q2 = ( -2 * c**2 + 4 * b**2 + 4 * a**2 - 7 ) * y**2 - x / c;
+puts "q2 = " + str(q2);
+q3 = ( -7 * b + 4 * a + 12 ) + z;
+puts "q3 = " + str(q3);
+q4 = q2 / q3;
+puts "q4 = " + str(q4);
+q5 = ( 2 * c**2 - 4 * b**2 - 4 * a**2 + 7 + x * z ) / (7 * b - 4 * a - 12 ) + y**2;
+puts "q5 = " + str(q5);
+puts "q5.factory() = " + str(q5.factory());
+q6 = q5.monic();
+puts "q6 = " + str(q6);
+puts;
+
+
 puts "------- RR( [QQ(),ZM(19),DD()] ) ---------";
 r = RR( [ QQ(),ZM(19),DD() ] );
 puts "r = " + str(r);
