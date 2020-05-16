@@ -139,16 +139,16 @@ Used By:
 --------------------------------------------------
 
 Stats:
-    Total Classes: 46
-    Concrete Classes: 43
+    Total Classes: 50
+    Concrete Classes: 47
     Abstract Classes: 3
 
     Ca: 12
     Ce: 2
 
-    A: 0,07
+    A: 0,06
     I: 0,14
-    D: 0,79
+    D: 0,8
 
 Abstract Classes:
     edu.jas.arith.Modular
@@ -180,6 +180,10 @@ Concrete Classes:
     edu.jas.arith.BigRationalTest
     edu.jas.arith.BigRationalUniqueIterator
     edu.jas.arith.Combinatoric
+    edu.jas.arith.ModInt
+    edu.jas.arith.ModIntIterator
+    edu.jas.arith.ModIntRing
+    edu.jas.arith.ModIntTest
     edu.jas.arith.ModInteger
     edu.jas.arith.ModIntegerIterator
     edu.jas.arith.ModIntegerRing
@@ -717,8 +721,8 @@ Used By:
 --------------------------------------------------
 
 Stats:
-    Total Classes: 225
-    Concrete Classes: 219
+    Total Classes: 231
+    Concrete Classes: 225
     Abstract Classes: 6
 
     Ca: 10
@@ -756,6 +760,7 @@ Concrete Classes:
     edu.jas.poly.ComplexGenPolynomialTest
     edu.jas.poly.ComplexRing
     edu.jas.poly.ComplexTest
+    edu.jas.poly.DecGenPolynomialTest
     edu.jas.poly.DistToRec
     edu.jas.poly.EvalMain
     edu.jas.poly.EvalMainPol
@@ -773,12 +778,10 @@ Concrete Classes:
     edu.jas.poly.GFGenPolynomialTest
     edu.jas.poly.GaloisFieldTest
     edu.jas.poly.GenMatrixTest
-    edu.jas.poly.GenPolynomial
     edu.jas.poly.GenPolynomialIterator
     edu.jas.poly.GenPolynomialMonomialIterator
     edu.jas.poly.GenPolynomialRing
     edu.jas.poly.GenPolynomialRing$1
-    edu.jas.poly.GenPolynomialTest
     edu.jas.poly.GenPolynomialTokenizer
     edu.jas.poly.GenPolynomialTokenizer$1
     edu.jas.poly.GenPolynomialTokenizer$coeffType
@@ -819,6 +822,9 @@ Concrete Classes:
     edu.jas.poly.Overlap
     edu.jas.poly.OverlapList
     edu.jas.poly.PolyIterator
+    edu.jas.poly.PolySpliterator
+    edu.jas.poly.PolySpliterator$1
+    edu.jas.poly.PolySpliterator$2
     edu.jas.poly.PolyToAlg
     edu.jas.poly.PolyUtil
     edu.jas.poly.PolyUtil$1
@@ -938,6 +944,10 @@ Concrete Classes:
     edu.jas.poly.TermOrder$71
     edu.jas.poly.TermOrder$72
     edu.jas.poly.TermOrder$73
+    edu.jas.poly.TermOrder$74
+    edu.jas.poly.TermOrder$75
+    edu.jas.poly.TermOrder$76
+    edu.jas.poly.TermOrder$77
     edu.jas.poly.TermOrder$8
     edu.jas.poly.TermOrder$9
     edu.jas.poly.TermOrderByName
@@ -1571,14 +1581,14 @@ Used By:
 Name, Class Count, Abstract Class Count, Ca, Ce, A, I, D, V:
 
 edu.jas.application,99,0,0,11,0,1,0,1
-edu.jas.arith,46,3,12,2,0,07,0,14,0,79,1
+edu.jas.arith,50,3,12,2,0,06,0,14,0,8,1
 edu.jas.fd,36,2,1,7,0,06,0,88,0,07,1
 edu.jas.gb,138,18,6,6,0,13,0,5,0,37,1
 edu.jas.gbmod,8,4,0,4,0,5,1,0,5,1
 edu.jas.gbufd,84,10,4,8,0,12,0,67,0,21,1
 edu.jas.integrate,13,0,0,7,0,1,0,1
 edu.jas.kern,12,0,13,0,0,0,1,1
-edu.jas.poly,225,6,10,5,0,03,0,33,0,64,1
+edu.jas.poly,231,6,10,5,0,03,0,33,0,64,1
 edu.jas.ps,112,6,1,5,0,05,0,83,0,11,1
 edu.jas.root,36,4,2,5,0,11,0,71,0,17,1
 edu.jas.structure,28,25,13,0,0,89,0,0,11,1
