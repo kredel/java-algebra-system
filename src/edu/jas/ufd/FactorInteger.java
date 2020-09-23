@@ -10,6 +10,8 @@ import java.util.BitSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.SortedMap;
+import java.util.Set;
+import java.util.HashSet;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -858,7 +860,12 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         boolean notLucky = true;
         while (notLucky) { // for Wang's test
             if (Math.abs(evStart) > 371L) {
-                logger.warn("no evaluation point for: P = " + P + ", lprr = " + lprr + ", lfacs = " + lfacs);
+                logger.warn("found         points   : V = " + V + ", dei = " + dei);
+                if (tParts != null && tParts.size() > 0) { // at least one successful eval point 
+                    logger.warn("some evaluation points found after " + Math.abs(evStart) + " iterations, tParts = " + tParts);
+                    break;
+                }
+                logger.warn("no evaluation point for: P = " + P + ", prr = " + prr + ", lprr = " + lprr + ", lfacs = " + lfacs);
                 throw new RuntimeException(
                                 "no evaluation point found after " + Math.abs(evStart) + " iterations");
             }
@@ -930,6 +937,21 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 } else {
                     Evs.set(j, vi - jj); // record last tested value minus increment
                     evStart = vi - jj;
+                }
+                // ensure different evaluation points
+                Set<Long> Evset = new HashSet<Long>(Evs);
+                while (Evset.size() != Evs.size()) {
+                    //logger.warn("same eval points: " + Evs + " != " + Evset);
+                    long vgi = Evs.get(j);
+                    if (vgi > 0L) {
+                        vgi += 1L;
+                    } else {
+                        vgi -= 1L;
+                    }
+                    Evs.set(j, vgi);
+                    Evset.clear(); Evset.addAll(Evs); //= new HashSet<Long>(Evs);
+                    evStart = vgi;
+                    //logger.warn("same eval points: " + Evs + ", j = " + j);
                 }
                 //System.out.println(", j = " + j + ", vi_b " + Vi);
                 //evStart = vi+1L;
@@ -1179,23 +1201,23 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     notLucky = true;
                 }
             }
-            //logger.warn("tParts = " + tParts);
         } // end notLucky loop
+        logger.warn("end notLucky loop, trial parts = " + tParts.size());
 
         // search TrialParts with shortest factorization of univariate polynomial
         int min = Integer.MAX_VALUE;
         TrialParts tpmin = null;
         for (TrialParts tp : tParts) {
-            logger.info("tp.univFactors.size() = " + tp.univFactors.size());
+            //logger.info("tp.univFactors.size() = " + tp.univFactors.size());
             if (tp.univFactors.size() < min) {
                 min = tp.univFactors.size();
                 tpmin = tp;
             }
         }
         for (TrialParts tp : tParts) {
-            //logger.info("tp.univFactors.get(0) = " + tp.univFactors.get(0));
             if (tp.univFactors.size() == min) {
                 if (!tp.univFactors.get(0).isConstant()) {
+                    logger.info("tp.univFactors = " + tp.univFactors);
                     tpmin = tp;
                     break;
                 }
