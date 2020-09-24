@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ivy-module version="2.0" xmlns:m="http://ant.apache.org/ivy/maven" 
-                          xmlns:e="http://ant.apache.org/ivy/extra">
+<ivy-module version="2.0" xmlns:m="https://ant.apache.org/ivy/maven" 
+                          xmlns:e="https://ant.apache.org/ivy/extra">
   <info organisation="java-algebra-system" 
         module="jas" revision="2.6.*" 
         status="integration" >
@@ -21,10 +21,10 @@
     <artifact name="jas-doc" type="zip" ext="zip" conf="docs" m:classifier="javadoc"/-->
   </publications>
   <dependencies>
-    <dependency org="org.apache.logging.log4j" name="log4j-api" rev="2.5" conf="runtime-&gt;default">
+    <dependency org="org.apache.logging.log4j" name="log4j-api" rev="2.13.2" conf="runtime-&gt;default">
       <artifact name="log4j-api" type="jar" ext="jar"/>
     </dependency>
-    <dependency org="org.apache.logging.log4j" name="log4j-core" rev="2.5" conf="runtime-&gt;default">
+    <dependency org="org.apache.logging.log4j" name="log4j-core" rev="2.13.2" conf="runtime-&gt;default">
       <artifact name="log4j-core" type="jar" ext="jar"/>
     </dependency>
     <dependency org="junit" name="junit" rev="4.12" conf="runtime-&gt;default">
