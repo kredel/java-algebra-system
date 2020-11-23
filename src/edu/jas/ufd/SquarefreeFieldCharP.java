@@ -192,6 +192,14 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
             }
             ldbcf = pfac.coFac.getONE();
         }
+        if (A.length() == 1) { // assert A.leadingBaseCoefficient().isONE()
+	    long d = A.leadingExpVector().getVal(0); 
+	    ExpVector e = ExpVector.create(1, 0, 1L);
+	    GenPolynomial<C> B = new GenPolynomial<C>(pfac, A.leadingBaseCoefficient(), e);
+            logger.info("B, d = " + B + ", " + d);
+            sfactors.put(B, d);
+            return sfactors;
+	}
         GenPolynomial<C> T0 = A;
         long e = 1L;
         GenPolynomial<C> Tp;

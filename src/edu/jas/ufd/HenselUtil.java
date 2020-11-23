@@ -1085,7 +1085,7 @@ public class HenselUtil {
             //System.out.println("Si = " + Si);
             //System.out.println("Ti = " + Ti);
             modul = modul.multiply(p);
-            //System.out.println("modul = " + modul + ", " + p + "^" + k + ", p^k = " + p.power(k));
+            //System.out.println("modul = " + modul + ", " + p + "^" + i + ", p^i = " + p.power(i));
         }
         //System.out.println("Si = " + Si + ", Ti = " + Ti);
         // setup ring mod p^i
