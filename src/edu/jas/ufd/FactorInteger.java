@@ -28,6 +28,8 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.OptimizedPolynomialList;
 import edu.jas.poly.PolyUtil;
+import edu.jas.poly.TermOrder;
+import edu.jas.poly.TermOrderByName;
 import edu.jas.poly.TermOrderOptimization;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.Power;
@@ -701,6 +703,14 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         if (pfac.nvar <= 1) {
             return baseFactorsSquarefree(Pp);
         }
+        boolean noINVLEX = true;
+        if (pfac.tord.equals(TermOrderByName.INVLEX)) {
+            noINVLEX = false;
+        } else {
+            pfac = new GenPolynomialRing<BigInteger>(pfac,TermOrderByName.INVLEX);
+            Pp = pfac.copy(Pp);
+            logger.warn("invlexed polynomial: " + Pp + ", from ring " + P.ring);
+        }
         OptimizedPolynomialList<BigInteger> opt = null;
         List<Integer> iperm = null;
         final boolean USE_OPT = true;
@@ -755,6 +765,10 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         if (USE_OPT && iperm != null) {
             facs = TermOrderOptimization.<BigInteger> permutation(iperm, pfac, facs);
             logger.warn("de-optimized polynomials: " + facs);
+        }
+        if (noINVLEX) {
+            facs = P.ring.copy(facs);
+            logger.warn("de-invlexed polynomials: " + facs);
         }
         facs = normalizeFactorization(facs);
         return facs;
