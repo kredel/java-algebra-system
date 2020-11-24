@@ -121,14 +121,25 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>> extends SquarefreeAbs
             //System.out.println("gcda sqf f1 = " + f1);
             sfactors.put(f1, 1L);
         }
-        if (A.length() == 1) { // assert A.leadingBaseCoefficient().isONE()
-	    long d = A.leadingExpVector().getVal(0); 
-	    ExpVector e = ExpVector.create(1, 0, 1L);
-	    GenPolynomial<C> B = new GenPolynomial<C>(pfac, A.leadingBaseCoefficient(), e);
-            logger.info("B, d = " + B + ", " + d);
-            sfactors.put(B, d);
-            return sfactors;
-	}
+        // divide by trailing term
+        ExpVector et = A.trailingExpVector();
+        if (!et.isZERO()) {
+            GenPolynomial<C> tr = pfac.valueOf(et);
+            if (logger.isInfoEnabled()) {
+               logger.info("trailing term = " + tr);
+            }
+            A = PolyUtil.<C> basePseudoDivide(A, tr);
+            long ep = et.getVal(0); // univariate
+            et = et.subst(0,1);
+            tr = pfac.valueOf(et);
+            if (logger.isInfoEnabled()) {
+               logger.info("tr, ep = " + tr + ", " + ep);
+	    }
+            sfactors.put(tr, ep);
+	    if (A.length() == 1) {
+		return sfactors;
+	    }
+        }
         GenPolynomial<C> T0 = A;
         GenPolynomial<C> Tp;
         GenPolynomial<C> T = null;
@@ -167,7 +178,7 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>> extends SquarefreeAbs
             if (z.degree(0) > 0) {
                 if (ldbcf.isONE() && !z.leadingBaseCoefficient().isONE()) {
                     z = engine.basePrimitivePart(z);
-                    logger.info("z,pp = " + z);
+                    //logger.info("z,pp = " + z);
                 }
                 logger.info("z, k = " + z + ", " + k);
                 sfactors.put(z, k);
