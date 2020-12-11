@@ -676,7 +676,39 @@ public class FactorIntegerTest extends TestCase {
         assertTrue("#facs < 2, sm = " + sm, sm.size() >= 2);
     }
 
+    
+    /**
+     * Test integer factorization.
+     */
+    public void testBivarIntegerFactorization() {
+        TermOrder to = new TermOrder(TermOrder.INVLEX);
+        BigInteger cfac = new BigInteger(1);
+        String[] vars = new String[] { "x", "y" };
+        GenPolynomialRing<BigInteger> pfac = new GenPolynomialRing<BigInteger>(cfac, vars.length, to, vars);
+        FactorInteger<ModInteger> fac = new FactorInteger<ModInteger>();
+        GenPolynomial<BigInteger> a;
+        a = pfac.parse(" ( (5*y+2*x)*(5*y-2*x) ) "); // binomial formula
 
+        //System.out.println("a = " + a);
+
+        SortedMap<GenPolynomial<BigInteger>, Long> sm = fac.factors(a);
+        System.out.println("sm = " + sm + ", a = " + a + ", pfac = " + pfac.toScript());
+        boolean t = fac.isFactorization(a, sm);
+        //System.out.println("t        = " + t);
+        assertTrue("prod(factor(a)) = a", t);
+        assertTrue("#facs < 2, sm = " + sm, sm.size() >= 2);
+
+        a = pfac.parse(" ( (y-4*x)*(y-x) ) "); 
+        //System.out.println("a = " + a);
+        sm = fac.factors(a);
+        System.out.println("sm = " + sm + ", a = " + a + ", pfac = " + pfac.toScript());
+        t = fac.isFactorization(a, sm);
+        //System.out.println("t        = " + t);
+        assertTrue("prod(factor(a)) = a", t);
+        assertTrue("#facs < 2, sm = " + sm, sm.size() >= 2);
+    }
+
+	
     /**
      * Test integer factorization. Example (a+b*x) (c+d*x).
      */

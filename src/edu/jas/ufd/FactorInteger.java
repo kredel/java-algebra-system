@@ -875,10 +875,10 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         while (notLucky) { // for Wang's test
             if (Math.abs(evStart) > 371L) {
                 logger.warn("found         points   : V = " + V + ", dei = " + dei);
-                if (tParts != null && tParts.size() > 0) { // at least one successful eval point 
-                    logger.warn("some evaluation points found after " + Math.abs(evStart) + " iterations, tParts = " + tParts);
-                    break;
-                }
+                //if (tParts != null && tParts.size() > 0) { // at least one successful eval point 
+                //    logger.warn("some evaluation points found after " + Math.abs(evStart) + " iterations, tParts = " + tParts);
+                //    break;
+                //}
                 logger.warn("no evaluation point for: P = " + P + ", prr = " + prr + ", lprr = " + lprr + ", lfacs = " + lfacs);
                 throw new RuntimeException(
                                 "no evaluation point found after " + Math.abs(evStart) + " iterations");
