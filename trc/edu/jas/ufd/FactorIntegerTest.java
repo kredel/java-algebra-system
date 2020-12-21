@@ -692,7 +692,7 @@ public class FactorIntegerTest extends TestCase {
         //System.out.println("a = " + a);
 
         SortedMap<GenPolynomial<BigInteger>, Long> sm = fac.factors(a);
-        System.out.println("sm = " + sm + ", a = " + a + ", pfac = " + pfac.toScript());
+        //System.out.println("sm = " + sm + ", a = " + a + ", pfac = " + pfac.toScript());
         boolean t = fac.isFactorization(a, sm);
         //System.out.println("t        = " + t);
         assertTrue("prod(factor(a)) = a", t);
@@ -701,7 +701,7 @@ public class FactorIntegerTest extends TestCase {
         a = pfac.parse(" ( (y-4*x)*(y-x) ) "); 
         //System.out.println("a = " + a);
         sm = fac.factors(a);
-        System.out.println("sm = " + sm + ", a = " + a + ", pfac = " + pfac.toScript());
+        //System.out.println("sm = " + sm + ", a = " + a + ", pfac = " + pfac.toScript());
         t = fac.isFactorization(a, sm);
         //System.out.println("t        = " + t);
         assertTrue("prod(factor(a)) = a", t);

@@ -286,7 +286,7 @@ public class HenselMultUtilTest extends TestCase {
                 assertEquals("ar sr + br tr = cr ", cpr, rpr);
             } catch (NoLiftingException e) {
                 // can happen: fail("" + e);
-                System.out.println("e = " + e);
+                //System.out.println("e = " + e);
             }
         }
     }
@@ -443,7 +443,7 @@ public class HenselMultUtilTest extends TestCase {
                 // ok, can happen
             } catch (NoLiftingException e) {
                 // can now happen: fail("" + e);
-                System.out.println("e = " + e);
+                //System.out.println("e = " + e);
             }
         }
     }
