@@ -452,7 +452,7 @@ export:
 	git archive --format=tar --prefix=$(VERSION)/ HEAD | (cd ~/jas-versions/ && tar -xf -)
 	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) $(GITREV) doc/download.html $(DEBVERSION)
 	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) $(GITREV) doc/Dockerfile $(DEBVERSION)
-	git log -r --since $(GITSINCE) --name-status . src trc examples jython mpj mpi jlinalg_adapter commons-math_adapter > ~/jas-versions/$(VERSION)/doc/git_change.log
+	git log -r --since $(GITSINCE) --name-status --date=iso . src trc examples jython mpj mpi jlinalg_adapter commons-math_adapter > ~/jas-versions/$(VERSION)/doc/git_change.log
 	cd ~/jas-versions/; jar -cfM $(VERSION).$(GITREV)-src.zip $(VERSION)/
 	cd ~/jas-versions/$(VERSION)/; ant compile > ant_compile.out
 	cd ~/jas-versions/$(VERSION)/; jar -cfm ../$(VERSION).$(GITREV)-bin.jar GBManifest.MF edu/ COPYING* log4j2.properties
@@ -492,8 +492,10 @@ m2-deploy:
 #	$(RSYNC) -e 'ssh' ~/jas-versions/tmp/$(subst jas-,,$(VERSION)).$(GITREV)/ https://oss.sonatype.org/content/groups/public/de/uni-mannheim/rz/krum/$(subst -,/,$(VERSION)).$(GITREV)
 
 git-export:
-	cd ~/jas-versions/jas-git/jas; git svn rebase > ~/jas-versions/$(VERSION)/git_svn.out
-	cd ~/jas-versions/jas-git/jas; git push -v deploy > ~/jas-versions/$(VERSION)/git_push.out
+	#cd ~/jas-versions/jas-git/jas; git svn rebase > ~/jas-versions/$(VERSION)/git_svn.out
+	#cd ~/jas-versions/jas-git/jas; git push -v deploy > ~/jas-versions/$(VERSION)/git_push.out
+	#cd ~/jas; git svn dcommit > ~/jas-versions/$(VERSION)/git_svn.out
+	cd ~/jas; git push -v deploy > ~/jas-versions/$(VERSION)/git_push.out
 
 git-deploy:
 	$(RSYNC) -e 'ssh' --delete-after ~/jas-versions/jas-git/jas.git/ krum:htdocs/jas.git
