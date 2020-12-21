@@ -38,10 +38,9 @@ RSYNC=rsync -e ssh -avuz $(DRY) $(DELETE) --exclude=*~ --include=doc/svn_change.
 ####--exclude=*.ps --exclude=*.pdf --exclude=spin*
 ####--exclude=*/.jxta/
 PART=jas.j18
-VERSION=jas-2.6
-DEBVERSION=jas-java_2.6
-#BRANCH=2.3
-SVNVERSION=`grep committed-rev .svn/entries |head -1|awk -F = '{ print $2 }'|sed 's/"//g'`
+VERSION=jas-2.7
+DEBVERSION=jas-java_2.7
+#SVNVERSION=`grep committed-rev .svn/entries |head -1|awk -F = '{ print $2 }'|sed 's/"//g'`
 
 all: usage
 
@@ -87,6 +86,8 @@ MYCLASSPATH = $(LOG4JPATH):.:$(JUNITPATH):$(JOMPPATH):$(PYPATH)
 JAVA_MEM=-Xms500M -Xmx900M
 
 SOPTS="-J-cp ../lib/log4j-core-2.5.jar:../lib/log4j-api-2.5.jar:../lib/junit.jar-4.12.jar:../lib/hamcrest-core-1.3.jar:. -J-verbose:gc -J-Xms500M -J-Xmx900M"
+#SOPTS="-J-verbose:gc -J-Xms1500M -J-Xmx2900M"
+#SOPTS=
 
 
 JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d . -Xlint:unchecked
@@ -373,12 +374,12 @@ clean:
 
 testp:
 	find examples -name "*.py"|grep -v jas.py |grep -v sdexam.py |grep -v plot|grep -v versuch|sort|xargs -L 1 echo "time jython $(SOPTS)" | awk '{ printf "echo %s\n", $$0; printf "%s\n", $$0 }' > ./all_jython.sh
-	time bash all_jython.sh 2>&1 | tee tjy.out
+	time bash -i all_jython.sh 2>&1 | tee tjy.out
 	-egrep '(Error|File|Exception)' tjy.out
 
 testr:
 	find examples -name "*.rb"|grep -v jas.rb |grep -v versuch|sort|xargs -L 1 echo "time jruby $(SOPTS)" | awk '{ printf "echo %s\n", $$0; printf "%s\n", $$0 }' > ./all_jruby.sh
-	time bash all_jruby.sh 2>&1 | tee tjr.out
+	time bash -i ./all_jruby.sh 2>&1 | tee tjr.out
 	-egrep -i '(error|__file__|exception)' tjr.out
 
 tests:
@@ -418,8 +419,10 @@ findbugs-low:
 
 #svn copy file:///$(SVNREPO)/jas/trunk file:///$(SVNREPO)/jas/tags/$(VERSION)
 
-SVNREV=svnlook youngest $(SVNREPO)/jas
-SVNDATE=svnlook date $(SVNREPO)/jas
+#SVNREV=svnlook youngest $(SVNREPO)/jas
+#SVNDATE=svnlook date $(SVNREPO)/jas
+# new numbering in git:
+#SVNDATE=git log -r HEAD .|grep Date:|head -1|awk '{print $4}'
 # Jan 2008 SVNSRT=1584 
 # Jun 2008 SVNSRT=1882
 # Sep 2008 SVNSRT=2118r
@@ -433,32 +436,40 @@ SVNDATE=svnlook date $(SVNREPO)/jas
 # jul 2012 SVNSRT=4008
 # aug 2013 SVNSRT=4588
 # jan 2014 SVNSRT=4742
-# jan 2015
-SVNSRT=5055
+# jan 2015 SVNSRT=5055
+# jan 2018 SVNSRT=5787
+SVNREV=10
+GITREV=$(SVNREV)
+GITSINCE=2018-01-01
+
+# git archive --format=tar --prefix=$(VERSION)/ HEAD | (cd ~/jas-versions/ && tar -xf -)
+#svn export --quiet file:///$(SVNREPO)/jas/trunk ~/jas-versions/$(VERSION)
+#svn log -v -r HEAD:$(SVNSRT) file:///$(SVNREPO)/jas/trunk src trc examples jython mpj mpi jlinalg_adapter commons-math_adapter > ~/jas-versions/$(VERSION)/doc/svn_change.log
+
 
 export:
 	rm -rf ~/jas-versions/$(VERSION)
-	svn export --quiet file:///$(SVNREPO)/jas/trunk ~/jas-versions/$(VERSION)
-	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) `$(SVNREV)` doc/download.html $(DEBVERSION)
-	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) `$(SVNREV)` doc/Dockerfile $(DEBVERSION)
-	svn log -v -r HEAD:$(SVNSRT) file:///$(SVNREPO)/jas/trunk src trc examples jython mpj mpi jlinalg_adapter commons-math_adapter > ~/jas-versions/$(VERSION)/doc/svn_change.log
-	cd ~/jas-versions/; jar -cfM $(VERSION).`$(SVNREV)`-src.zip $(VERSION)/
+	git archive --format=tar --prefix=$(VERSION)/ HEAD | (cd ~/jas-versions/ && tar -xf -)
+	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) $(GITREV) doc/download.html $(DEBVERSION)
+	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) $(GITREV) doc/Dockerfile $(DEBVERSION)
+	git log -r --since $(GITSINCE) --name-status . src trc examples jython mpj mpi jlinalg_adapter commons-math_adapter > ~/jas-versions/$(VERSION)/doc/git_change.log
+	cd ~/jas-versions/; jar -cfM $(VERSION).$(GITREV)-src.zip $(VERSION)/
 	cd ~/jas-versions/$(VERSION)/; ant compile > ant_compile.out
-	cd ~/jas-versions/$(VERSION)/; jar -cfm ../$(VERSION).`$(SVNREV)`-bin.jar GBManifest.MF edu/ COPYING* log4j2.properties
-	cd ~/jas-versions/$(VERSION)/; jar -uf ../$(VERSION).`$(SVNREV)`-bin.jar -C ~/jas-versions/$(VERSION)/examples jas.rb -C ~/jas-versions/$(VERSION)/examples jas.py
-	jar -uf ~/jas-versions/$(VERSION).`$(SVNREV)`-bin.jar -C ~/jas/NOTES COPYING.APACHE-2.0 -C ~/jas/NOTES COPYING.apache.jas
+	cd ~/jas-versions/$(VERSION)/; jar -cfm ../$(VERSION).$(GITREV)-bin.jar GBManifest.MF edu/ COPYING* log4j2.properties
+	cd ~/jas-versions/$(VERSION)/; jar -uf ../$(VERSION).$(GITREV)-bin.jar -C ~/jas-versions/$(VERSION)/examples jas.rb -C ~/jas-versions/$(VERSION)/examples jas.py
+	jar -uf ~/jas-versions/$(VERSION).$(GITREV)-bin.jar -C ~/jas/NOTES COPYING.APACHE-2.0 -C ~/jas/NOTES COPYING.apache.jas
 	cd ~/jas-versions/$(VERSION)/; ant doc > ant_doc.out
 	cd ~/jas-versions/$(VERSION)/; epydoc -v -o doc/jython -n "Python to JAS" -u ../../index.html examples/jas.py examples/basic_sigbased_gb.py examples/sdjas.py > epydoc.out
 	cd ~/jas-versions/$(VERSION)/; jrdoc -o doc/jruby -U -N -t "Ruby to JAS" examples/jas.rb examples/sdjas.rb > rdoc.out 2>&1
 	cd ~/jas-versions/$(VERSION)/; ant test > ant_test.out
 	cd ~/jas-versions/$(VERSION)/; sh ./jython_tests.sh >jython_tests.out 2>&1
 	cd ~/jas-versions/$(VERSION)/; sh ./jruby_tests.sh >jruby_tests.out 2>&1
-	cp ~/jas-versions/$(VERSION).`$(SVNREV)`-bin.jar $(LIBPATH)/jas.jar
-	cp ~/jas-versions/$(VERSION).`$(SVNREV)`-bin.jar ~/jas-versions/$(VERSION)/jas.jar
+	cp ~/jas-versions/$(VERSION).$(GITREV)-bin.jar $(LIBPATH)/jas.jar
+	cp ~/jas-versions/$(VERSION).$(GITREV)-bin.jar ~/jas-versions/$(VERSION)/jas.jar
 	cd ~/jas-versions/$(VERSION)/jython; make all doc > ~/jas-versions/$(VERSION)/make_jython.out
 	cd ~/jas-versions/$(VERSION)/mpi; make all doc > ~/jas-versions/$(VERSION)/make_mpi.out
 	cd ~/jas-versions/$(VERSION)/mpj; make all doc > ~/jas-versions/$(VERSION)/make_mpj.out
-	cd ~/jas-versions/$(VERSION)/meditor; jas_dosed $(VERSION) `$(SVNREV)` manifest.mf
+	cd ~/jas-versions/$(VERSION)/meditor; jas_dosed $(VERSION) $(GITREV) manifest.mf
 	cd ~/jas-versions/$(VERSION)/meditor; make > ~/jas-versions/$(VERSION)/make_meditor.out
 	cd ~/jas-versions/log4j_adapter; make > ~/jas-versions/$(VERSION)/make_mylog.out
 	cp ~/java/lib/mylog.jar ~/jas-versions/$(VERSION)/
@@ -468,17 +479,17 @@ export:
 	cp ~/java/lib/nolog.jar ~/jas-versions/$(VERSION)/
 	cd ~/jas-versions/$(VERSION)/jlinalg_adapter; make all doc > ~/jas-versions/$(VERSION)/make_jlinalg.out
 	cd ~/jas-versions/$(VERSION)/commons-math_adapter; make all doc > ~/jas-versions/$(VERSION)/make_commons-math.out
-	cd ~/jas-versions/$(VERSION)/; jar -cfM ../$(VERSION).`$(SVNREV)`-doc.zip doc/ images/ *.html doc/*.html *.css doc/*.css
-	mv ~/jas-versions/$(VERSION).`$(SVNREV)`-*.jar ~/jas-versions/$(VERSION)/
-	mv ~/jas-versions/$(VERSION).`$(SVNREV)`-*.zip ~/jas-versions/$(VERSION)/
+	cd ~/jas-versions/$(VERSION)/; jar -cfM ../$(VERSION).$(GITREV)-doc.zip doc/ images/ *.html doc/*.html *.css doc/*.css
+	mv ~/jas-versions/$(VERSION).$(GITREV)-*.jar ~/jas-versions/$(VERSION)/
+	mv ~/jas-versions/$(VERSION).$(GITREV)-*.zip ~/jas-versions/$(VERSION)/
 	cd ~/jas-versions/$(VERSION)/; chmod -v +r *.jar *.zip >chmod.out 2>&1
 
 deploy:
 	$(RSYNC) -e 'ssh' --delete-after --exclude=DTD --exclude=*xml ~/jas-versions/$(VERSION)/ krum:htdocs/$(VERSION)
 
 m2-deploy:
-	$(RSYNC) -e 'ssh' ~/jas-versions/tmp/$(subst jas-,,$(VERSION)).`$(SVNREV)`/ krum:htdocs/maven-repository/de/uni-mannheim/rz/krum/$(subst -,/,$(VERSION)).`$(SVNREV)`
-#	$(RSYNC) -e 'ssh' ~/jas-versions/tmp/$(subst jas-,,$(VERSION)).`$(SVNREV)`/ https://oss.sonatype.org/content/groups/public/de/uni-mannheim/rz/krum/$(subst -,/,$(VERSION)).`$(SVNREV)`
+	$(RSYNC) -e 'ssh' ~/jas-versions/tmp/$(subst jas-,,$(VERSION)).$(GITREV)/ krum:htdocs/maven-repository/de/uni-mannheim/rz/krum/$(subst -,/,$(VERSION)).$(GITREV)
+#	$(RSYNC) -e 'ssh' ~/jas-versions/tmp/$(subst jas-,,$(VERSION)).$(GITREV)/ https://oss.sonatype.org/content/groups/public/de/uni-mannheim/rz/krum/$(subst -,/,$(VERSION)).$(GITREV)
 
 git-export:
 	cd ~/jas-versions/jas-git/jas; git svn rebase > ~/jas-versions/$(VERSION)/git_svn.out
@@ -490,8 +501,8 @@ git-deploy:
 	cd ~/jas-versions/jas-git/jas; git push -v $(DRY) github >> ~/jas-versions/$(VERSION)/git_push.out
 
 jas-bin.jar:
-	jar -cfm $(VERSION).`$(SVNREV)`-bin.jar GBManifest.MF edu/ COPYING* log4j2.properties
-	jar -uf  $(VERSION).`$(SVNREV)`-bin.jar -C examples jas.rb -C examples jas.py
+	jar -cfm $(VERSION).$(GITREV)-bin.jar GBManifest.MF edu/ COPYING* log4j2.properties
+	jar -uf  $(VERSION).$(GITREV)-bin.jar -C examples jas.rb -C examples jas.py
 
 #jar -ufm ../$(VERSION)-gbb-bin.jar ~/java/lib/log4j.dir/META-INF/MANIFEST.MF -C ~/java	/lib/log4j.dir/ org/ 
 #echo "EXAMJAS" $(EXAMJAS)
@@ -509,7 +520,7 @@ young:
 	echo youngest revision `svnlook youngest $(SVNREPO)/jas`
 
 subst:
-	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) `$(SVNREV)` doc/download.html $(DEBVERSION)
+	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) $(GITREV) doc/download.html $(DEBVERSION)
 
 logs:
 	svn log -v -r HEAD:$(SVNSRT) file:///$(SVNREPO)/jas/trunk src trc examples jython mpj mpi jlinalg_adapter commons-math_adapter > doc/svn_change.log

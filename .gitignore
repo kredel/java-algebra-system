@@ -28,3 +28,7 @@
 /ps
 /NOTES*
 *~
+all_jruby.sh
+all_jython.sh
+jython/classes/
+jython/jsr.out
