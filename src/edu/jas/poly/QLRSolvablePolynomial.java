@@ -134,6 +134,16 @@ public class QLRSolvablePolynomial<C extends GcdRingElem<C> & QuotPair<GenPolyno
 
 
     /**
+     * Hash code for this polynomial.
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+
+    /**
      * QLRSolvablePolynomial multiplication.
      * @param Bp QLRSolvablePolynomial.
      * @return this*Bp, where * denotes solvable multiplication.

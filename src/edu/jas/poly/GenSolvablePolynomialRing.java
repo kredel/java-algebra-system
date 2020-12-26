@@ -278,7 +278,6 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
             return false;
         }
         GenSolvablePolynomialRing<C> oring = (GenSolvablePolynomialRing<C>) other;
-        // do a super.equals( )
         if (!super.equals(other)) {
             return false;
         }
@@ -299,6 +298,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
         int h;
         h = super.hashCode();
         h = 37 * h + table.hashCode();
+	System.out.println("GenPolynomialRing.hashCode: " + h);
         return h;
     }
 

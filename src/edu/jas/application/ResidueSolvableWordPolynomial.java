@@ -148,6 +148,16 @@ public class ResidueSolvableWordPolynomial<C extends GcdRingElem<C>> extends
 
 
     /**
+     * Hash code for this polynomial.
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+
+    /**
      * ResidueSolvableWordPolynomial multiplication.
      * @param Bp ResidueSolvableWordPolynomial.
      * @return this*Bp, where * denotes solvable multiplication.

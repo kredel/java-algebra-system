@@ -417,7 +417,9 @@ public class GenPolynomialRing<C extends RingElem<C>> implements RingFactory<Gen
         int h;
         h = (nvar << 27);
         h += (coFac.hashCode() << 11);
-        h += tord.hashCode();
+        h += (tord.hashCode() << 9);
+        h += Arrays.hashCode(vars);
+        //System.out.println("GenPolynomialRing.hashCode: " + h);
         return h;
     }
 

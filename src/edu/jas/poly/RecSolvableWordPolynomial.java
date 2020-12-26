@@ -144,6 +144,16 @@ public class RecSolvableWordPolynomial<C extends RingElem<C>> extends
 
 
     /**
+     * Hash code for this polynomial.
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+
+    /**
      * RecSolvableWordPolynomial multiplication.
      * @param Bp RecSolvableWordPolynomial.
      * @return this*Bp, where * denotes solvable multiplication.

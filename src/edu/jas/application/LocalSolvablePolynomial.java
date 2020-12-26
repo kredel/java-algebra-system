@@ -137,6 +137,16 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
 
 
     /**
+     * Hash code for this polynomial.
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+
+    /**
      * LocalSolvablePolynomial multiplication.
      * @param Bp LocalSolvablePolynomial.
      * @return this*Bp, where * denotes solvable multiplication.
