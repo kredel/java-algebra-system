@@ -490,9 +490,7 @@ public class RunGB {
             JarFile jf = new JarFile(examples);
             JarEntry je = jf.getJarEntry(filename);
             if (je == null) {
-                if (jf != null) {
                     jf.close();
-                }
                 fnf.printStackTrace();
                 return problem;
             }

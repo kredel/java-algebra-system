@@ -147,7 +147,7 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>>
         }
         // better: test if sf.size() == 2 // no, since num and den factors 
         Long k = null;
-        Long cl = c.longValue();
+        long cl = c.longValueExact();
         for (Map.Entry<Quotient<C>, Long> me : sf.entrySet()) {
             Quotient<C> p = me.getKey();
             //System.out.println("p = " + p);
@@ -215,7 +215,7 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>>
             throw new IllegalArgumentException(
                             P.getClass().getName() + " only for ModInteger polynomials " + rf);
         }
-        long mp = rf.characteristic().longValue();
+        long mp = rf.characteristic().longValueExact();
         GenPolynomial<Quotient<C>> d = pfac.getZERO().copy();
         for (Monomial<Quotient<C>> m : P) {
             ExpVector f = m.e;
@@ -268,7 +268,7 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>>
             // basePthRoot not possible
             throw new IllegalArgumentException(P.getClass().getName() + " only for char p > 0 " + rf);
         }
-        long mp = rf.characteristic().longValue();
+        long mp = rf.characteristic().longValueExact();
         GenPolynomial<Quotient<C>> d = pfac.getZERO().copy();
         for (Monomial<Quotient<C>> m : P) {
             //System.out.println("m = " + m);
@@ -331,7 +331,7 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>>
             // basePthRoot not possible
             throw new IllegalArgumentException(P.getClass().getName() + " only for char p > 0 " + rf);
         }
-        long mp = rf.characteristic().longValue();
+        long mp = rf.characteristic().longValueExact();
         GenPolynomial<GenPolynomial<Quotient<C>>> d = pfac.getZERO().copy();
         for (Monomial<GenPolynomial<Quotient<C>>> m : P) {
             ExpVector f = m.e;

@@ -142,7 +142,7 @@ public class CriticalPairList<C extends RingElem<C>> extends OrderedPairlist<C> 
      * The pair is not removed from the pair list.
      * @return the next pair if one exists, otherwise null.
      */
-    public Pair<C> removeNext() { 
+    public synchronized Pair<C> removeNext() { 
         CriticalPair<C> cp = getNext();
         if ( cp == null ) {
             return null;

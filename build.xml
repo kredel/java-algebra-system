@@ -284,17 +284,39 @@
 </target>
 
 <target name="exam" depends="compile" >
-  <java classname="edu.jas.poly.Examples" classpath="${cp}" fork="yes" args="1" />
-  <java classname="edu.jas.vector.Examples" classpath="${cp}" fork="yes" args="1" />
-  <java classname="edu.jas.gbufd.Examples" classpath="${cp}" fork="yes" args="1" />
-  <java classname="edu.jas.ps.Examples" classpath="${cp}" fork="yes" args="1" />
-  <java classname="edu.jas.ps.ExamplesMulti" classpath="${cp}" fork="yes" args="1" />
-  <java classname="edu.jas.ufd.Examples" classpath="${cp}" fork="yes" args="1" />
-  <java classname="edu.jas.ufd.ExamplesPartialFraction" classpath="${cp}" fork="yes" args="1" />
-  <java classname="edu.jas.integrate.Examples" classpath="${cp}" fork="yes" args="1" />
-  <java classname="edu.jas.integrate.ExamplesMore" classpath="${cp}" fork="yes" args="1" />
-  <java classname="edu.jas.application.Examples" classpath="${cp}" fork="yes" args="1" />
-  <java classname="edu.jas.application.ExamplesGeoTheorems" classpath="${cp}" fork="yes" args="1" />
+  <java classname="edu.jas.poly.Examples" classpath="${cp}" fork="yes" >
+    <arg line="1" />
+  </java>
+  <java classname="edu.jas.vector.Examples" classpath="${cp}" fork="yes" >
+    <arg line="1" />
+  </java>
+  <java classname="edu.jas.gbufd.Examples" classpath="${cp}" fork="yes" >
+    <arg line="1" />
+  </java>
+  <java classname="edu.jas.ps.Examples" classpath="${cp}" fork="yes" >
+    <arg line="1" />
+  </java>
+  <java classname="edu.jas.ps.ExamplesMulti" classpath="${cp}" fork="yes" >
+    <arg line="1" />
+  </java>
+  <java classname="edu.jas.ufd.Examples" classpath="${cp}" fork="yes" >
+    <arg line="1" />
+  </java>
+  <java classname="edu.jas.ufd.ExamplesPartialFraction" classpath="${cp}" fork="yes" >
+    <arg line="1" />
+  </java>
+  <java classname="edu.jas.integrate.Examples" classpath="${cp}" fork="yes" >
+    <arg line="1" />
+  </java>
+  <java classname="edu.jas.integrate.ExamplesMore" classpath="${cp}" fork="yes" >
+    <arg line="1" />
+  </java>
+  <java classname="edu.jas.application.Examples" classpath="${cp}" fork="yes" >
+    <arg line="1" />
+  </java>
+  <java classname="edu.jas.application.ExamplesGeoTheorems" classpath="${cp}" fork="yes" >
+    <arg line="1" />
+  </java>
 </target>
 
 <target name="lint" depends="vorher" >

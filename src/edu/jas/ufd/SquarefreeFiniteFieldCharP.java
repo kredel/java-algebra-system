@@ -160,7 +160,7 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>> extends Square
             }
         }
         // now c divides all exponents
-        Long cl = c.longValue();
+        long cl = c.longValueExact();
         GenPolynomial<C> rp = P.ring.getONE();
         for (Map.Entry<GenPolynomial<C>, Long> me : sf.entrySet()) {
             GenPolynomial<C> q = me.getKey();
@@ -215,7 +215,7 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>> extends Square
             // basePthRoot not possible
             throw new IllegalArgumentException(P.getClass().getName() + " only for char p > 0 " + rf);
         }
-        long mp = rf.characteristic().longValue();
+        long mp = rf.characteristic().longValueExact();
         GenPolynomial<C> d = pfac.getZERO().copy();
         for (Monomial<C> m : P) {
             ExpVector f = m.e;
@@ -255,7 +255,7 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>> extends Square
             // basePthRoot not possible
             throw new IllegalArgumentException(P.getClass().getName() + " only for char p > 0 " + rf);
         }
-        long mp = rf.characteristic().longValue();
+        long mp = rf.characteristic().longValueExact();
         GenPolynomial<GenPolynomial<C>> d = pfac.getZERO().copy();
         for (Monomial<GenPolynomial<C>> m : P) {
             ExpVector f = m.e;
