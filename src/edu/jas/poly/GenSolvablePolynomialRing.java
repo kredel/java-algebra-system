@@ -354,7 +354,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
                     p = Xk.multiply(Xj).multiply(Xi);
                     q = Xk.multiply(Xj.multiply(Xi));
                     if (!p.equals(q)) {
-                        if (true || debug) {
+                        if (logger.isInfoEnabled()) {
                             logger.info("Xi = " + Xi + ", Xj = " + Xj + ", Xk = " + Xk);
                             logger.info("p = ( Xk * Xj ) * Xi = " + p);
                             logger.info("q = Xk * ( Xj * Xi ) = " + q);
