@@ -182,6 +182,9 @@ public class Power<C extends RingElem<C>> {
         if (n == 1) {
             return b;
         }
+        if (fac == null) {
+            throw new IllegalArgumentException("fac may not be null for n > 1");
+        }
         C p = fac.getONE();
         long i = n;
         do {
@@ -225,6 +228,9 @@ public class Power<C extends RingElem<C>> {
         }
         if (n == 1) {
             return b;
+        }
+        if (fac == null) {
+            throw new IllegalArgumentException("fac may not be null for n > 1");
         }
         C p = fac.getONE();
         long i = n;
@@ -273,6 +279,9 @@ public class Power<C extends RingElem<C>> {
         if (n.bitLength() <= 63) {
             long l = n.longValue();
             return modPower(fac, a, l, m);
+        }
+        if (fac == null) {
+            throw new IllegalArgumentException("fac may not be null for n > 1");
         }
         C p = fac.getONE();
         java.math.BigInteger i = n;
