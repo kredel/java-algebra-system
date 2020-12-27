@@ -96,7 +96,7 @@ public final class PrimeInteger {
         k = K;
 
         /* init */
-        long h = 2 * (k - 1);
+        long h = 2L * ((long)k - 1L);
         long m2 = m + h; // mp    
         BitSet p = new BitSet(k);
         p.set(0, k);
