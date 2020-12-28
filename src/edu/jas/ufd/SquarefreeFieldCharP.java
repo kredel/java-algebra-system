@@ -205,11 +205,11 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
             tr = pfac.valueOf(et);
             if (logger.isInfoEnabled()) {
                logger.info("tr, ep = " + tr + ", " + ep);
-	    }
+            }
             sfactors.put(tr, ep);
-	    if (A.length() == 1) {
-		return sfactors;
-	    }
+            if (A.length() == 1) {
+                return sfactors;
+            }
         }
         GenPolynomial<C> T0 = A;
         long e = 1L;

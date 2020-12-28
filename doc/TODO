@@ -40,10 +40,6 @@ issues to consider:
 
 - use Maven/Gradle/Buildr configuration management, Ivy done
 
-- completely switch from svn to git
-
-- remove @usage doc tag
-
 
 
 partially resolved and completed issues:
@@ -101,6 +97,7 @@ partially resolved and completed issues:
 
 - check correct term order in recursive algorithms,
   in GCD ModEval only univariate cases are used, so term order is not a problem
+  in polynomial factorization we force / convert to invlex term order
 
 - add assertions to check for number of polynomial variables and term order,
   nvar in GenPolynomial and GenSolvablePolynomial, done
@@ -113,7 +110,9 @@ partially resolved and completed issues:
 
 - add method bitLength() to Element
 
+- completely switch from svn to git
 
+- remove @usage doc tag
 
 
 resolved and completed issues:

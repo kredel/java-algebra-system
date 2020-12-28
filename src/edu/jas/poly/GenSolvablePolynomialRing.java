@@ -298,7 +298,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
         int h;
         h = super.hashCode();
         h = 37 * h + table.hashCode();
-	System.out.println("GenPolynomialRing.hashCode: " + h);
+        //System.out.println("GenSolvablePolynomialRing.hashCode: " + h);
         return h;
     }
 

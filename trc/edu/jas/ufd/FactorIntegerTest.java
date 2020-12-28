@@ -708,7 +708,7 @@ public class FactorIntegerTest extends TestCase {
         assertTrue("#facs < 2, sm = " + sm, sm.size() >= 2);
     }
 
-	
+
     /**
      * Test integer factorization. Example (a+b*x) (c+d*x).
      */
