@@ -174,7 +174,7 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
         // +1 seems to be a hack for the unlucky evaluation point test
         MOD inc = cofac.getONE();
         long i = 0;
-        long en = cofac.getIntegerModul().longValue() - 1; // just a stopper
+        long en = cofac.getIntegerModul().longValueExact() - 1; // just a stopper
         MOD end = cofac.fromInteger(en);
         MOD mi;
         GenPolynomial<MOD> M = null;
@@ -384,7 +384,7 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
         // initialize element
         MOD inc = cofac.getONE();
         long i = 0;
-        long en = cofac.getIntegerModul().longValue() - 1; // just a stopper
+        long en = cofac.getIntegerModul().longValueExact() - 1; // just a stopper
         MOD end = cofac.fromInteger(en);
         MOD mi;
         GenPolynomial<MOD> M = null;
