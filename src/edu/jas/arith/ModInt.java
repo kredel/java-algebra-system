@@ -62,7 +62,7 @@ public final class ModInt implements GcdRingElem<ModInt>, Modular {
      */
     public ModInt(ModIntRing m, long a) {
         ring = m;
-        int v = ((int) a) % ring.modul;
+        int v = (int) (a % (long)ring.modul);
         val = (v >= 0 ? v : v + ring.modul);
     }
 
@@ -85,7 +85,7 @@ public final class ModInt implements GcdRingElem<ModInt>, Modular {
      * @param a long.
      */
     public ModInt(ModIntRing m, Long a) {
-        this(m, a.intValue());
+        this(m, a.longValue());
     }
 
 
