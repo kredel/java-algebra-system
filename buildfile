@@ -12,7 +12,7 @@ require 'buildr/groovy'
 VERSION_NUMBER = "2.6." + `svnlook youngest /home/SUBVERSION/jas`.to_s.chomp
 # Group identifier for your projects
 GROUP = "JavaAlgebraSystem"
-COPYRIGHT = "Copyright (c) 2005-2020 by Heinz Kredel"
+COPYRIGHT = "Copyright (c) 2005-2021 by Heinz Kredel"
 
 # Specify Maven 2.0 remote repositories here, like this:
 #repositories.remote << "http://repo1.maven.org/maven2"

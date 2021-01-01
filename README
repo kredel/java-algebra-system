@@ -2,11 +2,11 @@
 JAS: Java Algebra System
 ========================
 
-Version 2.6, 2020
+Version 2.7, 2021
 
 by Heinz Kredel, University of Mannheim, kredel at rz.uni-mannheim.de
 
-Copyright (c) 2000-2020 by Heinz Kredel.
+Copyright (c) 2000-2021 by Heinz Kredel.
 
 Programms released under GPL or LGPL, see COPYING.jas or COPYING.lgpl.jas.
 
@@ -20,7 +20,7 @@ A Java JDK 1.8.
 
 Documentation see index.html.
 
-Required libraries are log4j-core-2.5.jar, log4j-api-2.5.jar, log4j-1.2-api-2.5.jar 
+Required libraries are log4j-core-2.5.jar, log4j-api-2.5.jar
 (from Apache Log4j2, or mylog.jar, droidlog.jar) 
 and junit-4.12.jar, hamcrest-core-1.3.jar (from Junit for tests in trc) 
 
@@ -31,7 +31,7 @@ Usage
 > java  -cp {other_jar_files}:jas-<version>-bin.jar:. <sample class>
 
 for example
-> java -cp ../lib/log4j-core-2.5.jar:../lib/log4j-api-2.5.jar:../lib/log4j-1.2-api-2.5.jar:jas-2.6.5428-bin.jar edu.jas.application.RunGB seq examples/trinks7.jas
+> java -cp ../lib/log4j-core-2.5.jar:../lib/log4j-api-2.5.jar:jas-2.6.5428-bin.jar edu.jas.application.RunGB seq examples/trinks7.jas
 
 or
 
@@ -106,8 +106,9 @@ There is a Maven compatible repository for bytecode, source and javadocs at
 groupId: edu.jas, artifactId: jas, version (for example): 2.6.5675
 
 
-The version is specified by a two digit major.minor number
-and a subversion revision number. For example in
+The version is specified by a two digit major.minor number and a
+revision number. The revision number was the subversion revision
+number, but with git it is just a consecutive number. For example in
 
 jas-2.5.5380-bin.jar
 
