@@ -33,7 +33,7 @@ PYPATH=$(LIBPATH)/jython.jar
 # --- syncing ----------
 DRY=--dry-run
 DELETE=
-RSYNC=rsync -e ssh -avuz $(DRY) $(DELETE) --exclude=*~ --include=doc/svn_change.log --include=jdepend-report.txt --exclude=*.log* --exclude=*.out* --exclude=*.txt* --exclude=.svn --exclude=build/ --exclude=target/ --exclude=reports/ --exclude=.gradle/
+RSYNC=rsync -e ssh -avuz $(DRY) $(DELETE) --exclude=*~ --include=doc/git_change.log --include=jdepend-report.txt --exclude=*.log* --exclude=*.out* --exclude=*.txt* --exclude=.svn --exclude=build/ --exclude=target/ --exclude=reports/ --exclude=.gradle/
 ####--exclude=./test
 ####--exclude=*.ps --exclude=*.pdf --exclude=spin*
 ####--exclude=*/.jxta/
@@ -444,7 +444,7 @@ GITSINCE=2018-01-01
 
 # git archive --format=tar --prefix=$(VERSION)/ HEAD | (cd ~/jas-versions/ && tar -xf -)
 #svn export --quiet file:///$(SVNREPO)/jas/trunk ~/jas-versions/$(VERSION)
-#svn log -v -r HEAD:$(SVNSRT) file:///$(SVNREPO)/jas/trunk src trc examples jython mpj mpi jlinalg_adapter commons-math_adapter > ~/jas-versions/$(VERSION)/doc/svn_change.log
+#svn log -v -r HEAD:$(SVNSRT) file:///$(SVNREPO)/jas/trunk src trc examples jython mpj mpi jlinalg_adapter commons-math_adapter > ~/jas-versions/$(VERSION)/doc/git_change.log
 
 
 export:
@@ -494,8 +494,10 @@ m2-deploy:
 git-export:
 	#cd ~/jas-versions/jas-git/jas; git svn rebase > ~/jas-versions/$(VERSION)/git_svn.out
 	#cd ~/jas-versions/jas-git/jas; git push -v deploy > ~/jas-versions/$(VERSION)/git_push.out
-	#cd ~/jas; git svn dcommit > ~/jas-versions/$(VERSION)/git_svn.out
 	cd ~/jas; git push -v deploy > ~/jas-versions/$(VERSION)/git_push.out
+
+svn-export:
+	cd ~/jas; git svn dcommit > ~/jas-versions/$(VERSION)/git_svn.out
 
 git-deploy:
 	$(RSYNC) -e 'ssh' --delete-after ~/jas-versions/jas-git/jas.git/ krum:htdocs/jas.git
@@ -524,7 +526,7 @@ young:
 subst:
 	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) $(GITREV) doc/download.html $(DEBVERSION)
 
-logs:
+svn-logs:
 	svn log -v -r HEAD:$(SVNSRT) file:///$(SVNREPO)/jas/trunk src trc examples jython mpj mpi jlinalg_adapter commons-math_adapter > doc/svn_change.log
 
 # lines of code and number of classes

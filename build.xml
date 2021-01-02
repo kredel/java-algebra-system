@@ -44,10 +44,12 @@
   <property name="dist.dir"  value="target" />
   <property name="ivy-publish.overwrite"  value="true" />
 
-  <property name="dist"      value="../jas-versions/jas-2.6" />
+  <property name="dist"      value="../jas-versions/jas-2.7" />
   <property name="tmpdist"   value="../jas-versions/tmp" />
   <property name="artifactId" value="jas" />
-  <!--property name="version"  value="2.6.${SVNREV}" /--> <!-- set in vorher-->
+  <property name="svnrev"    value="10" />
+  <property name="gitrev"    value="${svnrev}" />
+  <!--property name="version"  value="2.7.${SVNREV}" /--> <!-- set in vorher-->
 
 <!--
   <taskdef name="lint4j" classname="com.jutils.lint4j.ant.Lint4jAntTask">
@@ -73,7 +75,7 @@
   <!--exec executable="svnlook" outputproperty="svnrev" >
    <arg line="youngest /home/SUBVERSION/jas"/>
   </exec-->
-  <property name="version" value="2.6.${svnrev}" />
+  <property name="version" value="2.7.${gitrev}" />
   <!--echo message="artifact version = ${artifactId}-${version}"  /-->
 </target>
 
