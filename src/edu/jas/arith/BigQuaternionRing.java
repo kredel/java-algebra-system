@@ -236,14 +236,14 @@ public final class BigQuaternionRing implements RingFactory<BigQuaternion> {
      */
     @Override
     public String toScript() {
-        StringBuffer s = new StringBuffer("BigQuaternionRing(");
+        StringBuffer s = new StringBuffer("Quat(");
         switch (Scripting.getLang()) {
         case Ruby:
-            s.append((integral ? ",true" : ",false"));
+            s.append((integral ? "true" : "" ));
             break;
         case Python:
         default:
-            s.append((integral ? ",True" : ",False"));
+            s.append((integral ? "True" : "" ));
         }
         s.append(")");
         return s.toString();
