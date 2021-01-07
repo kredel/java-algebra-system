@@ -101,7 +101,7 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
         GenPolynomialRing<GenPolynomial<BigInteger>> rfac = P.ring;
         RingFactory<GenPolynomial<BigInteger>> rrfac = rfac.coFac;
         GenPolynomialRing<BigInteger> cfac = (GenPolynomialRing<BigInteger>) rrfac;
-        GenPolynomialRing<BigInteger> dfac = cfac.extend(rfac.nvar);
+        GenPolynomialRing<BigInteger> dfac = cfac.extend(rfac.getVars());
         GenPolynomial<BigInteger> Pd = PolyUtil.<BigInteger> distribute(dfac, P);
         GenPolynomial<BigInteger> Sd = PolyUtil.<BigInteger> distribute(dfac, S);
         GenPolynomial<BigInteger> Dd = gcd(Pd, Sd);
@@ -203,7 +203,7 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
             logger.debug("cc = " + cc);
             logger.debug("n  = " + n);
             logger.debug("cf = " + cf);
-            logger.info("wdegv = " + wdegv);
+            logger.info("wdegv = " + wdegv + ", in " + fac.toScript());
         }
         for (java.math.BigInteger p : primes) {
             //System.out.println("next run ++++++++++++++++++++++++++++++++++");

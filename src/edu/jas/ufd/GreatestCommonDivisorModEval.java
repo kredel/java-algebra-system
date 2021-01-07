@@ -167,7 +167,8 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
         long rd0 = PolyUtil.<MOD> coeffMaxDegree(rr);
         long qd0 = PolyUtil.<MOD> coeffMaxDegree(qr);
         long cd0 = cc.degree(0);
-        long G = (rd0 >= qd0 ? rd0 : qd0) + cd0;
+        long G = (rd0 < qd0 ? rd0 : qd0) + cd0 + 1L; // >=
+        //long Gm = (e < f ? e : f);
 
         // initialize element and degree vector
         ExpVector wdegv = rdegv.subst(0, rdegv.getVal(0) + 1);
@@ -187,13 +188,13 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
             logger.debug("c = " + c);
             logger.debug("cc = " + cc);
             logger.debug("G = " + G);
-            logger.info("wdegv = " + wdegv);
+            logger.info("wdegv = " + wdegv + ", in " + rfac.toScript());
         }
         for (MOD d = cofac.getZERO(); d.compareTo(end) <= 0; d = d.sum(inc)) {
             if (++i >= en) {
                 logger.warn("elements of Z_p exhausted, en = " + en);
                 return mufd.gcd(P, S);
-                //throw new ArithmeticException("prime list exhausted");
+                //throw new ArithmeticException("elements of Z_p exhausted, en = " + en);
             }
             // map normalization factor
             MOD nf = PolyUtil.<MOD> evaluateMain(cofac, cc, d);
@@ -214,7 +215,11 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
             }
             // compute modular gcd in recursion
             cm = gcd(rm, qm);
-            //System.out.println("cm = " + cm);
+            if (debug) {
+                logger.debug("cm = " + cm + ", rm = " + rm + ", qm = " + qm);
+                //cm = mufd.gcd(rm,qm);
+                //logger.debug("cm = " + cm + ", rm = " + rm + ", qm = " + qm);
+            }
             // test for constant g.c.d
             if (cm.isConstant()) {
                 logger.debug("cm.isConstant = " + cm + ", c = " + c);
@@ -223,7 +228,7 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
                 }
                 cm = cm.abs().multiply(c);
                 q = cm.extend(fac, 0, 0);
-                logger.debug("q             = " + q + ", c = " + c);
+                //logger.debug("q             = " + q + ", c = " + c);
                 return q;
             }
             // test for unlucky evaluation point
@@ -262,11 +267,39 @@ public class GreatestCommonDivisorModEval <MOD extends GcdRingElem<MOD> & Modula
             mi = PolyUtil.<MOD> evaluateMain(cofac, M, d);
             mi = mi.inverse(); // mod p
             cp = PolyUtil.interpolate(rfac, cp, M, mi, cm, d);
+            if (debug) {
+                logger.debug("cp = " + cp + ", cm = " + cm + ", M = " + M + " :: " + M.ring.toScript());
+            }
             mn = ufac.getONE().multiply(d);
             mn = ufac.univariate(0).subtract(mn);
-            M = M.multiply(mn);
+            M = M.multiply(mn); // M * (x-d)
+            // test for divisibility
+            boolean tt = false;
+            if (cp.leadingBaseCoefficient().equals(cc)) {
+                cp = recursivePrimitivePart(cp).abs();
+                logger.debug("test cp == cc: " + cp + " == " + cc);
+                tt = PolyUtil.<MOD> recursiveSparsePseudoRemainder(qr,cp).isZERO();
+                tt = tt && PolyUtil.<MOD> recursiveSparsePseudoRemainder(rr,cp).isZERO();
+                if (tt) {
+                    logger.debug("break: is gcd");
+                    break;
+                }
+                if (M.degree(0) > G) { // no && cp.degree(0) > Gm
+                    logger.debug("break: fail 1, cp = " + cp);
+                    cp = rfac.getONE();
+                    break;
+                }
+            }
             // test for completion
-            if (M.degree(0) > G) {
+            if (M.degree(0) > G) { //  no && cp.degree(0) > Gm
+                logger.debug("break: M = " + M + ", G = " + G + ", mn = " + mn + ", M.deg(0) = " + M.degree(0));
+                cp = recursivePrimitivePart(cp).abs();
+                tt = PolyUtil.<MOD> recursiveSparsePseudoRemainder(qr,cp).isZERO();
+                tt = tt && PolyUtil.<MOD> recursiveSparsePseudoRemainder(rr,cp).isZERO();
+                if (! tt) {
+                    logger.debug("break: fail 2, cp = " + cp);
+                    cp = rfac.getONE();
+                }
                 break;
             }
             //long cmn = PolyUtil.<MOD>coeffMaxDegree(cp);
