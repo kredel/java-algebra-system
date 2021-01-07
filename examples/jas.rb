@@ -1671,6 +1671,7 @@ r is the given polynomial ring.
         end
         begin
            i = GCDFactory.getProxy(r.coFac);
+           #i = GCDFactory.getImplementation(r.coFac);
         rescue => e
            i = nil
         end
@@ -1870,7 +1871,13 @@ Compute the greatest common divisor of a and b.
             b = element( b );
             b = b.elem;
         end
-        return RingElem.new( @engine.gcd(a,b) );
+        cf = @ring.coFac;
+        if cf.is_a? GenPolynomialRing
+            e = @engine.recursiveGcd( a, b );
+        else
+            e = @engine.gcd( a, b );
+        end
+        return RingElem.new( e );
     end
 
 =begin rdoc

@@ -31,7 +31,7 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>> extends SquarefreeAbs
     private static final Logger logger = LogManager.getLogger(SquarefreeRingChar0.class);
 
 
-    //private static final boolean debug = logger.isDebugEnabled();
+    private static final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -314,6 +314,9 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>> extends SquarefreeAbs
                 //System.out.println("iTp = " + Tp);
                 T = engine.recursiveUnivariateGcd(T0, Tp);
                 //System.out.println("iT = " + T);
+                if (debug) {
+                    logger.info("T0 = " + T0 + ", Tp = " + Tp + ", T = " + T);
+                }
                 T = engine.baseRecursivePrimitivePart(T);
                 //System.out.println("iT = " + T);
                 V = PolyUtil.<C> recursivePseudoDivide(T0, T);
@@ -327,6 +330,9 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>> extends SquarefreeAbs
             }
             k++;
             GenPolynomial<GenPolynomial<C>> W = engine.recursiveUnivariateGcd(T, V);
+            if (debug) {
+                logger.info("T = " + T + ", V = " + V + ", W = " + W);
+            }
             W = engine.baseRecursivePrimitivePart(W);
             GenPolynomial<GenPolynomial<C>> z = PolyUtil.<C> recursivePseudoDivide(V, W);
             //System.out.println("W = " + W);
