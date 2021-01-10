@@ -216,7 +216,7 @@ public class GCDProxyTest extends TestCase {
             //System.out.println("d = " + d);
             //System.out.println("e = " + e);
 
-            e = PolyUtil.<BigInteger> basePseudoRemainder(d, c);
+            e = PolyUtil.<BigInteger> baseSparsePseudoRemainder(d, c);
             //System.out.println("e = " + e);
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
         }
@@ -290,7 +290,7 @@ public class GCDProxyTest extends TestCase {
             //System.out.println("d = " + d);
             //System.out.println("e = " + e);
 
-            e = PolyUtil.<ModInteger> basePseudoRemainder(d, c);
+            e = PolyUtil.<ModInteger> baseSparsePseudoRemainder(d, c);
             //System.out.println("e = " + e);
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
         }

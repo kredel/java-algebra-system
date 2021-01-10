@@ -199,7 +199,7 @@ public class SquarefreeModLongTest extends TestCase {
         assertTrue("isSquarefree(c) " + c, sqf.isSquarefree(c));
         assertTrue("isSquarefree(d) " + d, sqf.isSquarefree(d));
 
-        e = PolyUtil.<ModLong> basePseudoRemainder(d, c);
+        e = PolyUtil.<ModLong> baseSparsePseudoRemainder(d, c);
         //System.out.println("e  = " + e);
         assertTrue("squarefree(abc) | squarefree(aabbbc) " + e, e.isZERO());
     }
@@ -270,7 +270,7 @@ public class SquarefreeModLongTest extends TestCase {
         assertTrue("isSquarefree(cr) " + cr, sqf.isRecursiveSquarefree(cr));
         assertTrue("isSquarefree(dr) " + dr, sqf.isRecursiveSquarefree(dr));
 
-        er = PolyUtil.<ModLong> recursivePseudoRemainder(dr, cr);
+        er = PolyUtil.<ModLong> recursiveSparsePseudoRemainder(dr, cr);
         //System.out.println("er  = " + er);
         assertTrue("squarefree(abc) | squarefree(aabbc) " + er, er.isZERO());
     }
@@ -340,7 +340,7 @@ public class SquarefreeModLongTest extends TestCase {
         assertTrue("isSquarefree(d) " + d, sqf.isSquarefree(d));
         assertTrue("isSquarefree(c) " + c, sqf.isSquarefree(c));
 
-        e = PolyUtil.<ModLong> basePseudoRemainder(d, c);
+        e = PolyUtil.<ModLong> baseSparsePseudoRemainder(d, c);
         //System.out.println("e  = " + e);
         assertTrue("squarefree(abc) | squarefree(aabbc) " + e, e.isZERO());
     }
@@ -414,7 +414,7 @@ public class SquarefreeModLongTest extends TestCase {
         assertTrue("isSquarefree(c) " + c, sqf.isSquarefree(c));
         assertTrue("isSquarefree(d) " + d, sqf.isSquarefree(d));
 
-        e = PolyUtil.<ModLong> basePseudoRemainder(d, c);
+        e = PolyUtil.<ModLong> baseSparsePseudoRemainder(d, c);
         //System.out.println("e  = " + e);
         assertTrue("squarefree(abc) | squarefree(aab^pc) " + e, e.isZERO());
     }
@@ -490,7 +490,7 @@ public class SquarefreeModLongTest extends TestCase {
         assertTrue("isSquarefree(cr) " + cr, sqf.isRecursiveSquarefree(cr));
         assertTrue("isSquarefree(dr) " + dr, sqf.isRecursiveSquarefree(dr));
 
-        er = PolyUtil.<ModLong> recursivePseudoRemainder(dr, cr);
+        er = PolyUtil.<ModLong> recursiveSparsePseudoRemainder(dr, cr);
         //System.out.println("er  = " + er);
         assertTrue("squarefree(abc) | squarefree(aabbc) " + er, er.isZERO());
     }
@@ -567,7 +567,7 @@ public class SquarefreeModLongTest extends TestCase {
         assertTrue("isSquarefree(d) " + d, sqf.isSquarefree(d));
         assertTrue("isSquarefree(c) " + c, sqf.isSquarefree(c));
 
-        e = PolyUtil.<ModLong> basePseudoRemainder(d, c);
+        e = PolyUtil.<ModLong> baseSparsePseudoRemainder(d, c);
         //System.out.println("e  = " + e);
         assertTrue("squarefree(abc) | squarefree(aab^pc) " + e, e.isZERO());
     }

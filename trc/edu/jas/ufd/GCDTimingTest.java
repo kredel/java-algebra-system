@@ -218,7 +218,7 @@ public class GCDTimingTest extends TestCase {
             t = System.currentTimeMillis();
             d = ufd_si.baseGcd(a,b);
             t = System.currentTimeMillis() - t;
-            e = PolyUtil.<BigInteger>basePseudoRemainder(d,c);
+            e = PolyUtil.<BigInteger>baseSparsePseudoRemainder(d,c);
             //System.out.println("d  = " + d);
 
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
@@ -228,7 +228,7 @@ public class GCDTimingTest extends TestCase {
             t = System.currentTimeMillis();
             d = ufd_pp.baseGcd(a, b);
             t = System.currentTimeMillis() - t;
-            e = PolyUtil.<BigInteger> basePseudoRemainder(d, c);
+            e = PolyUtil.<BigInteger> baseSparsePseudoRemainder(d, c);
             //System.out.println("d  = " + d);
 
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
@@ -238,7 +238,7 @@ public class GCDTimingTest extends TestCase {
             t = System.currentTimeMillis();
             d = ufd_sr.baseGcd(a, b);
             t = System.currentTimeMillis() - t;
-            e = PolyUtil.<BigInteger> basePseudoRemainder(d, c);
+            e = PolyUtil.<BigInteger> baseSparsePseudoRemainder(d, c);
             //System.out.println("d  = " + d);
 
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
@@ -288,7 +288,7 @@ public class GCDTimingTest extends TestCase {
             t = System.currentTimeMillis() - t;
             //System.out.println("dr = " + dr);
 
-            //er = PolyUtil.<BigInteger>recursivePseudoRemainder(dr,cr);
+            //er = PolyUtil.<BigInteger>recursiveSparsePseudoRemainder(dr,cr);
             //System.out.println("er = " + er);
 
             //assertTrue("c | gcd(ac,bc) " + er, er.isZERO() );
@@ -301,7 +301,7 @@ public class GCDTimingTest extends TestCase {
             t = System.currentTimeMillis() - t;
             //System.out.println("dr = " + dr);
 
-            er = PolyUtil.<BigInteger> recursivePseudoRemainder(dr, cr);
+            er = PolyUtil.<BigInteger> recursiveSparsePseudoRemainder(dr, cr);
             //System.out.println("er = " + er);
 
             assertTrue("c | gcd(ac,bc) " + er, er.isZERO());
@@ -313,7 +313,7 @@ public class GCDTimingTest extends TestCase {
             t = System.currentTimeMillis() - t;
             //System.out.println("dr = " + dr);
 
-            er = ufd_sr.recursivePseudoRemainder(dr, cr);
+            er = PolyUtil.<BigInteger> recursiveDensePseudoRemainder(dr, cr);
             //System.out.println("er = " + er);
 
             assertTrue("c | gcd(ac,bc) " + er, er.isZERO());
@@ -364,7 +364,7 @@ public class GCDTimingTest extends TestCase {
             t = System.currentTimeMillis();
             d = ufd_si.gcd(a,b);
             t = System.currentTimeMillis() - t;
-            e = PolyUtil.<BigInteger>basePseudoRemainder(d,c);
+            e = PolyUtil.<BigInteger>baseSparsePseudoRemainder(d,c);
             //System.out.println("d  = " + d);
 
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
@@ -374,7 +374,7 @@ public class GCDTimingTest extends TestCase {
             t = System.currentTimeMillis();
             d = ufd_pp.gcd(a,b);
             t = System.currentTimeMillis() - t;
-            e = PolyUtil.<BigInteger>basePseudoRemainder(d,c);
+            e = PolyUtil.<BigInteger>baseSparsePseudoRemainder(d,c);
             //System.out.println("d  = " + d);
 
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
@@ -384,7 +384,7 @@ public class GCDTimingTest extends TestCase {
             t = System.currentTimeMillis();
             d = ufd_sr.gcd(a, b);
             t = System.currentTimeMillis() - t;
-            e = PolyUtil.<BigInteger> basePseudoRemainder(d, c);
+            e = PolyUtil.<BigInteger> baseSparsePseudoRemainder(d, c);
             //System.out.println("d  = " + d);
 
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
@@ -394,7 +394,7 @@ public class GCDTimingTest extends TestCase {
             t = System.currentTimeMillis();
             d = ufd_mosi.gcd(a, b);
             t = System.currentTimeMillis() - t;
-            e = PolyUtil.<BigInteger> basePseudoRemainder(d, c);
+            e = PolyUtil.<BigInteger> baseSparsePseudoRemainder(d, c);
             //System.out.println("d  = " + d);
 
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
@@ -404,7 +404,7 @@ public class GCDTimingTest extends TestCase {
             t = System.currentTimeMillis();
             d = ufd_moevsi.gcd(a, b);
             t = System.currentTimeMillis() - t;
-            e = PolyUtil.<BigInteger> basePseudoRemainder(d, c);
+            e = PolyUtil.<BigInteger> baseSparsePseudoRemainder(d, c);
             //System.out.println("d  = " + d);
 
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO());

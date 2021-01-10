@@ -5,7 +5,6 @@
 package edu.jas.ufd;
 
 
-//import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,61 +77,19 @@ public class GCDModularTest extends TestCase {
     ModIntegerRing mi;
 
 
-    ModInteger ai;
+    ModInteger ai, bi, ci, di, ei;
 
 
-    ModInteger bi;
+    GenPolynomial<ModInteger> a, b, c, d, e;
 
 
-    ModInteger ci;
+    GenPolynomial<ModInteger> ac, bc;
 
 
-    ModInteger di;
+    GenPolynomial<GenPolynomial<ModInteger>> ar, br, cr, dr, er;
 
 
-    ModInteger ei;
-
-
-    GenPolynomial<ModInteger> a;
-
-
-    GenPolynomial<ModInteger> b;
-
-
-    GenPolynomial<ModInteger> c;
-
-
-    GenPolynomial<ModInteger> d;
-
-
-    GenPolynomial<ModInteger> e;
-
-
-    GenPolynomial<ModInteger> ac;
-
-
-    GenPolynomial<ModInteger> bc;
-
-
-    GenPolynomial<GenPolynomial<ModInteger>> ar;
-
-
-    GenPolynomial<GenPolynomial<ModInteger>> br;
-
-
-    GenPolynomial<GenPolynomial<ModInteger>> cr;
-
-
-    GenPolynomial<GenPolynomial<ModInteger>> dr;
-
-
-    GenPolynomial<GenPolynomial<ModInteger>> er;
-
-
-    GenPolynomial<GenPolynomial<ModInteger>> arc;
-
-
-    GenPolynomial<GenPolynomial<ModInteger>> brc;
+    GenPolynomial<GenPolynomial<ModInteger>> arc, brc;
 
 
     int rl = 5;
@@ -184,11 +141,7 @@ public class GCDModularTest extends TestCase {
         GreatestCommonDivisorAbstract<BigInteger> ufd_m = new GreatestCommonDivisorModular<ModInteger>(/*false*/);
         GreatestCommonDivisorAbstract<BigInteger> ufd = new GreatestCommonDivisorPrimitive<BigInteger>();
 
-        GenPolynomial<BigInteger> a;
-        GenPolynomial<BigInteger> b;
-        GenPolynomial<BigInteger> c;
-        GenPolynomial<BigInteger> d;
-        GenPolynomial<BigInteger> e;
+        GenPolynomial<BigInteger> a, b, c, d, e;
 
         GenPolynomialRing<BigInteger> dfac = new GenPolynomialRing<BigInteger>(new BigInteger(), 3, to);
 
@@ -217,17 +170,17 @@ public class GCDModularTest extends TestCase {
             d = ufd_m.gcd(a, b);
 
             c = ufd.basePrimitivePart(c).abs();
-            e = PolyUtil.<BigInteger> basePseudoRemainder(d, c);
+            e = PolyUtil.<BigInteger> baseSparsePseudoRemainder(d, c);
             //System.out.println("c  = " + c);
             //System.out.println("d  = " + d);
 
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
 
-            e = PolyUtil.<BigInteger> basePseudoRemainder(a, d);
+            e = PolyUtil.<BigInteger> baseSparsePseudoRemainder(a, d);
             //System.out.println("e = " + e);
             assertTrue("gcd(a,b) | a" + e, e.isZERO());
 
-            e = PolyUtil.<BigInteger> basePseudoRemainder(b, d);
+            e = PolyUtil.<BigInteger> baseSparsePseudoRemainder(b, d);
             //System.out.println("e = " + e);
             assertTrue("gcd(a,b) | b" + e, e.isZERO());
         }
@@ -242,11 +195,7 @@ public class GCDModularTest extends TestCase {
         GreatestCommonDivisorAbstract<BigInteger> ufd_m = new GreatestCommonDivisorModular<ModInteger>(true);
         GreatestCommonDivisorAbstract<BigInteger> ufd = new GreatestCommonDivisorPrimitive<BigInteger>();
 
-        GenPolynomial<BigInteger> a;
-        GenPolynomial<BigInteger> b;
-        GenPolynomial<BigInteger> c;
-        GenPolynomial<BigInteger> d;
-        GenPolynomial<BigInteger> e;
+        GenPolynomial<BigInteger> a, b, c, d, e;
 
         GenPolynomialRing<BigInteger> dfac = new GenPolynomialRing<BigInteger>(new BigInteger(), 3, to);
 
@@ -275,17 +224,17 @@ public class GCDModularTest extends TestCase {
             d = ufd_m.gcd(a, b);
 
             c = ufd.basePrimitivePart(c).abs();
-            e = PolyUtil.<BigInteger> basePseudoRemainder(d, c);
+            e = PolyUtil.<BigInteger> baseSparsePseudoRemainder(d, c);
             //System.out.println("c  = " + c);
             //System.out.println("d  = " + d);
 
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
 
-            e = PolyUtil.<BigInteger> basePseudoRemainder(a, d);
+            e = PolyUtil.<BigInteger> baseSparsePseudoRemainder(a, d);
             //System.out.println("e = " + e);
             assertTrue("gcd(a,b) | a" + e, e.isZERO());
 
-            e = PolyUtil.<BigInteger> basePseudoRemainder(b, d);
+            e = PolyUtil.<BigInteger> baseSparsePseudoRemainder(b, d);
             //System.out.println("e = " + e);
             assertTrue("gcd(a,b) | b" + e, e.isZERO());
         }
@@ -373,10 +322,10 @@ public class GCDModularTest extends TestCase {
             //System.out.println("ac = " + ac);
             //System.out.println("bc = " + bc);
 
-            //e = PolyUtil.<ModInteger>basePseudoRemainder(ac,c);
+            //e = PolyUtil.<ModInteger>baseSparsePseudoRemainder(ac,c);
             //System.out.println("ac/c a = 0 " + e);
             //assertTrue("ac/c-a != 0 " + e, e.isZERO() );
-            //e = PolyUtil.<ModInteger>basePseudoRemainder(bc,c);
+            //e = PolyUtil.<ModInteger>baseSparsePseudoRemainder(bc,c);
             //System.out.println("bc/c-b = 0 " + e);
             //assertTrue("bc/c-b != 0 " + e, e.isZERO() );
 
@@ -384,7 +333,7 @@ public class GCDModularTest extends TestCase {
             d = d.monic(); // not required
             //System.out.println("d = " + d);
 
-            e = PolyUtil.<ModInteger> basePseudoRemainder(d, c);
+            e = PolyUtil.<ModInteger> baseSparsePseudoRemainder(d, c);
             //System.out.println("e = " + e);
 
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
@@ -428,10 +377,10 @@ public class GCDModularTest extends TestCase {
             //System.out.println("arc = " + arc);
             //System.out.println("brc = " + brc);
 
-            //er = PolyUtil.<ModInteger>recursivePseudoRemainder(arc,cr);
+            //er = PolyUtil.<ModInteger>recursiveSparsePseudoRemainder(arc,cr);
             //System.out.println("ac/c-a = 0 " + er);
             //assertTrue("ac/c-a != 0 " + er, er.isZERO() );
-            //er = PolyUtil.<ModInteger>recursivePseudoRemainder(brc,cr);
+            //er = PolyUtil.<ModInteger>recursiveSparsePseudoRemainder(brc,cr);
             //System.out.println("bc/c-b = 0 " + er);
             //assertTrue("bc/c-b != 0 " + er, er.isZERO() );
 
@@ -440,7 +389,7 @@ public class GCDModularTest extends TestCase {
             //System.out.println("cr = " + cr);
             //System.out.println("dr = " + dr);
 
-            er = PolyUtil.<ModInteger> recursivePseudoRemainder(dr, cr);
+            er = PolyUtil.<ModInteger> recursiveSparsePseudoRemainder(dr, cr);
             //System.out.println("er = " + er);
 
             assertTrue("c | gcd(ac,bc) " + er, er.isZERO());
@@ -484,10 +433,10 @@ public class GCDModularTest extends TestCase {
             //System.out.println("arc = " + arc);
             //System.out.println("brc = " + brc);
 
-            //er = PolyUtil.<ModInteger>recursivePseudoRemainder(arc,cr);
+            //er = PolyUtil.<ModInteger>recursiveSparsePseudoRemainder(arc,cr);
             //System.out.println("ac/c-a = 0 " + er);
             //assertTrue("ac/c-a != 0 " + er, er.isZERO() );
-            //er = PolyUtil.<ModInteger>recursivePseudoRemainder(brc,cr);
+            //er = PolyUtil.<ModInteger>recursiveSparsePseudoRemainder(brc,cr);
             //System.out.println("bc/c-b = 0 " + er);
             //assertTrue("bc/c-b != 0 " + er, er.isZERO() );
 
@@ -496,7 +445,7 @@ public class GCDModularTest extends TestCase {
             //System.out.println("cr = " + cr);
             //System.out.println("dr = " + dr);
 
-            er = PolyUtil.<ModInteger> recursivePseudoRemainder(dr, cr);
+            er = PolyUtil.<ModInteger> recursiveSparsePseudoRemainder(dr, cr);
             //System.out.println("er = " + er);
 
             assertTrue("c | gcd(ac,bc) " + er, er.isZERO());
@@ -532,24 +481,24 @@ public class GCDModularTest extends TestCase {
             //System.out.println("ac = " + ac);
             //System.out.println("bc = " + bc);
 
-            //e = PolyUtil.<ModInteger>basePseudoRemainder(ac,c);
+            //e = PolyUtil.<ModInteger>baseSparsePseudoRemainder(ac,c);
             //System.out.println("ac/c-a = 0 " + e);
             //assertTrue("ac/c-a != 0 " + e, e.isZERO() );
-            //e = PolyUtil.<ModInteger>basePseudoRemainder(bc,c);
+            //e = PolyUtil.<ModInteger>baseSparsePseudoRemainder(bc,c);
             //System.out.println("bc/c-b = 0 " + e);
             //assertTrue("bc/c-b != 0 " + e, e.isZERO() );
 
             d = ufd.gcd(ac, bc);
             //System.out.println("d = " + d);
-            e = PolyUtil.<ModInteger> basePseudoRemainder(d, c);
+            e = PolyUtil.<ModInteger> baseSparsePseudoRemainder(d, c);
             //System.out.println("e = " + e);
             //System.out.println("c = " + c);
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
 
-            e = PolyUtil.<ModInteger> basePseudoRemainder(ac, d);
+            e = PolyUtil.<ModInteger> baseSparsePseudoRemainder(ac, d);
             //System.out.println("gcd(ac,bc) | ac " + e);
             assertTrue("gcd(ac,bc) | ac " + e, e.isZERO());
-            e = PolyUtil.<ModInteger> basePseudoRemainder(bc, d);
+            e = PolyUtil.<ModInteger> baseSparsePseudoRemainder(bc, d);
             //System.out.println("gcd(ac,bc) | bc " + e);
             assertTrue("gcd(ac,bc) | bc " + e, e.isZERO());
         }
@@ -762,6 +711,35 @@ public class GCDModularTest extends TestCase {
 
             assertEquals("d == e: " + d.subtract(e), d.signum(), e.signum());
         }
+    }
+
+
+    /**
+     * Test gcd example modular.
+     */
+    public void testGCDExamModular() {
+
+        GreatestCommonDivisorAbstract<BigInteger> ufd = new GreatestCommonDivisorModular<ModInteger>();
+        GenPolynomialRing<BigInteger> dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), new String[] {"t","x"}, to);
+        GenPolynomial<BigInteger> a, b, c, d, e;
+
+        a = dfac.parse("x**3 + x**2 - t * x - t");
+        b = dfac.parse("3 * x**2 + 2 * x - t");
+
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+
+        d = ufd.gcd(a, b);
+        //System.out.println("c = " + c);
+        //System.out.println("d = " + d);
+
+        e = PolyUtil.<BigInteger> baseSparsePseudoRemainder(a, d);
+        //System.out.println("e = " + e);
+        assertTrue("gcd(a,b) | a " + e, e.isZERO());
+
+        e = PolyUtil.<BigInteger> baseSparsePseudoRemainder(b, d);
+        //System.out.println("e = " + e);
+        assertTrue("gcd(a,b) | b " + e, e.isZERO());
     }
 
 }

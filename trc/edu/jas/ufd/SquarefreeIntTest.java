@@ -199,7 +199,7 @@ public class SquarefreeIntTest extends TestCase {
         assertTrue("isSquarefree(c) " + c, sqf.isSquarefree(c));
         assertTrue("isSquarefree(d) " + d, sqf.isSquarefree(d));
 
-        e = PolyUtil.<BigInteger> basePseudoRemainder(d, c);
+        e = PolyUtil.<BigInteger> baseSparsePseudoRemainder(d, c);
         //System.out.println("e  = " + e);
         assertTrue("squarefree(abc) | squarefree(aabbbc) " + e, e.isZERO());
     }
@@ -271,7 +271,7 @@ public class SquarefreeIntTest extends TestCase {
         assertTrue("isSquarefree(cr) " + cr, sqf.isRecursiveSquarefree(cr));
         assertTrue("isSquarefree(dr) " + dr, sqf.isRecursiveSquarefree(dr));
 
-        er = PolyUtil.<BigInteger> recursivePseudoRemainder(dr, cr);
+        er = PolyUtil.<BigInteger> recursiveSparsePseudoRemainder(dr, cr);
         //System.out.println("er  = " + er);
         assertTrue("squarefree(abc) | squarefree(aabbc) " + er, er.isZERO());
     }
@@ -342,7 +342,7 @@ public class SquarefreeIntTest extends TestCase {
         assertTrue("isSquarefree(d) " + d, sqf.isSquarefree(d));
         assertTrue("isSquarefree(c) " + c, sqf.isSquarefree(c));
 
-        e = PolyUtil.<BigInteger> basePseudoRemainder(d, c);
+        e = PolyUtil.<BigInteger> baseSparsePseudoRemainder(d, c);
         //System.out.println("e  = " + e);
         assertTrue("squarefree(abc) | squarefree(aabbc) " + e, e.isZERO());
     }

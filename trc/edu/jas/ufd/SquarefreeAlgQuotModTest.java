@@ -233,7 +233,7 @@ public class SquarefreeAlgQuotModTest extends TestCase {
         assertTrue("isSquarefree(c) " + c, asqf.isSquarefree(c));
         assertTrue("isSquarefree(d) " + d, asqf.isSquarefree(d));
 
-        e = PolyUtil.<AlgebraicNumber<Quotient<ModInteger>>> basePseudoRemainder(d, c);
+        e = PolyUtil.<AlgebraicNumber<Quotient<ModInteger>>> baseSparsePseudoRemainder(d, c);
         //System.out.println("e  = " + e);
         assertTrue("squarefree(abc) | squarefree(aabbbc) " + e, e.isZERO());
     }
@@ -316,7 +316,7 @@ public class SquarefreeAlgQuotModTest extends TestCase {
         assertTrue("isSquarefree(cr) " + cr, asqf.isRecursiveSquarefree(cr));
         assertTrue("isSquarefree(dr) " + dr, asqf.isRecursiveSquarefree(dr));
 
-        er = PolyUtil.<AlgebraicNumber<Quotient<ModInteger>>> recursivePseudoRemainder(dr, cr);
+        er = PolyUtil.<AlgebraicNumber<Quotient<ModInteger>>> recursiveSparsePseudoRemainder(dr, cr);
         //System.out.println("er  = " + er);
         assertTrue("squarefree(abc) | squarefree(aabbc) " + er, er.isZERO());
     }
@@ -401,7 +401,7 @@ public class SquarefreeAlgQuotModTest extends TestCase {
         assertTrue("isSquarefree(d) " + d, asqf.isSquarefree(d));
         assertTrue("isSquarefree(c) " + c, asqf.isSquarefree(c));
 
-        e = PolyUtil.<AlgebraicNumber<Quotient<ModInteger>>> basePseudoRemainder(d, c);
+        e = PolyUtil.<AlgebraicNumber<Quotient<ModInteger>>> baseSparsePseudoRemainder(d, c);
         //System.out.println("e  = " + e);
 
         assertTrue("squarefree(abc) | squarefree(aabbc) " + e, e.isZERO());
@@ -493,7 +493,7 @@ public class SquarefreeAlgQuotModTest extends TestCase {
         assertTrue("isSquarefree(c) " + c, asqf.isSquarefree(c));
         assertTrue("isSquarefree(d) " + d, asqf.isSquarefree(d));
 
-        e = PolyUtil.<AlgebraicNumber<Quotient<ModInteger>>> basePseudoRemainder(d, c);
+        e = PolyUtil.<AlgebraicNumber<Quotient<ModInteger>>> baseSparsePseudoRemainder(d, c);
         //System.out.println("e  = " + e);
         assertTrue("squarefree(abc) | squarefree(aab^pc) " + e, e.isZERO());
     }
@@ -579,7 +579,7 @@ public class SquarefreeAlgQuotModTest extends TestCase {
         assertTrue("isSquarefree(cr) " + cr, asqf.isRecursiveSquarefree(cr));
         assertTrue("isSquarefree(dr) " + dr, asqf.isRecursiveSquarefree(dr));
 
-        er = PolyUtil.<AlgebraicNumber<Quotient<ModInteger>>> recursivePseudoRemainder(dr, cr);
+        er = PolyUtil.<AlgebraicNumber<Quotient<ModInteger>>> recursiveSparsePseudoRemainder(dr, cr);
         //System.out.println("er  = " + er);
         assertTrue("squarefree(abc) | squarefree(aabbc) " + er, er.isZERO());
     }
@@ -663,7 +663,7 @@ public class SquarefreeAlgQuotModTest extends TestCase {
         assertTrue("isSquarefree(d) " + d, asqf.isSquarefree(d));
         assertTrue("isSquarefree(c) " + c, asqf.isSquarefree(c));
 
-        e = PolyUtil.<AlgebraicNumber<Quotient<ModInteger>>> basePseudoRemainder(d, c);
+        e = PolyUtil.<AlgebraicNumber<Quotient<ModInteger>>> baseSparsePseudoRemainder(d, c);
         //System.out.println("e  = " + e);
         assertTrue("squarefree(abc) | squarefree(aab^pc) " + e, e.isZERO());
     }

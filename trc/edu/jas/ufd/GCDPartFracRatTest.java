@@ -197,7 +197,7 @@ public class GCDPartFracRatTest extends TestCase {
 
             b = a.multiply(c);
             //System.out.println("b  = " + b);
-            d = PolyUtil.<BigRational> basePseudoRemainder(b, c);
+            d = PolyUtil.<BigRational> baseSparsePseudoRemainder(b, c);
             //System.out.println("d  = " + d);
 
             assertTrue("rem(ac,c) == 0", d.isZERO());
@@ -266,7 +266,7 @@ public class GCDPartFracRatTest extends TestCase {
 
             GenPolynomial<BigRational>[] egcd = ufd.baseExtendedGcd(a, b);
             d = egcd[0];
-            e = PolyUtil.<BigRational> basePseudoRemainder(d, c);
+            e = PolyUtil.<BigRational> baseSparsePseudoRemainder(d, c);
             //System.out.println("d  = " + d);
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
 

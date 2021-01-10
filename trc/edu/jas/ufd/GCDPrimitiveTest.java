@@ -189,7 +189,7 @@ public class GCDPrimitiveTest extends TestCase {
 
             b = a.multiply(c);
             //System.out.println("b  = " + b);
-            d = PolyUtil.<BigInteger> basePseudoRemainder(b, c);
+            d = PolyUtil.<BigInteger> baseSparsePseudoRemainder(b, c);
             //System.out.println("d  = " + d);
 
             assertTrue("rem(ac,c) == 0", d.isZERO());
@@ -274,7 +274,7 @@ public class GCDPrimitiveTest extends TestCase {
             b = b.multiply(c);
 
             d = ufd.baseGcd(a, b);
-            e = PolyUtil.<BigInteger> basePseudoRemainder(d, c);
+            e = PolyUtil.<BigInteger> baseSparsePseudoRemainder(d, c);
             //System.out.println("d  = " + d);
 
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
@@ -320,7 +320,7 @@ public class GCDPrimitiveTest extends TestCase {
 
             br = ar.multiply(cr);
             //System.out.println("br = " + br);
-            dr = PolyUtil.<BigInteger> recursivePseudoRemainder(br, cr);
+            dr = PolyUtil.<BigInteger> recursiveSparsePseudoRemainder(br, cr);
             //System.out.println("dr = " + dr);
             d = PolyUtil.<BigInteger> distribute(dfac, dr);
             //System.out.println("d  = " + d);
@@ -402,7 +402,7 @@ public class GCDPrimitiveTest extends TestCase {
             dr = ufd.recursiveUnivariateGcd(ar, br);
             //System.out.println("dr = " + dr);
 
-            er = PolyUtil.<BigInteger> recursivePseudoRemainder(dr, cr);
+            er = PolyUtil.<BigInteger> recursiveSparsePseudoRemainder(dr, cr);
             //System.out.println("er = " + er);
 
             assertTrue("c | gcd(ac,bc) " + er, er.isZERO());
@@ -444,7 +444,7 @@ public class GCDPrimitiveTest extends TestCase {
             dr = ufd.recursiveGcd(ar, br);
             //System.out.println("dr = " + dr);
 
-            er = PolyUtil.<BigInteger> recursivePseudoRemainder(dr, cr);
+            er = PolyUtil.<BigInteger> recursiveSparsePseudoRemainder(dr, cr);
             //System.out.println("er = " + er);
 
             assertTrue("c | gcd(ac,bc) " + er, er.isZERO());
@@ -512,7 +512,7 @@ public class GCDPrimitiveTest extends TestCase {
             d = ufd.gcd(a, b);
             //System.out.println("d = " + d);
 
-            e = PolyUtil.<BigInteger> basePseudoRemainder(d, c);
+            e = PolyUtil.<BigInteger> baseSparsePseudoRemainder(d, c);
             //System.out.println("e = " + e);
 
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
@@ -551,15 +551,15 @@ public class GCDPrimitiveTest extends TestCase {
             d = ufd.gcd(a, b);
             //System.out.println("d = " + d);
 
-            e = PolyUtil.<BigInteger> basePseudoRemainder(d, c);
+            e = PolyUtil.<BigInteger> baseSparsePseudoRemainder(d, c);
             //System.out.println("e = " + e);
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
 
-            e = PolyUtil.<BigInteger> basePseudoRemainder(a, d);
+            e = PolyUtil.<BigInteger> baseSparsePseudoRemainder(a, d);
             //System.out.println("e = " + e);
             assertTrue("gcd(a,b) | a " + e, e.isZERO());
 
-            e = PolyUtil.<BigInteger> basePseudoRemainder(b, d);
+            e = PolyUtil.<BigInteger> baseSparsePseudoRemainder(b, d);
             //System.out.println("e = " + e);
             assertTrue("gcd(a,b) | b " + e, e.isZERO());
         }
@@ -602,7 +602,7 @@ public class GCDPrimitiveTest extends TestCase {
             d = ufd.gcd(a, b);
             //System.out.println("d = " + d);
 
-            e = PolyUtil.<BigRational> basePseudoRemainder(d, c);
+            e = PolyUtil.<BigRational> baseSparsePseudoRemainder(d, c);
             //System.out.println("e = " + e);
 
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO());

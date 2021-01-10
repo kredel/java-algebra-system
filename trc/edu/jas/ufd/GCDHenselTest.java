@@ -198,17 +198,17 @@ public class GCDHenselTest extends TestCase {
             //d = ufd.baseGcd(a,b);
 
             c = ufd.basePrimitivePart(c).abs();
-            e = PolyUtil.<BigInteger> basePseudoRemainder(d, c);
+            e = PolyUtil.<BigInteger> baseSparsePseudoRemainder(d, c);
             //System.out.println("c  = " + c);
             //System.out.println("d  = " + d);
             //System.out.println("e  = " + e);
             assertTrue("c | gcd(ac,bc): " + d + ", c = " + c, e.isZERO());
 
-            e = PolyUtil.<BigInteger> basePseudoRemainder(a, d);
+            e = PolyUtil.<BigInteger> baseSparsePseudoRemainder(a, d);
             //System.out.println("e  = " + e);
             assertTrue("gcd(a,b) | a: " + e + ", d = " + d, e.isZERO());
 
-            e = PolyUtil.<BigInteger> basePseudoRemainder(b, d);
+            e = PolyUtil.<BigInteger> baseSparsePseudoRemainder(b, d);
             //System.out.println("e  = " + e);
             assertTrue("gcd(a,b) | b: " + e + ", d = " + d, e.isZERO());
         }
@@ -260,17 +260,17 @@ public class GCDHenselTest extends TestCase {
             //System.out.println("Hensel linear, time    = " + t);
 
             c = ufd.basePrimitivePart(c).abs();
-            e = PolyUtil.<BigInteger> basePseudoRemainder(d, c);
+            e = PolyUtil.<BigInteger> baseSparsePseudoRemainder(d, c);
             //System.out.println("c  = " + c);
             //System.out.println("d  = " + d);
             //System.out.println("e  = " + e);
             assertTrue("c | gcd(ac,bc): " + d + ", c = " + c, e.isZERO());
 
-            e = PolyUtil.<BigInteger> basePseudoRemainder(a, d);
+            e = PolyUtil.<BigInteger> baseSparsePseudoRemainder(a, d);
             //System.out.println("e  = " + e);
             assertTrue("gcd(a,b) | a: " + e + ", d = " + d, e.isZERO());
 
-            e = PolyUtil.<BigInteger> basePseudoRemainder(b, d);
+            e = PolyUtil.<BigInteger> baseSparsePseudoRemainder(b, d);
             //System.out.println("e  = " + e);
             assertTrue("gcd(a,b) | b: " + e + ", d = " + d, e.isZERO());
         }
@@ -340,7 +340,7 @@ public class GCDHenselTest extends TestCase {
             //System.out.println("b = " + b);
 
             d = ufd.gcd(a, b);
-            e = PolyUtil.<BigInteger> basePseudoRemainder(d, c);
+            e = PolyUtil.<BigInteger> baseSparsePseudoRemainder(d, c);
             //System.out.println("e = " + e);
             //System.out.println("d = " + d);
             //System.out.println("c = " + c);
