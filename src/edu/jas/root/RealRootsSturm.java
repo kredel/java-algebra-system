@@ -14,7 +14,9 @@ import org.apache.logging.log4j.LogManager;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.Rational;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
+import edu.jas.poly.ExpVector;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 
@@ -79,12 +81,26 @@ public class RealRootsSturm<C extends RingElem<C> & Rational> extends RealRootsA
     @Override
     public List<Interval<C>> realRoots(GenPolynomial<C> f) {
         List<Interval<C>> R = new ArrayList<Interval<C>>();
-        if (f == null || f.isConstant()) {
+        if (f == null) {
             return R;
         }
+        GenPolynomialRing<C> pfac = f.ring;
         if (f.isZERO()) {
-            C z = f.ring.coFac.getZERO();
+            C z = pfac.coFac.getZERO();
             R.add(new Interval<C>(z));
+            return R;
+        }
+        // check trailing degree
+        ExpVector et = f.trailingExpVector();
+        if (!et.isZERO()) {
+            GenPolynomial<C> tr = pfac.valueOf(et);
+            if (logger.isInfoEnabled()) {
+               logger.info("trailing term = " + tr);
+            }
+            f = PolyUtil.<C> basePseudoDivide(f, tr);
+            R.add(new Interval<C>( pfac.coFac.getZERO() ));
+        }
+        if (f.isConstant()) {
             return R;
         }
         if (f.degree(0) == 1L) {
@@ -92,6 +108,7 @@ public class RealRootsSturm<C extends RingElem<C> & Rational> extends RealRootsA
             R.add(new Interval<C>(z));
             return R;
         }
+        //if (f.degree(0) == 2L) ... 
         GenPolynomial<C> F = f;
         C M = realRootBound(F); // M != 0, since >= 2
         Interval<C> iv = new Interval<C>(M.negate(), M);

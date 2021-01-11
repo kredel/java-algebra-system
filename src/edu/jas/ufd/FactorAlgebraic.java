@@ -139,8 +139,6 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
                 continue;
             }
             sqf = factorCoeff.isSquarefree(res);
-            //System.out.println("sqf("+ks+") = " + res.degree());
-            //System.out.println("resfact = " + factorCoeff.baseFactors(res) + "\n");
         }
         // if Res is now squarefree, else must take radical factorization
         List<GenPolynomial<C>> nfacs;
@@ -153,12 +151,10 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
         //res = res.monic();
         if (logger.isInfoEnabled()) {
             logger.info("res = " + res);
-            //System.out.println("\nres = " + res); 
         }
         nfacs = factorCoeff.baseFactorsRadical(res);
         if (logger.isInfoEnabled()) {
             logger.info("res facs = " + nfacs); // Q[X]
-            //System.out.println("\nnfacs = " + nfacs); // Q[X]
         }
         if (nfacs.size() == 1) {
             factors.add(P);
@@ -175,17 +171,14 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
             if (logger.isInfoEnabled()) {
                 logger.info("Ni = " + Ni);
                 //System.out.println("Pp = " + Pp);
-                //System.out.println("Ni = " + Ni);
             }
             // compute gcds of factors with polynomial
             GenPolynomial<AlgebraicNumber<C>> pni = engine.gcd(Ni, Pp);
             if (!pni.leadingBaseCoefficient().isONE()) {
-                //System.out.println("gcd(Ni,Pp) not monic " + pni);
                 pni = pni.monic();
             }
             if (logger.isInfoEnabled()) {
                 logger.info("gcd(Ni,Pp) = " + pni);
-                //System.out.println("gcd(Ni,Pp) = " + pni);
             }
             if (!pni.isONE()) {
                 factors.add(pni);
@@ -264,17 +257,12 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
         }
         // if Res is now squarefree, else must take radical factorization
         List<GenPolynomial<C>> nfacs;
-        //if (!sqf) {
-            //System.out.println("\nnot squarefree???"); 
-            //System.out.println("\nres = " + res); 
-            //System.out.println("sqf(" + ks + ") = " + res.degree());
-            //res = factorCoeff.squarefreePart(res); // better use obtained factors
-            //res = factorCoeff.baseFactors(res).lastKey();
-        //}
+        if (!sqf) {
+            System.out.println("sqf_" + pfac.nvar + "(" + ks + ") = " + res.degree());
+        }
         //res = res.monic();
         if (logger.isInfoEnabled()) {
             logger.info("res = " + res);
-            //System.out.println("\nres = " + res); 
             logger.info("factorCoeff = " + factorCoeff);
         }
         nfacs = factorCoeff.factorsRadical(res);
@@ -298,7 +286,6 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
                 logger.info("Ni = " + Ni);
                 //System.out.println("Pp = " + Pp);
             }
-            //System.out.println("Ni = " + Ni);
             // compute gcds of factors with polynomial
             GenPolynomial<AlgebraicNumber<C>> pni = engine.gcd(Ni, Pp);
             if (!pni.leadingBaseCoefficient().isONE()) {
