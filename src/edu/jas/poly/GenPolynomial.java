@@ -159,6 +159,7 @@ public class GenPolynomial<C extends RingElem<C>>
         if (v.size() > 0) {
             GenPolynomialRing.creations++;
             val.putAll(v); // assume no zero coefficients and val is empty
+            assert !val.values().contains(r.coFac.getZERO()) : "illegal coefficient zero: " + v;
         }
     }
 
@@ -172,7 +173,8 @@ public class GenPolynomial<C extends RingElem<C>>
         this(r);
         if (v.size() > 0) {
             GenPolynomialRing.creations++;
-            val.putAll(v); // todo check no zero coefficients and val is empty
+            val.putAll(v); // assume no zero coefficients and val is empty
+            assert !val.values().contains(r.coFac.getZERO()) : "illegal coefficient zero: " + v;
         }
     }
 
@@ -2557,7 +2559,7 @@ public class GenPolynomial<C extends RingElem<C>>
             long n = 0L;
             for (Monomial<C> m : this) {
                 n += m.e.bitLength();
-                //n += m.c.bitLength(); // TODO add bitLength to Element
+                //n += m.c.bitLength(); // todo add bitLength to Element
                 try { // hack
                     Method method = m.c.getClass().getMethod("bitLength", (Class<?>[]) null);
                     n += (Long) method.invoke(m.c, (Object[]) null);

@@ -120,7 +120,6 @@ public final class Monomial<C extends RingElem<C>> implements Element<Monomial<C
     @Override
     public String toScriptFactory() {
         // Python and Ruby case
-        //return ""; // TODO
         throw new UnsupportedOperationException("no factory for Monomial");
     }
 
@@ -131,7 +130,6 @@ public final class Monomial<C extends RingElem<C>> implements Element<Monomial<C
      * @see edu.jas.structure.Element#factory()
      */
     public ElemFactory<Monomial<C>> factory() {
-        //return null; // TODO
         //return new GenPolynomialRing<C>((RingFactory<C>)c.factory(), e.length());
         throw new UnsupportedOperationException("no factory for Monomial");
     }
