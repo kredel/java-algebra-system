@@ -606,7 +606,6 @@ public class ComplexRootTest extends TestCase {
         //System.out.println("a = " + a);
         Collections.reverse(Rn);
         //System.out.println("Rn = " + Rn);
-
         ComplexRootsAbstract<BigRational> cr = new ComplexRootsSturm<BigRational>(cfac);
 
         eps = eps.multiply(new BigRational(100000));
@@ -617,17 +616,22 @@ public class ComplexRootTest extends TestCase {
         //System.out.println("eps2 = " + eps2);
 
         List<Complex<BigDecimal>> roots = cr.approximateRoots(a, eps);
-        //System.out.println("a = " + a);
+        // fix ordering of roots
+        cc = roots.remove(0);
+        roots.add(cc);
+        //System.out.println("a =     " + a);
         //System.out.println("roots = " + roots);
+        //System.out.println("Rn =    " + Rn);
         //now always true: 
         assertTrue("#roots == deg(a) ", roots.size() == a.degree(0));
-
+ 
         int i = 0;
         for (Complex<BigDecimal> dd : roots) {
             Complex<BigDecimal> di = Rn.get(i++);
             //System.out.print("di = " + di + ", ");
-            //System.out.println("dd = " + dd);
-            assertTrue("|dd - di| < eps ", dd.subtract(di).norm().getRe().compareTo(eps2) <= 0);
+            //System.out.println("di = " + di + ", " + "dd = " + dd);
+            Complex<BigDecimal> d = dd.subtract(di).norm();
+            assertTrue("|dd - di| < eps: " + d + ", " + dd + ", " + di, d.getRe().compareTo(eps2) <= 0);
         }
     }
 
