@@ -2,7 +2,7 @@
 <ivy-module version="2.0" xmlns:m="https://ant.apache.org/ivy/maven" 
                           xmlns:e="https://ant.apache.org/ivy/extra">
   <info organisation="java-algebra-system" 
-        module="jas" revision="2.6.*" 
+        module="jas" revision="2.7.*" 
         status="integration" >
     <description>
        Java Algebra System (JAS)
