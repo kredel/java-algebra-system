@@ -1,0 +1,17 @@
+<ivysettings>
+    <settings defaultResolver="securedcentral"/>
+    <!--settings defaultResolver="default"/-->
+    <resolvers>
+      <ibiblio name="securedcentral" m2compatible="true" root="https://repo1.maven.org/maven2/"/>
+      <ibiblio name="krum" m2compatible="true" usepoms="false"
+	       root="http://krum.rz.uni-mannheim.de/maven-repository/"/>
+    </resolvers>
+    <chain name="default">
+      <resolver ref="securedcentral"/>
+      <resolver ref="krum"/>
+    </chain>
+</ivysettings>
+<!--
+      <resolver ref="main"/>
+      <resolver ref="public"/>
+-->
