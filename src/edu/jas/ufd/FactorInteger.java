@@ -1279,7 +1279,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 primeIter = primes.iterator();
             }
             int pi = 0;
-            while (pi < pn && primeIter.hasNext()) {
+            while (pi++ < pn && primeIter.hasNext()) {
                 p = primeIter.next();
                 logger.info("prime = " + p);
                 // initialize coefficient factory and map normalization factor and polynomials
