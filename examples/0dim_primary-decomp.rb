@@ -35,7 +35,7 @@ Q = F.primaryDecomp();
 t = System.currentTimeMillis() - t;
 puts "Q = " + str(Q);
 puts;
-puts "primary decomp time = " +str(t) + " milliseconds";
+puts "primary decomp time = " + str(t) + " milliseconds";
 puts;
 
 puts "F = " + str(F);

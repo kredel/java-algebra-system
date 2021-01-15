@@ -137,7 +137,7 @@ puts;
 g = lambda { |a| a+a };
 
 ps1 = psr.create(g);
-puts "ps1: " +str(ps1);
+puts "ps1: " + str(ps1);
 puts;
 
 ps2 = ps * ps1;

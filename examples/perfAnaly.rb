@@ -26,7 +26,7 @@ end
 
 def so(z) # does not work
   #return z-1;
-  puts "z-1: " +str(z-1);
+  puts "z-1: " + str(z-1);
   if z-1 then return 1 else return z end
 end
 

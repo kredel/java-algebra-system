@@ -61,9 +61,9 @@ a = ( t * zi ) * y;
 b = t * ( zi * y );
 c = a - b;
 puts "t * 1/z * y: ";
-puts "a   = " +str(a);
-puts "b   = " +str(b);
-puts "a-b = " +str(c);
+puts "a   = " + str(a);
+puts "b   = " + str(b);
+puts "a-b = " + str(c);
 puts
 #bm = b.monic
 #puts "monic(b) = " +str(bm);

@@ -27,8 +27,8 @@ brel = [ x**2 - x, y**2 - y ];
 
 puts "brel = " + str(brel[0]) + ", " + str(brel[1]);
 
-pl = [ ( one + s1 + s2 ) * ( x*y + x +y ), s1 * x + s1, s2 * y + s2, x * y ];
-#pl = [ ( one ) * ( x*y + x +y ), s1 * x + s1, s2 * y + s2, x * y ];
+pl = [ ( one + s1 + s2 ) * ( x*y + x + y ), s1 * x + s1, s2 * y + s2, x * y ];
+#pl = [ ( one ) * ( x*y + x + y ), s1 * x + s1, s2 * y + s2, x * y ];
 
 pl = pl + brel;
 

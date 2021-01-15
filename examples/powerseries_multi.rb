@@ -184,7 +184,7 @@ puts;
 g = lambda { |a| a.totalDeg() };
 
 ps1 = psr.create(g);
-puts "ps1: " +str(ps1);
+puts "ps1: " + str(ps1);
 puts;
 
 

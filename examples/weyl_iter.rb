@@ -46,14 +46,14 @@ puts "gens =" + rp2.gens().join(", ") { |r| r.to_s };
 
 f1 = p2 + p1;
 f2 = q2 - q1;
-puts "f1 = " +str(f1);
-puts "f2 = " +str(f2);
+puts "f1 = " + str(f1);
+puts "f2 = " + str(f2);
 
 f3 = f1 * f2;
-puts "f3 = " +str(f3);
+puts "f3 = " + str(f3);
 
 f4 = f2 * f1;
-puts "f4 = " +str(f4);
+puts "f4 = " + str(f4);
 
 ff = [ f4 , f3 ];
 puts "ff = [" + ff.join(", ") { |r| r.to_s } + "]";

@@ -27,7 +27,7 @@ puts "gens =" + rp.gens().join(", ") { |r| r.to_s };
 
 f1 = x**2 + y**2 + z**2 + t**2 + 1;
 
-puts "f1 = " +str(f1);
+puts "f1 = " + str(f1);
 
 ff = [ f1 ];
 puts "ff = [" + ff.join(", ") { |r| r.to_s } + "]";

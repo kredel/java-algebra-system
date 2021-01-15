@@ -31,7 +31,7 @@ puts "is e-GB: " + str(gg.iseGB());
 puts;
 
 p = f1 + 2*f2 - f1*f2 + f1**4; 
-puts "p: " +str(p);
+puts "p: " + str(p);
 n = gg.eReduction(p);
 puts "n: " + str(n);
 
