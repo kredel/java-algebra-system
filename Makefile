@@ -85,9 +85,10 @@ MYCLASSPATH = $(LOG4JPATH):.:$(JUNITPATH):$(JOMPPATH):$(PYPATH)
 #JAVA_MEM=-Xms1500M -Xmx2900M
 JAVA_MEM=-Xms500M -Xmx900M
 
-SOPTS="-J-cp ../lib/log4j-core-2.5.jar:../lib/log4j-api-2.5.jar:../lib/junit.jar-4.12.jar:../lib/hamcrest-core-1.3.jar:. -J-verbose:gc -J-Xms500M -J-Xmx900M"
+#SOPTS="-J-cp ../lib/log4j-core-2.5.jar:../lib/log4j-api-2.5.jar:../lib/junit.jar-4.12.jar:../lib/hamcrest-core-1.3.jar:. -J-verbose:gc -J-Xms500M -J-Xmx900M"
+SOPTS="-J-cp ../lib/log4j-core-2.13.2.jar:../lib/log4j-api-2.13.2.jar:../lib/junit.jar-4.12.jar:../lib/hamcrest-core-1.3.jar:. -J-Xms500M -J-Xmx900M"
 #SOPTS="-J-verbose:gc -J-Xms1500M -J-Xmx2900M"
-#SOPTS=
+#SOPTS="-J-verbose:gc"
 
 
 JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d . -Xlint:unchecked
