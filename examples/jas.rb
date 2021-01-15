@@ -4,13 +4,18 @@
 jruby interface to JAS.
 =end
 
+class Integer
+  remove_method :/
+  alias / quo
+end
+
+
 module JAS
 
   module_function
 
 require "java"
-require "mathn"
-#require "rational"
+#require "mathn"
 
 java_import "java.lang.System"
 java_import "java.io.StringReader"
