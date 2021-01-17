@@ -386,15 +386,15 @@ testr:
 tests:
 	ant test 2>&1 | tee t.out
 	ant exam 2>&1 | tee e.out
-	make edu.jas.application.RunGB cl="seq  examples/trinks6.jas"   | tee tr.out
-	make edu.jas.application.RunGB cl="seq+ examples/trinks6.jas"   | tee -a tr.out
-	make edu.jas.application.RunGB cl="par  examples/trinks6.jas 4" | tee -a tr.out
-	make edu.jas.application.RunGB cl="par+ examples/trinks6.jas 4" | tee -a tr.out
-	cd jython; make tests | tee jsr.out
-	cd mpj; make tests | tee mpj.out
-	#cd mpi; make tests | tee mpi.out
-	cd jlinalg_adapter; make tests | tee ja.out
-	cd commons-math_adapter; make tests | tee ja.out
+	make edu.jas.application.RunGB cl="seq  examples/trinks6.jas"   2>&1 | tee tr.out
+	make edu.jas.application.RunGB cl="seq+ examples/trinks6.jas"   2>&1 | tee -a tr.out
+	make edu.jas.application.RunGB cl="par  examples/trinks6.jas 4" 2>&1 | tee -a tr.out
+	make edu.jas.application.RunGB cl="par+ examples/trinks6.jas 4" 2>&1 | tee -a tr.out
+	cd jython; make tests 2>&1 | tee jsr.out
+	cd mpj; make tests 2>&1 | tee mpj.out
+	#cd mpi; make tests 2>&1 | tee mpi.out
+	cd jlinalg_adapter; make tests 2>&1 | tee ja.out
+	cd commons-math_adapter; make tests 2>&1 | tee ja.out
 	echo "--------------------"
 	-grep FAIL t.out
 	-grep Exception e.out | grep -v GCDProxy | grep -v GBProxy
@@ -405,7 +405,7 @@ tests:
 	#-grep -i error mpi/mpi.out
 	-grep -i error jlinalg_adapter/ja.out
 	-grep -i error commons-math_adapter/ja.out
-	-egrep '(Exception|Usage)' tr.out
+	-egrep '(Exception|Usage|Error)' tr.out
 
 metrics:
 	ant jdepend
