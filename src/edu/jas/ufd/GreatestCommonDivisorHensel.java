@@ -270,8 +270,8 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
                 break;
             }
             logger.info("final devision not successfull");
-            //System.out.println("P rem q = " + PolyUtil.<BigInteger>basePseudoRemainder(P,q));
-            //System.out.println("S rem q = " + PolyUtil.<BigInteger>basePseudoRemainder(S,q));
+            //System.out.println("P rem q = " + PolyUtil.<BigInteger>baseSparsePseudoRemainder(P,q));
+            //System.out.println("S rem q = " + PolyUtil.<BigInteger>baseSparsePseudoRemainder(S,q));
             //break;
         }
         return q;
@@ -518,7 +518,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
             long dx = r.degree(0);
             //System.out.println("d0, dx = " + d0 + ", " + dx);
             if (d0 == dx) { // gcd == r ?
-                if (PolyUtil.<BigInteger> recursivePseudoRemainder(q, r).isZERO()) {
+                if (PolyUtil.<BigInteger> recursiveSparsePseudoRemainder(q, r).isZERO()) {
                     r = r.abs().multiply(c); //.abs();
                     logger.info("exit with r | q : " + r);
                     return r;
@@ -687,8 +687,8 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
             Q = ufd.baseRecursivePrimitivePart(Q);
             Q = Q.abs().multiply(c); //.abs();
             GenPolynomial<GenPolynomial<BigInteger>> Pq, Sq;
-            Pq = PolyUtil.<BigInteger> recursivePseudoRemainder(P, Q);
-            Sq = PolyUtil.<BigInteger> recursivePseudoRemainder(S, Q);
+            Pq = PolyUtil.<BigInteger> recursiveSparsePseudoRemainder(P, Q);
+            Sq = PolyUtil.<BigInteger> recursiveSparsePseudoRemainder(S, Q);
             if (Pq.isZERO() && Sq.isZERO()) {
                 logger.info("gcd normal exit: " + Q);
                 return Q;

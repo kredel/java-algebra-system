@@ -872,7 +872,7 @@ public class PolyUtil {
      * @return remainder with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
      *         m' &le; deg(P)-deg(S)
      * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
-     * @deprecated Use
+     * @deprecated(forRemoval=true) Use
      *             {@link #baseSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial)}
      *             instead
      */
@@ -1319,7 +1319,7 @@ public class PolyUtil {
      * @param S nonzero recursive GenPolynomial.
      * @return remainder with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
      * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
-     * @deprecated Use
+     * @deprecated(forRemoval=true) Use
      *             {@link #recursiveSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial)}
      *             instead
      */
