@@ -93,7 +93,8 @@ print;
 
 print "------- Oct = BigOctonion ------------";
 #print [ str(g) for g in Oct().gens() ];
-[oneOR,IOR,JOR,KOR,oneOI,IOI,JOI,KOI] = Oct().gens();
+#no: [oneOR,IOR,JOR,KOR,oneOI,IOI,JOI,KOI] = Oct().gens();
+[oneOR,oneOI,IOR,IOI,JOR,JOI,KOR,KOI] = Oct().gens();
 print "oneOR = " + str(oneOR);
 print "IOR   = " + str(IOR);
 print "JOR   = " + str(JOR);

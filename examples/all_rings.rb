@@ -78,7 +78,7 @@ puts;
 
 puts "------- Oct = BigOctonion ------------";
 #puts [ str(g) for g in Oct().gens() ];
-oneOR,IOR,JOR,KOR,oneOI,IOI,JOI,KOI = Oct().gens();
+oneOR,oneOI,IOR,IOI,JOR,JOI,KOR,KOI = Oct().gens();
 puts "oneOR = " + str(oneOR);
 puts "IOR   = " + str(IOR);
 puts "JOR   = " + str(JOR);
