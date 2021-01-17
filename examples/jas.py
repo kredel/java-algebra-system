@@ -88,7 +88,7 @@ def startLog():
     '''
     #print "BasicConfigurator from log4j version 1 is no more supported, please use log4j2 configuration";
 
-print "Java Algebra System (JAS) version 2.6"
+print "Java Algebra System (JAS) version 2.7"
 
 def terminate():
     '''Terminate the running thread pools.

@@ -33,3 +33,4 @@ all_jython.sh
 jython/classes/
 jython/jsr.out
 doc/git_change.log
+.jython_cache/
