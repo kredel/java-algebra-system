@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
-Class-Path: lib/log4j-core-2.5.jar lib/log4j-api-2.5.jar lib/log4j-1.2-api-2.5.jar lib/junit-4.12.jar lib/hamcrest-core-1.3.jar
+Class-Path: lib/log4j-core-2.13.2.jar lib/log4j-api-2.13.2.jar lib/junit-4.12.jar lib/hamcrest-core-1.3.jar
 Main-Class: edu.jas.application.RunGB
 Implementation-Vendor: JAS
 Implementation-Title: Java Algebra System
-Implementation-Version: 2.6
+Implementation-Version: 2.7
 Implementation-Vendor-Id: java-algebra-system

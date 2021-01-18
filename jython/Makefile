@@ -9,13 +9,12 @@
 JASPATH=..
 LIBPATH=$(HOME)/java/lib
 
-JYTHONPATH=$(HOME)/java/jython2.7.0/jython.jar
-#:$(LIBPATH)/jython.jar
-JRUBYPATH=$(LIBPATH)/jruby.jar:$(HOME)/java/jruby-1.5.6/lib/ruby/1.8
+JYTHONPATH=$(HOME)/java/jython/jython.jar
+JRUBYPATH=$(HOME)/java/jruby/lib/jruby.jar:$(HOME)/java/jruby/lib/ruby/stdlib
 
-LOG4JPATH=$(LIBPATH)/log4j-core-2.5.jar:$(LIBPATH)/log4j-api-2.5.jar
-#:$(LIBPATH)/log4j-1.2-api-2.5.jar
-CLASSPATH=$(LOG4JPATH):$(LIBPATH)/junit-4.12.jar:$(JASPATH):$(LIBPATH)/jas.jar
+LOG4JPATH=$(LIBPATH)/log4j-core-2.13.2.jar:$(LIBPATH)/log4j-api-2.13.2.jar
+JUNITPATH=$(LIBPATH)/junit.jar:$(LIBPATH)/hamcrest-core.jar
+CLASSPATH=$(LOG4JPATH):$(JUNITPATH):$(JASPATH):$(LIBPATH)/jas.jar
 
 BOOTCLASSPATH6="/usr/lib64/jvm/java-1.6.0/jre/lib/rt.jar"
 
@@ -36,7 +35,8 @@ all: clean jas-jython.jar
 
 $(CLASSES): $(FILES)
 	-mkdir classes
-	javac -g -source 1.6 -target 1.6 -classpath $(JYTHONPATH):$(CLASSPATH) -bootclasspath $(BOOTCLASSPATH6) -sourcepath src -d classes src/edu/jas/*/*.java
+	javac -g -classpath $(JYTHONPATH):$(CLASSPATH) -sourcepath src -d classes src/edu/jas/*/*.java
+	#javac -g -source 1.6 -target 1.6 -classpath $(JYTHONPATH):$(CLASSPATH) -bootclasspath $(BOOTCLASSPATH6) -sourcepath src -d classes src/edu/jas/*/*.java
 
 jas-jython.jar: $(CLASSES) $(JASPATH)/examples/jas.py services/javax.script.ScriptEngineFactory
 	-mkdir classes/META-INF
