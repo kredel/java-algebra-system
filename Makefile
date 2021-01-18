@@ -391,6 +391,7 @@ tests:
 	make edu.jas.application.RunGB cl="par  examples/trinks6.jas 4" 2>&1 | tee -a tr.out
 	make edu.jas.application.RunGB cl="par+ examples/trinks6.jas 4" 2>&1 | tee -a tr.out
 	cd jython; make tests 2>&1 | tee jsr.out
+	cd jython; make exam  2>&1 | tee -a jsr.out
 	cd mpj; make tests 2>&1 | tee mpj.out
 	#cd mpi; make tests 2>&1 | tee mpi.out
 	cd jlinalg_adapter; make tests 2>&1 | tee ja.out
