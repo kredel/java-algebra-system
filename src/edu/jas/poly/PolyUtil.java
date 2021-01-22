@@ -233,7 +233,7 @@ public class PolyUtil {
      * <b>Author:</b> Axel Kramer
      * @param fac result polynomial factory.
      * @param A polynomial with BigRational coefficients to be converted.
-     * @return Object[] with 3 entries: [0]->gcd [1]->lcm and [2]->polynomial
+     * @return Object[] with 3 entries: [0]=gcd [1]=lcm and [2]=polynomial
      *         with BigInteger coefficients.
      */
     public static Object[] integerFromRationalCoefficientsFactor(GenPolynomialRing<BigInteger> fac,
@@ -595,7 +595,7 @@ public class PolyUtil {
      * GenPolynomial monic, i.e. leadingBaseCoefficient == 1. If
      * leadingBaseCoefficient is not invertible returns this unmodified.
      * @param <C> coefficient type.
-     * @param p recursive GenPolynomial<GenPolynomial<C>>.
+     * @param p recursive GenPolynomial&lt;GenPolynomial<C>&gt;.
      * @return monic(p).
      */
     public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<C>> monic(
@@ -618,7 +618,7 @@ public class PolyUtil {
      * GenSolvablePolynomial monic, i.e. leadingBaseCoefficient == 1. If
      * leadingBaseCoefficient is not invertible returns this unmodified.
      * @param <C> coefficient type.
-     * @param p recursive GenSolvablePolynomial<GenPolynomial<C>>.
+     * @param p recursive GenSolvablePolynomial&lt;GenPolynomial<C>&gt;.
      * @return monic(p).
      */
     public static <C extends RingElem<C>> GenSolvablePolynomial<GenPolynomial<C>> monic(
@@ -2126,7 +2126,7 @@ public class PolyUtil {
      * Substitute main variable.
      * @param A univariate polynomial.
      * @param s polynomial for substitution.
-     * @return polynomial A(x <- s).
+     * @return polynomial A(x &lt;- s).
      */
     public static <C extends RingElem<C>> GenPolynomial<C> substituteMain(GenPolynomial<C> A,
                     GenPolynomial<C> s) {
@@ -2138,7 +2138,7 @@ public class PolyUtil {
      * Substitute univariate polynomial.
      * @param f univariate polynomial.
      * @param t polynomial for substitution.
-     * @return polynomial f(x <- t).
+     * @return polynomial f(x &lt;- t).
      */
     public static <C extends RingElem<C>> GenPolynomial<C> substituteUnivariate(GenPolynomial<C> f,
                     GenPolynomial<C> t) {
@@ -2185,7 +2185,7 @@ public class PolyUtil {
      * Substitute univariate polynomial with multivariate coefficients.
      * @param f univariate polynomial with multivariate coefficients.
      * @param t polynomial for substitution.
-     * @return polynomial f(x <- t).
+     * @return polynomial f(x &lt;- t).
      */
     public static <C extends RingElem<C>> GenPolynomial<C> substituteUnivariateMult(GenPolynomial<C> f,
                     GenPolynomial<C> t) {

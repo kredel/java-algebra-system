@@ -26,7 +26,7 @@ public interface ModularRingFactory<C extends RingElem<C> & Modular> extends Rin
 
 
     /**
-     * Chinese remainder algorithm. Assert c.modul >= a.modul and c.modul *
+     * Chinese remainder algorithm. Assert c.modul &ge; a.modul and c.modul *
      * a.modul = this.modul.
      * @param c modular.
      * @param ci inverse of c.modul in ring of a.

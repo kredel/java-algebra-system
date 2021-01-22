@@ -832,7 +832,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
      * @param P univariate GenPolynomial.
      * @param S univariate GenPolynomial.
      * @param c univariate GenPolynomial.
-     * @return [ a, b ] with a*P + b*S = c and deg(a) < deg(S).
+     * @return [ a, b ] with a*P + b*S = c and deg(a) &lt; deg(S).
      */
     @SuppressWarnings("unchecked")
     public GenPolynomial<C>[] baseGcdDiophant(GenPolynomial<C> P, GenPolynomial<C> S, GenPolynomial<C> c) {
@@ -875,8 +875,8 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
      * @param A univariate GenPolynomial.
      * @param P univariate GenPolynomial.
      * @param S univariate GenPolynomial.
-     * @return [ A0, Ap, As ] with A/(P*S) = A0 + Ap/P + As/S with deg(Ap) <
-     *         deg(P) and deg(As) < deg(S).
+     * @return [ A0, Ap, As ] with A/(P*S) = A0 + Ap/P + As/S with deg(Ap) &lt;
+     *         deg(P) and deg(As) &lt; deg(S).
      */
     @SuppressWarnings("unchecked")
     public GenPolynomial<C>[] basePartialFraction(GenPolynomial<C> A, GenPolynomial<C> P,
@@ -919,7 +919,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
      * @param A univariate GenPolynomial.
      * @param P univariate GenPolynomial.
      * @param e exponent for P.
-     * @return [ F0, F1, ..., Fe ] with A/(P^e) = sum( Fi / P^i ) with deg(Fi) <
+     * @return [ F0, F1, ..., Fe ] with A/(P^e) = sum( Fi / P^i ) with deg(Fi) &lt;
      *         deg(P).
      */
     public List<GenPolynomial<C>> basePartialFraction(GenPolynomial<C> A, GenPolynomial<C> P, int e) {
@@ -955,7 +955,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
      * @param A univariate GenPolynomial.
      * @param D list of co-prime univariate GenPolynomials.
      * @return [ A0, A1,..., An ] with A/prod(D) = A0 + sum( Ai/Di ) with
-     *         deg(Ai) < deg(Di).
+     *         deg(Ai) &lt; deg(Di).
      */
     public List<GenPolynomial<C>> basePartialFraction(GenPolynomial<C> A, List<GenPolynomial<C>> D) {
         if (D == null || A == null) {
@@ -1006,7 +1006,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
      * @param D list of (co-prime) univariate GenPolynomials.
      * @param F list of univariate GenPolynomials from a partial fraction
      *            computation.
-     * @return true if A/prod(D) = F0 + sum( Fi/Di ) with deg(Fi) < deg(Di), Fi
+     * @return true if A/prod(D) = F0 + sum( Fi/Di ) with deg(Fi) &lt; deg(Di), Fi
      *         in F, else false.
      */
     public boolean isBasePartialFraction(GenPolynomial<C> A, List<GenPolynomial<C>> D,
@@ -1056,7 +1056,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
      * @param e exponent for P.
      * @param F list of univariate GenPolynomials from a partial fraction
      *            computation.
-     * @return true if A/(P^e) = F0 + sum( Fi / P^i ) with deg(Fi) < deg(P), Fi
+     * @return true if A/(P^e) = F0 + sum( Fi / P^i ) with deg(Fi) &lt; deg(P), Fi
      *         in F, else false.
      */
     public boolean isBasePartialFraction(GenPolynomial<C> A, GenPolynomial<C> P, int e,

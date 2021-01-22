@@ -492,8 +492,8 @@ public final class BigOctonion
     /**
      * Since quaternion numbers are unordered, we use lexicographical order of
      * re, im, jm and km.
-     * @return 0 if this is equal to 0; 1 if or > 0, or or == 0 and oi > 0; -1
-     *         if or < 0, or or == 0 and oi < 0.
+     * @return 0 if this is equal to 0; 1 if or &gt; 0, or or == 0 and oi &gt; 0; -1
+     *         if or &lt; 0, or or == 0 and oi &lt; 0.
      * @see edu.jas.structure.RingElem#signum()
      */
     public int signum() {

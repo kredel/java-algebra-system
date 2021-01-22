@@ -367,7 +367,7 @@ public final class ModIntegerRing implements ModularRingFactory<ModInteger>, Ite
 
     /**
      * ModInteger chinese remainder algorithm. This is a factory method. Assert
-     * c.modul >= a.modul and c.modul * a.modul = this.modul.
+     * c.modul &ge; a.modul and c.modul * a.modul = this.modul.
      * @param c ModInteger.
      * @param ci inverse of c.modul in ring of a.
      * @param a other ModInteger.
@@ -400,7 +400,7 @@ public final class ModIntegerRing implements ModularRingFactory<ModInteger>, Ite
      * respectively.  L is a list of all a in Z(m) such that a is
      * congruent to a1 modulo m1 and a is congruent to a2 modulo m2
      * with a1 in L1 and a2 in L2.  This is a factory method. Assert
-     * c.modul >= a.modul and c.modul * a.modul = this.modul.
+     * c.modul &ge; a.modul and c.modul * a.modul = this.modul.
      * @param m1 modular integer.
      * @param m2 other modular integer.
      * @return L list of congruences.

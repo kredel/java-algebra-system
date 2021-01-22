@@ -52,7 +52,7 @@ public class ElementaryIntegrationLazard<C extends GcdRingElem<C>> extends Eleme
      * Univariate GenPolynomial integration of the logaritmic part, Lazard -
      * Rioboo - Trager
      * 
-     * @param A univariate GenPolynomial, deg(A) < deg(P).
+     * @param A univariate GenPolynomial, deg(A) &lt; deg(P).
      * @param P univariate irreducible GenPolynomial. // gcd(A,P) == 1 automatic
      * @return logarithmic part container.
      */

@@ -309,7 +309,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
      * Univariate GenPolynomial algebraic partial fraction decomposition,
      * Absolute factorization for elementary integration algorithm to linear
      * factors.
-     * @param A univariate GenPolynomial, deg(A) < deg(P).
+     * @param A univariate GenPolynomial, deg(A) &le; deg(P).
      * @param P univariate squarefree GenPolynomial, gcd(A,P) == 1.
      * @return partial fraction container.
      */
@@ -375,7 +375,7 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
     /**
      * Univariate GenPolynomial algebraic partial fraction decomposition, via
      * absolute factorization to linear factors.
-     * @param A univariate GenPolynomial, deg(A) < deg(P).
+     * @param A univariate GenPolynomial, deg(A) &lt; deg(P).
      * @param P univariate irreducible GenPolynomial, gcd(A,P) == 1.
      * @return partial fraction container.
      */

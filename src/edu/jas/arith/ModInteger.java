@@ -105,7 +105,7 @@ public final class ModInteger implements GcdRingElem<ModInteger>, Modular {
 
     /**
      * Get the symmetric value part.
-     * @return val with -modul/2 <= val < modul/2.
+     * @return val with -modul/2 &le; val &lt; modul/2.
      */
     public java.math.BigInteger getSymmetricVal() {
         if (val.add(val).compareTo(ring.modul) > 0) {

@@ -76,7 +76,7 @@ public interface Squarefree<C extends GcdRingElem<C>> extends Serializable {
     /**
      * GenPolynomial squarefree factorization.
      * @param P GenPolynomial.
-     * @return [p_1 -> e_1, ..., p_k -> e_k] with P = prod_{i=1,...,k} p_i^{e_i}
+     * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k} p_i^{e_i}
      *         and p_i squarefree.
      */
     public SortedMap<GenPolynomial<C>, Long> squarefreeFactors(GenPolynomial<C> P);

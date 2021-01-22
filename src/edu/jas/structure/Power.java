@@ -47,7 +47,7 @@ public class Power<C extends RingElem<C>> {
     /**
      * power of a to the n-th, n positive.
      * @param a element.
-     * @param n integer exponent > 0.
+     * @param n integer exponent &ge; 0.
      * @return a^n.
      */
     public static <C extends RingElem<C>> C positivePower(C a, long n) {
@@ -76,7 +76,7 @@ public class Power<C extends RingElem<C>> {
     /**
      * power of a to the n-th, n positive.
      * @param a element.
-     * @param n java.math.BigInteger exponent > 0.
+     * @param n java.math.BigInteger exponent &ge; 0.
      * @return a^n.
      */
     public static <C extends RingElem<C>> C positivePower(C a, java.math.BigInteger n) {
@@ -112,7 +112,7 @@ public class Power<C extends RingElem<C>> {
     /**
      * power of a to the n-th, n positive, modulo m.
      * @param a element.
-     * @param n integer exponent > 0.
+     * @param n integer exponent &ge; 0.
      * @param m modulus.
      * @return a^n mod m.
      */

@@ -432,7 +432,7 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
      * @param D sorted map [d_1 -&gt; e_1, ..., d_k -&gt; e_k] with d_i
      *            squarefree.
      * @return [ [Ai0, Ai1,..., Aie_i], i=0,...,k ] with A/prod(D) = A0 + sum(
-     *         sum ( Aij/di^j ) ) with deg(Aij) < deg(di).
+     *         sum ( Aij/di^j ) ) with deg(Aij) &lt; deg(di).
      */
     public List<List<GenPolynomial<C>>> basePartialFraction(GenPolynomial<C> A,
                     SortedMap<GenPolynomial<C>, Long> D) {

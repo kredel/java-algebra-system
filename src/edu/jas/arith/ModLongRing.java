@@ -415,7 +415,7 @@ public final class ModLongRing implements ModularRingFactory<ModLong>, Iterable<
 
     /**
      * ModLong chinese remainder algorithm. This is a factory method. Assert
-     * c.modul >= a.modul and c.modul * a.modul = this.modul.
+     * c.modul &ge; a.modul and c.modul * a.modul = this.modul.
      * @param c ModLong.
      * @param ci inverse of c.modul in ring of a.
      * @param a other ModLong.
@@ -447,7 +447,7 @@ public final class ModLongRing implements ModularRingFactory<ModLong>, Iterable<
      * are lists of elements of Z(m1) and Z(m2) respectively. L is a list of all
      * a in Z(m) such that a is congruent to a1 modulo m1 and a is congruent to
      * a2 modulo m2 with a1 in L1 and a2 in L2. This is a factory method. Assert
-     * c.modul >= a.modul and c.modul * a.modul = this.modul.
+     * c.modul &ge; a.modul and c.modul * a.modul = this.modul.
      * @param m1 ModLong.
      * @param m2 other ModLong.
      * @return L list of congruences.

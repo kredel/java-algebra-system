@@ -42,7 +42,7 @@ public class CriticalPairComparator<C extends RingElem<C> >
      * Compares exponents and if equal, compares polynomial indices.
      * @param p1 first critical pair.
      * @param p2 second critical pair.
-     * @return 0 if ( p1 == p2 ), -1 if ( p1 < p2 ) and +1 if ( p1 > p2 ).
+     * @return 0 if ( p1 == p2 ), -1 if ( p1 &lt; p2 ) and +1 if ( p1 &gt; p2 ).
      */
     public int compare(AbstractPair<C> p1, AbstractPair<C> p2) {
         int s = ec.compare( p1.e, p2.e );

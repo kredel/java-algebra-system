@@ -180,7 +180,7 @@ public class PolyUtilTest extends TestCase {
 
 
     /**
-     * Test recursive <--> distributive conversion.
+     * Test recursive -- distributive conversion.
      */
     public void testConversion() {
         c = dfac.getONE();
@@ -204,7 +204,7 @@ public class PolyUtilTest extends TestCase {
 
 
     /**
-     * Test recursive <--> distributive ring conversion.
+     * Test recursive -- distributive ring conversion.
      */
     public void testConversionRing() {
         GenPolynomialRing<GenPolynomial<BigInteger>> rf = dfac.recursive(1);
@@ -217,7 +217,7 @@ public class PolyUtilTest extends TestCase {
 
 
     /**
-     * Test random recursive <--> distributive conversion.
+     * Test random recursive -- distributive conversion.
      */
     public void testRandomConversion() {
         for (int i = 0; i < 7; i++) {
@@ -239,7 +239,7 @@ public class PolyUtilTest extends TestCase {
 
 
     /**
-     * Test random rational <--> integer conversion.
+     * Test random rational -- integer conversion.
      */
     public void testRationalConversion() {
         GenPolynomialRing<BigRational> rfac = new GenPolynomialRing<BigRational>(new BigRational(1), rl, to);
@@ -270,7 +270,7 @@ public class PolyUtilTest extends TestCase {
 
 
     /**
-     * Test random modular <--> integer conversion.
+     * Test random modular -- integer conversion.
      */
     public void testModularConversion() {
         ModIntegerRing pm = new ModIntegerRing(getPrime1());
@@ -934,7 +934,7 @@ public class PolyUtilTest extends TestCase {
 
 
     /**
-     * Test interpolate univariate deg > 0 polynomial.
+     * Test interpolate univariate deg &gt; 0 polynomial.
      */
     public void testInterpolateUnivariate() {
         ModInteger ai, ci, ei, fi;
@@ -1011,7 +1011,7 @@ public class PolyUtilTest extends TestCase {
 
 
     /**
-     * Test interpolate multivariate deg > 0 polynomial.
+     * Test interpolate multivariate deg &gt; 0 polynomial.
      */
     public void testInterpolateMultivariate() {
         ModInteger ci, ei, fi;
@@ -1108,7 +1108,7 @@ public class PolyUtilTest extends TestCase {
 
 
     /**
-     * Test interpolate rational multivariate deg > 0 polynomial.
+     * Test interpolate rational multivariate deg &gt; 0 polynomial.
      */
     public void testInterpolateRationalMultivariate() {
         BigRational ci, ei, fi;

@@ -408,7 +408,7 @@ public class AlgebraicNumberRing<C extends RingElem<C>>
 
 
     /**
-     * AlgebraicNumber chinese remainder algorithm. Assert deg(c.modul) >=
+     * AlgebraicNumber chinese remainder algorithm. Assert deg(c.modul) &ge;
      * deg(a.modul) and c.modul * a.modul = this.modul.
      * @param c AlgebraicNumber.
      * @param ci inverse of c.modul in ring of a.
@@ -439,7 +439,7 @@ public class AlgebraicNumberRing<C extends RingElem<C>>
 
 
     /**
-     * AlgebraicNumber interpolation algorithm. Assert deg(c.modul) >=
+     * AlgebraicNumber interpolation algorithm. Assert deg(c.modul) &ge;
      * deg(A.modul) and c.modul * A.modul = this.modul. Special case with
      * deg(A.modul) == 1. Similar algorithm as chinese remainder algortihm.
      * @param c AlgebraicNumber.

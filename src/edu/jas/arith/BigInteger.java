@@ -329,7 +329,7 @@ public final class BigInteger
     /**
      * Compare to BigInteger b.
      * @param b BigInteger.
-     * @return 0 if this == b, 1 if this > b, -1 if this < b.
+     * @return 0 if this == b, 1 if this &gt; b, -1 if this &lt; b.
      */
     @Override
     public int compareTo(BigInteger b) {
@@ -341,7 +341,7 @@ public final class BigInteger
      * Integer comparison.
      * @param A BigInteger.
      * @param B BigInteger.
-     * @return 0 if A == B, 1 if A > B, -1 if A < B.
+     * @return 0 if A == B, 1 if A &gt; B, -1 if A &lt; B.
      */
     public static int ICOMP(BigInteger A, BigInteger B) {
         if (A == null)

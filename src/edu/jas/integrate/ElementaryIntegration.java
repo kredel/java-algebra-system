@@ -238,7 +238,7 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
     /**
      * Univariate GenPolynomial integration of the logaritmic part, eventual
      * preparation for irreducible factorization of P.
-     * @param A univariate GenPolynomial, deg(A) < deg(P).
+     * @param A univariate GenPolynomial, deg(A) &lt; deg(P).
      * @param P univariate squarefree GenPolynomial, gcd(A,P) == 1.
      * @return logarithmic part container.
      */
@@ -303,7 +303,7 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
     /**
      * Univariate GenPolynomial integration of the logaritmic part,
      * Rothstein-Trager algorithm.
-     * @param A univariate GenPolynomial, deg(A) < deg(P).
+     * @param A univariate GenPolynomial, deg(A) &lt; deg(P).
      * @param P univariate squarefree or irreducible GenPolynomial. // gcd(A,P)
      *            == 1 automatic
      * @return logarithmic part container.

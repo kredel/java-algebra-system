@@ -115,7 +115,7 @@ public final class ModLong implements GcdRingElem<ModLong>, Modular {
 
     /**
      * Get the symmetric value part.
-     * @return val with -modul/2 <= val < modul/2.
+     * @return val with -modul/2 &le; val &lt; modul/2.
      */
     public long getSymmetricVal() {
         if ((val + val) > ring.modul) {

@@ -41,7 +41,7 @@ public class PolynomialComparator<C extends RingElem<C>> implements Serializable
      * Compare polynomials.
      * @param p1 first polynomial.
      * @param p2 second polynomial.
-     * @return 0 if ( p1 == p2 ), -1 if ( p1 < p2 ) and +1 if ( p1 > p2 ).
+     * @return 0 if ( p1 == p2 ), -1 if ( p1 &lt; p2 ) and +1 if ( p1 &gt; p2 ).
      */
     public int compare(GenPolynomial<C> p1, GenPolynomial<C> p2) {
         // check if p1.tord = p2.tord = tord ?

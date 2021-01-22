@@ -139,7 +139,7 @@ public final class ModInt implements GcdRingElem<ModInt>, Modular {
 
     /**
      * Get the symmetric value part.
-     * @return val with -modul/2 <= val < modul/2.
+     * @return val with -modul/2 &le; val &lt; modul/2.
      */
     public int getSymmetricVal() {
         if ((val + val) > ring.modul) {

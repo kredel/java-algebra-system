@@ -565,7 +565,7 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
      * Rational number reduction to lowest terms.
      * @param n BigInteger.
      * @param d BigInteger.
-     * @return a/b ~ n/d, gcd(a,b) = 1, b > 0.
+     * @return a/b ~ n/d, gcd(a,b) = 1, b &gt; 0.
      */
     public static BigRational RNRED(BigInteger n, BigInteger d) {
         BigInteger num;
@@ -600,7 +600,7 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
      * Rational number reduction to lowest terms.
      * @param n BigInteger.
      * @param d BigInteger.
-     * @return a/b ~ n/d, gcd(a,b) = 1, b > 0.
+     * @return a/b ~ n/d, gcd(a,b) = 1, b &gt; 0.
      */
     public static BigRational reduction(BigInteger n, BigInteger d) {
         return RNRED(n, d);

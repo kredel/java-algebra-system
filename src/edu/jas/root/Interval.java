@@ -117,7 +117,7 @@ public class Interval<C extends RingElem<C> & Rational> implements Serializable 
     /**
      * Test if an element is contained in this interval.
      * @param c element to test.
-     * @return true, if left <= b <= right;
+     * @return true, if left &le; b &le; right;
      */
     public boolean contains(C c) {
         return left.compareTo(c) <= 0 && c.compareTo(right) <= 0;
@@ -127,7 +127,7 @@ public class Interval<C extends RingElem<C> & Rational> implements Serializable 
     /**
      * Test if an interval is contained in this interval.
      * @param vc interval to test.
-     * @return true, if left <= vc.left and vc.right <= right;
+     * @return true, if left &le; vc.left and vc.right &le; right;
      */
     public boolean contains(Interval<C> vc) {
         return contains(vc.left) && contains(vc.right);

@@ -55,7 +55,7 @@ public class ElementaryIntegrationBernoulli<C extends GcdRingElem<C>> extends El
     /**
      * Univariate GenPolynomial integration of the logarithmic part, Bernoulli
      * linear factorization algorithm.
-     * @param A univariate GenPolynomial, deg(A) < deg(P).
+     * @param A univariate GenPolynomial, deg(A) &lt; deg(P).
      * @param P univariate squarefree or irreducible GenPolynomial. // gcd(A,P)
      *            == 1 automatic
      * @return logarithmic part container.

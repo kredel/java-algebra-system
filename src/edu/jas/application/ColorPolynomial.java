@@ -168,7 +168,7 @@ public class ColorPolynomial<C extends RingElem<C>> implements Serializable
 
 
     /**
-     * Check ordering invariants. TT(green) > LT(red) and TT(red) > LT(white).
+     * Check ordering invariants. TT(green) &gt; LT(red) and TT(red) &gt; LT(white).
      * @return true, if all ordering invariants are met, else false.
      */
     public boolean checkInvariant() {
