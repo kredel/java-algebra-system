@@ -282,7 +282,7 @@ public class GenPolynomialTokenizer {
      * syntax:
      * 
      * <pre>
-    ... coefficient variable**exponent ... variable^exponent + ... - ....
+     ... coefficient variable**exponent ... variable^exponent + ... - ....
      * </pre>
      * 
      * Juxtaposition means multiplication <code>*</code>. Then terms/monomials
@@ -338,7 +338,7 @@ public class GenPolynomialTokenizer {
             if (tt == StreamTokenizer.TT_EOF)
                 break;
             switch (tt) {
-            // case '_': removed 
+                // case '_': removed 
             case '}':
                 throw new InvalidExpressionException("mismatch of braces after " + a + ", error at " + b);
             case '{': // recursion
@@ -349,7 +349,7 @@ public class GenPolynomialTokenizer {
                     //System.out.println("token { = " + ((char)tt) + ", " + tt + ", level = " + level);
                     if (tt == StreamTokenizer.TT_EOF) {
                         throw new InvalidExpressionException(
-                                        "mismatch of braces after " + a + ", error at " + b);
+                                                             "mismatch of braces after " + a + ", error at " + b);
                     }
                     if (tt == '{') {
                         level++;
@@ -390,9 +390,9 @@ public class GenPolynomialTokenizer {
                 //no break;
                 break;
 
-            //case '.': // eventually a float
-            //System.out.println("start . = " + reader);
-            //throw new InvalidExpressionException("float must start with a digit ");
+                //case '.': // eventually a float
+                //System.out.println("start . = " + reader);
+                //throw new InvalidExpressionException("float must start with a digit ");
 
             case StreamTokenizer.TT_WORD:
                 //System.out.println("TT_WORD: " + tok.sval);
@@ -765,11 +765,11 @@ public class GenPolynomialTokenizer {
                         BigInteger mo = new BigInteger(tok.sval);
                         BigInteger lm = new BigInteger(ModLongRing.MAX_LONG); //wrong: Long.MAX_VALUE);
                         if (mo.compareTo(lm) < 0) {
-			    if (mo.compareTo(new BigInteger(ModIntRing.MAX_INT)) < 0) {
+                            if (mo.compareTo(new BigInteger(ModIntRing.MAX_INT)) < 0) {
                                 coeff = new ModIntRing(mo.getVal());
-			    } else {
+                            } else {
                                 coeff = new ModLongRing(mo.getVal());
-			    }
+                            }
                         } else {
                             coeff = new ModIntegerRing(mo.getVal());
                         }
@@ -787,7 +787,7 @@ public class GenPolynomialTokenizer {
             } else if (tok.sval.equalsIgnoreCase("RatFunc") || tok.sval.equalsIgnoreCase("ModFunc")) {
                 //logger.error("RatFunc and ModFunc can no more be read, see edu.jas.application.RingFactoryTokenizer.");
                 throw new InvalidExpressionException(
-                                "RatFunc and ModFunc can no more be read, see edu.jas.application.RingFactoryTokenizer.");
+                                                     "RatFunc and ModFunc can no more be read, see edu.jas.application.RingFactoryTokenizer.");
             } else if (tok.sval.equalsIgnoreCase("IntFunc")) {
                 String[] rfv = nextVariableList();
                 //System.out.println("rfv = " + rfv.length + " " + rfv[0]);
@@ -818,8 +818,8 @@ public class GenPolynomialTokenizer {
                     int vs = anv.length;
                     if (vs != 1) {
                         throw new InvalidExpressionException(
-                                        "AlgebraicNumber only for univariate polynomials "
-                                                        + Arrays.toString(anv));
+                                                             "AlgebraicNumber only for univariate polynomials "
+                                                             + Arrays.toString(anv));
                     }
                     String[] ovars = vars;
                     vars = anv;
@@ -1511,7 +1511,293 @@ public class GenPolynomialTokenizer {
         return new OrderedModuleList(spfac, s); // Ordered
     }
 
+    /* ----------------------------------- */
+    
+    /**
+     * Parsing method for word polynomial. Syntax: same as for polynomial.
+     * Multiplication will be non commutative.
+     * @param f word polynomial factory.
+     * @return the next polynomial.
+     * @throws IOException
+     */
+    //@SuppressWarnings("unchecked")
+    public GenWordPolynomial nextWordPolynomial(GenWordPolynomialRing f) throws IOException {
+        GenWordPolynomialRing wfac = f;
+        logger.info("wfac = " + wfac);
+        WordFactory wf = wfac.alphabet;
 
+        GenWordPolynomial a = wfac.getZERO();
+        GenWordPolynomial a1 = wfac.getONE();
+        Word leer = wfac.wone;
+        RingFactory fac = wfac.coFac; 
+        if (debug) {
+            logger.debug("a = " + a);
+            logger.debug("a1 = " + a1);
+        }
+        GenWordPolynomial b = a1;
+        GenWordPolynomial c;
+        int tt;
+        char first;
+        RingElem r;
+        Word e;
+        int ix;
+        long ie;
+        while (true) { 
+            // next input. determine next action
+            tt = tok.nextToken();
+            //System.out.println("while tt = " + tok);
+            logger.debug("while tt = " + tok);
+            if (tt == StreamTokenizer.TT_EOF)
+                break;
+            switch (tt) {
+            case ')':
+            case ',':
+                return a; // do not change or remove
+            case '-':
+                b = b.negate();
+            case '+':
+            case '*':
+                tt = tok.nextToken();
+                break;
+            default: // skip
+            }
+            // read coefficient, monic monomial and polynomial
+            if (tt == StreamTokenizer.TT_EOF)
+                break;
+            switch (tt) {
+                // case '_': removed 
+            case '}':
+                throw new InvalidExpressionException("mismatch of braces after " + a + ", error at " + b);
+            case '{': // recursion
+                StringBuffer rf = new StringBuffer();
+                int level = 0;
+                do {
+                    tt = tok.nextToken();
+                    //System.out.println("token { = " + ((char)tt) + ", " + tt + ", level = " + level);
+                    if (tt == StreamTokenizer.TT_EOF) {
+                        throw new InvalidExpressionException(
+                                                             "mismatch of braces after " + a + ", error at " + b);
+                    }
+                    if (tt == '{') {
+                        level++;
+                    }
+                    if (tt == '}') {
+                        level--;
+                        if (level < 0) {
+                            continue; // skip last closing brace 
+                        }
+                    }
+                    if (tok.sval != null) {
+                        if (rf.length() > 0 && rf.charAt(rf.length() - 1) != '.') {
+                            rf.append(" ");
+                        }
+                        rf.append(tok.sval); // " " + 
+                    } else {
+                        rf.append((char) tt);
+                    }
+                } while (level >= 0);
+                //System.out.println("coeff{} = " + rf.toString() );
+                try {
+                    r = (RingElem) fac.parse(rf.toString());
+                } catch (NumberFormatException re) {
+                    throw new InvalidExpressionException("not a number " + rf, re);
+                }
+                if (debug)
+                    logger.debug("coeff " + r);
+                ie = nextExponent();
+                if (debug)
+                    logger.debug("ie " + ie);
+                r = (RingElem) r.power(ie);
+                if (debug)
+                    logger.debug("coeff^ie " + r);
+                b = b.multiply(r, leer);
+                tt = tok.nextToken();
+                if (debug)
+                    logger.debug("tt,digit = " + tok);
+                //no break;
+                break;
+
+                //case '.': // eventually a float
+                //System.out.println("start . = " + reader);
+                //throw new InvalidExpressionException("float must start with a digit ");
+
+            case StreamTokenizer.TT_WORD:
+                //System.out.println("TT_WORD: " + tok.sval);
+                if (tok.sval == null || tok.sval.length() == 0)
+                    break;
+                // read coefficient
+                first = tok.sval.charAt(0);
+                if (digit(first) || first == '/' || first == '.' || first == '~') {
+                    //System.out.println("coeff 0 = " + tok.sval );
+                    StringBuffer df = new StringBuffer();
+                    df.append(tok.sval);
+                    if (tok.sval.length() > 1 && digit(tok.sval.charAt(1))) {
+                        //System.out.println("start / or . = " + tok.sval);
+                        if (first == '/') { // let x/2 be x 1/2
+                            df.insert(0, "1");
+                        }
+                        if (first == '.') { // let x.2 be x 0.2
+                            df.insert(0, "0");
+                        }
+                    }
+                    if (tok.sval.charAt(tok.sval.length() - 1) == 'i') { // complex number
+                        tt = tok.nextToken();
+                        if (debug)
+                            logger.debug("tt,im = " + tok);
+                        if (tok.sval != null || tt == '-') {
+                            if (tok.sval != null) {
+                                df.append(tok.sval);
+                            } else {
+                                df.append("-");
+                            }
+                            if (tt == '-') {
+                                tt = tok.nextToken(); // todo: decimal number
+                                if (tok.sval != null && digit(tok.sval.charAt(0))) {
+                                    df.append(tok.sval);
+
+                                } else {
+                                    tok.pushBack();
+                                }
+                            }
+                        } else {
+                            tok.pushBack();
+                        }
+                    }
+                    tt = tok.nextToken();
+                    if (tt == '.') { // decimal number, obsolete by word char?
+                        tt = tok.nextToken();
+                        if (debug)
+                            logger.debug("tt,dot = " + tok);
+                        if (tok.sval != null) {
+                            df.append(".");
+                            df.append(tok.sval);
+                        } else {
+                            tok.pushBack();
+                            tok.pushBack();
+                        }
+                    } else {
+                        tok.pushBack();
+                    }
+                    try {
+                        //System.out.println("df = " + df + ", fac = " + fac.getClass());
+                        r = (RingElem) fac.parse(df.toString());
+                        //System.out.println("r = " + r);
+                    } catch (NumberFormatException re) {
+                        //System.out.println("re = " + re);
+                        throw new InvalidExpressionException("not a number " + df, re);
+                    }
+                    if (debug)
+                        logger.debug("coeff " + r);
+                    //System.out.println("r = " + r.toScriptFactory());
+                    ie = nextExponent();
+                    if (debug)
+                        logger.debug("ie " + ie);
+                    // r = r^ie;
+                    r = (RingElem) r.power(ie); //Power.<RingElem> positivePower(r, ie);
+                    if (debug)
+                        logger.debug("coeff^ie " + r);
+                    b = b.multiply(r, leer);
+                    tt = tok.nextToken();
+                    if (debug)
+                        logger.debug("tt,digit = " + tok);
+                }
+                if (tt == StreamTokenizer.TT_EOF)
+                    break;
+                if (tok.sval == null)
+                    break;
+                // read monomial or recursion 
+                first = tok.sval.charAt(0);
+                if (letter(first)) {
+                    //ix = leer.indexVar(tok.sval, vars); 
+                    try {
+                        e = wf.parse(tok.sval);
+                    } catch (IllegalArgumentException ee) {
+                        e = null;
+                    }
+                    if (debug)
+                        logger.info("monom " + e);
+                    if (e == null) { // not found, look for coeff var
+                        try {
+                            r = (RingElem) fac.parse(tok.sval);
+                        } catch (NumberFormatException re) {
+                            throw new InvalidExpressionException("recursively unknown variable " + tok.sval);
+                        }
+                        ie = nextExponent();
+                        //  System.out.println("ie: " + ie);
+                        r = (RingElem) r.power(ie);
+                        //  System.out.println("re:  " + r);
+                        b = b.multiply(r, leer);
+                    } else { // found
+                        ie = nextExponent();
+                        //  System.out.println("ie: " + ie);
+                        e = e.power(ie);
+                        //  System.out.println("e:  " + e);
+                        b = b.multiply(e);
+                    }
+                    tt = tok.nextToken();
+                    if (debug)
+                        logger.debug("tt,letter = " + tok);
+                }
+                break;
+
+            case '(':
+                c = nextWordPolynomial(wfac);
+                if (debug)
+                    logger.debug("factor " + c);
+                ie = nextExponent();
+                if (debug)
+                    logger.debug("ie " + ie);
+                c = (GenWordPolynomial) c.power(ie); //Power.<GenPolynomial> positivePower(c, ie);
+                if (debug)
+                    logger.debug("factor^ie " + c);
+                b = b.multiply(c);
+                tt = tok.nextToken();
+                if (debug)
+                    logger.debug("tt,digit = " + tok);
+                //no break;
+                break;
+
+            default: //skip 
+            }
+            if (tt == StreamTokenizer.TT_EOF)
+                break;
+            // complete polynomial
+            tok.pushBack();
+            switch (tt) {
+            case '-':
+            case '+':
+            case ')':
+            case ',':
+                logger.debug("b, = " + b);
+                a = a.sum(b);
+                b = a1;
+                break;
+            case '*':
+                logger.debug("b, = " + b);
+                //a = a.sum(b); 
+                //b = a1;
+                break;
+            case '\n':
+                tt = tok.nextToken();
+                if (debug)
+                    logger.debug("tt,nl = " + tt);
+                break;
+            default: // skip or finish ?
+                if (debug)
+                    logger.debug("default: " + tok);
+            }
+        }
+        if (debug)
+            logger.debug("b = " + b);
+        a = a.sum(b);
+        if (debug)
+            logger.debug("a = " + a);
+        // b = a1;
+        return a;
+    }
+    /* ----------------------------------- */
+
+    
     // must also allow +/- // does not work with tokenizer
     //private static boolean number(char x) {
     //    return digit(x) || x == '-' || x == '+';

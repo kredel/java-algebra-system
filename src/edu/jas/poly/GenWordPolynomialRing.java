@@ -32,7 +32,7 @@ import edu.jas.structure.RingFactory;
  */
 
 public final class GenWordPolynomialRing<C extends RingElem<C>> implements RingFactory<GenWordPolynomial<C>>
-/*, Iterable<GenWordPolynomial<C>>*/{
+                                                                           /*, Iterable<GenWordPolynomial<C>>*/{
 
 
     /**
@@ -440,7 +440,7 @@ public final class GenWordPolynomialRing<C extends RingElem<C>> implements RingF
     }
 
 
-   /**
+    /**
      * Get a GenWordPolynomial&lt;C&gt; element from a GenWordPolynomial&lt;C&gt;.
      * @param a GenWordPolynomial.
      * @return a GenWordPolynomial&lt;C&gt;.
@@ -590,21 +590,30 @@ public final class GenWordPolynomialRing<C extends RingElem<C>> implements RingF
      */
     @SuppressWarnings("unchecked")
     public GenWordPolynomial<C> parse(Reader r) {
-        if (alphabet.length() <= 4) { // todo, hack for commuative like cases
-            logger.warn("parse not implemented, assuming commutative for <= 4 variables.");
+        if (alphabet.length() <= 1) { // hack for univariate = commuative like cases
+            //logger.warn("parse not implemented, but commutative for <= 1 variables.");
             GenPolynomialRing<C> cr = new GenPolynomialRing<C>(coFac, alphabet.getVars() );
             GenPolynomialTokenizer pt = new GenPolynomialTokenizer(cr, r);
             GenPolynomial<C> p = cr.getZERO();
             try {
-                  p = pt.nextPolynomial();
+                p = pt.nextPolynomial();
             } catch (IOException e) {
-                  logger.error(e.toString() + " parse " + this);
+                logger.error(e.toString() + " parse " + this);
             }
             GenWordPolynomial<C> wp = this.valueOf(p);
             return wp;
         }
-        logger.error("parse not implemented");
-        throw new UnsupportedOperationException("not implemented");
+        GenPolynomialTokenizer tok = new GenPolynomialTokenizer(r);
+        GenWordPolynomial<C> a;
+        try {
+            a = tok.nextWordPolynomial(this); 
+        } catch (IOException e) {
+            a = null;
+            e.printStackTrace();
+            logger.error(e.toString() + " parse " + this);
+        }
+        return a;
+        //throw new UnsupportedOperationException("not implemented");
     }
 
 
@@ -673,7 +682,7 @@ public final class GenWordPolynomialRing<C extends RingElem<C>> implements RingF
         int n = alphabet.length();
         List<GenWordPolynomial<C>> pols = new ArrayList<GenWordPolynomial<C>>(n*(n-1));
         for ( int i = 0; i < n; i++ ) {
-             pols.addAll( commute(i) );
+            pols.addAll( commute(i) );
         }
         return pols;
     }
