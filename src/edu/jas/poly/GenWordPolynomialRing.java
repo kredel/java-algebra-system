@@ -591,7 +591,7 @@ public final class GenWordPolynomialRing<C extends RingElem<C>> implements RingF
     @SuppressWarnings("unchecked")
     public GenWordPolynomial<C> parse(Reader r) {
         if (alphabet.length() <= 1) { // hack for univariate = commuative like cases
-            //logger.warn("parse not implemented, but commutative for <= 1 variables.");
+            // obsolete case
             GenPolynomialRing<C> cr = new GenPolynomialRing<C>(coFac, alphabet.getVars() );
             GenPolynomialTokenizer pt = new GenPolynomialTokenizer(cr, r);
             GenPolynomial<C> p = cr.getZERO();

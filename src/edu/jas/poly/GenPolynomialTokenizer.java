@@ -1511,18 +1511,29 @@ public class GenPolynomialTokenizer {
         return new OrderedModuleList(spfac, s); // Ordered
     }
 
-    /* ----------------------------------- */
     
     /**
      * Parsing method for word polynomial. Syntax: same as for polynomial.
      * Multiplication will be non commutative.
-     * @param f word polynomial factory.
      * @return the next polynomial.
      * @throws IOException
      */
-    //@SuppressWarnings("unchecked")
-    public GenWordPolynomial nextWordPolynomial(GenWordPolynomialRing f) throws IOException {
-        GenWordPolynomialRing wfac = f;
+    @SuppressWarnings("unchecked")
+    public GenWordPolynomial nextWordPolynomial() throws IOException {
+        GenWordPolynomialRing wfac = new GenWordPolynomialRing(pfac);
+        return nextWordPolynomial(wfac);
+    }
+
+
+    /**
+     * Parsing method for word polynomial. Syntax: same as for polynomial.
+     * Multiplication will be non commutative.
+     * @param wfac word polynomial ring.
+     * @return the next polynomial.
+     * @throws IOException
+     */
+    @SuppressWarnings("unchecked")
+    public GenWordPolynomial nextWordPolynomial(GenWordPolynomialRing wfac) throws IOException {
         logger.info("wfac = " + wfac);
         WordFactory wf = wfac.alphabet;
 
@@ -1795,9 +1806,70 @@ public class GenPolynomialTokenizer {
         // b = a1;
         return a;
     }
-    /* ----------------------------------- */
+
+
+    /**
+     * Parsing method for word polynomial list. Syntax:
+     *
+     * <pre>
+     * ( p1, p2, p3, ..., pn )
+     * </pre>
+     *
+     * @return the next word polynomial list.
+     * @throws IOException
+     */
+    @SuppressWarnings("unchecked")
+    public List<GenWordPolynomial> nextWordPolynomialList() throws IOException {
+        GenWordPolynomialRing wfac = new GenWordPolynomialRing(pfac);
+        return nextWordPolynomialList(wfac);
+    }
 
     
+    /**
+     * Parsing method for word polynomial list. Syntax:
+     *
+     * <pre>
+     * ( p1, p2, p3, ..., pn )
+     * </pre>
+     *
+     * @param wfac word polynomial ring.
+     * @return the next word polynomial list.
+     * @throws IOException
+     */
+    public List<GenWordPolynomial> nextWordPolynomialList(GenWordPolynomialRing wfac) throws IOException {
+        GenWordPolynomial a;
+        List<GenWordPolynomial> L = new ArrayList<GenWordPolynomial>();
+        int tt;
+        tt = tok.nextToken();
+        if (tt == StreamTokenizer.TT_EOF)
+            return L;
+        if (tt != '(')
+            return L;
+        logger.debug("word polynomial list");
+        while (true) {
+            tt = tok.nextToken();
+            if (tok.ttype == ',')
+                continue;
+            if (tt == '(') {
+                a = nextWordPolynomial(wfac);
+                tt = tok.nextToken();
+                if (tok.ttype != ')')
+                    tok.pushBack();
+            } else {
+                tok.pushBack();
+                a = nextWordPolynomial(wfac);
+            }
+            logger.info("next pol = " + a);
+            L.add(a);
+            if (tok.ttype == StreamTokenizer.TT_EOF)
+                break;
+            if (tok.ttype == ')')
+                break;
+        }
+        return L;
+    }
+
+
     // must also allow +/- // does not work with tokenizer
     //private static boolean number(char x) {
     //    return digit(x) || x == '-' || x == '+';
