@@ -100,6 +100,7 @@
      <src path="${src}" />
      <src path="${testsrc}" />
      <!--compilerarg value="-Xlint:unchecked" /-->
+     <!--compilerarg value="-Xlint:deprecation" /-->
   </javac>
 </target>
 
@@ -168,7 +169,7 @@
            overview="doc/overview.html" 
            author="true" 
            linksource="true" 
-           additionalparam="-Xdoclint:none"
+           additionalparam="-Xdoclint:none -html5"
            >
 <!--       
            private="true" 

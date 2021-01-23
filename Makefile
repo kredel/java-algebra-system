@@ -376,7 +376,7 @@ clean:
 testp:
 	find examples -name "*.py"|grep -v jas.py |grep -v sdexam.py |grep -v plot|grep -v versuch|sort|xargs -L 1 echo "time jython $(SOPTS)" | awk '{ printf "echo %s\n", $$0; printf "%s\n", $$0 }' > ./all_jython.sh
 	time bash -i all_jython.sh 2>&1 | tee tjy.out
-	-egrep '(Error|File|Exception)' tjy.out
+	-egrep '(Error|ERROR|File|Exception)' tjy.out
 
 testr:
 	find examples -name "*.rb"|grep -v jas.rb |grep -v versuch|sort|xargs -L 1 echo "time jruby $(SOPTS)" | awk '{ printf "echo %s\n", $$0; printf "%s\n", $$0 }' > ./all_jruby.sh
@@ -399,14 +399,14 @@ tests:
 	echo "--------------------"
 	-grep FAIL t.out
 	-grep Exception e.out | grep -v GCDProxy | grep -v GBProxy
-	-egrep '(Error|File|Exception)' tjy.out
+	-egrep '(Error|ERROR|File|Exception)' tjy.out
 	-egrep -i '(error|__file__|exception)' tjr.out
 	-grep -i error jython/jsr.out
 	-grep -i error mpj/mpj.out
 	#-grep -i error mpi/mpi.out
 	-grep -i error jlinalg_adapter/ja.out
 	-grep -i error commons-math_adapter/ja.out
-	-egrep '(Exception|Usage|Error)' tr.out
+	-egrep '(Exception|Usage|Error|ERROR)' tr.out
 
 metrics:
 	ant jdepend
