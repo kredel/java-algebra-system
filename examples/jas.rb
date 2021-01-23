@@ -5639,13 +5639,13 @@ Word polynomial ring constructor.
 =end
     def initialize(ringstr="",ring=nil)
         if ring == nil
-           raise "parse of word polynomial rings not implemented"
+           #raise "parse of word polynomial rings not implemented"
            sr = StringReader.new( ringstr );
            tok = RingFactoryTokenizer.new(sr);
            pfac = tok.nextPolynomialRing();
-           #tok = GenPolynomialTokenizer.new(sr);
-           #@pset = tok.nextWordPolynomialSet();
-           @ring = pfac;
+           wfac = GenWordPolynomialRing.new(pfac);
+           #@list = tok.nextWordPolynomialList(wfac);
+           @ring = wfac;
         else
            if ring.is_a? Ring
               @ring = ring.ring
@@ -5719,7 +5719,7 @@ Create an element from a string or object.
            end
            poly = str(poly);
         end
-        ii = WordPolyIdeal.new(self, "( " + poly + " )"); # not working
+        ii = WordPolyIdeal.new(self, "( " + poly + " )"); # should work
         list = ii.list;
         if list.size > 0
             return RingElem.new( list[0] );
@@ -5792,10 +5792,10 @@ Constructor for an ideal in a non-commutative polynomial ring.
     def initialize(ring,ringstr="",list=nil)
         @ring = ring;
         if list == nil
-           raise "parse of non-commutative polynomials not implemented"
+           #raise "parse of non-commutative polynomials not implemented"
            sr = StringReader.new( ringstr );
-           tok = GenPolynomialTokenizer.new(ring.ring, sr);
-           @list = tok.nextWordPolynomialList();
+           tok = GenPolynomialTokenizer.new(sr);
+           @list = tok.nextWordPolynomialList(ring.ring);
            @ideal = WordIdeal.new(ring.ring, @list);
         else
            if list.is_a? WordIdeal

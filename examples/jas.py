@@ -4305,14 +4305,13 @@ class WordRing(Ring):
         '''Word polynomial ring constructor.
         '''
         if ring == None:
-           raise ValueError, "parse of word polynomials not implemented" 
+           #raise ValueError, "parse of word polynomials not implemented" 
            sr = StringReader( ringstr );
            tok = RingFactoryTokenizer(sr);
            pfac = tok.nextPolynomialRing();
-           #tok = GenPolynomialTokenizer(pfac,sr);
-           #plist = tok.nextWordPolynomialList();
-           #self.pset = PolynomialList(pfac,plist);
-           self.ring = pfac;
+           wfac = GenWordPolynomialRing(pfac);
+           #list = tok.nextWordPolynomialList(wfac);
+           self.ring = wfac;
         else:
            if isinstance(ring,Ring):
               self.ring = ring.ring;
@@ -4359,7 +4358,7 @@ class WordRing(Ring):
             except Exception, e:
                 pass
             poly = str(poly);
-        I = WordPolyIdeal(self, "( " + poly + " )"); # not working
+        I = WordPolyIdeal(self, "( " + poly + " )"); # should work
         list = I.list;
         if len(list) > 0:
             return RingElem( list[0] );
@@ -4413,10 +4412,10 @@ class WordPolyIdeal:
         '''
         self.ring = ring;
         if list == None:
-           raise ValueError, "parse of word polynomials not implemented" 
+           #raise ValueError, "parse of word polynomials not implemented" 
            sr = StringReader( ringstr );
-           tok = GenPolynomialTokenizer(ring.ring,sr);
-           self.list = tok.nextSolvablePolynomialList();
+           tok = GenPolynomialTokenizer(sr);
+           self.list = tok.nextWordPolynomialList(ring.ring);
         else:
            if isinstance(list,WordPolyIdeal):
               self.list = list.list;
