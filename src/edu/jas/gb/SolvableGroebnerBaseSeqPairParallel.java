@@ -1,6 +1,5 @@
 /*
- * $Id: SolvableGroebnerBaseSeqPairParallel.java 3990 2012-07-14 12:46:08Z
- * kredel $
+ * $Id$
  */
 
 package edu.jas.gb;

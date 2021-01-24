@@ -1,6 +1,5 @@
 /*
- * $Id: ResidueSolvableWordPolynomialTest.java 5288 2015-08-01 17:22:12Z kredel
- * $
+ * $Id$
  */
 
 package edu.jas.application;
@@ -302,7 +301,7 @@ public class ResidueSolvableWordPolynomialTest extends TestCase {
         d = (ResidueSolvableWordPolynomial<BigRational>) a.monic();
         //System.out.println("d = " + d);
         assertTrue("a.monic(): " + d, d.leadingBaseCoefficient().isONE()
-                        || d.leadingBaseCoefficient().abs().equals(a.leadingBaseCoefficient().abs()));
+                   || d.leadingBaseCoefficient().abs().equals(a.leadingBaseCoefficient().abs()));
     }
 
 
@@ -389,7 +388,7 @@ public class ResidueSolvableWordPolynomialTest extends TestCase {
         GenWordPolynomial<BigRational> r2 = wring.parse("a");
         ResidueSolvableWordPolynomial<BigRational> rp = ring.parse("a x + b");
         ring.polCoeff.coeffTable.update(r1.leadingExpVector(), r2.leadingWord().leadingExpVector(),
-                        ring.toPolyCoefficients(rp));
+                                        ring.toPolyCoefficients(rp));
 
         int k = rl;
         ResidueSolvableWordPolynomialRing<BigRational> pfe = ring.extend(k);
@@ -402,12 +401,12 @@ public class ResidueSolvableWordPolynomialTest extends TestCase {
         //System.out.println("a = " + a);
 
         ResidueSolvableWordPolynomial<BigRational> ae = (ResidueSolvableWordPolynomial<BigRational>) a
-                        .extend(pfe, 0, 0);
+            .extend(pfe, 0, 0);
         //System.out.println("ae = " + ae);
 
         Map<ExpVector, GenPolynomial<WordResidue<BigRational>>> m = ae.contract(pfec);
         List<GenPolynomial<WordResidue<BigRational>>> ml = new ArrayList<GenPolynomial<WordResidue<BigRational>>>(
-                        m.values());
+                                                                                                                  m.values());
         GenPolynomial<WordResidue<BigRational>> aec = ml.get(0);
         //System.out.println("ae  = " + ae);
         //System.out.println("aec = " + aec);
@@ -423,7 +422,7 @@ public class ResidueSolvableWordPolynomialTest extends TestCase {
         GenWordPolynomial<BigRational> r2 = wring.parse("a");
         ResidueSolvableWordPolynomial<BigRational> rp = ring.parse("a x + b");
         ring.polCoeff.coeffTable.update(r1.leadingExpVector(), r2.leadingWord().leadingExpVector(),
-                        ring.toPolyCoefficients(rp));
+                                        ring.toPolyCoefficients(rp));
 
         ResidueSolvableWordPolynomialRing<BigRational> pfr = ring.reverse();
         ResidueSolvableWordPolynomialRing<BigRational> pfrr = pfr.reverse();
@@ -435,9 +434,9 @@ public class ResidueSolvableWordPolynomialTest extends TestCase {
         //System.out.println("a = " + a);
 
         ResidueSolvableWordPolynomial<BigRational> ar = (ResidueSolvableWordPolynomial<BigRational>) a
-                        .reverse(pfr);
+            .reverse(pfr);
         ResidueSolvableWordPolynomial<BigRational> arr = (ResidueSolvableWordPolynomial<BigRational>) ar
-                        .reverse(pfrr);
+            .reverse(pfrr);
         assertEquals("a == arr", a, arr);
         //System.out.println("ar = " + ar);
         //System.out.println("arr = " + arr);

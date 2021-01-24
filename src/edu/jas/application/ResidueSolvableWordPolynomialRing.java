@@ -1,6 +1,5 @@
 /*
- * $Id: ResidueSolvableWordPolynomialRing.java 5284 2015-08-01 11:21:04Z kredel
- * $
+ * $Id$
  */
 
 package edu.jas.application;

@@ -1,6 +1,5 @@
 /*
- * $Id: ElementaryIntegrationCzichowski.java 5846 2018-06-24 13:18:52Z elbarbary
- * $
+ * $Id$
  */
 
 package edu.jas.integrate;

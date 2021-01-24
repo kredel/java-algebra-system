@@ -1,6 +1,5 @@
 /*
- * $Id: ElementaryIntegrationAbsoluteTest.java 5812 2018-04-25 21:28:02Z kredel
- * $
+ * $Id$
  */
 
 package edu.jas.integrate;

@@ -1,6 +1,5 @@
 /*
- * $Id: SquarefreeInfiniteAlgebraicFieldCharP.java 3290 2010-08-26 09:18:48Z
- * kredel $
+ * $Id$
  */
 
 package edu.jas.ufd;

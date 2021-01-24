@@ -1,6 +1,5 @@
 /*
- * $Id: LocalResidueSolvablePolynomialQLRTest.java 5134 2015-02-28 18:36:43Z
- * kredel $
+ * $Id$
  */
 
 package edu.jas.application;
