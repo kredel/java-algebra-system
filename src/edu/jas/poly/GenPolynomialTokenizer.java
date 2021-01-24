@@ -1369,7 +1369,7 @@ public class GenPolynomialTokenizer {
     @SuppressWarnings("unchecked")
     public GenSolvablePolynomial nextSolvablePolynomial() throws IOException {
         GenPolynomial p = nextPolynomial();
-        logger.info("p = " + p);
+        logger.info("nextSolvablePolynomial = " + p);
         // comments += nextComment();
 
         GenSolvablePolynomial ps = new GenSolvablePolynomial(spfac, p.val);
@@ -1534,7 +1534,7 @@ public class GenPolynomialTokenizer {
      */
     @SuppressWarnings("unchecked")
     public GenWordPolynomial nextWordPolynomial(GenWordPolynomialRing wfac) throws IOException {
-        logger.info("wfac = " + wfac);
+        //logger.info("wfac = " + wfac);
         WordFactory wf = wfac.alphabet;
 
         GenWordPolynomial a = wfac.getZERO();
@@ -1563,6 +1563,8 @@ public class GenPolynomialTokenizer {
             switch (tt) {
             case ')':
             case ',':
+                if (logger.isInfoEnabled())
+                    logger.info("nextWordPolynomial = " + a);
                 return a; // do not change or remove
             case '-':
                 b = b.negate();
@@ -1801,8 +1803,8 @@ public class GenPolynomialTokenizer {
         if (debug)
             logger.debug("b = " + b);
         a = a.sum(b);
-        if (debug)
-            logger.debug("a = " + a);
+        if (logger.isInfoEnabled())
+            logger.info("nextWordPolynomial = " + a);
         // b = a1;
         return a;
     }

@@ -452,7 +452,7 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
             return;
         }
         List<GenWordPolynomial<C>> G = getList();
-        logger.info("GB computing = " + G);
+        logger.info("doGB computing = " + G);
         list = bb.GB(G);
         isGB = true;
         testGB = true;

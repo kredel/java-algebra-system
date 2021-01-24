@@ -80,7 +80,9 @@ public class WordResidueRing<C extends GcdRingElem<C>> implements RingFactory<Wo
      * @param isMaximal true, if ideal is maxmal.
      */
     public WordResidueRing(WordIdeal<C> i, boolean isMaximal) {
+        //System.out.println("i    = " + i);
         ideal = i.GB(); // cheap if isGB
+        //System.out.println("i.GB = " + ideal);
         ring = ideal.getRing();
         bb = new WordGroebnerBaseSeq<C>();
         if (isMaximal) {
@@ -199,7 +201,7 @@ public class WordResidueRing<C extends GcdRingElem<C>> implements RingFactory<Wo
             if (!r.isONE() && r.val.isConstant()) {
                 continue;
             }
-            // avoid duplicate generators
+            // avoid duplicate generators with sgens
             WordResidue<C> x = new WordResidue<C>(gr, r.val);
             if (x.isZERO()) {
                 continue;
