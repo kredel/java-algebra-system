@@ -117,12 +117,17 @@ public class ResidueSolvableWordPolynomialTest extends TestCase {
         List<GenWordPolynomial<BigRational>> il = new ArrayList<GenWordPolynomial<BigRational>>();
         //GenWordPolynomial<BigRational> p1 = wring.parse("b - a^2"); // not associative
         //GenWordPolynomial<BigRational> p1 = wring.parse("b - a^3"); // not associative
-        GenWordPolynomial<BigRational> p1 = wring.parse("b a - 1"); // Weyl relation
+        //GenWordPolynomial<BigRational> p1 = wring.parse("b a - 1"); // Weyl relation, result not assoc
+        //GenWordPolynomial<BigRational> p1 = wring.parse("a b - 1"); // isAssoc?
+        GenWordPolynomial<BigRational> p1 = wring.parse("b a - a b"); // commutative, okay
         il.add(p1);
         //p1 = wring.parse("a - b^5");
         //il.add(p1);
+        //System.out.println("il = " + il);
         wideal = new WordIdeal<BigRational>(wring, il);
+        //System.out.println("wideal = " + wideal.toScript());
         wideal = wideal.GB();
+        //System.out.println("twosided wideal = " + wideal.toScript());
         if (wideal.isONE()) {
             System.out.println("twosided wideal = " + wideal.toScript());
             throw new IllegalArgumentException("ideal is one");
