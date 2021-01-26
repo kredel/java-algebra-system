@@ -1590,8 +1590,8 @@ public final class GenWordPolynomial<C extends RingElem<C>> implements RingElem<
                 return fac.getZERO(); // or null?
             }
             C y = me.getValue();
-            if (sv.get(ec) != null) { // todo can be removed
-                throw new RuntimeException("x != null: should not happen " + sv.get(ec));
+            if (sv.get(ec) != null) { // eventualy need sum
+                throw new RuntimeException("x != null: need sum " + sv.get(ec) + " + " + y);
             }
             sv.put(ec, y);
         }

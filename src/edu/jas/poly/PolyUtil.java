@@ -1814,7 +1814,7 @@ public class PolyUtil {
             }
         }
         // compute square root if possible
-        // todo refactor for sqrt in RingElem (?)
+        // refactor for sqrt in RingElem ?
         if (a instanceof BigRational) {
             BigRational b = (BigRational) a;
             a = (C) Roots.sqrt(b);

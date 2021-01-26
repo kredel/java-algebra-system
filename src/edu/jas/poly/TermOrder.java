@@ -1878,10 +1878,10 @@ public final class TermOrder implements Serializable {
                 }
                 max++;
                 long[] wj = new long[wi.length + k];
-                for (int j = 0; j < i; j++) {
+                for (int j = 0; j < k; j++) { //i#k
                     wj[j] = max;
                 }
-                System.arraycopy(wi, 0, wj, i, wi.length);
+                System.arraycopy(wi, 0, wj, k, wi.length);
                 w[i] = wj;
             }
             return new TermOrder(w);
@@ -1896,19 +1896,32 @@ public final class TermOrder implements Serializable {
         //System.out.println("evord         = " + evord);
         //System.out.println("DEFAULT_EVORD = " + DEFAULT_EVORD);
         //System.out.println("tord          = " + this);
-        return new TermOrder(DEFAULT_EVORD/*evord*/, evord, r + k, k, top); // todo param
-               // don't change to evord, cause REVITDG
+        return new TermOrder(DEFAULT_EVORD/*evord*/, evord, r + k, k, top);
+               // don't change to evord, cause REVITDG || set evord1 per parameter?
     }
 
 
     /**
-     * Extend lower variables. Extend TermOrder by k elements. <b>Note:</b> todo
-     * distinguish TOP and POT orders.
+     * Extend lower variables. Extend TermOrder by k elements.
+     * <b>Note:</b> Use POT module term order.
      * @param r current number of variables.
      * @param k number of variables to extend.
      * @return extended TermOrder.
      */
     public TermOrder extendLower(int r, int k) {
+	return extendLower(r, k, false);
+    }
+
+
+    /**
+     * Extend lower variables. Extend TermOrder by k elements.
+     * <b>Note:</b> Now TOP and POT orders are distinguished.
+     * @param r current number of variables.
+     * @param k number of variables to extend.
+     * @param top true for TOP term order, false for POT term order.
+     * @return extended TermOrder.
+     */
+    public TermOrder extendLower(int r, int k, boolean top) {
         if (weight != null) {
             long[][] w = new long[weight.length][];
             for (int i = 0; i < weight.length; i++) {
@@ -1922,7 +1935,7 @@ public final class TermOrder implements Serializable {
                 }
                 //max++;
                 long[] wj = new long[wi.length + k];
-                for (int j = 0; j < i; j++) {
+                for (int j = 0; j < k; j++) { //i#k
                     wj[wi.length + j] = min;
                 }
                 System.arraycopy(wi, 0, wj, 0, wi.length);
@@ -1934,12 +1947,13 @@ public final class TermOrder implements Serializable {
             if (debug) {
                 logger.warn("TermOrder is already extended");
             }
-            return new TermOrder(evord, evord2, r + k, evend1 + k);
+            return new TermOrder(evord, evord2, r + k, evend1 + k, top);
         }
         //System.out.println("evord         = " + evord);
         //System.out.println("DEFAULT_EVORD = " + DEFAULT_EVORD);
         //System.out.println("tord          = " + this);
-        return new TermOrder(evord);
+        return new TermOrder(evord, DEFAULT_EVORD, r + k, r, top);
+               // set evord2 per parameter?
     }
 
 
