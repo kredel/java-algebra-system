@@ -379,9 +379,9 @@ testp:
 	-egrep '(Error|ERROR|File|Exception)' tjy.out
 
 testr:
-	find examples -name "*.rb"|grep -v jas.rb |grep -v versuch|sort|xargs -L 1 echo "time jruby $(SOPTS)" | awk '{ printf "echo %s\n", $$0; printf "%s\n", $$0 }' > ./all_jruby.sh
+	find examples -name "*.rb"|grep -v jas.rb |grep -v sdexam.rb |grep -v versuch|sort|xargs -L 1 echo "time jruby $(SOPTS)" | awk '{ printf "echo %s\n", $$0; printf "%s\n", $$0 }' > ./all_jruby.sh
 	time bash -i ./all_jruby.sh 2>&1 | tee tjr.out
-	-egrep -i '(error|__file__|exception)' tjr.out
+	-egrep -i '(error|__file__|exception|failed)' tjr.out
 
 tests:
 	ant test 2>&1 | tee t.out
@@ -400,7 +400,7 @@ tests:
 	-grep FAIL t.out
 	-grep Exception e.out | grep -v GCDProxy | grep -v GBProxy
 	-egrep '(Error|ERROR|File|Exception)' tjy.out
-	-egrep -i '(error|__file__|exception)' tjr.out
+	-egrep -i '(error|__file__|exception|failed)' tjr.out
 	-grep -i error jython/jsr.out
 	-grep -i error mpj/mpj.out
 	#-grep -i error mpi/mpi.out
