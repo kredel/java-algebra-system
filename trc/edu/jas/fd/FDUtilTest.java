@@ -383,6 +383,7 @@ public class FDUtilTest extends TestCase {
     /**
      * Test recursive right coefficient polynomial.
      */
+    @SuppressWarnings("unchecked")
     public void testRightRecursivePolynomial() {
         //String[] names = new String[] { "t", "x", "y", "z" };
         String[] names = new String[] { "y", "z" };
@@ -390,8 +391,10 @@ public class FDUtilTest extends TestCase {
         RelationGenerator<BigRational> wl = new WeylRelationsIterated<BigRational>();
         rdfac.addRelations(wl);
         rrfac = rdfac.recursive(1);
-        //System.out.println("\nrdfac  = " + rdfac.toScript());
-        //System.out.println("rrfac  = " + rrfac.toScript());
+        System.out.println("\nrdfac  = " + rdfac.toScript());
+        System.out.println("rrfac  = " + rrfac.toScript());
+        GenSolvablePolynomialRing<BigRational> cfac = (GenSolvablePolynomialRing) rrfac.coFac;
+        System.out.println("cfac  = " + cfac.toScript());
 
         // q = q;
         kl = 3;
@@ -399,40 +402,35 @@ public class FDUtilTest extends TestCase {
         el = 5;
 
         arr = rrfac.random(kl, ll, el, q);
-        //System.out.println("FDQR: arr  = " + arr);
+        //arr = rrfac.parse(" z { y } ");
+        System.out.println("FDQR: arr  = " + arr);
 
         brr = arr.rightRecursivePolynomial();
-        //System.out.println("FDQR: brr  = " + brr);
-
-        //System.out.println("FDQR: arr == brr: " + arr.equals(brr));
-        //assertFalse("arr != brr: ", arr.equals(brr) && false); // mostly unequal
+        System.out.println("FDQR: brr  = " + brr);
 
         boolean t = arr.isRightRecursivePolynomial(brr);
         assertTrue("arr == eval(brr): ", t);
 
         GenSolvablePolynomial<BigRational> c = (GenSolvablePolynomial<BigRational>) rrfac
                         .random(kl, ll, el, q).leadingBaseCoefficient();
-        //System.out.println("FDQR: c  = " + c);
+        //c = cfac.parse("y**2");
+        System.out.println("FDQR: c  = " + c);
 
-        //drr = FDUtil.<BigRational> multiplyRightRecursivePolynomial(brr,c);
-        drr = brr.multiply(c);
-        //System.out.println("FDQR: drr  = " + drr);
+        drr = arr.multiply(c); // arr * c = drr
+        System.out.println("FDQR: drr  = " + drr);
 
-        //no: err = FDUtil.<BigRational> recursiveRightPseudoQuotientRemainder(drr,c)[0];
-        err = FDUtil.<BigRational> recursiveDivideRightEval(drr, c); // this is correct
-        assertEquals("arr == err: " + err, brr, err);
-
-        //no: err = FDUtil.<BigRational> recursiveRightDivide(drr,c);
-        //System.out.println("FDQR: err  = " + err);
-        //assertEquals("brr == err: " + err, brr, err);
+        err = FDUtil.<BigRational> recursiveLeftDivide(drr, c); // err * c = drr
+        System.out.println("FDQR: err  = " + err);
+        assertEquals("arr == err: ", arr, err);
 
 
-        drr = brr.multiplyLeft(c);
-        //System.out.println("FDQR: drr  = " + drr);
+        System.out.println("\nFDQR: arr  = " + arr);
+        drr = arr.multiplyLeft(c); // c * arr = drr
+        System.out.println("FDQR: drr  = " + drr);
 
-        err = FDUtil.<BigRational> recursiveLeftDivide(drr, c);
-        //System.out.println("FDQR: err  = " + err);
-        assertEquals("brr == err: " + err, brr, err);
+        err = FDUtil.<BigRational> recursiveRightDivide(drr, c); // c * err = drr
+        System.out.println("FDQR: err  = " + err);
+        assertEquals("arr == err: ", arr, err);
     }
 
 
