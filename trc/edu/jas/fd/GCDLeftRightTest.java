@@ -168,7 +168,7 @@ public class GCDLeftRightTest extends TestCase {
             //d = (GenSolvablePolynomial<BigQuaternion>) cont.left;
             //System.out.println("cont = " + cont);
             //System.out.println("cont.isGCD() = " + cont.isGCD());
-            assertTrue("cont.isGCD() ", cont.isGCD());
+            assertTrue("cont.isGCD(): " + cont, cont.isGCD());
         }
     }
 
@@ -209,7 +209,7 @@ public class GCDLeftRightTest extends TestCase {
             //d = (GenSolvablePolynomial<BigQuaternion>) cont.left;
             //System.out.println("cont = " + cont);
             //System.out.println("cont.isGCD() = " + cont.isGCD());
-            assertTrue("cont.isGCD() ", cont.isGCD());
+            assertTrue("cont.isGCD(): " + cont, cont.isGCD());
         }
     }
 
@@ -249,14 +249,14 @@ public class GCDLeftRightTest extends TestCase {
             d = fd.leftBaseGcd(a, b);
             //System.out.println("c = " + c);
             //System.out.println("d = " + d);
-            //assertTrue("cont.isGCD() ", cont.isGCD());
+            //assertTrue("cont.isGCD(): " + cont, cont.isGCD());
 
             e = FDUtil.<BigQuaternion> rightBaseSparsePseudoRemainder(a, d);
             //System.out.println("e = " + e);
-            assertTrue("e == 0 ", e.isZERO());
+            assertTrue("e == 0: " + e, e.isZERO());
             f = FDUtil.<BigQuaternion> rightBaseSparsePseudoRemainder(b, d);
             //System.out.println("f = " + f);
-            assertTrue("f == 0 ", f.isZERO());
+            assertTrue("f == 0: " + f, f.isZERO());
         }
     }
 
@@ -296,14 +296,14 @@ public class GCDLeftRightTest extends TestCase {
             d = fd.rightBaseGcd(a, b);
             //System.out.println("c = " + c);
             //System.out.println("d = " + d);
-            //assertTrue("cont.isGCD() ", cont.isGCD());
+            //assertTrue("cont.isGCD(): " + cont, cont.isGCD());
 
             e = FDUtil.<BigQuaternion> leftBaseSparsePseudoRemainder(a, d);
             //System.out.println("e = " + e);
-            assertTrue("e == 0 ", e.isZERO());
+            assertTrue("e == 0: " + e, e.isZERO());
             f = FDUtil.<BigQuaternion> leftBaseSparsePseudoRemainder(b, d);
             //System.out.println("f = " + f);
-            assertTrue("f == 0 ", f.isZERO());
+            assertTrue("f == 0: " + f, f.isZERO());
         }
     }
 
@@ -354,10 +354,10 @@ public class GCDLeftRightTest extends TestCase {
             GCDcoFactors<BigQuaternion> cont = fd.leftRightBaseGcd(a, b);
             //d = (GenSolvablePolynomial<BigQuaternion>) cont.left;
             //System.out.println("cont = " + cont);
-            //System.out.println("cont.isGCD() = " + cont.isGCD());
+            //System.out.println("cont.isGCD(): = " + cont.isGCD());
             //System.out.println("r = " + cont.right + ", l=" + cont.left);
             //System.out.println("c = " + c + ", cc = " + cc); 
-            assertTrue("cont.isGCD() ", cont.isGCD());
+            assertTrue("cont.isGCD(): " + cont, cont.isGCD());
         }
     }
 
@@ -403,7 +403,7 @@ public class GCDLeftRightTest extends TestCase {
             //System.out.println("cont.isGCD() = " + cont.isGCD());
             //System.out.println("r = " + cont.right + ", l=" + cont.left);
             //System.out.println("c = " + c + ", cc = " + cc); 
-            assertTrue("cont.isGCD() ", cont.isGCD());
+            assertTrue("cont.isGCD(): " + cont, cont.isGCD());
         }
     }
 
@@ -453,10 +453,10 @@ public class GCDLeftRightTest extends TestCase {
 
             e = FDUtil.<BigQuaternion> rightBaseSparsePseudoRemainder(a, d);
             //System.out.println("e = " + e);
-            assertTrue("e == 0 ", e.isZERO());
+            assertTrue("e == 0: " + e, e.isZERO());
             f = FDUtil.<BigQuaternion> rightBaseSparsePseudoRemainder(b, d);
             //System.out.println("f = " + f);
-            assertTrue("f == 0 ", f.isZERO());
+            assertTrue("f == 0: " + f, f.isZERO());
         }
     }
 
@@ -495,22 +495,22 @@ public class GCDLeftRightTest extends TestCase {
             //System.out.println("c  = " + c);
 
             a = a.multiply(c);
-            b = a.multiply(c);
+            b = b.multiply(c);
             //System.out.println("a  = " + a);
             //System.out.println("b  = " + b);
 
             d = fd.rightBaseGcd(a, b);
-            //System.out.println("c = " + c);
-            //System.out.println("d = " + d);
+            //System.out.println("c  = " + c);
+            //System.out.println("d  = " + d);
             //d = fd.leftBasePrimitivePart(fd.rightBasePrimitivePart(d));
             //System.out.println("d = " + d);
 
             e = FDUtil.<BigQuaternion> leftBaseSparsePseudoRemainder(a, d);
-            //System.out.println("e = " + e);
-            assertTrue("e == 0 ", e.isZERO());
+            //System.out.println("e  = " + e);
+            assertTrue("e == 0: " + e, e.isZERO());
             f = FDUtil.<BigQuaternion> leftBaseSparsePseudoRemainder(b, d);
-            //System.out.println("f = " + f);
-            assertTrue("f == 0 ", f.isZERO());
+            //System.out.println("f  = " + f);
+            assertTrue("f == 0: " + f, f.isZERO());
         }
     }
 

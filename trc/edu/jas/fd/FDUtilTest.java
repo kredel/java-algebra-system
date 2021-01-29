@@ -391,10 +391,10 @@ public class FDUtilTest extends TestCase {
         RelationGenerator<BigRational> wl = new WeylRelationsIterated<BigRational>();
         rdfac.addRelations(wl);
         rrfac = rdfac.recursive(1);
-        System.out.println("\nrdfac  = " + rdfac.toScript());
-        System.out.println("rrfac  = " + rrfac.toScript());
+        //System.out.println("\nrdfac  = " + rdfac.toScript());
+        //System.out.println("rrfac  = " + rrfac.toScript());
         GenSolvablePolynomialRing<BigRational> cfac = (GenSolvablePolynomialRing) rrfac.coFac;
-        System.out.println("cfac  = " + cfac.toScript());
+        //System.out.println("cfac  = " + cfac.toScript());
 
         // q = q;
         kl = 3;
@@ -403,10 +403,10 @@ public class FDUtilTest extends TestCase {
 
         arr = rrfac.random(kl, ll, el, q);
         //arr = rrfac.parse(" z { y } ");
-        System.out.println("FDQR: arr  = " + arr);
+        //System.out.println("FDQR: arr  = " + arr);
 
         brr = arr.rightRecursivePolynomial();
-        System.out.println("FDQR: brr  = " + brr);
+        //System.out.println("FDQR: brr  = " + brr);
 
         boolean t = arr.isRightRecursivePolynomial(brr);
         assertTrue("arr == eval(brr): ", t);
@@ -414,22 +414,22 @@ public class FDUtilTest extends TestCase {
         GenSolvablePolynomial<BigRational> c = (GenSolvablePolynomial<BigRational>) rrfac
                         .random(kl, ll, el, q).leadingBaseCoefficient();
         //c = cfac.parse("y**2");
-        System.out.println("FDQR: c  = " + c);
+        //System.out.println("FDQR: c  = " + c);
 
         drr = arr.multiply(c); // arr * c = drr
-        System.out.println("FDQR: drr  = " + drr);
+        //System.out.println("FDQR: drr  = " + drr);
 
         err = FDUtil.<BigRational> recursiveLeftDivide(drr, c); // err * c = drr
-        System.out.println("FDQR: err  = " + err);
+        //System.out.println("FDQR: err  = " + err);
         assertEquals("arr == err: ", arr, err);
 
 
-        System.out.println("\nFDQR: arr  = " + arr);
+        //System.out.println("\nFDQR: arr  = " + arr);
         drr = arr.multiplyLeft(c); // c * arr = drr
-        System.out.println("FDQR: drr  = " + drr);
+        //System.out.println("FDQR: drr  = " + drr);
 
         err = FDUtil.<BigRational> recursiveRightDivide(drr, c); // c * err = drr
-        System.out.println("FDQR: err  = " + err);
+        //System.out.println("FDQR: err  = " + err);
         assertEquals("arr == err: ", arr, err);
     }
 
