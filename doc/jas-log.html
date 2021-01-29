@@ -10,7 +10,7 @@
     <h1>JAS project web-log</h1>
 
 <p>For a detailed list of the latest changes see the 
-   <a href="svn_change.log" target="top">Subversion change log</a>.
+   <a href="git_change.log" target="top">Git change log</a>.
 </p>
 
 <!--
@@ -23,27 +23,40 @@
 
 <dl>
 
-<dt>2021, January,  </dt> <!-- 2.7.1 -->
+<dt>2021, February </dt> <!-- 2.7.20 -->
 <dd>
 
+ Switch to Java 11, Log4j 2.13.2, JRuby 9.2.14.0, Jython 2.7.2 with
+ some fixes. For example the deprecated JRuby <code>mathn</code>
+ module for rational number input had to be replaced. Replaced calls to
+ deprecated <code>PseudoRemainder</code> methods. Fixed termination
+ detection in <code>GreatestCommonDivisor\-ModEval</code>.  
+ New parsing method for <code>WordPolynomial</code>s.
+ Deactivated <a href="https://symbolicdata.org/">SymbolicData</a> test
+ as its servers have been stopped.
+ Remove internal calls to some deprecated methods.
+ Further cleanups, improvements and small bug fixes.
+
+</dd>
+
+<dt>2021, January </dt> <!-- 2.7.10 -->
+<dd>
  Switch from SVN to Git, so the SVN revision number will no more be
  part of the JAS version.  Several small fixes for some issues found
  by <a href="https://lgtm.com/">LGTM</a>. For example,
  <code>hashCode</code>, potential <code>int, long</code> overflows and
  parameter typos in Javadoc. 
-
  <b>Note:</b> From JAS version 2.7 on, the deprecated methods and
  classes might be removed.
-
 </dd>
 
-<dt>2020, December 13th,  </dt> <!-- 2.6.6027 -->
+<dt>2020, December, 13th </dt> <!-- 2.6.6027 -->
 <dd>
  Undo error in selection of evaluation points in factorization of
  polynomials with integer coeffcients. Fix in Debian package.
 </dd>
 
-<dt>2020, December,  </dt> <!-- 2.6.6025 --> 
+<dt>2020, December </dt> <!-- 2.6.6025 --> 
 <dd> 
  In polynomial factorization check and force INVLEX term ordering.
  Improve special case of polynomials with positive degree of
@@ -2779,7 +2792,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Fri Jan  1 20:46:30 CET 2021
+Last modified: Fri Jan 29 11:20:08 CET 2021
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
