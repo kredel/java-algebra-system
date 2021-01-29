@@ -2,7 +2,7 @@
 # run some py files
 
 #OPTS="-J-cp ../lib/log4j.jar:../lib/junit.jar:."
-OPTS="-J-cp ../lib/log4j-core-2.5.jar:../lib/log4j-api-2.5.jar:../lib/junit.jar-4.12.jar:../lib/hamcrest-core-1.3.jar:."
+OPTS="-J-cp ../lib/log4j-core-2.13.2.jar:../lib/log4j-api-2.13.2.jar:../lib/junit.jar-4.12.jar:../lib/hamcrest-core-1.3.jar:."
 
 echo jython $OPTS -J-verbose:gc examples/all_rings.py
 time jython $OPTS -J-verbose:gc examples/all_rings.py
