@@ -160,7 +160,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         GenPolynomialRing<BigInteger> pfac = P.ring;
         if (pfac.nvar > 1) {
             throw new IllegalArgumentException(
-                            this.getClass().getName() + " only for univariate polynomials");
+                                               this.getClass().getName() + " only for univariate polynomials");
         }
         if (!engine.baseContent(P).isONE()) {
             throw new IllegalArgumentException(this.getClass().getName() + " P not primitive");
@@ -440,7 +440,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
      *         p**e. <b>Note:</b> does not work in all cases.
      */
     List<GenPolynomial<BigInteger>> searchFactorsMonic(GenPolynomial<BigInteger> C, BigInteger M,
-                    List<GenPolynomial<MOD>> F, BitSet D) {
+                                                       List<GenPolynomial<MOD>> F, BitSet D) {
         //System.out.println("*** monic factor combination ***");
         if (C == null || C.isZERO() || F == null || F.size() == 0) {
             throw new IllegalArgumentException("C must be nonzero and F must be nonempty");
@@ -569,7 +569,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
      *         p**e.
      */
     List<GenPolynomial<BigInteger>> searchFactorsNonMonic(GenPolynomial<BigInteger> C, BigInteger M,
-                    List<GenPolynomial<MOD>> F, BitSet D) {
+                                                          List<GenPolynomial<MOD>> F, BitSet D) {
         //System.out.println("*** non monic factor combination ***");
         if (C == null || C.isZERO() || F == null || F.size() == 0) {
             throw new IllegalArgumentException("C must be nonzero and F must be nonempty");
@@ -698,22 +698,60 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
      */
     @Override
     public List<GenPolynomial<BigInteger>> factorsSquarefree(GenPolynomial<BigInteger> P) {
+        GenPolynomialRing<BigInteger> pfac = P.ring;
+        if (pfac.nvar <= 1) {
+            return baseFactorsSquarefree(P);
+        }
+        List<GenPolynomial<BigInteger>> factors;
+        factors = factorsSquarefreeOptions(P, false, false);
+        if (factors != null) {
+            return factors;
+        }
+        factors = factorsSquarefreeOptions(P, false, true);
+        if (factors != null) {
+            return factors;
+        }
+        factors = factorsSquarefreeOptions(P, true, false);
+        if (factors != null) {
+            return factors;
+        }
+        factors = factorsSquarefreeOptions(P, true, true);
+        if (factors != null) {
+            return factors;
+        }
+        logger.warn("factorsSquarefreeHensel not applicable or failed, reverting to Kronecker for: " + P);
+        factors = super.factorsSquarefree(P);
+        return factors;
+    }
+
+
+    /**
+     * GenPolynomial factorization of a multivariate squarefree polynomial,
+     * using Hensel lifting if possible.
+     * @param P squarefree and primitive! (respectively monic) multivariate
+     *            GenPolynomial over the integers.
+     * @param opti true, if polynomial variables should be optimized, else false.
+     * @param ilex true, if INVLEX term order should be forced, else false.
+     * @return [p_1,...,p_k] with P = prod_{i=1,...,r} p_i.
+     */
+    public List<GenPolynomial<BigInteger>> factorsSquarefreeOptions(GenPolynomial<BigInteger> P, boolean opti, boolean tlex) {
         GenPolynomial<BigInteger> Pp = P;
         GenPolynomialRing<BigInteger> pfac = Pp.ring;
         if (pfac.nvar <= 1) {
             return baseFactorsSquarefree(Pp);
         }
-        boolean noINVLEX = true;
-        if (pfac.tord.equals(TermOrderByName.INVLEX)) {
-            noINVLEX = false;
-        } else {
-            pfac = new GenPolynomialRing<BigInteger>(pfac,TermOrderByName.INVLEX);
-            Pp = pfac.copy(Pp);
-            logger.warn("invlexed polynomial: " + Pp + ", from ring " + P.ring);
+        if (tlex) {
+            if (! pfac.tord.equals(TermOrderByName.INVLEX)) {
+                pfac = new GenPolynomialRing<BigInteger>(pfac,TermOrderByName.INVLEX);
+                Pp = pfac.copy(Pp);
+                logger.warn("invlexed polynomial: " + Pp + ", from ring " + P.ring);
+            } else {
+                tlex = false;
+            }
         }
         OptimizedPolynomialList<BigInteger> opt = null;
         List<Integer> iperm = null;
-        final boolean USE_OPT = true;
+        final boolean USE_OPT = opti;
         if (USE_OPT) {
             List<GenPolynomial<BigInteger>> topt = new ArrayList<GenPolynomial<BigInteger>>(1);
             topt.add(Pp);
@@ -758,15 +796,13 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             }
         }
         if (facs == null) {
-            logger.warn("factorsSquarefreeHensel not applicable or failed, reverting to Kronecker for: "
-                            + Pp);
-            facs = super.factorsSquarefree(Pp);
+            return facs;
         }
         if (USE_OPT && iperm != null) {
             facs = TermOrderOptimization.<BigInteger> permutation(iperm, pfac, facs);
             logger.warn("de-optimized polynomials: " + facs);
         }
-        if (noINVLEX) {
+        if (tlex) {
             facs = P.ring.copy(facs);
             logger.warn("de-invlexed polynomials: " + facs);
         }
@@ -881,7 +917,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 //}
                 logger.warn("no evaluation point for: P = " + P + ", prr = " + prr + ", lprr = " + lprr + ", lfacs = " + lfacs);
                 throw new RuntimeException(
-                                "no evaluation point found after " + Math.abs(evStart) + " iterations");
+                                           "no evaluation point found after " + Math.abs(evStart) + " iterations");
             }
             if (Math.abs(evStart) % 100L <= 3L) {
                 ran = ran * (Math.PI - 2.14);
@@ -1020,7 +1056,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                             countSeparate++;
                             if (countSeparate > COUNT_MAX) {
                                 logger.info("too many inseparable evaluation points: " + countSeparate
-                                                + ", removing " + pecw);
+                                            + ", removing " + pecw);
                             }
                         }
                         notLucky = true;
@@ -1081,7 +1117,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                         //System.out.println("ci = " + ci + ", lfp = " + lfp + ", lfacs.get(ii) = " + lfacs.get(ii));
                         if (ci.abs().isONE()) {
                             System.out.println("ppl = " + ppl + ", ci = " + ci + ", lfp = " + lfp
-                                            + ", lfacs.get(ii) = " + lfacs.get(ii));
+                                               + ", lfacs.get(ii) = " + lfacs.get(ii));
                             notLucky = true;
                             throw new RuntimeException("something is wrong, ci is a unit");
                         }
@@ -1548,7 +1584,7 @@ class TrialParts {
      * @param lf evaluated le by evaluation points.
      */
     public TrialParts(List<BigInteger> ev, GenPolynomial<BigInteger> up, List<GenPolynomial<BigInteger>> uf,
-                    List<BigInteger> le, List<GenPolynomial<BigInteger>> lf) {
+                      List<BigInteger> le, List<GenPolynomial<BigInteger>> lf) {
         evalPoints = ev;
         univPoly = up;
         univFactors = uf;
