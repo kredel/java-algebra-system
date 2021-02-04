@@ -1,15 +1,20 @@
 # $Id$
 
-=begin rdoc
-jruby interface to JAS.
-=end
 
+=begin rdoc
+Enhance Ruby Integer class by rational number construction.
+
+Replace / by quo from Numeric to get Rational number.
+=end
 class Integer
-  remove_method :/
-  alias / quo
+  remove_method :/  # integer division
+  alias / quo       # rational construction
 end
 
 
+=begin rdoc
+jruby interface to JAS.
+=end
 module JAS
 
   module_function
