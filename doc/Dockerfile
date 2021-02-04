@@ -1,4 +1,4 @@
-FROM openjdk:8
+FROM openjdk:11
 MAINTAINER Heinz Kredel kredel@rz.uni-mannheim.de
 RUN apt-get -y update && apt-get -y upgrade
 RUN apt-get -y install junit4 liblog4j2-java jython jruby wget vim-tiny
