@@ -48,7 +48,7 @@ fi
 
 # verify that JAS home is found
 if [ -d "$JAS_HOME/examples" ] ; then
-   JAVA_LIBS=".:$JAS_HOME/examples:$JAS_HOME/jas.jar"
+   JAVA_LIBS=".:$JAS_HOME:$JAS_HOME/examples:$JAS_HOME/jas.jar"
 elif [ -d "examples" ] ; then
    JAVA_LIBS=".:examples:jas.jar"
 else
@@ -80,8 +80,6 @@ elif [ -f "lib/log4j.jar" ] ; then
    JAVA_LIBS="$JAVA_LIBS:lib/log4j.jar"
 elif [ -f "$JAS_HOME/../lib/log4j.jar" ] ; then
    JAVA_LIBS="$JAVA_LIBS:$JAS_HOME/../lib/log4j.jar"
-#elif [ -f /usr/share/java/log4j-1.2.jar ] ; then
-#   JAVA_LIBS="$JAVA_LIBS:/usr/share/java/log4j-1.2.jar"
 else
    echo "==================================" 
    echo "Error: library log4j.jar not found" 
@@ -215,10 +213,12 @@ fi
 JASRB=
 if [ "$SCRIPT_LANG" = "ruby" ]; then
    if [ -f "examples/jas.rb" ] ; then
-      JASRB="examples/jas.rb"
+      #JASRB="examples/jas.rb"
+      JASRB="jas"
       echo -n "" 
    elif [ -f "$JAS_HOME/examples/jas.rb" ] ; then
-      JASRB="$JAS_HOME/examples/jas.rb"
+      #JASRB="$JAS_HOME/examples/jas.rb"
+      JASRB="jas"
       echo -n "" 
    else 
       echo "===============================" 
@@ -273,6 +273,9 @@ if [ "$SCRIPT_LANG" = "python" ]; then
    [[ $DEBUG > 0 ]] && echo jython $SCRIPT_OPTS $JAVA_LIBS $JAVA_OPTS $* 
    jython $SCRIPT_OPTS $JAVA_LIBS $JAVA_OPTS $*
 elif [ "$SCRIPT_LANG" = "ruby" ]; then
+   if [[ "$SCRIPT_OPTS" = "-v" ]]; then
+      SCRIPT_OPTS="-d -w -W"
+   fi
    [[ $DEBUG > 0 ]] && echo jruby $SCRIPT_OPTS -J-cp "$JAVA_LIBS" $JAVA_OPTS -S jirb --noinspect --readline -r "$JASRB" $*
    jruby $SCRIPT_OPTS -J-cp "$JAVA_LIBS" $JAVA_OPTS -S jirb --noinspect --readline -r "$JASRB" $*
 else 
