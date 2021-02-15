@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
-
 import edu.jas.arith.BigRational;
 import edu.jas.gb.SolvableGroebnerBase;
 import edu.jas.gb.SolvableGroebnerBaseSeq;
@@ -37,13 +35,10 @@ import junit.framework.TestSuite;
 public class SolvableIdealTest extends TestCase {
 
 
-
-
     /**
      * main
      */
     public static void main(String[] args) {
-        
         junit.textui.TestRunner.run(suite());
     }
 

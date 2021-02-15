@@ -5,7 +5,6 @@
 package edu.jas.fd;
 
 
-
 import edu.jas.arith.BigQuaternion;
 import edu.jas.arith.BigQuaternionRing;
 import edu.jas.gbufd.SolvableSyzygyAbstract;
@@ -712,7 +711,6 @@ public class GCDLeftRightTest extends TestCase {
             h = h.multiply((BigQuaternion) oc[0]);
             s = b.multiply((BigQuaternion) oc[1]);
             assertEquals("h * oh == a * oa: ", h, s);
-
 
             //System.out.println("d  = " + d + ", rem = " + qr[1]);
             //System.out.println("e  = " + e + ", rem = " + qr[1]);

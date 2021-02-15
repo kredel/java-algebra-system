@@ -8,7 +8,6 @@ package edu.jas.ufd;
 import java.util.List;
 import java.util.SortedMap;
 
-
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
@@ -94,7 +93,6 @@ public class FactorMoreTest extends TestCase {
      * Test integral function factorization.
      */
     public void testIntegralFunctionFactorization() {
-
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         BigRational cfac = new BigRational(1);
         String[] qvars = new String[] { "t" };
@@ -105,7 +103,7 @@ public class FactorMoreTest extends TestCase {
 
         String[] vars = new String[] { "x" };
         GenPolynomialRing<GenPolynomial<BigRational>> pqfac = new GenPolynomialRing<GenPolynomial<BigRational>>(
-                                                                                                                pfac, 1, to, vars);
+                        pfac, 1, to, vars);
         GenPolynomial<GenPolynomial<BigRational>> x = pqfac.univariate(0);
         GenPolynomial<GenPolynomial<BigRational>> x2 = pqfac.univariate(0, 2);
 
@@ -172,7 +170,7 @@ public class FactorMoreTest extends TestCase {
 
         String[] vars = new String[] { "x" };
         GenPolynomialRing<GenPolynomial<BigInteger>> pqfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(
-                                                                                                              pfac, 1, to, vars);
+                        pfac, 1, to, vars);
         GenPolynomial<GenPolynomial<BigInteger>> x = pqfac.univariate(0);
         GenPolynomial<GenPolynomial<BigInteger>> x2 = pqfac.univariate(0, 2);
 
@@ -242,7 +240,7 @@ public class FactorMoreTest extends TestCase {
 
         String[] vars = new String[] { "x" };
         GenPolynomialRing<Quotient<BigRational>> pqfac = new GenPolynomialRing<Quotient<BigRational>>(qfac, 1,
-                                                                                                      to, vars);
+                        to, vars);
         GenPolynomial<Quotient<BigRational>> x = pqfac.univariate(0);
         GenPolynomial<Quotient<BigRational>> x2 = pqfac.univariate(0, 2);
 
@@ -310,7 +308,7 @@ public class FactorMoreTest extends TestCase {
 
         String[] vars = new String[] { "x" };
         GenPolynomialRing<Quotient<ModInteger>> pqfac = new GenPolynomialRing<Quotient<ModInteger>>(qfac, 1,
-                                                                                                    to, vars);
+                        to, vars);
         GenPolynomial<Quotient<ModInteger>> x = pqfac.univariate(0);
         GenPolynomial<Quotient<ModInteger>> x2 = pqfac.univariate(0, 2);
 
@@ -446,28 +444,27 @@ public class FactorMoreTest extends TestCase {
      * @author Axel Kramer
      */
     public void testFactorizationInteger() {
-        String str =
-            "-2*m1*m2*u1*u2+m1*m2*u2^2-m2^2*u2^2+2*m1*m2*u1*v2+2*m2^2*u2*v2-m1*m2*v2^2-m2^2*v2^2";
-            //"m2 * v2 + m1 * v2 - m2 * u2 + m1 * u2 - 2 m1 * u1";
-            //"-2*m1*u1*u2+m1*u2^2-m2*u2^2+2*m1*u1*v2+2*m2*u2*v2-m1*v2^2-m2^2*v2^2";
+        String str = "-2*m1*m2*u1*u2+m1*m2*u2^2-m2^2*u2^2+2*m1*m2*u1*v2+2*m2^2*u2*v2-m1*m2*v2^2-m2^2*v2^2";
+        //"m2 * v2 + m1 * v2 - m2 * u2 + m1 * u2 - 2 m1 * u1";
+        //"-2*m1*u1*u2+m1*u2^2-m2*u2^2+2*m1*u1*v2+2*m2*u2*v2-m1*v2^2-m2^2*v2^2";
 
-        String[] vars = new String[] {"m1", "m2", "u1", "u2", "v2"};
+        String[] vars = new String[] { "m1", "m2", "u1", "u2", "v2" };
         GenPolynomialRing<BigInteger> fac;
-        fac = new GenPolynomialRing<BigInteger>(BigInteger.ONE, vars.length, new TermOrder(TermOrder.INVLEX), vars);
+        fac = new GenPolynomialRing<BigInteger>(BigInteger.ONE, vars.length, new TermOrder(TermOrder.INVLEX),
+                        vars);
 
         GenPolynomial<BigInteger> poly = fac.parse(str);
-        GenPolynomial<BigInteger> p2 = fac.parse("m2");
-        GenPolynomial<BigInteger> p3 = fac.parse("v2-u2");
+        //GenPolynomial<BigInteger> p2 = fac.parse("m2");
+        //GenPolynomial<BigInteger> p3 = fac.parse("v2-u2");
         //poly = poly.multiply(p3);
         final int loops = 10; //0000
         for (int i = 0; i < loops; i++) {
             //System.out.println("Run: " + i + " -" + poly.toString());
-            FactorAbstract<BigInteger> factorAbstract =
-                FactorFactory.getImplementation(BigInteger.ZERO);
+            FactorAbstract<BigInteger> factorAbstract = FactorFactory.getImplementation(BigInteger.ZERO);
             SortedMap<GenPolynomial<BigInteger>, Long> map = factorAbstract.factors(poly);
             //System.out.println("Factors: " + map.toString());
             //System.out.println("isFactorization = " + factorAbstract.isFactorization(poly,map));
-            assertTrue("isFactorization: ", factorAbstract.isFactorization(poly,map));
+            assertTrue("isFactorization: ", factorAbstract.isFactorization(poly, map));
         }
     }
 

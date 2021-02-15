@@ -5,7 +5,6 @@
 package edu.jas.fd;
 
 
-
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
@@ -133,7 +132,6 @@ public class FDUtilTest extends TestCase {
      */
     public void testBasePseudoDivisionExact() {
         //System.out.println("dfac  = " + dfac.toScript());
-
         do {
             a = dfac.random(kl, ll + 1, el, q);
         } while (a.isZERO());
@@ -393,7 +391,7 @@ public class FDUtilTest extends TestCase {
         rrfac = rdfac.recursive(1);
         //System.out.println("\nrdfac  = " + rdfac.toScript());
         //System.out.println("rrfac  = " + rrfac.toScript());
-        GenSolvablePolynomialRing<BigRational> cfac = (GenSolvablePolynomialRing) rrfac.coFac;
+        //GenSolvablePolynomialRing<BigRational> cfac = (GenSolvablePolynomialRing) rrfac.coFac;
         //System.out.println("cfac  = " + cfac.toScript());
 
         // q = q;

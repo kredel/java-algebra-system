@@ -109,7 +109,6 @@ public class GBDistSP<C extends RingElem<C>> {
 /**
  * Objects of this class are to be send to a ExecutableServer.
  */
-
 class GBClientSP<C extends RingElem<C>> implements RemoteExecutable {
 
 
