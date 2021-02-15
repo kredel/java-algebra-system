@@ -5,6 +5,8 @@
 package edu.jas.root;
 
 
+import java.math.BigInteger;
+
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.Rational;
@@ -316,6 +318,16 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
         Interval<C> v = ring.engine.halfInterval(ring.root, ring.algebraic.modul);
         //System.out.println("old v = " + ring.root + ", new v = " + v);
         ring.setRoot(v);
+    }
+
+
+    /**
+     * RealAlgebraicNumber floor.
+     * @return floor of this.
+     */
+    public BigInteger floor() {
+        BigRational f = magnitude();
+        return f.floor();
     }
 
 

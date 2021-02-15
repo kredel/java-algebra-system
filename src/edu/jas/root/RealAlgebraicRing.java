@@ -301,6 +301,16 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
 
 
     /**
+     * Get a RealAlgebraicNumber element from a BigRational value.
+     * @param a BigRational.
+     * @return a RealAlgebraicNumber.
+     */
+    public RealAlgebraicNumber<C> fromRational(BigRational a) {
+        return new RealAlgebraicNumber<C>(this, algebraic.parse(a.toString()));
+    }
+
+
+    /**
      * Get a RealAlgebraicNumber element from a long value.
      * @param a long.
      * @return a RealAlgebraicNumber.

@@ -8,9 +8,9 @@ package edu.jas.root;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
+import edu.jas.arith.BigInteger;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -457,6 +457,35 @@ public class RealAlgebraicTest extends TestCase {
             //System.out.println("vi = " + di);
             assertTrue("|dd - di| < eps ", dd.compareTo(di) == 0);
         }
+    }
+
+
+    /**
+     * Test continued fraction.
+     */
+    public void testContinuedFraction() {
+        final int M = 100;
+        RealAlgebraicNumber<BigRational> x = fac.random(5);
+        //x = fac.parse("5/12");
+        //x = fac.parse("-1");
+        System.out.println("x = " + x + ", mag(x) = " + x.decimalMagnitude());
+
+        List<BigInteger> cf = RealArithUtil.continuedFraction(x, M);
+        System.out.println("cf(" + x + ") = " + cf);
+
+        BigRational a = RealArithUtil.continuedFractionApprox(cf);
+        RealAlgebraicNumber<BigRational> ax = fac.fromRational(a);
+        System.out.println("ax = " + ax + ", mag(ax) = " + ax.decimalMagnitude());
+        //assertEquals("a = approx(cf(a)): ", x, ax);
+
+        //BigDecimal eps = (new BigDecimal("0.1")).power(M/2);
+        BigRational eps = (new BigRational("1/10")).power(M/2);
+        RealAlgebraicNumber<BigRational> dx = x.subtract(ax).abs();
+        // check ax > 1:
+        dx = dx.divide(ax.abs());
+        System.out.println("dx = " + dx + ", mag(dx) = " + dx.decimalMagnitude());
+        BigRational dr = dx.magnitude();
+        assertTrue("|a - approx(cf(a))| = " + dr, dr.compareTo(eps) < 1 );
     }
 
 }
