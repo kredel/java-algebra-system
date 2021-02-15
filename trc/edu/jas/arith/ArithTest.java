@@ -5,6 +5,8 @@
 package edu.jas.arith;
 
 
+import java.util.List;
+
 import edu.jas.structure.Power;
 
 import junit.framework.Test;
@@ -1183,6 +1185,24 @@ public class ArithTest extends TestCase {
         //System.out.println("t = " + t + ", eps = " + eps);
 
         assertTrue("sqrt(x)*sqrt(x): " + b, t.compareTo(eps) <= 0);
+    }
+
+
+    /**
+     * Test continued fraction.
+     */
+    public void testContinuedFraction() {
+        BigRational fac = BigRational.ONE;
+        BigRational x = fac.random(35);
+        //BigRational x = fac.parse("5/12");
+        //BigRational x = fac.parse("-1");
+
+        List<BigInteger> cf = ArithUtil.continuedFraction(x);
+        //System.out.println("cf(" + x + ") = " + cf);
+
+        BigRational a = ArithUtil.continuedFractionApprox(cf);
+        //System.out.println("a = " + a);
+        assertEquals("a = approx(cf(a)): ", x, a);
     }
 
 }
