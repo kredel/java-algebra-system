@@ -8,22 +8,11 @@ package edu.jas.root;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import edu.jas.arith.Rational;
-import edu.jas.arith.BigRational;
 import edu.jas.arith.BigInteger;
-import edu.jas.poly.AlgebraicNumber;
-import edu.jas.poly.AlgebraicNumberRing;
-import edu.jas.poly.Complex;
-import edu.jas.poly.ComplexRing;
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.PolyUtil;
-import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingFactory;
-import edu.jas.structure.UnaryFunctor;
+import edu.jas.arith.BigRational;
 
 
 /**
@@ -86,20 +75,24 @@ public class RealArithUtil {
      */
     public static BigRational continuedFractionApprox(List<BigInteger> A) {
         BigRational ab = BigRational.ZERO;
-	if (A == null || A.isEmpty()) {
+        if (A == null || A.isEmpty()) {
             return ab;
         }
         BigInteger a2, a1, b2, b1, a, b;
-        a2 = BigInteger.ZERO; a1 = BigInteger.ONE;
-        b2 = BigInteger.ONE; b1 = BigInteger.ZERO;
+        a2 = BigInteger.ZERO;
+        a1 = BigInteger.ONE;
+        b2 = BigInteger.ONE;
+        b1 = BigInteger.ZERO;
         for (BigInteger q : A) {
             a = q.multiply(a1).sum(a2);
             b = q.multiply(b1).sum(b2);
             //System.out.println("A/B = " + new BigRational(a,b));
-            a2 = a1; a1 = a;
-            b2 = b1; b1 = b;
+            a2 = a1;
+            a1 = a;
+            b2 = b1;
+            b1 = b;
         }
-        ab = new BigRational(a1,b1);
+        ab = new BigRational(a1, b1);
         return ab;
     }
 

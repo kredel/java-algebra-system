@@ -8,13 +8,8 @@ package edu.jas.root;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
-import edu.jas.arith.Roots;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.Complex;
 import edu.jas.poly.ComplexRing;
@@ -23,6 +18,10 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
 import edu.jas.structure.Power;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -58,45 +57,16 @@ public class RootUtilTest extends TestCase {
     }
 
 
-    //private final static int bitlen = 100;
-
     TermOrder to = new TermOrder(TermOrder.INVLEX);
 
 
     GenPolynomialRing<BigRational> dfac;
 
 
-    BigRational ai;
+    BigRational ai, bi, ci, di, ei, eps;
 
 
-    BigRational bi;
-
-
-    BigRational ci;
-
-
-    BigRational di;
-
-
-    BigRational ei;
-
-
-    BigRational eps;
-
-
-    GenPolynomial<BigRational> a;
-
-
-    GenPolynomial<BigRational> b;
-
-
-    GenPolynomial<BigRational> c;
-
-
-    GenPolynomial<BigRational> d;
-
-
-    GenPolynomial<BigRational> e;
+    GenPolynomial<BigRational> a, b, c, d, e;
 
 
     int rl = 1;
@@ -203,7 +173,7 @@ public class RootUtilTest extends TestCase {
         assertTrue("#roots >= 0 ", lrn != null);
         for (RealAlgebraicNumber<BigRational> ra : lrn) {
             //System.out.println("ra = " + ra.toScript() + " in " + ra.toScriptFactory());
-            assertTrue("f(r) == 0: " + ra, RootFactory.<BigRational> isRoot(a,ra));
+            assertTrue("f(r) == 0: " + ra, RootFactory.<BigRational> isRoot(a, ra));
         }
 
         lrn = RootFactory.<BigRational> realAlgebraicNumbersField(a);
@@ -211,7 +181,7 @@ public class RootUtilTest extends TestCase {
         assertTrue("#roots >= 0 ", lrn != null);
         for (RealAlgebraicNumber<BigRational> ra : lrn) {
             //System.out.println("ra = " + ra.toScript() + " in " + ra.toScriptFactory());
-            assertTrue("f(r) == 0: " + ra, RootFactory.<BigRational> isRoot(a,ra));
+            assertTrue("f(r) == 0: " + ra, RootFactory.<BigRational> isRoot(a, ra));
         }
     }
 
@@ -228,7 +198,8 @@ public class RootUtilTest extends TestCase {
 
         GenPolynomial<Complex<BigRational>> ca = PolyUtil.<BigRational> toComplex(cfac, a);
         //System.out.println("ca = " + ca);
-        List<ComplexAlgebraicNumber<BigRational>> lcn = RootFactory.<BigRational> complexAlgebraicNumbersComplex(ca);
+        List<ComplexAlgebraicNumber<BigRational>> lcn = RootFactory
+                        .<BigRational> complexAlgebraicNumbersComplex(ca);
         //System.out.println("lcn = " + lcn);
         assertTrue("#roots == deg(a): " + a, lcn.size() == a.degree(0));
 
@@ -237,7 +208,7 @@ public class RootUtilTest extends TestCase {
             //System.out.println("car = " + car.ring.root);
             //System.out.println("car = " + car.ring.root.centerApprox() + ", "
             //        + (Roots.sqrt(new BigDecimal(car.ring.root.rationalLength()))) + ", " + car.ring.root);
-            assertTrue("f(r) == 0: " + car, RootFactory.<BigRational> isRoot(a,car));
+            assertTrue("f(r) == 0: " + car, RootFactory.<BigRational> isRoot(a, car));
         }
     }
 
@@ -260,7 +231,7 @@ public class RootUtilTest extends TestCase {
             //System.out.println("car = " + car.ring.root);
             //System.out.println("car = " + car.ring.root.centerApprox() + ", "
             //        + (Roots.sqrt(new BigDecimal(car.ring.root.rationalLength()))) + ", " + car.ring.root);
-            assertTrue("f(r) == 0: " + car, RootFactory.<BigRational> isRoot(a,car));
+            assertTrue("f(r) == 0: " + car, RootFactory.<BigRational> isRoot(a, car));
         }
     }
 }

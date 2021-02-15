@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.jas.arith.BigDecimal;
-import edu.jas.arith.BigRational;
 import edu.jas.arith.BigInteger;
-import edu.jas.poly.PolyUtil;
+import edu.jas.arith.BigRational;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.PolyUtil;
 import edu.jas.structure.NotInvertibleException;
 import edu.jas.structure.Power;
 
@@ -341,10 +341,9 @@ public class RealAlgebraicTest extends TestCase {
         BigDecimal err = dd.subtract(dd1).abs().divide(rel);
         //System.out.println("rel = " + rel);
         //System.out.println("|dd-dd1|/rel = " + err + ", eps = " + epsd);
-        assertTrue("mag(a*b) = mag(a)*mag(b): " + dd + ", " + dd1,
-                   err.compareTo(epsd) <= 0);
-        assertTrue("mag(a+b) = mag(a)+mag(b): " + ed + ", " + ed1, 
-                   ed.subtract(ed1).abs().compareTo(epsd) <= 0); 
+        assertTrue("mag(a*b) = mag(a)*mag(b): " + dd + ", " + dd1, err.compareTo(epsd) <= 0);
+        assertTrue("mag(a+b) = mag(a)+mag(b): " + ed + ", " + ed1,
+                        ed.subtract(ed1).abs().compareTo(epsd) <= 0);
 
 
         d = a.divide(b);
@@ -367,7 +366,7 @@ public class RealAlgebraicTest extends TestCase {
 
 
     /**
-     * Test real root isolation. 
+     * Test real root isolation.
      */
     public void testRealRootIsolation() {
         //System.out.println();
@@ -381,14 +380,14 @@ public class RealAlgebraicTest extends TestCase {
             ar = ar.multiply(dfac.univariate(0));
         }
         //System.out.println("ar = " + ar);
-        
+
         RealRoots<RealAlgebraicNumber<BigRational>> rrr = new RealRootsSturm<RealAlgebraicNumber<BigRational>>();
         List<Interval<RealAlgebraicNumber<BigRational>>> R = rrr.realRoots(ar);
         //System.out.println("R = " + R);
-        assertTrue("#roots >= 0 ", R.size() > 0 );
+        assertTrue("#roots >= 0 ", R.size() > 0);
 
         BigRational eps = Power.positivePower(new BigRational(1L, 10L), BigDecimal.DEFAULT_PRECISION);
-        BigDecimal epsd = new BigDecimal(Power.positivePower(new BigRational(1L,10L), 14 - ar.degree())); // less
+        BigDecimal epsd = new BigDecimal(Power.positivePower(new BigRational(1L, 10L), 14 - ar.degree())); // less
         //System.out.println("eps = " + epsd);
 
         R = rrr.refineIntervals(R, ar, eps);
@@ -399,9 +398,9 @@ public class RealAlgebraicTest extends TestCase {
             RealAlgebraicNumber<BigRational> n;
             n = PolyUtil.<RealAlgebraicNumber<BigRational>> evaluateMain(fac, ar, m);
             //System.out.println("n = " + n);
-            BigRational nr = n.magnitude(); 
+            BigRational nr = n.magnitude();
             //System.out.println("nr = " + nr);
-            BigDecimal nd = new BigDecimal(nr); 
+            BigDecimal nd = new BigDecimal(nr);
             //System.out.println("nd = " + nd);
             assertTrue("|nd| < eps: " + nd + " " + epsd, nd.abs().compareTo(epsd) <= 0);
             //no: assertTrue("n == 0: " + n, n.isZERO());
@@ -427,8 +426,7 @@ public class RealAlgebraicTest extends TestCase {
         er = dfac.univariate(0);
 
         List<Interval<RealAlgebraicNumber<BigRational>>> Rn;
-          Rn = new ArrayList<Interval<RealAlgebraicNumber<BigRational>>>(
-                        N);
+        Rn = new ArrayList<Interval<RealAlgebraicNumber<BigRational>>>(N);
         ar = dr;
         for (int i = 0; i < N; i++) {
             cr = dfac.fromInteger(i).multiply(alpha); // i * alpha
@@ -468,24 +466,22 @@ public class RealAlgebraicTest extends TestCase {
         RealAlgebraicNumber<BigRational> x = fac.random(5);
         //x = fac.parse("5/12");
         //x = fac.parse("-1");
-        System.out.println("x = " + x + ", mag(x) = " + x.decimalMagnitude());
+        //System.out.println("x = " + x + ", mag(x) = " + x.decimalMagnitude());
 
         List<BigInteger> cf = RealArithUtil.continuedFraction(x, M);
-        System.out.println("cf(" + x + ") = " + cf);
+        //System.out.println("cf(" + x + ") = " + cf);
 
         BigRational a = RealArithUtil.continuedFractionApprox(cf);
         RealAlgebraicNumber<BigRational> ax = fac.fromRational(a);
-        System.out.println("ax = " + ax + ", mag(ax) = " + ax.decimalMagnitude());
-        //assertEquals("a = approx(cf(a)): ", x, ax);
+        //System.out.println("ax = " + ax + ", mag(ax) = " + ax.decimalMagnitude());
 
-        //BigDecimal eps = (new BigDecimal("0.1")).power(M/2);
-        BigRational eps = (new BigRational("1/10")).power(M/2);
+        BigRational eps = (new BigRational("1/10")).power(M / 2);
         RealAlgebraicNumber<BigRational> dx = x.subtract(ax).abs();
         // check ax > 1:
         dx = dx.divide(ax.abs());
-        System.out.println("dx = " + dx + ", mag(dx) = " + dx.decimalMagnitude());
+        //System.out.println("dx = " + dx + ", mag(dx) = " + dx.decimalMagnitude());
         BigRational dr = dx.magnitude();
-        assertTrue("|a - approx(cf(a))| = " + dr, dr.compareTo(eps) < 1 );
+        assertTrue("|a - approx(cf(a))| = " + dr, dr.compareTo(eps) < 1);
     }
 
 }

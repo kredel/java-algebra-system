@@ -921,9 +921,9 @@ public class ArithTest extends TestCase {
     public void testRootDecimal() {
         BigDecimal a, b, d, e;
         a = BigDecimal.ONE;
-        BigRational eps = new BigRational(1,10).power(BigDecimal.DEFAULT_PRECISION-2);
+        BigRational eps = new BigRational(1, 10).power(BigDecimal.DEFAULT_PRECISION - 2);
         BigDecimal epsd = new BigDecimal(eps);
-        
+
         b = a.random(17).abs();
         //System.out.println("\nb         = " + b);
         //System.out.println("ulp(b)     = " + b.val.ulp());
@@ -1022,11 +1022,11 @@ public class ArithTest extends TestCase {
         d = b.multiply(b.conjugate());
         assertTrue("norm(b) == b*b^: b-d = " + c.subtract(d), c.compareTo(d) == 0);
 
-        BigRational eps = new BigRational(1,10).power(BigDecimal.DEFAULT_PRECISION-1);
+        BigRational eps = new BigRational(1, 10).power(BigDecimal.DEFAULT_PRECISION - 1);
         //System.out.println("eps = " + eps + ", epsd = " + new BigDecimal(eps));
         BigDecimal epsd = new BigDecimal(eps);
         BigDecimal dd;
-        
+
         //System.out.println("b = " + b + ", c = " + c);
         //c = b.norm();
         d = b.abs();
@@ -1062,9 +1062,9 @@ public class ArithTest extends TestCase {
         b = Roots.sqrt(a);
         c = b.multiply(b);
         assertTrue("sqrt(4)*sqrt(4) == 4: " + a.subtract(c), a.compareTo(c) == 0);
-        BigRational eps = new BigRational(1,10).power(BigDecimal.DEFAULT_PRECISION-1);
+        BigRational eps = new BigRational(1, 10).power(BigDecimal.DEFAULT_PRECISION - 1);
         //System.out.println("eps = " + eps + ", epsd = " + new BigDecimal(eps));
-        
+
         a = new BigRational("0.5");
         b = Roots.sqrt(a);
         c = b.multiply(b);
@@ -1082,12 +1082,12 @@ public class ArithTest extends TestCase {
         assertTrue("sqrt(0.5)*sqrt(0.5) == 0.5: " + c, d.compareTo(eps) <= 0);
     }
 
-    
+
     /**
      * Test root/norm complex.
      */
     public void test2NormComplex() {
-        BigComplex a, b, c, d;
+        BigComplex a, b;
         a = BigComplex.ZERO;
         b = a.abs();
         assertTrue("abs(0) == 0: " + b, b.isZERO());
@@ -1100,7 +1100,7 @@ public class ArithTest extends TestCase {
         b = a.abs();
         assertTrue("abs(-1): " + b, b.isONE());
 
-        BigRational eps = new BigRational(1,10).power(BigDecimal.DEFAULT_PRECISION-1);
+        BigRational eps = new BigRational(1, 10).power(BigDecimal.DEFAULT_PRECISION - 1);
         //System.out.println("eps = " + eps); // + ", epsd = " + new BigDecimal(eps));
 
         BigRational r, s, t;
@@ -1120,7 +1120,7 @@ public class ArithTest extends TestCase {
      * Test root/norm quaternion.
      */
     public void test2NormQuaternion() {
-        BigQuaternion a, b, c, d;
+        BigQuaternion a, b;
         BigQuaternionRing fac = new BigQuaternionRing();
         a = fac.ZERO;
         b = a.abs();
@@ -1134,7 +1134,7 @@ public class ArithTest extends TestCase {
         b = a.abs();
         assertTrue("abs(-1): " + b, b.isONE());
 
-        BigRational eps = new BigRational(1,10).power(BigDecimal.DEFAULT_PRECISION-1);
+        BigRational eps = new BigRational(1, 10).power(BigDecimal.DEFAULT_PRECISION - 1);
         //System.out.println("eps = " + eps); // + ", epsd = " + new BigDecimal(eps));
 
         BigRational r, s, t;
@@ -1155,10 +1155,10 @@ public class ArithTest extends TestCase {
      * Test root/norm octonion.
      */
     public void test2NormOctonion() {
-        BigOctonion a, b, c, d;
+        BigOctonion a, b;
         BigQuaternionRing fac = new BigQuaternionRing();
         BigOctonion ofac = new BigOctonion(fac);
-            
+
         a = ofac.getZERO();
         b = a.abs();
         assertTrue("abs(0) == 0: " + b, b.isZERO());
@@ -1171,7 +1171,7 @@ public class ArithTest extends TestCase {
         b = a.abs();
         assertTrue("abs(-1): " + b, b.isONE());
 
-        BigRational eps = new BigRational(1,10).power(BigDecimal.DEFAULT_PRECISION-1);
+        BigRational eps = new BigRational(1, 10).power(BigDecimal.DEFAULT_PRECISION - 1);
         //System.out.println("eps = " + eps); // + ", epsd = " + new BigDecimal(eps));
 
         BigRational r, s, t;
@@ -1194,8 +1194,8 @@ public class ArithTest extends TestCase {
     public void testContinuedFraction() {
         BigRational fac = BigRational.ONE;
         BigRational x = fac.random(35);
-        //BigRational x = fac.parse("5/12");
-        //BigRational x = fac.parse("-1");
+        //x = fac.parse("5/12");
+        //x = fac.parse("-1");
 
         List<BigInteger> cf = ArithUtil.continuedFraction(x);
         //System.out.println("cf(" + x + ") = " + cf);
