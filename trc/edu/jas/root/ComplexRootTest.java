@@ -9,10 +9,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
@@ -25,6 +21,10 @@ import edu.jas.poly.TermOrder;
 import edu.jas.structure.Power;
 import edu.jas.ufd.Squarefree;
 import edu.jas.ufd.SquarefreeFactory;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -624,7 +624,7 @@ public class ComplexRootTest extends TestCase {
         //System.out.println("Rn =    " + Rn);
         //now always true: 
         assertTrue("#roots == deg(a) ", roots.size() == a.degree(0));
- 
+
         int i = 0;
         for (Complex<BigDecimal> dd : roots) {
             Complex<BigDecimal> di = Rn.get(i++);

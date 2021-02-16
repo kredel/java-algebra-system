@@ -10,16 +10,16 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import edu.jas.arith.BigRational;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -216,7 +216,7 @@ public class GCDPartFracRatTest extends TestCase {
 
             assertEquals("a == ac/c", a, d);
 
-            b = a.multiply(c).sum( dfac.getONE() );
+            b = a.multiply(c).sum(dfac.getONE());
             //System.out.println("b  = " + b);
             //System.out.println("c  = " + c);
             GenPolynomial<BigRational>[] qr = PolyUtil.<BigRational> basePseudoQuotientRemainder(b, c);
@@ -270,14 +270,14 @@ public class GCDPartFracRatTest extends TestCase {
             //System.out.println("d  = " + d);
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
 
-            e = egcd[1].multiply(a).sum( egcd[2].multiply(b) );
+            e = egcd[1].multiply(a).sum(egcd[2].multiply(b));
             assertEquals("gcd(a,b) = s a + t b ", d, e);
 
             //System.out.println("a  = " + a);
             //System.out.println("b  = " + b);
             //System.out.println("d  = " + d);
             GenPolynomial<BigRational>[] diop = ufd.baseGcdDiophant(a, b, d);
-            e = diop[0].multiply(a).sum( diop[1].multiply(b) );
+            e = diop[0].multiply(a).sum(diop[1].multiply(b));
             //System.out.println("e  = " + e);
             assertEquals("d*gcd(a,b) = s a + t b ", d, e);
         }
@@ -303,11 +303,11 @@ public class GCDPartFracRatTest extends TestCase {
             //b = ufd.basePrimitivePart(b);
             //c = ufd.basePrimitivePart(c).abs();
 
-            if ( b.isZERO() || c.isZERO() ) {
+            if (b.isZERO() || c.isZERO()) {
                 // skip for this turn
                 continue;
             }
-            if ( b.isConstant() || c.isConstant() ) {
+            if (b.isConstant() || c.isConstant()) {
                 // skip for this turn
                 continue;
             }
@@ -316,9 +316,9 @@ public class GCDPartFracRatTest extends TestCase {
             //System.out.println("c  = " + c);
 
             // a / (b*c) = a0 + ap/b + as/c
-            GenPolynomial<BigRational> gcd = ufd.baseGcd(b,c);
+            GenPolynomial<BigRational> gcd = ufd.baseGcd(b, c);
             //System.out.println("gcd = " + gcd);
-            if ( !gcd.isONE() ) {
+            if (!gcd.isONE()) {
                 b = PolyUtil.<BigRational> basePseudoDivide(b, gcd);
                 c = PolyUtil.<BigRational> basePseudoDivide(c, gcd);
             }
@@ -333,10 +333,10 @@ public class GCDPartFracRatTest extends TestCase {
             d = pf[0].multiply(b).multiply(c); // a0*b*c
             //System.out.println("d  = " + d);
 
-            e = c.multiply( pf[1] ).sum( b.multiply(pf[2]) );  // ap * b + as * c
+            e = c.multiply(pf[1]).sum(b.multiply(pf[2])); // ap * b + as * c
             //System.out.println("e  = " + e);
 
-            d = d.sum( e ); // a0*b*c + ap * c + as * b
+            d = d.sum(e); // a0*b*c + ap * c + as * b
             //System.out.println("d  = " + d);
 
             assertEquals("a = a0*b*c + s * c + t * b ", a, d);
@@ -367,9 +367,9 @@ public class GCDPartFracRatTest extends TestCase {
             //System.out.println("a  = " + a);
 
             List<GenPolynomial<BigRational>> D = new ArrayList<GenPolynomial<BigRational>>();
-            for ( int j = 0; j < i*3; j++ ) {
+            for (int j = 0; j < i * 3; j++) {
                 b = dfac.random(kl * (i + 1), ll + i, el + i, q);
-                if ( b.isZERO() || b.isConstant() ) {
+                if (b.isZERO() || b.isConstant()) {
                     // skip for this turn
                     continue;
                 }
@@ -401,7 +401,7 @@ public class GCDPartFracRatTest extends TestCase {
             //System.out.println("a  = " + a);
 
             b = dfac.random(kl * (i + 1), ll + i, el + i, q);
-            if ( b.isZERO() || b.isConstant() ) {
+            if (b.isZERO() || b.isConstant()) {
                 // skip for this turn
                 continue;
             }
@@ -431,9 +431,9 @@ public class GCDPartFracRatTest extends TestCase {
             //System.out.println("a  = " + a);
 
             List<GenPolynomial<BigRational>> D = new ArrayList<GenPolynomial<BigRational>>();
-            for ( int j = 0; j < i*3; j++ ) {
+            for (int j = 0; j < i * 3; j++) {
                 b = dfac.random(kl, ll + 1 + i, el + i, q);
-                if ( b.isZERO() || b.isConstant() ) {
+                if (b.isZERO() || b.isConstant()) {
                     // skip for this turn
                     continue;
                 }
@@ -443,10 +443,10 @@ public class GCDPartFracRatTest extends TestCase {
             D = ufd.coPrime(D);
             //System.out.println("D  = " + D);
 
-            SortedMap<GenPolynomial<BigRational>,Long> Ds = new TreeMap<GenPolynomial<BigRational>,Long>();
+            SortedMap<GenPolynomial<BigRational>, Long> Ds = new TreeMap<GenPolynomial<BigRational>, Long>();
             long j = 1L;
-            for ( GenPolynomial<BigRational> p : D ) {
-                Ds.put(p,j);
+            for (GenPolynomial<BigRational> p : D) {
+                Ds.put(p, j);
                 j++;
             }
             //System.out.println("Ds = " + Ds);

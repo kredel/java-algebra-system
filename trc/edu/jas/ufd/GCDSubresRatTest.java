@@ -8,16 +8,16 @@ package edu.jas.ufd;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import edu.jas.arith.BigRational;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -290,7 +290,7 @@ public class GCDSubresRatTest extends TestCase {
     public void testDiscriminant() {
         dfac = new GenPolynomialRing<BigRational>(mi, 1, to);
         for (int i = 0; i < 5; i++) {
-            c = dfac.random(kl * (i + 1), ll + 2 * i, el + i, q*2);
+            c = dfac.random(kl * (i + 1), ll + 2 * i, el + i, q * 2);
             //System.out.println("c  = " + c);
             if (c.isZERO()) {
                 // skip for this turn

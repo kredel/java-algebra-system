@@ -5,13 +5,6 @@
 package edu.jas.ufd;
 
 
-//import java.util.Map;
-
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
 import edu.jas.poly.ExpVector;
@@ -19,6 +12,10 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -457,11 +454,11 @@ public class GCDSubresTest extends TestCase {
                 assertTrue("res(a,b) = 0 " + dr + " e = " + er, dr.isZERO());
             }
             if (er.isConstant() && er.leadingBaseCoefficient().isConstant()) {
-                assertTrue("res(a,b) != 0 " + dr + ", e = " + er + ", a = " + ar + ", b = " + br, !dr
-                        .isZERO());
+                assertTrue("res(a,b) != 0 " + dr + ", e = " + er + ", a = " + ar + ", b = " + br,
+                                !dr.isZERO());
             } else {
                 assertTrue("res(a,b) = 0 or not const " + dr + ", e = " + er + ", a = " + ar + ", b = " + br,
-                        dr.isZERO() || !dr.isConstant() || !dr.leadingBaseCoefficient().isConstant());
+                                dr.isZERO() || !dr.isConstant() || !dr.leadingBaseCoefficient().isConstant());
             }
 
         }
@@ -513,9 +510,8 @@ public class GCDSubresTest extends TestCase {
             if (e.isConstant()) {
                 assertTrue("res(a,b) != 0 " + d + ", e = " + e + ", a = " + a + ", b = " + b, !d.isZERO());
             } else {
-                assertTrue("res(a,b) = 0 or not const " + d + ", e = " + e + ", a = " + a + ", b = " + b, d
-                        .isZERO()
-                        || !d.isConstant());
+                assertTrue("res(a,b) = 0 or not const " + d + ", e = " + e + ", a = " + a + ", b = " + b,
+                                d.isZERO() || !d.isConstant());
             }
 
         }
@@ -533,21 +529,21 @@ public class GCDSubresTest extends TestCase {
         dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 3, to);
 
         for (int i = 0; i < 1; i++) {
-            a = dfac.random(kl+(i+1), ll, el, q);
-            b = dfac.random(kl+(i+2), ll, el, q);
+            a = dfac.random(kl + (i + 1), ll, el, q);
+            b = dfac.random(kl + (i + 2), ll, el, q);
             c = dfac.random(kl, ll, 2, q);
             //c = dfac.getONE();
             //c = c.multiply( dfac.univariate(0) );
             //c = ufd.primitivePart(c).abs();
             //System.out.println("a = " + a);
             //System.out.println("b = " + b);
- 
+
             if (a.isZERO() || b.isZERO() || c.isZERO()) {
                 // skip for this turn
                 continue;
             }
             if (c.isConstant()) {
-                c = dfac.univariate(0,1);
+                c = dfac.univariate(0, 1);
             }
             //System.out.println("c = " + c);
             assertTrue("length( c" + i + " ) <> 0", c.length() > 0);

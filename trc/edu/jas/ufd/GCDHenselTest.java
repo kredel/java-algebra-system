@@ -5,13 +5,6 @@
 package edu.jas.ufd;
 
 
-//import java.util.Map;
-
-
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
 import edu.jas.poly.ExpVector;
@@ -19,6 +12,10 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -127,7 +124,9 @@ public class GCDHenselTest extends TestCase {
 
 
     int rl = 3;
-    String [] vars = { "x", "y", "z" }; 
+
+
+    String[] vars = { "x", "y", "z" };
 
 
     int kl = 4;
@@ -176,8 +175,8 @@ public class GCDHenselTest extends TestCase {
             //a = ufd.basePrimitivePart(a);
             //b = ufd.basePrimitivePart(b);
             ExpVector ev = c.leadingExpVector();
-            if ( ev != null ) {
-                c.doPutToMap(ev,dfac.coFac.getONE());
+            if (ev != null) {
+                c.doPutToMap(ev, dfac.coFac.getONE());
             }
 
             if (a.isZERO() || b.isZERO() || c.isZERO()) {
@@ -230,8 +229,8 @@ public class GCDHenselTest extends TestCase {
             //a = ufd.basePrimitivePart(a);
             //b = ufd.basePrimitivePart(b);
             ExpVector ev = c.leadingExpVector();
-            if ( ev != null ) {
-                c.doPutToMap(ev,dfac.coFac.getONE());
+            if (ev != null) {
+                c.doPutToMap(ev, dfac.coFac.getONE());
             }
 
             if (a.isZERO() || b.isZERO() || c.isZERO()) {
@@ -254,7 +253,7 @@ public class GCDHenselTest extends TestCase {
             //d = ufd.baseGcd(a,b);
 
             long tq = System.currentTimeMillis();
-            e = ufd.gcd(a,b);
+            e = ufd.gcd(a, b);
             tq = System.currentTimeMillis() - tq;
             //System.out.println("Hensel quadratic, time = " + tq);
             //System.out.println("Hensel linear, time    = " + t);
@@ -283,7 +282,7 @@ public class GCDHenselTest extends TestCase {
     public void testHenselGCD3() {
         BigInteger ifa = new BigInteger(1);
         //dfac = new GenPolynomialRing<BigInteger>(ifa, 2, to , new String[] {"x", "y" });
-        dfac = new GenPolynomialRing<BigInteger>(ifa, 3, to , new String[] { "x" , "y", "z" });
+        dfac = new GenPolynomialRing<BigInteger>(ifa, 3, to, new String[] { "x", "y", "z" });
 
         for (int i = 0; i < 1; i++) {
             a = dfac.random(kl, ll, el + i, q);
@@ -291,19 +290,19 @@ public class GCDHenselTest extends TestCase {
             c = dfac.random(kl, ll, el, q);
             // make monic and c with univariate head term
             ExpVector ev = a.leadingExpVector();
-            if ( ev != null ) {
-                a.doPutToMap(ev,ifa.getONE());
+            if (ev != null) {
+                a.doPutToMap(ev, ifa.getONE());
             }
             ev = b.leadingExpVector();
-            if ( ev != null ) {
-                b.doPutToMap(ev,ifa.getONE());
+            if (ev != null) {
+                b.doPutToMap(ev, ifa.getONE());
             }
             ev = c.leadingExpVector();
-            if ( ev != null ) {
+            if (ev != null) {
                 //c.doPutToMap(ev,ifa.getONE());
             }
             assertFalse("ev == null ", ev == null);
-            if ( ev.dependencyOnVariables().length > 1 ) {
+            if (ev.dependencyOnVariables().length > 1) {
                 c = dfac.univariate(1); //getONE();
             }
             //a = dfac.parse(" y^2 + 2 x y - 3 y + x^2 - 3 x - 4 ");

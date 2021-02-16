@@ -5,13 +5,6 @@
 package edu.jas.ufd;
 
 
-//import java.util.Map;
-
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-
 import edu.jas.arith.BigComplex;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
@@ -24,6 +17,10 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -231,7 +228,7 @@ public class GCDProxyTest extends TestCase {
      */
     public void testModInteger() {
         long t;
-        ModIntegerRing mi = new ModIntegerRing(19,true);
+        ModIntegerRing mi = new ModIntegerRing(19, true);
         //ModIntegerRing mi = new ModIntegerRing(536870909, true);
 
         GenPolynomial<ModInteger> a, b, c, d, e;

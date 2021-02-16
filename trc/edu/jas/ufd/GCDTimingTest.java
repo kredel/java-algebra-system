@@ -5,16 +5,16 @@
 package edu.jas.ufd;
 
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -50,8 +50,6 @@ public class GCDTimingTest extends TestCase {
     }
 
 
-    //private final static int bitlen = 100;
-
     GreatestCommonDivisorAbstract<BigInteger> ufd_si;
 
 
@@ -79,49 +77,13 @@ public class GCDTimingTest extends TestCase {
     GenPolynomialRing<GenPolynomial<BigInteger>> rfac;
 
 
-    BigInteger ai;
+    BigInteger ai, bi, ci, di, ei;
 
 
-    BigInteger bi;
+    GenPolynomial<BigInteger> a, b, c, d, e;
 
 
-    BigInteger ci;
-
-
-    BigInteger di;
-
-
-    BigInteger ei;
-
-
-    GenPolynomial<BigInteger> a;
-
-
-    GenPolynomial<BigInteger> b;
-
-
-    GenPolynomial<BigInteger> c;
-
-
-    GenPolynomial<BigInteger> d;
-
-
-    GenPolynomial<BigInteger> e;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> ar;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> br;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> cr;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> dr;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> er;
+    GenPolynomial<GenPolynomial<BigInteger>> ar, br, cr, dr, er;
 
 
     int rl = 5;
@@ -212,15 +174,14 @@ public class GCDTimingTest extends TestCase {
             a = a.multiply(c);
             b = b.multiply(c);
 
-            System.out
-                    .println("\ndegrees: a = " + a.degree() + ", b = " + b.degree() + ", c = " + c.degree());
+            System.out.println(
+                            "\ndegrees: a = " + a.degree() + ", b = " + b.degree() + ", c = " + c.degree());
             /*
             t = System.currentTimeMillis();
             d = ufd_si.baseGcd(a,b);
             t = System.currentTimeMillis() - t;
             e = PolyUtil.<BigInteger>baseSparsePseudoRemainder(d,c);
             //System.out.println("d  = " + d);
-
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
             System.out.println("simple prs        time = " + t);
             */
@@ -281,7 +242,7 @@ public class GCDTimingTest extends TestCase {
             //System.out.println("br = " + br);
 
             System.out.println("\ndegrees: a = " + ar.degree() + ", b = " + br.degree() + ", c = "
-                    + cr.degree());
+                            + cr.degree());
 
             t = System.currentTimeMillis();
             dr = ufd_si.recursiveUnivariateGcd(ar, br);
@@ -358,15 +319,14 @@ public class GCDTimingTest extends TestCase {
             //System.out.println("b = " + b);
             //System.out.println("c = " + c);
 
-            System.out
-                    .println("\ndegrees: a = " + a.degree() + ", b = " + b.degree() + ", c = " + c.degree());
+            System.out.println(
+                            "\ndegrees: a = " + a.degree() + ", b = " + b.degree() + ", c = " + c.degree());
             /*
             t = System.currentTimeMillis();
             d = ufd_si.gcd(a,b);
             t = System.currentTimeMillis() - t;
             e = PolyUtil.<BigInteger>baseSparsePseudoRemainder(d,c);
             //System.out.println("d  = " + d);
-
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
             System.out.println("simple prs        time = " + t);
             */
@@ -376,7 +336,6 @@ public class GCDTimingTest extends TestCase {
             t = System.currentTimeMillis() - t;
             e = PolyUtil.<BigInteger>baseSparsePseudoRemainder(d,c);
             //System.out.println("d  = " + d);
-
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
             System.out.println("primitive prs     time = " + t);
             */

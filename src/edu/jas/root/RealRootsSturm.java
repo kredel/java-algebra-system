@@ -8,15 +8,15 @@ package edu.jas.root;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigRational;
 import edu.jas.arith.Rational;
+import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
-import edu.jas.poly.ExpVector;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 
@@ -95,10 +95,10 @@ public class RealRootsSturm<C extends RingElem<C> & Rational> extends RealRootsA
         if (!et.isZERO()) {
             GenPolynomial<C> tr = pfac.valueOf(et);
             if (logger.isInfoEnabled()) {
-               logger.info("trailing term = " + tr);
+                logger.info("trailing term = " + tr);
             }
             f = PolyUtil.<C> basePseudoDivide(f, tr);
-            R.add(new Interval<C>( pfac.coFac.getZERO() ));
+            R.add(new Interval<C>(pfac.coFac.getZERO()));
         }
         if (f.isConstant()) {
             return R;
@@ -384,7 +384,7 @@ public class RealRootsSturm<C extends RingElem<C> & Rational> extends RealRootsA
             return iv;
         }
         Interval<C> vn = new Interval<C>(iv.left, zero);
-        if (realRootCount(vn,S) == 1) {
+        if (realRootCount(vn, S) == 1) {
             return vn;
         }
         vn = new Interval<C>(zero, iv.right);
