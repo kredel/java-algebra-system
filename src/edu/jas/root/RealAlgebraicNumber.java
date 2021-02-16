@@ -327,7 +327,8 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
      */
     public BigInteger floor() {
         BigRational f = magnitude();
-        return f.floor();
+        BigInteger fi = f.floor(); // todo: ensure int not in interval
+        return fi;
     }
 
 
@@ -341,11 +342,9 @@ public class RealAlgebraicNumber<C extends GcdRingElem<C> & Rational>
         //System.out.println("old v = " + ring.root + ", new v = " + v);
         ring.setRoot(v);
         C ev = ring.engine.realIntervalMagnitude(v, ring.algebraic.modul, number.val); //, ring.eps);
-        //if ((Object) ev instanceof Rational) { // always true by type parameter
-        BigRational er = ev.getRational();
+        //Interval<C> ev = ring.engine.realIntervalMagnitudeInterval(v, ring.algebraic.modul, number.val);
+        BigRational er = ev.getRational(); //middle().
         return er;
-        //}
-        //throw new RuntimeException("Rational expected, but was " + ev.getClass());
     }
 
 

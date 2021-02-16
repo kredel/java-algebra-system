@@ -426,12 +426,6 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
             return g.leadingBaseCoefficient();
         }
         RingFactory<C> cfac = f.ring.coFac;
-        //if (false) {
-        //    C c = iv.left.sum(iv.right);
-        //    c = c.divide(cfac.fromInteger(2));
-        //    C ev = PolyUtil.<C> evaluateMain(cfac, g, c);
-        //    return ev;
-        //}
         C evl = PolyUtil.<C> evaluateMain(cfac, g, iv.left);
         C evr = PolyUtil.<C> evaluateMain(cfac, g, iv.right);
         C ev = evl;
@@ -457,6 +451,30 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
         }
         Interval<C> v = invariantMagnitudeInterval(iv, f, g, eps);
         return realIntervalMagnitude(v, f, g);
+    }
+
+
+    /**
+     * Real algebraic number magnitude.
+     * @param iv root isolating interval for f, with f(left) * f(right) &lt; 0,
+     *            with iv such that |g(a) - g(b)| &lt; eps for a, b in iv.
+     * @param f univariate polynomial, non-zero.
+     * @param g univariate polynomial, gcd(f,g) == 1.
+     * @return Interval( g(iv.left), g(iv.right) ) .
+     */
+    public Interval<C> realIntervalMagnitudeInterval(Interval<C> iv, GenPolynomial<C> f, GenPolynomial<C> g) {
+        if (g.isZERO() || g.isConstant()) {
+            return iv;
+        }
+        RingFactory<C> cfac = f.ring.coFac;
+        C evl = PolyUtil.<C> evaluateMain(cfac, g, iv.left);
+        C evr = PolyUtil.<C> evaluateMain(cfac, g, iv.right);
+        Interval<C> ev = new Interval<C>(evr, evl);
+        if (evl.compareTo(evr) <= 0) {
+            ev = new Interval<C>(evl, evr);
+        }
+        System.out.println("ev = " + ev + ", iv = " + iv);
+        return ev;
     }
 
 

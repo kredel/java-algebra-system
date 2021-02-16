@@ -463,9 +463,10 @@ public class RealAlgebraicTest extends TestCase {
      */
     public void testContinuedFraction() {
         final int M = 100;
-        RealAlgebraicNumber<BigRational> x = fac.random(5);
+        RealAlgebraicNumber<BigRational> x = fac.random(15);
         //x = fac.parse("5/12");
         //x = fac.parse("-1");
+        //x = fac.getGenerator(); // alpha = sqrt(2)
         //System.out.println("x = " + x + ", mag(x) = " + x.decimalMagnitude());
 
         List<BigInteger> cf = RealArithUtil.continuedFraction(x, M);
