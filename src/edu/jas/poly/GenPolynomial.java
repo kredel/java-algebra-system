@@ -1000,7 +1000,7 @@ public class GenPolynomial<C extends RingElem<C>>
 
     /**
      * GenPolynomial maximum norm.
-     * @return ||this||.
+     * @return ||this|| the maximum of all absolute values of coefficients.
      */
     public C maxNorm() {
         C n = ring.getZEROCoefficient();
@@ -1022,6 +1022,21 @@ public class GenPolynomial<C extends RingElem<C>>
         C n = ring.getZEROCoefficient();
         for (C c : val.values()) {
             C x = c.abs();
+            n = n.sum(x);
+        }
+        return n;
+    }
+
+
+    /**
+     * GenPolynomial square norm.
+     * @return the sum all squared values of coefficients.
+     */
+    public C squareNorm() {
+        C n = ring.getZEROCoefficient();
+        for (C c : val.values()) {
+            C x = c.abs();
+            x = x.multiply(x);
             n = n.sum(x);
         }
         return n;

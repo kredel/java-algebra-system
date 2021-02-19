@@ -15,6 +15,7 @@ import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.Rational;
+import edu.jas.arith.Roots;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
@@ -38,7 +39,7 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
 
 
     /**
-     * Real root bound. With f(M) * f(-M) != 0.
+     * Real root bound. With f(-M) * f(M) != 0.
      * @param f univariate polynomial.
      * @return M such that -M &lt; root(f) &lt; M.
      */
@@ -62,26 +63,6 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
                 M = d;
             }
         }
-        // works also without this case, only for optimization 
-        // to use integral number interval end points
-        // could be obsolete: can fail if real root is in interval [r,r+1] 
-        // for too low precision or too big r, since r is approximation
-        /*
-        if (false&&(Object) M instanceof RealAlgebraicNumber) {
-            RealAlgebraicNumber Mr = (RealAlgebraicNumber) M;
-            BigRational r = Mr.magnitude();
-            //logger.info("rational root bound: " + r);
-            BigInteger i = new BigInteger(r.numerator().divide(r.denominator()));
-            i = i.sum(BigInteger.ONE);
-            //logger.info("integer root bound: " + i);
-            //M = cfac.fromInteger(r.numerator()).divide(cfac.fromInteger(r.denominator()));
-            M = cfac.fromInteger(i.getVal());
-            M = M.sum(f.ring.coFac.getONE());
-            logger.info("root bound: " + M);
-            //System.out.println("M = " + M);
-            return M;
-        }
-        */
         BigRational r = M.getRational();
         logger.info("rational root bound: " + r);
         BigInteger i = new BigInteger(r.numerator().divide(r.denominator()));
@@ -114,10 +95,10 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
         GenPolynomial<C> fa = f.map(new UnaryFunctor<C, C>() {
 
 
-            public C eval(C a) {
-                return a.abs();
-            }
-        });
+                public C eval(C a) {
+                    return a.abs();
+                }
+            });
         //System.out.println("fa = " + fa);
         C M = iv.left.abs();
         if (M.compareTo(iv.right.abs()) < 0) {
@@ -130,11 +111,13 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
         // to use rational number interval end points
         // can fail if real root is in interval [r,r+1] 
         // for too low precision or too big r, since r is approximation
-        if ((Object) B instanceof RealAlgebraicNumber) {
-            RealAlgebraicNumber Br = (RealAlgebraicNumber) B;
-            BigRational r = Br.magnitude();
-            B = cfac.fromInteger(r.numerator()).divide(cfac.fromInteger(r.denominator()));
-        }
+        //if ((Object) B instanceof RealAlgebraicNumber) {
+        //    RealAlgebraicNumber Br = (RealAlgebraicNumber) B;
+        //    BigRational r = Br.magnitude();
+        //    B = cfac.fromInteger(r.numerator()).divide(cfac.fromInteger(r.denominator()));
+        //}
+        BigRational r = B.getRational();
+        B = cfac.fromInteger(r.numerator()).divide(cfac.fromInteger(r.denominator()));
         //System.out.println("B = " + B);
         return B;
     }
@@ -378,7 +361,7 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
      *         &lt; eps for a, b in v in iv.
      */
     public Interval<C> invariantMagnitudeInterval(Interval<C> iv, GenPolynomial<C> f, GenPolynomial<C> g,
-                    BigRational eps) {
+                                                  BigRational eps) {
         Interval<C> v = iv;
         if (g == null || g.isZERO()) {
             return v;
@@ -487,7 +470,7 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
      *         v real.
      */
     public BigDecimal approximateRoot(Interval<C> iv, GenPolynomial<C> f, BigRational eps)
-                    throws NoConvergenceException {
+        throws NoConvergenceException {
         if (iv == null) {
             throw new IllegalArgumentException("null interval not allowed");
         }
@@ -635,7 +618,7 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
      *         with |d-v| &lt; eps, else false.
      */
     public boolean isApproximateRoot(BigDecimal x, GenPolynomial<BigDecimal> f, GenPolynomial<BigDecimal> fp,
-                    BigDecimal eps) {
+                                     BigDecimal eps) {
         if (x == null) {
             throw new IllegalArgumentException("null root not allowed");
         }
@@ -697,6 +680,66 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
             }
         }
         return true;
+    }
+
+
+    /**
+     * Fourier sequence.
+     * @param f univariate polynomial.
+     * @return (f, f', ..., f(n)) a Fourier sequence for f.
+     */
+    public List<GenPolynomial<C>> fourierSequence(GenPolynomial<C> f) {
+        List<GenPolynomial<C>> S = new ArrayList<GenPolynomial<C>>();
+        if (f == null || f.isZERO()) {
+            return S;
+        }
+        long d = f.degree();
+        GenPolynomial<C> F = f;
+        S.add(F);
+        while (d-- > 0) {
+            GenPolynomial<C> G = PolyUtil.<C> baseDeriviative(F);
+            F = G;
+            S.add(F /*.monic()*/ );
+        }
+        //System.out.println("F = " + F);
+        return S;
+    }
+
+
+    /**
+     * Thom sign sequence.
+     * @param f univariate polynomial.
+     * @param v interval for a real root, f(v.left) * f(v.right) &lt; 0.
+     * @return (s1, s2, ..., sn) = (sign(f'(v)), .... sign(f(n)(v))) a
+     *         Thom sign sequence for the real root in v of f.
+     */
+    public List<Integer> signSequence(GenPolynomial<C> f, Interval<C> v) {
+        List<Integer> S = new ArrayList<Integer>();
+        GenPolynomial<C> fp = PolyUtil.<C> baseDeriviative(f);
+        List<GenPolynomial<C>> fs = fourierSequence(fp);
+        for (GenPolynomial<C> p : fs) {
+            int s = realSign(v, f, p);
+            S.add(s);
+        }
+        return S;
+    }
+
+
+    /**
+     * Root number.
+     * @param f univariate polynomial.
+     * @param v interval for a real root, f(v.left) * f(v.right) &lt; 0.
+     * @return r the number of this root in the sequence a1 &lt; a2 &lt; ..., &lt; am
+     *         of all real roots of f
+     */
+    public Long realRootNumber(GenPolynomial<C> f, Interval<C> v) {
+        C M = realRootBound(f);
+        Interval<C> iv = new Interval<C>(M.negate(), v.right);
+        long r = realRootCount(iv, f);
+	if (r <= 0) {
+	    logger.warn("no real root in interval " + v);
+	}
+        return r;
     }
 
 }

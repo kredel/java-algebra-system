@@ -139,7 +139,7 @@ public class RealRootsSturm<C extends RingElem<C> & Rational> extends RealRootsA
             C z = f.leadingBaseCoefficient();
             if (!iv.contains(z)) {
                 throw new IllegalArgumentException(
-                                "root not in interval: f = " + f + ", iv = " + iv + ", z = " + z);
+                                                   "root not in interval: f = " + f + ", iv = " + iv + ", z = " + z);
             }
             Interval<C> iv1 = new Interval<C>(z);
             R.add(iv1);
@@ -330,7 +330,7 @@ public class RealRootsSturm<C extends RingElem<C> & Rational> extends RealRootsA
      * Invariant interval for algebraic number sign.
      * @param iv root isolating interval for f, with f(left) * f(right) &lt; 0.
      * @param f univariate polynomial, non-zero.
-     * @param Sg Sturm sequence for g, a univariate polynomial with gcd(f,g) ==
+     * @param Sg Sturm sequence for (f,g), a univariate polynomial with gcd(f,g) ==
      *            1.
      * @return v with v a new interval contained in iv such that g(w) != 0 for w
      *         in v.
