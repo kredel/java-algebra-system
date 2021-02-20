@@ -442,7 +442,7 @@ public class RealAlgebraicTest extends TestCase {
         assertTrue("#roots = " + N + " ", R.size() == N);
 
         BigRational eps = Power.positivePower(new BigRational(1L, 10L), BigDecimal.DEFAULT_PRECISION);
-        //BigRational eps = Power.positivePower(new BigRational(1L,10L),10);
+        eps = eps.multiply(new BigRational("1/10"));
         //System.out.println("eps = " + eps);
 
         R = rrr.refineIntervals(R, ar, eps);
