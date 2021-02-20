@@ -15,10 +15,12 @@ import junit.framework.TestSuite;
 
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
+import edu.jas.arith.Roots;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
 import edu.jas.structure.Power;
+import edu.jas.structure.RingFactory;
 
 
 /**
@@ -60,37 +62,10 @@ public class RealRootTest extends TestCase {
     GenPolynomialRing<BigRational> dfac;
 
 
-    BigRational ai;
+    BigRational ai, bi, ci, di, ei, eps;
 
 
-    BigRational bi;
-
-
-    BigRational ci;
-
-
-    BigRational di;
-
-
-    BigRational ei;
-
-
-    BigRational eps;
-
-
-    GenPolynomial<BigRational> a;
-
-
-    GenPolynomial<BigRational> b;
-
-
-    GenPolynomial<BigRational> c;
-
-
-    GenPolynomial<BigRational> d;
-
-
-    GenPolynomial<BigRational> e;
+    GenPolynomial<BigRational> a, b, c, d, e;
 
 
     int rl = 1;
@@ -130,7 +105,6 @@ public class RealRootTest extends TestCase {
 
     /**
      * Test Sturm sequence.
-     * 
      */
     public void testSturmSequence() {
         a = dfac.random(kl, ll, el, q);
@@ -154,31 +128,75 @@ public class RealRootTest extends TestCase {
 
     /**
      * Test root bound.
-     * 
      */
     public void testRootBound() {
         a = dfac.random(kl, ll, el, q);
-        //System.out.println("a = " + a);
+        System.out.println("a = " + a);
 
         RealRoots<BigRational> rr = new RealRootsSturm<BigRational>();
 
+        // used root bound
         BigRational M = rr.realRootBound(a);
-
-        //System.out.println("M = " + M);
+        System.out.println("M = " + M);
         assertTrue("M >= 1 ", M.compareTo(BigRational.ONE) >= 0);
+        Interval<BigRational> v1 = new Interval<BigRational>(M.negate(), M);
+        long r1 = rr.realRootCount(v1, a);
+        System.out.println("v1 = " + v1 + ", r1 = " + r1);
 
         a = a.monic();
-        //System.out.println("a = " + a);
-        M = rr.realRootBound(a);
+        System.out.println("a = " + a);
+        BigDecimal ar = M.getDecimal();
+        System.out.println("ar = " + ar);
+        assertTrue("ar >= 1 ", ar.compareTo(BigDecimal.ONE) >= 0);
 
-        //System.out.println("M = " + M);
-        assertTrue("M >= 1 ", M.compareTo(BigRational.ONE) >= 0);
+        // maxNorm root bound
+        BigRational mr = a.maxNorm().getRational().sum(BigRational.ONE);
+        BigDecimal dr = mr.getDecimal();
+        System.out.println("dr = " + dr);
+        //assertTrue("ar >= maxNorm(a): " + (ar.subtract(dr)), ar.compareTo(dr) >= 0);
+        Interval<BigRational> v2 = new Interval<BigRational>(mr.negate(), mr);
+        long r2 = rr.realRootCount(v2,a);
+        System.out.println("v2 = " + v2 + ", r2 = " + r2);
+        assertTrue("r1 == r2: " + (r2-r1), r1 == r2);
+
+        // squareNorm root bound
+        BigRational qr = a.squareNorm().getRational();
+        BigDecimal ir = Roots.sqrt(qr.getDecimal());
+        //qr = Roots.sqrt(qr);
+        System.out.println("ir = " + ir);
+        //assertTrue("ar >= squareNorm(a): " + (ar.subtract(ir)), ar.compareTo(ir) >= 0);
+        Interval<BigRational> v3 = new Interval<BigRational>(qr.negate(), qr);
+        long r3 = rr.realRootCount(v3,a);
+        System.out.println("v3 = " + v3 + ", r3 = " + r3);
+        assertTrue("r1 == r3: " + (r3-r1), r1 == r3);
+
+        // sumNorm root bound
+        BigRational pr = a.sumNorm().getRational();
+        BigDecimal sr = pr.getDecimal();
+        System.out.println("sr = " + sr);
+        //assertTrue("ar >= squareNorm(a): " + (ar.subtract(sr)), ar.compareTo(sr) >= 0);
+        Interval<BigRational> v4 = new Interval<BigRational>(pr.negate(), pr);
+        long r4 = rr.realRootCount(v4,a);
+        System.out.println("v4 = " + v4 + ", r4 = " + r4);
+        assertTrue("r1 == r4: " + (r4-r1), r1 == r4);
+
+        // minimal root bound
+        BigDecimal dri = dr.sum(BigDecimal.ONE).inverse();
+        System.out.println("dri = " + dri + ", sign(dri) = " + dri.signum());
+        assertTrue("minimal root > 0: " + dri, dri.signum() > 0);
+
+        // minimal root separation
+        long n = a.degree();
+        if (n > 0) {
+            BigDecimal sep = sr.sum(BigDecimal.ONE).power(2*n).multiply(sr.fromInteger(n).power(n+1)).inverse();
+            System.out.println("sep = " + sep + ", sign(sep) = " + sep.signum());
+            assertTrue("separation(a) > 0: " + sep, sep.signum() > 0);
+        }
     }
 
 
     /**
      * Test real root isolation.
-     * 
      */
     public void testRealRootIsolation() {
         a = dfac.random(kl, ll * 2, el * 2, q);
@@ -191,6 +209,55 @@ public class RealRootTest extends TestCase {
         //System.out.println("R = " + R);
         //assertTrue("#roots >= 0 ", R.size() >= 0);
         assertTrue("#roots >= 0 ", R != null);
+    }
+
+
+    /**
+     * Test Thom lemma real root sign sequence.
+     */
+    public void testRealRootSignSequence() {
+        a = dfac.random(kl, ll * 2, el * 2, q);
+        if (a.degree() % 2 == 0) {
+            a = a.multiply( dfac.univariate(0).subtract(dfac.getONE()) );
+        }
+        System.out.println("a = " + a);
+        long d = a.degree();
+
+        RealRootsAbstract<BigRational> rr = new RealRootsSturm<BigRational>();
+
+        List<Interval<BigRational>> R = rr.realRoots(a);
+        System.out.println("R = " + R);
+        //assertTrue("#roots >= 0 ", R.size() >= 0);
+        assertTrue("#roots >= 0 ", R != null);
+
+        int l = R.size();
+        Interval<BigRational> v = R.get(l-1);
+        Interval<BigRational> u = R.get(0);
+        if (u.left.isZERO() && u.right.isZERO()) {
+            Interval<BigRational> w = v;
+            v = u;
+            u = w;
+        }
+        Interval<BigRational> vm = new Interval<BigRational>(u.left,v.right);
+        System.out.println("v  = " + v);
+        System.out.println("u  = " + u);
+        System.out.println("vm = " + vm);
+        long rc = rr.realRootCount(vm,a);
+        System.out.println("rc = " + rc);
+        assertTrue("root number == " + l, rc == l);
+
+        List<GenPolynomial<BigRational>> fs = rr.fourierSequence(a);
+        System.out.println("fs = " + fs);
+        assertTrue("len(fs) == " + (d-fs.size()), fs.size() == (d+1));
+
+        List<Integer> ss = rr.signSequence(a, v);
+        System.out.println("ss = " + ss);
+        assertTrue("len(ss) == " + (d-ss.size()), ss.size() == d);
+
+        for (Interval<BigRational> t : R) {
+            ss = rr.signSequence(a, t);
+            System.out.println("ss = " + ss);
+        }
     }
 
 
@@ -220,18 +287,18 @@ public class RealRootTest extends TestCase {
 
         assertTrue("#roots = " + N + " ", R.size() == N);
 
+        eps = eps.multiply(new BigRational("1/10"));
         //System.out.println("eps = " + eps);
-        //BigDecimal eps1 = new BigDecimal(eps);
-        //System.out.println("eps1 = " + eps1);
 
         R = rr.refineIntervals(R, a, eps);
         //System.out.println("R = " + R);
         int i = 0;
         for (Interval<BigRational> v : R) {
-            BigDecimal dd = v.toDecimal(); //.sum(eps1);
+            BigDecimal dd = v.toDecimal(); 
             BigDecimal di = Rn.get(i++).toDecimal();
             //System.out.println("v  = " + dd);
             //System.out.println("vi = " + di);
+            //System.out.println("|dd - di| < eps: " + dd.compareTo(di));
             assertTrue("|dd - di| < eps ", dd.compareTo(di) == 0);
         }
     }
@@ -269,9 +336,8 @@ public class RealRootTest extends TestCase {
 
         assertTrue("#roots = " + (N - 1) + " ", R.size() == (N - 1));
 
+        eps = eps.multiply(new BigRational("1/100"));
         //System.out.println("eps = " + eps);
-        //BigDecimal eps1 = new BigDecimal(eps);
-        //System.out.println("eps1 = " + eps1);
 
         R = rr.refineIntervals(R, a, eps);
         //System.out.println("R = " + R);
@@ -281,6 +347,7 @@ public class RealRootTest extends TestCase {
             BigDecimal di = Rn.get(i++).toDecimal();
             //System.out.println("v  = " + dd);
             //System.out.println("vi = " + di);
+            //System.out.println("|dd - di| < eps: " + dd.compareTo(di));
             assertTrue("|dd - di| < eps ", dd.compareTo(di) == 0);
         }
     }
@@ -288,7 +355,6 @@ public class RealRootTest extends TestCase {
 
     /**
      * Test real algebraic number sign.
-     * 
      */
     public void testRealAlgebraicNumberSign() {
         d = dfac.fromInteger(2);
