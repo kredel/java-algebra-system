@@ -389,10 +389,15 @@ public class ComplexRootTest extends TestCase {
         a = dfac.random(kl, ll, el + 1, q);
         //System.out.println("a = " + a);
 
+        Squarefree<Complex<BigRational>> engine = SquarefreeFactory.<Complex<BigRational>> getImplementation(cfac);
+        b = engine.squarefreePart(a);
+        long deg = b.degree(0);
+
         List<Rectangle<BigRational>> roots = cr.complexRoots(a);
         //System.out.println("a = " + a);
         //System.out.println("roots = " + roots);
-        assertTrue("#roots == deg(a) ", roots.size() == a.degree(0));
+        //assertTrue("#roots == deg(a) " + (a.degree()-roots.size()), roots.size() == a.degree(0));
+        assertTrue("#roots == deg(a): " + roots + ", " + a + ", " + b, roots.size() == deg);
     }
 
 
