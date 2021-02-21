@@ -133,11 +133,9 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
             return null;
         }
         RingFactory<C> cfac = f.ring.coFac;
-
         // maxNorm root bound
         BigRational mr = f.maxNorm().getRational().sum(BigRational.ONE);
         BigRational di = mr.sum(BigRational.ONE).inverse();
-
         C B = cfac.fromInteger(di.numerator()).divide(cfac.fromInteger(di.denominator()));
         //System.out.println("B = " + B + ", sign(B) = " + B.signum());
         return B;
@@ -154,19 +152,17 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
             return null;
         }
         RingFactory<C> cfac = f.ring.coFac;
-
         // sumNorm root bound
         BigRational pr = f.sumNorm().getRational();
         pr = pr.sum(BigRational.ONE);
-
         BigRational sep = BigRational.ZERO;
         long n = f.degree();
         if (n > 0) {
             sep = pr.power(2*n).multiply(pr.fromInteger(n).power(n+1)).inverse();
         }
         //System.out.println("sep = " + sep + ", sign(sep) = " + sep.signum());
-        C B = cfac.fromInteger(sep.numerator()).divide(cfac.fromInteger(sep.denominator()));
-        return B;
+        C M = cfac.fromInteger(sep.numerator()).divide(cfac.fromInteger(sep.denominator()));
+        return M;
     }
 
 
@@ -424,10 +420,8 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
         //System.out.println("gp = " + gp);
         C B = magnitudeBound(iv, gp);
         //System.out.println("B = " + B);
-
         RingFactory<C> cfac = f.ring.coFac;
         C two = cfac.fromInteger(2);
-
         while (B.multiply(v.length()).getRational().compareTo(eps) >= 0) {
             C c = v.left.sum(v.right);
             c = c.divide(two);
@@ -543,7 +537,6 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
         GenPolynomial<BigDecimal> df = PolyUtil.<C> decimalFromRational(dfac, f);
         GenPolynomial<C> fp = PolyUtil.<C> baseDeriviative(f);
         GenPolynomial<BigDecimal> dfp = PolyUtil.<C> decimalFromRational(dfac, fp);
-
         // Newton Raphson iteration: x_{n+1} = x_n - f(x_n)/f'(x_n)
         int i = 0;
         final int MITER = 50;
@@ -746,7 +739,7 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
         while (d-- > 0) {
             GenPolynomial<C> G = PolyUtil.<C> baseDeriviative(F);
             F = G;
-            S.add(F /*.monic()*/ );
+            S.add(F);
         }
         //System.out.println("F = " + F);
         return S;
