@@ -44,7 +44,10 @@ public class BigDecimalComplexTest extends TestCase {
     }
 
 
-    BigDecimalComplex a, b, c, d, e;
+    int precision = BigDecimal.DEFAULT_PRECISION; // must match default
+
+
+    BigDecimalComplex a, b, c, d, e, eps;
 
 
     BigDecimalComplex fac;
@@ -54,12 +57,15 @@ public class BigDecimalComplexTest extends TestCase {
     protected void setUp() {
         a = b = c = d = e = null;
         fac = new BigDecimalComplex();
+        eps = new BigDecimalComplex("0.1");
+        eps = eps.power(precision-1);
     }
 
 
     @Override
     protected void tearDown() {
         a = b = c = d = e = null;
+        eps = null;
     }
 
 
@@ -182,8 +188,9 @@ public class BigDecimalComplexTest extends TestCase {
         b = a.multiply(a);
         c = b.divide(a);
 
-        assertEquals("a*a/a == a: " + c.subtract(a), c, a);
-        assertEquals("a*a/a == a: " + c.subtract(a), 0, c.compareTo(a));
+        //assertEquals("a*a/a == a: " + c.subtract(a), c, a);
+        d = c.subtract(a).abs().divide(a.abs());
+        assertTrue("a*a/a == a: " + c.subtract(a), d.compareTo(eps) <= 0);
 
         d = a.multiply(BigDecimalComplex.ONE);
         assertEquals("a*1 == a", d, a);
@@ -198,8 +205,9 @@ public class BigDecimalComplexTest extends TestCase {
         a = fac.random(5);
         b = a.inverse();
         c = a.multiply(b);
+        e = c.subtract(fac.getONE()).abs();
         //assertTrue("a*1/a == 1: " + c, c.isONE());
-        assertTrue("a*1/a == 1: " + c, c.compareTo(fac.getONE()) == 0);
+        assertTrue("a*1/a == 1: " + e, e.compareTo(eps) <= 0);
     }
 
 
@@ -214,7 +222,9 @@ public class BigDecimalComplexTest extends TestCase {
         d = a.multiply(b.sum(c));
         e = a.multiply(b).sum(a.multiply(c));
 
-        assertEquals("a(b+c) == ab+ac", d, e);
+        a = d.subtract(e).abs().divide(e.abs());
+        //assertEquals("a(b+c) == ab+ac", d, e);
+        assertTrue("a(b+c) == ab+ac", a.compareTo(eps) <= 0);
     }
 
 
@@ -230,7 +240,8 @@ public class BigDecimalComplexTest extends TestCase {
         e = b.subtract(d);
         //System.out.println("e = " + e);
 
-        assertTrue("||a|| == |a|*|a|: " + e, b.compareTo(d) == 0);
+        e = d.subtract(b).abs().divide(b.abs());
+        assertTrue("||a|| == |a|*|a|: " + e, e.compareTo(eps) <= 0);
     }
 
 }
