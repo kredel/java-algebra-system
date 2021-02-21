@@ -131,66 +131,75 @@ public class RealRootTest extends TestCase {
      */
     public void testRootBound() {
         a = dfac.random(kl, ll, el, q);
-        System.out.println("a = " + a);
+        //System.out.println("a = " + a);
 
-        RealRoots<BigRational> rr = new RealRootsSturm<BigRational>();
+        RealRootsAbstract<BigRational> rr = new RealRootsSturm<BigRational>();
 
         // used root bound
         BigRational M = rr.realRootBound(a);
-        System.out.println("M = " + M);
+        //System.out.println("M = " + M);
         assertTrue("M >= 1 ", M.compareTo(BigRational.ONE) >= 0);
         Interval<BigRational> v1 = new Interval<BigRational>(M.negate(), M);
         long r1 = rr.realRootCount(v1, a);
-        System.out.println("v1 = " + v1 + ", r1 = " + r1);
+        //System.out.println("v1 = " + v1 + ", r1 = " + r1);
 
         a = a.monic();
-        System.out.println("a = " + a);
+        //System.out.println("a = " + a);
         BigDecimal ar = M.getDecimal();
-        System.out.println("ar = " + ar);
+        //System.out.println("ar = " + ar);
         assertTrue("ar >= 1 ", ar.compareTo(BigDecimal.ONE) >= 0);
 
         // maxNorm root bound
         BigRational mr = a.maxNorm().getRational().sum(BigRational.ONE);
         BigDecimal dr = mr.getDecimal();
-        System.out.println("dr = " + dr);
+        //System.out.println("dr = " + dr);
         //assertTrue("ar >= maxNorm(a): " + (ar.subtract(dr)), ar.compareTo(dr) >= 0);
         Interval<BigRational> v2 = new Interval<BigRational>(mr.negate(), mr);
         long r2 = rr.realRootCount(v2,a);
-        System.out.println("v2 = " + v2 + ", r2 = " + r2);
+        //System.out.println("v2 = " + v2 + ", r2 = " + r2);
         assertTrue("r1 == r2: " + (r2-r1), r1 == r2);
 
         // squareNorm root bound
         BigRational qr = a.squareNorm().getRational();
         BigDecimal ir = Roots.sqrt(qr.getDecimal());
         //qr = Roots.sqrt(qr);
-        System.out.println("ir = " + ir);
+        //System.out.println("ir = " + ir);
         //assertTrue("ar >= squareNorm(a): " + (ar.subtract(ir)), ar.compareTo(ir) >= 0);
         Interval<BigRational> v3 = new Interval<BigRational>(qr.negate(), qr);
         long r3 = rr.realRootCount(v3,a);
-        System.out.println("v3 = " + v3 + ", r3 = " + r3);
+        //System.out.println("v3 = " + v3 + ", r3 = " + r3);
         assertTrue("r1 == r3: " + (r3-r1), r1 == r3);
 
         // sumNorm root bound
         BigRational pr = a.sumNorm().getRational();
         BigDecimal sr = pr.getDecimal();
-        System.out.println("sr = " + sr);
+        //System.out.println("sr = " + sr);
         //assertTrue("ar >= squareNorm(a): " + (ar.subtract(sr)), ar.compareTo(sr) >= 0);
         Interval<BigRational> v4 = new Interval<BigRational>(pr.negate(), pr);
         long r4 = rr.realRootCount(v4,a);
-        System.out.println("v4 = " + v4 + ", r4 = " + r4);
+        //System.out.println("v4 = " + v4 + ", r4 = " + r4);
         assertTrue("r1 == r4: " + (r4-r1), r1 == r4);
 
         // minimal root bound
         BigDecimal dri = dr.sum(BigDecimal.ONE).inverse();
-        System.out.println("dri = " + dri + ", sign(dri) = " + dri.signum());
+        //System.out.println("dri = " + dri + ", sign(dri) = " + dri.signum());
         assertTrue("minimal root > 0: " + dri, dri.signum() > 0);
+        BigDecimal mri = rr.realMinimalRootBound(a).getDecimal();
+        //System.out.println("mri = " + mri + ", sign(mri) = " + mri.signum());
+        BigDecimal s = dri.subtract(mri).abs();
+        eps = eps.multiply(BigRational.ONE.fromInteger(10));
+        //System.out.println("s = " + s + ", eps = " + eps.getDecimal());
+        assertTrue("minimal root: " + dri, s.compareTo(eps.getDecimal()) < 0);
 
         // minimal root separation
         long n = a.degree();
         if (n > 0) {
             BigDecimal sep = sr.sum(BigDecimal.ONE).power(2*n).multiply(sr.fromInteger(n).power(n+1)).inverse();
-            System.out.println("sep = " + sep + ", sign(sep) = " + sep.signum());
+            //System.out.println("sep = " + sep + ", sign(sep) = " + sep.signum());
             assertTrue("separation(a) > 0: " + sep, sep.signum() > 0);
+            BigDecimal sri = rr.realMinimalRootSeparation(a).getDecimal();
+            BigDecimal ss = sep.subtract(sri).abs();
+            assertTrue("minimal separation: " + sep, ss.compareTo(eps.getDecimal()) < 0);
         }
     }
 
@@ -220,13 +229,13 @@ public class RealRootTest extends TestCase {
         if (a.degree() % 2 == 0) {
             a = a.multiply( dfac.univariate(0).subtract(dfac.getONE()) );
         }
-        System.out.println("a = " + a);
+        //System.out.println("a = " + a);
         long d = a.degree();
 
         RealRootsAbstract<BigRational> rr = new RealRootsSturm<BigRational>();
 
         List<Interval<BigRational>> R = rr.realRoots(a);
-        System.out.println("R = " + R);
+        //System.out.println("R = " + R);
         //assertTrue("#roots >= 0 ", R.size() >= 0);
         assertTrue("#roots >= 0 ", R != null);
 
@@ -239,19 +248,19 @@ public class RealRootTest extends TestCase {
             u = w;
         }
         Interval<BigRational> vm = new Interval<BigRational>(u.left,v.right);
-        System.out.println("v  = " + v);
-        System.out.println("u  = " + u);
-        System.out.println("vm = " + vm);
+        //System.out.println("v  = " + v);
+        //System.out.println("u  = " + u);
+        //System.out.println("vm = " + vm);
         long rc = rr.realRootCount(vm,a);
-        System.out.println("rc = " + rc);
+        //System.out.println("rc = " + rc);
         assertTrue("root number == " + l, rc == l);
 
         List<GenPolynomial<BigRational>> fs = rr.fourierSequence(a);
-        System.out.println("fs = " + fs);
+        //System.out.println("fs = " + fs);
         assertTrue("len(fs) == " + (d-fs.size()), fs.size() == (d+1));
 
         List<Integer> ss = rr.signSequence(a, v);
-        System.out.println("ss = " + ss);
+        //System.out.println("ss = " + ss);
         assertTrue("len(ss) == " + (d-ss.size()), ss.size() == d);
 
         for (Interval<BigRational> t : R) {

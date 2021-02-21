@@ -124,6 +124,53 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
 
 
     /**
+     * Real minimal root bound. 
+     * @param f univariate polynomial.
+     * @return M such that abs(xi) &gt; M for f(xi) == 0.
+     */
+    public C realMinimalRootBound(GenPolynomial<C> f) {
+        if (f == null) {
+            return null;
+        }
+        RingFactory<C> cfac = f.ring.coFac;
+
+        // maxNorm root bound
+        BigRational mr = f.maxNorm().getRational().sum(BigRational.ONE);
+        BigRational di = mr.sum(BigRational.ONE).inverse();
+
+        C B = cfac.fromInteger(di.numerator()).divide(cfac.fromInteger(di.denominator()));
+        //System.out.println("B = " + B + ", sign(B) = " + B.signum());
+        return B;
+    }
+
+
+    /**
+     * Real minimal root separation. 
+     * @param f univariate polynomial.
+     * @return M such that abs(xi-xj) &gt; M for roots xi, xj of f.
+     */
+    public C realMinimalRootSeparation(GenPolynomial<C> f) {
+        if (f == null) {
+            return null;
+        }
+        RingFactory<C> cfac = f.ring.coFac;
+
+        // sumNorm root bound
+        BigRational pr = f.sumNorm().getRational();
+        pr = pr.sum(BigRational.ONE);
+
+        BigRational sep = BigRational.ZERO;
+        long n = f.degree();
+        if (n > 0) {
+            sep = pr.power(2*n).multiply(pr.fromInteger(n).power(n+1)).inverse();
+        }
+        //System.out.println("sep = " + sep + ", sign(sep) = " + sep.signum());
+        C B = cfac.fromInteger(sep.numerator()).divide(cfac.fromInteger(sep.denominator()));
+        return B;
+    }
+
+
+    /**
      * Bi-section point.
      * @param iv interval with f(left) * f(right) != 0.
      * @param f univariate polynomial, non-zero.
