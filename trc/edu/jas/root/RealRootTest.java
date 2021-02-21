@@ -230,12 +230,10 @@ public class RealRootTest extends TestCase {
             a = a.multiply( dfac.univariate(0).subtract(dfac.getONE()) );
         }
         //System.out.println("a = " + a);
-        long d = a.degree();
-
         RealRootsAbstract<BigRational> rr = new RealRootsSturm<BigRational>();
 
         List<Interval<BigRational>> R = rr.realRoots(a);
-        //System.out.println("R = " + R);
+        System.out.println("R = " + R);
         //assertTrue("#roots >= 0 ", R.size() >= 0);
         assertTrue("#roots >= 0 ", R != null);
 
@@ -254,18 +252,21 @@ public class RealRootTest extends TestCase {
         long rc = rr.realRootCount(vm,a);
         //System.out.println("rc = " + rc);
         assertTrue("root number == " + l, rc == l);
+        long rn = rr.realRootNumber(a,vm);
+        assertTrue("root number == " + rn, rn == l);
 
+        long d = a.degree();
         List<GenPolynomial<BigRational>> fs = rr.fourierSequence(a);
         //System.out.println("fs = " + fs);
-        assertTrue("len(fs) == " + (d-fs.size()), fs.size() == (d+1));
+        assertTrue("len(fs) == " + (d+1-fs.size()), fs.size() == (d+1));
 
-        List<Integer> ss = rr.signSequence(a, v);
+        //List<Integer> ss = rr.signSequence(a, v);
         //System.out.println("ss = " + ss);
-        assertTrue("len(ss) == " + (d-ss.size()), ss.size() == d);
-
+        //assertTrue("len(ss) == " + (d-ss.size()), ss.size() == d);
         for (Interval<BigRational> t : R) {
-            ss = rr.signSequence(a, t);
+            List<Integer> ss = rr.signSequence(a, t);
             System.out.println("ss = " + ss);
+            assertTrue("len(ss) == " + (d-ss.size()), ss.size() == d);
         }
     }
 
