@@ -160,6 +160,45 @@ public class RootUtilTest extends TestCase {
 
 
     /**
+     * Test intervals.
+     */
+    public void testIntervals() {
+        a = dfac.random(kl, ll * 2, el * 2, q);
+        b = dfac.random(kl, ll * 2, el * 2, q);
+        b = b.multiply(b);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+
+        RealRootsAbstract<BigRational> rr = new RealRootsSturm<BigRational>();
+
+        ai = rr.realRootBound(a);
+        bi = rr.realRootBound(b);
+        //System.out.println("ai = " + ai);
+        //System.out.println("bi = " + bi);
+
+        Interval<BigRational> v1 = new Interval<BigRational>(ai.negate(), ai);
+        Interval<BigRational> v2 = new Interval<BigRational>(bi.negate(), bi.sum(BigRational.ONE));
+        //System.out.println("v1 = " + v1);
+        //System.out.println("v2 = " + v2);
+
+        Interval<BigRational> v3 = v1.sum(v2);
+        Interval<BigRational> v4 = v1.subtract(v2);
+        Interval<BigRational> v5 = v1.multiply(v2);
+        //System.out.println("v3 = " + v3);
+        //System.out.println("v4 = " + v4);
+        //System.out.println("v5 = " + v5);
+        assertTrue("v1 in v3" , v3.contains(v1));
+        assertTrue("v2 in v3" , v3.contains(v2));
+
+        assertTrue("v1 in v4" , v4.contains(v1));
+        assertTrue("v2 in v4" , v4.contains(v2));
+
+        assertTrue("v3 in v5" , v5.contains(v3));
+        assertTrue("v4 in v5" , v5.contains(v4));
+    }
+
+
+    /**
      * Test real algebraic factory.
      */
     public void testRealAlgebraicFactory() {
@@ -199,7 +238,7 @@ public class RootUtilTest extends TestCase {
         GenPolynomial<Complex<BigRational>> ca = PolyUtil.<BigRational> toComplex(cfac, a);
         //System.out.println("ca = " + ca);
         List<ComplexAlgebraicNumber<BigRational>> lcn = RootFactory
-                        .<BigRational> complexAlgebraicNumbersComplex(ca);
+            .<BigRational> complexAlgebraicNumbersComplex(ca);
         //System.out.println("lcn = " + lcn);
         assertTrue("#roots == deg(a): " + a, lcn.size() == a.degree(0));
 
