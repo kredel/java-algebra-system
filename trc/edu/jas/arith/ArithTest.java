@@ -946,7 +946,7 @@ public class ArithTest extends TestCase {
      * Test root decimal.
      */
     public void test2RootDecimal() {
-        BigDecimal a, b, c;
+        BigDecimal a, b, c, d;
         a = BigDecimal.ZERO;
         b = Roots.sqrt(a);
         assertTrue("sqrt(0) == 0: " + b, b.isZERO());
@@ -975,7 +975,9 @@ public class ArithTest extends TestCase {
         //b = Roots.root(a,2);
         c = b.multiply(b);
         //System.out.println("a = " + a + ", sqrt(a) = " + b + ", b^2 = " + c);
-        assertTrue("sqrt(a)*sqrt(a) == a: " + a.subtract(c), a.compareTo(c) == 0);
+        BigDecimal eps = new BigDecimal("0.1").power(BigDecimal.DEFAULT_PRECISION - 2);
+        d = a.subtract(c).abs().divide(a.abs().sum(BigDecimal.ONE));
+        assertTrue("sqrt(a)*sqrt(a) == a: " + d, d.compareTo(eps) <= 0);
     }
 
 
