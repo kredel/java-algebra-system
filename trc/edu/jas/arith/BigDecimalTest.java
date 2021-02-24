@@ -45,7 +45,7 @@ public class BigDecimalTest extends TestCase {
     }
 
 
-    BigDecimal a, b, c, d, e;
+    BigDecimal a, b, c, d, e, eps;
 
 
     BigDecimal fac;
@@ -64,6 +64,8 @@ public class BigDecimalTest extends TestCase {
     protected void setUp() {
         a = b = c = d = e = null;
         fac = new BigDecimal(0L, mc);
+        eps = new BigDecimal(new BigRational(1,10));
+        eps = eps.power(precision);
     }
 
 
@@ -71,6 +73,7 @@ public class BigDecimalTest extends TestCase {
     protected void tearDown() {
         a = b = c = d = e = null;
         fac = null;
+        eps = null;
     }
 
 
@@ -212,7 +215,8 @@ public class BigDecimalTest extends TestCase {
         b = a.inverse();
         c = a.multiply(b);
         //System.out.println("c = " + c);
-        assertTrue("a*1/a = 1: " + c, c.compareTo(fac.getONE()) == 0);
+        d = c.subtract(fac.getONE()).abs();
+        assertTrue("a*1/a = 1: " + c, d.compareTo(eps) <= 0);
 
         b = fac.random(kl);
         c = a.multiply(b);
