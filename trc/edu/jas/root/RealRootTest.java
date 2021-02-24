@@ -233,7 +233,7 @@ public class RealRootTest extends TestCase {
         RealRootsAbstract<BigRational> rr = new RealRootsSturm<BigRational>();
 
         List<Interval<BigRational>> R = rr.realRoots(a);
-        System.out.println("R = " + R);
+        //System.out.println("R = " + R);
         //assertTrue("#roots >= 0 ", R.size() >= 0);
         assertTrue("#roots >= 0 ", R != null);
 
@@ -251,7 +251,7 @@ public class RealRootTest extends TestCase {
         //System.out.println("vm = " + vm);
         long rc = rr.realRootCount(vm,a);
         //System.out.println("rc = " + rc);
-        assertTrue("root number == " + l, rc == l);
+        assertTrue("root number: R = " + R + ", rc = " + rc, rc == l);
         long rn = rr.realRootNumber(a,vm);
         assertTrue("root number == " + rn, rn == l);
 
@@ -265,7 +265,7 @@ public class RealRootTest extends TestCase {
         //assertTrue("len(ss) == " + (d-ss.size()), ss.size() == d);
         for (Interval<BigRational> t : R) {
             List<Integer> ss = rr.signSequence(a, t);
-            System.out.println("ss = " + ss);
+            //System.out.println("ss = " + ss);
             assertTrue("len(ss) == " + (d-ss.size()), ss.size() == d);
         }
     }
