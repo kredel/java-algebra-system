@@ -25,6 +25,7 @@ import junit.framework.TestSuite;
 /**
  * Factor tests with JUnit.
  * @author Heinz Kredel
+ * @author Axel Kramer
  */
 
 public class FactorMoreTest extends TestCase {
@@ -441,7 +442,6 @@ public class FactorMoreTest extends TestCase {
 
     /**
      * Test factorization over integers.
-     * @author Axel Kramer
      */
     public void testFactorizationInteger() {
         String str = "-2*m1*m2*u1*u2+m1*m2*u2^2-m2^2*u2^2+2*m1*m2*u1*v2+2*m2^2*u2*v2-m1*m2*v2^2-m2^2*v2^2";

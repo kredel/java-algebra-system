@@ -1087,7 +1087,7 @@ public class GenPolynomialRing<C extends RingElem<C>>
      * Distributive representation as polynomial with all main variables.
      * @return distributive polynomial ring factory.
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public GenPolynomialRing<C> distribute() {
         if (!(coFac instanceof GenPolynomialRing)) {
             return this;

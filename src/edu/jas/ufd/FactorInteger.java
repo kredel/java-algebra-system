@@ -731,7 +731,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
      * @param P squarefree and primitive! (respectively monic) multivariate
      *            GenPolynomial over the integers.
      * @param opti true, if polynomial variables should be optimized, else false.
-     * @param ilex true, if INVLEX term order should be forced, else false.
+     * @param tlex true, if INVLEX term order should be forced, else false.
      * @return [p_1,...,p_k] with P = prod_{i=1,...,r} p_i.
      */
     public List<GenPolynomial<BigInteger>> factorsSquarefreeOptions(GenPolynomial<BigInteger> P, boolean opti, boolean tlex) {
