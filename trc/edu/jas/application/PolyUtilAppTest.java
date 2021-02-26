@@ -56,99 +56,61 @@ public class PolyUtilAppTest extends TestCase {
     }
 
 
-    //private final static int bitlen = 100;
-
-    TermOrder to = new TermOrder(TermOrder.INVLEX);
+    //TermOrder to = new TermOrder(TermOrder.INVLEX);
 
 
-    GenPolynomialRing<BigRational> dfac;
+    //GenPolynomialRing<BigRational> dfac;
 
 
-    GenPolynomialRing<BigRational> cfac;
+    //GenPolynomialRing<BigRational> cfac;
 
 
-    GenPolynomialRing<GenPolynomial<BigRational>> rfac;
+    //GenPolynomialRing<GenPolynomial<BigRational>> rfac;
 
 
-    BigRational ai;
+    //BigRational ai, bi, ci, di, ei;
 
 
-    BigRational bi;
+    //GenPolynomial<BigRational> a, b, c, d, e;
 
 
-    BigRational ci;
+    //GenPolynomial<GenPolynomial<BigRational>> ar, br, cr, dr, er;
 
 
-    BigRational di;
-
-
-    BigRational ei;
-
-
-    GenPolynomial<BigRational> a;
-
-
-    GenPolynomial<BigRational> b;
-
-
-    GenPolynomial<BigRational> c;
-
-
-    GenPolynomial<BigRational> d;
-
-
-    GenPolynomial<BigRational> e;
-
-
-    GenPolynomial<GenPolynomial<BigRational>> ar;
-
-
-    GenPolynomial<GenPolynomial<BigRational>> br;
-
-
-    GenPolynomial<GenPolynomial<BigRational>> cr;
-
-
-    GenPolynomial<GenPolynomial<BigRational>> dr;
-
-
-    GenPolynomial<GenPolynomial<BigRational>> er;
-
-
-    int rl = 5;
+    //int rl = 5;
 
 
     int kl = 5;
 
 
-    int ll = 5;
+    //int ll = 5;
 
 
-    int el = 5;
+    //int el = 5;
 
 
-    float q = 0.6f;
+    //float q = 0.6f;
 
 
     @Override
     protected void setUp() {
-        a = b = c = d = e = null;
-        ai = bi = ci = di = ei = null;
-        ar = br = cr = dr = er = null;
-        dfac = new GenPolynomialRing<BigRational>(new BigRational(1), rl, to);
-        cfac = null; //new GenPolynomialRing<BigRational>(new BigRational(1),rl-1,to);
-        rfac = null; //new GenPolynomialRing<GenPolynomial<BigRational>>(cfac,1,to);
+        //a = b = c = d = e = null;
+        //ai = bi = ci = di = ei = null;
+        //ar = br = cr = dr = er = null;
+        // dfac = new GenPolynomialRing<BigRational>(new BigRational(1), rl, to);
+        // cfac = null; //new GenPolynomialRing<BigRational>(new BigRational(1),rl-1,to);
+        // rfac = null; //new GenPolynomialRing<GenPolynomial<BigRational>>(cfac,1,to);
     }
 
 
     @Override
     protected void tearDown() {
-        a = b = c = d = e = null;
-        ai = bi = ci = di = ei = null;
-        ar = br = cr = dr = er = null;
-        dfac = null;
-        cfac = null;
-        rfac = null;
+        //a = b = c = d = e = null;
+        //ai = bi = ci = di = ei = null;
+        //ar = br = cr = dr = er = null;
+        // dfac = null;
+        // cfac = null;
+        // rfac = null;
     }
 
 
@@ -210,6 +172,7 @@ public class PolyUtilAppTest extends TestCase {
         GenPolynomialRing<BigRational> ufac;
         ufac = new GenPolynomialRing<BigRational>(new BigRational(1), 1, va);
 
+        // x^3 - 2
         GenPolynomial<BigRational> m;
         m = ufac.univariate(0, 3);
         m = m.subtract(ufac.fromInteger(2));
@@ -222,6 +185,7 @@ public class PolyUtilAppTest extends TestCase {
         GenPolynomialRing<AlgebraicNumber<BigRational>> aufac;
         aufac = new GenPolynomialRing<AlgebraicNumber<BigRational>>(afac, 1, vb);
 
+        // y^2 - x
         GenPolynomial<AlgebraicNumber<BigRational>> n;
         n = aufac.univariate(0, 2);
         n = n.subtract(aufac.getONE().multiply(afac.getGenerator()));
@@ -255,9 +219,10 @@ public class PolyUtilAppTest extends TestCase {
                 afac, 1, vx);
         GenPolynomialRing<AlgebraicNumber<AlgebraicNumber<BigRational>>> rbfac = new GenPolynomialRing<AlgebraicNumber<AlgebraicNumber<BigRational>>>(
                 bfac, 1, vx);
-        GenPolynomial<AlgebraicNumber<BigRational>> ap = rafac.getGenerators().get(0).multiply(a);
-        GenPolynomial<AlgebraicNumber<AlgebraicNumber<BigRational>>> bp = rbfac.getGenerators().get(0)
-                .multiply(b);
+        GenPolynomial<AlgebraicNumber<BigRational>> ap = rafac.getONE().multiply(a);
+        GenPolynomial<AlgebraicNumber<AlgebraicNumber<BigRational>>> bp = rbfac.getONE().multiply(b);
+        //System.out.println("ap = " + ap);
+        //System.out.println("bp = " + bp);
 
         GenPolynomial<AlgebraicNumber<BigRational>> asp = PolyUtilApp.<BigRational> convertToPrimitiveElem(
                 cfac, pe.A, ap);
@@ -270,6 +235,20 @@ public class PolyUtilAppTest extends TestCase {
         GenPolynomial<AlgebraicNumber<BigRational>> csp = asp.sum(bsp);
         //System.out.println("csp = " + csp);
         assertEquals("alpha+beta == gamma", csp.leadingBaseCoefficient(), cfac.getGenerator());
+
+        // polynomials, trivial
+        GenPolynomialRing<AlgebraicNumber<BigRational>> gfac = csp.ring;
+        assertEquals("gfac == afac", gfac, asp.ring);
+        assertEquals("gfac == bfac", gfac, bsp.ring);
+        //no assertEquals("gfac == rafac", gfac, rafac);
+
+        asp = gfac.random(kl);
+        bsp = gfac.random(kl);
+        //System.out.println("asp = " + asp);
+        //System.out.println("bsp = " + bsp);
+        csp = asp.multiply(bsp);
+        //System.out.println("csp = " + csp);
+        assertEquals("a*b == b*a", csp, bsp.multiply(asp));
     }
 
 }
