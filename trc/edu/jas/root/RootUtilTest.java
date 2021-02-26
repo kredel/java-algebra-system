@@ -19,6 +19,8 @@ import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
 import edu.jas.structure.Power;
 
+//import edu.jas.commons.math.Roots;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -273,4 +275,27 @@ public class RootUtilTest extends TestCase {
             assertTrue("f(r) == 0: " + car, RootFactory.<BigRational> isRoot(a, car));
         }
     }
+
+
+    /**
+     * Test algebraic roots, i.e. real and complex algebraic roots.
+     */
+    public void testAlgebraicRoots() {
+        a = dfac.random(kl, ll, el, q);
+        //a = a.multiply( dfac.univariate(0) );
+        //System.out.println("a = " + a);
+
+        AlgebraicRoots<BigRational> lcn = RootFactory.<BigRational> algebraicRoots(a);
+        //System.out.println("lcn = " + lcn.toScript());
+        //System.out.println("lcn = " + lcn.toDecimalScript());
+
+        long r = lcn.real.size() + lcn.complex.size();
+        ////Roots<BigRational> linalg = new Roots<BigRational>();
+        ////List<Complex<BigDecimal>> cd = linalg.complexRoots(a);
+        ////System.out.println("cd = " + cd);
+
+        // some real roots not detected under complex roots // todo
+        assertTrue("#roots == degree(f): " + r, r >= a.degree());
+    }
+
 }
