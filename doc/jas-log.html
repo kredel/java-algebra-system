@@ -23,9 +23,27 @@
 
 <dl>
 
-<dt>2021, February </dt> <!-- 2.7.20 -->
+<dt>2021, March </dt> <!-- 2.7.30 -->
 <dd>
 
+ Methods for continued fractions of rational and real algebraic
+ numbers. Improved heuristics for polynomial factorization. New real
+ root methods related to Thom's lemma. Minimal root and root
+ separation bounds. Some interval arithmetic, reimplement
+ <code>excludeZero</code> method.
+
+ Squarefree part fix in <code>edu.jas.root.</code>
+ <code>ComplexRootsAbstract</code>.  Delegate <code>compareTo</code>
+ from <code>edu.jas.arith.</code> <code>BigDecimal</code> to
+ <code>java.math.</code> <code>BigDecimal</code>.  More unit tests for
+ missing cases. Further code cleanup by Eclipse rules, small fixes and
+ improvements.
+
+</dd>
+
+
+<dt>2021, February </dt> <!-- 2.7.20 -->
+<dd>
  In this release the source and classes are switched to Java 11, Log4j
  2.13.2, JRuby 9.2.14.0 and Jython 2.7.2 with some fixes. For example
  the deprecated JRuby <code>mathn</code> module for rational number
@@ -38,7 +56,6 @@
  target="new">SymbolicData</a> test are deactivated as its servers
  have been terminated. Further cleanups, improvements and small bug
  fixes.
-
 </dd>
 
 <dt>2021, January </dt> <!-- 2.7.10 -->
@@ -2795,7 +2812,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Sun Jan 31 14:57:25 CET 2021
+Last modified: Sat Feb 27 13:18:20 CET 2021
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
