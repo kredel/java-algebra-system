@@ -121,41 +121,13 @@
   </javac>
 </target>
 
-<target name="recomp5" depends="vorher,distclean" >
+<target name="recomp8" depends="vorher,distclean" >
   <javac destdir="${build}"
          debug="on" debuglevel="lines,source"
          classpath="${cp}" 
-         source="1.5" 
-         target="1.5" 
-         bootclasspath="/usr/lib64/jvm/java-1.5.0/jre/lib/rt.jar"
-         includeantruntime="false"
-  >
-     <src path="${src}" />
-     <src path="${testsrc}" />
-  </javac>
-</target>
-
-<target name="recomp6" depends="vorher,distclean" >
-  <javac destdir="${build}"
-         debug="on" debuglevel="lines,source"
-         classpath="${cp}" 
-         source="1.6" 
-         target="1.6" 
-         bootclasspath="/usr/lib64/jvm/java-1.6.0/jre/lib/rt.jar"
-         includeantruntime="false"
-  >
-     <src path="${src}" />
-     <src path="${testsrc}" />
-  </javac>
-</target>
-
-<target name="recomp7" depends="vorher,distclean" >
-  <javac destdir="${build}"
-         debug="on" debuglevel="lines,source"
-         classpath="${cp}" 
-         source="1.7" 
-         target="1.7" 
-         bootclasspath="/usr/lib64/jvm/java-1.7.0/jre/lib/rt.jar"
+         source="1.8"
+         target="1.8"
+         bootclasspath="/usr/lib64/jvm/java-1.8.0/jre/lib/rt.jar"
          includeantruntime="false"
   >
      <src path="${src}" />
