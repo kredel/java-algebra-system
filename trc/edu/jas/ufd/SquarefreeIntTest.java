@@ -7,10 +7,6 @@ package edu.jas.ufd;
 
 import java.util.SortedMap;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import edu.jas.arith.BigInteger;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.ExpVector;
@@ -19,9 +15,13 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
 
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
 
 /**
- * Squarefree factorization tests with JUnit.
+ * Squarefree factorization BigInteger coefficients tests with JUnit.
  * @author Heinz Kredel
  */
 
@@ -96,19 +96,7 @@ public class SquarefreeIntTest extends TestCase {
     GenPolynomialRing<BigInteger> dfac;
 
 
-    GenPolynomial<BigInteger> a;
-
-
-    GenPolynomial<BigInteger> b;
-
-
-    GenPolynomial<BigInteger> c;
-
-
-    GenPolynomial<BigInteger> d;
-
-
-    GenPolynomial<BigInteger> e;
+    GenPolynomial<BigInteger> a, b, c, d, e;
 
 
     GenPolynomialRing<BigInteger> cfac;
@@ -117,19 +105,7 @@ public class SquarefreeIntTest extends TestCase {
     GenPolynomialRing<GenPolynomial<BigInteger>> rfac;
 
 
-    GenPolynomial<GenPolynomial<BigInteger>> ar;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> br;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> cr;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> dr;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> er;
+    GenPolynomial<GenPolynomial<BigInteger>> ar, br, cr, dr, er;
 
 
     @Override
@@ -167,11 +143,9 @@ public class SquarefreeIntTest extends TestCase {
 
     /**
      * Test base squarefree.
-     * 
      */
     public void testBaseSquarefree() {
         //System.out.println("\nbase:");
-
         dfac = new GenPolynomialRing<BigInteger>(fac, 1, to, rvars);
 
         a = dfac.random(kl, ll, el + 2, q);
@@ -207,10 +181,8 @@ public class SquarefreeIntTest extends TestCase {
 
     /**
      * Test base squarefree factors.
-     * 
      */
     public void testBaseSquarefreeFactors() {
-
         dfac = new GenPolynomialRing<BigInteger>(fac, 1, to, rvars);
 
         a = dfac.random(kl, ll, el + 3, q);
@@ -239,11 +211,9 @@ public class SquarefreeIntTest extends TestCase {
 
     /**
      * Test recursive squarefree.
-     * 
      */
     public void testRecursiveSquarefree() {
         //System.out.println("\nrecursive:");
-
         cfac = new GenPolynomialRing<BigInteger>(fac, 2 - 1, to, c1vars);
         rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac, 1, to, rvars);
 
@@ -279,10 +249,8 @@ public class SquarefreeIntTest extends TestCase {
 
     /**
      * Test recursive squarefree factors.
-     * 
      */
     public void testRecursiveSquarefreeFactors() {
-
         cfac = new GenPolynomialRing<BigInteger>(fac, 2 - 1, to, c1vars);
         rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac, 1, to, rvars);
 
@@ -311,11 +279,9 @@ public class SquarefreeIntTest extends TestCase {
 
     /**
      * Test squarefree.
-     * 
      */
     public void testSquarefree() {
         //System.out.println("\nfull:");
-
         dfac = new GenPolynomialRing<BigInteger>(fac, rl, to, vars);
 
         a = dfac.random(kl, ll, 2, q);
@@ -350,10 +316,8 @@ public class SquarefreeIntTest extends TestCase {
 
     /**
      * Test squarefree factors.
-     * 
      */
     public void testSquarefreeFactors() {
-
         dfac = new GenPolynomialRing<BigInteger>(fac, rl, to, vars);
 
         a = dfac.random(kl, 3, 2, q);

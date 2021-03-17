@@ -5,10 +5,6 @@
 package edu.jas.ufd;
 
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
@@ -21,6 +17,10 @@ import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.RingFactory;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -69,7 +69,6 @@ public class SquarefreeTest extends TestCase {
 
     /**
      * Test factory specific.
-     * 
      */
     public void testFactorySpecific() {
         ModIntegerRing mi = new ModIntegerRing(19, true);
@@ -97,13 +96,14 @@ public class SquarefreeTest extends TestCase {
         AlgebraicNumberRing<ModInteger> am = new AlgebraicNumberRing<ModInteger>(pm, true);
         Squarefree<AlgebraicNumber<ModInteger>> sqfam = SquarefreeFactory.<ModInteger> getImplementation(am);
         //System.out.println("sqfam = " + sqfam);
-        assertTrue("sqf != AlgebraicNumber<ModInteger> " + sqfam, sqfam instanceof SquarefreeFiniteFieldCharP);
+        assertTrue("sqf != AlgebraicNumber<ModInteger> " + sqfam,
+                        sqfam instanceof SquarefreeFiniteFieldCharP);
 
         GenPolynomialRing<BigRational> prfac = new GenPolynomialRing<BigRational>(br, 1);
         GenPolynomial<BigRational> pr = prfac.univariate(0);
         AlgebraicNumberRing<BigRational> ar = new AlgebraicNumberRing<BigRational>(pr, true);
         Squarefree<AlgebraicNumber<BigRational>> sqfar = SquarefreeFactory
-                .<BigRational> getImplementation(ar);
+                        .<BigRational> getImplementation(ar);
         //System.out.println("sqfar = " + sqfar);
         assertTrue("sqf != AlgebraicNumber<BigRational> " + sqfar, sqfar instanceof SquarefreeFieldChar0);
 
@@ -123,7 +123,6 @@ public class SquarefreeTest extends TestCase {
 
     /**
      * Test factory generic.
-     * 
      */
     @SuppressWarnings("unchecked")
     public void testFactoryGeneric() {
@@ -152,13 +151,14 @@ public class SquarefreeTest extends TestCase {
         AlgebraicNumberRing<ModInteger> am = new AlgebraicNumberRing<ModInteger>(pm, true);
         Squarefree<AlgebraicNumber<ModInteger>> sqfam = SquarefreeFactory.getImplementation((RingFactory) am);
         //System.out.println("sqfam = " + sqfam);
-        assertTrue("sqf != AlgebraicNumber<ModInteger> " + sqfam, sqfam instanceof SquarefreeFiniteFieldCharP);
+        assertTrue("sqf != AlgebraicNumber<ModInteger> " + sqfam,
+                        sqfam instanceof SquarefreeFiniteFieldCharP);
 
         GenPolynomialRing<BigRational> prfac = new GenPolynomialRing<BigRational>(br, 1);
         GenPolynomial<BigRational> pr = prfac.univariate(0);
         AlgebraicNumberRing<BigRational> ar = new AlgebraicNumberRing<BigRational>(pr, true);
         Squarefree<AlgebraicNumber<BigRational>> sqfar = SquarefreeFactory
-                .getImplementation((RingFactory) ar);
+                        .getImplementation((RingFactory) ar);
         //System.out.println("sqfar = " + sqfar);
         assertTrue("sqf != AlgebraicNumber<BigRational> " + sqfar, sqfar instanceof SquarefreeFieldChar0);
 

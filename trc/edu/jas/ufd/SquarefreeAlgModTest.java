@@ -7,10 +7,6 @@ package edu.jas.ufd;
 
 import java.util.SortedMap;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.kern.ComputerThreads;
@@ -23,9 +19,14 @@ import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
 import edu.jas.structure.Power;
 
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
 
 /**
- * Squarefree factorization tests with JUnit.
+ * Squarefree factorization AlgebraicNumber:ModInteger coefficients tests with
+ * JUnit.
  * @author Heinz Kredel
  */
 
@@ -119,19 +120,7 @@ public class SquarefreeAlgModTest extends TestCase {
     GenPolynomialRing<AlgebraicNumber<ModInteger>> dfac;
 
 
-    GenPolynomial<AlgebraicNumber<ModInteger>> a;
-
-
-    GenPolynomial<AlgebraicNumber<ModInteger>> b;
-
-
-    GenPolynomial<AlgebraicNumber<ModInteger>> c;
-
-
-    GenPolynomial<AlgebraicNumber<ModInteger>> d;
-
-
-    GenPolynomial<AlgebraicNumber<ModInteger>> e;
+    GenPolynomial<AlgebraicNumber<ModInteger>> a, b, c, d, e;
 
 
     GenPolynomialRing<AlgebraicNumber<ModInteger>> cfac;
@@ -140,19 +129,7 @@ public class SquarefreeAlgModTest extends TestCase {
     GenPolynomialRing<GenPolynomial<AlgebraicNumber<ModInteger>>> rfac;
 
 
-    GenPolynomial<GenPolynomial<AlgebraicNumber<ModInteger>>> ar;
-
-
-    GenPolynomial<GenPolynomial<AlgebraicNumber<ModInteger>>> br;
-
-
-    GenPolynomial<GenPolynomial<AlgebraicNumber<ModInteger>>> cr;
-
-
-    GenPolynomial<GenPolynomial<AlgebraicNumber<ModInteger>>> dr;
-
-
-    GenPolynomial<GenPolynomial<AlgebraicNumber<ModInteger>>> er;
+    GenPolynomial<GenPolynomial<AlgebraicNumber<ModInteger>>> ar, br, cr, dr, er;
 
 
     @Override
@@ -200,11 +177,9 @@ public class SquarefreeAlgModTest extends TestCase {
 
     /**
      * Test base squarefree.
-     * 
      */
     public void testBaseSquarefree() {
         //System.out.println("\nbase:");
-
         dfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac, 1, to, rvars);
 
         a = dfac.random(kl, ll, el + 2, q);
@@ -240,10 +215,8 @@ public class SquarefreeAlgModTest extends TestCase {
 
     /**
      * Test base squarefree factors.
-     * 
      */
     public void testBaseSquarefreeFactors() {
-
         dfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac, 1, to, rvars);
 
         a = dfac.random(kl, ll, el + 3, q);
@@ -271,11 +244,9 @@ public class SquarefreeAlgModTest extends TestCase {
 
     /**
      * Test recursive squarefree.
-     * 
      */
     public void testRecursiveSquarefree() {
         //System.out.println("\nrecursive:");
-
         cfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac, 2 - 1, to, c1vars);
         rfac = new GenPolynomialRing<GenPolynomial<AlgebraicNumber<ModInteger>>>(cfac, 1, to, rvars);
 
@@ -311,10 +282,8 @@ public class SquarefreeAlgModTest extends TestCase {
 
     /**
      * Test recursive squarefree factors.
-     * 
      */
     public void testRecursiveSquarefreeFactors() {
-
         cfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac, 2 - 1, to, c1vars);
         rfac = new GenPolynomialRing<GenPolynomial<AlgebraicNumber<ModInteger>>>(cfac, 1, to, rvars);
 
@@ -343,11 +312,9 @@ public class SquarefreeAlgModTest extends TestCase {
 
     /**
      * Test squarefree.
-     * 
      */
     public void testSquarefree() {
         //System.out.println("\nfull:");
-
         dfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac, rl, to, vars);
 
         a = dfac.random(kl, 3, 2, q);
@@ -382,10 +349,8 @@ public class SquarefreeAlgModTest extends TestCase {
 
     /**
      * Test squarefree factors.
-     * 
      */
     public void testSquarefreeFactors() {
-
         dfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac, rl, to, vars);
 
         a = dfac.random(kl, 3, 2, q);
@@ -415,11 +380,9 @@ public class SquarefreeAlgModTest extends TestCase {
 
     /**
      * Test base squarefree with char-th root.
-     * 
      */
     public void testBaseSquarefreeCharRoot() {
         //System.out.println("\nbase CharRoot:");
-
         long p = fac.characteristic().longValue();
 
         //dfac = new GenPolynomialRing<ModInteger>(fac,1,to,rvars);
@@ -460,10 +423,8 @@ public class SquarefreeAlgModTest extends TestCase {
 
     /**
      * Test base squarefree factors with char-th root.
-     * 
      */
     public void testBaseSquarefreeFactorsCharRoot() {
-
         long p = fac.characteristic().longValue();
 
         //dfac = new GenPolynomialRing<ModInteger>(fac,1,to,rvars);
@@ -497,7 +458,6 @@ public class SquarefreeAlgModTest extends TestCase {
 
     /**
      * Test base squarefree with char-th root, two times.
-     * 
      */
     public void testBaseSquarefreeCharRoot2() {
         //System.out.println("\nbase CharRoot 2:");
@@ -541,7 +501,6 @@ public class SquarefreeAlgModTest extends TestCase {
 
     /**
      * Test base squarefree factors with char-th root, two times.
-     * 
      */
     public void testBaseSquarefreeFactorsCharRoot2() {
         //long p = fac.characteristic().longValue();
@@ -577,11 +536,9 @@ public class SquarefreeAlgModTest extends TestCase {
 
     /**
      * Test recursive squarefree with char-th root.
-     * 
      */
     public void testRecursiveSquarefreeCharRoot() {
         //System.out.println("\nrecursive CharRoot:");
-
         long p = fac.characteristic().longValue();
 
         cfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac, 2 - 1, to, c1vars);
@@ -626,10 +583,8 @@ public class SquarefreeAlgModTest extends TestCase {
 
     /**
      * Test recursive squarefree factors with char-th root.
-     * 
      */
     public void testRecursiveSquarefreeFactorsCharRoot() {
-
         long p = fac.characteristic().longValue();
 
         cfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac, 2 - 1, to, c1vars);
@@ -667,11 +622,9 @@ public class SquarefreeAlgModTest extends TestCase {
 
     /**
      * Test squarefree with char-th root.
-     * 
      */
     public void testSquarefreeCharRoot() {
         //System.out.println("\nfull CharRoot:");
-
         long p = fac.characteristic().longValue();
 
         dfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac, rl, to, vars);
@@ -715,10 +668,8 @@ public class SquarefreeAlgModTest extends TestCase {
 
     /**
      * Test squarefree factors with char-th root.
-     * 
      */
     public void testSquarefreeFactorsCharRoot() {
-
         long p = fac.characteristic().longValue();
 
         dfac = new GenPolynomialRing<AlgebraicNumber<ModInteger>>(fac, rl, to, vars);

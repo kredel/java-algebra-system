@@ -7,10 +7,6 @@ package edu.jas.ufd;
 
 import java.util.SortedMap;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.ExpVector;
@@ -19,9 +15,13 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
 
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
 
 /**
- * Squarefree factorization tests with JUnit.
+ * Squarefree factorization BigRational coefficients tests with JUnit.
  * @author Heinz Kredel
  */
 
@@ -96,19 +96,7 @@ public class SquarefreeRatTest extends TestCase {
     GenPolynomialRing<BigRational> dfac;
 
 
-    GenPolynomial<BigRational> a;
-
-
-    GenPolynomial<BigRational> b;
-
-
-    GenPolynomial<BigRational> c;
-
-
-    GenPolynomial<BigRational> d;
-
-
-    GenPolynomial<BigRational> e;
+    GenPolynomial<BigRational> a, b, c, d, e;
 
 
     GenPolynomialRing<BigRational> cfac;
@@ -117,19 +105,7 @@ public class SquarefreeRatTest extends TestCase {
     GenPolynomialRing<GenPolynomial<BigRational>> rfac;
 
 
-    GenPolynomial<GenPolynomial<BigRational>> ar;
-
-
-    GenPolynomial<GenPolynomial<BigRational>> br;
-
-
-    GenPolynomial<GenPolynomial<BigRational>> cr;
-
-
-    GenPolynomial<GenPolynomial<BigRational>> dr;
-
-
-    GenPolynomial<GenPolynomial<BigRational>> er;
+    GenPolynomial<GenPolynomial<BigRational>> ar, br, cr, dr, er;
 
 
     @Override
