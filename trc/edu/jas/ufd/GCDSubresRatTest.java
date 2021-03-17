@@ -24,7 +24,6 @@ import junit.framework.TestSuite;
  * GCD Subres with rational coefficients algorithm tests with JUnit.
  * @author Heinz Kredel
  */
-
 public class GCDSubresRatTest extends TestCase {
 
 
@@ -53,8 +52,6 @@ public class GCDSubresRatTest extends TestCase {
     }
 
 
-    //private final static int bitlen = 100;
-
     GreatestCommonDivisorSubres<BigRational> ufd;
 
 
@@ -73,49 +70,13 @@ public class GCDSubresRatTest extends TestCase {
     BigRational mi;
 
 
-    BigRational ai;
+    BigRational ai, bi, ci, di, ei;
 
 
-    BigRational bi;
+    GenPolynomial<BigRational> a, b, c, d, e;
 
 
-    BigRational ci;
-
-
-    BigRational di;
-
-
-    BigRational ei;
-
-
-    GenPolynomial<BigRational> a;
-
-
-    GenPolynomial<BigRational> b;
-
-
-    GenPolynomial<BigRational> c;
-
-
-    GenPolynomial<BigRational> d;
-
-
-    GenPolynomial<BigRational> e;
-
-
-    GenPolynomial<GenPolynomial<BigRational>> ar;
-
-
-    GenPolynomial<GenPolynomial<BigRational>> br;
-
-
-    GenPolynomial<GenPolynomial<BigRational>> cr;
-
-
-    GenPolynomial<GenPolynomial<BigRational>> dr;
-
-
-    GenPolynomial<GenPolynomial<BigRational>> er;
+    GenPolynomial<GenPolynomial<BigRational>> ar, br, cr, dr, er;
 
 
     int rl = 3;

@@ -8,11 +8,6 @@ package edu.jas.ufd;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.PrimeList;
@@ -21,6 +16,10 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -77,49 +76,13 @@ public class GCDModEvalTest extends TestCase {
     ModIntegerRing mi;
 
 
-    ModInteger ai;
+    ModInteger ai, bi, ci, di, ei;
 
 
-    ModInteger bi;
+    GenPolynomial<ModInteger> a, b, c, d, e;
 
 
-    ModInteger ci;
-
-
-    ModInteger di;
-
-
-    ModInteger ei;
-
-
-    GenPolynomial<ModInteger> a;
-
-
-    GenPolynomial<ModInteger> b;
-
-
-    GenPolynomial<ModInteger> c;
-
-
-    GenPolynomial<ModInteger> d;
-
-
-    GenPolynomial<ModInteger> e;
-
-
-    GenPolynomial<GenPolynomial<ModInteger>> ar;
-
-
-    GenPolynomial<GenPolynomial<ModInteger>> br;
-
-
-    GenPolynomial<GenPolynomial<ModInteger>> cr;
-
-
-    GenPolynomial<GenPolynomial<ModInteger>> dr;
-
-
-    GenPolynomial<GenPolynomial<ModInteger>> er;
+    GenPolynomial<GenPolynomial<ModInteger>> ar, br, cr, dr, er;
 
 
     int rl = 3;
@@ -140,7 +103,7 @@ public class GCDModEvalTest extends TestCase {
     @Override
     protected void setUp() {
         a = b = c = d = e = null;
-        ai = bi = ci = di = ei = null;
+        //ai = bi = ci = di = ei = null;
         ar = br = cr = dr = er = null;
         //mi = new ModIntegerRing(primes.get(0),true);
         mi = new ModIntegerRing(19, true);
@@ -161,7 +124,7 @@ public class GCDModEvalTest extends TestCase {
     @Override
     protected void tearDown() {
         a = b = c = d = e = null;
-        ai = bi = ci = di = ei = null;
+        //ai = bi = ci = di = ei = null;
         ar = br = cr = dr = er = null;
         mi = null;
         ufd = null;
@@ -175,7 +138,6 @@ public class GCDModEvalTest extends TestCase {
      * Test modular evaluation gcd.
      */
     public void testModEvalGcd() {
-
         //GreatestCommonDivisorAbstract<ModInteger> ufd_me
         //   = new GreatestCommonDivisorModEval();
 
@@ -223,7 +185,6 @@ public class GCDModEvalTest extends TestCase {
      * Test base quotioent and remainder.
      */
     public void testBaseQR() {
-
         dfac = new GenPolynomialRing<ModInteger>(mi, 1, to);
 
         for (int i = 0; i < 5; i++) {
@@ -276,7 +237,6 @@ public class GCDModEvalTest extends TestCase {
      * Test base content and primitive part.
      */
     public void testBaseContentPP() {
-
         for (int i = 0; i < 13; i++) {
             c = dfac.random(kl * (i + 2), ll + 2 * i, el + i, q);
             c = c.multiply(mi.random(kl * (i + 2)));
@@ -305,7 +265,6 @@ public class GCDModEvalTest extends TestCase {
      * Test base gcd.
      */
     public void testBaseGcd() {
-
         dfac = new GenPolynomialRing<ModInteger>(mi, 1, to);
 
         for (int i = 0; i < 5; i++) {
@@ -660,7 +619,6 @@ public class GCDModEvalTest extends TestCase {
      * Test co-prime factors.
      */
     public void testCoPrime() {
-
         dfac = new GenPolynomialRing<ModInteger>(mi, 3, to);
 
         a = dfac.random(kl, 3, 2, q);
@@ -714,7 +672,7 @@ public class GCDModEvalTest extends TestCase {
      */
     public void testResultant() {
         mi = new ModIntegerRing(163, true);
-        dfac = new GenPolynomialRing<ModInteger>(mi,3,to);
+        dfac = new GenPolynomialRing<ModInteger>(mi, 3, to);
         //System.out.println("dfac = " + dfac);
 
         GreatestCommonDivisorAbstract<ModInteger> ufdm = new GreatestCommonDivisorModEval<ModInteger>();
@@ -732,7 +690,7 @@ public class GCDModEvalTest extends TestCase {
                 continue;
             }
             if (c.isConstant()) {
-                c = dfac.univariate(0,1);
+                c = dfac.univariate(0, 1);
             }
             assertTrue("length( c" + i + " ) <> 0", c.length() > 0);
 

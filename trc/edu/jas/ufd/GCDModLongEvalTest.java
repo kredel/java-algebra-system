@@ -8,10 +8,6 @@ package edu.jas.ufd;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import edu.jas.arith.ModLong;
 import edu.jas.arith.ModLongRing;
 import edu.jas.arith.PrimeList;
@@ -20,6 +16,10 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -55,8 +55,6 @@ public class GCDModLongEvalTest extends TestCase {
     }
 
 
-    //private final static int bitlen = 100;
-
     GreatestCommonDivisorAbstract<ModLong> ufd;
 
 
@@ -78,49 +76,13 @@ public class GCDModLongEvalTest extends TestCase {
     ModLongRing mi;
 
 
-    ModLong ai;
+    ModLong ai, bi, ci, di, ei;
 
 
-    ModLong bi;
+    GenPolynomial<ModLong> a, b, c, d, e;
 
 
-    ModLong ci;
-
-
-    ModLong di;
-
-
-    ModLong ei;
-
-
-    GenPolynomial<ModLong> a;
-
-
-    GenPolynomial<ModLong> b;
-
-
-    GenPolynomial<ModLong> c;
-
-
-    GenPolynomial<ModLong> d;
-
-
-    GenPolynomial<ModLong> e;
-
-
-    GenPolynomial<GenPolynomial<ModLong>> ar;
-
-
-    GenPolynomial<GenPolynomial<ModLong>> br;
-
-
-    GenPolynomial<GenPolynomial<ModLong>> cr;
-
-
-    GenPolynomial<GenPolynomial<ModLong>> dr;
-
-
-    GenPolynomial<GenPolynomial<ModLong>> er;
+    GenPolynomial<GenPolynomial<ModLong>> ar, br, cr, dr, er;
 
 
     int rl = 3;
@@ -174,10 +136,8 @@ public class GCDModLongEvalTest extends TestCase {
 
     /**
      * Test modular evaluation gcd.
-     * 
      */
     public void testModEvalGcd() {
-
         //GreatestCommonDivisorAbstract<ModLong> ufd_me
         //   = new GreatestCommonDivisorModEval();
 
@@ -223,10 +183,8 @@ public class GCDModLongEvalTest extends TestCase {
 
     /**
      * Test base quotioent and remainder.
-     * 
      */
     public void testBaseQR() {
-
         dfac = new GenPolynomialRing<ModLong>(mi, 1, to);
 
         for (int i = 0; i < 5; i++) {
@@ -277,10 +235,8 @@ public class GCDModLongEvalTest extends TestCase {
 
     /**
      * Test base content and primitive part.
-     * 
      */
     public void testBaseContentPP() {
-
         for (int i = 0; i < 13; i++) {
             c = dfac.random(kl * (i + 2), ll + 2 * i, el + i, q);
             c = c.multiply(mi.random(kl * (i + 2)));
@@ -307,10 +263,8 @@ public class GCDModLongEvalTest extends TestCase {
 
     /**
      * Test base gcd.
-     * 
      */
     public void testBaseGcd() {
-
         dfac = new GenPolynomialRing<ModLong>(mi, 1, to);
 
         for (int i = 0; i < 5; i++) {
@@ -347,7 +301,6 @@ public class GCDModLongEvalTest extends TestCase {
 
     /**
      * Test recursive quotioent and remainder.
-     * 
      */
     public void testRecursiveQR() {
         dfac = new GenPolynomialRing<ModLong>(mi, 2, to);
@@ -403,7 +356,6 @@ public class GCDModLongEvalTest extends TestCase {
 
     /**
      * Test recursive content and primitive part.
-     * 
      */
     public void testRecursiveContentPP() {
         dfac = new GenPolynomialRing<ModLong>(mi, 2, to);
@@ -431,7 +383,6 @@ public class GCDModLongEvalTest extends TestCase {
 
     /**
      * Test recursive gcd.
-     * 
      */
     public void testRecursiveGCD() {
         dfac = new GenPolynomialRing<ModLong>(mi, 2, to);
@@ -472,7 +423,6 @@ public class GCDModLongEvalTest extends TestCase {
 
     /**
      * Test arbitrary recursive gcd.
-     * 
      */
     public void testArbitraryRecursiveGCD() {
         dfac = new GenPolynomialRing<ModLong>(mi, 2, to);
@@ -513,7 +463,6 @@ public class GCDModLongEvalTest extends TestCase {
 
     /**
      * Test content and primitive part.
-     * 
      */
     public void testContentPP() {
         dfac = new GenPolynomialRing<ModLong>(mi, 3, to);
@@ -545,7 +494,6 @@ public class GCDModLongEvalTest extends TestCase {
 
     /**
      * Test gcd 3 variables.
-     * 
      */
     public void testGCD3() {
         dfac = new GenPolynomialRing<ModLong>(mi, 3, to);
@@ -584,7 +532,6 @@ public class GCDModLongEvalTest extends TestCase {
 
     /**
      * Test gcd.
-     * 
      */
     public void testGCD() {
         // dfac = new GenPolynomialRing<ModLong>(mi,3,to);
@@ -630,7 +577,6 @@ public class GCDModLongEvalTest extends TestCase {
 
     /**
      * Test lcm.
-     * 
      */
     public void testLCM() {
         dfac = new GenPolynomialRing<ModLong>(mi, 3, to);
@@ -672,7 +618,6 @@ public class GCDModLongEvalTest extends TestCase {
 
     /**
      * Test co-prime factors.
-     * 
      */
     public void testCoPrime() {
 
@@ -702,7 +647,6 @@ public class GCDModLongEvalTest extends TestCase {
         F.add(b);
         F.add(c);
         F.add(e);
-
 
         List<GenPolynomial<ModLong>> P = ufd.coPrime(F);
         //System.out.println("F = " + F);

@@ -18,10 +18,10 @@ import junit.framework.TestSuite;
 
 
 /**
- * GreatestCommonDivisor timing tests with JUnit.
+ * GreatestCommonDivisor timing tests with JUnit. Change xtestMethod to
+ * testMethod to activate.
  * @author Heinz Kredel
  */
-
 public class GCDTimingTest extends TestCase {
 
 
@@ -133,7 +133,6 @@ public class GCDTimingTest extends TestCase {
 
     /**
      * Test dummy for junit.
-     * 
      */
     public void testDummy() {
         assertTrue("ufd_pp != null", ufd_pp != null);
@@ -142,10 +141,8 @@ public class GCDTimingTest extends TestCase {
 
     /**
      * Test base gcd simple.
-     * 
      */
     public void xtestBaseGcd() {
-
         dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 1, to);
 
         long t;
@@ -210,10 +207,8 @@ public class GCDTimingTest extends TestCase {
 
     /**
      * Test recursive gcd.
-     * 
      */
     public void xtestRecursiveGCD() {
-
         cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 2 - 1, to);
         rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac, 1, to);
 
@@ -285,10 +280,8 @@ public class GCDTimingTest extends TestCase {
 
     /**
      * Test gcd.
-     * 
      */
     public void xtestGCD() {
-
         long t;
 
         dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 3, to);

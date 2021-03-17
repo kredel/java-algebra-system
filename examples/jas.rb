@@ -7,13 +7,13 @@ Enhance Ruby Integer class by rational number construction.
 Replace / by quo from Numeric to get Rational number.
 =end
 if 1.class == Integer
-   puts "1.class == Integer: redefine :/"
+   #puts "1.class == Integer: redefine :/"
    class Integer
      remove_method :/  # integer division
      alias / quo       # rational construction
    end
 else
-   puts "require mathn"
+   #puts "require mathn"
    require "mathn"
 end
 

@@ -55,8 +55,6 @@ public class GCDPartFracRatTest extends TestCase {
     }
 
 
-    //private final static int bitlen = 100;
-
     GreatestCommonDivisorAbstract<BigRational> ufd;
 
 
@@ -75,49 +73,13 @@ public class GCDPartFracRatTest extends TestCase {
     BigRational mi;
 
 
-    BigRational ai;
+    BigRational ai, bi, ci, di, ei;
 
 
-    BigRational bi;
+    GenPolynomial<BigRational> a, b, c, d, e;
 
 
-    BigRational ci;
-
-
-    BigRational di;
-
-
-    BigRational ei;
-
-
-    GenPolynomial<BigRational> a;
-
-
-    GenPolynomial<BigRational> b;
-
-
-    GenPolynomial<BigRational> c;
-
-
-    GenPolynomial<BigRational> d;
-
-
-    GenPolynomial<BigRational> e;
-
-
-    GenPolynomial<GenPolynomial<BigRational>> ar;
-
-
-    GenPolynomial<GenPolynomial<BigRational>> br;
-
-
-    GenPolynomial<GenPolynomial<BigRational>> cr;
-
-
-    GenPolynomial<GenPolynomial<BigRational>> dr;
-
-
-    GenPolynomial<GenPolynomial<BigRational>> er;
+    //GenPolynomial<GenPolynomial<BigRational>> ar, br, cr, dr, er;
 
 
     int rl = 3;
@@ -139,7 +101,7 @@ public class GCDPartFracRatTest extends TestCase {
     protected void setUp() {
         a = b = c = d = e = null;
         ai = bi = ci = di = ei = null;
-        ar = br = cr = dr = er = null;
+        //ar = br = cr = dr = er = null;
         mi = new BigRational(1);
         ufd = new GreatestCommonDivisorSubres<BigRational>();
         String[] vars = ExpVector.STDVARS(rl);
@@ -156,7 +118,7 @@ public class GCDPartFracRatTest extends TestCase {
     protected void tearDown() {
         a = b = c = d = e = null;
         ai = bi = ci = di = ei = null;
-        ar = br = cr = dr = er = null;
+        //ar = br = cr = dr = er = null;
         mi = null;
         ufd = null;
         dfac = null;
@@ -167,10 +129,8 @@ public class GCDPartFracRatTest extends TestCase {
 
     /**
      * Test base quotioent and remainder.
-     * 
      */
     public void testBaseQR() {
-
         dfac = new GenPolynomialRing<BigRational>(mi, 1, to);
 
         for (int i = 0; i < 3; i++) {
@@ -228,17 +188,14 @@ public class GCDPartFracRatTest extends TestCase {
             e = d.multiply(c).sum(e);
             //System.out.println("e  = " + e);
             assertEquals("b == b/c + b%c ", b, e);
-
         }
     }
 
 
     /**
      * Test base extended gcd.
-     * 
      */
     public void testBaseExtGcd() {
-
         dfac = new GenPolynomialRing<BigRational>(mi, 1, to);
 
         for (int i = 0; i < 3; i++) {
@@ -286,10 +243,8 @@ public class GCDPartFracRatTest extends TestCase {
 
     /**
      * Test base partial fraction.
-     * 
      */
     public void testBasePartFrac() {
-
         dfac = new GenPolynomialRing<BigRational>(mi, 1, to);
 
         for (int i = 0; i < 3; i++) {
@@ -356,10 +311,8 @@ public class GCDPartFracRatTest extends TestCase {
 
     /**
      * Test base partial fraction list.
-     * 
      */
     public void testBasePartFracList() {
-
         dfac = new GenPolynomialRing<BigRational>(mi, 1, to);
 
         for (int i = 0; i < 3; i++) {
@@ -390,10 +343,8 @@ public class GCDPartFracRatTest extends TestCase {
 
     /**
      * Test base partial fraction exponent.
-     * 
      */
     public void testBasePartFracExponent() {
-
         dfac = new GenPolynomialRing<BigRational>(mi, 1, to);
 
         for (int i = 0; i < 3; i++) {
@@ -418,10 +369,8 @@ public class GCDPartFracRatTest extends TestCase {
 
     /**
      * Test base partial fraction list exponent (squarefree).
-     * 
      */
     public void testBasePartFracListExponent() {
-
         SquarefreeAbstract<BigRational> sqf = SquarefreeFactory.getImplementation(mi);
 
         dfac = new GenPolynomialRing<BigRational>(mi, 1, to);

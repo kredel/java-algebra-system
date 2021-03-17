@@ -8,11 +8,6 @@ package edu.jas.ufd;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
@@ -21,6 +16,10 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -137,7 +136,6 @@ public class GCDModularTest extends TestCase {
      * Test modular algorithm gcd with modular evaluation recursive algorithm.
      */
     public void testModularEvaluationGcd() {
-
         GreatestCommonDivisorAbstract<BigInteger> ufd_m = new GreatestCommonDivisorModular<ModInteger>(/*false*/);
         GreatestCommonDivisorAbstract<BigInteger> ufd = new GreatestCommonDivisorPrimitive<BigInteger>();
 
@@ -191,7 +189,6 @@ public class GCDModularTest extends TestCase {
      * Test modular algorithm gcd with simple PRS recursive algorithm.
      */
     public void testModularSimpleGcd() {
-
         GreatestCommonDivisorAbstract<BigInteger> ufd_m = new GreatestCommonDivisorModular<ModInteger>(true);
         GreatestCommonDivisorAbstract<BigInteger> ufd = new GreatestCommonDivisorPrimitive<BigInteger>();
 
@@ -245,7 +242,6 @@ public class GCDModularTest extends TestCase {
      * Test recursive content and primitive part, modular coefficients.
      */
     public void testRecursiveContentPPmodular() {
-
         dfac = new GenPolynomialRing<ModInteger>(mi, 2, to);
         cfac = new GenPolynomialRing<ModInteger>(mi, 2 - 1, to);
         rfac = new GenPolynomialRing<GenPolynomial<ModInteger>>(cfac, 1, to);
@@ -296,7 +292,6 @@ public class GCDModularTest extends TestCase {
      * Test base gcd modular coefficients.
      */
     public void testGCDbaseModular() {
-
         dfac = new GenPolynomialRing<ModInteger>(mi, 1, to);
 
         GreatestCommonDivisorAbstract<ModInteger> ufd = new GreatestCommonDivisorPrimitive<ModInteger>();
@@ -345,7 +340,6 @@ public class GCDModularTest extends TestCase {
      * Test recursive gcd modular coefficients.
      */
     public void testRecursiveGCDModular() {
-
         dfac = new GenPolynomialRing<ModInteger>(mi, 2, to);
         cfac = new GenPolynomialRing<ModInteger>(mi, 2 - 1, to);
         rfac = new GenPolynomialRing<GenPolynomial<ModInteger>>(cfac, 1, to);
@@ -401,7 +395,6 @@ public class GCDModularTest extends TestCase {
      * Test arbitrary recursive gcd modular coefficients.
      */
     public void testArbitraryRecursiveGCDModular() {
-
         dfac = new GenPolynomialRing<ModInteger>(mi, 2, to);
         cfac = new GenPolynomialRing<ModInteger>(mi, 2 - 1, to);
         rfac = new GenPolynomialRing<GenPolynomial<ModInteger>>(cfac, 1, to);
@@ -457,7 +450,6 @@ public class GCDModularTest extends TestCase {
      * Test gcd modular coefficients.
      */
     public void testGcdModular() {
-
         dfac = new GenPolynomialRing<ModInteger>(mi, 4, to);
 
         for (int i = 0; i < 1; i++) {
@@ -509,7 +501,6 @@ public class GCDModularTest extends TestCase {
      * Test co-prime factors.
      */
     public void testCoPrime() {
-
         dfac = new GenPolynomialRing<ModInteger>(mi, 3, to);
 
         a = dfac.random(kl, 3, 2, q);
@@ -557,7 +548,6 @@ public class GCDModularTest extends TestCase {
      * Test base resultant modular coefficients.
      */
     public void testResultantBaseModular() {
-
         dfac = new GenPolynomialRing<ModInteger>(mi, 1, to);
 
         GreatestCommonDivisorSimple<ModInteger> ufds = new GreatestCommonDivisorSimple<ModInteger>();
@@ -576,7 +566,7 @@ public class GCDModularTest extends TestCase {
                 continue;
             }
             if (c.isConstant()) {
-                c = dfac.univariate(0,1);
+                c = dfac.univariate(0, 1);
             }
             assertTrue("length( c" + i + " ) <> 0", c.length() > 0);
 
@@ -609,11 +599,10 @@ public class GCDModularTest extends TestCase {
      * Test recursive resultant modular coefficients.
      */
     public void testRecursiveResultantModular() {
-
         cfac = new GenPolynomialRing<ModInteger>(mi, 2 - 0, to);
         rfac = new GenPolynomialRing<GenPolynomial<ModInteger>>(cfac, 1, to);
         //System.out.println("rfac = " + rfac);
- 
+
         GreatestCommonDivisorSimple<ModInteger> ufds = new GreatestCommonDivisorSimple<ModInteger>();
         GreatestCommonDivisorSubres<ModInteger> sres = new GreatestCommonDivisorSubres<ModInteger>();
 
@@ -633,7 +622,7 @@ public class GCDModularTest extends TestCase {
                 continue;
             }
             if (cr.isConstant()) {
-                cr = rfac.univariate(0,1);
+                cr = rfac.univariate(0, 1);
             }
             assertTrue("length( cr" + i + " ) <> 0", cr.length() > 0);
 
@@ -685,7 +674,7 @@ public class GCDModularTest extends TestCase {
                 continue;
             }
             if (c.isConstant()) {
-                c = dfac.univariate(0,1);
+                c = dfac.univariate(0, 1);
             }
             assertTrue("length( c" + i + " ) <> 0", c.length() > 0);
 
@@ -718,9 +707,9 @@ public class GCDModularTest extends TestCase {
      * Test gcd example modular.
      */
     public void testGCDExamModular() {
-
         GreatestCommonDivisorAbstract<BigInteger> ufd = new GreatestCommonDivisorModular<ModInteger>();
-        GenPolynomialRing<BigInteger> dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), new String[] {"t","x"}, to);
+        GenPolynomialRing<BigInteger> dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),
+                        new String[] { "t", "x" }, to);
         GenPolynomial<BigInteger> a, b, c, d, e;
 
         a = dfac.parse("x**3 + x**2 - t * x - t");

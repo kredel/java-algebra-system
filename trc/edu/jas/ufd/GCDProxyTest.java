@@ -58,8 +58,6 @@ public class GCDProxyTest extends TestCase {
     }
 
 
-    //private final static int bitlen = 100;
-
     TermOrder to = new TermOrder(TermOrder.INVLEX);
 
 
@@ -157,7 +155,6 @@ public class GCDProxyTest extends TestCase {
 
     /**
      * Test get BigInteger implementation.
-     * 
      */
     public void testBigInteger() {
         long t;
@@ -224,7 +221,6 @@ public class GCDProxyTest extends TestCase {
 
     /**
      * Test get ModInteger implementation.
-     * 
      */
     public void testModInteger() {
         long t;
@@ -298,7 +294,6 @@ public class GCDProxyTest extends TestCase {
 
     /**
      * Test get BigRational implementation.
-     * 
      */
     public void testBigRational() {
         BigRational b = new BigRational();
@@ -312,7 +307,6 @@ public class GCDProxyTest extends TestCase {
 
     /**
      * Test get BigComplex implementation.
-     * 
      */
     public void testBigComplex() {
         BigComplex b = new BigComplex();
@@ -326,9 +320,8 @@ public class GCDProxyTest extends TestCase {
 
     /**
      * Test get AlgebraicNumber&lt;BigRational&gt; implementation.
-     * 
      */
-    public void xtestAlgebraicNumberBigRational() {
+    public void testAlgebraicNumberBigRational() {
         BigRational b = new BigRational();
         GenPolynomialRing<BigRational> fac;
         fac = new GenPolynomialRing<BigRational>(b, 1);
@@ -357,7 +350,6 @@ public class GCDProxyTest extends TestCase {
 
     /**
      * Test get AlgebraicNumber&lt;ModInteger&glt; implementation.
-     * 
      */
     public void testAlgebraicNumberModInteger() {
         ModIntegerRing b = new ModIntegerRing(19, true);

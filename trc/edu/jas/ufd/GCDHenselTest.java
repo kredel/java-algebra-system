@@ -66,19 +66,7 @@ public class GCDHenselTest extends TestCase {
     BigInteger cofac;
 
 
-    BigInteger ai;
-
-
-    BigInteger bi;
-
-
-    BigInteger ci;
-
-
-    BigInteger di;
-
-
-    BigInteger ei;
+    //BigInteger ai, bi, ci, di, ei;
 
 
     GenPolynomial<BigInteger> a;
@@ -102,25 +90,7 @@ public class GCDHenselTest extends TestCase {
     GenPolynomial<BigInteger> bc;
 
 
-    GenPolynomial<GenPolynomial<BigInteger>> ar;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> br;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> cr;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> dr;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> er;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> arc;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> brc;
+    GenPolynomial<GenPolynomial<BigInteger>> ar, br, cr, dr, er;
 
 
     int rl = 3;
@@ -144,8 +114,8 @@ public class GCDHenselTest extends TestCase {
     @Override
     protected void setUp() {
         a = b = c = d = e = null;
-        ai = bi = ci = di = ei = null;
-        ar = br = cr = dr = er = null;
+        //ai = bi = ci = di = ei = null;
+        //ar = br = cr = dr = er = null;
         cofac = new BigInteger();
         ufd = new GreatestCommonDivisorHensel<ModInteger>();
         dfac = new GenPolynomialRing<BigInteger>(cofac, rl, to, vars);
@@ -155,8 +125,8 @@ public class GCDHenselTest extends TestCase {
     @Override
     protected void tearDown() {
         a = b = c = d = e = null;
-        ai = bi = ci = di = ei = null;
-        ar = br = cr = dr = er = null;
+        //ai = bi = ci = di = ei = null;
+        //ar = br = cr = dr = er = null;
         ufd = null;
         dfac = null;
     }

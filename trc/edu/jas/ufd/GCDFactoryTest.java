@@ -5,8 +5,6 @@
 package edu.jas.ufd;
 
 
-//import java.util.Map;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -57,8 +55,6 @@ public class GCDFactoryTest extends TestCase {
     }
 
 
-    //private final static int bitlen = 100;
-
     TermOrder to = new TermOrder(TermOrder.INVLEX);
 
 
@@ -71,49 +67,13 @@ public class GCDFactoryTest extends TestCase {
     GenPolynomialRing<GenPolynomial<BigInteger>> rfac;
 
 
-    BigInteger ai;
+    //BigInteger ai, bi, ci, di, ei;
 
 
-    BigInteger bi;
+    GenPolynomial<BigInteger> a, b, c, d, e;
 
 
-    BigInteger ci;
-
-
-    BigInteger di;
-
-
-    BigInteger ei;
-
-
-    GenPolynomial<BigInteger> a;
-
-
-    GenPolynomial<BigInteger> b;
-
-
-    GenPolynomial<BigInteger> c;
-
-
-    GenPolynomial<BigInteger> d;
-
-
-    GenPolynomial<BigInteger> e;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> ar;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> br;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> cr;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> dr;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> er;
+    //GenPolynomial<GenPolynomial<BigInteger>> ar, br, cr, dr, er;
 
 
     int rl = 5;
@@ -134,8 +94,8 @@ public class GCDFactoryTest extends TestCase {
     @Override
     protected void setUp() {
         a = b = c = d = e = null;
-        ai = bi = ci = di = ei = null;
-        ar = br = cr = dr = er = null;
+        //ai = bi = ci = di = ei = null;
+        //ar = br = cr = dr = er = null;
         dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), rl, to);
         cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), rl - 1, to);
         rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac, 1, to);
@@ -145,8 +105,8 @@ public class GCDFactoryTest extends TestCase {
     @Override
     protected void tearDown() {
         a = b = c = d = e = null;
-        ai = bi = ci = di = ei = null;
-        ar = br = cr = dr = er = null;
+        //ai = bi = ci = di = ei = null;
+        //ar = br = cr = dr = er = null;
         dfac = null;
         cfac = null;
         rfac = null;
@@ -155,7 +115,6 @@ public class GCDFactoryTest extends TestCase {
 
     /**
      * Test get BigInteger implementation.
-     * 
      */
     public void testBigInteger() {
         BigInteger bi = new BigInteger();
@@ -169,7 +128,6 @@ public class GCDFactoryTest extends TestCase {
 
     /**
      * Test get ModInteger implementation.
-     * 
      */
     public void testModInteger() {
         ModIntegerRing mi = new ModIntegerRing(19, true);
@@ -188,7 +146,6 @@ public class GCDFactoryTest extends TestCase {
 
     /**
      * Test get BigRational implementation.
-     * 
      */
     public void testBigRational() {
         BigRational b = new BigRational();
@@ -202,7 +159,6 @@ public class GCDFactoryTest extends TestCase {
 
     /**
      * Test get BigComplex implementation.
-     * 
      */
     public void testBigComplex() {
         BigComplex b = new BigComplex();
@@ -216,7 +172,6 @@ public class GCDFactoryTest extends TestCase {
 
     /**
      * Test get AlgebraicNumber&lt;BigRational&gt; implementation.
-     * 
      */
     public void testAlgebraicNumberBigRational() {
         BigRational b = new BigRational();
@@ -248,7 +203,6 @@ public class GCDFactoryTest extends TestCase {
 
     /**
      * Test get AlgebraicNumber&lt;ModInteger&gt; implementation.
-     * 
      */
     public void testAlgebraicNumberModInteger() {
         ModIntegerRing b = new ModIntegerRing(19, true);

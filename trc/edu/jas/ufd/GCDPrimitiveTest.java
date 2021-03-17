@@ -54,8 +54,6 @@ public class GCDPrimitiveTest extends TestCase {
     }
 
 
-    //private final static int bitlen = 100;
-
     GreatestCommonDivisorAbstract<BigInteger> ufd;
 
 
@@ -71,49 +69,13 @@ public class GCDPrimitiveTest extends TestCase {
     GenPolynomialRing<GenPolynomial<BigInteger>> rfac;
 
 
-    BigInteger ai;
+    BigInteger ai, bi, ci, di, ei;
 
 
-    BigInteger bi;
+    GenPolynomial<BigInteger> a, b, c, d, e;
 
 
-    BigInteger ci;
-
-
-    BigInteger di;
-
-
-    BigInteger ei;
-
-
-    GenPolynomial<BigInteger> a;
-
-
-    GenPolynomial<BigInteger> b;
-
-
-    GenPolynomial<BigInteger> c;
-
-
-    GenPolynomial<BigInteger> d;
-
-
-    GenPolynomial<BigInteger> e;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> ar;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> br;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> cr;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> dr;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> er;
+    GenPolynomial<GenPolynomial<BigInteger>> ar, br, cr, dr, er;
 
 
     int rl = 5;
@@ -160,7 +122,6 @@ public class GCDPrimitiveTest extends TestCase {
 
     /**
      * Test base quotioent and remainder.
-     * 
      */
     public void testBaseQR() {
         di = new BigInteger(1);
@@ -212,7 +173,6 @@ public class GCDPrimitiveTest extends TestCase {
 
     /**
      * Test base content and primitive part.
-     * 
      */
     public void testBaseContentPP() {
         di = new BigInteger(1);
@@ -243,10 +203,8 @@ public class GCDPrimitiveTest extends TestCase {
 
     /**
      * Test base gcd.
-     * 
      */
     public void testBaseGcd() {
-
         dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 1, to);
 
         for (int i = 0; i < 5; i++) {
@@ -283,7 +241,6 @@ public class GCDPrimitiveTest extends TestCase {
 
     /**
      * Test recursive quotioent and remainder.
-     * 
      */
     public void testRecursiveQR() {
         di = new BigInteger(1);
@@ -340,7 +297,6 @@ public class GCDPrimitiveTest extends TestCase {
 
     /**
      * Test recursive content and primitive part.
-     * 
      */
     public void testRecursiveContentPP() {
         di = new BigInteger(1);
@@ -369,7 +325,6 @@ public class GCDPrimitiveTest extends TestCase {
 
     /**
      * Test recursive gcd.
-     * 
      */
     public void testRecursiveGCD() {
         di = new BigInteger(1);
@@ -411,7 +366,6 @@ public class GCDPrimitiveTest extends TestCase {
 
     /**
      * Test arbitrary recursive gcd.
-     * 
      */
     public void testArbitraryRecursiveGCD() {
         di = new BigInteger(1);
@@ -453,7 +407,6 @@ public class GCDPrimitiveTest extends TestCase {
 
     /**
      * Test content and primitive part.
-     * 
      */
     public void testContentPP() {
         dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 3, to);
@@ -482,7 +435,6 @@ public class GCDPrimitiveTest extends TestCase {
 
     /**
      * Test gcd 3 variables.
-     * 
      */
     public void testGCD3() {
         dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 3, to);
@@ -521,7 +473,6 @@ public class GCDPrimitiveTest extends TestCase {
 
     /**
      * Test gcd.
-     * 
      */
     public void testGCD() {
         // dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),3,to);
@@ -567,7 +518,6 @@ public class GCDPrimitiveTest extends TestCase {
 
     /**
      * Test gcd field coefficients.
-     * 
      */
     public void testGCDfield() {
         GenPolynomialRing<BigRational> dfac;
@@ -611,7 +561,6 @@ public class GCDPrimitiveTest extends TestCase {
 
     /**
      * Test lcm.
-     * 
      */
     public void testLCM() {
         dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 3, to);
@@ -653,10 +602,8 @@ public class GCDPrimitiveTest extends TestCase {
 
     /**
      * Test co-prime factors.
-     * 
      */
     public void testCoPrime() {
-
         dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 3, to);
 
         a = dfac.random(kl, 3, 2, q);

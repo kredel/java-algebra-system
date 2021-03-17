@@ -66,49 +66,13 @@ public class GCDSubresTest extends TestCase {
     GenPolynomialRing<GenPolynomial<BigInteger>> rfac;
 
 
-    BigInteger ai;
+    BigInteger ai, bi, ci, di, ei;
 
 
-    BigInteger bi;
+    GenPolynomial<BigInteger> a, b, c, d, e;
 
 
-    BigInteger ci;
-
-
-    BigInteger di;
-
-
-    BigInteger ei;
-
-
-    GenPolynomial<BigInteger> a;
-
-
-    GenPolynomial<BigInteger> b;
-
-
-    GenPolynomial<BigInteger> c;
-
-
-    GenPolynomial<BigInteger> d;
-
-
-    GenPolynomial<BigInteger> e;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> ar;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> br;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> cr;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> dr;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> er;
+    GenPolynomial<GenPolynomial<BigInteger>> ar, br, cr, dr, er;
 
 
     int rl = 5;
@@ -157,7 +121,6 @@ public class GCDSubresTest extends TestCase {
      * Test base gcd subresultant.
      */
     public void testBaseGcdSubres() {
-
         ufd = new GreatestCommonDivisorSubres<BigInteger>();
 
         dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 1, to);
@@ -207,7 +170,6 @@ public class GCDSubresTest extends TestCase {
      * Test recursive gcd subresultant.
      */
     public void testRecursiveGCDsubres() {
-
         ufd = new GreatestCommonDivisorSubres<BigInteger>();
 
         di = new BigInteger(1);
@@ -260,7 +222,6 @@ public class GCDSubresTest extends TestCase {
      * Test arbitrary recursive gcd subresultant.
      */
     public void testArbitraryRecursiveGCDsubres() {
-
         ufd = new GreatestCommonDivisorSubres<BigInteger>();
 
         di = new BigInteger(1);
@@ -313,7 +274,6 @@ public class GCDSubresTest extends TestCase {
      * Test gcd subresultant.
      */
     public void testGCDsubres() {
-
         //GreatestCommonDivisorAbstract<BigInteger> ufd_pp; 
         //ufd_pp = ufd;
 
@@ -368,7 +328,6 @@ public class GCDSubresTest extends TestCase {
      * Test base subresultant.
      */
     public void testBaseSubresultant() {
-
         GreatestCommonDivisorSubres<BigInteger> ufd = new GreatestCommonDivisorSubres<BigInteger>();
 
         dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 1, to);
@@ -412,7 +371,6 @@ public class GCDSubresTest extends TestCase {
      * Test recursive subresultant.
      */
     public void testRecursiveSubresultant() {
-
         GreatestCommonDivisorSubres<BigInteger> ufd = new GreatestCommonDivisorSubres<BigInteger>();
 
         di = new BigInteger(1);
@@ -469,7 +427,6 @@ public class GCDSubresTest extends TestCase {
      * Test subresultant.
      */
     public void testSubres() {
-
         GreatestCommonDivisorSubres<BigInteger> ufd = new GreatestCommonDivisorSubres<BigInteger>();
 
         dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 3, to);
@@ -513,7 +470,6 @@ public class GCDSubresTest extends TestCase {
                 assertTrue("res(a,b) = 0 or not const " + d + ", e = " + e + ", a = " + a + ", b = " + b,
                                 d.isZERO() || !d.isConstant());
             }
-
         }
     }
 
@@ -522,7 +478,6 @@ public class GCDSubresTest extends TestCase {
      * Test and compare resultant.
      */
     public void testResultant() {
-
         GreatestCommonDivisorAbstract<BigInteger> ufdm = new GreatestCommonDivisorModular<ModInteger>(true);
         GreatestCommonDivisorSubres<BigInteger> ufds = new GreatestCommonDivisorSubres<BigInteger>();
 

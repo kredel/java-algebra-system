@@ -5,13 +5,6 @@
 package edu.jas.ufd;
 
 
-//import java.util.Map;
-
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
 import edu.jas.poly.GenPolynomial;
@@ -19,12 +12,15 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
 
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
 
 /**
  * GCD Simple PRS algorithm tests with JUnit.
  * @author Heinz Kredel
  */
-
 public class GCDSimpleTest extends TestCase {
 
 
@@ -121,7 +117,6 @@ public class GCDSimpleTest extends TestCase {
      * Test base gcd simple.
      */
     public void testBaseGcdSimple() {
-
         dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 1, to);
 
         for (int i = 0; i < 5; i++) {
@@ -169,7 +164,6 @@ public class GCDSimpleTest extends TestCase {
      * Test recursive gcd simple.
      */
     public void testRecursiveGCDSimple() {
-
         di = new BigInteger(1);
         dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 2, to);
         cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 2 - 1, to);
@@ -222,7 +216,6 @@ public class GCDSimpleTest extends TestCase {
      * Test arbitrary recursive gcd simple.
      */
     public void testArbitraryRecursiveGCDSimple() {
-
         di = new BigInteger(1);
         dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 2, to);
         cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 2 - 1, to);
@@ -275,7 +268,6 @@ public class GCDSimpleTest extends TestCase {
      * Test gcd simple.
      */
     public void testGCDSimple() {
-
         dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 4, to);
 
         for (int i = 0; i < 2; i++) {
@@ -325,7 +317,6 @@ public class GCDSimpleTest extends TestCase {
      * Test base resultant integral coefficients.
      */
     public void testBaseResultant() {
-
         dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 1, to);
 
         GreatestCommonDivisorSimple<BigInteger> ufds = new GreatestCommonDivisorSimple<BigInteger>();
@@ -344,7 +335,7 @@ public class GCDSimpleTest extends TestCase {
                 continue;
             }
             if (c.isConstant()) {
-                c = dfac.univariate(0,1);
+                c = dfac.univariate(0, 1);
             }
             assertTrue("length( c" + i + " ) <> 0", c.length() > 0);
 
@@ -352,7 +343,7 @@ public class GCDSimpleTest extends TestCase {
             //System.out.println("d = " + d);
             e = sres.baseResultant(a, b);
             //System.out.println("e = " + e);
-            assertEquals("d == e: " + d.subtract(e), d.abs().signum(), e.abs().signum() );
+            assertEquals("d == e: " + d.subtract(e), d.abs().signum(), e.abs().signum());
             //assertEquals("d == e: " + d.subtract(e), d, e);
 
             GenPolynomial<BigInteger> ac = a.multiply(c);
@@ -375,7 +366,6 @@ public class GCDSimpleTest extends TestCase {
      * Test recursive resultant simple.
      */
     public void testRecursiveResultantSimple() {
-
         di = new BigInteger(1);
         dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 2, to);
         cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 2 - 1, to);
@@ -399,7 +389,7 @@ public class GCDSimpleTest extends TestCase {
                 continue;
             }
             if (cr.isConstant()) {
-                cr = rfac.univariate(0,1);
+                cr = rfac.univariate(0, 1);
             }
             //System.out.println("cr = " + cr);
             assertTrue("length( cr" + i + " ) <> 0", cr.length() > 0);
@@ -433,9 +423,8 @@ public class GCDSimpleTest extends TestCase {
      * Test gcd example simple.
      */
     public void testGCDExamSimple() {
-
         ufd = new GreatestCommonDivisorModular<ModInteger>();
-        dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), new String[] {"t","x"}, to);
+        dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), new String[] { "t", "x" }, to);
 
         a = dfac.parse("x**3 + x**2 - t * x - t");
         b = dfac.parse("3 * x**2 + 2 * x - t");
