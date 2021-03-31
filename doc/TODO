@@ -91,10 +91,6 @@ partially resolved and completed issues:
 
 - define FieldElem and Field factory interfaces and use them for GB coefficients
 
-- refactor Hensel lifting to ufd package, not possible because of 
-  coefficient replacement trick
-  !must be done some how!
-
 - check correct term order in recursive algorithms,
   in GCD ModEval only univariate cases are used, so term order is not a problem
   in polynomial factorization we force / convert to invlex term order
@@ -102,17 +98,12 @@ partially resolved and completed issues:
 - add assertions to check for number of polynomial variables and term order,
   nvar in GenPolynomial and GenSolvablePolynomial, done
 
-- define quotientRemainder in MonoidElem interface with default implementation, done
-
 - make final variables public (?)
 
 - make hashCode to reuse computed value --> not immutable
 
 - add method bitLength() to Element
 
-- completely switch from svn to git
-
-- remove @usage doc tag
 
 
 resolved and completed issues:
@@ -231,6 +222,16 @@ resolved and completed issues:
 - split AlgebraicNumber to AlgebraicNumberRing factory, done
 
 - obsolete: check usage SDP (Socked Direct Protokol) with Java 7 and InfiniBand
+
+- refactor Hensel lifting to ufd package, not possible because of 
+  coefficient replacement trick
+  is now in ufd package (must be done some how)
+
+- define quotientRemainder in MonoidElem interface with default implementation, done
+
+- completely switch from svn to git
+
+- remove @usage doc tag
 
 
 $Id$
