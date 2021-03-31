@@ -60,10 +60,10 @@ public class GenMatrixTest extends TestCase {
     float q = 0.5f;
 
 
-    int rows = 3+2;
+    int rows = 3+20;
 
 
-    int cols = 3+2;
+    int cols = 3+20;
 
 
     @Override
