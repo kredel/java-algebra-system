@@ -495,7 +495,7 @@ public class PolyGBUtil {
 
     /**
      * Subring generators.
-     * @param A list of generic polynomials in n variables.
+     * @param A list of polynomials in n variables.
      * @return list of polynomials generating the subring of elements of A.
      */
     public static <C extends GcdRingElem<C>> List<GenPolynomial<C>> subRing(List<GenPolynomial<C>> A) {
@@ -503,11 +503,11 @@ public class PolyGBUtil {
             return A;
         }
         GenPolynomialRing<C> pfac = A.get(0).ring;
-        System.out.println("pfac = " + pfac.toScript());
+        logger.debug("pfac = " + pfac.toScript());
         int n = pfac.nvar;
         int k = A.size();
         GenPolynomialRing<C> rfac = pfac.extendLower(k);
-        System.out.println("rfac = " + rfac.toScript());
+        logger.debug("rfac = " + rfac.toScript());
         assert rfac.nvar == n+k : "rfac.nvar == n+k";
         List<GenPolynomial<C>> sr = new ArrayList<GenPolynomial<C>>();
         int i = 0;
@@ -536,22 +536,34 @@ public class PolyGBUtil {
         }
         GenPolynomialRing<C> pfac = A.get(0).ring;
         GenPolynomial<C> m = g;
-        int k = pfac.nvar - g.ring.nvar;
-        if (k != 0) {
+        if (pfac.nvar != g.ring.nvar) {
             m = m.extendLower(pfac,0, 0L);
         } else {
-            throw new IllegalArgumentException("g may not be extended");
+            throw new IllegalArgumentException("g must be extended: " + pfac.nvar + " == " + g.ring.nvar);
         }
         ReductionAbstract<C> rr = new ReductionSeq<C>();
         GenPolynomial<C> r = rr.normalform(A, m);
-        //System.out.println("g = " + g);
-        //System.out.println("m = " + m);
         //System.out.println("r = " + r);
-        GenPolynomialRing<C> cfac = pfac.contract(k+1);
-        System.out.println("cfac = " + cfac.toScript());
+        GenPolynomialRing<C> cfac = pfac.contract(g.ring.nvar);
+        logger.debug("cfac = " + cfac.toScript());
         Map<ExpVector,GenPolynomial<C>> map = r.contract(cfac);
         //System.out.println("map = " + map);
         return map.size() == 1 && map.keySet().contains(g.ring.evzero);
+    }
+
+
+    /**
+     * Subring and membership test.
+     * @param A list of polynomials.
+     * @param g polynomial in n variables.
+     * @return true, if g \in K[A], else false.
+     */
+    public static <C extends GcdRingElem<C>> boolean subRingAndMember(List<GenPolynomial<C>> A, GenPolynomial<C> g) {
+        if (A == null || A.isEmpty()) {
+            return true;
+        }
+        List<GenPolynomial<C>> srg = PolyGBUtil.<C> subRing(A);
+        return PolyGBUtil.<C> subRingMember(srg,g);
     }
 
 }

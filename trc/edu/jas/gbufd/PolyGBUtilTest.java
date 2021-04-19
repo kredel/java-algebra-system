@@ -372,18 +372,25 @@ public class PolyGBUtilTest extends TestCase {
         GenPolynomialRing<BigRational> dfac;
         dfac = new GenPolynomialRing<BigRational>(new BigRational(1), rl, to);
         //System.out.println("dfac = " + dfac);
-        GenPolynomial<BigRational> a, b, c;
+        GenPolynomial<BigRational> a, b, c, d;
         a = dfac.random(kl, ll, el, q).abs();
         b = dfac.random(kl, ll, el, q).abs();
-        c = a.multiply(b).sum(b);
-        List<GenPolynomial<BigRational>> sr = new ArrayList<GenPolynomial<BigRational>>(2);
+        d = a.multiply(b).sum(b);
+        List<GenPolynomial<BigRational>> sr = new ArrayList<GenPolynomial<BigRational>>(3);
         sr.add(a);
         sr.add(b);
         //System.out.println("sr  = " + sr);
         List<GenPolynomial<BigRational>> srg = PolyGBUtil.<BigRational> subRing(sr);
         //System.out.println("srg = " + srg);
-        boolean t = PolyGBUtil.<BigRational> subRingMember(srg, c);
-        assertTrue("c in SR: ", t);
+        boolean t = PolyGBUtil.<BigRational> subRingMember(srg, d);
+        assertTrue("d in SR: ", t);
+
+        c = dfac.random(kl, ll, el+el, q*1.5f).abs();
+        sr.add(c);
+        //System.out.println("sr  = " + sr);
+        d = a.multiply(b).sum(c);
+        t = PolyGBUtil.<BigRational> subRingAndMember(sr, d);
+        assertTrue("d in SR: ", t);
     }
     
 }
