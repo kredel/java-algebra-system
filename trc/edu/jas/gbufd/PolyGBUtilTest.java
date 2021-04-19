@@ -8,10 +8,6 @@ package edu.jas.gbufd;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
@@ -27,6 +23,10 @@ import edu.jas.ufd.GreatestCommonDivisorModEval;
 import edu.jas.ufd.GreatestCommonDivisorModular;
 import edu.jas.ufd.GreatestCommonDivisorSimple;
 import edu.jas.ufd.GreatestCommonDivisorSubres;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -296,7 +296,7 @@ public class PolyGBUtilTest extends TestCase {
         //System.out.println("cr = " + cr);
         assertTrue("deg(c) < deg(a): ", cr.degree(0) <= ar.degree(0) || ar.degree(0) == 0);
         assertTrue("deg(lfcd(c)) < deg(b): ",
-                   cr.leadingBaseCoefficient().degree(0) < b.degree(0) || b.degree(0) == 0);
+                        cr.leadingBaseCoefficient().degree(0) < b.degree(0) || b.degree(0) == 0);
 
         dr = ar.multiply(b);
         //System.out.println("dr = " + dr);
@@ -345,7 +345,7 @@ public class PolyGBUtilTest extends TestCase {
         //System.out.println("cr = " + cr);
         assertTrue("deg(c) < deg(a): ", cr.degree(0) <= ar.degree(0) || ar.degree(0) == 0);
         assertTrue("deg(lfcd(c)) < deg(b): ",
-                   cr.leadingBaseCoefficient().degree(0) < b.degree(0) || b.degree(0) == 0);
+                        cr.leadingBaseCoefficient().degree(0) < b.degree(0) || b.degree(0) == 0);
 
         dr = ar.multiply(b);
         //System.out.println("dr = " + dr);
@@ -364,7 +364,7 @@ public class PolyGBUtilTest extends TestCase {
         assertTrue("deg(c) < deg(a): ", cr.degree(0) < er.degree(0));
     }
 
-    
+
     /**
      * Test sub ring membership.
      */
@@ -385,12 +385,12 @@ public class PolyGBUtilTest extends TestCase {
         boolean t = PolyGBUtil.<BigRational> subRingMember(srg, d);
         assertTrue("d in SR: ", t);
 
-        c = dfac.random(kl, ll, el+el, q*1.5f).abs();
+        c = dfac.random(kl, ll, el + el, q * 1.5f).abs();
         sr.add(c);
         //System.out.println("sr  = " + sr);
         d = a.multiply(b).sum(c);
         t = PolyGBUtil.<BigRational> subRingAndMember(sr, d);
         assertTrue("d in SR: ", t);
     }
-    
+
 }
