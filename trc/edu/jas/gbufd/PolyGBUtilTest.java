@@ -296,7 +296,7 @@ public class PolyGBUtilTest extends TestCase {
         //System.out.println("cr = " + cr);
         assertTrue("deg(c) < deg(a): ", cr.degree(0) <= ar.degree(0) || ar.degree(0) == 0);
         assertTrue("deg(lfcd(c)) < deg(b): ",
-                        cr.leadingBaseCoefficient().degree(0) < b.degree(0) || b.degree(0) == 0);
+                   cr.leadingBaseCoefficient().degree(0) < b.degree(0) || b.degree(0) == 0);
 
         dr = ar.multiply(b);
         //System.out.println("dr = " + dr);
@@ -345,7 +345,7 @@ public class PolyGBUtilTest extends TestCase {
         //System.out.println("cr = " + cr);
         assertTrue("deg(c) < deg(a): ", cr.degree(0) <= ar.degree(0) || ar.degree(0) == 0);
         assertTrue("deg(lfcd(c)) < deg(b): ",
-                        cr.leadingBaseCoefficient().degree(0) < b.degree(0) || b.degree(0) == 0);
+                   cr.leadingBaseCoefficient().degree(0) < b.degree(0) || b.degree(0) == 0);
 
         dr = ar.multiply(b);
         //System.out.println("dr = " + dr);
@@ -373,17 +373,17 @@ public class PolyGBUtilTest extends TestCase {
         dfac = new GenPolynomialRing<BigRational>(new BigRational(1), rl, to);
         //System.out.println("dfac = " + dfac);
         GenPolynomial<BigRational> a, b, c;
-	a = dfac.random(kl, ll, el, q).abs();
-	b = dfac.random(kl, ll, el, q).abs();
-	c = a.sum(b);
+        a = dfac.random(kl, ll, el, q).abs();
+        b = dfac.random(kl, ll, el, q).abs();
+        c = a.multiply(b).sum(b);
         List<GenPolynomial<BigRational>> sr = new ArrayList<GenPolynomial<BigRational>>(2);
         sr.add(a);
-	sr.add(b);
-        System.out.println("sr  = " + sr);
+        sr.add(b);
+        //System.out.println("sr  = " + sr);
         List<GenPolynomial<BigRational>> srg = PolyGBUtil.<BigRational> subRing(sr);
-        System.out.println("srg = " + srg);
-	boolean t = PolyGBUtil.<BigRational> subRingMember(srg, c);
-	assertTrue("c in SR: ", t);
+        //System.out.println("srg = " + srg);
+        boolean t = PolyGBUtil.<BigRational> subRingMember(srg, c);
+        assertTrue("c in SR: ", t);
     }
     
 }
