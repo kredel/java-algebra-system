@@ -7,6 +7,7 @@ package edu.jas.gbufd;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager; 
@@ -18,6 +19,8 @@ import edu.jas.gb.SolvableReductionAbstract;
 import edu.jas.gb.SolvableReductionSeq;
 import edu.jas.gb.WordGroebnerBaseAbstract;
 import edu.jas.gb.WordGroebnerBaseSeq;
+import edu.jas.gb.ReductionAbstract;
+import edu.jas.gb.ReductionSeq;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
@@ -487,6 +490,68 @@ public class PolyGBUtil {
         res[1] = sred.rightNormalform(Q, D, n); // left
         res[0] = Q.get(0);
         return res;
+    }
+
+
+    /**
+     * Subring generators.
+     * @param A list of generic polynomials in n variables.
+     * @return list of polynomials generating the subring of elements of A.
+     */
+    public static <C extends GcdRingElem<C>> List<GenPolynomial<C>> subRing(List<GenPolynomial<C>> A) {
+        if (A == null || A.isEmpty()) {
+            return A;
+        }
+        GenPolynomialRing<C> pfac = A.get(0).ring;
+        System.out.println("pfac = " + pfac);
+	int n = pfac.nvar;
+        int k = A.size();
+	GenPolynomialRing<C> rfac = pfac.extendLower(k);
+        System.out.println("rfac = " + rfac);
+	assert rfac.nvar == n+k : "rfac.nvar == n+k";
+        List<GenPolynomial<C>> sr = new ArrayList<GenPolynomial<C>>();
+	int i = 0;
+        for (GenPolynomial<C> a : A) {
+	    GenPolynomial<C> b = a.extendLower(rfac, 0, 0L);
+	    b = b.subtract(pfac.getONE().extendLower(rfac, i++, 1L));
+            System.out.println("a = " + a);
+            System.out.println("b = " + b);
+	    sr.add(b);
+        }
+	GroebnerBaseAbstract<C> bb = GBFactory.<C> getImplementation(pfac.coFac);
+	List<GenPolynomial<C>> srg = bb.GB(sr);
+        return srg;
+    }
+
+    
+    /**
+     * Subring membership.
+     * @param A list of polynomials generating the subring of elements of A.
+     * @param g polynomial in n variables.
+     * @return true, if g \in A, else false.
+     */
+    public static <C extends GcdRingElem<C>> boolean subRingMember(List<GenPolynomial<C>> A, GenPolynomial<C> g) {
+        if (A == null || A.isEmpty()) {
+            return true;
+        }
+        GenPolynomialRing<C> pfac = A.get(0).ring;
+	GenPolynomial<C> m = g;
+	int k = pfac.nvar - g.ring.nvar;
+	if (k != 0) {
+	    m = m.extendLower(pfac,0, 0L);
+        } else {
+	    throw new IllegalArgumentException("g may not be extended");
+	}
+	ReductionAbstract<C> rr = new ReductionSeq<C>();
+	GenPolynomial<C> r = rr.normalform(A, m);
+        System.out.println("g = " + g);
+        System.out.println("m = " + m);
+        System.out.println("r = " + r);
+        GenPolynomialRing<C> cfac = pfac.contract(k+1);
+        System.out.println("cfac = " + cfac);
+	Map<ExpVector,GenPolynomial<C>> map = r.contract(cfac);
+        System.out.println("map = " + map);
+        return map.size() == 1 && map.keySet().contains(g.ring.evzero);
     }
 
 }
