@@ -4,8 +4,6 @@ issues to consider:
 
 - implement Berlekamp-Zassenhaus for modular factorization
 
-- implement IDEALDIV2 with extGB
-
 - implement Musers multivariate factorization, evtl. with sparse Hensel lifting
 
 - implement real roots with other methods, e.g. after Uspensky or Rolle
@@ -103,6 +101,8 @@ partially resolved and completed issues:
 - make hashCode to reuse computed value --> not immutable
 
 - add method bitLength() to Element
+
+- implement IDEALDIV2 with extGB
 
 
 
