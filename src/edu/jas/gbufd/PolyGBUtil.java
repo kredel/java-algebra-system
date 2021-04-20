@@ -495,7 +495,7 @@ public class PolyGBUtil {
     /**
      * Subring generators.
      * @param A list of polynomials in n variables.
-     * @return list of polynomials generating the subring of elements of A.
+     * @return a Groebner base of polynomials in m &gt; n variables generating the subring of K[A].
      */
     public static <C extends GcdRingElem<C>> List<GenPolynomial<C>> subRing(List<GenPolynomial<C>> A) {
         if (A == null || A.isEmpty()) {
@@ -535,9 +535,9 @@ public class PolyGBUtil {
 
     /**
      * Subring membership.
-     * @param A list of polynomials generating the subring of elements of A.
+     * @param A Groebner base of polynomials in m &gt; n variables generating the subring of elements of K[A].
      * @param g polynomial in n variables.
-     * @return true, if g \in A, else false.
+     * @return true, if g \in K[A], else false.
      */
     public static <C extends GcdRingElem<C>> boolean subRingMember(List<GenPolynomial<C>> A,
                     GenPolynomial<C> g) {
@@ -564,7 +564,7 @@ public class PolyGBUtil {
 
     /**
      * Subring and membership test.
-     * @param A list of polynomials.
+     * @param A list of polynomials in n variables.
      * @param g polynomial in n variables.
      * @return true, if g \in K[A], else false.
      */
