@@ -2074,6 +2074,7 @@ Sub ring generators as Groebner base.
 
 =begin rdoc
 Sub ring member test. list is a Groebner base.
+Test if a \in K[list].
 =end
     def subringmember(list, a)
         sr = list.map { |p| p.elem }; 

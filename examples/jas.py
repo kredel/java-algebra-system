@@ -549,6 +549,7 @@ class Ring:
 
     def subringmember(self, list, a):
         '''Sub ring member test. list is a Groebner base.
+           Test if a \in K[list].
         '''
         sr = [ p.elem for p in list];
         if isinstance(a,RingElem):
