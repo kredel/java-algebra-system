@@ -44,7 +44,7 @@ from edu.jas.gbufd       import GroebnerBasePseudoRecSeq, GroebnerBasePseudoSeq,
                                 SolvableGroebnerBasePseudoRecSeq, WordGroebnerBasePseudoRecSeq,\
                                 RGroebnerBasePseudoSeq, RGroebnerBaseSeq, RReductionSeq,\
                                 GroebnerBaseFGLM, GroebnerBaseWalk,\
-                                CharacteristicSetWu,\
+                                CharacteristicSetWu, PolyGBUtil,\
                                 SolvableSyzygySeq, SyzygySeq
 #from edu.jas.gbmod       import ModGroebnerBaseSeq, ModSolvableGroebnerBaseSeq
 from edu.jas.vector      import GenVector, GenVectorModul,\
@@ -533,6 +533,28 @@ class Ring:
         if not isinstance(a,RingElem):
             a = RingElem(a);
         return a.integrate();
+
+    def subring(self,polystr="",list=None):
+        '''Sub ring generators as Groebner base.
+        '''
+        if list == None:
+           sr = StringReader( polystr );
+           tok = GenPolynomialTokenizer(self.ring,sr);
+           self.list = tok.nextPolynomialList();
+        else:
+           self.list = pylist2arraylist(list,rec=1);
+        sr = PolyGBUtil.subRing(self.list);
+        srr = [ RingElem(a) for a in sr ];
+        return srr;
+
+    def subringmember(self, list, a):
+        '''Sub ring member test. list is a Groebner base.
+        '''
+        sr = [ p.elem for p in list];
+        if isinstance(a,RingElem):
+            a = a.elem;
+        b = PolyGBUtil.subRingMember(sr, a);
+        return b;
 
 
 class Ideal:

@@ -7,10 +7,10 @@ require "examples/jas"
 
 # polynomial examples: subring
 
-r = PolyRing.new( ZM(1152921504606846883), "(x,y,z)", PolyRing.lex );
+#r = PolyRing.new( ZM(1152921504606846883), "(x,y,z)", PolyRing.lex );
 #r = PolyRing.new( CC(), "(x,y,z)", PolyRing.lex );
 ##r = PolyRing.new( ZZ(), "(x,y,z)", PolyRing.lex );
-#r = PolyRing.new( QQ(), "x,y,z", PolyRing.lex );
+r = PolyRing.new( QQ(), "x,y,z", PolyRing.lex );
 puts "Ring: " + str(r);
 puts;
 
