@@ -504,13 +504,23 @@ public class PolyGBUtil {
         GenPolynomialRing<C> pfac = A.get(0).ring;
         logger.debug("pfac = " + pfac.toScript());
         int n = pfac.nvar;
-        int k = A.size();
+        List<GenPolynomial<C>> Ap = new ArrayList<GenPolynomial<C>>();
+        for (GenPolynomial<C> a : A) {
+             if (a == null || a.isZERO() || a.isONE()) {
+                continue;
+            }
+            Ap.add(a);
+        }
+        int k = Ap.size();
+        if (k == 0) {
+            return Ap;
+        }
         GenPolynomialRing<C> rfac = pfac.extendLower(k);
         logger.debug("rfac = " + rfac.toScript());
         assert rfac.nvar == n + k : "rfac.nvar == n+k";
         List<GenPolynomial<C>> sr = new ArrayList<GenPolynomial<C>>();
         int i = 0;
-        for (GenPolynomial<C> a : A) {
+        for (GenPolynomial<C> a : Ap) {
             GenPolynomial<C> b = a.extendLower(rfac, 0, 0L);
             b = b.subtract(pfac.getONE().extendLower(rfac, i++, 1L));
             //System.out.println("a = " + a);

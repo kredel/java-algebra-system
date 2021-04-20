@@ -1616,6 +1616,7 @@ java_import "edu.jas.ufd.GCDFactory";
 java_import "edu.jas.application.FactorFactory";
 java_import "edu.jas.ufd.SquarefreeFactory";
 java_import "edu.jas.integrate.ElementaryIntegration";
+java_import "edu.jas.gbufd.PolyGBUtil";
 
 
 =begin rdoc
@@ -2053,6 +2054,34 @@ Integrate rational function or power series.
             a = RingElem.new(a);
         end
         return a.integrate();
+    end
+
+=begin rdoc
+Sub ring generators as Groebner base.
+=end
+    def subring(polystr="", list=nil)
+        if list == nil
+           sr = StringReader.new( polystr );
+           tok = GenPolynomialTokenizer.new(@ring,sr);
+           @list = tok.nextPolynomialList();
+        else
+           @list = rbarray2arraylist(list,rec=1);
+        end
+        sr = PolyGBUtil.subRing(@list);
+        srr = sr.map { |a| RingElem.new(a) }; 
+        return srr;
+    end
+
+=begin rdoc
+Sub ring member test. list is a Groebner base.
+=end
+    def subringmember(list, a)
+        sr = list.map { |p| p.elem }; 
+        if a.is_a? RingElem
+            a = a.elem;
+        end
+        b = PolyGBUtil.subRingMember(sr, a);
+        return b;
     end
 end
 
