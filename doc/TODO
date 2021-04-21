@@ -14,6 +14,8 @@ issues to consider:
 
 - implement univariate power series composition and power
 
+- setup unit tests for JRuby and Jython methods and examples
+
 - make polynomial chinese remainder generic (?)
 
 - check / test caching results of gcd computation
@@ -35,8 +37,6 @@ issues to consider:
 - implement Boolean with RingElem interface (?)
 
 - refactor method names for groovy operator overloading, make examples for usage
-
-- use Maven/Gradle/Buildr configuration management, Ivy done
 
 
 
@@ -96,6 +96,8 @@ partially resolved and completed issues:
 - add assertions to check for number of polynomial variables and term order,
   nvar in GenPolynomial and GenSolvablePolynomial, done
 
+- use record classes and lambda expressions
+
 - make final variables public (?)
 
 - make hashCode to reuse computed value --> not immutable
@@ -103,6 +105,8 @@ partially resolved and completed issues:
 - add method bitLength() to Element
 
 - implement IDEALDIV2 with extGB
+
+- use Maven/Gradle/Buildr configuration management, Ivy done
 
 
 

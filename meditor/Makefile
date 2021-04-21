@@ -15,6 +15,7 @@ CLASSPATH=$(LIBPATH)/jython.jar:$(MEDITORPATH)/meditor.jar
 # incompatible with jython version
 #BOOTCLASSPATH4="/usr/java/j2sdk1.4.0/jre/lib/rt.jar"
 #	javac -g -source 1.4 -target 1.4 -classpath $(CLASSPATH) -bootclasspath $(BOOTCLASSPATH4) -sourcepath src -d classes src/edu/jas/editorengine/*.java
+BOOTCLASSPATH8=/usr/lib64/jvm/java-1.8.0-openjdk-1.8.0/jre/lib/rt.jar
 
 .SUFFIXES : .class .java .jar 
 .PHONY    : clean
@@ -28,7 +29,7 @@ all: jas-meditor.jar
 
 $(CLASSES): $(FILES)
 	-mkdir classes
-	javac -g -source 1.6 -target 1.6 -classpath $(CLASSPATH) -sourcepath src -d classes src/edu/jas/editorengine/*.java
+	javac -g -source 1.8 -target 1.8 -classpath $(CLASSPATH) -bootclasspath $(BOOTCLASSPATH8) -sourcepath src -d classes src/edu/jas/editorengine/*.java
 
 jas-meditor.jar: $(CLASSES) $(JASPATH)/examples/jas.py manifest.mf services/jscl.editor.EngineFactory
 	-mkdir classes/META-INF
