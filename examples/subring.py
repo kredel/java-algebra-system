@@ -5,15 +5,14 @@
 
 from java.lang import System
 
-from jas import Ring, PolyRing, QQ, ZZ, GF
+from jas import Ring, PolyRing, QQ, ZZ, GF, CC, ZM
 from jas import terminate, startLog
 
 # polynomial examples: subring
 
-#r = Ring( "Mod 1152921504606846883 (x,y,z) L" );
-#r = Ring( "Rat(x,y,z) L" );
-#r = Ring( "C(x,y,z) L" );
-##r = Ring( "Z(x,y,z) L" );
+#r = PolyRing( ZM(1152921504606846883), "(x,y,z)", PolyRing.lex );
+#r = PolyRing( CC(), "(x,y,z)", PolyRing.lex );
+#r = PolyRing( ZZ(), "(x,y,z)", PolyRing.lex );
 r = PolyRing( QQ(), "x,y,z", PolyRing.lex );
 print "Ring: " + str(r);
 print;

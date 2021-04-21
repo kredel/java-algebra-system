@@ -551,8 +551,9 @@ public class PolyGBUtil {
         } else {
             throw new IllegalArgumentException("g must be extended: " + pfac.nvar + " == " + g.ring.nvar);
         }
-        ReductionAbstract<C> rr = new ReductionSeq<C>();
-        GenPolynomial<C> r = rr.normalform(A, m);
+        //ReductionAbstract<C> red = new ReductionSeq<C>();
+        GroebnerBaseAbstract<C> bb = GBFactory.<C> getImplementation(pfac.coFac);
+        GenPolynomial<C> r = bb.red.normalform(A, m);
         //System.out.println("r = " + r);
         GenPolynomialRing<C> cfac = pfac.contract(g.ring.nvar);
         logger.debug("cfac = " + cfac.toScript());
