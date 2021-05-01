@@ -549,7 +549,8 @@ public class PolyGBUtil {
         if (pfac.nvar != g.ring.nvar) {
             m = m.extendLower(pfac, 0, 0L);
         } else {
-            throw new IllegalArgumentException("g must be extended: " + pfac.nvar + " == " + g.ring.nvar);
+            throw new IllegalArgumentException("g must be extended: " + pfac.nvar + " == " + g.ring.nvar
+                                               + " did you mean method subRingAndMember()?");
         }
         //ReductionAbstract<C> red = new ReductionSeq<C>();
         GroebnerBaseAbstract<C> bb = GBFactory.<C> getImplementation(pfac.coFac);
