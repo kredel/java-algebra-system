@@ -296,7 +296,7 @@ public class PolyGBUtilTest extends TestCase {
         //System.out.println("cr = " + cr);
         assertTrue("deg(c) < deg(a): ", cr.degree(0) <= ar.degree(0) || ar.degree(0) == 0);
         assertTrue("deg(lfcd(c)) < deg(b): ",
-                   cr.leadingBaseCoefficient().degree(0) < b.degree(0) || b.degree(0) == 0);
+                        cr.leadingBaseCoefficient().degree(0) < b.degree(0) || b.degree(0) == 0);
 
         dr = ar.multiply(b);
         //System.out.println("dr = " + dr);
@@ -345,7 +345,7 @@ public class PolyGBUtilTest extends TestCase {
         //System.out.println("cr = " + cr);
         assertTrue("deg(c) < deg(a): ", cr.degree(0) <= ar.degree(0) || ar.degree(0) == 0);
         assertTrue("deg(lfcd(c)) < deg(b): ",
-                   cr.leadingBaseCoefficient().degree(0) < b.degree(0) || b.degree(0) == 0);
+                        cr.leadingBaseCoefficient().degree(0) < b.degree(0) || b.degree(0) == 0);
 
         dr = ar.multiply(b);
         //System.out.println("dr = " + dr);
@@ -398,38 +398,38 @@ public class PolyGBUtilTest extends TestCase {
      * Test Chinese remainder theorem, random.
      */
     public void testCRTrandom() {
-        String[] vars = new String[]{ "x", "y", "z" };
+        String[] vars = new String[] { "x", "y", "z" };
         GenPolynomialRing<BigRational> dfac;
         dfac = new GenPolynomialRing<BigRational>(new BigRational(1), rl, to, vars);
         //System.out.println("dfac = " + dfac.toScript());
-        GenPolynomial<BigRational> a, b, c, d;
+        GenPolynomial<BigRational> a, b;
         List<List<GenPolynomial<BigRational>>> F = new ArrayList<List<GenPolynomial<BigRational>>>(2);
-            List<GenPolynomial<BigRational>> F1 = new ArrayList<GenPolynomial<BigRational>>(2);
-            a = dfac.random(kl, ll, el, q).abs();
-            b = dfac.random(kl, ll, el, q).abs();
-            F1.add(a);
-            F1.add(b);
-            F.add(F1);
-            List<GenPolynomial<BigRational>> F2 = new ArrayList<GenPolynomial<BigRational>>(2);
-            a = dfac.random(kl, ll, el, q).abs();
-            b = dfac.random(kl, ll, el, q).abs();
-            F2.add(a);
-            F2.add(b);
-            F.add(F2);
-            //System.out.println("F  = " + F);
-            List<GenPolynomial<BigRational>> A = new ArrayList<GenPolynomial<BigRational>>(2);
-            a = dfac.random(kl/2, ll, el, q).abs();
-            b = dfac.random(kl/2, ll, el, q).abs();
-            A.add(a);
-            A.add(b);
-            //System.out.println("A  = " + A);
-            GenPolynomial<BigRational> h = PolyGBUtil.<BigRational> chineseRemainderTheorem(F, A);
-            //System.out.println("h  = " + h);
-            assertTrue("h == null or deg(h) >= 0: ", (h==null || h.degree() >= 0));
-            if (h == null) {
-                return;
-            }
-            assertTrue("isChineseRemainder " + h, PolyGBUtil.<BigRational> isChineseRemainder(F, A, h));
+        List<GenPolynomial<BigRational>> F1 = new ArrayList<GenPolynomial<BigRational>>(2);
+        a = dfac.random(kl, ll, el, q).abs();
+        b = dfac.random(kl, ll, el, q).abs();
+        F1.add(a);
+        F1.add(b);
+        F.add(F1);
+        List<GenPolynomial<BigRational>> F2 = new ArrayList<GenPolynomial<BigRational>>(2);
+        a = dfac.random(kl, ll, el, q).abs();
+        b = dfac.random(kl, ll, el, q).abs();
+        F2.add(a);
+        F2.add(b);
+        F.add(F2);
+        //System.out.println("F  = " + F);
+        List<GenPolynomial<BigRational>> A = new ArrayList<GenPolynomial<BigRational>>(2);
+        a = dfac.random(kl / 2, ll, el, q).abs();
+        b = dfac.random(kl / 2, ll, el, q).abs();
+        A.add(a);
+        A.add(b);
+        //System.out.println("A  = " + A);
+        GenPolynomial<BigRational> h = PolyGBUtil.<BigRational> chineseRemainderTheorem(F, A);
+        //System.out.println("h  = " + h);
+        assertTrue("h == null or deg(h) >= 0: ", (h == null || h.degree() >= 0));
+        if (h == null) {
+            return;
+        }
+        assertTrue("isChineseRemainder " + h, PolyGBUtil.<BigRational> isChineseRemainder(F, A, h));
     }
 
 
@@ -437,40 +437,40 @@ public class PolyGBUtilTest extends TestCase {
      * Test Chinese remainder theorem, random.
      */
     public void testCRTrandomInt() {
-            String[] vars = new String[]{ "x", "y", "z" };
-            GenPolynomialRing<BigInteger> dfac;
-            dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), rl, to, vars);
-            //System.out.println("dfac = " + dfac.toScript());
-            GenPolynomial<BigInteger> a, b, c, d;
-            List<List<GenPolynomial<BigInteger>>> F = new ArrayList<List<GenPolynomial<BigInteger>>>(2);
-            List<GenPolynomial<BigInteger>> F1 = new ArrayList<GenPolynomial<BigInteger>>(2);
-            a = dfac.random(kl, ll, el, q).abs();
-            b = dfac.random(kl, ll, el, q).abs();
-            F1.add(a);
-            F1.add(b);
-            F.add(F1);
-            List<GenPolynomial<BigInteger>> F2 = new ArrayList<GenPolynomial<BigInteger>>(2);
-            a = dfac.random(kl, ll, el, q).abs();
-            b = dfac.random(kl, ll, el, q).abs();
-            F2.add(a);
-            F2.add(b);
-            F.add(F2);
-            //System.out.println("F  = " + F);
-            List<GenPolynomial<BigInteger>> A = new ArrayList<GenPolynomial<BigInteger>>(2);
-            a = dfac.random(kl/2, ll, el, q).abs();
-            b = dfac.random(kl/2, ll, el, q).abs();
-            A.add(a);
-            A.add(b);
-            //System.out.println("A  = " + A);
-            GenPolynomial<BigInteger> h = PolyGBUtil.<BigInteger> chineseRemainderTheorem(F, A);
-            //System.out.println("h  = " + h);
-            if (h == null) {
-                return;
-            }
-            assertTrue("h == null or deg(h) >= 0: ", (h==null || h.degree() >= 0));
-            boolean t = PolyGBUtil.<BigInteger> isChineseRemainder(F, A, h);
-            System.out.println("t  = " + t);
-            //assertTrue("isChineseRemainder " + h, PolyGBUtil.<BigInteger> isChineseRemainder(F, A, h));
+        String[] vars = new String[] { "x", "y", "z" };
+        GenPolynomialRing<BigInteger> dfac;
+        dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), rl, to, vars);
+        //System.out.println("dfac = " + dfac.toScript());
+        GenPolynomial<BigInteger> a, b;
+        List<List<GenPolynomial<BigInteger>>> F = new ArrayList<List<GenPolynomial<BigInteger>>>(2);
+        List<GenPolynomial<BigInteger>> F1 = new ArrayList<GenPolynomial<BigInteger>>(2);
+        a = dfac.random(kl, ll, el, q).abs();
+        b = dfac.random(kl, ll, el, q).abs();
+        F1.add(a);
+        F1.add(b);
+        F.add(F1);
+        List<GenPolynomial<BigInteger>> F2 = new ArrayList<GenPolynomial<BigInteger>>(2);
+        a = dfac.random(kl, ll, el, q).abs();
+        b = dfac.random(kl, ll, el, q).abs();
+        F2.add(a);
+        F2.add(b);
+        F.add(F2);
+        //System.out.println("F  = " + F);
+        List<GenPolynomial<BigInteger>> A = new ArrayList<GenPolynomial<BigInteger>>(2);
+        a = dfac.random(kl / 2, ll, el, q).abs();
+        b = dfac.random(kl / 2, ll, el, q).abs();
+        A.add(a);
+        A.add(b);
+        //System.out.println("A  = " + A);
+        GenPolynomial<BigInteger> h = PolyGBUtil.<BigInteger> chineseRemainderTheorem(F, A);
+        //System.out.println("h  = " + h);
+        if (h == null) {
+            return;
+        }
+        assertTrue("h == null or deg(h) >= 0: ", (h == null || h.degree() >= 0));
+        boolean t = PolyGBUtil.<BigInteger> isChineseRemainder(F, A, h);
+        System.out.println("t  = " + t);
+        //assertTrue("isChineseRemainder " + h, PolyGBUtil.<BigInteger> isChineseRemainder(F, A, h));
     }
 
 
@@ -478,52 +478,52 @@ public class PolyGBUtilTest extends TestCase {
      * Test Chinese remainder theorem, interpolation.
      */
     public void testCRTLagrange() {
-                String[] vars = new String[]{ "x", "y", "z" };
-                GenPolynomialRing<BigRational> dfac;
-                dfac = new GenPolynomialRing<BigRational>(new BigRational(1), rl, to, vars);
-                //System.out.println("dfac = " + dfac.toScript());
-                GenPolynomial<BigRational> a, b, c, d;
-                List<List<GenPolynomial<BigRational>>> F = new ArrayList<List<GenPolynomial<BigRational>>>(2);
-                List<GenPolynomial<BigRational>> F1 = new ArrayList<GenPolynomial<BigRational>>(3);
-                a = dfac.parse("(x-(2**16-15))");
-                F1.add(a);
-                b = dfac.parse("(y-13)");
-                F1.add(b);
-                c = dfac.parse("(z-169)");
-                F1.add(c);
-                F.add(F1);
-                List<GenPolynomial<BigRational>> F2 = new ArrayList<GenPolynomial<BigRational>>(3);
-                a = dfac.parse("(x-7)");
-                F2.add(a);
-                b = dfac.parse("(y-(2**32-5))");
-                F2.add(b);
-                c = dfac.parse("(z-101)");
-                F2.add(c);
-                F.add(F2);
-                List<GenPolynomial<BigRational>> F3 = new ArrayList<GenPolynomial<BigRational>>(3);
-                a = dfac.parse("(x-17)");
-                F3.add(a);
-                b = dfac.parse("(y-23)");
-                F3.add(b);
-                c = dfac.parse("(z-(2**15-19))");
-                F3.add(c);
-                F.add(F3);
-                //System.out.println("F  = " + F);
-                List<GenPolynomial<BigRational>> A = new ArrayList<GenPolynomial<BigRational>>(2);
-                a = dfac.parse("(4)");
-                b = dfac.parse("(11)");
-                c = dfac.parse("(103)");
-                A.add(a);
-                A.add(b);
-                A.add(c);
-                //System.out.println("A  = " + A);
-                GenPolynomial<BigRational> h = PolyGBUtil.<BigRational> chineseRemainderTheorem(F, A);
-                //System.out.println("h  = " + h);
-                assertTrue("h == null or deg(h) >= 0: ", (h==null || h.degree() >= 0));
-                if (h == null) {
-                    return;
-                }
-                assertTrue("isChineseRemainder " + h, PolyGBUtil.<BigRational> isChineseRemainder(F, A, h));
+        String[] vars = new String[] { "x", "y", "z" };
+        GenPolynomialRing<BigRational> dfac;
+        dfac = new GenPolynomialRing<BigRational>(new BigRational(1), rl, to, vars);
+        //System.out.println("dfac = " + dfac.toScript());
+        GenPolynomial<BigRational> a, b, c;
+        List<List<GenPolynomial<BigRational>>> F = new ArrayList<List<GenPolynomial<BigRational>>>(2);
+        List<GenPolynomial<BigRational>> F1 = new ArrayList<GenPolynomial<BigRational>>(3);
+        a = dfac.parse("(x-(2**16-15))");
+        F1.add(a);
+        b = dfac.parse("(y-13)");
+        F1.add(b);
+        c = dfac.parse("(z-169)");
+        F1.add(c);
+        F.add(F1);
+        List<GenPolynomial<BigRational>> F2 = new ArrayList<GenPolynomial<BigRational>>(3);
+        a = dfac.parse("(x-7)");
+        F2.add(a);
+        b = dfac.parse("(y-(2**32-5))");
+        F2.add(b);
+        c = dfac.parse("(z-101)");
+        F2.add(c);
+        F.add(F2);
+        List<GenPolynomial<BigRational>> F3 = new ArrayList<GenPolynomial<BigRational>>(3);
+        a = dfac.parse("(x-17)");
+        F3.add(a);
+        b = dfac.parse("(y-23)");
+        F3.add(b);
+        c = dfac.parse("(z-(2**15-19))");
+        F3.add(c);
+        F.add(F3);
+        //System.out.println("F  = " + F);
+        List<GenPolynomial<BigRational>> A = new ArrayList<GenPolynomial<BigRational>>(2);
+        a = dfac.parse("(4)");
+        b = dfac.parse("(11)");
+        c = dfac.parse("(103)");
+        A.add(a);
+        A.add(b);
+        A.add(c);
+        //System.out.println("A  = " + A);
+        GenPolynomial<BigRational> h = PolyGBUtil.<BigRational> chineseRemainderTheorem(F, A);
+        //System.out.println("h  = " + h);
+        assertTrue("h == null or deg(h) >= 0: ", (h == null || h.degree() >= 0));
+        if (h == null) {
+            return;
+        }
+        assertTrue("isChineseRemainder " + h, PolyGBUtil.<BigRational> isChineseRemainder(F, A, h));
     }
 
 
@@ -531,11 +531,11 @@ public class PolyGBUtilTest extends TestCase {
      * Test Chinese remainder theorem, interpolation.
      */
     public void testCRTLagrangeInt() {
-        String[] vars = new String[]{ "x", "y", "z" };
+        String[] vars = new String[] { "x", "y", "z" };
         GenPolynomialRing<BigInteger> dfac;
         dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), rl, to, vars);
         //System.out.println("dfac = " + dfac.toScript());
-        GenPolynomial<BigInteger> a, b, c, d;
+        GenPolynomial<BigInteger> a, b, c;
         List<List<GenPolynomial<BigInteger>>> F = new ArrayList<List<GenPolynomial<BigInteger>>>(2);
         List<GenPolynomial<BigInteger>> F1 = new ArrayList<GenPolynomial<BigInteger>>(3);
         a = dfac.parse("(x-(2**16-15))");
@@ -572,7 +572,7 @@ public class PolyGBUtilTest extends TestCase {
         //System.out.println("A  = " + A);
         GenPolynomial<BigInteger> h = PolyGBUtil.<BigInteger> chineseRemainderTheorem(F, A);
         //System.out.println("h  = " + h);
-        assertTrue("h == null or deg(h) >= 0: ", (h==null || h.degree() >= 0));
+        assertTrue("h == null or deg(h) >= 0: ", (h == null || h.degree() >= 0));
         if (h == null) {
             return;
         }
