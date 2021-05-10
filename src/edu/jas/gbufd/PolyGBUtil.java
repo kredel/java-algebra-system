@@ -54,7 +54,7 @@ public class PolyGBUtil {
      * @return true if res(A,B) isContained in ideal(A,B), else false.
      */
     public static <C extends GcdRingElem<C>> boolean isResultant(GenPolynomial<C> A, GenPolynomial<C> B,
-                    GenPolynomial<C> r) {
+                                                                 GenPolynomial<C> r) {
         if (r == null || r.isZERO()) {
             return true;
         }
@@ -78,7 +78,7 @@ public class PolyGBUtil {
      * @return top pseudo remainder of P wrt. A for the appearing variables.
      */
     public static <C extends RingElem<C>> GenPolynomial<C> topPseudoRemainder(List<GenPolynomial<C>> A,
-                    GenPolynomial<C> P) {
+                                                                              GenPolynomial<C> P) {
         if (A == null || A.isEmpty()) {
             return P.monic();
         }
@@ -129,7 +129,7 @@ public class PolyGBUtil {
      * @return pseudo remainder of the leading coefficient of P wrt A.
      */
     public static <C extends RingElem<C>> GenPolynomial<C> topCoefficientPseudoRemainder(
-                    List<GenPolynomial<C>> A, GenPolynomial<C> P) {
+                                                                                         List<GenPolynomial<C>> A, GenPolynomial<C> P) {
         if (A == null || A.isEmpty()) {
             return P.monic();
         }
@@ -190,7 +190,7 @@ public class PolyGBUtil {
      *         ldcf(A)<sup>m'</sup> P = quotient * A + remainder.
      */
     public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<GenPolynomial<C>>> coefficientPseudoRemainder(
-                    GenPolynomial<GenPolynomial<GenPolynomial<C>>> P, GenPolynomial<GenPolynomial<C>> A) {
+                                                                                                                    GenPolynomial<GenPolynomial<GenPolynomial<C>>> P, GenPolynomial<GenPolynomial<C>> A) {
         if (A == null || A.isZERO()) { // findbugs
             throw new ArithmeticException(P + " division by zero " + A);
         }
@@ -247,7 +247,7 @@ public class PolyGBUtil {
      *         ldcf(A)<sup>m'</sup> P = quotient * A + remainder.
      */
     public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<C>> coefficientPseudoRemainderBase(
-                    GenPolynomial<GenPolynomial<C>> P, GenPolynomial<C> A) {
+                                                                                                         GenPolynomial<GenPolynomial<C>> P, GenPolynomial<C> A) {
         if (A == null || A.isZERO()) { // findbugs
             throw new ArithmeticException(P + " division by zero " + A);
         }
@@ -327,7 +327,7 @@ public class PolyGBUtil {
      * @return generators for (A \cap B)
      */
     public static <C extends GcdRingElem<C>> List<GenPolynomial<C>> intersect(GenPolynomialRing<C> pfac,
-                    List<GenPolynomial<C>> A, List<GenPolynomial<C>> B) {
+                                                                              List<GenPolynomial<C>> A, List<GenPolynomial<C>> B) {
         if (A == null || A.isEmpty()) { // (0)
             return B;
         }
@@ -367,8 +367,8 @@ public class PolyGBUtil {
      * @return generators for (A \cap B)
      */
     public static <C extends GcdRingElem<C>> List<GenSolvablePolynomial<C>> intersect(
-                    GenSolvablePolynomialRing<C> pfac, List<GenSolvablePolynomial<C>> A,
-                    List<GenSolvablePolynomial<C>> B) {
+                                                                                      GenSolvablePolynomialRing<C> pfac, List<GenSolvablePolynomial<C>> A,
+                                                                                      List<GenSolvablePolynomial<C>> B) {
         if (A == null || A.isEmpty()) { // (0)
             return B;
         }
@@ -410,8 +410,8 @@ public class PolyGBUtil {
      * @return generators for (A \cap B) if it exists
      */
     public static <C extends GcdRingElem<C>> List<GenWordPolynomial<C>> intersect(
-                    GenWordPolynomialRing<C> pfac, List<GenWordPolynomial<C>> A,
-                    List<GenWordPolynomial<C>> B) {
+                                                                                  GenWordPolynomialRing<C> pfac, List<GenWordPolynomial<C>> A,
+                                                                                  List<GenWordPolynomial<C>> B) {
         if (A == null || A.isEmpty()) { // (0)
             return B;
         }
@@ -464,7 +464,7 @@ public class PolyGBUtil {
      */
     @SuppressWarnings("unchecked")
     public static <C extends GcdRingElem<C>> GenSolvablePolynomial<C>[] quotientRemainder(
-                    GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d) {
+                                                                                          GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d) {
         GenSolvablePolynomial<C>[] res = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[2];
         if (d.isZERO()) {
             throw new RuntimeException("division by zero: " + n + "/" + d);
@@ -506,7 +506,7 @@ public class PolyGBUtil {
         int n = pfac.nvar;
         List<GenPolynomial<C>> Ap = new ArrayList<GenPolynomial<C>>();
         for (GenPolynomial<C> a : A) {
-             if (a == null || a.isZERO() || a.isONE()) {
+            if (a == null || a.isZERO() || a.isONE()) {
                 continue;
             }
             Ap.add(a);
@@ -540,7 +540,7 @@ public class PolyGBUtil {
      * @return true, if g \in K[A], else false.
      */
     public static <C extends GcdRingElem<C>> boolean subRingMember(List<GenPolynomial<C>> A,
-                    GenPolynomial<C> g) {
+                                                                   GenPolynomial<C> g) {
         if (A == null || A.isEmpty()) {
             return true;
         }
@@ -560,7 +560,11 @@ public class PolyGBUtil {
         logger.debug("cfac = " + cfac.toScript());
         Map<ExpVector, GenPolynomial<C>> map = r.contract(cfac);
         //System.out.println("map = " + map);
-        return map.size() == 1 && map.keySet().contains(g.ring.evzero);
+        boolean t = map.size() == 1 && map.keySet().contains(g.ring.evzero);
+        if (! t) {
+            System.out.println("false: map = " + map);
+        }
+        return t;
     }
 
 
@@ -571,12 +575,115 @@ public class PolyGBUtil {
      * @return true, if g \in K[A], else false.
      */
     public static <C extends GcdRingElem<C>> boolean subRingAndMember(List<GenPolynomial<C>> A,
-                    GenPolynomial<C> g) {
+                                                                      GenPolynomial<C> g) {
         if (A == null || A.isEmpty()) {
             return true;
         }
         List<GenPolynomial<C>> srg = PolyGBUtil.<C> subRing(A);
         return PolyGBUtil.<C> subRingMember(srg, g);
+    }
+
+
+    /**
+     * Chinese remainder theorem.
+     * @param F = ( F_i ) list of list of polynomials in n variables.
+     * @param A = ( f_i ) list of polynomials in n variables.
+     * @return p \in \Cap_i (f_i + ideal(F_i)) if it exists, else null.
+     */
+    public static <C extends GcdRingElem<C>> GenPolynomial<C>
+        chineseRemainderTheorem(List<List<GenPolynomial<C>>> F, List<GenPolynomial<C>> A) {
+        if (F == null || F.isEmpty() || A == null || A.isEmpty()) {
+            throw new IllegalArgumentException("F and A may not be empty or null");
+        }
+        int m = F.size();
+        if (m != A.size()) {
+            throw new IllegalArgumentException("size(F) and size(A) must be equal");
+        }
+        GenPolynomialRing<C> pfac = A.get(0).ring;
+        logger.debug("pfac = " + pfac.toScript());
+        GenPolynomialRing<C> rfac = pfac.extend(m);
+        logger.debug("rfac = " + rfac.toScript());
+        GenPolynomial<C> y = rfac.getONE();
+        GenPolynomial<C> f = rfac.getZERO();
+        int n = pfac.nvar;
+        int i = 0;
+        List<GenPolynomial<C>> Fp = new ArrayList<GenPolynomial<C>>(); //m**2?
+        for (List<GenPolynomial<C>> Fi : F) {
+            GenPolynomial<C> Yi = pfac.getONE().extend(rfac, i, 1L);
+            y = y.subtract(Yi);
+            List<GenPolynomial<C>> Fip = new ArrayList<GenPolynomial<C>>(Fi.size());
+            for (GenPolynomial<C> a : Fi) {
+                GenPolynomial<C> b = a.extend(rfac, i, 1L);
+                Fip.add(b);
+                //System.out.println("a = " + a);
+                //System.out.println("b = " + b);
+            }
+            Fp.addAll(Fip);
+            GenPolynomial<C> a = A.get(i);
+            f = f.sum( a.extend(rfac, i, 1L) );
+            //System.out.println("ap = " + a);
+            //System.out.println("fp = " + f);
+            i++;
+        }
+        //System.out.println("y = " + y);
+        Fp.add(y);
+        //System.out.println("f = " + f);
+        GroebnerBaseAbstract<C> bb = GBFactory.<C> getImplementation(pfac.coFac);
+        List<GenPolynomial<C>> Fpp = bb.GB(Fp);
+        //System.out.println("Fpp = " + Fpp);
+        GenPolynomial<C> h = bb.red.normalform(Fpp, f);
+        //System.out.println("h = " + h);
+        List<GenPolynomial<C>> H = new ArrayList<GenPolynomial<C>>();
+        H.add(h);
+        H = PolyUtil.<C> intersect(pfac,H);
+        //System.out.println("H != (): " + (! H.isEmpty()));
+        if (H.isEmpty()) {
+            return null;
+        } else {
+            return H.get(0);
+        }
+    }
+
+
+    /**
+     * Is Chinese remainder.
+     * @param F = ( F_i ) list of list of polynomials in n variables.
+     * @param A = ( f_i ) list of polynomials in n variables.
+     * @param h polynomial in n variables.
+     * @return true if h \in \Cap_i (f_i + ideal(F_i)), else false.
+     */
+    public static <C extends GcdRingElem<C>> boolean
+        isChineseRemainder(List<List<GenPolynomial<C>>> F, List<GenPolynomial<C>> A, GenPolynomial<C> h) {
+        if (h == null) {
+            return false;
+        }
+        if (F == null || F.isEmpty() || A == null || A.isEmpty()) {
+            return false;
+        }
+        if (F.size() != A.size()) {
+            return false;
+        }
+        GenPolynomialRing<C> pfac = h.ring;
+        GroebnerBaseAbstract<C> bb = GBFactory.<C> getImplementation(pfac.coFac);
+        int i = 0;
+        for (List<GenPolynomial<C>> Fi : F) {
+            List<GenPolynomial<C>> Fp = bb.GB(Fi);
+            //System.out.println("Fp = " + Fp);
+            GenPolynomial<C> a = A.get(i);
+            GenPolynomial<C> fi = bb.red.normalform(Fp, h.subtract(a));
+            if (!fi.isZERO()) {
+                System.out.println("Fp = " + Fp + ", Fi = " + Fi);
+                System.out.println("h  = " + h  + ", a  = " + a  + ", fi  = " + fi);
+		if (! pfac.coFac.isField()) {
+		    PseudoReduction<C> pr = new PseudoReductionSeq<C>();
+                    PseudoReductionEntry<C> fz = pr.normalformFactor(Fp, h);
+                    System.out.println("fz = " + fz);
+	        }
+                return false;
+            }
+            i++;
+        }
+        return true;
     }
 
 }

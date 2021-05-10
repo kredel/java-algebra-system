@@ -25,4 +25,9 @@ public class PseudoReductionEntry<C extends RingElem<C>> {
         this.multiplicator = multiplicator;
     }
 
+
+    public String toString() {
+	return " " + multiplicator + " times " + pol;
+    }
+
 }
