@@ -460,7 +460,7 @@ public class PolyGBUtil {
      * @param d second solvable polynomial.
      * @return [ n/d, n - (n/d)*d ]
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings({"cast","unchecked"})
     public static <C extends GcdRingElem<C>> GenSolvablePolynomial<C>[] quotientRemainder(
                     GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d) {
         GenSolvablePolynomial<C>[] res = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[2];
@@ -681,7 +681,7 @@ public class PolyGBUtil {
             if (!fi.isZERO()) {
                 //System.out.println("Fp = " + Fp + ", Fi = " + Fi);
                 //System.out.println("h  = " + h  + ", a  = " + a  + ", fi  = " + fi);
-                System.out.println("h-a = " + h.subtract(a) + ", fi  = " + fi);
+                logger.info("h-a = " + h.subtract(a) + ", fi  = " + fi);
                 return false;
             }
             i++;

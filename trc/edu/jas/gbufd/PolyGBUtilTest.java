@@ -468,8 +468,8 @@ public class PolyGBUtilTest extends TestCase {
             return;
         }
         assertTrue("h == null or deg(h) >= 0: ", (h == null || h.degree() >= 0));
-        boolean t = PolyGBUtil.<BigInteger> isChineseRemainder(F, A, h);
-        System.out.println("t  = " + t);
+        //boolean t = PolyGBUtil.<BigInteger> isChineseRemainder(F, A, h);
+        //System.out.println("t  = " + t);
         //assertTrue("isChineseRemainder " + h, PolyGBUtil.<BigInteger> isChineseRemainder(F, A, h));
     }
 
@@ -576,8 +576,8 @@ public class PolyGBUtilTest extends TestCase {
         if (h == null) {
             return;
         }
-        boolean t = PolyGBUtil.<BigInteger> isChineseRemainder(F, A, h);
-        System.out.println("t  = " + t);
+        //boolean t = PolyGBUtil.<BigInteger> isChineseRemainder(F, A, h);
+        //System.out.println("t  = " + t);
         //assertTrue("isChineseRemainder " + h, PolyGBUtil.<BigInteger> isChineseRemainder(F, A, h));
     }
 
