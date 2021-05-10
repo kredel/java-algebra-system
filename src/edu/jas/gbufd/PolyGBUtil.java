@@ -633,6 +633,9 @@ public class PolyGBUtil {
         //System.out.println("Fpp = " + Fpp);
         GenPolynomial<C> h = bb.red.normalform(Fpp, f);
         //System.out.println("h = " + h);
+        ////PseudoReduction<C> pr = new PseudoReductionSeq<C>();
+        ////PseudoReductionEntry<C> fz = pr.normalformFactor(Fpp, f);
+        ////System.out.println("fz = " + fz);
         List<GenPolynomial<C>> H = new ArrayList<GenPolynomial<C>>();
         H.add(h);
         H = PolyUtil.<C> intersect(pfac,H);
@@ -677,13 +680,9 @@ public class PolyGBUtil {
             GenPolynomial<C> a = A.get(i);
             GenPolynomial<C> fi = bb.red.normalform(Fp, h.subtract(a));
             if (!fi.isZERO()) {
-                System.out.println("Fp = " + Fp + ", Fi = " + Fi);
-                System.out.println("h  = " + h  + ", a  = " + a  + ", fi  = " + fi);
-		if (! pfac.coFac.isField()) {
-		    PseudoReduction<C> pr = new PseudoReductionSeq<C>();
-                    PseudoReductionEntry<C> fz = pr.normalformFactor(Fp, h);
-                    System.out.println("fz = " + fz);
-	        }
+                //System.out.println("Fp = " + Fp + ", Fi = " + Fi);
+                //System.out.println("h  = " + h  + ", a  = " + a  + ", fi  = " + fi);
+                System.out.println("h-a = " + h.subtract(a) + ", fi  = " + fi);
                 return false;
             }
             i++;
