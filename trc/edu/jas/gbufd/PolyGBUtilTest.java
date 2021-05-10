@@ -523,4 +523,59 @@ public class PolyGBUtilTest extends TestCase {
                 assertTrue("isChineseRemainder " + h, PolyGBUtil.<BigRational> isChineseRemainder(F, A, h));
     }
 
+
+    /**
+     * Test Chinese remainder theorem, interpolation.
+     */
+    public void testCRTLagrangeInt() {
+        String[] vars = new String[]{ "x", "y", "z" };
+        GenPolynomialRing<BigInteger> dfac;
+        dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), rl, to, vars);
+        //System.out.println("dfac = " + dfac.toScript());
+        GenPolynomial<BigInteger> a, b, c, d;
+        List<List<GenPolynomial<BigInteger>>> F = new ArrayList<List<GenPolynomial<BigInteger>>>(2);
+        List<GenPolynomial<BigInteger>> F1 = new ArrayList<GenPolynomial<BigInteger>>(3);
+        a = dfac.parse("(x-(2**16-15))");
+        F1.add(a);
+        b = dfac.parse("(y-13)");
+        F1.add(b);
+        c = dfac.parse("(z-169)");
+        F1.add(c);
+        F.add(F1);
+        List<GenPolynomial<BigInteger>> F2 = new ArrayList<GenPolynomial<BigInteger>>(3);
+        a = dfac.parse("(x-7)");
+        F2.add(a);
+        b = dfac.parse("(y-(2**32-5))");
+        F2.add(b);
+        c = dfac.parse("(z-101)");
+        F2.add(c);
+        F.add(F2);
+        List<GenPolynomial<BigInteger>> F3 = new ArrayList<GenPolynomial<BigInteger>>(3);
+        a = dfac.parse("(x-17)");
+        F3.add(a);
+        b = dfac.parse("(y-23)");
+        F3.add(b);
+        c = dfac.parse("(z-(2**15-19))");
+        F3.add(c);
+        F.add(F3);
+        System.out.println("F  = " + F);
+        List<GenPolynomial<BigInteger>> A = new ArrayList<GenPolynomial<BigInteger>>(2);
+        a = dfac.parse("(4)");
+        b = dfac.parse("(11)");
+        c = dfac.parse("(103)");
+        A.add(a);
+        A.add(b);
+        A.add(c);
+        System.out.println("A  = " + A);
+        GenPolynomial<BigInteger> h = PolyGBUtil.<BigInteger> chineseRemainderTheorem(F, A);
+        System.out.println("h  = " + h);
+        assertTrue("h == null or deg(h) >= 0: ", (h==null || h.degree() >= 0));
+        if (h == null) {
+            return;
+        }
+        boolean t = PolyGBUtil.<BigInteger> isChineseRemainder(F, A, h);
+        System.out.println("t  = " + t);
+        //assertTrue("isChineseRemainder " + h, PolyGBUtil.<BigInteger> isChineseRemainder(F, A, h));
+    }
+
 }

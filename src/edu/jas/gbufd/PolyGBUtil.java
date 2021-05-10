@@ -664,6 +664,11 @@ public class PolyGBUtil {
             return false;
         }
         GenPolynomialRing<C> pfac = h.ring;
+        if (! pfac.coFac.isField()) {
+            //System.out.println("pfac = " + pfac.toScript());
+            logger.error("only for field coefficients: " + pfac.toScript());
+            //throw new IllegalArgumentException("only for field coefficients: " + pfac.toScript());
+        }
         GroebnerBaseAbstract<C> bb = GBFactory.<C> getImplementation(pfac.coFac);
         int i = 0;
         for (List<GenPolynomial<C>> Fi : F) {
