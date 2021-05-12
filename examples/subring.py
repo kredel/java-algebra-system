@@ -20,7 +20,7 @@ print;
 #[one,x,y,z] = r.gens();
 
 a = r.random(3,4);
-b = r.random(3,4);
+b = r.random(2,3);
 c = abs( r.random(3,3) );
 
 print "a = ", a;

@@ -572,13 +572,129 @@ public class PolyGBUtilTest extends TestCase {
         //System.out.println("A  = " + A);
         GenPolynomial<BigInteger> h = PolyGBUtil.<BigInteger> chineseRemainderTheorem(F, A);
         //System.out.println("h  = " + h);
-        assertTrue("h == null or deg(h) >= 0: ", (h == null || h.degree() >= 0));
+        assertTrue("deg(h) > 0: ", h.degree() > 0);
         if (h == null) {
             return;
         }
         //boolean t = PolyGBUtil.<BigInteger> isChineseRemainder(F, A, h);
         //System.out.println("t  = " + t);
         //assertTrue("isChineseRemainder " + h, PolyGBUtil.<BigInteger> isChineseRemainder(F, A, h));
+    }
+
+
+    /**
+     * Test Chinese remainder theorem, interpolation.
+     */
+    public void testCRTnterpolation() {
+        String[] vars = new String[] { "x", "y", "z" };
+        BigRational cfac = new BigRational(1);
+        GenPolynomialRing<BigRational> dfac;
+        dfac = new GenPolynomialRing<BigRational>(cfac, rl, to, vars);
+        //System.out.println("dfac = " + dfac.toScript());
+        BigRational a, b, c;
+        List<List<BigRational>> F = new ArrayList<List<BigRational>>(3);
+        List<BigRational> F1 = new ArrayList<BigRational>(3);
+        a = cfac.parse("65521");
+        F1.add(a);
+        b = cfac.parse("13");
+        F1.add(b);
+        c = cfac.parse("169");
+        F1.add(c);
+        F.add(F1);
+        List<BigRational> F2 = new ArrayList<BigRational>(3);
+        a = cfac.parse("7");
+        F2.add(a);
+        b = cfac.parse("4294967291");
+        F2.add(b);
+        c = cfac.parse("101");
+        F2.add(c);
+        F.add(F2);
+        List<BigRational> F3 = new ArrayList<BigRational>(3);
+        a = cfac.parse("17");
+        F3.add(a);
+        b = cfac.parse("23");
+        F3.add(b);
+        c = cfac.parse("32749");
+        F3.add(c);
+        F.add(F3);
+        List<BigRational> F4 = new ArrayList<BigRational>(3);
+        a = cfac.parse("27");
+        F4.add(a);
+        b = cfac.parse("33");
+        F4.add(b);
+        c = cfac.parse("42749");
+        F4.add(c);
+        F.add(F4);
+        List<BigRational> F5 = new ArrayList<BigRational>(3);
+        a = cfac.parse("37");
+        F5.add(a);
+        b = cfac.parse("43");
+        F5.add(b);
+        c = cfac.parse("22749");
+        F5.add(c);
+        F.add(F5);
+        List<BigRational> F6 = new ArrayList<BigRational>(3);
+        a = cfac.parse("47");
+        F6.add(a);
+        b = cfac.parse("53");
+        F6.add(b);
+        c = cfac.parse("12749");
+        F6.add(c);
+        F.add(F6);
+        List<BigRational> F7 = new ArrayList<BigRational>(3);
+        a = cfac.parse("57");
+        F7.add(a);
+        b = cfac.parse("63");
+        F7.add(b);
+        c = cfac.parse("2749");
+        F7.add(c);
+        F.add(F7);
+        List<BigRational> F8 = new ArrayList<BigRational>(3);
+        a = cfac.parse("67");
+        F8.add(a);
+        b = cfac.parse("93");
+        F8.add(b);
+        c = cfac.parse("749");
+        F8.add(c);
+        F.add(F8);
+        List<BigRational> F9 = new ArrayList<BigRational>(3);
+        a = cfac.parse("77");
+        F9.add(a);
+        b = cfac.parse("103");
+        F9.add(b);
+        c = cfac.parse("49");
+        F9.add(c);
+        F.add(F9);
+        //System.out.println("F  = " + F);
+        List<BigRational> A = new ArrayList<BigRational>(3);
+        a = cfac.parse("4");
+        b = cfac.parse("11");
+        c = cfac.parse("103");
+        A.add(a);
+        A.add(b);
+        A.add(c);
+        c = cfac.parse("13");
+        A.add(c);
+        c = cfac.parse("23");
+        A.add(c);
+        c = cfac.parse("91");
+        A.add(c);
+        c = cfac.parse("81");
+        A.add(c);
+        c = cfac.parse("72");
+        A.add(c);
+        c = cfac.parse("102");
+        A.add(c);
+        //System.out.println("A  = " + A);
+        GenPolynomial<BigRational> h = PolyGBUtil.<BigRational> CRTInterpolation(dfac, F, A);
+        //System.out.println("h  = " + h);
+        assertTrue("deg(h) > 0: ", h.degree() > 0);
+        if (h == null) {
+            return;
+        }
+        //boolean t = PolyGBUtil.<BigRational> isChineseRemainder(F, A, h);
+        //System.out.println("t  = " + t);
+        //assertTrue("isChineseRemainder " + h, PolyGBUtil.<BigRational> isChineseRemainder(F, A, h));
     }
 
 }

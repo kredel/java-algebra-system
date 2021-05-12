@@ -17,7 +17,7 @@ puts;
 #one,x,y,z = r.gens();
 
 a = r.random(3,4);
-b = r.random(3,4);
+b = r.random(2,3);
 c = r.random(3,3).abs();
 
 puts "a = " + str(a);

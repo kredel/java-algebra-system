@@ -689,4 +689,52 @@ public class PolyGBUtil {
         return true;
     }
 
+
+    /**
+     * Chinese remainder theorem, interpolation.
+     * @param fac polynomial ring over K in n variables.
+     * @param E = ( E_i ) list of list of elements of K, the evaluation points.
+     * @param V = ( f_i ) list of elements of K, the evaluation values.
+     * @return p \in K[X1,...,Xn], with p(E_i) = f_i, if it exists, else null.
+     */
+    @SuppressWarnings({"cast","unchecked"})
+    public static <C extends GcdRingElem<C>> GenPolynomial<C> CRTInterpolation(
+                  GenPolynomialRing<C> fac, List<List<C>> E, List<C> V) {
+        if (E == null || E.isEmpty() || V == null || V.isEmpty()) {
+            throw new IllegalArgumentException("E and V may not be empty or null");
+        }
+        int m = E.size();
+        if (m != V.size()) {
+            throw new IllegalArgumentException("size(E) and size(V) must be equal");
+        }
+        //System.out.println("fac = " + fac.toScript());
+        List<List<GenPolynomial<C>>> F = new ArrayList<List<GenPolynomial<C>>>(E.size());
+        List<GenPolynomial<C>> A = new ArrayList<GenPolynomial<C>>(V.size());
+        List<GenPolynomial<C>> gen = (List<GenPolynomial<C>>) fac.univariateList();
+        //System.out.println("gen = " + gen);
+        int i = 0;
+        for (List<C> Ei : E) {
+            List<GenPolynomial<C>> Fi = new ArrayList<GenPolynomial<C>>();
+            int j = 0;
+            for (C eij : Ei) {
+                GenPolynomial<C> ep = gen.get(j);
+                ep = ep.subtract( fac.valueOf(eij) );
+                Fi.add(ep);
+                j++;
+            }
+            F.add(Fi);
+            //GenPolynomial<C> ap = gen.get(i);
+            C ai = V.get(i);
+            GenPolynomial<C> ap = fac.valueOf(ai);
+            A.add(ap);
+            i++;
+        }
+        //System.out.println("F = " + F);
+        //System.out.println("A = " + A);
+        GenPolynomial<C> p = PolyGBUtil. <C>chineseRemainderTheorem(F,A);
+        //System.out.println("p = " + p);
+        //System.out.println("t = " + PolyGBUtil. <C>isChineseRemainder(F,A,p));
+        return p;
+    }
+
 }
