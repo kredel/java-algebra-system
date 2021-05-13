@@ -47,10 +47,43 @@ puts;
 puts "Chinese remainder time = " + str(t) + " milliseconds" ;
 puts;
 
-#cc = a + b * c;
-#tt = r.subringmember(dd, cc);
-#puts "sub ring member = " + str(tt);
-#puts;
+
+# now, used for interpolation
+
+cr = r.ring.coFac;
+puts "cr = " + str(cr.toScriptFactory());
+
+a = cr.random(3);
+b = cr.random(4);
+c = cr.random(3).abs();
+
+puts "a = " + str(a);
+puts "b = " + str(b);
+puts "c = " + str(c);
+puts;
+
+oo = cr.getONE();
+ff = [[a,b,c], [a.sum(oo),b,c], [a,b.sum(oo),c], [a,b,c.sum(oo)]];
+puts "ff = " + str(ff.map{ |f| f.map{ |a| a.to_s } });
+puts;
+
+a = 2/3;
+b = 3/7;
+c = 5;
+d = 1/27;
+rr = [a, b, c, d];
+puts "ff = " + str(rr.map{ |f| f.to_s });
+puts;
+
+t = System.currentTimeMillis();
+dd = r.CRTinterpol("", ff, rr);
+t = System.currentTimeMillis() - t;
+
+puts "if existing, interpolated polynomial = " + str(dd);
+puts;
+
+puts "CRT interpolation time = " + str(t) + " milliseconds" ;
+puts;
 
 #startLog();
 terminate();

@@ -722,8 +722,8 @@ public class PolyGBUtil {
                 j++;
             }
             F.add(Fi);
-            //GenPolynomial<C> ap = gen.get(i);
-            C ai = V.get(i);
+            String ai = " " + V.get(i); // (sic) .toString() not possible
+            //System.out.println("ai = " + ai);
             GenPolynomial<C> ap = fac.valueOf(ai);
             A.add(ap);
             i++;

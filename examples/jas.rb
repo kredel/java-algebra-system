@@ -2110,6 +2110,33 @@ Chinese remainder theorem.
         end
         return h;
     end
+
+=begin rdoc
+Chinese remainder theorem, interpolation.
+=end
+    def CRTinterpol(polystr="", list=nil, rem=nil)
+        if list == nil
+           sr = StringReader.new( polystr );
+           tok = GenPolynomialTokenizer.new(@ring,sr);
+           @list = tok.nextPolynomialList();
+        else
+           @list = rbarray2arraylist(list,nil,rec=2);
+        end
+        if rem == nil
+           raise ArgumentError, "No remeinders given."
+        else
+           @remlist = rbarray2arraylist(rem,nil,rec=1);
+        end
+        #puts "ring = " + str(@ring.toScript());
+        #puts "list = " + str(@list);
+        #puts "remlist = " + str(@remlist);
+        #puts
+        h = PolyGBUtil.CRTInterpolation(@ring, @list, @remlist);
+        if h != nil
+           h = RingElem.new(h);
+        end
+        return h;
+    end
 end
 
 
