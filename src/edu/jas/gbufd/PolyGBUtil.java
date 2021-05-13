@@ -605,29 +605,28 @@ public class PolyGBUtil {
         logger.debug("rfac = " + rfac.toScript());
         GenPolynomial<C> y = rfac.getONE();
         GenPolynomial<C> f = rfac.getZERO();
-        //int n = pfac.nvar;
         int i = 0;
         List<GenPolynomial<C>> Fp = new ArrayList<GenPolynomial<C>>(); //m**2?
+        //System.out.println("A = " + A);
         for (List<GenPolynomial<C>> Fi : F) {
             GenPolynomial<C> Yi = pfac.getONE().extend(rfac, i, 1L);
             y = y.subtract(Yi);
             List<GenPolynomial<C>> Fip = new ArrayList<GenPolynomial<C>>(Fi.size());
+            //System.out.println("Fi = " + Fi);
             for (GenPolynomial<C> a : Fi) {
                 GenPolynomial<C> b = a.extend(rfac, i, 1L);
                 Fip.add(b);
-                //System.out.println("a = " + a);
-                //System.out.println("b = " + b);
             }
+            //System.out.println("Fip = " + Fip);
             Fp.addAll(Fip);
             GenPolynomial<C> a = A.get(i);
+            //System.out.println("a = " + a);
             f = f.sum(a.extend(rfac, i, 1L));
-            //System.out.println("ap = " + a);
-            //System.out.println("fp = " + f);
             i++;
         }
-        //System.out.println("y = " + y);
         Fp.add(y);
         //System.out.println("f = " + f);
+        //System.out.println("Fp = " + Fp);
         GroebnerBaseAbstract<C> bb = GBFactory.<C> getImplementation(pfac.coFac);
         List<GenPolynomial<C>> Fpp = bb.GB(Fp);
         //System.out.println("Fpp = " + Fpp);
@@ -693,7 +692,7 @@ public class PolyGBUtil {
     /**
      * Chinese remainder theorem, interpolation.
      * @param fac polynomial ring over K in n variables.
-     * @param E = ( E_i ) list of list of elements of K, the evaluation points.
+     * @param E = ( E_i ), E_i = ( e_ij ) list of list of elements of K, the evaluation points.
      * @param V = ( f_i ) list of elements of K, the evaluation values.
      * @return p \in K[X1,...,Xn], with p(E_i) = f_i, if it exists, else null.
      */

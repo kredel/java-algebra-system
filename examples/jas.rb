@@ -2084,6 +2084,32 @@ Test if a \in K[list].
         b = PolyGBUtil.subRingMember(sr, a);
         return b;
     end
+
+=begin rdoc
+Chinese remainder theorem.
+=end
+    def CRT(polystr="", list=nil, rem=nil)
+        if list == nil
+           sr = StringReader.new( polystr );
+           tok = GenPolynomialTokenizer.new(@ring,sr);
+           @list = tok.nextPolynomialList();
+        else
+           @list = rbarray2arraylist(list,nil,rec=2);
+        end
+        if rem == nil
+           raise ArgumentError, "No remeinders given."
+        else
+           @remlist = rbarray2arraylist(rem,nil,rec=1);
+        end
+        #puts "list = " + str(@list);
+        #puts "remlist = " + str(@remlist);
+        #puts
+        h = PolyGBUtil.chineseRemainderTheorem(@list, @remlist);
+        if h != nil
+           h = RingElem.new(h);
+        end
+        return h;
+    end
 end
 
 
