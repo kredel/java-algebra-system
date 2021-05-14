@@ -34,7 +34,7 @@ br = 3*one;
 cr = z - y;
 dr = 27*one;
 rr = [ar, br, cr, dr];
-puts "ff = " + str(rr.map{ |f| f.to_s });
+puts "rr = " + str(rr.map{ |f| f.to_s });
 puts;
 
 t = System.currentTimeMillis();

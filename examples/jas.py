@@ -557,6 +557,28 @@ class Ring:
         b = PolyGBUtil.subRingMember(sr, a);
         return b;
 
+    def CRT(self,polystr="", list=None, rem=None):
+        '''Chinese remainder theorem.
+        '''
+        if list == None:
+           sr = StringReader( polystr );
+           tok = GenPolynomialTokenizer(self.ring,sr);
+           self.list = tok.nextPolynomialList();
+        else:
+           self.list = pylist2arraylist(list,rec=2);
+        if rem == None:
+           raise ValueError, "No remeinders given."
+        else:
+           self.remlist = pylist2arraylist(rem,rec=1);
+        #print "list = " + str(self.list);
+        #print "remlist = " + str(self.remlist);
+        #print
+        h = PolyGBUtil.chineseRemainderTheorem(self.list, self.remlist);
+        if h != None:
+            h = RingElem(h);
+        return h;
+
+
 
 class Ideal:
     '''Represents a JAS polynomial ideal: PolynomialList and Ideal.
