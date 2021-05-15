@@ -567,7 +567,7 @@ class Ring:
         else:
            self.list = pylist2arraylist(list,rec=2);
         if rem == None:
-           raise ValueError, "No remeinders given."
+           raise ValueError, "No remainders given."
         else:
            self.remlist = pylist2arraylist(rem,rec=1);
         #print "list = " + str(self.list);
@@ -578,6 +578,27 @@ class Ring:
             h = RingElem(h);
         return h;
 
+    def CRTinterpol(self,polystr="", list=None, rem=None):
+        '''Chinese remainder theorem, interpolation.
+        '''
+        if list == None:
+           sr = StringReader( polystr );
+           tok = GenPolynomialTokenizer(self.ring,sr);
+           self.list = tok.nextPolynomialList();
+        else:
+           self.list = pylist2arraylist(list,rec=2);
+        if rem == None:
+           raise ValueError, "No remainders given."
+        else:
+           self.remlist = pylist2arraylist(rem,rec=1);
+        #print "ring = " + str(self.ring);
+        #print "list = " + str(self.list);
+        #print "remlist = " + str(self.remlist);
+        #print
+        h = PolyGBUtil.CRTInterpolation(self.ring, self.list, self.remlist);
+        if h != None:
+            h = RingElem(h);
+        return h;
 
 
 class Ideal:

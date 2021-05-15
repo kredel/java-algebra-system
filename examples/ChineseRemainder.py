@@ -58,5 +58,37 @@ cr = r.ring.coFac;
 print "cr = " + str(cr.toScriptFactory());
 print;
 
+a = cr.random(3);
+b = cr.random(4);
+c = cr.random(3).abs();
+
+print "a = " + str(a);
+print "b = " + str(b);
+print "c = " + str(c);
+print;
+
+oo = cr.getONE();
+ff = [[a,b,c], [a.sum(oo),b,c], [a,b.sum(oo),c], [a,b,c.sum(oo)]];
+print "ff = " + str([ str([ str(a) for a in f ]) for f in ff ]);
+print;
+
+a = (2,3);
+b = (3,7);
+c = 5;
+d = (1,27);
+rr = [a, b, c, d];
+print "rr = " + str([ str(a) for a in rr]);
+print;
+
+t = System.currentTimeMillis();
+dd = r.CRTinterpol("", ff, rr);
+t = System.currentTimeMillis() - t;
+
+print "if existing, interpolated polynomial = " + str(dd);
+print;
+
+print "CRT interpolation time = " + str(t) + " milliseconds" ;
+print;
+
 #startLog();
 terminate();

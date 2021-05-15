@@ -2097,7 +2097,7 @@ Chinese remainder theorem.
            @list = rbarray2arraylist(list,nil,rec=2);
         end
         if rem == nil
-           raise ArgumentError, "No remeinders given."
+           raise ArgumentError, "No remainders given."
         else
            @remlist = rbarray2arraylist(rem,nil,rec=1);
         end
