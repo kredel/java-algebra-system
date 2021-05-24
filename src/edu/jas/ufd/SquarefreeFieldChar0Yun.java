@@ -21,7 +21,8 @@ import edu.jas.structure.RingFactory;
 
 
 /**
- * Squarefree decomposition for coefficient fields of characteristic 0, algorithm of Yun.
+ * Squarefree decomposition for coefficient fields of characteristic 0,
+ * algorithm of Yun.
  * @author Heinz Kredel
  */
 
@@ -38,7 +39,7 @@ public class SquarefreeFieldChar0Yun<C extends GcdRingElem<C>> extends Squarefre
      * Constructor.
      */
     public SquarefreeFieldChar0Yun(RingFactory<C> fac) {
-        super(fac); 
+        super(fac);
     }
 
 
@@ -106,7 +107,7 @@ public class SquarefreeFieldChar0Yun<C extends GcdRingElem<C>> extends Squarefre
         T = engine.baseGcd(A, Tp);
         T = T.monic();
         if (T.isConstant()) {
-            sfactors.put(A, k); 
+            sfactors.put(A, k);
             return sfactors;
         }
         W = PolyUtil.<C> basePseudoDivide(A, T);
@@ -116,10 +117,10 @@ public class SquarefreeFieldChar0Yun<C extends GcdRingElem<C>> extends Squarefre
         Y = PolyUtil.<C> basePseudoDivide(Tp, T);
         GenPolynomial<C> Wp = PolyUtil.<C> baseDeriviative(W);
         Z = Y.subtract(Wp);
-        while (! Z.isZERO()) {
-	    GenPolynomial<C> g = engine.baseGcd(W, Z);
+        while (!Z.isZERO()) {
+            GenPolynomial<C> g = engine.baseGcd(W, Z);
             g = g.monic();
-	    if (!g.isONE()) {
+            if (!g.isONE()) {
                 sfactors.put(g, k);
             }
             W = PolyUtil.<C> basePseudoDivide(W, g);
@@ -204,7 +205,7 @@ public class SquarefreeFieldChar0Yun<C extends GcdRingElem<C>> extends Squarefre
             et = et.subst(0, 1);
             tr = pfac.valueOf(et);
             sfactors.put(tr, ep);
-	    //P.length == 1 ??
+            //P.length == 1 ??
         }
         // factors of recursive polynomial
         GenPolynomial<GenPolynomial<C>> Tp, T, W, Y, Z;
@@ -213,7 +214,7 @@ public class SquarefreeFieldChar0Yun<C extends GcdRingElem<C>> extends Squarefre
         T = engine.recursiveUnivariateGcd(P, Tp);
         T = PolyUtil.<C> monic(T);
         if (T.isConstant()) {
-            sfactors.put(P, k); 
+            sfactors.put(P, k);
             return sfactors;
         }
         W = PolyUtil.<C> recursivePseudoDivide(P, T);
@@ -224,10 +225,10 @@ public class SquarefreeFieldChar0Yun<C extends GcdRingElem<C>> extends Squarefre
         GenPolynomial<GenPolynomial<C>> Wp = PolyUtil.<C> recursiveDeriviative(W);
         Z = Y.subtract(Wp);
 
-        while (! Z.isZERO()) {
+        while (!Z.isZERO()) {
             GenPolynomial<GenPolynomial<C>> g = engine.recursiveGcd(W, Z);
             g = PolyUtil.<C> monic(g);
-	    if (!g.isONE()) {
+            if (!g.isONE()) {
                 sfactors.put(g, k);
             }
             W = PolyUtil.<C> recursivePseudoDivide(W, g);
