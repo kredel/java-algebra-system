@@ -90,7 +90,7 @@ public class SquarefreeRatTest extends TestCase {
     GreatestCommonDivisorAbstract<BigRational> ufd;
 
 
-    SquarefreeFieldChar0<BigRational> sqf;
+    SquarefreeFieldChar0<BigRational> sqf, sqfy;
 
 
     GenPolynomialRing<BigRational> dfac;
@@ -119,9 +119,11 @@ public class SquarefreeRatTest extends TestCase {
         //ufd = GCDFactory.<BigRational> getImplementation(fac);
         ufd = GCDFactory.getProxy(fac);
         sqf = new SquarefreeFieldChar0<BigRational>(fac);
+        sqfy = new SquarefreeFieldChar0Yun<BigRational>(fac);
 
         SquarefreeAbstract<BigRational> sqff = SquarefreeFactory.getImplementation(fac);
         //System.out.println("sqf  = " + sqf);
+        //System.out.println("sqfy = " + sqfy);
         //System.out.println("sqff = " + sqff);
         assertEquals("sqf == sqff ", sqf.getClass(), sqff.getClass());
 
@@ -140,11 +142,9 @@ public class SquarefreeRatTest extends TestCase {
 
     /**
      * Test base squarefree.
-     * 
      */
     public void testBaseSquarefree() {
         //System.out.println("\nbase:");
-
         dfac = new GenPolynomialRing<BigRational>(fac, 1, to, rvars);
 
         a = dfac.random(kl, ll, el + 2, q);
@@ -153,7 +153,6 @@ public class SquarefreeRatTest extends TestCase {
         //System.out.println("a  = " + a);
         //System.out.println("b  = " + b);
         //System.out.println("c  = " + c);
-
         if (a.isZERO() || b.isZERO() || c.isZERO()) {
             // skip for this turn
             return;
@@ -180,19 +179,16 @@ public class SquarefreeRatTest extends TestCase {
 
     /**
      * Test base squarefree factors.
-     * 
      */
     public void testBaseSquarefreeFactors() {
-
         dfac = new GenPolynomialRing<BigRational>(fac, 1, to, rvars);
 
-        a = dfac.random(kl, ll, el + 3, q);
-        b = dfac.random(kl, ll, el + 3, q);
+        a = dfac.random(kl, ll, el + 2, q);
+        b = dfac.random(kl, ll, el + 1, q);
         c = dfac.random(kl, ll, el + 2, q);
         //System.out.println("a  = " + a);
         //System.out.println("b  = " + b);
         //System.out.println("c  = " + c);
-
         if (a.isZERO() || b.isZERO() || c.isZERO()) {
             // skip for this turn
             return;
@@ -211,12 +207,46 @@ public class SquarefreeRatTest extends TestCase {
 
 
     /**
+     * Test base squarefree factors, Yun.
+     */
+    public void testBaseSquarefreeFactorsYun() {
+        dfac = new GenPolynomialRing<BigRational>(fac, 1, to, rvars);
+
+        a = dfac.random(kl, ll, el + 3, q);
+        b = dfac.random(kl, ll, el + 3, q);
+        c = dfac.random(kl, ll, el + 2, q);
+        //System.out.println("a  = " + a);
+        //System.out.println("b  = " + b);
+        //System.out.println("c  = " + c);
+        if (a.isZERO() || b.isZERO() || c.isZERO()) {
+            // skip for this turn
+            return;
+        }
+
+        // a a b b b c
+        d = a.multiply(a).multiply(b).multiply(b).multiply(b).multiply(c);
+        //System.out.println("d  = " + d);
+
+        SortedMap<GenPolynomial<BigRational>, Long> sfactors;
+        long t = System.currentTimeMillis();
+        sfactors = sqf.baseSquarefreeFactors(d);
+        t = System.currentTimeMillis() - t;
+        System.out.println("sqf_t  = " + t + " ms"); //, sfactors = " + sfactors);
+
+        t = System.currentTimeMillis();
+        sfactors = sqfy.baseSquarefreeFactors(d);
+        t = System.currentTimeMillis() - t;
+        System.out.println("sqfy_t = " + t + " ms"); //, sfactors = " + sfactors);
+
+        assertTrue("isFactorization(d,sfactors) ", sqf.isFactorization(d, sfactors));
+    }
+
+
+    /**
      * Test recursive squarefree.
-     * 
      */
     public void testRecursiveSquarefree() {
         //System.out.println("\nrecursive:");
-
         cfac = new GenPolynomialRing<BigRational>(fac, 2 - 1, to, c1vars);
         rfac = new GenPolynomialRing<GenPolynomial<BigRational>>(cfac, 1, to, rvars);
 
@@ -226,7 +256,6 @@ public class SquarefreeRatTest extends TestCase {
         //System.out.println("ar = " + ar);
         //System.out.println("br = " + br);
         //System.out.println("cr = " + cr);
-
         if (ar.isZERO() || br.isZERO() || cr.isZERO()) {
             // skip for this turn
             return;
@@ -252,10 +281,8 @@ public class SquarefreeRatTest extends TestCase {
 
     /**
      * Test recursive squarefree factors.
-     * 
      */
     public void testRecursiveSquarefreeFactors() {
-
         cfac = new GenPolynomialRing<BigRational>(fac, 2 - 1, to, c1vars);
         rfac = new GenPolynomialRing<GenPolynomial<BigRational>>(cfac, 1, to, rvars);
 
@@ -265,7 +292,6 @@ public class SquarefreeRatTest extends TestCase {
         //System.out.println("ar = " + ar);
         //System.out.println("br = " + br);
         //System.out.println("cr = " + cr);
-
         if (ar.isZERO() || br.isZERO() || cr.isZERO()) {
             // skip for this turn
             return;
@@ -282,12 +308,46 @@ public class SquarefreeRatTest extends TestCase {
 
 
     /**
+     * Test recursive squarefree factors, Yun.
+     */
+    public void testRecursiveSquarefreeFactorsYun() {
+        cfac = new GenPolynomialRing<BigRational>(fac, 2 - 1, to, c1vars);
+        rfac = new GenPolynomialRing<GenPolynomial<BigRational>>(cfac, 1, to, rvars);
+
+        ar = rfac.random(kl, 3, 2, q);
+        br = rfac.random(kl, 3, 2, q);
+        cr = rfac.random(kl, 3, 2, q);
+        //System.out.println("ar = " + ar);
+        //System.out.println("br = " + br);
+        //System.out.println("cr = " + cr);
+        if (ar.isZERO() || br.isZERO() || cr.isZERO()) {
+            // skip for this turn
+            return;
+        }
+
+        // a b b b c c
+        dr = ar.multiply(cr).multiply(cr).multiply(br).multiply(br).multiply(br);
+        //System.out.println("dr  = " + dr);
+
+        SortedMap<GenPolynomial<GenPolynomial<BigRational>>, Long> sfactors;
+        long t = System.currentTimeMillis();
+        sfactors = sqf.recursiveUnivariateSquarefreeFactors(dr);
+        t = System.currentTimeMillis() - t;
+        System.out.println("r-sqf_t  = " + t + " ms"); //, sfactors = " + sfactors);
+
+        t = System.currentTimeMillis();
+        sfactors = sqfy.recursiveUnivariateSquarefreeFactors(dr);
+        t = System.currentTimeMillis() - t;
+        System.out.println("r-sqfy_t = " + t + " ms"); //, sfactors = " + sfactors);
+        assertTrue("isFactorization(d,sfactors) ", sqf.isRecursiveFactorization(dr, sfactors));
+    }
+
+
+    /**
      * Test squarefree.
-     * 
      */
     public void testSquarefree() {
         //System.out.println("\nfull:");
-
         dfac = new GenPolynomialRing<BigRational>(fac, rl, to, vars);
 
         a = dfac.random(kl, ll, 2, q);
@@ -296,7 +356,6 @@ public class SquarefreeRatTest extends TestCase {
         //System.out.println("a  = " + a);
         //System.out.println("b  = " + b);
         //System.out.println("c  = " + c);
-
         if (a.isZERO() || b.isZERO() || c.isZERO()) {
             // skip for this turn
             return;
@@ -322,10 +381,8 @@ public class SquarefreeRatTest extends TestCase {
 
     /**
      * Test squarefree factors.
-     * 
      */
     public void testSquarefreeFactors() {
-
         dfac = new GenPolynomialRing<BigRational>(fac, rl, to, vars);
 
         a = dfac.random(kl, 3, 2, q);
@@ -334,7 +391,6 @@ public class SquarefreeRatTest extends TestCase {
         //System.out.println("a  = " + a);
         //System.out.println("b  = " + b);
         //System.out.println("c  = " + c);
-
         if (a.isZERO() || b.isZERO() || c.isZERO()) {
             // skip for this turn
             return;
