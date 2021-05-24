@@ -573,9 +573,9 @@ public class PolyGBUtilTest extends TestCase {
         GenPolynomial<BigInteger> h = PolyGBUtil.<BigInteger> chineseRemainderTheorem(F, A);
         //System.out.println("h  = " + h);
         assertTrue("deg(h) > 0: ", h.degree() > 0);
-        if (h == null) {
-            return;
-        }
+        //if (h == null) {
+        //    return;
+        //}
         //boolean t = PolyGBUtil.<BigInteger> isChineseRemainder(F, A, h);
         //System.out.println("t  = " + t);
         //assertTrue("isChineseRemainder " + h, PolyGBUtil.<BigInteger> isChineseRemainder(F, A, h));
@@ -689,9 +689,9 @@ public class PolyGBUtilTest extends TestCase {
         GenPolynomial<BigRational> h = PolyGBUtil.<BigRational> CRTInterpolation(dfac, F, A);
         //System.out.println("h  = " + h);
         assertTrue("deg(h) > 0: ", h.degree() > 0);
-        if (h == null) {
-            return;
-        }
+        //if (h == null) {
+        //    return;
+        //}
         //boolean t = PolyGBUtil.<BigRational> isChineseRemainder(F, A, h);
         //System.out.println("t  = " + t);
         //assertTrue("isChineseRemainder " + h, PolyGBUtil.<BigRational> isChineseRemainder(F, A, h));

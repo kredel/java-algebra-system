@@ -710,7 +710,7 @@ public class GCDModularTest extends TestCase {
         GreatestCommonDivisorAbstract<BigInteger> ufd = new GreatestCommonDivisorModular<ModInteger>();
         GenPolynomialRing<BigInteger> dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1),
                         new String[] { "t", "x" }, to);
-        GenPolynomial<BigInteger> a, b, c, d, e;
+        GenPolynomial<BigInteger> a, b, d, e;
 
         a = dfac.parse("x**3 + x**2 - t * x - t");
         b = dfac.parse("3 * x**2 + 2 * x - t");
