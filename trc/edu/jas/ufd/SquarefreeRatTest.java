@@ -125,7 +125,7 @@ public class SquarefreeRatTest extends TestCase {
         //System.out.println("sqf  = " + sqf);
         //System.out.println("sqfy = " + sqfy);
         //System.out.println("sqff = " + sqff);
-        assertEquals("sqf == sqff ", sqf.getClass(), sqff.getClass());
+        assertEquals("sqf/y == sqff ", sqfy.getClass(), sqff.getClass());
 
         a = b = c = d = e = null;
         ar = br = cr = dr = er = null;
@@ -231,13 +231,13 @@ public class SquarefreeRatTest extends TestCase {
         long t = System.currentTimeMillis();
         sfactors = sqf.baseSquarefreeFactors(d);
         t = System.currentTimeMillis() - t;
-        System.out.println("sqf_t  = " + t + " ms"); //, sfactors = " + sfactors);
+        //System.out.println("sqf_t  = " + t + " ms"); //, sfactors = " + sfactors);
 
         t = System.currentTimeMillis();
         sfactors = sqfy.baseSquarefreeFactors(d);
         t = System.currentTimeMillis() - t;
-        System.out.println("sqfy_t = " + t + " ms"); //, sfactors = " + sfactors);
-
+        //System.out.println("sqfy_t = " + t + " ms"); //, sfactors = " + sfactors);
+        assertTrue("dummy ", t >= 0L);
         assertTrue("isFactorization(d,sfactors) ", sqf.isFactorization(d, sfactors));
     }
 
@@ -333,12 +333,13 @@ public class SquarefreeRatTest extends TestCase {
         long t = System.currentTimeMillis();
         sfactors = sqf.recursiveUnivariateSquarefreeFactors(dr);
         t = System.currentTimeMillis() - t;
-        System.out.println("r-sqf_t  = " + t + " ms"); //, sfactors = " + sfactors);
+        //System.out.println("r-sqf_t  = " + t + " ms"); //, sfactors = " + sfactors);
 
         t = System.currentTimeMillis();
         sfactors = sqfy.recursiveUnivariateSquarefreeFactors(dr);
         t = System.currentTimeMillis() - t;
-        System.out.println("r-sqfy_t = " + t + " ms"); //, sfactors = " + sfactors);
+        //System.out.println("r-sqfy_t = " + t + " ms"); //, sfactors = " + sfactors);
+        assertTrue("dummy ", t >= 0L);
         assertTrue("isFactorization(d,sfactors) ", sqf.isRecursiveFactorization(dr, sfactors));
     }
 
