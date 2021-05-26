@@ -47,7 +47,7 @@
   <property name="dist"      value="../jas-versions/jas-2.7" />
   <property name="tmpdist"   value="../jas-versions/tmp" />
   <property name="artifactId" value="jas" />
-  <property name="svnrev"    value="40" />
+  <property name="svnrev"    value="50" />
   <property name="gitrev"    value="${svnrev}" />
   <!--property name="version"  value="2.7.${SVNREV}" /--> <!-- set in vorher-->
 
