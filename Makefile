@@ -503,8 +503,8 @@ svn-export:
 
 git-deploy:
 	$(RSYNC) -e 'ssh' --delete-after ~/jas-versions/jas-git/jas.git/ krum:htdocs/jas.git
-	#cd ~/jas-versions/jas-git/jas; git push -v $(DRY) google >> ~/jas-versions/$(VERSION)/git_push.out
-	cd ~/jas-versions/jas-git/jas; git push -v $(DRY) github >> ~/jas-versions/$(VERSION)/git_push.out
+	#cd ~/jas-versions/jas-git/jas.git; git push -v $(DRY) google >> ~/jas-versions/$(VERSION)/git_push.out
+	cd ~/jas-versions/jas-git/jas.git; git push -v $(DRY) github >> ~/jas-versions/$(VERSION)/git_push.out
 
 jas-bin.jar:
 	jar -cfm $(VERSION).$(GITREV)-bin.jar GBManifest.MF edu/ COPYING* log4j2.properties
