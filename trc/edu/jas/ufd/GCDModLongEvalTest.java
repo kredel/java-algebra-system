@@ -525,7 +525,7 @@ public class GCDModLongEvalTest extends TestCase {
             e = PolyUtil.<ModLong> baseSparsePseudoRemainder(d, c);
             //System.out.println("e = " + e);
 
-            assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
+            assertTrue("c | gcd(ac,bc) " + e + ", " + c, e.isZERO());
         }
     }
 
@@ -562,15 +562,15 @@ public class GCDModLongEvalTest extends TestCase {
 
             e = PolyUtil.<ModLong> baseSparsePseudoRemainder(d, c);
             //System.out.println("e = " + e);
-            assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
+            assertTrue("c | gcd(ac,bc) " + e + ", " + c, e.isZERO());
 
             e = PolyUtil.<ModLong> baseSparsePseudoRemainder(a, d);
             //System.out.println("e = " + e);
-            assertTrue("gcd(a,b) | a " + e, e.isZERO());
+            assertTrue("gcd(a,b) | a " + e + ", " + d, e.isZERO());
 
             e = PolyUtil.<ModLong> baseSparsePseudoRemainder(b, d);
             //System.out.println("e = " + e);
-            assertTrue("gcd(a,b) | b " + e, e.isZERO());
+            assertTrue("gcd(a,b) | b " + e + ", " + d, e.isZERO());
         }
     }
 

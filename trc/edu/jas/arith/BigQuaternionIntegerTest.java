@@ -263,7 +263,7 @@ public class BigQuaternionIntegerTest extends TestCase {
 
         c = a.multiply(b);
         d = b.multiply(a);
-        assertFalse("a*b != b*a", c.equals(d));
+        assertFalse("a*b != b*a: " + c + ", " + d, c.equals(d));
 
         assertTrue("isEntier(a)", a.isEntier());
         assertTrue("isEntier(b)", b.isEntier());
