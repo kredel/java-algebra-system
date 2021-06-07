@@ -178,6 +178,7 @@ Scripting.setLang(Scripting::Lang::Ruby);
 
 java_import "edu.jas.util.ExecutableServer";
 java_import "edu.jas.structure.Power";
+java_import "edu.jas.arith.ArithUtil";
 java_import "edu.jas.arith.BigInteger";
 java_import "edu.jas.arith.BigRational";
 java_import "edu.jas.arith.ModInteger";
@@ -1341,6 +1342,43 @@ Compute an extension field with a primitive element.
 
 
 =begin rdoc
+Continued fraction computation of rational and real algebraic numbers.
+=end
+    def contFrac(prec)
+        a = @elem;
+        if a.is_a? RealAlgebraicNumber
+           b = prec;
+           if b.is_a? RingElem
+              b = b.elem;
+           end
+           if b < 1
+              b = 1;
+           end
+           d = RealArithUtil.continuedFraction(a, b);
+           return d;
+        end
+        if a.is_a? BigRational
+           d = ArithUtil.continuedFraction(a);
+           return d;
+        end
+        raise ArgumentError, "type " + str(a.class) + " not supported"
+    end
+
+
+=begin rdoc
+Continued fraction expansion to approximate fraction.
+=end
+    def contFracApprox(lst)
+        if lst == nil
+           d = BigRational::ZERO; 
+           return RingElem.new( d );
+        end
+        nb = ArithUtil.continuedFractionApprox(lst);
+        return RingElem.new( nb );
+    end
+
+
+=begin rdoc
 Get the coefficients of a polynomial.
 =end
     def coefficients()
@@ -2302,6 +2340,7 @@ def FF(p,n,z=0)
 end
 
 
+java_import "edu.jas.root.RealArithUtil";
 java_import "edu.jas.root.RealRootsSturm";
 java_import "edu.jas.root.Interval";
 java_import "edu.jas.root.RealAlgebraicNumber";

@@ -11,7 +11,7 @@ from edu.jas.structure   import RingElem, RingFactory, Power
 from edu.jas.arith       import BigInteger, BigRational, BigComplex, BigDecimal,\
                                 ModInteger, ModIntegerRing, ModLong, ModLongRing, ModInt, ModIntRing,\
                                 BigQuaternion, BigQuaternionRing, BigOctonion,\
-                                Product, ProductRing, PrimeList, PrimeInteger
+                                Product, ProductRing, ArithUtil, PrimeList, PrimeInteger
 from edu.jas.poly        import GenPolynomial, GenPolynomialRing, Monomial,\
                                 GenSolvablePolynomial, GenSolvablePolynomialRing,\
                                 RecSolvablePolynomial, RecSolvablePolynomialRing,\
@@ -66,7 +66,7 @@ from edu.jas.ufd         import GreatestCommonDivisor, PolyUfdUtil, GCDFactory,\
 from edu.jas.fd          import SolvableQuotient, SolvableQuotientRing,\
                                 QuotSolvablePolynomial, QuotSolvablePolynomialRing
 from edu.jas.root        import RealRootsSturm, Interval, RealAlgebraicNumber, RealAlgebraicRing,\
-                                ComplexRootsSturm, Rectangle, RootFactory
+                                ComplexRootsSturm, Rectangle, RealArithUtil, RootFactory
 from edu.jas.integrate   import ElementaryIntegration
 from edu.jas.util        import ExecutableServer
 #from edu.jas             import structure, arith, poly, ps, gb, gbmod, vector,\
@@ -3866,6 +3866,32 @@ class RingElem:
         except Exception, e:
             print "error " + str(e)
             return None
+
+    def contFrac(self, prec):
+        '''Continued fraction computation of rational and real algebraic numbers.
+        '''
+        a = self.elem;
+        if isinstance(a,RealAlgebraicNumber):
+            b = prec;
+            if isinstance(b,RingElem):
+                b = b.elem;
+            if b < 1:
+                b = 1;
+            d = RealArithUtil.continuedFraction(a, b);
+            return d;
+        if isinstance(a,BigRational):
+            d = ArithUtil.continuedFraction(a);
+            return d;
+        raise ValueError, "type " + str(a.class) + " not supported"
+
+    def contFracApprox(self, lst):
+        '''Continued fraction expansion to approximate fraction.
+        '''
+        if lst == None:
+            d = BigRational.ZERO;
+            return RingElem( d );
+        nb = ArithUtil.continuedFractionApprox(lst);
+        return RingElem( nb );
 
     def coefficients(self):
         '''Get the coefficients of a polynomial.
